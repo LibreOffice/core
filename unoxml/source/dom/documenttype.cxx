@@ -41,7 +41,7 @@ namespace DOM
     A NamedNodeMap containing the general entities, both external and
     internal, declared in the DTD.
     */
-    Reference< XNamedNodeMap > SAL_CALL CDocumentType::getEntities() throw (RuntimeException)
+    Reference< XNamedNodeMap > SAL_CALL CDocumentType::getEntities() throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -56,7 +56,7 @@ namespace DOM
     /**
     The internal subset as a string, or null if there is none.
     */
-    OUString SAL_CALL CDocumentType::getInternalSubset() throw (RuntimeException)
+    OUString SAL_CALL CDocumentType::getInternalSubset() throw (RuntimeException, std::exception)
     {
         OSL_ENSURE(false,
             "CDocumentType::getInternalSubset: not implemented (#i113683#)");
@@ -67,7 +67,7 @@ namespace DOM
     The name of DTD; i.e., the name immediately following the DOCTYPE
     keyword.
     */
-    OUString SAL_CALL CDocumentType::getName() throw (RuntimeException)
+    OUString SAL_CALL CDocumentType::getName() throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -82,7 +82,7 @@ namespace DOM
     /**
     A NamedNodeMap containing the notations declared in the DTD.
     */
-    Reference< XNamedNodeMap > SAL_CALL CDocumentType::getNotations() throw (RuntimeException)
+    Reference< XNamedNodeMap > SAL_CALL CDocumentType::getNotations() throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -97,7 +97,7 @@ namespace DOM
     /**
     The public identifier of the external subset.
     */
-    OUString SAL_CALL CDocumentType::getPublicId() throw (RuntimeException)
+    OUString SAL_CALL CDocumentType::getPublicId() throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -112,7 +112,7 @@ namespace DOM
     /**
     The system identifier of the external subset.
     */
-    OUString SAL_CALL CDocumentType::getSystemId() throw (RuntimeException)
+    OUString SAL_CALL CDocumentType::getSystemId() throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -124,12 +124,12 @@ namespace DOM
         return aId;
     }
 
-    OUString SAL_CALL CDocumentType::getNodeName()throw (RuntimeException)
+    OUString SAL_CALL CDocumentType::getNodeName()throw (RuntimeException, std::exception)
     {
         return getName();
     }
 
-    OUString SAL_CALL CDocumentType::getNodeValue() throw (RuntimeException)
+    OUString SAL_CALL CDocumentType::getNodeValue() throw (RuntimeException, std::exception)
     {
         return OUString();
     }

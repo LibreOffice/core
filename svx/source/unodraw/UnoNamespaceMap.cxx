@@ -57,18 +57,18 @@ namespace svx
         virtual ~NamespaceMap();
 
         // XNameAccess
-        virtual Any SAL_CALL getByName( const OUString& aName ) throw (NoSuchElementException, WrappedTargetException, RuntimeException);
-        virtual Sequence< OUString > SAL_CALL getElementNames(  ) throw (RuntimeException);
-        virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (RuntimeException);
+        virtual Any SAL_CALL getByName( const OUString& aName ) throw (NoSuchElementException, WrappedTargetException, RuntimeException, std::exception);
+        virtual Sequence< OUString > SAL_CALL getElementNames(  ) throw (RuntimeException, std::exception);
+        virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (RuntimeException, std::exception);
 
         // XElementAccess
-        virtual Type SAL_CALL getElementType(  ) throw (RuntimeException);
-        virtual sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException);
+        virtual Type SAL_CALL getElementType(  ) throw (RuntimeException, std::exception);
+        virtual sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException, std::exception);
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw(RuntimeException);
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException);
-        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(RuntimeException);
+        virtual OUString SAL_CALL getImplementationName(  ) throw(RuntimeException, std::exception);
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException, std::exception);
+        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(RuntimeException, std::exception);
     };
 
     Reference< XInterface > SAL_CALL NamespaceMap_createInstance( sal_uInt16* pWhichIds, SfxItemPool* pPool )
@@ -194,7 +194,7 @@ NamespaceMap::~NamespaceMap()
 }
 
 // XNameAccess
-Any SAL_CALL NamespaceMap::getByName( const OUString& aName ) throw (NoSuchElementException, WrappedTargetException, RuntimeException)
+Any SAL_CALL NamespaceMap::getByName( const OUString& aName ) throw (NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     NamespaceIteratorImpl aIter( mpWhichIds, mpPool );
 
@@ -215,7 +215,7 @@ Any SAL_CALL NamespaceMap::getByName( const OUString& aName ) throw (NoSuchEleme
     return makeAny( aURL );
 }
 
-Sequence< OUString > SAL_CALL NamespaceMap::getElementNames() throw (RuntimeException)
+Sequence< OUString > SAL_CALL NamespaceMap::getElementNames() throw (RuntimeException, std::exception)
 {
     NamespaceIteratorImpl aIter( mpWhichIds, mpPool );
 
@@ -241,7 +241,7 @@ Sequence< OUString > SAL_CALL NamespaceMap::getElementNames() throw (RuntimeExce
     return aSeq;
 }
 
-sal_Bool SAL_CALL NamespaceMap::hasByName( const OUString& aName ) throw (RuntimeException)
+sal_Bool SAL_CALL NamespaceMap::hasByName( const OUString& aName ) throw (RuntimeException, std::exception)
 {
     NamespaceIteratorImpl aIter( mpWhichIds, mpPool );
 
@@ -260,12 +260,12 @@ sal_Bool SAL_CALL NamespaceMap::hasByName( const OUString& aName ) throw (Runtim
 }
 
 // XElementAccess
-Type SAL_CALL NamespaceMap::getElementType() throw (RuntimeException)
+Type SAL_CALL NamespaceMap::getElementType() throw (RuntimeException, std::exception)
 {
     return ::getCppuType( (const OUString*) 0 );
 }
 
-sal_Bool SAL_CALL NamespaceMap::hasElements() throw (RuntimeException)
+sal_Bool SAL_CALL NamespaceMap::hasElements() throw (RuntimeException, std::exception)
 {
     NamespaceIteratorImpl aIter( mpWhichIds, mpPool );
 
@@ -277,19 +277,19 @@ sal_Bool SAL_CALL NamespaceMap::hasElements() throw (RuntimeException)
 
 // XServiceInfo
 OUString SAL_CALL NamespaceMap::getImplementationName(  )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     return NamespaceMap_getImplementationName();
 }
 
 sal_Bool SAL_CALL NamespaceMap::supportsService( const OUString& serviceName )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     return cppu::supportsService( this, serviceName );
 }
 
 Sequence< OUString > SAL_CALL NamespaceMap::getSupportedServiceNames(  )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     return NamespaceMap_getSupportedServiceNames();
 }

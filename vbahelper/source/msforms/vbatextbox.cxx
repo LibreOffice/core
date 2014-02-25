@@ -32,13 +32,13 @@ ScVbaTextBox::ScVbaTextBox( const uno::Reference< ov::XHelperInterface >& xParen
 
 // Attributes
 uno::Any SAL_CALL
-ScVbaTextBox::getValue() throw (css::uno::RuntimeException)
+ScVbaTextBox::getValue() throw (css::uno::RuntimeException, std::exception)
 {
     return uno::makeAny( getText() );
 }
 
 void SAL_CALL
-ScVbaTextBox::setValue( const uno::Any& _value ) throw (css::uno::RuntimeException)
+ScVbaTextBox::setValue( const uno::Any& _value ) throw (css::uno::RuntimeException, std::exception)
 {
     // booleans are converted to uppercase strings
     OUString sVal = extractStringFromAny( _value, true );
@@ -47,7 +47,7 @@ ScVbaTextBox::setValue( const uno::Any& _value ) throw (css::uno::RuntimeExcepti
 
 //getString() will cause some imfo lose.
 OUString SAL_CALL
-ScVbaTextBox::getText() throw (css::uno::RuntimeException)
+ScVbaTextBox::getText() throw (css::uno::RuntimeException, std::exception)
 {
     uno::Any aValue;
     aValue = m_xProps->getPropertyValue( "Text" );
@@ -57,7 +57,7 @@ ScVbaTextBox::getText() throw (css::uno::RuntimeException)
 }
 
 void SAL_CALL
-ScVbaTextBox::setText( const OUString& _text ) throw (css::uno::RuntimeException)
+ScVbaTextBox::setText( const OUString& _text ) throw (css::uno::RuntimeException, std::exception)
 {
     OUString oldText( getText() );
     if ( !mbDialog )
@@ -72,7 +72,7 @@ ScVbaTextBox::setText( const OUString& _text ) throw (css::uno::RuntimeException
 }
 
 sal_Int32 SAL_CALL
-ScVbaTextBox::getMaxLength() throw (css::uno::RuntimeException)
+ScVbaTextBox::getMaxLength() throw (css::uno::RuntimeException, std::exception)
 {
     uno::Any aValue;
     aValue = m_xProps->getPropertyValue( "MaxTextLen" );
@@ -82,7 +82,7 @@ ScVbaTextBox::getMaxLength() throw (css::uno::RuntimeException)
 }
 
 void SAL_CALL
-ScVbaTextBox::setMaxLength( sal_Int32 _maxlength ) throw (css::uno::RuntimeException)
+ScVbaTextBox::setMaxLength( sal_Int32 _maxlength ) throw (css::uno::RuntimeException, std::exception)
 {
     sal_Int16 nTmp( _maxlength );
     uno::Any aValue( nTmp );
@@ -90,7 +90,7 @@ ScVbaTextBox::setMaxLength( sal_Int32 _maxlength ) throw (css::uno::RuntimeExcep
 }
 
 sal_Bool SAL_CALL
-ScVbaTextBox::getMultiline() throw (css::uno::RuntimeException)
+ScVbaTextBox::getMultiline() throw (css::uno::RuntimeException, std::exception)
 {
     uno::Any aValue;
     aValue = m_xProps->getPropertyValue( "MultiLine" );
@@ -100,68 +100,68 @@ ScVbaTextBox::getMultiline() throw (css::uno::RuntimeException)
 }
 
 void SAL_CALL
-ScVbaTextBox::setMultiline( sal_Bool _multiline ) throw (css::uno::RuntimeException)
+ScVbaTextBox::setMultiline( sal_Bool _multiline ) throw (css::uno::RuntimeException, std::exception)
 {
     uno::Any aValue( _multiline );
     m_xProps->setPropertyValue( "MultiLine" , aValue);
 }
 
-sal_Int32 SAL_CALL ScVbaTextBox::getSpecialEffect() throw (uno::RuntimeException)
+sal_Int32 SAL_CALL ScVbaTextBox::getSpecialEffect() throw (uno::RuntimeException, std::exception)
 {
     return msforms::fmSpecialEffect::fmSpecialEffectSunken;
 }
 
-void SAL_CALL ScVbaTextBox::setSpecialEffect( sal_Int32 /*nSpecialEffect*/ ) throw (uno::RuntimeException)
+void SAL_CALL ScVbaTextBox::setSpecialEffect( sal_Int32 /*nSpecialEffect*/ ) throw (uno::RuntimeException, std::exception)
 {
     // #STUB
 }
 
-sal_Int32 SAL_CALL ScVbaTextBox::getBorderStyle() throw (uno::RuntimeException)
+sal_Int32 SAL_CALL ScVbaTextBox::getBorderStyle() throw (uno::RuntimeException, std::exception)
 {
     return msforms::fmBorderStyle::fmBorderStyleNone;
 }
 
-void SAL_CALL ScVbaTextBox::setBorderStyle( sal_Int32 /*nBorderStyle*/ ) throw (uno::RuntimeException)
+void SAL_CALL ScVbaTextBox::setBorderStyle( sal_Int32 /*nBorderStyle*/ ) throw (uno::RuntimeException, std::exception)
 {
     // #STUB
 }
 
-sal_Int32 SAL_CALL ScVbaTextBox::getTextLength() throw (uno::RuntimeException)
+sal_Int32 SAL_CALL ScVbaTextBox::getTextLength() throw (uno::RuntimeException, std::exception)
 {
     return getText().getLength();
 }
 
-uno::Reference< msforms::XNewFont > SAL_CALL ScVbaTextBox::getFont() throw (uno::RuntimeException)
+uno::Reference< msforms::XNewFont > SAL_CALL ScVbaTextBox::getFont() throw (uno::RuntimeException, std::exception)
 {
     return new VbaNewFont( this, mxContext, m_xProps );
 }
 
-sal_Int32 SAL_CALL ScVbaTextBox::getBackColor() throw (uno::RuntimeException)
+sal_Int32 SAL_CALL ScVbaTextBox::getBackColor() throw (uno::RuntimeException, std::exception)
 {
     return ScVbaControl::getBackColor();
 }
 
-void SAL_CALL ScVbaTextBox::setBackColor( sal_Int32 nBackColor ) throw (uno::RuntimeException)
+void SAL_CALL ScVbaTextBox::setBackColor( sal_Int32 nBackColor ) throw (uno::RuntimeException, std::exception)
 {
     ScVbaControl::setBackColor( nBackColor );
 }
 
-sal_Bool SAL_CALL ScVbaTextBox::getAutoSize() throw (uno::RuntimeException)
+sal_Bool SAL_CALL ScVbaTextBox::getAutoSize() throw (uno::RuntimeException, std::exception)
 {
     return ScVbaControl::getAutoSize();
 }
 
-void SAL_CALL ScVbaTextBox::setAutoSize( sal_Bool bAutoSize ) throw (uno::RuntimeException)
+void SAL_CALL ScVbaTextBox::setAutoSize( sal_Bool bAutoSize ) throw (uno::RuntimeException, std::exception)
 {
     ScVbaControl::setAutoSize( bAutoSize );
 }
 
-sal_Bool SAL_CALL ScVbaTextBox::getLocked() throw (uno::RuntimeException)
+sal_Bool SAL_CALL ScVbaTextBox::getLocked() throw (uno::RuntimeException, std::exception)
 {
     return ScVbaControl::getLocked();
 }
 
-void SAL_CALL ScVbaTextBox::setLocked( sal_Bool bLocked ) throw (uno::RuntimeException)
+void SAL_CALL ScVbaTextBox::setLocked( sal_Bool bLocked ) throw (uno::RuntimeException, std::exception)
 {
     ScVbaControl::setLocked( bLocked );
 }

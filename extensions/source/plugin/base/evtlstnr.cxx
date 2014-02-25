@@ -63,7 +63,7 @@ PluginEventListener::~PluginEventListener()
         free( m_pNormalizedUrl );
 }
 
-void PluginEventListener::disposing( const ::com::sun::star::lang::EventObject& /*rEvt*/ ) throw()
+void PluginEventListener::disposing( const ::com::sun::star::lang::EventObject& /*rEvt*/ ) throw(std::exception)
 {
     m_pPlugin->getPluginComm()->
         NPP_URLNotify( m_pPlugin->getNPPInstance(),

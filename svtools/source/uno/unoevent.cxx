@@ -70,7 +70,7 @@ void SvBaseEventDescriptor::replaceByName(
         IllegalArgumentException,
         NoSuchElementException,
         WrappedTargetException,
-        RuntimeException)
+        RuntimeException, std::exception)
 {
     sal_uInt16 nMacroID = getMacroID(rName);
 
@@ -95,7 +95,7 @@ Any SvBaseEventDescriptor::getByName(
     throw(
         NoSuchElementException,
         WrappedTargetException,
-        RuntimeException)
+        RuntimeException, std::exception)
 {
     sal_uInt16 nMacroID = getMacroID(rName);
 
@@ -112,7 +112,7 @@ Any SvBaseEventDescriptor::getByName(
 }
 
 Sequence<OUString> SvBaseEventDescriptor::getElementNames()
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     // create and fill sequence
     Sequence<OUString> aSequence(mnMacroItems);
@@ -126,32 +126,32 @@ Sequence<OUString> SvBaseEventDescriptor::getElementNames()
 
 sal_Bool SvBaseEventDescriptor::hasByName(
     const OUString& rName )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     sal_uInt16 nMacroID = getMacroID(rName);
     return (nMacroID != 0);
 }
 
 Type SvBaseEventDescriptor::getElementType()
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     return ::getCppuType((Sequence<PropertyValue> *)0);
 }
 
 sal_Bool SvBaseEventDescriptor::hasElements()
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     return mnMacroItems != 0;
 }
 
 sal_Bool SvBaseEventDescriptor::supportsService(const OUString& rServiceName)
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence<OUString> SvBaseEventDescriptor::getSupportedServiceNames(void)
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     Sequence<OUString> aSequence(1);
     aSequence[0] = sServiceName;
@@ -457,7 +457,7 @@ sal_Int16 SvDetachedEventDescriptor::getIndex(const sal_uInt16 nID) const
 }
 
 OUString SvDetachedEventDescriptor::getImplementationName()
-    throw( ::com::sun::star::uno::RuntimeException )
+    throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     return sImplName;
 }

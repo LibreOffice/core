@@ -142,7 +142,7 @@ namespace comphelper
     }
 
 
-    void SAL_CALL OContainerListenerAdapter::disposing( const  EventObject& _rSource) throw(RuntimeException)
+    void SAL_CALL OContainerListenerAdapter::disposing( const  EventObject& _rSource) throw(RuntimeException, std::exception)
     {
         if (m_pListener)
         {
@@ -159,21 +159,21 @@ namespace comphelper
     }
 
 
-    void SAL_CALL OContainerListenerAdapter::elementInserted( const ContainerEvent& _rEvent ) throw(RuntimeException)
+    void SAL_CALL OContainerListenerAdapter::elementInserted( const ContainerEvent& _rEvent ) throw(RuntimeException, std::exception)
     {
         if (m_pListener && !locked())
             m_pListener->_elementInserted(_rEvent);
     }
 
 
-    void SAL_CALL OContainerListenerAdapter::elementRemoved( const ContainerEvent& _rEvent ) throw(RuntimeException)
+    void SAL_CALL OContainerListenerAdapter::elementRemoved( const ContainerEvent& _rEvent ) throw(RuntimeException, std::exception)
     {
         if (m_pListener && !locked())
             m_pListener->_elementRemoved(_rEvent);
     }
 
 
-    void SAL_CALL OContainerListenerAdapter::elementReplaced( const ContainerEvent& _rEvent ) throw(RuntimeException)
+    void SAL_CALL OContainerListenerAdapter::elementReplaced( const ContainerEvent& _rEvent ) throw(RuntimeException, std::exception)
     {
         if (m_pListener && !locked())
             m_pListener->_elementReplaced(_rEvent);

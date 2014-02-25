@@ -23,7 +23,7 @@ ShapeDrawingFragmentHandler::~ShapeDrawingFragmentHandler() throw()
 {
 }
 
-void SAL_CALL ShapeDrawingFragmentHandler::endDocument() throw (xml::sax::SAXException, uno::RuntimeException)
+void SAL_CALL ShapeDrawingFragmentHandler::endDocument() throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
 }
 

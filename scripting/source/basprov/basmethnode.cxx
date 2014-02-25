@@ -117,7 +117,7 @@ namespace basprov
     // XBrowseNode
 
 
-    OUString BasicMethodNodeImpl::getName(  ) throw (RuntimeException)
+    OUString BasicMethodNodeImpl::getName(  ) throw (RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
 
@@ -130,7 +130,7 @@ namespace basprov
 
 
 
-    Sequence< Reference< browse::XBrowseNode > > BasicMethodNodeImpl::getChildNodes(  ) throw (RuntimeException)
+    Sequence< Reference< browse::XBrowseNode > > BasicMethodNodeImpl::getChildNodes(  ) throw (RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
 
@@ -139,7 +139,7 @@ namespace basprov
 
 
 
-    sal_Bool BasicMethodNodeImpl::hasChildNodes(  ) throw (RuntimeException)
+    sal_Bool BasicMethodNodeImpl::hasChildNodes(  ) throw (RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
 
@@ -148,7 +148,7 @@ namespace basprov
 
 
 
-    sal_Int16 BasicMethodNodeImpl::getType(  ) throw (RuntimeException)
+    sal_Int16 BasicMethodNodeImpl::getType(  ) throw (RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
 
@@ -179,7 +179,7 @@ namespace basprov
     // XPropertySet
 
 
-    Reference< XPropertySetInfo > BasicMethodNodeImpl::getPropertySetInfo(  ) throw (RuntimeException)
+    Reference< XPropertySetInfo > BasicMethodNodeImpl::getPropertySetInfo(  ) throw (RuntimeException, std::exception)
     {
         Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;
@@ -189,7 +189,7 @@ namespace basprov
     // XInvocation
 
 
-    Reference< XIntrospectionAccess > BasicMethodNodeImpl::getIntrospection(  ) throw (RuntimeException)
+    Reference< XIntrospectionAccess > BasicMethodNodeImpl::getIntrospection(  ) throw (RuntimeException, std::exception)
     {
         return Reference< XIntrospectionAccess >();
     }
@@ -199,7 +199,7 @@ namespace basprov
     Any BasicMethodNodeImpl::invoke( const OUString& aFunctionName, const Sequence< Any >& aParams,
         Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam )
         throw (IllegalArgumentException, script::CannotConvertException,
-               reflection::InvocationTargetException, RuntimeException)
+               reflection::InvocationTargetException, RuntimeException, std::exception)
     {
         (void)aParams;
         (void)aOutParamIndex;
@@ -287,7 +287,7 @@ namespace basprov
 
     void BasicMethodNodeImpl::setValue( const OUString& aPropertyName, const Any& aValue )
         throw (UnknownPropertyException, script::CannotConvertException,
-               reflection::InvocationTargetException, RuntimeException)
+               reflection::InvocationTargetException, RuntimeException, std::exception)
     {
         (void)aPropertyName;
         (void)aValue;
@@ -299,7 +299,7 @@ namespace basprov
 
 
 
-    Any BasicMethodNodeImpl::getValue( const OUString& aPropertyName ) throw (UnknownPropertyException, RuntimeException)
+    Any BasicMethodNodeImpl::getValue( const OUString& aPropertyName ) throw (UnknownPropertyException, RuntimeException, std::exception)
     {
         (void)aPropertyName;
 
@@ -310,7 +310,7 @@ namespace basprov
 
 
 
-    sal_Bool BasicMethodNodeImpl::hasMethod( const OUString& aName ) throw (RuntimeException)
+    sal_Bool BasicMethodNodeImpl::hasMethod( const OUString& aName ) throw (RuntimeException, std::exception)
     {
         sal_Bool bReturn = sal_False;
         if ( aName == BASPROV_PROPERTY_EDITABLE )
@@ -321,7 +321,7 @@ namespace basprov
 
 
 
-    sal_Bool BasicMethodNodeImpl::hasProperty( const OUString& aName ) throw (RuntimeException)
+    sal_Bool BasicMethodNodeImpl::hasProperty( const OUString& aName ) throw (RuntimeException, std::exception)
     {
         (void)aName;
 

@@ -50,8 +50,8 @@ public:
     virtual ~Meaning();
 
     // XMeaning
-    virtual OUString SAL_CALL getMeaning() throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL querySynonyms() throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getMeaning() throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL querySynonyms() throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     // non-interface specific functions
     void    SetSynonyms( const ::com::sun::star::uno::Sequence< OUString > &rSyn );

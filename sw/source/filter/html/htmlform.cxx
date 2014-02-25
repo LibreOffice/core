@@ -382,29 +382,29 @@ public:
 
     // XImageConsumer
     virtual void SAL_CALL init( sal_Int32 Width, sal_Int32 Height)
-        throw( uno::RuntimeException );
+        throw( uno::RuntimeException, std::exception );
     virtual void SAL_CALL setColorModel(
             sal_Int16 BitCount, const uno::Sequence< sal_Int32 >& RGBAPal,
             sal_Int32 RedMask, sal_Int32 GreenMask, sal_Int32 BlueMask,
             sal_Int32 AlphaMask)
-        throw( uno::RuntimeException );
+        throw( uno::RuntimeException, std::exception );
     virtual void SAL_CALL setPixelsByBytes(
             sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height,
             const uno::Sequence< sal_Int8 >& ProducerData,
             sal_Int32 Offset, sal_Int32 Scansize)
-        throw( uno::RuntimeException );
+        throw( uno::RuntimeException, std::exception );
     virtual void SAL_CALL setPixelsByLongs(
             sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height,
             const uno::Sequence< sal_Int32 >& ProducerData,
             sal_Int32 Offset, sal_Int32 Scansize)
-        throw( uno::RuntimeException );
+        throw( uno::RuntimeException, std::exception );
     virtual void SAL_CALL complete(
             sal_Int32 Status,
             const uno::Reference< awt::XImageProducer > & Producer)
-        throw( uno::RuntimeException );
+        throw( uno::RuntimeException, std::exception );
 
     // XEventListener
-    virtual void SAL_CALL disposing( const EventObject& Source ) throw ( uno::RuntimeException);
+    virtual void SAL_CALL disposing( const EventObject& Source ) throw ( uno::RuntimeException, std::exception);
 };
 
 SwHTMLImageWatcher::SwHTMLImageWatcher(
@@ -453,7 +453,7 @@ void SwHTMLImageWatcher::clear()
 }
 
 void SwHTMLImageWatcher::init( sal_Int32 Width, sal_Int32 Height )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     OSL_ENSURE( bSetWidth || bSetHeight,
             "Breite oder Hoehe muss angepasst werden" );
@@ -554,27 +554,27 @@ void SwHTMLImageWatcher::init( sal_Int32 Width, sal_Int32 Height )
 void SwHTMLImageWatcher::setColorModel(
         sal_Int16, const Sequence< sal_Int32 >&, sal_Int32, sal_Int32,
         sal_Int32, sal_Int32 )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
 }
 
 void SwHTMLImageWatcher::setPixelsByBytes(
         sal_Int32, sal_Int32, sal_Int32, sal_Int32,
         const Sequence< sal_Int8 >&, sal_Int32, sal_Int32 )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
 }
 
 void SwHTMLImageWatcher::setPixelsByLongs(
         sal_Int32, sal_Int32, sal_Int32, sal_Int32,
         const Sequence< sal_Int32 >&, sal_Int32, sal_Int32 )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
 }
 
 void SwHTMLImageWatcher::complete( sal_Int32 Status,
         const uno::Reference< awt::XImageProducer >& )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     if( awt::ImageStatus::IMAGESTATUS_ERROR == Status || awt::ImageStatus::IMAGESTATUS_ABORTED == Status )
     {
@@ -585,7 +585,7 @@ void SwHTMLImageWatcher::complete( sal_Int32 Status,
     }
 }
 
-void SwHTMLImageWatcher::disposing(const lang::EventObject& evt) throw ( uno::RuntimeException)
+void SwHTMLImageWatcher::disposing(const lang::EventObject& evt) throw ( uno::RuntimeException, std::exception)
 {
     uno::Reference< awt::XImageConsumer > xTmp;
 

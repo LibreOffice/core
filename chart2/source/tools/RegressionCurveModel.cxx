@@ -216,19 +216,19 @@ RegressionCurveModel::~RegressionCurveModel()
 // ____ XRegressionCurve ____
 uno::Reference< chart2::XRegressionCurveCalculator > SAL_CALL
     RegressionCurveModel::getCalculator()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return RegressionCurveHelper::createRegressionCurveCalculatorByServiceName( getServiceName());
 }
 
 uno::Reference< beans::XPropertySet > SAL_CALL RegressionCurveModel::getEquationProperties()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return m_xEquationProperties;
 }
 
 void SAL_CALL RegressionCurveModel::setEquationProperties( const uno::Reference< beans::XPropertySet >& xEquationProperties )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if( xEquationProperties.is())
     {
@@ -243,7 +243,7 @@ void SAL_CALL RegressionCurveModel::setEquationProperties( const uno::Reference<
 
 // ____ XServiceName ____
 OUString SAL_CALL RegressionCurveModel::getServiceName()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     switch( m_eRegressionCurveType )
     {
@@ -268,7 +268,7 @@ OUString SAL_CALL RegressionCurveModel::getServiceName()
 
 // ____ XModifyBroadcaster ____
 void SAL_CALL RegressionCurveModel::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -282,7 +282,7 @@ void SAL_CALL RegressionCurveModel::addModifyListener( const uno::Reference< uti
 }
 
 void SAL_CALL RegressionCurveModel::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -297,14 +297,14 @@ void SAL_CALL RegressionCurveModel::removeModifyListener( const uno::Reference< 
 
 // ____ XModifyListener ____
 void SAL_CALL RegressionCurveModel::modified( const lang::EventObject& aEvent )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
 // ____ XEventListener (base of XModifyListener) ____
 void SAL_CALL RegressionCurveModel::disposing( const lang::EventObject& /* Source */ )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     // nothing
 }
@@ -338,7 +338,7 @@ uno::Any RegressionCurveModel::GetDefaultValue( sal_Int32 nHandle ) const
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL RegressionCurveModel::getPropertySetInfo()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return *StaticRegressionCurveInfo::get();
 }
@@ -372,7 +372,7 @@ uno::Sequence< OUString > MeanValueRegressionCurve::getSupportedServiceNames_Sta
 APPHELPER_XSERVICEINFO_IMPL( MeanValueRegressionCurve, lcl_aImplementationName_MeanValue );
 
 uno::Reference< util::XCloneable > SAL_CALL MeanValueRegressionCurve::createClone()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< util::XCloneable >( new MeanValueRegressionCurve( *this ));
 }
@@ -398,7 +398,7 @@ uno::Sequence< OUString > LinearRegressionCurve::getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( LinearRegressionCurve, lcl_aImplementationName_Linear );
 
 uno::Reference< util::XCloneable > SAL_CALL LinearRegressionCurve::createClone()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< util::XCloneable >( new LinearRegressionCurve( *this ));
 }
@@ -424,7 +424,7 @@ uno::Sequence< OUString > LogarithmicRegressionCurve::getSupportedServiceNames_S
 APPHELPER_XSERVICEINFO_IMPL( LogarithmicRegressionCurve, lcl_aImplementationName_Logarithmic );
 
 uno::Reference< util::XCloneable > SAL_CALL LogarithmicRegressionCurve::createClone()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< util::XCloneable >( new LogarithmicRegressionCurve( *this ));
 }
@@ -450,7 +450,7 @@ uno::Sequence< OUString > ExponentialRegressionCurve::getSupportedServiceNames_S
 APPHELPER_XSERVICEINFO_IMPL( ExponentialRegressionCurve, lcl_aImplementationName_Exponential );
 
 uno::Reference< util::XCloneable > SAL_CALL ExponentialRegressionCurve::createClone()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< util::XCloneable >( new ExponentialRegressionCurve( *this ));
 }
@@ -476,7 +476,7 @@ uno::Sequence< OUString > PotentialRegressionCurve::getSupportedServiceNames_Sta
 APPHELPER_XSERVICEINFO_IMPL( PotentialRegressionCurve, lcl_aImplementationName_Potential );
 
 uno::Reference< util::XCloneable > SAL_CALL PotentialRegressionCurve::createClone()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< util::XCloneable >( new PotentialRegressionCurve( *this ));
 }
@@ -502,7 +502,7 @@ uno::Sequence< OUString > PolynomialRegressionCurve::getSupportedServiceNames_St
 APPHELPER_XSERVICEINFO_IMPL( PolynomialRegressionCurve, lcl_aImplementationName_Polynomial );
 
 uno::Reference< util::XCloneable > SAL_CALL PolynomialRegressionCurve::createClone()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< util::XCloneable >( new PolynomialRegressionCurve( *this ));
 }
@@ -528,7 +528,7 @@ uno::Sequence< OUString > MovingAverageRegressionCurve::getSupportedServiceNames
 APPHELPER_XSERVICEINFO_IMPL( MovingAverageRegressionCurve, lcl_aImplementationName_MovingAverage );
 
 uno::Reference< util::XCloneable > SAL_CALL MovingAverageRegressionCurve::createClone()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< util::XCloneable >( new MovingAverageRegressionCurve( *this ));
 }

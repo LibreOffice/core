@@ -41,18 +41,18 @@ private:
 public:
     SwVbaWrapFormat(  css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
 
-    virtual ::sal_Int32 SAL_CALL getType() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setType( ::sal_Int32 _type ) throw (css::uno::RuntimeException);
-    virtual ::sal_Int32 SAL_CALL getSide() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setSide( ::sal_Int32 _side ) throw (css::uno::RuntimeException);
-    virtual float SAL_CALL getDistanceTop() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setDistanceTop( float _distancetop ) throw (css::uno::RuntimeException);
-    virtual float SAL_CALL getDistanceBottom() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setDistanceBottom( float _distancebottom ) throw (css::uno::RuntimeException);
-    virtual float SAL_CALL getDistanceLeft() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setDistanceLeft( float _distanceleft ) throw (css::uno::RuntimeException);
-    virtual float SAL_CALL getDistanceRight() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setDistanceRight( float _distanceright ) throw (css::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getType() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setType( ::sal_Int32 _type ) throw (css::uno::RuntimeException, std::exception);
+    virtual ::sal_Int32 SAL_CALL getSide() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setSide( ::sal_Int32 _side ) throw (css::uno::RuntimeException, std::exception);
+    virtual float SAL_CALL getDistanceTop() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setDistanceTop( float _distancetop ) throw (css::uno::RuntimeException, std::exception);
+    virtual float SAL_CALL getDistanceBottom() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setDistanceBottom( float _distancebottom ) throw (css::uno::RuntimeException, std::exception);
+    virtual float SAL_CALL getDistanceLeft() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setDistanceLeft( float _distanceleft ) throw (css::uno::RuntimeException, std::exception);
+    virtual float SAL_CALL getDistanceRight() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setDistanceRight( float _distanceright ) throw (css::uno::RuntimeException, std::exception);
 
     virtual OUString getServiceImplName();
     virtual css::uno::Sequence<OUString> getServiceNames();

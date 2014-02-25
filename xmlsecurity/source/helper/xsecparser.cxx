@@ -52,7 +52,7 @@ OUString XSecParser::getIdAttr(const cssu::Reference< cssxs::XAttributeList >& x
  * XDocumentHandler
  */
 void SAL_CALL XSecParser::startDocument(  )
-    throw (cssxs::SAXException, cssu::RuntimeException)
+    throw (cssxs::SAXException, cssu::RuntimeException, std::exception)
 {
     m_bInX509IssuerName = false;
     m_bInX509SerialNumber = false;
@@ -68,7 +68,7 @@ void SAL_CALL XSecParser::startDocument(  )
 }
 
 void SAL_CALL XSecParser::endDocument(  )
-    throw (cssxs::SAXException, cssu::RuntimeException)
+    throw (cssxs::SAXException, cssu::RuntimeException, std::exception)
 {
     if (m_xNextHandler.is())
     {
@@ -79,7 +79,7 @@ void SAL_CALL XSecParser::endDocument(  )
 void SAL_CALL XSecParser::startElement(
     const OUString& aName,
     const cssu::Reference< cssxs::XAttributeList >& xAttribs )
-    throw (cssxs::SAXException, cssu::RuntimeException)
+    throw (cssxs::SAXException, cssu::RuntimeException, std::exception)
 {
     try
     {
@@ -193,7 +193,7 @@ void SAL_CALL XSecParser::startElement(
 }
 
 void SAL_CALL XSecParser::endElement( const OUString& aName )
-    throw (cssxs::SAXException, cssu::RuntimeException)
+    throw (cssxs::SAXException, cssu::RuntimeException, std::exception)
 {
     try
     {
@@ -265,7 +265,7 @@ void SAL_CALL XSecParser::endElement( const OUString& aName )
 }
 
 void SAL_CALL XSecParser::characters( const OUString& aChars )
-    throw (cssxs::SAXException, cssu::RuntimeException)
+    throw (cssxs::SAXException, cssu::RuntimeException, std::exception)
 {
     if (m_bInX509IssuerName)
     {
@@ -299,7 +299,7 @@ void SAL_CALL XSecParser::characters( const OUString& aChars )
 }
 
 void SAL_CALL XSecParser::ignorableWhitespace( const OUString& aWhitespaces )
-    throw (cssxs::SAXException, cssu::RuntimeException)
+    throw (cssxs::SAXException, cssu::RuntimeException, std::exception)
 {
     if (m_xNextHandler.is())
     {
@@ -308,7 +308,7 @@ void SAL_CALL XSecParser::ignorableWhitespace( const OUString& aWhitespaces )
 }
 
 void SAL_CALL XSecParser::processingInstruction( const OUString& aTarget, const OUString& aData )
-    throw (cssxs::SAXException, cssu::RuntimeException)
+    throw (cssxs::SAXException, cssu::RuntimeException, std::exception)
 {
     if (m_xNextHandler.is())
     {
@@ -317,7 +317,7 @@ void SAL_CALL XSecParser::processingInstruction( const OUString& aTarget, const 
 }
 
 void SAL_CALL XSecParser::setDocumentLocator( const cssu::Reference< cssxs::XLocator >& xLocator )
-    throw (cssxs::SAXException, cssu::RuntimeException)
+    throw (cssxs::SAXException, cssu::RuntimeException, std::exception)
 {
     if (m_xNextHandler.is())
     {
@@ -330,7 +330,7 @@ void SAL_CALL XSecParser::setDocumentLocator( const cssu::Reference< cssxs::XLoc
  */
 void SAL_CALL XSecParser::initialize(
     const cssu::Sequence< cssu::Any >& aArguments )
-    throw(cssu::Exception, cssu::RuntimeException)
+    throw(cssu::Exception, cssu::RuntimeException, std::exception)
 {
     aArguments[0] >>= m_xNextHandler;
 }

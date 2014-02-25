@@ -92,10 +92,10 @@ private:
     virtual ~SimpleTypeDescription() {}
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return typeClass_; }
 
-    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException)
+    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception)
     { return name_; }
 
     css::uno::TypeClass typeClass_;
@@ -116,14 +116,14 @@ private:
     virtual ~SequenceTypeDescription() {}
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return css::uno::TypeClass_SEQUENCE; }
 
-    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException)
+    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception)
     { return name_; }
 
     virtual css::uno::Reference< css::reflection::XTypeDescription > SAL_CALL
-    getReferencedType() throw (css::uno::RuntimeException)
+    getReferencedType() throw (css::uno::RuntimeException, std::exception)
     { return manager_->resolve(componentType_); }
 
     rtl::Reference< cppuhelper::TypeManager > manager_;
@@ -140,7 +140,7 @@ protected:
     virtual ~PublishableDescription() {}
 
 private:
-    virtual sal_Bool SAL_CALL isPublished() throw (css::uno::RuntimeException)
+    virtual sal_Bool SAL_CALL isPublished() throw (css::uno::RuntimeException, std::exception)
     { return published_; }
 
     bool published_;
@@ -161,16 +161,16 @@ private:
     virtual ~ModuleDescription() {}
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return css::uno::TypeClass_MODULE; }
 
-    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException)
+    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception)
     { return name_; }
 
     virtual
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > >
-    SAL_CALL getMembers() throw (css::uno::RuntimeException);
+    SAL_CALL getMembers() throw (css::uno::RuntimeException, std::exception);
 
     rtl::Reference< cppuhelper::TypeManager > manager_;
     rtl::OUString name_;
@@ -178,7 +178,7 @@ private:
 };
 
 css::uno::Sequence< css::uno::Reference< css::reflection::XTypeDescription > >
-ModuleDescription::getMembers() throw (css::uno::RuntimeException) {
+ModuleDescription::getMembers() throw (css::uno::RuntimeException, std::exception) {
     try {
         std::vector< rtl::OUString > names(entity_->getMemberNames());
         assert(names.size() <= SAL_MAX_INT32);
@@ -213,28 +213,28 @@ private:
     virtual ~EnumTypeDescription() {}
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return css::uno::TypeClass_ENUM; }
 
-    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException)
+    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception)
     { return name_; }
 
     virtual sal_Int32 SAL_CALL getDefaultEnumValue()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return entity_->getMembers()[0].value; }
 
     virtual css::uno::Sequence< rtl::OUString > SAL_CALL getEnumNames()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Sequence< sal_Int32 > SAL_CALL getEnumValues()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     rtl::OUString name_;
     rtl::Reference< unoidl::EnumTypeEntity > entity_;
 };
 
 css::uno::Sequence< rtl::OUString > EnumTypeDescription::getEnumNames()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     assert(entity_->getMembers().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getMembers().size());
@@ -246,7 +246,7 @@ css::uno::Sequence< rtl::OUString > EnumTypeDescription::getEnumNames()
 }
 
 css::uno::Sequence< sal_Int32 > EnumTypeDescription::getEnumValues()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     assert(entity_->getMembers().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getMembers().size());
@@ -275,14 +275,14 @@ private:
     virtual ~PlainStructTypeDescription() {}
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return css::uno::TypeClass_STRUCT; }
 
-    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException)
+    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception)
     { return name_; }
 
     virtual css::uno::Reference< css::reflection::XTypeDescription > SAL_CALL
-    getBaseType() throw (css::uno::RuntimeException) {
+    getBaseType() throw (css::uno::RuntimeException, std::exception) {
         return entity_->getDirectBase().isEmpty()
             ? css::uno::Reference< css::reflection::XTypeDescription >()
             : manager_->resolve(entity_->getDirectBase());
@@ -291,19 +291,19 @@ private:
     virtual
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > >
-    SAL_CALL getMemberTypes() throw (css::uno::RuntimeException);
+    SAL_CALL getMemberTypes() throw (css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Sequence< rtl::OUString > SAL_CALL getMemberNames()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Sequence< rtl::OUString > SAL_CALL getTypeParameters()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return css::uno::Sequence< rtl::OUString >(); }
 
     virtual
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > >
-    SAL_CALL getTypeArguments() throw (css::uno::RuntimeException) {
+    SAL_CALL getTypeArguments() throw (css::uno::RuntimeException, std::exception) {
         return css::uno::Sequence<
             css::uno::Reference< css::reflection::XTypeDescription > >();
     }
@@ -314,7 +314,7 @@ private:
 };
 
 css::uno::Sequence< css::uno::Reference< css::reflection::XTypeDescription > >
-PlainStructTypeDescription::getMemberTypes() throw (css::uno::RuntimeException)
+PlainStructTypeDescription::getMemberTypes() throw (css::uno::RuntimeException, std::exception)
 {
     assert(entity_->getDirectMembers().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getDirectMembers().size());
@@ -327,7 +327,7 @@ PlainStructTypeDescription::getMemberTypes() throw (css::uno::RuntimeException)
 }
 
 css::uno::Sequence< rtl::OUString > PlainStructTypeDescription::getMemberNames()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     assert(entity_->getDirectMembers().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getDirectMembers().size());
@@ -351,10 +351,10 @@ private:
     virtual ~ParameterizedMemberTypeDescription() {}
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return css::uno::TypeClass_UNKNOWN; }
 
-    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException)
+    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception)
     { return typeParameterName_; }
 
     rtl::OUString typeParameterName_;
@@ -381,31 +381,31 @@ private:
     virtual ~PolymorphicStructTypeTemplateDescription() {}
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return css::uno::TypeClass_STRUCT; }
 
-    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException)
+    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception)
     { return name_; }
 
     virtual css::uno::Reference< css::reflection::XTypeDescription > SAL_CALL
-    getBaseType() throw (css::uno::RuntimeException)
+    getBaseType() throw (css::uno::RuntimeException, std::exception)
     { return css::uno::Reference< css::reflection::XTypeDescription >(); }
 
     virtual
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > >
-    SAL_CALL getMemberTypes() throw (css::uno::RuntimeException);
+    SAL_CALL getMemberTypes() throw (css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Sequence< rtl::OUString > SAL_CALL getMemberNames()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Sequence< rtl::OUString > SAL_CALL getTypeParameters()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     virtual
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > >
-    SAL_CALL getTypeArguments() throw (css::uno::RuntimeException) {
+    SAL_CALL getTypeArguments() throw (css::uno::RuntimeException, std::exception) {
         return css::uno::Sequence<
             css::uno::Reference< css::reflection::XTypeDescription > >();
     }
@@ -417,7 +417,7 @@ private:
 
 css::uno::Sequence< css::uno::Reference< css::reflection::XTypeDescription > >
 PolymorphicStructTypeTemplateDescription::getMemberTypes()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     assert(entity_->getMembers().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getMembers().size());
@@ -434,7 +434,7 @@ PolymorphicStructTypeTemplateDescription::getMemberTypes()
 
 css::uno::Sequence< rtl::OUString >
 PolymorphicStructTypeTemplateDescription::getMemberNames()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     assert(entity_->getMembers().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getMembers().size());
@@ -447,7 +447,7 @@ PolymorphicStructTypeTemplateDescription::getMemberNames()
 
 css::uno::Sequence< rtl::OUString >
 PolymorphicStructTypeTemplateDescription::getTypeParameters()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     assert(entity_->getTypeParameters().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getTypeParameters().size());
@@ -479,32 +479,32 @@ private:
     virtual ~InstantiatedPolymorphicStructTypeDescription() {}
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return css::uno::TypeClass_STRUCT; }
 
-    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException)
+    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception)
     { return name_; }
 
     virtual css::uno::Reference< css::reflection::XTypeDescription > SAL_CALL
-    getBaseType() throw (css::uno::RuntimeException)
+    getBaseType() throw (css::uno::RuntimeException, std::exception)
     { return css::uno::Reference< css::reflection::XTypeDescription >(); }
 
     virtual
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > >
-    SAL_CALL getMemberTypes() throw (css::uno::RuntimeException);
+    SAL_CALL getMemberTypes() throw (css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Sequence< rtl::OUString > SAL_CALL getMemberNames()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Sequence< rtl::OUString > SAL_CALL getTypeParameters()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return css::uno::Sequence< rtl::OUString >(); }
 
     virtual
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > >
-    SAL_CALL getTypeArguments() throw (css::uno::RuntimeException);
+    SAL_CALL getTypeArguments() throw (css::uno::RuntimeException, std::exception);
 
     rtl::Reference< cppuhelper::TypeManager > manager_;
     rtl::OUString name_;
@@ -514,7 +514,7 @@ private:
 
 css::uno::Sequence< css::uno::Reference< css::reflection::XTypeDescription > >
 InstantiatedPolymorphicStructTypeDescription::getMemberTypes()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     assert(entity_->getMembers().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getMembers().size());
@@ -542,7 +542,7 @@ InstantiatedPolymorphicStructTypeDescription::getMemberTypes()
 
 css::uno::Sequence< rtl::OUString >
 InstantiatedPolymorphicStructTypeDescription::getMemberNames()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     assert(entity_->getMembers().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getMembers().size());
@@ -554,7 +554,7 @@ InstantiatedPolymorphicStructTypeDescription::getMemberNames()
 }
 css::uno::Sequence< css::uno::Reference< css::reflection::XTypeDescription > >
 InstantiatedPolymorphicStructTypeDescription::getTypeArguments()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     assert(arguments_.size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(arguments_.size());
@@ -584,14 +584,14 @@ private:
     virtual ~ExceptionTypeDescription() {}
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return css::uno::TypeClass_EXCEPTION; }
 
-    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException)
+    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception)
     { return name_; }
 
     virtual css::uno::Reference< css::reflection::XTypeDescription > SAL_CALL
-    getBaseType() throw (css::uno::RuntimeException) {
+    getBaseType() throw (css::uno::RuntimeException, std::exception) {
         return entity_->getDirectBase().isEmpty()
             ? css::uno::Reference< css::reflection::XTypeDescription >()
             : manager_->resolve(entity_->getDirectBase());
@@ -600,10 +600,10 @@ private:
     virtual
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > >
-    SAL_CALL getMemberTypes() throw (css::uno::RuntimeException);
+    SAL_CALL getMemberTypes() throw (css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Sequence< rtl::OUString > SAL_CALL getMemberNames()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     rtl::Reference< cppuhelper::TypeManager > manager_;
     rtl::OUString name_;
@@ -611,7 +611,7 @@ private:
 };
 
 css::uno::Sequence< css::uno::Reference< css::reflection::XTypeDescription > >
-ExceptionTypeDescription::getMemberTypes() throw (css::uno::RuntimeException) {
+ExceptionTypeDescription::getMemberTypes() throw (css::uno::RuntimeException, std::exception) {
     assert(entity_->getDirectMembers().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getDirectMembers().size());
     css::uno::Sequence<
@@ -623,7 +623,7 @@ ExceptionTypeDescription::getMemberTypes() throw (css::uno::RuntimeException) {
 }
 
 css::uno::Sequence< rtl::OUString > ExceptionTypeDescription::getMemberNames()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     assert(entity_->getDirectMembers().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getDirectMembers().size());
@@ -652,38 +652,38 @@ private:
     virtual ~AttributeDescription() {}
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return css::uno::TypeClass_INTERFACE_ATTRIBUTE; }
 
-    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException)
+    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception)
     { return name_; }
 
     virtual rtl::OUString SAL_CALL getMemberName()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return attribute_.name; }
 
-    virtual sal_Int32 SAL_CALL getPosition() throw (css::uno::RuntimeException)
+    virtual sal_Int32 SAL_CALL getPosition() throw (css::uno::RuntimeException, std::exception)
     { return position_; }
 
-    virtual sal_Bool SAL_CALL isReadOnly() throw (css::uno::RuntimeException)
+    virtual sal_Bool SAL_CALL isReadOnly() throw (css::uno::RuntimeException, std::exception)
     { return attribute_.readOnly; }
 
     virtual css::uno::Reference< css::reflection::XTypeDescription > SAL_CALL
-    getType() throw (css::uno::RuntimeException)
+    getType() throw (css::uno::RuntimeException, std::exception)
     { return manager_->resolve(attribute_.type); }
 
-    virtual sal_Bool SAL_CALL isBound() throw (css::uno::RuntimeException)
+    virtual sal_Bool SAL_CALL isBound() throw (css::uno::RuntimeException, std::exception)
     { return attribute_.bound; }
 
     virtual
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XCompoundTypeDescription > >
-    SAL_CALL getGetExceptions() throw (css::uno::RuntimeException);
+    SAL_CALL getGetExceptions() throw (css::uno::RuntimeException, std::exception);
 
     virtual
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XCompoundTypeDescription > >
-    SAL_CALL getSetExceptions() throw (css::uno::RuntimeException);
+    SAL_CALL getSetExceptions() throw (css::uno::RuntimeException, std::exception);
 
     rtl::Reference< cppuhelper::TypeManager > manager_;
     rtl::OUString name_;
@@ -693,7 +693,7 @@ private:
 
 css::uno::Sequence<
     css::uno::Reference< css::reflection::XCompoundTypeDescription > >
-AttributeDescription::getGetExceptions() throw (css::uno::RuntimeException) {
+AttributeDescription::getGetExceptions() throw (css::uno::RuntimeException, std::exception) {
     assert(attribute_.getExceptions.size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(attribute_.getExceptions.size());
     css::uno::Sequence<
@@ -708,7 +708,7 @@ AttributeDescription::getGetExceptions() throw (css::uno::RuntimeException) {
 
 css::uno::Sequence<
     css::uno::Reference< css::reflection::XCompoundTypeDescription > >
-AttributeDescription::getSetExceptions() throw (css::uno::RuntimeException) {
+AttributeDescription::getSetExceptions() throw (css::uno::RuntimeException, std::exception) {
     assert(attribute_.setExceptions.size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(attribute_.setExceptions.size());
     css::uno::Sequence<
@@ -735,14 +735,14 @@ public:
 private:
     virtual ~MethodParameter() {}
 
-    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException)
+    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception)
     { return parameter_.name; }
 
     virtual css::uno::Reference< css::reflection::XTypeDescription > SAL_CALL
-    getType() throw (css::uno::RuntimeException)
+    getType() throw (css::uno::RuntimeException, std::exception)
     { return manager_->resolve(parameter_.type); }
 
-    virtual sal_Bool SAL_CALL isIn() throw (css::uno::RuntimeException) {
+    virtual sal_Bool SAL_CALL isIn() throw (css::uno::RuntimeException, std::exception) {
         return
             (parameter_.direction
              == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN)
@@ -751,7 +751,7 @@ private:
                     DIRECTION_IN_OUT);
     }
 
-    virtual sal_Bool SAL_CALL isOut() throw (css::uno::RuntimeException) {
+    virtual sal_Bool SAL_CALL isOut() throw (css::uno::RuntimeException, std::exception) {
         return
             (parameter_.direction
              == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_OUT)
@@ -760,7 +760,7 @@ private:
                     DIRECTION_IN_OUT);
     }
 
-    virtual sal_Int32 SAL_CALL getPosition() throw (css::uno::RuntimeException)
+    virtual sal_Int32 SAL_CALL getPosition() throw (css::uno::RuntimeException, std::exception)
     { return position_; }
 
     rtl::Reference< cppuhelper::TypeManager > manager_;
@@ -784,35 +784,35 @@ private:
     virtual ~MethodDescription() {}
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return css::uno::TypeClass_INTERFACE_METHOD; }
 
-    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException)
+    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception)
     { return name_; }
 
     virtual rtl::OUString SAL_CALL getMemberName()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return method_.name; }
 
-    virtual sal_Int32 SAL_CALL getPosition() throw (css::uno::RuntimeException)
+    virtual sal_Int32 SAL_CALL getPosition() throw (css::uno::RuntimeException, std::exception)
     { return position_; }
 
     virtual css::uno::Reference< css::reflection::XTypeDescription > SAL_CALL
-    getReturnType() throw (css::uno::RuntimeException)
+    getReturnType() throw (css::uno::RuntimeException, std::exception)
     { return manager_->resolve(method_.returnType); }
 
-    virtual sal_Bool SAL_CALL isOneway() throw (css::uno::RuntimeException)
+    virtual sal_Bool SAL_CALL isOneway() throw (css::uno::RuntimeException, std::exception)
     { return false; }
 
     virtual
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XMethodParameter > >
-    SAL_CALL getParameters() throw (css::uno::RuntimeException);
+    SAL_CALL getParameters() throw (css::uno::RuntimeException, std::exception);
 
     virtual
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > >
-    SAL_CALL getExceptions() throw (css::uno::RuntimeException);
+    SAL_CALL getExceptions() throw (css::uno::RuntimeException, std::exception);
 
     rtl::Reference< cppuhelper::TypeManager > manager_;
     rtl::OUString name_;
@@ -821,7 +821,7 @@ private:
 };
 
 css::uno::Sequence< css::uno::Reference< css::reflection::XMethodParameter > >
-MethodDescription::getParameters() throw (css::uno::RuntimeException) {
+MethodDescription::getParameters() throw (css::uno::RuntimeException, std::exception) {
     assert(method_.parameters.size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(method_.parameters.size());
     css::uno::Sequence<
@@ -833,7 +833,7 @@ MethodDescription::getParameters() throw (css::uno::RuntimeException) {
 }
 
 css::uno::Sequence< css::uno::Reference< css::reflection::XTypeDescription > >
-MethodDescription::getExceptions() throw (css::uno::RuntimeException) {
+MethodDescription::getExceptions() throw (css::uno::RuntimeException, std::exception) {
     assert(method_.exceptions.size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(method_.exceptions.size());
     css::uno::Sequence<
@@ -916,37 +916,37 @@ private:
     virtual ~InterfaceTypeDescription() {}
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return css::uno::TypeClass_INTERFACE; }
 
-    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException)
+    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception)
     { return name_; }
 
     virtual css::uno::Reference< css::reflection::XTypeDescription > SAL_CALL
-    getBaseType() throw (css::uno::RuntimeException) {
+    getBaseType() throw (css::uno::RuntimeException, std::exception) {
         return entity_->getDirectMandatoryBases().empty()
             ? css::uno::Reference< css::reflection::XTypeDescription >()
             : manager_->resolve(entity_->getDirectMandatoryBases()[0].name);
     }
 
-    virtual css::uno::Uik SAL_CALL getUik() throw (css::uno::RuntimeException)
+    virtual css::uno::Uik SAL_CALL getUik() throw (css::uno::RuntimeException, std::exception)
     { return css::uno::Uik(); }
 
     virtual
     css::uno::Sequence<
         css::uno::Reference<
              css::reflection::XInterfaceMemberTypeDescription > >
-    SAL_CALL getMembers() throw (css::uno::RuntimeException);
+    SAL_CALL getMembers() throw (css::uno::RuntimeException, std::exception);
 
     virtual
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > >
-    SAL_CALL getBaseTypes() throw (css::uno::RuntimeException);
+    SAL_CALL getBaseTypes() throw (css::uno::RuntimeException, std::exception);
 
     virtual
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > >
-    SAL_CALL getOptionalBaseTypes() throw (css::uno::RuntimeException);
+    SAL_CALL getOptionalBaseTypes() throw (css::uno::RuntimeException, std::exception);
 
     rtl::Reference< cppuhelper::TypeManager > manager_;
     rtl::OUString name_;
@@ -955,7 +955,7 @@ private:
 
 css::uno::Sequence<
     css::uno::Reference< css::reflection::XInterfaceMemberTypeDescription > >
-InterfaceTypeDescription::getMembers() throw (css::uno::RuntimeException) {
+InterfaceTypeDescription::getMembers() throw (css::uno::RuntimeException, std::exception) {
     assert(
         entity_->getDirectAttributes().size() <= SAL_MAX_INT32
         && (entity_->getDirectMethods().size()
@@ -981,7 +981,7 @@ InterfaceTypeDescription::getMembers() throw (css::uno::RuntimeException) {
 }
 
 css::uno::Sequence< css::uno::Reference< css::reflection::XTypeDescription > >
-InterfaceTypeDescription::getBaseTypes() throw (css::uno::RuntimeException) {
+InterfaceTypeDescription::getBaseTypes() throw (css::uno::RuntimeException, std::exception) {
     assert(entity_->getDirectMandatoryBases().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(
         entity_->getDirectMandatoryBases().size());
@@ -995,7 +995,7 @@ InterfaceTypeDescription::getBaseTypes() throw (css::uno::RuntimeException) {
 
 css::uno::Sequence< css::uno::Reference< css::reflection::XTypeDescription > >
 InterfaceTypeDescription::getOptionalBaseTypes()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     assert(entity_->getDirectOptionalBases().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(
@@ -1020,14 +1020,14 @@ private:
     virtual ~ConstantDescription() {}
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return css::uno::TypeClass_CONSTANT; }
 
-    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException)
+    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception)
     { return name_; }
 
     virtual css::uno::Any SAL_CALL getConstantValue()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return value_; }
 
     rtl::OUString name_;
@@ -1092,16 +1092,16 @@ private:
     virtual ~ConstantGroupDescription() {}
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return css::uno::TypeClass_CONSTANTS; }
 
-    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException)
+    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception)
     { return name_; }
 
     virtual
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XConstantTypeDescription > >
-    SAL_CALL getConstants() throw (css::uno::RuntimeException);
+    SAL_CALL getConstants() throw (css::uno::RuntimeException, std::exception);
 
     rtl::OUString name_;
     rtl::Reference< unoidl::ConstantGroupEntity > entity_;
@@ -1109,7 +1109,7 @@ private:
 
 css::uno::Sequence<
     css::uno::Reference< css::reflection::XConstantTypeDescription > >
-ConstantGroupDescription::getConstants() throw (css::uno::RuntimeException) {
+ConstantGroupDescription::getConstants() throw (css::uno::RuntimeException, std::exception) {
     assert(entity_->getMembers().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getMembers().size());
     css::uno::Sequence<
@@ -1138,14 +1138,14 @@ private:
     virtual ~TypedefDescription() {}
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return css::uno::TypeClass_TYPEDEF; }
 
-    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException)
+    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception)
     { return name_; }
 
     virtual css::uno::Reference< css::reflection::XTypeDescription > SAL_CALL
-    getReferencedType() throw (css::uno::RuntimeException)
+    getReferencedType() throw (css::uno::RuntimeException, std::exception)
     { return manager_->resolve(entity_->getType()); }
 
     rtl::Reference< cppuhelper::TypeManager > manager_;
@@ -1168,24 +1168,24 @@ public:
 private:
     virtual ~ConstructorParameter() {}
 
-    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException)
+    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception)
     { return parameter_.name; }
 
     virtual css::uno::Reference< css::reflection::XTypeDescription > SAL_CALL
-    getType() throw (css::uno::RuntimeException)
+    getType() throw (css::uno::RuntimeException, std::exception)
     { return manager_->resolve(parameter_.type); }
 
-    virtual sal_Bool SAL_CALL isIn() throw (css::uno::RuntimeException)
+    virtual sal_Bool SAL_CALL isIn() throw (css::uno::RuntimeException, std::exception)
     { return true; }
 
-    virtual sal_Bool SAL_CALL isOut() throw (css::uno::RuntimeException)
+    virtual sal_Bool SAL_CALL isOut() throw (css::uno::RuntimeException, std::exception)
     { return false; }
 
-    virtual sal_Int32 SAL_CALL getPosition() throw (css::uno::RuntimeException)
+    virtual sal_Int32 SAL_CALL getPosition() throw (css::uno::RuntimeException, std::exception)
     { return position_; }
 
     virtual sal_Bool SAL_CALL isRestParameter()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return parameter_.rest; }
 
     rtl::Reference< cppuhelper::TypeManager > manager_;
@@ -1210,28 +1210,28 @@ private:
     virtual ~ConstructorDescription() {}
 
     virtual sal_Bool SAL_CALL isDefaultConstructor()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return constructor_.defaultConstructor; }
 
-    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException)
+    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception)
     { return constructor_.name; }
 
     virtual
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XParameter > >
-    SAL_CALL getParameters() throw (css::uno::RuntimeException);
+    SAL_CALL getParameters() throw (css::uno::RuntimeException, std::exception);
 
     virtual
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XCompoundTypeDescription > >
-    SAL_CALL getExceptions() throw (css::uno::RuntimeException);
+    SAL_CALL getExceptions() throw (css::uno::RuntimeException, std::exception);
 
     rtl::Reference< cppuhelper::TypeManager > manager_;
     unoidl::SingleInterfaceBasedServiceEntity::Constructor constructor_;
 };
 
 css::uno::Sequence< css::uno::Reference< css::reflection::XParameter > >
-ConstructorDescription::getParameters() throw (css::uno::RuntimeException) {
+ConstructorDescription::getParameters() throw (css::uno::RuntimeException, std::exception) {
     assert(constructor_.parameters.size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(constructor_.parameters.size());
     css::uno::Sequence< css::uno::Reference< css::reflection::XParameter > > s(
@@ -1245,7 +1245,7 @@ ConstructorDescription::getParameters() throw (css::uno::RuntimeException) {
 
 css::uno::Sequence<
     css::uno::Reference< css::reflection::XCompoundTypeDescription > >
-ConstructorDescription::getExceptions() throw (css::uno::RuntimeException) {
+ConstructorDescription::getExceptions() throw (css::uno::RuntimeException, std::exception) {
     assert(constructor_.exceptions.size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(constructor_.exceptions.size());
     css::uno::Sequence<
@@ -1279,16 +1279,16 @@ private:
     virtual ~SingleInterfaceBasedServiceDescription() {}
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return css::uno::TypeClass_SERVICE; }
 
-    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException)
+    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception)
     { return name_; }
 
     virtual
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XServiceTypeDescription > >
-    SAL_CALL getMandatoryServices() throw (css::uno::RuntimeException)
+    SAL_CALL getMandatoryServices() throw (css::uno::RuntimeException, std::exception)
     {
         return css::uno::Sequence<
             css::uno::Reference< css::reflection::XServiceTypeDescription > >();
@@ -1297,7 +1297,7 @@ private:
     virtual
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XServiceTypeDescription > >
-    SAL_CALL getOptionalServices() throw (css::uno::RuntimeException)
+    SAL_CALL getOptionalServices() throw (css::uno::RuntimeException, std::exception)
     {
         return css::uno::Sequence<
             css::uno::Reference< css::reflection::XServiceTypeDescription > >();
@@ -1306,7 +1306,7 @@ private:
     virtual
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XInterfaceTypeDescription > >
-    SAL_CALL getMandatoryInterfaces() throw (css::uno::RuntimeException)
+    SAL_CALL getMandatoryInterfaces() throw (css::uno::RuntimeException, std::exception)
     {
         return css::uno::Sequence<
             css::uno::Reference<
@@ -1316,7 +1316,7 @@ private:
     virtual
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XInterfaceTypeDescription > >
-    SAL_CALL getOptionalInterfaces() throw (css::uno::RuntimeException)
+    SAL_CALL getOptionalInterfaces() throw (css::uno::RuntimeException, std::exception)
     {
         return css::uno::Sequence<
             css::uno::Reference<
@@ -1326,7 +1326,7 @@ private:
     virtual
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XPropertyTypeDescription > >
-    SAL_CALL getProperties() throw (css::uno::RuntimeException)
+    SAL_CALL getProperties() throw (css::uno::RuntimeException, std::exception)
     {
         return css::uno::Sequence<
             css::uno::Reference<
@@ -1334,17 +1334,17 @@ private:
     }
 
     virtual sal_Bool SAL_CALL isSingleInterfaceBased()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return true; }
 
     virtual css::uno::Reference< css::reflection::XTypeDescription > SAL_CALL
-    getInterface() throw (css::uno::RuntimeException)
+    getInterface() throw (css::uno::RuntimeException, std::exception)
     { return manager_->resolve(entity_->getBase()); }
 
     virtual
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XServiceConstructorDescription > >
-    SAL_CALL getConstructors() throw (css::uno::RuntimeException);
+    SAL_CALL getConstructors() throw (css::uno::RuntimeException, std::exception);
 
     rtl::Reference< cppuhelper::TypeManager > manager_;
     rtl::OUString name_;
@@ -1354,7 +1354,7 @@ private:
 css::uno::Sequence<
     css::uno::Reference< css::reflection::XServiceConstructorDescription > >
 SingleInterfaceBasedServiceDescription::getConstructors()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     assert(entity_->getConstructors().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getConstructors().size());
@@ -1382,18 +1382,18 @@ private:
     virtual ~PropertyDescription() {}
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return css::uno::TypeClass_PROPERTY; }
 
-    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException)
+    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception)
     { return property_.name; }
 
     virtual sal_Int16 SAL_CALL getPropertyFlags()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return property_.attributes; }
 
     virtual css::uno::Reference< css::reflection::XTypeDescription > SAL_CALL
-    getPropertyTypeDescription() throw (css::uno::RuntimeException)
+    getPropertyTypeDescription() throw (css::uno::RuntimeException, std::exception)
     { return manager_->resolve(property_.type); }
 
     rtl::Reference< cppuhelper::TypeManager > manager_;
@@ -1421,49 +1421,49 @@ private:
     virtual ~AccumulationBasedServiceDescription() {}
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return css::uno::TypeClass_SERVICE; }
 
-    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException)
+    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception)
     { return name_; }
 
     virtual
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XServiceTypeDescription > >
-    SAL_CALL getMandatoryServices() throw (css::uno::RuntimeException);
+    SAL_CALL getMandatoryServices() throw (css::uno::RuntimeException, std::exception);
 
     virtual
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XServiceTypeDescription > >
-    SAL_CALL getOptionalServices() throw (css::uno::RuntimeException);
+    SAL_CALL getOptionalServices() throw (css::uno::RuntimeException, std::exception);
 
     virtual
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XInterfaceTypeDescription > >
-    SAL_CALL getMandatoryInterfaces() throw (css::uno::RuntimeException);
+    SAL_CALL getMandatoryInterfaces() throw (css::uno::RuntimeException, std::exception);
 
     virtual
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XInterfaceTypeDescription > >
-    SAL_CALL getOptionalInterfaces() throw (css::uno::RuntimeException);
+    SAL_CALL getOptionalInterfaces() throw (css::uno::RuntimeException, std::exception);
 
     virtual
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XPropertyTypeDescription > >
-    SAL_CALL getProperties() throw (css::uno::RuntimeException);
+    SAL_CALL getProperties() throw (css::uno::RuntimeException, std::exception);
 
     virtual sal_Bool SAL_CALL isSingleInterfaceBased()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return false; }
 
     virtual css::uno::Reference< css::reflection::XTypeDescription > SAL_CALL
-    getInterface() throw (css::uno::RuntimeException)
+    getInterface() throw (css::uno::RuntimeException, std::exception)
     { return css::uno::Reference< css::reflection::XTypeDescription >(); }
 
     virtual
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XServiceConstructorDescription > >
-    SAL_CALL getConstructors() throw (css::uno::RuntimeException)
+    SAL_CALL getConstructors() throw (css::uno::RuntimeException, std::exception)
     {
         return css::uno::Sequence<
             css::uno::Reference<
@@ -1478,7 +1478,7 @@ private:
 css::uno::Sequence<
     css::uno::Reference< css::reflection::XServiceTypeDescription > >
 AccumulationBasedServiceDescription::getMandatoryServices()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     assert(entity_->getDirectMandatoryBaseServices().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(
@@ -1497,7 +1497,7 @@ AccumulationBasedServiceDescription::getMandatoryServices()
 css::uno::Sequence<
     css::uno::Reference< css::reflection::XServiceTypeDescription > >
 AccumulationBasedServiceDescription::getOptionalServices()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     assert(entity_->getDirectOptionalBaseServices().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(
@@ -1515,7 +1515,7 @@ AccumulationBasedServiceDescription::getOptionalServices()
 css::uno::Sequence<
     css::uno::Reference< css::reflection::XInterfaceTypeDescription > >
 AccumulationBasedServiceDescription::getMandatoryInterfaces()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     assert(entity_->getDirectMandatoryBaseInterfaces().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(
@@ -1536,7 +1536,7 @@ AccumulationBasedServiceDescription::getMandatoryInterfaces()
 css::uno::Sequence<
     css::uno::Reference< css::reflection::XInterfaceTypeDescription > >
 AccumulationBasedServiceDescription::getOptionalInterfaces()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     assert(entity_->getDirectOptionalBaseInterfaces().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(
@@ -1557,7 +1557,7 @@ AccumulationBasedServiceDescription::getOptionalInterfaces()
 css::uno::Sequence<
     css::uno::Reference< css::reflection::XPropertyTypeDescription > >
 AccumulationBasedServiceDescription::getProperties()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     assert(entity_->getDirectProperties().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(
@@ -1591,25 +1591,25 @@ private:
     virtual ~InterfaceBasedSingletonDescription() {}
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return css::uno::TypeClass_SINGLETON; }
 
-    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException)
+    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception)
     { return name_; }
 
     virtual css::uno::Reference< css::reflection::XServiceTypeDescription >
-    SAL_CALL getService() throw (css::uno::RuntimeException)
+    SAL_CALL getService() throw (css::uno::RuntimeException, std::exception)
     {
         return
             css::uno::Reference< css::reflection::XServiceTypeDescription >();
     }
 
     virtual sal_Bool SAL_CALL isInterfaceBased()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return true; }
 
     virtual css::uno::Reference< css::reflection::XTypeDescription >
-    SAL_CALL getInterface() throw (css::uno::RuntimeException)
+    SAL_CALL getInterface() throw (css::uno::RuntimeException, std::exception)
     { return manager_->resolve(entity_->getBase()); }
 
     rtl::Reference< cppuhelper::TypeManager > manager_;
@@ -1637,25 +1637,25 @@ private:
     virtual ~ServiceBasedSingletonDescription() {}
 
     virtual css::uno::TypeClass SAL_CALL getTypeClass()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return css::uno::TypeClass_SINGLETON; }
 
-    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException)
+    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception)
     { return name_; }
 
     virtual css::uno::Reference< css::reflection::XServiceTypeDescription >
-    SAL_CALL getService() throw (css::uno::RuntimeException)
+    SAL_CALL getService() throw (css::uno::RuntimeException, std::exception)
     {
         return css::uno::Reference< css::reflection::XServiceTypeDescription >(
             manager_->resolve(entity_->getBase()), css::uno::UNO_QUERY_THROW);
     }
 
     virtual sal_Bool SAL_CALL isInterfaceBased()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return false; }
 
     virtual css::uno::Reference< css::reflection::XTypeDescription >
-    SAL_CALL getInterface() throw (css::uno::RuntimeException)
+    SAL_CALL getInterface() throw (css::uno::RuntimeException, std::exception)
     { return css::uno::Reference< css::reflection::XTypeDescription >(); }
 
     rtl::Reference< cppuhelper::TypeManager > manager_;
@@ -1683,19 +1683,19 @@ private:
     virtual ~Enumeration() {}
 
     virtual sal_Bool SAL_CALL hasMoreElements()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return !positions_.empty(); }
 
     virtual css::uno::Any SAL_CALL nextElement()
         throw (
             css::container::NoSuchElementException,
-            css::lang::WrappedTargetException, css::uno::RuntimeException)
+            css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
     { return css::uno::makeAny(nextTypeDescription()); }
 
     virtual css::uno::Reference< css::reflection::XTypeDescription > SAL_CALL
     nextTypeDescription()
         throw (
-            css::container::NoSuchElementException, css::uno::RuntimeException);
+            css::container::NoSuchElementException, css::uno::RuntimeException, std::exception);
 
     bool matches(css::uno::TypeClass tc) const;
 
@@ -1743,7 +1743,7 @@ private:
 
 css::uno::Reference< css::reflection::XTypeDescription >
 Enumeration::nextTypeDescription()
-    throw (css::container::NoSuchElementException, css::uno::RuntimeException)
+    throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception)
 {
     rtl::OUString name;
     {
@@ -1960,7 +1960,7 @@ cppuhelper::TypeManager::~TypeManager() throw () {}
 void cppuhelper::TypeManager::disposing() {} //TODO
 
 rtl::OUString cppuhelper::TypeManager::getImplementationName()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return rtl::OUString(
         "com.sun.star.comp.cppuhelper.bootstrap.TypeManager");
@@ -1968,14 +1968,14 @@ rtl::OUString cppuhelper::TypeManager::getImplementationName()
 
 sal_Bool cppuhelper::TypeManager::supportsService(
     rtl::OUString const & ServiceName)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 css::uno::Sequence< rtl::OUString >
 cppuhelper::TypeManager::getSupportedServiceNames()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     css::uno::Sequence< rtl::OUString > names(1);
     names[0] = "com.sun.star.reflection.TypeDescriptionManager"; //TODO
@@ -1984,7 +1984,7 @@ cppuhelper::TypeManager::getSupportedServiceNames()
 
 css::uno::Any cppuhelper::TypeManager::getByHierarchicalName(
     rtl::OUString const & aName)
-    throw (css::container::NoSuchElementException, css::uno::RuntimeException)
+    throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception)
 {
     css::uno::Any desc(find(aName));
     if (!desc.hasValue()) {
@@ -1996,19 +1996,19 @@ css::uno::Any cppuhelper::TypeManager::getByHierarchicalName(
 
 sal_Bool cppuhelper::TypeManager::hasByHierarchicalName(
     rtl::OUString const & aName)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return find(aName).hasValue();
 }
 
 css::uno::Type cppuhelper::TypeManager::getElementType()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::UnoType< rtl::OUString >::get();
 }
 
 sal_Bool cppuhelper::TypeManager::hasElements()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     throw css::uno::RuntimeException(
         "TypeManager hasElements: method not supported",
@@ -2017,7 +2017,7 @@ sal_Bool cppuhelper::TypeManager::hasElements()
 
 css::uno::Reference< css::container::XEnumeration >
 cppuhelper::TypeManager::createEnumeration()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     throw css::uno::RuntimeException(
         "TypeManager createEnumeration: method not supported",
@@ -2025,7 +2025,7 @@ cppuhelper::TypeManager::createEnumeration()
 }
 
 sal_Bool cppuhelper::TypeManager::has(css::uno::Any const &)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     throw css::uno::RuntimeException(
         "TypeManager has: method not supported",
@@ -2035,7 +2035,7 @@ sal_Bool cppuhelper::TypeManager::has(css::uno::Any const &)
 void cppuhelper::TypeManager::insert(css::uno::Any const & aElement)
     throw (
         css::lang::IllegalArgumentException,
-        css::container::ElementExistException, css::uno::RuntimeException)
+        css::container::ElementExistException, css::uno::RuntimeException, std::exception)
 {
     rtl::OUString uri;
     if (!(aElement >>= uri)) {
@@ -2052,7 +2052,7 @@ void cppuhelper::TypeManager::insert(css::uno::Any const & aElement)
 void cppuhelper::TypeManager::remove(css::uno::Any const & aElement)
     throw (
         css::lang::IllegalArgumentException,
-        css::container::NoSuchElementException, css::uno::RuntimeException)
+        css::container::NoSuchElementException, css::uno::RuntimeException, std::exception)
 {
     rtl::OUString uri;
     if (!(aElement >>= uri)) {
@@ -2072,7 +2072,7 @@ cppuhelper::TypeManager::createTypeDescriptionEnumeration(
     throw (
         css::reflection::NoSuchTypeNameException,
         css::reflection::InvalidTypeNameException,
-        css::uno::RuntimeException)
+        css::uno::RuntimeException, std::exception)
 {
     rtl::Reference< unoidl::MapCursor > cursor;
     try {

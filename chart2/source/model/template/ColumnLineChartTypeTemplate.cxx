@@ -161,7 +161,7 @@ uno::Any ColumnLineChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL ColumnLineChartTypeTemplate::getPropertySetInfo()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return *StaticColumnLineChartTypeTemplateInfo::get();
 }
@@ -249,7 +249,7 @@ void SAL_CALL ColumnLineChartTypeTemplate::applyStyle(
     ::sal_Int32 nChartTypeIndex,
     ::sal_Int32 nSeriesIndex,
     ::sal_Int32 nSeriesCount )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     ChartTypeTemplate::applyStyle( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
 
@@ -280,7 +280,7 @@ StackMode ColumnLineChartTypeTemplate::getStackMode( sal_Int32 nChartTypeIndex )
 sal_Bool SAL_CALL ColumnLineChartTypeTemplate::matchesTemplate(
     const uno::Reference< XDiagram >& xDiagram,
     sal_Bool bAdaptProperties )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     sal_Bool bResult = sal_False;
 
@@ -377,7 +377,7 @@ Reference< chart2::XChartType > ColumnLineChartTypeTemplate::getChartTypeForInde
 
 Reference< XChartType > SAL_CALL ColumnLineChartTypeTemplate::getChartTypeForNewSeries(
         const uno::Sequence< Reference< chart2::XChartType > >& aFormerlyUsedChartTypes )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< chart2::XChartType > xResult;
 
@@ -398,7 +398,7 @@ Reference< XChartType > SAL_CALL ColumnLineChartTypeTemplate::getChartTypeForNew
 }
 
 Reference< XDataInterpreter > SAL_CALL ColumnLineChartTypeTemplate::getDataInterpreter()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if( ! m_xDataInterpreter.is())
     {

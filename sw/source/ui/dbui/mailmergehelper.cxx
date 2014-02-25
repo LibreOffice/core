@@ -624,12 +624,12 @@ SwAuthenticator::~SwAuthenticator()
 {
 }
 
-OUString SwAuthenticator::getUserName( ) throw (RuntimeException)
+OUString SwAuthenticator::getUserName( ) throw (RuntimeException, std::exception)
 {
     return m_aUserName;
 }
 
-OUString SwAuthenticator::getPassword(  ) throw (RuntimeException)
+OUString SwAuthenticator::getPassword(  ) throw (RuntimeException, std::exception)
 {
     if(!m_aUserName.isEmpty() && m_aPassword.isEmpty() && m_pParentWindow)
     {
@@ -656,7 +656,7 @@ SwConnectionContext::~SwConnectionContext()
 }
 
 uno::Any SwConnectionContext::getValueByName( const OUString& rName )
-                                                throw (uno::RuntimeException)
+                                                throw (uno::RuntimeException, std::exception)
 {
     uno::Any aRet;
     if( rName.equalsAscii( "ServerName" ))
@@ -673,17 +673,17 @@ SwConnectionListener::~SwConnectionListener()
 }
 
 void SwConnectionListener::connected(const lang::EventObject& /*aEvent*/)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
 }
 
 void SwConnectionListener::disconnected(const lang::EventObject& /*aEvent*/)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
 }
 
 void SwConnectionListener::disposing(const lang::EventObject& /*aEvent*/)
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
 }
 
@@ -711,7 +711,7 @@ SwMailTransferable::~SwMailTransferable()
 
 uno::Any SwMailTransferable::getTransferData( const datatransfer::DataFlavor& /*aFlavor*/ )
                             throw (datatransfer::UnsupportedFlavorException,
-                            io::IOException, uno::RuntimeException)
+                            io::IOException, uno::RuntimeException, std::exception)
 {
     uno::Any aRet;
     if( m_bIsBody )
@@ -735,7 +735,7 @@ uno::Any SwMailTransferable::getTransferData( const datatransfer::DataFlavor& /*
 }
 
 uno::Sequence< datatransfer::DataFlavor > SwMailTransferable::getTransferDataFlavors(  )
-                            throw (uno::RuntimeException)
+                            throw (uno::RuntimeException, std::exception)
 {
     uno::Sequence< datatransfer::DataFlavor > aRet(1);
     aRet[0].MimeType = m_aMimeType;
@@ -753,24 +753,24 @@ uno::Sequence< datatransfer::DataFlavor > SwMailTransferable::getTransferDataFla
 
 sal_Bool SwMailTransferable::isDataFlavorSupported(
             const datatransfer::DataFlavor& aFlavor )
-                            throw (uno::RuntimeException)
+                            throw (uno::RuntimeException, std::exception)
 {
     return (aFlavor.MimeType == m_aMimeType);
 }
 
-uno::Reference< beans::XPropertySetInfo > SwMailTransferable::getPropertySetInfo(  ) throw(uno::RuntimeException)
+uno::Reference< beans::XPropertySetInfo > SwMailTransferable::getPropertySetInfo(  ) throw(uno::RuntimeException, std::exception)
 {
     return uno::Reference< beans::XPropertySetInfo >();
 }
 
 void SwMailTransferable::setPropertyValue( const OUString& , const uno::Any& )
     throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException,
-          lang::WrappedTargetException, uno::RuntimeException)
+          lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
 }
 
 uno::Any SwMailTransferable::getPropertyValue( const OUString& rPropertyName )
-    throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+    throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     uno::Any aRet;
     if ( rPropertyName == "URL" )
@@ -780,28 +780,28 @@ uno::Any SwMailTransferable::getPropertyValue( const OUString& rPropertyName )
 
 void SwMailTransferable::addPropertyChangeListener(
     const OUString&, const uno::Reference< beans::XPropertyChangeListener >&  )
-    throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+    throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
 }
 
 void SwMailTransferable::removePropertyChangeListener(
     const OUString&,
     const uno::Reference< beans::XPropertyChangeListener >& )
-    throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+    throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
 }
 
 void SwMailTransferable::addVetoableChangeListener(
     const OUString&,
     const uno::Reference< beans::XVetoableChangeListener >& )
-    throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+    throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
 }
 
 void SwMailTransferable::removeVetoableChangeListener(
     const OUString& ,
     const uno::Reference< beans::XVetoableChangeListener >&  )
-        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
 }
 
@@ -814,93 +814,93 @@ SwMailMessage::~SwMailMessage()
 {
 }
 
-OUString SwMailMessage::getSenderName() throw (uno::RuntimeException)
+OUString SwMailMessage::getSenderName() throw (uno::RuntimeException, std::exception)
 {
     return m_sSenderName;
 }
 
-OUString SwMailMessage::getSenderAddress() throw (uno::RuntimeException)
+OUString SwMailMessage::getSenderAddress() throw (uno::RuntimeException, std::exception)
 {
     return m_sSenderAddress;
 }
 
-OUString SwMailMessage::getReplyToAddress() throw (uno::RuntimeException)
+OUString SwMailMessage::getReplyToAddress() throw (uno::RuntimeException, std::exception)
 {
     return m_sReplyToAddress;
 }
 
-void SwMailMessage::setReplyToAddress( const OUString& _replytoaddress ) throw (uno::RuntimeException)
+void SwMailMessage::setReplyToAddress( const OUString& _replytoaddress ) throw (uno::RuntimeException, std::exception)
 {
     m_sReplyToAddress = _replytoaddress;
 }
 
-OUString SwMailMessage::getSubject() throw (uno::RuntimeException)
+OUString SwMailMessage::getSubject() throw (uno::RuntimeException, std::exception)
 {
     return m_sSubject;
 }
 
-void SwMailMessage::setSubject( const OUString& _subject ) throw (uno::RuntimeException)
+void SwMailMessage::setSubject( const OUString& _subject ) throw (uno::RuntimeException, std::exception)
 {
     m_sSubject = _subject;
 }
 
-uno::Reference< datatransfer::XTransferable > SwMailMessage::getBody() throw (uno::RuntimeException)
+uno::Reference< datatransfer::XTransferable > SwMailMessage::getBody() throw (uno::RuntimeException, std::exception)
 {
     return m_xBody;
 }
 
 void SwMailMessage::setBody(
         const uno::Reference< datatransfer::XTransferable >& rBody )
-                                                throw (uno::RuntimeException)
+                                                throw (uno::RuntimeException, std::exception)
 {
     m_xBody = rBody;
 }
 
 void  SwMailMessage::addRecipient( const OUString& rRecipientAddress )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     m_aRecipients.realloc(m_aRecipients.getLength() + 1);
     m_aRecipients[m_aRecipients.getLength() - 1] = rRecipientAddress;
 }
 
 void  SwMailMessage::addCcRecipient( const OUString& rRecipientAddress )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     m_aCcRecipients.realloc(m_aCcRecipients.getLength() + 1);
     m_aCcRecipients[m_aCcRecipients.getLength() - 1] = rRecipientAddress;
 
 }
 
-void  SwMailMessage::addBccRecipient( const OUString& rRecipientAddress ) throw (uno::RuntimeException)
+void  SwMailMessage::addBccRecipient( const OUString& rRecipientAddress ) throw (uno::RuntimeException, std::exception)
 {
     m_aBccRecipients.realloc(m_aBccRecipients.getLength() + 1);
     m_aBccRecipients[m_aBccRecipients.getLength() - 1] = rRecipientAddress;
 }
 
-uno::Sequence< OUString > SwMailMessage::getRecipients(  ) throw (uno::RuntimeException)
+uno::Sequence< OUString > SwMailMessage::getRecipients(  ) throw (uno::RuntimeException, std::exception)
 {
     return m_aRecipients;
 }
 
-uno::Sequence< OUString > SwMailMessage::getCcRecipients(  ) throw (uno::RuntimeException)
+uno::Sequence< OUString > SwMailMessage::getCcRecipients(  ) throw (uno::RuntimeException, std::exception)
 {
     return m_aCcRecipients;
 }
 
-uno::Sequence< OUString > SwMailMessage::getBccRecipients(  ) throw (uno::RuntimeException)
+uno::Sequence< OUString > SwMailMessage::getBccRecipients(  ) throw (uno::RuntimeException, std::exception)
 {
     return m_aBccRecipients;
 }
 
 void SwMailMessage::addAttachment( const mail::MailAttachment& rMailAttachment )
-            throw (uno::RuntimeException)
+            throw (uno::RuntimeException, std::exception)
 {
     m_aAttachments.realloc(m_aAttachments.getLength() + 1);
     m_aAttachments[m_aAttachments.getLength() - 1] = rMailAttachment;
 }
 
 uno::Sequence< mail::MailAttachment > SwMailMessage::getAttachments(  )
-                                            throw (uno::RuntimeException)
+                                            throw (uno::RuntimeException, std::exception)
 {
     return m_aAttachments;
 }

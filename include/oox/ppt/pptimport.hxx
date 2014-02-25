@@ -57,7 +57,7 @@ public:
     std::vector< SlidePersistPtr >&                         getNotesPages(){ return maNotesPages; };
 
     virtual sal_Bool SAL_CALL filter( const ::com::sun::star::uno::Sequence<   ::com::sun::star::beans::PropertyValue >& rDescriptor )
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     sal_Int32 getSchemeColor( sal_Int32 nToken ) const;
 

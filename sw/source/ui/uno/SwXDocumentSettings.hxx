@@ -72,7 +72,7 @@ public:
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL acquire(  )
         throw ();
     virtual void SAL_CALL release(  )
@@ -80,15 +80,15 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  )
-        throw(com::sun::star::uno::RuntimeException);
+        throw(com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw(com::sun::star::uno::RuntimeException);
+        throw(com::sun::star::uno::RuntimeException, std::exception);
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw(com::sun::star::uno::RuntimeException);
+        throw(com::sun::star::uno::RuntimeException, std::exception);
 
     // XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 };
 #endif
 

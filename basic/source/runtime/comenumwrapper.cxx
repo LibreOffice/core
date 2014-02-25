@@ -22,7 +22,7 @@
 using namespace ::com::sun::star;
 
 ::sal_Bool SAL_CALL ComEnumerationWrapper::hasMoreElements()
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     sal_Bool bResult = sal_False;
 
@@ -43,7 +43,7 @@ using namespace ::com::sun::star;
 uno::Any SAL_CALL ComEnumerationWrapper::nextElement()
     throw ( container::NoSuchElementException,
             lang::WrappedTargetException,
-            uno::RuntimeException )
+            uno::RuntimeException, std::exception )
 {
     try
     {

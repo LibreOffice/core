@@ -84,39 +84,39 @@ public: // XDriver
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL connect(
         const OUString& url,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info )
-        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual sal_Bool SAL_CALL acceptsURL( const OUString& url )
-        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo(
         const OUString& url,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info )
-        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception);
 
-    virtual sal_Int32 SAL_CALL getMajorVersion(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getMinorVersion(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getMajorVersion(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual sal_Int32 SAL_CALL getMinorVersion(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 public: // XServiceInfo
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(void)
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
 
 public: // XDataDefinitionSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier > SAL_CALL
     getDataDefinitionByConnection(
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& connection )
-        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier > SAL_CALL
     getDataDefinitionByURL(
         const OUString& url,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info )
-        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception);
 
     // XComponent
     virtual void SAL_CALL disposing();

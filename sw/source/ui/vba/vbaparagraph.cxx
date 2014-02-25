@@ -35,20 +35,20 @@ SwVbaParagraph::~SwVbaParagraph()
 }
 
 uno::Reference< word::XRange > SAL_CALL
-SwVbaParagraph::getRange( ) throw ( uno::RuntimeException )
+SwVbaParagraph::getRange( ) throw ( uno::RuntimeException, std::exception )
 {
     return uno::Reference< word::XRange >( new SwVbaRange( this, mxContext, mxTextDocument, mxTextRange->getStart(), mxTextRange->getEnd(), mxTextRange->getText(), sal_True ) );
 }
 
 uno::Any SAL_CALL
-SwVbaParagraph::getStyle( ) throw ( uno::RuntimeException )
+SwVbaParagraph::getStyle( ) throw ( uno::RuntimeException, std::exception )
 {
     uno::Reference< word::XRange > xRange = getRange();
     return xRange->getStyle();
 }
 
 void SAL_CALL
-SwVbaParagraph::setStyle( const uno::Any& style ) throw ( uno::RuntimeException )
+SwVbaParagraph::setStyle( const uno::Any& style ) throw ( uno::RuntimeException, std::exception )
 {
     uno::Reference< word::XRange > xRange = getRange();
     xRange->setStyle( style );
@@ -90,10 +90,10 @@ public:
     {
     }
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException) { return  cppu::UnoType<text::XTextRange>::get(); }
-    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException) { return sal_True; }
+    virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException, std::exception) { return  cppu::UnoType<text::XTextRange>::get(); }
+    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException, std::exception) { return sal_True; }
     // XIndexAccess
-    virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException)
+    virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException, std::exception)
     {
         sal_Int32 nCount = 0;
         uno::Reference< container::XEnumeration > xParEnum = getEnumeration();
@@ -107,7 +107,7 @@ public:
         }
         return nCount;
     }
-    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException )
+    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
     {
         if( Index < getCount() )
         {
@@ -127,7 +127,7 @@ public:
         throw lang::IndexOutOfBoundsException();
     }
     // XEnumerationAccess
-    virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) throw (uno::RuntimeException)
+    virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) throw (uno::RuntimeException, std::exception)
     {
         return getEnumeration();
     }

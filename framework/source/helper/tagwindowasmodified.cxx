@@ -56,7 +56,7 @@ TagWindowAsModified::~TagWindowAsModified()
 //*****************************************************************************************************************
 void SAL_CALL TagWindowAsModified::initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
     throw(css::uno::Exception       ,
-          css::uno::RuntimeException)
+          css::uno::RuntimeException, std::exception)
 {
     css::uno::Reference< css::frame::XFrame > xFrame;
 
@@ -78,7 +78,7 @@ void SAL_CALL TagWindowAsModified::initialize(const css::uno::Sequence< css::uno
 
 //*****************************************************************************************************************
 void SAL_CALL TagWindowAsModified::modified(const css::lang::EventObject& aEvent)
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
@@ -118,7 +118,7 @@ void SAL_CALL TagWindowAsModified::modified(const css::lang::EventObject& aEvent
 
 //*****************************************************************************************************************
 void SAL_CALL TagWindowAsModified::frameAction(const css::frame::FrameActionEvent& aEvent)
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     if (
         (aEvent.Action != css::frame::FrameAction_COMPONENT_REATTACHED) &&
@@ -144,7 +144,7 @@ void SAL_CALL TagWindowAsModified::frameAction(const css::frame::FrameActionEven
 
 //*****************************************************************************************************************
 void SAL_CALL TagWindowAsModified::disposing(const css::lang::EventObject& aEvent)
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);

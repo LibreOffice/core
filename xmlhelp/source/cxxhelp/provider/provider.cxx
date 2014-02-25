@@ -83,7 +83,7 @@ XTYPEPROVIDER_IMPL_5( ContentProvider,
 // XServiceInfo methods.
 
 OUString SAL_CALL ContentProvider::getImplementationName()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return getImplementationName_Static();
 }
@@ -95,14 +95,14 @@ OUString ContentProvider::getImplementationName_Static()
 
 sal_Bool SAL_CALL
 ContentProvider::supportsService(const OUString& ServiceName )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL
 ContentProvider::getSupportedServiceNames()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return getSupportedServiceNames_Static();
 }
@@ -141,7 +141,7 @@ ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 uno::Reference< ucb::XContent > SAL_CALL
 ContentProvider::queryContent(
         const uno::Reference< ucb::XContentIdentifier >& xCanonicId )
-    throw( ucb::IllegalIdentifierException, uno::RuntimeException )
+    throw( ucb::IllegalIdentifierException, uno::RuntimeException, std::exception )
 {
     if ( !xCanonicId->getContentProviderScheme()
              .equalsIgnoreAsciiCase( m_aScheme ) )
@@ -179,7 +179,7 @@ ContentProvider::queryContent(
 
 void SAL_CALL
 ContentProvider::dispose()
-    throw ( uno::RuntimeException)
+    throw ( uno::RuntimeException, std::exception)
 {
     if(m_xContainer.is())
     {
@@ -190,7 +190,7 @@ ContentProvider::dispose()
 
 void SAL_CALL
 ContentProvider::elementReplaced(const container::ContainerEvent& Event)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if(!m_pDatabases)
         return;

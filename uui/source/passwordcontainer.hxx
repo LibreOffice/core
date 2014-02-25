@@ -150,26 +150,26 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw ( com::sun::star::uno::RuntimeException );
+        throw ( com::sun::star::uno::RuntimeException, std::exception );
 
     virtual sal_Bool SAL_CALL
     supportsService( const OUString& ServiceName )
-        throw ( com::sun::star::uno::RuntimeException );
+        throw ( com::sun::star::uno::RuntimeException, std::exception );
 
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames()
-        throw ( com::sun::star::uno::RuntimeException );
+        throw ( com::sun::star::uno::RuntimeException, std::exception );
 
     // XInteractionHandler2
     virtual void SAL_CALL
     handle( const ::com::sun::star::uno::Reference<
                 ::com::sun::star::task::XInteractionRequest >& Request )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual sal_Bool SAL_CALL
     handleInteractionRequest( const ::com::sun::star::uno::Reference<
                 ::com::sun::star::task::XInteractionRequest >& Request )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // Non-UNO interfaces
     static OUString

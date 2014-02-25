@@ -97,7 +97,7 @@ class OComponentEnumeration :   public ThreadHelpBase               ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
+        virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException, std::exception );
 
         //---------------------------------------------------------------------------------------------------------
         //  XEnumeration
@@ -118,7 +118,7 @@ class OComponentEnumeration :   public ThreadHelpBase               ,
                         (List is emtpy and there no accessible elements ...)
         *//*-*****************************************************************************************************/
 
-        virtual sal_Bool SAL_CALL hasMoreElements() throw( css::uno::RuntimeException );
+        virtual sal_Bool SAL_CALL hasMoreElements() throw( css::uno::RuntimeException, std::exception );
 
         /*-****************************************************************************************************//**
             @short      give the next element, if some exist
@@ -134,7 +134,7 @@ class OComponentEnumeration :   public ThreadHelpBase               ,
 
         virtual css::uno::Any SAL_CALL nextElement() throw( css::container::NoSuchElementException  ,
                                                              css::lang::WrappedTargetException      ,
-                                                            css::uno::RuntimeException              );
+                                                            css::uno::RuntimeException, std::exception              );
 
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods

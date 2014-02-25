@@ -54,7 +54,7 @@ class SidebarWinAccessibleContext : public VCLXAccessibleComponent
         }
 
         virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
-            getAccessibleParent() throw (css::uno::RuntimeException)
+            getAccessibleParent() throw (css::uno::RuntimeException, std::exception)
         {
             osl::MutexGuard aGuard(maMutex);
 
@@ -69,7 +69,7 @@ class SidebarWinAccessibleContext : public VCLXAccessibleComponent
             return xAccParent;
         }
 
-        virtual sal_Int32 SAL_CALL getAccessibleIndexInParent() throw (css::uno::RuntimeException)
+        virtual sal_Int32 SAL_CALL getAccessibleIndexInParent() throw (css::uno::RuntimeException, std::exception)
         {
             osl::MutexGuard aGuard(maMutex);
 

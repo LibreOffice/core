@@ -588,17 +588,17 @@ static OUString aResourceResolverPropName("ResourceResolver");
     // XServiceInfo
 
 
-    OUString DialogProviderImpl::getImplementationName(  ) throw (RuntimeException)
+    OUString DialogProviderImpl::getImplementationName(  ) throw (RuntimeException, std::exception)
     {
         return getImplementationName_DialogProviderImpl();
     }
 
-    sal_Bool DialogProviderImpl::supportsService( const OUString& rServiceName ) throw (RuntimeException)
+    sal_Bool DialogProviderImpl::supportsService( const OUString& rServiceName ) throw (RuntimeException, std::exception)
     {
         return cppu::supportsService(this, rServiceName);
     }
 
-    Sequence< OUString > DialogProviderImpl::getSupportedServiceNames(  ) throw (RuntimeException)
+    Sequence< OUString > DialogProviderImpl::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
     {
         return getSupportedServiceNames_DialogProviderImpl();
     }
@@ -607,7 +607,7 @@ static OUString aResourceResolverPropName("ResourceResolver");
     // XInitialization
 
 
-    void DialogProviderImpl::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException)
+    void DialogProviderImpl::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( getMutex() );
 
@@ -721,7 +721,7 @@ static OUString aResourceResolverPropName("ResourceResolver");
     }
 
     Reference < XDialog > DialogProviderImpl::createDialog( const OUString& URL )
-        throw (IllegalArgumentException, RuntimeException)
+        throw (IllegalArgumentException, RuntimeException, std::exception)
     {
         Reference< XInterface > xDummyHandler;
         Reference< XWindowPeer > xDummyPeer;
@@ -732,7 +732,7 @@ static OUString aResourceResolverPropName("ResourceResolver");
 
     Reference < XDialog > DialogProviderImpl::createDialogWithHandler(
         const OUString& URL, const Reference< XInterface >& xHandler )
-            throw (IllegalArgumentException, RuntimeException)
+            throw (IllegalArgumentException, RuntimeException, std::exception)
     {
         if( !xHandler.is() )
         {
@@ -748,7 +748,7 @@ static OUString aResourceResolverPropName("ResourceResolver");
 
     Reference < XDialog > DialogProviderImpl::createDialogWithArguments(
         const OUString& URL, const Sequence< NamedValue >& Arguments )
-            throw (IllegalArgumentException, RuntimeException)
+            throw (IllegalArgumentException, RuntimeException, std::exception)
     {
         ::comphelper::NamedValueCollection aArguments( Arguments );
 
@@ -774,7 +774,7 @@ static OUString aResourceResolverPropName("ResourceResolver");
     Reference< XWindow > DialogProviderImpl::createContainerWindow(
         const OUString& URL, const OUString& WindowType,
         const Reference< XWindowPeer >& xParent, const Reference< XInterface >& xHandler )
-            throw (lang::IllegalArgumentException, RuntimeException)
+            throw (lang::IllegalArgumentException, RuntimeException, std::exception)
     {
         (void)WindowType;   // for future use
         if( !xParent.is() )

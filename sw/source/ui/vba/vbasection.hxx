@@ -36,13 +36,13 @@ public:
     virtual ~SwVbaSection();
 
     // Attributes
-    virtual ::sal_Bool SAL_CALL getProtectedForForms() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setProtectedForForms( ::sal_Bool _protectedforforms ) throw (css::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL getProtectedForForms() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setProtectedForForms( ::sal_Bool _protectedforforms ) throw (css::uno::RuntimeException, std::exception);
 
     // Methods
-    virtual css::uno::Any SAL_CALL Headers( const css::uno::Any& index ) throw (css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL Footers( const css::uno::Any& index ) throw (css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL PageSetup(  ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL Headers( const css::uno::Any& index ) throw (css::uno::RuntimeException, std::exception);
+    virtual css::uno::Any SAL_CALL Footers( const css::uno::Any& index ) throw (css::uno::RuntimeException, std::exception);
+    virtual css::uno::Any SAL_CALL PageSetup(  ) throw (css::uno::RuntimeException, std::exception);
 
     // XHelperInterface
     virtual OUString getServiceImplName();

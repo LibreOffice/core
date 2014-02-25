@@ -79,16 +79,16 @@ struct FactoryImpl : public ::cppu::WeakImplHelper2< lang::XServiceInfo,
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName )
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
 
     // XProxyFactory
     virtual Reference< XAggregation > SAL_CALL createProxy(
         Reference< XInterface > const & xTarget )
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
 };
 
 
@@ -170,7 +170,7 @@ struct ProxyRoot : public ::cppu::OWeakAggObject
 {
     // XAggregation
     virtual Any SAL_CALL queryAggregation( Type const & rType )
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
 
     virtual ~ProxyRoot();
     inline ProxyRoot( ::rtl::Reference< FactoryImpl > const & factory,
@@ -325,7 +325,7 @@ inline ProxyRoot::ProxyRoot(
 
 
 Any ProxyRoot::queryAggregation( Type const & rType )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     Any ret( OWeakAggObject::queryAggregation( rType ) );
     if (! ret.hasValue())
@@ -429,7 +429,7 @@ FactoryImpl::~FactoryImpl() {}
 
 Reference< XAggregation > FactoryImpl::createProxy(
     Reference< XInterface > const & xTarget )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return new ProxyRoot( this, xTarget );
 }
@@ -437,19 +437,19 @@ Reference< XAggregation > FactoryImpl::createProxy(
 // XServiceInfo
 
 OUString FactoryImpl::getImplementationName()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return proxyfac_getImplementationName();
 }
 
 sal_Bool FactoryImpl::supportsService( const OUString & rServiceName )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > FactoryImpl::getSupportedServiceNames()
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return proxyfac_getSupportedServiceNames();
 }

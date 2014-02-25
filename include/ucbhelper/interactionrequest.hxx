@@ -93,7 +93,7 @@ public:
     // XInterface
     virtual com::sun::star::uno::Any SAL_CALL
     queryInterface( const com::sun::star::uno::Type & rType )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL acquire()
         throw();
     virtual void SAL_CALL release()
@@ -102,20 +102,20 @@ public:
     // XTypeProvider
     virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
     getTypes()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
     virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
     getImplementationId()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 
     // XInteractionRequest
     virtual com::sun::star::uno::Any SAL_CALL
     getRequest()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
     virtual com::sun::star::uno::Sequence<
                 com::sun::star::uno::Reference<
                     com::sun::star::task::XInteractionContinuation > > SAL_CALL
     getContinuations()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 
     // Non-interface methods.
 
@@ -191,7 +191,7 @@ public:
     // XInterface
     virtual com::sun::star::uno::Any SAL_CALL
     queryInterface( const com::sun::star::uno::Type & rType )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL acquire()
         throw();
     virtual void SAL_CALL release()
@@ -200,14 +200,14 @@ public:
     // XTypeProvider
     virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
     getTypes()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
     virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
     getImplementationId()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 
     // XInteractionContinuation
     virtual void SAL_CALL select()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 };
 
 //============================================================================
@@ -228,7 +228,7 @@ public:
     // XInterface
     virtual com::sun::star::uno::Any SAL_CALL
     queryInterface( const com::sun::star::uno::Type & rType )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL acquire()
         throw();
     virtual void SAL_CALL release()
@@ -237,14 +237,14 @@ public:
     // XTypeProvider
     virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
     getTypes()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
     virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
     getImplementationId()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 
     // XInteractionContinuation
     virtual void SAL_CALL select()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 };
 
 //============================================================================
@@ -265,7 +265,7 @@ public:
     // XInterface
     virtual com::sun::star::uno::Any SAL_CALL
     queryInterface( const com::sun::star::uno::Type & rType )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL acquire()
         throw();
     virtual void SAL_CALL release()
@@ -274,14 +274,14 @@ public:
     // XTypeProvider
     virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
     getTypes()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
     virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
     getImplementationId()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 
     // XInteractionContinuation
     virtual void SAL_CALL select()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 };
 
 //============================================================================
@@ -302,7 +302,7 @@ public:
     // XInterface
     virtual com::sun::star::uno::Any SAL_CALL
     queryInterface( const com::sun::star::uno::Type & rType )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL acquire()
         throw();
     virtual void SAL_CALL release()
@@ -311,14 +311,14 @@ public:
     // XTypeProvider
     virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
     getTypes()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
     virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
     getImplementationId()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 
     // XInteractionContinuation
     virtual void SAL_CALL select()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 };
 
 //============================================================================
@@ -431,7 +431,7 @@ public:
     // XInterface
     virtual com::sun::star::uno::Any SAL_CALL
     queryInterface( const com::sun::star::uno::Type & rType )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL acquire()
         throw();
     virtual void SAL_CALL release()
@@ -440,67 +440,67 @@ public:
     // XTypeProvider
     virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
     getTypes()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
     virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
     getImplementationId()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 
     // XInteractionContinuation
     virtual void SAL_CALL select()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 
     // XInteractionSupplyAuthentication
     virtual sal_Bool SAL_CALL
     canSetRealm()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL
     setRealm( const OUString& Realm )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 
     virtual sal_Bool SAL_CALL
     canSetUserName()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL
     setUserName( const OUString& UserName )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 
     virtual sal_Bool SAL_CALL
     canSetPassword()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL
     setPassword( const OUString& Password )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 
     virtual com::sun::star::uno::Sequence<
                 com::sun::star::ucb::RememberAuthentication > SAL_CALL
     getRememberPasswordModes(
             com::sun::star::ucb::RememberAuthentication& Default )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL
     setRememberPassword( com::sun::star::ucb::RememberAuthentication Remember )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 
     virtual sal_Bool SAL_CALL
     canSetAccount()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL
     setAccount( const OUString& Account )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 
     virtual com::sun::star::uno::Sequence<
                 com::sun::star::ucb::RememberAuthentication > SAL_CALL
     getRememberAccountModes(
             com::sun::star::ucb::RememberAuthentication& Default )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL
     setRememberAccount( com::sun::star::ucb::RememberAuthentication Remember )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 
     // XInteractionSupplyAuthentication2
     virtual ::sal_Bool SAL_CALL canUseSystemCredentials( ::sal_Bool& Default )
-        throw ( ::com::sun::star::uno::RuntimeException );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL setUseSystemCredentials( ::sal_Bool UseSystemCredentials )
-        throw ( ::com::sun::star::uno::RuntimeException );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
 
     // Non-interface methods.
 
@@ -643,7 +643,7 @@ public:
     // XInterface
     virtual com::sun::star::uno::Any SAL_CALL
     queryInterface( const com::sun::star::uno::Type & rType )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL acquire()
         throw();
     virtual void SAL_CALL release()
@@ -652,18 +652,18 @@ public:
     // XTypeProvider
     virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
     getTypes()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
     virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
     getImplementationId()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 
     // XInteractionContinuation
     virtual void SAL_CALL select()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 
     // XInteractionSupplyName
     virtual void SAL_CALL setName( const OUString& Name )
-        throw ( com::sun::star::uno::RuntimeException );
+        throw ( com::sun::star::uno::RuntimeException, std::exception );
 
     // Non-interface methods.
 
@@ -695,7 +695,7 @@ public:
     // XInterface
     virtual com::sun::star::uno::Any SAL_CALL
     queryInterface( const com::sun::star::uno::Type & rType )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL acquire()
         throw();
     virtual void SAL_CALL release()
@@ -704,14 +704,14 @@ public:
     // XTypeProvider
     virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
     getTypes()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
     virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
     getImplementationId()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 
     // XInteractionContinuation
     virtual void SAL_CALL select()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 };
 
 } // namespace ucbhelper

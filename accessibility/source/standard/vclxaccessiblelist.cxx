@@ -572,7 +572,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2(VCLXAccessibleList, VCLXAccessibleComponent, VC
 
 Reference<XAccessibleContext> SAL_CALL
     VCLXAccessibleList::getAccessibleContext (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return this;
 }
@@ -581,7 +581,7 @@ Reference<XAccessibleContext> SAL_CALL
 //=====  XAccessibleContext  ==================================================
 
 sal_Int32 SAL_CALL VCLXAccessibleList::getAccessibleChildCount (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -595,7 +595,7 @@ sal_Int32 SAL_CALL VCLXAccessibleList::getAccessibleChildCount (void)
 
 
 Reference<XAccessible> SAL_CALL VCLXAccessibleList::getAccessibleChild (sal_Int32 i)
-    throw (IndexOutOfBoundsException, RuntimeException)
+    throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -619,7 +619,7 @@ Reference<XAccessible> SAL_CALL VCLXAccessibleList::getAccessibleChild (sal_Int3
 
 
 Reference< XAccessible > SAL_CALL VCLXAccessibleList::getAccessibleParent(  )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -628,7 +628,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleList::getAccessibleParent(  )
 
 
 sal_Int32 SAL_CALL VCLXAccessibleList::getAccessibleIndexInParent (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     if (m_nIndexInParent != DEFAULT_INDEX_IN_PARENT)
         return m_nIndexInParent;
@@ -638,7 +638,7 @@ sal_Int32 SAL_CALL VCLXAccessibleList::getAccessibleIndexInParent (void)
 
 
 sal_Int16 SAL_CALL VCLXAccessibleList::getAccessibleRole (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return AccessibleRole::LIST;
 }
@@ -696,14 +696,14 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleList::getAccessibleAt( const awt
 //===== XServiceInfo ==========================================================
 
 OUString VCLXAccessibleList::getImplementationName (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleList" );
 }
 
 
 Sequence< OUString > VCLXAccessibleList::getSupportedServiceNames (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aNames = VCLXAccessibleComponent::getSupportedServiceNames();
     sal_Int32 nLength = aNames.getLength();
@@ -847,7 +847,7 @@ void VCLXAccessibleList::UpdateSelection_Impl(sal_uInt16)
 
 // XAccessibleSelection
 
-void SAL_CALL VCLXAccessibleList::selectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+void SAL_CALL VCLXAccessibleList::selectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     sal_Bool bNotify = sal_False;
 
@@ -872,7 +872,7 @@ void SAL_CALL VCLXAccessibleList::selectAccessibleChild( sal_Int32 nChildIndex )
         UpdateSelection_Impl();
 }
 
-sal_Bool SAL_CALL VCLXAccessibleList::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+sal_Bool SAL_CALL VCLXAccessibleList::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -887,7 +887,7 @@ sal_Bool SAL_CALL VCLXAccessibleList::isAccessibleChildSelected( sal_Int32 nChil
     return bRet;
 }
 
-void SAL_CALL VCLXAccessibleList::clearAccessibleSelection(  ) throw (RuntimeException)
+void SAL_CALL VCLXAccessibleList::clearAccessibleSelection(  ) throw (RuntimeException, std::exception)
 {
     sal_Bool bNotify = sal_False;
 
@@ -906,7 +906,7 @@ void SAL_CALL VCLXAccessibleList::clearAccessibleSelection(  ) throw (RuntimeExc
         UpdateSelection_Impl();
 }
 
-void SAL_CALL VCLXAccessibleList::selectAllAccessibleChildren(  ) throw (RuntimeException)
+void SAL_CALL VCLXAccessibleList::selectAllAccessibleChildren(  ) throw (RuntimeException, std::exception)
 {
     sal_Bool bNotify = sal_False;
 
@@ -931,7 +931,7 @@ void SAL_CALL VCLXAccessibleList::selectAllAccessibleChildren(  ) throw (Runtime
         UpdateSelection_Impl();
 }
 
-sal_Int32 SAL_CALL VCLXAccessibleList::getSelectedAccessibleChildCount(  ) throw (RuntimeException)
+sal_Int32 SAL_CALL VCLXAccessibleList::getSelectedAccessibleChildCount(  ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -942,7 +942,7 @@ sal_Int32 SAL_CALL VCLXAccessibleList::getSelectedAccessibleChildCount(  ) throw
     return nCount;
 }
 
-Reference< XAccessible > SAL_CALL VCLXAccessibleList::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+Reference< XAccessible > SAL_CALL VCLXAccessibleList::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -956,7 +956,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleList::getSelectedAccessibleChild
     return NULL;
 }
 
-void SAL_CALL VCLXAccessibleList::deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+void SAL_CALL VCLXAccessibleList::deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     sal_Bool bNotify = sal_False;
 
@@ -1011,7 +1011,7 @@ awt::Rectangle VCLXAccessibleList::implGetBounds() throw (uno::RuntimeException)
 }
 
 
-awt::Point VCLXAccessibleList::getLocationOnScreen(  ) throw (uno::RuntimeException)
+awt::Point VCLXAccessibleList::getLocationOnScreen(  ) throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );

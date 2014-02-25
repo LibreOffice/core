@@ -56,11 +56,11 @@ public:
     // ::com::sun::star::lang::XEventListener
     // we do not hold References to dispatches, so there is nothing to do on disposal
     virtual void    SAL_CALL disposing(const ::com::sun::star::lang::EventObject& /*Source*/)
-                                            throw( ::com::sun::star::uno::RuntimeException ){};
+                                            throw( ::com::sun::star::uno::RuntimeException, std::exception ){};
 
     // ::com::sun::star::frame::XStatusListener
     virtual void    SAL_CALL statusChanged(const ::com::sun::star::frame::FeatureStateEvent& Event)
-                                            throw( ::com::sun::star::uno::RuntimeException );
+                                            throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 };
 
@@ -72,7 +72,7 @@ public:
     ~BibTBListBoxListener();
 
     virtual void    SAL_CALL statusChanged(const ::com::sun::star::frame::FeatureStateEvent& Event)
-                                            throw( ::com::sun::star::uno::RuntimeException );
+                                            throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 };
 
@@ -84,7 +84,7 @@ public:
     ~BibTBEditListener();
 
     virtual void    SAL_CALL statusChanged(const ::com::sun::star::frame::FeatureStateEvent& Event)
-                                            throw( ::com::sun::star::uno::RuntimeException );
+                                            throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 };
 
@@ -96,7 +96,7 @@ public:
     ~BibTBQueryMenuListener();
 
     virtual void    SAL_CALL statusChanged(const ::com::sun::star::frame::FeatureStateEvent& Event)
-                                            throw( ::com::sun::star::uno::RuntimeException );
+                                            throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 };
 

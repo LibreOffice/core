@@ -102,7 +102,7 @@ Table::Table( const ::rtl::Reference< RefCountedMutex > & refMutex,
       m_pColumns( 0 )
 {}
 
-Reference< XPropertySet > Table::createDataDescriptor(  ) throw (RuntimeException)
+Reference< XPropertySet > Table::createDataDescriptor(  ) throw (RuntimeException, std::exception)
 {
     TableDescriptor * pTable = new TableDescriptor(
         m_refMutex, m_conn, m_pSettings );
@@ -111,7 +111,7 @@ Reference< XPropertySet > Table::createDataDescriptor(  ) throw (RuntimeExceptio
     return Reference< XPropertySet > ( pTable );
 }
 
-Reference< XNameAccess > Table::getColumns(  ) throw (::com::sun::star::uno::RuntimeException)
+Reference< XNameAccess > Table::getColumns(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     if( ! m_columns.is() )
     {
@@ -126,7 +126,7 @@ Reference< XNameAccess > Table::getColumns(  ) throw (::com::sun::star::uno::Run
     return m_columns;
 }
 
-Reference< XNameAccess > Table::getIndexes() throw (::com::sun::star::uno::RuntimeException)
+Reference< XNameAccess > Table::getIndexes() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     if( ! m_indexes.is() )
     {
@@ -140,7 +140,7 @@ Reference< XNameAccess > Table::getIndexes() throw (::com::sun::star::uno::Runti
     return m_indexes;
 }
 
-Reference< XIndexAccess > Table::getKeys(  ) throw (::com::sun::star::uno::RuntimeException)
+Reference< XIndexAccess > Table::getKeys(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     if( ! m_keys.is() )
     {
@@ -157,7 +157,7 @@ Reference< XIndexAccess > Table::getKeys(  ) throw (::com::sun::star::uno::Runti
 void Table::rename( const OUString& newName )
         throw (::com::sun::star::sdbc::SQLException,
                ::com::sun::star::container::ElementExistException,
-               ::com::sun::star::uno::RuntimeException)
+               ::com::sun::star::uno::RuntimeException, std::exception)
 {
     MutexGuard guard( m_refMutex->mutex );
     Statics & st = getStatics();
@@ -243,7 +243,7 @@ void Table::rename( const OUString& newName )
 void Table::alterColumnByName(
     const OUString& colName,
     const Reference< XPropertySet >& descriptor )
-    throw (SQLException,NoSuchElementException,RuntimeException)
+    throw (SQLException,NoSuchElementException,RuntimeException, std::exception)
 {
     Reference< com::sun::star::container::XNameAccess > columns =
         Reference< com::sun::star::container::XNameAccess > ( getColumns(), UNO_QUERY );
@@ -267,7 +267,7 @@ void Table::alterColumnByName(
 void Table::alterColumnByIndex(
     sal_Int32 index,
     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor )
-    throw (SQLException,IndexOutOfBoundsException,RuntimeException)
+    throw (SQLException,IndexOutOfBoundsException,RuntimeException, std::exception)
 {
     Reference< com::sun::star::container::XIndexAccess > columns =
         Reference< com::sun::star::container::XIndexAccess>( getColumns(), UNO_QUERY );
@@ -282,7 +282,7 @@ void Table::alterColumnByIndex(
     m_pColumns->refresh();
 }
 
-Sequence<Type > Table::getTypes() throw( RuntimeException )
+Sequence<Type > Table::getTypes() throw( RuntimeException, std::exception )
 {
     static cppu::OTypeCollection *pCollection;
     if( ! pCollection )
@@ -303,12 +303,12 @@ Sequence<Type > Table::getTypes() throw( RuntimeException )
     return pCollection->getTypes();
 }
 
-Sequence< sal_Int8> Table::getImplementationId() throw( RuntimeException )
+Sequence< sal_Int8> Table::getImplementationId() throw( RuntimeException, std::exception )
 {
     return getStatics().refl.table.implementationId;
 }
 
-Any Table::queryInterface( const Type & reqType ) throw (RuntimeException)
+Any Table::queryInterface( const Type & reqType ) throw (RuntimeException, std::exception)
 {
     Any ret;
 
@@ -326,13 +326,13 @@ Any Table::queryInterface( const Type & reqType ) throw (RuntimeException)
 }
 
 ::com::sun::star::uno::Any Table::getPropertyValue(const OUString& aPropertyName)
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     return ReflectionBase::getPropertyValue( aPropertyName );
 }
 
 
-OUString Table::getName(  ) throw (::com::sun::star::uno::RuntimeException)
+OUString Table::getName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     Statics & st = getStatics();
     return concatQualified(
@@ -340,7 +340,7 @@ OUString Table::getName(  ) throw (::com::sun::star::uno::RuntimeException)
         extractStringProperty( this, st.NAME ) );
 }
 
-void Table::setName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException)
+void Table::setName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     rename( aName );
 }
@@ -362,7 +362,7 @@ TableDescriptor::TableDescriptor(
 {
 }
 
-Reference< XNameAccess > TableDescriptor::getColumns(  ) throw (::com::sun::star::uno::RuntimeException)
+Reference< XNameAccess > TableDescriptor::getColumns(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     if( ! m_columns.is() )
     {
@@ -371,7 +371,7 @@ Reference< XNameAccess > TableDescriptor::getColumns(  ) throw (::com::sun::star
     return m_columns;
 }
 
-Reference< XNameAccess > TableDescriptor::getIndexes() throw (::com::sun::star::uno::RuntimeException)
+Reference< XNameAccess > TableDescriptor::getIndexes() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     if( ! m_indexes.is() )
     {
@@ -383,7 +383,7 @@ Reference< XNameAccess > TableDescriptor::getIndexes() throw (::com::sun::star::
     return m_indexes;
 }
 
-Reference< XIndexAccess > TableDescriptor::getKeys(  ) throw (::com::sun::star::uno::RuntimeException)
+Reference< XIndexAccess > TableDescriptor::getKeys(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     if( ! m_keys.is() )
     {
@@ -396,7 +396,7 @@ Reference< XIndexAccess > TableDescriptor::getKeys(  ) throw (::com::sun::star::
 }
 
 
-Sequence<Type > TableDescriptor::getTypes() throw( RuntimeException )
+Sequence<Type > TableDescriptor::getTypes() throw( RuntimeException, std::exception )
 {
     static cppu::OTypeCollection *pCollection;
     if( ! pCollection )
@@ -415,12 +415,12 @@ Sequence<Type > TableDescriptor::getTypes() throw( RuntimeException )
     return pCollection->getTypes();
 }
 
-Sequence< sal_Int8> TableDescriptor::getImplementationId() throw( RuntimeException )
+Sequence< sal_Int8> TableDescriptor::getImplementationId() throw( RuntimeException, std::exception )
 {
     return getStatics().refl.tableDescriptor.implementationId;
 }
 
-Any TableDescriptor::queryInterface( const Type & reqType ) throw (RuntimeException)
+Any TableDescriptor::queryInterface( const Type & reqType ) throw (RuntimeException, std::exception)
 {
     Any ret;
 
@@ -435,7 +435,7 @@ Any TableDescriptor::queryInterface( const Type & reqType ) throw (RuntimeExcept
 }
 
 
-Reference< XPropertySet > TableDescriptor::createDataDescriptor(  ) throw (RuntimeException)
+Reference< XPropertySet > TableDescriptor::createDataDescriptor(  ) throw (RuntimeException, std::exception)
 {
     TableDescriptor * pTable = new TableDescriptor(
         m_refMutex, m_conn, m_pSettings );

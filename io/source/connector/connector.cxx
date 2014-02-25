@@ -58,12 +58,12 @@ namespace stoc_connector
         // Methods
         virtual Reference< XConnection > SAL_CALL connect(
             const OUString& sConnectionDescription )
-            throw( NoConnectException, ConnectionSetupException, RuntimeException);
+            throw( NoConnectException, ConnectionSetupException, RuntimeException, std::exception);
 
     public: // XServiceInfo
-                virtual OUString              SAL_CALL getImplementationName() throw();
-                virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames(void) throw();
-                virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) throw();
+                virtual OUString              SAL_CALL getImplementationName() throw(std::exception);
+                virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames(void) throw(std::exception);
+                virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception);
     };
 
     OConnector::OConnector(const Reference< XComponentContext > &xCtx)
@@ -74,7 +74,7 @@ namespace stoc_connector
     OConnector::~OConnector() {}
 
     Reference< XConnection > SAL_CALL OConnector::connect( const OUString& sConnectionDescription )
-        throw( NoConnectException, ConnectionSetupException, RuntimeException)
+        throw( NoConnectException, ConnectionSetupException, RuntimeException, std::exception)
     {
         OSL_TRACE(
             "connector %s\n",
@@ -187,17 +187,17 @@ namespace stoc_connector
         return OUString( IMPLEMENTATION_NAME );
     }
 
-        OUString OConnector::getImplementationName() throw()
+        OUString OConnector::getImplementationName() throw(std::exception)
     {
         return connector_getImplementationName();
     }
 
-        sal_Bool OConnector::supportsService(const OUString& ServiceName) throw()
+        sal_Bool OConnector::supportsService(const OUString& ServiceName) throw(std::exception)
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-        Sequence< OUString > OConnector::getSupportedServiceNames(void) throw()
+        Sequence< OUString > OConnector::getSupportedServiceNames(void) throw(std::exception)
     {
         return connector_getSupportedServiceNames();
     }

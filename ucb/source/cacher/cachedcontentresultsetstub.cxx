@@ -58,7 +58,7 @@ XINTERFACE_COMMON_IMPL( CachedContentResultSetStub )
 
 Any SAL_CALL CachedContentResultSetStub
     ::queryInterface( const Type&  rType )
-    throw ( RuntimeException )
+    throw ( RuntimeException, std::exception )
 {
     //list all interfaces inclusive baseclasses of interfaces
 
@@ -130,7 +130,7 @@ XTYPEPROVIDER_COMMON_IMPL( CachedContentResultSetStub )
 //list all interfaces exclusive baseclasses
 Sequence< Type > SAL_CALL CachedContentResultSetStub
     ::getTypes()
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     static Sequence< Type >* pTypes = NULL;
     if( !pTypes )
@@ -285,7 +285,7 @@ return aRet;
 FetchResult SAL_CALL CachedContentResultSetStub
     ::fetch( sal_Int32 nRowStartPosition
     , sal_Int32 nRowCount, sal_Bool bDirection )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     impl_init_xRowOrigin();
     FETCH_XXX( impl_getCurrentRowContent, m_xRowOrigin );
@@ -454,7 +454,7 @@ void SAL_CALL CachedContentResultSetStub
 FetchResult SAL_CALL CachedContentResultSetStub
     ::fetchContentIdentifierStrings( sal_Int32 nRowStartPosition
         , sal_Int32 nRowCount, sal_Bool bDirection )
-        throw( com::sun::star::uno::RuntimeException )
+        throw( com::sun::star::uno::RuntimeException, std::exception )
 {
     impl_init_xContentAccessOrigin();
     FETCH_XXX( impl_getCurrentContentIdentifierString, m_xContentAccessOrigin );
@@ -464,7 +464,7 @@ FetchResult SAL_CALL CachedContentResultSetStub
 FetchResult SAL_CALL CachedContentResultSetStub
     ::fetchContentIdentifiers( sal_Int32 nRowStartPosition
         , sal_Int32 nRowCount, sal_Bool bDirection )
-        throw( com::sun::star::uno::RuntimeException )
+        throw( com::sun::star::uno::RuntimeException, std::exception )
 {
     impl_init_xContentAccessOrigin();
     FETCH_XXX( impl_getCurrentContentIdentifier, m_xContentAccessOrigin );
@@ -474,7 +474,7 @@ FetchResult SAL_CALL CachedContentResultSetStub
 FetchResult SAL_CALL CachedContentResultSetStub
     ::fetchContents( sal_Int32 nRowStartPosition
         , sal_Int32 nRowCount, sal_Bool bDirection )
-        throw( com::sun::star::uno::RuntimeException )
+        throw( com::sun::star::uno::RuntimeException, std::exception )
 {
     impl_init_xContentAccessOrigin();
     FETCH_XXX( impl_getCurrentContent, m_xContentAccessOrigin );
@@ -536,7 +536,7 @@ ONE_INSTANCE_SERVICE_FACTORY_IMPL( CachedContentResultSetStubFactory );
 Reference< XResultSet > SAL_CALL CachedContentResultSetStubFactory
     ::createCachedContentResultSetStub(
             const Reference< XResultSet > & xSource )
-            throw( RuntimeException )
+            throw( RuntimeException, std::exception )
 {
     if( xSource.is() )
     {

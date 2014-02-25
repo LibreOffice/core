@@ -69,7 +69,7 @@ namespace pcr
     }
 
 
-    Sequence<sal_Int8> SAL_CALL OTabOrderDialog::getImplementationId(  ) throw(RuntimeException)
+    Sequence<sal_Int8> SAL_CALL OTabOrderDialog::getImplementationId(  ) throw(RuntimeException, std::exception)
     {
         static ::cppu::OImplementationId aId;
         return aId.getImplementationId();
@@ -82,7 +82,7 @@ namespace pcr
     }
 
 
-    OUString SAL_CALL OTabOrderDialog::getImplementationName() throw(RuntimeException)
+    OUString SAL_CALL OTabOrderDialog::getImplementationName() throw(RuntimeException, std::exception)
     {
         return getImplementationName_static();
     }
@@ -94,7 +94,7 @@ namespace pcr
     }
 
 
-    ::comphelper::StringSequence SAL_CALL OTabOrderDialog::getSupportedServiceNames() throw(RuntimeException)
+    ::comphelper::StringSequence SAL_CALL OTabOrderDialog::getSupportedServiceNames() throw(RuntimeException, std::exception)
     {
         return getSupportedServiceNames_static();
     }
@@ -109,7 +109,7 @@ namespace pcr
     }
 
 
-    Reference<XPropertySetInfo>  SAL_CALL OTabOrderDialog::getPropertySetInfo() throw(RuntimeException)
+    Reference<XPropertySetInfo>  SAL_CALL OTabOrderDialog::getPropertySetInfo() throw(RuntimeException, std::exception)
     {
         Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;
@@ -135,7 +135,7 @@ namespace pcr
         return new TabOrderDialog( _pParent, m_xTabbingModel, m_xControlContext, m_aContext );
     }
 
-    void OTabOrderDialog::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException)
+    void OTabOrderDialog::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException, std::exception)
     {
         Reference<css::awt::XTabControllerModel> xTabbingModel;
         Reference<css::awt::XControlContainer> xControlContext;

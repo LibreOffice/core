@@ -55,7 +55,7 @@ namespace accessibility
         }
     }
 
-    OUString SAL_CALL EditBrowseBoxTableCell::getImplementationName() throw ( ::com::sun::star::uno::RuntimeException )
+    OUString SAL_CALL EditBrowseBoxTableCell::getImplementationName() throw ( ::com::sun::star::uno::RuntimeException, std::exception )
     {
         return OUString( "com.sun.star.comp.svtools.TableCellProxy" );
     }
@@ -70,7 +70,7 @@ namespace accessibility
     }
 
     // XAccessibleComponent
-    sal_Int32 SAL_CALL EditBrowseBoxTableCell::getForeground(  ) throw (RuntimeException)
+    sal_Int32 SAL_CALL EditBrowseBoxTableCell::getForeground(  ) throw (RuntimeException, std::exception)
     {
         SolarMethodGuard aGuard( *this );
         Reference< XAccessibleComponent > xAccComp( m_xInnerContext, UNO_QUERY );
@@ -79,7 +79,7 @@ namespace accessibility
         return 0;
     }
 
-    sal_Int32 SAL_CALL EditBrowseBoxTableCell::getBackground(  ) throw (RuntimeException)
+    sal_Int32 SAL_CALL EditBrowseBoxTableCell::getBackground(  ) throw (RuntimeException, std::exception)
     {
         SolarMethodGuard aGuard( *this );
         Reference< XAccessibleComponent > xAccComp( m_xInnerContext, UNO_QUERY );
@@ -88,18 +88,18 @@ namespace accessibility
         return 0;
     }
 
-    Reference< XAccessible > SAL_CALL EditBrowseBoxTableCell::getAccessibleParent(  ) throw (RuntimeException)
+    Reference< XAccessible > SAL_CALL EditBrowseBoxTableCell::getAccessibleParent(  ) throw (RuntimeException, std::exception)
     {
         return m_xParentAccessible;
     }
 
-    OUString SAL_CALL EditBrowseBoxTableCell::getAccessibleDescription() throw ( RuntimeException )
+    OUString SAL_CALL EditBrowseBoxTableCell::getAccessibleDescription() throw ( RuntimeException, std::exception )
     {
         SolarMethodGuard aGuard( *this );
         return m_xInnerContext->getAccessibleDescription();
     }
 
-    OUString SAL_CALL EditBrowseBoxTableCell::getAccessibleName() throw ( RuntimeException )
+    OUString SAL_CALL EditBrowseBoxTableCell::getAccessibleName() throw ( RuntimeException, std::exception )
     {
         SolarMethodGuard aGuard( *this );
 
@@ -107,38 +107,38 @@ namespace accessibility
         return "Column " + OUString::number(getColumnPos()-1) + ", Row " + OUString::number(getRowPos());
     }
 
-    Reference< XAccessibleRelationSet > SAL_CALL EditBrowseBoxTableCell::getAccessibleRelationSet() throw ( RuntimeException )
+    Reference< XAccessibleRelationSet > SAL_CALL EditBrowseBoxTableCell::getAccessibleRelationSet() throw ( RuntimeException, std::exception )
     {
         SolarMethodGuard aGuard( *this );
         return OAccessibleContextWrapperHelper::getAccessibleRelationSet( );
     }
 
-    Reference<XAccessibleStateSet > SAL_CALL EditBrowseBoxTableCell::getAccessibleStateSet() throw ( RuntimeException )
+    Reference<XAccessibleStateSet > SAL_CALL EditBrowseBoxTableCell::getAccessibleStateSet() throw ( RuntimeException, std::exception )
     {
         SolarMethodGuard aGuard( *this );
         return m_xInnerContext->getAccessibleStateSet();
             // TODO: shouldn't we add an ACTIVE here? Isn't the EditBrowseBoxTableCell always ACTIVE?
     }
 
-    sal_Int32 SAL_CALL EditBrowseBoxTableCell::getAccessibleChildCount(  ) throw (RuntimeException)
+    sal_Int32 SAL_CALL EditBrowseBoxTableCell::getAccessibleChildCount(  ) throw (RuntimeException, std::exception)
     {
         SolarMethodGuard aGuard( *this );
         return OAccessibleContextWrapperHelper::getAccessibleChildCount();
     }
 
-    Reference< XAccessible > SAL_CALL EditBrowseBoxTableCell::getAccessibleChild( sal_Int32 i ) throw (::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException)
+    Reference< XAccessible > SAL_CALL EditBrowseBoxTableCell::getAccessibleChild( sal_Int32 i ) throw (::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException, std::exception)
     {
         SolarMethodGuard aGuard( *this );
         return OAccessibleContextWrapperHelper::getAccessibleChild( i );
     }
 
-    sal_Int16 SAL_CALL EditBrowseBoxTableCell::getAccessibleRole() throw ( RuntimeException )
+    sal_Int16 SAL_CALL EditBrowseBoxTableCell::getAccessibleRole() throw ( RuntimeException, std::exception )
     {
         SolarMethodGuard aGuard( *this );
         return m_xInnerContext->getAccessibleRole( );
     }
 
-    void SAL_CALL EditBrowseBoxTableCell::dispose() throw( RuntimeException )
+    void SAL_CALL EditBrowseBoxTableCell::dispose() throw( RuntimeException, std::exception )
     {
         // simply disambiguate. Note that the OComponentHelper base in AccessibleBrowseBoxCell
         // will call our "disposing()", which will call "dispose()" on the OAccessibleContextWrapperHelper
@@ -146,7 +146,7 @@ namespace accessibility
         AccessibleBrowseBoxCell::dispose();
     }
 
-    void SAL_CALL EditBrowseBoxTableCell::disposing( const EventObject& _rSource ) throw (RuntimeException)
+    void SAL_CALL EditBrowseBoxTableCell::disposing( const EventObject& _rSource ) throw (RuntimeException, std::exception)
     {
         AccessibleBrowseBoxCell::disposing( _rSource );
         OAccessibleContextWrapperHelper::disposing( _rSource );
@@ -179,7 +179,7 @@ namespace accessibility
     {
     }
 
-    Reference< XAccessibleContext > SAL_CALL EditBrowseBoxTableCellAccess::getAccessibleContext(  ) throw (RuntimeException)
+    Reference< XAccessibleContext > SAL_CALL EditBrowseBoxTableCellAccess::getAccessibleContext(  ) throw (RuntimeException, std::exception)
     {
         if ( !m_pBrowseBox || !m_xControlAccessible.is() )
             throw DisposedException();

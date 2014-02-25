@@ -139,23 +139,23 @@ public:
 
 private:
     virtual void SAL_CALL disposing( const lang::EventObject& Source )
-        throw (uno::RuntimeException);
+        throw (uno::RuntimeException, std::exception);
 
     // XMouseListener implementation
     virtual void SAL_CALL mousePressed( const awt::MouseEvent& e )
-        throw (uno::RuntimeException);
+        throw (uno::RuntimeException, std::exception);
     virtual void SAL_CALL mouseReleased( const awt::MouseEvent& e )
-        throw (uno::RuntimeException);
+        throw (uno::RuntimeException, std::exception);
     virtual void SAL_CALL mouseEntered( const awt::MouseEvent& e )
-        throw (uno::RuntimeException);
+        throw (uno::RuntimeException, std::exception);
     virtual void SAL_CALL mouseExited( const awt::MouseEvent& e )
-        throw (uno::RuntimeException);
+        throw (uno::RuntimeException, std::exception);
 
     // XMouseMotionListener implementation
     virtual void SAL_CALL mouseDragged( const awt::MouseEvent& e )
-        throw (uno::RuntimeException);
+        throw (uno::RuntimeException, std::exception);
     virtual void SAL_CALL mouseMoved( const awt::MouseEvent& e )
-        throw (uno::RuntimeException);
+        throw (uno::RuntimeException, std::exception);
 
 
     EventQueue*           mpEventQueue;
@@ -333,7 +333,7 @@ void SAL_CALL EventMultiplexerListener::disposing()
 }
 
 void SAL_CALL EventMultiplexerListener::disposing(
-    const lang::EventObject& /*rSource*/ ) throw (uno::RuntimeException)
+    const lang::EventObject& /*rSource*/ ) throw (uno::RuntimeException, std::exception)
 {
     // there's no real point in acting on this message - after all,
     // the event sources are the XSlideShowViews, which must be
@@ -345,7 +345,7 @@ void SAL_CALL EventMultiplexerListener::disposing(
 }
 
 void SAL_CALL EventMultiplexerListener::mousePressed(
-    const awt::MouseEvent& e ) throw (uno::RuntimeException)
+    const awt::MouseEvent& e ) throw (uno::RuntimeException, std::exception)
 {
     osl::MutexGuard const guard( m_aMutex );
 
@@ -360,7 +360,7 @@ void SAL_CALL EventMultiplexerListener::mousePressed(
 }
 
 void SAL_CALL EventMultiplexerListener::mouseReleased(
-    const awt::MouseEvent& e ) throw (uno::RuntimeException)
+    const awt::MouseEvent& e ) throw (uno::RuntimeException, std::exception)
 {
     osl::MutexGuard const guard( m_aMutex );
 
@@ -375,20 +375,20 @@ void SAL_CALL EventMultiplexerListener::mouseReleased(
 }
 
 void SAL_CALL EventMultiplexerListener::mouseEntered(
-    const awt::MouseEvent& /*e*/ ) throw (uno::RuntimeException)
+    const awt::MouseEvent& /*e*/ ) throw (uno::RuntimeException, std::exception)
 {
     // not used here
 }
 
 void SAL_CALL EventMultiplexerListener::mouseExited(
-    const awt::MouseEvent& /*e*/ ) throw (uno::RuntimeException)
+    const awt::MouseEvent& /*e*/ ) throw (uno::RuntimeException, std::exception)
 {
     // not used here
 }
 
 // XMouseMotionListener implementation
 void SAL_CALL EventMultiplexerListener::mouseDragged(
-    const awt::MouseEvent& e ) throw (uno::RuntimeException)
+    const awt::MouseEvent& e ) throw (uno::RuntimeException, std::exception)
 {
     osl::MutexGuard const guard( m_aMutex );
 
@@ -403,7 +403,7 @@ void SAL_CALL EventMultiplexerListener::mouseDragged(
 }
 
 void SAL_CALL EventMultiplexerListener::mouseMoved(
-    const awt::MouseEvent& e ) throw (uno::RuntimeException)
+    const awt::MouseEvent& e ) throw (uno::RuntimeException, std::exception)
 {
     osl::MutexGuard const guard( m_aMutex );
 

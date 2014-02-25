@@ -55,37 +55,37 @@ namespace {
     }
 }
 
-sal_Int16 SAL_CALL SaxAttrList::getLength() throw()
+sal_Int16 SAL_CALL SaxAttrList::getLength() throw(std::exception)
 {
     return sal_Int16(m_aAttributes.size());
 }
-OUString SAL_CALL SaxAttrList::getNameByIndex( sal_Int16 i_nIndex ) throw()
+OUString SAL_CALL SaxAttrList::getNameByIndex( sal_Int16 i_nIndex ) throw(std::exception)
 {
     return (i_nIndex < sal_Int16(m_aAttributes.size())) ? m_aAttributes[i_nIndex].m_aName : OUString();
 }
 
-OUString SAL_CALL SaxAttrList::getTypeByIndex( sal_Int16 i_nIndex) throw()
+OUString SAL_CALL SaxAttrList::getTypeByIndex( sal_Int16 i_nIndex) throw(std::exception)
 {
     return (i_nIndex < sal_Int16(m_aAttributes.size())) ? getCDATAString() : OUString();
 }
 
-OUString SAL_CALL SaxAttrList::getTypeByName( const OUString& i_rName ) throw()
+OUString SAL_CALL SaxAttrList::getTypeByName( const OUString& i_rName ) throw(std::exception)
 {
     return (m_aIndexMap.find( i_rName ) != m_aIndexMap.end()) ? getCDATAString() : OUString();
 }
 
-OUString SAL_CALL SaxAttrList::getValueByIndex( sal_Int16 i_nIndex ) throw()
+OUString SAL_CALL SaxAttrList::getValueByIndex( sal_Int16 i_nIndex ) throw(std::exception)
 {
     return (i_nIndex < sal_Int16(m_aAttributes.size())) ? m_aAttributes[i_nIndex].m_aValue : OUString();
 }
 
-OUString SAL_CALL SaxAttrList::getValueByName(const OUString& i_rName) throw()
+OUString SAL_CALL SaxAttrList::getValueByName(const OUString& i_rName) throw(std::exception)
 {
     boost::unordered_map< OUString, size_t, OUStringHash >::const_iterator it = m_aIndexMap.find( i_rName );
     return (it != m_aIndexMap.end()) ? m_aAttributes[it->second].m_aValue : OUString();
 }
 
-com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL SaxAttrList::createClone() throw()
+com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL SaxAttrList::createClone() throw(std::exception)
 {
     return new SaxAttrList( *this );
 }

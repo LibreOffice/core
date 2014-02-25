@@ -70,12 +70,12 @@ namespace
         // XCurrentContext
         virtual uno::Any SAL_CALL
             getValueByName( OUString const & aName)
-                throw (uno::RuntimeException);
+                throw (uno::RuntimeException, std::exception);
     };
 
     uno::Any SAL_CALL
         SimpleCurrentContext::getValueByName( OUString const & aName)
-            throw (uno::RuntimeException)
+            throw (uno::RuntimeException, std::exception)
     {
         return getChainedValueByName(aName);
     }
@@ -98,7 +98,7 @@ public:
     // XCurrentContext
     virtual uno::Any SAL_CALL
         getValueByName( OUString const & aName)
-            throw (uno::RuntimeException);
+            throw (uno::RuntimeException, std::exception);
 
 private:
     InteractionHandler  m_xHandler;
@@ -106,7 +106,7 @@ private:
 
 
 uno::Any SAL_CALL ConfigurationErrorHandler::Context::getValueByName( OUString const & aName)
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     if ( aName == CONFIG_ERROR_HANDLER )
     {

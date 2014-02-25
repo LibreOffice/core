@@ -50,7 +50,7 @@ FTPContentIdentifier::queryInterface(
     const Type& rType
 )
     throw(
-        RuntimeException
+        RuntimeException, std::exception
     )
 {
     Any aRet =
@@ -74,7 +74,7 @@ void SAL_CALL FTPContentIdentifier::release( void ) throw() {
 
 Sequence<sal_Int8> SAL_CALL
 FTPContentIdentifier::getImplementationId()
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     static cppu::OImplementationId* pId = NULL;
     if(!pId)
@@ -93,7 +93,7 @@ FTPContentIdentifier::getImplementationId()
 Sequence<Type> SAL_CALL
 FTPContentIdentifier::getTypes(
     void )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     static cppu::OTypeCollection* pCollection = NULL;
     if ( !pCollection ) {
@@ -116,7 +116,7 @@ OUString SAL_CALL
 FTPContentIdentifier::getContentIdentifier(
 )
     throw (
-        com::sun::star::uno::RuntimeException
+        com::sun::star::uno::RuntimeException, std::exception
     )
 {
     return m_ident;
@@ -127,7 +127,7 @@ OUString SAL_CALL
 FTPContentIdentifier::getContentProviderScheme(
 )
     throw (
-        com::sun::star::uno::RuntimeException
+        com::sun::star::uno::RuntimeException, std::exception
     )
 {
     return OUString("ftp");

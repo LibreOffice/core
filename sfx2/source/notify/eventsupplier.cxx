@@ -59,7 +59,7 @@ using namespace css;
 
 void SAL_CALL SfxEvents_Impl::replaceByName( const OUString & aName, const uno::Any & rElement )
                                 throw( lang::IllegalArgumentException, container::NoSuchElementException,
-                                       lang::WrappedTargetException, uno::RuntimeException )
+                                       lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -117,7 +117,7 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const OUString & aName, const uno::
 
 uno::Any SAL_CALL SfxEvents_Impl::getByName( const OUString& aName )
                                 throw( container::NoSuchElementException, lang::WrappedTargetException,
-                                       uno::RuntimeException )
+                                       uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -135,13 +135,13 @@ uno::Any SAL_CALL SfxEvents_Impl::getByName( const OUString& aName )
 }
 
 
-uno::Sequence< OUString > SAL_CALL SfxEvents_Impl::getElementNames() throw ( uno::RuntimeException )
+uno::Sequence< OUString > SAL_CALL SfxEvents_Impl::getElementNames() throw ( uno::RuntimeException, std::exception )
 {
     return maEventNames;
 }
 
 
-sal_Bool SAL_CALL SfxEvents_Impl::hasByName( const OUString& aName ) throw ( uno::RuntimeException )
+sal_Bool SAL_CALL SfxEvents_Impl::hasByName( const OUString& aName ) throw ( uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -161,14 +161,14 @@ sal_Bool SAL_CALL SfxEvents_Impl::hasByName( const OUString& aName ) throw ( uno
 
 //  --- XElementAccess ( parent of XNameAccess ) ---
 
-uno::Type SAL_CALL SfxEvents_Impl::getElementType() throw ( uno::RuntimeException )
+uno::Type SAL_CALL SfxEvents_Impl::getElementType() throw ( uno::RuntimeException, std::exception )
 {
     uno::Type aElementType = ::getCppuType( (const uno::Sequence < beans::PropertyValue > *)0 );
     return aElementType;
 }
 
 
-sal_Bool SAL_CALL SfxEvents_Impl::hasElements() throw ( uno::RuntimeException )
+sal_Bool SAL_CALL SfxEvents_Impl::hasElements() throw ( uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -274,7 +274,7 @@ void SfxEvents_Impl::Execute( uno::Any& aEventData, const document::DocumentEven
 
 // --- ::document::XEventListener ---
 
-void SAL_CALL SfxEvents_Impl::notifyEvent( const document::EventObject& aEvent ) throw( uno::RuntimeException )
+void SAL_CALL SfxEvents_Impl::notifyEvent( const document::EventObject& aEvent ) throw( uno::RuntimeException, std::exception )
 {
     ::osl::ClearableMutexGuard aGuard( maMutex );
 
@@ -304,7 +304,7 @@ void SAL_CALL SfxEvents_Impl::notifyEvent( const document::EventObject& aEvent )
 
 // --- ::lang::XEventListener ---
 
-void SAL_CALL SfxEvents_Impl::disposing( const lang::EventObject& /*Source*/ ) throw( uno::RuntimeException )
+void SAL_CALL SfxEvents_Impl::disposing( const lang::EventObject& /*Source*/ ) throw( uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( maMutex );
 

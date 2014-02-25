@@ -80,25 +80,25 @@ public:
 
     virtual cssu::Reference<cssa::XAccessibleContext> SAL_CALL
         getAccessibleContext (void)
-        throw (cssu::RuntimeException);
+        throw (cssu::RuntimeException, std::exception);
 
     //----- XFocusListener ----------------------------------------------------
 
     virtual void SAL_CALL focusGained (const css::awt::FocusEvent& rEvent)
-        throw (cssu::RuntimeException);
+        throw (cssu::RuntimeException, std::exception);
 
     virtual void SAL_CALL focusLost (const css::awt::FocusEvent& rEvent)
-        throw (cssu::RuntimeException);
+        throw (cssu::RuntimeException, std::exception);
 
     //----- XEventListener ----------------------------------------------------
 
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
-        throw (cssu::RuntimeException);
+        throw (cssu::RuntimeException, std::exception);
 
     //----- XInitialization ---------------------------------------------------
 
     virtual void SAL_CALL initialize (const cssu::Sequence<cssu::Any>& rArguments)
-        throw (cssu::RuntimeException);
+        throw (cssu::RuntimeException, std::exception);
 
     class AccessibleObject;
     class AccessibleParagraph;

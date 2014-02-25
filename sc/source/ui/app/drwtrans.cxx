@@ -786,7 +786,7 @@ const com::sun::star::uno::Sequence< sal_Int8 >& ScDrawTransferObj::getUnoTunnel
     return theScDrawTransferObjUnoTunnelId::get().getSeq();
 }
 
-sal_Int64 SAL_CALL ScDrawTransferObj::getSomething( const com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( com::sun::star::uno::RuntimeException )
+sal_Int64 SAL_CALL ScDrawTransferObj::getSomething( const com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( com::sun::star::uno::RuntimeException, std::exception )
 {
     sal_Int64 nRet;
     if( ( rId.getLength() == 16 ) &&

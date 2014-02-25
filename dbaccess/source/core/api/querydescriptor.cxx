@@ -94,7 +94,7 @@ void OQueryDescriptor::registerProperties()
                     &m_aLayoutInformation, ::getCppuType(&m_aLayoutInformation));
 }
 
-Reference< XPropertySetInfo > SAL_CALL OQueryDescriptor::getPropertySetInfo(  ) throw(RuntimeException)
+Reference< XPropertySetInfo > SAL_CALL OQueryDescriptor::getPropertySetInfo(  ) throw(RuntimeException, std::exception)
 {
     return createPropertySetInfo( getInfoHelper() ) ;
 }
@@ -141,7 +141,7 @@ OQueryDescriptor_Base::~OQueryDescriptor_Base()
 
 }
 
-sal_Int64 SAL_CALL OQueryDescriptor_Base::getSomething( const Sequence< sal_Int8 >& _rIdentifier ) throw(RuntimeException)
+sal_Int64 SAL_CALL OQueryDescriptor_Base::getSomething( const Sequence< sal_Int8 >& _rIdentifier ) throw(RuntimeException, std::exception)
 {
     if (_rIdentifier.getLength() != 16)
         return 0;
@@ -173,7 +173,7 @@ void OQueryDescriptor_Base::clearColumns( )
     setColumnsOutOfDate();
 }
 
-Reference< XNameAccess > SAL_CALL OQueryDescriptor_Base::getColumns( ) throw (RuntimeException)
+Reference< XNameAccess > SAL_CALL OQueryDescriptor_Base::getColumns( ) throw (RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_rMutex);
 
@@ -203,17 +203,17 @@ Reference< XNameAccess > SAL_CALL OQueryDescriptor_Base::getColumns( ) throw (Ru
     return m_pColumns;
 }
 
-OUString SAL_CALL OQueryDescriptor_Base::getImplementationName(  ) throw(RuntimeException)
+OUString SAL_CALL OQueryDescriptor_Base::getImplementationName(  ) throw(RuntimeException, std::exception)
 {
     return OUString("com.sun.star.sdb.OQueryDescriptor");
 }
 
-sal_Bool SAL_CALL OQueryDescriptor_Base::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
+sal_Bool SAL_CALL OQueryDescriptor_Base::supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception)
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
-Sequence< OUString > SAL_CALL OQueryDescriptor_Base::getSupportedServiceNames(  ) throw(RuntimeException)
+Sequence< OUString > SAL_CALL OQueryDescriptor_Base::getSupportedServiceNames(  ) throw(RuntimeException, std::exception)
 {
     Sequence< OUString > aSupported(2);
     aSupported.getArray()[0] = SERVICE_SDB_DATASETTINGS;

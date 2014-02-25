@@ -66,7 +66,7 @@ TabWinFactory::~TabWinFactory()
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL TabWinFactory::createInstanceWithContext(
     const css::uno::Reference< css::uno::XComponentContext >& xContext )
-throw ( css::uno::Exception, css::uno::RuntimeException )
+throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
 {
     css::uno::Sequence< css::uno::Any > aArgs;
 
@@ -75,7 +75,7 @@ throw ( css::uno::Exception, css::uno::RuntimeException )
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL TabWinFactory::createInstanceWithArgumentsAndContext(
     const css::uno::Sequence< css::uno::Any >& Arguments, const css::uno::Reference< css::uno::XComponentContext >& )
-throw ( css::uno::Exception, css::uno::RuntimeException )
+throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
 {
     const OUString aTopWindowArgName( "TopWindow");
 

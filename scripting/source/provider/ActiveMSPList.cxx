@@ -245,7 +245,7 @@ ActiveMSPList::addActiveMSP( const Reference< uno::XInterface >& xComponent,
 
 void SAL_CALL
 ActiveMSPList::disposing( const ::com::sun::star::lang::EventObject& Source )
-throw ( ::com::sun::star::uno::RuntimeException )
+throw ( ::com::sun::star::uno::RuntimeException, std::exception )
 
 {
     try

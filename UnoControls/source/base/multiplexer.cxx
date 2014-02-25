@@ -96,7 +96,7 @@ OMRCListenerMultiplexerHelper::~OMRCListenerMultiplexerHelper()
 //  XInterface
 
 
-Any SAL_CALL OMRCListenerMultiplexerHelper::queryInterface( const Type& rType ) throw( RuntimeException )
+Any SAL_CALL OMRCListenerMultiplexerHelper::queryInterface( const Type& rType ) throw( RuntimeException, std::exception )
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
@@ -247,7 +247,7 @@ void OMRCListenerMultiplexerHelper::unadvise(   const   Type&                   
 //  XEventListener
 
 
-void SAL_CALL OMRCListenerMultiplexerHelper::disposing( const EventObject& /*aSource*/ ) throw( RuntimeException )
+void SAL_CALL OMRCListenerMultiplexerHelper::disposing( const EventObject& /*aSource*/ ) throw( RuntimeException, std::exception )
 {
     MutexGuard aGuard( m_aMutex );
     // peer is disposed, clear the reference
@@ -258,7 +258,7 @@ void SAL_CALL OMRCListenerMultiplexerHelper::disposing( const EventObject& /*aSo
 //  XFcousListener
 
 
-void OMRCListenerMultiplexerHelper::focusGained(const FocusEvent& aEvent ) throw( RuntimeException )
+void OMRCListenerMultiplexerHelper::focusGained(const FocusEvent& aEvent ) throw( RuntimeException, std::exception )
 {
     MULTIPLEX( XFocusListener, focusGained, FocusEvent, aEvent )
 }
@@ -267,7 +267,7 @@ void OMRCListenerMultiplexerHelper::focusGained(const FocusEvent& aEvent ) throw
 //  XFcousListener
 
 
-void OMRCListenerMultiplexerHelper::focusLost(const FocusEvent& aEvent ) throw( RuntimeException )
+void OMRCListenerMultiplexerHelper::focusLost(const FocusEvent& aEvent ) throw( RuntimeException, std::exception )
 {
     MULTIPLEX( XFocusListener, focusLost, FocusEvent, aEvent )
 }
@@ -276,7 +276,7 @@ void OMRCListenerMultiplexerHelper::focusLost(const FocusEvent& aEvent ) throw( 
 //  XWindowListener
 
 
-void OMRCListenerMultiplexerHelper::windowResized(const WindowEvent& aEvent ) throw( RuntimeException )
+void OMRCListenerMultiplexerHelper::windowResized(const WindowEvent& aEvent ) throw( RuntimeException, std::exception )
 {
     MULTIPLEX( XWindowListener, windowResized, WindowEvent, aEvent )
 }
@@ -285,7 +285,7 @@ void OMRCListenerMultiplexerHelper::windowResized(const WindowEvent& aEvent ) th
 //  XWindowListener
 
 
-void OMRCListenerMultiplexerHelper::windowMoved(const WindowEvent& aEvent ) throw( RuntimeException )
+void OMRCListenerMultiplexerHelper::windowMoved(const WindowEvent& aEvent ) throw( RuntimeException, std::exception )
 {
     MULTIPLEX( XWindowListener, windowMoved, WindowEvent, aEvent )
 }
@@ -294,7 +294,7 @@ void OMRCListenerMultiplexerHelper::windowMoved(const WindowEvent& aEvent ) thro
 //  XWindowListener
 
 
-void OMRCListenerMultiplexerHelper::windowShown(const EventObject& aEvent ) throw( RuntimeException )
+void OMRCListenerMultiplexerHelper::windowShown(const EventObject& aEvent ) throw( RuntimeException, std::exception )
 {
     MULTIPLEX( XWindowListener, windowShown, EventObject, aEvent )
 }
@@ -303,7 +303,7 @@ void OMRCListenerMultiplexerHelper::windowShown(const EventObject& aEvent ) thro
 //  XWindowListener
 
 
-void OMRCListenerMultiplexerHelper::windowHidden(const EventObject& aEvent ) throw( RuntimeException )
+void OMRCListenerMultiplexerHelper::windowHidden(const EventObject& aEvent ) throw( RuntimeException, std::exception )
 {
     MULTIPLEX( XWindowListener, windowHidden, EventObject, aEvent )
 }
@@ -312,7 +312,7 @@ void OMRCListenerMultiplexerHelper::windowHidden(const EventObject& aEvent ) thr
 //  XKeyListener
 
 
-void OMRCListenerMultiplexerHelper::keyPressed(const KeyEvent& aEvent) throw( RuntimeException )
+void OMRCListenerMultiplexerHelper::keyPressed(const KeyEvent& aEvent) throw( RuntimeException, std::exception )
 {
     MULTIPLEX( XKeyListener, keyPressed, KeyEvent, aEvent )
 }
@@ -321,7 +321,7 @@ void OMRCListenerMultiplexerHelper::keyPressed(const KeyEvent& aEvent) throw( Ru
 //  XKeyListener
 
 
-void OMRCListenerMultiplexerHelper::keyReleased(const KeyEvent& aEvent) throw( RuntimeException )
+void OMRCListenerMultiplexerHelper::keyReleased(const KeyEvent& aEvent) throw( RuntimeException, std::exception )
 {
     MULTIPLEX( XKeyListener, keyReleased, KeyEvent, aEvent )
 }
@@ -330,7 +330,7 @@ void OMRCListenerMultiplexerHelper::keyReleased(const KeyEvent& aEvent) throw( R
 //  XMouseListener
 
 
-void OMRCListenerMultiplexerHelper::mousePressed(const MouseEvent& aEvent) throw( RuntimeException )
+void OMRCListenerMultiplexerHelper::mousePressed(const MouseEvent& aEvent) throw( RuntimeException, std::exception )
 {
     MULTIPLEX( XMouseListener, mousePressed, MouseEvent, aEvent )
 }
@@ -339,7 +339,7 @@ void OMRCListenerMultiplexerHelper::mousePressed(const MouseEvent& aEvent) throw
 //  XMouseListener
 
 
-void OMRCListenerMultiplexerHelper::mouseReleased(const MouseEvent& aEvent) throw( RuntimeException )
+void OMRCListenerMultiplexerHelper::mouseReleased(const MouseEvent& aEvent) throw( RuntimeException, std::exception )
 {
     MULTIPLEX( XMouseListener, mouseReleased, MouseEvent, aEvent )
 }
@@ -348,7 +348,7 @@ void OMRCListenerMultiplexerHelper::mouseReleased(const MouseEvent& aEvent) thro
 //  XMouseListener
 
 
-void OMRCListenerMultiplexerHelper::mouseEntered(const MouseEvent& aEvent) throw( RuntimeException )
+void OMRCListenerMultiplexerHelper::mouseEntered(const MouseEvent& aEvent) throw( RuntimeException, std::exception )
 {
     MULTIPLEX( XMouseListener, mouseEntered, MouseEvent, aEvent )
 }
@@ -357,7 +357,7 @@ void OMRCListenerMultiplexerHelper::mouseEntered(const MouseEvent& aEvent) throw
 //  XMouseListener
 
 
-void OMRCListenerMultiplexerHelper::mouseExited(const MouseEvent& aEvent) throw( RuntimeException )
+void OMRCListenerMultiplexerHelper::mouseExited(const MouseEvent& aEvent) throw( RuntimeException, std::exception )
 {
     MULTIPLEX( XMouseListener, mouseExited, MouseEvent, aEvent )
 }
@@ -366,7 +366,7 @@ void OMRCListenerMultiplexerHelper::mouseExited(const MouseEvent& aEvent) throw(
 //  XMouseMotionListener
 
 
-void OMRCListenerMultiplexerHelper::mouseDragged(const MouseEvent& aEvent) throw( RuntimeException )
+void OMRCListenerMultiplexerHelper::mouseDragged(const MouseEvent& aEvent) throw( RuntimeException, std::exception )
 {
     MULTIPLEX( XMouseMotionListener, mouseDragged, MouseEvent, aEvent )
 }
@@ -375,7 +375,7 @@ void OMRCListenerMultiplexerHelper::mouseDragged(const MouseEvent& aEvent) throw
 //  XMouseMotionListener
 
 
-void OMRCListenerMultiplexerHelper::mouseMoved(const MouseEvent& aEvent) throw( RuntimeException )
+void OMRCListenerMultiplexerHelper::mouseMoved(const MouseEvent& aEvent) throw( RuntimeException, std::exception )
 {
     MULTIPLEX( XMouseMotionListener, mouseMoved, MouseEvent, aEvent )
 }
@@ -384,7 +384,7 @@ void OMRCListenerMultiplexerHelper::mouseMoved(const MouseEvent& aEvent) throw( 
 //  XPaintListener
 
 
-void OMRCListenerMultiplexerHelper::windowPaint(const PaintEvent& aEvent) throw( RuntimeException )
+void OMRCListenerMultiplexerHelper::windowPaint(const PaintEvent& aEvent) throw( RuntimeException, std::exception )
 {
     MULTIPLEX( XPaintListener, windowPaint, PaintEvent, aEvent )
 }
@@ -393,7 +393,7 @@ void OMRCListenerMultiplexerHelper::windowPaint(const PaintEvent& aEvent) throw(
 //  XTopWindowListener
 
 
-void OMRCListenerMultiplexerHelper::windowOpened(const EventObject& aEvent) throw( RuntimeException )
+void OMRCListenerMultiplexerHelper::windowOpened(const EventObject& aEvent) throw( RuntimeException, std::exception )
 {
     MULTIPLEX( XTopWindowListener, windowOpened, EventObject, aEvent )
 }
@@ -402,7 +402,7 @@ void OMRCListenerMultiplexerHelper::windowOpened(const EventObject& aEvent) thro
 //  XTopWindowListener
 
 
-void OMRCListenerMultiplexerHelper::windowClosing( const EventObject& aEvent ) throw( RuntimeException )
+void OMRCListenerMultiplexerHelper::windowClosing( const EventObject& aEvent ) throw( RuntimeException, std::exception )
 {
     MULTIPLEX( XTopWindowListener, windowClosing, EventObject, aEvent )
 }
@@ -411,7 +411,7 @@ void OMRCListenerMultiplexerHelper::windowClosing( const EventObject& aEvent ) t
 //  XTopWindowListener
 
 
-void OMRCListenerMultiplexerHelper::windowClosed( const EventObject& aEvent ) throw( RuntimeException )
+void OMRCListenerMultiplexerHelper::windowClosed( const EventObject& aEvent ) throw( RuntimeException, std::exception )
 {
     MULTIPLEX( XTopWindowListener, windowClosed, EventObject, aEvent )
 }
@@ -420,7 +420,7 @@ void OMRCListenerMultiplexerHelper::windowClosed( const EventObject& aEvent ) th
 //  XTopWindowListener
 
 
-void OMRCListenerMultiplexerHelper::windowMinimized( const EventObject& aEvent ) throw( RuntimeException )
+void OMRCListenerMultiplexerHelper::windowMinimized( const EventObject& aEvent ) throw( RuntimeException, std::exception )
 {
     MULTIPLEX( XTopWindowListener, windowMinimized, EventObject, aEvent )
 }
@@ -429,7 +429,7 @@ void OMRCListenerMultiplexerHelper::windowMinimized( const EventObject& aEvent )
 //  XTopWindowListener
 
 
-void OMRCListenerMultiplexerHelper::windowNormalized( const EventObject& aEvent ) throw( RuntimeException )
+void OMRCListenerMultiplexerHelper::windowNormalized( const EventObject& aEvent ) throw( RuntimeException, std::exception )
 {
     MULTIPLEX( XTopWindowListener, windowNormalized, EventObject, aEvent )
 }
@@ -438,7 +438,7 @@ void OMRCListenerMultiplexerHelper::windowNormalized( const EventObject& aEvent 
 //  XTopWindowListener
 
 
-void OMRCListenerMultiplexerHelper::windowActivated( const EventObject& aEvent ) throw( RuntimeException )
+void OMRCListenerMultiplexerHelper::windowActivated( const EventObject& aEvent ) throw( RuntimeException, std::exception )
 {
     MULTIPLEX( XTopWindowListener, windowActivated, EventObject, aEvent )
 }
@@ -447,7 +447,7 @@ void OMRCListenerMultiplexerHelper::windowActivated( const EventObject& aEvent )
 //  XTopWindowListener
 
 
-void OMRCListenerMultiplexerHelper::windowDeactivated( const EventObject& aEvent ) throw( RuntimeException )
+void OMRCListenerMultiplexerHelper::windowDeactivated( const EventObject& aEvent ) throw( RuntimeException, std::exception )
 {
     MULTIPLEX( XTopWindowListener, windowDeactivated, EventObject, aEvent )
 }

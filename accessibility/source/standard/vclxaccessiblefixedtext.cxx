@@ -67,14 +67,14 @@ void VCLXAccessibleFixedText::implGetLineBoundary( i18n::Boundary& rBoundary, sa
 // XServiceInfo
 
 
-OUString VCLXAccessibleFixedText::getImplementationName() throw (RuntimeException)
+OUString VCLXAccessibleFixedText::getImplementationName() throw (RuntimeException, std::exception)
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleFixedText" );
 }
 
 
 
-Sequence< OUString > VCLXAccessibleFixedText::getSupportedServiceNames() throw (RuntimeException)
+Sequence< OUString > VCLXAccessibleFixedText::getSupportedServiceNames() throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aNames(1);
     aNames[0] = "com.sun.star.awt.AccessibleFixedText";

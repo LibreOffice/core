@@ -47,16 +47,16 @@ public:
 
     void setForeColorAndInternalStyle( sal_Int32 nForeColor ) throw (css::uno::RuntimeException);
     // Attributes
-    virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setVisible( sal_Bool _visible ) throw (css::uno::RuntimeException);
-    virtual double SAL_CALL getTransparency() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setTransparency( double _transparency ) throw (css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setVisible( sal_Bool _visible ) throw (css::uno::RuntimeException, std::exception);
+    virtual double SAL_CALL getTransparency() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setTransparency( double _transparency ) throw (css::uno::RuntimeException, std::exception);
 
     // Methods
-    virtual void SAL_CALL Solid() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL TwoColorGradient( sal_Int32 style, sal_Int32 variant ) throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< ov::msforms::XColorFormat > SAL_CALL BackColor() throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< ov::msforms::XColorFormat > SAL_CALL ForeColor() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL Solid() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL TwoColorGradient( sal_Int32 style, sal_Int32 variant ) throw (css::uno::RuntimeException, std::exception);
+    virtual css::uno::Reference< ov::msforms::XColorFormat > SAL_CALL BackColor() throw (css::uno::RuntimeException, std::exception);
+    virtual css::uno::Reference< ov::msforms::XColorFormat > SAL_CALL ForeColor() throw (css::uno::RuntimeException, std::exception);
 
 };
 

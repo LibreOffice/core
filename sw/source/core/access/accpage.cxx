@@ -137,19 +137,19 @@ sal_Bool SwAccessiblePage::HasCursor()
 }
 
 OUString SwAccessiblePage::getImplementationName( )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return OUString(sImplementationName);
 }
 
 sal_Bool SwAccessiblePage::supportsService( const OUString& rServiceName)
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence<OUString> SwAccessiblePage::getSupportedServiceNames( )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
@@ -164,13 +164,13 @@ namespace
 }
 
 Sequence< sal_Int8 > SAL_CALL SwAccessiblePage::getImplementationId()
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     return theSwAccessiblePageImplementationId::get().getSeq();
 }
 
 OUString SwAccessiblePage::getAccessibleDescription( )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     CHECK_FOR_DEFUNC( ::com::sun::star::accessibility::XAccessibleContext );
 

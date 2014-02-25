@@ -61,7 +61,7 @@ public:
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
         ::com::sun::star::uno::Type const & rType )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL acquire() throw ();
 
@@ -116,22 +116,22 @@ public:
     /// Returns the row headers as an AccessibleTable.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleTable > SAL_CALL
                 getAccessibleRowHeaders(  )
-                    throw (::com::sun::star::uno::RuntimeException);
+                    throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     /// Returns the column headers as an AccessibleTable.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleTable > SAL_CALL
                 getAccessibleColumnHeaders(  )
-                    throw (::com::sun::star::uno::RuntimeException);
+                    throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     /// Returns the selected rows in a table.
     virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL
                 getSelectedAccessibleRows(  )
-                    throw (::com::sun::star::uno::RuntimeException);
+                    throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     /// Returns the selected columns in a table.
     virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL
                 getSelectedAccessibleColumns(  )
-                    throw (::com::sun::star::uno::RuntimeException);
+                    throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     /// Returns a boolean value indicating whether the specified row is selected.
     virtual sal_Bool SAL_CALL
@@ -157,12 +157,12 @@ public:
     /// Returns the caption for the table.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
                 getAccessibleCaption(  )
-                    throw (::com::sun::star::uno::RuntimeException);
+                    throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     /// Returns the summary description of the table.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
                 getAccessibleSummary(  )
-                    throw (::com::sun::star::uno::RuntimeException);
+                    throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     /// Returns a boolean value indicating whether the accessible at a specified row and column is selected.
     virtual sal_Bool SAL_CALL
@@ -240,14 +240,14 @@ public:
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleRelationSet> SAL_CALL
         getAccessibleRelationSet(void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     /// Return the set of current states.
     // perhaps sometimes to be implemented
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
         getAccessibleStateSet(void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     ///=====  XAccessibleSelection  ===========================================
 
@@ -265,7 +265,7 @@ public:
 
     virtual void SAL_CALL
         clearAccessibleSelection(  )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL
         selectAllAccessibleChildren(  )
@@ -273,13 +273,13 @@ public:
 
     virtual sal_Int32 SAL_CALL
         getSelectedAccessibleChildCount(  )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible > SAL_CALL
         getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
-        ::com::sun::star::uno::RuntimeException);
+        ::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL
         deselectAccessibleChild( sal_Int32 nSelectedChildIndex )
@@ -293,20 +293,20 @@ public:
     */
     virtual OUString SAL_CALL
         getImplementationName(void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     ///=====  XTypeProvider  ===================================================
 
     /// returns the possible types
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL
         getTypes()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     /** Returns a implementation id.
     */
     virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
         getImplementationId(void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 protected:
     /// contains the range of the table, because it could be a subrange of the complete table

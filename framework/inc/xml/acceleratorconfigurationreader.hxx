@@ -137,37 +137,37 @@ class AcceleratorConfigurationReader : private ThreadHelpBase
         // XDocumentHandler
         virtual void SAL_CALL startDocument()
             throw(css::xml::sax::SAXException,
-                  css::uno::RuntimeException );
+                  css::uno::RuntimeException, std::exception );
 
         virtual void SAL_CALL endDocument()
             throw(css::xml::sax::SAXException,
-                  css::uno::RuntimeException );
+                  css::uno::RuntimeException, std::exception );
 
         virtual void SAL_CALL startElement(const OUString&                                      sElement      ,
                                            const css::uno::Reference< css::xml::sax::XAttributeList >& xAttributeList)
             throw(css::xml::sax::SAXException,
-                  css::uno::RuntimeException );
+                  css::uno::RuntimeException, std::exception );
 
         virtual void SAL_CALL endElement(const OUString& sElement)
             throw(css::xml::sax::SAXException,
-                  css::uno::RuntimeException );
+                  css::uno::RuntimeException, std::exception );
 
         virtual void SAL_CALL characters(const OUString& sChars)
             throw(css::xml::sax::SAXException,
-                  css::uno::RuntimeException );
+                  css::uno::RuntimeException, std::exception );
 
         virtual void SAL_CALL ignorableWhitespace(const OUString& sWhitespaces)
             throw(css::xml::sax::SAXException,
-                  css::uno::RuntimeException );
+                  css::uno::RuntimeException, std::exception );
 
         virtual void SAL_CALL processingInstruction(const OUString& sTarget,
                                                     const OUString& sData  )
             throw(css::xml::sax::SAXException,
-                  css::uno::RuntimeException );
+                  css::uno::RuntimeException, std::exception );
 
         virtual void SAL_CALL setDocumentLocator(const css::uno::Reference< css::xml::sax::XLocator >& xLocator)
             throw(css::xml::sax::SAXException,
-                  css::uno::RuntimeException );
+                  css::uno::RuntimeException, std::exception );
 
     //-------------------------------------------
     // helper

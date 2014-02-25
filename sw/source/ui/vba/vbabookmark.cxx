@@ -49,7 +49,7 @@ void SwVbaBookmark::checkVality() throw ( uno::RuntimeException )
         throw uno::RuntimeException("The bookmark is not valid", uno::Reference< uno::XInterface >() );
 }
 
-void SAL_CALL SwVbaBookmark::Delete() throw ( uno::RuntimeException )
+void SAL_CALL SwVbaBookmark::Delete() throw ( uno::RuntimeException, std::exception )
 {
     checkVality();
     uno::Reference< text::XTextDocument > xTextDocument( mxModel, uno::UNO_QUERY_THROW );
@@ -57,25 +57,25 @@ void SAL_CALL SwVbaBookmark::Delete() throw ( uno::RuntimeException )
     mbValid = false;
 }
 
-void SAL_CALL SwVbaBookmark::Select() throw ( uno::RuntimeException )
+void SAL_CALL SwVbaBookmark::Select() throw ( uno::RuntimeException, std::exception )
 {
     checkVality();
     uno::Reference< view::XSelectionSupplier > xSelectSupp( mxModel->getCurrentController(), uno::UNO_QUERY_THROW );
     xSelectSupp->select( uno::makeAny( mxBookmark ) );
 }
 
-OUString SAL_CALL SwVbaBookmark::getName() throw ( uno::RuntimeException )
+OUString SAL_CALL SwVbaBookmark::getName() throw ( uno::RuntimeException, std::exception )
 {
     return maName;
 }
 
-void SAL_CALL SwVbaBookmark::setName( const OUString& _name ) throw ( uno::RuntimeException )
+void SAL_CALL SwVbaBookmark::setName( const OUString& _name ) throw ( uno::RuntimeException, std::exception )
 {
     uno::Reference< container::XNamed > xNamed( mxBookmark, uno::UNO_QUERY_THROW );
     xNamed->setName( _name );
 }
 
-uno::Any SAL_CALL SwVbaBookmark::Range() throw ( uno::RuntimeException )
+uno::Any SAL_CALL SwVbaBookmark::Range() throw ( uno::RuntimeException, std::exception )
 {
     uno::Reference< text::XTextContent > xTextContent( mxBookmark, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextDocument > xTextDocument( mxModel, uno::UNO_QUERY_THROW );

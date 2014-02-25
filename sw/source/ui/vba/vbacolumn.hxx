@@ -40,9 +40,9 @@ public:
     virtual ~SwVbaColumn();
 
     // Methods
-    virtual sal_Int32 SAL_CALL getWidth() throw ( css::uno::RuntimeException );
-    virtual void SAL_CALL setWidth( sal_Int32 _width ) throw ( css::uno::RuntimeException );
-    virtual void SAL_CALL Select(  ) throw (css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getWidth() throw ( css::uno::RuntimeException, std::exception );
+    virtual void SAL_CALL setWidth( sal_Int32 _width ) throw ( css::uno::RuntimeException, std::exception );
+    virtual void SAL_CALL Select(  ) throw (css::uno::RuntimeException, std::exception);
 
     static void SelectColumn( const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::text::XTextTable >& xTextTable, sal_Int32 nStartColumn, sal_Int32 nEndColumn ) throw (css::uno::RuntimeException);
 

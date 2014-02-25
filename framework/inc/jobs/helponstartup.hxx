@@ -114,11 +114,11 @@ class HelpOnStartup : private ThreadHelpBase
         virtual css::uno::Any SAL_CALL execute(const css::uno::Sequence< css::beans::NamedValue >& lArguments)
             throw(css::lang::IllegalArgumentException,
                   css::uno::Exception                ,
-                  css::uno::RuntimeException         );
+                  css::uno::RuntimeException, std::exception         );
 
         // css.lang.XEventListener
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
-            throw(css::uno::RuntimeException);
+            throw(css::uno::RuntimeException, std::exception);
 
     //-------------------------------------------
     // helper

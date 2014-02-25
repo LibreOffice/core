@@ -124,13 +124,13 @@ void OEvoabConnection::construct(const OUString& url, const Sequence< PropertyVa
 }
 
 
-OUString SAL_CALL OEvoabConnection::nativeSQL( const OUString& _sSql ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OEvoabConnection::nativeSQL( const OUString& _sSql ) throw(SQLException, RuntimeException, std::exception)
 {
     // when you need to transform SQL92 to you driver specific you can do it here
     return _sSql;
 }
 
-Reference< XDatabaseMetaData > SAL_CALL OEvoabConnection::getMetaData(  ) throw(SQLException, RuntimeException)
+Reference< XDatabaseMetaData > SAL_CALL OEvoabConnection::getMetaData(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -158,7 +158,7 @@ Reference< XDatabaseMetaData > SAL_CALL OEvoabConnection::getMetaData(  ) throw(
      return xTab;
 }
 
-Reference< XStatement > SAL_CALL OEvoabConnection::createStatement(  ) throw(SQLException, RuntimeException)
+Reference< XStatement > SAL_CALL OEvoabConnection::createStatement(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -170,7 +170,7 @@ Reference< XStatement > SAL_CALL OEvoabConnection::createStatement(  ) throw(SQL
     return xStmt;
 }
 
-Reference< XPreparedStatement > SAL_CALL OEvoabConnection::prepareStatement( const OUString& sql ) throw(SQLException, RuntimeException)
+Reference< XPreparedStatement > SAL_CALL OEvoabConnection::prepareStatement( const OUString& sql ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -183,12 +183,12 @@ Reference< XPreparedStatement > SAL_CALL OEvoabConnection::prepareStatement( con
     return xStmt;
 }
 
-Reference< XPreparedStatement > SAL_CALL OEvoabConnection::prepareCall( const OUString& /*sql*/ ) throw( SQLException, RuntimeException)
+Reference< XPreparedStatement > SAL_CALL OEvoabConnection::prepareCall( const OUString& /*sql*/ ) throw( SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFeatureNotImplementedException( "XConnection::prepareCall", *this );
     return NULL;
 }
-sal_Bool SAL_CALL OEvoabConnection::isClosed(  ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabConnection::isClosed(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     return OConnection_BASE::rBHelper.bDisposed;
@@ -196,7 +196,7 @@ sal_Bool SAL_CALL OEvoabConnection::isClosed(  ) throw(SQLException, RuntimeExce
 
 
 // XCloseable
-void SAL_CALL OEvoabConnection::close(  ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabConnection::close(  ) throw(SQLException, RuntimeException, std::exception)
 {
     {  // we just dispose us
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -207,11 +207,11 @@ void SAL_CALL OEvoabConnection::close(  ) throw(SQLException, RuntimeException)
 
 
 // XWarningsSupplier
-Any SAL_CALL OEvoabConnection::getWarnings(  ) throw(SQLException, RuntimeException)
+Any SAL_CALL OEvoabConnection::getWarnings(  ) throw(SQLException, RuntimeException, std::exception)
 {
     return m_aWarnings.getWarnings();
 }
-void SAL_CALL OEvoabConnection::clearWarnings(  ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabConnection::clearWarnings(  ) throw(SQLException, RuntimeException, std::exception)
 {
     m_aWarnings.clearWarnings();
 }
@@ -226,53 +226,53 @@ void OEvoabConnection::disposing()
 }
 
 // -------------------------------- stubbed methods ------------------------------------------------
-void SAL_CALL OEvoabConnection::setAutoCommit( sal_Bool /*autoCommit*/ ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabConnection::setAutoCommit( sal_Bool /*autoCommit*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFeatureNotImplementedException( "XConnection::setAutoCommit", *this );
 }
-sal_Bool SAL_CALL OEvoabConnection::getAutoCommit(  ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabConnection::getAutoCommit(  ) throw(SQLException, RuntimeException, std::exception)
 {
     return sal_True;
 }
-void SAL_CALL OEvoabConnection::commit(  ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabConnection::commit(  ) throw(SQLException, RuntimeException, std::exception)
 {
 }
-void SAL_CALL OEvoabConnection::rollback(  ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabConnection::rollback(  ) throw(SQLException, RuntimeException, std::exception)
 {
 }
-void SAL_CALL OEvoabConnection::setReadOnly( sal_Bool /*readOnly*/ ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabConnection::setReadOnly( sal_Bool /*readOnly*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFeatureNotImplementedException( "XConnection::setReadOnly", *this );
 }
-sal_Bool SAL_CALL OEvoabConnection::isReadOnly(  ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabConnection::isReadOnly(  ) throw(SQLException, RuntimeException, std::exception)
 {
     return sal_False;
 }
-void SAL_CALL OEvoabConnection::setCatalog( const OUString& /*catalog*/ ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabConnection::setCatalog( const OUString& /*catalog*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFeatureNotImplementedException( "XConnection::setCatalog", *this );
 }
 
-OUString SAL_CALL OEvoabConnection::getCatalog(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OEvoabConnection::getCatalog(  ) throw(SQLException, RuntimeException, std::exception)
 {
     return OUString();
 }
-void SAL_CALL OEvoabConnection::setTransactionIsolation( sal_Int32 /*level*/ ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabConnection::setTransactionIsolation( sal_Int32 /*level*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFeatureNotImplementedException( "XConnection::setTransactionIsolation", *this );
 }
 
-sal_Int32 SAL_CALL OEvoabConnection::getTransactionIsolation(  ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OEvoabConnection::getTransactionIsolation(  ) throw(SQLException, RuntimeException, std::exception)
 {
     return TransactionIsolation::NONE;
 }
 
-Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OEvoabConnection::getTypeMap(  ) throw(SQLException, RuntimeException)
+Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OEvoabConnection::getTypeMap(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFeatureNotImplementedException( "XConnection::getTypeMap", *this );
     return NULL;
 }
-void SAL_CALL OEvoabConnection::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabConnection::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFeatureNotImplementedException( "XConnection::setTypeMap", *this );
 }

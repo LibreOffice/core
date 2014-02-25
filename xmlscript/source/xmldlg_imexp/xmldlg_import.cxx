@@ -64,7 +64,7 @@ namespace xmlscript
 {
 
 void EventElement::endElement()
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     static_cast< ControlElement * >( _pParent )->_events.push_back( this );
 }
@@ -1600,57 +1600,57 @@ void ImportContext::importDefaults(
 }
 
 Reference< xml::input::XElement > ElementBase::getParent()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return static_cast< xml::input::XElement * >( _pParent );
 }
 
 OUString ElementBase::getLocalName()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return _aLocalName;
 }
 
 sal_Int32 ElementBase::getUid()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return _nUid;
 }
 
 Reference< xml::input::XAttributes > ElementBase::getAttributes()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return _xAttributes;
 }
 
 void ElementBase::ignorableWhitespace(
     OUString const & /*rWhitespaces*/ )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     // not used
 }
 
 void ElementBase::characters( OUString const & /*rChars*/ )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     // not used, all characters ignored
 }
 
 void ElementBase::endElement()
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
 }
 
 void ElementBase::processingInstruction(
     OUString const & /*Target*/, OUString const & /*Data*/ )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
 }
 
 Reference< xml::input::XElement > ElementBase::startChildElement(
     sal_Int32 /*nUid*/, OUString const & /*rLocalName*/,
     Reference< xml::input::XAttributes > const & /*xAttributes*/ )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     throw xml::sax::SAXException( "unexpected element!", Reference< XInterface >(), Any() );
 }
@@ -1694,28 +1694,28 @@ ElementBase::~ElementBase()
 
 void DialogImport::startDocument(
     Reference< xml::input::XNamespaceMapping > const & xNamespaceMapping )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     XMLNS_DIALOGS_UID = xNamespaceMapping->getUidByUri( XMLNS_DIALOGS_URI );
     XMLNS_SCRIPT_UID = xNamespaceMapping->getUidByUri( XMLNS_SCRIPT_URI );
 }
 
 void DialogImport::endDocument()
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     // ignored
 }
 
 void DialogImport::processingInstruction(
     OUString const & /*rTarget*/, OUString const & /*rData*/ )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     // ignored for now: xxx todo
 }
 
 void DialogImport::setDocumentLocator(
     Reference< xml::sax::XLocator > const & /*xLocator*/ )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     // ignored for now: xxx todo
 }
@@ -1723,7 +1723,7 @@ void DialogImport::setDocumentLocator(
 Reference< xml::input::XElement > DialogImport::startRootElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     if (XMLNS_DIALOGS_UID != nUid)
     {

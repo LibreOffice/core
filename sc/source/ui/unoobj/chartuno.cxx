@@ -299,7 +299,7 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
 }
 
 void SAL_CALL ScChartsObj::removeByName( const OUString& aName )
-                                            throw(uno::RuntimeException)
+                                            throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     SdrOle2Obj* pObj = lcl_FindChartObj( pDocShell, nTab, aName );
@@ -320,7 +320,7 @@ void SAL_CALL ScChartsObj::removeByName( const OUString& aName )
 // XEnumerationAccess
 
 uno::Reference<container::XEnumeration> SAL_CALL ScChartsObj::createEnumeration()
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return new ScIndexEnumeration(this, OUString("com.sun.star.table.TableChartsEnumeration"));
@@ -328,7 +328,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScChartsObj::createEnumeration(
 
 // XIndexAccess
 
-sal_Int32 SAL_CALL ScChartsObj::getCount() throw(uno::RuntimeException)
+sal_Int32 SAL_CALL ScChartsObj::getCount() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     sal_Int32 nCount = 0;
@@ -358,7 +358,7 @@ sal_Int32 SAL_CALL ScChartsObj::getCount() throw(uno::RuntimeException)
 
 uno::Any SAL_CALL ScChartsObj::getByIndex( sal_Int32 nIndex )
                             throw(lang::IndexOutOfBoundsException,
-                                    lang::WrappedTargetException, uno::RuntimeException)
+                                    lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Reference<table::XTableChart> xChart(GetObjectByIndex_Impl(nIndex));
@@ -368,13 +368,13 @@ uno::Any SAL_CALL ScChartsObj::getByIndex( sal_Int32 nIndex )
         throw lang::IndexOutOfBoundsException();
 }
 
-uno::Type SAL_CALL ScChartsObj::getElementType() throw(uno::RuntimeException)
+uno::Type SAL_CALL ScChartsObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return getCppuType((uno::Reference<table::XTableChart>*)0);
 }
 
-sal_Bool SAL_CALL ScChartsObj::hasElements() throw(uno::RuntimeException)
+sal_Bool SAL_CALL ScChartsObj::hasElements() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return getCount() != 0;
@@ -382,7 +382,7 @@ sal_Bool SAL_CALL ScChartsObj::hasElements() throw(uno::RuntimeException)
 
 uno::Any SAL_CALL ScChartsObj::getByName( const OUString& aName )
             throw(container::NoSuchElementException,
-                    lang::WrappedTargetException, uno::RuntimeException)
+                    lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Reference<table::XTableChart> xChart(GetObjectByName_Impl(aName));
@@ -392,7 +392,7 @@ uno::Any SAL_CALL ScChartsObj::getByName( const OUString& aName )
         throw container::NoSuchElementException();
 }
 
-uno::Sequence<OUString> SAL_CALL ScChartsObj::getElementNames() throw(uno::RuntimeException)
+uno::Sequence<OUString> SAL_CALL ScChartsObj::getElementNames() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (pDocShell)
@@ -437,7 +437,7 @@ uno::Sequence<OUString> SAL_CALL ScChartsObj::getElementNames() throw(uno::Runti
 }
 
 sal_Bool SAL_CALL ScChartsObj::hasByName( const OUString& aName )
-                                        throw(uno::RuntimeException)
+                                        throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return ( lcl_FindChartObj( pDocShell, nTab, aName ) != NULL );
@@ -660,7 +660,7 @@ void ScChartObj::disposing()
 
 // XTableChart
 
-sal_Bool SAL_CALL ScChartObj::getHasColumnHeaders() throw(uno::RuntimeException)
+sal_Bool SAL_CALL ScChartObj::getHasColumnHeaders() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScRangeListRef xRanges = new ScRangeList;
@@ -681,7 +681,7 @@ void SAL_CALL ScChartObj::setHasColumnHeaders( sal_Bool bHasColumnHeaders )
         Update_Impl( xRanges, bHasColumnHeaders, bOldRowHeaders );
 }
 
-sal_Bool SAL_CALL ScChartObj::getHasRowHeaders() throw(uno::RuntimeException)
+sal_Bool SAL_CALL ScChartObj::getHasRowHeaders() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScRangeListRef xRanges = new ScRangeList;
@@ -701,7 +701,7 @@ void SAL_CALL ScChartObj::setHasRowHeaders( sal_Bool bHasRowHeaders )
         Update_Impl( xRanges, bOldColHeaders, bHasRowHeaders );
 }
 
-uno::Sequence<table::CellRangeAddress> SAL_CALL ScChartObj::getRanges() throw(uno::RuntimeException)
+uno::Sequence<table::CellRangeAddress> SAL_CALL ScChartObj::getRanges() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScRangeListRef xRanges = new ScRangeList;
@@ -761,7 +761,7 @@ void SAL_CALL ScChartObj::setRanges( const uno::Sequence<table::CellRangeAddress
 
 // XEmbeddedObjectSupplier
 
-uno::Reference<lang::XComponent> SAL_CALL ScChartObj::getEmbeddedObject() throw(uno::RuntimeException)
+uno::Reference<lang::XComponent> SAL_CALL ScChartObj::getEmbeddedObject() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     SdrOle2Obj* pObject = lcl_FindChartObj( pDocShell, nTab, aChartName );
@@ -776,13 +776,13 @@ uno::Reference<lang::XComponent> SAL_CALL ScChartObj::getEmbeddedObject() throw(
 
 // XNamed
 
-OUString SAL_CALL ScChartObj::getName() throw(uno::RuntimeException)
+OUString SAL_CALL ScChartObj::getName() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return aChartName;
 }
 
-void SAL_CALL ScChartObj::setName( const OUString& /* aName */ ) throw(uno::RuntimeException)
+void SAL_CALL ScChartObj::setName( const OUString& /* aName */ ) throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     throw uno::RuntimeException();      // name cannot be changed
@@ -790,7 +790,7 @@ void SAL_CALL ScChartObj::setName( const OUString& /* aName */ ) throw(uno::Runt
 
 // XPropertySet
 
-uno::Reference< beans::XPropertySetInfo > ScChartObj::getPropertySetInfo() throw (uno::RuntimeException)
+uno::Reference< beans::XPropertySetInfo > ScChartObj::getPropertySetInfo() throw (uno::RuntimeException, std::exception)
 {
     return createPropertySetInfo( getInfoHelper() ) ;
 }

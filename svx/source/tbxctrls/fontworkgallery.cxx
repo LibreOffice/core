@@ -435,8 +435,8 @@ public:
     virtual ::Window* createPopupWindow( ::Window* pParent );
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     using  svt::PopupWindowController::createPopupWindow;
 };
@@ -483,14 +483,14 @@ Reference< XInterface > SAL_CALL SAL_CALL FontworkAlignmentControl_createInstanc
 
 
 
-OUString SAL_CALL FontworkAlignmentControl::getImplementationName(  ) throw (RuntimeException)
+OUString SAL_CALL FontworkAlignmentControl::getImplementationName(  ) throw (RuntimeException, std::exception)
 {
     return FontworkAlignmentControl_getImplementationName();
 }
 
 
 
-Sequence< OUString > SAL_CALL FontworkAlignmentControl::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > SAL_CALL FontworkAlignmentControl::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
 {
     return FontworkAlignmentControl_getSupportedServiceNames();
 }
@@ -673,8 +673,8 @@ public:
     virtual ::Window* createPopupWindow( ::Window* pParent );
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     using svt::PopupWindowController::createPopupWindow;
 };
@@ -719,14 +719,14 @@ Reference< XInterface > SAL_CALL SAL_CALL FontworkCharacterSpacingControl_create
 
 
 
-OUString SAL_CALL FontworkCharacterSpacingControl::getImplementationName(  ) throw (RuntimeException)
+OUString SAL_CALL FontworkCharacterSpacingControl::getImplementationName(  ) throw (RuntimeException, std::exception)
 {
     return FontworkCharacterSpacingControl_getImplementationName();
 }
 
 
 
-Sequence< OUString > SAL_CALL FontworkCharacterSpacingControl::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > SAL_CALL FontworkCharacterSpacingControl::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
 {
     return FontworkCharacterSpacingControl_getSupportedServiceNames();
 }

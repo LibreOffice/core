@@ -84,13 +84,13 @@ private:
     virtual ~BridgeFactory();
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
-    getSupportedServiceNames() throw (com::sun::star::uno::RuntimeException);
+    getSupportedServiceNames() throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual com::sun::star::uno::Reference< com::sun::star::bridge::XBridge >
     SAL_CALL createBridge(
@@ -108,12 +108,12 @@ private:
     virtual com::sun::star::uno::Reference< com::sun::star::bridge::XBridge >
     SAL_CALL getBridge(
         OUString const & sName)
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual
     com::sun::star::uno::Sequence<
         com::sun::star::uno::Reference< com::sun::star::bridge::XBridge > >
-    SAL_CALL getExistingBridges() throw (com::sun::star::uno::RuntimeException);
+    SAL_CALL getExistingBridges() throw (com::sun::star::uno::RuntimeException, std::exception);
 
     typedef
         std::list<

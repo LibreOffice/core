@@ -306,48 +306,48 @@ uno::Sequence< OUString > ScaDateAddIn::getSupportedServiceNames_Static()
 }
 
 // XServiceName
-OUString SAL_CALL ScaDateAddIn::getServiceName() throw( uno::RuntimeException )
+OUString SAL_CALL ScaDateAddIn::getServiceName() throw( uno::RuntimeException, std::exception )
 {
     // name of specific AddIn service
     return OUString( MY_SERVICE );
 }
 
 // XServiceInfo
-OUString SAL_CALL ScaDateAddIn::getImplementationName() throw( uno::RuntimeException )
+OUString SAL_CALL ScaDateAddIn::getImplementationName() throw( uno::RuntimeException, std::exception )
 {
     return getImplementationName_Static();
 }
 
-sal_Bool SAL_CALL ScaDateAddIn::supportsService( const OUString& aServiceName ) throw( uno::RuntimeException )
+sal_Bool SAL_CALL ScaDateAddIn::supportsService( const OUString& aServiceName ) throw( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, aServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL ScaDateAddIn::getSupportedServiceNames() throw( uno::RuntimeException )
+uno::Sequence< OUString > SAL_CALL ScaDateAddIn::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
 {
     return getSupportedServiceNames_Static();
 }
 
 // XLocalizable
-void SAL_CALL ScaDateAddIn::setLocale( const lang::Locale& eLocale ) throw( uno::RuntimeException )
+void SAL_CALL ScaDateAddIn::setLocale( const lang::Locale& eLocale ) throw( uno::RuntimeException, std::exception )
 {
     aFuncLoc = eLocale;
     InitData();     // change of locale invalidates resources!
 }
 
-lang::Locale SAL_CALL ScaDateAddIn::getLocale() throw( uno::RuntimeException )
+lang::Locale SAL_CALL ScaDateAddIn::getLocale() throw( uno::RuntimeException, std::exception )
 {
     return aFuncLoc;
 }
 
-OUString SAL_CALL ScaDateAddIn::getProgrammaticFuntionName( const OUString& ) throw( uno::RuntimeException )
+OUString SAL_CALL ScaDateAddIn::getProgrammaticFuntionName( const OUString& ) throw( uno::RuntimeException, std::exception )
 {
     //  not used by calc
     //  (but should be implemented for other uses of the AddIn service)
     return OUString();
 }
 
-OUString SAL_CALL ScaDateAddIn::getDisplayFunctionName( const OUString& aProgrammaticName ) throw( uno::RuntimeException )
+OUString SAL_CALL ScaDateAddIn::getDisplayFunctionName( const OUString& aProgrammaticName ) throw( uno::RuntimeException, std::exception )
 {
     OUString aRet;
 
@@ -367,7 +367,7 @@ OUString SAL_CALL ScaDateAddIn::getDisplayFunctionName( const OUString& aProgram
     return aRet;
 }
 
-OUString SAL_CALL ScaDateAddIn::getFunctionDescription( const OUString& aProgrammaticName ) throw( uno::RuntimeException )
+OUString SAL_CALL ScaDateAddIn::getFunctionDescription( const OUString& aProgrammaticName ) throw( uno::RuntimeException, std::exception )
 {
     OUString aRet;
 
@@ -379,7 +379,7 @@ OUString SAL_CALL ScaDateAddIn::getFunctionDescription( const OUString& aProgram
 }
 
 OUString SAL_CALL ScaDateAddIn::getDisplayArgumentName(
-        const OUString& aProgrammaticName, sal_Int32 nArgument ) throw( uno::RuntimeException )
+        const OUString& aProgrammaticName, sal_Int32 nArgument ) throw( uno::RuntimeException, std::exception )
 {
     OUString aRet;
 
@@ -397,7 +397,7 @@ OUString SAL_CALL ScaDateAddIn::getDisplayArgumentName(
 }
 
 OUString SAL_CALL ScaDateAddIn::getArgumentDescription(
-        const OUString& aProgrammaticName, sal_Int32 nArgument ) throw( uno::RuntimeException )
+        const OUString& aProgrammaticName, sal_Int32 nArgument ) throw( uno::RuntimeException, std::exception )
 {
     OUString aRet;
 
@@ -415,7 +415,7 @@ OUString SAL_CALL ScaDateAddIn::getArgumentDescription(
 }
 
 OUString SAL_CALL ScaDateAddIn::getProgrammaticCategoryName(
-        const OUString& aProgrammaticName ) throw( uno::RuntimeException )
+        const OUString& aProgrammaticName ) throw( uno::RuntimeException, std::exception )
 {
     OUString aRet;
 
@@ -441,14 +441,14 @@ OUString SAL_CALL ScaDateAddIn::getProgrammaticCategoryName(
 }
 
 OUString SAL_CALL ScaDateAddIn::getDisplayCategoryName(
-        const OUString& aProgrammaticName ) throw( uno::RuntimeException )
+        const OUString& aProgrammaticName ) throw( uno::RuntimeException, std::exception )
 {
     return getProgrammaticCategoryName( aProgrammaticName );
 }
 
 // XCompatibilityNames
 uno::Sequence< sheet::LocalizedName > SAL_CALL ScaDateAddIn::getCompatibilityNames(
-        const OUString& aProgrammaticName ) throw( uno::RuntimeException )
+        const OUString& aProgrammaticName ) throw( uno::RuntimeException, std::exception )
 {
     const ScaFuncData* pFData = pFuncDataList->Get( aProgrammaticName );
     if( !pFData )
@@ -654,7 +654,7 @@ sal_Int32 GetNullDate( const uno::Reference< beans::XPropertySet >& xOptions )
 sal_Int32 SAL_CALL ScaDateAddIn::getDiffWeeks(
         const uno::Reference< beans::XPropertySet >& xOptions,
         sal_Int32 nStartDate, sal_Int32 nEndDate,
-        sal_Int32 nMode ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+        sal_Int32 nMode ) throw( uno::RuntimeException, lang::IllegalArgumentException, std::exception )
 {
     sal_Int32 nNullDate = GetNullDate( xOptions );
 
@@ -691,7 +691,7 @@ sal_Int32 SAL_CALL ScaDateAddIn::getDiffWeeks(
 sal_Int32 SAL_CALL ScaDateAddIn::getDiffMonths(
         const uno::Reference< beans::XPropertySet >& xOptions,
         sal_Int32 nStartDate, sal_Int32 nEndDate,
-        sal_Int32 nMode ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+        sal_Int32 nMode ) throw( uno::RuntimeException, lang::IllegalArgumentException, std::exception )
 {
     sal_Int32 nNullDate = GetNullDate( xOptions );
 
@@ -736,7 +736,7 @@ sal_Int32 SAL_CALL ScaDateAddIn::getDiffMonths(
 sal_Int32 SAL_CALL ScaDateAddIn::getDiffYears(
         const uno::Reference< beans::XPropertySet >& xOptions,
         sal_Int32 nStartDate, sal_Int32 nEndDate,
-        sal_Int32 nMode ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+        sal_Int32 nMode ) throw( uno::RuntimeException, lang::IllegalArgumentException, std::exception )
 {
     if ( nMode != 1 )
         return getDiffMonths( xOptions, nStartDate, nEndDate, nMode ) / 12;
@@ -759,7 +759,7 @@ sal_Int32 SAL_CALL ScaDateAddIn::getDiffYears(
  */
 sal_Int32 SAL_CALL ScaDateAddIn::getIsLeapYear(
         const uno::Reference< beans::XPropertySet >& xOptions,
-        sal_Int32 nDate ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+        sal_Int32 nDate ) throw( uno::RuntimeException, lang::IllegalArgumentException, std::exception )
 {
     sal_Int32 nNullDate = GetNullDate( xOptions );
     sal_Int32 nDays = nDate + nNullDate;
@@ -775,7 +775,7 @@ sal_Int32 SAL_CALL ScaDateAddIn::getIsLeapYear(
  */
 sal_Int32 SAL_CALL ScaDateAddIn::getDaysInMonth(
         const uno::Reference<beans::XPropertySet>& xOptions,
-        sal_Int32 nDate ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+        sal_Int32 nDate ) throw( uno::RuntimeException, lang::IllegalArgumentException, std::exception )
 {
     sal_Int32 nNullDate = GetNullDate( xOptions );
     sal_Int32 nDays = nDate + nNullDate;
@@ -791,7 +791,7 @@ sal_Int32 SAL_CALL ScaDateAddIn::getDaysInMonth(
  */
 sal_Int32 SAL_CALL ScaDateAddIn::getDaysInYear(
         const uno::Reference< beans::XPropertySet >& xOptions,
-        sal_Int32 nDate ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+        sal_Int32 nDate ) throw( uno::RuntimeException, lang::IllegalArgumentException, std::exception )
 {
     sal_Int32 nNullDate = GetNullDate( xOptions );
     sal_Int32 nDays = nDate + nNullDate;
@@ -819,7 +819,7 @@ sal_Int32 SAL_CALL ScaDateAddIn::getDaysInYear(
  */
 sal_Int32 SAL_CALL ScaDateAddIn::getWeeksInYear(
         const uno::Reference< beans::XPropertySet >& xOptions,
-        sal_Int32 nDate ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+        sal_Int32 nDate ) throw( uno::RuntimeException, lang::IllegalArgumentException, std::exception )
 {
     sal_Int32 nNullDate = GetNullDate( xOptions );
     sal_Int32 nDays = nDate + nNullDate;
@@ -846,7 +846,7 @@ sal_Int32 SAL_CALL ScaDateAddIn::getWeeksInYear(
  * This function rotates each character by 13 in the alphabet.
  * Only the characters 'a' ... 'z' and 'A' ... 'Z' are modified.
  */
-OUString SAL_CALL ScaDateAddIn::getRot13( const OUString& aSrcString ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+OUString SAL_CALL ScaDateAddIn::getRot13( const OUString& aSrcString ) throw( uno::RuntimeException, lang::IllegalArgumentException, std::exception )
 {
     OUStringBuffer aBuffer( aSrcString );
     for( sal_Int32 nIndex = 0; nIndex < aBuffer.getLength(); nIndex++ )

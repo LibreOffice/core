@@ -45,7 +45,7 @@ namespace fileaccess {
         virtual com::sun::star::uno::Any SAL_CALL
         queryInterface(
             const com::sun::star::uno::Type& aType )
-            throw( com::sun::star::uno::RuntimeException);
+            throw( com::sun::star::uno::RuntimeException, std::exception);
 
         virtual void SAL_CALL
         acquire(
@@ -65,17 +65,17 @@ namespace fileaccess {
         virtual com::sun::star::uno::Sequence< com::sun::star::beans::Property > SAL_CALL
         getProperties(
             void )
-            throw( com::sun::star::uno::RuntimeException );
+            throw( com::sun::star::uno::RuntimeException, std::exception );
 
         virtual com::sun::star::beans::Property SAL_CALL
         getPropertyByName(
             const OUString& aName )
             throw( com::sun::star::beans::UnknownPropertyException,
-                   com::sun::star::uno::RuntimeException);
+                   com::sun::star::uno::RuntimeException, std::exception);
 
         virtual sal_Bool SAL_CALL
         hasPropertyByName( const OUString& Name )
-            throw( com::sun::star::uno::RuntimeException );
+            throw( com::sun::star::uno::RuntimeException, std::exception );
 
     private:
         shell*                                                                     m_pMyShell;

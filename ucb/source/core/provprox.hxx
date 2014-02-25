@@ -72,7 +72,7 @@ public:
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::ucb::XContentProvider > SAL_CALL
     createContentProvider( const OUString& Service )
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception );
 };
 
 
@@ -123,7 +123,7 @@ public:
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::ucb::XContentProvider > SAL_CALL
     getContentProvider()
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     // XContentProvider
     virtual ::com::sun::star::uno::Reference<
@@ -131,13 +131,13 @@ public:
     queryContent( const ::com::sun::star::uno::Reference<
                     ::com::sun::star::ucb::XContentIdentifier >& Identifier )
         throw( ::com::sun::star::ucb::IllegalIdentifierException,
-               ::com::sun::star::uno::RuntimeException );
+               ::com::sun::star::uno::RuntimeException, std::exception );
     virtual sal_Int32 SAL_CALL
     compareContentIds( const ::com::sun::star::uno::Reference<
                         ::com::sun::star::ucb::XContentIdentifier >& Id1,
                        const ::com::sun::star::uno::Reference<
                            ::com::sun::star::ucb::XContentIdentifier >& Id2 )
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     // XParameterizedContentProvider
     virtual ::com::sun::star::uno::Reference<
@@ -146,13 +146,13 @@ public:
                       const OUString& Arguments,
                       sal_Bool ReplaceExisting )
         throw( ::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException );
+               ::com::sun::star::uno::RuntimeException, std::exception );
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::ucb::XContentProvider > SAL_CALL
     deregisterInstance( const OUString& Template,
                         const OUString& Arguments )
         throw( ::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException );
+               ::com::sun::star::uno::RuntimeException, std::exception );
 };
 
 #endif /* !_PROVPROX_HXX */

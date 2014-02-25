@@ -105,40 +105,40 @@ private:
     /// Returns the row headers as an AccessibleTable.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleTable > SAL_CALL
                 getAccessibleRowHeaders(  )
-                    throw (::com::sun::star::uno::RuntimeException);
+                    throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     /// Returns the column headers as an AccessibleTable.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleTable > SAL_CALL
                 getAccessibleColumnHeaders(  )
-                    throw (::com::sun::star::uno::RuntimeException);
+                    throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     /// Returns the selected rows in a table.
     virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL
                 getSelectedAccessibleRows(  )
-                    throw (::com::sun::star::uno::RuntimeException);
+                    throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     /// Returns the selected columns in a table.
     virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL
                 getSelectedAccessibleColumns(  )
-                    throw (::com::sun::star::uno::RuntimeException);
+                    throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     /// Returns a boolean value indicating whether the specified row is selected.
     virtual sal_Bool SAL_CALL
                 isAccessibleRowSelected( sal_Int32 nRow )
                     throw (::com::sun::star::uno::RuntimeException,
-                    ::com::sun::star::lang::IndexOutOfBoundsException);
+                    ::com::sun::star::lang::IndexOutOfBoundsException, std::exception);
 
     /// Returns a boolean value indicating whether the specified column is selected.
     virtual sal_Bool SAL_CALL
                 isAccessibleColumnSelected( sal_Int32 nColumn )
                     throw (::com::sun::star::uno::RuntimeException,
-                    ::com::sun::star::lang::IndexOutOfBoundsException);
+                    ::com::sun::star::lang::IndexOutOfBoundsException, std::exception);
 
     /// Returns the Accessible at a specified row and column in the table.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
                 getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn )
                     throw (::com::sun::star::uno::RuntimeException,
-                            ::com::sun::star::lang::IndexOutOfBoundsException);
+                            ::com::sun::star::lang::IndexOutOfBoundsException, std::exception);
 
     rtl::Reference<ScAccessibleCell> GetAccessibleCellAt(sal_Int32 nRow, sal_Int32 nColumn);
 
@@ -146,7 +146,7 @@ private:
     virtual sal_Bool SAL_CALL
                 isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn )
                     throw (::com::sun::star::uno::RuntimeException,
-                    ::com::sun::star::lang::IndexOutOfBoundsException);
+                    ::com::sun::star::lang::IndexOutOfBoundsException, std::exception);
 
     ///=====  XAccessibleComponent  ============================================
 
@@ -156,13 +156,13 @@ private:
         throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL grabFocus(  )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual sal_Int32 SAL_CALL getForeground(  )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual sal_Int32 SAL_CALL getBackground(  )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     ///=====  XAccessibleContext  ==============================================
 
@@ -170,13 +170,13 @@ private:
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleRelationSet> SAL_CALL
         getAccessibleRelationSet(void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     /// Return the set of current states.
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
         getAccessibleStateSet(void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     ///=====  XAccessibleSelection  ===========================================
 
@@ -188,7 +188,7 @@ private:
 
     virtual void SAL_CALL
         clearAccessibleSelection(  )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL
         selectAllAccessibleChildren(  )
@@ -196,13 +196,13 @@ private:
 
     virtual sal_Int32 SAL_CALL
         getSelectedAccessibleChildCount(  )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible > SAL_CALL
         getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
-        ::com::sun::star::uno::RuntimeException);
+        ::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL
         deselectAccessibleChild( sal_Int32 nChildIndex )
@@ -216,13 +216,13 @@ private:
     */
     virtual OUString SAL_CALL
         getImplementationName(void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     /** Returns a list of all supported services.
     */
     virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames(void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     ///=====  XTypeProvider  ===================================================
 
@@ -230,7 +230,7 @@ private:
     */
     virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
         getImplementationId(void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     ///=====  XAccessibleEventBroadcaster  =====================================
 
@@ -241,7 +241,7 @@ private:
         addAccessibleEventListener(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::accessibility::XAccessibleEventListener>& xListener)
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
     //=====  XAccessibleTableSelection  ============================================
     virtual sal_Bool SAL_CALL selectRow( sal_Int32 row )
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException,
@@ -259,11 +259,11 @@ private:
 protected:
     /// Return the object's current bounding box relative to the desktop.
     virtual Rectangle GetBoundingBoxOnScreen(void) const
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     /// Return the object's current bounding box relative to the parent object.
     virtual Rectangle GetBoundingBox(void) const
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 private:
     ScTabViewShell* mpViewShell;
     ScRangeList*    mpMarkedRanges;

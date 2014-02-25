@@ -264,7 +264,7 @@ protected:
     */
     virtual com::sun::star::uno::Any SAL_CALL queryInterface(
         com::sun::star::uno::Type const & type)
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     // @see com::sun::star::beans::XPropertySet::getPropertySetInfo
     virtual

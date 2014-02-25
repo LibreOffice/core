@@ -106,7 +106,7 @@ namespace comphelper
     }
 
 
-    sal_Int64 SAL_CALL OAccessibleImplementationAccess::getSomething( const Sequence< sal_Int8 >& _rIdentifier ) throw (RuntimeException)
+    sal_Int64 SAL_CALL OAccessibleImplementationAccess::getSomething( const Sequence< sal_Int8 >& _rIdentifier ) throw (RuntimeException, std::exception)
     {
         sal_Int64 nReturn( 0 );
 

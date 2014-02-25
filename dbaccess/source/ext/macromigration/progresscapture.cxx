@@ -67,35 +67,35 @@ namespace dbmm
         m_pData->bDisposed = true;
     }
 
-    void SAL_CALL ProgressCapture::start( const OUString& _rText, ::sal_Int32 _nRange ) throw (RuntimeException)
+    void SAL_CALL ProgressCapture::start( const OUString& _rText, ::sal_Int32 _nRange ) throw (RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
         if ( !m_pData->bDisposed )
             m_pData->rMasterProgress.startObject( m_pData->sObjectName, _rText, _nRange );
     }
 
-    void SAL_CALL ProgressCapture::end(  ) throw (RuntimeException)
+    void SAL_CALL ProgressCapture::end(  ) throw (RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
         if ( !m_pData->bDisposed )
             m_pData->rMasterProgress.endObject();
     }
 
-    void SAL_CALL ProgressCapture::setText( const OUString& _rText ) throw (RuntimeException)
+    void SAL_CALL ProgressCapture::setText( const OUString& _rText ) throw (RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
         if ( !m_pData->bDisposed )
             m_pData->rMasterProgress.setObjectProgressText( _rText );
     }
 
-    void SAL_CALL ProgressCapture::setValue( ::sal_Int32 _nValue ) throw (RuntimeException)
+    void SAL_CALL ProgressCapture::setValue( ::sal_Int32 _nValue ) throw (RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
         if ( !m_pData->bDisposed )
             m_pData->rMasterProgress.setObjectProgressValue( _nValue );
     }
 
-    void SAL_CALL ProgressCapture::reset(  ) throw (RuntimeException)
+    void SAL_CALL ProgressCapture::reset(  ) throw (RuntimeException, std::exception)
     {
         OSL_FAIL( "ProgressCapture::reset: not implemented!" );
     }

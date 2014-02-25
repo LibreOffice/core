@@ -41,26 +41,26 @@ XMLSignatureTemplateImpl :: ~XMLSignatureTemplateImpl() {
 
 /* XXMLSignatureTemplate */
 void SAL_CALL XMLSignatureTemplateImpl :: setTemplate( const Reference< XXMLElementWrapper >& aTemplate )
-    throw( com::sun::star::uno::RuntimeException, com::sun::star::lang::IllegalArgumentException)
+    throw( com::sun::star::uno::RuntimeException, com::sun::star::lang::IllegalArgumentException, std::exception)
 {
     m_xTemplate = aTemplate ;
 }
 
 /* XXMLSignatureTemplate */
 Reference< XXMLElementWrapper > SAL_CALL XMLSignatureTemplateImpl :: getTemplate()
-    throw (com::sun::star::uno::RuntimeException)
+    throw (com::sun::star::uno::RuntimeException, std::exception)
 {
     return m_xTemplate ;
 }
 
 void SAL_CALL XMLSignatureTemplateImpl :: setTarget( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper >& aXmlElement )
-    throw( com::sun::star::uno::RuntimeException, com::sun::star::lang::IllegalArgumentException)
+    throw( com::sun::star::uno::RuntimeException, com::sun::star::lang::IllegalArgumentException, std::exception)
 {
     targets.push_back( aXmlElement );
 }
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper > > SAL_CALL XMLSignatureTemplateImpl :: getTargets()
-    throw (com::sun::star::uno::RuntimeException)
+    throw (com::sun::star::uno::RuntimeException, std::exception)
 {
     sal_Int32 length = targets.size();
     ::com::sun::star::uno::Sequence<
@@ -80,37 +80,37 @@ void SAL_CALL XMLSignatureTemplateImpl :: setTarget( const ::com::sun::star::uno
 void SAL_CALL XMLSignatureTemplateImpl::setBinding(
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::crypto::XUriBinding >& aUriBinding )
-    throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     m_xUriBinding = aUriBinding;
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XUriBinding > SAL_CALL XMLSignatureTemplateImpl::getBinding()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return m_xUriBinding;
 }
 
 void SAL_CALL XMLSignatureTemplateImpl::setStatus(
     ::com::sun::star::xml::crypto::SecurityOperationStatus status )
-    throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     m_nStatus = status;
 }
 
 ::com::sun::star::xml::crypto::SecurityOperationStatus SAL_CALL XMLSignatureTemplateImpl::getStatus(  )
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return m_nStatus;
 }
 
 /* XServiceInfo */
-OUString SAL_CALL XMLSignatureTemplateImpl :: getImplementationName() throw( RuntimeException ) {
+OUString SAL_CALL XMLSignatureTemplateImpl :: getImplementationName() throw( RuntimeException, std::exception ) {
     return impl_getImplementationName() ;
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL XMLSignatureTemplateImpl :: supportsService( const OUString& serviceName) throw( RuntimeException ) {
+sal_Bool SAL_CALL XMLSignatureTemplateImpl :: supportsService( const OUString& serviceName) throw( RuntimeException, std::exception ) {
     Sequence< OUString > seqServiceNames = getSupportedServiceNames() ;
     const OUString* pArray = seqServiceNames.getConstArray() ;
     for( sal_Int32 i = 0 ; i < seqServiceNames.getLength() ; i ++ ) {
@@ -121,7 +121,7 @@ sal_Bool SAL_CALL XMLSignatureTemplateImpl :: supportsService( const OUString& s
 }
 
 /* XServiceInfo */
-Sequence< OUString > SAL_CALL XMLSignatureTemplateImpl :: getSupportedServiceNames() throw( RuntimeException ) {
+Sequence< OUString > SAL_CALL XMLSignatureTemplateImpl :: getSupportedServiceNames() throw( RuntimeException, std::exception ) {
     return impl_getSupportedServiceNames() ;
 }
 

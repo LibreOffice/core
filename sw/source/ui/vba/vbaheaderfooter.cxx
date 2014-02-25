@@ -33,23 +33,23 @@ SwVbaHeaderFooter::SwVbaHeaderFooter( const uno::Reference< ooo::vba::XHelperInt
 {
 }
 
-sal_Bool SAL_CALL SwVbaHeaderFooter::getIsHeader() throw (uno::RuntimeException)
+sal_Bool SAL_CALL SwVbaHeaderFooter::getIsHeader() throw (uno::RuntimeException, std::exception)
 {
     return mbHeader;
 }
 
-sal_Bool SAL_CALL SwVbaHeaderFooter::getLinkToPrevious() throw (uno::RuntimeException)
+sal_Bool SAL_CALL SwVbaHeaderFooter::getLinkToPrevious() throw (uno::RuntimeException, std::exception)
 {
     // seems always false
     return sal_False;
 }
 
-void SAL_CALL SwVbaHeaderFooter::setLinkToPrevious( ::sal_Bool /*_linktoprevious*/ ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaHeaderFooter::setLinkToPrevious( ::sal_Bool /*_linktoprevious*/ ) throw (uno::RuntimeException, std::exception)
 {
     // not support in Writer
 }
 
-uno::Reference< word::XRange > SAL_CALL SwVbaHeaderFooter::getRange() throw (uno::RuntimeException)
+uno::Reference< word::XRange > SAL_CALL SwVbaHeaderFooter::getRange() throw (uno::RuntimeException, std::exception)
 {
     OUString sPropsNameText;
     if( mbHeader )
@@ -71,7 +71,7 @@ uno::Reference< word::XRange > SAL_CALL SwVbaHeaderFooter::getRange() throw (uno
 }
 
 uno::Any SAL_CALL
-SwVbaHeaderFooter::Shapes( const uno::Any& index ) throw (uno::RuntimeException)
+SwVbaHeaderFooter::Shapes( const uno::Any& index ) throw (uno::RuntimeException, std::exception)
 {
     // #FIXME: only get the shapes in the current header/footer
     uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier( mxModel, uno::UNO_QUERY_THROW );

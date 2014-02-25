@@ -33,7 +33,7 @@ ScVbaCheckbox::ScVbaCheckbox( const uno::Reference< ov::XHelperInterface >& xPar
 
 // Attributes
 OUString SAL_CALL
-ScVbaCheckbox::getCaption() throw (css::uno::RuntimeException)
+ScVbaCheckbox::getCaption() throw (css::uno::RuntimeException, std::exception)
 {
     OUString Label;
     m_xProps->getPropertyValue( LABEL ) >>= Label;
@@ -41,13 +41,13 @@ ScVbaCheckbox::getCaption() throw (css::uno::RuntimeException)
 }
 
 void SAL_CALL
-ScVbaCheckbox::setCaption( const OUString& _caption ) throw (::com::sun::star::uno::RuntimeException)
+ScVbaCheckbox::setCaption( const OUString& _caption ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     m_xProps->setPropertyValue( LABEL, uno::makeAny( _caption ) );
 }
 
 uno::Any SAL_CALL
-ScVbaCheckbox::getValue() throw (css::uno::RuntimeException)
+ScVbaCheckbox::getValue() throw (css::uno::RuntimeException, std::exception)
 {
     sal_Int16 nValue = -1;
     m_xProps->getPropertyValue( STATE ) >>= nValue;
@@ -60,7 +60,7 @@ ScVbaCheckbox::getValue() throw (css::uno::RuntimeException)
 }
 
 void SAL_CALL
-ScVbaCheckbox::setValue( const uno::Any& _value ) throw (css::uno::RuntimeException)
+ScVbaCheckbox::setValue( const uno::Any& _value ) throw (css::uno::RuntimeException, std::exception)
 {
     sal_Int16 nValue = 0;
     sal_Int16 nOldValue = 0;
@@ -80,7 +80,7 @@ ScVbaCheckbox::setValue( const uno::Any& _value ) throw (css::uno::RuntimeExcept
         fireClickEvent();
 }
 
-uno::Reference< msforms::XNewFont > SAL_CALL ScVbaCheckbox::getFont() throw (uno::RuntimeException)
+uno::Reference< msforms::XNewFont > SAL_CALL ScVbaCheckbox::getFont() throw (uno::RuntimeException, std::exception)
 {
     return new VbaNewFont( this, mxContext, m_xProps );
 }
@@ -103,32 +103,32 @@ ScVbaCheckbox::getServiceNames()
     return aServiceNames;
 }
 
-sal_Int32 SAL_CALL ScVbaCheckbox::getBackColor() throw (uno::RuntimeException)
+sal_Int32 SAL_CALL ScVbaCheckbox::getBackColor() throw (uno::RuntimeException, std::exception)
 {
     return ScVbaControl::getBackColor();
 }
 
-void SAL_CALL ScVbaCheckbox::setBackColor( sal_Int32 nBackColor ) throw (uno::RuntimeException)
+void SAL_CALL ScVbaCheckbox::setBackColor( sal_Int32 nBackColor ) throw (uno::RuntimeException, std::exception)
 {
     ScVbaControl::setBackColor( nBackColor );
 }
 
-sal_Bool SAL_CALL ScVbaCheckbox::getAutoSize() throw (uno::RuntimeException)
+sal_Bool SAL_CALL ScVbaCheckbox::getAutoSize() throw (uno::RuntimeException, std::exception)
 {
     return ScVbaControl::getAutoSize();
 }
 
-void SAL_CALL ScVbaCheckbox::setAutoSize( sal_Bool bAutoSize ) throw (uno::RuntimeException)
+void SAL_CALL ScVbaCheckbox::setAutoSize( sal_Bool bAutoSize ) throw (uno::RuntimeException, std::exception)
 {
     ScVbaControl::setAutoSize( bAutoSize );
 }
 
-sal_Bool SAL_CALL ScVbaCheckbox::getLocked() throw (uno::RuntimeException)
+sal_Bool SAL_CALL ScVbaCheckbox::getLocked() throw (uno::RuntimeException, std::exception)
 {
     return ScVbaControl::getLocked();
 }
 
-void SAL_CALL ScVbaCheckbox::setLocked( sal_Bool bLocked ) throw (uno::RuntimeException)
+void SAL_CALL ScVbaCheckbox::setLocked( sal_Bool bLocked ) throw (uno::RuntimeException, std::exception)
 {
     ScVbaControl::setLocked( bLocked );
 }

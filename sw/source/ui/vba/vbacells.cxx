@@ -36,12 +36,12 @@ public:
     CellsEnumWrapper( const uno::Reference< container::XIndexAccess >& xIndexAccess ) : mxIndexAccess( xIndexAccess ), nIndex( 0 )
     {
     }
-    virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException)
+    virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception)
     {
         return ( nIndex < mxIndexAccess->getCount() );
     }
 
-    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
     {
         if( nIndex < mxIndexAccess->getCount() )
         {
@@ -68,11 +68,11 @@ public:
     }
     virtual ~CellCollectionHelper() {}
 
-    virtual sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException)
+    virtual sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException, std::exception)
     {
         return ( mnRight - mnLeft + 1 ) * ( mnBottom - mnTop + 1 );
     }
-    virtual uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
     {
         if ( Index < 0 || Index >= getCount() )
             throw css::lang::IndexOutOfBoundsException();
@@ -88,16 +88,16 @@ public:
         throw css::lang::IndexOutOfBoundsException();
 
     }
-    virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException)
+    virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException, std::exception)
     {
         return cppu::UnoType<word::XCell>::get();
     }
-    virtual sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException)
+    virtual sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException, std::exception)
     {
         return sal_True;
     }
     // XEnumerationAccess
-    virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) throw (uno::RuntimeException)
+    virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) throw (uno::RuntimeException, std::exception)
     {
         return new CellsEnumWrapper( this );
     }
@@ -107,13 +107,13 @@ SwVbaCells::SwVbaCells( const uno::Reference< XHelperInterface >& xParent, const
 {
 }
 
-::sal_Int32 SAL_CALL SwVbaCells::getWidth() throw (css::uno::RuntimeException)
+::sal_Int32 SAL_CALL SwVbaCells::getWidth() throw (css::uno::RuntimeException, std::exception)
 {
     uno::Reference< word::XCell > xCell( m_xIndexAccess->getByIndex( 0 ), uno::UNO_QUERY_THROW );
     return xCell->getWidth();
 }
 
-void SAL_CALL SwVbaCells::setWidth( ::sal_Int32 _width ) throw (css::uno::RuntimeException)
+void SAL_CALL SwVbaCells::setWidth( ::sal_Int32 _width ) throw (css::uno::RuntimeException, std::exception)
 {
     sal_Int32 nIndex = 0;
     while( nIndex < m_xIndexAccess->getCount() )
@@ -123,13 +123,13 @@ void SAL_CALL SwVbaCells::setWidth( ::sal_Int32 _width ) throw (css::uno::Runtim
     }
 }
 
-uno::Any SAL_CALL SwVbaCells::getHeight() throw (css::uno::RuntimeException)
+uno::Any SAL_CALL SwVbaCells::getHeight() throw (css::uno::RuntimeException, std::exception)
 {
     uno::Reference< word::XRow > xRow( new SwVbaRow( getParent(), mxContext, mxTextTable, mnTop ) );
     return xRow->getHeight();
 }
 
-void SAL_CALL SwVbaCells::setHeight( const uno::Any& _height ) throw (css::uno::RuntimeException)
+void SAL_CALL SwVbaCells::setHeight( const uno::Any& _height ) throw (css::uno::RuntimeException, std::exception)
 {
     for( sal_Int32 row = mnTop; row <= mnBottom; row++ )
     {
@@ -138,13 +138,13 @@ void SAL_CALL SwVbaCells::setHeight( const uno::Any& _height ) throw (css::uno::
     }
 }
 
-::sal_Int32 SAL_CALL SwVbaCells::getHeightRule() throw (css::uno::RuntimeException)
+::sal_Int32 SAL_CALL SwVbaCells::getHeightRule() throw (css::uno::RuntimeException, std::exception)
 {
     uno::Reference< word::XRow > xRow( new SwVbaRow( getParent(), mxContext, mxTextTable, mnTop ) );
     return xRow->getHeightRule();
 }
 
-void SAL_CALL SwVbaCells::setHeightRule( ::sal_Int32 _heightrule ) throw (css::uno::RuntimeException)
+void SAL_CALL SwVbaCells::setHeightRule( ::sal_Int32 _heightrule ) throw (css::uno::RuntimeException, std::exception)
 {
     for( sal_Int32 row = mnTop; row <= mnBottom; row++ )
     {
@@ -153,7 +153,7 @@ void SAL_CALL SwVbaCells::setHeightRule( ::sal_Int32 _heightrule ) throw (css::u
     }
 }
 
-void SAL_CALL SwVbaCells::SetWidth( float width, sal_Int32 rulestyle ) throw (css::uno::RuntimeException)
+void SAL_CALL SwVbaCells::SetWidth( float width, sal_Int32 rulestyle ) throw (css::uno::RuntimeException, std::exception)
 {
     sal_Int32 nIndex = 0;
     while( nIndex < m_xIndexAccess->getCount() )
@@ -163,7 +163,7 @@ void SAL_CALL SwVbaCells::SetWidth( float width, sal_Int32 rulestyle ) throw (cs
     }
 }
 
-void SAL_CALL SwVbaCells::SetHeight( float height, sal_Int32 heightrule ) throw (css::uno::RuntimeException)
+void SAL_CALL SwVbaCells::SetHeight( float height, sal_Int32 heightrule ) throw (css::uno::RuntimeException, std::exception)
 {
     for( sal_Int32 row = mnTop; row <= mnBottom; row++ )
     {

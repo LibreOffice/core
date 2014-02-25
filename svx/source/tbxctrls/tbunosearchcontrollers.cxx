@@ -362,7 +362,7 @@ FindTextToolbarController::~FindTextToolbarController()
 }
 
 // XInterface
-css::uno::Any SAL_CALL FindTextToolbarController::queryInterface( const css::uno::Type& aType ) throw ( css::uno::RuntimeException )
+css::uno::Any SAL_CALL FindTextToolbarController::queryInterface( const css::uno::Type& aType ) throw ( css::uno::RuntimeException, std::exception )
 {
     css::uno::Any a = ToolboxController::queryInterface( aType );
     if ( a.hasValue() )
@@ -382,17 +382,17 @@ void SAL_CALL FindTextToolbarController::release() throw ()
 }
 
 // XServiceInfo
-OUString SAL_CALL FindTextToolbarController::getImplementationName() throw( css::uno::RuntimeException )
+OUString SAL_CALL FindTextToolbarController::getImplementationName() throw( css::uno::RuntimeException, std::exception )
 {
     return OUString("com.sun.star.svx.FindTextToolboxController");
 }
 
-sal_Bool SAL_CALL FindTextToolbarController::supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException )
+sal_Bool SAL_CALL FindTextToolbarController::supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL FindTextToolbarController::getSupportedServiceNames() throw( css::uno::RuntimeException )
+css::uno::Sequence< OUString > SAL_CALL FindTextToolbarController::getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception )
 {
     css::uno::Sequence< OUString > aSNS( 1 );
     aSNS[0] = "com.sun.star.frame.ToolbarController";
@@ -400,7 +400,7 @@ css::uno::Sequence< OUString > SAL_CALL FindTextToolbarController::getSupportedS
 }
 
 // XComponent
-void SAL_CALL FindTextToolbarController::dispose() throw ( css::uno::RuntimeException )
+void SAL_CALL FindTextToolbarController::dispose() throw ( css::uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarMutexGuard;
 
@@ -413,7 +413,7 @@ void SAL_CALL FindTextToolbarController::dispose() throw ( css::uno::RuntimeExce
 }
 
 // XInitialization
-void SAL_CALL FindTextToolbarController::initialize( const css::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException)
+void SAL_CALL FindTextToolbarController::initialize( const css::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     svt::ToolboxController::initialize(aArguments);
 
@@ -441,7 +441,7 @@ void SAL_CALL FindTextToolbarController::initialize( const css::uno::Sequence< :
     SearchToolbarControllersManager::createControllersManager().registryController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
 }
 
-css::uno::Reference< css::awt::XWindow > SAL_CALL FindTextToolbarController::createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) throw ( css::uno::RuntimeException )
+css::uno::Reference< css::awt::XWindow > SAL_CALL FindTextToolbarController::createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) throw ( css::uno::RuntimeException, std::exception )
 {
     css::uno::Reference< css::awt::XWindow > xItemWindow;
 
@@ -463,7 +463,7 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL FindTextToolbarController::cre
 }
 
 // XStatusListener
-void SAL_CALL FindTextToolbarController::statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException )
+void SAL_CALL FindTextToolbarController::statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarMutexGuard;
     if ( m_bDisposed )
@@ -518,7 +518,7 @@ UpDownSearchToolboxController::~UpDownSearchToolboxController()
 }
 
 // XInterface
-css::uno::Any SAL_CALL UpDownSearchToolboxController::queryInterface( const css::uno::Type& aType ) throw ( css::uno::RuntimeException )
+css::uno::Any SAL_CALL UpDownSearchToolboxController::queryInterface( const css::uno::Type& aType ) throw ( css::uno::RuntimeException, std::exception )
 {
     css::uno::Any a = ToolboxController::queryInterface( aType );
     if ( a.hasValue() )
@@ -538,19 +538,19 @@ void SAL_CALL UpDownSearchToolboxController::release() throw ()
 }
 
 // XServiceInfo
-OUString SAL_CALL UpDownSearchToolboxController::getImplementationName() throw( css::uno::RuntimeException )
+OUString SAL_CALL UpDownSearchToolboxController::getImplementationName() throw( css::uno::RuntimeException, std::exception )
 {
     return meType == UpDownSearchToolboxController::UP?
         OUString( "com.sun.star.svx.UpSearchToolboxController" ) :
         OUString( "com.sun.star.svx.DownSearchToolboxController" );
 }
 
-sal_Bool SAL_CALL UpDownSearchToolboxController::supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException )
+sal_Bool SAL_CALL UpDownSearchToolboxController::supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL UpDownSearchToolboxController::getSupportedServiceNames() throw( css::uno::RuntimeException )
+css::uno::Sequence< OUString > SAL_CALL UpDownSearchToolboxController::getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception )
 {
     css::uno::Sequence< OUString > aSNS( 1 );
     aSNS[0] = "com.sun.star.frame.ToolbarController";
@@ -558,7 +558,7 @@ css::uno::Sequence< OUString > SAL_CALL UpDownSearchToolboxController::getSuppor
 }
 
 // XComponent
-void SAL_CALL UpDownSearchToolboxController::dispose() throw ( css::uno::RuntimeException )
+void SAL_CALL UpDownSearchToolboxController::dispose() throw ( css::uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarMutexGuard;
 
@@ -568,14 +568,14 @@ void SAL_CALL UpDownSearchToolboxController::dispose() throw ( css::uno::Runtime
 }
 
 // XInitialization
-void SAL_CALL UpDownSearchToolboxController::initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException )
+void SAL_CALL UpDownSearchToolboxController::initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
 {
     svt::ToolboxController::initialize( aArguments );
     SearchToolbarControllersManager::createControllersManager().registryController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
 }
 
 // XToolbarController
-void SAL_CALL UpDownSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ ) throw ( css::uno::RuntimeException )
+void SAL_CALL UpDownSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ ) throw ( css::uno::RuntimeException, std::exception )
 {
     if ( m_bDisposed )
         throw css::lang::DisposedException();
@@ -593,7 +593,7 @@ void SAL_CALL UpDownSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ 
 }
 
 // XStatusListener
-void SAL_CALL UpDownSearchToolboxController::statusChanged( const css::frame::FeatureStateEvent& /*rEvent*/ ) throw ( css::uno::RuntimeException )
+void SAL_CALL UpDownSearchToolboxController::statusChanged( const css::frame::FeatureStateEvent& /*rEvent*/ ) throw ( css::uno::RuntimeException, std::exception )
 {
 }
 
@@ -613,7 +613,7 @@ MatchCaseToolboxController::~MatchCaseToolboxController()
 }
 
 // XInterface
-css::uno::Any SAL_CALL MatchCaseToolboxController::queryInterface( const css::uno::Type& aType ) throw ( css::uno::RuntimeException )
+css::uno::Any SAL_CALL MatchCaseToolboxController::queryInterface( const css::uno::Type& aType ) throw ( css::uno::RuntimeException, std::exception )
 {
     css::uno::Any a = ToolboxController::queryInterface( aType );
     if ( a.hasValue() )
@@ -633,17 +633,17 @@ void SAL_CALL MatchCaseToolboxController::release() throw ()
 }
 
 // XServiceInfo
-OUString SAL_CALL MatchCaseToolboxController::getImplementationName() throw( css::uno::RuntimeException )
+OUString SAL_CALL MatchCaseToolboxController::getImplementationName() throw( css::uno::RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.svx.MatchCaseToolboxController" );
 }
 
-sal_Bool SAL_CALL MatchCaseToolboxController::supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException )
+sal_Bool SAL_CALL MatchCaseToolboxController::supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL MatchCaseToolboxController::getSupportedServiceNames() throw( css::uno::RuntimeException )
+css::uno::Sequence< OUString > SAL_CALL MatchCaseToolboxController::getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception )
 {
     css::uno::Sequence< OUString > aSNS( 1 );
     aSNS[0] = "com.sun.star.frame.ToolbarController";
@@ -651,7 +651,7 @@ css::uno::Sequence< OUString > SAL_CALL MatchCaseToolboxController::getSupported
 }
 
 // XComponent
-void SAL_CALL MatchCaseToolboxController::dispose() throw ( css::uno::RuntimeException )
+void SAL_CALL MatchCaseToolboxController::dispose() throw ( css::uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarMutexGuard;
 
@@ -664,14 +664,14 @@ void SAL_CALL MatchCaseToolboxController::dispose() throw ( css::uno::RuntimeExc
 }
 
 // XInitialization
-void SAL_CALL MatchCaseToolboxController::initialize( const css::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException)
+void SAL_CALL MatchCaseToolboxController::initialize( const css::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     svt::ToolboxController::initialize(aArguments);
 
     SearchToolbarControllersManager::createControllersManager().registryController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
 }
 
-css::uno::Reference< css::awt::XWindow > SAL_CALL MatchCaseToolboxController::createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) throw ( css::uno::RuntimeException )
+css::uno::Reference< css::awt::XWindow > SAL_CALL MatchCaseToolboxController::createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) throw ( css::uno::RuntimeException, std::exception )
 {
     css::uno::Reference< css::awt::XWindow > xItemWindow;
 
@@ -691,7 +691,7 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL MatchCaseToolboxController::cr
 }
 
 // XStatusListener
-void SAL_CALL MatchCaseToolboxController::statusChanged( const css::frame::FeatureStateEvent& ) throw ( css::uno::RuntimeException )
+void SAL_CALL MatchCaseToolboxController::statusChanged( const css::frame::FeatureStateEvent& ) throw ( css::uno::RuntimeException, std::exception )
 {
 }
 
@@ -710,7 +710,7 @@ FindAllToolboxController::~FindAllToolboxController()
 }
 
 // XInterface
-css::uno::Any SAL_CALL FindAllToolboxController::queryInterface( const css::uno::Type& aType ) throw ( css::uno::RuntimeException )
+css::uno::Any SAL_CALL FindAllToolboxController::queryInterface( const css::uno::Type& aType ) throw ( css::uno::RuntimeException, std::exception )
 {
     css::uno::Any a = ToolboxController::queryInterface( aType );
     if ( a.hasValue() )
@@ -730,18 +730,18 @@ void SAL_CALL FindAllToolboxController::release() throw ()
 }
 
 // XServiceInfo
-OUString SAL_CALL FindAllToolboxController::getImplementationName() throw( css::uno::RuntimeException )
+OUString SAL_CALL FindAllToolboxController::getImplementationName() throw( css::uno::RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.svx.FindAllToolboxController" );
 }
 
 
-sal_Bool SAL_CALL FindAllToolboxController::supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException )
+sal_Bool SAL_CALL FindAllToolboxController::supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL FindAllToolboxController::getSupportedServiceNames() throw( css::uno::RuntimeException )
+css::uno::Sequence< OUString > SAL_CALL FindAllToolboxController::getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception )
 {
     css::uno::Sequence< OUString > aSNS( 1 );
     aSNS[0] = "com.sun.star.frame.ToolbarController";
@@ -749,7 +749,7 @@ css::uno::Sequence< OUString > SAL_CALL FindAllToolboxController::getSupportedSe
 }
 
 // XComponent
-void SAL_CALL FindAllToolboxController::dispose() throw ( css::uno::RuntimeException )
+void SAL_CALL FindAllToolboxController::dispose() throw ( css::uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarMutexGuard;
 
@@ -759,14 +759,14 @@ void SAL_CALL FindAllToolboxController::dispose() throw ( css::uno::RuntimeExcep
 }
 
 // XInitialization
-void SAL_CALL FindAllToolboxController::initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException )
+void SAL_CALL FindAllToolboxController::initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
 {
     svt::ToolboxController::initialize( aArguments );
     SearchToolbarControllersManager::createControllersManager().registryController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
 }
 
 // XToolbarController
-void SAL_CALL FindAllToolboxController::execute( sal_Int16 /*KeyModifier*/ ) throw ( css::uno::RuntimeException )
+void SAL_CALL FindAllToolboxController::execute( sal_Int16 /*KeyModifier*/ ) throw ( css::uno::RuntimeException, std::exception )
 {
     if ( m_bDisposed )
         throw css::lang::DisposedException();
@@ -778,7 +778,7 @@ void SAL_CALL FindAllToolboxController::execute( sal_Int16 /*KeyModifier*/ ) thr
 }
 
 // XStatusListener
-void SAL_CALL FindAllToolboxController::statusChanged( const css::frame::FeatureStateEvent& /*rEvent*/ ) throw ( css::uno::RuntimeException )
+void SAL_CALL FindAllToolboxController::statusChanged( const css::frame::FeatureStateEvent& /*rEvent*/ ) throw ( css::uno::RuntimeException, std::exception )
 {
 }
 
@@ -797,7 +797,7 @@ ExitSearchToolboxController::~ExitSearchToolboxController()
 }
 
 // XInterface
-css::uno::Any SAL_CALL ExitSearchToolboxController::queryInterface( const css::uno::Type& aType ) throw ( css::uno::RuntimeException )
+css::uno::Any SAL_CALL ExitSearchToolboxController::queryInterface( const css::uno::Type& aType ) throw ( css::uno::RuntimeException, std::exception )
 {
     css::uno::Any a = ToolboxController::queryInterface( aType );
     if ( a.hasValue() )
@@ -817,18 +817,18 @@ void SAL_CALL ExitSearchToolboxController::release() throw ()
 }
 
 // XServiceInfo
-OUString SAL_CALL ExitSearchToolboxController::getImplementationName() throw( css::uno::RuntimeException )
+OUString SAL_CALL ExitSearchToolboxController::getImplementationName() throw( css::uno::RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.svx.ExitFindbarToolboxController" );
 }
 
 
-sal_Bool SAL_CALL ExitSearchToolboxController::supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException )
+sal_Bool SAL_CALL ExitSearchToolboxController::supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL ExitSearchToolboxController::getSupportedServiceNames() throw( css::uno::RuntimeException )
+css::uno::Sequence< OUString > SAL_CALL ExitSearchToolboxController::getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception )
 {
     css::uno::Sequence< OUString > aSNS( 1 );
     aSNS[0] = "com.sun.star.frame.ToolbarController";
@@ -836,7 +836,7 @@ css::uno::Sequence< OUString > SAL_CALL ExitSearchToolboxController::getSupporte
 }
 
 // XComponent
-void SAL_CALL ExitSearchToolboxController::dispose() throw ( css::uno::RuntimeException )
+void SAL_CALL ExitSearchToolboxController::dispose() throw ( css::uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarMutexGuard;
 
@@ -846,14 +846,14 @@ void SAL_CALL ExitSearchToolboxController::dispose() throw ( css::uno::RuntimeEx
 }
 
 // XInitialization
-void SAL_CALL ExitSearchToolboxController::initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException )
+void SAL_CALL ExitSearchToolboxController::initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
 {
     svt::ToolboxController::initialize( aArguments );
     SearchToolbarControllersManager::createControllersManager().registryController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
 }
 
 // XToolbarController
-void SAL_CALL ExitSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ ) throw ( css::uno::RuntimeException )
+void SAL_CALL ExitSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ ) throw ( css::uno::RuntimeException, std::exception )
 {
     Window *pFocusWindow = Application::GetFocusWindow();
     if ( pFocusWindow )
@@ -876,7 +876,7 @@ void SAL_CALL ExitSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ ) 
 }
 
 // XStatusListener
-void SAL_CALL ExitSearchToolboxController::statusChanged( const css::frame::FeatureStateEvent& /*rEvent*/ ) throw ( css::uno::RuntimeException )
+void SAL_CALL ExitSearchToolboxController::statusChanged( const css::frame::FeatureStateEvent& /*rEvent*/ ) throw ( css::uno::RuntimeException, std::exception )
 {
 }
 
@@ -895,7 +895,7 @@ SearchLabelToolboxController::~SearchLabelToolboxController()
 }
 
 // XInterface
-css::uno::Any SAL_CALL SearchLabelToolboxController::queryInterface( const css::uno::Type& aType ) throw ( css::uno::RuntimeException )
+css::uno::Any SAL_CALL SearchLabelToolboxController::queryInterface( const css::uno::Type& aType ) throw ( css::uno::RuntimeException, std::exception )
 {
     css::uno::Any a = ToolboxController::queryInterface( aType );
     if ( a.hasValue() )
@@ -915,18 +915,18 @@ void SAL_CALL SearchLabelToolboxController::release() throw ()
 }
 
 // XServiceInfo
-OUString SAL_CALL SearchLabelToolboxController::getImplementationName() throw( css::uno::RuntimeException )
+OUString SAL_CALL SearchLabelToolboxController::getImplementationName() throw( css::uno::RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.svx.SearchLabelToolboxController" );
 }
 
 
-sal_Bool SAL_CALL SearchLabelToolboxController::supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException )
+sal_Bool SAL_CALL SearchLabelToolboxController::supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL SearchLabelToolboxController::getSupportedServiceNames() throw( css::uno::RuntimeException )
+css::uno::Sequence< OUString > SAL_CALL SearchLabelToolboxController::getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception )
 {
     css::uno::Sequence< OUString > aSNS( 1 );
     aSNS[0] = "com.sun.star.frame.ToolbarController";
@@ -934,7 +934,7 @@ css::uno::Sequence< OUString > SAL_CALL SearchLabelToolboxController::getSupport
 }
 
 // XComponent
-void SAL_CALL SearchLabelToolboxController::dispose() throw ( css::uno::RuntimeException )
+void SAL_CALL SearchLabelToolboxController::dispose() throw ( css::uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarMutexGuard;
 
@@ -944,18 +944,18 @@ void SAL_CALL SearchLabelToolboxController::dispose() throw ( css::uno::RuntimeE
 }
 
 // XInitialization
-void SAL_CALL SearchLabelToolboxController::initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException )
+void SAL_CALL SearchLabelToolboxController::initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
 {
     svt::ToolboxController::initialize( aArguments );
     SearchToolbarControllersManager::createControllersManager().registryController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
 }
 
 // XStatusListener
-void SAL_CALL SearchLabelToolboxController::statusChanged( const css::frame::FeatureStateEvent& ) throw ( css::uno::RuntimeException )
+void SAL_CALL SearchLabelToolboxController::statusChanged( const css::frame::FeatureStateEvent& ) throw ( css::uno::RuntimeException, std::exception )
 {
 }
 
-css::uno::Reference< css::awt::XWindow > SAL_CALL SearchLabelToolboxController::createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) throw ( css::uno::RuntimeException )
+css::uno::Reference< css::awt::XWindow > SAL_CALL SearchLabelToolboxController::createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) throw ( css::uno::RuntimeException, std::exception )
 {
     Window *pSL= new FixedText(VCLUnoHelper::GetWindow( Parent ));
     pSL->SetSizePixel(Size(250, 25));
@@ -975,7 +975,7 @@ FindbarDispatcher::~FindbarDispatcher()
 }
 
 // XInterface
-css::uno::Any SAL_CALL FindbarDispatcher::queryInterface( const css::uno::Type& aType ) throw( css::uno::RuntimeException )
+css::uno::Any SAL_CALL FindbarDispatcher::queryInterface( const css::uno::Type& aType ) throw( css::uno::RuntimeException, std::exception )
 {
     css::uno::Any aReturn( ::cppu::queryInterface( aType,
         static_cast< css::lang::XServiceInfo* >(this),
@@ -1000,17 +1000,17 @@ void SAL_CALL FindbarDispatcher::release() throw()
 }
 
 // XServiceInfo
-OUString SAL_CALL FindbarDispatcher::getImplementationName() throw( css::uno::RuntimeException )
+OUString SAL_CALL FindbarDispatcher::getImplementationName() throw( css::uno::RuntimeException, std::exception )
 {
     return OUString("com.sun.star.comp.svx.Impl.FindbarDispatcher");
 }
 
-sal_Bool SAL_CALL FindbarDispatcher::supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException )
+sal_Bool SAL_CALL FindbarDispatcher::supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL FindbarDispatcher::getSupportedServiceNames() throw( css::uno::RuntimeException )
+css::uno::Sequence< OUString > SAL_CALL FindbarDispatcher::getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception )
 {
     css::uno::Sequence< OUString > aSNS( 2 );
     aSNS[0] = "com.sun.star.comp.svx.FindbarDispatcher";
@@ -1019,14 +1019,14 @@ css::uno::Sequence< OUString > SAL_CALL FindbarDispatcher::getSupportedServiceNa
 }
 
 // XInitialization
-void SAL_CALL FindbarDispatcher::initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException )
+void SAL_CALL FindbarDispatcher::initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
 {
     if ( aArguments.getLength() )
         aArguments[0] >>= m_xFrame;
 }
 
 // XDispatchProvider
-css::uno::Reference< css::frame::XDispatch > SAL_CALL FindbarDispatcher::queryDispatch( const css::util::URL& aURL, const OUString& /*sTargetFrameName*/, sal_Int32 /*nSearchFlags*/ ) throw( css::uno::RuntimeException )
+css::uno::Reference< css::frame::XDispatch > SAL_CALL FindbarDispatcher::queryDispatch( const css::util::URL& aURL, const OUString& /*sTargetFrameName*/, sal_Int32 /*nSearchFlags*/ ) throw( css::uno::RuntimeException, std::exception )
 {
     css::uno::Reference< css::frame::XDispatch > xDispatch;
 
@@ -1036,7 +1036,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL FindbarDispatcher::queryDi
     return xDispatch;
 }
 
-css::uno::Sequence < css::uno::Reference< css::frame::XDispatch > > SAL_CALL FindbarDispatcher::queryDispatches( const css::uno::Sequence < css::frame::DispatchDescriptor >& seqDescripts ) throw( css::uno::RuntimeException )
+css::uno::Sequence < css::uno::Reference< css::frame::XDispatch > > SAL_CALL FindbarDispatcher::queryDispatches( const css::uno::Sequence < css::frame::DispatchDescriptor >& seqDescripts ) throw( css::uno::RuntimeException, std::exception )
 {
     sal_Int32 nCount = seqDescripts.getLength();
     css::uno::Sequence < css::uno::Reference < XDispatch > > lDispatcher( nCount );
@@ -1048,7 +1048,7 @@ css::uno::Sequence < css::uno::Reference< css::frame::XDispatch > > SAL_CALL Fin
 }
 
 // XDispatch
-void SAL_CALL FindbarDispatcher::dispatch( const css::util::URL& aURL, const css::uno::Sequence < css::beans::PropertyValue >& /*lArgs*/ ) throw( css::uno::RuntimeException )
+void SAL_CALL FindbarDispatcher::dispatch( const css::util::URL& aURL, const css::uno::Sequence < css::beans::PropertyValue >& /*lArgs*/ ) throw( css::uno::RuntimeException, std::exception )
 {
     //vnd.sun.star.findbar:FocusToFindbar  - set cursor to the FindTextFieldControl of the findbar
     if ( aURL.Path == "FocusToFindbar" )
@@ -1102,11 +1102,11 @@ void SAL_CALL FindbarDispatcher::dispatch( const css::util::URL& aURL, const css
     }
 }
 
-void SAL_CALL FindbarDispatcher::addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xControl*/, const css::util::URL& /*aURL*/ ) throw ( css::uno::RuntimeException )
+void SAL_CALL FindbarDispatcher::addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xControl*/, const css::util::URL& /*aURL*/ ) throw ( css::uno::RuntimeException, std::exception )
 {
 }
 
-void SAL_CALL FindbarDispatcher::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xControl*/, const css::util::URL& /*aURL*/ ) throw ( css::uno::RuntimeException )
+void SAL_CALL FindbarDispatcher::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xControl*/, const css::util::URL& /*aURL*/ ) throw ( css::uno::RuntimeException, std::exception )
 {
 }
 

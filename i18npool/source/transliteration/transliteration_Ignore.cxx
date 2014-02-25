@@ -30,7 +30,7 @@ inline sal_Int32 Min( sal_Int32 a, sal_Int32 b ) { return a > b ? b : a; }
 
 sal_Bool SAL_CALL
 transliteration_Ignore::equals(const OUString& str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32& nMatch1,
-        const OUString& str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2 ) throw(RuntimeException)
+        const OUString& str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2 ) throw(RuntimeException, std::exception)
 {
     Sequence< sal_Int32 > offset1;
     Sequence< sal_Int32 > offset2;
@@ -62,7 +62,7 @@ transliteration_Ignore::equals(const OUString& str1, sal_Int32 pos1, sal_Int32 n
 
 
 Sequence< OUString > SAL_CALL
-transliteration_Ignore::transliterateRange( const OUString& str1, const OUString& str2 ) throw(RuntimeException)
+transliteration_Ignore::transliterateRange( const OUString& str1, const OUString& str2 ) throw(RuntimeException, std::exception)
 {
     if (str1.isEmpty() || str2.isEmpty())
         throw RuntimeException();
@@ -75,7 +75,7 @@ transliteration_Ignore::transliterateRange( const OUString& str1, const OUString
 
 
 sal_Int16 SAL_CALL
-transliteration_Ignore::getType() throw(RuntimeException)
+transliteration_Ignore::getType() throw(RuntimeException, std::exception)
 {
     // The type is also defined in com/sun/star/util/TransliterationType.hdl
     return TransliterationType::IGNORE;
@@ -84,7 +84,7 @@ transliteration_Ignore::getType() throw(RuntimeException)
 
 OUString SAL_CALL
 transliteration_Ignore::transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-        Sequence< sal_Int32 >& offset  ) throw(RuntimeException)
+        Sequence< sal_Int32 >& offset  ) throw(RuntimeException, std::exception)
 {
     // The method folding is defined in a sub class.
     return this->folding( inStr, startPos, nCount, offset);
@@ -121,7 +121,7 @@ transliteration_Ignore::transliterateRange( const OUString& str1, const OUString
 OUString SAL_CALL
 transliteration_Ignore::folding( const OUString& inStr, sal_Int32 startPos,
     sal_Int32 nCount, Sequence< sal_Int32 >& offset)
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     // Create a string buffer which can hold nCount + 1 characters.
     // The reference count is 1 now.
@@ -200,7 +200,7 @@ transliteration_Ignore::folding( const OUString& inStr, sal_Int32 startPos,
 }
 
 sal_Unicode SAL_CALL
-transliteration_Ignore::transliterateChar2Char( sal_Unicode inChar) throw(RuntimeException, MultipleCharsOutputException)
+transliteration_Ignore::transliterateChar2Char( sal_Unicode inChar) throw(RuntimeException, MultipleCharsOutputException, std::exception)
 {
     return func ? func( inChar) : table ? (*table)[ inChar ] : inChar;
 }

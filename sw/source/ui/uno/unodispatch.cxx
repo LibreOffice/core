@@ -64,7 +64,7 @@ SwXDispatchProviderInterceptor::~SwXDispatchProviderInterceptor()
 
 uno::Reference< frame::XDispatch > SwXDispatchProviderInterceptor::queryDispatch(
     const util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags )
-        throw(uno::RuntimeException)
+        throw(uno::RuntimeException, std::exception)
 {
     DispatchMutexLock_Impl aLock(*this);
     uno::Reference< frame::XDispatch> xResult;
@@ -90,7 +90,7 @@ uno::Reference< frame::XDispatch > SwXDispatchProviderInterceptor::queryDispatch
 }
 
 uno::Sequence< uno::Reference< frame::XDispatch > > SwXDispatchProviderInterceptor::queryDispatches(
-    const uno::Sequence< frame::DispatchDescriptor >& aDescripts ) throw(uno::RuntimeException)
+    const uno::Sequence< frame::DispatchDescriptor >& aDescripts ) throw(uno::RuntimeException, std::exception)
 {
     DispatchMutexLock_Impl aLock(*this);
     uno::Sequence< uno::Reference< frame::XDispatch> > aReturn(aDescripts.getLength());
@@ -105,35 +105,35 @@ uno::Sequence< uno::Reference< frame::XDispatch > > SwXDispatchProviderIntercept
 }
 
 uno::Reference< frame::XDispatchProvider > SwXDispatchProviderInterceptor::getSlaveDispatchProvider(  )
-        throw(uno::RuntimeException)
+        throw(uno::RuntimeException, std::exception)
 {
     DispatchMutexLock_Impl aLock(*this);
     return m_xSlaveDispatcher;
 }
 
 void SwXDispatchProviderInterceptor::setSlaveDispatchProvider(
-    const uno::Reference< frame::XDispatchProvider >& xNewDispatchProvider ) throw(uno::RuntimeException)
+    const uno::Reference< frame::XDispatchProvider >& xNewDispatchProvider ) throw(uno::RuntimeException, std::exception)
 {
     DispatchMutexLock_Impl aLock(*this);
     m_xSlaveDispatcher = xNewDispatchProvider;
 }
 
 uno::Reference< frame::XDispatchProvider > SwXDispatchProviderInterceptor::getMasterDispatchProvider(  )
-        throw(uno::RuntimeException)
+        throw(uno::RuntimeException, std::exception)
 {
     DispatchMutexLock_Impl aLock(*this);
     return m_xMasterDispatcher;
 }
 
 void SwXDispatchProviderInterceptor::setMasterDispatchProvider(
-    const uno::Reference< frame::XDispatchProvider >& xNewSupplier ) throw(uno::RuntimeException)
+    const uno::Reference< frame::XDispatchProvider >& xNewSupplier ) throw(uno::RuntimeException, std::exception)
 {
     DispatchMutexLock_Impl aLock(*this);
     m_xMasterDispatcher = xNewSupplier;
 }
 
 void SwXDispatchProviderInterceptor::disposing( const lang::EventObject& )
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     DispatchMutexLock_Impl aLock(*this);
     if (m_xIntercepted.is())
@@ -159,7 +159,7 @@ const uno::Sequence< sal_Int8 > & SwXDispatchProviderInterceptor::getUnoTunnelId
 
 sal_Int64 SwXDispatchProviderInterceptor::getSomething(
     const uno::Sequence< sal_Int8 >& aIdentifier )
-        throw(uno::RuntimeException)
+        throw(uno::RuntimeException, std::exception)
 {
     if( aIdentifier.getLength() == 16
         && 0 == memcmp( getUnoTunnelId().getConstArray(),
@@ -264,7 +264,7 @@ void SwXDispatch::dispatch(const util::URL& aURL,
 }
 
 void SwXDispatch::addStatusListener(
-    const uno::Reference< frame::XStatusListener >& xControl, const util::URL& aURL ) throw(uno::RuntimeException)
+    const uno::Reference< frame::XStatusListener >& xControl, const util::URL& aURL ) throw(uno::RuntimeException, std::exception)
 {
     if(!m_pView)
         throw uno::RuntimeException();
@@ -313,7 +313,7 @@ void SwXDispatch::addStatusListener(
 }
 
 void SwXDispatch::removeStatusListener(
-    const uno::Reference< frame::XStatusListener >& xControl, const util::URL&  ) throw(uno::RuntimeException)
+    const uno::Reference< frame::XStatusListener >& xControl, const util::URL&  ) throw(uno::RuntimeException, std::exception)
 {
     StatusListenerList::iterator aListIter = m_aListenerList.begin();
     for(aListIter = m_aListenerList.begin(); aListIter != m_aListenerList.end(); ++aListIter)
@@ -334,7 +334,7 @@ void SwXDispatch::removeStatusListener(
     }
 }
 
-void SwXDispatch::selectionChanged( const lang::EventObject&  ) throw(uno::RuntimeException)
+void SwXDispatch::selectionChanged( const lang::EventObject&  ) throw(uno::RuntimeException, std::exception)
 {
     ShellModes eMode = m_pView->GetShellMode();
     sal_Bool bEnable = SHELL_MODE_TEXT == eMode  ||
@@ -360,7 +360,7 @@ void SwXDispatch::selectionChanged( const lang::EventObject&  ) throw(uno::Runti
     }
 }
 
-void SwXDispatch::disposing( const lang::EventObject& rSource ) throw(uno::RuntimeException)
+void SwXDispatch::disposing( const lang::EventObject& rSource ) throw(uno::RuntimeException, std::exception)
 {
     uno::Reference<view::XSelectionSupplier> xSupplier(rSource.Source, uno::UNO_QUERY);
     uno::Reference<view::XSelectionChangeListener> xThis = this;

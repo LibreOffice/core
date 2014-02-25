@@ -113,7 +113,7 @@ void OCommonStatement::disposing()
     OCommonStatement_IBASE::disposing();
 }
 
-Any SAL_CALL OCommonStatement::queryInterface( const Type & rType ) throw(RuntimeException)
+Any SAL_CALL OCommonStatement::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
 {
     Any aRet = OCommonStatement_IBASE::queryInterface(rType);
     if(!aRet.hasValue())
@@ -121,7 +121,7 @@ Any SAL_CALL OCommonStatement::queryInterface( const Type & rType ) throw(Runtim
     return aRet;
 }
 
-Sequence< Type > SAL_CALL OCommonStatement::getTypes(  ) throw(RuntimeException)
+Sequence< Type > SAL_CALL OCommonStatement::getTypes(  ) throw(RuntimeException, std::exception)
 {
     ::cppu::OTypeCollection aTypes( ::getCppuType( (const Reference< XMultiPropertySet > *)0 ),
                                     ::getCppuType( (const Reference< XFastPropertySet > *)0 ),
@@ -130,7 +130,7 @@ Sequence< Type > SAL_CALL OCommonStatement::getTypes(  ) throw(RuntimeException)
     return ::comphelper::concatSequences(aTypes.getTypes(),OCommonStatement_IBASE::getTypes());
 }
 
-void SAL_CALL OCommonStatement::close(  ) throw(SQLException, RuntimeException)
+void SAL_CALL OCommonStatement::close(  ) throw(SQLException, RuntimeException, std::exception)
 {
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -319,7 +319,7 @@ void OCommonStatement::cacheResultSet( const ::rtl::Reference< OResultSet >& _pR
 }
 
 
-sal_Bool SAL_CALL OCommonStatement::execute( const OUString& sql ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OCommonStatement::execute( const OUString& sql ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("connectivity.mork", "=>  OCommonStatement::execute()" );
 
@@ -334,7 +334,7 @@ sal_Bool SAL_CALL OCommonStatement::execute( const OUString& sql ) throw(SQLExce
 }
 
 
-Reference< XResultSet > SAL_CALL OCommonStatement::executeQuery( const OUString& sql ) throw(SQLException, RuntimeException)
+Reference< XResultSet > SAL_CALL OCommonStatement::executeQuery( const OUString& sql ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("connectivity.mork", "=>  OCommonStatement::executeQuery()" );
 
@@ -352,7 +352,7 @@ Reference< XResultSet > SAL_CALL OCommonStatement::executeQuery( const OUString&
 }
 
 
-Reference< XConnection > SAL_CALL OCommonStatement::getConnection(  ) throw(SQLException, RuntimeException)
+Reference< XConnection > SAL_CALL OCommonStatement::getConnection(  ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("connectivity.mork", "=>  OCommonStatement::getConnection()" );
 
@@ -363,7 +363,7 @@ Reference< XConnection > SAL_CALL OCommonStatement::getConnection(  ) throw(SQLE
     return (Reference< XConnection >)m_pConnection;
 }
 
-Any SAL_CALL OStatement::queryInterface( const Type & rType ) throw(RuntimeException)
+Any SAL_CALL OStatement::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
 {
     SAL_INFO("connectivity.mork", "=>  OCommonStatement::queryInterface()" );
 
@@ -373,14 +373,14 @@ Any SAL_CALL OStatement::queryInterface( const Type & rType ) throw(RuntimeExcep
     return aRet;
 }
 
-sal_Int32 SAL_CALL OCommonStatement::executeUpdate( const OUString& /*sql*/ ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OCommonStatement::executeUpdate( const OUString& /*sql*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFeatureNotImplementedException( "XStatement::executeUpdate", *this );
     return 0;
 
 }
 
-Any SAL_CALL OCommonStatement::getWarnings(  ) throw(SQLException, RuntimeException)
+Any SAL_CALL OCommonStatement::getWarnings(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBASE::rBHelper.bDisposed);
@@ -390,7 +390,7 @@ Any SAL_CALL OCommonStatement::getWarnings(  ) throw(SQLException, RuntimeExcept
 
 
 
-void SAL_CALL OCommonStatement::clearWarnings(  ) throw(SQLException, RuntimeException)
+void SAL_CALL OCommonStatement::clearWarnings(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBASE::rBHelper.bDisposed);
@@ -437,7 +437,7 @@ sal_Bool OCommonStatement::convertFastPropertyValue(
     return bConverted;
 }
 
-void OCommonStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& /*rValue*/) throw (Exception)
+void OCommonStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& /*rValue*/) throw (Exception, std::exception)
 {
     // set the value to whatever is necessary
     switch(nHandle)
@@ -494,7 +494,7 @@ void SAL_CALL OStatement::release() throw()
     OCommonStatement::release();
 }
 
-Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OCommonStatement::getPropertySetInfo(  ) throw(RuntimeException)
+Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OCommonStatement::getPropertySetInfo(  ) throw(RuntimeException, std::exception)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }

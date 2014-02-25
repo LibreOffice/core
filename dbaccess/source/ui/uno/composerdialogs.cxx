@@ -140,7 +140,7 @@ namespace dbaui
         return new DlgFilterCrit( _pParent, m_aContext, _rxConnection, m_xComposer, _rxColumns );
     }
 
-    void SAL_CALL RowsetFilterDialog::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException)
+    void SAL_CALL RowsetFilterDialog::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException, std::exception)
     {
         if( aArguments.getLength() == 3 )
         {
@@ -188,7 +188,7 @@ namespace dbaui
         return new DlgOrderCrit( _pParent, _rxConnection, m_xComposer, _rxColumns );
     }
 
-    void SAL_CALL RowsetOrderDialog::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException)
+    void SAL_CALL RowsetOrderDialog::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException, std::exception)
     {
         if( aArguments.getLength() == 2 )
         {

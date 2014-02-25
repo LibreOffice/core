@@ -42,11 +42,11 @@ public:
     virtual NameOrIndex* createItem() const throw();
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw( uno::RuntimeException );
-    virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) throw( uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw( uno::RuntimeException, std::exception );
+    virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) throw( uno::RuntimeException, std::exception);
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) throw( uno::RuntimeException);
+    virtual uno::Type SAL_CALL getElementType(  ) throw( uno::RuntimeException, std::exception);
 };
 
 SvxUnoTransGradientTable::SvxUnoTransGradientTable( SdrModel* pModel ) throw()
@@ -58,13 +58,13 @@ SvxUnoTransGradientTable::~SvxUnoTransGradientTable() throw()
 {
 }
 
-OUString SAL_CALL SvxUnoTransGradientTable::getImplementationName() throw( uno::RuntimeException )
+OUString SAL_CALL SvxUnoTransGradientTable::getImplementationName() throw( uno::RuntimeException, std::exception )
 {
     return OUString("SvxUnoTransGradientTable");
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoTransGradientTable::getSupportedServiceNames(  )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence< OUString > aSNS( 1 );
     aSNS.getArray()[0] = "com.sun.star.drawing.TransparencyGradientTable";
@@ -80,7 +80,7 @@ NameOrIndex* SvxUnoTransGradientTable::createItem() const throw()
 
 // XElementAccess
 uno::Type SAL_CALL SvxUnoTransGradientTable::getElementType(  )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return ::getCppuType((const struct awt::Gradient*)0);
 }

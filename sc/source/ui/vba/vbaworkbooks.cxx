@@ -154,7 +154,7 @@ class WorkBookEnumImpl : public EnumerationHelperImpl
 public:
     WorkBookEnumImpl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration, const uno::Any& aApplication ) throw ( uno::RuntimeException ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ), m_aApplication( aApplication ) {}
 
-    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
     {
         uno::Reference< sheet::XSpreadsheetDocument > xDoc( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
         return getWorkbook( m_xContext, xDoc, m_xParent );
@@ -191,7 +191,7 @@ ScVbaWorkbooks::createCollectionObject( const css::uno::Any& aSource )
 
 
 uno::Any SAL_CALL
-ScVbaWorkbooks::Add( const uno::Any& Template ) throw (uno::RuntimeException)
+ScVbaWorkbooks::Add( const uno::Any& Template ) throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< sheet::XSpreadsheetDocument > xSpreadDoc;
     sal_Int32 nWorkbookType = 0;
@@ -235,7 +235,7 @@ ScVbaWorkbooks::Add( const uno::Any& Template ) throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-ScVbaWorkbooks::Close() throw (uno::RuntimeException)
+ScVbaWorkbooks::Close() throw (uno::RuntimeException, std::exception)
 {
     closeDocuments();
 }
@@ -276,7 +276,7 @@ ScVbaWorkbooks::getFileFilterType( const OUString& rFileName )
 
 // #TODO# #FIXME# can any of the unused params below be used?
 uno::Any SAL_CALL
-ScVbaWorkbooks::Open( const OUString& rFileName, const uno::Any& /*UpdateLinks*/, const uno::Any& ReadOnly, const uno::Any& Format, const uno::Any& /*Password*/, const uno::Any& /*WriteResPassword*/, const uno::Any& /*IgnoreReadOnlyRecommended*/, const uno::Any& /*Origin*/, const uno::Any& Delimiter, const uno::Any& /*Editable*/, const uno::Any& /*Notify*/, const uno::Any& /*Converter*/, const uno::Any& /*AddToMru*/ ) throw (uno::RuntimeException)
+ScVbaWorkbooks::Open( const OUString& rFileName, const uno::Any& /*UpdateLinks*/, const uno::Any& ReadOnly, const uno::Any& Format, const uno::Any& /*Password*/, const uno::Any& /*WriteResPassword*/, const uno::Any& /*IgnoreReadOnlyRecommended*/, const uno::Any& /*Origin*/, const uno::Any& Delimiter, const uno::Any& /*Editable*/, const uno::Any& /*Notify*/, const uno::Any& /*Converter*/, const uno::Any& /*AddToMru*/ ) throw (uno::RuntimeException, std::exception)
 {
     // we need to detect if this is a URL, if not then assume it's a file path
     OUString aURL;

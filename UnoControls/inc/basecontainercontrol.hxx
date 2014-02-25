@@ -114,7 +114,7 @@ public:
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
         const ::com::sun::star::uno::Type& aType
-    ) throw( ::com::sun::star::uno::RuntimeException );
+    ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 
     //  XTypeProvider
@@ -134,7 +134,7 @@ public:
     */
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 
     //  XAggregation
@@ -155,7 +155,7 @@ public:
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(
         const ::com::sun::star::uno::Type& aType
-    ) throw( ::com::sun::star::uno::RuntimeException );
+    ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 
     //  XControl
@@ -177,7 +177,7 @@ public:
     virtual void SAL_CALL createPeer(
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >&      xToolkit ,
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >&   xParent
-    ) throw( ::com::sun::star::uno::RuntimeException );
+    ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -194,7 +194,7 @@ public:
 
     virtual sal_Bool SAL_CALL setModel(
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xModel
-    ) throw( ::com::sun::star::uno::RuntimeException );
+    ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -210,7 +210,7 @@ public:
     */
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > SAL_CALL getModel()
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 
     //  XComponent
@@ -229,7 +229,7 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 
     //  XEventListener
@@ -248,7 +248,7 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& rEvent ) throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& rEvent ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 
     //  XControlContainer
@@ -270,7 +270,7 @@ public:
     virtual void SAL_CALL addControl(
         const OUString&                                   sName    ,
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >&    xControl
-    ) throw( ::com::sun::star::uno::RuntimeException  );
+    ) throw( ::com::sun::star::uno::RuntimeException, std::exception  );
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -304,7 +304,7 @@ public:
 
     virtual void SAL_CALL removeControl(
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& xControl
-    ) throw( ::com::sun::star::uno::RuntimeException );
+    ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -338,7 +338,7 @@ public:
 
     virtual void SAL_CALL setStatusText(
         const OUString& sStatusText
-    ) throw( ::com::sun::star::uno::RuntimeException );
+    ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -355,7 +355,7 @@ public:
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > SAL_CALL getControl(
         const OUString& sName
-    ) throw( ::com::sun::star::uno::RuntimeException );
+    ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -371,7 +371,7 @@ public:
     */
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > > SAL_CALL getControls()
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 
     //  XUnoControlContainer
@@ -461,7 +461,7 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL setVisible( sal_Bool bVisible ) throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL setVisible( sal_Bool bVisible ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 
 //  protected methods

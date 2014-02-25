@@ -56,7 +56,7 @@ namespace toolkit
         void SAL_CALL setFastPropertyValue_NoBroadcast(
                     sal_Int32 nHandle,
                     const ::com::sun::star::uno::Any& rValue
-                ) throw (::com::sun::star::uno::Exception);
+                ) throw (::com::sun::star::uno::Exception, std::exception);
 
     public:
                             UnoControlFormattedFieldModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
@@ -68,10 +68,10 @@ namespace toolkit
         UnoControlModel*    Clone() const { return new UnoControlFormattedFieldModel( *this ); }
 
         // ::com::sun::star::io::XPersistObject
-        OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+        OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception);
 
         // ::com::sun::star::beans::XMultiPropertySet
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
 
 
         // ::com::sun::star::lang::XServiceInfo
@@ -81,10 +81,10 @@ namespace toolkit
         ~UnoControlFormattedFieldModel();
 
         // XComponent
-        void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
+        void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
 
         // XPropertySet
-        void SAL_CALL setPropertyValues( const ::com::sun::star::uno::Sequence< OUString >& PropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Values ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        void SAL_CALL setPropertyValues( const ::com::sun::star::uno::Sequence< OUString >& PropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Values ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception);
 
         // UnoControlModel
         virtual void ImplNormalizePropertySequence(
@@ -109,7 +109,7 @@ namespace toolkit
         OUString     GetComponentServiceName();
 
         // ::com::sun::star::awt::XTextListener
-        void SAL_CALL textChanged( const ::com::sun::star::awt::TextEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
+        void SAL_CALL textChanged( const ::com::sun::star::awt::TextEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception);
 
         // ::com::sun::star::lang::XServiceInfo
         DECLIMPL_SERVICEINFO_DERIVED( UnoFormattedFieldControl, UnoEditControl, szServiceName2_UnoControlFormattedField )

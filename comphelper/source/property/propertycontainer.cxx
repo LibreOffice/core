@@ -52,7 +52,7 @@ OPropertyContainer::~OPropertyContainer()
 }
 
 
-Sequence< Type > SAL_CALL OPropertyContainer::getTypes() throw (RuntimeException)
+Sequence< Type > SAL_CALL OPropertyContainer::getTypes() throw (RuntimeException, std::exception)
 {
     // just the types from our one and only base class
     ::cppu::OTypeCollection aTypes(
@@ -64,7 +64,7 @@ Sequence< Type > SAL_CALL OPropertyContainer::getTypes() throw (RuntimeException
 }
 
 
-void SAL_CALL OPropertyContainer::setFastPropertyValue( sal_Int32 nHandle, const Any& rValue ) throw ( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
+void SAL_CALL OPropertyContainer::setFastPropertyValue( sal_Int32 nHandle, const Any& rValue ) throw ( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
 {
     OPropertySetHelper::setFastPropertyValue( nHandle, rValue );
 }

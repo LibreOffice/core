@@ -46,19 +46,19 @@ class UICommandDescription : private osl::Mutex,
         virtual ~UICommandDescription();
 
         virtual OUString SAL_CALL getImplementationName()
-            throw (css::uno::RuntimeException)
+            throw (css::uno::RuntimeException, std::exception)
         {
             return OUString("com.sun.star.comp.framework.UICommandDescription");
         }
 
         virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-            throw (css::uno::RuntimeException)
+            throw (css::uno::RuntimeException, std::exception)
         {
             return cppu::supportsService(this, ServiceName);
         }
 
         virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-            throw (css::uno::RuntimeException)
+            throw (css::uno::RuntimeException, std::exception)
         {
             css::uno::Sequence< OUString > aSeq(1);
             aSeq[0] = OUString("com.sun.star.frame.UICommandDescription");
@@ -68,19 +68,19 @@ class UICommandDescription : private osl::Mutex,
 private:
         // XNameAccess
         virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
-            throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+            throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception);
 
         virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames()
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
 
         virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
 
         // XElementAccess
         virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
         virtual sal_Bool SAL_CALL hasElements()
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 public:
         typedef ::boost::unordered_map< OUString,

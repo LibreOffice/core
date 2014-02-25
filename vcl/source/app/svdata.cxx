@@ -244,13 +244,13 @@ public:
 
     // XCurrentContext
     virtual com::sun::star::uno::Any SAL_CALL getValueByName( const OUString& Name )
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 private:
     com::sun::star::uno::Reference< com::sun::star::uno::XCurrentContext > m_prevContext;
 };
 
 com::sun::star::uno::Any AccessBridgeCurrentContext::getValueByName( const OUString & Name )
-    throw (com::sun::star::uno::RuntimeException)
+    throw (com::sun::star::uno::RuntimeException, std::exception)
 {
     com::sun::star::uno::Any ret;
     if ( Name == "java-vm.interaction-handler" )

@@ -817,7 +817,7 @@ const :: uno::Sequence< sal_Int8 > & SwXFrame::getUnoTunnelId()
 }
 
 sal_Int64 SAL_CALL SwXFrame::getSomething( const :: uno::Sequence< sal_Int8 >& rId )
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     if( rId.getLength() == 16
         && 0 == memcmp( getUnoTunnelId().getConstArray(),
@@ -830,17 +830,17 @@ sal_Int64 SAL_CALL SwXFrame::getSomething( const :: uno::Sequence< sal_Int8 >& r
 
 TYPEINIT1(SwXFrame, SwClient);
 
-OUString SwXFrame::getImplementationName(void) throw( uno::RuntimeException )
+OUString SwXFrame::getImplementationName(void) throw( uno::RuntimeException, std::exception )
 {
     return OUString("SwXFrame");
 }
 
-sal_Bool SwXFrame::supportsService(const :: OUString& rServiceName) throw( uno::RuntimeException )
+sal_Bool SwXFrame::supportsService(const :: OUString& rServiceName) throw( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SwXFrame::getSupportedServiceNames(void) throw( uno::RuntimeException )
+uno::Sequence< OUString > SwXFrame::getSupportedServiceNames(void) throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence< OUString > aRet(3);
     aRet[0] = "com.sun.star.text.BaseFrame";
@@ -921,7 +921,7 @@ SwXFrame::~SwXFrame()
     delete pProps;
 }
 
-OUString SwXFrame::getName(void) throw( uno::RuntimeException )
+OUString SwXFrame::getName(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     SwFrmFmt* pFmt = GetFrmFmt();
@@ -932,7 +932,7 @@ OUString SwXFrame::getName(void) throw( uno::RuntimeException )
     return m_sName;
 }
 
-void SwXFrame::setName(const OUString& rName) throw( uno::RuntimeException )
+void SwXFrame::setName(const OUString& rName) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     SwFrmFmt* pFmt = GetFrmFmt();
@@ -950,7 +950,7 @@ void SwXFrame::setName(const OUString& rName) throw( uno::RuntimeException )
         throw uno::RuntimeException();
 }
 
-uno::Reference< beans::XPropertySetInfo >  SwXFrame::getPropertySetInfo(void) throw( uno::RuntimeException )
+uno::Reference< beans::XPropertySetInfo >  SwXFrame::getPropertySetInfo(void) throw( uno::RuntimeException, std::exception )
 {
     uno::Reference< beans::XPropertySetInfo >  xRef;
     static uno::Reference< beans::XPropertySetInfo >  xFrmRef;
@@ -1033,7 +1033,7 @@ static SwFrmFmt *lcl_GetFrmFmt( const :: uno::Any& rValue, SwDoc *pDoc )
 }
 
 void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::Any& aValue)
-    throw( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException )
+    throw( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     SwFrmFmt* pFmt = GetFrmFmt();
@@ -1484,7 +1484,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
 }
 
 uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     uno::Any aAny;
@@ -1797,34 +1797,34 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
 
 void SwXFrame::addPropertyChangeListener(const OUString& /*PropertyName*/,
     const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     OSL_FAIL("not implemented");
 }
 
 void SwXFrame::removePropertyChangeListener(const OUString& /*PropertyName*/,
     const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     OSL_FAIL("not implemented");
 }
 
 void SwXFrame::addVetoableChangeListener(const OUString& /*PropertyName*/,
                                 const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     OSL_FAIL("not implemented");
 }
 
 void SwXFrame::removeVetoableChangeListener(
     const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/)
-        throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+        throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     OSL_FAIL("not implemented");
 }
 
 beans::PropertyState SwXFrame::getPropertyState( const OUString& rPropertyName )
-    throw(beans::UnknownPropertyException, uno::RuntimeException)
+    throw(beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Sequence< OUString > aPropertyNames(1);
@@ -1836,7 +1836,7 @@ beans::PropertyState SwXFrame::getPropertyState( const OUString& rPropertyName )
 
 uno::Sequence< beans::PropertyState > SwXFrame::getPropertyStates(
     const uno::Sequence< OUString >& aPropertyNames )
-        throw(beans::UnknownPropertyException, uno::RuntimeException)
+        throw(beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Sequence< beans::PropertyState > aStates(aPropertyNames.getLength());
@@ -1899,7 +1899,7 @@ uno::Sequence< beans::PropertyState > SwXFrame::getPropertyStates(
 }
 
 void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
-    throw(beans::UnknownPropertyException, uno::RuntimeException)
+    throw(beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     SwFrmFmt* pFmt = GetFrmFmt();
@@ -1995,7 +1995,7 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
 }
 
 uno::Any SwXFrame::getPropertyDefault( const OUString& rPropertyName )
-    throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+    throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Any aRet;
@@ -2022,7 +2022,7 @@ uno::Any SwXFrame::getPropertyDefault( const OUString& rPropertyName )
 
 void SAL_CALL SwXFrame::addEventListener(
         const uno::Reference<lang::XEventListener> & xListener)
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     m_pImpl->m_EventListeners.addInterface(xListener);
@@ -2030,7 +2030,7 @@ throw (uno::RuntimeException)
 
 void SAL_CALL SwXFrame::removeEventListener(
         const uno::Reference<lang::XEventListener> & xListener)
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     m_pImpl->m_EventListeners.removeInterface(xListener);
@@ -2049,7 +2049,7 @@ void    SwXFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
     }
 }
 
-void SwXFrame::dispose(void) throw( uno::RuntimeException )
+void SwXFrame::dispose(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     SwFrmFmt* pFmt = GetFrmFmt();
@@ -2078,7 +2078,7 @@ void SwXFrame::dispose(void) throw( uno::RuntimeException )
 
 }
 
-uno::Reference< text::XTextRange >  SwXFrame::getAnchor(void) throw( uno::RuntimeException )
+uno::Reference< text::XTextRange >  SwXFrame::getAnchor(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     uno::Reference< text::XTextRange >  aRef;
@@ -2486,7 +2486,7 @@ void SwXFrame::attach(const uno::Reference< text::XTextRange > & xTextRange)
     }
 }
 
-awt::Point SwXFrame::getPosition(void) throw( uno::RuntimeException )
+awt::Point SwXFrame::getPosition(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     uno::RuntimeException aRuntime;
@@ -2494,7 +2494,7 @@ awt::Point SwXFrame::getPosition(void) throw( uno::RuntimeException )
     throw aRuntime;
 }
 
-void SwXFrame::setPosition(const awt::Point& /*aPosition*/) throw( uno::RuntimeException )
+void SwXFrame::setPosition(const awt::Point& /*aPosition*/) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     uno::RuntimeException aRuntime;
@@ -2502,7 +2502,7 @@ void SwXFrame::setPosition(const awt::Point& /*aPosition*/) throw( uno::RuntimeE
     throw aRuntime;
 }
 
-awt::Size SwXFrame::getSize(void) throw( uno::RuntimeException )
+awt::Size SwXFrame::getSize(void) throw( uno::RuntimeException, std::exception )
 {
     const ::uno::Any aVal = getPropertyValue("Size");
     awt::Size* pRet =  (awt::Size*)aVal.getValue();
@@ -2510,13 +2510,13 @@ awt::Size SwXFrame::getSize(void) throw( uno::RuntimeException )
 }
 
 void SwXFrame::setSize(const awt::Size& aSize)
-    throw( beans::PropertyVetoException, uno::RuntimeException )
+    throw( beans::PropertyVetoException, uno::RuntimeException, std::exception )
 {
     const ::uno::Any aVal(&aSize, ::getCppuType(static_cast<const awt::Size*>(0)));
     setPropertyValue("Size", aVal);
 }
 
-OUString SwXFrame::getShapeType(void) throw( uno::RuntimeException )
+OUString SwXFrame::getShapeType(void) throw( uno::RuntimeException, std::exception )
 {
     return OUString("FrameShape");
 }
@@ -2552,7 +2552,7 @@ void SAL_CALL SwXTextFrame::release(  )throw()
 }
 
 ::uno::Any SAL_CALL SwXTextFrame::queryInterface( const uno::Type& aType )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     ::uno::Any aRet = SwXFrame::queryInterface(aType);
     if(aRet.getValueType() == ::getCppuVoidType())
@@ -2562,7 +2562,7 @@ void SAL_CALL SwXTextFrame::release(  )throw()
     return aRet;
 }
 
-uno::Sequence< uno::Type > SAL_CALL SwXTextFrame::getTypes(  ) throw(uno::RuntimeException)
+uno::Sequence< uno::Type > SAL_CALL SwXTextFrame::getTypes(  ) throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence< uno::Type > aTextFrameTypes = SwXTextFrameBaseClass::getTypes();
     uno::Sequence< uno::Type > aFrameTypes = SwXFrame::getTypes();
@@ -2592,12 +2592,12 @@ namespace
     class theSwXTextFrameImplementationId : public rtl::Static< UnoTunnelIdInit, theSwXTextFrameImplementationId > {};
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL SwXTextFrame::getImplementationId(  ) throw(uno::RuntimeException)
+uno::Sequence< sal_Int8 > SAL_CALL SwXTextFrame::getImplementationId(  ) throw(uno::RuntimeException, std::exception)
 {
     return theSwXTextFrameImplementationId::get().getSeq();
 }
 
-uno::Reference< text::XText >  SwXTextFrame::getText(void) throw( uno::RuntimeException )
+uno::Reference< text::XText >  SwXTextFrame::getText(void) throw( uno::RuntimeException, std::exception )
 {
     return this;
 }
@@ -2623,7 +2623,7 @@ SwXTextFrame::CreateCursor() throw (uno::RuntimeException)
     return createTextCursor();
 }
 
-uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursor(void) throw( uno::RuntimeException )
+uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursor(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     uno::Reference< text::XTextCursor >  aRef;
@@ -2670,7 +2670,7 @@ uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursor(void) throw(
     return aRef;
 }
 
-uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursorByRange(const uno::Reference< text::XTextRange > & aTextPosition) throw( uno::RuntimeException )
+uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursorByRange(const uno::Reference< text::XTextRange > & aTextPosition) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     uno::Reference< text::XTextCursor >  aRef;
@@ -2697,7 +2697,7 @@ uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursorByRange(const
     return aRef;
 }
 
-uno::Reference< container::XEnumeration >  SwXTextFrame::createEnumeration(void) throw( uno::RuntimeException )
+uno::Reference< container::XEnumeration >  SwXTextFrame::createEnumeration(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     uno::Reference< container::XEnumeration >  aRef;
@@ -2718,55 +2718,55 @@ uno::Reference< container::XEnumeration >  SwXTextFrame::createEnumeration(void)
     return aRef;
 }
 
-uno::Type  SwXTextFrame::getElementType(void) throw( uno::RuntimeException )
+uno::Type  SwXTextFrame::getElementType(void) throw( uno::RuntimeException, std::exception )
 {
     return ::getCppuType(static_cast<uno::Reference<text::XTextRange>*>(0));
 }
 
-sal_Bool SwXTextFrame::hasElements(void) throw( uno::RuntimeException )
+sal_Bool SwXTextFrame::hasElements(void) throw( uno::RuntimeException, std::exception )
 {
     return sal_True;
 }
 
 void SwXTextFrame::attach(const uno::Reference< text::XTextRange > & xTextRange)
-    throw( lang::IllegalArgumentException, uno::RuntimeException )
+    throw( lang::IllegalArgumentException, uno::RuntimeException, std::exception )
 {
     SwXFrame::attach(xTextRange);
 }
 
-uno::Reference< text::XTextRange >  SwXTextFrame::getAnchor(void) throw( uno::RuntimeException )
+uno::Reference< text::XTextRange >  SwXTextFrame::getAnchor(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     return SwXFrame::getAnchor();
 }
 
-void SwXTextFrame::dispose(void) throw( uno::RuntimeException )
+void SwXTextFrame::dispose(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     SwXFrame::dispose();
 }
 
-void SwXTextFrame::addEventListener(const uno::Reference< lang::XEventListener > & aListener) throw( uno::RuntimeException )
+void SwXTextFrame::addEventListener(const uno::Reference< lang::XEventListener > & aListener) throw( uno::RuntimeException, std::exception )
 {
     SwXFrame::addEventListener(aListener);
 }
 
-void SwXTextFrame::removeEventListener(const uno::Reference< lang::XEventListener > & aListener) throw( uno::RuntimeException )
+void SwXTextFrame::removeEventListener(const uno::Reference< lang::XEventListener > & aListener) throw( uno::RuntimeException, std::exception )
 {
     SwXFrame::removeEventListener(aListener);
 }
 
-OUString SwXTextFrame::getImplementationName(void) throw( uno::RuntimeException )
+OUString SwXTextFrame::getImplementationName(void) throw( uno::RuntimeException, std::exception )
 {
     return OUString("SwXTextFrame");
 }
 
-sal_Bool SwXTextFrame::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
+sal_Bool SwXTextFrame::supportsService(const OUString& rServiceName) throw( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SwXTextFrame::getSupportedServiceNames(void) throw( uno::RuntimeException )
+uno::Sequence< OUString > SwXTextFrame::getSupportedServiceNames(void) throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence < OUString > aRet = SwXFrame::getSupportedServiceNames();
     aRet.realloc(aRet.getLength() + 2);
@@ -2787,13 +2787,13 @@ void SAL_CALL SwXTextFrame::operator delete( void * p) throw()
 }
 
 uno::Reference<container::XNameReplace > SAL_CALL SwXTextFrame::getEvents()
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     return new SwFrameEventDescriptor( *this );
 }
 
 sal_Int64 SAL_CALL SwXTextFrame::getSomething( const uno::Sequence< sal_Int8 >& rId )
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     sal_Int64 nRet = SwXFrame::getSomething( rId );
     if( !nRet )
@@ -2803,7 +2803,7 @@ sal_Int64 SAL_CALL SwXTextFrame::getSomething( const uno::Sequence< sal_Int8 >& 
 }
 
 ::uno::Any SwXTextFrame::getPropertyValue(const OUString& rPropertyName)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     ::uno::Any aRet;
@@ -2849,7 +2849,7 @@ void SAL_CALL SwXTextGraphicObject::release(  )throw()
 }
 
 ::uno::Any SAL_CALL SwXTextGraphicObject::queryInterface( const uno::Type& aType )
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     ::uno::Any aRet = SwXFrame::queryInterface(aType);
     if(aRet.getValueType() == ::getCppuVoidType())
@@ -2858,7 +2858,7 @@ void SAL_CALL SwXTextGraphicObject::release(  )throw()
 }
 
 uno::Sequence< uno::Type > SAL_CALL
-    SwXTextGraphicObject::getTypes(  ) throw(uno::RuntimeException)
+    SwXTextGraphicObject::getTypes(  ) throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence< uno::Type > aGraphicTypes = SwXTextGraphicObjectBaseClass::getTypes();
     uno::Sequence< uno::Type > aFrameTypes = SwXFrame::getTypes();
@@ -2882,52 +2882,52 @@ namespace
     class theSwXTextGraphicObjectImplementationId : public rtl::Static< UnoTunnelIdInit, theSwXTextGraphicObjectImplementationId > {};
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL SwXTextGraphicObject::getImplementationId(  ) throw(uno::RuntimeException)
+uno::Sequence< sal_Int8 > SAL_CALL SwXTextGraphicObject::getImplementationId(  ) throw(uno::RuntimeException, std::exception)
 {
     return theSwXTextGraphicObjectImplementationId::get().getSeq();
 }
 
-void SwXTextGraphicObject::attach(const uno::Reference< text::XTextRange > & xTextRange) throw( lang::IllegalArgumentException, uno::RuntimeException )
+void SwXTextGraphicObject::attach(const uno::Reference< text::XTextRange > & xTextRange) throw( lang::IllegalArgumentException, uno::RuntimeException, std::exception )
 {
     SwXFrame::attach(xTextRange);
 }
 
-uno::Reference< text::XTextRange >  SwXTextGraphicObject::getAnchor(void) throw( uno::RuntimeException )
+uno::Reference< text::XTextRange >  SwXTextGraphicObject::getAnchor(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     return SwXFrame::getAnchor();
 }
 
-void SwXTextGraphicObject::dispose(void) throw( uno::RuntimeException )
+void SwXTextGraphicObject::dispose(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     SwXFrame::dispose();
 }
 
 void SwXTextGraphicObject::addEventListener(const uno::Reference< lang::XEventListener > & aListener)
-                                                    throw( uno::RuntimeException )
+                                                    throw( uno::RuntimeException, std::exception )
 {
     SwXFrame::addEventListener(aListener);
 }
 
 void SwXTextGraphicObject::removeEventListener(const uno::Reference< lang::XEventListener > & aListener)
-                                                    throw( uno::RuntimeException )
+                                                    throw( uno::RuntimeException, std::exception )
 {
     SwXFrame::removeEventListener(aListener);
 }
 
-OUString SwXTextGraphicObject::getImplementationName(void) throw( uno::RuntimeException )
+OUString SwXTextGraphicObject::getImplementationName(void) throw( uno::RuntimeException, std::exception )
 {
     return OUString("SwXTextGraphicObject");
 }
 
-sal_Bool SwXTextGraphicObject::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
+sal_Bool SwXTextGraphicObject::supportsService(const OUString& rServiceName) throw( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SwXTextGraphicObject::getSupportedServiceNames(void)
-        throw( uno::RuntimeException )
+        throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence < OUString > aRet = SwXFrame::getSupportedServiceNames();
     aRet.realloc(aRet.getLength() + 1);
@@ -2948,7 +2948,7 @@ void SAL_CALL SwXTextGraphicObject::operator delete( void * p) throw()
 
 uno::Reference<container::XNameReplace> SAL_CALL
     SwXTextGraphicObject::getEvents()
-        throw(uno::RuntimeException)
+        throw(uno::RuntimeException, std::exception)
 {
     return new SwFrameEventDescriptor( *this );
 }
@@ -2979,7 +2979,7 @@ void SAL_CALL SwXTextEmbeddedObject::release()throw()
 }
 
 ::uno::Any SAL_CALL SwXTextEmbeddedObject::queryInterface( const uno::Type& aType )
-    throw( uno::RuntimeException)
+    throw( uno::RuntimeException, std::exception)
 {
     ::uno::Any aRet = SwXFrame::queryInterface(aType);;
     if(aRet.getValueType() == ::getCppuVoidType())
@@ -2987,7 +2987,7 @@ void SAL_CALL SwXTextEmbeddedObject::release()throw()
     return aRet;
 }
 
-uno::Sequence< uno::Type > SAL_CALL SwXTextEmbeddedObject::getTypes(  ) throw(uno::RuntimeException)
+uno::Sequence< uno::Type > SAL_CALL SwXTextEmbeddedObject::getTypes(  ) throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence< uno::Type > aTextEmbeddedTypes = SwXTextEmbeddedObjectBaseClass::getTypes();
     uno::Sequence< uno::Type > aFrameTypes = SwXFrame::getTypes();
@@ -3012,39 +3012,39 @@ namespace
     class theSwXTextEmbeddedObjectImplementationId : public rtl::Static< UnoTunnelIdInit, theSwXTextEmbeddedObjectImplementationId > {};
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL SwXTextEmbeddedObject::getImplementationId(  ) throw(uno::RuntimeException)
+uno::Sequence< sal_Int8 > SAL_CALL SwXTextEmbeddedObject::getImplementationId(  ) throw(uno::RuntimeException, std::exception)
 {
     return theSwXTextEmbeddedObjectImplementationId::get().getSeq();
 }
 
-void SwXTextEmbeddedObject::attach(const uno::Reference< text::XTextRange > & xTextRange) throw( lang::IllegalArgumentException, uno::RuntimeException )
+void SwXTextEmbeddedObject::attach(const uno::Reference< text::XTextRange > & xTextRange) throw( lang::IllegalArgumentException, uno::RuntimeException, std::exception )
 {
     SwXFrame::attach(xTextRange);
 }
 
-uno::Reference< text::XTextRange >  SwXTextEmbeddedObject::getAnchor(void) throw( uno::RuntimeException )
+uno::Reference< text::XTextRange >  SwXTextEmbeddedObject::getAnchor(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     return SwXFrame::getAnchor();
 }
 
-void SwXTextEmbeddedObject::dispose(void) throw( uno::RuntimeException )
+void SwXTextEmbeddedObject::dispose(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     SwXFrame::dispose();
 }
 
-void SwXTextEmbeddedObject::addEventListener(const uno::Reference< lang::XEventListener > & aListener) throw( uno::RuntimeException )
+void SwXTextEmbeddedObject::addEventListener(const uno::Reference< lang::XEventListener > & aListener) throw( uno::RuntimeException, std::exception )
 {
     SwXFrame::addEventListener(aListener);
 }
 
-void SwXTextEmbeddedObject::removeEventListener(const uno::Reference< lang::XEventListener > & aListener) throw( uno::RuntimeException )
+void SwXTextEmbeddedObject::removeEventListener(const uno::Reference< lang::XEventListener > & aListener) throw( uno::RuntimeException, std::exception )
 {
     SwXFrame::removeEventListener(aListener);
 }
 
-uno::Reference< lang::XComponent >  SwXTextEmbeddedObject::getEmbeddedObject(void) throw( uno::RuntimeException )
+uno::Reference< lang::XComponent >  SwXTextEmbeddedObject::getEmbeddedObject(void) throw( uno::RuntimeException, std::exception )
 {
     uno::Reference< lang::XComponent >  xRet;
     SwFrmFmt*   pFmt = GetFrmFmt();
@@ -3084,7 +3084,7 @@ uno::Reference< lang::XComponent >  SwXTextEmbeddedObject::getEmbeddedObject(voi
 }
 
 uno::Reference< embed::XEmbeddedObject > SAL_CALL SwXTextEmbeddedObject::getExtendedControlOverEmbeddedObject()
-        throw( uno::RuntimeException )
+        throw( uno::RuntimeException, std::exception )
 {
     uno::Reference< embed::XEmbeddedObject > xResult;
     SwFrmFmt*   pFmt = GetFrmFmt();
@@ -3123,7 +3123,7 @@ uno::Reference< embed::XEmbeddedObject > SAL_CALL SwXTextEmbeddedObject::getExte
     return xResult;
 }
 
-sal_Int64 SAL_CALL SwXTextEmbeddedObject::getAspect() throw (uno::RuntimeException)
+sal_Int64 SAL_CALL SwXTextEmbeddedObject::getAspect() throw (uno::RuntimeException, std::exception)
 {
     SwFrmFmt*   pFmt = GetFrmFmt();
     if(pFmt)
@@ -3140,7 +3140,7 @@ sal_Int64 SAL_CALL SwXTextEmbeddedObject::getAspect() throw (uno::RuntimeExcepti
     return embed::Aspects::MSOLE_CONTENT; // return the default value
 }
 
-void SAL_CALL SwXTextEmbeddedObject::setAspect( sal_Int64 nAspect ) throw (uno::RuntimeException)
+void SAL_CALL SwXTextEmbeddedObject::setAspect( sal_Int64 nAspect ) throw (uno::RuntimeException, std::exception)
 {
     SwFrmFmt*   pFmt = GetFrmFmt();
     if(pFmt)
@@ -3155,7 +3155,7 @@ void SAL_CALL SwXTextEmbeddedObject::setAspect( sal_Int64 nAspect ) throw (uno::
     }
 }
 
-uno::Reference< graphic::XGraphic > SAL_CALL SwXTextEmbeddedObject::getReplacementGraphic() throw (uno::RuntimeException)
+uno::Reference< graphic::XGraphic > SAL_CALL SwXTextEmbeddedObject::getReplacementGraphic() throw (uno::RuntimeException, std::exception)
 {
     SwFrmFmt*   pFmt = GetFrmFmt();
     if(pFmt)
@@ -3175,19 +3175,19 @@ uno::Reference< graphic::XGraphic > SAL_CALL SwXTextEmbeddedObject::getReplaceme
 }
 
 
-OUString SwXTextEmbeddedObject::getImplementationName(void) throw( uno::RuntimeException )
+OUString SwXTextEmbeddedObject::getImplementationName(void) throw( uno::RuntimeException, std::exception )
 
 {
     return OUString("SwXTextEmbeddedObject");
 }
 
-sal_Bool SwXTextEmbeddedObject::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
+sal_Bool SwXTextEmbeddedObject::supportsService(const OUString& rServiceName) throw( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SwXTextEmbeddedObject::getSupportedServiceNames(void)
-        throw( uno::RuntimeException )
+        throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence < OUString > aRet = SwXFrame::getSupportedServiceNames();
     aRet.realloc(aRet.getLength() + 1);
@@ -3208,7 +3208,7 @@ void SAL_CALL SwXTextEmbeddedObject::operator delete( void * p) throw()
 
 uno::Reference<container::XNameReplace> SAL_CALL
     SwXTextEmbeddedObject::getEvents()
-        throw(uno::RuntimeException)
+        throw(uno::RuntimeException, std::exception)
 {
     return new SwFrameEventDescriptor( *this );
 }
@@ -3225,7 +3225,7 @@ SwXOLEListener::~SwXOLEListener()
 {}
 
 void SwXOLEListener::modified( const lang::EventObject& /*rEvent*/ )
-                                        throw( uno::RuntimeException )
+                                        throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -3257,7 +3257,7 @@ void SwXOLEListener::modified( const lang::EventObject& /*rEvent*/ )
 }
 
 void SwXOLEListener::disposing( const lang::EventObject& rEvent )
-                        throw( uno::RuntimeException )
+                        throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 

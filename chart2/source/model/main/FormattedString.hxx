@@ -64,17 +64,17 @@ public:
     /// merge XTypeProvider implementations
     DECLARE_XTYPEPROVIDER()
 
-    virtual void SAL_CALL setPropertyValue(const OUString& p1, const css::uno::Any& p2) throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException)
+    virtual void SAL_CALL setPropertyValue(const OUString& p1, const css::uno::Any& p2) throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
         { ::property::OPropertySet::setPropertyValue(p1, p2); }
-    virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& p1) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException)
+    virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& p1) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
         { return ::property::OPropertySet::getPropertyValue(p1); }
-    virtual void SAL_CALL addPropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException)
+    virtual void SAL_CALL addPropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
         { ::property::OPropertySet::addPropertyChangeListener(p1, p2); }
-    virtual void SAL_CALL removePropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException)
+    virtual void SAL_CALL removePropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
         { ::property::OPropertySet::removePropertyChangeListener(p1, p2); }
-    virtual void SAL_CALL addVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException)
+    virtual void SAL_CALL addVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
         { ::property::OPropertySet::addVetoableChangeListener(p1, p2); }
-    virtual void SAL_CALL removeVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException)
+    virtual void SAL_CALL removeVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
         { ::property::OPropertySet::removeVetoableChangeListener(p1, p2); }
 
 protected:
@@ -82,9 +82,9 @@ protected:
 
     // ____ XFormattedString ____
     virtual OUString SAL_CALL getString()
-        throw (::css::uno::RuntimeException);
+        throw (::css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setString( const OUString& String )
-        throw (::css::uno::RuntimeException);
+        throw (::css::uno::RuntimeException, std::exception);
 
     // ____ OPropertySet ____
     virtual ::css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
@@ -96,29 +96,29 @@ protected:
     // ____ XPropertySet ____
     virtual ::css::uno::Reference< ::css::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo()
-        throw (::css::uno::RuntimeException);
+        throw (::css::uno::RuntimeException, std::exception);
 
     // ____ XCloneable ____
     virtual ::css::uno::Reference< ::css::util::XCloneable > SAL_CALL createClone()
-        throw (::css::uno::RuntimeException);
+        throw (::css::uno::RuntimeException, std::exception);
 
     // ____ XModifyBroadcaster ____
     virtual void SAL_CALL addModifyListener(
         const ::css::uno::Reference< ::css::util::XModifyListener >& aListener )
-        throw (::css::uno::RuntimeException);
+        throw (::css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL removeModifyListener(
         const ::css::uno::Reference< ::css::util::XModifyListener >& aListener )
-        throw (::css::uno::RuntimeException);
+        throw (::css::uno::RuntimeException, std::exception);
 
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(
         const ::css::lang::EventObject& aEvent )
-        throw (::css::uno::RuntimeException);
+        throw (::css::uno::RuntimeException, std::exception);
 
     // ____ XEventListener (base of XModifyListener) ____
     virtual void SAL_CALL disposing(
         const ::css::lang::EventObject& Source )
-        throw (::css::uno::RuntimeException);
+        throw (::css::uno::RuntimeException, std::exception);
 
     // ____ OPropertySet ____
     virtual void firePropertyChangeEvent();

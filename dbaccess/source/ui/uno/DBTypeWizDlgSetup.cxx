@@ -55,7 +55,7 @@ ODBTypeWizDialogSetup::ODBTypeWizDialogSetup(const Reference< XComponentContext 
         &m_bStartTableWizard, getBooleanCppuType());
 }
 
-Sequence<sal_Int8> SAL_CALL ODBTypeWizDialogSetup::getImplementationId(  ) throw(RuntimeException)
+Sequence<sal_Int8> SAL_CALL ODBTypeWizDialogSetup::getImplementationId(  ) throw(RuntimeException, std::exception)
 {
     static ::cppu::OImplementationId aId;
     return aId.getImplementationId();
@@ -67,7 +67,7 @@ Reference< XInterface > SAL_CALL ODBTypeWizDialogSetup::Create(const Reference< 
     return xDBWizard;
 }
 
-OUString SAL_CALL ODBTypeWizDialogSetup::getImplementationName() throw(RuntimeException)
+OUString SAL_CALL ODBTypeWizDialogSetup::getImplementationName() throw(RuntimeException, std::exception)
 {
     return getImplementationName_Static();
 }
@@ -77,7 +77,7 @@ OUString ODBTypeWizDialogSetup::getImplementationName_Static() throw(RuntimeExce
     return OUString("org.openoffice.comp.dbu.ODBTypeWizDialogSetup");
 }
 
-::comphelper::StringSequence SAL_CALL ODBTypeWizDialogSetup::getSupportedServiceNames() throw(RuntimeException)
+::comphelper::StringSequence SAL_CALL ODBTypeWizDialogSetup::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     return getSupportedServiceNames_Static();
 }
@@ -89,7 +89,7 @@ OUString ODBTypeWizDialogSetup::getImplementationName_Static() throw(RuntimeExce
     return aSupported;
 }
 
-Reference<XPropertySetInfo>  SAL_CALL ODBTypeWizDialogSetup::getPropertySetInfo() throw(RuntimeException)
+Reference<XPropertySetInfo>  SAL_CALL ODBTypeWizDialogSetup::getPropertySetInfo() throw(RuntimeException, std::exception)
 {
     return createPropertySetInfo( getInfoHelper() );
 }

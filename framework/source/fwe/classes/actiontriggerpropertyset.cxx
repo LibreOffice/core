@@ -68,7 +68,7 @@ ActionTriggerPropertySet::~ActionTriggerPropertySet()
 
 // XInterface
 Any SAL_CALL ActionTriggerPropertySet::queryInterface( const Type& aType )
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     Any a = ::cppu::queryInterface(
                 aType,
@@ -100,19 +100,19 @@ void SAL_CALL ActionTriggerPropertySet::release() throw ()
 
 // XServiceInfo
 OUString SAL_CALL ActionTriggerPropertySet::getImplementationName()
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     return OUString( IMPLEMENTATIONNAME_ACTIONTRIGGER );
 }
 
 sal_Bool SAL_CALL ActionTriggerPropertySet::supportsService( const OUString& ServiceName )
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL ActionTriggerPropertySet::getSupportedServiceNames()
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     Sequence< OUString > seqServiceNames( 1 );
     seqServiceNames[0] = OUString( SERVICENAME_ACTIONTRIGGER );
@@ -120,7 +120,7 @@ throw ( RuntimeException )
 }
 
 // XTypeProvider
-Sequence< Type > SAL_CALL ActionTriggerPropertySet::getTypes() throw ( RuntimeException )
+Sequence< Type > SAL_CALL ActionTriggerPropertySet::getTypes() throw ( RuntimeException, std::exception )
 {
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
@@ -151,7 +151,7 @@ Sequence< Type > SAL_CALL ActionTriggerPropertySet::getTypes() throw ( RuntimeEx
     return pTypeCollection->getTypes() ;
 }
 
-Sequence< sal_Int8 > SAL_CALL ActionTriggerPropertySet::getImplementationId() throw ( RuntimeException )
+Sequence< sal_Int8 > SAL_CALL ActionTriggerPropertySet::getImplementationId() throw ( RuntimeException, std::exception )
 {
     // Create one Id for all instances of this class.
     // Use ethernet address to do this! (sal_True)
@@ -222,7 +222,7 @@ throw( IllegalArgumentException )
 
 void SAL_CALL ActionTriggerPropertySet::setFastPropertyValue_NoBroadcast(
     sal_Int32 nHandle, const Any& aValue )
-throw( Exception )
+throw( Exception, std::exception )
 {
     ::osl::MutexGuard aGuard( LockHelper::getGlobalLock().getShareableOslMutex() );
 
@@ -307,7 +307,7 @@ void SAL_CALL ActionTriggerPropertySet::getFastPropertyValue(
 }
 
 Reference< XPropertySetInfo > SAL_CALL ActionTriggerPropertySet::getPropertySetInfo()
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!

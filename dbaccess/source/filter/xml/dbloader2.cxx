@@ -99,9 +99,9 @@ public:
     DBTypeDetection(const Reference< XComponentContext >&);
 
     // XServiceInfo
-    OUString                        SAL_CALL getImplementationName() throw(  );
-    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw(  );
-    Sequence< OUString >            SAL_CALL getSupportedServiceNames(void) throw(  );
+    OUString                        SAL_CALL getImplementationName() throw(std::exception  );
+    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception  );
+    Sequence< OUString >            SAL_CALL getSupportedServiceNames(void) throw(std::exception  );
 
     // static methods
     static OUString                 getImplementationName_Static() throw(  )
@@ -112,7 +112,7 @@ public:
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
             SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
-    virtual OUString SAL_CALL detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Descriptor ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Descriptor ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 };
 
 DBTypeDetection::DBTypeDetection(const Reference< XComponentContext >& _rxContext)
@@ -120,7 +120,7 @@ DBTypeDetection::DBTypeDetection(const Reference< XComponentContext >& _rxContex
 {
 }
 
-OUString SAL_CALL DBTypeDetection::detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Descriptor ) throw (::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL DBTypeDetection::detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Descriptor ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     try
     {
@@ -187,19 +187,19 @@ Reference< XInterface > SAL_CALL DBTypeDetection::Create( const Reference< XMult
 }
 
 // XServiceInfo
-OUString SAL_CALL DBTypeDetection::getImplementationName() throw(  )
+OUString SAL_CALL DBTypeDetection::getImplementationName() throw(std::exception  )
 {
     return getImplementationName_Static();
 }
 
 // XServiceInfo
-sal_Bool SAL_CALL DBTypeDetection::supportsService(const OUString& ServiceName) throw(  )
+sal_Bool SAL_CALL DBTypeDetection::supportsService(const OUString& ServiceName) throw(std::exception  )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo
-Sequence< OUString > SAL_CALL DBTypeDetection::getSupportedServiceNames(void) throw(  )
+Sequence< OUString > SAL_CALL DBTypeDetection::getSupportedServiceNames(void) throw(std::exception  )
 {
     return getSupportedServiceNames_Static();
 }
@@ -231,9 +231,9 @@ public:
     ~DBContentLoader();
 
     // XServiceInfo
-    OUString                        SAL_CALL getImplementationName() throw(  );
-    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw(  );
-    Sequence< OUString >            SAL_CALL getSupportedServiceNames(void) throw(  );
+    OUString                        SAL_CALL getImplementationName() throw(std::exception  );
+    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception  );
+    Sequence< OUString >            SAL_CALL getSupportedServiceNames(void) throw(std::exception  );
 
     // static methods
     static OUString                 getImplementationName_Static() throw(  )
@@ -247,8 +247,8 @@ public:
     // XLoader
     virtual void SAL_CALL load( const Reference< XFrame > & _rFrame, const OUString& _rURL,
                                 const Sequence< PropertyValue >& _rArgs,
-                                const Reference< XLoadEventListener > & _rListener) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL cancel(void) throw();
+                                const Reference< XLoadEventListener > & _rListener) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL cancel(void) throw(std::exception);
 
 private:
     sal_Bool impl_executeNewDatabaseWizard( Reference< XModel >& _rxModel, sal_Bool& _bShouldStartTableWizard );
@@ -273,19 +273,19 @@ Reference< XInterface > SAL_CALL DBContentLoader::Create( const Reference< XMult
 }
 
 // XServiceInfo
-OUString SAL_CALL DBContentLoader::getImplementationName() throw(  )
+OUString SAL_CALL DBContentLoader::getImplementationName() throw(std::exception  )
 {
     return getImplementationName_Static();
 }
 
 // XServiceInfo
-sal_Bool SAL_CALL DBContentLoader::supportsService(const OUString& ServiceName) throw(  )
+sal_Bool SAL_CALL DBContentLoader::supportsService(const OUString& ServiceName) throw(std::exception  )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo
-Sequence< OUString > SAL_CALL DBContentLoader::getSupportedServiceNames(void) throw(  )
+Sequence< OUString > SAL_CALL DBContentLoader::getSupportedServiceNames(void) throw(std::exception  )
 {
     return getSupportedServiceNames_Static();
 }
@@ -369,7 +369,7 @@ sal_Bool DBContentLoader::impl_executeNewDatabaseWizard( Reference< XModel >& _r
 
 void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OUString& _rURL,
         const Sequence< PropertyValue >& rArgs,
-        const Reference< XLoadEventListener > & rListener) throw(::com::sun::star::uno::RuntimeException)
+        const Reference< XLoadEventListener > & rListener) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     // first check if preview is true, if so return with out creating a controller. Preview is not supported
     ::comphelper::NamedValueCollection aMediaDesc( rArgs );
@@ -552,7 +552,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
         ::comphelper::disposeComponent(xModel);
 }
 
-void DBContentLoader::cancel(void) throw()
+void DBContentLoader::cancel(void) throw(std::exception)
 {
 }
 

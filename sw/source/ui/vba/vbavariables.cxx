@@ -61,7 +61,7 @@ SwVbaVariables::createCollectionObject( const css::uno::Any& aSource )
 }
 
 uno::Any SAL_CALL
-SwVbaVariables::Add( const OUString& rName, const uno::Any& rValue ) throw (uno::RuntimeException)
+SwVbaVariables::Add( const OUString& rName, const uno::Any& rValue ) throw (uno::RuntimeException, std::exception)
 {
     uno::Any aValue;
     if( rValue.hasValue() )

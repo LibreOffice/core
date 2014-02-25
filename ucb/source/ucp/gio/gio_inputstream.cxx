@@ -41,13 +41,13 @@ InputStream::~InputStream( void )
 }
 
 sal_Int32 SAL_CALL InputStream::available()
-    throw( io::NotConnectedException, io::IOException, uno::RuntimeException )
+    throw( io::NotConnectedException, io::IOException, uno::RuntimeException, std::exception )
 {
     return 0;
 }
 
 void SAL_CALL InputStream::closeInput()
-    throw( io::NotConnectedException, io::IOException, uno::RuntimeException )
+    throw( io::NotConnectedException, io::IOException, uno::RuntimeException, std::exception )
 {
     if (mpStream)
         g_input_stream_close(G_INPUT_STREAM(mpStream), NULL, NULL);
@@ -55,7 +55,7 @@ void SAL_CALL InputStream::closeInput()
 
 void SAL_CALL InputStream::skipBytes( sal_Int32 nBytesToSkip )
     throw( io::NotConnectedException, io::BufferSizeExceededException,
-      io::IOException, uno::RuntimeException )
+      io::IOException, uno::RuntimeException, std::exception )
 {
     if (!mpStream)
         throw io::NotConnectedException();
@@ -71,7 +71,7 @@ void SAL_CALL InputStream::skipBytes( sal_Int32 nBytesToSkip )
 
 sal_Int32 SAL_CALL InputStream::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
     throw( io::NotConnectedException, io::BufferSizeExceededException,
-      io::IOException, uno::RuntimeException )
+      io::IOException, uno::RuntimeException, std::exception )
 {
     if (!mpStream)
         throw io::NotConnectedException();
@@ -95,12 +95,12 @@ sal_Int32 SAL_CALL InputStream::readBytes( uno::Sequence< sal_Int8 >& aData, sal
 
 sal_Int32 SAL_CALL InputStream::readSomeBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
     throw( io::NotConnectedException, io::BufferSizeExceededException,
-      io::IOException, uno::RuntimeException )
+      io::IOException, uno::RuntimeException, std::exception )
 {
     return readBytes(aData, nMaxBytesToRead);
 }
 
-uno::Any InputStream::queryInterface( const uno::Type &type ) throw( uno::RuntimeException )
+uno::Any InputStream::queryInterface( const uno::Type &type ) throw( uno::RuntimeException, std::exception )
 {
     uno::Any aRet = ::cppu::queryInterface ( type,
         static_cast< XInputStream * >( this ) );

@@ -64,7 +64,7 @@ namespace connectivity
                 );
 
             //XInterface
-            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception);
             virtual void SAL_CALL acquire() throw();
             virtual void SAL_CALL release() throw();
             // ::cppu::OComponentHelper
@@ -85,13 +85,13 @@ namespace connectivity
             // refresh the header of file based tables to see changes done by someone
             virtual void refreshHeader();
 
-            OUString SAL_CALL getName() throw() { return m_Name; }
+            OUString SAL_CALL getName() throw(std::exception) { return m_Name; }
 
             OUString getSchema() { return m_SchemaName; }
             sal_Bool isReadOnly() const { return !m_bWriteable; }
                 // m_pFileStream && !m_pFileStream->IsWritable(); }
             // com::sun::star::lang::XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
+            virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception);
             static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
 

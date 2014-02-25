@@ -94,41 +94,41 @@ public:
                             // XSheetConditionalEntries
     virtual void SAL_CALL   addNew( const ::com::sun::star::uno::Sequence<
                                     ::com::sun::star::beans::PropertyValue >& aConditionalEntry )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL   removeByIndex( sal_Int32 nIndex )
-                                throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   clear() throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL   clear() throw(::com::sun::star::uno::RuntimeException, std::exception);
 
                             // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index )
                                 throw(::com::sun::star::lang::IndexOutOfBoundsException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException);
+                                    ::com::sun::star::uno::RuntimeException, std::exception);
 
                             // XNameAccess
     virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
                                 throw(::com::sun::star::container::NoSuchElementException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException);
+                                    ::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames()
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
 
                             // XEnumerationAccess
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL
-                            createEnumeration() throw(::com::sun::star::uno::RuntimeException);
+                            createEnumeration() throw(::com::sun::star::uno::RuntimeException, std::exception);
 
                             // XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
-                                throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException, std::exception);
 
                             // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence<
                                     sal_Int8 >& aIdentifier )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
     static ScTableConditionalFormat* getImplementation( const com::sun::star::uno::Reference<
@@ -136,11 +136,11 @@ public:
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
 };
 
 
@@ -162,36 +162,36 @@ public:
 
                             // XSheetCondition
     virtual ::com::sun::star::sheet::ConditionOperator SAL_CALL getOperator()
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Int32 SAL_CALL getConditionOperator()
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL   setOperator( ::com::sun::star::sheet::ConditionOperator nOperator )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL   setConditionOperator( sal_Int32 nOperator )
-                                throw(::com::sun::star::uno::RuntimeException);
-    virtual OUString SAL_CALL getFormula1() throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual OUString SAL_CALL getFormula1() throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL   setFormula1( const OUString& aFormula1 )
-                                throw(::com::sun::star::uno::RuntimeException);
-    virtual OUString SAL_CALL getFormula2() throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual OUString SAL_CALL getFormula2() throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL   setFormula2( const OUString& aFormula2 )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::table::CellAddress SAL_CALL getSourcePosition()
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setSourcePosition( const ::com::sun::star::table::CellAddress& aSourcePosition )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
 
                             // XSheetConditionalEntry
-    virtual OUString SAL_CALL getStyleName() throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getStyleName() throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL   setStyleName( const OUString& aStyleName )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
 };
 
 
@@ -240,78 +240,78 @@ public:
 
                             // XSheetCondition
     virtual ::com::sun::star::sheet::ConditionOperator SAL_CALL getOperator()
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Int32 SAL_CALL getConditionOperator()
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL   setOperator( ::com::sun::star::sheet::ConditionOperator nOperator )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL   setConditionOperator( sal_Int32 nOperator )
-                                throw(::com::sun::star::uno::RuntimeException);
-    virtual OUString SAL_CALL getFormula1() throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual OUString SAL_CALL getFormula1() throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL   setFormula1( const OUString& aFormula1 )
-                                throw(::com::sun::star::uno::RuntimeException);
-    virtual OUString SAL_CALL getFormula2() throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual OUString SAL_CALL getFormula2() throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL   setFormula2( const OUString& aFormula2 )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::table::CellAddress SAL_CALL getSourcePosition()
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setSourcePosition( const ::com::sun::star::table::CellAddress& aSourcePosition )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
 
                             // XMultiFormulaTokens
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken >
                             SAL_CALL getTokens( sal_Int32 nIndex )
-                                throw(::com::sun::star::uno::RuntimeException,::com::sun::star::lang::IndexOutOfBoundsException);
+                                throw(::com::sun::star::uno::RuntimeException,::com::sun::star::lang::IndexOutOfBoundsException, std::exception);
     virtual void SAL_CALL setTokens( sal_Int32 nIndex,
                                      const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken >& aTokens )
-                                throw(::com::sun::star::uno::RuntimeException,::com::sun::star::lang::IndexOutOfBoundsException);
-    virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException,::com::sun::star::lang::IndexOutOfBoundsException, std::exception);
+    virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException, std::exception);
 
                             // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
                                     const ::com::sun::star::uno::Any& aValue )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::beans::PropertyVetoException,
                                     ::com::sun::star::lang::IllegalArgumentException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException);
+                                    ::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue(
                                     const OUString& PropertyName )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException);
+                                    ::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL   addPropertyChangeListener( const OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& xListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException);
+                                    ::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL   removePropertyChangeListener( const OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException);
+                                    ::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL   addVetoableChangeListener( const OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException);
+                                    ::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL   removeVetoableChangeListener( const OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException);
+                                    ::com::sun::star::uno::RuntimeException, std::exception);
 
                             // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence<
                                     sal_Int8 >& aIdentifier )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
     static ScTableValidationObj* getImplementation( const com::sun::star::uno::Reference<
@@ -319,11 +319,11 @@ public:
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
 };
 
 

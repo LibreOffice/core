@@ -120,7 +120,7 @@ FTPContentProvider::queryContent(
 )
     throw(
         IllegalIdentifierException,
-        RuntimeException
+        RuntimeException, std::exception
     )
 {
     // Check, if a content with given id already exists...

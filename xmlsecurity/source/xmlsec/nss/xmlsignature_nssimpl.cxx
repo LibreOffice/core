@@ -59,7 +59,7 @@ SAL_CALL XMLSignature_NssImpl :: generate(
     const Reference< XXMLSignatureTemplate >& aTemplate ,
     const Reference< XSecurityEnvironment >& aEnvironment
 ) throw( com::sun::star::xml::crypto::XMLSignatureException,
-         com::sun::star::uno::SecurityException )
+         com::sun::star::uno::SecurityException, std::exception )
 {
     xmlSecKeysMngrPtr pMngr = NULL ;
     xmlSecDSigCtxPtr pDsigCtx = NULL ;
@@ -164,7 +164,7 @@ SAL_CALL XMLSignature_NssImpl :: validate(
     const Reference< XXMLSecurityContext >& aSecurityCtx
 ) throw( com::sun::star::uno::RuntimeException,
          com::sun::star::uno::SecurityException,
-         com::sun::star::xml::crypto::XMLSignatureException ) {
+         com::sun::star::xml::crypto::XMLSignatureException, std::exception ) {
     xmlSecKeysMngrPtr pMngr = NULL ;
     xmlSecDSigCtxPtr pDsigCtx = NULL ;
     xmlNodePtr pNode = NULL ;
@@ -272,12 +272,12 @@ SAL_CALL XMLSignature_NssImpl :: validate(
 }
 
 /* XServiceInfo */
-OUString SAL_CALL XMLSignature_NssImpl :: getImplementationName() throw( RuntimeException ) {
+OUString SAL_CALL XMLSignature_NssImpl :: getImplementationName() throw( RuntimeException, std::exception ) {
     return impl_getImplementationName() ;
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL XMLSignature_NssImpl :: supportsService( const OUString& serviceName) throw( RuntimeException ) {
+sal_Bool SAL_CALL XMLSignature_NssImpl :: supportsService( const OUString& serviceName) throw( RuntimeException, std::exception ) {
     Sequence< OUString > seqServiceNames = getSupportedServiceNames() ;
     const OUString* pArray = seqServiceNames.getConstArray() ;
     for( sal_Int32 i = 0 ; i < seqServiceNames.getLength() ; i ++ ) {
@@ -288,7 +288,7 @@ sal_Bool SAL_CALL XMLSignature_NssImpl :: supportsService( const OUString& servi
 }
 
 /* XServiceInfo */
-Sequence< OUString > SAL_CALL XMLSignature_NssImpl :: getSupportedServiceNames() throw( RuntimeException ) {
+Sequence< OUString > SAL_CALL XMLSignature_NssImpl :: getSupportedServiceNames() throw( RuntimeException, std::exception ) {
     return impl_getSupportedServiceNames() ;
 }
 

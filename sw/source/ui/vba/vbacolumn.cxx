@@ -40,14 +40,14 @@ SwVbaColumn::~SwVbaColumn()
 }
 
 sal_Int32 SAL_CALL
-SwVbaColumn::getWidth( ) throw ( css::uno::RuntimeException )
+SwVbaColumn::getWidth( ) throw ( css::uno::RuntimeException, std::exception )
 {
     SwVbaTableHelper aTableHelper( mxTextTable );
     return aTableHelper.GetColWidth( mnIndex );
 }
 
 void SAL_CALL
-SwVbaColumn::setWidth( sal_Int32 _width ) throw ( css::uno::RuntimeException )
+SwVbaColumn::setWidth( sal_Int32 _width ) throw ( css::uno::RuntimeException, std::exception )
 {
 
     SwVbaTableHelper aTableHelper( mxTextTable );
@@ -55,7 +55,7 @@ SwVbaColumn::setWidth( sal_Int32 _width ) throw ( css::uno::RuntimeException )
 }
 
 void SAL_CALL
-SwVbaColumn::Select( ) throw ( uno::RuntimeException )
+SwVbaColumn::Select( ) throw ( uno::RuntimeException, std::exception )
 {
     SelectColumn( getCurrentWordDoc(mxContext), mxTextTable, mnIndex, mnIndex );
 }

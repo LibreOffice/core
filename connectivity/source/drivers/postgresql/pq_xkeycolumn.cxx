@@ -60,7 +60,7 @@ KeyColumn::KeyColumn( const ::rtl::Reference< RefCountedMutex > & refMutex,
         * getStatics().refl.keycolumn.pProps )
 {}
 
-Reference< XPropertySet > KeyColumn::createDataDescriptor(  ) throw (RuntimeException)
+Reference< XPropertySet > KeyColumn::createDataDescriptor(  ) throw (RuntimeException, std::exception)
 {
     KeyColumnDescriptor * pKeyColumn = new KeyColumnDescriptor(
         m_refMutex, m_conn, m_pSettings );
@@ -82,7 +82,7 @@ KeyColumnDescriptor::KeyColumnDescriptor(
         * getStatics().refl.keycolumnDescriptor.pProps )
 {}
 
-Reference< XPropertySet > KeyColumnDescriptor::createDataDescriptor(  ) throw (RuntimeException)
+Reference< XPropertySet > KeyColumnDescriptor::createDataDescriptor(  ) throw (RuntimeException, std::exception)
 {
     KeyColumnDescriptor * pKeyColumn = new KeyColumnDescriptor(
         m_refMutex, m_conn, m_pSettings );

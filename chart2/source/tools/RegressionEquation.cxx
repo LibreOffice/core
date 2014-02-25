@@ -197,7 +197,7 @@ RegressionEquation::~RegressionEquation()
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL RegressionEquation::createClone()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< util::XCloneable >( new RegressionEquation( *this ));
 }
@@ -220,14 +220,14 @@ uno::Any RegressionEquation::GetDefaultValue( sal_Int32 nHandle ) const
 
 // ____ XPropertySet ____
 Reference< beans::XPropertySetInfo > SAL_CALL RegressionEquation::getPropertySetInfo()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return *StaticRegressionEquationInfo::get();
 }
 
 // ____ XModifyBroadcaster ____
 void SAL_CALL RegressionEquation::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -241,7 +241,7 @@ void SAL_CALL RegressionEquation::addModifyListener( const uno::Reference< util:
 }
 
 void SAL_CALL RegressionEquation::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -256,14 +256,14 @@ void SAL_CALL RegressionEquation::removeModifyListener( const uno::Reference< ut
 
 // ____ XModifyListener ____
 void SAL_CALL RegressionEquation::modified( const lang::EventObject& aEvent )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
 // ____ XEventListener (base of XModifyListener) ____
 void SAL_CALL RegressionEquation::disposing( const lang::EventObject& /* Source */ )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     // nothing
 }
@@ -281,14 +281,14 @@ void RegressionEquation::fireModifyEvent()
 
 // ____ XTitle ____
 uno::Sequence< uno::Reference< chart2::XFormattedString > > SAL_CALL RegressionEquation::getText()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard( GetMutex() );
     return m_aStrings;
 }
 
 void SAL_CALL RegressionEquation::setText( const uno::Sequence< uno::Reference< chart2::XFormattedString > >& Strings )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard( GetMutex() );
     ModifyListenerHelper::removeListenerFromAllElements(

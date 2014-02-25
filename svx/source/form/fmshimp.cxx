@@ -758,17 +758,17 @@ bool FmXFormShell::IsReadonlyDoc() const
 }
 
 
-Any SAL_CALL FmXFormShell::queryInterface( const Type& type) throw ( RuntimeException )
+Any SAL_CALL FmXFormShell::queryInterface( const Type& type) throw ( RuntimeException, std::exception )
 {
     return FmXFormShell_BASE::queryInterface(type);
 }
 
-Sequence< Type > SAL_CALL FmXFormShell::getTypes(  ) throw(RuntimeException)
+Sequence< Type > SAL_CALL FmXFormShell::getTypes(  ) throw(RuntimeException, std::exception)
 {
     return FmXFormShell_BASE::getTypes();
 }
 
-Sequence< sal_Int8 > SAL_CALL FmXFormShell::getImplementationId() throw(RuntimeException)
+Sequence< sal_Int8 > SAL_CALL FmXFormShell::getImplementationId() throw(RuntimeException, std::exception)
 {
     static ::cppu::OImplementationId* pId = 0;
     if (! pId)
@@ -784,7 +784,7 @@ Sequence< sal_Int8 > SAL_CALL FmXFormShell::getImplementationId() throw(RuntimeE
 }
 //  EventListener
 
-void SAL_CALL FmXFormShell::disposing(const EventObject& e) throw( RuntimeException )
+void SAL_CALL FmXFormShell::disposing(const EventObject& e) throw( RuntimeException, std::exception )
 {
     impl_checkDisposed();
 
@@ -823,7 +823,7 @@ void SAL_CALL FmXFormShell::disposing(const EventObject& e) throw( RuntimeExcept
 }
 
 
-void SAL_CALL FmXFormShell::propertyChange(const PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL FmXFormShell::propertyChange(const PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     if ( impl_checkDisposed() )
         return;
@@ -888,7 +888,7 @@ void FmXFormShell::invalidateFeatures( const ::std::vector< sal_Int32 >& _rFeatu
 }
 
 
-void SAL_CALL FmXFormShell::formActivated(const EventObject& rEvent) throw( RuntimeException )
+void SAL_CALL FmXFormShell::formActivated(const EventObject& rEvent) throw( RuntimeException, std::exception )
 {
     if ( impl_checkDisposed() )
         return;
@@ -899,7 +899,7 @@ void SAL_CALL FmXFormShell::formActivated(const EventObject& rEvent) throw( Runt
 }
 
 
-void SAL_CALL FmXFormShell::formDeactivated(const EventObject& rEvent) throw( RuntimeException )
+void SAL_CALL FmXFormShell::formDeactivated(const EventObject& rEvent) throw( RuntimeException, std::exception )
 {
     if ( impl_checkDisposed() )
         return;
@@ -2563,7 +2563,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
 
   // XContainerListener
 
-void FmXFormShell::elementInserted(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
+void FmXFormShell::elementInserted(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     if ( impl_checkDisposed() )
         return;
@@ -2576,7 +2576,7 @@ void FmXFormShell::elementInserted(const ContainerEvent& evt) throw(::com::sun::
 }
 
 
-void FmXFormShell::elementReplaced(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
+void FmXFormShell::elementReplaced(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     if ( impl_checkDisposed() )
         return;
@@ -2589,7 +2589,7 @@ void FmXFormShell::elementReplaced(const ContainerEvent& evt) throw(::com::sun::
 }
 
 
-void FmXFormShell::elementRemoved(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
+void FmXFormShell::elementRemoved(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     if ( impl_checkDisposed() )
         return;
@@ -2694,7 +2694,7 @@ void FmXFormShell::impl_RemoveElement_nothrow(const Reference< XInterface>& Elem
 }
 
 
-void FmXFormShell::selectionChanged(const EventObject& rEvent) throw(::com::sun::star::uno::RuntimeException)
+void FmXFormShell::selectionChanged(const EventObject& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     if ( impl_checkDisposed() )
         return;

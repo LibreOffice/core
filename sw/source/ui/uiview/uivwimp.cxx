@@ -254,7 +254,7 @@ SwScannerEventListener::~SwScannerEventListener()
 {
 }
 
-void SAL_CALL SwScannerEventListener::disposing( const EventObject& rEventObject) throw(uno::RuntimeException)
+void SAL_CALL SwScannerEventListener::disposing( const EventObject& rEventObject) throw(uno::RuntimeException, std::exception)
 {
 #if defined WNT || defined UNX
     SolarMutexGuard aGuard;
@@ -268,7 +268,7 @@ SwClipboardChangeListener::~SwClipboardChangeListener()
 }
 
 void SAL_CALL SwClipboardChangeListener::disposing( const EventObject& /*rEventObject*/ )
-    throw ( RuntimeException )
+    throw ( RuntimeException, std::exception )
 {
 }
 

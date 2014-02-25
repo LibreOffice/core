@@ -89,7 +89,7 @@ void VCLXAccessibleDropDownComboBox::ProcessWindowEvent (const VclWindowEvent& r
 //=====  XServiceInfo  ========================================================
 
 OUString VCLXAccessibleDropDownComboBox::getImplementationName()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleDropDownComboBox" );
 }
@@ -98,7 +98,7 @@ OUString VCLXAccessibleDropDownComboBox::getImplementationName()
 
 
 Sequence< OUString > VCLXAccessibleDropDownComboBox::getSupportedServiceNames (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aNames = VCLXAccessibleBox::getSupportedServiceNames();
     sal_Int32 nLength = aNames.getLength();

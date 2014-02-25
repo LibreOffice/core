@@ -189,7 +189,7 @@ void SAL_CALL Content::release()
 
 // virtual
 uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     uno::Any aRet = ContentImplHelper::queryInterface( rType );
 
@@ -218,7 +218,7 @@ XTYPEPROVIDER_COMMON_IMPL( Content );
 
 // virtual
 uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     cppu::OTypeCollection * pCollection = 0;
 
@@ -299,7 +299,7 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
 
 // virtual
 OUString SAL_CALL Content::getImplementationName()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.comp.ucb.TransientDocumentsContent" );
 }
@@ -307,7 +307,7 @@ OUString SAL_CALL Content::getImplementationName()
 
 // virtual
 uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -333,7 +333,7 @@ uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
 
 // virtual
 OUString SAL_CALL Content::getContentType()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     return m_aProps.getContentType();
@@ -343,7 +343,7 @@ OUString SAL_CALL Content::getContentType()
 // virtual
 uno::Reference< ucb::XContentIdentifier > SAL_CALL
 Content::getIdentifier()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -371,7 +371,7 @@ uno::Any SAL_CALL Content::execute(
         const uno::Reference< ucb::XCommandEnvironment >& Environment )
     throw( uno::Exception,
            ucb::CommandAbortedException,
-           uno::RuntimeException )
+           uno::RuntimeException, std::exception )
 {
     uno::Any aRet;
 
@@ -663,7 +663,7 @@ uno::Any SAL_CALL Content::execute(
 
 // virtual
 void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
 }
 
@@ -676,7 +676,7 @@ void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
 // virtual
 uno::Sequence< ucb::ContentInfo > SAL_CALL
 Content::queryCreatableContentsInfo()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return m_aProps.getCreatableContentsInfo();
 }
@@ -685,7 +685,7 @@ Content::queryCreatableContentsInfo()
 // virtual
 uno::Reference< ucb::XContent > SAL_CALL
 Content::createNewContent( const ucb::ContentInfo& Info )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     if ( m_aProps.isContentCreator() )
     {

@@ -52,7 +52,7 @@ ClientBoxEntry::~ClientBoxEntry()
 // ClientRemovedListener
 
 void ClientRemovedListener::disposing( lang::EventObject const & rEvt )
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     (void) rEvt;
 }

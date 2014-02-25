@@ -34,7 +34,7 @@ ScVbaCommandBar::ScVbaCommandBar( const uno::Reference< ov::XHelperInterface > x
 }
 
 OUString SAL_CALL
-ScVbaCommandBar::getName() throw ( uno::RuntimeException )
+ScVbaCommandBar::getName() throw ( uno::RuntimeException, std::exception )
 {
     // This will get a "NULL length string" when Name is not set.
     uno::Reference< beans::XPropertySet > xPropertySet( m_xBarSettings, uno::UNO_QUERY_THROW );
@@ -66,7 +66,7 @@ ScVbaCommandBar::getName() throw ( uno::RuntimeException )
     return sName;
 }
 void SAL_CALL
-ScVbaCommandBar::setName( const OUString& _name ) throw (uno::RuntimeException)
+ScVbaCommandBar::setName( const OUString& _name ) throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< beans::XPropertySet > xPropertySet( m_xBarSettings, uno::UNO_QUERY_THROW );
     xPropertySet->setPropertyValue( "UIName" , uno::makeAny( _name ) );
@@ -74,7 +74,7 @@ ScVbaCommandBar::setName( const OUString& _name ) throw (uno::RuntimeException)
     pCBarHelper->ApplyChange( m_sResourceUrl, m_xBarSettings );
 }
 ::sal_Bool SAL_CALL
-ScVbaCommandBar::getVisible() throw (uno::RuntimeException)
+ScVbaCommandBar::getVisible() throw (uno::RuntimeException, std::exception)
 {
     // menu bar is always visible in OOo
     if( m_bIsMenu )
@@ -97,7 +97,7 @@ ScVbaCommandBar::getVisible() throw (uno::RuntimeException)
     return bVisible;
 }
 void SAL_CALL
-ScVbaCommandBar::setVisible( ::sal_Bool _visible ) throw (uno::RuntimeException)
+ScVbaCommandBar::setVisible( ::sal_Bool _visible ) throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -120,21 +120,21 @@ ScVbaCommandBar::setVisible( ::sal_Bool _visible ) throw (uno::RuntimeException)
 }
 
 ::sal_Bool SAL_CALL
-ScVbaCommandBar::getEnabled() throw (uno::RuntimeException)
+ScVbaCommandBar::getEnabled() throw (uno::RuntimeException, std::exception)
 {
     // emulated with Visible
     return getVisible();
 }
 
 void SAL_CALL
-ScVbaCommandBar::setEnabled( sal_Bool _enabled ) throw (uno::RuntimeException)
+ScVbaCommandBar::setEnabled( sal_Bool _enabled ) throw (uno::RuntimeException, std::exception)
 {
     // emulated with Visible
     setVisible( _enabled );
 }
 
 void SAL_CALL
-ScVbaCommandBar::Delete(  ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaCommandBar::Delete(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     pCBarHelper->removeSettings( m_sResourceUrl );
     uno::Reference< container::XNameContainer > xNameContainer( pCBarHelper->getPersistentWindowState(), uno::UNO_QUERY_THROW );
@@ -144,7 +144,7 @@ ScVbaCommandBar::Delete(  ) throw (script::BasicErrorException, uno::RuntimeExce
     }
 }
 uno::Any SAL_CALL
-ScVbaCommandBar::Controls( const uno::Any& aIndex ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaCommandBar::Controls( const uno::Any& aIndex ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     uno::Reference< XCommandBarControls > xCommandBarControls( new ScVbaCommandBarControls( this, mxContext, m_xBarSettings, pCBarHelper, m_xBarSettings, m_sResourceUrl ) );
     if( aIndex.hasValue() )
@@ -155,7 +155,7 @@ ScVbaCommandBar::Controls( const uno::Any& aIndex ) throw (script::BasicErrorExc
 }
 
 sal_Int32 SAL_CALL
-ScVbaCommandBar::Type() throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaCommandBar::Type() throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     // #FIXME support msoBarTypePopup
     sal_Int32 nType = office::MsoBarType::msoBarTypePopup;
@@ -164,7 +164,7 @@ ScVbaCommandBar::Type() throw (script::BasicErrorException, uno::RuntimeExceptio
 }
 
 uno::Any SAL_CALL
-ScVbaCommandBar::FindControl( const uno::Any& /*aType*/, const uno::Any& /*aId*/, const uno::Any& /*aTag*/, const uno::Any& /*aVisible*/, const uno::Any& /*aRecursive*/ ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaCommandBar::FindControl( const uno::Any& /*aType*/, const uno::Any& /*aId*/, const uno::Any& /*aTag*/, const uno::Any& /*aVisible*/, const uno::Any& /*aRecursive*/ ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     // alwayse fail to find control
     return uno::makeAny( uno::Reference< XCommandBarControl > () );
@@ -199,46 +199,46 @@ VbaDummyCommandBar::VbaDummyCommandBar(
 {
 }
 
-OUString SAL_CALL VbaDummyCommandBar::getName() throw ( uno::RuntimeException )
+OUString SAL_CALL VbaDummyCommandBar::getName() throw ( uno::RuntimeException, std::exception )
 {
     return maName;
 }
 
-void SAL_CALL VbaDummyCommandBar::setName( const OUString& _name ) throw (uno::RuntimeException)
+void SAL_CALL VbaDummyCommandBar::setName( const OUString& _name ) throw (uno::RuntimeException, std::exception)
 {
     maName = _name;
 }
 
-::sal_Bool SAL_CALL VbaDummyCommandBar::getVisible() throw (uno::RuntimeException)
+::sal_Bool SAL_CALL VbaDummyCommandBar::getVisible() throw (uno::RuntimeException, std::exception)
 {
     // #STUB
     return sal_True;
 }
 
-void SAL_CALL VbaDummyCommandBar::setVisible( ::sal_Bool /*_visible*/ ) throw (uno::RuntimeException)
+void SAL_CALL VbaDummyCommandBar::setVisible( ::sal_Bool /*_visible*/ ) throw (uno::RuntimeException, std::exception)
 {
     // #STUB
 }
 
-::sal_Bool SAL_CALL VbaDummyCommandBar::getEnabled() throw (uno::RuntimeException)
+::sal_Bool SAL_CALL VbaDummyCommandBar::getEnabled() throw (uno::RuntimeException, std::exception)
 {
     // emulated with Visible
     return getVisible();
 }
 
-void SAL_CALL VbaDummyCommandBar::setEnabled( sal_Bool _enabled ) throw (uno::RuntimeException)
+void SAL_CALL VbaDummyCommandBar::setEnabled( sal_Bool _enabled ) throw (uno::RuntimeException, std::exception)
 {
     // emulated with Visible
     setVisible( _enabled );
 }
 
-void SAL_CALL VbaDummyCommandBar::Delete(  ) throw (script::BasicErrorException, uno::RuntimeException)
+void SAL_CALL VbaDummyCommandBar::Delete(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     // no-op
     // #STUB
 }
 
-uno::Any SAL_CALL VbaDummyCommandBar::Controls( const uno::Any& aIndex ) throw (script::BasicErrorException, uno::RuntimeException)
+uno::Any SAL_CALL VbaDummyCommandBar::Controls( const uno::Any& aIndex ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     uno::Reference< XCommandBarControls > xCommandBarControls( new VbaDummyCommandBarControls( this, mxContext ) );
     if( aIndex.hasValue() )
@@ -246,12 +246,12 @@ uno::Any SAL_CALL VbaDummyCommandBar::Controls( const uno::Any& aIndex ) throw (
     return uno::Any( xCommandBarControls );
 }
 
-sal_Int32 SAL_CALL VbaDummyCommandBar::Type() throw (script::BasicErrorException, uno::RuntimeException)
+sal_Int32 SAL_CALL VbaDummyCommandBar::Type() throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     return mnType;
 }
 
-uno::Any SAL_CALL VbaDummyCommandBar::FindControl( const uno::Any& /*aType*/, const uno::Any& /*aId*/, const uno::Any& /*aTag*/, const uno::Any& /*aVisible*/, const uno::Any& /*aRecursive*/ ) throw (script::BasicErrorException, uno::RuntimeException)
+uno::Any SAL_CALL VbaDummyCommandBar::FindControl( const uno::Any& /*aType*/, const uno::Any& /*aId*/, const uno::Any& /*aTag*/, const uno::Any& /*aVisible*/, const uno::Any& /*aRecursive*/ ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     return uno::Any( uno::Reference< XCommandBarControl >() );
 }

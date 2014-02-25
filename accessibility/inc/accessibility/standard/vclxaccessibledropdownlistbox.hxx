@@ -41,11 +41,11 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName (void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     // Return drop down list box specific services.
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames (void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 protected:
     virtual ~VCLXAccessibleDropDownListBox (void);

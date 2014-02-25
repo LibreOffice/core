@@ -245,7 +245,7 @@ Reference< XPossibleHyphens > HyphenatorDispatcher::buildPossHyphens(
 
 
 Sequence< Locale > SAL_CALL HyphenatorDispatcher::getLocales()
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -261,7 +261,7 @@ Sequence< Locale > SAL_CALL HyphenatorDispatcher::getLocales()
 
 
 sal_Bool SAL_CALL HyphenatorDispatcher::hasLocale(const Locale& rLocale)
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     HyphSvcByLangMap_t::const_iterator aIt( aSvcMap.find( LinguLocaleToLanguage( rLocale ) ) );
@@ -273,7 +273,7 @@ Reference< XHyphenatedWord > SAL_CALL
     HyphenatorDispatcher::hyphenate(
             const OUString& rWord, const Locale& rLocale, sal_Int16 nMaxLeading,
             const PropertyValues& rProperties )
-        throw(IllegalArgumentException, RuntimeException)
+        throw(IllegalArgumentException, RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -410,7 +410,7 @@ Reference< XHyphenatedWord > SAL_CALL
     HyphenatorDispatcher::queryAlternativeSpelling(
             const OUString& rWord, const Locale& rLocale, sal_Int16 nIndex,
             const PropertyValues& rProperties )
-        throw(IllegalArgumentException, RuntimeException)
+        throw(IllegalArgumentException, RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -542,7 +542,7 @@ Reference< XPossibleHyphens > SAL_CALL
     HyphenatorDispatcher::createPossibleHyphens(
             const OUString& rWord, const Locale& rLocale,
             const PropertyValues& rProperties )
-        throw(IllegalArgumentException, RuntimeException)
+        throw(IllegalArgumentException, RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 

@@ -81,7 +81,7 @@ void OHiddenModel::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const
 }
 
 
-void OHiddenModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue) throw (com::sun::star::uno::Exception)
+void OHiddenModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue) throw (com::sun::star::uno::Exception, std::exception)
 {
     switch (_nHandle)
     {
@@ -125,7 +125,7 @@ void OHiddenModel::describeFixedProperties( Sequence< Property >& _rProps ) cons
 
 // XServiceInfo
 
-StringSequence SAL_CALL OHiddenModel::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
+StringSequence SAL_CALL OHiddenModel::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     StringSequence aSupported( 2 );
     aSupported[ 0 ] = FRM_SUN_COMPONENT_HIDDENCONTROL;
@@ -134,14 +134,14 @@ StringSequence SAL_CALL OHiddenModel::getSupportedServiceNames() throw(::com::su
 }
 
 
-OUString SAL_CALL OHiddenModel::getServiceName() throw(RuntimeException)
+OUString SAL_CALL OHiddenModel::getServiceName() throw(RuntimeException, std::exception)
 {
     return OUString(FRM_COMPONENT_HIDDEN);    // old (non-sun) name for compatibility !
 }
 
 
 void SAL_CALL OHiddenModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
-    throw(IOException, RuntimeException)
+    throw(IOException, RuntimeException, std::exception)
 {
     // Version
     _rxOutStream->writeShort(0x0002);
@@ -153,7 +153,7 @@ void SAL_CALL OHiddenModel::write(const Reference<XObjectOutputStream>& _rxOutSt
 }
 
 
-void SAL_CALL OHiddenModel::read(const Reference<XObjectInputStream>& _rxInStream) throw(IOException, RuntimeException)
+void SAL_CALL OHiddenModel::read(const Reference<XObjectInputStream>& _rxInStream) throw(IOException, RuntimeException, std::exception)
 {
     // Version
     sal_uInt16 nVersion = _rxInStream->readShort();

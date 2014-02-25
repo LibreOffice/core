@@ -79,9 +79,9 @@ public:
     ChangeListener (Impl& rParent): m_rParent(rParent) { }
 
     // XChangesListener
-    virtual void SAL_CALL changesOccurred (util::ChangesEvent const& Event) throw(uno::RuntimeException);
+    virtual void SAL_CALL changesOccurred (util::ChangesEvent const& Event) throw(uno::RuntimeException, std::exception);
     // XEventListener
-    virtual void SAL_CALL disposing (lang::EventObject const& Source) throw(uno::RuntimeException);
+    virtual void SAL_CALL disposing (lang::EventObject const& Source) throw(uno::RuntimeException, std::exception);
 
 private:
     Impl& m_rParent;
@@ -105,13 +105,13 @@ private:
     uno::Reference<beans::XPropertySet>    m_xData;
 };
 
-void SvtUserOptions::ChangeListener::changesOccurred (util::ChangesEvent const& rEvent) throw(uno::RuntimeException)
+void SvtUserOptions::ChangeListener::changesOccurred (util::ChangesEvent const& rEvent) throw(uno::RuntimeException, std::exception)
 {
     if (rEvent.Changes.getLength())
         m_rParent.Notify();
 }
 
-void SvtUserOptions::ChangeListener::disposing (lang::EventObject const& rSource) throw(uno::RuntimeException)
+void SvtUserOptions::ChangeListener::disposing (lang::EventObject const& rSource) throw(uno::RuntimeException, std::exception)
 {
     try
     {

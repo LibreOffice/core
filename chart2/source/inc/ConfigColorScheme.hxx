@@ -62,7 +62,7 @@ public:
 protected:
     // ____ XColorScheme ____
     SAL_DLLPRIVATE virtual ::sal_Int32 SAL_CALL getColorByIndex( ::sal_Int32 nIndex )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // ____ ConfigItemListener ____
     SAL_DLLPRIVATE virtual void notify( const OUString & rPropertyName );

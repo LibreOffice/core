@@ -200,7 +200,7 @@ void SpellCheckerDispatcher::ClearSvcList()
 
 
 Sequence< Locale > SAL_CALL SpellCheckerDispatcher::getLocales()
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -216,7 +216,7 @@ Sequence< Locale > SAL_CALL SpellCheckerDispatcher::getLocales()
 
 
 sal_Bool SAL_CALL SpellCheckerDispatcher::hasLocale( const Locale& rLocale )
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     SpellSvcByLangMap_t::const_iterator aIt( aSvcMap.find( LinguLocaleToLanguage( rLocale ) ) );
@@ -227,7 +227,7 @@ sal_Bool SAL_CALL SpellCheckerDispatcher::hasLocale( const Locale& rLocale )
 sal_Bool SAL_CALL
     SpellCheckerDispatcher::isValid( const OUString& rWord, const Locale& rLocale,
             const PropertyValues& rProperties )
-        throw(IllegalArgumentException, RuntimeException)
+        throw(IllegalArgumentException, RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return isValid_Impl( rWord, LinguLocaleToLanguage( rLocale ), rProperties, sal_True );
@@ -237,7 +237,7 @@ sal_Bool SAL_CALL
 Reference< XSpellAlternatives > SAL_CALL
     SpellCheckerDispatcher::spell( const OUString& rWord, const Locale& rLocale,
             const PropertyValues& rProperties )
-        throw(IllegalArgumentException, RuntimeException)
+        throw(IllegalArgumentException, RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return spell_Impl( rWord, LinguLocaleToLanguage( rLocale ), rProperties, sal_True );
@@ -714,7 +714,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
 }
 
 uno::Sequence< sal_Int16 > SAL_CALL SpellCheckerDispatcher::getLanguages(  )
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     uno::Sequence< Locale > aTmp( getLocales() );
@@ -725,7 +725,7 @@ throw (uno::RuntimeException)
 
 sal_Bool SAL_CALL SpellCheckerDispatcher::hasLanguage(
     sal_Int16 nLanguage )
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return hasLocale( LanguageTag::convertToLocale( nLanguage) );
@@ -736,7 +736,7 @@ sal_Bool SAL_CALL SpellCheckerDispatcher::isValid(
     const OUString& rWord,
     sal_Int16 nLanguage,
     const uno::Sequence< beans::PropertyValue >& rProperties )
-throw (lang::IllegalArgumentException, uno::RuntimeException)
+throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return isValid( rWord, LanguageTag::convertToLocale( nLanguage ), rProperties);
@@ -747,7 +747,7 @@ uno::Reference< linguistic2::XSpellAlternatives > SAL_CALL SpellCheckerDispatche
     const OUString& rWord,
     sal_Int16 nLanguage,
     const uno::Sequence< beans::PropertyValue >& rProperties )
-throw (lang::IllegalArgumentException, uno::RuntimeException)
+throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return spell( rWord, LanguageTag::convertToLocale( nLanguage), rProperties);

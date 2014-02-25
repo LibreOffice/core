@@ -80,26 +80,26 @@ namespace logging
         virtual ~ConsoleHandler();
 
         // XConsoleHandler
-        virtual ::sal_Int32 SAL_CALL getThreshold() throw (RuntimeException);
-        virtual void SAL_CALL setThreshold( ::sal_Int32 _threshold ) throw (RuntimeException);
+        virtual ::sal_Int32 SAL_CALL getThreshold() throw (RuntimeException, std::exception);
+        virtual void SAL_CALL setThreshold( ::sal_Int32 _threshold ) throw (RuntimeException, std::exception);
 
         // XLogHandler
-        virtual OUString SAL_CALL getEncoding() throw (RuntimeException);
-        virtual void SAL_CALL setEncoding( const OUString& _encoding ) throw (RuntimeException);
-        virtual Reference< XLogFormatter > SAL_CALL getFormatter() throw (RuntimeException);
-        virtual void SAL_CALL setFormatter( const Reference< XLogFormatter >& _formatter ) throw (RuntimeException);
-        virtual ::sal_Int32 SAL_CALL getLevel() throw (RuntimeException);
-        virtual void SAL_CALL setLevel( ::sal_Int32 _level ) throw (RuntimeException);
-        virtual void SAL_CALL flush(  ) throw (RuntimeException);
-        virtual ::sal_Bool SAL_CALL publish( const LogRecord& Record ) throw (RuntimeException);
+        virtual OUString SAL_CALL getEncoding() throw (RuntimeException, std::exception);
+        virtual void SAL_CALL setEncoding( const OUString& _encoding ) throw (RuntimeException, std::exception);
+        virtual Reference< XLogFormatter > SAL_CALL getFormatter() throw (RuntimeException, std::exception);
+        virtual void SAL_CALL setFormatter( const Reference< XLogFormatter >& _formatter ) throw (RuntimeException, std::exception);
+        virtual ::sal_Int32 SAL_CALL getLevel() throw (RuntimeException, std::exception);
+        virtual void SAL_CALL setLevel( ::sal_Int32 _level ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL flush(  ) throw (RuntimeException, std::exception);
+        virtual ::sal_Bool SAL_CALL publish( const LogRecord& Record ) throw (RuntimeException, std::exception);
 
         // XInitialization
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception);
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(RuntimeException);
-        virtual ::sal_Bool SAL_CALL supportsService( const OUString& _rServiceName ) throw(RuntimeException);
-        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException);
+        virtual OUString SAL_CALL getImplementationName() throw(RuntimeException, std::exception);
+        virtual ::sal_Bool SAL_CALL supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception);
+        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception);
 
         // OComponentHelper
         virtual void SAL_CALL disposing();
@@ -156,21 +156,21 @@ namespace logging
     }
 
 
-    ::sal_Int32 SAL_CALL ConsoleHandler::getThreshold() throw (RuntimeException)
+    ::sal_Int32 SAL_CALL ConsoleHandler::getThreshold() throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *this );
         return m_nThreshold;
     }
 
 
-    void SAL_CALL ConsoleHandler::setThreshold( ::sal_Int32 _threshold ) throw (RuntimeException)
+    void SAL_CALL ConsoleHandler::setThreshold( ::sal_Int32 _threshold ) throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *this );
         m_nThreshold = _threshold;
     }
 
 
-    OUString SAL_CALL ConsoleHandler::getEncoding() throw (RuntimeException)
+    OUString SAL_CALL ConsoleHandler::getEncoding() throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *this );
         OUString sEncoding;
@@ -179,42 +179,42 @@ namespace logging
     }
 
 
-    void SAL_CALL ConsoleHandler::setEncoding( const OUString& _rEncoding ) throw (RuntimeException)
+    void SAL_CALL ConsoleHandler::setEncoding( const OUString& _rEncoding ) throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *this );
         OSL_VERIFY( m_aHandlerHelper.setEncoding( _rEncoding ) );
     }
 
 
-    Reference< XLogFormatter > SAL_CALL ConsoleHandler::getFormatter() throw (RuntimeException)
+    Reference< XLogFormatter > SAL_CALL ConsoleHandler::getFormatter() throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *this );
         return m_aHandlerHelper.getFormatter();
     }
 
 
-    void SAL_CALL ConsoleHandler::setFormatter( const Reference< XLogFormatter >& _rxFormatter ) throw (RuntimeException)
+    void SAL_CALL ConsoleHandler::setFormatter( const Reference< XLogFormatter >& _rxFormatter ) throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *this );
         m_aHandlerHelper.setFormatter( _rxFormatter );
     }
 
 
-    ::sal_Int32 SAL_CALL ConsoleHandler::getLevel() throw (RuntimeException)
+    ::sal_Int32 SAL_CALL ConsoleHandler::getLevel() throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *this );
         return m_aHandlerHelper.getLevel();
     }
 
 
-    void SAL_CALL ConsoleHandler::setLevel( ::sal_Int32 _nLevel ) throw (RuntimeException)
+    void SAL_CALL ConsoleHandler::setLevel( ::sal_Int32 _nLevel ) throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *this );
         m_aHandlerHelper.setLevel( _nLevel );
     }
 
 
-    void SAL_CALL ConsoleHandler::flush(  ) throw (RuntimeException)
+    void SAL_CALL ConsoleHandler::flush(  ) throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *this );
         fflush( stdout );
@@ -222,7 +222,7 @@ namespace logging
     }
 
 
-    ::sal_Bool SAL_CALL ConsoleHandler::publish( const LogRecord& _rRecord ) throw (RuntimeException)
+    ::sal_Bool SAL_CALL ConsoleHandler::publish( const LogRecord& _rRecord ) throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *this );
 
@@ -239,7 +239,7 @@ namespace logging
     }
 
 
-    void SAL_CALL ConsoleHandler::initialize( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException)
+    void SAL_CALL ConsoleHandler::initialize( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -269,19 +269,19 @@ namespace logging
     }
 
 
-    OUString SAL_CALL ConsoleHandler::getImplementationName() throw(RuntimeException)
+    OUString SAL_CALL ConsoleHandler::getImplementationName() throw(RuntimeException, std::exception)
     {
         return getImplementationName_static();
     }
 
 
-    ::sal_Bool SAL_CALL ConsoleHandler::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
+    ::sal_Bool SAL_CALL ConsoleHandler::supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception)
     {
         return cppu::supportsService(this, _rServiceName);
     }
 
 
-    Sequence< OUString > SAL_CALL ConsoleHandler::getSupportedServiceNames() throw(RuntimeException)
+    Sequence< OUString > SAL_CALL ConsoleHandler::getSupportedServiceNames() throw(RuntimeException, std::exception)
     {
         return getSupportedServiceNames_static();
     }

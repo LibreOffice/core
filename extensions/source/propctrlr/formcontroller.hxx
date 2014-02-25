@@ -81,11 +81,11 @@ namespace pcr
         DECLARE_XTYPEPROVIDER()
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
 
         // XPropertySet and friends
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
@@ -94,7 +94,7 @@ namespace pcr
             )   throw (::com::sun::star::lang::IllegalArgumentException);
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                 sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue
-            ) throw (::com::sun::star::uno::Exception);
+            ) throw (::com::sun::star::uno::Exception, std::exception);
         virtual void SAL_CALL getFastPropertyValue(
                 ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle
             ) const;

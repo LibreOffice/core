@@ -74,7 +74,7 @@ SwFilterDetect::~SwFilterDetect()
 {
 }
 
-OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor ) throw( RuntimeException )
+OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor ) throw( RuntimeException, std::exception )
 {
     Reference< XInputStream > xStream;
     Reference< XContent > xContent;
@@ -453,19 +453,19 @@ sal_uLong SwFilterDetect::DetectFilter( SfxMedium& rMedium, const SfxFilter** pp
 }
 
 /* XServiceInfo */
-OUString SAL_CALL SwFilterDetect::getImplementationName() throw( RuntimeException )
+OUString SAL_CALL SwFilterDetect::getImplementationName() throw( RuntimeException, std::exception )
 {
     return impl_getStaticImplementationName();
 }
                                                                                                                                 \
 /* XServiceInfo */
-sal_Bool SAL_CALL SwFilterDetect::supportsService( const OUString& sServiceName ) throw( RuntimeException )
+sal_Bool SAL_CALL SwFilterDetect::supportsService( const OUString& sServiceName ) throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
 /* XServiceInfo */
-Sequence< OUString > SAL_CALL SwFilterDetect::getSupportedServiceNames() throw( RuntimeException )
+Sequence< OUString > SAL_CALL SwFilterDetect::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     return impl_getStaticSupportedServiceNames();
 }

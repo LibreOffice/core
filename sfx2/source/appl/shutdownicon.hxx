@@ -92,13 +92,13 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
         virtual ~ShutdownIcon();
 
         virtual OUString SAL_CALL getImplementationName()
-            throw (css::uno::RuntimeException);
+            throw (css::uno::RuntimeException, std::exception);
 
         virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-            throw (css::uno::RuntimeException);
+            throw (css::uno::RuntimeException, std::exception);
 
         virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-            throw (css::uno::RuntimeException);
+            throw (css::uno::RuntimeException, std::exception);
 
         static ShutdownIcon* getInstance();
         static ShutdownIcon* createInstance();
@@ -134,17 +134,17 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
 
         // XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(::com::sun::star::uno::RuntimeException, std::exception);
 
         // XTerminateListener
         virtual void SAL_CALL queryTermination( const ::com::sun::star::lang::EventObject& aEvent )
-            throw(::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException);
+            throw(::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException, std::exception);
         virtual void SAL_CALL notifyTermination( const ::com::sun::star::lang::EventObject& aEvent )
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(::com::sun::star::uno::RuntimeException, std::exception);
 
         // XInitialization
         virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
-            throw( ::com::sun::star::uno::Exception );
+            throw( ::com::sun::star::uno::Exception, std::exception );
 
         // XFastPropertySet
         virtual void SAL_CALL setFastPropertyValue(       ::sal_Int32                  nHandle,
@@ -153,11 +153,11 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
                     ::com::sun::star::beans::PropertyVetoException,
                     ::com::sun::star::lang::IllegalArgumentException,
                     ::com::sun::star::lang::WrappedTargetException,
-                    ::com::sun::star::uno::RuntimeException);
+                    ::com::sun::star::uno::RuntimeException, std::exception);
         virtual ::com::sun::star::uno::Any SAL_CALL getFastPropertyValue( ::sal_Int32 nHandle )
             throw (::com::sun::star::beans::UnknownPropertyException,
                     ::com::sun::star::lang::WrappedTargetException,
-                    ::com::sun::star::uno::RuntimeException);
+                    ::com::sun::star::uno::RuntimeException, std::exception);
 
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop2 > m_xDesktop;
 

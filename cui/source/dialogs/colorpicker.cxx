@@ -1386,20 +1386,20 @@ public:
     ColorPicker( Reference< XComponentContext > const & xContext );
 
     // XInitialization
-    virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException);
+    virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException, std::exception);
 
     // XInitialization
-    virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception);
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException, std::exception);
 
     // XPropertyAccess
-    virtual Sequence< PropertyValue > SAL_CALL getPropertyValues(  ) throw (RuntimeException);
-    virtual void SAL_CALL setPropertyValues( const Sequence< PropertyValue >& aProps ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException);
+    virtual Sequence< PropertyValue > SAL_CALL getPropertyValues(  ) throw (RuntimeException, std::exception);
+    virtual void SAL_CALL setPropertyValues( const Sequence< PropertyValue >& aProps ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception);
 
     // XExecutableDialog
-    virtual void SAL_CALL setTitle( const OUString& aTitle ) throw (RuntimeException);
-    virtual sal_Int16 SAL_CALL execute(  ) throw (RuntimeException);
+    virtual void SAL_CALL setTitle( const OUString& aTitle ) throw (RuntimeException, std::exception);
+    virtual sal_Int16 SAL_CALL execute(  ) throw (RuntimeException, std::exception);
 
 private:
     Reference< XComponentContext > mxContext;
@@ -1439,7 +1439,7 @@ ColorPicker::ColorPicker( Reference< XComponentContext > const & xContext )
 }
 
 // XInitialization
-void SAL_CALL ColorPicker::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException)
+void SAL_CALL ColorPicker::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException, std::exception)
 {
     if( aArguments.getLength() == 1 )
     {
@@ -1448,23 +1448,23 @@ void SAL_CALL ColorPicker::initialize( const Sequence< Any >& aArguments ) throw
 }
 
 // XInitialization
-OUString SAL_CALL ColorPicker::getImplementationName(  ) throw (RuntimeException)
+OUString SAL_CALL ColorPicker::getImplementationName(  ) throw (RuntimeException, std::exception)
 {
     return ColorPicker_getImplementationName();
 }
 
-sal_Bool SAL_CALL ColorPicker::supportsService( const OUString& sServiceName ) throw (RuntimeException)
+sal_Bool SAL_CALL ColorPicker::supportsService( const OUString& sServiceName ) throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-Sequence< OUString > SAL_CALL ColorPicker::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > SAL_CALL ColorPicker::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
 {
     return ColorPicker_getSupportedServiceNames();
 }
 
 // XPropertyAccess
-Sequence< PropertyValue > SAL_CALL ColorPicker::getPropertyValues(  ) throw (RuntimeException)
+Sequence< PropertyValue > SAL_CALL ColorPicker::getPropertyValues(  ) throw (RuntimeException, std::exception)
 {
     Sequence< PropertyValue > props(1);
     props[0].Name = msColorKey;
@@ -1472,7 +1472,7 @@ Sequence< PropertyValue > SAL_CALL ColorPicker::getPropertyValues(  ) throw (Run
     return props;
 }
 
-void SAL_CALL ColorPicker::setPropertyValues( const Sequence< PropertyValue >& aProps ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
+void SAL_CALL ColorPicker::setPropertyValues( const Sequence< PropertyValue >& aProps ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
 {
     for( sal_Int32 n = 0; n < aProps.getLength(); n++ )
     {
@@ -1488,12 +1488,12 @@ void SAL_CALL ColorPicker::setPropertyValues( const Sequence< PropertyValue >& a
 }
 
 // XExecutableDialog
-void SAL_CALL ColorPicker::setTitle( const OUString& sTitle ) throw (RuntimeException)
+void SAL_CALL ColorPicker::setTitle( const OUString& sTitle ) throw (RuntimeException, std::exception)
 {
     msTitle = sTitle;
 }
 
-sal_Int16 SAL_CALL ColorPicker::execute(  ) throw (RuntimeException)
+sal_Int16 SAL_CALL ColorPicker::execute(  ) throw (RuntimeException, std::exception)
 {
     ColorPickerDialog aDlg( VCLUnoHelper::GetWindow( mxParent ), mnColor, mnMode );
     sal_Int16 ret = aDlg.Execute();

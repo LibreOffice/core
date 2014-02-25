@@ -139,17 +139,17 @@ namespace cairocanvas
         return mpSpriteCanvas->getOutputDevice();
     }
 
-    OUString SAL_CALL CanvasCustomSprite::getImplementationName() throw( uno::RuntimeException )
+    OUString SAL_CALL CanvasCustomSprite::getImplementationName() throw( uno::RuntimeException, std::exception )
     {
         return OUString( "CairoCanvas.CanvasCustomSprite" );
     }
 
-    sal_Bool SAL_CALL CanvasCustomSprite::supportsService( const OUString& ServiceName ) throw( uno::RuntimeException )
+    sal_Bool SAL_CALL CanvasCustomSprite::supportsService( const OUString& ServiceName ) throw( uno::RuntimeException, std::exception )
     {
         return cppu::supportsService( this, ServiceName );
     }
 
-    uno::Sequence< OUString > SAL_CALL CanvasCustomSprite::getSupportedServiceNames()  throw( uno::RuntimeException )
+    uno::Sequence< OUString > SAL_CALL CanvasCustomSprite::getSupportedServiceNames()  throw( uno::RuntimeException, std::exception )
     {
         uno::Sequence< OUString > aRet(1);
         aRet[0] = "com.sun.star.rendering.CanvasCustomSprite";

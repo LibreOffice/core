@@ -139,7 +139,7 @@ namespace svt
 
     // XEventListener
 
-    void SAL_CALL OCommonPicker::disposing( const EventObject& _rSource ) throw (RuntimeException)
+    void SAL_CALL OCommonPicker::disposing( const EventObject& _rSource ) throw (RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
         sal_Bool bDialogDying = _rSource.Source == m_xWindow;
@@ -179,13 +179,13 @@ namespace svt
     }
 
 
-    Reference< XPropertySetInfo > SAL_CALL OCommonPicker::getPropertySetInfo(  ) throw(RuntimeException)
+    Reference< XPropertySetInfo > SAL_CALL OCommonPicker::getPropertySetInfo(  ) throw(RuntimeException, std::exception)
     {
         return ::cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper() );
     }
 
 
-    void SAL_CALL OCommonPicker::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue ) throw (Exception)
+    void SAL_CALL OCommonPicker::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue ) throw (Exception, std::exception)
     {
         OPropertyContainer::setFastPropertyValue_NoBroadcast( _nHandle, _rValue );
 
@@ -248,7 +248,7 @@ namespace svt
 
     // XControlAccess functions
 
-    void SAL_CALL OCommonPicker::setControlProperty( const OUString& aControlName, const OUString& aControlProperty, const Any& aValue ) throw (IllegalArgumentException, RuntimeException)
+    void SAL_CALL OCommonPicker::setControlProperty( const OUString& aControlName, const OUString& aControlProperty, const Any& aValue ) throw (IllegalArgumentException, RuntimeException, std::exception)
     {
         checkAlive();
 
@@ -261,7 +261,7 @@ namespace svt
     }
 
 
-    Any SAL_CALL OCommonPicker::getControlProperty( const OUString& aControlName, const OUString& aControlProperty ) throw (IllegalArgumentException, RuntimeException)
+    Any SAL_CALL OCommonPicker::getControlProperty( const OUString& aControlName, const OUString& aControlProperty ) throw (IllegalArgumentException, RuntimeException, std::exception)
     {
         checkAlive();
 
@@ -278,7 +278,7 @@ namespace svt
 
     // XControlInformation functions
 
-    Sequence< OUString > SAL_CALL OCommonPicker::getSupportedControls(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL OCommonPicker::getSupportedControls(  ) throw (RuntimeException, std::exception)
     {
         checkAlive();
 
@@ -293,7 +293,7 @@ namespace svt
     }
 
 
-    sal_Bool SAL_CALL OCommonPicker::isControlSupported( const OUString& aControlName ) throw (RuntimeException)
+    sal_Bool SAL_CALL OCommonPicker::isControlSupported( const OUString& aControlName ) throw (RuntimeException, std::exception)
     {
         checkAlive();
 
@@ -308,7 +308,7 @@ namespace svt
     }
 
 
-    Sequence< OUString > SAL_CALL OCommonPicker::getSupportedControlProperties( const OUString& aControlName ) throw (IllegalArgumentException, RuntimeException)
+    Sequence< OUString > SAL_CALL OCommonPicker::getSupportedControlProperties( const OUString& aControlName ) throw (IllegalArgumentException, RuntimeException, std::exception)
     {
         checkAlive();
 
@@ -323,7 +323,7 @@ namespace svt
     }
 
 
-    sal_Bool SAL_CALL OCommonPicker::isControlPropertySupported( const OUString& aControlName, const OUString& aControlProperty ) throw (IllegalArgumentException, RuntimeException)
+    sal_Bool SAL_CALL OCommonPicker::isControlPropertySupported( const OUString& aControlName, const OUString& aControlProperty ) throw (IllegalArgumentException, RuntimeException, std::exception)
     {
         checkAlive();
 
@@ -340,14 +340,14 @@ namespace svt
 
     // XExecutableDialog functions
 
-    void SAL_CALL OCommonPicker::setTitle( const OUString& _rTitle ) throw( RuntimeException )
+    void SAL_CALL OCommonPicker::setTitle( const OUString& _rTitle ) throw( RuntimeException, std::exception )
     {
         SolarMutexGuard aGuard;
         m_aTitle = _rTitle;
     }
 
 
-    sal_Int16 OCommonPicker::execute() throw (RuntimeException)
+    sal_Int16 OCommonPicker::execute() throw (RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
 
@@ -369,7 +369,7 @@ namespace svt
 
     // XCancellable functions
 
-    void SAL_CALL OCommonPicker::cancel(  ) throw (RuntimeException)
+    void SAL_CALL OCommonPicker::cancel(  ) throw (RuntimeException, std::exception)
     {
         {
             ::osl::MutexGuard aGuard( m_aMutex );
@@ -416,7 +416,7 @@ namespace svt
     // XInitialization functions
 
     void SAL_CALL OCommonPicker::initialize( const Sequence< Any >& _rArguments )
-        throw ( Exception, RuntimeException )
+        throw ( Exception, RuntimeException, std::exception )
     {
         checkAlive();
 

@@ -98,10 +98,10 @@ public:
     virtual void SAL_CALL disposing (void);
     // XEventListener
     virtual void SAL_CALL disposing (const lang::EventObject& rEvent)
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
     // XConfigurationChangeListener
     virtual void SAL_CALL notifyConfigurationChange (const ConfigurationChangeEvent& rEvent)
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
 
 private:
     OUString msEventType;
@@ -139,7 +139,7 @@ public:
         is being destroyed.
     */
     virtual void SAL_CALL disposing (const lang::EventObject& rEvent)
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
 
     /** This method is called when the ViewShellBase is being destroyed.
     */
@@ -318,7 +318,7 @@ public:
     virtual void SAL_CALL disposing (void);
 
     virtual void SAL_CALL disposing (const lang::EventObject& rEventObject)
-        throw(RuntimeException);
+        throw(RuntimeException, std::exception);
 
 private:
     ::boost::shared_ptr<FrameworkHelper> mpHelper;
@@ -946,7 +946,7 @@ void SAL_CALL FrameworkHelper::DisposeListener::disposing (void)
 
 
 void SAL_CALL FrameworkHelper::DisposeListener::disposing (const lang::EventObject& rEventObject)
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     if (mpHelper.get() != NULL)
         mpHelper->disposing(rEventObject);
@@ -1039,7 +1039,7 @@ void CallbackCaller::disposing (void)
 
 
 void SAL_CALL CallbackCaller::disposing (const lang::EventObject& rEvent)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     if (rEvent.Source == mxConfigurationController)
     {
@@ -1053,7 +1053,7 @@ void SAL_CALL CallbackCaller::disposing (const lang::EventObject& rEvent)
 
 void SAL_CALL CallbackCaller::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     if (rEvent.Type.equals(msEventType) && maFilter(rEvent))
     {
@@ -1119,7 +1119,7 @@ void LifetimeController::disposing (void)
 
 
 void SAL_CALL LifetimeController::disposing (const lang::EventObject& rEvent)
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     (void)rEvent;
     mbListeningToController = false;

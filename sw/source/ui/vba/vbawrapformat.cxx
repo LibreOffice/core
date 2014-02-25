@@ -80,7 +80,7 @@ void SwVbaWrapFormat::makeWrap() throw (uno::RuntimeException)
     m_xPropertySet->setPropertyValue("TextWrap", uno::makeAny( eTextMode ) );
 }
 
-::sal_Int32 SAL_CALL SwVbaWrapFormat::getType() throw (uno::RuntimeException)
+::sal_Int32 SAL_CALL SwVbaWrapFormat::getType() throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nType = word::WdWrapType::wdWrapSquare;
     text::WrapTextMode eTextMode;
@@ -122,13 +122,13 @@ void SwVbaWrapFormat::makeWrap() throw (uno::RuntimeException)
     return nType;
 }
 
-void SAL_CALL SwVbaWrapFormat::setType( ::sal_Int32 _type ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaWrapFormat::setType( ::sal_Int32 _type ) throw (uno::RuntimeException, std::exception)
 {
     mnWrapFormatType = _type;
     makeWrap();
 }
 
-::sal_Int32 SAL_CALL SwVbaWrapFormat::getSide() throw (uno::RuntimeException)
+::sal_Int32 SAL_CALL SwVbaWrapFormat::getSide() throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nSide = word::WdWrapSideType::wdWrapBoth;
     text::WrapTextMode eTextMode;
@@ -153,7 +153,7 @@ void SAL_CALL SwVbaWrapFormat::setType( ::sal_Int32 _type ) throw (uno::RuntimeE
     return nSide;
 }
 
-void SAL_CALL SwVbaWrapFormat::setSide( ::sal_Int32 _side ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaWrapFormat::setSide( ::sal_Int32 _side ) throw (uno::RuntimeException, std::exception)
 {
     mnSide = _side;
     makeWrap();
@@ -172,42 +172,42 @@ void SwVbaWrapFormat::setDistance( const OUString& sName, float _distance ) thro
     m_xPropertySet->setPropertyValue( sName, uno::makeAny( nDistance ) );
 }
 
-float SAL_CALL SwVbaWrapFormat::getDistanceTop() throw (uno::RuntimeException)
+float SAL_CALL SwVbaWrapFormat::getDistanceTop() throw (uno::RuntimeException, std::exception)
 {
     return getDistance( OUString("TopMargin") );
 }
 
-void SAL_CALL SwVbaWrapFormat::setDistanceTop( float _distancetop ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaWrapFormat::setDistanceTop( float _distancetop ) throw (uno::RuntimeException, std::exception)
 {
     setDistance( OUString("TopMargin"), _distancetop );
 }
 
-float SAL_CALL SwVbaWrapFormat::getDistanceBottom() throw (uno::RuntimeException)
+float SAL_CALL SwVbaWrapFormat::getDistanceBottom() throw (uno::RuntimeException, std::exception)
 {
     return getDistance( OUString("BottomMargin") );
 }
 
-void SAL_CALL SwVbaWrapFormat::setDistanceBottom( float _distancebottom ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaWrapFormat::setDistanceBottom( float _distancebottom ) throw (uno::RuntimeException, std::exception)
 {
     setDistance( OUString("BottomMargin"), _distancebottom );
 }
 
-float SAL_CALL SwVbaWrapFormat::getDistanceLeft() throw (uno::RuntimeException)
+float SAL_CALL SwVbaWrapFormat::getDistanceLeft() throw (uno::RuntimeException, std::exception)
 {
     return getDistance( OUString("LeftMargin") );
 }
 
-void SAL_CALL SwVbaWrapFormat::setDistanceLeft( float _distanceleft ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaWrapFormat::setDistanceLeft( float _distanceleft ) throw (uno::RuntimeException, std::exception)
 {
     setDistance( OUString("LeftMargin"), _distanceleft );
 }
 
-float SAL_CALL SwVbaWrapFormat::getDistanceRight() throw (uno::RuntimeException)
+float SAL_CALL SwVbaWrapFormat::getDistanceRight() throw (uno::RuntimeException, std::exception)
 {
     return getDistance( OUString("RightMargin") );
 }
 
-void SAL_CALL SwVbaWrapFormat::setDistanceRight( float _distanceright ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaWrapFormat::setDistanceRight( float _distanceright ) throw (uno::RuntimeException, std::exception)
 {
     setDistance( OUString("RightMargin"), _distanceright );
 }

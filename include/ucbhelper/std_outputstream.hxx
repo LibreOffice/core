@@ -35,7 +35,7 @@ namespace ucbhelper
             ~StdOutputStream( );
 
             virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType )
-                throw ( css::uno::RuntimeException );
+                throw ( css::uno::RuntimeException, std::exception );
 
             virtual void SAL_CALL acquire ( ) throw ( );
 
@@ -45,19 +45,19 @@ namespace ucbhelper
                 throw ( css::io::NotConnectedException,
                         css::io::BufferSizeExceededException,
                         css::io::IOException,
-                        css::uno::RuntimeException );
+                        css::uno::RuntimeException, std::exception );
 
             virtual void SAL_CALL flush ( )
                 throw ( css::io::NotConnectedException,
                         css::io::BufferSizeExceededException,
                         css::io::IOException,
-                        css::uno::RuntimeException );
+                        css::uno::RuntimeException, std::exception );
 
             virtual void SAL_CALL closeOutput ( )
                 throw ( css::io::NotConnectedException,
                         css::io::BufferSizeExceededException,
                         css::io::IOException,
-                        css::uno::RuntimeException );
+                        css::uno::RuntimeException, std::exception );
 
         private:
 

@@ -145,7 +145,7 @@ uno::Sequence<OUString> ScFilterOptionsObj::getSupportedServiceNames_Static()
 
 // XPropertyAccess
 
-uno::Sequence<beans::PropertyValue> SAL_CALL ScFilterOptionsObj::getPropertyValues() throw(uno::RuntimeException)
+uno::Sequence<beans::PropertyValue> SAL_CALL ScFilterOptionsObj::getPropertyValues() throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence<beans::PropertyValue> aRet(1);
     beans::PropertyValue* pArray = aRet.getArray();
@@ -158,7 +158,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScFilterOptionsObj::getPropertyValu
 
 void SAL_CALL ScFilterOptionsObj::setPropertyValues( const uno::Sequence<beans::PropertyValue>& aProps )
                     throw(beans::UnknownPropertyException, beans::PropertyVetoException,
-                            lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+                            lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     const beans::PropertyValue* pPropArray = aProps.getConstArray();
     long nPropCount = aProps.getLength();
@@ -180,12 +180,12 @@ void SAL_CALL ScFilterOptionsObj::setPropertyValues( const uno::Sequence<beans::
 
 // XExecutableDialog
 
-void SAL_CALL ScFilterOptionsObj::setTitle( const OUString& /* aTitle */ ) throw(uno::RuntimeException)
+void SAL_CALL ScFilterOptionsObj::setTitle( const OUString& /* aTitle */ ) throw(uno::RuntimeException, std::exception)
 {
     // not used
 }
 
-sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
+sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException, std::exception)
 {
     sal_Int16 nRet = ui::dialogs::ExecutableDialogResults::CANCEL;
 
@@ -332,7 +332,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
 // XImporter
 
 void SAL_CALL ScFilterOptionsObj::setTargetDocument( const uno::Reference<lang::XComponent>& /* xDoc */ )
-                            throw(lang::IllegalArgumentException, uno::RuntimeException)
+                            throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     bExport = false;
 }
@@ -340,7 +340,7 @@ void SAL_CALL ScFilterOptionsObj::setTargetDocument( const uno::Reference<lang::
 // XExporter
 
 void SAL_CALL ScFilterOptionsObj::setSourceDocument( const uno::Reference<lang::XComponent>& /* xDoc */ )
-                            throw(lang::IllegalArgumentException, uno::RuntimeException)
+                            throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     bExport = true;
 }

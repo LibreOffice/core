@@ -219,7 +219,7 @@ void SAL_CALL ConfigurationController::addConfigurationChangeListener (
     const Reference<XConfigurationChangeListener>& rxListener,
     const OUString& rsEventType,
     const Any& rUserData)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
 
@@ -233,7 +233,7 @@ void SAL_CALL ConfigurationController::addConfigurationChangeListener (
 
 void SAL_CALL ConfigurationController::removeConfigurationChangeListener (
     const Reference<XConfigurationChangeListener>& rxListener)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
 
@@ -246,7 +246,7 @@ void SAL_CALL ConfigurationController::removeConfigurationChangeListener (
 
 void SAL_CALL ConfigurationController::notifyEvent (
     const ConfigurationChangeEvent& rEvent)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     mpImplementation->mpBroadcaster->NotifyListeners(rEvent);
@@ -274,7 +274,7 @@ void SAL_CALL ConfigurationController::lock()
 
 
 void SAL_CALL ConfigurationController::unlock (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
 
@@ -295,7 +295,7 @@ void SAL_CALL ConfigurationController::unlock (void)
 void SAL_CALL ConfigurationController::requestResourceActivation (
     const Reference<XResourceId>& rxResourceId,
     ResourceActivationMode eMode)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
        ThrowIfDisposed();
@@ -356,7 +356,7 @@ void SAL_CALL ConfigurationController::requestResourceActivation (
 
 void SAL_CALL ConfigurationController::requestResourceDeactivation (
     const Reference<XResourceId>& rxResourceId)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
@@ -397,7 +397,7 @@ void SAL_CALL ConfigurationController::requestResourceDeactivation (
 
 Reference<XResource> SAL_CALL ConfigurationController::getResource (
     const Reference<XResourceId>& rxResourceId)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
@@ -411,7 +411,7 @@ Reference<XResource> SAL_CALL ConfigurationController::getResource (
 
 
 void SAL_CALL ConfigurationController::update (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
@@ -433,7 +433,7 @@ void SAL_CALL ConfigurationController::update (void)
 
 
 sal_Bool SAL_CALL ConfigurationController::hasPendingRequests (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
@@ -447,7 +447,7 @@ sal_Bool SAL_CALL ConfigurationController::hasPendingRequests (void)
 
 void SAL_CALL ConfigurationController::postChangeRequest (
     const Reference<XConfigurationChangeRequest>& rxRequest)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
@@ -459,7 +459,7 @@ void SAL_CALL ConfigurationController::postChangeRequest (
 
 
 Reference<XConfiguration> SAL_CALL ConfigurationController::getRequestedConfiguration (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
@@ -475,7 +475,7 @@ Reference<XConfiguration> SAL_CALL ConfigurationController::getRequestedConfigur
 
 
 Reference<XConfiguration> SAL_CALL ConfigurationController::getCurrentConfiguration (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
@@ -560,7 +560,7 @@ void SAL_CALL ConfigurationController::restoreConfiguration (
 void SAL_CALL ConfigurationController::addResourceFactory(
     const OUString& sResourceURL,
     const Reference<XResourceFactory>& rxResourceFactory)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
@@ -572,7 +572,7 @@ void SAL_CALL ConfigurationController::addResourceFactory(
 
 void SAL_CALL ConfigurationController::removeResourceFactoryForURL(
     const OUString& sResourceURL)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
@@ -584,7 +584,7 @@ void SAL_CALL ConfigurationController::removeResourceFactoryForURL(
 
 void SAL_CALL ConfigurationController::removeResourceFactoryForReference(
     const Reference<XResourceFactory>& rxResourceFactory)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
@@ -596,7 +596,7 @@ void SAL_CALL ConfigurationController::removeResourceFactoryForReference(
 
 Reference<XResourceFactory> SAL_CALL ConfigurationController::getResourceFactory (
     const OUString& sResourceURL)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
@@ -610,7 +610,7 @@ Reference<XResourceFactory> SAL_CALL ConfigurationController::getResourceFactory
 //----- XInitialization -------------------------------------------------------
 
 void SAL_CALL ConfigurationController::initialize (const Sequence<Any>& aArguments)
-    throw (Exception, RuntimeException)
+    throw (Exception, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
 

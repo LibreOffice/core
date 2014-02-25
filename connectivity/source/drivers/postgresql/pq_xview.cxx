@@ -98,7 +98,7 @@ View::View( const ::rtl::Reference< RefCountedMutex > & refMutex,
         * getStatics().refl.view.pProps )
 {}
 
-Reference< XPropertySet > View::createDataDescriptor(  ) throw (RuntimeException)
+Reference< XPropertySet > View::createDataDescriptor(  ) throw (RuntimeException, std::exception)
 {
     ViewDescriptor * pView = new ViewDescriptor(
         m_refMutex, m_conn, m_pSettings );
@@ -110,7 +110,7 @@ Reference< XPropertySet > View::createDataDescriptor(  ) throw (RuntimeException
 void View::rename( const OUString& newName )
         throw (::com::sun::star::sdbc::SQLException,
                ::com::sun::star::container::ElementExistException,
-               ::com::sun::star::uno::RuntimeException)
+               ::com::sun::star::uno::RuntimeException, std::exception)
 {
     MutexGuard guard( m_refMutex->mutex );
 
@@ -178,7 +178,7 @@ void View::rename( const OUString& newName )
     }
 }
 
-Sequence<Type > View::getTypes() throw( RuntimeException )
+Sequence<Type > View::getTypes() throw( RuntimeException, std::exception )
 {
     static cppu::OTypeCollection *pCollection;
     if( ! pCollection )
@@ -195,12 +195,12 @@ Sequence<Type > View::getTypes() throw( RuntimeException )
     return pCollection->getTypes();
 }
 
-Sequence< sal_Int8> View::getImplementationId() throw( RuntimeException )
+Sequence< sal_Int8> View::getImplementationId() throw( RuntimeException, std::exception )
 {
     return getStatics().refl.view.implementationId;
 }
 
-Any View::queryInterface( const Type & reqType ) throw (RuntimeException)
+Any View::queryInterface( const Type & reqType ) throw (RuntimeException, std::exception)
 {
     Any ret;
 
@@ -213,7 +213,7 @@ Any View::queryInterface( const Type & reqType ) throw (RuntimeException)
     return ret;
 }
 
-OUString View::getName(  ) throw (::com::sun::star::uno::RuntimeException)
+OUString View::getName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     Statics & st = getStatics();
     return concatQualified(
@@ -221,7 +221,7 @@ OUString View::getName(  ) throw (::com::sun::star::uno::RuntimeException)
         extractStringProperty( this, st.NAME ) );
 }
 
-void View::setName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException)
+void View::setName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     rename( aName );
 }
@@ -241,7 +241,7 @@ ViewDescriptor::ViewDescriptor(
         * getStatics().refl.viewDescriptor.pProps )
 {}
 
-Reference< XPropertySet > ViewDescriptor::createDataDescriptor(  ) throw (RuntimeException)
+Reference< XPropertySet > ViewDescriptor::createDataDescriptor(  ) throw (RuntimeException, std::exception)
 {
     ViewDescriptor * pView = new ViewDescriptor(
         m_refMutex, m_conn, m_pSettings );

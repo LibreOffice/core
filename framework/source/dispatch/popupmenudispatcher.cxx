@@ -79,19 +79,19 @@ PopupMenuDispatcher::~PopupMenuDispatcher()
     // and a dtor isn't the best place to do that!
 }
 
-OUString SAL_CALL PopupMenuDispatcher::getImplementationName() throw( css::uno::RuntimeException )
+OUString SAL_CALL PopupMenuDispatcher::getImplementationName() throw( css::uno::RuntimeException, std::exception )
 {
     return impl_getStaticImplementationName();
 }
 
 sal_Bool SAL_CALL PopupMenuDispatcher::supportsService( const OUString& sServiceName )
-  throw( css::uno::RuntimeException )
+  throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL PopupMenuDispatcher::getSupportedServiceNames()
-  throw( css::uno::RuntimeException )
+  throw( css::uno::RuntimeException, std::exception )
 {
     return impl_getStaticSupportedServiceNames();
 }
@@ -145,7 +145,7 @@ DEFINE_INIT_SERVICE(PopupMenuDispatcher,
 )
 
 void SAL_CALL PopupMenuDispatcher::initialize( const css::uno::Sequence< css::uno::Any >& lArguments )
-throw( css::uno::Exception, css::uno::RuntimeException)
+throw( css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     css::uno::Reference< css::frame::XFrame > xFrame;
 
@@ -175,7 +175,7 @@ SAL_CALL PopupMenuDispatcher::queryDispatch(
     const css::util::URL&  rURL    ,
     const OUString& sTarget ,
     sal_Int32              nFlags  )
-throw( css::uno::RuntimeException )
+throw( css::uno::RuntimeException, std::exception )
 {
     css::uno::Reference< css::frame::XDispatch > xDispatch;
 
@@ -237,7 +237,7 @@ throw( css::uno::RuntimeException )
 css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL
 PopupMenuDispatcher::queryDispatches(
     const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor )
-throw( css::uno::RuntimeException )
+throw( css::uno::RuntimeException, std::exception )
 {
     sal_Int32 nCount = lDescriptor.getLength();
     css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > lDispatcher( nCount );
@@ -252,13 +252,13 @@ throw( css::uno::RuntimeException )
 }
 
 void SAL_CALL PopupMenuDispatcher::dispatch( const URL& /*aURL*/, const Sequence< PropertyValue >& /*seqProperties*/ )
-throw( RuntimeException )
+throw( RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL PopupMenuDispatcher::addStatusListener( const uno::Reference< XStatusListener >& xControl,
                                                       const URL& aURL )
-throw( RuntimeException )
+throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );
@@ -269,7 +269,7 @@ throw( RuntimeException )
 
 void SAL_CALL PopupMenuDispatcher::removeStatusListener( const uno::Reference< XStatusListener >& xControl,
                                                          const URL& aURL )
-throw( RuntimeException )
+throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );
@@ -279,7 +279,7 @@ throw( RuntimeException )
 }
 
 void SAL_CALL PopupMenuDispatcher::frameAction( const FrameActionEvent& aEvent )
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -291,7 +291,7 @@ throw ( RuntimeException )
     }
 }
 
-void SAL_CALL PopupMenuDispatcher::disposing( const EventObject& ) throw( RuntimeException )
+void SAL_CALL PopupMenuDispatcher::disposing( const EventObject& ) throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );

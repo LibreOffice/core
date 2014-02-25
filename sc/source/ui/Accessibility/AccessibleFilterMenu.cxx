@@ -100,48 +100,48 @@ ScAccessibleFilterMenu::~ScAccessibleFilterMenu()
 // XAccessibleComponent
 
 Reference<XAccessible> ScAccessibleFilterMenu::getAccessibleAtPoint( const ::com::sun::star::awt::Point& /*rPoint*/ )
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
 {
     return this;
 }
 
-sal_Bool ScAccessibleFilterMenu::isVisible() throw (RuntimeException)
+sal_Bool ScAccessibleFilterMenu::isVisible() throw (RuntimeException, std::exception)
 {
     return mpWindow->IsVisible();
 }
 
 void ScAccessibleFilterMenu::grabFocus()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
 }
 
 sal_Int32 ScAccessibleFilterMenu::getForeground()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return 0;
 }
 
 sal_Int32 ScAccessibleFilterMenu::getBackground()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return 0;
 }
 
 // XAccessibleContext
 
-OUString ScAccessibleFilterMenu::getAccessibleName() throw (RuntimeException)
+OUString ScAccessibleFilterMenu::getAccessibleName() throw (RuntimeException, std::exception)
 {
     return ScAccessibleContextBase::getAccessibleName();
 }
 
 sal_Int32 ScAccessibleFilterMenu::getAccessibleChildCount()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return getMenuItemCount();
 }
 
 Reference<XAccessible> ScAccessibleFilterMenu::getAccessibleChild(sal_Int32 nIndex)
-    throw (RuntimeException, IndexOutOfBoundsException)
+    throw (RuntimeException, IndexOutOfBoundsException, std::exception)
 {
     if (maMenuItems.size() <= static_cast<size_t>(nIndex))
         throw IndexOutOfBoundsException();
@@ -150,14 +150,14 @@ Reference<XAccessible> ScAccessibleFilterMenu::getAccessibleChild(sal_Int32 nInd
 }
 
 Reference<XAccessibleStateSet> ScAccessibleFilterMenu::getAccessibleStateSet()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     updateStates();
     return mxStateSet;
 }
 
 OUString ScAccessibleFilterMenu::getImplementationName()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return OUString("ScAccessibleFilterMenu");
 }
@@ -167,7 +167,7 @@ OUString ScAccessibleFilterMenu::getImplementationName()
 void ScAccessibleFilterMenu::addAccessibleEventListener(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleEventListener>& xListener)
-    throw (com::sun::star::uno::RuntimeException)
+    throw (com::sun::star::uno::RuntimeException, std::exception)
 {
     ScAccessibleContextBase::addAccessibleEventListener(xListener);
     for_each(maMenuItems.begin(), maMenuItems.end(), AddRemoveEventListener(xListener, true));
@@ -176,7 +176,7 @@ void ScAccessibleFilterMenu::addAccessibleEventListener(
 void ScAccessibleFilterMenu::removeAccessibleEventListener(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleEventListener>& xListener)
-    throw (com::sun::star::uno::RuntimeException)
+    throw (com::sun::star::uno::RuntimeException, std::exception)
 {
     ScAccessibleContextBase::removeAccessibleEventListener(xListener);
     for_each(maMenuItems.begin(), maMenuItems.end(), AddRemoveEventListener(xListener, false));
@@ -185,7 +185,7 @@ void ScAccessibleFilterMenu::removeAccessibleEventListener(
 // XAccessibleSelection
 
 void ScAccessibleFilterMenu::selectAccessibleChild(sal_Int32 nChildIndex)
-    throw (IndexOutOfBoundsException, RuntimeException)
+    throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     if (static_cast<size_t>(nChildIndex) >= maMenuItems.size())
         throw IndexOutOfBoundsException();
@@ -194,7 +194,7 @@ void ScAccessibleFilterMenu::selectAccessibleChild(sal_Int32 nChildIndex)
 }
 
 sal_Bool ScAccessibleFilterMenu::isAccessibleChildSelected(sal_Int32 nChildIndex)
-    throw (IndexOutOfBoundsException, RuntimeException)
+    throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     if (static_cast<size_t>(nChildIndex) >= maMenuItems.size())
         throw IndexOutOfBoundsException();
@@ -202,24 +202,24 @@ sal_Bool ScAccessibleFilterMenu::isAccessibleChildSelected(sal_Int32 nChildIndex
     return mpWindow->isMenuItemSelected(static_cast<size_t>(nChildIndex));
 }
 
-void ScAccessibleFilterMenu::clearAccessibleSelection() throw (RuntimeException)
+void ScAccessibleFilterMenu::clearAccessibleSelection() throw (RuntimeException, std::exception)
 {
     mpWindow->clearSelectedMenuItem();
 }
 
-void ScAccessibleFilterMenu::selectAllAccessibleChildren() throw (RuntimeException)
+void ScAccessibleFilterMenu::selectAllAccessibleChildren() throw (RuntimeException, std::exception)
 {
     // not suported - this is a menu, you can't select all menu items.
 }
 
-sal_Int32 ScAccessibleFilterMenu::getSelectedAccessibleChildCount() throw (RuntimeException)
+sal_Int32 ScAccessibleFilterMenu::getSelectedAccessibleChildCount() throw (RuntimeException, std::exception)
 {
     // Since this is a menu, either one menu item is selected, or none at all.
     return mpWindow->getSelectedMenuItem() == ScMenuFloatingWindow::MENU_NOT_SELECTED ? 0 : 1;
 }
 
 Reference<XAccessible> ScAccessibleFilterMenu::getSelectedAccessibleChild(sal_Int32 nChildIndex)
-    throw (IndexOutOfBoundsException, RuntimeException)
+    throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     if (static_cast<size_t>(nChildIndex) >= maMenuItems.size())
         throw IndexOutOfBoundsException();
@@ -227,7 +227,7 @@ Reference<XAccessible> ScAccessibleFilterMenu::getSelectedAccessibleChild(sal_In
     return maMenuItems[nChildIndex];
 }
 
-void ScAccessibleFilterMenu::deselectAccessibleChild(sal_Int32 nChildIndex) throw (IndexOutOfBoundsException, RuntimeException)
+void ScAccessibleFilterMenu::deselectAccessibleChild(sal_Int32 nChildIndex) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     if (static_cast<size_t>(nChildIndex) >= maMenuItems.size())
         throw IndexOutOfBoundsException();
@@ -238,7 +238,7 @@ void ScAccessibleFilterMenu::deselectAccessibleChild(sal_Int32 nChildIndex) thro
 // XInterface
 
 uno::Any SAL_CALL ScAccessibleFilterMenu::queryInterface( uno::Type const & rType )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     Any any = ScAccessibleContextBase::queryInterface(rType);
     if (any.hasValue())
@@ -260,14 +260,14 @@ void SAL_CALL ScAccessibleFilterMenu::release() throw ()
 // XTypeProvider
 
 Sequence<sal_Int8> ScAccessibleFilterMenu::getImplementationId()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     Sequence<sal_Int8> aId(16);
     return aId;
 }
 
 Rectangle ScAccessibleFilterMenu::GetBoundingBoxOnScreen() const
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     if (mnMenuPos == ScMenuFloatingWindow::MENU_NOT_SELECTED)
         return Rectangle();
@@ -290,7 +290,7 @@ Rectangle ScAccessibleFilterMenu::GetBoundingBoxOnScreen() const
 }
 
 Rectangle ScAccessibleFilterMenu::GetBoundingBox() const
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     if (mnMenuPos == ScMenuFloatingWindow::MENU_NOT_SELECTED)
         return Rectangle();

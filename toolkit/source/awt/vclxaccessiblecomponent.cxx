@@ -92,17 +92,17 @@ VCLXAccessibleComponent::~VCLXAccessibleComponent()
 IMPLEMENT_FORWARD_XINTERFACE3( VCLXAccessibleComponent, AccessibleExtendedComponentHelper_BASE, OAccessibleImplementationAccess, VCLXAccessibleComponent_BASE )
 IMPLEMENT_FORWARD_XTYPEPROVIDER3( VCLXAccessibleComponent, AccessibleExtendedComponentHelper_BASE, OAccessibleImplementationAccess, VCLXAccessibleComponent_BASE )
 
-OUString VCLXAccessibleComponent::getImplementationName() throw (uno::RuntimeException)
+OUString VCLXAccessibleComponent::getImplementationName() throw (uno::RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.toolkit.AccessibleWindow");
 }
 
-sal_Bool VCLXAccessibleComponent::supportsService( const OUString& rServiceName ) throw (uno::RuntimeException)
+sal_Bool VCLXAccessibleComponent::supportsService( const OUString& rServiceName ) throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > VCLXAccessibleComponent::getSupportedServiceNames() throw (uno::RuntimeException)
+uno::Sequence< OUString > VCLXAccessibleComponent::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString > aNames(1);
     aNames[0] = "com.sun.star.awt.AccessibleWindow";
@@ -510,7 +510,7 @@ TRANSIENT
 
 
 // accessibility::XAccessibleContext
-sal_Int32 VCLXAccessibleComponent::getAccessibleChildCount() throw (uno::RuntimeException)
+sal_Int32 VCLXAccessibleComponent::getAccessibleChildCount() throw (uno::RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -521,7 +521,7 @@ sal_Int32 VCLXAccessibleComponent::getAccessibleChildCount() throw (uno::Runtime
     return nChildren;
 }
 
-uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessibleChild( sal_Int32 i ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessibleChild( sal_Int32 i ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -551,7 +551,7 @@ uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getVclPare
     return xAcc;
 }
 
-uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessibleParent(  ) throw (uno::RuntimeException)
+uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessibleParent(  ) throw (uno::RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -563,7 +563,7 @@ uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessi
     return xAcc;
 }
 
-sal_Int32 VCLXAccessibleComponent::getAccessibleIndexInParent(  ) throw (uno::RuntimeException)
+sal_Int32 VCLXAccessibleComponent::getAccessibleIndexInParent(  ) throw (uno::RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -612,7 +612,7 @@ sal_Int32 VCLXAccessibleComponent::getAccessibleIndexInParent(  ) throw (uno::Ru
     return nIndex;
 }
 
-sal_Int16 VCLXAccessibleComponent::getAccessibleRole(  ) throw (uno::RuntimeException)
+sal_Int16 VCLXAccessibleComponent::getAccessibleRole(  ) throw (uno::RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -624,7 +624,7 @@ sal_Int16 VCLXAccessibleComponent::getAccessibleRole(  ) throw (uno::RuntimeExce
     return nRole;
 }
 
-OUString VCLXAccessibleComponent::getAccessibleDescription(  ) throw (uno::RuntimeException)
+OUString VCLXAccessibleComponent::getAccessibleDescription(  ) throw (uno::RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -636,7 +636,7 @@ OUString VCLXAccessibleComponent::getAccessibleDescription(  ) throw (uno::Runti
     return aDescription;
 }
 
-OUString VCLXAccessibleComponent::getAccessibleName(  ) throw (uno::RuntimeException)
+OUString VCLXAccessibleComponent::getAccessibleName(  ) throw (uno::RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -653,7 +653,7 @@ OUString VCLXAccessibleComponent::getAccessibleName(  ) throw (uno::RuntimeExcep
     return aName;
 }
 
-uno::Reference< accessibility::XAccessibleRelationSet > VCLXAccessibleComponent::getAccessibleRelationSet(  ) throw (uno::RuntimeException)
+uno::Reference< accessibility::XAccessibleRelationSet > VCLXAccessibleComponent::getAccessibleRelationSet(  ) throw (uno::RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -663,7 +663,7 @@ uno::Reference< accessibility::XAccessibleRelationSet > VCLXAccessibleComponent:
     return xSet;
 }
 
-uno::Reference< accessibility::XAccessibleStateSet > VCLXAccessibleComponent::getAccessibleStateSet(  ) throw (uno::RuntimeException)
+uno::Reference< accessibility::XAccessibleStateSet > VCLXAccessibleComponent::getAccessibleStateSet(  ) throw (uno::RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -673,14 +673,14 @@ uno::Reference< accessibility::XAccessibleStateSet > VCLXAccessibleComponent::ge
     return xSet;
 }
 
-lang::Locale VCLXAccessibleComponent::getLocale() throw (accessibility::IllegalAccessibleComponentStateException, uno::RuntimeException)
+lang::Locale VCLXAccessibleComponent::getLocale() throw (accessibility::IllegalAccessibleComponentStateException, uno::RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
     return Application::GetSettings().GetLanguageTag().getLocale();
 }
 
-uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessibleAtPoint( const awt::Point& rPoint ) throw (uno::RuntimeException)
+uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessibleAtPoint( const awt::Point& rPoint ) throw (uno::RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -760,7 +760,7 @@ awt::Rectangle VCLXAccessibleComponent::implGetBounds() throw (uno::RuntimeExcep
     return aBounds;
 }
 
-awt::Point VCLXAccessibleComponent::getLocationOnScreen(  ) throw (uno::RuntimeException)
+awt::Point VCLXAccessibleComponent::getLocationOnScreen(  ) throw (uno::RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -775,7 +775,7 @@ awt::Point VCLXAccessibleComponent::getLocationOnScreen(  ) throw (uno::RuntimeE
     return aPos;
 }
 
-void VCLXAccessibleComponent::grabFocus(  ) throw (uno::RuntimeException)
+void VCLXAccessibleComponent::grabFocus(  ) throw (uno::RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -784,7 +784,7 @@ void VCLXAccessibleComponent::grabFocus(  ) throw (uno::RuntimeException)
         mxWindow->setFocus();
 }
 
-sal_Int32 SAL_CALL VCLXAccessibleComponent::getForeground(  ) throw (uno::RuntimeException)
+sal_Int32 SAL_CALL VCLXAccessibleComponent::getForeground(  ) throw (uno::RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -811,7 +811,7 @@ sal_Int32 SAL_CALL VCLXAccessibleComponent::getForeground(  ) throw (uno::Runtim
     return nColor;
 }
 
-sal_Int32 SAL_CALL VCLXAccessibleComponent::getBackground(  ) throw (uno::RuntimeException)
+sal_Int32 SAL_CALL VCLXAccessibleComponent::getBackground(  ) throw (uno::RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -830,7 +830,7 @@ sal_Int32 SAL_CALL VCLXAccessibleComponent::getBackground(  ) throw (uno::Runtim
 
 // XAccessibleExtendedComponent
 
-uno::Reference< awt::XFont > SAL_CALL VCLXAccessibleComponent::getFont(  ) throw (uno::RuntimeException)
+uno::Reference< awt::XFont > SAL_CALL VCLXAccessibleComponent::getFont(  ) throw (uno::RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -855,7 +855,7 @@ uno::Reference< awt::XFont > SAL_CALL VCLXAccessibleComponent::getFont(  ) throw
     return xFont;
 }
 
-OUString SAL_CALL VCLXAccessibleComponent::getTitledBorderText(  ) throw (uno::RuntimeException)
+OUString SAL_CALL VCLXAccessibleComponent::getTitledBorderText(  ) throw (uno::RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -866,7 +866,7 @@ OUString SAL_CALL VCLXAccessibleComponent::getTitledBorderText(  ) throw (uno::R
     return sRet;
 }
 
-OUString SAL_CALL VCLXAccessibleComponent::getToolTipText(  ) throw (uno::RuntimeException)
+OUString SAL_CALL VCLXAccessibleComponent::getToolTipText(  ) throw (uno::RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 

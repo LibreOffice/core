@@ -60,7 +60,7 @@ class DropdownToolbarController : public IListBoxListener,
         virtual ~DropdownToolbarController();
 
         // XComponent
-        virtual void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException );
+        virtual void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException, std::exception );
 
         // IComboBoxListener
         virtual void Select();

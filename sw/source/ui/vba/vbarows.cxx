@@ -43,12 +43,12 @@ public:
     {
         mxIndexAccess.set( mxTextTable->getRows(), uno::UNO_QUERY );
     }
-    virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException)
+    virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception)
     {
         return ( nIndex < mxIndexAccess->getCount() );
     }
 
-    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
     {
         if( nIndex < mxIndexAccess->getCount() )
         {
@@ -75,7 +75,7 @@ SwVbaRows::SwVbaRows( const uno::Reference< XHelperInterface >& xParent, const u
  * is mapped to WdRowAlignment in Word
  * @return the alignment
  */
-::sal_Int32 SAL_CALL SwVbaRows::getAlignment() throw (uno::RuntimeException)
+::sal_Int32 SAL_CALL SwVbaRows::getAlignment() throw (uno::RuntimeException, std::exception)
 {
     sal_Int16 nAlignment = text::HoriOrientation::LEFT;
     uno::Reference< beans::XPropertySet > xTableProps( mxTextTable, uno::UNO_QUERY_THROW );
@@ -101,7 +101,7 @@ SwVbaRows::SwVbaRows( const uno::Reference< XHelperInterface >& xParent, const u
     return nRet;
 }
 
-void SAL_CALL SwVbaRows::setAlignment( ::sal_Int32 _alignment ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaRows::setAlignment( ::sal_Int32 _alignment ) throw (uno::RuntimeException, std::exception)
 {
     sal_Int16 nAlignment = text::HoriOrientation::LEFT;
     switch( _alignment )
@@ -125,7 +125,7 @@ void SAL_CALL SwVbaRows::setAlignment( ::sal_Int32 _alignment ) throw (uno::Runt
     xTableProps->setPropertyValue("HoriOrient", uno::makeAny( nAlignment ) );
 }
 
-uno::Any SAL_CALL SwVbaRows::getAllowBreakAcrossPages() throw (uno::RuntimeException)
+uno::Any SAL_CALL SwVbaRows::getAllowBreakAcrossPages() throw (uno::RuntimeException, std::exception)
 {
     sal_Bool bAllowBreak = sal_False;
     uno::Reference< container::XIndexAccess > xRowsAccess( mxTableRows, uno::UNO_QUERY_THROW );
@@ -147,7 +147,7 @@ uno::Any SAL_CALL SwVbaRows::getAllowBreakAcrossPages() throw (uno::RuntimeExcep
     return uno::makeAny( bAllowBreak );
 }
 
-void SAL_CALL SwVbaRows::setAllowBreakAcrossPages( const uno::Any& _allowbreakacrosspages ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaRows::setAllowBreakAcrossPages( const uno::Any& _allowbreakacrosspages ) throw (uno::RuntimeException, std::exception)
 {
     sal_Bool bAllowBreak = sal_False;
     _allowbreakacrosspages >>= bAllowBreak;
@@ -159,7 +159,7 @@ void SAL_CALL SwVbaRows::setAllowBreakAcrossPages( const uno::Any& _allowbreakac
     }
 }
 
-float SAL_CALL SwVbaRows::getSpaceBetweenColumns() throw (uno::RuntimeException)
+float SAL_CALL SwVbaRows::getSpaceBetweenColumns() throw (uno::RuntimeException, std::exception)
 {
     // just get the first spacing of the first cell
     uno::Reference< table::XCellRange > xCellRange( mxTextTable, uno::UNO_QUERY_THROW );
@@ -171,7 +171,7 @@ float SAL_CALL SwVbaRows::getSpaceBetweenColumns() throw (uno::RuntimeException)
     return static_cast< float >( Millimeter::getInPoints( nLeftBorderDistance + nRightBorderDistance ) );
 }
 
-void SAL_CALL SwVbaRows::setSpaceBetweenColumns( float _spacebetweencolumns ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaRows::setSpaceBetweenColumns( float _spacebetweencolumns ) throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nSpace = Millimeter::getInHundredthsOfOneMillimeter( _spacebetweencolumns ) / 2;
     uno::Reference< container::XIndexAccess > xColumnAccess( mxTextTable->getColumns(), uno::UNO_QUERY_THROW );
@@ -189,12 +189,12 @@ void SAL_CALL SwVbaRows::setSpaceBetweenColumns( float _spacebetweencolumns ) th
     }
 }
 
-void SAL_CALL SwVbaRows::Delete(  ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaRows::Delete(  ) throw (uno::RuntimeException, std::exception)
 {
     mxTableRows->removeByIndex( mnStartRowIndex, getCount() );
 }
 
-void SAL_CALL SwVbaRows::SetLeftIndent( float LeftIndent, ::sal_Int32 RulerStyle ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaRows::SetLeftIndent( float LeftIndent, ::sal_Int32 RulerStyle ) throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< word::XColumns > xColumns( new SwVbaColumns( getParent(), mxContext, mxTextTable, mxTextTable->getColumns() ) );
     sal_Int32 nIndent = (sal_Int32)( LeftIndent );
@@ -306,7 +306,7 @@ void SwVbaRows::setIndentWithAdjustNone( sal_Int32 indent ) throw (uno::RuntimeE
     xTableProps->setPropertyValue("Width", uno::makeAny( nNewWidth ) );
  }
 
-void SAL_CALL SwVbaRows::Select(  ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaRows::Select(  ) throw (uno::RuntimeException, std::exception)
 {
     SwVbaRow::SelectRow( getCurrentWordDoc(mxContext), mxTextTable, mnStartRowIndex, mnEndRowIndex );
 }

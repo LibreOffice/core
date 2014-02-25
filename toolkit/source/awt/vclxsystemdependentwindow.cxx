@@ -49,7 +49,7 @@ VCLXSystemDependentWindow::~VCLXSystemDependentWindow()
 }
 
 // ::com::sun::star::uno::XInterface
-::com::sun::star::uno::Any VCLXSystemDependentWindow::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Any VCLXSystemDependentWindow::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
                                         (static_cast< ::com::sun::star::awt::XSystemDependentWindowPeer* >(this)) );
@@ -62,7 +62,7 @@ IMPL_XTYPEPROVIDER_START( VCLXSystemDependentWindow )
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
 
-::com::sun::star::uno::Any VCLXSystemDependentWindow::getWindowHandle( const ::com::sun::star::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Any VCLXSystemDependentWindow::getWindowHandle( const ::com::sun::star::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 

@@ -49,27 +49,27 @@ public:
 
     //XIndexReplace
     virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const com::sun::star::uno::Any& Element ) throw(
-    com::sun::star::lang::IllegalArgumentException, com::sun::star::lang::IndexOutOfBoundsException, com::sun::star::lang::WrappedTargetException, com::sun::star::uno::RuntimeException);
+    com::sun::star::lang::IllegalArgumentException, com::sun::star::lang::IndexOutOfBoundsException, com::sun::star::lang::WrappedTargetException, com::sun::star::uno::RuntimeException, std::exception);
 
     //XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() throw(com::sun::star::uno::RuntimeException) ;
+    virtual sal_Int32 SAL_CALL getCount() throw(com::sun::star::uno::RuntimeException, std::exception) ;
     virtual com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw(com::sun::star::lang::IndexOutOfBoundsException,
-        com::sun::star::lang::WrappedTargetException, com::sun::star::uno::RuntimeException);
+        com::sun::star::lang::WrappedTargetException, com::sun::star::uno::RuntimeException, std::exception);
 
     //XElementAccess
-    virtual com::sun::star::uno::Type SAL_CALL getElementType() throw(com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasElements() throw(com::sun::star::uno::RuntimeException);
+    virtual com::sun::star::uno::Type SAL_CALL getElementType() throw(com::sun::star::uno::RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL hasElements() throw(com::sun::star::uno::RuntimeException, std::exception);
 
     // XAnyCompare
-    virtual sal_Int16 SAL_CALL compare( const com::sun::star::uno::Any& Any1, const com::sun::star::uno::Any& Any2 ) throw(com::sun::star::uno::RuntimeException);
+    virtual sal_Int16 SAL_CALL compare( const com::sun::star::uno::Any& Any1, const com::sun::star::uno::Any& Any2 ) throw(com::sun::star::uno::RuntimeException, std::exception);
 
     // XCloneable
-    virtual com::sun::star::uno::Reference< com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw (com::sun::star::uno::RuntimeException);
+    virtual com::sun::star::uno::Reference< com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw (com::sun::star::uno::RuntimeException, std::exception);
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw(com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(com::sun::star::uno::RuntimeException);
-    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw(com::sun::star::uno::RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(com::sun::star::uno::RuntimeException, std::exception);
+    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(com::sun::star::uno::RuntimeException, std::exception);
 
     // internal
     com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> getNumberingRuleByIndex( sal_Int32 nIndex) const throw();

@@ -41,7 +41,7 @@ ScVbaFormatCondition::ScVbaFormatCondition(  const uno::Reference< XHelperInterf
 
 
 void SAL_CALL
-ScVbaFormatCondition::Delete(  ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaFormatCondition::Delete(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     ScVbaFormatConditions* pFormatConditions = lcl_getScVbaFormatConditionsPtr( moFormatConditions );
     pFormatConditions->removeFormatCondition(msStyleName, sal_True);
@@ -49,7 +49,7 @@ ScVbaFormatCondition::Delete(  ) throw (script::BasicErrorException, uno::Runtim
 }
 
 void SAL_CALL
-ScVbaFormatCondition::Modify( ::sal_Int32 _nType, const uno::Any& _aOperator, const uno::Any& _aFormula1, const uno::Any& _aFormula2 ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaFormatCondition::Modify( ::sal_Int32 _nType, const uno::Any& _aOperator, const uno::Any& _aFormula1, const uno::Any& _aFormula2 ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     try
     {
@@ -64,18 +64,18 @@ ScVbaFormatCondition::Modify( ::sal_Int32 _nType, const uno::Any& _aOperator, co
 }
 
 uno::Reference< excel::XInterior > SAL_CALL
-ScVbaFormatCondition::Interior(  ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaFormatCondition::Interior(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     return mxStyle->Interior();
 }
 
 uno::Reference< excel::XFont > SAL_CALL
-ScVbaFormatCondition::Font(  ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaFormatCondition::Font(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     return mxStyle->Font();
 }
 uno::Any SAL_CALL
-ScVbaFormatCondition::Borders( const uno::Any& Index ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaFormatCondition::Borders( const uno::Any& Index ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 { return mxStyle->Borders( Index );
 }
 
@@ -113,7 +113,7 @@ ScVbaFormatCondition::setFormula2( const uno::Any& _aFormula2) throw ( script::B
 }
 
 ::sal_Int32 SAL_CALL
-ScVbaFormatCondition::Type(  ) throw ( script::BasicErrorException, uno::RuntimeException )
+ScVbaFormatCondition::Type(  ) throw ( script::BasicErrorException, uno::RuntimeException, std::exception )
 {
     sal_Int32 nReturnType = 0;
     if ( mxSheetCondition->getOperator() == sheet::ConditionOperator_FORMULA)

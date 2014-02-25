@@ -870,7 +870,7 @@ Bridge::~Bridge() {
 }
 
 css::uno::Reference< css::uno::XInterface > Bridge::getInstance(
-    OUString const & sInstanceName) throw (css::uno::RuntimeException)
+    OUString const & sInstanceName) throw (css::uno::RuntimeException, std::exception)
 {
     if (sInstanceName.isEmpty()) {
         throw css::uno::RuntimeException(
@@ -909,18 +909,18 @@ css::uno::Reference< css::uno::XInterface > Bridge::getInstance(
         css::uno::UNO_REF_NO_ACQUIRE);
 }
 
-OUString Bridge::getName() throw (css::uno::RuntimeException) {
+OUString Bridge::getName() throw (css::uno::RuntimeException, std::exception) {
     return name_;
 }
 
-OUString Bridge::getDescription() throw (css::uno::RuntimeException) {
+OUString Bridge::getDescription() throw (css::uno::RuntimeException, std::exception) {
     OUStringBuffer b(name_);
     b.append(':');
     b.append(connection_->getDescription());
     return b.makeStringAndClear();
 }
 
-void Bridge::dispose() throw (css::uno::RuntimeException) {
+void Bridge::dispose() throw (css::uno::RuntimeException, std::exception) {
     // For terminate(true) not to deadlock, an external protocol must ensure
     // that dispose is not called from a thread pool worker thread (that dispose
     // is never called from the reader or writer thread is already ensured
@@ -935,7 +935,7 @@ void Bridge::dispose() throw (css::uno::RuntimeException) {
 
 void Bridge::addEventListener(
     css::uno::Reference< css::lang::XEventListener > const & xListener)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     assert(xListener.is());
     {
@@ -952,7 +952,7 @@ void Bridge::addEventListener(
 
 void Bridge::removeEventListener(
     css::uno::Reference< css::lang::XEventListener > const & aListener)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard g(mutex_);
     Listeners::iterator i(

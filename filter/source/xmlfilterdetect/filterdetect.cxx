@@ -91,7 +91,7 @@ OUString supportedByType( const OUString clipBoardFormat ,  const OUString resul
 
 }
 
-OUString SAL_CALL FilterDetect::detect( com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& aArguments ) throw( com::sun::star::uno::RuntimeException )
+OUString SAL_CALL FilterDetect::detect( com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& aArguments ) throw( com::sun::star::uno::RuntimeException, std::exception )
 {
     OUString sTypeName;
     OUString sUrl;
@@ -211,7 +211,7 @@ OUString SAL_CALL FilterDetect::detect( com::sun::star::uno::Sequence< com::sun:
 // XInitialization
 
 void SAL_CALL FilterDetect::initialize( const Sequence< Any >& aArguments )
-    throw (Exception, RuntimeException)
+    throw (Exception, RuntimeException, std::exception)
 {
     Sequence < PropertyValue > aAnySeq;
     sal_Int32 nLength = aArguments.getLength();
@@ -264,18 +264,18 @@ Reference< XInterface > FilterDetect_createInstance( const Reference< XComponent
 
 // XServiceInfo
 OUString SAL_CALL FilterDetect::getImplementationName(  )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return FilterDetect_getImplementationName();
 }
 sal_Bool SAL_CALL FilterDetect::supportsService( const OUString& rServiceName )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return cppu::supportsService( this, rServiceName );
 }
 
 Sequence< OUString > SAL_CALL FilterDetect::getSupportedServiceNames(  )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return FilterDetect_getSupportedServiceNames();
 }

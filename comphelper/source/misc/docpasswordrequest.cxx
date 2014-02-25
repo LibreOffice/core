@@ -53,7 +53,7 @@ public:
     inline bool     isSelected() const { return mbSelected; }
     inline void         reset() { mbSelected = false; }
 
-    virtual void SAL_CALL select() throw( RuntimeException ) { mbSelected = true; }
+    virtual void SAL_CALL select() throw( RuntimeException, std::exception ) { mbSelected = true; }
 
 private:
     bool            mbSelected;
@@ -69,16 +69,16 @@ public:
     inline bool     isSelected() const { return mbSelected; }
     inline void         reset() { mbSelected = false; }
 
-    virtual void SAL_CALL select() throw( RuntimeException ) { mbSelected = true; }
+    virtual void SAL_CALL select() throw( RuntimeException, std::exception ) { mbSelected = true; }
 
-    virtual void SAL_CALL setPassword( const OUString& rPass ) throw( RuntimeException ) { maPassword = rPass; }
-    virtual OUString SAL_CALL getPassword() throw( RuntimeException ) { return maPassword; }
+    virtual void SAL_CALL setPassword( const OUString& rPass ) throw( RuntimeException, std::exception ) { maPassword = rPass; }
+    virtual OUString SAL_CALL getPassword() throw( RuntimeException, std::exception ) { return maPassword; }
 
-    virtual void SAL_CALL setPasswordToModify( const OUString& rPass ) throw( RuntimeException ) { maModifyPassword = rPass; }
-    virtual OUString SAL_CALL getPasswordToModify() throw( RuntimeException ) { return maModifyPassword; }
+    virtual void SAL_CALL setPasswordToModify( const OUString& rPass ) throw( RuntimeException, std::exception ) { maModifyPassword = rPass; }
+    virtual OUString SAL_CALL getPasswordToModify() throw( RuntimeException, std::exception ) { return maModifyPassword; }
 
-    virtual void SAL_CALL setRecommendReadOnly( sal_Bool bReadOnly ) throw( RuntimeException ) { mbReadOnly = bReadOnly; }
-    virtual sal_Bool SAL_CALL getRecommendReadOnly() throw( RuntimeException ) { return mbReadOnly; }
+    virtual void SAL_CALL setRecommendReadOnly( sal_Bool bReadOnly ) throw( RuntimeException, std::exception ) { mbReadOnly = bReadOnly; }
+    virtual sal_Bool SAL_CALL getRecommendReadOnly() throw( RuntimeException, std::exception ) { return mbReadOnly; }
 
 private:
     OUString            maPassword;
@@ -116,12 +116,12 @@ OUString SimplePasswordRequest::getPassword() const
     return mpPassword->getPassword();
 }
 
-Any SAL_CALL SimplePasswordRequest::getRequest() throw( RuntimeException )
+Any SAL_CALL SimplePasswordRequest::getRequest() throw( RuntimeException, std::exception )
 {
     return maRequest;
 }
 
-Sequence< Reference< XInteractionContinuation > > SAL_CALL SimplePasswordRequest::getContinuations() throw( RuntimeException )
+Sequence< Reference< XInteractionContinuation > > SAL_CALL SimplePasswordRequest::getContinuations() throw( RuntimeException, std::exception )
 {
     return maContinuations;
 }
@@ -182,12 +182,12 @@ bool DocPasswordRequest::getRecommendReadOnly() const
     return mpPassword->getRecommendReadOnly();
 }
 
-Any SAL_CALL DocPasswordRequest::getRequest() throw( RuntimeException )
+Any SAL_CALL DocPasswordRequest::getRequest() throw( RuntimeException, std::exception )
 {
     return maRequest;
 }
 
-Sequence< Reference< XInteractionContinuation > > SAL_CALL DocPasswordRequest::getContinuations() throw( RuntimeException )
+Sequence< Reference< XInteractionContinuation > > SAL_CALL DocPasswordRequest::getContinuations() throw( RuntimeException, std::exception )
 {
     return maContinuations;
 }

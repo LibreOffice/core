@@ -35,60 +35,60 @@ SwVbaTableOfContents::~SwVbaTableOfContents()
 {
 }
 
-::sal_Int32 SAL_CALL SwVbaTableOfContents::getLowerHeadingLevel() throw (uno::RuntimeException)
+::sal_Int32 SAL_CALL SwVbaTableOfContents::getLowerHeadingLevel() throw (uno::RuntimeException, std::exception)
 {
     sal_Int16 nLevel = 0;
     mxTocProps->getPropertyValue("Level") >>= nLevel;
     return nLevel;
 }
 
-void SAL_CALL SwVbaTableOfContents::setLowerHeadingLevel( ::sal_Int32 _lowerheadinglevel ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaTableOfContents::setLowerHeadingLevel( ::sal_Int32 _lowerheadinglevel ) throw (uno::RuntimeException, std::exception)
 {
     mxTocProps->setPropertyValue("Level", uno::makeAny( sal_Int8( _lowerheadinglevel ) ) );
 }
 
-::sal_Int32 SAL_CALL SwVbaTableOfContents::getTabLeader() throw (uno::RuntimeException)
+::sal_Int32 SAL_CALL SwVbaTableOfContents::getTabLeader() throw (uno::RuntimeException, std::exception)
 {
     // not support in Writer
     return word::WdTabLeader::wdTabLeaderDots;
 }
 
-void SAL_CALL SwVbaTableOfContents::setTabLeader( ::sal_Int32 /*_tableader*/ ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaTableOfContents::setTabLeader( ::sal_Int32 /*_tableader*/ ) throw (uno::RuntimeException, std::exception)
 {
     // not support in Writer
 }
 
-::sal_Bool SAL_CALL SwVbaTableOfContents::getUseFields() throw (css::uno::RuntimeException)
+::sal_Bool SAL_CALL SwVbaTableOfContents::getUseFields() throw (css::uno::RuntimeException, std::exception)
 {
     sal_Bool bUseFields = sal_False;
     mxTocProps->getPropertyValue("CreateFromMarks") >>= bUseFields;
     return bUseFields;
 }
 
-void SAL_CALL SwVbaTableOfContents::setUseFields( ::sal_Bool _useFields ) throw (css::uno::RuntimeException)
+void SAL_CALL SwVbaTableOfContents::setUseFields( ::sal_Bool _useFields ) throw (css::uno::RuntimeException, std::exception)
 {
     mxTocProps->setPropertyValue("CreateFromMarks", uno::makeAny( _useFields ) );
 }
 
-::sal_Bool SAL_CALL SwVbaTableOfContents::getUseOutlineLevels() throw (css::uno::RuntimeException)
+::sal_Bool SAL_CALL SwVbaTableOfContents::getUseOutlineLevels() throw (css::uno::RuntimeException, std::exception)
 {
     sal_Bool bUseOutlineLevels = sal_False;
     mxTocProps->getPropertyValue("CreateFromOutline") >>= bUseOutlineLevels;
     return bUseOutlineLevels;
 }
 
-void SAL_CALL SwVbaTableOfContents::setUseOutlineLevels( ::sal_Bool _useOutlineLevels ) throw (css::uno::RuntimeException)
+void SAL_CALL SwVbaTableOfContents::setUseOutlineLevels( ::sal_Bool _useOutlineLevels ) throw (css::uno::RuntimeException, std::exception)
 {
     mxTocProps->setPropertyValue("CreateFromOutline", uno::makeAny( _useOutlineLevels ) );
 }
 
-void SAL_CALL SwVbaTableOfContents::Delete(  ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaTableOfContents::Delete(  ) throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< text::XTextContent > xTextContent( mxDocumentIndex, uno::UNO_QUERY_THROW );
     mxTextDocument->getText()->removeTextContent( xTextContent );
 }
 
-void SAL_CALL SwVbaTableOfContents::Update(  ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaTableOfContents::Update(  ) throw (uno::RuntimeException, std::exception)
 {
     mxDocumentIndex->update();
 }

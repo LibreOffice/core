@@ -78,7 +78,7 @@ UIConfigElementWrapperBase::~UIConfigElementWrapperBase()
 {
 }
 
-Any SAL_CALL UIConfigElementWrapperBase::queryInterface( const Type& _rType ) throw(RuntimeException)
+Any SAL_CALL UIConfigElementWrapperBase::queryInterface( const Type& _rType ) throw(RuntimeException, std::exception)
 {
     Any aRet = UIConfigElementWrapperBase_BASE::queryInterface( _rType );
     if ( !aRet.hasValue() )
@@ -86,7 +86,7 @@ Any SAL_CALL UIConfigElementWrapperBase::queryInterface( const Type& _rType ) th
     return aRet;
 }
 
-Sequence< Type > SAL_CALL UIConfigElementWrapperBase::getTypes(  ) throw(RuntimeException)
+Sequence< Type > SAL_CALL UIConfigElementWrapperBase::getTypes(  ) throw(RuntimeException, std::exception)
 {
     return comphelper::concatSequences(
         UIConfigElementWrapperBase_BASE::getTypes(),
@@ -95,26 +95,26 @@ Sequence< Type > SAL_CALL UIConfigElementWrapperBase::getTypes(  ) throw(Runtime
 }
 
 // XComponent
-void SAL_CALL UIConfigElementWrapperBase::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL UIConfigElementWrapperBase::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     m_aListenerContainer.addInterface( ::getCppuType( ( const css::uno::Reference< css::lang::XEventListener >* ) NULL ), xListener );
 }
 
-void SAL_CALL UIConfigElementWrapperBase::removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL UIConfigElementWrapperBase::removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     m_aListenerContainer.removeInterface( ::getCppuType( ( const css::uno::Reference< css::lang::XEventListener >* ) NULL ), aListener );
 }
 
 // XEventListener
 void SAL_CALL UIConfigElementWrapperBase::disposing( const EventObject& )
-throw( RuntimeException )
+throw( RuntimeException, std::exception )
 {
     ResetableGuard aLock( m_aLock );
     m_xConfigSource.clear();
 }
 
 void SAL_CALL UIConfigElementWrapperBase::initialize( const Sequence< Any >& aArguments )
-throw ( Exception, RuntimeException )
+throw ( Exception, RuntimeException, std::exception )
 {
     ResetableGuard aLock( m_aLock );
 
@@ -147,22 +147,22 @@ throw ( Exception, RuntimeException )
 }
 
 // XUpdatable
-void SAL_CALL UIConfigElementWrapperBase::update() throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL UIConfigElementWrapperBase::update() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     // can be implemented by derived class
 }
 
-void SAL_CALL UIConfigElementWrapperBase::elementInserted( const ::com::sun::star::ui::ConfigurationEvent& ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL UIConfigElementWrapperBase::elementInserted( const ::com::sun::star::ui::ConfigurationEvent& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     // can be implemented by derived class
 }
 
-void SAL_CALL UIConfigElementWrapperBase::elementRemoved( const ::com::sun::star::ui::ConfigurationEvent& ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL UIConfigElementWrapperBase::elementRemoved( const ::com::sun::star::ui::ConfigurationEvent& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     // can be implemented by derived class
 }
 
-void SAL_CALL UIConfigElementWrapperBase::elementReplaced( const ::com::sun::star::ui::ConfigurationEvent& ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL UIConfigElementWrapperBase::elementReplaced( const ::com::sun::star::ui::ConfigurationEvent& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     // can be implemented by derived class
 }
@@ -252,7 +252,7 @@ sal_Bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&    
 }
 
 void SAL_CALL UIConfigElementWrapperBase::setFastPropertyValue_NoBroadcast(   sal_Int32               nHandle ,
-                                                                        const com::sun::star::uno::Any&    aValue  ) throw( com::sun::star::uno::Exception )
+                                                                        const com::sun::star::uno::Any&    aValue  ) throw( com::sun::star::uno::Exception, std::exception )
 {
     switch( nHandle )
     {
@@ -401,7 +401,7 @@ void SAL_CALL UIConfigElementWrapperBase::getFastPropertyValue( com::sun::star::
     return(*pInfoHelper);
 }
 
-com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > SAL_CALL UIConfigElementWrapperBase::getPropertySetInfo() throw (::com::sun::star::uno::RuntimeException)
+com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > SAL_CALL UIConfigElementWrapperBase::getPropertySetInfo() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
@@ -450,7 +450,7 @@ const com::sun::star::uno::Sequence< com::sun::star::beans::Property > UIConfigE
     // Return "PropertyDescriptor"
     return lPropertyDescriptor;
 }
-void SAL_CALL UIConfigElementWrapperBase::setSettings( const Reference< XIndexAccess >& xSettings ) throw ( RuntimeException )
+void SAL_CALL UIConfigElementWrapperBase::setSettings( const Reference< XIndexAccess >& xSettings ) throw ( RuntimeException, std::exception )
 {
     ResetableGuard aLock( m_aLock );
 
@@ -489,7 +489,7 @@ void SAL_CALL UIConfigElementWrapperBase::setSettings( const Reference< XIndexAc
 void UIConfigElementWrapperBase::impl_fillNewData()
 {
 }
-Reference< XIndexAccess > SAL_CALL UIConfigElementWrapperBase::getSettings( sal_Bool bWriteable ) throw ( RuntimeException )
+Reference< XIndexAccess > SAL_CALL UIConfigElementWrapperBase::getSettings( sal_Bool bWriteable ) throw ( RuntimeException, std::exception )
 {
     ResetableGuard aLock( m_aLock );
 
@@ -500,20 +500,20 @@ Reference< XIndexAccess > SAL_CALL UIConfigElementWrapperBase::getSettings( sal_
     return m_xConfigData;
 }
 
-Reference< XFrame > SAL_CALL UIConfigElementWrapperBase::getFrame() throw (RuntimeException)
+Reference< XFrame > SAL_CALL UIConfigElementWrapperBase::getFrame() throw (RuntimeException, std::exception)
 {
     ResetableGuard aLock( m_aLock );
     Reference< XFrame > xFrame( m_xWeakFrame );
     return xFrame;
 }
 
-OUString SAL_CALL UIConfigElementWrapperBase::getResourceURL() throw (RuntimeException)
+OUString SAL_CALL UIConfigElementWrapperBase::getResourceURL() throw (RuntimeException, std::exception)
 {
     ResetableGuard aLock( m_aLock );
     return m_aResourceURL;
 }
 
-::sal_Int16 SAL_CALL UIConfigElementWrapperBase::getType() throw (RuntimeException)
+::sal_Int16 SAL_CALL UIConfigElementWrapperBase::getType() throw (RuntimeException, std::exception)
 {
     ResetableGuard aLock( m_aLock );
     return m_nType;

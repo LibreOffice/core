@@ -80,29 +80,29 @@ namespace io_stm {
         virtual ~Pump();
 
         // XActiveDataSource
-        virtual void SAL_CALL setOutputStream( const Reference< ::com::sun::star::io::XOutputStream >& xOutput ) throw();
-        virtual Reference< ::com::sun::star::io::XOutputStream > SAL_CALL getOutputStream() throw();
+        virtual void SAL_CALL setOutputStream( const Reference< ::com::sun::star::io::XOutputStream >& xOutput ) throw(std::exception);
+        virtual Reference< ::com::sun::star::io::XOutputStream > SAL_CALL getOutputStream() throw(std::exception);
 
         // XActiveDataSink
-        virtual void SAL_CALL setInputStream( const Reference< ::com::sun::star::io::XInputStream >& xStream ) throw();
-        virtual Reference< ::com::sun::star::io::XInputStream > SAL_CALL getInputStream() throw();
+        virtual void SAL_CALL setInputStream( const Reference< ::com::sun::star::io::XInputStream >& xStream ) throw(std::exception);
+        virtual Reference< ::com::sun::star::io::XInputStream > SAL_CALL getInputStream() throw(std::exception);
 
         // XActiveDataControl
-        virtual void SAL_CALL addListener( const Reference< ::com::sun::star::io::XStreamListener >& xListener ) throw();
-        virtual void SAL_CALL removeListener( const Reference< ::com::sun::star::io::XStreamListener >& xListener ) throw();
-        virtual void SAL_CALL start() throw( RuntimeException );
-        virtual void SAL_CALL terminate() throw();
+        virtual void SAL_CALL addListener( const Reference< ::com::sun::star::io::XStreamListener >& xListener ) throw(std::exception);
+        virtual void SAL_CALL removeListener( const Reference< ::com::sun::star::io::XStreamListener >& xListener ) throw(std::exception);
+        virtual void SAL_CALL start() throw( RuntimeException, std::exception );
+        virtual void SAL_CALL terminate() throw(std::exception);
 
         // XConnectable
-        virtual void SAL_CALL setPredecessor( const Reference< ::com::sun::star::io::XConnectable >& xPred ) throw();
-        virtual Reference< ::com::sun::star::io::XConnectable > SAL_CALL getPredecessor() throw();
-        virtual void SAL_CALL setSuccessor( const Reference< ::com::sun::star::io::XConnectable >& xSucc ) throw();
-        virtual Reference< ::com::sun::star::io::XConnectable > SAL_CALL getSuccessor() throw();
+        virtual void SAL_CALL setPredecessor( const Reference< ::com::sun::star::io::XConnectable >& xPred ) throw(std::exception);
+        virtual Reference< ::com::sun::star::io::XConnectable > SAL_CALL getPredecessor() throw(std::exception);
+        virtual void SAL_CALL setSuccessor( const Reference< ::com::sun::star::io::XConnectable >& xSucc ) throw(std::exception);
+        virtual Reference< ::com::sun::star::io::XConnectable > SAL_CALL getSuccessor() throw(std::exception);
 
     public: // XServiceInfo
-        virtual OUString    SAL_CALL getImplementationName() throw(  );
-        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw(  );
-        virtual sal_Bool     SAL_CALL supportsService(const OUString& ServiceName) throw(  );
+        virtual OUString    SAL_CALL getImplementationName() throw(std::exception  );
+        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw(std::exception  );
+        virtual sal_Bool     SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception  );
     };
 
 Pump::Pump() : m_aThread( 0 ),
@@ -309,7 +309,7 @@ void Pump::run()
  * XConnectable
  */
 
-void Pump::setPredecessor( const Reference< XConnectable >& xPred ) throw()
+void Pump::setPredecessor( const Reference< XConnectable >& xPred ) throw(std::exception)
 {
     Guard< Mutex > aGuard( m_aMutex );
     m_xPred = xPred;
@@ -317,7 +317,7 @@ void Pump::setPredecessor( const Reference< XConnectable >& xPred ) throw()
 
 
 
-Reference< XConnectable > Pump::getPredecessor() throw()
+Reference< XConnectable > Pump::getPredecessor() throw(std::exception)
 {
     Guard< Mutex > aGuard( m_aMutex );
     return m_xPred;
@@ -325,7 +325,7 @@ Reference< XConnectable > Pump::getPredecessor() throw()
 
 
 
-void Pump::setSuccessor( const Reference< XConnectable >& xSucc ) throw()
+void Pump::setSuccessor( const Reference< XConnectable >& xSucc ) throw(std::exception)
 {
     Guard< Mutex > aGuard( m_aMutex );
     m_xSucc = xSucc;
@@ -333,7 +333,7 @@ void Pump::setSuccessor( const Reference< XConnectable >& xSucc ) throw()
 
 
 
-Reference< XConnectable > Pump::getSuccessor() throw()
+Reference< XConnectable > Pump::getSuccessor() throw(std::exception)
 {
     Guard< Mutex > aGuard( m_aMutex );
     return m_xSucc;
@@ -345,21 +345,21 @@ Reference< XConnectable > Pump::getSuccessor() throw()
  * XActiveDataControl
  */
 
-void Pump::addListener( const Reference< XStreamListener >& xListener ) throw()
+void Pump::addListener( const Reference< XStreamListener >& xListener ) throw(std::exception)
 {
     m_cnt.addInterface( xListener );
 }
 
 
 
-void Pump::removeListener( const Reference< XStreamListener >& xListener ) throw()
+void Pump::removeListener( const Reference< XStreamListener >& xListener ) throw(std::exception)
 {
     m_cnt.removeInterface( xListener );
 }
 
 
 
-void Pump::start() throw( RuntimeException )
+void Pump::start() throw( RuntimeException, std::exception )
 {
     Guard< Mutex > aGuard( m_aMutex );
     m_aThread = osl_createSuspendedThread((oslWorkerFunction)Pump::static_run,this);
@@ -379,7 +379,7 @@ void Pump::start() throw( RuntimeException )
 
 
 
-void Pump::terminate() throw()
+void Pump::terminate() throw(std::exception)
 {
     close();
 
@@ -397,7 +397,7 @@ void Pump::terminate() throw()
  * XActiveDataSink
  */
 
-void Pump::setInputStream( const Reference< XInputStream >& xStream ) throw()
+void Pump::setInputStream( const Reference< XInputStream >& xStream ) throw(std::exception)
 {
     Guard< Mutex > aGuard( m_aMutex );
     m_xInput = xStream;
@@ -409,7 +409,7 @@ void Pump::setInputStream( const Reference< XInputStream >& xStream ) throw()
 
 
 
-Reference< XInputStream > Pump::getInputStream() throw()
+Reference< XInputStream > Pump::getInputStream() throw(std::exception)
 {
     Guard< Mutex > aGuard( m_aMutex );
     return m_xInput;
@@ -421,7 +421,7 @@ Reference< XInputStream > Pump::getInputStream() throw()
  * XActiveDataSource
  */
 
-void Pump::setOutputStream( const Reference< XOutputStream >& xOut ) throw()
+void Pump::setOutputStream( const Reference< XOutputStream >& xOut ) throw(std::exception)
 {
     Guard< Mutex > aGuard( m_aMutex );
     m_xOutput = xOut;
@@ -431,26 +431,26 @@ void Pump::setOutputStream( const Reference< XOutputStream >& xOut ) throw()
     // data transfer starts in XActiveDataControl::start
 }
 
-Reference< XOutputStream > Pump::getOutputStream() throw()
+Reference< XOutputStream > Pump::getOutputStream() throw(std::exception)
 {
     Guard< Mutex > aGuard( m_aMutex );
     return m_xOutput;
 }
 
 // XServiceInfo
-OUString Pump::getImplementationName() throw(  )
+OUString Pump::getImplementationName() throw(std::exception  )
 {
     return OPumpImpl_getImplementationName();
 }
 
 // XServiceInfo
-sal_Bool Pump::supportsService(const OUString& ServiceName) throw(  )
+sal_Bool Pump::supportsService(const OUString& ServiceName) throw(std::exception  )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo
-Sequence< OUString > Pump::getSupportedServiceNames(void) throw(  )
+Sequence< OUString > Pump::getSupportedServiceNames(void) throw(std::exception  )
 {
     return OPumpImpl_getSupportedServiceNames();
 }

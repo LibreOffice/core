@@ -194,7 +194,7 @@ Sequence< Sequence< PropertyValue > > ConfigurationAccess_FactoryManager::getFac
 }
 
 // container.XContainerListener
-void SAL_CALL ConfigurationAccess_FactoryManager::elementInserted( const ContainerEvent& aEvent ) throw(RuntimeException)
+void SAL_CALL ConfigurationAccess_FactoryManager::elementInserted( const ContainerEvent& aEvent ) throw(RuntimeException, std::exception)
 {
     OUString   aType;
     OUString   aName;
@@ -213,7 +213,7 @@ void SAL_CALL ConfigurationAccess_FactoryManager::elementInserted( const Contain
     }
 }
 
-void SAL_CALL ConfigurationAccess_FactoryManager::elementRemoved ( const ContainerEvent& aEvent ) throw(RuntimeException)
+void SAL_CALL ConfigurationAccess_FactoryManager::elementRemoved ( const ContainerEvent& aEvent ) throw(RuntimeException, std::exception)
 {
     OUString   aType;
     OUString   aName;
@@ -232,7 +232,7 @@ void SAL_CALL ConfigurationAccess_FactoryManager::elementRemoved ( const Contain
     }
 }
 
-void SAL_CALL ConfigurationAccess_FactoryManager::elementReplaced( const ContainerEvent& aEvent ) throw(RuntimeException)
+void SAL_CALL ConfigurationAccess_FactoryManager::elementReplaced( const ContainerEvent& aEvent ) throw(RuntimeException, std::exception)
 {
     OUString   aType;
     OUString   aName;
@@ -253,7 +253,7 @@ void SAL_CALL ConfigurationAccess_FactoryManager::elementReplaced( const Contain
 }
 
 // lang.XEventListener
-void SAL_CALL ConfigurationAccess_FactoryManager::disposing( const EventObject& ) throw(RuntimeException)
+void SAL_CALL ConfigurationAccess_FactoryManager::disposing( const EventObject& ) throw(RuntimeException, std::exception)
 {
     // SAFE
     // remove our reference to the config access
@@ -361,19 +361,19 @@ public:
     virtual ~UIElementFactoryManager();
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     {
         return OUString("com.sun.star.comp.framework.UIElementFactoryManager");
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     {
         return cppu::supportsService(this, ServiceName);
     }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     {
         css::uno::Sequence< OUString > aSeq(1);
         aSeq[0] = OUString("com.sun.star.ui.UIElementFactoryManager");
@@ -381,13 +381,13 @@ public:
     }
 
     // XUIElementFactory
-    virtual css::uno::Reference< css::ui::XUIElement > SAL_CALL createUIElement( const OUString& ResourceURL, const css::uno::Sequence< css::beans::PropertyValue >& Args ) throw (css::container::NoSuchElementException, css::lang::IllegalArgumentException, css::uno::RuntimeException);
+    virtual css::uno::Reference< css::ui::XUIElement > SAL_CALL createUIElement( const OUString& ResourceURL, const css::uno::Sequence< css::beans::PropertyValue >& Args ) throw (css::container::NoSuchElementException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception);
 
     // XUIElementFactoryRegistration
-    virtual css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > SAL_CALL getRegisteredFactories(  ) throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< css::ui::XUIElementFactory > SAL_CALL getFactory( const OUString& ResourceURL, const OUString& ModuleIdentifier ) throw (css::uno::RuntimeException);
-    virtual void SAL_CALL registerFactory( const OUString& aType, const OUString& aName, const OUString& aModuleIdentifier, const OUString& aFactoryImplementationName ) throw (css::container::ElementExistException, css::uno::RuntimeException);
-    virtual void SAL_CALL deregisterFactory( const OUString& aType, const OUString& aName, const OUString& aModuleIdentifier ) throw (css::container::NoSuchElementException, css::uno::RuntimeException);
+    virtual css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > SAL_CALL getRegisteredFactories(  ) throw (css::uno::RuntimeException, std::exception);
+    virtual css::uno::Reference< css::ui::XUIElementFactory > SAL_CALL getFactory( const OUString& ResourceURL, const OUString& ModuleIdentifier ) throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL registerFactory( const OUString& aType, const OUString& aName, const OUString& aModuleIdentifier, const OUString& aFactoryImplementationName ) throw (css::container::ElementExistException, css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL deregisterFactory( const OUString& aType, const OUString& aName, const OUString& aModuleIdentifier ) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception);
 
 private:
     sal_Bool                                                  m_bConfigRead;
@@ -425,7 +425,7 @@ void SAL_CALL UIElementFactoryManager::disposing()
 Reference< XUIElement > SAL_CALL UIElementFactoryManager::createUIElement(
     const OUString& ResourceURL,
     const Sequence< PropertyValue >& Args )
-throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException )
+throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception )
 {
     Reference< XFrame > xFrame;
     { // SAFE
@@ -469,7 +469,7 @@ throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::l
 
 // XUIElementFactoryRegistration
 Sequence< Sequence< PropertyValue > > SAL_CALL UIElementFactoryManager::getRegisteredFactories()
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     // SAFE
     osl::MutexGuard g(rBHelper.rMutex);
@@ -484,7 +484,7 @@ throw ( RuntimeException )
 }
 
 Reference< XUIElementFactory > SAL_CALL UIElementFactoryManager::getFactory( const OUString& aResourceURL, const OUString& aModuleId )
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     OUString aServiceSpecifier;
     { // SAFE
@@ -518,7 +518,7 @@ throw ( RuntimeException )
 }
 
 void SAL_CALL UIElementFactoryManager::registerFactory( const OUString& aType, const OUString& aName, const OUString& aModuleId, const OUString& aFactoryImplementationName )
-throw ( ElementExistException, RuntimeException )
+throw ( ElementExistException, RuntimeException, std::exception )
 {
     // SAFE
     osl::MutexGuard g(rBHelper.rMutex);
@@ -534,7 +534,7 @@ throw ( ElementExistException, RuntimeException )
 }
 
 void SAL_CALL UIElementFactoryManager::deregisterFactory( const OUString& aType, const OUString& aName, const OUString& aModuleId )
-throw ( NoSuchElementException, RuntimeException )
+throw ( NoSuchElementException, RuntimeException, std::exception )
 {
     // SAFE
     osl::MutexGuard g(rBHelper.rMutex);

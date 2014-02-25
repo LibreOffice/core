@@ -663,7 +663,7 @@ void SAL_CALL OCalcTable::disposing(void)
 
 }
 
-Sequence< Type > SAL_CALL OCalcTable::getTypes(  ) throw(RuntimeException)
+Sequence< Type > SAL_CALL OCalcTable::getTypes(  ) throw(RuntimeException, std::exception)
 {
     //SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::getTypes" );
     Sequence< Type > aTypes = OTable_TYPEDEF::getTypes();
@@ -688,7 +688,7 @@ Sequence< Type > SAL_CALL OCalcTable::getTypes(  ) throw(RuntimeException)
 }
 
 
-Any SAL_CALL OCalcTable::queryInterface( const Type & rType ) throw(RuntimeException)
+Any SAL_CALL OCalcTable::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
 {
     if( rType == ::getCppuType((const Reference<XKeysSupplier>*)0) ||
         rType == ::getCppuType((const Reference<XIndexesSupplier>*)0) ||
@@ -720,7 +720,7 @@ Sequence< sal_Int8 > OCalcTable::getUnoTunnelImplementationId()
 
 // com::sun::star::lang::XUnoTunnel
 
-sal_Int64 OCalcTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
+sal_Int64 OCalcTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException, std::exception)
 {
     //SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::getSomething" );
     return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )

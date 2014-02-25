@@ -100,11 +100,11 @@ namespace dbaui
 
     class OViewController : public OQueryController
     {
-        virtual OUString SAL_CALL getImplementationName() throw( RuntimeException )
+        virtual OUString SAL_CALL getImplementationName() throw( RuntimeException, std::exception )
         {
             return getImplementationName_Static();
         }
-        virtual Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(RuntimeException)
+        virtual Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception)
         {
             return getSupportedServiceNames_Static();
         }
@@ -298,7 +298,7 @@ namespace
     }
 }
 
-OUString SAL_CALL OQueryController::getImplementationName() throw( RuntimeException )
+OUString SAL_CALL OQueryController::getImplementationName() throw( RuntimeException, std::exception )
 {
     return getImplementationName_Static();
 }
@@ -315,7 +315,7 @@ Sequence< OUString> OQueryController::getSupportedServiceNames_Static(void) thro
     return aSupported;
 }
 
-Sequence< OUString> SAL_CALL OQueryController::getSupportedServiceNames() throw(RuntimeException)
+Sequence< OUString> SAL_CALL OQueryController::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     return getSupportedServiceNames_Static();
 }
@@ -364,7 +364,7 @@ OQueryController::~OQueryController()
 IMPLEMENT_FORWARD_XINTERFACE2( OQueryController, OJoinController, OQueryController_PBase )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( OQueryController, OJoinController, OQueryController_PBase )
 
-Reference< XPropertySetInfo > SAL_CALL OQueryController::getPropertySetInfo() throw(RuntimeException)
+Reference< XPropertySetInfo > SAL_CALL OQueryController::getPropertySetInfo() throw(RuntimeException, std::exception)
 {
     Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
@@ -375,7 +375,7 @@ sal_Bool SAL_CALL OQueryController::convertFastPropertyValue( Any& o_rConvertedV
     return OPropertyContainer::convertFastPropertyValue( o_rConvertedValue, o_rOldValue, i_nHandle, i_rValue );
 }
 
-void SAL_CALL OQueryController::setFastPropertyValue_NoBroadcast( sal_Int32 i_nHandle, const Any& i_rValue ) throw ( Exception )
+void SAL_CALL OQueryController::setFastPropertyValue_NoBroadcast( sal_Int32 i_nHandle, const Any& i_rValue ) throw ( Exception, std::exception )
 {
     OPropertyContainer::setFastPropertyValue_NoBroadcast( i_nHandle, i_rValue );
 }
@@ -1158,7 +1158,7 @@ void OQueryController::impl_onModifyChanged()
     InvalidateFeature(ID_BROWSER_QUERY_EXECUTE);
 }
 
-void SAL_CALL OQueryController::disposing( const EventObject& Source ) throw(RuntimeException)
+void SAL_CALL OQueryController::disposing( const EventObject& Source ) throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1992,7 +1992,7 @@ bool OQueryController::allowQueries() const
     return !bCreatingView;
 }
 
-Any SAL_CALL OQueryController::getViewData() throw( RuntimeException )
+Any SAL_CALL OQueryController::getViewData() throw( RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( getMutex() );
 
@@ -2004,7 +2004,7 @@ Any SAL_CALL OQueryController::getViewData() throw( RuntimeException )
     return makeAny( aViewSettings.getPropertyValues() );
 }
 
-void SAL_CALL OQueryController::restoreViewData(const Any& /*Data*/) throw( RuntimeException )
+void SAL_CALL OQueryController::restoreViewData(const Any& /*Data*/) throw( RuntimeException, std::exception )
 {
     // TODO
 }

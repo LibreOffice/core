@@ -40,16 +40,16 @@ public:
         const css::uno::Reference< css::awt::XControl >& xDialog );
 
     // XFrame attributes
-    virtual OUString SAL_CALL getCaption() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setCaption( const OUString& _caption ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getCaption() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setCaption( const OUString& _caption ) throw (css::uno::RuntimeException, std::exception);
 
-    virtual sal_Int32 SAL_CALL getSpecialEffect() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setSpecialEffect( sal_Int32 nSpecialEffect ) throw (css::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getBorderStyle() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setBorderStyle( sal_Int32 nBorderStyle ) throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< ov::msforms::XNewFont > SAL_CALL getFont() throw (css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getSpecialEffect() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setSpecialEffect( sal_Int32 nSpecialEffect ) throw (css::uno::RuntimeException, std::exception);
+    virtual sal_Int32 SAL_CALL getBorderStyle() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setBorderStyle( sal_Int32 nBorderStyle ) throw (css::uno::RuntimeException, std::exception);
+    virtual css::uno::Reference< ov::msforms::XNewFont > SAL_CALL getFont() throw (css::uno::RuntimeException, std::exception);
     // XFrame methods
-    css::uno::Any SAL_CALL Controls( const css::uno::Any& rIndex ) throw (css::uno::RuntimeException);
+    css::uno::Any SAL_CALL Controls( const css::uno::Any& rIndex ) throw (css::uno::RuntimeException, std::exception);
     //XHelperInterface
     virtual OUString getServiceImplName();
     virtual css::uno::Sequence<OUString> getServiceNames();

@@ -113,7 +113,7 @@ OCollection* Table::createIndexes(const TStringVector& rNames)
 //----- XAlterTable -----------------------------------------------------------
 void SAL_CALL Table::alterColumnByName(const OUString& rColName,
                                        const uno::Reference< XPropertySet >& rDescriptor)
-    throw(SQLException, NoSuchElementException, RuntimeException)
+    throw(SQLException, NoSuchElementException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_rMutex);
     checkDisposed(WeakComponentImplHelperBase::rBHelper.bDisposed);
@@ -220,7 +220,7 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
 
 // ----- XRename --------------------------------------------------------------
 void SAL_CALL Table::rename(const OUString& rName)
-    throw(SQLException, ElementExistException, RuntimeException)
+    throw(SQLException, ElementExistException, RuntimeException, std::exception)
 {
     (void) rName;
     throw RuntimeException(); // Firebird doesn't support this.
@@ -228,7 +228,7 @@ void SAL_CALL Table::rename(const OUString& rName)
 
 // ----- XInterface -----------------------------------------------------------
 Any SAL_CALL Table::queryInterface(const Type& rType)
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     if (rType.getTypeName() == "com.sun.star.sdbcx.XRename")
         return Any();
@@ -238,7 +238,7 @@ Any SAL_CALL Table::queryInterface(const Type& rType)
 
 // ----- XTypeProvider --------------------------------------------------------
 uno::Sequence< Type > SAL_CALL Table::getTypes()
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     uno::Sequence< Type > aTypes = OTableHelper::getTypes();
 

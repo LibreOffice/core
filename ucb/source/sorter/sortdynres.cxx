@@ -132,7 +132,7 @@ XSERVICEINFO_NOFACTORY_IMPL_1( SortedDynamicResultSet,
 // XComponent methods.
 
 void SAL_CALL SortedDynamicResultSet::dispose()
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     osl::Guard< osl::Mutex > aGuard( maMutex );
 
@@ -155,7 +155,7 @@ void SAL_CALL SortedDynamicResultSet::dispose()
 
 void SAL_CALL SortedDynamicResultSet::addEventListener(
                             const Reference< XEventListener >& Listener )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     osl::Guard< osl::Mutex > aGuard( maMutex );
 
@@ -169,7 +169,7 @@ void SAL_CALL SortedDynamicResultSet::addEventListener(
 
 void SAL_CALL SortedDynamicResultSet::removeEventListener(
                             const Reference< XEventListener >& Listener )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     osl::Guard< osl::Mutex > aGuard( maMutex );
 
@@ -182,7 +182,7 @@ void SAL_CALL SortedDynamicResultSet::removeEventListener(
 
 Reference< XResultSet > SAL_CALL
 SortedDynamicResultSet::getStaticResultSet()
-    throw( ListenerAlreadySetException, RuntimeException )
+    throw( ListenerAlreadySetException, RuntimeException, std::exception )
 {
     osl::Guard< osl::Mutex > aGuard( maMutex );
 
@@ -204,7 +204,7 @@ SortedDynamicResultSet::getStaticResultSet()
 
 void SAL_CALL
 SortedDynamicResultSet::setListener( const Reference< XDynamicResultSetListener >& Listener )
-    throw( ListenerAlreadySetException, RuntimeException )
+    throw( ListenerAlreadySetException, RuntimeException, std::exception )
 {
     osl::Guard< osl::Mutex > aGuard( maMutex );
 
@@ -226,7 +226,7 @@ SortedDynamicResultSet::connectToCache(
         throw( ListenerAlreadySetException,
                AlreadyInitializedException,
                ServiceNotFoundException,
-               RuntimeException )
+               RuntimeException, std::exception )
 {
     if( mxListener.is() )
         throw ListenerAlreadySetException();
@@ -259,7 +259,7 @@ SortedDynamicResultSet::connectToCache(
 
 sal_Int16 SAL_CALL
 SortedDynamicResultSet::getCapabilities()
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     osl::Guard< osl::Mutex > aGuard( maMutex );
 
@@ -515,7 +515,7 @@ SortedDynamicResultSetFactory::createSortedDynamicResultSet(
                 const Reference< XDynamicResultSet > & Source,
                 const Sequence< NumberedSortingInfo > & Info,
                 const Reference< XAnyCompareFactory > & CompareFactory )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     Reference< XDynamicResultSet > xRet;
     xRet = new SortedDynamicResultSet( Source, Info, CompareFactory, m_xContext );
@@ -580,7 +580,7 @@ XINTERFACE_IMPL_2( SortedDynamicResultSetListener,
 
 void SAL_CALL
 SortedDynamicResultSetListener::disposing( const EventObject& Source )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     osl::Guard< osl::Mutex > aGuard( maMutex );
 
@@ -593,7 +593,7 @@ SortedDynamicResultSetListener::disposing( const EventObject& Source )
 
 void SAL_CALL
 SortedDynamicResultSetListener::notify( const ListEvent& Changes )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     osl::Guard< osl::Mutex > aGuard( maMutex );
 

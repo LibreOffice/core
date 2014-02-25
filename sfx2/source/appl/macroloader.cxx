@@ -58,19 +58,19 @@ SfxMacroLoader::SfxMacroLoader(const css::uno::Sequence< css::uno::Any >& aArgum
 }
 
 OUString SAL_CALL SfxMacroLoader::getImplementationName()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.sfx2.SfxMacroLoader");
 }
 
 sal_Bool SAL_CALL SfxMacroLoader::supportsService(OUString const & ServiceName)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 css::uno::Sequence<OUString> SAL_CALL SfxMacroLoader::getSupportedServiceNames()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     css::uno::Sequence< OUString > aSeq(1);
     aSeq[0] = OUString("com.sun.star.frame.ProtocolHandler");
@@ -101,7 +101,7 @@ SfxObjectShell* SfxMacroLoader::GetObjectShell_Impl()
 uno::Reference<frame::XDispatch> SAL_CALL SfxMacroLoader::queryDispatch(
     const util::URL&   aURL            ,
     const OUString&               /*sTargetFrameName*/,
-    sal_Int32                            /*nSearchFlags*/    ) throw( uno::RuntimeException )
+    sal_Int32                            /*nSearchFlags*/    ) throw( uno::RuntimeException, std::exception )
 {
     uno::Reference<frame::XDispatch> xDispatcher;
     if(aURL.Complete.startsWith("macro:"))
@@ -112,7 +112,7 @@ uno::Reference<frame::XDispatch> SAL_CALL SfxMacroLoader::queryDispatch(
 
 uno::Sequence< uno::Reference<frame::XDispatch> > SAL_CALL
                 SfxMacroLoader::queryDispatches( const uno::Sequence < frame::DispatchDescriptor >& seqDescriptor )
-                    throw( uno::RuntimeException )
+                    throw( uno::RuntimeException, std::exception )
 {
     sal_Int32 nCount = seqDescriptor.getLength();
     uno::Sequence< uno::Reference<frame::XDispatch> > lDispatcher(nCount);
@@ -127,7 +127,7 @@ uno::Sequence< uno::Reference<frame::XDispatch> > SAL_CALL
 void SAL_CALL SfxMacroLoader::dispatchWithNotification(
     const util::URL& aURL, const uno::Sequence<beans::PropertyValue>& /*lArgs*/,
     const uno::Reference<frame::XDispatchResultListener>& xListener )
-              throw (uno::RuntimeException)
+              throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -151,7 +151,7 @@ void SAL_CALL SfxMacroLoader::dispatchWithNotification(
 
 uno::Any SAL_CALL SfxMacroLoader::dispatchWithReturnValue(
     const util::URL& aURL, const uno::Sequence<beans::PropertyValue>& )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     uno::Any aRet;
     loadMacro( aURL.Complete, aRet, GetObjectShell_Impl() );
@@ -160,7 +160,7 @@ uno::Any SAL_CALL SfxMacroLoader::dispatchWithReturnValue(
 
 void SAL_CALL SfxMacroLoader::dispatch(
     const util::URL& aURL, const uno::Sequence<beans::PropertyValue>& /*lArgs*/ )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -171,7 +171,7 @@ void SAL_CALL SfxMacroLoader::dispatch(
 void SAL_CALL SfxMacroLoader::addStatusListener(
     const uno::Reference< frame::XStatusListener >& ,
     const util::URL&                                                    )
-              throw (uno::RuntimeException)
+              throw (uno::RuntimeException, std::exception)
 {
     /* TODO
             How we can handle different listener for further coming or currently running dispatch() jobs
@@ -183,7 +183,7 @@ void SAL_CALL SfxMacroLoader::addStatusListener(
 void SAL_CALL SfxMacroLoader::removeStatusListener(
     const uno::Reference< frame::XStatusListener >&,
     const util::URL&                                                  )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
 }
 

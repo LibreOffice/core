@@ -50,10 +50,10 @@ public:
 
     // com.sun.star.sax.XLocator interface
 
-    virtual sal_Int32 SAL_CALL getColumnNumber() throw( RuntimeException );
-    virtual sal_Int32 SAL_CALL getLineNumber() throw( RuntimeException );
-    virtual OUString SAL_CALL getPublicId() throw( RuntimeException );
-    virtual OUString SAL_CALL getSystemId() throw( RuntimeException );
+    virtual sal_Int32 SAL_CALL getColumnNumber() throw( RuntimeException, std::exception );
+    virtual sal_Int32 SAL_CALL getLineNumber() throw( RuntimeException, std::exception );
+    virtual OUString SAL_CALL getPublicId() throw( RuntimeException, std::exception );
+    virtual OUString SAL_CALL getSystemId() throw( RuntimeException, std::exception );
 
 private:
     RecordParser*           mpParser;
@@ -72,23 +72,23 @@ void Locator::checkDispose() throw( RuntimeException )
         throw DisposedException();
 }
 
-sal_Int32 SAL_CALL Locator::getColumnNumber() throw( RuntimeException )
+sal_Int32 SAL_CALL Locator::getColumnNumber() throw( RuntimeException, std::exception )
 {
     return -1;
 }
 
-sal_Int32 SAL_CALL Locator::getLineNumber() throw( RuntimeException )
+sal_Int32 SAL_CALL Locator::getLineNumber() throw( RuntimeException, std::exception )
 {
     return -1;
 }
 
-OUString SAL_CALL Locator::getPublicId() throw( RuntimeException )
+OUString SAL_CALL Locator::getPublicId() throw( RuntimeException, std::exception )
 {
     checkDispose();
     return mpParser->getInputSource().maPublicId;
 }
 
-OUString SAL_CALL Locator::getSystemId() throw( RuntimeException )
+OUString SAL_CALL Locator::getSystemId() throw( RuntimeException, std::exception )
 {
     checkDispose();
     return mpParser->getInputSource().maSystemId;

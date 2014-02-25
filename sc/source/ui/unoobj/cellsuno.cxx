@@ -1740,7 +1740,7 @@ void ScCellRangesBase::SetCursorOnly( bool bSet )
 }
 
 uno::Any SAL_CALL ScCellRangesBase::queryInterface( const uno::Type& rType )
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SC_QUERYINTERFACE( beans::XPropertySet )
     SC_QUERYINTERFACE( beans::XMultiPropertySet )
@@ -1772,7 +1772,7 @@ void SAL_CALL ScCellRangesBase::release() throw()
     OWeakObject::release();
 }
 
-uno::Sequence<uno::Type> SAL_CALL ScCellRangesBase::getTypes() throw(uno::RuntimeException)
+uno::Sequence<uno::Type> SAL_CALL ScCellRangesBase::getTypes() throw(uno::RuntimeException, std::exception)
 {
     static uno::Sequence<uno::Type> aTypes;
     if ( aTypes.getLength() == 0 )
@@ -1802,7 +1802,7 @@ namespace
 }
 
 uno::Sequence<sal_Int8> SAL_CALL ScCellRangesBase::getImplementationId()
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     return theScCellRangesBaseImplementationId::get().getSeq();
 }
@@ -1838,7 +1838,7 @@ double SAL_CALL ScCellRangesBase::computeFunction( sheet::GeneralFunction nFunct
     return fVal;
 }
 
-void SAL_CALL ScCellRangesBase::clearContents( sal_Int32 nContentFlags ) throw(uno::RuntimeException)
+void SAL_CALL ScCellRangesBase::clearContents( sal_Int32 nContentFlags ) throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( !aRanges.empty() )
@@ -1940,7 +1940,7 @@ beans::PropertyState ScCellRangesBase::GetOnePropertyState( sal_uInt16 nItemWhic
 }
 
 beans::PropertyState SAL_CALL ScCellRangesBase::getPropertyState( const OUString& aPropertyName )
-                                throw(beans::UnknownPropertyException, uno::RuntimeException)
+                                throw(beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( aRanges.empty() )
@@ -1955,7 +1955,7 @@ beans::PropertyState SAL_CALL ScCellRangesBase::getPropertyState( const OUString
 
 uno::Sequence<beans::PropertyState> SAL_CALL ScCellRangesBase::getPropertyStates(
                                 const uno::Sequence<OUString>& aPropertyNames )
-                            throw(beans::UnknownPropertyException, uno::RuntimeException)
+                            throw(beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1974,7 +1974,7 @@ uno::Sequence<beans::PropertyState> SAL_CALL ScCellRangesBase::getPropertyStates
 }
 
 void SAL_CALL ScCellRangesBase::setPropertyToDefault( const OUString& aPropertyName )
-                            throw(beans::UnknownPropertyException, uno::RuntimeException)
+                            throw(beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( pDocShell )
@@ -2020,7 +2020,7 @@ void SAL_CALL ScCellRangesBase::setPropertyToDefault( const OUString& aPropertyN
 
 uno::Any SAL_CALL ScCellRangesBase::getPropertyDefault( const OUString& aPropertyName )
                                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
-                                        uno::RuntimeException)
+                                        uno::RuntimeException, std::exception)
 {
     //! mit getPropertyValue zusammenfassen
 
@@ -2127,7 +2127,7 @@ uno::Any SAL_CALL ScCellRangesBase::getPropertyDefault( const OUString& aPropert
 // XPropertySet
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScCellRangesBase::getPropertySetInfo()
-                                                        throw(uno::RuntimeException)
+                                                        throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     static uno::Reference<beans::XPropertySetInfo> aRef(
@@ -2249,7 +2249,7 @@ void SAL_CALL ScCellRangesBase::setPropertyValue(
                         const OUString& aPropertyName, const uno::Any& aValue )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
                         lang::IllegalArgumentException, lang::WrappedTargetException,
-                        uno::RuntimeException)
+                        uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2445,7 +2445,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
 
 uno::Any SAL_CALL ScCellRangesBase::getPropertyValue( const OUString& aPropertyName )
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
-                        uno::RuntimeException)
+                        uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2607,7 +2607,7 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
 void SAL_CALL ScCellRangesBase::addPropertyChangeListener( const OUString& /* aPropertyName */,
                             const uno::Reference<beans::XPropertyChangeListener>& /* aListener */)
                             throw(beans::UnknownPropertyException,
-                                    lang::WrappedTargetException, uno::RuntimeException)
+                                    lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( aRanges.empty() )
@@ -2619,7 +2619,7 @@ void SAL_CALL ScCellRangesBase::addPropertyChangeListener( const OUString& /* aP
 void SAL_CALL ScCellRangesBase::removePropertyChangeListener( const OUString& /* aPropertyName */,
                             const uno::Reference<beans::XPropertyChangeListener>& /* aListener */)
                             throw(beans::UnknownPropertyException,
-                                    lang::WrappedTargetException, uno::RuntimeException)
+                                    lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( aRanges.empty() )
@@ -2631,7 +2631,7 @@ void SAL_CALL ScCellRangesBase::removePropertyChangeListener( const OUString& /*
 void SAL_CALL ScCellRangesBase::addVetoableChangeListener( const OUString&,
                             const uno::Reference<beans::XVetoableChangeListener>&)
                             throw(beans::UnknownPropertyException,
-                                lang::WrappedTargetException, uno::RuntimeException)
+                                lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     OSL_FAIL("not implemented");
 }
@@ -2639,7 +2639,7 @@ void SAL_CALL ScCellRangesBase::addVetoableChangeListener( const OUString&,
 void SAL_CALL ScCellRangesBase::removeVetoableChangeListener( const OUString&,
                             const uno::Reference<beans::XVetoableChangeListener>&)
                             throw(beans::UnknownPropertyException,
-                                lang::WrappedTargetException, uno::RuntimeException)
+                                lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     OSL_FAIL("not implemented");
 }
@@ -2651,7 +2651,7 @@ void SAL_CALL ScCellRangesBase::setPropertyValues( const uno::Sequence< OUString
                                 throw (beans::PropertyVetoException,
                                     lang::IllegalArgumentException,
                                     lang::WrappedTargetException,
-                                    uno::RuntimeException)
+                                    uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2742,7 +2742,7 @@ void SAL_CALL ScCellRangesBase::setPropertyValues( const uno::Sequence< OUString
 
 uno::Sequence<uno::Any> SAL_CALL ScCellRangesBase::getPropertyValues(
                                 const uno::Sequence< OUString >& aPropertyNames )
-                                    throw (uno::RuntimeException)
+                                    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2760,20 +2760,20 @@ uno::Sequence<uno::Any> SAL_CALL ScCellRangesBase::getPropertyValues(
 
 void SAL_CALL ScCellRangesBase::addPropertiesChangeListener( const uno::Sequence< OUString >& /* aPropertyNames */,
                                     const uno::Reference< beans::XPropertiesChangeListener >& /* xListener */ )
-                                throw (uno::RuntimeException)
+                                throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL("not implemented");
 }
 
 void SAL_CALL ScCellRangesBase::removePropertiesChangeListener( const uno::Reference< beans::XPropertiesChangeListener >& /* xListener */ )
-                                throw (uno::RuntimeException)
+                                throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL("not implemented");
 }
 
 void SAL_CALL ScCellRangesBase::firePropertiesChangeEvent( const uno::Sequence< OUString >& /* aPropertyNames */,
                                     const uno::Reference< beans::XPropertiesChangeListener >& /* xListener */ )
-                                throw (uno::RuntimeException)
+                                throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL("not implemented");
 }
@@ -2795,7 +2795,7 @@ IMPL_LINK( ScCellRangesBase, ValueListenerHdl, SfxHint*, pHint )
 // XTolerantMultiPropertySet
 uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL ScCellRangesBase::setPropertyValuesTolerant( const uno::Sequence< OUString >& aPropertyNames,
                                     const uno::Sequence< uno::Any >& aValues )
-                                    throw (lang::IllegalArgumentException, uno::RuntimeException)
+                                    throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2918,7 +2918,7 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL ScCellRangesBase::set
 }
 
 uno::Sequence< beans::GetPropertyTolerantResult > SAL_CALL ScCellRangesBase::getPropertyValuesTolerant( const uno::Sequence< OUString >& aPropertyNames )
-                                    throw (uno::RuntimeException)
+                                    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2948,7 +2948,7 @@ uno::Sequence< beans::GetPropertyTolerantResult > SAL_CALL ScCellRangesBase::get
 }
 
 uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL ScCellRangesBase::getDirectPropertyValuesTolerant( const uno::Sequence< OUString >& aPropertyNames )
-                                    throw (uno::RuntimeException)
+                                    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2987,7 +2987,7 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL ScCellRangesBas
 
 // XIndent
 
-void SAL_CALL ScCellRangesBase::decrementIndent() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL ScCellRangesBase::decrementIndent() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( pDocShell && !aRanges.empty() )        // leer = nichts zu tun
@@ -2999,7 +2999,7 @@ void SAL_CALL ScCellRangesBase::decrementIndent() throw(::com::sun::star::uno::R
     }
 }
 
-void SAL_CALL ScCellRangesBase::incrementIndent() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL ScCellRangesBase::incrementIndent() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( pDocShell && !aRanges.empty() )        // leer = nichts zu tun
@@ -3125,7 +3125,7 @@ ScRangeListRef ScCellRangesBase::GetLimitedChartRanges_Impl( long nDataColumns, 
 }
 
 void SAL_CALL ScCellRangesBase::setData( const uno::Sequence< uno::Sequence<double> >& aData )
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     sal_Bool bDone = false;
@@ -3198,7 +3198,7 @@ uno::Sequence<OUString> SAL_CALL ScCellRangesBase::getRowDescriptions()
 
 void SAL_CALL ScCellRangesBase::setRowDescriptions(
                         const uno::Sequence<OUString>& aRowDescriptions )
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     sal_Bool bDone = false;
@@ -3381,13 +3381,13 @@ void SAL_CALL ScCellRangesBase::removeChartDataChangeEventListener( const uno::R
     }
 }
 
-double SAL_CALL ScCellRangesBase::getNotANumber() throw(::com::sun::star::uno::RuntimeException)
+double SAL_CALL ScCellRangesBase::getNotANumber() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     //  im ScChartArray wird DBL_MIN verwendet, weil das Chart es so will
     return DBL_MIN;
 }
 
-sal_Bool SAL_CALL ScCellRangesBase::isNotANumber( double nNumber ) throw(uno::RuntimeException)
+sal_Bool SAL_CALL ScCellRangesBase::isNotANumber( double nNumber ) throw(uno::RuntimeException, std::exception)
 {
     //  im ScChartArray wird DBL_MIN verwendet, weil das Chart es so will
     return (nNumber == DBL_MIN);
@@ -3420,7 +3420,7 @@ void SAL_CALL ScCellRangesBase::addModifyListener(const uno::Reference<util::XMo
 }
 
 void SAL_CALL ScCellRangesBase::removeModifyListener( const uno::Reference<util::XModifyListener>& aListener )
-                                throw(uno::RuntimeException)
+                                throw(uno::RuntimeException, std::exception)
 {
 
     SolarMutexGuard aGuard;
@@ -3763,7 +3763,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryRowDiffe
 }
 
 uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryIntersection(
-                            const table::CellRangeAddress& aRange ) throw(uno::RuntimeException)
+                            const table::CellRangeAddress& aRange ) throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScRange aMask( (SCCOL)aRange.StartColumn, (SCROW)aRange.StartRow, aRange.Sheet,
@@ -3898,7 +3898,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryDependen
 // XSearchable
 
 uno::Reference<util::XSearchDescriptor> SAL_CALL ScCellRangesBase::createSearchDescriptor()
-                                                            throw(uno::RuntimeException)
+                                                            throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return new ScCellSearchObj;
@@ -3993,7 +3993,7 @@ uno::Reference<uno::XInterface> ScCellRangesBase::Find_Impl(
 
 uno::Reference<uno::XInterface> SAL_CALL ScCellRangesBase::findFirst(
                         const uno::Reference<util::XSearchDescriptor>& xDesc )
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return Find_Impl( xDesc, NULL );
@@ -4002,7 +4002,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScCellRangesBase::findFirst(
 uno::Reference<uno::XInterface> SAL_CALL ScCellRangesBase::findNext(
                         const uno::Reference<uno::XInterface>& xStartAt,
                         const uno::Reference<util::XSearchDescriptor >& xDesc )
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( xStartAt.is() )
@@ -4024,7 +4024,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScCellRangesBase::findNext(
 // XReplaceable
 
 uno::Reference<util::XReplaceDescriptor> SAL_CALL ScCellRangesBase::createReplaceDescriptor()
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return new ScCellSearchObj;
@@ -4116,7 +4116,7 @@ sal_Int32 SAL_CALL ScCellRangesBase::replaceAll( const uno::Reference<util::XSea
 // XUnoTunnel
 
 sal_Int64 SAL_CALL ScCellRangesBase::getSomething(
-                const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException)
+                const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException, std::exception)
 {
     if ( rId.getLength() == 16 &&
           0 == memcmp( getUnoTunnelId().getConstArray(),
@@ -4173,7 +4173,7 @@ void ScCellRangesObj::RefChanged()
 }
 
 uno::Any SAL_CALL ScCellRangesObj::queryInterface( const uno::Type& rType )
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SC_QUERYINTERFACE( sheet::XSheetCellRangeContainer )
     SC_QUERYINTERFACE( sheet::XSheetCellRanges )
@@ -4197,7 +4197,7 @@ void SAL_CALL ScCellRangesObj::release() throw()
     ScCellRangesBase::release();
 }
 
-uno::Sequence<uno::Type> SAL_CALL ScCellRangesObj::getTypes() throw(uno::RuntimeException)
+uno::Sequence<uno::Type> SAL_CALL ScCellRangesObj::getTypes() throw(uno::RuntimeException, std::exception)
 {
     static uno::Sequence<uno::Type> aTypes;
     if ( aTypes.getLength() == 0 )
@@ -4224,7 +4224,7 @@ namespace
 }
 
 uno::Sequence<sal_Int8> SAL_CALL ScCellRangesObj::getImplementationId()
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     return theScCellRangesObjImplementationId::get().getSeq();
 }
@@ -4248,7 +4248,7 @@ ScCellRangeObj* ScCellRangesObj::GetObjectByIndex_Impl(sal_Int32 nIndex) const
 }
 
 uno::Sequence<table::CellRangeAddress> SAL_CALL ScCellRangesObj::getRangeAddresses()
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -4271,7 +4271,7 @@ uno::Sequence<table::CellRangeAddress> SAL_CALL ScCellRangesObj::getRangeAddress
 }
 
 uno::Reference<container::XEnumerationAccess> SAL_CALL ScCellRangesObj::getCells()
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -4288,7 +4288,7 @@ uno::Reference<container::XEnumerationAccess> SAL_CALL ScCellRangesObj::getCells
 }
 
 OUString SAL_CALL ScCellRangesObj::getRangeAddressesAsString()
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     OUString aString;
@@ -4303,7 +4303,7 @@ OUString SAL_CALL ScCellRangesObj::getRangeAddressesAsString()
 
 void SAL_CALL ScCellRangesObj::addRangeAddress( const table::CellRangeAddress& rRange,
                                     sal_Bool bMergeRanges )
-                                    throw(::com::sun::star::uno::RuntimeException)
+                                    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScRange aRange(static_cast<SCCOL>(rRange.StartColumn),
@@ -4325,7 +4325,7 @@ static void lcl_RemoveNamedEntry( ScNamedEntryArr_Impl& rNamedEntries, const ScR
 
 void SAL_CALL ScCellRangesObj::removeRangeAddress( const table::CellRangeAddress& rRange )
                                 throw(::com::sun::star::container::NoSuchElementException,
-                                    ::com::sun::star::uno::RuntimeException)
+                                    ::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
@@ -4373,7 +4373,7 @@ void SAL_CALL ScCellRangesObj::removeRangeAddress( const table::CellRangeAddress
 
 void SAL_CALL ScCellRangesObj::addRangeAddresses( const uno::Sequence<table::CellRangeAddress >& rRanges,
                                     sal_Bool bMergeRanges )
-                                    throw(::com::sun::star::uno::RuntimeException)
+                                    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     sal_Int32 nCount(rRanges.getLength());
@@ -4395,7 +4395,7 @@ void SAL_CALL ScCellRangesObj::addRangeAddresses( const uno::Sequence<table::Cel
 
 void SAL_CALL ScCellRangesObj::removeRangeAddresses( const uno::Sequence<table::CellRangeAddress >& rRangeSeq )
                                 throw(::com::sun::star::container::NoSuchElementException,
-                                    ::com::sun::star::uno::RuntimeException)
+                                    ::com::sun::star::uno::RuntimeException, std::exception)
 {
     // use sometimes a better/faster implementation
     sal_uInt32 nCount(rRangeSeq.getLength());
@@ -4551,7 +4551,7 @@ static sal_Bool lcl_FindRangeOrEntry( const ScNamedEntryArr_Impl& rNamedEntries,
 
 void SAL_CALL ScCellRangesObj::removeByName( const OUString& aName )
                                 throw(container::NoSuchElementException,
-                                    lang::WrappedTargetException, uno::RuntimeException)
+                                    lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     sal_Bool bDone = false;
@@ -4616,7 +4616,7 @@ void SAL_CALL ScCellRangesObj::removeByName( const OUString& aName )
 
 void SAL_CALL ScCellRangesObj::replaceByName( const OUString& aName, const uno::Any& aElement )
                             throw(lang::IllegalArgumentException, container::NoSuchElementException,
-                                    lang::WrappedTargetException, uno::RuntimeException)
+                                    lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     //! zusammenfassen?
@@ -4628,7 +4628,7 @@ void SAL_CALL ScCellRangesObj::replaceByName( const OUString& aName, const uno::
 
 uno::Any SAL_CALL ScCellRangesObj::getByName( const OUString& aName )
             throw(container::NoSuchElementException,
-                    lang::WrappedTargetException, uno::RuntimeException)
+                    lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Any aRet;
@@ -4666,7 +4666,7 @@ static sal_Bool lcl_FindEntryName( const ScNamedEntryArr_Impl& rNamedEntries,
 }
 
 uno::Sequence<OUString> SAL_CALL ScCellRangesObj::getElementNames()
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -4697,7 +4697,7 @@ uno::Sequence<OUString> SAL_CALL ScCellRangesObj::getElementNames()
 }
 
 sal_Bool SAL_CALL ScCellRangesObj::hasByName( const OUString& aName )
-                                        throw(uno::RuntimeException)
+                                        throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     OUString aNameStr(aName);
@@ -4711,7 +4711,7 @@ sal_Bool SAL_CALL ScCellRangesObj::hasByName( const OUString& aName )
 // XEnumerationAccess
 
 uno::Reference<container::XEnumeration> SAL_CALL ScCellRangesObj::createEnumeration()
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.SheetCellRangesEnumeration"));
@@ -4719,7 +4719,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScCellRangesObj::createEnumerat
 
 // XIndexAccess
 
-sal_Int32 SAL_CALL ScCellRangesObj::getCount() throw(uno::RuntimeException)
+sal_Int32 SAL_CALL ScCellRangesObj::getCount() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
@@ -4728,7 +4728,7 @@ sal_Int32 SAL_CALL ScCellRangesObj::getCount() throw(uno::RuntimeException)
 
 uno::Any SAL_CALL ScCellRangesObj::getByIndex( sal_Int32 nIndex )
                             throw(lang::IndexOutOfBoundsException,
-                                    lang::WrappedTargetException, uno::RuntimeException)
+                                    lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Reference<table::XCellRange> xRange(GetObjectByIndex_Impl(nIndex));
@@ -4738,13 +4738,13 @@ uno::Any SAL_CALL ScCellRangesObj::getByIndex( sal_Int32 nIndex )
         throw lang::IndexOutOfBoundsException();
 }
 
-uno::Type SAL_CALL ScCellRangesObj::getElementType() throw(uno::RuntimeException)
+uno::Type SAL_CALL ScCellRangesObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return getCppuType((uno::Reference<table::XCellRange>*)0);
 }
 
-sal_Bool SAL_CALL ScCellRangesObj::hasElements() throw(uno::RuntimeException)
+sal_Bool SAL_CALL ScCellRangesObj::hasElements() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
@@ -4752,19 +4752,19 @@ sal_Bool SAL_CALL ScCellRangesObj::hasElements() throw(uno::RuntimeException)
 }
 
 // XServiceInfo
-OUString SAL_CALL ScCellRangesObj::getImplementationName() throw(uno::RuntimeException)
+OUString SAL_CALL ScCellRangesObj::getImplementationName() throw(uno::RuntimeException, std::exception)
 {
     return OUString( "ScCellRangesObj" );
 }
 
 sal_Bool SAL_CALL ScCellRangesObj::supportsService( const OUString& rServiceName )
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence<OUString> SAL_CALL ScCellRangesObj::getSupportedServiceNames()
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence<OUString> aRet(4);
     OUString* pArray = aRet.getArray();
@@ -4812,7 +4812,7 @@ void ScCellRangeObj::RefChanged()
 }
 
 uno::Any SAL_CALL ScCellRangeObj::queryInterface( const uno::Type& rType )
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SC_QUERYINTERFACE( sheet::XCellRangeAddressable )
     SC_QUERYINTERFACE( table::XCellRange )
@@ -4847,7 +4847,7 @@ void SAL_CALL ScCellRangeObj::release() throw()
     ScCellRangesBase::release();
 }
 
-uno::Sequence<uno::Type> SAL_CALL ScCellRangeObj::getTypes() throw(uno::RuntimeException)
+uno::Sequence<uno::Type> SAL_CALL ScCellRangeObj::getTypes() throw(uno::RuntimeException, std::exception)
 {
     static uno::Sequence<uno::Type> aTypes;
     if ( aTypes.getLength() == 0 )
@@ -4888,7 +4888,7 @@ namespace
 }
 
 uno::Sequence<sal_Int8> SAL_CALL ScCellRangeObj::getImplementationId()
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     return theScCellRangeObjImplementationId::get().getSeq();
 }
@@ -4923,7 +4923,7 @@ uno::Reference<table::XCell> ScCellRangeObj::GetCellByPosition_Impl(
 
 uno::Reference<table::XCell> SAL_CALL ScCellRangeObj::getCellByPosition(
                                         sal_Int32 nColumn, sal_Int32 nRow )
-                                throw(lang::IndexOutOfBoundsException, uno::RuntimeException)
+                                throw(lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -4932,7 +4932,7 @@ uno::Reference<table::XCell> SAL_CALL ScCellRangeObj::getCellByPosition(
 
 uno::Reference<table::XCellRange> SAL_CALL ScCellRangeObj::getCellRangeByPosition(
                 sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom )
-                                    throw(lang::IndexOutOfBoundsException, uno::RuntimeException)
+                                    throw(lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -4960,7 +4960,7 @@ uno::Reference<table::XCellRange> SAL_CALL ScCellRangeObj::getCellRangeByPositio
 }
 
 uno::Reference<table::XCellRange> SAL_CALL ScCellRangeObj::getCellRangeByName(
-                        const OUString& aName ) throw(uno::RuntimeException)
+                        const OUString& aName ) throw(uno::RuntimeException, std::exception)
 {
     return getCellRangeByName( aName, ScAddress::detailsOOOa1 );
 }
@@ -5019,7 +5019,7 @@ uno::Reference<table::XCellRange>  ScCellRangeObj::getCellRangeByName(
 
 // XColumnRowRange
 
-uno::Reference<table::XTableColumns> SAL_CALL ScCellRangeObj::getColumns() throw(uno::RuntimeException)
+uno::Reference<table::XTableColumns> SAL_CALL ScCellRangeObj::getColumns() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -5031,7 +5031,7 @@ uno::Reference<table::XTableColumns> SAL_CALL ScCellRangeObj::getColumns() throw
     return NULL;
 }
 
-uno::Reference<table::XTableRows> SAL_CALL ScCellRangeObj::getRows() throw(uno::RuntimeException)
+uno::Reference<table::XTableRows> SAL_CALL ScCellRangeObj::getRows() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -5045,7 +5045,7 @@ uno::Reference<table::XTableRows> SAL_CALL ScCellRangeObj::getRows() throw(uno::
 
 // XAddressableCellRange
 
-table::CellRangeAddress SAL_CALL ScCellRangeObj::getRangeAddress() throw(uno::RuntimeException)
+table::CellRangeAddress SAL_CALL ScCellRangeObj::getRangeAddress() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     table::CellRangeAddress aRet;
@@ -5056,7 +5056,7 @@ table::CellRangeAddress SAL_CALL ScCellRangeObj::getRangeAddress() throw(uno::Ru
 // XSheetCellRange
 
 uno::Reference<sheet::XSpreadsheet> SAL_CALL ScCellRangeObj::getSpreadsheet()
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -5069,7 +5069,7 @@ uno::Reference<sheet::XSpreadsheet> SAL_CALL ScCellRangeObj::getSpreadsheet()
 
 // XArrayFormulaRange
 
-OUString SAL_CALL ScCellRangeObj::getArrayFormula() throw(uno::RuntimeException)
+OUString SAL_CALL ScCellRangeObj::getArrayFormula() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -5131,7 +5131,7 @@ void ScCellRangeObj::SetArrayFormula_Impl( const OUString& rFormula,
 }
 
 void SAL_CALL ScCellRangeObj::setArrayFormula( const OUString& aFormula )
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     // GRAM_PODF_A1 for API compatibility.
@@ -5184,7 +5184,7 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScCellRangeObj::getArrayTokens()
     return aSequence;
 }
 
-void SAL_CALL ScCellRangeObj::setArrayTokens( const uno::Sequence<sheet::FormulaToken>& rTokens ) throw(uno::RuntimeException)
+void SAL_CALL ScCellRangeObj::setArrayTokens( const uno::Sequence<sheet::FormulaToken>& rTokens ) throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -5220,7 +5220,7 @@ void SAL_CALL ScCellRangeObj::setArrayTokens( const uno::Sequence<sheet::Formula
 // XCellRangeData
 
 uno::Sequence< uno::Sequence<uno::Any> > SAL_CALL ScCellRangeObj::getDataArray()
-                                    throw(uno::RuntimeException)
+                                    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -5248,7 +5248,7 @@ uno::Sequence< uno::Sequence<uno::Any> > SAL_CALL ScCellRangeObj::getDataArray()
 
 void SAL_CALL ScCellRangeObj::setDataArray(
                         const uno::Sequence< uno::Sequence<uno::Any> >& aArray )
-                                    throw(uno::RuntimeException)
+                                    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -5267,7 +5267,7 @@ void SAL_CALL ScCellRangeObj::setDataArray(
 // XCellRangeFormula
 
 uno::Sequence< uno::Sequence<OUString> > SAL_CALL ScCellRangeObj::getFormulaArray()
-                                    throw(uno::RuntimeException)
+                                    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -5309,7 +5309,7 @@ uno::Sequence< uno::Sequence<OUString> > SAL_CALL ScCellRangeObj::getFormulaArra
 
 void SAL_CALL ScCellRangeObj::setFormulaArray(
                         const uno::Sequence< uno::Sequence<OUString> >& aArray )
-                                    throw(uno::RuntimeException)
+                                    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -5333,7 +5333,7 @@ void SAL_CALL ScCellRangeObj::setTableOperation( const table::CellRangeAddress& 
                                         sheet::TableOperationMode nMode,
                                         const table::CellAddress& aColumnCell,
                                         const table::CellAddress& aRowCell )
-                                    throw(uno::RuntimeException)
+                                    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -5376,7 +5376,7 @@ void SAL_CALL ScCellRangeObj::setTableOperation( const table::CellRangeAddress& 
 
 // XMergeable
 
-void SAL_CALL ScCellRangeObj::merge( sal_Bool bMerge ) throw(uno::RuntimeException)
+void SAL_CALL ScCellRangeObj::merge( sal_Bool bMerge ) throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -5395,7 +5395,7 @@ void SAL_CALL ScCellRangeObj::merge( sal_Bool bMerge ) throw(uno::RuntimeExcepti
     }
 }
 
-sal_Bool SAL_CALL ScCellRangeObj::getIsMerged() throw(uno::RuntimeException)
+sal_Bool SAL_CALL ScCellRangeObj::getIsMerged() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -5406,7 +5406,7 @@ sal_Bool SAL_CALL ScCellRangeObj::getIsMerged() throw(uno::RuntimeException)
 
 void SAL_CALL ScCellRangeObj::fillSeries( sheet::FillDirection nFillDirection,
                         sheet::FillMode nFillMode, sheet::FillDateMode nFillDateMode,
-                        double fStep, double fEndValue ) throw(uno::RuntimeException)
+                        double fStep, double fEndValue ) throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -5481,7 +5481,7 @@ void SAL_CALL ScCellRangeObj::fillSeries( sheet::FillDirection nFillDirection,
 }
 
 void SAL_CALL ScCellRangeObj::fillAuto( sheet::FillDirection nFillDirection,
-                                sal_Int32 nSourceCount ) throw(uno::RuntimeException)
+                                sal_Int32 nSourceCount ) throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -5527,7 +5527,7 @@ void SAL_CALL ScCellRangeObj::fillAuto( sheet::FillDirection nFillDirection,
 // XAutoFormattable
 
 void SAL_CALL ScCellRangeObj::autoFormat( const OUString& aName )
-                    throw(lang::IllegalArgumentException, uno::RuntimeException)
+                    throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -5549,7 +5549,7 @@ void SAL_CALL ScCellRangeObj::autoFormat( const OUString& aName )
 // XSortable
 
 uno::Sequence<beans::PropertyValue> SAL_CALL ScCellRangeObj::createSortDescriptor()
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScSortParam aParam;
@@ -5580,7 +5580,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScCellRangeObj::createSortDescripto
 }
 
 void SAL_CALL ScCellRangeObj::sort( const uno::Sequence<beans::PropertyValue>& aDescriptor )
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -5627,7 +5627,7 @@ void SAL_CALL ScCellRangeObj::sort( const uno::Sequence<beans::PropertyValue>& a
 // XFilterable
 
 uno::Reference<sheet::XSheetFilterDescriptor> SAL_CALL ScCellRangeObj::createFilterDescriptor(
-                                sal_Bool bEmpty ) throw(uno::RuntimeException)
+                                sal_Bool bEmpty ) throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -5660,7 +5660,7 @@ uno::Reference<sheet::XSheetFilterDescriptor> SAL_CALL ScCellRangeObj::createFil
 }
 
 void SAL_CALL ScCellRangeObj::filter( const uno::Reference<sheet::XSheetFilterDescriptor>& xDescriptor )
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -5740,7 +5740,7 @@ void SAL_CALL ScCellRangeObj::filter( const uno::Reference<sheet::XSheetFilterDe
 
 uno::Reference<sheet::XSheetFilterDescriptor> SAL_CALL ScCellRangeObj::createFilterDescriptorByObject(
                         const uno::Reference<sheet::XSheetFilterable>& xObject )
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -5802,7 +5802,7 @@ uno::Reference<sheet::XSheetFilterDescriptor> SAL_CALL ScCellRangeObj::createFil
 // XSubTotalSource
 
 uno::Reference<sheet::XSubTotalDescriptor> SAL_CALL ScCellRangeObj::createSubTotalDescriptor(
-                                sal_Bool bEmpty ) throw(uno::RuntimeException)
+                                sal_Bool bEmpty ) throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScSubTotalDescriptor* pNew = new ScSubTotalDescriptor;
@@ -5881,7 +5881,7 @@ void SAL_CALL ScCellRangeObj::applySubTotals(
     }
 }
 
-void SAL_CALL ScCellRangeObj::removeSubTotals() throw(uno::RuntimeException)
+void SAL_CALL ScCellRangeObj::removeSubTotals() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -5909,7 +5909,7 @@ void SAL_CALL ScCellRangeObj::removeSubTotals() throw(uno::RuntimeException)
 }
 
 uno::Sequence<beans::PropertyValue> SAL_CALL ScCellRangeObj::createImportDescriptor( sal_Bool bEmpty )
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScImportParam aParam;
@@ -5928,7 +5928,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScCellRangeObj::createImportDescrip
 }
 
 void SAL_CALL ScCellRangeObj::doImport( const uno::Sequence<beans::PropertyValue>& aDescriptor )
-                                            throw(uno::RuntimeException)
+                                            throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -5955,7 +5955,7 @@ void SAL_CALL ScCellRangeObj::doImport( const uno::Sequence<beans::PropertyValue
 // XCellFormatRangesSupplier
 
 uno::Reference<container::XIndexAccess> SAL_CALL ScCellRangeObj::getCellFormatRanges()
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -5967,7 +5967,7 @@ uno::Reference<container::XIndexAccess> SAL_CALL ScCellRangeObj::getCellFormatRa
 // XUniqueCellFormatRangesSupplier
 
 uno::Reference<container::XIndexAccess> SAL_CALL ScCellRangeObj::getUniqueCellFormatRanges()
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -5979,7 +5979,7 @@ uno::Reference<container::XIndexAccess> SAL_CALL ScCellRangeObj::getUniqueCellFo
 // XPropertySet erweitert fuer Range-Properties
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScCellRangeObj::getPropertySetInfo()
-                                                        throw(uno::RuntimeException)
+                                                        throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     static uno::Reference<beans::XPropertySetInfo> aRef(
@@ -6040,19 +6040,19 @@ const SfxItemPropertyMap& ScCellRangeObj::GetItemPropertyMap()
 
 // XServiceInfo
 
-OUString SAL_CALL ScCellRangeObj::getImplementationName() throw(uno::RuntimeException)
+OUString SAL_CALL ScCellRangeObj::getImplementationName() throw(uno::RuntimeException, std::exception)
 {
     return OUString( "ScCellRangeObj" );
 }
 
 sal_Bool SAL_CALL ScCellRangeObj::supportsService( const OUString& rServiceName )
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence<OUString> SAL_CALL ScCellRangeObj::getSupportedServiceNames()
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence<OUString> aRet(5);
     OUString* pArray = aRet.getArray();
@@ -6119,7 +6119,7 @@ void ScCellObj::RefChanged()
     }
 }
 
-uno::Any SAL_CALL ScCellObj::queryInterface( const uno::Type& rType ) throw(uno::RuntimeException)
+uno::Any SAL_CALL ScCellObj::queryInterface( const uno::Type& rType ) throw(uno::RuntimeException, std::exception)
 {
     SC_QUERYINTERFACE( table::XCell )
     SC_QUERYINTERFACE( table::XCell2 )
@@ -6147,7 +6147,7 @@ void SAL_CALL ScCellObj::release() throw()
     ScCellRangeObj::release();
 }
 
-uno::Sequence<uno::Type> SAL_CALL ScCellObj::getTypes() throw(uno::RuntimeException)
+uno::Sequence<uno::Type> SAL_CALL ScCellObj::getTypes() throw(uno::RuntimeException, std::exception)
 {
     static uno::Sequence<uno::Type> aTypes;
     if ( aTypes.getLength() == 0 )
@@ -6179,7 +6179,7 @@ namespace
     class theScCellObjImplementationId : public rtl::Static< UnoTunnelIdInit, theScCellObjImplementationId > {};
 }
 
-uno::Sequence<sal_Int8> SAL_CALL ScCellObj::getImplementationId() throw(uno::RuntimeException)
+uno::Sequence<sal_Int8> SAL_CALL ScCellObj::getImplementationId() throw(uno::RuntimeException, std::exception)
 {
     return theScCellObjImplementationId::get().getSeq();
 }
@@ -6330,7 +6330,7 @@ void ScCellObj::InputEnglishString( const OUString& rText )
 //  XText
 
 uno::Reference<text::XTextCursor> SAL_CALL ScCellObj::createTextCursor()
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return new ScCellTextCursor( *this );
@@ -6338,7 +6338,7 @@ uno::Reference<text::XTextCursor> SAL_CALL ScCellObj::createTextCursor()
 
 uno::Reference<text::XTextCursor> SAL_CALL ScCellObj::createTextCursorByRange(
                                     const uno::Reference<text::XTextRange>& aTextPosition )
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     SvxUnoTextCursor* pCursor = new ScCellTextCursor( *this );
@@ -6359,13 +6359,13 @@ uno::Reference<text::XTextCursor> SAL_CALL ScCellObj::createTextCursorByRange(
     return xCursor;
 }
 
-OUString SAL_CALL ScCellObj::getString() throw(uno::RuntimeException)
+OUString SAL_CALL ScCellObj::getString() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return GetOutputString_Impl();
 }
 
-void SAL_CALL ScCellObj::setString( const OUString& aText ) throw(uno::RuntimeException)
+void SAL_CALL ScCellObj::setString( const OUString& aText ) throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     OUString aString(aText);
@@ -6378,7 +6378,7 @@ void SAL_CALL ScCellObj::setString( const OUString& aText ) throw(uno::RuntimeEx
 
 void SAL_CALL ScCellObj::insertString( const uno::Reference<text::XTextRange>& xRange,
                                         const OUString& aString, sal_Bool bAbsorb )
-                                    throw(uno::RuntimeException)
+                                    throw(uno::RuntimeException, std::exception)
 {
     // special handling for ScCellTextCursor is no longer needed,
     // SvxUnoText::insertString checks for SvxUnoTextRangeBase instead of SvxUnoTextRange
@@ -6389,7 +6389,7 @@ void SAL_CALL ScCellObj::insertString( const uno::Reference<text::XTextRange>& x
 
 void SAL_CALL ScCellObj::insertControlCharacter( const uno::Reference<text::XTextRange>& xRange,
                                                 sal_Int16 nControlCharacter, sal_Bool bAbsorb )
-                                    throw(lang::IllegalArgumentException, uno::RuntimeException)
+                                    throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     GetUnoText().insertControlCharacter(xRange, nControlCharacter, bAbsorb);
@@ -6398,7 +6398,7 @@ void SAL_CALL ScCellObj::insertControlCharacter( const uno::Reference<text::XTex
 void SAL_CALL ScCellObj::insertTextContent( const uno::Reference<text::XTextRange >& xRange,
                                                 const uno::Reference<text::XTextContent >& xContent,
                                                 sal_Bool bAbsorb )
-                                    throw(lang::IllegalArgumentException, uno::RuntimeException)
+                                    throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -6450,7 +6450,7 @@ void SAL_CALL ScCellObj::insertTextContent( const uno::Reference<text::XTextRang
 }
 
 void SAL_CALL ScCellObj::removeTextContent( const uno::Reference<text::XTextContent>& xContent )
-                                throw(container::NoSuchElementException, uno::RuntimeException)
+                                throw(container::NoSuchElementException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( xContent.is() )
@@ -6466,38 +6466,38 @@ void SAL_CALL ScCellObj::removeTextContent( const uno::Reference<text::XTextCont
     GetUnoText().removeTextContent(xContent);
 }
 
-uno::Reference<text::XText> SAL_CALL ScCellObj::getText() throw(uno::RuntimeException)
+uno::Reference<text::XText> SAL_CALL ScCellObj::getText() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return this;
 }
 
-uno::Reference<text::XTextRange> SAL_CALL ScCellObj::getStart() throw(uno::RuntimeException)
+uno::Reference<text::XTextRange> SAL_CALL ScCellObj::getStart() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return GetUnoText().getStart();
 }
 
-uno::Reference<text::XTextRange> SAL_CALL ScCellObj::getEnd() throw(uno::RuntimeException)
+uno::Reference<text::XTextRange> SAL_CALL ScCellObj::getEnd() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return GetUnoText().getEnd();
 }
 
 uno::Reference<container::XEnumeration> SAL_CALL ScCellObj::createEnumeration()
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return GetUnoText().createEnumeration();
 }
 
-uno::Type SAL_CALL ScCellObj::getElementType() throw(uno::RuntimeException)
+uno::Type SAL_CALL ScCellObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return GetUnoText().getElementType();
 }
 
-sal_Bool SAL_CALL ScCellObj::hasElements() throw(uno::RuntimeException)
+sal_Bool SAL_CALL ScCellObj::hasElements() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return GetUnoText().hasElements();
@@ -6505,32 +6505,32 @@ sal_Bool SAL_CALL ScCellObj::hasElements() throw(uno::RuntimeException)
 
 //  XCell
 
-OUString SAL_CALL ScCellObj::getFormula() throw(uno::RuntimeException)
+OUString SAL_CALL ScCellObj::getFormula() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return GetInputString_Impl( true /* English */ );
 }
 
-void SAL_CALL ScCellObj::setFormula( const OUString& aFormula ) throw(uno::RuntimeException)
+void SAL_CALL ScCellObj::setFormula( const OUString& aFormula ) throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     OUString aString(aFormula);
     SetString_Impl(aString, true, true); // Interpret as English
 }
 
-double SAL_CALL ScCellObj::getValue() throw(uno::RuntimeException)
+double SAL_CALL ScCellObj::getValue() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return GetValue_Impl();
 }
 
-void SAL_CALL ScCellObj::setValue( double nValue ) throw(uno::RuntimeException)
+void SAL_CALL ScCellObj::setValue( double nValue ) throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     SetValue_Impl(nValue);
 }
 
-void SAL_CALL ScCellObj::setFormulaString( const OUString& aFormula) throw(uno::RuntimeException)
+void SAL_CALL ScCellObj::setFormulaString( const OUString& aFormula) throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell *pDocSh = GetDocShell();
@@ -6541,7 +6541,7 @@ void SAL_CALL ScCellObj::setFormulaString( const OUString& aFormula) throw(uno::
         pDocSh->GetDocFunc().SetFormulaCell(aCellPos, pCell, false);
     }
 }
-void SAL_CALL ScCellObj::setFormulaResult( double nValue ) throw(uno::RuntimeException)
+void SAL_CALL ScCellObj::setFormulaResult( double nValue ) throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -6554,7 +6554,7 @@ void SAL_CALL ScCellObj::setFormulaResult( double nValue ) throw(uno::RuntimeExc
     }
 }
 
-table::CellContentType SAL_CALL ScCellObj::getType() throw(uno::RuntimeException)
+table::CellContentType SAL_CALL ScCellObj::getType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     table::CellContentType eRet = table::CellContentType_EMPTY;
@@ -6602,7 +6602,7 @@ table::CellContentType ScCellObj::GetResultType_Impl()
     return getType();   // wenn keine Formel
 }
 
-sal_Int32 SAL_CALL ScCellObj::getError() throw(uno::RuntimeException)
+sal_Int32 SAL_CALL ScCellObj::getError() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -6644,7 +6644,7 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScCellObj::getTokens()
     return aSequence;
 }
 
-void SAL_CALL ScCellObj::setTokens( const uno::Sequence<sheet::FormulaToken>& rTokens ) throw(uno::RuntimeException)
+void SAL_CALL ScCellObj::setTokens( const uno::Sequence<sheet::FormulaToken>& rTokens ) throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -6661,7 +6661,7 @@ void SAL_CALL ScCellObj::setTokens( const uno::Sequence<sheet::FormulaToken>& rT
 
 // XCellAddressable
 
-table::CellAddress SAL_CALL ScCellObj::getCellAddress() throw(uno::RuntimeException)
+table::CellAddress SAL_CALL ScCellObj::getCellAddress() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     table::CellAddress aAdr;
@@ -6674,7 +6674,7 @@ table::CellAddress SAL_CALL ScCellObj::getCellAddress() throw(uno::RuntimeExcept
 // XSheetAnnotationAnchor
 
 uno::Reference<sheet::XSheetAnnotation> SAL_CALL ScCellObj::getAnnotation()
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -6688,7 +6688,7 @@ uno::Reference<sheet::XSheetAnnotation> SAL_CALL ScCellObj::getAnnotation()
 // XFieldTypesSupplier
 
 uno::Reference<container::XEnumerationAccess> SAL_CALL ScCellObj::getTextFields()
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -6702,7 +6702,7 @@ uno::Reference<container::XEnumerationAccess> SAL_CALL ScCellObj::getTextFields(
 }
 
 uno::Reference<container::XNameAccess> SAL_CALL ScCellObj::getTextFieldMasters()
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     //  sowas gibts nicht im Calc (?)
     return NULL;
@@ -6711,7 +6711,7 @@ uno::Reference<container::XNameAccess> SAL_CALL ScCellObj::getTextFieldMasters()
 // XPropertySet erweitert fuer Zell-Properties
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScCellObj::getPropertySetInfo()
-                                                        throw(uno::RuntimeException)
+                                                        throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     static uno::Reference<beans::XPropertySetInfo> aRef(
@@ -6720,7 +6720,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScCellObj::getPropertySetInfo()
 }
 
 void ScCellObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry, const uno::Any& aValue )
-                                throw(lang::IllegalArgumentException, uno::RuntimeException)
+                                throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     if ( pEntry )
     {
@@ -6768,19 +6768,19 @@ const SfxItemPropertyMap& ScCellObj::GetItemPropertyMap()
 
 // XServiceInfo
 
-OUString SAL_CALL ScCellObj::getImplementationName() throw(uno::RuntimeException)
+OUString SAL_CALL ScCellObj::getImplementationName() throw(uno::RuntimeException, std::exception)
 {
     return OUString( "ScCellObj" );
 }
 
 sal_Bool SAL_CALL ScCellObj::supportsService( const OUString& rServiceName )
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence<OUString> SAL_CALL ScCellObj::getSupportedServiceNames()
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence<OUString> aRet(7);
     OUString* pArray = aRet.getArray();
@@ -6796,13 +6796,13 @@ uno::Sequence<OUString> SAL_CALL ScCellObj::getSupportedServiceNames()
 
 // XActionLockable
 
-sal_Bool SAL_CALL ScCellObj::isActionLocked() throw(uno::RuntimeException)
+sal_Bool SAL_CALL ScCellObj::isActionLocked() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return nActionLockCount != 0;
 }
 
-void SAL_CALL ScCellObj::addActionLock() throw(uno::RuntimeException)
+void SAL_CALL ScCellObj::addActionLock() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (!nActionLockCount)
@@ -6818,7 +6818,7 @@ void SAL_CALL ScCellObj::addActionLock() throw(uno::RuntimeException)
     nActionLockCount++;
 }
 
-void SAL_CALL ScCellObj::removeActionLock() throw(uno::RuntimeException)
+void SAL_CALL ScCellObj::removeActionLock() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (nActionLockCount > 0)
@@ -6841,7 +6841,7 @@ void SAL_CALL ScCellObj::removeActionLock() throw(uno::RuntimeException)
     }
 }
 
-void SAL_CALL ScCellObj::setActionLocks( sal_Int16 nLock ) throw(uno::RuntimeException)
+void SAL_CALL ScCellObj::setActionLocks( sal_Int16 nLock ) throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (mxUnoText.is())
@@ -6858,7 +6858,7 @@ void SAL_CALL ScCellObj::setActionLocks( sal_Int16 nLock ) throw(uno::RuntimeExc
     nActionLockCount = nLock;
 }
 
-sal_Int16 SAL_CALL ScCellObj::resetActionLocks() throw(uno::RuntimeException)
+sal_Int16 SAL_CALL ScCellObj::resetActionLocks() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     sal_uInt16 nRet(nActionLockCount);
@@ -6894,7 +6894,7 @@ void ScTableSheetObj::InitInsertSheet(ScDocShell* pDocSh, SCTAB nTab)
     InitInsertRange( pDocSh, ScRange(0,0,nTab, MAXCOL,MAXROW,nTab) );
 }
 
-uno::Any SAL_CALL ScTableSheetObj::queryInterface( const uno::Type& rType ) throw(uno::RuntimeException)
+uno::Any SAL_CALL ScTableSheetObj::queryInterface( const uno::Type& rType ) throw(uno::RuntimeException, std::exception)
 {
     SC_QUERYINTERFACE( sheet::XSpreadsheet )
     SC_QUERYINTERFACE( container::XNamed )
@@ -6928,7 +6928,7 @@ void SAL_CALL ScTableSheetObj::release() throw()
     ScCellRangeObj::release();
 }
 
-uno::Sequence<uno::Type> SAL_CALL ScTableSheetObj::getTypes() throw(uno::RuntimeException)
+uno::Sequence<uno::Type> SAL_CALL ScTableSheetObj::getTypes() throw(uno::RuntimeException, std::exception)
 {
     static uno::Sequence<uno::Type> aTypes;
     if ( aTypes.getLength() == 0 )
@@ -6969,7 +6969,7 @@ namespace
     class theScTableSheetObjImplementationId : public rtl::Static< UnoTunnelIdInit, theScTableSheetObjImplementationId > {};
 }
 
-uno::Sequence<sal_Int8> SAL_CALL ScTableSheetObj::getImplementationId() throw(uno::RuntimeException)
+uno::Sequence<sal_Int8> SAL_CALL ScTableSheetObj::getImplementationId() throw(uno::RuntimeException, std::exception)
 {
     return theScTableSheetObjImplementationId::get().getSeq();
 }
@@ -6990,7 +6990,7 @@ SCTAB ScTableSheetObj::GetTab_Impl() const
 
 // former XSheet
 
-uno::Reference<table::XTableCharts> SAL_CALL ScTableSheetObj::getCharts() throw(uno::RuntimeException)
+uno::Reference<table::XTableCharts> SAL_CALL ScTableSheetObj::getCharts() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -7002,7 +7002,7 @@ uno::Reference<table::XTableCharts> SAL_CALL ScTableSheetObj::getCharts() throw(
 }
 
 uno::Reference<sheet::XDataPilotTables> SAL_CALL ScTableSheetObj::getDataPilotTables()
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -7013,7 +7013,7 @@ uno::Reference<sheet::XDataPilotTables> SAL_CALL ScTableSheetObj::getDataPilotTa
     return NULL;
 }
 
-uno::Reference<sheet::XScenarios> SAL_CALL ScTableSheetObj::getScenarios() throw(uno::RuntimeException)
+uno::Reference<sheet::XScenarios> SAL_CALL ScTableSheetObj::getScenarios() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -7026,7 +7026,7 @@ uno::Reference<sheet::XScenarios> SAL_CALL ScTableSheetObj::getScenarios() throw
 }
 
 uno::Reference<sheet::XSheetAnnotations> SAL_CALL ScTableSheetObj::getAnnotations()
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -7039,14 +7039,14 @@ uno::Reference<sheet::XSheetAnnotations> SAL_CALL ScTableSheetObj::getAnnotation
 }
 
 uno::Reference<table::XCellRange> SAL_CALL ScTableSheetObj::getCellRangeByName(
-                        const OUString& rRange ) throw(uno::RuntimeException)
+                        const OUString& rRange ) throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return ScCellRangeObj::getCellRangeByName( rRange );
 }
 
 uno::Reference<sheet::XSheetCellCursor> SAL_CALL ScTableSheetObj::createCursor()
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -7061,7 +7061,7 @@ uno::Reference<sheet::XSheetCellCursor> SAL_CALL ScTableSheetObj::createCursor()
 
 uno::Reference<sheet::XSheetCellCursor> SAL_CALL ScTableSheetObj::createCursorByRange(
                         const uno::Reference<sheet::XSheetCellRange>& xCellRange )
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -7081,7 +7081,7 @@ uno::Reference<sheet::XSheetCellCursor> SAL_CALL ScTableSheetObj::createCursorBy
 // XSheetCellRange
 
 uno::Reference<sheet::XSpreadsheet> SAL_CALL ScTableSheetObj::getSpreadsheet()
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return this;        //!???
@@ -7091,7 +7091,7 @@ uno::Reference<sheet::XSpreadsheet> SAL_CALL ScTableSheetObj::getSpreadsheet()
 
 uno::Reference<table::XCell> SAL_CALL ScTableSheetObj::getCellByPosition(
                                         sal_Int32 nColumn, sal_Int32 nRow )
-                                throw(lang::IndexOutOfBoundsException, uno::RuntimeException)
+                                throw(lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return ScCellRangeObj::GetCellByPosition_Impl(nColumn, nRow);
@@ -7099,14 +7099,14 @@ uno::Reference<table::XCell> SAL_CALL ScTableSheetObj::getCellByPosition(
 
 uno::Reference<table::XCellRange> SAL_CALL ScTableSheetObj::getCellRangeByPosition(
                 sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom )
-                                throw(lang::IndexOutOfBoundsException, uno::RuntimeException)
+                                throw(lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return ScCellRangeObj::getCellRangeByPosition(nLeft,nTop,nRight,nBottom);
 }
 
 uno::Sequence<sheet::TablePageBreakData> SAL_CALL ScTableSheetObj::getColumnPageBreaks()
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -7152,7 +7152,7 @@ uno::Sequence<sheet::TablePageBreakData> SAL_CALL ScTableSheetObj::getColumnPage
 }
 
 uno::Sequence<sheet::TablePageBreakData> SAL_CALL ScTableSheetObj::getRowPageBreaks()
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -7175,7 +7175,7 @@ uno::Sequence<sheet::TablePageBreakData> SAL_CALL ScTableSheetObj::getRowPageBre
     return uno::Sequence<sheet::TablePageBreakData>(0);
 }
 
-void SAL_CALL ScTableSheetObj::removeAllManualPageBreaks() throw(uno::RuntimeException)
+void SAL_CALL ScTableSheetObj::removeAllManualPageBreaks() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -7207,7 +7207,7 @@ void SAL_CALL ScTableSheetObj::removeAllManualPageBreaks() throw(uno::RuntimeExc
 
 // XNamed
 
-OUString SAL_CALL ScTableSheetObj::getName() throw(uno::RuntimeException)
+OUString SAL_CALL ScTableSheetObj::getName() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     OUString aName;
@@ -7218,7 +7218,7 @@ OUString SAL_CALL ScTableSheetObj::getName() throw(uno::RuntimeException)
 }
 
 void SAL_CALL ScTableSheetObj::setName( const OUString& aNewName )
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -7232,7 +7232,7 @@ void SAL_CALL ScTableSheetObj::setName( const OUString& aNewName )
 // XDrawPageSupplier
 
 uno::Reference<drawing::XDrawPage> SAL_CALL ScTableSheetObj::getDrawPage()
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -7256,7 +7256,7 @@ uno::Reference<drawing::XDrawPage> SAL_CALL ScTableSheetObj::getDrawPage()
 // XCellMovement
 
 void SAL_CALL ScTableSheetObj::insertCells( const table::CellRangeAddress& rRangeAddress,
-                                sheet::CellInsertMode nMode ) throw(uno::RuntimeException)
+                                sheet::CellInsertMode nMode ) throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -7287,7 +7287,7 @@ void SAL_CALL ScTableSheetObj::insertCells( const table::CellRangeAddress& rRang
 }
 
 void SAL_CALL ScTableSheetObj::removeRange( const table::CellRangeAddress& rRangeAddress,
-                                sheet::CellDeleteMode nMode ) throw(uno::RuntimeException)
+                                sheet::CellDeleteMode nMode ) throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -7319,7 +7319,7 @@ void SAL_CALL ScTableSheetObj::removeRange( const table::CellRangeAddress& rRang
 
 void SAL_CALL ScTableSheetObj::moveRange( const table::CellAddress& aDestination,
                                         const table::CellRangeAddress& aSource )
-                                        throw(uno::RuntimeException)
+                                        throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -7335,7 +7335,7 @@ void SAL_CALL ScTableSheetObj::moveRange( const table::CellAddress& aDestination
 
 void SAL_CALL ScTableSheetObj::copyRange( const table::CellAddress& aDestination,
                                         const table::CellRangeAddress& aSource )
-                                        throw(uno::RuntimeException)
+                                        throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -7391,7 +7391,7 @@ void ScTableSheetObj::PrintAreaUndo_Impl( ScPrintRangeSaver* pOldRanges )
 }
 
 uno::Sequence<table::CellRangeAddress> SAL_CALL ScTableSheetObj::getPrintAreas()
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -7422,7 +7422,7 @@ uno::Sequence<table::CellRangeAddress> SAL_CALL ScTableSheetObj::getPrintAreas()
 
 void SAL_CALL ScTableSheetObj::setPrintAreas(
                     const uno::Sequence<table::CellRangeAddress>& aPrintAreas )
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScPrintRangeSaver* pOldRanges = NULL;
@@ -7453,7 +7453,7 @@ void SAL_CALL ScTableSheetObj::setPrintAreas(
     }
 }
 
-sal_Bool SAL_CALL ScTableSheetObj::getPrintTitleColumns() throw(uno::RuntimeException)
+sal_Bool SAL_CALL ScTableSheetObj::getPrintTitleColumns() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -7467,7 +7467,7 @@ sal_Bool SAL_CALL ScTableSheetObj::getPrintTitleColumns() throw(uno::RuntimeExce
 }
 
 void SAL_CALL ScTableSheetObj::setPrintTitleColumns( sal_Bool bPrintTitleColumns )
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -7495,7 +7495,7 @@ void SAL_CALL ScTableSheetObj::setPrintTitleColumns( sal_Bool bPrintTitleColumns
     }
 }
 
-table::CellRangeAddress SAL_CALL ScTableSheetObj::getTitleColumns() throw(uno::RuntimeException)
+table::CellRangeAddress SAL_CALL ScTableSheetObj::getTitleColumns() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     table::CellRangeAddress aRet;
@@ -7515,7 +7515,7 @@ table::CellRangeAddress SAL_CALL ScTableSheetObj::getTitleColumns() throw(uno::R
 }
 
 void SAL_CALL ScTableSheetObj::setTitleColumns( const table::CellRangeAddress& aTitleColumns )
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -7534,7 +7534,7 @@ void SAL_CALL ScTableSheetObj::setTitleColumns( const table::CellRangeAddress& a
     }
 }
 
-sal_Bool SAL_CALL ScTableSheetObj::getPrintTitleRows() throw(uno::RuntimeException)
+sal_Bool SAL_CALL ScTableSheetObj::getPrintTitleRows() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -7548,7 +7548,7 @@ sal_Bool SAL_CALL ScTableSheetObj::getPrintTitleRows() throw(uno::RuntimeExcepti
 }
 
 void SAL_CALL ScTableSheetObj::setPrintTitleRows( sal_Bool bPrintTitleRows )
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -7576,7 +7576,7 @@ void SAL_CALL ScTableSheetObj::setPrintTitleRows( sal_Bool bPrintTitleRows )
     }
 }
 
-table::CellRangeAddress SAL_CALL ScTableSheetObj::getTitleRows() throw(uno::RuntimeException)
+table::CellRangeAddress SAL_CALL ScTableSheetObj::getTitleRows() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     table::CellRangeAddress aRet;
@@ -7596,7 +7596,7 @@ table::CellRangeAddress SAL_CALL ScTableSheetObj::getTitleRows() throw(uno::Runt
 }
 
 void SAL_CALL ScTableSheetObj::setTitleRows( const table::CellRangeAddress& aTitleRows )
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -7617,7 +7617,7 @@ void SAL_CALL ScTableSheetObj::setTitleRows( const table::CellRangeAddress& aTit
 
 // XSheetLinkable
 
-sheet::SheetLinkMode SAL_CALL ScTableSheetObj::getLinkMode() throw(uno::RuntimeException)
+sheet::SheetLinkMode SAL_CALL ScTableSheetObj::getLinkMode() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     sheet::SheetLinkMode eRet = sheet::SheetLinkMode_NONE;
@@ -7634,7 +7634,7 @@ sheet::SheetLinkMode SAL_CALL ScTableSheetObj::getLinkMode() throw(uno::RuntimeE
 }
 
 void SAL_CALL ScTableSheetObj::setLinkMode( sheet::SheetLinkMode nLinkMode )
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -7647,7 +7647,7 @@ void SAL_CALL ScTableSheetObj::setLinkMode( sheet::SheetLinkMode nLinkMode )
     link( aUrl, aSheet, aEmpty, aEmpty, nLinkMode );
 }
 
-OUString SAL_CALL ScTableSheetObj::getLinkUrl() throw(uno::RuntimeException)
+OUString SAL_CALL ScTableSheetObj::getLinkUrl() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     OUString aFile;
@@ -7658,7 +7658,7 @@ OUString SAL_CALL ScTableSheetObj::getLinkUrl() throw(uno::RuntimeException)
 }
 
 void SAL_CALL ScTableSheetObj::setLinkUrl( const OUString& aLinkUrl )
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -7671,7 +7671,7 @@ void SAL_CALL ScTableSheetObj::setLinkUrl( const OUString& aLinkUrl )
     link( aLinkUrl, aSheet, aEmpty, aEmpty, eMode );
 }
 
-OUString SAL_CALL ScTableSheetObj::getLinkSheetName() throw(uno::RuntimeException)
+OUString SAL_CALL ScTableSheetObj::getLinkSheetName() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     OUString aSheet;
@@ -7682,7 +7682,7 @@ OUString SAL_CALL ScTableSheetObj::getLinkSheetName() throw(uno::RuntimeExceptio
 }
 
 void SAL_CALL ScTableSheetObj::setLinkSheetName( const OUString& aLinkSheetName )
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -7697,7 +7697,7 @@ void SAL_CALL ScTableSheetObj::setLinkSheetName( const OUString& aLinkSheetName 
 
 void SAL_CALL ScTableSheetObj::link( const OUString& aUrl, const OUString& aSheetName,
                         const OUString& aFilterName, const OUString& aFilterOptions,
-                        sheet::SheetLinkMode nMode ) throw(uno::RuntimeException)
+                        sheet::SheetLinkMode nMode ) throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -7763,7 +7763,7 @@ void SAL_CALL ScTableSheetObj::link( const OUString& aUrl, const OUString& aShee
 // XSheetAuditing
 
 sal_Bool SAL_CALL ScTableSheetObj::hideDependents( const table::CellAddress& aPosition )
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -7778,7 +7778,7 @@ sal_Bool SAL_CALL ScTableSheetObj::hideDependents( const table::CellAddress& aPo
 }
 
 sal_Bool SAL_CALL ScTableSheetObj::hidePrecedents( const table::CellAddress& aPosition )
-                                            throw(uno::RuntimeException)
+                                            throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -7793,7 +7793,7 @@ sal_Bool SAL_CALL ScTableSheetObj::hidePrecedents( const table::CellAddress& aPo
 }
 
 sal_Bool SAL_CALL ScTableSheetObj::showDependents( const table::CellAddress& aPosition )
-                                            throw(uno::RuntimeException)
+                                            throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -7808,7 +7808,7 @@ sal_Bool SAL_CALL ScTableSheetObj::showDependents( const table::CellAddress& aPo
 }
 
 sal_Bool SAL_CALL ScTableSheetObj::showPrecedents( const table::CellAddress& aPosition )
-                                            throw(uno::RuntimeException)
+                                            throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -7823,7 +7823,7 @@ sal_Bool SAL_CALL ScTableSheetObj::showPrecedents( const table::CellAddress& aPo
 }
 
 sal_Bool SAL_CALL ScTableSheetObj::showErrors( const table::CellAddress& aPosition )
-                                            throw(uno::RuntimeException)
+                                            throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -7837,7 +7837,7 @@ sal_Bool SAL_CALL ScTableSheetObj::showErrors( const table::CellAddress& aPositi
     return false;
 }
 
-sal_Bool SAL_CALL ScTableSheetObj::showInvalid() throw(uno::RuntimeException)
+sal_Bool SAL_CALL ScTableSheetObj::showInvalid() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -7846,7 +7846,7 @@ sal_Bool SAL_CALL ScTableSheetObj::showInvalid() throw(uno::RuntimeException)
     return false;
 }
 
-void SAL_CALL ScTableSheetObj::clearArrows() throw(uno::RuntimeException)
+void SAL_CALL ScTableSheetObj::clearArrows() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -7962,7 +7962,7 @@ void SAL_CALL ScTableSheetObj::showLevel( sal_Int16 nLevel, table::TableOrientat
 // XProtectable
 
 void SAL_CALL ScTableSheetObj::protect( const OUString& aPassword )
-                                            throw(uno::RuntimeException)
+                                            throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -7975,7 +7975,7 @@ void SAL_CALL ScTableSheetObj::protect( const OUString& aPassword )
 }
 
 void SAL_CALL ScTableSheetObj::unprotect( const OUString& aPassword )
-                            throw(lang::IllegalArgumentException, uno::RuntimeException)
+                            throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -7988,7 +7988,7 @@ void SAL_CALL ScTableSheetObj::unprotect( const OUString& aPassword )
     }
 }
 
-sal_Bool SAL_CALL ScTableSheetObj::isProtected() throw(uno::RuntimeException)
+sal_Bool SAL_CALL ScTableSheetObj::isProtected() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -8001,7 +8001,7 @@ sal_Bool SAL_CALL ScTableSheetObj::isProtected() throw(uno::RuntimeException)
 
 // XScenario
 
-sal_Bool SAL_CALL ScTableSheetObj::getIsScenario() throw(uno::RuntimeException)
+sal_Bool SAL_CALL ScTableSheetObj::getIsScenario() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -8011,7 +8011,7 @@ sal_Bool SAL_CALL ScTableSheetObj::getIsScenario() throw(uno::RuntimeException)
     return false;
 }
 
-OUString SAL_CALL ScTableSheetObj::getScenarioComment() throw(uno::RuntimeException)
+OUString SAL_CALL ScTableSheetObj::getScenarioComment() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -8027,7 +8027,7 @@ OUString SAL_CALL ScTableSheetObj::getScenarioComment() throw(uno::RuntimeExcept
 }
 
 void SAL_CALL ScTableSheetObj::setScenarioComment( const OUString& aScenarioComment )
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -8050,7 +8050,7 @@ void SAL_CALL ScTableSheetObj::setScenarioComment( const OUString& aScenarioComm
 }
 
 void SAL_CALL ScTableSheetObj::addRanges( const uno::Sequence<table::CellRangeAddress>& rScenRanges )
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -8087,7 +8087,7 @@ void SAL_CALL ScTableSheetObj::addRanges( const uno::Sequence<table::CellRangeAd
     }
 }
 
-void SAL_CALL ScTableSheetObj::apply() throw(uno::RuntimeException)
+void SAL_CALL ScTableSheetObj::apply() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -8112,7 +8112,7 @@ void SAL_CALL ScTableSheetObj::apply() throw(uno::RuntimeException)
 // XScenarioEnhanced
 
 uno::Sequence< table::CellRangeAddress > SAL_CALL ScTableSheetObj::getRanges(  )
-                                    throw(uno::RuntimeException)
+                                    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -8145,7 +8145,7 @@ uno::Sequence< table::CellRangeAddress > SAL_CALL ScTableSheetObj::getRanges(  )
 // XExternalSheetName
 
 void ScTableSheetObj::setExternalName( const OUString& aUrl, const OUString& aSheetName )
-    throw (container::ElementExistException, uno::RuntimeException)
+    throw (container::ElementExistException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -8167,7 +8167,7 @@ void ScTableSheetObj::setExternalName( const OUString& aUrl, const OUString& aSh
 
 // XEventsSupplier
 
-uno::Reference<container::XNameReplace> SAL_CALL ScTableSheetObj::getEvents() throw (uno::RuntimeException)
+uno::Reference<container::XNameReplace> SAL_CALL ScTableSheetObj::getEvents() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -8180,7 +8180,7 @@ uno::Reference<container::XNameReplace> SAL_CALL ScTableSheetObj::getEvents() th
 // XPropertySet erweitert fuer Sheet-Properties
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScTableSheetObj::getPropertySetInfo()
-                                                        throw(uno::RuntimeException)
+                                                        throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     static uno::Reference<beans::XPropertySetInfo> aRef(
@@ -8673,19 +8673,19 @@ const SfxItemPropertyMap& ScTableSheetObj::GetItemPropertyMap()
 
 // XServiceInfo
 
-OUString SAL_CALL ScTableSheetObj::getImplementationName() throw(uno::RuntimeException)
+OUString SAL_CALL ScTableSheetObj::getImplementationName() throw(uno::RuntimeException, std::exception)
 {
     return OUString( "ScTableSheetObj" );
 }
 
 sal_Bool SAL_CALL ScTableSheetObj::supportsService( const OUString& rServiceName )
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence<OUString> SAL_CALL ScTableSheetObj::getSupportedServiceNames()
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence<OUString> aRet(7);
     OUString* pArray = aRet.getArray();
@@ -8702,7 +8702,7 @@ uno::Sequence<OUString> SAL_CALL ScTableSheetObj::getSupportedServiceNames()
 // XUnoTunnel
 
 sal_Int64 SAL_CALL ScTableSheetObj::getSomething(
-                const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException)
+                const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException, std::exception)
 {
     if ( rId.getLength() == 16 &&
           0 == memcmp( getUnoTunnelId().getConstArray(),
@@ -8745,7 +8745,7 @@ ScTableColumnObj::~ScTableColumnObj()
 {
 }
 
-uno::Any SAL_CALL ScTableColumnObj::queryInterface( const uno::Type& rType ) throw(uno::RuntimeException)
+uno::Any SAL_CALL ScTableColumnObj::queryInterface( const uno::Type& rType ) throw(uno::RuntimeException, std::exception)
 {
     SC_QUERYINTERFACE( container::XNamed )
 
@@ -8762,7 +8762,7 @@ void SAL_CALL ScTableColumnObj::release() throw()
     ScCellRangeObj::release();
 }
 
-uno::Sequence<uno::Type> SAL_CALL ScTableColumnObj::getTypes() throw(uno::RuntimeException)
+uno::Sequence<uno::Type> SAL_CALL ScTableColumnObj::getTypes() throw(uno::RuntimeException, std::exception)
 {
     static uno::Sequence<uno::Type> aTypes;
     if ( aTypes.getLength() == 0 )
@@ -8786,14 +8786,14 @@ namespace
     class theScTableColumnObjImplementationId : public rtl::Static< UnoTunnelIdInit, theScTableColumnObjImplementationId > {};
 }
 
-uno::Sequence<sal_Int8> SAL_CALL ScTableColumnObj::getImplementationId() throw(uno::RuntimeException)
+uno::Sequence<sal_Int8> SAL_CALL ScTableColumnObj::getImplementationId() throw(uno::RuntimeException, std::exception)
 {
     return theScTableColumnObjImplementationId::get().getSeq();
 }
 
 // XNamed
 
-OUString SAL_CALL ScTableColumnObj::getName() throw(uno::RuntimeException)
+OUString SAL_CALL ScTableColumnObj::getName() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -8805,7 +8805,7 @@ OUString SAL_CALL ScTableColumnObj::getName() throw(uno::RuntimeException)
 }
 
 void SAL_CALL ScTableColumnObj::setName( const OUString& /* aNewName */ )
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     throw uno::RuntimeException();      // read-only
@@ -8814,7 +8814,7 @@ void SAL_CALL ScTableColumnObj::setName( const OUString& /* aNewName */ )
 // XPropertySet erweitert fuer Spalten-Properties
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScTableColumnObj::getPropertySetInfo()
-                                                        throw(uno::RuntimeException)
+                                                        throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     static uno::Reference<beans::XPropertySetInfo> aRef(
@@ -8957,7 +8957,7 @@ ScTableRowObj::~ScTableRowObj()
 // XPropertySet erweitert fuer Zeilen-Properties
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScTableRowObj::getPropertySetInfo()
-                                                        throw(uno::RuntimeException)
+                                                        throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     static uno::Reference<beans::XPropertySetInfo> aRef(
@@ -9131,7 +9131,7 @@ void ScCellsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 // XEnumerationAccess
 
 uno::Reference<container::XEnumeration> SAL_CALL ScCellsObj::createEnumeration()
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (pDocShell)
@@ -9139,13 +9139,13 @@ uno::Reference<container::XEnumeration> SAL_CALL ScCellsObj::createEnumeration()
     return NULL;
 }
 
-uno::Type SAL_CALL ScCellsObj::getElementType() throw(uno::RuntimeException)
+uno::Type SAL_CALL ScCellsObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return getCppuType((uno::Reference<table::XCell>*)0);
 }
 
-sal_Bool SAL_CALL ScCellsObj::hasElements() throw(uno::RuntimeException)
+sal_Bool SAL_CALL ScCellsObj::hasElements() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     sal_Bool bHas = false;
@@ -9269,14 +9269,14 @@ void ScCellsEnumeration::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // XEnumeration
 
-sal_Bool SAL_CALL ScCellsEnumeration::hasMoreElements() throw(uno::RuntimeException)
+sal_Bool SAL_CALL ScCellsEnumeration::hasMoreElements() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return !bAtEnd;
 }
 
 uno::Any SAL_CALL ScCellsEnumeration::nextElement() throw(container::NoSuchElementException,
-                                        lang::WrappedTargetException, uno::RuntimeException)
+                                        lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (pDocShell && !bAtEnd)
@@ -9356,7 +9356,7 @@ ScCellRangeObj* ScCellFormatsObj::GetObjectByIndex_Impl(long nIndex) const
 
 // XIndexAccess
 
-sal_Int32 SAL_CALL ScCellFormatsObj::getCount() throw(uno::RuntimeException)
+sal_Int32 SAL_CALL ScCellFormatsObj::getCount() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -9379,7 +9379,7 @@ sal_Int32 SAL_CALL ScCellFormatsObj::getCount() throw(uno::RuntimeException)
 
 uno::Any SAL_CALL ScCellFormatsObj::getByIndex( sal_Int32 nIndex )
                             throw(lang::IndexOutOfBoundsException,
-                                    lang::WrappedTargetException, uno::RuntimeException)
+                                    lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -9390,13 +9390,13 @@ uno::Any SAL_CALL ScCellFormatsObj::getByIndex( sal_Int32 nIndex )
         throw lang::IndexOutOfBoundsException();
 }
 
-uno::Type SAL_CALL ScCellFormatsObj::getElementType() throw(uno::RuntimeException)
+uno::Type SAL_CALL ScCellFormatsObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return getCppuType((uno::Reference<table::XCellRange>*)0);
 }
 
-sal_Bool SAL_CALL ScCellFormatsObj::hasElements() throw(uno::RuntimeException)
+sal_Bool SAL_CALL ScCellFormatsObj::hasElements() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );     //! immer groesser 0 ??
@@ -9405,7 +9405,7 @@ sal_Bool SAL_CALL ScCellFormatsObj::hasElements() throw(uno::RuntimeException)
 // XEnumerationAccess
 
 uno::Reference<container::XEnumeration> SAL_CALL ScCellFormatsObj::createEnumeration()
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (pDocShell)
@@ -9502,14 +9502,14 @@ void ScCellFormatsEnumeration::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // XEnumeration
 
-sal_Bool SAL_CALL ScCellFormatsEnumeration::hasMoreElements() throw(uno::RuntimeException)
+sal_Bool SAL_CALL ScCellFormatsEnumeration::hasMoreElements() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return !bAtEnd;
 }
 
 uno::Any SAL_CALL ScCellFormatsEnumeration::nextElement() throw(container::NoSuchElementException,
-                                        lang::WrappedTargetException, uno::RuntimeException)
+                                        lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -9749,7 +9749,7 @@ void ScUniqueCellFormatsObj::GetObjects_Impl()
 
 // XIndexAccess
 
-sal_Int32 SAL_CALL ScUniqueCellFormatsObj::getCount() throw(uno::RuntimeException)
+sal_Int32 SAL_CALL ScUniqueCellFormatsObj::getCount() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -9758,7 +9758,7 @@ sal_Int32 SAL_CALL ScUniqueCellFormatsObj::getCount() throw(uno::RuntimeExceptio
 
 uno::Any SAL_CALL ScUniqueCellFormatsObj::getByIndex( sal_Int32 nIndex )
                             throw(lang::IndexOutOfBoundsException,
-                                    lang::WrappedTargetException, uno::RuntimeException)
+                                    lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -9768,13 +9768,13 @@ uno::Any SAL_CALL ScUniqueCellFormatsObj::getByIndex( sal_Int32 nIndex )
         throw lang::IndexOutOfBoundsException();
 }
 
-uno::Type SAL_CALL ScUniqueCellFormatsObj::getElementType() throw(uno::RuntimeException)
+uno::Type SAL_CALL ScUniqueCellFormatsObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return getCppuType((uno::Reference<sheet::XSheetCellRangeContainer>*)0);
 }
 
-sal_Bool SAL_CALL ScUniqueCellFormatsObj::hasElements() throw(uno::RuntimeException)
+sal_Bool SAL_CALL ScUniqueCellFormatsObj::hasElements() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return ( aRangeLists.size() != 0 );
@@ -9783,7 +9783,7 @@ sal_Bool SAL_CALL ScUniqueCellFormatsObj::hasElements() throw(uno::RuntimeExcept
 // XEnumerationAccess
 
 uno::Reference<container::XEnumeration> SAL_CALL ScUniqueCellFormatsObj::createEnumeration()
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (pDocShell)
@@ -9823,14 +9823,14 @@ void ScUniqueCellFormatsEnumeration::Notify( SfxBroadcaster&, const SfxHint& rHi
 
 // XEnumeration
 
-sal_Bool SAL_CALL ScUniqueCellFormatsEnumeration::hasMoreElements() throw(uno::RuntimeException)
+sal_Bool SAL_CALL ScUniqueCellFormatsEnumeration::hasMoreElements() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return static_cast<sal_uInt32>(nCurrentPosition) < aRangeLists.size();
 }
 
 uno::Any SAL_CALL ScUniqueCellFormatsEnumeration::nextElement() throw(container::NoSuchElementException,
-                                        lang::WrappedTargetException, uno::RuntimeException)
+                                        lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 

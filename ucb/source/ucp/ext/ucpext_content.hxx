@@ -90,11 +90,11 @@ namespace ucb { namespace ucp { namespace ext
         virtual ~Content();
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
         // XContent
-        virtual OUString SAL_CALL getContentType() throw( com::sun::star::uno::RuntimeException );
+        virtual OUString SAL_CALL getContentType() throw( com::sun::star::uno::RuntimeException, std::exception );
 
         // XCommandProcessor
         virtual com::sun::star::uno::Any SAL_CALL
@@ -105,14 +105,14 @@ namespace ucb { namespace ucp { namespace ext
                 )
                 throw   (   ::com::sun::star::uno::Exception
                         ,   ::com::sun::star::ucb::CommandAbortedException
-                        ,   ::com::sun::star::uno::RuntimeException
+                        ,   ::com::sun::star::uno::RuntimeException, std::exception
                         );
 
         virtual void SAL_CALL
                 abort(
                     sal_Int32 CommandId
                 )
-                throw   (   ::com::sun::star::uno::RuntimeException
+                throw   (   ::com::sun::star::uno::RuntimeException, std::exception
                         );
 
     private:

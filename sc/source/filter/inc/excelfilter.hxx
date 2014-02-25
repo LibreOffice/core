@@ -50,7 +50,7 @@ public:
     virtual ::oox::drawingml::chart::ChartConverter* getChartConverter();
     virtual void useInternalChartDataTable( bool bInternal );
 
-    virtual sal_Bool SAL_CALL filter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rDescriptor ) throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL filter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rDescriptor ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 private:
     virtual GraphicHelper* implCreateGraphicHelper() const;

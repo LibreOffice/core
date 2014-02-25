@@ -267,7 +267,7 @@ TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos,
 TextConversionResult SAL_CALL
 TextConversion_zh::getConversions( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
     const Locale& rLocale, sal_Int16 nConversionType, sal_Int32 nConversionOptions)
-    throw(  RuntimeException, IllegalArgumentException, NoSupportException )
+    throw(  RuntimeException, IllegalArgumentException, NoSupportException, std::exception )
 {
     TextConversionResult result;
 
@@ -282,7 +282,7 @@ TextConversion_zh::getConversions( const OUString& aText, sal_Int32 nStartPos, s
 OUString SAL_CALL
 TextConversion_zh::getConversion( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
     const Locale& rLocale, sal_Int16 nConversionType, sal_Int32 nConversionOptions)
-    throw(  RuntimeException, IllegalArgumentException, NoSupportException )
+    throw(  RuntimeException, IllegalArgumentException, NoSupportException, std::exception )
 {
     if (rLocale.Language == "zh" && ( nConversionType == TextConversionType::TO_SCHINESE || nConversionType == TextConversionType::TO_TCHINESE) ) {
 
@@ -304,7 +304,7 @@ TextConversion_zh::getConversion( const OUString& aText, sal_Int32 nStartPos, sa
 OUString SAL_CALL
 TextConversion_zh::getConversionWithOffset( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
     const Locale& rLocale, sal_Int16 nConversionType, sal_Int32 nConversionOptions, Sequence<sal_Int32>& offset)
-    throw(  RuntimeException, IllegalArgumentException, NoSupportException )
+    throw(  RuntimeException, IllegalArgumentException, NoSupportException, std::exception )
 {
     if (rLocale.Language == "zh" && ( nConversionType == TextConversionType::TO_SCHINESE || nConversionType == TextConversionType::TO_TCHINESE) ) {
 
@@ -327,7 +327,7 @@ TextConversion_zh::getConversionWithOffset( const OUString& aText, sal_Int32 nSt
 
 sal_Bool SAL_CALL
 TextConversion_zh::interactiveConversion( const Locale& /*rLocale*/, sal_Int16 /*nTextConversionType*/, sal_Int32 /*nTextConversionOptions*/ )
-    throw(  RuntimeException, IllegalArgumentException, NoSupportException )
+    throw(  RuntimeException, IllegalArgumentException, NoSupportException, std::exception )
 {
     return sal_False;
 }

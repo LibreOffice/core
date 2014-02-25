@@ -31,15 +31,15 @@ public:
         virtual                                 ~ScPageObj() throw();
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-                            _CreateShape( SdrObject *pObj ) const throw();
+                            _CreateShape( SdrObject *pObj ) const throw(std::exception);
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName )
-        throw(com::sun::star::uno::RuntimeException);
+        throw(com::sun::star::uno::RuntimeException, std::exception);
     virtual com::sun::star::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw(com::sun::star::uno::RuntimeException);
+        throw(com::sun::star::uno::RuntimeException, std::exception);
 };
 
 #endif

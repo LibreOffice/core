@@ -86,10 +86,10 @@ namespace utl{
             ~ConfigChangeListener_Impl();
 
         //XChangesListener
-        virtual void SAL_CALL changesOccurred( const ChangesEvent& Event ) throw(RuntimeException);
+        virtual void SAL_CALL changesOccurred( const ChangesEvent& Event ) throw(RuntimeException, std::exception);
 
         //XEventListener
-        virtual void SAL_CALL disposing( const EventObject& Source ) throw(RuntimeException);
+        virtual void SAL_CALL disposing( const EventObject& Source ) throw(RuntimeException, std::exception);
     };
 }
 
@@ -131,7 +131,7 @@ static bool lcl_Find(
     return false;
 }
 
-void ConfigChangeListener_Impl::changesOccurred( const ChangesEvent& rEvent ) throw(RuntimeException)
+void ConfigChangeListener_Impl::changesOccurred( const ChangesEvent& rEvent ) throw(RuntimeException, std::exception)
 {
     const ElementChange* pElementChanges = rEvent.Changes.getConstArray();
 
@@ -160,7 +160,7 @@ void ConfigChangeListener_Impl::changesOccurred( const ChangesEvent& rEvent ) th
 }
 
 
-void ConfigChangeListener_Impl::disposing( const EventObject& /*rSource*/ ) throw(RuntimeException)
+void ConfigChangeListener_Impl::disposing( const EventObject& /*rSource*/ ) throw(RuntimeException, std::exception)
 {
     pParent->RemoveChangesListener();
 }

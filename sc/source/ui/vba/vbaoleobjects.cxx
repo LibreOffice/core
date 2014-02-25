@@ -46,12 +46,12 @@ public:
         }
     }
 
-    virtual ::sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException)
+    virtual ::sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException, std::exception)
     {
         return vObjects.size();
     }
 
-    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
     {
         if ( Index < 0 || Index >= getCount() )
             throw lang::IndexOutOfBoundsException();
@@ -59,12 +59,12 @@ public:
     }
 
         // Methods XElementAcess
-        virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException)
+        virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException, std::exception)
         {
             return cppu::UnoType<drawing::XControlShape>::get();
         }
 
-        virtual ::sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException)
+        virtual ::sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException, std::exception)
         {
             return ( getCount() > 0 );
         }
@@ -81,12 +81,12 @@ class EnumWrapper : public EnumerationHelper_BASE
 public:
         EnumWrapper(  const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, uno::Reference< container::XIndexAccess >& xIndexAccess ) :  m_xParent( xParent ), m_xContext( xContext), m_xIndexAccess( xIndexAccess ), nIndex( 0 ) {}
 
-        virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException)
+        virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception)
         {
                 return ( nIndex < m_xIndexAccess->getCount() );
         }
 
-        virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+        virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
         {
                 if ( nIndex < m_xIndexAccess->getCount() )
         {

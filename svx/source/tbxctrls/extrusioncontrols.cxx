@@ -282,14 +282,14 @@ Reference< XInterface > SAL_CALL SAL_CALL ExtrusionDirectionControl_createInstan
 
 
 
-OUString SAL_CALL ExtrusionDirectionControl::getImplementationName(  ) throw (RuntimeException)
+OUString SAL_CALL ExtrusionDirectionControl::getImplementationName(  ) throw (RuntimeException, std::exception)
 {
     return ExtrusionDirectionControl_getImplementationName();
 }
 
 
 
-Sequence< OUString > SAL_CALL ExtrusionDirectionControl::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > SAL_CALL ExtrusionDirectionControl::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
 {
     return ExtrusionDirectionControl_getSupportedServiceNames();
 }
@@ -535,14 +535,14 @@ Reference< XInterface > SAL_CALL SAL_CALL ExtrusionDepthController_createInstanc
 
 
 
-OUString SAL_CALL ExtrusionDepthController::getImplementationName(  ) throw (RuntimeException)
+OUString SAL_CALL ExtrusionDepthController::getImplementationName(  ) throw (RuntimeException, std::exception)
 {
     return ExtrusionDepthController_getImplementationName();
 }
 
 
 
-Sequence< OUString > SAL_CALL ExtrusionDepthController::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > SAL_CALL ExtrusionDepthController::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
 {
     return ExtrusionDepthController_getSupportedServiceNames();
 }
@@ -798,14 +798,14 @@ Reference< XInterface > SAL_CALL SAL_CALL ExtrusionLightingControl_createInstanc
 
 
 
-OUString SAL_CALL ExtrusionLightingControl::getImplementationName(  ) throw (RuntimeException)
+OUString SAL_CALL ExtrusionLightingControl::getImplementationName(  ) throw (RuntimeException, std::exception)
 {
     return ExtrusionLightingControl_getImplementationName();
 }
 
 
 
-Sequence< OUString > SAL_CALL ExtrusionLightingControl::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > SAL_CALL ExtrusionLightingControl::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
 {
     return ExtrusionLightingControl_getSupportedServiceNames();
 }
@@ -943,14 +943,14 @@ Reference< XInterface > SAL_CALL SAL_CALL ExtrusionSurfaceControl_createInstance
 
 
 
-OUString SAL_CALL ExtrusionSurfaceControl::getImplementationName(  ) throw (RuntimeException)
+OUString SAL_CALL ExtrusionSurfaceControl::getImplementationName(  ) throw (RuntimeException, std::exception)
 {
     return ExtrusionSurfaceControl_getImplementationName();
 }
 
 
 
-Sequence< OUString > SAL_CALL ExtrusionSurfaceControl::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > SAL_CALL ExtrusionSurfaceControl::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
 {
     return ExtrusionSurfaceControl_getSupportedServiceNames();
 }

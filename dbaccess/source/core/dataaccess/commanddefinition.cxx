@@ -154,7 +154,7 @@ OUString OCommandDefinition::getImplementationName_static(  ) throw(RuntimeExcep
     return OUString("com.sun.star.comp.dba.OCommandDefinition");
 }
 
-OUString SAL_CALL OCommandDefinition::getImplementationName(  ) throw(RuntimeException)
+OUString SAL_CALL OCommandDefinition::getImplementationName(  ) throw(RuntimeException, std::exception)
 {
     return getImplementationName_static();
 }
@@ -168,7 +168,7 @@ Sequence< OUString > OCommandDefinition::getSupportedServiceNames_static(  ) thr
     return aServices;
 }
 
-Sequence< OUString > SAL_CALL OCommandDefinition::getSupportedServiceNames(  ) throw(RuntimeException)
+Sequence< OUString > SAL_CALL OCommandDefinition::getSupportedServiceNames(  ) throw(RuntimeException, std::exception)
 {
     return getSupportedServiceNames_static();
 }
@@ -178,7 +178,7 @@ Reference< XInterface > OCommandDefinition::Create(const Reference< XComponentCo
     return *(new OCommandDefinition( _rxContext, NULL, TContentPtr( new OCommandDefinition_Impl ) ) );
 }
 
-void SAL_CALL OCommandDefinition::rename( const OUString& newName ) throw (SQLException, ElementExistException, RuntimeException)
+void SAL_CALL OCommandDefinition::rename( const OUString& newName ) throw (SQLException, ElementExistException, RuntimeException, std::exception)
 {
     try
     {

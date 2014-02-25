@@ -39,7 +39,7 @@ NumberFormatCodeMapper::~NumberFormatCodeMapper()
 
 
 ::com::sun::star::i18n::NumberFormatCode SAL_CALL
-NumberFormatCodeMapper::getDefault( sal_Int16 formatType, sal_Int16 formatUsage, const ::com::sun::star::lang::Locale& rLocale ) throw(::com::sun::star::uno::RuntimeException)
+NumberFormatCodeMapper::getDefault( sal_Int16 formatType, sal_Int16 formatUsage, const ::com::sun::star::lang::Locale& rLocale ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
 
     OUString elementType = mapElementTypeShortToString(formatType);
@@ -67,7 +67,7 @@ NumberFormatCodeMapper::getDefault( sal_Int16 formatType, sal_Int16 formatUsage,
 
 
 ::com::sun::star::i18n::NumberFormatCode SAL_CALL
-NumberFormatCodeMapper::getFormatCode( sal_Int16 formatIndex, const ::com::sun::star::lang::Locale& rLocale ) throw(::com::sun::star::uno::RuntimeException)
+NumberFormatCodeMapper::getFormatCode( sal_Int16 formatIndex, const ::com::sun::star::lang::Locale& rLocale ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     getFormats( rLocale );
 
@@ -91,7 +91,7 @@ NumberFormatCodeMapper::getFormatCode( sal_Int16 formatIndex, const ::com::sun::
 
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode > SAL_CALL
-NumberFormatCodeMapper::getAllFormatCode( sal_Int16 formatUsage, const ::com::sun::star::lang::Locale& rLocale ) throw(::com::sun::star::uno::RuntimeException)
+NumberFormatCodeMapper::getAllFormatCode( sal_Int16 formatUsage, const ::com::sun::star::lang::Locale& rLocale ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     getFormats( rLocale );
 
@@ -124,7 +124,7 @@ NumberFormatCodeMapper::getAllFormatCode( sal_Int16 formatUsage, const ::com::su
 
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode > SAL_CALL
-NumberFormatCodeMapper::getAllFormatCodes( const ::com::sun::star::lang::Locale& rLocale ) throw(::com::sun::star::uno::RuntimeException)
+NumberFormatCodeMapper::getAllFormatCodes( const ::com::sun::star::lang::Locale& rLocale ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     getFormats( rLocale );
 
@@ -262,19 +262,19 @@ NumberFormatCodeMapper::createLocaleDataObject() {
 
 OUString SAL_CALL
 NumberFormatCodeMapper::getImplementationName(void)
-                throw( ::com::sun::star::uno::RuntimeException )
+                throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     return OUString("com.sun.star.i18n.NumberFormatCodeMapper");
 }
 
 sal_Bool SAL_CALL NumberFormatCodeMapper::supportsService(const OUString& rServiceName)
-                throw( ::com::sun::star::uno::RuntimeException )
+                throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL
-NumberFormatCodeMapper::getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException )
+NumberFormatCodeMapper::getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     ::com::sun::star::uno::Sequence< OUString > aRet(1);
     aRet[0] = "com.sun.star.i18n.NumberFormatMapper";

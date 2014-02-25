@@ -44,7 +44,7 @@ PlainTextFilterDetect::PlainTextFilterDetect(const uno::Reference<uno::XComponen
 
 PlainTextFilterDetect::~PlainTextFilterDetect() {}
 
-OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyValue>& lDescriptor) throw (uno::RuntimeException)
+OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyValue>& lDescriptor) throw (uno::RuntimeException, std::exception)
 {
     OUString aType;
     OUString aDocService;
@@ -110,7 +110,7 @@ OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyVal
 // XInitialization
 
 void SAL_CALL PlainTextFilterDetect::initialize(const uno::Sequence<uno::Any>& /*aArguments*/)
-    throw (uno::Exception, uno::RuntimeException)
+    throw (uno::Exception, uno::RuntimeException, std::exception)
 {
 }
 
@@ -136,19 +136,19 @@ uno::Reference<uno::XInterface> PlainTextFilterDetect_createInstance(
 
 // XServiceInfo
 OUString SAL_CALL PlainTextFilterDetect::getImplementationName()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return PlainTextFilterDetect_getImplementationName();
 }
 
 sal_Bool SAL_CALL PlainTextFilterDetect::supportsService(const OUString& rServiceName)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence<OUString> SAL_CALL PlainTextFilterDetect::getSupportedServiceNames()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return PlainTextFilterDetect_getSupportedServiceNames();
 }

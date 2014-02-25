@@ -82,7 +82,7 @@ public:
         const css::uno::Any& rLeft,
         const css::uno::Any& rTop,
         const css::uno::Any& rWidth,
-        const css::uno::Any& rHeight ) throw (css::uno::RuntimeException);
+        const css::uno::Any& rHeight ) throw (css::uno::RuntimeException, std::exception);
 };
 
 // ============================================================================

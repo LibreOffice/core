@@ -40,12 +40,12 @@ ZipPackageFolderEnumeration::~ZipPackageFolderEnumeration( void )
 }
 
 sal_Bool SAL_CALL ZipPackageFolderEnumeration::hasMoreElements(  )
-        throw(uno::RuntimeException)
+        throw(uno::RuntimeException, std::exception)
 {
     return (aIterator != rContents.end() );
 }
 uno::Any SAL_CALL ZipPackageFolderEnumeration::nextElement(  )
-        throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+        throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     uno::Any aAny;
     if (aIterator == rContents.end() )
@@ -56,13 +56,13 @@ uno::Any SAL_CALL ZipPackageFolderEnumeration::nextElement(  )
 }
 
 OUString ZipPackageFolderEnumeration::getImplementationName()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return OUString ("ZipPackageFolderEnumeration");
 }
 
 uno::Sequence< OUString > ZipPackageFolderEnumeration::getSupportedServiceNames()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString > aNames(1);
     aNames[0] = "com.sun.star.packages.PackageFolderEnumeration";
@@ -70,7 +70,7 @@ uno::Sequence< OUString > ZipPackageFolderEnumeration::getSupportedServiceNames(
 }
 
 sal_Bool SAL_CALL ZipPackageFolderEnumeration::supportsService( OUString const & rServiceName )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }

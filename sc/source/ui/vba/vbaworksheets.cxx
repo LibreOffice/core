@@ -69,11 +69,11 @@ class WorkSheetsEnumeration : public SheetEnumeration_BASE
     SheetMap::iterator mIt;
 public:
     WorkSheetsEnumeration( const SheetMap& sMap ) : mSheetMap( sMap ), mIt( mSheetMap.begin() ) {}
-    virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException)
+    virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception)
     {
         return ( mIt != mSheetMap.end() );
     }
-    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
     {
         if ( !hasMoreElements() )
             throw container::NoSuchElementException();
@@ -89,16 +89,16 @@ class SheetCollectionHelper : public SheetCollectionHelper_BASE
 public:
     SheetCollectionHelper( const SheetMap& sMap ) : mSheetMap( sMap ), cachePos(mSheetMap.begin()) {}
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException) { return  cppu::UnoType<sheet::XSpreadsheet>::get(); }
-    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException) { return ( !mSheetMap.empty() ); }
+    virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException, std::exception) { return  cppu::UnoType<sheet::XSpreadsheet>::get(); }
+    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException, std::exception) { return ( !mSheetMap.empty() ); }
     // XNameAcess
-    virtual uno::Any SAL_CALL getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual uno::Any SAL_CALL getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
     {
         if ( !hasByName(aName) )
             throw container::NoSuchElementException();
         return uno::makeAny( *cachePos );
     }
-    virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (uno::RuntimeException)
+    virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (uno::RuntimeException, std::exception)
     {
         uno::Sequence< OUString > sNames( mSheetMap.size() );
         OUString* pString = sNames.getArray();
@@ -112,7 +112,7 @@ public:
         }
         return sNames;
     }
-    virtual ::sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (uno::RuntimeException)
+    virtual ::sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (uno::RuntimeException, std::exception)
     {
         cachePos = mSheetMap.begin();
         SheetMap::iterator it_end = mSheetMap.end();
@@ -126,8 +126,8 @@ public:
     }
 
     // XElementAccess
-    virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException) { return mSheetMap.size(); }
-    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException )
+    virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException, std::exception) { return mSheetMap.size(); }
+    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
     {
         if ( Index < 0 || Index >= getCount() )
             throw lang::IndexOutOfBoundsException();
@@ -136,7 +136,7 @@ public:
 
     }
     // XEnumerationAccess
-    virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) throw (uno::RuntimeException)
+    virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) throw (uno::RuntimeException, std::exception)
     {
         return new WorkSheetsEnumeration( mSheetMap );
     }
@@ -148,7 +148,7 @@ class SheetsEnumeration : public EnumerationHelperImpl
 public:
     SheetsEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration,  const uno::Reference< frame::XModel >& xModel  ) throw ( uno::RuntimeException ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ), m_xModel( xModel ) {}
 
-    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
     {
         uno::Reference< sheet::XSpreadsheet > xSheet( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
         uno::Reference< XHelperInterface > xIf = excel::getUnoSheetModuleObj( xSheet );
@@ -215,7 +215,7 @@ ScVbaWorksheets::createCollectionObject( const uno::Any& aSource )
 // XWorksheets
 uno::Any
 ScVbaWorksheets::Add( const uno::Any& Before, const uno::Any& After,
-                     const uno::Any& Count, const uno::Any& Type ) throw (uno::RuntimeException)
+                     const uno::Any& Count, const uno::Any& Type ) throw (uno::RuntimeException, std::exception)
 {
     if ( isSelectedSheets() )
         return uno::Any(); // or should we throw?
@@ -288,7 +288,7 @@ ScVbaWorksheets::Add( const uno::Any& Before, const uno::Any& After,
 }
 
 void
-ScVbaWorksheets::Delete() throw (uno::RuntimeException)
+ScVbaWorksheets::Delete() throw (uno::RuntimeException, std::exception)
 {
     // #TODO #INVESTIGATE
     // mmm this method could be trouble if the underlying
@@ -309,7 +309,7 @@ ScVbaWorksheets::isSelectedSheets()
 }
 
 void SAL_CALL
-ScVbaWorksheets::PrintOut( const uno::Any& From, const uno::Any& To, const uno::Any& Copies, const uno::Any& Preview, const uno::Any& ActivePrinter, const uno::Any& PrintToFile, const uno::Any& Collate, const uno::Any& PrToFileName ) throw (uno::RuntimeException)
+ScVbaWorksheets::PrintOut( const uno::Any& From, const uno::Any& To, const uno::Any& Copies, const uno::Any& Preview, const uno::Any& ActivePrinter, const uno::Any& PrintToFile, const uno::Any& Collate, const uno::Any& PrToFileName ) throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nTo = 0;
     sal_Int32 nFrom = 0;
@@ -330,7 +330,7 @@ ScVbaWorksheets::PrintOut( const uno::Any& From, const uno::Any& To, const uno::
 }
 
 uno::Any SAL_CALL
-ScVbaWorksheets::getVisible() throw (uno::RuntimeException)
+ScVbaWorksheets::getVisible() throw (uno::RuntimeException, std::exception)
 {
     sal_Bool bVisible = sal_True;
     uno::Reference< container::XEnumeration > xEnum( createEnumeration(), uno::UNO_QUERY_THROW );
@@ -347,7 +347,7 @@ ScVbaWorksheets::getVisible() throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-ScVbaWorksheets::setVisible( const uno::Any& _visible ) throw (uno::RuntimeException)
+ScVbaWorksheets::setVisible( const uno::Any& _visible ) throw (uno::RuntimeException, std::exception)
 {
     sal_Bool bState = false;
     if ( _visible >>= bState )
@@ -364,7 +364,7 @@ ScVbaWorksheets::setVisible( const uno::Any& _visible ) throw (uno::RuntimeExcep
 }
 
 void SAL_CALL
-ScVbaWorksheets::Select( const uno::Any& Replace ) throw (uno::RuntimeException)
+ScVbaWorksheets::Select( const uno::Any& Replace ) throw (uno::RuntimeException, std::exception)
 {
     ScTabViewShell* pViewShell = excel::getBestViewShell( mxModel );
     if ( !pViewShell )
@@ -395,7 +395,7 @@ ScVbaWorksheets::Select( const uno::Any& Replace ) throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-ScVbaWorksheets::Copy ( const uno::Any& Before, const uno::Any& After) throw (css::uno::RuntimeException)
+ScVbaWorksheets::Copy ( const uno::Any& Before, const uno::Any& After) throw (css::uno::RuntimeException, std::exception)
 {
     uno::Reference<excel::XWorksheet> xSheet;
     sal_Int32 nElems = getCount();
@@ -508,7 +508,7 @@ bool ScVbaWorksheets::nameExists( uno::Reference <sheet::XSpreadsheetDocument>& 
     return false;
 }
 
-void ScVbaWorksheets::PrintPreview( const css::uno::Any& /*EnableChanges*/ ) throw (css::uno::RuntimeException)
+void ScVbaWorksheets::PrintPreview( const css::uno::Any& /*EnableChanges*/ ) throw (css::uno::RuntimeException, std::exception)
 {
     // need test, print preview current active sheet
     // !! TODO !! get view shell from controller

@@ -48,22 +48,22 @@ public:
     // XDispatchProvider
     virtual com::sun::star::uno::Reference< com::sun::star::frame::XDispatch > SAL_CALL queryDispatch(
         const com::sun::star::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags )
-            throw(com::sun::star::uno::RuntimeException);
+            throw(com::sun::star::uno::RuntimeException, std::exception);
 
     virtual com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::frame::XDispatch > > SAL_CALL queryDispatches(
-        const com::sun::star::uno::Sequence< com::sun::star::frame::DispatchDescriptor >& aDescripts ) throw( com::sun::star::uno::RuntimeException );
+        const com::sun::star::uno::Sequence< com::sun::star::frame::DispatchDescriptor >& aDescripts ) throw( com::sun::star::uno::RuntimeException, std::exception );
 
     // XDispatch
     virtual void SAL_CALL dispatch( const com::sun::star::util::URL& aURL,
                                         const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& lArguments )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 
     virtual void SAL_CALL addStatusListener( const com::sun::star::uno::Reference< com::sun::star::frame::XStatusListener >& xListener,
                                                 const com::sun::star::util::URL& aURL )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL removeStatusListener( const com::sun::star::uno::Reference< com::sun::star::frame::XStatusListener >& xListener,
                                                 const com::sun::star::util::URL& aURL )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 
     static sal_Int64 GetFileSize( const OUString& rURL );
 };

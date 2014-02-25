@@ -119,23 +119,23 @@ public:
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething(
             const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL supportsService(
             const OUString& rServiceName)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // XPropertySet
     virtual ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setPropertyValue(
             const OUString& rPropertyName,
             const ::com::sun::star::uno::Any& rValue)
@@ -143,62 +143,62 @@ public:
                 ::com::sun::star::beans::PropertyVetoException,
                 ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException);
+                ::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue(
             const OUString& rPropertyName)
         throw (::com::sun::star::beans::UnknownPropertyException,
                 ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException);
+                ::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL addPropertyChangeListener(
             const OUString& rPropertyName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertyChangeListener >& xListener)
         throw (::com::sun::star::beans::UnknownPropertyException,
                 ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException);
+                ::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL removePropertyChangeListener(
             const OUString& rPropertyName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertyChangeListener >& xListener)
         throw (::com::sun::star::beans::UnknownPropertyException,
                 ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException);
+                ::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL addVetoableChangeListener(
             const OUString& rPropertyName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XVetoableChangeListener >& xListener)
         throw (::com::sun::star::beans::UnknownPropertyException,
                 ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException);
+                ::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL removeVetoableChangeListener(
             const OUString& rPropertyName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XVetoableChangeListener >& xListener)
         throw (::com::sun::star::beans::UnknownPropertyException,
                 ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException);
+                ::com::sun::star::uno::RuntimeException, std::exception);
 
     // XPropertyState
     virtual ::com::sun::star::beans::PropertyState SAL_CALL
         getPropertyState(const OUString& rPropertyName)
         throw (::com::sun::star::beans::UnknownPropertyException,
-                ::com::sun::star::uno::RuntimeException);
+                ::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Sequence<
             ::com::sun::star::beans::PropertyState > SAL_CALL
         getPropertyStates(
             const ::com::sun::star::uno::Sequence<
                 OUString >& rPropertyNames)
         throw (::com::sun::star::beans::UnknownPropertyException,
-                ::com::sun::star::uno::RuntimeException);
+                ::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setPropertyToDefault(
             const OUString& rPropertyName)
         throw (::com::sun::star::beans::UnknownPropertyException,
-                ::com::sun::star::uno::RuntimeException);
+                ::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Any SAL_CALL getPropertyDefault(
             const OUString& rPropertyName)
         throw (::com::sun::star::beans::UnknownPropertyException,
                 ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException);
+                ::com::sun::star::uno::RuntimeException, std::exception);
 
     // XMultiPropertySet
     virtual void SAL_CALL setPropertyValues(
@@ -207,68 +207,68 @@ public:
         throw (
             css::beans::PropertyVetoException,
             css::lang::IllegalArgumentException,
-            css::lang::WrappedTargetException, css::uno::RuntimeException);
+            css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception);
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL
         getPropertyValues( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL addPropertiesChangeListener(
         const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames,
         const ::com::sun::star::uno::Reference< css::beans::XPropertiesChangeListener >& xListener )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL removePropertiesChangeListener(
         const ::com::sun::star::uno::Reference< css::beans::XPropertiesChangeListener >& xListener )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL firePropertiesChangeEvent(
         const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames,
         const ::com::sun::star::uno::Reference< css::beans::XPropertiesChangeListener >& xListener )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     // XMultiPropertyStates
     virtual void SAL_CALL setAllPropertiesToDefault()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setPropertiesToDefault(
             const ::com::sun::star::uno::Sequence< OUString >&
                 rPropertyNames)
         throw (::com::sun::star::beans::UnknownPropertyException,
-                ::com::sun::star::uno::RuntimeException);
+                ::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
         SAL_CALL getPropertyDefaults(
             const ::com::sun::star::uno::Sequence< OUString >&
                 rPropertyNames)
         throw (::com::sun::star::beans::UnknownPropertyException,
                 ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException);
+                ::com::sun::star::uno::RuntimeException, std::exception);
 
     // XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL hasElements()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // XEnumerationAccess
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::container::XEnumeration >  SAL_CALL
         createEnumeration()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // XContentEnumerationAccess
     virtual ::com::sun::star::uno::Reference<
                 ::com::sun::star::container::XEnumeration > SAL_CALL
         createContentEnumeration(const OUString& rServiceName)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
         getAvailableServiceNames()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // XSortable
     virtual ::com::sun::star::uno::Sequence<
                 ::com::sun::star::beans::PropertyValue > SAL_CALL
         createSortDescriptor()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL sort(
             const ::com::sun::star::uno::Sequence<
                 ::com::sun::star::beans::PropertyValue >& xDescriptor)
@@ -282,85 +282,85 @@ public:
                 ::com::sun::star::beans::PropertyValue >& rOptions)
         throw (::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::RuntimeException);
+                ::com::sun::star::uno::RuntimeException, std::exception);
 
     // XTextRange
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >
         SAL_CALL getText()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Reference<
                 ::com::sun::star::text::XTextRange > SAL_CALL getStart()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Reference<
                 ::com::sun::star::text::XTextRange > SAL_CALL getEnd()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual OUString SAL_CALL getString()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setString(const OUString& rString)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // XTextCursor
     virtual void SAL_CALL collapseToStart()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL collapseToEnd()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL isCollapsed()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL goLeft(sal_Int16 nCount, sal_Bool bExpand)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL goRight(sal_Int16 nCount, sal_Bool bExpand)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL gotoStart(sal_Bool bExpand)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL gotoEnd(sal_Bool bExpand)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL gotoRange(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::text::XTextRange >& xRange,
             sal_Bool bExpand)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // XWordCursor
     virtual sal_Bool SAL_CALL isStartOfWord()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL isEndOfWord()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL gotoNextWord(sal_Bool bExpand)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL gotoPreviousWord(sal_Bool bExpand)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL gotoEndOfWord(sal_Bool bExpand)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL gotoStartOfWord(sal_Bool bExpand)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // XSentenceCursor
     virtual sal_Bool SAL_CALL isStartOfSentence()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL isEndOfSentence()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL gotoNextSentence(sal_Bool Expand)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL gotoPreviousSentence(sal_Bool Expand)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL gotoStartOfSentence(sal_Bool Expand)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL gotoEndOfSentence(sal_Bool Expand)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // XParagraphCursor
     virtual sal_Bool SAL_CALL isStartOfParagraph()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL isEndOfParagraph()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL gotoStartOfParagraph(sal_Bool Expand)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL gotoEndOfParagraph(sal_Bool Expand)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL gotoNextParagraph(sal_Bool Expand)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL gotoPreviousParagraph(sal_Bool Expand)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // XRedline
     virtual void SAL_CALL makeRedline(
@@ -368,11 +368,11 @@ public:
             const ::com::sun::star::uno::Sequence<
                 ::com::sun::star::beans::PropertyValue >& RedlineProperties)
         throw (::com::sun::star::lang::IllegalArgumentException,
-                ::com::sun::star::uno::RuntimeException);
+                ::com::sun::star::uno::RuntimeException, std::exception);
 
     //XMarkingAccess
     virtual void SAL_CALL invalidateMarkings(::sal_Int32 nType)
-    throw (::com::sun::star::uno::RuntimeException);
+    throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 };
 

@@ -40,7 +40,7 @@ namespace connectivity
         // ::cppu::OComponentHelper
         virtual void SAL_CALL disposing(void);
         // XResultSet
-        virtual sal_Bool SAL_CALL next(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL next(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception);
     };
 }
 #endif // CONNECTIVITY_PRIVILEGESRESULTSET_HXX

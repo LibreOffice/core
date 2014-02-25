@@ -110,7 +110,7 @@ namespace
     }
 }
 
-OUString SAL_CALL OTableController::getImplementationName() throw( RuntimeException )
+OUString SAL_CALL OTableController::getImplementationName() throw( RuntimeException, std::exception )
 {
     return getImplementationName_Static();
 }
@@ -127,7 +127,7 @@ Sequence< OUString> OTableController::getSupportedServiceNames_Static(void) thro
     return aSupported;
 }
 
-Sequence< OUString> SAL_CALL OTableController::getSupportedServiceNames() throw(RuntimeException)
+Sequence< OUString> SAL_CALL OTableController::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     return getSupportedServiceNames_Static();
 }
@@ -544,7 +544,7 @@ sal_Bool OTableController::Construct(Window* pParent)
     return sal_True;
 }
 
-sal_Bool SAL_CALL OTableController::suspend(sal_Bool /*_bSuspend*/) throw( RuntimeException )
+sal_Bool SAL_CALL OTableController::suspend(sal_Bool /*_bSuspend*/) throw( RuntimeException, std::exception )
 {
     if ( getBroadcastHelper().bInDispose || getBroadcastHelper().bDisposed )
         return sal_True;
@@ -627,7 +627,7 @@ void OTableController::impl_onModifyChanged()
     InvalidateFeature( SID_INDEXDESIGN );
 }
 
-void SAL_CALL OTableController::disposing( const EventObject& _rSource ) throw(RuntimeException)
+void SAL_CALL OTableController::disposing( const EventObject& _rSource ) throw(RuntimeException, std::exception)
 {
     if ( _rSource.Source == m_xTable )
     {   // some deleted our table so we have a new one

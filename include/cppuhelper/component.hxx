@@ -62,10 +62,10 @@ public:
     // XAggregation
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
         ::com::sun::star::uno::Type const & rType )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(
         ::com::sun::star::uno::Type const & rType )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL acquire()
         throw ();
     virtual void SAL_CALL release()
@@ -75,22 +75,22 @@ public:
         XTypeProvider::getImplementationId() has to be implemented separately!
     */
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
-        throw(::com::sun::star::uno::RuntimeException) = 0;
+        throw(::com::sun::star::uno::RuntimeException, std::exception) = 0;
     /** @attention
         XTypeProvider::getTypes() has to be re-implemented!
     */
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // XComponent
     virtual void SAL_CALL dispose()
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL addEventListener(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL removeEventListener(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
 
 protected:
     /** Called in dispose method after the listeners were notified.

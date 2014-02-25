@@ -47,13 +47,13 @@ public:
         uno::Reference< container::XNameAccess > xNameAccess = m_pCBarHelper->getPersistentWindowState();
         m_sNames = xNameAccess->getElementNames();
     }
-    virtual sal_Bool SAL_CALL hasMoreElements() throw ( uno::RuntimeException )
+    virtual sal_Bool SAL_CALL hasMoreElements() throw ( uno::RuntimeException, std::exception )
     {
         if( m_nCurrentPosition < m_sNames.getLength() )
             return sal_True;
         return sal_False;
     }
-    virtual uno::Any SAL_CALL nextElement() throw ( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
+    virtual uno::Any SAL_CALL nextElement() throw ( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
     {
         // FIXME: should be add menubar
         if( hasMoreElements() )
@@ -158,7 +158,7 @@ ScVbaCommandBars::createCollectionObject( const uno::Any& aSource )
 
 // XCommandBars
 uno::Reference< XCommandBar > SAL_CALL
-ScVbaCommandBars::Add( const css::uno::Any& Name, const css::uno::Any& /*Position*/, const css::uno::Any& /*MenuBar*/, const css::uno::Any& /*Temporary*/ ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
+ScVbaCommandBars::Add( const css::uno::Any& Name, const css::uno::Any& /*Position*/, const css::uno::Any& /*MenuBar*/, const css::uno::Any& /*Temporary*/ ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception)
 {
     // FIXME: only support to add Toolbar
     // Position - MsoBar MenuBar - sal_Bool

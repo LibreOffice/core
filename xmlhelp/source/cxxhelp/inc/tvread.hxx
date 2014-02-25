@@ -78,7 +78,7 @@ namespace treeview {
         virtual com::sun::star::uno::Any SAL_CALL
         queryInterface(
             const com::sun::star::uno::Type& aType )
-            throw( com::sun::star::uno::RuntimeException);
+            throw( com::sun::star::uno::RuntimeException, std::exception);
 
         virtual void SAL_CALL
         acquire(
@@ -98,13 +98,13 @@ namespace treeview {
 
         virtual com::sun::star::uno::Type SAL_CALL
         getElementType(  )
-            throw( com::sun::star::uno::RuntimeException )
+            throw( com::sun::star::uno::RuntimeException, std::exception )
         {
             return getCppuVoidType();
         }
 
         virtual sal_Bool SAL_CALL hasElements()
-            throw( com::sun::star::uno::RuntimeException )
+            throw( com::sun::star::uno::RuntimeException, std::exception )
         {
             return true;
         }
@@ -114,7 +114,7 @@ namespace treeview {
         virtual void SAL_CALL
         addChangesListener(
             const com::sun::star::uno::Reference< com::sun::star::util::XChangesListener >& aListener )
-            throw( com::sun::star::uno::RuntimeException )
+            throw( com::sun::star::uno::RuntimeException, std::exception )
         {
             // read only
             (void)aListener;
@@ -123,7 +123,7 @@ namespace treeview {
         virtual void SAL_CALL
         removeChangesListener(
             const com::sun::star::uno::Reference< com::sun::star::util::XChangesListener >& aListener )
-            throw( com::sun::star::uno::RuntimeException )
+            throw( com::sun::star::uno::RuntimeException, std::exception )
         {
             // read only
             (void)aListener;
@@ -132,13 +132,13 @@ namespace treeview {
         // XComponent
 
         virtual void SAL_CALL dispose( )
-            throw( com::sun::star::uno::RuntimeException )
+            throw( com::sun::star::uno::RuntimeException, std::exception )
         {
         }
 
         virtual void SAL_CALL addEventListener(
             const com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >& xListener )
-            throw( com::sun::star::uno::RuntimeException )
+            throw( com::sun::star::uno::RuntimeException, std::exception )
         {
             (void)xListener;
         }
@@ -146,7 +146,7 @@ namespace treeview {
         virtual void SAL_CALL
         removeEventListener(
             const com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >& aListener )
-            throw( com::sun::star::uno::RuntimeException )
+            throw( com::sun::star::uno::RuntimeException, std::exception )
         {
             (void)aListener;
         }
@@ -158,26 +158,26 @@ namespace treeview {
         getByName( const OUString& aName )
             throw( com::sun::star::container::NoSuchElementException,
                    com::sun::star::lang::WrappedTargetException,
-                   com::sun::star::uno::RuntimeException) = 0;
+                   com::sun::star::uno::RuntimeException, std::exception) = 0;
 
         virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
         getElementNames( )
-            throw( com::sun::star::uno::RuntimeException ) = 0;
+            throw( com::sun::star::uno::RuntimeException, std::exception ) = 0;
 
         virtual sal_Bool SAL_CALL
         hasByName( const OUString& aName )
-            throw( com::sun::star::uno::RuntimeException ) = 0;
+            throw( com::sun::star::uno::RuntimeException, std::exception ) = 0;
 
         // XHierarchicalNameAccess
 
         virtual com::sun::star::uno::Any SAL_CALL
         getByHierarchicalName( const OUString& aName )
             throw( com::sun::star::container::NoSuchElementException,
-                   com::sun::star::uno::RuntimeException ) = 0;
+                   com::sun::star::uno::RuntimeException, std::exception ) = 0;
 
         virtual sal_Bool SAL_CALL
         hasByHierarchicalName( const OUString& aName )
-            throw( com::sun::star::uno::RuntimeException ) = 0;
+            throw( com::sun::star::uno::RuntimeException, std::exception ) = 0;
 
     }; // end class TVBase
 
@@ -197,26 +197,26 @@ namespace treeview {
         getByName( const OUString& aName )
             throw( com::sun::star::container::NoSuchElementException,
                    com::sun::star::lang::WrappedTargetException,
-                   com::sun::star::uno::RuntimeException);
+                   com::sun::star::uno::RuntimeException, std::exception);
 
         virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
         getElementNames( )
-            throw( com::sun::star::uno::RuntimeException );
+            throw( com::sun::star::uno::RuntimeException, std::exception );
 
         virtual sal_Bool SAL_CALL
         hasByName( const OUString& aName )
-            throw( com::sun::star::uno::RuntimeException );
+            throw( com::sun::star::uno::RuntimeException, std::exception );
 
         // XHierarchicalNameAccess
 
         virtual com::sun::star::uno::Any SAL_CALL
         getByHierarchicalName( const OUString& aName )
             throw( com::sun::star::container::NoSuchElementException,
-                   com::sun::star::uno::RuntimeException );
+                   com::sun::star::uno::RuntimeException, std::exception );
 
         virtual sal_Bool SAL_CALL
         hasByHierarchicalName( const OUString& aName )
-            throw( com::sun::star::uno::RuntimeException );
+            throw( com::sun::star::uno::RuntimeException, std::exception );
 
     private:
 
@@ -241,26 +241,26 @@ namespace treeview {
         getByName( const OUString& aName )
             throw( com::sun::star::container::NoSuchElementException,
                    com::sun::star::lang::WrappedTargetException,
-                   com::sun::star::uno::RuntimeException);
+                   com::sun::star::uno::RuntimeException, std::exception);
 
         virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
         getElementNames( )
-            throw( com::sun::star::uno::RuntimeException );
+            throw( com::sun::star::uno::RuntimeException, std::exception );
 
         virtual sal_Bool SAL_CALL
         hasByName( const OUString& aName )
-            throw( com::sun::star::uno::RuntimeException );
+            throw( com::sun::star::uno::RuntimeException, std::exception );
 
         // XHierarchicalNameAccess
 
         virtual com::sun::star::uno::Any SAL_CALL
         getByHierarchicalName( const OUString& aName )
             throw( com::sun::star::container::NoSuchElementException,
-                   com::sun::star::uno::RuntimeException );
+                   com::sun::star::uno::RuntimeException, std::exception );
 
         virtual sal_Bool SAL_CALL
         hasByHierarchicalName( const OUString& aName )
-            throw( com::sun::star::uno::RuntimeException );
+            throw( com::sun::star::uno::RuntimeException, std::exception );
 
     private:
         std::vector< rtl::Reference< TVRead > >   Elements;

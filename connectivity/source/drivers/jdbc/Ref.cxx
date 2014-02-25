@@ -43,7 +43,7 @@ jclass java_sql_Ref::getMyClass() const
     return theClass;
 }
 
-OUString SAL_CALL java_sql_Ref::getBaseTypeName(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL java_sql_Ref::getBaseTypeName(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
     return callStringMethod("getBaseTypeName",mID);

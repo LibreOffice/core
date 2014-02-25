@@ -710,7 +710,7 @@ ChartDocumentWrapper::~ChartDocumentWrapper()
 
 // ____ XInterface (for new interfaces) ____
 uno::Any SAL_CALL ChartDocumentWrapper::queryInterface( const uno::Type& aType )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if( m_xDelegator.is())
         // calls queryAggregation if the delegator doesn't know aType
@@ -721,7 +721,7 @@ uno::Any SAL_CALL ChartDocumentWrapper::queryInterface( const uno::Type& aType )
 
 // ____ chart::XChartDocument (old API wrapper) ____
 Reference< drawing::XShape > SAL_CALL ChartDocumentWrapper::getTitle()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if( !m_xTitle.is()  )
     {
@@ -732,7 +732,7 @@ Reference< drawing::XShape > SAL_CALL ChartDocumentWrapper::getTitle()
 }
 
 Reference< drawing::XShape > SAL_CALL ChartDocumentWrapper::getSubTitle()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if( !m_xSubTitle.is() )
     {
@@ -743,7 +743,7 @@ Reference< drawing::XShape > SAL_CALL ChartDocumentWrapper::getSubTitle()
 }
 
 Reference< drawing::XShape > SAL_CALL ChartDocumentWrapper::getLegend()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if( ! m_xLegend.is())
     {
@@ -755,7 +755,7 @@ Reference< drawing::XShape > SAL_CALL ChartDocumentWrapper::getLegend()
 }
 
 Reference< beans::XPropertySet > SAL_CALL ChartDocumentWrapper::getArea()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if( ! m_xArea.is())
     {
@@ -767,7 +767,7 @@ Reference< beans::XPropertySet > SAL_CALL ChartDocumentWrapper::getArea()
 }
 
 Reference< XDiagram > SAL_CALL ChartDocumentWrapper::getDiagram()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if( !m_xDiagram.is()  )
     {
@@ -785,7 +785,7 @@ Reference< XDiagram > SAL_CALL ChartDocumentWrapper::getDiagram()
 }
 
 void SAL_CALL ChartDocumentWrapper::setDiagram( const Reference< XDiagram >& xDiagram )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< util::XRefreshable > xAddIn( xDiagram, uno::UNO_QUERY );
     if( xAddIn.is() )
@@ -818,7 +818,7 @@ void SAL_CALL ChartDocumentWrapper::setDiagram( const Reference< XDiagram >& xDi
 }
 
 Reference< XChartData > SAL_CALL ChartDocumentWrapper::getData()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if( !m_xChartData.is() )
     {
@@ -830,7 +830,7 @@ Reference< XChartData > SAL_CALL ChartDocumentWrapper::getData()
 }
 
 void SAL_CALL ChartDocumentWrapper::attachData( const Reference< XChartData >& xNewData )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if( !xNewData.is() )
         return;
@@ -845,7 +845,7 @@ void SAL_CALL ChartDocumentWrapper::attachData( const Reference< XChartData >& x
 sal_Bool SAL_CALL ChartDocumentWrapper::attachResource(
     const OUString& URL,
     const Sequence< beans::PropertyValue >& Arguments )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< frame::XModel > xModel( m_spChart2ModelContact->getChartModel() );
     if( xModel.is() )
@@ -854,7 +854,7 @@ sal_Bool SAL_CALL ChartDocumentWrapper::attachResource(
 }
 
 OUString SAL_CALL ChartDocumentWrapper::getURL()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< frame::XModel > xModel( m_spChart2ModelContact->getChartModel() );
     if( xModel.is() )
@@ -863,7 +863,7 @@ OUString SAL_CALL ChartDocumentWrapper::getURL()
 }
 
 Sequence< beans::PropertyValue > SAL_CALL ChartDocumentWrapper::getArgs()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< frame::XModel > xModel( m_spChart2ModelContact->getChartModel() );
     if( xModel.is() )
@@ -872,7 +872,7 @@ Sequence< beans::PropertyValue > SAL_CALL ChartDocumentWrapper::getArgs()
 }
 
 void SAL_CALL ChartDocumentWrapper::connectController( const Reference< frame::XController >& Controller )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< frame::XModel > xModel( m_spChart2ModelContact->getChartModel() );
     if( xModel.is() )
@@ -881,7 +881,7 @@ void SAL_CALL ChartDocumentWrapper::connectController( const Reference< frame::X
 
 void SAL_CALL ChartDocumentWrapper::disconnectController(
     const Reference< frame::XController >& Controller )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< frame::XModel > xModel( m_spChart2ModelContact->getChartModel() );
     if( xModel.is() )
@@ -889,7 +889,7 @@ void SAL_CALL ChartDocumentWrapper::disconnectController(
 }
 
 void SAL_CALL ChartDocumentWrapper::lockControllers()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< frame::XModel > xModel( m_spChart2ModelContact->getChartModel() );
     if( xModel.is() )
@@ -897,7 +897,7 @@ void SAL_CALL ChartDocumentWrapper::lockControllers()
 }
 
 void SAL_CALL ChartDocumentWrapper::unlockControllers()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< frame::XModel > xModel( m_spChart2ModelContact->getChartModel() );
     if( xModel.is() )
@@ -905,7 +905,7 @@ void SAL_CALL ChartDocumentWrapper::unlockControllers()
 }
 
 sal_Bool SAL_CALL ChartDocumentWrapper::hasControllersLocked()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< frame::XModel > xModel( m_spChart2ModelContact->getChartModel() );
     if( xModel.is() )
@@ -914,7 +914,7 @@ sal_Bool SAL_CALL ChartDocumentWrapper::hasControllersLocked()
 }
 
 Reference< frame::XController > SAL_CALL ChartDocumentWrapper::getCurrentController()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< frame::XModel > xModel( m_spChart2ModelContact->getChartModel() );
     if( xModel.is() )
@@ -925,7 +925,7 @@ Reference< frame::XController > SAL_CALL ChartDocumentWrapper::getCurrentControl
 void SAL_CALL ChartDocumentWrapper::setCurrentController(
     const Reference< frame::XController >& Controller )
     throw (container::NoSuchElementException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     Reference< frame::XModel > xModel( m_spChart2ModelContact->getChartModel() );
     if( xModel.is() )
@@ -933,7 +933,7 @@ void SAL_CALL ChartDocumentWrapper::setCurrentController(
 }
 
 Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::getCurrentSelection()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< frame::XModel > xModel( m_spChart2ModelContact->getChartModel() );
     if( xModel.is() )
@@ -943,7 +943,7 @@ Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::getCurrentSelection(
 
 // ____ XComponent ____
 void SAL_CALL ChartDocumentWrapper::dispose()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if( m_bIsDisposed )
         throw lang::DisposedException("ChartDocumentWrapper is disposed",
@@ -1117,7 +1117,7 @@ Reference< drawing::XShapes > ChartDocumentWrapper::getAdditionalShapes() const
 }
 
 void SAL_CALL ChartDocumentWrapper::addEventListener( const Reference< lang::XEventListener >& xListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< frame::XModel > xModel( m_spChart2ModelContact->getChartModel() );
     if( xModel.is() )
@@ -1125,7 +1125,7 @@ void SAL_CALL ChartDocumentWrapper::addEventListener( const Reference< lang::XEv
 }
 
 void SAL_CALL ChartDocumentWrapper::removeEventListener( const Reference< lang::XEventListener >& aListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< frame::XModel > xModel( m_spChart2ModelContact->getChartModel() );
     if( xModel.is() )
@@ -1134,7 +1134,7 @@ void SAL_CALL ChartDocumentWrapper::removeEventListener( const Reference< lang::
 
 // ____ XDrawPageSupplier ____
 uno::Reference< drawing::XDrawPage > SAL_CALL ChartDocumentWrapper::getDrawPage()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return this->impl_getDrawPage();
 }
@@ -1149,7 +1149,7 @@ uno::Reference< drawing::XDrawPage > ChartDocumentWrapper::impl_getDrawPage() co
 uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
     const OUString& aServiceSpecifier )
     throw (uno::Exception,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     uno::Reference< uno::XInterface > xResult;
 
@@ -1426,7 +1426,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstanceW
     const OUString& ServiceSpecifier,
     const uno::Sequence< uno::Any >& Arguments )
     throw (uno::Exception,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     OSL_ENSURE( Arguments.getLength(), "createInstanceWithArguments: Warning: Arguments are ignored" );
     (void)(Arguments);
@@ -1435,7 +1435,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstanceW
 }
 
 uno::Sequence< OUString > SAL_CALL ChartDocumentWrapper::getAvailableServiceNames()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     tServiceNameMap & rMap = lcl_getStaticServiceNameMap();
     uno::Sequence< OUString > aResult( rMap.size());
@@ -1451,7 +1451,7 @@ uno::Sequence< OUString > SAL_CALL ChartDocumentWrapper::getAvailableServiceName
 // ____ XAggregation ____
 void SAL_CALL ChartDocumentWrapper::setDelegator(
     const uno::Reference< uno::XInterface >& rDelegator )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if( m_bIsDisposed )
     {
@@ -1482,7 +1482,7 @@ void SAL_CALL ChartDocumentWrapper::setDelegator(
 }
 
 uno::Any SAL_CALL ChartDocumentWrapper::queryAggregation( const uno::Type& rType )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return ChartDocumentWrapper_Base::queryInterface( rType );
 }

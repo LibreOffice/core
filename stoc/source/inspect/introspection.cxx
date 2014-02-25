@@ -719,32 +719,32 @@ public:
 
     // Methoden von XIntrospectionAccess
     virtual sal_Int32 SAL_CALL getSuppliedMethodConcepts(void)
-        throw( RuntimeException );
+        throw( RuntimeException, std::exception );
     virtual sal_Int32 SAL_CALL getSuppliedPropertyConcepts(void)
-        throw( RuntimeException );
+        throw( RuntimeException, std::exception );
     virtual Property SAL_CALL getProperty(const OUString& Name, sal_Int32 PropertyConcepts)
-        throw( NoSuchElementException, RuntimeException );
+        throw( NoSuchElementException, RuntimeException, std::exception );
     virtual sal_Bool SAL_CALL hasProperty(const OUString& Name, sal_Int32 PropertyConcepts)
-        throw( RuntimeException );
+        throw( RuntimeException, std::exception );
     virtual Sequence< Property > SAL_CALL getProperties(sal_Int32 PropertyConcepts)
-          throw( RuntimeException );
+          throw( RuntimeException, std::exception );
     virtual Reference<XIdlMethod> SAL_CALL getMethod(const OUString& Name, sal_Int32 MethodConcepts)
-          throw( NoSuchMethodException, RuntimeException );
+          throw( NoSuchMethodException, RuntimeException, std::exception );
     virtual sal_Bool SAL_CALL hasMethod(const OUString& Name, sal_Int32 MethodConcepts)
-          throw( RuntimeException );
+          throw( RuntimeException, std::exception );
     virtual Sequence< Reference<XIdlMethod> > SAL_CALL getMethods(sal_Int32 MethodConcepts)
-          throw( RuntimeException );
+          throw( RuntimeException, std::exception );
     virtual Sequence< Type > SAL_CALL getSupportedListeners(void)
-          throw( RuntimeException );
+          throw( RuntimeException, std::exception );
     using OWeakObject::queryAdapter;
     virtual Reference<XInterface> SAL_CALL queryAdapter( const Type& rType )
-          throw( IllegalTypeException, RuntimeException );
+          throw( IllegalTypeException, RuntimeException, std::exception );
 
     // Methoden von XMaterialHolder
-    virtual Any SAL_CALL getMaterial(void) throw(RuntimeException);
+    virtual Any SAL_CALL getMaterial(void) throw(RuntimeException, std::exception);
 
     // Methoden von XExactName
-    virtual OUString SAL_CALL getExactName( const OUString& rApproximateName ) throw( RuntimeException );
+    virtual OUString SAL_CALL getExactName( const OUString& rApproximateName ) throw( RuntimeException, std::exception );
 };
 
 ImplIntrospectionAccess::ImplIntrospectionAccess
@@ -805,78 +805,78 @@ public:
         rtl::Reference< IntrospectionAccessStatic_Impl > const & pStaticImpl_ );
 
     // Methoden von XInterface
-    virtual Any SAL_CALL queryInterface( const Type& rType ) throw( RuntimeException );
+    virtual Any SAL_CALL queryInterface( const Type& rType ) throw( RuntimeException, std::exception );
     virtual void        SAL_CALL acquire() throw() { OWeakObject::acquire(); }
     virtual void        SAL_CALL release() throw() { OWeakObject::release(); }
 
     // Methoden von XPropertySet
-    virtual Reference<XPropertySetInfo> SAL_CALL getPropertySetInfo() throw( RuntimeException );
+    virtual Reference<XPropertySetInfo> SAL_CALL getPropertySetInfo() throw( RuntimeException, std::exception );
     virtual void SAL_CALL setPropertyValue(const OUString& aPropertyName, const Any& aValue)
-        throw( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException );
+        throw( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception );
     virtual Any SAL_CALL getPropertyValue(const OUString& aPropertyName)
-        throw( UnknownPropertyException, WrappedTargetException, RuntimeException );
+        throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception );
     virtual void SAL_CALL addPropertyChangeListener(const OUString& aPropertyName, const Reference<XPropertyChangeListener>& aListener)
-        throw( UnknownPropertyException, WrappedTargetException, RuntimeException );
+        throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception );
     virtual void SAL_CALL removePropertyChangeListener(const OUString& aPropertyName, const Reference<XPropertyChangeListener>& aListener)
-        throw( UnknownPropertyException, WrappedTargetException, RuntimeException );
+        throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception );
     virtual void SAL_CALL addVetoableChangeListener(const OUString& aPropertyName, const Reference<XVetoableChangeListener>& aListener)
-        throw( UnknownPropertyException, WrappedTargetException, RuntimeException );
+        throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception );
     virtual void SAL_CALL removeVetoableChangeListener(const OUString& aPropertyName, const Reference<XVetoableChangeListener>& aListener)
-        throw( UnknownPropertyException, WrappedTargetException, RuntimeException );
+        throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception );
 
     // Methoden von XFastPropertySet
     virtual void SAL_CALL setFastPropertyValue(sal_Int32 nHandle, const Any& aValue)
-        throw( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException );
+        throw( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception );
     virtual Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle)
-        throw( UnknownPropertyException, WrappedTargetException, RuntimeException );
+        throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception );
 
     // Methoden von XPropertySetInfo
-    virtual Sequence< Property > SAL_CALL getProperties(void) throw( RuntimeException );
-    virtual Property SAL_CALL getPropertyByName(const OUString& Name) throw( RuntimeException );
-    virtual sal_Bool SAL_CALL hasPropertyByName(const OUString& Name) throw( RuntimeException );
+    virtual Sequence< Property > SAL_CALL getProperties(void) throw( RuntimeException, std::exception );
+    virtual Property SAL_CALL getPropertyByName(const OUString& Name) throw( RuntimeException, std::exception );
+    virtual sal_Bool SAL_CALL hasPropertyByName(const OUString& Name) throw( RuntimeException, std::exception );
 
     // Methoden von XElementAccess
-    virtual Type SAL_CALL getElementType(void) throw( RuntimeException );
-    virtual sal_Bool SAL_CALL hasElements(void) throw( RuntimeException );
+    virtual Type SAL_CALL getElementType(void) throw( RuntimeException, std::exception );
+    virtual sal_Bool SAL_CALL hasElements(void) throw( RuntimeException, std::exception );
 
     // Methoden von XNameAccess
     virtual Any SAL_CALL getByName(const OUString& Name)
-        throw( NoSuchElementException, WrappedTargetException, RuntimeException );
-    virtual Sequence< OUString > SAL_CALL getElementNames(void) throw( RuntimeException );
-    virtual sal_Bool SAL_CALL hasByName(const OUString& Name) throw( RuntimeException );
+        throw( NoSuchElementException, WrappedTargetException, RuntimeException, std::exception );
+    virtual Sequence< OUString > SAL_CALL getElementNames(void) throw( RuntimeException, std::exception );
+    virtual sal_Bool SAL_CALL hasByName(const OUString& Name) throw( RuntimeException, std::exception );
 
     // Methoden von XNameContainer
     virtual void SAL_CALL insertByName(const OUString& Name, const Any& Element)
-        throw( IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException );
+        throw( IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException, std::exception );
     virtual void SAL_CALL replaceByName(const OUString& Name, const Any& Element)
-        throw( IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException );
+        throw( IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException, std::exception );
     virtual void SAL_CALL removeByName(const OUString& Name)
-        throw( NoSuchElementException, WrappedTargetException, RuntimeException );
+        throw( NoSuchElementException, WrappedTargetException, RuntimeException, std::exception );
 
     // Methoden von XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount(void) throw( RuntimeException );
+    virtual sal_Int32 SAL_CALL getCount(void) throw( RuntimeException, std::exception );
     virtual Any SAL_CALL getByIndex(sal_Int32 Index)
-        throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException );
+        throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception );
 
     // Methoden von XIndexContainer
     virtual void SAL_CALL insertByIndex(sal_Int32 Index, const Any& Element)
-        throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException );
+        throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception );
     virtual void SAL_CALL replaceByIndex(sal_Int32 Index, const Any& Element)
-        throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException );
+        throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception );
     virtual void SAL_CALL removeByIndex(sal_Int32 Index)
-        throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException );
+        throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception );
 
     // Methoden von XEnumerationAccess
-    virtual Reference<XEnumeration> SAL_CALL createEnumeration(void) throw( RuntimeException );
+    virtual Reference<XEnumeration> SAL_CALL createEnumeration(void) throw( RuntimeException, std::exception );
 
     // Methoden von XIdlArray
     virtual void SAL_CALL realloc(Any& array, sal_Int32 length)
-        throw( IllegalArgumentException, RuntimeException );
-    virtual sal_Int32 SAL_CALL getLen(const Any& array) throw( IllegalArgumentException, RuntimeException );
+        throw( IllegalArgumentException, RuntimeException, std::exception );
+    virtual sal_Int32 SAL_CALL getLen(const Any& array) throw( IllegalArgumentException, RuntimeException, std::exception );
     virtual Any SAL_CALL get(const Any& array, sal_Int32 index)
-        throw( IllegalArgumentException, ArrayIndexOutOfBoundsException, RuntimeException );
+        throw( IllegalArgumentException, ArrayIndexOutOfBoundsException, RuntimeException, std::exception );
     virtual void SAL_CALL set(Any& array, sal_Int32 index, const Any& value)
-        throw( IllegalArgumentException, ArrayIndexOutOfBoundsException, RuntimeException );
+        throw( IllegalArgumentException, ArrayIndexOutOfBoundsException, RuntimeException, std::exception );
 };
 
 ImplIntrospectionAdapter::ImplIntrospectionAdapter( ImplIntrospectionAccess* pAccess_,
@@ -902,7 +902,7 @@ ImplIntrospectionAdapter::ImplIntrospectionAdapter( ImplIntrospectionAccess* pAc
 
 // Methoden von XInterface
 Any SAL_CALL ImplIntrospectionAdapter::queryInterface( const Type& rType )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     Any aRet( ::cppu::queryInterface(
         rType,
@@ -937,25 +937,25 @@ Any SAL_CALL ImplIntrospectionAdapter::queryInterface( const Type& rType )
 
 // Methoden von XPropertySet
 Reference<XPropertySetInfo> ImplIntrospectionAdapter::getPropertySetInfo(void)
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return (XPropertySetInfo *)this;
 }
 
 void ImplIntrospectionAdapter::setPropertyValue(const OUString& aPropertyName, const Any& aValue)
-    throw( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException )
+    throw( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception )
 {
     mpStaticImpl->setPropertyValue( mrInspectedObject, aPropertyName, aValue );
 }
 
 Any ImplIntrospectionAdapter::getPropertyValue(const OUString& aPropertyName)
-    throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
+    throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception )
 {
     return mpStaticImpl->getPropertyValue( mrInspectedObject, aPropertyName );
 }
 
 void ImplIntrospectionAdapter::addPropertyChangeListener(const OUString& aPropertyName, const Reference<XPropertyChangeListener>& aListener)
-    throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
+    throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception )
 {
     if( mxIface.is() )
     {
@@ -968,7 +968,7 @@ void ImplIntrospectionAdapter::addPropertyChangeListener(const OUString& aProper
 }
 
 void ImplIntrospectionAdapter::removePropertyChangeListener(const OUString& aPropertyName, const Reference<XPropertyChangeListener>& aListener)
-    throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
+    throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception )
 {
     if( mxIface.is() )
     {
@@ -981,7 +981,7 @@ void ImplIntrospectionAdapter::removePropertyChangeListener(const OUString& aPro
 }
 
 void ImplIntrospectionAdapter::addVetoableChangeListener(const OUString& aPropertyName, const Reference<XVetoableChangeListener>& aListener)
-    throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
+    throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception )
 {
     if( mxIface.is() )
     {
@@ -994,7 +994,7 @@ void ImplIntrospectionAdapter::addVetoableChangeListener(const OUString& aProper
 }
 
 void ImplIntrospectionAdapter::removeVetoableChangeListener(const OUString& aPropertyName, const Reference<XVetoableChangeListener>& aListener)
-    throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
+    throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception )
 {
     if( mxIface.is() )
     {
@@ -1008,143 +1008,143 @@ void ImplIntrospectionAdapter::removeVetoableChangeListener(const OUString& aPro
 
 // Methoden von XFastPropertySet
 void ImplIntrospectionAdapter::setFastPropertyValue(sal_Int32, const Any&)
-    throw( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException )
+    throw( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception )
 {
 }
 
 Any ImplIntrospectionAdapter::getFastPropertyValue(sal_Int32)
-    throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
+    throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception )
 {
     return Any();
 }
 
 // Methoden von XPropertySetInfo
-Sequence< Property > ImplIntrospectionAdapter::getProperties(void) throw( RuntimeException )
+Sequence< Property > ImplIntrospectionAdapter::getProperties(void) throw( RuntimeException, std::exception )
 {
     return mpStaticImpl->getProperties();
 }
 
 Property ImplIntrospectionAdapter::getPropertyByName(const OUString& Name)
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return mpAccess->getProperty( Name, PropertyConcept::ALL );
 }
 
 sal_Bool ImplIntrospectionAdapter::hasPropertyByName(const OUString& Name)
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return mpAccess->hasProperty( Name, PropertyConcept::ALL );
 }
 
 // Methoden von XElementAccess
-Type ImplIntrospectionAdapter::getElementType(void) throw( RuntimeException )
+Type ImplIntrospectionAdapter::getElementType(void) throw( RuntimeException, std::exception )
 {
     return mxObjElementAccess->getElementType();
 }
 
-sal_Bool ImplIntrospectionAdapter::hasElements(void) throw( RuntimeException )
+sal_Bool ImplIntrospectionAdapter::hasElements(void) throw( RuntimeException, std::exception )
 {
     return mxObjElementAccess->hasElements();
 }
 
 // Methoden von XNameAccess
 Any ImplIntrospectionAdapter::getByName(const OUString& Name)
-    throw( NoSuchElementException, WrappedTargetException, RuntimeException )
+    throw( NoSuchElementException, WrappedTargetException, RuntimeException, std::exception )
 {
     return mxObjNameAccess->getByName( Name );
 }
 
 Sequence< OUString > ImplIntrospectionAdapter::getElementNames(void)
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return mxObjNameAccess->getElementNames();
 }
 
 sal_Bool ImplIntrospectionAdapter::hasByName(const OUString& Name)
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return mxObjNameAccess->hasByName( Name );
 }
 
 // Methoden von XNameContainer
 void ImplIntrospectionAdapter::insertByName(const OUString& Name, const Any& Element)
-    throw( IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException )
+    throw( IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException, std::exception )
 {
     mxObjNameContainer->insertByName( Name, Element );
 }
 
 void ImplIntrospectionAdapter::replaceByName(const OUString& Name, const Any& Element)
-    throw( IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException )
+    throw( IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException, std::exception )
 {
     mxObjNameContainer->replaceByName( Name, Element );
 }
 
 void ImplIntrospectionAdapter::removeByName(const OUString& Name)
-    throw( NoSuchElementException, WrappedTargetException, RuntimeException )
+    throw( NoSuchElementException, WrappedTargetException, RuntimeException, std::exception )
 {
     mxObjNameContainer->removeByName( Name );
 }
 
 // Methoden von XIndexAccess
 // Schon in XNameAccess: virtual Reference<XIdlClass> getElementType(void) const
-sal_Int32 ImplIntrospectionAdapter::getCount(void) throw( RuntimeException )
+sal_Int32 ImplIntrospectionAdapter::getCount(void) throw( RuntimeException, std::exception )
 {
     return mxObjIndexAccess->getCount();
 }
 
 Any ImplIntrospectionAdapter::getByIndex(sal_Int32 Index)
-    throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
+    throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
     return mxObjIndexAccess->getByIndex( Index );
 }
 
 // Methoden von XIndexContainer
 void ImplIntrospectionAdapter::insertByIndex(sal_Int32 Index, const Any& Element)
-    throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
+    throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
     mxObjIndexContainer->insertByIndex( Index, Element );
 }
 
 void ImplIntrospectionAdapter::replaceByIndex(sal_Int32 Index, const Any& Element)
-    throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
+    throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
     mxObjIndexContainer->replaceByIndex( Index, Element );
 }
 
 void ImplIntrospectionAdapter::removeByIndex(sal_Int32 Index)
-    throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
+    throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
     mxObjIndexContainer->removeByIndex( Index );
 }
 
 // Methoden von XEnumerationAccess
 // Schon in XNameAccess: virtual Reference<XIdlClass> getElementType(void) const;
-Reference<XEnumeration> ImplIntrospectionAdapter::createEnumeration(void) throw( RuntimeException )
+Reference<XEnumeration> ImplIntrospectionAdapter::createEnumeration(void) throw( RuntimeException, std::exception )
 {
     return mxObjEnumerationAccess->createEnumeration();
 }
 
 // Methoden von XIdlArray
 void ImplIntrospectionAdapter::realloc(Any& array, sal_Int32 length)
-    throw( IllegalArgumentException, RuntimeException )
+    throw( IllegalArgumentException, RuntimeException, std::exception )
 {
     mxObjIdlArray->realloc( array, length );
 }
 
 sal_Int32 ImplIntrospectionAdapter::getLen(const Any& array)
-    throw( IllegalArgumentException, RuntimeException )
+    throw( IllegalArgumentException, RuntimeException, std::exception )
 {
     return mxObjIdlArray->getLen( array );
 }
 
 Any ImplIntrospectionAdapter::get(const Any& array, sal_Int32 index)
-    throw( IllegalArgumentException, ArrayIndexOutOfBoundsException, RuntimeException )
+    throw( IllegalArgumentException, ArrayIndexOutOfBoundsException, RuntimeException, std::exception )
 {
     return mxObjIdlArray->get( array, index );
 }
 
 void ImplIntrospectionAdapter::set(Any& array, sal_Int32 index, const Any& value)
-    throw( IllegalArgumentException, ArrayIndexOutOfBoundsException, RuntimeException )
+    throw( IllegalArgumentException, ArrayIndexOutOfBoundsException, RuntimeException, std::exception )
 {
     mxObjIdlArray->set( array, index, value );
 }
@@ -1156,7 +1156,7 @@ void ImplIntrospectionAdapter::set(Any& array, sal_Int32 index, const Any& value
 
 // Methoden von XIntrospectionAccess
 sal_Int32 ImplIntrospectionAccess::getSuppliedMethodConcepts(void)
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return    MethodConcept::DANGEROUS |
             PROPERTY |
@@ -1167,7 +1167,7 @@ sal_Int32 ImplIntrospectionAccess::getSuppliedMethodConcepts(void)
 }
 
 sal_Int32 ImplIntrospectionAccess::getSuppliedPropertyConcepts(void)
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return    PropertyConcept::DANGEROUS |
             PROPERTYSET |
@@ -1176,7 +1176,7 @@ sal_Int32 ImplIntrospectionAccess::getSuppliedPropertyConcepts(void)
 }
 
 Property ImplIntrospectionAccess::getProperty(const OUString& Name, sal_Int32 PropertyConcepts)
-    throw( NoSuchElementException, RuntimeException )
+    throw( NoSuchElementException, RuntimeException, std::exception )
 {
     Property aRet;
     sal_Int32 i = mpStaticImpl->getPropertyIndex( Name );
@@ -1197,7 +1197,7 @@ Property ImplIntrospectionAccess::getProperty(const OUString& Name, sal_Int32 Pr
 }
 
 sal_Bool ImplIntrospectionAccess::hasProperty(const OUString& Name, sal_Int32 PropertyConcepts)
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     sal_Int32 i = mpStaticImpl->getPropertyIndex( Name );
     sal_Bool bRet = sal_False;
@@ -1211,7 +1211,7 @@ sal_Bool ImplIntrospectionAccess::hasProperty(const OUString& Name, sal_Int32 Pr
 }
 
 Sequence< Property > ImplIntrospectionAccess::getProperties(sal_Int32 PropertyConcepts)
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     // Wenn alle unterstuetzten Konzepte gefordert werden, Sequence einfach durchreichen
     sal_Int32 nAllSupportedMask =    PROPERTYSET |
@@ -1268,7 +1268,7 @@ Sequence< Property > ImplIntrospectionAccess::getProperties(sal_Int32 PropertyCo
 }
 
 Reference<XIdlMethod> ImplIntrospectionAccess::getMethod(const OUString& Name, sal_Int32 MethodConcepts)
-    throw( NoSuchMethodException, RuntimeException )
+    throw( NoSuchMethodException, RuntimeException, std::exception )
 {
     Reference<XIdlMethod> xRet;
     sal_Int32 i = mpStaticImpl->getMethodIndex( Name );
@@ -1288,7 +1288,7 @@ Reference<XIdlMethod> ImplIntrospectionAccess::getMethod(const OUString& Name, s
 }
 
 sal_Bool ImplIntrospectionAccess::hasMethod(const OUString& Name, sal_Int32 MethodConcepts)
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     sal_Int32 i = mpStaticImpl->getMethodIndex( Name );
     sal_Bool bRet = sal_False;
@@ -1302,7 +1302,7 @@ sal_Bool ImplIntrospectionAccess::hasMethod(const OUString& Name, sal_Int32 Meth
 }
 
 Sequence< Reference<XIdlMethod> > ImplIntrospectionAccess::getMethods(sal_Int32 MethodConcepts)
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     ImplIntrospectionAccess* pThis = (ImplIntrospectionAccess*)this;    // const umgehen
 
@@ -1382,13 +1382,13 @@ Sequence< Reference<XIdlMethod> > ImplIntrospectionAccess::getMethods(sal_Int32 
 }
 
 Sequence< Type > ImplIntrospectionAccess::getSupportedListeners(void)
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return mpStaticImpl->getSupportedListeners();
 }
 
 Reference<XInterface> SAL_CALL ImplIntrospectionAccess::queryAdapter( const Type& rType )
-    throw( IllegalTypeException, RuntimeException )
+    throw( IllegalTypeException, RuntimeException, std::exception )
 {
     // Gibt es schon einen Adapter?
     Reference< XInterface > xAdapter( maAdapter );
@@ -1404,7 +1404,7 @@ Reference<XInterface> SAL_CALL ImplIntrospectionAccess::queryAdapter( const Type
 }
 
 // Methoden von XMaterialHolder
-Any ImplIntrospectionAccess::getMaterial(void) throw(RuntimeException)
+Any ImplIntrospectionAccess::getMaterial(void) throw(RuntimeException, std::exception)
 {
     return maInspectedObject;
 }
@@ -1420,7 +1420,7 @@ OUString toLower( OUString aUStr )
 }
 
 // Methoden von XExactName
-OUString ImplIntrospectionAccess::getExactName( const OUString& rApproximateName ) throw( RuntimeException )
+OUString ImplIntrospectionAccess::getExactName( const OUString& rApproximateName ) throw( RuntimeException, std::exception )
 {
     OUString aRetStr;
     LowerToExactNameMap::iterator aIt =
@@ -1619,28 +1619,28 @@ public:
     ImplIntrospection( const Reference<XMultiServiceFactory> & rXSMgr );
 
     // Methoden von XInterface
-    virtual Any            SAL_CALL queryInterface( const Type& rType ) throw( RuntimeException );
+    virtual Any            SAL_CALL queryInterface( const Type& rType ) throw( RuntimeException, std::exception );
     virtual void        SAL_CALL acquire() throw() { OComponentHelper::acquire(); }
     virtual void        SAL_CALL release() throw() { OComponentHelper::release(); }
 
     // XTypeProvider
-    Sequence< Type >    SAL_CALL getTypes(  ) throw( RuntimeException );
-    Sequence<sal_Int8>    SAL_CALL getImplementationId(  ) throw( RuntimeException );
+    Sequence< Type >    SAL_CALL getTypes(  ) throw( RuntimeException, std::exception );
+    Sequence<sal_Int8>    SAL_CALL getImplementationId(  ) throw( RuntimeException, std::exception );
 
     // XServiceInfo
-    OUString                     SAL_CALL getImplementationName() throw();
-    sal_Bool                    SAL_CALL supportsService(const OUString& ServiceName) throw();
-    Sequence< OUString >         SAL_CALL getSupportedServiceNames(void) throw();
+    OUString                     SAL_CALL getImplementationName() throw(std::exception);
+    sal_Bool                    SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception);
+    Sequence< OUString >         SAL_CALL getSupportedServiceNames(void) throw(std::exception);
     static OUString SAL_CALL    getImplementationName_Static(  );
     static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(void) throw();
 
     // Methoden von XIntrospection
     virtual Reference<XIntrospectionAccess> SAL_CALL inspect(const Any& aToInspectObj)
-                throw( RuntimeException );
+                throw( RuntimeException, std::exception );
 
 protected:
     // some XComponent part from OComponentHelper
-    virtual void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException, std::exception);
 };
 
 enum MethodType
@@ -1695,7 +1695,7 @@ ImplIntrospection::ImplIntrospection( const Reference<XMultiServiceFactory> & rX
 }
 
 // XComponent
-void ImplIntrospection::dispose() throw(::com::sun::star::uno::RuntimeException)
+void ImplIntrospection::dispose() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     OComponentHelper::dispose();
 
@@ -1721,7 +1721,7 @@ void ImplIntrospection::dispose() throw(::com::sun::star::uno::RuntimeException)
 
 // XInterface
 Any ImplIntrospection::queryInterface( const Type & rType )
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     Any aRet( ::cppu::queryInterface(
         rType,
@@ -1733,7 +1733,7 @@ Any ImplIntrospection::queryInterface( const Type & rType )
 
 // XTypeProvider
 Sequence< Type > ImplIntrospection::getTypes()
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     static OTypeCollection * s_pTypes = 0;
     if (! s_pTypes)
@@ -1752,7 +1752,7 @@ Sequence< Type > ImplIntrospection::getTypes()
 }
 
 Sequence< sal_Int8 > ImplIntrospection::getImplementationId()
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     static OImplementationId * s_pId = 0;
     if (! s_pId)
@@ -1769,19 +1769,19 @@ Sequence< sal_Int8 > ImplIntrospection::getImplementationId()
 
 
 // XServiceInfo
-OUString ImplIntrospection::getImplementationName() throw()
+OUString ImplIntrospection::getImplementationName() throw(std::exception)
 {
     return getImplementationName_Static();
 }
 
 // XServiceInfo
-sal_Bool ImplIntrospection::supportsService(const OUString& ServiceName) throw()
+sal_Bool ImplIntrospection::supportsService(const OUString& ServiceName) throw(std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo
-Sequence< OUString > ImplIntrospection::getSupportedServiceNames(void) throw()
+Sequence< OUString > ImplIntrospection::getSupportedServiceNames(void) throw(std::exception)
 {
     return getSupportedServiceNames_Static();
 }
@@ -1805,7 +1805,7 @@ Sequence< OUString > ImplIntrospection::getSupportedServiceNames_Static(void) th
 
 // Methoden von XIntrospection
 Reference<XIntrospectionAccess> ImplIntrospection::inspect(const Any& aToInspectObj)
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     Reference<XIntrospectionAccess> xAccess;
 

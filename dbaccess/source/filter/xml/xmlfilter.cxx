@@ -182,7 +182,7 @@ namespace dbaxml
         public:
             DatasourceURLListener(uno::Reference< uno::XComponentContext > const & _xContext) : m_xContext(_xContext), m_aTypeCollection(_xContext){}
             // XPropertyChangeListener
-            virtual void SAL_CALL propertyChange( const beans::PropertyChangeEvent& _rEvent ) throw (uno::RuntimeException)
+            virtual void SAL_CALL propertyChange( const beans::PropertyChangeEvent& _rEvent ) throw (uno::RuntimeException, std::exception)
             {
                 OUString sURL;
                 _rEvent.NewValue >>= sURL;
@@ -206,7 +206,7 @@ namespace dbaxml
                 }
             }
             // XEventListener
-            virtual void SAL_CALL disposing( const lang::EventObject& /*_rSource*/ ) throw (uno::RuntimeException)
+            virtual void SAL_CALL disposing( const lang::EventObject& /*_rSource*/ ) throw (uno::RuntimeException, std::exception)
             {
             }
         };
@@ -388,7 +388,7 @@ css::uno::Sequence<OUString> ODBFilter::getSupportedServiceNames_Static()
 }
 
 sal_Bool SAL_CALL ODBFilter::filter( const Sequence< PropertyValue >& rDescriptor )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     uno::Reference< ::com::sun::star::awt::XWindow > xWindow;
     {

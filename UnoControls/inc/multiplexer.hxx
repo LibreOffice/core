@@ -141,7 +141,7 @@ public:
     */
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     /**_______________________________________________________________________________________________________
         @short      increment refcount
@@ -294,7 +294,7 @@ public:
     */
 
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& aSource)
-        throw( ::com::sun::star::uno::RuntimeException ) ;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) ;
 
 
     //  XFocusListener
@@ -315,7 +315,7 @@ public:
     */
 
     virtual void SAL_CALL focusGained(const ::com::sun::star::awt::FocusEvent& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException ) ;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) ;
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -332,7 +332,7 @@ public:
     */
 
     virtual void SAL_CALL focusLost(const ::com::sun::star::awt::FocusEvent& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException ) ;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) ;
 
 
     //  XWindowListener
@@ -353,7 +353,7 @@ public:
     */
 
     virtual void SAL_CALL windowResized(const ::com::sun::star::awt::WindowEvent& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException ) ;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) ;
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -370,7 +370,7 @@ public:
     */
 
     virtual void SAL_CALL windowMoved(const ::com::sun::star::awt::WindowEvent& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException ) ;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) ;
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -387,7 +387,7 @@ public:
     */
 
     virtual void SAL_CALL windowShown(const ::com::sun::star::lang::EventObject& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException ) ;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) ;
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -404,7 +404,7 @@ public:
     */
 
     virtual void SAL_CALL windowHidden(const ::com::sun::star::lang::EventObject& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException ) ;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) ;
 
 
     //  XKeyListener
@@ -425,7 +425,7 @@ public:
     */
 
     virtual void SAL_CALL keyPressed( const ::com::sun::star::awt::KeyEvent& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException ) ;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) ;
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -442,7 +442,7 @@ public:
     */
 
     virtual void SAL_CALL keyReleased( const ::com::sun::star::awt::KeyEvent& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException ) ;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) ;
 
 
     //  XMouseListener
@@ -463,7 +463,7 @@ public:
     */
 
     virtual void SAL_CALL mousePressed(const ::com::sun::star::awt::MouseEvent& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException ) ;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) ;
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -480,7 +480,7 @@ public:
     */
 
     virtual void SAL_CALL mouseReleased(const ::com::sun::star::awt::MouseEvent& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException ) ;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) ;
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -497,7 +497,7 @@ public:
     */
 
     virtual void SAL_CALL mouseEntered(const ::com::sun::star::awt::MouseEvent& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException ) ;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) ;
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -514,7 +514,7 @@ public:
     */
 
     virtual void SAL_CALL mouseExited(const ::com::sun::star::awt::MouseEvent& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException ) ;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) ;
 
 
     //  XMouseMotionListener
@@ -535,7 +535,7 @@ public:
     */
 
     virtual void SAL_CALL mouseDragged(const ::com::sun::star::awt::MouseEvent& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException ) ;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) ;
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -552,7 +552,7 @@ public:
     */
 
     virtual void SAL_CALL mouseMoved(const ::com::sun::star::awt::MouseEvent& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException ) ;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) ;
 
 
     //  XPaintListener
@@ -573,7 +573,7 @@ public:
     */
 
     virtual void SAL_CALL windowPaint(const ::com::sun::star::awt::PaintEvent& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException ) ;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) ;
 
 
     //  XTopWindowListener
@@ -594,7 +594,7 @@ public:
     */
 
     virtual void SAL_CALL windowOpened( const ::com::sun::star::lang::EventObject& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException ) ;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) ;
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -611,7 +611,7 @@ public:
     */
 
     virtual void SAL_CALL windowClosing( const ::com::sun::star::lang::EventObject& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException ) ;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) ;
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -628,7 +628,7 @@ public:
     */
 
     virtual void SAL_CALL windowClosed( const ::com::sun::star::lang::EventObject& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException ) ;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) ;
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -645,7 +645,7 @@ public:
     */
 
     virtual void SAL_CALL windowMinimized( const ::com::sun::star::lang::EventObject& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException ) ;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) ;
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -662,7 +662,7 @@ public:
     */
 
     virtual void SAL_CALL windowNormalized( const ::com::sun::star::lang::EventObject& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException ) ;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) ;
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -679,7 +679,7 @@ public:
     */
 
     virtual void SAL_CALL windowActivated( const ::com::sun::star::lang::EventObject& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException ) ;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) ;
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -696,7 +696,7 @@ public:
     */
 
     virtual void SAL_CALL windowDeactivated( const ::com::sun::star::lang::EventObject& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException ) ;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) ;
 
 
 //  protected methods

@@ -98,8 +98,8 @@ public:
     SwXSelChgLstnr_Impl(SwMailMergeDlg& rParentDlg);
     ~SwXSelChgLstnr_Impl();
 
-    virtual void SAL_CALL selectionChanged( const EventObject& aEvent ) throw (RuntimeException);
-    virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException);
+    virtual void SAL_CALL selectionChanged( const EventObject& aEvent ) throw (RuntimeException, std::exception);
+    virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException, std::exception);
 };
 
 SwXSelChgLstnr_Impl::SwXSelChgLstnr_Impl(SwMailMergeDlg& rParentDlg) :
@@ -109,7 +109,7 @@ SwXSelChgLstnr_Impl::SwXSelChgLstnr_Impl(SwMailMergeDlg& rParentDlg) :
 SwXSelChgLstnr_Impl::~SwXSelChgLstnr_Impl()
 {}
 
-void SwXSelChgLstnr_Impl::selectionChanged( const EventObject&  ) throw (RuntimeException)
+void SwXSelChgLstnr_Impl::selectionChanged( const EventObject&  ) throw (RuntimeException, std::exception)
 {
     //call the parent to enable selection mode
     Sequence <Any> aSelection;
@@ -127,7 +127,7 @@ void SwXSelChgLstnr_Impl::selectionChanged( const EventObject&  ) throw (Runtime
     }
 }
 
-void SwXSelChgLstnr_Impl::disposing( const EventObject&  ) throw (RuntimeException)
+void SwXSelChgLstnr_Impl::disposing( const EventObject&  ) throw (RuntimeException, std::exception)
 {
     OSL_FAIL("disposing");
 }

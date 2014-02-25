@@ -77,7 +77,7 @@ void SAL_CALL OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt
         throw ( lang::IllegalArgumentException,
                 embed::WrongStateException,
                 uno::Exception,
-                uno::RuntimeException )
+                uno::RuntimeException, std::exception )
 {
     SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::setVisualAreaSize" );
 
@@ -158,7 +158,7 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
         throw ( lang::IllegalArgumentException,
                 embed::WrongStateException,
                 uno::Exception,
-                uno::RuntimeException )
+                uno::RuntimeException, std::exception )
 {
     SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::getVisualAreaSize" );
 
@@ -306,7 +306,7 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
         throw ( lang::IllegalArgumentException,
                 embed::WrongStateException,
                 uno::Exception,
-                uno::RuntimeException )
+                uno::RuntimeException, std::exception )
 {
     SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::getPreferredVisualRepresentation" );
 
@@ -401,7 +401,7 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
 
 sal_Int32 SAL_CALL OleEmbeddedObject::getMapUnit( sal_Int64 nAspect )
         throw ( uno::Exception,
-                uno::RuntimeException)
+                uno::RuntimeException, std::exception)
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;

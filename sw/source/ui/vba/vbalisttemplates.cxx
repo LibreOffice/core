@@ -28,12 +28,12 @@ class ListTemplatesEnumWrapper : public EnumerationHelper_BASE
     sal_Int32 nIndex;
 public:
     ListTemplatesEnumWrapper( SwVbaListTemplates* pTemplates ) : pListTemplates( pTemplates ), nIndex( 1 ) {}
-    virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException)
+    virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception)
     {
         return ( nIndex <= pListTemplates->getCount() );
     }
 
-    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
     {
         if ( nIndex <= pListTemplates->getCount() )
             return pListTemplates->Item( uno::makeAny( nIndex++ ), uno::Any() );

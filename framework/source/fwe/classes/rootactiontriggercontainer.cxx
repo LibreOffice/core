@@ -62,7 +62,7 @@ RootActionTriggerContainer::~RootActionTriggerContainer()
 
 // XInterface
 Any SAL_CALL RootActionTriggerContainer::queryInterface( const Type& aType )
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     Any a = ::cppu::queryInterface(
                 aType ,
@@ -92,7 +92,7 @@ void SAL_CALL RootActionTriggerContainer::release() throw ()
 
 // XMultiServiceFactory
 Reference< XInterface > SAL_CALL RootActionTriggerContainer::createInstance( const OUString& aServiceSpecifier )
-throw ( Exception,  RuntimeException )
+throw ( Exception,  RuntimeException, std::exception )
 {
     if ( aServiceSpecifier.equalsAscii( SERVICENAME_ACTIONTRIGGER ))
         return (OWeakObject *)( new ActionTriggerPropertySet());
@@ -105,13 +105,13 @@ throw ( Exception,  RuntimeException )
 }
 
 Reference< XInterface > SAL_CALL RootActionTriggerContainer::createInstanceWithArguments( const OUString& ServiceSpecifier, const Sequence< Any >& /*Arguments*/ )
-throw ( Exception, RuntimeException )
+throw ( Exception, RuntimeException, std::exception )
 {
     return createInstance( ServiceSpecifier );
 }
 
 Sequence< OUString > SAL_CALL RootActionTriggerContainer::getAvailableServiceNames()
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     Sequence< OUString > aSeq( 3 );
 
@@ -124,7 +124,7 @@ throw ( RuntimeException )
 
 // XIndexContainer
 void SAL_CALL RootActionTriggerContainer::insertByIndex( sal_Int32 Index, const Any& Element )
-throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
+throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -137,7 +137,7 @@ throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetExcept
 }
 
 void SAL_CALL RootActionTriggerContainer::removeByIndex( sal_Int32 Index )
-throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
+throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -151,7 +151,7 @@ throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
 
 // XIndexReplace
 void SAL_CALL RootActionTriggerContainer::replaceByIndex( sal_Int32 Index, const Any& Element )
-throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
+throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -165,7 +165,7 @@ throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetExcept
 
 // XIndexAccess
 sal_Int32 SAL_CALL RootActionTriggerContainer::getCount()
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -186,7 +186,7 @@ throw ( RuntimeException )
 }
 
 Any SAL_CALL RootActionTriggerContainer::getByIndex( sal_Int32 Index )
-throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
+throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -198,13 +198,13 @@ throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
 
 // XElementAccess
 Type SAL_CALL RootActionTriggerContainer::getElementType()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return ::getCppuType(( Reference< XPropertySet >*)0);
 }
 
 sal_Bool SAL_CALL RootActionTriggerContainer::hasElements()
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     if ( m_pMenu )
     {
@@ -217,19 +217,19 @@ throw (::com::sun::star::uno::RuntimeException)
 
 // XServiceInfo
 OUString SAL_CALL RootActionTriggerContainer::getImplementationName()
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     return OUString( IMPLEMENTATIONNAME_ROOTACTIONTRIGGERCONTAINER );
 }
 
 sal_Bool SAL_CALL RootActionTriggerContainer::supportsService( const OUString& ServiceName )
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL RootActionTriggerContainer::getSupportedServiceNames()
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     Sequence< OUString > seqServiceNames( 1 );
 
@@ -238,7 +238,7 @@ throw ( RuntimeException )
 }
 
 // XUnoTunnel
-sal_Int64 SAL_CALL RootActionTriggerContainer::getSomething( const Sequence< sal_Int8 >& aIdentifier ) throw ( RuntimeException )
+sal_Int64 SAL_CALL RootActionTriggerContainer::getSomething( const Sequence< sal_Int8 >& aIdentifier ) throw ( RuntimeException, std::exception )
 {
     if ( aIdentifier == impl_getStaticIdentifier() )
         return reinterpret_cast< sal_Int64 >( this );
@@ -247,7 +247,7 @@ sal_Int64 SAL_CALL RootActionTriggerContainer::getSomething( const Sequence< sal
 }
 
 // XTypeProvider
-Sequence< Type > SAL_CALL RootActionTriggerContainer::getTypes() throw ( RuntimeException )
+Sequence< Type > SAL_CALL RootActionTriggerContainer::getTypes() throw ( RuntimeException, std::exception )
 {
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
@@ -279,7 +279,7 @@ Sequence< Type > SAL_CALL RootActionTriggerContainer::getTypes() throw ( Runtime
     return pTypeCollection->getTypes() ;
 }
 
-Sequence< sal_Int8 > SAL_CALL RootActionTriggerContainer::getImplementationId() throw ( RuntimeException )
+Sequence< sal_Int8 > SAL_CALL RootActionTriggerContainer::getImplementationId() throw ( RuntimeException, std::exception )
 {
     // Create one Id for all instances of this class.
     // Use ethernet address to do this! (sal_True)
@@ -318,7 +318,7 @@ void RootActionTriggerContainer::FillContainer()
         m_pMenu );
     m_bInContainerCreation = sal_False;
 }
-OUString RootActionTriggerContainer::getName() throw ( RuntimeException )
+OUString RootActionTriggerContainer::getName() throw ( RuntimeException, std::exception )
 {
     OUString sRet;
     if( m_pMenuIdentifier )
@@ -326,7 +326,7 @@ OUString RootActionTriggerContainer::getName() throw ( RuntimeException )
     return sRet;
 }
 
-void RootActionTriggerContainer::setName( const OUString& ) throw ( RuntimeException)
+void RootActionTriggerContainer::setName( const OUString& ) throw ( RuntimeException, std::exception)
 {
     throw RuntimeException();
 }

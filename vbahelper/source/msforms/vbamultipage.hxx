@@ -41,9 +41,9 @@ public:
         ov::AbstractGeometryAttributes* pGeomHelper);
 
    // Attributes
-    virtual sal_Int32 SAL_CALL getValue() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setValue( sal_Int32 _value ) throw (css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL Pages( const css::uno::Any& index ) throw (css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getValue() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setValue( sal_Int32 _value ) throw (css::uno::RuntimeException, std::exception);
+    virtual css::uno::Any SAL_CALL Pages( const css::uno::Any& index ) throw (css::uno::RuntimeException, std::exception);
 
     //XHelperInterface
     virtual OUString getServiceImplName();

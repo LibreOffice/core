@@ -95,7 +95,7 @@ public:
     // XInterface
     virtual com::sun::star::uno::Any SAL_CALL queryInterface(
             const com::sun::star::uno::Type& aType )
-        throw ( com::sun::star::uno::RuntimeException );
+        throw ( com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL acquire()
         throw ();
     virtual void SAL_CALL release()
@@ -105,44 +105,44 @@ public:
     //                delegating to aggregate)
     virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
     getTypes()
-        throw ( com::sun::star::uno::RuntimeException );
+        throw ( com::sun::star::uno::RuntimeException, std::exception );
     virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
     getImplementationId()
-        throw ( com::sun::star::uno::RuntimeException );
+        throw ( com::sun::star::uno::RuntimeException, std::exception );
 
     // XComponent ( one of XStorage bases )
     virtual void SAL_CALL
     dispose()
-        throw ( com::sun::star::uno::RuntimeException );
+        throw ( com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL
     addEventListener( const com::sun::star::uno::Reference<
                         com::sun::star::lang::XEventListener > & xListener )
-        throw ( com::sun::star::uno::RuntimeException );
+        throw ( com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL
     removeEventListener( const com::sun::star::uno::Reference<
                             com::sun::star::lang::XEventListener >& aListener )
-        throw ( com::sun::star::uno::RuntimeException );
+        throw ( com::sun::star::uno::RuntimeException, std::exception );
 
     // XNameAccess ( one of XStorage bases )
     virtual com::sun::star::uno::Any SAL_CALL
     getByName( const OUString& aName )
         throw ( com::sun::star::container::NoSuchElementException,
                 com::sun::star::lang::WrappedTargetException,
-                com::sun::star::uno::RuntimeException );
+                com::sun::star::uno::RuntimeException, std::exception );
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
     getElementNames()
-        throw ( com::sun::star::uno::RuntimeException );
+        throw ( com::sun::star::uno::RuntimeException, std::exception );
     virtual sal_Bool SAL_CALL
     hasByName( const OUString& aName )
-        throw ( com::sun::star::uno::RuntimeException );
+        throw ( com::sun::star::uno::RuntimeException, std::exception );
 
     // XElementAccess (base of XNameAccess)
     virtual com::sun::star::uno::Type SAL_CALL
     getElementType()
-        throw ( com::sun::star::uno::RuntimeException );
+        throw ( com::sun::star::uno::RuntimeException, std::exception );
     virtual sal_Bool SAL_CALL
     hasElements()
-        throw ( com::sun::star::uno::RuntimeException );
+        throw ( com::sun::star::uno::RuntimeException, std::exception );
 
     // XStorage
     virtual void SAL_CALL
@@ -152,7 +152,7 @@ public:
                 com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::io::IOException,
                 com::sun::star::embed::StorageWrappedTargetException,
-                com::sun::star::uno::RuntimeException );
+                com::sun::star::uno::RuntimeException, std::exception );
     virtual com::sun::star::uno::Reference< com::sun::star::io::XStream > SAL_CALL
     openStreamElement( const OUString& aStreamName,
                        sal_Int32 nOpenMode )
@@ -161,7 +161,7 @@ public:
                 com::sun::star::packages::WrongPasswordException,
                 com::sun::star::io::IOException,
                 com::sun::star::embed::StorageWrappedTargetException,
-                com::sun::star::uno::RuntimeException );
+                com::sun::star::uno::RuntimeException, std::exception );
     virtual com::sun::star::uno::Reference< com::sun::star::io::XStream > SAL_CALL
     openEncryptedStreamElement( const OUString& aStreamName,
                                 sal_Int32 nOpenMode,
@@ -172,7 +172,7 @@ public:
                 com::sun::star::packages::WrongPasswordException,
                 com::sun::star::io::IOException,
                 com::sun::star::embed::StorageWrappedTargetException,
-                com::sun::star::uno::RuntimeException );
+                com::sun::star::uno::RuntimeException, std::exception );
     virtual com::sun::star::uno::Reference< com::sun::star::embed::XStorage > SAL_CALL
     openStorageElement( const OUString& aStorName,
                         sal_Int32 nOpenMode )
@@ -180,7 +180,7 @@ public:
                 com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::io::IOException,
                 com::sun::star::embed::StorageWrappedTargetException,
-                com::sun::star::uno::RuntimeException );
+                com::sun::star::uno::RuntimeException, std::exception );
     virtual com::sun::star::uno::Reference< com::sun::star::io::XStream > SAL_CALL
     cloneStreamElement( const OUString& aStreamName )
         throw ( com::sun::star::embed::InvalidStorageException,
@@ -188,7 +188,7 @@ public:
                 com::sun::star::packages::WrongPasswordException,
                 com::sun::star::io::IOException,
                 com::sun::star::embed::StorageWrappedTargetException,
-                com::sun::star::uno::RuntimeException );
+                com::sun::star::uno::RuntimeException, std::exception );
     virtual com::sun::star::uno::Reference< com::sun::star::io::XStream > SAL_CALL
     cloneEncryptedStreamElement( const OUString& aStreamName,
                                  const OUString& aPassword )
@@ -198,7 +198,7 @@ public:
                 com::sun::star::packages::WrongPasswordException,
                 com::sun::star::io::IOException,
                 com::sun::star::embed::StorageWrappedTargetException,
-                com::sun::star::uno::RuntimeException );
+                com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL
     copyLastCommitTo( const com::sun::star::uno::Reference<
                         com::sun::star::embed::XStorage >& xTargetStorage )
@@ -206,7 +206,7 @@ public:
                 com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::io::IOException,
                 com::sun::star::embed::StorageWrappedTargetException,
-                com::sun::star::uno::RuntimeException );
+                com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL
     copyStorageElementLastCommitTo( const OUString& aStorName,
                                     const com::sun::star::uno::Reference<
@@ -216,19 +216,19 @@ public:
                 com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::io::IOException,
                 com::sun::star::embed::StorageWrappedTargetException,
-                com::sun::star::uno::RuntimeException );
+                com::sun::star::uno::RuntimeException, std::exception );
     virtual sal_Bool SAL_CALL
     isStreamElement( const OUString& aElementName )
         throw ( com::sun::star::container::NoSuchElementException,
                 com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::embed::InvalidStorageException,
-                com::sun::star::uno::RuntimeException );
+                com::sun::star::uno::RuntimeException, std::exception );
     virtual sal_Bool SAL_CALL
     isStorageElement( const OUString& aElementName )
         throw ( com::sun::star::container::NoSuchElementException,
                 com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::embed::InvalidStorageException,
-                com::sun::star::uno::RuntimeException );
+                com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL
     removeElement( const OUString& aElementName )
         throw ( com::sun::star::embed::InvalidStorageException,
@@ -236,7 +236,7 @@ public:
                 com::sun::star::container::NoSuchElementException,
                 com::sun::star::io::IOException,
                 com::sun::star::embed::StorageWrappedTargetException,
-                com::sun::star::uno::RuntimeException );
+                com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL
     renameElement( const OUString& aEleName,
                    const OUString& aNewName )
@@ -246,7 +246,7 @@ public:
                 com::sun::star::container::ElementExistException,
                 com::sun::star::io::IOException,
                 com::sun::star::embed::StorageWrappedTargetException,
-                com::sun::star::uno::RuntimeException );
+                com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL
     copyElementTo( const OUString& aElementName,
                    const com::sun::star::uno::Reference<
@@ -258,7 +258,7 @@ public:
                 com::sun::star::container::ElementExistException,
                 com::sun::star::io::IOException,
                 com::sun::star::embed::StorageWrappedTargetException,
-                com::sun::star::uno::RuntimeException );
+                com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL
     moveElementTo( const OUString& aElementName,
                    const com::sun::star::uno::Reference<
@@ -270,17 +270,17 @@ public:
                 com::sun::star::container::ElementExistException,
                 com::sun::star::io::IOException,
                 com::sun::star::embed::StorageWrappedTargetException,
-                com::sun::star::uno::RuntimeException );
+                com::sun::star::uno::RuntimeException, std::exception );
 
     // XTransactedObject
     virtual void SAL_CALL commit()
         throw ( com::sun::star::io::IOException,
                 com::sun::star::lang::WrappedTargetException,
-                com::sun::star::uno::RuntimeException );
+                com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL revert()
         throw ( com::sun::star::io::IOException,
                 com::sun::star::lang::WrappedTargetException,
-                com::sun::star::uno::RuntimeException );
+                com::sun::star::uno::RuntimeException, std::exception );
 
 private:
     Storage( const rtl::Reference< Storage > & rFactory ); // n.i.
@@ -327,16 +327,16 @@ public:
     // XInterface
     virtual com::sun::star::uno::Any SAL_CALL
     queryInterface( const com::sun::star::uno::Type& aType )
-        throw ( com::sun::star::uno::RuntimeException );
+        throw ( com::sun::star::uno::RuntimeException, std::exception );
 
     // XTypeProvider (implemnented by base, but needs to be overridden for
     //                delegating to aggregate)
     virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
     getTypes()
-        throw ( com::sun::star::uno::RuntimeException );
+        throw ( com::sun::star::uno::RuntimeException, std::exception );
     virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
     getImplementationId()
-        throw ( com::sun::star::uno::RuntimeException );
+        throw ( com::sun::star::uno::RuntimeException, std::exception );
 
     // XOutputStream
     virtual void SAL_CALL
@@ -344,34 +344,34 @@ public:
         throw ( com::sun::star::io::NotConnectedException,
                 com::sun::star::io::BufferSizeExceededException,
                 com::sun::star::io::IOException,
-                com::sun::star::uno::RuntimeException );
+                com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL
     flush(  )
         throw ( com::sun::star::io::NotConnectedException,
                 com::sun::star::io::BufferSizeExceededException,
                 com::sun::star::io::IOException,
-                com::sun::star::uno::RuntimeException );
+                com::sun::star::uno::RuntimeException, std::exception );
     // Note: We need to intercept this one.
     virtual void SAL_CALL
     closeOutput(  )
         throw ( com::sun::star::io::NotConnectedException,
                 com::sun::star::io::BufferSizeExceededException,
                 com::sun::star::io::IOException,
-                com::sun::star::uno::RuntimeException );
+                com::sun::star::uno::RuntimeException, std::exception );
 
     // XComponent
     // Note: We need to intercept this one.
     virtual void SAL_CALL
     dispose()
-        throw ( com::sun::star::uno::RuntimeException );
+        throw ( com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL
     addEventListener( const com::sun::star::uno::Reference<
                         com::sun::star::lang::XEventListener >& xListener )
-        throw ( com::sun::star::uno::RuntimeException );
+        throw ( com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL
     removeEventListener( const com::sun::star::uno::Reference<
                             com::sun::star::lang::XEventListener >& aListener )
-        throw ( com::sun::star::uno::RuntimeException );
+        throw ( com::sun::star::uno::RuntimeException, std::exception );
 
 private:
     com::sun::star::uno::Reference<
@@ -410,27 +410,27 @@ public:
     // XInterface
     virtual com::sun::star::uno::Any SAL_CALL
     queryInterface( const com::sun::star::uno::Type& aType )
-        throw ( com::sun::star::uno::RuntimeException );
+        throw ( com::sun::star::uno::RuntimeException, std::exception );
 
     // XTypeProvider (implemnented by base, but needs to be overridden for
     //                delegating to aggregate)
     virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
     getTypes()
-        throw ( com::sun::star::uno::RuntimeException );
+        throw ( com::sun::star::uno::RuntimeException, std::exception );
     virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
     getImplementationId()
-        throw ( com::sun::star::uno::RuntimeException );
+        throw ( com::sun::star::uno::RuntimeException, std::exception );
 
     // XStream
     virtual com::sun::star::uno::Reference<
         com::sun::star::io::XInputStream > SAL_CALL
     getInputStream()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 
     virtual com::sun::star::uno::Reference<
         com::sun::star::io::XOutputStream > SAL_CALL
     getOutputStream()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 
     // XOutputStream
     virtual void SAL_CALL
@@ -438,26 +438,26 @@ public:
         throw( com::sun::star::io::NotConnectedException,
                com::sun::star::io::BufferSizeExceededException,
                com::sun::star::io::IOException,
-               com::sun::star::uno::RuntimeException );
+               com::sun::star::uno::RuntimeException, std::exception );
 
     virtual void SAL_CALL
     flush()
         throw( com::sun::star::io::NotConnectedException,
                com::sun::star::io::BufferSizeExceededException,
                com::sun::star::io::IOException,
-               com::sun::star::uno::RuntimeException );
+               com::sun::star::uno::RuntimeException, std::exception );
 
     virtual void SAL_CALL
     closeOutput()
         throw( com::sun::star::io::NotConnectedException,
                com::sun::star::io::IOException,
-               com::sun::star::uno::RuntimeException );
+               com::sun::star::uno::RuntimeException, std::exception );
 
     // XTruncate
     virtual void SAL_CALL
     truncate()
         throw( com::sun::star::io::IOException,
-               com::sun::star::uno::RuntimeException );
+               com::sun::star::uno::RuntimeException, std::exception );
 
     // XInputStream
     virtual sal_Int32 SAL_CALL
@@ -466,7 +466,7 @@ public:
         throw( com::sun::star::io::NotConnectedException,
                com::sun::star::io::BufferSizeExceededException,
                com::sun::star::io::IOException,
-               com::sun::star::uno::RuntimeException );
+               com::sun::star::uno::RuntimeException, std::exception );
 
     virtual sal_Int32 SAL_CALL
     readSomeBytes( com::sun::star::uno::Sequence< sal_Int8 >& aData,
@@ -474,40 +474,40 @@ public:
         throw( com::sun::star::io::NotConnectedException,
                com::sun::star::io::BufferSizeExceededException,
                com::sun::star::io::IOException,
-               com::sun::star::uno::RuntimeException);
+               com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL
     skipBytes( sal_Int32 nBytesToSkip )
         throw( com::sun::star::io::NotConnectedException,
                com::sun::star::io::BufferSizeExceededException,
                com::sun::star::io::IOException,
-               com::sun::star::uno::RuntimeException );
+               com::sun::star::uno::RuntimeException, std::exception );
 
     virtual sal_Int32 SAL_CALL
     available()
         throw( com::sun::star::io::NotConnectedException,
                com::sun::star::io::IOException,
-               com::sun::star::uno::RuntimeException );
+               com::sun::star::uno::RuntimeException, std::exception );
 
     virtual void SAL_CALL
     closeInput()
         throw( com::sun::star::io::NotConnectedException,
                com::sun::star::io::IOException,
-               com::sun::star::uno::RuntimeException );
+               com::sun::star::uno::RuntimeException, std::exception );
 
     // XComponent
     // Note: We need to intercept this one.
     virtual void SAL_CALL
     dispose()
-        throw ( com::sun::star::uno::RuntimeException );
+        throw ( com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL
     addEventListener( const com::sun::star::uno::Reference<
             com::sun::star::lang::XEventListener >& xListener )
-        throw ( com::sun::star::uno::RuntimeException );
+        throw ( com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL
     removeEventListener( const com::sun::star::uno::Reference<
             com::sun::star::lang::XEventListener >& aListener )
-        throw ( com::sun::star::uno::RuntimeException );
+        throw ( com::sun::star::uno::RuntimeException, std::exception );
 
 private:
     void commitChanges()

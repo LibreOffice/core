@@ -152,7 +152,7 @@ DropdownToolbarController::~DropdownToolbarController()
 
 
 void SAL_CALL DropdownToolbarController::dispose()
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarMutexGuard;
 

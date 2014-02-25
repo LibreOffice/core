@@ -45,12 +45,12 @@ ScVbaImage::getServiceNames()
     return aServiceNames;
 }
 
-sal_Int32 SAL_CALL ScVbaImage::getBackColor() throw (uno::RuntimeException)
+sal_Int32 SAL_CALL ScVbaImage::getBackColor() throw (uno::RuntimeException, std::exception)
 {
     return ScVbaControl::getBackColor();
 }
 
-void SAL_CALL ScVbaImage::setBackColor( sal_Int32 nBackColor ) throw (uno::RuntimeException)
+void SAL_CALL ScVbaImage::setBackColor( sal_Int32 nBackColor ) throw (uno::RuntimeException, std::exception)
 {
     ScVbaControl::setBackColor( nBackColor );
 }

@@ -146,34 +146,34 @@ public:
     // XComponent ( base class of XDynamicResultSet )
     virtual void SAL_CALL
     dispose()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL
     addEventListener( const com::sun::star::uno::Reference<
                             com::sun::star::lang::XEventListener >& Listener )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL
     removeEventListener( const com::sun::star::uno::Reference<
                             com::sun::star::lang::XEventListener >& Listener )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 
     // XDynamicResultSet
     virtual com::sun::star::uno::Reference<
                 com::sun::star::sdbc::XResultSet > SAL_CALL
     getStaticResultSet()
         throw( com::sun::star::ucb::ListenerAlreadySetException,
-        com::sun::star::uno::RuntimeException );
+        com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL
     setListener( const com::sun::star::uno::Reference<
                     com::sun::star::ucb::XDynamicResultSetListener >& Listener )
         throw( com::sun::star::ucb::ListenerAlreadySetException,
-               com::sun::star::uno::RuntimeException );
+               com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL
     connectToCache( const com::sun::star::uno::Reference<
                         com::sun::star::ucb::XDynamicResultSet > & xCache )
         throw( com::sun::star::ucb::ListenerAlreadySetException,
                com::sun::star::ucb::AlreadyInitializedException,
                com::sun::star::ucb::ServiceNotFoundException,
-               com::sun::star::uno::RuntimeException );
+               com::sun::star::uno::RuntimeException, std::exception );
 
     /**
       * The implementation of this method always returns 0. Override this
@@ -181,7 +181,7 @@ public:
       */
     virtual sal_Int16 SAL_CALL
     getCapabilities()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 
     //////////////////////////////////////////////////////////////////////
     // Non-interface methods.

@@ -67,14 +67,14 @@ public:
         const Reference< XAllListener >& AllListener, const Any& Helper );
 
     // XInvocation
-    virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection(void) throw( RuntimeException );
+    virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection(void) throw( RuntimeException, std::exception );
     virtual Any SAL_CALL invoke(const OUString& FunctionName, const Sequence< Any >& Params, Sequence< sal_Int16 >& OutParamIndex, Sequence< Any >& OutParam)
-        throw( IllegalArgumentException, CannotConvertException, InvocationTargetException, RuntimeException );
+        throw( IllegalArgumentException, CannotConvertException, InvocationTargetException, RuntimeException, std::exception );
     virtual void SAL_CALL setValue(const OUString& PropertyName, const Any& Value)
-        throw( UnknownPropertyException, CannotConvertException, InvocationTargetException, RuntimeException );
-    virtual Any SAL_CALL getValue(const OUString& PropertyName) throw( UnknownPropertyException, RuntimeException );
-    virtual sal_Bool SAL_CALL hasMethod(const OUString& Name) throw( RuntimeException );
-    virtual sal_Bool SAL_CALL hasProperty(const OUString& Name) throw( RuntimeException );
+        throw( UnknownPropertyException, CannotConvertException, InvocationTargetException, RuntimeException, std::exception );
+    virtual Any SAL_CALL getValue(const OUString& PropertyName) throw( UnknownPropertyException, RuntimeException, std::exception );
+    virtual sal_Bool SAL_CALL hasMethod(const OUString& Name) throw( RuntimeException, std::exception );
+    virtual sal_Bool SAL_CALL hasProperty(const OUString& Name) throw( RuntimeException, std::exception );
 
 private:
     Reference< XIdlReflection >  m_xCoreReflection;
@@ -119,7 +119,7 @@ InvocationToAllListenerMapper::InvocationToAllListenerMapper
 
 //*************************************************************************
 Reference< XIntrospectionAccess > SAL_CALL InvocationToAllListenerMapper::getIntrospection(void)
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return Reference< XIntrospectionAccess >();
 }
@@ -128,7 +128,7 @@ Reference< XIntrospectionAccess > SAL_CALL InvocationToAllListenerMapper::getInt
 Any SAL_CALL InvocationToAllListenerMapper::invoke(const OUString& FunctionName, const Sequence< Any >& Params,
     Sequence< sal_Int16 >& , Sequence< Any >& )
         throw( IllegalArgumentException, CannotConvertException,
-        InvocationTargetException, RuntimeException )
+        InvocationTargetException, RuntimeException, std::exception )
 {
     Any aRet;
 
@@ -178,20 +178,20 @@ Any SAL_CALL InvocationToAllListenerMapper::invoke(const OUString& FunctionName,
 //*************************************************************************
 void SAL_CALL InvocationToAllListenerMapper::setValue(const OUString& , const Any& )
     throw( UnknownPropertyException, CannotConvertException,
-           InvocationTargetException, RuntimeException )
+           InvocationTargetException, RuntimeException, std::exception )
 {
 }
 
 //*************************************************************************
 Any SAL_CALL InvocationToAllListenerMapper::getValue(const OUString& )
-    throw( UnknownPropertyException, RuntimeException )
+    throw( UnknownPropertyException, RuntimeException, std::exception )
 {
     return Any();
 }
 
 //*************************************************************************
 sal_Bool SAL_CALL InvocationToAllListenerMapper::hasMethod(const OUString& Name)
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     Reference< XIdlMethod > xMethod = m_xListenerType->getMethod( Name );
     return xMethod.is();
@@ -199,7 +199,7 @@ sal_Bool SAL_CALL InvocationToAllListenerMapper::hasMethod(const OUString& Name)
 
 //*************************************************************************
 sal_Bool SAL_CALL InvocationToAllListenerMapper::hasProperty(const OUString& Name)
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     Reference< XIdlField > xField = m_xListenerType->getField( Name );
     return xField.is();
@@ -216,35 +216,35 @@ public:
     ~EventAttacherImpl();
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw(RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw(RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException, std::exception);
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(RuntimeException, std::exception);
     static OUString SAL_CALL getImplementationName_Static(  );
     static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(  );
 
     // XInitialization
     virtual void SAL_CALL initialize( const Sequence< Any >& aArguments )
-        throw( Exception, RuntimeException);
+        throw( Exception, RuntimeException, std::exception);
 
     // Methoden von XEventAttacher
     virtual Reference< XEventListener > SAL_CALL attachListener(const Reference< XInterface >& xObject,
             const Reference< XAllListener >& AllListener, const Any& Helper,
             const OUString& ListenerType, const OUString& AddListenerParam)
-        throw( IllegalArgumentException, ServiceNotRegisteredException, CannotCreateAdapterException, IntrospectionException, RuntimeException );
+        throw( IllegalArgumentException, ServiceNotRegisteredException, CannotCreateAdapterException, IntrospectionException, RuntimeException, std::exception );
     virtual Reference< XEventListener > SAL_CALL attachSingleEventListener(const Reference< XInterface >& xObject,
             const Reference< XAllListener >& AllListener, const Any& Helper,
             const OUString& ListenerType, const OUString& AddListenerParam,
             const OUString& EventMethod)
-        throw( IllegalArgumentException, ServiceNotRegisteredException, CannotCreateAdapterException, IntrospectionException, RuntimeException );
+        throw( IllegalArgumentException, ServiceNotRegisteredException, CannotCreateAdapterException, IntrospectionException, RuntimeException, std::exception );
     virtual void SAL_CALL removeListener(const Reference< XInterface >& xObject,
             const OUString& ListenerType, const OUString& AddListenerParam,
             const Reference< XEventListener >& aToRemoveListener)
-        throw( IllegalArgumentException, IntrospectionException, RuntimeException );
+        throw( IllegalArgumentException, IntrospectionException, RuntimeException, std::exception );
 
     // XEventAttacher2
     virtual Sequence< Reference<XEventListener> > SAL_CALL attachMultipleEventListeners(
         const Reference<XInterface>& xObject, const Sequence<com::sun::star::script::EventListener>& aListeners )
-            throw( IllegalArgumentException, ServiceNotRegisteredException, CannotCreateAdapterException, IntrospectionException, RuntimeException );
+            throw( IllegalArgumentException, ServiceNotRegisteredException, CannotCreateAdapterException, IntrospectionException, RuntimeException, std::exception );
 
     // used by FilterAllListener_Impl
     Reference< XTypeConverter > getConverter() throw( Exception );
@@ -310,19 +310,19 @@ Reference< XInterface > SAL_CALL EventAttacherImpl_CreateInstance( const Referen
 
 //*************************************************************************
 OUString SAL_CALL EventAttacherImpl::getImplementationName(  )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     return OUString(  IMPLNAME  );
 }
 
 sal_Bool SAL_CALL EventAttacherImpl::supportsService( const OUString& ServiceName )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence<OUString> SAL_CALL EventAttacherImpl::getSupportedServiceNames(  )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     return getSupportedServiceNames_Static();
 }
@@ -335,7 +335,7 @@ Sequence<OUString> SAL_CALL EventAttacherImpl::getSupportedServiceNames_Static( 
 }
 
 //*************************************************************************
-void SAL_CALL EventAttacherImpl::initialize(const Sequence< Any >& Arguments) throw( Exception, RuntimeException )
+void SAL_CALL EventAttacherImpl::initialize(const Sequence< Any >& Arguments) throw( Exception, RuntimeException, std::exception )
 {
     // get services from the argument list
     const Any * pArray = Arguments.getConstArray();
@@ -444,11 +444,11 @@ public:
                            const Reference< XAllListener >& AllListener_ );
 
     // XAllListener
-    virtual void SAL_CALL firing(const AllEventObject& Event) throw( RuntimeException );
-    virtual Any SAL_CALL approveFiring(const AllEventObject& Event) throw( InvocationTargetException, RuntimeException );
+    virtual void SAL_CALL firing(const AllEventObject& Event) throw( RuntimeException, std::exception );
+    virtual Any SAL_CALL approveFiring(const AllEventObject& Event) throw( InvocationTargetException, RuntimeException, std::exception );
 
     // XEventListener
-    virtual void SAL_CALL disposing(const EventObject& Source) throw( RuntimeException );
+    virtual void SAL_CALL disposing(const EventObject& Source) throw( RuntimeException, std::exception );
 
 private:
     // convert
@@ -473,7 +473,7 @@ FilterAllListenerImpl::FilterAllListenerImpl( EventAttacherImpl * pEA_, const OU
 
 //*************************************************************************
 void SAL_CALL FilterAllListenerImpl::firing(const AllEventObject& Event)
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     if( Event.MethodName == m_EventMethod && m_AllListener.is() )
         m_AllListener->firing( Event );
@@ -526,7 +526,7 @@ void FilterAllListenerImpl::convertToEventReturn( Any & rRet, const Type & rRetT
 
 //*************************************************************************
 Any SAL_CALL FilterAllListenerImpl::approveFiring( const AllEventObject& Event )
-    throw( InvocationTargetException, RuntimeException )
+    throw( InvocationTargetException, RuntimeException, std::exception )
 {
     Any aRet;
 
@@ -557,7 +557,7 @@ Any SAL_CALL FilterAllListenerImpl::approveFiring( const AllEventObject& Event )
 
 //*************************************************************************
 void FilterAllListenerImpl::disposing(const EventObject& )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     // TODO: ???
 }
@@ -572,7 +572,7 @@ Reference< XEventListener > EventAttacherImpl::attachListener
     const OUString& ListenerType,
     const OUString& AddListenerParam
 )
-    throw( IllegalArgumentException, ServiceNotRegisteredException, CannotCreateAdapterException, IntrospectionException, RuntimeException )
+    throw( IllegalArgumentException, ServiceNotRegisteredException, CannotCreateAdapterException, IntrospectionException, RuntimeException, std::exception )
 {
     if( !xObject.is() || !AllListener.is() )
         throw IllegalArgumentException();
@@ -766,7 +766,7 @@ Reference< XEventListener > EventAttacherImpl::attachSingleEventListener
     const OUString& AddListenerParam,
     const OUString& EventMethod
 )
-    throw( IllegalArgumentException, ServiceNotRegisteredException, CannotCreateAdapterException, IntrospectionException, RuntimeException )
+    throw( IllegalArgumentException, ServiceNotRegisteredException, CannotCreateAdapterException, IntrospectionException, RuntimeException, std::exception )
 {
     // Subscribe FilterListener
     Reference< XAllListener > aFilterListener = (XAllListener*)
@@ -782,7 +782,7 @@ void EventAttacherImpl::removeListener
     const OUString& AddListenerParam,
     const Reference< XEventListener >& aToRemoveListener
 )
-    throw( IllegalArgumentException, IntrospectionException, RuntimeException )
+    throw( IllegalArgumentException, IntrospectionException, RuntimeException, std::exception )
 {
     if( !xObject.is() || !aToRemoveListener.is() )
         throw IllegalArgumentException();
@@ -881,7 +881,7 @@ void EventAttacherImpl::removeListener
 
 Sequence< Reference<XEventListener> > EventAttacherImpl::attachMultipleEventListeners(
     const Reference<XInterface>& xObject, const Sequence<com::sun::star::script::EventListener>& aListeners )
-        throw( IllegalArgumentException, ServiceNotRegisteredException, CannotCreateAdapterException, IntrospectionException, RuntimeException )
+        throw( IllegalArgumentException, ServiceNotRegisteredException, CannotCreateAdapterException, IntrospectionException, RuntimeException, std::exception )
 {
     sal_Int32 nCount = aListeners.getLength();
     Sequence< Reference<XAllListener> > aFilterListeners(nCount);

@@ -45,7 +45,7 @@ ScChartRangeSelectionListener::~ScChartRangeSelectionListener()
 
 // ____ XModifyListener ____
 void SAL_CALL ScChartRangeSelectionListener::selectionChanged( const lang::EventObject& aEvent )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< chart2::data::XRangeHighlighter > xRangeHighlighter( aEvent.Source, uno::UNO_QUERY );
     if( xRangeHighlighter.is())
@@ -63,7 +63,7 @@ void SAL_CALL ScChartRangeSelectionListener::selectionChanged( const lang::Event
 
 // ____ XEventListener ____
 void SAL_CALL ScChartRangeSelectionListener::disposing( const lang::EventObject& /*Source*/ )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
 }
 

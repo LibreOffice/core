@@ -132,7 +132,7 @@ void SwXTextView::Invalidate()
     m_pView = 0;
 }
 
-Sequence< uno::Type > SAL_CALL SwXTextView::getTypes(  ) throw(uno::RuntimeException)
+Sequence< uno::Type > SAL_CALL SwXTextView::getTypes(  ) throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence< uno::Type > aBaseTypes = SfxBaseController::getTypes();
 
@@ -157,7 +157,7 @@ namespace
     class theSwXTextViewImplementationId : public rtl::Static< UnoTunnelIdInit, theSwXTextViewImplementationId > {};
 }
 
-Sequence< sal_Int8 > SAL_CALL SwXTextView::getImplementationId(  ) throw(uno::RuntimeException)
+Sequence< sal_Int8 > SAL_CALL SwXTextView::getImplementationId(  ) throw(uno::RuntimeException, std::exception)
 {
     return theSwXTextViewImplementationId::get().getSeq();
 }
@@ -173,7 +173,7 @@ void SAL_CALL SwXTextView::release(  )throw()
 }
 
 uno::Any SAL_CALL SwXTextView::queryInterface( const uno::Type& aType )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     uno::Any aRet;
     if(aType == ::getCppuType((uno::Reference<view::XSelectionSupplier  >*)0))
@@ -432,7 +432,7 @@ uno::Any SwXTextView::getSelection()
 
 void SwXTextView::addSelectionChangeListener(
                                     const uno::Reference< view::XSelectionChangeListener > & rxListener)
-                                    throw( uno::RuntimeException )
+                                    throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     m_SelChangedListeners.addInterface(rxListener);
@@ -440,7 +440,7 @@ void SwXTextView::addSelectionChangeListener(
 
 void SwXTextView::removeSelectionChangeListener(
                                         const uno::Reference< view::XSelectionChangeListener > & rxListener)
-                                        throw( uno::RuntimeException )
+                                        throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     m_SelChangedListeners.removeInterface(rxListener);
@@ -464,7 +464,7 @@ SdrObject* SwXTextView::GetControl(
 }
 
 uno::Reference< awt::XControl >  SwXTextView::getControl(const uno::Reference< awt::XControlModel > & xModel)
-        throw( container::NoSuchElementException, uno::RuntimeException )
+        throw( container::NoSuchElementException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     uno::Reference< awt::XControl >  xRet;
@@ -472,7 +472,7 @@ uno::Reference< awt::XControl >  SwXTextView::getControl(const uno::Reference< a
     return xRet;
 }
 
-uno::Reference< form::runtime::XFormController > SAL_CALL SwXTextView::getFormController( const uno::Reference< form::XForm >& _Form ) throw (RuntimeException)
+uno::Reference< form::runtime::XFormController > SAL_CALL SwXTextView::getFormController( const uno::Reference< form::XForm >& _Form ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -488,7 +488,7 @@ uno::Reference< form::runtime::XFormController > SAL_CALL SwXTextView::getFormCo
     return xController;
 }
 
-::sal_Bool SAL_CALL SwXTextView::isFormDesignMode(  ) throw (uno::RuntimeException)
+::sal_Bool SAL_CALL SwXTextView::isFormDesignMode(  ) throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     SwView* pView2 = GetView();
@@ -496,7 +496,7 @@ uno::Reference< form::runtime::XFormController > SAL_CALL SwXTextView::getFormCo
     return pFormShell ? pFormShell->IsDesignMode() : sal_True;
 }
 
-void SAL_CALL SwXTextView::setFormDesignMode( ::sal_Bool _DesignMode ) throw (RuntimeException)
+void SAL_CALL SwXTextView::setFormDesignMode( ::sal_Bool _DesignMode ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     SwView* pView2 = GetView();
@@ -505,7 +505,7 @@ void SAL_CALL SwXTextView::setFormDesignMode( ::sal_Bool _DesignMode ) throw (Ru
         pFormShell->SetDesignMode( _DesignMode );
 }
 
-uno::Reference< text::XTextViewCursor >  SwXTextView::getViewCursor(void) throw( uno::RuntimeException )
+uno::Reference< text::XTextViewCursor >  SwXTextView::getViewCursor(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(GetView())
@@ -521,7 +521,7 @@ uno::Reference< text::XTextViewCursor >  SwXTextView::getViewCursor(void) throw(
         throw uno::RuntimeException();
 }
 
-uno::Reference< beans::XPropertySet >  SwXTextView::getViewSettings(void) throw( uno::RuntimeException )
+uno::Reference< beans::XPropertySet >  SwXTextView::getViewSettings(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(m_pView)
@@ -725,7 +725,7 @@ void SwXTextView::NotifyDBChanged()
 }
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL SwXTextView::getPropertySetInfo(  )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     static uno::Reference< XPropertySetInfo > aRef = m_pPropSet->getPropertySetInfo();
@@ -734,7 +734,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL SwXTextView::getPropertySetIn
 
 void SAL_CALL SwXTextView::setPropertyValue(
         const OUString& rPropertyName, const uno::Any& rValue )
-    throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+    throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName );
@@ -825,7 +825,7 @@ uno::Any SAL_CALL SwXTextView::getPropertyValue(
 void SAL_CALL SwXTextView::addPropertyChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener >& /*rxListener*/ )
-    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     OSL_FAIL("not implemented");
 }
@@ -833,7 +833,7 @@ void SAL_CALL SwXTextView::addPropertyChangeListener(
 void SAL_CALL SwXTextView::removePropertyChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener >& /*rxListener*/ )
-    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     OSL_FAIL("not implemented");
 }
@@ -841,7 +841,7 @@ void SAL_CALL SwXTextView::removePropertyChangeListener(
 void SAL_CALL SwXTextView::addVetoableChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener >& /*rxListener*/ )
-    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     OSL_FAIL("not implemented");
 }
@@ -849,22 +849,22 @@ void SAL_CALL SwXTextView::addVetoableChangeListener(
 void SAL_CALL SwXTextView::removeVetoableChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener >& /*rxListener*/ )
-    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     OSL_FAIL("not implemented");
 }
 
-OUString SwXTextView::getImplementationName(void) throw( RuntimeException )
+OUString SwXTextView::getImplementationName(void) throw( RuntimeException, std::exception )
 {
     return OUString("SwXTextView");
 }
 
-sal_Bool SwXTextView::supportsService(const OUString& rServiceName) throw( RuntimeException )
+sal_Bool SwXTextView::supportsService(const OUString& rServiceName) throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SwXTextView::getSupportedServiceNames(void) throw( RuntimeException )
+Sequence< OUString > SwXTextView::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
@@ -908,20 +908,20 @@ sal_Bool SwXTextViewCursor::IsTextSelection( sal_Bool bAllowTables ) const
     return bRes;
 }
 
-sal_Bool SwXTextViewCursor::isVisible(void) throw( uno::RuntimeException )
+sal_Bool SwXTextViewCursor::isVisible(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     OSL_FAIL("not implemented");
     return sal_True;
 }
 
-void SwXTextViewCursor::setVisible(sal_Bool /*bVisible*/) throw( uno::RuntimeException )
+void SwXTextViewCursor::setVisible(sal_Bool /*bVisible*/) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     OSL_FAIL("not implemented");
 }
 
-awt::Point SwXTextViewCursor::getPosition(void) throw( uno::RuntimeException )
+awt::Point SwXTextViewCursor::getPosition(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     awt::Point aRet;
@@ -1264,7 +1264,7 @@ sal_Bool SwXTextViewCursor::jumpToLastPage()
     return bRet;
 }
 
-sal_Bool SwXTextViewCursor::jumpToPage(sal_Int16 nPage) throw( uno::RuntimeException )
+sal_Bool SwXTextViewCursor::jumpToPage(sal_Int16 nPage) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     sal_Bool bRet = sal_False;
@@ -1275,7 +1275,7 @@ sal_Bool SwXTextViewCursor::jumpToPage(sal_Int16 nPage) throw( uno::RuntimeExcep
     return bRet;
 }
 
-sal_Bool SwXTextViewCursor::jumpToNextPage(void) throw( uno::RuntimeException )
+sal_Bool SwXTextViewCursor::jumpToNextPage(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     sal_Bool bRet = sal_False;
@@ -1286,7 +1286,7 @@ sal_Bool SwXTextViewCursor::jumpToNextPage(void) throw( uno::RuntimeException )
     return bRet;
 }
 
-sal_Bool SwXTextViewCursor::jumpToPreviousPage(void) throw( uno::RuntimeException )
+sal_Bool SwXTextViewCursor::jumpToPreviousPage(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     sal_Bool bRet = sal_False;
@@ -1297,7 +1297,7 @@ sal_Bool SwXTextViewCursor::jumpToPreviousPage(void) throw( uno::RuntimeExceptio
     return bRet;
 }
 
-sal_Bool SwXTextViewCursor::jumpToEndOfPage(void) throw( uno::RuntimeException )
+sal_Bool SwXTextViewCursor::jumpToEndOfPage(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     sal_Bool bRet = sal_False;
@@ -1308,7 +1308,7 @@ sal_Bool SwXTextViewCursor::jumpToEndOfPage(void) throw( uno::RuntimeException )
     return bRet;
 }
 
-sal_Bool SwXTextViewCursor::jumpToStartOfPage(void) throw( uno::RuntimeException )
+sal_Bool SwXTextViewCursor::jumpToStartOfPage(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     sal_Bool bRet = sal_False;
@@ -1491,7 +1491,7 @@ void SwXTextViewCursor::setString(const OUString& aString)
     }
 }
 
-uno::Reference< XPropertySetInfo >  SwXTextViewCursor::getPropertySetInfo(  ) throw(RuntimeException)
+uno::Reference< XPropertySetInfo >  SwXTextViewCursor::getPropertySetInfo(  ) throw(RuntimeException, std::exception)
 {
     static uno::Reference< XPropertySetInfo >  xRef = m_pPropSet->getPropertySetInfo();
     return xRef;
@@ -1540,24 +1540,24 @@ Any  SwXTextViewCursor::getPropertyValue( const OUString& rPropertyName )
 
 void  SwXTextViewCursor::addPropertyChangeListener(
     const OUString& /*aPropertyName*/, const uno::Reference< XPropertyChangeListener >& /*xListener*/ )
-        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+        throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
 
 void  SwXTextViewCursor::removePropertyChangeListener(
     const OUString& /*aPropertyName*/, const uno::Reference< XPropertyChangeListener >& /*aListener*/ )
-        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+        throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
 
 void  SwXTextViewCursor::addVetoableChangeListener(
     const OUString& /*PropertyName*/, const uno::Reference< XVetoableChangeListener >& /*aListener*/ )
-        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+        throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
 
 void  SwXTextViewCursor::removeVetoableChangeListener(
-    const OUString& /*PropertyName*/, const uno::Reference< XVetoableChangeListener >& /*aListener*/ ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+    const OUString& /*PropertyName*/, const uno::Reference< XVetoableChangeListener >& /*aListener*/ ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
 
@@ -1726,17 +1726,17 @@ void SwXTextViewCursor::gotoStartOfLine(sal_Bool bExpand)
         throw uno::RuntimeException();
 }
 
-OUString SwXTextViewCursor::getImplementationName(void) throw( RuntimeException )
+OUString SwXTextViewCursor::getImplementationName(void) throw( RuntimeException, std::exception )
 {
     return OUString("SwXTextViewCursor");
 }
 
-sal_Bool SwXTextViewCursor::supportsService(const OUString& rServiceName) throw( RuntimeException )
+sal_Bool SwXTextViewCursor::supportsService(const OUString& rServiceName) throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SwXTextViewCursor::getSupportedServiceNames(void) throw( RuntimeException )
+Sequence< OUString > SwXTextViewCursor::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(7);
     OUString* pArray = aRet.getArray();
@@ -1763,7 +1763,7 @@ const uno::Sequence< sal_Int8 > & SwXTextViewCursor::getUnoTunnelId()
 //XUnoTunnel
 sal_Int64 SAL_CALL SwXTextViewCursor::getSomething(
     const uno::Sequence< sal_Int8 >& rId )
-        throw(uno::RuntimeException)
+        throw(uno::RuntimeException, std::exception)
 {
     if( rId.getLength() == 16
         && 0 == memcmp( getUnoTunnelId().getConstArray(),
@@ -1824,7 +1824,7 @@ uno::Reference< datatransfer::XTransferable > SAL_CALL SwXTextView::getTransfera
     }
 }
 
-void SAL_CALL SwXTextView::insertTransferable( const uno::Reference< datatransfer::XTransferable >& xTrans ) throw (datatransfer::UnsupportedFlavorException, uno::RuntimeException)
+void SAL_CALL SwXTextView::insertTransferable( const uno::Reference< datatransfer::XTransferable >& xTrans ) throw (datatransfer::UnsupportedFlavorException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 

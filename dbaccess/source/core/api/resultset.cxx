@@ -102,7 +102,7 @@ OResultSet::~OResultSet()
 }
 
 // com::sun::star::lang::XTypeProvider
-Sequence< Type > OResultSet::getTypes() throw (RuntimeException)
+Sequence< Type > OResultSet::getTypes() throw (RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "OResultSet::getTypes" );
     OTypeCollection aTypes(::getCppuType( (const Reference< XPropertySet > *)0 ),
@@ -111,7 +111,7 @@ Sequence< Type > OResultSet::getTypes() throw (RuntimeException)
     return aTypes.getTypes();
 }
 
-Sequence< sal_Int8 > OResultSet::getImplementationId() throw (RuntimeException)
+Sequence< sal_Int8 > OResultSet::getImplementationId() throw (RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "OResultSet::getImplementationId" );
     static OImplementationId * pId = 0;
@@ -128,7 +128,7 @@ Sequence< sal_Int8 > OResultSet::getImplementationId() throw (RuntimeException)
 }
 
 // com::sun::star::uno::XInterface
-Any OResultSet::queryInterface( const Type & rType ) throw (RuntimeException)
+Any OResultSet::queryInterface( const Type & rType ) throw (RuntimeException, std::exception)
 {
     Any aIface = OResultSetBase::queryInterface( rType );
     if (!aIface.hasValue())
@@ -172,7 +172,7 @@ void OResultSet::disposing()
 }
 
 // XCloseable
-void OResultSet::close(void) throw( SQLException, RuntimeException )
+void OResultSet::close(void) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::close" );
     {
@@ -183,18 +183,18 @@ void OResultSet::close(void) throw( SQLException, RuntimeException )
 }
 
 // XServiceInfo
-OUString OResultSet::getImplementationName(  ) throw(RuntimeException)
+OUString OResultSet::getImplementationName(  ) throw(RuntimeException, std::exception)
 {
     //SAL_INFO("dbaccess", "OResultSet::getImplementationName" );
     return OUString("com.sun.star.sdb.OResultSet");
 }
 
-sal_Bool OResultSet::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
+sal_Bool OResultSet::supportsService( const OUString& _rServiceName ) throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
-Sequence< OUString > OResultSet::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > OResultSet::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
 {
     //SAL_INFO("dbaccess", "OResultSet::getSupportedServiceNames" );
     Sequence< OUString > aSNS( 2 );
@@ -204,7 +204,7 @@ Sequence< OUString > OResultSet::getSupportedServiceNames(  ) throw (RuntimeExce
 }
 
 // com::sun::star::beans::XPropertySet
-Reference< XPropertySetInfo > OResultSet::getPropertySetInfo() throw (RuntimeException)
+Reference< XPropertySetInfo > OResultSet::getPropertySetInfo() throw (RuntimeException, std::exception)
 {
     //SAL_INFO("dbaccess", "OResultSet::getPropertySetInfo" );
     return createPropertySetInfo( getInfoHelper() ) ;
@@ -240,7 +240,7 @@ sal_Bool OResultSet::convertFastPropertyValue(Any & rConvertedValue, Any & rOldV
     return sal_True;
 }
 
-void OResultSet::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception)
+void OResultSet::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception, std::exception)
 {
     //SAL_INFO("dbaccess", "OResultSet::setFastPropertyValue_NoBroadcast" );
     // set it for the driver result set
@@ -284,7 +284,7 @@ void OResultSet::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
 }
 
 // XWarningsSupplier
-Any OResultSet::getWarnings(void) throw( SQLException, RuntimeException )
+Any OResultSet::getWarnings(void) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::getWarnings" );
     MutexGuard aGuard(m_aMutex);
@@ -292,7 +292,7 @@ Any OResultSet::getWarnings(void) throw( SQLException, RuntimeException )
     return m_aWarnings.getWarnings();
 }
 
-void OResultSet::clearWarnings(void) throw( SQLException, RuntimeException )
+void OResultSet::clearWarnings(void) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::clearWarnings" );
     MutexGuard aGuard(m_aMutex);
@@ -301,7 +301,7 @@ void OResultSet::clearWarnings(void) throw( SQLException, RuntimeException )
 }
 
 // ::com::sun::star::sdbc::XResultSetMetaDataSupplier
-Reference< XResultSetMetaData > OResultSet::getMetaData(void) throw( SQLException, RuntimeException )
+Reference< XResultSetMetaData > OResultSet::getMetaData(void) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::getMetaData" );
     MutexGuard aGuard(m_aMutex);
@@ -311,7 +311,7 @@ Reference< XResultSetMetaData > OResultSet::getMetaData(void) throw( SQLExceptio
 }
 
 // ::com::sun::star::sdbc::XColumnLocate
-sal_Int32 OResultSet::findColumn(const OUString& columnName) throw( SQLException, RuntimeException )
+sal_Int32 OResultSet::findColumn(const OUString& columnName) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::findColumn" );
     MutexGuard aGuard(m_aMutex);
@@ -346,7 +346,7 @@ namespace
 }
 
 // ::com::sun::star::sdbcx::XColumnsSupplier
-Reference< ::com::sun::star::container::XNameAccess > OResultSet::getColumns(void) throw( RuntimeException )
+Reference< ::com::sun::star::container::XNameAccess > OResultSet::getColumns(void) throw( RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::getColumns" );
     MutexGuard aGuard(m_aMutex);
@@ -417,7 +417,7 @@ Reference< ::com::sun::star::container::XNameAccess > OResultSet::getColumns(voi
 }
 
 // ::com::sun::star::sdbc::XRow
-sal_Bool OResultSet::wasNull(void) throw( SQLException, RuntimeException )
+sal_Bool OResultSet::wasNull(void) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::wasNull" );
     MutexGuard aGuard(m_aMutex);
@@ -426,7 +426,7 @@ sal_Bool OResultSet::wasNull(void) throw( SQLException, RuntimeException )
     return m_xDelegatorRow->wasNull();
 }
 
-OUString OResultSet::getString(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
+OUString OResultSet::getString(sal_Int32 columnIndex) throw( SQLException, RuntimeException, std::exception )
 {
     //SAL_INFO("dbaccess", "OResultSet::getString" );
     MutexGuard aGuard(m_aMutex);
@@ -435,7 +435,7 @@ OUString OResultSet::getString(sal_Int32 columnIndex) throw( SQLException, Runti
     return m_xDelegatorRow->getString(columnIndex);
 }
 
-sal_Bool OResultSet::getBoolean(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
+sal_Bool OResultSet::getBoolean(sal_Int32 columnIndex) throw( SQLException, RuntimeException, std::exception )
 {
     //SAL_INFO("dbaccess", "OResultSet::getBoolean" );
     MutexGuard aGuard(m_aMutex);
@@ -444,7 +444,7 @@ sal_Bool OResultSet::getBoolean(sal_Int32 columnIndex) throw( SQLException, Runt
     return m_xDelegatorRow->getBoolean(columnIndex);
 }
 
-sal_Int8 OResultSet::getByte(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
+sal_Int8 OResultSet::getByte(sal_Int32 columnIndex) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::getByte" );
     MutexGuard aGuard(m_aMutex);
@@ -453,7 +453,7 @@ sal_Int8 OResultSet::getByte(sal_Int32 columnIndex) throw( SQLException, Runtime
     return m_xDelegatorRow->getByte(columnIndex);
 }
 
-sal_Int16 OResultSet::getShort(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
+sal_Int16 OResultSet::getShort(sal_Int32 columnIndex) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::getShort" );
     MutexGuard aGuard(m_aMutex);
@@ -462,7 +462,7 @@ sal_Int16 OResultSet::getShort(sal_Int32 columnIndex) throw( SQLException, Runti
     return m_xDelegatorRow->getShort(columnIndex);
 }
 
-sal_Int32 OResultSet::getInt(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
+sal_Int32 OResultSet::getInt(sal_Int32 columnIndex) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::getInt" );
     MutexGuard aGuard(m_aMutex);
@@ -471,7 +471,7 @@ sal_Int32 OResultSet::getInt(sal_Int32 columnIndex) throw( SQLException, Runtime
     return m_xDelegatorRow->getInt(columnIndex);
 }
 
-sal_Int64 OResultSet::getLong(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
+sal_Int64 OResultSet::getLong(sal_Int32 columnIndex) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::getLong" );
     MutexGuard aGuard(m_aMutex);
@@ -480,7 +480,7 @@ sal_Int64 OResultSet::getLong(sal_Int32 columnIndex) throw( SQLException, Runtim
     return m_xDelegatorRow->getLong(columnIndex);
 }
 
-float OResultSet::getFloat(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
+float OResultSet::getFloat(sal_Int32 columnIndex) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::getFloat" );
     MutexGuard aGuard(m_aMutex);
@@ -489,7 +489,7 @@ float OResultSet::getFloat(sal_Int32 columnIndex) throw( SQLException, RuntimeEx
     return m_xDelegatorRow->getFloat(columnIndex);
 }
 
-double OResultSet::getDouble(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
+double OResultSet::getDouble(sal_Int32 columnIndex) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::getDouble" );
     MutexGuard aGuard(m_aMutex);
@@ -498,7 +498,7 @@ double OResultSet::getDouble(sal_Int32 columnIndex) throw( SQLException, Runtime
     return m_xDelegatorRow->getDouble(columnIndex);
 }
 
-Sequence< sal_Int8 > OResultSet::getBytes(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
+Sequence< sal_Int8 > OResultSet::getBytes(sal_Int32 columnIndex) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::getBytes" );
     MutexGuard aGuard(m_aMutex);
@@ -507,7 +507,7 @@ Sequence< sal_Int8 > OResultSet::getBytes(sal_Int32 columnIndex) throw( SQLExcep
     return m_xDelegatorRow->getBytes(columnIndex);
 }
 
-::com::sun::star::util::Date OResultSet::getDate(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
+::com::sun::star::util::Date OResultSet::getDate(sal_Int32 columnIndex) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::getDate" );
     MutexGuard aGuard(m_aMutex);
@@ -516,7 +516,7 @@ Sequence< sal_Int8 > OResultSet::getBytes(sal_Int32 columnIndex) throw( SQLExcep
     return m_xDelegatorRow->getDate(columnIndex);
 }
 
-::com::sun::star::util::Time OResultSet::getTime(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
+::com::sun::star::util::Time OResultSet::getTime(sal_Int32 columnIndex) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::getTime" );
     MutexGuard aGuard(m_aMutex);
@@ -525,7 +525,7 @@ Sequence< sal_Int8 > OResultSet::getBytes(sal_Int32 columnIndex) throw( SQLExcep
     return m_xDelegatorRow->getTime(columnIndex);
 }
 
-::com::sun::star::util::DateTime OResultSet::getTimestamp(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
+::com::sun::star::util::DateTime OResultSet::getTimestamp(sal_Int32 columnIndex) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::getTimestamp" );
     MutexGuard aGuard(m_aMutex);
@@ -534,7 +534,7 @@ Sequence< sal_Int8 > OResultSet::getBytes(sal_Int32 columnIndex) throw( SQLExcep
     return m_xDelegatorRow->getTimestamp(columnIndex);
 }
 
-Reference< ::com::sun::star::io::XInputStream >  OResultSet::getBinaryStream(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
+Reference< ::com::sun::star::io::XInputStream >  OResultSet::getBinaryStream(sal_Int32 columnIndex) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::getBinaryStream" );
     MutexGuard aGuard(m_aMutex);
@@ -543,7 +543,7 @@ Reference< ::com::sun::star::io::XInputStream >  OResultSet::getBinaryStream(sal
     return m_xDelegatorRow->getBinaryStream(columnIndex);
 }
 
-Reference< ::com::sun::star::io::XInputStream >  OResultSet::getCharacterStream(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
+Reference< ::com::sun::star::io::XInputStream >  OResultSet::getCharacterStream(sal_Int32 columnIndex) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::getCharacterStream" );
     MutexGuard aGuard(m_aMutex);
@@ -552,7 +552,7 @@ Reference< ::com::sun::star::io::XInputStream >  OResultSet::getCharacterStream(
     return m_xDelegatorRow->getCharacterStream(columnIndex);
 }
 
-Any OResultSet::getObject(sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess > & typeMap) throw( SQLException, RuntimeException )
+Any OResultSet::getObject(sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess > & typeMap) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::getObject" );
     MutexGuard aGuard(m_aMutex);
@@ -561,7 +561,7 @@ Any OResultSet::getObject(sal_Int32 columnIndex, const Reference< ::com::sun::st
     return m_xDelegatorRow->getObject(columnIndex, typeMap);
 }
 
-Reference< XRef >  OResultSet::getRef(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
+Reference< XRef >  OResultSet::getRef(sal_Int32 columnIndex) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::getRef" );
     MutexGuard aGuard(m_aMutex);
@@ -570,7 +570,7 @@ Reference< XRef >  OResultSet::getRef(sal_Int32 columnIndex) throw( SQLException
     return m_xDelegatorRow->getRef(columnIndex);
 }
 
-Reference< XBlob >  OResultSet::getBlob(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
+Reference< XBlob >  OResultSet::getBlob(sal_Int32 columnIndex) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::getBlob" );
     MutexGuard aGuard(m_aMutex);
@@ -579,7 +579,7 @@ Reference< XBlob >  OResultSet::getBlob(sal_Int32 columnIndex) throw( SQLExcepti
     return m_xDelegatorRow->getBlob(columnIndex);
 }
 
-Reference< XClob >  OResultSet::getClob(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
+Reference< XClob >  OResultSet::getClob(sal_Int32 columnIndex) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::getClob" );
     MutexGuard aGuard(m_aMutex);
@@ -588,7 +588,7 @@ Reference< XClob >  OResultSet::getClob(sal_Int32 columnIndex) throw( SQLExcepti
     return m_xDelegatorRow->getClob(columnIndex);
 }
 
-Reference< XArray >  OResultSet::getArray(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
+Reference< XArray >  OResultSet::getArray(sal_Int32 columnIndex) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::getArray" );
     MutexGuard aGuard(m_aMutex);
@@ -598,7 +598,7 @@ Reference< XArray >  OResultSet::getArray(sal_Int32 columnIndex) throw( SQLExcep
 }
 
 // ::com::sun::star::sdbc::XRowUpdate
-void OResultSet::updateNull(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
+void OResultSet::updateNull(sal_Int32 columnIndex) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::updateNull" );
     MutexGuard aGuard(m_aMutex);
@@ -609,7 +609,7 @@ void OResultSet::updateNull(sal_Int32 columnIndex) throw( SQLException, RuntimeE
     m_xDelegatorRowUpdate->updateNull(columnIndex);
 }
 
-void OResultSet::updateBoolean(sal_Int32 columnIndex, sal_Bool x) throw( SQLException, RuntimeException )
+void OResultSet::updateBoolean(sal_Int32 columnIndex, sal_Bool x) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::updateBoolean" );
     MutexGuard aGuard(m_aMutex);
@@ -620,7 +620,7 @@ void OResultSet::updateBoolean(sal_Int32 columnIndex, sal_Bool x) throw( SQLExce
     m_xDelegatorRowUpdate->updateBoolean(columnIndex, x);
 }
 
-void OResultSet::updateByte(sal_Int32 columnIndex, sal_Int8 x) throw( SQLException, RuntimeException )
+void OResultSet::updateByte(sal_Int32 columnIndex, sal_Int8 x) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::updateByte" );
     MutexGuard aGuard(m_aMutex);
@@ -631,7 +631,7 @@ void OResultSet::updateByte(sal_Int32 columnIndex, sal_Int8 x) throw( SQLExcepti
     m_xDelegatorRowUpdate->updateByte(columnIndex, x);
 }
 
-void OResultSet::updateShort(sal_Int32 columnIndex, sal_Int16 x) throw( SQLException, RuntimeException )
+void OResultSet::updateShort(sal_Int32 columnIndex, sal_Int16 x) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::updateShort" );
         MutexGuard aGuard(m_aMutex);
@@ -642,7 +642,7 @@ void OResultSet::updateShort(sal_Int32 columnIndex, sal_Int16 x) throw( SQLExcep
     m_xDelegatorRowUpdate->updateShort(columnIndex, x);
 }
 
-void OResultSet::updateInt(sal_Int32 columnIndex, sal_Int32 x) throw( SQLException, RuntimeException )
+void OResultSet::updateInt(sal_Int32 columnIndex, sal_Int32 x) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::updateInt" );
     MutexGuard aGuard(m_aMutex);
@@ -653,7 +653,7 @@ void OResultSet::updateInt(sal_Int32 columnIndex, sal_Int32 x) throw( SQLExcepti
     m_xDelegatorRowUpdate->updateInt(columnIndex, x);
 }
 
-void OResultSet::updateLong(sal_Int32 columnIndex, sal_Int64 x) throw( SQLException, RuntimeException )
+void OResultSet::updateLong(sal_Int32 columnIndex, sal_Int64 x) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::updateLong" );
     MutexGuard aGuard(m_aMutex);
@@ -664,7 +664,7 @@ void OResultSet::updateLong(sal_Int32 columnIndex, sal_Int64 x) throw( SQLExcept
     m_xDelegatorRowUpdate->updateLong(columnIndex, x);
 }
 
-void OResultSet::updateFloat(sal_Int32 columnIndex, float x) throw( SQLException, RuntimeException )
+void OResultSet::updateFloat(sal_Int32 columnIndex, float x) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::updateFloat" );
     MutexGuard aGuard(m_aMutex);
@@ -675,7 +675,7 @@ void OResultSet::updateFloat(sal_Int32 columnIndex, float x) throw( SQLException
     m_xDelegatorRowUpdate->updateFloat(columnIndex, x);
 }
 
-void OResultSet::updateDouble(sal_Int32 columnIndex, double x) throw( SQLException, RuntimeException )
+void OResultSet::updateDouble(sal_Int32 columnIndex, double x) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::updateDouble" );
     MutexGuard aGuard(m_aMutex);
@@ -686,7 +686,7 @@ void OResultSet::updateDouble(sal_Int32 columnIndex, double x) throw( SQLExcepti
     m_xDelegatorRowUpdate->updateDouble(columnIndex, x);
 }
 
-void OResultSet::updateString(sal_Int32 columnIndex, const OUString& x) throw( SQLException, RuntimeException )
+void OResultSet::updateString(sal_Int32 columnIndex, const OUString& x) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::updateString" );
     MutexGuard aGuard(m_aMutex);
@@ -697,7 +697,7 @@ void OResultSet::updateString(sal_Int32 columnIndex, const OUString& x) throw( S
     m_xDelegatorRowUpdate->updateString(columnIndex, x);
 }
 
-void OResultSet::updateBytes(sal_Int32 columnIndex, const Sequence< sal_Int8 >& x) throw( SQLException, RuntimeException )
+void OResultSet::updateBytes(sal_Int32 columnIndex, const Sequence< sal_Int8 >& x) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::updateBytes" );
     MutexGuard aGuard(m_aMutex);
@@ -708,7 +708,7 @@ void OResultSet::updateBytes(sal_Int32 columnIndex, const Sequence< sal_Int8 >& 
     m_xDelegatorRowUpdate->updateBytes(columnIndex, x);
 }
 
-void OResultSet::updateDate(sal_Int32 columnIndex, const ::com::sun::star::util::Date& x) throw( SQLException, RuntimeException )
+void OResultSet::updateDate(sal_Int32 columnIndex, const ::com::sun::star::util::Date& x) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::updateDate" );
     MutexGuard aGuard(m_aMutex);
@@ -719,7 +719,7 @@ void OResultSet::updateDate(sal_Int32 columnIndex, const ::com::sun::star::util:
     m_xDelegatorRowUpdate->updateDate(columnIndex, x);
 }
 
-void OResultSet::updateTime(sal_Int32 columnIndex, const ::com::sun::star::util::Time& x) throw( SQLException, RuntimeException )
+void OResultSet::updateTime(sal_Int32 columnIndex, const ::com::sun::star::util::Time& x) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::updateTime" );
     MutexGuard aGuard(m_aMutex);
@@ -730,7 +730,7 @@ void OResultSet::updateTime(sal_Int32 columnIndex, const ::com::sun::star::util:
     m_xDelegatorRowUpdate->updateTime(columnIndex, x);
 }
 
-void OResultSet::updateTimestamp(sal_Int32 columnIndex, const ::com::sun::star::util::DateTime& x) throw( SQLException, RuntimeException )
+void OResultSet::updateTimestamp(sal_Int32 columnIndex, const ::com::sun::star::util::DateTime& x) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::updateTimestamp" );
     MutexGuard aGuard(m_aMutex);
@@ -741,7 +741,7 @@ void OResultSet::updateTimestamp(sal_Int32 columnIndex, const ::com::sun::star::
     m_xDelegatorRowUpdate->updateTimestamp(columnIndex, x);
 }
 
-void OResultSet::updateBinaryStream(sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream > & x, sal_Int32 length) throw( SQLException, RuntimeException )
+void OResultSet::updateBinaryStream(sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream > & x, sal_Int32 length) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::updateBinaryStream" );
     MutexGuard aGuard(m_aMutex);
@@ -752,7 +752,7 @@ void OResultSet::updateBinaryStream(sal_Int32 columnIndex, const Reference< ::co
     m_xDelegatorRowUpdate->updateBinaryStream(columnIndex, x, length);
 }
 
-void OResultSet::updateCharacterStream(sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream > & x, sal_Int32 length) throw( SQLException, RuntimeException )
+void OResultSet::updateCharacterStream(sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream > & x, sal_Int32 length) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::updateCharacterStream" );
     MutexGuard aGuard(m_aMutex);
@@ -763,7 +763,7 @@ void OResultSet::updateCharacterStream(sal_Int32 columnIndex, const Reference< :
     m_xDelegatorRowUpdate->updateCharacterStream(columnIndex, x, length);
 }
 
-void OResultSet::updateNumericObject(sal_Int32 columnIndex, const Any& x, sal_Int32 scale) throw( SQLException, RuntimeException )
+void OResultSet::updateNumericObject(sal_Int32 columnIndex, const Any& x, sal_Int32 scale) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::updateNumericObject" );
     MutexGuard aGuard(m_aMutex);
@@ -774,7 +774,7 @@ void OResultSet::updateNumericObject(sal_Int32 columnIndex, const Any& x, sal_In
     m_xDelegatorRowUpdate->updateNumericObject(columnIndex, x, scale);
 }
 
-void OResultSet::updateObject(sal_Int32 columnIndex, const Any& x) throw( SQLException, RuntimeException )
+void OResultSet::updateObject(sal_Int32 columnIndex, const Any& x) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::updateObject" );
     MutexGuard aGuard(m_aMutex);
@@ -786,7 +786,7 @@ void OResultSet::updateObject(sal_Int32 columnIndex, const Any& x) throw( SQLExc
 }
 
 // ::com::sun::star::sdbc::XResultSet
-sal_Bool OResultSet::next(void) throw( SQLException, RuntimeException )
+sal_Bool OResultSet::next(void) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::next" );
     MutexGuard aGuard(m_aMutex);
@@ -795,7 +795,7 @@ sal_Bool OResultSet::next(void) throw( SQLException, RuntimeException )
     return m_xDelegatorResultSet->next();
 }
 
-sal_Bool OResultSet::isBeforeFirst(void) throw( SQLException, RuntimeException )
+sal_Bool OResultSet::isBeforeFirst(void) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::isBeforeFirst" );
     MutexGuard aGuard(m_aMutex);
@@ -804,7 +804,7 @@ sal_Bool OResultSet::isBeforeFirst(void) throw( SQLException, RuntimeException )
     return m_xDelegatorResultSet->isBeforeFirst();
 }
 
-sal_Bool OResultSet::isAfterLast(void) throw( SQLException, RuntimeException )
+sal_Bool OResultSet::isAfterLast(void) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::isAfterLast" );
     MutexGuard aGuard(m_aMutex);
@@ -813,7 +813,7 @@ sal_Bool OResultSet::isAfterLast(void) throw( SQLException, RuntimeException )
     return m_xDelegatorResultSet->isAfterLast();
 }
 
-sal_Bool OResultSet::isFirst(void) throw( SQLException, RuntimeException )
+sal_Bool OResultSet::isFirst(void) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::isFirst" );
     MutexGuard aGuard(m_aMutex);
@@ -822,7 +822,7 @@ sal_Bool OResultSet::isFirst(void) throw( SQLException, RuntimeException )
     return m_xDelegatorResultSet->isFirst();
 }
 
-sal_Bool OResultSet::isLast(void) throw( SQLException, RuntimeException )
+sal_Bool OResultSet::isLast(void) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::isLast" );
     MutexGuard aGuard(m_aMutex);
@@ -831,7 +831,7 @@ sal_Bool OResultSet::isLast(void) throw( SQLException, RuntimeException )
     return m_xDelegatorResultSet->isLast();
 }
 
-void OResultSet::beforeFirst(void) throw( SQLException, RuntimeException )
+void OResultSet::beforeFirst(void) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::beforeFirst" );
     MutexGuard aGuard(m_aMutex);
@@ -840,7 +840,7 @@ void OResultSet::beforeFirst(void) throw( SQLException, RuntimeException )
     m_xDelegatorResultSet->beforeFirst();
 }
 
-void OResultSet::afterLast(void) throw( SQLException, RuntimeException )
+void OResultSet::afterLast(void) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::afterLast" );
     MutexGuard aGuard(m_aMutex);
@@ -849,7 +849,7 @@ void OResultSet::afterLast(void) throw( SQLException, RuntimeException )
     m_xDelegatorResultSet->afterLast();
 }
 
-sal_Bool OResultSet::first(void) throw( SQLException, RuntimeException )
+sal_Bool OResultSet::first(void) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::first" );
     MutexGuard aGuard(m_aMutex);
@@ -858,7 +858,7 @@ sal_Bool OResultSet::first(void) throw( SQLException, RuntimeException )
     return m_xDelegatorResultSet->first();
 }
 
-sal_Bool OResultSet::last(void) throw( SQLException, RuntimeException )
+sal_Bool OResultSet::last(void) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::last" );
     MutexGuard aGuard(m_aMutex);
@@ -867,7 +867,7 @@ sal_Bool OResultSet::last(void) throw( SQLException, RuntimeException )
     return m_xDelegatorResultSet->last();
 }
 
-sal_Int32 OResultSet::getRow(void) throw( SQLException, RuntimeException )
+sal_Int32 OResultSet::getRow(void) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::getRow" );
     MutexGuard aGuard(m_aMutex);
@@ -876,7 +876,7 @@ sal_Int32 OResultSet::getRow(void) throw( SQLException, RuntimeException )
     return m_xDelegatorResultSet->getRow();
 }
 
-sal_Bool OResultSet::absolute(sal_Int32 row) throw( SQLException, RuntimeException )
+sal_Bool OResultSet::absolute(sal_Int32 row) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::absolute" );
     MutexGuard aGuard(m_aMutex);
@@ -885,7 +885,7 @@ sal_Bool OResultSet::absolute(sal_Int32 row) throw( SQLException, RuntimeExcepti
     return m_xDelegatorResultSet->absolute(row);
 }
 
-sal_Bool OResultSet::relative(sal_Int32 rows) throw( SQLException, RuntimeException )
+sal_Bool OResultSet::relative(sal_Int32 rows) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::relative" );
     MutexGuard aGuard(m_aMutex);
@@ -894,7 +894,7 @@ sal_Bool OResultSet::relative(sal_Int32 rows) throw( SQLException, RuntimeExcept
     return m_xDelegatorResultSet->relative(rows);
 }
 
-sal_Bool OResultSet::previous(void) throw( SQLException, RuntimeException )
+sal_Bool OResultSet::previous(void) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::previous" );
     MutexGuard aGuard(m_aMutex);
@@ -903,7 +903,7 @@ sal_Bool OResultSet::previous(void) throw( SQLException, RuntimeException )
     return m_xDelegatorResultSet->previous();
 }
 
-void OResultSet::refreshRow(void) throw( SQLException, RuntimeException )
+void OResultSet::refreshRow(void) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::refreshRow" );
     MutexGuard aGuard(m_aMutex);
@@ -912,7 +912,7 @@ void OResultSet::refreshRow(void) throw( SQLException, RuntimeException )
     m_xDelegatorResultSet->refreshRow();
 }
 
-sal_Bool OResultSet::rowUpdated(void) throw( SQLException, RuntimeException )
+sal_Bool OResultSet::rowUpdated(void) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::rowUpdated" );
     MutexGuard aGuard(m_aMutex);
@@ -921,7 +921,7 @@ sal_Bool OResultSet::rowUpdated(void) throw( SQLException, RuntimeException )
     return m_xDelegatorResultSet->rowUpdated();
 }
 
-sal_Bool OResultSet::rowInserted(void) throw( SQLException, RuntimeException )
+sal_Bool OResultSet::rowInserted(void) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::rowInserted" );
     MutexGuard aGuard(m_aMutex);
@@ -930,7 +930,7 @@ sal_Bool OResultSet::rowInserted(void) throw( SQLException, RuntimeException )
     return m_xDelegatorResultSet->rowInserted();
 }
 
-sal_Bool OResultSet::rowDeleted(void) throw( SQLException, RuntimeException )
+sal_Bool OResultSet::rowDeleted(void) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::rowDeleted" );
     MutexGuard aGuard(m_aMutex);
@@ -939,7 +939,7 @@ sal_Bool OResultSet::rowDeleted(void) throw( SQLException, RuntimeException )
     return m_xDelegatorResultSet->rowDeleted();
 }
 
-Reference< XInterface > OResultSet::getStatement(void) throw( SQLException, RuntimeException )
+Reference< XInterface > OResultSet::getStatement(void) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::getStatement" );
     MutexGuard aGuard(m_aMutex);
@@ -949,7 +949,7 @@ Reference< XInterface > OResultSet::getStatement(void) throw( SQLException, Runt
 }
 
 // ::com::sun::star::sdbcx::XRowLocate
-Any OResultSet::getBookmark(void) throw( SQLException, RuntimeException )
+Any OResultSet::getBookmark(void) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::getBookmark" );
     MutexGuard aGuard(m_aMutex);
@@ -960,7 +960,7 @@ Any OResultSet::getBookmark(void) throw( SQLException, RuntimeException )
     return Reference< XRowLocate >(m_xDelegatorResultSet, UNO_QUERY)->getBookmark();
 }
 
-sal_Bool OResultSet::moveToBookmark(const Any& bookmark) throw( SQLException, RuntimeException )
+sal_Bool OResultSet::moveToBookmark(const Any& bookmark) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::moveToBookmark" );
     MutexGuard aGuard(m_aMutex);
@@ -971,7 +971,7 @@ sal_Bool OResultSet::moveToBookmark(const Any& bookmark) throw( SQLException, Ru
     return Reference< XRowLocate >(m_xDelegatorResultSet, UNO_QUERY)->moveToBookmark(bookmark);
 }
 
-sal_Bool OResultSet::moveRelativeToBookmark(const Any& bookmark, sal_Int32 rows) throw( SQLException, RuntimeException )
+sal_Bool OResultSet::moveRelativeToBookmark(const Any& bookmark, sal_Int32 rows) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::moveRelativeToBookmark" );
     MutexGuard aGuard(m_aMutex);
@@ -982,7 +982,7 @@ sal_Bool OResultSet::moveRelativeToBookmark(const Any& bookmark, sal_Int32 rows)
     return Reference< XRowLocate >(m_xDelegatorResultSet, UNO_QUERY)->moveRelativeToBookmark(bookmark, rows);
 }
 
-sal_Int32 OResultSet::compareBookmarks(const Any& _first, const Any& _second) throw( SQLException, RuntimeException )
+sal_Int32 OResultSet::compareBookmarks(const Any& _first, const Any& _second) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::compareBookmarks" );
     MutexGuard aGuard(m_aMutex);
@@ -993,7 +993,7 @@ sal_Int32 OResultSet::compareBookmarks(const Any& _first, const Any& _second) th
     return Reference< XRowLocate >(m_xDelegatorResultSet, UNO_QUERY)->compareBookmarks(_first, _second);
 }
 
-sal_Bool OResultSet::hasOrderedBookmarks(void) throw( SQLException, RuntimeException )
+sal_Bool OResultSet::hasOrderedBookmarks(void) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::hasOrderedBookmarks" );
     MutexGuard aGuard(m_aMutex);
@@ -1004,7 +1004,7 @@ sal_Bool OResultSet::hasOrderedBookmarks(void) throw( SQLException, RuntimeExcep
     return Reference< XRowLocate >(m_xDelegatorResultSet, UNO_QUERY)->hasOrderedBookmarks();
 }
 
-sal_Int32 OResultSet::hashBookmark(const Any& bookmark) throw( SQLException, RuntimeException )
+sal_Int32 OResultSet::hashBookmark(const Any& bookmark) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::hashBookmark" );
     MutexGuard aGuard(m_aMutex);
@@ -1016,7 +1016,7 @@ sal_Int32 OResultSet::hashBookmark(const Any& bookmark) throw( SQLException, Run
 }
 
 // ::com::sun::star::sdbc::XResultSetUpdate
-void OResultSet::insertRow(void) throw( SQLException, RuntimeException )
+void OResultSet::insertRow(void) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::insertRow" );
     MutexGuard aGuard(m_aMutex);
@@ -1027,7 +1027,7 @@ void OResultSet::insertRow(void) throw( SQLException, RuntimeException )
     m_xDelegatorResultSetUpdate->insertRow();
 }
 
-void OResultSet::updateRow(void) throw( SQLException, RuntimeException )
+void OResultSet::updateRow(void) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::updateRow" );
     MutexGuard aGuard(m_aMutex);
@@ -1038,7 +1038,7 @@ void OResultSet::updateRow(void) throw( SQLException, RuntimeException )
     m_xDelegatorResultSetUpdate->updateRow();
 }
 
-void OResultSet::deleteRow(void) throw( SQLException, RuntimeException )
+void OResultSet::deleteRow(void) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::deleteRow" );
     MutexGuard aGuard(m_aMutex);
@@ -1049,7 +1049,7 @@ void OResultSet::deleteRow(void) throw( SQLException, RuntimeException )
     m_xDelegatorResultSetUpdate->deleteRow();
 }
 
-void OResultSet::cancelRowUpdates(void) throw( SQLException, RuntimeException )
+void OResultSet::cancelRowUpdates(void) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::cancelRowUpdates" );
     MutexGuard aGuard(m_aMutex);
@@ -1060,7 +1060,7 @@ void OResultSet::cancelRowUpdates(void) throw( SQLException, RuntimeException )
     m_xDelegatorResultSetUpdate->cancelRowUpdates();
 }
 
-void OResultSet::moveToInsertRow(void) throw( SQLException, RuntimeException )
+void OResultSet::moveToInsertRow(void) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::moveToInsertRow" );
     MutexGuard aGuard(m_aMutex);
@@ -1071,7 +1071,7 @@ void OResultSet::moveToInsertRow(void) throw( SQLException, RuntimeException )
     m_xDelegatorResultSetUpdate->moveToInsertRow();
 }
 
-void OResultSet::moveToCurrentRow(void) throw( SQLException, RuntimeException )
+void OResultSet::moveToCurrentRow(void) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OResultSet::moveToCurrentRow" );
     MutexGuard aGuard(m_aMutex);

@@ -84,33 +84,33 @@ public:
 
     // XInitialization
     virtual void SAL_CALL initialize( const uno::Sequence< uno::Any > & aArguments )
-        throw ( uno::Exception, uno::RuntimeException );
+        throw ( uno::Exception, uno::RuntimeException, std::exception );
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw ( uno::RuntimeException );
+        throw ( uno::RuntimeException, std::exception );
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw ( uno::RuntimeException );
+        throw ( uno::RuntimeException, std::exception );
     virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw ( uno::RuntimeException );
+        throw ( uno::RuntimeException, std::exception );
 
     // XPropertyAccess
     virtual uno::Sequence< beans::PropertyValue > SAL_CALL getPropertyValues()
-        throw ( uno::RuntimeException );
+        throw ( uno::RuntimeException, std::exception );
     virtual void SAL_CALL setPropertyValues( const uno::Sequence< beans::PropertyValue > & aProps )
         throw ( beans::UnknownPropertyException, beans::PropertyVetoException,
                 lang::IllegalArgumentException, lang::WrappedTargetException,
-                uno::RuntimeException );
+                uno::RuntimeException, std::exception );
 
     // XExecuteDialog
     virtual sal_Int16 SAL_CALL execute()
-        throw ( uno::RuntimeException );
+        throw ( uno::RuntimeException, std::exception );
     virtual void SAL_CALL setTitle( const OUString& aTitle )
-        throw ( uno::RuntimeException );
+        throw ( uno::RuntimeException, std::exception );
 
     // XExporter
     virtual void SAL_CALL setSourceDocument( const uno::Reference< lang::XComponent >& xDoc )
-        throw ( lang::IllegalArgumentException, uno::RuntimeException );
+        throw ( lang::IllegalArgumentException, uno::RuntimeException, std::exception );
 
 };
 
@@ -143,23 +143,23 @@ void SAL_CALL SvFilterOptionsDialog::release() throw()
 
 // XInitialization
 void SAL_CALL SvFilterOptionsDialog::initialize( const uno::Sequence< uno::Any > & )
-    throw ( uno::Exception, uno::RuntimeException )
+    throw ( uno::Exception, uno::RuntimeException, std::exception )
 {
 }
 
 // XServiceInfo
 OUString SAL_CALL SvFilterOptionsDialog::getImplementationName()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.svtools.SvFilterOptionsDialog" );
 }
 sal_Bool SAL_CALL SvFilterOptionsDialog::supportsService( const OUString& rServiceName )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 uno::Sequence< OUString > SAL_CALL SvFilterOptionsDialog::getSupportedServiceNames()
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
@@ -169,7 +169,7 @@ uno::Sequence< OUString > SAL_CALL SvFilterOptionsDialog::getSupportedServiceNam
 
 // XPropertyAccess
 uno::Sequence< beans::PropertyValue > SvFilterOptionsDialog::getPropertyValues()
-        throw ( uno::RuntimeException )
+        throw ( uno::RuntimeException, std::exception )
 {
     sal_Int32 i, nCount;
     for ( i = 0, nCount = maMediaDescriptor.getLength(); i < nCount; i++ )
@@ -189,7 +189,7 @@ uno::Sequence< beans::PropertyValue > SvFilterOptionsDialog::getPropertyValues()
 void SvFilterOptionsDialog::setPropertyValues( const uno::Sequence< beans::PropertyValue > & aProps )
         throw ( beans::UnknownPropertyException, beans::PropertyVetoException,
                 lang::IllegalArgumentException, lang::WrappedTargetException,
-                uno::RuntimeException )
+                uno::RuntimeException, std::exception )
 {
     maMediaDescriptor = aProps;
 
@@ -209,13 +209,13 @@ void SvFilterOptionsDialog::setPropertyValues( const uno::Sequence< beans::Prope
 
 // XExecutableDialog
 void SvFilterOptionsDialog::setTitle( const OUString& aTitle )
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     maDialogTitle = aTitle;
 }
 
 sal_Int16 SvFilterOptionsDialog::execute()
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     sal_Int16 nRet = ui::dialogs::ExecutableDialogResults::CANCEL;
 
@@ -270,7 +270,7 @@ sal_Int16 SvFilterOptionsDialog::execute()
 
 // XEmporter
 void SvFilterOptionsDialog::setSourceDocument( const uno::Reference< lang::XComponent >& xDoc )
-        throw ( lang::IllegalArgumentException, uno::RuntimeException )
+        throw ( lang::IllegalArgumentException, uno::RuntimeException, std::exception )
 {
     mxSourceDocument = xDoc;
 

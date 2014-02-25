@@ -47,7 +47,7 @@ AccessiblePresentationOLEShape::~AccessiblePresentationOLEShape (void)
 
 OUString SAL_CALL
     AccessiblePresentationOLEShape::getImplementationName (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return OUString("AccessiblePresentationOLEShape");
 }
@@ -120,7 +120,7 @@ OUString
 
 //  Return this object's role.
 sal_Int16 SAL_CALL AccessiblePresentationOLEShape::getAccessibleRole ()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return  AccessibleRole::EMBEDDED_OBJECT ;
 }

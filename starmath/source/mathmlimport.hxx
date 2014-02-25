@@ -92,12 +92,12 @@ public:
     virtual ~SmXMLImport() throw ();
 
     // XUnoTunnel
-    sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw(::com::sun::star::uno::RuntimeException);
+    sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw(::com::sun::star::uno::RuntimeException, std::exception);
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
 
     void SAL_CALL endDocument(void)
         throw( ::com::sun::star::xml::sax::SAXException,
-        ::com::sun::star::uno::RuntimeException );
+        ::com::sun::star::uno::RuntimeException, std::exception );
 
     SvXMLImportContext *CreateContext(sal_uInt16 nPrefix,
         const OUString &rLocalName,

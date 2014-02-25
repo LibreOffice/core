@@ -112,31 +112,31 @@ namespace comphelper
         // (order matters: the first is the class name, the second is the class doing the ref counting)
 
 
-    sal_Bool SAL_CALL OAccessibleComponentHelper::containsPoint( const Point& _rPoint ) throw (RuntimeException)
+    sal_Bool SAL_CALL OAccessibleComponentHelper::containsPoint( const Point& _rPoint ) throw (RuntimeException, std::exception)
     {
         return OCommonAccessibleComponent::containsPoint( _rPoint );
     }
 
 
-    Point SAL_CALL OAccessibleComponentHelper::getLocation(  ) throw (RuntimeException)
+    Point SAL_CALL OAccessibleComponentHelper::getLocation(  ) throw (RuntimeException, std::exception)
     {
         return OCommonAccessibleComponent::getLocation( );
     }
 
 
-    Point SAL_CALL OAccessibleComponentHelper::getLocationOnScreen(  ) throw (RuntimeException)
+    Point SAL_CALL OAccessibleComponentHelper::getLocationOnScreen(  ) throw (RuntimeException, std::exception)
     {
         return OCommonAccessibleComponent::getLocationOnScreen( );
     }
 
 
-    Size SAL_CALL OAccessibleComponentHelper::getSize(  ) throw (RuntimeException)
+    Size SAL_CALL OAccessibleComponentHelper::getSize(  ) throw (RuntimeException, std::exception)
     {
         return OCommonAccessibleComponent::getSize( );
     }
 
 
-    Rectangle SAL_CALL OAccessibleComponentHelper::getBounds(  ) throw (RuntimeException)
+    Rectangle SAL_CALL OAccessibleComponentHelper::getBounds(  ) throw (RuntimeException, std::exception)
     {
         return OCommonAccessibleComponent::getBounds( );
     }
@@ -156,31 +156,31 @@ namespace comphelper
         // (order matters: the first is the class name, the second is the class doing the ref counting)
 
 
-    sal_Bool SAL_CALL OAccessibleExtendedComponentHelper::containsPoint( const Point& _rPoint ) throw (RuntimeException)
+    sal_Bool SAL_CALL OAccessibleExtendedComponentHelper::containsPoint( const Point& _rPoint ) throw (RuntimeException, std::exception)
     {
         return OCommonAccessibleComponent::containsPoint( _rPoint );
     }
 
 
-    Point SAL_CALL OAccessibleExtendedComponentHelper::getLocation(  ) throw (RuntimeException)
+    Point SAL_CALL OAccessibleExtendedComponentHelper::getLocation(  ) throw (RuntimeException, std::exception)
     {
         return OCommonAccessibleComponent::getLocation( );
     }
 
 
-    Point SAL_CALL OAccessibleExtendedComponentHelper::getLocationOnScreen(  ) throw (RuntimeException)
+    Point SAL_CALL OAccessibleExtendedComponentHelper::getLocationOnScreen(  ) throw (RuntimeException, std::exception)
     {
         return OCommonAccessibleComponent::getLocationOnScreen( );
     }
 
 
-    Size SAL_CALL OAccessibleExtendedComponentHelper::getSize(  ) throw (RuntimeException)
+    Size SAL_CALL OAccessibleExtendedComponentHelper::getSize(  ) throw (RuntimeException, std::exception)
     {
         return OCommonAccessibleComponent::getSize( );
     }
 
 
-    Rectangle SAL_CALL OAccessibleExtendedComponentHelper::getBounds(  ) throw (RuntimeException)
+    Rectangle SAL_CALL OAccessibleExtendedComponentHelper::getBounds(  ) throw (RuntimeException, std::exception)
     {
         return OCommonAccessibleComponent::getBounds( );
     }

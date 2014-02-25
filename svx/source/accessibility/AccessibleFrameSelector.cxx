@@ -109,14 +109,14 @@ void AccFrameSelector::RemoveFrameSelEventListener()
 
 
 Reference< XAccessibleContext > AccFrameSelector::getAccessibleContext(  )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return this;
 }
 
 
 
-sal_Int32 AccFrameSelector::getAccessibleChildCount(  ) throw (RuntimeException)
+sal_Int32 AccFrameSelector::getAccessibleChildCount(  ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsValid();
@@ -126,7 +126,7 @@ sal_Int32 AccFrameSelector::getAccessibleChildCount(  ) throw (RuntimeException)
 
 
 Reference< XAccessible > AccFrameSelector::getAccessibleChild( sal_Int32 i )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsValid();
@@ -141,7 +141,7 @@ Reference< XAccessible > AccFrameSelector::getAccessibleChild( sal_Int32 i )
 
 
 Reference< XAccessible > AccFrameSelector::getAccessibleParent(  )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsValid();
@@ -156,7 +156,7 @@ Reference< XAccessible > AccFrameSelector::getAccessibleParent(  )
 
 
 sal_Int32 AccFrameSelector::getAccessibleIndexInParent(  )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsValid();
@@ -180,7 +180,7 @@ sal_Int32 AccFrameSelector::getAccessibleIndexInParent(  )
 
 
 
-sal_Int16 AccFrameSelector::getAccessibleRole(  ) throw (RuntimeException)
+sal_Int16 AccFrameSelector::getAccessibleRole(  ) throw (RuntimeException, std::exception)
 {
     return meBorder == FRAMEBORDER_NONE ? AccessibleRole::OPTION_PANE : AccessibleRole::CHECK_BOX;
 }
@@ -188,7 +188,7 @@ sal_Int16 AccFrameSelector::getAccessibleRole(  ) throw (RuntimeException)
 
 
 OUString AccFrameSelector::getAccessibleDescription(  )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsValid();
@@ -198,7 +198,7 @@ OUString AccFrameSelector::getAccessibleDescription(  )
 
 
 OUString AccFrameSelector::getAccessibleName(  )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsValid();
@@ -208,7 +208,7 @@ OUString AccFrameSelector::getAccessibleName(  )
 
 
 Reference< XAccessibleRelationSet > AccFrameSelector::getAccessibleRelationSet(  )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsValid();
@@ -242,7 +242,7 @@ Reference< XAccessibleRelationSet > AccFrameSelector::getAccessibleRelationSet( 
 
 
 Reference< XAccessibleStateSet > AccFrameSelector::getAccessibleStateSet(  )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     utl::AccessibleStateSetHelper* pStateSetHelper = new utl::AccessibleStateSetHelper;
@@ -288,7 +288,7 @@ Reference< XAccessibleStateSet > AccFrameSelector::getAccessibleStateSet(  )
 
 
 Locale AccFrameSelector::getLocale(  )
-    throw (IllegalAccessibleComponentStateException, RuntimeException)
+    throw (IllegalAccessibleComponentStateException, RuntimeException, std::exception)
 {
     return Application::GetSettings().GetUILanguageTag().getLocale();
 }
@@ -313,7 +313,7 @@ void AccFrameSelector::removePropertyChangeListener( const Reference< XPropertyC
 
 
 sal_Bool AccFrameSelector::containsPoint( const AwtPoint& aPt )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsValid();
@@ -325,7 +325,7 @@ sal_Bool AccFrameSelector::containsPoint( const AwtPoint& aPt )
 
 Reference< XAccessible > AccFrameSelector::getAccessibleAtPoint(
     const AwtPoint& aPt )
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsValid();
@@ -333,7 +333,7 @@ Reference< XAccessible > AccFrameSelector::getAccessibleAtPoint(
     return mpFrameSel->GetChildAccessible( Point( aPt.X, aPt.Y ) );
 }
 
-AwtRectangle AccFrameSelector::getBounds(  ) throw (RuntimeException)
+AwtRectangle AccFrameSelector::getBounds(  ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsValid();
@@ -360,7 +360,7 @@ AwtRectangle AccFrameSelector::getBounds(  ) throw (RuntimeException)
 
 
 
-AwtPoint AccFrameSelector::getLocation(  ) throw (RuntimeException)
+AwtPoint AccFrameSelector::getLocation(  ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsValid();
@@ -380,7 +380,7 @@ AwtPoint AccFrameSelector::getLocation(  ) throw (RuntimeException)
 
 
 
-AwtPoint AccFrameSelector::getLocationOnScreen(  ) throw (RuntimeException)
+AwtPoint AccFrameSelector::getLocationOnScreen(  ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsValid();
@@ -401,7 +401,7 @@ AwtPoint AccFrameSelector::getLocationOnScreen(  ) throw (RuntimeException)
 
 
 
-AwtSize AccFrameSelector::getSize(  ) throw (RuntimeException)
+AwtSize AccFrameSelector::getSize(  ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsValid();
@@ -462,7 +462,7 @@ void AccFrameSelector::removeFocusListener( const Reference< XFocusListener >& x
 
 
 
-void AccFrameSelector::grabFocus(  ) throw (RuntimeException)
+void AccFrameSelector::grabFocus(  ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsValid();
@@ -508,7 +508,7 @@ Any AccFrameSelector::getAccessibleKeyBinding(  ) throw (RuntimeException)
 
 
 sal_Int32 AccFrameSelector::getForeground(  )
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsValid();
@@ -518,7 +518,7 @@ sal_Int32 AccFrameSelector::getForeground(  )
 
 
 sal_Int32 AccFrameSelector::getBackground(  )
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsValid();
@@ -527,7 +527,7 @@ sal_Int32 AccFrameSelector::getBackground(  )
 
 
 
-void AccFrameSelector::addAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener ) throw (RuntimeException)
+void AccFrameSelector::addAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -543,7 +543,7 @@ void AccFrameSelector::addAccessibleEventListener( const Reference< XAccessibleE
 
 
 
-void AccFrameSelector::removeAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener ) throw (RuntimeException)
+void AccFrameSelector::removeAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -560,19 +560,19 @@ void AccFrameSelector::removeAccessibleEventListener( const Reference< XAccessib
     }
 }
 
-OUString AccFrameSelector::getImplementationName(  ) throw (RuntimeException)
+OUString AccFrameSelector::getImplementationName(  ) throw (RuntimeException, std::exception)
 {
     return OUString("AccFrameSelector");
 }
 
 sal_Bool AccFrameSelector::supportsService( const OUString& rServiceName )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > AccFrameSelector::getSupportedServiceNames(  )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aRet(3);
     OUString* pArray = aRet.getArray();

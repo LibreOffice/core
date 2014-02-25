@@ -111,14 +111,14 @@ public:
     // XInteractionHandler methods.
     virtual void SAL_CALL handle(
             const uno::Reference< task::XInteractionRequest >& Request )
-        throw ( uno::RuntimeException );
+        throw ( uno::RuntimeException, std::exception );
 };
 
 
 // virtual
 void SAL_CALL InteractionHandlerProxy::handle(
             const uno::Reference< task::XInteractionRequest >& Request )
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     if ( !m_xOrig.is() )
         return;
@@ -180,16 +180,16 @@ public:
     // XActiveDataSink methods.
     virtual void SAL_CALL setInputStream(
                         const uno::Reference< io::XInputStream >& aStream )
-        throw( uno::RuntimeException );
+        throw( uno::RuntimeException, std::exception );
     virtual uno::Reference< io::XInputStream > SAL_CALL getInputStream()
-        throw( uno::RuntimeException );
+        throw( uno::RuntimeException, std::exception );
 };
 
 
 // virtual
 void SAL_CALL ActiveDataSink::setInputStream(
                         const uno::Reference< io::XInputStream >& aStream )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     m_xStream = aStream;
 }
@@ -197,7 +197,7 @@ void SAL_CALL ActiveDataSink::setInputStream(
 
 // virtual
 uno::Reference< io::XInputStream > SAL_CALL ActiveDataSink::getInputStream()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return m_xStream;
 }
@@ -219,17 +219,17 @@ public:
 
     // XCommandInfo methods
     virtual uno::Sequence< ucb::CommandInfo > SAL_CALL getCommands()
-        throw( uno::RuntimeException );
+        throw( uno::RuntimeException, std::exception );
     virtual ucb::CommandInfo SAL_CALL
     getCommandInfoByName( const OUString& Name )
-        throw( ucb::UnsupportedCommandException, uno::RuntimeException );
+        throw( ucb::UnsupportedCommandException, uno::RuntimeException, std::exception );
     virtual ucb::CommandInfo SAL_CALL
     getCommandInfoByHandle( sal_Int32 Handle )
-        throw( ucb::UnsupportedCommandException, uno::RuntimeException );
+        throw( ucb::UnsupportedCommandException, uno::RuntimeException, std::exception );
     virtual sal_Bool SAL_CALL hasCommandByName( const OUString& Name )
-        throw( uno::RuntimeException );
+        throw( uno::RuntimeException, std::exception );
     virtual sal_Bool SAL_CALL hasCommandByHandle( sal_Int32 Handle )
-        throw( uno::RuntimeException );
+        throw( uno::RuntimeException, std::exception );
 };
 
 
@@ -269,7 +269,7 @@ CommandProcessorInfo::~CommandProcessorInfo()
 // virtual
 uno::Sequence< ucb::CommandInfo > SAL_CALL
 CommandProcessorInfo::getCommands()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return uno::Sequence< ucb::CommandInfo >( *m_pInfo );
 }
@@ -278,7 +278,7 @@ CommandProcessorInfo::getCommands()
 // virtual
 ucb::CommandInfo SAL_CALL
 CommandProcessorInfo::getCommandInfoByName( const OUString& Name )
-    throw( ucb::UnsupportedCommandException, uno::RuntimeException )
+    throw( ucb::UnsupportedCommandException, uno::RuntimeException, std::exception )
 {
     for ( sal_Int32 n = 0; n < m_pInfo->getLength(); ++n )
     {
@@ -293,7 +293,7 @@ CommandProcessorInfo::getCommandInfoByName( const OUString& Name )
 // virtual
 ucb::CommandInfo SAL_CALL
 CommandProcessorInfo::getCommandInfoByHandle( sal_Int32 Handle )
-    throw( ucb::UnsupportedCommandException, uno::RuntimeException )
+    throw( ucb::UnsupportedCommandException, uno::RuntimeException, std::exception )
 {
     for ( sal_Int32 n = 0; n < m_pInfo->getLength(); ++n )
     {
@@ -308,7 +308,7 @@ CommandProcessorInfo::getCommandInfoByHandle( sal_Int32 Handle )
 // virtual
 sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByName(
                                                 const OUString& Name )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     for ( sal_Int32 n = 0; n < m_pInfo->getLength(); ++n )
     {
@@ -322,7 +322,7 @@ sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByName(
 
 // virtual
 sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByHandle( sal_Int32 Handle )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     for ( sal_Int32 n = 0; n < m_pInfo->getLength(); ++n )
     {

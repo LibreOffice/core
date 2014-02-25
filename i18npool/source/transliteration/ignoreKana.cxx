@@ -37,7 +37,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 OUString SAL_CALL
 ignoreKana::folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
-  throw(RuntimeException)
+  throw(RuntimeException, std::exception)
 {
     hiraganaToKatakana t1;
     return t1.transliterate(inStr, startPos, nCount, offset);
@@ -45,7 +45,7 @@ ignoreKana::folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount
 
 Sequence< OUString > SAL_CALL
 ignoreKana::transliterateRange( const OUString& str1, const OUString& str2 )
-  throw(RuntimeException)
+  throw(RuntimeException, std::exception)
 {
     hiraganaToKatakana t1;
     katakanaToHiragana t2;
@@ -54,7 +54,7 @@ ignoreKana::transliterateRange( const OUString& str1, const OUString& str2 )
 }
 
 sal_Unicode SAL_CALL
-ignoreKana::transliterateChar2Char( sal_Unicode inChar) throw(RuntimeException, MultipleCharsOutputException)
+ignoreKana::transliterateChar2Char( sal_Unicode inChar) throw(RuntimeException, MultipleCharsOutputException, std::exception)
 {
     hiraganaToKatakana t1;
     return t1.transliterateChar2Char(inChar);

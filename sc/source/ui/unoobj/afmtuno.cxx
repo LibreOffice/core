@@ -285,7 +285,7 @@ void SAL_CALL ScAutoFormatsObj::insertByName( const OUString& aName, const uno::
 
 void SAL_CALL ScAutoFormatsObj::replaceByName( const OUString& aName, const uno::Any& aElement )
                             throw(lang::IllegalArgumentException, container::NoSuchElementException,
-                                    lang::WrappedTargetException, uno::RuntimeException)
+                                    lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     //! zusammenfassen?
@@ -295,7 +295,7 @@ void SAL_CALL ScAutoFormatsObj::replaceByName( const OUString& aName, const uno:
 
 void SAL_CALL ScAutoFormatsObj::removeByName( const OUString& aName )
                                 throw(container::NoSuchElementException,
-                                    lang::WrappedTargetException, uno::RuntimeException)
+                                    lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScAutoFormat* pFormats = ScGlobal::GetOrCreateAutoFormat();
@@ -317,7 +317,7 @@ void SAL_CALL ScAutoFormatsObj::removeByName( const OUString& aName )
 // container::XEnumerationAccess
 
 uno::Reference<container::XEnumeration> SAL_CALL ScAutoFormatsObj::createEnumeration()
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.TableAutoFormatEnumeration"));
@@ -325,7 +325,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScAutoFormatsObj::createEnumera
 
 // container::XIndexAccess
 
-sal_Int32 SAL_CALL ScAutoFormatsObj::getCount() throw(uno::RuntimeException)
+sal_Int32 SAL_CALL ScAutoFormatsObj::getCount() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return ScGlobal::GetOrCreateAutoFormat()->size();
@@ -333,7 +333,7 @@ sal_Int32 SAL_CALL ScAutoFormatsObj::getCount() throw(uno::RuntimeException)
 
 uno::Any SAL_CALL ScAutoFormatsObj::getByIndex( sal_Int32 nIndex )
                             throw(lang::IndexOutOfBoundsException,
-                                    lang::WrappedTargetException, uno::RuntimeException)
+                                    lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Reference< container::XNamed >  xFormat(GetObjectByIndex_Impl((sal_uInt16)nIndex));
@@ -342,13 +342,13 @@ uno::Any SAL_CALL ScAutoFormatsObj::getByIndex( sal_Int32 nIndex )
     return uno::makeAny(xFormat);
 }
 
-uno::Type SAL_CALL ScAutoFormatsObj::getElementType() throw(uno::RuntimeException)
+uno::Type SAL_CALL ScAutoFormatsObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return ::getCppuType((const uno::Reference< container::XNamed >*)0);    // muss zu getByIndex passen
 }
 
-sal_Bool SAL_CALL ScAutoFormatsObj::hasElements() throw(uno::RuntimeException)
+sal_Bool SAL_CALL ScAutoFormatsObj::hasElements() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
@@ -358,7 +358,7 @@ sal_Bool SAL_CALL ScAutoFormatsObj::hasElements() throw(uno::RuntimeException)
 
 uno::Any SAL_CALL ScAutoFormatsObj::getByName( const OUString& aName )
             throw(container::NoSuchElementException,
-                    lang::WrappedTargetException, uno::RuntimeException)
+                    lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Reference< container::XNamed >  xFormat(GetObjectByName_Impl(aName));
@@ -368,7 +368,7 @@ uno::Any SAL_CALL ScAutoFormatsObj::getByName( const OUString& aName )
 }
 
 uno::Sequence<OUString> SAL_CALL ScAutoFormatsObj::getElementNames()
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScAutoFormat* pFormats = ScGlobal::GetOrCreateAutoFormat();
@@ -383,7 +383,7 @@ uno::Sequence<OUString> SAL_CALL ScAutoFormatsObj::getElementNames()
 }
 
 sal_Bool SAL_CALL ScAutoFormatsObj::hasByName( const OUString& aName )
-                                        throw(uno::RuntimeException)
+                                        throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     OUString aString(aName);
@@ -426,7 +426,7 @@ void ScAutoFormatObj::InitFormat( sal_uInt16 nNewIndex )
 // XUnoTunnel
 
 sal_Int64 SAL_CALL ScAutoFormatObj::getSomething(
-                const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException)
+                const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException, std::exception)
 {
     if ( rId.getLength() == 16 &&
           0 == memcmp( getUnoTunnelId().getConstArray(),
@@ -475,7 +475,7 @@ ScAutoFormatFieldObj* ScAutoFormatObj::GetObjectByIndex_Impl(sal_uInt16 nIndex)
 // container::XEnumerationAccess
 
 uno::Reference<container::XEnumeration> SAL_CALL ScAutoFormatObj::createEnumeration()
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.TableAutoFormatEnumeration"));
@@ -483,7 +483,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScAutoFormatObj::createEnumerat
 
 // container::XIndexAccess
 
-sal_Int32 SAL_CALL ScAutoFormatObj::getCount() throw(uno::RuntimeException)
+sal_Int32 SAL_CALL ScAutoFormatObj::getCount() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (IsInserted())
@@ -494,7 +494,7 @@ sal_Int32 SAL_CALL ScAutoFormatObj::getCount() throw(uno::RuntimeException)
 
 uno::Any SAL_CALL ScAutoFormatObj::getByIndex( sal_Int32 nIndex )
                             throw(lang::IndexOutOfBoundsException,
-                                    lang::WrappedTargetException, uno::RuntimeException)
+                                    lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -506,13 +506,13 @@ uno::Any SAL_CALL ScAutoFormatObj::getByIndex( sal_Int32 nIndex )
     return uno::Any();
 }
 
-uno::Type SAL_CALL ScAutoFormatObj::getElementType() throw(uno::RuntimeException)
+uno::Type SAL_CALL ScAutoFormatObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);  // muss zu getByIndex passen
 }
 
-sal_Bool SAL_CALL ScAutoFormatObj::hasElements() throw(uno::RuntimeException)
+sal_Bool SAL_CALL ScAutoFormatObj::hasElements() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
@@ -520,7 +520,7 @@ sal_Bool SAL_CALL ScAutoFormatObj::hasElements() throw(uno::RuntimeException)
 
 // container::XNamed
 
-OUString SAL_CALL ScAutoFormatObj::getName() throw(uno::RuntimeException)
+OUString SAL_CALL ScAutoFormatObj::getName() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScAutoFormat* pFormats = ScGlobal::GetOrCreateAutoFormat();
@@ -575,7 +575,7 @@ void SAL_CALL ScAutoFormatObj::setName( const OUString& aNewName )
 // beans::XPropertySet
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScAutoFormatObj::getPropertySetInfo()
-                                                        throw(uno::RuntimeException)
+                                                        throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     static uno::Reference< beans::XPropertySetInfo > aRef(new SfxItemPropertySetInfo( aPropSet.getPropertyMap() ));
@@ -586,7 +586,7 @@ void SAL_CALL ScAutoFormatObj::setPropertyValue(
                         const OUString& aPropertyName, const uno::Any& aValue )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
                         lang::IllegalArgumentException, lang::WrappedTargetException,
-                        uno::RuntimeException)
+                        uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScAutoFormat* pFormats = ScGlobal::GetOrCreateAutoFormat();
@@ -619,7 +619,7 @@ void SAL_CALL ScAutoFormatObj::setPropertyValue(
 
 uno::Any SAL_CALL ScAutoFormatObj::getPropertyValue( const OUString& aPropertyName )
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
-                        uno::RuntimeException)
+                        uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Any aAny;
@@ -679,7 +679,7 @@ void ScAutoFormatFieldObj::Notify( SfxBroadcaster& /* rBC */, const SfxHint& /* 
 // beans::XPropertySet
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScAutoFormatFieldObj::getPropertySetInfo()
-                                                        throw(uno::RuntimeException)
+                                                        throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     static uno::Reference< beans::XPropertySetInfo > aRef(new SfxItemPropertySetInfo( aPropSet.getPropertyMap() ));
@@ -690,7 +690,7 @@ void SAL_CALL ScAutoFormatFieldObj::setPropertyValue(
                         const OUString& aPropertyName, const uno::Any& aValue )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
                         lang::IllegalArgumentException, lang::WrappedTargetException,
-                        uno::RuntimeException)
+                        uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScAutoFormat* pFormats = ScGlobal::GetOrCreateAutoFormat();
@@ -793,7 +793,7 @@ void SAL_CALL ScAutoFormatFieldObj::setPropertyValue(
 
 uno::Any SAL_CALL ScAutoFormatFieldObj::getPropertyValue( const OUString& aPropertyName )
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
-                        uno::RuntimeException)
+                        uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Any aVal;

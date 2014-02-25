@@ -57,21 +57,21 @@ public:
     virtual ~GraphicExportDialog();
 
     // XInitialization
-    virtual void SAL_CALL initialize( const Sequence<Any>& aArguments ) throw (Exception, RuntimeException );
+    virtual void SAL_CALL initialize( const Sequence<Any>& aArguments ) throw (Exception, RuntimeException, std::exception );
 
     // XPropertyAccess
-    virtual Sequence<PropertyValue> SAL_CALL getPropertyValues() throw ( RuntimeException );
+    virtual Sequence<PropertyValue> SAL_CALL getPropertyValues() throw ( RuntimeException, std::exception );
     virtual void SAL_CALL setPropertyValues( const Sequence<PropertyValue>& aProps )
         throw ( UnknownPropertyException, PropertyVetoException,
                 lang::IllegalArgumentException, lang::WrappedTargetException,
-                RuntimeException );
+                RuntimeException, std::exception );
 
     // XExecuteDialog
-    virtual sal_Int16 SAL_CALL execute() throw ( RuntimeException );
-    virtual void SAL_CALL setTitle( const OUString& aTitle ) throw ( RuntimeException );
+    virtual sal_Int16 SAL_CALL execute() throw ( RuntimeException, std::exception );
+    virtual void SAL_CALL setTitle( const OUString& aTitle ) throw ( RuntimeException, std::exception );
 
     // XExporter
-    virtual void SAL_CALL setSourceDocument( const Reference<lang::XComponent>& xDocument ) throw ( lang::IllegalArgumentException, RuntimeException );
+    virtual void SAL_CALL setSourceDocument( const Reference<lang::XComponent>& xDocument ) throw ( lang::IllegalArgumentException, RuntimeException, std::exception );
 };
 
 

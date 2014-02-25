@@ -96,33 +96,33 @@ public:
     // XSprite
 
     virtual void SAL_CALL setAlpha (double nAlpha)
-        throw (lang::IllegalArgumentException,RuntimeException);
+        throw (lang::IllegalArgumentException,RuntimeException, std::exception);
 
     virtual void SAL_CALL move (const geometry::RealPoint2D& rNewPos,
         const rendering::ViewState& rViewState,
         const rendering::RenderState& rRenderState)
-        throw (lang::IllegalArgumentException,RuntimeException);
+        throw (lang::IllegalArgumentException,RuntimeException, std::exception);
 
     virtual void SAL_CALL transform (const geometry::AffineMatrix2D& rTransformation)
-        throw (lang::IllegalArgumentException,RuntimeException);
+        throw (lang::IllegalArgumentException,RuntimeException, std::exception);
 
     virtual void SAL_CALL clip (const Reference<rendering::XPolyPolygon2D>& rClip)
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
 
     virtual void SAL_CALL setPriority (double nPriority)
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
 
     virtual void SAL_CALL show (void)
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
 
     virtual void SAL_CALL hide (void)
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
 
 
     // XCustomSprite
 
     virtual Reference<rendering::XCanvas> SAL_CALL getContentCanvas (void)
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
 
 private:
     rtl::Reference<PresenterCanvas> mpCanvas;
@@ -205,7 +205,7 @@ void SAL_CALL PresenterCanvas::disposing (void)
 
 void SAL_CALL PresenterCanvas::initialize (
     const Sequence<Any>& rArguments)
-    throw(Exception, RuntimeException)
+    throw(Exception, RuntimeException, std::exception)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
         ThrowIfDisposed();
@@ -265,7 +265,7 @@ void SAL_CALL PresenterCanvas::initialize (
 //----- XCanvas ---------------------------------------------------------------
 
 void SAL_CALL PresenterCanvas::clear (void)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     // ToDo: Clear the area covered by the child window.  A simple forward
@@ -279,7 +279,7 @@ void SAL_CALL PresenterCanvas::drawPoint (
     const css::geometry::RealPoint2D& aPoint,
     const css::rendering::ViewState& aViewState,
     const css::rendering::RenderState& aRenderState)
-    throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
+    throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     mxSharedCanvas->drawPoint(aPoint,MergeViewState(aViewState),aRenderState);
@@ -293,7 +293,7 @@ void SAL_CALL PresenterCanvas::drawLine (
         const css::geometry::RealPoint2D& aEndPoint,
         const css::rendering::ViewState& aViewState,
         const css::rendering::RenderState& aRenderState)
-        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     mxSharedCanvas->drawLine(aStartPoint,aEndPoint,MergeViewState(aViewState),aRenderState);
@@ -307,7 +307,7 @@ void SAL_CALL PresenterCanvas::drawBezier (
         const css::geometry::RealPoint2D& aEndPoint,
         const css::rendering::ViewState& aViewState,
         const css::rendering::RenderState& aRenderState)
-        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     mxSharedCanvas->drawBezier(aBezierSegment,aEndPoint,MergeViewState(aViewState),aRenderState);
@@ -320,7 +320,7 @@ css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL PresenterCanvas::
         const css::uno::Reference< css::rendering::XPolyPolygon2D >& xPolyPolygon,
         const css::rendering::ViewState& aViewState,
         const css::rendering::RenderState& aRenderState)
-        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     return mxSharedCanvas->drawPolyPolygon(
@@ -335,7 +335,7 @@ css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL PresenterCanvas::
         const css::rendering::ViewState& aViewState,
         const css::rendering::RenderState& aRenderState,
         const css::rendering::StrokeAttributes& aStrokeAttributes)
-        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     return mxSharedCanvas->strokePolyPolygon(
@@ -354,7 +354,7 @@ css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
             const css::rendering::StrokeAttributes& aStrokeAttributes)
         throw (css::lang::IllegalArgumentException,
             css::rendering::VolatileContentDestroyedException,
-            css::uno::RuntimeException)
+            css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     return mxSharedCanvas->strokeTexturedPolyPolygon(
@@ -374,7 +374,7 @@ css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
             const css::rendering::StrokeAttributes& aStrokeAttributes)
         throw (css::lang::IllegalArgumentException,
             css::rendering::VolatileContentDestroyedException,
-            css::uno::RuntimeException)
+            css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     return mxSharedCanvas->strokeTextureMappedPolyPolygon(
@@ -395,7 +395,7 @@ css::uno::Reference<css::rendering::XPolyPolygon2D> SAL_CALL
             const css::rendering::ViewState& aViewState,
             const css::rendering::RenderState& aRenderState,
             const css::rendering::StrokeAttributes& aStrokeAttributes)
-        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     return mxSharedCanvas->queryStrokeShapes(
@@ -411,7 +411,7 @@ css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
             const css::rendering::ViewState& aViewState,
             const css::rendering::RenderState& aRenderState)
         throw (css::lang::IllegalArgumentException,
-            css::uno::RuntimeException)
+            css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     return mxSharedCanvas->fillPolyPolygon(
@@ -429,7 +429,7 @@ css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
             const css::uno::Sequence<css::rendering::Texture>& xTextures)
         throw (css::lang::IllegalArgumentException,
             css::rendering::VolatileContentDestroyedException,
-            css::uno::RuntimeException)
+            css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     return mxSharedCanvas->fillTexturedPolyPolygon(
@@ -448,7 +448,7 @@ css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
             const css::uno::Reference< css::geometry::XMapping2D >& xMapping)
         throw (css::lang::IllegalArgumentException,
             css::rendering::VolatileContentDestroyedException,
-            css::uno::RuntimeException)
+            css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     return mxSharedCanvas->fillTextureMappedPolyPolygon(
@@ -464,7 +464,7 @@ css::uno::Reference<css::rendering::XCanvasFont> SAL_CALL
             const css::uno::Sequence< css::beans::PropertyValue >& aExtraFontProperties,
             const css::geometry::Matrix2D& aFontMatrix)
         throw (css::lang::IllegalArgumentException,
-            css::uno::RuntimeException)
+            css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     return mxSharedCanvas->createFont(
@@ -478,7 +478,7 @@ css::uno::Sequence<css::rendering::FontInfo> SAL_CALL
         PresenterCanvas::queryAvailableFonts(
             const css::rendering::FontInfo& aFilter,
             const css::uno::Sequence< css::beans::PropertyValue >& aFontProperties)
-        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     return mxSharedCanvas->queryAvailableFonts(aFilter, aFontProperties);
@@ -494,7 +494,7 @@ css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
             const css::rendering::ViewState& aViewState,
             const css::rendering::RenderState& aRenderState,
             ::sal_Int8 nTextDirection)
-        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     return mxSharedCanvas->drawText(
@@ -509,7 +509,7 @@ css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
             const css::uno::Reference< css::rendering::XTextLayout >& xLayoutetText,
             const css::rendering::ViewState& aViewState,
             const css::rendering::RenderState& aRenderState)
-        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     return mxSharedCanvas->drawTextLayout(
@@ -526,7 +526,7 @@ css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
             const css::rendering::RenderState& aRenderState)
         throw (css::lang::IllegalArgumentException,
             css::rendering::VolatileContentDestroyedException,
-            css::uno::RuntimeException)
+            css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     return mxSharedCanvas->drawBitmap(
@@ -543,7 +543,7 @@ css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
             const css::rendering::RenderState& aRenderState)
         throw (css::lang::IllegalArgumentException,
             css::rendering::VolatileContentDestroyedException,
-            css::uno::RuntimeException)
+            css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     return mxSharedCanvas->drawBitmapModulated(
@@ -555,7 +555,7 @@ css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
 
 css::uno::Reference<css::rendering::XGraphicDevice> SAL_CALL
         PresenterCanvas::getDevice (void)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     return mxSharedCanvas->getDevice();
@@ -600,7 +600,7 @@ void SAL_CALL PresenterCanvas::copyRect(
 Reference<rendering::XAnimatedSprite> SAL_CALL
     PresenterCanvas::createSpriteFromAnimation (
         const css::uno::Reference<css::rendering::XAnimation>& rAnimation)
-    throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
+    throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
 
@@ -621,7 +621,7 @@ Reference<rendering::XAnimatedSprite> SAL_CALL
     ::sal_Int8 nInterpolationMode)
         throw (css::lang::IllegalArgumentException,
             css::rendering::VolatileContentDestroyedException,
-            css::uno::RuntimeException)
+            css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
 
@@ -638,7 +638,7 @@ Reference<rendering::XAnimatedSprite> SAL_CALL
 Reference<rendering::XCustomSprite> SAL_CALL
     PresenterCanvas::createCustomSprite (
         const css::geometry::RealSize2D& rSpriteSize)
-    throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
+    throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
 
@@ -665,7 +665,7 @@ Reference<rendering::XCustomSprite> SAL_CALL
 Reference<rendering::XSprite> SAL_CALL
     PresenterCanvas::createClonedSprite (
         const css::uno::Reference< css::rendering::XSprite >& rxOriginal)
-    throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
+    throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
 
@@ -681,7 +681,7 @@ Reference<rendering::XSprite> SAL_CALL
 
 
 ::sal_Bool SAL_CALL PresenterCanvas::updateScreen (::sal_Bool bUpdateAll)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
 
@@ -703,7 +703,7 @@ Reference<rendering::XSprite> SAL_CALL
 //----- XEventListener --------------------------------------------------------
 
 void SAL_CALL PresenterCanvas::disposing (const css::lang::EventObject& rEvent)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     if (rEvent.Source == mxWindow)
@@ -716,7 +716,7 @@ void SAL_CALL PresenterCanvas::disposing (const css::lang::EventObject& rEvent)
 //----- XWindowListener -------------------------------------------------------
 
 void SAL_CALL PresenterCanvas::windowResized (const css::awt::WindowEvent& rEvent)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
 {
     (void)rEvent;
     ThrowIfDisposed();
@@ -727,7 +727,7 @@ void SAL_CALL PresenterCanvas::windowResized (const css::awt::WindowEvent& rEven
 
 
 void SAL_CALL PresenterCanvas::windowMoved (const css::awt::WindowEvent& rEvent)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     (void)rEvent;
     ThrowIfDisposed();
@@ -738,7 +738,7 @@ void SAL_CALL PresenterCanvas::windowMoved (const css::awt::WindowEvent& rEvent)
 
 
 void SAL_CALL PresenterCanvas::windowShown (const css::lang::EventObject& rEvent)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     (void)rEvent;
     ThrowIfDisposed();
@@ -749,7 +749,7 @@ void SAL_CALL PresenterCanvas::windowShown (const css::lang::EventObject& rEvent
 
 
 void SAL_CALL PresenterCanvas::windowHidden (const css::lang::EventObject& rEvent)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     (void)rEvent;
     ThrowIfDisposed();
@@ -761,7 +761,7 @@ void SAL_CALL PresenterCanvas::windowHidden (const css::lang::EventObject& rEven
 //----- XBitmap ---------------------------------------------------------------
 
 geometry::IntegerSize2D SAL_CALL PresenterCanvas::getSize (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
 
@@ -778,7 +778,7 @@ geometry::IntegerSize2D SAL_CALL PresenterCanvas::getSize (void)
 
 
 sal_Bool SAL_CALL PresenterCanvas::hasAlpha (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     Reference<rendering::XBitmap> xBitmap (mxSharedCanvas, UNO_QUERY);
     if (xBitmap.is())
@@ -795,7 +795,7 @@ Reference<rendering::XBitmap> SAL_CALL PresenterCanvas::getScaledBitmap(
     sal_Bool bFast)
     throw (css::uno::RuntimeException,
         css::lang::IllegalArgumentException,
-        css::rendering::VolatileContentDestroyedException)
+        css::rendering::VolatileContentDestroyedException, std::exception)
 {
     (void)rNewSize;
     (void)bFast;
@@ -1085,7 +1085,7 @@ void SAL_CALL PresenterCustomSprite::disposing (void)
 //----- XSprite ---------------------------------------------------------------
 
 void SAL_CALL PresenterCustomSprite::setAlpha (const double nAlpha)
-    throw (lang::IllegalArgumentException,RuntimeException)
+    throw (lang::IllegalArgumentException,RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     mxSprite->setAlpha(nAlpha);
@@ -1098,7 +1098,7 @@ void SAL_CALL PresenterCustomSprite::move (
     const geometry::RealPoint2D& rNewPos,
     const rendering::ViewState& rViewState,
     const rendering::RenderState& rRenderState)
-    throw (lang::IllegalArgumentException,RuntimeException)
+    throw (lang::IllegalArgumentException,RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     maPosition = rNewPos;
@@ -1117,7 +1117,7 @@ void SAL_CALL PresenterCustomSprite::move (
 
 
 void SAL_CALL PresenterCustomSprite::transform (const geometry::AffineMatrix2D& rTransformation)
-    throw (lang::IllegalArgumentException,RuntimeException)
+    throw (lang::IllegalArgumentException,RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     mxSprite->transform(rTransformation);
@@ -1127,7 +1127,7 @@ void SAL_CALL PresenterCustomSprite::transform (const geometry::AffineMatrix2D& 
 
 
 void SAL_CALL PresenterCustomSprite::clip (const Reference<rendering::XPolyPolygon2D>& rxClip)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     // The clip region is expected in the coordinate system of the sprite.
@@ -1140,7 +1140,7 @@ void SAL_CALL PresenterCustomSprite::clip (const Reference<rendering::XPolyPolyg
 
 
 void SAL_CALL PresenterCustomSprite::setPriority (const double nPriority)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     mxSprite->setPriority(nPriority);
@@ -1149,7 +1149,7 @@ void SAL_CALL PresenterCustomSprite::setPriority (const double nPriority)
 
 
 void SAL_CALL PresenterCustomSprite::show (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     mxSprite->show();
@@ -1159,7 +1159,7 @@ void SAL_CALL PresenterCustomSprite::show (void)
 
 
 void SAL_CALL PresenterCustomSprite::hide (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     mxSprite->hide();
@@ -1171,7 +1171,7 @@ void SAL_CALL PresenterCustomSprite::hide (void)
 //----- XCustomSprite ---------------------------------------------------------
 
 Reference<rendering::XCanvas> PresenterCustomSprite::getContentCanvas (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     return mxSprite->getContentCanvas();

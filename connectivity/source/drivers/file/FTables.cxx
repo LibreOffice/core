@@ -51,7 +51,7 @@ m_xMetaData.clear();
     OCollection::disposing();
 }
 
-Any SAL_CALL OTables::queryInterface( const Type & rType ) throw(RuntimeException)
+Any SAL_CALL OTables::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
 {
     if( rType == ::getCppuType((const Reference<XColumnLocate>*)0) ||
         rType == ::getCppuType((const Reference<XDataDescriptorFactory>*)0) ||

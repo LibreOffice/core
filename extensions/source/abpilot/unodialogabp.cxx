@@ -53,7 +53,7 @@ namespace abp
     }
 
 
-    Any SAL_CALL OABSPilotUno::queryInterface( const Type& aType ) throw (RuntimeException)
+    Any SAL_CALL OABSPilotUno::queryInterface( const Type& aType ) throw (RuntimeException, std::exception)
     {
         Any aReturn = OABSPilotUno_DBase::queryInterface( aType );
         return aReturn.hasValue() ? aReturn : OABSPilotUno_JBase::queryInterface( aType );
@@ -72,7 +72,7 @@ namespace abp
     }
 
 
-    Sequence< Type > SAL_CALL OABSPilotUno::getTypes(  ) throw (RuntimeException)
+    Sequence< Type > SAL_CALL OABSPilotUno::getTypes(  ) throw (RuntimeException, std::exception)
     {
         return ::comphelper::concatSequences(
             OABSPilotUno_DBase::getTypes(),
@@ -81,7 +81,7 @@ namespace abp
     }
 
 
-    Sequence<sal_Int8> SAL_CALL OABSPilotUno::getImplementationId(  ) throw(RuntimeException)
+    Sequence<sal_Int8> SAL_CALL OABSPilotUno::getImplementationId(  ) throw(RuntimeException, std::exception)
     {
         static ::cppu::OImplementationId* s_pId;
         if ( !s_pId )
@@ -103,7 +103,7 @@ namespace abp
     }
 
 
-    OUString SAL_CALL OABSPilotUno::getImplementationName() throw(RuntimeException)
+    OUString SAL_CALL OABSPilotUno::getImplementationName() throw(RuntimeException, std::exception)
     {
         return getImplementationName_Static();
     }
@@ -115,7 +115,7 @@ namespace abp
     }
 
 
-    ::comphelper::StringSequence SAL_CALL OABSPilotUno::getSupportedServiceNames() throw(RuntimeException)
+    ::comphelper::StringSequence SAL_CALL OABSPilotUno::getSupportedServiceNames() throw(RuntimeException, std::exception)
     {
         return getSupportedServiceNames_Static();
     }
@@ -129,7 +129,7 @@ namespace abp
     }
 
 
-    Reference<XPropertySetInfo>  SAL_CALL OABSPilotUno::getPropertySetInfo() throw(RuntimeException)
+    Reference<XPropertySetInfo>  SAL_CALL OABSPilotUno::getPropertySetInfo() throw(RuntimeException, std::exception)
     {
         Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;
@@ -149,7 +149,7 @@ namespace abp
         return new ::cppu::OPropertyArrayHelper(aProps);
     }
 
-    void SAL_CALL OABSPilotUno::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException)
+    void SAL_CALL OABSPilotUno::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException, std::exception)
     {
         Reference<awt::XWindow> xParentWindow;
         if (aArguments.getLength() == 1 && (aArguments[0] >>= xParentWindow) ) {
@@ -168,7 +168,7 @@ namespace abp
     }
 
 
-    Any SAL_CALL OABSPilotUno::execute( const Sequence< NamedValue >& /*lArgs*/ ) throw (IllegalArgumentException, Exception, RuntimeException)
+    Any SAL_CALL OABSPilotUno::execute( const Sequence< NamedValue >& /*lArgs*/ ) throw (IllegalArgumentException, Exception, RuntimeException, std::exception)
     {
         // not interested in the context, not interested in the args
         // -> call the execute method of the XExecutableDialog

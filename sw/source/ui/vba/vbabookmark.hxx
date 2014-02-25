@@ -44,11 +44,11 @@ public:
     virtual ~SwVbaBookmark();
 
    // Methods
-    virtual OUString SAL_CALL getName() throw ( css::uno::RuntimeException );
-    virtual void SAL_CALL setName( const OUString& ) throw ( css::uno::RuntimeException );
-    virtual void SAL_CALL Delete() throw ( css::uno::RuntimeException );
-    virtual void SAL_CALL Select() throw ( css::uno::RuntimeException );
-    virtual css::uno::Any SAL_CALL Range() throw ( css::uno::RuntimeException );
+    virtual OUString SAL_CALL getName() throw ( css::uno::RuntimeException, std::exception );
+    virtual void SAL_CALL setName( const OUString& ) throw ( css::uno::RuntimeException, std::exception );
+    virtual void SAL_CALL Delete() throw ( css::uno::RuntimeException, std::exception );
+    virtual void SAL_CALL Select() throw ( css::uno::RuntimeException, std::exception );
+    virtual css::uno::Any SAL_CALL Range() throw ( css::uno::RuntimeException, std::exception );
 
     // XHelperInterface
     virtual OUString getServiceImplName();

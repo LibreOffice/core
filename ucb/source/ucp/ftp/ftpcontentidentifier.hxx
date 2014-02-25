@@ -54,7 +54,7 @@ namespace ftp {
 
         virtual com::sun::star::uno::Any SAL_CALL
         queryInterface( const com::sun::star::uno::Type& rType )
-            throw( com::sun::star::uno::RuntimeException );
+            throw( com::sun::star::uno::RuntimeException, std::exception );
 
         virtual void SAL_CALL acquire( void ) throw();
 
@@ -67,14 +67,14 @@ namespace ftp {
         getTypes(
         )
             throw(
-                com::sun::star::uno::RuntimeException
+                com::sun::star::uno::RuntimeException, std::exception
             );
 
         virtual com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
         getImplementationId(
         )
             throw(
-                com::sun::star::uno::RuntimeException
+                com::sun::star::uno::RuntimeException, std::exception
             );
 
 
@@ -84,14 +84,14 @@ namespace ftp {
         getContentIdentifier(
         )
             throw (
-                com::sun::star::uno::RuntimeException
+                com::sun::star::uno::RuntimeException, std::exception
             );
 
         virtual OUString SAL_CALL
         getContentProviderScheme(
         )
             throw (
-                ::com::sun::star::uno::RuntimeException
+                ::com::sun::star::uno::RuntimeException, std::exception
             );
 
 

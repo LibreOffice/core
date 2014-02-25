@@ -63,7 +63,7 @@ Sequence<Type> ODateControl::_getTypes()
 }
 
 
-StringSequence SAL_CALL ODateControl::getSupportedServiceNames() throw()
+StringSequence SAL_CALL ODateControl::getSupportedServiceNames() throw(std::exception)
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
@@ -133,7 +133,7 @@ IMPLEMENT_DEFAULT_CLONING( ODateModel )
 
 // XServiceInfo
 
-StringSequence SAL_CALL ODateModel::getSupportedServiceNames() throw()
+StringSequence SAL_CALL ODateModel::getSupportedServiceNames() throw(std::exception)
 {
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
 
@@ -156,7 +156,7 @@ StringSequence SAL_CALL ODateModel::getSupportedServiceNames() throw()
 }
 
 
-OUString SAL_CALL ODateModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL ODateModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException, std::exception)
 {
     return OUString(FRM_COMPONENT_DATEFIELD); // old (non-sun) name for compatibility !
 }
@@ -201,7 +201,7 @@ sal_Bool SAL_CALL ODateModel::convertFastPropertyValue(Any& _rConvertedValue, An
 }
 
 
-void SAL_CALL ODateModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue) throw ( ::com::sun::star::uno::Exception)
+void SAL_CALL ODateModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue) throw ( ::com::sun::star::uno::Exception, std::exception)
 {
     if (PROPERTY_ID_FORMATKEY == _nHandle)
         setFormatKeyPropertyValue(_rValue);

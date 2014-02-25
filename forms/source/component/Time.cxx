@@ -70,7 +70,7 @@ Sequence<Type> OTimeControl::_getTypes()
 }
 
 
-StringSequence SAL_CALL OTimeControl::getSupportedServiceNames() throw()
+StringSequence SAL_CALL OTimeControl::getSupportedServiceNames() throw(std::exception)
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
@@ -91,7 +91,7 @@ InterfaceRef SAL_CALL OTimeModel_CreateInstance(const Reference<XMultiServiceFac
 
 // XServiceInfo
 
-StringSequence SAL_CALL OTimeModel::getSupportedServiceNames() throw()
+StringSequence SAL_CALL OTimeModel::getSupportedServiceNames() throw(std::exception)
 {
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
 
@@ -154,7 +154,7 @@ OTimeModel::~OTimeModel( )
 IMPLEMENT_DEFAULT_CLONING( OTimeModel )
 
 
-OUString SAL_CALL OTimeModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL OTimeModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException, std::exception)
 {
     return OUString(FRM_COMPONENT_TIMEFIELD); // old (non-sun) name for compatibility !
 }
@@ -199,7 +199,7 @@ sal_Bool SAL_CALL OTimeModel::convertFastPropertyValue(Any& _rConvertedValue, An
 }
 
 
-void SAL_CALL OTimeModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue) throw ( ::com::sun::star::uno::Exception)
+void SAL_CALL OTimeModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue) throw ( ::com::sun::star::uno::Exception, std::exception)
 {
     if (PROPERTY_ID_FORMATKEY == _nHandle)
         setFormatKeyPropertyValue(_rValue);

@@ -104,7 +104,7 @@ void OCommonStatement::disposing()
 
 /* {{{ OCommonStatement::queryInterface() -I- */
 Any SAL_CALL OCommonStatement::queryInterface(const Type & rType)
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     OSL_TRACE("OCommonStatement::queryInterface");
     Any aRet = OCommonStatement_IBase::queryInterface(rType);
@@ -118,7 +118,7 @@ Any SAL_CALL OCommonStatement::queryInterface(const Type & rType)
 
 /* {{{ OCommonStatement::getTypes() -I- */
 Sequence< Type > SAL_CALL OCommonStatement::getTypes()
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     OSL_TRACE("OCommonStatement::getTypes");
     ::cppu::OTypeCollection aTypes( ::getCppuType( (const Reference< XMultiPropertySet > *)0 ),
@@ -132,7 +132,7 @@ Sequence< Type > SAL_CALL OCommonStatement::getTypes()
 
 /* {{{ OCommonStatement::cancel() -I- */
 void SAL_CALL OCommonStatement::cancel()
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     OSL_TRACE("OCommonStatement::cancel");
     MutexGuard aGuard(m_aMutex);
@@ -144,7 +144,7 @@ void SAL_CALL OCommonStatement::cancel()
 
 /* {{{ OCommonStatement::close() -I- */
 void SAL_CALL OCommonStatement::close()
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OCommonStatement::close");
     /*
@@ -162,7 +162,7 @@ void SAL_CALL OCommonStatement::close()
 
 /* {{{ OStatement::clearBatch() -I- */
 void SAL_CALL OStatement::clearBatch()
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OStatement::clearBatch");
     // if you support batches clear it here
@@ -172,7 +172,7 @@ void SAL_CALL OStatement::clearBatch()
 
 /* {{{ OStatement::execute() -I- */
 sal_Bool SAL_CALL OCommonStatement::execute(const OUString& sql)
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OCommonStatement::execute");
     MutexGuard aGuard(m_aMutex);
@@ -192,7 +192,7 @@ sal_Bool SAL_CALL OCommonStatement::execute(const OUString& sql)
 
 /* {{{ OStatement::executeQuery() -I- */
 Reference< XResultSet > SAL_CALL OCommonStatement::executeQuery(const OUString& sql)
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OCommonStatement::executeQuery");
 
@@ -215,7 +215,7 @@ Reference< XResultSet > SAL_CALL OCommonStatement::executeQuery(const OUString& 
 
 /* {{{ OStatement::getConnection() -I- */
 Reference< XConnection > SAL_CALL OCommonStatement::getConnection()
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OCommonStatement::getConnection");
     MutexGuard aGuard(m_aMutex);
@@ -229,7 +229,7 @@ Reference< XConnection > SAL_CALL OCommonStatement::getConnection()
 
 /* {{{ OStatement::getUpdateCount() -I- */
 sal_Int32 SAL_CALL OCommonStatement::getUpdateCount()
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OCommonStatement::getUpdateCount");
     return 0;
@@ -239,7 +239,7 @@ sal_Int32 SAL_CALL OCommonStatement::getUpdateCount()
 
 /* {{{ OStatement::queryInterface() -I- */
 Any SAL_CALL OStatement::queryInterface(const Type & rType)
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     OSL_TRACE("OStatement::queryInterface");
     Any aRet = ::cppu::queryInterface(rType,static_cast< XBatchExecution*> (this));
@@ -253,7 +253,7 @@ Any SAL_CALL OStatement::queryInterface(const Type & rType)
 
 /* {{{ OStatement::addBatch() -I- */
 void SAL_CALL OStatement::addBatch(const OUString& sql)
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OStatement::addBatch");
     MutexGuard aGuard(m_aMutex);
@@ -266,7 +266,7 @@ void SAL_CALL OStatement::addBatch(const OUString& sql)
 
 /* {{{ OStatement::executeBatch() -I- */
 Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch()
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OStatement::executeBatch");
     MutexGuard aGuard(m_aMutex);
@@ -280,7 +280,7 @@ Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch()
 
 /* {{{ OCommonStatement::executeUpdate() -I- */
 sal_Int32 SAL_CALL OCommonStatement::executeUpdate(const OUString& sql)
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OCommonStatement::executeUpdate");
     MutexGuard aGuard(m_aMutex);
@@ -300,7 +300,7 @@ sal_Int32 SAL_CALL OCommonStatement::executeUpdate(const OUString& sql)
 
 /* {{{ OCommonStatement::getResultSet() -I- */
 Reference< XResultSet > SAL_CALL OCommonStatement::getResultSet()
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OCommonStatement::getResultSet");
     MutexGuard aGuard(m_aMutex);
@@ -321,7 +321,7 @@ Reference< XResultSet > SAL_CALL OCommonStatement::getResultSet()
 
 /* {{{ OCommonStatement::getMoreResults() -I- */
 sal_Bool SAL_CALL OCommonStatement::getMoreResults()
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OCommonStatement::getMoreResults");
     MutexGuard aGuard(m_aMutex);
@@ -336,7 +336,7 @@ sal_Bool SAL_CALL OCommonStatement::getMoreResults()
 
 /* {{{ OCommonStatement::getWarnings() -I- */
 Any SAL_CALL OCommonStatement::getWarnings()
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OCommonStatement::getWarnings");
     MutexGuard aGuard(m_aMutex);
@@ -349,7 +349,7 @@ Any SAL_CALL OCommonStatement::getWarnings()
 
 /* {{{ OCommonStatement::clearWarnings() -I- */
 void SAL_CALL OCommonStatement::clearWarnings()
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OCommonStatement::clearWarnings");
     MutexGuard aGuard(m_aMutex);
@@ -410,7 +410,7 @@ sal_Bool OCommonStatement::convertFastPropertyValue(
 
 /* {{{ OCommonStatement::setFastPropertyValue_NoBroadcast() -I- */
 void OCommonStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& /* rValue */)
-    throw (Exception)
+    throw (Exception, std::exception)
 {
     OSL_TRACE("OCommonStatement::setFastPropertyValue_NoBroadcast");
     // set the value to what ever is necessary
@@ -456,13 +456,13 @@ void OCommonStatement::getFastPropertyValue(Any& _rValue, sal_Int32 nHandle) con
 }
 /* }}} */
 
-OUString OStatement::getImplementationName() throw (css::uno::RuntimeException)
+OUString OStatement::getImplementationName() throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("com.sun.star.sdbcx.OStatement");
 }
 
 css::uno::Sequence<OUString> OStatement::getSupportedServiceNames()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     css::uno::Sequence<OUString> s(1);
     s[0] = "com.sun.star.sdbc.Statement";
@@ -470,7 +470,7 @@ css::uno::Sequence<OUString> OStatement::getSupportedServiceNames()
 }
 
 sal_Bool OStatement::supportsService(OUString const & ServiceName)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -517,7 +517,7 @@ void SAL_CALL OStatement::release()
 
 /* {{{ OCommonStatement::getPropertySetInfo() -I- */
 Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OCommonStatement::getPropertySetInfo()
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     OSL_TRACE("OCommonStatement::getPropertySetInfo");
     return(::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper()));

@@ -74,7 +74,7 @@ void AccessiblePageShape::Init (void)
 
 sal_Int32 SAL_CALL
        AccessiblePageShape::getAccessibleChildCount (void)
-    throw ()
+    throw (std::exception)
 {
     return 0;
 }
@@ -87,7 +87,7 @@ sal_Int32 SAL_CALL
 */
 uno::Reference<XAccessible> SAL_CALL
     AccessiblePageShape::getAccessibleChild( sal_Int32 )
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     throw lang::IndexOutOfBoundsException ("page shape has no children",
         static_cast<uno::XWeak*>(this));
@@ -99,7 +99,7 @@ uno::Reference<XAccessible> SAL_CALL
 //=====  XAccessibleComponent  ================================================
 
 awt::Rectangle SAL_CALL AccessiblePageShape::getBounds (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
 
@@ -167,7 +167,7 @@ awt::Rectangle SAL_CALL AccessiblePageShape::getBounds (void)
 
 
 sal_Int32 SAL_CALL AccessiblePageShape::getForeground (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     sal_Int32 nColor (0x0ffffffL);
@@ -196,7 +196,7 @@ sal_Int32 SAL_CALL AccessiblePageShape::getForeground (void)
     draw page or its master page.
 */
 sal_Int32 SAL_CALL AccessiblePageShape::getBackground (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     sal_Int32 nColor (0x01020ffL);
@@ -249,7 +249,7 @@ sal_Int32 SAL_CALL AccessiblePageShape::getBackground (void)
 
 OUString SAL_CALL
     AccessiblePageShape::getImplementationName (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     return OUString("AccessiblePageShape");
@@ -260,7 +260,7 @@ OUString SAL_CALL
 
 ::com::sun::star::uno::Sequence< OUString> SAL_CALL
     AccessiblePageShape::getSupportedServiceNames (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     return AccessibleShape::getSupportedServiceNames();
@@ -273,7 +273,7 @@ OUString SAL_CALL
 
 void SAL_CALL
     AccessiblePageShape::disposing (const ::com::sun::star::lang::EventObject& aEvent)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     AccessibleShape::disposing (aEvent);
@@ -285,7 +285,7 @@ void SAL_CALL
 //=====  XComponent  ==========================================================
 
 void AccessiblePageShape::dispose (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     OSL_TRACE ("AccessiblePageShape::dispose");
 

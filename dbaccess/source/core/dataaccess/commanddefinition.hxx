@@ -82,8 +82,8 @@ public:
     DECLARE_XINTERFACE( )
 
 // ::com::sun::star::lang::XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
 
 // ::com::sun::star::lang::XServiceInfo - static methods
     static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_static(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -92,34 +92,34 @@ public:
         Create(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
 
     // XRename
-    virtual void SAL_CALL rename( const OUString& newName ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL rename( const OUString& newName ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException, std::exception);
 
     // overrides to resolve ambiguity
-    virtual void SAL_CALL setPropertyValue(const OUString& p1, const com::sun::star::uno::Any& p2) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL setPropertyValue(const OUString& p1, const com::sun::star::uno::Any& p2) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
         { OComponentDefinition::setPropertyValue(p1, p2); }
-    virtual com::sun::star::uno::Any SAL_CALL getPropertyValue(const OUString& p1) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+    virtual com::sun::star::uno::Any SAL_CALL getPropertyValue(const OUString& p1) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
         { return OComponentDefinition::getPropertyValue(p1); }
-    virtual void SAL_CALL addPropertyChangeListener(const OUString& p1, const com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener>& p2) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL addPropertyChangeListener(const OUString& p1, const com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener>& p2) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
         { OComponentDefinition::addPropertyChangeListener(p1, p2); }
-    virtual void SAL_CALL removePropertyChangeListener(const OUString& p1, const com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener>& p2) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL removePropertyChangeListener(const OUString& p1, const com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener>& p2) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
         { OComponentDefinition::removePropertyChangeListener(p1, p2); }
-    virtual void SAL_CALL addVetoableChangeListener(const OUString& p1, const com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener>& p2) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL addVetoableChangeListener(const OUString& p1, const com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener>& p2) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
         { OComponentDefinition::addVetoableChangeListener(p1, p2); }
-    virtual void SAL_CALL removeVetoableChangeListener(const OUString& p1, const com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener>& p2) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL removeVetoableChangeListener(const OUString& p1, const com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener>& p2) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
         { OComponentDefinition::removeVetoableChangeListener(p1, p2); }
-    virtual com::sun::star::uno::Reference<com::sun::star::ucb::XContentIdentifier> SAL_CALL getIdentifier() throw( ::com::sun::star::uno::RuntimeException )
+    virtual com::sun::star::uno::Reference<com::sun::star::ucb::XContentIdentifier> SAL_CALL getIdentifier() throw( ::com::sun::star::uno::RuntimeException, std::exception )
         { return OComponentDefinition::getIdentifier(); }
-    virtual OUString SAL_CALL getContentType() throw( ::com::sun::star::uno::RuntimeException )
+    virtual OUString SAL_CALL getContentType() throw( ::com::sun::star::uno::RuntimeException, std::exception )
         { return OComponentDefinition::getContentType(); }
-    virtual void SAL_CALL addContentEventListener(const com::sun::star::uno::Reference<com::sun::star::ucb::XContentEventListener>& p1) throw( ::com::sun::star::uno::RuntimeException )
+    virtual void SAL_CALL addContentEventListener(const com::sun::star::uno::Reference<com::sun::star::ucb::XContentEventListener>& p1) throw( ::com::sun::star::uno::RuntimeException, std::exception )
         { OComponentDefinition::addContentEventListener(p1); }
-    virtual void SAL_CALL removeContentEventListener(const com::sun::star::uno::Reference<com::sun::star::ucb::XContentEventListener>& p1) throw( ::com::sun::star::uno::RuntimeException )
+    virtual void SAL_CALL removeContentEventListener(const com::sun::star::uno::Reference<com::sun::star::ucb::XContentEventListener>& p1) throw( ::com::sun::star::uno::RuntimeException, std::exception )
         { OComponentDefinition::removeContentEventListener(p1); }
-     virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException )
+     virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException, std::exception )
         { OComponentDefinition::dispose(); }
-    virtual void SAL_CALL addEventListener(const com::sun::star::uno::Reference<com::sun::star::lang::XEventListener>& p1) throw( ::com::sun::star::uno::RuntimeException )
+    virtual void SAL_CALL addEventListener(const com::sun::star::uno::Reference<com::sun::star::lang::XEventListener>& p1) throw( ::com::sun::star::uno::RuntimeException, std::exception )
         { OComponentDefinition::addEventListener(p1); }
-     virtual void SAL_CALL removeEventListener(const com::sun::star::uno::Reference<com::sun::star::lang::XEventListener>& p1) throw( ::com::sun::star::uno::RuntimeException )
+     virtual void SAL_CALL removeEventListener(const com::sun::star::uno::Reference<com::sun::star::lang::XEventListener>& p1) throw( ::com::sun::star::uno::RuntimeException, std::exception )
         { OComponentDefinition::removeEventListener(p1); }
 
     // XQueryDefinition properties

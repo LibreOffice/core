@@ -61,53 +61,53 @@ namespace XPath
     /**
         get object type
     */
-    virtual XPathObjectType SAL_CALL getObjectType() throw (RuntimeException);
+    virtual XPathObjectType SAL_CALL getObjectType() throw (RuntimeException, std::exception);
 
     /**
         get the nodes from a nodelist type object
     */
     virtual Reference< XNodeList > SAL_CALL getNodeList()
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
 
      /**
         get value of a boolean object
      */
-     virtual sal_Bool SAL_CALL getBoolean() throw (RuntimeException);
+     virtual sal_Bool SAL_CALL getBoolean() throw (RuntimeException, std::exception);
 
     /**
         get number as byte
     */
-    virtual sal_Int8 SAL_CALL getByte() throw (RuntimeException);
+    virtual sal_Int8 SAL_CALL getByte() throw (RuntimeException, std::exception);
 
     /**
         get number as short
     */
-    virtual sal_Int16 SAL_CALL getShort() throw (RuntimeException);
+    virtual sal_Int16 SAL_CALL getShort() throw (RuntimeException, std::exception);
 
     /**
         get number as long
     */
-    virtual sal_Int32 SAL_CALL getLong() throw (RuntimeException);
+    virtual sal_Int32 SAL_CALL getLong() throw (RuntimeException, std::exception);
 
     /**
         get number as hyper
     */
-    virtual sal_Int64 SAL_CALL getHyper() throw (RuntimeException);
+    virtual sal_Int64 SAL_CALL getHyper() throw (RuntimeException, std::exception);
 
     /**
         get number as float
     */
-    virtual float SAL_CALL getFloat() throw (RuntimeException);
+    virtual float SAL_CALL getFloat() throw (RuntimeException, std::exception);
 
     /**
         get number as double
     */
-    virtual double SAL_CALL getDouble() throw (RuntimeException);
+    virtual double SAL_CALL getDouble() throw (RuntimeException, std::exception);
 
     /**
         get string value
     */
-    virtual OUString SAL_CALL getString() throw (RuntimeException);
+    virtual OUString SAL_CALL getString() throw (RuntimeException, std::exception);
 
     };
 }

@@ -71,28 +71,28 @@ class ConfigurationAccess_UICategory : public ::cppu::WeakImplHelper2<XNameAcces
 
         // XNameAccess
         virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
-            throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception);
 
         virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames()
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
 
         virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
 
         // XElementAccess
         virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
 
         virtual sal_Bool SAL_CALL hasElements()
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
 
         // container.XContainerListener
-        virtual void SAL_CALL     elementInserted( const ContainerEvent& aEvent ) throw(RuntimeException);
-        virtual void SAL_CALL     elementRemoved ( const ContainerEvent& aEvent ) throw(RuntimeException);
-        virtual void SAL_CALL     elementReplaced( const ContainerEvent& aEvent ) throw(RuntimeException);
+        virtual void SAL_CALL     elementInserted( const ContainerEvent& aEvent ) throw(RuntimeException, std::exception);
+        virtual void SAL_CALL     elementRemoved ( const ContainerEvent& aEvent ) throw(RuntimeException, std::exception);
+        virtual void SAL_CALL     elementReplaced( const ContainerEvent& aEvent ) throw(RuntimeException, std::exception);
 
         // lang.XEventListener
-        virtual void SAL_CALL disposing( const EventObject& aEvent ) throw(RuntimeException);
+        virtual void SAL_CALL disposing( const EventObject& aEvent ) throw(RuntimeException, std::exception);
 
     protected:
         Any                       getUINameFromID( const OUString& rId );
@@ -148,7 +148,7 @@ ConfigurationAccess_UICategory::~ConfigurationAccess_UICategory()
 
 // XNameAccess
 Any SAL_CALL ConfigurationAccess_UICategory::getByName( const OUString& rId )
-throw ( NoSuchElementException, WrappedTargetException, RuntimeException)
+throw ( NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     osl::MutexGuard g(aMutex);
     if ( !m_bConfigAccessInitialized )
@@ -168,26 +168,26 @@ throw ( NoSuchElementException, WrappedTargetException, RuntimeException)
 }
 
 Sequence< OUString > SAL_CALL ConfigurationAccess_UICategory::getElementNames()
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     return getAllIds();
 }
 
 sal_Bool SAL_CALL ConfigurationAccess_UICategory::hasByName( const OUString& rId )
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return getByName( rId ).hasValue();
 }
 
 // XElementAccess
 Type SAL_CALL ConfigurationAccess_UICategory::getElementType()
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     return( ::getCppuType( (const OUString*)NULL ) );
 }
 
 sal_Bool SAL_CALL ConfigurationAccess_UICategory::hasElements()
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     // There must be global categories!
     return sal_True;
@@ -359,20 +359,20 @@ sal_Bool ConfigurationAccess_UICategory::initializeConfigAccess()
 }
 
 // container.XContainerListener
-void SAL_CALL ConfigurationAccess_UICategory::elementInserted( const ContainerEvent& ) throw(RuntimeException)
+void SAL_CALL ConfigurationAccess_UICategory::elementInserted( const ContainerEvent& ) throw(RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL ConfigurationAccess_UICategory::elementRemoved ( const ContainerEvent& ) throw(RuntimeException)
+void SAL_CALL ConfigurationAccess_UICategory::elementRemoved ( const ContainerEvent& ) throw(RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL ConfigurationAccess_UICategory::elementReplaced( const ContainerEvent& ) throw(RuntimeException)
+void SAL_CALL ConfigurationAccess_UICategory::elementReplaced( const ContainerEvent& ) throw(RuntimeException, std::exception)
 {
 }
 
 // lang.XEventListener
-void SAL_CALL ConfigurationAccess_UICategory::disposing( const EventObject& aEvent ) throw(RuntimeException)
+void SAL_CALL ConfigurationAccess_UICategory::disposing( const EventObject& aEvent ) throw(RuntimeException, std::exception)
 {
     // SAFE
     // remove our reference to the config access
@@ -391,19 +391,19 @@ public:
     virtual ~UICategoryDescription();
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     {
         return OUString("com.sun.star.comp.framework.UICategoryDescription");
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     {
         return cppu::supportsService(this, ServiceName);
     }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     {
         css::uno::Sequence< OUString > aSeq(1);
         aSeq[0] = OUString("com.sun.star.ui.UICategoryDescription");

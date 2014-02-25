@@ -2296,7 +2296,7 @@ DocumentRenderer::~DocumentRenderer()
 sal_Int32 SAL_CALL DocumentRenderer::getRendererCount (
     const css::uno::Any& aSelection,
     const css::uno::Sequence<css::beans::PropertyValue >& rOptions)
-    throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
+    throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     (void)aSelection;
     mpImpl->ProcessProperties(rOptions);
@@ -2310,7 +2310,7 @@ Sequence<beans::PropertyValue> SAL_CALL DocumentRenderer::getRenderer (
     sal_Int32 nRenderer,
     const css::uno::Any& rSelection,
     const css::uno::Sequence<css::beans::PropertyValue>& rOptions)
-    throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
+    throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     (void)nRenderer;
     (void)rSelection;
@@ -2325,7 +2325,7 @@ void SAL_CALL DocumentRenderer::render (
     sal_Int32 nRenderer,
     const css::uno::Any& rSelection,
     const css::uno::Sequence<css::beans::PropertyValue>& rOptions)
-    throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
+    throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     (void)rSelection;
     mpImpl->ProcessProperties(rOptions);

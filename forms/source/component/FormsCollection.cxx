@@ -44,19 +44,19 @@ InterfaceRef SAL_CALL OFormsCollection_CreateInstance(const Reference<XMultiServ
 }
 
 
-OUString SAL_CALL OFormsCollection::getServiceName() throw(RuntimeException)
+OUString SAL_CALL OFormsCollection::getServiceName() throw(RuntimeException, std::exception)
 {
     return OUString("com.sun.star.form.Forms");
 }
 
 
-Sequence< sal_Int8 > SAL_CALL OFormsCollection::getImplementationId(  ) throw(RuntimeException)
+Sequence< sal_Int8 > SAL_CALL OFormsCollection::getImplementationId(  ) throw(RuntimeException, std::exception)
 {
     return OImplementationIds::getImplementationId(getTypes());
 }
 
 
-Sequence<Type> SAL_CALL OFormsCollection::getTypes() throw(RuntimeException)
+Sequence<Type> SAL_CALL OFormsCollection::getTypes() throw(RuntimeException, std::exception)
 {
     return concatSequences(OInterfaceContainer::getTypes(), FormsCollectionComponentBase::getTypes(), OFormsCollection_BASE::getTypes());
 }
@@ -88,7 +88,7 @@ OFormsCollection::~OFormsCollection()
 }
 
 
-Any SAL_CALL OFormsCollection::queryAggregation(const Type& _rType) throw(RuntimeException)
+Any SAL_CALL OFormsCollection::queryAggregation(const Type& _rType) throw(RuntimeException, std::exception)
 {
     Any aReturn = OFormsCollection_BASE::queryInterface(_rType);
     if (!aReturn.hasValue())
@@ -102,17 +102,17 @@ Any SAL_CALL OFormsCollection::queryAggregation(const Type& _rType) throw(Runtim
     return aReturn;
 }
 
-OUString SAL_CALL OFormsCollection::getImplementationName() throw(RuntimeException)
+OUString SAL_CALL OFormsCollection::getImplementationName() throw(RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.forms.OFormsCollection");
 }
 
-sal_Bool SAL_CALL OFormsCollection::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
+sal_Bool SAL_CALL OFormsCollection::supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception)
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
-StringSequence SAL_CALL OFormsCollection::getSupportedServiceNames() throw(RuntimeException)
+StringSequence SAL_CALL OFormsCollection::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     StringSequence aReturn(2);
 
@@ -123,7 +123,7 @@ StringSequence SAL_CALL OFormsCollection::getSupportedServiceNames() throw(Runti
 }
 
 // XCloneable
-Reference< XCloneable > SAL_CALL OFormsCollection::createClone(  ) throw (RuntimeException)
+Reference< XCloneable > SAL_CALL OFormsCollection::createClone(  ) throw (RuntimeException, std::exception)
 {
     OFormsCollection* pClone = new OFormsCollection( *this );
     osl_atomic_increment( &pClone->m_refCount );
@@ -146,14 +146,14 @@ void OFormsCollection::disposing()
 
 //XChild
 
-void OFormsCollection::setParent(const InterfaceRef& Parent) throw( NoSupportException, RuntimeException )
+void OFormsCollection::setParent(const InterfaceRef& Parent) throw( NoSupportException, RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     m_xParent = Parent;
 }
 
 
-InterfaceRef  OFormsCollection::getParent() throw( RuntimeException )
+InterfaceRef  OFormsCollection::getParent() throw( RuntimeException, std::exception )
 {
     return m_xParent;
 }

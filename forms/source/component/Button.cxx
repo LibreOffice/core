@@ -69,7 +69,7 @@ OButtonModel::OButtonModel(const Reference<XComponentContext>& _rxFactory)
 }
 
 
-Any SAL_CALL OButtonModel::queryAggregation( const Type& _type ) throw(RuntimeException)
+Any SAL_CALL OButtonModel::queryAggregation( const Type& _type ) throw(RuntimeException, std::exception)
 {
     Any aReturn = OClickableImageBaseModel::queryAggregation( _type );
     if ( !aReturn.hasValue() )
@@ -120,7 +120,7 @@ IMPLEMENT_DEFAULT_CLONING( OButtonModel )
 
 // XServiceInfo
 
-StringSequence  OButtonModel::getSupportedServiceNames() throw()
+StringSequence  OButtonModel::getSupportedServiceNames() throw(std::exception)
 {
     StringSequence aSupported = OClickableImageBaseModel::getSupportedServiceNames();
     aSupported.realloc( aSupported.getLength() + 1 );
@@ -132,13 +132,13 @@ StringSequence  OButtonModel::getSupportedServiceNames() throw()
 }
 
 
-OUString OButtonModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
+OUString OButtonModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException, std::exception)
 {
     return OUString(FRM_COMPONENT_COMMANDBUTTON); // old (non-sun) name for compatibility !
 }
 
 
-void OButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
+void OButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     OClickableImageBaseModel::write(_rxOutStream);
 
@@ -159,7 +159,7 @@ void OButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream) thr
 }
 
 
-void OButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
+void OButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     OClickableImageBaseModel::read(_rxInStream);
 
@@ -226,7 +226,7 @@ void SAL_CALL OButtonModel::disposing()
 }
 
 
-void SAL_CALL OButtonModel::reset() throw (RuntimeException)
+void SAL_CALL OButtonModel::reset() throw (RuntimeException, std::exception)
 {
     if ( !m_aResetHelper.approveReset() )
         return;
@@ -237,13 +237,13 @@ void SAL_CALL OButtonModel::reset() throw (RuntimeException)
 }
 
 
-void SAL_CALL OButtonModel::addResetListener( const Reference< XResetListener >& _listener ) throw (RuntimeException)
+void SAL_CALL OButtonModel::addResetListener( const Reference< XResetListener >& _listener ) throw (RuntimeException, std::exception)
 {
     m_aResetHelper.addResetListener( _listener );
 }
 
 
-void SAL_CALL OButtonModel::removeResetListener( const Reference< XResetListener >& _listener ) throw (RuntimeException)
+void SAL_CALL OButtonModel::removeResetListener( const Reference< XResetListener >& _listener ) throw (RuntimeException, std::exception)
 {
     m_aResetHelper.removeResetListener( _listener );
 }
@@ -264,7 +264,7 @@ void SAL_CALL OButtonModel::getFastPropertyValue( Any& _rValue, sal_Int32 _nHand
 }
 
 
-void SAL_CALL OButtonModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue ) throw (Exception)
+void SAL_CALL OButtonModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue ) throw (Exception, std::exception)
 {
     switch ( _nHandle )
     {
@@ -350,7 +350,7 @@ Sequence<Type> OButtonControl::_getTypes()
 }
 
 
-StringSequence  OButtonControl::getSupportedServiceNames() throw()
+StringSequence  OButtonControl::getSupportedServiceNames() throw(std::exception)
 {
     StringSequence aSupported = OClickableImageBaseControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
@@ -389,7 +389,7 @@ OButtonControl::~OButtonControl()
 
 // UNO binding
 
-Any SAL_CALL OButtonControl::queryAggregation(const Type& _rType) throw (RuntimeException)
+Any SAL_CALL OButtonControl::queryAggregation(const Type& _rType) throw (RuntimeException, std::exception)
 {
     // if asked for the XTypeProvider, don't let OButtonControl_BASE do this
     Any aReturn;
@@ -415,7 +415,7 @@ void SAL_CALL OButtonControl::disposing()
 }
 
 
-void SAL_CALL OButtonControl::disposing( const EventObject& _rSource ) throw( RuntimeException )
+void SAL_CALL OButtonControl::disposing( const EventObject& _rSource ) throw( RuntimeException, std::exception )
 {
     OControl::disposing( _rSource );
     OFormNavigationHelper::disposing( _rSource );
@@ -423,7 +423,7 @@ void SAL_CALL OButtonControl::disposing( const EventObject& _rSource ) throw( Ru
 
 // ActionListener
 
-void OButtonControl::actionPerformed(const ActionEvent& /*rEvent*/) throw ( ::com::sun::star::uno::RuntimeException)
+void OButtonControl::actionPerformed(const ActionEvent& /*rEvent*/) throw ( ::com::sun::star::uno::RuntimeException, std::exception)
 {
     // Asynchronous for starutil::URL-Button
     sal_uLong n = Application::PostUserEvent( LINK(this, OButtonControl,OnClick) );
@@ -514,7 +514,7 @@ void OButtonControl::actionPerformed_Impl( sal_Bool _bNotifyListener, const ::co
 
 // XButton
 
-void OButtonControl::setLabel(const OUString& Label) throw( RuntimeException )
+void OButtonControl::setLabel(const OUString& Label) throw( RuntimeException, std::exception )
 {
     Reference<XButton>  xButton;
     query_aggregation( m_xAggregate, xButton );
@@ -523,7 +523,7 @@ void OButtonControl::setLabel(const OUString& Label) throw( RuntimeException )
 }
 
 
-void SAL_CALL OButtonControl::setActionCommand(const OUString& _rCommand) throw( RuntimeException )
+void SAL_CALL OButtonControl::setActionCommand(const OUString& _rCommand) throw( RuntimeException, std::exception )
 {
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -537,13 +537,13 @@ void SAL_CALL OButtonControl::setActionCommand(const OUString& _rCommand) throw(
 }
 
 
-void SAL_CALL OButtonControl::addActionListener(const Reference<XActionListener>& _rxListener) throw( RuntimeException )
+void SAL_CALL OButtonControl::addActionListener(const Reference<XActionListener>& _rxListener) throw( RuntimeException, std::exception )
 {
     m_aActionListeners.addInterface(_rxListener);
 }
 
 
-void SAL_CALL OButtonControl::removeActionListener(const Reference<XActionListener>& _rxListener) throw( RuntimeException )
+void SAL_CALL OButtonControl::removeActionListener(const Reference<XActionListener>& _rxListener) throw( RuntimeException, std::exception )
 {
     m_aActionListeners.removeInterface(_rxListener);
 }
@@ -600,7 +600,7 @@ void OButtonControl::startOrStopModelPropertyListening( bool _bStart )
 }
 
 
-sal_Bool SAL_CALL OButtonControl::setModel( const Reference< XControlModel >& _rxModel ) throw ( RuntimeException )
+sal_Bool SAL_CALL OButtonControl::setModel( const Reference< XControlModel >& _rxModel ) throw ( RuntimeException, std::exception )
 {
     startOrStopModelPropertyListening( false );
     sal_Bool bResult = OClickableImageBaseControl::setModel( _rxModel );
@@ -632,7 +632,7 @@ void OButtonControl::modelFeatureUrlPotentiallyChanged( )
 }
 
 
-void SAL_CALL OButtonControl::propertyChange( const PropertyChangeEvent& _rEvent ) throw ( RuntimeException )
+void SAL_CALL OButtonControl::propertyChange( const PropertyChangeEvent& _rEvent ) throw ( RuntimeException, std::exception )
 {
     if  (   _rEvent.PropertyName.equals( PROPERTY_TARGET_URL )
         ||  _rEvent.PropertyName.equals( PROPERTY_BUTTONTYPE )
@@ -687,7 +687,7 @@ sal_Int16 OButtonControl::getModelUrlFeatureId( ) const
 }
 
 
-void SAL_CALL OButtonControl::setDesignMode( sal_Bool _bOn ) throw( RuntimeException )
+void SAL_CALL OButtonControl::setDesignMode( sal_Bool _bOn ) throw( RuntimeException, std::exception )
 {
     OClickableImageBaseControl::setDesignMode( _bOn  );
 
@@ -746,14 +746,14 @@ bool OButtonControl::isEnabled( sal_Int16 _nFeatureId ) const
 }
 
 
-void SAL_CALL OButtonControl::registerDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor ) throw (RuntimeException)
+void SAL_CALL OButtonControl::registerDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor ) throw (RuntimeException, std::exception)
 {
     OClickableImageBaseControl::registerDispatchProviderInterceptor( _rxInterceptor );
     OFormNavigationHelper::registerDispatchProviderInterceptor( _rxInterceptor );
 }
 
 
-void SAL_CALL OButtonControl::releaseDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor ) throw (RuntimeException)
+void SAL_CALL OButtonControl::releaseDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor ) throw (RuntimeException, std::exception)
 {
     OClickableImageBaseControl::releaseDispatchProviderInterceptor( _rxInterceptor );
     OFormNavigationHelper::releaseDispatchProviderInterceptor( _rxInterceptor );

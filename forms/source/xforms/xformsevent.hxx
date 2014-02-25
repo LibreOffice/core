@@ -42,27 +42,27 @@ class XFormsEventConcrete : public cppu::WeakImplHelper1< XFormsEvent > {
         inline XFormsEventConcrete( void ) : m_canceled(sal_False) {}
         virtual ~XFormsEventConcrete( void ) {}
 
-        virtual OUString SAL_CALL getType() throw (RuntimeException_t);
-        virtual XEventTarget_t SAL_CALL getTarget() throw (RuntimeException_t);
-        virtual XEventTarget_t SAL_CALL getCurrentTarget() throw (RuntimeException_t);
-        virtual PhaseType_t SAL_CALL getEventPhase() throw (RuntimeException_t);
-        virtual sal_Bool SAL_CALL getBubbles() throw (RuntimeException_t);
-        virtual sal_Bool SAL_CALL getCancelable() throw (RuntimeException_t);
-        virtual Time_t SAL_CALL getTimeStamp() throw (RuntimeException_t);
-        virtual void SAL_CALL stopPropagation() throw (RuntimeException_t);
-        virtual void SAL_CALL preventDefault() throw (RuntimeException_t);
+        virtual OUString SAL_CALL getType() throw (RuntimeException_t, std::exception);
+        virtual XEventTarget_t SAL_CALL getTarget() throw (RuntimeException_t, std::exception);
+        virtual XEventTarget_t SAL_CALL getCurrentTarget() throw (RuntimeException_t, std::exception);
+        virtual PhaseType_t SAL_CALL getEventPhase() throw (RuntimeException_t, std::exception);
+        virtual sal_Bool SAL_CALL getBubbles() throw (RuntimeException_t, std::exception);
+        virtual sal_Bool SAL_CALL getCancelable() throw (RuntimeException_t, std::exception);
+        virtual Time_t SAL_CALL getTimeStamp() throw (RuntimeException_t, std::exception);
+        virtual void SAL_CALL stopPropagation() throw (RuntimeException_t, std::exception);
+        virtual void SAL_CALL preventDefault() throw (RuntimeException_t, std::exception);
 
         virtual void SAL_CALL initXFormsEvent(
                             const OUString& typeArg,
                             sal_Bool canBubbleArg,
                             sal_Bool cancelableArg )
-                            throw (RuntimeException_t);
+                            throw (RuntimeException_t, std::exception);
 
         virtual void SAL_CALL initEvent(
             const OUString& eventTypeArg,
             sal_Bool canBubbleArg,
             sal_Bool cancelableArg)
-            throw (RuntimeException_t);
+            throw (RuntimeException_t, std::exception);
 
     private:
 

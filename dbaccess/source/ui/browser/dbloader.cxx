@@ -73,9 +73,9 @@ public:
     ~DBContentLoader();
 
     // XServiceInfo
-    OUString                 SAL_CALL getImplementationName() throw(  );
-    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw(  );
-    Sequence< OUString >     SAL_CALL getSupportedServiceNames(void) throw(  );
+    OUString                 SAL_CALL getImplementationName() throw(std::exception  );
+    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception  );
+    Sequence< OUString >     SAL_CALL getSupportedServiceNames(void) throw(std::exception  );
 
     // static methods
     static OUString          getImplementationName_Static() throw(  )
@@ -89,8 +89,8 @@ public:
     // XLoader
     virtual void SAL_CALL load( const Reference< XFrame > & _rFrame, const OUString& _rURL,
                                 const Sequence< PropertyValue >& _rArgs,
-                                const Reference< XLoadEventListener > & _rListener) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL cancel(void) throw();
+                                const Reference< XLoadEventListener > & _rListener) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL cancel(void) throw(std::exception);
 };
 
 
@@ -116,19 +116,19 @@ Reference< XInterface > SAL_CALL DBContentLoader::Create( const Reference< XMult
 }
 
 // XServiceInfo
-OUString SAL_CALL DBContentLoader::getImplementationName() throw(  )
+OUString SAL_CALL DBContentLoader::getImplementationName() throw(std::exception  )
 {
     return getImplementationName_Static();
 }
 
 // XServiceInfo
-sal_Bool SAL_CALL DBContentLoader::supportsService(const OUString& ServiceName) throw(  )
+sal_Bool SAL_CALL DBContentLoader::supportsService(const OUString& ServiceName) throw(std::exception  )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo
-Sequence< OUString > SAL_CALL DBContentLoader::getSupportedServiceNames(void) throw(  )
+Sequence< OUString > SAL_CALL DBContentLoader::getSupportedServiceNames(void) throw(std::exception  )
 {
     return getSupportedServiceNames_Static();
 }
@@ -144,7 +144,7 @@ Sequence< OUString > DBContentLoader::getSupportedServiceNames_Static(void) thro
 
 void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OUString& rURL,
         const Sequence< PropertyValue >& rArgs,
-        const Reference< XLoadEventListener > & rListener) throw(::com::sun::star::uno::RuntimeException)
+        const Reference< XLoadEventListener > & rListener) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     m_xFrame    = rFrame;
     m_xListener = rListener;
@@ -305,7 +305,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
             rListener->loadCancelled( this );
 }
 
-void DBContentLoader::cancel(void) throw()
+void DBContentLoader::cancel(void) throw(std::exception)
 {
 }
 

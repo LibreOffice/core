@@ -115,12 +115,12 @@ public:
     }
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName ) throw (RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException);
+    virtual OUString SAL_CALL getImplementationName() throw (RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName ) throw (RuntimeException, std::exception);
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException, std::exception);
 
     // XMain
-    virtual sal_Int32 SAL_CALL run( const Sequence< OUString > & rArgs ) throw (RuntimeException);
+    virtual sal_Int32 SAL_CALL run( const Sequence< OUString > & rArgs ) throw (RuntimeException, std::exception);
 };
 
 //==================================================================================================
@@ -314,7 +314,7 @@ public:
     void SAL_CALL callRecursivly(
         const ::com::sun::star::uno::Reference< XRecursiveCall >& xCall,
         sal_Int32 nToCall )
-        throw(::com::sun::star::uno::RuntimeException)
+        throw(::com::sun::star::uno::RuntimeException, std::exception)
         {
             MutexGuard guard( m_mutex );
             if( nToCall )
@@ -1140,7 +1140,7 @@ inline bool makeSurrogate(
 
 //==================================================================================================
 sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     bool bRet = false;
     try
@@ -1236,19 +1236,19 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
 // XServiceInfo
 
 OUString TestBridgeImpl::getImplementationName()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return OUString( IMPLNAME );
 }
 
 sal_Bool TestBridgeImpl::supportsService( const OUString & rServiceName )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > TestBridgeImpl::getSupportedServiceNames()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return bridge_test::getSupportedServiceNames();
 }

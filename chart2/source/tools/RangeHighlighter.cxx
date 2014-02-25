@@ -75,7 +75,7 @@ RangeHighlighter::~RangeHighlighter()
 
 // ____ XRangeHighlighter ____
 Sequence< chart2::data::HighlightedRange > SAL_CALL RangeHighlighter::getSelectedRanges()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return m_aSelectedRanges;
 }
@@ -298,7 +298,7 @@ void RangeHighlighter::fillRangesForDataPoint( const Reference< uno::XInterface 
 }
 
 void SAL_CALL RangeHighlighter::addSelectionChangeListener( const Reference< view::XSelectionChangeListener >& xListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if(!xListener.is())
         return;
@@ -314,7 +314,7 @@ void SAL_CALL RangeHighlighter::addSelectionChangeListener( const Reference< vie
 }
 
 void SAL_CALL RangeHighlighter::removeSelectionChangeListener( const Reference< view::XSelectionChangeListener >& xListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     rBHelper.removeListener( ::getCppuType( & xListener ), xListener );
     --m_nAddedListenerCount;
@@ -324,7 +324,7 @@ void SAL_CALL RangeHighlighter::removeSelectionChangeListener( const Reference< 
 
 // ____ XSelectionChangeListener ____
 void SAL_CALL RangeHighlighter::selectionChanged( const lang::EventObject& /*aEvent*/ )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     determineRanges();
 
@@ -351,7 +351,7 @@ void RangeHighlighter::fireSelectionEvent()
 }
 
 void SAL_CALL RangeHighlighter::disposing( const lang::EventObject& Source )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if( Source.Source == m_xSelectionSupplier )
     {

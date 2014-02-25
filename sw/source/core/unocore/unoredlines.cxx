@@ -45,7 +45,7 @@ SwXRedlines::~SwXRedlines()
 {
 }
 
-sal_Int32 SwXRedlines::getCount(  ) throw(uno::RuntimeException)
+sal_Int32 SwXRedlines::getCount(  ) throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -55,7 +55,7 @@ sal_Int32 SwXRedlines::getCount(  ) throw(uno::RuntimeException)
 }
 
 uno::Any SwXRedlines::getByIndex(sal_Int32 nIndex)
-    throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException )
+    throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -73,7 +73,7 @@ uno::Any SwXRedlines::getByIndex(sal_Int32 nIndex)
 }
 
 uno::Reference< container::XEnumeration >  SwXRedlines::createEnumeration(void)
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -81,12 +81,12 @@ uno::Reference< container::XEnumeration >  SwXRedlines::createEnumeration(void)
     return uno::Reference< container::XEnumeration >(new SwXRedlineEnumeration(*GetDoc()));
 }
 
-uno::Type SwXRedlines::getElementType(  ) throw(uno::RuntimeException)
+uno::Type SwXRedlines::getElementType(  ) throw(uno::RuntimeException, std::exception)
 {
     return ::getCppuType((uno::Reference<beans::XPropertySet>*)0);
 }
 
-sal_Bool SwXRedlines::hasElements(  ) throw(uno::RuntimeException)
+sal_Bool SwXRedlines::hasElements(  ) throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -95,19 +95,19 @@ sal_Bool SwXRedlines::hasElements(  ) throw(uno::RuntimeException)
     return rRedTbl.size() > 0;
 }
 
-OUString SwXRedlines::getImplementationName(void) throw( uno::RuntimeException )
+OUString SwXRedlines::getImplementationName(void) throw( uno::RuntimeException, std::exception )
 {
     return OUString("SwXRedlines");
 }
 
 sal_Bool SwXRedlines::supportsService(const OUString& ServiceName)
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence< OUString > SwXRedlines::getSupportedServiceNames(void)
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     OSL_FAIL("not implemented");
     return uno::Sequence< OUString >();
@@ -140,7 +140,7 @@ SwXRedlineEnumeration::~SwXRedlineEnumeration()
 {
 }
 
-sal_Bool SwXRedlineEnumeration::hasMoreElements(void) throw( uno::RuntimeException )
+sal_Bool SwXRedlineEnumeration::hasMoreElements(void) throw( uno::RuntimeException, std::exception )
 {
     if(!pDoc)
         throw uno::RuntimeException();
@@ -148,7 +148,7 @@ sal_Bool SwXRedlineEnumeration::hasMoreElements(void) throw( uno::RuntimeExcepti
 }
 
 uno::Any SwXRedlineEnumeration::nextElement(void)
-    throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
+    throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     if(!pDoc)
         throw uno::RuntimeException();
@@ -161,17 +161,17 @@ uno::Any SwXRedlineEnumeration::nextElement(void)
     return aRet;
 }
 
-OUString SwXRedlineEnumeration::getImplementationName(void) throw( uno::RuntimeException )
+OUString SwXRedlineEnumeration::getImplementationName(void) throw( uno::RuntimeException, std::exception )
 {
     return OUString("SwXRedlineEnumeration");
 }
 
-sal_Bool SwXRedlineEnumeration::supportsService(const OUString& ServiceName) throw( uno::RuntimeException )
+sal_Bool SwXRedlineEnumeration::supportsService(const OUString& ServiceName) throw( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence< OUString > SwXRedlineEnumeration::getSupportedServiceNames(void) throw( uno::RuntimeException )
+uno::Sequence< OUString > SwXRedlineEnumeration::getSupportedServiceNames(void) throw( uno::RuntimeException, std::exception )
 {
     return uno::Sequence< OUString >();
 }

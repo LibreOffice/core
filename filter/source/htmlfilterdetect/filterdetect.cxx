@@ -104,7 +104,7 @@ bool isHTMLStream(const OString& aStreamHeader)
 }
 
 OUString SAL_CALL HtmlFilterDetect::detect(Sequence<PropertyValue>& lDescriptor)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     OUString sUrl;
     OUString sDocService;
@@ -186,7 +186,7 @@ OUString SAL_CALL HtmlFilterDetect::detect(Sequence<PropertyValue>& lDescriptor)
 // XInitialization
 
 void SAL_CALL HtmlFilterDetect::initialize(const Sequence<Any>& /*aArguments*/)
-    throw (Exception, RuntimeException)
+    throw (Exception, RuntimeException, std::exception)
 {
 }
 
@@ -212,19 +212,19 @@ Reference<XInterface> HtmlFilterDetect_createInstance(const Reference<XComponent
 // XServiceInfo
 
 OUString SAL_CALL HtmlFilterDetect::getImplementationName()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return HtmlFilterDetect_getImplementationName();
 }
 
 sal_Bool SAL_CALL HtmlFilterDetect::supportsService(const OUString& rServiceName)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return cppu::supportsService( this, rServiceName );
 }
 
 Sequence<OUString> SAL_CALL HtmlFilterDetect::getSupportedServiceNames()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return HtmlFilterDetect_getSupportedServiceNames();
 }

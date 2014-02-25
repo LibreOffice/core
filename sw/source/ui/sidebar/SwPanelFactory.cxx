@@ -60,7 +60,7 @@ public:
         throw(
             css::container::NoSuchElementException,
             css::lang::IllegalArgumentException,
-            cssu::RuntimeException );
+            cssu::RuntimeException, std::exception );
 };
 
 SwPanelFactory::SwPanelFactory (void)
@@ -80,7 +80,7 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
     throw(
         container::NoSuchElementException,
         lang::IllegalArgumentException,
-        RuntimeException)
+        RuntimeException, std::exception)
 {
     Reference<ui::XUIElement> xElement;
 

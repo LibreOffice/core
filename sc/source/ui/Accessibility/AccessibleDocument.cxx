@@ -1475,7 +1475,7 @@ void SAL_CALL ScAccessibleDocument::disposing()
 }
 
 void SAL_CALL ScAccessibleDocument::disposing( const lang::EventObject& /* Source */ )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     disposing();
 }
@@ -1663,7 +1663,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 }
 
 void SAL_CALL ScAccessibleDocument::selectionChanged( const lang::EventObject& /* aEvent */ )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     sal_Bool bSelectionChanged(false);
     if (mpAccessibleSpreadsheet)
@@ -1697,7 +1697,7 @@ void SAL_CALL ScAccessibleDocument::selectionChanged( const lang::EventObject& /
     //=====  XInterface  =====================================================
 
 uno::Any SAL_CALL ScAccessibleDocument::queryInterface( uno::Type const & rType )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     uno::Any aAnyTmp;
     if(rType == ::getCppuType((com::sun::star::uno::Reference<XAccessibleGetAccFlowTo> *)NULL) )
@@ -1726,7 +1726,7 @@ void SAL_CALL ScAccessibleDocument::release()
 
 uno::Reference< XAccessible > SAL_CALL ScAccessibleDocument::getAccessibleAtPoint(
         const awt::Point& rPoint )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     uno::Reference<XAccessible> xAccessible = NULL;
     if (containsPoint(rPoint))
@@ -1756,7 +1756,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocument::getAccessibleAtPoin
 }
 
 void SAL_CALL ScAccessibleDocument::grabFocus(  )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -1782,7 +1782,7 @@ void SAL_CALL ScAccessibleDocument::grabFocus(  )
     /// Return the number of currently visible children.
 sal_Int32 SAL_CALL
     ScAccessibleDocument::getAccessibleChildCount(void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -1800,7 +1800,7 @@ sal_Int32 SAL_CALL
 uno::Reference<XAccessible> SAL_CALL
     ScAccessibleDocument::getAccessibleChild(sal_Int32 nIndex)
     throw (uno::RuntimeException,
-        lang::IndexOutOfBoundsException)
+        lang::IndexOutOfBoundsException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -1831,7 +1831,7 @@ uno::Reference<XAccessible> SAL_CALL
     /// Return the set of current states.
 uno::Reference<XAccessibleStateSet> SAL_CALL
     ScAccessibleDocument::getAccessibleStateSet(void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Reference<XAccessibleStateSet> xParentStates;
@@ -1859,7 +1859,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
 
 OUString SAL_CALL
     ScAccessibleDocument::getAccessibleName(void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -1896,7 +1896,7 @@ OUString SAL_CALL
 
 void SAL_CALL
     ScAccessibleDocument::selectAccessibleChild( sal_Int32 nChildIndex )
-        throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+        throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -1930,7 +1930,7 @@ void SAL_CALL
 
 sal_Bool SAL_CALL
     ScAccessibleDocument::isAccessibleChildSelected( sal_Int32 nChildIndex )
-        throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+        throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -1963,7 +1963,7 @@ sal_Bool SAL_CALL
 
 void SAL_CALL
     ScAccessibleDocument::clearAccessibleSelection(  )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -1974,7 +1974,7 @@ void SAL_CALL
 
 void SAL_CALL
     ScAccessibleDocument::selectAllAccessibleChildren(  )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -1991,7 +1991,7 @@ void SAL_CALL
 
 sal_Int32 SAL_CALL
     ScAccessibleDocument::getSelectedAccessibleChildCount(  )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -2011,7 +2011,7 @@ sal_Int32 SAL_CALL
 
 uno::Reference<XAccessible > SAL_CALL
     ScAccessibleDocument::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
-        throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+        throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -2039,7 +2039,7 @@ uno::Reference<XAccessible > SAL_CALL
 
 void SAL_CALL
     ScAccessibleDocument::deselectAccessibleChild( sal_Int32 nChildIndex )
-        throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+        throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -2072,14 +2072,14 @@ void SAL_CALL
 
 OUString SAL_CALL
     ScAccessibleDocument::getImplementationName(void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return OUString("ScAccessibleDocument");
 }
 
 uno::Sequence< OUString> SAL_CALL
     ScAccessibleDocument::getSupportedServiceNames(void)
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
     sal_Int32 nOldSize(aSequence.getLength());
@@ -2093,7 +2093,7 @@ uno::Sequence< OUString> SAL_CALL
 //=====  XTypeProvider  =======================================================
 
 uno::Sequence< uno::Type > SAL_CALL ScAccessibleDocument::getTypes()
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     return comphelper::concatSequences(ScAccessibleDocumentImpl::getTypes(), ScAccessibleContextBase::getTypes());
 }
@@ -2105,7 +2105,7 @@ namespace
 
 uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleDocument::getImplementationId(void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return theScAccessibleDocumentImplementationId::get().getSeq();
 }
@@ -2212,7 +2212,7 @@ OUString SAL_CALL
 
 OUString SAL_CALL
     ScAccessibleDocument::createAccessibleName(void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -2223,7 +2223,7 @@ OUString SAL_CALL
 }
 
 Rectangle ScAccessibleDocument::GetBoundingBoxOnScreen() const
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Rectangle aRect;
     if (mpViewShell)
@@ -2236,7 +2236,7 @@ Rectangle ScAccessibleDocument::GetBoundingBoxOnScreen() const
 }
 
 Rectangle ScAccessibleDocument::GetBoundingBox() const
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Rectangle aRect;
     if (mpViewShell)
@@ -2372,7 +2372,7 @@ ScAddress   ScAccessibleDocument::GetCurCellAddress() const
 }
 
 uno::Any SAL_CALL ScAccessibleDocument::getExtendedAttributes()
-        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -2449,7 +2449,7 @@ com::sun::star::uno::Sequence< com::sun::star::uno::Any > ScAccessibleDocument::
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
         SAL_CALL ScAccessibleDocument::get_AccFlowTo(const ::com::sun::star::uno::Any& rAny, sal_Int32 nType)
-        throw ( ::com::sun::star::uno::RuntimeException )
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -2553,13 +2553,13 @@ void ScAccessibleDocument::SwitchViewFireFocus()
 }
 
 sal_Int32 SAL_CALL ScAccessibleDocument::getForeground(  )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     return COL_BLACK;
 }
 
 sal_Int32 SAL_CALL ScAccessibleDocument::getBackground(  )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();

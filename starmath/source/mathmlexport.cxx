@@ -371,7 +371,7 @@ SmXMLExport::SmXMLExport(
 
 sal_Int64 SAL_CALL SmXMLExport::getSomething(
     const uno::Sequence< sal_Int8 >& rId )
-throw(uno::RuntimeException)
+throw(uno::RuntimeException, std::exception)
 {
     if ( rId.getLength() == 16 &&
         0 == memcmp( getUnoTunnelId().getConstArray(),

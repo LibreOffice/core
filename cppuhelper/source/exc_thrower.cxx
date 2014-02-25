@@ -55,13 +55,13 @@ struct ExceptionThrower : public uno_Interface, XExceptionThrower
 
     // XInterface
     virtual Any SAL_CALL queryInterface( Type const & type )
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
     virtual void SAL_CALL acquire() throw ();
     virtual void SAL_CALL release() throw ();
 
     // XExceptionThrower
-    virtual void SAL_CALL throwException( Any const & exc ) throw (Exception);
-    virtual void SAL_CALL rethrowException() throw (Exception);
+    virtual void SAL_CALL throwException( Any const & exc ) throw (Exception, std::exception);
+    virtual void SAL_CALL rethrowException() throw (Exception, std::exception);
 };
 
 extern "C"
@@ -133,7 +133,7 @@ static void SAL_CALL ExceptionThrower_dispatch(
 
 
 Any ExceptionThrower::queryInterface( Type const & type )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     if (type.equals( ::getCppuType( reinterpret_cast<
                                     Reference< XInterface > const * >(0) ) ) ||
@@ -155,14 +155,14 @@ void ExceptionThrower::release() throw ()
 }
 
 
-void ExceptionThrower::throwException( Any const & exc ) throw (Exception)
+void ExceptionThrower::throwException( Any const & exc ) throw (Exception, std::exception)
 {
     OSL_FAIL( "unexpected!" );
     throwException( exc );
 }
 
 
-void ExceptionThrower::rethrowException() throw (Exception)
+void ExceptionThrower::rethrowException() throw (Exception, std::exception)
 {
     throw;
 }

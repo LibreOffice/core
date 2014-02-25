@@ -1261,12 +1261,12 @@ public:
     SvXMLImportContext* CreateContext(sal_uInt16 nPrefix, const OUString& rLocalName,   const Reference<XAttributeList>& xAttrList);
 
     // XInterface
-    virtual Any SAL_CALL queryInterface( const Type& aType ) throw (RuntimeException);
+    virtual Any SAL_CALL queryInterface( const Type& aType ) throw (RuntimeException, std::exception);
     virtual void SAL_CALL acquire() throw ();
     virtual void SAL_CALL release() throw ();
 
     // XAnimationNodeSupplier
-    Reference< XAnimationNode > SAL_CALL getAnimationNode() throw (RuntimeException);
+    Reference< XAnimationNode > SAL_CALL getAnimationNode() throw (RuntimeException, std::exception);
 
 private:
     Reference< XAnimationNode > mxRootNode;
@@ -1302,7 +1302,7 @@ AnimationsImport::~AnimationsImport() throw ()
 }
 
 // XInterface
-Any SAL_CALL AnimationsImport::queryInterface( const Type& aType ) throw (RuntimeException)
+Any SAL_CALL AnimationsImport::queryInterface( const Type& aType ) throw (RuntimeException, std::exception)
 {
     if ( aType == ::getCppuType((Reference<XAnimationNodeSupplier> *)0) )
     {
@@ -1341,7 +1341,7 @@ SvXMLImportContext *AnimationsImport::CreateContext(sal_uInt16 nPrefix, const OU
 }
 
 // XAnimationNodeSupplier
-Reference< XAnimationNode > SAL_CALL AnimationsImport::getAnimationNode() throw (RuntimeException)
+Reference< XAnimationNode > SAL_CALL AnimationsImport::getAnimationNode() throw (RuntimeException, std::exception)
 {
     return mxRootNode;
 }

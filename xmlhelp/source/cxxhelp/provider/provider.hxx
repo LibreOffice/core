@@ -75,7 +75,7 @@ namespace chelp {
         queryContent( const ::com::sun::star::uno::Reference<
                       ::com::sun::star::ucb::XContentIdentifier >& Identifier )
             throw( ::com::sun::star::ucb::IllegalIdentifierException,
-                   ::com::sun::star::uno::RuntimeException );
+                   ::com::sun::star::uno::RuntimeException, std::exception );
 
         // Additional interfaces
 
@@ -83,18 +83,18 @@ namespace chelp {
 
         virtual void SAL_CALL
         dispose(  )
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
 
         virtual void SAL_CALL
         addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener )
-            throw (::com::sun::star::uno::RuntimeException)
+            throw (::com::sun::star::uno::RuntimeException, std::exception)
         {
             (void)xListener;
         }
 
         virtual void SAL_CALL
         removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener )
-            throw (::com::sun::star::uno::RuntimeException)
+            throw (::com::sun::star::uno::RuntimeException, std::exception)
         {
             (void)aListener;
         }
@@ -103,7 +103,7 @@ namespace chelp {
 
         virtual void SAL_CALL
         disposing( const ::com::sun::star::lang::EventObject& Source )
-            throw (::com::sun::star::uno::RuntimeException)
+            throw (::com::sun::star::uno::RuntimeException, std::exception)
         {
             (void)Source;
             m_xContainer = com::sun::star::uno::Reference<com::sun::star::container::XContainer>(0);
@@ -111,21 +111,21 @@ namespace chelp {
 
         virtual void SAL_CALL
         elementInserted( const ::com::sun::star::container::ContainerEvent& Event )
-            throw (::com::sun::star::uno::RuntimeException)
+            throw (::com::sun::star::uno::RuntimeException, std::exception)
         {
             (void)Event;
         }
 
         virtual void SAL_CALL
         elementRemoved( const ::com::sun::star::container::ContainerEvent& Event )
-            throw (::com::sun::star::uno::RuntimeException)
+            throw (::com::sun::star::uno::RuntimeException, std::exception)
         {
             (void)Event;
         }
 
         virtual void SAL_CALL
         elementReplaced( const ::com::sun::star::container::ContainerEvent& Event )
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
 
         // Non-interface methods.
 

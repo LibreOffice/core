@@ -115,7 +115,7 @@ void OCommonStatement::disposing()
     OCommonStatement_IBase::disposing();
 }
 
-Any SAL_CALL OCommonStatement::queryInterface( const Type & rType ) throw(RuntimeException)
+Any SAL_CALL OCommonStatement::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
 {
     Any aRet = OCommonStatement_IBase::queryInterface(rType);
     if(!aRet.hasValue())
@@ -123,7 +123,7 @@ Any SAL_CALL OCommonStatement::queryInterface( const Type & rType ) throw(Runtim
     return aRet;
 }
 
-Sequence< Type > SAL_CALL OCommonStatement::getTypes(  ) throw(RuntimeException)
+Sequence< Type > SAL_CALL OCommonStatement::getTypes(  ) throw(RuntimeException, std::exception)
 {
     ::cppu::OTypeCollection aTypes( ::getCppuType( (const Reference< XMultiPropertySet > *)0 ),
                                     ::getCppuType( (const Reference< XFastPropertySet > *)0 ),
@@ -141,7 +141,7 @@ Sequence< Type > SAL_CALL OCommonStatement::getTypes(  ) throw(RuntimeException)
 //}
 
 
-void SAL_CALL OCommonStatement::close(  ) throw(SQLException, RuntimeException)
+void SAL_CALL OCommonStatement::close(  ) throw(SQLException, RuntimeException, std::exception)
 {
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -493,7 +493,7 @@ void OCommonStatement::parseSql( const OUString& sql, QueryData& _out_rQueryData
 
 
 
-Reference< XConnection > SAL_CALL OStatement::getConnection(  ) throw(SQLException, RuntimeException)
+Reference< XConnection > SAL_CALL OStatement::getConnection(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
@@ -503,7 +503,7 @@ Reference< XConnection > SAL_CALL OStatement::getConnection(  ) throw(SQLExcepti
 }
 
 
-Any SAL_CALL OCommonStatement::getWarnings(  ) throw(SQLException, RuntimeException)
+Any SAL_CALL OCommonStatement::getWarnings(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
@@ -513,7 +513,7 @@ Any SAL_CALL OCommonStatement::getWarnings(  ) throw(SQLException, RuntimeExcept
 }
 
 
-void SAL_CALL OCommonStatement::clearWarnings(  ) throw(SQLException, RuntimeException)
+void SAL_CALL OCommonStatement::clearWarnings(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
@@ -593,7 +593,7 @@ Reference< XResultSet > OCommonStatement::impl_executeQuery_throw( const OUStrin
 }
 
 
-Reference< XPropertySetInfo > SAL_CALL OCommonStatement::getPropertySetInfo(  ) throw(RuntimeException)
+Reference< XPropertySetInfo > SAL_CALL OCommonStatement::getPropertySetInfo(  ) throw(RuntimeException, std::exception)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper() );
 }
@@ -611,7 +611,7 @@ IMPLEMENT_FORWARD_XINTERFACE2( OStatement, OCommonStatement, OStatement_IBase )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( OStatement, OCommonStatement, OStatement_IBase )
 
 
-sal_Bool SAL_CALL OStatement::execute( const OUString& _sql ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OStatement::execute( const OUString& _sql ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
@@ -621,7 +621,7 @@ sal_Bool SAL_CALL OStatement::execute( const OUString& _sql ) throw(SQLException
 }
 
 
-Reference< XResultSet > SAL_CALL OStatement::executeQuery( const OUString& _sql ) throw(SQLException, RuntimeException)
+Reference< XResultSet > SAL_CALL OStatement::executeQuery( const OUString& _sql ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
@@ -630,7 +630,7 @@ Reference< XResultSet > SAL_CALL OStatement::executeQuery( const OUString& _sql 
 }
 
 
-sal_Int32 SAL_CALL OStatement::executeUpdate( const OUString& /*sql*/ ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OStatement::executeUpdate( const OUString& /*sql*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);

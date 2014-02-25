@@ -117,7 +117,7 @@ VbaGlobalsBase::init(  const uno::Sequence< beans::PropertyValue >& aInitArgs )
 }
 
 uno::Reference< uno::XInterface > SAL_CALL
-VbaGlobalsBase::createInstance( const OUString& aServiceSpecifier ) throw (uno::Exception, uno::RuntimeException)
+VbaGlobalsBase::createInstance( const OUString& aServiceSpecifier ) throw (uno::Exception, uno::RuntimeException, std::exception)
 {
     uno::Reference< uno::XInterface > xReturn;
     if ( aServiceSpecifier == sAppService )
@@ -132,7 +132,7 @@ VbaGlobalsBase::createInstance( const OUString& aServiceSpecifier ) throw (uno::
 }
 
 uno::Reference< uno::XInterface > SAL_CALL
-VbaGlobalsBase::createInstanceWithArguments( const OUString& aServiceSpecifier, const uno::Sequence< uno::Any >& Arguments ) throw (uno::Exception, uno::RuntimeException)
+VbaGlobalsBase::createInstanceWithArguments( const OUString& aServiceSpecifier, const uno::Sequence< uno::Any >& Arguments ) throw (uno::Exception, uno::RuntimeException, std::exception)
 {
 
     uno::Reference< uno::XInterface > xReturn;
@@ -148,7 +148,7 @@ VbaGlobalsBase::createInstanceWithArguments( const OUString& aServiceSpecifier, 
 }
 
 uno::Sequence< OUString > SAL_CALL
-VbaGlobalsBase::getAvailableServiceNames(  ) throw (uno::RuntimeException)
+VbaGlobalsBase::getAvailableServiceNames(  ) throw (uno::RuntimeException, std::exception)
 {
     static const OUString names[] = {
     // common

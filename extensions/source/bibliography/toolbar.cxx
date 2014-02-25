@@ -57,7 +57,7 @@ BibToolBarListener::~BibToolBarListener()
 {
 }
 
-void BibToolBarListener::statusChanged(const ::com::sun::star::frame::FeatureStateEvent& rEvt)throw( ::com::sun::star::uno::RuntimeException )
+void BibToolBarListener::statusChanged(const ::com::sun::star::frame::FeatureStateEvent& rEvt)throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     if(rEvt.FeatureURL.Complete == aCommand)
     {
@@ -88,7 +88,7 @@ BibTBListBoxListener::~BibTBListBoxListener()
 {
 }
 
-void BibTBListBoxListener::statusChanged(const ::com::sun::star::frame::FeatureStateEvent& rEvt)throw( ::com::sun::star::uno::RuntimeException )
+void BibTBListBoxListener::statusChanged(const ::com::sun::star::frame::FeatureStateEvent& rEvt)throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     if(rEvt.FeatureURL.Complete == GetCommand())
     {
@@ -127,7 +127,7 @@ BibTBQueryMenuListener::~BibTBQueryMenuListener()
 {
 }
 
-void BibTBQueryMenuListener::statusChanged(const frame::FeatureStateEvent& rEvt)throw( uno::RuntimeException )
+void BibTBQueryMenuListener::statusChanged(const frame::FeatureStateEvent& rEvt)throw( uno::RuntimeException, std::exception )
 {
     if(rEvt.FeatureURL.Complete == GetCommand())
     {
@@ -164,7 +164,7 @@ BibTBEditListener::~BibTBEditListener()
 {
 }
 
-void BibTBEditListener::statusChanged(const frame::FeatureStateEvent& rEvt)throw( uno::RuntimeException )
+void BibTBEditListener::statusChanged(const frame::FeatureStateEvent& rEvt)throw( uno::RuntimeException, std::exception )
 {
     if(rEvt.FeatureURL.Complete == GetCommand())
     {

@@ -92,12 +92,12 @@ public:
     virtual void SAL_CALL addResource (
         const ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId>&
             rxResourceId)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL removeResource(
         const ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId>&
             rxResourceId)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual ::com::sun::star::uno::Sequence< com::sun::star::uno::Reference<
         com::sun::star::drawing::framework::XResourceId> > SAL_CALL getResources (
@@ -105,19 +105,19 @@ public:
             ::com::sun::star::drawing::framework::XResourceId>& rxAnchorId,
         const OUString& rsResourceURLPrefix,
         ::com::sun::star::drawing::framework::AnchorBindingMode eMode)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual sal_Bool SAL_CALL hasResource (
         const ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId>&
             rxResourceId)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 
     // XCloneable
 
     virtual ::com::sun::star::uno::Reference<com::sun::star::util::XCloneable>
         SAL_CALL createClone (void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 
     // XNamed
@@ -126,13 +126,13 @@ public:
         debugging purposes.
     */
     virtual OUString SAL_CALL getName (void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     /** This call is ignored because the XNamed interface is (mis)used to
         give access to a human readable name for debugging purposes.
     */
     virtual void SAL_CALL setName (const OUString& rName)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 private:
     class ResourceContainer;

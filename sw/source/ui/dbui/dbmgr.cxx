@@ -209,7 +209,7 @@ class SwConnectionDisposedListener_Impl : public cppu::WeakImplHelper1
 {
     SwNewDBMgr&     rDBMgr;
 
-    virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException);
+    virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException, std::exception);
 public:
     SwConnectionDisposedListener_Impl(SwNewDBMgr& rMgr);
     ~SwConnectionDisposedListener_Impl();
@@ -2948,7 +2948,7 @@ SwConnectionDisposedListener_Impl::~SwConnectionDisposedListener_Impl()
 };
 
 void SwConnectionDisposedListener_Impl::disposing( const EventObject& rSource )
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
     uno::Reference<XConnection> xSource(rSource.Source, UNO_QUERY);

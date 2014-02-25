@@ -55,7 +55,7 @@ LogarithmicScaling::~LogarithmicScaling()
 
     double SAL_CALL
 LogarithmicScaling::doScaling( double value )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     double fResult;
     if( ::rtl::math::isNan( value ) || ::rtl::math::isInf( value ) )
@@ -67,14 +67,14 @@ LogarithmicScaling::doScaling( double value )
 
     uno::Reference< XScaling > SAL_CALL
 LogarithmicScaling::getInverseScaling()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return new ExponentialScaling( m_fBase );
 }
 
     OUString SAL_CALL
 LogarithmicScaling::getServiceName()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return lcl_aServiceName_Logarithmic;
 }
@@ -104,7 +104,7 @@ ExponentialScaling::~ExponentialScaling()
 
     double SAL_CALL
 ExponentialScaling::doScaling( double value )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     double fResult;
     if( ::rtl::math::isNan( value ) || ::rtl::math::isInf( value ) )
@@ -116,14 +116,14 @@ ExponentialScaling::doScaling( double value )
 
     uno::Reference< XScaling > SAL_CALL
 ExponentialScaling::getInverseScaling()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return new LogarithmicScaling( m_fBase );
 }
 
     OUString SAL_CALL
 ExponentialScaling::getServiceName()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return lcl_aServiceName_Exponential;
 }
@@ -151,7 +151,7 @@ LinearScaling::~LinearScaling()
 {}
 
 double SAL_CALL LinearScaling::doScaling( double value )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     double fResult;
     if( ::rtl::math::isNan( value ) || ::rtl::math::isInf( value ) )
@@ -163,7 +163,7 @@ double SAL_CALL LinearScaling::doScaling( double value )
 
 uno::Reference< XScaling > SAL_CALL
     LinearScaling::getInverseScaling()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     // ToDo: ApproxEqual ?
     if( m_fSlope == 0 )
@@ -174,7 +174,7 @@ uno::Reference< XScaling > SAL_CALL
 
     OUString SAL_CALL
 LinearScaling::getServiceName()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return lcl_aServiceName_Linear;
 }
@@ -200,7 +200,7 @@ PowerScaling::~PowerScaling()
 {}
 
 double SAL_CALL PowerScaling::doScaling( double value )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     double fResult;
     if( ::rtl::math::isNan( value ) || ::rtl::math::isInf( value ) )
@@ -212,7 +212,7 @@ double SAL_CALL PowerScaling::doScaling( double value )
 
 uno::Reference< XScaling > SAL_CALL
     PowerScaling::getInverseScaling()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     // ToDo: ApproxEqual ?
     if( m_fExponent == 0 )
@@ -223,7 +223,7 @@ uno::Reference< XScaling > SAL_CALL
 
     OUString SAL_CALL
 PowerScaling::getServiceName()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return lcl_aServiceName_Power;
 }

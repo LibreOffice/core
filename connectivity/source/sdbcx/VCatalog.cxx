@@ -90,7 +90,7 @@ void SAL_CALL OCatalog::disposing()
 }
 
 // XTablesSupplier
-Reference< XNameAccess > SAL_CALL OCatalog::getTables(  ) throw(RuntimeException)
+Reference< XNameAccess > SAL_CALL OCatalog::getTables(  ) throw(RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OCatalog_BASE::rBHelper.bDisposed);
@@ -114,7 +114,7 @@ Reference< XNameAccess > SAL_CALL OCatalog::getTables(  ) throw(RuntimeException
 }
 
 // XViewsSupplier
-Reference< XNameAccess > SAL_CALL OCatalog::getViews(  ) throw(RuntimeException)
+Reference< XNameAccess > SAL_CALL OCatalog::getViews(  ) throw(RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OCatalog_BASE::rBHelper.bDisposed);
@@ -138,7 +138,7 @@ Reference< XNameAccess > SAL_CALL OCatalog::getViews(  ) throw(RuntimeException)
 }
 
 // XUsersSupplier
-Reference< XNameAccess > SAL_CALL OCatalog::getUsers(  ) throw(RuntimeException)
+Reference< XNameAccess > SAL_CALL OCatalog::getUsers(  ) throw(RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OCatalog_BASE::rBHelper.bDisposed);
@@ -162,7 +162,7 @@ Reference< XNameAccess > SAL_CALL OCatalog::getUsers(  ) throw(RuntimeException)
 }
 
 // XGroupsSupplier
-Reference< XNameAccess > SAL_CALL OCatalog::getGroups(  ) throw(RuntimeException)
+Reference< XNameAccess > SAL_CALL OCatalog::getGroups(  ) throw(RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OCatalog_BASE::rBHelper.bDisposed);

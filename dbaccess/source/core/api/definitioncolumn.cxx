@@ -84,12 +84,12 @@ void OTableColumnDescriptor::impl_registerProperties()
 IMPLEMENT_GET_IMPLEMENTATION_ID( OTableColumnDescriptor )
 
 // ::com::sun::star::lang::XServiceInfo
-OUString OTableColumnDescriptor::getImplementationName(  ) throw (RuntimeException)
+OUString OTableColumnDescriptor::getImplementationName(  ) throw (RuntimeException, std::exception)
 {
     return OUString("com.sun.star.sdb.OTableColumnDescriptor");
 }
 
-Sequence< OUString > OTableColumnDescriptor::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > OTableColumnDescriptor::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aSNS( 2 );
     aSNS[0] = m_bActAsDescriptor ? OUString(SERVICE_SDBCX_COLUMNDESCRIPTOR) : OUString(SERVICE_SDBCX_COLUMN);
@@ -111,19 +111,19 @@ Sequence< OUString > OTableColumnDescriptor::getSupportedServiceNames(  ) throw 
     return *static_cast< ::comphelper::OPropertyArrayUsageHelper< OTableColumnDescriptor >* >(this)->getArrayHelper();
 }
 
-void OTableColumnDescriptor::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception)
+void OTableColumnDescriptor::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception, std::exception)
 {
     OColumn::setFastPropertyValue_NoBroadcast( nHandle, rValue );
     ::dbaccess::notifyDataSourceModified( m_xParent, sal_True );
 }
 
-Reference< XInterface > SAL_CALL OTableColumnDescriptor::getParent(  ) throw (RuntimeException)
+Reference< XInterface > SAL_CALL OTableColumnDescriptor::getParent(  ) throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_xParent;
 }
 
-void SAL_CALL OTableColumnDescriptor::setParent( const Reference< XInterface >& _xParent ) throw (NoSupportException, RuntimeException)
+void SAL_CALL OTableColumnDescriptor::setParent( const Reference< XInterface >& _xParent ) throw (NoSupportException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     m_xParent = _xParent;
@@ -143,7 +143,7 @@ OTableColumn::~OTableColumn()
 
 IMPLEMENT_GET_IMPLEMENTATION_ID( OTableColumn )
 
-OUString OTableColumn::getImplementationName(  ) throw (RuntimeException)
+OUString OTableColumn::getImplementationName(  ) throw (RuntimeException, std::exception)
 {
     return OUString("com.sun.star.sdb.OTableColumn");
 }
@@ -264,7 +264,7 @@ Reference< XPropertySet > OQueryColumn::impl_determineOriginalTableColumn( const
 
 IMPLEMENT_GET_IMPLEMENTATION_ID( OQueryColumn )
 
-OUString SAL_CALL OQueryColumn::getImplementationName(  ) throw(RuntimeException)
+OUString SAL_CALL OQueryColumn::getImplementationName(  ) throw(RuntimeException, std::exception)
 {
     return OUString( "org.openoffice.comp.dbaccess.OQueryColumn"  );
 }
@@ -384,7 +384,7 @@ sal_Bool OColumnWrapper::convertFastPropertyValue( Any & rConvertedValue, Any & 
     return bModified;
 }
 
-void OColumnWrapper::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception)
+void OColumnWrapper::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception, std::exception)
 {
     if ( OColumn::isRegisteredProperty( nHandle ) )
     {
@@ -418,12 +418,12 @@ OTableColumnDescriptorWrapper::OTableColumnDescriptorWrapper( const Reference< X
 IMPLEMENT_GET_IMPLEMENTATION_ID( OTableColumnDescriptorWrapper )
 
 // ::com::sun::star::lang::XServiceInfo
-OUString OTableColumnDescriptorWrapper::getImplementationName(  ) throw (RuntimeException)
+OUString OTableColumnDescriptorWrapper::getImplementationName(  ) throw (RuntimeException, std::exception)
 {
     return OUString("com.sun.star.sdb.OTableColumnDescriptorWrapper");
 }
 
-Sequence< OUString > OTableColumnDescriptorWrapper::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > OTableColumnDescriptorWrapper::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aSNS( 2 );
     aSNS[0] = SERVICE_SDBCX_COLUMNDESCRIPTOR;
@@ -545,7 +545,7 @@ void OTableColumnDescriptorWrapper::setFastPropertyValue_NoBroadcast(
                                                 sal_Int32 nHandle,
                                                 const Any& rValue
                                                  )
-                                                 throw (Exception)
+                                                 throw (Exception, std::exception)
 {
     if ( m_bPureWrap )
     {
@@ -583,12 +583,12 @@ OTableColumnWrapper::~OTableColumnWrapper()
 
 IMPLEMENT_GET_IMPLEMENTATION_ID( OTableColumnWrapper )
 
-OUString OTableColumnWrapper::getImplementationName(  ) throw (RuntimeException)
+OUString OTableColumnWrapper::getImplementationName(  ) throw (RuntimeException, std::exception)
 {
     return OUString("com.sun.star.sdb.OTableColumnWrapper" );
 }
 
-Sequence< OUString > OTableColumnWrapper::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > OTableColumnWrapper::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aSNS( 2 );
     aSNS[0] = SERVICE_SDBCX_COLUMN;

@@ -32,7 +32,7 @@ class ScVbaPivotTable : public PivotTableImpl_BASE
     css::uno::Reference< css::sheet::XDataPilotTable > m_xTable;
 public:
     ScVbaPivotTable( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::sheet::XDataPilotTable >& xTable );
-    virtual css::uno::Reference< ov::excel::XPivotCache > SAL_CALL PivotCache(  ) throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< ov::excel::XPivotCache > SAL_CALL PivotCache(  ) throw (css::uno::RuntimeException, std::exception);
     // XHelperInterface
     virtual OUString getServiceImplName();
     virtual css::uno::Sequence<OUString> getServiceNames();

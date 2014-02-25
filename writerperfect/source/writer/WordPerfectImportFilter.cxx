@@ -150,20 +150,20 @@ throw (RuntimeException)
 }
 
 sal_Bool SAL_CALL WordPerfectImportFilter::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     SAL_INFO("writerperfect", "WordPerfectImportFilter::filter");
     return importImpl ( aDescriptor );
 }
 void SAL_CALL WordPerfectImportFilter::cancel(  )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     SAL_INFO("writerperfect", "WordPerfectImportFilter::cancel");
 }
 
 // XImporter
 void SAL_CALL WordPerfectImportFilter::setTargetDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc )
-throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
+throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     SAL_INFO("writerperfect", "WordPerfectImportFilter::getTargetDocument");
     mxDoc = xDoc;
@@ -171,7 +171,7 @@ throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 
 // XExtendedFilterDetection
 OUString SAL_CALL WordPerfectImportFilter::detect( Sequence< PropertyValue >& Descriptor )
-throw( RuntimeException )
+throw( RuntimeException, std::exception )
 {
     SAL_INFO("writerperfect", "WordPerfectImportFilter::detect");
 
@@ -216,7 +216,7 @@ throw( RuntimeException )
 
 // XInitialization
 void SAL_CALL WordPerfectImportFilter::initialize( const Sequence< Any >& aArguments )
-throw (Exception, RuntimeException)
+throw (Exception, RuntimeException, std::exception)
 {
     SAL_INFO("writerperfect", "WordPerfectImportFilter::initialize");
     Sequence < PropertyValue > aAnySeq;
@@ -259,17 +259,17 @@ throw( Exception )
 
 // XServiceInfo
 OUString SAL_CALL WordPerfectImportFilter::getImplementationName(  )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     return WordPerfectImportFilter_getImplementationName();
 }
 sal_Bool SAL_CALL WordPerfectImportFilter::supportsService( const OUString &rServiceName )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     return cppu::supportsService( this, rServiceName );
 }
 Sequence< OUString > SAL_CALL WordPerfectImportFilter::getSupportedServiceNames(  )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     return WordPerfectImportFilter_getSupportedServiceNames();
 }
@@ -283,12 +283,12 @@ WordPerfectImportFilterDialog::~WordPerfectImportFilterDialog()
 }
 
 void SAL_CALL WordPerfectImportFilterDialog::setTitle( const OUString & )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
 }
 
 sal_Int16 SAL_CALL WordPerfectImportFilterDialog::execute()
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     WPXSvInputStream input( mxInputStream );
 
@@ -318,7 +318,7 @@ throw (RuntimeException)
     return com::sun::star::ui::dialogs::ExecutableDialogResults::OK;
 }
 
-Sequence<PropertyValue> SAL_CALL WordPerfectImportFilterDialog::getPropertyValues() throw(RuntimeException)
+Sequence<PropertyValue> SAL_CALL WordPerfectImportFilterDialog::getPropertyValues() throw(RuntimeException, std::exception)
 {
     Sequence<PropertyValue> aRet(1);
     PropertyValue *pArray = aRet.getArray();
@@ -331,7 +331,7 @@ Sequence<PropertyValue> SAL_CALL WordPerfectImportFilterDialog::getPropertyValue
 
 void SAL_CALL WordPerfectImportFilterDialog::setPropertyValues( const Sequence<PropertyValue>& aProps)
 throw(com::sun::star::beans::UnknownPropertyException, com::sun::star::beans::PropertyVetoException,
-      com::sun::star::lang::IllegalArgumentException, com::sun::star::lang::WrappedTargetException, RuntimeException)
+      com::sun::star::lang::IllegalArgumentException, com::sun::star::lang::WrappedTargetException, RuntimeException, std::exception)
 {
     const PropertyValue *pPropArray = aProps.getConstArray();
     long nPropCount = aProps.getLength();
@@ -350,19 +350,19 @@ throw(com::sun::star::beans::UnknownPropertyException, com::sun::star::beans::Pr
 
 // XServiceInfo
 OUString SAL_CALL WordPerfectImportFilterDialog::getImplementationName(  )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     return WordPerfectImportFilterDialog_getImplementationName();
 }
 
 sal_Bool SAL_CALL WordPerfectImportFilterDialog::supportsService( const OUString &rServiceName )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     return cppu::supportsService( this, rServiceName );
 }
 
 Sequence< OUString > SAL_CALL WordPerfectImportFilterDialog::getSupportedServiceNames(  )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     return WordPerfectImportFilterDialog_getSupportedServiceNames();
 }

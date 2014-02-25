@@ -72,13 +72,13 @@ ScVbaWSFunction::ScVbaWSFunction( const uno::Reference< XHelperInterface >& xPar
 }
 
 uno::Reference< beans::XIntrospectionAccess >
-ScVbaWSFunction::getIntrospection(void)  throw(uno::RuntimeException)
+ScVbaWSFunction::getIntrospection(void)  throw(uno::RuntimeException, std::exception)
 {
     return uno::Reference<beans::XIntrospectionAccess>();
 }
 
 uno::Any SAL_CALL
-ScVbaWSFunction::invoke(const OUString& FunctionName, const uno::Sequence< uno::Any >& Params, uno::Sequence< sal_Int16 >& /*OutParamIndex*/, uno::Sequence< uno::Any >& /*OutParam*/) throw(lang::IllegalArgumentException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException)
+ScVbaWSFunction::invoke(const OUString& FunctionName, const uno::Sequence< uno::Any >& Params, uno::Sequence< sal_Int16 >& /*OutParamIndex*/, uno::Sequence< uno::Any >& /*OutParam*/) throw(lang::IllegalArgumentException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException, std::exception)
 {
     // create copy of parameters, replace Excel range objects with UNO range objects
     uno::Sequence< uno::Any > aParamTemp( Params );
@@ -245,19 +245,19 @@ ScVbaWSFunction::invoke(const OUString& FunctionName, const uno::Sequence< uno::
 }
 
 void SAL_CALL
-ScVbaWSFunction::setValue(const OUString& /*PropertyName*/, const uno::Any& /*Value*/) throw(beans::UnknownPropertyException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException)
+ScVbaWSFunction::setValue(const OUString& /*PropertyName*/, const uno::Any& /*Value*/) throw(beans::UnknownPropertyException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException, std::exception)
 {
     throw beans::UnknownPropertyException();
 }
 
 uno::Any SAL_CALL
-ScVbaWSFunction::getValue(const OUString& /*PropertyName*/) throw(beans::UnknownPropertyException, uno::RuntimeException)
+ScVbaWSFunction::getValue(const OUString& /*PropertyName*/) throw(beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     throw beans::UnknownPropertyException();
 }
 
 sal_Bool SAL_CALL
-ScVbaWSFunction::hasMethod(const OUString& Name)  throw(uno::RuntimeException)
+ScVbaWSFunction::hasMethod(const OUString& Name)  throw(uno::RuntimeException, std::exception)
 {
     sal_Bool bIsFound = false;
     try
@@ -277,13 +277,13 @@ ScVbaWSFunction::hasMethod(const OUString& Name)  throw(uno::RuntimeException)
 }
 
 sal_Bool SAL_CALL
-ScVbaWSFunction::hasProperty(const OUString& /*Name*/)  throw(uno::RuntimeException)
+ScVbaWSFunction::hasProperty(const OUString& /*Name*/)  throw(uno::RuntimeException, std::exception)
 {
      return false;
 }
 
 OUString SAL_CALL
-ScVbaWSFunction::getExactName( const OUString& aApproximateName ) throw (css::uno::RuntimeException)
+ScVbaWSFunction::getExactName( const OUString& aApproximateName ) throw (css::uno::RuntimeException, std::exception)
 {
     OUString sName = aApproximateName.toAsciiUpperCase();
     if ( !hasMethod( sName ) )

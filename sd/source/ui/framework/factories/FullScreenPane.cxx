@@ -134,7 +134,7 @@ void SAL_CALL FullScreenPane::disposing (void)
 //----- XPane -----------------------------------------------------------------
 
 sal_Bool SAL_CALL FullScreenPane::isVisible (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
 
@@ -148,7 +148,7 @@ sal_Bool SAL_CALL FullScreenPane::isVisible (void)
 
 
 void SAL_CALL FullScreenPane::setVisible (const sal_Bool bIsVisible)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
 
@@ -162,7 +162,7 @@ void SAL_CALL FullScreenPane::setVisible (const sal_Bool bIsVisible)
 
 
 Reference<css::accessibility::XAccessible> SAL_CALL FullScreenPane::getAccessible (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
 
@@ -177,7 +177,7 @@ Reference<css::accessibility::XAccessible> SAL_CALL FullScreenPane::getAccessibl
 
 void SAL_CALL FullScreenPane::setAccessible (
     const Reference<css::accessibility::XAccessible>& rxAccessible)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
 

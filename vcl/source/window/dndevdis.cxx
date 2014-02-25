@@ -81,7 +81,7 @@ Window* DNDEventDispatcher::findTopLevelWindow(Point location)
 
 
 void SAL_CALL DNDEventDispatcher::drop( const DropTargetDropEvent& dtde )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     osl::MutexGuard aImplGuard( m_aMutex );
 
@@ -121,7 +121,7 @@ void SAL_CALL DNDEventDispatcher::drop( const DropTargetDropEvent& dtde )
 
 
 void SAL_CALL DNDEventDispatcher::dragEnter( const DropTargetDragEnterEvent& dtdee )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     osl::MutexGuard aImplGuard( m_aMutex );
     Point location( dtdee.LocationX, dtdee.LocationY );
@@ -149,7 +149,7 @@ void SAL_CALL DNDEventDispatcher::dragEnter( const DropTargetDragEnterEvent& dtd
 
 
 void SAL_CALL DNDEventDispatcher::dragExit( const DropTargetEvent& /*dte*/ )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     osl::MutexGuard aImplGuard( m_aMutex );
 
@@ -165,7 +165,7 @@ void SAL_CALL DNDEventDispatcher::dragExit( const DropTargetEvent& /*dte*/ )
 
 
 void SAL_CALL DNDEventDispatcher::dragOver( const DropTargetDragEvent& dtde )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     osl::MutexGuard aImplGuard( m_aMutex );
 
@@ -206,7 +206,7 @@ void SAL_CALL DNDEventDispatcher::dragOver( const DropTargetDragEvent& dtde )
 
 
 void SAL_CALL DNDEventDispatcher::dropActionChanged( const DropTargetDragEvent& dtde )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     osl::MutexGuard aImplGuard( m_aMutex );
 
@@ -248,7 +248,7 @@ void SAL_CALL DNDEventDispatcher::dropActionChanged( const DropTargetDragEvent& 
 
 
 void SAL_CALL DNDEventDispatcher::dragGestureRecognized( const DragGestureEvent& dge )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     osl::MutexGuard aImplGuard( m_aMutex );
 
@@ -264,7 +264,7 @@ void SAL_CALL DNDEventDispatcher::dragGestureRecognized( const DragGestureEvent&
 
 
 void SAL_CALL DNDEventDispatcher::disposing( const EventObject& )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
 }
 
@@ -272,7 +272,7 @@ void SAL_CALL DNDEventDispatcher::disposing( const EventObject& )
 // DNDEventDispatcher::acceptDrag
 
 
-void SAL_CALL DNDEventDispatcher::acceptDrag( sal_Int8 /*dropAction*/ ) throw(RuntimeException)
+void SAL_CALL DNDEventDispatcher::acceptDrag( sal_Int8 /*dropAction*/ ) throw(RuntimeException, std::exception)
 {
 }
 
@@ -280,7 +280,7 @@ void SAL_CALL DNDEventDispatcher::acceptDrag( sal_Int8 /*dropAction*/ ) throw(Ru
 // DNDEventDispatcher::rejectDrag
 
 
-void SAL_CALL DNDEventDispatcher::rejectDrag() throw(RuntimeException)
+void SAL_CALL DNDEventDispatcher::rejectDrag() throw(RuntimeException, std::exception)
 {
 }
 

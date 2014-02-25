@@ -119,14 +119,14 @@ public:
     queryContent( const com::sun::star::uno::Reference<
                     com::sun::star::ucb::XContentIdentifier >& Identifier )
         throw( com::sun::star::ucb::IllegalIdentifierException,
-               com::sun::star::uno::RuntimeException );
+               com::sun::star::uno::RuntimeException, std::exception );
 
     // XInitialization
     virtual void SAL_CALL
     initialize( const ::com::sun::star::uno::Sequence<
                         ::com::sun::star::uno::Any >& aArguments )
         throw( ::com::sun::star::uno::Exception,
-               ::com::sun::star::uno::RuntimeException );
+               ::com::sun::star::uno::RuntimeException, std::exception );
 
     // Non-Interface methods
     com::sun::star::uno::Reference<

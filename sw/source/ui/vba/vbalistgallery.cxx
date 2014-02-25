@@ -33,7 +33,7 @@ SwVbaListGallery::~SwVbaListGallery()
 }
 
 uno::Any SAL_CALL
-SwVbaListGallery::ListTemplates( const uno::Any& index ) throw (uno::RuntimeException)
+SwVbaListGallery::ListTemplates( const uno::Any& index ) throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< XCollection > xCol( new SwVbaListTemplates( mxParent, mxContext, mxTextDocument, mnType ) );
     if ( index.hasValue() )

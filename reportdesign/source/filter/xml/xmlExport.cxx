@@ -1391,7 +1391,7 @@ SvXMLAutoStylePoolP* ORptExport::CreateAutoStylePool()
     return new OXMLAutoStylePoolP(*this);
 }
 
-void SAL_CALL ORptExport::setSourceDocument( const Reference< XComponent >& xDoc ) throw(IllegalArgumentException, RuntimeException)
+void SAL_CALL ORptExport::setSourceDocument( const Reference< XComponent >& xDoc ) throw(IllegalArgumentException, RuntimeException, std::exception)
 {
     m_xReportDefinition.set(xDoc,UNO_QUERY_THROW);
     OSL_ENSURE(m_xReportDefinition.is(),"DataSource is NULL!");

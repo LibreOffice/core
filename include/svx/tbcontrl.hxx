@@ -184,13 +184,13 @@ public:
     DECL_LINK( VisibilityNotification, void* );
 protected:
     // XInitialization
-    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception);
 
     // XUpdatable
-    virtual void SAL_CALL update() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL update() throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // XComponent
-    virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 private:
 

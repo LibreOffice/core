@@ -70,11 +70,11 @@ namespace utl
 
         private:
             // XTerminateListener
-            virtual void SAL_CALL queryTermination( const EventObject& Event ) throw (TerminationVetoException, RuntimeException);
-            virtual void SAL_CALL notifyTermination( const EventObject& Event ) throw (RuntimeException);
+            virtual void SAL_CALL queryTermination( const EventObject& Event ) throw (TerminationVetoException, RuntimeException, std::exception);
+            virtual void SAL_CALL notifyTermination( const EventObject& Event ) throw (RuntimeException, std::exception);
 
             // XEventListener
-            virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception);
         };
 
 
@@ -112,7 +112,7 @@ namespace utl
         }
 
 
-        void SAL_CALL OObserverImpl::queryTermination( const EventObject& /*Event*/ ) throw (TerminationVetoException, RuntimeException)
+        void SAL_CALL OObserverImpl::queryTermination( const EventObject& /*Event*/ ) throw (TerminationVetoException, RuntimeException, std::exception)
         {
             Listeners aToNotify;
             {
@@ -131,7 +131,7 @@ namespace utl
         }
 
 
-        void SAL_CALL OObserverImpl::notifyTermination( const EventObject& /*Event*/ ) throw (RuntimeException)
+        void SAL_CALL OObserverImpl::notifyTermination( const EventObject& /*Event*/ ) throw (RuntimeException, std::exception)
         {
             // get the listeners
             Listeners aToNotify;
@@ -159,7 +159,7 @@ namespace utl
         }
 
 
-        void SAL_CALL OObserverImpl::disposing( const EventObject& /*Event*/ ) throw (RuntimeException)
+        void SAL_CALL OObserverImpl::disposing( const EventObject& /*Event*/ ) throw (RuntimeException, std::exception)
         {
 #if OSL_DEBUG_LEVEL > 0
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );

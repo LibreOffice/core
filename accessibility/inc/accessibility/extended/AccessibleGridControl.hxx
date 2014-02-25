@@ -57,18 +57,18 @@ protected:
 
     /** @return  The count of visible children. */
     virtual sal_Int32 SAL_CALL getAccessibleChildCount()
-        throw ( ::com::sun::star::uno::RuntimeException );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
 
     /** @return  The XAccessible interface of the specified child. */
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible > SAL_CALL
     getAccessibleChild( sal_Int32 nChildIndex )
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
-                ::com::sun::star::uno::RuntimeException );
+                ::com::sun::star::uno::RuntimeException, std::exception );
 
     /** @return  The role of this object (a table). */
     virtual sal_Int16 SAL_CALL getAccessibleRole()
-        throw ( ::com::sun::star::uno::RuntimeException );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
 
     // XAccessibleComponent ---------------------------------------------------
 
@@ -78,11 +78,11 @@ protected:
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible > SAL_CALL
     getAccessibleAtPoint( const ::com::sun::star::awt::Point& rPoint )
-        throw ( ::com::sun::star::uno::RuntimeException );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
 
     /** Grabs the focus to the Grid Control. */
     virtual void SAL_CALL grabFocus()
-        throw ( ::com::sun::star::uno::RuntimeException );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
 
     /** @return  The key bindings associated with this object. */
     virtual ::com::sun::star::uno::Any SAL_CALL getAccessibleKeyBinding()
@@ -94,7 +94,7 @@ protected:
             The name of this class.
     */
     virtual OUString SAL_CALL getImplementationName()
-        throw ( ::com::sun::star::uno::RuntimeException );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
 
 public:
     // helper functions
@@ -219,7 +219,7 @@ protected:
 
     // XAccessible
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
-        SAL_CALL getAccessibleContext() throw ( ::com::sun::star::uno::RuntimeException );
+        SAL_CALL getAccessibleContext() throw ( ::com::sun::star::uno::RuntimeException, std::exception );
 
     // IAccessibleTable
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >

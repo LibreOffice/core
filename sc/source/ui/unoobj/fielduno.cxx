@@ -354,7 +354,7 @@ uno::Reference<text::XTextField> ScCellFieldsObj::GetObjectByIndex_Impl(sal_Int3
     return xRet;
 }
 
-sal_Int32 SAL_CALL ScCellFieldsObj::getCount() throw(uno::RuntimeException)
+sal_Int32 SAL_CALL ScCellFieldsObj::getCount() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -367,7 +367,7 @@ sal_Int32 SAL_CALL ScCellFieldsObj::getCount() throw(uno::RuntimeException)
 
 uno::Any SAL_CALL ScCellFieldsObj::getByIndex( sal_Int32 nIndex )
                             throw(lang::IndexOutOfBoundsException,
-                                    lang::WrappedTargetException, uno::RuntimeException)
+                                    lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Reference<text::XTextField> xField(GetObjectByIndex_Impl(nIndex));
@@ -377,20 +377,20 @@ uno::Any SAL_CALL ScCellFieldsObj::getByIndex( sal_Int32 nIndex )
         throw lang::IndexOutOfBoundsException();
 }
 
-uno::Type SAL_CALL ScCellFieldsObj::getElementType() throw(uno::RuntimeException)
+uno::Type SAL_CALL ScCellFieldsObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return getCppuType((uno::Reference<text::XTextField>*)0);
 }
 
-sal_Bool SAL_CALL ScCellFieldsObj::hasElements() throw(uno::RuntimeException)
+sal_Bool SAL_CALL ScCellFieldsObj::hasElements() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
 }
 
 uno::Reference<container::XEnumeration> SAL_CALL ScCellFieldsObj::createEnumeration()
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return new ScIndexEnumeration(this, OUString("com.sun.star.text.TextFieldEnumeration"));
@@ -398,21 +398,21 @@ uno::Reference<container::XEnumeration> SAL_CALL ScCellFieldsObj::createEnumerat
 
 void SAL_CALL ScCellFieldsObj::addContainerListener(
                                 const uno::Reference<container::XContainerListener>& /* xListener */ )
-                                    throw(uno::RuntimeException)
+                                    throw(uno::RuntimeException, std::exception)
 {
     OSL_FAIL("not implemented");
 }
 
 void SAL_CALL ScCellFieldsObj::removeContainerListener(
                                 const uno::Reference<container::XContainerListener>& /* xListener */ )
-                                    throw(uno::RuntimeException)
+                                    throw(uno::RuntimeException, std::exception)
 {
     OSL_FAIL("not implemented");
 }
 
 // XRefreshable
 void SAL_CALL ScCellFieldsObj::refresh(  )
-                                    throw (uno::RuntimeException)
+                                    throw (uno::RuntimeException, std::exception)
 {
     if (mpRefreshListeners)
     {
@@ -450,7 +450,7 @@ void SAL_CALL ScCellFieldsObj::refresh(  )
 }
 
 void SAL_CALL ScCellFieldsObj::addRefreshListener( const uno::Reference< util::XRefreshListener >& xListener )
-                                    throw (uno::RuntimeException)
+                                    throw (uno::RuntimeException, std::exception)
 {
     if (xListener.is())
     {
@@ -462,7 +462,7 @@ void SAL_CALL ScCellFieldsObj::addRefreshListener( const uno::Reference< util::X
 }
 
 void SAL_CALL ScCellFieldsObj::removeRefreshListener( const uno::Reference<util::XRefreshListener >& xListener )
-                                    throw (uno::RuntimeException)
+                                    throw (uno::RuntimeException, std::exception)
 {
     if (xListener.is())
     {
@@ -535,7 +535,7 @@ uno::Reference<text::XTextField> ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_In
     return xRet;
 }
 
-sal_Int32 SAL_CALL ScHeaderFieldsObj::getCount() throw(uno::RuntimeException)
+sal_Int32 SAL_CALL ScHeaderFieldsObj::getCount() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -547,7 +547,7 @@ sal_Int32 SAL_CALL ScHeaderFieldsObj::getCount() throw(uno::RuntimeException)
 
 uno::Any SAL_CALL ScHeaderFieldsObj::getByIndex( sal_Int32 nIndex )
                             throw(lang::IndexOutOfBoundsException,
-                                    lang::WrappedTargetException, uno::RuntimeException)
+                                    lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Reference<text::XTextField> xField(GetObjectByIndex_Impl(nIndex));
@@ -557,20 +557,20 @@ uno::Any SAL_CALL ScHeaderFieldsObj::getByIndex( sal_Int32 nIndex )
         throw lang::IndexOutOfBoundsException();
 }
 
-uno::Type SAL_CALL ScHeaderFieldsObj::getElementType() throw(uno::RuntimeException)
+uno::Type SAL_CALL ScHeaderFieldsObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return getCppuType((uno::Reference<text::XTextField>*)0);
 }
 
-sal_Bool SAL_CALL ScHeaderFieldsObj::hasElements() throw(uno::RuntimeException)
+sal_Bool SAL_CALL ScHeaderFieldsObj::hasElements() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
 }
 
 uno::Reference<container::XEnumeration> SAL_CALL ScHeaderFieldsObj::createEnumeration()
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return new ScIndexEnumeration(this, OUString("com.sun.star.text.TextFieldEnumeration"));
@@ -578,21 +578,21 @@ uno::Reference<container::XEnumeration> SAL_CALL ScHeaderFieldsObj::createEnumer
 
 void SAL_CALL ScHeaderFieldsObj::addContainerListener(
                                 const uno::Reference<container::XContainerListener>& /* xListener */ )
-                                    throw(uno::RuntimeException)
+                                    throw(uno::RuntimeException, std::exception)
 {
     OSL_FAIL("not implemented");
 }
 
 void SAL_CALL ScHeaderFieldsObj::removeContainerListener(
                                 const uno::Reference<container::XContainerListener>& /* xListener */ )
-                                    throw(uno::RuntimeException)
+                                    throw(uno::RuntimeException, std::exception)
 {
     OSL_FAIL("not implemented");
 }
 
 // XRefreshable
 void SAL_CALL ScHeaderFieldsObj::refresh(  )
-                                    throw (uno::RuntimeException)
+                                    throw (uno::RuntimeException, std::exception)
 {
     if (mpRefreshListeners)
     {
@@ -630,7 +630,7 @@ void SAL_CALL ScHeaderFieldsObj::refresh(  )
 }
 
 void SAL_CALL ScHeaderFieldsObj::addRefreshListener( const uno::Reference< util::XRefreshListener >& xListener )
-                                    throw (uno::RuntimeException)
+                                    throw (uno::RuntimeException, std::exception)
 {
     if (xListener.is())
     {
@@ -642,7 +642,7 @@ void SAL_CALL ScHeaderFieldsObj::addRefreshListener( const uno::Reference< util:
 }
 
 void SAL_CALL ScHeaderFieldsObj::removeRefreshListener( const uno::Reference<util::XRefreshListener >& xListener )
-                                    throw (uno::RuntimeException)
+                                    throw (uno::RuntimeException, std::exception)
 {
     if (xListener.is())
     {
@@ -1223,7 +1223,7 @@ bool ScEditFieldObj::IsInserted() const
 // XTextField
 
 OUString SAL_CALL ScEditFieldObj::getPresentation( sal_Bool bShowCommand )
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1262,7 +1262,7 @@ OUString SAL_CALL ScEditFieldObj::getPresentation( sal_Bool bShowCommand )
 // XTextContent
 
 void SAL_CALL ScEditFieldObj::attach( const uno::Reference<text::XTextRange>& xTextRange )
-                                throw(lang::IllegalArgumentException, uno::RuntimeException)
+                                throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (xTextRange.is())
@@ -1275,7 +1275,7 @@ void SAL_CALL ScEditFieldObj::attach( const uno::Reference<text::XTextRange>& xT
     }
 }
 
-uno::Reference<text::XTextRange> SAL_CALL ScEditFieldObj::getAnchor() throw(uno::RuntimeException)
+uno::Reference<text::XTextRange> SAL_CALL ScEditFieldObj::getAnchor() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return mpContent;
@@ -1283,21 +1283,21 @@ uno::Reference<text::XTextRange> SAL_CALL ScEditFieldObj::getAnchor() throw(uno:
 
 // XComponent
 
-void SAL_CALL ScEditFieldObj::dispose() throw(uno::RuntimeException)
+void SAL_CALL ScEditFieldObj::dispose() throw(uno::RuntimeException, std::exception)
 {
     OComponentHelper::dispose();
 }
 
 void SAL_CALL ScEditFieldObj::addEventListener(
                         const uno::Reference<lang::XEventListener>& xListener )
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     OComponentHelper::addEventListener( xListener );
 }
 
 void SAL_CALL ScEditFieldObj::removeEventListener(
                         const uno::Reference<lang::XEventListener>& xListener )
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     OComponentHelper::removeEventListener( xListener );
 }
@@ -1305,7 +1305,7 @@ void SAL_CALL ScEditFieldObj::removeEventListener(
 // XPropertySet
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScEditFieldObj::getPropertySetInfo()
-                                                        throw(uno::RuntimeException)
+                                                        throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Reference<beans::XPropertySetInfo> aRef = pPropSet->getPropertySetInfo();
@@ -1349,7 +1349,7 @@ void SAL_CALL ScEditFieldObj::setPropertyValue(
 
 uno::Any SAL_CALL ScEditFieldObj::getPropertyValue( const OUString& aPropertyName )
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
-                        uno::RuntimeException)
+                        uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (aPropertyName.equals(SC_UNONAME_TEXTFIELD_TYPE))
@@ -1400,7 +1400,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScEditFieldObj )
 // XUnoTunnel
 
 sal_Int64 SAL_CALL ScEditFieldObj::getSomething(
-                const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException)
+                const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException, std::exception)
 {
     if ( rId.getLength() == 16 &&
           0 == memcmp( getUnoTunnelId().getConstArray(),
@@ -1432,19 +1432,19 @@ ScEditFieldObj* ScEditFieldObj::getImplementation(const uno::Reference<text::XTe
 
 // XServiceInfo
 
-OUString SAL_CALL ScEditFieldObj::getImplementationName() throw(uno::RuntimeException)
+OUString SAL_CALL ScEditFieldObj::getImplementationName() throw(uno::RuntimeException, std::exception)
 {
     return OUString("ScEditFieldObj");
 }
 
 sal_Bool SAL_CALL ScEditFieldObj::supportsService( const OUString& rServiceName )
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence<OUString> SAL_CALL ScEditFieldObj::getSupportedServiceNames()
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence<OUString> aRet(2);
     OUString* pArray = aRet.getArray();
@@ -1453,7 +1453,7 @@ uno::Sequence<OUString> SAL_CALL ScEditFieldObj::getSupportedServiceNames()
     return aRet;
 }
 
-uno::Sequence<uno::Type> SAL_CALL ScEditFieldObj::getTypes() throw(uno::RuntimeException)
+uno::Sequence<uno::Type> SAL_CALL ScEditFieldObj::getTypes() throw(uno::RuntimeException, std::exception)
 {
     static uno::Sequence<uno::Type> aTypes;
     if ( aTypes.getLength() == 0 )
@@ -1481,7 +1481,7 @@ namespace
 }
 
 uno::Sequence<sal_Int8> SAL_CALL ScEditFieldObj::getImplementationId()
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     return theScEditFieldObjImplementationId::get().getSeq();
 }

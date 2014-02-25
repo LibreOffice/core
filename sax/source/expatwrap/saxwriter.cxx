@@ -891,7 +891,7 @@ public:
 
 public: // XActiveDataSource
     virtual void SAL_CALL setOutputStream(const Reference< XOutputStream > & aStream)
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
             {
                 // temporary: set same stream again to clear buffer
                 if ( m_out == aStream && m_pSaxWriterHelper && m_bDocStarted )
@@ -909,48 +909,48 @@ public: // XActiveDataSource
                 }
             }
     virtual Reference< XOutputStream >  SAL_CALL getOutputStream(void)
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
             { return m_out; }
 
 public: // XDocumentHandler
     virtual void SAL_CALL startDocument(void)
-        throw(SAXException, RuntimeException);
+        throw(SAXException, RuntimeException, std::exception);
 
     virtual void SAL_CALL endDocument(void)
-        throw(SAXException, RuntimeException);
+        throw(SAXException, RuntimeException, std::exception);
 
     virtual void SAL_CALL startElement(const OUString& aName,
                                        const Reference< XAttributeList > & xAttribs)
-        throw (SAXException, RuntimeException);
+        throw (SAXException, RuntimeException, std::exception);
 
     virtual void SAL_CALL endElement(const OUString& aName)
-        throw(SAXException, RuntimeException);
+        throw(SAXException, RuntimeException, std::exception);
 
     virtual void SAL_CALL characters(const OUString& aChars)
-        throw(SAXException, RuntimeException);
+        throw(SAXException, RuntimeException, std::exception);
 
     virtual void SAL_CALL ignorableWhitespace(const OUString& aWhitespaces)
-        throw(SAXException, RuntimeException);
+        throw(SAXException, RuntimeException, std::exception);
     virtual void SAL_CALL processingInstruction(const OUString& aTarget,
                                                 const OUString& aData)
-        throw(SAXException, RuntimeException);
+        throw(SAXException, RuntimeException, std::exception);
     virtual void SAL_CALL setDocumentLocator(const Reference< XLocator > & xLocator)
-        throw(SAXException, RuntimeException);
+        throw(SAXException, RuntimeException, std::exception);
 
 public: // XExtendedDocumentHandler
-    virtual void SAL_CALL startCDATA(void) throw(SAXException, RuntimeException);
-    virtual void SAL_CALL endCDATA(void) throw(SAXException,RuntimeException);
+    virtual void SAL_CALL startCDATA(void) throw(SAXException, RuntimeException, std::exception);
+    virtual void SAL_CALL endCDATA(void) throw(SAXException,RuntimeException, std::exception);
     virtual void SAL_CALL comment(const OUString& sComment)
-        throw(SAXException, RuntimeException);
+        throw(SAXException, RuntimeException, std::exception);
     virtual void SAL_CALL unknown(const OUString& sString)
-        throw(SAXException, RuntimeException);
+        throw(SAXException, RuntimeException, std::exception);
     virtual void SAL_CALL allowLineBreak(void)
-        throw(SAXException,RuntimeException);
+        throw(SAXException,RuntimeException, std::exception);
 
 public: // XServiceInfo
-    OUString                     SAL_CALL getImplementationName() throw();
-    Sequence< OUString >         SAL_CALL getSupportedServiceNames(void) throw();
-    sal_Bool                    SAL_CALL supportsService(const OUString& ServiceName) throw();
+    OUString                     SAL_CALL getImplementationName() throw(std::exception);
+    Sequence< OUString >         SAL_CALL getSupportedServiceNames(void) throw(std::exception);
+    sal_Bool                    SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception);
 
 private:
 
@@ -990,26 +990,26 @@ static inline sal_Bool isFirstCharWhitespace( const sal_Unicode *p ) throw()
 }
 
 // XServiceInfo
-OUString SAXWriter::getImplementationName() throw()
+OUString SAXWriter::getImplementationName() throw(std::exception)
 {
     return OUString("com.sun.star.extensions.xml.sax.Writer");
 }
 
 // XServiceInfo
-sal_Bool SAXWriter::supportsService(const OUString& ServiceName) throw()
+sal_Bool SAXWriter::supportsService(const OUString& ServiceName) throw(std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo
-Sequence< OUString > SAXWriter::getSupportedServiceNames(void) throw ()
+Sequence< OUString > SAXWriter::getSupportedServiceNames(void) throw (std::exception)
 {
     Sequence<OUString> seq(1);
     seq[0] = "com.sun.star.xml.sax.Writer";
     return seq;
 }
 
-void SAXWriter::startDocument()                     throw(SAXException, RuntimeException )
+void SAXWriter::startDocument()                     throw(SAXException, RuntimeException, std::exception )
 {
     if( m_bDocStarted || ! m_out.is() || !m_pSaxWriterHelper ) {
         throw SAXException();
@@ -1019,7 +1019,7 @@ void SAXWriter::startDocument()                     throw(SAXException, RuntimeE
 }
 
 
-void SAXWriter::endDocument(void)                   throw(SAXException, RuntimeException)
+void SAXWriter::endDocument(void)                   throw(SAXException, RuntimeException, std::exception)
 {
     if( ! m_bDocStarted )
     {
@@ -1050,7 +1050,7 @@ void SAXWriter::endDocument(void)                   throw(SAXException, RuntimeE
 
 
 void SAXWriter::startElement(const OUString& aName, const Reference< XAttributeList >& xAttribs)
-    throw(SAXException, RuntimeException)
+    throw(SAXException, RuntimeException, std::exception)
 {
     if( ! m_bDocStarted )
     {
@@ -1118,7 +1118,7 @@ void SAXWriter::startElement(const OUString& aName, const Reference< XAttributeL
     }
 }
 
-void SAXWriter::endElement(const OUString& aName)   throw (SAXException, RuntimeException)
+void SAXWriter::endElement(const OUString& aName)   throw (SAXException, RuntimeException, std::exception)
 {
     if( ! m_bDocStarted ) {
         throw SAXException ();
@@ -1162,7 +1162,7 @@ void SAXWriter::endElement(const OUString& aName)   throw (SAXException, Runtime
     }
 }
 
-void SAXWriter::characters(const OUString& aChars)  throw(SAXException, RuntimeException)
+void SAXWriter::characters(const OUString& aChars)  throw(SAXException, RuntimeException, std::exception)
 {
     if( ! m_bDocStarted )
     {
@@ -1215,7 +1215,7 @@ void SAXWriter::characters(const OUString& aChars)  throw(SAXException, RuntimeE
 }
 
 
-void SAXWriter::ignorableWhitespace(const OUString&) throw(SAXException, RuntimeException)
+void SAXWriter::ignorableWhitespace(const OUString&) throw(SAXException, RuntimeException, std::exception)
 {
     if( ! m_bDocStarted )
     {
@@ -1226,7 +1226,7 @@ void SAXWriter::ignorableWhitespace(const OUString&) throw(SAXException, Runtime
 }
 
 void SAXWriter::processingInstruction(const OUString& aTarget, const OUString& aData)
-    throw (SAXException, RuntimeException)
+    throw (SAXException, RuntimeException, std::exception)
 {
     if( ! m_bDocStarted || m_bIsCDATA )
     {
@@ -1261,12 +1261,12 @@ void SAXWriter::processingInstruction(const OUString& aTarget, const OUString& a
 
 
 void SAXWriter::setDocumentLocator(const Reference< XLocator >&)
-        throw (SAXException, RuntimeException)
+        throw (SAXException, RuntimeException, std::exception)
 {
 
 }
 
-void SAXWriter::startCDATA(void) throw(SAXException, RuntimeException)
+void SAXWriter::startCDATA(void) throw(SAXException, RuntimeException, std::exception)
 {
     if( ! m_bDocStarted || m_bIsCDATA)
     {
@@ -1283,7 +1283,7 @@ void SAXWriter::startCDATA(void) throw(SAXException, RuntimeException)
     m_bIsCDATA = sal_True;
 }
 
-void SAXWriter::endCDATA(void) throw (SAXException,RuntimeException)
+void SAXWriter::endCDATA(void) throw (SAXException,RuntimeException, std::exception)
 {
     if( ! m_bDocStarted || ! m_bIsCDATA)
     {
@@ -1303,7 +1303,7 @@ void SAXWriter::endCDATA(void) throw (SAXException,RuntimeException)
 }
 
 
-void SAXWriter::comment(const OUString& sComment) throw(SAXException, RuntimeException)
+void SAXWriter::comment(const OUString& sComment) throw(SAXException, RuntimeException, std::exception)
 {
     if( ! m_bDocStarted || m_bIsCDATA )
     {
@@ -1332,7 +1332,7 @@ void SAXWriter::comment(const OUString& sComment) throw(SAXException, RuntimeExc
 }
 
 
-void SAXWriter::allowLineBreak( )   throw ( SAXException , RuntimeException)
+void SAXWriter::allowLineBreak( )   throw ( SAXException , RuntimeException, std::exception)
 {
     if( ! m_bDocStarted || m_bAllowLineBreak ) {
         throw SAXException();
@@ -1341,7 +1341,7 @@ void SAXWriter::allowLineBreak( )   throw ( SAXException , RuntimeException)
      m_bAllowLineBreak = sal_True;
 }
 
-void SAXWriter::unknown(const OUString& sString) throw (SAXException, RuntimeException)
+void SAXWriter::unknown(const OUString& sString) throw (SAXException, RuntimeException, std::exception)
 {
 
     if( ! m_bDocStarted )

@@ -36,13 +36,13 @@ namespace apphelper
 #define APPHELPER_XSERVICEINFO_DECL()                                                   \
     virtual OUString SAL_CALL                                        \
         getImplementationName()                                             \
-            throw( ::com::sun::star::uno::RuntimeException );               \
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ); \
     virtual sal_Bool SAL_CALL                                               \
         supportsService( const OUString& ServiceName )               \
-            throw( ::com::sun::star::uno::RuntimeException );               \
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ); \
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL     \
         getSupportedServiceNames()                                          \
-            throw( ::com::sun::star::uno::RuntimeException );               \
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ); \
                                                                             \
     static OUString getImplementationName_Static();                  \
     static ::com::sun::star::uno::Sequence< OUString >               \
@@ -54,7 +54,7 @@ namespace apphelper
 
 #define APPHELPER_XSERVICEINFO_IMPL( Class, ImplName )                              \
 OUString SAL_CALL Class::getImplementationName()                     \
-    throw( ::com::sun::star::uno::RuntimeException )                        \
+    throw( ::com::sun::star::uno::RuntimeException, std::exception )        \
 {                                                                           \
     return getImplementationName_Static();                                  \
 }                                                                           \
@@ -66,7 +66,7 @@ OUString Class::getImplementationName_Static()                       \
                                                                             \
 sal_Bool SAL_CALL                                                           \
 Class::supportsService( const OUString& ServiceName )                \
-    throw( ::com::sun::star::uno::RuntimeException )                        \
+    throw( ::com::sun::star::uno::RuntimeException, std::exception )        \
 {                                                                           \
     ::com::sun::star::uno::Sequence< OUString > aSNL =               \
                                         getSupportedServiceNames();         \
@@ -82,7 +82,7 @@ Class::supportsService( const OUString& ServiceName )                \
                                                                             \
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL                 \
 Class::getSupportedServiceNames()                                           \
-    throw( ::com::sun::star::uno::RuntimeException )                        \
+    throw( ::com::sun::star::uno::RuntimeException, std::exception )        \
 {                                                                           \
     return getSupportedServiceNames_Static();                               \
 }

@@ -237,7 +237,7 @@ namespace accessibility
     {
     }
 
-    sal_Int32 SAL_CALL AccessibleToolPanelDeck::getAccessibleChildCount(  ) throw (RuntimeException)
+    sal_Int32 SAL_CALL AccessibleToolPanelDeck::getAccessibleChildCount(  ) throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *m_pImpl );
 
@@ -250,7 +250,7 @@ namespace accessibility
         return nChildCount;
     }
 
-    Reference< XAccessible > SAL_CALL AccessibleToolPanelDeck::getAccessibleChild( sal_Int32 i_nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+    Reference< XAccessible > SAL_CALL AccessibleToolPanelDeck::getAccessibleChild( sal_Int32 i_nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
     {
         MethodGuard aGuard( *m_pImpl );
 
@@ -270,7 +270,7 @@ namespace accessibility
         return m_pImpl->getActivePanelAccessible();
     }
 
-    Reference< XAccessible > SAL_CALL AccessibleToolPanelDeck::getAccessibleParent(  ) throw (RuntimeException)
+    Reference< XAccessible > SAL_CALL AccessibleToolPanelDeck::getAccessibleParent(  ) throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *m_pImpl );
         const Reference< XAccessible > xParent = implGetForeignControlledParent();
@@ -279,13 +279,13 @@ namespace accessibility
         return m_pImpl->m_xAccessibleParent;
     }
 
-    sal_Int16 SAL_CALL AccessibleToolPanelDeck::getAccessibleRole(  ) throw (RuntimeException)
+    sal_Int16 SAL_CALL AccessibleToolPanelDeck::getAccessibleRole(  ) throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *m_pImpl );
         return AccessibleRole::PANEL;
     }
 
-    Reference< XAccessible > SAL_CALL AccessibleToolPanelDeck::getAccessibleAtPoint( const UnoPoint& i_rPoint ) throw (RuntimeException)
+    Reference< XAccessible > SAL_CALL AccessibleToolPanelDeck::getAccessibleAtPoint( const UnoPoint& i_rPoint ) throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *m_pImpl );
 
@@ -322,7 +322,7 @@ namespace accessibility
         return NULL;
     }
 
-    void SAL_CALL AccessibleToolPanelDeck::grabFocus(  ) throw (RuntimeException)
+    void SAL_CALL AccessibleToolPanelDeck::grabFocus(  ) throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *m_pImpl );
         m_pImpl->m_pPanelDeck->GrabFocus();

@@ -64,18 +64,18 @@ namespace stoc_connector
         virtual sal_Int32 SAL_CALL read( ::com::sun::star::uno::Sequence< sal_Int8 >& aReadBytes,
                                          sal_Int32 nBytesToRead )
             throw(::com::sun::star::io::IOException,
-                  ::com::sun::star::uno::RuntimeException);
+                  ::com::sun::star::uno::RuntimeException, std::exception);
         virtual void SAL_CALL write( const ::com::sun::star::uno::Sequence< sal_Int8 >& aData )
             throw(::com::sun::star::io::IOException,
-                  ::com::sun::star::uno::RuntimeException);
+                  ::com::sun::star::uno::RuntimeException, std::exception);
         virtual void SAL_CALL flush(  ) throw(
             ::com::sun::star::io::IOException,
-            ::com::sun::star::uno::RuntimeException);
+            ::com::sun::star::uno::RuntimeException, std::exception);
         virtual void SAL_CALL close(  )
             throw(::com::sun::star::io::IOException,
-                  ::com::sun::star::uno::RuntimeException);
+                  ::com::sun::star::uno::RuntimeException, std::exception);
         virtual OUString SAL_CALL getDescription(  )
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(::com::sun::star::uno::RuntimeException, std::exception);
     public:
         ::osl::StreamPipe m_pipe;
         oslInterlockedCount m_nStatus;
@@ -93,25 +93,25 @@ namespace stoc_connector
         virtual sal_Int32 SAL_CALL read( ::com::sun::star::uno::Sequence< sal_Int8 >& aReadBytes,
                                          sal_Int32 nBytesToRead )
             throw(::com::sun::star::io::IOException,
-                  ::com::sun::star::uno::RuntimeException);
+                  ::com::sun::star::uno::RuntimeException, std::exception);
         virtual void SAL_CALL write( const ::com::sun::star::uno::Sequence< sal_Int8 >& aData )
             throw(::com::sun::star::io::IOException,
-                  ::com::sun::star::uno::RuntimeException);
+                  ::com::sun::star::uno::RuntimeException, std::exception);
         virtual void SAL_CALL flush(  ) throw(
             ::com::sun::star::io::IOException,
-            ::com::sun::star::uno::RuntimeException);
+            ::com::sun::star::uno::RuntimeException, std::exception);
         virtual void SAL_CALL close(  )
             throw(::com::sun::star::io::IOException,
-                  ::com::sun::star::uno::RuntimeException);
+                  ::com::sun::star::uno::RuntimeException, std::exception);
         virtual OUString SAL_CALL getDescription(  )
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(::com::sun::star::uno::RuntimeException, std::exception);
 
 
         // XConnectionBroadcaster
         virtual void SAL_CALL addStreamListener(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener>& aListener)
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(::com::sun::star::uno::RuntimeException, std::exception);
         virtual void SAL_CALL removeStreamListener(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener>& aListener)
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     public:
         void completeConnectionString();

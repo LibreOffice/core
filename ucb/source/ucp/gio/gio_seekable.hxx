@@ -44,7 +44,7 @@ public:
 
     // XInterface
     virtual com::sun::star::uno::Any SAL_CALL queryInterface(const ::com::sun::star::uno::Type & type )
-            throw( ::com::sun::star::uno::RuntimeException );
+            throw( ::com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL acquire( void ) throw () { OWeakObject::acquire(); }
     virtual void SAL_CALL release( void ) throw() { OWeakObject::release(); }
 
@@ -52,20 +52,20 @@ public:
     virtual void SAL_CALL seek( sal_Int64 location )
             throw( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::RuntimeException );
+                ::com::sun::star::uno::RuntimeException, std::exception );
 
     virtual sal_Int64 SAL_CALL getPosition()
             throw( ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::RuntimeException );
+                ::com::sun::star::uno::RuntimeException, std::exception );
 
     virtual sal_Int64 SAL_CALL getLength()
             throw( ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::RuntimeException );
+                ::com::sun::star::uno::RuntimeException, std::exception );
 
     // XTruncate
     virtual void SAL_CALL truncate( void )
             throw( com::sun::star::io::IOException,
-                com::sun::star::uno::RuntimeException );
+                com::sun::star::uno::RuntimeException, std::exception );
 };
 
 } // namespace gio

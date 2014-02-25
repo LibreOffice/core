@@ -46,7 +46,7 @@ SIDEModel::~SIDEModel()
 {
 }
 
-uno::Any SAL_CALL SIDEModel::queryInterface( const uno::Type& rType ) throw(uno::RuntimeException)
+uno::Any SAL_CALL SIDEModel::queryInterface( const uno::Type& rType ) throw(uno::RuntimeException, std::exception)
 {
     uno::Any aRet =  ::cppu::queryInterface ( rType,
                                     // OWeakObject interfaces
@@ -70,7 +70,7 @@ void SAL_CALL SIDEModel::release() throw()
     OWeakObject::release();
 }
 
-uno::Sequence< uno::Type > SAL_CALL SIDEModel::getTypes(  ) throw(uno::RuntimeException)
+uno::Sequence< uno::Type > SAL_CALL SIDEModel::getTypes(  ) throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence< uno::Type > aTypes = SfxBaseModel::getTypes();
     sal_Int32 nLen = aTypes.getLength();
@@ -81,7 +81,7 @@ uno::Sequence< uno::Type > SAL_CALL SIDEModel::getTypes(  ) throw(uno::RuntimeEx
     return aTypes;
 }
 
-OUString SIDEModel::getImplementationName(void) throw( uno::RuntimeException )
+OUString SIDEModel::getImplementationName(void) throw( uno::RuntimeException, std::exception )
 {
     return getImplementationName_Static();
 }
@@ -91,11 +91,11 @@ OUString SIDEModel::getImplementationName_Static()
     return OUString( "com.sun.star.comp.basic.BasicIDE" );
 }
 
-sal_Bool SIDEModel::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
+sal_Bool SIDEModel::supportsService(const OUString& rServiceName) throw( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
-uno::Sequence< OUString > SIDEModel::getSupportedServiceNames(void) throw( uno::RuntimeException )
+uno::Sequence< OUString > SIDEModel::getSupportedServiceNames(void) throw( uno::RuntimeException, std::exception )
 {
     return getSupportedServiceNames_Static();
 }
@@ -118,20 +118,20 @@ uno::Reference< uno::XInterface > SAL_CALL SIDEModel_createInstance(
 }
 
 //  XStorable
-void SAL_CALL SIDEModel::store() throw (io::IOException, uno::RuntimeException)
+void SAL_CALL SIDEModel::store() throw (io::IOException, uno::RuntimeException, std::exception)
 {
     notImplemented();
 }
 
 void SAL_CALL SIDEModel::storeAsURL( const OUString&, const uno::Sequence< beans::PropertyValue >& )
-        throw (io::IOException, uno::RuntimeException)
+        throw (io::IOException, uno::RuntimeException, std::exception)
 {
     notImplemented();
 }
 
 void SAL_CALL SIDEModel::storeToURL( const OUString&,
         const uno::Sequence< beans::PropertyValue >& )
-        throw (io::IOException, uno::RuntimeException)
+        throw (io::IOException, uno::RuntimeException, std::exception)
 {
     notImplemented();
 }

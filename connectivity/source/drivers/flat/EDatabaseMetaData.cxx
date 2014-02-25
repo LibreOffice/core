@@ -152,7 +152,7 @@ Reference< XResultSet > OFlatDatabaseMetaData::impl_getTypeInfo_throw(  )
 
 Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getColumns(
     const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& tableNamePattern,
-        const OUString& columnNamePattern ) throw(SQLException, RuntimeException)
+        const OUString& columnNamePattern ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatDatabaseMetaData::getColumns" );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -241,7 +241,7 @@ Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getColumns(
     return xRef;
 }
 
-OUString SAL_CALL OFlatDatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OFlatDatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatDatabaseMetaData::getURL" );
     ::osl::MutexGuard aGuard( m_aMutex );

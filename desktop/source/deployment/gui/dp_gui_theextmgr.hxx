@@ -103,17 +103,17 @@ public:
 
     // XEventListener
     virtual void SAL_CALL disposing( ::com::sun::star::lang::EventObject const & evt )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // XTerminateListener
     virtual void SAL_CALL queryTermination( ::com::sun::star::lang::EventObject const & evt )
-        throw (::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL notifyTermination( ::com::sun::star::lang::EventObject const & evt )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // XModifyListener
     virtual void SAL_CALL modified( ::com::sun::star::lang::EventObject const & evt )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 };
 
 } // namespace dp_gui

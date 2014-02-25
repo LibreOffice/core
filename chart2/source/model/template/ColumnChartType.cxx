@@ -140,14 +140,14 @@ ColumnChartType::~ColumnChartType()
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL ColumnChartType::createClone()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< util::XCloneable >( new ColumnChartType( *this ));
 }
 
 // ____ XChartType ____
 OUString SAL_CALL ColumnChartType::getChartType()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return CHART2_SERVICE_NAME_CHARTTYPE_COLUMN;
 }
@@ -170,7 +170,7 @@ uno::Any ColumnChartType::GetDefaultValue( sal_Int32 nHandle ) const
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL ColumnChartType::getPropertySetInfo()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return *StaticColumnChartTypeInfo::get();
 }

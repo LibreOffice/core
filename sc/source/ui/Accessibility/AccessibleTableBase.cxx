@@ -63,7 +63,7 @@ void SAL_CALL ScAccessibleTableBase::disposing()
     //=====  XInterface  =====================================================
 
 uno::Any SAL_CALL ScAccessibleTableBase::queryInterface( uno::Type const & rType )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if ( rType == ::getCppuType((uno::Reference<XAccessibleTableSelection> *)0) )
     {
@@ -199,7 +199,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnExtentAt( sal_Int32
 }
 
 uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleTableBase::getAccessibleRowHeaders(  )
-                    throw (uno::RuntimeException)
+                    throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< XAccessibleTable > xAccessibleTable;
     OSL_FAIL("Here should be a implementation to fill the row headers");
@@ -209,7 +209,7 @@ uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleTableBase::getAccessible
 }
 
 uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleTableBase::getAccessibleColumnHeaders(  )
-                    throw (uno::RuntimeException)
+                    throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< XAccessibleTable > xAccessibleTable;
     OSL_FAIL("Here should be a implementation to fill the column headers");
@@ -219,7 +219,7 @@ uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleTableBase::getAccessible
 }
 
 uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleTableBase::getSelectedAccessibleRows(  )
-                    throw (uno::RuntimeException)
+                    throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL("not implemented yet");
     uno::Sequence< sal_Int32 > aSequence;
@@ -227,7 +227,7 @@ uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleTableBase::getSelectedAccessible
 }
 
 uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleTableBase::getSelectedAccessibleColumns(  )
-                    throw (uno::RuntimeException)
+                    throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL("not implemented yet");
     uno::Sequence< sal_Int32 > aSequence;
@@ -257,7 +257,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleTableBase::getAccessibleCellA
 }
 
 uno::Reference< XAccessible > SAL_CALL ScAccessibleTableBase::getAccessibleCaption(  )
-                    throw (uno::RuntimeException)
+                    throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL("not implemented yet");
     uno::Reference< XAccessible > xAccessible;
@@ -265,7 +265,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleTableBase::getAccessibleCapti
 }
 
 uno::Reference< XAccessible > SAL_CALL ScAccessibleTableBase::getAccessibleSummary(  )
-                    throw (uno::RuntimeException)
+                    throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL("not implemented yet");
     uno::Reference< XAccessible > xAccessible;
@@ -384,7 +384,7 @@ OUString SAL_CALL ScAccessibleTableBase::createAccessibleName()
 
 uno::Reference<XAccessibleRelationSet> SAL_CALL
     ScAccessibleTableBase::getAccessibleRelationSet(void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL("should be implemented in the abrevated class");
     return uno::Reference<XAccessibleRelationSet>();
@@ -392,7 +392,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
 
 uno::Reference<XAccessibleStateSet> SAL_CALL
     ScAccessibleTableBase::getAccessibleStateSet(void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL("should be implemented in the abrevated class");
     uno::Reference< XAccessibleStateSet > xAccessibleStateSet;
@@ -418,7 +418,7 @@ sal_Bool SAL_CALL
 
 void SAL_CALL
         ScAccessibleTableBase::clearAccessibleSelection(  )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
 }
 
@@ -429,7 +429,7 @@ void SAL_CALL ScAccessibleTableBase::selectAllAccessibleChildren()
 
 sal_Int32 SAL_CALL
         ScAccessibleTableBase::getSelectedAccessibleChildCount(  )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nResult(0);
     return nResult;
@@ -437,7 +437,7 @@ sal_Int32 SAL_CALL
 
 uno::Reference<XAccessible > SAL_CALL
         ScAccessibleTableBase::getSelectedAccessibleChild( sal_Int32 /* nSelectedChildIndex */ )
-        throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+        throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
     uno::Reference < XAccessible > xAccessible;
     return xAccessible;
@@ -451,7 +451,7 @@ void SAL_CALL ScAccessibleTableBase::deselectAccessibleChild( sal_Int32 /* nSele
     //=====  XServiceInfo  ====================================================
 
 OUString SAL_CALL ScAccessibleTableBase::getImplementationName(void)
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     return OUString("ScAccessibleTableBase");
 }
@@ -459,7 +459,7 @@ OUString SAL_CALL ScAccessibleTableBase::getImplementationName(void)
     //=====  XTypeProvider  ===================================================
 
 uno::Sequence< uno::Type > SAL_CALL ScAccessibleTableBase::getTypes()
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     return comphelper::concatSequences(ScAccessibleTableBaseImpl::getTypes(), ScAccessibleContextBase::getTypes());
 }
@@ -471,7 +471,7 @@ namespace
 
 uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleTableBase::getImplementationId(void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return theScAccessibleTableBaseImplementationId::get().getSeq();
 }

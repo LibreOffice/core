@@ -76,28 +76,28 @@ class SfxTerminateListener_Impl : public ::cppu::WeakImplHelper2< XTerminateList
 public:
 
     // XTerminateListener
-    virtual void SAL_CALL queryTermination( const EventObject& aEvent ) throw( TerminationVetoException, RuntimeException );
-    virtual void SAL_CALL notifyTermination( const EventObject& aEvent ) throw( RuntimeException );
-    virtual void SAL_CALL disposing( const EventObject& Source ) throw( RuntimeException );
+    virtual void SAL_CALL queryTermination( const EventObject& aEvent ) throw( TerminationVetoException, RuntimeException, std::exception );
+    virtual void SAL_CALL notifyTermination( const EventObject& aEvent ) throw( RuntimeException, std::exception );
+    virtual void SAL_CALL disposing( const EventObject& Source ) throw( RuntimeException, std::exception );
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (RuntimeException);
-    virtual ::sal_Bool SAL_CALL supportsService( const OUString& sServiceName ) throw (RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException);
+    virtual OUString SAL_CALL getImplementationName() throw (RuntimeException, std::exception);
+    virtual ::sal_Bool SAL_CALL supportsService( const OUString& sServiceName ) throw (RuntimeException, std::exception);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException, std::exception);
 };
 
-void SAL_CALL SfxTerminateListener_Impl::disposing( const EventObject& ) throw( RuntimeException )
+void SAL_CALL SfxTerminateListener_Impl::disposing( const EventObject& ) throw( RuntimeException, std::exception )
 {
 }
 
-void SAL_CALL SfxTerminateListener_Impl::queryTermination( const EventObject& ) throw(TerminationVetoException, RuntimeException )
+void SAL_CALL SfxTerminateListener_Impl::queryTermination( const EventObject& ) throw(TerminationVetoException, RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if ( !SFX_APP()->QueryExit_Impl() )
         throw TerminationVetoException();
 }
 
-void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& aEvent ) throw(RuntimeException )
+void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& aEvent ) throw(RuntimeException, std::exception )
 {
     Reference< XDesktop > xDesktop( aEvent.Source, UNO_QUERY );
     if( xDesktop.is() )
@@ -122,17 +122,17 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
     Application::Quit();
 }
 
-OUString SAL_CALL SfxTerminateListener_Impl::getImplementationName() throw (RuntimeException)
+OUString SAL_CALL SfxTerminateListener_Impl::getImplementationName() throw (RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.sfx2.SfxTerminateListener");
 }
 
-::sal_Bool SAL_CALL SfxTerminateListener_Impl::supportsService( const OUString& sServiceName ) throw (RuntimeException)
+::sal_Bool SAL_CALL SfxTerminateListener_Impl::supportsService( const OUString& sServiceName ) throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-Sequence< OUString > SAL_CALL SfxTerminateListener_Impl::getSupportedServiceNames() throw (RuntimeException)
+Sequence< OUString > SAL_CALL SfxTerminateListener_Impl::getSupportedServiceNames() throw (RuntimeException, std::exception)
 {
     // Note: That service  does not really exists .-)
     // But this implementation is not thought to be registered really within our service.rdb.

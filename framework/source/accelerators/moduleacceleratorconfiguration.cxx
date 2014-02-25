@@ -75,19 +75,19 @@ public:
     virtual ~ModuleAcceleratorConfiguration();
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     {
         return OUString("com.sun.star.comp.framework.ModuleAcceleratorConfiguration");
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     {
         return cppu::supportsService(this, ServiceName);
     }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     {
         css::uno::Sequence< OUString > aSeq(1);
         aSeq[0] = OUString("com.sun.star.ui.ModuleAcceleratorConfiguration");
@@ -95,7 +95,7 @@ public:
     }
 
     // XComponent
-    virtual  void SAL_CALL dispose() throw (css::uno::RuntimeException);
+    virtual  void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception);
 
     /// This has to be called after when the instance is acquire()'d.
     void SAL_CALL fillCache();
@@ -173,7 +173,7 @@ void ModuleAcceleratorConfiguration::fillCache()
 // XComponent.dispose(),  #i120029#, to release the cyclic reference
 //
 void SAL_CALL ModuleAcceleratorConfiguration::dispose()
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     try
     {

@@ -83,16 +83,16 @@ public:
                             { return m_xLockBytes; }
 
     // XActiveDataControl.
-    virtual void SAL_CALL   addListener ( const Reference<XStreamListener> &/*rxListener*/) throw(RuntimeException) {}
-    virtual void SAL_CALL   removeListener ( const Reference<XStreamListener> &/*rxListener*/) throw(RuntimeException) {}
-    virtual void SAL_CALL   start (void) throw(RuntimeException) {}
-    virtual void SAL_CALL   terminate (void) throw(RuntimeException)
+    virtual void SAL_CALL   addListener ( const Reference<XStreamListener> &/*rxListener*/) throw(RuntimeException, std::exception) {}
+    virtual void SAL_CALL   removeListener ( const Reference<XStreamListener> &/*rxListener*/) throw(RuntimeException, std::exception) {}
+    virtual void SAL_CALL   start (void) throw(RuntimeException, std::exception) {}
+    virtual void SAL_CALL   terminate (void) throw(RuntimeException, std::exception)
                             { m_xLockBytes->terminate_Impl(); }
 
     // XActiveDataSink.
-    virtual void SAL_CALL   setInputStream ( const Reference<XInputStream> &rxInputStream) throw(RuntimeException)
+    virtual void SAL_CALL   setInputStream ( const Reference<XInputStream> &rxInputStream) throw(RuntimeException, std::exception)
                             { m_xLockBytes->setInputStream_Impl (rxInputStream); }
-    virtual Reference<XInputStream> SAL_CALL getInputStream (void) throw(RuntimeException)
+    virtual Reference<XInputStream> SAL_CALL getInputStream (void) throw(RuntimeException, std::exception)
                             { return m_xLockBytes->getInputStream_Impl(); }
 };
 
@@ -110,16 +110,16 @@ public:
                             {}
 
     // XActiveDataControl.
-    virtual void SAL_CALL   addListener ( const Reference<XStreamListener> &/*rxListener*/) throw(RuntimeException) {}
-    virtual void SAL_CALL   removeListener ( const Reference<XStreamListener> &/*rxListener*/) throw(RuntimeException) {}
-    virtual void SAL_CALL   start (void) throw(RuntimeException) {}
-    virtual void SAL_CALL   terminate (void) throw(RuntimeException)
+    virtual void SAL_CALL   addListener ( const Reference<XStreamListener> &/*rxListener*/) throw(RuntimeException, std::exception) {}
+    virtual void SAL_CALL   removeListener ( const Reference<XStreamListener> &/*rxListener*/) throw(RuntimeException, std::exception) {}
+    virtual void SAL_CALL   start (void) throw(RuntimeException, std::exception) {}
+    virtual void SAL_CALL   terminate (void) throw(RuntimeException, std::exception)
                             { m_xLockBytes->terminate_Impl(); }
 
     // XActiveDataStreamer
-    virtual void SAL_CALL   setStream( const Reference< XStream >& aStream ) throw(RuntimeException)
+    virtual void SAL_CALL   setStream( const Reference< XStream >& aStream ) throw(RuntimeException, std::exception)
                             { m_xStream = aStream; m_xLockBytes->setStream_Impl( aStream ); }
-    virtual Reference< XStream > SAL_CALL getStream() throw(RuntimeException)
+    virtual Reference< XStream > SAL_CALL getStream() throw(RuntimeException, std::exception)
                             { return m_xStream; }
 };
 
@@ -135,9 +135,9 @@ public:
                                 : m_aProgress( rLink )
                             {}
     // XProgressHandler
-    virtual void SAL_CALL   push(const Any & /*rStatus*/) throw (RuntimeException) {}
-    virtual void SAL_CALL   pop() throw (RuntimeException) {}
-    virtual void SAL_CALL   update(const Any & /*rStatus*/) throw (RuntimeException)
+    virtual void SAL_CALL   push(const Any & /*rStatus*/) throw (RuntimeException, std::exception) {}
+    virtual void SAL_CALL   pop() throw (RuntimeException, std::exception) {}
+    virtual void SAL_CALL   update(const Any & /*rStatus*/) throw (RuntimeException, std::exception)
                             { if ( m_aProgress.IsSet() ) m_aProgress.Call( 0 ); }
 };
 
@@ -156,10 +156,10 @@ public:
                                 , m_xProgressHandler( rxProgressHandler )
                             {}
 
-    virtual Reference<XInteractionHandler> SAL_CALL getInteractionHandler() throw (RuntimeException)
+    virtual Reference<XInteractionHandler> SAL_CALL getInteractionHandler() throw (RuntimeException, std::exception)
     { return m_xInteractionHandler; }
 
-    virtual Reference<XProgressHandler> SAL_CALL    getProgressHandler() throw (RuntimeException)
+    virtual Reference<XProgressHandler> SAL_CALL    getProgressHandler() throw (RuntimeException, std::exception)
     { return m_xProgressHandler; }
 };
 
@@ -176,11 +176,11 @@ public:
                                 : m_xLockBytes( rRef )
                             {}
 
-    virtual void SAL_CALL   disposing ( const EventObject &/*rEvent*/) throw(RuntimeException) {}
-    virtual void SAL_CALL   propertiesChange ( const Sequence<PropertyChangeEvent> &rEvent) throw(RuntimeException);
+    virtual void SAL_CALL   disposing ( const EventObject &/*rEvent*/) throw(RuntimeException, std::exception) {}
+    virtual void SAL_CALL   propertiesChange ( const Sequence<PropertyChangeEvent> &rEvent) throw(RuntimeException, std::exception);
 };
 
-void SAL_CALL UcbPropertiesChangeListener_Impl::propertiesChange ( const Sequence<PropertyChangeEvent> &rEvent) throw(RuntimeException)
+void SAL_CALL UcbPropertiesChangeListener_Impl::propertiesChange ( const Sequence<PropertyChangeEvent> &rEvent) throw(RuntimeException, std::exception)
 {
     sal_Int32 i, n = rEvent.getLength();
     for (i = 0; i < n; i++)
@@ -384,14 +384,14 @@ public:
         const Reference< XStream >& aStream
     )
         throw(
-            RuntimeException
+            RuntimeException, std::exception
         );
 
     virtual Reference<XStream> SAL_CALL
     getStream (
         void
     ) throw(
-        RuntimeException
+        RuntimeException, std::exception
     )
     {
         osl::MutexGuard aGuard(m_aMutex);
@@ -422,14 +422,14 @@ public:
         const Reference<XInputStream> &rxInputStream
     )
         throw(
-            RuntimeException
+            RuntimeException, std::exception
         );
 
     virtual Reference<XInputStream> SAL_CALL
     getInputStream (
         void
     ) throw(
-        RuntimeException
+        RuntimeException, std::exception
     )
     {
         osl::MutexGuard aGuard(m_aMutex);
@@ -461,7 +461,7 @@ ModeratorsActiveDataSink::setInputStream (
     const Reference<XInputStream> &rxInputStream
 )
     throw(
-        RuntimeException
+        RuntimeException, std::exception
     )
 {
     m_aModerator.setInputStream(rxInputStream);
@@ -488,7 +488,7 @@ ModeratorsActiveDataStreamer::setStream (
     const Reference<XStream> &rxStream
 )
     throw(
-        RuntimeException
+        RuntimeException, std::exception
     )
 {
     m_aModerator.setStream(rxStream);
@@ -509,7 +509,7 @@ public:
 
     virtual void SAL_CALL
     handle( const Reference<XInteractionRequest >& Request )
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
 
 private:
 
@@ -527,13 +527,13 @@ public:
 
     virtual void SAL_CALL push( const Any& Status )
         throw (
-            RuntimeException);
+            RuntimeException, std::exception);
 
     virtual void SAL_CALL update( const Any& Status )
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
 
     virtual void SAL_CALL pop(  )
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
 
 
 private:
@@ -553,21 +553,21 @@ ModeratorsProgressHandler::~ModeratorsProgressHandler()
 
 void SAL_CALL ModeratorsProgressHandler::push( const Any& Status )
     throw (
-        RuntimeException)
+        RuntimeException, std::exception)
 {
     m_aModerator.push(Status);
 }
 
 
 void SAL_CALL ModeratorsProgressHandler::update( const Any& Status )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     m_aModerator.update(Status);
 }
 
 
 void SAL_CALL ModeratorsProgressHandler::pop(  )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     m_aModerator.pop();
 }
@@ -590,7 +590,7 @@ ModeratorsInteractionHandler::handle(
     const Reference<XInteractionRequest >& Request
 )
     throw (
-        RuntimeException
+        RuntimeException, std::exception
     )
 {
     // wakes up the mainthread

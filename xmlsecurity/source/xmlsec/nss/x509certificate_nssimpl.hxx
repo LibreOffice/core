@@ -43,44 +43,44 @@ class X509Certificate_NssImpl : public ::cppu::WeakImplHelper2<
         virtual ~X509Certificate_NssImpl() ;
 
         //Methods from XCertificate
-        virtual sal_Int16 SAL_CALL getVersion(  ) throw ( ::com::sun::star::uno::RuntimeException) ;
+        virtual sal_Int16 SAL_CALL getVersion(  ) throw ( ::com::sun::star::uno::RuntimeException, std::exception) ;
 
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getSerialNumber(  ) throw ( ::com::sun::star::uno::RuntimeException) ;
+        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getSerialNumber(  ) throw ( ::com::sun::star::uno::RuntimeException, std::exception) ;
 
-        virtual OUString SAL_CALL getIssuerName(  ) throw ( ::com::sun::star::uno::RuntimeException) ;
-        virtual OUString SAL_CALL getSubjectName(  ) throw ( ::com::sun::star::uno::RuntimeException) ;
+        virtual OUString SAL_CALL getIssuerName(  ) throw ( ::com::sun::star::uno::RuntimeException, std::exception) ;
+        virtual OUString SAL_CALL getSubjectName(  ) throw ( ::com::sun::star::uno::RuntimeException, std::exception) ;
 
-        virtual ::com::sun::star::util::DateTime SAL_CALL getNotValidBefore(  ) throw ( ::com::sun::star::uno::RuntimeException) ;
-        virtual ::com::sun::star::util::DateTime SAL_CALL getNotValidAfter(  ) throw ( ::com::sun::star::uno::RuntimeException) ;
+        virtual ::com::sun::star::util::DateTime SAL_CALL getNotValidBefore(  ) throw ( ::com::sun::star::uno::RuntimeException, std::exception) ;
+        virtual ::com::sun::star::util::DateTime SAL_CALL getNotValidAfter(  ) throw ( ::com::sun::star::uno::RuntimeException, std::exception) ;
 
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getIssuerUniqueID(  ) throw ( ::com::sun::star::uno::RuntimeException) ;
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getSubjectUniqueID(  ) throw ( ::com::sun::star::uno::RuntimeException) ;
+        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getIssuerUniqueID(  ) throw ( ::com::sun::star::uno::RuntimeException, std::exception) ;
+        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getSubjectUniqueID(  ) throw ( ::com::sun::star::uno::RuntimeException, std::exception) ;
 
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificateExtension > > SAL_CALL getExtensions(  ) throw ( ::com::sun::star::uno::RuntimeException) ;
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificateExtension > > SAL_CALL getExtensions(  ) throw ( ::com::sun::star::uno::RuntimeException, std::exception) ;
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificateExtension > SAL_CALL findCertificateExtension( const ::com::sun::star::uno::Sequence< sal_Int8 >& oid ) throw (::com::sun::star::uno::RuntimeException) ;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificateExtension > SAL_CALL findCertificateExtension( const ::com::sun::star::uno::Sequence< sal_Int8 >& oid ) throw (::com::sun::star::uno::RuntimeException, std::exception) ;
 
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getEncoded(  ) throw ( ::com::sun::star::uno::RuntimeException) ;
+        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getEncoded(  ) throw ( ::com::sun::star::uno::RuntimeException, std::exception) ;
 
         virtual OUString SAL_CALL getSubjectPublicKeyAlgorithm()
-            throw ( ::com::sun::star::uno::RuntimeException) ;
+            throw ( ::com::sun::star::uno::RuntimeException, std::exception) ;
 
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getSubjectPublicKeyValue()
-            throw ( ::com::sun::star::uno::RuntimeException) ;
+            throw ( ::com::sun::star::uno::RuntimeException, std::exception) ;
 
         virtual OUString SAL_CALL getSignatureAlgorithm()
-            throw ( ::com::sun::star::uno::RuntimeException) ;
+            throw ( ::com::sun::star::uno::RuntimeException, std::exception) ;
 
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getSHA1Thumbprint()
-            throw ( ::com::sun::star::uno::RuntimeException) ;
+            throw ( ::com::sun::star::uno::RuntimeException, std::exception) ;
 
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getMD5Thumbprint()
-            throw ( ::com::sun::star::uno::RuntimeException) ;
+            throw ( ::com::sun::star::uno::RuntimeException, std::exception) ;
 
-        virtual sal_Int32 SAL_CALL getCertificateUsage( ) throw ( ::com::sun::star::uno::RuntimeException) ;
+        virtual sal_Int32 SAL_CALL getCertificateUsage( ) throw ( ::com::sun::star::uno::RuntimeException, std::exception) ;
 
         //Methods from XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw (com::sun::star::uno::RuntimeException);
+        virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw (com::sun::star::uno::RuntimeException, std::exception);
 
         static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId() ;
 

@@ -81,7 +81,7 @@ XINTERFACE_COMMON_IMPL( CachedDynamicResultSetStub )
 
 Any SAL_CALL CachedDynamicResultSetStub
     ::queryInterface( const Type&  rType )
-    throw ( RuntimeException )
+    throw ( RuntimeException, std::exception )
 {
     //list all interfaces inclusive baseclasses of interfaces
 
@@ -172,7 +172,7 @@ ONE_INSTANCE_SERVICE_FACTORY_IMPL( CachedDynamicResultSetStubFactory );
 Reference< XDynamicResultSet > SAL_CALL CachedDynamicResultSetStubFactory
     ::createCachedDynamicResultSetStub(
             const Reference< XDynamicResultSet > & Source )
-            throw( RuntimeException )
+            throw( RuntimeException, std::exception )
 {
     Reference< XDynamicResultSet > xRet;
     xRet = new CachedDynamicResultSetStub( Source, m_xContext );
@@ -189,7 +189,7 @@ void SAL_CALL CachedDynamicResultSetStubFactory
             )
             throw (  ListenerAlreadySetException
             , AlreadyInitializedException
-            , RuntimeException )
+            , RuntimeException, std::exception )
 {
     OSL_ENSURE( Source.is(), "a Source is needed" );
     OSL_ENSURE( TargetCache.is(), "a TargetCache is needed" );

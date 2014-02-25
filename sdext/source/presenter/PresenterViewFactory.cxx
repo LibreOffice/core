@@ -77,7 +77,7 @@ public:
     virtual ~NextSlidePreview (void) {}
     virtual void SAL_CALL setCurrentPage (
         const css::uno::Reference<css::drawing::XDrawPage>& rxSlide)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     {
         Reference<presentation::XSlideShowController> xSlideShowController (
             mpPresenterController->GetSlideShowController());
@@ -212,7 +212,7 @@ void SAL_CALL PresenterViewFactory::disposing (void)
 
 Reference<XResource> SAL_CALL PresenterViewFactory::createResource (
     const Reference<XResourceId>& rxViewId)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
 
@@ -238,7 +238,7 @@ Reference<XResource> SAL_CALL PresenterViewFactory::createResource (
 }
 
 void SAL_CALL PresenterViewFactory::releaseResource (const Reference<XResource>& rxView)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
 

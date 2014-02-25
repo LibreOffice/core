@@ -78,7 +78,7 @@ bool GalleryItem::isValid() const
 
 
 uno::Any SAL_CALL GalleryItem::queryAggregation( const uno::Type & rType )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     uno::Any aAny;
 
@@ -103,7 +103,7 @@ uno::Any SAL_CALL GalleryItem::queryAggregation( const uno::Type & rType )
 
 
 uno::Any SAL_CALL GalleryItem::queryInterface( const uno::Type & rType )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return OWeakAggObject::queryInterface( rType );
 }
@@ -145,25 +145,25 @@ uno::Sequence< OUString > GalleryItem::getSupportedServiceNames_Static()
 }
 
 OUString SAL_CALL GalleryItem::getImplementationName()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return getImplementationName_Static();
 }
 
 sal_Bool SAL_CALL GalleryItem::supportsService( const OUString& ServiceName )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL GalleryItem::getSupportedServiceNames()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return getSupportedServiceNames_Static();
 }
 
 uno::Sequence< uno::Type > SAL_CALL GalleryItem::getTypes()
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence< uno::Type >  aTypes( 6 );
     uno::Type*                  pTypes = aTypes.getArray();
@@ -184,7 +184,7 @@ namespace
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL GalleryItem::getImplementationId()
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     return theGalleryItemImplementationId::get().getSeq();
 }
@@ -192,7 +192,7 @@ uno::Sequence< sal_Int8 > SAL_CALL GalleryItem::getImplementationId()
 
 
 sal_Int8 SAL_CALL GalleryItem::getType()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     const SolarMutexGuard aGuard;
     sal_Int8            nRet = gallery::GalleryItemType::EMPTY;

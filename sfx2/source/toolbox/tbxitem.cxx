@@ -269,7 +269,7 @@ unsigned short SfxToolBoxControl::GetSlotId() const
 
 
 
-void SAL_CALL SfxToolBoxControl::dispose() throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SfxToolBoxControl::dispose() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     if ( m_bDisposed )
         return;
@@ -463,7 +463,7 @@ void SfxToolBoxControl::Dispatch( const OUString& aCommand, ::com::sun::star::un
 
 // XInterface
 Any SAL_CALL SfxToolBoxControl::queryInterface( const Type & rType )
-throw(::com::sun::star::uno::RuntimeException)
+throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
                                            (static_cast< ::com::sun::star::awt::XDockableWindowListener* >(this)),
@@ -482,14 +482,14 @@ void SAL_CALL SfxToolBoxControl::release() throw()
 }
 
 void SAL_CALL SfxToolBoxControl::disposing( const ::com::sun::star::lang::EventObject& aEvent )
-throw( ::com::sun::star::uno::RuntimeException )
+throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     svt::ToolboxController::disposing( aEvent );
 }
 
 // XStatusListener
 void SAL_CALL SfxToolBoxControl::statusChanged( const FeatureStateEvent& rEvent )
-throw ( ::com::sun::star::uno::RuntimeException )
+throw ( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     SfxViewFrame* pViewFrame = NULL;
     Reference < XController > xController;
@@ -601,45 +601,45 @@ throw ( ::com::sun::star::uno::RuntimeException )
 }
 
 // XSubToolbarController
-::sal_Bool SAL_CALL SfxToolBoxControl::opensSubToolbar() throw (::com::sun::star::uno::RuntimeException)
+::sal_Bool SAL_CALL SfxToolBoxControl::opensSubToolbar() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return sal_False;
 }
 
-OUString SAL_CALL SfxToolBoxControl::getSubToolbarName() throw (::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL SfxToolBoxControl::getSubToolbarName() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return OUString();
 }
 
-void SAL_CALL SfxToolBoxControl::functionSelected( const OUString& /*aCommand*/ ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SfxToolBoxControl::functionSelected( const OUString& /*aCommand*/ ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     // must be implemented by sub-class
 }
 
-void SAL_CALL SfxToolBoxControl::updateImage() throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SfxToolBoxControl::updateImage() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     // must be implemented by sub-class
 }
 
 // XToolbarController
-void SAL_CALL SfxToolBoxControl::execute( sal_Int16 KeyModifier ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SfxToolBoxControl::execute( sal_Int16 KeyModifier ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     Select( (sal_uInt16)KeyModifier );
 }
-void SAL_CALL SfxToolBoxControl::click() throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SfxToolBoxControl::click() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     Click();
 }
 
-void SAL_CALL SfxToolBoxControl::doubleClick() throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SfxToolBoxControl::doubleClick() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     DoubleClick();
 }
 
-Reference< ::com::sun::star::awt::XWindow > SAL_CALL SfxToolBoxControl::createPopupWindow() throw (::com::sun::star::uno::RuntimeException)
+Reference< ::com::sun::star::awt::XWindow > SAL_CALL SfxToolBoxControl::createPopupWindow() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     Window* pWindow = CreatePopupWindow();
@@ -649,7 +649,7 @@ Reference< ::com::sun::star::awt::XWindow > SAL_CALL SfxToolBoxControl::createPo
         return Reference< ::com::sun::star::awt::XWindow >();
 }
 
-Reference< ::com::sun::star::awt::XWindow > SAL_CALL SfxToolBoxControl::createItemWindow( const Reference< ::com::sun::star::awt::XWindow >& rParent ) throw (::com::sun::star::uno::RuntimeException)
+Reference< ::com::sun::star::awt::XWindow > SAL_CALL SfxToolBoxControl::createItemWindow( const Reference< ::com::sun::star::awt::XWindow >& rParent ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return VCLUnoHelper::GetInterface( CreateItemWindow( VCLUnoHelper::GetWindow( rParent )));
@@ -657,38 +657,38 @@ Reference< ::com::sun::star::awt::XWindow > SAL_CALL SfxToolBoxControl::createIt
 
 // XDockableWindowListener
 void SAL_CALL SfxToolBoxControl::startDocking( const ::com::sun::star::awt::DockingEvent& )
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
 }
 ::com::sun::star::awt::DockingData SAL_CALL SfxToolBoxControl::docking( const ::com::sun::star::awt::DockingEvent& )
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return ::com::sun::star::awt::DockingData();
 }
 
 void SAL_CALL SfxToolBoxControl::endDocking( const ::com::sun::star::awt::EndDockingEvent& )
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
 }
 
 sal_Bool SAL_CALL SfxToolBoxControl::prepareToggleFloatingMode( const ::com::sun::star::lang::EventObject& )
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return sal_False;
 }
 
 void SAL_CALL SfxToolBoxControl::toggleFloatingMode( const ::com::sun::star::lang::EventObject& )
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL SfxToolBoxControl::closed( const ::com::sun::star::lang::EventObject& )
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL SfxToolBoxControl::endPopupMode( const ::com::sun::star::awt::EndPopupModeEvent& aEvent )
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1039,7 +1039,7 @@ SfxFrameStatusListener::~SfxFrameStatusListener()
 
 // XStatusListener
 void SAL_CALL SfxFrameStatusListener::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& rEvent )
-throw ( ::com::sun::star::uno::RuntimeException )
+throw ( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     SfxViewFrame* pViewFrame = NULL;
     Reference < XController > xController;

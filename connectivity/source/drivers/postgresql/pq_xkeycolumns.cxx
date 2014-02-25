@@ -97,7 +97,7 @@ KeyColumns::~KeyColumns()
 
 
 void KeyColumns::refresh()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     try
     {
@@ -289,7 +289,7 @@ void KeyColumns::appendByDescriptor(
     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& future )
     throw (::com::sun::star::sdbc::SQLException,
            ::com::sun::star::container::ElementExistException,
-           ::com::sun::star::uno::RuntimeException)
+           ::com::sun::star::uno::RuntimeException, std::exception)
 {
     (void) future;
     throw com::sun::star::sdbc::SQLException(
@@ -309,7 +309,7 @@ void KeyColumns::appendByDescriptor(
 void KeyColumns::dropByIndex( sal_Int32 index )
     throw (::com::sun::star::sdbc::SQLException,
            ::com::sun::star::lang::IndexOutOfBoundsException,
-           ::com::sun::star::uno::RuntimeException)
+           ::com::sun::star::uno::RuntimeException, std::exception)
 {
     (void) index;
     throw com::sun::star::sdbc::SQLException(
@@ -347,7 +347,7 @@ void KeyColumns::dropByIndex( sal_Int32 index )
 
 
 Reference< ::com::sun::star::beans::XPropertySet > KeyColumns::createDataDescriptor()
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return new KeyColumnDescriptor( m_refMutex, m_origin, m_pSettings );
 }
@@ -378,7 +378,7 @@ KeyColumnDescriptors::KeyColumnDescriptors(
 {}
 
 Reference< ::com::sun::star::beans::XPropertySet > KeyColumnDescriptors::createDataDescriptor()
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return new KeyColumnDescriptor( m_refMutex, m_origin, m_pSettings );
 }

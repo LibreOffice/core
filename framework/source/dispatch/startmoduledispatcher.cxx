@@ -73,7 +73,7 @@ StartModuleDispatcher::~StartModuleDispatcher()
 
 void SAL_CALL StartModuleDispatcher::dispatch(const css::util::URL&                                  aURL      ,
                                               const css::uno::Sequence< css::beans::PropertyValue >& lArguments)
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     dispatchWithNotification(aURL, lArguments, css::uno::Reference< css::frame::XDispatchResultListener >());
 }
@@ -82,7 +82,7 @@ void SAL_CALL StartModuleDispatcher::dispatch(const css::util::URL&             
 void SAL_CALL StartModuleDispatcher::dispatchWithNotification(const css::util::URL&                                             aURL      ,
                                                               const css::uno::Sequence< css::beans::PropertyValue >&            /*lArguments*/,
                                                               const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     ::sal_Int16 nResult = css::frame::DispatchResultState::DONTKNOW;
     if ( aURL.Complete == CMD_UNO_SHOWSTARTMODULE )
@@ -100,14 +100,14 @@ void SAL_CALL StartModuleDispatcher::dispatchWithNotification(const css::util::U
 
 
 css::uno::Sequence< ::sal_Int16 > SAL_CALL StartModuleDispatcher::getSupportedCommandGroups()
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence< ::sal_Int16 >();
 }
 
 
 css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL StartModuleDispatcher::getConfigurableDispatchInformation(::sal_Int16 /*nCommandGroup*/)
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence< css::frame::DispatchInformation >();
 }
@@ -115,14 +115,14 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL StartModuleDispat
 
 void SAL_CALL StartModuleDispatcher::addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
                                                        const css::util::URL&                                     /*aURL*/     )
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
 }
 
 
 void SAL_CALL StartModuleDispatcher::removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
                                                           const css::util::URL&                                     /*aURL*/     )
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
 }
 

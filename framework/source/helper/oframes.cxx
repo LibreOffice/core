@@ -66,7 +66,7 @@ OFrames::~OFrames()
 //*****************************************************************************************************************
 //  XFrames
 //*****************************************************************************************************************
-void SAL_CALL OFrames::append( const css::uno::Reference< XFrame >& xFrame ) throw( RuntimeException )
+void SAL_CALL OFrames::append( const css::uno::Reference< XFrame >& xFrame ) throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );
@@ -92,7 +92,7 @@ void SAL_CALL OFrames::append( const css::uno::Reference< XFrame >& xFrame ) thr
 //*****************************************************************************************************************
 //  XFrames
 //*****************************************************************************************************************
-void SAL_CALL OFrames::remove( const css::uno::Reference< XFrame >& xFrame ) throw( RuntimeException )
+void SAL_CALL OFrames::remove( const css::uno::Reference< XFrame >& xFrame ) throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );
@@ -119,7 +119,7 @@ void SAL_CALL OFrames::remove( const css::uno::Reference< XFrame >& xFrame ) thr
 //*****************************************************************************************************************
 //  XFrames
 //*****************************************************************************************************************
-Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int32 nSearchFlags ) throw( RuntimeException )
+Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int32 nSearchFlags ) throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );
@@ -226,7 +226,7 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
 //*****************************************************************************************************************
 //  XIndexAccess
 //*****************************************************************************************************************
-sal_Int32 SAL_CALL OFrames::getCount() throw( RuntimeException )
+sal_Int32 SAL_CALL OFrames::getCount() throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );
@@ -252,7 +252,7 @@ sal_Int32 SAL_CALL OFrames::getCount() throw( RuntimeException )
 //*****************************************************************************************************************
 Any SAL_CALL OFrames::getByIndex( sal_Int32 nIndex ) throw( IndexOutOfBoundsException   ,
                                                             WrappedTargetException      ,
-                                                            RuntimeException            )
+                                                            RuntimeException, std::exception            )
 {
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );
@@ -282,7 +282,7 @@ Any SAL_CALL OFrames::getByIndex( sal_Int32 nIndex ) throw( IndexOutOfBoundsExce
 //*****************************************************************************************************************
 //  XElementAccess
 //*****************************************************************************************************************
-Type SAL_CALL OFrames::getElementType() throw( RuntimeException )
+Type SAL_CALL OFrames::getElementType() throw( RuntimeException, std::exception )
 {
     // This "container" support XFrame-interfaces only!
     return ::getCppuType( (const css::uno::Reference< XFrame >*)NULL );
@@ -291,7 +291,7 @@ Type SAL_CALL OFrames::getElementType() throw( RuntimeException )
 //*****************************************************************************************************************
 //  XElementAccess
 //*****************************************************************************************************************
-sal_Bool SAL_CALL OFrames::hasElements() throw( RuntimeException )
+sal_Bool SAL_CALL OFrames::hasElements() throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );

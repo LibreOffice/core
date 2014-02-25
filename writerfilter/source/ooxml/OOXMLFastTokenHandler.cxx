@@ -48,7 +48,7 @@ OOXMLFastTokenHandler::OOXMLFastTokenHandler
 
 // ::com::sun::star::xml::sax::XFastTokenHandler:
 ::sal_Int32 SAL_CALL OOXMLFastTokenHandler::getToken(const OUString & Identifier)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ::sal_Int32 nResult = OOXML_FAST_TOKENS_END;
 
@@ -71,14 +71,14 @@ OOXMLFastTokenHandler::OOXMLFastTokenHandler
 }
 
 OUString SAL_CALL OOXMLFastTokenHandler::getIdentifier(::sal_Int32)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     // we use a Boost tokenmap, but tokenmaps cannot be indexed by an integer
     for (;;) { std::abort(); } // avoid "must return a value" warnings
 }
 
 css::uno::Sequence< ::sal_Int8 > SAL_CALL OOXMLFastTokenHandler::getUTF8Identifier(::sal_Int32)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     // we use a Boost tokenmap, but tokenmaps cannot be indexed by an integer
     for (;;) { std::abort(); } // avoid "must return a value" warnings
@@ -102,7 +102,7 @@ sal_Int32 OOXMLFastTokenHandler::getTokenDirect( const char *pStr, sal_Int32 nLe
 }
 
 ::sal_Int32 SAL_CALL OOXMLFastTokenHandler::getTokenFromUTF8
-(const css::uno::Sequence< ::sal_Int8 > & Identifier) throw (css::uno::RuntimeException)
+(const css::uno::Sequence< ::sal_Int8 > & Identifier) throw (css::uno::RuntimeException, std::exception)
 {
     return getTokenDirect(reinterpret_cast<const char *>
                           (Identifier.getConstArray()),

@@ -64,17 +64,17 @@ public:
 
     /* com::sun::star::lang::XUnoTunnel */
     virtual sal_Int64 SAL_CALL getSomething( const com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
     static com::sun::star::uno::Sequence < sal_Int8 > getUnoTunnelImplementationId( void )
         throw(com::sun::star::uno::RuntimeException);
 
     /* com::sun::star::lang::XServiceInfo */
     virtual OUString SAL_CALL getImplementationName(  )
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
 public:
     xmlNodePtr getNativeElement( ) const;

@@ -209,19 +209,19 @@ class StatusIndicatorFactory : private ThreadHelpBase
         StatusIndicatorFactory(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
         virtual OUString SAL_CALL getImplementationName()
-            throw (css::uno::RuntimeException)
+            throw (css::uno::RuntimeException, std::exception)
         {
             return OUString("com.sun.star.comp.framework.StatusIndicatorFactory");
         }
 
         virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-            throw (css::uno::RuntimeException)
+            throw (css::uno::RuntimeException, std::exception)
         {
             return cppu::supportsService(this, ServiceName);
         }
 
         virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-            throw (css::uno::RuntimeException)
+            throw (css::uno::RuntimeException, std::exception)
         {
             css::uno::Sequence< OUString > aSeq(1);
             aSeq[0] = OUString("com.sun.star.task.StatusIndicatorFactory");
@@ -232,17 +232,17 @@ class StatusIndicatorFactory : private ThreadHelpBase
         // XInitialization
         virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
             throw(css::uno::Exception       ,
-                  css::uno::RuntimeException);
+                  css::uno::RuntimeException, std::exception);
 
         //---------------------------------------
         // XStatusIndicatorFactory
         virtual css::uno::Reference< css::task::XStatusIndicator > SAL_CALL createStatusIndicator()
-            throw(css::uno::RuntimeException);
+            throw(css::uno::RuntimeException, std::exception);
 
         //---------------------------------------
         // XUpdatable
         virtual void SAL_CALL update()
-            throw(css::uno::RuntimeException);
+            throw(css::uno::RuntimeException, std::exception);
 
         //---------------------------------------
         // similar (XStatusIndicator)

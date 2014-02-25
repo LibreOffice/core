@@ -46,10 +46,10 @@ namespace
             }
 
             // XIndexAccess
-            virtual ::sal_Int32 SAL_CALL getCount(  ) throw (::com::sun::star::uno::RuntimeException)
+            virtual ::sal_Int32 SAL_CALL getCount(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
                 { return m_pResMgr.get() ? SAL_MAX_UINT16 : 0; };
             // XElementAccess
-            virtual ::sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException)
+            virtual ::sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
                 { return static_cast<bool>(m_pResMgr.get()); };
 
         protected:
@@ -63,9 +63,9 @@ namespace
             ResourceStringIndexAccess( ::boost::shared_ptr<ResMgr> pResMgr)
                 : ResourceIndexAccessBase(pResMgr) {}
             // XIndexAccess
-            virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception);
             // XElementAccessBase
-            virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException)
+            virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
                 { return ::getCppuType(static_cast< OUString*>(0)); };
     };
 
@@ -75,9 +75,9 @@ namespace
             ResourceStringListIndexAccess( ::boost::shared_ptr<ResMgr> pResMgr)
                 : ResourceIndexAccessBase(pResMgr) {}
             // XIndexAccess
-            virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception);
             // XElementAccessBase
-            virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException)
+            virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
                 { return ::getCppuType(static_cast<Sequence<PropertyValue> * >(0)); };
     };
 }
@@ -100,7 +100,7 @@ Reference<XInterface> initResourceIndexAccess(ResourceIndexAccess* pResourceInde
 }
 
 Any SAL_CALL ResourceIndexAccess::getByName(const OUString& aName)
-    throw (NoSuchElementException, WrappedTargetException, RuntimeException)
+    throw (NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     const Sequence<OUString> aNames(getElementNames());
     Reference<XIndexAccess> xResult;
@@ -119,7 +119,7 @@ Any SAL_CALL ResourceIndexAccess::getByName(const OUString& aName)
 }
 
 Sequence<OUString> SAL_CALL ResourceIndexAccess::getElementNames(  )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     static Sequence<OUString> aResult;
     if( aResult.getLength() == 0)
@@ -132,14 +132,14 @@ Sequence<OUString> SAL_CALL ResourceIndexAccess::getElementNames(  )
 }
 
 ::sal_Bool SAL_CALL ResourceIndexAccess::hasByName(const OUString& aName)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     const Sequence<OUString> aNames(getElementNames());
     return (::std::find(aNames.begin(), aNames.end(), aName) != aNames.end());
 }
 
 Any SAL_CALL ResourceStringIndexAccess::getByIndex(sal_Int32 nIdx)
-    throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
+    throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception)
 {
     if(nIdx > SAL_MAX_UINT16 || nIdx < 0)
         throw IndexOutOfBoundsException();
@@ -161,7 +161,7 @@ Any SAL_CALL ResourceStringIndexAccess::getByIndex(sal_Int32 nIdx)
 }
 
 Any SAL_CALL ResourceStringListIndexAccess::getByIndex(sal_Int32 nIdx)
-    throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
+    throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception)
 {
     if(nIdx > SAL_MAX_UINT16 || nIdx < 0)
         throw IndexOutOfBoundsException();

@@ -40,7 +40,7 @@ class SwHyperlinkEventDescriptor : public SvDetachedEventDescriptor
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName(void)
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception );
 protected:
     virtual ~SwHyperlinkEventDescriptor();
 public:
@@ -78,7 +78,7 @@ public:
     ~SwFrameEventDescriptor();
 
     virtual OUString SAL_CALL getImplementationName(void)
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 protected:
     virtual void setMacroItem(const SvxMacroItem& rItem);
@@ -98,7 +98,7 @@ public:
     ~SwFrameStyleEventDescriptor();
 
     virtual OUString SAL_CALL getImplementationName(void)
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 protected:
     virtual void setMacroItem(const SvxMacroItem& rItem);

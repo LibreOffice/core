@@ -41,7 +41,7 @@ MovingAverageRegressionCurveCalculator::~MovingAverageRegressionCurveCalculator(
 void SAL_CALL MovingAverageRegressionCurveCalculator::recalculateRegression(
     const uno::Sequence< double >& aXValues,
     const uno::Sequence< double >& aYValues )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     ::rtl::math::setNan( & m_fCorrelationCoeffitient );
 
@@ -74,7 +74,7 @@ void SAL_CALL MovingAverageRegressionCurveCalculator::recalculateRegression(
 
 double SAL_CALL MovingAverageRegressionCurveCalculator::getCurveValue( double /*x*/ )
     throw (lang::IllegalArgumentException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     double fResult;
     rtl::math::setNan(&fResult);
@@ -87,7 +87,7 @@ uno::Sequence< geometry::RealPoint2D > SAL_CALL MovingAverageRegressionCurveCalc
     const uno::Reference< chart2::XScaling >& /*xScalingY*/,
     sal_Bool /*bMaySkipPointsInCalculation*/ )
     throw (lang::IllegalArgumentException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     uno::Sequence< geometry::RealPoint2D > aResult( aYList.size() );
 

@@ -37,7 +37,7 @@ private:
         sal_Bool  aForceIntercept,
         double    aInterceptValue,
         sal_Int32 aPeriod)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Sequence<css::geometry::RealPoint2D> SAL_CALL getCurveValues(
         double min,
@@ -47,7 +47,7 @@ private:
         const css::uno::Reference<css::chart2::XScaling>& xScalingY,
         sal_Bool bMaySkipPointsInCalculation )
         throw (css::lang::IllegalArgumentException,
-               css::uno::RuntimeException);
+               css::uno::RuntimeException, std::exception);
 };
 
 } //  namespace chart

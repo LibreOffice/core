@@ -97,7 +97,7 @@ void OContainerMediator::impl_cleanup_nothrow()
     }
 }
 
-void SAL_CALL OContainerMediator::elementInserted( const ContainerEvent& _rEvent ) throw(RuntimeException)
+void SAL_CALL OContainerMediator::elementInserted( const ContainerEvent& _rEvent ) throw(RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     if ( _rEvent.Source == m_xSettings && m_xSettings.is() )
@@ -113,7 +113,7 @@ void SAL_CALL OContainerMediator::elementInserted( const ContainerEvent& _rEvent
     }
 }
 
-void SAL_CALL OContainerMediator::elementRemoved( const ContainerEvent& _rEvent ) throw(RuntimeException)
+void SAL_CALL OContainerMediator::elementRemoved( const ContainerEvent& _rEvent ) throw(RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     Reference< XContainer > xContainer = m_xContainer;
@@ -135,7 +135,7 @@ void SAL_CALL OContainerMediator::elementRemoved( const ContainerEvent& _rEvent 
     }
 }
 
-void SAL_CALL OContainerMediator::elementReplaced( const ContainerEvent& _rEvent ) throw(RuntimeException)
+void SAL_CALL OContainerMediator::elementReplaced( const ContainerEvent& _rEvent ) throw(RuntimeException, std::exception)
 {
     Reference< XContainer > xContainer = m_xContainer;
     if ( _rEvent.Source == xContainer && xContainer.is() )
@@ -167,7 +167,7 @@ void SAL_CALL OContainerMediator::elementReplaced( const ContainerEvent& _rEvent
     }
 }
 
-void SAL_CALL OContainerMediator::disposing( const EventObject& /*Source*/ ) throw(RuntimeException)
+void SAL_CALL OContainerMediator::disposing( const EventObject& /*Source*/ ) throw(RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 

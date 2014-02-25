@@ -51,10 +51,10 @@ public:
     virtual void SAL_CALL acquire() throw ();
     virtual void SAL_CALL release() throw ();
     virtual Any SAL_CALL queryInterface( Type const & type )
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
 
     // XInteractionContinuation
-    virtual void SAL_CALL select() throw (RuntimeException);
+    virtual void SAL_CALL select() throw (RuntimeException, std::exception);
 };
 
 // XInterface
@@ -72,7 +72,7 @@ void InteractionContinuationImpl::release() throw ()
 
 
 Any InteractionContinuationImpl::queryInterface( Type const & type )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     if (type.isAssignableFrom( m_type )) {
         Reference<task::XInteractionContinuation> xThis(this);
@@ -84,7 +84,7 @@ Any InteractionContinuationImpl::queryInterface( Type const & type )
 
 // XInteractionContinuation
 
-void InteractionContinuationImpl::select() throw (RuntimeException)
+void InteractionContinuationImpl::select() throw (RuntimeException, std::exception)
 {
     *m_pselect = true;
 }
@@ -106,21 +106,21 @@ public:
 
     // XInteractionRequest
     virtual Any SAL_CALL getRequest()
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
     virtual Sequence< Reference<task::XInteractionContinuation> >
-    SAL_CALL getContinuations() throw (RuntimeException);
+    SAL_CALL getContinuations() throw (RuntimeException, std::exception);
 };
 
 // XInteractionRequest
 
-Any InteractionRequest::getRequest() throw (RuntimeException)
+Any InteractionRequest::getRequest() throw (RuntimeException, std::exception)
 {
     return m_request;
 }
 
 
 Sequence< Reference< task::XInteractionContinuation > >
-InteractionRequest::getContinuations() throw (RuntimeException)
+InteractionRequest::getContinuations() throw (RuntimeException, std::exception)
 {
     return m_conts;
 }
@@ -163,7 +163,7 @@ bool interactContinuation( Any const & request,
 
 // XAbortChannel
 
-void AbortChannel::sendAbort() throw (RuntimeException)
+void AbortChannel::sendAbort() throw (RuntimeException, std::exception)
 {
     m_aborted = true;
     if (m_xNext.is())

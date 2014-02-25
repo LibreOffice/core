@@ -71,21 +71,21 @@ public: // XInterface
     virtual void SAL_CALL release() throw() { OComponentHelper::release(); }
     virtual com::sun::star::uno::Any  SAL_CALL queryInterface(
         const com::sun::star::uno::Type & reqType )
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
 public: // XColumnsSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL
-    getColumns(  ) throw (::com::sun::star::uno::RuntimeException);
+    getColumns(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 public: // XTypeProvider, first implemented by OPropertySetHelper
     virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL getTypes()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
     virtual com::sun::star::uno::Sequence< sal_Int8> SAL_CALL getImplementationId()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 
 public: // XDataDescriptorFactory
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL
-    createDataDescriptor(  ) throw (::com::sun::star::uno::RuntimeException);
+    createDataDescriptor(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 };
 
@@ -106,21 +106,21 @@ public: // XInterface
     virtual void SAL_CALL release() throw() { OComponentHelper::release(); }
     virtual com::sun::star::uno::Any  SAL_CALL queryInterface(
         const com::sun::star::uno::Type & reqType )
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
 public: // XColumnsSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL
-    getColumns(  ) throw (::com::sun::star::uno::RuntimeException);
+    getColumns(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 public: // XTypeProvider, first implemented by OPropertySetHelper
     virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL getTypes()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
     virtual com::sun::star::uno::Sequence< sal_Int8> SAL_CALL getImplementationId()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 
 public: // XDataDescriptorFactory
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL
-    createDataDescriptor(  ) throw (::com::sun::star::uno::RuntimeException);
+    createDataDescriptor(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 };
 

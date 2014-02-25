@@ -361,7 +361,7 @@ sal_Bool InformationDialog::execute()
 
 
 void OKActionListener::actionPerformed( const ActionEvent& rEvent )
-    throw ( com::sun::star::uno::RuntimeException )
+    throw ( com::sun::star::uno::RuntimeException, std::exception )
 {
     if ( rEvent.ActionCommand == "button" )
     {
@@ -369,7 +369,7 @@ void OKActionListener::actionPerformed( const ActionEvent& rEvent )
     }
 }
 void OKActionListener::disposing( const ::com::sun::star::lang::EventObject& /* Source */ )
-    throw ( com::sun::star::uno::RuntimeException )
+    throw ( com::sun::star::uno::RuntimeException, std::exception )
 {
 }
 

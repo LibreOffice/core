@@ -93,18 +93,18 @@ public:
     explicit LangGuess_Impl(css::uno::Reference< css::uno::XComponentContext > const & rxContext);
 
     // XServiceInfo implementation
-    virtual OUString SAL_CALL getImplementationName(  ) throw(RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw(RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException, std::exception);
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(RuntimeException, std::exception);
     static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(  );
 
     // XLanguageGuessing implementation
-    virtual ::com::sun::star::lang::Locale SAL_CALL guessPrimaryLanguage( const OUString& aText, ::sal_Int32 nStartPos, ::sal_Int32 nLen ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL disableLanguages( const ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale >& aLanguages ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL enableLanguages( const ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale >& aLanguages ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > SAL_CALL getAvailableLanguages(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > SAL_CALL getEnabledLanguages(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > SAL_CALL getDisabledLanguages(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::lang::Locale SAL_CALL guessPrimaryLanguage( const OUString& aText, ::sal_Int32 nStartPos, ::sal_Int32 nLen ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL disableLanguages( const ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale >& aLanguages ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL enableLanguages( const ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale >& aLanguages ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > SAL_CALL getAvailableLanguages(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > SAL_CALL getEnabledLanguages(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > SAL_CALL getDisabledLanguages(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // implementation specific
     void SetFingerPrintsDB( const OUString &fileName ) throw (RuntimeException);
@@ -175,7 +175,7 @@ Locale SAL_CALL LangGuess_Impl::guessPrimaryLanguage(
         const OUString& rText,
         ::sal_Int32 nStartPos,
         ::sal_Int32 nLen )
-    throw (lang::IllegalArgumentException, uno::RuntimeException)
+    throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLangGuessMutex() );
 
@@ -211,7 +211,7 @@ void LangGuess_Impl::SetFingerPrintsDB(
 }
 
 uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getAvailableLanguages(  )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLangGuessMutex() );
 
@@ -234,7 +234,7 @@ uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getAvailableLanguages(  )
 }
 
 uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getEnabledLanguages(  )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLangGuessMutex() );
 
@@ -257,7 +257,7 @@ uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getEnabledLanguages(  )
 }
 
 uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getDisabledLanguages(  )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLangGuessMutex() );
 
@@ -281,7 +281,7 @@ uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getDisabledLanguages(  )
 
 void SAL_CALL LangGuess_Impl::disableLanguages(
         const uno::Sequence< Locale >& rLanguages )
-    throw (lang::IllegalArgumentException, uno::RuntimeException)
+    throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLangGuessMutex() );
 
@@ -306,7 +306,7 @@ void SAL_CALL LangGuess_Impl::disableLanguages(
 
 void SAL_CALL LangGuess_Impl::enableLanguages(
         const uno::Sequence< Locale >& rLanguages )
-    throw (lang::IllegalArgumentException, uno::RuntimeException)
+    throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLangGuessMutex() );
 
@@ -330,20 +330,20 @@ void SAL_CALL LangGuess_Impl::enableLanguages(
 }
 
 OUString SAL_CALL LangGuess_Impl::getImplementationName(  )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLangGuessMutex() );
     return OUString( IMPLNAME );
 }
 
 sal_Bool SAL_CALL LangGuess_Impl::supportsService( const OUString& ServiceName )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence<OUString> SAL_CALL LangGuess_Impl::getSupportedServiceNames(  )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLangGuessMutex() );
     return getSupportedServiceNames_Static();

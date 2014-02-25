@@ -52,17 +52,17 @@ namespace framework{
 
 #define PRIVATE_DEFINE_XSERVICEINFO_BASE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )                                                  \
                                                                                                                                                     \
-    OUString SAL_CALL CLASS::getImplementationName() throw( css::uno::RuntimeException )                                                            \
+    OUString SAL_CALL CLASS::getImplementationName() throw( css::uno::RuntimeException, std::exception )                                                            \
     {                                                                                                                                               \
         return impl_getStaticImplementationName();                                                                                                  \
     }                                                                                                                                               \
                                                                                                                                                     \
-    sal_Bool SAL_CALL CLASS::supportsService( const OUString& sServiceName ) throw( css::uno::RuntimeException )                                    \
+    sal_Bool SAL_CALL CLASS::supportsService( const OUString& sServiceName ) throw( css::uno::RuntimeException, std::exception )                                    \
     {                                                                                                                                               \
         return cppu::supportsService(this, sServiceName);                                                                                           \
     }                                                                                                                                               \
                                                                                                                                                     \
-    css::uno::Sequence< OUString > SAL_CALL CLASS::getSupportedServiceNames() throw( css::uno::RuntimeException )                                   \
+    css::uno::Sequence< OUString > SAL_CALL CLASS::getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception )                                   \
     {                                                                                                                                               \
         return impl_getStaticSupportedServiceNames();                                                                                               \
     }                                                                                                                                               \
@@ -145,9 +145,9 @@ namespace framework{
 
 #define DECLARE_XSERVICEINFO_NOFACTORY                                                                                                                                                                                                  \
     /* interface XServiceInfo */                                                                                                                                                                                                        \
-    virtual OUString                                        SAL_CALL getImplementationName              (                                                                               ) throw( css::uno::RuntimeException );   \
-    virtual sal_Bool                                               SAL_CALL supportsService                    ( const OUString&                                        sServiceName    ) throw( css::uno::RuntimeException );   \
-    virtual css::uno::Sequence< OUString >                  SAL_CALL getSupportedServiceNames           (                                                                               ) throw( css::uno::RuntimeException );   \
+    virtual OUString                                        SAL_CALL getImplementationName              (                                                                               ) throw( css::uno::RuntimeException, std::exception );   \
+    virtual sal_Bool                                               SAL_CALL supportsService                    ( const OUString&                                        sServiceName    ) throw( css::uno::RuntimeException, std::exception );   \
+    virtual css::uno::Sequence< OUString >                  SAL_CALL getSupportedServiceNames           (                                                                               ) throw( css::uno::RuntimeException, std::exception );   \
     /* Helper for XServiceInfo */                                                                                                                                                                                                       \
     static css::uno::Sequence< OUString >                   SAL_CALL impl_getStaticSupportedServiceNames(                                                                               );                                       \
     static OUString                                         SAL_CALL impl_getStaticImplementationName   (                                                                               );                                       \

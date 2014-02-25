@@ -14,12 +14,12 @@
 
 using namespace ::com::sun::star;
 
-void MtfRenderer::setMetafile (const uno::Sequence< sal_Int8 >& /*rMtf*/) throw (uno::RuntimeException)
+void MtfRenderer::setMetafile (const uno::Sequence< sal_Int8 >& /*rMtf*/) throw (uno::RuntimeException, std::exception)
 {
         // printf ("MtfRenderer::setMetafile unimplemented, use fast property set or implement me\n");
 }
 
-void MtfRenderer::draw (double fScaleX, double fScaleY) throw (uno::RuntimeException)
+void MtfRenderer::draw (double fScaleX, double fScaleY) throw (uno::RuntimeException, std::exception)
 {
     if (mpMetafile && mxCanvas.get()) {
         cppcanvas::VCLFactory& factory = cppcanvas::VCLFactory::getInstance();
@@ -32,7 +32,7 @@ void MtfRenderer::draw (double fScaleX, double fScaleY) throw (uno::RuntimeExcep
     }
 }
 
-void MtfRenderer::setFastPropertyValue( sal_Int32 nHandle, const uno::Any& aAny)  throw (uno::RuntimeException)
+void MtfRenderer::setFastPropertyValue( sal_Int32 nHandle, const uno::Any& aAny)  throw (uno::RuntimeException, std::exception)
 {
     if (nHandle == 0) {
         mpMetafile = (GDIMetaFile*) *reinterpret_cast<const sal_Int64*>(aAny.getValue());

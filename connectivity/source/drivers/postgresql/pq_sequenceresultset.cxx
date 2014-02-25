@@ -86,13 +86,13 @@ SequenceResultSet::~SequenceResultSet()
 }
 
 void SequenceResultSet::close(  )
-    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     // a noop
 }
 
 Reference< XResultSetMetaData > SAL_CALL SequenceResultSet::getMetaData(  )
-    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     if( ! m_meta.is() )
     {
@@ -110,7 +110,7 @@ Reference< XResultSetMetaData > SAL_CALL SequenceResultSet::getMetaData(  )
 
 sal_Int32 SAL_CALL SequenceResultSet::findColumn(
     const OUString& columnName )
-    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     // no need to guard, as all members are readonly !
     for( int i = 0 ;i < m_fieldCount ; i ++ )

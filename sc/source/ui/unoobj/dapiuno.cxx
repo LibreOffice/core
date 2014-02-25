@@ -361,7 +361,7 @@ ScDataPilotTableObj* ScDataPilotTablesObj::GetObjectByName_Impl(const OUString& 
 }
 
 Reference<XDataPilotDescriptor> SAL_CALL ScDataPilotTablesObj::createDataPilotDescriptor()
-                                            throw(RuntimeException)
+                                            throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (pDocShell)
@@ -448,7 +448,7 @@ void SAL_CALL ScDataPilotTablesObj::insertNewByName( const OUString& aNewName,
 }
 
 void SAL_CALL ScDataPilotTablesObj::removeByName( const OUString& aName )
-                                        throw(RuntimeException)
+                                        throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     OUString aNameStr(aName);
@@ -464,7 +464,7 @@ void SAL_CALL ScDataPilotTablesObj::removeByName( const OUString& aName )
 
 // XEnumerationAccess
 
-Reference< XEnumeration > SAL_CALL ScDataPilotTablesObj::createEnumeration() throw(RuntimeException)
+Reference< XEnumeration > SAL_CALL ScDataPilotTablesObj::createEnumeration() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.DataPilotTablesEnumeration"));
@@ -472,7 +472,7 @@ Reference< XEnumeration > SAL_CALL ScDataPilotTablesObj::createEnumeration() thr
 
 // XIndexAccess
 
-sal_Int32 SAL_CALL ScDataPilotTablesObj::getCount() throw(RuntimeException)
+sal_Int32 SAL_CALL ScDataPilotTablesObj::getCount() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( pDocShell )
@@ -499,7 +499,7 @@ sal_Int32 SAL_CALL ScDataPilotTablesObj::getCount() throw(RuntimeException)
 }
 
 Any SAL_CALL ScDataPilotTablesObj::getByIndex( sal_Int32 nIndex )
-        throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
+        throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     Reference<XDataPilotTable2> xTable(GetObjectByIndex_Impl(nIndex));
@@ -508,13 +508,13 @@ Any SAL_CALL ScDataPilotTablesObj::getByIndex( sal_Int32 nIndex )
     return Any( xTable );
 }
 
-uno::Type SAL_CALL ScDataPilotTablesObj::getElementType() throw(RuntimeException)
+uno::Type SAL_CALL ScDataPilotTablesObj::getElementType() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return getCppuType((Reference<XDataPilotTable2>*)0);
 }
 
-sal_Bool SAL_CALL ScDataPilotTablesObj::hasElements() throw(RuntimeException)
+sal_Bool SAL_CALL ScDataPilotTablesObj::hasElements() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
@@ -523,7 +523,7 @@ sal_Bool SAL_CALL ScDataPilotTablesObj::hasElements() throw(RuntimeException)
 // XNameAccess
 
 Any SAL_CALL ScDataPilotTablesObj::getByName( const OUString& aName )
-        throw(NoSuchElementException, WrappedTargetException, RuntimeException)
+        throw(NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     Reference<XDataPilotTable2> xTable(GetObjectByName_Impl(aName));
@@ -533,7 +533,7 @@ Any SAL_CALL ScDataPilotTablesObj::getByName( const OUString& aName )
 }
 
 Sequence<OUString> SAL_CALL ScDataPilotTablesObj::getElementNames()
-                                                throw(RuntimeException)
+                                                throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (pDocShell)
@@ -571,7 +571,7 @@ Sequence<OUString> SAL_CALL ScDataPilotTablesObj::getElementNames()
 }
 
 sal_Bool SAL_CALL ScDataPilotTablesObj::hasByName( const OUString& aName )
-                                        throw(RuntimeException)
+                                        throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (pDocShell)
@@ -609,7 +609,7 @@ ScDataPilotDescriptorBase::~ScDataPilotDescriptorBase()
 }
 
 Any SAL_CALL ScDataPilotDescriptorBase::queryInterface( const uno::Type& rType )
-                                                throw(RuntimeException)
+                                                throw(RuntimeException, std::exception)
 {
     SC_QUERYINTERFACE( XDataPilotDescriptor )
     SC_QUERYINTERFACE( XPropertySet )
@@ -633,7 +633,7 @@ void SAL_CALL ScDataPilotDescriptorBase::release() throw()
 }
 
 Sequence< uno::Type > SAL_CALL ScDataPilotDescriptorBase::getTypes()
-                                                    throw(RuntimeException)
+                                                    throw(RuntimeException, std::exception)
 {
     static Sequence< uno::Type > aTypes;
     if ( aTypes.getLength() == 0 )
@@ -656,7 +656,7 @@ namespace
 }
 
 Sequence<sal_Int8> SAL_CALL ScDataPilotDescriptorBase::getImplementationId()
-                                                    throw(RuntimeException)
+                                                    throw(RuntimeException, std::exception)
 {
     return theScDataPilotDescriptorBaseImplementationId::get().getSeq();
 }
@@ -675,7 +675,7 @@ void ScDataPilotDescriptorBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 // XDataPilotDescriptor
 
 CellRangeAddress SAL_CALL ScDataPilotDescriptorBase::getSourceRange()
-                                            throw(RuntimeException)
+                                            throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -689,7 +689,7 @@ CellRangeAddress SAL_CALL ScDataPilotDescriptorBase::getSourceRange()
     return aRet;
 }
 
-void SAL_CALL ScDataPilotDescriptorBase::setSourceRange( const CellRangeAddress& aSourceRange ) throw(RuntimeException)
+void SAL_CALL ScDataPilotDescriptorBase::setSourceRange( const CellRangeAddress& aSourceRange ) throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -709,49 +709,49 @@ void SAL_CALL ScDataPilotDescriptorBase::setSourceRange( const CellRangeAddress&
 }
 
 Reference<XSheetFilterDescriptor> SAL_CALL ScDataPilotDescriptorBase::getFilterDescriptor()
-                                                throw(RuntimeException)
+                                                throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return new ScDataPilotFilterDescriptor( pDocShell, this );
 }
 
 Reference<XIndexAccess> SAL_CALL ScDataPilotDescriptorBase::getDataPilotFields()
-                                                throw(RuntimeException)
+                                                throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return new ScDataPilotFieldsObj( *this );
 }
 
 Reference<XIndexAccess> SAL_CALL ScDataPilotDescriptorBase::getColumnFields()
-                                                throw(RuntimeException)
+                                                throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return new ScDataPilotFieldsObj( *this, DataPilotFieldOrientation_COLUMN );
 }
 
 Reference<XIndexAccess> SAL_CALL ScDataPilotDescriptorBase::getRowFields()
-                                                throw(RuntimeException)
+                                                throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return new ScDataPilotFieldsObj( *this, DataPilotFieldOrientation_ROW );
 }
 
 Reference<XIndexAccess> SAL_CALL ScDataPilotDescriptorBase::getPageFields()
-                                                throw(RuntimeException)
+                                                throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return new ScDataPilotFieldsObj( *this, DataPilotFieldOrientation_PAGE );
 }
 
 Reference<XIndexAccess> SAL_CALL ScDataPilotDescriptorBase::getDataFields()
-                                                throw(RuntimeException)
+                                                throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return new ScDataPilotFieldsObj( *this, DataPilotFieldOrientation_DATA );
 }
 
 Reference<XIndexAccess> SAL_CALL ScDataPilotDescriptorBase::getHiddenFields()
-                                                throw(RuntimeException)
+                                                throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return new ScDataPilotFieldsObj( *this, DataPilotFieldOrientation_HIDDEN );
@@ -759,7 +759,7 @@ Reference<XIndexAccess> SAL_CALL ScDataPilotDescriptorBase::getHiddenFields()
 
 // XPropertySet
 Reference< XPropertySetInfo > SAL_CALL ScDataPilotDescriptorBase::getPropertySetInfo(  )
-                                                throw(RuntimeException)
+                                                throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     static Reference<XPropertySetInfo> aRef =
@@ -769,7 +769,7 @@ Reference< XPropertySetInfo > SAL_CALL ScDataPilotDescriptorBase::getPropertySet
 
 void SAL_CALL ScDataPilotDescriptorBase::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
         throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException,
-                WrappedTargetException, RuntimeException)
+                WrappedTargetException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDPObject* pDPObject = GetDPObject();
@@ -1029,25 +1029,25 @@ Any SAL_CALL ScDataPilotDescriptorBase::getPropertyValue( const OUString& aPrope
 
 void SAL_CALL ScDataPilotDescriptorBase::addPropertyChangeListener(
         const OUString& /* aPropertyName */, const Reference<XPropertyChangeListener >& /* xListener */ )
-        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+        throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL ScDataPilotDescriptorBase::removePropertyChangeListener(
         const OUString& /* aPropertyName */, const Reference<XPropertyChangeListener >& /* aListener */ )
-        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+        throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL ScDataPilotDescriptorBase::addVetoableChangeListener(
         const OUString& /* PropertyName */, const Reference<XVetoableChangeListener >& /* aListener */ )
-        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+        throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL ScDataPilotDescriptorBase::removeVetoableChangeListener(
         const OUString& /* PropertyName */, const Reference<XVetoableChangeListener >& /* aListener */ )
-        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+        throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
 
@@ -1074,7 +1074,7 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotDescriptorBase::getDataLayoutFi
 // XUnoTunnel
 
 sal_Int64 SAL_CALL ScDataPilotDescriptorBase::getSomething(
-                const Sequence<sal_Int8 >& rId ) throw(RuntimeException)
+                const Sequence<sal_Int8 >& rId ) throw(RuntimeException, std::exception)
 {
     if ( rId.getLength() == 16 &&
           0 == memcmp( getUnoTunnelId().getConstArray(),
@@ -1120,7 +1120,7 @@ ScDataPilotTableObj::~ScDataPilotTableObj()
 }
 
 Any SAL_CALL ScDataPilotTableObj::queryInterface( const uno::Type& rType )
-                                                throw(RuntimeException)
+                                                throw(RuntimeException, std::exception)
 {
     // since we manually do resolve the query for XDataPilotTable2
     // we also need to do the same for XDataPilotTable
@@ -1141,7 +1141,7 @@ void SAL_CALL ScDataPilotTableObj::release() throw()
     ScDataPilotDescriptorBase::release();
 }
 
-Sequence< uno::Type > SAL_CALL ScDataPilotTableObj::getTypes() throw(RuntimeException)
+Sequence< uno::Type > SAL_CALL ScDataPilotTableObj::getTypes() throw(RuntimeException, std::exception)
 {
     static Sequence< uno::Type > aTypes;
     if ( aTypes.getLength() == 0 )
@@ -1167,7 +1167,7 @@ namespace
 }
 
 Sequence<sal_Int8> SAL_CALL ScDataPilotTableObj::getImplementationId()
-                                                    throw(RuntimeException)
+                                                    throw(RuntimeException, std::exception)
 {
     return theScDataPilotTableObjImplementationId::get().getSeq();
 }
@@ -1191,7 +1191,7 @@ void ScDataPilotTableObj::SetDPObject( ScDPObject* pDPObject )
 
 // "rest of XDataPilotDescriptor"
 
-OUString SAL_CALL ScDataPilotTableObj::getName() throw(RuntimeException)
+OUString SAL_CALL ScDataPilotTableObj::getName() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDPObject* pDPObj = lcl_GetDPObject(GetDocShell(), nTab, aName);
@@ -1201,7 +1201,7 @@ OUString SAL_CALL ScDataPilotTableObj::getName() throw(RuntimeException)
 }
 
 void SAL_CALL ScDataPilotTableObj::setName( const OUString& aNewName )
-                                                throw(RuntimeException)
+                                                throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDPObject* pDPObj = lcl_GetDPObject(GetDocShell(), nTab, aName);
@@ -1218,7 +1218,7 @@ void SAL_CALL ScDataPilotTableObj::setName( const OUString& aNewName )
     }
 }
 
-OUString SAL_CALL ScDataPilotTableObj::getTag() throw(RuntimeException)
+OUString SAL_CALL ScDataPilotTableObj::getTag() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDPObject* pDPObj = lcl_GetDPObject(GetDocShell(), nTab, aName);
@@ -1228,7 +1228,7 @@ OUString SAL_CALL ScDataPilotTableObj::getTag() throw(RuntimeException)
 }
 
 void SAL_CALL ScDataPilotTableObj::setTag( const OUString& aNewTag )
-                                                throw(RuntimeException)
+                                                throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDPObject* pDPObj = lcl_GetDPObject(GetDocShell(), nTab, aName);
@@ -1243,7 +1243,7 @@ void SAL_CALL ScDataPilotTableObj::setTag( const OUString& aNewTag )
 
 // XDataPilotTable
 
-CellRangeAddress SAL_CALL ScDataPilotTableObj::getOutputRange() throw(RuntimeException)
+CellRangeAddress SAL_CALL ScDataPilotTableObj::getOutputRange() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     CellRangeAddress aRet;
@@ -1260,7 +1260,7 @@ CellRangeAddress SAL_CALL ScDataPilotTableObj::getOutputRange() throw(RuntimeExc
     return aRet;
 }
 
-void SAL_CALL ScDataPilotTableObj::refresh() throw(RuntimeException)
+void SAL_CALL ScDataPilotTableObj::refresh() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDPObject* pDPObj = lcl_GetDPObject(GetDocShell(), nTab, aName);
@@ -1272,7 +1272,7 @@ void SAL_CALL ScDataPilotTableObj::refresh() throw(RuntimeException)
 }
 
 Sequence< Sequence<Any> > SAL_CALL ScDataPilotTableObj::getDrillDownData(const CellAddress& aAddr)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     Sequence< Sequence<Any> > aTabData;
@@ -1286,7 +1286,7 @@ Sequence< Sequence<Any> > SAL_CALL ScDataPilotTableObj::getDrillDownData(const C
 }
 
 DataPilotTablePositionData SAL_CALL ScDataPilotTableObj::getPositionData(const CellAddress& aAddr)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     DataPilotTablePositionData aPosData;
@@ -1300,7 +1300,7 @@ DataPilotTablePositionData SAL_CALL ScDataPilotTableObj::getPositionData(const C
 }
 
 void SAL_CALL ScDataPilotTableObj::insertDrillDownSheet(const CellAddress& aAddr)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDPObject* pDPObj = GetDPObject();
@@ -1314,7 +1314,7 @@ void SAL_CALL ScDataPilotTableObj::insertDrillDownSheet(const CellAddress& aAddr
 }
 
 CellRangeAddress SAL_CALL ScDataPilotTableObj::getOutputRangeByType( sal_Int32 nType )
-    throw (IllegalArgumentException, RuntimeException)
+    throw (IllegalArgumentException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (nType < 0 || nType > DataPilotOutputRangeType::RESULT)
@@ -1341,7 +1341,7 @@ void SAL_CALL ScDataPilotTableObj::addModifyListener( const uno::Reference<util:
 }
 
 void SAL_CALL ScDataPilotTableObj::removeModifyListener( const uno::Reference<util::XModifyListener>& aListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1447,27 +1447,27 @@ void ScDataPilotDescriptor::SetDPObject( ScDPObject* pDPObject )
 
 // "rest of XDataPilotDescriptor"
 
-OUString SAL_CALL ScDataPilotDescriptor::getName() throw(RuntimeException)
+OUString SAL_CALL ScDataPilotDescriptor::getName() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return mpDPObject->GetName();
 }
 
 void SAL_CALL ScDataPilotDescriptor::setName( const OUString& aNewName )
-                                                throw(RuntimeException)
+                                                throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     mpDPObject->SetName( aNewName );
 }
 
-OUString SAL_CALL ScDataPilotDescriptor::getTag() throw(RuntimeException)
+OUString SAL_CALL ScDataPilotDescriptor::getTag() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return mpDPObject->GetTag();
 }
 
 void SAL_CALL ScDataPilotDescriptor::setTag( const OUString& aNewTag )
-                                                throw(RuntimeException)
+                                                throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     mpDPObject->SetTag( aNewTag );
@@ -1743,7 +1743,7 @@ ScDataPilotFieldObj* ScDataPilotFieldsObj::GetObjectByName_Impl(const OUString& 
 // XEnumerationAccess
 
 Reference<XEnumeration> SAL_CALL ScDataPilotFieldsObj::createEnumeration()
-                                                    throw(RuntimeException)
+                                                    throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.DataPilotFieldsEnumeration"));
@@ -1751,7 +1751,7 @@ Reference<XEnumeration> SAL_CALL ScDataPilotFieldsObj::createEnumeration()
 
 // XIndexAccess
 
-sal_Int32 SAL_CALL ScDataPilotFieldsObj::getCount() throw(RuntimeException)
+sal_Int32 SAL_CALL ScDataPilotFieldsObj::getCount() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 // TODO
@@ -1760,7 +1760,7 @@ sal_Int32 SAL_CALL ScDataPilotFieldsObj::getCount() throw(RuntimeException)
 }
 
 Any SAL_CALL ScDataPilotFieldsObj::getByIndex( sal_Int32 nIndex )
-        throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
+        throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     Reference< XPropertySet > xField( GetObjectByIndex_Impl( nIndex ) );
@@ -1769,20 +1769,20 @@ Any SAL_CALL ScDataPilotFieldsObj::getByIndex( sal_Int32 nIndex )
     return Any( xField );
 }
 
-uno::Type SAL_CALL ScDataPilotFieldsObj::getElementType() throw(RuntimeException)
+uno::Type SAL_CALL ScDataPilotFieldsObj::getElementType() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return getCppuType((Reference<XPropertySet>*)0);
 }
 
-sal_Bool SAL_CALL ScDataPilotFieldsObj::hasElements() throw(RuntimeException)
+sal_Bool SAL_CALL ScDataPilotFieldsObj::hasElements() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
 }
 
 Any SAL_CALL ScDataPilotFieldsObj::getByName( const OUString& aName )
-        throw(NoSuchElementException, WrappedTargetException, RuntimeException)
+        throw(NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     Reference<XPropertySet> xField(GetObjectByName_Impl(aName));
@@ -1792,7 +1792,7 @@ Any SAL_CALL ScDataPilotFieldsObj::getByName( const OUString& aName )
 }
 
 Sequence<OUString> SAL_CALL ScDataPilotFieldsObj::getElementNames()
-                                                throw(RuntimeException)
+                                                throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 // TODO
@@ -1817,7 +1817,7 @@ Sequence<OUString> SAL_CALL ScDataPilotFieldsObj::getElementNames()
 }
 
 sal_Bool SAL_CALL ScDataPilotFieldsObj::hasByName( const OUString& aName )
-                                        throw(RuntimeException)
+                                        throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1883,7 +1883,7 @@ void SAL_CALL ScDataPilotFieldObj::setName(const OUString& rName)
 // XPropertySet
 
 Reference<XPropertySetInfo> SAL_CALL ScDataPilotFieldObj::getPropertySetInfo()
-                                                        throw(RuntimeException)
+                                                        throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     static Reference<XPropertySetInfo> aRef(
@@ -2054,7 +2054,7 @@ Any SAL_CALL ScDataPilotFieldObj::getPropertyValue( const OUString& aPropertyNam
 // XDatePilotField
 
 Reference<XIndexAccess> SAL_CALL ScDataPilotFieldObj::getItems()
-                throw (RuntimeException)
+                throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (!mxItems.is())
@@ -2888,7 +2888,7 @@ ScDataPilotFieldGroupsObj::~ScDataPilotFieldGroupsObj()
 // XNameAccess
 
 Any SAL_CALL ScDataPilotFieldGroupsObj::getByName( const OUString& rName )
-        throw(NoSuchElementException, WrappedTargetException, RuntimeException)
+        throw(NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if( implFindByName( rName ) == maGroups.end() )
@@ -2896,7 +2896,7 @@ Any SAL_CALL ScDataPilotFieldGroupsObj::getByName( const OUString& rName )
     return Any( Reference< XNameAccess >( new ScDataPilotFieldGroupObj( *this, rName ) ) );
 }
 
-Sequence< OUString > SAL_CALL ScDataPilotFieldGroupsObj::getElementNames() throw(RuntimeException)
+Sequence< OUString > SAL_CALL ScDataPilotFieldGroupsObj::getElementNames() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     Sequence< OUString > aSeq;
@@ -2910,7 +2910,7 @@ Sequence< OUString > SAL_CALL ScDataPilotFieldGroupsObj::getElementNames() throw
     return aSeq;
 }
 
-sal_Bool SAL_CALL ScDataPilotFieldGroupsObj::hasByName( const OUString& rName ) throw(RuntimeException)
+sal_Bool SAL_CALL ScDataPilotFieldGroupsObj::hasByName( const OUString& rName ) throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return implFindByName( rName ) != maGroups.end();
@@ -2919,7 +2919,7 @@ sal_Bool SAL_CALL ScDataPilotFieldGroupsObj::hasByName( const OUString& rName ) 
 // XNameReplace
 
 void SAL_CALL ScDataPilotFieldGroupsObj::replaceByName( const OUString& rName, const Any& rElement )
-        throw (IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
+        throw (IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2942,7 +2942,7 @@ void SAL_CALL ScDataPilotFieldGroupsObj::replaceByName( const OUString& rName, c
 // XNameContainer
 
 void SAL_CALL ScDataPilotFieldGroupsObj::insertByName( const OUString& rName, const Any& rElement )
-        throw (IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
+        throw (IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2966,7 +2966,7 @@ void SAL_CALL ScDataPilotFieldGroupsObj::insertByName( const OUString& rName, co
 }
 
 void SAL_CALL ScDataPilotFieldGroupsObj::removeByName( const OUString& rName )
-        throw (NoSuchElementException, WrappedTargetException, RuntimeException)
+        throw (NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2982,14 +2982,14 @@ void SAL_CALL ScDataPilotFieldGroupsObj::removeByName( const OUString& rName )
 
 // XIndexAccess
 
-sal_Int32 SAL_CALL ScDataPilotFieldGroupsObj::getCount() throw(RuntimeException)
+sal_Int32 SAL_CALL ScDataPilotFieldGroupsObj::getCount() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return static_cast< sal_Int32 >( maGroups.size() );
 }
 
 Any SAL_CALL ScDataPilotFieldGroupsObj::getByIndex( sal_Int32 nIndex )
-        throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
+        throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ((nIndex < 0) || (nIndex >= static_cast< sal_Int32 >( maGroups.size() )))
@@ -2999,7 +2999,7 @@ Any SAL_CALL ScDataPilotFieldGroupsObj::getByIndex( sal_Int32 nIndex )
 
 // XEnumerationAccess
 
-Reference<XEnumeration> SAL_CALL ScDataPilotFieldGroupsObj::createEnumeration() throw(RuntimeException)
+Reference<XEnumeration> SAL_CALL ScDataPilotFieldGroupsObj::createEnumeration() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return new ScIndexEnumeration( this, OUString( "com.sun.star.sheet.DataPilotFieldGroupsEnumeration" ) );
@@ -3007,13 +3007,13 @@ Reference<XEnumeration> SAL_CALL ScDataPilotFieldGroupsObj::createEnumeration() 
 
 // XElementAccess
 
-uno::Type SAL_CALL ScDataPilotFieldGroupsObj::getElementType() throw(RuntimeException)
+uno::Type SAL_CALL ScDataPilotFieldGroupsObj::getElementType() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return getCppuType( (Reference< XNameAccess >*)0 );
 }
 
-sal_Bool SAL_CALL ScDataPilotFieldGroupsObj::hasElements() throw(RuntimeException)
+sal_Bool SAL_CALL ScDataPilotFieldGroupsObj::hasElements() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return !maGroups.empty();
@@ -3084,7 +3084,7 @@ ScDataPilotFieldGroupObj::~ScDataPilotFieldGroupObj()
 // XNameAccess
 
 Any SAL_CALL ScDataPilotFieldGroupObj::getByName( const OUString& rName )
-        throw(NoSuchElementException, WrappedTargetException, RuntimeException)
+        throw(NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScFieldGroupMembers& rMembers = mrParent.getFieldGroup( maGroupName ).maMembers;
@@ -3094,13 +3094,13 @@ Any SAL_CALL ScDataPilotFieldGroupObj::getByName( const OUString& rName )
     return Any( Reference< XNamed >( new ScDataPilotFieldGroupItemObj( *this, *aIt ) ) );
 }
 
-Sequence< OUString > SAL_CALL ScDataPilotFieldGroupObj::getElementNames() throw(RuntimeException)
+Sequence< OUString > SAL_CALL ScDataPilotFieldGroupObj::getElementNames() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return ::comphelper::containerToSequence( mrParent.getFieldGroup( maGroupName ).maMembers );
 }
 
-sal_Bool SAL_CALL ScDataPilotFieldGroupObj::hasByName( const OUString& rName ) throw(RuntimeException)
+sal_Bool SAL_CALL ScDataPilotFieldGroupObj::hasByName( const OUString& rName ) throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScFieldGroupMembers& rMembers = mrParent.getFieldGroup( maGroupName ).maMembers;
@@ -3110,7 +3110,7 @@ sal_Bool SAL_CALL ScDataPilotFieldGroupObj::hasByName( const OUString& rName ) t
 // XNameReplace
 
 void SAL_CALL ScDataPilotFieldGroupObj::replaceByName( const OUString& rName, const Any& rElement )
-        throw (IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
+        throw (IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -3136,7 +3136,7 @@ void SAL_CALL ScDataPilotFieldGroupObj::replaceByName( const OUString& rName, co
 // XNameContainer
 
 void SAL_CALL ScDataPilotFieldGroupObj::insertByName( const OUString& rName, const Any& /*rElement*/ )
-        throw (IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
+        throw (IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -3153,7 +3153,7 @@ void SAL_CALL ScDataPilotFieldGroupObj::insertByName( const OUString& rName, con
 }
 
 void SAL_CALL ScDataPilotFieldGroupObj::removeByName( const OUString& rName )
-        throw (NoSuchElementException, WrappedTargetException, RuntimeException)
+        throw (NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -3169,14 +3169,14 @@ void SAL_CALL ScDataPilotFieldGroupObj::removeByName( const OUString& rName )
 
 // XIndexAccess
 
-sal_Int32 SAL_CALL ScDataPilotFieldGroupObj::getCount() throw(RuntimeException)
+sal_Int32 SAL_CALL ScDataPilotFieldGroupObj::getCount() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return static_cast< sal_Int32 >( mrParent.getFieldGroup( maGroupName ).maMembers.size() );
 }
 
 Any SAL_CALL ScDataPilotFieldGroupObj::getByIndex( sal_Int32 nIndex )
-        throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
+        throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScFieldGroupMembers& rMembers = mrParent.getFieldGroup( maGroupName ).maMembers;
@@ -3187,7 +3187,7 @@ Any SAL_CALL ScDataPilotFieldGroupObj::getByIndex( sal_Int32 nIndex )
 
 // XEnumerationAccess
 
-Reference< XEnumeration > SAL_CALL ScDataPilotFieldGroupObj::createEnumeration() throw(RuntimeException)
+Reference< XEnumeration > SAL_CALL ScDataPilotFieldGroupObj::createEnumeration() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return new ScIndexEnumeration( this, OUString( "com.sun.star.sheet.DataPilotFieldGroupEnumeration" ) );
@@ -3195,13 +3195,13 @@ Reference< XEnumeration > SAL_CALL ScDataPilotFieldGroupObj::createEnumeration()
 
 // XElementAccess
 
-uno::Type SAL_CALL ScDataPilotFieldGroupObj::getElementType() throw(RuntimeException)
+uno::Type SAL_CALL ScDataPilotFieldGroupObj::getElementType() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return getCppuType( (Reference< XNamed >*)0 );
 }
 
-sal_Bool SAL_CALL ScDataPilotFieldGroupObj::hasElements() throw(RuntimeException)
+sal_Bool SAL_CALL ScDataPilotFieldGroupObj::hasElements() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return !mrParent.getFieldGroup( maGroupName ).maMembers.empty();
@@ -3209,13 +3209,13 @@ sal_Bool SAL_CALL ScDataPilotFieldGroupObj::hasElements() throw(RuntimeException
 
 // XNamed
 
-OUString SAL_CALL ScDataPilotFieldGroupObj::getName() throw(RuntimeException)
+OUString SAL_CALL ScDataPilotFieldGroupObj::getName() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return maGroupName;
 }
 
-void SAL_CALL ScDataPilotFieldGroupObj::setName( const OUString& rName ) throw(RuntimeException)
+void SAL_CALL ScDataPilotFieldGroupObj::setName( const OUString& rName ) throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     mrParent.renameFieldGroup( maGroupName, rName );
@@ -3239,13 +3239,13 @@ ScDataPilotFieldGroupItemObj::~ScDataPilotFieldGroupItemObj()
 
 // XNamed
 
-OUString SAL_CALL ScDataPilotFieldGroupItemObj::getName() throw(RuntimeException)
+OUString SAL_CALL ScDataPilotFieldGroupItemObj::getName() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return maName;
 }
 
-void SAL_CALL ScDataPilotFieldGroupItemObj::setName( const OUString& rName ) throw(RuntimeException)
+void SAL_CALL ScDataPilotFieldGroupItemObj::setName( const OUString& rName ) throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     mrParent.replaceByName( maName, Any( rName ) );
@@ -3275,7 +3275,7 @@ ScDataPilotItemObj* ScDataPilotItemsObj::GetObjectByIndex_Impl( sal_Int32 nIndex
 // XNameAccess
 
 Any SAL_CALL ScDataPilotItemsObj::getByName( const OUString& aName )
-        throw(NoSuchElementException, WrappedTargetException, RuntimeException)
+        throw(NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     Reference<XNameAccess> xMembers = GetMembers();
@@ -3299,7 +3299,7 @@ Any SAL_CALL ScDataPilotItemsObj::getByName( const OUString& aName )
 }
 
 Sequence<OUString> SAL_CALL ScDataPilotItemsObj::getElementNames()
-                                                throw(RuntimeException)
+                                                throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     Sequence< OUString > aSeq;
@@ -3309,7 +3309,7 @@ Sequence<OUString> SAL_CALL ScDataPilotItemsObj::getElementNames()
 }
 
 sal_Bool SAL_CALL ScDataPilotItemsObj::hasByName( const OUString& aName )
-                                        throw(RuntimeException)
+                                        throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     sal_Bool bFound = false;
@@ -3334,7 +3334,7 @@ sal_Bool SAL_CALL ScDataPilotItemsObj::hasByName( const OUString& aName )
 // XEnumerationAccess
 
 Reference<XEnumeration> SAL_CALL ScDataPilotItemsObj::createEnumeration()
-                                                    throw(RuntimeException)
+                                                    throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.DataPilotItemsEnumeration"));
@@ -3342,14 +3342,14 @@ Reference<XEnumeration> SAL_CALL ScDataPilotItemsObj::createEnumeration()
 
 // XIndexAccess
 
-sal_Int32 SAL_CALL ScDataPilotItemsObj::getCount() throw(RuntimeException)
+sal_Int32 SAL_CALL ScDataPilotItemsObj::getCount() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return GetMemberCount();
 }
 
 Any SAL_CALL ScDataPilotItemsObj::getByIndex( sal_Int32 nIndex )
-        throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
+        throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     Reference< XPropertySet > xItem( GetObjectByIndex_Impl( nIndex ) );
@@ -3358,13 +3358,13 @@ Any SAL_CALL ScDataPilotItemsObj::getByIndex( sal_Int32 nIndex )
     return Any( xItem );
 }
 
-uno::Type SAL_CALL ScDataPilotItemsObj::getElementType() throw(RuntimeException)
+uno::Type SAL_CALL ScDataPilotItemsObj::getElementType() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return getCppuType((Reference<XPropertySet>*)0);
 }
 
-sal_Bool SAL_CALL ScDataPilotItemsObj::hasElements() throw(RuntimeException)
+sal_Bool SAL_CALL ScDataPilotItemsObj::hasElements() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
@@ -3384,7 +3384,7 @@ ScDataPilotItemObj::~ScDataPilotItemObj()
 }
 
                             // XNamed
-OUString SAL_CALL ScDataPilotItemObj::getName() throw(RuntimeException)
+OUString SAL_CALL ScDataPilotItemObj::getName() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     OUString sRet;
@@ -3403,14 +3403,14 @@ OUString SAL_CALL ScDataPilotItemObj::getName() throw(RuntimeException)
 }
 
 void SAL_CALL ScDataPilotItemObj::setName( const OUString& /* aName */ )
-                                throw(RuntimeException)
+                                throw(RuntimeException, std::exception)
 {
 }
 
                             // XPropertySet
 Reference< XPropertySetInfo >
                             SAL_CALL ScDataPilotItemObj::getPropertySetInfo(  )
-                                throw(RuntimeException)
+                                throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     static Reference<XPropertySetInfo> aRef =
@@ -3533,25 +3533,25 @@ Any SAL_CALL ScDataPilotItemObj::getPropertyValue( const OUString& aPropertyName
 
 void SAL_CALL ScDataPilotItemObj::addPropertyChangeListener(
         const OUString& /* aPropertyName */, const Reference< XPropertyChangeListener >& /* xListener */ )
-        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+        throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL ScDataPilotItemObj::removePropertyChangeListener(
         const OUString& /* aPropertyName */, const Reference< XPropertyChangeListener >& /* aListener */ )
-        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+        throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL ScDataPilotItemObj::addVetoableChangeListener(
         const OUString& /* PropertyName */, const Reference< XVetoableChangeListener >& /* aListener */ )
-        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+        throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL ScDataPilotItemObj::removeVetoableChangeListener(
         const OUString& /* PropertyName */, const Reference< XVetoableChangeListener >& /* aListener */ )
-        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+        throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
 

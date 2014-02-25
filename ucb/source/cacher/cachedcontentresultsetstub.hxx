@@ -126,7 +126,7 @@ public:
     virtual com::sun::star::ucb::FetchResult SAL_CALL
     fetch( sal_Int32 nRowStartPosition
         , sal_Int32 nRowCount, sal_Bool bDirection )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 
 
     // XFetchProviderForContentAccess
@@ -134,17 +134,17 @@ public:
     virtual com::sun::star::ucb::FetchResult SAL_CALL
          fetchContentIdentifierStrings( sal_Int32 nRowStartPosition
         , sal_Int32 nRowCount, sal_Bool bDirection )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 
     virtual com::sun::star::ucb::FetchResult SAL_CALL
          fetchContentIdentifiers( sal_Int32 nRowStartPosition
         , sal_Int32 nRowCount, sal_Bool bDirection )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 
     virtual com::sun::star::ucb::FetchResult SAL_CALL
          fetchContents( sal_Int32 nRowStartPosition
         , sal_Int32 nRowCount, sal_Bool bDirection )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 };
 
 
@@ -187,7 +187,7 @@ public:
     createCachedContentResultSetStub(
                 const com::sun::star::uno::Reference<
                     com::sun::star::sdbc::XResultSet > & xSource )
-            throw( com::sun::star::uno::RuntimeException );
+            throw( com::sun::star::uno::RuntimeException, std::exception );
 };
 
 #endif

@@ -168,7 +168,7 @@ ScatterChartType::~ScatterChartType()
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL ScatterChartType::createClone()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< util::XCloneable >( new ScatterChartType( *this ));
 }
@@ -177,7 +177,7 @@ uno::Reference< util::XCloneable > SAL_CALL ScatterChartType::createClone()
 Reference< chart2::XCoordinateSystem > SAL_CALL
     ScatterChartType::createCoordinateSystem( ::sal_Int32 DimensionCount )
     throw (lang::IllegalArgumentException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     Reference< chart2::XCoordinateSystem > xResult(
         new CartesianCoordinateSystem(
@@ -208,13 +208,13 @@ Reference< chart2::XCoordinateSystem > SAL_CALL
 }
 
 OUString SAL_CALL ScatterChartType::getChartType()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return CHART2_SERVICE_NAME_CHARTTYPE_SCATTER;
 }
 
 uno::Sequence< OUString > SAL_CALL ScatterChartType::getSupportedMandatoryRoles()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString > aMandRolesSeq(3);
     aMandRolesSeq[0] = "label";
@@ -224,7 +224,7 @@ uno::Sequence< OUString > SAL_CALL ScatterChartType::getSupportedMandatoryRoles(
 }
 
 uno::Sequence< OUString > SAL_CALL ScatterChartType::getSupportedOptionalRoles()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return uno::Sequence< OUString >();
 }
@@ -248,7 +248,7 @@ uno::Any ScatterChartType::GetDefaultValue( sal_Int32 nHandle ) const
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL ScatterChartType::getPropertySetInfo()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return *StaticScatterChartTypeInfo::get();
 }

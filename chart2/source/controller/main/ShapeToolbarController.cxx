@@ -35,7 +35,7 @@ using ::com::sun::star::uno::Sequence;
 namespace chart
 {
 
-OUString ShapeToolbarController::getImplementationName() throw (uno::RuntimeException)
+OUString ShapeToolbarController::getImplementationName() throw (uno::RuntimeException, std::exception)
 {
     return getImplementationName_Static();
 }
@@ -52,12 +52,12 @@ Sequence< OUString > ShapeToolbarController::getSupportedServiceNames_Static() t
     return aSupported;
 }
 
-::sal_Bool ShapeToolbarController::supportsService( const OUString& ServiceName ) throw (uno::RuntimeException)
+::sal_Bool ShapeToolbarController::supportsService( const OUString& ServiceName ) throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService( this, ServiceName );
 }
 
-Sequence< OUString > ShapeToolbarController::getSupportedServiceNames() throw (uno::RuntimeException)
+Sequence< OUString > ShapeToolbarController::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
 {
     return getSupportedServiceNames_Static();
 }
@@ -82,7 +82,7 @@ ShapeToolbarController::~ShapeToolbarController()
 }
 
 // ::com::sun::star::uno::XInterface
-uno::Any ShapeToolbarController::queryInterface( const uno::Type& rType ) throw (uno::RuntimeException)
+uno::Any ShapeToolbarController::queryInterface( const uno::Type& rType ) throw (uno::RuntimeException, std::exception)
 {
     uno::Any aReturn = ToolboxController::queryInterface( rType );
     if ( !aReturn.hasValue() )
@@ -103,7 +103,7 @@ void ShapeToolbarController::release() throw ()
 }
 
 // ::com::sun::star::lang::XInitialization
-void ShapeToolbarController::initialize( const Sequence< uno::Any >& rArguments ) throw (uno::Exception, uno::RuntimeException)
+void ShapeToolbarController::initialize( const Sequence< uno::Any >& rArguments ) throw (uno::Exception, uno::RuntimeException, std::exception)
 {
     ToolboxController::initialize( rArguments );
     SolarMutexGuard aSolarMutexGuard;
@@ -175,7 +175,7 @@ void ShapeToolbarController::initialize( const Sequence< uno::Any >& rArguments 
 }
 
 // ::com::sun::star::frame::XStatusListener
-void ShapeToolbarController::statusChanged( const frame::FeatureStateEvent& Event ) throw ( uno::RuntimeException )
+void ShapeToolbarController::statusChanged( const frame::FeatureStateEvent& Event ) throw ( uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     TCommandState::iterator aFind = m_aStates.find( Event.FeatureURL.Complete );
@@ -217,7 +217,7 @@ void ShapeToolbarController::statusChanged( const frame::FeatureStateEvent& Even
 }
 
 // ::com::sun::star::frame::XToolbarController
-Reference< awt::XWindow > ShapeToolbarController::createPopupWindow() throw (uno::RuntimeException)
+Reference< awt::XWindow > ShapeToolbarController::createPopupWindow() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -232,7 +232,7 @@ Reference< awt::XWindow > ShapeToolbarController::createPopupWindow() throw (uno
 }
 
 // ::com::sun::star::frame::XSubToolbarController
-::sal_Bool ShapeToolbarController::opensSubToolbar() throw (uno::RuntimeException)
+::sal_Bool ShapeToolbarController::opensSubToolbar() throw (uno::RuntimeException, std::exception)
 {
     return ( m_nSlotId == SID_DRAWTBX_CS_BASIC ||
              m_nSlotId == SID_DRAWTBX_CS_SYMBOL ||
@@ -242,7 +242,7 @@ Reference< awt::XWindow > ShapeToolbarController::createPopupWindow() throw (uno
              m_nSlotId == SID_DRAWTBX_CS_STAR );
 }
 
-OUString ShapeToolbarController::getSubToolbarName() throw (uno::RuntimeException)
+OUString ShapeToolbarController::getSubToolbarName() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -254,7 +254,7 @@ OUString ShapeToolbarController::getSubToolbarName() throw (uno::RuntimeExceptio
     return OUString();
 }
 
-void ShapeToolbarController::functionSelected( const OUString& rCommand ) throw (uno::RuntimeException)
+void ShapeToolbarController::functionSelected( const OUString& rCommand ) throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -267,7 +267,7 @@ void ShapeToolbarController::functionSelected( const OUString& rCommand ) throw 
     }
 }
 
-void ShapeToolbarController::updateImage() throw (uno::RuntimeException)
+void ShapeToolbarController::updateImage() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard( m_aMutex );

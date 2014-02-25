@@ -57,7 +57,7 @@ SwVbaTemplate::~SwVbaTemplate()
 }
 
 OUString
-SwVbaTemplate::getName() throw ( css::uno::RuntimeException )
+SwVbaTemplate::getName() throw ( css::uno::RuntimeException, std::exception )
 {
     OUString sName;
     if( !msFullUrl.isEmpty() )
@@ -69,7 +69,7 @@ SwVbaTemplate::getName() throw ( css::uno::RuntimeException )
 }
 
 OUString
-SwVbaTemplate::getPath() throw ( css::uno::RuntimeException )
+SwVbaTemplate::getPath() throw ( css::uno::RuntimeException, std::exception )
 {
     OUString sPath;
     if( !msFullUrl.isEmpty() )
@@ -83,7 +83,7 @@ SwVbaTemplate::getPath() throw ( css::uno::RuntimeException )
 }
 
 uno::Any SAL_CALL
-SwVbaTemplate::AutoTextEntries( const uno::Any& index ) throw (uno::RuntimeException)
+SwVbaTemplate::AutoTextEntries( const uno::Any& index ) throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
     uno::Reference< text::XAutoTextContainer2 > xAutoTextContainer = text::AutoTextContainer::create( xContext );

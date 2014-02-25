@@ -44,7 +44,7 @@ public:
     */
     virtual OUString SAL_CALL
         getImplementationName (void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     //=====  internal  ========================================================
 
@@ -58,7 +58,7 @@ public:
         CreateAccessibleDescription ()
         throw (::com::sun::star::uno::RuntimeException);
     /// Return this object's role.
-    virtual sal_Int16 SAL_CALL getAccessibleRole () throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Int16 SAL_CALL getAccessibleRole () throw (::com::sun::star::uno::RuntimeException, std::exception);
 };
 
 } // end of namespace accessibility

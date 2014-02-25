@@ -76,16 +76,16 @@ public:
     // XService info
     static OUString impl_getImplementationName();
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     static css::uno::Sequence<OUString> impl_getSupportedServiceNames();
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL supportsService( const OUString& aName )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     // XInitialize
     virtual void SAL_CALL initialize( const css::uno::Sequence<css::uno::Any>& aArguments )
-        throw ( css::uno::Exception );
+        throw ( css::uno::Exception, std::exception );
 
     static css::uno::Reference<css::uno::XInterface> impl_getInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& aFactory );
 };
@@ -103,7 +103,7 @@ public:
 
     // XInstanceProvider
     virtual css::uno::Reference<css::uno::XInterface> SAL_CALL getInstance (const OUString& aName )
-        throw ( css::container::NoSuchElementException );
+        throw ( css::container::NoSuchElementException, std::exception );
 };
 
 

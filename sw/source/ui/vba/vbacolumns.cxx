@@ -41,12 +41,12 @@ public:
     {
         mxIndexAccess.set( mxTextTable->getColumns(), uno::UNO_QUERY );
     }
-    virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException)
+    virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception)
     {
         return ( nIndex < mxIndexAccess->getCount() );
     }
 
-    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
     {
         if( nIndex < mxIndexAccess->getCount() )
         {
@@ -74,12 +74,12 @@ uno::Reference< word::XColumn > SwVbaColumns::getColumnAtIndex( sal_Int32 index 
     return uno::Reference< word::XColumn >( new SwVbaColumn( this, mxContext, mxTextTable, index ) );
 }
 
-::sal_Int32 SAL_CALL SwVbaColumns::getWidth() throw (uno::RuntimeException)
+::sal_Int32 SAL_CALL SwVbaColumns::getWidth() throw (uno::RuntimeException, std::exception)
 {
     return getColumnAtIndex( mnStartColumnIndex )->getWidth();
 }
 
-void SAL_CALL SwVbaColumns::setWidth( ::sal_Int32 _width ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaColumns::setWidth( ::sal_Int32 _width ) throw (uno::RuntimeException, std::exception)
 {
     for( sal_Int32 index = mnStartColumnIndex; index <= mnEndColumnIndex; index++ )
     {
@@ -87,7 +87,7 @@ void SAL_CALL SwVbaColumns::setWidth( ::sal_Int32 _width ) throw (uno::RuntimeEx
     }
 }
 
-void SAL_CALL SwVbaColumns::Select(  ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaColumns::Select(  ) throw (uno::RuntimeException, std::exception)
 {
     SwVbaColumn::SelectColumn( getCurrentWordDoc(mxContext), mxTextTable, mnStartColumnIndex, mnEndColumnIndex );
 }

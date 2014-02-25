@@ -37,7 +37,7 @@ namespace svt
     }
 
     // XDialogClosedListener methods
-    void SAL_CALL DialogClosedListener::dialogClosed( const DialogClosedEvent& aEvent ) throw (RuntimeException)
+    void SAL_CALL DialogClosedListener::dialogClosed( const DialogClosedEvent& aEvent ) throw (RuntimeException, std::exception)
     {
         if ( m_aDialogClosedLink.IsSet() )
         {
@@ -47,7 +47,7 @@ namespace svt
     }
 
     // XEventListener methods
-    void SAL_CALL DialogClosedListener::disposing( const EventObject& ) throw(RuntimeException)
+    void SAL_CALL DialogClosedListener::disposing( const EventObject& ) throw(RuntimeException, std::exception)
     {
         m_aDialogClosedLink = Link();
     }

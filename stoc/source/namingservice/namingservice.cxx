@@ -93,20 +93,20 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-    throw(::com::sun::star::uno::RuntimeException);
+    throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-    throw(::com::sun::star::uno::RuntimeException);
+    throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()
-    throw(::com::sun::star::uno::RuntimeException);
+    throw(::com::sun::star::uno::RuntimeException, std::exception);
     static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static()
     {
         OUString aStr( SERVICENAME );
         return Sequence< OUString >( &aStr, 1 );
     }
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getRegisteredObject( const OUString& Name ) throw(Exception, RuntimeException);
-    virtual void SAL_CALL registerObject( const OUString& Name, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Object ) throw(Exception, RuntimeException);
-    virtual void SAL_CALL revokeObject( const OUString& Name ) throw(Exception, RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getRegisteredObject( const OUString& Name ) throw(Exception, RuntimeException, std::exception);
+    virtual void SAL_CALL registerObject( const OUString& Name, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Object ) throw(Exception, RuntimeException, std::exception);
+    virtual void SAL_CALL revokeObject( const OUString& Name ) throw(Exception, RuntimeException, std::exception);
 };
 
 
@@ -124,27 +124,27 @@ NamingService_Impl::~NamingService_Impl() {}
 
 // XServiceInfo
 OUString NamingService_Impl::getImplementationName()
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return ns_getImplementationName();
 }
 
 // XServiceInfo
 sal_Bool NamingService_Impl::supportsService( const OUString & rServiceName )
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 // XServiceInfo
 Sequence< OUString > NamingService_Impl::getSupportedServiceNames()
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return ns_getSupportedServiceNames();
 }
 
 // XServiceInfo
-Reference< XInterface > NamingService_Impl::getRegisteredObject( const OUString& Name ) throw(Exception, RuntimeException)
+Reference< XInterface > NamingService_Impl::getRegisteredObject( const OUString& Name ) throw(Exception, RuntimeException, std::exception)
 {
     Guard< Mutex > aGuard( aMutex );
     Reference< XInterface > xRet;
@@ -155,14 +155,14 @@ Reference< XInterface > NamingService_Impl::getRegisteredObject( const OUString&
 }
 
 // XServiceInfo
-void NamingService_Impl::registerObject( const OUString& Name, const Reference< XInterface >& Object ) throw(Exception, RuntimeException)
+void NamingService_Impl::registerObject( const OUString& Name, const Reference< XInterface >& Object ) throw(Exception, RuntimeException, std::exception)
 {
     Guard< Mutex > aGuard( aMutex );
     aMap[ Name ] = Object;
 }
 
 // XServiceInfo
-void NamingService_Impl::revokeObject( const OUString& Name ) throw(Exception, RuntimeException)
+void NamingService_Impl::revokeObject( const OUString& Name ) throw(Exception, RuntimeException, std::exception)
 {
     Guard< Mutex > aGuard( aMutex );
     aMap.erase( Name );

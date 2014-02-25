@@ -453,21 +453,21 @@ bool Model::isValid() const
 //
 
 OUString Model::getID()
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     DBG_INVARIANT();
     return msID;
 }
 
 void Model::setID( const OUString& sID )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     DBG_INVARIANT();
     msID = sID;
 }
 
 void Model::initialize()
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     DBG_ASSERT( ! mbInitialized, "model already initialized" );
 
@@ -480,7 +480,7 @@ void Model::initialize()
 }
 
 void Model::rebuild()
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     if( ! mbInitialized )
         initialize();
@@ -489,19 +489,19 @@ void Model::rebuild()
 }
 
 void Model::recalculate()
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     rebind();
 }
 
 void Model::revalidate()
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     // do nothing. We don't validate anyways!
 }
 
 void Model::refresh()
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     rebind();
 }
@@ -512,7 +512,7 @@ void SAL_CALL Model::submitWithInteraction(
     const XInteractionHandler_t& _rxHandler )
     throw( VetoException,
            WrappedTargetException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     DBG_INVARIANT();
 
@@ -530,13 +530,13 @@ void SAL_CALL Model::submitWithInteraction(
 }
 
 void Model::submit( const OUString& sID )
-    throw( VetoException, WrappedTargetException, RuntimeException )
+    throw( VetoException, WrappedTargetException, RuntimeException, std::exception )
 {
     submitWithInteraction( sID, NULL );
 }
 
 Model::XDataTypeRepository_t SAL_CALL Model::getDataTypeRepository(  )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     if ( !mxDataTypes.is() )
         mxDataTypes = new ODataTypeRepository;
@@ -549,13 +549,13 @@ Model::XDataTypeRepository_t SAL_CALL Model::getDataTypeRepository(  )
 //
 
 Model::XSet_t Model::getInstances()
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return mxInstances;
 }
 
 Model::XDocument_t Model::getInstanceDocument( const OUString& rName )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     ensureAtLeastOneInstance();
     Reference<XDocument> aInstance;
@@ -567,7 +567,7 @@ Model::XDocument_t Model::getInstanceDocument( const OUString& rName )
 }
 
 Model::XDocument_t SAL_CALL Model::getDefaultInstance()
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     ensureAtLeastOneInstance();
     DBG_ASSERT( mpInstances->countItems() > 0, "no instance?" );
@@ -583,14 +583,14 @@ Model::XDocument_t SAL_CALL Model::getDefaultInstance()
 //
 
 Model::XPropertySet_t SAL_CALL Model::createBinding()
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     DBG_INVARIANT();
     return new Binding();
 }
 
 Model::XPropertySet_t Model::cloneBinding( const XPropertySet_t& xBinding )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     DBG_INVARIANT();
     XPropertySet_t xNewBinding = createBinding();
@@ -599,14 +599,14 @@ Model::XPropertySet_t Model::cloneBinding( const XPropertySet_t& xBinding )
 }
 
 Model::XPropertySet_t Model::getBinding( const OUString& sId )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     DBG_INVARIANT();
     return mpBindings->hasItem( sId ) ? mpBindings->getItem( sId ) : NULL;
 }
 
 Model::XSet_t Model::getBindings()
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     DBG_INVARIANT();
     return mxBindings;
@@ -619,14 +619,14 @@ Model::XSet_t Model::getBindings()
 //
 
 Model::XSubmission_t Model::createSubmission()
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     DBG_INVARIANT();
     return new Submission();
 }
 
 Model::XSubmission_t Model::cloneSubmission(const XPropertySet_t& xSubmission)
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     DBG_INVARIANT();
     XSubmission_t xNewSubmission = createSubmission();
@@ -636,7 +636,7 @@ Model::XSubmission_t Model::cloneSubmission(const XPropertySet_t& xSubmission)
 }
 
 Model::XSubmission_t Model::getSubmission( const OUString& sId )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     DBG_INVARIANT();
     XSubmission_t xSubmission;
@@ -646,7 +646,7 @@ Model::XSubmission_t Model::getSubmission( const OUString& sId )
 }
 
 Model::XSet_t Model::getSubmissions()
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     DBG_INVARIANT();
     return mxSubmissions;
@@ -684,14 +684,14 @@ void Model::initializePropertySet()
 }
 
 void Model::update()
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     rebuild();
 }
 
 
 sal_Int64 Model::getSomething( const IntSequence_t& xId )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return reinterpret_cast<sal_Int64>( ( xId == getUnoTunnelID() ) ? this : NULL );
 }

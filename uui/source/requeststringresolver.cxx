@@ -39,7 +39,7 @@ UUIInteractionRequestStringResolver::~UUIInteractionRequestStringResolver()
 
 OUString SAL_CALL
 UUIInteractionRequestStringResolver::getImplementationName()
-    throw (star::uno::RuntimeException)
+    throw (star::uno::RuntimeException, std::exception)
 {
     return OUString::createFromAscii(m_aImplementationName);
 }
@@ -47,14 +47,14 @@ UUIInteractionRequestStringResolver::getImplementationName()
 sal_Bool SAL_CALL
 UUIInteractionRequestStringResolver::supportsService(
         OUString const & rServiceName)
-    throw (star::uno::RuntimeException)
+    throw (star::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 star::uno::Sequence< OUString > SAL_CALL
 UUIInteractionRequestStringResolver::getSupportedServiceNames()
-    throw (star::uno::RuntimeException)
+    throw (star::uno::RuntimeException, std::exception)
 {
     return getSupportedServiceNames_static();
 }
@@ -63,7 +63,7 @@ star::beans::Optional< OUString > SAL_CALL
 UUIInteractionRequestStringResolver::getStringFromInformationalRequest(
     const star::uno::Reference<
         star::task::XInteractionRequest >& Request )
-    throw (star::uno::RuntimeException)
+    throw (star::uno::RuntimeException, std::exception)
 {
     try
     {

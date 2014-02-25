@@ -71,7 +71,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
     throw ( lang::IllegalArgumentException,
             io::IOException,
             uno::Exception,
-            uno::RuntimeException)
+            uno::RuntimeException, std::exception)
 {
     SAL_INFO( "embeddedobj.general", "embeddedobj (mv76033) UNOEmbeddedObjectCreator::createInstanceInitNew" );
 
@@ -116,7 +116,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
             container::NoSuchElementException,
             io::IOException,
             uno::Exception,
-            uno::RuntimeException)
+            uno::RuntimeException, std::exception)
 {
     SAL_INFO( "embeddedobj.general", "embeddedobj (mv76033) UNOEmbeddedObjectCreator::createInstanceInitFromEntry" );
 
@@ -235,7 +235,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
     throw ( lang::IllegalArgumentException,
             io::IOException,
             uno::Exception,
-            uno::RuntimeException)
+            uno::RuntimeException, std::exception)
 {
     SAL_INFO( "embeddedobj.general", "embeddedobj (mv76033) UNOEmbeddedObjectCreator::createInstanceInitFromMediaDescriptor" );
 
@@ -300,7 +300,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
     throw ( lang::IllegalArgumentException,
             io::IOException,
             uno::Exception,
-            uno::RuntimeException)
+            uno::RuntimeException, std::exception)
 {
     SAL_INFO( "embeddedobj.general", "embeddedobj (mv76033) UNOEmbeddedObjectCreator::createInstanceUserInit" );
 
@@ -341,7 +341,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
         throw ( lang::IllegalArgumentException,
                 io::IOException,
                 uno::Exception,
-                uno::RuntimeException )
+                uno::RuntimeException, std::exception )
 {
     SAL_INFO( "embeddedobj.general", "embeddedobj (mv76033) UNOEmbeddedObjectCreator::createInstanceLink" );
 
@@ -440,20 +440,20 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
 
 
 OUString SAL_CALL UNOEmbeddedObjectCreator::getImplementationName()
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     return impl_staticGetImplementationName();
 }
 
 sal_Bool SAL_CALL UNOEmbeddedObjectCreator::supportsService( const OUString& ServiceName )
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 
 uno::Sequence< OUString > SAL_CALL UNOEmbeddedObjectCreator::getSupportedServiceNames()
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     return impl_staticGetSupportedServiceNames();
 }

@@ -327,11 +327,11 @@ public:
     // XTypeDetection
 
     virtual OUString SAL_CALL queryTypeByURL(const OUString& sURL)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     virtual OUString SAL_CALL queryTypeByDescriptor(css::uno::Sequence< css::beans::PropertyValue >& lDescriptor,
                                                            sal_Bool                                         bAllowDeep )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
 //-------------------------------------------
 // static uno helper!

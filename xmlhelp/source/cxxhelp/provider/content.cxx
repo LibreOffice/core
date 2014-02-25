@@ -87,7 +87,7 @@ void SAL_CALL Content::release()
 
 // virtual
 uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     uno::Any aRet;
      return aRet.hasValue() ? aRet : ContentImplHelper::queryInterface( rType );
@@ -99,7 +99,7 @@ XTYPEPROVIDER_COMMON_IMPL( Content );
 
 // virtual
 uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     static cppu::OTypeCollection* pCollection = NULL;
 
@@ -130,14 +130,14 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
 
 // virtual
 OUString SAL_CALL Content::getImplementationName()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return OUString( "CHelpContent" );
 }
 
 // virtual
 uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence< OUString > aSNS( 1 );
     aSNS.getArray()[ 0 ] = MYUCP_CONTENT_SERVICE_NAME ;
@@ -148,7 +148,7 @@ uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
 
 // virtual
 OUString SAL_CALL Content::getContentType()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return OUString( MYUCP_CONTENT_TYPE );
 }
@@ -157,7 +157,7 @@ OUString SAL_CALL Content::getContentType()
 
 //virtual
 void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
 }
 
@@ -258,7 +258,7 @@ uno::Any SAL_CALL Content::execute(
         const uno::Reference< ucb::XCommandEnvironment >& Environment )
     throw( uno::Exception,
            ucb::CommandAbortedException,
-           uno::RuntimeException )
+           uno::RuntimeException, std::exception )
 {
     uno::Any aRet;
 

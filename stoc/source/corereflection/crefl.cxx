@@ -73,7 +73,7 @@ IdlReflectionServiceImpl::~IdlReflectionServiceImpl() {}
 // XInterface
 
 Any IdlReflectionServiceImpl::queryInterface( const Type & rType )
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     Any aRet( ::cppu::queryInterface(
         rType,
@@ -97,7 +97,7 @@ void IdlReflectionServiceImpl::release() throw()
 // XTypeProvider
 
 Sequence< Type > IdlReflectionServiceImpl::getTypes()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     static OTypeCollection * s_pTypes = 0;
     if (! s_pTypes)
@@ -117,7 +117,7 @@ Sequence< Type > IdlReflectionServiceImpl::getTypes()
 }
 
 Sequence< sal_Int8 > IdlReflectionServiceImpl::getImplementationId()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     static OImplementationId * s_pId = 0;
     if (! s_pId)
@@ -135,7 +135,7 @@ Sequence< sal_Int8 > IdlReflectionServiceImpl::getImplementationId()
 // XComponent
 
 void IdlReflectionServiceImpl::dispose()
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     OComponentHelper::dispose();
 
@@ -155,19 +155,19 @@ void IdlReflectionServiceImpl::dispose()
 // XServiceInfo
 
 OUString IdlReflectionServiceImpl::getImplementationName()
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return core_getImplementationName();
 }
 
 sal_Bool IdlReflectionServiceImpl::supportsService( const OUString & rServiceName )
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > IdlReflectionServiceImpl::getSupportedServiceNames()
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return core_getSupportedServiceNames();
 }
@@ -175,7 +175,7 @@ Sequence< OUString > IdlReflectionServiceImpl::getSupportedServiceNames()
 // XIdlReflection
 
 Reference< XIdlClass > IdlReflectionServiceImpl::getType( const Any & rObj )
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return (rObj.hasValue() ? forType( rObj.getValueTypeRef() ) : Reference< XIdlClass >());
 }
@@ -232,7 +232,7 @@ inline Reference< XIdlClass > IdlReflectionServiceImpl::constructClass(
 }
 
 Reference< XIdlClass > IdlReflectionServiceImpl::forName( const OUString & rTypeName )
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     Reference< XIdlClass > xRet;
     Any aAny( _aElements.getValue( rTypeName ) );
@@ -261,7 +261,7 @@ Reference< XIdlClass > IdlReflectionServiceImpl::forName( const OUString & rType
 // XHierarchicalNameAccess
 
 Any IdlReflectionServiceImpl::getByHierarchicalName( const OUString & rName )
-    throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     Any aRet( _aElements.getValue( rName ) );
     if (! aRet.hasValue())
@@ -315,7 +315,7 @@ Any IdlReflectionServiceImpl::getByHierarchicalName( const OUString & rName )
 }
 
 sal_Bool IdlReflectionServiceImpl::hasByHierarchicalName( const OUString & rName )
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     try
     {

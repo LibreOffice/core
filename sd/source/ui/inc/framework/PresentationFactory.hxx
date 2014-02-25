@@ -72,25 +72,25 @@ public:
         SAL_CALL createResource (
             const css::uno::Reference<
                 css::drawing::framework::XResourceId>& rxViewId)
-        throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException);
+        throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, std::exception);
 
     virtual void SAL_CALL releaseResource (
         const css::uno::Reference<css::drawing::framework::XResource>& xView)
-        throw(css::uno::RuntimeException);
+        throw(css::uno::RuntimeException, std::exception);
 
 
     // XConfigurationChangeListener
 
     virtual void SAL_CALL notifyConfigurationChange (
         const css::drawing::framework::ConfigurationChangeEvent& rEvent)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
 
     // lang::XEventListener
 
     virtual void SAL_CALL disposing (
         const css::lang::EventObject& rEventObject)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
 private:
     css::uno::Reference<css::drawing::framework::XConfigurationController>

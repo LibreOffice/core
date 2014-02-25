@@ -67,15 +67,15 @@ namespace animcore
         virtual void SAL_CALL disposing();
 
         // XTargetPropertiesCreator
-        virtual uno::Sequence< animations::TargetProperties > SAL_CALL createInitialTargetProperties( const uno::Reference< animations::XAnimationNode >& rootNode ) throw (uno::RuntimeException);
+        virtual uno::Sequence< animations::TargetProperties > SAL_CALL createInitialTargetProperties( const uno::Reference< animations::XAnimationNode >& rootNode ) throw (uno::RuntimeException, std::exception);
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw( uno::RuntimeException );
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( uno::RuntimeException );
-        virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()  throw( uno::RuntimeException );
+        virtual OUString SAL_CALL getImplementationName() throw( uno::RuntimeException, std::exception );
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( uno::RuntimeException, std::exception );
+        virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()  throw( uno::RuntimeException, std::exception );
 
         // XServiceName
-        virtual OUString SAL_CALL getServiceName(  ) throw (uno::RuntimeException);
+        virtual OUString SAL_CALL getServiceName(  ) throw (uno::RuntimeException, std::exception);
 
     protected:
         ~TargetPropertiesCreator(); // we're a ref-counted UNO class. _We_ destroy ourselves.
@@ -408,7 +408,7 @@ namespace animcore
     uno::Sequence< animations::TargetProperties > SAL_CALL TargetPropertiesCreator::createInitialTargetProperties
         (
             const uno::Reference< animations::XAnimationNode >& xRootNode
-        ) throw (uno::RuntimeException)
+        ) throw (uno::RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -457,17 +457,17 @@ namespace animcore
     }
 
     // XServiceInfo
-    OUString SAL_CALL TargetPropertiesCreator::getImplementationName() throw( uno::RuntimeException )
+    OUString SAL_CALL TargetPropertiesCreator::getImplementationName() throw( uno::RuntimeException, std::exception )
     {
         return OUString( IMPLEMENTATION_NAME );
     }
 
-    sal_Bool SAL_CALL TargetPropertiesCreator::supportsService( const OUString& ServiceName ) throw( uno::RuntimeException )
+    sal_Bool SAL_CALL TargetPropertiesCreator::supportsService( const OUString& ServiceName ) throw( uno::RuntimeException, std::exception )
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    uno::Sequence< OUString > SAL_CALL TargetPropertiesCreator::getSupportedServiceNames()  throw( uno::RuntimeException )
+    uno::Sequence< OUString > SAL_CALL TargetPropertiesCreator::getSupportedServiceNames()  throw( uno::RuntimeException, std::exception )
     {
         uno::Sequence< OUString > aRet(1);
         aRet[0] = SERVICE_NAME;
@@ -476,7 +476,7 @@ namespace animcore
     }
 
     // XServiceName
-    OUString SAL_CALL TargetPropertiesCreator::getServiceName(  ) throw (uno::RuntimeException)
+    OUString SAL_CALL TargetPropertiesCreator::getServiceName(  ) throw (uno::RuntimeException, std::exception)
     {
         return OUString( SERVICE_NAME );
     }

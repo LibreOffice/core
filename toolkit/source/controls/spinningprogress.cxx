@@ -37,14 +37,14 @@ public:
     virtual UnoControlModel* Clone() const;
 
     // XPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException);
+    css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception);
 
     // XPersistObject
-    OUString SAL_CALL getServiceName() throw(css::uno::RuntimeException);
+    OUString SAL_CALL getServiceName() throw(css::uno::RuntimeException, std::exception);
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException);
-    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException);
+    OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception);
+    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception);
 
 protected:
     ~SpinningProgressControlModel();
@@ -95,26 +95,26 @@ protected:
     }
 
 
-    Reference< beans::XPropertySetInfo > SAL_CALL SpinningProgressControlModel::getPropertySetInfo(  ) throw(RuntimeException)
+    Reference< beans::XPropertySetInfo > SAL_CALL SpinningProgressControlModel::getPropertySetInfo(  ) throw(RuntimeException, std::exception)
     {
         static Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;
     }
 
 
-    OUString SAL_CALL SpinningProgressControlModel::getServiceName() throw(RuntimeException)
+    OUString SAL_CALL SpinningProgressControlModel::getServiceName() throw(RuntimeException, std::exception)
     {
         return OUString("com.sun.star.awt.SpinningProgressControlModel");
     }
 
 
-    OUString SAL_CALL SpinningProgressControlModel::getImplementationName(  ) throw(RuntimeException)
+    OUString SAL_CALL SpinningProgressControlModel::getImplementationName(  ) throw(RuntimeException, std::exception)
     {
         return OUString("org.openoffice.comp.toolkit.SpinningProgressControlModel");
     }
 
 
-    Sequence< OUString > SAL_CALL SpinningProgressControlModel::getSupportedServiceNames() throw(RuntimeException)
+    Sequence< OUString > SAL_CALL SpinningProgressControlModel::getSupportedServiceNames() throw(RuntimeException, std::exception)
     {
         Sequence< OUString > aServiceNames(3);
         aServiceNames[0] = "com.sun.star.awt.SpinningProgressControlModel";

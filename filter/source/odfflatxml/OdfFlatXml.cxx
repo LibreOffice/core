@@ -72,7 +72,7 @@ namespace filter {
             importer(const Sequence< PropertyValue >& sourceData,
                      const Reference< XDocumentHandler >& docHandler,
                      const Sequence< OUString >& userData)
-                throw (IllegalArgumentException, RuntimeException);
+                throw (IllegalArgumentException, RuntimeException, std::exception);
 
             // XExportFilter
             virtual sal_Bool SAL_CALL
@@ -80,7 +80,7 @@ namespace filter {
                      const Sequence< PropertyValue >& sourceData,
                      const Sequence< OUString >& userData)
                 throw (IllegalArgumentException,
-                       RuntimeException);
+                       RuntimeException, std::exception);
 
             // UNO component helper methods
 
@@ -100,7 +100,7 @@ OdfFlatXml::importer(
                      const Sequence< PropertyValue >& sourceData,
                      const Reference< XDocumentHandler >& docHandler,
                      const Sequence< OUString >& /* userData */)
-    throw (IllegalArgumentException, RuntimeException)
+    throw (IllegalArgumentException, RuntimeException, std::exception)
 {
     // Read InputStream to read from and an URL used for the system id
     // of the InputSource we create from the given sourceData sequence
@@ -146,7 +146,7 @@ OdfFlatXml::importer(
 sal_Bool
 OdfFlatXml::exporter(const Sequence< PropertyValue >& sourceData,
                      const Sequence< OUString >& /*msUserData*/)
-    throw (IllegalArgumentException, RuntimeException)
+    throw (IllegalArgumentException, RuntimeException, std::exception)
 {
     OUString paramName;
     OUString targetURL;

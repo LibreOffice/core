@@ -247,48 +247,48 @@ namespace accessibility
     {
     }
 
-    sal_Int32 SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleChildCount(  ) throw (RuntimeException)
+    sal_Int32 SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleChildCount(  ) throw (RuntimeException, std::exception)
     {
         return 0;
     }
 
-    Reference< XAccessible > SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException)
+    Reference< XAccessible > SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
     {
         (void)i;
         throw IndexOutOfBoundsException( OUString(), *this );
     }
 
-    Reference< XAccessible > SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleParent(  ) throw (RuntimeException)
+    Reference< XAccessible > SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleParent(  ) throw (RuntimeException, std::exception)
     {
         ItemMethodGuard aGuard( *m_pImpl );
         return m_pImpl->getAccessibleParent();
     }
 
-    sal_Int16 SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleRole(  ) throw (RuntimeException)
+    sal_Int16 SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleRole(  ) throw (RuntimeException, std::exception)
     {
         return AccessibleRole::PAGE_TAB;
     }
 
-    OUString SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleDescription(  ) throw (RuntimeException)
+    OUString SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleDescription(  ) throw (RuntimeException, std::exception)
     {
         ItemMethodGuard aGuard( *m_pImpl );
         return m_pImpl->getPanelDisplayName();
     }
 
-    OUString SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleName(  ) throw (RuntimeException)
+    OUString SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleName(  ) throw (RuntimeException, std::exception)
     {
         ItemMethodGuard aGuard( *m_pImpl );
         return m_pImpl->getPanelDisplayName();
     }
 
-    Reference< XAccessibleRelationSet > SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleRelationSet(  ) throw (RuntimeException)
+    Reference< XAccessibleRelationSet > SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleRelationSet(  ) throw (RuntimeException, std::exception)
     {
         ItemMethodGuard aGuard( *m_pImpl );
         ::utl::AccessibleRelationSetHelper* pRelationSet = new utl::AccessibleRelationSetHelper;
         return pRelationSet;
     }
 
-    Reference< XAccessibleStateSet > SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleStateSet(  ) throw (RuntimeException)
+    Reference< XAccessibleStateSet > SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleStateSet(  ) throw (RuntimeException, std::exception)
     {
         ItemMethodGuard aGuard( *m_pImpl );
 
@@ -318,7 +318,7 @@ namespace accessibility
         return pStateSet;
     }
 
-    Reference< XAccessible > SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleAtPoint( const UnoPoint& i_rLocation ) throw (RuntimeException)
+    Reference< XAccessible > SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleAtPoint( const UnoPoint& i_rLocation ) throw (RuntimeException, std::exception)
     {
         ItemMethodGuard aGuard( *m_pImpl );
         // we do not have children ...
@@ -326,27 +326,27 @@ namespace accessibility
         return NULL;
     }
 
-    void SAL_CALL AccessibleToolPanelDeckTabBarItem::grabFocus(  ) throw (RuntimeException)
+    void SAL_CALL AccessibleToolPanelDeckTabBarItem::grabFocus(  ) throw (RuntimeException, std::exception)
     {
         ItemMethodGuard aGuard( *m_pImpl );
         m_pImpl->getTabBar()->FocusPanelItem( m_pImpl->getItemPos() );
     }
 
-    ::sal_Int32 SAL_CALL AccessibleToolPanelDeckTabBarItem::getForeground(  ) throw (RuntimeException)
+    ::sal_Int32 SAL_CALL AccessibleToolPanelDeckTabBarItem::getForeground(  ) throw (RuntimeException, std::exception)
     {
         ItemMethodGuard aGuard( *m_pImpl );
         Reference< XAccessibleComponent > xParentComponent( m_pImpl->getParentAccessibleComponent(), UNO_SET_THROW );
         return xParentComponent->getForeground();
     }
 
-    ::sal_Int32 SAL_CALL AccessibleToolPanelDeckTabBarItem::getBackground(  ) throw (RuntimeException)
+    ::sal_Int32 SAL_CALL AccessibleToolPanelDeckTabBarItem::getBackground(  ) throw (RuntimeException, std::exception)
     {
         ItemMethodGuard aGuard( *m_pImpl );
         Reference< XAccessibleComponent > xParentComponent( m_pImpl->getParentAccessibleComponent(), UNO_SET_THROW );
         return xParentComponent->getBackground();
     }
 
-    Reference< XFont > SAL_CALL AccessibleToolPanelDeckTabBarItem::getFont(  ) throw (RuntimeException)
+    Reference< XFont > SAL_CALL AccessibleToolPanelDeckTabBarItem::getFont(  ) throw (RuntimeException, std::exception)
     {
         ItemMethodGuard aGuard( *m_pImpl );
         Reference< XAccessibleExtendedComponent > xParentComponent( m_pImpl->getParentAccessibleComponent(), UNO_QUERY_THROW );
@@ -355,14 +355,14 @@ namespace accessibility
         return xParentComponent->getFont();
     }
 
-    OUString SAL_CALL AccessibleToolPanelDeckTabBarItem::getTitledBorderText(  ) throw (RuntimeException)
+    OUString SAL_CALL AccessibleToolPanelDeckTabBarItem::getTitledBorderText(  ) throw (RuntimeException, std::exception)
     {
         ItemMethodGuard aGuard( *m_pImpl );
         // no support
         return OUString();
     }
 
-    OUString SAL_CALL AccessibleToolPanelDeckTabBarItem::getToolTipText(  ) throw (RuntimeException)
+    OUString SAL_CALL AccessibleToolPanelDeckTabBarItem::getToolTipText(  ) throw (RuntimeException, std::exception)
     {
         ItemMethodGuard aGuard( *m_pImpl );
         return m_pImpl->getPanelDisplayName();

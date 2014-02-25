@@ -48,7 +48,7 @@ SwSmartTagMgr::~SwSmartTagMgr()
 {
 }
 
-void SwSmartTagMgr::modified( const lang::EventObject& rEO ) throw( RuntimeException )
+void SwSmartTagMgr::modified( const lang::EventObject& rEO ) throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -58,7 +58,7 @@ void SwSmartTagMgr::modified( const lang::EventObject& rEO ) throw( RuntimeExcep
     SmartTagMgr::modified( rEO );
 }
 
-void SwSmartTagMgr::changesOccurred( const util::ChangesEvent& rEvent ) throw( RuntimeException)
+void SwSmartTagMgr::changesOccurred( const util::ChangesEvent& rEvent ) throw( RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 

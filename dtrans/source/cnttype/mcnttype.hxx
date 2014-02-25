@@ -36,18 +36,18 @@ public:
 
     // XMimeContentType
 
-    virtual OUString SAL_CALL getMediaType(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual OUString SAL_CALL getMediaSubtype(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual OUString SAL_CALL getFullMediaType(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getMediaType(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual OUString SAL_CALL getMediaSubtype(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual OUString SAL_CALL getFullMediaType(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getParameters(  )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual sal_Bool SAL_CALL hasParameter( const OUString& aName )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual OUString SAL_CALL getParameterValue( const OUString& aName )
-        throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception);
 
 private:
     void SAL_CALL init( const OUString& aCntType ) throw( com::sun::star::lang::IllegalArgumentException );

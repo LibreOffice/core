@@ -44,17 +44,17 @@ public:
 
     virtual ~ScVbaCharacters() {}
     // Attributes
-    virtual OUString SAL_CALL getCaption() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setCaption( const OUString& _caption ) throw (css::uno::RuntimeException);
-    virtual ::sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException);
-    virtual OUString SAL_CALL getText() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setText( const OUString& _text ) throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< ov::excel::XFont > SAL_CALL getFont() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setFont( const css::uno::Reference< ov::excel::XFont >& _font ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getCaption() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setCaption( const OUString& _caption ) throw (css::uno::RuntimeException, std::exception);
+    virtual ::sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException, std::exception);
+    virtual OUString SAL_CALL getText() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setText( const OUString& _text ) throw (css::uno::RuntimeException, std::exception);
+    virtual css::uno::Reference< ov::excel::XFont > SAL_CALL getFont() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setFont( const css::uno::Reference< ov::excel::XFont >& _font ) throw (css::uno::RuntimeException, std::exception);
 
     // Methods
-    virtual void SAL_CALL Insert( const OUString& String ) throw (css::uno::RuntimeException);
-    virtual void SAL_CALL Delete(  ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL Insert( const OUString& String ) throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL Delete(  ) throw (css::uno::RuntimeException, std::exception);
 
 
     // XHelperInterface

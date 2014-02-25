@@ -87,40 +87,40 @@ AreaWrapper::~AreaWrapper()
 
 // ____ XShape ____
 awt::Point SAL_CALL AreaWrapper::getPosition()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return awt::Point(0,0);
 }
 
 void SAL_CALL AreaWrapper::setPosition( const awt::Point& /*aPosition*/ )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "trying to set position of chart area" );
 }
 
 awt::Size SAL_CALL AreaWrapper::getSize()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return m_spChart2ModelContact->GetPageSize();
 }
 
 void SAL_CALL AreaWrapper::setSize( const awt::Size& /*aSize*/ )
     throw (beans::PropertyVetoException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "trying to set size of chart area" );
 }
 
 // ____ XShapeDescriptor (base of XShape) ____
 OUString SAL_CALL AreaWrapper::getShapeType()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return OUString( "com.sun.star.chart.ChartArea" );
 }
 
 // ____ XComponent ____
 void SAL_CALL AreaWrapper::dispose()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
     m_aEventListenerContainer.disposeAndClear( lang::EventObject( xSource ) );
@@ -131,14 +131,14 @@ void SAL_CALL AreaWrapper::dispose()
 
 void SAL_CALL AreaWrapper::addEventListener(
     const Reference< lang::XEventListener >& xListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     m_aEventListenerContainer.addInterface( xListener );
 }
 
 void SAL_CALL AreaWrapper::removeEventListener(
     const Reference< lang::XEventListener >& aListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     m_aEventListenerContainer.removeInterface( aListener );
 }

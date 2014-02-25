@@ -51,7 +51,7 @@ OUString WriterFilterDetection_getImplementationName () throw (uno::RuntimeExcep
 
 
 OUString WriterFilterDetection::detect( uno::Sequence< beans::PropertyValue >& rDescriptor )
-   throw( uno::RuntimeException )
+   throw( uno::RuntimeException, std::exception )
 {
     OUString sTypeName;
     bool bWord = false;
@@ -148,19 +148,19 @@ uno::Reference< uno::XInterface > WriterFilterDetection_createInstance( const un
 }
 
 
-OUString WriterFilterDetection::getImplementationName(  ) throw (uno::RuntimeException)
+OUString WriterFilterDetection::getImplementationName(  ) throw (uno::RuntimeException, std::exception)
 {
    return WriterFilterDetection_getImplementationName();
 }
 
 
-sal_Bool WriterFilterDetection::supportsService( const OUString& rServiceName ) throw (uno::RuntimeException)
+sal_Bool WriterFilterDetection::supportsService( const OUString& rServiceName ) throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService( this, rServiceName );
 }
 
 
-uno::Sequence< OUString > WriterFilterDetection::getSupportedServiceNames(  ) throw (uno::RuntimeException)
+uno::Sequence< OUString > WriterFilterDetection::getSupportedServiceNames(  ) throw (uno::RuntimeException, std::exception)
 {
     return WriterFilterDetection_getSupportedServiceNames();
 }

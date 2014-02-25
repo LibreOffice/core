@@ -60,17 +60,17 @@ namespace sdbtools
         );
 
         // XTableName
-        virtual OUString SAL_CALL getCatalogName() throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setCatalogName( const OUString& _catalogname ) throw (::com::sun::star::uno::RuntimeException);
-        virtual OUString SAL_CALL getSchemaName() throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setSchemaName( const OUString& _schemaname ) throw (::com::sun::star::uno::RuntimeException);
-        virtual OUString SAL_CALL getTableName() throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setTableName( const OUString& _tablename ) throw (::com::sun::star::uno::RuntimeException);
-        virtual OUString SAL_CALL getNameForSelect() throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL getTable() throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setTable( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _table ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-        virtual OUString SAL_CALL getComposedName( ::sal_Int32 Type, ::sal_Bool _Quote ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setComposedName( const OUString& ComposedName, ::sal_Int32 Type ) throw (::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getCatalogName() throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL setCatalogName( const OUString& _catalogname ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual OUString SAL_CALL getSchemaName() throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL setSchemaName( const OUString& _schemaname ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual OUString SAL_CALL getTableName() throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL setTableName( const OUString& _tablename ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual OUString SAL_CALL getNameForSelect() throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL getTable() throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL setTable( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _table ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception);
+        virtual OUString SAL_CALL getComposedName( ::sal_Int32 Type, ::sal_Bool _Quote ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL setComposedName( const OUString& ComposedName, ::sal_Int32 Type ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     protected:
         virtual ~TableName();

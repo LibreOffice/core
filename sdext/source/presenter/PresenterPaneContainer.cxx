@@ -361,7 +361,7 @@ void PresenterPaneContainer::ToTop (const SharedPaneDescriptor& rpDescriptor)
 
 void SAL_CALL PresenterPaneContainer::disposing (
     const com::sun::star::lang::EventObject& rEvent)
-    throw (com::sun::star::uno::RuntimeException)
+    throw (com::sun::star::uno::RuntimeException, std::exception)
 {
     SharedPaneDescriptor pDescriptor (
         FindContentWindow(Reference<awt::XWindow>(rEvent.Source, UNO_QUERY)));

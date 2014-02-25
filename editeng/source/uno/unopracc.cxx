@@ -41,7 +41,7 @@ SvxAccessibleTextPropertySet::~SvxAccessibleTextPropertySet() throw()
 {
 }
 
-uno::Reference< text::XText > SAL_CALL SvxAccessibleTextPropertySet::getText() throw (uno::RuntimeException)
+uno::Reference< text::XText > SAL_CALL SvxAccessibleTextPropertySet::getText() throw (uno::RuntimeException, std::exception)
 {
   // TODO (empty?)
   return uno::Reference< text::XText > ();
@@ -54,7 +54,7 @@ uno::Any SAL_CALL SvxAccessibleTextPropertySet::queryAggregation( const uno::Typ
 }
 
 uno::Any SAL_CALL SvxAccessibleTextPropertySet::queryInterface( const uno::Type & rType )
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     return OWeakObject::queryInterface(rType);
 }
@@ -72,7 +72,7 @@ void SAL_CALL SvxAccessibleTextPropertySet::release()
 }
 
 // XTypeProvider
-uno::Sequence< uno::Type > SAL_CALL SvxAccessibleTextPropertySet::getTypes() throw ( uno::RuntimeException )
+uno::Sequence< uno::Type > SAL_CALL SvxAccessibleTextPropertySet::getTypes() throw ( uno::RuntimeException, std::exception )
 {
     static ::cppu::OTypeCollection* pTypeCollection = NULL ;
 
@@ -106,23 +106,23 @@ namespace
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL SvxAccessibleTextPropertySet::getImplementationId()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return theSvxAccessibleTextPropertySetImplementationId::get().getSeq();
 }
 
 // XServiceInfo
-OUString SAL_CALL SAL_CALL SvxAccessibleTextPropertySet::getImplementationName (void) throw (uno::RuntimeException)
+OUString SAL_CALL SAL_CALL SvxAccessibleTextPropertySet::getImplementationName (void) throw (uno::RuntimeException, std::exception)
 {
     return OUString("SvxAccessibleTextPropertySet");
 }
 
-sal_Bool SAL_CALL SvxAccessibleTextPropertySet::supportsService (const OUString& sServiceName) throw (uno::RuntimeException)
+sal_Bool SAL_CALL SvxAccessibleTextPropertySet::supportsService (const OUString& sServiceName) throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-uno::Sequence< OUString> SAL_CALL SvxAccessibleTextPropertySet::getSupportedServiceNames (void) throw (uno::RuntimeException)
+uno::Sequence< OUString> SAL_CALL SvxAccessibleTextPropertySet::getSupportedServiceNames (void) throw (uno::RuntimeException, std::exception)
 {
     // TODO
     return SvxUnoTextRangeBase::getSupportedServiceNames();

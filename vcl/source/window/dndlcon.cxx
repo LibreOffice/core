@@ -49,7 +49,7 @@ DNDListenerContainer::~DNDListenerContainer()
 
 
 void SAL_CALL DNDListenerContainer::addDragGestureListener( const Reference< XDragGestureListener >& dgl )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     rBHelper.addListener( getCppuType( ( const Reference< XDragGestureListener > * ) 0 ), dgl );
 }
@@ -59,7 +59,7 @@ void SAL_CALL DNDListenerContainer::addDragGestureListener( const Reference< XDr
 
 
 void SAL_CALL DNDListenerContainer::removeDragGestureListener( const Reference< XDragGestureListener >& dgl )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     rBHelper.removeListener( getCppuType( ( const Reference< XDragGestureListener > * ) 0 ), dgl );
 }
@@ -69,7 +69,7 @@ void SAL_CALL DNDListenerContainer::removeDragGestureListener( const Reference< 
 
 
 void SAL_CALL DNDListenerContainer::resetRecognizer(  )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
 }
 
@@ -78,7 +78,7 @@ void SAL_CALL DNDListenerContainer::resetRecognizer(  )
 
 
 void SAL_CALL DNDListenerContainer::addDropTargetListener( const Reference< XDropTargetListener >& dtl )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     rBHelper.addListener( getCppuType( ( const Reference< XDropTargetListener > * ) 0 ), dtl );
 }
@@ -88,7 +88,7 @@ void SAL_CALL DNDListenerContainer::addDropTargetListener( const Reference< XDro
 
 
 void SAL_CALL DNDListenerContainer::removeDropTargetListener( const Reference< XDropTargetListener >& dtl )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     rBHelper.removeListener( getCppuType( ( const Reference< XDropTargetListener > * ) 0 ), dtl );
 }
@@ -98,7 +98,7 @@ void SAL_CALL DNDListenerContainer::removeDropTargetListener( const Reference< X
 
 
 sal_Bool SAL_CALL DNDListenerContainer::isActive(  )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     return m_bActive;
 }
@@ -108,7 +108,7 @@ sal_Bool SAL_CALL DNDListenerContainer::isActive(  )
 
 
 void SAL_CALL DNDListenerContainer::setActive( sal_Bool active )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     m_bActive = active;
 }
@@ -118,7 +118,7 @@ void SAL_CALL DNDListenerContainer::setActive( sal_Bool active )
 
 
 sal_Int8 SAL_CALL DNDListenerContainer::getDefaultActions(  )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     return m_nDefaultActions;
 }
@@ -128,7 +128,7 @@ sal_Int8 SAL_CALL DNDListenerContainer::getDefaultActions(  )
 
 
 void SAL_CALL DNDListenerContainer::setDefaultActions( sal_Int8 actions )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     m_nDefaultActions = actions;
 }
@@ -496,7 +496,7 @@ sal_uInt32 DNDListenerContainer::fireDragGestureEvent( sal_Int8 dragAction, sal_
 // DNDListenerContainer::acceptDrag
 
 
-void SAL_CALL DNDListenerContainer::acceptDrag( sal_Int8 dragOperation ) throw (RuntimeException)
+void SAL_CALL DNDListenerContainer::acceptDrag( sal_Int8 dragOperation ) throw (RuntimeException, std::exception)
 {
     if( m_xDropTargetDragContext.is() )
     {
@@ -509,7 +509,7 @@ void SAL_CALL DNDListenerContainer::acceptDrag( sal_Int8 dragOperation ) throw (
 // DNDListenerContainer::rejectDrag
 
 
-void SAL_CALL DNDListenerContainer::rejectDrag(  ) throw (RuntimeException)
+void SAL_CALL DNDListenerContainer::rejectDrag(  ) throw (RuntimeException, std::exception)
 {
     // nothing to do here
 }
@@ -518,7 +518,7 @@ void SAL_CALL DNDListenerContainer::rejectDrag(  ) throw (RuntimeException)
 // DNDListenerContainer::acceptDrop
 
 
-void SAL_CALL DNDListenerContainer::acceptDrop( sal_Int8 dropOperation ) throw (RuntimeException)
+void SAL_CALL DNDListenerContainer::acceptDrop( sal_Int8 dropOperation ) throw (RuntimeException, std::exception)
 {
     if( m_xDropTargetDropContext.is() )
         m_xDropTargetDropContext->acceptDrop( dropOperation );
@@ -528,7 +528,7 @@ void SAL_CALL DNDListenerContainer::acceptDrop( sal_Int8 dropOperation ) throw (
 // DNDListenerContainer::rejectDrop
 
 
-void SAL_CALL DNDListenerContainer::rejectDrop(  ) throw (RuntimeException)
+void SAL_CALL DNDListenerContainer::rejectDrop(  ) throw (RuntimeException, std::exception)
 {
     // nothing to do here
 }
@@ -537,7 +537,7 @@ void SAL_CALL DNDListenerContainer::rejectDrop(  ) throw (RuntimeException)
 // DNDListenerContainer::dropComplete
 
 
-void SAL_CALL DNDListenerContainer::dropComplete( sal_Bool success ) throw (RuntimeException)
+void SAL_CALL DNDListenerContainer::dropComplete( sal_Bool success ) throw (RuntimeException, std::exception)
 {
     if( m_xDropTargetDropContext.is() )
     {

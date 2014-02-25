@@ -242,7 +242,7 @@ SwXDocumentSettings::~SwXDocumentSettings()
 }
 
 Any SAL_CALL SwXDocumentSettings::queryInterface( const Type& rType )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
         return ::cppu::queryInterface ( rType,
                                         // OWeakObject interfaces
@@ -267,7 +267,7 @@ void SwXDocumentSettings::release ()
 }
 
 uno::Sequence< uno::Type > SAL_CALL SwXDocumentSettings::getTypes(  )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -291,7 +291,7 @@ namespace
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL SwXDocumentSettings::getImplementationId(  )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return theSwXDocumentSettingsImplementationId::get().getSeq();
 }
@@ -1233,19 +1233,19 @@ void SwXDocumentSettings::_postGetValues ()
 
 // XServiceInfo
 OUString SAL_CALL SwXDocumentSettings::getImplementationName(  )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.Writer.DocumentSettings");
 }
 
 sal_Bool SAL_CALL SwXDocumentSettings::supportsService( const OUString& ServiceName )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL SwXDocumentSettings::getSupportedServiceNames(  )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     Sequence< OUString > aSeq( 3 );
     aSeq[0] = "com.sun.star.document.Settings";

@@ -48,14 +48,14 @@ SwAccessibleField::SwAccessibleField( SwField *pSwFld,SwAccessibleParagraph *p,s
 
 uno::Reference< XAccessibleContext > SAL_CALL
     SwAccessibleField::getAccessibleContext( void )
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     uno::Reference < XAccessibleContext > xRet( this );
     return xRet;
 }
 
 sal_Int32 SAL_CALL SwAccessibleField::getAccessibleChildCount( void )
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return 0;
@@ -64,14 +64,14 @@ sal_Int32 SAL_CALL SwAccessibleField::getAccessibleChildCount( void )
 uno::Reference< XAccessible> SAL_CALL
     SwAccessibleField::getAccessibleChild( sal_Int32 )
         throw (::com::sun::star::uno::RuntimeException,
-                ::com::sun::star::lang::IndexOutOfBoundsException)
+                ::com::sun::star::lang::IndexOutOfBoundsException, std::exception)
 {
     SolarMutexGuard aGuard;
     return uno::Reference< XAccessible >();
 }
 
 uno::Reference< XAccessible> SAL_CALL SwAccessibleField::getAccessibleParent (void)
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -80,49 +80,49 @@ uno::Reference< XAccessible> SAL_CALL SwAccessibleField::getAccessibleParent (vo
 }
 
 sal_Int32 SAL_CALL SwAccessibleField::getAccessibleIndexInParent (void)
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return 0;
 }
 
 sal_Int16 SAL_CALL SwAccessibleField::getAccessibleRole (void)
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
     return m_nRole;
 }
 
 OUString SAL_CALL SwAccessibleField::getAccessibleDescription (void)
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     OSL_ENSURE( !this, "description needs to be overloaded" );
     return OUString();
 }
 
 OUString SAL_CALL SwAccessibleField::getAccessibleName (void)
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return OUString();
 }
 
 uno::Reference< XAccessibleRelationSet> SAL_CALL
     SwAccessibleField::getAccessibleRelationSet (void)
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return NULL;
 }
 
 uno::Reference<XAccessibleStateSet> SAL_CALL
     SwAccessibleField::getAccessibleStateSet (void)
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return uno::Reference<XAccessibleStateSet>();
 }
 
 com::sun::star::lang::Locale SAL_CALL SwAccessibleField::getLocale (void)
-        throw (::com::sun::star::accessibility::IllegalAccessibleComponentStateException, ::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::accessibility::IllegalAccessibleComponentStateException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -144,7 +144,7 @@ static sal_Bool lcl_PointInRectangle(const awt::Point & aPoint,
 
 sal_Bool SAL_CALL SwAccessibleField::containsPoint(
             const ::com::sun::star::awt::Point& aPoint )
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
 {
     awt::Rectangle aPixBounds = getBoundsImpl(sal_True);
     aPixBounds.X = 0;
@@ -155,7 +155,7 @@ sal_Bool SAL_CALL SwAccessibleField::containsPoint(
 
 uno::Reference< XAccessible > SAL_CALL SwAccessibleField::getAccessibleAtPoint(
                 const awt::Point& aPoint )
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -196,13 +196,13 @@ awt::Rectangle SAL_CALL SwAccessibleField::getBoundsImpl( sal_Bool )
 }
 
 awt::Rectangle SAL_CALL SwAccessibleField::getBounds()
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
 {
     return getBoundsImpl(sal_True);
 }
 
 awt::Point SAL_CALL SwAccessibleField::getLocation()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     awt::Rectangle aRect = getBoundsImpl(sal_True);
     awt::Point aPoint(aRect.X, aRect.Y);
@@ -212,7 +212,7 @@ awt::Point SAL_CALL SwAccessibleField::getLocation()
 
 
 awt::Point SAL_CALL SwAccessibleField::getLocationOnScreen()
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
 {
     awt::Rectangle aRect = getBoundsImpl(sal_False);
     //Point aPixPos = m_xPara->getLocationOnScreen();
@@ -221,7 +221,7 @@ awt::Point SAL_CALL SwAccessibleField::getLocationOnScreen()
 
 
 awt::Size SAL_CALL SwAccessibleField::getSize()
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
 {
     awt::Rectangle aRect = getBoundsImpl(sal_False);
     awt::Size aSize( aRect.Width, aRect.Height );
@@ -230,7 +230,7 @@ awt::Size SAL_CALL SwAccessibleField::getSize()
 }
 
 void SAL_CALL SwAccessibleField::grabFocus()
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return;
@@ -238,19 +238,19 @@ void SAL_CALL SwAccessibleField::grabFocus()
 
 
 sal_Int32 SAL_CALL SwAccessibleField::getForeground()
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return 0;
 }
 
 sal_Int32 SAL_CALL SwAccessibleField::getBackground()
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return 0xffffff;
 }
 ::com::sun::star::uno::Any SAL_CALL SwAccessibleField::queryInterface(
         const ::com::sun::star::uno::Type& rType )
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     Any aRet;
     if ( rType == ::getCppuType((uno::Reference<XAccessibleContext> *)0) )

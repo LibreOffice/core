@@ -199,7 +199,7 @@ uno::Any StockChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL StockChartTypeTemplate::getPropertySetInfo()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return *StaticStockChartTypeTemplateInfo::get();
 }
@@ -225,7 +225,7 @@ void SAL_CALL StockChartTypeTemplate::applyStyle(
     ::sal_Int32 nChartTypeIndex,
     ::sal_Int32 nSeriesIndex,
     ::sal_Int32 nSeriesCount )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     ChartTypeTemplate::applyStyle( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
     try
@@ -270,7 +270,7 @@ void SAL_CALL StockChartTypeTemplate::applyStyle(
 
 void SAL_CALL StockChartTypeTemplate::resetStyles(
     const Reference< chart2::XDiagram >& xDiagram )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     ChartTypeTemplate::resetStyles( xDiagram );
     if( getDimension() == 3 )
@@ -408,7 +408,7 @@ void StockChartTypeTemplate::createChartTypes(
 sal_Bool SAL_CALL StockChartTypeTemplate::matchesTemplate(
     const uno::Reference< XDiagram >& xDiagram,
     sal_Bool /* bAdaptProperties */ )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     sal_Bool bResult = sal_False;
 
@@ -489,7 +489,7 @@ sal_Bool SAL_CALL StockChartTypeTemplate::matchesTemplate(
 
 Reference< XChartType > SAL_CALL StockChartTypeTemplate::getChartTypeForNewSeries(
         const uno::Sequence< Reference< chart2::XChartType > >& aFormerlyUsedChartTypes )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< chart2::XChartType > xResult;
 
@@ -510,7 +510,7 @@ Reference< XChartType > SAL_CALL StockChartTypeTemplate::getChartTypeForNewSerie
 }
 
 Reference< XDataInterpreter > SAL_CALL StockChartTypeTemplate::getDataInterpreter()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if( ! m_xDataInterpreter.is())
         m_xDataInterpreter.set( new StockDataInterpreter( m_eStockVariant, GetComponentContext() ) );

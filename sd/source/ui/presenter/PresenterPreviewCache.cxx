@@ -127,7 +127,7 @@ PresenterPreviewCache::~PresenterPreviewCache (void)
 //----- XInitialize -----------------------------------------------------------
 
 void SAL_CALL PresenterPreviewCache::initialize (const Sequence<Any>& rArguments)
-    throw(Exception, RuntimeException)
+    throw(Exception, RuntimeException, std::exception)
 {
     if (rArguments.getLength() != 0)
         throw RuntimeException();
@@ -141,7 +141,7 @@ void SAL_CALL PresenterPreviewCache::initialize (const Sequence<Any>& rArguments
 void SAL_CALL PresenterPreviewCache::setDocumentSlides (
     const Reference<container::XIndexAccess>& rxSlides,
     const Reference<XInterface>& rxDocument)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     OSL_ASSERT(mpCacheContext.get()!=NULL);
@@ -155,7 +155,7 @@ void SAL_CALL PresenterPreviewCache::setDocumentSlides (
 void SAL_CALL PresenterPreviewCache::setVisibleRange (
     sal_Int32 nFirstVisibleSlideIndex,
     sal_Int32 nLastVisibleSlideIndex)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     OSL_ASSERT(mpCacheContext.get()!=NULL);
@@ -168,7 +168,7 @@ void SAL_CALL PresenterPreviewCache::setVisibleRange (
 
 void SAL_CALL PresenterPreviewCache::setPreviewSize (
     const css::geometry::IntegerSize2D& rSize)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     OSL_ASSERT(mpCache.get()!=NULL);
@@ -183,7 +183,7 @@ void SAL_CALL PresenterPreviewCache::setPreviewSize (
 Reference<rendering::XBitmap> SAL_CALL PresenterPreviewCache::getSlidePreview (
     sal_Int32 nSlideIndex,
     const Reference<rendering::XCanvas>& rxCanvas)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     OSL_ASSERT(mpCacheContext.get()!=NULL);
@@ -209,7 +209,7 @@ Reference<rendering::XBitmap> SAL_CALL PresenterPreviewCache::getSlidePreview (
 
 void SAL_CALL PresenterPreviewCache::addPreviewCreationNotifyListener (
     const Reference<drawing::XSlidePreviewCacheListener>& rxListener)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
         return;
@@ -222,7 +222,7 @@ void SAL_CALL PresenterPreviewCache::addPreviewCreationNotifyListener (
 
 void SAL_CALL PresenterPreviewCache::removePreviewCreationNotifyListener (
     const css::uno::Reference<css::drawing::XSlidePreviewCacheListener>& rxListener)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     mpCacheContext->RemovePreviewCreationNotifyListener(rxListener);
@@ -232,7 +232,7 @@ void SAL_CALL PresenterPreviewCache::removePreviewCreationNotifyListener (
 
 
 void SAL_CALL PresenterPreviewCache::pause (void)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     OSL_ASSERT(mpCache.get()!=NULL);
@@ -243,7 +243,7 @@ void SAL_CALL PresenterPreviewCache::pause (void)
 
 
 void SAL_CALL PresenterPreviewCache::resume (void)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     OSL_ASSERT(mpCache.get()!=NULL);

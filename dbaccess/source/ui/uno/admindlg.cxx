@@ -41,7 +41,7 @@ ODataSourcePropertyDialog::ODataSourcePropertyDialog(const Reference< XComponent
 {
 }
 
-Sequence<sal_Int8> SAL_CALL ODataSourcePropertyDialog::getImplementationId(  ) throw(RuntimeException)
+Sequence<sal_Int8> SAL_CALL ODataSourcePropertyDialog::getImplementationId(  ) throw(RuntimeException, std::exception)
 {
     static ::cppu::OImplementationId aId;
     return aId.getImplementationId();
@@ -52,7 +52,7 @@ Reference< XInterface > SAL_CALL ODataSourcePropertyDialog::Create(const Referen
     return *(new ODataSourcePropertyDialog( comphelper::getComponentContext(_rxFactory) ));
 }
 
-OUString SAL_CALL ODataSourcePropertyDialog::getImplementationName() throw(RuntimeException)
+OUString SAL_CALL ODataSourcePropertyDialog::getImplementationName() throw(RuntimeException, std::exception)
 {
     return getImplementationName_Static();
 }
@@ -62,7 +62,7 @@ OUString ODataSourcePropertyDialog::getImplementationName_Static() throw(Runtime
     return OUString("org.openoffice.comp.dbu.ODatasourceAdministrationDialog");
 }
 
-::comphelper::StringSequence SAL_CALL ODataSourcePropertyDialog::getSupportedServiceNames() throw(RuntimeException)
+::comphelper::StringSequence SAL_CALL ODataSourcePropertyDialog::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     return getSupportedServiceNames_Static();
 }
@@ -74,7 +74,7 @@ OUString ODataSourcePropertyDialog::getImplementationName_Static() throw(Runtime
     return aSupported;
 }
 
-Reference<XPropertySetInfo>  SAL_CALL ODataSourcePropertyDialog::getPropertySetInfo() throw(RuntimeException)
+Reference<XPropertySetInfo>  SAL_CALL ODataSourcePropertyDialog::getPropertySetInfo() throw(RuntimeException, std::exception)
 {
     Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;

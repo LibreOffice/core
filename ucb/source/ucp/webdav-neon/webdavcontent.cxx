@@ -190,7 +190,7 @@ void SAL_CALL Content::release()
 
 // virtual
 uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     // Note: isFolder may require network activities! So call it only
     //       if it is really necessary!!!
@@ -239,7 +239,7 @@ XTYPEPROVIDER_COMMON_IMPL( Content );
 
 // virtual
 uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     sal_Bool bFolder = sal_False;
     try
@@ -334,7 +334,7 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
 
 // virtual
 OUString SAL_CALL Content::getImplementationName()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.comp.ucb.WebDAVContent" );
 }
@@ -342,7 +342,7 @@ OUString SAL_CALL Content::getImplementationName()
 
 // virtual
 uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence< OUString > aSNS( 1 );
     aSNS[ 0 ] = WEBDAV_CONTENT_SERVICE_NAME;
@@ -357,7 +357,7 @@ uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
 
 // virtual
 OUString SAL_CALL Content::getContentType()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     sal_Bool bFolder = sal_False;
     try
@@ -392,7 +392,7 @@ uno::Any SAL_CALL Content::execute(
         const uno::Reference< ucb::XCommandEnvironment >& Environment )
     throw( uno::Exception,
            ucb::CommandAbortedException,
-           uno::RuntimeException )
+           uno::RuntimeException, std::exception )
 {
     SAL_INFO( "ucb.ucp.webdav", "Content::execute: start: command: " <<
               aCommand.Name << ", env: " <<
@@ -728,7 +728,7 @@ uno::Any SAL_CALL Content::execute(
 
 // virtual
 void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     try
     {
@@ -991,7 +991,7 @@ void SAL_CALL Content::addProperty( const OUString& Name,
     throw( beans::PropertyExistException,
            beans::IllegalTypeException,
            lang::IllegalArgumentException,
-           uno::RuntimeException )
+           uno::RuntimeException, std::exception )
 {
     beans::Property aProperty;
     aProperty.Name = Name;
@@ -1007,7 +1007,7 @@ void SAL_CALL Content::addProperty( const OUString& Name,
 void SAL_CALL Content::removeProperty( const OUString& Name )
     throw( beans::UnknownPropertyException,
            beans::NotRemoveableException,
-           uno::RuntimeException )
+           uno::RuntimeException, std::exception )
 {
     removeProperty( Name,
                     uno::Reference< ucb::XCommandEnvironment >() );
@@ -1022,7 +1022,7 @@ void SAL_CALL Content::removeProperty( const OUString& Name )
 // virtual
 uno::Sequence< ucb::ContentInfo > SAL_CALL
 Content::queryCreatableContentsInfo()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -1057,7 +1057,7 @@ Content::queryCreatableContentsInfo()
 // virtual
 uno::Reference< ucb::XContent > SAL_CALL
 Content::createNewContent( const ucb::ContentInfo& Info )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 

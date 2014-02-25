@@ -51,10 +51,10 @@ public:
 
     virtual void SAL_CALL disposing (void);
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL notifyConfigurationChange (
         const css::drawing::framework::ConfigurationChangeEvent& rEvent)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
 private:
     OUString msEventType;

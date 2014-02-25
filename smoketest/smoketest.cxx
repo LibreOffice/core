@@ -69,17 +69,17 @@ public:
 
 private:
     virtual void SAL_CALL disposing(css::lang::EventObject const &)
-        throw (css::uno::RuntimeException) {}
+        throw (css::uno::RuntimeException, std::exception) {}
 
     virtual void SAL_CALL dispatchFinished(
         css::frame::DispatchResultEvent const & Result)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     Result * result_;
 };
 
 void Listener::dispatchFinished(css::frame::DispatchResultEvent const & Result)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     result_->success =
         (Result.State == css::frame::DispatchResultState::SUCCESS) &&
@@ -101,7 +101,7 @@ public:
 
 private:
     virtual void SAL_CALL notify(css::uno::Any const &)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { dispatch_->dispatchWithNotification(url_, arguments_, listener_); }
 
     css::uno::Reference< css::frame::XNotifyingDispatch > dispatch_;

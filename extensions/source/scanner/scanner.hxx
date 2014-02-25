@@ -53,22 +53,22 @@ public:
     virtual                                 ~ScannerManager();
 
     // XInterface
-    virtual Any SAL_CALL                    queryInterface( const Type & rType ) throw( RuntimeException );
+    virtual Any SAL_CALL                    queryInterface( const Type & rType ) throw( RuntimeException, std::exception );
     virtual void SAL_CALL                   acquire() throw();
     virtual void SAL_CALL                   release() throw();
 
     // XScannerManager
-    virtual Sequence< ScannerContext > SAL_CALL  getAvailableScanners() throw();
-    virtual sal_Bool SAL_CALL               configureScanner( ScannerContext& scanner_context ) throw( ScannerException );
-    virtual sal_Bool SAL_CALL               configureScannerAndScan( ScannerContext& scanner_context, const Reference< com::sun::star::lang::XEventListener >& rxListener ) throw( ScannerException );
-    virtual void SAL_CALL                   startScan( const ScannerContext& scanner_context, const Reference< com::sun::star::lang::XEventListener >& rxListener ) throw( ScannerException );
-    virtual ScanError SAL_CALL              getError( const ScannerContext& scanner_context ) throw( ScannerException );
-    virtual Reference< css::awt::XBitmap > SAL_CALL    getBitmap( const ScannerContext& scanner_context ) throw( ScannerException );
+    virtual Sequence< ScannerContext > SAL_CALL  getAvailableScanners() throw(std::exception);
+    virtual sal_Bool SAL_CALL               configureScanner( ScannerContext& scanner_context ) throw( ScannerException, std::exception );
+    virtual sal_Bool SAL_CALL               configureScannerAndScan( ScannerContext& scanner_context, const Reference< com::sun::star::lang::XEventListener >& rxListener ) throw( ScannerException, std::exception );
+    virtual void SAL_CALL                   startScan( const ScannerContext& scanner_context, const Reference< com::sun::star::lang::XEventListener >& rxListener ) throw( ScannerException, std::exception );
+    virtual ScanError SAL_CALL              getError( const ScannerContext& scanner_context ) throw( ScannerException, std::exception );
+    virtual Reference< css::awt::XBitmap > SAL_CALL    getBitmap( const ScannerContext& scanner_context ) throw( ScannerException, std::exception );
 
     // XBitmap
-    virtual css::awt::Size SAL_CALL              getSize() throw();
-    virtual Sequence< sal_Int8 > SAL_CALL        getDIB() throw();
-    virtual Sequence< sal_Int8 > SAL_CALL        getMaskDIB() throw();
+    virtual css::awt::Size SAL_CALL              getSize() throw(std::exception);
+    virtual Sequence< sal_Int8 > SAL_CALL        getDIB() throw(std::exception);
+    virtual Sequence< sal_Int8 > SAL_CALL        getMaskDIB() throw(std::exception);
 
     // Misc
     static OUString                         getImplementationName_Static() throw();

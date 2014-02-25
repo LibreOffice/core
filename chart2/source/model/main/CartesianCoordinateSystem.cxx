@@ -58,20 +58,20 @@ CartesianCoordinateSystem::~CartesianCoordinateSystem()
 
 // ____ XCoordinateSystem ____
 OUString SAL_CALL CartesianCoordinateSystem::getCoordinateSystemType()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return CHART2_COOSYSTEM_CARTESIAN_SERVICE_NAME;
 }
 
 OUString SAL_CALL CartesianCoordinateSystem::getViewServiceName()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return CHART2_COOSYSTEM_CARTESIAN_VIEW_SERVICE_NAME;
 }
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL CartesianCoordinateSystem::createClone()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return Reference< util::XCloneable >( new CartesianCoordinateSystem( *this ));
 }

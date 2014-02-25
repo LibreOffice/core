@@ -247,19 +247,19 @@ public:
     virtual ~SubstitutePathVariables();
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     {
         return OUString("com.sun.star.comp.framework.PathSubstitution");
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     {
         return cppu::supportsService(this, ServiceName);
     }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     {
         css::uno::Sequence< OUString > aSeq(1);
         aSeq[0] = OUString("com.sun.star.util.PathSubstitution");
@@ -268,11 +268,11 @@ public:
 
     // XStringSubstitution
     virtual OUString SAL_CALL substituteVariables( const OUString& aText, sal_Bool bSubstRequired )
-        throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception);
     virtual OUString SAL_CALL reSubstituteVariables( const OUString& aText )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual OUString SAL_CALL getSubstituteVariableValue( const OUString& variable )
-        throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception);
 
 protected:
     DECL_LINK(implts_ConfigurationNotify, void *);
@@ -802,21 +802,21 @@ SubstitutePathVariables::~SubstitutePathVariables()
 
 // XStringSubstitution
 OUString SAL_CALL SubstitutePathVariables::substituteVariables( const OUString& aText, sal_Bool bSubstRequired )
-throw ( NoSuchElementException, RuntimeException )
+throw ( NoSuchElementException, RuntimeException, std::exception )
 {
     osl::MutexGuard g(rBHelper.rMutex);
     return impl_substituteVariable( aText, bSubstRequired );
 }
 
 OUString SAL_CALL SubstitutePathVariables::reSubstituteVariables( const OUString& aText )
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     osl::MutexGuard g(rBHelper.rMutex);
     return impl_reSubstituteVariables( aText );
 }
 
 OUString SAL_CALL SubstitutePathVariables::getSubstituteVariableValue( const OUString& aVariable )
-throw ( NoSuchElementException, RuntimeException )
+throw ( NoSuchElementException, RuntimeException, std::exception )
 {
     osl::MutexGuard g(rBHelper.rMutex);
     return impl_getSubstituteVariableValue( aVariable );

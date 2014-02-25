@@ -125,7 +125,7 @@ const Sequence<sal_Int8>& OGridColumn::getUnoTunnelImplementationId()
 }
 
 
-sal_Int64 SAL_CALL OGridColumn::getSomething( const Sequence<sal_Int8>& _rIdentifier) throw(RuntimeException)
+sal_Int64 SAL_CALL OGridColumn::getSomething( const Sequence<sal_Int8>& _rIdentifier) throw(RuntimeException, std::exception)
 {
     sal_Int64 nReturn(0);
 
@@ -145,13 +145,13 @@ sal_Int64 SAL_CALL OGridColumn::getSomething( const Sequence<sal_Int8>& _rIdenti
 }
 
 
-Sequence<sal_Int8> SAL_CALL OGridColumn::getImplementationId() throw(RuntimeException)
+Sequence<sal_Int8> SAL_CALL OGridColumn::getImplementationId() throw(RuntimeException, std::exception)
 {
     return OImplementationIds::getImplementationId(getTypes());
 }
 
 
-Sequence<Type> SAL_CALL OGridColumn::getTypes() throw(RuntimeException)
+Sequence<Type> SAL_CALL OGridColumn::getTypes() throw(RuntimeException, std::exception)
 {
     TypeBag aTypes( OGridColumn_BASE::getTypes() );
     // erase the types which we do not support
@@ -175,7 +175,7 @@ Sequence<Type> SAL_CALL OGridColumn::getTypes() throw(RuntimeException)
 }
 
 
-Any SAL_CALL OGridColumn::queryAggregation( const Type& _rType ) throw (RuntimeException)
+Any SAL_CALL OGridColumn::queryAggregation( const Type& _rType ) throw (RuntimeException, std::exception)
 {
     Any aReturn;
     // some functionality at our aggregate cannot be reasonably fullfilled here.
@@ -273,7 +273,7 @@ OGridColumn::~OGridColumn()
 
 // XEventListener
 
-void SAL_CALL OGridColumn::disposing(const EventObject& _rSource) throw(RuntimeException)
+void SAL_CALL OGridColumn::disposing(const EventObject& _rSource) throw(RuntimeException, std::exception)
 {
     OPropertySetAggregationHelper::disposing(_rSource);
 
@@ -424,7 +424,7 @@ sal_Bool OGridColumn::convertFastPropertyValue( Any& rConvertedValue, Any& rOldV
 }
 
 
-void OGridColumn::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (::com::sun::star::uno::Exception)
+void OGridColumn::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (::com::sun::star::uno::Exception, std::exception)
 {
     switch (nHandle)
     {
@@ -463,7 +463,7 @@ Any OGridColumn::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
 
 // XCloneable
 
-Reference< XCloneable > SAL_CALL OGridColumn::createClone(  ) throw (RuntimeException)
+Reference< XCloneable > SAL_CALL OGridColumn::createClone(  ) throw (RuntimeException, std::exception)
 {
     OGridColumn* pNewColumn = createCloneColumn();
     return pNewColumn;

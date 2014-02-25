@@ -40,22 +40,22 @@ public:
             css::uno::Reference< css::drawing::XControlShape > xControlShape );
 
     // XOLEObject Attributes
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getObject() throw (css::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL getEnabled() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setEnabled( ::sal_Bool _enabled ) throw (css::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setVisible( ::sal_Bool _visible ) throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getObject() throw (css::uno::RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL getEnabled() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setEnabled( ::sal_Bool _enabled ) throw (css::uno::RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setVisible( ::sal_Bool _visible ) throw (css::uno::RuntimeException, std::exception);
 
-    virtual double SAL_CALL getLeft() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setLeft( double _left ) throw (css::uno::RuntimeException);
-    virtual double SAL_CALL getTop() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setTop( double _top ) throw (css::uno::RuntimeException);
-    virtual double SAL_CALL getHeight() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setHeight( double _height ) throw (css::uno::RuntimeException);
-    virtual double SAL_CALL getWidth() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setWidth( double _width ) throw (css::uno::RuntimeException);
-    virtual OUString SAL_CALL getLinkedCell() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setLinkedCell( const OUString& _linkedcell ) throw (::com::sun::star::uno::RuntimeException);
+    virtual double SAL_CALL getLeft() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setLeft( double _left ) throw (css::uno::RuntimeException, std::exception);
+    virtual double SAL_CALL getTop() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setTop( double _top ) throw (css::uno::RuntimeException, std::exception);
+    virtual double SAL_CALL getHeight() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setHeight( double _height ) throw (css::uno::RuntimeException, std::exception);
+    virtual double SAL_CALL getWidth() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setWidth( double _width ) throw (css::uno::RuntimeException, std::exception);
+    virtual OUString SAL_CALL getLinkedCell() throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setLinkedCell( const OUString& _linkedcell ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 };
 #endif //SC_VBA_OLEOBJECT_HXX
 

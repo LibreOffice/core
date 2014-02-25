@@ -43,19 +43,19 @@ typedef ::cppu::WeakImplHelper2<
             virtual ~MenuBarFactory();
 
             virtual OUString SAL_CALL getImplementationName()
-                throw (css::uno::RuntimeException)
+                throw (css::uno::RuntimeException, std::exception)
             {
                 return OUString("com.sun.star.comp.framework.MenuBarFactory");
             }
 
             virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-                throw (css::uno::RuntimeException)
+                throw (css::uno::RuntimeException, std::exception)
             {
                 return cppu::supportsService(this, ServiceName);
             }
 
             virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-                throw (css::uno::RuntimeException)
+                throw (css::uno::RuntimeException, std::exception)
             {
                 css::uno::Sequence< OUString > aSeq(1);
                 aSeq[0] = OUString("com.sun.star.ui.UIElementFactory");
@@ -63,7 +63,7 @@ typedef ::cppu::WeakImplHelper2<
             }
 
             // XUIElementFactory
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > SAL_CALL createUIElement( const OUString& ResourceURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Args ) throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > SAL_CALL createUIElement( const OUString& ResourceURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Args ) throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception );
 
             static void CreateUIElement(const OUString& ResourceURL
                         ,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Args

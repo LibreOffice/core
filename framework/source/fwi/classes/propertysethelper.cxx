@@ -173,7 +173,7 @@ void PropertySetHelper::impl_notifyChangeListener(const css::beans::PropertyChan
 
 
 css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL PropertySetHelper::getPropertySetInfo()
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     TransactionGuard aTransaction(m_rTransactionManager, E_HARDEXCEPTIONS);
 
@@ -188,7 +188,7 @@ void SAL_CALL PropertySetHelper::setPropertyValue(const OUString& sProperty,
           css::beans::PropertyVetoException   ,
           css::lang::IllegalArgumentException ,
           css::lang::WrappedTargetException   ,
-          css::uno::RuntimeException          )
+          css::uno::RuntimeException, std::exception          )
 {
     // TODO look for e.g. readonly props and reject setProp() call!
 
@@ -251,7 +251,7 @@ void SAL_CALL PropertySetHelper::setPropertyValue(const OUString& sProperty,
 css::uno::Any SAL_CALL PropertySetHelper::getPropertyValue(const OUString& sProperty)
     throw(css::beans::UnknownPropertyException,
           css::lang::WrappedTargetException   ,
-          css::uno::RuntimeException          )
+          css::uno::RuntimeException, std::exception          )
 {
     TransactionGuard aTransaction(m_rTransactionManager, E_HARDEXCEPTIONS);
 
@@ -275,7 +275,7 @@ void SAL_CALL PropertySetHelper::addPropertyChangeListener(const OUString&      
                                                            const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener)
     throw(css::beans::UnknownPropertyException,
           css::lang::WrappedTargetException   ,
-          css::uno::RuntimeException          )
+          css::uno::RuntimeException, std::exception          )
 {
     TransactionGuard aTransaction(m_rTransactionManager, E_HARDEXCEPTIONS);
 
@@ -297,7 +297,7 @@ void SAL_CALL PropertySetHelper::removePropertyChangeListener(const OUString&   
                                                               const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener)
     throw(css::beans::UnknownPropertyException,
           css::lang::WrappedTargetException   ,
-          css::uno::RuntimeException          )
+          css::uno::RuntimeException, std::exception          )
 {
     TransactionGuard aTransaction(m_rTransactionManager, E_SOFTEXCEPTIONS);
 
@@ -319,7 +319,7 @@ void SAL_CALL PropertySetHelper::addVetoableChangeListener(const OUString&      
                                                            const css::uno::Reference< css::beans::XVetoableChangeListener >& xListener)
     throw(css::beans::UnknownPropertyException,
           css::lang::WrappedTargetException   ,
-          css::uno::RuntimeException          )
+          css::uno::RuntimeException, std::exception          )
 {
     TransactionGuard aTransaction(m_rTransactionManager, E_HARDEXCEPTIONS);
 
@@ -341,7 +341,7 @@ void SAL_CALL PropertySetHelper::removeVetoableChangeListener(const OUString&   
                                                               const css::uno::Reference< css::beans::XVetoableChangeListener >& xListener)
     throw(css::beans::UnknownPropertyException,
           css::lang::WrappedTargetException   ,
-          css::uno::RuntimeException          )
+          css::uno::RuntimeException, std::exception          )
 {
     TransactionGuard aTransaction(m_rTransactionManager, E_SOFTEXCEPTIONS);
 
@@ -360,7 +360,7 @@ void SAL_CALL PropertySetHelper::removeVetoableChangeListener(const OUString&   
 
 
 css::uno::Sequence< css::beans::Property > SAL_CALL PropertySetHelper::getProperties()
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     TransactionGuard aTransaction(m_rTransactionManager, E_HARDEXCEPTIONS);
 
@@ -385,7 +385,7 @@ css::uno::Sequence< css::beans::Property > SAL_CALL PropertySetHelper::getProper
 
 css::beans::Property SAL_CALL PropertySetHelper::getPropertyByName(const OUString& sName)
     throw(css::beans::UnknownPropertyException,
-          css::uno::RuntimeException          )
+          css::uno::RuntimeException, std::exception          )
 {
     TransactionGuard aTransaction(m_rTransactionManager, E_HARDEXCEPTIONS);
 
@@ -402,7 +402,7 @@ css::beans::Property SAL_CALL PropertySetHelper::getPropertyByName(const OUStrin
 
 
 sal_Bool SAL_CALL PropertySetHelper::hasPropertyByName(const OUString& sName)
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     TransactionGuard aTransaction(m_rTransactionManager, E_HARDEXCEPTIONS);
 

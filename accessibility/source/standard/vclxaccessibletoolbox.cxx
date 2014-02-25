@@ -60,11 +60,11 @@ namespace
             ,m_nIndexInParent(_nIndexInParent)
         {
         }
-        virtual sal_Int32 SAL_CALL getAccessibleIndexInParent(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual sal_Int32 SAL_CALL getAccessibleIndexInParent(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
     };
 
 
-    sal_Int32 SAL_CALL OToolBoxWindowItemContext::getAccessibleIndexInParent(  ) throw (::com::sun::star::uno::RuntimeException)
+    sal_Int32 SAL_CALL OToolBoxWindowItemContext::getAccessibleIndexInParent(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return m_nIndexInParent;
@@ -115,7 +115,7 @@ namespace
             );
 
         // XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const Sequence< sal_Int8 >& aIdentifier ) throw (RuntimeException);
+        virtual sal_Int64 SAL_CALL getSomething( const Sequence< sal_Int8 >& aIdentifier ) throw (RuntimeException, std::exception);
         static Sequence< sal_Int8 > getUnoTunnelImplementationId();
     };
 
@@ -157,7 +157,7 @@ namespace
         return pId->getImplementationId();
     }
 
-    sal_Int64 SAL_CALL OToolBoxWindowItem::getSomething( const Sequence< sal_Int8 >& _rId ) throw (RuntimeException)
+    sal_Int64 SAL_CALL OToolBoxWindowItem::getSomething( const Sequence< sal_Int8 >& _rId ) throw (RuntimeException, std::exception)
     {
         if  (   ( 16 == _rId.getLength() )
             &&  ( 0 == memcmp( getUnoTunnelImplementationId().getConstArray(),  _rId.getConstArray(), 16 ) )
@@ -679,12 +679,12 @@ void SAL_CALL VCLXAccessibleToolBox::disposing()
 }
 
 // XServiceInfo
-OUString VCLXAccessibleToolBox::getImplementationName() throw (RuntimeException)
+OUString VCLXAccessibleToolBox::getImplementationName() throw (RuntimeException, std::exception)
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleToolBox" );
 }
 
-Sequence< OUString > VCLXAccessibleToolBox::getSupportedServiceNames() throw (RuntimeException)
+Sequence< OUString > VCLXAccessibleToolBox::getSupportedServiceNames() throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aNames = VCLXAccessibleComponent::getSupportedServiceNames();
     sal_Int32 nLength = aNames.getLength();
@@ -694,7 +694,7 @@ Sequence< OUString > VCLXAccessibleToolBox::getSupportedServiceNames() throw (Ru
 }
 
 // XAccessibleContext
-sal_Int32 SAL_CALL VCLXAccessibleToolBox::getAccessibleChildCount(  ) throw (RuntimeException)
+sal_Int32 SAL_CALL VCLXAccessibleToolBox::getAccessibleChildCount(  ) throw (RuntimeException, std::exception)
 {
     comphelper::OExternalLockGuard aGuard( this );
 
@@ -706,7 +706,7 @@ sal_Int32 SAL_CALL VCLXAccessibleToolBox::getAccessibleChildCount(  ) throw (Run
     return nCount;
 }
 
-Reference< XAccessible > SAL_CALL VCLXAccessibleToolBox::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException)
+Reference< XAccessible > SAL_CALL VCLXAccessibleToolBox::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     if ( i < 0 || i >= getAccessibleChildCount() )
         throw IndexOutOfBoundsException();
@@ -753,7 +753,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleToolBox::getAccessibleChild( sal
     return NULL;
 }
 
-Reference< XAccessible > SAL_CALL VCLXAccessibleToolBox::getAccessibleAtPoint( const awt::Point& _rPoint ) throw (RuntimeException)
+Reference< XAccessible > SAL_CALL VCLXAccessibleToolBox::getAccessibleAtPoint( const awt::Point& _rPoint ) throw (RuntimeException, std::exception)
 {
     comphelper::OExternalLockGuard aGuard( this );
 
@@ -798,7 +798,7 @@ Reference< XAccessible > VCLXAccessibleToolBox::GetChildAccessible( const VclWin
 }
 
 // XAccessibleSelection
-void VCLXAccessibleToolBox::selectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+void VCLXAccessibleToolBox::selectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
     if ( nChildIndex < 0 || nChildIndex >= getAccessibleChildCount() )
@@ -808,7 +808,7 @@ void VCLXAccessibleToolBox::selectAccessibleChild( sal_Int32 nChildIndex ) throw
     pToolBox->ChangeHighlight( nPos );
 }
 
-sal_Bool VCLXAccessibleToolBox::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+sal_Bool VCLXAccessibleToolBox::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
     if ( nChildIndex < 0 || nChildIndex >= getAccessibleChildCount() )
@@ -821,20 +821,20 @@ sal_Bool VCLXAccessibleToolBox::isAccessibleChildSelected( sal_Int32 nChildIndex
         return sal_False;
 }
 
-void VCLXAccessibleToolBox::clearAccessibleSelection(  ) throw (RuntimeException)
+void VCLXAccessibleToolBox::clearAccessibleSelection(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
     ToolBox * pToolBox = static_cast < ToolBox * > ( GetWindow() );
     pToolBox -> LoseFocus();
 }
 
-void VCLXAccessibleToolBox::selectAllAccessibleChildren(  ) throw (RuntimeException)
+void VCLXAccessibleToolBox::selectAllAccessibleChildren(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
     // intentionally empty. makes no sense for a toolbox
 }
 
-sal_Int32 VCLXAccessibleToolBox::getSelectedAccessibleChildCount(  ) throw (RuntimeException)
+sal_Int32 VCLXAccessibleToolBox::getSelectedAccessibleChildCount(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
     sal_Int32 nRet = 0;
@@ -849,7 +849,7 @@ sal_Int32 VCLXAccessibleToolBox::getSelectedAccessibleChildCount(  ) throw (Runt
     return nRet;
 }
 
-Reference< XAccessible > VCLXAccessibleToolBox::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+Reference< XAccessible > VCLXAccessibleToolBox::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
     if ( nSelectedChildIndex < 0 || nSelectedChildIndex >= getSelectedAccessibleChildCount() )
@@ -866,7 +866,7 @@ Reference< XAccessible > VCLXAccessibleToolBox::getSelectedAccessibleChild( sal_
     return xChild;
 }
 
-void VCLXAccessibleToolBox::deselectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+void VCLXAccessibleToolBox::deselectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
     if ( nChildIndex < 0 || nChildIndex >= getAccessibleChildCount() )

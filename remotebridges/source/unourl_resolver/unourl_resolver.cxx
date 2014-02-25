@@ -71,13 +71,13 @@ public:
     virtual ~ResolverImpl();
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName ) throw(::com::sun::star::uno::RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     // XUnoUrlResolver
     virtual Reference< XInterface > SAL_CALL resolve( const OUString & rUnoUrl )
-        throw (NoConnectException, ConnectionSetupException, RuntimeException);
+        throw (NoConnectException, ConnectionSetupException, RuntimeException, std::exception);
 };
 
 ResolverImpl::ResolverImpl( const Reference< XComponentContext > & xCtx )
@@ -89,26 +89,26 @@ ResolverImpl::~ResolverImpl() {}
 
 // XServiceInfo
 OUString ResolverImpl::getImplementationName()
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return resolver_getImplementationName();
 }
 
 sal_Bool ResolverImpl::supportsService( const OUString & rServiceName )
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > ResolverImpl::getSupportedServiceNames()
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return resolver_getSupportedServiceNames();
 }
 
 // XUnoUrlResolver
 Reference< XInterface > ResolverImpl::resolve( const OUString & rUnoUrl )
-    throw (NoConnectException, ConnectionSetupException, RuntimeException)
+    throw (NoConnectException, ConnectionSetupException, RuntimeException, std::exception)
 {
     OUString aProtocolDescr;
     OUString aConnectDescr;

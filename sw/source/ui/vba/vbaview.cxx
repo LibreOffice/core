@@ -64,7 +64,7 @@ SwVbaView::~SwVbaView()
 }
 
 ::sal_Int32 SAL_CALL
-SwVbaView::getSeekView() throw (css::uno::RuntimeException)
+SwVbaView::getSeekView() throw (css::uno::RuntimeException, std::exception)
 {
     // FIXME: if the view cursor is in table, field, section and frame
     // handle if the cursor is in table
@@ -115,7 +115,7 @@ SwVbaView::getSeekView() throw (css::uno::RuntimeException)
 }
 
 void SAL_CALL
-SwVbaView::setSeekView( ::sal_Int32 _seekview ) throw (css::uno::RuntimeException)
+SwVbaView::setSeekView( ::sal_Int32 _seekview ) throw (css::uno::RuntimeException, std::exception)
 {
     // FIXME: save the current cursor position, if the cursor is in the main
     // document, so we can jump back to this position, if the macro sets
@@ -178,19 +178,19 @@ SwVbaView::setSeekView( ::sal_Int32 _seekview ) throw (css::uno::RuntimeExceptio
 }
 
 ::sal_Int32 SAL_CALL
-SwVbaView::getSplitSpecial() throw (css::uno::RuntimeException)
+SwVbaView::getSplitSpecial() throw (css::uno::RuntimeException, std::exception)
 {
     return word::WdSpecialPane::wdPaneNone;
 }
 
 void SAL_CALL
-SwVbaView::setSplitSpecial( ::sal_Int32/* _splitspecial */) throw (css::uno::RuntimeException)
+SwVbaView::setSplitSpecial( ::sal_Int32/* _splitspecial */) throw (css::uno::RuntimeException, std::exception)
 {
     // not support in Writer
 }
 
 ::sal_Bool SAL_CALL
-SwVbaView::getTableGridLines() throw (css::uno::RuntimeException)
+SwVbaView::getTableGridLines() throw (css::uno::RuntimeException, std::exception)
 {
     sal_Bool bShowTableGridLine = sal_False;
     mxViewSettings->getPropertyValue("ShowTableBoundaries") >>= bShowTableGridLine;
@@ -198,13 +198,13 @@ SwVbaView::getTableGridLines() throw (css::uno::RuntimeException)
 }
 
 void SAL_CALL
-SwVbaView::setTableGridLines( ::sal_Bool _tablegridlines ) throw (css::uno::RuntimeException)
+SwVbaView::setTableGridLines( ::sal_Bool _tablegridlines ) throw (css::uno::RuntimeException, std::exception)
 {
     mxViewSettings->setPropertyValue("ShowTableBoundaries", uno::makeAny( _tablegridlines ) );
 }
 
 ::sal_Int32 SAL_CALL
-SwVbaView::getType() throw (css::uno::RuntimeException)
+SwVbaView::getType() throw (css::uno::RuntimeException, std::exception)
 {
     // FIXME: handle wdPrintPreview type
     sal_Bool bOnlineLayout = sal_False;
@@ -213,7 +213,7 @@ SwVbaView::getType() throw (css::uno::RuntimeException)
 }
 
 void SAL_CALL
-SwVbaView::setType( ::sal_Int32 _type ) throw (css::uno::RuntimeException)
+SwVbaView::setType( ::sal_Int32 _type ) throw (css::uno::RuntimeException, std::exception)
 {
     // FIXME: handle wdPrintPreview type
     switch( _type )

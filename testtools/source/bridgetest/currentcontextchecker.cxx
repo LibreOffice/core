@@ -51,7 +51,7 @@ public:
     virtual ~CurrentContext();
 
     virtual css::uno::Any SAL_CALL getValueByName(OUString const & Name)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
 private:
     CurrentContext(CurrentContext &); // not defined
@@ -63,7 +63,7 @@ CurrentContext::CurrentContext() {}
 CurrentContext::~CurrentContext() {}
 
 css::uno::Any CurrentContext::getValueByName(OUString const & Name)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return Name == KEY
         ? css::uno::makeAny(OUString::createFromAscii(VALUE))
@@ -80,7 +80,7 @@ testtools::bridgetest::CurrentContextChecker::~CurrentContextChecker() {}
     css::uno::Reference<
         ::test::testtools::bridgetest::XCurrentContextChecker > const & other,
     ::sal_Int32 setSteps, ::sal_Int32 checkSteps)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     if (setSteps == 0) {
         css::uno::ContextLayer layer(new CurrentContext);

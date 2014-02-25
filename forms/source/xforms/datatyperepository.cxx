@@ -112,7 +112,7 @@ namespace xforms
     }
 
 
-    Reference< XDataType > SAL_CALL ODataTypeRepository::getBasicDataType( sal_Int16 dataTypeClass ) throw (NoSuchElementException, RuntimeException)
+    Reference< XDataType > SAL_CALL ODataTypeRepository::getBasicDataType( sal_Int16 dataTypeClass ) throw (NoSuchElementException, RuntimeException, std::exception)
     {
         Reference< XDataType > xReturn;
 
@@ -132,7 +132,7 @@ namespace xforms
     }
 
 
-    Reference< XDataType > SAL_CALL ODataTypeRepository::cloneDataType( const OUString& sourceName, const OUString& newName ) throw (NoSuchElementException, ElementExistException, RuntimeException)
+    Reference< XDataType > SAL_CALL ODataTypeRepository::cloneDataType( const OUString& sourceName, const OUString& newName ) throw (NoSuchElementException, ElementExistException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -148,7 +148,7 @@ namespace xforms
     }
 
 
-    void SAL_CALL ODataTypeRepository::revokeDataType( const OUString& typeName ) throw (NoSuchElementException, VetoException, RuntimeException)
+    void SAL_CALL ODataTypeRepository::revokeDataType( const OUString& typeName ) throw (NoSuchElementException, VetoException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -161,7 +161,7 @@ namespace xforms
     }
 
 
-    Reference< XDataType > SAL_CALL ODataTypeRepository::getDataType( const OUString& typeName ) throw (NoSuchElementException, RuntimeException)
+    Reference< XDataType > SAL_CALL ODataTypeRepository::getDataType( const OUString& typeName ) throw (NoSuchElementException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return implLocate( typeName, false )->second.get();
@@ -169,19 +169,19 @@ namespace xforms
 
 
 
-    Reference< XEnumeration > SAL_CALL ODataTypeRepository::createEnumeration(  ) throw (RuntimeException)
+    Reference< XEnumeration > SAL_CALL ODataTypeRepository::createEnumeration(  ) throw (RuntimeException, std::exception)
     {
         return new ::comphelper::OEnumerationByName( this );
     }
 
 
-    Any SAL_CALL ODataTypeRepository::getByName( const OUString& aName ) throw (NoSuchElementException, WrappedTargetException, RuntimeException)
+    Any SAL_CALL ODataTypeRepository::getByName( const OUString& aName ) throw (NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
     {
         return makeAny( getDataType( aName ) );
     }
 
 
-    Sequence< OUString > SAL_CALL ODataTypeRepository::getElementNames(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL ODataTypeRepository::getElementNames(  ) throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -196,20 +196,20 @@ namespace xforms
     }
 
 
-    sal_Bool SAL_CALL ODataTypeRepository::hasByName( const OUString& aName ) throw (RuntimeException)
+    sal_Bool SAL_CALL ODataTypeRepository::hasByName( const OUString& aName ) throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return m_aRepository.find( aName ) != m_aRepository.end();
     }
 
 
-    Type SAL_CALL ODataTypeRepository::getElementType(  ) throw (RuntimeException)
+    Type SAL_CALL ODataTypeRepository::getElementType(  ) throw (RuntimeException, std::exception)
     {
         return ::getCppuType( static_cast< Reference< XDataType >* >( NULL ) );
     }
 
 
-    sal_Bool SAL_CALL ODataTypeRepository::hasElements(  ) throw (RuntimeException)
+    sal_Bool SAL_CALL ODataTypeRepository::hasElements(  ) throw (RuntimeException, std::exception)
     {
         return !m_aRepository.empty();
     }

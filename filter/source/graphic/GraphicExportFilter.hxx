@@ -61,14 +61,14 @@ public:
     virtual ~GraphicExportFilter();
 
     // XFilter
-    virtual sal_Bool SAL_CALL filter( const Sequence<PropertyValue>& rDescriptor ) throw(RuntimeException);
-    virtual void SAL_CALL cancel( ) throw (RuntimeException);
+    virtual sal_Bool SAL_CALL filter( const Sequence<PropertyValue>& rDescriptor ) throw(RuntimeException, std::exception);
+    virtual void SAL_CALL cancel( ) throw (RuntimeException, std::exception);
 
     // XExporter
-    virtual void SAL_CALL setSourceDocument( const Reference< XComponent >& xDocument ) throw(IllegalArgumentException, RuntimeException);
+    virtual void SAL_CALL setSourceDocument( const Reference< XComponent >& xDocument ) throw(IllegalArgumentException, RuntimeException, std::exception);
 
     // XInitialization
-    virtual void SAL_CALL initialize( const Sequence<Any>& aArguments ) throw(Exception, RuntimeException);
+    virtual void SAL_CALL initialize( const Sequence<Any>& aArguments ) throw(Exception, RuntimeException, std::exception);
 };
 
 #endif

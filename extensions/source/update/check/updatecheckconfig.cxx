@@ -511,7 +511,7 @@ UpdateCheckConfig::getImplName()
 
 
 uno::Type SAL_CALL
-UpdateCheckConfig::getElementType() throw (uno::RuntimeException)
+UpdateCheckConfig::getElementType() throw (uno::RuntimeException, std::exception)
 {
     return m_xContainer->getElementType();
 }
@@ -519,7 +519,7 @@ UpdateCheckConfig::getElementType() throw (uno::RuntimeException)
 
 
 sal_Bool SAL_CALL
-UpdateCheckConfig::hasElements() throw (uno::RuntimeException)
+UpdateCheckConfig::hasElements() throw (uno::RuntimeException, std::exception)
 {
     return m_xContainer->hasElements();
 }
@@ -528,7 +528,7 @@ UpdateCheckConfig::hasElements() throw (uno::RuntimeException)
 
 uno::Any SAL_CALL
 UpdateCheckConfig::getByName( const OUString& aName )
-    throw (container::NoSuchElementException, lang::WrappedTargetException,  uno::RuntimeException)
+    throw (container::NoSuchElementException, lang::WrappedTargetException,  uno::RuntimeException, std::exception)
 {
     uno::Any aValue = m_xContainer->getByName( aName );
 
@@ -548,7 +548,7 @@ UpdateCheckConfig::getByName( const OUString& aName )
 
 
 uno::Sequence< OUString > SAL_CALL
-UpdateCheckConfig::getElementNames(  ) throw (uno::RuntimeException)
+UpdateCheckConfig::getElementNames(  ) throw (uno::RuntimeException, std::exception)
 {
     return m_xContainer->getElementNames();
 }
@@ -556,7 +556,7 @@ UpdateCheckConfig::getElementNames(  ) throw (uno::RuntimeException)
 
 
 sal_Bool SAL_CALL
-UpdateCheckConfig::hasByName( const OUString& aName ) throw (uno::RuntimeException)
+UpdateCheckConfig::hasByName( const OUString& aName ) throw (uno::RuntimeException, std::exception)
 {
     return m_xContainer->hasByName( aName );
 }
@@ -566,7 +566,7 @@ UpdateCheckConfig::hasByName( const OUString& aName ) throw (uno::RuntimeExcepti
 void SAL_CALL
 UpdateCheckConfig::replaceByName( const OUString& aName, const uno::Any& aElement )
     throw (lang::IllegalArgumentException, container::NoSuchElementException,
-           lang::WrappedTargetException, uno::RuntimeException)
+           lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     return m_xContainer->replaceByName( aName, aElement );
 }
@@ -576,7 +576,7 @@ UpdateCheckConfig::replaceByName( const OUString& aName, const uno::Any& aElemen
 
 void SAL_CALL
 UpdateCheckConfig::commitChanges()
-    throw (lang::WrappedTargetException, uno::RuntimeException)
+    throw (lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     uno::Reference< util::XChangesBatch > xChangesBatch(m_xContainer, uno::UNO_QUERY);
     if( xChangesBatch.is() && xChangesBatch->hasPendingChanges() )
@@ -621,7 +621,7 @@ UpdateCheckConfig::commitChanges()
 
 
 sal_Bool SAL_CALL
-UpdateCheckConfig::hasPendingChanges(  ) throw (uno::RuntimeException)
+UpdateCheckConfig::hasPendingChanges(  ) throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< util::XChangesBatch > xChangesBatch(m_xContainer, uno::UNO_QUERY);
     if( xChangesBatch.is() )
@@ -633,7 +633,7 @@ UpdateCheckConfig::hasPendingChanges(  ) throw (uno::RuntimeException)
 
 
 uno::Sequence< util::ElementChange > SAL_CALL
-UpdateCheckConfig::getPendingChanges(  ) throw (uno::RuntimeException)
+UpdateCheckConfig::getPendingChanges(  ) throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< util::XChangesBatch > xChangesBatch(m_xContainer, uno::UNO_QUERY);
     if( xChangesBatch.is() )
@@ -747,14 +747,14 @@ bool UpdateCheckConfig::isVersionGreater( const OUString& rVersion1,
 
 
 OUString SAL_CALL
-UpdateCheckConfig::getImplementationName()  throw (uno::RuntimeException)
+UpdateCheckConfig::getImplementationName()  throw (uno::RuntimeException, std::exception)
 {
     return getImplName();
 }
 
 sal_Bool SAL_CALL
 UpdateCheckConfig::supportsService(OUString const & serviceName)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, serviceName);
 }
@@ -762,7 +762,7 @@ UpdateCheckConfig::supportsService(OUString const & serviceName)
 
 
 uno::Sequence< OUString > SAL_CALL
-UpdateCheckConfig::getSupportedServiceNames()  throw (uno::RuntimeException)
+UpdateCheckConfig::getSupportedServiceNames()  throw (uno::RuntimeException, std::exception)
 {
     return getServiceNames();
 }

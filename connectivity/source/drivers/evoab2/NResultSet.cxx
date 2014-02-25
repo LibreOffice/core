@@ -64,19 +64,19 @@ using namespace com::sun::star::io;
 namespace ErrorCondition = ::com::sun::star::sdb::ErrorCondition;
 
 
-OUString SAL_CALL OEvoabResultSet::getImplementationName(  ) throw ( RuntimeException)   \
+OUString SAL_CALL OEvoabResultSet::getImplementationName(  ) throw ( RuntimeException, std::exception)   \
 {
     return OUString("com.sun.star.sdbcx.evoab.ResultSet");
 }
 
- Sequence< OUString > SAL_CALL OEvoabResultSet::getSupportedServiceNames(  ) throw( RuntimeException)
+ Sequence< OUString > SAL_CALL OEvoabResultSet::getSupportedServiceNames(  ) throw( RuntimeException, std::exception)
 {
      Sequence< OUString > aSupported(1);
     aSupported[0] = "com.sun.star.sdbc.ResultSet";
     return aSupported;
 }
 
-sal_Bool SAL_CALL OEvoabResultSet::supportsService( const OUString& _rServiceName ) throw( RuntimeException)
+sal_Bool SAL_CALL OEvoabResultSet::supportsService( const OUString& _rServiceName ) throw( RuntimeException, std::exception)
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -720,7 +720,7 @@ void OEvoabResultSet::disposing(void)
     m_xMetaData.clear();
 }
 
-Any SAL_CALL OEvoabResultSet::queryInterface( const Type & rType ) throw(RuntimeException)
+Any SAL_CALL OEvoabResultSet::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
 {
     Any aRet = ::comphelper::OPropertyContainer::queryInterface(rType);
     if(!aRet.hasValue())
@@ -728,7 +728,7 @@ Any SAL_CALL OEvoabResultSet::queryInterface( const Type & rType ) throw(Runtime
     return aRet;
 }
 
-Sequence< Type > SAL_CALL OEvoabResultSet::getTypes(  ) throw( RuntimeException)
+Sequence< Type > SAL_CALL OEvoabResultSet::getTypes(  ) throw( RuntimeException, std::exception)
 {
     return ::comphelper::concatSequences(
         OResultSet_BASE::getTypes(),
@@ -746,7 +746,7 @@ Sequence< Type > SAL_CALL OEvoabResultSet::getTypes(  ) throw( RuntimeException)
  * If the equivalent NResultSetMetaData.cxx marks the columntype of
  * nColumnNum as DataType::VARCHAR this accessor is used.
  */
-OUString SAL_CALL OEvoabResultSet::getString( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OEvoabResultSet::getString( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -762,7 +762,7 @@ OUString SAL_CALL OEvoabResultSet::getString( sal_Int32 nColumnNum ) throw(SQLEx
     return aResult;
 }
 
-sal_Bool SAL_CALL OEvoabResultSet::getBoolean( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabResultSet::getBoolean( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -779,103 +779,103 @@ sal_Bool SAL_CALL OEvoabResultSet::getBoolean( sal_Int32 nColumnNum ) throw(SQLE
     return bResult ? sal_True : sal_False;
 }
 
-sal_Int64 SAL_CALL OEvoabResultSet::getLong( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
+sal_Int64 SAL_CALL OEvoabResultSet::getLong( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedException( "XRow::getLong", *this );
     return sal_Int64();
 }
 
-Reference< XArray > SAL_CALL OEvoabResultSet::getArray( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
+Reference< XArray > SAL_CALL OEvoabResultSet::getArray( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedException( "XRow::getArray", *this );
     return NULL;
 }
 
-Reference< XClob > SAL_CALL OEvoabResultSet::getClob( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
+Reference< XClob > SAL_CALL OEvoabResultSet::getClob( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedException( "XRow::getClob", *this );
     return NULL;
 }
 
-Reference< XBlob > SAL_CALL OEvoabResultSet::getBlob( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
+Reference< XBlob > SAL_CALL OEvoabResultSet::getBlob( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedException( "XRow::getBlob", *this );
     return NULL;
 }
 
-Reference< XRef > SAL_CALL OEvoabResultSet::getRef( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
+Reference< XRef > SAL_CALL OEvoabResultSet::getRef( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedException( "XRow::getRef", *this );
     return NULL;
 }
 
-Any SAL_CALL OEvoabResultSet::getObject( sal_Int32 /*nColumnNum*/, const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
+Any SAL_CALL OEvoabResultSet::getObject( sal_Int32 /*nColumnNum*/, const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedException( "XRow::getObject", *this );
     return Any();
 }
 
-sal_Int16 SAL_CALL OEvoabResultSet::getShort( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
+sal_Int16 SAL_CALL OEvoabResultSet::getShort( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedException( "XRow::getShort", *this );
     return 0;
 }
 
-::com::sun::star::util::Time SAL_CALL OEvoabResultSet::getTime( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
+::com::sun::star::util::Time SAL_CALL OEvoabResultSet::getTime( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedException( "XRow::getTime", *this );
     return ::com::sun::star::util::Time();
 }
 
-util::DateTime SAL_CALL OEvoabResultSet::getTimestamp( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
+util::DateTime SAL_CALL OEvoabResultSet::getTimestamp( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedException( "XRow::getTimestamp", *this );
     return ::com::sun::star::util::DateTime();
 }
 
-Reference< XInputStream > SAL_CALL OEvoabResultSet::getBinaryStream( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
+Reference< XInputStream > SAL_CALL OEvoabResultSet::getBinaryStream( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedException( "XRow::getBinaryStream", *this );
     return NULL;
 }
 
-Reference< XInputStream > SAL_CALL OEvoabResultSet::getCharacterStream( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
+Reference< XInputStream > SAL_CALL OEvoabResultSet::getCharacterStream( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedException( "XRow::getCharacterStream", *this );
     return NULL;
 }
 
-sal_Int8 SAL_CALL OEvoabResultSet::getByte( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
+sal_Int8 SAL_CALL OEvoabResultSet::getByte( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedException( "XRow::getByte", *this );
     return 0;
 }
 
-Sequence< sal_Int8 > SAL_CALL OEvoabResultSet::getBytes( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
+Sequence< sal_Int8 > SAL_CALL OEvoabResultSet::getBytes( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedException( "XRow::getBytes", *this );
     return Sequence< sal_Int8 >();
 }
 
-::com::sun::star::util::Date SAL_CALL OEvoabResultSet::getDate( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
+::com::sun::star::util::Date SAL_CALL OEvoabResultSet::getDate( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedException( "XRow::getDate", *this );
     return ::com::sun::star::util::Date();
 }
 
-double SAL_CALL OEvoabResultSet::getDouble( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
+double SAL_CALL OEvoabResultSet::getDouble( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedException( "XRow::getDouble", *this );
     return 0;
 }
 
-float SAL_CALL OEvoabResultSet::getFloat( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
+float SAL_CALL OEvoabResultSet::getFloat( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedException( "XRow::getFloat", *this );
     return 0;
 }
 
-sal_Int32 SAL_CALL OEvoabResultSet::getInt( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OEvoabResultSet::getInt( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedException( "XRow::getInt", *this );
     return 0;
@@ -884,7 +884,7 @@ sal_Int32 SAL_CALL OEvoabResultSet::getInt( sal_Int32 /*nColumnNum*/ ) throw(SQL
 
 
 // XResultSetMetaDataSupplier Interface
-Reference< XResultSetMetaData > SAL_CALL OEvoabResultSet::getMetaData(  ) throw(SQLException, RuntimeException)
+Reference< XResultSetMetaData > SAL_CALL OEvoabResultSet::getMetaData(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -897,7 +897,7 @@ Reference< XResultSetMetaData > SAL_CALL OEvoabResultSet::getMetaData(  ) throw(
 
 
 // XResultSet Interface
-sal_Bool SAL_CALL OEvoabResultSet::next(  ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabResultSet::next(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -909,7 +909,7 @@ sal_Bool SAL_CALL OEvoabResultSet::next(  ) throw(SQLException, RuntimeException
         return false;
 }
 
-sal_Bool SAL_CALL OEvoabResultSet::wasNull(  ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabResultSet::wasNull(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -917,7 +917,7 @@ sal_Bool SAL_CALL OEvoabResultSet::wasNull(  ) throw(SQLException, RuntimeExcept
     return m_bWasNull;
 }
 
-sal_Bool SAL_CALL OEvoabResultSet::isBeforeFirst(  ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabResultSet::isBeforeFirst(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -925,7 +925,7 @@ sal_Bool SAL_CALL OEvoabResultSet::isBeforeFirst(  ) throw(SQLException, Runtime
     return m_nIndex < 0;
 }
 
-sal_Int32 SAL_CALL OEvoabResultSet::getRow(  ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OEvoabResultSet::getRow(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -933,7 +933,7 @@ sal_Int32 SAL_CALL OEvoabResultSet::getRow(  ) throw(SQLException, RuntimeExcept
     return m_nIndex;
 }
 
-sal_Bool SAL_CALL OEvoabResultSet::isAfterLast(  ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabResultSet::isAfterLast(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -941,7 +941,7 @@ sal_Bool SAL_CALL OEvoabResultSet::isAfterLast(  ) throw(SQLException, RuntimeEx
     return m_nIndex >= m_nLength;
 }
 
-sal_Bool SAL_CALL OEvoabResultSet::isFirst(  ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabResultSet::isFirst(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -949,7 +949,7 @@ sal_Bool SAL_CALL OEvoabResultSet::isFirst(  ) throw(SQLException, RuntimeExcept
     return m_nIndex == 0;
 }
 
-sal_Bool SAL_CALL OEvoabResultSet::isLast(  ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabResultSet::isLast(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -957,7 +957,7 @@ sal_Bool SAL_CALL OEvoabResultSet::isLast(  ) throw(SQLException, RuntimeExcepti
     return m_nIndex == m_nLength - 1;
 }
 
-void SAL_CALL OEvoabResultSet::beforeFirst(  ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabResultSet::beforeFirst(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -965,7 +965,7 @@ void SAL_CALL OEvoabResultSet::beforeFirst(  ) throw(SQLException, RuntimeExcept
     m_nIndex = -1;
 }
 
-void SAL_CALL OEvoabResultSet::afterLast(  ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabResultSet::afterLast(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -974,7 +974,7 @@ void SAL_CALL OEvoabResultSet::afterLast(  ) throw(SQLException, RuntimeExceptio
 }
 
 
-sal_Bool SAL_CALL OEvoabResultSet::first(  ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabResultSet::first(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -984,7 +984,7 @@ sal_Bool SAL_CALL OEvoabResultSet::first(  ) throw(SQLException, RuntimeExceptio
 }
 
 
-sal_Bool SAL_CALL OEvoabResultSet::last(  ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabResultSet::last(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -993,7 +993,7 @@ sal_Bool SAL_CALL OEvoabResultSet::last(  ) throw(SQLException, RuntimeException
     return true;
 }
 
-sal_Bool SAL_CALL OEvoabResultSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabResultSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -1005,7 +1005,7 @@ sal_Bool SAL_CALL OEvoabResultSet::absolute( sal_Int32 row ) throw(SQLException,
         return false;
 }
 
-sal_Bool SAL_CALL OEvoabResultSet::relative( sal_Int32 row ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabResultSet::relative( sal_Int32 row ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -1018,7 +1018,7 @@ sal_Bool SAL_CALL OEvoabResultSet::relative( sal_Int32 row ) throw(SQLException,
         return false;
 }
 
-sal_Bool SAL_CALL OEvoabResultSet::previous(  ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabResultSet::previous(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -1031,7 +1031,7 @@ sal_Bool SAL_CALL OEvoabResultSet::previous(  ) throw(SQLException, RuntimeExcep
         return false;
 }
 
-Reference< XInterface > SAL_CALL OEvoabResultSet::getStatement(  ) throw(SQLException, RuntimeException)
+Reference< XInterface > SAL_CALL OEvoabResultSet::getStatement(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -1040,7 +1040,7 @@ Reference< XInterface > SAL_CALL OEvoabResultSet::getStatement(  ) throw(SQLExce
 }
 
 
-sal_Bool SAL_CALL OEvoabResultSet::rowDeleted(  ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabResultSet::rowDeleted(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -1048,7 +1048,7 @@ sal_Bool SAL_CALL OEvoabResultSet::rowDeleted(  ) throw(SQLException, RuntimeExc
     return sal_False;
 }
 
-sal_Bool SAL_CALL OEvoabResultSet::rowInserted(  ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabResultSet::rowInserted(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -1056,7 +1056,7 @@ sal_Bool SAL_CALL OEvoabResultSet::rowInserted(  ) throw(SQLException, RuntimeEx
     return sal_False;
 }
 
-sal_Bool SAL_CALL OEvoabResultSet::rowUpdated(  ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabResultSet::rowUpdated(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -1064,7 +1064,7 @@ sal_Bool SAL_CALL OEvoabResultSet::rowUpdated(  ) throw(SQLException, RuntimeExc
     return sal_False;
 }
 
-void SAL_CALL OEvoabResultSet::refreshRow(  ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabResultSet::refreshRow(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -1073,7 +1073,7 @@ void SAL_CALL OEvoabResultSet::refreshRow(  ) throw(SQLException, RuntimeExcepti
 
 // XCancellable
 
-void SAL_CALL OEvoabResultSet::cancel(  ) throw(RuntimeException)
+void SAL_CALL OEvoabResultSet::cancel(  ) throw(RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -1082,7 +1082,7 @@ void SAL_CALL OEvoabResultSet::cancel(  ) throw(RuntimeException)
 }
 
 //XCloseable
-void SAL_CALL OEvoabResultSet::close(  ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabResultSet::close(  ) throw(SQLException, RuntimeException, std::exception)
 {
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -1094,20 +1094,20 @@ void SAL_CALL OEvoabResultSet::close(  ) throw(SQLException, RuntimeException)
 
 // XWarningsSupplier
 
-void SAL_CALL OEvoabResultSet::clearWarnings(  ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabResultSet::clearWarnings(  ) throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("In/Out: OEvoabResultSet::clearWarnings" );
     m_aWarnings.clearWarnings();
 }
 
-Any SAL_CALL OEvoabResultSet::getWarnings(  ) throw(SQLException, RuntimeException)
+Any SAL_CALL OEvoabResultSet::getWarnings(  ) throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("In/Out: OEvoabResultSet::getWarnings" );
     return m_aWarnings.getWarnings();
 }
 
 //XColumnLocate Interface
-sal_Int32 SAL_CALL OEvoabResultSet::findColumn( const OUString& columnName ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OEvoabResultSet::findColumn( const OUString& columnName ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -1154,7 +1154,7 @@ void SAL_CALL OEvoabResultSet::release() throw()
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
-OEvoabResultSet::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
+OEvoabResultSet::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }

@@ -90,51 +90,51 @@ public:
         throw ( ::com::sun::star::embed::UnreachableStateException,
                 ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::Exception,
-                ::com::sun::star::uno::RuntimeException );
+                ::com::sun::star::uno::RuntimeException, std::exception );
 
     virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL getReachableStates()
         throw ( ::com::sun::star::embed::WrongStateException,
-                ::com::sun::star::uno::RuntimeException );
+                ::com::sun::star::uno::RuntimeException, std::exception );
 
     virtual sal_Int32 SAL_CALL getCurrentState()
         throw ( ::com::sun::star::embed::WrongStateException,
-                ::com::sun::star::uno::RuntimeException );
+                ::com::sun::star::uno::RuntimeException, std::exception );
 
     virtual void SAL_CALL doVerb( sal_Int32 nVerbID )
         throw ( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::embed::UnreachableStateException,
                 ::com::sun::star::uno::Exception,
-                ::com::sun::star::uno::RuntimeException );
+                ::com::sun::star::uno::RuntimeException, std::exception );
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::embed::VerbDescriptor > SAL_CALL getSupportedVerbs()
         throw ( ::com::sun::star::embed::WrongStateException,
-                ::com::sun::star::uno::RuntimeException );
+                ::com::sun::star::uno::RuntimeException, std::exception );
 
     virtual void SAL_CALL setClientSite(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedClient >& xClient )
         throw ( ::com::sun::star::embed::WrongStateException,
-                ::com::sun::star::uno::RuntimeException );
+                ::com::sun::star::uno::RuntimeException, std::exception );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedClient > SAL_CALL getClientSite()
         throw ( ::com::sun::star::embed::WrongStateException,
-                ::com::sun::star::uno::RuntimeException );
+                ::com::sun::star::uno::RuntimeException, std::exception );
 
     virtual void SAL_CALL update()
         throw ( ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::Exception,
-                ::com::sun::star::uno::RuntimeException );
+                ::com::sun::star::uno::RuntimeException, std::exception );
 
     virtual void SAL_CALL setUpdateMode( sal_Int32 nMode )
         throw ( ::com::sun::star::embed::WrongStateException,
-                ::com::sun::star::uno::RuntimeException );
+                ::com::sun::star::uno::RuntimeException, std::exception );
 
     virtual sal_Int64 SAL_CALL getStatus( sal_Int64 nAspect )
         throw ( ::com::sun::star::embed::WrongStateException,
-                ::com::sun::star::uno::RuntimeException );
+                ::com::sun::star::uno::RuntimeException, std::exception );
 
     virtual void SAL_CALL setContainerName( const OUString& sName )
-        throw ( ::com::sun::star::uno::RuntimeException );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
 
 
 // XVisualObject
@@ -143,23 +143,23 @@ public:
         throw ( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::Exception,
-                ::com::sun::star::uno::RuntimeException );
+                ::com::sun::star::uno::RuntimeException, std::exception );
 
     virtual ::com::sun::star::awt::Size SAL_CALL getVisualAreaSize( sal_Int64 nAspect )
         throw ( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::Exception,
-                ::com::sun::star::uno::RuntimeException );
+                ::com::sun::star::uno::RuntimeException, std::exception );
 
     virtual ::com::sun::star::embed::VisualRepresentation SAL_CALL getPreferredVisualRepresentation( ::sal_Int64 nAspect )
         throw ( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::Exception,
-                ::com::sun::star::uno::RuntimeException );
+                ::com::sun::star::uno::RuntimeException, std::exception );
 
     virtual sal_Int32 SAL_CALL getMapUnit( sal_Int64 nAspect )
         throw ( ::com::sun::star::uno::Exception,
-                ::com::sun::star::uno::RuntimeException);
+                ::com::sun::star::uno::RuntimeException, std::exception);
 
 // XEmbedPersist
 
@@ -173,14 +173,14 @@ public:
                 ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::Exception,
-                ::com::sun::star::uno::RuntimeException );
+                ::com::sun::star::uno::RuntimeException, std::exception );
 
     virtual void SAL_CALL storeToEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage, const OUString& sEntName, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lObjArgs )
         throw ( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::Exception,
-                ::com::sun::star::uno::RuntimeException );
+                ::com::sun::star::uno::RuntimeException, std::exception );
 
     virtual void SAL_CALL storeAsEntry(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
@@ -191,20 +191,20 @@ public:
                 ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::Exception,
-                ::com::sun::star::uno::RuntimeException );
+                ::com::sun::star::uno::RuntimeException, std::exception );
 
     virtual void SAL_CALL saveCompleted( sal_Bool bUseNew )
         throw ( ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::Exception,
-                ::com::sun::star::uno::RuntimeException );
+                ::com::sun::star::uno::RuntimeException, std::exception );
 
     virtual sal_Bool SAL_CALL hasEntry()
         throw ( ::com::sun::star::embed::WrongStateException,
-                ::com::sun::star::uno::RuntimeException );
+                ::com::sun::star::uno::RuntimeException, std::exception );
 
     virtual OUString SAL_CALL getEntryName()
         throw ( ::com::sun::star::embed::WrongStateException,
-                ::com::sun::star::uno::RuntimeException );
+                ::com::sun::star::uno::RuntimeException, std::exception );
 
 
 // XCommonEmbedPersist
@@ -213,11 +213,11 @@ public:
         throw ( ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::Exception,
-                ::com::sun::star::uno::RuntimeException );
+                ::com::sun::star::uno::RuntimeException, std::exception );
 
     virtual sal_Bool SAL_CALL isReadonly()
         throw ( ::com::sun::star::embed::WrongStateException,
-                ::com::sun::star::uno::RuntimeException );
+                ::com::sun::star::uno::RuntimeException, std::exception );
 
     virtual void SAL_CALL reload(
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments,
@@ -226,54 +226,54 @@ public:
                 ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::Exception,
-                ::com::sun::star::uno::RuntimeException );
+                ::com::sun::star::uno::RuntimeException, std::exception );
 
 
 // XClassifiedObject
 
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getClassID()
-        throw ( ::com::sun::star::uno::RuntimeException );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
 
     virtual OUString SAL_CALL getClassName()
-        throw ( ::com::sun::star::uno::RuntimeException );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
 
     virtual void SAL_CALL setClassInfo(
                 const ::com::sun::star::uno::Sequence< sal_Int8 >& aClassID, const OUString& aClassName )
         throw ( ::com::sun::star::lang::NoSupportException,
-                ::com::sun::star::uno::RuntimeException );
+                ::com::sun::star::uno::RuntimeException, std::exception );
 
 
 // XComponentSupplier
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > SAL_CALL getComponent()
-        throw ( ::com::sun::star::uno::RuntimeException );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
 
 // XStateChangeBroadcaster
-    virtual void SAL_CALL addStateChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStateChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeStateChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStateChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addStateChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStateChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL removeStateChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStateChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 // XCloseable
 
     virtual void SAL_CALL close( sal_Bool DeliverOwnership )
         throw ( ::com::sun::star::util::CloseVetoException,
-                ::com::sun::star::uno::RuntimeException );
+                ::com::sun::star::uno::RuntimeException, std::exception );
 
     virtual void SAL_CALL addCloseListener(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseListener >& Listener )
-        throw ( ::com::sun::star::uno::RuntimeException );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
 
     virtual void SAL_CALL removeCloseListener(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseListener >& Listener )
-        throw ( ::com::sun::star::uno::RuntimeException );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
 
 // XEventBroadcaster
     virtual void SAL_CALL addEventListener(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::document::XEventListener >& Listener )
-        throw ( ::com::sun::star::uno::RuntimeException );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
 
     virtual void SAL_CALL removeEventListener(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::document::XEventListener >& Listener )
-        throw ( ::com::sun::star::uno::RuntimeException );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
 
 };
 

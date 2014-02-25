@@ -89,7 +89,7 @@ Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
     throw(
         container::NoSuchElementException,
         lang::IllegalArgumentException,
-        RuntimeException)
+        RuntimeException, std::exception)
 {
     Reference<ui::XUIElement> xElement;
 

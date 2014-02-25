@@ -90,11 +90,11 @@ namespace utl
         virtual ~CloseableComponentImpl();
 
         // XCloseListener overridables
-        virtual void SAL_CALL queryClosing( const EventObject& Source, ::sal_Bool GetsOwnership ) throw (CloseVetoException, RuntimeException);
-        virtual void SAL_CALL notifyClosing( const EventObject& Source ) throw (RuntimeException);
+        virtual void SAL_CALL queryClosing( const EventObject& Source, ::sal_Bool GetsOwnership ) throw (CloseVetoException, RuntimeException, std::exception);
+        virtual void SAL_CALL notifyClosing( const EventObject& Source ) throw (RuntimeException, std::exception);
 
         // XEventListener overridables
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     private:
         /** starts or stops being a CloseListener at the component
@@ -177,7 +177,7 @@ namespace utl
     #ifdef DBG_UTIL
     Source
     #endif
-    , ::sal_Bool /*GetsOwnership*/ ) throw (CloseVetoException, RuntimeException)
+    , ::sal_Bool /*GetsOwnership*/ ) throw (CloseVetoException, RuntimeException, std::exception)
     {
         // as long as we live, somebody wants to keep the object alive. So, veto the
         // closing
@@ -190,7 +190,7 @@ namespace utl
     #ifdef DBG_UTIL
     Source
     #endif
-    ) throw (RuntimeException)
+    ) throw (RuntimeException, std::exception)
     {
         DBG_ASSERT( Source.Source == m_xCloseable, "CloseableComponentImpl::notifyClosing: where did this come from?" );
 
@@ -205,7 +205,7 @@ namespace utl
     #ifdef DBG_UTIL
     Source
     #endif
-    ) throw (RuntimeException)
+    ) throw (RuntimeException, std::exception)
     {
         DBG_ASSERT( Source.Source == m_xCloseable, "CloseableComponentImpl::disposing: where did this come from?" );
         OSL_FAIL( "CloseableComponentImpl::disposing: unreachable!" );

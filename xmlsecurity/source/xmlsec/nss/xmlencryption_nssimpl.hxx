@@ -51,22 +51,22 @@ class XMLEncryption_NssImpl : public ::cppu::WeakImplHelper2<
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment >& aEnvironment)
             // ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
             throw ( com::sun::star::xml::crypto::XMLEncryptionException ,
-                    com::sun::star::uno::SecurityException);
+                    com::sun::star::uno::SecurityException, std::exception);
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XXMLEncryptionTemplate > SAL_CALL decrypt(
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XXMLEncryptionTemplate >& aTemplate ,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XXMLSecurityContext >& aContext
         ) throw( com::sun::star::xml::crypto::XMLEncryptionException ,
-                    com::sun::star::uno::SecurityException) ;
+                    com::sun::star::uno::SecurityException, std::exception) ;
 
         //Methods from XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException ) ;
+        virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException, std::exception ) ;
 
         virtual sal_Bool SAL_CALL supportsService(
             const OUString& ServiceName
-        ) throw( ::com::sun::star::uno::RuntimeException ) ;
+        ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) ;
 
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException ) ;
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) ;
 
         //Helper for XServiceInfo
         static ::com::sun::star::uno::Sequence< OUString > impl_getSupportedServiceNames() ;

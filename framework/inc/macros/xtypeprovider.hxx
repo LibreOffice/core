@@ -54,7 +54,7 @@ ________________________________________________________________________________
 //  implementation of XTypeProvider::getImplementationId()
 //*****************************************************************************************************************
 #define PRIVATE_DEFINE_XTYPEPROVIDER_GETIMPLEMENTATIONID( CLASS )                                                                               \
-    ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL CLASS::getImplementationId() throw( ::com::sun::star::uno::RuntimeException )          \
+    ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL CLASS::getImplementationId() throw( ::com::sun::star::uno::RuntimeException, std::exception )          \
     {                                                                                                                                           \
         /* Create one Id for all instances of this class.                                               */                                      \
         /* Use ethernet address to do this! (sal_True)                                                  */                                      \
@@ -83,7 +83,7 @@ ________________________________________________________________________________
 //  implementation of XTypeProvider::getTypes() with max. 12 interfaces!
 //*****************************************************************************************************************
 #define PRIVATE_DEFINE_XTYPEPROVIDER_GETTYPES( CLASS, TYPES )                                                                                   \
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL CLASS::getTypes() throw( ::com::sun::star::uno::RuntimeException )  \
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL CLASS::getTypes() throw( ::com::sun::star::uno::RuntimeException, std::exception )  \
     {                                                                                                                                           \
         /* Optimize this method !                                       */                                                                      \
         /* We initialize a static variable only one time.               */                                                                      \
@@ -113,7 +113,7 @@ ________________________________________________________________________________
 //  implementation of XTypeProvider::getTypes() with more then 12 interfaces!
 //*****************************************************************************************************************
 #define PRIVATE_DEFINE_XTYPEPROVIDER_GETTYPES_LARGE( CLASS, TYPES_FIRST, TYPES_SECOND )                                                         \
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL CLASS::getTypes() throw( ::com::sun::star::uno::RuntimeException )  \
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL CLASS::getTypes() throw( ::com::sun::star::uno::RuntimeException, std::exception )  \
     {                                                                                                                                           \
         /* Optimize this method !                                       */                                                                      \
         /* We initialize a static variable only one time.               */                                                                      \
@@ -287,8 +287,8 @@ ________________________________________________________________________________
 //  declaration of XTypeProvider
 //*****************************************************************************************************************
 #define FWK_DECLARE_XTYPEPROVIDER                                                                                                                               \
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes           () throw( ::com::sun::star::uno::RuntimeException );\
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes           () throw( ::com::sun::star::uno::RuntimeException, std::exception );\
+    virtual ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 //*****************************************************************************************************************
 //  public

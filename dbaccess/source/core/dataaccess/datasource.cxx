@@ -126,9 +126,9 @@ protected:
 
 protected:
     // XFlushListener
-    virtual void SAL_CALL flushed( const ::com::sun::star::lang::EventObject& rEvent ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL flushed( const ::com::sun::star::lang::EventObject& rEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception);
     // XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 };
 
 FlushNotificationAdapter::FlushNotificationAdapter( const Reference< XFlushable >& _rxBroadcaster, const Reference< XFlushListener >& _rxListener )
@@ -165,7 +165,7 @@ void SAL_CALL FlushNotificationAdapter::impl_dispose( bool _bRevokeListener )
     m_aBroadcaster.clear();
 }
 
-void SAL_CALL FlushNotificationAdapter::flushed( const EventObject& rEvent ) throw (RuntimeException)
+void SAL_CALL FlushNotificationAdapter::flushed( const EventObject& rEvent ) throw (RuntimeException, std::exception)
 {
     Reference< XFlushListener > xListener( m_aListener );
     if ( xListener.is() )
@@ -174,7 +174,7 @@ void SAL_CALL FlushNotificationAdapter::flushed( const EventObject& rEvent ) thr
         impl_dispose( true );
 }
 
-void SAL_CALL FlushNotificationAdapter::disposing( const EventObject& Source ) throw (RuntimeException)
+void SAL_CALL FlushNotificationAdapter::disposing( const EventObject& Source ) throw (RuntimeException, std::exception)
 {
     Reference< XFlushListener > xListener( m_aListener );
     if ( xListener.is() )
@@ -189,61 +189,61 @@ OAuthenticationContinuation::OAuthenticationContinuation()
 {
 }
 
-sal_Bool SAL_CALL OAuthenticationContinuation::canSetRealm(  ) throw(RuntimeException)
+sal_Bool SAL_CALL OAuthenticationContinuation::canSetRealm(  ) throw(RuntimeException, std::exception)
 {
     return sal_False;
 }
 
-void SAL_CALL OAuthenticationContinuation::setRealm( const OUString& /*Realm*/ ) throw(RuntimeException)
+void SAL_CALL OAuthenticationContinuation::setRealm( const OUString& /*Realm*/ ) throw(RuntimeException, std::exception)
 {
     SAL_WARN("dbaccess","OAuthenticationContinuation::setRealm: not supported!");
 }
 
-sal_Bool SAL_CALL OAuthenticationContinuation::canSetUserName(  ) throw(RuntimeException)
+sal_Bool SAL_CALL OAuthenticationContinuation::canSetUserName(  ) throw(RuntimeException, std::exception)
 {
     // we always allow this, even if the database document is read-only. In this case,
     // it's simply that the user cannot store the new user name.
     return m_bCanSetUserName;
 }
 
-void SAL_CALL OAuthenticationContinuation::setUserName( const OUString& _rUser ) throw(RuntimeException)
+void SAL_CALL OAuthenticationContinuation::setUserName( const OUString& _rUser ) throw(RuntimeException, std::exception)
 {
     m_sUser = _rUser;
 }
 
-sal_Bool SAL_CALL OAuthenticationContinuation::canSetPassword(  ) throw(RuntimeException)
+sal_Bool SAL_CALL OAuthenticationContinuation::canSetPassword(  ) throw(RuntimeException, std::exception)
 {
     return sal_True;
 }
 
-void SAL_CALL OAuthenticationContinuation::setPassword( const OUString& _rPassword ) throw(RuntimeException)
+void SAL_CALL OAuthenticationContinuation::setPassword( const OUString& _rPassword ) throw(RuntimeException, std::exception)
 {
     m_sPassword = _rPassword;
 }
 
-Sequence< RememberAuthentication > SAL_CALL OAuthenticationContinuation::getRememberPasswordModes( RememberAuthentication& _reDefault ) throw(RuntimeException)
+Sequence< RememberAuthentication > SAL_CALL OAuthenticationContinuation::getRememberPasswordModes( RememberAuthentication& _reDefault ) throw(RuntimeException, std::exception)
 {
     Sequence< RememberAuthentication > aReturn(1);
     _reDefault = aReturn[0] = RememberAuthentication_SESSION;
     return aReturn;
 }
 
-void SAL_CALL OAuthenticationContinuation::setRememberPassword( RememberAuthentication _eRemember ) throw(RuntimeException)
+void SAL_CALL OAuthenticationContinuation::setRememberPassword( RememberAuthentication _eRemember ) throw(RuntimeException, std::exception)
 {
     m_bRemberPassword = (RememberAuthentication_NO != _eRemember);
 }
 
-sal_Bool SAL_CALL OAuthenticationContinuation::canSetAccount(  ) throw(RuntimeException)
+sal_Bool SAL_CALL OAuthenticationContinuation::canSetAccount(  ) throw(RuntimeException, std::exception)
 {
     return sal_False;
 }
 
-void SAL_CALL OAuthenticationContinuation::setAccount( const OUString& ) throw(RuntimeException)
+void SAL_CALL OAuthenticationContinuation::setAccount( const OUString& ) throw(RuntimeException, std::exception)
 {
     SAL_WARN("dbaccess","OAuthenticationContinuation::setAccount: not supported!");
 }
 
-Sequence< RememberAuthentication > SAL_CALL OAuthenticationContinuation::getRememberAccountModes( RememberAuthentication& _reDefault ) throw(RuntimeException)
+Sequence< RememberAuthentication > SAL_CALL OAuthenticationContinuation::getRememberAccountModes( RememberAuthentication& _reDefault ) throw(RuntimeException, std::exception)
 {
     Sequence < RememberAuthentication > aReturn(1);
     aReturn[0] = RememberAuthentication_NO;
@@ -251,7 +251,7 @@ Sequence< RememberAuthentication > SAL_CALL OAuthenticationContinuation::getReme
     return aReturn;
 }
 
-void SAL_CALL OAuthenticationContinuation::setRememberAccount( RememberAuthentication /*Remember*/ ) throw(RuntimeException)
+void SAL_CALL OAuthenticationContinuation::setRememberAccount( RememberAuthentication /*Remember*/ ) throw(RuntimeException, std::exception)
 {
     SAL_WARN("dbaccess","OAuthenticationContinuation::setRememberAccount: not supported!");
 }
@@ -307,7 +307,7 @@ protected:
 public:
     OSharedConnectionManager(const Reference< XComponentContext >& _rxContext);
 
-    void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(RuntimeException);
+    void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(RuntimeException, std::exception);
     Reference<XConnection> getConnection(   const OUString& url,
                                             const OUString& user,
                                             const OUString& password,
@@ -325,7 +325,7 @@ OSharedConnectionManager::~OSharedConnectionManager()
 {
 }
 
-void SAL_CALL OSharedConnectionManager::disposing( const ::com::sun::star::lang::EventObject& Source ) throw(RuntimeException)
+void SAL_CALL OSharedConnectionManager::disposing( const ::com::sun::star::lang::EventObject& Source ) throw(RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     Reference<XConnection> xConnection(Source.Source,UNO_QUERY);
@@ -513,7 +513,7 @@ void ODatabaseSource::setName( const Reference< XDocumentDataSource >& _rxDocume
 }
 
 // com::sun::star::lang::XTypeProvider
-Sequence< Type > ODatabaseSource::getTypes() throw (RuntimeException)
+Sequence< Type > ODatabaseSource::getTypes() throw (RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "ODatabaseSource::getTypes" );
     OTypeCollection aPropertyHelperTypes(   ::getCppuType( (const Reference< XFastPropertySet > *)0 ),
@@ -526,7 +526,7 @@ Sequence< Type > ODatabaseSource::getTypes() throw (RuntimeException)
     );
 }
 
-Sequence< sal_Int8 > ODatabaseSource::getImplementationId() throw (RuntimeException)
+Sequence< sal_Int8 > ODatabaseSource::getImplementationId() throw (RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "ODatabaseSource::getImplementationId" );
     static OImplementationId * pId = 0;
@@ -543,7 +543,7 @@ Sequence< sal_Int8 > ODatabaseSource::getImplementationId() throw (RuntimeExcept
 }
 
 // com::sun::star::uno::XInterface
-Any ODatabaseSource::queryInterface( const Type & rType ) throw (RuntimeException)
+Any ODatabaseSource::queryInterface( const Type & rType ) throw (RuntimeException, std::exception)
 {
     Any aIface = ODatabaseSource_Base::queryInterface( rType );
     if ( !aIface.hasValue() )
@@ -561,14 +561,14 @@ void ODatabaseSource::release() throw ()
     ODatabaseSource_Base::release();
 }
 
-void SAL_CALL ODatabaseSource::disposing( const ::com::sun::star::lang::EventObject& Source ) throw(RuntimeException)
+void SAL_CALL ODatabaseSource::disposing( const ::com::sun::star::lang::EventObject& Source ) throw(RuntimeException, std::exception)
 {
     if ( m_pImpl.is() )
         m_pImpl->disposing(Source);
 }
 
 // XServiceInfo
-OUString ODatabaseSource::getImplementationName(  ) throw(RuntimeException)
+OUString ODatabaseSource::getImplementationName(  ) throw(RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "ODatabaseSource::getImplementationName" );
     return getImplementationName_static();
@@ -580,7 +580,7 @@ OUString ODatabaseSource::getImplementationName_static(  ) throw(RuntimeExceptio
     return OUString("com.sun.star.comp.dba.ODatabaseSource");
 }
 
-Sequence< OUString > ODatabaseSource::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > ODatabaseSource::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "ODatabaseSource::getSupportedServiceNames" );
     return getSupportedServiceNames_static();
@@ -602,7 +602,7 @@ Sequence< OUString > ODatabaseSource::getSupportedServiceNames_static(  ) throw 
     return aSNS;
 }
 
-sal_Bool ODatabaseSource::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
+sal_Bool ODatabaseSource::supportsService( const OUString& _rServiceName ) throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -741,7 +741,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
 }
 
 // OPropertySetHelper
-Reference< XPropertySetInfo >  ODatabaseSource::getPropertySetInfo() throw (RuntimeException)
+Reference< XPropertySetInfo >  ODatabaseSource::getPropertySetInfo() throw (RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "ODatabaseSource::getPropertySetInfo" );
     return createPropertySetInfo( getInfoHelper() ) ;
@@ -917,7 +917,7 @@ namespace
     }
 }
 
-void ODatabaseSource::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception)
+void ODatabaseSource::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception, std::exception)
 {
     SAL_INFO("dbaccess", "ODatabaseSource::setFastPropertyValue_NoBroadcast" );
     if ( m_pImpl.is() )
@@ -1049,14 +1049,14 @@ void ODatabaseSource::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) con
 }
 
 // XDataSource
-void ODatabaseSource::setLoginTimeout(sal_Int32 seconds) throw( SQLException, RuntimeException )
+void ODatabaseSource::setLoginTimeout(sal_Int32 seconds) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "ODatabaseSource::setLoginTimeout" );
     ModelMethodGuard aGuard( *this );
     m_pImpl->m_nLoginTimeout = seconds;
 }
 
-sal_Int32 ODatabaseSource::getLoginTimeout(void) throw( SQLException, RuntimeException )
+sal_Int32 ODatabaseSource::getLoginTimeout(void) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "ODatabaseSource::getLoginTimeout" );
     ModelMethodGuard aGuard( *this );
@@ -1064,25 +1064,25 @@ sal_Int32 ODatabaseSource::getLoginTimeout(void) throw( SQLException, RuntimeExc
 }
 
 // XCompletedConnection
-Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const Reference< XInteractionHandler >& _rxHandler ) throw(SQLException, RuntimeException)
+Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const Reference< XInteractionHandler >& _rxHandler ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "ODatabaseSource::connectWithCompletion" );
     return connectWithCompletion(_rxHandler,sal_False);
 }
 
-Reference< XConnection > ODatabaseSource::getConnection(const OUString& user, const OUString& password) throw( SQLException, RuntimeException )
+Reference< XConnection > ODatabaseSource::getConnection(const OUString& user, const OUString& password) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "ODatabaseSource::getConnection" );
     return getConnection(user,password,sal_False);
 }
 
-Reference< XConnection > SAL_CALL ODatabaseSource::getIsolatedConnection( const OUString& user, const OUString& password ) throw(SQLException, RuntimeException)
+Reference< XConnection > SAL_CALL ODatabaseSource::getIsolatedConnection( const OUString& user, const OUString& password ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "ODatabaseSource::getIsolatedConnection" );
     return getConnection(user,password,sal_True);
 }
 
-Reference< XConnection > SAL_CALL ODatabaseSource::getIsolatedConnectionWithCompletion( const Reference< XInteractionHandler >& _rxHandler ) throw(SQLException, RuntimeException)
+Reference< XConnection > SAL_CALL ODatabaseSource::getIsolatedConnectionWithCompletion( const Reference< XInteractionHandler >& _rxHandler ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "ODatabaseSource::getIsolatedConnectionWithCompletion" );
     return connectWithCompletion(_rxHandler,sal_True);
@@ -1222,14 +1222,14 @@ Reference< XConnection > ODatabaseSource::getConnection(const OUString& user, co
     return xConn;
 }
 
-Reference< XNameAccess > SAL_CALL ODatabaseSource::getBookmarks(  ) throw (RuntimeException)
+Reference< XNameAccess > SAL_CALL ODatabaseSource::getBookmarks(  ) throw (RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "ODatabaseSource::getBookmarks" );
     ModelMethodGuard aGuard( *this );
     return static_cast< XNameContainer* >(&m_aBookmarks);
 }
 
-Reference< XNameAccess > SAL_CALL ODatabaseSource::getQueryDefinitions( ) throw(RuntimeException)
+Reference< XNameAccess > SAL_CALL ODatabaseSource::getQueryDefinitions( ) throw(RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "ODatabaseSource::getQueryDefinitions" );
     ModelMethodGuard aGuard( *this );
@@ -1261,7 +1261,7 @@ Reference< XNameAccess > SAL_CALL ODatabaseSource::getQueryDefinitions( ) throw(
 }
 
 // XTablesSupplier
-Reference< XNameAccess >  ODatabaseSource::getTables() throw( RuntimeException )
+Reference< XNameAccess >  ODatabaseSource::getTables() throw( RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "ODatabaseSource::getTables" );
     ModelMethodGuard aGuard( *this );
@@ -1276,7 +1276,7 @@ Reference< XNameAccess >  ODatabaseSource::getTables() throw( RuntimeException )
     return xContainer;
 }
 
-void SAL_CALL ODatabaseSource::flush(  ) throw (RuntimeException)
+void SAL_CALL ODatabaseSource::flush(  ) throw (RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "ODatabaseSource::flush" );
     try
@@ -1305,7 +1305,7 @@ void SAL_CALL ODatabaseSource::flush(  ) throw (RuntimeException)
     }
 }
 
-void SAL_CALL ODatabaseSource::flushed( const EventObject& /*rEvent*/ ) throw (RuntimeException)
+void SAL_CALL ODatabaseSource::flushed( const EventObject& /*rEvent*/ ) throw (RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "ODatabaseSource::flushed" );
     ModelMethodGuard aGuard( *this );
@@ -1338,19 +1338,19 @@ void SAL_CALL ODatabaseSource::flushed( const EventObject& /*rEvent*/ ) throw (R
     m_pImpl->setModified( bWasModified );
 }
 
-void SAL_CALL ODatabaseSource::addFlushListener( const Reference< ::com::sun::star::util::XFlushListener >& _xListener ) throw (RuntimeException)
+void SAL_CALL ODatabaseSource::addFlushListener( const Reference< ::com::sun::star::util::XFlushListener >& _xListener ) throw (RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "ODatabaseSource::addFlushListener" );
     m_aFlushListeners.addInterface(_xListener);
 }
 
-void SAL_CALL ODatabaseSource::removeFlushListener( const Reference< ::com::sun::star::util::XFlushListener >& _xListener ) throw (RuntimeException)
+void SAL_CALL ODatabaseSource::removeFlushListener( const Reference< ::com::sun::star::util::XFlushListener >& _xListener ) throw (RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "ODatabaseSource::removeFlushListener" );
     m_aFlushListeners.removeInterface(_xListener);
 }
 
-void SAL_CALL ODatabaseSource::elementInserted( const ContainerEvent& /*Event*/ ) throw (RuntimeException)
+void SAL_CALL ODatabaseSource::elementInserted( const ContainerEvent& /*Event*/ ) throw (RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "ODatabaseSource::elementInserted" );
     ModelMethodGuard aGuard( *this );
@@ -1358,7 +1358,7 @@ void SAL_CALL ODatabaseSource::elementInserted( const ContainerEvent& /*Event*/ 
         m_pImpl->setModified(sal_True);
 }
 
-void SAL_CALL ODatabaseSource::elementRemoved( const ContainerEvent& /*Event*/ ) throw (RuntimeException)
+void SAL_CALL ODatabaseSource::elementRemoved( const ContainerEvent& /*Event*/ ) throw (RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "ODatabaseSource::elementRemoved" );
     ModelMethodGuard aGuard( *this );
@@ -1366,7 +1366,7 @@ void SAL_CALL ODatabaseSource::elementRemoved( const ContainerEvent& /*Event*/ )
         m_pImpl->setModified(sal_True);
 }
 
-void SAL_CALL ODatabaseSource::elementReplaced( const ContainerEvent& /*Event*/ ) throw (RuntimeException)
+void SAL_CALL ODatabaseSource::elementReplaced( const ContainerEvent& /*Event*/ ) throw (RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "ODatabaseSource::elementReplaced" );
     ModelMethodGuard aGuard( *this );
@@ -1375,7 +1375,7 @@ void SAL_CALL ODatabaseSource::elementReplaced( const ContainerEvent& /*Event*/ 
 }
 
 // XDocumentDataSource
-Reference< XOfficeDatabaseDocument > SAL_CALL ODatabaseSource::getDatabaseDocument() throw (RuntimeException)
+Reference< XOfficeDatabaseDocument > SAL_CALL ODatabaseSource::getDatabaseDocument() throw (RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "ODatabaseSource::getDatabaseDocument" );
     ModelMethodGuard aGuard( *this );

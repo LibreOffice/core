@@ -30,42 +30,42 @@ VbaSystemAXControl::VbaSystemAXControl(  const uno::Reference< ov::XHelperInterf
 
 
 uno::Reference< beans::XIntrospectionAccess > SAL_CALL VbaSystemAXControl::getIntrospection()
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     return m_xControlInvocation->getIntrospection();
 }
 
 
 uno::Any SAL_CALL VbaSystemAXControl::invoke( const OUString& aFunctionName, const uno::Sequence< uno::Any >& aParams, uno::Sequence< ::sal_Int16 >& aOutParamIndex, uno::Sequence< uno::Any >& aOutParam )
-    throw ( lang::IllegalArgumentException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException )
+    throw ( lang::IllegalArgumentException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException, std::exception )
 {
     return m_xControlInvocation->invoke( aFunctionName, aParams, aOutParamIndex, aOutParam );
 }
 
 
 void SAL_CALL VbaSystemAXControl::setValue( const OUString& aPropertyName, const uno::Any& aValue )
-    throw ( beans::UnknownPropertyException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException )
+    throw ( beans::UnknownPropertyException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException, std::exception )
 {
     m_xControlInvocation->setValue( aPropertyName, aValue );
 }
 
 
 uno::Any SAL_CALL VbaSystemAXControl::getValue( const OUString& aPropertyName )
-    throw ( beans::UnknownPropertyException, uno::RuntimeException )
+    throw ( beans::UnknownPropertyException, uno::RuntimeException, std::exception )
 {
     return m_xControlInvocation->getValue( aPropertyName );
 }
 
 
 ::sal_Bool SAL_CALL VbaSystemAXControl::hasMethod( const OUString& aName )
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     return m_xControlInvocation->hasMethod( aName );
 }
 
 
 ::sal_Bool SAL_CALL VbaSystemAXControl::hasProperty( const OUString& aName )
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     return m_xControlInvocation->hasProperty( aName );
 }

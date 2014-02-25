@@ -34,7 +34,7 @@ SwVbaAddin::~SwVbaAddin()
 {
 }
 
-OUString SAL_CALL SwVbaAddin::getName() throw (uno::RuntimeException)
+OUString SAL_CALL SwVbaAddin::getName() throw (uno::RuntimeException, std::exception)
 {
     OUString sName;
     INetURLObject aURL( msFileURL );
@@ -43,29 +43,29 @@ OUString SAL_CALL SwVbaAddin::getName() throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-SwVbaAddin::setName( const OUString& ) throw ( css::uno::RuntimeException )
+SwVbaAddin::setName( const OUString& ) throw ( css::uno::RuntimeException, std::exception )
 {
     throw uno::RuntimeException(" Fail to set name", uno::Reference< uno::XInterface >() );
 }
 
-OUString SAL_CALL SwVbaAddin::getPath() throw (uno::RuntimeException)
+OUString SAL_CALL SwVbaAddin::getPath() throw (uno::RuntimeException, std::exception)
 {
     INetURLObject aURL( msFileURL );
     aURL.CutLastName();
     return aURL.GetURLPath();
 }
 
-::sal_Bool SAL_CALL SwVbaAddin::getAutoload() throw (uno::RuntimeException)
+::sal_Bool SAL_CALL SwVbaAddin::getAutoload() throw (uno::RuntimeException, std::exception)
 {
     return mbAutoload;
 }
 
-::sal_Bool SAL_CALL SwVbaAddin::getInstalled() throw (uno::RuntimeException)
+::sal_Bool SAL_CALL SwVbaAddin::getInstalled() throw (uno::RuntimeException, std::exception)
 {
     return mbInstalled;
 }
 
-void SAL_CALL SwVbaAddin::setInstalled( ::sal_Bool _installed ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaAddin::setInstalled( ::sal_Bool _installed ) throw (uno::RuntimeException, std::exception)
 {
     if( _installed != mbInstalled )
     {

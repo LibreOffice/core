@@ -31,7 +31,7 @@ namespace connectivity
     ParameterSubstitution::ParameterSubstitution(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext ) : m_xContext(_rxContext)
     {
     }
-    void SAL_CALL ParameterSubstitution::initialize( const uno::Sequence< uno::Any >& _aArguments ) throw (uno::Exception, uno::RuntimeException)
+    void SAL_CALL ParameterSubstitution::initialize( const uno::Sequence< uno::Any >& _aArguments ) throw (uno::Exception, uno::RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         comphelper::SequenceAsHashMap aArgs(_aArguments);
@@ -45,17 +45,17 @@ namespace connectivity
         return OUString("org.openoffice.comp.helper.ParameterSubstitution");
     }
 
-    OUString SAL_CALL ParameterSubstitution::getImplementationName(  ) throw(RuntimeException)
+    OUString SAL_CALL ParameterSubstitution::getImplementationName(  ) throw(RuntimeException, std::exception)
     {
         return getImplementationName_Static();
     }
 
-    sal_Bool SAL_CALL ParameterSubstitution::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
+    sal_Bool SAL_CALL ParameterSubstitution::supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception)
     {
         return cppu::supportsService(this, _rServiceName);
     }
 
-    Sequence< OUString > SAL_CALL ParameterSubstitution::getSupportedServiceNames(  ) throw(RuntimeException)
+    Sequence< OUString > SAL_CALL ParameterSubstitution::getSupportedServiceNames(  ) throw(RuntimeException, std::exception)
     {
         return getSupportedServiceNames_Static();
     }
@@ -73,7 +73,7 @@ namespace connectivity
         return *(new ParameterSubstitution(_xContext));
     }
 
-    OUString SAL_CALL ParameterSubstitution::substituteVariables( const OUString& _sText, ::sal_Bool /*bSubstRequired*/ ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException)
+    OUString SAL_CALL ParameterSubstitution::substituteVariables( const OUString& _sText, ::sal_Bool /*bSubstRequired*/ ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception)
     {
         OUString sRet = _sText;
         uno::Reference< sdbc::XConnection > xConnection = m_xConnection;
@@ -100,12 +100,12 @@ namespace connectivity
         return sRet;
     }
 
-    OUString SAL_CALL ParameterSubstitution::reSubstituteVariables( const OUString& _sText ) throw (::com::sun::star::uno::RuntimeException)
+    OUString SAL_CALL ParameterSubstitution::reSubstituteVariables( const OUString& _sText ) throw (::com::sun::star::uno::RuntimeException, std::exception)
     {
         return _sText;
     }
 
-    OUString SAL_CALL ParameterSubstitution::getSubstituteVariableValue( const OUString& /*variable*/ ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException)
+    OUString SAL_CALL ParameterSubstitution::getSubstituteVariableValue( const OUString& /*variable*/ ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception)
     {
         throw container::NoSuchElementException();
     }

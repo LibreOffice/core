@@ -718,7 +718,7 @@ void SAL_CALL ODbaseTable::disposing(void)
     m_aColumns = NULL;
 }
 
-Sequence< Type > SAL_CALL ODbaseTable::getTypes(  ) throw(RuntimeException)
+Sequence< Type > SAL_CALL ODbaseTable::getTypes(  ) throw(RuntimeException, std::exception)
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::getTypes" );
     Sequence< Type > aTypes = OTable_TYPEDEF::getTypes();
@@ -741,7 +741,7 @@ Sequence< Type > SAL_CALL ODbaseTable::getTypes(  ) throw(RuntimeException)
 }
 
 
-Any SAL_CALL ODbaseTable::queryInterface( const Type & rType ) throw(RuntimeException)
+Any SAL_CALL ODbaseTable::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::queryInterface" );
     if( rType == ::getCppuType((const Reference<XKeysSupplier>*)0)  ||
@@ -771,7 +771,7 @@ Sequence< sal_Int8 > ODbaseTable::getUnoTunnelImplementationId()
 
 // com::sun::star::lang::XUnoTunnel
 
-sal_Int64 ODbaseTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
+sal_Int64 ODbaseTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException, std::exception)
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::getSomething" );
     return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
@@ -2137,7 +2137,7 @@ sal_Bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, sal_Size& rBlockN
 
 
 // XAlterTable
-void SAL_CALL ODbaseTable::alterColumnByName( const OUString& colName, const Reference< XPropertySet >& descriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
+void SAL_CALL ODbaseTable::alterColumnByName( const OUString& colName, const Reference< XPropertySet >& descriptor ) throw(SQLException, NoSuchElementException, RuntimeException, std::exception)
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::alterColumnByName" );
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -2150,7 +2150,7 @@ void SAL_CALL ODbaseTable::alterColumnByName( const OUString& colName, const Ref
     alterColumn(m_pColumns->findColumn(colName)-1,descriptor,xOldColumn);
 }
 
-void SAL_CALL ODbaseTable::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor ) throw(SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException)
+void SAL_CALL ODbaseTable::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor ) throw(SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::alterColumnByIndex" );
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -2278,7 +2278,7 @@ Reference< XDatabaseMetaData> ODbaseTable::getMetaData() const
     return getConnection()->getMetaData();
 }
 
-void SAL_CALL ODbaseTable::rename( const OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException)
+void SAL_CALL ODbaseTable::rename( const OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::rename" );
     ::osl::MutexGuard aGuard(m_aMutex);

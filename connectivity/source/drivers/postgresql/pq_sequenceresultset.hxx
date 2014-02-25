@@ -81,15 +81,15 @@ public:
 
 public: // XCloseable
     virtual void SAL_CALL close(  )
-        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception);
 
 public: // XResultSetMetaDataSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > SAL_CALL getMetaData(  )
-        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception);
 
 public: // XColumnLocate
     virtual sal_Int32 SAL_CALL findColumn( const OUString& columnName )
-        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception);
 };
 
 }

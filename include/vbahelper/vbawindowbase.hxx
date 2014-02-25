@@ -42,16 +42,16 @@ public:
         throw (css::uno::RuntimeException);
 
     // XWindowBase
-    virtual sal_Int32 SAL_CALL getHeight() throw (css::uno::RuntimeException) ;
-    virtual void SAL_CALL setHeight( sal_Int32 _height ) throw (css::uno::RuntimeException) ;
-    virtual sal_Int32 SAL_CALL getLeft() throw (css::uno::RuntimeException) ;
-    virtual void SAL_CALL setLeft( sal_Int32 _left ) throw (css::uno::RuntimeException) ;
-    virtual sal_Int32 SAL_CALL getTop() throw (css::uno::RuntimeException) ;
-    virtual void SAL_CALL setTop( sal_Int32 _top ) throw (css::uno::RuntimeException) ;
-    virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setVisible( sal_Bool _visible ) throw (css::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getWidth() throw (css::uno::RuntimeException) ;
-    virtual void SAL_CALL setWidth( sal_Int32 _width ) throw (css::uno::RuntimeException) ;
+    virtual sal_Int32 SAL_CALL getHeight() throw (css::uno::RuntimeException, std::exception) ;
+    virtual void SAL_CALL setHeight( sal_Int32 _height ) throw (css::uno::RuntimeException, std::exception) ;
+    virtual sal_Int32 SAL_CALL getLeft() throw (css::uno::RuntimeException, std::exception) ;
+    virtual void SAL_CALL setLeft( sal_Int32 _left ) throw (css::uno::RuntimeException, std::exception) ;
+    virtual sal_Int32 SAL_CALL getTop() throw (css::uno::RuntimeException, std::exception) ;
+    virtual void SAL_CALL setTop( sal_Int32 _top ) throw (css::uno::RuntimeException, std::exception) ;
+    virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setVisible( sal_Bool _visible ) throw (css::uno::RuntimeException, std::exception);
+    virtual sal_Int32 SAL_CALL getWidth() throw (css::uno::RuntimeException, std::exception) ;
+    virtual void SAL_CALL setWidth( sal_Int32 _width ) throw (css::uno::RuntimeException, std::exception) ;
 
     // XHelperInterface
     virtual OUString getServiceImplName();

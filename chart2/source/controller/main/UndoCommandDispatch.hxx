@@ -47,7 +47,7 @@ protected:
     virtual void SAL_CALL dispatch(
         const ::com::sun::star::util::URL& URL,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // ____ WeakComponentImplHelperBase ____
     /// is called when this is disposed
@@ -56,7 +56,7 @@ protected:
     // ____ XEventListener (base of XModifyListener) ____
     virtual void SAL_CALL disposing(
         const ::com::sun::star::lang::EventObject& Source )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void fireStatusEvent(
         const OUString & rURL,

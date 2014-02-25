@@ -58,7 +58,7 @@ XInteractionSupplyNameImpl::release( void )
 
 Any SAL_CALL
 XInteractionSupplyNameImpl::queryInterface( const Type& rType )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     Any aRet = cppu::queryInterface( rType,
                                      (static_cast< lang::XTypeProvider* >(this)),
@@ -97,7 +97,7 @@ XInteractionAbortImpl::release( void )
 
 Any SAL_CALL
 XInteractionAbortImpl::queryInterface( const Type& rType )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     Any aRet = cppu::queryInterface( rType,
                                      (static_cast< lang::XTypeProvider* >(this)),
@@ -155,7 +155,7 @@ XInteractionRequestImpl::release( void )
 
 Any SAL_CALL
 XInteractionRequestImpl::queryInterface( const Type& rType )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     Any aRet =
         cppu::queryInterface(
@@ -177,7 +177,7 @@ XTYPEPROVIDER_IMPL_2( XInteractionRequestImpl,
 
 Any SAL_CALL
 XInteractionRequestImpl::getRequest()
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     Any aAny;
     if(m_nErrorCode == TASKHANDLING_FOLDER_EXISTS_MKDIR)

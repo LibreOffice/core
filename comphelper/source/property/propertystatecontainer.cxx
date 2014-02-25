@@ -55,7 +55,7 @@ namespace comphelper
     }
 
 
-    Any SAL_CALL OPropertyStateContainer::queryInterface( const Type& _rType ) throw (RuntimeException)
+    Any SAL_CALL OPropertyStateContainer::queryInterface( const Type& _rType ) throw (RuntimeException, std::exception)
     {
         Any aReturn = OPropertyContainer::queryInterface( _rType );
         if ( !aReturn.hasValue() )
@@ -80,13 +80,13 @@ namespace comphelper
     }
 
 
-    PropertyState SAL_CALL OPropertyStateContainer::getPropertyState( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
+    PropertyState SAL_CALL OPropertyStateContainer::getPropertyState( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException, std::exception)
     {
         return getPropertyStateByHandle( getHandleForName( _rPropertyName ) );
     }
 
 
-    Sequence< PropertyState > SAL_CALL OPropertyStateContainer::getPropertyStates( const Sequence< OUString >& _rPropertyNames ) throw (UnknownPropertyException, RuntimeException)
+    Sequence< PropertyState > SAL_CALL OPropertyStateContainer::getPropertyStates( const Sequence< OUString >& _rPropertyNames ) throw (UnknownPropertyException, RuntimeException, std::exception)
     {
         sal_Int32 nProperties = _rPropertyNames.getLength();
         Sequence< PropertyState> aStates( nProperties );
@@ -139,13 +139,13 @@ namespace comphelper
     }
 
 
-    void SAL_CALL OPropertyStateContainer::setPropertyToDefault( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
+    void SAL_CALL OPropertyStateContainer::setPropertyToDefault( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException, std::exception)
     {
         setPropertyToDefaultByHandle( getHandleForName( _rPropertyName ) );
     }
 
 
-    Any SAL_CALL OPropertyStateContainer::getPropertyDefault( const OUString& _rPropertyName ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
+    Any SAL_CALL OPropertyStateContainer::getPropertyDefault( const OUString& _rPropertyName ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
     {
         Any aDefault;
         getPropertyDefaultByHandle( getHandleForName( _rPropertyName ), aDefault );

@@ -48,17 +48,17 @@ public:
     virtual ~SwVbaRows() {}
 
     // Attributes
-    virtual ::sal_Int32 SAL_CALL getAlignment() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setAlignment( ::sal_Int32 _alignment ) throw (css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL getAllowBreakAcrossPages() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setAllowBreakAcrossPages( const css::uno::Any& _allowbreakacrosspages ) throw (css::uno::RuntimeException);
-    virtual float SAL_CALL getSpaceBetweenColumns() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setSpaceBetweenColumns( float _spacebetweencolumns ) throw (css::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getAlignment() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setAlignment( ::sal_Int32 _alignment ) throw (css::uno::RuntimeException, std::exception);
+    virtual css::uno::Any SAL_CALL getAllowBreakAcrossPages() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setAllowBreakAcrossPages( const css::uno::Any& _allowbreakacrosspages ) throw (css::uno::RuntimeException, std::exception);
+    virtual float SAL_CALL getSpaceBetweenColumns() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setSpaceBetweenColumns( float _spacebetweencolumns ) throw (css::uno::RuntimeException, std::exception);
 
     // Methods
-    virtual void SAL_CALL Delete(  ) throw (css::uno::RuntimeException);
-    virtual void SAL_CALL SetLeftIndent( float LeftIndent, ::sal_Int32 RulerStyle ) throw (css::uno::RuntimeException);
-    virtual void SAL_CALL Select(  ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL Delete(  ) throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL SetLeftIndent( float LeftIndent, ::sal_Int32 RulerStyle ) throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL Select(  ) throw (css::uno::RuntimeException, std::exception);
 
     //XCollection
     virtual ::sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException);

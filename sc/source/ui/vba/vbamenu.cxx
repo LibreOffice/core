@@ -18,25 +18,25 @@ ScVbaMenu::ScVbaMenu( const uno::Reference< ov::XHelperInterface > xParent, cons
 }
 
 OUString SAL_CALL
-ScVbaMenu::getCaption() throw ( uno::RuntimeException )
+ScVbaMenu::getCaption() throw ( uno::RuntimeException, std::exception )
 {
     return m_xCommandBarControl->getCaption();
 }
 
 void SAL_CALL
-ScVbaMenu::setCaption( const OUString& _caption ) throw (uno::RuntimeException)
+ScVbaMenu::setCaption( const OUString& _caption ) throw (uno::RuntimeException, std::exception)
 {
     m_xCommandBarControl->setCaption( _caption );
 }
 
 void SAL_CALL
-ScVbaMenu::Delete( ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaMenu::Delete( ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     m_xCommandBarControl->Delete();
 }
 
 uno::Any SAL_CALL
-ScVbaMenu::MenuItems( const uno::Any& aIndex ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaMenu::MenuItems( const uno::Any& aIndex ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     uno::Reference< XCommandBarControls > xCommandBarControls( m_xCommandBarControl->Controls( uno::Any() ), uno::UNO_QUERY_THROW );
     uno::Reference< excel::XMenuItems > xMenuItems( new ScVbaMenuItems( this, mxContext, xCommandBarControls ) );

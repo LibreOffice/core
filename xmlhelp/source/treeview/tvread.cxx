@@ -250,7 +250,7 @@ TVBase::release(
 Any SAL_CALL
 TVBase::queryInterface(
     const Type& rType )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     Any aRet = cppu::queryInterface( rType,
                                      (static_cast< XTypeProvider* >(this)),
@@ -301,7 +301,7 @@ Any SAL_CALL
 TVRead::getByName( const OUString& aName )
     throw( NoSuchElementException,
            WrappedTargetException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     bool found( true );
     Any aAny;
@@ -325,7 +325,7 @@ TVRead::getByName( const OUString& aName )
 
 Sequence< OUString > SAL_CALL
 TVRead::getElementNames( )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     Sequence< OUString > seq( 3 );
 
@@ -338,7 +338,7 @@ TVRead::getElementNames( )
 
 sal_Bool SAL_CALL
 TVRead::hasByName( const OUString& aName )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     if( aName.equalsAscii( "Title" )     ||
         aName.equalsAscii( "TargetURL" ) ||
@@ -353,7 +353,7 @@ TVRead::hasByName( const OUString& aName )
 Any SAL_CALL
 TVRead::getByHierarchicalName( const OUString& aName )
     throw( NoSuchElementException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     sal_Int32 idx;
     OUString name( aName );
@@ -367,7 +367,7 @@ TVRead::getByHierarchicalName( const OUString& aName )
 
 sal_Bool SAL_CALL
 TVRead::hasByHierarchicalName( const OUString& aName )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     sal_Int32 idx;
     OUString name( aName );
@@ -573,7 +573,7 @@ Any SAL_CALL
 TVChildTarget::getByName( const OUString& aName )
     throw( NoSuchElementException,
            WrappedTargetException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     OUString num( aName.getStr()+2,aName.getLength()-4 );
     sal_Int32 idx = num.toInt32() - 1;
@@ -588,7 +588,7 @@ TVChildTarget::getByName( const OUString& aName )
 
 Sequence< OUString > SAL_CALL
 TVChildTarget::getElementNames( )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     Sequence< OUString > seq( Elements.size() );
     for( unsigned i = 0; i < Elements.size(); ++i )
@@ -599,7 +599,7 @@ TVChildTarget::getElementNames( )
 
 sal_Bool SAL_CALL
 TVChildTarget::hasByName( const OUString& aName )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     OUString num( aName.getStr()+2,aName.getLength()-4 );
     sal_Int32 idx = num.toInt32() - 1;
@@ -614,7 +614,7 @@ TVChildTarget::hasByName( const OUString& aName )
 Any SAL_CALL
 TVChildTarget::getByHierarchicalName( const OUString& aName )
     throw( NoSuchElementException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     sal_Int32 idx;
     OUString name( aName );
@@ -635,7 +635,7 @@ TVChildTarget::getByHierarchicalName( const OUString& aName )
 
 sal_Bool SAL_CALL
 TVChildTarget::hasByHierarchicalName( const OUString& aName )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     sal_Int32 idx;
     OUString name( aName );

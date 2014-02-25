@@ -105,21 +105,21 @@ public:
 
 public:
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw(RuntimeException);
+    virtual OUString SAL_CALL getImplementationName() throw(RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-        throw(RuntimeException);
+        throw(RuntimeException, std::exception);
     virtual Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw(RuntimeException);
+        throw(RuntimeException, std::exception);
 
     // XImplementationLoader
     virtual css::uno::Reference<XInterface> SAL_CALL activate(
         const OUString& implementationName, const OUString& implementationLoaderUrl,
         const OUString& locationUrl, const css::uno::Reference<XRegistryKey>& xKey)
-        throw(CannotActivateFactoryException, RuntimeException);
+        throw(CannotActivateFactoryException, RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL writeRegistryInfo(
         const css::uno::Reference<XRegistryKey>& xKey,
         const OUString& implementationLoaderUrl, const OUString& locationUrl)
-        throw(CannotRegisterImplementationException, RuntimeException);
+        throw(CannotRegisterImplementationException, RuntimeException, std::exception);
 };
 
 const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaLoader()
@@ -316,19 +316,19 @@ JavaComponentLoader::~JavaComponentLoader() throw()
 
 // XServiceInfo
 OUString SAL_CALL JavaComponentLoader::getImplementationName()
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return loader_getImplementationName();
 }
 
 sal_Bool SAL_CALL JavaComponentLoader::supportsService(const OUString & ServiceName)
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence<OUString> SAL_CALL JavaComponentLoader::getSupportedServiceNames()
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return loader_getSupportedServiceNames();
 }
@@ -339,7 +339,7 @@ Sequence<OUString> SAL_CALL JavaComponentLoader::getSupportedServiceNames()
 sal_Bool SAL_CALL JavaComponentLoader::writeRegistryInfo(
     const css::uno::Reference<XRegistryKey> & xKey, const OUString & blabla,
     const OUString & rLibName)
-    throw(CannotRegisterImplementationException, RuntimeException)
+    throw(CannotRegisterImplementationException, RuntimeException, std::exception)
 {
     const css::uno::Reference<XImplementationLoader> & loader = getJavaLoader();
     if (loader.is())
@@ -353,7 +353,7 @@ sal_Bool SAL_CALL JavaComponentLoader::writeRegistryInfo(
 css::uno::Reference<XInterface> SAL_CALL JavaComponentLoader::activate(
     const OUString & rImplName, const OUString & blabla, const OUString & rLibName,
     const css::uno::Reference<XRegistryKey> & xKey)
-    throw(CannotActivateFactoryException, RuntimeException)
+    throw(CannotActivateFactoryException, RuntimeException, std::exception)
 {
     const css::uno::Reference<XImplementationLoader> & loader = getJavaLoader();
     if (loader.is())

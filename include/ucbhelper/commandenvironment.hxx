@@ -79,12 +79,12 @@ public:
     virtual com::sun::star::uno::Reference<
                 com::sun::star::task::XInteractionHandler > SAL_CALL
     getInteractionHandler()
-        throw ( com::sun::star::uno::RuntimeException );
+        throw ( com::sun::star::uno::RuntimeException, std::exception );
 
     virtual com::sun::star::uno::Reference<
                 com::sun::star::ucb::XProgressHandler > SAL_CALL
     getProgressHandler()
-        throw ( com::sun::star::uno::RuntimeException );
+        throw ( com::sun::star::uno::RuntimeException, std::exception );
 };
 
 } /* namespace ucbhelper */

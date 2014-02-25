@@ -91,18 +91,18 @@ class RecoveryUI : public ::cppu::WeakImplHelper2< css::lang::XServiceInfo      
         // css.lang.XServiceInfo
 
         virtual OUString SAL_CALL getImplementationName()
-            throw(css::uno::RuntimeException);
+            throw(css::uno::RuntimeException, std::exception);
 
         virtual sal_Bool SAL_CALL supportsService(const OUString& sServiceName)
-            throw(css::uno::RuntimeException);
+            throw(css::uno::RuntimeException, std::exception);
 
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-            throw(css::uno::RuntimeException);
+            throw(css::uno::RuntimeException, std::exception);
 
 
         virtual com::sun::star::uno::Any SAL_CALL dispatchWithReturnValue(const css::util::URL& aURL,
                                             const css::uno::Sequence< css::beans::PropertyValue >& lArguments )
-            throw(css::uno::RuntimeException);
+            throw(css::uno::RuntimeException, std::exception);
 
 
         // css.frame.XDispatch
@@ -144,19 +144,19 @@ RecoveryUI::~RecoveryUI()
 }
 
 OUString SAL_CALL RecoveryUI::getImplementationName()
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.svx.RecoveryUI");
 }
 
 sal_Bool SAL_CALL RecoveryUI::supportsService(const OUString& sServiceName)
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, sServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL RecoveryUI::getSupportedServiceNames()
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     css::uno::Sequence< OUString > lServiceNames(1);
     lServiceNames[0] = "com.sun.star.dialog.RecoveryUI";
@@ -165,7 +165,7 @@ css::uno::Sequence< OUString > SAL_CALL RecoveryUI::getSupportedServiceNames()
 
 css::uno::Any SAL_CALL RecoveryUI::dispatchWithReturnValue(const css::util::URL& aURL,
                                                    const css::uno::Sequence< css::beans::PropertyValue >& )
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     // Internally we use VCL ... every call into vcl based code must
     // be guarded by locking the global solar mutex.

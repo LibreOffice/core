@@ -105,7 +105,7 @@ class OComponentAccess  :   private ThreadHelpBase                      ,   // M
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw( css::uno::RuntimeException );
+        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw( css::uno::RuntimeException, std::exception );
 
         //---------------------------------------------------------------------------------------------------------
         //  XElementAccess
@@ -124,7 +124,7 @@ class OComponentAccess  :   private ThreadHelpBase                      ,   // M
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual css::uno::Type SAL_CALL getElementType() throw( css::uno::RuntimeException );
+        virtual css::uno::Type SAL_CALL getElementType() throw( css::uno::RuntimeException, std::exception );
 
         /*-****************************************************************************************************//**
             @short      get state of componentlist of enumeration.
@@ -139,7 +139,7 @@ class OComponentAccess  :   private ThreadHelpBase                      ,   // M
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual sal_Bool SAL_CALL hasElements() throw( css::uno::RuntimeException );
+        virtual sal_Bool SAL_CALL hasElements() throw( css::uno::RuntimeException, std::exception );
 
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods

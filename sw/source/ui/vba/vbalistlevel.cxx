@@ -36,7 +36,7 @@ SwVbaListLevel::~SwVbaListLevel()
 {
 }
 
-::sal_Int32 SAL_CALL SwVbaListLevel::getAlignment() throw (uno::RuntimeException)
+::sal_Int32 SAL_CALL SwVbaListLevel::getAlignment() throw (uno::RuntimeException, std::exception)
 {
     sal_Int16 nAlignment = 0;
     pListHelper->getPropertyValueWithNameAndLevel( mnLevel, OUString("Adjust") ) >>= nAlignment;
@@ -65,7 +65,7 @@ SwVbaListLevel::~SwVbaListLevel()
     return nAlignment;
 }
 
-void SAL_CALL SwVbaListLevel::setAlignment( ::sal_Int32 _alignment ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaListLevel::setAlignment( ::sal_Int32 _alignment ) throw (uno::RuntimeException, std::exception)
 {
     sal_Int16 nAlignment = text::HoriOrientation::LEFT;
     switch( _alignment )
@@ -93,44 +93,44 @@ void SAL_CALL SwVbaListLevel::setAlignment( ::sal_Int32 _alignment ) throw (uno:
     pListHelper->setPropertyValueWithNameAndLevel( mnLevel, OUString("Adjust"), uno::makeAny( nAlignment ) );
 }
 
-uno::Reference< ::ooo::vba::word::XFont > SAL_CALL SwVbaListLevel::getFont() throw (uno::RuntimeException)
+uno::Reference< ::ooo::vba::word::XFont > SAL_CALL SwVbaListLevel::getFont() throw (uno::RuntimeException, std::exception)
 {
     throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
 }
 
-void SAL_CALL SwVbaListLevel::setFont( const uno::Reference< ::ooo::vba::word::XFont >& /*_font*/ ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaListLevel::setFont( const uno::Reference< ::ooo::vba::word::XFont >& /*_font*/ ) throw (uno::RuntimeException, std::exception)
 {
     throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
 }
 
-::sal_Int32 SAL_CALL SwVbaListLevel::getIndex() throw (uno::RuntimeException)
+::sal_Int32 SAL_CALL SwVbaListLevel::getIndex() throw (uno::RuntimeException, std::exception)
 {
     return mnLevel + 1;
 }
 
-OUString SAL_CALL SwVbaListLevel::getLinkedStyle() throw (uno::RuntimeException)
+OUString SAL_CALL SwVbaListLevel::getLinkedStyle() throw (uno::RuntimeException, std::exception)
 {
     // TODO:
     return OUString();
 }
 
-void SAL_CALL SwVbaListLevel::setLinkedStyle( const OUString& /*_linkedstyle*/ ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaListLevel::setLinkedStyle( const OUString& /*_linkedstyle*/ ) throw (uno::RuntimeException, std::exception)
 {
     // TODO:
 }
 
-OUString SAL_CALL SwVbaListLevel::getNumberFormat() throw (uno::RuntimeException)
+OUString SAL_CALL SwVbaListLevel::getNumberFormat() throw (uno::RuntimeException, std::exception)
 {
     // TODO::
     return OUString();
 }
 
-void SAL_CALL SwVbaListLevel::setNumberFormat( const OUString& /*_numberformat*/ ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaListLevel::setNumberFormat( const OUString& /*_numberformat*/ ) throw (uno::RuntimeException, std::exception)
 {
     // TODO::
 }
 
-float SAL_CALL SwVbaListLevel::getNumberPosition() throw (uno::RuntimeException)
+float SAL_CALL SwVbaListLevel::getNumberPosition() throw (uno::RuntimeException, std::exception)
 {
     // indentAt + firstlineindent
     sal_Int32 nIndentAt = 0;
@@ -143,7 +143,7 @@ float SAL_CALL SwVbaListLevel::getNumberPosition() throw (uno::RuntimeException)
     return static_cast< float >( Millimeter::getInPoints( nResult ) );
 }
 
-void SAL_CALL SwVbaListLevel::setNumberPosition( float _numberposition ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaListLevel::setNumberPosition( float _numberposition ) throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nNumberPosition = Millimeter::getInHundredthsOfOneMillimeter( _numberposition );
 
@@ -154,7 +154,7 @@ void SAL_CALL SwVbaListLevel::setNumberPosition( float _numberposition ) throw (
     pListHelper->setPropertyValueWithNameAndLevel( mnLevel, OUString("FirstLineIndent"), uno::makeAny( nFirstLineIndent ) );
 }
 
-::sal_Int32 SAL_CALL SwVbaListLevel::getNumberStyle() throw (uno::RuntimeException)
+::sal_Int32 SAL_CALL SwVbaListLevel::getNumberStyle() throw (uno::RuntimeException, std::exception)
 {
     sal_Int16 nNumberingType = 0;
     pListHelper->getPropertyValueWithNameAndLevel( mnLevel, OUString("NumberingType") ) >>= nNumberingType;
@@ -218,7 +218,7 @@ void SAL_CALL SwVbaListLevel::setNumberPosition( float _numberposition ) throw (
     return nNumberingType;
 }
 
-void SAL_CALL SwVbaListLevel::setNumberStyle( ::sal_Int32 _numberstyle ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaListLevel::setNumberStyle( ::sal_Int32 _numberstyle ) throw (uno::RuntimeException, std::exception)
 {
     sal_Int16 nNumberingType = 0;
     switch( _numberstyle )
@@ -292,31 +292,31 @@ void SAL_CALL SwVbaListLevel::setNumberStyle( ::sal_Int32 _numberstyle ) throw (
     pListHelper->setPropertyValueWithNameAndLevel( mnLevel, OUString("NumberingType"), uno::makeAny( nNumberingType ) );
 }
 
-::sal_Int32 SAL_CALL SwVbaListLevel::getResetOnHigher() throw (uno::RuntimeException)
+::sal_Int32 SAL_CALL SwVbaListLevel::getResetOnHigher() throw (uno::RuntimeException, std::exception)
 {
     //seems not support?
     return 0;
 }
 
-void SAL_CALL SwVbaListLevel::setResetOnHigher( ::sal_Int32 /*_resetonhigher*/ ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaListLevel::setResetOnHigher( ::sal_Int32 /*_resetonhigher*/ ) throw (uno::RuntimeException, std::exception)
 {
     //seems not support?
 }
 
-::sal_Int32 SAL_CALL SwVbaListLevel::getStartAt() throw (uno::RuntimeException)
+::sal_Int32 SAL_CALL SwVbaListLevel::getStartAt() throw (uno::RuntimeException, std::exception)
 {
     sal_Int16 nStartWith = 0;
     pListHelper->getPropertyValueWithNameAndLevel( mnLevel, OUString("StartWith") ) >>= nStartWith;
     return nStartWith;
 }
 
-void SAL_CALL SwVbaListLevel::setStartAt( ::sal_Int32 _startat ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaListLevel::setStartAt( ::sal_Int32 _startat ) throw (uno::RuntimeException, std::exception)
 {
     sal_Int16 nStartWith = (sal_Int16)_startat;
     pListHelper->setPropertyValueWithNameAndLevel( mnLevel, OUString("StartWith"), uno::makeAny( nStartWith ) );
 }
 
-float SAL_CALL SwVbaListLevel::getTabPosition() throw (uno::RuntimeException)
+float SAL_CALL SwVbaListLevel::getTabPosition() throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nTabPosition = 0;
     pListHelper->getPropertyValueWithNameAndLevel( mnLevel, OUString("ListtabStopPosition") ) >>= nTabPosition;
@@ -324,13 +324,13 @@ float SAL_CALL SwVbaListLevel::getTabPosition() throw (uno::RuntimeException)
     return static_cast< float >( Millimeter::getInPoints( nTabPosition ) );
 }
 
-void SAL_CALL SwVbaListLevel::setTabPosition( float _tabposition ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaListLevel::setTabPosition( float _tabposition ) throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nTabPosition = Millimeter::getInHundredthsOfOneMillimeter( _tabposition );
     pListHelper->setPropertyValueWithNameAndLevel( mnLevel, OUString("ListtabStopPosition"), uno::makeAny( nTabPosition ) );
 }
 
-float SAL_CALL SwVbaListLevel::getTextPosition() throw (uno::RuntimeException)
+float SAL_CALL SwVbaListLevel::getTextPosition() throw (uno::RuntimeException, std::exception)
 {
     // indentAt
     sal_Int32 nIndentAt = 0;
@@ -339,7 +339,7 @@ float SAL_CALL SwVbaListLevel::getTextPosition() throw (uno::RuntimeException)
     return static_cast< float >( Millimeter::getInPoints( nIndentAt ) );
 }
 
-void SAL_CALL SwVbaListLevel::setTextPosition( float _textposition ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaListLevel::setTextPosition( float _textposition ) throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nIndentAt = 0;
     sal_Int32 nFirstLineIndent = 0;
@@ -354,7 +354,7 @@ void SAL_CALL SwVbaListLevel::setTextPosition( float _textposition ) throw (uno:
     pListHelper->setPropertyValueWithNameAndLevel( mnLevel, OUString("FirstLineIndent"), uno::makeAny( nFirstLineIndent ) );
 }
 
-::sal_Int32 SAL_CALL SwVbaListLevel::getTrailingCharacter() throw (uno::RuntimeException)
+::sal_Int32 SAL_CALL SwVbaListLevel::getTrailingCharacter() throw (uno::RuntimeException, std::exception)
 {
     sal_Int16 nLabelFollowedBy= 0;
     pListHelper->getPropertyValueWithNameAndLevel( mnLevel, OUString("LabelFollowedBy") ) >>= nLabelFollowedBy;
@@ -362,7 +362,7 @@ void SAL_CALL SwVbaListLevel::setTextPosition( float _textposition ) throw (uno:
     return nLabelFollowedBy;
 }
 
-void SAL_CALL SwVbaListLevel::setTrailingCharacter( ::sal_Int32 _trailingcharacter ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaListLevel::setTrailingCharacter( ::sal_Int32 _trailingcharacter ) throw (uno::RuntimeException, std::exception)
 {
     sal_Int16 nLabelFollowedBy = (sal_Int16)_trailingcharacter;
     pListHelper->setPropertyValueWithNameAndLevel( mnLevel, OUString("LabelFollowedBy"), uno::makeAny( nLabelFollowedBy ) );

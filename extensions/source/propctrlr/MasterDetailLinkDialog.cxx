@@ -43,7 +43,7 @@ namespace pcr
     {
     }
 
-    Sequence<sal_Int8> SAL_CALL MasterDetailLinkDialog::getImplementationId(  ) throw(RuntimeException)
+    Sequence<sal_Int8> SAL_CALL MasterDetailLinkDialog::getImplementationId(  ) throw(RuntimeException, std::exception)
     {
         static ::cppu::OImplementationId aId;
         return aId.getImplementationId();
@@ -56,7 +56,7 @@ namespace pcr
     }
 
 
-    OUString SAL_CALL MasterDetailLinkDialog::getImplementationName() throw(RuntimeException)
+    OUString SAL_CALL MasterDetailLinkDialog::getImplementationName() throw(RuntimeException, std::exception)
     {
         return getImplementationName_static();
     }
@@ -68,7 +68,7 @@ namespace pcr
     }
 
 
-    ::comphelper::StringSequence SAL_CALL MasterDetailLinkDialog::getSupportedServiceNames() throw(RuntimeException)
+    ::comphelper::StringSequence SAL_CALL MasterDetailLinkDialog::getSupportedServiceNames() throw(RuntimeException, std::exception)
     {
         return getSupportedServiceNames_static();
     }
@@ -82,7 +82,7 @@ namespace pcr
     }
 
 
-    Reference<XPropertySetInfo>  SAL_CALL MasterDetailLinkDialog::getPropertySetInfo() throw(RuntimeException)
+    Reference<XPropertySetInfo>  SAL_CALL MasterDetailLinkDialog::getPropertySetInfo() throw(RuntimeException, std::exception)
     {
         Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;

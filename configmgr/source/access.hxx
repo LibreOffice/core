@@ -136,60 +136,60 @@ public:
     using OWeakObject::release;
 
     virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
-    getTypes() throw (com::sun::star::uno::RuntimeException);
+    getTypes() throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
-    getImplementationId() throw (com::sun::star::uno::RuntimeException);
+    getImplementationId() throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
-    getSupportedServiceNames() throw (com::sun::star::uno::RuntimeException);
+    getSupportedServiceNames() throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL dispose()
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL addEventListener(
         com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >
             const & xListener)
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL removeEventListener(
         com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >
             const & aListener)
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual com::sun::star::uno::Type SAL_CALL getElementType()
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual sal_Bool SAL_CALL hasElements()
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual com::sun::star::uno::Any SAL_CALL getByName(
         OUString const & aName)
         throw (
             com::sun::star::container::NoSuchElementException,
             com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException);
+            com::sun::star::uno::RuntimeException, std::exception);
 
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
-    getElementNames() throw (com::sun::star::uno::RuntimeException);
+    getElementNames() throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual sal_Bool SAL_CALL hasByName(OUString const & aName)
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual com::sun::star::uno::Any SAL_CALL getByHierarchicalName(
         OUString const & aName)
         throw (
             com::sun::star::container::NoSuchElementException,
-            com::sun::star::uno::RuntimeException);
+            com::sun::star::uno::RuntimeException, std::exception);
 
     virtual sal_Bool SAL_CALL hasByHierarchicalName(OUString const & aName)
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL replaceByHierarchicalName(
         OUString const & aName, com::sun::star::uno::Any const & aElement)
@@ -197,56 +197,56 @@ public:
             com::sun::star::lang::IllegalArgumentException,
             com::sun::star::container::NoSuchElementException,
             com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException);
+            com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL addContainerListener(
         com::sun::star::uno::Reference<
             com::sun::star::container::XContainerListener > const & xListener)
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL removeContainerListener(
         com::sun::star::uno::Reference<
             com::sun::star::container::XContainerListener > const & xListener)
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual OUString SAL_CALL getExactName(
         OUString const & aApproximateName)
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual com::sun::star::uno::Sequence< com::sun::star::beans::Property >
-    SAL_CALL getProperties() throw (com::sun::star::uno::RuntimeException);
+    SAL_CALL getProperties() throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual com::sun::star::beans::Property SAL_CALL getPropertyByName(
         OUString const & aName)
         throw (
             com::sun::star::beans::UnknownPropertyException,
-            com::sun::star::uno::RuntimeException);
+            com::sun::star::uno::RuntimeException, std::exception);
 
     virtual sal_Bool SAL_CALL hasPropertyByName(OUString const & Name)
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual OUString SAL_CALL getHierarchicalName()
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual OUString SAL_CALL composeHierarchicalName(
         OUString const & aRelativeName)
         throw (
             com::sun::star::lang::IllegalArgumentException,
             com::sun::star::lang::NoSupportException,
-            com::sun::star::uno::RuntimeException);
+            com::sun::star::uno::RuntimeException, std::exception);
 
     virtual OUString SAL_CALL getName()
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL setName(OUString const & aName)
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual com::sun::star::beans::Property SAL_CALL getAsProperty()
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual
     com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo >
-    SAL_CALL getPropertySetInfo() throw (com::sun::star::uno::RuntimeException);
+    SAL_CALL getPropertySetInfo() throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL setPropertyValue(
         OUString const & aPropertyName,
@@ -256,14 +256,14 @@ public:
             com::sun::star::beans::PropertyVetoException,
             com::sun::star::lang::IllegalArgumentException,
             com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException);
+            com::sun::star::uno::RuntimeException, std::exception);
 
     virtual com::sun::star::uno::Any SAL_CALL getPropertyValue(
         OUString const & PropertyName)
         throw (
             com::sun::star::beans::UnknownPropertyException,
             com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException);
+            com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL addPropertyChangeListener(
         OUString const & aPropertyName,
@@ -272,7 +272,7 @@ public:
         throw (
             com::sun::star::beans::UnknownPropertyException,
             com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException);
+            com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL removePropertyChangeListener(
         OUString const & aPropertyName,
@@ -281,7 +281,7 @@ public:
         throw (
             com::sun::star::beans::UnknownPropertyException,
             com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException);
+            com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL addVetoableChangeListener(
         OUString const & PropertyName,
@@ -290,7 +290,7 @@ public:
         throw (
             com::sun::star::beans::UnknownPropertyException,
             com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException);
+            com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL removeVetoableChangeListener(
         OUString const & PropertyName,
@@ -299,7 +299,7 @@ public:
         throw (
             com::sun::star::beans::UnknownPropertyException,
             com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException);
+            com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL setPropertyValues(
         com::sun::star::uno::Sequence< OUString > const & aPropertyNames,
@@ -309,38 +309,38 @@ public:
             com::sun::star::beans::PropertyVetoException,
             com::sun::star::lang::IllegalArgumentException,
             com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException);
+            com::sun::star::uno::RuntimeException, std::exception);
 
     virtual com::sun::star::uno::Sequence< com::sun::star::uno::Any > SAL_CALL
     getPropertyValues(
         com::sun::star::uno::Sequence< OUString > const & aPropertyNames)
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL addPropertiesChangeListener(
         com::sun::star::uno::Sequence< OUString > const & aPropertyNames,
         com::sun::star::uno::Reference<
             com::sun::star::beans::XPropertiesChangeListener > const &
                 xListener)
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL removePropertiesChangeListener(
         com::sun::star::uno::Reference<
             com::sun::star::beans::XPropertiesChangeListener > const &
                 xListener)
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL firePropertiesChangeEvent(
         com::sun::star::uno::Sequence< OUString > const & aPropertyNames,
         com::sun::star::uno::Reference<
             com::sun::star::beans::XPropertiesChangeListener > const &
                 xListener)
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual
     com::sun::star::uno::Reference<
         com::sun::star::beans::XHierarchicalPropertySetInfo > SAL_CALL
     getHierarchicalPropertySetInfo()
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL setHierarchicalPropertyValue(
         OUString const & aHierarchicalPropertyName,
@@ -350,7 +350,7 @@ public:
             com::sun::star::beans::PropertyVetoException,
             com::sun::star::lang::IllegalArgumentException,
             com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException);
+            com::sun::star::uno::RuntimeException, std::exception);
 
     virtual com::sun::star::uno::Any SAL_CALL getHierarchicalPropertyValue(
         OUString const & aHierarchicalPropertyName)
@@ -358,7 +358,7 @@ public:
             com::sun::star::beans::UnknownPropertyException,
             com::sun::star::lang::IllegalArgumentException,
             com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException);
+            com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL setHierarchicalPropertyValues(
         com::sun::star::uno::Sequence< OUString > const &
@@ -369,7 +369,7 @@ public:
             com::sun::star::beans::PropertyVetoException,
             com::sun::star::lang::IllegalArgumentException,
             com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException);
+            com::sun::star::uno::RuntimeException, std::exception);
 
     virtual com::sun::star::uno::Sequence< com::sun::star::uno::Any > SAL_CALL
     getHierarchicalPropertyValues(
@@ -378,17 +378,17 @@ public:
         throw (
             com::sun::star::lang::IllegalArgumentException,
             com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException);
+            com::sun::star::uno::RuntimeException, std::exception);
 
     virtual com::sun::star::beans::Property SAL_CALL
     getPropertyByHierarchicalName(OUString const & aHierarchicalName)
         throw (
             com::sun::star::beans::UnknownPropertyException,
-            com::sun::star::uno::RuntimeException);
+            com::sun::star::uno::RuntimeException, std::exception);
 
     virtual sal_Bool SAL_CALL hasPropertyByHierarchicalName(
         OUString const & aHierarchicalName)
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL replaceByName(
         OUString const & aName, com::sun::star::uno::Any const & aElement)
@@ -396,7 +396,7 @@ public:
             com::sun::star::lang::IllegalArgumentException,
             com::sun::star::container::NoSuchElementException,
             com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException);
+            com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL insertByName(
         OUString const & aName, com::sun::star::uno::Any const & aElement)
@@ -404,19 +404,19 @@ public:
             com::sun::star::lang::IllegalArgumentException,
             com::sun::star::container::ElementExistException,
             com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException);
+            com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL removeByName(OUString const & aName)
         throw (
             com::sun::star::container::NoSuchElementException,
             com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException);
+            com::sun::star::uno::RuntimeException, std::exception);
 
     virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
     SAL_CALL createInstance()
         throw (
             com::sun::star::uno::Exception,
-            com::sun::star::uno::RuntimeException);
+            com::sun::star::uno::RuntimeException, std::exception);
 
     virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
     SAL_CALL createInstanceWithArguments(
@@ -424,7 +424,7 @@ public:
             aArguments)
         throw (
             com::sun::star::uno::Exception,
-            com::sun::star::uno::RuntimeException);
+            com::sun::star::uno::RuntimeException, std::exception);
 
 protected:
     Access(Components & components);
@@ -446,7 +446,7 @@ protected:
 
     virtual com::sun::star::uno::Any SAL_CALL queryInterface(
         com::sun::star::uno::Type const & aType)
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     Components & getComponents() const;
 

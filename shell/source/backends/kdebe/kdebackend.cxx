@@ -76,19 +76,19 @@ private:
     virtual ~Service() {}
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return getServiceImplementationName(); }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return ServiceName == getSupportedServiceNames()[0]; }
 
     virtual css::uno::Sequence< OUString > SAL_CALL
-    getSupportedServiceNames() throw (css::uno::RuntimeException)
+    getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception)
     { return getServiceSupportedServiceNames(); }
 
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
-    getPropertySetInfo() throw (css::uno::RuntimeException)
+    getPropertySetInfo() throw (css::uno::RuntimeException, std::exception)
     { return css::uno::Reference< css::beans::XPropertySetInfo >(); }
 
     virtual void SAL_CALL setPropertyValue(
@@ -97,20 +97,20 @@ private:
             css::beans::UnknownPropertyException,
             css::beans::PropertyVetoException,
             css::lang::IllegalArgumentException,
-            css::lang::WrappedTargetException, css::uno::RuntimeException);
+            css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Any SAL_CALL getPropertyValue(
         OUString const & PropertyName)
         throw (
             css::beans::UnknownPropertyException,
-            css::lang::WrappedTargetException, css::uno::RuntimeException);
+            css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL addPropertyChangeListener(
         OUString const &,
         css::uno::Reference< css::beans::XPropertyChangeListener > const &)
         throw (
             css::beans::UnknownPropertyException,
-            css::lang::WrappedTargetException, css::uno::RuntimeException)
+            css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
     {}
 
     virtual void SAL_CALL removePropertyChangeListener(
@@ -118,7 +118,7 @@ private:
         css::uno::Reference< css::beans::XPropertyChangeListener > const &)
         throw (
             css::beans::UnknownPropertyException,
-            css::lang::WrappedTargetException, css::uno::RuntimeException)
+            css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
     {}
 
     virtual void SAL_CALL addVetoableChangeListener(
@@ -126,7 +126,7 @@ private:
         css::uno::Reference< css::beans::XVetoableChangeListener > const &)
         throw (
             css::beans::UnknownPropertyException,
-            css::lang::WrappedTargetException, css::uno::RuntimeException)
+            css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
     {}
 
     virtual void SAL_CALL removeVetoableChangeListener(
@@ -134,7 +134,7 @@ private:
         css::uno::Reference< css::beans::XVetoableChangeListener > const &)
         throw (
             css::beans::UnknownPropertyException,
-            css::lang::WrappedTargetException, css::uno::RuntimeException)
+            css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
     {}
 
     bool enabled_;
@@ -156,7 +156,7 @@ void Service::setPropertyValue(OUString const &, css::uno::Any const &)
     throw (
         css::beans::UnknownPropertyException, css::beans::PropertyVetoException,
         css::lang::IllegalArgumentException, css::lang::WrappedTargetException,
-        css::uno::RuntimeException)
+        css::uno::RuntimeException, std::exception)
 {
     throw css::lang::IllegalArgumentException(
         OUString("setPropertyValue not supported"),
@@ -166,7 +166,7 @@ void Service::setPropertyValue(OUString const &, css::uno::Any const &)
 css::uno::Any Service::getPropertyValue(OUString const & PropertyName)
     throw (
         css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
-        css::uno::RuntimeException)
+        css::uno::RuntimeException, std::exception)
 {
     if ( PropertyName == "EnableATToolSupport" || PropertyName == "ExternalMailer" || PropertyName == "SourceViewFontHeight"
       || PropertyName == "SourceViewFontName" || PropertyName == "WorkPathVariable" || PropertyName == "ooInetFTPProxyName"

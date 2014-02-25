@@ -52,13 +52,13 @@ public:
     virtual ~PopupMenuToolbarController();
 
     // XComponent
-    virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException );
+    virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException, std::exception );
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException);
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception);
     // XToolbarController
-    virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createPopupWindow() throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createPopupWindow() throw (css::uno::RuntimeException, std::exception);
     // XStatusListener
-    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException );
+    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException, std::exception );
 
 protected:
     PopupMenuToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
@@ -92,7 +92,7 @@ PopupMenuToolbarController::~PopupMenuToolbarController()
 }
 
 void SAL_CALL PopupMenuToolbarController::dispose()
-throw ( css::uno::RuntimeException )
+throw ( css::uno::RuntimeException, std::exception )
 {
     svt::ToolboxController::dispose();
 
@@ -120,7 +120,7 @@ throw ( css::uno::RuntimeException )
 
 void SAL_CALL PopupMenuToolbarController::initialize(
     const css::uno::Sequence< css::uno::Any >& aArguments )
-throw ( css::uno::Exception, css::uno::RuntimeException )
+throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
 {
     ToolboxController::initialize( aArguments );
 
@@ -157,7 +157,7 @@ throw ( css::uno::Exception, css::uno::RuntimeException )
 }
 
 void SAL_CALL PopupMenuToolbarController::statusChanged( const css::frame::FeatureStateEvent& rEvent )
-    throw ( css::uno::RuntimeException )
+    throw ( css::uno::RuntimeException, std::exception )
 {
     // TODO move to base class
 
@@ -167,7 +167,7 @@ void SAL_CALL PopupMenuToolbarController::statusChanged( const css::frame::Featu
 
 css::uno::Reference< css::awt::XWindow > SAL_CALL
 PopupMenuToolbarController::createPopupWindow()
-    throw ( css::uno::RuntimeException )
+    throw ( css::uno::RuntimeException, std::exception )
 {
     css::uno::Reference< css::awt::XWindow > xRet;
 
@@ -352,12 +352,12 @@ public:
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
         throw (css::uno::RuntimeException);
 
-    void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException);
+    void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception);
 
 private:
     void functionExecuted( const OUString &rCommand );
-    void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException );
-    void SAL_CALL execute( sal_Int16 KeyModifier ) throw (css::uno::RuntimeException);
+    void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException, std::exception );
+    void SAL_CALL execute( sal_Int16 KeyModifier ) throw (css::uno::RuntimeException, std::exception);
     void setItemImage( const OUString &rCommand );
 
     OUString m_aLastURL;
@@ -391,7 +391,7 @@ css::uno::Sequence<OUString> NewToolbarController::getSupportedServiceNames()
 }
 
 void SAL_CALL NewToolbarController::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
-throw ( css::uno::Exception, css::uno::RuntimeException )
+throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
 {
     PopupMenuToolbarController::initialize( aArguments );
 
@@ -400,7 +400,7 @@ throw ( css::uno::Exception, css::uno::RuntimeException )
 }
 
 void SAL_CALL NewToolbarController::statusChanged( const css::frame::FeatureStateEvent& rEvent )
-    throw ( css::uno::RuntimeException )
+    throw ( css::uno::RuntimeException, std::exception )
 {
     if ( rEvent.IsEnabled )
     {
@@ -421,7 +421,7 @@ void SAL_CALL NewToolbarController::statusChanged( const css::frame::FeatureStat
 }
 
 void SAL_CALL NewToolbarController::execute( sal_Int16 /*KeyModifier*/ )
-throw ( css::uno::RuntimeException )
+throw ( css::uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard( m_aMutex );
     if ( !m_aLastURL.getLength() )

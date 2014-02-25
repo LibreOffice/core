@@ -31,7 +31,7 @@ ScVbaTextFrame::ScVbaTextFrame( uno::Sequence< uno::Any> const & args, uno::Refe
 
 // Methods
 uno::Any SAL_CALL
-ScVbaTextFrame::Characters() throw (uno::RuntimeException)
+ScVbaTextFrame::Characters() throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< text::XSimpleText > xSimpleText( m_xShape, uno::UNO_QUERY_THROW );
     ScVbaPalette aPalette( SfxObjectShell::Current() );

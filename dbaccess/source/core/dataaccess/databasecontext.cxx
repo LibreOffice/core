@@ -109,10 +109,10 @@ namespace dbaccess
 
         private:
             // XTerminateListener
-            virtual void SAL_CALL queryTermination( const lang::EventObject& Event ) throw (TerminationVetoException, RuntimeException);
-            virtual void SAL_CALL notifyTermination( const lang::EventObject& Event ) throw (RuntimeException);
+            virtual void SAL_CALL queryTermination( const lang::EventObject& Event ) throw (TerminationVetoException, RuntimeException, std::exception);
+            virtual void SAL_CALL notifyTermination( const lang::EventObject& Event ) throw (RuntimeException, std::exception);
             // XEventListener
-            virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception);
         };
 
         DatabaseDocumentLoader::DatabaseDocumentLoader( const Reference<XComponentContext> & rxContext )
@@ -149,17 +149,17 @@ namespace dbaccess
             }
         };
 
-        void SAL_CALL DatabaseDocumentLoader::queryTermination( const lang::EventObject& /*Event*/ ) throw (TerminationVetoException, RuntimeException)
+        void SAL_CALL DatabaseDocumentLoader::queryTermination( const lang::EventObject& /*Event*/ ) throw (TerminationVetoException, RuntimeException, std::exception)
         {
             ::std::list< const ODatabaseModelImpl* > aCopy(m_aDatabaseDocuments);
             ::std::for_each(aCopy.begin(),aCopy.end(),TerminateFunctor());
         }
 
-        void SAL_CALL DatabaseDocumentLoader::notifyTermination( const lang::EventObject& /*Event*/ ) throw (RuntimeException)
+        void SAL_CALL DatabaseDocumentLoader::notifyTermination( const lang::EventObject& /*Event*/ ) throw (RuntimeException, std::exception)
         {
         }
 
-        void SAL_CALL DatabaseDocumentLoader::disposing( const lang::EventObject& /*Source*/ ) throw (RuntimeException)
+        void SAL_CALL DatabaseDocumentLoader::disposing( const lang::EventObject& /*Source*/ ) throw (RuntimeException, std::exception)
         {
         }
 
@@ -219,17 +219,17 @@ Sequence< OUString > ODatabaseContext::getSupportedServiceNames_static(void) thr
 }
 
 // XServiceInfo
-OUString ODatabaseContext::getImplementationName(  ) throw(RuntimeException)
+OUString ODatabaseContext::getImplementationName(  ) throw(RuntimeException, std::exception)
 {
     return getImplementationName_static();
 }
 
-sal_Bool ODatabaseContext::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
+sal_Bool ODatabaseContext::supportsService( const OUString& _rServiceName ) throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
-Sequence< OUString > ODatabaseContext::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > ODatabaseContext::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
 {
     return getSupportedServiceNames_static();
 }
@@ -242,14 +242,14 @@ Reference< XInterface > ODatabaseContext::impl_createNewDataSource()
     return xDataSource.get();
 }
 
-Reference< XInterface > SAL_CALL ODatabaseContext::createInstance(  ) throw (Exception, RuntimeException)
+Reference< XInterface > SAL_CALL ODatabaseContext::createInstance(  ) throw (Exception, RuntimeException, std::exception)
 {
     // for convenience of the API user, we ensure the document is fully initialized (effectively: XLoadable::initNew
     // has been called at the DatabaseDocument).
     return impl_createNewDataSource();
 }
 
-Reference< XInterface > SAL_CALL ODatabaseContext::createInstanceWithArguments( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException)
+Reference< XInterface > SAL_CALL ODatabaseContext::createInstanceWithArguments( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException, std::exception)
 {
     ::comphelper::NamedValueCollection aArgs( _rArguments );
     OUString sURL = aArgs.getOrDefault( (OUString)INFO_POOLURL, OUString() );
@@ -289,7 +289,7 @@ void ODatabaseContext::disposing()
 }
 
 // XNamingService
-Reference< XInterface >  ODatabaseContext::getRegisteredObject(const OUString& _rName) throw( Exception, RuntimeException )
+Reference< XInterface >  ODatabaseContext::getRegisteredObject(const OUString& _rName) throw( Exception, RuntimeException, std::exception )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(DatabaseAccessContext_Base::rBHelper.bDisposed);
@@ -413,7 +413,7 @@ void ODatabaseContext::setTransientProperties(const OUString& _sURL, ODatabaseMo
     }
 }
 
-void ODatabaseContext::registerObject(const OUString& _rName, const Reference< XInterface > & _rxObject) throw( Exception, RuntimeException )
+void ODatabaseContext::registerObject(const OUString& _rName, const Reference< XInterface > & _rxObject) throw( Exception, RuntimeException, std::exception )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(DatabaseAccessContext_Base::rBHelper.bDisposed);
@@ -496,17 +496,17 @@ void ODatabaseContext::storeTransientProperties( ODatabaseModelImpl& _rModelImpl
     }
 }
 
-void SAL_CALL ODatabaseContext::addContainerListener( const Reference< XContainerListener >& _rxListener ) throw(RuntimeException)
+void SAL_CALL ODatabaseContext::addContainerListener( const Reference< XContainerListener >& _rxListener ) throw(RuntimeException, std::exception)
 {
     m_aContainerListeners.addInterface(_rxListener);
 }
 
-void SAL_CALL ODatabaseContext::removeContainerListener( const Reference< XContainerListener >& _rxListener ) throw(RuntimeException)
+void SAL_CALL ODatabaseContext::removeContainerListener( const Reference< XContainerListener >& _rxListener ) throw(RuntimeException, std::exception)
 {
     m_aContainerListeners.removeInterface(_rxListener);
 }
 
-void ODatabaseContext::revokeObject(const OUString& _rName) throw( Exception, RuntimeException )
+void ODatabaseContext::revokeObject(const OUString& _rName) throw( Exception, RuntimeException, std::exception )
 {
     ClearableMutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(DatabaseAccessContext_Base::rBHelper.bDisposed);
@@ -532,58 +532,58 @@ void ODatabaseContext::revokeObject(const OUString& _rName) throw( Exception, Ru
     m_aContainerListeners.notifyEach( &XContainerListener::elementRemoved, aEvent );
 }
 
-::sal_Bool SAL_CALL ODatabaseContext::hasRegisteredDatabase( const OUString& _Name ) throw (IllegalArgumentException, RuntimeException)
+::sal_Bool SAL_CALL ODatabaseContext::hasRegisteredDatabase( const OUString& _Name ) throw (IllegalArgumentException, RuntimeException, std::exception)
 {
     return m_xDatabaseRegistrations->hasRegisteredDatabase( _Name );
 }
 
-Sequence< OUString > SAL_CALL ODatabaseContext::getRegistrationNames() throw (RuntimeException)
+Sequence< OUString > SAL_CALL ODatabaseContext::getRegistrationNames() throw (RuntimeException, std::exception)
 {
     return m_xDatabaseRegistrations->getRegistrationNames();
 }
 
-OUString SAL_CALL ODatabaseContext::getDatabaseLocation( const OUString& _Name ) throw (IllegalArgumentException, NoSuchElementException, RuntimeException)
+OUString SAL_CALL ODatabaseContext::getDatabaseLocation( const OUString& _Name ) throw (IllegalArgumentException, NoSuchElementException, RuntimeException, std::exception)
 {
     return m_xDatabaseRegistrations->getDatabaseLocation( _Name );
 }
 
-void SAL_CALL ODatabaseContext::registerDatabaseLocation( const OUString& _Name, const OUString& _Location ) throw (IllegalArgumentException, ElementExistException, RuntimeException)
+void SAL_CALL ODatabaseContext::registerDatabaseLocation( const OUString& _Name, const OUString& _Location ) throw (IllegalArgumentException, ElementExistException, RuntimeException, std::exception)
 {
     m_xDatabaseRegistrations->registerDatabaseLocation( _Name, _Location );
 }
 
-void SAL_CALL ODatabaseContext::revokeDatabaseLocation( const OUString& _Name ) throw (IllegalArgumentException, NoSuchElementException, IllegalAccessException, RuntimeException)
+void SAL_CALL ODatabaseContext::revokeDatabaseLocation( const OUString& _Name ) throw (IllegalArgumentException, NoSuchElementException, IllegalAccessException, RuntimeException, std::exception)
 {
     m_xDatabaseRegistrations->revokeDatabaseLocation( _Name );
 }
 
-void SAL_CALL ODatabaseContext::changeDatabaseLocation( const OUString& _Name, const OUString& _NewLocation ) throw (IllegalArgumentException, NoSuchElementException, IllegalAccessException, RuntimeException)
+void SAL_CALL ODatabaseContext::changeDatabaseLocation( const OUString& _Name, const OUString& _NewLocation ) throw (IllegalArgumentException, NoSuchElementException, IllegalAccessException, RuntimeException, std::exception)
 {
     m_xDatabaseRegistrations->changeDatabaseLocation( _Name, _NewLocation );
 }
 
-::sal_Bool SAL_CALL ODatabaseContext::isDatabaseRegistrationReadOnly( const OUString& _Name ) throw (IllegalArgumentException, NoSuchElementException, RuntimeException)
+::sal_Bool SAL_CALL ODatabaseContext::isDatabaseRegistrationReadOnly( const OUString& _Name ) throw (IllegalArgumentException, NoSuchElementException, RuntimeException, std::exception)
 {
     return m_xDatabaseRegistrations->isDatabaseRegistrationReadOnly( _Name );
 }
 
-void SAL_CALL ODatabaseContext::addDatabaseRegistrationsListener( const Reference< XDatabaseRegistrationsListener >& _Listener ) throw (RuntimeException)
+void SAL_CALL ODatabaseContext::addDatabaseRegistrationsListener( const Reference< XDatabaseRegistrationsListener >& _Listener ) throw (RuntimeException, std::exception)
 {
     m_xDatabaseRegistrations->addDatabaseRegistrationsListener( _Listener );
 }
 
-void SAL_CALL ODatabaseContext::removeDatabaseRegistrationsListener( const Reference< XDatabaseRegistrationsListener >& _Listener ) throw (RuntimeException)
+void SAL_CALL ODatabaseContext::removeDatabaseRegistrationsListener( const Reference< XDatabaseRegistrationsListener >& _Listener ) throw (RuntimeException, std::exception)
 {
     m_xDatabaseRegistrations->removeDatabaseRegistrationsListener( _Listener );
 }
 
 // ::com::sun::star::container::XElementAccess
-Type ODatabaseContext::getElementType(  ) throw(RuntimeException)
+Type ODatabaseContext::getElementType(  ) throw(RuntimeException, std::exception)
 {
     return::getCppuType(static_cast<Reference<XDataSource>*>(NULL));
 }
 
-sal_Bool ODatabaseContext::hasElements(void) throw( RuntimeException )
+sal_Bool ODatabaseContext::hasElements(void) throw( RuntimeException, std::exception )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(DatabaseAccessContext_Base::rBHelper.bDisposed);
@@ -592,7 +592,7 @@ sal_Bool ODatabaseContext::hasElements(void) throw( RuntimeException )
 }
 
 // ::com::sun::star::container::XEnumerationAccess
-Reference< ::com::sun::star::container::XEnumeration >  ODatabaseContext::createEnumeration(void) throw( RuntimeException )
+Reference< ::com::sun::star::container::XEnumeration >  ODatabaseContext::createEnumeration(void) throw( RuntimeException, std::exception )
 {
     MutexGuard aGuard(m_aMutex);
     return new ::comphelper::OEnumerationByName(static_cast<XNameAccess*>(this));
@@ -600,7 +600,7 @@ Reference< ::com::sun::star::container::XEnumeration >  ODatabaseContext::create
 
 // ::com::sun::star::container::XNameAccess
 Any ODatabaseContext::getByName(const OUString& _rName) throw( NoSuchElementException,
-                                                          WrappedTargetException, RuntimeException )
+                                                          WrappedTargetException, RuntimeException, std::exception )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(DatabaseAccessContext_Base::rBHelper.bDisposed);
@@ -649,7 +649,7 @@ Any ODatabaseContext::getByName(const OUString& _rName) throw( NoSuchElementExce
     }
 }
 
-Sequence< OUString > ODatabaseContext::getElementNames(void) throw( RuntimeException )
+Sequence< OUString > ODatabaseContext::getElementNames(void) throw( RuntimeException, std::exception )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(DatabaseAccessContext_Base::rBHelper.bDisposed);
@@ -657,7 +657,7 @@ Sequence< OUString > ODatabaseContext::getElementNames(void) throw( RuntimeExcep
     return getRegistrationNames();
 }
 
-sal_Bool ODatabaseContext::hasByName(const OUString& _rName) throw( RuntimeException )
+sal_Bool ODatabaseContext::hasByName(const OUString& _rName) throw( RuntimeException, std::exception )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(DatabaseAccessContext_Base::rBHelper.bDisposed);
@@ -714,7 +714,7 @@ void ODatabaseContext::databaseDocumentURLChange( const OUString& _rOldURL, cons
     m_aDatabaseObjects.erase( oldPos );
 }
 
-sal_Int64 SAL_CALL ODatabaseContext::getSomething( const Sequence< sal_Int8 >& rId ) throw(RuntimeException)
+sal_Int64 SAL_CALL ODatabaseContext::getSomething( const Sequence< sal_Int8 >& rId ) throw(RuntimeException, std::exception)
 {
     if (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
         return reinterpret_cast<sal_Int64>(this);

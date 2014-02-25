@@ -245,7 +245,7 @@ static void lcl_getReportControlFormat(const Sequence< PropertyValue >& aArgs,
         _xWindow = VCLUnoHelper::GetInterface(_pView);
 }
 
-OUString SAL_CALL OReportController::getImplementationName() throw( RuntimeException )
+OUString SAL_CALL OReportController::getImplementationName() throw( RuntimeException, std::exception )
 {
     return getImplementationName_Static();
 }
@@ -263,7 +263,7 @@ Sequence< OUString> OReportController::getSupportedServiceNames_Static(void) thr
     return aSupported;
 }
 
-Sequence< OUString> SAL_CALL OReportController::getSupportedServiceNames() throw(RuntimeException)
+Sequence< OUString> SAL_CALL OReportController::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     return getSupportedServiceNames_Static();
 }
@@ -1805,7 +1805,7 @@ sal_Bool OReportController::Construct(Window* pParent)
     return sal_True;
 }
 
-sal_Bool SAL_CALL OReportController::suspend(sal_Bool /*_bSuspend*/) throw( RuntimeException )
+sal_Bool SAL_CALL OReportController::suspend(sal_Bool /*_bSuspend*/) throw( RuntimeException, std::exception )
 {
     if ( getBroadcastHelper().bInDispose || getBroadcastHelper().bDisposed )
         return sal_True;
@@ -2168,24 +2168,24 @@ void OReportController::notifyGroupSections(const ContainerEvent& _rEvent,bool _
 }
 
 // ::container::XContainerListener
-void SAL_CALL OReportController::elementInserted( const ContainerEvent& _rEvent ) throw(RuntimeException)
+void SAL_CALL OReportController::elementInserted( const ContainerEvent& _rEvent ) throw(RuntimeException, std::exception)
 {
     notifyGroupSections(_rEvent,true);
 }
 
-void SAL_CALL OReportController::elementRemoved( const ContainerEvent& _rEvent ) throw(RuntimeException)
+void SAL_CALL OReportController::elementRemoved( const ContainerEvent& _rEvent ) throw(RuntimeException, std::exception)
 {
     notifyGroupSections(_rEvent,false);
 }
 
-void SAL_CALL OReportController::elementReplaced( const ContainerEvent& /*_rEvent*/ ) throw(RuntimeException)
+void SAL_CALL OReportController::elementReplaced( const ContainerEvent& /*_rEvent*/ ) throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
     OSL_FAIL("Not yet implemented!");
 }
 
-void SAL_CALL OReportController::propertyChange( const beans::PropertyChangeEvent& evt ) throw (RuntimeException)
+void SAL_CALL OReportController::propertyChange( const beans::PropertyChangeEvent& evt ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
@@ -2281,7 +2281,7 @@ void SAL_CALL OReportController::propertyChange( const beans::PropertyChangeEven
 }
 
 
-void SAL_CALL OReportController::disposing( const lang::EventObject& Source ) throw(uno::RuntimeException)
+void SAL_CALL OReportController::disposing( const lang::EventObject& Source ) throw(uno::RuntimeException, std::exception)
 {
     // simply disambiguate
     OReportController_BASE::disposing(Source);
@@ -2513,7 +2513,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
 }
 
 
-sal_Bool SAL_CALL OReportController::attachModel(const uno::Reference< frame::XModel > & xModel) throw( uno::RuntimeException )
+sal_Bool SAL_CALL OReportController::attachModel(const uno::Reference< frame::XModel > & xModel) throw( uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( getMutex() );
 
@@ -2695,7 +2695,7 @@ void OReportController::shrinkSection(sal_uInt16 _nUndoStrId, uno::Reference<rep
 }
 
 
-uno::Any SAL_CALL OReportController::getViewData(void) throw( uno::RuntimeException )
+uno::Any SAL_CALL OReportController::getViewData(void) throw( uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( getMutex() );
 
@@ -2761,7 +2761,7 @@ uno::Any SAL_CALL OReportController::getViewData(void) throw( uno::RuntimeExcept
     return uno::makeAny( aViewData.getPropertyValues() );
 }
 
-void SAL_CALL OReportController::restoreViewData(const uno::Any& i_data) throw( uno::RuntimeException )
+void SAL_CALL OReportController::restoreViewData(const uno::Any& i_data) throw( uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( getMutex() );
 
@@ -2961,7 +2961,7 @@ uno::Reference<frame::XModel> OReportController::executeReport()
     return xModel;
 }
 
-uno::Reference< frame::XModel >  SAL_CALL OReportController::getModel(void) throw( uno::RuntimeException )
+uno::Reference< frame::XModel >  SAL_CALL OReportController::getModel(void) throw( uno::RuntimeException, std::exception )
 {
     return m_xReportDefinition.get();
 }
@@ -3039,7 +3039,7 @@ void OReportController::insertGraphic()
     return m_aReportModel;
 }
 
-::sal_Bool SAL_CALL OReportController::select( const Any& aSelection ) throw (IllegalArgumentException, RuntimeException)
+::sal_Bool SAL_CALL OReportController::select( const Any& aSelection ) throw (IllegalArgumentException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( getMutex() );
     ::sal_Bool bRet = sal_True;
@@ -3079,7 +3079,7 @@ void OReportController::insertGraphic()
     return bRet;
 }
 
-Any SAL_CALL OReportController::getSelection(  ) throw (RuntimeException)
+Any SAL_CALL OReportController::getSelection(  ) throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( getMutex() );
     Any aRet;
@@ -3092,12 +3092,12 @@ Any SAL_CALL OReportController::getSelection(  ) throw (RuntimeException)
     return aRet;
 }
 
-void SAL_CALL OReportController::addSelectionChangeListener( const Reference< view::XSelectionChangeListener >& _Listener ) throw (RuntimeException)
+void SAL_CALL OReportController::addSelectionChangeListener( const Reference< view::XSelectionChangeListener >& _Listener ) throw (RuntimeException, std::exception)
 {
     m_aSelectionListeners.addInterface( _Listener );
 }
 
-void SAL_CALL OReportController::removeSelectionChangeListener( const Reference< view::XSelectionChangeListener >& _Listener ) throw (RuntimeException)
+void SAL_CALL OReportController::removeSelectionChangeListener( const Reference< view::XSelectionChangeListener >& _Listener ) throw (RuntimeException, std::exception)
 {
     m_aSelectionListeners.removeInterface( _Listener );
 }
@@ -4006,7 +4006,7 @@ void OReportController::checkChartEnabled()
 
 // css.frame.XTitle
 OUString SAL_CALL OReportController::getTitle()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
@@ -4037,7 +4037,7 @@ void OReportController::getPropertyDefaultByHandle( sal_Int32 /*_nHandle*/, Any&
     return *OReportController_PROP::getArrayHelper();
 }
 
-void SAL_CALL OReportController::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle,const Any& _aValue) throw (Exception)
+void SAL_CALL OReportController::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle,const Any& _aValue) throw (Exception, std::exception)
 {
     if ( _nHandle == PROPERTY_ID_ZOOMVALUE )
     {
@@ -4045,23 +4045,23 @@ void SAL_CALL OReportController::setFastPropertyValue_NoBroadcast(sal_Int32 _nHa
         impl_zoom_nothrow();
     }
 }
-void SAL_CALL OReportController::setMode( const OUString& aMode ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException)
+void SAL_CALL OReportController::setMode( const OUString& aMode ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( getMutex() );
     m_sMode = aMode;
 }
-OUString SAL_CALL OReportController::getMode(  ) throw (::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL OReportController::getMode(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( getMutex() );
     return m_sMode;
 }
-::com::sun::star::uno::Sequence< OUString > SAL_CALL OReportController::getSupportedModes(  ) throw (::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Sequence< OUString > SAL_CALL OReportController::getSupportedModes(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     static const OUString s_sModes[] = { OUString("remote"),
                                           OUString("normal") };
     return uno::Sequence< OUString> (&s_sModes[0],sizeof(s_sModes)/sizeof(s_sModes[0]));
 }
-::sal_Bool SAL_CALL OReportController::supportsMode( const OUString& aMode ) throw (::com::sun::star::uno::RuntimeException)
+::sal_Bool SAL_CALL OReportController::supportsMode( const OUString& aMode ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString> aModes = getSupportedModes();
     const OUString* pIter = aModes.getConstArray();
@@ -4257,7 +4257,7 @@ void OReportController::openZoomDialog()
 
 
 // XVisualObject
-void SAL_CALL OReportController::setVisualAreaSize( ::sal_Int64 _nAspect, const awt::Size& _aSize ) throw (lang::IllegalArgumentException, embed::WrongStateException, uno::Exception, uno::RuntimeException)
+void SAL_CALL OReportController::setVisualAreaSize( ::sal_Int64 _nAspect, const awt::Size& _aSize ) throw (lang::IllegalArgumentException, embed::WrongStateException, uno::Exception, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( getMutex() );
         bool bChanged =
@@ -4269,13 +4269,13 @@ void SAL_CALL OReportController::setVisualAreaSize( ::sal_Int64 _nAspect, const 
     m_nAspect = _nAspect;
 }
 
-awt::Size SAL_CALL OReportController::getVisualAreaSize( ::sal_Int64 /*nAspect*/ ) throw (lang::IllegalArgumentException, embed::WrongStateException, uno::Exception, uno::RuntimeException)
+awt::Size SAL_CALL OReportController::getVisualAreaSize( ::sal_Int64 /*nAspect*/ ) throw (lang::IllegalArgumentException, embed::WrongStateException, uno::Exception, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( getMutex() );
     return m_aVisualAreaSize;
 }
 
-embed::VisualRepresentation SAL_CALL OReportController::getPreferredVisualRepresentation( ::sal_Int64 _nAspect ) throw (lang::IllegalArgumentException, embed::WrongStateException, uno::Exception, uno::RuntimeException)
+embed::VisualRepresentation SAL_CALL OReportController::getPreferredVisualRepresentation( ::sal_Int64 _nAspect ) throw (lang::IllegalArgumentException, embed::WrongStateException, uno::Exception, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
@@ -4313,7 +4313,7 @@ embed::VisualRepresentation SAL_CALL OReportController::getPreferredVisualRepres
     return aResult;
 }
 
-::sal_Int32 SAL_CALL OReportController::getMapUnit( ::sal_Int64 /*nAspect*/ ) throw (uno::Exception, uno::RuntimeException)
+::sal_Int32 SAL_CALL OReportController::getMapUnit( ::sal_Int64 /*nAspect*/ ) throw (uno::Exception, uno::RuntimeException, std::exception)
 {
     return embed::EmbedMapUnits::ONE_100TH_MM;
 }

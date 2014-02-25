@@ -49,9 +49,9 @@ namespace x11 {
         virtual ~DropTargetDropContext();
 
         // XDropTargetDropContext
-        virtual void SAL_CALL acceptDrop( sal_Int8 dragOperation ) throw();
-        virtual void SAL_CALL rejectDrop() throw();
-        virtual void SAL_CALL dropComplete( sal_Bool success ) throw();
+        virtual void SAL_CALL acceptDrop( sal_Int8 dragOperation ) throw(std::exception);
+        virtual void SAL_CALL rejectDrop() throw(std::exception);
+        virtual void SAL_CALL dropComplete( sal_Bool success ) throw(std::exception);
     };
 
     class DropTargetDragContext :
@@ -68,8 +68,8 @@ namespace x11 {
         virtual ~DropTargetDragContext();
 
         // XDropTargetDragContext
-        virtual void SAL_CALL acceptDrag( sal_Int8 dragOperation ) throw();
-        virtual void SAL_CALL rejectDrag() throw();
+        virtual void SAL_CALL acceptDrag( sal_Int8 dragOperation ) throw(std::exception);
+        virtual void SAL_CALL rejectDrag() throw(std::exception);
     };
 
     class DragSourceContext :
@@ -86,10 +86,10 @@ namespace x11 {
         virtual ~DragSourceContext();
 
         // XDragSourceContext
-        virtual sal_Int32   SAL_CALL getCurrentCursor() throw();
-        virtual void        SAL_CALL setCursor( sal_Int32 cursorId ) throw();
-        virtual void        SAL_CALL setImage( sal_Int32 imageId ) throw();
-        virtual void        SAL_CALL transferablesFlavorsChanged() throw();
+        virtual sal_Int32   SAL_CALL getCurrentCursor() throw(std::exception);
+        virtual void        SAL_CALL setCursor( sal_Int32 cursorId ) throw(std::exception);
+        virtual void        SAL_CALL setImage( sal_Int32 imageId ) throw(std::exception);
+        virtual void        SAL_CALL transferablesFlavorsChanged() throw(std::exception);
     };
 } // namespace
 

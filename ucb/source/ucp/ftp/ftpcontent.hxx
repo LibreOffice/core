@@ -80,7 +80,7 @@ namespace ftp
         // XContent
         virtual OUString SAL_CALL
         getContentType()
-            throw( com::sun::star::uno::RuntimeException );
+            throw( com::sun::star::uno::RuntimeException, std::exception );
 
         // XCommandProcessor
         virtual com::sun::star::uno::Any SAL_CALL
@@ -90,35 +90,35 @@ namespace ftp
                  com::sun::star::ucb::XCommandEnvironment >& Environment )
             throw( com::sun::star::uno::Exception,
                    com::sun::star::ucb::CommandAbortedException,
-                   com::sun::star::uno::RuntimeException );
+                   com::sun::star::uno::RuntimeException, std::exception );
 
         virtual void SAL_CALL
         abort(sal_Int32 CommandId)
-            throw( com::sun::star::uno::RuntimeException);
+            throw( com::sun::star::uno::RuntimeException, std::exception);
 
         // XContentCreator
         virtual com::sun::star::uno::Sequence<
         com::sun::star::ucb::ContentInfo > SAL_CALL
         queryCreatableContentsInfo(  )
-            throw (com::sun::star::uno::RuntimeException);
+            throw (com::sun::star::uno::RuntimeException, std::exception);
 
         virtual com::sun::star::uno::Reference<
         com::sun::star::ucb::XContent > SAL_CALL
         createNewContent( const com::sun::star::ucb::ContentInfo& Info )
-            throw (com::sun::star::uno::RuntimeException);
+            throw (com::sun::star::uno::RuntimeException, std::exception);
 
         // XChild
 
         virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XInterface > SAL_CALL
         getParent(  )
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
 
         virtual void SAL_CALL
         setParent( const ::com::sun::star::uno::Reference<
                    ::com::sun::star::uno::XInterface >& Parent )
             throw (::com::sun::star::lang::NoSupportException,
-                   ::com::sun::star::uno::RuntimeException);
+                   ::com::sun::star::uno::RuntimeException, std::exception);
 
 
         static com::sun::star::uno::Sequence<

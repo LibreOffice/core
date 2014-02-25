@@ -90,7 +90,7 @@ Sequence<Type> OComboBoxModel::_getTypes()
 
 // XServiceInfo
 
-StringSequence SAL_CALL OComboBoxModel::getSupportedServiceNames() throw(RuntimeException)
+StringSequence SAL_CALL OComboBoxModel::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
 
@@ -113,7 +113,7 @@ StringSequence SAL_CALL OComboBoxModel::getSupportedServiceNames() throw(Runtime
 }
 
 
-Any SAL_CALL OComboBoxModel::queryAggregation(const Type& _rType) throw (RuntimeException)
+Any SAL_CALL OComboBoxModel::queryAggregation(const Type& _rType) throw (RuntimeException, std::exception)
 {
     Any aReturn = OBoundControlModel::queryAggregation( _rType );
     if ( !aReturn.hasValue() )
@@ -207,7 +207,7 @@ void OComboBoxModel::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) cons
 
 
 void OComboBoxModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue)
-                        throw (Exception)
+                        throw (Exception, std::exception)
 {
     switch (_nHandle)
     {
@@ -318,14 +318,14 @@ void OComboBoxModel::describeAggregateProperties( Sequence< Property >& _rAggreg
 }
 
 
-OUString SAL_CALL OComboBoxModel::getServiceName() throw(RuntimeException)
+OUString SAL_CALL OComboBoxModel::getServiceName() throw(RuntimeException, std::exception)
 {
     return OUString(FRM_COMPONENT_COMBOBOX);  // old (non-sun) name for compatibility !
 }
 
 
 void SAL_CALL OComboBoxModel::write(const Reference<stario::XObjectOutputStream>& _rxOutStream)
-        throw(stario::IOException, RuntimeException)
+        throw(stario::IOException, RuntimeException, std::exception)
 {
     OBoundControlModel::write(_rxOutStream);
 
@@ -362,7 +362,7 @@ void SAL_CALL OComboBoxModel::write(const Reference<stario::XObjectOutputStream>
 }
 
 
-void SAL_CALL OComboBoxModel::read(const Reference<stario::XObjectInputStream>& _rxInStream) throw(stario::IOException, RuntimeException)
+void SAL_CALL OComboBoxModel::read(const Reference<stario::XObjectInputStream>& _rxInStream) throw(stario::IOException, RuntimeException, std::exception)
 {
     OBoundControlModel::read(_rxInStream);
     ControlModelLock aLock( *this );
@@ -701,7 +701,7 @@ void OComboBoxModel::onDisconnectedDbColumn()
 }
 
 
-void SAL_CALL OComboBoxModel::reloaded( const EventObject& aEvent ) throw(RuntimeException)
+void SAL_CALL OComboBoxModel::reloaded( const EventObject& aEvent ) throw(RuntimeException, std::exception)
 {
     OBoundControlModel::reloaded(aEvent);
 
@@ -858,7 +858,7 @@ void OComboBoxModel::refreshInternalEntryList()
 }
 
 
-void SAL_CALL OComboBoxModel::disposing( const EventObject& _rSource ) throw ( RuntimeException )
+void SAL_CALL OComboBoxModel::disposing( const EventObject& _rSource ) throw ( RuntimeException, std::exception )
 {
     if ( !OEntryListHelper::handleDisposing( _rSource ) )
         OBoundControlModel::disposing( _rSource );
@@ -881,7 +881,7 @@ OComboBoxControl::OComboBoxControl(const Reference<XComponentContext>& _rxContex
 }
 
 
-StringSequence SAL_CALL OComboBoxControl::getSupportedServiceNames() throw(RuntimeException)
+StringSequence SAL_CALL OComboBoxControl::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);

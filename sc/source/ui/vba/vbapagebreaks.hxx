@@ -47,7 +47,7 @@ public:
     virtual ~ScVbaHPageBreaks(){}
 
     // XHPageBreaks
-    virtual css::uno::Any SAL_CALL Add( const css::uno::Any& Before) throw ( css::script::BasicErrorException, css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL Add( const css::uno::Any& Before) throw ( css::script::BasicErrorException, css::uno::RuntimeException, std::exception);
 
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException);
@@ -74,7 +74,7 @@ public:
     virtual ~ScVbaVPageBreaks();
 
     // XVPageBreaks
-    virtual css::uno::Any SAL_CALL Add( const css::uno::Any& Before ) throw ( css::script::BasicErrorException, css::uno::RuntimeException );
+    virtual css::uno::Any SAL_CALL Add( const css::uno::Any& Before ) throw ( css::script::BasicErrorException, css::uno::RuntimeException, std::exception );
 
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() throw ( css::uno::RuntimeException );

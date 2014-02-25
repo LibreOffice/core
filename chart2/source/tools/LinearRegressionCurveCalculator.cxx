@@ -41,7 +41,7 @@ void LinearRegressionCurveCalculator::setRegressionProperties(
     sal_Bool  aForceIntercept,
     double    aInterceptValue,
     sal_Int32 aPeriod )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     PolynomialRegressionCurveCalculator::setRegressionProperties(
                                             1,
@@ -56,7 +56,7 @@ uno::Sequence< geometry::RealPoint2D > SAL_CALL LinearRegressionCurveCalculator:
     const uno::Reference< chart2::XScaling >& xScalingY,
     ::sal_Bool bMaySkipPointsInCalculation )
     throw (lang::IllegalArgumentException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     if( bMaySkipPointsInCalculation &&
         isLinearScaling( xScalingX ) &&

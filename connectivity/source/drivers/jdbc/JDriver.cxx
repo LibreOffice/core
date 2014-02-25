@@ -72,24 +72,24 @@ Sequence< OUString > java_sql_Driver::getSupportedServiceNames_Static(  ) throw 
     return *(new java_sql_Driver( comphelper::getComponentContext(_rxFactory)));
 }
 
-OUString SAL_CALL java_sql_Driver::getImplementationName(  ) throw(RuntimeException)
+OUString SAL_CALL java_sql_Driver::getImplementationName(  ) throw(RuntimeException, std::exception)
 {
     return getImplementationName_Static();
 }
 
-sal_Bool SAL_CALL java_sql_Driver::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
+sal_Bool SAL_CALL java_sql_Driver::supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception)
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
 
-Sequence< OUString > SAL_CALL java_sql_Driver::getSupportedServiceNames(  ) throw(RuntimeException)
+Sequence< OUString > SAL_CALL java_sql_Driver::getSupportedServiceNames(  ) throw(RuntimeException, std::exception)
 {
     return getSupportedServiceNames_Static();
 }
 
 Reference< XConnection > SAL_CALL java_sql_Driver::connect( const OUString& url, const
-                                                         Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
+                                                         Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException, std::exception)
 {
     m_aLogger.log( LogLevel::INFO, STR_LOG_DRIVER_CONNECTING_URL, url );
 
@@ -106,7 +106,7 @@ Reference< XConnection > SAL_CALL java_sql_Driver::connect( const OUString& url,
     return xOut;
 }
 
-sal_Bool SAL_CALL java_sql_Driver::acceptsURL( const OUString& url ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL java_sql_Driver::acceptsURL( const OUString& url ) throw(SQLException, RuntimeException, std::exception)
 {
     // don't ask the real driver for the url
     // I feel responsible for all jdbc url's
@@ -129,7 +129,7 @@ sal_Bool SAL_CALL java_sql_Driver::acceptsURL( const OUString& url ) throw(SQLEx
 }
 
 Sequence< DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const OUString& url,
-                                                                         const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)
+                                                                         const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     if ( acceptsURL(url) )
     {
@@ -238,12 +238,12 @@ Sequence< DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const 
     return Sequence< DriverPropertyInfo >();
 }
 
-sal_Int32 SAL_CALL java_sql_Driver::getMajorVersion(  ) throw(RuntimeException)
+sal_Int32 SAL_CALL java_sql_Driver::getMajorVersion(  ) throw(RuntimeException, std::exception)
 {
     return 1;
 }
 
-sal_Int32 SAL_CALL java_sql_Driver::getMinorVersion(  ) throw(RuntimeException)
+sal_Int32 SAL_CALL java_sql_Driver::getMinorVersion(  ) throw(RuntimeException, std::exception)
 {
     return 0;
 }

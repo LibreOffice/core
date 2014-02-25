@@ -70,7 +70,7 @@ Sequence<sal_Int8> Adapter::getUnoTunnelImplementationId()
     return g_id.getImplementationId();
 }
 
-sal_Int64 Adapter::getSomething( const Sequence< sal_Int8 > &id) throw (RuntimeException)
+sal_Int64 Adapter::getSomething( const Sequence< sal_Int8 > &id) throw (RuntimeException, std::exception)
 {
     if( id == g_id.getImplementationId() )
         return reinterpret_cast<sal_Int64>(this);
@@ -92,7 +92,7 @@ void raiseInvocationTargetExceptionWhenNeeded( const Runtime &runtime )
 }
 
 Reference< XIntrospectionAccess > Adapter::getIntrospection()
-    throw ( RuntimeException )
+    throw ( RuntimeException, std::exception )
 {
     // not supported
     return Reference< XIntrospectionAccess > ();
@@ -178,7 +178,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
                      const Sequence< Any >& aParams,
                      Sequence< sal_Int16 > &aOutParamIndex,
                      Sequence< Any > &aOutParam)
-    throw (IllegalArgumentException,CannotConvertException,InvocationTargetException,RuntimeException)
+    throw (IllegalArgumentException,CannotConvertException,InvocationTargetException,RuntimeException, std::exception)
 {
     Any ret;
 
@@ -345,7 +345,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
 }
 
 void Adapter::setValue( const OUString & aPropertyName, const Any & value )
-    throw( UnknownPropertyException, CannotConvertException, InvocationTargetException,RuntimeException)
+    throw( UnknownPropertyException, CannotConvertException, InvocationTargetException,RuntimeException, std::exception)
 {
     if( !hasProperty( aPropertyName ) )
     {
@@ -373,7 +373,7 @@ void Adapter::setValue( const OUString & aPropertyName, const Any & value )
 }
 
 Any Adapter::getValue( const OUString & aPropertyName )
-    throw ( UnknownPropertyException, RuntimeException )
+    throw ( UnknownPropertyException, RuntimeException, std::exception )
 {
     Any ret;
     PyThreadAttach guard( mInterpreter );
@@ -397,13 +397,13 @@ Any Adapter::getValue( const OUString & aPropertyName )
 }
 
 sal_Bool Adapter::hasMethod( const OUString & aMethodName )
-    throw ( RuntimeException )
+    throw ( RuntimeException, std::exception )
 {
     return hasProperty( aMethodName );
 }
 
 sal_Bool Adapter::hasProperty( const OUString & aPropertyName )
-    throw ( RuntimeException )
+    throw ( RuntimeException, std::exception )
 {
     bool bRet = false;
     PyThreadAttach guard( mInterpreter );

@@ -263,11 +263,11 @@ protected:
     virtual sal_Bool SAL_CALL convertFastPropertyValue( Any_t& rConvertedValue, Any_t& rOldValue, sal_Int32 nHandle, const Any_t& rValue )
         throw (::com::sun::star::lang::IllegalArgumentException);
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any_t& rValue )
-        throw (::com::sun::star::uno::Exception);
+        throw (::com::sun::star::uno::Exception, std::exception);
     virtual void SAL_CALL getFastPropertyValue( Any_t& rValue, sal_Int32 nHandle ) const;
 
     virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
 
 public:
     /// helper struct for granting selective access to some notification-related methods

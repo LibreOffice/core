@@ -156,7 +156,7 @@ namespace connectivity { namespace hsqldb
 
     // XFlushable
 
-    void SAL_CALL OHsqlConnection::flush(  ) throw (RuntimeException)
+    void SAL_CALL OHsqlConnection::flush(  ) throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *this );
 
@@ -194,21 +194,21 @@ namespace connectivity { namespace hsqldb
    }
 
 
-    void SAL_CALL OHsqlConnection::addFlushListener( const Reference< XFlushListener >& l ) throw (RuntimeException)
+    void SAL_CALL OHsqlConnection::addFlushListener( const Reference< XFlushListener >& l ) throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *this );
         m_aFlushListeners.addInterface( l );
     }
 
 
-    void SAL_CALL OHsqlConnection::removeFlushListener( const Reference< XFlushListener >& l ) throw (RuntimeException)
+    void SAL_CALL OHsqlConnection::removeFlushListener( const Reference< XFlushListener >& l ) throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *this );
         m_aFlushListeners.removeInterface( l );
     }
 
 
-    Reference< XGraphic > SAL_CALL OHsqlConnection::getTableIcon( const OUString& _TableName, ::sal_Int32 /*_ColorMode*/ ) throw (RuntimeException)
+    Reference< XGraphic > SAL_CALL OHsqlConnection::getTableIcon( const OUString& _TableName, ::sal_Int32 /*_ColorMode*/ ) throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *this );
 
@@ -220,7 +220,7 @@ namespace connectivity { namespace hsqldb
     }
 
 
-    Reference< XInterface > SAL_CALL OHsqlConnection::getTableEditor( const Reference< XDatabaseDocumentUI >& _DocumentUI, const OUString& _TableName ) throw (IllegalArgumentException, WrappedTargetException, RuntimeException)
+    Reference< XInterface > SAL_CALL OHsqlConnection::getTableEditor( const Reference< XDatabaseDocumentUI >& _DocumentUI, const OUString& _TableName ) throw (IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
     {
         MethodGuard aGuard( *this );
 

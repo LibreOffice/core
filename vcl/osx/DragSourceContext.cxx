@@ -37,23 +37,23 @@ DragSourceContext::~DragSourceContext()
 }
 
 sal_Int32 SAL_CALL DragSourceContext::getCurrentCursor(  )
-    throw( RuntimeException)
+    throw( RuntimeException, std::exception)
 {
     return 0;
 }
 
 void SAL_CALL DragSourceContext::setCursor( sal_Int32 /*cursorId*/ )
-    throw( RuntimeException)
+    throw( RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL DragSourceContext::setImage( sal_Int32 /*imageId*/ )
-    throw( RuntimeException)
+    throw( RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL DragSourceContext::transferablesFlavorsChanged(  )
-    throw( RuntimeException)
+    throw( RuntimeException, std::exception)
 {
 }
 

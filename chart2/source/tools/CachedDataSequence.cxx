@@ -238,7 +238,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( CachedDataSequence, CachedDataSequence_Base, O
 
 // ____ XPropertySet ____
 Reference< beans::XPropertySetInfo > SAL_CALL CachedDataSequence::getPropertySetInfo()
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     return Reference< beans::XPropertySetInfo >( createPropertySetInfo( getInfoHelper() ) );
 }
@@ -264,7 +264,7 @@ APPHELPER_XSERVICEINFO_IMPL( CachedDataSequence, lcl_aServiceName )
 
 // ________ XNumericalDataSequence ________
 Sequence< double > SAL_CALL CachedDataSequence::getNumericalData()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard( GetMutex() );
 
@@ -276,7 +276,7 @@ Sequence< double > SAL_CALL CachedDataSequence::getNumericalData()
 
 // ________ XTextualDataSequence ________
 Sequence< OUString > SAL_CALL CachedDataSequence::getTextualData()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard( GetMutex() );
 
@@ -288,20 +288,20 @@ Sequence< OUString > SAL_CALL CachedDataSequence::getTextualData()
 
 // ________ XDataSequence  ________
 Sequence< Any > SAL_CALL CachedDataSequence::getData()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard( GetMutex() );
     return Impl_getMixedData();
 }
 
 OUString SAL_CALL CachedDataSequence::getSourceRangeRepresentation()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return m_sRole;
 }
 
 Sequence< OUString > SAL_CALL CachedDataSequence::generateLabel( chart2::data::LabelOrigin  /*eLabelOrigin*/ )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     // return empty label, as we have no range representaions to determine something useful
     return Sequence< OUString >();
@@ -309,13 +309,13 @@ Sequence< OUString > SAL_CALL CachedDataSequence::generateLabel( chart2::data::L
 
 ::sal_Int32 SAL_CALL CachedDataSequence::getNumberFormatKeyByIndex( ::sal_Int32 /*nIndex*/ )
     throw (lang::IndexOutOfBoundsException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     return 0;
 }
 
 Reference< util::XCloneable > SAL_CALL CachedDataSequence::createClone()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     CachedDataSequence * pNewSeq = new CachedDataSequence( *this );
 
@@ -323,7 +323,7 @@ Reference< util::XCloneable > SAL_CALL CachedDataSequence::createClone()
 }
 
 void SAL_CALL CachedDataSequence::addModifyListener( const Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -337,7 +337,7 @@ void SAL_CALL CachedDataSequence::addModifyListener( const Reference< util::XMod
 }
 
 void SAL_CALL CachedDataSequence::removeModifyListener( const Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -351,7 +351,7 @@ void SAL_CALL CachedDataSequence::removeModifyListener( const Reference< util::X
 }
 
 // lang::XInitialization:
-void SAL_CALL CachedDataSequence::initialize(const uno::Sequence< uno::Any > & _aArguments) throw (uno::RuntimeException, uno::Exception)
+void SAL_CALL CachedDataSequence::initialize(const uno::Sequence< uno::Any > & _aArguments) throw (uno::RuntimeException, uno::Exception, std::exception)
 {
     ::comphelper::SequenceAsHashMap aMap(_aArguments);
     m_aNumericalSequence = aMap.getUnpackedValueOrDefault( "DataSequence" ,m_aNumericalSequence);

@@ -77,49 +77,49 @@ namespace sdbtools
     {
     }
 
-    OUString SAL_CALL TableName::getCatalogName() throw (RuntimeException)
+    OUString SAL_CALL TableName::getCatalogName() throw (RuntimeException, std::exception)
     {
         EntryGuard aGuard( *this );
         return m_pImpl->sCatalog;
     }
 
-    void SAL_CALL TableName::setCatalogName( const OUString& _catalogName ) throw (RuntimeException)
+    void SAL_CALL TableName::setCatalogName( const OUString& _catalogName ) throw (RuntimeException, std::exception)
     {
         EntryGuard aGuard( *this );
         m_pImpl->sCatalog = _catalogName;
     }
 
-    OUString SAL_CALL TableName::getSchemaName() throw (RuntimeException)
+    OUString SAL_CALL TableName::getSchemaName() throw (RuntimeException, std::exception)
     {
         EntryGuard aGuard( *this );
         return m_pImpl->sSchema;
     }
 
-    void SAL_CALL TableName::setSchemaName( const OUString& _schemaName ) throw (RuntimeException)
+    void SAL_CALL TableName::setSchemaName( const OUString& _schemaName ) throw (RuntimeException, std::exception)
     {
         EntryGuard aGuard( *this );
         m_pImpl->sSchema = _schemaName;
     }
 
-    OUString SAL_CALL TableName::getTableName() throw (RuntimeException)
+    OUString SAL_CALL TableName::getTableName() throw (RuntimeException, std::exception)
     {
         EntryGuard aGuard( *this );
         return m_pImpl->sName;
     }
 
-    void SAL_CALL TableName::setTableName( const OUString& _tableName ) throw (RuntimeException)
+    void SAL_CALL TableName::setTableName( const OUString& _tableName ) throw (RuntimeException, std::exception)
     {
         EntryGuard aGuard( *this );
         m_pImpl->sName = _tableName;
     }
 
-    OUString SAL_CALL TableName::getNameForSelect() throw (RuntimeException)
+    OUString SAL_CALL TableName::getNameForSelect() throw (RuntimeException, std::exception)
     {
         EntryGuard aGuard( *this );
         return composeTableNameForSelect( getConnection(), m_pImpl->sCatalog, m_pImpl->sSchema, m_pImpl->sName );
     }
 
-    Reference< XPropertySet > SAL_CALL TableName::getTable() throw (NoSuchElementException, RuntimeException)
+    Reference< XPropertySet > SAL_CALL TableName::getTable() throw (NoSuchElementException, RuntimeException, std::exception)
     {
         EntryGuard aGuard( *this );
 
@@ -146,7 +146,7 @@ namespace sdbtools
         return xTable;
     }
 
-    void SAL_CALL TableName::setTable( const Reference< XPropertySet >& _table ) throw (IllegalArgumentException, RuntimeException)
+    void SAL_CALL TableName::setTable( const Reference< XPropertySet >& _table ) throw (IllegalArgumentException, RuntimeException, std::exception)
     {
         EntryGuard aGuard( *this );
 
@@ -213,7 +213,7 @@ namespace sdbtools
         }
     }
 
-    OUString SAL_CALL TableName::getComposedName( ::sal_Int32 _Type, ::sal_Bool _Quote ) throw (IllegalArgumentException, RuntimeException)
+    OUString SAL_CALL TableName::getComposedName( ::sal_Int32 _Type, ::sal_Bool _Quote ) throw (IllegalArgumentException, RuntimeException, std::exception)
     {
         EntryGuard aGuard( *this );
 
@@ -223,7 +223,7 @@ namespace sdbtools
             lcl_translateCompositionType_throw( _Type ) );
     }
 
-    void SAL_CALL TableName::setComposedName( const OUString& _ComposedName, ::sal_Int32 _Type ) throw (RuntimeException)
+    void SAL_CALL TableName::setComposedName( const OUString& _ComposedName, ::sal_Int32 _Type ) throw (RuntimeException, std::exception)
     {
         EntryGuard aGuard( *this );
 

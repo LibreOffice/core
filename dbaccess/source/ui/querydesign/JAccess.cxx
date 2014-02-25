@@ -37,7 +37,7 @@ namespace dbaui
         ,m_pTableView(_pTableView)
     {
     }
-    OUString SAL_CALL OJoinDesignViewAccess::getImplementationName() throw(RuntimeException)
+    OUString SAL_CALL OJoinDesignViewAccess::getImplementationName() throw(RuntimeException, std::exception)
     {
         return getImplementationName_Static();
     }
@@ -51,7 +51,7 @@ namespace dbaui
         m_pTableView = NULL;
     }
     // XAccessibleContext
-    sal_Int32 SAL_CALL OJoinDesignViewAccess::getAccessibleChildCount(  ) throw (RuntimeException)
+    sal_Int32 SAL_CALL OJoinDesignViewAccess::getAccessibleChildCount(  ) throw (RuntimeException, std::exception)
     {
         // TODO may be this will change to only visible windows
         // this is the same assumption mt implements
@@ -61,7 +61,7 @@ namespace dbaui
             nChildCount = m_pTableView->GetTabWinCount() + m_pTableView->getTableConnections()->size();
         return nChildCount;
     }
-    Reference< XAccessible > SAL_CALL OJoinDesignViewAccess::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException,RuntimeException)
+    Reference< XAccessible > SAL_CALL OJoinDesignViewAccess::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException,RuntimeException, std::exception)
     {
         Reference< XAccessible > aRet;
         ::osl::MutexGuard aGuard( m_aMutex  );
@@ -87,11 +87,11 @@ namespace dbaui
     {
         return m_pTableView && !m_pTableView->getDesignView()->getController().isReadOnly();
     }
-    sal_Int16 SAL_CALL OJoinDesignViewAccess::getAccessibleRole(  ) throw (RuntimeException)
+    sal_Int16 SAL_CALL OJoinDesignViewAccess::getAccessibleRole(  ) throw (RuntimeException, std::exception)
     {
         return AccessibleRole::VIEW_PORT;
     }
-    Reference< XAccessibleContext > SAL_CALL OJoinDesignViewAccess::getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException)
+    Reference< XAccessibleContext > SAL_CALL OJoinDesignViewAccess::getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
     {
         return this;
     }

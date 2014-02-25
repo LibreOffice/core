@@ -79,12 +79,12 @@ public:
     // XEventListener
     virtual void SAL_CALL
         disposing( const EventObject& rSource )
-            throw(RuntimeException);
+            throw(RuntimeException, std::exception);
 
     // XDictionaryEventListener
     virtual void SAL_CALL
         processDictionaryEvent( const DictionaryEvent& rDicEvent )
-            throw(RuntimeException);
+            throw(RuntimeException, std::exception);
 
     // non-UNO functions
     void    DisposeAndClear( const EventObject &rEvtObj );
@@ -125,7 +125,7 @@ void DicEvtListenerHelper::DisposeAndClear( const EventObject &rEvtObj )
 
 
 void SAL_CALL DicEvtListenerHelper::disposing( const EventObject& rSource )
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
@@ -148,7 +148,7 @@ void SAL_CALL DicEvtListenerHelper::disposing( const EventObject& rSource )
 
 void SAL_CALL DicEvtListenerHelper::processDictionaryEvent(
             const DictionaryEvent& rDicEvent )
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
@@ -394,7 +394,7 @@ uno::Reference< XInterface > SAL_CALL
     return xService;
 }
 
-sal_Int16 SAL_CALL DicList::getCount() throw(RuntimeException)
+sal_Int16 SAL_CALL DicList::getCount() throw(RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
     return static_cast< sal_Int16 >(GetOrCreateDicList().size());
@@ -402,7 +402,7 @@ sal_Int16 SAL_CALL DicList::getCount() throw(RuntimeException)
 
 uno::Sequence< uno::Reference< XDictionary > > SAL_CALL
         DicList::getDictionaries()
-            throw(RuntimeException)
+            throw(RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
@@ -420,7 +420,7 @@ uno::Sequence< uno::Reference< XDictionary > > SAL_CALL
 
 uno::Reference< XDictionary > SAL_CALL
         DicList::getDictionaryByName( const OUString& aDictionaryName )
-            throw(RuntimeException)
+            throw(RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
@@ -442,7 +442,7 @@ uno::Reference< XDictionary > SAL_CALL
 
 sal_Bool SAL_CALL DicList::addDictionary(
             const uno::Reference< XDictionary >& xDictionary )
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
@@ -464,7 +464,7 @@ sal_Bool SAL_CALL DicList::addDictionary(
 
 sal_Bool SAL_CALL
     DicList::removeDictionary( const uno::Reference< XDictionary >& xDictionary )
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
@@ -497,7 +497,7 @@ sal_Bool SAL_CALL
 sal_Bool SAL_CALL DicList::addDictionaryListEventListener(
             const uno::Reference< XDictionaryListEventListener >& xListener,
             sal_Bool bReceiveVerbose )
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
@@ -517,7 +517,7 @@ sal_Bool SAL_CALL DicList::addDictionaryListEventListener(
 
 sal_Bool SAL_CALL DicList::removeDictionaryListEventListener(
             const uno::Reference< XDictionaryListEventListener >& xListener )
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
@@ -532,19 +532,19 @@ sal_Bool SAL_CALL DicList::removeDictionaryListEventListener(
     return bRes;
 }
 
-sal_Int16 SAL_CALL DicList::beginCollectEvents() throw(RuntimeException)
+sal_Int16 SAL_CALL DicList::beginCollectEvents() throw(RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
     return pDicEvtLstnrHelper->BeginCollectEvents();
 }
 
-sal_Int16 SAL_CALL DicList::endCollectEvents() throw(RuntimeException)
+sal_Int16 SAL_CALL DicList::endCollectEvents() throw(RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
     return pDicEvtLstnrHelper->EndCollectEvents();
 }
 
-sal_Int16 SAL_CALL DicList::flushEvents() throw(RuntimeException)
+sal_Int16 SAL_CALL DicList::flushEvents() throw(RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
     return pDicEvtLstnrHelper->FlushEvents();
@@ -553,7 +553,7 @@ sal_Int16 SAL_CALL DicList::flushEvents() throw(RuntimeException)
 uno::Reference< XDictionary > SAL_CALL
     DicList::createDictionary( const OUString& rName, const Locale& rLocale,
             DictionaryType eDicType, const OUString& rURL )
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
@@ -566,7 +566,7 @@ uno::Reference< XDictionary > SAL_CALL
 uno::Reference< XDictionaryEntry > SAL_CALL
     DicList::queryDictionaryEntry( const OUString& rWord, const Locale& rLocale,
             sal_Bool bSearchPosDics, sal_Bool bSearchSpellEntry )
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
     return SearchDicList( this, rWord, LinguLocaleToLanguage( rLocale ),
@@ -576,7 +576,7 @@ uno::Reference< XDictionaryEntry > SAL_CALL
 
 void SAL_CALL
     DicList::dispose()
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
@@ -624,7 +624,7 @@ void SAL_CALL
 
 void SAL_CALL
     DicList::addEventListener( const uno::Reference< XEventListener >& rxListener )
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
@@ -634,7 +634,7 @@ void SAL_CALL
 
 void SAL_CALL
     DicList::removeEventListener( const uno::Reference< XEventListener >& rxListener )
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
@@ -729,7 +729,7 @@ void DicList::SaveDics()
 
 // Service specific part
 
-OUString SAL_CALL DicList::getImplementationName(  ) throw(RuntimeException)
+OUString SAL_CALL DicList::getImplementationName(  ) throw(RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
     return getImplementationName_Static();
@@ -737,13 +737,13 @@ OUString SAL_CALL DicList::getImplementationName(  ) throw(RuntimeException)
 
 
 sal_Bool SAL_CALL DicList::supportsService( const OUString& ServiceName )
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL DicList::getSupportedServiceNames(  )
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
     return getSupportedServiceNames_Static();

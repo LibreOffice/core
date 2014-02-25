@@ -104,12 +104,12 @@ public:
      *          get which file to import.
      */
     virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& aDescriptor )
-        throw( RuntimeException );
+        throw( RuntimeException, std::exception );
 
     /**
      * @descr   stop loading the file.
      */
-    virtual void SAL_CALL cancel() throw (com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL cancel() throw (com::sun::star::uno::RuntimeException, std::exception);
 
     /**
      * @descr   get the XDocumentHandler interface.
@@ -139,29 +139,29 @@ public:
      * @descr   see LWPFilterReader::filter.
      */
     virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& aDescriptor )
-        throw( RuntimeException );
+        throw( RuntimeException, std::exception );
 
     /**
      * @descr   see LWPFilterReader::cancel.
      */
-    virtual void SAL_CALL cancel() throw (com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL cancel() throw (com::sun::star::uno::RuntimeException, std::exception);
 
     // XImporter
     virtual void SAL_CALL setTargetDocument( const uno::Reference< XComponent >& xDoc)
-        throw( IllegalArgumentException, RuntimeException );
+        throw( IllegalArgumentException, RuntimeException, std::exception );
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() throw ();
+    OUString SAL_CALL getImplementationName() throw (std::exception);
 
-    Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw ();
+    Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw (std::exception);
 
-    sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw ();
+    sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw (std::exception);
 
     /**
      * @descr   function of interface XExtendedFilterDetection. If this interface is registered, it will be called whenever
      *          a file is to be loaded.
      */
-    virtual OUString SAL_CALL detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Descriptor ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Descriptor ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 public:
     uno::Reference< XFilter > rFilter;

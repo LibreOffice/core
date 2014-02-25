@@ -68,29 +68,29 @@ public:
     virtual void SAL_CALL release() throw();
 
     // XInitialization
-    virtual void SAL_CALL initialize( const Sequence< Any > & aArguments ) throw ( Exception, RuntimeException );
+    virtual void SAL_CALL initialize( const Sequence< Any > & aArguments ) throw ( Exception, RuntimeException, std::exception );
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw ( RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw ( RuntimeException );
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw ( RuntimeException );
+    virtual OUString SAL_CALL getImplementationName() throw ( RuntimeException, std::exception );
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw ( RuntimeException, std::exception );
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw ( RuntimeException, std::exception );
 
     // XPropertyAccess
-    virtual Sequence< PropertyValue > SAL_CALL getPropertyValues() throw ( RuntimeException );
+    virtual Sequence< PropertyValue > SAL_CALL getPropertyValues() throw ( RuntimeException, std::exception );
     virtual void SAL_CALL setPropertyValues( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > & aProps )
         throw ( ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException,
                 ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException );
+                ::com::sun::star::uno::RuntimeException, std::exception );
 
     // XExecuteDialog
     virtual sal_Int16 SAL_CALL execute()
-        throw ( com::sun::star::uno::RuntimeException );
+        throw ( com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL setTitle( const OUString& aTitle )
-        throw ( ::com::sun::star::uno::RuntimeException );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
 
     // XExporter
     virtual void SAL_CALL setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
-        throw ( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
+        throw ( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception );
 
 };
 
@@ -145,23 +145,23 @@ void SAL_CALL SdHtmlOptionsDialog::release() throw()
 
 // XInitialization
 void SAL_CALL SdHtmlOptionsDialog::initialize( const Sequence< Any > & )
-    throw ( Exception, RuntimeException )
+    throw ( Exception, RuntimeException, std::exception )
 {
 }
 
 // XServiceInfo
 OUString SAL_CALL SdHtmlOptionsDialog::getImplementationName()
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return SdHtmlOptionsDialog_getImplementationName();
 }
 sal_Bool SAL_CALL SdHtmlOptionsDialog::supportsService( const OUString& rServiceName )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 Sequence< OUString > SAL_CALL SdHtmlOptionsDialog::getSupportedServiceNames()
-    throw ( RuntimeException )
+    throw ( RuntimeException, std::exception )
 {
     return SdHtmlOptionsDialog_getSupportedServiceNames();
 }
@@ -169,7 +169,7 @@ Sequence< OUString > SAL_CALL SdHtmlOptionsDialog::getSupportedServiceNames()
 
 // XPropertyAccess
 Sequence< PropertyValue > SdHtmlOptionsDialog::getPropertyValues()
-        throw ( RuntimeException )
+        throw ( RuntimeException, std::exception )
 {
     sal_Int32 i, nCount;
     for ( i = 0, nCount = maMediaDescriptor.getLength(); i < nCount; i++ )
@@ -189,7 +189,7 @@ Sequence< PropertyValue > SdHtmlOptionsDialog::getPropertyValues()
 void SdHtmlOptionsDialog::setPropertyValues( const Sequence< PropertyValue > & aProps )
         throw ( UnknownPropertyException, PropertyVetoException,
                 IllegalArgumentException, WrappedTargetException,
-                RuntimeException )
+                RuntimeException, std::exception )
 {
     maMediaDescriptor = aProps;
 
@@ -206,13 +206,13 @@ void SdHtmlOptionsDialog::setPropertyValues( const Sequence< PropertyValue > & a
 
 // XExecutableDialog
 void SdHtmlOptionsDialog::setTitle( const OUString& aTitle )
-    throw ( RuntimeException )
+    throw ( RuntimeException, std::exception )
 {
     aDialogTitle = aTitle;
 }
 
 sal_Int16 SdHtmlOptionsDialog::execute()
-    throw ( RuntimeException )
+    throw ( RuntimeException, std::exception )
 {
     sal_Int16 nRet = ExecutableDialogResults::CANCEL;
 
@@ -239,7 +239,7 @@ sal_Int16 SdHtmlOptionsDialog::execute()
 
 // XEmporter
 void SdHtmlOptionsDialog::setSourceDocument( const Reference< XComponent >& xDoc )
-        throw ( IllegalArgumentException, RuntimeException )
+        throw ( IllegalArgumentException, RuntimeException, std::exception )
 {
     // try to set the corresponding metric unit
     Reference< XServiceInfo > xServiceInfo(xDoc, UNO_QUERY);

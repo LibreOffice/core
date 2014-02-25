@@ -81,21 +81,21 @@ class MailToDispatcher : // baseclasses
         // XDispatchProvider
         virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL                       queryDispatch  ( const css::util::URL&                                       aURL        ,
                                                                                                              const OUString&                                      sTarget     ,
-                                                                                                                   sal_Int32                                             nFlags      ) throw( css::uno::RuntimeException );
-        virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor ) throw( css::uno::RuntimeException );
+                                                                                                                   sal_Int32                                             nFlags      ) throw( css::uno::RuntimeException, std::exception );
+        virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor ) throw( css::uno::RuntimeException, std::exception );
 
         // XNotifyingDispatch
         virtual void SAL_CALL dispatchWithNotification( const css::util::URL&                                             aURL      ,
                                                         const css::uno::Sequence< css::beans::PropertyValue >&            lArguments,
-                                                        const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) throw( css::uno::RuntimeException );
+                                                        const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) throw( css::uno::RuntimeException, std::exception );
 
         // XDispatch
         virtual void SAL_CALL dispatch            ( const css::util::URL&                                     aURL       ,
-                                                    const css::uno::Sequence< css::beans::PropertyValue >&    lArguments ) throw( css::uno::RuntimeException );
+                                                    const css::uno::Sequence< css::beans::PropertyValue >&    lArguments ) throw( css::uno::RuntimeException, std::exception );
         virtual void SAL_CALL addStatusListener   ( const css::uno::Reference< css::frame::XStatusListener >& xListener  ,
-                                                    const css::util::URL&                                     aURL       ) throw( css::uno::RuntimeException );
+                                                    const css::util::URL&                                     aURL       ) throw( css::uno::RuntimeException, std::exception );
         virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener  ,
-                                                    const css::util::URL&                                     aURL       ) throw( css::uno::RuntimeException );
+                                                    const css::util::URL&                                     aURL       ) throw( css::uno::RuntimeException, std::exception );
 
     /* internal */
     private:

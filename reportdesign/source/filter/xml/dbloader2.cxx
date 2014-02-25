@@ -45,7 +45,7 @@ ORptTypeDetection::ORptTypeDetection(Reference< XComponentContext > const & xCon
 {
 }
 
-OUString SAL_CALL ORptTypeDetection::detect( Sequence< ::com::sun::star::beans::PropertyValue >& Descriptor ) throw (RuntimeException)
+OUString SAL_CALL ORptTypeDetection::detect( Sequence< ::com::sun::star::beans::PropertyValue >& Descriptor ) throw (RuntimeException, std::exception)
 {
 
     ::comphelper::SequenceAsHashMap aTemp(Descriptor);
@@ -85,20 +85,20 @@ Reference< XInterface > SAL_CALL
 }
 
 // XServiceInfo
-OUString SAL_CALL ORptTypeDetection::getImplementationName() throw(  )
+OUString SAL_CALL ORptTypeDetection::getImplementationName() throw(std::exception  )
 {
     return getImplementationName_Static();
 }
 
 
 // XServiceInfo
-sal_Bool SAL_CALL ORptTypeDetection::supportsService(const OUString& ServiceName) throw(  )
+sal_Bool SAL_CALL ORptTypeDetection::supportsService(const OUString& ServiceName) throw(std::exception  )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo
-Sequence< OUString > SAL_CALL ORptTypeDetection::getSupportedServiceNames(void) throw(  )
+Sequence< OUString > SAL_CALL ORptTypeDetection::getSupportedServiceNames(void) throw(std::exception  )
 {
     return getSupportedServiceNames_Static();
 }

@@ -61,7 +61,7 @@ uno::Sequence< OUString> SwXFilterOptions::getSupportedServiceNames_Static()
     return uno::Sequence< OUString> (&sService, 1);
 }
 
-uno::Sequence< beans::PropertyValue > SwXFilterOptions::getPropertyValues() throw (uno::RuntimeException)
+uno::Sequence< beans::PropertyValue > SwXFilterOptions::getPropertyValues() throw (uno::RuntimeException, std::exception)
 {
     uno::Sequence<beans::PropertyValue> aRet(1);
     beans::PropertyValue* pArray = aRet.getArray();
@@ -74,7 +74,7 @@ uno::Sequence< beans::PropertyValue > SwXFilterOptions::getPropertyValues() thro
 
 void   SwXFilterOptions::setPropertyValues( const uno::Sequence<beans::PropertyValue >& aProps )
     throw (beans::UnknownPropertyException, beans::PropertyVetoException,
-       IllegalArgumentException, WrappedTargetException, uno::RuntimeException)
+       IllegalArgumentException, WrappedTargetException, uno::RuntimeException, std::exception)
 {
     const beans::PropertyValue* pPropArray = aProps.getConstArray();
     long nPropCount = aProps.getLength();
@@ -93,11 +93,11 @@ void   SwXFilterOptions::setPropertyValues( const uno::Sequence<beans::PropertyV
 }
 
 void   SwXFilterOptions::setTitle( const OUString& /*rTitle*/ )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
 }
 
-sal_Int16 SwXFilterOptions::execute() throw (uno::RuntimeException)
+sal_Int16 SwXFilterOptions::execute() throw (uno::RuntimeException, std::exception)
 {
     sal_Int16 nRet = ui::dialogs::ExecutableDialogResults::CANCEL;
 
@@ -138,32 +138,32 @@ sal_Int16 SwXFilterOptions::execute() throw (uno::RuntimeException)
 }
 
 void   SwXFilterOptions::setTargetDocument( const uno::Reference< XComponent >& xDoc )
-    throw (IllegalArgumentException, uno::RuntimeException)
+    throw (IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     bExport = sal_False;
     xModel = xDoc;
 }
 
 void   SwXFilterOptions::setSourceDocument( const uno::Reference<XComponent >& xDoc )
-        throw (IllegalArgumentException,uno::RuntimeException)
+        throw (IllegalArgumentException,uno::RuntimeException, std::exception)
 {
     bExport = sal_True;
     xModel = xDoc;
 }
 
-OUString SwXFilterOptions::getImplementationName() throw(uno::RuntimeException)
+OUString SwXFilterOptions::getImplementationName() throw(uno::RuntimeException, std::exception)
 {
     return OUString(SWFILTEROPTIONSOBJ_IMPLNAME);
 }
 
 sal_Bool SwXFilterOptions::supportsService( const OUString& rServiceName )
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SwXFilterOptions::getSupportedServiceNames()
-                throw(uno::RuntimeException)
+                throw(uno::RuntimeException, std::exception)
 {
     return SwXFilterOptions::getSupportedServiceNames_Static();
 }

@@ -259,7 +259,7 @@ void OHierarchyElement_Impl::TestForClosing()
 }
 
 void SAL_CALL OHierarchyElement_Impl::disposing( const lang::EventObject& Source )
-        throw ( uno::RuntimeException )
+        throw ( uno::RuntimeException, std::exception )
 {
     try
     {
@@ -303,12 +303,12 @@ void OHierarchyElement_Impl::RemoveElement( const ::rtl::Reference< OHierarchyEl
 
 // XTransactionListener
 void SAL_CALL OHierarchyElement_Impl::preCommit( const ::com::sun::star::lang::EventObject& /*aEvent*/ )
-    throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL OHierarchyElement_Impl::commited( const ::com::sun::star::lang::EventObject& /*aEvent*/ )
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     try
     {
@@ -324,12 +324,12 @@ void SAL_CALL OHierarchyElement_Impl::commited( const ::com::sun::star::lang::Ev
 }
 
 void SAL_CALL OHierarchyElement_Impl::preRevert( const ::com::sun::star::lang::EventObject& /*aEvent*/ )
-    throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL OHierarchyElement_Impl::reverted( const ::com::sun::star::lang::EventObject& /*aEvent*/ )
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
 }
 

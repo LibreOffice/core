@@ -40,19 +40,19 @@ public:
     virtual ~URLTransformer() {}
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     {
         return OUString("com.sun.star.comp.framework.URLTransformer");
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     {
         return cppu::supportsService(this, ServiceName);
     }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     {
         css::uno::Sequence< OUString > aRet(1);
         aRet[0] = "com.sun.star.util.URLTransformer";
@@ -60,16 +60,16 @@ public:
     }
 
     virtual sal_Bool SAL_CALL parseStrict( css::util::URL& aURL )
-        throw( css::uno::RuntimeException );
+        throw( css::uno::RuntimeException, std::exception );
 
     virtual sal_Bool SAL_CALL parseSmart( css::util::URL& aURL, const OUString& sSmartProtocol )
-        throw( css::uno::RuntimeException );
+        throw( css::uno::RuntimeException, std::exception );
 
     virtual sal_Bool SAL_CALL assemble( css::util::URL& aURL )
-        throw( css::uno::RuntimeException );
+        throw( css::uno::RuntimeException, std::exception );
 
     virtual OUString SAL_CALL getPresentation( const css::util::URL& aURL, sal_Bool bWithPassword )
-        throw( css::uno::RuntimeException );
+        throw( css::uno::RuntimeException, std::exception );
 };
 
 namespace
@@ -126,7 +126,7 @@ namespace
 //*****************************************************************************************************************
 //  XURLTransformer
 //*****************************************************************************************************************
-sal_Bool SAL_CALL URLTransformer::parseStrict( css::util::URL& aURL ) throw( css::uno::RuntimeException )
+sal_Bool SAL_CALL URLTransformer::parseStrict( css::util::URL& aURL ) throw( css::uno::RuntimeException, std::exception )
 {
     // Safe impossible cases.
     if  (( &aURL                        ==  NULL    )   ||
@@ -180,7 +180,7 @@ sal_Bool SAL_CALL URLTransformer::parseStrict( css::util::URL& aURL ) throw( css
 //  XURLTransformer
 //*****************************************************************************************************************
 sal_Bool SAL_CALL URLTransformer::parseSmart( css::util::URL& aURL,
-                                                const   OUString&    sSmartProtocol  ) throw( css::uno::RuntimeException )
+                                                const   OUString&    sSmartProtocol  ) throw( css::uno::RuntimeException, std::exception )
 {
     // Safe impossible cases.
     if  (( &aURL                            ==  NULL    ) ||
@@ -235,7 +235,7 @@ sal_Bool SAL_CALL URLTransformer::parseSmart( css::util::URL& aURL,
 //*****************************************************************************************************************
 //  XURLTransformer
 //*****************************************************************************************************************
-sal_Bool SAL_CALL URLTransformer::assemble( css::util::URL& aURL ) throw( css::uno::RuntimeException )
+sal_Bool SAL_CALL URLTransformer::assemble( css::util::URL& aURL ) throw( css::uno::RuntimeException, std::exception )
 {
     // Safe impossible cases.
     if  ( &aURL == NULL )
@@ -299,7 +299,7 @@ sal_Bool SAL_CALL URLTransformer::assemble( css::util::URL& aURL ) throw( css::u
 //  XURLTransformer
 //*****************************************************************************************************************
 OUString SAL_CALL URLTransformer::getPresentation( const css::util::URL& aURL,
-                                                            sal_Bool    bWithPassword   ) throw( css::uno::RuntimeException )
+                                                            sal_Bool    bWithPassword   ) throw( css::uno::RuntimeException, std::exception )
 {
     // Safe impossible cases.
     if  (( &aURL                        ==  NULL        )   ||

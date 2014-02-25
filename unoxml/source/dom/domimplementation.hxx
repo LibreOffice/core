@@ -50,19 +50,19 @@ namespace DOM
         Creates a DOM Document object of the specified type with its document element.
         */
         virtual Reference <XDocument > SAL_CALL createDocument(const OUString& namespaceURI, const OUString& qualifiedName, const Reference< XDocumentType >& doctype)
-            throw (RuntimeException);
+            throw (RuntimeException, std::exception);
 
         /**
         Creates an empty DocumentType node.
         */
         virtual Reference< XDocumentType > SAL_CALL createDocumentType(const OUString& qualifiedName, const OUString& publicId, const OUString& systemId)
-            throw (RuntimeException);
+            throw (RuntimeException, std::exception);
 
         /**
         Test if the DOM implementation implements a specific feature.
         */
         virtual sal_Bool SAL_CALL hasFeature(const OUString& feature, const OUString& ver)
-            throw (RuntimeException);
+            throw (RuntimeException, std::exception);
         };
 }
 #endif

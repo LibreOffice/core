@@ -52,13 +52,13 @@ public:
 protected:
     // ____ XRangeSelectionListener ____
     virtual void SAL_CALL done( const ::com::sun::star::sheet::RangeSelectionEvent& aEvent )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL aborted( const ::com::sun::star::sheet::RangeSelectionEvent& aEvent )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // ____ XEventListener ____
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 private:
     RangeSelectionListenerParent & m_rParent;

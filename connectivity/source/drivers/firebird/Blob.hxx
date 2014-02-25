@@ -63,25 +63,25 @@ namespace connectivity
             virtual sal_Int64 SAL_CALL
                 length()
                 throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::uno::RuntimeException);
+                      ::com::sun::star::uno::RuntimeException, std::exception);
             virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
                 getBytes(sal_Int64 aPosition, sal_Int32 aLength)
                 throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::uno::RuntimeException);
+                      ::com::sun::star::uno::RuntimeException, std::exception);
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL
                 getBinaryStream()
                 throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::uno::RuntimeException);
+                      ::com::sun::star::uno::RuntimeException, std::exception);
             virtual sal_Int64 SAL_CALL
                 position(const ::com::sun::star::uno::Sequence< sal_Int8 >& rPattern,
                          sal_Int64 aStart)
                 throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::uno::RuntimeException);
+                      ::com::sun::star::uno::RuntimeException, std::exception);
             virtual sal_Int64 SAL_CALL
                 positionOfBlob(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XBlob >& rPattern,
                                sal_Int64 aStart)
                 throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::uno::RuntimeException);
+                      ::com::sun::star::uno::RuntimeException, std::exception);
 
             // ---- XInputStream ----------------------------------------------
             virtual sal_Int32 SAL_CALL
@@ -90,30 +90,30 @@ namespace connectivity
                 throw(::com::sun::star::io::NotConnectedException,
                       ::com::sun::star::io::BufferSizeExceededException,
                       ::com::sun::star::io::IOException,
-                      ::com::sun::star::uno::RuntimeException);
+                      ::com::sun::star::uno::RuntimeException, std::exception);
             virtual sal_Int32 SAL_CALL
                 readSomeBytes(::com::sun::star::uno::Sequence< sal_Int8 >& rDataOut,
                               sal_Int32 nMaximumBytes)
                 throw(::com::sun::star::io::NotConnectedException,
                       ::com::sun::star::io::BufferSizeExceededException,
                         ::com::sun::star::io::IOException,
-                      ::com::sun::star::uno::RuntimeException);
+                      ::com::sun::star::uno::RuntimeException, std::exception);
             virtual void SAL_CALL
                 skipBytes(sal_Int32 nBytes)
                 throw(::com::sun::star::io::NotConnectedException,
                       ::com::sun::star::io::BufferSizeExceededException,
                       ::com::sun::star::io::IOException,
-                      ::com::sun::star::uno::RuntimeException);
+                      ::com::sun::star::uno::RuntimeException, std::exception);
             virtual sal_Int32 SAL_CALL
                 available()
                 throw(::com::sun::star::io::NotConnectedException,
                       ::com::sun::star::io::IOException,
-                      ::com::sun::star::uno::RuntimeException);
+                      ::com::sun::star::uno::RuntimeException, std::exception);
             virtual void SAL_CALL
                 closeInput()
                 throw(::com::sun::star::io::NotConnectedException,
                       ::com::sun::star::io::IOException,
-                      ::com::sun::star::uno::RuntimeException);
+                      ::com::sun::star::uno::RuntimeException, std::exception);
 
             // ---- OComponentHelper ------------------------------------------
             virtual void SAL_CALL disposing();

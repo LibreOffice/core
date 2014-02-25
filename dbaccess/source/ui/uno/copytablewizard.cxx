@@ -149,8 +149,8 @@ namespace dbaui
     {
     public:
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(RuntimeException);
-        virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(RuntimeException);
+        virtual OUString SAL_CALL getImplementationName() throw(RuntimeException, std::exception);
+        virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception);
 
         // XServiceInfo - static methods
         static Sequence< OUString >  getSupportedServiceNames_Static(void) throw( RuntimeException );
@@ -158,26 +158,26 @@ namespace dbaui
         static Reference< XInterface >      Create( const Reference< XMultiServiceFactory >& );
 
         // XCopyTableWizard
-        virtual ::sal_Int16 SAL_CALL getOperation() throw (RuntimeException);
-        virtual void SAL_CALL setOperation( ::sal_Int16 _operation ) throw (IllegalArgumentException, RuntimeException);
-        virtual OUString SAL_CALL getDestinationTableName() throw (RuntimeException);
-        virtual void SAL_CALL setDestinationTableName( const OUString& _destinationTableName ) throw (RuntimeException);
-        virtual Optional< OUString > SAL_CALL getCreatePrimaryKey() throw (RuntimeException);
-        virtual void SAL_CALL setCreatePrimaryKey( const Optional< OUString >& _newPrimaryKey ) throw (IllegalArgumentException, RuntimeException);
-        virtual sal_Bool SAL_CALL getUseHeaderLineAsColumnNames() throw (RuntimeException);
-        virtual void SAL_CALL setUseHeaderLineAsColumnNames( sal_Bool _bUseHeaderLineAsColumnNames ) throw (RuntimeException);
-        virtual void SAL_CALL addCopyTableListener( const Reference< XCopyTableListener >& Listener ) throw (RuntimeException);
-        virtual void SAL_CALL removeCopyTableListener( const Reference< XCopyTableListener >& Listener ) throw (RuntimeException);
+        virtual ::sal_Int16 SAL_CALL getOperation() throw (RuntimeException, std::exception);
+        virtual void SAL_CALL setOperation( ::sal_Int16 _operation ) throw (IllegalArgumentException, RuntimeException, std::exception);
+        virtual OUString SAL_CALL getDestinationTableName() throw (RuntimeException, std::exception);
+        virtual void SAL_CALL setDestinationTableName( const OUString& _destinationTableName ) throw (RuntimeException, std::exception);
+        virtual Optional< OUString > SAL_CALL getCreatePrimaryKey() throw (RuntimeException, std::exception);
+        virtual void SAL_CALL setCreatePrimaryKey( const Optional< OUString >& _newPrimaryKey ) throw (IllegalArgumentException, RuntimeException, std::exception);
+        virtual sal_Bool SAL_CALL getUseHeaderLineAsColumnNames() throw (RuntimeException, std::exception);
+        virtual void SAL_CALL setUseHeaderLineAsColumnNames( sal_Bool _bUseHeaderLineAsColumnNames ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL addCopyTableListener( const Reference< XCopyTableListener >& Listener ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL removeCopyTableListener( const Reference< XCopyTableListener >& Listener ) throw (RuntimeException, std::exception);
 
         // XCopyTableWizard::XExecutableDialog
-        virtual void SAL_CALL setTitle( const OUString& aTitle ) throw (RuntimeException);
-        virtual ::sal_Int16 SAL_CALL execute(  ) throw (RuntimeException);
+        virtual void SAL_CALL setTitle( const OUString& aTitle ) throw (RuntimeException, std::exception);
+        virtual ::sal_Int16 SAL_CALL execute(  ) throw (RuntimeException, std::exception);
 
         // XInitialization
-        virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException);
+        virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException, std::exception);
 
         // XPropertySet
-        virtual Reference< XPropertySetInfo > SAL_CALL getPropertySetInfo() throw(RuntimeException);
+        virtual Reference< XPropertySetInfo > SAL_CALL getPropertySetInfo() throw(RuntimeException, std::exception);
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
         // OPropertyArrayUsageHelper
@@ -424,7 +424,7 @@ Reference< XInterface > CopyTableWizard::Create( const Reference< XMultiServiceF
     return *( new CopyTableWizard( comphelper::getComponentContext(_rxFactory) ) );
 }
 
-OUString SAL_CALL CopyTableWizard::getImplementationName() throw(RuntimeException)
+OUString SAL_CALL CopyTableWizard::getImplementationName() throw(RuntimeException, std::exception)
 {
     return getImplementationName_Static();
 }
@@ -434,7 +434,7 @@ OUString CopyTableWizard::getImplementationName_Static() throw(RuntimeException)
     return OUString( "org.openoffice.comp.dbu.CopyTableWizard" );
 }
 
-::comphelper::StringSequence SAL_CALL CopyTableWizard::getSupportedServiceNames() throw(RuntimeException)
+::comphelper::StringSequence SAL_CALL CopyTableWizard::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     return getSupportedServiceNames_Static();
 }
@@ -446,19 +446,19 @@ OUString CopyTableWizard::getImplementationName_Static() throw(RuntimeException)
     return aSupported;
 }
 
-Reference< XPropertySetInfo > SAL_CALL CopyTableWizard::getPropertySetInfo() throw(RuntimeException)
+Reference< XPropertySetInfo > SAL_CALL CopyTableWizard::getPropertySetInfo() throw(RuntimeException, std::exception)
 {
     Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 
-::sal_Int16 SAL_CALL CopyTableWizard::getOperation() throw (RuntimeException)
+::sal_Int16 SAL_CALL CopyTableWizard::getOperation() throw (RuntimeException, std::exception)
 {
     CopyTableAccessGuard aGuard( *this );
     return m_nOperation;
 }
 
-void SAL_CALL CopyTableWizard::setOperation( ::sal_Int16 _operation ) throw (IllegalArgumentException, RuntimeException)
+void SAL_CALL CopyTableWizard::setOperation( ::sal_Int16 _operation ) throw (IllegalArgumentException, RuntimeException, std::exception)
 {
     CopyTableAccessGuard aGuard( *this );
 
@@ -481,25 +481,25 @@ void SAL_CALL CopyTableWizard::setOperation( ::sal_Int16 _operation ) throw (Ill
     m_nOperation = _operation;
 }
 
-OUString SAL_CALL CopyTableWizard::getDestinationTableName() throw (RuntimeException)
+OUString SAL_CALL CopyTableWizard::getDestinationTableName() throw (RuntimeException, std::exception)
 {
     CopyTableAccessGuard aGuard( *this );
     return m_sDestinationTable;
 }
 
-void SAL_CALL CopyTableWizard::setDestinationTableName( const OUString& _destinationTableName ) throw (RuntimeException)
+void SAL_CALL CopyTableWizard::setDestinationTableName( const OUString& _destinationTableName ) throw (RuntimeException, std::exception)
 {
     CopyTableAccessGuard aGuard( *this );
     m_sDestinationTable = _destinationTableName;
 }
 
-Optional< OUString > SAL_CALL CopyTableWizard::getCreatePrimaryKey() throw (RuntimeException)
+Optional< OUString > SAL_CALL CopyTableWizard::getCreatePrimaryKey() throw (RuntimeException, std::exception)
 {
     CopyTableAccessGuard aGuard( *this );
     return m_aPrimaryKeyName;
 }
 
-void SAL_CALL CopyTableWizard::setCreatePrimaryKey( const Optional< OUString >& _newPrimaryKey ) throw (IllegalArgumentException, RuntimeException)
+void SAL_CALL CopyTableWizard::setCreatePrimaryKey( const Optional< OUString >& _newPrimaryKey ) throw (IllegalArgumentException, RuntimeException, std::exception)
 {
     CopyTableAccessGuard aGuard( *this );
 
@@ -513,39 +513,39 @@ void SAL_CALL CopyTableWizard::setCreatePrimaryKey( const Optional< OUString >& 
     m_aPrimaryKeyName = _newPrimaryKey;
 }
 
-sal_Bool SAL_CALL CopyTableWizard::getUseHeaderLineAsColumnNames() throw (RuntimeException)
+sal_Bool SAL_CALL CopyTableWizard::getUseHeaderLineAsColumnNames() throw (RuntimeException, std::exception)
 {
     CopyTableAccessGuard aGuard( *this );
     return m_bUseHeaderLineAsColumnNames;
 }
 
-void SAL_CALL CopyTableWizard::setUseHeaderLineAsColumnNames( sal_Bool _bUseHeaderLineAsColumnNames ) throw (RuntimeException)
+void SAL_CALL CopyTableWizard::setUseHeaderLineAsColumnNames( sal_Bool _bUseHeaderLineAsColumnNames ) throw (RuntimeException, std::exception)
 {
     CopyTableAccessGuard aGuard( *this );
     m_bUseHeaderLineAsColumnNames = _bUseHeaderLineAsColumnNames;
 }
 
-void SAL_CALL CopyTableWizard::addCopyTableListener( const Reference< XCopyTableListener >& _rxListener ) throw (RuntimeException)
+void SAL_CALL CopyTableWizard::addCopyTableListener( const Reference< XCopyTableListener >& _rxListener ) throw (RuntimeException, std::exception)
 {
     CopyTableAccessGuard aGuard( *this );
     if ( _rxListener.is() )
         m_aCopyTableListeners.addInterface( _rxListener );
 }
 
-void SAL_CALL CopyTableWizard::removeCopyTableListener( const Reference< XCopyTableListener >& _rxListener ) throw (RuntimeException)
+void SAL_CALL CopyTableWizard::removeCopyTableListener( const Reference< XCopyTableListener >& _rxListener ) throw (RuntimeException, std::exception)
 {
     CopyTableAccessGuard aGuard( *this );
     if ( _rxListener.is() )
         m_aCopyTableListeners.removeInterface( _rxListener );
 }
 
-void SAL_CALL CopyTableWizard::setTitle( const OUString& _rTitle ) throw (RuntimeException)
+void SAL_CALL CopyTableWizard::setTitle( const OUString& _rTitle ) throw (RuntimeException, std::exception)
 {
     CopyTableAccessGuard aGuard( *this );
     CopyTableWizard_DialogBase::setTitle( _rTitle );
 }
 
-::sal_Int16 SAL_CALL CopyTableWizard::execute(  ) throw (RuntimeException)
+::sal_Int16 SAL_CALL CopyTableWizard::execute(  ) throw (RuntimeException, std::exception)
 {
     CopyTableAccessGuard aGuard( *this );
 
@@ -1472,7 +1472,7 @@ OUString CopyTableWizard::impl_getServerSideCopyStatement_throw(const Reference<
     return sSql;
 }
 
-void SAL_CALL CopyTableWizard::initialize( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException)
+void SAL_CALL CopyTableWizard::initialize( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( isInitialized() )

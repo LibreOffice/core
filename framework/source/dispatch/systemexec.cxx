@@ -75,7 +75,7 @@ SystemExec::~SystemExec()
 
 css::uno::Reference< css::frame::XDispatch > SAL_CALL SystemExec::queryDispatch( const css::util::URL&  aURL    ,
                                                                                  const OUString&,
-                                                                                       sal_Int32 ) throw( css::uno::RuntimeException )
+                                                                                       sal_Int32 ) throw( css::uno::RuntimeException, std::exception )
 {
     css::uno::Reference< css::frame::XDispatch > xDispatcher;
     if (aURL.Complete.startsWith(PROTOCOL_VALUE))
@@ -85,7 +85,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL SystemExec::queryDispatch(
 
 
 
-css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL SystemExec::queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor ) throw( css::uno::RuntimeException )
+css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL SystemExec::queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor ) throw( css::uno::RuntimeException, std::exception )
 {
     sal_Int32 nCount = lDescriptor.getLength();
     css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > lDispatcher( nCount );
@@ -102,7 +102,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Syst
 
 
 void SAL_CALL SystemExec::dispatch( const css::util::URL&                                  aURL       ,
-                                    const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) throw( css::uno::RuntimeException )
+                                    const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) throw( css::uno::RuntimeException, std::exception )
 {
     dispatchWithNotification(aURL, lArguments, css::uno::Reference< css::frame::XDispatchResultListener >());
 }
@@ -111,7 +111,7 @@ void SAL_CALL SystemExec::dispatch( const css::util::URL&                       
 
 void SAL_CALL SystemExec::dispatchWithNotification( const css::util::URL&                                             aURL      ,
                                                     const css::uno::Sequence< css::beans::PropertyValue >&,
-                                                    const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) throw( css::uno::RuntimeException )
+                                                    const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) throw( css::uno::RuntimeException, std::exception )
 {
     // convert "systemexec:file:///c:/temp/test.html" => "file:///c:/temp/test.html"
     sal_Int32 c = aURL.Complete.getLength()-PROTOCOL_LENGTH;
@@ -150,7 +150,7 @@ void SAL_CALL SystemExec::dispatchWithNotification( const css::util::URL&       
 
 
 void SAL_CALL SystemExec::addStatusListener( const css::uno::Reference< css::frame::XStatusListener >&,
-                                             const css::util::URL& ) throw( css::uno::RuntimeException )
+                                             const css::util::URL& ) throw( css::uno::RuntimeException, std::exception )
 {
     // not suported yet
 }
@@ -158,7 +158,7 @@ void SAL_CALL SystemExec::addStatusListener( const css::uno::Reference< css::fra
 
 
 void SAL_CALL SystemExec::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >&,
-                                                const css::util::URL& ) throw( css::uno::RuntimeException )
+                                                const css::util::URL& ) throw( css::uno::RuntimeException, std::exception )
 {
     // not suported yet
 }

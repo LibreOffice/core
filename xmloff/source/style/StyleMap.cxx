@@ -63,7 +63,7 @@ StyleMap* StyleMap::getImplementation( Reference< XInterface > xInt ) throw()
 // XUnoTunnel
 sal_Int64 SAL_CALL StyleMap::getSomething(
         const Sequence< sal_Int8 >& rId )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     if( rId.getLength() == 16 &&
         0 == memcmp( getUnoTunnelId().getConstArray(),

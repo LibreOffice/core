@@ -284,13 +284,13 @@ Reference< com::sun::star::beans::XPropertySet > ResultSetMetaData::getColumnByI
 
 // Methods
 sal_Int32 ResultSetMetaData::getColumnCount(  )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     return m_colCount;
 }
 
 sal_Bool ResultSetMetaData::isAutoIncrement( sal_Int32 column )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
 
     sal_Bool ret = getBoolColumnProperty( getStatics().IS_AUTO_INCREMENT, column, sal_False );
@@ -298,39 +298,39 @@ sal_Bool ResultSetMetaData::isAutoIncrement( sal_Int32 column )
 }
 
 sal_Bool ResultSetMetaData::isCaseSensitive( sal_Int32 column )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     (void) column;
     return sal_True; // ??? hmm, numeric types or
 }
 
-sal_Bool ResultSetMetaData::isSearchable( sal_Int32 column ) throw (SQLException, RuntimeException)
+sal_Bool ResultSetMetaData::isSearchable( sal_Int32 column ) throw (SQLException, RuntimeException, std::exception)
 {
     (void) column;
     return sal_True; // mmm, what types are not searchable ?
 }
 
-sal_Bool ResultSetMetaData::isCurrency( sal_Int32 column ) throw (SQLException, RuntimeException)
+sal_Bool ResultSetMetaData::isCurrency( sal_Int32 column ) throw (SQLException, RuntimeException, std::exception)
 {
     return getBoolColumnProperty( getStatics().IS_CURRENCY, column, sal_False );
 }
 
 sal_Int32 ResultSetMetaData::isNullable( sal_Int32 column )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     return getIntColumnProperty(
         getStatics().IS_NULLABLE, column, com::sun::star::sdbc::ColumnValue::NULLABLE_UNKNOWN );
 }
 
 sal_Bool ResultSetMetaData::isSigned( sal_Int32 column )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     (void) column;
     return sal_True;
 }
 
 sal_Int32 ResultSetMetaData::getColumnDisplaySize( sal_Int32 column )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
@@ -339,12 +339,12 @@ sal_Int32 ResultSetMetaData::getColumnDisplaySize( sal_Int32 column )
 }
 
 OUString ResultSetMetaData::getColumnLabel( sal_Int32 column )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     return getColumnName( column);
 }
 
-OUString ResultSetMetaData::getColumnName( sal_Int32 column ) throw (SQLException, RuntimeException)
+OUString ResultSetMetaData::getColumnName( sal_Int32 column ) throw (SQLException, RuntimeException, std::exception)
 {
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
@@ -353,14 +353,14 @@ OUString ResultSetMetaData::getColumnName( sal_Int32 column ) throw (SQLExceptio
     return m_colDesc[column-1].name;
 }
 
-OUString ResultSetMetaData::getSchemaName( sal_Int32 column ) throw (SQLException, RuntimeException)
+OUString ResultSetMetaData::getSchemaName( sal_Int32 column ) throw (SQLException, RuntimeException, std::exception)
 {
     (void) column;
     return m_schemaName;
 }
 
 sal_Int32 ResultSetMetaData::getPrecision( sal_Int32 column )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
@@ -369,7 +369,7 @@ sal_Int32 ResultSetMetaData::getPrecision( sal_Int32 column )
 }
 
 sal_Int32 ResultSetMetaData::getScale( sal_Int32 column )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
@@ -378,7 +378,7 @@ sal_Int32 ResultSetMetaData::getScale( sal_Int32 column )
 }
 
 OUString ResultSetMetaData::getTableName( sal_Int32 column )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     (void) column;
 // LEM TODO This is very fishy.. Should probably return the table to which that column belongs!
@@ -386,14 +386,14 @@ OUString ResultSetMetaData::getTableName( sal_Int32 column )
 }
 
 OUString ResultSetMetaData::getCatalogName( sal_Int32 column )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     (void) column;
     // can do this through XConnection.getCatalog() !
     return OUString();
 }
 sal_Int32 ResultSetMetaData::getColumnType( sal_Int32 column )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     int ret = getIntColumnProperty( getStatics().TYPE, column, -100 );
     if( -100 == ret )
@@ -407,7 +407,7 @@ sal_Int32 ResultSetMetaData::getColumnType( sal_Int32 column )
 }
 
 OUString ResultSetMetaData::getColumnTypeName( sal_Int32 column )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     OUString ret; // give defensive answers, when data is not available
     try
@@ -434,25 +434,25 @@ OUString ResultSetMetaData::getColumnTypeName( sal_Int32 column )
 
 
 sal_Bool ResultSetMetaData::isReadOnly( sal_Int32 column )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     (void) column;
     return sal_False;
 }
 
 sal_Bool ResultSetMetaData::isWritable( sal_Int32 column )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     return ! isReadOnly( column ); // what's the sense if this method ?
 }
 
 sal_Bool ResultSetMetaData::isDefinitelyWritable( sal_Int32 column )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     return isWritable(column); // uhh, now it becomes really esoteric ....
 }
 OUString ResultSetMetaData::getColumnServiceName( sal_Int32 column )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     (void) column;
     return OUString();

@@ -54,13 +54,13 @@ m_xComponent.clear();
 }
 
 // XEventListener
-void SAL_CALL OPooledConnection::disposing( const EventObject& /*Source*/ ) throw (RuntimeException)
+void SAL_CALL OPooledConnection::disposing( const EventObject& /*Source*/ ) throw (RuntimeException, std::exception)
 {
 m_xComponent.clear();
 }
 
 //XPooledConnection
-Reference< XConnection > OPooledConnection::getConnection()  throw(SQLException, RuntimeException)
+Reference< XConnection > OPooledConnection::getConnection()  throw(SQLException, RuntimeException, std::exception)
 {
     if(!m_xComponent.is() && m_xRealConnection.is())
     {

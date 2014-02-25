@@ -101,12 +101,12 @@ public:
     uno::Any getItemByStringIndex( const OUString& rIndex ) throw (uno::RuntimeException);
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException);
-    virtual uno::Any SAL_CALL getByIndex( sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException, std::exception);
+    virtual uno::Any SAL_CALL getByIndex( sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception);
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException);
+    virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException, std::exception);
 
 protected:
     /** Derived classes return true, if the passed shape is supported by the instance. */
@@ -202,13 +202,13 @@ uno::Any ScVbaObjectContainer::getItemByStringIndex( const OUString& rIndex ) th
 
 // XIndexAccess
 
-sal_Int32 SAL_CALL ScVbaObjectContainer::getCount() throw (uno::RuntimeException)
+sal_Int32 SAL_CALL ScVbaObjectContainer::getCount() throw (uno::RuntimeException, std::exception)
 {
     return static_cast< sal_Int32 >( maShapes.size() );
 }
 
 uno::Any SAL_CALL ScVbaObjectContainer::getByIndex( sal_Int32 nIndex )
-        throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
+        throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     if( (0 <= nIndex) && (nIndex < getCount()) )
         return uno::Any( maShapes[ static_cast< size_t >( nIndex ) ] );
@@ -217,12 +217,12 @@ uno::Any SAL_CALL ScVbaObjectContainer::getByIndex( sal_Int32 nIndex )
 
 // XElementAccess
 
-uno::Type SAL_CALL ScVbaObjectContainer::getElementType() throw (uno::RuntimeException)
+uno::Type SAL_CALL ScVbaObjectContainer::getElementType() throw (uno::RuntimeException, std::exception)
 {
     return cppu::UnoType<drawing::XShape>::get();
 }
 
-sal_Bool SAL_CALL ScVbaObjectContainer::hasElements() throw (uno::RuntimeException)
+sal_Bool SAL_CALL ScVbaObjectContainer::hasElements() throw (uno::RuntimeException, std::exception)
 {
     return !maShapes.empty();
 }
@@ -319,7 +319,7 @@ ScVbaGraphicObjectsBase::ScVbaGraphicObjectsBase( const ScVbaObjectContainerRef&
 
 // XGraphicObjects
 
-uno::Any SAL_CALL ScVbaGraphicObjectsBase::Add( const uno::Any& rLeft, const uno::Any& rTop, const uno::Any& rWidth, const uno::Any& rHeight ) throw (uno::RuntimeException)
+uno::Any SAL_CALL ScVbaGraphicObjectsBase::Add( const uno::Any& rLeft, const uno::Any& rTop, const uno::Any& rWidth, const uno::Any& rHeight ) throw (uno::RuntimeException, std::exception)
 {
     /*  Extract double values from passed Anys (the lclPointsToHmm() helper
         function will throw a RuntimeException on any error), and convert from

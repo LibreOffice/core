@@ -43,7 +43,7 @@ SwAccessibleNoTextHyperlink::SwAccessibleNoTextHyperlink( SwAccessibleNoTextFram
 
 // XAccessibleAction
 sal_Int32 SAL_CALL SwAccessibleNoTextHyperlink::getAccessibleActionCount()
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -62,7 +62,7 @@ sal_Int32 SAL_CALL SwAccessibleNoTextHyperlink::getAccessibleActionCount()
 }
 
 sal_Bool SAL_CALL SwAccessibleNoTextHyperlink::doAccessibleAction( sal_Int32 nIndex )
-        throw (IndexOutOfBoundsException, RuntimeException)
+        throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -102,7 +102,7 @@ sal_Bool SAL_CALL SwAccessibleNoTextHyperlink::doAccessibleAction( sal_Int32 nIn
 
 OUString SAL_CALL SwAccessibleNoTextHyperlink::getAccessibleActionDescription(
         sal_Int32 nIndex )
-        throw (IndexOutOfBoundsException, RuntimeException)
+        throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -129,7 +129,7 @@ OUString SAL_CALL SwAccessibleNoTextHyperlink::getAccessibleActionDescription(
 
 Reference< XAccessibleKeyBinding > SAL_CALL
     SwAccessibleNoTextHyperlink::getAccessibleActionKeyBinding( sal_Int32 nIndex )
-    throw (IndexOutOfBoundsException, RuntimeException)
+    throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -170,7 +170,7 @@ Reference< XAccessibleKeyBinding > SAL_CALL
 // XAccessibleHyperlink
 Any SAL_CALL SwAccessibleNoTextHyperlink::getAccessibleActionAnchor(
         sal_Int32 nIndex )
-        throw (IndexOutOfBoundsException, RuntimeException)
+        throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -188,7 +188,7 @@ Any SAL_CALL SwAccessibleNoTextHyperlink::getAccessibleActionAnchor(
 
 Any SAL_CALL SwAccessibleNoTextHyperlink::getAccessibleActionObject(
             sal_Int32 nIndex )
-    throw (IndexOutOfBoundsException, RuntimeException)
+    throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -213,19 +213,19 @@ Any SAL_CALL SwAccessibleNoTextHyperlink::getAccessibleActionObject(
 }
 
 sal_Int32 SAL_CALL SwAccessibleNoTextHyperlink::getStartIndex()
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
 {
     return 0;
 }
 
 sal_Int32 SAL_CALL SwAccessibleNoTextHyperlink::getEndIndex()
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
 {
     return 0;
 }
 
 sal_Bool SAL_CALL SwAccessibleNoTextHyperlink::isValid(  )
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 

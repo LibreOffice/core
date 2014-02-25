@@ -222,7 +222,7 @@ SwXModule::~SwXModule()
     delete pxPrintSettings;
 }
 
-Reference< XPropertySet >  SwXModule::getViewSettings(void) throw( uno::RuntimeException )
+Reference< XPropertySet >  SwXModule::getViewSettings(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!pxViewSettings)
@@ -234,7 +234,7 @@ Reference< XPropertySet >  SwXModule::getViewSettings(void) throw( uno::RuntimeE
     return *pxViewSettings;
 }
 
-Reference< XPropertySet >  SwXModule::getPrintSettings(void) throw( uno::RuntimeException )
+Reference< XPropertySet >  SwXModule::getPrintSettings(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!pxPrintSettings)
@@ -246,17 +246,17 @@ Reference< XPropertySet >  SwXModule::getPrintSettings(void) throw( uno::Runtime
     return *pxPrintSettings;
 }
 
-OUString SwXModule::getImplementationName(void) throw( RuntimeException )
+OUString SwXModule::getImplementationName(void) throw( RuntimeException, std::exception )
 {
     return SwXModule_getImplementationName();
 }
 
-sal_Bool SwXModule::supportsService(const OUString& rServiceName) throw( RuntimeException )
+sal_Bool SwXModule::supportsService(const OUString& rServiceName) throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SwXModule::getSupportedServiceNames(void) throw( RuntimeException )
+Sequence< OUString > SwXModule::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
 {
     return SwXModule_getSupportedServiceNames();
 }
@@ -532,17 +532,17 @@ void SwXPrintSettings::_postGetValues ()
     mpPrtOpt = NULL;
 }
 
-OUString SwXPrintSettings::getImplementationName(void) throw( RuntimeException )
+OUString SwXPrintSettings::getImplementationName(void) throw( RuntimeException, std::exception )
 {
     return OUString("SwXPrintSettings");
 }
 
-sal_Bool SwXPrintSettings::supportsService(const OUString& rServiceName) throw( RuntimeException )
+sal_Bool SwXPrintSettings::supportsService(const OUString& rServiceName) throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SwXPrintSettings::getSupportedServiceNames(void) throw( RuntimeException )
+Sequence< OUString > SwXPrintSettings::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
@@ -971,17 +971,17 @@ void SwXViewSettings::_postGetValues ()
     mpConstViewOption = NULL;
 }
 
-OUString SwXViewSettings::getImplementationName(void) throw( RuntimeException )
+OUString SwXViewSettings::getImplementationName(void) throw( RuntimeException, std::exception )
 {
     return OUString("SwXViewSettings");
 }
 
-sal_Bool SwXViewSettings::supportsService(const OUString& rServiceName) throw( RuntimeException )
+sal_Bool SwXViewSettings::supportsService(const OUString& rServiceName) throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SwXViewSettings::getSupportedServiceNames(void) throw( RuntimeException )
+Sequence< OUString > SwXViewSettings::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();

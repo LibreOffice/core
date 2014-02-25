@@ -59,19 +59,19 @@ NameContainer::~NameContainer()
 
 //XServiceInfo
 OUString SAL_CALL NameContainer::getImplementationName()
-    throw( ::com::sun::star::uno::RuntimeException )
+    throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     return m_aImplementationName;
 }
 
 sal_Bool SAL_CALL NameContainer::supportsService( const OUString& ServiceName )
-    throw( ::com::sun::star::uno::RuntimeException )
+    throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL NameContainer::getSupportedServiceNames()
-    throw( ::com::sun::star::uno::RuntimeException )
+    throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     Sequence< OUString > aSNS( 1 );
     aSNS.getArray()[ 0 ] = m_aServicename;
@@ -80,7 +80,7 @@ Sequence< OUString > SAL_CALL NameContainer::getSupportedServiceNames()
 
 // XNameContainer
 void SAL_CALL NameContainer::insertByName( const OUString& rName, const Any& rElement )
-    throw( lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException )
+    throw( lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     if( m_aMap.find( rName ) != m_aMap.end() )
         throw container::ElementExistException();
@@ -88,7 +88,7 @@ void SAL_CALL NameContainer::insertByName( const OUString& rName, const Any& rEl
 }
 
 void SAL_CALL NameContainer::removeByName( const OUString& Name )
-    throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     tContentMap::iterator aIt( m_aMap.find( Name ));
     if( aIt == m_aMap.end())
@@ -98,7 +98,7 @@ void SAL_CALL NameContainer::removeByName( const OUString& Name )
 
 // XNameReplace
 void SAL_CALL NameContainer::replaceByName( const OUString& rName, const Any& rElement )
-    throw( lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
+    throw( lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     tContentMap::iterator aIt( m_aMap.find( rName ));
     if( aIt == m_aMap.end() )
@@ -108,7 +108,7 @@ void SAL_CALL NameContainer::replaceByName( const OUString& rName, const Any& rE
 
 // XNameAccess
 Any SAL_CALL NameContainer::getByName( const OUString& rName )
-    throw( container::NoSuchElementException,  lang::WrappedTargetException, uno::RuntimeException)
+    throw( container::NoSuchElementException,  lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     tContentMap::iterator aIter( m_aMap.find( rName ) );
     if( aIter == m_aMap.end() )
@@ -117,7 +117,7 @@ Any SAL_CALL NameContainer::getByName( const OUString& rName )
 }
 
 Sequence< OUString > SAL_CALL NameContainer::getElementNames()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     sal_Int32 nCount = m_aMap.size();
     Sequence< OUString > aSeq(nCount);
@@ -128,27 +128,27 @@ Sequence< OUString > SAL_CALL NameContainer::getElementNames()
 }
 
 sal_Bool SAL_CALL NameContainer::hasByName( const OUString& rName )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return ( m_aMap.find( rName ) != m_aMap.end() );
 }
 
 // XElementAccess
 sal_Bool SAL_CALL NameContainer::hasElements()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return ! m_aMap.empty();
 }
 
 uno::Type SAL_CALL NameContainer::getElementType()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return m_aType;
 }
 
 // XCloneable
 uno::Reference< util::XCloneable > SAL_CALL NameContainer::createClone()
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     return uno::Reference< util::XCloneable >( new NameContainer( *this ));
 }

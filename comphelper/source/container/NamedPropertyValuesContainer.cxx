@@ -42,35 +42,35 @@ public:
     // XNameContainer
     virtual void SAL_CALL insertByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement )
         throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException,
-        ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL removeByName( const OUString& Name )
         throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException,
-            ::com::sun::star::uno::RuntimeException);
+            ::com::sun::star::uno::RuntimeException, std::exception);
 
     // XNameReplace
     virtual void SAL_CALL replaceByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement )
         throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException,
-            ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+            ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception);
 
     // XNameAccess
     virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
         throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException,
-            ::com::sun::star::uno::RuntimeException);
+            ::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     // XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL hasElements(  )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     // XServiceInfo - static versions (used for component registration)
     static OUString SAL_CALL getImplementationName_static();
@@ -92,7 +92,7 @@ NamedPropertyValuesContainer::~NamedPropertyValuesContainer() throw()
 // XNameContainer
 void SAL_CALL NamedPropertyValuesContainer::insertByName( const OUString& aName, const uno::Any& aElement )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException,
-        ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+        ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     if( maProperties.find( aName ) != maProperties.end() )
         throw container::ElementExistException();
@@ -106,7 +106,7 @@ void SAL_CALL NamedPropertyValuesContainer::insertByName( const OUString& aName,
 
 void SAL_CALL NamedPropertyValuesContainer::removeByName( const OUString& Name )
     throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException,
-        ::com::sun::star::uno::RuntimeException)
+        ::com::sun::star::uno::RuntimeException, std::exception)
 {
     NamedPropertyValues::iterator aIter = maProperties.find( Name );
     if( aIter == maProperties.end() )
@@ -118,7 +118,7 @@ void SAL_CALL NamedPropertyValuesContainer::removeByName( const OUString& Name )
 // XNameReplace
 void SAL_CALL NamedPropertyValuesContainer::replaceByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException,
-        ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+        ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     NamedPropertyValues::iterator aIter = maProperties.find( aName );
     if( aIter == maProperties.end() )
@@ -134,7 +134,7 @@ void SAL_CALL NamedPropertyValuesContainer::replaceByName( const OUString& aName
 // XNameAccess
 ::com::sun::star::uno::Any SAL_CALL NamedPropertyValuesContainer::getByName( const OUString& aName )
     throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException,
-        ::com::sun::star::uno::RuntimeException)
+        ::com::sun::star::uno::RuntimeException, std::exception)
 {
     NamedPropertyValues::iterator aIter = maProperties.find( aName );
     if( aIter == maProperties.end() )
@@ -148,7 +148,7 @@ void SAL_CALL NamedPropertyValuesContainer::replaceByName( const OUString& aName
 }
 
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL NamedPropertyValuesContainer::getElementNames(  )
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     NamedPropertyValues::iterator aIter = maProperties.begin();
     const NamedPropertyValues::iterator aEnd = maProperties.end();
@@ -165,7 +165,7 @@ void SAL_CALL NamedPropertyValuesContainer::replaceByName( const OUString& aName
 }
 
 sal_Bool SAL_CALL NamedPropertyValuesContainer::hasByName( const OUString& aName )
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     NamedPropertyValues::iterator aIter = maProperties.find( aName );
     return aIter != maProperties.end();
@@ -173,19 +173,19 @@ sal_Bool SAL_CALL NamedPropertyValuesContainer::hasByName( const OUString& aName
 
 // XElementAccess
 ::com::sun::star::uno::Type SAL_CALL NamedPropertyValuesContainer::getElementType(  )
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return ::getCppuType((uno::Sequence<beans::PropertyValue> *)0);
 }
 
 sal_Bool SAL_CALL NamedPropertyValuesContainer::hasElements(  )
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return !maProperties.empty();
 }
 
 //XServiceInfo
-OUString SAL_CALL NamedPropertyValuesContainer::getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL NamedPropertyValuesContainer::getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return getImplementationName_static();
 }
@@ -195,12 +195,12 @@ OUString SAL_CALL NamedPropertyValuesContainer::getImplementationName_static(  )
     return OUString( "NamedPropertyValuesContainer" );
 }
 
-sal_Bool SAL_CALL NamedPropertyValuesContainer::supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException)
+sal_Bool SAL_CALL NamedPropertyValuesContainer::supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-::com::sun::star::uno::Sequence< OUString > SAL_CALL NamedPropertyValuesContainer::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Sequence< OUString > SAL_CALL NamedPropertyValuesContainer::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return getSupportedServiceNames_static();
 }

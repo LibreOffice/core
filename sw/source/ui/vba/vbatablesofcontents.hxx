@@ -38,7 +38,7 @@ public:
     virtual ~SwVbaTablesOfContents() {}
 
     // Methods
-    virtual css::uno::Reference< ::ooo::vba::word::XTableOfContents > SAL_CALL Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, const css::uno::Any& UseHeadingStyles, const css::uno::Any& UpperHeadingLevel, const css::uno::Any& LowerHeadingLevel, const css::uno::Any& UseFields, const css::uno::Any& TableID, const css::uno::Any& RightAlignPageNumbers, const css::uno::Any& IncludePageNumbers, const css::uno::Any& AddedStyles, const css::uno::Any& UseHyperlinks, const css::uno::Any& HidePageNumbersInWeb, const css::uno::Any& UseOutlineLevels ) throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< ::ooo::vba::word::XTableOfContents > SAL_CALL Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, const css::uno::Any& UseHeadingStyles, const css::uno::Any& UpperHeadingLevel, const css::uno::Any& LowerHeadingLevel, const css::uno::Any& UseFields, const css::uno::Any& TableID, const css::uno::Any& RightAlignPageNumbers, const css::uno::Any& IncludePageNumbers, const css::uno::Any& AddedStyles, const css::uno::Any& UseHyperlinks, const css::uno::Any& HidePageNumbersInWeb, const css::uno::Any& UseOutlineLevels ) throw (css::uno::RuntimeException, std::exception);
 
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException);

@@ -81,7 +81,7 @@ public:
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
         const ::com::sun::star::uno::Type& aType
-    ) throw( ::com::sun::star::uno::RuntimeException );
+    ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     /**_______________________________________________________________________________________________________
         @short      increment refcount
@@ -120,7 +120,7 @@ public:
 
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 
     //  XAggregation
@@ -128,7 +128,7 @@ public:
 
     ::com::sun::star::uno::Any SAL_CALL queryAggregation(
         const ::com::sun::star::uno::Type& aType
-    ) throw( ::com::sun::star::uno::RuntimeException );
+    ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 
     //  XControl
@@ -137,20 +137,20 @@ public:
     virtual void SAL_CALL createPeer(
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >&      xToolkit ,
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >&   xParent
-    ) throw ( ::com::sun::star::uno::RuntimeException );
+    ) throw ( ::com::sun::star::uno::RuntimeException, std::exception );
 
     virtual sal_Bool SAL_CALL setModel(
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xModel
-    ) throw( ::com::sun::star::uno::RuntimeException );
+    ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > SAL_CALL getModel()
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 
     //  XComponent
 
 
-    virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 
     //  XView
@@ -158,31 +158,31 @@ public:
 
     virtual sal_Bool SAL_CALL setGraphics(
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >& xDevice
-    ) throw( ::com::sun::star::uno::RuntimeException );
+    ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics > SAL_CALL getGraphics()
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 
     //  XConnectionPointContainer
 
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getConnectionPointTypes()
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XConnectionPoint > SAL_CALL queryConnectionPoint(
         const ::com::sun::star::uno::Type& aType
-    ) throw ( ::com::sun::star::uno::RuntimeException );
+    ) throw ( ::com::sun::star::uno::RuntimeException, std::exception );
 
     virtual void SAL_CALL advise(
         const ::com::sun::star::uno::Type&                                aType       ,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&    xListener
-    ) throw( ::com::sun::star::uno::RuntimeException );
+    ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     virtual void SAL_CALL unadvise(
         const ::com::sun::star::uno::Type&                                aType ,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&    xListener
-    ) throw( ::com::sun::star::uno::RuntimeException );
+    ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 
     //  impl but public methods to register service!
@@ -212,7 +212,7 @@ protected:
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
         sal_Int32 nHandle ,
         const ::com::sun::star::uno::Any& rValue
-    ) throw ( ::com::sun::star::uno::Exception );
+    ) throw ( ::com::sun::star::uno::Exception, std::exception );
 
     virtual void SAL_CALL getFastPropertyValue( ::com::sun::star::uno::Any&   rValue  ,
                                                 sal_Int32       nHandle ) const ;
@@ -224,7 +224,7 @@ protected:
 
 
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 
     //  BaseControl

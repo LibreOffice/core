@@ -27,7 +27,7 @@ ContentProvider::queryContent(
             const uno::Reference<
                     com::sun::star::ucb::XContentIdentifier >& Identifier )
     throw( com::sun::star::ucb::IllegalIdentifierException,
-           uno::RuntimeException )
+           uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard( m_aMutex );
 

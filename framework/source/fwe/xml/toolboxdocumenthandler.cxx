@@ -197,12 +197,12 @@ OReadToolBoxDocumentHandler::~OReadToolBoxDocumentHandler()
 
 // XDocumentHandler
 void SAL_CALL OReadToolBoxDocumentHandler::startDocument(void)
-throw ( SAXException, RuntimeException )
+throw ( SAXException, RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL OReadToolBoxDocumentHandler::endDocument(void)
-throw(  SAXException, RuntimeException )
+throw(  SAXException, RuntimeException, std::exception )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -217,7 +217,7 @@ throw(  SAXException, RuntimeException )
 
 void SAL_CALL OReadToolBoxDocumentHandler::startElement(
     const OUString& aName, const Reference< XAttributeList > &xAttribs )
-throw(  SAXException, RuntimeException )
+throw(  SAXException, RuntimeException, std::exception )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -535,7 +535,7 @@ throw(  SAXException, RuntimeException )
 }
 
 void SAL_CALL OReadToolBoxDocumentHandler::endElement(const OUString& aName)
-throw(  SAXException, RuntimeException )
+throw(  SAXException, RuntimeException, std::exception )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -616,24 +616,24 @@ throw(  SAXException, RuntimeException )
 }
 
 void SAL_CALL OReadToolBoxDocumentHandler::characters(const OUString&)
-throw(  SAXException, RuntimeException )
+throw(  SAXException, RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL OReadToolBoxDocumentHandler::ignorableWhitespace(const OUString&)
-throw(  SAXException, RuntimeException )
+throw(  SAXException, RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL OReadToolBoxDocumentHandler::processingInstruction(
     const OUString& /*aTarget*/, const OUString& /*aData*/ )
-throw(  SAXException, RuntimeException )
+throw(  SAXException, RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL OReadToolBoxDocumentHandler::setDocumentLocator(
     const Reference< XLocator > &xLocator)
-throw(  SAXException, RuntimeException )
+throw(  SAXException, RuntimeException, std::exception )
 {
     ResetableGuard aGuard( m_aLock );
 

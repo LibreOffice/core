@@ -155,7 +155,7 @@ void SAL_CALL PresenterTextView::disposing (void)
 
 // XInitialization
 void SAL_CALL PresenterTextView::initialize (const Sequence<Any>& rArguments)
-    throw (Exception, RuntimeException)
+    throw (Exception, RuntimeException, std::exception)
 {
     ThrowIfDisposed();
 

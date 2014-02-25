@@ -412,7 +412,7 @@ void OTableContainer::dropObject(sal_Int32 _nPos,const OUString _sElementName)
     m_bInDrop = sal_False;
 }
 
-void SAL_CALL OTableContainer::elementInserted( const ContainerEvent& Event ) throw (RuntimeException)
+void SAL_CALL OTableContainer::elementInserted( const ContainerEvent& Event ) throw (RuntimeException, std::exception)
 {
    SAL_INFO("dbaccess", "dbaccess Ocke.Janssen@sun.com OTableContainer::elementInserted" );
     ::osl::MutexGuard aGuard(m_rMutex);
@@ -431,12 +431,12 @@ void SAL_CALL OTableContainer::elementInserted( const ContainerEvent& Event ) th
     }
 }
 
-void SAL_CALL OTableContainer::elementRemoved( const ContainerEvent& /*Event*/ ) throw (RuntimeException)
+void SAL_CALL OTableContainer::elementRemoved( const ContainerEvent& /*Event*/ ) throw (RuntimeException, std::exception)
 {
    SAL_INFO("dbaccess", "dbaccess Ocke.Janssen@sun.com OTableContainer::elementRemoved" );
 }
 
-void SAL_CALL OTableContainer::elementReplaced( const ContainerEvent& Event ) throw (RuntimeException)
+void SAL_CALL OTableContainer::elementReplaced( const ContainerEvent& Event ) throw (RuntimeException, std::exception)
 {
    SAL_INFO("dbaccess", "dbaccess Ocke.Janssen@sun.com OTableContainer::elementReplaced" );
     // create a new config entry
@@ -458,7 +458,7 @@ void SAL_CALL OTableContainer::disposing()
     m_pTableMediator = NULL;
 }
 
-void SAL_CALL OTableContainer::disposing( const ::com::sun::star::lang::EventObject& /*Source*/ ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL OTableContainer::disposing( const ::com::sun::star::lang::EventObject& /*Source*/ ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
    SAL_INFO("dbaccess", "dbaccess Ocke.Janssen@sun.com OTableContainer::disposing" );
 }

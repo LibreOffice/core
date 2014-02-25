@@ -34,7 +34,7 @@ SwVbaListTemplate::~SwVbaListTemplate()
 }
 
 uno::Any SAL_CALL
-SwVbaListTemplate::ListLevels( const uno::Any& index ) throw (uno::RuntimeException)
+SwVbaListTemplate::ListLevels( const uno::Any& index ) throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< XCollection > xCol( new SwVbaListLevels( mxParent, mxContext, pListHelper ) );
     if ( index.hasValue() )

@@ -57,7 +57,7 @@ XMLAutoTextEventImport::~XMLAutoTextEventImport() throw()
 
 void XMLAutoTextEventImport::initialize(
     const Sequence<Any> & rArguments )
-        throw(Exception, RuntimeException)
+        throw(Exception, RuntimeException, std::exception)
 {
     // The events may come as either an XNameReplace or XEventsSupplier.
 

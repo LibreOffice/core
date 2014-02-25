@@ -128,13 +128,13 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER3( ScAccessibleCell, ScAccessibleCellBase, Access
 
 uno::Reference< XAccessible > SAL_CALL ScAccessibleCell::getAccessibleAtPoint(
         const awt::Point& rPoint )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     return AccessibleStaticTextBase::getAccessibleAtPoint(rPoint);
 }
 
 void SAL_CALL ScAccessibleCell::grabFocus(  )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
      SolarMutexGuard aGuard;
     IsObjectValid();
@@ -150,7 +150,7 @@ void SAL_CALL ScAccessibleCell::grabFocus(  )
 }
 
 Rectangle ScAccessibleCell::GetBoundingBoxOnScreen(void) const
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     Rectangle aCellRect(GetBoundingBox());
     if (mpViewShell)
@@ -212,7 +212,7 @@ Rectangle ScAccessibleCell::GetBoundingBox() const
 
 sal_Int32 SAL_CALL
     ScAccessibleCell::getAccessibleChildCount(void)
-                    throw (uno::RuntimeException)
+                    throw (uno::RuntimeException, std::exception)
 {
     return AccessibleStaticTextBase::getAccessibleChildCount();
 }
@@ -220,14 +220,14 @@ sal_Int32 SAL_CALL
 uno::Reference< XAccessible > SAL_CALL
     ScAccessibleCell::getAccessibleChild(sal_Int32 nIndex)
         throw (uno::RuntimeException,
-        lang::IndexOutOfBoundsException)
+        lang::IndexOutOfBoundsException, std::exception)
 {
     return AccessibleStaticTextBase::getAccessibleChild(nIndex);
 }
 
 uno::Reference<XAccessibleStateSet> SAL_CALL
     ScAccessibleCell::getAccessibleStateSet(void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Reference<XAccessibleStateSet> xParentStates;
@@ -300,14 +300,14 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
     //=====  XServiceInfo  ====================================================
 
 OUString SAL_CALL ScAccessibleCell::getImplementationName(void)
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     return OUString("ScAccessibleCell");
 }
 
 uno::Sequence< OUString> SAL_CALL
     ScAccessibleCell::getSupportedServiceNames(void)
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
     sal_Int32 nOldSize(aSequence.getLength());
@@ -542,7 +542,7 @@ uno::Any SAL_CALL ScAccessibleCell::getExtendedAttributes()
 }
 
 // cell has its own ParaIndent property, so when calling character attributes on cell, the ParaIndent should replace the ParaLeftMargin if its value is not zero.
-uno::Sequence< beans::PropertyValue > SAL_CALL ScAccessibleCell::getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< OUString >& aRequestedAttributes ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+uno::Sequence< beans::PropertyValue > SAL_CALL ScAccessibleCell::getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< OUString >& aRequestedAttributes ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 

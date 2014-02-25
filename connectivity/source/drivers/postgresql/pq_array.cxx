@@ -54,20 +54,20 @@ namespace pq_sdbc_driver
 
 
 OUString Array::getBaseTypeName(  )
-        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     return OUString( "varchar" );
 }
 
 sal_Int32 Array::getBaseType(  )
-        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     return  com::sun::star::sdbc::DataType::VARCHAR;
 }
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > Array::getArray(
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& /* typeMap */ )
-        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     return m_data;
 }
@@ -76,7 +76,7 @@ sal_Int32 Array::getBaseType(  )
     sal_Int32 index,
     sal_Int32 count,
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& /* typeMap */ )
-    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     checkRange( index, count );
     return Sequence< Any > ( &m_data[index-1], count );
@@ -84,7 +84,7 @@ sal_Int32 Array::getBaseType(  )
 
 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > Array::getResultSet(
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& typeMap )
-        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     return getResultSetAtIndex( 0 , m_data.getLength() , typeMap );
 }
@@ -93,7 +93,7 @@ sal_Int32 Array::getBaseType(  )
     sal_Int32 index,
     sal_Int32 count,
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& /* typeMap */ )
-        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     checkRange( index, count );
     Sequence< Sequence< Any > > ret( count );

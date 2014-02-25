@@ -171,17 +171,17 @@ void PropertySetInfo::remove( const OUString& aName ) throw()
     mpMap->remove( aName );
 }
 
-Sequence< ::com::sun::star::beans::Property > SAL_CALL PropertySetInfo::getProperties() throw(::com::sun::star::uno::RuntimeException)
+Sequence< ::com::sun::star::beans::Property > SAL_CALL PropertySetInfo::getProperties() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return mpMap->getProperties();
 }
 
-Property SAL_CALL PropertySetInfo::getPropertyByName( const OUString& aName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
+Property SAL_CALL PropertySetInfo::getPropertyByName( const OUString& aName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     return mpMap->getPropertyByName( aName );
 }
 
-sal_Bool SAL_CALL PropertySetInfo::hasPropertyByName( const OUString& Name ) throw(::com::sun::star::uno::RuntimeException)
+sal_Bool SAL_CALL PropertySetInfo::hasPropertyByName( const OUString& Name ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return mpMap->hasPropertyByName( Name );
 }

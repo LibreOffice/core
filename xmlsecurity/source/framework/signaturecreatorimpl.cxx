@@ -187,7 +187,7 @@ void SignatureCreatorImpl::clearUp() const
 
 /* XBlockerMonitor */
 void SAL_CALL SignatureCreatorImpl::setBlockerId( sal_Int32 id )
-        throw (cssu::Exception, cssu::RuntimeException)
+        throw (cssu::Exception, cssu::RuntimeException, std::exception)
 {
     m_nIdOfBlocker = id;
     tryToPerform();
@@ -196,7 +196,7 @@ void SAL_CALL SignatureCreatorImpl::setBlockerId( sal_Int32 id )
 /* XSignatureCreationResultBroadcaster */
 void SAL_CALL SignatureCreatorImpl::addSignatureCreationResultListener(
     const cssu::Reference< cssxc::sax::XSignatureCreationResultListener >& listener )
-    throw (cssu::Exception, cssu::RuntimeException)
+    throw (cssu::Exception, cssu::RuntimeException, std::exception)
 {
     m_xResultListener = listener;
     tryToPerform();
@@ -204,13 +204,13 @@ void SAL_CALL SignatureCreatorImpl::addSignatureCreationResultListener(
 
 void SAL_CALL SignatureCreatorImpl::removeSignatureCreationResultListener(
     const cssu::Reference< cssxc::sax::XSignatureCreationResultListener >&)
-    throw (cssu::RuntimeException)
+    throw (cssu::RuntimeException, std::exception)
 {
 }
 
 /* XInitialization */
 void SAL_CALL SignatureCreatorImpl::initialize( const cssu::Sequence< cssu::Any >& aArguments )
-    throw (cssu::Exception, cssu::RuntimeException)
+    throw (cssu::Exception, cssu::RuntimeException, std::exception)
 {
     OSL_ASSERT(aArguments.getLength() == 5);
 
@@ -251,19 +251,19 @@ cssu::Reference< cssu::XInterface > SAL_CALL SignatureCreatorImpl_createInstance
 
 /* XServiceInfo */
 OUString SAL_CALL SignatureCreatorImpl::getImplementationName(  )
-    throw (cssu::RuntimeException)
+    throw (cssu::RuntimeException, std::exception)
 {
     return SignatureCreatorImpl_getImplementationName();
 }
 
 sal_Bool SAL_CALL SignatureCreatorImpl::supportsService( const OUString& rServiceName )
-    throw (cssu::RuntimeException)
+    throw (cssu::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 cssu::Sequence< OUString > SAL_CALL SignatureCreatorImpl::getSupportedServiceNames(  )
-    throw (cssu::RuntimeException)
+    throw (cssu::RuntimeException, std::exception)
 {
     return SignatureCreatorImpl_getSupportedServiceNames();
 }

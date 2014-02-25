@@ -107,7 +107,7 @@ void ScAddInListener::RemoveDocument( ScDocument* pDocumentP )
 // XResultListener
 
 void SAL_CALL ScAddInListener::modified( const ::com::sun::star::sheet::ResultEvent& aEvent )
-                                throw(::com::sun::star::uno::RuntimeException)
+                                throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard; //! or generate a UserEvent
 
@@ -128,7 +128,7 @@ void SAL_CALL ScAddInListener::modified( const ::com::sun::star::sheet::ResultEv
 // XEventListener
 
 void SAL_CALL ScAddInListener::disposing( const ::com::sun::star::lang::EventObject& /* Source */ )
-                                throw(::com::sun::star::uno::RuntimeException)
+                                throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     // hold a ref so this is not deleted at removeResultListener
     uno::Reference<sheet::XResultListener> xRef( this );

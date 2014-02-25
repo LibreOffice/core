@@ -288,10 +288,10 @@ public:
     virtual css::beans::Property SAL_CALL getPropertyByName(
         rtl::OUString const & name)
         throw (
-            css::beans::UnknownPropertyException, css::uno::RuntimeException);
+            css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception);
 
     virtual sal_Bool SAL_CALL hasPropertyByName(rtl::OUString const & name)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
 private:
     rtl::Reference< Data > m_data;
@@ -316,14 +316,14 @@ css::uno::Sequence< css::beans::Property > Info::getProperties()
 }
 
 css::beans::Property Info::getPropertyByName(rtl::OUString const & name)
-    throw (css::beans::UnknownPropertyException, css::uno::RuntimeException)
+    throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception)
 {
     return m_data->get(static_cast< cppu::OWeakObject * >(this), name)->
         second.property;
 }
 
 sal_Bool Info::hasPropertyByName(rtl::OUString const & name)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     Data::PropertyMap::iterator i(m_data->properties.find(name));
     return i != m_data->properties.end() && i->second.present;
@@ -962,7 +962,7 @@ void PropertySetMixinImpl::dispose() {
 }
 
 css::uno::Any PropertySetMixinImpl::queryInterface(css::uno::Type const & type)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     if (((m_impl->implements & IMPLEMENTS_PROPERTY_SET) != 0
          && type == css::beans::XPropertySet::static_type()))

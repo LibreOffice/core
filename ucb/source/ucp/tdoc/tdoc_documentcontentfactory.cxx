@@ -60,7 +60,7 @@ DocumentContentFactory::~DocumentContentFactory()
 
 // virtual
 OUString SAL_CALL DocumentContentFactory::getImplementationName()
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     return getImplementationName_Static();
 }
@@ -68,7 +68,7 @@ OUString SAL_CALL DocumentContentFactory::getImplementationName()
 // virtual
 sal_Bool SAL_CALL
 DocumentContentFactory::supportsService( const OUString& ServiceName )
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -76,7 +76,7 @@ DocumentContentFactory::supportsService( const OUString& ServiceName )
 // virtual
 uno::Sequence< OUString > SAL_CALL
 DocumentContentFactory::getSupportedServiceNames()
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     return getSupportedServiceNames_Static();
 }
@@ -111,7 +111,7 @@ DocumentContentFactory::getSupportedServiceNames_Static()
 uno::Reference< ucb::XContent > SAL_CALL
 DocumentContentFactory::createDocumentContent(
         const uno::Reference< frame::XModel >& Model )
-    throw ( lang::IllegalArgumentException, uno::RuntimeException )
+    throw ( lang::IllegalArgumentException, uno::RuntimeException, std::exception )
 {
     uno::Reference< frame::XTransientDocumentsDocumentContentFactory > xDocFac;
     try

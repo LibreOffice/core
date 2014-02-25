@@ -64,7 +64,7 @@ OComponentEnumeration::~OComponentEnumeration()
 //*****************************************************************************************************************
 //  XEventListener
 //*****************************************************************************************************************
-void SAL_CALL OComponentEnumeration::disposing( const EventObject& aEvent ) throw( RuntimeException )
+void SAL_CALL OComponentEnumeration::disposing( const EventObject& aEvent ) throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );
@@ -81,7 +81,7 @@ void SAL_CALL OComponentEnumeration::disposing( const EventObject& aEvent ) thro
 //*****************************************************************************************************************
 //  XEnumeration
 //*****************************************************************************************************************
-sal_Bool SAL_CALL OComponentEnumeration::hasMoreElements() throw( RuntimeException )
+sal_Bool SAL_CALL OComponentEnumeration::hasMoreElements() throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );
@@ -98,7 +98,7 @@ sal_Bool SAL_CALL OComponentEnumeration::hasMoreElements() throw( RuntimeExcepti
 //*****************************************************************************************************************
 Any SAL_CALL OComponentEnumeration::nextElement() throw(    NoSuchElementException  ,
                                                              WrappedTargetException ,
-                                                            RuntimeException        )
+                                                            RuntimeException, std::exception        )
 {
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );

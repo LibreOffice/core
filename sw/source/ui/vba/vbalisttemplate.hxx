@@ -40,7 +40,7 @@ public:
     void applyListTemplate( css::uno::Reference< css::beans::XPropertySet >& xProps ) throw ( css::uno::RuntimeException );
 
     // Methods
-    virtual css::uno::Any SAL_CALL ListLevels( const css::uno::Any& index ) throw ( css::uno::RuntimeException );
+    virtual css::uno::Any SAL_CALL ListLevels( const css::uno::Any& index ) throw ( css::uno::RuntimeException, std::exception );
 
     // XHelperInterface
     virtual OUString getServiceImplName();

@@ -85,20 +85,20 @@ void SAL_CALL SdUnoModule::dispatchWithNotification( const util::URL& aURL, cons
     }
 }
     // XDispatch
-void SAL_CALL SdUnoModule::dispatch( const util::URL& aURL, const uno::Sequence< beans::PropertyValue >& aArgs ) throw( uno::RuntimeException )
+void SAL_CALL SdUnoModule::dispatch( const util::URL& aURL, const uno::Sequence< beans::PropertyValue >& aArgs ) throw( uno::RuntimeException, std::exception )
 {
     dispatchWithNotification(aURL, aArgs, uno::Reference< frame::XDispatchResultListener >());
 }
 
-void SAL_CALL SdUnoModule::addStatusListener(const uno::Reference< frame::XStatusListener > &, const util::URL&) throw( uno::RuntimeException )
+void SAL_CALL SdUnoModule::addStatusListener(const uno::Reference< frame::XStatusListener > &, const util::URL&) throw( uno::RuntimeException, std::exception )
 {
 }
 
-void SAL_CALL SdUnoModule::removeStatusListener(const uno::Reference< frame::XStatusListener > &, const util::URL&) throw( uno::RuntimeException )
+void SAL_CALL SdUnoModule::removeStatusListener(const uno::Reference< frame::XStatusListener > &, const util::URL&) throw( uno::RuntimeException, std::exception )
 {
 }
 
-uno::Sequence< uno::Reference< frame::XDispatch > > SAL_CALL SdUnoModule::queryDispatches( const uno::Sequence< frame::DispatchDescriptor >& seqDescripts ) throw( uno::RuntimeException )
+uno::Sequence< uno::Reference< frame::XDispatch > > SAL_CALL SdUnoModule::queryDispatches( const uno::Sequence< frame::DispatchDescriptor >& seqDescripts ) throw( uno::RuntimeException, std::exception )
 {
     sal_Int32 nCount = seqDescripts.getLength();
     uno::Sequence< uno::Reference< frame::XDispatch > > lDispatcher( nCount );
@@ -129,17 +129,17 @@ uno::Reference< frame::XDispatch > SAL_CALL SdUnoModule::queryDispatch( const ut
 }
 
 // XServiceInfo
-OUString SAL_CALL SdUnoModule::getImplementationName(  ) throw(uno::RuntimeException)
+OUString SAL_CALL SdUnoModule::getImplementationName(  ) throw(uno::RuntimeException, std::exception)
 {
     return SdUnoModule_getImplementationName();
 }
 
-sal_Bool SAL_CALL SdUnoModule::supportsService( const OUString& sServiceName ) throw(uno::RuntimeException)
+sal_Bool SAL_CALL SdUnoModule::supportsService( const OUString& sServiceName ) throw(uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL SdUnoModule::getSupportedServiceNames(  ) throw(uno::RuntimeException)
+uno::Sequence< OUString > SAL_CALL SdUnoModule::getSupportedServiceNames(  ) throw(uno::RuntimeException, std::exception)
 {
     return SdUnoModule_getSupportedServiceNames();
 }

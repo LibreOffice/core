@@ -106,37 +106,37 @@ public:
     // XComponent
 
     virtual void SAL_CALL
-    dispose() throw( css::uno::RuntimeException );
+    dispose() throw( css::uno::RuntimeException, std::exception );
 
     virtual void SAL_CALL
     addEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener )
-        throw( css::uno::RuntimeException );
+        throw( css::uno::RuntimeException, std::exception );
 
     virtual void SAL_CALL
     removeEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener )
-        throw( css::uno::RuntimeException );
+        throw( css::uno::RuntimeException, std::exception );
 
 
     // XDynamicResultSet
 
     virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL
     getStaticResultSet(  )
-        throw( css::ucb::ListenerAlreadySetException, css::uno::RuntimeException );
+        throw( css::ucb::ListenerAlreadySetException, css::uno::RuntimeException, std::exception );
 
     virtual void SAL_CALL
     setListener( const css::uno::Reference< css::ucb::XDynamicResultSetListener >& Listener )
-        throw( css::ucb::ListenerAlreadySetException, css::uno::RuntimeException );
+        throw( css::ucb::ListenerAlreadySetException, css::uno::RuntimeException, std::exception );
 
     virtual void SAL_CALL
     connectToCache( const css::uno::Reference< css::ucb::XDynamicResultSet > & xCache )
         throw( css::ucb::ListenerAlreadySetException,
                css::ucb::AlreadyInitializedException,
                css::ucb::ServiceNotFoundException,
-               css::uno::RuntimeException );
+               css::uno::RuntimeException, std::exception );
 
     virtual sal_Int16 SAL_CALL
     getCapabilities()
-        throw( css::uno::RuntimeException );
+        throw( css::uno::RuntimeException, std::exception );
 
 
     // own methods:
@@ -173,14 +173,14 @@ public:
 
     virtual void SAL_CALL
     disposing( const css::lang::EventObject& Source )
-        throw( css::uno::RuntimeException );
+        throw( css::uno::RuntimeException, std::exception );
 
 
     // XDynamicResultSetListener
 
     virtual void SAL_CALL
     notify( const css::ucb::ListEvent& Changes )
-        throw( css::uno::RuntimeException );
+        throw( css::uno::RuntimeException, std::exception );
 
 
     // own methods:
@@ -229,7 +229,7 @@ public:
                 const css::uno::Reference< css::ucb::XDynamicResultSet > & Source,
                 const css::uno::Sequence< css::ucb::NumberedSortingInfo > & Info,
                 const css::uno::Reference< css::ucb::XAnyCompareFactory > & CompareFactory )
-        throw( css::uno::RuntimeException );
+        throw( css::uno::RuntimeException, std::exception );
 };
 
 #endif

@@ -399,7 +399,7 @@ uno::Sequence< OUString > ORptFilter::getSupportedServiceNames_Static(  ) throw(
 }
 
 sal_Bool SAL_CALL ORptFilter::filter( const Sequence< PropertyValue >& rDescriptor )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     Window*     pFocusWindow = Application::GetFocusWindow();
     sal_Bool    bRet = sal_False;
@@ -982,7 +982,7 @@ OUString ORptFilter::convertFormula(const OUString& _sFormula)
 }
 
 void SAL_CALL ORptFilter::startDocument( void )
-    throw( xml::sax::SAXException, uno::RuntimeException )
+    throw( xml::sax::SAXException, uno::RuntimeException, std::exception )
 {
     m_xReportDefinition.set(GetModel(),UNO_QUERY_THROW);
     OSL_ENSURE(m_xReportDefinition.is(),"ReportDefinition is NULL!");
@@ -996,7 +996,7 @@ void SAL_CALL ORptFilter::startDocument( void )
 }
 
 void ORptFilter::endDocument( void )
-    throw( xml::sax::SAXException, uno::RuntimeException )
+    throw( xml::sax::SAXException, uno::RuntimeException, std::exception )
 {
     OSL_ENSURE( GetModel().is(), "model missing; maybe startDocument wasn't called?" );
     if( !GetModel().is() )

@@ -35,19 +35,19 @@ ScVbaScrollBar::ScVbaScrollBar(  const css::uno::Reference< ov::XHelperInterface
 
 // Attributes
 uno::Any SAL_CALL
-ScVbaScrollBar::getValue() throw (css::uno::RuntimeException)
+ScVbaScrollBar::getValue() throw (css::uno::RuntimeException, std::exception)
 {
     return  m_xProps->getPropertyValue( SCROLLVALUE );
 }
 
 void SAL_CALL
-ScVbaScrollBar::setValue( const uno::Any& _value ) throw (::com::sun::star::uno::RuntimeException)
+ScVbaScrollBar::setValue( const uno::Any& _value ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     m_xProps->setPropertyValue( SCROLLVALUE, _value );
 }
 
 ::sal_Int32 SAL_CALL
-ScVbaScrollBar::getMax() throw (uno::RuntimeException)
+ScVbaScrollBar::getMax() throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nMax = 0;
     m_xProps->getPropertyValue( SCROLLMAX ) >>= nMax;
@@ -55,13 +55,13 @@ ScVbaScrollBar::getMax() throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-ScVbaScrollBar::setMax( sal_Int32 nVal ) throw (uno::RuntimeException)
+ScVbaScrollBar::setMax( sal_Int32 nVal ) throw (uno::RuntimeException, std::exception)
 {
     m_xProps->setPropertyValue( SCROLLMAX, uno::makeAny( nVal ) );
 }
 
 ::sal_Int32 SAL_CALL
-ScVbaScrollBar::getMin() throw (uno::RuntimeException)
+ScVbaScrollBar::getMin() throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nVal = 0;
     m_xProps->getPropertyValue( SCROLLMIN ) >>= nVal;
@@ -69,19 +69,19 @@ ScVbaScrollBar::getMin() throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-ScVbaScrollBar::setMin( sal_Int32 nVal ) throw (uno::RuntimeException)
+ScVbaScrollBar::setMin( sal_Int32 nVal ) throw (uno::RuntimeException, std::exception)
 {
     m_xProps->setPropertyValue( SCROLLMIN, uno::makeAny( nVal ) );
 }
 
 void SAL_CALL
-ScVbaScrollBar::setLargeChange( ::sal_Int32 _largechange ) throw (uno::RuntimeException)
+ScVbaScrollBar::setLargeChange( ::sal_Int32 _largechange ) throw (uno::RuntimeException, std::exception)
 {
     m_xProps->setPropertyValue( LARGECHANGE, uno::makeAny( _largechange ) );
 }
 
 ::sal_Int32 SAL_CALL
-ScVbaScrollBar::getLargeChange() throw (uno::RuntimeException)
+ScVbaScrollBar::getLargeChange() throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nVal = 0;
     m_xProps->getPropertyValue( LARGECHANGE ) >>= nVal;
@@ -89,7 +89,7 @@ ScVbaScrollBar::getLargeChange() throw (uno::RuntimeException)
 }
 
 ::sal_Int32 SAL_CALL
-ScVbaScrollBar::getSmallChange() throw (uno::RuntimeException)
+ScVbaScrollBar::getSmallChange() throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nSmallChange = 0;
     m_xProps->getPropertyValue( SMALLCHANGE ) >>= nSmallChange;
@@ -97,7 +97,7 @@ ScVbaScrollBar::getSmallChange() throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-ScVbaScrollBar::setSmallChange( ::sal_Int32 _smallchange ) throw (uno::RuntimeException)
+ScVbaScrollBar::setSmallChange( ::sal_Int32 _smallchange ) throw (uno::RuntimeException, std::exception)
 {
     m_xProps->setPropertyValue( SMALLCHANGE, uno::makeAny( _smallchange ) );
 }

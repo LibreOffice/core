@@ -50,12 +50,12 @@ UnxSplashScreen::~UnxSplashScreen()
 }
 
 void SAL_CALL UnxSplashScreen::start( const OUString& /*aText*/, sal_Int32 /*nRange*/ )
-    throw ( RuntimeException )
+    throw ( RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL UnxSplashScreen::end()
-    throw ( RuntimeException )
+    throw ( RuntimeException, std::exception )
 {
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "UnxSplashScreen::end()\n" );
@@ -68,7 +68,7 @@ void SAL_CALL UnxSplashScreen::end()
 }
 
 void SAL_CALL UnxSplashScreen::reset()
-    throw ( RuntimeException )
+    throw ( RuntimeException, std::exception )
 {
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "UnxSplashScreen::reset()\n" );
@@ -81,13 +81,13 @@ void SAL_CALL UnxSplashScreen::reset()
 }
 
 void SAL_CALL UnxSplashScreen::setText( const OUString& /*aText*/ )
-    throw ( RuntimeException )
+    throw ( RuntimeException, std::exception )
 {
     // TODO?
 }
 
 void SAL_CALL UnxSplashScreen::setValue( sal_Int32 nValue )
-    throw ( RuntimeException )
+    throw ( RuntimeException, std::exception )
 {
     if ( m_pOutFd )
     {
@@ -99,7 +99,7 @@ void SAL_CALL UnxSplashScreen::setValue( sal_Int32 nValue )
 // XInitialize
 void SAL_CALL
 UnxSplashScreen::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& )
-    throw ( RuntimeException )
+    throw ( RuntimeException, std::exception )
 {
     for ( sal_uInt32 i = 0; i < osl_getCommandArgCount(); i++ )
     {
@@ -121,19 +121,19 @@ UnxSplashScreen::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::
 }
 
 OUString UnxSplashScreen::getImplementationName()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return UnxSplash_getImplementationName();
 }
 
 sal_Bool UnxSplashScreen::supportsService(OUString const & ServiceName)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 css::uno::Sequence<OUString> UnxSplashScreen::getSupportedServiceNames()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return UnxSplash_getSupportedServiceNames();
 }

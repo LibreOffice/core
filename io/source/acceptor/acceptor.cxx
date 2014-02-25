@@ -58,13 +58,13 @@ namespace io_acceptor
             throw( AlreadyAcceptingException,
                    ConnectionSetupException,
                    IllegalArgumentException,
-                   RuntimeException);
-        virtual void SAL_CALL stopAccepting(  ) throw( RuntimeException);
+                   RuntimeException, std::exception);
+        virtual void SAL_CALL stopAccepting(  ) throw( RuntimeException, std::exception);
 
     public: // XServiceInfo
-                virtual OUString              SAL_CALL getImplementationName() throw();
-                virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames(void) throw();
-                virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) throw();
+                virtual OUString              SAL_CALL getImplementationName() throw(std::exception);
+                virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames(void) throw(std::exception);
+                virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception);
 
     private:
         PipeAcceptor *m_pPipe;
@@ -123,7 +123,7 @@ namespace io_acceptor
         throw( AlreadyAcceptingException,
                ConnectionSetupException,
                IllegalArgumentException,
-               RuntimeException)
+               RuntimeException, std::exception)
     {
         OSL_TRACE(
             "acceptor %s\n",
@@ -249,7 +249,7 @@ namespace io_acceptor
         return r;
     }
 
-    void SAL_CALL OAcceptor::stopAccepting(  ) throw( RuntimeException)
+    void SAL_CALL OAcceptor::stopAccepting(  ) throw( RuntimeException, std::exception)
     {
         MutexGuard guard( m_mutex );
 
@@ -285,17 +285,17 @@ namespace io_acceptor
         return seqNames;
     }
 
-        OUString OAcceptor::getImplementationName() throw()
+        OUString OAcceptor::getImplementationName() throw(std::exception)
     {
         return acceptor_getImplementationName();
     }
 
-        sal_Bool OAcceptor::supportsService(const OUString& ServiceName) throw()
+        sal_Bool OAcceptor::supportsService(const OUString& ServiceName) throw(std::exception)
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-        Sequence< OUString > OAcceptor::getSupportedServiceNames(void) throw()
+        Sequence< OUString > OAcceptor::getSupportedServiceNames(void) throw(std::exception)
     {
         return acceptor_getSupportedServiceNames();
     }

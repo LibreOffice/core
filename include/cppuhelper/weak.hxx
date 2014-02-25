@@ -131,7 +131,7 @@ public:
     */
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
         const ::com::sun::star::uno::Type & rType )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     /** increasing m_refCount
     */
     virtual void SAL_CALL acquire()
@@ -146,7 +146,7 @@ public:
         @return a \::com::sun::star::uno::XAdapter reference
     */
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAdapter > SAL_CALL queryAdapter()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     /** Cast operator to XInterface reference.
 

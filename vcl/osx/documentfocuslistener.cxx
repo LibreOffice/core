@@ -41,7 +41,7 @@ DocumentFocusListener::DocumentFocusListener(AquaA11yFocusTracker& rTracker) :
 
 void SAL_CALL
 DocumentFocusListener::disposing( const EventObject& aEvent )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     // Unref the object here, but do not remove as listener since the object
     // might no longer be in a state that safely allows this.
@@ -53,7 +53,7 @@ DocumentFocusListener::disposing( const EventObject& aEvent )
 
 void SAL_CALL
 DocumentFocusListener::notifyEvent( const AccessibleEventObject& aEvent )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     switch( aEvent.EventId )
     {

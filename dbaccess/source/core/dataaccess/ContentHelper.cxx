@@ -88,7 +88,7 @@ IMPLEMENT_SERVICE_INFO1(OContentHelper,"com.sun.star.comp.sdb.Content","com.sun.
 IMPLEMENT_IMPLEMENTATION_ID(OContentHelper)
 
 // XContent
-Reference< XContentIdentifier > SAL_CALL OContentHelper::getIdentifier(  ) throw (RuntimeException)
+Reference< XContentIdentifier > SAL_CALL OContentHelper::getIdentifier(  ) throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     OUString aIdentifier( "private:" + impl_getHierarchicalName( true ) );
@@ -119,7 +119,7 @@ OUString OContentHelper::impl_getHierarchicalName( bool _includingRootContainer 
     return sHierarchicalName;
 }
 
-OUString SAL_CALL OContentHelper::getContentType() throw (RuntimeException)
+OUString SAL_CALL OContentHelper::getContentType() throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -131,14 +131,14 @@ OUString SAL_CALL OContentHelper::getContentType() throw (RuntimeException)
     return *m_pImpl->m_aProps.aContentType;
 }
 
-void SAL_CALL OContentHelper::addContentEventListener( const Reference< XContentEventListener >& _rxListener ) throw (RuntimeException)
+void SAL_CALL OContentHelper::addContentEventListener( const Reference< XContentEventListener >& _rxListener ) throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     if ( _rxListener.is() )
         m_aContentListeners.addInterface(_rxListener);
 }
 
-void SAL_CALL OContentHelper::removeContentEventListener( const Reference< XContentEventListener >& _rxListener ) throw (RuntimeException)
+void SAL_CALL OContentHelper::removeContentEventListener( const Reference< XContentEventListener >& _rxListener ) throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     if (_rxListener.is())
@@ -146,14 +146,14 @@ void SAL_CALL OContentHelper::removeContentEventListener( const Reference< XCont
 }
 
 // XCommandProcessor
-sal_Int32 SAL_CALL OContentHelper::createCommandIdentifier(  ) throw (RuntimeException)
+sal_Int32 SAL_CALL OContentHelper::createCommandIdentifier(  ) throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     // Just increase counter on every call to generate an identifier.
     return ++m_nCommandId;
 }
 
-Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*CommandId*/, const Reference< XCommandEnvironment >& Environment ) throw (Exception, CommandAbortedException, RuntimeException)
+Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*CommandId*/, const Reference< XCommandEnvironment >& Environment ) throw (Exception, CommandAbortedException, RuntimeException, std::exception)
 {
     Any aRet;
     if ( aCommand.Name.equalsAscii( "getPropertyValues" ) )
@@ -231,12 +231,12 @@ Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*Comma
     return aRet;
 }
 
-void SAL_CALL OContentHelper::abort( sal_Int32 /*CommandId*/ ) throw (RuntimeException)
+void SAL_CALL OContentHelper::abort( sal_Int32 /*CommandId*/ ) throw (RuntimeException, std::exception)
 {
 }
 
 // XPropertiesChangeNotifier
-void SAL_CALL OContentHelper::addPropertiesChangeListener( const Sequence< OUString >& PropertyNames, const Reference< XPropertiesChangeListener >& Listener ) throw (RuntimeException)
+void SAL_CALL OContentHelper::addPropertiesChangeListener( const Sequence< OUString >& PropertyNames, const Reference< XPropertiesChangeListener >& Listener ) throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     sal_Int32 nCount = PropertyNames.getLength();
@@ -258,7 +258,7 @@ void SAL_CALL OContentHelper::addPropertiesChangeListener( const Sequence< OUStr
     }
 }
 
-void SAL_CALL OContentHelper::removePropertiesChangeListener( const Sequence< OUString >& PropertyNames, const Reference< XPropertiesChangeListener >& Listener ) throw (RuntimeException)
+void SAL_CALL OContentHelper::removePropertiesChangeListener( const Sequence< OUString >& PropertyNames, const Reference< XPropertiesChangeListener >& Listener ) throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     sal_Int32 nCount = PropertyNames.getLength();
@@ -281,18 +281,18 @@ void SAL_CALL OContentHelper::removePropertiesChangeListener( const Sequence< OU
 }
 
 // XPropertyContainer
-void SAL_CALL OContentHelper::addProperty( const OUString& /*Name*/, sal_Int16 /*Attributes*/, const Any& /*DefaultValue*/ ) throw (PropertyExistException, IllegalTypeException, IllegalArgumentException, RuntimeException)
+void SAL_CALL OContentHelper::addProperty( const OUString& /*Name*/, sal_Int16 /*Attributes*/, const Any& /*DefaultValue*/ ) throw (PropertyExistException, IllegalTypeException, IllegalArgumentException, RuntimeException, std::exception)
 {
     OSL_FAIL( "OContentHelper::addProperty: not implemented!" );
 }
 
-void SAL_CALL OContentHelper::removeProperty( const OUString& /*Name*/ ) throw (UnknownPropertyException, NotRemoveableException, RuntimeException)
+void SAL_CALL OContentHelper::removeProperty( const OUString& /*Name*/ ) throw (UnknownPropertyException, NotRemoveableException, RuntimeException, std::exception)
 {
     OSL_FAIL( "OContentHelper::removeProperty: not implemented!" );
 }
 
 // XInitialization
-void SAL_CALL OContentHelper::initialize( const Sequence< Any >& _aArguments ) throw(Exception, RuntimeException)
+void SAL_CALL OContentHelper::initialize( const Sequence< Any >& _aArguments ) throw(Exception, RuntimeException, std::exception)
 {
     const Any* pBegin = _aArguments.getConstArray();
     const Any* pEnd = pBegin + _aArguments.getLength();
@@ -555,7 +555,7 @@ void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent
 }
 
 // com::sun::star::lang::XUnoTunnel
-sal_Int64 OContentHelper::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
+sal_Int64 OContentHelper::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException, std::exception)
 {
     if (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
         return reinterpret_cast<sal_Int64>(this);
@@ -574,13 +574,13 @@ OContentHelper* OContentHelper::getImplementation( const Reference< XInterface >
     return pContent;
 }
 
-Reference< XInterface > SAL_CALL OContentHelper::getParent(  ) throw (RuntimeException)
+Reference< XInterface > SAL_CALL OContentHelper::getParent(  ) throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_xParentContainer;
 }
 
-void SAL_CALL OContentHelper::setParent( const Reference< XInterface >& _xParent ) throw (NoSupportException, RuntimeException)
+void SAL_CALL OContentHelper::setParent( const Reference< XInterface >& _xParent ) throw (NoSupportException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     m_xParentContainer = _xParent;
@@ -615,7 +615,7 @@ void OContentHelper::impl_rename_throw(const OUString& _sNewName,bool _bNotify )
     }
 }
 
-void SAL_CALL OContentHelper::rename( const OUString& newName ) throw (SQLException, ElementExistException, RuntimeException)
+void SAL_CALL OContentHelper::rename( const OUString& newName ) throw (SQLException, ElementExistException, RuntimeException, std::exception)
 {
 
     impl_rename_throw(newName);

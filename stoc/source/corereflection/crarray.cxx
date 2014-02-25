@@ -29,7 +29,7 @@ namespace stoc_corefl
 // XInterface
 
 Any ArrayIdlClassImpl::queryInterface( const Type & rType )
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     Any aRet( ::cppu::queryInterface( rType, static_cast< XIdlArray * >( this ) ) );
     return (aRet.hasValue() ? aRet : IdlClassImpl::queryInterface( rType ));
@@ -48,7 +48,7 @@ void ArrayIdlClassImpl::release() throw()
 // XTypeProvider
 
 Sequence< Type > ArrayIdlClassImpl::getTypes()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     static OTypeCollection * s_pTypes = 0;
     if (! s_pTypes)
@@ -66,7 +66,7 @@ Sequence< Type > ArrayIdlClassImpl::getTypes()
 }
 
 Sequence< sal_Int8 > ArrayIdlClassImpl::getImplementationId()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     static OImplementationId * s_pId = 0;
     if (! s_pId)
@@ -84,7 +84,7 @@ Sequence< sal_Int8 > ArrayIdlClassImpl::getImplementationId()
 // XIdlArray
 
 void ArrayIdlClassImpl::realloc( Any & rArray, sal_Int32 nLen )
-    throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     TypeClass eTC = rArray.getValueTypeClass();
     if (eTC != TypeClass_SEQUENCE)
@@ -109,7 +109,7 @@ void ArrayIdlClassImpl::realloc( Any & rArray, sal_Int32 nLen )
 }
 
 sal_Int32 ArrayIdlClassImpl::getLen( const Any & rArray )
-    throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     TypeClass eTC = rArray.getValueTypeClass();
     if (eTC != TypeClass_SEQUENCE)
@@ -123,7 +123,7 @@ sal_Int32 ArrayIdlClassImpl::getLen( const Any & rArray )
 }
 
 Any ArrayIdlClassImpl::get( const Any & rArray, sal_Int32 nIndex )
-    throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::ArrayIndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::ArrayIndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     TypeClass eTC = rArray.getValueTypeClass();
     if (eTC != TypeClass_SEQUENCE)
@@ -154,7 +154,7 @@ Any ArrayIdlClassImpl::get( const Any & rArray, sal_Int32 nIndex )
 
 
 void ArrayIdlClassImpl::set( Any & rArray, sal_Int32 nIndex, const Any & rNewValue )
-    throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::ArrayIndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::ArrayIndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     TypeClass eTC = rArray.getValueTypeClass();
     if (eTC != TypeClass_SEQUENCE)
@@ -197,7 +197,7 @@ void ArrayIdlClassImpl::set( Any & rArray, sal_Int32 nIndex, const Any & rNewVal
 // ArrayIdlClassImpl
 
 sal_Bool ArrayIdlClassImpl::isAssignableFrom( const Reference< XIdlClass > & xType )
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return (xType.is() &&
             (equals( xType ) ||
@@ -206,13 +206,13 @@ sal_Bool ArrayIdlClassImpl::isAssignableFrom( const Reference< XIdlClass > & xTy
 }
 
 Reference< XIdlClass > ArrayIdlClassImpl::getComponentType()
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return getReflection()->forType( getTypeDescr()->pType );
 }
 
 Reference< XIdlArray > ArrayIdlClassImpl::getArray()
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return this;
 }

@@ -127,7 +127,7 @@ namespace calc
     }
 
 
-    Reference< XPropertySetInfo > SAL_CALL OCellListSource::getPropertySetInfo(  ) throw(RuntimeException)
+    Reference< XPropertySetInfo > SAL_CALL OCellListSource::getPropertySetInfo(  ) throw(RuntimeException, std::exception)
     {
         DBG_CHKTHIS( OCellListSource, checkConsistency_static );
         return createPropertySetInfo( getInfoHelper() ) ;
@@ -173,17 +173,17 @@ namespace calc
             // TODO: error message
     }
 
-    OUString SAL_CALL OCellListSource::getImplementationName(  ) throw (RuntimeException)
+    OUString SAL_CALL OCellListSource::getImplementationName(  ) throw (RuntimeException, std::exception)
     {
         return OUString( "com.sun.star.comp.sheet.OCellListSource" );
     }
 
-    sal_Bool SAL_CALL OCellListSource::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
+    sal_Bool SAL_CALL OCellListSource::supportsService( const OUString& _rServiceName ) throw (RuntimeException, std::exception)
     {
         return cppu::supportsService(this, _rServiceName);
     }
 
-    Sequence< OUString > SAL_CALL OCellListSource::getSupportedServiceNames(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL OCellListSource::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
     {
         Sequence< OUString > aServices( 2 );
         aServices[ 0 ] = "com.sun.star.table.CellRangeListSource";
@@ -217,7 +217,7 @@ namespace calc
     }
 
 
-    sal_Int32 SAL_CALL OCellListSource::getListEntryCount(  ) throw (RuntimeException)
+    sal_Int32 SAL_CALL OCellListSource::getListEntryCount(  ) throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         DBG_CHKTHIS( OCellListSource, checkConsistency_static );
@@ -229,7 +229,7 @@ namespace calc
     }
 
 
-    OUString SAL_CALL OCellListSource::getListEntry( sal_Int32 _nPosition ) throw (IndexOutOfBoundsException, RuntimeException)
+    OUString SAL_CALL OCellListSource::getListEntry( sal_Int32 _nPosition ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         DBG_CHKTHIS( OCellListSource, checkConsistency_static );
@@ -243,7 +243,7 @@ namespace calc
     }
 
 
-    Sequence< OUString > SAL_CALL OCellListSource::getAllListEntries(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL OCellListSource::getAllListEntries(  ) throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         DBG_CHKTHIS( OCellListSource, checkConsistency_static );
@@ -261,7 +261,7 @@ namespace calc
     }
 
 
-    void SAL_CALL OCellListSource::addListEntryListener( const Reference< XListEntryListener >& _rxListener ) throw (NullPointerException, RuntimeException)
+    void SAL_CALL OCellListSource::addListEntryListener( const Reference< XListEntryListener >& _rxListener ) throw (NullPointerException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         DBG_CHKTHIS( OCellListSource, checkConsistency_static );
@@ -275,7 +275,7 @@ namespace calc
     }
 
 
-    void SAL_CALL OCellListSource::removeListEntryListener( const Reference< XListEntryListener >& _rxListener ) throw (NullPointerException, RuntimeException)
+    void SAL_CALL OCellListSource::removeListEntryListener( const Reference< XListEntryListener >& _rxListener ) throw (NullPointerException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         DBG_CHKTHIS( OCellListSource, checkConsistency_static );
@@ -289,7 +289,7 @@ namespace calc
     }
 
 
-    void SAL_CALL OCellListSource::modified( const EventObject& /* aEvent */ ) throw (RuntimeException)
+    void SAL_CALL OCellListSource::modified( const EventObject& /* aEvent */ ) throw (RuntimeException, std::exception)
     {
         DBG_CHKTHIS( OCellListSource, checkConsistency_static );
 
@@ -322,7 +322,7 @@ namespace calc
     }
 
 
-    void SAL_CALL OCellListSource::disposing( const EventObject& aEvent ) throw (RuntimeException)
+    void SAL_CALL OCellListSource::disposing( const EventObject& aEvent ) throw (RuntimeException, std::exception)
     {
         DBG_CHKTHIS( OCellListSource, checkConsistency_static );
 
@@ -335,7 +335,7 @@ namespace calc
     }
 
 
-    void SAL_CALL OCellListSource::initialize( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException)
+    void SAL_CALL OCellListSource::initialize( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException, std::exception)
     {
         if ( m_bInitialized )
             throw Exception();

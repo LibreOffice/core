@@ -94,7 +94,7 @@ namespace sw
 
     // XFilter
     sal_Bool LayoutDumpFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescriptor )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
     {
         sal_Bool bRet = sal_False;
 
@@ -140,38 +140,38 @@ namespace sw
         return bRet;
     }
 
-    void LayoutDumpFilter::cancel(  ) throw (uno::RuntimeException)
+    void LayoutDumpFilter::cancel(  ) throw (uno::RuntimeException, std::exception)
     {
     }
 
     // XExporter
     void LayoutDumpFilter::setSourceDocument( const uno::Reference< lang::XComponent >& xDoc )
-        throw (lang::IllegalArgumentException, uno::RuntimeException)
+        throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     {
         m_xSrcDoc = xDoc;
     }
 
     // XInitialization
     void LayoutDumpFilter::initialize( const uno::Sequence< uno::Any >& )
-        throw (uno::Exception, uno::RuntimeException)
+        throw (uno::Exception, uno::RuntimeException, std::exception)
     {
     }
 
     // XServiceInfo
     OUString LayoutDumpFilter::getImplementationName(  )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
     {
         return LayoutDumpFilter_getImplementationName();
     }
 
     sal_Bool LayoutDumpFilter::supportsService( const OUString& rServiceName )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
     {
         return cppu::supportsService(this, rServiceName);
     }
 
     uno::Sequence< OUString > LayoutDumpFilter::getSupportedServiceNames()
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
     {
         return LayoutDumpFilter_getSupportedServiceNames();
     }

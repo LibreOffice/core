@@ -130,7 +130,7 @@ RunDialog::~RunDialog()
 }
 
 void SAL_CALL RunDialog::windowOpened( const ::com::sun::star::lang::EventObject& )
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -138,12 +138,12 @@ void SAL_CALL RunDialog::windowOpened( const ::com::sun::star::lang::EventObject
 }
 
 void SAL_CALL RunDialog::queryTermination( const ::com::sun::star::lang::EventObject& )
-        throw(::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException)
+        throw(::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL RunDialog::notifyTermination( const ::com::sun::star::lang::EventObject& )
-        throw(::com::sun::star::uno::RuntimeException)
+        throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 

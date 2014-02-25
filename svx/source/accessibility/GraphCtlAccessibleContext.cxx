@@ -180,14 +180,14 @@ Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessible( 
 
 //=====  XAccessible  =========================================================
 
-Reference< XAccessibleContext > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleContext( void ) throw( RuntimeException )
+Reference< XAccessibleContext > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleContext( void ) throw( RuntimeException, std::exception )
 {
     return this;
 }
 
 //=====  XAccessibleComponent  ================================================
 
-sal_Bool SAL_CALL SvxGraphCtrlAccessibleContext::containsPoint( const awt::Point& rPoint ) throw( RuntimeException )
+sal_Bool SAL_CALL SvxGraphCtrlAccessibleContext::containsPoint( const awt::Point& rPoint ) throw( RuntimeException, std::exception )
 {
     // no guard -> done in getSize()
     awt::Size aSize (getSize());
@@ -199,7 +199,7 @@ sal_Bool SAL_CALL SvxGraphCtrlAccessibleContext::containsPoint( const awt::Point
 
 
 
-Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleAtPoint( const awt::Point& rPoint ) throw( RuntimeException )
+Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleAtPoint( const awt::Point& rPoint ) throw( RuntimeException, std::exception )
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
 
@@ -230,7 +230,7 @@ Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleAt
 
 
 
-awt::Rectangle SAL_CALL SvxGraphCtrlAccessibleContext::getBounds() throw( RuntimeException )
+awt::Rectangle SAL_CALL SvxGraphCtrlAccessibleContext::getBounds() throw( RuntimeException, std::exception )
 {
     // no guard -> done in GetBoundingBox()
     Rectangle           aCoreBounds( GetBoundingBox() );
@@ -244,7 +244,7 @@ awt::Rectangle SAL_CALL SvxGraphCtrlAccessibleContext::getBounds() throw( Runtim
 
 
 
-awt::Point SAL_CALL SvxGraphCtrlAccessibleContext::getLocation() throw( RuntimeException )
+awt::Point SAL_CALL SvxGraphCtrlAccessibleContext::getLocation() throw( RuntimeException, std::exception )
 {
     // no guard -> done in GetBoundingBox()
     Rectangle   aRect( GetBoundingBox() );
@@ -253,7 +253,7 @@ awt::Point SAL_CALL SvxGraphCtrlAccessibleContext::getLocation() throw( RuntimeE
 
 
 
-awt::Point SAL_CALL SvxGraphCtrlAccessibleContext::getLocationOnScreen() throw( RuntimeException )
+awt::Point SAL_CALL SvxGraphCtrlAccessibleContext::getLocationOnScreen() throw( RuntimeException, std::exception )
 {
     // no guard -> done in GetBoundingBoxOnScreen()
     Rectangle   aRect( GetBoundingBoxOnScreen() );
@@ -262,7 +262,7 @@ awt::Point SAL_CALL SvxGraphCtrlAccessibleContext::getLocationOnScreen() throw( 
 
 
 
-awt::Size SAL_CALL SvxGraphCtrlAccessibleContext::getSize() throw( RuntimeException )
+awt::Size SAL_CALL SvxGraphCtrlAccessibleContext::getSize() throw( RuntimeException, std::exception )
 {
     // no guard -> done in GetBoundingBox()
     Rectangle   aRect( GetBoundingBox() );
@@ -272,7 +272,7 @@ awt::Size SAL_CALL SvxGraphCtrlAccessibleContext::getSize() throw( RuntimeExcept
 
 //=====  XAccessibleContext  ==================================================
 
-sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleChildCount( void ) throw( RuntimeException )
+sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleChildCount( void ) throw( RuntimeException, std::exception )
 {
     ::SolarMutexGuard aGuard;
 
@@ -326,7 +326,7 @@ void SvxGraphCtrlAccessibleContext::FireEvent (const AccessibleEventObject& aEve
 
 
 Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleChild( sal_Int32 nIndex )
-    throw( RuntimeException, lang::IndexOutOfBoundsException )
+    throw( RuntimeException, lang::IndexOutOfBoundsException, std::exception )
 {
     ::SolarMutexGuard aGuard;
 
@@ -335,14 +335,14 @@ Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleCh
 
 
 
-Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleParent( void ) throw( RuntimeException )
+Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleParent( void ) throw( RuntimeException, std::exception )
 {
     return mxParent;
 }
 
 
 
-sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleIndexInParent( void ) throw( RuntimeException )
+sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleIndexInParent( void ) throw( RuntimeException, std::exception )
 {
     ::SolarMutexGuard aGuard;
     //  Use a simple but slow solution for now.  Optimize later.
@@ -374,14 +374,14 @@ sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleIndexInParent( vo
 
 
 
-sal_Int16 SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleRole( void ) throw( RuntimeException )
+sal_Int16 SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleRole( void ) throw( RuntimeException, std::exception )
 {
     return AccessibleRole::PANEL;
 }
 
 
 
-OUString SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleDescription( void ) throw( RuntimeException )
+OUString SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleDescription( void ) throw( RuntimeException, std::exception )
 {
     ::SolarMutexGuard aGuard;
     return msDescription;
@@ -389,7 +389,7 @@ OUString SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleDescription( void 
 
 
 
-OUString SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleName( void ) throw( RuntimeException )
+OUString SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleName( void ) throw( RuntimeException, std::exception )
 {
     ::SolarMutexGuard aGuard;
     return msName;
@@ -400,14 +400,14 @@ OUString SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleName( void ) throw
 /** Return empty reference to indicate that the relation set is not
     supported.
 */
-Reference< XAccessibleRelationSet > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleRelationSet( void ) throw( RuntimeException )
+Reference< XAccessibleRelationSet > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleRelationSet( void ) throw( RuntimeException, std::exception )
 {
     return Reference< XAccessibleRelationSet >();
 }
 
 
 
-Reference< XAccessibleStateSet > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleStateSet( void ) throw( RuntimeException )
+Reference< XAccessibleStateSet > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleStateSet( void ) throw( RuntimeException, std::exception )
 {
     ::SolarMutexGuard aGuard;
 
@@ -432,7 +432,7 @@ Reference< XAccessibleStateSet > SAL_CALL SvxGraphCtrlAccessibleContext::getAcce
 
 
 
-lang::Locale SAL_CALL SvxGraphCtrlAccessibleContext::getLocale( void ) throw( IllegalAccessibleComponentStateException, RuntimeException )
+lang::Locale SAL_CALL SvxGraphCtrlAccessibleContext::getLocale( void ) throw( IllegalAccessibleComponentStateException, RuntimeException, std::exception )
 {
     ::SolarMutexGuard aGuard;
 
@@ -450,7 +450,7 @@ lang::Locale SAL_CALL SvxGraphCtrlAccessibleContext::getLocale( void ) throw( Il
 //=====  XAccessibleEventListener  ============================================
 
 void SAL_CALL SvxGraphCtrlAccessibleContext::addAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     if (xListener.is())
     {
@@ -464,7 +464,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::addAccessibleEventListener( const R
 
 
 void SAL_CALL SvxGraphCtrlAccessibleContext::removeAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     if (xListener.is())
     {
@@ -515,7 +515,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::removeFocusListener( const Referenc
 
 
 
-void SAL_CALL SvxGraphCtrlAccessibleContext::grabFocus() throw( RuntimeException )
+void SAL_CALL SvxGraphCtrlAccessibleContext::grabFocus() throw( RuntimeException, std::exception )
 {
     ::SolarMutexGuard aGuard;
 
@@ -538,7 +538,7 @@ Any SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleKeyBinding() throw( Run
 
 
 sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getForeground (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     svtools::ColorConfig aColorConfig;
     sal_uInt32 nColor = aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor;
@@ -549,7 +549,7 @@ sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getForeground (void)
 
 
 sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getBackground (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     sal_uInt32 nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();
     return static_cast<sal_Int32>(nColor);
@@ -557,17 +557,17 @@ sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getBackground (void)
 
 
 //=====  XServiceInfo  ========================================================
-OUString SAL_CALL SvxGraphCtrlAccessibleContext::getImplementationName( void ) throw( RuntimeException )
+OUString SAL_CALL SvxGraphCtrlAccessibleContext::getImplementationName( void ) throw( RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.comp.ui.SvxGraphCtrlAccessibleContext" );
 }
 
-sal_Bool SAL_CALL SvxGraphCtrlAccessibleContext::supportsService( const OUString& sServiceName ) throw( RuntimeException )
+sal_Bool SAL_CALL SvxGraphCtrlAccessibleContext::supportsService( const OUString& sServiceName ) throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-Sequence< OUString > SAL_CALL SvxGraphCtrlAccessibleContext::getSupportedServiceNames( void ) throw( RuntimeException )
+Sequence< OUString > SAL_CALL SvxGraphCtrlAccessibleContext::getSupportedServiceNames( void ) throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aSNs( 3 );
 
@@ -579,7 +579,7 @@ Sequence< OUString > SAL_CALL SvxGraphCtrlAccessibleContext::getSupportedService
 }
 
 //=====  XTypeProvider  =======================================================
-Sequence<sal_Int8> SAL_CALL SvxGraphCtrlAccessibleContext::getImplementationId( void ) throw( RuntimeException )
+Sequence<sal_Int8> SAL_CALL SvxGraphCtrlAccessibleContext::getImplementationId( void ) throw( RuntimeException, std::exception )
 {
     ::SolarMutexGuard aGuard;
     return getUniqueId();
@@ -587,14 +587,14 @@ Sequence<sal_Int8> SAL_CALL SvxGraphCtrlAccessibleContext::getImplementationId( 
 
 //=====  XServiceName  ========================================================
 
-OUString SvxGraphCtrlAccessibleContext::getServiceName( void ) throw( RuntimeException )
+OUString SvxGraphCtrlAccessibleContext::getServiceName( void ) throw( RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.accessibility.AccessibleContext" );
 }
 
 //=====  XAccessibleSelection =============================================
 
-void SAL_CALL SvxGraphCtrlAccessibleContext::selectAccessibleChild( sal_Int32 nIndex ) throw( lang::IndexOutOfBoundsException, RuntimeException )
+void SAL_CALL SvxGraphCtrlAccessibleContext::selectAccessibleChild( sal_Int32 nIndex ) throw( lang::IndexOutOfBoundsException, RuntimeException, std::exception )
 {
     ::SolarMutexGuard aGuard;
 
@@ -609,7 +609,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::selectAccessibleChild( sal_Int32 nI
 
 
 
-sal_Bool SAL_CALL SvxGraphCtrlAccessibleContext::isAccessibleChildSelected( sal_Int32 nIndex ) throw( lang::IndexOutOfBoundsException, RuntimeException )
+sal_Bool SAL_CALL SvxGraphCtrlAccessibleContext::isAccessibleChildSelected( sal_Int32 nIndex ) throw( lang::IndexOutOfBoundsException, RuntimeException, std::exception )
 {
     ::SolarMutexGuard aGuard;
 
@@ -621,7 +621,7 @@ sal_Bool SAL_CALL SvxGraphCtrlAccessibleContext::isAccessibleChildSelected( sal_
 
 
 
-void SAL_CALL SvxGraphCtrlAccessibleContext::clearAccessibleSelection() throw( RuntimeException )
+void SAL_CALL SvxGraphCtrlAccessibleContext::clearAccessibleSelection() throw( RuntimeException, std::exception )
 {
     ::SolarMutexGuard aGuard;
 
@@ -633,7 +633,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::clearAccessibleSelection() throw( R
 
 
 
-void SAL_CALL SvxGraphCtrlAccessibleContext::selectAllAccessibleChildren() throw( RuntimeException )
+void SAL_CALL SvxGraphCtrlAccessibleContext::selectAllAccessibleChildren() throw( RuntimeException, std::exception )
 {
     ::SolarMutexGuard aGuard;
 
@@ -645,7 +645,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::selectAllAccessibleChildren() throw
 
 
 
-sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getSelectedAccessibleChildCount() throw( RuntimeException )
+sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getSelectedAccessibleChildCount() throw( RuntimeException, std::exception )
 {
     ::SolarMutexGuard aGuard;
 
@@ -659,7 +659,7 @@ sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getSelectedAccessibleChildCoun
 
 
 Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getSelectedAccessibleChild( sal_Int32 nIndex )
-    throw( lang::IndexOutOfBoundsException, RuntimeException )
+    throw( lang::IndexOutOfBoundsException, RuntimeException, std::exception )
 {
     ::SolarMutexGuard aGuard;
 
@@ -677,7 +677,7 @@ Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getSelectedAcce
 
 
 
-void SAL_CALL SvxGraphCtrlAccessibleContext::deselectAccessibleChild( sal_Int32 nIndex ) throw( lang::IndexOutOfBoundsException, RuntimeException )
+void SAL_CALL SvxGraphCtrlAccessibleContext::deselectAccessibleChild( sal_Int32 nIndex ) throw( lang::IndexOutOfBoundsException, RuntimeException, std::exception )
 {
     ::SolarMutexGuard aGuard;
 

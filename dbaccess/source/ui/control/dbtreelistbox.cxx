@@ -535,10 +535,10 @@ namespace
         {
         }
 
-        virtual ::sal_Bool SAL_CALL select( const Any& xSelection ) throw (IllegalArgumentException, RuntimeException);
-        virtual Any SAL_CALL getSelection(  ) throw (RuntimeException);
-        virtual void SAL_CALL addSelectionChangeListener( const Reference< XSelectionChangeListener >& xListener ) throw (RuntimeException);
-        virtual void SAL_CALL removeSelectionChangeListener( const Reference< XSelectionChangeListener >& xListener ) throw (RuntimeException);
+        virtual ::sal_Bool SAL_CALL select( const Any& xSelection ) throw (IllegalArgumentException, RuntimeException, std::exception);
+        virtual Any SAL_CALL getSelection(  ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL addSelectionChangeListener( const Reference< XSelectionChangeListener >& xListener ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL removeSelectionChangeListener( const Reference< XSelectionChangeListener >& xListener ) throw (RuntimeException, std::exception);
 
     protected:
         virtual ~SelectionSupplier()
@@ -549,24 +549,24 @@ namespace
         Any m_aSelection;
     };
 
-    ::sal_Bool SAL_CALL SelectionSupplier::select( const Any& /*_Selection*/ ) throw (IllegalArgumentException, RuntimeException)
+    ::sal_Bool SAL_CALL SelectionSupplier::select( const Any& /*_Selection*/ ) throw (IllegalArgumentException, RuntimeException, std::exception)
     {
         throw IllegalArgumentException();
         // API bug: this should be a NoSupportException
     }
 
-    Any SAL_CALL SelectionSupplier::getSelection(  ) throw (RuntimeException)
+    Any SAL_CALL SelectionSupplier::getSelection(  ) throw (RuntimeException, std::exception)
     {
         return m_aSelection;
     }
 
-    void SAL_CALL SelectionSupplier::addSelectionChangeListener( const Reference< XSelectionChangeListener >& /*_Listener*/ ) throw (RuntimeException)
+    void SAL_CALL SelectionSupplier::addSelectionChangeListener( const Reference< XSelectionChangeListener >& /*_Listener*/ ) throw (RuntimeException, std::exception)
     {
         OSL_FAIL( "SelectionSupplier::removeSelectionChangeListener: no support!" );
         // API bug: this should be a NoSupportException
     }
 
-    void SAL_CALL SelectionSupplier::removeSelectionChangeListener( const Reference< XSelectionChangeListener >& /*_Listener*/ ) throw (RuntimeException)
+    void SAL_CALL SelectionSupplier::removeSelectionChangeListener( const Reference< XSelectionChangeListener >& /*_Listener*/ ) throw (RuntimeException, std::exception)
     {
         OSL_FAIL( "SelectionSupplier::removeSelectionChangeListener: no support!" );
         // API bug: this should be a NoSupportException

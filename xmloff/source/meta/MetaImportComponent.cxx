@@ -63,7 +63,7 @@ SvXMLImportContext* XMLMetaImportComponent::CreateContext(
 
 void SAL_CALL XMLMetaImportComponent::setTargetDocument(
     const uno::Reference< lang::XComponent >& xDoc )
-    throw(lang::IllegalArgumentException, uno::RuntimeException)
+    throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     mxDocProps = uno::Reference< document::XDocumentProperties >::query( xDoc );
     if( !mxDocProps.is() )

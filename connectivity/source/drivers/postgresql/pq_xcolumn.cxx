@@ -60,7 +60,7 @@ Column::Column( const ::rtl::Reference< RefCountedMutex > & refMutex,
         * getStatics().refl.column.pProps )
 {}
 
-Reference< XPropertySet > Column::createDataDescriptor(  ) throw (RuntimeException)
+Reference< XPropertySet > Column::createDataDescriptor(  ) throw (RuntimeException, std::exception)
 {
     ColumnDescriptor * pColumn = new ColumnDescriptor(
         m_refMutex, m_conn, m_pSettings );
@@ -81,7 +81,7 @@ ColumnDescriptor::ColumnDescriptor(
         *getStatics().refl.columnDescriptor.pProps )
 {}
 
-Reference< XPropertySet > ColumnDescriptor::createDataDescriptor(  ) throw (RuntimeException)
+Reference< XPropertySet > ColumnDescriptor::createDataDescriptor(  ) throw (RuntimeException, std::exception)
 {
     ColumnDescriptor * pColumn = new ColumnDescriptor(
         m_refMutex, m_conn, m_pSettings );

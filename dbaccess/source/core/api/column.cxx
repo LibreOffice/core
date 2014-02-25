@@ -77,7 +77,7 @@ OColumn::~OColumn()
 }
 
 // com::sun::star::lang::XTypeProvider
-Sequence< Type > OColumn::getTypes() throw (RuntimeException)
+Sequence< Type > OColumn::getTypes() throw (RuntimeException, std::exception)
 {
     return ::comphelper::concatSequences(
         OColumnBase::getTypes(),
@@ -89,17 +89,17 @@ Sequence< Type > OColumn::getTypes() throw (RuntimeException)
 IMPLEMENT_FORWARD_XINTERFACE2( OColumn, OColumnBase, ::comphelper::OPropertyContainer )
 
 // ::com::sun::star::lang::XServiceInfo
-OUString OColumn::getImplementationName(  ) throw(RuntimeException)
+OUString OColumn::getImplementationName(  ) throw(RuntimeException, std::exception)
 {
     return OUString("com.sun.star.sdb.OColumn");
 }
 
-sal_Bool OColumn::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
+sal_Bool OColumn::supportsService( const OUString& _rServiceName ) throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
-Sequence< OUString > OColumn::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > OColumn::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aSNS( 1 );
     aSNS[0] = SERVICE_SDBCX_COLUMN;
@@ -113,17 +113,17 @@ void OColumn::disposing()
 }
 
 // com::sun::star::beans::XPropertySet
-Reference< XPropertySetInfo > OColumn::getPropertySetInfo() throw (RuntimeException)
+Reference< XPropertySetInfo > OColumn::getPropertySetInfo() throw (RuntimeException, std::exception)
 {
     return createPropertySetInfo( getInfoHelper() ) ;
 }
 
-OUString SAL_CALL OColumn::getName(  ) throw(::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL OColumn::getName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return m_sName;
 }
 
-void SAL_CALL OColumn::setName( const OUString& _rName ) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OColumn::setName( const OUString& _rName ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     m_sName = _rName;
 }
@@ -193,17 +193,17 @@ OColumns::~OColumns()
 }
 
 // XServiceInfo
-OUString OColumns::getImplementationName(  ) throw(RuntimeException)
+OUString OColumns::getImplementationName(  ) throw(RuntimeException, std::exception)
 {
     return OUString("com.sun.star.sdb.OColumns");
 }
 
-sal_Bool OColumns::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
+sal_Bool OColumns::supportsService( const OUString& _rServiceName ) throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
-Sequence< OUString > OColumns::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > OColumns::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aSNS( 1 );
     aSNS[0] = SERVICE_SDBCX_CONTAINER;
@@ -278,7 +278,7 @@ Reference< XPropertySet > OColumns::createDescriptor()
         return Reference< XPropertySet >();
 }
 
-Any SAL_CALL OColumns::queryInterface( const Type & rType ) throw(RuntimeException)
+Any SAL_CALL OColumns::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
 {
     Any aRet;
     if(m_xDrvColumns.is())
@@ -304,7 +304,7 @@ Any SAL_CALL OColumns::queryInterface( const Type & rType ) throw(RuntimeExcepti
     return aRet;
 }
 
-Sequence< Type > SAL_CALL OColumns::getTypes(  ) throw(RuntimeException)
+Sequence< Type > SAL_CALL OColumns::getTypes(  ) throw(RuntimeException, std::exception)
 {
     sal_Bool bAppendFound = sal_False,bDropFound = sal_False;
 
@@ -418,13 +418,13 @@ void OColumns::dropObject(sal_Int32 _nPos,const OUString _sElementName)
     ::dbaccess::notifyDataSourceModified(m_xParent,sal_True);
 }
 
-Reference< XInterface > SAL_CALL OColumns::getParent(  ) throw (RuntimeException)
+Reference< XInterface > SAL_CALL OColumns::getParent(  ) throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     return m_xParent;
 }
 
-void SAL_CALL OColumns::setParent( const Reference< XInterface >& _xParent ) throw (NoSupportException, RuntimeException)
+void SAL_CALL OColumns::setParent( const Reference< XInterface >& _xParent ) throw (NoSupportException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     m_xParent = _xParent;

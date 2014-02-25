@@ -52,7 +52,7 @@ protected:
 
     // XEventListener
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // state of a feature
     virtual FeatureState getState( const OUString& rCommand );

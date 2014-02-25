@@ -614,12 +614,12 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
 
 
 void SAL_CALL DispatchWatcher::disposing( const ::com::sun::star::lang::EventObject& )
-throw(::com::sun::star::uno::RuntimeException)
+throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
 }
 
 
-void SAL_CALL DispatchWatcher::dispatchFinished( const DispatchResultEvent& ) throw( RuntimeException )
+void SAL_CALL DispatchWatcher::dispatchFinished( const DispatchResultEvent& ) throw( RuntimeException, std::exception )
 {
     osl::ClearableMutexGuard aGuard( GetMutex() );
     sal_Int16 nCount = --m_nRequestCount;

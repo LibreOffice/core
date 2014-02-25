@@ -66,7 +66,7 @@ OImageButtonModel::~OImageButtonModel()
 }
 
 // XServiceInfo
-StringSequence  OImageButtonModel::getSupportedServiceNames() throw()
+StringSequence  OImageButtonModel::getSupportedServiceNames() throw(std::exception)
 {
     StringSequence aSupported = OClickableImageBaseModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
@@ -87,12 +87,12 @@ void OImageButtonModel::describeFixedProperties( Sequence< Property >& _rProps )
     END_DESCRIBE_PROPERTIES();
 }
 
-OUString OImageButtonModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
+OUString OImageButtonModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException, std::exception)
 {
     return OUString(FRM_COMPONENT_IMAGEBUTTON);   // old (non-sun) name for compatibility !
 }
 
-void OImageButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
+void OImageButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     OControlModel::write(_rxOutStream);
 
@@ -106,7 +106,7 @@ void OImageButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream
     writeHelpTextCompatibly(_rxOutStream);
 }
 
-void OImageButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
+void OImageButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     OControlModel::read(_rxInStream);
 
@@ -159,7 +159,7 @@ Sequence<Type> OImageButtonControl::_getTypes()
     return aTypes;
 }
 
-StringSequence  OImageButtonControl::getSupportedServiceNames() throw()
+StringSequence  OImageButtonControl::getSupportedServiceNames() throw(std::exception)
 {
     StringSequence aSupported = OClickableImageBaseControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
@@ -184,7 +184,7 @@ OImageButtonControl::OImageButtonControl(const Reference<XComponentContext>& _rx
 }
 
 // UNO Anbindung
-Any SAL_CALL OImageButtonControl::queryAggregation(const Type& _rType) throw (RuntimeException)
+Any SAL_CALL OImageButtonControl::queryAggregation(const Type& _rType) throw (RuntimeException, std::exception)
 {
     Any aReturn = OClickableImageBaseControl::queryAggregation(_rType);
     if (!aReturn.hasValue())
@@ -193,7 +193,7 @@ Any SAL_CALL OImageButtonControl::queryAggregation(const Type& _rType) throw (Ru
     return aReturn;
 }
 
-void OImageButtonControl::mousePressed(const awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException)
+void OImageButtonControl::mousePressed(const awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -216,15 +216,15 @@ void OImageButtonControl::mousePressed(const awt::MouseEvent& e) throw ( ::com::
     }
 }
 
-void SAL_CALL OImageButtonControl::mouseReleased(const awt::MouseEvent& /*e*/) throw ( RuntimeException)
+void SAL_CALL OImageButtonControl::mouseReleased(const awt::MouseEvent& /*e*/) throw ( RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL OImageButtonControl::mouseEntered(const awt::MouseEvent& /*e*/) throw ( RuntimeException)
+void SAL_CALL OImageButtonControl::mouseEntered(const awt::MouseEvent& /*e*/) throw ( RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL OImageButtonControl::mouseExited(const awt::MouseEvent& /*e*/) throw ( RuntimeException)
+void SAL_CALL OImageButtonControl::mouseExited(const awt::MouseEvent& /*e*/) throw ( RuntimeException, std::exception)
 {
 }
 

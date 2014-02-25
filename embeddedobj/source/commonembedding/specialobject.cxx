@@ -52,7 +52,7 @@ OSpecialEmbeddedObject::OSpecialEmbeddedObject( const uno::Reference< uno::XComp
 
 
 uno::Any SAL_CALL OSpecialEmbeddedObject::queryInterface( const uno::Type& rType )
-        throw( uno::RuntimeException )
+        throw( uno::RuntimeException, std::exception )
 {
     uno::Any aReturn;
 
@@ -99,7 +99,7 @@ embed::VisualRepresentation SAL_CALL OSpecialEmbeddedObject::getPreferredVisualR
         throw ( lang::IllegalArgumentException,
                 embed::WrongStateException,
                 uno::Exception,
-                uno::RuntimeException )
+                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -125,7 +125,7 @@ void SAL_CALL OSpecialEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, cons
         throw ( lang::IllegalArgumentException,
                 embed::WrongStateException,
                 uno::Exception,
-                uno::RuntimeException )
+                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -144,7 +144,7 @@ awt::Size SAL_CALL OSpecialEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect 
         throw ( lang::IllegalArgumentException,
                 embed::WrongStateException,
                 uno::Exception,
-                uno::RuntimeException )
+                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -166,7 +166,7 @@ awt::Size SAL_CALL OSpecialEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect 
 
 sal_Int32 SAL_CALL OSpecialEmbeddedObject::getMapUnit( sal_Int64 nAspect )
         throw ( uno::Exception,
-                uno::RuntimeException)
+                uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -185,7 +185,7 @@ void SAL_CALL OSpecialEmbeddedObject::changeState( sal_Int32 nNewState )
         throw ( ::com::sun::star::embed::UnreachableStateException,
                 ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::Exception,
-                ::com::sun::star::uno::RuntimeException )
+                ::com::sun::star::uno::RuntimeException, std::exception )
 {
     if ( nNewState == embed::EmbedStates::UI_ACTIVE )
         nNewState = embed::EmbedStates::INPLACE_ACTIVE;
@@ -197,7 +197,7 @@ void SAL_CALL OSpecialEmbeddedObject::doVerb( sal_Int32 nVerbID )
                 embed::WrongStateException,
                 embed::UnreachableStateException,
                 uno::Exception,
-                uno::RuntimeException )
+                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )

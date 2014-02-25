@@ -283,7 +283,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
 }
 
 OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& lDescriptor )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     uno::Reference< XInputStream > xStream;
     uno::Reference< XContent > xContent;
@@ -641,19 +641,19 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
     return aTypeName;
 }
 
-OUString SAL_CALL ScFilterDetect::getImplementationName() throw (uno::RuntimeException)
+OUString SAL_CALL ScFilterDetect::getImplementationName() throw (uno::RuntimeException, std::exception)
 {
     return impl_getStaticImplementationName();
 }
 
 sal_Bool ScFilterDetect::supportsService( const OUString& sServiceName )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, sServiceName);
 }
 
 com::sun::star::uno::Sequence<OUString> ScFilterDetect::getSupportedServiceNames()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return impl_getStaticSupportedServiceNames();
 }

@@ -32,18 +32,18 @@
 
 #define SC_SIMPLE_SERVICE_INFO( ClassName, ClassNameAscii, ServiceAscii )            \
 OUString SAL_CALL ClassName::getImplementationName()                      \
-    throw(::com::sun::star::uno::RuntimeException)                                   \
+    throw(::com::sun::star::uno::RuntimeException, std::exception)                                   \
 {                                                                                    \
     return OUString::createFromAscii(ClassNameAscii);                         \
 }                                                                                    \
 sal_Bool SAL_CALL ClassName::supportsService( const OUString& ServiceName ) \
-    throw(::com::sun::star::uno::RuntimeException)                                   \
+    throw(::com::sun::star::uno::RuntimeException, std::exception)                                   \
 {                                                                                    \
     return cppu::supportsService(this, ServiceName);                                \
 }                                                                                    \
 ::com::sun::star::uno::Sequence< OUString >                                   \
     SAL_CALL ClassName::getSupportedServiceNames(void)                           \
-    throw(::com::sun::star::uno::RuntimeException)                                   \
+    throw(::com::sun::star::uno::RuntimeException, std::exception)                                   \
 {                                                                                    \
     ::com::sun::star::uno::Sequence< OUString > aRet(1);                      \
     OUString* pArray = aRet.getArray();                                       \
@@ -55,22 +55,22 @@ sal_Bool SAL_CALL ClassName::supportsService( const OUString& ServiceName ) \
     void SAL_CALL ClassName::addPropertyChangeListener( const OUString&,       \
                             const uno::Reference<beans::XPropertyChangeListener>&)  \
                             throw(beans::UnknownPropertyException,                  \
-                            lang::WrappedTargetException, uno::RuntimeException)    \
+                            lang::WrappedTargetException, uno::RuntimeException, std::exception)    \
     { OSL_FAIL("not implemented"); }                                                \
     void SAL_CALL ClassName::removePropertyChangeListener( const OUString&,    \
                             const uno::Reference<beans::XPropertyChangeListener>&)  \
                             throw(beans::UnknownPropertyException,                  \
-                            lang::WrappedTargetException, uno::RuntimeException)    \
+                            lang::WrappedTargetException, uno::RuntimeException, std::exception)    \
     { OSL_FAIL("not implemented"); }                                                \
     void SAL_CALL ClassName::addVetoableChangeListener( const OUString&,       \
                             const uno::Reference<beans::XVetoableChangeListener>&)  \
                             throw(beans::UnknownPropertyException,                  \
-                            lang::WrappedTargetException, uno::RuntimeException)    \
+                            lang::WrappedTargetException, uno::RuntimeException, std::exception)    \
     { OSL_FAIL("not implemented"); }                                                \
     void SAL_CALL ClassName::removeVetoableChangeListener( const OUString&,    \
                             const uno::Reference<beans::XVetoableChangeListener>&)  \
                             throw(beans::UnknownPropertyException,                  \
-                            lang::WrappedTargetException, uno::RuntimeException)    \
+                            lang::WrappedTargetException, uno::RuntimeException, std::exception)    \
     { OSL_FAIL("not implemented"); }
 
 
@@ -101,19 +101,19 @@ public:
     virtual                 ~ScIndexEnumeration();
 
                             // XEnumeration
-    virtual sal_Bool SAL_CALL hasMoreElements() throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasMoreElements() throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Any SAL_CALL nextElement()
                                 throw(::com::sun::star::container::NoSuchElementException,
                                         ::com::sun::star::lang::WrappedTargetException,
-                                        ::com::sun::star::uno::RuntimeException);
+                                        ::com::sun::star::uno::RuntimeException, std::exception);
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
 };
 
 //  new (uno 3) variant
@@ -132,24 +132,24 @@ public:
     virtual                 ~ScNameToIndexAccess();
 
                             // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getCount(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index )
                                 throw(::com::sun::star::lang::IndexOutOfBoundsException,
                                         ::com::sun::star::lang::WrappedTargetException,
-                                        ::com::sun::star::uno::RuntimeException);
+                                        ::com::sun::star::uno::RuntimeException, std::exception);
 
                             // XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  )
-                                throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
 };
 
 class SC_DLLPUBLIC ScUnoHelpFunctions

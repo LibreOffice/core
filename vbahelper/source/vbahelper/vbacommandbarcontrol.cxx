@@ -36,7 +36,7 @@ void ScVbaCommandBarControl::ApplyChange() throw ( uno::RuntimeException )
 }
 
 OUString SAL_CALL
-ScVbaCommandBarControl::getCaption() throw ( uno::RuntimeException )
+ScVbaCommandBarControl::getCaption() throw ( uno::RuntimeException, std::exception )
 {
     // "Label" always empty
     OUString sCaption;
@@ -45,7 +45,7 @@ ScVbaCommandBarControl::getCaption() throw ( uno::RuntimeException )
 }
 
 void SAL_CALL
-ScVbaCommandBarControl::setCaption( const OUString& _caption ) throw (uno::RuntimeException)
+ScVbaCommandBarControl::setCaption( const OUString& _caption ) throw (uno::RuntimeException, std::exception)
 {
     OUString sCaption = _caption.replace('&','~');
     setPropertyValue( m_aPropertyValues, "Label" , uno::makeAny( sCaption ) );
@@ -53,7 +53,7 @@ ScVbaCommandBarControl::setCaption( const OUString& _caption ) throw (uno::Runti
 }
 
 OUString SAL_CALL
-ScVbaCommandBarControl::getOnAction() throw (uno::RuntimeException)
+ScVbaCommandBarControl::getOnAction() throw (uno::RuntimeException, std::exception)
 {
     OUString sCommandURL;
     getPropertyValue( m_aPropertyValues, "CommandURL" ) >>= sCommandURL;
@@ -61,7 +61,7 @@ ScVbaCommandBarControl::getOnAction() throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-ScVbaCommandBarControl::setOnAction( const OUString& _onaction ) throw (uno::RuntimeException)
+ScVbaCommandBarControl::setOnAction( const OUString& _onaction ) throw (uno::RuntimeException, std::exception)
 {
     // get the current model
     uno::Reference< frame::XModel > xModel( pCBarHelper->getModel() );
@@ -76,7 +76,7 @@ ScVbaCommandBarControl::setOnAction( const OUString& _onaction ) throw (uno::Run
 }
 
 ::sal_Bool SAL_CALL
-ScVbaCommandBarControl::getVisible() throw (uno::RuntimeException)
+ScVbaCommandBarControl::getVisible() throw (uno::RuntimeException, std::exception)
 {
     sal_Bool bVisible = sal_True;
     uno::Any aValue = getPropertyValue( m_aPropertyValues, ITEM_DESCRIPTOR_ISVISIBLE );
@@ -85,7 +85,7 @@ ScVbaCommandBarControl::getVisible() throw (uno::RuntimeException)
     return bVisible;
 }
 void SAL_CALL
-ScVbaCommandBarControl::setVisible( ::sal_Bool _visible ) throw (uno::RuntimeException)
+ScVbaCommandBarControl::setVisible( ::sal_Bool _visible ) throw (uno::RuntimeException, std::exception)
 {
     uno::Any aValue = getPropertyValue( m_aPropertyValues, ITEM_DESCRIPTOR_ISVISIBLE );
     if( aValue.hasValue() )
@@ -96,7 +96,7 @@ ScVbaCommandBarControl::setVisible( ::sal_Bool _visible ) throw (uno::RuntimeExc
 }
 
 ::sal_Bool SAL_CALL
-ScVbaCommandBarControl::getEnabled() throw (uno::RuntimeException)
+ScVbaCommandBarControl::getEnabled() throw (uno::RuntimeException, std::exception)
 {
     sal_Bool bEnabled = sal_True;
 
@@ -114,7 +114,7 @@ ScVbaCommandBarControl::getEnabled() throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-ScVbaCommandBarControl::setEnabled( sal_Bool _enabled ) throw (uno::RuntimeException)
+ScVbaCommandBarControl::setEnabled( sal_Bool _enabled ) throw (uno::RuntimeException, std::exception)
 {
     uno::Any aValue = getPropertyValue( m_aPropertyValues, ITEM_DESCRIPTOR_ENABLED );
     if( aValue.hasValue() )
@@ -130,7 +130,7 @@ ScVbaCommandBarControl::setEnabled( sal_Bool _enabled ) throw (uno::RuntimeExcep
 }
 
 ::sal_Bool SAL_CALL
-ScVbaCommandBarControl::getBeginGroup() throw (css::uno::RuntimeException)
+ScVbaCommandBarControl::getBeginGroup() throw (css::uno::RuntimeException, std::exception)
 {
     // TODO: need to check if the item before this item is of type 'separator'
     //#STUB
@@ -138,7 +138,7 @@ ScVbaCommandBarControl::getBeginGroup() throw (css::uno::RuntimeException)
 }
 
 void SAL_CALL
-ScVbaCommandBarControl::setBeginGroup( ::sal_Bool _begin ) throw (css::uno::RuntimeException)
+ScVbaCommandBarControl::setBeginGroup( ::sal_Bool _begin ) throw (css::uno::RuntimeException, std::exception)
 {
     if( getBeginGroup() != _begin )
     {
@@ -147,7 +147,7 @@ ScVbaCommandBarControl::setBeginGroup( ::sal_Bool _begin ) throw (css::uno::Runt
 }
 
 void SAL_CALL
-ScVbaCommandBarControl::Delete(  ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaCommandBarControl::Delete(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     if( m_xCurrentSettings.is() )
     {
@@ -159,7 +159,7 @@ ScVbaCommandBarControl::Delete(  ) throw (script::BasicErrorException, uno::Runt
 }
 
 uno::Any SAL_CALL
-ScVbaCommandBarControl::Controls( const uno::Any& aIndex ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaCommandBarControl::Controls( const uno::Any& aIndex ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     // only Popup Menu has controls
     uno::Reference< container::XIndexAccess > xSubMenu;

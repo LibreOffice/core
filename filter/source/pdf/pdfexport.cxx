@@ -956,8 +956,8 @@ public:
     PDFErrorRequest( const task::PDFExportException& i_rExc );
 
     // XInteractionRequest
-    virtual uno::Any SAL_CALL getRequest() throw (uno::RuntimeException);
-    virtual uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations() throw (uno::RuntimeException);
+    virtual uno::Any SAL_CALL getRequest() throw (uno::RuntimeException, std::exception);
+    virtual uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations() throw (uno::RuntimeException, std::exception);
 };
 
 PDFErrorRequest::PDFErrorRequest( const task::PDFExportException& i_rExc ) :
@@ -966,7 +966,7 @@ PDFErrorRequest::PDFErrorRequest( const task::PDFExportException& i_rExc ) :
 {
 }
 
-uno::Any SAL_CALL PDFErrorRequest::getRequest() throw (uno::RuntimeException)
+uno::Any SAL_CALL PDFErrorRequest::getRequest() throw (uno::RuntimeException, std::exception)
 {
     osl::MutexGuard const guard( m_aMutex );
 
@@ -975,7 +975,7 @@ uno::Any SAL_CALL PDFErrorRequest::getRequest() throw (uno::RuntimeException)
     return aRet;
 }
 
-uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL PDFErrorRequest::getContinuations() throw (uno::RuntimeException)
+uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL PDFErrorRequest::getContinuations() throw (uno::RuntimeException, std::exception)
 {
     return uno::Sequence< uno::Reference< task::XInteractionContinuation > >();
 }

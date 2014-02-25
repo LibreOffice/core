@@ -112,14 +112,14 @@ namespace xmlscript
     }
 
     // XServiceInfo
-    sal_Bool XMLBasicExporterBase::supportsService( const OUString& rServiceName ) throw (RuntimeException)
+    sal_Bool XMLBasicExporterBase::supportsService( const OUString& rServiceName ) throw (RuntimeException, std::exception)
     {
         return cppu::supportsService(this, rServiceName);
     }
 
     // XInitialization
 
-    void XMLBasicExporterBase::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException)
+    void XMLBasicExporterBase::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -141,7 +141,7 @@ namespace xmlscript
     // XExporter
 
     void XMLBasicExporterBase::setSourceDocument( const Reference< XComponent >& rxDoc )
-        throw (IllegalArgumentException, RuntimeException)
+        throw (IllegalArgumentException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -156,7 +156,7 @@ namespace xmlscript
     // XFilter
 
 sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /*aDescriptor*/ )
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -391,7 +391,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
     }
 
     void XMLBasicExporterBase::cancel()
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -411,12 +411,12 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
 
     // XServiceInfo
 
-    OUString XMLBasicExporter::getImplementationName(  ) throw (RuntimeException)
+    OUString XMLBasicExporter::getImplementationName(  ) throw (RuntimeException, std::exception)
     {
         return getImplementationName_XMLBasicExporter();
     }
 
-    Sequence< OUString > XMLBasicExporter::getSupportedServiceNames(  ) throw (RuntimeException)
+    Sequence< OUString > XMLBasicExporter::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
     {
         return getSupportedServiceNames_XMLBasicExporter();
     }
@@ -434,12 +434,12 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
 
     // XServiceInfo
 
-    OUString XMLOasisBasicExporter::getImplementationName(  ) throw (RuntimeException)
+    OUString XMLOasisBasicExporter::getImplementationName(  ) throw (RuntimeException, std::exception)
     {
         return getImplementationName_XMLOasisBasicExporter();
     }
 
-    Sequence< OUString > XMLOasisBasicExporter::getSupportedServiceNames(  ) throw (RuntimeException)
+    Sequence< OUString > XMLOasisBasicExporter::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
     {
         return getSupportedServiceNames_XMLOasisBasicExporter();
     }

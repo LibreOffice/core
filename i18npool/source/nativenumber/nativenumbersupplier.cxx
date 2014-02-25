@@ -598,7 +598,7 @@ OUString SAL_CALL NativeNumberSupplier::getNativeNumberString(const OUString& aN
 }
 
 OUString SAL_CALL NativeNumberSupplier::getNativeNumberString(const OUString& aNumberString, const Locale& rLocale,
-                sal_Int16 nNativeNumberMode) throw (RuntimeException)
+                sal_Int16 nNativeNumberMode) throw (RuntimeException, std::exception)
 {
     Sequence< sal_Int32 > offset;
     return getNativeNumberString(aNumberString, rLocale, nNativeNumberMode, offset);
@@ -638,7 +638,7 @@ sal_Unicode SAL_CALL NativeNumberSupplier::getNativeNumberChar( const sal_Unicod
     return inChar;
 }
 
-sal_Bool SAL_CALL NativeNumberSupplier::isValidNatNum( const Locale& rLocale, sal_Int16 nNativeNumberMode ) throw (RuntimeException)
+sal_Bool SAL_CALL NativeNumberSupplier::isValidNatNum( const Locale& rLocale, sal_Int16 nNativeNumberMode ) throw (RuntimeException, std::exception)
 {
     sal_Int16 langnum = getLanguageNumber(rLocale);
 
@@ -665,7 +665,7 @@ sal_Bool SAL_CALL NativeNumberSupplier::isValidNatNum( const Locale& rLocale, sa
     return sal_False;
 }
 
-NativeNumberXmlAttributes SAL_CALL NativeNumberSupplier::convertToXmlAttributes( const Locale& rLocale, sal_Int16 nNativeNumberMode ) throw (RuntimeException)
+NativeNumberXmlAttributes SAL_CALL NativeNumberSupplier::convertToXmlAttributes( const Locale& rLocale, sal_Int16 nNativeNumberMode ) throw (RuntimeException, std::exception)
 {
     static const sal_Int16 attShort         = 0;
     static const sal_Int16 attMedium        = 1;
@@ -741,7 +741,7 @@ static sal_Bool natNumIn(sal_Int16 num, const sal_Int16 natnum[], sal_Int16 len)
     return sal_False;
 }
 
-sal_Int16 SAL_CALL NativeNumberSupplier::convertFromXmlAttributes( const NativeNumberXmlAttributes& aAttr ) throw (RuntimeException)
+sal_Int16 SAL_CALL NativeNumberSupplier::convertFromXmlAttributes( const NativeNumberXmlAttributes& aAttr ) throw (RuntimeException, std::exception)
 {
     sal_Unicode numberChar[NumberChar_Count];
     for (sal_Int16 i = 0; i < NumberChar_Count; i++)
@@ -889,19 +889,19 @@ OUString SAL_CALL getHebrewNativeNumberString(const OUString& aNumberString, sal
 
 static const sal_Char* implementationName = "com.sun.star.i18n.NativeNumberSupplier";
 
-OUString SAL_CALL NativeNumberSupplier::getImplementationName() throw( RuntimeException )
+OUString SAL_CALL NativeNumberSupplier::getImplementationName() throw( RuntimeException, std::exception )
 {
     return OUString::createFromAscii( implementationName );
 }
 
 sal_Bool SAL_CALL
-NativeNumberSupplier::supportsService(const OUString& rServiceName) throw( RuntimeException )
+NativeNumberSupplier::supportsService(const OUString& rServiceName) throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL
-NativeNumberSupplier::getSupportedServiceNames() throw( RuntimeException )
+NativeNumberSupplier::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
     aRet[0] = OUString::createFromAscii( implementationName );

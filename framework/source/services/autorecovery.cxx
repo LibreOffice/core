@@ -489,19 +489,19 @@ public:
     virtual ~AutoRecovery(                                                                   );
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     {
         return OUString("com.sun.star.comp.framework.AutoRecovery");
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     {
         return cppu::supportsService(this, ServiceName);
     }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     {
         css::uno::Sequence< OUString > aSeq(1);
         aSeq[0] = OUString("com.sun.star.frame.AutoRecovery");
@@ -513,27 +513,27 @@ public:
         { OWeakObject::acquire(); }
     virtual void SAL_CALL release() throw ()
         { OWeakObject::release(); }
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& type) throw ( css::uno::RuntimeException );
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& type) throw ( css::uno::RuntimeException, std::exception );
 
     /// Initialization function after having acquire()'d.
     void initListeners();
 
     // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException);
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception);
 
 
     // css.frame.XDispatch
     virtual void SAL_CALL dispatch(const css::util::URL&                                  aURL      ,
                                    const css::uno::Sequence< css::beans::PropertyValue >& lArguments)
-        throw(css::uno::RuntimeException);
+        throw(css::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
                                             const css::util::URL&                                     aURL     )
-        throw(css::uno::RuntimeException);
+        throw(css::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
                                                const css::util::URL&                                     aURL     )
-        throw(css::uno::RuntimeException);
+        throw(css::uno::RuntimeException, std::exception);
 
 
     // css.document.XEventListener
@@ -547,22 +547,22 @@ public:
                 points to the new created/opened document.
      */
     virtual void SAL_CALL notifyEvent(const css::document::EventObject& aEvent)
-        throw(css::uno::RuntimeException);
+        throw(css::uno::RuntimeException, std::exception);
 
 
     // css.util.XChangesListener
     virtual void SAL_CALL changesOccurred(const css::util::ChangesEvent& aEvent)
-        throw(css::uno::RuntimeException);
+        throw(css::uno::RuntimeException, std::exception);
 
 
     // css.util.XModifyListener
     virtual void SAL_CALL modified(const css::lang::EventObject& aEvent)
-        throw(css::uno::RuntimeException);
+        throw(css::uno::RuntimeException, std::exception);
 
 
     // css.lang.XEventListener
     virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
-        throw(css::uno::RuntimeException);
+        throw(css::uno::RuntimeException, std::exception);
 
 protected:
 
@@ -577,7 +577,7 @@ protected:
 
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(      sal_Int32      nHandle,
                                                            const css::uno::Any& aValue )
-        throw(css::uno::Exception);
+        throw(css::uno::Exception, std::exception);
     using cppu::OPropertySetHelper::getFastPropertyValue;
     virtual void SAL_CALL getFastPropertyValue(css::uno::Any& aValue ,
                                                sal_Int32      nHandle) const;
@@ -585,7 +585,7 @@ protected:
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
-        throw(css::uno::RuntimeException);
+        throw(css::uno::RuntimeException, std::exception);
 
 private:
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
@@ -1407,7 +1407,7 @@ void AutoRecovery::disposing()
     implts_stopTimer();
 }
 
-Any SAL_CALL AutoRecovery::queryInterface( const css::uno::Type& _rType ) throw(css::uno::RuntimeException)
+Any SAL_CALL AutoRecovery::queryInterface( const css::uno::Type& _rType ) throw(css::uno::RuntimeException, std::exception)
 {
     Any aRet = AutoRecovery_BASE::queryInterface( _rType );
     if ( !aRet.hasValue() )
@@ -1415,7 +1415,7 @@ Any SAL_CALL AutoRecovery::queryInterface( const css::uno::Type& _rType ) throw(
     return aRet;
 }
 
-Sequence< css::uno::Type > SAL_CALL AutoRecovery::getTypes(  ) throw(css::uno::RuntimeException)
+Sequence< css::uno::Type > SAL_CALL AutoRecovery::getTypes(  ) throw(css::uno::RuntimeException, std::exception)
 {
     return comphelper::concatSequences(
         AutoRecovery_BASE::getTypes(),
@@ -1426,7 +1426,7 @@ Sequence< css::uno::Type > SAL_CALL AutoRecovery::getTypes(  ) throw(css::uno::R
 
 void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                                  aURL      ,
                                      const css::uno::Sequence< css::beans::PropertyValue >& lArguments)
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     SAL_INFO("fwk.autorecovery", "AutoRecovery::dispatch() starts ..." << aURL.Complete);
 
@@ -1661,7 +1661,7 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
 
 void SAL_CALL AutoRecovery::addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
                                               const css::util::URL&                                     aURL     )
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     if (!xListener.is())
         throw css::uno::RuntimeException("Invalid listener reference.", static_cast< css::frame::XDispatch* >(this));
@@ -1695,7 +1695,7 @@ void SAL_CALL AutoRecovery::addStatusListener(const css::uno::Reference< css::fr
 
 void SAL_CALL AutoRecovery::removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
                                                  const css::util::URL&                                     aURL     )
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     if (!xListener.is())
         throw css::uno::RuntimeException("Invalid listener reference.", static_cast< css::frame::XDispatch* >(this));
@@ -1705,7 +1705,7 @@ void SAL_CALL AutoRecovery::removeStatusListener(const css::uno::Reference< css:
 
 
 void SAL_CALL AutoRecovery::notifyEvent(const css::document::EventObject& aEvent)
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     css::uno::Reference< css::frame::XModel > xDocument(aEvent.Source, css::uno::UNO_QUERY);
 
@@ -1774,7 +1774,7 @@ void SAL_CALL AutoRecovery::notifyEvent(const css::document::EventObject& aEvent
 
 
 void SAL_CALL AutoRecovery::changesOccurred(const css::util::ChangesEvent& aEvent)
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     const css::uno::Sequence< css::util::ElementChange > lChanges (aEvent.Changes);
     const css::util::ElementChange*                      pChanges = lChanges.getConstArray();
@@ -1828,7 +1828,7 @@ void SAL_CALL AutoRecovery::changesOccurred(const css::util::ChangesEvent& aEven
 
 
 void SAL_CALL AutoRecovery::modified(const css::lang::EventObject& aEvent)
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     css::uno::Reference< css::frame::XModel > xDocument(aEvent.Source, css::uno::UNO_QUERY);
     if (! xDocument.is())
@@ -1839,7 +1839,7 @@ void SAL_CALL AutoRecovery::modified(const css::lang::EventObject& aEvent)
 
 
 void SAL_CALL AutoRecovery::disposing(const css::lang::EventObject& aEvent)
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     /* SAFE */ {
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
@@ -4153,7 +4153,7 @@ sal_Bool SAL_CALL AutoRecovery::convertFastPropertyValue(      css::uno::Any& /*
 
 void SAL_CALL AutoRecovery::setFastPropertyValue_NoBroadcast(      sal_Int32      /*nHandle*/,
                                                              const css::uno::Any& /*aValue*/ )
-    throw(css::uno::Exception)
+    throw(css::uno::Exception, std::exception)
 {
     // not needed currently
 }
@@ -4237,7 +4237,7 @@ const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescripto
 
 
 css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL AutoRecovery::getPropertySetInfo()
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     static css::uno::Reference< css::beans::XPropertySetInfo >* pInfo = 0;
     if(!pInfo)

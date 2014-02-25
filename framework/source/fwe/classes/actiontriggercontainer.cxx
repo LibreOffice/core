@@ -43,7 +43,7 @@ ActionTriggerContainer::~ActionTriggerContainer()
 
 // XInterface
 Any SAL_CALL ActionTriggerContainer::queryInterface( const Type& aType )
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     Any a = ::cppu::queryInterface(
                 aType ,
@@ -71,7 +71,7 @@ void ActionTriggerContainer::release() throw()
 
 // XMultiServiceFactory
 Reference< XInterface > SAL_CALL ActionTriggerContainer::createInstance( const OUString& aServiceSpecifier )
-throw ( ::com::sun::star::uno::Exception, RuntimeException)
+throw ( ::com::sun::star::uno::Exception, RuntimeException, std::exception)
 {
     if ( aServiceSpecifier.equalsAscii( SERVICENAME_ACTIONTRIGGER ))
         return (OWeakObject *)( new ActionTriggerPropertySet());
@@ -84,13 +84,13 @@ throw ( ::com::sun::star::uno::Exception, RuntimeException)
 }
 
 Reference< XInterface > SAL_CALL ActionTriggerContainer::createInstanceWithArguments( const OUString& ServiceSpecifier, const Sequence< Any >& /*Arguments*/ )
-throw ( Exception, RuntimeException)
+throw ( Exception, RuntimeException, std::exception)
 {
     return createInstance( ServiceSpecifier );
 }
 
 Sequence< OUString > SAL_CALL ActionTriggerContainer::getAvailableServiceNames()
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     Sequence< OUString > aSeq( 3 );
 
@@ -103,19 +103,19 @@ throw ( RuntimeException )
 
 // XServiceInfo
 OUString SAL_CALL ActionTriggerContainer::getImplementationName()
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     return OUString( IMPLEMENTATIONNAME_ACTIONTRIGGERCONTAINER );
 }
 
 sal_Bool SAL_CALL ActionTriggerContainer::supportsService( const OUString& ServiceName )
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL ActionTriggerContainer::getSupportedServiceNames()
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     Sequence< OUString > seqServiceNames( 1 );
 
@@ -124,7 +124,7 @@ throw ( RuntimeException )
 }
 
 // XTypeProvider
-Sequence< Type > SAL_CALL ActionTriggerContainer::getTypes() throw ( RuntimeException )
+Sequence< Type > SAL_CALL ActionTriggerContainer::getTypes() throw ( RuntimeException, std::exception )
 {
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
@@ -154,7 +154,7 @@ Sequence< Type > SAL_CALL ActionTriggerContainer::getTypes() throw ( RuntimeExce
     return pTypeCollection->getTypes() ;
 }
 
-Sequence< sal_Int8 > SAL_CALL ActionTriggerContainer::getImplementationId() throw ( RuntimeException )
+Sequence< sal_Int8 > SAL_CALL ActionTriggerContainer::getImplementationId() throw ( RuntimeException, std::exception )
 {
     // Create one Id for all instances of this class.
     // Use ethernet address to do this! (sal_True)

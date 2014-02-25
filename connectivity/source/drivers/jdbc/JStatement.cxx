@@ -119,7 +119,7 @@ void SAL_CALL OStatement_BASE2::release() throw()
 }
 
 
-Any SAL_CALL java_sql_Statement_Base::queryInterface( const Type & rType ) throw(RuntimeException)
+Any SAL_CALL java_sql_Statement_Base::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
 {
     if ( m_pConnection && !m_pConnection->isAutoRetrievingEnabled() && rType == ::getCppuType( (const Reference< XGeneratedResultSet > *)0 ) )
         return Any();
@@ -127,7 +127,7 @@ Any SAL_CALL java_sql_Statement_Base::queryInterface( const Type & rType ) throw
     return aRet.hasValue() ? aRet : OPropertySetHelper::queryInterface(rType);
 }
 
-Sequence< Type > SAL_CALL java_sql_Statement_Base::getTypes(  ) throw(RuntimeException)
+Sequence< Type > SAL_CALL java_sql_Statement_Base::getTypes(  ) throw(RuntimeException, std::exception)
 {
     ::cppu::OTypeCollection aTypes( ::getCppuType( (const Reference< ::com::sun::star::beans::XMultiPropertySet > *)0 ),
                                                 ::getCppuType( (const Reference< ::com::sun::star::beans::XFastPropertySet > *)0 ),
@@ -144,7 +144,7 @@ Sequence< Type > SAL_CALL java_sql_Statement_Base::getTypes(  ) throw(RuntimeExc
     return ::comphelper::concatSequences(aTypes.getTypes(),aOldTypes);
 }
 
-Reference< XResultSet > SAL_CALL java_sql_Statement_Base::getGeneratedValues(  ) throw (SQLException, RuntimeException)
+Reference< XResultSet > SAL_CALL java_sql_Statement_Base::getGeneratedValues(  ) throw (SQLException, RuntimeException, std::exception)
 {
     m_aLogger.log( LogLevel::FINE, STR_LOG_GENERATED_VALUES );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -187,7 +187,7 @@ Reference< XResultSet > SAL_CALL java_sql_Statement_Base::getGeneratedValues(  )
 
 
 
-void SAL_CALL java_sql_Statement_Base::cancel(  ) throw(RuntimeException)
+void SAL_CALL java_sql_Statement_Base::cancel(  ) throw(RuntimeException, std::exception)
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
@@ -196,7 +196,7 @@ void SAL_CALL java_sql_Statement_Base::cancel(  ) throw(RuntimeException)
 }
 
 
-void SAL_CALL java_sql_Statement_Base::close(  ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
+void SAL_CALL java_sql_Statement_Base::close(  ) throw(::com::sun::star::sdbc::SQLException, RuntimeException, std::exception)
 {
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -207,7 +207,7 @@ void SAL_CALL java_sql_Statement_Base::close(  ) throw(::com::sun::star::sdbc::S
 }
 
 
-void SAL_CALL java_sql_Statement::clearBatch(  ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
+void SAL_CALL java_sql_Statement::clearBatch(  ) throw(::com::sun::star::sdbc::SQLException, RuntimeException, std::exception)
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     {
@@ -219,7 +219,7 @@ void SAL_CALL java_sql_Statement::clearBatch(  ) throw(::com::sun::star::sdbc::S
 }
 
 
-sal_Bool SAL_CALL java_sql_Statement_Base::execute( const OUString& sql ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL java_sql_Statement_Base::execute( const OUString& sql ) throw(SQLException, RuntimeException, std::exception)
 {
     m_aLogger.log( LogLevel::FINE, STR_LOG_EXECUTE_STATEMENT, sql );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -253,7 +253,7 @@ sal_Bool SAL_CALL java_sql_Statement_Base::execute( const OUString& sql ) throw(
 }
 
 
-Reference< XResultSet > SAL_CALL java_sql_Statement_Base::executeQuery( const OUString& sql ) throw(SQLException, RuntimeException)
+Reference< XResultSet > SAL_CALL java_sql_Statement_Base::executeQuery( const OUString& sql ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
@@ -288,7 +288,7 @@ Reference< XResultSet > SAL_CALL java_sql_Statement_Base::executeQuery( const OU
     return out==0 ? 0 : new java_sql_ResultSet( t.pEnv, out, m_aLogger, *m_pConnection,this );
 }
 
-Reference< XConnection > SAL_CALL java_sql_Statement_Base::getConnection(  ) throw(SQLException, RuntimeException)
+Reference< XConnection > SAL_CALL java_sql_Statement_Base::getConnection(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
@@ -296,14 +296,14 @@ Reference< XConnection > SAL_CALL java_sql_Statement_Base::getConnection(  ) thr
 }
 
 
-Any SAL_CALL java_sql_Statement::queryInterface( const Type & rType ) throw(RuntimeException)
+Any SAL_CALL java_sql_Statement::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
 {
     Any aRet = ::cppu::queryInterface(rType,static_cast< XBatchExecution*> (this));
     return aRet.hasValue() ? aRet : java_sql_Statement_Base::queryInterface(rType);
 }
 
 
-void SAL_CALL java_sql_Statement::addBatch( const OUString& sql ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
+void SAL_CALL java_sql_Statement::addBatch( const OUString& sql ) throw(::com::sun::star::sdbc::SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
@@ -316,7 +316,7 @@ void SAL_CALL java_sql_Statement::addBatch( const OUString& sql ) throw(::com::s
 }
 
 
-Sequence< sal_Int32 > SAL_CALL java_sql_Statement::executeBatch(  ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
+Sequence< sal_Int32 > SAL_CALL java_sql_Statement::executeBatch(  ) throw(::com::sun::star::sdbc::SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
@@ -337,7 +337,7 @@ Sequence< sal_Int32 > SAL_CALL java_sql_Statement::executeBatch(  ) throw(::com:
 
 
 
-sal_Int32 SAL_CALL java_sql_Statement_Base::executeUpdate( const OUString& sql ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL java_sql_Statement_Base::executeUpdate( const OUString& sql ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
@@ -351,7 +351,7 @@ sal_Int32 SAL_CALL java_sql_Statement_Base::executeUpdate( const OUString& sql )
 }
 
 
-Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL java_sql_Statement_Base::getResultSet(  ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
+Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL java_sql_Statement_Base::getResultSet(  ) throw(::com::sun::star::sdbc::SQLException, RuntimeException, std::exception)
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
@@ -363,7 +363,7 @@ Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL java_sql_Statement_Base
 }
 
 
-sal_Int32 SAL_CALL java_sql_Statement_Base::getUpdateCount(  ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
+sal_Int32 SAL_CALL java_sql_Statement_Base::getUpdateCount(  ) throw(::com::sun::star::sdbc::SQLException, RuntimeException, std::exception)
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
@@ -374,7 +374,7 @@ sal_Int32 SAL_CALL java_sql_Statement_Base::getUpdateCount(  ) throw(::com::sun:
 }
 
 
-sal_Bool SAL_CALL java_sql_Statement_Base::getMoreResults(  ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
+sal_Bool SAL_CALL java_sql_Statement_Base::getMoreResults(  ) throw(::com::sun::star::sdbc::SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
     return callBooleanMethod( "getMoreResults", mID );
@@ -382,7 +382,7 @@ sal_Bool SAL_CALL java_sql_Statement_Base::getMoreResults(  ) throw(::com::sun::
 
 
 
-Any SAL_CALL java_sql_Statement_Base::getWarnings(  ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
+Any SAL_CALL java_sql_Statement_Base::getWarnings(  ) throw(::com::sun::star::sdbc::SQLException, RuntimeException, std::exception)
 {
     SDBThreadAttach t;
     createStatement(t.pEnv);
@@ -400,7 +400,7 @@ Any SAL_CALL java_sql_Statement_Base::getWarnings(  ) throw(::com::sun::star::sd
     return Any();
 }
 
-void SAL_CALL java_sql_Statement_Base::clearWarnings(  ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
+void SAL_CALL java_sql_Statement_Base::clearWarnings(  ) throw(::com::sun::star::sdbc::SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
@@ -667,7 +667,7 @@ void java_sql_Statement_Base::setFastPropertyValue_NoBroadcast(
                                 sal_Int32 nHandle,
                                 const Any& rValue
                                                  )
-                                                 throw (Exception)
+                                                 throw (Exception, std::exception)
 {
     switch(nHandle)
     {
@@ -822,7 +822,7 @@ void SAL_CALL java_sql_Statement::release() throw()
     OStatement_BASE2::release();
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL java_sql_Statement_Base::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL java_sql_Statement_Base::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }

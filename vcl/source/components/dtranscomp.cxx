@@ -78,9 +78,9 @@ public:
      * XServiceInfo
      */
 
-    virtual OUString SAL_CALL getImplementationName() throw( RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( RuntimeException );
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( RuntimeException );
+    virtual OUString SAL_CALL getImplementationName() throw( RuntimeException, std::exception );
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( RuntimeException, std::exception );
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( RuntimeException, std::exception );
 
     static OUString getImplementationName_static();
     static Sequence< OUString > getSupportedServiceNames_static();
@@ -90,33 +90,33 @@ public:
      */
 
     virtual Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL getContents()
-        throw(RuntimeException);
+        throw(RuntimeException, std::exception);
 
     virtual void SAL_CALL setContents(
         const Reference< ::com::sun::star::datatransfer::XTransferable >& xTrans,
         const Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
-        throw(RuntimeException);
+        throw(RuntimeException, std::exception);
 
     virtual OUString SAL_CALL getName()
-        throw(RuntimeException);
+        throw(RuntimeException, std::exception);
 
     /*
      * XClipboardEx
      */
 
     virtual sal_Int8 SAL_CALL getRenderingCapabilities()
-        throw(RuntimeException);
+        throw(RuntimeException, std::exception);
 
     /*
      * XClipboardNotifier
      */
     virtual void SAL_CALL addClipboardListener(
         const Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
-        throw(RuntimeException);
+        throw(RuntimeException, std::exception);
 
     virtual void SAL_CALL removeClipboardListener(
         const Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
-        throw(RuntimeException);
+        throw(RuntimeException, std::exception);
 };
 
 GenericClipboard::~GenericClipboard()
@@ -135,22 +135,22 @@ Sequence< OUString > GenericClipboard::getSupportedServiceNames_static()
     return aRet;
 }
 
-OUString GenericClipboard::getImplementationName() throw( RuntimeException )
+OUString GenericClipboard::getImplementationName() throw( RuntimeException, std::exception )
 {
     return getImplementationName_static();
 }
 
-Sequence< OUString > GenericClipboard::getSupportedServiceNames() throw( RuntimeException )
+Sequence< OUString > GenericClipboard::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     return getSupportedServiceNames_static();
 }
 
-sal_Bool GenericClipboard::supportsService( const OUString& ServiceName ) throw( RuntimeException )
+sal_Bool GenericClipboard::supportsService( const OUString& ServiceName ) throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Reference< ::com::sun::star::datatransfer::XTransferable > GenericClipboard::getContents() throw( RuntimeException )
+Reference< ::com::sun::star::datatransfer::XTransferable > GenericClipboard::getContents() throw( RuntimeException, std::exception )
 {
     return m_aContents;
 }
@@ -158,7 +158,7 @@ Reference< ::com::sun::star::datatransfer::XTransferable > GenericClipboard::get
 void GenericClipboard::setContents(
         const Reference< ::com::sun::star::datatransfer::XTransferable >& xTrans,
         const Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     osl::ClearableMutexGuard aGuard( m_aMutex );
     Reference< datatransfer::clipboard::XClipboardOwner > xOldOwner( m_aOwner );
@@ -181,18 +181,18 @@ void GenericClipboard::setContents(
     }
 }
 
-OUString GenericClipboard::getName() throw( RuntimeException )
+OUString GenericClipboard::getName() throw( RuntimeException, std::exception )
 {
     return OUString( "CLIPBOARD"  );
 }
 
-sal_Int8 GenericClipboard::getRenderingCapabilities() throw( RuntimeException )
+sal_Int8 GenericClipboard::getRenderingCapabilities() throw( RuntimeException, std::exception )
 {
     return 0;
 }
 
 void GenericClipboard::addClipboardListener( const Reference< datatransfer::clipboard::XClipboardListener >& listener )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     osl::ClearableMutexGuard aGuard( m_aMutex );
 
@@ -200,7 +200,7 @@ void GenericClipboard::addClipboardListener( const Reference< datatransfer::clip
 }
 
 void GenericClipboard::removeClipboardListener( const Reference< datatransfer::clipboard::XClipboardListener >& listener )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     osl::ClearableMutexGuard aGuard( m_aMutex );
 
@@ -221,8 +221,8 @@ public:
     /*
      *  XSingleServiceFactory
      */
-    virtual Reference< XInterface > SAL_CALL createInstance() throw();
-    virtual Reference< XInterface > SAL_CALL createInstanceWithArguments( const Sequence< Any >& rArgs ) throw();
+    virtual Reference< XInterface > SAL_CALL createInstance() throw(std::exception);
+    virtual Reference< XInterface > SAL_CALL createInstanceWithArguments( const Sequence< Any >& rArgs ) throw(std::exception);
 };
 
 
@@ -242,14 +242,14 @@ ClipboardFactory::~ClipboardFactory()
 
 
 
-Reference< XInterface > ClipboardFactory::createInstance() throw()
+Reference< XInterface > ClipboardFactory::createInstance() throw(std::exception)
 {
     return createInstanceWithArguments( Sequence< Any >() );
 }
 
 
 
-Reference< XInterface > ClipboardFactory::createInstanceWithArguments( const Sequence< Any >& arguments ) throw()
+Reference< XInterface > ClipboardFactory::createInstanceWithArguments( const Sequence< Any >& arguments ) throw(std::exception)
 {
     SolarMutexGuard aGuard;
     Reference< XInterface > xResult = ImplGetSVData()->mpDefInst->CreateClipboard( arguments );
@@ -290,17 +290,17 @@ public:
     virtual ~GenericDragSource();
 
     // XDragSource
-    virtual sal_Bool    SAL_CALL isDragImageSupported() throw();
-    virtual sal_Int32   SAL_CALL getDefaultCursor( sal_Int8 dragAction ) throw();
+    virtual sal_Bool    SAL_CALL isDragImageSupported() throw(std::exception);
+    virtual sal_Int32   SAL_CALL getDefaultCursor( sal_Int8 dragAction ) throw(std::exception);
     virtual void        SAL_CALL startDrag(
                                      const datatransfer::dnd::DragGestureEvent& trigger,
                                      sal_Int8 sourceActions, sal_Int32 cursor, sal_Int32 image,
                                      const Reference< datatransfer::XTransferable >& transferable,
                                      const Reference< datatransfer::dnd::XDragSourceListener >& listener
-                                     ) throw();
+                                     ) throw(std::exception);
 
     // XInitialization
-    virtual void        SAL_CALL initialize( const Sequence< Any >& arguments ) throw( ::com::sun::star::uno::Exception );
+    virtual void        SAL_CALL initialize( const Sequence< Any >& arguments ) throw( ::com::sun::star::uno::Exception, std::exception );
 
     static Sequence< OUString > getSupportedServiceNames_static()
     {
@@ -319,12 +319,12 @@ GenericDragSource::~GenericDragSource()
 {
 }
 
-sal_Bool GenericDragSource::isDragImageSupported() throw()
+sal_Bool GenericDragSource::isDragImageSupported() throw(std::exception)
 {
     return sal_False;
 }
 
-sal_Int32 GenericDragSource::getDefaultCursor( sal_Int8 ) throw()
+sal_Int32 GenericDragSource::getDefaultCursor( sal_Int8 ) throw(std::exception)
 {
     return 0;
 }
@@ -333,7 +333,7 @@ void GenericDragSource::startDrag( const datatransfer::dnd::DragGestureEvent&,
                                    sal_Int8 /*sourceActions*/, sal_Int32 /*cursor*/, sal_Int32 /*image*/,
                                    const Reference< datatransfer::XTransferable >&,
                                    const Reference< datatransfer::dnd::XDragSourceListener >& listener
-                                   ) throw()
+                                   ) throw(std::exception)
 {
     datatransfer::dnd::DragSourceDropEvent aEv;
     aEv.DropAction = datatransfer::dnd::DNDConstants::ACTION_COPY;
@@ -341,7 +341,7 @@ void GenericDragSource::startDrag( const datatransfer::dnd::DragGestureEvent&,
     listener->dragDropEnd( aEv );
 }
 
-void GenericDragSource::initialize( const Sequence< Any >& ) throw( Exception )
+void GenericDragSource::initialize( const Sequence< Any >& ) throw( Exception, std::exception )
 {
 }
 
@@ -403,15 +403,15 @@ public:
     virtual ~GenericDropTarget();
 
     // XInitialization
-    virtual void        SAL_CALL initialize( const Sequence< Any >& args ) throw ( Exception );
+    virtual void        SAL_CALL initialize( const Sequence< Any >& args ) throw ( Exception, std::exception );
 
     // XDropTarget
-    virtual void        SAL_CALL addDropTargetListener( const Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener >& ) throw();
-    virtual void        SAL_CALL removeDropTargetListener( const Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener >& ) throw();
-    virtual sal_Bool    SAL_CALL isActive() throw();
-    virtual void        SAL_CALL setActive( sal_Bool active ) throw();
-    virtual sal_Int8    SAL_CALL getDefaultActions() throw();
-    virtual void        SAL_CALL setDefaultActions( sal_Int8 actions ) throw();
+    virtual void        SAL_CALL addDropTargetListener( const Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener >& ) throw(std::exception);
+    virtual void        SAL_CALL removeDropTargetListener( const Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener >& ) throw(std::exception);
+    virtual sal_Bool    SAL_CALL isActive() throw(std::exception);
+    virtual void        SAL_CALL setActive( sal_Bool active ) throw(std::exception);
+    virtual sal_Int8    SAL_CALL getDefaultActions() throw(std::exception);
+    virtual void        SAL_CALL setDefaultActions( sal_Int8 actions ) throw(std::exception);
 
     static Sequence< OUString > getSupportedServiceNames_static()
     {
@@ -430,33 +430,33 @@ GenericDropTarget::~GenericDropTarget()
 {
 }
 
-void GenericDropTarget::initialize( const Sequence< Any >& ) throw( Exception )
+void GenericDropTarget::initialize( const Sequence< Any >& ) throw( Exception, std::exception )
 {
 }
 
-void GenericDropTarget::addDropTargetListener( const Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener >& ) throw()
+void GenericDropTarget::addDropTargetListener( const Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener >& ) throw(std::exception)
 {
 }
 
-void GenericDropTarget::removeDropTargetListener( const Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener >& ) throw()
+void GenericDropTarget::removeDropTargetListener( const Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener >& ) throw(std::exception)
 {
 }
 
-sal_Bool GenericDropTarget::isActive() throw()
+sal_Bool GenericDropTarget::isActive() throw(std::exception)
 {
     return sal_False;
 }
 
-void GenericDropTarget::setActive( sal_Bool ) throw()
+void GenericDropTarget::setActive( sal_Bool ) throw(std::exception)
 {
 }
 
-sal_Int8 GenericDropTarget::getDefaultActions() throw()
+sal_Int8 GenericDropTarget::getDefaultActions() throw(std::exception)
 {
     return 0;
 }
 
-void GenericDropTarget::setDefaultActions( sal_Int8) throw()
+void GenericDropTarget::setDefaultActions( sal_Int8) throw(std::exception)
 {
 }
 

@@ -40,13 +40,13 @@ ScDrawModelBroadcaster::~ScDrawModelBroadcaster()
 }
 
 void SAL_CALL ScDrawModelBroadcaster::addEventListener( const uno::Reference< document::XEventListener >& xListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     maEventListeners.addInterface( xListener );
 }
 
 void SAL_CALL ScDrawModelBroadcaster::removeEventListener( const uno::Reference< document::XEventListener >& xListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     maEventListeners.removeInterface( xListener );
 }

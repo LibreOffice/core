@@ -58,7 +58,7 @@ public:
 
 public: // XDataDescriptorFactory
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL
-    createDataDescriptor(  ) throw (::com::sun::star::uno::RuntimeException);
+    createDataDescriptor(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 };
 
@@ -72,7 +72,7 @@ public:
 
 public: // XDataDescriptorFactory
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL
-    createDataDescriptor(  ) throw (::com::sun::star::uno::RuntimeException);
+    createDataDescriptor(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 };
 

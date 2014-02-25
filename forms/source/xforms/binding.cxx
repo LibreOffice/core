@@ -1038,20 +1038,20 @@ void Binding::_checkBindingID()
 //
 
 Binding::Sequence_Type_t Binding::getSupportedValueTypes()
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return Convert::get().getTypes();
 }
 
 sal_Bool Binding::supportsType( const Type_t& rType )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return Convert::get().hasType( rType );
 }
 
 Binding::Any_t Binding::getValue( const Type_t& rType )
     throw( IncompatibleTypesException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     // first, check for model
     checkLive();
@@ -1075,7 +1075,7 @@ void Binding::setValue( const Any_t& aValue )
     throw( IncompatibleTypesException,
            InvalidBindingStateException,
            NoSupportException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     // first, check for model
     checkLive();
@@ -1107,7 +1107,7 @@ void Binding::setValue( const Any_t& aValue )
 //
 
 sal_Int32 Binding::getListEntryCount()
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     // first, check for model
     checkLive();
@@ -1143,7 +1143,7 @@ static OUString lcl_getString( const Reference<XNode>& xNode )
 
 OUString Binding::getListEntry( sal_Int32 nPosition )
     throw( IndexOutOfBoundsException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     // first, check for model
     checkLive();
@@ -1156,7 +1156,7 @@ OUString Binding::getListEntry( sal_Int32 nPosition )
 }
 
 Sequence<OUString> Binding::getAllListEntries()
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     // first, check for model
     checkLive();
@@ -1175,7 +1175,7 @@ Sequence<OUString> Binding::getAllListEntries()
 
 void Binding::addListEntryListener( const XListEntryListener_t& xListener )
     throw( NullPointerException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     OSL_ENSURE( xListener.is(), "need listener!" );
     if( ::std::find( maListEntryListeners.begin(),
@@ -1187,7 +1187,7 @@ void Binding::addListEntryListener( const XListEntryListener_t& xListener )
 
 void Binding::removeListEntryListener( const XListEntryListener_t& xListener )
     throw( NullPointerException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     XListEntryListeners_t::iterator aIter =
         ::std::find( maListEntryListeners.begin(), maListEntryListeners.end(),
@@ -1202,7 +1202,7 @@ void Binding::removeListEntryListener( const XListEntryListener_t& xListener )
 //
 
 sal_Bool Binding::isValid( const Any_t& )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     // first, check for model
     checkLive();
@@ -1213,7 +1213,7 @@ sal_Bool Binding::isValid( const Any_t& )
 
 OUString Binding::explainInvalid(
     const Any_t& /*Value*/ )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     // first, check for model
     checkLive();
@@ -1225,7 +1225,7 @@ OUString Binding::explainInvalid(
 void Binding::addValidityConstraintListener(
     const XValidityConstraintListener_t& xListener )
     throw( NullPointerException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     OSL_ENSURE( xListener.is(), "need listener!" );
     if( ::std::find(maValidityListeners.begin(), maValidityListeners.end(), xListener)
@@ -1236,7 +1236,7 @@ void Binding::addValidityConstraintListener(
 void Binding::removeValidityConstraintListener(
     const XValidityConstraintListener_t& xListener )
     throw( NullPointerException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     XValidityConstraintListeners_t::iterator aIter =
         ::std::find( maValidityListeners.begin(), maValidityListeners.end(),
@@ -1252,7 +1252,7 @@ void Binding::removeValidityConstraintListener(
 //
 
 void Binding::handleEvent( const XEvent_t& xEvent )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     OUString sType(xEvent->getType());
     //OUString sEventMIPChanged("xforms-generic");
@@ -1285,7 +1285,7 @@ void Binding::handleEvent( const XEvent_t& xEvent )
 //
 
 sal_Int64 Binding::getSomething( const IntSequence_t& xId )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return reinterpret_cast<sal_Int64>( ( xId == getUnoTunnelID() ) ? this : NULL );
 }
@@ -1295,7 +1295,7 @@ sal_Int64 Binding::getSomething( const IntSequence_t& xId )
 //
 
 Binding::XCloneable_t SAL_CALL Binding::createClone()
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     Reference< XPropertySet > xClone;
 
@@ -1351,7 +1351,7 @@ void Binding::initializePropertySet()
 
 void Binding::addModifyListener(
     const XModifyListener_t& xListener )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     OSL_ENSURE( xListener.is(), "need listener!" );
     if( ::std::find( maModifyListeners.begin(), maModifyListeners.end(), xListener )
@@ -1366,7 +1366,7 @@ void Binding::addModifyListener(
 
 void Binding::removeModifyListener(
     const XModifyListener_t& xListener )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     ModifyListeners_t::iterator aIter =
         ::std::find( maModifyListeners.begin(), maModifyListeners.end(), xListener );
@@ -1378,13 +1378,13 @@ void Binding::removeModifyListener(
 
 
 OUString Binding::getName()
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return getBindingID();
 }
 
 void SAL_CALL Binding::setName( const OUString& rName )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     // use the XPropertySet methods, so the change in the name is notified to the
     // property listeners

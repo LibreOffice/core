@@ -43,19 +43,19 @@ SwAccessiblePreview::~SwAccessiblePreview()
 }
 
 OUString SwAccessiblePreview::getImplementationName( )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return OUString( sImplementationName );
 }
 
 sal_Bool SwAccessiblePreview::supportsService( const OUString& rServiceName )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence<OUString> SwAccessiblePreview::getSupportedServiceNames( )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     Sequence<OUString> aSeq( 2 );
     aSeq[0] = "com.sun.star.text.AccessibleTextDocumentPageView";
@@ -69,17 +69,17 @@ namespace
 }
 
 Sequence< sal_Int8 > SAL_CALL SwAccessiblePreview::getImplementationId()
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     return theSwAccessiblePreviewImplementationId::get().getSeq();
 }
 
-OUString SAL_CALL SwAccessiblePreview::getAccessibleDescription (void) throw (com::sun::star::uno::RuntimeException)
+OUString SAL_CALL SwAccessiblePreview::getAccessibleDescription (void) throw (com::sun::star::uno::RuntimeException, std::exception)
 {
     return GetResource( STR_ACCESS_PREVIEW_DOC_NAME );
 }
 
-OUString SAL_CALL SwAccessiblePreview::getAccessibleName (void) throw (::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL SwAccessiblePreview::getAccessibleName (void) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     OUString sLclName = SwAccessibleDocumentBase::getAccessibleName();
     sLclName += " ";

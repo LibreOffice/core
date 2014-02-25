@@ -50,7 +50,7 @@ FrameLoaderFactory::~FrameLoaderFactory()
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createInstance(const OUString& sLoader)
     throw(css::uno::Exception       ,
-          css::uno::RuntimeException)
+          css::uno::RuntimeException, std::exception)
 {
     return createInstanceWithArguments(sLoader, css::uno::Sequence< css::uno::Any >());
 }
@@ -60,7 +60,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createI
 css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createInstanceWithArguments(const OUString&                     sLoader  ,
                                                                                                      const css::uno::Sequence< css::uno::Any >& lArguments)
     throw(css::uno::Exception       ,
-          css::uno::RuntimeException)
+          css::uno::RuntimeException, std::exception)
 {
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -137,7 +137,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createI
 
 
 css::uno::Sequence< OUString > SAL_CALL FrameLoaderFactory::getAvailableServiceNames()
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     // must be the same list as ((XNameAccess*)this)->getElementNames() return!
     return BaseContainer::getElementNames();

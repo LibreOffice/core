@@ -45,12 +45,12 @@ class EnumWrapper : public EnumerationHelper_BASE
         sal_Int32 nIndex;
 public:
         EnumWrapper( const uno::Reference< container::XIndexAccess >& xIndexAccess ) : m_xIndexAccess( xIndexAccess ), nIndex( 0 ) {}
-        virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException)
+        virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception)
         {
                 return ( nIndex < m_xIndexAccess->getCount() );
         }
 
-        virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+        virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
         {
                 if ( nIndex < m_xIndexAccess->getCount() )
                         return m_xIndexAccess->getByIndex( nIndex++ );
@@ -112,18 +112,18 @@ public:
         }
 
     }
-    virtual ::sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException) { return mCoordinates.size(); }
-    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, ::uno::RuntimeException)
+    virtual ::sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException, std::exception) { return mCoordinates.size(); }
+    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, ::uno::RuntimeException, std::exception)
     {
             AxesCoordinate dIndexes = mCoordinates[ Index ];
             return uno::makeAny( ScVbaAxes::createAxis( mxChart, mxContext, dIndexes.second, dIndexes.first ) );
     }
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException)
+    virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException, std::exception)
     {
         return cppu::UnoType<excel::XAxis>::get();
     }
-    virtual ::sal_Bool SAL_CALL hasElements( ) throw (uno::RuntimeException)
+    virtual ::sal_Bool SAL_CALL hasElements( ) throw (uno::RuntimeException, std::exception)
     {
         return ( mCoordinates.size() > 0 );
     }

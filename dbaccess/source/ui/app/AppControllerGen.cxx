@@ -111,7 +111,7 @@ public:
     }
 
     // interface XEventListener
-    virtual void SAL_CALL disposing( const EventObject& /*Source*/ ) throw( RuntimeException )
+    virtual void SAL_CALL disposing( const EventObject& /*Source*/ ) throw( RuntimeException, std::exception )
     {
         m_bClosed = true;
     }
@@ -281,7 +281,7 @@ void OApplicationController::openDirectSQLDialog()
     openDialog( SERVICE_SDB_DIRECTSQLDIALOG );
 }
 
-void SAL_CALL OApplicationController::propertyChange( const PropertyChangeEvent& evt ) throw (RuntimeException)
+void SAL_CALL OApplicationController::propertyChange( const PropertyChangeEvent& evt ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
@@ -329,14 +329,14 @@ void SAL_CALL OApplicationController::propertyChange( const PropertyChangeEvent&
     modified(aEvt);
 }
 
-Reference< XDataSource > SAL_CALL OApplicationController::getDataSource() throw (RuntimeException)
+Reference< XDataSource > SAL_CALL OApplicationController::getDataSource() throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( getMutex() );
     Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
     return xDataSource;
 }
 
-Reference< XWindow > SAL_CALL OApplicationController::getApplicationMainWindow() throw (RuntimeException)
+Reference< XWindow > SAL_CALL OApplicationController::getApplicationMainWindow() throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( getMutex() );
     Reference< XFrame > xFrame( getFrame(), UNO_QUERY_THROW );
@@ -344,25 +344,25 @@ Reference< XWindow > SAL_CALL OApplicationController::getApplicationMainWindow()
     return xWindow;
 }
 
-Sequence< Reference< XComponent > > SAL_CALL OApplicationController::getSubComponents() throw (RuntimeException)
+Sequence< Reference< XComponent > > SAL_CALL OApplicationController::getSubComponents() throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( getMutex() );
     return m_pSubComponentManager->getSubComponents();
 }
 
-Reference< XConnection > SAL_CALL OApplicationController::getActiveConnection() throw (RuntimeException)
+Reference< XConnection > SAL_CALL OApplicationController::getActiveConnection() throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( getMutex() );
     return m_xDataSourceConnection.getTyped();
 }
 
-::sal_Bool SAL_CALL OApplicationController::isConnected(  ) throw (RuntimeException)
+::sal_Bool SAL_CALL OApplicationController::isConnected(  ) throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( getMutex() );
     return m_xDataSourceConnection.is();
 }
 
-void SAL_CALL OApplicationController::connect(  ) throw (SQLException, RuntimeException)
+void SAL_CALL OApplicationController::connect(  ) throw (SQLException, RuntimeException, std::exception)
 {
     SQLExceptionInfo aError;
     SharedConnection xConnection = ensureConnection( &aError );
@@ -377,7 +377,7 @@ void SAL_CALL OApplicationController::connect(  ) throw (SQLException, RuntimeEx
     }
 }
 
-beans::Pair< ::sal_Int32, OUString > SAL_CALL OApplicationController::identifySubComponent( const Reference< XComponent >& i_rSubComponent ) throw (IllegalArgumentException, RuntimeException)
+beans::Pair< ::sal_Int32, OUString > SAL_CALL OApplicationController::identifySubComponent( const Reference< XComponent >& i_rSubComponent ) throw (IllegalArgumentException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( getMutex() );
 
@@ -395,7 +395,7 @@ beans::Pair< ::sal_Int32, OUString > SAL_CALL OApplicationController::identifySu
     return beans::Pair< ::sal_Int32, OUString >( nType, sName );
 }
 
-::sal_Bool SAL_CALL OApplicationController::closeSubComponents(  ) throw (RuntimeException)
+::sal_Bool SAL_CALL OApplicationController::closeSubComponents(  ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
@@ -469,13 +469,13 @@ void OApplicationController::impl_validateObjectTypeAndName_throw( const sal_Int
 }
 
 Reference< XComponent > SAL_CALL OApplicationController::loadComponent( ::sal_Int32 _ObjectType,
-    const OUString& _ObjectName, ::sal_Bool _ForEditing ) throw (IllegalArgumentException, NoSuchElementException, SQLException, RuntimeException)
+    const OUString& _ObjectName, ::sal_Bool _ForEditing ) throw (IllegalArgumentException, NoSuchElementException, SQLException, RuntimeException, std::exception)
 {
     return loadComponentWithArguments( _ObjectType, _ObjectName, _ForEditing, Sequence< PropertyValue >() );
 }
 
 Reference< XComponent > SAL_CALL OApplicationController::loadComponentWithArguments( ::sal_Int32 _ObjectType,
-    const OUString& _ObjectName, ::sal_Bool _ForEditing, const Sequence< PropertyValue >& _Arguments ) throw (IllegalArgumentException, NoSuchElementException, SQLException, RuntimeException)
+    const OUString& _ObjectName, ::sal_Bool _ForEditing, const Sequence< PropertyValue >& _Arguments ) throw (IllegalArgumentException, NoSuchElementException, SQLException, RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
@@ -493,12 +493,12 @@ Reference< XComponent > SAL_CALL OApplicationController::loadComponentWithArgume
     return xComponent;
 }
 
-Reference< XComponent > SAL_CALL OApplicationController::createComponent( ::sal_Int32 i_nObjectType, Reference< XComponent >& o_DocumentDefinition  ) throw (IllegalArgumentException, SQLException, RuntimeException)
+Reference< XComponent > SAL_CALL OApplicationController::createComponent( ::sal_Int32 i_nObjectType, Reference< XComponent >& o_DocumentDefinition  ) throw (IllegalArgumentException, SQLException, RuntimeException, std::exception)
 {
     return createComponentWithArguments( i_nObjectType, Sequence< PropertyValue >(), o_DocumentDefinition );
 }
 
-Reference< XComponent > SAL_CALL OApplicationController::createComponentWithArguments( ::sal_Int32 i_nObjectType, const Sequence< PropertyValue >& i_rArguments, Reference< XComponent >& o_DocumentDefinition ) throw (IllegalArgumentException, SQLException, RuntimeException)
+Reference< XComponent > SAL_CALL OApplicationController::createComponentWithArguments( ::sal_Int32 i_nObjectType, const Sequence< PropertyValue >& i_rArguments, Reference< XComponent >& o_DocumentDefinition ) throw (IllegalArgumentException, SQLException, RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
@@ -514,13 +514,13 @@ Reference< XComponent > SAL_CALL OApplicationController::createComponentWithArgu
     return xComponent;
 }
 
-void SAL_CALL OApplicationController::registerContextMenuInterceptor( const Reference< XContextMenuInterceptor >& _Interceptor ) throw (RuntimeException)
+void SAL_CALL OApplicationController::registerContextMenuInterceptor( const Reference< XContextMenuInterceptor >& _Interceptor ) throw (RuntimeException, std::exception)
 {
     if ( _Interceptor.is() )
         m_aContextMenuInterceptors.addInterface( _Interceptor );
 }
 
-void SAL_CALL OApplicationController::releaseContextMenuInterceptor( const Reference< XContextMenuInterceptor >& _Interceptor ) throw (RuntimeException)
+void SAL_CALL OApplicationController::releaseContextMenuInterceptor( const Reference< XContextMenuInterceptor >& _Interceptor ) throw (RuntimeException, std::exception)
 {
     m_aContextMenuInterceptors.removeInterface( _Interceptor );
 }

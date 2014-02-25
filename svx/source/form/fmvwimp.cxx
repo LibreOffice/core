@@ -235,13 +235,13 @@ void FormViewPageWindowAdapter::dispose()
 
 
 
-sal_Bool SAL_CALL FormViewPageWindowAdapter::hasElements(void) throw( RuntimeException )
+sal_Bool SAL_CALL FormViewPageWindowAdapter::hasElements(void) throw( RuntimeException, std::exception )
 {
     return getCount() != 0;
 }
 
 
-Type SAL_CALL  FormViewPageWindowAdapter::getElementType(void) throw( RuntimeException )
+Type SAL_CALL  FormViewPageWindowAdapter::getElementType(void) throw( RuntimeException, std::exception )
 {
     return ::getCppuType((const Reference< XFormController>*)0);
 }
@@ -255,13 +255,13 @@ Reference< XEnumeration >  SAL_CALL FormViewPageWindowAdapter::createEnumeration
 
 // XIndexAccess
 
-sal_Int32 SAL_CALL FormViewPageWindowAdapter::getCount(void) throw( RuntimeException )
+sal_Int32 SAL_CALL FormViewPageWindowAdapter::getCount(void) throw( RuntimeException, std::exception )
 {
     return m_aControllerList.size();
 }
 
 
-Any SAL_CALL FormViewPageWindowAdapter::getByIndex(sal_Int32 nIndex) throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
+Any SAL_CALL FormViewPageWindowAdapter::getByIndex(sal_Int32 nIndex) throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
     if (nIndex < 0 ||
         nIndex >= getCount())
@@ -273,7 +273,7 @@ Any SAL_CALL FormViewPageWindowAdapter::getByIndex(sal_Int32 nIndex) throw( Inde
 }
 
 
-void SAL_CALL FormViewPageWindowAdapter::makeVisible( const Reference< XControl >& _Control ) throw (RuntimeException)
+void SAL_CALL FormViewPageWindowAdapter::makeVisible( const Reference< XControl >& _Control ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -490,7 +490,7 @@ FmXFormView::~FmXFormView()
 
 //      EventListener
 
-void SAL_CALL FmXFormView::disposing(const EventObject& Source) throw( RuntimeException )
+void SAL_CALL FmXFormView::disposing(const EventObject& Source) throw( RuntimeException, std::exception )
 {
     if ( m_xWindow.is() && Source.Source == m_xWindow )
         removeGridWindowListening();
@@ -498,14 +498,14 @@ void SAL_CALL FmXFormView::disposing(const EventObject& Source) throw( RuntimeEx
 
 // XFormControllerListener
 
-void SAL_CALL FmXFormView::formActivated(const EventObject& rEvent) throw( RuntimeException )
+void SAL_CALL FmXFormView::formActivated(const EventObject& rEvent) throw( RuntimeException, std::exception )
 {
     if ( m_pView && m_pView->GetFormShell() && m_pView->GetFormShell()->GetImpl() )
         m_pView->GetFormShell()->GetImpl()->formActivated( rEvent );
 }
 
 
-void SAL_CALL FmXFormView::formDeactivated(const EventObject& rEvent) throw( RuntimeException )
+void SAL_CALL FmXFormView::formDeactivated(const EventObject& rEvent) throw( RuntimeException, std::exception )
 {
     if ( m_pView && m_pView->GetFormShell() && m_pView->GetFormShell()->GetImpl() )
         m_pView->GetFormShell()->GetImpl()->formDeactivated( rEvent );
@@ -513,7 +513,7 @@ void SAL_CALL FmXFormView::formDeactivated(const EventObject& rEvent) throw( Run
 
 // XContainerListener
 
-void SAL_CALL FmXFormView::elementInserted(const ContainerEvent& evt) throw( RuntimeException )
+void SAL_CALL FmXFormView::elementInserted(const ContainerEvent& evt) throw( RuntimeException, std::exception )
 {
     try
     {
@@ -541,13 +541,13 @@ void SAL_CALL FmXFormView::elementInserted(const ContainerEvent& evt) throw( Run
 }
 
 
-void SAL_CALL FmXFormView::elementReplaced(const ContainerEvent& evt) throw( RuntimeException )
+void SAL_CALL FmXFormView::elementReplaced(const ContainerEvent& evt) throw( RuntimeException, std::exception )
 {
     elementInserted(evt);
 }
 
 
-void SAL_CALL FmXFormView::elementRemoved(const ContainerEvent& /*evt*/) throw( RuntimeException )
+void SAL_CALL FmXFormView::elementRemoved(const ContainerEvent& /*evt*/) throw( RuntimeException, std::exception )
 {
 }
 
@@ -1877,7 +1877,7 @@ void FmXFormView::restoreMarkList( SdrMarkList& _rRestoredMarkList )
     }
 }
 
-void SAL_CALL FmXFormView::focusGained( const FocusEvent& /*e*/ ) throw (RuntimeException)
+void SAL_CALL FmXFormView::focusGained( const FocusEvent& /*e*/ ) throw (RuntimeException, std::exception)
 {
     if ( m_xWindow.is() && m_pView )
     {
@@ -1885,7 +1885,7 @@ void SAL_CALL FmXFormView::focusGained( const FocusEvent& /*e*/ ) throw (Runtime
     }
 }
 
-void SAL_CALL FmXFormView::focusLost( const FocusEvent& /*e*/ ) throw (RuntimeException)
+void SAL_CALL FmXFormView::focusLost( const FocusEvent& /*e*/ ) throw (RuntimeException, std::exception)
 {
     // when switch the focus outside the office the mark didn't change
     // so we can not remove us as focus listener

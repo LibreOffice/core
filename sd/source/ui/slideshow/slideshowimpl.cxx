@@ -1231,7 +1231,7 @@ void SlideshowImpl::paint( const Rectangle& /* rRect */ )
 
 
 
-void SAL_CALL SlideshowImpl::addSlideShowListener( const Reference< XSlideShowListener >& xListener ) throw (RuntimeException)
+void SAL_CALL SlideshowImpl::addSlideShowListener( const Reference< XSlideShowListener >& xListener ) throw (RuntimeException, std::exception)
 {
     if( mxListenerProxy.is() )
         mxListenerProxy->addSlideShowListener( xListener );
@@ -1239,7 +1239,7 @@ void SAL_CALL SlideshowImpl::addSlideShowListener( const Reference< XSlideShowLi
 
 
 
-void SAL_CALL SlideshowImpl::removeSlideShowListener( const Reference< XSlideShowListener >& xListener ) throw (RuntimeException)
+void SAL_CALL SlideshowImpl::removeSlideShowListener( const Reference< XSlideShowListener >& xListener ) throw (RuntimeException, std::exception)
 {
     if( mxListenerProxy.is() )
         mxListenerProxy->removeSlideShowListener( xListener );
@@ -1455,7 +1455,7 @@ IMPL_LINK_NOARG(SlideshowImpl, endPresentationHdl)
 
 
 
-void SAL_CALL SlideshowImpl::pause() throw (RuntimeException)
+void SAL_CALL SlideshowImpl::pause() throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -1483,7 +1483,7 @@ void SAL_CALL SlideshowImpl::pause() throw (RuntimeException)
 
 
 
-void SAL_CALL SlideshowImpl::resume() throw (RuntimeException)
+void SAL_CALL SlideshowImpl::resume() throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -1522,7 +1522,7 @@ void SAL_CALL SlideshowImpl::resume() throw (RuntimeException)
 
 
 
-sal_Bool SAL_CALL SlideshowImpl::isPaused() throw (RuntimeException)
+sal_Bool SAL_CALL SlideshowImpl::isPaused() throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     return mbIsPaused;
@@ -1530,7 +1530,7 @@ sal_Bool SAL_CALL SlideshowImpl::isPaused() throw (RuntimeException)
 
 
 
-void SAL_CALL SlideshowImpl::blankScreen( sal_Int32 nColor ) throw (RuntimeException)
+void SAL_CALL SlideshowImpl::blankScreen( sal_Int32 nColor ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -1800,7 +1800,7 @@ sal_Int32 SlideshowImpl::getLastSlideNumber()
 
 
 
-sal_Bool SAL_CALL SlideshowImpl::isEndless() throw( RuntimeException )
+sal_Bool SAL_CALL SlideshowImpl::isEndless() throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarGuard;
     return maPresSettings.mbEndless;
@@ -2717,7 +2717,7 @@ void SlideshowImpl::setActiveXToolbarsVisible( sal_Bool bVisible )
 
 
 
-void SAL_CALL SlideshowImpl::activate() throw (RuntimeException)
+void SAL_CALL SlideshowImpl::activate() throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -2758,7 +2758,7 @@ void SAL_CALL SlideshowImpl::activate() throw (RuntimeException)
 
 
 
-void SAL_CALL SlideshowImpl::deactivate() throw (RuntimeException)
+void SAL_CALL SlideshowImpl::deactivate() throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -2794,7 +2794,7 @@ IMPL_LINK_NOARG(SlideshowImpl, deactivateHdl)
 
 
 
-sal_Bool SAL_CALL SlideshowImpl::isActive() throw (RuntimeException)
+sal_Bool SAL_CALL SlideshowImpl::isActive() throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     return mbActive;
@@ -2882,7 +2882,7 @@ void SlideshowImpl::setAutoSaveState( bool bOn)
 
 
 
-Reference< XDrawPage > SAL_CALL SlideshowImpl::getCurrentSlide() throw (RuntimeException)
+Reference< XDrawPage > SAL_CALL SlideshowImpl::getCurrentSlide() throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -2899,7 +2899,7 @@ Reference< XDrawPage > SAL_CALL SlideshowImpl::getCurrentSlide() throw (RuntimeE
 
 
 
-sal_Int32 SAL_CALL SlideshowImpl::getNextSlideIndex() throw (RuntimeException)
+sal_Int32 SAL_CALL SlideshowImpl::getNextSlideIndex() throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -2915,7 +2915,7 @@ sal_Int32 SAL_CALL SlideshowImpl::getNextSlideIndex() throw (RuntimeException)
 
 
 
-sal_Int32 SAL_CALL SlideshowImpl::getCurrentSlideIndex() throw (RuntimeException)
+sal_Int32 SAL_CALL SlideshowImpl::getCurrentSlideIndex() throw (RuntimeException, std::exception)
 {
     return mpSlideController.get() ? mpSlideController->getCurrentSlideIndex() : -1;
 }
@@ -2924,14 +2924,14 @@ sal_Int32 SAL_CALL SlideshowImpl::getCurrentSlideIndex() throw (RuntimeException
 // ::com::sun::star::presentation::XSlideShowController:
 
 
-::sal_Int32 SAL_CALL SlideshowImpl::getSlideCount() throw (RuntimeException)
+::sal_Int32 SAL_CALL SlideshowImpl::getSlideCount() throw (RuntimeException, std::exception)
 {
     return mpSlideController.get() ? mpSlideController->getSlideIndexCount() : 0;
 }
 
 
 
-Reference< XDrawPage > SAL_CALL SlideshowImpl::getSlideByIndex(::sal_Int32 Index) throw (RuntimeException, css::lang::IndexOutOfBoundsException)
+Reference< XDrawPage > SAL_CALL SlideshowImpl::getSlideByIndex(::sal_Int32 Index) throw (RuntimeException, css::lang::IndexOutOfBoundsException, std::exception)
 {
     if( (mpSlideController.get() == 0 ) || (Index < 0) || (Index >= mpSlideController->getSlideIndexCount() ) )
         throw IndexOutOfBoundsException();
@@ -2939,7 +2939,7 @@ Reference< XDrawPage > SAL_CALL SlideshowImpl::getSlideByIndex(::sal_Int32 Index
     return mpSlideController->getSlideByNumber( mpSlideController->getSlideNumber( Index ) );
 }
 
-sal_Bool SAL_CALL SlideshowImpl::getAlwaysOnTop() throw (RuntimeException)
+sal_Bool SAL_CALL SlideshowImpl::getAlwaysOnTop() throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     return maPresSettings.mbAlwaysOnTop;
@@ -2947,7 +2947,7 @@ sal_Bool SAL_CALL SlideshowImpl::getAlwaysOnTop() throw (RuntimeException)
 
 
 
-void SAL_CALL SlideshowImpl::setAlwaysOnTop( sal_Bool bAlways ) throw (RuntimeException)
+void SAL_CALL SlideshowImpl::setAlwaysOnTop( sal_Bool bAlways ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     if( maPresSettings.mbAlwaysOnTop != bAlways )
@@ -2959,7 +2959,7 @@ void SAL_CALL SlideshowImpl::setAlwaysOnTop( sal_Bool bAlways ) throw (RuntimeEx
 
 
 
-sal_Bool SAL_CALL SlideshowImpl::isFullScreen() throw (RuntimeException)
+sal_Bool SAL_CALL SlideshowImpl::isFullScreen() throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     return maPresSettings.mbFullScreen;
@@ -2967,7 +2967,7 @@ sal_Bool SAL_CALL SlideshowImpl::isFullScreen() throw (RuntimeException)
 
 
 
-sal_Bool SAL_CALL SlideshowImpl::getMouseVisible() throw (RuntimeException)
+sal_Bool SAL_CALL SlideshowImpl::getMouseVisible() throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     return maPresSettings.mbMouseVisible;
@@ -2975,7 +2975,7 @@ sal_Bool SAL_CALL SlideshowImpl::getMouseVisible() throw (RuntimeException)
 
 
 
-void SAL_CALL SlideshowImpl::setMouseVisible( sal_Bool bVisible ) throw (RuntimeException)
+void SAL_CALL SlideshowImpl::setMouseVisible( sal_Bool bVisible ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     if( maPresSettings.mbMouseVisible != bVisible )
@@ -2988,7 +2988,7 @@ void SAL_CALL SlideshowImpl::setMouseVisible( sal_Bool bVisible ) throw (Runtime
 
 
 
-sal_Bool SAL_CALL SlideshowImpl::getUsePen() throw (RuntimeException)
+sal_Bool SAL_CALL SlideshowImpl::getUsePen() throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     return mbUsePen;
@@ -2996,7 +2996,7 @@ sal_Bool SAL_CALL SlideshowImpl::getUsePen() throw (RuntimeException)
 
 
 
-void SAL_CALL SlideshowImpl::setUsePen( sal_Bool bMouseAsPen ) throw (RuntimeException)
+void SAL_CALL SlideshowImpl::setUsePen( sal_Bool bMouseAsPen ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     mbUsePen = bMouseAsPen;
@@ -3039,7 +3039,7 @@ void SAL_CALL SlideshowImpl::setUsePen( sal_Bool bMouseAsPen ) throw (RuntimeExc
 
 
 
-double SAL_CALL SlideshowImpl::getPenWidth() throw (RuntimeException)
+double SAL_CALL SlideshowImpl::getPenWidth() throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     return mdUserPaintStrokeWidth;
@@ -3047,7 +3047,7 @@ double SAL_CALL SlideshowImpl::getPenWidth() throw (RuntimeException)
 
 
 
-void SAL_CALL SlideshowImpl::setPenWidth( double dStrokeWidth ) throw (RuntimeException)
+void SAL_CALL SlideshowImpl::setPenWidth( double dStrokeWidth ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     mdUserPaintStrokeWidth = dStrokeWidth;
@@ -3056,7 +3056,7 @@ void SAL_CALL SlideshowImpl::setPenWidth( double dStrokeWidth ) throw (RuntimeEx
 
 
 
-sal_Int32 SAL_CALL SlideshowImpl::getPenColor() throw (RuntimeException)
+sal_Int32 SAL_CALL SlideshowImpl::getPenColor() throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     return mnUserPaintColor;
@@ -3064,7 +3064,7 @@ sal_Int32 SAL_CALL SlideshowImpl::getPenColor() throw (RuntimeException)
 
 
 
-void SAL_CALL SlideshowImpl::setPenColor( sal_Int32 nColor ) throw (RuntimeException)
+void SAL_CALL SlideshowImpl::setPenColor( sal_Int32 nColor ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     mnUserPaintColor = nColor;
@@ -3157,7 +3157,7 @@ void SAL_CALL SlideshowImpl::setEraserMode( bool /*bSwitchEraserMode*/ ) throw (
 // XSlideShowController Methods
 
 
-sal_Bool SAL_CALL SlideshowImpl::isRunning(  ) throw (RuntimeException)
+sal_Bool SAL_CALL SlideshowImpl::isRunning(  ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     return mxShow.is();
@@ -3165,7 +3165,7 @@ sal_Bool SAL_CALL SlideshowImpl::isRunning(  ) throw (RuntimeException)
 
 
 
-void SAL_CALL SlideshowImpl::gotoNextEffect(  ) throw (RuntimeException)
+void SAL_CALL SlideshowImpl::gotoNextEffect(  ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -3193,7 +3193,7 @@ void SAL_CALL SlideshowImpl::gotoNextEffect(  ) throw (RuntimeException)
 
 
 
-void SAL_CALL SlideshowImpl::gotoPreviousEffect(  ) throw (RuntimeException)
+void SAL_CALL SlideshowImpl::gotoPreviousEffect(  ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -3217,7 +3217,7 @@ void SAL_CALL SlideshowImpl::gotoPreviousEffect(  ) throw (RuntimeException)
 
 
 
-void SAL_CALL SlideshowImpl::gotoFirstSlide(  ) throw (RuntimeException)
+void SAL_CALL SlideshowImpl::gotoFirstSlide(  ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -3240,7 +3240,7 @@ void SAL_CALL SlideshowImpl::gotoFirstSlide(  ) throw (RuntimeException)
 
 
 
-void SAL_CALL SlideshowImpl::gotoNextSlide(  ) throw (RuntimeException)
+void SAL_CALL SlideshowImpl::gotoNextSlide(  ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -3313,7 +3313,7 @@ void SAL_CALL SlideshowImpl::gotoNextSlide(  ) throw (RuntimeException)
 
 
 
-void SAL_CALL SlideshowImpl::gotoPreviousSlide(  ) throw (RuntimeException)
+void SAL_CALL SlideshowImpl::gotoPreviousSlide(  ) throw (RuntimeException, std::exception)
 {
     gotoPreviousSlide(false);
 }
@@ -3369,7 +3369,7 @@ void SlideshowImpl::gotoPreviousSlide (const bool bSkipAllMainSequenceEffects)
 
 
 
-void SAL_CALL SlideshowImpl::gotoLastSlide() throw (RuntimeException)
+void SAL_CALL SlideshowImpl::gotoLastSlide() throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -3395,7 +3395,7 @@ void SAL_CALL SlideshowImpl::gotoLastSlide() throw (RuntimeException)
 
 
 
-void SAL_CALL SlideshowImpl::gotoBookmark( const OUString& rBookmark ) throw (RuntimeException)
+void SAL_CALL SlideshowImpl::gotoBookmark( const OUString& rBookmark ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -3410,7 +3410,7 @@ void SAL_CALL SlideshowImpl::gotoBookmark( const OUString& rBookmark ) throw (Ru
 
 
 void SAL_CALL SlideshowImpl::gotoSlide( const Reference< XDrawPage >& xSlide )
-    throw(IllegalArgumentException, RuntimeException)
+    throw(IllegalArgumentException, RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -3432,7 +3432,7 @@ void SAL_CALL SlideshowImpl::gotoSlide( const Reference< XDrawPage >& xSlide )
 
 
 
-void SAL_CALL SlideshowImpl::gotoSlideIndex( sal_Int32 nIndex ) throw (RuntimeException)
+void SAL_CALL SlideshowImpl::gotoSlideIndex( sal_Int32 nIndex ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -3444,7 +3444,7 @@ void SAL_CALL SlideshowImpl::gotoSlideIndex( sal_Int32 nIndex ) throw (RuntimeEx
 
 
 
-void SAL_CALL SlideshowImpl::stopSound(  ) throw (RuntimeException)
+void SAL_CALL SlideshowImpl::stopSound(  ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -3471,35 +3471,35 @@ void SAL_CALL SlideshowImpl::stopSound(  ) throw (RuntimeException)
 // XIndexAccess
 
 
-::sal_Int32 SAL_CALL SlideshowImpl::getCount(  ) throw (::com::sun::star::uno::RuntimeException)
+::sal_Int32 SAL_CALL SlideshowImpl::getCount(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return getSlideCount();
 }
 
 
 
-::com::sun::star::uno::Any SAL_CALL SlideshowImpl::getByIndex( ::sal_Int32 Index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Any SAL_CALL SlideshowImpl::getByIndex( ::sal_Int32 Index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     return Any( getSlideByIndex( Index ) );
 }
 
 
 
-::com::sun::star::uno::Type SAL_CALL SlideshowImpl::getElementType(  ) throw (::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Type SAL_CALL SlideshowImpl::getElementType(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return cppu::UnoType<XDrawPage>::get();
 }
 
 
 
-::sal_Bool SAL_CALL SlideshowImpl::hasElements(  ) throw (::com::sun::star::uno::RuntimeException)
+::sal_Bool SAL_CALL SlideshowImpl::hasElements(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return getSlideCount() != 0;
 }
 
 
 
-Reference< XSlideShow > SAL_CALL SlideshowImpl::getSlideShow() throw (RuntimeException)
+Reference< XSlideShow > SAL_CALL SlideshowImpl::getSlideShow() throw (RuntimeException, std::exception)
 {
     return mxShow;
 }
@@ -3708,7 +3708,7 @@ void SlideShowListenerProxy::removeSlideShowListener( const css::uno::Reference<
 
 
 
-void SAL_CALL SlideShowListenerProxy::beginEvent( const Reference< XAnimationNode >& xNode ) throw (RuntimeException)
+void SAL_CALL SlideShowListenerProxy::beginEvent( const Reference< XAnimationNode >& xNode ) throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -3718,7 +3718,7 @@ void SAL_CALL SlideShowListenerProxy::beginEvent( const Reference< XAnimationNod
 
 
 
-void SAL_CALL SlideShowListenerProxy::endEvent( const Reference< XAnimationNode >& xNode ) throw (RuntimeException)
+void SAL_CALL SlideShowListenerProxy::endEvent( const Reference< XAnimationNode >& xNode ) throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -3728,7 +3728,7 @@ void SAL_CALL SlideShowListenerProxy::endEvent( const Reference< XAnimationNode 
 
 
 
-void SAL_CALL SlideShowListenerProxy::repeat( const Reference< XAnimationNode >& xNode, ::sal_Int32 nRepeat ) throw (RuntimeException)
+void SAL_CALL SlideShowListenerProxy::repeat( const Reference< XAnimationNode >& xNode, ::sal_Int32 nRepeat ) throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -3740,7 +3740,7 @@ void SAL_CALL SlideShowListenerProxy::repeat( const Reference< XAnimationNode >&
 // ::com::sun::star::presentation::XSlideShowListener:
 
 
-void SAL_CALL SlideShowListenerProxy::paused(  ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SlideShowListenerProxy::paused(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -3750,7 +3750,7 @@ void SAL_CALL SlideShowListenerProxy::paused(  ) throw (::com::sun::star::uno::R
 
 
 
-void SAL_CALL SlideShowListenerProxy::resumed(  ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SlideShowListenerProxy::resumed(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -3760,7 +3760,7 @@ void SAL_CALL SlideShowListenerProxy::resumed(  ) throw (::com::sun::star::uno::
 
 
 
-void SAL_CALL SlideShowListenerProxy::slideTransitionStarted( ) throw (RuntimeException)
+void SAL_CALL SlideShowListenerProxy::slideTransitionStarted( ) throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -3770,7 +3770,7 @@ void SAL_CALL SlideShowListenerProxy::slideTransitionStarted( ) throw (RuntimeEx
 
 
 
-void SAL_CALL SlideShowListenerProxy::slideTransitionEnded( ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SlideShowListenerProxy::slideTransitionEnded( ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -3780,7 +3780,7 @@ void SAL_CALL SlideShowListenerProxy::slideTransitionEnded( ) throw (::com::sun:
 
 
 
-void SAL_CALL SlideShowListenerProxy::slideAnimationsEnded(  ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SlideShowListenerProxy::slideAnimationsEnded(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -3790,7 +3790,7 @@ void SAL_CALL SlideShowListenerProxy::slideAnimationsEnded(  ) throw (::com::sun
 
 
 
-void SlideShowListenerProxy::slideEnded(sal_Bool bReverse) throw (RuntimeException)
+void SlideShowListenerProxy::slideEnded(sal_Bool bReverse) throw (RuntimeException, std::exception)
 {
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -3809,7 +3809,7 @@ void SlideShowListenerProxy::slideEnded(sal_Bool bReverse) throw (RuntimeExcepti
 
 
 
-void SlideShowListenerProxy::hyperLinkClicked( OUString const& aHyperLink ) throw (RuntimeException)
+void SlideShowListenerProxy::hyperLinkClicked( OUString const& aHyperLink ) throw (RuntimeException, std::exception)
 {
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -3829,7 +3829,7 @@ void SlideShowListenerProxy::hyperLinkClicked( OUString const& aHyperLink ) thro
 // XEventListener
 
 
-void SAL_CALL SlideShowListenerProxy::disposing( const ::com::sun::star::lang::EventObject& aDisposeEvent ) throw (RuntimeException)
+void SAL_CALL SlideShowListenerProxy::disposing( const ::com::sun::star::lang::EventObject& aDisposeEvent ) throw (RuntimeException, std::exception)
 {
     maListeners.disposeAndClear( aDisposeEvent );
     mxController.clear();
@@ -3840,7 +3840,7 @@ void SAL_CALL SlideShowListenerProxy::disposing( const ::com::sun::star::lang::E
 // XShapeEventListener
 
 
-void SAL_CALL SlideShowListenerProxy::click( const Reference< XShape >& xShape, const ::com::sun::star::awt::MouseEvent& aOriginalEvent ) throw (RuntimeException)
+void SAL_CALL SlideShowListenerProxy::click( const Reference< XShape >& xShape, const ::com::sun::star::awt::MouseEvent& aOriginalEvent ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     if( mxController.is() )

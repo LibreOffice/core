@@ -121,7 +121,7 @@ void SAL_CALL AccessibleSlideSorterObject::disposing (void)
 
 Reference<XAccessibleContext> SAL_CALL
     AccessibleSlideSorterObject::getAccessibleContext (void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     return this;
@@ -132,7 +132,7 @@ Reference<XAccessibleContext> SAL_CALL
 //===== XAccessibleContext ====================================================
 
 sal_Int32 SAL_CALL AccessibleSlideSorterObject::getAccessibleChildCount (void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     return 0;
@@ -142,7 +142,7 @@ sal_Int32 SAL_CALL AccessibleSlideSorterObject::getAccessibleChildCount (void)
 
 
 Reference<XAccessible> SAL_CALL AccessibleSlideSorterObject::getAccessibleChild (sal_Int32 )
-    throw (lang::IndexOutOfBoundsException, RuntimeException)
+    throw (lang::IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     throw lang::IndexOutOfBoundsException();
@@ -152,7 +152,7 @@ Reference<XAccessible> SAL_CALL AccessibleSlideSorterObject::getAccessibleChild 
 
 
 Reference<XAccessible> SAL_CALL AccessibleSlideSorterObject::getAccessibleParent (void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     return mxParent;
@@ -162,7 +162,7 @@ Reference<XAccessible> SAL_CALL AccessibleSlideSorterObject::getAccessibleParent
 
 
 sal_Int32 SAL_CALL AccessibleSlideSorterObject::getAccessibleIndexInParent()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
@@ -191,7 +191,7 @@ sal_Int32 SAL_CALL AccessibleSlideSorterObject::getAccessibleIndexInParent()
 
 
 sal_Int16 SAL_CALL AccessibleSlideSorterObject::getAccessibleRole (void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     //set Role = Shape
@@ -204,7 +204,7 @@ sal_Int16 SAL_CALL AccessibleSlideSorterObject::getAccessibleRole (void)
 
 
 OUString SAL_CALL AccessibleSlideSorterObject::getAccessibleDescription (void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     return SD_RESSTR(STR_PAGE);
@@ -214,7 +214,7 @@ OUString SAL_CALL AccessibleSlideSorterObject::getAccessibleDescription (void)
 
 
 OUString SAL_CALL AccessibleSlideSorterObject::getAccessibleName (void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
@@ -231,7 +231,7 @@ OUString SAL_CALL AccessibleSlideSorterObject::getAccessibleName (void)
 
 Reference<XAccessibleRelationSet> SAL_CALL
     AccessibleSlideSorterObject::getAccessibleRelationSet (void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     return Reference<XAccessibleRelationSet>();
@@ -242,7 +242,7 @@ Reference<XAccessibleRelationSet> SAL_CALL
 
 Reference<XAccessibleStateSet> SAL_CALL
     AccessibleSlideSorterObject::getAccessibleStateSet (void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
@@ -275,7 +275,7 @@ Reference<XAccessibleStateSet> SAL_CALL
 
 lang::Locale SAL_CALL AccessibleSlideSorterObject::getLocale (void)
     throw (IllegalAccessibleComponentStateException,
-        RuntimeException)
+        RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     // Delegate request to parent.
@@ -299,7 +299,7 @@ lang::Locale SAL_CALL AccessibleSlideSorterObject::getLocale (void)
 
 void SAL_CALL AccessibleSlideSorterObject::addAccessibleEventListener(
     const Reference<XAccessibleEventListener>& rxListener)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     if (rxListener.is())
     {
@@ -324,7 +324,7 @@ void SAL_CALL AccessibleSlideSorterObject::addAccessibleEventListener(
 
 void SAL_CALL AccessibleSlideSorterObject::removeAccessibleEventListener(
     const Reference<XAccessibleEventListener>& rxListener)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     if (rxListener.is())
@@ -350,7 +350,7 @@ void SAL_CALL AccessibleSlideSorterObject::removeAccessibleEventListener(
 //===== XAccessibleComponent ==================================================
 
 sal_Bool SAL_CALL AccessibleSlideSorterObject::containsPoint(const awt::Point& aPoint)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     const awt::Size aSize (getSize());
@@ -365,7 +365,7 @@ sal_Bool SAL_CALL AccessibleSlideSorterObject::containsPoint(const awt::Point& a
 
 Reference<XAccessible> SAL_CALL
     AccessibleSlideSorterObject::getAccessibleAtPoint(const awt::Point& )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return NULL;
 }
@@ -374,7 +374,7 @@ Reference<XAccessible> SAL_CALL
 
 
 awt::Rectangle SAL_CALL AccessibleSlideSorterObject::getBounds (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
 
@@ -411,7 +411,7 @@ awt::Rectangle SAL_CALL AccessibleSlideSorterObject::getBounds (void)
 
 
 awt::Point SAL_CALL AccessibleSlideSorterObject::getLocation ()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     const awt::Rectangle aBBox (getBounds());
@@ -422,7 +422,7 @@ awt::Point SAL_CALL AccessibleSlideSorterObject::getLocation ()
 
 
 awt::Point SAL_CALL AccessibleSlideSorterObject::getLocationOnScreen (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
 
@@ -448,7 +448,7 @@ awt::Point SAL_CALL AccessibleSlideSorterObject::getLocationOnScreen (void)
 
 
 awt::Size SAL_CALL AccessibleSlideSorterObject::getSize (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     const awt::Rectangle aBBox (getBounds());
@@ -459,7 +459,7 @@ awt::Size SAL_CALL AccessibleSlideSorterObject::getSize (void)
 
 
 void SAL_CALL AccessibleSlideSorterObject::grabFocus (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     // nothing to do
 }
@@ -468,7 +468,7 @@ void SAL_CALL AccessibleSlideSorterObject::grabFocus (void)
 
 
 sal_Int32 SAL_CALL AccessibleSlideSorterObject::getForeground (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     svtools::ColorConfig aColorConfig;
@@ -480,7 +480,7 @@ sal_Int32 SAL_CALL AccessibleSlideSorterObject::getForeground (void)
 
 
 sal_Int32 SAL_CALL AccessibleSlideSorterObject::getBackground (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     sal_uInt32 nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();
@@ -490,20 +490,20 @@ sal_Int32 SAL_CALL AccessibleSlideSorterObject::getBackground (void)
 //=====  XServiceInfo  ========================================================
 OUString SAL_CALL
        AccessibleSlideSorterObject::getImplementationName (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return OUString("AccessibleSlideSorterObject");
 }
 
 sal_Bool SAL_CALL AccessibleSlideSorterObject::supportsService (const OUString& sServiceName)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, sServiceName);
 }
 
 uno::Sequence< OUString> SAL_CALL
        AccessibleSlideSorterObject::getSupportedServiceNames (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
 

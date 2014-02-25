@@ -89,7 +89,7 @@ extern "C" {
 }
 
 // XEventListener implementation
-void AtkListener::disposing( const lang::EventObject& ) throw (uno::RuntimeException)
+void AtkListener::disposing( const lang::EventObject& ) throw (uno::RuntimeException, std::exception)
 {
     if( mpWrapper )
     {
@@ -268,7 +268,7 @@ getAccessibleContextFromSource( const uno::Reference< uno::XInterface >& rxSourc
 /*****************************************************************************/
 
 // XAccessibleEventListener
-void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEvent ) throw( uno::RuntimeException )
+void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEvent ) throw( uno::RuntimeException, std::exception )
 {
     if( !mpWrapper )
         return;

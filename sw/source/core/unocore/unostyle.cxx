@@ -187,17 +187,17 @@ public:
 /******************************************************************
  * SwXStyleFamilies
  ******************************************************************/
-OUString SwXStyleFamilies::getImplementationName(void) throw( uno::RuntimeException )
+OUString SwXStyleFamilies::getImplementationName(void) throw( uno::RuntimeException, std::exception )
 {
     return OUString("SwXStyleFamilies");
 }
 
-sal_Bool SwXStyleFamilies::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
+sal_Bool SwXStyleFamilies::supportsService(const OUString& rServiceName) throw( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SwXStyleFamilies::getSupportedServiceNames(void) throw( uno::RuntimeException )
+uno::Sequence< OUString > SwXStyleFamilies::getSupportedServiceNames(void) throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
@@ -230,7 +230,7 @@ uno::Any SAL_CALL SwXStyleFamilies::getByName(const OUString& Name)
     throw(
         container::NoSuchElementException,
         lang::WrappedTargetException,
-        uno::RuntimeException )
+        uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 // der Index kommt aus const unsigned short aStyleByIndex[] =
@@ -252,7 +252,7 @@ uno::Any SAL_CALL SwXStyleFamilies::getByName(const OUString& Name)
     return aRet;
 }
 
-uno::Sequence< OUString > SwXStyleFamilies::getElementNames(void) throw( uno::RuntimeException )
+uno::Sequence< OUString > SwXStyleFamilies::getElementNames(void) throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence< OUString > aNames(STYLE_FAMILY_COUNT);
     OUString* pNames = aNames.getArray();
@@ -264,7 +264,7 @@ uno::Sequence< OUString > SwXStyleFamilies::getElementNames(void) throw( uno::Ru
     return aNames;
 }
 
-sal_Bool SwXStyleFamilies::hasByName(const OUString& Name) throw( uno::RuntimeException )
+sal_Bool SwXStyleFamilies::hasByName(const OUString& Name) throw( uno::RuntimeException, std::exception )
 {
     if( Name.equalsAscii("CharacterStyles") ||
         Name.equalsAscii("ParagraphStyles") ||
@@ -276,13 +276,13 @@ sal_Bool SwXStyleFamilies::hasByName(const OUString& Name) throw( uno::RuntimeEx
         return sal_False;
 }
 
-sal_Int32 SwXStyleFamilies::getCount(void) throw( uno::RuntimeException )
+sal_Int32 SwXStyleFamilies::getCount(void) throw( uno::RuntimeException, std::exception )
 {
     return STYLE_FAMILY_COUNT;
 }
 
 uno::Any SwXStyleFamilies::getByIndex(sal_Int32 nIndex)
-    throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException )
+    throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     uno::Any aRet;
@@ -353,13 +353,13 @@ uno::Any SwXStyleFamilies::getByIndex(sal_Int32 nIndex)
 }
 
 uno::Type SwXStyleFamilies::getElementType(void)
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return ::getCppuType((const uno::Reference<container::XNameContainer>*)0);
 
 }
 
-sal_Bool SwXStyleFamilies::hasElements(void) throw( uno::RuntimeException )
+sal_Bool SwXStyleFamilies::hasElements(void) throw( uno::RuntimeException, std::exception )
 {
     return sal_True;
 }
@@ -414,7 +414,7 @@ void SwXStyleFamilies::loadStylesFromURL(const OUString& rURL,
 }
 
 uno::Sequence< beans::PropertyValue > SwXStyleFamilies::getStyleLoaderOptions(void)
-        throw( uno::RuntimeException )
+        throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     uno::Sequence< beans::PropertyValue > aSeq(5);
@@ -437,17 +437,17 @@ uno::Sequence< beans::PropertyValue > SwXStyleFamilies::getStyleLoaderOptions(vo
 /******************************************************************
  * SwXStyleFamily
  ******************************************************************/
-OUString SwXStyleFamily::getImplementationName(void) throw( uno::RuntimeException )
+OUString SwXStyleFamily::getImplementationName(void) throw( uno::RuntimeException, std::exception )
 {
     return OUString("SwXStyleFamily");
 }
 
-sal_Bool SwXStyleFamily::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
+sal_Bool SwXStyleFamily::supportsService(const OUString& rServiceName) throw( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SwXStyleFamily::getSupportedServiceNames(void) throw( uno::RuntimeException )
+uno::Sequence< OUString > SwXStyleFamily::getSupportedServiceNames(void) throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
@@ -606,14 +606,14 @@ static sal_Int32 lcl_GetCountOrName(const SwDoc &rDoc,
     return nCount;
 }
 
-sal_Int32 SwXStyleFamily::getCount(void) throw( uno::RuntimeException )
+sal_Int32 SwXStyleFamily::getCount(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     return lcl_GetCountOrName ( *pDocShell->GetDoc(), eFamily, NULL );
 }
 
 uno::Any SwXStyleFamily::getByIndex(sal_Int32 nTempIndex)
-    throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException )
+    throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     uno::Any aRet;
@@ -750,7 +750,7 @@ uno::Any SwXStyleFamily::getByIndex(sal_Int32 nTempIndex)
 }
 
 uno::Any SwXStyleFamily::getByName(const OUString& rName)
-    throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
+    throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     uno::Any aRet;
@@ -782,7 +782,7 @@ uno::Any SwXStyleFamily::getByName(const OUString& rName)
 
 }
 
-uno::Sequence< OUString > SwXStyleFamily::getElementNames(void) throw( uno::RuntimeException )
+uno::Sequence< OUString > SwXStyleFamily::getElementNames(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     uno::Sequence< OUString > aRet;
@@ -804,7 +804,7 @@ uno::Sequence< OUString > SwXStyleFamily::getElementNames(void) throw( uno::Runt
     return aRet;
 }
 
-sal_Bool SwXStyleFamily::hasByName(const OUString& rName) throw( uno::RuntimeException )
+sal_Bool SwXStyleFamily::hasByName(const OUString& rName) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     sal_Bool bRet = sal_False;
@@ -822,13 +822,13 @@ sal_Bool SwXStyleFamily::hasByName(const OUString& rName) throw( uno::RuntimeExc
 
 }
 
-uno::Type SwXStyleFamily::getElementType(void) throw( uno::RuntimeException )
+uno::Type SwXStyleFamily::getElementType(void) throw( uno::RuntimeException, std::exception )
 {
     return ::getCppuType((const uno::Reference<style::XStyle>*)0);
 
 }
 
-sal_Bool SwXStyleFamily::hasElements(void) throw( uno::RuntimeException )
+sal_Bool SwXStyleFamily::hasElements(void) throw( uno::RuntimeException, std::exception )
 {
     if(!pBasePool)
         throw uno::RuntimeException();
@@ -836,7 +836,7 @@ sal_Bool SwXStyleFamily::hasElements(void) throw( uno::RuntimeException )
 }
 
 void SwXStyleFamily::insertByName(const OUString& rName, const uno::Any& rElement)
-        throw( lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException )
+        throw( lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(pBasePool)
@@ -906,7 +906,7 @@ void SwXStyleFamily::insertByName(const OUString& rName, const uno::Any& rElemen
 }
 
 void SwXStyleFamily::replaceByName(const OUString& rName, const uno::Any& rElement)
-    throw( lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
+    throw( lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(pBasePool)
@@ -938,7 +938,7 @@ void SwXStyleFamily::replaceByName(const OUString& rName, const uno::Any& rEleme
         throw uno::RuntimeException();
 }
 
-void SwXStyleFamily::removeByName(const OUString& rName) throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
+void SwXStyleFamily::removeByName(const OUString& rName) throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(pBasePool)
@@ -957,17 +957,17 @@ void SwXStyleFamily::removeByName(const OUString& rName) throw( container::NoSuc
         throw uno::RuntimeException();
 }
 
-uno::Reference< beans::XPropertySetInfo > SAL_CALL SwXStyleFamily::getPropertySetInfo(  ) throw (uno::RuntimeException)
+uno::Reference< beans::XPropertySetInfo > SAL_CALL SwXStyleFamily::getPropertySetInfo(  ) throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< beans::XPropertySetInfo >();
 }
 
-void SAL_CALL SwXStyleFamily::setPropertyValue( const OUString&, const uno::Any& ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL SwXStyleFamily::setPropertyValue( const OUString&, const uno::Any& ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "###unexpected!" );
 }
 
-uno::Any SAL_CALL SwXStyleFamily::getPropertyValue( const OUString& sPropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+uno::Any SAL_CALL SwXStyleFamily::getPropertyValue( const OUString& sPropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     uno::Any aRet;
 
@@ -1003,22 +1003,22 @@ uno::Any SAL_CALL SwXStyleFamily::getPropertyValue( const OUString& sPropertyNam
     return aRet;
 }
 
-void SAL_CALL SwXStyleFamily::addPropertyChangeListener( const OUString&, const uno::Reference< beans::XPropertyChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL SwXStyleFamily::addPropertyChangeListener( const OUString&, const uno::Reference< beans::XPropertyChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "###unexpected!" );
 }
 
-void SAL_CALL SwXStyleFamily::removePropertyChangeListener( const OUString&, const uno::Reference< beans::XPropertyChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL SwXStyleFamily::removePropertyChangeListener( const OUString&, const uno::Reference< beans::XPropertyChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "###unexpected!" );
 }
 
-void SAL_CALL SwXStyleFamily::addVetoableChangeListener( const OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL SwXStyleFamily::addVetoableChangeListener( const OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "###unexpected!" );
 }
 
-void SAL_CALL SwXStyleFamily::removeVetoableChangeListener( const OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL SwXStyleFamily::removeVetoableChangeListener( const OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "###unexpected!" );
 }
@@ -1173,7 +1173,7 @@ const uno::Sequence< sal_Int8 > & SwXStyle::getUnoTunnelId()
 }
 
 sal_Int64 SAL_CALL SwXStyle::getSomething( const uno::Sequence< sal_Int8 >& rId )
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     if( rId.getLength() == 16
         && 0 == memcmp( getUnoTunnelId().getConstArray(),
@@ -1186,17 +1186,17 @@ sal_Int64 SAL_CALL SwXStyle::getSomething( const uno::Sequence< sal_Int8 >& rId 
 
 TYPEINIT1(SwXStyle, SfxListener);
 
-OUString SwXStyle::getImplementationName(void) throw( uno::RuntimeException )
+OUString SwXStyle::getImplementationName(void) throw( uno::RuntimeException, std::exception )
 {
     return OUString("SwXStyle");
 }
 
-sal_Bool SwXStyle::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
+sal_Bool SwXStyle::supportsService(const OUString& rServiceName) throw( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SwXStyle::getSupportedServiceNames(void) throw( uno::RuntimeException )
+uno::Sequence< OUString > SwXStyle::getSupportedServiceNames(void) throw( uno::RuntimeException, std::exception )
 {
     long nCount = 1;
     if(SFX_STYLE_FAMILY_PARA == eFamily)
@@ -1350,7 +1350,7 @@ void SwXStyle::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
     }
 }
 
-OUString SwXStyle::getName(void) throw( uno::RuntimeException )
+OUString SwXStyle::getName(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(pBasePool)
@@ -1367,7 +1367,7 @@ OUString SwXStyle::getName(void) throw( uno::RuntimeException )
     return m_sStyleName;
 }
 
-void SwXStyle::setName(const OUString& rName) throw( uno::RuntimeException )
+void SwXStyle::setName(const OUString& rName) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(pBasePool)
@@ -1390,7 +1390,7 @@ void SwXStyle::setName(const OUString& rName) throw( uno::RuntimeException )
         m_sStyleName = rName;
 }
 
-sal_Bool SwXStyle::isUserDefined(void) throw( uno::RuntimeException )
+sal_Bool SwXStyle::isUserDefined(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     sal_Bool bRet = sal_False;
@@ -1407,7 +1407,7 @@ sal_Bool SwXStyle::isUserDefined(void) throw( uno::RuntimeException )
     return bRet;
 }
 
-sal_Bool SwXStyle::isInUse(void) throw( uno::RuntimeException )
+sal_Bool SwXStyle::isInUse(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     sal_Bool bRet = sal_False;
@@ -1423,7 +1423,7 @@ sal_Bool SwXStyle::isInUse(void) throw( uno::RuntimeException )
     return bRet;
 }
 
-OUString SwXStyle::getParentStyle(void) throw( uno::RuntimeException )
+OUString SwXStyle::getParentStyle(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     OUString aString;
@@ -1443,7 +1443,7 @@ OUString SwXStyle::getParentStyle(void) throw( uno::RuntimeException )
 }
 
 void SwXStyle::setParentStyle(const OUString& rParentStyle)
-            throw( container::NoSuchElementException, uno::RuntimeException )
+            throw( container::NoSuchElementException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     OUString sParentStyle;
@@ -1557,7 +1557,7 @@ static uno::Reference< beans::XPropertySetInfo > lcl_getPropertySetInfo( SfxStyl
 }
 
 uno::Reference< beans::XPropertySetInfo >  SwXStyle::getPropertySetInfo(void)
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return lcl_getPropertySetInfo( eFamily, bIsConditional );
 }
@@ -2125,7 +2125,7 @@ void SwXStyle::setPropertyValues(
     const uno::Sequence< OUString >& rPropertyNames,
     const uno::Sequence< uno::Any >& rValues )
         throw(beans::PropertyVetoException, lang::IllegalArgumentException,
-                lang::WrappedTargetException, uno::RuntimeException)
+                lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2444,7 +2444,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXStyle::GetPropertyValues_Impl(
 }
 
 uno::Sequence< uno::Any > SwXStyle::getPropertyValues(
-    const uno::Sequence< OUString >& rPropertyNames ) throw(uno::RuntimeException)
+    const uno::Sequence< OUString >& rPropertyNames ) throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Sequence< uno::Any > aValues;
@@ -2469,20 +2469,20 @@ uno::Sequence< uno::Any > SwXStyle::getPropertyValues(
 void SwXStyle::addPropertiesChangeListener(
     const uno::Sequence< OUString >& /*aPropertyNames*/,
     const uno::Reference< beans::XPropertiesChangeListener >& /*xListener*/ )
-        throw(uno::RuntimeException)
+        throw(uno::RuntimeException, std::exception)
 {
 }
 
 void SwXStyle::removePropertiesChangeListener(
     const uno::Reference< beans::XPropertiesChangeListener >& /*xListener*/ )
-        throw(uno::RuntimeException)
+        throw(uno::RuntimeException, std::exception)
 {
 }
 
 void SwXStyle::firePropertiesChangeEvent(
     const uno::Sequence< OUString >& /*aPropertyNames*/,
     const uno::Reference< beans::XPropertiesChangeListener >& /*xListener*/ )
-        throw(uno::RuntimeException)
+        throw(uno::RuntimeException, std::exception)
 {
 }
 
@@ -2491,7 +2491,7 @@ void SwXStyle::setPropertyValue(const OUString& rPropertyName, const uno::Any& r
         beans::PropertyVetoException,
         lang::IllegalArgumentException,
         lang::WrappedTargetException,
-        uno::RuntimeException)
+        uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     const uno::Sequence<OUString> aProperties(&rPropertyName, 1);
@@ -2500,7 +2500,7 @@ void SwXStyle::setPropertyValue(const OUString& rPropertyName, const uno::Any& r
 }
 
 uno::Any SwXStyle::getPropertyValue(const OUString& rPropertyName)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     const uno::Sequence<OUString> aProperties(&rPropertyName, 1);
@@ -2510,34 +2510,34 @@ uno::Any SwXStyle::getPropertyValue(const OUString& rPropertyName)
 
 void SwXStyle::addPropertyChangeListener(const OUString& /*rPropertyName*/,
     const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     OSL_FAIL("not implemented");
 }
 
 void SwXStyle::removePropertyChangeListener(const OUString& /*rPropertyName*/,
     const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     OSL_FAIL("not implemented");
 }
 
 void SwXStyle::addVetoableChangeListener(const OUString& /*rPropertyName*/,
     const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     OSL_FAIL("not implemented");
 }
 
 void SwXStyle::removeVetoableChangeListener(const OUString& /*rPropertyName*/,
     const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     OSL_FAIL("not implemented");
 }
 
 beans::PropertyState SwXStyle::getPropertyState(const OUString& rPropertyName)
-        throw( beans::UnknownPropertyException, uno::RuntimeException )
+        throw( beans::UnknownPropertyException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -2550,7 +2550,7 @@ beans::PropertyState SwXStyle::getPropertyState(const OUString& rPropertyName)
 
 uno::Sequence< beans::PropertyState > SwXStyle::getPropertyStates(
     const uno::Sequence< OUString >& rPropertyNames)
-        throw( beans::UnknownPropertyException, uno::RuntimeException )
+        throw( beans::UnknownPropertyException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     uno::Sequence< beans::PropertyState > aRet(rPropertyNames.getLength());
@@ -2642,14 +2642,14 @@ uno::Sequence< beans::PropertyState > SwXStyle::getPropertyStates(
 }
 
 void SwXStyle::setPropertyToDefault(const OUString& rPropertyName)
-        throw( beans::UnknownPropertyException, uno::RuntimeException )
+        throw( beans::UnknownPropertyException, uno::RuntimeException, std::exception )
 {
     const uno::Sequence < OUString > aSequence ( &rPropertyName, 1 );
     setPropertiesToDefault ( aSequence );
 }
 
 void SAL_CALL SwXStyle::setPropertiesToDefault( const uno::Sequence< OUString >& aPropertyNames )
-    throw (beans::UnknownPropertyException, uno::RuntimeException)
+    throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     SwFmt *pTargetFmt = 0;
@@ -2724,7 +2724,7 @@ void SAL_CALL SwXStyle::setPropertiesToDefault( const uno::Sequence< OUString >&
 }
 
 void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if(pBasePool)
@@ -2831,7 +2831,7 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
 }
 
 uno::Sequence< uno::Any > SAL_CALL SwXStyle::getPropertyDefaults( const uno::Sequence< OUString >& aPropertyNames )
-    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     sal_Int32 nCount = aPropertyNames.getLength();
@@ -2894,7 +2894,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXStyle::getPropertyDefaults( const uno::Seq
 }
 
 uno::Any SwXStyle::getPropertyDefault(const OUString& rPropertyName)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     const uno::Sequence < OUString > aSequence ( &rPropertyName, 1 );
     return getPropertyDefaults ( aSequence ).getConstArray()[0];
@@ -3195,7 +3195,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
 void SwXPageStyle::setPropertyValues(
     const uno::Sequence< OUString >& rPropertyNames,
     const uno::Sequence< uno::Any >& rValues )
-        throw(beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+        throw(beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -3456,7 +3456,7 @@ MakeObject:
 
 uno::Sequence< uno::Any > SwXPageStyle::getPropertyValues(
     const uno::Sequence< OUString >& rPropertyNames )
-        throw(uno::RuntimeException)
+        throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Sequence< uno::Any > aValues;
@@ -3479,7 +3479,7 @@ uno::Sequence< uno::Any > SwXPageStyle::getPropertyValues(
 }
 
 uno::Any SwXPageStyle::getPropertyValue(const OUString& rPropertyName) throw(
-    beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+    beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     const uno::Sequence<OUString> aProperties(&rPropertyName, 1);
@@ -3491,7 +3491,7 @@ void SwXPageStyle::setPropertyValue(const OUString& rPropertyName, const uno::An
         beans::PropertyVetoException,
         lang::IllegalArgumentException,
         lang::WrappedTargetException,
-        uno::RuntimeException)
+        uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     const uno::Sequence<OUString> aProperties(&rPropertyName, 1);
@@ -3508,7 +3508,7 @@ SwXFrameStyle::~SwXFrameStyle()
 {
 }
 
-uno::Sequence< uno::Type > SwXFrameStyle::getTypes(  ) throw(uno::RuntimeException)
+uno::Sequence< uno::Type > SwXFrameStyle::getTypes(  ) throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence< uno::Type > aTypes = SwXStyle::getTypes();
     sal_Int32 nLen = aTypes.getLength();
@@ -3517,7 +3517,7 @@ uno::Sequence< uno::Type > SwXFrameStyle::getTypes(  ) throw(uno::RuntimeExcepti
     return aTypes;
 }
 
-uno::Any SwXFrameStyle::queryInterface( const uno::Type& rType ) throw(uno::RuntimeException)
+uno::Any SwXFrameStyle::queryInterface( const uno::Type& rType ) throw(uno::RuntimeException, std::exception)
 {
     uno::Any aRet;
     if(rType == ::getCppuType((uno::Reference<XEventsSupplier>*)0))
@@ -3527,7 +3527,7 @@ uno::Any SwXFrameStyle::queryInterface( const uno::Type& rType ) throw(uno::Runt
     return aRet;
 }
 
-uno::Reference< container::XNameReplace > SwXFrameStyle::getEvents(  ) throw(uno::RuntimeException)
+uno::Reference< container::XNameReplace > SwXFrameStyle::getEvents(  ) throw(uno::RuntimeException, std::exception)
 {
     return new SwFrameStyleEventDescriptor( *this );
 }
@@ -3541,14 +3541,14 @@ SwXAutoStyles::~SwXAutoStyles()
 {
 }
 
-sal_Int32 SwXAutoStyles::getCount(void) throw( uno::RuntimeException )
+sal_Int32 SwXAutoStyles::getCount(void) throw( uno::RuntimeException, std::exception )
 {
     return AUTOSTYLE_FAMILY_COUNT;
 }
 
 uno::Any SwXAutoStyles::getByIndex(sal_Int32 nIndex)
         throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException,
-                uno::RuntimeException )
+                uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     uno::Any aRet;
@@ -3592,18 +3592,18 @@ uno::Any SwXAutoStyles::getByIndex(sal_Int32 nIndex)
     return aRet;
 }
 
-uno::Type SwXAutoStyles::getElementType(  ) throw(uno::RuntimeException)
+uno::Type SwXAutoStyles::getElementType(  ) throw(uno::RuntimeException, std::exception)
 {
     return ::getCppuType((const uno::Reference<style::XAutoStyleFamily>*)0);
 }
 
-sal_Bool SwXAutoStyles::hasElements(  ) throw(uno::RuntimeException)
+sal_Bool SwXAutoStyles::hasElements(  ) throw(uno::RuntimeException, std::exception)
 {
     return sal_True;
 }
 
 uno::Any SwXAutoStyles::getByName(const OUString& Name)
-        throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
+        throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     uno::Any aRet;
     if(Name.equalsAscii("CharacterStyles") )
@@ -3618,7 +3618,7 @@ uno::Any SwXAutoStyles::getByName(const OUString& Name)
 }
 
 uno::Sequence< OUString > SwXAutoStyles::getElementNames(void)
-            throw( uno::RuntimeException )
+            throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence< OUString > aNames(AUTOSTYLE_FAMILY_COUNT);
     OUString* pNames = aNames.getArray();
@@ -3629,7 +3629,7 @@ uno::Sequence< OUString > SwXAutoStyles::getElementNames(void)
 }
 
 sal_Bool SwXAutoStyles::hasByName(const OUString& Name)
-            throw( uno::RuntimeException )
+            throw( uno::RuntimeException, std::exception )
 {
     if( Name.equalsAscii("CharacterStyles") ||
         Name.equalsAscii("RubyStyles") ||
@@ -3659,7 +3659,7 @@ void SwXAutoStyleFamily::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNe
 
 uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
     const uno::Sequence< beans::PropertyValue >& Values )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     if( !pDocShell )
         throw uno::RuntimeException();
@@ -3714,7 +3714,7 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
 }
 
 uno::Reference< container::XEnumeration > SwXAutoStyleFamily::createEnumeration(  )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     if( !pDocShell )
         throw uno::RuntimeException();
@@ -3722,12 +3722,12 @@ uno::Reference< container::XEnumeration > SwXAutoStyleFamily::createEnumeration(
         (new SwXAutoStylesEnumerator( pDocShell->GetDoc(), eFamily ));
 }
 
-uno::Type SwXAutoStyleFamily::getElementType(  ) throw(uno::RuntimeException)
+uno::Type SwXAutoStyleFamily::getElementType(  ) throw(uno::RuntimeException, std::exception)
 {
     return ::getCppuType((const uno::Reference<style::XAutoStyle>*)0);
 }
 
-sal_Bool SwXAutoStyleFamily::hasElements(  ) throw(uno::RuntimeException)
+sal_Bool SwXAutoStyleFamily::hasElements(  ) throw(uno::RuntimeException, std::exception)
 {
     return sal_False;
 }
@@ -3789,7 +3789,7 @@ void SwXAutoStylesEnumerator::Modify( const SfxPoolItem* pOld, const SfxPoolItem
 }
 
 ::sal_Bool SwXAutoStylesEnumerator::hasMoreElements(  )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if( !pImpl )
         throw uno::RuntimeException();
@@ -3797,7 +3797,7 @@ void SwXAutoStylesEnumerator::Modify( const SfxPoolItem* pOld, const SfxPoolItem
 }
 
 uno::Any SwXAutoStylesEnumerator::nextElement(  )
-    throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     if( !pImpl )
         throw uno::RuntimeException();
@@ -3831,7 +3831,7 @@ void SwXAutoStyle::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 }
 
 uno::Reference< beans::XPropertySetInfo > SwXAutoStyle::getPropertySetInfo(  )
-                throw (uno::RuntimeException)
+                throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< beans::XPropertySetInfo >  xRet;
     switch( eFamily )
@@ -3881,14 +3881,14 @@ void SwXAutoStyle::setPropertyValue( const OUString& /*rPropertyName*/, const un
             beans::PropertyVetoException,
             lang::IllegalArgumentException,
             lang::WrappedTargetException,
-            uno::RuntimeException)
+            uno::RuntimeException, std::exception)
 {
 }
 
 uno::Any SwXAutoStyle::getPropertyValue( const OUString& rPropertyName )
     throw( beans::UnknownPropertyException,
            lang::WrappedTargetException,
-           uno::RuntimeException )
+           uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     const uno::Sequence<OUString> aProperties(&rPropertyName, 1);
@@ -3899,7 +3899,7 @@ void SwXAutoStyle::addPropertyChangeListener( const OUString& /*aPropertyName*/,
                                               const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
     throw( beans::UnknownPropertyException,
            lang::WrappedTargetException,
-           uno::RuntimeException )
+           uno::RuntimeException, std::exception )
 {
 }
 
@@ -3907,7 +3907,7 @@ void SwXAutoStyle::removePropertyChangeListener( const OUString& /*aPropertyName
                                                  const uno::Reference< beans::XPropertyChangeListener >& /*aListener*/ )
     throw( beans::UnknownPropertyException,
            lang::WrappedTargetException,
-           uno::RuntimeException )
+           uno::RuntimeException, std::exception )
 {
 }
 
@@ -3915,7 +3915,7 @@ void SwXAutoStyle::addVetoableChangeListener( const OUString& /*PropertyName*/,
                                               const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
     throw( beans::UnknownPropertyException,
            lang::WrappedTargetException,
-           uno::RuntimeException )
+           uno::RuntimeException, std::exception )
 {
 }
 
@@ -3923,7 +3923,7 @@ void SwXAutoStyle::removeVetoableChangeListener( const OUString& /*PropertyName*
                                                  const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
     throw( beans::UnknownPropertyException,
            lang::WrappedTargetException,
-           uno::RuntimeException )
+           uno::RuntimeException, std::exception )
 {
 }
 
@@ -3931,7 +3931,7 @@ void SwXAutoStyle::setPropertyValues(
         const uno::Sequence< OUString >& /*aPropertyNames*/,
         const uno::Sequence< uno::Any >& /*aValues*/ )
             throw (beans::PropertyVetoException, lang::IllegalArgumentException,
-                lang::WrappedTargetException, uno::RuntimeException)
+                lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
 }
 
@@ -3981,7 +3981,7 @@ uno::Sequence< uno::Any > SwXAutoStyle::GetPropertyValues_Impl(
 
 uno::Sequence< uno::Any > SwXAutoStyle::getPropertyValues (
         const uno::Sequence< OUString >& rPropertyNames )
-            throw (uno::RuntimeException)
+            throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Sequence< uno::Any > aValues;
@@ -4006,26 +4006,26 @@ uno::Sequence< uno::Any > SwXAutoStyle::getPropertyValues (
 void SwXAutoStyle::addPropertiesChangeListener(
         const uno::Sequence< OUString >& /*aPropertyNames*/,
         const uno::Reference< beans::XPropertiesChangeListener >& /*xListener*/ )
-            throw (uno::RuntimeException)
+            throw (uno::RuntimeException, std::exception)
 {
 }
 
 void SwXAutoStyle::removePropertiesChangeListener(
         const uno::Reference< beans::XPropertiesChangeListener >& /*xListener*/ )
-            throw (uno::RuntimeException)
+            throw (uno::RuntimeException, std::exception)
 {
 }
 
 void SwXAutoStyle::firePropertiesChangeEvent(
         const uno::Sequence< OUString >& /*aPropertyNames*/,
         const uno::Reference< beans::XPropertiesChangeListener >& /*xListener*/ )
-            throw (uno::RuntimeException)
+            throw (uno::RuntimeException, std::exception)
 {
 }
 
 beans::PropertyState SwXAutoStyle::getPropertyState( const OUString& rPropertyName )
     throw( beans::UnknownPropertyException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -4038,14 +4038,14 @@ beans::PropertyState SwXAutoStyle::getPropertyState( const OUString& rPropertyNa
 
 void SwXAutoStyle::setPropertyToDefault( const OUString& /*PropertyName*/ )
     throw( beans::UnknownPropertyException,
-           uno::RuntimeException )
+           uno::RuntimeException, std::exception )
 {
 }
 
 uno::Any SwXAutoStyle::getPropertyDefault( const OUString& rPropertyName )
     throw( beans::UnknownPropertyException,
            lang::WrappedTargetException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     const uno::Sequence < OUString > aSequence ( &rPropertyName, 1 );
     return getPropertyDefaults ( aSequence ).getConstArray()[0];
@@ -4053,7 +4053,7 @@ uno::Any SwXAutoStyle::getPropertyDefault( const OUString& rPropertyName )
 
 uno::Sequence< beans::PropertyState > SwXAutoStyle::getPropertyStates(
         const uno::Sequence< OUString >& rPropertyNames )
-            throw (beans::UnknownPropertyException, uno::RuntimeException)
+            throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     if( !pSet.get() )
         throw uno::RuntimeException();
@@ -4087,26 +4087,26 @@ uno::Sequence< beans::PropertyState > SwXAutoStyle::getPropertyStates(
 }
 
 void SwXAutoStyle::setAllPropertiesToDefault(  )
-            throw (uno::RuntimeException)
+            throw (uno::RuntimeException, std::exception)
 {
 }
 
 void SwXAutoStyle::setPropertiesToDefault(
         const uno::Sequence< OUString >& /*aPropertyNames*/ )
-            throw (beans::UnknownPropertyException, uno::RuntimeException)
+            throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
 }
 
 uno::Sequence< uno::Any > SwXAutoStyle::getPropertyDefaults(
         const uno::Sequence< OUString >& /*aPropertyNames*/ )
             throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-                    uno::RuntimeException)
+                    uno::RuntimeException, std::exception)
 {
     uno::Sequence< uno::Any > aRet(0);
     return aRet;
 }
 
-uno::Sequence< beans::PropertyValue > SwXAutoStyle::getProperties() throw (uno::RuntimeException)
+uno::Sequence< beans::PropertyValue > SwXAutoStyle::getProperties() throw (uno::RuntimeException, std::exception)
 {
     if( !pSet.get() )
         throw uno::RuntimeException();

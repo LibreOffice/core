@@ -36,7 +36,7 @@ WeakModifyListenerAdapter::~WeakModifyListenerAdapter()
 {}
 
 void SAL_CALL WeakModifyListenerAdapter::modified( const lang::EventObject& aEvent )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< util::XModifyListener > xModListener( getListener() );
     if( xModListener.is())
@@ -52,7 +52,7 @@ WeakSelectionChangeListenerAdapter::~WeakSelectionChangeListenerAdapter()
 {}
 
 void SAL_CALL WeakSelectionChangeListenerAdapter::selectionChanged( const lang::EventObject& aEvent )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< view::XSelectionChangeListener > xSelChgListener( getListener() );
     if( xSelChgListener.is())

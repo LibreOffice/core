@@ -163,7 +163,7 @@ namespace frm
     }
 
 
-    void SAL_CALL FormOperations::initialize( const Sequence< Any >& _arguments ) throw (Exception, RuntimeException)
+    void SAL_CALL FormOperations::initialize( const Sequence< Any >& _arguments ) throw (Exception, RuntimeException, std::exception)
     {
         if ( m_bConstructed )
             throw AlreadyInitializedException();
@@ -184,56 +184,56 @@ namespace frm
         throw IllegalArgumentException( OUString(), *this, 0 );
     }
 
-    OUString SAL_CALL FormOperations::getImplementationName(  ) throw (RuntimeException)
+    OUString SAL_CALL FormOperations::getImplementationName(  ) throw (RuntimeException, std::exception)
     {
         return getImplementationName_Static();
     }
 
-    ::sal_Bool SAL_CALL FormOperations::supportsService( const OUString& _ServiceName ) throw (RuntimeException)
+    ::sal_Bool SAL_CALL FormOperations::supportsService( const OUString& _ServiceName ) throw (RuntimeException, std::exception)
     {
         return cppu::supportsService(this, _ServiceName);
     }
 
-    Sequence< OUString > SAL_CALL FormOperations::getSupportedServiceNames(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL FormOperations::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
     {
         return getSupportedServiceNames_Static();
     }
 
-    Reference< XRowSet > SAL_CALL FormOperations::getCursor() throw (RuntimeException)
+    Reference< XRowSet > SAL_CALL FormOperations::getCursor() throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *this );
         return m_xCursor;
     }
 
-    Reference< XResultSetUpdate > SAL_CALL FormOperations::getUpdateCursor() throw (RuntimeException)
+    Reference< XResultSetUpdate > SAL_CALL FormOperations::getUpdateCursor() throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *this );
         return m_xUpdateCursor;
     }
 
 
-    Reference< XFormController > SAL_CALL FormOperations::getController() throw (RuntimeException)
+    Reference< XFormController > SAL_CALL FormOperations::getController() throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *this );
         return m_xController;
     }
 
 
-    Reference< XFeatureInvalidation > SAL_CALL FormOperations::getFeatureInvalidation() throw (RuntimeException)
+    Reference< XFeatureInvalidation > SAL_CALL FormOperations::getFeatureInvalidation() throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *this );
         return m_xFeatureInvalidation;
     }
 
 
-    void SAL_CALL FormOperations::setFeatureInvalidation( const Reference< XFeatureInvalidation > & _rxFeatureInvalidation ) throw (RuntimeException)
+    void SAL_CALL FormOperations::setFeatureInvalidation( const Reference< XFeatureInvalidation > & _rxFeatureInvalidation ) throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *this );
         m_xFeatureInvalidation = _rxFeatureInvalidation;
     }
 
 
-    FeatureState SAL_CALL FormOperations::getState( ::sal_Int16 _nFeature ) throw (RuntimeException)
+    FeatureState SAL_CALL FormOperations::getState( ::sal_Int16 _nFeature ) throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *this );
 
@@ -416,7 +416,7 @@ namespace frm
     }
 
 
-    ::sal_Bool SAL_CALL FormOperations::isEnabled( ::sal_Int16 _nFeature ) throw (RuntimeException)
+    ::sal_Bool SAL_CALL FormOperations::isEnabled( ::sal_Int16 _nFeature ) throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *this );
 
@@ -570,7 +570,7 @@ namespace frm
         }
     }
 
-    void SAL_CALL FormOperations::execute( ::sal_Int16 _nFeature ) throw (RuntimeException, IllegalArgumentException, SQLException, WrappedTargetException)
+    void SAL_CALL FormOperations::execute( ::sal_Int16 _nFeature ) throw (RuntimeException, IllegalArgumentException, SQLException, WrappedTargetException, std::exception)
     {
         SolarMutexGuard aSolarGuard;
         MethodGuard aGuard( *this );
@@ -829,7 +829,7 @@ namespace frm
     }
 
 
-    void SAL_CALL FormOperations::executeWithArguments( ::sal_Int16 _nFeature, const Sequence< NamedValue >& _rArguments ) throw (RuntimeException, IllegalArgumentException, SQLException, WrappedTargetException)
+    void SAL_CALL FormOperations::executeWithArguments( ::sal_Int16 _nFeature, const Sequence< NamedValue >& _rArguments ) throw (RuntimeException, IllegalArgumentException, SQLException, WrappedTargetException, std::exception)
     {
         if ( !lcl_requiresArguments( _nFeature ) )
         {
@@ -886,7 +886,7 @@ namespace frm
     }
 
 
-    ::sal_Bool SAL_CALL FormOperations::commitCurrentRecord( ::sal_Bool& _out_rRecordInserted ) throw (RuntimeException, SQLException)
+    ::sal_Bool SAL_CALL FormOperations::commitCurrentRecord( ::sal_Bool& _out_rRecordInserted ) throw (RuntimeException, SQLException, std::exception)
     {
         MethodGuard aGuard( *this );
         _out_rRecordInserted = sal_False;
@@ -921,7 +921,7 @@ namespace frm
     }
 
 
-    ::sal_Bool SAL_CALL FormOperations::commitCurrentControl() throw (RuntimeException, SQLException)
+    ::sal_Bool SAL_CALL FormOperations::commitCurrentControl() throw (RuntimeException, SQLException, std::exception)
     {
         MethodGuard aGuard( *this );
         return impl_commitCurrentControl_throw();
@@ -970,7 +970,7 @@ namespace frm
     }
 
 
-    ::sal_Bool SAL_CALL FormOperations::isInsertionRow() throw (RuntimeException, WrappedTargetException)
+    ::sal_Bool SAL_CALL FormOperations::isInsertionRow() throw (RuntimeException, WrappedTargetException, std::exception)
     {
         sal_Bool bIs = sal_False;
         try
@@ -986,7 +986,7 @@ namespace frm
     }
 
 
-    ::sal_Bool SAL_CALL FormOperations::isModifiedRow() throw (RuntimeException, WrappedTargetException)
+    ::sal_Bool SAL_CALL FormOperations::isModifiedRow() throw (RuntimeException, WrappedTargetException, std::exception)
     {
         sal_Bool bIs = sal_False;
         try
@@ -1002,7 +1002,7 @@ namespace frm
     }
 
 
-    void SAL_CALL FormOperations::cursorMoved( const EventObject& /*_Event*/ ) throw (RuntimeException)
+    void SAL_CALL FormOperations::cursorMoved( const EventObject& /*_Event*/ ) throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *this );
         m_bActiveControlModified = false;
@@ -1011,19 +1011,19 @@ namespace frm
     }
 
 
-    void SAL_CALL FormOperations::rowChanged( const EventObject& /*_Event*/ ) throw (RuntimeException)
+    void SAL_CALL FormOperations::rowChanged( const EventObject& /*_Event*/ ) throw (RuntimeException, std::exception)
     {
         // not interested in
     }
 
 
-    void SAL_CALL FormOperations::rowSetChanged( const EventObject& /*_Event*/ ) throw (RuntimeException)
+    void SAL_CALL FormOperations::rowSetChanged( const EventObject& /*_Event*/ ) throw (RuntimeException, std::exception)
     {
         // not interested in
     }
 
 
-    void SAL_CALL FormOperations::modified( const EventObject& /*_Source*/ ) throw( RuntimeException )
+    void SAL_CALL FormOperations::modified( const EventObject& /*_Source*/ ) throw( RuntimeException, std::exception )
     {
         MethodGuard aGuard( *this );
 
@@ -1036,7 +1036,7 @@ namespace frm
     }
 
 
-    void SAL_CALL FormOperations::propertyChange( const PropertyChangeEvent& _rEvent ) throw (RuntimeException)
+    void SAL_CALL FormOperations::propertyChange( const PropertyChangeEvent& _rEvent ) throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *this );
 
@@ -1084,7 +1084,7 @@ namespace frm
     }
 
 
-    void SAL_CALL FormOperations::disposing( const EventObject& /*_Source*/ ) throw (RuntimeException)
+    void SAL_CALL FormOperations::disposing( const EventObject& /*_Source*/ ) throw (RuntimeException, std::exception)
     {
         // TODO: should we react on this? Or is this the responsibility of our owner to dispose us?
     }

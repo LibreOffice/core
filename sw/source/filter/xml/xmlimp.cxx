@@ -470,7 +470,7 @@ const Sequence< sal_Int8 > & SwXMLImport::getUnoTunnelId() throw()
 }
 
 sal_Int64 SAL_CALL SwXMLImport::getSomething( const Sequence< sal_Int8 >& rId )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     if( rId.getLength() == 16
         && 0 == memcmp( getUnoTunnelId().getConstArray(),
@@ -705,7 +705,7 @@ void SwXMLImport::startDocument()
 }
 
 void SwXMLImport::endDocument( void )
-    throw( xml::sax::SAXException, uno::RuntimeException )
+    throw( xml::sax::SAXException, uno::RuntimeException, std::exception )
 {
     OSL_ENSURE( GetModel().is(), "model missing; maybe startDocument wasn't called?" );
     if( !GetModel().is() )
@@ -1478,7 +1478,7 @@ void SwXMLImport::SetDocumentSpecificSettings(
 
 void SwXMLImport::initialize(
     const Sequence<Any>& aArguments )
-    throw( uno::Exception, uno::RuntimeException)
+    throw( uno::Exception, uno::RuntimeException, std::exception)
 {
     // delegate to super class
     SvXMLImport::initialize(aArguments);

@@ -58,12 +58,12 @@ UnoControlTabPageModel::UnoControlTabPageModel( Reference< XComponentContext > c
     ImplRegisterProperty( BASEPROPERTY_HELPURL );
 }
 
-OUString SAL_CALL UnoControlTabPageModel::getImplementationName() throw(css::uno::RuntimeException)
+OUString SAL_CALL UnoControlTabPageModel::getImplementationName() throw(css::uno::RuntimeException, std::exception)
 {
     return OUString("stardiv.Toolkit.UnoControlTabPageModel");
 }
 
-css::uno::Sequence< OUString > SAL_CALL UnoControlTabPageModel::getSupportedServiceNames() throw(css::uno::RuntimeException)
+css::uno::Sequence< OUString > SAL_CALL UnoControlTabPageModel::getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception)
 {
     css::uno::Sequence< OUString > aNames = ControlModelContainerBase::getSupportedServiceNames( );
     aNames.realloc( aNames.getLength() + 1 );
@@ -71,7 +71,7 @@ css::uno::Sequence< OUString > SAL_CALL UnoControlTabPageModel::getSupportedServ
     return aNames;
 }
 
-OUString UnoControlTabPageModel::getServiceName( ) throw(RuntimeException)
+OUString UnoControlTabPageModel::getServiceName( ) throw(RuntimeException, std::exception)
 {
     return OUString("com.sun.star.awt.tab.UnoControlTabPageModel");
 }
@@ -103,14 +103,14 @@ Any UnoControlTabPageModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     return *pHelper;
 }
 // beans::XMultiPropertySet
-uno::Reference< beans::XPropertySetInfo > UnoControlTabPageModel::getPropertySetInfo(  ) throw(uno::RuntimeException)
+uno::Reference< beans::XPropertySetInfo > UnoControlTabPageModel::getPropertySetInfo(  ) throw(uno::RuntimeException, std::exception)
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 ////----- XInitialization -------------------------------------------------------------------
 void SAL_CALL UnoControlTabPageModel::initialize (const Sequence<Any>& rArguments)
-            throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException)
+            throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception)
 {
     sal_Int16 nPageId = -1;
     if ( rArguments.getLength() == 1 )
@@ -180,26 +180,26 @@ OUString UnoControlTabPage::GetComponentServiceName()
 }
 
 OUString SAL_CALL UnoControlTabPage::getImplementationName()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("stardiv.Toolkit.UnoControlTabPage");
 }
 
 sal_Bool SAL_CALL UnoControlTabPage::supportsService(OUString const & ServiceName)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 css::uno::Sequence<OUString> SAL_CALL UnoControlTabPage::getSupportedServiceNames()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     css::uno::Sequence< OUString > aSeq(1);
     aSeq[0] = OUString("com.sun.star.awt.tab.UnoControlTabPage");
     return aSeq;
 }
 
-void UnoControlTabPage::dispose() throw(RuntimeException)
+void UnoControlTabPage::dispose() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -208,12 +208,12 @@ void UnoControlTabPage::dispose() throw(RuntimeException)
     ControlContainerBase::dispose();
 }
 
-void SAL_CALL UnoControlTabPage::disposing( const lang::EventObject& Source )throw(RuntimeException)
+void SAL_CALL UnoControlTabPage::disposing( const lang::EventObject& Source )throw(RuntimeException, std::exception)
 {
      ControlContainerBase::disposing( Source );
 }
 
-void UnoControlTabPage::createPeer( const Reference< XToolkit > & rxToolkit, const Reference< XWindowPeer >  & rParentPeer ) throw(RuntimeException)
+void UnoControlTabPage::createPeer( const Reference< XToolkit > & rxToolkit, const Reference< XWindowPeer >  & rParentPeer ) throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ImplUpdateResourceResolver();
@@ -239,7 +239,7 @@ static ::Size ImplMapPixelToAppFont( OutputDevice* pOutDev, const ::Size& aSize 
 }
 // ::com::sun::star::awt::XWindowListener
 void SAL_CALL UnoControlTabPage::windowResized( const ::com::sun::star::awt::WindowEvent& e )
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     OutputDevice*pOutDev = Application::GetDefaultDevice();
     DBG_ASSERT( pOutDev, "Missing Default Device!" );
@@ -277,7 +277,7 @@ throw (::com::sun::star::uno::RuntimeException)
 }
 
 void SAL_CALL UnoControlTabPage::windowMoved( const ::com::sun::star::awt::WindowEvent& e )
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     OutputDevice*pOutDev = Application::GetDefaultDevice();
     DBG_ASSERT( pOutDev, "Missing Default Device!" );
@@ -303,13 +303,13 @@ throw (::com::sun::star::uno::RuntimeException)
 }
 
 void SAL_CALL UnoControlTabPage::windowShown( const ::com::sun::star::lang::EventObject& e )
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     (void)e;
 }
 
 void SAL_CALL UnoControlTabPage::windowHidden( const ::com::sun::star::lang::EventObject& e )
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     (void)e;
 }

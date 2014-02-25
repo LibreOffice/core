@@ -187,7 +187,7 @@ void Statement::checkClosed() throw (SQLException, RuntimeException )
             *this, OUString(),1,Any());
 }
 
-Any Statement::queryInterface( const Type & reqType ) throw (RuntimeException)
+Any Statement::queryInterface( const Type & reqType ) throw (RuntimeException, std::exception)
 {
     Any ret;
 
@@ -206,7 +206,7 @@ Any Statement::queryInterface( const Type & reqType ) throw (RuntimeException)
 }
 
 
-Sequence< Type > Statement::getTypes() throw ( RuntimeException )
+Sequence< Type > Statement::getTypes() throw ( RuntimeException, std::exception )
 {
     static cppu::OTypeCollection *pCollection;
     if( ! pCollection )
@@ -230,7 +230,7 @@ Sequence< Type > Statement::getTypes() throw ( RuntimeException )
     return pCollection->getTypes();
 }
 
-Sequence< sal_Int8> Statement::getImplementationId() throw ( RuntimeException )
+Sequence< sal_Int8> Statement::getImplementationId() throw ( RuntimeException, std::exception )
 {
     static cppu::OImplementationId *pId;
     if( ! pId )
@@ -245,7 +245,7 @@ Sequence< sal_Int8> Statement::getImplementationId() throw ( RuntimeException )
     return pId->getImplementationId();
 }
 
-void Statement::close(  ) throw (SQLException, RuntimeException)
+void Statement::close(  ) throw (SQLException, RuntimeException, std::exception)
 {
     // let the connection die without acquired mutex !
     Reference< XConnection > r;
@@ -290,7 +290,7 @@ void Statement::raiseSQLException(
 }
 
 Reference< XResultSet > Statement::executeQuery(const OUString& sql )
-        throw (SQLException, RuntimeException)
+        throw (SQLException, RuntimeException, std::exception)
 {
     Reference< XCloseable > lastResultSetHolder = m_lastResultset;
     if( lastResultSetHolder.is() )
@@ -304,7 +304,7 @@ Reference< XResultSet > Statement::executeQuery(const OUString& sql )
 }
 
 sal_Int32 Statement::executeUpdate( const OUString& sql )
-        throw (SQLException, RuntimeException)
+        throw (SQLException, RuntimeException, std::exception)
 {
     if( execute( sql ) )
     {
@@ -861,7 +861,7 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
 }
 
 sal_Bool Statement::execute( const OUString& sql )
-        throw (SQLException, RuntimeException)
+        throw (SQLException, RuntimeException, std::exception)
 {
     osl::MutexGuard guard( m_refMutex->mutex );
     checkClosed();
@@ -887,7 +887,7 @@ sal_Bool Statement::execute( const OUString& sql )
 }
 
 Reference< XConnection > Statement::getConnection(  )
-        throw (SQLException, RuntimeException)
+        throw (SQLException, RuntimeException, std::exception)
 {
     Reference< XConnection > ret;
     {
@@ -900,18 +900,18 @@ Reference< XConnection > Statement::getConnection(  )
 
 
 Any Statement::getWarnings(  )
-        throw (SQLException,RuntimeException)
+        throw (SQLException,RuntimeException, std::exception)
 {
     return Any();
 }
 
 void Statement::clearWarnings(  )
-        throw (SQLException, RuntimeException)
+        throw (SQLException, RuntimeException, std::exception)
 {
 }
 
 Reference< ::com::sun::star::sdbc::XResultSetMetaData > Statement::getMetaData()
-            throw (SQLException,RuntimeException)
+            throw (SQLException,RuntimeException, std::exception)
 {
     Reference< com::sun::star::sdbc::XResultSetMetaData > ret;
     Reference< com::sun::star::sdbc::XResultSetMetaDataSupplier > supplier( m_lastResultset, UNO_QUERY );
@@ -976,7 +976,7 @@ sal_Bool Statement::convertFastPropertyValue(
 
 
 void Statement::setFastPropertyValue_NoBroadcast(
-    sal_Int32 nHandle,const Any& rValue ) throw (Exception)
+    sal_Int32 nHandle,const Any& rValue ) throw (Exception, std::exception)
 {
     m_props[nHandle] = rValue;
 }
@@ -987,26 +987,26 @@ void Statement::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
 }
 
 Reference < XPropertySetInfo >  Statement::getPropertySetInfo()
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     return OPropertySetHelper::createPropertySetInfo( getStatementPropertyArrayHelper() );
 }
 
 
 Reference< XResultSet > Statement::getResultSet(  )
-    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     return Reference< XResultSet > ( m_lastResultset, com::sun::star::uno::UNO_QUERY );
 }
 
 sal_Int32 Statement::getUpdateCount(  )
-    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     return m_multipleResultUpdateCount;
 }
 
 sal_Bool Statement::getMoreResults(  )
-    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     return sal_False;
 }
@@ -1019,7 +1019,7 @@ void Statement::disposing()
 }
 
 Reference< XResultSet > Statement::getGeneratedValues(  )
-        throw (SQLException, RuntimeException)
+        throw (SQLException, RuntimeException, std::exception)
 {
     osl::MutexGuard guard( m_refMutex->mutex );
     return getGeneratedValuesFromLastInsert(

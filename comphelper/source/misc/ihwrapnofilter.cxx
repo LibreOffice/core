@@ -56,7 +56,7 @@ namespace comphelper
     // XInteractionHandler
 
     void SAL_CALL OIHWrapNoFilterDialog::handle( const uno::Reference< task::XInteractionRequest >& xRequest)
-            throw( com::sun::star::uno::RuntimeException )
+            throw( com::sun::star::uno::RuntimeException, std::exception )
     {
         if( !m_xInter.is() )
             return;
@@ -73,7 +73,7 @@ namespace comphelper
     // XInteractionHandler2
 
     sal_Bool SAL_CALL OIHWrapNoFilterDialog::handleInteractionRequest( const uno::Reference< task::XInteractionRequest >& xRequest)
-            throw( com::sun::star::uno::RuntimeException )
+            throw( com::sun::star::uno::RuntimeException, std::exception )
     {
         if( !m_xInter.is() )
             return sal_False;
@@ -101,19 +101,19 @@ namespace comphelper
 
     // XServiceInfo
     OUString SAL_CALL OIHWrapNoFilterDialog::getImplementationName()
-        throw ( uno::RuntimeException )
+        throw ( uno::RuntimeException, std::exception )
     {
         return impl_staticGetImplementationName();
     }
 
     ::sal_Bool SAL_CALL OIHWrapNoFilterDialog::supportsService( const OUString& ServiceName )
-        throw ( uno::RuntimeException )
+        throw ( uno::RuntimeException, std::exception )
     {
         return cppu::supportsService(this, ServiceName);
     }
 
     uno::Sequence< OUString > SAL_CALL OIHWrapNoFilterDialog::getSupportedServiceNames()
-        throw ( uno::RuntimeException )
+        throw ( uno::RuntimeException, std::exception )
     {
         return impl_staticGetSupportedServiceNames();
     }

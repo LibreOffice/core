@@ -370,21 +370,21 @@ public:
         : mxControlContainer( xControlContainer ) {}
 
     // XEventListener
-    virtual void SAL_CALL disposing( const  lang::EventObject& Source ) throw( uno::RuntimeException);
+    virtual void SAL_CALL disposing( const  lang::EventObject& Source ) throw( uno::RuntimeException, std::exception);
 
     // XPropertyChangeListener
-    virtual void SAL_CALL propertyChange( const  beans::PropertyChangeEvent& evt ) throw( uno::RuntimeException);
+    virtual void SAL_CALL propertyChange( const  beans::PropertyChangeEvent& evt ) throw( uno::RuntimeException, std::exception);
 
 };
 
 void SAL_CALL DialogStepChangedListener::disposing( const  lang::EventObject& /*_rSource*/)
-    throw( uno::RuntimeException)
+    throw( uno::RuntimeException, std::exception)
 {
     mxControlContainer.clear();
 }
 
 void SAL_CALL DialogStepChangedListener::propertyChange( const  beans::PropertyChangeEvent& evt )
-    throw( uno::RuntimeException)
+    throw( uno::RuntimeException, std::exception)
 {
     // evt.PropertyName HAS to be "Step" because we only use the listener for that
     sal_Int32 nDialogStep = 0;
@@ -427,7 +427,7 @@ void UnoControlContainer::ImplActivateTabControllers()
 }
 
 // lang::XComponent
-void UnoControlContainer::dispose(  ) throw(uno::RuntimeException)
+void UnoControlContainer::dispose(  ) throw(uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -460,7 +460,7 @@ void UnoControlContainer::dispose(  ) throw(uno::RuntimeException)
 }
 
 // lang::XEventListener
-void UnoControlContainer::disposing( const lang::EventObject& _rEvt ) throw(uno::RuntimeException)
+void UnoControlContainer::disposing( const lang::EventObject& _rEvt ) throw(uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -472,14 +472,14 @@ void UnoControlContainer::disposing( const lang::EventObject& _rEvt ) throw(uno:
 }
 
 // container::XContainer
-void UnoControlContainer::addContainerListener( const uno::Reference< container::XContainerListener >& rxListener ) throw(uno::RuntimeException)
+void UnoControlContainer::addContainerListener( const uno::Reference< container::XContainerListener >& rxListener ) throw(uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     maCListeners.addInterface( rxListener );
 }
 
-void UnoControlContainer::removeContainerListener( const uno::Reference< container::XContainerListener >& rxListener ) throw(uno::RuntimeException)
+void UnoControlContainer::removeContainerListener( const uno::Reference< container::XContainerListener >& rxListener ) throw(uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -487,7 +487,7 @@ void UnoControlContainer::removeContainerListener( const uno::Reference< contain
 }
 
 
-::sal_Int32 SAL_CALL UnoControlContainer::insert( const uno::Any& _rElement ) throw (lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+::sal_Int32 SAL_CALL UnoControlContainer::insert( const uno::Any& _rElement ) throw (lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -502,7 +502,7 @@ void UnoControlContainer::removeContainerListener( const uno::Reference< contain
     return impl_addControl( xControl, NULL );
 }
 
-void SAL_CALL UnoControlContainer::removeByIdentifier( ::sal_Int32 _nIdentifier ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL UnoControlContainer::removeByIdentifier( ::sal_Int32 _nIdentifier ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -516,7 +516,7 @@ void SAL_CALL UnoControlContainer::removeByIdentifier( ::sal_Int32 _nIdentifier 
     impl_removeControl( _nIdentifier, xControl, NULL );
 }
 
-void SAL_CALL UnoControlContainer::replaceByIdentifer( ::sal_Int32 _nIdentifier, const uno::Any& _rElement ) throw (lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL UnoControlContainer::replaceByIdentifer( ::sal_Int32 _nIdentifier, const uno::Any& _rElement ) throw (lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -554,7 +554,7 @@ void SAL_CALL UnoControlContainer::replaceByIdentifer( ::sal_Int32 _nIdentifier,
     }
 }
 
-uno::Any SAL_CALL UnoControlContainer::getByIdentifier( ::sal_Int32 _nIdentifier ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+uno::Any SAL_CALL UnoControlContainer::getByIdentifier( ::sal_Int32 _nIdentifier ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -564,7 +564,7 @@ uno::Any SAL_CALL UnoControlContainer::getByIdentifier( ::sal_Int32 _nIdentifier
     return uno::makeAny( xControl );
 }
 
-uno::Sequence< ::sal_Int32 > SAL_CALL UnoControlContainer::getIdentifiers(  ) throw (uno::RuntimeException)
+uno::Sequence< ::sal_Int32 > SAL_CALL UnoControlContainer::getIdentifiers(  ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -574,19 +574,19 @@ uno::Sequence< ::sal_Int32 > SAL_CALL UnoControlContainer::getIdentifiers(  ) th
 }
 
 // container::XElementAccess
-uno::Type SAL_CALL UnoControlContainer::getElementType(  ) throw (uno::RuntimeException)
+uno::Type SAL_CALL UnoControlContainer::getElementType(  ) throw (uno::RuntimeException, std::exception)
 {
     return cppu::UnoType<awt::XControlModel>::get();
 }
 
-::sal_Bool SAL_CALL UnoControlContainer::hasElements(  ) throw (uno::RuntimeException)
+::sal_Bool SAL_CALL UnoControlContainer::hasElements(  ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
     return !mpControls->empty();
 }
 
 // awt::XControlContainer
-void UnoControlContainer::setStatusText( const OUString& rStatusText ) throw(uno::RuntimeException)
+void UnoControlContainer::setStatusText( const OUString& rStatusText ) throw(uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -596,7 +596,7 @@ void UnoControlContainer::setStatusText( const OUString& rStatusText ) throw(uno
         xContainer->setStatusText( rStatusText );
 }
 
-uno::Sequence< uno::Reference< awt::XControl > > UnoControlContainer::getControls(  ) throw(uno::RuntimeException)
+uno::Sequence< uno::Reference< awt::XControl > > UnoControlContainer::getControls(  ) throw(uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
     uno::Sequence< uno::Reference< awt::XControl > > aControls;
@@ -604,7 +604,7 @@ uno::Sequence< uno::Reference< awt::XControl > > UnoControlContainer::getControl
     return aControls;
 }
 
-uno::Reference< awt::XControl > UnoControlContainer::getControl( const OUString& rName ) throw(uno::RuntimeException)
+uno::Reference< awt::XControl > UnoControlContainer::getControl( const OUString& rName ) throw(uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
     return mpControls->getControlForName( rName );
@@ -658,7 +658,7 @@ sal_Int32 UnoControlContainer::impl_addControl( const uno::Reference< awt::XCont
     return id;
 }
 
-void UnoControlContainer::addControl( const OUString& rName, const uno::Reference< awt::XControl >& rControl ) throw(uno::RuntimeException)
+void UnoControlContainer::addControl( const OUString& rName, const uno::Reference< awt::XControl >& rControl ) throw(uno::RuntimeException, std::exception)
 {
     if ( rControl.is() )
         impl_addControl( rControl, &rName );
@@ -696,7 +696,7 @@ void UnoControlContainer::impl_removeControl( sal_Int32 _nId, const uno::Referen
     }
 }
 
-void UnoControlContainer::removeControl( const uno::Reference< awt::XControl >& _rxControl ) throw(uno::RuntimeException)
+void UnoControlContainer::removeControl( const uno::Reference< awt::XControl >& _rxControl ) throw(uno::RuntimeException, std::exception)
 {
     if ( _rxControl.is() )
     {
@@ -711,21 +711,21 @@ void UnoControlContainer::removeControl( const uno::Reference< awt::XControl >& 
 
 
 // awt::XUnoControlContainer
-void UnoControlContainer::setTabControllers( const uno::Sequence< uno::Reference< awt::XTabController > >& TabControllers ) throw(uno::RuntimeException)
+void UnoControlContainer::setTabControllers( const uno::Sequence< uno::Reference< awt::XTabController > >& TabControllers ) throw(uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     maTabControllers = TabControllers;
 }
 
-uno::Sequence< uno::Reference< awt::XTabController > > UnoControlContainer::getTabControllers(  ) throw(uno::RuntimeException)
+uno::Sequence< uno::Reference< awt::XTabController > > UnoControlContainer::getTabControllers(  ) throw(uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     return maTabControllers;
 }
 
-void UnoControlContainer::addTabController( const uno::Reference< awt::XTabController >& TabController ) throw(uno::RuntimeException)
+void UnoControlContainer::addTabController( const uno::Reference< awt::XTabController >& TabController ) throw(uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -734,7 +734,7 @@ void UnoControlContainer::addTabController( const uno::Reference< awt::XTabContr
     maTabControllers[ nCount ] = TabController;
 }
 
-void UnoControlContainer::removeTabController( const uno::Reference< awt::XTabController >& TabController ) throw(uno::RuntimeException)
+void UnoControlContainer::removeTabController( const uno::Reference< awt::XTabController >& TabController ) throw(uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -751,7 +751,7 @@ void UnoControlContainer::removeTabController( const uno::Reference< awt::XTabCo
 }
 
 // awt::XControl
-void UnoControlContainer::createPeer( const uno::Reference< awt::XToolkit >& rxToolkit, const uno::Reference< awt::XWindowPeer >& rParent ) throw(uno::RuntimeException)
+void UnoControlContainer::createPeer( const uno::Reference< awt::XToolkit >& rxToolkit, const uno::Reference< awt::XWindowPeer >& rParent ) throw(uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -810,7 +810,7 @@ void UnoControlContainer::createPeer( const uno::Reference< awt::XToolkit >& rxT
 
 
 // awt::XWindow
-void UnoControlContainer::setVisible( sal_Bool bVisible ) throw(uno::RuntimeException)
+void UnoControlContainer::setVisible( sal_Bool bVisible ) throw(uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 

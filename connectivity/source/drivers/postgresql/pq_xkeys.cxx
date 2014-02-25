@@ -114,7 +114,7 @@ static sal_Int32 string2keyrule( const OUString & rule )
 }
 
 void Keys::refresh()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     try
     {
@@ -219,7 +219,7 @@ void Keys::appendByDescriptor(
     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor )
     throw (::com::sun::star::sdbc::SQLException,
            ::com::sun::star::container::ElementExistException,
-           ::com::sun::star::uno::RuntimeException)
+           ::com::sun::star::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard guard( m_refMutex->mutex );
 
@@ -238,7 +238,7 @@ void Keys::appendByDescriptor(
 void Keys::dropByIndex( sal_Int32 index )
     throw (::com::sun::star::sdbc::SQLException,
            ::com::sun::star::lang::IndexOutOfBoundsException,
-           ::com::sun::star::uno::RuntimeException)
+           ::com::sun::star::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard guard( m_refMutex->mutex );
     if( index < 0 ||  index >= m_values.getLength() )
@@ -267,7 +267,7 @@ void Keys::dropByIndex( sal_Int32 index )
 
 
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > Keys::createDataDescriptor()
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return new KeyDescriptor( m_refMutex, m_origin, m_pSettings );
 }
@@ -302,7 +302,7 @@ Reference< com::sun::star::container::XIndexAccess > KeyDescriptors::create(
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > KeyDescriptors::createDataDescriptor()
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return new KeyDescriptor( m_refMutex, m_origin, m_pSettings );
 }

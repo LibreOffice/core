@@ -500,7 +500,7 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLImportSettings_createInstance(
 
 sal_Int64 SAL_CALL SmXMLImport::getSomething(
     const uno::Sequence< sal_Int8 >&rId )
-throw(uno::RuntimeException)
+throw(uno::RuntimeException, std::exception)
 {
     if ( rId.getLength() == 16 &&
         0 == memcmp( getUnoTunnelId().getConstArray(),
@@ -511,7 +511,7 @@ throw(uno::RuntimeException)
 }
 
 void SmXMLImport::endDocument(void)
-    throw(xml::sax::SAXException, uno::RuntimeException)
+    throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
     //Set the resulted tree into the SmDocShell where it belongs
     SmNode *pTree;

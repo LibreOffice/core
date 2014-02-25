@@ -102,7 +102,7 @@ Index::Index( const ::rtl::Reference< RefCountedMutex > & refMutex,
       m_tableName( tableName )
 {}
 
-Reference< XPropertySet > Index::createDataDescriptor(  ) throw (RuntimeException)
+Reference< XPropertySet > Index::createDataDescriptor(  ) throw (RuntimeException, std::exception)
 {
     IndexDescriptor * pIndex = new IndexDescriptor(
         m_refMutex, m_conn, m_pSettings );
@@ -111,7 +111,7 @@ Reference< XPropertySet > Index::createDataDescriptor(  ) throw (RuntimeExceptio
     return Reference< XPropertySet > ( pIndex );
 }
 
-Reference< XNameAccess > Index::getColumns(  ) throw (::com::sun::star::uno::RuntimeException)
+Reference< XNameAccess > Index::getColumns(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     if( ! m_indexColumns.is() )
     {
@@ -125,7 +125,7 @@ Reference< XNameAccess > Index::getColumns(  ) throw (::com::sun::star::uno::Run
     return m_indexColumns;
 }
 
-Sequence<Type > Index::getTypes() throw( RuntimeException )
+Sequence<Type > Index::getTypes() throw( RuntimeException, std::exception )
 {
     static cppu::OTypeCollection *pCollection;
     if( ! pCollection )
@@ -142,12 +142,12 @@ Sequence<Type > Index::getTypes() throw( RuntimeException )
     return pCollection->getTypes();
 }
 
-Sequence< sal_Int8> Index::getImplementationId() throw( RuntimeException )
+Sequence< sal_Int8> Index::getImplementationId() throw( RuntimeException, std::exception )
 {
     return getStatics().refl.index.implementationId;
 }
 
-Any Index::queryInterface( const Type & reqType ) throw (RuntimeException)
+Any Index::queryInterface( const Type & reqType ) throw (RuntimeException, std::exception)
 {
     Any ret;
 
@@ -174,7 +174,7 @@ IndexDescriptor::IndexDescriptor(
         * getStatics().refl.indexDescriptor.pProps )
 {}
 
-Reference< XPropertySet > IndexDescriptor::createDataDescriptor(  ) throw (RuntimeException)
+Reference< XPropertySet > IndexDescriptor::createDataDescriptor(  ) throw (RuntimeException, std::exception)
 {
     IndexDescriptor * pIndex = new IndexDescriptor(
         m_refMutex, m_conn, m_pSettings );
@@ -182,7 +182,7 @@ Reference< XPropertySet > IndexDescriptor::createDataDescriptor(  ) throw (Runti
     return Reference< XPropertySet > ( pIndex );
 }
 
-Reference< XNameAccess > IndexDescriptor::getColumns(  ) throw (::com::sun::star::uno::RuntimeException)
+Reference< XNameAccess > IndexDescriptor::getColumns(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     if( ! m_indexColumns.is() )
     {
@@ -198,7 +198,7 @@ Reference< XNameAccess > IndexDescriptor::getColumns(  ) throw (::com::sun::star
     return m_indexColumns;
 }
 
-Sequence<Type > IndexDescriptor::getTypes() throw( RuntimeException )
+Sequence<Type > IndexDescriptor::getTypes() throw( RuntimeException, std::exception )
 {
     static cppu::OTypeCollection *pCollection;
     if( ! pCollection )
@@ -215,12 +215,12 @@ Sequence<Type > IndexDescriptor::getTypes() throw( RuntimeException )
     return pCollection->getTypes();
 }
 
-Sequence< sal_Int8> IndexDescriptor::getImplementationId() throw( RuntimeException )
+Sequence< sal_Int8> IndexDescriptor::getImplementationId() throw( RuntimeException, std::exception )
 {
     return getStatics().refl.indexDescriptor.implementationId;
 }
 
-Any IndexDescriptor::queryInterface( const Type & reqType ) throw (RuntimeException)
+Any IndexDescriptor::queryInterface( const Type & reqType ) throw (RuntimeException, std::exception)
 {
     Any ret;
 

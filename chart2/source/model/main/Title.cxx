@@ -256,21 +256,21 @@ Title::~Title()
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL Title::createClone()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< util::XCloneable >( new Title( *this ));
 }
 
 // ____ XTitle ____
 uno::Sequence< uno::Reference< chart2::XFormattedString > > SAL_CALL Title::getText()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard( GetMutex() );
     return m_aStrings;
 }
 
 void SAL_CALL Title::setText( const uno::Sequence< uno::Reference< chart2::XFormattedString > >& rNewStrings )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     uno::Sequence< uno::Reference< chart2::XFormattedString > > aOldStrings;
     {
@@ -304,14 +304,14 @@ uno::Any Title::GetDefaultValue( sal_Int32 nHandle ) const
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL Title::getPropertySetInfo()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return *StaticTitleInfo::get();
 }
 
 // ____ XModifyBroadcaster ____
 void SAL_CALL Title::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -325,7 +325,7 @@ void SAL_CALL Title::addModifyListener( const uno::Reference< util::XModifyListe
 }
 
 void SAL_CALL Title::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -340,14 +340,14 @@ void SAL_CALL Title::removeModifyListener( const uno::Reference< util::XModifyLi
 
 // ____ XModifyListener ____
 void SAL_CALL Title::modified( const lang::EventObject& aEvent )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
 // ____ XEventListener (base of XModifyListener) ____
 void SAL_CALL Title::disposing( const lang::EventObject& /* Source */ )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     // nothing
 }

@@ -186,7 +186,7 @@ void SAL_CALL SfxDialogLibraryContainer::writeLibraryElement
     xInput->closeInput();
 }
 
-void SfxDialogLibraryContainer::storeLibrariesToStorage( const uno::Reference< embed::XStorage >& xStorage ) throw ( RuntimeException )
+void SfxDialogLibraryContainer::storeLibrariesToStorage( const uno::Reference< embed::XStorage >& xStorage ) throw ( RuntimeException, std::exception )
 {
     LibraryContainerMethodGuard aGuard( *this );
     mbOasis2OOoFormat = false;
@@ -443,7 +443,7 @@ void SfxDialogLibraryContainer::onNewRootStorage()
 }
 
 sal_Bool SAL_CALL
-SfxDialogLibraryContainer:: HasExecutableCode( const OUString& /*Library*/ ) throw (uno::RuntimeException)
+SfxDialogLibraryContainer:: HasExecutableCode( const OUString& /*Library*/ ) throw (uno::RuntimeException, std::exception)
 {
     return sal_False; // dialog library has no executable code
 }
@@ -455,12 +455,12 @@ void createRegistryInfo_SfxDialogLibraryContainer()
     static OAutoRegistration< SfxDialogLibraryContainer > aAutoRegistration;
 }
 
-OUString SAL_CALL SfxDialogLibraryContainer::getImplementationName( ) throw (RuntimeException)
+OUString SAL_CALL SfxDialogLibraryContainer::getImplementationName( ) throw (RuntimeException, std::exception)
 {
     return getImplementationName_static();
 }
 
-Sequence< OUString > SAL_CALL SfxDialogLibraryContainer::getSupportedServiceNames( ) throw (RuntimeException)
+Sequence< OUString > SAL_CALL SfxDialogLibraryContainer::getSupportedServiceNames( ) throw (RuntimeException, std::exception)
 {
     return getSupportedServiceNames_static();
 }
@@ -585,7 +585,7 @@ void SfxDialogLibrary::storeResourcesToStorage( const ::com::sun::star::uno::Ref
 
 // XStringResourceSupplier
 Reference< resource::XStringResourceResolver >
-    SAL_CALL SfxDialogLibrary::getStringResource(  ) throw (RuntimeException)
+    SAL_CALL SfxDialogLibrary::getStringResource(  ) throw (RuntimeException, std::exception)
 {
     if( !m_xStringResourcePersistence.is() )
         m_xStringResourcePersistence = m_pParent->implCreateStringResource( this );

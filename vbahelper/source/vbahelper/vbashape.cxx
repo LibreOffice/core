@@ -59,7 +59,7 @@ ScVbaShape::~ScVbaShape()
 }
 
 void SAL_CALL
-ScVbaShape::disposing( const lang::EventObject& rEventObject ) throw( uno::RuntimeException )
+ScVbaShape::disposing( const lang::EventObject& rEventObject ) throw( uno::RuntimeException, std::exception )
 {
     try
     {
@@ -152,7 +152,7 @@ ScVbaShape::getType( const css::uno::Reference< drawing::XShape > xShape ) throw
 
 // Attributes
 OUString SAL_CALL
-ScVbaShape::getName() throw (uno::RuntimeException)
+ScVbaShape::getName() throw (uno::RuntimeException, std::exception)
 {
     OUString sName;
     uno::Reference< container::XNamed > xNamed( m_xShape, uno::UNO_QUERY_THROW );
@@ -161,14 +161,14 @@ ScVbaShape::getName() throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-ScVbaShape::setName( const OUString& _name ) throw (uno::RuntimeException)
+ScVbaShape::setName( const OUString& _name ) throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< container::XNamed > xNamed( m_xShape, uno::UNO_QUERY_THROW );
     xNamed->setName( _name );
 }
 
 OUString SAL_CALL
-ScVbaShape::getAlternativeText() throw (uno::RuntimeException)
+ScVbaShape::getAlternativeText() throw (uno::RuntimeException, std::exception)
 {
     OUString sAltText;
     uno::Reference< beans::XPropertySet > xProps( m_xShape, uno::UNO_QUERY_THROW );
@@ -177,38 +177,38 @@ ScVbaShape::getAlternativeText() throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-ScVbaShape::setAlternativeText( const OUString& sAltText ) throw (uno::RuntimeException)
+ScVbaShape::setAlternativeText( const OUString& sAltText ) throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< beans::XPropertySet > xProps( m_xShape, uno::UNO_QUERY_THROW );
     xProps->setPropertyValue("Title", uno::Any( sAltText ) );
 }
 
 double SAL_CALL
-ScVbaShape::getHeight() throw (uno::RuntimeException)
+ScVbaShape::getHeight() throw (uno::RuntimeException, std::exception)
 {
     return m_pShapeHelper->getHeight();
 }
 
 void SAL_CALL
-ScVbaShape::setHeight( double _height ) throw (uno::RuntimeException)
+ScVbaShape::setHeight( double _height ) throw (uno::RuntimeException, std::exception)
 {
     m_pShapeHelper->setHeight( _height );
 }
 
 double SAL_CALL
-ScVbaShape::getWidth() throw (uno::RuntimeException)
+ScVbaShape::getWidth() throw (uno::RuntimeException, std::exception)
 {
     return m_pShapeHelper->getWidth();
 }
 
 void SAL_CALL
-ScVbaShape::setWidth( double _width ) throw (uno::RuntimeException)
+ScVbaShape::setWidth( double _width ) throw (uno::RuntimeException, std::exception)
 {
     m_pShapeHelper->setWidth( _width );
 }
 
 double SAL_CALL
-ScVbaShape::getLeft() throw (uno::RuntimeException)
+ScVbaShape::getLeft() throw (uno::RuntimeException, std::exception)
 {
     double left = 0;
     try
@@ -226,7 +226,7 @@ ScVbaShape::getLeft() throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-ScVbaShape::setLeft( double _left ) throw (uno::RuntimeException)
+ScVbaShape::setLeft( double _left ) throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -241,7 +241,7 @@ ScVbaShape::setLeft( double _left ) throw (uno::RuntimeException)
 }
 
 double SAL_CALL
-ScVbaShape::getTop() throw (uno::RuntimeException)
+ScVbaShape::getTop() throw (uno::RuntimeException, std::exception)
 {
     double top = 0;
     try
@@ -258,7 +258,7 @@ ScVbaShape::getTop() throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-ScVbaShape::setTop( double _top ) throw (uno::RuntimeException)
+ScVbaShape::setTop( double _top ) throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -273,7 +273,7 @@ ScVbaShape::setTop( double _top ) throw (uno::RuntimeException)
 }
 
 sal_Bool SAL_CALL
-ScVbaShape::getVisible() throw (uno::RuntimeException)
+ScVbaShape::getVisible() throw (uno::RuntimeException, std::exception)
 {
     // #STUB
     //UNO Shapes are always visible
@@ -281,14 +281,14 @@ ScVbaShape::getVisible() throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-ScVbaShape::setVisible( sal_Bool /*_visible*/ ) throw (uno::RuntimeException)
+ScVbaShape::setVisible( sal_Bool /*_visible*/ ) throw (uno::RuntimeException, std::exception)
 {
     // #STUB
     //UNO Shapes are always visible
 }
 
 sal_Int32 SAL_CALL
-ScVbaShape::getZOrderPosition() throw (uno::RuntimeException)
+ScVbaShape::getZOrderPosition() throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nZOrderPosition = 0;
     uno::Any aZOrderPosition =  m_xPropertySet->getPropertyValue( "ZOrder" );
@@ -297,13 +297,13 @@ ScVbaShape::getZOrderPosition() throw (uno::RuntimeException)
 }
 
 sal_Int32 SAL_CALL
-ScVbaShape::getType() throw (uno::RuntimeException)
+ScVbaShape::getType() throw (uno::RuntimeException, std::exception)
 {
     return m_nType;
 }
 
 double SAL_CALL
-ScVbaShape::getRotation() throw (uno::RuntimeException)
+ScVbaShape::getRotation() throw (uno::RuntimeException, std::exception)
 {
     double dRotation = 0;
     sal_Int32 nRotation = 0;
@@ -313,34 +313,34 @@ ScVbaShape::getRotation() throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-ScVbaShape::setRotation( double _rotation ) throw (uno::RuntimeException)
+ScVbaShape::setRotation( double _rotation ) throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nRotation = static_cast < sal_Int32 > ( _rotation * 100 );
     m_xPropertySet->setPropertyValue( "RotateAngle" , uno::makeAny( nRotation ) );
 }
 
 uno::Reference< msforms::XLineFormat > SAL_CALL
-ScVbaShape::getLine() throw (uno::RuntimeException)
+ScVbaShape::getLine() throw (uno::RuntimeException, std::exception)
 {
     // TODO should ongly return line
     return uno::Reference< msforms::XLineFormat >( new ScVbaLineFormat( this, mxContext, m_xShape ) );
 }
 
 uno::Reference< msforms::XFillFormat > SAL_CALL
-ScVbaShape::getFill() throw (uno::RuntimeException)
+ScVbaShape::getFill() throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< msforms::XFillFormat >( new ScVbaFillFormat( this, mxContext, m_xShape ) );
 }
 
 uno::Reference<  msforms::XPictureFormat > SAL_CALL
-ScVbaShape::getPictureFormat() throw (uno::RuntimeException)
+ScVbaShape::getPictureFormat() throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< msforms::XPictureFormat >( new ScVbaPictureFormat( this, mxContext, m_xShape ) );
 }
 
 // Methods
 uno::Any SAL_CALL
-ScVbaShape::TextFrame() throw (uno::RuntimeException)
+ScVbaShape::TextFrame() throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< lang::XServiceInfo > xServiceInfo( m_xModel, uno::UNO_QUERY_THROW );
     if( xServiceInfo->supportsService( "com.sun.star.sheet.SpreadsheetDocument" ) )
@@ -357,14 +357,14 @@ ScVbaShape::TextFrame() throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-ScVbaShape::Delete() throw (uno::RuntimeException)
+ScVbaShape::Delete() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     m_xShapes->remove( m_xShape );
 }
 
 void SAL_CALL
-ScVbaShape::ZOrder( sal_Int32 ZOrderCmd ) throw (uno::RuntimeException)
+ScVbaShape::ZOrder( sal_Int32 ZOrderCmd ) throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nOrderPositon;
     uno::Any aOrderPostion = m_xPropertySet->getPropertyValue( "ZOrder" );
@@ -398,7 +398,7 @@ ScVbaShape::ZOrder( sal_Int32 ZOrderCmd ) throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-ScVbaShape::IncrementRotation( double Increment ) throw (uno::RuntimeException)
+ScVbaShape::IncrementRotation( double Increment ) throw (uno::RuntimeException, std::exception)
 {
     double nCurrentRotation = getRotation();
     nCurrentRotation += Increment;
@@ -406,7 +406,7 @@ ScVbaShape::IncrementRotation( double Increment ) throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-ScVbaShape::IncrementLeft( double Increment ) throw (uno::RuntimeException)
+ScVbaShape::IncrementLeft( double Increment ) throw (uno::RuntimeException, std::exception)
 {
     double nCurrentLeft = getLeft();
     nCurrentLeft += Increment;
@@ -414,7 +414,7 @@ ScVbaShape::IncrementLeft( double Increment ) throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-ScVbaShape::IncrementTop( double Increment ) throw (uno::RuntimeException)
+ScVbaShape::IncrementTop( double Increment ) throw (uno::RuntimeException, std::exception)
 {
     double nCurrentTop = getTop();
     nCurrentTop += Increment;
@@ -422,7 +422,7 @@ ScVbaShape::IncrementTop( double Increment ) throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-ScVbaShape::ScaleHeight( double Factor, sal_Bool /*RelativeToOriginalSize*/, sal_Int32 Scale ) throw (uno::RuntimeException)
+ScVbaShape::ScaleHeight( double Factor, sal_Bool /*RelativeToOriginalSize*/, sal_Int32 Scale ) throw (uno::RuntimeException, std::exception)
 {
     double nHeight = getHeight();
     double nNewHeight = nHeight * Factor;
@@ -451,7 +451,7 @@ ScVbaShape::ScaleHeight( double Factor, sal_Bool /*RelativeToOriginalSize*/, sal
 }
 
 void SAL_CALL
-ScVbaShape::ScaleWidth( double Factor, sal_Bool /*RelativeToOriginalSize*/, sal_Int32 Scale ) throw (uno::RuntimeException)
+ScVbaShape::ScaleWidth( double Factor, sal_Bool /*RelativeToOriginalSize*/, sal_Int32 Scale ) throw (uno::RuntimeException, std::exception)
 {
     double nWidth = getWidth();
     double nNewWidth = nWidth * Factor;
@@ -480,7 +480,7 @@ ScVbaShape::ScaleWidth( double Factor, sal_Bool /*RelativeToOriginalSize*/, sal_
 }
 
 void SAL_CALL
-ScVbaShape::Select( const uno::Any& /*Replace*/ ) throw ( uno::RuntimeException )
+ScVbaShape::Select( const uno::Any& /*Replace*/ ) throw ( uno::RuntimeException, std::exception )
 {
     uno::Reference< view::XSelectionSupplier > xSelectSupp( m_xModel->getCurrentController(), uno::UNO_QUERY_THROW );
     xSelectSupp->select( uno::makeAny( m_xShape ) );
@@ -490,7 +490,7 @@ ScVbaShape::Select( const uno::Any& /*Replace*/ ) throw ( uno::RuntimeException 
 // dynamically create the appropriate objects e.g. TextBox, Oval, Picture etc.
 // ( e.g. the ones that really do have ShapeRange as an attribute )
 uno::Any SAL_CALL
-ScVbaShape::ShapeRange( const uno::Any& index ) throw ( uno::RuntimeException )
+ScVbaShape::ShapeRange( const uno::Any& index ) throw ( uno::RuntimeException, std::exception )
 {
     // perhaps we should store a reference to the Shapes Collection
     // in this class
@@ -509,33 +509,33 @@ ScVbaShape::ShapeRange( const uno::Any& index ) throw ( uno::RuntimeException )
 }
 
 sal_Bool SAL_CALL
-ScVbaShape::getLockAspectRatio() throw (uno::RuntimeException)
+ScVbaShape::getLockAspectRatio() throw (uno::RuntimeException, std::exception)
 {
     // #STUB
     return sal_False;
 }
 
 void SAL_CALL
-ScVbaShape::setLockAspectRatio( sal_Bool /*_lockaspectratio*/ ) throw (uno::RuntimeException)
+ScVbaShape::setLockAspectRatio( sal_Bool /*_lockaspectratio*/ ) throw (uno::RuntimeException, std::exception)
 {
     // #STUB
 }
 
 sal_Bool SAL_CALL
-ScVbaShape::getLockAnchor() throw (uno::RuntimeException)
+ScVbaShape::getLockAnchor() throw (uno::RuntimeException, std::exception)
 {
     // #STUB
     return sal_True;
 }
 
 void SAL_CALL
-ScVbaShape::setLockAnchor( sal_Bool /*_lockanchor*/ ) throw (uno::RuntimeException)
+ScVbaShape::setLockAnchor( sal_Bool /*_lockanchor*/ ) throw (uno::RuntimeException, std::exception)
 {
     // #STUB
 }
 
 sal_Int32 SAL_CALL
-ScVbaShape::getRelativeHorizontalPosition() throw (uno::RuntimeException)
+ScVbaShape::getRelativeHorizontalPosition() throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nRelativeHorizontalPosition = word::WdRelativeHorizontalPosition::wdRelativeHorizontalPositionMargin;
     sal_Int16 nType = text::RelOrientation::PAGE_LEFT;
@@ -572,7 +572,7 @@ ScVbaShape::getRelativeHorizontalPosition() throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-ScVbaShape::setRelativeHorizontalPosition( ::sal_Int32 _relativehorizontalposition ) throw (uno::RuntimeException)
+ScVbaShape::setRelativeHorizontalPosition( ::sal_Int32 _relativehorizontalposition ) throw (uno::RuntimeException, std::exception)
 {
     sal_Int16 nType = text::RelOrientation::PAGE_FRAME;
     switch( _relativehorizontalposition )
@@ -606,7 +606,7 @@ ScVbaShape::setRelativeHorizontalPosition( ::sal_Int32 _relativehorizontalpositi
 }
 
 sal_Int32 SAL_CALL
-ScVbaShape::getRelativeVerticalPosition() throw (uno::RuntimeException)
+ScVbaShape::getRelativeVerticalPosition() throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nRelativeVerticalPosition = word::WdRelativeVerticalPosition::wdRelativeVerticalPositionMargin;
     sal_Int16 nType = text::RelOrientation::PAGE_FRAME;
@@ -643,7 +643,7 @@ ScVbaShape::getRelativeVerticalPosition() throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-ScVbaShape::setRelativeVerticalPosition( ::sal_Int32 _relativeverticalposition ) throw (uno::RuntimeException)
+ScVbaShape::setRelativeVerticalPosition( ::sal_Int32 _relativeverticalposition ) throw (uno::RuntimeException, std::exception)
 {
     sal_Int16 nType = text::RelOrientation::PAGE_FRAME;
     switch( _relativeverticalposition )
@@ -677,7 +677,7 @@ ScVbaShape::setRelativeVerticalPosition( ::sal_Int32 _relativeverticalposition )
 }
 
 uno::Any SAL_CALL
-ScVbaShape::WrapFormat() throw (uno::RuntimeException)
+ScVbaShape::WrapFormat() throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< lang::XServiceInfo > xServiceInfo( m_xModel, uno::UNO_QUERY_THROW );
     if( xServiceInfo->supportsService( "com.sun.star.text.TextDocument" ))

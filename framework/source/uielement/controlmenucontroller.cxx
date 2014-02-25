@@ -183,19 +183,19 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     {
         return OUString("com.sun.star.comp.framework.ControlMenuController");
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     {
         return cppu::supportsService(this, ServiceName);
     }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     {
         css::uno::Sequence< OUString > aSeq(1);
         aSeq[0] = OUString("com.sun.star.frame.PopupMenuController");
@@ -204,19 +204,19 @@ public:
 
 
     // XPopupMenuController
-    virtual void SAL_CALL updatePopupMenu() throw (uno::RuntimeException);
+    virtual void SAL_CALL updatePopupMenu() throw (uno::RuntimeException, std::exception);
 
     // XInitialization
-    virtual void SAL_CALL initialize( const uno::Sequence< uno::Any >& aArguments ) throw (uno::Exception, uno::RuntimeException);
+    virtual void SAL_CALL initialize( const uno::Sequence< uno::Any >& aArguments ) throw (uno::Exception, uno::RuntimeException, std::exception);
 
     // XStatusListener
-    virtual void SAL_CALL statusChanged( const frame::FeatureStateEvent& Event ) throw ( uno::RuntimeException );
+    virtual void SAL_CALL statusChanged( const frame::FeatureStateEvent& Event ) throw ( uno::RuntimeException, std::exception );
 
     // XMenuListener
-    virtual void SAL_CALL itemActivated( const awt::MenuEvent& rEvent ) throw (uno::RuntimeException);
+    virtual void SAL_CALL itemActivated( const awt::MenuEvent& rEvent ) throw (uno::RuntimeException, std::exception);
 
     // XEventListener
-    virtual void SAL_CALL disposing( const lang::EventObject& Source ) throw ( uno::RuntimeException );
+    virtual void SAL_CALL disposing( const lang::EventObject& Source ) throw ( uno::RuntimeException, std::exception );
 
 private:
     virtual void impl_setPopupMenu();
@@ -295,7 +295,7 @@ void ControlMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rP
 }
 
 // XEventListener
-void SAL_CALL ControlMenuController::disposing( const EventObject& ) throw ( RuntimeException )
+void SAL_CALL ControlMenuController::disposing( const EventObject& ) throw ( RuntimeException, std::exception )
 {
     Reference< css::awt::XMenuListener > xHolder(( OWeakObject *)this, UNO_QUERY );
 
@@ -310,7 +310,7 @@ void SAL_CALL ControlMenuController::disposing( const EventObject& ) throw ( Run
 }
 
 // XStatusListener
-void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException )
+void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException, std::exception )
 {
     osl::ResettableMutexGuard aLock( m_aMutex );
 
@@ -373,7 +373,7 @@ void ControlMenuController::impl_select(const Reference< XDispatch >& /*_xDispat
     }
 }
 
-void SAL_CALL ControlMenuController::itemActivated( const css::awt::MenuEvent& ) throw (RuntimeException)
+void SAL_CALL ControlMenuController::itemActivated( const css::awt::MenuEvent& ) throw (RuntimeException, std::exception)
 {
     osl::ResettableMutexGuard aLock( m_aMutex );
 
@@ -422,7 +422,7 @@ void ControlMenuController::impl_setPopupMenu()
     } // if ( m_pResPopupMenu == 0 )
 }
 
-void SAL_CALL ControlMenuController::updatePopupMenu() throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL ControlMenuController::updatePopupMenu() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     osl::ResettableMutexGuard aLock( m_aMutex );
 
@@ -452,7 +452,7 @@ void SAL_CALL ControlMenuController::updatePopupMenu() throw (::com::sun::star::
 }
 
 // XInitialization
-void SAL_CALL ControlMenuController::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
+void SAL_CALL ControlMenuController::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException, std::exception )
 {
     osl::ResettableMutexGuard aLock( m_aMutex );
     svt::PopupMenuControllerBase::initialize(aArguments);

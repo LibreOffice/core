@@ -65,7 +65,7 @@ public:
     // XInterface
     virtual uno::Any SAL_CALL
     queryInterface( const uno::Type& aType )
-        throw( uno::RuntimeException )
+        throw( uno::RuntimeException, std::exception )
     { return m_xNA->queryInterface( aType ); }
     virtual void SAL_CALL
     acquire() throw()
@@ -77,11 +77,11 @@ public:
     // XHierarchicalNameAccess
     virtual uno::Any SAL_CALL
     getByHierarchicalName( const OUString& aName )
-        throw( container::NoSuchElementException, uno::RuntimeException )
+        throw( container::NoSuchElementException, uno::RuntimeException, std::exception )
     { return m_xNA->getByHierarchicalName( aName ); }
     virtual sal_Bool SAL_CALL
     hasByHierarchicalName( const OUString& aName )
-        throw( uno::RuntimeException )
+        throw( uno::RuntimeException, std::exception )
     { return m_xNA->hasByHierarchicalName( aName ); }
 };
 
@@ -194,7 +194,7 @@ ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 // virtual
 uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
             const uno::Reference< ucb::XContentIdentifier >& Identifier )
-    throw( ucb::IllegalIdentifierException, uno::RuntimeException )
+    throw( ucb::IllegalIdentifierException, uno::RuntimeException, std::exception )
 {
     if ( !Identifier.is() )
         return uno::Reference< ucb::XContent >();

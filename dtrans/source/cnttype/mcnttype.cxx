@@ -41,22 +41,22 @@ CMimeContentType::CMimeContentType( const OUString& aCntType )
     init( aCntType );
 }
 
-OUString SAL_CALL CMimeContentType::getMediaType( ) throw(RuntimeException)
+OUString SAL_CALL CMimeContentType::getMediaType( ) throw(RuntimeException, std::exception)
 {
     return m_MediaType;
 }
 
-OUString SAL_CALL CMimeContentType::getMediaSubtype( ) throw(RuntimeException)
+OUString SAL_CALL CMimeContentType::getMediaSubtype( ) throw(RuntimeException, std::exception)
 {
     return m_MediaSubtype;
 }
 
-OUString SAL_CALL CMimeContentType::getFullMediaType( ) throw(RuntimeException)
+OUString SAL_CALL CMimeContentType::getFullMediaType( ) throw(RuntimeException, std::exception)
 {
     return m_MediaType + "/" + m_MediaSubtype;
 }
 
-Sequence< OUString > SAL_CALL CMimeContentType::getParameters( ) throw(RuntimeException)
+Sequence< OUString > SAL_CALL CMimeContentType::getParameters( ) throw(RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
 
@@ -74,13 +74,13 @@ Sequence< OUString > SAL_CALL CMimeContentType::getParameters( ) throw(RuntimeEx
     return seqParams;
 }
 
-sal_Bool SAL_CALL CMimeContentType::hasParameter( const OUString& aName ) throw(RuntimeException)
+sal_Bool SAL_CALL CMimeContentType::hasParameter( const OUString& aName ) throw(RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
     return ( m_ParameterMap.end( ) != m_ParameterMap.find( aName ) );
 }
 
-OUString SAL_CALL CMimeContentType::getParameterValue( const OUString& aName ) throw(NoSuchElementException, RuntimeException)
+OUString SAL_CALL CMimeContentType::getParameterValue( const OUString& aName ) throw(NoSuchElementException, RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
 

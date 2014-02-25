@@ -43,11 +43,11 @@ public:
                   const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xParent);
 
 // ::com::sun::star::lang::XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 // ::com::sun::star::uno::XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType )
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL acquire() throw();
     virtual void SAL_CALL release() throw();
 
@@ -60,13 +60,13 @@ public:
 
 // (internal - not to be used outside - usually)
 #define IMPLEMENT_SERVICE_INFO_IMPLNAME(classname, implasciiname)   \
-    OUString SAL_CALL classname::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)   \
+    OUString SAL_CALL classname::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)   \
     {   \
         return OUString::createFromAscii(implasciiname); \
     }   \
 
 #define IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(classname, implasciiname)    \
-    OUString SAL_CALL classname::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)   \
+    OUString SAL_CALL classname::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)   \
     {   \
         return getImplementationName_Static();  \
     }   \
@@ -76,7 +76,7 @@ public:
     }   \
 
 #define IMPLEMENT_SERVICE_INFO_SUPPORTS(classname)  \
-    sal_Bool SAL_CALL classname::supportsService( const OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException) \
+    sal_Bool SAL_CALL classname::supportsService( const OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception) \
     {   \
         ::com::sun::star::uno::Sequence< OUString > aSupported(getSupportedServiceNames());  \
         const OUString* pSupported = aSupported.getConstArray(); \
@@ -88,7 +88,7 @@ public:
     }   \
 
 #define IMPLEMENT_SERVICE_INFO_GETSUPPORTED1(classname, serviceasciiname)   \
-    ::com::sun::star::uno::Sequence< OUString > SAL_CALL classname::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)  \
+    ::com::sun::star::uno::Sequence< OUString > SAL_CALL classname::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)  \
     {   \
         ::com::sun::star::uno::Sequence< OUString > aSupported(1);   \
         aSupported[0] = OUString::createFromAscii(serviceasciiname); \
@@ -96,7 +96,7 @@ public:
     }   \
 
 #define IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(classname, serviceasciiname)    \
-    ::com::sun::star::uno::Sequence< OUString > SAL_CALL classname::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)  \
+    ::com::sun::star::uno::Sequence< OUString > SAL_CALL classname::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)  \
     {   \
         return getSupportedServiceNames_Static();   \
     }   \
@@ -108,7 +108,7 @@ public:
     }   \
 
 #define IMPLEMENT_SERVICE_INFO_GETSUPPORTED2_STATIC(classname, serviceasciiname1, serviceasciiname2)    \
-    ::com::sun::star::uno::Sequence< OUString > SAL_CALL classname::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)  \
+    ::com::sun::star::uno::Sequence< OUString > SAL_CALL classname::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)  \
     {   \
         return getSupportedServiceNames_Static();   \
     }   \
@@ -121,7 +121,7 @@ public:
     }   \
 
 #define IMPLEMENT_SERVICE_INFO_GETSUPPORTED2(classname, serviceasciiname1, serviceasciiname2)   \
-    ::com::sun::star::uno::Sequence< OUString > SAL_CALL classname::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)  \
+    ::com::sun::star::uno::Sequence< OUString > SAL_CALL classname::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)  \
     {   \
         ::com::sun::star::uno::Sequence< OUString > aSupported(2);   \
         aSupported[0] = OUString::createFromAscii(serviceasciiname1);    \
@@ -130,7 +130,7 @@ public:
     }   \
 
 #define IMPLEMENT_SERVICE_INFO_GETSUPPORTED3(classname, serviceasciiname1, serviceasciiname2, serviceasciiname3)    \
-    ::com::sun::star::uno::Sequence< OUString > SAL_CALL classname::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)  \
+    ::com::sun::star::uno::Sequence< OUString > SAL_CALL classname::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)  \
     {   \
         ::com::sun::star::uno::Sequence< OUString > aSupported(3);   \
         aSupported[0] = OUString::createFromAscii(serviceasciiname1);    \
@@ -148,9 +148,9 @@ public:
 
 // declare service info methods
 #define DECLARE_SERVICE_INFO()  \
-    virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException); \
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException); \
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException) \
+    virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception); \
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception); \
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) \
 
 #define DECLARE_SERVICE_INFO_STATIC()   \
     DECLARE_SERVICE_INFO(); \
@@ -197,11 +197,11 @@ public:
 // XTypeProvider helpers
 
 #define DECLARE_IMPLEMENTATION_ID( )    \
-    virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);  \
+    virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);  \
     static ::com::sun::star::uno::Sequence< sal_Int8 >  getUnoTunnelImplementationId() \
 
 #define DECLARE_GETTYPES( ) \
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 #define DECLARE_TYPEPROVIDER( ) \
     DECLARE_GETTYPES( ) \
@@ -222,13 +222,13 @@ public:
     }   \
     return pId->getImplementationId();  \
 } \
-::com::sun::star::uno::Sequence< sal_Int8 > classname::getImplementationId() throw (::com::sun::star::uno::RuntimeException)    \
+::com::sun::star::uno::Sequence< sal_Int8 > classname::getImplementationId() throw (::com::sun::star::uno::RuntimeException, std::exception)    \
 {   \
     return classname::getUnoTunnelImplementationId(); \
 }
 
 #define IMPLEMENT_GETTYPES2( classname, baseclass1, baseclass2 )    \
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > classname::getTypes() throw (::com::sun::star::uno::RuntimeException)    \
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > classname::getTypes() throw (::com::sun::star::uno::RuntimeException, std::exception)    \
     {   \
         return  ::comphelper::concatSequences(  \
             baseclass1::getTypes( ),    \
@@ -237,7 +237,7 @@ public:
     }
 
 #define IMPLEMENT_GETTYPES3( classname, baseclass1, baseclass2, baseclass3 )    \
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > classname::getTypes() throw (::com::sun::star::uno::RuntimeException)    \
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > classname::getTypes() throw (::com::sun::star::uno::RuntimeException, std::exception)    \
     {   \
         return  ::comphelper::concatSequences(  \
             baseclass1::getTypes( ),    \
@@ -256,12 +256,12 @@ public:
 
 // helper for declaring/implementing classes based on the OPropertyContainer and an OPropertyArrayUsageHelper
 #define DECLARE_PROPERTYCONTAINER_DEFAULTS( )   \
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException); \
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException, std::exception); \
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper(); \
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const
 
 #define IMPLEMENT_PROPERTYCONTAINER_DEFAULTS2( classname , baseclass1)  \
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >  SAL_CALL classname::getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException)  \
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >  SAL_CALL classname::getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException, std::exception)  \
     {   \
         Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );    \
         return xInfo;   \

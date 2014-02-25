@@ -101,7 +101,7 @@ Sequence< OUString > DriverGetSupportedServiceNames()
 
 Reference< XConnection > Driver::connect(
     const OUString& url,const Sequence< PropertyValue >& info )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     if( ! acceptsURL( url ) )  // XDriver spec tells me to do so ...
         return Reference< XConnection > ();
@@ -117,45 +117,45 @@ Reference< XConnection > Driver::connect(
 }
 
 sal_Bool Driver::acceptsURL( const OUString& url )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     return url.startsWith( "sdbc:postgresql:" );
 }
 
 Sequence< DriverPropertyInfo > Driver::getPropertyInfo(
     const OUString& url,const Sequence< PropertyValue >& info )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     (void)url; (void)info;
     return Sequence< DriverPropertyInfo > ();
 }
 
-sal_Int32  Driver::getMajorVersion(  ) throw (RuntimeException)
+sal_Int32  Driver::getMajorVersion(  ) throw (RuntimeException, std::exception)
 {
     return PQ_SDBC_MAJOR;
 }
 
 
-sal_Int32 Driver::getMinorVersion(  ) throw (RuntimeException)
+sal_Int32 Driver::getMinorVersion(  ) throw (RuntimeException, std::exception)
 {
     return PQ_SDBC_MINOR;
 }
 
     // XServiceInfo
 OUString SAL_CALL Driver::getImplementationName()
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return DriverGetImplementationName();
 }
 
 sal_Bool Driver::supportsService(const OUString& ServiceName)
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > Driver::getSupportedServiceNames(void)
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return DriverGetSupportedServiceNames();
 }
@@ -169,14 +169,14 @@ void Driver::disposing()
 
 Reference< XTablesSupplier > Driver::getDataDefinitionByConnection(
     const Reference< XConnection >& connection )
-        throw (SQLException, RuntimeException)
+        throw (SQLException, RuntimeException, std::exception)
 {
      return Reference< XTablesSupplier >( connection , UNO_QUERY );
 }
 
 Reference< XTablesSupplier > Driver::getDataDefinitionByURL(
     const OUString& url, const Sequence< PropertyValue >& info )
-        throw (SQLException, RuntimeException)
+        throw (SQLException, RuntimeException, std::exception)
 {
     return Reference< XTablesSupplier > ( connect( url, info ), UNO_QUERY );
 }
@@ -212,20 +212,20 @@ public:
     // XSingleComponentFactory
     virtual Reference< XInterface > SAL_CALL createInstanceWithContext(
         Reference< XComponentContext > const & xContext )
-        throw (Exception, RuntimeException);
+        throw (Exception, RuntimeException, std::exception);
     virtual Reference< XInterface > SAL_CALL createInstanceWithArgumentsAndContext(
         Sequence< Any > const & rArguments,
         Reference< XComponentContext > const & xContext )
-        throw (Exception, RuntimeException);
+        throw (Exception, RuntimeException, std::exception);
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName()
-        throw(::com::sun::star::uno::RuntimeException)
+        throw(::com::sun::star::uno::RuntimeException, std::exception)
     {
         return m_implName;
     }
     sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-        throw(::com::sun::star::uno::RuntimeException)
+        throw(::com::sun::star::uno::RuntimeException, std::exception)
     {
         for( int i = 0 ; i < m_serviceNames.getLength() ; i ++ )
             if( m_serviceNames[i] == ServiceName )
@@ -233,7 +233,7 @@ public:
         return sal_False;
     }
     Sequence< OUString > SAL_CALL getSupportedServiceNames(void)
-        throw(::com::sun::star::uno::RuntimeException)
+        throw(::com::sun::star::uno::RuntimeException, std::exception)
     {
         return m_serviceNames;
     }
@@ -251,7 +251,7 @@ private:
 
 Reference< XInterface > OOneInstanceComponentFactory::createInstanceWithArgumentsAndContext(
     Sequence< Any > const &rArguments, const Reference< XComponentContext > & ctx )
-    throw( RuntimeException, Exception )
+    throw( RuntimeException, Exception, std::exception )
 {
     (void)rArguments;
     return createInstanceWithContext( ctx );
@@ -259,7 +259,7 @@ Reference< XInterface > OOneInstanceComponentFactory::createInstanceWithArgument
 
 Reference< XInterface > OOneInstanceComponentFactory::createInstanceWithContext(
     const Reference< XComponentContext > & ctx )
-    throw( RuntimeException, Exception )
+    throw( RuntimeException, Exception, std::exception )
 {
     if( ! m_theInstance.is() )
     {

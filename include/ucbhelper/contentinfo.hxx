@@ -77,14 +77,14 @@ public:
     virtual com::sun::star::uno::Sequence<
                 com::sun::star::beans::Property > SAL_CALL
     getProperties()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
     virtual com::sun::star::beans::Property SAL_CALL
     getPropertyByName( const OUString& aName )
         throw( com::sun::star::beans::UnknownPropertyException,
-               com::sun::star::uno::RuntimeException );
+               com::sun::star::uno::RuntimeException, std::exception );
     virtual sal_Bool SAL_CALL
     hasPropertyByName( const OUString& Name )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 
     // Non-Interface methods.
     void reset();
@@ -135,21 +135,21 @@ public:
     virtual com::sun::star::uno::Sequence<
                 com::sun::star::ucb::CommandInfo > SAL_CALL
     getCommands()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
     virtual com::sun::star::ucb::CommandInfo SAL_CALL
     getCommandInfoByName( const OUString& Name )
         throw( com::sun::star::ucb::UnsupportedCommandException,
-        com::sun::star::uno::RuntimeException );
+        com::sun::star::uno::RuntimeException, std::exception );
     virtual com::sun::star::ucb::CommandInfo SAL_CALL
     getCommandInfoByHandle( sal_Int32 Handle )
         throw( com::sun::star::ucb::UnsupportedCommandException,
-        com::sun::star::uno::RuntimeException );
+        com::sun::star::uno::RuntimeException, std::exception );
     virtual sal_Bool SAL_CALL
     hasCommandByName( const OUString& Name )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
     virtual sal_Bool SAL_CALL
     hasCommandByHandle( sal_Int32 Handle )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 
     // Non-Interface methods.
     void reset();

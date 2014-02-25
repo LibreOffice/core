@@ -54,20 +54,20 @@ namespace {
         OAddressBookSourceDialogUno(const Reference< XComponentContext >& _rxORB);
 
         // XTypeProvider
-        virtual Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(RuntimeException);
+        virtual Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(RuntimeException, std::exception);
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(RuntimeException);
-        virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(RuntimeException);
+        virtual OUString SAL_CALL getImplementationName() throw(RuntimeException, std::exception);
+        virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception);
 
         // XPropertySet
-        virtual Reference< XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(RuntimeException);
+        virtual Reference< XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(RuntimeException, std::exception);
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
-        virtual void SAL_CALL initialize(const Sequence< Any >& aArguments) throw(Exception, RuntimeException);
+        virtual void SAL_CALL initialize(const Sequence< Any >& aArguments) throw(Exception, RuntimeException, std::exception);
 
     protected:
     // OGenericUnoDialog overridables
@@ -87,20 +87,20 @@ namespace {
     }
 
 
-    Sequence<sal_Int8> SAL_CALL OAddressBookSourceDialogUno::getImplementationId(  ) throw(RuntimeException)
+    Sequence<sal_Int8> SAL_CALL OAddressBookSourceDialogUno::getImplementationId(  ) throw(RuntimeException, std::exception)
     {
         static ::cppu::OImplementationId aId;
         return aId.getImplementationId();
     }
 
 
-    OUString SAL_CALL OAddressBookSourceDialogUno::getImplementationName() throw(RuntimeException)
+    OUString SAL_CALL OAddressBookSourceDialogUno::getImplementationName() throw(RuntimeException, std::exception)
     {
         return OUString( "com.sun.star.comp.svtools.OAddressBookSourceDialogUno" );
     }
 
 
-    ::comphelper::StringSequence SAL_CALL OAddressBookSourceDialogUno::getSupportedServiceNames() throw(RuntimeException)
+    ::comphelper::StringSequence SAL_CALL OAddressBookSourceDialogUno::getSupportedServiceNames() throw(RuntimeException, std::exception)
     {
         ::comphelper::StringSequence aSupported(1);
         aSupported.getArray()[0] = "com.sun.star.ui.AddressBookSourceDialog";
@@ -108,7 +108,7 @@ namespace {
     }
 
 
-    Reference<XPropertySetInfo>  SAL_CALL OAddressBookSourceDialogUno::getPropertySetInfo() throw(RuntimeException)
+    Reference<XPropertySetInfo>  SAL_CALL OAddressBookSourceDialogUno::getPropertySetInfo() throw(RuntimeException, std::exception)
     {
         Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;
@@ -138,7 +138,7 @@ namespace {
                 static_cast< AddressBookSourceDialog* >( m_pDialog )->getFieldMapping( m_aAliases );
     }
 
-    void SAL_CALL OAddressBookSourceDialogUno::initialize(const Sequence< Any >& rArguments) throw(Exception, RuntimeException)
+    void SAL_CALL OAddressBookSourceDialogUno::initialize(const Sequence< Any >& rArguments) throw(Exception, RuntimeException, std::exception)
     {
         if( rArguments.getLength() == 5 )
         {

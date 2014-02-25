@@ -83,7 +83,7 @@ public: //XInterface
     virtual void SAL_CALL release() throw() { OComponentHelper::release(); }
     virtual com::sun::star::uno::Any  SAL_CALL queryInterface(
         const com::sun::star::uno::Type & reqType )
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
 public: // OPropertySetHelper
     virtual cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
@@ -98,7 +98,7 @@ public: // OPropertySetHelper
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
         sal_Int32 nHandle,
         const ::com::sun::star::uno::Any& rValue )
-        throw (::com::sun::star::uno::Exception);
+        throw (::com::sun::star::uno::Exception, std::exception);
 
     using ::cppu::OPropertySetHelper::getFastPropertyValue;
 
@@ -108,29 +108,29 @@ public: // OPropertySetHelper
 
     // XPropertySet
     ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySetInfo >  SAL_CALL getPropertySetInfo()
-        throw(com::sun::star::uno::RuntimeException);
+        throw(com::sun::star::uno::RuntimeException, std::exception);
 
 public: // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(void)
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
 
 public: // XTypeProvider, first implemented by OPropertySetHelper
     virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL getTypes()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
     virtual com::sun::star::uno::Sequence< sal_Int8> SAL_CALL getImplementationId()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 
 public: // XDataDescriptorFactory
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL
-    createDataDescriptor(  ) throw (::com::sun::star::uno::RuntimeException) = 0;
+    createDataDescriptor(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) = 0;
 
 public: // XNamed
-    virtual OUString SAL_CALL getName(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 };
 

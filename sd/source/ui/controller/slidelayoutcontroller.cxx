@@ -378,7 +378,7 @@ SlideLayoutController::SlideLayoutController( const Reference< uno::XComponentCo
 // XServiceInfo
 
 
-OUString SAL_CALL SlideLayoutController::getImplementationName() throw( RuntimeException )
+OUString SAL_CALL SlideLayoutController::getImplementationName() throw( RuntimeException, std::exception )
 {
     if( mbInsertPage )
         return InsertSlideController_getImplementationName();
@@ -388,7 +388,7 @@ OUString SAL_CALL SlideLayoutController::getImplementationName() throw( RuntimeE
 
 
 
-Sequence< OUString > SAL_CALL SlideLayoutController::getSupportedServiceNames(  ) throw( RuntimeException )
+Sequence< OUString > SAL_CALL SlideLayoutController::getSupportedServiceNames(  ) throw( RuntimeException, std::exception )
 {
     if( mbInsertPage )
         return InsertSlideController_getSupportedServiceNames();

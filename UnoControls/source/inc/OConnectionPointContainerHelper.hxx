@@ -97,7 +97,7 @@ public:
     */
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     /**_______________________________________________________________________________________________________
         @short      increment refcount
@@ -149,7 +149,7 @@ public:
     */
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getConnectionPointTypes()
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -166,7 +166,7 @@ public:
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XConnectionPoint > SAL_CALL queryConnectionPoint(
         const ::com::sun::star::uno::Type& aType
-    ) throw( ::com::sun::star::uno::RuntimeException );
+    ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -184,7 +184,7 @@ public:
     virtual void SAL_CALL advise(
         const   ::com::sun::star::uno::Type&                              aType ,
         const   ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&  xListener
-    ) throw( ::com::sun::star::uno::RuntimeException );
+    ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -202,7 +202,7 @@ public:
     virtual void SAL_CALL unadvise(
         const   ::com::sun::star::uno::Type&                              aType       ,
         const   ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&  xListener
-    ) throw( ::com::sun::star::uno::RuntimeException );
+    ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     /**_________________________________________________________________________________________________________
         @short

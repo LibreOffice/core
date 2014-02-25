@@ -127,30 +127,30 @@ public:
 
 public: // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(  )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index )
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
                ::com::sun::star::lang::WrappedTargetException,
-               ::com::sun::star::uno::RuntimeException);
+               ::com::sun::star::uno::RuntimeException, std::exception);
 
 public: // XEnumerationAccess
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration >
-    SAL_CALL createEnumeration(  ) throw (::com::sun::star::uno::RuntimeException);
+    SAL_CALL createEnumeration(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 public: // XNameAccess
     virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
         throw (::com::sun::star::container::NoSuchElementException,
                ::com::sun::star::lang::WrappedTargetException,
-               ::com::sun::star::uno::RuntimeException);
+               ::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     // Methods
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL hasElements(  )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 
 public: // XAppend
@@ -160,7 +160,7 @@ public: // XAppend
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor )
         throw (::com::sun::star::sdbc::SQLException,
                ::com::sun::star::container::ElementExistException,
-               ::com::sun::star::uno::RuntimeException);
+               ::com::sun::star::uno::RuntimeException, std::exception);
 
     // helper method !
     void append(
@@ -173,33 +173,33 @@ public: // XDrop
     virtual void SAL_CALL dropByName( const OUString& elementName )
         throw (::com::sun::star::sdbc::SQLException,
                ::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::uno::RuntimeException);
+               ::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL dropByIndex( sal_Int32 index )
         throw (::com::sun::star::sdbc::SQLException,
                ::com::sun::star::lang::IndexOutOfBoundsException,
-               ::com::sun::star::uno::RuntimeException);
+               ::com::sun::star::uno::RuntimeException, std::exception);
 
 public: // XDataDescriptorFactory
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL createDataDescriptor(  )
-        throw (::com::sun::star::uno::RuntimeException) = 0;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) = 0;
 
 public: // XRefreshable
-    virtual void SAL_CALL refresh(  ) throw (::com::sun::star::uno::RuntimeException) {}
+    virtual void SAL_CALL refresh(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) {}
     virtual void SAL_CALL addRefreshListener(
         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshListener >& l )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL removeRefreshListener(
         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshListener >& l )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 public:
     // Methods
     virtual void SAL_CALL addContainerListener(
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL removeContainerListener(
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 public:
     virtual void SAL_CALL disposing();

@@ -138,13 +138,13 @@ void OQueryContainer::disposing()
 IMPLEMENT_SERVICE_INFO2(OQueryContainer, "com.sun.star.sdb.dbaccess.OQueryContainer", SERVICE_SDBCX_CONTAINER, SERVICE_SDB_QUERIES)
 
 // XDataDescriptorFactory
-Reference< XPropertySet > SAL_CALL OQueryContainer::createDataDescriptor(  ) throw(RuntimeException)
+Reference< XPropertySet > SAL_CALL OQueryContainer::createDataDescriptor(  ) throw(RuntimeException, std::exception)
 {
     return new OQueryDescriptor();
 }
 
 // XAppend
-void SAL_CALL OQueryContainer::appendByDescriptor( const Reference< XPropertySet >& _rxDesc ) throw(SQLException, ElementExistException, RuntimeException)
+void SAL_CALL OQueryContainer::appendByDescriptor( const Reference< XPropertySet >& _rxDesc ) throw(SQLException, ElementExistException, RuntimeException, std::exception)
 {
     ResettableMutexGuard aGuard(m_aMutex);
     if ( !m_xCommandDefinitions.is() )
@@ -185,7 +185,7 @@ void SAL_CALL OQueryContainer::appendByDescriptor( const Reference< XPropertySet
 }
 
 // XDrop
-void SAL_CALL OQueryContainer::dropByName( const OUString& _rName ) throw(SQLException, NoSuchElementException, RuntimeException)
+void SAL_CALL OQueryContainer::dropByName( const OUString& _rName ) throw(SQLException, NoSuchElementException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     if ( !checkExistence(_rName) )
@@ -199,7 +199,7 @@ void SAL_CALL OQueryContainer::dropByName( const OUString& _rName ) throw(SQLExc
     m_xCommandDefinitions->removeByName(_rName);
 }
 
-void SAL_CALL OQueryContainer::dropByIndex( sal_Int32 _nIndex ) throw(SQLException, IndexOutOfBoundsException, RuntimeException)
+void SAL_CALL OQueryContainer::dropByIndex( sal_Int32 _nIndex ) throw(SQLException, IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     if ((_nIndex<0) || (_nIndex>getCount()))
@@ -216,7 +216,7 @@ void SAL_CALL OQueryContainer::dropByIndex( sal_Int32 _nIndex ) throw(SQLExcepti
     dropByName(sName);
 }
 
-void SAL_CALL OQueryContainer::elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OQueryContainer::elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     Reference< XContent > xNewElement;
     OUString sElementName;
@@ -238,7 +238,7 @@ void SAL_CALL OQueryContainer::elementInserted( const ::com::sun::star::containe
     insertByName(sElementName,makeAny(xNewElement));
 }
 
-void SAL_CALL OQueryContainer::elementRemoved( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OQueryContainer::elementRemoved( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     OUString sAccessor;
     _rEvent.Accessor >>= sAccessor;
@@ -251,7 +251,7 @@ void SAL_CALL OQueryContainer::elementRemoved( const ::com::sun::star::container
     removeByName(sAccessor);
 }
 
-void SAL_CALL OQueryContainer::elementReplaced( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OQueryContainer::elementReplaced( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     Reference< XPropertySet > xReplacedElement;
     Reference< XContent > xNewElement;
@@ -271,7 +271,7 @@ void SAL_CALL OQueryContainer::elementReplaced( const ::com::sun::star::containe
     replaceByName(sAccessor,makeAny(xNewElement));
 }
 
-Reference< XVeto > SAL_CALL OQueryContainer::approveInsertElement( const ContainerEvent& Event ) throw (WrappedTargetException, RuntimeException)
+Reference< XVeto > SAL_CALL OQueryContainer::approveInsertElement( const ContainerEvent& Event ) throw (WrappedTargetException, RuntimeException, std::exception)
 {
     OUString sName;
     OSL_VERIFY( Event.Accessor >>= sName );
@@ -289,17 +289,17 @@ Reference< XVeto > SAL_CALL OQueryContainer::approveInsertElement( const Contain
     return xReturn;
 }
 
-Reference< XVeto > SAL_CALL OQueryContainer::approveReplaceElement( const ContainerEvent& /*Event*/ ) throw (WrappedTargetException, RuntimeException)
+Reference< XVeto > SAL_CALL OQueryContainer::approveReplaceElement( const ContainerEvent& /*Event*/ ) throw (WrappedTargetException, RuntimeException, std::exception)
 {
     return NULL;
 }
 
-Reference< XVeto > SAL_CALL OQueryContainer::approveRemoveElement( const ContainerEvent& /*Event*/ ) throw (WrappedTargetException, RuntimeException)
+Reference< XVeto > SAL_CALL OQueryContainer::approveRemoveElement( const ContainerEvent& /*Event*/ ) throw (WrappedTargetException, RuntimeException, std::exception)
 {
     return NULL;
 }
 
-void SAL_CALL OQueryContainer::disposing( const ::com::sun::star::lang::EventObject& _rSource ) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OQueryContainer::disposing( const ::com::sun::star::lang::EventObject& _rSource ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     if (_rSource.Source.get() == Reference< XInterface >(m_xCommandDefinitions, UNO_QUERY).get())
     {   // our "master container" (with the command definitions) is being disposed
@@ -383,19 +383,19 @@ sal_Bool OQueryContainer::checkExistence(const OUString& _rName)
     return bRet;
 }
 
-sal_Bool SAL_CALL OQueryContainer::hasElements( ) throw (RuntimeException)
+sal_Bool SAL_CALL OQueryContainer::hasElements( ) throw (RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     return m_xCommandDefinitions->hasElements();
 }
 
-sal_Int32 SAL_CALL OQueryContainer::getCount(  ) throw(RuntimeException)
+sal_Int32 SAL_CALL OQueryContainer::getCount(  ) throw(RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     return Reference<XIndexAccess>(m_xCommandDefinitions,UNO_QUERY)->getCount();
 }
 
-Sequence< OUString > SAL_CALL OQueryContainer::getElementNames(  ) throw(RuntimeException)
+Sequence< OUString > SAL_CALL OQueryContainer::getElementNames(  ) throw(RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
 

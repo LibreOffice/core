@@ -467,32 +467,32 @@ public:
     ReadOnlyEventsNameContainer( const Sequence< OUString >& eventMethods, const OUString& sCodeName );
     // XNameContainer
 
-    virtual void SAL_CALL insertByName( const OUString&, const Any& ) throw (lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, RuntimeException)
+    virtual void SAL_CALL insertByName( const OUString&, const Any& ) throw (lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, RuntimeException, std::exception)
     {
         throw RuntimeException("ReadOnly container", Reference< XInterface >() );
 
     }
-    virtual void SAL_CALL removeByName( const OUString& ) throw (::com::sun::star::container::NoSuchElementException, lang::WrappedTargetException, RuntimeException)
+    virtual void SAL_CALL removeByName( const OUString& ) throw (::com::sun::star::container::NoSuchElementException, lang::WrappedTargetException, RuntimeException, std::exception)
     {
         throw RuntimeException("ReadOnly container", Reference< XInterface >() );
     }
 
     // XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString&, const Any& ) throw (lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, RuntimeException)
+    virtual void SAL_CALL replaceByName( const OUString&, const Any& ) throw (lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, RuntimeException, std::exception)
     {
         throw RuntimeException("ReadOnly container", Reference< XInterface >() );
 
     }
 
     // XNameAccess
-    virtual Any SAL_CALL getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getElementNames(  ) throw (RuntimeException);
-    virtual ::sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (RuntimeException);
+    virtual Any SAL_CALL getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, RuntimeException, std::exception);
+    virtual Sequence< OUString > SAL_CALL getElementNames(  ) throw (RuntimeException, std::exception);
+    virtual ::sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (RuntimeException, std::exception);
 
     // XElementAccess
-    virtual Type SAL_CALL getElementType(  ) throw (RuntimeException)
+    virtual Type SAL_CALL getElementType(  ) throw (RuntimeException, std::exception)
     { return getCppuType(static_cast< const OUString * >(0) ); }
-    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException)
+    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException, std::exception)
     { return ( ( m_hEvents.size() > 0 ? sal_True : sal_False ) ); }
 private:
 
@@ -519,7 +519,7 @@ ReadOnlyEventsNameContainer::ReadOnlyEventsNameContainer( const Sequence< OUStri
 }
 
 Any SAL_CALL
-ReadOnlyEventsNameContainer::getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, RuntimeException){
+ReadOnlyEventsNameContainer::getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, RuntimeException, std::exception){
     EventSupplierHash::const_iterator it = m_hEvents.find( aName );
     if ( it == m_hEvents.end() )
         throw container::NoSuchElementException();
@@ -527,7 +527,7 @@ ReadOnlyEventsNameContainer::getByName( const OUString& aName ) throw (container
 }
 
 Sequence< OUString > SAL_CALL
-ReadOnlyEventsNameContainer::getElementNames(  ) throw (RuntimeException)
+ReadOnlyEventsNameContainer::getElementNames(  ) throw (RuntimeException, std::exception)
 {
     Sequence< OUString > names(m_hEvents.size());
     OUString* pDest = names.getArray();
@@ -539,7 +539,7 @@ ReadOnlyEventsNameContainer::getElementNames(  ) throw (RuntimeException)
 }
 
 sal_Bool SAL_CALL
-ReadOnlyEventsNameContainer::hasByName( const OUString& aName ) throw (RuntimeException)
+ReadOnlyEventsNameContainer::hasByName( const OUString& aName ) throw (RuntimeException, std::exception)
 {
     EventSupplierHash::const_iterator it = m_hEvents.find( aName );
     if ( it == m_hEvents.end() )
@@ -556,7 +556,7 @@ public:
     { m_xNameContainer = new ReadOnlyEventsNameContainer( eventMethods, sCodeName ); }
 
     // XScriptEventSupplier
-    virtual Reference< container::XNameContainer > SAL_CALL getEvents(  ) throw (RuntimeException){ return m_xNameContainer; }
+    virtual Reference< container::XNameContainer > SAL_CALL getEvents(  ) throw (RuntimeException, std::exception){ return m_xNameContainer; }
 private:
     Reference< container::XNameContainer > m_xNameContainer;
 };
@@ -576,25 +576,25 @@ class EventListener : public EventListener_BASE
 public:
     EventListener( const Reference< XComponentContext >& rxContext );
     // XEventListener
-    virtual void SAL_CALL disposing(const lang::EventObject& Source) throw( RuntimeException );
+    virtual void SAL_CALL disposing(const lang::EventObject& Source) throw( RuntimeException, std::exception );
     using cppu::OPropertySetHelper::disposing;
 
     // XScriptListener
-    virtual void SAL_CALL firing(const ScriptEvent& evt) throw(RuntimeException);
-    virtual Any SAL_CALL approveFiring(const ScriptEvent& evt) throw(reflection::InvocationTargetException, RuntimeException);
+    virtual void SAL_CALL firing(const ScriptEvent& evt) throw(RuntimeException, std::exception);
+    virtual Any SAL_CALL approveFiring(const ScriptEvent& evt) throw(reflection::InvocationTargetException, RuntimeException, std::exception);
     // XCloseListener
-    virtual void SAL_CALL queryClosing( const lang::EventObject& Source, ::sal_Bool GetsOwnership ) throw (util::CloseVetoException, uno::RuntimeException);
-    virtual void SAL_CALL notifyClosing( const lang::EventObject& Source ) throw (uno::RuntimeException);
+    virtual void SAL_CALL queryClosing( const lang::EventObject& Source, ::sal_Bool GetsOwnership ) throw (util::CloseVetoException, uno::RuntimeException, std::exception);
+    virtual void SAL_CALL notifyClosing( const lang::EventObject& Source ) throw (uno::RuntimeException, std::exception);
     // XPropertySet
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
     // XInitialization
-    virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException);
+    virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException, std::exception);
     // XInterface
     DECLARE_XINTERFACE()
 
     // XTypeProvider
     DECLARE_XTYPEPROVIDER()
-    virtual void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
     {
         if ( nHandle == EVENTLSTNR_PROPERTY_ID_MODEL )
         {
@@ -676,14 +676,14 @@ EventListener::setShellFromModel()
 
 //XEventListener
 void
-EventListener::disposing(const lang::EventObject&)  throw( RuntimeException )
+EventListener::disposing(const lang::EventObject&)  throw( RuntimeException, std::exception )
 {
 }
 
 //XScriptListener
 
 void SAL_CALL
-EventListener::firing(const ScriptEvent& evt) throw(RuntimeException)
+EventListener::firing(const ScriptEvent& evt) throw(RuntimeException, std::exception)
 {
 #if ASYNC
     // needs some logic to check if the event handler is oneway or not
@@ -719,7 +719,7 @@ IMPL_LINK( EventListener, OnAsyncScriptEvent, ScriptEvent*, _pEvent )
 #endif
 
 Any SAL_CALL
-EventListener::approveFiring(const ScriptEvent& evt) throw(reflection::InvocationTargetException, RuntimeException)
+EventListener::approveFiring(const ScriptEvent& evt) throw(reflection::InvocationTargetException, RuntimeException, std::exception)
 {
     Any ret;
     firing_Impl( evt, &ret );
@@ -728,13 +728,13 @@ EventListener::approveFiring(const ScriptEvent& evt) throw(reflection::Invocatio
 
 // XCloseListener
 void SAL_CALL
-EventListener::queryClosing( const lang::EventObject& /*Source*/, ::sal_Bool /*GetsOwnership*/ ) throw (util::CloseVetoException, uno::RuntimeException)
+EventListener::queryClosing( const lang::EventObject& /*Source*/, ::sal_Bool /*GetsOwnership*/ ) throw (util::CloseVetoException, uno::RuntimeException, std::exception)
 {
     //Nothing to do
 }
 
 void SAL_CALL
-EventListener::notifyClosing( const lang::EventObject& /*Source*/ ) throw (uno::RuntimeException)
+EventListener::notifyClosing( const lang::EventObject& /*Source*/ ) throw (uno::RuntimeException, std::exception)
 {
     m_bDocClosed = true;
     uno::Reference< util::XCloseBroadcaster > xCloseBroadcaster( m_xModel, uno::UNO_QUERY );
@@ -746,7 +746,7 @@ EventListener::notifyClosing( const lang::EventObject& /*Source*/ ) throw (uno::
 
 // XInitialization
 void SAL_CALL
-EventListener::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException)
+EventListener::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException, std::exception)
 {
     if ( aArguments.getLength() == 1 )
         aArguments[0] >>= m_xModel;
@@ -781,7 +781,7 @@ EventListener::createArrayHelper(  ) const
 
 // XPropertySet
 Reference< beans::XPropertySetInfo >
-EventListener::getPropertySetInfo(  ) throw (RuntimeException)
+EventListener::getPropertySetInfo(  ) throw (RuntimeException, std::exception)
 {
     Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
@@ -1024,8 +1024,8 @@ public:
     VBAToOOEventDescGen( const Reference< XComponentContext >& rxContext );
 
     // XVBAToOOEventDescGen
-    virtual Sequence< ScriptEventDescriptor > SAL_CALL getEventDescriptions( const OUString& sCtrlServiceName, const OUString& sCodeName ) throw (RuntimeException);
-    virtual Reference< XScriptEventsSupplier > SAL_CALL getEventSupplier( const Reference< XInterface >& xControl,  const OUString& sCodeName ) throw (::com::sun::star::uno::RuntimeException);
+    virtual Sequence< ScriptEventDescriptor > SAL_CALL getEventDescriptions( const OUString& sCtrlServiceName, const OUString& sCodeName ) throw (RuntimeException, std::exception);
+    virtual Reference< XScriptEventsSupplier > SAL_CALL getEventSupplier( const Reference< XInterface >& xControl,  const OUString& sCodeName ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 private:
     Reference< XComponentContext > m_xContext;
 
@@ -1034,14 +1034,14 @@ private:
 VBAToOOEventDescGen::VBAToOOEventDescGen( const Reference< XComponentContext >& rxContext ):m_xContext( rxContext ) {}
 
 Sequence< ScriptEventDescriptor > SAL_CALL
-VBAToOOEventDescGen::getEventDescriptions( const OUString& sCntrlServiceName, const OUString& sCodeName ) throw (RuntimeException)
+VBAToOOEventDescGen::getEventDescriptions( const OUString& sCntrlServiceName, const OUString& sCodeName ) throw (RuntimeException, std::exception)
 {
     ScriptEventHelper evntHelper( sCntrlServiceName );
     return evntHelper.createEvents( sCodeName );
 }
 
 Reference< XScriptEventsSupplier > SAL_CALL
-VBAToOOEventDescGen::getEventSupplier( const Reference< XInterface >& xControl, const OUString& sCodeName  ) throw (::com::sun::star::uno::RuntimeException)
+VBAToOOEventDescGen::getEventSupplier( const Reference< XInterface >& xControl, const OUString& sCodeName  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ScriptEventHelper evntHelper( xControl );
     Reference< XScriptEventsSupplier > xSupplier =

@@ -51,27 +51,27 @@ public:
     // XOfficeInstallationDirectories
     virtual OUString SAL_CALL
     getOfficeInstallationDirectoryURL()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual OUString SAL_CALL
     getOfficeUserDataDirectoryURL()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual OUString SAL_CALL
     makeRelocatableURL( const OUString& URL )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual OUString SAL_CALL
     makeAbsoluteURL( const OUString& URL )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // XServiceInfo
     virtual OUString SAL_CALL
     getImplementationName()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL
     supportsService( const OUString& ServiceName )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // XServiceInfo - static versions (used for component registration)
     static OUString SAL_CALL

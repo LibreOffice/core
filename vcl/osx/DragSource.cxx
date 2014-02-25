@@ -165,7 +165,7 @@ DragSource::~DragSource()
 }
 
 void SAL_CALL DragSource::initialize(const Sequence< Any >& aArguments)
-  throw(Exception)
+  throw(Exception, std::exception)
 {
   if (aArguments.getLength() < 2)
     {
@@ -210,13 +210,13 @@ void SAL_CALL DragSource::initialize(const Sequence< Any >& aArguments)
 }
 
 sal_Bool SAL_CALL DragSource::isDragImageSupported(  )
-  throw(RuntimeException)
+  throw(RuntimeException, std::exception)
 {
   return true;
 }
 
 sal_Int32 SAL_CALL DragSource::getDefaultCursor( sal_Int8 /*dragAction*/ )
-  throw( IllegalArgumentException, RuntimeException)
+  throw( IllegalArgumentException, RuntimeException, std::exception)
 {
   return 0;
 }
@@ -227,7 +227,7 @@ void SAL_CALL DragSource::startDrag(const DragGestureEvent& trigger,
                                     sal_Int32 /*image*/,
                                     const uno::Reference<XTransferable >& transferable,
                                     const uno::Reference<XDragSourceListener >& listener )
-  throw( RuntimeException)
+  throw( RuntimeException, std::exception)
 {
   MutexGuard guard(m_aMutex);
 
@@ -327,17 +327,17 @@ unsigned int DragSource::getSupportedDragOperations(bool isLocal) const
   return srcActions;
 }
 
-OUString SAL_CALL DragSource::getImplementationName(  ) throw (RuntimeException)
+OUString SAL_CALL DragSource::getImplementationName(  ) throw (RuntimeException, std::exception)
 {
   return dragSource_getImplementationName();
 }
 
-sal_Bool SAL_CALL DragSource::supportsService( const OUString& ServiceName ) throw (RuntimeException)
+sal_Bool SAL_CALL DragSource::supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception)
 {
   return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL DragSource::getSupportedServiceNames() throw (RuntimeException)
+Sequence< OUString > SAL_CALL DragSource::getSupportedServiceNames() throw (RuntimeException, std::exception)
 {
   return dragSource_getSupportedServiceNames();
 }

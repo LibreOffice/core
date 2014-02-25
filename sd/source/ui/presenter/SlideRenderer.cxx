@@ -89,7 +89,7 @@ void SAL_CALL SlideRenderer::disposing (void)
 //----- XInitialization -------------------------------------------------------
 
 void SAL_CALL SlideRenderer::initialize (const Sequence<Any>& rArguments)
-    throw (Exception, RuntimeException)
+    throw (Exception, RuntimeException, std::exception)
 {
     ThrowIfDisposed();
 
@@ -109,7 +109,7 @@ Reference<awt::XBitmap> SlideRenderer::createPreview (
     const Reference<drawing::XDrawPage>& rxSlide,
     const awt::Size& rMaximalSize,
     sal_Int16 nSuperSampleFactor)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     SolarMutexGuard aGuard;
@@ -126,7 +126,7 @@ Reference<rendering::XBitmap> SlideRenderer::createPreviewForCanvas (
     const awt::Size& rMaximalSize,
     sal_Int16 nSuperSampleFactor,
     const Reference<rendering::XCanvas>& rxCanvas)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     SolarMutexGuard aGuard;
@@ -147,7 +147,7 @@ Reference<rendering::XBitmap> SlideRenderer::createPreviewForCanvas (
 awt::Size SAL_CALL SlideRenderer::calculatePreviewSize (
     double nSlideAspectRatio,
     const awt::Size& rMaximalSize)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     if (rMaximalSize.Width <= 0
         || rMaximalSize.Height <= 0

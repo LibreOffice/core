@@ -285,7 +285,7 @@ OUString columnMetaData2SDBCX(
 // };
 
 void Columns::refresh()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     try
     {
@@ -475,7 +475,7 @@ void Columns::appendByDescriptor(
     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& future )
     throw (::com::sun::star::sdbc::SQLException,
            ::com::sun::star::container::ElementExistException,
-           ::com::sun::star::uno::RuntimeException)
+           ::com::sun::star::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard guard( m_refMutex->mutex );
     Statics & st = getStatics();
@@ -512,7 +512,7 @@ void Columns::appendByDescriptor(
 void Columns::dropByIndex( sal_Int32 index )
     throw (::com::sun::star::sdbc::SQLException,
            ::com::sun::star::lang::IndexOutOfBoundsException,
-           ::com::sun::star::uno::RuntimeException)
+           ::com::sun::star::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard guard( m_refMutex->mutex );
     if( index < 0 ||  index >= m_values.getLength() )
@@ -547,7 +547,7 @@ void Columns::dropByIndex( sal_Int32 index )
 
 
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > Columns::createDataDescriptor()
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return new ColumnDescriptor( m_refMutex, m_origin, m_pSettings );
 }
@@ -579,7 +579,7 @@ ColumnDescriptors::ColumnDescriptors(
 
 
 Reference< ::com::sun::star::beans::XPropertySet > ColumnDescriptors::createDataDescriptor()
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return new ColumnDescriptor( m_refMutex, m_origin, m_pSettings );
 }

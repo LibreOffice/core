@@ -39,15 +39,15 @@ class PDFInteractionHandler : public cppu::WeakImplHelper2 < task::XInteractionH
 {
 protected:
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw(RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()  throw(RuntimeException);
+    virtual OUString SAL_CALL getImplementationName() throw(RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException, std::exception);
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()  throw(RuntimeException, std::exception);
 
     // XIniteractionHandler
-    virtual void SAL_CALL handle( const Reference< task::XInteractionRequest >& ) throw(RuntimeException);
+    virtual void SAL_CALL handle( const Reference< task::XInteractionRequest >& ) throw(RuntimeException, std::exception);
 
     // XIniteractionHandler2
-    virtual sal_Bool SAL_CALL handleInteractionRequest( const Reference< task::XInteractionRequest >& ) throw(RuntimeException);
+    virtual sal_Bool SAL_CALL handleInteractionRequest( const Reference< task::XInteractionRequest >& ) throw(RuntimeException, std::exception);
 public:
 
                 PDFInteractionHandler();

@@ -43,7 +43,7 @@ class ChartObjectEnumerationImpl : public EnumerationHelperImpl
 public:
 
     ChartObjectEnumerationImpl( const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration, const uno::Reference< drawing::XDrawPageSupplier >& _xDrawPageSupplier, const uno::Reference< XHelperInterface >& _xParent ) throw ( uno::RuntimeException ) : EnumerationHelperImpl( _xParent, xContext, xEnumeration ), xDrawPageSupplier( _xDrawPageSupplier ) {}
-    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
     {
         uno::Reference< table::XTableChart > xTableChart( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
         // parent Object is sheet
@@ -108,7 +108,7 @@ ScVbaChartObjects::getChartObjectNames() throw( css::script::BasicErrorException
 
 // XChartObjects
 uno::Any SAL_CALL
-ScVbaChartObjects::Add( double _nX, double _nY, double _nWidth, double _nHeight ) throw (script::BasicErrorException)
+ScVbaChartObjects::Add( double _nX, double _nY, double _nWidth, double _nHeight ) throw (script::BasicErrorException, std::exception)
 {
     try
     {
@@ -131,7 +131,7 @@ ScVbaChartObjects::Add( double _nX, double _nY, double _nWidth, double _nHeight 
     }
     return aNULL();
 }
-void SAL_CALL ScVbaChartObjects::Delete(  ) throw (script::BasicErrorException)
+void SAL_CALL ScVbaChartObjects::Delete(  ) throw (script::BasicErrorException, std::exception)
 {
     uno::Sequence< OUString > sChartNames = xTableCharts->getElementNames();
     sal_Int32 ncount = sChartNames.getLength();

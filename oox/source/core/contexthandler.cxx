@@ -84,33 +84,33 @@ void ContextHandler::implSetLocator( const Reference< XLocator >& rxLocator )
 
 // com.sun.star.xml.sax.XFastContextHandler interface -------------------------
 
-void ContextHandler::startFastElement( sal_Int32, const Reference< XFastAttributeList >& ) throw( SAXException, RuntimeException )
+void ContextHandler::startFastElement( sal_Int32, const Reference< XFastAttributeList >& ) throw( SAXException, RuntimeException, std::exception )
 {
 }
 
-void ContextHandler::startUnknownElement( const OUString&, const OUString&, const Reference< XFastAttributeList >& ) throw( SAXException, RuntimeException )
+void ContextHandler::startUnknownElement( const OUString&, const OUString&, const Reference< XFastAttributeList >& ) throw( SAXException, RuntimeException, std::exception )
 {
 }
 
-void ContextHandler::endFastElement( sal_Int32 ) throw( SAXException, RuntimeException )
+void ContextHandler::endFastElement( sal_Int32 ) throw( SAXException, RuntimeException, std::exception )
 {
 }
 
-void ContextHandler::endUnknownElement( const OUString&, const OUString& ) throw( SAXException, RuntimeException )
+void ContextHandler::endUnknownElement( const OUString&, const OUString& ) throw( SAXException, RuntimeException, std::exception )
 {
 }
 
-Reference< XFastContextHandler > ContextHandler::createFastChildContext( sal_Int32, const Reference< XFastAttributeList >& ) throw( SAXException, RuntimeException )
-{
-    return 0;
-}
-
-Reference< XFastContextHandler > ContextHandler::createUnknownChildContext( const OUString&, const OUString&, const Reference< XFastAttributeList >& ) throw( SAXException, RuntimeException )
+Reference< XFastContextHandler > ContextHandler::createFastChildContext( sal_Int32, const Reference< XFastAttributeList >& ) throw( SAXException, RuntimeException, std::exception )
 {
     return 0;
 }
 
-void ContextHandler::characters( const OUString& ) throw( SAXException, RuntimeException )
+Reference< XFastContextHandler > ContextHandler::createUnknownChildContext( const OUString&, const OUString&, const Reference< XFastAttributeList >& ) throw( SAXException, RuntimeException, std::exception )
+{
+    return 0;
+}
+
+void ContextHandler::characters( const OUString& ) throw( SAXException, RuntimeException, std::exception )
 {
 }
 

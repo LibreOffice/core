@@ -73,11 +73,11 @@ namespace cppu
     {
         struct cd : public rtl::StaticAggregate< class_data, ImplClassData4 < Ifc1, Ifc2, Ifc3, Ifc4, ImplHelper4<Ifc1, Ifc2, Ifc3, Ifc4> > > {};
     public:
-        virtual com::sun::star::uno::Any SAL_CALL queryInterface( com::sun::star::uno::Type const & rType ) throw (com::sun::star::uno::RuntimeException)
+        virtual com::sun::star::uno::Any SAL_CALL queryInterface( com::sun::star::uno::Type const & rType ) throw (com::sun::star::uno::RuntimeException, std::exception)
             { return ImplHelper_query( rType, cd::get(), this ); }
-        virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL getTypes() throw (com::sun::star::uno::RuntimeException)
+        virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL getTypes() throw (com::sun::star::uno::RuntimeException, std::exception)
             { return ImplHelper_getTypes( cd::get() ); }
-        virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (com::sun::star::uno::RuntimeException)
+        virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (com::sun::star::uno::RuntimeException, std::exception)
             { return ImplHelper_getImplementationId( cd::get() ); }
 
 #if !defined _MSC_VER // public -> protected changes mangled names there
@@ -101,15 +101,15 @@ namespace cppu
     {
         struct cd : public rtl::StaticAggregate< class_data, ImplClassData4 < Ifc1, Ifc2, Ifc3, Ifc4, WeakImplHelper4<Ifc1, Ifc2, Ifc3, Ifc4> > > {};
     public:
-        virtual com::sun::star::uno::Any SAL_CALL queryInterface( com::sun::star::uno::Type const & rType ) throw (com::sun::star::uno::RuntimeException)
+        virtual com::sun::star::uno::Any SAL_CALL queryInterface( com::sun::star::uno::Type const & rType ) throw (com::sun::star::uno::RuntimeException, std::exception)
             { return WeakImplHelper_query( rType, cd::get(), this, (OWeakObject *)this ); }
         virtual void SAL_CALL acquire() throw ()
             { OWeakObject::acquire(); }
         virtual void SAL_CALL release() throw ()
             { OWeakObject::release(); }
-        virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL getTypes() throw (com::sun::star::uno::RuntimeException)
+        virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL getTypes() throw (com::sun::star::uno::RuntimeException, std::exception)
             { return WeakImplHelper_getTypes( cd::get() ); }
-        virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (com::sun::star::uno::RuntimeException)
+        virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (com::sun::star::uno::RuntimeException, std::exception)
             { return ImplHelper_getImplementationId( cd::get() ); }
     };
     /** Implementation helper implementing interfaces com::sun::star::lang::XTypeProvider and
@@ -133,17 +133,17 @@ namespace cppu
     {
         struct cd : public rtl::StaticAggregate< class_data, ImplClassData4 < Ifc1, Ifc2, Ifc3, Ifc4, WeakAggImplHelper4<Ifc1, Ifc2, Ifc3, Ifc4> > > {};
     public:
-        virtual com::sun::star::uno::Any SAL_CALL queryInterface( com::sun::star::uno::Type const & rType ) throw (com::sun::star::uno::RuntimeException)
+        virtual com::sun::star::uno::Any SAL_CALL queryInterface( com::sun::star::uno::Type const & rType ) throw (com::sun::star::uno::RuntimeException, std::exception)
             { return OWeakAggObject::queryInterface( rType ); }
-        virtual com::sun::star::uno::Any SAL_CALL queryAggregation( com::sun::star::uno::Type const & rType ) throw (com::sun::star::uno::RuntimeException)
+        virtual com::sun::star::uno::Any SAL_CALL queryAggregation( com::sun::star::uno::Type const & rType ) throw (com::sun::star::uno::RuntimeException, std::exception)
             { return WeakAggImplHelper_queryAgg( rType, cd::get(), this, (OWeakAggObject *)this ); }
         virtual void SAL_CALL acquire() throw ()
             { OWeakAggObject::acquire(); }
         virtual void SAL_CALL release() throw ()
             { OWeakAggObject::release(); }
-        virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL getTypes() throw (com::sun::star::uno::RuntimeException)
+        virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL getTypes() throw (com::sun::star::uno::RuntimeException, std::exception)
             { return WeakAggImplHelper_getTypes( cd::get() ); }
-        virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (com::sun::star::uno::RuntimeException)
+        virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (com::sun::star::uno::RuntimeException, std::exception)
             { return ImplHelper_getImplementationId( cd::get() ); }
     };
     /** Implementation helper implementing interfaces com::sun::star::lang::XTypeProvider and
@@ -278,9 +278,9 @@ namespace cppu
             { BaseClass::acquire(); }
         virtual void SAL_CALL release() throw ()
             { BaseClass::release(); }
-        virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL getTypes() throw (com::sun::star::uno::RuntimeException)
+        virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL getTypes() throw (com::sun::star::uno::RuntimeException, std::exception)
             { return ImplInhHelper_getTypes( cd::get(), BaseClass::getTypes() ); }
-        virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (com::sun::star::uno::RuntimeException)
+        virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (com::sun::star::uno::RuntimeException, std::exception)
             { return ImplHelper_getImplementationId( cd::get() ); }
     };
 }

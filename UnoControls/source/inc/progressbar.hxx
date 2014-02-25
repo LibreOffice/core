@@ -106,7 +106,7 @@ public:
     */
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     /**_______________________________________________________________________________________________________
         @short      increment refcount
@@ -158,7 +158,7 @@ public:
     */
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 
     //  XAggregation
@@ -178,7 +178,7 @@ public:
     */
 
     ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& aType )
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 
     //  XProgressBar
@@ -198,7 +198,7 @@ public:
     */
 
     virtual void SAL_CALL setForegroundColor( sal_Int32 nColor )
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -214,7 +214,7 @@ public:
     */
 
     virtual void SAL_CALL setBackgroundColor( sal_Int32 nColor )
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -229,7 +229,7 @@ public:
         @onerror
     */
 
-    virtual void SAL_CALL setValue( sal_Int32 nValue ) throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL setValue( sal_Int32 nValue ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -247,7 +247,7 @@ public:
     virtual void SAL_CALL setRange(
         sal_Int32   nMin    ,
         sal_Int32   nMax
-    ) throw( ::com::sun::star::uno::RuntimeException );
+    ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -262,7 +262,7 @@ public:
         @onerror
     */
 
-    virtual sal_Int32 SAL_CALL getValue() throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Int32 SAL_CALL getValue() throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 
     //  XWindow
@@ -287,7 +287,7 @@ public:
         sal_Int32   nWidth  ,
         sal_Int32   nHeight ,
         sal_Int16   nFlags
-    ) throw( ::com::sun::star::uno::RuntimeException );
+    ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 
     //  XControl
@@ -308,7 +308,7 @@ public:
 
     virtual sal_Bool SAL_CALL setModel(
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xModel
-    ) throw( ::com::sun::star::uno::RuntimeException );
+    ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -324,7 +324,7 @@ public:
     */
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > SAL_CALL getModel()
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 
     //  BaseControl

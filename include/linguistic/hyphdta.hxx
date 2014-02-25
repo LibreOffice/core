@@ -53,22 +53,22 @@ public:
     // XHyphenatedWord
     virtual OUString SAL_CALL
         getWord()
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::lang::Locale SAL_CALL
         getLocale()
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Int16 SAL_CALL
         getHyphenationPos()
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual OUString SAL_CALL
         getHyphenatedWord()
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Int16 SAL_CALL
         getHyphenPos()
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL
         isAlternativeSpelling()
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     OUString GetWord()           { return aWord; }
     OUString GetHyphenatedWord() { return aHyphenatedWord; }
@@ -106,16 +106,16 @@ public:
     // XPossibleHyphens
     virtual OUString SAL_CALL
         getWord()
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::lang::Locale SAL_CALL
         getLocale()
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual OUString SAL_CALL
         getPossibleHyphens()
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Sequence< sal_Int16 > SAL_CALL
         getHyphenationPositions()
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     OUString GetWord()       { return aWord; }
     sal_Int16           GetLanguage()   { return nLanguage; }

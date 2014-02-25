@@ -75,7 +75,7 @@ public:
     // Methods XStorageBasedLibraryContainer
     virtual void SAL_CALL storeLibrariesToStorage(
         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& RootStorage )
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // Resource handling
     ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourcePersistence >
@@ -83,12 +83,12 @@ public:
 
     // Methods XServiceInfo
     virtual OUString SAL_CALL getImplementationName( )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames( )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     // XLibraryQueryExecutable
     virtual sal_Bool SAL_CALL HasExecutableCode(const OUString&)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     // Service
     static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_static();
     static OUString getImplementationName_static();
@@ -144,7 +144,7 @@ public:
 
     // XStringResourceSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceResolver >
-        SAL_CALL getStringResource(  ) throw (::com::sun::star::uno::RuntimeException);
+        SAL_CALL getStringResource(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     OUString getName( void )
         { return m_aName; }

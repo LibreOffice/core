@@ -633,7 +633,7 @@ DiagramWrapper::~DiagramWrapper()
 
 // ____ XDiagram ____
 OUString SAL_CALL DiagramWrapper::getDiagramType()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     OUString aRet;
 
@@ -681,7 +681,7 @@ OUString SAL_CALL DiagramWrapper::getDiagramType()
 Reference<
     beans::XPropertySet > SAL_CALL DiagramWrapper::getDataRowProperties( sal_Int32 nRow )
     throw (lang::IndexOutOfBoundsException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     if( nRow < 0 )
         throw lang::IndexOutOfBoundsException("DataSeries index invalid",
@@ -702,7 +702,7 @@ Reference<
 Reference<
     beans::XPropertySet > SAL_CALL DiagramWrapper::getDataPointProperties( sal_Int32 nCol, sal_Int32 nRow )
     throw (lang::IndexOutOfBoundsException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     if( nCol < 0 || nRow < 0 )
         throw lang::IndexOutOfBoundsException("DataSeries index invalid",
@@ -725,14 +725,14 @@ Reference<
 
 // ____ XShape (base of XDiagram) ____
 awt::Point SAL_CALL DiagramWrapper::getPosition()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     awt::Point aPosition = ToPoint( m_spChart2ModelContact->GetDiagramRectangleIncludingAxes() );
     return aPosition;
 }
 
 void SAL_CALL DiagramWrapper::setPosition( const awt::Point& aPosition )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
     Reference< beans::XPropertySet > xProp( this->getInnerPropertySet() );
@@ -757,7 +757,7 @@ void SAL_CALL DiagramWrapper::setPosition( const awt::Point& aPosition )
 }
 
 awt::Size SAL_CALL DiagramWrapper::getSize()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     awt::Size aSize = ToSize( m_spChart2ModelContact->GetDiagramRectangleIncludingAxes() );
     return aSize;
@@ -765,7 +765,7 @@ awt::Size SAL_CALL DiagramWrapper::getSize()
 
 void SAL_CALL DiagramWrapper::setSize( const awt::Size& aSize )
     throw (beans::PropertyVetoException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
     Reference< beans::XPropertySet > xProp( this->getInnerPropertySet() );
@@ -792,14 +792,14 @@ void SAL_CALL DiagramWrapper::setSize( const awt::Size& aSize )
 
 // ____ XShapeDescriptor (base of XShape) ____
 OUString SAL_CALL DiagramWrapper::getShapeType()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return OUString( "com.sun.star.chart.Diagram" );
 }
 
 // ____ XDiagramPositioning ____
 
-void SAL_CALL DiagramWrapper::setAutomaticDiagramPositioning() throw (uno::RuntimeException)
+void SAL_CALL DiagramWrapper::setAutomaticDiagramPositioning() throw (uno::RuntimeException, std::exception)
 {
     ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
     uno::Reference< beans::XPropertySet > xDiaProps( this->getDiagram(), uno::UNO_QUERY );
@@ -809,7 +809,7 @@ void SAL_CALL DiagramWrapper::setAutomaticDiagramPositioning() throw (uno::Runti
         xDiaProps->setPropertyValue( "RelativePosition", Any() );
     }
 }
-::sal_Bool SAL_CALL DiagramWrapper::isAutomaticDiagramPositioning(  ) throw (uno::RuntimeException)
+::sal_Bool SAL_CALL DiagramWrapper::isAutomaticDiagramPositioning(  ) throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< beans::XPropertySet > xDiaProps( this->getDiagram(), uno::UNO_QUERY );
     if( xDiaProps.is() )
@@ -821,7 +821,7 @@ void SAL_CALL DiagramWrapper::setAutomaticDiagramPositioning() throw (uno::Runti
     }
     return true;
 }
-void SAL_CALL DiagramWrapper::setDiagramPositionExcludingAxes( const awt::Rectangle& rPositionRect ) throw (uno::RuntimeException)
+void SAL_CALL DiagramWrapper::setDiagramPositionExcludingAxes( const awt::Rectangle& rPositionRect ) throw (uno::RuntimeException, std::exception)
 {
     ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
     DiagramHelper::setDiagramPositioning( m_spChart2ModelContact->getChartModel(), rPositionRect );
@@ -829,7 +829,7 @@ void SAL_CALL DiagramWrapper::setDiagramPositionExcludingAxes( const awt::Rectan
     if( xDiaProps.is() )
         xDiaProps->setPropertyValue("PosSizeExcludeAxes", uno::makeAny(true) );
 }
-::sal_Bool SAL_CALL DiagramWrapper::isExcludingDiagramPositioning() throw (uno::RuntimeException)
+::sal_Bool SAL_CALL DiagramWrapper::isExcludingDiagramPositioning() throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< beans::XPropertySet > xDiaProps( this->getDiagram(), uno::UNO_QUERY );
     if( xDiaProps.is() )
@@ -845,11 +845,11 @@ void SAL_CALL DiagramWrapper::setDiagramPositionExcludingAxes( const awt::Rectan
     }
     return false;
 }
-awt::Rectangle SAL_CALL DiagramWrapper::calculateDiagramPositionExcludingAxes(  ) throw (uno::RuntimeException)
+awt::Rectangle SAL_CALL DiagramWrapper::calculateDiagramPositionExcludingAxes(  ) throw (uno::RuntimeException, std::exception)
 {
     return m_spChart2ModelContact->GetDiagramRectangleExcludingAxes();
 }
-void SAL_CALL DiagramWrapper::setDiagramPositionIncludingAxes( const awt::Rectangle& rPositionRect ) throw (uno::RuntimeException)
+void SAL_CALL DiagramWrapper::setDiagramPositionIncludingAxes( const awt::Rectangle& rPositionRect ) throw (uno::RuntimeException, std::exception)
 {
     ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
     DiagramHelper::setDiagramPositioning( m_spChart2ModelContact->getChartModel(), rPositionRect );
@@ -857,24 +857,24 @@ void SAL_CALL DiagramWrapper::setDiagramPositionIncludingAxes( const awt::Rectan
     if( xDiaProps.is() )
         xDiaProps->setPropertyValue("PosSizeExcludeAxes", uno::makeAny(false) );
 }
-awt::Rectangle SAL_CALL DiagramWrapper::calculateDiagramPositionIncludingAxes(  ) throw (uno::RuntimeException)
+awt::Rectangle SAL_CALL DiagramWrapper::calculateDiagramPositionIncludingAxes(  ) throw (uno::RuntimeException, std::exception)
 {
     return m_spChart2ModelContact->GetDiagramRectangleIncludingAxes();
 }
-void SAL_CALL DiagramWrapper::setDiagramPositionIncludingAxesAndAxisTitles( const awt::Rectangle& rPositionRect ) throw (uno::RuntimeException)
+void SAL_CALL DiagramWrapper::setDiagramPositionIncludingAxesAndAxisTitles( const awt::Rectangle& rPositionRect ) throw (uno::RuntimeException, std::exception)
 {
     ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
     awt::Rectangle aRect( m_spChart2ModelContact->SubstractAxisTitleSizes(rPositionRect) );
     DiagramWrapper::setDiagramPositionIncludingAxes( aRect );
 }
-::com::sun::star::awt::Rectangle SAL_CALL DiagramWrapper::calculateDiagramPositionIncludingAxesAndAxisTitles(  ) throw (::com::sun::star::uno::RuntimeException)
+::com::sun::star::awt::Rectangle SAL_CALL DiagramWrapper::calculateDiagramPositionIncludingAxesAndAxisTitles(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return m_spChart2ModelContact->GetDiagramRectangleIncludingTitle();
 }
 
 // ____ XAxisSupplier ____
 Reference< XAxis > SAL_CALL DiagramWrapper::getAxis( sal_Int32 nDimensionIndex )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< XAxis > xAxis;
     if(!nDimensionIndex)
@@ -899,7 +899,7 @@ Reference< XAxis > SAL_CALL DiagramWrapper::getAxis( sal_Int32 nDimensionIndex )
 }
 
 Reference< XAxis > SAL_CALL DiagramWrapper::getSecondaryAxis( sal_Int32 nDimensionIndex )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< XAxis > xAxis;
     if(!nDimensionIndex)
@@ -919,7 +919,7 @@ Reference< XAxis > SAL_CALL DiagramWrapper::getSecondaryAxis( sal_Int32 nDimensi
 
 // ____ XAxisZSupplier ____
 Reference< drawing::XShape > SAL_CALL DiagramWrapper::getZAxisTitle()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< drawing::XShape > xRet;
     Reference< XAxis > xAxis( getAxis(2) );
@@ -929,7 +929,7 @@ Reference< drawing::XShape > SAL_CALL DiagramWrapper::getZAxisTitle()
 }
 
 Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getZMainGrid()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< beans::XPropertySet > xRet;
     Reference< XAxis > xAxis( getAxis(2) );
@@ -939,7 +939,7 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getZMainGrid()
 }
 
 Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getZHelpGrid()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< beans::XPropertySet > xRet;
     Reference< XAxis > xAxis( getAxis(2) );
@@ -949,7 +949,7 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getZHelpGrid()
 }
 
 Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getZAxis()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if( ! m_xZAxis.is())
         m_xZAxis = new AxisWrapper( AxisWrapper::Z_AXIS, m_spChart2ModelContact );
@@ -958,7 +958,7 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getZAxis()
 
 // ____ XTwoAxisXSupplier ____
 Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getSecondaryXAxis()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if( ! m_xSecondXAxis.is())
         m_xSecondXAxis = new AxisWrapper( AxisWrapper::SECOND_X_AXIS, m_spChart2ModelContact );
@@ -967,7 +967,7 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getSecondaryXAxis()
 
 // ____ XAxisXSupplier (base of XTwoAxisXSupplier) ____
 Reference< drawing::XShape > SAL_CALL DiagramWrapper::getXAxisTitle()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< drawing::XShape > xRet;
     Reference< XAxis > xAxis( getAxis(0) );
@@ -977,7 +977,7 @@ Reference< drawing::XShape > SAL_CALL DiagramWrapper::getXAxisTitle()
 }
 
 Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getXAxis()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if( ! m_xXAxis.is())
         m_xXAxis = new AxisWrapper( AxisWrapper::X_AXIS, m_spChart2ModelContact );
@@ -985,7 +985,7 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getXAxis()
 }
 
 Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getXMainGrid()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< beans::XPropertySet > xRet;
     Reference< XAxis > xAxis( getAxis(0) );
@@ -995,7 +995,7 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getXMainGrid()
 }
 
 Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getXHelpGrid()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< beans::XPropertySet > xRet;
     Reference< XAxis > xAxis( getAxis(0) );
@@ -1006,7 +1006,7 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getXHelpGrid()
 
 // ____ XTwoAxisYSupplier ____
 Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getSecondaryYAxis()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if( ! m_xSecondYAxis.is())
         m_xSecondYAxis = new AxisWrapper( AxisWrapper::SECOND_Y_AXIS, m_spChart2ModelContact );
@@ -1015,7 +1015,7 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getSecondaryYAxis()
 
 // ____ XAxisYSupplier (base of XTwoAxisYSupplier) ____
 Reference< drawing::XShape > SAL_CALL DiagramWrapper::getYAxisTitle()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< drawing::XShape > xRet;
     Reference< XAxis > xAxis( getAxis(1) );
@@ -1025,7 +1025,7 @@ Reference< drawing::XShape > SAL_CALL DiagramWrapper::getYAxisTitle()
 }
 
 Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getYAxis()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if( ! m_xYAxis.is())
         m_xYAxis = new AxisWrapper( AxisWrapper::Y_AXIS, m_spChart2ModelContact );
@@ -1033,7 +1033,7 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getYAxis()
 }
 
 Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getYMainGrid()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< beans::XPropertySet > xRet;
     Reference< XAxis > xAxis( getAxis(1) );
@@ -1043,7 +1043,7 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getYMainGrid()
 }
 
 Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getYHelpGrid()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< beans::XPropertySet > xRet;
     Reference< XAxis > xAxis( getAxis(1) );
@@ -1054,7 +1054,7 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getYHelpGrid()
 
 // ____ XSecondAxisTitleSupplier ____
 Reference< drawing::XShape > SAL_CALL DiagramWrapper::getSecondXAxisTitle()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< drawing::XShape > xRet;
     Reference< XAxis > xAxis( getSecondaryAxis(0) );
@@ -1064,7 +1064,7 @@ Reference< drawing::XShape > SAL_CALL DiagramWrapper::getSecondXAxisTitle()
 }
 
 Reference< drawing::XShape > SAL_CALL DiagramWrapper::getSecondYAxisTitle()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< drawing::XShape > xRet;
     Reference< XAxis > xAxis( getSecondaryAxis(1) );
@@ -1076,7 +1076,7 @@ Reference< drawing::XShape > SAL_CALL DiagramWrapper::getSecondYAxisTitle()
 // ____ XStatisticDisplay ____
 Reference<
     beans::XPropertySet > SAL_CALL DiagramWrapper::getUpBar()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if( !m_xUpBarWrapper.is() )
     {
@@ -1087,7 +1087,7 @@ Reference<
 
 Reference<
     beans::XPropertySet > SAL_CALL DiagramWrapper::getDownBar()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if( !m_xDownBarWrapper.is() )
     {
@@ -1098,7 +1098,7 @@ Reference<
 
 Reference<
     beans::XPropertySet > SAL_CALL DiagramWrapper::getMinMaxLine()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if( !m_xMinMaxLineWrapper.is() )
     {
@@ -1109,7 +1109,7 @@ Reference<
 
 // ____ X3DDisplay ____
 Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getWall()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if( !m_xWall.is() )
     {
@@ -1120,7 +1120,7 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getWall()
 
 Reference<
     beans::XPropertySet > SAL_CALL DiagramWrapper::getFloor()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if( !m_xFloor.is() )
     {
@@ -1131,7 +1131,7 @@ Reference<
 
 // ____ X3DDefaultSetter ____
 void SAL_CALL DiagramWrapper::set3DSettingsToDefault()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< X3DDefaultSetter > x3DDefaultSetter( m_spChart2ModelContact->getChart2Diagram(), uno::UNO_QUERY );
     if( x3DDefaultSetter.is() )
@@ -1139,7 +1139,7 @@ void SAL_CALL DiagramWrapper::set3DSettingsToDefault()
 }
 
 void SAL_CALL DiagramWrapper::setDefaultRotation()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< X3DDefaultSetter > x3DDefaultSetter( m_spChart2ModelContact->getChart2Diagram(), uno::UNO_QUERY );
     if( x3DDefaultSetter.is() )
@@ -1147,7 +1147,7 @@ void SAL_CALL DiagramWrapper::setDefaultRotation()
 }
 
 void SAL_CALL DiagramWrapper::setDefaultIllumination()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< X3DDefaultSetter > x3DDefaultSetter( m_spChart2ModelContact->getChart2Diagram(), uno::UNO_QUERY );
     if( x3DDefaultSetter.is() )
@@ -1156,7 +1156,7 @@ void SAL_CALL DiagramWrapper::setDefaultIllumination()
 
 // ____ XComponent ____
 void SAL_CALL DiagramWrapper::dispose()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     m_aEventListenerContainer.disposeAndClear( lang::EventObject( static_cast< ::cppu::OWeakObject* >( this )));
 
@@ -1178,14 +1178,14 @@ void SAL_CALL DiagramWrapper::dispose()
 
 void SAL_CALL DiagramWrapper::addEventListener(
     const Reference< lang::XEventListener >& xListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     m_aEventListenerContainer.addInterface( xListener );
 }
 
 void SAL_CALL DiagramWrapper::removeEventListener(
     const Reference< lang::XEventListener >& aListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     m_aEventListenerContainer.removeInterface( aListener );
 }
@@ -2000,14 +2000,14 @@ void WrappedIncludeHiddenCellsProperty::setPropertyValue( const Any& rOuterValue
 
 // ____ XDiagramProvider ____
 Reference< chart2::XDiagram > SAL_CALL DiagramWrapper::getDiagram()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return m_spChart2ModelContact->getChart2Diagram();
 }
 
 void SAL_CALL DiagramWrapper::setDiagram(
     const Reference< chart2::XDiagram >& /*xDiagram*/ )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     //@todo: remove this method from interface
     OSL_FAIL("DiagramWrapper::setDiagram is not implemented, should be removed and not be called" );

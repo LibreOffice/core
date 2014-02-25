@@ -141,7 +141,7 @@ void SignatureVerifierImpl::startEngine( const cssu::Reference<
 /* XSignatureVerifyResultBroadcaster */
 void SAL_CALL SignatureVerifierImpl::addSignatureVerifyResultListener(
     const cssu::Reference< cssxc::sax::XSignatureVerifyResultListener >& listener )
-    throw (cssu::Exception, cssu::RuntimeException)
+    throw (cssu::Exception, cssu::RuntimeException, std::exception)
 {
     m_xResultListener = listener;
     tryToPerform();
@@ -149,14 +149,14 @@ void SAL_CALL SignatureVerifierImpl::addSignatureVerifyResultListener(
 
 void SAL_CALL SignatureVerifierImpl::removeSignatureVerifyResultListener(
     const cssu::Reference< cssxc::sax::XSignatureVerifyResultListener >&)
-    throw (cssu::RuntimeException)
+    throw (cssu::RuntimeException, std::exception)
 {
 }
 
 /* XInitialization */
 void SAL_CALL SignatureVerifierImpl::initialize(
     const cssu::Sequence< cssu::Any >& aArguments )
-    throw (cssu::Exception, cssu::RuntimeException)
+    throw (cssu::Exception, cssu::RuntimeException, std::exception)
 {
     OSL_ASSERT(aArguments.getLength() == 5);
 
@@ -197,19 +197,19 @@ cssu::Reference< cssu::XInterface > SAL_CALL SignatureVerifierImpl_createInstanc
 
 /* XServiceInfo */
 OUString SAL_CALL SignatureVerifierImpl::getImplementationName(  )
-    throw (cssu::RuntimeException)
+    throw (cssu::RuntimeException, std::exception)
 {
     return SignatureVerifierImpl_getImplementationName();
 }
 
 sal_Bool SAL_CALL SignatureVerifierImpl::supportsService( const OUString& rServiceName )
-    throw (cssu::RuntimeException)
+    throw (cssu::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 cssu::Sequence< OUString > SAL_CALL SignatureVerifierImpl::getSupportedServiceNames(  )
-    throw (cssu::RuntimeException)
+    throw (cssu::RuntimeException, std::exception)
 {
     return SignatureVerifierImpl_getSupportedServiceNames();
 }

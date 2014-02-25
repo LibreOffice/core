@@ -52,7 +52,7 @@ namespace utl
         const Reference< XComponent >&  getComponent() const { return m_xComponent; }
 
     protected:
-        virtual void SAL_CALL disposing( const EventObject& _rSource ) throw (RuntimeException);
+        virtual void SAL_CALL disposing( const EventObject& _rSource ) throw (RuntimeException, std::exception);
     };
 
 
@@ -84,7 +84,7 @@ namespace utl
     }
 
 
-    void SAL_CALL OEventListenerImpl::disposing( const EventObject& _rSource ) throw (RuntimeException)
+    void SAL_CALL OEventListenerImpl::disposing( const EventObject& _rSource ) throw (RuntimeException, std::exception)
     {
         Reference< XEventListener > xDeleteUponLeaving = m_xKeepMeAlive;
         m_xKeepMeAlive.clear();

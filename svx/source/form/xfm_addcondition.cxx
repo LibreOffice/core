@@ -104,7 +104,7 @@ namespace svxform
     }
 
 
-    Sequence<sal_Int8> SAL_CALL OAddConditionDialog::getImplementationId(  ) throw(RuntimeException)
+    Sequence<sal_Int8> SAL_CALL OAddConditionDialog::getImplementationId(  ) throw(RuntimeException, std::exception)
     {
         static ::cppu::OImplementationId * pId = 0;
         if (! pId)
@@ -126,19 +126,19 @@ namespace svxform
     }
 
 
-    OUString SAL_CALL OAddConditionDialog::getImplementationName() throw(RuntimeException)
+    OUString SAL_CALL OAddConditionDialog::getImplementationName() throw(RuntimeException, std::exception)
     {
         return OAddConditionDialog_GetImplementationName();
     }
 
 
-    Sequence< OUString > SAL_CALL OAddConditionDialog::getSupportedServiceNames() throw(RuntimeException)
+    Sequence< OUString > SAL_CALL OAddConditionDialog::getSupportedServiceNames() throw(RuntimeException, std::exception)
     {
         return OAddConditionDialog_GetSupportedServiceNames();
     }
 
 
-    Reference<XPropertySetInfo>  SAL_CALL OAddConditionDialog::getPropertySetInfo() throw(RuntimeException)
+    Reference<XPropertySetInfo>  SAL_CALL OAddConditionDialog::getPropertySetInfo() throw(RuntimeException, std::exception)
     {
         return createPropertySetInfo( getInfoHelper() );
     }

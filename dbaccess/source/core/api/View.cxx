@@ -80,7 +80,7 @@ namespace dbaccess
     IMPLEMENT_FORWARD_REFCOUNT( View, View_Base )
     IMPLEMENT_GET_IMPLEMENTATION_ID( View )
 
-    Any SAL_CALL View::queryInterface( const Type & _rType ) throw(RuntimeException)
+    Any SAL_CALL View::queryInterface( const Type & _rType ) throw(RuntimeException, std::exception)
     {
         if(_rType == getCppuType( (Reference<XAlterView>*)0) && !m_xViewAccess.is() )
             return Any();
@@ -90,7 +90,7 @@ namespace dbaccess
         return aReturn;
     }
 
-    Sequence< Type > SAL_CALL View::getTypes(  ) throw(RuntimeException)
+    Sequence< Type > SAL_CALL View::getTypes(  ) throw(RuntimeException, std::exception)
     {
         Type aAlterType = getCppuType( (Reference<XAlterView>*)0);
 
@@ -110,7 +110,7 @@ namespace dbaccess
         return Sequence< Type >(pTypes, aOwnTypes.size());
     }
 
-    void SAL_CALL View::alterCommand( const OUString& _rNewCommand ) throw (SQLException, RuntimeException)
+    void SAL_CALL View::alterCommand( const OUString& _rNewCommand ) throw (SQLException, RuntimeException, std::exception)
     {
         OSL_ENSURE(m_xViewAccess.is(),"Illegal call to AlterView!");
         m_xViewAccess->alterCommand(this,_rNewCommand);

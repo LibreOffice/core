@@ -56,7 +56,7 @@ namespace DOM
     Append the string to the end of the character data of the node.
     */
     void SAL_CALL CCharacterData::appendData(const OUString& arg)
-        throw (RuntimeException, DOMException)
+        throw (RuntimeException, DOMException, std::exception)
     {
         ::osl::ClearableMutexGuard guard(m_rMutex);
 
@@ -75,7 +75,7 @@ namespace DOM
     Remove a range of 16-bit units from the node.
     */
     void SAL_CALL CCharacterData::deleteData(sal_Int32 offset, sal_Int32 count)
-        throw (RuntimeException, DOMException)
+        throw (RuntimeException, DOMException, std::exception)
     {
         ::osl::ClearableMutexGuard guard(m_rMutex);
 
@@ -109,7 +109,7 @@ namespace DOM
     /**
     Return the character data of the node that implements this interface.
     */
-    OUString SAL_CALL CCharacterData::getData() throw (RuntimeException)
+    OUString SAL_CALL CCharacterData::getData() throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -129,7 +129,7 @@ namespace DOM
     The number of 16-bit units that are available through data and the
     substringData method below.
     */
-    sal_Int32 SAL_CALL CCharacterData::getLength() throw (RuntimeException)
+    sal_Int32 SAL_CALL CCharacterData::getLength() throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -146,7 +146,7 @@ namespace DOM
     Insert a string at the specified 16-bit unit offset.
     */
     void SAL_CALL CCharacterData::insertData(sal_Int32 offset, const OUString& arg)
-        throw (RuntimeException, DOMException)
+        throw (RuntimeException, DOMException, std::exception)
     {
         ::osl::ClearableMutexGuard guard(m_rMutex);
 
@@ -181,7 +181,7 @@ namespace DOM
     with the specified string.
     */
     void SAL_CALL CCharacterData::replaceData(sal_Int32 offset, sal_Int32 count, const OUString& arg)
-        throw (RuntimeException, DOMException)
+        throw (RuntimeException, DOMException, std::exception)
     {
         ::osl::ClearableMutexGuard guard(m_rMutex);
 
@@ -216,7 +216,7 @@ namespace DOM
     Set the character data of the node that implements this interface.
     */
     void SAL_CALL CCharacterData::setData(const OUString& data)
-        throw (RuntimeException, DOMException)
+        throw (RuntimeException, DOMException, std::exception)
     {
         ::osl::ClearableMutexGuard guard(m_rMutex);
 
@@ -235,7 +235,7 @@ namespace DOM
     Extracts a range of data from the node.
     */
     OUString SAL_CALL CCharacterData::subStringData(sal_Int32 offset, sal_Int32 count)
-        throw (RuntimeException, DOMException)
+        throw (RuntimeException, DOMException, std::exception)
     {
         ::osl::MutexGuard const g(m_rMutex);
 

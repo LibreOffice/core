@@ -86,7 +86,7 @@ Views::~Views()
 {}
 
 void Views::refresh()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     try
     {
@@ -149,7 +149,7 @@ void Views::appendByDescriptor(
     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor )
     throw (::com::sun::star::sdbc::SQLException,
            ::com::sun::star::container::ElementExistException,
-           ::com::sun::star::uno::RuntimeException)
+           ::com::sun::star::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard guard( m_refMutex->mutex );
 
@@ -180,7 +180,7 @@ void Views::appendByDescriptor(
 void Views::dropByName( const OUString& elementName )
     throw (::com::sun::star::sdbc::SQLException,
            ::com::sun::star::container::NoSuchElementException,
-           ::com::sun::star::uno::RuntimeException)
+           ::com::sun::star::uno::RuntimeException, std::exception)
 {
     String2IntMap::const_iterator ii = m_name2index.find( elementName );
     if( ii == m_name2index.end() )
@@ -196,7 +196,7 @@ void Views::dropByName( const OUString& elementName )
 void Views::dropByIndex( sal_Int32 index )
     throw (::com::sun::star::sdbc::SQLException,
            ::com::sun::star::lang::IndexOutOfBoundsException,
-           ::com::sun::star::uno::RuntimeException)
+           ::com::sun::star::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard guard( m_refMutex->mutex );
     if( index < 0 ||  index >= m_values.getLength() )
@@ -225,7 +225,7 @@ void Views::dropByIndex( sal_Int32 index )
 
 
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > Views::createDataDescriptor()
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return new ViewDescriptor( m_refMutex, m_origin, m_pSettings );
 }

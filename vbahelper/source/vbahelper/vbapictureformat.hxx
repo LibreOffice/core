@@ -40,14 +40,14 @@ public:
     ScVbaPictureFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, css::uno::Reference< css::drawing::XShape > xShape ) throw( css::lang::IllegalArgumentException );
 
     // Attributes
-    virtual double SAL_CALL getBrightness() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setBrightness( double _brightness ) throw (css::uno::RuntimeException);
-    virtual double SAL_CALL getContrast() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setContrast( double _contrast ) throw (css::uno::RuntimeException);
+    virtual double SAL_CALL getBrightness() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setBrightness( double _brightness ) throw (css::uno::RuntimeException, std::exception);
+    virtual double SAL_CALL getContrast() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setContrast( double _contrast ) throw (css::uno::RuntimeException, std::exception);
 
     // Methods
-    virtual void SAL_CALL IncrementBrightness( double increment ) throw (css::uno::RuntimeException);
-    virtual void SAL_CALL IncrementContrast( double increment ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL IncrementBrightness( double increment ) throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL IncrementContrast( double increment ) throw (css::uno::RuntimeException, std::exception);
 };
 
 #endif // INCLUDED_VBAHELPER_SOURCE_VBAHELPER_VBAPICTUREFORMAT_HXX

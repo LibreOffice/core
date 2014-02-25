@@ -67,12 +67,12 @@ namespace framework
         DECLARE_XSERVICEINFO
 
         virtual css::uno::Any SAL_CALL execute(const css::uno::Sequence<css::beans::NamedValue>& args)
-            throw( css::lang::IllegalArgumentException, css::uno::Exception);
+            throw( css::lang::IllegalArgumentException, css::uno::Exception, std::exception);
 
-        virtual void SAL_CALL close(sal_Bool bDeliverOwnership) throw (css::util::CloseVetoException);
+        virtual void SAL_CALL close(sal_Bool bDeliverOwnership) throw (css::util::CloseVetoException, std::exception);
 
-        virtual void SAL_CALL addCloseListener(const css::uno::Reference< css::util::XCloseListener >& aListener) throw (css::uno::RuntimeException);
-        virtual void SAL_CALL removeCloseListener(const css::uno::Reference< css::util::XCloseListener >& aListener) throw (css::uno::RuntimeException);
+        virtual void SAL_CALL addCloseListener(const css::uno::Reference< css::util::XCloseListener >& aListener) throw (css::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL removeCloseListener(const css::uno::Reference< css::util::XCloseListener >& aListener) throw (css::uno::RuntimeException, std::exception);
 
 };
 

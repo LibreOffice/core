@@ -67,7 +67,7 @@ AquaA11yEventListener::~AquaA11yEventListener()
 
 
 void SAL_CALL
-AquaA11yEventListener::disposing( const EventObject& ) throw( RuntimeException )
+AquaA11yEventListener::disposing( const EventObject& ) throw( RuntimeException, std::exception )
 {
     [ AquaA11yFactory removeFromWrapperRepositoryFor: [ (AquaA11yWrapper *) m_wrapperObject accessibleContext ] ];
 }
@@ -75,7 +75,7 @@ AquaA11yEventListener::disposing( const EventObject& ) throw( RuntimeException )
 
 
 void SAL_CALL
-AquaA11yEventListener::notifyEvent( const AccessibleEventObject& aEvent ) throw( RuntimeException )
+AquaA11yEventListener::notifyEvent( const AccessibleEventObject& aEvent ) throw( RuntimeException, std::exception )
 {
     NSString * notification = nil;
     id element = m_wrapperObject;

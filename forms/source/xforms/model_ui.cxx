@@ -74,7 +74,7 @@ using namespace com::sun::star::xml::xpath;
 //
 
 OUString Model::getDefaultServiceNameForNode( const XNode_t& xNode )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     // determine service for control. string/text field is default.
     OUString sService = "com.sun.star.form.component.TextField";
@@ -261,7 +261,7 @@ OUString Model::getDefaultBindingExpressionForNode(
 
 
 OUString Model::getDefaultBindingExpressionForNode( const XNode_t& xNode )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return getDefaultBindingExpressionForNode( xNode, getEvaluationContext() );
 }
@@ -285,7 +285,7 @@ static bool lcl_isWhitespace( const OUString& rString )
 
 OUString Model::getNodeDisplayName( const XNode_t& xNode,
                                     sal_Bool bDetail )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     OUStringBuffer aBuffer;
 
@@ -327,7 +327,7 @@ OUString Model::getNodeDisplayName( const XNode_t& xNode,
 }
 
 OUString Model::getNodeName( const XNode_t& xNode )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     OUStringBuffer aBuffer;
 
@@ -351,7 +351,7 @@ OUString Model::getNodeName( const XNode_t& xNode )
 
 OUString Model::getBindingName( const XPropertySet_t& xBinding,
                                 sal_Bool /*bDetail*/ )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     OUString sID;
     xBinding->getPropertyValue( "BindingID" ) >>= sID;
@@ -371,7 +371,7 @@ OUString Model::getBindingName( const XPropertySet_t& xBinding,
 
 OUString Model::getSubmissionName( const XPropertySet_t& xSubmission,
                                    sal_Bool /*bDetail*/ )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     OUString sID;
     xSubmission->getPropertyValue( "ID" ) >>= sID;
@@ -379,7 +379,7 @@ OUString Model::getSubmissionName( const XPropertySet_t& xSubmission,
 }
 
 Model::XPropertySet_t Model::cloneBindingAsGhost( const XPropertySet_t &xBinding )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     // Create a new binding instance first...
     Binding *pBinding = new Binding();
@@ -396,7 +396,7 @@ Model::XPropertySet_t Model::cloneBindingAsGhost( const XPropertySet_t &xBinding
 }
 
 void Model::removeBindingIfUseless( const XPropertySet_t& xBinding )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     Binding* pBinding = Binding::getBinding( xBinding );
     if( pBinding != NULL )
@@ -409,7 +409,7 @@ void Model::removeBindingIfUseless( const XPropertySet_t& xBinding )
 Model::XDocument_t Model::newInstance( const OUString& sName,
                          const OUString& sURL,
                          sal_Bool bURLOnce )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     // create a default instance with <instanceData> element
     XDocument_t xInstance = getDocumentBuilder()->newDocument();
@@ -460,7 +460,7 @@ void Model::renameInstance( const OUString& sFrom,
                             const OUString& sTo,
                             const OUString& sURL,
                             sal_Bool bURLOnce )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     sal_Int32 nPos = lcl_findInstance( mpInstances, sFrom );
     if( nPos != -1 )
@@ -498,7 +498,7 @@ void Model::renameInstance( const OUString& sFrom,
 }
 
 void Model::removeInstance( const OUString& sName )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     sal_Int32 nPos = lcl_findInstance( mpInstances, sName );
     if( nPos != -1 )
@@ -519,7 +519,7 @@ static Reference<XNameContainer> lcl_getModels(
 
 Model::XModel_t Model::newModel( const Reference<com::sun::star::frame::XModel>& xCmp,
                                  const OUString& sName )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     Model::XModel_t xModel;
     Reference<XNameContainer> xModels = lcl_getModels( xCmp );
@@ -541,7 +541,7 @@ Model::XModel_t Model::newModel( const Reference<com::sun::star::frame::XModel>&
 void Model::renameModel( const Reference<com::sun::star::frame::XModel>& xCmp,
                          const OUString& sFrom,
                          const OUString& sTo )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     Reference<XNameContainer> xModels = lcl_getModels( xCmp );
     if( xModels.is()
@@ -557,7 +557,7 @@ void Model::renameModel( const Reference<com::sun::star::frame::XModel>& xCmp,
 
 void Model::removeModel( const Reference<com::sun::star::frame::XModel>& xCmp,
                          const OUString& sName )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     Reference<XNameContainer> xModels = lcl_getModels( xCmp );
     if( xModels.is()
@@ -569,7 +569,7 @@ void Model::removeModel( const Reference<com::sun::star::frame::XModel>& xCmp,
 
 Model::XNode_t Model::createElement( const XNode_t& xParent,
                                      const OUString& sName )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     Reference<XNode> xNode;
     if( xParent.is()
@@ -584,7 +584,7 @@ Model::XNode_t Model::createElement( const XNode_t& xParent,
 
 Model::XNode_t Model::createAttribute( const XNode_t& xParent,
                                        const OUString& sName )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     Reference<XNode> xNode;
     Reference<XElement> xElement( xParent, UNO_QUERY );
@@ -610,7 +610,7 @@ Model::XNode_t Model::createAttribute( const XNode_t& xParent,
 
 Model::XNode_t Model::renameNode( const XNode_t& xNode,
                                   const OUString& sName )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     // early out if we don't have to change the name
     if( xNode->getNodeName() == sName )
@@ -694,7 +694,7 @@ Model::XNode_t Model::renameNode( const XNode_t& xNode,
 
 Model::XPropertySet_t Model::getBindingForNode( const XNode_t& xNode,
                                                 sal_Bool bCreate )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     OSL_ENSURE( xNode.is(), "no node?" );
 
@@ -750,7 +750,7 @@ Model::XPropertySet_t Model::getBindingForNode( const XNode_t& xNode,
 }
 
 void Model::removeBindingForNode( const XNode_t& )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     // determine whether suitable binding is still used
 }
@@ -902,7 +902,7 @@ OUString Model::getResultForExpression(
     const XPropertySet_t& xBinding,
     sal_Bool bIsBindingExpression,
     const OUString& sExpression )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     Binding* pBinding = Binding::getBinding( xBinding );
     if( pBinding == NULL )
@@ -936,13 +936,13 @@ OUString Model::getResultForExpression(
 }
 
 sal_Bool Model::isValidXMLName( const OUString& sName )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return isValidQName( sName, NULL );
 }
 
 sal_Bool Model::isValidPrefixName( const OUString& sName )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return ::isValidPrefixName( sName, NULL );
 }
@@ -950,7 +950,7 @@ sal_Bool Model::isValidPrefixName( const OUString& sName )
 void Model::setNodeValue(
     const XNode_t& xNode,
     const OUString& sValue )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     setSimpleContent( xNode, sValue );
 }

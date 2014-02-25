@@ -79,7 +79,7 @@ cppu::IPropertyArrayHelper& SAL_CALL PropertySetBase::getInfoHelper()
     return *m_pProperties;
 }
 
-Reference< XPropertySetInfo > SAL_CALL PropertySetBase::getPropertySetInfo(  ) throw(RuntimeException)
+Reference< XPropertySetInfo > SAL_CALL PropertySetBase::getPropertySetInfo(  ) throw(RuntimeException, std::exception)
 {
     return cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper() );
 }
@@ -173,7 +173,7 @@ sal_Bool SAL_CALL PropertySetBase::convertFastPropertyValue( Any& rConvertedValu
 }
 
 void SAL_CALL PropertySetBase::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue )
-    throw (Exception)
+    throw (Exception, std::exception)
 {
     PropertyAccessorBase& rAccessor = locatePropertyHandler( nHandle );
     rAccessor.setValue( rValue );

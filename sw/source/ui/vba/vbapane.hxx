@@ -36,8 +36,8 @@ public:
     virtual ~SwVbaPane();
 
     // Methods
-    virtual css::uno::Any SAL_CALL View(  ) throw (css::uno::RuntimeException);
-    virtual void SAL_CALL Close(  ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL View(  ) throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL Close(  ) throw (css::uno::RuntimeException, std::exception);
 
     // XHelperInterface
     virtual OUString getServiceImplName();

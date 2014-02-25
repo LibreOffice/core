@@ -50,9 +50,9 @@ public:
     virtual css::uno::Sequence<OUString> getServiceNames();
 
     // XWorkbooks
-    virtual css::uno::Any SAL_CALL Add( const css::uno::Any& Template ) throw (css::uno::RuntimeException);
-    virtual void SAL_CALL Close(  ) throw (css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL Open( const OUString& Filename, const css::uno::Any& UpdateLinks, const css::uno::Any& ReadOnly, const css::uno::Any& Format, const css::uno::Any& Password, const css::uno::Any& WriteResPassword, const css::uno::Any& IgnoreReadOnlyRecommended, const css::uno::Any& Origin, const css::uno::Any& Delimiter, const css::uno::Any& Editable, const css::uno::Any& Notify, const css::uno::Any& Converter, const css::uno::Any& AddToMru ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL Add( const css::uno::Any& Template ) throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL Close(  ) throw (css::uno::RuntimeException, std::exception);
+    virtual css::uno::Any SAL_CALL Open( const OUString& Filename, const css::uno::Any& UpdateLinks, const css::uno::Any& ReadOnly, const css::uno::Any& Format, const css::uno::Any& Password, const css::uno::Any& WriteResPassword, const css::uno::Any& IgnoreReadOnlyRecommended, const css::uno::Any& Origin, const css::uno::Any& Delimiter, const css::uno::Any& Editable, const css::uno::Any& Notify, const css::uno::Any& Converter, const css::uno::Any& AddToMru ) throw (css::uno::RuntimeException, std::exception);
 };
 
 #endif /* SC_VBA_WORKBOOKS_HXX */

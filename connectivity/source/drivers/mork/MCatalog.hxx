@@ -39,7 +39,7 @@ namespace connectivity
             virtual void refreshViews() ;
             virtual void refreshGroups();
             virtual void refreshUsers() ;
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getTables(  ) throw(::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getTables(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
         public:
             OCatalog(OConnection* _pCon);
 

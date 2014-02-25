@@ -250,10 +250,10 @@ private:
     const sal_Int32                mnBitsPerPixel;
 
     // XBitmap
-    virtual geometry::IntegerSize2D SAL_CALL getSize() throw (uno::RuntimeException) { return maSize; }
-    virtual ::sal_Bool SAL_CALL hasAlpha(  ) throw (uno::RuntimeException) { return mnBitsPerPixel != 8; }
+    virtual geometry::IntegerSize2D SAL_CALL getSize() throw (uno::RuntimeException, std::exception) { return maSize; }
+    virtual ::sal_Bool SAL_CALL hasAlpha(  ) throw (uno::RuntimeException, std::exception) { return mnBitsPerPixel != 8; }
     virtual uno::Reference< rendering::XBitmap > SAL_CALL getScaledBitmap( const geometry::RealSize2D&,
-                                                                           sal_Bool ) throw (uno::RuntimeException) { return this; }
+                                                                           sal_Bool ) throw (uno::RuntimeException, std::exception) { return this; }
 
     // XIntegerReadOnlyBitmap
     virtual uno::Sequence< ::sal_Int8 > SAL_CALL getData( rendering::IntegerBitmapLayout&     bitmapLayout,
@@ -324,7 +324,7 @@ private:
         return aRet;
     }
 
-    virtual rendering::IntegerBitmapLayout SAL_CALL getMemoryLayout(  ) throw (uno::RuntimeException)
+    virtual rendering::IntegerBitmapLayout SAL_CALL getMemoryLayout(  ) throw (uno::RuntimeException, std::exception)
     {
         rendering::IntegerBitmapLayout aLayout( maLayout );
 
@@ -340,7 +340,7 @@ private:
     }
 
     // XBitmapPalette
-    virtual sal_Int32 SAL_CALL getNumberOfEntries() throw (uno::RuntimeException)
+    virtual sal_Int32 SAL_CALL getNumberOfEntries() throw (uno::RuntimeException, std::exception)
     {
         CPPUNIT_ASSERT_MESSAGE( "Got palette getNumberOfEntries interface call without handing out palette",
                                 getPalette().is() );
@@ -389,7 +389,7 @@ private:
         }
     };
 
-    virtual uno::Reference< rendering::XColorSpace > SAL_CALL getColorSpace(  ) throw (uno::RuntimeException)
+    virtual uno::Reference< rendering::XColorSpace > SAL_CALL getColorSpace(  ) throw (uno::RuntimeException, std::exception)
     {
         // this is the method from XBitmapPalette. Return palette color
         // space here
@@ -397,17 +397,17 @@ private:
     }
 
     // XIntegerBitmapColorSpace
-    virtual ::sal_Int8 SAL_CALL getType(  ) throw (uno::RuntimeException)
+    virtual ::sal_Int8 SAL_CALL getType(  ) throw (uno::RuntimeException, std::exception)
     {
         return rendering::ColorSpaceType::RGB;
     }
 
-    virtual uno::Sequence< sal_Int8 > SAL_CALL getComponentTags(  ) throw (uno::RuntimeException)
+    virtual uno::Sequence< sal_Int8 > SAL_CALL getComponentTags(  ) throw (uno::RuntimeException, std::exception)
     {
         return maComponentTags;
     }
 
-    virtual ::sal_Int8 SAL_CALL getRenderingIntent(  ) throw (uno::RuntimeException)
+    virtual ::sal_Int8 SAL_CALL getRenderingIntent(  ) throw (uno::RuntimeException, std::exception)
     {
         return rendering::RenderingIntent::PERCEPTUAL;
     }
@@ -483,17 +483,17 @@ private:
         return uno::Sequence< double >();
     }
 
-    virtual ::sal_Int32 SAL_CALL getBitsPerPixel(  ) throw (uno::RuntimeException)
+    virtual ::sal_Int32 SAL_CALL getBitsPerPixel(  ) throw (uno::RuntimeException, std::exception)
     {
         return mnBitsPerPixel;
     }
 
-    virtual uno::Sequence< ::sal_Int32 > SAL_CALL getComponentBitCounts(  ) throw (uno::RuntimeException)
+    virtual uno::Sequence< ::sal_Int32 > SAL_CALL getComponentBitCounts(  ) throw (uno::RuntimeException, std::exception)
     {
         return maComponentBitCounts;
     }
 
-    virtual ::sal_Int8 SAL_CALL getEndianness(  ) throw (uno::RuntimeException)
+    virtual ::sal_Int8 SAL_CALL getEndianness(  ) throw (uno::RuntimeException, std::exception)
     {
         return util::Endianness::LITTLE;
     }
@@ -519,7 +519,7 @@ private:
     }
 
     virtual uno::Sequence< rendering::RGBColor > SAL_CALL convertIntegerToRGB( const uno::Sequence< ::sal_Int8 >& deviceColor ) throw (lang::IllegalArgumentException,
-                                                                                                                                       uno::RuntimeException)
+                                                                                                                                       uno::RuntimeException, std::exception)
     {
         const uno::Sequence< rendering::ARGBColor > aTemp( convertIntegerToARGB(deviceColor) );
         const sal_Size nLen(aTemp.getLength());
@@ -536,7 +536,7 @@ private:
     }
 
     virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertIntegerToARGB( const uno::Sequence< ::sal_Int8 >& deviceColor ) throw (lang::IllegalArgumentException,
-                                                                                                                                         uno::RuntimeException)
+                                                                                                                                         uno::RuntimeException, std::exception)
     {
         const sal_Size  nLen( deviceColor.getLength() );
         const sal_Int32 nBytesPerPixel(mnBitsPerPixel == 8 ? 1 : 4);

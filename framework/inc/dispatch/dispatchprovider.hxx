@@ -103,8 +103,8 @@ class DispatchProvider  :   // baseclasses
 
         virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL                       queryDispatch  ( const css::util::URL&                                       aURL             ,
                                                                                                              const OUString&                                      sTargetFrameName ,
-                                                                                                                   sal_Int32                                             nSearchFlags     ) throw( css::uno::RuntimeException );
-        virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptions    ) throw( css::uno::RuntimeException );
+                                                                                                                   sal_Int32                                             nSearchFlags     ) throw( css::uno::RuntimeException, std::exception );
+        virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptions    ) throw( css::uno::RuntimeException, std::exception );
 
     /* helper */
     protected:

@@ -52,7 +52,7 @@ class AddonsToolBarManager : public ToolBarManager
         virtual ~AddonsToolBarManager();
 
         // XComponent
-        void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException );
+        void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException, std::exception );
 
         virtual void RefreshImages();
         using ToolBarManager::FillToolbar;

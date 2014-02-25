@@ -377,12 +377,12 @@ bool ORelationTableView::allowQueries() const
     return false;
 }
 
-void ORelationTableView::_elementInserted( const container::ContainerEvent& /*_rEvent*/ )  throw(::com::sun::star::uno::RuntimeException)
+void ORelationTableView::_elementInserted( const container::ContainerEvent& /*_rEvent*/ )  throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
 
 }
 
-void ORelationTableView::_elementRemoved( const container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException)
+void ORelationTableView::_elementRemoved( const container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     m_bInRemove = true;
     OUString sName;
@@ -402,7 +402,7 @@ void ORelationTableView::_elementRemoved( const container::ContainerEvent& _rEve
     m_bInRemove = false;
 }
 
-void ORelationTableView::_elementReplaced( const container::ContainerEvent& /*_rEvent*/ ) throw(::com::sun::star::uno::RuntimeException)
+void ORelationTableView::_elementReplaced( const container::ContainerEvent& /*_rEvent*/ ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
 }
 

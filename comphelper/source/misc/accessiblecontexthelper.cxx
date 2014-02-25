@@ -128,7 +128,7 @@ namespace comphelper
     }
 
 
-    void SAL_CALL OAccessibleContextHelper::addAccessibleEventListener( const Reference< XAccessibleEventListener >& _rxListener ) throw (RuntimeException)
+    void SAL_CALL OAccessibleContextHelper::addAccessibleEventListener( const Reference< XAccessibleEventListener >& _rxListener ) throw (RuntimeException, std::exception)
     {
         OMutexGuard aGuard( getExternalLock() );
             // don't use the OContextEntryGuard - it will throw an exception if we're not alive
@@ -151,7 +151,7 @@ namespace comphelper
     }
 
 
-    void SAL_CALL OAccessibleContextHelper::removeAccessibleEventListener( const Reference< XAccessibleEventListener >& _rxListener ) throw (RuntimeException)
+    void SAL_CALL OAccessibleContextHelper::removeAccessibleEventListener( const Reference< XAccessibleEventListener >& _rxListener ) throw (RuntimeException, std::exception)
     {
         OMutexGuard aGuard( getExternalLock() );
             // don't use the OContextEntryGuard - it will throw an exception if we're not alive
@@ -232,7 +232,7 @@ namespace comphelper
     }
 
 
-    sal_Int32 SAL_CALL OAccessibleContextHelper::getAccessibleIndexInParent(  ) throw (RuntimeException)
+    sal_Int32 SAL_CALL OAccessibleContextHelper::getAccessibleIndexInParent(  ) throw (RuntimeException, std::exception)
     {
         OExternalLockGuard aGuard( this );
 
@@ -278,7 +278,7 @@ namespace comphelper
     }
 
 
-    Locale SAL_CALL OAccessibleContextHelper::getLocale(  ) throw (IllegalAccessibleComponentStateException, RuntimeException)
+    Locale SAL_CALL OAccessibleContextHelper::getLocale(  ) throw (IllegalAccessibleComponentStateException, RuntimeException, std::exception)
     {
         // simply ask the parent
         Reference< XAccessible > xParent = getAccessibleParent();

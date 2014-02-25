@@ -34,7 +34,7 @@ ContentProvider::queryContent(
             const uno::Reference<
                     com::sun::star::ucb::XContentIdentifier >& Identifier )
     throw( com::sun::star::ucb::IllegalIdentifierException,
-           uno::RuntimeException )
+           uno::RuntimeException, std::exception )
 {
 #if OSL_DEBUG_LEVEL > 1
     fprintf(stderr, "QueryContent: '%s'",

@@ -39,7 +39,7 @@ RtfExportFilter::~RtfExportFilter()
 }
 
 sal_Bool RtfExportFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescriptor )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
@@ -95,12 +95,12 @@ sal_Bool RtfExportFilter::filter( const uno::Sequence< beans::PropertyValue >& a
 }
 
 
-void RtfExportFilter::cancel(  ) throw (uno::RuntimeException)
+void RtfExportFilter::cancel(  ) throw (uno::RuntimeException, std::exception)
 {
 }
 
 void RtfExportFilter::setSourceDocument( const uno::Reference< lang::XComponent >& xDoc )
-    throw (lang::IllegalArgumentException, uno::RuntimeException)
+    throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     m_xSrcDoc = xDoc;
 }

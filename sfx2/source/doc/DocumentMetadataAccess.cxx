@@ -817,7 +817,7 @@ DocumentMetadataAccess::~DocumentMetadataAccess()
 
 // ::com::sun::star::rdf::XRepositorySupplier:
 uno::Reference< rdf::XRepository > SAL_CALL
-DocumentMetadataAccess::getRDFRepository() throw (uno::RuntimeException)
+DocumentMetadataAccess::getRDFRepository() throw (uno::RuntimeException, std::exception)
 {
     OSL_ENSURE(m_pImpl->m_xRepository.is(), "repository not initialized");
     return m_pImpl->m_xRepository;
@@ -825,20 +825,20 @@ DocumentMetadataAccess::getRDFRepository() throw (uno::RuntimeException)
 
 // ::com::sun::star::rdf::XNode:
 OUString SAL_CALL
-DocumentMetadataAccess::getStringValue() throw (uno::RuntimeException)
+DocumentMetadataAccess::getStringValue() throw (uno::RuntimeException, std::exception)
 {
     return m_pImpl->m_xBaseURI->getStringValue();
 }
 
 // ::com::sun::star::rdf::XURI:
 OUString SAL_CALL
-DocumentMetadataAccess::getNamespace() throw (uno::RuntimeException)
+DocumentMetadataAccess::getNamespace() throw (uno::RuntimeException, std::exception)
 {
     return m_pImpl->m_xBaseURI->getNamespace();
 }
 
 OUString SAL_CALL
-DocumentMetadataAccess::getLocalName() throw (uno::RuntimeException)
+DocumentMetadataAccess::getLocalName() throw (uno::RuntimeException, std::exception)
 {
     return m_pImpl->m_xBaseURI->getLocalName();
 }
@@ -847,7 +847,7 @@ DocumentMetadataAccess::getLocalName() throw (uno::RuntimeException)
 uno::Reference< rdf::XMetadatable > SAL_CALL
 DocumentMetadataAccess::getElementByMetadataReference(
     const ::com::sun::star::beans::StringPair & i_rReference)
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     const IXmlIdRegistry * pReg(
         m_pImpl->m_rXmlIdRegistrySupplier.GetXmlIdRegistry() );
@@ -861,7 +861,7 @@ throw (uno::RuntimeException)
 uno::Reference< rdf::XMetadatable > SAL_CALL
 DocumentMetadataAccess::getElementByURI(
     const uno::Reference< rdf::XURI > & i_xURI )
-throw (uno::RuntimeException, lang::IllegalArgumentException)
+throw (uno::RuntimeException, lang::IllegalArgumentException, std::exception)
 {
     if (!i_xURI.is()) {
         throw lang::IllegalArgumentException(OUString(
@@ -887,7 +887,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException)
 uno::Sequence< uno::Reference< rdf::XURI > > SAL_CALL
 DocumentMetadataAccess::getMetadataGraphsWithType(
     const uno::Reference<rdf::XURI> & i_xType)
-throw (uno::RuntimeException, lang::IllegalArgumentException)
+throw (uno::RuntimeException, lang::IllegalArgumentException, std::exception)
 {
     if (!i_xType.is()) {
         throw lang::IllegalArgumentException(OUString(
@@ -910,7 +910,7 @@ uno::Reference<rdf::XURI> SAL_CALL
 DocumentMetadataAccess::addMetadataFile(const OUString & i_rFileName,
     const uno::Sequence < uno::Reference< rdf::XURI > > & i_rTypes)
 throw (uno::RuntimeException, lang::IllegalArgumentException,
-    container::ElementExistException)
+    container::ElementExistException, std::exception)
 {
     if (!isFileNameValid(i_rFileName)) {
         throw lang::IllegalArgumentException(OUString(
@@ -956,7 +956,7 @@ DocumentMetadataAccess::importMetadataFile(::sal_Int16 i_Format,
     const uno::Sequence < uno::Reference< rdf::XURI > > & i_rTypes)
 throw (uno::RuntimeException, lang::IllegalArgumentException,
     datatransfer::UnsupportedFlavorException,
-    container::ElementExistException, rdf::ParseException, io::IOException)
+    container::ElementExistException, rdf::ParseException, io::IOException, std::exception)
 {
     if (!isFileNameValid(i_rFileName)) {
         throw lang::IllegalArgumentException(OUString(
@@ -1000,7 +1000,7 @@ void SAL_CALL
 DocumentMetadataAccess::removeMetadataFile(
     const uno::Reference< rdf::XURI > & i_xGraphName)
 throw (uno::RuntimeException, lang::IllegalArgumentException,
-    container::NoSuchElementException)
+    container::NoSuchElementException, std::exception)
 {
     try {
         m_pImpl->m_xRepository->destroyGraph(i_xGraphName);
@@ -1020,7 +1020,7 @@ void SAL_CALL
 DocumentMetadataAccess::addContentOrStylesFile(
     const OUString & i_rFileName)
 throw (uno::RuntimeException, lang::IllegalArgumentException,
-    container::ElementExistException)
+    container::ElementExistException, std::exception)
 {
     if (!isFileNameValid(i_rFileName)) {
         throw lang::IllegalArgumentException(OUString(
@@ -1040,7 +1040,7 @@ void SAL_CALL
 DocumentMetadataAccess::removeContentOrStylesFile(
     const OUString & i_rFileName)
 throw (uno::RuntimeException, lang::IllegalArgumentException,
-    container::NoSuchElementException)
+    container::NoSuchElementException, std::exception)
 {
     if (!isFileNameValid(i_rFileName)) {
         throw lang::IllegalArgumentException(OUString(
@@ -1082,7 +1082,7 @@ void SAL_CALL DocumentMetadataAccess::loadMetadataFromStorage(
     const uno::Reference<rdf::XURI> & i_xBaseURI,
     const uno::Reference<task::XInteractionHandler> & i_xHandler)
 throw (uno::RuntimeException, lang::IllegalArgumentException,
-    lang::WrappedTargetException)
+    lang::WrappedTargetException, std::exception)
 {
     if (!i_xStorage.is()) {
         throw lang::IllegalArgumentException(OUString(
@@ -1193,7 +1193,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
 void SAL_CALL DocumentMetadataAccess::storeMetadataToStorage(
     const uno::Reference< embed::XStorage > & i_xStorage)
 throw (uno::RuntimeException, lang::IllegalArgumentException,
-    lang::WrappedTargetException)
+    lang::WrappedTargetException, std::exception)
 {
     if (!i_xStorage.is()) {
         throw lang::IllegalArgumentException(OUString(
@@ -1271,7 +1271,7 @@ void SAL_CALL
 DocumentMetadataAccess::loadMetadataFromMedium(
     const uno::Sequence< beans::PropertyValue > & i_rMedium)
 throw (uno::RuntimeException, lang::IllegalArgumentException,
-    lang::WrappedTargetException)
+    lang::WrappedTargetException, std::exception)
 {
     uno::Reference<io::XInputStream> xIn;
     utl::MediaDescriptor md(i_rMedium);
@@ -1331,7 +1331,7 @@ void SAL_CALL
 DocumentMetadataAccess::storeMetadataToMedium(
     const uno::Sequence< beans::PropertyValue > & i_rMedium)
 throw (uno::RuntimeException, lang::IllegalArgumentException,
-    lang::WrappedTargetException)
+    lang::WrappedTargetException, std::exception)
 {
     utl::MediaDescriptor md(i_rMedium);
     OUString URL;

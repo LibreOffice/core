@@ -99,7 +99,7 @@ namespace pcr
     IMPLEMENT_FORWARD_XINTERFACE2( FormController, OPropertyBrowserController, FormController_PropertyBase1 )
 
 
-    Sequence< Type > SAL_CALL FormController::getTypes(  ) throw(RuntimeException)
+    Sequence< Type > SAL_CALL FormController::getTypes(  ) throw(RuntimeException, std::exception)
     {
         ::cppu::OTypeCollection aTypes(
             ::getCppuType( static_cast< Reference< XPropertySet >* >(NULL) ),
@@ -113,13 +113,13 @@ namespace pcr
     IMPLEMENT_GET_IMPLEMENTATION_ID( FormController )
 
 
-    OUString SAL_CALL FormController::getImplementationName(  ) throw(RuntimeException)
+    OUString SAL_CALL FormController::getImplementationName(  ) throw(RuntimeException, std::exception)
     {
         return m_aServiceDescriptor.GetImplementationName();
     }
 
 
-    Sequence< OUString > SAL_CALL FormController::getSupportedServiceNames(  ) throw(RuntimeException)
+    Sequence< OUString > SAL_CALL FormController::getSupportedServiceNames(  ) throw(RuntimeException, std::exception)
     {
         Sequence< OUString > aSupported( m_aServiceDescriptor.GetSupportedServiceNames() );
         aSupported.realloc( aSupported.getLength() + 1 );
@@ -151,7 +151,7 @@ namespace pcr
     }
 
 
-    Reference< XPropertySetInfo > SAL_CALL FormController::getPropertySetInfo(  ) throw(RuntimeException)
+    Reference< XPropertySetInfo > SAL_CALL FormController::getPropertySetInfo(  ) throw(RuntimeException, std::exception)
     {
         return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
     }
@@ -202,7 +202,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL FormController::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue) throw (Exception)
+    void SAL_CALL FormController::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue) throw (Exception, std::exception)
     {
         switch ( _nHandle )
         {

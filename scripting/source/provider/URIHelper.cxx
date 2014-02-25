@@ -82,7 +82,7 @@ ScriptingFrameworkURIHelper::~ScriptingFrameworkURIHelper()
 void SAL_CALL
 ScriptingFrameworkURIHelper::initialize(
     const uno::Sequence < uno::Any >& args )
-throw ( uno::Exception, uno::RuntimeException )
+throw ( uno::Exception, uno::RuntimeException, std::exception )
 {
     if ( args.getLength() != 2 ||
          args[0].getValueType() != ::getCppuType((const OUString*)NULL) ||
@@ -211,7 +211,7 @@ ScriptingFrameworkURIHelper::getLanguagePath(const OUString& rLanguagePart)
 
 OUString SAL_CALL
 ScriptingFrameworkURIHelper::getScriptURI(const OUString& rStorageURI)
-    throw( lang::IllegalArgumentException, uno::RuntimeException )
+    throw( lang::IllegalArgumentException, uno::RuntimeException, std::exception )
 {
     OUStringBuffer buf(120);
 
@@ -227,7 +227,7 @@ ScriptingFrameworkURIHelper::getScriptURI(const OUString& rStorageURI)
 
 OUString SAL_CALL
 ScriptingFrameworkURIHelper::getStorageURI(const OUString& rScriptURI)
-    throw( lang::IllegalArgumentException, uno::RuntimeException )
+    throw( lang::IllegalArgumentException, uno::RuntimeException, std::exception )
 {
     OUString sLanguagePart;
     try
@@ -255,14 +255,14 @@ ScriptingFrameworkURIHelper::getStorageURI(const OUString& rScriptURI)
 
 OUString SAL_CALL
 ScriptingFrameworkURIHelper::getRootStorageURI()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return m_sBaseURI;
 }
 
 OUString SAL_CALL
 ScriptingFrameworkURIHelper::getImplementationName()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return OUString(
         "com.sun.star.script.provider.ScriptURIHelper" );
@@ -270,7 +270,7 @@ ScriptingFrameworkURIHelper::getImplementationName()
 
 sal_Bool SAL_CALL
 ScriptingFrameworkURIHelper::supportsService( const OUString& serviceName )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     OUString m_sServiceName(
         "com.sun.star.script.provider.ScriptURIHelper" );
@@ -284,7 +284,7 @@ ScriptingFrameworkURIHelper::supportsService( const OUString& serviceName )
 
 uno::Sequence< OUString > SAL_CALL
 ScriptingFrameworkURIHelper::getSupportedServiceNames()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     OUString serviceNameList[] = {
         OUString(

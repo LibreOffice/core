@@ -45,7 +45,7 @@ ScannerManager::~ScannerManager()
 
 
 
-Any SAL_CALL ScannerManager::queryInterface( const Type& rType ) throw( RuntimeException )
+Any SAL_CALL ScannerManager::queryInterface( const Type& rType ) throw( RuntimeException, std::exception )
 {
     const Any aRet( cppu::queryInterface( rType,
                                           static_cast< XScannerManager2* >( this ),
@@ -70,7 +70,7 @@ void SAL_CALL ScannerManager::release() throw()
 
 
 
-Sequence< sal_Int8 > SAL_CALL ScannerManager::getMaskDIB() throw()
+Sequence< sal_Int8 > SAL_CALL ScannerManager::getMaskDIB() throw(std::exception)
 {
     return Sequence< sal_Int8 >();
 }
@@ -94,7 +94,7 @@ Sequence< OUString > ScannerManager::getSupportedServiceNames_Static() throw ()
 }
 
 sal_Bool SAL_CALL ScannerManager::configureScanner( ScannerContext& rContext )
-    throw( ScannerException )
+    throw( ScannerException, std::exception )
 {
     return configureScannerAndScan( rContext, NULL );
 }

@@ -93,7 +93,7 @@ namespace frm
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( ORichTextControl, UnoEditControl, ORichTextControl_Base )
 
 
-    Any SAL_CALL ORichTextControl::queryAggregation( const Type& _rType ) throw ( RuntimeException )
+    Any SAL_CALL ORichTextControl::queryAggregation( const Type& _rType ) throw ( RuntimeException, std::exception )
     {
         Any aReturn = UnoEditControl::queryAggregation( _rType );
 
@@ -174,7 +174,7 @@ namespace frm
     }
 
 
-    void SAL_CALL ORichTextControl::createPeer( const Reference< XToolkit >& _rToolkit, const Reference< XWindowPeer >& _rParentPeer ) throw( RuntimeException )
+    void SAL_CALL ORichTextControl::createPeer( const Reference< XToolkit >& _rToolkit, const Reference< XWindowPeer >& _rParentPeer ) throw( RuntimeException, std::exception )
     {
         sal_Bool bReallyActAsRichText = sal_False;
         try
@@ -249,13 +249,13 @@ namespace frm
     }
 
 
-    OUString SAL_CALL ORichTextControl::getImplementationName()  throw( RuntimeException )
+    OUString SAL_CALL ORichTextControl::getImplementationName()  throw( RuntimeException, std::exception )
     {
         return getImplementationName_Static();
     }
 
 
-    Sequence< OUString > SAL_CALL ORichTextControl::getSupportedServiceNames()  throw( RuntimeException )
+    Sequence< OUString > SAL_CALL ORichTextControl::getSupportedServiceNames()  throw( RuntimeException, std::exception )
     {
         return getSupportedServiceNames_Static();
     }
@@ -283,13 +283,13 @@ namespace frm
     }
 
 
-    Reference< XDispatch > SAL_CALL ORichTextControl::queryDispatch( const ::com::sun::star::util::URL& _rURL, const OUString& _rTargetFrameName, sal_Int32 _nSearchFlags ) throw (RuntimeException)
+    Reference< XDispatch > SAL_CALL ORichTextControl::queryDispatch( const ::com::sun::star::util::URL& _rURL, const OUString& _rTargetFrameName, sal_Int32 _nSearchFlags ) throw (RuntimeException, std::exception)
     {
         FORWARD_TO_PEER_3_RET( Reference< XDispatch >, XDispatchProvider, queryDispatch, _rURL, _rTargetFrameName, _nSearchFlags );
     }
 
 
-    Sequence< Reference< XDispatch > > SAL_CALL ORichTextControl::queryDispatches( const Sequence< DispatchDescriptor >& _rRequests ) throw (RuntimeException)
+    Sequence< Reference< XDispatch > > SAL_CALL ORichTextControl::queryDispatches( const Sequence< DispatchDescriptor >& _rRequests ) throw (RuntimeException, std::exception)
     {
         FORWARD_TO_PEER_1_RET( Sequence< Reference< XDispatch > >, XDispatchProvider, queryDispatches, _rRequests );
     }
@@ -339,7 +339,7 @@ namespace frm
     }
 
 
-    void ORichTextPeer::dispose( ) throw(RuntimeException)
+    void ORichTextPeer::dispose( ) throw(RuntimeException, std::exception)
     {
         {
             SolarMutexGuard aGuard;
@@ -365,7 +365,7 @@ namespace frm
     }
 
 
-    void SAL_CALL ORichTextPeer::draw( sal_Int32 _nX, sal_Int32 _nY ) throw(::com::sun::star::uno::RuntimeException)
+    void SAL_CALL ORichTextPeer::draw( sal_Int32 _nX, sal_Int32 _nY ) throw(::com::sun::star::uno::RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
 
@@ -665,7 +665,7 @@ namespace frm
     }
 
 
-    Reference< XDispatch > SAL_CALL ORichTextPeer::queryDispatch( const ::com::sun::star::util::URL& _rURL, const OUString& /*_rTargetFrameName*/, sal_Int32 /*_nSearchFlags*/ ) throw (RuntimeException)
+    Reference< XDispatch > SAL_CALL ORichTextPeer::queryDispatch( const ::com::sun::star::util::URL& _rURL, const OUString& /*_rTargetFrameName*/, sal_Int32 /*_nSearchFlags*/ ) throw (RuntimeException, std::exception)
     {
         Reference< XDispatch > xReturn;
         if ( !GetWindow() )
@@ -702,7 +702,7 @@ namespace frm
     }
 
 
-    Sequence< Reference< XDispatch > > SAL_CALL ORichTextPeer::queryDispatches( const Sequence< DispatchDescriptor >& _rRequests ) throw (RuntimeException)
+    Sequence< Reference< XDispatch > > SAL_CALL ORichTextPeer::queryDispatches( const Sequence< DispatchDescriptor >& _rRequests ) throw (RuntimeException, std::exception)
     {
         Sequence< Reference< XDispatch > >  aReturn( _rRequests.getLength() );
         Reference< XDispatch >*             pReturn = aReturn.getArray();

@@ -121,7 +121,7 @@ void ODbaseTables::dropObject(sal_Int32 _nPos,const OUString _sElementName)
     }
 }
 
-Any SAL_CALL ODbaseTables::queryInterface( const Type & rType ) throw(RuntimeException)
+Any SAL_CALL ODbaseTables::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
 {
     typedef sdbcx::OCollection OTables_BASE;
     return OTables_BASE::queryInterface(rType);

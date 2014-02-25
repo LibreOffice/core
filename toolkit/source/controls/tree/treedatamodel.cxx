@@ -59,23 +59,23 @@ public:
     void broadcast( broadcast_type eType, const Reference< XTreeNode >& xParentNode, const Reference< XTreeNode >* pNodes, sal_Int32 nNodes );
 
     // XMutableTreeDataModel
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XMutableTreeNode > SAL_CALL createNode( const ::com::sun::star::uno::Any& DisplayValue, ::sal_Bool ChildrenOnDemand ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setRoot( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XMutableTreeNode >& RootNode ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XMutableTreeNode > SAL_CALL createNode( const ::com::sun::star::uno::Any& DisplayValue, ::sal_Bool ChildrenOnDemand ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setRoot( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XMutableTreeNode >& RootNode ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception);
 
     // XTreeDataModel
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode > SAL_CALL getRoot(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addTreeDataModelListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeDataModelListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeTreeDataModelListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeDataModelListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode > SAL_CALL getRoot(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL addTreeDataModelListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeDataModelListener >& Listener ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL removeTreeDataModelListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeDataModelListener >& Listener ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // XComponent
-    virtual void SAL_CALL dispose(  ) throw (RuntimeException);
-    virtual void SAL_CALL addEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException);
-    virtual void SAL_CALL removeEventListener( const Reference< XEventListener >& aListener ) throw (RuntimeException);
+    virtual void SAL_CALL dispose(  ) throw (RuntimeException, std::exception);
+    virtual void SAL_CALL addEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException, std::exception);
+    virtual void SAL_CALL removeEventListener( const Reference< XEventListener >& aListener ) throw (RuntimeException, std::exception);
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception);
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException, std::exception);
 
 private:
     bool mbDisposed;
@@ -95,32 +95,32 @@ public:
     void broadcast_changes(const Reference< XTreeNode >& xNode, bool bNew);
 
     // XMutableTreeNode
-    virtual ::com::sun::star::uno::Any SAL_CALL getDataValue() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setDataValue( const ::com::sun::star::uno::Any& _datavalue ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL appendChild( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XMutableTreeNode >& ChildNode ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL insertChildByIndex( ::sal_Int32 Index, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XMutableTreeNode >& ChildNode ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeChildByIndex( ::sal_Int32 Index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setHasChildrenOnDemand( ::sal_Bool ChildrenOnDemand ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setDisplayValue( const ::com::sun::star::uno::Any& Value ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setNodeGraphicURL( const OUString& URL ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setExpandedGraphicURL( const OUString& URL ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setCollapsedGraphicURL( const OUString& URL ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getDataValue() throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setDataValue( const ::com::sun::star::uno::Any& _datavalue ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL appendChild( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XMutableTreeNode >& ChildNode ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL insertChildByIndex( ::sal_Int32 Index, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XMutableTreeNode >& ChildNode ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL removeChildByIndex( ::sal_Int32 Index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setHasChildrenOnDemand( ::sal_Bool ChildrenOnDemand ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setDisplayValue( const ::com::sun::star::uno::Any& Value ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setNodeGraphicURL( const OUString& URL ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setExpandedGraphicURL( const OUString& URL ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setCollapsedGraphicURL( const OUString& URL ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // XTreeNode
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode > SAL_CALL getChildAt( ::sal_Int32 Index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Int32 SAL_CALL getChildCount(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode > SAL_CALL getParent(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Int32 SAL_CALL getIndex( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode >& Node ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL hasChildrenOnDemand(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL getDisplayValue(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual OUString SAL_CALL getNodeGraphicURL(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual OUString SAL_CALL getExpandedGraphicURL(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual OUString SAL_CALL getCollapsedGraphicURL(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode > SAL_CALL getChildAt( ::sal_Int32 Index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception);
+    virtual ::sal_Int32 SAL_CALL getChildCount(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode > SAL_CALL getParent(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual ::sal_Int32 SAL_CALL getIndex( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode >& Node ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual ::sal_Bool SAL_CALL hasChildrenOnDemand(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual ::com::sun::star::uno::Any SAL_CALL getDisplayValue(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual OUString SAL_CALL getNodeGraphicURL(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual OUString SAL_CALL getExpandedGraphicURL(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual OUString SAL_CALL getCollapsedGraphicURL(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception);
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException, std::exception);
 
     static MutableTreeNode* getImplementation( const Reference< XTreeNode >& xNode, bool bThrows ) throw (IllegalArgumentException);
     Reference< XTreeNode > getReference( MutableTreeNode* pNode )
@@ -175,12 +175,12 @@ void MutableTreeDataModel::broadcast( broadcast_type eType, const Reference< XTr
     }
 }
 
-Reference< XMutableTreeNode > SAL_CALL MutableTreeDataModel::createNode( const Any& aValue, sal_Bool bChildrenOnDemand ) throw (RuntimeException)
+Reference< XMutableTreeNode > SAL_CALL MutableTreeDataModel::createNode( const Any& aValue, sal_Bool bChildrenOnDemand ) throw (RuntimeException, std::exception)
 {
     return new MutableTreeNode( this, aValue, bChildrenOnDemand );
 }
 
-void SAL_CALL MutableTreeDataModel::setRoot( const Reference< XMutableTreeNode >& xNode ) throw (IllegalArgumentException, RuntimeException)
+void SAL_CALL MutableTreeDataModel::setRoot( const Reference< XMutableTreeNode >& xNode ) throw (IllegalArgumentException, RuntimeException, std::exception)
 {
     if( !xNode.is() )
         throw IllegalArgumentException();
@@ -207,23 +207,23 @@ void SAL_CALL MutableTreeDataModel::setRoot( const Reference< XMutableTreeNode >
     }
 }
 
-Reference< XTreeNode > SAL_CALL MutableTreeDataModel::getRoot(  ) throw (RuntimeException)
+Reference< XTreeNode > SAL_CALL MutableTreeDataModel::getRoot(  ) throw (RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
     return mxRootNode;
 }
 
-void SAL_CALL MutableTreeDataModel::addTreeDataModelListener( const Reference< XTreeDataModelListener >& xListener ) throw (RuntimeException)
+void SAL_CALL MutableTreeDataModel::addTreeDataModelListener( const Reference< XTreeDataModelListener >& xListener ) throw (RuntimeException, std::exception)
 {
     BrdcstHelper.addListener( cppu::UnoType<XTreeDataModelListener>::get(), xListener );
 }
 
-void SAL_CALL MutableTreeDataModel::removeTreeDataModelListener( const Reference< XTreeDataModelListener >& xListener ) throw (RuntimeException)
+void SAL_CALL MutableTreeDataModel::removeTreeDataModelListener( const Reference< XTreeDataModelListener >& xListener ) throw (RuntimeException, std::exception)
 {
     BrdcstHelper.removeListener( cppu::UnoType<XTreeDataModelListener>::get(), xListener );
 }
 
-void SAL_CALL MutableTreeDataModel::dispose() throw (RuntimeException)
+void SAL_CALL MutableTreeDataModel::dispose() throw (RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -236,29 +236,29 @@ void SAL_CALL MutableTreeDataModel::dispose() throw (RuntimeException)
     }
 }
 
-void SAL_CALL MutableTreeDataModel::addEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException)
+void SAL_CALL MutableTreeDataModel::addEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException, std::exception)
 {
     BrdcstHelper.addListener( cppu::UnoType<XEventListener>::get(), xListener );
 }
 
-void SAL_CALL MutableTreeDataModel::removeEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException)
+void SAL_CALL MutableTreeDataModel::removeEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException, std::exception)
 {
     BrdcstHelper.removeListener( cppu::UnoType<XEventListener>::get(), xListener );
 }
 
-OUString SAL_CALL MutableTreeDataModel::getImplementationName(  ) throw (RuntimeException)
+OUString SAL_CALL MutableTreeDataModel::getImplementationName(  ) throw (RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
     static const OUString aImplName( "toolkit.MutableTreeDataModel" );
     return aImplName;
 }
 
-sal_Bool SAL_CALL MutableTreeDataModel::supportsService( const OUString& ServiceName ) throw (RuntimeException)
+sal_Bool SAL_CALL MutableTreeDataModel::supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL MutableTreeDataModel::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > SAL_CALL MutableTreeDataModel::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
     static const OUString aServiceName( OUString::createFromAscii( szServiceName_MutableTreeDataModel ) );
@@ -315,19 +315,19 @@ void MutableTreeNode::broadcast_changes(const Reference< XTreeNode >& xNode, boo
     }
 }
 
-Any SAL_CALL MutableTreeNode::getDataValue() throw (RuntimeException)
+Any SAL_CALL MutableTreeNode::getDataValue() throw (RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
     return maDataValue;
 }
 
-void SAL_CALL MutableTreeNode::setDataValue( const Any& _datavalue ) throw (RuntimeException)
+void SAL_CALL MutableTreeNode::setDataValue( const Any& _datavalue ) throw (RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
     maDataValue = _datavalue;
 }
 
-void SAL_CALL MutableTreeNode::appendChild( const Reference< XMutableTreeNode >& xChildNode ) throw (IllegalArgumentException, RuntimeException)
+void SAL_CALL MutableTreeNode::appendChild( const Reference< XMutableTreeNode >& xChildNode ) throw (IllegalArgumentException, RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
     Reference< XTreeNode > xNode( xChildNode.get() );
@@ -343,7 +343,7 @@ void SAL_CALL MutableTreeNode::appendChild( const Reference< XMutableTreeNode >&
     broadcast_changes( xNode, true );
 }
 
-void SAL_CALL MutableTreeNode::insertChildByIndex( sal_Int32 nChildIndex, const Reference< XMutableTreeNode >& xChildNode ) throw (IllegalArgumentException, IndexOutOfBoundsException, RuntimeException)
+void SAL_CALL MutableTreeNode::insertChildByIndex( sal_Int32 nChildIndex, const Reference< XMutableTreeNode >& xChildNode ) throw (IllegalArgumentException, IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
 
@@ -367,7 +367,7 @@ void SAL_CALL MutableTreeNode::insertChildByIndex( sal_Int32 nChildIndex, const 
     broadcast_changes( xNode, true );
 }
 
-void SAL_CALL MutableTreeNode::removeChildByIndex( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+void SAL_CALL MutableTreeNode::removeChildByIndex( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
 
@@ -391,7 +391,7 @@ void SAL_CALL MutableTreeNode::removeChildByIndex( sal_Int32 nChildIndex ) throw
     broadcast_changes( getReference( xImpl.get() ), false );
 }
 
-void SAL_CALL MutableTreeNode::setHasChildrenOnDemand( sal_Bool bChildrenOnDemand ) throw (RuntimeException)
+void SAL_CALL MutableTreeNode::setHasChildrenOnDemand( sal_Bool bChildrenOnDemand ) throw (RuntimeException, std::exception)
 {
     bool bChanged;
 
@@ -405,7 +405,7 @@ void SAL_CALL MutableTreeNode::setHasChildrenOnDemand( sal_Bool bChildrenOnDeman
         broadcast_changes();
 }
 
-void SAL_CALL MutableTreeNode::setDisplayValue( const Any& aValue ) throw (RuntimeException)
+void SAL_CALL MutableTreeNode::setDisplayValue( const Any& aValue ) throw (RuntimeException, std::exception)
 {
     {
         ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
@@ -415,7 +415,7 @@ void SAL_CALL MutableTreeNode::setDisplayValue( const Any& aValue ) throw (Runti
     broadcast_changes();
 }
 
-void SAL_CALL MutableTreeNode::setNodeGraphicURL( const OUString& rURL ) throw (RuntimeException)
+void SAL_CALL MutableTreeNode::setNodeGraphicURL( const OUString& rURL ) throw (RuntimeException, std::exception)
 {
     bool bChanged;
 
@@ -429,7 +429,7 @@ void SAL_CALL MutableTreeNode::setNodeGraphicURL( const OUString& rURL ) throw (
         broadcast_changes();
 }
 
-void SAL_CALL MutableTreeNode::setExpandedGraphicURL( const OUString& rURL ) throw (RuntimeException)
+void SAL_CALL MutableTreeNode::setExpandedGraphicURL( const OUString& rURL ) throw (RuntimeException, std::exception)
 {
     bool bChanged;
 
@@ -443,7 +443,7 @@ void SAL_CALL MutableTreeNode::setExpandedGraphicURL( const OUString& rURL ) thr
         broadcast_changes();
 }
 
-void SAL_CALL MutableTreeNode::setCollapsedGraphicURL( const OUString& rURL ) throw (RuntimeException)
+void SAL_CALL MutableTreeNode::setCollapsedGraphicURL( const OUString& rURL ) throw (RuntimeException, std::exception)
 {
     bool bChanged;
 
@@ -457,7 +457,7 @@ void SAL_CALL MutableTreeNode::setCollapsedGraphicURL( const OUString& rURL ) th
         broadcast_changes();
 }
 
-Reference< XTreeNode > SAL_CALL MutableTreeNode::getChildAt( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException,RuntimeException)
+Reference< XTreeNode > SAL_CALL MutableTreeNode::getChildAt( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException,RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
 
@@ -466,19 +466,19 @@ Reference< XTreeNode > SAL_CALL MutableTreeNode::getChildAt( sal_Int32 nChildInd
     return getReference( maChildren[nChildIndex].get() );
 }
 
-sal_Int32 SAL_CALL MutableTreeNode::getChildCount(  ) throw (RuntimeException)
+sal_Int32 SAL_CALL MutableTreeNode::getChildCount(  ) throw (RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
     return (sal_Int32)maChildren.size();
 }
 
-Reference< XTreeNode > SAL_CALL MutableTreeNode::getParent(  ) throw (RuntimeException)
+Reference< XTreeNode > SAL_CALL MutableTreeNode::getParent(  ) throw (RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
     return getReference( mpParent );
 }
 
-sal_Int32 SAL_CALL MutableTreeNode::getIndex( const Reference< XTreeNode >& xNode ) throw (RuntimeException)
+sal_Int32 SAL_CALL MutableTreeNode::getIndex( const Reference< XTreeNode >& xNode ) throw (RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
 
@@ -496,49 +496,49 @@ sal_Int32 SAL_CALL MutableTreeNode::getIndex( const Reference< XTreeNode >& xNod
     return -1;
 }
 
-sal_Bool SAL_CALL MutableTreeNode::hasChildrenOnDemand(  ) throw (RuntimeException)
+sal_Bool SAL_CALL MutableTreeNode::hasChildrenOnDemand(  ) throw (RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
     return mbHasChildrenOnDemand;
 }
 
-Any SAL_CALL MutableTreeNode::getDisplayValue(  ) throw (RuntimeException)
+Any SAL_CALL MutableTreeNode::getDisplayValue(  ) throw (RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
     return maDisplayValue;
 }
 
-OUString SAL_CALL MutableTreeNode::getNodeGraphicURL(  ) throw (RuntimeException)
+OUString SAL_CALL MutableTreeNode::getNodeGraphicURL(  ) throw (RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
     return maNodeGraphicURL;
 }
 
-OUString SAL_CALL MutableTreeNode::getExpandedGraphicURL(  ) throw (RuntimeException)
+OUString SAL_CALL MutableTreeNode::getExpandedGraphicURL(  ) throw (RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
     return maExpandedGraphicURL;
 }
 
-OUString SAL_CALL MutableTreeNode::getCollapsedGraphicURL(  ) throw (RuntimeException)
+OUString SAL_CALL MutableTreeNode::getCollapsedGraphicURL(  ) throw (RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
     return maCollapsedGraphicURL;
 }
 
-OUString SAL_CALL MutableTreeNode::getImplementationName(  ) throw (RuntimeException)
+OUString SAL_CALL MutableTreeNode::getImplementationName(  ) throw (RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
     static const OUString aImplName( "toolkit.MutableTreeNode" );
     return aImplName;
 }
 
-sal_Bool SAL_CALL MutableTreeNode::supportsService( const OUString& ServiceName ) throw (RuntimeException)
+sal_Bool SAL_CALL MutableTreeNode::supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL MutableTreeNode::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > SAL_CALL MutableTreeNode::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
     static const OUString aServiceName( "com.sun.star.awt.tree.MutableTreeNode" );

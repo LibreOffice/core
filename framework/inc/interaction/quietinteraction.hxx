@@ -75,7 +75,7 @@ class QuietInteraction : private ThreadHelpBase
 
             @threadsafe yes
         */
-        virtual void SAL_CALL handle( const css::uno::Reference< css::task::XInteractionRequest >& xRequest ) throw( css::uno::RuntimeException );
+        virtual void SAL_CALL handle( const css::uno::Reference< css::task::XInteractionRequest >& xRequest ) throw( css::uno::RuntimeException, std::exception );
 
     // c++ interface
     public:

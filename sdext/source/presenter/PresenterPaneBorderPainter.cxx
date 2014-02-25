@@ -175,7 +175,7 @@ awt::Rectangle SAL_CALL PresenterPaneBorderPainter::addBorder (
     const OUString& rsPaneBorderStyleName,
     const css::awt::Rectangle& rRectangle,
     drawing::framework::BorderType eBorderType)
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
 
@@ -188,7 +188,7 @@ awt::Rectangle SAL_CALL PresenterPaneBorderPainter::removeBorder (
     const OUString& rsPaneBorderStyleName,
     const css::awt::Rectangle& rRectangle,
     drawing::framework::BorderType eBorderType)
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
 
@@ -203,7 +203,7 @@ void SAL_CALL PresenterPaneBorderPainter::paintBorder (
     const css::awt::Rectangle& rOuterBorderRectangle,
     const css::awt::Rectangle& rRepaintArea,
     const OUString& rsTitle)
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
 
@@ -239,7 +239,7 @@ void SAL_CALL PresenterPaneBorderPainter::paintBorderWithCallout (
     const css::awt::Rectangle& rRepaintArea,
     const OUString& rsTitle,
     const css::awt::Point& rCalloutAnchor)
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
 
@@ -271,7 +271,7 @@ void SAL_CALL PresenterPaneBorderPainter::paintBorderWithCallout (
 
 awt::Point SAL_CALL PresenterPaneBorderPainter::getCalloutOffset (
     const OUString& rsPaneBorderStyleName)
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     ProvideTheme();

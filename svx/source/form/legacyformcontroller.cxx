@@ -82,114 +82,114 @@ namespace svxform
         }
 
         // form::XFormController
-        virtual Reference< XControl > SAL_CALL getCurrentControl(  ) throw (RuntimeException);
-        virtual void SAL_CALL addActivateListener( const Reference< form::XFormControllerListener >& l ) throw (RuntimeException);
-        virtual void SAL_CALL removeActivateListener( const Reference< form::XFormControllerListener >& l ) throw (RuntimeException);
+        virtual Reference< XControl > SAL_CALL getCurrentControl(  ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL addActivateListener( const Reference< form::XFormControllerListener >& l ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL removeActivateListener( const Reference< form::XFormControllerListener >& l ) throw (RuntimeException, std::exception);
 
         // awt::XTabController
-        virtual void SAL_CALL setModel( const Reference< XTabControllerModel >& Model ) throw (RuntimeException);
-        virtual Reference< XTabControllerModel > SAL_CALL getModel(  ) throw (RuntimeException);
-        virtual void SAL_CALL setContainer( const Reference< XControlContainer >& Container ) throw (RuntimeException);
-        virtual Reference< XControlContainer > SAL_CALL getContainer(  ) throw (RuntimeException);
-        virtual Sequence< Reference< XControl > > SAL_CALL getControls(  ) throw (RuntimeException);
-        virtual void SAL_CALL autoTabOrder(  ) throw (RuntimeException);
-        virtual void SAL_CALL activateTabOrder(  ) throw (RuntimeException);
-        virtual void SAL_CALL activateFirst(  ) throw (RuntimeException);
-        virtual void SAL_CALL activateLast(  ) throw (RuntimeException);
+        virtual void SAL_CALL setModel( const Reference< XTabControllerModel >& Model ) throw (RuntimeException, std::exception);
+        virtual Reference< XTabControllerModel > SAL_CALL getModel(  ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL setContainer( const Reference< XControlContainer >& Container ) throw (RuntimeException, std::exception);
+        virtual Reference< XControlContainer > SAL_CALL getContainer(  ) throw (RuntimeException, std::exception);
+        virtual Sequence< Reference< XControl > > SAL_CALL getControls(  ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL autoTabOrder(  ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL activateTabOrder(  ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL activateFirst(  ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL activateLast(  ) throw (RuntimeException, std::exception);
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);
-        virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException);
-        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
+        virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException, std::exception);
+        virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception);
+        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException, std::exception);
 
     private:
         const Reference< form::runtime::XFormController >   m_xDelegator;
     };
 
 
-    Reference< XControl > SAL_CALL LegacyFormController::getCurrentControl(  ) throw (RuntimeException)
+    Reference< XControl > SAL_CALL LegacyFormController::getCurrentControl(  ) throw (RuntimeException, std::exception)
     {
         return m_xDelegator->getCurrentControl();
     }
 
 
-    void SAL_CALL LegacyFormController::addActivateListener( const Reference< form::XFormControllerListener >& _listener ) throw (RuntimeException)
+    void SAL_CALL LegacyFormController::addActivateListener( const Reference< form::XFormControllerListener >& _listener ) throw (RuntimeException, std::exception)
     {
         m_xDelegator->addActivateListener( _listener );
     }
 
 
-    void SAL_CALL LegacyFormController::removeActivateListener( const Reference< form::XFormControllerListener >& _listener ) throw (RuntimeException)
+    void SAL_CALL LegacyFormController::removeActivateListener( const Reference< form::XFormControllerListener >& _listener ) throw (RuntimeException, std::exception)
     {
         m_xDelegator->removeActivateListener( _listener );
     }
 
 
-    void SAL_CALL LegacyFormController::setModel( const Reference< XTabControllerModel >& _model ) throw (RuntimeException)
+    void SAL_CALL LegacyFormController::setModel( const Reference< XTabControllerModel >& _model ) throw (RuntimeException, std::exception)
     {
         m_xDelegator->setModel( _model );
     }
 
 
-    Reference< XTabControllerModel > SAL_CALL LegacyFormController::getModel(  ) throw (RuntimeException)
+    Reference< XTabControllerModel > SAL_CALL LegacyFormController::getModel(  ) throw (RuntimeException, std::exception)
     {
         return m_xDelegator->getModel();
     }
 
 
-    void SAL_CALL LegacyFormController::setContainer( const Reference< XControlContainer >& _container ) throw (RuntimeException)
+    void SAL_CALL LegacyFormController::setContainer( const Reference< XControlContainer >& _container ) throw (RuntimeException, std::exception)
     {
         m_xDelegator->setContainer( _container );
     }
 
 
-    Reference< XControlContainer > SAL_CALL LegacyFormController::getContainer(  ) throw (RuntimeException)
+    Reference< XControlContainer > SAL_CALL LegacyFormController::getContainer(  ) throw (RuntimeException, std::exception)
     {
         return m_xDelegator->getContainer();
     }
 
 
-    Sequence< Reference< XControl > > SAL_CALL LegacyFormController::getControls(  ) throw (RuntimeException)
+    Sequence< Reference< XControl > > SAL_CALL LegacyFormController::getControls(  ) throw (RuntimeException, std::exception)
     {
         return m_xDelegator->getControls();
     }
 
 
-    void SAL_CALL LegacyFormController::autoTabOrder(  ) throw (RuntimeException)
+    void SAL_CALL LegacyFormController::autoTabOrder(  ) throw (RuntimeException, std::exception)
     {
         m_xDelegator->autoTabOrder();
     }
 
 
-    void SAL_CALL LegacyFormController::activateTabOrder(  ) throw (RuntimeException)
+    void SAL_CALL LegacyFormController::activateTabOrder(  ) throw (RuntimeException, std::exception)
     {
         m_xDelegator->activateTabOrder();
     }
 
 
-    void SAL_CALL LegacyFormController::activateFirst(  ) throw (RuntimeException)
+    void SAL_CALL LegacyFormController::activateFirst(  ) throw (RuntimeException, std::exception)
     {
         m_xDelegator->activateFirst();
     }
 
 
-    void SAL_CALL LegacyFormController::activateLast(  ) throw (RuntimeException)
+    void SAL_CALL LegacyFormController::activateLast(  ) throw (RuntimeException, std::exception)
     {
         m_xDelegator->activateLast();
     }
 
 
-    OUString SAL_CALL LegacyFormController::getImplementationName(  ) throw (RuntimeException)
+    OUString SAL_CALL LegacyFormController::getImplementationName(  ) throw (RuntimeException, std::exception)
     {
         return OUString( "org.openoffice.comp.svx.LegacyFormController" );
     }
 
-    ::sal_Bool SAL_CALL LegacyFormController::supportsService( const OUString& _serviceName ) throw (RuntimeException)
+    ::sal_Bool SAL_CALL LegacyFormController::supportsService( const OUString& _serviceName ) throw (RuntimeException, std::exception)
     {
         return cppu::supportsService(this, _serviceName);
     }
 
-    Sequence< OUString > SAL_CALL LegacyFormController::getSupportedServiceNames(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL LegacyFormController::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
     {
         Sequence< OUString > aServices(2);
         aServices.getArray()[0] = "com.sun.star.form.FormController";

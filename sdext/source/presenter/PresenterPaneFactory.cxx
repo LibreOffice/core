@@ -142,7 +142,7 @@ void SAL_CALL PresenterPaneFactory::disposing (void)
 
 Reference<XResource> SAL_CALL PresenterPaneFactory::createResource (
     const Reference<XResourceId>& rxPaneId)
-    throw (RuntimeException, IllegalArgumentException, WrappedTargetException)
+    throw (RuntimeException, IllegalArgumentException, WrappedTargetException, std::exception)
 {
     ThrowIfDisposed();
 
@@ -182,7 +182,7 @@ Reference<XResource> SAL_CALL PresenterPaneFactory::createResource (
 }
 
 void SAL_CALL PresenterPaneFactory::releaseResource (const Reference<XResource>& rxResource)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
 

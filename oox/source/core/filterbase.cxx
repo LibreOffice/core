@@ -390,17 +390,17 @@ bool FilterBase::importBinaryData( StreamDataSequence& orDataSeq, const OUString
 
 // com.sun.star.lang.XServiceInfo interface
 
-OUString SAL_CALL FilterBase::getImplementationName() throw( RuntimeException )
+OUString SAL_CALL FilterBase::getImplementationName() throw( RuntimeException, std::exception )
 {
     return implGetImplementationName();
 }
 
-sal_Bool SAL_CALL FilterBase::supportsService( const OUString& rServiceName ) throw( RuntimeException )
+sal_Bool SAL_CALL FilterBase::supportsService( const OUString& rServiceName ) throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL FilterBase::getSupportedServiceNames() throw( RuntimeException )
+Sequence< OUString > SAL_CALL FilterBase::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aServiceNames( 2 );
     aServiceNames[ 0 ] = "com.sun.star.document.ImportFilter";
@@ -410,7 +410,7 @@ Sequence< OUString > SAL_CALL FilterBase::getSupportedServiceNames() throw( Runt
 
 // com.sun.star.lang.XInitialization interface
 
-void SAL_CALL FilterBase::initialize( const Sequence< Any >& rArgs ) throw( Exception, RuntimeException )
+void SAL_CALL FilterBase::initialize( const Sequence< Any >& rArgs ) throw( Exception, RuntimeException, std::exception )
 {
     if( rArgs.getLength() >= 2 ) try
     {
@@ -423,7 +423,7 @@ void SAL_CALL FilterBase::initialize( const Sequence< Any >& rArgs ) throw( Exce
 
 // com.sun.star.document.XImporter interface
 
-void SAL_CALL FilterBase::setTargetDocument( const Reference< XComponent >& rxDocument ) throw( IllegalArgumentException, RuntimeException )
+void SAL_CALL FilterBase::setTargetDocument( const Reference< XComponent >& rxDocument ) throw( IllegalArgumentException, RuntimeException, std::exception )
 {
     mxImpl->setDocumentModel( rxDocument );
     mxImpl->meDirection = FILTERDIRECTION_IMPORT;
@@ -431,7 +431,7 @@ void SAL_CALL FilterBase::setTargetDocument( const Reference< XComponent >& rxDo
 
 // com.sun.star.document.XExporter interface
 
-void SAL_CALL FilterBase::setSourceDocument( const Reference< XComponent >& rxDocument ) throw( IllegalArgumentException, RuntimeException )
+void SAL_CALL FilterBase::setSourceDocument( const Reference< XComponent >& rxDocument ) throw( IllegalArgumentException, RuntimeException, std::exception )
 {
     mxImpl->setDocumentModel( rxDocument );
     mxImpl->meDirection = FILTERDIRECTION_EXPORT;
@@ -439,7 +439,7 @@ void SAL_CALL FilterBase::setSourceDocument( const Reference< XComponent >& rxDo
 
 // com.sun.star.document.XFilter interface
 
-sal_Bool SAL_CALL FilterBase::filter( const Sequence< PropertyValue >& rMediaDescSeq ) throw( RuntimeException )
+sal_Bool SAL_CALL FilterBase::filter( const Sequence< PropertyValue >& rMediaDescSeq ) throw( RuntimeException, std::exception )
 {
     if( !mxImpl->mxModel.is() || !mxImpl->mxModelFactory.is() || (mxImpl->meDirection == FILTERDIRECTION_UNKNOWN) )
         throw RuntimeException();
@@ -474,7 +474,7 @@ sal_Bool SAL_CALL FilterBase::filter( const Sequence< PropertyValue >& rMediaDes
     return bRet;
 }
 
-void SAL_CALL FilterBase::cancel() throw( RuntimeException )
+void SAL_CALL FilterBase::cancel() throw( RuntimeException, std::exception )
 {
 }
 

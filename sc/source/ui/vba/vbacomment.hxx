@@ -53,17 +53,17 @@ public:
     virtual ~ScVbaComment() {}
 
     // Attributes
-    virtual OUString SAL_CALL getAuthor() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setAuthor( const OUString& _author ) throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< ov::msforms::XShape > SAL_CALL getShape() throw (css::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setVisible( sal_Bool _visible ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getAuthor() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setAuthor( const OUString& _author ) throw (css::uno::RuntimeException, std::exception);
+    virtual css::uno::Reference< ov::msforms::XShape > SAL_CALL getShape() throw (css::uno::RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setVisible( sal_Bool _visible ) throw (css::uno::RuntimeException, std::exception);
 
     // Methods
-    virtual void SAL_CALL Delete() throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< ov::excel::XComment > SAL_CALL Next() throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< ov::excel::XComment > SAL_CALL Previous() throw (css::uno::RuntimeException);
-    virtual OUString SAL_CALL Text( const css::uno::Any& Text, const css::uno::Any& Start, const css::uno::Any& Overwrite ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL Delete() throw (css::uno::RuntimeException, std::exception);
+    virtual css::uno::Reference< ov::excel::XComment > SAL_CALL Next() throw (css::uno::RuntimeException, std::exception);
+    virtual css::uno::Reference< ov::excel::XComment > SAL_CALL Previous() throw (css::uno::RuntimeException, std::exception);
+    virtual OUString SAL_CALL Text( const css::uno::Any& Text, const css::uno::Any& Start, const css::uno::Any& Overwrite ) throw (css::uno::RuntimeException, std::exception);
     // XHelperInterface
     virtual OUString getServiceImplName();
     virtual css::uno::Sequence<OUString> getServiceNames();

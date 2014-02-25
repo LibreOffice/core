@@ -199,86 +199,86 @@ public:
     {}
 
     virtual OUString SAL_CALL getUriReference()
-        throw (com::sun::star::uno::RuntimeException)
+        throw (com::sun::star::uno::RuntimeException, std::exception)
     { return m_base.getUriReference(); }
 
     virtual sal_Bool SAL_CALL isAbsolute()
-        throw (com::sun::star::uno::RuntimeException)
+        throw (com::sun::star::uno::RuntimeException, std::exception)
     { return m_base.isAbsolute(); }
 
     virtual OUString SAL_CALL getScheme()
-        throw (com::sun::star::uno::RuntimeException)
+        throw (com::sun::star::uno::RuntimeException, std::exception)
     { return m_base.getScheme(); }
 
     virtual OUString SAL_CALL getSchemeSpecificPart()
-        throw (com::sun::star::uno::RuntimeException)
+        throw (com::sun::star::uno::RuntimeException, std::exception)
     { return m_base.getSchemeSpecificPart(); }
 
     virtual sal_Bool SAL_CALL isHierarchical()
-        throw (com::sun::star::uno::RuntimeException)
+        throw (com::sun::star::uno::RuntimeException, std::exception)
     { return m_base.isHierarchical(); }
 
     virtual sal_Bool SAL_CALL hasAuthority()
-        throw (com::sun::star::uno::RuntimeException)
+        throw (com::sun::star::uno::RuntimeException, std::exception)
     { return m_base.hasAuthority(); }
 
     virtual OUString SAL_CALL getAuthority()
-        throw (com::sun::star::uno::RuntimeException)
+        throw (com::sun::star::uno::RuntimeException, std::exception)
     { return m_base.getAuthority(); }
 
     virtual OUString SAL_CALL getPath()
-        throw (com::sun::star::uno::RuntimeException)
+        throw (com::sun::star::uno::RuntimeException, std::exception)
     { return m_base.getPath(); }
 
     virtual sal_Bool SAL_CALL hasRelativePath()
-        throw (com::sun::star::uno::RuntimeException)
+        throw (com::sun::star::uno::RuntimeException, std::exception)
     { return m_base.hasRelativePath(); }
 
     virtual sal_Int32 SAL_CALL getPathSegmentCount()
-        throw (com::sun::star::uno::RuntimeException)
+        throw (com::sun::star::uno::RuntimeException, std::exception)
     { return m_base.getPathSegmentCount(); }
 
     virtual OUString SAL_CALL getPathSegment(sal_Int32 index)
-        throw (com::sun::star::uno::RuntimeException)
+        throw (com::sun::star::uno::RuntimeException, std::exception)
     { return m_base.getPathSegment(index); }
 
     virtual sal_Bool SAL_CALL hasQuery()
-        throw (com::sun::star::uno::RuntimeException)
+        throw (com::sun::star::uno::RuntimeException, std::exception)
     { return m_base.hasQuery(); }
 
     virtual OUString SAL_CALL getQuery()
-        throw (com::sun::star::uno::RuntimeException)
+        throw (com::sun::star::uno::RuntimeException, std::exception)
     { return m_base.getQuery(); }
 
     virtual sal_Bool SAL_CALL hasFragment()
-        throw (com::sun::star::uno::RuntimeException)
+        throw (com::sun::star::uno::RuntimeException, std::exception)
     { return m_base.hasFragment(); }
 
     virtual OUString SAL_CALL getFragment()
-        throw (com::sun::star::uno::RuntimeException)
+        throw (com::sun::star::uno::RuntimeException, std::exception)
     { return m_base.getFragment(); }
 
     virtual void SAL_CALL setFragment(OUString const & fragment)
-        throw (com::sun::star::uno::RuntimeException)
+        throw (com::sun::star::uno::RuntimeException, std::exception)
     { m_base.setFragment(fragment); }
 
     virtual void SAL_CALL clearFragment()
-        throw (com::sun::star::uno::RuntimeException)
+        throw (com::sun::star::uno::RuntimeException, std::exception)
     { m_base.clearFragment(); }
 
-    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL setName(OUString const & name)
-        throw (css::uno::RuntimeException, css::lang::IllegalArgumentException);
+        throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception);
 
     virtual sal_Bool SAL_CALL hasParameter(OUString const & key)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     virtual OUString SAL_CALL getParameter(OUString const & key)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL setParameter(OUString const & key, OUString const & value)
-        throw (css::uno::RuntimeException, css::lang::IllegalArgumentException);
+        throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception);
 
 private:
     UrlReference(UrlReference &); // not implemented
@@ -291,13 +291,13 @@ private:
     stoc::uriproc::UriReference m_base;
 };
 
-OUString UrlReference::getName() throw (css::uno::RuntimeException) {
+OUString UrlReference::getName() throw (css::uno::RuntimeException, std::exception) {
     osl::MutexGuard g(m_base.m_mutex);
     sal_Int32 i = 0;
     return parsePart(m_base.m_path, true, &i);
 }
 
-void SAL_CALL UrlReference::setName(OUString const & name) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException)
+void SAL_CALL UrlReference::setName(OUString const & name) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception)
 {
     if (name.isEmpty())
         throw css::lang::IllegalArgumentException(
@@ -314,14 +314,14 @@ void SAL_CALL UrlReference::setName(OUString const & name) throw (css::uno::Runt
 }
 
 sal_Bool UrlReference::hasParameter(OUString const & key)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard g(m_base.m_mutex);
     return findParameter(key) >= 0;
 }
 
 OUString UrlReference::getParameter(OUString const & key)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard g(m_base.m_mutex);
     sal_Int32 i = findParameter(key);
@@ -329,7 +329,7 @@ OUString UrlReference::getParameter(OUString const & key)
 }
 
 void UrlReference::setParameter(OUString const & key, OUString const & value)
-    throw (css::uno::RuntimeException, css::lang::IllegalArgumentException)
+    throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception)
 {
     if (key.isEmpty())
         throw css::lang::IllegalArgumentException(
@@ -383,13 +383,13 @@ public:
     Parser() {}
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & serviceName)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Sequence< OUString > SAL_CALL
-    getSupportedServiceNames() throw (css::uno::RuntimeException);
+    getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Reference< css::uri::XUriReference > SAL_CALL
     parse(
@@ -404,20 +404,20 @@ private:
 };
 
 OUString Parser::getImplementationName()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return stoc_services::UriSchemeParser_vndDOTsunDOTstarDOTscript::
         getImplementationName();
 }
 
 sal_Bool Parser::supportsService(OUString const & serviceName)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, serviceName);
 }
 
 css::uno::Sequence< OUString > Parser::getSupportedServiceNames()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return stoc_services::UriSchemeParser_vndDOTsunDOTstarDOTscript::
         getSupportedServiceNames();

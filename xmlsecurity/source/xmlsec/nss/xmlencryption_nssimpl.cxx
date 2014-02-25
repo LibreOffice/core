@@ -55,7 +55,7 @@ SAL_CALL XMLEncryption_NssImpl :: encrypt(
     const Reference< XXMLEncryptionTemplate >& aTemplate ,
     const Reference< XSecurityEnvironment >& aEnvironment
 ) throw( com::sun::star::xml::crypto::XMLEncryptionException,
-         com::sun::star::uno::SecurityException )
+         com::sun::star::uno::SecurityException, std::exception )
 {
     xmlSecKeysMngrPtr pMngr = NULL ;
     xmlSecEncCtxPtr pEncCtx = NULL ;
@@ -193,7 +193,7 @@ SAL_CALL XMLEncryption_NssImpl :: decrypt(
     const Reference< XXMLEncryptionTemplate >& aTemplate ,
     const Reference< XXMLSecurityContext >& aSecurityCtx
 ) throw( com::sun::star::xml::crypto::XMLEncryptionException ,
-         com::sun::star::uno::SecurityException) {
+         com::sun::star::uno::SecurityException, std::exception) {
     xmlSecKeysMngrPtr pMngr = NULL ;
     xmlSecEncCtxPtr pEncCtx = NULL ;
     xmlNodePtr pEncryptedData = NULL ;
@@ -307,12 +307,12 @@ SAL_CALL XMLEncryption_NssImpl :: decrypt(
 }
 
 /* XServiceInfo */
-OUString SAL_CALL XMLEncryption_NssImpl :: getImplementationName() throw( RuntimeException ) {
+OUString SAL_CALL XMLEncryption_NssImpl :: getImplementationName() throw( RuntimeException, std::exception ) {
     return impl_getImplementationName() ;
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL XMLEncryption_NssImpl :: supportsService( const OUString& serviceName) throw( RuntimeException ) {
+sal_Bool SAL_CALL XMLEncryption_NssImpl :: supportsService( const OUString& serviceName) throw( RuntimeException, std::exception ) {
     Sequence< OUString > seqServiceNames = getSupportedServiceNames() ;
     const OUString* pArray = seqServiceNames.getConstArray() ;
     for( sal_Int32 i = 0 ; i < seqServiceNames.getLength() ; i ++ ) {
@@ -323,7 +323,7 @@ sal_Bool SAL_CALL XMLEncryption_NssImpl :: supportsService( const OUString& serv
 }
 
 /* XServiceInfo */
-Sequence< OUString > SAL_CALL XMLEncryption_NssImpl :: getSupportedServiceNames() throw( RuntimeException ) {
+Sequence< OUString > SAL_CALL XMLEncryption_NssImpl :: getSupportedServiceNames() throw( RuntimeException, std::exception ) {
     return impl_getSupportedServiceNames() ;
 }
 

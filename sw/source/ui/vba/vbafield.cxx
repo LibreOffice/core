@@ -37,7 +37,7 @@ SwVbaField::SwVbaField(  const uno::Reference< ooo::vba::XHelperInterface >& rPa
     mxTextField.set( xTextField, uno::UNO_QUERY_THROW );
 }
 
-sal_Bool SAL_CALL SwVbaField::Update() throw (uno::RuntimeException)
+sal_Bool SAL_CALL SwVbaField::Update() throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< util::XUpdatable > xUpdatable( mxTextField, uno::UNO_QUERY );
     if( xUpdatable.is() )
@@ -242,11 +242,11 @@ public:
     FieldEnumeration(  const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< frame::XModel >& xModel, const uno::Reference< container::XEnumeration >& xEnumeration ) : mxParent( xParent ), mxContext( xContext ), mxModel( xModel ), mxEnumeration( xEnumeration )
     {
     }
-    virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException)
+    virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception)
     {
         return mxEnumeration->hasMoreElements();
     }
-    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
     {
         if ( !hasMoreElements() )
             throw container::NoSuchElementException();
@@ -267,10 +267,10 @@ public:
         mxEnumerationAccess.set( xSupp->getTextFields(), uno::UNO_QUERY_THROW );
     }
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException) { return  mxEnumerationAccess->getElementType(); }
-    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException) { return mxEnumerationAccess->hasElements(); }
+    virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException, std::exception) { return  mxEnumerationAccess->getElementType(); }
+    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException, std::exception) { return mxEnumerationAccess->hasElements(); }
     // XIndexAccess
-    virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException)
+    virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException, std::exception)
     {
         uno::Reference< container::XEnumeration > xEnumeration =  mxEnumerationAccess->createEnumeration();
         sal_Int32 nCount = 0;
@@ -281,7 +281,7 @@ public:
         }
         return nCount;
     }
-    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException )
+    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
     {
         if( Index < 0 || Index >= getCount() )
             throw lang::IndexOutOfBoundsException();
@@ -299,7 +299,7 @@ public:
         throw lang::IndexOutOfBoundsException();
     }
     // XEnumerationAccess
-    virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) throw (uno::RuntimeException)
+    virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) throw (uno::RuntimeException, std::exception)
     {
         uno::Reference< container::XEnumeration > xEnumeration =  mxEnumerationAccess->createEnumeration();
         return uno::Reference< container::XEnumeration >( new FieldEnumeration( mxParent, mxContext, mxModel, xEnumeration ) );
@@ -312,7 +312,7 @@ SwVbaFields::SwVbaFields( const uno::Reference< XHelperInterface >& xParent, con
 }
 
 uno::Reference< word::XField > SAL_CALL
-SwVbaFields::Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, const css::uno::Any& Type, const css::uno::Any& Text, const css::uno::Any& /*PreserveFormatting*/ ) throw (css::uno::RuntimeException)
+SwVbaFields::Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, const css::uno::Any& Type, const css::uno::Any& Text, const css::uno::Any& /*PreserveFormatting*/ ) throw (css::uno::RuntimeException, std::exception)
 {
     sal_Int32 nType = word::WdFieldType::wdFieldEmpty;
     Type >>= nType;
@@ -492,7 +492,7 @@ SwVbaFields::createCollectionObject( const uno::Any& aSource )
     return lcl_createField( mxParent, mxContext, mxModel, aSource );
 }
 
-sal_Int32 SAL_CALL SwVbaFields::Update() throw (uno::RuntimeException)
+sal_Int32 SAL_CALL SwVbaFields::Update() throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nUpdate = 1;
     try

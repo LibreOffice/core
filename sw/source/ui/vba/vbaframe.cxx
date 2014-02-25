@@ -37,7 +37,7 @@ SwVbaFrame::~SwVbaFrame()
 {
 }
 
-void SAL_CALL SwVbaFrame::Select() throw ( uno::RuntimeException )
+void SAL_CALL SwVbaFrame::Select() throw ( uno::RuntimeException, std::exception )
 {
     uno::Reference< view::XSelectionSupplier > xSelectSupp( mxModel->getCurrentController(), uno::UNO_QUERY_THROW );
     xSelectSupp->select( uno::makeAny( mxTextFrame ) );

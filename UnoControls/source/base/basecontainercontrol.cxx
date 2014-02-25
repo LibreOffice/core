@@ -54,7 +54,7 @@ BaseContainerControl::~BaseContainerControl()
 //  XInterface
 
 
-Any SAL_CALL BaseContainerControl::queryInterface( const Type& rType ) throw( RuntimeException )
+Any SAL_CALL BaseContainerControl::queryInterface( const Type& rType ) throw( RuntimeException, std::exception )
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
@@ -79,7 +79,7 @@ Any SAL_CALL BaseContainerControl::queryInterface( const Type& rType ) throw( Ru
 //  XTypeProvider
 
 
-Sequence< Type > SAL_CALL BaseContainerControl::getTypes() throw( RuntimeException )
+Sequence< Type > SAL_CALL BaseContainerControl::getTypes() throw( RuntimeException, std::exception )
 {
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
@@ -111,7 +111,7 @@ Sequence< Type > SAL_CALL BaseContainerControl::getTypes() throw( RuntimeExcepti
 //  XAggregation
 
 
-Any SAL_CALL BaseContainerControl::queryAggregation( const Type& aType ) throw( RuntimeException )
+Any SAL_CALL BaseContainerControl::queryAggregation( const Type& aType ) throw( RuntimeException, std::exception )
 {
     // Ask for my own supported interfaces ...
     // Attention: XTypeProvider and XInterface are supported by OComponentHelper!
@@ -139,7 +139,7 @@ Any SAL_CALL BaseContainerControl::queryAggregation( const Type& aType ) throw( 
 
 
 void SAL_CALL BaseContainerControl::createPeer( const   Reference< XToolkit >&      xToolkit    ,
-                                                const   Reference< XWindowPeer >&   xParent     ) throw( RuntimeException )
+                                                const   Reference< XWindowPeer >&   xParent     ) throw( RuntimeException, std::exception )
 {
     if ( !getPeer().is() )
     {
@@ -165,7 +165,7 @@ void SAL_CALL BaseContainerControl::createPeer( const   Reference< XToolkit >&  
 //  XControl
 
 
-sal_Bool SAL_CALL BaseContainerControl::setModel( const Reference< XControlModel >& ) throw( RuntimeException )
+sal_Bool SAL_CALL BaseContainerControl::setModel( const Reference< XControlModel >& ) throw( RuntimeException, std::exception )
 {
     // This object has NO model.
     return sal_False ;
@@ -175,7 +175,7 @@ sal_Bool SAL_CALL BaseContainerControl::setModel( const Reference< XControlModel
 //  XControl
 
 
-Reference< XControlModel > SAL_CALL BaseContainerControl::getModel() throw( RuntimeException )
+Reference< XControlModel > SAL_CALL BaseContainerControl::getModel() throw( RuntimeException, std::exception )
 {
     // This object has NO model.
     // return (XControlModel*)this ;
@@ -186,7 +186,7 @@ Reference< XControlModel > SAL_CALL BaseContainerControl::getModel() throw( Runt
 //  XComponent
 
 
-void SAL_CALL BaseContainerControl::dispose() throw( RuntimeException )
+void SAL_CALL BaseContainerControl::dispose() throw( RuntimeException, std::exception )
 {
     // Tell everything that this container is now gone.
     // It's faster if you listen to both the control and the container.
@@ -227,7 +227,7 @@ void SAL_CALL BaseContainerControl::dispose() throw( RuntimeException )
 //  XEventListener
 
 
-void SAL_CALL BaseContainerControl::disposing( const EventObject& rEvent ) throw( RuntimeException )
+void SAL_CALL BaseContainerControl::disposing( const EventObject& rEvent ) throw( RuntimeException, std::exception )
 {
     Reference< XControl > xControl( rEvent.Source, UNO_QUERY );
 
@@ -239,7 +239,7 @@ void SAL_CALL BaseContainerControl::disposing( const EventObject& rEvent ) throw
 //  XControlContainer
 
 
-void SAL_CALL BaseContainerControl::addControl ( const OUString& rName, const Reference< XControl > & rControl ) throw( RuntimeException )
+void SAL_CALL BaseContainerControl::addControl ( const OUString& rName, const Reference< XControl > & rControl ) throw( RuntimeException, std::exception )
 {
     if ( !rControl.is () )
         return;
@@ -310,7 +310,7 @@ void SAL_CALL BaseContainerControl::addContainerListener ( const Reference< XCon
 //  XControlContainer
 
 
-void SAL_CALL BaseContainerControl::removeControl ( const Reference< XControl > & rControl ) throw( RuntimeException )
+void SAL_CALL BaseContainerControl::removeControl ( const Reference< XControl > & rControl ) throw( RuntimeException, std::exception )
 {
     if ( rControl.is() )
     {
@@ -375,7 +375,7 @@ void SAL_CALL BaseContainerControl::removeContainerListener ( const Reference< X
 //  XControlContainer
 
 
-void SAL_CALL BaseContainerControl::setStatusText ( const OUString& rStatusText ) throw( RuntimeException )
+void SAL_CALL BaseContainerControl::setStatusText ( const OUString& rStatusText ) throw( RuntimeException, std::exception )
 {
     // go down to each parent
     Reference< XControlContainer >  xContainer ( getContext(), UNO_QUERY ) ;
@@ -390,7 +390,7 @@ void SAL_CALL BaseContainerControl::setStatusText ( const OUString& rStatusText 
 //  XControlContainer
 
 
-Reference< XControl > SAL_CALL BaseContainerControl::getControl ( const OUString& rName ) throw( RuntimeException )
+Reference< XControl > SAL_CALL BaseContainerControl::getControl ( const OUString& rName ) throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
     MutexGuard  aGuard ( Mutex::getGlobalMutex() ) ;
@@ -418,7 +418,7 @@ Reference< XControl > SAL_CALL BaseContainerControl::getControl ( const OUString
 //  XControlContainer
 
 
-Sequence< Reference< XControl > > SAL_CALL BaseContainerControl::getControls () throw( RuntimeException )
+Sequence< Reference< XControl > > SAL_CALL BaseContainerControl::getControls () throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
     MutexGuard  aGuard ( Mutex::getGlobalMutex() ) ;
@@ -513,7 +513,7 @@ Sequence<Reference< XTabController > > SAL_CALL BaseContainerControl::getTabCont
 //  XWindow
 
 
-void SAL_CALL BaseContainerControl::setVisible ( sal_Bool bVisible ) throw( RuntimeException )
+void SAL_CALL BaseContainerControl::setVisible ( sal_Bool bVisible ) throw( RuntimeException, std::exception )
 {
     // override baseclass definition
     BaseControl::setVisible ( bVisible ) ;

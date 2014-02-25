@@ -316,7 +316,7 @@ XLIB_Cursor SelectionManager::createCursor( const unsigned char* pPointerData, c
     return aCursor;
 }
 
-void SelectionManager::initialize( const Sequence< Any >& arguments ) throw (::com::sun::star::uno::Exception)
+void SelectionManager::initialize( const Sequence< Any >& arguments ) throw (::com::sun::star::uno::Exception, std::exception)
 {
     osl::MutexGuard aGuard(m_aMutex);
 
@@ -2932,14 +2932,14 @@ void SelectionManager::reject( XLIB_Window aDropWindow, XLIB_Time )
  *  XDragSource
  */
 
-sal_Bool SelectionManager::isDragImageSupported() throw()
+sal_Bool SelectionManager::isDragImageSupported() throw(std::exception)
 {
     return sal_False;
 }
 
 
 
-sal_Int32 SelectionManager::getDefaultCursor( sal_Int8 dragAction ) throw()
+sal_Int32 SelectionManager::getDefaultCursor( sal_Int8 dragAction ) throw(std::exception)
 {
     XLIB_Cursor aCursor = m_aNoneCursor;
     if( dragAction & DNDConstants::ACTION_MOVE )
@@ -3190,7 +3190,7 @@ void SelectionManager::startDrag(
                                  sal_Int32,
                                  const css::uno::Reference< XTransferable >& transferable,
                                  const css::uno::Reference< XDragSourceListener >& listener
-                                 ) throw()
+                                 ) throw(std::exception)
 {
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "startDrag( sourceActions = %x )\n", (int)sourceActions );
@@ -3857,7 +3857,7 @@ void SelectionManager::shutdown() throw()
 
 
 
-sal_Bool SelectionManager::handleEvent( const Any& event ) throw()
+sal_Bool SelectionManager::handleEvent( const Any& event ) throw(std::exception)
 {
     Sequence< sal_Int8 > aSeq;
     if( (event >>= aSeq) )
@@ -3893,14 +3893,14 @@ sal_Bool SelectionManager::handleEvent( const Any& event ) throw()
 }
 
 void SAL_CALL SelectionManager::disposing( const ::com::sun::star::lang::EventObject& rEvt )
-    throw( ::com::sun::star::uno::RuntimeException )
+    throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     if (rEvt.Source == m_xDesktop || rEvt.Source == m_xDisplayConnection)
         shutdown();
 }
 
 void SAL_CALL SelectionManager::queryTermination( const ::com::sun::star::lang::EventObject& )
-    throw( ::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException )
+    throw( ::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException, std::exception )
 {
 }
 
@@ -3910,7 +3910,7 @@ void SAL_CALL SelectionManager::queryTermination( const ::com::sun::star::lang::
  * has been called before vcl is shutdown
  */
 void SAL_CALL SelectionManager::notifyTermination( const ::com::sun::star::lang::EventObject& rEvent )
-    throw( ::com::sun::star::uno::RuntimeException )
+    throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     disposing(rEvent);
 }
@@ -4097,7 +4097,7 @@ SelectionManagerHolder::~SelectionManagerHolder()
 
 
 
-void SelectionManagerHolder::initialize( const Sequence< Any >& arguments ) throw( ::com::sun::star::uno::Exception )
+void SelectionManagerHolder::initialize( const Sequence< Any >& arguments ) throw( ::com::sun::star::uno::Exception, std::exception )
 {
     OUString aDisplayName;
 
@@ -4121,14 +4121,14 @@ void SelectionManagerHolder::initialize( const Sequence< Any >& arguments ) thro
  *  XDragSource
  */
 
-sal_Bool SelectionManagerHolder::isDragImageSupported() throw()
+sal_Bool SelectionManagerHolder::isDragImageSupported() throw(std::exception)
 {
     return m_xRealDragSource.is() ? m_xRealDragSource->isDragImageSupported() : sal_False;
 }
 
 
 
-sal_Int32 SelectionManagerHolder::getDefaultCursor( sal_Int8 dragAction ) throw()
+sal_Int32 SelectionManagerHolder::getDefaultCursor( sal_Int8 dragAction ) throw(std::exception)
 {
     return m_xRealDragSource.is() ? m_xRealDragSource->getDefaultCursor( dragAction ) : 0;
 }
@@ -4140,7 +4140,7 @@ void SelectionManagerHolder::startDrag(
                                        sal_Int8 sourceActions, sal_Int32 cursor, sal_Int32 image,
                                        const css::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& transferable,
                                        const css::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener >& listener
-                                       ) throw()
+                                       ) throw(std::exception)
 {
     if( m_xRealDragSource.is() )
         m_xRealDragSource->startDrag( trigger, sourceActions, cursor, image, transferable, listener );
@@ -4154,17 +4154,17 @@ void SelectionManagerHolder::startDrag(
 
 
 
-OUString SelectionManagerHolder::getImplementationName() throw()
+OUString SelectionManagerHolder::getImplementationName() throw(std::exception)
 {
     return OUString(XDND_IMPLEMENTATION_NAME);
 }
 
-sal_Bool SelectionManagerHolder::supportsService( const OUString& ServiceName ) throw()
+sal_Bool SelectionManagerHolder::supportsService( const OUString& ServiceName ) throw(std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SelectionManagerHolder::getSupportedServiceNames() throw()
+Sequence< OUString > SelectionManagerHolder::getSupportedServiceNames() throw(std::exception)
 {
     return Xdnd_getSupportedServiceNames();
 }

@@ -226,7 +226,7 @@ namespace DOM
         return empty string if attribute is not set
     */
     OUString SAL_CALL CElement::getAttribute(OUString const& name)
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -249,7 +249,7 @@ namespace DOM
     Retrieves an attribute node by name.
     */
     Reference< XAttr > SAL_CALL CElement::getAttributeNode(OUString const& name)
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -275,7 +275,7 @@ namespace DOM
     */
     Reference< XAttr > SAL_CALL CElement::getAttributeNodeNS(
             const OUString& namespaceURI, const OUString& localName)
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -306,7 +306,7 @@ namespace DOM
     OUString SAL_CALL
     CElement::getAttributeNS(
             OUString const& namespaceURI, OUString const& localName)
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -337,7 +337,7 @@ namespace DOM
     */
     Reference< XNodeList > SAL_CALL
     CElement::getElementsByTagName(OUString const& rLocalName)
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -354,7 +354,7 @@ namespace DOM
     Reference< XNodeList > SAL_CALL
     CElement::getElementsByTagNameNS(
             OUString const& rNamespaceURI, OUString const& rLocalName)
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -367,7 +367,7 @@ namespace DOM
     The name of the element.
     */
     OUString SAL_CALL CElement::getTagName()
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -385,7 +385,7 @@ namespace DOM
     element or has a default value, false otherwise.
     */
     sal_Bool SAL_CALL CElement::hasAttribute(OUString const& name)
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -400,7 +400,7 @@ namespace DOM
     */
     sal_Bool SAL_CALL CElement::hasAttributeNS(
             OUString const& namespaceURI, OUString const& localName)
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -415,7 +415,7 @@ namespace DOM
     Removes an attribute by name.
     */
     void SAL_CALL CElement::removeAttribute(OUString const& name)
-        throw (RuntimeException, DOMException)
+        throw (RuntimeException, DOMException, std::exception)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -440,7 +440,7 @@ namespace DOM
     */
     void SAL_CALL CElement::removeAttributeNS(
             OUString const& namespaceURI, OUString const& localName)
-        throw (RuntimeException, DOMException)
+        throw (RuntimeException, DOMException, std::exception)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -470,7 +470,7 @@ namespace DOM
     */
     Reference< XAttr > SAL_CALL
     CElement::removeAttributeNode(Reference< XAttr > const& oldAttr)
-        throw (RuntimeException, DOMException)
+        throw (RuntimeException, DOMException, std::exception)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -589,7 +589,7 @@ namespace DOM
 
     Reference< XAttr >
     CElement::setAttributeNode(const Reference< XAttr >& newAttr)
-        throw (RuntimeException, DOMException)
+        throw (RuntimeException, DOMException, std::exception)
     {
         return setAttributeNode_Impl_Lock(newAttr, false);
     }
@@ -599,7 +599,7 @@ namespace DOM
     */
     Reference< XAttr >
     CElement::setAttributeNodeNS(const Reference< XAttr >& newAttr)
-        throw (RuntimeException, DOMException)
+        throw (RuntimeException, DOMException, std::exception)
     {
         return setAttributeNode_Impl_Lock(newAttr, true);
     }
@@ -609,7 +609,7 @@ namespace DOM
     */
     void SAL_CALL
     CElement::setAttribute(OUString const& name, OUString const& value)
-        throw (RuntimeException, DOMException)
+        throw (RuntimeException, DOMException, std::exception)
     {
         ::osl::ClearableMutexGuard guard(m_rMutex);
 
@@ -655,7 +655,7 @@ namespace DOM
     void SAL_CALL
     CElement::setAttributeNS(OUString const& namespaceURI,
             OUString const& qualifiedName, OUString const& value)
-        throw (RuntimeException, DOMException)
+        throw (RuntimeException, DOMException, std::exception)
     {
         if (namespaceURI.isEmpty()) throw RuntimeException();
 
@@ -732,7 +732,7 @@ namespace DOM
     }
 
     Reference< XNamedNodeMap > SAL_CALL
-    CElement::getAttributes() throw (RuntimeException)
+    CElement::getAttributes() throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -741,12 +741,12 @@ namespace DOM
         return xMap;
     }
 
-    OUString SAL_CALL CElement::getNodeName()throw (RuntimeException)
+    OUString SAL_CALL CElement::getNodeName()throw (RuntimeException, std::exception)
     {
         return getLocalName();
     }
 
-    OUString SAL_CALL CElement::getLocalName()throw (RuntimeException)
+    OUString SAL_CALL CElement::getLocalName()throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -759,7 +759,7 @@ namespace DOM
         return aName;
     }
 
-    OUString SAL_CALL CElement::getNodeValue() throw (RuntimeException)
+    OUString SAL_CALL CElement::getNodeValue() throw (RuntimeException, std::exception)
     {
         return OUString();
     }

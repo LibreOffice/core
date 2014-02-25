@@ -66,21 +66,21 @@ MRCListenerMultiplexerHelper* PluginControl_Impl::getMultiplexer()
 //==================================================================================================
 
 void PluginControl_Impl::addEventListener( const Reference< ::com::sun::star::lang::XEventListener > & l )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     _aDisposeListeners.push_back( l );
 }
 
 //---- ::com::sun::star::lang::XComponent ----------------------------------------------------------------------------------
 void PluginControl_Impl::removeEventListener( const Reference< ::com::sun::star::lang::XEventListener > & l )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     _aDisposeListeners.remove( l );
 }
 
 //---- ::com::sun::star::lang::XComponent ----------------------------------------------------------------------------------
 void PluginControl_Impl::dispose(void)
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     // send disposing events
     ::com::sun::star::lang::EventObject aEvt;
@@ -95,7 +95,7 @@ void PluginControl_Impl::dispose(void)
 
 //---- ::com::sun::star::awt::XWindow -------------------------------------------------------------------------------------
 void PluginControl_Impl::setPosSize( sal_Int32 nX_, sal_Int32 nY_, sal_Int32 nWidth_, sal_Int32 nHeight_, sal_Int16 nFlags )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     _nX         = nX_ >=0 ? nX_ : 0;
     _nY         = nY_ >=0 ? nY_ : 0;
@@ -109,14 +109,14 @@ void PluginControl_Impl::setPosSize( sal_Int32 nX_, sal_Int32 nY_, sal_Int32 nWi
 
 //---- ::com::sun::star::awt::XWindow -------------------------------------------------------------------------------------
 ::com::sun::star::awt::Rectangle PluginControl_Impl::getPosSize(void)
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return _xPeerWindow->getPosSize();
 }
 
 //---- ::com::sun::star::awt::XWindow -------------------------------------------------------------------------------------
 void PluginControl_Impl::setVisible( sal_Bool bVisible )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     _bVisible = bVisible;
     if (_xPeerWindow.is())
@@ -125,7 +125,7 @@ void PluginControl_Impl::setVisible( sal_Bool bVisible )
 
 //---- ::com::sun::star::awt::XWindow -------------------------------------------------------------------------------------
 void PluginControl_Impl::setEnable( sal_Bool bEnable )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     _bEnable = bEnable;
     if (_xPeerWindow.is())
@@ -133,7 +133,7 @@ void PluginControl_Impl::setEnable( sal_Bool bEnable )
 }
 
 //---- ::com::sun::star::awt::XWindow -------------------------------------------------------------------------------------
-void PluginControl_Impl::setFocus(void) throw( RuntimeException )
+void PluginControl_Impl::setFocus(void) throw( RuntimeException, std::exception )
 {
     if (_xPeerWindow.is())
         _xPeerWindow->setFocus();
@@ -156,7 +156,7 @@ void PluginControl_Impl::releasePeer()
 
 //---- ::com::sun::star::awt::XControl ------------------------------------------------------------------------------------
 void PluginControl_Impl::createPeer( const Reference< ::com::sun::star::awt::XToolkit > & /*xToolkit*/, const Reference< ::com::sun::star::awt::XWindowPeer >  & xParentPeer )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     if (_xPeer.is())
     {
@@ -196,7 +196,7 @@ void PluginControl_Impl::createPeer( const Reference< ::com::sun::star::awt::XTo
 
 //---- ::com::sun::star::awt::XControl ------------------------------------------------------------------------------------
 void PluginControl_Impl::setDesignMode( sal_Bool bOn )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     _bInDesignMode = bOn;
     if (_xPeerWindow.is())
@@ -205,84 +205,84 @@ void PluginControl_Impl::setDesignMode( sal_Bool bOn )
 
 //---- ::com::sun::star::awt::XWindow -------------------------------------------------------------------------------------
 void PluginControl_Impl::addPaintListener( const Reference< ::com::sun::star::awt::XPaintListener > & l )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     getMultiplexer()->advise( ::getCppuType((const Reference< ::com::sun::star::awt::XPaintListener >*)0), l );
 }
 
 //---- ::com::sun::star::awt::XWindow -------------------------------------------------------------------------------------
 void PluginControl_Impl::removePaintListener( const Reference< ::com::sun::star::awt::XPaintListener > & l )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     getMultiplexer()->unadvise( ::getCppuType((const Reference< ::com::sun::star::awt::XPaintListener >*)0), l );
 }
 
 //---- ::com::sun::star::awt::XWindow -------------------------------------------------------------------------------------
 void PluginControl_Impl::addWindowListener( const Reference< ::com::sun::star::awt::XWindowListener > & l )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     getMultiplexer()->advise( ::getCppuType((const Reference< ::com::sun::star::awt::XWindowListener >*)0), l );
 }
 
 //---- ::com::sun::star::awt::XWindow -------------------------------------------------------------------------------------
 void PluginControl_Impl::removeWindowListener( const Reference< ::com::sun::star::awt::XWindowListener > & l )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     getMultiplexer()->unadvise( ::getCppuType((const Reference< ::com::sun::star::awt::XWindowListener >*)0), l );
 }
 
 //---- ::com::sun::star::awt::XWindow -------------------------------------------------------------------------------------
 void PluginControl_Impl::addFocusListener( const Reference< ::com::sun::star::awt::XFocusListener > & l )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     getMultiplexer()->advise( ::getCppuType((const Reference< ::com::sun::star::awt::XFocusListener >*)0), l );
 }
 
 //---- ::com::sun::star::awt::XWindow -------------------------------------------------------------------------------------
 void PluginControl_Impl::removeFocusListener( const Reference< ::com::sun::star::awt::XFocusListener > & l )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     getMultiplexer()->unadvise( ::getCppuType((const Reference< ::com::sun::star::awt::XFocusListener >*)0), l );
 }
 
 //---- ::com::sun::star::awt::XWindow -------------------------------------------------------------------------------------
 void PluginControl_Impl::addKeyListener( const Reference< ::com::sun::star::awt::XKeyListener > & l )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     getMultiplexer()->advise( ::getCppuType((const Reference< ::com::sun::star::awt::XKeyListener >*)0), l );
 }
 
 //---- ::com::sun::star::awt::XWindow -------------------------------------------------------------------------------------
 void PluginControl_Impl::removeKeyListener( const Reference< ::com::sun::star::awt::XKeyListener > & l )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     getMultiplexer()->unadvise( ::getCppuType((const Reference< ::com::sun::star::awt::XKeyListener >*)0), l );
 }
 
 //---- ::com::sun::star::awt::XWindow -------------------------------------------------------------------------------------
 void PluginControl_Impl::addMouseListener( const Reference< ::com::sun::star::awt::XMouseListener > & l )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     getMultiplexer()->advise( ::getCppuType((const Reference< ::com::sun::star::awt::XMouseListener >*)0), l );
 }
 
 //---- ::com::sun::star::awt::XWindow -------------------------------------------------------------------------------------
 void PluginControl_Impl::removeMouseListener( const Reference< ::com::sun::star::awt::XMouseListener > & l )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     getMultiplexer()->unadvise( ::getCppuType((const Reference< ::com::sun::star::awt::XMouseListener >*)0), l );
 }
 
 //---- ::com::sun::star::awt::XWindow -------------------------------------------------------------------------------------
 void PluginControl_Impl::addMouseMotionListener( const Reference< ::com::sun::star::awt::XMouseMotionListener > & l )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     getMultiplexer()->advise( ::getCppuType((const Reference< ::com::sun::star::awt::XMouseMotionListener >*)0), l );
 }
 
 //---- ::com::sun::star::awt::XWindow -------------------------------------------------------------------------------------
 void PluginControl_Impl::removeMouseMotionListener( const Reference< ::com::sun::star::awt::XMouseMotionListener > & l )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     getMultiplexer()->unadvise( ::getCppuType((const Reference< ::com::sun::star::awt::XMouseMotionListener >*)0), l );
 }
@@ -290,33 +290,33 @@ void PluginControl_Impl::removeMouseMotionListener( const Reference< ::com::sun:
 
 //---- ::com::sun::star::awt::XView ---------------------------------------------------------------------------------------
 void PluginControl_Impl::draw( sal_Int32 /*x*/, sal_Int32 /*y*/ )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     // has to be done by further implementation of control
 }
 
 //---- ::com::sun::star::awt::XView ---------------------------------------------------------------------------------------
 void PluginControl_Impl::setZoom( float /*ZoomX*/, float /*ZoomY*/ )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     // has to be done by further implementation of control
 }
 
 //---- ::com::sun::star::lang::XEventListener ------------------------------------------------------------------------------
 void PluginControl_Impl::disposing( const ::com::sun::star::lang::EventObject & /*rSource*/ )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
 }
 //---- ::com::sun::star::awt::XFocusListener ------------------------------------------------------------------------------
 void PluginControl_Impl::focusGained( const ::com::sun::star::awt::FocusEvent & /*rEvt*/ )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     if (_xPeerWindow.is())
         _xPeerWindow->setFocus();
 }
 //---- ::com::sun::star::awt::XFocusListener ------------------------------------------------------------------------------
 void PluginControl_Impl::focusLost( const ::com::sun::star::awt::FocusEvent & /*rEvt*/ )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
 }
 

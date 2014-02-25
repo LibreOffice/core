@@ -88,13 +88,13 @@ public:
         SAL_CALL createResource (
             const ::com::sun::star::uno::Reference<
                 com::sun::star::drawing::framework::XResourceId>& rxPaneId)
-        throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException);
+        throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, std::exception);
 
     virtual void SAL_CALL
         releaseResource (
             const ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResource>&
                 rxPane)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 private:
     css::uno::WeakReference<css::uno::XComponentContext> mxComponentContextWeak;

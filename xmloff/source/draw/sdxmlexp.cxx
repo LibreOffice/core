@@ -421,7 +421,7 @@ SdXMLExport::SdXMLExport(
 
 // XExporter
 void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent >& xDoc )
-    throw(lang::IllegalArgumentException, uno::RuntimeException)
+    throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     SvXMLExport::setSourceDocument( xDoc );
 

@@ -31,7 +31,7 @@ namespace DOM
     {
     }
 
-    OUString SAL_CALL CNotation::getPublicId() throw (RuntimeException)
+    OUString SAL_CALL CNotation::getPublicId() throw (RuntimeException, std::exception)
     {
         OSL_ENSURE(false,
             "CNotation::getPublicId: not implemented (#i113683#)");
@@ -41,7 +41,7 @@ namespace DOM
     /**
     The system identifier of this notation.
     */
-    OUString SAL_CALL CNotation::getSystemId() throw (RuntimeException)
+    OUString SAL_CALL CNotation::getSystemId() throw (RuntimeException, std::exception)
     {
         OSL_ENSURE(false,
             "CNotation::getSystemId: not implemented (#i113683#)");
@@ -49,7 +49,7 @@ namespace DOM
     }
 
 
-    OUString SAL_CALL CNotation::getNodeName()throw (RuntimeException)
+    OUString SAL_CALL CNotation::getNodeName()throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -62,7 +62,7 @@ namespace DOM
         return aName;
     }
 
-    OUString SAL_CALL CNotation::getNodeValue() throw (RuntimeException)
+    OUString SAL_CALL CNotation::getNodeValue() throw (RuntimeException, std::exception)
     {
         return OUString();
     }

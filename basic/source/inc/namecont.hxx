@@ -98,53 +98,53 @@ public:
 
     // Methods XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL hasElements(  )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     // Methods XNameAccess
     virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
         throw(::com::sun::star::container::NoSuchElementException,
               ::com::sun::star::lang::WrappedTargetException,
-              ::com::sun::star::uno::RuntimeException);
+              ::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     // Methods XNameReplace
     virtual void SAL_CALL replaceByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement )
         throw(::com::sun::star::lang::IllegalArgumentException,
               ::com::sun::star::container::NoSuchElementException,
               ::com::sun::star::lang::WrappedTargetException,
-              ::com::sun::star::uno::RuntimeException);
+              ::com::sun::star::uno::RuntimeException, std::exception);
 
     // Methods XNameContainer
     virtual void SAL_CALL insertByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement )
         throw(::com::sun::star::lang::IllegalArgumentException,
               ::com::sun::star::container::ElementExistException,
               ::com::sun::star::lang::WrappedTargetException,
-              ::com::sun::star::uno::RuntimeException);
+              ::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL removeByName( const OUString& Name )
         throw(::com::sun::star::container::NoSuchElementException,
               ::com::sun::star::lang::WrappedTargetException,
-              ::com::sun::star::uno::RuntimeException);
+              ::com::sun::star::uno::RuntimeException, std::exception);
 
     // Methods XContainer
     virtual void SAL_CALL addContainerListener( const ::com::sun::star::uno::Reference<
         ::com::sun::star::container::XContainerListener >& xListener )
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL removeContainerListener( const ::com::sun::star::uno::Reference<
         ::com::sun::star::container::XContainerListener >& xListener )
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // Methods XChangesNotifier
     virtual void SAL_CALL addChangesListener( const ::com::sun::star::uno::Reference<
         ::com::sun::star::util::XChangesListener >& xListener )
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL removeChangesListener( const ::com::sun::star::uno::Reference<
         ::com::sun::star::util::XChangesListener >& xListener )
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
 };
 
 
@@ -386,145 +386,145 @@ public:
 
     // Methods XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL hasElements()
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     // Methods XNameAccess
     virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
         throw(::com::sun::star::container::NoSuchElementException,
               ::com::sun::star::lang::WrappedTargetException,
-              ::com::sun::star::uno::RuntimeException);
+              ::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames()
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     // Members XStorageBasedLibraryContainer
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > SAL_CALL getRootStorage() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setRootStorage( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rootstorage ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL storeLibrariesToStorage( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& RootStorage ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > SAL_CALL getRootStorage() throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setRootStorage( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rootstorage ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL storeLibrariesToStorage( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& RootStorage ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception);
 
     // Methods XModifiable (base of XPersistentLibraryContainer)
-    virtual ::sal_Bool SAL_CALL isModified(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setModified( ::sal_Bool bModified ) throw (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL isModified(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setModified( ::sal_Bool bModified ) throw (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL addModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL removeModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // Methods XPersistentLibraryContainer (base of XStorageBasedLibraryContainer)
-    virtual ::com::sun::star::uno::Any SAL_CALL getRootLocation() throw (::com::sun::star::uno::RuntimeException);
-    virtual OUString SAL_CALL getContainerLocationName() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL storeLibraries(  ) throw (::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getRootLocation() throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual OUString SAL_CALL getContainerLocationName() throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL storeLibraries(  ) throw (::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception);
 
     //Methods XLibraryContainer3
     virtual OUString SAL_CALL getOriginalLibraryLinkURL( const OUString& Name )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::uno::RuntimeException);
+               ::com::sun::star::uno::RuntimeException, std::exception);
 
     // Methods XLibraryContainer2 (base of XPersistentLibraryContainer)
     virtual sal_Bool SAL_CALL isLibraryLink( const OUString& Name )
         throw (::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::uno::RuntimeException);
+               ::com::sun::star::uno::RuntimeException, std::exception);
     virtual OUString SAL_CALL getLibraryLinkURL( const OUString& Name )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::uno::RuntimeException);
+               ::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL isLibraryReadOnly( const OUString& Name )
         throw (::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::uno::RuntimeException);
+               ::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setLibraryReadOnly( const OUString& Name, sal_Bool bReadOnly )
         throw (::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::uno::RuntimeException);
+               ::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL renameLibrary( const OUString& Name, const OUString& NewName )
         throw (::com::sun::star::container::NoSuchElementException,
                ::com::sun::star::container::ElementExistException,
-               ::com::sun::star::uno::RuntimeException);
+               ::com::sun::star::uno::RuntimeException, std::exception);
 
     // Methods XLibraryContainer (base of XLibraryContainer2)
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > SAL_CALL
         createLibrary( const OUString& Name )
             throw(::com::sun::star::lang::IllegalArgumentException,
                   ::com::sun::star::container::ElementExistException,
-                  ::com::sun::star::uno::RuntimeException);
+                  ::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL createLibraryLink
         ( const OUString& Name, const OUString& StorageURL, sal_Bool ReadOnly )
             throw(::com::sun::star::lang::IllegalArgumentException,
                   ::com::sun::star::container::ElementExistException,
-                  ::com::sun::star::uno::RuntimeException);
+                  ::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL removeLibrary( const OUString& Name )
         throw(::com::sun::star::container::NoSuchElementException,
               ::com::sun::star::lang::WrappedTargetException,
-              ::com::sun::star::uno::RuntimeException);
+              ::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL isLibraryLoaded( const OUString& Name )
         throw(::com::sun::star::container::NoSuchElementException,
-              ::com::sun::star::uno::RuntimeException);
+              ::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL loadLibrary( const OUString& Name )
         throw(::com::sun::star::container::NoSuchElementException,
               ::com::sun::star::lang::WrappedTargetException,
-              ::com::sun::star::uno::RuntimeException);
+              ::com::sun::star::uno::RuntimeException, std::exception);
 
     // Methods XInitialization
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence<
         ::com::sun::star::uno::Any >& aArguments )
             throw (::com::sun::star::uno::Exception,
-                   ::com::sun::star::uno::RuntimeException);
+                   ::com::sun::star::uno::RuntimeException, std::exception);
 
     // Methods XLibraryContainerPassword
     virtual sal_Bool SAL_CALL isLibraryPasswordProtected( const OUString& Name )
         throw (::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::uno::RuntimeException);
+               ::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL isLibraryPasswordVerified( const OUString& Name )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::uno::RuntimeException);
+               ::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL verifyLibraryPassword( const OUString& Name, const OUString& Password )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::uno::RuntimeException);
+               ::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL changeLibraryPassword( const OUString& Name,
         const OUString& OldPassword, const OUString& NewPassword )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::uno::RuntimeException);
+               ::com::sun::star::uno::RuntimeException, std::exception);
 
     // Methods XContainer
     virtual void SAL_CALL addContainerListener( const ::com::sun::star::uno::Reference<
         ::com::sun::star::container::XContainerListener >& xListener )
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL removeContainerListener( const ::com::sun::star::uno::Reference<
         ::com::sun::star::container::XContainerListener >& xListener )
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // Methods XLibraryContainerExport
     virtual void SAL_CALL exportLibrary( const OUString& Name, const OUString& URL,
         const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler )
             throw (::com::sun::star::uno::Exception,
                    ::com::sun::star::container::NoSuchElementException,
-                   ::com::sun::star::uno::RuntimeException);
+                   ::com::sun::star::uno::RuntimeException, std::exception);
 
     // Methods XServiceInfo
     virtual OUString SAL_CALL getImplementationName( )
-        throw (::com::sun::star::uno::RuntimeException) = 0;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) = 0;
     virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames( )
-        throw (::com::sun::star::uno::RuntimeException) = 0;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) = 0;
     // Methods XVBACompatibility
-    virtual ::sal_Bool SAL_CALL getVBACompatibilityMode() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setVBACompatibilityMode( ::sal_Bool _vbacompatmodeon ) throw (::com::sun::star::uno::RuntimeException);
-    virtual OUString SAL_CALL getProjectName() throw (::com::sun::star::uno::RuntimeException) { return msProjectName; }
-    virtual void SAL_CALL setProjectName( const OUString& _projectname ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL getVBACompatibilityMode() throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setVBACompatibilityMode( ::sal_Bool _vbacompatmodeon ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual OUString SAL_CALL getProjectName() throw (::com::sun::star::uno::RuntimeException, std::exception) { return msProjectName; }
+    virtual void SAL_CALL setProjectName( const OUString& _projectname ) throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Int32 SAL_CALL getRunningVBAScripts()
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL addVBAScriptListener(
         const ::com::sun::star::uno::Reference< ::com::sun::star::script::vba::XVBAScriptListener >& Listener )
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL removeVBAScriptListener(
         const ::com::sun::star::uno::Reference< ::com::sun::star::script::vba::XVBAScriptListener >& Listener )
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL broadcastVBAScriptEvent( sal_Int32 nIdentifier, const OUString& rModuleName )
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
 };
 
 
@@ -634,65 +634,65 @@ public:
     );
 
     // Methods XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType ) throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL acquire() throw() { OComponentHelper::acquire(); }
     virtual void SAL_CALL release() throw() { OComponentHelper::release(); }
 
     // Methods XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL hasElements(  )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     // Methods XNameAccess
     virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
         throw(::com::sun::star::container::NoSuchElementException,
               ::com::sun::star::lang::WrappedTargetException,
-              ::com::sun::star::uno::RuntimeException);
+              ::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     // Methods XNameReplace
     virtual void SAL_CALL replaceByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement )
         throw(::com::sun::star::lang::IllegalArgumentException,
               ::com::sun::star::container::NoSuchElementException,
               ::com::sun::star::lang::WrappedTargetException,
-              ::com::sun::star::uno::RuntimeException);
+              ::com::sun::star::uno::RuntimeException, std::exception);
 
     // Methods XNameContainer
     virtual void SAL_CALL insertByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement )
         throw(::com::sun::star::lang::IllegalArgumentException,
               ::com::sun::star::container::ElementExistException,
               ::com::sun::star::lang::WrappedTargetException,
-              ::com::sun::star::uno::RuntimeException);
+              ::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL removeByName( const OUString& Name )
         throw(::com::sun::star::container::NoSuchElementException,
               ::com::sun::star::lang::WrappedTargetException,
-              ::com::sun::star::uno::RuntimeException);
+              ::com::sun::star::uno::RuntimeException, std::exception);
 
     // XTypeProvider
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  )
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception );
     ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  )
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     // Methods XContainer
     virtual void SAL_CALL addContainerListener( const ::com::sun::star::uno::Reference<
         ::com::sun::star::container::XContainerListener >& xListener )
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL removeContainerListener( const ::com::sun::star::uno::Reference<
         ::com::sun::star::container::XContainerListener >& xListener )
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // Methods XChangesNotifier
     virtual void SAL_CALL addChangesListener( const ::com::sun::star::uno::Reference<
         ::com::sun::star::util::XChangesListener >& xListener )
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL removeChangesListener( const ::com::sun::star::uno::Reference<
         ::com::sun::star::util::XChangesListener >& xListener )
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 public:
     struct LibraryContainerAccess { friend class SfxLibraryContainer; private: LibraryContainerAccess() { } };

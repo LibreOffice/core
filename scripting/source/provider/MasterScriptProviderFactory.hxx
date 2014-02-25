@@ -55,20 +55,20 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw ( css::uno::RuntimeException );
+        throw ( css::uno::RuntimeException, std::exception );
 
     virtual sal_Bool SAL_CALL
         supportsService( OUString const & serviceName )
-            throw ( css::uno::RuntimeException );
+            throw ( css::uno::RuntimeException, std::exception );
 
     virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames()
-            throw ( css::uno::RuntimeException );
+            throw ( css::uno::RuntimeException, std::exception );
 
     // XScriptProviderFactory
     virtual css::uno::Reference< css::script::provider::XScriptProvider >
         SAL_CALL createScriptProvider( const css::uno::Any& context )
-            throw ( css::lang::IllegalArgumentException, css::uno::RuntimeException);
+            throw ( css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception);
 };
 
 

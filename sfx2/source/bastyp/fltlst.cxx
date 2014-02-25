@@ -54,14 +54,14 @@ class SfxRefreshListener : public ::cppu::WeakImplHelper1<com::sun::star::util::
 
         // util.XRefreshListener
         virtual void SAL_CALL refreshed( const ::com::sun::star::lang::EventObject& rEvent )
-            throw(com::sun::star::uno::RuntimeException)
+            throw(com::sun::star::uno::RuntimeException, std::exception)
         {
             m_pOwner->refreshed(rEvent);
         }
 
         // lang.XEventListener
         virtual void SAL_CALL disposing(const com::sun::star::lang::EventObject& rEvent)
-            throw(com::sun::star::uno::RuntimeException)
+            throw(com::sun::star::uno::RuntimeException, std::exception)
         {
             m_pOwner->disposing(rEvent);
         }

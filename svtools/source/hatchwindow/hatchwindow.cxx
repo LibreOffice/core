@@ -108,7 +108,7 @@ void VCLXHatchWindow::InplaceDeactivate()
 
 
 uno::Any SAL_CALL VCLXHatchWindow::queryInterface( const uno::Type & rType )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     // Attention:
     //    Don't use mutex or guard in this method!!! Is a method of XInterface.
@@ -137,7 +137,7 @@ void SAL_CALL VCLXHatchWindow::release()
 }
 
 uno::Sequence< uno::Type > SAL_CALL VCLXHatchWindow::getTypes()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     static ::cppu::OTypeCollection* pTypeCollection = NULL ;
 
@@ -159,7 +159,7 @@ uno::Sequence< uno::Type > SAL_CALL VCLXHatchWindow::getTypes()
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL VCLXHatchWindow::getImplementationId()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     static ::cppu::OImplementationId* pID = NULL ;
 
@@ -177,12 +177,12 @@ uno::Sequence< sal_Int8 > SAL_CALL VCLXHatchWindow::getImplementationId()
     return pID->getImplementationId() ;
 }
 
-::com::sun::star::awt::Size SAL_CALL VCLXHatchWindow::getHatchBorderSize() throw (::com::sun::star::uno::RuntimeException)
+::com::sun::star::awt::Size SAL_CALL VCLXHatchWindow::getHatchBorderSize() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return aHatchBorderSize;
 }
 
-void SAL_CALL VCLXHatchWindow::setHatchBorderSize( const ::com::sun::star::awt::Size& _hatchbordersize ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL VCLXHatchWindow::setHatchBorderSize( const ::com::sun::star::awt::Size& _hatchbordersize ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     if ( pHatchWindow )
     {
@@ -192,26 +192,26 @@ void SAL_CALL VCLXHatchWindow::setHatchBorderSize( const ::com::sun::star::awt::
 }
 
 void SAL_CALL VCLXHatchWindow::setController( const uno::Reference< embed::XHatchWindowController >& xController )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     m_xController = xController;
 }
 
 void SAL_CALL VCLXHatchWindow::dispose()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     pHatchWindow = 0;
     VCLXWindow::dispose();
 }
 
 void SAL_CALL VCLXHatchWindow::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     VCLXWindow::addEventListener( xListener );
 }
 
 void SAL_CALL VCLXHatchWindow::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     VCLXWindow::removeEventListener( xListener );
 }

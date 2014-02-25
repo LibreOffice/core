@@ -57,12 +57,12 @@ namespace pdfi
                                           ::com::sun::star::uno::XComponentContext >& xContext );
 
         // XFilter
-        virtual sal_Bool SAL_CALL filter( const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rFilterData ) throw(com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL cancel() throw();
+        virtual sal_Bool SAL_CALL filter( const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rFilterData ) throw(com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL cancel() throw(std::exception);
 
         // XImporter
         virtual void SAL_CALL setTargetDocument( const com::sun::star::uno::Reference< com::sun::star::lang::XComponent >& xDocument )
-            throw( com::sun::star::lang::IllegalArgumentException );
+            throw( com::sun::star::lang::IllegalArgumentException, std::exception );
 
     };
 
@@ -119,11 +119,11 @@ namespace pdfi
         // XImportFilter
         virtual sal_Bool SAL_CALL importer( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rSourceData,
                                             const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler >& rHdl,
-                                            const com::sun::star::uno::Sequence< OUString >& rUserData ) throw( com::sun::star::uno::RuntimeException );
+                                            const com::sun::star::uno::Sequence< OUString >& rUserData ) throw( com::sun::star::uno::RuntimeException, std::exception );
 
         // XImporter
         virtual void SAL_CALL setTargetDocument( const com::sun::star::uno::Reference< com::sun::star::lang::XComponent >& xDocument )
-            throw( com::sun::star::lang::IllegalArgumentException );
+            throw( com::sun::star::lang::IllegalArgumentException, std::exception );
     };
 }
 

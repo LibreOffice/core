@@ -38,7 +38,7 @@ public:
     virtual ~SwVbaListGallery();
 
     // Methods
-    virtual css::uno::Any SAL_CALL ListTemplates( const css::uno::Any& index ) throw ( css::uno::RuntimeException );
+    virtual css::uno::Any SAL_CALL ListTemplates( const css::uno::Any& index ) throw ( css::uno::RuntimeException, std::exception );
 
     // XHelperInterface
     virtual OUString getServiceImplName();

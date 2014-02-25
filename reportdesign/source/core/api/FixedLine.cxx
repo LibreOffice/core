@@ -188,7 +188,7 @@ OFixedLine::~OFixedLine()
 
 IMPLEMENT_FORWARD_REFCOUNT( OFixedLine, FixedLineBase )
 
-uno::Any SAL_CALL OFixedLine::queryInterface( const uno::Type& _rType ) throw (uno::RuntimeException)
+uno::Any SAL_CALL OFixedLine::queryInterface( const uno::Type& _rType ) throw (uno::RuntimeException, std::exception)
 {
     uno::Any aReturn = FixedLineBase::queryInterface(_rType);
     if ( !aReturn.hasValue() )
@@ -199,7 +199,7 @@ uno::Any SAL_CALL OFixedLine::queryInterface( const uno::Type& _rType ) throw (u
     return aReturn.hasValue() ? aReturn : (m_aProps.aComponent.m_xProxy.is() ? m_aProps.aComponent.m_xProxy->queryAggregation(_rType) : aReturn);
 }
 
-void SAL_CALL OFixedLine::dispose() throw(uno::RuntimeException)
+void SAL_CALL OFixedLine::dispose() throw(uno::RuntimeException, std::exception)
 {
     FixedLinePropertySet::dispose();
     cppu::WeakComponentImplHelperBase::dispose();
@@ -211,7 +211,7 @@ OUString OFixedLine::getImplementationName_Static(  ) throw(uno::RuntimeExceptio
 }
 
 
-OUString SAL_CALL OFixedLine::getImplementationName(  ) throw(uno::RuntimeException)
+OUString SAL_CALL OFixedLine::getImplementationName(  ) throw(uno::RuntimeException, std::exception)
 {
     return getImplementationName_Static();
 }
@@ -230,12 +230,12 @@ uno::Reference< uno::XInterface > OFixedLine::create(uno::Reference< uno::XCompo
 }
 
 
-uno::Sequence< OUString > SAL_CALL OFixedLine::getSupportedServiceNames(  ) throw(uno::RuntimeException)
+uno::Sequence< OUString > SAL_CALL OFixedLine::getSupportedServiceNames(  ) throw(uno::RuntimeException, std::exception)
 {
     return getSupportedServiceNames_Static();
 }
 
-sal_Bool SAL_CALL OFixedLine::supportsService(const OUString& ServiceName) throw( uno::RuntimeException )
+sal_Bool SAL_CALL OFixedLine::supportsService(const OUString& ServiceName) throw( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -244,114 +244,114 @@ sal_Bool SAL_CALL OFixedLine::supportsService(const OUString& ServiceName) throw
 REPORTCOMPONENT_IMPL3(OFixedLine,m_aProps.aComponent)
 REPORTCOMPONENT_NOMASTERDETAIL(OFixedLine)
 
-::sal_Int16  SAL_CALL OFixedLine::getControlBorder( ) throw (beans::UnknownPropertyException, uno::RuntimeException)
+::sal_Int16  SAL_CALL OFixedLine::getControlBorder( ) throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     throw beans::UnknownPropertyException();
 }
 
-void SAL_CALL OFixedLine::setControlBorder( ::sal_Int16 /*_border*/ ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
+void SAL_CALL OFixedLine::setControlBorder( ::sal_Int16 /*_border*/ ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     throw beans::UnknownPropertyException();
 }
 
-::sal_Int32 SAL_CALL OFixedLine::getControlBorderColor() throw (beans::UnknownPropertyException,uno::RuntimeException)
+::sal_Int32 SAL_CALL OFixedLine::getControlBorderColor() throw (beans::UnknownPropertyException,uno::RuntimeException, std::exception)
 {
     throw beans::UnknownPropertyException();
 }
 
-void SAL_CALL OFixedLine::setControlBorderColor( ::sal_Int32 /*_bordercolor*/ ) throw (beans::UnknownPropertyException,lang::IllegalArgumentException,uno::RuntimeException)
+void SAL_CALL OFixedLine::setControlBorderColor( ::sal_Int32 /*_bordercolor*/ ) throw (beans::UnknownPropertyException,lang::IllegalArgumentException,uno::RuntimeException, std::exception)
 {
     throw beans::UnknownPropertyException();
 }
 
-uno::Reference< beans::XPropertySetInfo > SAL_CALL OFixedLine::getPropertySetInfo(  ) throw(uno::RuntimeException)
+uno::Reference< beans::XPropertySetInfo > SAL_CALL OFixedLine::getPropertySetInfo(  ) throw(uno::RuntimeException, std::exception)
 {
     return FixedLinePropertySet::getPropertySetInfo();
 }
 
-void SAL_CALL OFixedLine::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OFixedLine::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     FixedLinePropertySet::setPropertyValue( aPropertyName, aValue );
 }
 
-uno::Any SAL_CALL OFixedLine::getPropertyValue( const OUString& PropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+uno::Any SAL_CALL OFixedLine::getPropertyValue( const OUString& PropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     return FixedLinePropertySet::getPropertyValue( PropertyName);
 }
 
-void SAL_CALL OFixedLine::addPropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OFixedLine::addPropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     FixedLinePropertySet::addPropertyChangeListener( aPropertyName, xListener );
 }
 
-void SAL_CALL OFixedLine::removePropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OFixedLine::removePropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     FixedLinePropertySet::removePropertyChangeListener( aPropertyName, aListener );
 }
 
-void SAL_CALL OFixedLine::addVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OFixedLine::addVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     FixedLinePropertySet::addVetoableChangeListener( PropertyName, aListener );
 }
 
-void SAL_CALL OFixedLine::removeVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OFixedLine::removeVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     FixedLinePropertySet::removeVetoableChangeListener( PropertyName, aListener );
 }
 
 // XReportControlModel
-OUString SAL_CALL OFixedLine::getDataField() throw (beans::UnknownPropertyException, uno::RuntimeException)
+OUString SAL_CALL OFixedLine::getDataField() throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     throw beans::UnknownPropertyException();
 }
 
-void SAL_CALL OFixedLine::setDataField( const OUString& /*_datafield*/ ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
+void SAL_CALL OFixedLine::setDataField( const OUString& /*_datafield*/ ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     throw beans::UnknownPropertyException();
 }
 
-::sal_Int32 SAL_CALL OFixedLine::getControlBackground() throw (beans::UnknownPropertyException, uno::RuntimeException)
+::sal_Int32 SAL_CALL OFixedLine::getControlBackground() throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     throw beans::UnknownPropertyException();
 }
 
-void SAL_CALL OFixedLine::setControlBackground( ::sal_Int32 /*_backgroundcolor*/ ) throw (uno::RuntimeException,beans::UnknownPropertyException)
+void SAL_CALL OFixedLine::setControlBackground( ::sal_Int32 /*_backgroundcolor*/ ) throw (uno::RuntimeException,beans::UnknownPropertyException, std::exception)
 {
     throw beans::UnknownPropertyException();
 }
 
-::sal_Bool SAL_CALL OFixedLine::getControlBackgroundTransparent() throw (beans::UnknownPropertyException, uno::RuntimeException)
+::sal_Bool SAL_CALL OFixedLine::getControlBackgroundTransparent() throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     throw beans::UnknownPropertyException();
 }
 
-void SAL_CALL OFixedLine::setControlBackgroundTransparent( ::sal_Bool /*_controlbackgroundtransparent*/ ) throw (beans::UnknownPropertyException, uno::RuntimeException)
+void SAL_CALL OFixedLine::setControlBackgroundTransparent( ::sal_Bool /*_controlbackgroundtransparent*/ ) throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     throw beans::UnknownPropertyException();
 }
 
-::sal_Bool SAL_CALL OFixedLine::getPrintWhenGroupChange() throw (beans::UnknownPropertyException, uno::RuntimeException)
+::sal_Bool SAL_CALL OFixedLine::getPrintWhenGroupChange() throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     throw beans::UnknownPropertyException();
 }
 
-void SAL_CALL OFixedLine::setPrintWhenGroupChange( ::sal_Bool /*_printwhengroupchange*/ ) throw (beans::UnknownPropertyException, uno::RuntimeException)
+void SAL_CALL OFixedLine::setPrintWhenGroupChange( ::sal_Bool /*_printwhengroupchange*/ ) throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     throw beans::UnknownPropertyException();
 }
 
-OUString SAL_CALL OFixedLine::getConditionalPrintExpression() throw (beans::UnknownPropertyException, uno::RuntimeException)
+OUString SAL_CALL OFixedLine::getConditionalPrintExpression() throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     throw beans::UnknownPropertyException();
 }
 
-void SAL_CALL OFixedLine::setConditionalPrintExpression( const OUString& /*_conditionalprintexpression*/ ) throw (beans::UnknownPropertyException, uno::RuntimeException)
+void SAL_CALL OFixedLine::setConditionalPrintExpression( const OUString& /*_conditionalprintexpression*/ ) throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     throw beans::UnknownPropertyException();
 }
 
 // XCloneable
-uno::Reference< util::XCloneable > SAL_CALL OFixedLine::createClone(  ) throw (uno::RuntimeException)
+uno::Reference< util::XCloneable > SAL_CALL OFixedLine::createClone(  ) throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< report::XReportComponent> xSource = this;
     uno::Reference< report::XFixedLine> xSet(cloneObject(xSource,m_aProps.aComponent.m_xFactory,SERVICE_FIXEDLINE),uno::UNO_QUERY_THROW);
@@ -361,156 +361,156 @@ uno::Reference< util::XCloneable > SAL_CALL OFixedLine::createClone(  ) throw (u
 
 // XFixedLine
 
-::sal_Int32 SAL_CALL OFixedLine::getOrientation() throw (beans::UnknownPropertyException,uno::RuntimeException)
+::sal_Int32 SAL_CALL OFixedLine::getOrientation() throw (beans::UnknownPropertyException,uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_nOrientation;
 }
 
-void SAL_CALL OFixedLine::setOrientation( ::sal_Int32 _orientation ) throw (beans::UnknownPropertyException,uno::RuntimeException)
+void SAL_CALL OFixedLine::setOrientation( ::sal_Int32 _orientation ) throw (beans::UnknownPropertyException,uno::RuntimeException, std::exception)
 {
     set(PROPERTY_ORIENTATION,_orientation,m_nOrientation);
 }
 
-drawing::LineStyle SAL_CALL OFixedLine::getLineStyle() throw (uno::RuntimeException)
+drawing::LineStyle SAL_CALL OFixedLine::getLineStyle() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_LineStyle;
 }
 
-void SAL_CALL OFixedLine::setLineStyle( drawing::LineStyle _linestyle ) throw (uno::RuntimeException)
+void SAL_CALL OFixedLine::setLineStyle( drawing::LineStyle _linestyle ) throw (uno::RuntimeException, std::exception)
 {
     set(PROPERTY_LINESTYLE,_linestyle,m_LineStyle);
 }
 
-drawing::LineDash SAL_CALL OFixedLine::getLineDash() throw (uno::RuntimeException)
+drawing::LineDash SAL_CALL OFixedLine::getLineDash() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_LineDash;
 }
 
-void SAL_CALL OFixedLine::setLineDash( const drawing::LineDash& _linedash ) throw (uno::RuntimeException)
+void SAL_CALL OFixedLine::setLineDash( const drawing::LineDash& _linedash ) throw (uno::RuntimeException, std::exception)
 {
     set(PROPERTY_LINEDASH,_linedash,m_LineDash);
 }
 
-::sal_Int32 SAL_CALL OFixedLine::getLineColor() throw (uno::RuntimeException)
+::sal_Int32 SAL_CALL OFixedLine::getLineColor() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_LineColor;
 }
 
-void SAL_CALL OFixedLine::setLineColor( ::sal_Int32 _linecolor ) throw (uno::RuntimeException)
+void SAL_CALL OFixedLine::setLineColor( ::sal_Int32 _linecolor ) throw (uno::RuntimeException, std::exception)
 {
     set(PROPERTY_LINECOLOR,_linecolor,m_LineColor);
 }
 
-::sal_Int16 SAL_CALL OFixedLine::getLineTransparence() throw (uno::RuntimeException)
+::sal_Int16 SAL_CALL OFixedLine::getLineTransparence() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_LineTransparence;
 }
 
-void SAL_CALL OFixedLine::setLineTransparence( ::sal_Int16 _linetransparence ) throw (uno::RuntimeException)
+void SAL_CALL OFixedLine::setLineTransparence( ::sal_Int16 _linetransparence ) throw (uno::RuntimeException, std::exception)
 {
     set(PROPERTY_LINETRANSPARENCE,_linetransparence,m_LineTransparence);
 }
 
-::sal_Int32 SAL_CALL OFixedLine::getLineWidth() throw (uno::RuntimeException)
+::sal_Int32 SAL_CALL OFixedLine::getLineWidth() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_LineWidth;
 }
 
-void SAL_CALL OFixedLine::setLineWidth( ::sal_Int32 _linewidth ) throw (uno::RuntimeException)
+void SAL_CALL OFixedLine::setLineWidth( ::sal_Int32 _linewidth ) throw (uno::RuntimeException, std::exception)
 {
     set(PROPERTY_LINEWIDTH,_linewidth,m_LineWidth);
 }
 
 
 // XChild
-uno::Reference< uno::XInterface > SAL_CALL OFixedLine::getParent(  ) throw (uno::RuntimeException)
+uno::Reference< uno::XInterface > SAL_CALL OFixedLine::getParent(  ) throw (uno::RuntimeException, std::exception)
 {
     return OShapeHelper::getParent(this);
 }
 
-void SAL_CALL OFixedLine::setParent( const uno::Reference< uno::XInterface >& Parent ) throw (lang::NoSupportException, uno::RuntimeException)
+void SAL_CALL OFixedLine::setParent( const uno::Reference< uno::XInterface >& Parent ) throw (lang::NoSupportException, uno::RuntimeException, std::exception)
 {
     OShapeHelper::setParent(Parent,this);
 }
 
-uno::Reference< report::XFormatCondition > SAL_CALL OFixedLine::createFormatCondition(  ) throw (uno::Exception, uno::RuntimeException)
+uno::Reference< report::XFormatCondition > SAL_CALL OFixedLine::createFormatCondition(  ) throw (uno::Exception, uno::RuntimeException, std::exception)
 {
     return new OFormatCondition(m_aProps.aComponent.m_xContext);
 }
 
 // XContainer
-void SAL_CALL OFixedLine::addContainerListener( const uno::Reference< container::XContainerListener >& xListener ) throw (uno::RuntimeException)
+void SAL_CALL OFixedLine::addContainerListener( const uno::Reference< container::XContainerListener >& xListener ) throw (uno::RuntimeException, std::exception)
 {
     m_aProps.addContainerListener(xListener);
 }
 
-void SAL_CALL OFixedLine::removeContainerListener( const uno::Reference< container::XContainerListener >& xListener ) throw (uno::RuntimeException)
+void SAL_CALL OFixedLine::removeContainerListener( const uno::Reference< container::XContainerListener >& xListener ) throw (uno::RuntimeException, std::exception)
 {
     m_aProps.removeContainerListener(xListener);
 }
 
 // XElementAccess
-uno::Type SAL_CALL OFixedLine::getElementType(  ) throw (uno::RuntimeException)
+uno::Type SAL_CALL OFixedLine::getElementType(  ) throw (uno::RuntimeException, std::exception)
 {
     return ::getCppuType(static_cast< uno::Reference<report::XFormatCondition>*>(NULL));
 }
 
-::sal_Bool SAL_CALL OFixedLine::hasElements(  ) throw (uno::RuntimeException)
+::sal_Bool SAL_CALL OFixedLine::hasElements(  ) throw (uno::RuntimeException, std::exception)
 {
     return m_aProps.hasElements();
 }
 
 // XIndexContainer
-void SAL_CALL OFixedLine::insertByIndex( ::sal_Int32 Index, const uno::Any& Element ) throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OFixedLine::insertByIndex( ::sal_Int32 Index, const uno::Any& Element ) throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     m_aProps.insertByIndex(Index,Element);
 }
 
-void SAL_CALL OFixedLine::removeByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OFixedLine::removeByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     m_aProps.removeByIndex(Index);
 }
 
 // XIndexReplace
-void SAL_CALL OFixedLine::replaceByIndex( ::sal_Int32 Index, const uno::Any& Element ) throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OFixedLine::replaceByIndex( ::sal_Int32 Index, const uno::Any& Element ) throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     m_aProps.replaceByIndex(Index,Element);
 }
 
 // XIndexAccess
-::sal_Int32 SAL_CALL OFixedLine::getCount(  ) throw (uno::RuntimeException)
+::sal_Int32 SAL_CALL OFixedLine::getCount(  ) throw (uno::RuntimeException, std::exception)
 {
     return m_aProps.getCount();
 }
 
-uno::Any SAL_CALL OFixedLine::getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
+uno::Any SAL_CALL OFixedLine::getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     return m_aProps.getByIndex( Index );
 }
 
 // XShape
-awt::Point SAL_CALL OFixedLine::getPosition(  ) throw (uno::RuntimeException)
+awt::Point SAL_CALL OFixedLine::getPosition(  ) throw (uno::RuntimeException, std::exception)
 {
     return OShapeHelper::getPosition(this);
 }
 
-void SAL_CALL OFixedLine::setPosition( const awt::Point& aPosition ) throw (uno::RuntimeException)
+void SAL_CALL OFixedLine::setPosition( const awt::Point& aPosition ) throw (uno::RuntimeException, std::exception)
 {
     OShapeHelper::setPosition(aPosition,this);
 }
 
-awt::Size SAL_CALL OFixedLine::getSize(  ) throw (uno::RuntimeException)
+awt::Size SAL_CALL OFixedLine::getSize(  ) throw (uno::RuntimeException, std::exception)
 {
     return OShapeHelper::getSize(this);
 }
 
-void SAL_CALL OFixedLine::setSize( const awt::Size& aSize ) throw (beans::PropertyVetoException, uno::RuntimeException)
+void SAL_CALL OFixedLine::setSize( const awt::Size& aSize ) throw (beans::PropertyVetoException, uno::RuntimeException, std::exception)
 {
     const char hundredthmmC[] = "0\xe2\x80\x89\xC2\xB5""m"; // in UTF-8: 0, thin space, µ (micro), m (meter)
     const OUString hundredthmm(hundredthmmC, sizeof(hundredthmmC)-1, RTL_TEXTENCODING_UTF8);
@@ -522,7 +522,7 @@ void SAL_CALL OFixedLine::setSize( const awt::Size& aSize ) throw (beans::Proper
 }
 
 // XShapeDescriptor
-OUString SAL_CALL OFixedLine::getShapeType(  ) throw (uno::RuntimeException)
+OUString SAL_CALL OFixedLine::getShapeType(  ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     if ( m_aProps.aComponent.m_xShape.is() )
@@ -530,38 +530,38 @@ OUString SAL_CALL OFixedLine::getShapeType(  ) throw (uno::RuntimeException)
     return OUString("com.sun.star.drawing.ControlShape");
 }
 
-OUString SAL_CALL OFixedLine::getHyperLinkURL() throw (uno::RuntimeException, beans::UnknownPropertyException)
+OUString SAL_CALL OFixedLine::getHyperLinkURL() throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)
 {
     throw beans::UnknownPropertyException();
 }
-void SAL_CALL OFixedLine::setHyperLinkURL(const OUString & /*the_value*/) throw (uno::RuntimeException, beans::UnknownPropertyException)
+void SAL_CALL OFixedLine::setHyperLinkURL(const OUString & /*the_value*/) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)
 {
     throw beans::UnknownPropertyException();
 }
-OUString SAL_CALL OFixedLine::getHyperLinkTarget() throw (uno::RuntimeException, beans::UnknownPropertyException)
+OUString SAL_CALL OFixedLine::getHyperLinkTarget() throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)
 {
     throw beans::UnknownPropertyException();
 }
-void SAL_CALL OFixedLine::setHyperLinkTarget(const OUString & /*the_value*/) throw (uno::RuntimeException, beans::UnknownPropertyException)
+void SAL_CALL OFixedLine::setHyperLinkTarget(const OUString & /*the_value*/) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)
 {
     throw beans::UnknownPropertyException();
 }
-OUString SAL_CALL OFixedLine::getHyperLinkName() throw (uno::RuntimeException, beans::UnknownPropertyException)
+OUString SAL_CALL OFixedLine::getHyperLinkName() throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)
 {
     throw beans::UnknownPropertyException();
 }
-void SAL_CALL OFixedLine::setHyperLinkName(const OUString & /*the_value*/) throw (uno::RuntimeException, beans::UnknownPropertyException)
+void SAL_CALL OFixedLine::setHyperLinkName(const OUString & /*the_value*/) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)
 {
     throw beans::UnknownPropertyException();
 }
 
 NO_REPORTCONTROLFORMAT_IMPL(OFixedLine)
 
-::sal_Bool SAL_CALL OFixedLine::getPrintRepeatedValues() throw (beans::UnknownPropertyException, uno::RuntimeException)
+::sal_Bool SAL_CALL OFixedLine::getPrintRepeatedValues() throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     throw beans::UnknownPropertyException();
 }
-void SAL_CALL OFixedLine::setPrintRepeatedValues( ::sal_Bool /*_printrepeatedvalues*/ ) throw (beans::UnknownPropertyException, uno::RuntimeException)
+void SAL_CALL OFixedLine::setPrintRepeatedValues( ::sal_Bool /*_printrepeatedvalues*/ ) throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     throw beans::UnknownPropertyException();
 }

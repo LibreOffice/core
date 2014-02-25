@@ -43,10 +43,10 @@ public:
 
     // ::com::sun::star::lang::XServiceInfo
     IMPLEMENTATION_NAME(ONumericModel);
-    virtual StringSequence SAL_CALL getSupportedServiceNames() throw();
+    virtual StringSequence SAL_CALL getSupportedServiceNames() throw(std::exception);
 
     // ::com::sun::star::io::XPersistObject
-    virtual OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException, std::exception);
 
     // OControlModel's property handling
     virtual void describeFixedProperties(
@@ -80,7 +80,7 @@ public:
 
     // ::com::sun::star::lang::XServiceInfo
     IMPLEMENTATION_NAME(ONumericControl);
-    virtual StringSequence SAL_CALL getSupportedServiceNames() throw();
+    virtual StringSequence SAL_CALL getSupportedServiceNames() throw(std::exception);
 };
 
 //.........................................................................

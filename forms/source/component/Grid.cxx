@@ -120,7 +120,7 @@ OGridControlModel::~OGridControlModel()
 }
 
 // XCloneable
-Reference< XCloneable > SAL_CALL OGridControlModel::createClone( ) throw (RuntimeException)
+Reference< XCloneable > SAL_CALL OGridControlModel::createClone( ) throw (RuntimeException, std::exception)
 {
     OGridControlModel* pClone = new OGridControlModel( this, getContext() );
     osl_atomic_increment( &pClone->m_refCount );
@@ -164,7 +164,7 @@ void OGridControlModel::cloneColumns( const OGridControlModel* _pOriginalContain
 }
 
 // XServiceInfo
-StringSequence OGridControlModel::getSupportedServiceNames() throw(RuntimeException)
+StringSequence OGridControlModel::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     StringSequence aSupported = OControlModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
@@ -172,7 +172,7 @@ StringSequence OGridControlModel::getSupportedServiceNames() throw(RuntimeExcept
     aSupported[aSupported.getLength()-1] = FRM_SUN_COMPONENT_GRIDCONTROL;
     return aSupported;
 }
-Any SAL_CALL OGridControlModel::queryAggregation( const Type& _rType ) throw (RuntimeException)
+Any SAL_CALL OGridControlModel::queryAggregation( const Type& _rType ) throw (RuntimeException, std::exception)
 {
     Any aReturn = OGridControlModel_BASE::queryInterface(_rType);
     if ( !aReturn.hasValue() )
@@ -189,36 +189,36 @@ Any SAL_CALL OGridControlModel::queryAggregation( const Type& _rType ) throw (Ru
 }
 
 // XSQLErrorListener
-void SAL_CALL OGridControlModel::errorOccured( const SQLErrorEvent& _rEvent ) throw (RuntimeException)
+void SAL_CALL OGridControlModel::errorOccured( const SQLErrorEvent& _rEvent ) throw (RuntimeException, std::exception)
 {
     // forward the errors which happened to my columns to my own listeners
     onError( _rEvent );
 }
 
 // XRowSetSupplier
-Reference< XRowSet > SAL_CALL OGridControlModel::getRowSet(  ) throw (RuntimeException)
+Reference< XRowSet > SAL_CALL OGridControlModel::getRowSet(  ) throw (RuntimeException, std::exception)
 {
     return Reference< XRowSet >( getParent(), UNO_QUERY );
 }
 
-void SAL_CALL OGridControlModel::setRowSet( const Reference< XRowSet >& /*_rxDataSource*/ ) throw (RuntimeException)
+void SAL_CALL OGridControlModel::setRowSet( const Reference< XRowSet >& /*_rxDataSource*/ ) throw (RuntimeException, std::exception)
 {
     OSL_FAIL( "OGridControlModel::setRowSet: not supported!" );
 }
 
-void SAL_CALL OGridControlModel::addRowSetChangeListener( const Reference< XRowSetChangeListener >& i_Listener ) throw (RuntimeException)
+void SAL_CALL OGridControlModel::addRowSetChangeListener( const Reference< XRowSetChangeListener >& i_Listener ) throw (RuntimeException, std::exception)
 {
     if ( i_Listener.is() )
         m_aRowSetChangeListeners.addInterface( i_Listener );
 }
 
-void SAL_CALL OGridControlModel::removeRowSetChangeListener( const Reference< XRowSetChangeListener >& i_Listener ) throw (RuntimeException)
+void SAL_CALL OGridControlModel::removeRowSetChangeListener( const Reference< XRowSetChangeListener >& i_Listener ) throw (RuntimeException, std::exception)
 {
     m_aRowSetChangeListeners.removeInterface( i_Listener );
 }
 
 // XChild
-void SAL_CALL OGridControlModel::setParent( const InterfaceRef& i_Parent ) throw(NoSupportException, RuntimeException)
+void SAL_CALL OGridControlModel::setParent( const InterfaceRef& i_Parent ) throw(NoSupportException, RuntimeException, std::exception)
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
     if ( i_Parent == getParent() )
@@ -228,7 +228,7 @@ void SAL_CALL OGridControlModel::setParent( const InterfaceRef& i_Parent ) throw
     aGuard.clear();
     m_aRowSetChangeListeners.notifyEach( &XRowSetChangeListener::onRowSetChanged, aEvent );
 }
-Sequence< Type > SAL_CALL OGridControlModel::getTypes(  ) throw(RuntimeException)
+Sequence< Type > SAL_CALL OGridControlModel::getTypes(  ) throw(RuntimeException, std::exception)
 {
     return concatSequences(
         concatSequences(
@@ -254,14 +254,14 @@ void OGridControlModel::disposing()
 }
 
 // XEventListener
-void OGridControlModel::disposing(const EventObject& _rEvent) throw( RuntimeException )
+void OGridControlModel::disposing(const EventObject& _rEvent) throw( RuntimeException, std::exception )
 {
     OControlModel::disposing( _rEvent );
     OInterfaceContainer::disposing( _rEvent );
 }
 
 // XSelectionSupplier
-sal_Bool SAL_CALL OGridControlModel::select(const Any& rElement) throw(IllegalArgumentException, RuntimeException)
+sal_Bool SAL_CALL OGridControlModel::select(const Any& rElement) throw(IllegalArgumentException, RuntimeException, std::exception)
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
     Reference<XPropertySet> xSel;
@@ -291,23 +291,23 @@ sal_Bool SAL_CALL OGridControlModel::select(const Any& rElement) throw(IllegalAr
     }
     return sal_False;
 }
-Any SAL_CALL OGridControlModel::getSelection() throw(RuntimeException)
+Any SAL_CALL OGridControlModel::getSelection() throw(RuntimeException, std::exception)
 {
     return makeAny(m_xSelection);
 }
 
-void OGridControlModel::addSelectionChangeListener(const Reference< XSelectionChangeListener >& _rxListener) throw( RuntimeException )
+void OGridControlModel::addSelectionChangeListener(const Reference< XSelectionChangeListener >& _rxListener) throw( RuntimeException, std::exception )
 {
     m_aSelectListeners.addInterface(_rxListener);
 }
 
-void OGridControlModel::removeSelectionChangeListener(const Reference< XSelectionChangeListener >& _rxListener) throw( RuntimeException )
+void OGridControlModel::removeSelectionChangeListener(const Reference< XSelectionChangeListener >& _rxListener) throw( RuntimeException, std::exception )
 {
     m_aSelectListeners.removeInterface(_rxListener);
 }
 
 // XGridColumnFactory
-Reference<XPropertySet> SAL_CALL OGridControlModel::createColumn(const OUString& ColumnType) throw ( :: com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+Reference<XPropertySet> SAL_CALL OGridControlModel::createColumn(const OUString& ColumnType) throw ( :: com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
     const Sequence< OUString >& rColumnTypes = frm::getColumnTypes();
@@ -334,13 +334,13 @@ Reference<XPropertySet>  OGridControlModel::createColumn(sal_Int32 nTypeId) cons
     }
     return xReturn;
 }
-StringSequence SAL_CALL OGridControlModel::getColumnTypes() throw ( ::com::sun::star::uno::RuntimeException)
+StringSequence SAL_CALL OGridControlModel::getColumnTypes() throw ( ::com::sun::star::uno::RuntimeException, std::exception)
 {
     return frm::getColumnTypes();
 }
 
 // XReset
-void SAL_CALL OGridControlModel::reset() throw ( ::com::sun::star::uno::RuntimeException)
+void SAL_CALL OGridControlModel::reset() throw ( ::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::cppu::OInterfaceIteratorHelper aIter(m_aResetListeners);
     EventObject aEvt(static_cast<XWeak*>(this));
@@ -353,11 +353,11 @@ void SAL_CALL OGridControlModel::reset() throw ( ::com::sun::star::uno::RuntimeE
         m_aResetListeners.notifyEach( &XResetListener::resetted, aEvt );
     }
 }
-void SAL_CALL OGridControlModel::addResetListener(const Reference<XResetListener>& _rxListener) throw ( ::com::sun::star::uno::RuntimeException)
+void SAL_CALL OGridControlModel::addResetListener(const Reference<XResetListener>& _rxListener) throw ( ::com::sun::star::uno::RuntimeException, std::exception)
 {
     m_aResetListeners.addInterface(_rxListener);
 }
-void SAL_CALL OGridControlModel::removeResetListener(const Reference<XResetListener>& _rxListener) throw ( ::com::sun::star::uno::RuntimeException)
+void SAL_CALL OGridControlModel::removeResetListener(const Reference<XResetListener>& _rxListener) throw ( ::com::sun::star::uno::RuntimeException, std::exception)
 {
     m_aResetListeners.removeInterface(_rxListener);
 }
@@ -568,7 +568,7 @@ sal_Bool OGridControlModel::convertFastPropertyValue( Any& rConvertedValue, Any&
     }
     return bModified;
 }
-void OGridControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw ( ::com::sun::star::uno::Exception)
+void OGridControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw ( ::com::sun::star::uno::Exception, std::exception)
 {
     switch (nHandle)
     {
@@ -760,12 +760,12 @@ void OGridControlModel::approveNewElement( const Reference< XPropertySet >& _rxO
 }
 
 // XPersistObject
-OUString SAL_CALL OGridControlModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL OGridControlModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException, std::exception)
 {
     return OUString(FRM_COMPONENT_GRID);  // old (non-sun) name for compatibility!
 }
 
-void OGridControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
+void OGridControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     OControlModel::write(_rxOutStream);
     Reference<XMarkableStream>  xMark(_rxOutStream, UNO_QUERY);
@@ -858,7 +858,7 @@ void OGridControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream
         _rxOutStream->writeLong(getINT32(m_aBackgroundColor));
 }
 
-void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
+void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
     OControlModel::read(_rxInStream);

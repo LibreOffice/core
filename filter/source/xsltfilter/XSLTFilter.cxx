@@ -135,32 +135,32 @@ namespace XSLT
 
         // XStreamListener
         virtual void SAL_CALL
-        error(const Any& a) throw (RuntimeException);
+        error(const Any& a) throw (RuntimeException, std::exception);
         virtual void SAL_CALL
-        closed() throw (RuntimeException);
+        closed() throw (RuntimeException, std::exception);
         virtual void SAL_CALL
-        terminated() throw (RuntimeException);
+        terminated() throw (RuntimeException, std::exception);
         virtual void SAL_CALL
-        started() throw (RuntimeException);
+        started() throw (RuntimeException, std::exception);
         virtual void SAL_CALL
-        disposing(const EventObject& e) throw (RuntimeException);
+        disposing(const EventObject& e) throw (RuntimeException, std::exception);
 
         // XImportFilter
         virtual sal_Bool SAL_CALL
         importer(const Sequence<PropertyValue>& aSourceData, const css::uno::Reference<
                 XDocumentHandler>& xHandler,
-                const Sequence<OUString>& msUserData) throw (RuntimeException);
+                const Sequence<OUString>& msUserData) throw (RuntimeException, std::exception);
 
         // XExportFilter
         virtual sal_Bool SAL_CALL
         exporter(const Sequence<PropertyValue>& aSourceData, const Sequence<
-                OUString>& msUserData) throw (RuntimeException);
+                OUString>& msUserData) throw (RuntimeException, std::exception);
 
         // XDocumentHandler
         virtual void SAL_CALL
-        startDocument() throw (SAXException, RuntimeException);
+        startDocument() throw (SAXException, RuntimeException, std::exception);
         virtual void SAL_CALL
-        endDocument() throw (SAXException, RuntimeException);
+        endDocument() throw (SAXException, RuntimeException, std::exception);
     };
 
     XSLTFilter::XSLTFilter(const css::uno::Reference<XComponentContext> &r):
@@ -175,7 +175,7 @@ namespace XSLT
     }
 
     void
-    XSLTFilter::disposing(const EventObject&) throw (RuntimeException)
+    XSLTFilter::disposing(const EventObject&) throw (RuntimeException, std::exception)
     {
     }
 
@@ -234,12 +234,12 @@ namespace XSLT
     }
 
     void
-    XSLTFilter::started() throw (RuntimeException)
+    XSLTFilter::started() throw (RuntimeException, std::exception)
     {
         osl_resetCondition(m_cTransformed);
     }
     void
-    XSLTFilter::error(const Any& a) throw (RuntimeException)
+    XSLTFilter::error(const Any& a) throw (RuntimeException, std::exception)
     {
         Exception e;
         if (a >>= e)
@@ -250,12 +250,12 @@ namespace XSLT
         osl_setCondition(m_cTransformed);
     }
     void
-    XSLTFilter::closed() throw (RuntimeException)
+    XSLTFilter::closed() throw (RuntimeException, std::exception)
     {
         osl_setCondition(m_cTransformed);
     }
     void
-    XSLTFilter::terminated() throw (RuntimeException)
+    XSLTFilter::terminated() throw (RuntimeException, std::exception)
     {
         m_bTerminated = sal_True;
         osl_setCondition(m_cTransformed);
@@ -279,7 +279,7 @@ namespace XSLT
     sal_Bool
     XSLTFilter::importer(const Sequence<PropertyValue>& aSourceData,
             const css::uno::Reference<XDocumentHandler>& xHandler, const Sequence<
-                    OUString>& msUserData) throw (RuntimeException)
+                    OUString>& msUserData) throw (RuntimeException, std::exception)
     {
         if (msUserData.getLength() < 5)
             return sal_False;
@@ -420,7 +420,7 @@ namespace XSLT
 
     sal_Bool
     XSLTFilter::exporter(const Sequence<PropertyValue>& aSourceData,
-            const Sequence<OUString>& msUserData) throw (RuntimeException)
+            const Sequence<OUString>& msUserData) throw (RuntimeException, std::exception)
     {
         if (msUserData.getLength() < 6)
             return sal_False;
@@ -520,14 +520,14 @@ namespace XSLT
     // events to the XML writer that we created upon the output stream
     // that was provided by the XMLFilterAdapter
     void
-    XSLTFilter::startDocument() throw (SAXException, RuntimeException)
+    XSLTFilter::startDocument() throw (SAXException, RuntimeException, std::exception)
     {
         ExtendedDocumentHandlerAdapter::startDocument();
         m_tcontrol->start();
     }
 
     void
-    XSLTFilter::endDocument() throw (SAXException, RuntimeException)
+    XSLTFilter::endDocument() throw (SAXException, RuntimeException, std::exception)
     {
         ExtendedDocumentHandlerAdapter::endDocument();
         // wait for the transformer to finish

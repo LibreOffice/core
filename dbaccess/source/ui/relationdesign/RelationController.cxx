@@ -91,7 +91,7 @@ using namespace ::dbaui;
 using namespace ::comphelper;
 using namespace ::osl;
 
-OUString SAL_CALL ORelationController::getImplementationName() throw( RuntimeException )
+OUString SAL_CALL ORelationController::getImplementationName() throw( RuntimeException, std::exception )
 {
     return getImplementationName_Static();
 }
@@ -108,7 +108,7 @@ Sequence< OUString> ORelationController::getSupportedServiceNames_Static(void) t
     return aSupported;
 }
 
-Sequence< OUString> SAL_CALL ORelationController::getSupportedServiceNames() throw(RuntimeException)
+Sequence< OUString> SAL_CALL ORelationController::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     return getSupportedServiceNames_Static();
 }

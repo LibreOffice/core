@@ -179,9 +179,9 @@ namespace svx
         ~FmFocusListenerAdapter();
 
     protected:
-        virtual void SAL_CALL focusGained( const FocusEvent& e ) throw (RuntimeException);
-        virtual void SAL_CALL focusLost( const FocusEvent& e ) throw (RuntimeException);
-        virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException);
+        virtual void SAL_CALL focusGained( const FocusEvent& e ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL focusLost( const FocusEvent& e ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException, std::exception);
     };
 
 
@@ -229,21 +229,21 @@ namespace svx
     }
 
 
-    void SAL_CALL FmFocusListenerAdapter::focusGained( const FocusEvent& e ) throw (RuntimeException)
+    void SAL_CALL FmFocusListenerAdapter::focusGained( const FocusEvent& e ) throw (RuntimeException, std::exception)
     {
         if ( m_pObserver )
             m_pObserver->focusGained( e );
     }
 
 
-    void SAL_CALL FmFocusListenerAdapter::focusLost( const FocusEvent& e ) throw (RuntimeException)
+    void SAL_CALL FmFocusListenerAdapter::focusLost( const FocusEvent& e ) throw (RuntimeException, std::exception)
     {
         if ( m_pObserver )
             m_pObserver->focusLost( e );
     }
 
 
-    void SAL_CALL FmFocusListenerAdapter::disposing( const EventObject& Source ) throw (RuntimeException)
+    void SAL_CALL FmFocusListenerAdapter::disposing( const EventObject& Source ) throw (RuntimeException, std::exception)
     {
         (void)Source;
         DBG_ASSERT( Source.Source == m_xWindow, "FmFocusListenerAdapter::disposing: where did this come from?" );
@@ -271,11 +271,11 @@ namespace svx
         ~FmMouseListenerAdapter();
 
     protected:
-        virtual void SAL_CALL mousePressed( const awt::MouseEvent& e ) throw (RuntimeException);
-        virtual void SAL_CALL mouseReleased( const awt::MouseEvent& e ) throw (RuntimeException);
-        virtual void SAL_CALL mouseEntered( const awt::MouseEvent& e ) throw (RuntimeException);
-        virtual void SAL_CALL mouseExited( const awt::MouseEvent& e ) throw (RuntimeException);
-        virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException);
+        virtual void SAL_CALL mousePressed( const awt::MouseEvent& e ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL mouseReleased( const awt::MouseEvent& e ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL mouseEntered( const awt::MouseEvent& e ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL mouseExited( const awt::MouseEvent& e ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException, std::exception);
     };
 
 
@@ -326,7 +326,7 @@ namespace svx
     }
 
 
-    void SAL_CALL FmMouseListenerAdapter::mousePressed( const awt::MouseEvent& _rEvent ) throw (::com::sun::star::uno::RuntimeException)
+    void SAL_CALL FmMouseListenerAdapter::mousePressed( const awt::MouseEvent& _rEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
         // is this a request for a context menu?
@@ -338,25 +338,25 @@ namespace svx
     }
 
 
-    void SAL_CALL FmMouseListenerAdapter::mouseReleased( const awt::MouseEvent& /*e*/ ) throw (::com::sun::star::uno::RuntimeException)
+    void SAL_CALL FmMouseListenerAdapter::mouseReleased( const awt::MouseEvent& /*e*/ ) throw (::com::sun::star::uno::RuntimeException, std::exception)
     {
         // not interested in
     }
 
 
-    void SAL_CALL FmMouseListenerAdapter::mouseEntered( const awt::MouseEvent& /*e*/ ) throw (::com::sun::star::uno::RuntimeException)
+    void SAL_CALL FmMouseListenerAdapter::mouseEntered( const awt::MouseEvent& /*e*/ ) throw (::com::sun::star::uno::RuntimeException, std::exception)
     {
         // not interested in
     }
 
 
-    void SAL_CALL FmMouseListenerAdapter::mouseExited( const awt::MouseEvent& /*e*/ ) throw (::com::sun::star::uno::RuntimeException)
+    void SAL_CALL FmMouseListenerAdapter::mouseExited( const awt::MouseEvent& /*e*/ ) throw (::com::sun::star::uno::RuntimeException, std::exception)
     {
         // not interested in
     }
 
 
-    void SAL_CALL FmMouseListenerAdapter::disposing( const EventObject& Source ) throw (RuntimeException)
+    void SAL_CALL FmMouseListenerAdapter::disposing( const EventObject& Source ) throw (RuntimeException, std::exception)
     {
         (void)Source;
         DBG_ASSERT( Source.Source == m_xWindow, "FmMouseListenerAdapter::disposing: where did this come from?" );

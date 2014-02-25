@@ -91,7 +91,7 @@ sal_Bool SAL_CALL ScAccessibleCellBase::isVisible()
 }
 
 sal_Int32 SAL_CALL ScAccessibleCellBase::getForeground()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -131,7 +131,7 @@ sal_Int32 SAL_CALL ScAccessibleCellBase::getForeground()
 }
 
 sal_Int32 SAL_CALL ScAccessibleCellBase::getBackground()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -175,7 +175,7 @@ sal_Int32 SAL_CALL ScAccessibleCellBase::getBackground()
     //=====  XInterface  =====================================================
 
 uno::Any SAL_CALL ScAccessibleCellBase::queryInterface( uno::Type const & rType )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     uno::Any aAny (ScAccessibleCellBaseImpl::queryInterface(rType));
     return aAny.hasValue() ? aAny : ScAccessibleContextBase::queryInterface(rType);
@@ -197,7 +197,7 @@ void SAL_CALL ScAccessibleCellBase::release()
 
 sal_Int32
     ScAccessibleCellBase::getAccessibleIndexInParent(void)
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -215,7 +215,7 @@ OUString SAL_CALL
 
 OUString SAL_CALL
     ScAccessibleCellBase::createAccessibleName(void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     // Document not needed, because only the cell address, but not the tablename is needed
     // always us OOO notation
@@ -240,7 +240,7 @@ uno::Any SAL_CALL
 
 sal_Bool SAL_CALL
     ScAccessibleCellBase::setCurrentValue( const uno::Any& aNumber )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -265,7 +265,7 @@ sal_Bool SAL_CALL
 
 uno::Any SAL_CALL
     ScAccessibleCellBase::getMaximumValue(  )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     uno::Any aAny;
     aAny <<= DBL_MAX;
@@ -275,7 +275,7 @@ uno::Any SAL_CALL
 
 uno::Any SAL_CALL
     ScAccessibleCellBase::getMinimumValue(  )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     uno::Any aAny;
     aAny <<= -DBL_MAX;
@@ -286,7 +286,7 @@ uno::Any SAL_CALL
     //=====  XServiceInfo  ====================================================
 
 OUString SAL_CALL ScAccessibleCellBase::getImplementationName(void)
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     return OUString("ScAccessibleCellBase");
 }
@@ -294,7 +294,7 @@ OUString SAL_CALL ScAccessibleCellBase::getImplementationName(void)
     //=====  XTypeProvider  ===================================================
 
 uno::Sequence< uno::Type > SAL_CALL ScAccessibleCellBase::getTypes()
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     return comphelper::concatSequences(ScAccessibleCellBaseImpl::getTypes(), ScAccessibleContextBase::getTypes());
 }
@@ -306,7 +306,7 @@ namespace
 
 uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleCellBase::getImplementationId(void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return theScAccessibleCellBaseImplementationId::get().getSeq();
 }

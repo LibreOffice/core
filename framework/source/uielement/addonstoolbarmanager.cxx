@@ -139,7 +139,7 @@ static Image RetrieveImage( Reference< com::sun::star::frame::XFrame >& rFrame,
 }
 
 // XComponent
-void SAL_CALL AddonsToolBarManager::dispose() throw( RuntimeException )
+void SAL_CALL AddonsToolBarManager::dispose() throw( RuntimeException, std::exception )
 {
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
 

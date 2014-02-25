@@ -124,7 +124,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     throw(
         css::container::NoSuchElementException,
         css::lang::IllegalArgumentException,
-        cssu::RuntimeException)
+        cssu::RuntimeException, std::exception)
 {
     // Process arguments.
     const ::comphelper::NamedValueCollection aArguments (rArguments);

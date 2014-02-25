@@ -90,10 +90,10 @@ public:
     virtual ::com::sun::star::uno::Sequence<
             ::com::sun::star::lang::Locale > SAL_CALL
         getLocales()
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL
         hasLocale( const ::com::sun::star::lang::Locale& rLocale )
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     // XThesaurus
     virtual ::com::sun::star::uno::Sequence<
@@ -103,7 +103,7 @@ public:
                 const ::com::sun::star::lang::Locale& rLocale,
                 const ::com::sun::star::beans::PropertyValues& rProperties )
             throw(::com::sun::star::lang::IllegalArgumentException,
-                  ::com::sun::star::uno::RuntimeException);
+                  ::com::sun::star::uno::RuntimeException, std::exception);
 };
 
 
@@ -150,7 +150,7 @@ void ThesDummy_Impl::GetThes_Impl()
 
 uno::Sequence< lang::Locale > SAL_CALL
         ThesDummy_Impl::getLocales()
-            throw(uno::RuntimeException)
+            throw(uno::RuntimeException, std::exception)
 {
     GetThes_Impl();
     if (xThes.is())
@@ -163,7 +163,7 @@ uno::Sequence< lang::Locale > SAL_CALL
 
 sal_Bool SAL_CALL
         ThesDummy_Impl::hasLocale( const lang::Locale& rLocale )
-            throw(uno::RuntimeException)
+            throw(uno::RuntimeException, std::exception)
 {
     GetThes_Impl();
     if (xThes.is())
@@ -190,7 +190,7 @@ uno::Sequence< uno::Reference< linguistic2::XMeaning > > SAL_CALL
                 const lang::Locale& rLocale,
                 const beans::PropertyValues& rProperties )
             throw(lang::IllegalArgumentException,
-                  uno::RuntimeException)
+                  uno::RuntimeException, std::exception)
 {
     GetThes_Impl();
     uno::Sequence< uno::Reference< linguistic2::XMeaning > > aRes;
@@ -216,23 +216,23 @@ public:
     // XSupportedLanguages (for XSpellChecker1)
     virtual ::com::sun::star::uno::Sequence< sal_Int16 > SAL_CALL
         getLanguages()
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL
         hasLanguage( sal_Int16 nLanguage )
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     // XSpellChecker1 (same as XSpellChecker but sal_Int16 for language)
     virtual sal_Bool SAL_CALL
         isValid( const OUString& rWord, sal_Int16 nLanguage,
                 const ::com::sun::star::beans::PropertyValues& rProperties )
             throw(::com::sun::star::lang::IllegalArgumentException,
-                  ::com::sun::star::uno::RuntimeException);
+                  ::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::linguistic2::XSpellAlternatives > SAL_CALL
         spell( const OUString& rWord, sal_Int16 nLanguage,
                 const ::com::sun::star::beans::PropertyValues& rProperties )
             throw(::com::sun::star::lang::IllegalArgumentException,
-                  ::com::sun::star::uno::RuntimeException);
+                  ::com::sun::star::uno::RuntimeException, std::exception);
 };
 
 
@@ -248,7 +248,7 @@ void SpellDummy_Impl::GetSpell_Impl()
 
 uno::Sequence< sal_Int16 > SAL_CALL
     SpellDummy_Impl::getLanguages()
-        throw(uno::RuntimeException)
+        throw(uno::RuntimeException, std::exception)
 {
     GetSpell_Impl();
     if (xSpell.is())
@@ -260,7 +260,7 @@ uno::Sequence< sal_Int16 > SAL_CALL
 
 sal_Bool SAL_CALL
     SpellDummy_Impl::hasLanguage( sal_Int16 nLanguage )
-        throw(uno::RuntimeException)
+        throw(uno::RuntimeException, std::exception)
 {
     GetSpell_Impl();
     sal_Bool bRes = sal_False;
@@ -274,7 +274,7 @@ sal_Bool SAL_CALL
     SpellDummy_Impl::isValid( const OUString& rWord, sal_Int16 nLanguage,
             const beans::PropertyValues& rProperties )
         throw(lang::IllegalArgumentException,
-              uno::RuntimeException)
+              uno::RuntimeException, std::exception)
 {
     GetSpell_Impl();
     sal_Bool bRes = sal_True;
@@ -288,7 +288,7 @@ uno::Reference< linguistic2::XSpellAlternatives > SAL_CALL
     SpellDummy_Impl::spell( const OUString& rWord, sal_Int16 nLanguage,
             const beans::PropertyValues& rProperties )
         throw(lang::IllegalArgumentException,
-              uno::RuntimeException)
+              uno::RuntimeException, std::exception)
 {
     GetSpell_Impl();
     uno::Reference< linguistic2::XSpellAlternatives > xRes;
@@ -314,10 +314,10 @@ public:
     virtual ::com::sun::star::uno::Sequence<
             ::com::sun::star::lang::Locale > SAL_CALL
         getLocales()
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL
         hasLocale( const ::com::sun::star::lang::Locale& rLocale )
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     // XHyphenator
     virtual ::com::sun::star::uno::Reference<
@@ -327,7 +327,7 @@ public:
                 sal_Int16 nMaxLeading,
                 const ::com::sun::star::beans::PropertyValues& rProperties )
             throw(::com::sun::star::lang::IllegalArgumentException,
-                  ::com::sun::star::uno::RuntimeException);
+                  ::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::linguistic2::XHyphenatedWord > SAL_CALL
         queryAlternativeSpelling( const OUString& rWord,
@@ -335,7 +335,7 @@ public:
                 sal_Int16 nIndex,
                 const ::com::sun::star::beans::PropertyValues& rProperties )
             throw(::com::sun::star::lang::IllegalArgumentException,
-                  ::com::sun::star::uno::RuntimeException);
+                  ::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::linguistic2::XPossibleHyphens > SAL_CALL
         createPossibleHyphens(
@@ -343,7 +343,7 @@ public:
                 const ::com::sun::star::lang::Locale& rLocale,
                 const ::com::sun::star::beans::PropertyValues& rProperties )
             throw(::com::sun::star::lang::IllegalArgumentException,
-                  ::com::sun::star::uno::RuntimeException);
+                  ::com::sun::star::uno::RuntimeException, std::exception);
 };
 
 
@@ -359,7 +359,7 @@ void HyphDummy_Impl::GetHyph_Impl()
 
 uno::Sequence< lang::Locale > SAL_CALL
     HyphDummy_Impl::getLocales()
-        throw(uno::RuntimeException)
+        throw(uno::RuntimeException, std::exception)
 {
     GetHyph_Impl();
     if (xHyph.is())
@@ -371,7 +371,7 @@ uno::Sequence< lang::Locale > SAL_CALL
 
 sal_Bool SAL_CALL
     HyphDummy_Impl::hasLocale( const lang::Locale& rLocale )
-        throw(uno::RuntimeException)
+        throw(uno::RuntimeException, std::exception)
 {
     GetHyph_Impl();
     sal_Bool bRes = sal_False;
@@ -388,7 +388,7 @@ uno::Reference< linguistic2::XHyphenatedWord > SAL_CALL
             sal_Int16 nMaxLeading,
             const beans::PropertyValues& rProperties )
         throw(lang::IllegalArgumentException,
-              uno::RuntimeException)
+              uno::RuntimeException, std::exception)
 {
     GetHyph_Impl();
     uno::Reference< linguistic2::XHyphenatedWord > xRes;
@@ -405,7 +405,7 @@ uno::Reference< linguistic2::XHyphenatedWord > SAL_CALL
             sal_Int16 nIndex,
             const PropertyValues& rProperties )
         throw(lang::IllegalArgumentException,
-              uno::RuntimeException)
+              uno::RuntimeException, std::exception)
 {
     GetHyph_Impl();
     uno::Reference< linguistic2::XHyphenatedWord > xRes;
@@ -421,7 +421,7 @@ uno::Reference< linguistic2::XPossibleHyphens > SAL_CALL
             const lang::Locale& rLocale,
             const beans::PropertyValues& rProperties )
         throw(lang::IllegalArgumentException,
-              uno::RuntimeException)
+              uno::RuntimeException, std::exception)
 {
     GetHyph_Impl();
     uno::Reference< linguistic2::XPossibleHyphens > xRes;
@@ -447,7 +447,7 @@ public:
 
     // lang::XEventListener
     virtual void    SAL_CALL disposing(const EventObject& rSource)
-            throw( RuntimeException );
+            throw( RuntimeException, std::exception );
 };
 
 LinguMgrAppExitLstnr::LinguMgrAppExitLstnr()
@@ -471,7 +471,7 @@ LinguMgrAppExitLstnr::~LinguMgrAppExitLstnr()
 }
 
 void LinguMgrAppExitLstnr::disposing(const EventObject& rSource)
-        throw( RuntimeException )
+        throw( RuntimeException, std::exception )
 {
     if (xDesktop.is()  &&  rSource.Source == xDesktop)
     {

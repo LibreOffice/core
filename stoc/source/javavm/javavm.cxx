@@ -134,7 +134,7 @@ private:
     virtual inline ~SingletonFactory() {}
 
     virtual void SAL_CALL disposing(css::lang::EventObject const &)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     static void dispose();
 
@@ -176,7 +176,7 @@ css::uno::Reference< css::uno::XInterface > SingletonFactory::getSingleton(
 }
 
 void SAL_CALL SingletonFactory::disposing(css::lang::EventObject const &)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     dispose();
 }
@@ -586,7 +586,7 @@ JavaVirtualMachine::JavaVirtualMachine(
 void SAL_CALL
 JavaVirtualMachine::initialize(css::uno::Sequence< css::uno::Any > const &
                                    rArguments)
-    throw (css::uno::Exception)
+    throw (css::uno::Exception, std::exception)
 {
     osl::MutexGuard aGuard(*this);
     if (m_bDisposed)
@@ -641,21 +641,21 @@ JavaVirtualMachine::initialize(css::uno::Sequence< css::uno::Any > const &
 }
 
 OUString SAL_CALL JavaVirtualMachine::getImplementationName()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return serviceGetImplementationName();
 }
 
 sal_Bool SAL_CALL
 JavaVirtualMachine::supportsService(OUString const & rServiceName)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL
 JavaVirtualMachine::getSupportedServiceNames()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return serviceGetSupportedServiceNames();
 }
@@ -679,7 +679,7 @@ struct JavaInfoGuard: private boost::noncopyable {
 
 css::uno::Any SAL_CALL
 JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard(*this);
     if (m_bDisposed)
@@ -928,7 +928,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
 }
 
 sal_Bool SAL_CALL JavaVirtualMachine::isVMStarted()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard(*this);
     if (m_bDisposed)
@@ -938,7 +938,7 @@ sal_Bool SAL_CALL JavaVirtualMachine::isVMStarted()
 }
 
 sal_Bool SAL_CALL JavaVirtualMachine::isVMEnabled()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     {
         osl::MutexGuard aGuard(*this);
@@ -957,7 +957,7 @@ sal_Bool SAL_CALL JavaVirtualMachine::isVMEnabled()
 }
 
 sal_Bool SAL_CALL JavaVirtualMachine::isThreadAttached()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard(*this);
     if (m_bDisposed)
@@ -971,7 +971,7 @@ sal_Bool SAL_CALL JavaVirtualMachine::isThreadAttached()
 }
 
 void SAL_CALL JavaVirtualMachine::registerThread()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard(*this);
     if (m_bDisposed)
@@ -1004,7 +1004,7 @@ void SAL_CALL JavaVirtualMachine::registerThread()
 }
 
 void SAL_CALL JavaVirtualMachine::revokeThread()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard(*this);
     if (m_bDisposed)
@@ -1026,7 +1026,7 @@ void SAL_CALL JavaVirtualMachine::revokeThread()
 
 void SAL_CALL
 JavaVirtualMachine::disposing(css::lang::EventObject const & rSource)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard(*this);
     if (rSource.Source == m_xInetConfiguration)
@@ -1037,12 +1037,12 @@ JavaVirtualMachine::disposing(css::lang::EventObject const & rSource)
 
 void SAL_CALL JavaVirtualMachine::elementInserted(
     css::container::ContainerEvent const &)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {}
 
 void SAL_CALL JavaVirtualMachine::elementRemoved(
     css::container::ContainerEvent const &)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {}
 
 // If a user changes the setting, for example for proxy settings, then this
@@ -1052,7 +1052,7 @@ void SAL_CALL JavaVirtualMachine::elementRemoved(
 // values.
 void SAL_CALL JavaVirtualMachine::elementReplaced(
     css::container::ContainerEvent const & rEvent)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     // TODO Using the new value stored in rEvent is wrong here.  If two threads
     // receive different elementReplaced calls in quick succession, it is

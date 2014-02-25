@@ -43,10 +43,10 @@ public:
 
     // ::com::sun::star::lang::XServiceInfo
     IMPLEMENTATION_NAME(OCurrencyModel);
-    virtual StringSequence SAL_CALL getSupportedServiceNames() throw();
+    virtual StringSequence SAL_CALL getSupportedServiceNames() throw(std::exception);
 
     // ::com::sun::star::io::XPersistObject
-    virtual OUString SAL_CALL getServiceName() throw ( ::com::sun ::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getServiceName() throw ( ::com::sun ::star::uno::RuntimeException, std::exception);
 
     // OControlModel's property handling
     virtual void describeFixedProperties(
@@ -82,7 +82,7 @@ public:
     OCurrencyControl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext);
     // ::com::sun::star::lang::XServiceInfo
     IMPLEMENTATION_NAME(OCurrencyControl);
-    virtual StringSequence SAL_CALL getSupportedServiceNames() throw();
+    virtual StringSequence SAL_CALL getSupportedServiceNames() throw(std::exception);
 };
 
 //.........................................................................

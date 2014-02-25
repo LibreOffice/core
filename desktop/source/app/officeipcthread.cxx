@@ -338,19 +338,19 @@ oslSignalAction SAL_CALL SalMainPipeExchangeSignal_impl(void* /*pData*/, oslSign
 
 // XServiceInfo
 OUString SAL_CALL OfficeIPCThreadController::getImplementationName()
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.comp.OfficeIPCThreadController" );
 }
 
 sal_Bool OfficeIPCThreadController::supportsService(
-    OUString const & ServiceName) throw (css::uno::RuntimeException)
+    OUString const & ServiceName) throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL OfficeIPCThreadController::getSupportedServiceNames()
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     Sequence< OUString > aSeq( 0 );
     return aSeq;
@@ -358,13 +358,13 @@ throw ( RuntimeException )
 
 // XEventListener
 void SAL_CALL OfficeIPCThreadController::disposing( const EventObject& )
-throw( RuntimeException )
+throw( RuntimeException, std::exception )
 {
 }
 
 // XTerminateListener
 void SAL_CALL OfficeIPCThreadController::queryTermination( const EventObject& )
-throw( TerminationVetoException, RuntimeException )
+throw( TerminationVetoException, RuntimeException, std::exception )
 {
     // Desktop ask about pending request through our office ipc pipe. We have to
     // be sure that no pending request is waiting because framework is not able to
@@ -377,7 +377,7 @@ throw( TerminationVetoException, RuntimeException )
 }
 
 void SAL_CALL OfficeIPCThreadController::notifyTermination( const EventObject& )
-throw( RuntimeException )
+throw( RuntimeException, std::exception )
 {
 }
 

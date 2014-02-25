@@ -329,7 +329,7 @@ Any SAL_CALL SdUnoDrawView::getSelection()
 
 void SAL_CALL SdUnoDrawView::addSelectionChangeListener (
     const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     (void)rxListener;
 }
@@ -339,7 +339,7 @@ void SAL_CALL SdUnoDrawView::addSelectionChangeListener (
 
 void SAL_CALL SdUnoDrawView::removeSelectionChangeListener (
     const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     (void)rxListener;
 }
@@ -354,7 +354,7 @@ void SdUnoDrawView::setFastPropertyValue (
         css::beans::PropertyVetoException,
         css::lang::IllegalArgumentException,
         css::lang::WrappedTargetException,
-        css::uno::RuntimeException)
+        css::uno::RuntimeException, std::exception)
 {
     switch( nHandle )
     {
@@ -421,7 +421,7 @@ Any SAL_CALL SdUnoDrawView::getFastPropertyValue (
     sal_Int32 nHandle)
     throw(css::beans::UnknownPropertyException,
         css::lang::WrappedTargetException,
-        css::uno::RuntimeException)
+        css::uno::RuntimeException, std::exception)
 {
     Any aValue;
     switch( nHandle )
@@ -491,7 +491,7 @@ void SAL_CALL SdUnoDrawView::setCurrentPage (
 
 
 Reference< drawing::XDrawPage > SAL_CALL SdUnoDrawView::getCurrentPage()
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     Reference< drawing::XDrawPage >  xPage;
 
@@ -610,17 +610,17 @@ Any SdUnoDrawView::getDrawViewMode() const
 }
 
 // XServiceInfo
-OUString SAL_CALL SdUnoDrawView::getImplementationName(  ) throw (RuntimeException)
+OUString SAL_CALL SdUnoDrawView::getImplementationName(  ) throw (RuntimeException, std::exception)
 {
     return OUString( "com.sun.star.comp.sd.SdUnoDrawView") ;
 }
 
-sal_Bool SAL_CALL SdUnoDrawView::supportsService( const OUString& ServiceName ) throw (RuntimeException)
+sal_Bool SAL_CALL SdUnoDrawView::supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception)
 {
     return cppu::supportsService( this, ServiceName );
 }
 
-Sequence< OUString > SAL_CALL SdUnoDrawView::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > SAL_CALL SdUnoDrawView::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
 {
     OUString aSN("com.sun.star.drawing.DrawingDocumentDrawView");
     uno::Sequence< OUString > aSeq( &aSN, 1 );

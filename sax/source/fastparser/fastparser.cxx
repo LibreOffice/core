@@ -335,16 +335,16 @@ public:
     void checkDispose() throw (RuntimeException) { if( !mpParser ) throw DisposedException(); }
 
     //XLocator
-    virtual sal_Int32 SAL_CALL getColumnNumber(void) throw (RuntimeException);
-    virtual sal_Int32 SAL_CALL getLineNumber(void) throw (RuntimeException);
-    virtual OUString SAL_CALL getPublicId(void) throw (RuntimeException);
-    virtual OUString SAL_CALL getSystemId(void) throw (RuntimeException);
+    virtual sal_Int32 SAL_CALL getColumnNumber(void) throw (RuntimeException, std::exception);
+    virtual sal_Int32 SAL_CALL getLineNumber(void) throw (RuntimeException, std::exception);
+    virtual OUString SAL_CALL getPublicId(void) throw (RuntimeException, std::exception);
+    virtual OUString SAL_CALL getSystemId(void) throw (RuntimeException, std::exception);
 
 private:
     FastSaxParserImpl *mpParser;
 };
 
-sal_Int32 SAL_CALL FastLocatorImpl::getColumnNumber(void) throw (RuntimeException)
+sal_Int32 SAL_CALL FastLocatorImpl::getColumnNumber(void) throw (RuntimeException, std::exception)
 {
     checkDispose();
     return XML_GetCurrentColumnNumber( mpParser->getEntity().mpParser );
@@ -352,7 +352,7 @@ sal_Int32 SAL_CALL FastLocatorImpl::getColumnNumber(void) throw (RuntimeExceptio
 
 
 
-sal_Int32 SAL_CALL FastLocatorImpl::getLineNumber(void) throw (RuntimeException)
+sal_Int32 SAL_CALL FastLocatorImpl::getLineNumber(void) throw (RuntimeException, std::exception)
 {
     checkDispose();
     return XML_GetCurrentLineNumber( mpParser->getEntity().mpParser );
@@ -360,14 +360,14 @@ sal_Int32 SAL_CALL FastLocatorImpl::getLineNumber(void) throw (RuntimeException)
 
 
 
-OUString SAL_CALL FastLocatorImpl::getPublicId(void) throw (RuntimeException)
+OUString SAL_CALL FastLocatorImpl::getPublicId(void) throw (RuntimeException, std::exception)
 {
     checkDispose();
     return mpParser->getEntity().maStructSource.sPublicId;
 }
 
 
-OUString SAL_CALL FastLocatorImpl::getSystemId(void) throw (RuntimeException)
+OUString SAL_CALL FastLocatorImpl::getSystemId(void) throw (RuntimeException, std::exception)
 {
     checkDispose();
     return mpParser->getEntity().maStructSource.sSystemId;
@@ -1364,61 +1364,61 @@ void FastSaxParser::parseStream( const xml::sax::InputSource& aInputSource )
 }
 
 void FastSaxParser::setFastDocumentHandler( const uno::Reference<xml::sax::XFastDocumentHandler>& Handler )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     mpImpl->setFastDocumentHandler(Handler);
 }
 
 void FastSaxParser::setTokenHandler( const uno::Reference<xml::sax::XFastTokenHandler>& Handler )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     mpImpl->setTokenHandler(Handler);
 }
 
 void FastSaxParser::registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken )
-    throw (lang::IllegalArgumentException, uno::RuntimeException)
+    throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     mpImpl->registerNamespace(NamespaceURL, NamespaceToken);
 }
 
 OUString FastSaxParser::getNamespaceURL( const OUString& rPrefix )
-    throw(lang::IllegalArgumentException, uno::RuntimeException)
+    throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     return mpImpl->getNamespaceURL(rPrefix);
 }
 
 void FastSaxParser::setErrorHandler( const uno::Reference< xml::sax::XErrorHandler >& Handler )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     mpImpl->setErrorHandler(Handler);
 }
 
 void FastSaxParser::setEntityResolver( const uno::Reference< xml::sax::XEntityResolver >& Resolver )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     mpImpl->setEntityResolver(Resolver);
 }
 
 void FastSaxParser::setLocale( const lang::Locale& rLocale )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     mpImpl->setLocale(rLocale);
 }
 
 OUString FastSaxParser::getImplementationName()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.extensions.xml.sax.FastParser");
 }
 
 sal_Bool FastSaxParser::supportsService( const OUString& ServiceName )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence<OUString> FastSaxParser::getSupportedServiceNames()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Sequence<OUString> seq(1);
     seq[0] = OUString("com.sun.star.xml.sax.FastParser");

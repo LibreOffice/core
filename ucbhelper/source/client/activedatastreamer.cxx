@@ -66,7 +66,7 @@ XTYPEPROVIDER_IMPL_2( ActiveDataStreamer,
 
 // virtual
 void SAL_CALL ActiveDataStreamer::setStream( const uno::Reference< io::XStream >& xStream )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     m_xStream = xStream;
 }
@@ -74,7 +74,7 @@ void SAL_CALL ActiveDataStreamer::setStream( const uno::Reference< io::XStream >
 
 // virtual
 uno::Reference< io::XStream > SAL_CALL ActiveDataStreamer::getStream()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return m_xStream;
 }

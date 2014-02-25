@@ -82,7 +82,7 @@ public:
     queryContent( const com::sun::star::uno::Reference<
                     com::sun::star::ucb::XContentIdentifier >& Identifier )
         throw( com::sun::star::ucb::IllegalIdentifierException,
-               com::sun::star::uno::RuntimeException );
+               com::sun::star::uno::RuntimeException, std::exception );
 
     // XTransientDocumentsDocumentContentFactory
     virtual com::sun::star::uno::Reference<
@@ -90,7 +90,7 @@ public:
     createDocumentContent( const ::com::sun::star::uno::Reference<
                                 com::sun::star::frame::XModel >& Model )
         throw ( com::sun::star::lang::IllegalArgumentException,
-                com::sun::star::uno::RuntimeException );
+                com::sun::star::uno::RuntimeException, std::exception );
 
     // Non-UNO interfaces
     com::sun::star::uno::Reference< com::sun::star::embed::XStorage >

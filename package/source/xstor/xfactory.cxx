@@ -81,7 +81,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::impl_staticCreateSel
 
 uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstance()
     throw ( uno::Exception,
-            uno::RuntimeException )
+            uno::RuntimeException, std::exception )
 {
     // TODO: reimplement TempStream service to support XStream interface
     uno::Reference < io::XStream > xTempStream(
@@ -100,7 +100,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstance()
 uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithArguments(
             const uno::Sequence< uno::Any >& aArguments )
     throw ( uno::Exception,
-            uno::RuntimeException )
+            uno::RuntimeException, std::exception )
 {
     // The request for storage can be done with up to three arguments
 
@@ -281,19 +281,19 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
 }
 
 OUString SAL_CALL OStorageFactory::getImplementationName()
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     return impl_staticGetImplementationName();
 }
 
 sal_Bool SAL_CALL OStorageFactory::supportsService( const OUString& ServiceName )
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL OStorageFactory::getSupportedServiceNames()
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     return impl_staticGetSupportedServiceNames();
 }

@@ -62,13 +62,13 @@ protected:
 public:
     OColumnPropertyListener(OComponentDefinition* _pComponent) : m_pComponent(_pComponent){}
     // XPropertyChangeListener
-    virtual void SAL_CALL propertyChange( const PropertyChangeEvent& /*_rEvent*/ ) throw (RuntimeException)
+    virtual void SAL_CALL propertyChange( const PropertyChangeEvent& /*_rEvent*/ ) throw (RuntimeException, std::exception)
     {
         if ( m_pComponent )
             m_pComponent->notifyDataSourceModified();
     }
     // XEventListener
-    virtual void SAL_CALL disposing( const EventObject& /*_rSource*/ ) throw (RuntimeException)
+    virtual void SAL_CALL disposing( const EventObject& /*_rSource*/ ) throw (RuntimeException, std::exception)
     {
     }
     void clear() { m_pComponent = NULL; }
@@ -85,7 +85,7 @@ OComponentDefinition_Impl::~OComponentDefinition_Impl()
 // OComponentDefinition
 
 
-void OComponentDefinition::initialize( const Sequence< Any >& aArguments ) throw(Exception)
+void OComponentDefinition::initialize( const Sequence< Any >& aArguments ) throw(Exception, std::exception)
 {
     OUString rName;
     if( (aArguments.getLength() == 1) && (aArguments[0] >>= rName) )
@@ -159,7 +159,7 @@ OUString OComponentDefinition::getImplementationName_static(  ) throw(RuntimeExc
     return OUString("com.sun.star.comp.dba.OComponentDefinition");
 }
 
-OUString SAL_CALL OComponentDefinition::getImplementationName(  ) throw(RuntimeException)
+OUString SAL_CALL OComponentDefinition::getImplementationName(  ) throw(RuntimeException, std::exception)
 {
     return getImplementationName_static();
 }
@@ -173,7 +173,7 @@ Sequence< OUString > OComponentDefinition::getSupportedServiceNames_static(  ) t
     return aServices;
 }
 
-Sequence< OUString > SAL_CALL OComponentDefinition::getSupportedServiceNames(  ) throw(RuntimeException)
+Sequence< OUString > SAL_CALL OComponentDefinition::getSupportedServiceNames(  ) throw(RuntimeException, std::exception)
 {
     return getSupportedServiceNames_static();
 }
@@ -204,7 +204,7 @@ IPropertyArrayHelper* OComponentDefinition::createArrayHelper( ) const
     return new OPropertyArrayHelper(aProps);
 }
 
-Reference< XPropertySetInfo > SAL_CALL OComponentDefinition::getPropertySetInfo(  ) throw(RuntimeException)
+Reference< XPropertySetInfo > SAL_CALL OComponentDefinition::getPropertySetInfo(  ) throw(RuntimeException, std::exception)
 {
     Reference<XPropertySetInfo> xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
@@ -217,7 +217,7 @@ OUString OComponentDefinition::determineContentType() const
         :   OUString( "application/vnd.org.openoffice.DatabaseCommandDefinition" );
 }
 
-Reference< XNameAccess> OComponentDefinition::getColumns() throw (RuntimeException)
+Reference< XNameAccess> OComponentDefinition::getColumns() throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OContentHelper::rBHelper.bDisposed);
@@ -259,7 +259,7 @@ Reference< XPropertySet > OComponentDefinition::createColumnDescriptor()
     return new OTableColumnDescriptor( true );
 }
 
-void OComponentDefinition::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue) throw (Exception)
+void OComponentDefinition::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue) throw (Exception, std::exception)
 {
     ODataSettings::setFastPropertyValue_NoBroadcast(nHandle,rValue);
     notifyDataSourceModified();

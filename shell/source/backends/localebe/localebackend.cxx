@@ -266,7 +266,7 @@ void LocaleBackend::setPropertyValue(
     throw (
         css::beans::UnknownPropertyException, css::beans::PropertyVetoException,
         css::lang::IllegalArgumentException, css::lang::WrappedTargetException,
-        css::uno::RuntimeException)
+        css::uno::RuntimeException, std::exception)
 {
     throw css::lang::IllegalArgumentException(
         OUString(
@@ -278,7 +278,7 @@ css::uno::Any LocaleBackend::getPropertyValue(
     OUString const & PropertyName)
     throw (
         css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
-        css::uno::RuntimeException)
+        css::uno::RuntimeException, std::exception)
 {
     if ( PropertyName == "Locale" ) {
         return css::uno::makeAny(
@@ -307,7 +307,7 @@ OUString SAL_CALL LocaleBackend::getBackendName(void) {
 }
 
 OUString SAL_CALL LocaleBackend::getImplementationName(void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return getBackendName() ;
 }
@@ -320,13 +320,13 @@ uno::Sequence<OUString> SAL_CALL LocaleBackend::getBackendServiceNames(void)
 }
 
 sal_Bool SAL_CALL LocaleBackend::supportsService(const OUString& aServiceName)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, aServiceName);
 }
 
 uno::Sequence<OUString> SAL_CALL LocaleBackend::getSupportedServiceNames(void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return getBackendServiceNames() ;
 }

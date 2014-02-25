@@ -267,17 +267,17 @@ public:
     virtual ~TypeConverter_Impl();
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw( RuntimeException );
+    virtual OUString SAL_CALL getImplementationName() throw( RuntimeException, std::exception );
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-        throw( RuntimeException );
+        throw( RuntimeException, std::exception );
     virtual  Sequence< OUString > SAL_CALL getSupportedServiceNames(void)
-        throw( RuntimeException );
+        throw( RuntimeException, std::exception );
 
     // XTypeConverter
     virtual Any SAL_CALL convertTo( const Any& aFrom, const Type& DestinationType )
-        throw( IllegalArgumentException, CannotConvertException, RuntimeException);
+        throw( IllegalArgumentException, CannotConvertException, RuntimeException, std::exception);
     virtual Any SAL_CALL convertToSimpleType( const Any& aFrom, TypeClass aDestinationType )
-        throw( IllegalArgumentException, CannotConvertException, RuntimeException);
+        throw( IllegalArgumentException, CannotConvertException, RuntimeException, std::exception);
 };
 
 TypeConverter_Impl::TypeConverter_Impl() {}
@@ -285,19 +285,19 @@ TypeConverter_Impl::TypeConverter_Impl() {}
 TypeConverter_Impl::~TypeConverter_Impl() {}
 
 // XServiceInfo
-OUString TypeConverter_Impl::getImplementationName() throw( RuntimeException )
+OUString TypeConverter_Impl::getImplementationName() throw( RuntimeException, std::exception )
 {
     return stoc_services::tcv_getImplementationName();
 }
 
 // XServiceInfo
-sal_Bool TypeConverter_Impl::supportsService(const OUString& ServiceName) throw( RuntimeException )
+sal_Bool TypeConverter_Impl::supportsService(const OUString& ServiceName) throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo
-Sequence< OUString > TypeConverter_Impl::getSupportedServiceNames(void) throw( RuntimeException )
+Sequence< OUString > TypeConverter_Impl::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
 {
     return stoc_services::tcv_getSupportedServiceNames();
 }
@@ -500,7 +500,7 @@ double TypeConverter_Impl::toDouble( const Any& rAny, double min, double max ) c
 
 
 Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestType )
-    throw( IllegalArgumentException, CannotConvertException, RuntimeException)
+    throw( IllegalArgumentException, CannotConvertException, RuntimeException, std::exception)
 {
     Type aSourceType = rVal.getValueType();
     if (aSourceType == aDestType)
@@ -694,7 +694,7 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
 
 
 Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestinationClass )
-    throw( IllegalArgumentException, CannotConvertException, RuntimeException )
+    throw( IllegalArgumentException, CannotConvertException, RuntimeException, std::exception )
 {
     switch (aDestinationClass)
     {

@@ -156,12 +156,12 @@ SecurityEnvironment_NssImpl :: ~SecurityEnvironment_NssImpl() {
 }
 
 /* XServiceInfo */
-OUString SAL_CALL SecurityEnvironment_NssImpl :: getImplementationName() throw( RuntimeException ) {
+OUString SAL_CALL SecurityEnvironment_NssImpl :: getImplementationName() throw( RuntimeException, std::exception ) {
     return impl_getImplementationName() ;
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL SecurityEnvironment_NssImpl :: supportsService( const OUString& serviceName) throw( RuntimeException ) {
+sal_Bool SAL_CALL SecurityEnvironment_NssImpl :: supportsService( const OUString& serviceName) throw( RuntimeException, std::exception ) {
     Sequence< OUString > seqServiceNames = getSupportedServiceNames() ;
     const OUString* pArray = seqServiceNames.getConstArray() ;
     for( sal_Int32 i = 0 ; i < seqServiceNames.getLength() ; i ++ ) {
@@ -172,7 +172,7 @@ sal_Bool SAL_CALL SecurityEnvironment_NssImpl :: supportsService( const OUString
 }
 
 /* XServiceInfo */
-Sequence< OUString > SAL_CALL SecurityEnvironment_NssImpl :: getSupportedServiceNames() throw( RuntimeException ) {
+Sequence< OUString > SAL_CALL SecurityEnvironment_NssImpl :: getSupportedServiceNames() throw( RuntimeException, std::exception ) {
     return impl_getSupportedServiceNames() ;
 }
 
@@ -199,7 +199,7 @@ Reference< XSingleServiceFactory > SecurityEnvironment_NssImpl :: impl_createFac
 
 /* XUnoTunnel */
 sal_Int64 SAL_CALL SecurityEnvironment_NssImpl :: getSomething( const Sequence< sal_Int8 >& aIdentifier )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     if( aIdentifier.getLength() == 16 && 0 == memcmp( getUnoTunnelId().getConstArray(), aIdentifier.getConstArray(), 16 ) ) {
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
@@ -218,7 +218,7 @@ const Sequence< sal_Int8>& SecurityEnvironment_NssImpl :: getUnoTunnelId() {
     return theSecurityEnvironment_NssImplUnoTunnelId::get().getSeq();
 }
 
-OUString SecurityEnvironment_NssImpl::getSecurityEnvironmentInformation() throw( ::com::sun::star::uno::RuntimeException )
+OUString SecurityEnvironment_NssImpl::getSecurityEnvironmentInformation() throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     OUStringBuffer buff;
     for (CIT_SLOTS is = m_Slots.begin(); is != m_Slots.end(); is++)
@@ -469,7 +469,7 @@ void SecurityEnvironment_NssImpl::updateSlots()
 
 
 Sequence< Reference < XCertificate > >
-SecurityEnvironment_NssImpl::getPersonalCertificates() throw( SecurityException , RuntimeException )
+SecurityEnvironment_NssImpl::getPersonalCertificates() throw( SecurityException , RuntimeException, std::exception )
 {
     sal_Int32 length ;
     X509Certificate_NssImpl* xcert ;
@@ -537,7 +537,7 @@ SecurityEnvironment_NssImpl::getPersonalCertificates() throw( SecurityException 
     return Sequence< Reference < XCertificate > > ();
 }
 
-Reference< XCertificate > SecurityEnvironment_NssImpl :: getCertificate( const OUString& issuerName, const Sequence< sal_Int8 >& serialNumber ) throw( SecurityException , RuntimeException )
+Reference< XCertificate > SecurityEnvironment_NssImpl :: getCertificate( const OUString& issuerName, const Sequence< sal_Int8 >& serialNumber ) throw( SecurityException , RuntimeException, std::exception )
 {
     X509Certificate_NssImpl* xcert = NULL;
 
@@ -603,7 +603,7 @@ Reference< XCertificate > SecurityEnvironment_NssImpl :: getCertificate( const O
     return getCertificate( issuerName, serial ) ;
 }
 
-Sequence< Reference < XCertificate > > SecurityEnvironment_NssImpl :: buildCertificatePath( const Reference< XCertificate >& begin ) throw( SecurityException , RuntimeException ) {
+Sequence< Reference < XCertificate > > SecurityEnvironment_NssImpl :: buildCertificatePath( const Reference< XCertificate >& begin ) throw( SecurityException , RuntimeException, std::exception ) {
     const X509Certificate_NssImpl* xcert ;
     const CERTCertificate* cert ;
     CERTCertList* certChain ;
@@ -659,7 +659,7 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_NssImpl :: buildCerti
     return Sequence< Reference < XCertificate > >();
 }
 
-Reference< XCertificate > SecurityEnvironment_NssImpl :: createCertificateFromRaw( const Sequence< sal_Int8 >& rawCertificate ) throw( SecurityException , RuntimeException ) {
+Reference< XCertificate > SecurityEnvironment_NssImpl :: createCertificateFromRaw( const Sequence< sal_Int8 >& rawCertificate ) throw( SecurityException , RuntimeException, std::exception ) {
     X509Certificate_NssImpl* xcert ;
 
     if( rawCertificate.getLength() > 0 ) {
@@ -675,7 +675,7 @@ Reference< XCertificate > SecurityEnvironment_NssImpl :: createCertificateFromRa
     return xcert ;
 }
 
-Reference< XCertificate > SecurityEnvironment_NssImpl :: createCertificateFromAscii( const OUString& asciiCertificate ) throw( SecurityException , RuntimeException )
+Reference< XCertificate > SecurityEnvironment_NssImpl :: createCertificateFromAscii( const OUString& asciiCertificate ) throw( SecurityException , RuntimeException, std::exception )
 {
     xmlChar* chCert ;
     xmlSecSize certSize ;
@@ -705,7 +705,7 @@ Reference< XCertificate > SecurityEnvironment_NssImpl :: createCertificateFromAs
 sal_Int32 SecurityEnvironment_NssImpl ::
 verifyCertificate( const Reference< csss::XCertificate >& aCert,
                    const Sequence< Reference< csss::XCertificate > >&  intermediateCerts )
-    throw( ::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException )
+    throw( ::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException, std::exception )
 {
     sal_Int32 validity = csss::CertificateValidity::INVALID;
     const X509Certificate_NssImpl* xcert ;
@@ -932,7 +932,7 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
 }
 
 sal_Int32 SecurityEnvironment_NssImpl::getCertificateCharacters(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& aCert ) throw( ::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException ) {
+    const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& aCert ) throw( ::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException, std::exception ) {
     sal_Int32 characters ;
     const X509Certificate_NssImpl* xcert ;
     const CERTCertificate* cert ;

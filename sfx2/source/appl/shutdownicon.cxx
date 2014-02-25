@@ -87,33 +87,33 @@ extern "C" { static void SAL_CALL thisModule() {} }
 class SfxNotificationListener_Impl : public cppu::WeakImplHelper1< XDispatchResultListener >
 {
 public:
-    virtual void SAL_CALL dispatchFinished( const DispatchResultEvent& aEvent ) throw( RuntimeException );
-    virtual void SAL_CALL disposing( const EventObject& aEvent ) throw( RuntimeException );
+    virtual void SAL_CALL dispatchFinished( const DispatchResultEvent& aEvent ) throw( RuntimeException, std::exception );
+    virtual void SAL_CALL disposing( const EventObject& aEvent ) throw( RuntimeException, std::exception );
 };
 
-void SAL_CALL SfxNotificationListener_Impl::dispatchFinished( const DispatchResultEvent& ) throw( RuntimeException )
+void SAL_CALL SfxNotificationListener_Impl::dispatchFinished( const DispatchResultEvent& ) throw( RuntimeException, std::exception )
 {
     ShutdownIcon::LeaveModalMode();
 }
 
-void SAL_CALL SfxNotificationListener_Impl::disposing( const EventObject& ) throw( RuntimeException )
+void SAL_CALL SfxNotificationListener_Impl::disposing( const EventObject& ) throw( RuntimeException, std::exception )
 {
 }
 
 OUString SAL_CALL ShutdownIcon::getImplementationName()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.desktop.QuickstartWrapper");
 }
 
 sal_Bool SAL_CALL ShutdownIcon::supportsService(OUString const & ServiceName)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 css::uno::Sequence<OUString> SAL_CALL ShutdownIcon::getSupportedServiceNames()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     css::uno::Sequence< OUString > aSeq(1);
     aSeq[0] = OUString("com.sun.star.office.Quickstart");
@@ -671,7 +671,7 @@ void SAL_CALL ShutdownIcon::disposing()
 
 // XEventListener
 void SAL_CALL ShutdownIcon::disposing( const ::com::sun::star::lang::EventObject& )
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
 }
 
@@ -679,7 +679,7 @@ void SAL_CALL ShutdownIcon::disposing( const ::com::sun::star::lang::EventObject
 
 // XTerminateListener
 void SAL_CALL ShutdownIcon::queryTermination( const ::com::sun::star::lang::EventObject& )
-throw(::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException)
+throw(::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     SAL_INFO("sfx.appl", "ShutdownIcon::queryTermination: veto is " << m_bVeto);
     ::osl::ClearableMutexGuard  aGuard( m_aMutex );
@@ -692,7 +692,7 @@ throw(::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::
 
 
 void SAL_CALL ShutdownIcon::notifyTermination( const ::com::sun::star::lang::EventObject& )
-throw(::com::sun::star::uno::RuntimeException)
+throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
 }
 
@@ -700,7 +700,7 @@ throw(::com::sun::star::uno::RuntimeException)
 
 
 void SAL_CALL ShutdownIcon::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& aArguments )
-    throw( ::com::sun::star::uno::Exception )
+    throw( ::com::sun::star::uno::Exception, std::exception )
 {
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
 
@@ -926,7 +926,7 @@ void SAL_CALL ShutdownIcon::setFastPropertyValue(       ::sal_Int32             
             ::com::sun::star::beans::PropertyVetoException,
             ::com::sun::star::lang::IllegalArgumentException,
             ::com::sun::star::lang::WrappedTargetException,
-            ::com::sun::star::uno::RuntimeException)
+            ::com::sun::star::uno::RuntimeException, std::exception)
 {
     switch(nHandle)
     {
@@ -952,7 +952,7 @@ void SAL_CALL ShutdownIcon::setFastPropertyValue(       ::sal_Int32             
 ::com::sun::star::uno::Any SAL_CALL ShutdownIcon::getFastPropertyValue( ::sal_Int32 nHandle )
     throw (::com::sun::star::beans::UnknownPropertyException,
             ::com::sun::star::lang::WrappedTargetException,
-            ::com::sun::star::uno::RuntimeException)
+            ::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::com::sun::star::uno::Any aValue;
     switch(nHandle)

@@ -36,7 +36,7 @@ void OChildDispListener_Impl::OwnerIsDisposed()
 }
 
 void SAL_CALL OChildDispListener_Impl::disposing( const lang::EventObject& Source )
-        throw ( uno::RuntimeException )
+        throw ( uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     // ObjectIsDisposed must not contain any locking!

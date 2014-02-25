@@ -72,7 +72,7 @@ SbPropertyValues::~SbPropertyValues()
 
 
 
-Reference< XPropertySetInfo > SbPropertyValues::getPropertySetInfo(void) throw( RuntimeException )
+Reference< XPropertySetInfo > SbPropertyValues::getPropertySetInfo(void) throw( RuntimeException, std::exception )
 {
     // create on demand?
     if (!m_xInfo.is())
@@ -108,7 +108,7 @@ void SbPropertyValues::setPropertyValue(
                     ::com::sun::star::beans::PropertyVetoException,
                     ::com::sun::star::lang::IllegalArgumentException,
                     ::com::sun::star::lang::WrappedTargetException,
-                    ::com::sun::star::uno::RuntimeException)
+                    ::com::sun::star::uno::RuntimeException, std::exception)
 {
     size_t const nIndex = GetIndex_Impl( aPropertyName );
     PropertyValue & rPropVal = m_aPropVals[nIndex];
@@ -121,7 +121,7 @@ Any SbPropertyValues::getPropertyValue(
                     const OUString& aPropertyName)
                     throw(::com::sun::star::beans::UnknownPropertyException,
                     ::com::sun::star::lang::WrappedTargetException,
-                    ::com::sun::star::uno::RuntimeException)
+                    ::com::sun::star::uno::RuntimeException, std::exception)
 {
     size_t const nIndex = GetIndex_Impl( aPropertyName );
     return m_aPropVals[nIndex].Value;
@@ -132,7 +132,7 @@ Any SbPropertyValues::getPropertyValue(
 void SbPropertyValues::addPropertyChangeListener(
                     const OUString& aPropertyName,
                     const Reference< XPropertyChangeListener >& )
-                    throw ()
+                    throw (std::exception)
 {
     (void)aPropertyName;
 }
@@ -142,7 +142,7 @@ void SbPropertyValues::addPropertyChangeListener(
 void SbPropertyValues::removePropertyChangeListener(
                     const OUString& aPropertyName,
                     const Reference< XPropertyChangeListener >& )
-                    throw ()
+                    throw (std::exception)
 {
     (void)aPropertyName;
 }
@@ -152,7 +152,7 @@ void SbPropertyValues::removePropertyChangeListener(
 void SbPropertyValues::addVetoableChangeListener(
                     const OUString& aPropertyName,
                     const Reference< XVetoableChangeListener >& )
-                    throw()
+                    throw(std::exception)
 {
     (void)aPropertyName;
 }
@@ -162,14 +162,14 @@ void SbPropertyValues::addVetoableChangeListener(
 void SbPropertyValues::removeVetoableChangeListener(
                     const OUString& aPropertyName,
                     const Reference< XVetoableChangeListener >& )
-                    throw()
+                    throw(std::exception)
 {
     (void)aPropertyName;
 }
 
 
 
-Sequence< PropertyValue > SbPropertyValues::getPropertyValues(void) throw (::com::sun::star::uno::RuntimeException)
+Sequence< PropertyValue > SbPropertyValues::getPropertyValues(void) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     Sequence<PropertyValue> aRet( m_aPropVals.size() );
     for (size_t n = 0; n < m_aPropVals.size(); ++n)
@@ -184,7 +184,7 @@ void SbPropertyValues::setPropertyValues(const Sequence< PropertyValue >& rPrope
                      ::com::sun::star::beans::PropertyVetoException,
                      ::com::sun::star::lang::IllegalArgumentException,
                      ::com::sun::star::lang::WrappedTargetException,
-                     ::com::sun::star::uno::RuntimeException)
+                     ::com::sun::star::uno::RuntimeException, std::exception)
 {
     if ( !m_aPropVals.empty() )
         throw PropertyExistException();
@@ -258,19 +258,19 @@ SbPropertySetInfo::~SbPropertySetInfo()
 
 
 
-Sequence< Property > SbPropertySetInfo::getProperties(void) throw( RuntimeException )
+Sequence< Property > SbPropertySetInfo::getProperties(void) throw( RuntimeException, std::exception )
 {
     return aImpl.getProperties();
 }
 
 Property SbPropertySetInfo::getPropertyByName(const OUString& Name)
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return aImpl.getPropertyByName( Name );
 }
 
 sal_Bool SbPropertySetInfo::hasPropertyByName(const OUString& Name)
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return aImpl.hasPropertyByName( Name );
 }

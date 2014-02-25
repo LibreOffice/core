@@ -44,7 +44,7 @@ public:
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
         const ::com::sun::star::uno::Type& aType )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL acquire() throw();
 
@@ -53,7 +53,7 @@ public:
     // XCurrentContext
     virtual void SAL_CALL handle( const com::sun::star::uno::Reference<
                                   com::sun::star::task::XInteractionRequest >& Request )
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
 private:
     oslInterlockedCount m_aRefCount;

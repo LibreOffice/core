@@ -41,16 +41,16 @@ public:
     virtual ~SwVbaPageSetup(){}
 
     // Attributes
-    virtual double SAL_CALL getGutter() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setGutter( double _gutter ) throw (css::uno::RuntimeException);
-    virtual double SAL_CALL getHeaderDistance() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setHeaderDistance( double _headerdistance ) throw (css::uno::RuntimeException);
-    virtual double SAL_CALL getFooterDistance() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setFooterDistance( double _footerdistance ) throw (css::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL getDifferentFirstPageHeaderFooter() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setDifferentFirstPageHeaderFooter( sal_Bool status ) throw (css::uno::RuntimeException);
-    virtual ::sal_Int32 SAL_CALL getSectionStart() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setSectionStart( ::sal_Int32 _sectionstart ) throw (css::uno::RuntimeException);
+    virtual double SAL_CALL getGutter() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setGutter( double _gutter ) throw (css::uno::RuntimeException, std::exception);
+    virtual double SAL_CALL getHeaderDistance() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setHeaderDistance( double _headerdistance ) throw (css::uno::RuntimeException, std::exception);
+    virtual double SAL_CALL getFooterDistance() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setFooterDistance( double _footerdistance ) throw (css::uno::RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL getDifferentFirstPageHeaderFooter() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setDifferentFirstPageHeaderFooter( sal_Bool status ) throw (css::uno::RuntimeException, std::exception);
+    virtual ::sal_Int32 SAL_CALL getSectionStart() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setSectionStart( ::sal_Int32 _sectionstart ) throw (css::uno::RuntimeException, std::exception);
 
     // XHelperInterface
     virtual OUString getServiceImplName();

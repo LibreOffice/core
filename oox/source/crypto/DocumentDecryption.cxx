@@ -47,22 +47,22 @@ vector<sal_uInt8> convertToVector(Sequence<sal_Int8>& input)
 class AgileTokenHandler : public cppu::WeakImplHelper1< XFastTokenHandler >
 {
 public:
-    virtual sal_Int32 SAL_CALL getToken( const OUString& /*nIdentifier*/ ) throw (RuntimeException)
+    virtual sal_Int32 SAL_CALL getToken( const OUString& /*nIdentifier*/ ) throw (RuntimeException, std::exception)
     {
         return FastToken::DONTKNOW;
     }
 
-    virtual sal_Int32 SAL_CALL getTokenFromUTF8( const Sequence< sal_Int8 >& /*nIdentifier*/ ) throw (RuntimeException)
+    virtual sal_Int32 SAL_CALL getTokenFromUTF8( const Sequence< sal_Int8 >& /*nIdentifier*/ ) throw (RuntimeException, std::exception)
     {
         return FastToken::DONTKNOW;
     }
 
-    virtual OUString SAL_CALL getIdentifier( sal_Int32 /*nToken*/ ) throw (RuntimeException)
+    virtual OUString SAL_CALL getIdentifier( sal_Int32 /*nToken*/ ) throw (RuntimeException, std::exception)
     {
         return OUString();
     }
 
-    virtual Sequence<sal_Int8> SAL_CALL getUTF8Identifier(sal_Int32 /*nToken*/) throw (RuntimeException)
+    virtual Sequence<sal_Int8> SAL_CALL getUTF8Identifier(sal_Int32 /*nToken*/) throw (RuntimeException, std::exception)
     {
         return Sequence<sal_Int8>();
     }
@@ -78,20 +78,20 @@ public:
     {}
 
     void SAL_CALL startDocument()
-        throw (RuntimeException, SAXException)
+        throw (RuntimeException, SAXException, std::exception)
     {}
     void SAL_CALL endDocument()
-        throw (RuntimeException, SAXException)
+        throw (RuntimeException, SAXException, std::exception)
     {}
     void SAL_CALL setDocumentLocator( const Reference< XLocator >& /*xLocator*/ )
-        throw (RuntimeException, SAXException)
+        throw (RuntimeException, SAXException, std::exception)
     {}
     void SAL_CALL startFastElement( sal_Int32 /*Element*/, const Reference< XFastAttributeList >& /*Attribs*/ )
-        throw (RuntimeException, SAXException)
+        throw (RuntimeException, SAXException, std::exception)
     {}
 
     void SAL_CALL startUnknownElement( const OUString& /*aNamespace*/, const OUString& aName, const Reference< XFastAttributeList >& aAttributeList )
-        throw (RuntimeException, SAXException)
+        throw (RuntimeException, SAXException, std::exception)
     {
         if(aName == "keyData")
         {
@@ -173,26 +173,26 @@ public:
     }
 
     void SAL_CALL endFastElement( sal_Int32 /*aElement*/ )
-        throw (RuntimeException, SAXException)
+        throw (RuntimeException, SAXException, std::exception)
     {}
     void SAL_CALL endUnknownElement( const OUString& /*aNamespace*/, const OUString& /*aName*/ )
-        throw (RuntimeException, SAXException)
+        throw (RuntimeException, SAXException, std::exception)
     {}
 
     Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 /*aElement*/, const Reference< XFastAttributeList >& /*aAttribs*/ )
-        throw (RuntimeException, SAXException)
+        throw (RuntimeException, SAXException, std::exception)
     {
         return NULL;
     }
 
     Reference< XFastContextHandler > SAL_CALL createUnknownChildContext( const OUString& /*aNamespace*/, const OUString& /*aName*/, const Reference< XFastAttributeList >& /*aAttribs*/ )
-        throw (RuntimeException, SAXException)
+        throw (RuntimeException, SAXException, std::exception)
     {
         return this;
     }
 
     void SAL_CALL characters( const OUString& /*aChars*/ )
-        throw (RuntimeException, SAXException)
+        throw (RuntimeException, SAXException, std::exception)
     {}
 };
 

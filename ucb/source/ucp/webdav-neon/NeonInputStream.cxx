@@ -54,7 +54,7 @@ void NeonInputStream::AddToStream( const char * inBuf, sal_Int32 inLen )
 }
 
 Any NeonInputStream::queryInterface( const Type &type )
-                        throw( RuntimeException )
+                        throw( RuntimeException, std::exception )
 {
     Any aRet = ::cppu::queryInterface( type,
                                        static_cast< XInputStream * >( this ),
@@ -68,7 +68,7 @@ sal_Int32 SAL_CALL NeonInputStream::readBytes(
         throw( ::com::sun::star::io::NotConnectedException,
                ::com::sun::star::io::BufferSizeExceededException,
                ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::RuntimeException )
+               ::com::sun::star::uno::RuntimeException, std::exception )
 {
     // Work out how much we're actually going to write
     sal_Int32 theBytes2Read = nBytesToRead;
@@ -94,7 +94,7 @@ sal_Int32 SAL_CALL NeonInputStream::readSomeBytes(
         throw( ::com::sun::star::io::NotConnectedException,
                ::com::sun::star::io::BufferSizeExceededException,
                ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::RuntimeException )
+               ::com::sun::star::uno::RuntimeException, std::exception )
 {
     // Warning: What should this be doing ?
     return readBytes( aData, nMaxBytesToRead );
@@ -105,7 +105,7 @@ void SAL_CALL NeonInputStream::skipBytes( sal_Int32 nBytesToSkip )
         throw( ::com::sun::star::io::NotConnectedException,
                ::com::sun::star::io::BufferSizeExceededException,
                ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::RuntimeException )
+               ::com::sun::star::uno::RuntimeException, std::exception )
 {
     mPos += nBytesToSkip;
     if ( mPos >= mLen )
@@ -116,7 +116,7 @@ void SAL_CALL NeonInputStream::skipBytes( sal_Int32 nBytesToSkip )
 sal_Int32 SAL_CALL NeonInputStream::available(  )
         throw( ::com::sun::star::io::NotConnectedException,
                ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::RuntimeException )
+               ::com::sun::star::uno::RuntimeException, std::exception )
 {
     return sal::static_int_cast<sal_Int32>(mLen - mPos);
 }
@@ -124,14 +124,14 @@ sal_Int32 SAL_CALL NeonInputStream::available(  )
 void SAL_CALL NeonInputStream::closeInput( void )
          throw( ::com::sun::star::io::NotConnectedException,
                   ::com::sun::star::io::IOException,
-                  ::com::sun::star::uno::RuntimeException )
+                  ::com::sun::star::uno::RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL NeonInputStream::seek( sal_Int64 location )
         throw( ::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::RuntimeException )
+               ::com::sun::star::uno::RuntimeException, std::exception )
 {
     if ( location < 0 )
         throw ::com::sun::star::lang::IllegalArgumentException();
@@ -144,14 +144,14 @@ void SAL_CALL NeonInputStream::seek( sal_Int64 location )
 
 sal_Int64 SAL_CALL NeonInputStream::getPosition()
         throw( ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::RuntimeException )
+               ::com::sun::star::uno::RuntimeException, std::exception )
 {
     return mPos;
 }
 
 sal_Int64 SAL_CALL NeonInputStream::getLength()
         throw( ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::RuntimeException )
+               ::com::sun::star::uno::RuntimeException, std::exception )
 {
     return mLen;
 }

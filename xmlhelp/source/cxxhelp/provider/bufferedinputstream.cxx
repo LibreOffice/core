@@ -93,7 +93,7 @@ BufferedInputStream::~BufferedInputStream()
 }
 
 
-Any SAL_CALL BufferedInputStream::queryInterface( const Type& rType ) throw( RuntimeException )
+Any SAL_CALL BufferedInputStream::queryInterface( const Type& rType ) throw( RuntimeException, std::exception )
 {
     Any aRet = ::cppu::queryInterface( rType,
                                        (static_cast< XInputStream* >(this)),
@@ -120,7 +120,7 @@ sal_Int32 SAL_CALL BufferedInputStream::readBytes( Sequence< sal_Int8 >& aData,s
     throw( NotConnectedException,
            BufferSizeExceededException,
            IOException,
-           RuntimeException)
+           RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -146,7 +146,7 @@ sal_Int32 SAL_CALL BufferedInputStream::readSomeBytes(
     throw( NotConnectedException,
            BufferSizeExceededException,
            IOException,
-           RuntimeException)
+           RuntimeException, std::exception)
 {
     return readBytes(aData,nMaxBytesToRead);
 }
@@ -157,7 +157,7 @@ void SAL_CALL BufferedInputStream::skipBytes( sal_Int32 nBytesToSkip )
     throw( NotConnectedException,
            BufferSizeExceededException,
            IOException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     try
     {
@@ -174,7 +174,7 @@ void SAL_CALL BufferedInputStream::skipBytes( sal_Int32 nBytesToSkip )
 sal_Int32 SAL_CALL BufferedInputStream::available( void )
     throw( NotConnectedException,
            IOException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard( m_aMutex );
     return  m_nBufferSize-m_nBufferLocation;
@@ -185,7 +185,7 @@ sal_Int32 SAL_CALL BufferedInputStream::available( void )
 void SAL_CALL BufferedInputStream::closeInput( void )
     throw( NotConnectedException,
            IOException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
 }
 
@@ -193,7 +193,7 @@ void SAL_CALL BufferedInputStream::closeInput( void )
 void SAL_CALL BufferedInputStream::seek( sal_Int64 location )
     throw( IllegalArgumentException,
            IOException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     if( 0 <= location && location < m_nBufferSize )
     {
@@ -208,7 +208,7 @@ void SAL_CALL BufferedInputStream::seek( sal_Int64 location )
 
 sal_Int64 SAL_CALL BufferedInputStream::getPosition( void )
     throw( IOException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard( m_aMutex );
     return m_nBufferLocation;
@@ -216,7 +216,7 @@ sal_Int64 SAL_CALL BufferedInputStream::getPosition( void )
 
 
 
-sal_Int64 SAL_CALL BufferedInputStream::getLength( void ) throw( IOException,RuntimeException )
+sal_Int64 SAL_CALL BufferedInputStream::getLength( void ) throw( IOException,RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard( m_aMutex );
     return m_nBufferSize;

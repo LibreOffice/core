@@ -138,7 +138,7 @@ void ODBTable::columnDropped(const OUString& _sName)
     }
 }
 
-Sequence< sal_Int8 > ODBTable::getImplementationId() throw (RuntimeException)
+Sequence< sal_Int8 > ODBTable::getImplementationId() throw (RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "ODBTable::getImplementationId" );
     static OImplementationId * pId = 0;
@@ -270,7 +270,7 @@ void ODBTable::construct()
 // XServiceInfo
 IMPLEMENT_SERVICE_INFO1(ODBTable, "com.sun.star.sdb.dbaccess.ODBTable", SERVICE_SDBCX_TABLE)
 
-Any SAL_CALL ODBTable::queryInterface( const Type & rType ) throw(RuntimeException)
+Any SAL_CALL ODBTable::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "ODBTable::getInfoHelper" );
     if(rType == getCppuType( (Reference<XRename>*)0) && !getRenameService().is() )
@@ -280,7 +280,7 @@ Any SAL_CALL ODBTable::queryInterface( const Type & rType ) throw(RuntimeExcepti
     return OTable_Base::queryInterface( rType);
 }
 
-Sequence< Type > SAL_CALL ODBTable::getTypes(  ) throw(RuntimeException)
+Sequence< Type > SAL_CALL ODBTable::getTypes(  ) throw(RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "ODBTable::getTypes" );
     Type aRenameType = getCppuType( (Reference<XRename>*)0);
@@ -303,7 +303,7 @@ Sequence< Type > SAL_CALL ODBTable::getTypes(  ) throw(RuntimeException)
 }
 
 // XRename,
-void SAL_CALL ODBTable::rename( const OUString& _rNewName ) throw(SQLException, ElementExistException, RuntimeException)
+void SAL_CALL ODBTable::rename( const OUString& _rNewName ) throw(SQLException, ElementExistException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "ODBTable::rename" );
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -317,7 +317,7 @@ void SAL_CALL ODBTable::rename( const OUString& _rNewName ) throw(SQLException, 
 }
 
 // XAlterTable,
-void SAL_CALL ODBTable::alterColumnByName( const OUString& _rName, const Reference< XPropertySet >& _rxDescriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
+void SAL_CALL ODBTable::alterColumnByName( const OUString& _rName, const Reference< XPropertySet >& _rxDescriptor ) throw(SQLException, NoSuchElementException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "ODBTable::alterColumnByName" );
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -333,7 +333,7 @@ void SAL_CALL ODBTable::alterColumnByName( const OUString& _rName, const Referen
     m_pColumns->refresh();
 }
 
-sal_Int64 SAL_CALL ODBTable::getSomething( const Sequence< sal_Int8 >& rId ) throw(RuntimeException)
+sal_Int64 SAL_CALL ODBTable::getSomething( const Sequence< sal_Int8 >& rId ) throw(RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "ODBTable::getSomething" );
     sal_Int64 nRet(0);

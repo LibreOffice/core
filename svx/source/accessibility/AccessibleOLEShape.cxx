@@ -50,7 +50,7 @@ AccessibleOLEShape::~AccessibleOLEShape (void)
 //=====  XAccessibleAction  ===================================================
 
 sal_Int32 SAL_CALL AccessibleOLEShape::getAccessibleActionCount (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return 0;
 }
@@ -59,7 +59,7 @@ sal_Int32 SAL_CALL AccessibleOLEShape::getAccessibleActionCount (void)
 
 
 sal_Bool SAL_CALL AccessibleOLEShape::doAccessibleAction (sal_Int32 /*nIndex*/)
-    throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+    throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
     throw lang::IndexOutOfBoundsException();
 }
@@ -69,7 +69,7 @@ sal_Bool SAL_CALL AccessibleOLEShape::doAccessibleAction (sal_Int32 /*nIndex*/)
 
 OUString SAL_CALL AccessibleOLEShape::getAccessibleActionDescription (sal_Int32 /*nIndex*/)
     throw (::com::sun::star::lang::IndexOutOfBoundsException,
-        ::com::sun::star::uno::RuntimeException)
+        ::com::sun::star::uno::RuntimeException, std::exception)
 {
     throw lang::IndexOutOfBoundsException();
 }
@@ -79,7 +79,7 @@ OUString SAL_CALL AccessibleOLEShape::getAccessibleActionDescription (sal_Int32 
 
 Reference<XAccessibleKeyBinding> SAL_CALL AccessibleOLEShape::getAccessibleActionKeyBinding (sal_Int32 /*nIndex*/)
     throw (::com::sun::star::lang::IndexOutOfBoundsException,
-        ::com::sun::star::uno::RuntimeException)
+        ::com::sun::star::uno::RuntimeException, std::exception)
 {
     throw lang::IndexOutOfBoundsException();
 }
@@ -91,7 +91,7 @@ Reference<XAccessibleKeyBinding> SAL_CALL AccessibleOLEShape::getAccessibleActio
 
 com::sun::star::uno::Any SAL_CALL
     AccessibleOLEShape::queryInterface (const com::sun::star::uno::Type & rType)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::com::sun::star::uno::Any aReturn = AccessibleShape::queryInterface (rType);
     if ( ! aReturn.hasValue())
@@ -125,7 +125,7 @@ void SAL_CALL
 
 OUString SAL_CALL
     AccessibleOLEShape::getImplementationName (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return OUString("AccessibleOLEShape");
 }
@@ -135,7 +135,7 @@ OUString SAL_CALL
 
 ::com::sun::star::uno::Sequence< OUString> SAL_CALL
     AccessibleOLEShape::getSupportedServiceNames (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     // Get list of supported service names from base class...
@@ -158,7 +158,7 @@ OUString SAL_CALL
 
 uno::Sequence<uno::Type> SAL_CALL
     AccessibleOLEShape::getTypes (void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     // Get list of types from the context base implementation...
     uno::Sequence<uno::Type> aTypeList (AccessibleShape::getTypes());
@@ -174,7 +174,7 @@ uno::Sequence<uno::Type> SAL_CALL
 
 //=====  XAccessibleExtendedAttributes  ========================================================
 uno::Any SAL_CALL AccessibleOLEShape::getExtendedAttributes()
-        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     uno::Any strRet;
     ::rtl::OUString style;

@@ -37,7 +37,7 @@ public:
     virtual ~SwVbaFrame();
 
    // Methods
-    virtual void SAL_CALL Select() throw ( css::uno::RuntimeException );
+    virtual void SAL_CALL Select() throw ( css::uno::RuntimeException, std::exception );
 
     // XHelperInterface
     virtual OUString getServiceImplName();

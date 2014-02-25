@@ -80,7 +80,7 @@ public:
     */
     virtual ::com::sun::star::uno::Reference<com::sun::star::awt::XWindow>
         SAL_CALL getWindow (void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     DECLARE_XINTERFACE()
     DECLARE_XTYPEPROVIDER()
@@ -90,7 +90,7 @@ public:
 
     virtual void SAL_CALL disposing(
         const com::sun::star::lang::EventObject& rEvent)
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
 private:
     ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> mxPaneId;

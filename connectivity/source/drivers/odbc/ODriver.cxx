@@ -73,24 +73,24 @@ Sequence< OUString > ODBCDriver::getSupportedServiceNames_Static(  ) throw (Runt
 }
 
 
-OUString SAL_CALL ODBCDriver::getImplementationName(  ) throw(RuntimeException)
+OUString SAL_CALL ODBCDriver::getImplementationName(  ) throw(RuntimeException, std::exception)
 {
     return getImplementationName_Static();
 }
 
-sal_Bool SAL_CALL ODBCDriver::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
+sal_Bool SAL_CALL ODBCDriver::supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception)
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
 
-Sequence< OUString > SAL_CALL ODBCDriver::getSupportedServiceNames(  ) throw(RuntimeException)
+Sequence< OUString > SAL_CALL ODBCDriver::getSupportedServiceNames(  ) throw(RuntimeException, std::exception)
 {
     return getSupportedServiceNames_Static();
 }
 
 
-Reference< XConnection > SAL_CALL ODBCDriver::connect( const OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
+Reference< XConnection > SAL_CALL ODBCDriver::connect( const OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException, std::exception)
 {
     if ( ! acceptsURL(url) )
         return NULL;
@@ -110,12 +110,12 @@ Reference< XConnection > SAL_CALL ODBCDriver::connect( const OUString& url, cons
 }
 
 sal_Bool SAL_CALL ODBCDriver::acceptsURL( const OUString& url )
-        throw(SQLException, RuntimeException)
+        throw(SQLException, RuntimeException, std::exception)
 {
     return url.startsWith("sdbc:odbc:");
 }
 
-Sequence< DriverPropertyInfo > SAL_CALL ODBCDriver::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)
+Sequence< DriverPropertyInfo > SAL_CALL ODBCDriver::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     if ( acceptsURL(url) )
     {
@@ -197,12 +197,12 @@ Sequence< DriverPropertyInfo > SAL_CALL ODBCDriver::getPropertyInfo( const OUStr
     return Sequence< DriverPropertyInfo >();
 }
 
-sal_Int32 SAL_CALL ODBCDriver::getMajorVersion(  ) throw(RuntimeException)
+sal_Int32 SAL_CALL ODBCDriver::getMajorVersion(  ) throw(RuntimeException, std::exception)
 {
     return 1;
 }
 
-sal_Int32 SAL_CALL ODBCDriver::getMinorVersion(  ) throw(RuntimeException)
+sal_Int32 SAL_CALL ODBCDriver::getMinorVersion(  ) throw(RuntimeException, std::exception)
 {
     return 0;
 }

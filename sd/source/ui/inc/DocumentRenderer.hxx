@@ -48,19 +48,19 @@ public:
     virtual sal_Int32 SAL_CALL getRendererCount (
         const css::uno::Any& aSelection,
         const css::uno::Sequence<css::beans::PropertyValue >& xOptions)
-        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Sequence<css::beans::PropertyValue> SAL_CALL getRenderer (
         sal_Int32 nRenderer,
         const css::uno::Any& rSelection,
         const css::uno::Sequence<css::beans::PropertyValue>& rxOptions)
-        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL render (
         sal_Int32 nRenderer,
         const css::uno::Any& rSelection,
         const css::uno::Sequence<css::beans::PropertyValue>& rxOptions)
-        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception);
 
 private:
     class Implementation;

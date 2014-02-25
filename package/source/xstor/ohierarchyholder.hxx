@@ -93,17 +93,17 @@ public:
 
     // XEventListener
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // XTransactionListener
     virtual void SAL_CALL preCommit( const ::com::sun::star::lang::EventObject& aEvent )
-        throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL commited( const ::com::sun::star::lang::EventObject& aEvent )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL preRevert( const ::com::sun::star::lang::EventObject& aEvent )
-        throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL reverted( const ::com::sun::star::lang::EventObject& aEvent )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 };
 

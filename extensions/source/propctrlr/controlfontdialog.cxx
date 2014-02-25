@@ -65,7 +65,7 @@ namespace pcr
     }
 
 
-    Sequence<sal_Int8> SAL_CALL OControlFontDialog::getImplementationId(  ) throw(RuntimeException)
+    Sequence<sal_Int8> SAL_CALL OControlFontDialog::getImplementationId(  ) throw(RuntimeException, std::exception)
     {
         static ::cppu::OImplementationId aId;
         return aId.getImplementationId();
@@ -78,7 +78,7 @@ namespace pcr
     }
 
 
-    OUString SAL_CALL OControlFontDialog::getImplementationName() throw(RuntimeException)
+    OUString SAL_CALL OControlFontDialog::getImplementationName() throw(RuntimeException, std::exception)
     {
         return getImplementationName_static();
     }
@@ -90,7 +90,7 @@ namespace pcr
     }
 
 
-    ::comphelper::StringSequence SAL_CALL OControlFontDialog::getSupportedServiceNames() throw(RuntimeException)
+    ::comphelper::StringSequence SAL_CALL OControlFontDialog::getSupportedServiceNames() throw(RuntimeException, std::exception)
     {
         return getSupportedServiceNames_static();
     }
@@ -103,7 +103,7 @@ namespace pcr
         return aSupported;
     }
 
-    void OControlFontDialog::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException)
+    void OControlFontDialog::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException, std::exception)
     {
         Reference<XPropertySet> xGridModel;
         if (aArguments.getLength() == 1 && (aArguments[0] >>= xGridModel))
@@ -120,7 +120,7 @@ namespace pcr
     }
 
 
-    Reference<XPropertySetInfo>  SAL_CALL OControlFontDialog::getPropertySetInfo() throw(RuntimeException)
+    Reference<XPropertySetInfo>  SAL_CALL OControlFontDialog::getPropertySetInfo() throw(RuntimeException, std::exception)
     {
         Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;

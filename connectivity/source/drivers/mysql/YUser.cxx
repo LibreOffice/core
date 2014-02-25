@@ -77,7 +77,7 @@ cppu::IPropertyArrayHelper & OUserExtend::getInfoHelper()
 }
 typedef connectivity::sdbcx::OUser_BASE OUser_BASE_RBHELPER;
 
-sal_Int32 SAL_CALL OMySQLUser::getPrivileges( const OUString& objName, sal_Int32 objType ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OMySQLUser::getPrivileges( const OUString& objName, sal_Int32 objType ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE_RBHELPER::rBHelper.bDisposed);
@@ -201,7 +201,7 @@ void OMySQLUser::findPrivilegesAndGrantPrivileges(const OUString& objName, sal_I
     }
 }
 
-sal_Int32 SAL_CALL OMySQLUser::getGrantablePrivileges( const OUString& objName, sal_Int32 objType ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OMySQLUser::getGrantablePrivileges( const OUString& objName, sal_Int32 objType ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE_RBHELPER::rBHelper.bDisposed);
@@ -211,7 +211,7 @@ sal_Int32 SAL_CALL OMySQLUser::getGrantablePrivileges( const OUString& objName, 
     return nRightsWithGrant;
 }
 
-void SAL_CALL OMySQLUser::grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(SQLException, RuntimeException)
+void SAL_CALL OMySQLUser::grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(SQLException, RuntimeException, std::exception)
 {
     if ( objType != PrivilegeObject::TABLE )
     {
@@ -237,7 +237,7 @@ void SAL_CALL OMySQLUser::grantPrivileges( const OUString& objName, sal_Int32 ob
     }
 }
 
-void SAL_CALL OMySQLUser::revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(SQLException, RuntimeException)
+void SAL_CALL OMySQLUser::revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(SQLException, RuntimeException, std::exception)
 {
     if ( objType != PrivilegeObject::TABLE )
     {
@@ -264,7 +264,7 @@ void SAL_CALL OMySQLUser::revokePrivileges( const OUString& objName, sal_Int32 o
 }
 
 // XUser
-void SAL_CALL OMySQLUser::changePassword( const OUString& /*oldPassword*/, const OUString& newPassword ) throw(SQLException, RuntimeException)
+void SAL_CALL OMySQLUser::changePassword( const OUString& /*oldPassword*/, const OUString& newPassword ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE_RBHELPER::rBHelper.bDisposed);

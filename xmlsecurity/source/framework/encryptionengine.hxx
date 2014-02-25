@@ -93,7 +93,7 @@ protected:
 public:
     /* XBlockerMonitor */
     virtual void SAL_CALL setBlockerId( sal_Int32 id )
-            throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
+            throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception);
 };
 
 #endif

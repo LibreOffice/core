@@ -33,7 +33,7 @@ namespace DOM
     /**
     The number of nodes in this map.
     */
-    sal_Int32 SAL_CALL CNotationsMap::getLength() throw (RuntimeException)
+    sal_Int32 SAL_CALL CNotationsMap::getLength() throw (RuntimeException, std::exception)
     {
         OSL_ENSURE(false,
             "CNotationsMap::getLength: not implemented (#i113683#)");
@@ -45,7 +45,7 @@ namespace DOM
     */
     Reference< XNode > SAL_CALL
     CNotationsMap::getNamedItem(OUString const& /*name*/)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
     {
         OSL_ENSURE(false,
             "CNotationsMap::getNamedItem: not implemented (#i113683#)");
@@ -58,7 +58,7 @@ namespace DOM
     Reference< XNode > SAL_CALL
     CNotationsMap::getNamedItemNS(
         OUString const& /*namespaceURI*/, OUString const& /*localName*/)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
     {
         OSL_ENSURE(false,
             "CNotationsMap::getNamedItemNS: not implemented (#i113683#)");
@@ -69,7 +69,7 @@ namespace DOM
     Returns the indexth item in the map.
     */
     Reference< XNode > SAL_CALL
-    CNotationsMap::item(sal_Int32 /*index*/) throw (RuntimeException)
+    CNotationsMap::item(sal_Int32 /*index*/) throw (RuntimeException, std::exception)
     {
         OSL_ENSURE(false, "CNotationsMap::item: not implemented (#i113683#)");
         return Reference< XNode >();
@@ -80,7 +80,7 @@ namespace DOM
     */
     Reference< XNode > SAL_CALL
     CNotationsMap::removeNamedItem(OUString const& /*name*/)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
     {
         OSL_ENSURE(false,
             "CNotationsMap::removeNamedItem: not implemented (#i113683#)");
@@ -93,7 +93,7 @@ namespace DOM
     Reference< XNode > SAL_CALL
     CNotationsMap::removeNamedItemNS(
         OUString const& /*namespaceURI*/, OUString const& /*localName*/)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
     {
         OSL_ENSURE(false,
             "CNotationsMap::removeNamedItemNS: not implemented (#i113683#)");
@@ -105,7 +105,7 @@ namespace DOM
     */
     Reference< XNode > SAL_CALL
     CNotationsMap::setNamedItem(Reference< XNode > const& /*arg*/)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
     {
         OSL_ENSURE(false,
             "CNotationsMap::setNamedItem: not implemented (#i113683#)");
@@ -117,7 +117,7 @@ namespace DOM
     */
     Reference< XNode > SAL_CALL
     CNotationsMap::setNamedItemNS(Reference< XNode > const& /*arg*/)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
     {
         OSL_ENSURE(false,
             "CNotationsMap::setNamedItemNS: not implemented (#i113683#)");

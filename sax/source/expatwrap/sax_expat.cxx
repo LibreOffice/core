@@ -145,29 +145,29 @@ public:
 
     // ::com::sun::star::lang::XInitialization:
     virtual void SAL_CALL initialize(css::uno::Sequence<css::uno::Any> const& rArguments)
-        throw (css::uno::RuntimeException, css::uno::Exception);
+        throw (css::uno::RuntimeException, css::uno::Exception, std::exception);
 
     // The SAX-Parser-Interface
     virtual void SAL_CALL parseStream(  const InputSource& structSource)
         throw ( SAXException,
                 IOException,
-                css::uno::RuntimeException);
+                css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setDocumentHandler(const css::uno::Reference< XDocumentHandler > & xHandler)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL setErrorHandler(const css::uno::Reference< XErrorHandler > & xHandler)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setDTDHandler(const css::uno::Reference < XDTDHandler > & xHandler)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setEntityResolver(const css::uno::Reference<  XEntityResolver >& xResolver)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
-    virtual void SAL_CALL setLocale( const Locale &locale )                     throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setLocale( const Locale &locale )                     throw (css::uno::RuntimeException, std::exception);
 
 public: // XServiceInfo
-    OUString                     SAL_CALL getImplementationName() throw ();
-    css::uno::Sequence< OUString >         SAL_CALL getSupportedServiceNames(void) throw ();
-    sal_Bool                     SAL_CALL supportsService(const OUString& ServiceName) throw ();
+    OUString                     SAL_CALL getImplementationName() throw (std::exception);
+    css::uno::Sequence< OUString >         SAL_CALL getSupportedServiceNames(void) throw (std::exception);
+    sal_Bool                     SAL_CALL supportsService(const OUString& ServiceName) throw (std::exception);
 
 private:
 
@@ -363,33 +363,33 @@ public:
     }
 
 public: //XLocator
-    virtual sal_Int32 SAL_CALL getColumnNumber(void) throw ()
+    virtual sal_Int32 SAL_CALL getColumnNumber(void) throw (std::exception)
     {
         return XML_GetCurrentColumnNumber( m_pParser->getEntity().pParser );
     }
-    virtual sal_Int32 SAL_CALL getLineNumber(void) throw ()
+    virtual sal_Int32 SAL_CALL getLineNumber(void) throw (std::exception)
     {
         return XML_GetCurrentLineNumber( m_pParser->getEntity().pParser );
     }
-    virtual OUString SAL_CALL getPublicId(void) throw ()
+    virtual OUString SAL_CALL getPublicId(void) throw (std::exception)
     {
         return m_pParser->getEntity().structSource.sPublicId;
     }
-    virtual OUString SAL_CALL getSystemId(void) throw ()
+    virtual OUString SAL_CALL getSystemId(void) throw (std::exception)
     {
         return m_pParser->getEntity().structSource.sSystemId;
     }
 
     // XSeekable (only for getPosition)
 
-    virtual void SAL_CALL seek( sal_Int64 ) throw()
+    virtual void SAL_CALL seek( sal_Int64 ) throw(std::exception)
     {
     }
-    virtual sal_Int64 SAL_CALL getPosition() throw()
+    virtual sal_Int64 SAL_CALL getPosition() throw(std::exception)
     {
         return XML_GetCurrentByteIndex( m_pParser->getEntity().pParser );
     }
-    virtual ::sal_Int64 SAL_CALL getLength() throw()
+    virtual ::sal_Int64 SAL_CALL getLength() throw(std::exception)
     {
         return 0;
     }
@@ -425,7 +425,7 @@ SaxExpatParser::~SaxExpatParser()
 // ::com::sun::star::lang::XInitialization:
 void SAL_CALL
 SaxExpatParser::initialize(css::uno::Sequence< css::uno::Any > const& rArguments)
-    throw (css::uno::RuntimeException, css::uno::Exception)
+    throw (css::uno::RuntimeException, css::uno::Exception, std::exception)
 {
     // possible arguments: a string "DoSmeplease"
     if (rArguments.getLength())
@@ -448,7 +448,7 @@ SaxExpatParser::initialize(css::uno::Sequence< css::uno::Any > const& rArguments
 void SaxExpatParser::parseStream(   const InputSource& structSource)
     throw (SAXException,
            IOException,
-           css::uno::RuntimeException)
+           css::uno::RuntimeException, std::exception)
 {
     // Only one text at one time
     MutexGuard guard( m_pImpl->aMutex );
@@ -556,7 +556,7 @@ void SaxExpatParser::parseStream(   const InputSource& structSource)
 }
 
 void SaxExpatParser::setDocumentHandler(const css::uno::Reference< XDocumentHandler > & xHandler)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     m_pImpl->rDocumentHandler = xHandler;
     m_pImpl->rExtendedDocumentHandler =
@@ -564,43 +564,43 @@ void SaxExpatParser::setDocumentHandler(const css::uno::Reference< XDocumentHand
 }
 
 void SaxExpatParser::setErrorHandler(const css::uno::Reference< XErrorHandler > & xHandler)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     m_pImpl->rErrorHandler = xHandler;
 }
 
 void SaxExpatParser::setDTDHandler(const css::uno::Reference< XDTDHandler > & xHandler)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     m_pImpl->rDTDHandler = xHandler;
 }
 
 void SaxExpatParser::setEntityResolver(const css::uno::Reference < XEntityResolver > & xResolver)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     m_pImpl->rEntityResolver = xResolver;
 }
 
 
-void SaxExpatParser::setLocale( const Locale & locale ) throw (css::uno::RuntimeException)
+void SaxExpatParser::setLocale( const Locale & locale ) throw (css::uno::RuntimeException, std::exception)
 {
     m_pImpl->locale = locale;
 }
 
 // XServiceInfo
-OUString SaxExpatParser::getImplementationName() throw ()
+OUString SaxExpatParser::getImplementationName() throw (std::exception)
 {
     return OUString("com.sun.star.comp.extensions.xml.sax.ParserExpat");
 }
 
 // XServiceInfo
-sal_Bool SaxExpatParser::supportsService(const OUString& ServiceName) throw ()
+sal_Bool SaxExpatParser::supportsService(const OUString& ServiceName) throw (std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo
-css::uno::Sequence< OUString > SaxExpatParser::getSupportedServiceNames(void) throw ()
+css::uno::Sequence< OUString > SaxExpatParser::getSupportedServiceNames(void) throw (std::exception)
 {
     css::uno::Sequence<OUString> seq(1);
     seq[0] = "com.sun.star.xml.sax.Parser";

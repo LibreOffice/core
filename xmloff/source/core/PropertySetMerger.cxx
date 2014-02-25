@@ -43,24 +43,24 @@ public:
     virtual ~PropertySetMergerImpl();
 
     // XPropertySet
-    virtual Reference< XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(RuntimeException);
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const Any& aValue ) throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException);
-    virtual Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException);
-    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException);
-    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& aListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException);
-    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException);
-    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException);
+    virtual Reference< XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(RuntimeException, std::exception);
+    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const Any& aValue ) throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception);
+    virtual Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception);
+    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception);
+    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& aListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception);
+    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception);
+    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception);
 
     // XPropertyState
-    virtual PropertyState SAL_CALL getPropertyState( const OUString& PropertyName ) throw(UnknownPropertyException, RuntimeException);
-    virtual Sequence< PropertyState > SAL_CALL getPropertyStates( const Sequence< OUString >& aPropertyName ) throw(UnknownPropertyException, RuntimeException);
-    virtual void SAL_CALL setPropertyToDefault( const OUString& PropertyName ) throw(UnknownPropertyException, RuntimeException);
-    virtual Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException);
+    virtual PropertyState SAL_CALL getPropertyState( const OUString& PropertyName ) throw(UnknownPropertyException, RuntimeException, std::exception);
+    virtual Sequence< PropertyState > SAL_CALL getPropertyStates( const Sequence< OUString >& aPropertyName ) throw(UnknownPropertyException, RuntimeException, std::exception);
+    virtual void SAL_CALL setPropertyToDefault( const OUString& PropertyName ) throw(UnknownPropertyException, RuntimeException, std::exception);
+    virtual Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception);
 
     // XPropertySetInfo
-    virtual Sequence< Property > SAL_CALL getProperties(  ) throw(RuntimeException);
-    virtual Property SAL_CALL getPropertyByName( const OUString& aName ) throw(UnknownPropertyException, RuntimeException);
-    virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) throw(RuntimeException);
+    virtual Sequence< Property > SAL_CALL getProperties(  ) throw(RuntimeException, std::exception);
+    virtual Property SAL_CALL getPropertyByName( const OUString& aName ) throw(UnknownPropertyException, RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) throw(RuntimeException, std::exception);
 };
 
 // Interface implementation
@@ -80,12 +80,12 @@ PropertySetMergerImpl::~PropertySetMergerImpl()
 }
 
 // XPropertySet
-Reference< XPropertySetInfo > SAL_CALL PropertySetMergerImpl::getPropertySetInfo(  ) throw(RuntimeException)
+Reference< XPropertySetInfo > SAL_CALL PropertySetMergerImpl::getPropertySetInfo(  ) throw(RuntimeException, std::exception)
 {
     return this;
 }
 
-void SAL_CALL PropertySetMergerImpl::setPropertyValue( const OUString& aPropertyName, const Any& aValue ) throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
+void SAL_CALL PropertySetMergerImpl::setPropertyValue( const OUString& aPropertyName, const Any& aValue ) throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
 {
     if( mxPropSet1Info->hasPropertyByName( aPropertyName ) )
     {
@@ -97,7 +97,7 @@ void SAL_CALL PropertySetMergerImpl::setPropertyValue( const OUString& aProperty
     }
 }
 
-Any SAL_CALL PropertySetMergerImpl::getPropertyValue( const OUString& PropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+Any SAL_CALL PropertySetMergerImpl::getPropertyValue( const OUString& PropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
     if( mxPropSet1Info->hasPropertyByName( PropertyName ) )
     {
@@ -109,24 +109,24 @@ Any SAL_CALL PropertySetMergerImpl::getPropertyValue( const OUString& PropertyNa
     }
 }
 
-void SAL_CALL PropertySetMergerImpl::addPropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< XPropertyChangeListener >& /*xListener*/ ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+void SAL_CALL PropertySetMergerImpl::addPropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< XPropertyChangeListener >& /*xListener*/ ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL PropertySetMergerImpl::removePropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< XPropertyChangeListener >& /*aListener*/ ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+void SAL_CALL PropertySetMergerImpl::removePropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< XPropertyChangeListener >& /*aListener*/ ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL PropertySetMergerImpl::addVetoableChangeListener( const OUString& /*PropertyName*/, const Reference< XVetoableChangeListener >& /*aListener*/ ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+void SAL_CALL PropertySetMergerImpl::addVetoableChangeListener( const OUString& /*PropertyName*/, const Reference< XVetoableChangeListener >& /*aListener*/ ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL PropertySetMergerImpl::removeVetoableChangeListener( const OUString& /*PropertyName*/, const Reference< XVetoableChangeListener >& /*aListener*/ ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+void SAL_CALL PropertySetMergerImpl::removeVetoableChangeListener( const OUString& /*PropertyName*/, const Reference< XVetoableChangeListener >& /*aListener*/ ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
 
 // XPropertyState
-PropertyState SAL_CALL PropertySetMergerImpl::getPropertyState( const OUString& PropertyName ) throw(UnknownPropertyException, RuntimeException)
+PropertyState SAL_CALL PropertySetMergerImpl::getPropertyState( const OUString& PropertyName ) throw(UnknownPropertyException, RuntimeException, std::exception)
 {
     if( mxPropSet1Info->hasPropertyByName( PropertyName ) )
     {
@@ -152,7 +152,7 @@ PropertyState SAL_CALL PropertySetMergerImpl::getPropertyState( const OUString& 
     }
 }
 
-Sequence< PropertyState > SAL_CALL PropertySetMergerImpl::getPropertyStates( const Sequence< OUString >& aPropertyName ) throw(UnknownPropertyException, RuntimeException)
+Sequence< PropertyState > SAL_CALL PropertySetMergerImpl::getPropertyStates( const Sequence< OUString >& aPropertyName ) throw(UnknownPropertyException, RuntimeException, std::exception)
 {
     const sal_Int32 nCount = aPropertyName.getLength();
     Sequence< PropertyState > aPropStates( nCount );
@@ -166,7 +166,7 @@ Sequence< PropertyState > SAL_CALL PropertySetMergerImpl::getPropertyStates( con
     return aPropStates;
 }
 
-void SAL_CALL PropertySetMergerImpl::setPropertyToDefault( const OUString& PropertyName ) throw(UnknownPropertyException, RuntimeException)
+void SAL_CALL PropertySetMergerImpl::setPropertyToDefault( const OUString& PropertyName ) throw(UnknownPropertyException, RuntimeException, std::exception)
 {
     if( mxPropSet1State.is() && mxPropSet1Info->hasPropertyByName( PropertyName ) )
     {
@@ -181,7 +181,7 @@ void SAL_CALL PropertySetMergerImpl::setPropertyToDefault( const OUString& Prope
     }
 }
 
-Any SAL_CALL PropertySetMergerImpl::getPropertyDefault( const OUString& aPropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+Any SAL_CALL PropertySetMergerImpl::getPropertyDefault( const OUString& aPropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
     if( mxPropSet1State.is() && mxPropSet1Info->hasPropertyByName( aPropertyName ) )
     {
@@ -202,7 +202,7 @@ Any SAL_CALL PropertySetMergerImpl::getPropertyDefault( const OUString& aPropert
 }
 
 // XPropertySetInfo
-Sequence< Property > SAL_CALL PropertySetMergerImpl::getProperties() throw(RuntimeException)
+Sequence< Property > SAL_CALL PropertySetMergerImpl::getProperties() throw(RuntimeException, std::exception)
 {
     Sequence< Property > aProps1( mxPropSet1Info->getProperties() );
     const Property* pProps1 = aProps1.getArray();
@@ -227,7 +227,7 @@ Sequence< Property > SAL_CALL PropertySetMergerImpl::getProperties() throw(Runti
     return aProperties;
 }
 
-Property SAL_CALL PropertySetMergerImpl::getPropertyByName( const OUString& aName ) throw(UnknownPropertyException, RuntimeException)
+Property SAL_CALL PropertySetMergerImpl::getPropertyByName( const OUString& aName ) throw(UnknownPropertyException, RuntimeException, std::exception)
 {
     if( mxPropSet1Info->hasPropertyByName( aName ) )
         return mxPropSet1Info->getPropertyByName( aName );
@@ -235,7 +235,7 @@ Property SAL_CALL PropertySetMergerImpl::getPropertyByName( const OUString& aNam
     return mxPropSet2Info->getPropertyByName( aName );
 }
 
-sal_Bool SAL_CALL PropertySetMergerImpl::hasPropertyByName( const OUString& Name ) throw(RuntimeException)
+sal_Bool SAL_CALL PropertySetMergerImpl::hasPropertyByName( const OUString& Name ) throw(RuntimeException, std::exception)
 {
     if(mxPropSet1Info->hasPropertyByName( Name ) )
         return sal_True;

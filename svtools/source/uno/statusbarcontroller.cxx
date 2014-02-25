@@ -93,7 +93,7 @@ Reference< XURLTransformer > StatusbarController::getURLTransformer() const
 
 // XInterface
 Any SAL_CALL StatusbarController::queryInterface( const Type& rType )
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     Any a = ::cppu::queryInterface(
                 rType ,
@@ -121,7 +121,7 @@ void SAL_CALL StatusbarController::release() throw ()
 }
 
 void SAL_CALL StatusbarController::initialize( const Sequence< Any >& aArguments )
-throw ( Exception, RuntimeException )
+throw ( Exception, RuntimeException, std::exception )
 {
     bool bInitialized( true );
 
@@ -170,7 +170,7 @@ throw ( Exception, RuntimeException )
 }
 
 void SAL_CALL StatusbarController::update()
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     {
         SolarMutexGuard aSolarMutexGuard;
@@ -184,7 +184,7 @@ throw ( RuntimeException )
 
 // XComponent
 void SAL_CALL StatusbarController::dispose()
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
 
@@ -234,20 +234,20 @@ throw (::com::sun::star::uno::RuntimeException)
 }
 
 void SAL_CALL StatusbarController::addEventListener( const Reference< XEventListener >& xListener )
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     m_aListenerContainer.addInterface( ::getCppuType( ( const Reference< XEventListener >* ) NULL ), xListener );
 }
 
 void SAL_CALL StatusbarController::removeEventListener( const Reference< XEventListener >& aListener )
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     m_aListenerContainer.removeInterface( ::getCppuType( ( const Reference< XEventListener >* ) NULL ), aListener );
 }
 
 // XEventListener
 void SAL_CALL StatusbarController::disposing( const EventObject& Source )
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarMutexGuard;
 
@@ -278,7 +278,7 @@ throw ( RuntimeException )
 
 // XStatusListener
 void SAL_CALL StatusbarController::statusChanged( const FeatureStateEvent& Event )
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarMutexGuard;
 
@@ -301,21 +301,21 @@ throw ( RuntimeException )
 // XStatusbarController
 ::sal_Bool SAL_CALL StatusbarController::mouseButtonDown(
     const ::com::sun::star::awt::MouseEvent& )
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return sal_False;
 }
 
 ::sal_Bool SAL_CALL StatusbarController::mouseMove(
     const ::com::sun::star::awt::MouseEvent& )
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return sal_False;
 }
 
 ::sal_Bool SAL_CALL StatusbarController::mouseButtonUp(
     const ::com::sun::star::awt::MouseEvent& )
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return sal_False;
 }
@@ -325,7 +325,7 @@ void SAL_CALL StatusbarController::command(
     ::sal_Int32,
     ::sal_Bool,
     const ::com::sun::star::uno::Any& )
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
 }
 
@@ -333,16 +333,16 @@ void SAL_CALL StatusbarController::paint(
     const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >&,
     const ::com::sun::star::awt::Rectangle&,
     ::sal_Int32 )
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL StatusbarController::click( const ::com::sun::star::awt::Point& )
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL StatusbarController::doubleClick( const ::com::sun::star::awt::Point& ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL StatusbarController::doubleClick( const ::com::sun::star::awt::Point& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarMutexGuard;
 

@@ -75,7 +75,7 @@ Reference< uno::XComponentContext > ChartType::GetComponentContext() const
 Reference< chart2::XCoordinateSystem > SAL_CALL
     ChartType::createCoordinateSystem( ::sal_Int32 DimensionCount )
     throw (lang::IllegalArgumentException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     Reference< chart2::XCoordinateSystem > xResult(
         new CartesianCoordinateSystem(
@@ -108,7 +108,7 @@ Reference< chart2::XCoordinateSystem > SAL_CALL
 }
 
 Sequence< OUString > SAL_CALL ChartType::getSupportedMandatoryRoles()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Sequence< OUString > aDefaultSeq(2);
     aDefaultSeq[0] = "label";
@@ -117,13 +117,13 @@ Sequence< OUString > SAL_CALL ChartType::getSupportedMandatoryRoles()
 }
 
 Sequence< OUString > SAL_CALL ChartType::getSupportedOptionalRoles()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return Sequence< OUString >();
 }
 
 OUString SAL_CALL ChartType::getRoleOfSequenceForSeriesLabel()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return OUString("values-y");
 }
@@ -142,7 +142,7 @@ void ChartType::impl_addDataSeriesWithoutNotification(
 // ____ XDataSeriesContainer ____
 void SAL_CALL ChartType::addDataSeries( const Reference< chart2::XDataSeries >& xDataSeries )
     throw (lang::IllegalArgumentException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     impl_addDataSeriesWithoutNotification( xDataSeries );
     fireModifyEvent();
@@ -150,7 +150,7 @@ void SAL_CALL ChartType::addDataSeries( const Reference< chart2::XDataSeries >& 
 
 void SAL_CALL ChartType::removeDataSeries( const Reference< chart2::XDataSeries >& xDataSeries )
     throw (container::NoSuchElementException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     if( !xDataSeries.is())
         throw container::NoSuchElementException();
@@ -169,14 +169,14 @@ void SAL_CALL ChartType::removeDataSeries( const Reference< chart2::XDataSeries 
 }
 
 Sequence< Reference< chart2::XDataSeries > > SAL_CALL ChartType::getDataSeries()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return ContainerHelper::ContainerToSequence( m_aDataSeries );
 }
 
 void SAL_CALL ChartType::setDataSeries( const Sequence< Reference< chart2::XDataSeries > >& aDataSeries )
     throw (lang::IllegalArgumentException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     m_bNotifyChanges = false;
     try
@@ -247,14 +247,14 @@ struct StaticChartTypeInfo : public rtl::StaticAggregate< uno::Reference< beans:
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL ChartType::getPropertySetInfo()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return *StaticChartTypeInfo::get();
 }
 
 // ____ XModifyBroadcaster ____
 void SAL_CALL ChartType::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -268,7 +268,7 @@ void SAL_CALL ChartType::addModifyListener( const uno::Reference< util::XModifyL
 }
 
 void SAL_CALL ChartType::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -283,14 +283,14 @@ void SAL_CALL ChartType::removeModifyListener( const uno::Reference< util::XModi
 
 // ____ XModifyListener ____
 void SAL_CALL ChartType::modified( const lang::EventObject& aEvent )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
 // ____ XEventListener (base of XModifyListener) ____
 void SAL_CALL ChartType::disposing( const lang::EventObject& /* Source */ )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     // nothing
 }

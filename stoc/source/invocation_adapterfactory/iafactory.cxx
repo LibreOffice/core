@@ -109,21 +109,21 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName )
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
 
     // XInvocationAdapterFactory
     virtual Reference< XInterface > SAL_CALL createAdapter(
         const Reference< script::XInvocation > & xReceiver, const Type & rType )
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
     // XInvocationAdapterFactory2
     virtual Reference< XInterface > SAL_CALL createAdapter(
         const Reference< script::XInvocation > & xReceiver,
         const Sequence< Type > & rTypes )
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
 };
 struct AdapterImpl;
 
@@ -831,7 +831,7 @@ static inline AdapterImpl * lookup_adapter(
 Reference< XInterface > FactoryImpl::createAdapter(
     const Reference< script::XInvocation > & xReceiver,
     const Sequence< Type > & rTypes )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     Reference< XInterface > xRet;
     if (xReceiver.is() && rTypes.getLength())
@@ -892,7 +892,7 @@ Reference< XInterface > FactoryImpl::createAdapter(
 
 Reference< XInterface > FactoryImpl::createAdapter(
     const Reference< script::XInvocation > & xReceiver, const Type & rType )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return createAdapter( xReceiver, Sequence< Type >( &rType, 1 ) );
 }
@@ -900,19 +900,19 @@ Reference< XInterface > FactoryImpl::createAdapter(
 // XServiceInfo
 
 OUString FactoryImpl::getImplementationName()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return invadp_getImplementationName();
 }
 
 sal_Bool FactoryImpl::supportsService( const OUString & rServiceName )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > FactoryImpl::getSupportedServiceNames()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return invadp_getSupportedServiceNames();
 }

@@ -66,7 +66,7 @@ namespace frm
         // OPropertySet and friends
         virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle) const;
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
-                    throw (::com::sun::star::uno::Exception);
+                    throw (::com::sun::star::uno::Exception, std::exception);
         virtual sal_Bool SAL_CALL convertFastPropertyValue(
                     ::com::sun::star::uno::Any& _rConvertedValue, ::com::sun::star::uno::Any& _rOldValue, sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue )
                     throw (::com::sun::star::lang::IllegalArgumentException);

@@ -111,7 +111,7 @@ public:
     ODBFilter( const Reference< XComponentContext >& _rxContext );
 
     // XFilter
-    virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& rDescriptor ) throw(RuntimeException);
+    virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& rDescriptor ) throw(RuntimeException, std::exception);
 
     static OUString SAL_CALL getImplementationName_Static()
         throw (css::uno::RuntimeException);

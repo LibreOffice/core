@@ -40,8 +40,8 @@ public:
     AnnotationEnumeration( const AnnotationVector& rAnnotations );
 
     // ::com::sun::star::office::XAnnotationEnumeration:
-    virtual ::sal_Bool SAL_CALL hasMoreElements() throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< css::office::XAnnotation > SAL_CALL nextElement() throw (css::uno::RuntimeException, css::container::NoSuchElementException);
+    virtual ::sal_Bool SAL_CALL hasMoreElements() throw (css::uno::RuntimeException, std::exception);
+    virtual css::uno::Reference< css::office::XAnnotation > SAL_CALL nextElement() throw (css::uno::RuntimeException, css::container::NoSuchElementException, std::exception);
 
 private:
     AnnotationEnumeration(const AnnotationEnumeration &); // not defined
@@ -65,12 +65,12 @@ AnnotationEnumeration::AnnotationEnumeration( const AnnotationVector& rAnnotatio
 }
 
 // ::com::sun::star::office::XAnnotationEnumeration:
-::sal_Bool SAL_CALL AnnotationEnumeration::hasMoreElements() throw (css::uno::RuntimeException)
+::sal_Bool SAL_CALL AnnotationEnumeration::hasMoreElements() throw (css::uno::RuntimeException, std::exception)
 {
     return maIter != maAnnotations.end() ? sal_True : sal_False;
 }
 
-css::uno::Reference< css::office::XAnnotation > SAL_CALL AnnotationEnumeration::nextElement() throw (css::uno::RuntimeException, css::container::NoSuchElementException)
+css::uno::Reference< css::office::XAnnotation > SAL_CALL AnnotationEnumeration::nextElement() throw (css::uno::RuntimeException, css::container::NoSuchElementException, std::exception)
 {
     if( maIter == maAnnotations.end() )
         throw css::container::NoSuchElementException();

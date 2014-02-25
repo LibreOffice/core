@@ -242,7 +242,7 @@ void AccessibleDocumentViewBase::ViewForwarderChanged(ChangeType, const IAccessi
 
 Reference<XAccessible> SAL_CALL
        AccessibleDocumentViewBase::getAccessibleParent (void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
 
@@ -253,7 +253,7 @@ Reference<XAccessible> SAL_CALL
 
 sal_Int32 SAL_CALL
     AccessibleDocumentViewBase::getAccessibleChildCount (void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
 
@@ -268,7 +268,7 @@ sal_Int32 SAL_CALL
 
 Reference<XAccessible> SAL_CALL
     AccessibleDocumentViewBase::getAccessibleChild (sal_Int32 nIndex)
-    throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
+    throw (uno::RuntimeException, lang::IndexOutOfBoundsException, std::exception)
 {
     ThrowIfDisposed ();
 
@@ -292,7 +292,7 @@ Reference<XAccessible> SAL_CALL
 uno::Reference<XAccessible > SAL_CALL
     AccessibleDocumentViewBase::getAccessibleAtPoint (
         const awt::Point& aPoint)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
 
@@ -332,7 +332,7 @@ uno::Reference<XAccessible > SAL_CALL
 
 awt::Rectangle SAL_CALL
     AccessibleDocumentViewBase::getBounds (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
 
@@ -371,7 +371,7 @@ awt::Rectangle SAL_CALL
 
 awt::Point SAL_CALL
     AccessibleDocumentViewBase::getLocation (void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     awt::Rectangle aBoundingBox (getBounds());
@@ -383,7 +383,7 @@ awt::Point SAL_CALL
 
 awt::Point SAL_CALL
     AccessibleDocumentViewBase::getLocationOnScreen (void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     ::Point aLogicalPoint (maShapeTreeInfo.GetViewForwarder()->GetVisibleArea().TopLeft());
@@ -396,7 +396,7 @@ awt::Point SAL_CALL
 
 awt::Size SAL_CALL
     AccessibleDocumentViewBase::getSize (void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
 
@@ -421,7 +421,7 @@ awt::Size SAL_CALL
 
 uno::Any SAL_CALL
     AccessibleDocumentViewBase::queryInterface (const uno::Type & rType)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     uno::Any aReturn = AccessibleContextBase::queryInterface (rType);
     if ( ! aReturn.hasValue())
@@ -466,7 +466,7 @@ void SAL_CALL
 
 OUString SAL_CALL
     AccessibleDocumentViewBase::getImplementationName (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return OUString("AccessibleDocumentViewBase");
 }
@@ -476,7 +476,7 @@ OUString SAL_CALL
 
 ::com::sun::star::uno::Sequence< OUString> SAL_CALL
     AccessibleDocumentViewBase::getSupportedServiceNames (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     return AccessibleContextBase::getSupportedServiceNames ();
@@ -490,7 +490,7 @@ OUString SAL_CALL
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL
     AccessibleDocumentViewBase::getTypes (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
 
@@ -591,7 +591,7 @@ void AccessibleDocumentViewBase::impl_dispose()
 
 void SAL_CALL
     AccessibleDocumentViewBase::disposing (const lang::EventObject& rEventObject)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
 
@@ -611,7 +611,7 @@ void SAL_CALL
 //=====  XPropertyChangeListener  =============================================
 
 void SAL_CALL AccessibleDocumentViewBase::propertyChange (const beans::PropertyChangeEvent& )
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     // Empty
 }
@@ -623,7 +623,7 @@ void SAL_CALL AccessibleDocumentViewBase::propertyChange (const beans::PropertyC
 
 void SAL_CALL
     AccessibleDocumentViewBase::windowResized (const ::com::sun::star::awt::WindowEvent& )
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     if( IsDisposed() )
         return;
@@ -638,7 +638,7 @@ void SAL_CALL
 
 void SAL_CALL
     AccessibleDocumentViewBase::windowMoved (const ::com::sun::star::awt::WindowEvent& )
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     if( IsDisposed() )
         return;
@@ -653,7 +653,7 @@ void SAL_CALL
 
 void SAL_CALL
     AccessibleDocumentViewBase::windowShown (const ::com::sun::star::lang::EventObject& )
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     if( IsDisposed() )
         return;
@@ -668,7 +668,7 @@ void SAL_CALL
 
 void SAL_CALL
     AccessibleDocumentViewBase::windowHidden (const ::com::sun::star::lang::EventObject& )
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     if( IsDisposed() )
         return;
@@ -684,7 +684,7 @@ void SAL_CALL
 //=====  XFocusListener  ==================================================
 
 void AccessibleDocumentViewBase::focusGained (const ::com::sun::star::awt::FocusEvent& e)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     if (e.Source == mxWindow)
@@ -692,7 +692,7 @@ void AccessibleDocumentViewBase::focusGained (const ::com::sun::star::awt::Focus
 }
 
 void AccessibleDocumentViewBase::focusLost (const ::com::sun::star::awt::FocusEvent& e)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     if (e.Source == mxWindow)
@@ -959,7 +959,7 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
         SAL_CALL AccessibleDocumentViewBase::get_AccFlowTo(const ::com::sun::star::uno::Any&, sal_Int32 )
-        throw ( ::com::sun::star::uno::RuntimeException )
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     ::com::sun::star::uno::Sequence< uno::Any> aRet;
 
@@ -967,13 +967,13 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
 }
 
 sal_Int32 SAL_CALL AccessibleDocumentViewBase::getForeground(  )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     return COL_BLACK;
 }
 
 sal_Int32 SAL_CALL AccessibleDocumentViewBase::getBackground(  )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
      ThrowIfDisposed ();
     ::osl::MutexGuard aGuard (maMutex);

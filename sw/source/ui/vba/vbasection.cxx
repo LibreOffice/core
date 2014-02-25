@@ -34,16 +34,16 @@ SwVbaSection::~SwVbaSection()
 {
 }
 
-::sal_Bool SAL_CALL SwVbaSection::getProtectedForForms() throw (uno::RuntimeException)
+::sal_Bool SAL_CALL SwVbaSection::getProtectedForForms() throw (uno::RuntimeException, std::exception)
 {
     return sal_False;
 }
 
-void SAL_CALL SwVbaSection::setProtectedForForms( ::sal_Bool /*_protectedforforms*/ ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaSection::setProtectedForForms( ::sal_Bool /*_protectedforforms*/ ) throw (uno::RuntimeException, std::exception)
 {
 }
 
-uno::Any SAL_CALL SwVbaSection::Headers( const uno::Any& index ) throw (uno::RuntimeException)
+uno::Any SAL_CALL SwVbaSection::Headers( const uno::Any& index ) throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< XCollection > xCol( new SwVbaHeadersFooters( this, mxContext, mxModel, mxPageProps, sal_True ) );
     if ( index.hasValue() )
@@ -51,7 +51,7 @@ uno::Any SAL_CALL SwVbaSection::Headers( const uno::Any& index ) throw (uno::Run
     return uno::makeAny( xCol );
 }
 
-uno::Any SAL_CALL SwVbaSection::Footers( const uno::Any& index ) throw (uno::RuntimeException)
+uno::Any SAL_CALL SwVbaSection::Footers( const uno::Any& index ) throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< XCollection > xCol( new SwVbaHeadersFooters( this, mxContext, mxModel, mxPageProps, sal_False ) );
     if ( index.hasValue() )
@@ -60,7 +60,7 @@ uno::Any SAL_CALL SwVbaSection::Footers( const uno::Any& index ) throw (uno::Run
 }
 
 uno::Any SAL_CALL
-SwVbaSection::PageSetup( ) throw (uno::RuntimeException)
+SwVbaSection::PageSetup( ) throw (uno::RuntimeException, std::exception)
 {
     return uno::makeAny( uno::Reference< word::XPageSetup >( new SwVbaPageSetup( this, mxContext, mxModel, mxPageProps ) ) );
 }

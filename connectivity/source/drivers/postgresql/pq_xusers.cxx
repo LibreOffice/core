@@ -83,7 +83,7 @@ Users::~Users()
 {}
 
 void Users::refresh()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     try
     {
@@ -133,7 +133,7 @@ void Users::appendByDescriptor(
     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor )
     throw (::com::sun::star::sdbc::SQLException,
            ::com::sun::star::container::ElementExistException,
-           ::com::sun::star::uno::RuntimeException)
+           ::com::sun::star::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard guard( m_refMutex->mutex );
 
@@ -151,7 +151,7 @@ void Users::appendByDescriptor(
 void Users::dropByName( const OUString& elementName )
     throw (::com::sun::star::sdbc::SQLException,
            ::com::sun::star::container::NoSuchElementException,
-           ::com::sun::star::uno::RuntimeException)
+           ::com::sun::star::uno::RuntimeException, std::exception)
 {
     String2IntMap::const_iterator ii = m_name2index.find( elementName );
     if( ii == m_name2index.end() )
@@ -169,7 +169,7 @@ void Users::dropByName( const OUString& elementName )
 void Users::dropByIndex( sal_Int32 index )
     throw (::com::sun::star::sdbc::SQLException,
            ::com::sun::star::lang::IndexOutOfBoundsException,
-           ::com::sun::star::uno::RuntimeException)
+           ::com::sun::star::uno::RuntimeException, std::exception)
 {
 
     osl::MutexGuard guard( m_refMutex->mutex );
@@ -201,7 +201,7 @@ void Users::dropByIndex( sal_Int32 index )
 
 
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > Users::createDataDescriptor()
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return new UserDescriptor( m_refMutex, m_origin, m_pSettings  );
 }

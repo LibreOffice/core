@@ -35,31 +35,31 @@ public:
     virtual ~SIDEModel();
 
     //XInterface
-    virtual     ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
+    virtual     ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL acquire(  ) throw();
     virtual void SAL_CALL release(  ) throw();
 
     //XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName(void)
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception );
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-            throw( ::com::sun::star::uno::RuntimeException );
+            throw( ::com::sun::star::uno::RuntimeException, std::exception );
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(void)
-            throw( ::com::sun::star::uno::RuntimeException );
+            throw( ::com::sun::star::uno::RuntimeException, std::exception );
     // XStorable2
     virtual void SAL_CALL storeSelf( const  ::com::sun::star::uno::Sequence< css::beans::PropertyValue >& )
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException) { notImplemented(); }
+        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) { notImplemented(); }
     //  XStorable
-    virtual void SAL_CALL store() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL store() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL storeAsURL(   const   OUString& sURL,
         const   ::com::sun::star::uno::Sequence< css::beans::PropertyValue >&   seqArguments    )
-        throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL storeToURL(   const   OUString& sURL,
         const   ::com::sun::star::uno::Sequence< css::beans::PropertyValue >&   seqArguments    )
-        throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception);
 
     static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static();
     static OUString getImplementationName_Static();

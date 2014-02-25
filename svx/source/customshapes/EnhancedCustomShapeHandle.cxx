@@ -51,7 +51,7 @@ void SAL_CALL EnhancedCustomShapeHandle::release() throw()
 
 // XCustomShapeHandle
 com::sun::star::awt::Point SAL_CALL EnhancedCustomShapeHandle::getPosition()
-    throw ( com::sun::star::uno::RuntimeException )
+    throw ( com::sun::star::uno::RuntimeException, std::exception )
 {
     SdrObject* pSdrObjCustomShape( GetSdrObjectFromXShape( mxCustomShape ) );
     if ( !pSdrObjCustomShape )
@@ -65,7 +65,7 @@ com::sun::star::awt::Point SAL_CALL EnhancedCustomShapeHandle::getPosition()
 }
 
 void SAL_CALL EnhancedCustomShapeHandle::setControllerPosition( const com::sun::star::awt::Point& aPnt )
-    throw ( com::sun::star::uno::RuntimeException )
+    throw ( com::sun::star::uno::RuntimeException, std::exception )
 {
     SdrObject* pSdrObjCustomShape( GetSdrObjectFromXShape( mxCustomShape ) );
     if ( !pSdrObjCustomShape )
@@ -78,7 +78,7 @@ void SAL_CALL EnhancedCustomShapeHandle::setControllerPosition( const com::sun::
 
 // XInitialization
 void SAL_CALL EnhancedCustomShapeHandle::initialize( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& /* aArguments */ )
-    throw ( com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException )
+    throw ( com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception )
 {
 }
 

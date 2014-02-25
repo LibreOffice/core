@@ -42,7 +42,7 @@ SwVbaWindow::SwVbaWindow(
 }
 
 void
-SwVbaWindow::Activate() throw (css::uno::RuntimeException)
+SwVbaWindow::Activate() throw (css::uno::RuntimeException, std::exception)
 {
     SwVbaDocument document( uno::Reference< XHelperInterface >( Application(), uno::UNO_QUERY_THROW ), mxContext, m_xModel );
 
@@ -50,7 +50,7 @@ SwVbaWindow::Activate() throw (css::uno::RuntimeException)
 }
 
 void
-SwVbaWindow::Close( const uno::Any& SaveChanges, const uno::Any& RouteDocument ) throw (uno::RuntimeException)
+SwVbaWindow::Close( const uno::Any& SaveChanges, const uno::Any& RouteDocument ) throw (uno::RuntimeException, std::exception)
 {
     // FIXME: it is incorrect when there are more than 1 windows
     SwVbaDocument document( uno::Reference< XHelperInterface >( Application(), uno::UNO_QUERY_THROW ), mxContext, m_xModel );
@@ -59,12 +59,12 @@ SwVbaWindow::Close( const uno::Any& SaveChanges, const uno::Any& RouteDocument )
 }
 
 uno::Any SAL_CALL
-SwVbaWindow::getView() throw (uno::RuntimeException)
+SwVbaWindow::getView() throw (uno::RuntimeException, std::exception)
 {
     return uno::makeAny( uno::Reference< word::XView >( new SwVbaView( this,  mxContext, m_xModel ) ) );
 }
 
-void SAL_CALL SwVbaWindow::setView( const uno::Any& _view ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaWindow::setView( const uno::Any& _view ) throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nType = 0;
     if( _view >>= nType )
@@ -75,7 +75,7 @@ void SAL_CALL SwVbaWindow::setView( const uno::Any& _view ) throw (uno::RuntimeE
 }
 
 uno::Any SAL_CALL
-SwVbaWindow::getWindowState() throw (uno::RuntimeException)
+SwVbaWindow::getWindowState() throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nwindowState = word::WdWindowState::wdWindowStateNormal;
     SwView* pView = word::getView( m_xModel );
@@ -92,7 +92,7 @@ SwVbaWindow::getWindowState() throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-SwVbaWindow::setWindowState( const uno::Any& _windowstate ) throw (uno::RuntimeException)
+SwVbaWindow::setWindowState( const uno::Any& _windowstate ) throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nwindowState = word::WdWindowState::wdWindowStateMaximize;
     _windowstate >>= nwindowState;
@@ -113,7 +113,7 @@ SwVbaWindow::setWindowState( const uno::Any& _windowstate ) throw (uno::RuntimeE
 }
 
 uno::Any SAL_CALL
-SwVbaWindow::Panes( const uno::Any& aIndex ) throw (uno::RuntimeException)
+SwVbaWindow::Panes( const uno::Any& aIndex ) throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< XCollection > xPanes( new SwVbaPanes( this,  mxContext, m_xModel ) );
     if(  aIndex.getValueTypeClass() == uno::TypeClass_VOID )
@@ -123,7 +123,7 @@ SwVbaWindow::Panes( const uno::Any& aIndex ) throw (uno::RuntimeException)
 }
 
 uno::Any SAL_CALL
-SwVbaWindow::ActivePane() throw (uno::RuntimeException)
+SwVbaWindow::ActivePane() throw (uno::RuntimeException, std::exception)
 {
     return uno::makeAny( uno::Reference< word::XPane >( new SwVbaPane( this,  mxContext, m_xModel ) ) );
 }

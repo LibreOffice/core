@@ -90,7 +90,7 @@ void OCipherContext::Dispose()
 }
 
 uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::convertWithCipherContext( const uno::Sequence< ::sal_Int8 >& aData )
-    throw ( lang::IllegalArgumentException, lang::DisposedException, uno::RuntimeException)
+    throw ( lang::IllegalArgumentException, lang::DisposedException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -171,7 +171,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::convertWithCipherContext( c
 }
 
 uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::finalizeCipherContextAndDispose()
-    throw (lang::DisposedException, uno::RuntimeException)
+    throw (lang::DisposedException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 

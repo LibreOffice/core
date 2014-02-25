@@ -66,7 +66,7 @@ void SAL_CALL SdUnoOutlineView::disposing (void)
 //----- XSelectionSupplier ----------------------------------------------------
 
 sal_Bool SAL_CALL SdUnoOutlineView::select( const Any&  )
-    throw(lang::IllegalArgumentException, RuntimeException)
+    throw(lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     // todo: add selections for text ranges
     return sal_False;
@@ -75,7 +75,7 @@ sal_Bool SAL_CALL SdUnoOutlineView::select( const Any&  )
 
 
 Any SAL_CALL SdUnoOutlineView::getSelection()
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     Any aAny;
     return aAny;
@@ -85,7 +85,7 @@ Any SAL_CALL SdUnoOutlineView::getSelection()
 
 void SAL_CALL SdUnoOutlineView::addSelectionChangeListener (
     const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     (void)rxListener;
 }
@@ -95,7 +95,7 @@ void SAL_CALL SdUnoOutlineView::addSelectionChangeListener (
 
 void SAL_CALL SdUnoOutlineView::removeSelectionChangeListener (
     const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     (void)rxListener;
 }
@@ -108,7 +108,7 @@ void SAL_CALL SdUnoOutlineView::removeSelectionChangeListener (
 
 void SAL_CALL SdUnoOutlineView::setCurrentPage (
     const Reference< drawing::XDrawPage >& xPage)
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     SvxDrawPage* pDrawPage = SvxDrawPage::getImplementation( xPage );
     SdrPage *pSdrPage = pDrawPage ? pDrawPage->GetSdrPage() : NULL;
@@ -121,7 +121,7 @@ void SAL_CALL SdUnoOutlineView::setCurrentPage (
 
 
 Reference< drawing::XDrawPage > SAL_CALL SdUnoOutlineView::getCurrentPage (void)
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     Reference<drawing::XDrawPage>  xPage;
 
@@ -139,7 +139,7 @@ void SdUnoOutlineView::setFastPropertyValue (
         css::beans::PropertyVetoException,
         css::lang::IllegalArgumentException,
         css::lang::WrappedTargetException,
-        css::uno::RuntimeException)
+        css::uno::RuntimeException, std::exception)
 {
     switch( nHandle )
     {
@@ -171,7 +171,7 @@ Any SAL_CALL SdUnoOutlineView::getFastPropertyValue (
     sal_Int32 nHandle)
     throw(css::beans::UnknownPropertyException,
         css::lang::WrappedTargetException,
-        css::uno::RuntimeException)
+        css::uno::RuntimeException, std::exception)
 {
     Any aValue;
 
@@ -195,17 +195,17 @@ Any SAL_CALL SdUnoOutlineView::getFastPropertyValue (
 }
 
 // XServiceInfo
-OUString SAL_CALL SdUnoOutlineView::getImplementationName(  ) throw (RuntimeException)
+OUString SAL_CALL SdUnoOutlineView::getImplementationName(  ) throw (RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.sd.SdUnoOutlineView");
 }
 
-sal_Bool SAL_CALL SdUnoOutlineView::supportsService( const OUString& ServiceName ) throw (RuntimeException)
+sal_Bool SAL_CALL SdUnoOutlineView::supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception)
 {
     return cppu::supportsService( this, ServiceName );
 }
 
-Sequence< OUString > SAL_CALL SdUnoOutlineView::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > SAL_CALL SdUnoOutlineView::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
 {
     OUString aSN( "com.sun.star.presentation.OutlineView" );
     uno::Sequence< OUString > aSeq( &aSN, 1 );

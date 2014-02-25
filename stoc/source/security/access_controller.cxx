@@ -93,7 +93,7 @@ public:
     // XAccessControlContext impl
     virtual void SAL_CALL checkPermission(
         Any const & perm )
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
 };
 
 inline acc_Intersection::acc_Intersection(
@@ -122,7 +122,7 @@ inline Reference< security::XAccessControlContext > acc_Intersection::create(
 
 void acc_Intersection::checkPermission(
     Any const & perm )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     m_x1->checkPermission( perm );
     m_x2->checkPermission( perm );
@@ -152,7 +152,7 @@ public:
     // XAccessControlContext impl
     virtual void SAL_CALL checkPermission(
         Any const & perm )
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
 };
 
 inline acc_Union::acc_Union(
@@ -181,7 +181,7 @@ inline Reference< security::XAccessControlContext > acc_Union::create(
 
 void acc_Union::checkPermission(
     Any const & perm )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     try
     {
@@ -210,7 +210,7 @@ public:
     // XAccessControlContext impl
     virtual void SAL_CALL checkPermission(
         Any const & perm )
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
 };
 
 inline acc_Policy::acc_Policy(
@@ -225,7 +225,7 @@ acc_Policy::~acc_Policy()
 
 void acc_Policy::checkPermission(
     Any const & perm )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     m_permissions.checkPermission( perm );
 }
@@ -255,7 +255,7 @@ public:
 
     // XCurrentContext impl
     virtual Any SAL_CALL getValueByName( OUString const & name )
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
 };
 
 inline acc_CurrentContext::acc_CurrentContext(
@@ -292,7 +292,7 @@ void acc_CurrentContext::release()
 }
 
 Any acc_CurrentContext::getValueByName( OUString const & name )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     if (name == s_acRestriction)
     {
@@ -402,30 +402,30 @@ public:
     //  XInitialization impl
     virtual void SAL_CALL initialize(
         Sequence< Any > const & arguments )
-        throw (Exception);
+        throw (Exception, std::exception);
 
     // XAccessController impl
     virtual void SAL_CALL checkPermission(
         Any const & perm )
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
     virtual Any SAL_CALL doRestricted(
         Reference< security::XAction > const & xAction,
         Reference< security::XAccessControlContext > const & xRestriction )
-        throw (Exception);
+        throw (Exception, std::exception);
     virtual Any SAL_CALL doPrivileged(
         Reference< security::XAction > const & xAction,
         Reference< security::XAccessControlContext > const & xRestriction )
-        throw (Exception);
+        throw (Exception, std::exception);
     virtual Reference< security::XAccessControlContext > SAL_CALL getContext()
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
 
     // XServiceInfo impl
     virtual OUString SAL_CALL getImplementationName()
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL supportsService( OUString const & serviceName )
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
 };
 
 AccessController::AccessController( Reference< XComponentContext > const & xComponentContext )
@@ -506,7 +506,7 @@ void AccessController::disposing()
 
 void AccessController::initialize(
     Sequence< Any > const & arguments )
-    throw (Exception)
+    throw (Exception, std::exception)
 {
     // xxx todo: review for forking
     // portal forking hack: re-initialize for another user-id
@@ -836,7 +836,7 @@ PermissionCollection AccessController::getEffectivePermissions(
 
 void AccessController::checkPermission(
     Any const & perm )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     if (rBHelper.bDisposed)
     {
@@ -866,7 +866,7 @@ void AccessController::checkPermission(
 Any AccessController::doRestricted(
     Reference< security::XAction > const & xAction,
     Reference< security::XAccessControlContext > const & xRestriction )
-    throw (Exception)
+    throw (Exception, std::exception)
 {
     if (rBHelper.bDisposed)
     {
@@ -899,7 +899,7 @@ Any AccessController::doRestricted(
 Any AccessController::doPrivileged(
     Reference< security::XAction > const & xAction,
     Reference< security::XAccessControlContext > const & xRestriction )
-    throw (Exception)
+    throw (Exception, std::exception)
 {
     if (rBHelper.bDisposed)
     {
@@ -934,7 +934,7 @@ Any AccessController::doPrivileged(
 }
 
 Reference< security::XAccessControlContext > AccessController::getContext()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     if (rBHelper.bDisposed)
     {
@@ -958,19 +958,19 @@ Reference< security::XAccessControlContext > AccessController::getContext()
 // XServiceInfo impl
 
 OUString AccessController::getImplementationName()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return OUString("com.sun.star.security.comp.stoc.AccessController");
 }
 
 sal_Bool AccessController::supportsService( OUString const & serviceName )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, serviceName);
 }
 
 Sequence< OUString > AccessController::getSupportedServiceNames()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aSNS( 1 );
     aSNS[0] = OUString(SERVICE_NAME);

@@ -310,17 +310,17 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
 }
 
 sal_Bool SAL_CALL XmlFilterAdaptor::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
-  throw (RuntimeException)
+  throw (RuntimeException, std::exception)
 {
     return meType == FILTER_EXPORT ? exportImpl ( aDescriptor ) : importImpl ( aDescriptor );
 }
 void SAL_CALL XmlFilterAdaptor::cancel(  )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
 }
 // XExporter
 void SAL_CALL XmlFilterAdaptor::setSourceDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc )
-    throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
+    throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     meType = FILTER_EXPORT;
     mxDoc = xDoc;
@@ -328,14 +328,14 @@ void SAL_CALL XmlFilterAdaptor::setSourceDocument( const Reference< ::com::sun::
 
 // XImporter
 void SAL_CALL XmlFilterAdaptor::setTargetDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc )
-    throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
+    throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     meType = FILTER_IMPORT;
     mxDoc = xDoc;
 }
 // XInitialization
 void SAL_CALL XmlFilterAdaptor::initialize( const Sequence< Any >& aArguments )
-    throw (Exception, RuntimeException)
+    throw (Exception, RuntimeException, std::exception)
 {
     Sequence < PropertyValue > aAnySeq;
     sal_Int32 nLength = aArguments.getLength();
@@ -374,19 +374,19 @@ Reference< XInterface > SAL_CALL XmlFilterAdaptor_createInstance( const Referenc
 
 // XServiceInfo
 OUString SAL_CALL XmlFilterAdaptor::getImplementationName(  )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return XmlFilterAdaptor_getImplementationName();
 }
 
 sal_Bool SAL_CALL XmlFilterAdaptor::supportsService( const OUString& rServiceName )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return cppu::supportsService( this, rServiceName );
 }
 
 Sequence< OUString > SAL_CALL XmlFilterAdaptor::getSupportedServiceNames(  )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return XmlFilterAdaptor_getSupportedServiceNames();
 }

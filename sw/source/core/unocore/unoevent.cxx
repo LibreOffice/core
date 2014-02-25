@@ -120,7 +120,7 @@ SwHyperlinkEventDescriptor::~SwHyperlinkEventDescriptor()
 }
 
 OUString SwHyperlinkEventDescriptor::getImplementationName(void)
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return sImplName;
 }
@@ -220,7 +220,7 @@ sal_uInt16 SwFrameEventDescriptor::getMacroItemWhich() const
 }
 
 OUString SwFrameEventDescriptor::getImplementationName()
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return sSwFrameEventDescriptor;
 }
@@ -285,7 +285,7 @@ const SvxMacroItem& SwFrameStyleEventDescriptor::getMacroItem()
 }
 
 OUString SwFrameStyleEventDescriptor::getImplementationName()
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return sSwFrameStyleEventDescriptor;
 }

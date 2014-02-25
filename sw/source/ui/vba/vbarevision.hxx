@@ -39,8 +39,8 @@ public:
     virtual ~SwVbaRevision();
 
     // Methods
-    virtual void SAL_CALL Accept(  ) throw (css::uno::RuntimeException);
-    virtual void SAL_CALL Reject(  ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL Accept(  ) throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL Reject(  ) throw (css::uno::RuntimeException, std::exception);
 
     // XHelperInterface
     virtual OUString getServiceImplName();

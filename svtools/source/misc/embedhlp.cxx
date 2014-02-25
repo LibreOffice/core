@@ -71,15 +71,15 @@ public:
     static EmbedEventListener_Impl* Create( EmbeddedObjectRef* );
 
     virtual void SAL_CALL changingState( const lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState )
-                                    throw (embed::WrongStateException, uno::RuntimeException);
+                                    throw (embed::WrongStateException, uno::RuntimeException, std::exception);
     virtual void SAL_CALL stateChanged( const lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState )
-                                    throw (uno::RuntimeException);
+                                    throw (uno::RuntimeException, std::exception);
     virtual void SAL_CALL queryClosing( const lang::EventObject& Source, ::sal_Bool GetsOwnership )
-                                    throw (util::CloseVetoException, uno::RuntimeException);
-    virtual void SAL_CALL notifyClosing( const lang::EventObject& Source ) throw (uno::RuntimeException);
-    virtual void SAL_CALL notifyEvent( const document::EventObject& aEvent ) throw( uno::RuntimeException );
-    virtual void SAL_CALL disposing( const lang::EventObject& aEvent ) throw( uno::RuntimeException );
-    virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
+                                    throw (util::CloseVetoException, uno::RuntimeException, std::exception);
+    virtual void SAL_CALL notifyClosing( const lang::EventObject& Source ) throw (uno::RuntimeException, std::exception);
+    virtual void SAL_CALL notifyEvent( const document::EventObject& aEvent ) throw( uno::RuntimeException, std::exception );
+    virtual void SAL_CALL disposing( const lang::EventObject& aEvent ) throw( uno::RuntimeException, std::exception );
+    virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 };
 
 EmbedEventListener_Impl* EmbedEventListener_Impl::Create( EmbeddedObjectRef* p )
@@ -117,14 +117,14 @@ void SAL_CALL EmbedEventListener_Impl::changingState( const lang::EventObject&,
                                                     ::sal_Int32,
                                                     ::sal_Int32 )
     throw ( embed::WrongStateException,
-            uno::RuntimeException )
+            uno::RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL EmbedEventListener_Impl::stateChanged( const lang::EventObject&,
                                                     ::sal_Int32 nOldState,
                                                     ::sal_Int32 nNewState )
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     nState = nNewState;
@@ -160,7 +160,7 @@ void SAL_CALL EmbedEventListener_Impl::stateChanged( const lang::EventObject&,
     }
 }
 
-void SAL_CALL EmbedEventListener_Impl::modified( const lang::EventObject& ) throw (uno::RuntimeException)
+void SAL_CALL EmbedEventListener_Impl::modified( const lang::EventObject& ) throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( pObject && pObject->GetViewAspect() != embed::Aspects::MSOLE_ICON )
@@ -183,7 +183,7 @@ void SAL_CALL EmbedEventListener_Impl::modified( const lang::EventObject& ) thro
     }
 }
 
-void SAL_CALL EmbedEventListener_Impl::notifyEvent( const document::EventObject& aEvent ) throw( uno::RuntimeException )
+void SAL_CALL EmbedEventListener_Impl::notifyEvent( const document::EventObject& aEvent ) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -194,7 +194,7 @@ void SAL_CALL EmbedEventListener_Impl::notifyEvent( const document::EventObject&
 }
 
 void SAL_CALL EmbedEventListener_Impl::queryClosing( const lang::EventObject& Source, ::sal_Bool )
-        throw ( util::CloseVetoException, uno::RuntimeException)
+        throw ( util::CloseVetoException, uno::RuntimeException, std::exception)
 {
     // An embedded object can be shared between several objects (f.e. for undo purposes)
     // the object will not be closed before the last "customer" is destroyed
@@ -203,7 +203,7 @@ void SAL_CALL EmbedEventListener_Impl::queryClosing( const lang::EventObject& So
         throw util::CloseVetoException();
 }
 
-void SAL_CALL EmbedEventListener_Impl::notifyClosing( const lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL EmbedEventListener_Impl::notifyClosing( const lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     if ( pObject && Source.Source == pObject->GetObject() )
     {
@@ -212,7 +212,7 @@ void SAL_CALL EmbedEventListener_Impl::notifyClosing( const lang::EventObject& S
     }
 }
 
-void SAL_CALL EmbedEventListener_Impl::disposing( const lang::EventObject& aEvent ) throw( uno::RuntimeException )
+void SAL_CALL EmbedEventListener_Impl::disposing( const lang::EventObject& aEvent ) throw( uno::RuntimeException, std::exception )
 {
     if ( pObject && aEvent.Source == pObject->GetObject() )
     {

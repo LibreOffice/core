@@ -32,7 +32,7 @@ DesktopContext::DesktopContext( const Reference< XCurrentContext > & ctx )
 {
 }
 
-Any SAL_CALL DesktopContext::getValueByName( const OUString& Name) throw (RuntimeException)
+Any SAL_CALL DesktopContext::getValueByName( const OUString& Name) throw (RuntimeException, std::exception)
 {
     Any retVal;
 

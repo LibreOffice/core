@@ -164,16 +164,16 @@ public:
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL
         getProperties(  )
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual ::com::sun::star::beans::Property SAL_CALL
         getPropertyByName( const OUString& aName )
             throw(::com::sun::star::beans::UnknownPropertyException,
-                    ::com::sun::star::uno::RuntimeException);
+                    ::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual sal_Bool SAL_CALL
         hasPropertyByName( const OUString& Name )
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(::com::sun::star::uno::RuntimeException, std::exception);
 
 };
 
@@ -188,15 +188,15 @@ public:
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL
         getProperties(  )
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual ::com::sun::star::beans::Property SAL_CALL
         getPropertyByName( const OUString& aName )
-            throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+            throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual sal_Bool SAL_CALL
         hasPropertyByName( const OUString& Name )
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(::com::sun::star::uno::RuntimeException, std::exception);
 };
 
 #endif

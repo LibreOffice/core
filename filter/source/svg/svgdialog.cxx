@@ -100,7 +100,7 @@ SVGDialog::~SVGDialog()
 
 
 Any SAL_CALL SVGDialog::queryInterface( const Type& rType )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     Any aReturn( OGenericUnoDialog::queryInterface( rType ) );
 
@@ -132,7 +132,7 @@ void SAL_CALL SVGDialog::release()
 
 
 Sequence< sal_Int8 > SAL_CALL SVGDialog::getImplementationId()
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     return SVGDialog_getImplementationId();
 }
@@ -140,7 +140,7 @@ Sequence< sal_Int8 > SAL_CALL SVGDialog::getImplementationId()
 
 
 OUString SAL_CALL SVGDialog::getImplementationName()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return SVGDialog_getImplementationName();
 }
@@ -148,7 +148,7 @@ OUString SAL_CALL SVGDialog::getImplementationName()
 
 
 Sequence< OUString > SAL_CALL SVGDialog::getSupportedServiceNames()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return SVGDialog_getSupportedServiceNames();
 }
@@ -175,7 +175,7 @@ void SVGDialog::executedDialog( sal_Int16 nExecutionResult )
 
 
 Reference< XPropertySetInfo > SAL_CALL SVGDialog::getPropertySetInfo()
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     return( Reference< XPropertySetInfo >( createPropertySetInfo( getInfoHelper() ) ) );
 }
@@ -199,7 +199,7 @@ Reference< XPropertySetInfo > SAL_CALL SVGDialog::getPropertySetInfo()
 
 
 Sequence< PropertyValue > SAL_CALL SVGDialog::getPropertyValues()
-    throw ( RuntimeException )
+    throw ( RuntimeException, std::exception )
 {
     sal_Int32 i, nCount;
 
@@ -223,7 +223,7 @@ Sequence< PropertyValue > SAL_CALL SVGDialog::getPropertyValues()
 
 
 void SAL_CALL SVGDialog::setPropertyValues( const Sequence< PropertyValue >& rProps )
-    throw ( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException )
+    throw ( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception )
 {
     maMediaDescriptor = rProps;
 
@@ -240,7 +240,7 @@ void SAL_CALL SVGDialog::setPropertyValues( const Sequence< PropertyValue >& rPr
 
 
 void SAL_CALL SVGDialog::setSourceDocument( const Reference< XComponent >& xDoc )
-    throw(IllegalArgumentException, RuntimeException)
+    throw(IllegalArgumentException, RuntimeException, std::exception)
 {
     mxSrcDoc = xDoc;
 }

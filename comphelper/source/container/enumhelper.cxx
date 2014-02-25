@@ -56,7 +56,7 @@ OEnumerationByName::~OEnumerationByName()
 }
 
 
-sal_Bool SAL_CALL OEnumerationByName::hasMoreElements(  ) throw(staruno::RuntimeException)
+sal_Bool SAL_CALL OEnumerationByName::hasMoreElements(  ) throw(staruno::RuntimeException, std::exception)
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
@@ -74,7 +74,7 @@ sal_Bool SAL_CALL OEnumerationByName::hasMoreElements(  ) throw(staruno::Runtime
 
 
 staruno::Any SAL_CALL OEnumerationByName::nextElement(  )
-        throw(starcontainer::NoSuchElementException, starlang::WrappedTargetException, staruno::RuntimeException)
+        throw(starcontainer::NoSuchElementException, starlang::WrappedTargetException, staruno::RuntimeException, std::exception)
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
@@ -96,7 +96,7 @@ staruno::Any SAL_CALL OEnumerationByName::nextElement(  )
 
 
 void SAL_CALL OEnumerationByName::disposing(const starlang::EventObject& aEvent)
-        throw(staruno::RuntimeException)
+        throw(staruno::RuntimeException, std::exception)
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
@@ -159,7 +159,7 @@ OEnumerationByIndex::~OEnumerationByIndex()
 }
 
 
-sal_Bool SAL_CALL OEnumerationByIndex::hasMoreElements(  ) throw(staruno::RuntimeException)
+sal_Bool SAL_CALL OEnumerationByIndex::hasMoreElements(  ) throw(staruno::RuntimeException, std::exception)
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
@@ -177,7 +177,7 @@ sal_Bool SAL_CALL OEnumerationByIndex::hasMoreElements(  ) throw(staruno::Runtim
 
 
 staruno::Any SAL_CALL OEnumerationByIndex::nextElement(  )
-        throw(starcontainer::NoSuchElementException, starlang::WrappedTargetException, staruno::RuntimeException)
+        throw(starcontainer::NoSuchElementException, starlang::WrappedTargetException, staruno::RuntimeException, std::exception)
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
@@ -199,7 +199,7 @@ staruno::Any SAL_CALL OEnumerationByIndex::nextElement(  )
 
 
 void SAL_CALL OEnumerationByIndex::disposing(const starlang::EventObject& aEvent)
-        throw(staruno::RuntimeException)
+        throw(staruno::RuntimeException, std::exception)
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
@@ -260,7 +260,7 @@ OAnyEnumeration::~OAnyEnumeration()
 }
 
 
-sal_Bool SAL_CALL OAnyEnumeration::hasMoreElements(  ) throw(staruno::RuntimeException)
+sal_Bool SAL_CALL OAnyEnumeration::hasMoreElements(  ) throw(staruno::RuntimeException, std::exception)
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
@@ -269,7 +269,7 @@ sal_Bool SAL_CALL OAnyEnumeration::hasMoreElements(  ) throw(staruno::RuntimeExc
 
 
 staruno::Any SAL_CALL OAnyEnumeration::nextElement(  )
-        throw(starcontainer::NoSuchElementException, starlang::WrappedTargetException, staruno::RuntimeException)
+        throw(starcontainer::NoSuchElementException, starlang::WrappedTargetException, staruno::RuntimeException, std::exception)
 {
     if ( ! hasMoreElements())
         throw starcontainer::NoSuchElementException();

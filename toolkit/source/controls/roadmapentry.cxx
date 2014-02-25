@@ -71,24 +71,24 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( ORoadmapEntry, ORoadmapEntry_Base, ::comphelpe
 
 ::com::sun::star::uno::Reference< ::com::sun::star:: beans::XPropertySetInfo > SAL_CALL
     ORoadmapEntry::getPropertySetInfo()
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >(
         createPropertySetInfo( getInfoHelper() ) );
 }
 
-OUString SAL_CALL ORoadmapEntry::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL ORoadmapEntry::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     OUString aStr("com.sun.star.comp.toolkit.RoadmapItem");
     return aStr;
 }
 
-sal_Bool SAL_CALL ORoadmapEntry::supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException)
+sal_Bool SAL_CALL ORoadmapEntry::supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-::com::sun::star::uno::Sequence< OUString > SAL_CALL ORoadmapEntry::getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Sequence< OUString > SAL_CALL ORoadmapEntry::getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::com::sun::star::uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();

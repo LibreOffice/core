@@ -159,7 +159,7 @@ Container::Container(
 }
 
 Any Container::getByName( const OUString& aName )
-    throw (NoSuchElementException,WrappedTargetException,RuntimeException)
+    throw (NoSuchElementException,WrappedTargetException,RuntimeException, std::exception)
 {
     String2IntMap::const_iterator ii = m_name2index.find( aName );
     if( ii == m_name2index.end() )
@@ -177,7 +177,7 @@ Any Container::getByName( const OUString& aName )
 }
 
 Sequence< OUString > Container::getElementNames(  )
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     Sequence< OUString > ret( m_values.getLength() );
     for( String2IntMap::const_iterator ii = m_name2index.begin();
@@ -192,19 +192,19 @@ Sequence< OUString > Container::getElementNames(  )
 }
 
 sal_Bool Container::hasByName( const OUString& aName )
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return m_name2index.find( aName ) != m_name2index.end();
 }
     // Methods
 Type Container::getElementType(  )
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return Type();
 }
 
 sal_Bool Container::hasElements(  )
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return ! m_name2index.empty();
 }
@@ -212,7 +212,7 @@ sal_Bool Container::hasElements(  )
 Any Container::getByIndex( sal_Int32 Index )
     throw (::com::sun::star::lang::IndexOutOfBoundsException,
            ::com::sun::star::lang::WrappedTargetException,
-           ::com::sun::star::uno::RuntimeException)
+           ::com::sun::star::uno::RuntimeException, std::exception)
 {
     if( Index < 0 || Index >= m_values.getLength() )
     {
@@ -229,7 +229,7 @@ Any Container::getByIndex( sal_Int32 Index )
 }
 
 sal_Int32 Container::getCount()
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return m_values.getLength();
 }
@@ -248,16 +248,16 @@ public:
 public:
     // XEnumeration
     virtual sal_Bool SAL_CALL hasMoreElements(  )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Any SAL_CALL nextElement(  )
         throw (::com::sun::star::container::NoSuchElementException,
                ::com::sun::star::lang::WrappedTargetException,
-               ::com::sun::star::uno::RuntimeException);
+               ::com::sun::star::uno::RuntimeException, std::exception);
 
 };
 
 sal_Bool ContainerEnumeration::hasMoreElements()
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return m_vec.getLength() > m_index +1;
 }
@@ -265,7 +265,7 @@ sal_Bool ContainerEnumeration::hasMoreElements()
 com::sun::star::uno::Any ContainerEnumeration::nextElement()
         throw (::com::sun::star::container::NoSuchElementException,
                ::com::sun::star::lang::WrappedTargetException,
-               ::com::sun::star::uno::RuntimeException)
+               ::com::sun::star::uno::RuntimeException, std::exception)
 {
     if( ! hasMoreElements() )
     {
@@ -277,21 +277,21 @@ com::sun::star::uno::Any ContainerEnumeration::nextElement()
 }
 
 Reference< XEnumeration > Container::createEnumeration(  )
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return new ContainerEnumeration( m_values );
 }
 
 void Container::addRefreshListener(
     const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshListener >& l )
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     rBHelper.addListener( getCppuType(&l) , l );
 }
 
 void Container::removeRefreshListener(
     const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshListener >& l )
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     rBHelper.removeListener( getCppuType(&l) , l );
 }
@@ -322,7 +322,7 @@ void Container::rename( const OUString &oldName, const OUString &newName )
 void Container::dropByName( const OUString& elementName )
     throw (::com::sun::star::sdbc::SQLException,
            ::com::sun::star::container::NoSuchElementException,
-           ::com::sun::star::uno::RuntimeException)
+           ::com::sun::star::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard guard( m_refMutex->mutex );
     String2IntMap::const_iterator ii = m_name2index.find( elementName );
@@ -347,7 +347,7 @@ void Container::dropByName( const OUString& elementName )
 void Container::dropByIndex( sal_Int32 index )
     throw (::com::sun::star::sdbc::SQLException,
            ::com::sun::star::lang::IndexOutOfBoundsException,
-           ::com::sun::star::uno::RuntimeException)
+           ::com::sun::star::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard guard( m_refMutex->mutex );
     if( index < 0 ||  index >= m_values.getLength() )
@@ -429,7 +429,7 @@ void Container::appendByDescriptor(
     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor)
     throw (::com::sun::star::sdbc::SQLException,
            ::com::sun::star::container::ElementExistException,
-           ::com::sun::star::uno::RuntimeException)
+           ::com::sun::star::uno::RuntimeException, std::exception)
 {
     append( extractStringProperty( descriptor, getStatics().NAME ), descriptor );
 }
@@ -437,14 +437,14 @@ void Container::appendByDescriptor(
 
 void Container::addContainerListener(
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& l )
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     rBHelper.addListener( getCppuType(&l) , l );
 }
 
 void Container::removeContainerListener(
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& l )
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     rBHelper.removeListener( getCppuType(&l) , l );
 }

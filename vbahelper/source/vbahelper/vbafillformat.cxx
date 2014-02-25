@@ -75,7 +75,7 @@ ScVbaFillFormat::setForeColorAndInternalStyle( sal_Int32 nForeColor ) throw (css
 
 // Attributes
 sal_Bool SAL_CALL
-ScVbaFillFormat::getVisible() throw (uno::RuntimeException)
+ScVbaFillFormat::getVisible() throw (uno::RuntimeException, std::exception)
 {
     drawing::FillStyle nFillStyle;
     m_xPropertySet->getPropertyValue( "FillStyle" ) >>= nFillStyle;
@@ -85,7 +85,7 @@ ScVbaFillFormat::getVisible() throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-ScVbaFillFormat::setVisible( sal_Bool _visible ) throw (uno::RuntimeException)
+ScVbaFillFormat::setVisible( sal_Bool _visible ) throw (uno::RuntimeException, std::exception)
 {
     drawing::FillStyle aFillStyle;
     m_xPropertySet->getPropertyValue( "FillStyle" ) >>= aFillStyle;
@@ -103,7 +103,7 @@ ScVbaFillFormat::setVisible( sal_Bool _visible ) throw (uno::RuntimeException)
 }
 
 double SAL_CALL
-ScVbaFillFormat::getTransparency() throw (uno::RuntimeException)
+ScVbaFillFormat::getTransparency() throw (uno::RuntimeException, std::exception)
 {
     sal_Int16 nTransparence = 0;
     double dTransparence = 0;
@@ -114,7 +114,7 @@ ScVbaFillFormat::getTransparency() throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-ScVbaFillFormat::setTransparency( double _transparency ) throw (uno::RuntimeException)
+ScVbaFillFormat::setTransparency( double _transparency ) throw (uno::RuntimeException, std::exception)
 {
     sal_Int16 nTransparence = static_cast< sal_Int16 >( _transparency * 100 );
     m_xPropertySet->setPropertyValue( "FillTransparence" , uno::makeAny( nTransparence ) );
@@ -123,13 +123,13 @@ ScVbaFillFormat::setTransparency( double _transparency ) throw (uno::RuntimeExce
 
 // Methods
 void SAL_CALL
-ScVbaFillFormat::Solid() throw (uno::RuntimeException)
+ScVbaFillFormat::Solid() throw (uno::RuntimeException, std::exception)
 {
     setFillStyle( drawing::FillStyle_SOLID );
 }
 
 void SAL_CALL
-ScVbaFillFormat::TwoColorGradient( sal_Int32 style, sal_Int32 /*variant*/ ) throw (uno::RuntimeException)
+ScVbaFillFormat::TwoColorGradient( sal_Int32 style, sal_Int32 /*variant*/ ) throw (uno::RuntimeException, std::exception)
 {
     if( style == office::MsoGradientStyle::msoGradientHorizontal )
     {
@@ -154,7 +154,7 @@ ScVbaFillFormat::TwoColorGradient( sal_Int32 style, sal_Int32 /*variant*/ ) thro
 }
 
 uno::Reference< msforms::XColorFormat > SAL_CALL
-ScVbaFillFormat::BackColor() throw (uno::RuntimeException)
+ScVbaFillFormat::BackColor() throw (uno::RuntimeException, std::exception)
 {
     if( !m_xColorFormat.is() )
         m_xColorFormat.set( new ScVbaColorFormat( getParent(), mxContext, this, m_xShape, ColorFormatType::FILLFORMAT_BACKCOLOR ) );
@@ -162,7 +162,7 @@ ScVbaFillFormat::BackColor() throw (uno::RuntimeException)
 }
 
 uno::Reference< msforms::XColorFormat > SAL_CALL
-ScVbaFillFormat::ForeColor() throw (uno::RuntimeException)
+ScVbaFillFormat::ForeColor() throw (uno::RuntimeException, std::exception)
 {
     if( !m_xColorFormat.is() )
         m_xColorFormat.set( new ScVbaColorFormat( getParent(), mxContext, this, m_xShape, ColorFormatType::FILLFORMAT_FORECOLOR ) );

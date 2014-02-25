@@ -148,7 +148,7 @@ void ScViewPaneBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 }
 
 uno::Any SAL_CALL ScViewPaneBase::queryInterface( const uno::Type& rType )
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SC_QUERYINTERFACE( sheet::XViewPane )
     SC_QUERYINTERFACE( sheet::XCellRangeReferrer )
@@ -160,7 +160,7 @@ uno::Any SAL_CALL ScViewPaneBase::queryInterface( const uno::Type& rType )
     return uno::Any();          // OWeakObject is in derived objects
 }
 
-uno::Sequence<uno::Type> SAL_CALL ScViewPaneBase::getTypes() throw(uno::RuntimeException)
+uno::Sequence<uno::Type> SAL_CALL ScViewPaneBase::getTypes() throw(uno::RuntimeException, std::exception)
 {
     static uno::Sequence<uno::Type> aTypes;
     if ( aTypes.getLength() == 0 )
@@ -182,14 +182,14 @@ namespace
 }
 
 uno::Sequence<sal_Int8> SAL_CALL ScViewPaneBase::getImplementationId()
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     return theScViewPaneBaseImplementationId::get().getSeq();
 }
 
 // XViewPane
 
-sal_Int32 SAL_CALL ScViewPaneBase::getFirstVisibleColumn() throw(uno::RuntimeException)
+sal_Int32 SAL_CALL ScViewPaneBase::getFirstVisibleColumn() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (pViewShell)
@@ -223,7 +223,7 @@ void SAL_CALL ScViewPaneBase::setFirstVisibleColumn(sal_Int32 nFirstVisibleColum
     }
 }
 
-sal_Int32 SAL_CALL ScViewPaneBase::getFirstVisibleRow() throw(uno::RuntimeException)
+sal_Int32 SAL_CALL ScViewPaneBase::getFirstVisibleRow() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (pViewShell)
@@ -291,7 +291,7 @@ table::CellRangeAddress SAL_CALL ScViewPaneBase::getVisibleRange()
 // XCellRangeSource
 
 uno::Reference<table::XCellRange> SAL_CALL ScViewPaneBase::getReferredCells()
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (pViewShell)
@@ -329,7 +329,7 @@ namespace
 }
 
 // XFormLayerAccess
-uno::Reference< form::runtime::XFormController > SAL_CALL ScViewPaneBase::getFormController( const uno::Reference< form::XForm >& _Form ) throw (uno::RuntimeException)
+uno::Reference< form::runtime::XFormController > SAL_CALL ScViewPaneBase::getFormController( const uno::Reference< form::XForm >& _Form ) throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -344,7 +344,7 @@ uno::Reference< form::runtime::XFormController > SAL_CALL ScViewPaneBase::getFor
     return xController;
 }
 
-::sal_Bool SAL_CALL ScViewPaneBase::isFormDesignMode(  ) throw (uno::RuntimeException)
+::sal_Bool SAL_CALL ScViewPaneBase::isFormDesignMode(  ) throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -357,7 +357,7 @@ uno::Reference< form::runtime::XFormController > SAL_CALL ScViewPaneBase::getFor
     return bIsFormDesignMode;
 }
 
-void SAL_CALL ScViewPaneBase::setFormDesignMode( ::sal_Bool _DesignMode ) throw (uno::RuntimeException)
+void SAL_CALL ScViewPaneBase::setFormDesignMode( ::sal_Bool _DesignMode ) throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -372,7 +372,7 @@ void SAL_CALL ScViewPaneBase::setFormDesignMode( ::sal_Bool _DesignMode ) throw 
 
 uno::Reference<awt::XControl> SAL_CALL ScViewPaneBase::getControl(
                             const uno::Reference<awt::XControlModel>& xModel )
-                throw(container::NoSuchElementException, uno::RuntimeException)
+                throw(container::NoSuchElementException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -436,7 +436,7 @@ ScViewPaneObj::~ScViewPaneObj()
 }
 
 uno::Any SAL_CALL ScViewPaneObj::queryInterface( const uno::Type& rType )
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     //  ScViewPaneBase has everything except OWeakObject
 
@@ -492,7 +492,7 @@ ScTabViewObj::~ScTabViewObj()
 }
 
 uno::Any SAL_CALL ScTabViewObj::queryInterface( const uno::Type& rType )
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SC_QUERYINTERFACE( sheet::XSpreadsheetView )
     SC_QUERYINTERFACE( sheet::XEnhancedMouseClickBroadcaster )
@@ -600,7 +600,7 @@ void ScTabViewObj::SheetChanged( bool bSameTabButMoved )
     nPreviousTab = nNewTab;
 }
 
-uno::Sequence<uno::Type> SAL_CALL ScTabViewObj::getTypes() throw(uno::RuntimeException)
+uno::Sequence<uno::Type> SAL_CALL ScTabViewObj::getTypes() throw(uno::RuntimeException, std::exception)
 {
     static uno::Sequence<uno::Type> aTypes;
     if ( aTypes.getLength() == 0 )
@@ -645,7 +645,7 @@ namespace
 }
 
 uno::Sequence<sal_Int8> SAL_CALL ScTabViewObj::getImplementationId()
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     return theScTabViewObjImplementationId::get().getSeq();
 }
@@ -992,7 +992,7 @@ uno::Any SAL_CALL ScTabViewObj::getSelection()
 // XEnumerationAccess
 
 uno::Reference<container::XEnumeration> SAL_CALL ScTabViewObj::createEnumeration()
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.SpreadsheetViewPanesEnumeration"));
@@ -1000,7 +1000,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScTabViewObj::createEnumeration
 
 // XIndexAccess
 
-sal_Int32 SAL_CALL ScTabViewObj::getCount() throw(uno::RuntimeException)
+sal_Int32 SAL_CALL ScTabViewObj::getCount() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScTabViewShell* pViewSh = GetViewShell();
@@ -1019,7 +1019,7 @@ sal_Int32 SAL_CALL ScTabViewObj::getCount() throw(uno::RuntimeException)
 
 uno::Any SAL_CALL ScTabViewObj::getByIndex( sal_Int32 nIndex )
                             throw(lang::IndexOutOfBoundsException,
-                                    lang::WrappedTargetException, uno::RuntimeException)
+                                    lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Reference<sheet::XViewPane> xPane(GetObjectByIndex_Impl((sal_uInt16)nIndex));
@@ -1030,13 +1030,13 @@ uno::Any SAL_CALL ScTabViewObj::getByIndex( sal_Int32 nIndex )
 //    return uno::Any();
 }
 
-uno::Type SAL_CALL ScTabViewObj::getElementType() throw(uno::RuntimeException)
+uno::Type SAL_CALL ScTabViewObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return getCppuType((uno::Reference<sheet::XViewPane>*)0);
 }
 
-sal_Bool SAL_CALL ScTabViewObj::hasElements() throw(uno::RuntimeException)
+sal_Bool SAL_CALL ScTabViewObj::hasElements() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
@@ -1092,7 +1092,7 @@ ScViewPaneObj* ScTabViewObj::GetObjectByIndex_Impl(sal_uInt16 nIndex) const
 }
 
 uno::Reference<sheet::XSpreadsheet> SAL_CALL ScTabViewObj::getActiveSheet()
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScTabViewShell* pViewSh = GetViewShell();
@@ -1415,7 +1415,7 @@ void SAL_CALL ScTabViewObj::addEnhancedMouseClickHandler( const uno::Reference< 
 }
 
 void SAL_CALL ScTabViewObj::removeEnhancedMouseClickHandler( const uno::Reference< awt::XEnhancedMouseClickHandler >& aListener )
-                                    throw (uno::RuntimeException)
+                                    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     sal_uInt16 nCount = aMouseClickHandlers.size();
@@ -1450,7 +1450,7 @@ void SAL_CALL ScTabViewObj::addActivationEventListener( const uno::Reference< sh
 }
 
 void SAL_CALL ScTabViewObj::removeActivationEventListener( const uno::Reference< sheet::XActivationEventListener >& aListener )
-                                    throw (uno::RuntimeException)
+                                    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     sal_uInt16 nCount = aActivationListeners.size();
@@ -1585,7 +1585,7 @@ void ScTabViewObj::SetZoomType(sal_Int16 aZoomType)
     }
 }
 
-sal_Bool SAL_CALL ScTabViewObj::getIsWindowSplit() throw(uno::RuntimeException)
+sal_Bool SAL_CALL ScTabViewObj::getIsWindowSplit() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     //  wie Menue-Slot SID_WINDOW_SPLIT
@@ -1601,7 +1601,7 @@ sal_Bool SAL_CALL ScTabViewObj::getIsWindowSplit() throw(uno::RuntimeException)
     return false;
 }
 
-sal_Bool SAL_CALL ScTabViewObj::hasFrozenPanes() throw(uno::RuntimeException)
+sal_Bool SAL_CALL ScTabViewObj::hasFrozenPanes() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     //  wie Menue-Slot SID_WINDOW_FIX
@@ -1617,7 +1617,7 @@ sal_Bool SAL_CALL ScTabViewObj::hasFrozenPanes() throw(uno::RuntimeException)
     return false;
 }
 
-sal_Int32 SAL_CALL ScTabViewObj::getSplitHorizontal() throw(uno::RuntimeException)
+sal_Int32 SAL_CALL ScTabViewObj::getSplitHorizontal() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScTabViewShell* pViewSh = GetViewShell();
@@ -1630,7 +1630,7 @@ sal_Int32 SAL_CALL ScTabViewObj::getSplitHorizontal() throw(uno::RuntimeExceptio
     return 0;
 }
 
-sal_Int32 SAL_CALL ScTabViewObj::getSplitVertical() throw(uno::RuntimeException)
+sal_Int32 SAL_CALL ScTabViewObj::getSplitVertical() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScTabViewShell* pViewSh = GetViewShell();
@@ -1742,7 +1742,7 @@ void SAL_CALL ScTabViewObj::addSelectionChangeListener(
 
 void SAL_CALL ScTabViewObj::removeSelectionChangeListener(
                 const uno::Reference< view::XSelectionChangeListener >& xListener )
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     for (XSelectionChangeListenerVector::iterator it = aSelectionChgListeners.begin();
@@ -2027,7 +2027,7 @@ void SAL_CALL ScTabViewObj::removePropertyChangeListener( const OUString& /* aPr
                                     const uno::Reference<beans::XPropertyChangeListener >& xListener )
                                 throw(beans::UnknownPropertyException,
                                     lang::WrappedTargetException,
-                                    uno::RuntimeException)
+                                    uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     for (XViewPropertyChangeListenerVector::iterator it = aPropertyChgListeners.begin();
@@ -2045,7 +2045,7 @@ void SAL_CALL ScTabViewObj::addVetoableChangeListener( const OUString& /* Proper
                                     const uno::Reference<beans::XVetoableChangeListener >& /* aListener */ )
                                 throw(beans::UnknownPropertyException,
                                     lang::WrappedTargetException,
-                                    uno::RuntimeException)
+                                    uno::RuntimeException, std::exception)
 {
 }
 
@@ -2053,7 +2053,7 @@ void SAL_CALL ScTabViewObj::removeVetoableChangeListener( const OUString& /* Pro
                                     const uno::Reference<beans::XVetoableChangeListener >& /* aListener */ )
                                 throw(beans::UnknownPropertyException,
                                     lang::WrappedTargetException,
-                                    uno::RuntimeException)
+                                    uno::RuntimeException, std::exception)
 {
 }
 
@@ -2069,7 +2069,7 @@ void ScTabViewObj::VisAreaChanged()
 
 void SAL_CALL ScTabViewObj::startRangeSelection(
                                 const uno::Sequence<beans::PropertyValue>& aArguments )
-                                    throw(uno::RuntimeException)
+                                    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScTabViewShell* pViewSh = GetViewShell();
@@ -2110,7 +2110,7 @@ void SAL_CALL ScTabViewObj::startRangeSelection(
     }
 }
 
-void SAL_CALL ScTabViewObj::abortRangeSelection() throw(uno::RuntimeException)
+void SAL_CALL ScTabViewObj::abortRangeSelection() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScTabViewShell* pViewSh = GetViewShell();
@@ -2130,7 +2130,7 @@ void SAL_CALL ScTabViewObj::addRangeSelectionListener(
 
 void SAL_CALL ScTabViewObj::removeRangeSelectionListener(
                                 const uno::Reference<sheet::XRangeSelectionListener>& xListener )
-                                    throw(uno::RuntimeException)
+                                    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     for (XRangeSelectionListenerVector::iterator it = aRangeSelListeners.begin();
@@ -2156,7 +2156,7 @@ void SAL_CALL ScTabViewObj::addRangeSelectionChangeListener(
 
 void SAL_CALL ScTabViewObj::removeRangeSelectionChangeListener(
                                 const uno::Reference<sheet::XRangeSelectionChangeListener>& xListener )
-                                    throw(uno::RuntimeException)
+                                    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     for (XRangeSelectionChangeListenerVector::iterator it = aRangeChgListeners.begin();
@@ -2210,19 +2210,19 @@ void ScTabViewObj::RangeSelChanged( const OUString& rText )
 }
 
 // XServiceInfo
-OUString SAL_CALL ScTabViewObj::getImplementationName() throw(uno::RuntimeException)
+OUString SAL_CALL ScTabViewObj::getImplementationName() throw(uno::RuntimeException, std::exception)
 {
     return OUString( "ScTabViewObj" );
 }
 
 sal_Bool SAL_CALL ScTabViewObj::supportsService( const OUString& rServiceName )
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence<OUString> SAL_CALL ScTabViewObj::getSupportedServiceNames()
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence<OUString> aRet(2);
     OUString* pArray = aRet.getArray();
@@ -2234,7 +2234,7 @@ uno::Sequence<OUString> SAL_CALL ScTabViewObj::getSupportedServiceNames()
 // XUnoTunnel
 
 sal_Int64 SAL_CALL ScTabViewObj::getSomething(
-                const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException)
+                const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException, std::exception)
 {
     if ( rId.getLength() == 16 &&
           0 == memcmp( getUnoTunnelId().getConstArray(),
@@ -2373,7 +2373,7 @@ ScPreviewObj::~ScPreviewObj()
 }
 
 uno::Any ScPreviewObj::queryInterface(const uno::Type& rType)
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     SC_QUERYINTERFACE(sheet::XSelectedSheetsSupplier)
     return SfxBaseController::queryInterface(rType);
@@ -2397,7 +2397,7 @@ void ScPreviewObj::Notify(SfxBroadcaster&, const SfxHint& rHint)
 }
 
 uno::Sequence<sal_Int32> ScPreviewObj::getSelectedSheets()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     ScPreview* p = mpViewShell->GetPreview();
     if (!p)

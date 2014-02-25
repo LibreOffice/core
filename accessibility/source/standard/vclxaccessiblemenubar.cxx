@@ -134,14 +134,14 @@ void VCLXAccessibleMenuBar::disposing()
 // XServiceInfo
 
 
-OUString VCLXAccessibleMenuBar::getImplementationName() throw (RuntimeException)
+OUString VCLXAccessibleMenuBar::getImplementationName() throw (RuntimeException, std::exception)
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleMenuBar" );
 }
 
 
 
-Sequence< OUString > VCLXAccessibleMenuBar::getSupportedServiceNames() throw (RuntimeException)
+Sequence< OUString > VCLXAccessibleMenuBar::getSupportedServiceNames() throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aNames(1);
     aNames[0] = "com.sun.star.awt.AccessibleMenuBar";
@@ -152,7 +152,7 @@ Sequence< OUString > VCLXAccessibleMenuBar::getSupportedServiceNames() throw (Ru
 // XAccessibleContext
 
 
-sal_Int32 VCLXAccessibleMenuBar::getAccessibleIndexInParent(  ) throw (RuntimeException)
+sal_Int32 VCLXAccessibleMenuBar::getAccessibleIndexInParent(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -184,7 +184,7 @@ sal_Int32 VCLXAccessibleMenuBar::getAccessibleIndexInParent(  ) throw (RuntimeEx
 
 
 
-sal_Int16 VCLXAccessibleMenuBar::getAccessibleRole(  ) throw (RuntimeException)
+sal_Int16 VCLXAccessibleMenuBar::getAccessibleRole(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -195,7 +195,7 @@ sal_Int16 VCLXAccessibleMenuBar::getAccessibleRole(  ) throw (RuntimeException)
 // XAccessibleExtendedComponent
 
 
-sal_Int32 VCLXAccessibleMenuBar::getBackground(  ) throw (RuntimeException)
+sal_Int32 VCLXAccessibleMenuBar::getBackground(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 

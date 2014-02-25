@@ -102,7 +102,7 @@ Key::Key( const ::rtl::Reference< RefCountedMutex > & refMutex,
       m_tableName( tableName )
 {}
 
-Reference< XPropertySet > Key::createDataDescriptor(  ) throw (RuntimeException)
+Reference< XPropertySet > Key::createDataDescriptor(  ) throw (RuntimeException, std::exception)
 {
     KeyDescriptor * pKeyDescriptor = new KeyDescriptor(
         m_refMutex, m_conn, m_pSettings );
@@ -111,7 +111,7 @@ Reference< XPropertySet > Key::createDataDescriptor(  ) throw (RuntimeException)
     return Reference< XPropertySet > ( pKeyDescriptor );
 }
 
-Reference< XNameAccess > Key::getColumns(  ) throw (::com::sun::star::uno::RuntimeException)
+Reference< XNameAccess > Key::getColumns(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     // TODO: cash columns object !
     if( !m_keyColumns.is() )
@@ -127,7 +127,7 @@ Reference< XNameAccess > Key::getColumns(  ) throw (::com::sun::star::uno::Runti
     return m_keyColumns;
 }
 
-Sequence<Type > Key::getTypes() throw( RuntimeException )
+Sequence<Type > Key::getTypes() throw( RuntimeException, std::exception )
 {
     static cppu::OTypeCollection *pCollection;
     if( ! pCollection )
@@ -144,12 +144,12 @@ Sequence<Type > Key::getTypes() throw( RuntimeException )
     return pCollection->getTypes();
 }
 
-Sequence< sal_Int8> Key::getImplementationId() throw( RuntimeException )
+Sequence< sal_Int8> Key::getImplementationId() throw( RuntimeException, std::exception )
 {
     return getStatics().refl.key.implementationId;
 }
 
-Any Key::queryInterface( const Type & reqType ) throw (RuntimeException)
+Any Key::queryInterface( const Type & reqType ) throw (RuntimeException, std::exception)
 {
     Any ret;
 
@@ -176,7 +176,7 @@ KeyDescriptor::KeyDescriptor( const ::rtl::Reference< RefCountedMutex > & refMut
 {
 }
 
-Reference< XPropertySet > KeyDescriptor::createDataDescriptor(  ) throw (RuntimeException)
+Reference< XPropertySet > KeyDescriptor::createDataDescriptor(  ) throw (RuntimeException, std::exception)
 {
     KeyDescriptor * pKeyDescriptor = new KeyDescriptor(
         m_refMutex, m_conn, m_pSettings );
@@ -185,7 +185,7 @@ Reference< XPropertySet > KeyDescriptor::createDataDescriptor(  ) throw (Runtime
     return Reference< XPropertySet > ( pKeyDescriptor );
 }
 
-Reference< XNameAccess > KeyDescriptor::getColumns(  ) throw (::com::sun::star::uno::RuntimeException)
+Reference< XNameAccess > KeyDescriptor::getColumns(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     // TODO: cash columns object !
     if( !m_keyColumns.is() )
@@ -195,7 +195,7 @@ Reference< XNameAccess > KeyDescriptor::getColumns(  ) throw (::com::sun::star::
     return m_keyColumns;
 }
 
-Sequence<Type > KeyDescriptor::getTypes() throw( RuntimeException )
+Sequence<Type > KeyDescriptor::getTypes() throw( RuntimeException, std::exception )
 {
     static cppu::OTypeCollection *pCollection;
     if( ! pCollection )
@@ -212,12 +212,12 @@ Sequence<Type > KeyDescriptor::getTypes() throw( RuntimeException )
     return pCollection->getTypes();
 }
 
-Sequence< sal_Int8> KeyDescriptor::getImplementationId() throw( RuntimeException )
+Sequence< sal_Int8> KeyDescriptor::getImplementationId() throw( RuntimeException, std::exception )
 {
     return getStatics().refl.keyDescriptor.implementationId;
 }
 
-Any KeyDescriptor::queryInterface( const Type & reqType ) throw (RuntimeException)
+Any KeyDescriptor::queryInterface( const Type & reqType ) throw (RuntimeException, std::exception)
 {
     Any ret;
 

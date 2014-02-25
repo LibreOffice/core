@@ -36,11 +36,11 @@ public:
     virtual ~SwVbaReplacement();
 
     // Attributes
-    virtual OUString SAL_CALL getText() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setText( const OUString& _text ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getText() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setText( const OUString& _text ) throw (css::uno::RuntimeException, std::exception);
 
     //Methods
-    virtual void SAL_CALL ClearFormatting() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL ClearFormatting() throw (css::uno::RuntimeException, std::exception);
 
     // XHelperInterface
     virtual OUString getServiceImplName();

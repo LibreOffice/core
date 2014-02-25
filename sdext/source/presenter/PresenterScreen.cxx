@@ -74,11 +74,11 @@ namespace {
 
         // document::XEventListener
 
-        virtual void SAL_CALL notifyEvent( const css::document::EventObject& Event ) throw (css::uno::RuntimeException);
+        virtual void SAL_CALL notifyEvent( const css::document::EventObject& Event ) throw (css::uno::RuntimeException, std::exception);
 
         // XEventListener
 
-        virtual void SAL_CALL disposing ( const css::lang::EventObject& rEvent) throw (css::uno::RuntimeException);
+        virtual void SAL_CALL disposing ( const css::lang::EventObject& rEvent) throw (css::uno::RuntimeException, std::exception);
 
     private:
         css::uno::Reference<css::frame::XModel2 > mxModel;
@@ -128,7 +128,7 @@ void SAL_CALL PresenterScreenJob::disposing (void)
 
 Any SAL_CALL PresenterScreenJob::execute(
     const Sequence< beans::NamedValue >& Arguments )
-    throw (lang::IllegalArgumentException, Exception, RuntimeException)
+    throw (lang::IllegalArgumentException, Exception, RuntimeException, std::exception)
 {
     Sequence< beans::NamedValue > lEnv;
 
@@ -213,7 +213,7 @@ void SAL_CALL PresenterScreenListener::disposing (void)
 
 // document::XEventListener
 
-void SAL_CALL PresenterScreenListener::notifyEvent( const css::document::EventObject& Event ) throw (css::uno::RuntimeException)
+void SAL_CALL PresenterScreenListener::notifyEvent( const css::document::EventObject& Event ) throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
 
@@ -236,7 +236,7 @@ void SAL_CALL PresenterScreenListener::notifyEvent( const css::document::EventOb
 // XEventListener
 
 void SAL_CALL PresenterScreenListener::disposing (const css::lang::EventObject& rEvent)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     (void)rEvent;
 
@@ -320,7 +320,7 @@ void SAL_CALL PresenterScreen::disposing (void)
 //----- XEventListener --------------------------------------------------------
 
 void SAL_CALL PresenterScreen::disposing (const lang::EventObject& /*rEvent*/)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     mxSlideShowControllerWeak = WeakReference<presentation::XSlideShowController>();
     RequestShutdownPresenterScreen();

@@ -72,16 +72,16 @@ namespace DOM
         /**
         The number of nodes in the list.
         */
-        virtual sal_Int32 SAL_CALL getLength() throw (RuntimeException);
+        virtual sal_Int32 SAL_CALL getLength() throw (RuntimeException, std::exception);
         /**
         Returns the indexth item in the collection.
         */
         virtual Reference< XNode > SAL_CALL item(sal_Int32 index)
-            throw (RuntimeException);
+            throw (RuntimeException, std::exception);
 
         // XEventListener
         virtual void SAL_CALL handleEvent(const Reference< XEvent >& evt)
-            throw (RuntimeException);
+            throw (RuntimeException, std::exception);
     };
 }
 

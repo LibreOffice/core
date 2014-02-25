@@ -59,7 +59,7 @@ OComponentAccess::~OComponentAccess()
 //*****************************************************************************************************************
 //  XEnumerationAccess
 //*****************************************************************************************************************
-css::uno::Reference< XEnumeration > SAL_CALL OComponentAccess::createEnumeration() throw( RuntimeException )
+css::uno::Reference< XEnumeration > SAL_CALL OComponentAccess::createEnumeration() throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );
@@ -89,7 +89,7 @@ css::uno::Reference< XEnumeration > SAL_CALL OComponentAccess::createEnumeration
 //*****************************************************************************************************************
 //  XElementAccess
 //*****************************************************************************************************************
-Type SAL_CALL OComponentAccess::getElementType() throw( RuntimeException )
+Type SAL_CALL OComponentAccess::getElementType() throw( RuntimeException, std::exception )
 {
     // Elements in list an enumeration are components!
     // Return the uno-type of XComponent.
@@ -99,7 +99,7 @@ Type SAL_CALL OComponentAccess::getElementType() throw( RuntimeException )
 //*****************************************************************************************************************
 //  XElementAccess
 //*****************************************************************************************************************
-sal_Bool SAL_CALL OComponentAccess::hasElements() throw( RuntimeException )
+sal_Bool SAL_CALL OComponentAccess::hasElements() throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );

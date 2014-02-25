@@ -80,21 +80,21 @@ class EmptyInputStream : public ::cppu::WeakImplHelper1< XInputStream >
 public:
     virtual sal_Int32 SAL_CALL readBytes(
         Sequence< sal_Int8 > & data, sal_Int32 nBytesToRead )
-        throw (IOException, RuntimeException);
+        throw (IOException, RuntimeException, std::exception);
     virtual sal_Int32 SAL_CALL readSomeBytes(
         Sequence< sal_Int8 > & data, sal_Int32 nMaxBytesToRead )
-        throw (IOException, RuntimeException);
+        throw (IOException, RuntimeException, std::exception);
     virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
-        throw (IOException, RuntimeException);
+        throw (IOException, RuntimeException, std::exception);
     virtual sal_Int32 SAL_CALL available()
-        throw (IOException, RuntimeException);
+        throw (IOException, RuntimeException, std::exception);
     virtual void SAL_CALL closeInput()
-        throw (IOException, RuntimeException);
+        throw (IOException, RuntimeException, std::exception);
 };
 
 sal_Int32 EmptyInputStream::readBytes(
     Sequence< sal_Int8 > & data, sal_Int32 )
-    throw (IOException, RuntimeException)
+    throw (IOException, RuntimeException, std::exception)
 {
     data.realloc( 0 );
     return 0;
@@ -102,25 +102,25 @@ sal_Int32 EmptyInputStream::readBytes(
 
 sal_Int32 EmptyInputStream::readSomeBytes(
     Sequence< sal_Int8 > & data, sal_Int32 )
-    throw (IOException, RuntimeException)
+    throw (IOException, RuntimeException, std::exception)
 {
     data.realloc( 0 );
     return 0;
 }
 
 void EmptyInputStream::skipBytes( sal_Int32 )
-    throw (IOException, RuntimeException)
+    throw (IOException, RuntimeException, std::exception)
 {
 }
 
 sal_Int32 EmptyInputStream::available()
-    throw (IOException, RuntimeException)
+    throw (IOException, RuntimeException, std::exception)
 {
     return 0;
 }
 
 void EmptyInputStream::closeInput()
-    throw (IOException, RuntimeException)
+    throw (IOException, RuntimeException, std::exception)
 {
 }
 
@@ -147,11 +147,11 @@ public:
 
     // XContentEventListener
     virtual void SAL_CALL contentEvent( const ContentEvent& evt )
-        throw( RuntimeException );
+        throw( RuntimeException, std::exception );
 
     // XEventListener ( base of XContentEventListener )
     virtual void SAL_CALL disposing( const EventObject& Source )
-        throw( RuntimeException );
+        throw( RuntimeException, std::exception );
 };
 
 
@@ -1330,7 +1330,7 @@ XINTERFACE_IMPL_2( ContentEventListener_Impl,
 
 // virtual
 void SAL_CALL ContentEventListener_Impl::contentEvent( const ContentEvent& evt )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     if ( evt.Source == m_rContent.m_xContent )
     {
@@ -1358,7 +1358,7 @@ void SAL_CALL ContentEventListener_Impl::contentEvent( const ContentEvent& evt )
 
 // virtual
 void SAL_CALL ContentEventListener_Impl::disposing( const EventObject& Source )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     m_rContent.disposing(Source);
 }

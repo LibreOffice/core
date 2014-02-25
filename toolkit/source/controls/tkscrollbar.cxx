@@ -43,7 +43,7 @@ namespace toolkit
     }
 
 
-    OUString UnoControlScrollBarModel::getServiceName( ) throw(::com::sun::star::uno::RuntimeException)
+    OUString UnoControlScrollBarModel::getServiceName( ) throw(::com::sun::star::uno::RuntimeException, std::exception)
     {
         return OUString::createFromAscii( szServiceName_UnoControlScrollBarModel );
     }
@@ -76,7 +76,7 @@ namespace toolkit
     }
 
 
-    uno::Reference< beans::XPropertySetInfo > UnoControlScrollBarModel::getPropertySetInfo(  ) throw(uno::RuntimeException)
+    uno::Reference< beans::XPropertySetInfo > UnoControlScrollBarModel::getPropertySetInfo(  ) throw(uno::RuntimeException, std::exception)
     {
         static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;
@@ -98,7 +98,7 @@ namespace toolkit
     }
 
     // ::com::sun::star::uno::XInterface
-    uno::Any UnoScrollBarControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
+    uno::Any UnoScrollBarControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException, std::exception)
     {
         uno::Any aRet = ::cppu::queryInterface( rType,
                                             (static_cast< awt::XAdjustmentListener* >(this)),
@@ -113,7 +113,7 @@ namespace toolkit
         UnoControlBase::getTypes()
     IMPL_XTYPEPROVIDER_END
 
-    void UnoScrollBarControl::dispose() throw(uno::RuntimeException)
+    void UnoScrollBarControl::dispose() throw(uno::RuntimeException, std::exception)
     {
         lang::EventObject aEvt;
         aEvt.Source = (::cppu::OWeakObject*)this;
@@ -121,7 +121,7 @@ namespace toolkit
         UnoControl::dispose();
     }
 
-    void UnoScrollBarControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer ) throw(uno::RuntimeException)
+    void UnoScrollBarControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer ) throw(uno::RuntimeException, std::exception)
     {
         UnoControl::createPeer( rxToolkit, rParentPeer );
 
@@ -130,7 +130,7 @@ namespace toolkit
     }
 
     // ::com::sun::star::awt::XAdjustmentListener
-    void UnoScrollBarControl::adjustmentValueChanged( const ::com::sun::star::awt::AdjustmentEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException)
+    void UnoScrollBarControl::adjustmentValueChanged( const ::com::sun::star::awt::AdjustmentEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception)
     {
         switch ( rEvent.Type )
         {
@@ -160,22 +160,22 @@ namespace toolkit
     }
 
     // ::com::sun::star::awt::XScrollBar
-    void UnoScrollBarControl::addAdjustmentListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XAdjustmentListener > & l ) throw(::com::sun::star::uno::RuntimeException)
+    void UnoScrollBarControl::addAdjustmentListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XAdjustmentListener > & l ) throw(::com::sun::star::uno::RuntimeException, std::exception)
     {
         maAdjustmentListeners.addInterface( l );
     }
 
-    void UnoScrollBarControl::removeAdjustmentListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XAdjustmentListener > & l ) throw(::com::sun::star::uno::RuntimeException)
+    void UnoScrollBarControl::removeAdjustmentListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XAdjustmentListener > & l ) throw(::com::sun::star::uno::RuntimeException, std::exception)
     {
         maAdjustmentListeners.removeInterface( l );
     }
 
-    void UnoScrollBarControl::setValue( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException)
+    void UnoScrollBarControl::setValue( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException, std::exception)
     {
         ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SCROLLVALUE ), uno::makeAny( n ), true );
     }
 
-    void UnoScrollBarControl::setValues( sal_Int32 nValue, sal_Int32 nVisible, sal_Int32 nMax ) throw(::com::sun::star::uno::RuntimeException)
+    void UnoScrollBarControl::setValues( sal_Int32 nValue, sal_Int32 nVisible, sal_Int32 nMax ) throw(::com::sun::star::uno::RuntimeException, std::exception)
     {
         uno::Any aAny;
         aAny <<= nValue;
@@ -186,7 +186,7 @@ namespace toolkit
         ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SCROLLVALUE_MAX ), aAny, true );
     }
 
-    sal_Int32 UnoScrollBarControl::getValue() throw(::com::sun::star::uno::RuntimeException)
+    sal_Int32 UnoScrollBarControl::getValue() throw(::com::sun::star::uno::RuntimeException, std::exception)
     {
         sal_Int32 n = 0;
         if ( getPeer().is() )
@@ -197,12 +197,12 @@ namespace toolkit
         return n;
     }
 
-    void UnoScrollBarControl::setMaximum( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException)
+    void UnoScrollBarControl::setMaximum( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException, std::exception)
     {
         ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SCROLLVALUE_MAX ), uno::makeAny( n ), true );
     }
 
-    sal_Int32 UnoScrollBarControl::getMaximum() throw(::com::sun::star::uno::RuntimeException)
+    sal_Int32 UnoScrollBarControl::getMaximum() throw(::com::sun::star::uno::RuntimeException, std::exception)
     {
         sal_Int32 n = 0;
         if ( getPeer().is() )
@@ -213,12 +213,12 @@ namespace toolkit
         return n;
     }
 
-    void UnoScrollBarControl::setLineIncrement( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException)
+    void UnoScrollBarControl::setLineIncrement( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException, std::exception)
     {
         ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LINEINCREMENT ), uno::makeAny( n ), true );
     }
 
-    sal_Int32 UnoScrollBarControl::getLineIncrement() throw(::com::sun::star::uno::RuntimeException)
+    sal_Int32 UnoScrollBarControl::getLineIncrement() throw(::com::sun::star::uno::RuntimeException, std::exception)
     {
         sal_Int32 n = 0;
         if ( getPeer().is() )
@@ -229,12 +229,12 @@ namespace toolkit
         return n;
     }
 
-    void UnoScrollBarControl::setBlockIncrement( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException)
+    void UnoScrollBarControl::setBlockIncrement( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException, std::exception)
     {
         ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_BLOCKINCREMENT ), uno::makeAny( n ), true );
     }
 
-    sal_Int32 UnoScrollBarControl::getBlockIncrement() throw(::com::sun::star::uno::RuntimeException)
+    sal_Int32 UnoScrollBarControl::getBlockIncrement() throw(::com::sun::star::uno::RuntimeException, std::exception)
     {
         sal_Int32 n = 0;
         if ( getPeer().is() )
@@ -245,12 +245,12 @@ namespace toolkit
         return n;
     }
 
-    void UnoScrollBarControl::setVisibleSize( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException)
+    void UnoScrollBarControl::setVisibleSize( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException, std::exception)
     {
         ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VISIBLESIZE ), uno::makeAny( n ), true );
     }
 
-    sal_Int32 UnoScrollBarControl::getVisibleSize() throw(::com::sun::star::uno::RuntimeException)
+    sal_Int32 UnoScrollBarControl::getVisibleSize() throw(::com::sun::star::uno::RuntimeException, std::exception)
     {
         sal_Int32 n = 0;
         if ( getPeer().is() )
@@ -261,12 +261,12 @@ namespace toolkit
         return n;
     }
 
-    void UnoScrollBarControl::setOrientation( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException)
+    void UnoScrollBarControl::setOrientation( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException, std::exception)
     {
         ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_ORIENTATION ), uno::makeAny( n ), true );
     }
 
-    sal_Int32 UnoScrollBarControl::getOrientation() throw(::com::sun::star::uno::RuntimeException)
+    sal_Int32 UnoScrollBarControl::getOrientation() throw(::com::sun::star::uno::RuntimeException, std::exception)
     {
         sal_Int32 n = 0;
         if ( getPeer().is() )

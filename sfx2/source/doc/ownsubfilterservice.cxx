@@ -47,13 +47,13 @@ public:
     virtual ~OwnSubFilterService();
 
     // XFilter
-    virtual ::sal_Bool SAL_CALL filter( const uno::Sequence< beans::PropertyValue >& aDescriptor ) throw (uno::RuntimeException);
-    virtual void SAL_CALL cancel() throw (uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL filter( const uno::Sequence< beans::PropertyValue >& aDescriptor ) throw (uno::RuntimeException, std::exception);
+    virtual void SAL_CALL cancel() throw (uno::RuntimeException, std::exception);
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw (uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (uno::RuntimeException);
-    virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw (uno::RuntimeException, std::exception);
+    virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (uno::RuntimeException, std::exception);
+    virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (uno::RuntimeException, std::exception);
 };
 
 OwnSubFilterService::OwnSubFilterService(const css::uno::Sequence< css::uno::Any >& aArguments)
@@ -85,7 +85,7 @@ OwnSubFilterService::~OwnSubFilterService()
 }
 
 sal_Bool SAL_CALL OwnSubFilterService::filter( const uno::Sequence< beans::PropertyValue >& aDescriptor )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if ( !m_pObjectShell )
         throw uno::RuntimeException();
@@ -94,25 +94,25 @@ sal_Bool SAL_CALL OwnSubFilterService::filter( const uno::Sequence< beans::Prope
 }
 
 void SAL_CALL OwnSubFilterService::cancel()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     // not implemented
 }
 
 OUString SAL_CALL OwnSubFilterService::getImplementationName()
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     return OUString("com.sun.star.comp.document.OwnSubFilter");
 }
 
 sal_Bool SAL_CALL OwnSubFilterService::supportsService( const OUString& ServiceName )
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL OwnSubFilterService::getSupportedServiceNames()
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     uno::Sequence< OUString > aRet(2);
     aRet[0] = "com.sun.star.document.OwnSubFilter";

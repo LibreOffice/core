@@ -176,7 +176,7 @@ class WeakContainerListener : public ::cppu::WeakImplHelper1<com::sun::star::con
 
         // container.XContainerListener
         virtual void SAL_CALL elementInserted(const com::sun::star::container::ContainerEvent& rEvent)
-            throw(com::sun::star::uno::RuntimeException)
+            throw(com::sun::star::uno::RuntimeException, std::exception)
         {
             com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> xOwner(mxOwner.get(),
                 com::sun::star::uno::UNO_QUERY);
@@ -185,7 +185,7 @@ class WeakContainerListener : public ::cppu::WeakImplHelper1<com::sun::star::con
         }
 
         virtual void SAL_CALL elementRemoved(const com::sun::star::container::ContainerEvent& rEvent)
-            throw(com::sun::star::uno::RuntimeException)
+            throw(com::sun::star::uno::RuntimeException, std::exception)
         {
             com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> xOwner(mxOwner.get(),
                 com::sun::star::uno::UNO_QUERY);
@@ -194,7 +194,7 @@ class WeakContainerListener : public ::cppu::WeakImplHelper1<com::sun::star::con
         }
 
         virtual void SAL_CALL elementReplaced(const com::sun::star::container::ContainerEvent& rEvent)
-            throw(com::sun::star::uno::RuntimeException)
+            throw(com::sun::star::uno::RuntimeException, std::exception)
         {
             com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> xOwner(mxOwner.get(),
                 com::sun::star::uno::UNO_QUERY);
@@ -204,7 +204,7 @@ class WeakContainerListener : public ::cppu::WeakImplHelper1<com::sun::star::con
 
         // lang.XEventListener
         virtual void SAL_CALL disposing(const com::sun::star::lang::EventObject& rEvent)
-            throw(com::sun::star::uno::RuntimeException)
+            throw(com::sun::star::uno::RuntimeException, std::exception)
         {
             com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> xOwner(mxOwner.get(),
                 com::sun::star::uno::UNO_QUERY);
@@ -231,7 +231,7 @@ class WeakChangesListener : public ::cppu::WeakImplHelper1<com::sun::star::util:
 
         // util.XChangesListener
         virtual void SAL_CALL changesOccurred(const com::sun::star::util::ChangesEvent& rEvent)
-            throw(com::sun::star::uno::RuntimeException)
+            throw(com::sun::star::uno::RuntimeException, std::exception)
         {
             com::sun::star::uno::Reference<com::sun::star::util::XChangesListener> xOwner(mxOwner.get(),
                 com::sun::star::uno::UNO_QUERY);
@@ -241,7 +241,7 @@ class WeakChangesListener : public ::cppu::WeakImplHelper1<com::sun::star::util:
 
         // lang.XEventListener
         virtual void SAL_CALL disposing(const com::sun::star::lang::EventObject& rEvent)
-            throw(com::sun::star::uno::RuntimeException)
+            throw(com::sun::star::uno::RuntimeException, std::exception)
         {
             com::sun::star::uno::Reference<com::sun::star::util::XChangesListener> xOwner(mxOwner.get(),
                 com::sun::star::uno::UNO_QUERY);
@@ -268,7 +268,7 @@ class WeakEventListener : public ::cppu::WeakImplHelper1<com::sun::star::lang::X
 
         // lang.XEventListener
         virtual void SAL_CALL disposing(const com::sun::star::lang::EventObject& rEvent)
-            throw(com::sun::star::uno::RuntimeException)
+            throw(com::sun::star::uno::RuntimeException, std::exception)
         {
             com::sun::star::uno::Reference<com::sun::star::lang::XEventListener> xOwner(mxOwner.get(),
                 com::sun::star::uno::UNO_QUERY);
@@ -294,7 +294,7 @@ class WeakDocumentEventListener : public ::cppu::WeakImplHelper1<com::sun::star:
         }
 
         virtual void SAL_CALL notifyEvent(const com::sun::star::document::EventObject& rEvent)
-            throw(com::sun::star::uno::RuntimeException)
+            throw(com::sun::star::uno::RuntimeException, std::exception)
         {
             com::sun::star::uno::Reference<com::sun::star::document::XEventListener> xOwner(mxOwner.get(),
                 com::sun::star::uno::UNO_QUERY);
@@ -305,7 +305,7 @@ class WeakDocumentEventListener : public ::cppu::WeakImplHelper1<com::sun::star:
 
         // lang.XEventListener
         virtual void SAL_CALL disposing(const com::sun::star::lang::EventObject& rEvent)
-            throw(com::sun::star::uno::RuntimeException)
+            throw(com::sun::star::uno::RuntimeException, std::exception)
         {
             com::sun::star::uno::Reference<com::sun::star::document::XEventListener> xOwner(mxOwner.get(),
                 com::sun::star::uno::UNO_QUERY);

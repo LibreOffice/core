@@ -46,12 +46,12 @@ FragmentHandler2::~FragmentHandler2()
 
 // com.sun.star.xml.sax.XFastDocumentHandler interface --------------------
 
-void SAL_CALL FragmentHandler2::startDocument() throw( SAXException, RuntimeException )
+void SAL_CALL FragmentHandler2::startDocument() throw( SAXException, RuntimeException, std::exception )
 {
     initializeImport();
 }
 
-void SAL_CALL FragmentHandler2::endDocument() throw( SAXException, RuntimeException )
+void SAL_CALL FragmentHandler2::endDocument() throw( SAXException, RuntimeException, std::exception )
 {
     finalizeImport();
 }
@@ -106,7 +106,7 @@ bool FragmentHandler2::prepareMceContext( sal_Int32 nElement, const AttributeLis
 // com.sun.star.xml.sax.XFastContextHandler interface -------------------------
 
 Reference< XFastContextHandler > SAL_CALL FragmentHandler2::createFastChildContext(
-        sal_Int32 nElement, const Reference< XFastAttributeList >& rxAttribs ) throw( SAXException, RuntimeException )
+        sal_Int32 nElement, const Reference< XFastAttributeList >& rxAttribs ) throw( SAXException, RuntimeException, std::exception )
 {
     if( getNamespace( nElement ) == NMSP_mce ) // TODO for checking 'Ignorable'
     {
@@ -118,17 +118,17 @@ Reference< XFastContextHandler > SAL_CALL FragmentHandler2::createFastChildConte
 }
 
 void SAL_CALL FragmentHandler2::startFastElement(
-        sal_Int32 nElement, const Reference< XFastAttributeList >& rxAttribs ) throw( SAXException, RuntimeException )
+        sal_Int32 nElement, const Reference< XFastAttributeList >& rxAttribs ) throw( SAXException, RuntimeException, std::exception )
 {
     implStartElement( nElement, rxAttribs );
 }
 
-void SAL_CALL FragmentHandler2::characters( const OUString& rChars ) throw( SAXException, RuntimeException )
+void SAL_CALL FragmentHandler2::characters( const OUString& rChars ) throw( SAXException, RuntimeException, std::exception )
 {
     implCharacters( rChars );
 }
 
-void SAL_CALL FragmentHandler2::endFastElement( sal_Int32 nElement ) throw( SAXException, RuntimeException )
+void SAL_CALL FragmentHandler2::endFastElement( sal_Int32 nElement ) throw( SAXException, RuntimeException, std::exception )
 {
     /* If MCE */
     switch( nElement )

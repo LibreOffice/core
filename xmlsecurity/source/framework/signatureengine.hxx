@@ -112,20 +112,20 @@ protected:
 public:
     /* XReferenceCollector */
     virtual void SAL_CALL setReferenceCount( sal_Int32 count )
-        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL setReferenceId( sal_Int32 id )
-        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception);
 
     /* XUriBinding */
     virtual void SAL_CALL setUriBinding(
         const OUString& uri,
         const com::sun::star::uno::Reference<
             com::sun::star::io::XInputStream >& aInputStream )
-        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception);
     virtual com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
         SAL_CALL getUriBinding( const OUString& uri )
-        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception);
 };
 
 #endif

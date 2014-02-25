@@ -54,7 +54,7 @@ public:
         const ::com::sun::star::util::URL& URL,
         const ::com::sun::star::uno::Sequence<
         ::com::sun::star::beans::PropertyValue >& Arguments )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL
     addStatusListener(
@@ -62,7 +62,7 @@ public:
         ::com::sun::star::frame::XStatusListener >& Control,
         const ::com::sun::star::util::URL& URL )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            ::com::sun::star::uno::RuntimeException, std::exception
         );
 
     virtual void SAL_CALL
@@ -71,14 +71,14 @@ public:
         ::com::sun::star::frame::XStatusListener >& Control,
         const ::com::sun::star::util::URL& URL )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            ::com::sun::star::uno::RuntimeException, std::exception
         );
 
     //XInterceptorInfo
     virtual ::com::sun::star::uno::Sequence< OUString >
     SAL_CALL getInterceptedURLs(  )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            ::com::sun::star::uno::RuntimeException, std::exception
         );
 
     //XDispatchProvider ( inherited by XDispatchProviderInterceptor )
@@ -89,7 +89,7 @@ public:
         const OUString& TargetFrameName,
         sal_Int32 SearchFlags )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            ::com::sun::star::uno::RuntimeException, std::exception
         );
 
     virtual ::com::sun::star::uno::Sequence<
@@ -99,7 +99,7 @@ public:
         const ::com::sun::star::uno::Sequence<
         ::com::sun::star::frame::DispatchDescriptor >& Requests )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            ::com::sun::star::uno::RuntimeException, std::exception
         );
 
     //XDispatchProviderInterceptor
@@ -107,7 +107,7 @@ public:
     ::com::sun::star::frame::XDispatchProvider > SAL_CALL
     getSlaveDispatchProvider(  )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            ::com::sun::star::uno::RuntimeException, std::exception
         );
 
     virtual void SAL_CALL
@@ -115,14 +115,14 @@ public:
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::frame::XDispatchProvider >& NewDispatchProvider )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            ::com::sun::star::uno::RuntimeException, std::exception
         );
 
     virtual ::com::sun::star::uno::Reference<
     ::com::sun::star::frame::XDispatchProvider > SAL_CALL
     getMasterDispatchProvider(  )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            ::com::sun::star::uno::RuntimeException, std::exception
         );
 
     virtual void SAL_CALL
@@ -130,12 +130,12 @@ public:
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::frame::XDispatchProvider >& NewSupplier )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            ::com::sun::star::uno::RuntimeException, std::exception
         );
 
     // XEventListener
-    virtual void SAL_CALL notifyEvent( const ::com::sun::star::document::EventObject& Event ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL notifyEvent( const ::com::sun::star::document::EventObject& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 private:
 

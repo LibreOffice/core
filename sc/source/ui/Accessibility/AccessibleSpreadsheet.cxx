@@ -774,7 +774,7 @@ bool ScAccessibleSpreadsheet::IsSameMarkCell()
 //=====  XAccessibleTable  ================================================
 
 uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleSpreadsheet::getAccessibleRowHeaders(  )
-                    throw (uno::RuntimeException)
+                    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -793,7 +793,7 @@ uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleSpreadsheet::getAccessib
 }
 
 uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleSpreadsheet::getAccessibleColumnHeaders(  )
-                    throw (uno::RuntimeException)
+                    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -812,7 +812,7 @@ uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleSpreadsheet::getAccessib
 }
 
 uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAccessibleRows(  )
-                    throw (uno::RuntimeException)
+                    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -843,7 +843,7 @@ uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAccessib
 }
 
 uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAccessibleColumns(  )
-                    throw (uno::RuntimeException)
+                    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -874,7 +874,7 @@ uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAccessib
 }
 
 sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleRowSelected( sal_Int32 nRow )
-    throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
+    throw (uno::RuntimeException, lang::IndexOutOfBoundsException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -896,7 +896,7 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleRowSelected( sal_Int32 nR
 }
 
 sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleColumnSelected( sal_Int32 nColumn )
-    throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
+    throw (uno::RuntimeException, lang::IndexOutOfBoundsException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -943,7 +943,7 @@ rtl::Reference<ScAccessibleCell> ScAccessibleSpreadsheet::GetAccessibleCellAt(sa
 }
 
 uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn )
-                    throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
+                    throw (uno::RuntimeException, lang::IndexOutOfBoundsException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -960,7 +960,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleCel
 }
 
 sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn )
-    throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
+    throw (uno::RuntimeException, lang::IndexOutOfBoundsException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -1011,7 +1011,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleAtP
 }
 
 void SAL_CALL ScAccessibleSpreadsheet::grabFocus(  )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     if (getAccessibleParent().is())
     {
@@ -1022,13 +1022,13 @@ void SAL_CALL ScAccessibleSpreadsheet::grabFocus(  )
 }
 
 sal_Int32 SAL_CALL ScAccessibleSpreadsheet::getForeground(  )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     return COL_BLACK;
 }
 
 sal_Int32 SAL_CALL ScAccessibleSpreadsheet::getBackground(  )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -1038,7 +1038,7 @@ sal_Int32 SAL_CALL ScAccessibleSpreadsheet::getBackground(  )
     //=====  XAccessibleContext  ==============================================
 
 uno::Reference<XAccessibleRelationSet> SAL_CALL ScAccessibleSpreadsheet::getAccessibleRelationSet(void)
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     utl::AccessibleRelationSetHelper* pRelationSet = NULL;
     if(mpAccDoc)
@@ -1050,7 +1050,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL ScAccessibleSpreadsheet::getAcce
 
 uno::Reference<XAccessibleStateSet> SAL_CALL
     ScAccessibleSpreadsheet::getAccessibleStateSet(void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Reference<XAccessibleStateSet> xParentStates;
@@ -1105,7 +1105,7 @@ void SAL_CALL ScAccessibleSpreadsheet::selectAccessibleChild( sal_Int32 nChildIn
 
 void SAL_CALL
         ScAccessibleSpreadsheet::clearAccessibleSelection(  )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -1138,7 +1138,7 @@ void SAL_CALL ScAccessibleSpreadsheet::selectAllAccessibleChildren(  )
 
 sal_Int32 SAL_CALL
         ScAccessibleSpreadsheet::getSelectedAccessibleChildCount(  )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -1167,7 +1167,7 @@ sal_Int32 SAL_CALL
 
 uno::Reference<XAccessible > SAL_CALL
         ScAccessibleSpreadsheet::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
-        throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+        throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -1307,14 +1307,14 @@ void ScAccessibleSpreadsheet::AddMarkedRange(const ScRange& rRange)
     //=====  XServiceInfo  ====================================================
 
 OUString SAL_CALL ScAccessibleSpreadsheet::getImplementationName(void)
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     return OUString("ScAccessibleSpreadsheet");
 }
 
 uno::Sequence< OUString> SAL_CALL
     ScAccessibleSpreadsheet::getSupportedServiceNames (void)
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString > aSequence = ScAccessibleTableBase::getSupportedServiceNames();
     sal_Int32 nOldSize(aSequence.getLength());
@@ -1334,7 +1334,7 @@ namespace
 
 uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleSpreadsheet::getImplementationId(void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return theScAccessibleSpreadsheetImplementationId::get().getSeq();
 }
@@ -1342,7 +1342,7 @@ uno::Sequence<sal_Int8> SAL_CALL
 ///=====  XAccessibleEventBroadcaster  =====================================
 
 void SAL_CALL ScAccessibleSpreadsheet::addAccessibleEventListener(const uno::Reference<XAccessibleEventListener>& xListener)
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -1353,7 +1353,7 @@ void SAL_CALL ScAccessibleSpreadsheet::addAccessibleEventListener(const uno::Ref
 //====  internal  =========================================================
 
 Rectangle ScAccessibleSpreadsheet::GetBoundingBoxOnScreen() const
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Rectangle aRect;
     if (mpViewShell)
@@ -1366,7 +1366,7 @@ Rectangle ScAccessibleSpreadsheet::GetBoundingBoxOnScreen() const
 }
 
 Rectangle ScAccessibleSpreadsheet::GetBoundingBox() const
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Rectangle aRect;
     if (mpViewShell)

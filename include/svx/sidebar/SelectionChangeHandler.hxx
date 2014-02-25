@@ -59,10 +59,10 @@ public:
     virtual ~SelectionChangeHandler (void);
 
     virtual void SAL_CALL selectionChanged (const css::lang::EventObject& rEvent)
-        throw (cssu::RuntimeException);
+        throw (cssu::RuntimeException, std::exception);
 
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
-        throw (cssu::RuntimeException);
+        throw (cssu::RuntimeException, std::exception);
 
     virtual void SAL_CALL disposing (void)
         throw (cssu::RuntimeException);

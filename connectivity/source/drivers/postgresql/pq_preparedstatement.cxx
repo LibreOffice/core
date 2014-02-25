@@ -240,7 +240,7 @@ void PreparedStatement::checkClosed() throw (SQLException, RuntimeException )
             *this, OUString(),1,Any());
 }
 
-Any PreparedStatement::queryInterface( const Type & reqType ) throw (RuntimeException)
+Any PreparedStatement::queryInterface( const Type & reqType ) throw (RuntimeException, std::exception)
 {
     Any ret;
 
@@ -260,7 +260,7 @@ Any PreparedStatement::queryInterface( const Type & reqType ) throw (RuntimeExce
 }
 
 
-Sequence< Type > PreparedStatement::getTypes() throw ( RuntimeException )
+Sequence< Type > PreparedStatement::getTypes() throw ( RuntimeException, std::exception )
 {
     static cppu::OTypeCollection *pCollection;
     if( ! pCollection )
@@ -285,7 +285,7 @@ Sequence< Type > PreparedStatement::getTypes() throw ( RuntimeException )
     return pCollection->getTypes();
 }
 
-Sequence< sal_Int8> PreparedStatement::getImplementationId() throw ( RuntimeException )
+Sequence< sal_Int8> PreparedStatement::getImplementationId() throw ( RuntimeException, std::exception )
 {
     static cppu::OImplementationId *pId;
     if( ! pId )
@@ -300,7 +300,7 @@ Sequence< sal_Int8> PreparedStatement::getImplementationId() throw ( RuntimeExce
     return pId->getImplementationId();
 }
 
-void PreparedStatement::close(  ) throw (SQLException, RuntimeException)
+void PreparedStatement::close(  ) throw (SQLException, RuntimeException, std::exception)
 {
     // let the connection die without acquired mutex !
     Reference< XConnection > r;
@@ -343,7 +343,7 @@ void PreparedStatement::raiseSQLException(
 }
 
 Reference< XResultSet > PreparedStatement::executeQuery( )
-        throw (SQLException, RuntimeException)
+        throw (SQLException, RuntimeException, std::exception)
 {
     Reference< XCloseable > lastResultSet = m_lastResultset;
     if( lastResultSet.is() )
@@ -357,7 +357,7 @@ Reference< XResultSet > PreparedStatement::executeQuery( )
 }
 
 sal_Int32 PreparedStatement::executeUpdate( )
-        throw (SQLException, RuntimeException)
+        throw (SQLException, RuntimeException, std::exception)
 {
     if( execute( ) )
     {
@@ -367,7 +367,7 @@ sal_Int32 PreparedStatement::executeUpdate( )
 }
 
 sal_Bool PreparedStatement::execute( )
-        throw (SQLException, RuntimeException)
+        throw (SQLException, RuntimeException, std::exception)
 {
     osl::MutexGuard guard( m_refMutex->mutex );
 
@@ -446,7 +446,7 @@ sal_Bool PreparedStatement::execute( )
 }
 
 Reference< XConnection > PreparedStatement::getConnection(  )
-        throw (SQLException, RuntimeException)
+        throw (SQLException, RuntimeException, std::exception)
 {
     Reference< XConnection > ret;
     {
@@ -459,7 +459,7 @@ Reference< XConnection > PreparedStatement::getConnection(  )
 
 
 void PreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 sqlType )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     (void)sqlType;
     MutexGuard guard( m_refMutex->mutex );
@@ -470,7 +470,7 @@ void PreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 sqlType )
 
 void PreparedStatement::setObjectNull(
     sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& typeName )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     (void) sqlType; (void) typeName;
     MutexGuard guard( m_refMutex->mutex );
@@ -481,7 +481,7 @@ void PreparedStatement::setObjectNull(
 
 
 void PreparedStatement::setBoolean( sal_Int32 parameterIndex, sal_Bool x )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     MutexGuard guard(m_refMutex->mutex );
     checkClosed();
@@ -493,19 +493,19 @@ void PreparedStatement::setBoolean( sal_Int32 parameterIndex, sal_Bool x )
 }
 
 void PreparedStatement::setByte( sal_Int32 parameterIndex, sal_Int8 x )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     setInt(parameterIndex,x);
 }
 
 void PreparedStatement::setShort( sal_Int32 parameterIndex, sal_Int16 x )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     setInt(parameterIndex, x );
 }
 
 void PreparedStatement::setInt( sal_Int32 parameterIndex, sal_Int32 x )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
 //     printf( "setString %d %d\n ",  parameterIndex, x);
     MutexGuard guard(m_refMutex->mutex );
@@ -519,7 +519,7 @@ void PreparedStatement::setInt( sal_Int32 parameterIndex, sal_Int32 x )
 }
 
 void PreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 x )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     MutexGuard guard(m_refMutex->mutex );
     checkClosed();
@@ -532,7 +532,7 @@ void PreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 x )
 }
 
 void PreparedStatement::setFloat( sal_Int32 parameterIndex, float x )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     MutexGuard guard(m_refMutex->mutex );
     checkClosed();
@@ -545,7 +545,7 @@ void PreparedStatement::setFloat( sal_Int32 parameterIndex, float x )
 }
 
 void PreparedStatement::setDouble( sal_Int32 parameterIndex, double x )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     MutexGuard guard(m_refMutex->mutex );
     checkClosed();
@@ -558,7 +558,7 @@ void PreparedStatement::setDouble( sal_Int32 parameterIndex, double x )
 }
 
 void PreparedStatement::setString( sal_Int32 parameterIndex, const OUString& x )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
 //     printf( "setString %d %s\n ", parameterIndex,
 //             OUStringToOString( x , RTL_TEXTENCODING_ASCII_US ).getStr());
@@ -577,7 +577,7 @@ void PreparedStatement::setString( sal_Int32 parameterIndex, const OUString& x )
 
 void PreparedStatement::setBytes(
     sal_Int32 parameterIndex, const Sequence< sal_Int8 >& x )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     MutexGuard guard(m_refMutex->mutex );
     checkClosed();
@@ -601,20 +601,20 @@ void PreparedStatement::setBytes(
 
 
 void PreparedStatement::setDate( sal_Int32 parameterIndex, const ::com::sun::star::util::Date& x )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     setString( parameterIndex, DBTypeConversion::toDateString( x ) );
 }
 
 void PreparedStatement::setTime( sal_Int32 parameterIndex, const ::com::sun::star::util::Time& x )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     setString( parameterIndex, DBTypeConversion::toTimeString( x ) );
 }
 
 void PreparedStatement::setTimestamp(
     sal_Int32 parameterIndex, const ::com::sun::star::util::DateTime& x )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     setString( parameterIndex, DBTypeConversion::toDateTimeString( x ) );
 }
@@ -623,7 +623,7 @@ void PreparedStatement::setBinaryStream(
     sal_Int32 parameterIndex,
     const Reference< ::com::sun::star::io::XInputStream >& x,
     sal_Int32 length )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     (void) parameterIndex; (void)x; (void) length;
     throw SQLException(
@@ -635,7 +635,7 @@ void PreparedStatement::setCharacterStream(
     sal_Int32 parameterIndex,
     const Reference< ::com::sun::star::io::XInputStream >& x,
     sal_Int32 length )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     (void) parameterIndex; (void)x; (void) length;
     throw SQLException(
@@ -644,7 +644,7 @@ void PreparedStatement::setCharacterStream(
 }
 
 void PreparedStatement::setObject( sal_Int32 parameterIndex, const Any& x )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     if( ! implSetObject( this, parameterIndex, x ))
     {
@@ -660,7 +660,7 @@ void PreparedStatement::setObjectWithInfo(
     const Any& x,
     sal_Int32 targetSqlType,
     sal_Int32 scale )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     (void) scale;
     if( com::sun::star::sdbc::DataType::DECIMAL == targetSqlType ||
@@ -700,7 +700,7 @@ void PreparedStatement::setObjectWithInfo(
 void PreparedStatement::setRef(
     sal_Int32 parameterIndex,
     const Reference< XRef >& x )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     (void) parameterIndex; (void)x;
     throw SQLException(
@@ -711,7 +711,7 @@ void PreparedStatement::setRef(
 void PreparedStatement::setBlob(
     sal_Int32 parameterIndex,
     const Reference< XBlob >& x )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     (void) parameterIndex; (void)x;
     throw SQLException(
@@ -722,7 +722,7 @@ void PreparedStatement::setBlob(
 void PreparedStatement::setClob(
     sal_Int32 parameterIndex,
     const Reference< XClob >& x )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     (void) parameterIndex; (void)x;
     throw SQLException(
@@ -733,31 +733,31 @@ void PreparedStatement::setClob(
 void PreparedStatement::setArray(
     sal_Int32 parameterIndex,
     const Reference< XArray >& x )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     setString( parameterIndex, array2String( x->getArray( 0 ) ) );
 }
 
 void PreparedStatement::clearParameters(  )
-    throw (SQLException, RuntimeException)
+    throw (SQLException, RuntimeException, std::exception)
 {
     MutexGuard guard(m_refMutex->mutex );
     m_vars = OStringVector ( m_vars.size() );
 }
 
 Any PreparedStatement::getWarnings(  )
-        throw (SQLException,RuntimeException)
+        throw (SQLException,RuntimeException, std::exception)
 {
     return Any();
 }
 
 void PreparedStatement::clearWarnings(  )
-        throw (SQLException, RuntimeException)
+        throw (SQLException, RuntimeException, std::exception)
 {
 }
 
 Reference< ::com::sun::star::sdbc::XResultSetMetaData > PreparedStatement::getMetaData()
-            throw (SQLException,RuntimeException)
+            throw (SQLException,RuntimeException, std::exception)
 {
     Reference< com::sun::star::sdbc::XResultSetMetaData > ret;
     Reference< com::sun::star::sdbc::XResultSetMetaDataSupplier > supplier( m_lastResultset, UNO_QUERY );
@@ -821,7 +821,7 @@ sal_Bool PreparedStatement::convertFastPropertyValue(
 
 
 void PreparedStatement::setFastPropertyValue_NoBroadcast(
-    sal_Int32 nHandle,const Any& rValue ) throw (Exception)
+    sal_Int32 nHandle,const Any& rValue ) throw (Exception, std::exception)
 {
     m_props[nHandle] = rValue;
 }
@@ -832,7 +832,7 @@ void PreparedStatement::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) c
 }
 
 Reference < XPropertySetInfo >  PreparedStatement::getPropertySetInfo()
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     return OPropertySetHelper::createPropertySetInfo( getPreparedStatementPropertyArrayHelper() );
 }
@@ -844,23 +844,23 @@ void PreparedStatement::disposing()
 
 
 Reference< XResultSet > PreparedStatement::getResultSet(  )
-    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     return Reference< XResultSet > ( m_lastResultset, com::sun::star::uno::UNO_QUERY );
 }
 sal_Int32 PreparedStatement::getUpdateCount(  )
-    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     return m_multipleResultUpdateCount;
 }
 sal_Bool PreparedStatement::getMoreResults(  )
-    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     return sal_False;
 }
 
 Reference< XResultSet > PreparedStatement::getGeneratedValues(  )
-        throw (SQLException, RuntimeException)
+        throw (SQLException, RuntimeException, std::exception)
 {
     osl::MutexGuard guard( m_refMutex->mutex );
     return getGeneratedValuesFromLastInsert(

@@ -404,7 +404,7 @@ bool ONSSInitializer::initNSS( const css::uno::Reference< css::uno::XComponentCo
 }
 
 css::uno::Reference< css::xml::crypto::XDigestContext > SAL_CALL ONSSInitializer::getDigestContext( ::sal_Int32 nDigestID, const css::uno::Sequence< css::beans::NamedValue >& aParams )
-    throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
+    throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     SECOidTag nNSSDigestID = SEC_OID_UNKNOWN;
     sal_Int32 nDigestLength = 0;
@@ -441,7 +441,7 @@ css::uno::Reference< css::xml::crypto::XDigestContext > SAL_CALL ONSSInitializer
 }
 
 css::uno::Reference< css::xml::crypto::XCipherContext > SAL_CALL ONSSInitializer::getCipherContext( ::sal_Int32 nCipherID, const css::uno::Sequence< ::sal_Int8 >& aKey, const css::uno::Sequence< ::sal_Int8 >& aInitializationVector, ::sal_Bool bEncryption, const css::uno::Sequence< css::beans::NamedValue >& aParams )
-    throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
+    throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     CK_MECHANISM_TYPE nNSSCipherID = 0;
     bool bW3CPadding = false;
@@ -495,19 +495,19 @@ cssu::Reference< cssu::XInterface > SAL_CALL ONSSInitializer_createInstance( con
 
 /* XServiceInfo */
 OUString SAL_CALL ONSSInitializer::getImplementationName()
-    throw (cssu::RuntimeException)
+    throw (cssu::RuntimeException, std::exception)
 {
     return ONSSInitializer_getImplementationName();
 }
 
 sal_Bool SAL_CALL ONSSInitializer::supportsService( const OUString& rServiceName )
-    throw (cssu::RuntimeException)
+    throw (cssu::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 cssu::Sequence< OUString > SAL_CALL ONSSInitializer::getSupportedServiceNames(  )
-    throw (cssu::RuntimeException)
+    throw (cssu::RuntimeException, std::exception)
 {
     return ONSSInitializer_getSupportedServiceNames();
 }

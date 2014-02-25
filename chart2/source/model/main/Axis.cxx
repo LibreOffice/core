@@ -438,7 +438,7 @@ void Axis::AllocateSubGrids()
 
 // ____ XAxis ____
 void SAL_CALL Axis::setScaleData( const chart2::ScaleData& rScaleData )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< util::XModifyListener > xModifyEventForwarder;
     Reference< lang::XEventListener > xEventListener;
@@ -468,27 +468,27 @@ void SAL_CALL Axis::setScaleData( const chart2::ScaleData& rScaleData )
 }
 
 chart2::ScaleData SAL_CALL Axis::getScaleData()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
     return m_aScaleData;
 }
 
 Reference< beans::XPropertySet > SAL_CALL Axis::getGridProperties()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
     return m_xGrid;
 }
 Sequence< Reference< beans::XPropertySet > > SAL_CALL Axis::getSubGridProperties()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
     return m_aSubGridProperties;
 }
 
 Sequence< Reference< beans::XPropertySet > > SAL_CALL Axis::getSubTickProperties()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "Not implemented yet" );
     return Sequence< Reference< beans::XPropertySet > >();
@@ -496,14 +496,14 @@ Sequence< Reference< beans::XPropertySet > > SAL_CALL Axis::getSubTickProperties
 
 // ____ XTitled ____
 Reference< chart2::XTitle > SAL_CALL Axis::getTitleObject()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard( GetMutex() );
     return m_xTitle;
 }
 
 void SAL_CALL Axis::setTitleObject( const Reference< chart2::XTitle >& xNewTitle )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< util::XModifyListener > xModifyEventForwarder;
     Reference< chart2::XTitle > xOldTitle;
@@ -524,7 +524,7 @@ void SAL_CALL Axis::setTitleObject( const Reference< chart2::XTitle >& xNewTitle
 
 // ____ XCloneable ____
 Reference< util::XCloneable > SAL_CALL Axis::createClone()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Axis * pNewAxis( new Axis( *this ));
     // hold a reference to the clone
@@ -536,7 +536,7 @@ Reference< util::XCloneable > SAL_CALL Axis::createClone()
 
 // ____ XModifyBroadcaster ____
 void SAL_CALL Axis::addModifyListener( const Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -550,7 +550,7 @@ void SAL_CALL Axis::addModifyListener( const Reference< util::XModifyListener >&
 }
 
 void SAL_CALL Axis::removeModifyListener( const Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -565,14 +565,14 @@ void SAL_CALL Axis::removeModifyListener( const Reference< util::XModifyListener
 
 // ____ XModifyListener ____
 void SAL_CALL Axis::modified( const lang::EventObject& aEvent )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
 // ____ XEventListener (base of XModifyListener) ____
 void SAL_CALL Axis::disposing( const lang::EventObject& Source )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if( Source.Source == m_aScaleData.Categories )
         m_aScaleData.Categories = 0;
@@ -607,7 +607,7 @@ uno::Any Axis::GetDefaultValue( sal_Int32 nHandle ) const
 
 // ____ XPropertySet ____
 Reference< beans::XPropertySetInfo > SAL_CALL Axis::getPropertySetInfo()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return *StaticAxisInfo::get();
 }

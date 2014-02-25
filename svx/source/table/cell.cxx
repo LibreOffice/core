@@ -800,7 +800,7 @@ sdr::properties::TextProperties* Cell::CloneProperties( SdrObject& rNewObj, Cell
 // XInterface
 
 
-Any SAL_CALL Cell::queryInterface( const Type & rType ) throw(RuntimeException)
+Any SAL_CALL Cell::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
 {
     if( rType == cppu::UnoType<XMergeableCell>::get() )
         return Any( Reference< XMergeableCell >( this ) );
@@ -839,7 +839,7 @@ void SAL_CALL Cell::release() throw ()
 // XTypeProvider
 
 
-Sequence< Type > SAL_CALL Cell::getTypes(  ) throw (RuntimeException)
+Sequence< Type > SAL_CALL Cell::getTypes(  ) throw (RuntimeException, std::exception)
 {
     Sequence< Type > aTypes( SvxUnoTextBase::getTypes() );
 
@@ -853,7 +853,7 @@ Sequence< Type > SAL_CALL Cell::getTypes(  ) throw (RuntimeException)
 
 
 
-Sequence< sal_Int8 > SAL_CALL Cell::getImplementationId(  ) throw (RuntimeException)
+Sequence< sal_Int8 > SAL_CALL Cell::getImplementationId(  ) throw (RuntimeException, std::exception)
 {
     static ::cppu::OImplementationId* pId = 0;
     if (! pId)
@@ -869,17 +869,17 @@ Sequence< sal_Int8 > SAL_CALL Cell::getImplementationId(  ) throw (RuntimeExcept
 }
 
 // XServiceInfo
-OUString SAL_CALL Cell::getImplementationName(  ) throw (RuntimeException)
+OUString SAL_CALL Cell::getImplementationName(  ) throw (RuntimeException, std::exception)
 {
     return OUString( "com.sun.star.comp.svx.table.Cell" );
 }
 
-sal_Bool SAL_CALL Cell::supportsService( const OUString& ServiceName ) throw (RuntimeException)
+sal_Bool SAL_CALL Cell::supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception)
 {
     return cppu::supportsService( this, ServiceName );
 }
 
-Sequence< OUString > SAL_CALL Cell::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > SAL_CALL Cell::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aSeq( SvxUnoTextBase::getSupportedServiceNames() );
     sal_Int32 nIndex = aSeq.getLength();
@@ -908,7 +908,7 @@ Sequence< OUString > SAL_CALL Cell::getSupportedServiceNames(  ) throw (RuntimeE
 
 
 
-::com::sun::star::awt::Size SAL_CALL Cell::calcAdjustedSize( const ::com::sun::star::awt::Size& aNewSize ) throw (RuntimeException)
+::com::sun::star::awt::Size SAL_CALL Cell::calcAdjustedSize( const ::com::sun::star::awt::Size& aNewSize ) throw (RuntimeException, std::exception)
 {
     return aNewSize;
 }
@@ -917,21 +917,21 @@ Sequence< OUString > SAL_CALL Cell::getSupportedServiceNames(  ) throw (RuntimeE
 // XMergeableCell
 
 
-sal_Int32 SAL_CALL Cell::getRowSpan() throw (RuntimeException)
+sal_Int32 SAL_CALL Cell::getRowSpan() throw (RuntimeException, std::exception)
 {
     return mnRowSpan;
 }
 
 
 
-sal_Int32 SAL_CALL Cell::getColumnSpan() throw (RuntimeException)
+sal_Int32 SAL_CALL Cell::getColumnSpan() throw (RuntimeException, std::exception)
 {
     return mnColSpan;
 }
 
 
 
-sal_Bool SAL_CALL Cell::isMerged() throw (RuntimeException)
+sal_Bool SAL_CALL Cell::isMerged() throw (RuntimeException, std::exception)
 {
     return mbMerged;
 }
@@ -940,14 +940,14 @@ sal_Bool SAL_CALL Cell::isMerged() throw (RuntimeException)
 // XCell
 
 
-OUString SAL_CALL Cell::getFormula(  ) throw (RuntimeException)
+OUString SAL_CALL Cell::getFormula(  ) throw (RuntimeException, std::exception)
 {
     return msFormula;
 }
 
 
 
-void SAL_CALL Cell::setFormula( const OUString& aFormula ) throw (RuntimeException)
+void SAL_CALL Cell::setFormula( const OUString& aFormula ) throw (RuntimeException, std::exception)
 {
     if( msFormula != aFormula )
     {
@@ -957,14 +957,14 @@ void SAL_CALL Cell::setFormula( const OUString& aFormula ) throw (RuntimeExcepti
 
 
 
-double SAL_CALL Cell::getValue(  ) throw (RuntimeException)
+double SAL_CALL Cell::getValue(  ) throw (RuntimeException, std::exception)
 {
     return mfValue;
 }
 
 
 
-void SAL_CALL Cell::setValue( double nValue ) throw (RuntimeException)
+void SAL_CALL Cell::setValue( double nValue ) throw (RuntimeException, std::exception)
 {
     if( mfValue != nValue )
     {
@@ -975,14 +975,14 @@ void SAL_CALL Cell::setValue( double nValue ) throw (RuntimeException)
 
 
 
-CellContentType SAL_CALL Cell::getType() throw (RuntimeException)
+CellContentType SAL_CALL Cell::getType() throw (RuntimeException, std::exception)
 {
     return mnCellContentType;
 }
 
 
 
-sal_Int32 SAL_CALL Cell::getError(  ) throw (RuntimeException)
+sal_Int32 SAL_CALL Cell::getError(  ) throw (RuntimeException, std::exception)
 {
     return mnError;
 }
@@ -1013,14 +1013,14 @@ Any Cell::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleEntry* pMa
     return aAny;
 }
 
-Reference< XPropertySetInfo > SAL_CALL Cell::getPropertySetInfo() throw(RuntimeException)
+Reference< XPropertySetInfo > SAL_CALL Cell::getPropertySetInfo() throw(RuntimeException, std::exception)
 {
     return mpPropSet->getPropertySetInfo();
 }
 
 
 
-void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& rValue ) throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
+void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& rValue ) throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
 
@@ -1165,7 +1165,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
 
 
 
-Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
 
@@ -1249,25 +1249,25 @@ Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName ) throw(Unknow
 
 
 
-void SAL_CALL Cell::addPropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< XPropertyChangeListener >& /*xListener*/ ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+void SAL_CALL Cell::addPropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< XPropertyChangeListener >& /*xListener*/ ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
 
 
 
-void SAL_CALL Cell::removePropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< XPropertyChangeListener >& /*aListener*/ ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+void SAL_CALL Cell::removePropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< XPropertyChangeListener >& /*aListener*/ ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
 
 
 
-void SAL_CALL Cell::addVetoableChangeListener( const OUString& /*PropertyName*/, const Reference< XVetoableChangeListener >& /*aListener*/ ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+void SAL_CALL Cell::addVetoableChangeListener( const OUString& /*PropertyName*/, const Reference< XVetoableChangeListener >& /*aListener*/ ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
 
 
 
-void SAL_CALL Cell::removeVetoableChangeListener( const OUString& /*PropertyName*/, const Reference< XVetoableChangeListener >& /*aListener*/ ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+void SAL_CALL Cell::removeVetoableChangeListener( const OUString& /*PropertyName*/, const Reference< XVetoableChangeListener >& /*aListener*/ ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
 
@@ -1275,7 +1275,7 @@ void SAL_CALL Cell::removeVetoableChangeListener( const OUString& /*PropertyName
 // XMultiPropertySet
 
 
-void SAL_CALL Cell::setPropertyValues( const Sequence< OUString >& aPropertyNames, const Sequence< Any >& aValues ) throw (PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
+void SAL_CALL Cell::setPropertyValues( const Sequence< OUString >& aPropertyNames, const Sequence< Any >& aValues ) throw (PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
 {
     ::SolarMutexGuard aSolarGuard;
 
@@ -1306,7 +1306,7 @@ void SAL_CALL Cell::setPropertyValues( const Sequence< OUString >& aPropertyName
 
 
 
-Sequence< Any > SAL_CALL Cell::getPropertyValues( const Sequence< OUString >& aPropertyNames ) throw (RuntimeException)
+Sequence< Any > SAL_CALL Cell::getPropertyValues( const Sequence< OUString >& aPropertyNames ) throw (RuntimeException, std::exception)
 {
     ::SolarMutexGuard aSolarGuard;
 
@@ -1340,19 +1340,19 @@ Sequence< Any > SAL_CALL Cell::getPropertyValues( const Sequence< OUString >& aP
 
 
 
-void SAL_CALL Cell::addPropertiesChangeListener( const Sequence< OUString >& /*aPropertyNames*/, const Reference< XPropertiesChangeListener >& /*xListener*/ ) throw (RuntimeException)
+void SAL_CALL Cell::addPropertiesChangeListener( const Sequence< OUString >& /*aPropertyNames*/, const Reference< XPropertiesChangeListener >& /*xListener*/ ) throw (RuntimeException, std::exception)
 {
 }
 
 
 
-void SAL_CALL Cell::removePropertiesChangeListener( const Reference< XPropertiesChangeListener >& /*xListener*/ ) throw (RuntimeException)
+void SAL_CALL Cell::removePropertiesChangeListener( const Reference< XPropertiesChangeListener >& /*xListener*/ ) throw (RuntimeException, std::exception)
 {
 }
 
 
 
-void SAL_CALL Cell::firePropertiesChangeEvent( const Sequence< OUString >& /*aPropertyNames*/, const Reference< XPropertiesChangeListener >& /*xListener*/ ) throw (RuntimeException)
+void SAL_CALL Cell::firePropertiesChangeEvent( const Sequence< OUString >& /*aPropertyNames*/, const Reference< XPropertiesChangeListener >& /*xListener*/ ) throw (RuntimeException, std::exception)
 {
 }
 
@@ -1360,7 +1360,7 @@ void SAL_CALL Cell::firePropertiesChangeEvent( const Sequence< OUString >& /*aPr
 // XPropertyState
 
 
-PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName ) throw(UnknownPropertyException, RuntimeException)
+PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName ) throw(UnknownPropertyException, RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
 
@@ -1463,7 +1463,7 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName ) th
 
 
 
-Sequence< PropertyState > SAL_CALL Cell::getPropertyStates( const Sequence< OUString >& aPropertyName ) throw(UnknownPropertyException, RuntimeException)
+Sequence< PropertyState > SAL_CALL Cell::getPropertyStates( const Sequence< OUString >& aPropertyName ) throw(UnknownPropertyException, RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
 
@@ -1494,7 +1494,7 @@ Sequence< PropertyState > SAL_CALL Cell::getPropertyStates( const Sequence< OUSt
 
 
 
-void SAL_CALL Cell::setPropertyToDefault( const OUString& PropertyName ) throw(UnknownPropertyException, RuntimeException)
+void SAL_CALL Cell::setPropertyToDefault( const OUString& PropertyName ) throw(UnknownPropertyException, RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
 
@@ -1536,7 +1536,7 @@ void SAL_CALL Cell::setPropertyToDefault( const OUString& PropertyName ) throw(U
 
 
 
-Any SAL_CALL Cell::getPropertyDefault( const OUString& aPropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+Any SAL_CALL Cell::getPropertyDefault( const OUString& aPropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
 
@@ -1610,7 +1610,7 @@ void SAL_CALL Cell::setAllPropertiesToDefault()
 
 
 
-void SAL_CALL Cell::setPropertiesToDefault( const Sequence< OUString >& aPropertyNames ) throw (UnknownPropertyException, RuntimeException)
+void SAL_CALL Cell::setPropertiesToDefault( const Sequence< OUString >& aPropertyNames ) throw (UnknownPropertyException, RuntimeException, std::exception)
 {
     sal_Int32 nCount = aPropertyNames.getLength();
     const OUString* pName = aPropertyNames.getConstArray();
@@ -1621,7 +1621,7 @@ void SAL_CALL Cell::setPropertiesToDefault( const Sequence< OUString >& aPropert
 
 
 
-Sequence< Any > SAL_CALL Cell::getPropertyDefaults( const Sequence< OUString >& aPropertyNames ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
+Sequence< Any > SAL_CALL Cell::getPropertyDefaults( const Sequence< OUString >& aPropertyNames ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
     sal_Int32 nCount = aPropertyNames.getLength();
     Sequence< Any > aDefaults( nCount );
@@ -1657,7 +1657,7 @@ Any SAL_CALL Cell::getFastPropertyValue( sal_Int32 nHandle ) throw (UnknownPrope
 // XText
 
 
-void SAL_CALL Cell::insertTextContent( const Reference< XTextRange >& xRange, const Reference< XTextContent >& xContent, sal_Bool bAbsorb ) throw (IllegalArgumentException, RuntimeException)
+void SAL_CALL Cell::insertTextContent( const Reference< XTextRange >& xRange, const Reference< XTextContent >& xContent, sal_Bool bAbsorb ) throw (IllegalArgumentException, RuntimeException, std::exception)
 {
     SvxUnoTextBase::insertTextContent( xRange, xContent, bAbsorb );
     notifyModified();
@@ -1665,7 +1665,7 @@ void SAL_CALL Cell::insertTextContent( const Reference< XTextRange >& xRange, co
 
 
 
-void SAL_CALL Cell::removeTextContent( const Reference< XTextContent >& xContent ) throw (NoSuchElementException, RuntimeException)
+void SAL_CALL Cell::removeTextContent( const Reference< XTextContent >& xContent ) throw (NoSuchElementException, RuntimeException, std::exception)
 {
     SvxUnoTextBase::removeTextContent( xContent );
     notifyModified();
@@ -1675,21 +1675,21 @@ void SAL_CALL Cell::removeTextContent( const Reference< XTextContent >& xContent
 // XSimpleText
 
 
-Reference< XTextCursor > SAL_CALL Cell::createTextCursor(  ) throw (RuntimeException)
+Reference< XTextCursor > SAL_CALL Cell::createTextCursor(  ) throw (RuntimeException, std::exception)
 {
     return SvxUnoTextBase::createTextCursor();
 }
 
 
 
-Reference< XTextCursor > SAL_CALL Cell::createTextCursorByRange( const Reference< XTextRange >& aTextPosition ) throw (RuntimeException)
+Reference< XTextCursor > SAL_CALL Cell::createTextCursorByRange( const Reference< XTextRange >& aTextPosition ) throw (RuntimeException, std::exception)
 {
     return SvxUnoTextBase::createTextCursorByRange( aTextPosition );
 }
 
 
 
-void SAL_CALL Cell::insertString( const Reference< XTextRange >& xRange, const OUString& aString, sal_Bool bAbsorb ) throw (RuntimeException)
+void SAL_CALL Cell::insertString( const Reference< XTextRange >& xRange, const OUString& aString, sal_Bool bAbsorb ) throw (RuntimeException, std::exception)
 {
     SvxUnoTextBase::insertString( xRange, aString, bAbsorb );
     notifyModified();
@@ -1697,7 +1697,7 @@ void SAL_CALL Cell::insertString( const Reference< XTextRange >& xRange, const O
 
 
 
-void SAL_CALL Cell::insertControlCharacter( const Reference< XTextRange >& xRange, sal_Int16 nControlCharacter, sal_Bool bAbsorb ) throw (IllegalArgumentException, RuntimeException)
+void SAL_CALL Cell::insertControlCharacter( const Reference< XTextRange >& xRange, sal_Int16 nControlCharacter, sal_Bool bAbsorb ) throw (IllegalArgumentException, RuntimeException, std::exception)
 {
     SvxUnoTextBase::insertControlCharacter( xRange, nControlCharacter, bAbsorb );
     notifyModified();
@@ -1707,28 +1707,28 @@ void SAL_CALL Cell::insertControlCharacter( const Reference< XTextRange >& xRang
 // XTextRange
 
 
-Reference< XText > SAL_CALL Cell::getText(  ) throw (RuntimeException)
+Reference< XText > SAL_CALL Cell::getText(  ) throw (RuntimeException, std::exception)
 {
     return SvxUnoTextBase::getText();
 }
 
 
 
-Reference< XTextRange > SAL_CALL Cell::getStart(  ) throw (RuntimeException)
+Reference< XTextRange > SAL_CALL Cell::getStart(  ) throw (RuntimeException, std::exception)
 {
     return SvxUnoTextBase::getStart();
 }
 
 
 
-Reference< XTextRange > SAL_CALL Cell::getEnd(  ) throw (RuntimeException)
+Reference< XTextRange > SAL_CALL Cell::getEnd(  ) throw (RuntimeException, std::exception)
 {
     return SvxUnoTextBase::getEnd();
 }
 
 
 
-OUString SAL_CALL Cell::getString(  ) throw (RuntimeException)
+OUString SAL_CALL Cell::getString(  ) throw (RuntimeException, std::exception)
 {
     maSelection.nStartPara = EE_PARA_MAX_COUNT;
     return SvxUnoTextBase::getString();
@@ -1736,14 +1736,14 @@ OUString SAL_CALL Cell::getString(  ) throw (RuntimeException)
 
 
 
-void SAL_CALL Cell::setString( const OUString& aString ) throw (RuntimeException)
+void SAL_CALL Cell::setString( const OUString& aString ) throw (RuntimeException, std::exception)
 {
     SvxUnoTextBase::setString( aString );
     notifyModified();
 }
 
 // XEventListener
-void SAL_CALL Cell::disposing( const EventObject& /*Source*/ ) throw (RuntimeException)
+void SAL_CALL Cell::disposing( const EventObject& /*Source*/ ) throw (RuntimeException, std::exception)
 {
     mxTable.clear();
     dispose();

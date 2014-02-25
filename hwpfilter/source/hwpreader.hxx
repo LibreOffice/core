@@ -85,8 +85,8 @@ public:
     /**
      * parseStream does Parser-startup initializations
      */
-    virtual sal_Bool SAL_CALL filter(const Sequence< PropertyValue >& aDescriptor) throw (RuntimeException);
-    virtual void SAL_CALL cancel() throw(RuntimeException) {}
+    virtual sal_Bool SAL_CALL filter(const Sequence< PropertyValue >& aDescriptor) throw (RuntimeException, std::exception);
+    virtual void SAL_CALL cancel() throw(RuntimeException, std::exception) {}
     virtual void SAL_CALL setDocumentHandler(Reference< XDocumentHandler > xHandler)
     {
         m_rxDocumentHandler = xHandler;
@@ -167,20 +167,20 @@ public:
 public:
     // XFilter
     virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& aDescriptor )
-        throw( RuntimeException );
-    virtual void SAL_CALL cancel() throw(RuntimeException);
+        throw( RuntimeException, std::exception );
+    virtual void SAL_CALL cancel() throw(RuntimeException, std::exception);
 
     // XImporter
     virtual void SAL_CALL setTargetDocument( const Reference< XComponent >& xDoc)
-        throw( IllegalArgumentException, RuntimeException );
+        throw( IllegalArgumentException, RuntimeException, std::exception );
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() throw (RuntimeException);
-    Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw (::com::sun::star::uno::RuntimeException);
-    sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw (::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getImplementationName() throw (RuntimeException, std::exception);
+    Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     //XExtendedFilterDetection
-    virtual OUString SAL_CALL detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rDescriptor ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rDescriptor ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 public:
     Reference< XFilter > rFilter;
@@ -229,19 +229,19 @@ HwpImportFilter::~HwpImportFilter()
 }
 
 sal_Bool HwpImportFilter::filter( const Sequence< PropertyValue >& aDescriptor )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     // delegate to IchitaroImpoter
     return rFilter->filter( aDescriptor );
 }
 
-void HwpImportFilter::cancel() throw(::com::sun::star::uno::RuntimeException)
+void HwpImportFilter::cancel() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     rFilter->cancel();
 }
 
 void HwpImportFilter::setTargetDocument( const Reference< XComponent >& xDoc )
-    throw( IllegalArgumentException, RuntimeException )
+    throw( IllegalArgumentException, RuntimeException, std::exception )
 {
         // delegate
     rImporter->setTargetDocument( xDoc );
@@ -252,18 +252,18 @@ OUString HwpImportFilter::getImplementationName_Static() throw()
     return OUString( IMPLEMENTATION_NAME );
 }
 
-OUString HwpImportFilter::getImplementationName() throw(::com::sun::star::uno::RuntimeException)
+OUString HwpImportFilter::getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return OUString( IMPLEMENTATION_NAME );
 }
 
-sal_Bool HwpImportFilter::supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException)
+sal_Bool HwpImportFilter::supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 //XExtendedFilterDetection
-OUString HwpImportFilter::detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rDescriptor ) throw (::com::sun::star::uno::RuntimeException)
+OUString HwpImportFilter::detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rDescriptor ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     OUString sTypeName;
 
@@ -289,7 +289,7 @@ OUString HwpImportFilter::detect( ::com::sun::star::uno::Sequence< ::com::sun::s
     return sTypeName;
 }
 
-Sequence< OUString> HwpImportFilter::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
+Sequence< OUString> HwpImportFilter::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     Sequence < OUString > aRet(2);
     OUString* pArray = aRet.getArray();

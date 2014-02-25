@@ -62,31 +62,31 @@ public:
     void SAL_CALL setScale( float factor );
     void SAL_CALL setWindowID( const intptr_t windowID );
 
-    void SAL_CALL start() throw ( ::com::sun::star::uno::RuntimeException );
-    void SAL_CALL stop() throw ( ::com::sun::star::uno::RuntimeException );
-    ::sal_Bool SAL_CALL isPlaying() throw ( ::com::sun::star::uno::RuntimeException );
-    double SAL_CALL getDuration() throw ( ::com::sun::star::uno::RuntimeException );
-    void SAL_CALL setMediaTime( double fTime ) throw ( ::com::sun::star::uno::RuntimeException );
-    double SAL_CALL getMediaTime() throw ( ::com::sun::star::uno::RuntimeException );
-    double SAL_CALL getRate() throw ( ::com::sun::star::uno::RuntimeException );
-    void SAL_CALL setPlaybackLoop( ::sal_Bool bSet ) throw ( ::com::sun::star::uno::RuntimeException );
-    ::sal_Bool SAL_CALL isPlaybackLoop() throw ( ::com::sun::star::uno::RuntimeException );
-    void SAL_CALL setVolumeDB( ::sal_Int16 nDB ) throw ( ::com::sun::star::uno::RuntimeException );
-    ::sal_Int16 SAL_CALL getVolumeDB() throw ( ::com::sun::star::uno::RuntimeException );
-    void SAL_CALL setMute( ::sal_Bool bSet ) throw ( ::com::sun::star::uno::RuntimeException );
-    ::sal_Bool SAL_CALL isMute() throw ( ::com::sun::star::uno::RuntimeException );
-    css::awt::Size SAL_CALL getPreferredPlayerWindowSize() throw ( ::com::sun::star::uno::RuntimeException );
+    void SAL_CALL start() throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+    void SAL_CALL stop() throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+    ::sal_Bool SAL_CALL isPlaying() throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+    double SAL_CALL getDuration() throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+    void SAL_CALL setMediaTime( double fTime ) throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+    double SAL_CALL getMediaTime() throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+    double SAL_CALL getRate() throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+    void SAL_CALL setPlaybackLoop( ::sal_Bool bSet ) throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+    ::sal_Bool SAL_CALL isPlaybackLoop() throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+    void SAL_CALL setVolumeDB( ::sal_Int16 nDB ) throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+    ::sal_Int16 SAL_CALL getVolumeDB() throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+    void SAL_CALL setMute( ::sal_Bool bSet ) throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+    ::sal_Bool SAL_CALL isMute() throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+    css::awt::Size SAL_CALL getPreferredPlayerWindowSize() throw ( ::com::sun::star::uno::RuntimeException, std::exception );
     ::com::sun::star::uno::Reference< css::media::XPlayerWindow > SAL_CALL createPlayerWindow( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
-            throw ( ::com::sun::star::uno::RuntimeException );
+            throw ( ::com::sun::star::uno::RuntimeException, std::exception );
     ::com::sun::star::uno::Reference< css::media::XFrameGrabber > SAL_CALL createFrameGrabber()
-            throw ( ::com::sun::star::uno::RuntimeException );
+            throw ( ::com::sun::star::uno::RuntimeException, std::exception );
 
     ::rtl::OUString SAL_CALL getImplementationName()
-            throw ( ::com::sun::star::uno::RuntimeException );
+            throw ( ::com::sun::star::uno::RuntimeException, std::exception );
     ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& serviceName )
-            throw ( ::com::sun::star::uno::RuntimeException );;
+            throw ( ::com::sun::star::uno::RuntimeException, std::exception );;
     ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
-            throw ( ::com::sun::star::uno::RuntimeException );;
+            throw ( ::com::sun::star::uno::RuntimeException, std::exception );;
 
 private:
     void replay();

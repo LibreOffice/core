@@ -117,7 +117,7 @@ void OMySQLCatalog::refreshUsers()
         m_pUsers = new OUsers(*this,m_aMutex,aVector,m_xConnection,this);
 }
 
-Any SAL_CALL OMySQLCatalog::queryInterface( const Type & rType ) throw(RuntimeException)
+Any SAL_CALL OMySQLCatalog::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
 {
     if ( rType == ::getCppuType((const Reference<XGroupsSupplier>*)0) )
         return Any();
@@ -126,7 +126,7 @@ Any SAL_CALL OMySQLCatalog::queryInterface( const Type & rType ) throw(RuntimeEx
     return OCatalog::queryInterface(rType);
 }
 
-Sequence< Type > SAL_CALL OMySQLCatalog::getTypes(  ) throw(RuntimeException)
+Sequence< Type > SAL_CALL OMySQLCatalog::getTypes(  ) throw(RuntimeException, std::exception)
 {
     Sequence< Type > aTypes = OCatalog::getTypes();
     ::std::vector<Type> aOwnTypes;

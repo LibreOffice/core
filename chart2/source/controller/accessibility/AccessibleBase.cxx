@@ -506,14 +506,14 @@ void SAL_CALL AccessibleBase::disposing()
 
 // ________ XAccessible ________
 Reference< XAccessibleContext > SAL_CALL AccessibleBase::getAccessibleContext()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return this;
 }
 
 // ________ AccessibleBase::XAccessibleContext ________
 sal_Int32 SAL_CALL AccessibleBase::getAccessibleChildCount()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ClearableMutexGuard aGuard( GetMutex() );
     if( ! m_bMayHaveChildren ||
@@ -539,7 +539,7 @@ sal_Int32 AccessibleBase::ImplGetAccessibleChildCount() const
 }
 
 Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleChild( sal_Int32 i )
-    throw (lang::IndexOutOfBoundsException, RuntimeException)
+    throw (lang::IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     CheckDisposeState();
     Reference< XAccessible > xResult;
@@ -583,7 +583,7 @@ Reference< XAccessible > AccessibleBase::ImplGetAccessibleChildById( sal_Int32 i
 }
 
 Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleParent()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     CheckDisposeState();
     Reference< XAccessible > aResult;
@@ -594,7 +594,7 @@ Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleParent()
 }
 
 sal_Int32 SAL_CALL AccessibleBase::getAccessibleIndexInParent()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     CheckDisposeState();
 
@@ -604,20 +604,20 @@ sal_Int32 SAL_CALL AccessibleBase::getAccessibleIndexInParent()
 }
 
 sal_Int16 SAL_CALL AccessibleBase::getAccessibleRole()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return AccessibleRole::SHAPE;
 }
 
 Reference< XAccessibleRelationSet > SAL_CALL AccessibleBase::getAccessibleRelationSet()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     Reference< XAccessibleRelationSet > aResult;
     return aResult;
 }
 
 Reference< XAccessibleStateSet > SAL_CALL AccessibleBase::getAccessibleStateSet()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     if( ! m_bStateSetInitialized )
     {
@@ -638,7 +638,7 @@ Reference< XAccessibleStateSet > SAL_CALL AccessibleBase::getAccessibleStateSet(
 }
 
 lang::Locale SAL_CALL AccessibleBase::getLocale()
-    throw (IllegalAccessibleComponentStateException, RuntimeException)
+    throw (IllegalAccessibleComponentStateException, RuntimeException, std::exception)
 {
     CheckDisposeState();
 
@@ -647,7 +647,7 @@ lang::Locale SAL_CALL AccessibleBase::getLocale()
 
 // ________ AccessibleBase::XAccessibleComponent ________
 sal_Bool SAL_CALL AccessibleBase::containsPoint( const awt::Point& aPoint )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     awt::Rectangle aRect( getBounds() );
 
@@ -662,7 +662,7 @@ sal_Bool SAL_CALL AccessibleBase::containsPoint( const awt::Point& aPoint )
 }
 
 Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleAtPoint( const awt::Point& aPoint )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     CheckDisposeState();
     Reference< XAccessible > aResult;
@@ -702,7 +702,7 @@ Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleAtPoint( const aw
 }
 
 awt::Rectangle SAL_CALL AccessibleBase::getBounds()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ExplicitValueProvider *pExplicitValueProvider(
         ExplicitValueProvider::getExplicitValueProvider( m_aAccInfo.m_xView ));
@@ -738,7 +738,7 @@ awt::Rectangle SAL_CALL AccessibleBase::getBounds()
 }
 
 awt::Point SAL_CALL AccessibleBase::getLocation()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     CheckDisposeState();
     awt::Rectangle aBBox( getBounds() );
@@ -746,7 +746,7 @@ awt::Point SAL_CALL AccessibleBase::getLocation()
 }
 
 awt::Point SAL_CALL AccessibleBase::getLocationOnScreen()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     CheckDisposeState();
 
@@ -767,7 +767,7 @@ awt::Point SAL_CALL AccessibleBase::getLocationOnScreen()
 }
 
 awt::Size SAL_CALL AccessibleBase::getSize()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     CheckDisposeState();
     awt::Rectangle aBBox( getBounds() );
@@ -775,7 +775,7 @@ awt::Size SAL_CALL AccessibleBase::getSize()
 }
 
 void SAL_CALL AccessibleBase::grabFocus()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     CheckDisposeState();
 
@@ -787,13 +787,13 @@ void SAL_CALL AccessibleBase::grabFocus()
 }
 
 sal_Int32 SAL_CALL AccessibleBase::getForeground()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return getColor( ACC_BASE_FOREGROUND );
 }
 
 sal_Int32 SAL_CALL AccessibleBase::getBackground()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return getColor( ACC_BASE_BACKGROUND );
 }
@@ -892,19 +892,19 @@ sal_Int32 AccessibleBase::getColor( eColorType eColType )
 
 // ________ AccessibleBase::XServiceInfo ________
 OUString SAL_CALL AccessibleBase::getImplementationName()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return OUString( "AccessibleBase" );
 }
 
 sal_Bool SAL_CALL AccessibleBase::supportsService( const OUString& ServiceName )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return cppu::supportsService( this, ServiceName );
 }
 
 uno::Sequence< OUString > SAL_CALL AccessibleBase::getSupportedServiceNames()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     uno::Sequence< OUString > aSeq( 2 );
     OUString* pStr = aSeq.getArray();
@@ -916,13 +916,13 @@ uno::Sequence< OUString > SAL_CALL AccessibleBase::getSupportedServiceNames()
 
 // ________ AccessibleBase::XEventListener ________
 void SAL_CALL AccessibleBase::disposing( const lang::EventObject& /*Source*/ )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
 }
 
 // ________ XAccessibleEventBroadcasters ________
 void SAL_CALL AccessibleBase::addAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     MutexGuard aGuard( GetMutex() );
 
@@ -936,7 +936,7 @@ void SAL_CALL AccessibleBase::addAccessibleEventListener( const Reference< XAcce
 }
 
 void SAL_CALL AccessibleBase::removeAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     MutexGuard aGuard( GetMutex() );
 

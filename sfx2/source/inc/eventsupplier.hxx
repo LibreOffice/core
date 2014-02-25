@@ -67,26 +67,26 @@ public:
     //  --- XNameReplace ---
     virtual void SAL_CALL       replaceByName( const OUString & aName, const css::uno::Any & aElement )
                                     throw( css::lang::IllegalArgumentException, css::container::NoSuchElementException,
-                                           css::lang::WrappedTargetException, css::uno::RuntimeException );
+                                           css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception );
 
     //  --- XNameAccess ( parent of XNameReplace ) ---
     virtual css::uno::Any SAL_CALL        getByName( const OUString& aName )
                                     throw( css::container::NoSuchElementException, css::lang::WrappedTargetException,
-                                           css::uno::RuntimeException );
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() throw ( css::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL   hasByName( const OUString& aName ) throw ( css::uno::RuntimeException );
+                                           css::uno::RuntimeException, std::exception );
+    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() throw ( css::uno::RuntimeException, std::exception );
+    virtual sal_Bool SAL_CALL   hasByName( const OUString& aName ) throw ( css::uno::RuntimeException, std::exception );
 
     //  --- XElementAccess ( parent of XNameAccess ) ---
-    virtual css::uno::Type SAL_CALL    getElementType() throw ( css::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL   hasElements() throw ( css::uno::RuntimeException );
+    virtual css::uno::Type SAL_CALL    getElementType() throw ( css::uno::RuntimeException, std::exception );
+    virtual sal_Bool SAL_CALL   hasElements() throw ( css::uno::RuntimeException, std::exception );
 
     // --- ::document::XEventListener ---
     virtual void SAL_CALL       notifyEvent( const css::document::EventObject& aEvent )
-                                    throw( css::uno::RuntimeException );
+                                    throw( css::uno::RuntimeException, std::exception );
 
     // --- ::lang::XEventListener ---
     virtual void SAL_CALL       disposing( const css::lang::EventObject& Source )
-                                    throw( css::uno::RuntimeException );
+                                    throw( css::uno::RuntimeException, std::exception );
 
     static SvxMacro*            ConvertToMacro( const css::uno::Any& rElement, SfxObjectShell* pDoc, sal_Bool bNormalizeMacro );
     static void                 NormalizeMacro( const css::uno::Any& rIn, css::uno::Any& rOut, SfxObjectShell* pDoc );

@@ -71,17 +71,17 @@ ImageManager::~ImageManager()
 }
 
 // XComponent
-void SAL_CALL ImageManager::dispose() throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL ImageManager::dispose() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     m_pImpl->dispose();
 }
 
-void SAL_CALL ImageManager::addEventListener( const uno::Reference< XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL ImageManager::addEventListener( const uno::Reference< XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     m_pImpl->addEventListener(xListener);
 }
 
-void SAL_CALL ImageManager::removeEventListener( const uno::Reference< XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL ImageManager::removeEventListener( const uno::Reference< XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     m_pImpl->removeEventListener(xListener);
@@ -98,14 +98,14 @@ throw (::com::sun::star::uno::RuntimeException)
 }
 
 // XInitialization
-void SAL_CALL ImageManager::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
+void SAL_CALL ImageManager::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException, std::exception )
 {
     m_pImpl->initialize(aArguments);
 }
 
 // XImageManager
 void SAL_CALL ImageManager::reset()
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
@@ -113,13 +113,13 @@ throw (::com::sun::star::uno::RuntimeException)
 }
 
 Sequence< OUString > SAL_CALL ImageManager::getAllImageNames( ::sal_Int16 nImageType )
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return m_pImpl->getAllImageNames( nImageType );
 }
 
 ::sal_Bool SAL_CALL ImageManager::hasImage( ::sal_Int16 nImageType, const OUString& aCommandURL )
-throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     return m_pImpl->hasImage(nImageType,aCommandURL);
 }
@@ -127,7 +127,7 @@ throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::
 Sequence< uno::Reference< XGraphic > > SAL_CALL ImageManager::getImages(
     ::sal_Int16 nImageType,
     const Sequence< OUString >& aCommandURLSequence )
-throw ( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException )
+throw ( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception )
 {
     return m_pImpl->getImages(nImageType,aCommandURLSequence);
 }
@@ -138,7 +138,7 @@ void SAL_CALL ImageManager::replaceImages(
     const Sequence< uno::Reference< XGraphic > >& aGraphicsSequence )
 throw ( ::com::sun::star::lang::IllegalArgumentException,
         ::com::sun::star::lang::IllegalAccessException,
-        ::com::sun::star::uno::RuntimeException)
+        ::com::sun::star::uno::RuntimeException, std::exception)
 {
     m_pImpl->replaceImages(nImageType,aCommandURLSequence,aGraphicsSequence);
 }
@@ -146,7 +146,7 @@ throw ( ::com::sun::star::lang::IllegalArgumentException,
 void SAL_CALL ImageManager::removeImages( ::sal_Int16 nImageType, const Sequence< OUString >& aCommandURLSequence )
 throw ( ::com::sun::star::lang::IllegalArgumentException,
         ::com::sun::star::lang::IllegalAccessException,
-        ::com::sun::star::uno::RuntimeException)
+        ::com::sun::star::uno::RuntimeException, std::exception)
 {
     m_pImpl->removeImages(nImageType,aCommandURLSequence);
 }
@@ -155,20 +155,20 @@ void SAL_CALL ImageManager::insertImages( ::sal_Int16 nImageType, const Sequence
 throw ( ::com::sun::star::container::ElementExistException,
         ::com::sun::star::lang::IllegalArgumentException,
         ::com::sun::star::lang::IllegalAccessException,
-        ::com::sun::star::uno::RuntimeException)
+        ::com::sun::star::uno::RuntimeException, std::exception)
 {
     m_pImpl->insertImages(nImageType,aCommandURLSequence,aGraphicSequence);
 }
 
 // XUIConfiguration
 void SAL_CALL ImageManager::addConfigurationListener( const uno::Reference< ::com::sun::star::ui::XUIConfigurationListener >& xListener )
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     m_pImpl->addConfigurationListener(xListener);
 }
 
 void SAL_CALL ImageManager::removeConfigurationListener( const uno::Reference< ::com::sun::star::ui::XUIConfigurationListener >& xListener )
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     m_pImpl->removeConfigurationListener(xListener);
@@ -177,30 +177,30 @@ throw (::com::sun::star::uno::RuntimeException)
 // XUIConfigurationPersistence
 void SAL_CALL ImageManager::reload()
 throw ( ::com::sun::star::uno::Exception,
-        ::com::sun::star::uno::RuntimeException )
+        ::com::sun::star::uno::RuntimeException, std::exception )
 {
     m_pImpl->reload();
 }
 
 void SAL_CALL ImageManager::store()
-throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     m_pImpl->store();
 }
 
 void SAL_CALL ImageManager::storeToStorage( const uno::Reference< XStorage >& Storage )
-throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     m_pImpl->storeToStorage(Storage);
 }
 
 sal_Bool SAL_CALL ImageManager::isModified()
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return m_pImpl->isModified();
 }
 
-sal_Bool SAL_CALL ImageManager::isReadOnly() throw (::com::sun::star::uno::RuntimeException)
+sal_Bool SAL_CALL ImageManager::isReadOnly() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return m_pImpl->isReadOnly();
 }

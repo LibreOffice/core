@@ -66,14 +66,14 @@ namespace
                 mxFrame->removeFrameActionListener(this);
         }
         virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
-            throw (cssu::RuntimeException)
+            throw (cssu::RuntimeException, std::exception)
         {
             (void)rEvent;
             mrControllerItem.ResetFrame();
             mxFrame = NULL;
         }
         virtual void SAL_CALL frameAction (const css::frame::FrameActionEvent& rEvent)
-            throw (cssu::RuntimeException)
+            throw (cssu::RuntimeException, std::exception)
         {
             if (rEvent.Action == frame::FrameAction_CONTEXT_CHANGED)
                 mrControllerItem.NotifyFrameContextChange();

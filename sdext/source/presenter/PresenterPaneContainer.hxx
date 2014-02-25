@@ -173,7 +173,7 @@ public:
 
     virtual void SAL_CALL disposing (
         const com::sun::star::lang::EventObject& rEvent)
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
 private:
     css::uno::Reference<css::drawing::XPresenterHelper> mxPresenterHelper;

@@ -124,14 +124,14 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleButton, VCLXAccessibleTextCompon
 // XServiceInfo
 
 
-OUString VCLXAccessibleButton::getImplementationName() throw (RuntimeException)
+OUString VCLXAccessibleButton::getImplementationName() throw (RuntimeException, std::exception)
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleButton" );
 }
 
 
 
-Sequence< OUString > VCLXAccessibleButton::getSupportedServiceNames() throw (RuntimeException)
+Sequence< OUString > VCLXAccessibleButton::getSupportedServiceNames() throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aNames(1);
     aNames[0] = "com.sun.star.awt.AccessibleButton";
@@ -142,7 +142,7 @@ Sequence< OUString > VCLXAccessibleButton::getSupportedServiceNames() throw (Run
 // XAccessibleContext
 
 
-OUString VCLXAccessibleButton::getAccessibleName(  ) throw (RuntimeException)
+OUString VCLXAccessibleButton::getAccessibleName(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -180,7 +180,7 @@ OUString VCLXAccessibleButton::getAccessibleName(  ) throw (RuntimeException)
 // XAccessibleAction
 
 
-sal_Int32 VCLXAccessibleButton::getAccessibleActionCount( ) throw (RuntimeException)
+sal_Int32 VCLXAccessibleButton::getAccessibleActionCount( ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -189,7 +189,7 @@ sal_Int32 VCLXAccessibleButton::getAccessibleActionCount( ) throw (RuntimeExcept
 
 
 
-sal_Bool VCLXAccessibleButton::doAccessibleAction ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+sal_Bool VCLXAccessibleButton::doAccessibleAction ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -205,7 +205,7 @@ sal_Bool VCLXAccessibleButton::doAccessibleAction ( sal_Int32 nIndex ) throw (In
 
 
 
-OUString VCLXAccessibleButton::getAccessibleActionDescription ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+OUString VCLXAccessibleButton::getAccessibleActionDescription ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -217,7 +217,7 @@ OUString VCLXAccessibleButton::getAccessibleActionDescription ( sal_Int32 nIndex
 
 
 
-Reference< XAccessibleKeyBinding > VCLXAccessibleButton::getAccessibleActionKeyBinding( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+Reference< XAccessibleKeyBinding > VCLXAccessibleButton::getAccessibleActionKeyBinding( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -258,7 +258,7 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleButton::getAccessibleActionKeyB
 // XAccessibleValue
 
 
-Any VCLXAccessibleButton::getCurrentValue(  ) throw (RuntimeException)
+Any VCLXAccessibleButton::getCurrentValue(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -273,7 +273,7 @@ Any VCLXAccessibleButton::getCurrentValue(  ) throw (RuntimeException)
 
 
 
-sal_Bool VCLXAccessibleButton::setCurrentValue( const Any& aNumber ) throw (RuntimeException)
+sal_Bool VCLXAccessibleButton::setCurrentValue( const Any& aNumber ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -299,7 +299,7 @@ sal_Bool VCLXAccessibleButton::setCurrentValue( const Any& aNumber ) throw (Runt
 
 
 
-Any VCLXAccessibleButton::getMaximumValue(  ) throw (RuntimeException)
+Any VCLXAccessibleButton::getMaximumValue(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -311,7 +311,7 @@ Any VCLXAccessibleButton::getMaximumValue(  ) throw (RuntimeException)
 
 
 
-Any VCLXAccessibleButton::getMinimumValue(  ) throw (RuntimeException)
+Any VCLXAccessibleButton::getMinimumValue(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 

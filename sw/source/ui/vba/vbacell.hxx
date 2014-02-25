@@ -38,16 +38,16 @@ public:
     virtual ~SwVbaCell();
 
     // Attributes
-    virtual ::sal_Int32 SAL_CALL getWidth() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setWidth( ::sal_Int32 _width ) throw (css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL getHeight() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setHeight( const css::uno::Any& _height ) throw (css::uno::RuntimeException);
-    virtual ::sal_Int32 SAL_CALL getHeightRule() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setHeightRule( ::sal_Int32 _heightrule ) throw (css::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getWidth() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setWidth( ::sal_Int32 _width ) throw (css::uno::RuntimeException, std::exception);
+    virtual css::uno::Any SAL_CALL getHeight() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setHeight( const css::uno::Any& _height ) throw (css::uno::RuntimeException, std::exception);
+    virtual ::sal_Int32 SAL_CALL getHeightRule() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setHeightRule( ::sal_Int32 _heightrule ) throw (css::uno::RuntimeException, std::exception);
 
     // Methods
-    virtual void SAL_CALL SetWidth( float width, sal_Int32 rulestyle ) throw (css::uno::RuntimeException);
-    virtual void SAL_CALL SetHeight( float height, sal_Int32 heightrule ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL SetWidth( float width, sal_Int32 rulestyle ) throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL SetHeight( float height, sal_Int32 heightrule ) throw (css::uno::RuntimeException, std::exception);
 
     // XHelperInterface
     virtual OUString getServiceImplName();

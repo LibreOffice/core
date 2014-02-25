@@ -77,7 +77,7 @@ void VCLXAccessibleListBox::ProcessWindowEvent (const VclWindowEvent& rVclWindow
 //=====  XServiceInfo  ========================================================
 
 OUString VCLXAccessibleListBox::getImplementationName (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleListBox" );
 }
@@ -86,7 +86,7 @@ OUString VCLXAccessibleListBox::getImplementationName (void)
 
 
 Sequence< OUString > VCLXAccessibleListBox::getSupportedServiceNames (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aNames = VCLXAccessibleBox::getSupportedServiceNames();
     sal_Int32 nLength = aNames.getLength();

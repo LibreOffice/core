@@ -1987,7 +1987,7 @@ const Sequence< sal_Int8 > & Oasis2OOoTransformer::getUnoTunnelId() throw()
 
 // XUnoTunnel
 sal_Int64 SAL_CALL Oasis2OOoTransformer::getSomething( const Sequence< sal_Int8 >& rId )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     if( rId.getLength() == 16
         && 0 == memcmp( getUnoTunnelId().getConstArray(),
@@ -2003,19 +2003,19 @@ sal_Int64 SAL_CALL Oasis2OOoTransformer::getSomething( const Sequence< sal_Int8 
 
 // XServiceInfo
 OUString SAL_CALL Oasis2OOoTransformer::getImplementationName()
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     return Oasis2OOoTransformer_getImplementationName();
 }
 
 sal_Bool SAL_CALL Oasis2OOoTransformer::supportsService( const OUString& ServiceName )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL Oasis2OOoTransformer::getSupportedServiceNames(  )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     Sequence<OUString> aSeq(0);
     return aSeq;

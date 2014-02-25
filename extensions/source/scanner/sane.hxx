@@ -41,13 +41,13 @@ public:
 
 
     // XInterface
-    virtual Any SAL_CALL                queryInterface( const Type & rType ) throw( RuntimeException );
+    virtual Any SAL_CALL                queryInterface( const Type & rType ) throw( RuntimeException, std::exception );
     virtual void SAL_CALL               acquire() throw() { OWeakObject::acquire(); }
     virtual void SAL_CALL               release() throw() { OWeakObject::release(); }
 
-    virtual css::awt::Size SAL_CALL          getSize() throw();
-    virtual Sequence< sal_Int8 > SAL_CALL    getDIB() throw();
-    virtual Sequence< sal_Int8 > SAL_CALL    getMaskDIB() throw() { return Sequence< sal_Int8 >(); }
+    virtual css::awt::Size SAL_CALL          getSize() throw(std::exception);
+    virtual Sequence< sal_Int8 > SAL_CALL    getDIB() throw(std::exception);
+    virtual Sequence< sal_Int8 > SAL_CALL    getMaskDIB() throw(std::exception) { return Sequence< sal_Int8 >(); }
 
     // Misc
     void                                lock() { m_aProtector.acquire(); }

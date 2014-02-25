@@ -25,7 +25,7 @@ CancellableJob::CancellableJob( const rtl::Reference< ObservableThread >& rThrea
 }
 
 // ::com::sun::star::util::XCancellable:
-void SAL_CALL CancellableJob::cancel() throw (com::sun::star::uno::RuntimeException)
+void SAL_CALL CancellableJob::cancel() throw (com::sun::star::uno::RuntimeException, std::exception)
 {
     mrThread->join();
 }

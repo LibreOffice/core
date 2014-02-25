@@ -39,8 +39,8 @@ public:
     virtual ~SwVbaRevisions() {}
 
     // Methods
-    virtual void SAL_CALL AcceptAll(  ) throw (css::uno::RuntimeException);
-    virtual void SAL_CALL RejectAll(  ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL AcceptAll(  ) throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL RejectAll(  ) throw (css::uno::RuntimeException, std::exception);
 
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException);

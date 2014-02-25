@@ -248,7 +248,7 @@ void SvOutputStreamOpenLockBytes::Terminate()
 // virtual
 uno::Any SAL_CALL SvLockBytesInputStream::queryInterface(uno::Type const &
                                                              rType)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     uno::Any
         aReturn(cppu::queryInterface(rType,
@@ -273,7 +273,7 @@ void SAL_CALL SvLockBytesInputStream::release() throw ()
 sal_Int32 SAL_CALL
 SvLockBytesInputStream::readBytes(uno::Sequence< sal_Int8 > & rData,
                                   sal_Int32 nBytesToRead)
-    throw (io::IOException, uno::RuntimeException)
+    throw (io::IOException, uno::RuntimeException, std::exception)
 {
     OSL_ASSERT(m_nPosition >= 0);
     if (!m_xLockBytes.Is())
@@ -312,7 +312,7 @@ SvLockBytesInputStream::readBytes(uno::Sequence< sal_Int8 > & rData,
 sal_Int32 SAL_CALL
 SvLockBytesInputStream::readSomeBytes(uno::Sequence< sal_Int8 > & rData,
                                       sal_Int32 nMaxBytesToRead)
-    throw (io::IOException, uno::RuntimeException)
+    throw (io::IOException, uno::RuntimeException, std::exception)
 {
     OSL_ASSERT(m_nPosition >= 0);
     if (!m_xLockBytes.Is())
@@ -344,7 +344,7 @@ SvLockBytesInputStream::readSomeBytes(uno::Sequence< sal_Int8 > & rData,
 
 // virtual
 void SAL_CALL SvLockBytesInputStream::skipBytes(sal_Int32 nBytesToSkip)
-    throw (io::IOException, uno::RuntimeException)
+    throw (io::IOException, uno::RuntimeException, std::exception)
 {
     if (!m_xLockBytes.Is())
         throw io::NotConnectedException();
@@ -357,7 +357,7 @@ void SAL_CALL SvLockBytesInputStream::skipBytes(sal_Int32 nBytesToSkip)
 
 // virtual
 sal_Int32 SAL_CALL SvLockBytesInputStream::available()
-    throw (io::IOException, uno::RuntimeException)
+    throw (io::IOException, uno::RuntimeException, std::exception)
 {
     OSL_ASSERT(m_nPosition >= 0);
     if (!m_xLockBytes.Is())
@@ -375,7 +375,7 @@ sal_Int32 SAL_CALL SvLockBytesInputStream::available()
 
 // virtual
 void SAL_CALL SvLockBytesInputStream::closeInput()
-    throw (io::IOException, uno::RuntimeException)
+    throw (io::IOException, uno::RuntimeException, std::exception)
 {
     if (!m_xLockBytes.Is())
         throw io::NotConnectedException();
@@ -385,7 +385,7 @@ void SAL_CALL SvLockBytesInputStream::closeInput()
 // virtual
 void SAL_CALL SvLockBytesInputStream::seek(sal_Int64 nLocation)
     throw (lang::IllegalArgumentException, io::IOException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     if (nLocation < 0)
         throw lang::IllegalArgumentException();
@@ -396,7 +396,7 @@ void SAL_CALL SvLockBytesInputStream::seek(sal_Int64 nLocation)
 
 // virtual
 sal_Int64 SAL_CALL SvLockBytesInputStream::getPosition()
-    throw (io::IOException, uno::RuntimeException)
+    throw (io::IOException, uno::RuntimeException, std::exception)
 {
     if (!m_xLockBytes.Is())
         throw io::NotConnectedException();
@@ -405,7 +405,7 @@ sal_Int64 SAL_CALL SvLockBytesInputStream::getPosition()
 
 // virtual
 sal_Int64 SAL_CALL SvLockBytesInputStream::getLength()
-    throw (io::IOException, uno::RuntimeException)
+    throw (io::IOException, uno::RuntimeException, std::exception)
 {
     if (!m_xLockBytes.Is())
         throw io::NotConnectedException();

@@ -32,17 +32,17 @@ public:
     virtual ~SwVbaFont(){}
 
     // Attributes
-    virtual void SAL_CALL setColorIndex( const css::uno::Any& _colorindex ) throw (css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL getColorIndex() throw (css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL getUnderline() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setUnderline( const css::uno::Any& _underline ) throw (css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL getSubscript() throw ( css::uno::RuntimeException );
-    virtual css::uno::Any SAL_CALL getSuperscript() throw ( css::uno::RuntimeException );
+    virtual void SAL_CALL setColorIndex( const css::uno::Any& _colorindex ) throw (css::uno::RuntimeException, std::exception);
+    virtual css::uno::Any SAL_CALL getColorIndex() throw (css::uno::RuntimeException, std::exception);
+    virtual css::uno::Any SAL_CALL getUnderline() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setUnderline( const css::uno::Any& _underline ) throw (css::uno::RuntimeException, std::exception);
+    virtual css::uno::Any SAL_CALL getSubscript() throw ( css::uno::RuntimeException, std::exception );
+    virtual css::uno::Any SAL_CALL getSuperscript() throw ( css::uno::RuntimeException, std::exception );
 
-    virtual css::uno::Any SAL_CALL getBold() throw (css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL getItalic() throw (css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL getStrikethrough() throw (css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL getShadow() throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL getBold() throw (css::uno::RuntimeException, std::exception);
+    virtual css::uno::Any SAL_CALL getItalic() throw (css::uno::RuntimeException, std::exception);
+    virtual css::uno::Any SAL_CALL getStrikethrough() throw (css::uno::RuntimeException, std::exception);
+    virtual css::uno::Any SAL_CALL getShadow() throw (css::uno::RuntimeException, std::exception);
     // XHelperInterface
     virtual OUString getServiceImplName();
     virtual css::uno::Sequence<OUString> getServiceNames();

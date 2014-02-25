@@ -176,7 +176,7 @@ SfxStatusBarControl::~SfxStatusBarControl()
 
 // XInterface
 uno::Any SAL_CALL SfxStatusBarControl::queryInterface( const uno::Type & rType )
-throw( uno::RuntimeException)
+throw( uno::RuntimeException, std::exception)
 {
     return svt::StatusbarController::queryInterface( rType );
 }
@@ -194,7 +194,7 @@ void SAL_CALL SfxStatusBarControl::release() throw()
 
 // XEventListener
 void SAL_CALL SfxStatusBarControl::disposing( const lang::EventObject& aEvent )
-throw( uno::RuntimeException )
+throw( uno::RuntimeException, std::exception )
 {
     svt::StatusbarController::disposing( aEvent );
 }
@@ -202,7 +202,7 @@ throw( uno::RuntimeException )
 
 // XComponent
 void SAL_CALL SfxStatusBarControl::dispose()
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     svt::StatusbarController::dispose();
 }
@@ -210,7 +210,7 @@ throw (uno::RuntimeException)
 
 // XStatusListener
 void SAL_CALL SfxStatusBarControl::statusChanged( const frame::FeatureStateEvent& rEvent )
-throw ( ::com::sun::star::uno::RuntimeException )
+throw ( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     SfxViewFrame* pViewFrame = NULL;
     uno::Reference < frame::XController > xController;
@@ -318,7 +318,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
 
 ::sal_Bool SAL_CALL SfxStatusBarControl::mouseButtonDown(
     const awt::MouseEvent& rMouseEvent )
-throw ( uno::RuntimeException )
+throw ( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     ::Point aPos( rMouseEvent.X, rMouseEvent.Y );
@@ -336,7 +336,7 @@ throw ( uno::RuntimeException )
 
 ::sal_Bool SAL_CALL SfxStatusBarControl::mouseMove(
     const awt::MouseEvent& rMouseEvent )
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ::Point aPos( rMouseEvent.X, rMouseEvent.Y );
@@ -353,7 +353,7 @@ throw (uno::RuntimeException)
 
 ::sal_Bool SAL_CALL SfxStatusBarControl::mouseButtonUp(
     const ::awt::MouseEvent& rMouseEvent )
-throw ( uno::RuntimeException )
+throw ( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     ::Point aPos( rMouseEvent.X, rMouseEvent.Y );
@@ -373,7 +373,7 @@ void SAL_CALL SfxStatusBarControl::command(
     ::sal_Int32 nCommand,
     ::sal_Bool /*bMouseEvent*/,
     const ::com::sun::star::uno::Any& /*aData*/ )
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ::Point aPos( rPos.X, rPos.Y );
@@ -388,7 +388,7 @@ void SAL_CALL SfxStatusBarControl::paint(
     const uno::Reference< awt::XGraphics >& xGraphics,
     const awt::Rectangle& rOutputRectangle,
     ::sal_Int32 nStyle )
-throw ( ::uno::RuntimeException )
+throw ( ::uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -404,7 +404,7 @@ throw ( ::uno::RuntimeException )
 
 
 void SAL_CALL SfxStatusBarControl::click( const awt::Point& )
-throw ( uno::RuntimeException )
+throw ( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     Click();
@@ -413,7 +413,7 @@ throw ( uno::RuntimeException )
 
 
 void SAL_CALL SfxStatusBarControl::doubleClick( const awt::Point& )
-throw ( uno::RuntimeException )
+throw ( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     DoubleClick();

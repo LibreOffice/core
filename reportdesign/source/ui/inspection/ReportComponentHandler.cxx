@@ -53,17 +53,17 @@ ReportComponentHandler::ReportComponentHandler(uno::Reference< uno::XComponentCo
     }
 }
 
-OUString SAL_CALL ReportComponentHandler::getImplementationName(  ) throw(uno::RuntimeException)
+OUString SAL_CALL ReportComponentHandler::getImplementationName(  ) throw(uno::RuntimeException, std::exception)
 {
     return getImplementationName_Static();
 }
 
-sal_Bool SAL_CALL ReportComponentHandler::supportsService( const OUString& ServiceName ) throw(uno::RuntimeException)
+sal_Bool SAL_CALL ReportComponentHandler::supportsService( const OUString& ServiceName ) throw(uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL ReportComponentHandler::getSupportedServiceNames(  ) throw(uno::RuntimeException)
+uno::Sequence< OUString > SAL_CALL ReportComponentHandler::getSupportedServiceNames(  ) throw(uno::RuntimeException, std::exception)
 {
     return getSupportedServiceNames_static();
 }
@@ -92,12 +92,12 @@ void SAL_CALL ReportComponentHandler::disposing()
 {
     ::comphelper::disposeComponent(m_xFormComponentHandler);
 }
-void SAL_CALL ReportComponentHandler::addEventListener(const uno::Reference< lang::XEventListener > & xListener) throw (uno::RuntimeException)
+void SAL_CALL ReportComponentHandler::addEventListener(const uno::Reference< lang::XEventListener > & xListener) throw (uno::RuntimeException, std::exception)
 {
     m_xFormComponentHandler->addEventListener(xListener);
 }
 
-void SAL_CALL ReportComponentHandler::removeEventListener(const uno::Reference< lang::XEventListener > & aListener) throw (uno::RuntimeException)
+void SAL_CALL ReportComponentHandler::removeEventListener(const uno::Reference< lang::XEventListener > & aListener) throw (uno::RuntimeException, std::exception)
 {
     m_xFormComponentHandler->removeEventListener(aListener);
 }
@@ -105,7 +105,7 @@ void SAL_CALL ReportComponentHandler::removeEventListener(const uno::Reference< 
 // inspection::XPropertyHandler:
 
 /********************************************************************************/
-void SAL_CALL ReportComponentHandler::inspect(const uno::Reference< uno::XInterface > & Component) throw (uno::RuntimeException, lang::NullPointerException)
+void SAL_CALL ReportComponentHandler::inspect(const uno::Reference< uno::XInterface > & Component) throw (uno::RuntimeException, lang::NullPointerException, std::exception)
 {
     try
     {
@@ -130,47 +130,47 @@ void SAL_CALL ReportComponentHandler::inspect(const uno::Reference< uno::XInterf
     }
 }
 
-uno::Any SAL_CALL ReportComponentHandler::getPropertyValue(const OUString & PropertyName) throw (uno::RuntimeException, beans::UnknownPropertyException)
+uno::Any SAL_CALL ReportComponentHandler::getPropertyValue(const OUString & PropertyName) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)
 {
     return m_xFormComponentHandler->getPropertyValue(PropertyName);
 }
 
-void SAL_CALL ReportComponentHandler::setPropertyValue(const OUString & PropertyName, const uno::Any & Value) throw (uno::RuntimeException, beans::UnknownPropertyException)
+void SAL_CALL ReportComponentHandler::setPropertyValue(const OUString & PropertyName, const uno::Any & Value) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)
 {
     m_xFormComponentHandler->setPropertyValue(PropertyName, Value);
 }
 
-beans::PropertyState SAL_CALL ReportComponentHandler::getPropertyState(const OUString & PropertyName) throw (uno::RuntimeException, beans::UnknownPropertyException)
+beans::PropertyState SAL_CALL ReportComponentHandler::getPropertyState(const OUString & PropertyName) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)
 {
     return m_xFormComponentHandler->getPropertyState(PropertyName);
 }
 
-inspection::LineDescriptor SAL_CALL ReportComponentHandler::describePropertyLine(const OUString & PropertyName,  const uno::Reference< inspection::XPropertyControlFactory > & ControlFactory) throw (beans::UnknownPropertyException, lang::NullPointerException,uno::RuntimeException)
+inspection::LineDescriptor SAL_CALL ReportComponentHandler::describePropertyLine(const OUString & PropertyName,  const uno::Reference< inspection::XPropertyControlFactory > & ControlFactory) throw (beans::UnknownPropertyException, lang::NullPointerException,uno::RuntimeException, std::exception)
 {
     return m_xFormComponentHandler->describePropertyLine(PropertyName, ControlFactory);
 }
 
-uno::Any SAL_CALL ReportComponentHandler::convertToPropertyValue(const OUString & PropertyName, const uno::Any & ControlValue) throw (uno::RuntimeException, beans::UnknownPropertyException)
+uno::Any SAL_CALL ReportComponentHandler::convertToPropertyValue(const OUString & PropertyName, const uno::Any & ControlValue) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)
 {
     return m_xFormComponentHandler->convertToPropertyValue(PropertyName, ControlValue);
 }
 
-uno::Any SAL_CALL ReportComponentHandler::convertToControlValue(const OUString & PropertyName, const uno::Any & PropertyValue, const uno::Type & ControlValueType) throw (uno::RuntimeException, beans::UnknownPropertyException)
+uno::Any SAL_CALL ReportComponentHandler::convertToControlValue(const OUString & PropertyName, const uno::Any & PropertyValue, const uno::Type & ControlValueType) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)
 {
     return m_xFormComponentHandler->convertToControlValue(PropertyName, PropertyValue, ControlValueType);
 }
 
-void SAL_CALL ReportComponentHandler::addPropertyChangeListener(const uno::Reference< beans::XPropertyChangeListener > & Listener) throw (uno::RuntimeException, lang::NullPointerException)
+void SAL_CALL ReportComponentHandler::addPropertyChangeListener(const uno::Reference< beans::XPropertyChangeListener > & Listener) throw (uno::RuntimeException, lang::NullPointerException, std::exception)
 {
     m_xFormComponentHandler->addPropertyChangeListener(Listener);
 }
 
-void SAL_CALL ReportComponentHandler::removePropertyChangeListener(const uno::Reference< beans::XPropertyChangeListener > & _rxListener) throw (uno::RuntimeException)
+void SAL_CALL ReportComponentHandler::removePropertyChangeListener(const uno::Reference< beans::XPropertyChangeListener > & _rxListener) throw (uno::RuntimeException, std::exception)
 {
     m_xFormComponentHandler->removePropertyChangeListener(_rxListener);
 }
 
-uno::Sequence< beans::Property > SAL_CALL ReportComponentHandler::getSupportedProperties() throw (uno::RuntimeException)
+uno::Sequence< beans::Property > SAL_CALL ReportComponentHandler::getSupportedProperties() throw (uno::RuntimeException, std::exception)
 {
     ::std::vector< beans::Property > aNewProps;
     m_pInfoService->getExcludeProperties( aNewProps, m_xFormComponentHandler );
@@ -178,33 +178,33 @@ uno::Sequence< beans::Property > SAL_CALL ReportComponentHandler::getSupportedPr
     return aNewProps.empty() ? uno::Sequence< beans::Property > () : uno::Sequence< beans::Property > (&(*aNewProps.begin()),aNewProps.size());
 }
 
-uno::Sequence< OUString > SAL_CALL ReportComponentHandler::getSupersededProperties() throw (uno::RuntimeException)
+uno::Sequence< OUString > SAL_CALL ReportComponentHandler::getSupersededProperties() throw (uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString > aRet;
     return aRet;
 }
 
-uno::Sequence< OUString > SAL_CALL ReportComponentHandler::getActuatingProperties() throw (uno::RuntimeException)
+uno::Sequence< OUString > SAL_CALL ReportComponentHandler::getActuatingProperties() throw (uno::RuntimeException, std::exception)
 {
     return m_xFormComponentHandler->getActuatingProperties();
 }
 
-::sal_Bool SAL_CALL ReportComponentHandler::isComposable( const OUString& _rPropertyName ) throw (uno::RuntimeException, beans::UnknownPropertyException)
+::sal_Bool SAL_CALL ReportComponentHandler::isComposable( const OUString& _rPropertyName ) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)
 {
     return m_pInfoService->isComposable( _rPropertyName, m_xFormComponentHandler );
 }
 
-inspection::InteractiveSelectionResult SAL_CALL ReportComponentHandler::onInteractivePropertySelection(const OUString & PropertyName, ::sal_Bool Primary, uno::Any & out_Data, const uno::Reference< inspection::XObjectInspectorUI > & InspectorUI) throw (uno::RuntimeException, beans::UnknownPropertyException, lang::NullPointerException)
+inspection::InteractiveSelectionResult SAL_CALL ReportComponentHandler::onInteractivePropertySelection(const OUString & PropertyName, ::sal_Bool Primary, uno::Any & out_Data, const uno::Reference< inspection::XObjectInspectorUI > & InspectorUI) throw (uno::RuntimeException, beans::UnknownPropertyException, lang::NullPointerException, std::exception)
 {
     return m_xFormComponentHandler->onInteractivePropertySelection(PropertyName, Primary, out_Data, InspectorUI);
 }
 
-void SAL_CALL ReportComponentHandler::actuatingPropertyChanged(const OUString & ActuatingPropertyName, const uno::Any & NewValue, const uno::Any & OldValue, const uno::Reference< inspection::XObjectInspectorUI > & InspectorUI, ::sal_Bool FirstTimeInit) throw (uno::RuntimeException, lang::NullPointerException)
+void SAL_CALL ReportComponentHandler::actuatingPropertyChanged(const OUString & ActuatingPropertyName, const uno::Any & NewValue, const uno::Any & OldValue, const uno::Reference< inspection::XObjectInspectorUI > & InspectorUI, ::sal_Bool FirstTimeInit) throw (uno::RuntimeException, lang::NullPointerException, std::exception)
 {
     m_xFormComponentHandler->actuatingPropertyChanged(ActuatingPropertyName, NewValue, OldValue, InspectorUI, FirstTimeInit);
 }
 
-::sal_Bool SAL_CALL ReportComponentHandler::suspend(::sal_Bool Suspend) throw (uno::RuntimeException)
+::sal_Bool SAL_CALL ReportComponentHandler::suspend(::sal_Bool Suspend) throw (uno::RuntimeException, std::exception)
 {
     return m_xFormComponentHandler->suspend(Suspend);
 }

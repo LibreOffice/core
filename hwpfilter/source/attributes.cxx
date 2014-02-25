@@ -47,7 +47,7 @@ struct AttributeListImpl_impl
     std::vector<struct TagAttribute> vecAttribute;
 };
 
-sal_Int16 SAL_CALL AttributeListImpl::getLength(void) throw (RuntimeException)
+sal_Int16 SAL_CALL AttributeListImpl::getLength(void) throw (RuntimeException, std::exception)
 {
     return (sal_Int16)m_pImpl->vecAttribute.size();
 }
@@ -61,7 +61,7 @@ cppu::WeakImplHelper1<com::sun::star::xml::sax::XAttributeList>( r )
 }
 
 
-OUString AttributeListImpl::getNameByIndex(sal_Int16 i) throw (RuntimeException)
+OUString AttributeListImpl::getNameByIndex(sal_Int16 i) throw (RuntimeException, std::exception)
 {
     sal_uInt32 i2 = sal::static_int_cast<sal_Int16>(i);
     if( i >= 0 &&  i2 < m_pImpl->vecAttribute.size() )
@@ -72,7 +72,7 @@ OUString AttributeListImpl::getNameByIndex(sal_Int16 i) throw (RuntimeException)
 }
 
 
-OUString AttributeListImpl::getTypeByIndex(sal_Int16 i) throw (RuntimeException)
+OUString AttributeListImpl::getTypeByIndex(sal_Int16 i) throw (RuntimeException, std::exception)
 {
     sal_uInt32 i2 = sal::static_int_cast<sal_Int16>(i);
     if( i >= 0 &&  i2 < m_pImpl->vecAttribute.size() )
@@ -83,7 +83,7 @@ OUString AttributeListImpl::getTypeByIndex(sal_Int16 i) throw (RuntimeException)
 }
 
 
-OUString AttributeListImpl::getValueByIndex(sal_Int16 i) throw (RuntimeException)
+OUString AttributeListImpl::getValueByIndex(sal_Int16 i) throw (RuntimeException, std::exception)
 {
     sal_uInt32 i2 = sal::static_int_cast<sal_Int16>(i);
     if( i >= 0 &&  i2 < m_pImpl->vecAttribute.size() )
@@ -95,7 +95,7 @@ OUString AttributeListImpl::getValueByIndex(sal_Int16 i) throw (RuntimeException
 }
 
 
-OUString AttributeListImpl::getTypeByName( const OUString& sName ) throw (RuntimeException)
+OUString AttributeListImpl::getTypeByName( const OUString& sName ) throw (RuntimeException, std::exception)
 {
     std::vector<struct TagAttribute>::iterator ii = m_pImpl->vecAttribute.begin();
 
@@ -110,7 +110,7 @@ OUString AttributeListImpl::getTypeByName( const OUString& sName ) throw (Runtim
 }
 
 
-OUString AttributeListImpl::getValueByName(const OUString& sName) throw (RuntimeException)
+OUString AttributeListImpl::getValueByName(const OUString& sName) throw (RuntimeException, std::exception)
 {
     std::vector<struct TagAttribute>::iterator ii = m_pImpl->vecAttribute.begin();
 

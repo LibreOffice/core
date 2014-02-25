@@ -57,23 +57,23 @@ public:
 protected:
     // ____ XRangeHighlighter ____
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::chart2::data::HighlightedRange > SAL_CALL getSelectedRanges()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL addSelectionChangeListener(
         const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL removeSelectionChangeListener(
         const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // ____ XSelectionChangeListener ____
     virtual void SAL_CALL selectionChanged(
         const ::com::sun::star::lang::EventObject& aEvent )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // ____ XEventListener (base of XSelectionChangeListener) ____
     virtual void SAL_CALL disposing(
         const ::com::sun::star::lang::EventObject& Source )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // ____ WeakComponentImplHelperBase ____
     // is called when dispose() is called at this component

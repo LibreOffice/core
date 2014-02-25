@@ -163,13 +163,13 @@ namespace toolkit
     }
 
 
-    OUString UnoControlFormattedFieldModel::getServiceName() throw(RuntimeException)
+    OUString UnoControlFormattedFieldModel::getServiceName() throw(RuntimeException, std::exception)
     {
         return OUString::createFromAscii( szServiceName_UnoControlFormattedFieldModel );
     }
 
 
-    void SAL_CALL UnoControlFormattedFieldModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception)
+    void SAL_CALL UnoControlFormattedFieldModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception, std::exception)
     {
         UnoControlModel::setFastPropertyValue_NoBroadcast( nHandle, rValue );
 
@@ -260,7 +260,7 @@ namespace toolkit
     }
 
 
-    void UnoControlFormattedFieldModel::dispose(  ) throw(RuntimeException)
+    void UnoControlFormattedFieldModel::dispose(  ) throw(RuntimeException, std::exception)
     {
         UnoControlModel::dispose();
 
@@ -302,7 +302,7 @@ namespace toolkit
     }
 
 
-    void SAL_CALL UnoControlFormattedFieldModel::setPropertyValues( const Sequence< OUString >& _rPropertyNames, const Sequence< Any >& _rValues ) throw(PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
+    void SAL_CALL UnoControlFormattedFieldModel::setPropertyValues( const Sequence< OUString >& _rPropertyNames, const Sequence< Any >& _rValues ) throw(PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
     {
         bool bSettingValue = false;
         bool bSettingText = false;
@@ -411,7 +411,7 @@ namespace toolkit
 
     // beans::XMultiPropertySet
 
-    Reference< XPropertySetInfo > UnoControlFormattedFieldModel::getPropertySetInfo(  ) throw(RuntimeException)
+    Reference< XPropertySetInfo > UnoControlFormattedFieldModel::getPropertySetInfo(  ) throw(RuntimeException, std::exception)
     {
         static Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;
@@ -433,7 +433,7 @@ namespace toolkit
     }
 
 
-    void UnoFormattedFieldControl::textChanged(const TextEvent& e) throw(RuntimeException)
+    void UnoFormattedFieldControl::textChanged(const TextEvent& e) throw(RuntimeException, std::exception)
     {
         Reference< XVclWindowPeer >  xPeer(getPeer(), UNO_QUERY);
         OSL_ENSURE(xPeer.is(), "UnoFormattedFieldControl::textChanged : what kind of peer do I have ?");

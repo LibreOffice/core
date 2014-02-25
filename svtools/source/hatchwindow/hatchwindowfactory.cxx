@@ -38,19 +38,19 @@ public:
     OHatchWindowFactory() {}
 
     // XHatchWindowFactory
-    virtual uno::Reference< embed::XHatchWindow > SAL_CALL createHatchWindowInstance( const uno::Reference< awt::XWindowPeer >& xParent, const awt::Rectangle& aBounds, const awt::Size& aSize ) throw (uno::RuntimeException);
+    virtual uno::Reference< embed::XHatchWindow > SAL_CALL createHatchWindowInstance( const uno::Reference< awt::XWindowPeer >& xParent, const awt::Rectangle& aBounds, const awt::Size& aSize ) throw (uno::RuntimeException, std::exception);
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (uno::RuntimeException);
-    virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName() throw (uno::RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (uno::RuntimeException, std::exception);
+    virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (uno::RuntimeException, std::exception);
 };
 
 uno::Reference< embed::XHatchWindow > SAL_CALL OHatchWindowFactory::createHatchWindowInstance(
                 const uno::Reference< awt::XWindowPeer >& xParent,
                 const awt::Rectangle& aBounds,
                 const awt::Size& aHandlerSize )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if ( !xParent.is() )
         throw lang::IllegalArgumentException(); // TODO
@@ -62,19 +62,19 @@ uno::Reference< embed::XHatchWindow > SAL_CALL OHatchWindowFactory::createHatchW
 }
 
 OUString SAL_CALL OHatchWindowFactory::getImplementationName()
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.comp.embed.HatchWindowFactory" );
 }
 
 sal_Bool SAL_CALL OHatchWindowFactory::supportsService( const OUString& ServiceName )
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL OHatchWindowFactory::getSupportedServiceNames()
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     uno::Sequence< OUString > aRet(2);
     aRet[0] = "com.sun.star.embed.HatchWindowFactory";

@@ -44,8 +44,8 @@ public:
     // SwVbaCollectionBaseImpl
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource );
 
-    virtual sal_Bool SAL_CALL getShadow() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setShadow( sal_Bool _shadow ) throw (css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL getShadow() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setShadow( sal_Bool _shadow ) throw (css::uno::RuntimeException, std::exception);
 
     virtual OUString getServiceImplName();
     virtual css::uno::Sequence<OUString> getServiceNames();

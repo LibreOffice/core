@@ -104,7 +104,7 @@ namespace DOM
     /**
     The number of nodes in the list.
     */
-    sal_Int32 SAL_CALL CElementList::getLength() throw (RuntimeException)
+    sal_Int32 SAL_CALL CElementList::getLength() throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -118,7 +118,7 @@ namespace DOM
     Returns the indexth item in the collection.
     */
     Reference< XNode > SAL_CALL CElementList::item(sal_Int32 index)
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         if (index < 0) throw RuntimeException();
 
@@ -137,7 +137,7 @@ namespace DOM
 
     // tree mutations can change the list
     void SAL_CALL CElementList::handleEvent(Reference< XEvent > const&)
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_rMutex);
 

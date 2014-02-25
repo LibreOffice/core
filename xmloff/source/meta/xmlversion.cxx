@@ -319,7 +319,7 @@ sal_Bool XMLVersionContext::ParseISODateTimeString(
 }
 
 void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XStorage >& xRoot, const uno::Sequence< util::RevisionTag >& rVersions )
-    throw (::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     // no storage, no version list!
     if ( xRoot.is() )
@@ -365,7 +365,7 @@ void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XSt
 }
 
 uno::Sequence< util::RevisionTag > SAL_CALL XMLVersionListPersistence::load( const uno::Reference< embed::XStorage >& xRoot )
-        throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     com::sun::star::uno::Sequence < com::sun::star::util::RevisionTag > aVersions;
 

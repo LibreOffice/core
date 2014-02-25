@@ -324,7 +324,7 @@ SmModel::~SmModel() throw ()
     delete m_pPrintUIOptions;
 }
 
-uno::Any SAL_CALL SmModel::queryInterface( const uno::Type& rType ) throw(uno::RuntimeException)
+uno::Any SAL_CALL SmModel::queryInterface( const uno::Type& rType ) throw(uno::RuntimeException, std::exception)
 {
     uno::Any aRet =  ::cppu::queryInterface ( rType,
                                     // OWeakObject interfaces
@@ -352,7 +352,7 @@ void SAL_CALL SmModel::release() throw()
     OWeakObject::release();
 }
 
-uno::Sequence< uno::Type > SAL_CALL SmModel::getTypes(  ) throw(uno::RuntimeException)
+uno::Sequence< uno::Type > SAL_CALL SmModel::getTypes(  ) throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Sequence< uno::Type > aTypes = SfxBaseModel::getTypes();
@@ -378,7 +378,7 @@ const uno::Sequence< sal_Int8 > & SmModel::getUnoTunnelId()
 }
 
 sal_Int64 SAL_CALL SmModel::getSomething( const uno::Sequence< sal_Int8 >& rId )
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     if( rId.getLength() == 16
         && 0 == memcmp( getUnoTunnelId().getConstArray(),
@@ -404,7 +404,7 @@ static sal_Int16 lcl_AnyToINT16(const uno::Any& rAny)
     return nRet;
 }
 
-OUString SmModel::getImplementationName(void) throw( uno::RuntimeException )
+OUString SmModel::getImplementationName(void) throw( uno::RuntimeException, std::exception )
 {
     return getImplementationName_Static();
 }
@@ -415,12 +415,12 @@ OUString SmModel::getImplementationName_Static()
     return OUString("com.sun.star.comp.math.FormulaDocument");
 }
 
-sal_Bool SmModel::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
+sal_Bool SmModel::supportsService(const OUString& rServiceName) throw( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SmModel::getSupportedServiceNames(void) throw( uno::RuntimeException )
+uno::Sequence< OUString > SmModel::getSupportedServiceNames(void) throw( uno::RuntimeException, std::exception )
 {
     return getSupportedServiceNames_Static();
 }
@@ -950,7 +950,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
 sal_Int32 SAL_CALL SmModel::getRendererCount(
         const uno::Any& /*rSelection*/,
         const uno::Sequence< beans::PropertyValue >& /*xOptions*/ )
-    throw (IllegalArgumentException, RuntimeException)
+    throw (IllegalArgumentException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return 1;
@@ -982,7 +982,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
         sal_Int32 nRenderer,
         const uno::Any& /*rSelection*/,
         const uno::Sequence< beans::PropertyValue >& /*rxOptions*/ )
-    throw (IllegalArgumentException, RuntimeException)
+    throw (IllegalArgumentException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1019,7 +1019,7 @@ void SAL_CALL SmModel::render(
         sal_Int32 nRenderer,
         const uno::Any& rSelection,
         const uno::Sequence< beans::PropertyValue >& rxOptions )
-    throw (IllegalArgumentException, RuntimeException)
+    throw (IllegalArgumentException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1116,7 +1116,7 @@ void SAL_CALL SmModel::render(
 }
 
 void SAL_CALL SmModel::setParent( const uno::Reference< uno::XInterface >& xParent)
-        throw( lang::NoSupportException, uno::RuntimeException )
+        throw( lang::NoSupportException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     SfxBaseModel::setParent( xParent );

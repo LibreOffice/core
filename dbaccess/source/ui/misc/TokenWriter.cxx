@@ -172,7 +172,7 @@ void ODatabaseImportExport::dispose()
     m_xFormatter.clear();
 }
 
-void SAL_CALL ODatabaseImportExport::disposing( const EventObject& Source ) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL ODatabaseImportExport::disposing( const EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess.ui", "ODatabaseImportExport::disposing" );
     Reference<XConnection> xCon(Source.Source,UNO_QUERY);

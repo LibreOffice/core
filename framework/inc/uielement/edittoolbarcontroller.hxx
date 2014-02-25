@@ -61,7 +61,7 @@ class EditToolbarController : public IEditListener,
         virtual ~EditToolbarController();
 
         // XComponent
-        virtual void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException );
+        virtual void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException, std::exception );
 
         // IEditListener
         virtual void Modify();

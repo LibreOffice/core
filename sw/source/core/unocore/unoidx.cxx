@@ -198,28 +198,28 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw (uno::RuntimeException);
+        throw (uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL
         supportsService(const OUString& rServiceName)
-        throw (uno::RuntimeException);
+        throw (uno::RuntimeException, std::exception);
     virtual uno::Sequence< OUString > SAL_CALL
-        getSupportedServiceNames() throw (uno::RuntimeException);
+        getSupportedServiceNames() throw (uno::RuntimeException, std::exception);
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException);
+    virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException, std::exception);
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException, std::exception);
     virtual uno::Any SAL_CALL getByIndex(sal_Int32 nIndex)
         throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
-                uno::RuntimeException);
+                uno::RuntimeException, std::exception);
 
     // XIndexReplace
     virtual void SAL_CALL
         replaceByIndex(sal_Int32 Index, const uno::Any& rElement)
         throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
-                lang::WrappedTargetException, uno::RuntimeException);
+                lang::WrappedTargetException, uno::RuntimeException, std::exception);
 
 };
 
@@ -244,28 +244,28 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw (uno::RuntimeException);
+        throw (uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL
         supportsService(const OUString& rServiceName)
-        throw (uno::RuntimeException);
+        throw (uno::RuntimeException, std::exception);
     virtual uno::Sequence< OUString > SAL_CALL
-        getSupportedServiceNames() throw (uno::RuntimeException);
+        getSupportedServiceNames() throw (uno::RuntimeException, std::exception);
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException);
+    virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException, std::exception);
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException, std::exception);
     virtual uno::Any SAL_CALL getByIndex(sal_Int32 nIndex)
         throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
-                uno::RuntimeException);
+                uno::RuntimeException, std::exception);
 
     // XIndexReplace
     virtual void SAL_CALL
         replaceByIndex(sal_Int32 Index, const uno::Any& rElement)
         throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
-                lang::WrappedTargetException, uno::RuntimeException);
+                lang::WrappedTargetException, uno::RuntimeException, std::exception);
 
 };
 
@@ -443,26 +443,26 @@ const uno::Sequence< sal_Int8 > & SwXDocumentIndex::getUnoTunnelId()
 
 sal_Int64 SAL_CALL
 SwXDocumentIndex::getSomething(const uno::Sequence< sal_Int8 >& rId)
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     return ::sw::UnoTunnelImpl<SwXDocumentIndex>(rId, this);
 }
 
 OUString SAL_CALL
-SwXDocumentIndex::getImplementationName() throw (uno::RuntimeException)
+SwXDocumentIndex::getImplementationName() throw (uno::RuntimeException, std::exception)
 {
     return OUString("SwXDocumentIndex");
 }
 
 sal_Bool SAL_CALL
 SwXDocumentIndex::supportsService(const OUString& rServiceName)
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL
-SwXDocumentIndex::getSupportedServiceNames() throw (uno::RuntimeException)
+SwXDocumentIndex::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -497,7 +497,7 @@ SwXDocumentIndex::getSupportedServiceNames() throw (uno::RuntimeException)
 }
 
 OUString SAL_CALL SwXDocumentIndex::getServiceName()
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -523,13 +523,13 @@ throw (uno::RuntimeException)
     return SwXServiceProvider::GetProviderName(nObjectType);
 }
 
-void SAL_CALL SwXDocumentIndex::update() throw (uno::RuntimeException)
+void SAL_CALL SwXDocumentIndex::update() throw (uno::RuntimeException, std::exception)
 {
     return refresh(); // update is from deprecated XDocumentIndex
 }
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
-SwXDocumentIndex::getPropertySetInfo() throw (uno::RuntimeException)
+SwXDocumentIndex::getPropertySetInfo() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -543,7 +543,7 @@ SwXDocumentIndex::setPropertyValue(
         const OUString& rPropertyName, const uno::Any& rValue)
 throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     lang::IllegalArgumentException, lang::WrappedTargetException,
-    uno::RuntimeException)
+    uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -877,7 +877,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
 uno::Any SAL_CALL
 SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-        uno::RuntimeException)
+        uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1218,7 +1218,7 @@ SwXDocumentIndex::addPropertyChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-    uno::RuntimeException)
+    uno::RuntimeException, std::exception)
 {
     OSL_FAIL("SwXDocumentIndex::addPropertyChangeListener(): not implemented");
 }
@@ -1228,7 +1228,7 @@ SwXDocumentIndex::removePropertyChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-    uno::RuntimeException)
+    uno::RuntimeException, std::exception)
 {
     OSL_FAIL("SwXDocumentIndex::removePropertyChangeListener(): not implemented");
 }
@@ -1238,7 +1238,7 @@ SwXDocumentIndex::addVetoableChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-    uno::RuntimeException)
+    uno::RuntimeException, std::exception)
 {
     OSL_FAIL("SwXDocumentIndex::addVetoableChangeListener(): not implemented");
 }
@@ -1248,7 +1248,7 @@ SwXDocumentIndex::removeVetoableChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-        uno::RuntimeException)
+        uno::RuntimeException, std::exception)
 {
     OSL_FAIL("SwXDocumentIndex::removeVetoableChangeListener(): not implemented");
 }
@@ -1268,7 +1268,7 @@ void lcl_CalcLayout(SwDoc *pDoc)
 }
 
 // XRefreshable
-void SAL_CALL SwXDocumentIndex::refresh() throw (uno::RuntimeException)
+void SAL_CALL SwXDocumentIndex::refresh() throw (uno::RuntimeException, std::exception)
 {
     {
         SolarMutexGuard g;
@@ -1303,7 +1303,7 @@ void SAL_CALL SwXDocumentIndex::refresh() throw (uno::RuntimeException)
 
 void SAL_CALL SwXDocumentIndex::addRefreshListener(
         const uno::Reference<util::XRefreshListener>& xListener)
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     m_pImpl->m_Listeners.addInterface(
@@ -1312,7 +1312,7 @@ throw (uno::RuntimeException)
 
 void SAL_CALL SwXDocumentIndex::removeRefreshListener(
         const uno::Reference<util::XRefreshListener>& xListener)
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     m_pImpl->m_Listeners.removeInterface(
@@ -1321,7 +1321,7 @@ throw (uno::RuntimeException)
 
 void SAL_CALL
 SwXDocumentIndex::attach(const uno::Reference< text::XTextRange > & xTextRange)
-throw (lang::IllegalArgumentException, uno::RuntimeException)
+throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1382,7 +1382,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 }
 
 uno::Reference< text::XTextRange > SAL_CALL
-SwXDocumentIndex::getAnchor() throw (uno::RuntimeException)
+SwXDocumentIndex::getAnchor() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1407,7 +1407,7 @@ SwXDocumentIndex::getAnchor() throw (uno::RuntimeException)
     return xRet;
 }
 
-void SAL_CALL SwXDocumentIndex::dispose() throw (uno::RuntimeException)
+void SAL_CALL SwXDocumentIndex::dispose() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1423,7 +1423,7 @@ void SAL_CALL SwXDocumentIndex::dispose() throw (uno::RuntimeException)
 void SAL_CALL
 SwXDocumentIndex::addEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     m_pImpl->m_Listeners.addInterface(
@@ -1433,14 +1433,14 @@ throw (uno::RuntimeException)
 void SAL_CALL
 SwXDocumentIndex::removeEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     m_pImpl->m_Listeners.removeInterface(
             cppu::UnoType<lang::XEventListener>::get(), xListener);
 }
 
-OUString SAL_CALL SwXDocumentIndex::getName() throw (uno::RuntimeException)
+OUString SAL_CALL SwXDocumentIndex::getName() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -1462,7 +1462,7 @@ OUString SAL_CALL SwXDocumentIndex::getName() throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-SwXDocumentIndex::setName(const OUString& rName) throw (uno::RuntimeException)
+SwXDocumentIndex::setName(const OUString& rName) throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -1689,7 +1689,7 @@ const uno::Sequence< sal_Int8 > & SwXDocumentIndexMark::getUnoTunnelId()
 
 sal_Int64 SAL_CALL
 SwXDocumentIndexMark::getSomething(const uno::Sequence< sal_Int8 >& rId)
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     return ::sw::UnoTunnelImpl<SwXDocumentIndexMark>(rId, this);
 }
@@ -1702,19 +1702,19 @@ static const sal_Char cUserMark[]      = "com.sun.star.text.UserIndexMark";
 static const sal_Char cTextContent[]   = "com.sun.star.text.TextContent";
 
 OUString SAL_CALL
-SwXDocumentIndexMark::getImplementationName() throw (uno::RuntimeException)
+SwXDocumentIndexMark::getImplementationName() throw (uno::RuntimeException, std::exception)
 {
     return OUString("SwXDocumentIndexMark");
 }
 
 sal_Bool SAL_CALL SwXDocumentIndexMark::supportsService(const OUString& rServiceName)
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL
-SwXDocumentIndexMark::getSupportedServiceNames() throw (uno::RuntimeException)
+SwXDocumentIndexMark::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -1743,7 +1743,7 @@ SwXDocumentIndexMark::getSupportedServiceNames() throw (uno::RuntimeException)
 }
 
 OUString SAL_CALL
-SwXDocumentIndexMark::getMarkEntry() throw (uno::RuntimeException)
+SwXDocumentIndexMark::getMarkEntry() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1766,7 +1766,7 @@ SwXDocumentIndexMark::getMarkEntry() throw (uno::RuntimeException)
 
 void SAL_CALL
 SwXDocumentIndexMark::setMarkEntry(const OUString& rIndexEntry)
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1801,7 +1801,7 @@ throw (uno::RuntimeException)
 void SAL_CALL
 SwXDocumentIndexMark::attach(
         const uno::Reference< text::XTextRange > & xTextRange)
-throw (lang::IllegalArgumentException, uno::RuntimeException)
+throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2008,7 +2008,7 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
 }
 
 uno::Reference< text::XTextRange > SAL_CALL
-SwXDocumentIndexMark::getAnchor() throw (uno::RuntimeException)
+SwXDocumentIndexMark::getAnchor() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2042,7 +2042,7 @@ SwXDocumentIndexMark::getAnchor() throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-SwXDocumentIndexMark::dispose() throw (uno::RuntimeException)
+SwXDocumentIndexMark::dispose() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2056,7 +2056,7 @@ SwXDocumentIndexMark::dispose() throw (uno::RuntimeException)
 void SAL_CALL
 SwXDocumentIndexMark::addEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     m_pImpl->m_EventListeners.addInterface(xListener);
@@ -2065,14 +2065,14 @@ throw (uno::RuntimeException)
 void SAL_CALL
 SwXDocumentIndexMark::removeEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     m_pImpl->m_EventListeners.removeInterface(xListener);
 }
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
-SwXDocumentIndexMark::getPropertySetInfo() throw (uno::RuntimeException)
+SwXDocumentIndexMark::getPropertySetInfo() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -2105,7 +2105,7 @@ SwXDocumentIndexMark::setPropertyValue(
         const OUString& rPropertyName, const uno::Any& rValue)
 throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     lang::IllegalArgumentException, lang::WrappedTargetException,
-    uno::RuntimeException)
+    uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2237,7 +2237,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
 uno::Any SAL_CALL
 SwXDocumentIndexMark::getPropertyValue(const OUString& rPropertyName)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-        uno::RuntimeException)
+        uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2352,7 +2352,7 @@ SwXDocumentIndexMark::addPropertyChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-    uno::RuntimeException)
+    uno::RuntimeException, std::exception)
 {
     OSL_FAIL("SwXDocumentIndexMark::addPropertyChangeListener(): not implemented");
 }
@@ -2362,7 +2362,7 @@ SwXDocumentIndexMark::removePropertyChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-    uno::RuntimeException)
+    uno::RuntimeException, std::exception)
 {
     OSL_FAIL("SwXDocumentIndexMark::removePropertyChangeListener(): not implemented");
 }
@@ -2372,7 +2372,7 @@ SwXDocumentIndexMark::addVetoableChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-    uno::RuntimeException)
+    uno::RuntimeException, std::exception)
 {
     OSL_FAIL("SwXDocumentIndexMark::addVetoableChangeListener(): not implemented");
 }
@@ -2382,7 +2382,7 @@ SwXDocumentIndexMark::removeVetoableChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-        uno::RuntimeException)
+        uno::RuntimeException, std::exception)
 {
     OSL_FAIL("SwXDocumentIndexMark::removeVetoableChangeListener(): not implemented");
 }
@@ -2400,7 +2400,7 @@ SwXDocumentIndexes::~SwXDocumentIndexes()
 }
 
 OUString SAL_CALL
-SwXDocumentIndexes::getImplementationName() throw (uno::RuntimeException)
+SwXDocumentIndexes::getImplementationName() throw (uno::RuntimeException, std::exception)
 {
     return OUString("SwXDocumentIndexes");
 }
@@ -2411,20 +2411,20 @@ static char const*const g_ServicesDocumentIndexes[] =
 };
 
 sal_Bool SAL_CALL SwXDocumentIndexes::supportsService(const OUString& rServiceName)
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL
-SwXDocumentIndexes::getSupportedServiceNames() throw (uno::RuntimeException)
+SwXDocumentIndexes::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
 {
     return ::sw::GetSupportedServiceNamesImpl(
         SAL_N_ELEMENTS(g_ServicesDocumentIndexes), g_ServicesDocumentIndexes);
 }
 
 sal_Int32 SAL_CALL
-SwXDocumentIndexes::getCount() throw (uno::RuntimeException)
+SwXDocumentIndexes::getCount() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2448,7 +2448,7 @@ SwXDocumentIndexes::getCount() throw (uno::RuntimeException)
 uno::Any SAL_CALL
 SwXDocumentIndexes::getByIndex(sal_Int32 nIndex)
 throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
-        uno::RuntimeException)
+        uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2480,7 +2480,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
 uno::Any SAL_CALL
 SwXDocumentIndexes::getByName(const OUString& rName)
 throw (container::NoSuchElementException, lang::WrappedTargetException,
-        uno::RuntimeException)
+        uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2509,7 +2509,7 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
 }
 
 uno::Sequence< OUString > SAL_CALL
-SwXDocumentIndexes::getElementNames() throw (uno::RuntimeException)
+SwXDocumentIndexes::getElementNames() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2546,7 +2546,7 @@ SwXDocumentIndexes::getElementNames() throw (uno::RuntimeException)
 
 sal_Bool SAL_CALL
 SwXDocumentIndexes::hasByName(const OUString& rName)
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2572,13 +2572,13 @@ throw (uno::RuntimeException)
 }
 
 uno::Type SAL_CALL
-SwXDocumentIndexes::getElementType() throw (uno::RuntimeException)
+SwXDocumentIndexes::getElementType() throw (uno::RuntimeException, std::exception)
 {
     return cppu::UnoType<text::XDocumentIndex>::get();
 }
 
 sal_Bool SAL_CALL
-SwXDocumentIndexes::hasElements() throw (uno::RuntimeException)
+SwXDocumentIndexes::hasElements() throw (uno::RuntimeException, std::exception)
 {
     return 0 != getCount();
 }
@@ -2598,7 +2598,7 @@ SwXDocumentIndex::StyleAccess_Impl::~StyleAccess_Impl()
 
 OUString SAL_CALL
 SwXDocumentIndex::StyleAccess_Impl::getImplementationName()
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     return OUString("SwXDocumentIndex::StyleAccess_Impl");
 }
@@ -2610,14 +2610,14 @@ static char const*const g_ServicesIndexStyleAccess[] =
 
 sal_Bool SAL_CALL
 SwXDocumentIndex::StyleAccess_Impl::supportsService(const OUString& rServiceName)
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL
 SwXDocumentIndex::StyleAccess_Impl::getSupportedServiceNames()
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     return ::sw::GetSupportedServiceNamesImpl(
         SAL_N_ELEMENTS(g_ServicesIndexStyleAccess),
@@ -2628,7 +2628,7 @@ void SAL_CALL
 SwXDocumentIndex::StyleAccess_Impl::replaceByIndex(
         sal_Int32 nIndex, const uno::Any& rElement)
 throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
-          lang::WrappedTargetException, uno::RuntimeException)
+          lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2663,7 +2663,7 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
 }
 
 sal_Int32 SAL_CALL
-SwXDocumentIndex::StyleAccess_Impl::getCount() throw (uno::RuntimeException)
+SwXDocumentIndex::StyleAccess_Impl::getCount() throw (uno::RuntimeException, std::exception)
 {
     return MAXLEVEL;
 }
@@ -2671,7 +2671,7 @@ SwXDocumentIndex::StyleAccess_Impl::getCount() throw (uno::RuntimeException)
 uno::Any SAL_CALL
 SwXDocumentIndex::StyleAccess_Impl::getByIndex(sal_Int32 nIndex)
 throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
-        uno::RuntimeException)
+        uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2703,13 +2703,13 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
 
 uno::Type SAL_CALL
 SwXDocumentIndex::StyleAccess_Impl::getElementType()
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     return ::getCppuType((uno::Sequence<OUString>*)0);
 }
 
 sal_Bool SAL_CALL
-SwXDocumentIndex::StyleAccess_Impl::hasElements() throw (uno::RuntimeException)
+SwXDocumentIndex::StyleAccess_Impl::hasElements() throw (uno::RuntimeException, std::exception)
 {
     return sal_True;
 }
@@ -2729,7 +2729,7 @@ SwXDocumentIndex::TokenAccess_Impl::~TokenAccess_Impl()
 
 OUString SAL_CALL
 SwXDocumentIndex::TokenAccess_Impl::getImplementationName()
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     return OUString("SwXDocumentIndex::TokenAccess_Impl");
 }
@@ -2741,14 +2741,14 @@ static char const*const g_ServicesIndexTokenAccess[] =
 
 sal_Bool SAL_CALL SwXDocumentIndex::TokenAccess_Impl::supportsService(
         const OUString& rServiceName)
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL
 SwXDocumentIndex::TokenAccess_Impl::getSupportedServiceNames()
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     return ::sw::GetSupportedServiceNamesImpl(
             SAL_N_ELEMENTS(g_ServicesIndexTokenAccess),
@@ -2778,7 +2778,7 @@ void SAL_CALL
 SwXDocumentIndex::TokenAccess_Impl::replaceByIndex(
         sal_Int32 nIndex, const uno::Any& rElement)
 throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
-        lang::WrappedTargetException, uno::RuntimeException)
+        lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2958,7 +2958,7 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
 }
 
 sal_Int32 SAL_CALL
-SwXDocumentIndex::TokenAccess_Impl::getCount() throw (uno::RuntimeException)
+SwXDocumentIndex::TokenAccess_Impl::getCount() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2969,7 +2969,7 @@ SwXDocumentIndex::TokenAccess_Impl::getCount() throw (uno::RuntimeException)
 uno::Any SAL_CALL
 SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
 throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
-    uno::RuntimeException)
+    uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -3221,14 +3221,14 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
 
 uno::Type SAL_CALL
 SwXDocumentIndex::TokenAccess_Impl::getElementType()
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     return ::getCppuType((uno::Sequence< beans::PropertyValues >*)0);
 }
 
 sal_Bool SAL_CALL
 SwXDocumentIndex::TokenAccess_Impl::hasElements()
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     return sal_True;
 }

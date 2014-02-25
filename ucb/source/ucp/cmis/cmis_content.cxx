@@ -1577,26 +1577,26 @@ namespace cmis
         ContentImplHelper::release();
     }
 
-    uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType ) throw ( uno::RuntimeException )
+    uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType ) throw ( uno::RuntimeException, std::exception )
     {
         uno::Any aRet = cppu::queryInterface( rType, static_cast< ucb::XContentCreator * >( this ) );
         return aRet.hasValue() ? aRet : ContentImplHelper::queryInterface(rType);
     }
 
-    OUString SAL_CALL Content::getImplementationName() throw( uno::RuntimeException )
+    OUString SAL_CALL Content::getImplementationName() throw( uno::RuntimeException, std::exception )
     {
        return OUString("com.sun.star.comp.CmisContent");
     }
 
     uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
-           throw( uno::RuntimeException )
+           throw( uno::RuntimeException, std::exception )
     {
            uno::Sequence< OUString > aSNS( 1 );
            aSNS.getArray()[ 0 ] = "com.sun.star.ucb.CmisContent";
            return aSNS;
     }
 
-    OUString SAL_CALL Content::getContentType() throw( uno::RuntimeException )
+    OUString SAL_CALL Content::getContentType() throw( uno::RuntimeException, std::exception )
     {
         return isFolder( uno::Reference< ucb::XCommandEnvironment >() )
             ? OUString(CMIS_FOLDER_TYPE)
@@ -1607,7 +1607,7 @@ namespace cmis
         const ucb::Command& aCommand,
         sal_Int32 /*CommandId*/,
         const uno::Reference< ucb::XCommandEnvironment >& xEnv )
-            throw( uno::Exception, ucb::CommandAbortedException, uno::RuntimeException )
+            throw( uno::Exception, ucb::CommandAbortedException, uno::RuntimeException, std::exception )
     {
         SAL_INFO( "ucb.ucp.cmis", "Content::execute( ) - " << aCommand.Name );
         uno::Any aRet;
@@ -1732,20 +1732,20 @@ namespace cmis
         return aRet;
     }
 
-    void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ ) throw( uno::RuntimeException )
+    void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ ) throw( uno::RuntimeException, std::exception )
     {
         SAL_INFO( "ucb.ucp.cmis", "TODO - Content::abort()" );
         // TODO Implement me
     }
 
     uno::Sequence< ucb::ContentInfo > SAL_CALL Content::queryCreatableContentsInfo()
-            throw( uno::RuntimeException )
+            throw( uno::RuntimeException, std::exception )
     {
         return queryCreatableContentsInfo( uno::Reference< ucb::XCommandEnvironment >() );
     }
 
     uno::Reference< ucb::XContent > SAL_CALL Content::createNewContent(
-            const ucb::ContentInfo& Info ) throw( uno::RuntimeException )
+            const ucb::ContentInfo& Info ) throw( uno::RuntimeException, std::exception )
     {
         bool create_document;
 
@@ -1775,7 +1775,7 @@ namespace cmis
         }
     }
 
-    uno::Sequence< uno::Type > SAL_CALL Content::getTypes() throw( uno::RuntimeException )
+    uno::Sequence< uno::Type > SAL_CALL Content::getTypes() throw( uno::RuntimeException, std::exception )
     {
         if ( isFolder( uno::Reference< ucb::XCommandEnvironment >() ) )
         {

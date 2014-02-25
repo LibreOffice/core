@@ -95,12 +95,12 @@ void SvxShapeGroup::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
 
 
 uno::Any SAL_CALL SvxShapeGroup::queryInterface( const uno::Type & rType )
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     return SvxShape::queryInterface( rType );
 }
 
-uno::Any SAL_CALL SvxShapeGroup::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
+uno::Any SAL_CALL SvxShapeGroup::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException, std::exception)
 {
     uno::Any aAny;
 
@@ -126,7 +126,7 @@ void SAL_CALL SvxShapeGroup::release() throw ( )
 }
 
 uno::Sequence< uno::Type > SAL_CALL SvxShapeGroup::getTypes()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return SvxShape::getTypes();
 }
@@ -137,7 +137,7 @@ namespace
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL SvxShapeGroup::getImplementationId()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return theSvxShapeGroupImplementationId::get().getSeq();
 }
@@ -146,33 +146,33 @@ uno::Sequence< sal_Int8 > SAL_CALL SvxShapeGroup::getImplementationId()
 
 
 OUString SAL_CALL SvxShapeGroup::getShapeType()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return SvxShape::getShapeType();
 }
 
 //------------------------------------------------------------------1----
-awt::Point SAL_CALL SvxShapeGroup::getPosition() throw(uno::RuntimeException)
+awt::Point SAL_CALL SvxShapeGroup::getPosition() throw(uno::RuntimeException, std::exception)
 {
     return SvxShape::getPosition();
 }
 
 
-void SAL_CALL SvxShapeGroup::setPosition( const awt::Point& Position ) throw(uno::RuntimeException)
+void SAL_CALL SvxShapeGroup::setPosition( const awt::Point& Position ) throw(uno::RuntimeException, std::exception)
 {
     SvxShape::setPosition(Position);
 }
 
 
 
-awt::Size SAL_CALL SvxShapeGroup::getSize() throw(uno::RuntimeException)
+awt::Size SAL_CALL SvxShapeGroup::getSize() throw(uno::RuntimeException, std::exception)
 {
     return SvxShape::getSize();
 }
 
 
 void SAL_CALL SvxShapeGroup::setSize( const awt::Size& rSize )
-    throw(beans::PropertyVetoException, uno::RuntimeException)
+    throw(beans::PropertyVetoException, uno::RuntimeException, std::exception)
 {
     SvxShape::setSize( rSize );
 }
@@ -180,14 +180,14 @@ void SAL_CALL SvxShapeGroup::setSize( const awt::Size& rSize )
 // drawing::XShapeGroup
 
 
-void SAL_CALL SvxShapeGroup::enterGroup(  ) throw(uno::RuntimeException)
+void SAL_CALL SvxShapeGroup::enterGroup(  ) throw(uno::RuntimeException, std::exception)
 {
     // Todo
 //  pDrView->EnterMarkedGroup();
 }
 
 
-void SAL_CALL SvxShapeGroup::leaveGroup(  ) throw(uno::RuntimeException)
+void SAL_CALL SvxShapeGroup::leaveGroup(  ) throw(uno::RuntimeException, std::exception)
 {
     // Todo
 //  pDrView->LeaveOneGroup();
@@ -233,7 +233,7 @@ void SvxShapeGroup::addUnoShape( const uno::Reference< drawing::XShape >& xShape
 
 // XShapes
 void SAL_CALL SvxShapeGroup::add( const uno::Reference< drawing::XShape >& xShape )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     ::SolarMutexGuard aGuard;
 
@@ -243,7 +243,7 @@ void SAL_CALL SvxShapeGroup::add( const uno::Reference< drawing::XShape >& xShap
 
 
 void SAL_CALL SvxShapeGroup::remove( const uno::Reference< drawing::XShape >& xShape )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     ::SolarMutexGuard aGuard;
 
@@ -295,7 +295,7 @@ void SAL_CALL SvxShapeGroup::remove( const uno::Reference< drawing::XShape >& xS
 }
 
 void SAL_CALL SvxShapeGroup::addTop( const uno::Reference< drawing::XShape >& xShape )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -304,7 +304,7 @@ void SAL_CALL SvxShapeGroup::addTop( const uno::Reference< drawing::XShape >& xS
 }
 
 void SAL_CALL SvxShapeGroup::addBottom( const uno::Reference< drawing::XShape >& xShape )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -315,7 +315,7 @@ void SAL_CALL SvxShapeGroup::addBottom( const uno::Reference< drawing::XShape >&
 // XIndexAccess
 
 
-sal_Int32 SAL_CALL SvxShapeGroup::getCount() throw( uno::RuntimeException )
+sal_Int32 SAL_CALL SvxShapeGroup::getCount() throw( uno::RuntimeException, std::exception )
 {
     ::SolarMutexGuard aGuard;
 
@@ -331,7 +331,7 @@ sal_Int32 SAL_CALL SvxShapeGroup::getCount() throw( uno::RuntimeException )
 
 
 uno::Any SAL_CALL SvxShapeGroup::getByIndex( sal_Int32 Index )
-    throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException )
+    throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     ::SolarMutexGuard aGuard;
 
@@ -353,13 +353,13 @@ uno::Any SAL_CALL SvxShapeGroup::getByIndex( sal_Int32 Index )
 // ::com::sun::star::container::XElementAccess
 
 
-uno::Type SAL_CALL SvxShapeGroup::getElementType() throw( uno::RuntimeException )
+uno::Type SAL_CALL SvxShapeGroup::getElementType() throw( uno::RuntimeException, std::exception )
 {
     return ::getCppuType(( const Reference< drawing::XShape >*)0);
 }
 
 
-sal_Bool SAL_CALL SvxShapeGroup::hasElements() throw( uno::RuntimeException )
+sal_Bool SAL_CALL SvxShapeGroup::hasElements() throw( uno::RuntimeException, std::exception )
 {
     ::SolarMutexGuard aGuard;
 
@@ -370,7 +370,7 @@ sal_Bool SAL_CALL SvxShapeGroup::hasElements() throw( uno::RuntimeException )
 // ::com::sun::star::lang::XServiceInfo
 
 uno::Sequence< OUString > SAL_CALL SvxShapeGroup::getSupportedServiceNames()
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     return SvxShape::getSupportedServiceNames();
 }
@@ -392,13 +392,13 @@ SvxShapeConnector::~SvxShapeConnector() throw()
 
 
 uno::Any SAL_CALL SvxShapeConnector::queryInterface( const uno::Type & rType )
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     return SvxShapeText::queryInterface( rType );
 }
 
 uno::Any SAL_CALL SvxShapeConnector::queryAggregation( const uno::Type & rType )
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     uno::Any aAny;
 
@@ -421,7 +421,7 @@ void SAL_CALL SvxShapeConnector::release() throw ( )
 // XTypeProvider
 
 uno::Sequence< uno::Type > SAL_CALL SvxShapeConnector::getTypes()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return SvxShape::getTypes();
 }
@@ -432,7 +432,7 @@ namespace
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL SvxShapeConnector::getImplementationId()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return theSvxShapeConnectorImplementationId::get().getSeq();
 }
@@ -441,33 +441,33 @@ uno::Sequence< sal_Int8 > SAL_CALL SvxShapeConnector::getImplementationId()
 
 
 OUString SAL_CALL SvxShapeConnector::getShapeType()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return SvxShapeText::getShapeType();
 }
 
 //------------------------------------------------------------------1----
-awt::Point SAL_CALL SvxShapeConnector::getPosition() throw(uno::RuntimeException)
+awt::Point SAL_CALL SvxShapeConnector::getPosition() throw(uno::RuntimeException, std::exception)
 {
     return SvxShapeText::getPosition();
 }
 
 
-void SAL_CALL SvxShapeConnector::setPosition( const awt::Point& Position ) throw(uno::RuntimeException)
+void SAL_CALL SvxShapeConnector::setPosition( const awt::Point& Position ) throw(uno::RuntimeException, std::exception)
 {
     SvxShapeText::setPosition(Position);
 }
 
 
 
-awt::Size SAL_CALL SvxShapeConnector::getSize() throw(uno::RuntimeException)
+awt::Size SAL_CALL SvxShapeConnector::getSize() throw(uno::RuntimeException, std::exception)
 {
     return SvxShapeText::getSize();
 }
 
 
 void SAL_CALL SvxShapeConnector::setSize( const awt::Size& rSize )
-    throw(beans::PropertyVetoException, uno::RuntimeException)
+    throw(beans::PropertyVetoException, uno::RuntimeException, std::exception)
 {
     SvxShapeText::setSize( rSize );
 }
@@ -476,7 +476,7 @@ void SAL_CALL SvxShapeConnector::setSize( const awt::Size& rSize )
 
 // XConnectorShape
 
-void SAL_CALL SvxShapeConnector::connectStart( const uno::Reference< drawing::XConnectableShape >& xShape, drawing::ConnectionType ) throw( uno::RuntimeException )
+void SAL_CALL SvxShapeConnector::connectStart( const uno::Reference< drawing::XConnectableShape >& xShape, drawing::ConnectionType ) throw( uno::RuntimeException, std::exception )
 {
     ::SolarMutexGuard aGuard;
 
@@ -492,7 +492,7 @@ void SAL_CALL SvxShapeConnector::connectStart( const uno::Reference< drawing::XC
 
 
 void SAL_CALL SvxShapeConnector::connectEnd( const uno::Reference< drawing::XConnectableShape >& xShape, drawing::ConnectionType  )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     ::SolarMutexGuard aGuard;
 
@@ -508,7 +508,7 @@ void SAL_CALL SvxShapeConnector::connectEnd( const uno::Reference< drawing::XCon
 
 
 void SAL_CALL SvxShapeConnector::disconnectBegin( const uno::Reference< drawing::XConnectableShape >&  )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     ::SolarMutexGuard aGuard;
 
@@ -521,7 +521,7 @@ void SAL_CALL SvxShapeConnector::disconnectBegin( const uno::Reference< drawing:
 
 
 void SAL_CALL SvxShapeConnector::disconnectEnd( const uno::Reference< drawing::XConnectableShape >& )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     ::SolarMutexGuard aGuard;
 
@@ -535,7 +535,7 @@ void SAL_CALL SvxShapeConnector::disconnectEnd( const uno::Reference< drawing::X
 
 // ::com::sun::star::lang::XServiceInfo
 
-uno::Sequence< OUString > SAL_CALL SvxShapeConnector::getSupportedServiceNames() throw( uno::RuntimeException )
+uno::Sequence< OUString > SAL_CALL SvxShapeConnector::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
 {
     return SvxShapeText::getSupportedServiceNames();
 }
@@ -560,12 +560,12 @@ SvxShapeControl::~SvxShapeControl() throw()
 
 
 uno::Any SAL_CALL SvxShapeControl::queryInterface( const uno::Type & rType )
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     return SvxShapeText::queryInterface( rType );
 }
 
-uno::Any SAL_CALL SvxShapeControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
+uno::Any SAL_CALL SvxShapeControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException, std::exception)
 {
     uno::Any aAny;
 
@@ -588,7 +588,7 @@ void SAL_CALL SvxShapeControl::release() throw ( )
 // XTypeProvider
 
 uno::Sequence< uno::Type > SAL_CALL SvxShapeControl::getTypes()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return SvxShape::getTypes();
 }
@@ -599,7 +599,7 @@ namespace
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL SvxShapeControl::getImplementationId()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return theSvxShapeControlImplementationId::get().getSeq();
 }
@@ -608,33 +608,33 @@ uno::Sequence< sal_Int8 > SAL_CALL SvxShapeControl::getImplementationId()
 
 
 OUString SAL_CALL SvxShapeControl::getShapeType()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return SvxShapeText::getShapeType();
 }
 
 //------------------------------------------------------------------1----
-awt::Point SAL_CALL SvxShapeControl::getPosition() throw(uno::RuntimeException)
+awt::Point SAL_CALL SvxShapeControl::getPosition() throw(uno::RuntimeException, std::exception)
 {
     return SvxShapeText::getPosition();
 }
 
 
-void SAL_CALL SvxShapeControl::setPosition( const awt::Point& Position ) throw(uno::RuntimeException)
+void SAL_CALL SvxShapeControl::setPosition( const awt::Point& Position ) throw(uno::RuntimeException, std::exception)
 {
     SvxShapeText::setPosition(Position);
 }
 
 
 
-awt::Size SAL_CALL SvxShapeControl::getSize() throw(uno::RuntimeException)
+awt::Size SAL_CALL SvxShapeControl::getSize() throw(uno::RuntimeException, std::exception)
 {
     return SvxShapeText::getSize();
 }
 
 
 void SAL_CALL SvxShapeControl::setSize( const awt::Size& rSize )
-    throw(beans::PropertyVetoException, uno::RuntimeException)
+    throw(beans::PropertyVetoException, uno::RuntimeException, std::exception)
 {
     SvxShapeText::setSize( rSize );
 }
@@ -643,7 +643,7 @@ void SAL_CALL SvxShapeControl::setSize( const awt::Size& rSize )
 // XControlShape
 
 Reference< awt::XControlModel > SAL_CALL SvxShapeControl::getControl()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     ::SolarMutexGuard aGuard;
 
@@ -658,7 +658,7 @@ Reference< awt::XControlModel > SAL_CALL SvxShapeControl::getControl()
 
 
 void SAL_CALL SvxShapeControl::setControl( const Reference< awt::XControlModel >& xControl )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     ::SolarMutexGuard aGuard;
 
@@ -671,7 +671,7 @@ void SAL_CALL SvxShapeControl::setControl( const Reference< awt::XControlModel >
 }
 
 // XServiceInfo
-uno::Sequence< OUString > SAL_CALL SvxShapeControl::getSupportedServiceNames() throw( uno::RuntimeException )
+uno::Sequence< OUString > SAL_CALL SvxShapeControl::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
 {
     return SvxShapeText::getSupportedServiceNames();
 }
@@ -832,7 +832,7 @@ namespace
 }
 
 void SAL_CALL SvxShapeControl::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, com::sun::star::beans::PropertyVetoException, com::sun::star::lang::IllegalArgumentException)
+    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, com::sun::star::beans::PropertyVetoException, com::sun::star::lang::IllegalArgumentException, std::exception)
 {
     OUString aFormsName;
     if ( lcl_convertPropertyName( aPropertyName, aFormsName ) )
@@ -871,7 +871,7 @@ void SAL_CALL SvxShapeControl::setPropertyValue( const OUString& aPropertyName, 
 }
 
 uno::Any SAL_CALL SvxShapeControl::getPropertyValue( const OUString& aPropertyName )
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     OUString aFormsName;
     if ( lcl_convertPropertyName( aPropertyName, aFormsName ) )
@@ -920,7 +920,7 @@ uno::Any SAL_CALL SvxShapeControl::getPropertyValue( const OUString& aPropertyNa
 }
 
 // XPropertyState
-beans::PropertyState SAL_CALL SvxShapeControl::getPropertyState( const OUString& PropertyName ) throw( beans::UnknownPropertyException, uno::RuntimeException )
+beans::PropertyState SAL_CALL SvxShapeControl::getPropertyState( const OUString& PropertyName ) throw( beans::UnknownPropertyException, uno::RuntimeException, std::exception )
 {
     OUString aFormsName;
     if ( lcl_convertPropertyName( PropertyName, aFormsName ) )
@@ -945,7 +945,7 @@ beans::PropertyState SAL_CALL SvxShapeControl::getPropertyState( const OUString&
     }
 }
 
-void SAL_CALL SvxShapeControl::setPropertyToDefault( const OUString& PropertyName ) throw( beans::UnknownPropertyException, uno::RuntimeException )
+void SAL_CALL SvxShapeControl::setPropertyToDefault( const OUString& PropertyName ) throw( beans::UnknownPropertyException, uno::RuntimeException, std::exception )
 {
     OUString aFormsName;
     if ( lcl_convertPropertyName( PropertyName, aFormsName ) )
@@ -969,7 +969,7 @@ void SAL_CALL SvxShapeControl::setPropertyToDefault( const OUString& PropertyNam
 }
 
 uno::Any SAL_CALL SvxShapeControl::getPropertyDefault( const OUString& aPropertyName )
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     OUString aFormsName;
     if ( lcl_convertPropertyName( aPropertyName, aFormsName ) )
@@ -1021,7 +1021,7 @@ SvxShapeDimensioning::~SvxShapeDimensioning() throw()
 }
 
 // ::com::sun::star::lang::XServiceInfo
-uno::Sequence< OUString > SAL_CALL SvxShapeDimensioning::getSupportedServiceNames() throw( uno::RuntimeException )
+uno::Sequence< OUString > SAL_CALL SvxShapeDimensioning::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
 {
     return SvxShapeText::getSupportedServiceNames();
 }
@@ -1043,7 +1043,7 @@ SvxShapeCircle::~SvxShapeCircle() throw()
 
 // ::com::sun::star::lang::XServiceInfo
 // XServiceInfo
-uno::Sequence< OUString > SAL_CALL SvxShapeCircle::getSupportedServiceNames() throw( uno::RuntimeException )
+uno::Sequence< OUString > SAL_CALL SvxShapeCircle::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
 {
     return SvxShapeText::getSupportedServiceNames();
 }
@@ -1312,7 +1312,7 @@ basegfx::B2DPolyPolygon SvxShapePolyPolygon::GetPolygon() const throw()
 }
 
 // ::com::sun::star::lang::XServiceInfo
-uno::Sequence< OUString > SAL_CALL SvxShapePolyPolygon::getSupportedServiceNames() throw( uno::RuntimeException )
+uno::Sequence< OUString > SAL_CALL SvxShapePolyPolygon::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
 {
     return SvxShapeText::getSupportedServiceNames();
 }
@@ -1448,7 +1448,7 @@ basegfx::B2DPolyPolygon SvxShapePolyPolygonBezier::GetPolygon() const throw()
 
 
 // ::com::sun::star::lang::XServiceInfo
-uno::Sequence< OUString > SAL_CALL SvxShapePolyPolygonBezier::getSupportedServiceNames() throw( uno::RuntimeException )
+uno::Sequence< OUString > SAL_CALL SvxShapePolyPolygonBezier::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
 {
     return SvxShapeText::getSupportedServiceNames();
 }
@@ -1761,13 +1761,13 @@ void SvxCustomShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
 
 
 uno::Any SAL_CALL SvxCustomShape::queryInterface( const uno::Type & rType )
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     return SvxShapeText::queryInterface( rType );
 }
 
 uno::Any SAL_CALL SvxCustomShape::queryAggregation( const uno::Type & rType )
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     ::com::sun::star::uno::Any aReturn = SvxShapeText::queryAggregation( rType );
     if ( !aReturn.hasValue() )
@@ -1788,7 +1788,7 @@ void SAL_CALL SvxCustomShape::release() throw ( )
 
 
 uno::Sequence< uno::Type > SAL_CALL SvxCustomShape::getTypes()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return SvxShapeText::getTypes();
 }
@@ -1799,7 +1799,7 @@ namespace
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL SvxCustomShape::getImplementationId()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return theSvxCustomShapeImplementationId::get().getSeq();
 }
@@ -1808,13 +1808,13 @@ uno::Sequence< sal_Int8 > SAL_CALL SvxCustomShape::getImplementationId()
 
 
 OUString SAL_CALL SvxCustomShape::getShapeType()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return SvxShape::getShapeType();
 }
 
 //------------------------------------------------------------------1----
-awt::Point SAL_CALL SvxCustomShape::getPosition() throw(uno::RuntimeException)
+awt::Point SAL_CALL SvxCustomShape::getPosition() throw(uno::RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
     if ( mpModel && mpObj.is() )
@@ -1896,21 +1896,21 @@ awt::Point SAL_CALL SvxCustomShape::getPosition() throw(uno::RuntimeException)
 }
 
 
-void SAL_CALL SvxCustomShape::setPosition( const awt::Point& Position ) throw(uno::RuntimeException)
+void SAL_CALL SvxCustomShape::setPosition( const awt::Point& Position ) throw(uno::RuntimeException, std::exception)
 {
     SvxShapeText::setPosition(Position);
 }
 
 
 
-awt::Size SAL_CALL SvxCustomShape::getSize() throw(uno::RuntimeException)
+awt::Size SAL_CALL SvxCustomShape::getSize() throw(uno::RuntimeException, std::exception)
 {
     return SvxShapeText::getSize();
 }
 
 
 void SAL_CALL SvxCustomShape::setSize( const awt::Size& rSize )
-    throw(beans::PropertyVetoException, uno::RuntimeException)
+    throw(beans::PropertyVetoException, uno::RuntimeException, std::exception)
 {
     SvxShapeText::setSize( rSize );
 }
@@ -1919,7 +1919,7 @@ void SAL_CALL SvxCustomShape::setSize( const awt::Size& rSize )
 
 
 void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, com::sun::star::beans::PropertyVetoException, com::sun::star::lang::IllegalArgumentException)
+    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, com::sun::star::beans::PropertyVetoException, com::sun::star::lang::IllegalArgumentException, std::exception)
 {
     ::SolarMutexGuard aGuard;
     SdrObject* pObject = mpObj.get();
@@ -1999,7 +1999,7 @@ bool SvxCustomShape::getPropertyValueImpl( const OUString& rName, const SfxItemP
 }
 
 
-void SvxCustomShape::createCustomShapeDefaults( const OUString& rValueType ) throw (::com::sun::star::uno::RuntimeException)
+void SvxCustomShape::createCustomShapeDefaults( const OUString& rValueType ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ((SdrObjCustomShape*)mpObj.get())->MergeDefaultAttributes( &rValueType );
 }

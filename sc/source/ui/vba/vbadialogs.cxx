@@ -29,7 +29,7 @@ ScVbaDialogs::Dummy() throw (uno::RuntimeException)
 }
 
 uno::Any
-ScVbaDialogs::Item( const uno::Any &aItem ) throw (uno::RuntimeException)
+ScVbaDialogs::Item( const uno::Any &aItem ) throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nIndex = 0;
     aItem >>= nIndex;

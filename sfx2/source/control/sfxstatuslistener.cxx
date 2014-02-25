@@ -99,7 +99,7 @@ void SfxStatusListener::ReBind()
 }
 
 // new UNO API
-void SAL_CALL SfxStatusListener::dispose() throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL SfxStatusListener::dispose() throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     if ( m_xDispatch.is() && !m_aCommand.Complete.isEmpty() )
     {
@@ -118,19 +118,19 @@ void SAL_CALL SfxStatusListener::dispose() throw( ::com::sun::star::uno::Runtime
 }
 
 void SAL_CALL SfxStatusListener::addEventListener( const Reference< XEventListener >& )
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     // do nothing - this is a wrapper class which does not support listeners
 }
 
 void SAL_CALL SfxStatusListener::removeEventListener( const Reference< XEventListener >& )
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     // do nothing - this is a wrapper class which does not support listeners
 }
 
 void SAL_CALL SfxStatusListener::disposing( const EventObject& Source )
-throw( RuntimeException )
+throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -141,7 +141,7 @@ throw( RuntimeException )
 }
 
 void SAL_CALL SfxStatusListener::statusChanged( const FeatureStateEvent& rEvent)
-throw( RuntimeException )
+throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 

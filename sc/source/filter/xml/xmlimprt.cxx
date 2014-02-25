@@ -2956,7 +2956,7 @@ void ScXMLImport::SetStylesToRangesFinished()
 
 // XImporter
 void SAL_CALL ScXMLImport::setTargetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
-throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     ScXMLImport::MutexGuard aGuard(*this);
     SvXMLImport::setTargetDocument( xDoc );
@@ -2980,7 +2980,7 @@ throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::R
 
 // ::com::sun::star::xml::sax::XDocumentHandler
 void SAL_CALL ScXMLImport::startDocument(void)
-throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
+throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception )
 {
     ScXMLImport::MutexGuard aGuard(*this);
     SvXMLImport::startDocument();

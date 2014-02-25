@@ -1463,7 +1463,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocumentPagePreview::getAcces
     return xAccessible;
 }
 
-void SAL_CALL ScAccessibleDocumentPagePreview::grabFocus() throw (uno::RuntimeException)
+void SAL_CALL ScAccessibleDocumentPagePreview::grabFocus() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -1563,7 +1563,7 @@ uno::Reference<XAccessible> SAL_CALL ScAccessibleDocumentPagePreview::getAccessi
 
     /// Return the set of current states.
 uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessibleDocumentPagePreview::getAccessibleStateSet(void)
-                        throw (uno::RuntimeException)
+                        throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Reference<XAccessibleStateSet> xParentStates;
@@ -1591,13 +1591,13 @@ uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessibleDocumentPagePreview::ge
     //=====  XServiceInfo  ====================================================
 
 OUString SAL_CALL ScAccessibleDocumentPagePreview::getImplementationName(void)
-                    throw (uno::RuntimeException)
+                    throw (uno::RuntimeException, std::exception)
 {
     return OUString("ScAccessibleDocumentPagePreview");
 }
 
 uno::Sequence< OUString> SAL_CALL ScAccessibleDocumentPagePreview::getSupportedServiceNames(void)
-                    throw (uno::RuntimeException)
+                    throw (uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
     sal_Int32 nOldSize(aSequence.getLength());
@@ -1617,7 +1617,7 @@ namespace
 
 uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleDocumentPagePreview::getImplementationId(void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return theScAccessibleDocumentPagePreviewImplementationId::get().getSeq();
 }
@@ -1632,13 +1632,13 @@ OUString SAL_CALL ScAccessibleDocumentPagePreview::createAccessibleDescription(v
 }
 
 OUString SAL_CALL ScAccessibleDocumentPagePreview::createAccessibleName(void)
-                    throw (uno::RuntimeException)
+                    throw (uno::RuntimeException, std::exception)
 {
     OUString sName = OUString(ScResId(STR_ACC_PREVIEWDOC_NAME));
     return sName;
 }
 
-Rectangle ScAccessibleDocumentPagePreview::GetBoundingBoxOnScreen() const throw (uno::RuntimeException)
+Rectangle ScAccessibleDocumentPagePreview::GetBoundingBoxOnScreen() const throw (uno::RuntimeException, std::exception)
 {
     Rectangle aRect;
     if (mpViewShell)
@@ -1650,7 +1650,7 @@ Rectangle ScAccessibleDocumentPagePreview::GetBoundingBoxOnScreen() const throw 
     return aRect;
 }
 
-Rectangle ScAccessibleDocumentPagePreview::GetBoundingBox() const throw (uno::RuntimeException)
+Rectangle ScAccessibleDocumentPagePreview::GetBoundingBox() const throw (uno::RuntimeException, std::exception)
 {
     Rectangle aRect;
     if (mpViewShell)
@@ -1696,7 +1696,7 @@ ScShapeChildren* ScAccessibleDocumentPagePreview::GetShapeChildren()
 }
 
 OUString ScAccessibleDocumentPagePreview::getAccessibleName(void)
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 

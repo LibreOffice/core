@@ -59,10 +59,10 @@ class DispatchInformationProvider : private ThreadHelpBase
         virtual ~DispatchInformationProvider();
 
         virtual css::uno::Sequence< sal_Int16 > SAL_CALL getSupportedCommandGroups()
-            throw (css::uno::RuntimeException);
+            throw (css::uno::RuntimeException, std::exception);
 
         virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation(sal_Int16 nCommandGroup)
-            throw (css::uno::RuntimeException);
+            throw (css::uno::RuntimeException, std::exception);
 
     //_______________________
     // helper

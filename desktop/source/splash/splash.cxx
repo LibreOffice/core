@@ -91,26 +91,26 @@ public:
     SplashScreen();
 
     // XStatusIndicator
-    virtual void SAL_CALL end() throw ( RuntimeException );
-    virtual void SAL_CALL reset() throw ( RuntimeException );
-    virtual void SAL_CALL setText(const OUString& aText) throw ( RuntimeException );
-    virtual void SAL_CALL setValue(sal_Int32 nValue) throw ( RuntimeException );
-    virtual void SAL_CALL start(const OUString& aText, sal_Int32 nRange) throw ( RuntimeException );
+    virtual void SAL_CALL end() throw ( RuntimeException, std::exception );
+    virtual void SAL_CALL reset() throw ( RuntimeException, std::exception );
+    virtual void SAL_CALL setText(const OUString& aText) throw ( RuntimeException, std::exception );
+    virtual void SAL_CALL setValue(sal_Int32 nValue) throw ( RuntimeException, std::exception );
+    virtual void SAL_CALL start(const OUString& aText, sal_Int32 nRange) throw ( RuntimeException, std::exception );
 
     // XInitialize
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& aArguments )
-        throw ( RuntimeException );
+        throw ( RuntimeException, std::exception );
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return desktop::splash::getImplementationName(); }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return cppu::supportsService(this, ServiceName); }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return desktop::splash::getSupportedServiceNames(); }
 
     // workwindow
@@ -162,7 +162,7 @@ SplashScreen::~SplashScreen()
 }
 
 void SAL_CALL SplashScreen::start(const OUString&, sal_Int32 nRange)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     _iMax = nRange;
     if (_bVisible) {
@@ -177,7 +177,7 @@ void SAL_CALL SplashScreen::start(const OUString&, sal_Int32 nRange)
 }
 
 void SAL_CALL SplashScreen::end()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     _iProgress = _iMax;
     if (_bVisible )
@@ -190,7 +190,7 @@ void SAL_CALL SplashScreen::end()
 }
 
 void SAL_CALL SplashScreen::reset()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     _iProgress = 0;
     if (_bVisible && !_bProgressEnd )
@@ -203,7 +203,7 @@ void SAL_CALL SplashScreen::reset()
 }
 
 void SAL_CALL SplashScreen::setText(const OUString& rText)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     if ( _sProgressText != rText )
@@ -221,7 +221,7 @@ void SAL_CALL SplashScreen::setText(const OUString& rText)
 }
 
 void SAL_CALL SplashScreen::setValue(sal_Int32 nValue)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     SAL_INFO( "desktop.splash", "::SplashScreen::setValue (lo119109)" );
     SAL_INFO( "desktop.splash", "value=" << nValue );
@@ -240,7 +240,7 @@ void SAL_CALL SplashScreen::setValue(sal_Int32 nValue)
 // XInitialize
 void SAL_CALL
 SplashScreen::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& aArguments )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ::osl::ClearableMutexGuard  aGuard( _aMutex );
     if (aArguments.getLength() > 0)

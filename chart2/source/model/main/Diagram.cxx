@@ -362,7 +362,7 @@ Diagram::~Diagram()
 
 // ____ XDiagram ____
 uno::Reference< beans::XPropertySet > SAL_CALL Diagram::getWall()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< beans::XPropertySet > xRet;
     bool bAddListener = false;
@@ -381,7 +381,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL Diagram::getWall()
 }
 
 uno::Reference< beans::XPropertySet > SAL_CALL Diagram::getFloor()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< beans::XPropertySet > xRet;
     bool bAddListener = false;
@@ -400,14 +400,14 @@ uno::Reference< beans::XPropertySet > SAL_CALL Diagram::getFloor()
 }
 
 uno::Reference< chart2::XLegend > SAL_CALL Diagram::getLegend()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard( GetMutex() );
     return m_xLegend;
 }
 
 void SAL_CALL Diagram::setLegend( const uno::Reference< chart2::XLegend >& xNewLegend )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< chart2::XLegend > xOldLegend;
     {
@@ -425,7 +425,7 @@ void SAL_CALL Diagram::setLegend( const uno::Reference< chart2::XLegend >& xNewL
 }
 
 Reference< chart2::XColorScheme > SAL_CALL Diagram::getDefaultColorScheme()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< chart2::XColorScheme > xRet;
     {
@@ -443,7 +443,7 @@ Reference< chart2::XColorScheme > SAL_CALL Diagram::getDefaultColorScheme()
 }
 
 void SAL_CALL Diagram::setDefaultColorScheme( const Reference< chart2::XColorScheme >& xColorScheme )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     {
         MutexGuard aGuard( GetMutex() );
@@ -455,7 +455,7 @@ void SAL_CALL Diagram::setDefaultColorScheme( const Reference< chart2::XColorSch
 void SAL_CALL Diagram::setDiagramData(
     const Reference< chart2::data::XDataSource >& xDataSource,
     const Sequence< beans::PropertyValue >& aArguments )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< lang::XMultiServiceFactory > xChartTypeManager( m_xContext->getServiceManager()->createInstanceWithContext(
             "com.sun.star.chart2.ChartTypeManager", m_xContext ), uno::UNO_QUERY );
@@ -470,14 +470,14 @@ void SAL_CALL Diagram::setDiagramData(
 
 // ____ XTitled ____
 uno::Reference< chart2::XTitle > SAL_CALL Diagram::getTitleObject()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard( GetMutex() );
     return m_xTitle;
 }
 
 void SAL_CALL Diagram::setTitleObject( const uno::Reference< chart2::XTitle >& xNewTitle )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< chart2::XTitle > xOldTitle;
     {
@@ -496,19 +496,19 @@ void SAL_CALL Diagram::setTitleObject( const uno::Reference< chart2::XTitle >& x
 
 // ____ X3DDefaultSetter ____
 void SAL_CALL Diagram::set3DSettingsToDefault()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     ThreeDHelper::set3DSettingsToDefault( this );
 }
 
 void SAL_CALL Diagram::setDefaultRotation()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     ThreeDHelper::setDefaultRotation( this );
 }
 
 void SAL_CALL Diagram::setDefaultIllumination()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     ThreeDHelper::setDefaultIllumination( this );
 }
@@ -517,7 +517,7 @@ void SAL_CALL Diagram::setDefaultIllumination()
 void SAL_CALL Diagram::addCoordinateSystem(
     const uno::Reference< chart2::XCoordinateSystem >& aCoordSys )
     throw (lang::IllegalArgumentException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     {
         MutexGuard aGuard( GetMutex() );
@@ -539,7 +539,7 @@ void SAL_CALL Diagram::addCoordinateSystem(
 void SAL_CALL Diagram::removeCoordinateSystem(
     const uno::Reference< chart2::XCoordinateSystem >& aCoordSys )
     throw (container::NoSuchElementException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     {
         MutexGuard aGuard( GetMutex() );
@@ -556,7 +556,7 @@ void SAL_CALL Diagram::removeCoordinateSystem(
 }
 
 uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > SAL_CALL Diagram::getCoordinateSystems()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard( GetMutex() );
     return ContainerHelper::ContainerToSequence( m_aCoordSystems );
@@ -565,7 +565,7 @@ uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > SAL_CALL Diagram::g
 void SAL_CALL Diagram::setCoordinateSystems(
     const Sequence< Reference< chart2::XCoordinateSystem > >& aCoordinateSystems )
     throw (lang::IllegalArgumentException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     tCoordinateSystemContainerType aNew;
     tCoordinateSystemContainerType aOld;
@@ -586,7 +586,7 @@ void SAL_CALL Diagram::setCoordinateSystems(
 
 // ____ XCloneable ____
 Reference< util::XCloneable > SAL_CALL Diagram::createClone()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard( GetMutex() );
     return Reference< util::XCloneable >( new Diagram( *this ));
@@ -594,7 +594,7 @@ Reference< util::XCloneable > SAL_CALL Diagram::createClone()
 
 // ____ XModifyBroadcaster ____
 void SAL_CALL Diagram::addModifyListener( const Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -608,7 +608,7 @@ void SAL_CALL Diagram::addModifyListener( const Reference< util::XModifyListener
 }
 
 void SAL_CALL Diagram::removeModifyListener( const Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -623,14 +623,14 @@ void SAL_CALL Diagram::removeModifyListener( const Reference< util::XModifyListe
 
 // ____ XModifyListener ____
 void SAL_CALL Diagram::modified( const lang::EventObject& aEvent )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
 // ____ XEventListener (base of XModifyListener) ____
 void SAL_CALL Diagram::disposing( const lang::EventObject& /* Source */ )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     // nothing
 }
@@ -675,7 +675,7 @@ uno::Any Diagram::GetDefaultValue( sal_Int32 nHandle ) const
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL Diagram::getPropertySetInfo()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return *StaticDiagramInfo::get();
 }
@@ -685,7 +685,7 @@ void SAL_CALL Diagram::setFastPropertyValue( sal_Int32 nHandle, const Any& rValu
     throw(beans::UnknownPropertyException,
           beans::PropertyVetoException,
           lang::IllegalArgumentException,
-          lang::WrappedTargetException, uno::RuntimeException)
+          lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     //special treatment for some 3D properties
     if( PROP_DIAGRAM_PERSPECTIVE == nHandle )

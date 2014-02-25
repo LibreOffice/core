@@ -75,14 +75,14 @@ public:
     SvMemoryStream& GetHTMLStream() { return maHTMLStream; }
 
     // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception);
     void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
     void                                        SAL_CALL release() throw()  { OWeakObject::release(); }
 
     // ::com::sun::star::datatransfer::XTransferable
-    ::com::sun::star::uno::Any SAL_CALL getTransferData( const ::com::sun::star::datatransfer::DataFlavor& aFlavor ) throw(::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) throw(::com::sun::star::uno::RuntimeException);
-    sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& aFlavor ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Any SAL_CALL getTransferData( const ::com::sun::star::datatransfer::DataFlavor& aFlavor ) throw(::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception);
+    ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& aFlavor ) throw(::com::sun::star::uno::RuntimeException, std::exception);
 };
 
 TETextDataObject::TETextDataObject( const OUString& rText ) : maText( rText )
@@ -94,14 +94,14 @@ TETextDataObject::~TETextDataObject()
 }
 
 // uno::XInterface
-uno::Any TETextDataObject::queryInterface( const uno::Type & rType ) throw(uno::RuntimeException)
+uno::Any TETextDataObject::queryInterface( const uno::Type & rType ) throw(uno::RuntimeException, std::exception)
 {
     uno::Any aRet = ::cppu::queryInterface( rType, (static_cast< datatransfer::XTransferable* >(this)) );
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
 }
 
 // datatransfer::XTransferable
-uno::Any TETextDataObject::getTransferData( const datatransfer::DataFlavor& rFlavor ) throw(datatransfer::UnsupportedFlavorException, io::IOException, uno::RuntimeException)
+uno::Any TETextDataObject::getTransferData( const datatransfer::DataFlavor& rFlavor ) throw(datatransfer::UnsupportedFlavorException, io::IOException, uno::RuntimeException, std::exception)
 {
     uno::Any aAny;
 
@@ -127,7 +127,7 @@ uno::Any TETextDataObject::getTransferData( const datatransfer::DataFlavor& rFla
     return aAny;
 }
 
-uno::Sequence< datatransfer::DataFlavor > TETextDataObject::getTransferDataFlavors(  ) throw(uno::RuntimeException)
+uno::Sequence< datatransfer::DataFlavor > TETextDataObject::getTransferDataFlavors(  ) throw(uno::RuntimeException, std::exception)
 {
     GetHTMLStream().Seek( STREAM_SEEK_TO_END );
     bool bHTML = GetHTMLStream().Tell() > 0;
@@ -138,7 +138,7 @@ uno::Sequence< datatransfer::DataFlavor > TETextDataObject::getTransferDataFlavo
     return aDataFlavors;
 }
 
-sal_Bool TETextDataObject::isDataFlavorSupported( const datatransfer::DataFlavor& rFlavor ) throw(uno::RuntimeException)
+sal_Bool TETextDataObject::isDataFlavorSupported( const datatransfer::DataFlavor& rFlavor ) throw(uno::RuntimeException, std::exception)
 {
     sal_uLong nT = SotExchange::GetFormat( rFlavor );
     return ( nT == SOT_FORMAT_STRING );
@@ -1986,7 +1986,7 @@ bool TextView::ImplCheckTextLen( const OUString& rNewText )
     return bOK;
 }
 
-void TextView::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::DragGestureEvent& rDGE ) throw (::com::sun::star::uno::RuntimeException)
+void TextView::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::DragGestureEvent& rDGE ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     if ( mpImpl->mbClickedInSelection )
     {
@@ -2034,14 +2034,14 @@ void TextView::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd:
     }
 }
 
-void TextView::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSourceDropEvent& ) throw (::com::sun::star::uno::RuntimeException)
+void TextView::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSourceDropEvent& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ImpHideDDCursor();
     delete mpImpl->mpDDInfo;
     mpImpl->mpDDInfo = NULL;
 }
 
-void TextView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException)
+void TextView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aVclGuard;
 
@@ -2152,17 +2152,17 @@ void TextView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEv
     rDTDE.Context->dropComplete( bChanges );
 }
 
-void TextView::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& ) throw (::com::sun::star::uno::RuntimeException)
+void TextView::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
 }
 
-void TextView::dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& ) throw (::com::sun::star::uno::RuntimeException)
+void TextView::dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aVclGuard;
     ImpHideDDCursor();
 }
 
-void TextView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException)
+void TextView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aVclGuard;
 

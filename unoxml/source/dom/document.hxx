@@ -128,49 +128,49 @@ namespace DOM
         Creates an Attr of the given name.
         */
         virtual Reference< XAttr > SAL_CALL createAttribute(const OUString& name)
-            throw (RuntimeException, DOMException);
+            throw (RuntimeException, DOMException, std::exception);
 
         /**
         Creates an attribute of the given qualified name and namespace URI.
         */
         virtual Reference< XAttr > SAL_CALL createAttributeNS(const OUString& namespaceURI, const OUString& qualifiedName)
-            throw (RuntimeException, DOMException);
+            throw (RuntimeException, DOMException, std::exception);
 
         /**
         Creates a CDATASection node whose value is the specified string.
         */
         virtual Reference< XCDATASection > SAL_CALL createCDATASection(const OUString& data)
-            throw (RuntimeException);
+            throw (RuntimeException, std::exception);
 
         /**
         Creates a Comment node given the specified string.
         */
         virtual Reference< XComment > SAL_CALL createComment(const OUString& data)
-            throw (RuntimeException);
+            throw (RuntimeException, std::exception);
 
         /**
         Creates an empty DocumentFragment object.
         */
         virtual Reference< XDocumentFragment > SAL_CALL createDocumentFragment()
-            throw (RuntimeException);
+            throw (RuntimeException, std::exception);
 
         /**
         Creates an element of the type specified.
         */
         virtual Reference< XElement > SAL_CALL createElement(const OUString& tagName)
-            throw (RuntimeException, DOMException);
+            throw (RuntimeException, DOMException, std::exception);
 
         /**
         Creates an element of the given qualified name and namespace URI.
         */
         virtual Reference< XElement > SAL_CALL createElementNS(const OUString& namespaceURI, const OUString& qualifiedName)
-            throw (RuntimeException, DOMException);
+            throw (RuntimeException, DOMException, std::exception);
 
         /**
         Creates an EntityReference object.
         */
         virtual Reference< XEntityReference > SAL_CALL createEntityReference(const OUString& name)
-            throw (RuntimeException, DOMException);
+            throw (RuntimeException, DOMException, std::exception);
 
         /**
         Creates a ProcessingInstruction node given the specified name and
@@ -178,33 +178,33 @@ namespace DOM
         */
         virtual Reference< XProcessingInstruction > SAL_CALL createProcessingInstruction(
                 const OUString& target, const OUString& data)
-            throw (RuntimeException, DOMException);
+            throw (RuntimeException, DOMException, std::exception);
 
         /**
         Creates a Text node given the specified string.
         */
         virtual Reference< XText > SAL_CALL createTextNode(const OUString& data)
-            throw (RuntimeException);
+            throw (RuntimeException, std::exception);
 
         /**
         The Document Type Declaration (see DocumentType) associated with this
         document.
         */
         virtual Reference< XDocumentType > SAL_CALL getDoctype()
-            throw (RuntimeException);
+            throw (RuntimeException, std::exception);
 
         /**
         This is a convenience attribute that allows direct access to the child
         node that is the root element of the document.
         */
         virtual Reference< XElement > SAL_CALL getDocumentElement()
-            throw (RuntimeException);
+            throw (RuntimeException, std::exception);
 
         /**
         Returns the Element whose ID is given by elementId.
         */
         virtual Reference< XElement > SAL_CALL getElementById(const OUString& elementId)
-            throw (RuntimeException);
+            throw (RuntimeException, std::exception);
 
         /**
         Returns a NodeList of all the Elements with a given tag name in the
@@ -212,7 +212,7 @@ namespace DOM
         Document tree.
         */
         virtual Reference< XNodeList > SAL_CALL getElementsByTagName(const OUString& tagname)
-            throw (RuntimeException);
+            throw (RuntimeException, std::exception);
 
         /**
         Returns a NodeList of all the Elements with a given local name and
@@ -220,153 +220,153 @@ namespace DOM
         traversal of the Document tree.
         */
         virtual Reference< XNodeList > SAL_CALL getElementsByTagNameNS(const OUString& namespaceURI, const OUString& localName)
-            throw (RuntimeException);
+            throw (RuntimeException, std::exception);
 
         /**
         The DOMImplementation object that handles this document.
         */
         virtual Reference< XDOMImplementation > SAL_CALL getImplementation()
-            throw (RuntimeException);
+            throw (RuntimeException, std::exception);
 
         /**
         Imports a node from another document to this document.
         */
         virtual Reference< XNode > SAL_CALL importNode(const Reference< XNode >& importedNode, sal_Bool deep)
-            throw (RuntimeException, DOMException);
+            throw (RuntimeException, DOMException, std::exception);
 
         // XDocumentEvent
-        virtual Reference< XEvent > SAL_CALL createEvent(const OUString& eventType) throw (RuntimeException);
+        virtual Reference< XEvent > SAL_CALL createEvent(const OUString& eventType) throw (RuntimeException, std::exception);
 
         // XActiveDataControl,
         // see http://api.libreoffice.org/docs/common/ref/com/sun/star/io/XActiveDataControl.html
-        virtual void SAL_CALL addListener(const Reference< XStreamListener >& aListener )  throw (RuntimeException);
-        virtual void SAL_CALL removeListener(const Reference< XStreamListener >& aListener ) throw (RuntimeException);
-        virtual void SAL_CALL start() throw (RuntimeException);
-        virtual void SAL_CALL terminate() throw (RuntimeException);
+        virtual void SAL_CALL addListener(const Reference< XStreamListener >& aListener )  throw (RuntimeException, std::exception);
+        virtual void SAL_CALL removeListener(const Reference< XStreamListener >& aListener ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL start() throw (RuntimeException, std::exception);
+        virtual void SAL_CALL terminate() throw (RuntimeException, std::exception);
 
         // XActiveDataSource
         // see http://api.libreoffice.org/docs/common/ref/com/sun/star/io/XActiveDataSource.html
-        virtual void SAL_CALL setOutputStream(  const Reference< XOutputStream >& aStream ) throw (RuntimeException);
-        virtual Reference< XOutputStream > SAL_CALL getOutputStream() throw (RuntimeException);
+        virtual void SAL_CALL setOutputStream(  const Reference< XOutputStream >& aStream ) throw (RuntimeException, std::exception);
+        virtual Reference< XOutputStream > SAL_CALL getOutputStream() throw (RuntimeException, std::exception);
 
         // ---- resolve uno inheritance problems...
         // overrides for XNode base
         virtual OUString SAL_CALL getNodeName()
-            throw (RuntimeException);
+            throw (RuntimeException, std::exception);
         virtual OUString SAL_CALL getNodeValue()
-            throw (RuntimeException);
+            throw (RuntimeException, std::exception);
         virtual Reference< XNode > SAL_CALL cloneNode(sal_Bool deep)
-            throw (RuntimeException);
+            throw (RuntimeException, std::exception);
         // --- delegation for XNde base.
         virtual Reference< XNode > SAL_CALL appendChild(const Reference< XNode >& newChild)
-            throw (RuntimeException, DOMException)
+            throw (RuntimeException, DOMException, std::exception)
         {
             return CNode::appendChild(newChild);
         }
         virtual Reference< XNamedNodeMap > SAL_CALL getAttributes()
-            throw (RuntimeException)
+            throw (RuntimeException, std::exception)
         {
             return CNode::getAttributes();
         }
         virtual Reference< XNodeList > SAL_CALL getChildNodes()
-            throw (RuntimeException)
+            throw (RuntimeException, std::exception)
         {
             return CNode::getChildNodes();
         }
         virtual Reference< XNode > SAL_CALL getFirstChild()
-            throw (RuntimeException)
+            throw (RuntimeException, std::exception)
         {
             return CNode::getFirstChild();
         }
         virtual Reference< XNode > SAL_CALL getLastChild()
-            throw (RuntimeException)
+            throw (RuntimeException, std::exception)
         {
             return CNode::getLastChild();
         }
         virtual OUString SAL_CALL getLocalName()
-            throw (RuntimeException)
+            throw (RuntimeException, std::exception)
         {
             return CNode::getLocalName();
         }
         virtual OUString SAL_CALL getNamespaceURI()
-            throw (RuntimeException)
+            throw (RuntimeException, std::exception)
         {
             return CNode::getNamespaceURI();
         }
         virtual Reference< XNode > SAL_CALL getNextSibling()
-            throw (RuntimeException)
+            throw (RuntimeException, std::exception)
         {
             return CNode::getNextSibling();
         }
         virtual NodeType SAL_CALL getNodeType()
-            throw (RuntimeException)
+            throw (RuntimeException, std::exception)
         {
             return CNode::getNodeType();
         }
         virtual Reference< XDocument > SAL_CALL getOwnerDocument()
-            throw (RuntimeException)
+            throw (RuntimeException, std::exception)
         {
             return CNode::getOwnerDocument();
         }
         virtual Reference< XNode > SAL_CALL getParentNode()
-            throw (RuntimeException)
+            throw (RuntimeException, std::exception)
         {
             return CNode::getParentNode();
         }
         virtual OUString SAL_CALL getPrefix()
-            throw (RuntimeException)
+            throw (RuntimeException, std::exception)
         {
            return CNode::getPrefix();
         }
         virtual Reference< XNode > SAL_CALL getPreviousSibling()
-            throw (RuntimeException)
+            throw (RuntimeException, std::exception)
         {
             return CNode::getPreviousSibling();
         }
         virtual sal_Bool SAL_CALL hasAttributes()
-            throw (RuntimeException)
+            throw (RuntimeException, std::exception)
         {
             return CNode::hasAttributes();
         }
         virtual sal_Bool SAL_CALL hasChildNodes()
-            throw (RuntimeException)
+            throw (RuntimeException, std::exception)
         {
             return CNode::hasChildNodes();
         }
         virtual Reference< XNode > SAL_CALL insertBefore(
                 const Reference< XNode >& newChild, const Reference< XNode >& refChild)
-            throw (RuntimeException, DOMException)
+            throw (RuntimeException, DOMException, std::exception)
         {
             return CNode::insertBefore(newChild, refChild);
         }
         virtual sal_Bool SAL_CALL isSupported(const OUString& feature, const OUString& ver)
-            throw (RuntimeException)
+            throw (RuntimeException, std::exception)
         {
             return CNode::isSupported(feature, ver);
         }
         virtual void SAL_CALL normalize()
-            throw (RuntimeException)
+            throw (RuntimeException, std::exception)
         {
             CNode::normalize();
         }
         virtual Reference< XNode > SAL_CALL removeChild(const Reference< XNode >& oldChild)
-            throw (RuntimeException, DOMException)
+            throw (RuntimeException, DOMException, std::exception)
         {
             return CNode::removeChild(oldChild);
         }
         virtual Reference< XNode > SAL_CALL replaceChild(
                 const Reference< XNode >& newChild, const Reference< XNode >& oldChild)
-            throw (RuntimeException, DOMException)
+            throw (RuntimeException, DOMException, std::exception)
         {
             return CNode::replaceChild(newChild, oldChild);
         }
         virtual void SAL_CALL setNodeValue(const OUString& nodeValue)
-            throw (RuntimeException, DOMException)
+            throw (RuntimeException, DOMException, std::exception)
         {
             return CNode::setNodeValue(nodeValue);
         }
         virtual void SAL_CALL setPrefix(const OUString& prefix)
-            throw (RuntimeException, DOMException)
+            throw (RuntimeException, DOMException, std::exception)
         {
             return CNode::setPrefix(prefix);
         }
@@ -375,14 +375,14 @@ namespace DOM
         virtual void SAL_CALL serialize(
             const Reference< XDocumentHandler >& i_xHandler,
             const Sequence< beans::StringPair >& i_rNamespaces)
-            throw (RuntimeException, SAXException);
+            throw (RuntimeException, SAXException, std::exception);
 
         // ::com::sun::star::xml::sax::XFastSAXSerializable
         virtual void SAL_CALL fastSerialize( const Reference< XFastDocumentHandler >& handler,
                                              const Reference< XFastTokenHandler >& tokenHandler,
                                              const Sequence< beans::StringPair >& i_rNamespaces,
                                              const Sequence< beans::Pair< OUString, sal_Int32 > >& namespaces )
-            throw (SAXException, RuntimeException);
+            throw (SAXException, RuntimeException, std::exception);
     };
 }
 

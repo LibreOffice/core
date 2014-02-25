@@ -129,7 +129,7 @@ UnxFilePicker::~UnxFilePicker()
 }
 
 void SAL_CALL UnxFilePicker::addFilePickerListener( const uno::Reference<XFilePickerListener>& xListener )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     OSL_ASSERT( m_pNotifyThread );
     osl::MutexGuard aGuard( m_aMutex );
@@ -138,7 +138,7 @@ void SAL_CALL UnxFilePicker::addFilePickerListener( const uno::Reference<XFilePi
 }
 
 void SAL_CALL UnxFilePicker::removeFilePickerListener( const uno::Reference<XFilePickerListener>& xListener )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     OSL_ASSERT( m_pNotifyThread );
     osl::MutexGuard aGuard( m_aMutex );
@@ -147,7 +147,7 @@ void SAL_CALL UnxFilePicker::removeFilePickerListener( const uno::Reference<XFil
 }
 
 void SAL_CALL UnxFilePicker::setTitle( const OUString &rTitle )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     checkFilePicker();
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -161,7 +161,7 @@ void SAL_CALL UnxFilePicker::setTitle( const OUString &rTitle )
 }
 
 sal_Int16 SAL_CALL UnxFilePicker::execute()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     checkFilePicker();
 
@@ -178,7 +178,7 @@ sal_Int16 SAL_CALL UnxFilePicker::execute()
 }
 
 void SAL_CALL UnxFilePicker::setMultiSelectionMode( sal_Bool bMode )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     checkFilePicker();
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -191,7 +191,7 @@ void SAL_CALL UnxFilePicker::setMultiSelectionMode( sal_Bool bMode )
 }
 
 void SAL_CALL UnxFilePicker::setDefaultName( const OUString &rName )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     checkFilePicker();
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -205,7 +205,7 @@ void SAL_CALL UnxFilePicker::setDefaultName( const OUString &rName )
 }
 
 void SAL_CALL UnxFilePicker::setDisplayDirectory( const OUString &rDirectory )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     checkFilePicker();
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -219,7 +219,7 @@ void SAL_CALL UnxFilePicker::setDisplayDirectory( const OUString &rDirectory )
 }
 
 OUString SAL_CALL UnxFilePicker::getDisplayDirectory()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     checkFilePicker();
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -231,7 +231,7 @@ OUString SAL_CALL UnxFilePicker::getDisplayDirectory()
 }
 
 uno::Sequence< OUString > SAL_CALL UnxFilePicker::getFiles()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     checkFilePicker();
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -243,7 +243,7 @@ uno::Sequence< OUString > SAL_CALL UnxFilePicker::getFiles()
 }
 
 void SAL_CALL UnxFilePicker::appendFilter( const OUString &rTitle, const OUString &rFilter )
-    throw( lang::IllegalArgumentException, uno::RuntimeException )
+    throw( lang::IllegalArgumentException, uno::RuntimeException, std::exception )
 {
     checkFilePicker();
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -259,7 +259,7 @@ void SAL_CALL UnxFilePicker::appendFilter( const OUString &rTitle, const OUStrin
 }
 
 void SAL_CALL UnxFilePicker::setCurrentFilter( const OUString &rTitle )
-    throw( lang::IllegalArgumentException, uno::RuntimeException )
+    throw( lang::IllegalArgumentException, uno::RuntimeException, std::exception )
 {
     checkFilePicker();
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -273,7 +273,7 @@ void SAL_CALL UnxFilePicker::setCurrentFilter( const OUString &rTitle )
 }
 
 OUString SAL_CALL UnxFilePicker::getCurrentFilter()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     checkFilePicker();
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -285,7 +285,7 @@ OUString SAL_CALL UnxFilePicker::getCurrentFilter()
 }
 
 void SAL_CALL UnxFilePicker::appendFilterGroup( const OUString &rGroupTitle, const uno::Sequence<beans::StringPair> &rFilters )
-    throw( lang::IllegalArgumentException, uno::RuntimeException )
+    throw( lang::IllegalArgumentException, uno::RuntimeException, std::exception )
 {
     checkFilePicker();
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -309,7 +309,7 @@ void SAL_CALL UnxFilePicker::appendFilterGroup( const OUString &rGroupTitle, con
 }
 
 void SAL_CALL UnxFilePicker::setValue( sal_Int16 nControlId, sal_Int16 nControlAction, const uno::Any &rValue )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     checkFilePicker();
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -390,7 +390,7 @@ void SAL_CALL UnxFilePicker::setValue( sal_Int16 nControlId, sal_Int16 nControlA
 }
 
 uno::Any SAL_CALL UnxFilePicker::getValue( sal_Int16 nControlId, sal_Int16 nControlAction )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     checkFilePicker();
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -416,7 +416,7 @@ uno::Any SAL_CALL UnxFilePicker::getValue( sal_Int16 nControlId, sal_Int16 nCont
 }
 
 void SAL_CALL UnxFilePicker::enableControl( sal_Int16 nControlId, sal_Bool bEnable )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     checkFilePicker();
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -431,7 +431,7 @@ void SAL_CALL UnxFilePicker::enableControl( sal_Int16 nControlId, sal_Bool bEnab
 }
 
 void SAL_CALL UnxFilePicker::setLabel( sal_Int16 nControlId, const OUString &rLabel )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     checkFilePicker();
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -447,7 +447,7 @@ void SAL_CALL UnxFilePicker::setLabel( sal_Int16 nControlId, const OUString &rLa
 }
 
 OUString SAL_CALL UnxFilePicker::getLabel(sal_Int16 /*nControlId*/)
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     // FIXME getLabel() is not yet implemented
     checkFilePicker();
@@ -523,7 +523,7 @@ sal_Bool SAL_CALL UnxFilePicker::getShowState()
 */
 
 void SAL_CALL UnxFilePicker::initialize( const uno::Sequence<uno::Any> &rArguments )
-    throw( uno::Exception, uno::RuntimeException )
+    throw( uno::Exception, uno::RuntimeException, std::exception )
 {
     initFilePicker();
 
@@ -629,7 +629,7 @@ void SAL_CALL UnxFilePicker::initialize( const uno::Sequence<uno::Any> &rArgumen
 }
 
 void SAL_CALL UnxFilePicker::cancel()
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     // FIXME cancel() is not implemented
     checkFilePicker();
@@ -648,19 +648,19 @@ void SAL_CALL UnxFilePicker::disposing( const lang::EventObject &rEvent )
 }
 
 OUString SAL_CALL UnxFilePicker::getImplementationName()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return OUString( FILE_PICKER_IMPL_NAME );
 }
 
 sal_Bool SAL_CALL UnxFilePicker::supportsService( const OUString& ServiceName )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL UnxFilePicker::getSupportedServiceNames()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return FilePicker_getSupportedServiceNames();
 }
@@ -917,7 +917,7 @@ void UnxFilePicker::sendAppendControlCommand( sal_Int16 nControlId )
 }
 
 uno::Sequence< OUString > SAL_CALL UnxFilePicker::getSelectedFiles()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return getFiles();
 }

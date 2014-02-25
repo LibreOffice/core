@@ -130,7 +130,7 @@ namespace comphelper
     }
 
 
-    Any SAL_CALL OComponentProxyAggregationHelper::queryInterface( const Type& _rType ) throw (RuntimeException)
+    Any SAL_CALL OComponentProxyAggregationHelper::queryInterface( const Type& _rType ) throw (RuntimeException, std::exception)
     {
         Any aReturn( BASE::queryInterface( _rType ) );
         if ( !aReturn.hasValue() )
@@ -157,7 +157,7 @@ namespace comphelper
     }
 
 
-    void SAL_CALL OComponentProxyAggregationHelper::disposing( const EventObject& _rSource ) throw (RuntimeException)
+    void SAL_CALL OComponentProxyAggregationHelper::disposing( const EventObject& _rSource ) throw (RuntimeException, std::exception)
     {
         if ( _rSource.Source == m_xInner )
         {   // it's our inner context which is dying -> dispose ourself
@@ -169,7 +169,7 @@ namespace comphelper
     }
 
 
-    void SAL_CALL OComponentProxyAggregationHelper::dispose() throw( RuntimeException )
+    void SAL_CALL OComponentProxyAggregationHelper::dispose() throw( RuntimeException, std::exception )
     {
         ::osl::MutexGuard aGuard( m_rBHelper.rMutex );
 
@@ -212,7 +212,7 @@ namespace comphelper
     IMPLEMENT_GET_IMPLEMENTATION_ID( OComponentProxyAggregation )
 
 
-    Sequence< Type > SAL_CALL OComponentProxyAggregation::getTypes(  ) throw (RuntimeException)
+    Sequence< Type > SAL_CALL OComponentProxyAggregation::getTypes(  ) throw (RuntimeException, std::exception)
     {
         Sequence< Type > aTypes( OComponentProxyAggregationHelper::getTypes() );
 
@@ -235,7 +235,7 @@ namespace comphelper
     }
 
 
-    void SAL_CALL OComponentProxyAggregation::disposing( const EventObject& _rSource ) throw (RuntimeException)
+    void SAL_CALL OComponentProxyAggregation::disposing( const EventObject& _rSource ) throw (RuntimeException, std::exception)
     {
         // Simply disambiguate---this is necessary for MSVC to distinguish
         // "disposing(EventObject)" from "disposing()"; but it is also a good
@@ -253,7 +253,7 @@ namespace comphelper
     }
 
 
-    void SAL_CALL OComponentProxyAggregation::dispose() throw( RuntimeException )
+    void SAL_CALL OComponentProxyAggregation::dispose() throw( RuntimeException, std::exception )
     {
         // simply disambiguate
         WeakComponentImplHelperBase::dispose();

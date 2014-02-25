@@ -218,20 +218,20 @@ void LayoutManagerListener::setFrame( const css::uno::Reference< css::frame::XFr
 
 void SAL_CALL LayoutManagerListener::addEventListener(
     const css::uno::Reference< css::lang::XEventListener >& )
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     // do nothing, only internal class
 }
 
 void SAL_CALL LayoutManagerListener::removeEventListener(
     const css::uno::Reference< css::lang::XEventListener >& )
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     // do nothing, only internal class
 }
 
 void SAL_CALL LayoutManagerListener::dispose()
-throw( css::uno::RuntimeException )
+throw( css::uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -278,7 +278,7 @@ throw( css::uno::RuntimeException )
 
 void SAL_CALL LayoutManagerListener::disposing(
     const css::lang::EventObject& )
-throw( css::uno::RuntimeException )
+throw( css::uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     m_pWrkWin = 0;
@@ -293,7 +293,7 @@ void SAL_CALL LayoutManagerListener::layoutEvent(
     const css::lang::EventObject&,
     ::sal_Int16                   eLayoutEvent,
     const css::uno::Any&                        )
-throw (css::uno::RuntimeException)
+throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( m_pWrkWin )

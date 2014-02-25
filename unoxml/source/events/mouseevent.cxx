@@ -35,52 +35,52 @@ namespace DOM { namespace events
     {
     }
 
-    sal_Int32 SAL_CALL CMouseEvent::getScreenX() throw (RuntimeException)
+    sal_Int32 SAL_CALL CMouseEvent::getScreenX() throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
         return m_screenX;
     }
-    sal_Int32 SAL_CALL CMouseEvent::getScreenY() throw (RuntimeException)
+    sal_Int32 SAL_CALL CMouseEvent::getScreenY() throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
         return m_screenY;
     }
-    sal_Int32 SAL_CALL CMouseEvent::getClientX() throw (RuntimeException)
+    sal_Int32 SAL_CALL CMouseEvent::getClientX() throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
         return m_clientX;
     }
-    sal_Int32 SAL_CALL CMouseEvent::getClientY() throw (RuntimeException)
+    sal_Int32 SAL_CALL CMouseEvent::getClientY() throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
         return m_clientY;
     }
-    sal_Bool SAL_CALL CMouseEvent::getCtrlKey() throw (RuntimeException)
+    sal_Bool SAL_CALL CMouseEvent::getCtrlKey() throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
         return m_ctrlKey;
     }
-    sal_Bool SAL_CALL CMouseEvent::getShiftKey() throw (RuntimeException)
+    sal_Bool SAL_CALL CMouseEvent::getShiftKey() throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
         return m_shiftKey;
     }
-    sal_Bool SAL_CALL CMouseEvent::getAltKey() throw (RuntimeException)
+    sal_Bool SAL_CALL CMouseEvent::getAltKey() throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
         return m_altKey;
     }
-    sal_Bool SAL_CALL CMouseEvent::getMetaKey() throw (RuntimeException)
+    sal_Bool SAL_CALL CMouseEvent::getMetaKey() throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
         return m_metaKey;
     }
-    sal_Int16 SAL_CALL CMouseEvent::getButton() throw (RuntimeException)
+    sal_Int16 SAL_CALL CMouseEvent::getButton() throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
         return m_button;
     }
-    Reference< XEventTarget > SAL_CALL CMouseEvent::getRelatedTarget()  throw(RuntimeException)
+    Reference< XEventTarget > SAL_CALL CMouseEvent::getRelatedTarget()  throw(RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
         return m_relatedTarget;
@@ -102,7 +102,7 @@ namespace DOM { namespace events
                         sal_Bool metaKeyArg,
                         sal_Int16 buttonArg,
                         const Reference< XEventTarget >& /*relatedTargetArg*/)
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -119,12 +119,12 @@ namespace DOM { namespace events
     }
 
     // delegate to CUIEvent, since we are inheriting from CUIEvent and XUIEvent
-    Reference< XAbstractView > SAL_CALL CMouseEvent::getView() throw(RuntimeException)
+    Reference< XAbstractView > SAL_CALL CMouseEvent::getView() throw(RuntimeException, std::exception)
     {
         return CUIEvent::getView();
     }
 
-    sal_Int32 SAL_CALL CMouseEvent::getDetail() throw(RuntimeException)
+    sal_Int32 SAL_CALL CMouseEvent::getDetail() throw(RuntimeException, std::exception)
     {
         return CUIEvent::getDetail();
     }
@@ -133,58 +133,58 @@ namespace DOM { namespace events
                      sal_Bool canBubbleArg,
                      sal_Bool cancelableArg,
                      const Reference< XAbstractView >& viewArg,
-                     sal_Int32 detailArg) throw(RuntimeException)
+                     sal_Int32 detailArg) throw(RuntimeException, std::exception)
     {
         CUIEvent::initUIEvent(typeArg, canBubbleArg, cancelableArg, viewArg, detailArg);
     }
 
-    OUString SAL_CALL CMouseEvent::getType() throw (RuntimeException)
+    OUString SAL_CALL CMouseEvent::getType() throw (RuntimeException, std::exception)
     {
         return CUIEvent::getType();
     }
 
-    Reference< XEventTarget > SAL_CALL CMouseEvent::getTarget() throw (RuntimeException)
+    Reference< XEventTarget > SAL_CALL CMouseEvent::getTarget() throw (RuntimeException, std::exception)
     {
         return CUIEvent::getTarget();
     }
 
-    Reference< XEventTarget > SAL_CALL CMouseEvent::getCurrentTarget() throw (RuntimeException)
+    Reference< XEventTarget > SAL_CALL CMouseEvent::getCurrentTarget() throw (RuntimeException, std::exception)
     {
         return CUIEvent::getCurrentTarget();
     }
 
-    PhaseType SAL_CALL CMouseEvent::getEventPhase() throw (RuntimeException)
+    PhaseType SAL_CALL CMouseEvent::getEventPhase() throw (RuntimeException, std::exception)
     {
         return CUIEvent::getEventPhase();
     }
 
-    sal_Bool SAL_CALL CMouseEvent::getBubbles() throw (RuntimeException)
+    sal_Bool SAL_CALL CMouseEvent::getBubbles() throw (RuntimeException, std::exception)
     {
         return CEvent::getBubbles();
     }
 
-    sal_Bool SAL_CALL CMouseEvent::getCancelable() throw (RuntimeException)
+    sal_Bool SAL_CALL CMouseEvent::getCancelable() throw (RuntimeException, std::exception)
     {
         return CUIEvent::getCancelable();
     }
 
-    com::sun::star::util::Time SAL_CALL CMouseEvent::getTimeStamp() throw (RuntimeException)
+    com::sun::star::util::Time SAL_CALL CMouseEvent::getTimeStamp() throw (RuntimeException, std::exception)
     {
         return CUIEvent::getTimeStamp();
     }
 
-    void SAL_CALL CMouseEvent::stopPropagation() throw (RuntimeException)
+    void SAL_CALL CMouseEvent::stopPropagation() throw (RuntimeException, std::exception)
     {
         CUIEvent::stopPropagation();
     }
 
-    void SAL_CALL CMouseEvent::preventDefault() throw (RuntimeException)
+    void SAL_CALL CMouseEvent::preventDefault() throw (RuntimeException, std::exception)
     {
         CUIEvent::preventDefault();
     }
 
     void SAL_CALL CMouseEvent::initEvent(const OUString& eventTypeArg, sal_Bool canBubbleArg,
-        sal_Bool cancelableArg) throw (RuntimeException)
+        sal_Bool cancelableArg) throw (RuntimeException, std::exception)
     {
         // base initializer
         CUIEvent::initEvent(eventTypeArg, canBubbleArg, cancelableArg);

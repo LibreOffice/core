@@ -58,20 +58,20 @@ PolarCoordinateSystem::~PolarCoordinateSystem()
 
 // ____ XCoordinateSystem ____
 OUString SAL_CALL PolarCoordinateSystem::getCoordinateSystemType()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return CHART2_COOSYSTEM_POLAR_SERVICE_NAME;
 }
 
 OUString SAL_CALL PolarCoordinateSystem::getViewServiceName()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return CHART2_COOSYSTEM_POLAR_VIEW_SERVICE_NAME;
 }
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL PolarCoordinateSystem::createClone()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return Reference< util::XCloneable >( new PolarCoordinateSystem( *this ));
 }

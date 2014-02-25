@@ -76,7 +76,7 @@ namespace svt
     }
 
 
-    void SAL_CALL PanelTabBarPeer::dispose() throw(RuntimeException)
+    void SAL_CALL PanelTabBarPeer::dispose() throw(RuntimeException, std::exception)
     {
         {
             SolarMutexGuard aSolarGuard;

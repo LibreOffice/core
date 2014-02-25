@@ -134,14 +134,14 @@ public:
 
     // XMacroExpander impl
     virtual OUString SAL_CALL expandMacros( OUString const & exp )
-        throw (lang::IllegalArgumentException);
+        throw (lang::IllegalArgumentException, std::exception);
     // XServiceInfo impl
     virtual OUString SAL_CALL getImplementationName()
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL supportsService( OUString const & serviceName )
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
 };
 
 
@@ -154,19 +154,19 @@ Bootstrap_MacroExpander::~Bootstrap_MacroExpander() SAL_THROW(())
 // XServiceInfo impl
 
 OUString Bootstrap_MacroExpander::getImplementationName()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return s_impl_name();
 }
 
 sal_Bool Bootstrap_MacroExpander::supportsService( OUString const & serviceName )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, serviceName);
 }
 
 Sequence< OUString > Bootstrap_MacroExpander::getSupportedServiceNames()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return s_get_service_names();
 }
@@ -174,7 +174,7 @@ Sequence< OUString > Bootstrap_MacroExpander::getSupportedServiceNames()
 // XMacroExpander impl
 
 OUString Bootstrap_MacroExpander::expandMacros( OUString const & exp )
-    throw (lang::IllegalArgumentException)
+    throw (lang::IllegalArgumentException, std::exception)
 {
     return cppuhelper::detail::expandMacros( exp );
 }

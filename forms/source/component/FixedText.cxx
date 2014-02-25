@@ -70,7 +70,7 @@ OFixedTextModel::~OFixedTextModel( )
 IMPLEMENT_DEFAULT_CLONING( OFixedTextModel )
 
 
-StringSequence SAL_CALL OFixedTextModel::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
+StringSequence SAL_CALL OFixedTextModel::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     StringSequence aSupported = OControlModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
@@ -88,14 +88,14 @@ void OFixedTextModel::describeAggregateProperties( Sequence< Property >& _rAggre
 }
 
 
-OUString SAL_CALL OFixedTextModel::getServiceName() throw(RuntimeException)
+OUString SAL_CALL OFixedTextModel::getServiceName() throw(RuntimeException, std::exception)
 {
     return OUString(FRM_COMPONENT_FIXEDTEXT); // old (non-sun) name for compatibility !
 }
 
 
 void SAL_CALL OFixedTextModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
-    throw(IOException, RuntimeException)
+    throw(IOException, RuntimeException, std::exception)
 {
     OControlModel::write(_rxOutStream);
 
@@ -105,7 +105,7 @@ void SAL_CALL OFixedTextModel::write(const Reference<XObjectOutputStream>& _rxOu
 }
 
 
-void SAL_CALL OFixedTextModel::read(const Reference<XObjectInputStream>& _rxInStream) throw(IOException, RuntimeException)
+void SAL_CALL OFixedTextModel::read(const Reference<XObjectInputStream>& _rxInStream) throw(IOException, RuntimeException, std::exception)
 {
     OControlModel::read(_rxInStream);
 

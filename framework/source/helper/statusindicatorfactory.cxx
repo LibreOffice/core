@@ -74,7 +74,7 @@ StatusIndicatorFactory::~StatusIndicatorFactory()
 
 void SAL_CALL StatusIndicatorFactory::initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
     throw(css::uno::Exception       ,
-          css::uno::RuntimeException)
+          css::uno::RuntimeException, std::exception)
 {
     if (lArguments.getLength() > 0) {
         // SAFE -> ----------------------------------
@@ -113,7 +113,7 @@ void SAL_CALL StatusIndicatorFactory::initialize(const css::uno::Sequence< css::
 
 
 css::uno::Reference< css::task::XStatusIndicator > SAL_CALL StatusIndicatorFactory::createStatusIndicator()
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     StatusIndicator* pIndicator = new StatusIndicator(this);
     css::uno::Reference< css::task::XStatusIndicator > xIndicator(static_cast< ::cppu::OWeakObject* >(pIndicator), css::uno::UNO_QUERY_THROW);
@@ -123,7 +123,7 @@ css::uno::Reference< css::task::XStatusIndicator > SAL_CALL StatusIndicatorFacto
 
 
 void SAL_CALL StatusIndicatorFactory::update()
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);

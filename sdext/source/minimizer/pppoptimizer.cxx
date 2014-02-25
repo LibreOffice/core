@@ -52,7 +52,7 @@ PPPOptimizer::~PPPOptimizer()
 
 
 Reference< com::sun::star::frame::XDispatch > SAL_CALL PPPOptimizer::queryDispatch(
-    const URL& aURL, const OUString& /* aTargetFrameName */, sal_Int32 /* nSearchFlags */ ) throw( RuntimeException )
+    const URL& aURL, const OUString& /* aTargetFrameName */, sal_Int32 /* nSearchFlags */ ) throw( RuntimeException, std::exception )
 {
     Reference < XDispatch > xRet;
     if ( aURL.Protocol.equalsAscii( "vnd.com.sun.star.comp.PPPOptimizer:" ) )
@@ -66,7 +66,7 @@ Reference< com::sun::star::frame::XDispatch > SAL_CALL PPPOptimizer::queryDispat
 
 
 Sequence< Reference< com::sun::star::frame::XDispatch > > SAL_CALL PPPOptimizer::queryDispatches(
-    const Sequence< com::sun::star::frame::DispatchDescriptor >& aDescripts ) throw( RuntimeException )
+    const Sequence< com::sun::star::frame::DispatchDescriptor >& aDescripts ) throw( RuntimeException, std::exception )
 {
     Sequence< Reference< com::sun::star::frame::XDispatch> > aReturn( aDescripts.getLength() );
     Reference< com::sun::star::frame::XDispatch>* pReturn = aReturn.getArray();
@@ -83,7 +83,7 @@ Sequence< Reference< com::sun::star::frame::XDispatch > > SAL_CALL PPPOptimizer:
 
 
 void SAL_CALL PPPOptimizer::dispatch( const URL& rURL, const Sequence< PropertyValue >& lArguments )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     if ( mxController.is() && rURL.Protocol.equalsAscii( "vnd.com.sun.star.comp.PPPOptimizer:" ) )
     {
@@ -107,7 +107,7 @@ void SAL_CALL PPPOptimizer::dispatch( const URL& rURL, const Sequence< PropertyV
 
 
 void SAL_CALL PPPOptimizer::addStatusListener( const Reference< XStatusListener >&, const URL& )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     // TODO
     OSL_FAIL( "PPPOptimizer::addStatusListener()\nNot implemented yet!" );
@@ -115,7 +115,7 @@ void SAL_CALL PPPOptimizer::addStatusListener( const Reference< XStatusListener 
 
 
 void SAL_CALL PPPOptimizer::removeStatusListener( const Reference< XStatusListener >&, const URL& )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     // TODO
     OSL_FAIL( "PPPOptimizer::removeStatusListener()\nNot implemented yet!" );

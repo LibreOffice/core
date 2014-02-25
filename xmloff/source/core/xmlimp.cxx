@@ -117,7 +117,7 @@ public:
     virtual                 ~SvXMLImportEventListener();
 
                             // XEventListener
-    virtual void SAL_CALL disposing(const lang::EventObject& rEventObject) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL disposing(const lang::EventObject& rEventObject) throw(::com::sun::star::uno::RuntimeException, std::exception);
 };
 
 SvXMLImportEventListener::SvXMLImportEventListener(SvXMLImport* pTempImport)
@@ -131,7 +131,7 @@ SvXMLImportEventListener::~SvXMLImportEventListener()
 
 // XEventListener
 void SAL_CALL SvXMLImportEventListener::disposing( const lang::EventObject& )
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     if (pImport)
     {
@@ -456,7 +456,7 @@ const uno::Sequence< sal_Int8 > & SvXMLImport::getUnoTunnelId() throw()
 
 // XUnoTunnel
 sal_Int64 SAL_CALL SvXMLImport::getSomething( const uno::Sequence< sal_Int8 >& rId )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     if( rId.getLength() == 16 && 0 == memcmp( getUnoTunnelId().getConstArray(),
                                                          rId.getConstArray(), 16 ) )
@@ -606,7 +606,7 @@ void SAL_CALL SvXMLImport::endDocument()
 
 void SAL_CALL SvXMLImport::startElement( const OUString& rName,
                                          const uno::Reference< xml::sax::XAttributeList >& xAttrList )
-    throw(xml::sax::SAXException, uno::RuntimeException)
+    throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
     SvXMLNamespaceMap *pRewindMap = 0;
     //    SAL_INFO("svg", "startElement " << rName);
@@ -716,7 +716,7 @@ void SAL_CALL SvXMLImport::endElement( const OUString&
 rName
 #endif
 )
-    throw(xml::sax::SAXException, uno::RuntimeException)
+    throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
     sal_uInt16 nCount = mpContexts->size();
     SAL_WARN_IF( nCount == 0, "xmloff.core", "SvXMLImport::endElement: no context left" );
@@ -755,7 +755,7 @@ rName
 }
 
 void SAL_CALL SvXMLImport::characters( const OUString& rChars )
-    throw(xml::sax::SAXException, uno::RuntimeException)
+    throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
     if( !mpContexts->empty() )
     {
@@ -764,43 +764,43 @@ void SAL_CALL SvXMLImport::characters( const OUString& rChars )
 }
 
 void SAL_CALL SvXMLImport::ignorableWhitespace( const OUString& )
-    throw(xml::sax::SAXException, uno::RuntimeException)
+    throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL SvXMLImport::processingInstruction( const OUString&,
                                        const OUString& )
-    throw(xml::sax::SAXException, uno::RuntimeException)
+    throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL SvXMLImport::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& rLocator )
-    throw(xml::sax::SAXException, uno::RuntimeException)
+    throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
     mxLocator = rLocator;
 }
 
 // XExtendedDocumentHandler
-void SAL_CALL SvXMLImport::startCDATA( void ) throw(xml::sax::SAXException, uno::RuntimeException)
+void SAL_CALL SvXMLImport::startCDATA( void ) throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL SvXMLImport::endCDATA( void ) throw(uno::RuntimeException)
+void SAL_CALL SvXMLImport::endCDATA( void ) throw(uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL SvXMLImport::comment( const OUString& )
-    throw(xml::sax::SAXException, uno::RuntimeException)
+    throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL SvXMLImport::allowLineBreak( void )
-    throw(xml::sax::SAXException, uno::RuntimeException)
+    throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL SvXMLImport::unknown( const OUString& )
-    throw(xml::sax::SAXException, uno::RuntimeException)
+    throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
 }
 
@@ -812,7 +812,7 @@ void SvXMLImport::SetStatistics(const uno::Sequence< beans::NamedValue> &)
 
 // XImporter
 void SAL_CALL SvXMLImport::setTargetDocument( const uno::Reference< lang::XComponent >& xDoc )
-    throw(lang::IllegalArgumentException, uno::RuntimeException)
+    throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     mxModel = uno::Reference< frame::XModel >::query( xDoc );
     if( !mxModel.is() )
@@ -852,19 +852,19 @@ void SAL_CALL SvXMLImport::setTargetDocument( const uno::Reference< lang::XCompo
 
 // XFilter
 sal_Bool SAL_CALL SvXMLImport::filter( const uno::Sequence< beans::PropertyValue >& )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return sal_False;
 }
 
 void SAL_CALL SvXMLImport::cancel(  )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
 }
 
 // XInitialize
 void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArguments )
-    throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     const sal_Int32 nAnyCount = aArguments.getLength();
     const uno::Any* pAny = aArguments.getConstArray();
@@ -971,19 +971,19 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
 
 // XServiceInfo
 OUString SAL_CALL SvXMLImport::getImplementationName()
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     return mpImpl->implementationName;
 }
 
 sal_Bool SAL_CALL SvXMLImport::supportsService( const OUString& rServiceName )
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL SvXMLImport::getSupportedServiceNames(  )
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence<OUString> aSeq(2);
     aSeq[0] = "com.sun.star.document.ImportFilter";

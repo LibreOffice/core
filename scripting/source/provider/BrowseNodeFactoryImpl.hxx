@@ -50,20 +50,20 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw ( css::uno::RuntimeException );
+        throw ( css::uno::RuntimeException, std::exception );
 
     virtual sal_Bool SAL_CALL
         supportsService( OUString const & serviceName )
-            throw ( css::uno::RuntimeException );
+            throw ( css::uno::RuntimeException, std::exception );
 
     virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames()
-            throw ( css::uno::RuntimeException );
+            throw ( css::uno::RuntimeException, std::exception );
 
     // XBrowseNodeFactory
     virtual css::uno::Reference< css::script::browse::XBrowseNode > SAL_CALL
         createView( sal_Int16 viewType )
-            throw ( css::uno::RuntimeException );
+            throw ( css::uno::RuntimeException, std::exception );
     private:
     css::uno::Reference< css::script::browse::XBrowseNode >
         getSelectorHierarchy()

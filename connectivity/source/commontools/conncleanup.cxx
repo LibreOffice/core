@@ -133,7 +133,7 @@ namespace dbtools
     }
 
 
-    void SAL_CALL OAutoConnectionDisposer::propertyChange( const PropertyChangeEvent& _rEvent ) throw (RuntimeException)
+    void SAL_CALL OAutoConnectionDisposer::propertyChange( const PropertyChangeEvent& _rEvent ) throw (RuntimeException, std::exception)
     {
         if ( _rEvent.PropertyName.equals( getActiveConnectionPropertyName() ) )
         {   // somebody set a new ActiveConnection
@@ -185,7 +185,7 @@ namespace dbtools
     }
 
 
-    void SAL_CALL OAutoConnectionDisposer::disposing( const EventObject& _rSource ) throw (RuntimeException)
+    void SAL_CALL OAutoConnectionDisposer::disposing( const EventObject& _rSource ) throw (RuntimeException, std::exception)
     {
         // the rowset is beeing disposed, and nobody has set a new ActiveConnection in the meantime
         if ( isRowSetListening() )
@@ -213,15 +213,15 @@ namespace dbtools
         }
     }
 
-    void SAL_CALL OAutoConnectionDisposer::cursorMoved( const ::com::sun::star::lang::EventObject& /*event*/ ) throw (::com::sun::star::uno::RuntimeException)
+    void SAL_CALL OAutoConnectionDisposer::cursorMoved( const ::com::sun::star::lang::EventObject& /*event*/ ) throw (::com::sun::star::uno::RuntimeException, std::exception)
     {
     }
 
-    void SAL_CALL OAutoConnectionDisposer::rowChanged( const ::com::sun::star::lang::EventObject& /*event*/ ) throw (::com::sun::star::uno::RuntimeException)
+    void SAL_CALL OAutoConnectionDisposer::rowChanged( const ::com::sun::star::lang::EventObject& /*event*/ ) throw (::com::sun::star::uno::RuntimeException, std::exception)
     {
     }
 
-    void SAL_CALL OAutoConnectionDisposer::rowSetChanged( const ::com::sun::star::lang::EventObject& /*event*/ ) throw (::com::sun::star::uno::RuntimeException)
+    void SAL_CALL OAutoConnectionDisposer::rowSetChanged( const ::com::sun::star::lang::EventObject& /*event*/ ) throw (::com::sun::star::uno::RuntimeException, std::exception)
     {
         stopRowSetListening();
         clearConnection();

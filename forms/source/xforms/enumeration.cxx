@@ -42,7 +42,7 @@ Enumeration::Enumeration( XIndexAccess* pContainer )
 }
 
 sal_Bool Enumeration::hasMoreElements()
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     if( ! mxContainer.is() )
         throw RuntimeException();
@@ -53,7 +53,7 @@ sal_Bool Enumeration::hasMoreElements()
 Any Enumeration::nextElement()
     throw( NoSuchElementException,
            WrappedTargetException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     if( ! mxContainer.is() )
         throw RuntimeException();

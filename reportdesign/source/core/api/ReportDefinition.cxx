@@ -251,28 +251,28 @@ public:
     DECLARE_XINTERFACE( )
 
     // XPropertySet
-    com::sun::star::uno::Reference<com::sun::star::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(com::sun::star::uno::RuntimeException);
+    com::sun::star::uno::Reference<com::sun::star::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(com::sun::star::uno::RuntimeException, std::exception);
     ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
     ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
     // XStyle
-    ::sal_Bool SAL_CALL isUserDefined(  ) throw (uno::RuntimeException);
-    ::sal_Bool SAL_CALL isInUse(  ) throw (uno::RuntimeException);
-    OUString SAL_CALL getParentStyle(  ) throw (uno::RuntimeException);
-    void SAL_CALL setParentStyle( const OUString& aParentStyle ) throw (container::NoSuchElementException, uno::RuntimeException);
+    ::sal_Bool SAL_CALL isUserDefined(  ) throw (uno::RuntimeException, std::exception);
+    ::sal_Bool SAL_CALL isInUse(  ) throw (uno::RuntimeException, std::exception);
+    OUString SAL_CALL getParentStyle(  ) throw (uno::RuntimeException, std::exception);
+    void SAL_CALL setParentStyle( const OUString& aParentStyle ) throw (container::NoSuchElementException, uno::RuntimeException, std::exception);
 
     // XNamed
-    OUString SAL_CALL getName(  ) throw (uno::RuntimeException);
-    void SAL_CALL setName( const OUString& aName ) throw (uno::RuntimeException);
+    OUString SAL_CALL getName(  ) throw (uno::RuntimeException, std::exception);
+    void SAL_CALL setName( const OUString& aName ) throw (uno::RuntimeException, std::exception);
 
     // XMultiPropertyState
-    uno::Sequence< beans::PropertyState > SAL_CALL getPropertyStates( const uno::Sequence< OUString >& aPropertyNames ) throw (beans::UnknownPropertyException, uno::RuntimeException)
+    uno::Sequence< beans::PropertyState > SAL_CALL getPropertyStates( const uno::Sequence< OUString >& aPropertyNames ) throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
     {
         return OStyle_PBASE::getPropertyStates(aPropertyNames);
     }
-    void SAL_CALL setAllPropertiesToDefault(  ) throw (uno::RuntimeException);
-    void SAL_CALL setPropertiesToDefault( const uno::Sequence< OUString >& aPropertyNames ) throw (beans::UnknownPropertyException, uno::RuntimeException);
-    uno::Sequence< uno::Any > SAL_CALL getPropertyDefaults( const uno::Sequence< OUString >& aPropertyNames ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException);
+    void SAL_CALL setAllPropertiesToDefault(  ) throw (uno::RuntimeException, std::exception);
+    void SAL_CALL setPropertiesToDefault( const uno::Sequence< OUString >& aPropertyNames ) throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception);
+    uno::Sequence< uno::Any > SAL_CALL getPropertyDefaults( const uno::Sequence< OUString >& aPropertyNames ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception);
 };
 
 OStyle::OStyle()
@@ -391,7 +391,7 @@ OStyle::OStyle()
 
 IMPLEMENT_FORWARD_XINTERFACE2(OStyle,TStyleBASE,OStyle_PBASE)
 
-uno::Reference< beans::XPropertySetInfo>  SAL_CALL OStyle::getPropertySetInfo() throw(uno::RuntimeException)
+uno::Reference< beans::XPropertySetInfo>  SAL_CALL OStyle::getPropertySetInfo() throw(uno::RuntimeException, std::exception)
 {
     return createPropertySetInfo( getInfoHelper() );
 }
@@ -413,43 +413,43 @@ void OStyle::getPropertyDefaultByHandle( sal_Int32 /*_nHandle*/, uno::Any& /*_rD
 }
 
 // XStyle
-::sal_Bool SAL_CALL OStyle::isUserDefined(  ) throw (uno::RuntimeException)
+::sal_Bool SAL_CALL OStyle::isUserDefined(  ) throw (uno::RuntimeException, std::exception)
 {
     return sal_False;
 }
 
-::sal_Bool SAL_CALL OStyle::isInUse(  ) throw (uno::RuntimeException)
+::sal_Bool SAL_CALL OStyle::isInUse(  ) throw (uno::RuntimeException, std::exception)
 {
     return sal_True;
 }
 
-OUString SAL_CALL OStyle::getParentStyle(  ) throw (uno::RuntimeException)
+OUString SAL_CALL OStyle::getParentStyle(  ) throw (uno::RuntimeException, std::exception)
 {
     return OUString();
 }
 
-void SAL_CALL OStyle::setParentStyle( const OUString& /*aParentStyle*/ ) throw (container::NoSuchElementException, uno::RuntimeException)
+void SAL_CALL OStyle::setParentStyle( const OUString& /*aParentStyle*/ ) throw (container::NoSuchElementException, uno::RuntimeException, std::exception)
 {
 }
 
 // XNamed
-OUString SAL_CALL OStyle::getName(  ) throw (uno::RuntimeException)
+OUString SAL_CALL OStyle::getName(  ) throw (uno::RuntimeException, std::exception)
 {
     OUString sName;
     getPropertyValue(PROPERTY_NAME) >>= sName;
     return sName;
 }
 
-void SAL_CALL OStyle::setName( const OUString& aName ) throw (uno::RuntimeException)
+void SAL_CALL OStyle::setName( const OUString& aName ) throw (uno::RuntimeException, std::exception)
 {
     setPropertyValue(PROPERTY_NAME,uno::makeAny(aName));
 }
 
-void SAL_CALL OStyle::setAllPropertiesToDefault(  ) throw (uno::RuntimeException)
+void SAL_CALL OStyle::setAllPropertiesToDefault(  ) throw (uno::RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL OStyle::setPropertiesToDefault( const uno::Sequence< OUString >& aPropertyNames ) throw (beans::UnknownPropertyException, uno::RuntimeException)
+void SAL_CALL OStyle::setPropertiesToDefault( const uno::Sequence< OUString >& aPropertyNames ) throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     const OUString* pIter = aPropertyNames.getConstArray();
     const OUString* pEnd   = pIter + aPropertyNames.getLength();
@@ -457,7 +457,7 @@ void SAL_CALL OStyle::setPropertiesToDefault( const uno::Sequence< OUString >& a
         setPropertyToDefault(*pIter);
 }
 
-uno::Sequence< uno::Any > SAL_CALL OStyle::getPropertyDefaults( const uno::Sequence< OUString >& aPropertyNames ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+uno::Sequence< uno::Any > SAL_CALL OStyle::getPropertyDefaults( const uno::Sequence< OUString >& aPropertyNames ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     uno::Sequence< uno::Any > aRet(aPropertyNames.getLength());
     const OUString* pIter = aPropertyNames.getConstArray();
@@ -759,7 +759,7 @@ void OReportDefinition::init()
     }
 }
 
-void SAL_CALL OReportDefinition::dispose() throw(uno::RuntimeException)
+void SAL_CALL OReportDefinition::dispose() throw(uno::RuntimeException, std::exception)
 {
     ReportDefinitionPropertySet::dispose();
     cppu::WeakComponentImplHelperBase::dispose();
@@ -823,7 +823,7 @@ OUString OReportDefinition::getImplementationName_Static(  ) throw(uno::RuntimeE
     return OUString("com.sun.star.comp.report.OReportDefinition");
 }
 
-OUString SAL_CALL OReportDefinition::getImplementationName(  ) throw(uno::RuntimeException)
+OUString SAL_CALL OReportDefinition::getImplementationName(  ) throw(uno::RuntimeException, std::exception)
 {
     return getImplementationName_Static();
 }
@@ -836,7 +836,7 @@ uno::Sequence< OUString > OReportDefinition::getSupportedServiceNames_Static(  )
     return aServices;
 }
 
-uno::Sequence< OUString > SAL_CALL OReportDefinition::getSupportedServiceNames(  ) throw(uno::RuntimeException)
+uno::Sequence< OUString > SAL_CALL OReportDefinition::getSupportedServiceNames(  ) throw(uno::RuntimeException, std::exception)
 {
     // first collect the services which are supported by our aggregate
     uno::Sequence< OUString > aSupported;
@@ -855,12 +855,12 @@ uno::Sequence< OUString > SAL_CALL OReportDefinition::getSupportedServiceNames( 
     return aSupported;
 }
 
-sal_Bool SAL_CALL OReportDefinition::supportsService( const OUString& _rServiceName ) throw(uno::RuntimeException)
+sal_Bool SAL_CALL OReportDefinition::supportsService( const OUString& _rServiceName ) throw(uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
-uno::Any SAL_CALL OReportDefinition::queryInterface( const uno::Type& _rType ) throw (uno::RuntimeException)
+uno::Any SAL_CALL OReportDefinition::queryInterface( const uno::Type& _rType ) throw (uno::RuntimeException, std::exception)
 {
     uno::Any aReturn = ReportDefinitionBase::queryInterface(_rType);
     if ( !aReturn.hasValue() )
@@ -868,7 +868,7 @@ uno::Any SAL_CALL OReportDefinition::queryInterface( const uno::Type& _rType ) t
 
     return aReturn.hasValue() ? aReturn : (m_aProps->m_xProxy.is() ? m_aProps->m_xProxy->queryAggregation(_rType) : aReturn);
 }
-uno::Sequence< uno::Type > SAL_CALL OReportDefinition::getTypes(  ) throw (uno::RuntimeException)
+uno::Sequence< uno::Type > SAL_CALL OReportDefinition::getTypes(  ) throw (uno::RuntimeException, std::exception)
 {
     if ( m_aProps->m_xTypeProvider.is() )
         return ::comphelper::concatSequences(
@@ -884,24 +884,24 @@ uno::Reference< uno::XInterface > OReportDefinition::create(uno::Reference< uno:
 }
 
 // XReportDefinition
-OUString SAL_CALL OReportDefinition::getCaption() throw (uno::RuntimeException)
+OUString SAL_CALL OReportDefinition::getCaption() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_pImpl->m_sCaption;
 }
 
-void SAL_CALL OReportDefinition::setCaption( const OUString& _caption ) throw (uno::RuntimeException)
+void SAL_CALL OReportDefinition::setCaption( const OUString& _caption ) throw (uno::RuntimeException, std::exception)
 {
     set(PROPERTY_CAPTION,_caption,m_pImpl->m_sCaption);
 }
 
-::sal_Int16 SAL_CALL OReportDefinition::getGroupKeepTogether() throw (uno::RuntimeException)
+::sal_Int16 SAL_CALL OReportDefinition::getGroupKeepTogether() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_pImpl->m_nGroupKeepTogether;
 }
 
-void SAL_CALL OReportDefinition::setGroupKeepTogether( ::sal_Int16 _groupkeeptogether ) throw (uno::RuntimeException)
+void SAL_CALL OReportDefinition::setGroupKeepTogether( ::sal_Int16 _groupkeeptogether ) throw (uno::RuntimeException, std::exception)
 {
     if ( _groupkeeptogether < report::GroupKeepTogether::PER_PAGE || _groupkeeptogether > report::GroupKeepTogether::PER_COLUMN )
         throwIllegallArgumentException("com::sun::star::report::GroupKeepTogether"
@@ -911,13 +911,13 @@ void SAL_CALL OReportDefinition::setGroupKeepTogether( ::sal_Int16 _groupkeeptog
     set(PROPERTY_GROUPKEEPTOGETHER,_groupkeeptogether,m_pImpl->m_nGroupKeepTogether);
 }
 
-::sal_Int16 SAL_CALL OReportDefinition::getPageHeaderOption() throw (uno::RuntimeException)
+::sal_Int16 SAL_CALL OReportDefinition::getPageHeaderOption() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_pImpl->m_nPageHeaderOption;
 }
 
-void SAL_CALL OReportDefinition::setPageHeaderOption( ::sal_Int16 _pageheaderoption ) throw (uno::RuntimeException)
+void SAL_CALL OReportDefinition::setPageHeaderOption( ::sal_Int16 _pageheaderoption ) throw (uno::RuntimeException, std::exception)
 {
     if ( _pageheaderoption < report::ReportPrintOption::ALL_PAGES || _pageheaderoption > report::ReportPrintOption::NOT_WITH_REPORT_HEADER_FOOTER )
         throwIllegallArgumentException("com::sun::star::report::ReportPrintOption"
@@ -927,13 +927,13 @@ void SAL_CALL OReportDefinition::setPageHeaderOption( ::sal_Int16 _pageheaderopt
     set(PROPERTY_PAGEHEADEROPTION,_pageheaderoption,m_pImpl->m_nPageHeaderOption);
 }
 
-::sal_Int16 SAL_CALL OReportDefinition::getPageFooterOption() throw (uno::RuntimeException)
+::sal_Int16 SAL_CALL OReportDefinition::getPageFooterOption() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_pImpl->m_nPageFooterOption;
 }
 
-void SAL_CALL OReportDefinition::setPageFooterOption( ::sal_Int16 _pagefooteroption ) throw (uno::RuntimeException)
+void SAL_CALL OReportDefinition::setPageFooterOption( ::sal_Int16 _pagefooteroption ) throw (uno::RuntimeException, std::exception)
 {
     if ( _pagefooteroption < report::ReportPrintOption::ALL_PAGES || _pagefooteroption > report::ReportPrintOption::NOT_WITH_REPORT_HEADER_FOOTER )
         throwIllegallArgumentException("com::sun::star::report::ReportPrintOption"
@@ -943,24 +943,24 @@ void SAL_CALL OReportDefinition::setPageFooterOption( ::sal_Int16 _pagefooteropt
     set(PROPERTY_PAGEFOOTEROPTION,_pagefooteroption,m_pImpl->m_nPageFooterOption);
 }
 
-OUString SAL_CALL OReportDefinition::getCommand() throw (uno::RuntimeException)
+OUString SAL_CALL OReportDefinition::getCommand() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_pImpl->m_sCommand;
 }
 
-void SAL_CALL OReportDefinition::setCommand( const OUString& _command ) throw (uno::RuntimeException)
+void SAL_CALL OReportDefinition::setCommand( const OUString& _command ) throw (uno::RuntimeException, std::exception)
 {
     set(PROPERTY_COMMAND,_command,m_pImpl->m_sCommand);
 }
 
-::sal_Int32 SAL_CALL OReportDefinition::getCommandType() throw (uno::RuntimeException)
+::sal_Int32 SAL_CALL OReportDefinition::getCommandType() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_pImpl->m_nCommandType;
 }
 
-void SAL_CALL OReportDefinition::setCommandType( ::sal_Int32 _commandtype ) throw (uno::RuntimeException)
+void SAL_CALL OReportDefinition::setCommandType( ::sal_Int32 _commandtype ) throw (uno::RuntimeException, std::exception)
 {
     if ( _commandtype < sdb::CommandType::TABLE || _commandtype > sdb::CommandType::COMMAND )
         throwIllegallArgumentException("com::sun::star::sdb::CommandType"
@@ -970,35 +970,35 @@ void SAL_CALL OReportDefinition::setCommandType( ::sal_Int32 _commandtype ) thro
     set(PROPERTY_COMMANDTYPE,_commandtype,m_pImpl->m_nCommandType);
 }
 
-OUString SAL_CALL OReportDefinition::getFilter() throw (uno::RuntimeException)
+OUString SAL_CALL OReportDefinition::getFilter() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_pImpl->m_sFilter;
 }
 
-void SAL_CALL OReportDefinition::setFilter( const OUString& _filter ) throw (uno::RuntimeException)
+void SAL_CALL OReportDefinition::setFilter( const OUString& _filter ) throw (uno::RuntimeException, std::exception)
 {
     set(PROPERTY_FILTER,_filter,m_pImpl->m_sFilter);
 }
 
-::sal_Bool SAL_CALL OReportDefinition::getEscapeProcessing() throw (uno::RuntimeException)
+::sal_Bool SAL_CALL OReportDefinition::getEscapeProcessing() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_pImpl->m_bEscapeProcessing;
 }
 
-void SAL_CALL OReportDefinition::setEscapeProcessing( ::sal_Bool _escapeprocessing ) throw (uno::RuntimeException)
+void SAL_CALL OReportDefinition::setEscapeProcessing( ::sal_Bool _escapeprocessing ) throw (uno::RuntimeException, std::exception)
 {
     set(PROPERTY_ESCAPEPROCESSING,_escapeprocessing,m_pImpl->m_bEscapeProcessing);
 }
 
-::sal_Bool SAL_CALL OReportDefinition::getReportHeaderOn() throw (uno::RuntimeException)
+::sal_Bool SAL_CALL OReportDefinition::getReportHeaderOn() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_pImpl->m_xReportHeader.is();
 }
 
-void SAL_CALL OReportDefinition::setReportHeaderOn( ::sal_Bool _reportheaderon ) throw (uno::RuntimeException)
+void SAL_CALL OReportDefinition::setReportHeaderOn( ::sal_Bool _reportheaderon ) throw (uno::RuntimeException, std::exception)
 {
     if ( bool(_reportheaderon) != m_pImpl->m_xReportHeader.is() )
     {
@@ -1006,13 +1006,13 @@ void SAL_CALL OReportDefinition::setReportHeaderOn( ::sal_Bool _reportheaderon )
     }
 }
 
-::sal_Bool SAL_CALL OReportDefinition::getReportFooterOn() throw (uno::RuntimeException)
+::sal_Bool SAL_CALL OReportDefinition::getReportFooterOn() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_pImpl->m_xReportFooter.is();
 }
 
-void SAL_CALL OReportDefinition::setReportFooterOn( ::sal_Bool _reportfooteron ) throw (uno::RuntimeException)
+void SAL_CALL OReportDefinition::setReportFooterOn( ::sal_Bool _reportfooteron ) throw (uno::RuntimeException, std::exception)
 {
     if ( bool(_reportfooteron) != m_pImpl->m_xReportFooter.is() )
     {
@@ -1020,13 +1020,13 @@ void SAL_CALL OReportDefinition::setReportFooterOn( ::sal_Bool _reportfooteron )
     }
 }
 
-::sal_Bool SAL_CALL OReportDefinition::getPageHeaderOn() throw (uno::RuntimeException)
+::sal_Bool SAL_CALL OReportDefinition::getPageHeaderOn() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_pImpl->m_xPageHeader.is();
 }
 
-void SAL_CALL OReportDefinition::setPageHeaderOn( ::sal_Bool _pageheaderon ) throw (uno::RuntimeException)
+void SAL_CALL OReportDefinition::setPageHeaderOn( ::sal_Bool _pageheaderon ) throw (uno::RuntimeException, std::exception)
 {
     if ( bool(_pageheaderon) != m_pImpl->m_xPageHeader.is() )
     {
@@ -1034,13 +1034,13 @@ void SAL_CALL OReportDefinition::setPageHeaderOn( ::sal_Bool _pageheaderon ) thr
     }
 }
 
-::sal_Bool SAL_CALL OReportDefinition::getPageFooterOn() throw (uno::RuntimeException)
+::sal_Bool SAL_CALL OReportDefinition::getPageFooterOn() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_pImpl->m_xPageFooter.is();
 }
 
-void SAL_CALL OReportDefinition::setPageFooterOn( ::sal_Bool _pagefooteron ) throw (uno::RuntimeException)
+void SAL_CALL OReportDefinition::setPageFooterOn( ::sal_Bool _pagefooteron ) throw (uno::RuntimeException, std::exception)
 {
     if ( bool(_pagefooteron) != m_pImpl->m_xPageFooter.is() )
     {
@@ -1048,13 +1048,13 @@ void SAL_CALL OReportDefinition::setPageFooterOn( ::sal_Bool _pagefooteron ) thr
     }
 }
 
-uno::Reference< report::XGroups > SAL_CALL OReportDefinition::getGroups() throw (uno::RuntimeException)
+uno::Reference< report::XGroups > SAL_CALL OReportDefinition::getGroups() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_pImpl->m_xGroups;
 }
 
-uno::Reference< report::XSection > SAL_CALL OReportDefinition::getReportHeader() throw (container::NoSuchElementException, uno::RuntimeException)
+uno::Reference< report::XSection > SAL_CALL OReportDefinition::getReportHeader() throw (container::NoSuchElementException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     if ( !m_pImpl->m_xReportHeader.is() )
@@ -1062,7 +1062,7 @@ uno::Reference< report::XSection > SAL_CALL OReportDefinition::getReportHeader()
     return m_pImpl->m_xReportHeader;
 }
 
-uno::Reference< report::XSection > SAL_CALL OReportDefinition::getPageHeader() throw (container::NoSuchElementException, uno::RuntimeException)
+uno::Reference< report::XSection > SAL_CALL OReportDefinition::getPageHeader() throw (container::NoSuchElementException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     if ( !m_pImpl->m_xPageHeader.is() )
@@ -1070,13 +1070,13 @@ uno::Reference< report::XSection > SAL_CALL OReportDefinition::getPageHeader() t
     return m_pImpl->m_xPageHeader;
 }
 
-uno::Reference< report::XSection > SAL_CALL OReportDefinition::getDetail() throw (uno::RuntimeException)
+uno::Reference< report::XSection > SAL_CALL OReportDefinition::getDetail() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_pImpl->m_xDetail;
 }
 
-uno::Reference< report::XSection > SAL_CALL OReportDefinition::getPageFooter() throw (container::NoSuchElementException, uno::RuntimeException)
+uno::Reference< report::XSection > SAL_CALL OReportDefinition::getPageFooter() throw (container::NoSuchElementException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     if ( !m_pImpl->m_xPageFooter.is() )
@@ -1084,7 +1084,7 @@ uno::Reference< report::XSection > SAL_CALL OReportDefinition::getPageFooter() t
     return m_pImpl->m_xPageFooter;
 }
 
-uno::Reference< report::XSection > SAL_CALL OReportDefinition::getReportFooter() throw (container::NoSuchElementException, uno::RuntimeException)
+uno::Reference< report::XSection > SAL_CALL OReportDefinition::getReportFooter() throw (container::NoSuchElementException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     if ( !m_pImpl->m_xReportFooter.is() )
@@ -1092,7 +1092,7 @@ uno::Reference< report::XSection > SAL_CALL OReportDefinition::getReportFooter()
     return m_pImpl->m_xReportFooter;
 }
 
-uno::Reference< document::XEventBroadcaster > SAL_CALL OReportDefinition::getEventBroadcaster(  ) throw (lang::DisposedException, uno::Exception, uno::RuntimeException)
+uno::Reference< document::XEventBroadcaster > SAL_CALL OReportDefinition::getEventBroadcaster(  ) throw (lang::DisposedException, uno::Exception, uno::RuntimeException, std::exception)
 {
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     return this;
@@ -1103,43 +1103,43 @@ REPORTCOMPONENT_MASTERDETAIL(OReportDefinition,*m_aProps)
 REPORTCOMPONENT_IMPL(OReportDefinition,*m_aProps)
 REPORTCOMPONENT_IMPL2(OReportDefinition,*m_aProps)
 
-uno::Reference< beans::XPropertySetInfo > SAL_CALL OReportDefinition::getPropertySetInfo(  ) throw(uno::RuntimeException)
+uno::Reference< beans::XPropertySetInfo > SAL_CALL OReportDefinition::getPropertySetInfo(  ) throw(uno::RuntimeException, std::exception)
 {
     return ReportDefinitionPropertySet::getPropertySetInfo();
 }
 
-void SAL_CALL OReportDefinition::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OReportDefinition::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     ReportDefinitionPropertySet::setPropertyValue( aPropertyName, aValue );
 }
 
-uno::Any SAL_CALL OReportDefinition::getPropertyValue( const OUString& PropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+uno::Any SAL_CALL OReportDefinition::getPropertyValue( const OUString& PropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     return ReportDefinitionPropertySet::getPropertyValue( PropertyName);
 }
 
-void SAL_CALL OReportDefinition::addPropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OReportDefinition::addPropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     ReportDefinitionPropertySet::addPropertyChangeListener( aPropertyName, xListener );
 }
 
-void SAL_CALL OReportDefinition::removePropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OReportDefinition::removePropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     ReportDefinitionPropertySet::removePropertyChangeListener( aPropertyName, aListener );
 }
 
-void SAL_CALL OReportDefinition::addVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OReportDefinition::addVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     ReportDefinitionPropertySet::addVetoableChangeListener( PropertyName, aListener );
 }
 
-void SAL_CALL OReportDefinition::removeVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OReportDefinition::removeVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     ReportDefinitionPropertySet::removeVetoableChangeListener( PropertyName, aListener );
 }
 
 // XChild
-uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::getParent(  ) throw (uno::RuntimeException)
+uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::getParent(  ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     uno::Reference< container::XChild > xChild;
@@ -1149,7 +1149,7 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::getParent(  ) thro
     return m_pImpl->m_xParent;
 }
 
-void SAL_CALL OReportDefinition::setParent( const uno::Reference< uno::XInterface >& Parent ) throw (lang::NoSupportException, uno::RuntimeException)
+void SAL_CALL OReportDefinition::setParent( const uno::Reference< uno::XInterface >& Parent ) throw (lang::NoSupportException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     m_aProps->m_xParent = uno::Reference< container::XChild >(Parent,uno::UNO_QUERY);
@@ -1161,7 +1161,7 @@ void SAL_CALL OReportDefinition::setParent( const uno::Reference< uno::XInterfac
 }
 
 // XCloneable
-uno::Reference< util::XCloneable > SAL_CALL OReportDefinition::createClone(  ) throw (uno::RuntimeException)
+uno::Reference< util::XCloneable > SAL_CALL OReportDefinition::createClone(  ) throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL("Not yet implemented correctly");
     uno::Reference< report::XReportComponent> xSource = this;
@@ -1186,21 +1186,21 @@ void OReportDefinition::setSection(  const OUString& _sProperty
 }
 
 // XCloseBroadcaster
-void SAL_CALL OReportDefinition::addCloseListener( const uno::Reference< util::XCloseListener >& _xListener ) throw (uno::RuntimeException)
+void SAL_CALL OReportDefinition::addCloseListener( const uno::Reference< util::XCloseListener >& _xListener ) throw (uno::RuntimeException, std::exception)
 {
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     if ( _xListener.is() )
         m_pImpl->m_aCloseListener.addInterface(_xListener);
 }
 
-void SAL_CALL OReportDefinition::removeCloseListener( const uno::Reference< util::XCloseListener >& _xListener ) throw (uno::RuntimeException)
+void SAL_CALL OReportDefinition::removeCloseListener( const uno::Reference< util::XCloseListener >& _xListener ) throw (uno::RuntimeException, std::exception)
 {
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     m_pImpl->m_aCloseListener.removeInterface(_xListener);
 }
 
 // XCloseable
-void SAL_CALL OReportDefinition::close( ::sal_Bool _bDeliverOwnership ) throw (util::CloseVetoException, uno::RuntimeException)
+void SAL_CALL OReportDefinition::close( ::sal_Bool _bDeliverOwnership ) throw (util::CloseVetoException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -1243,7 +1243,7 @@ void SAL_CALL OReportDefinition::close( ::sal_Bool _bDeliverOwnership ) throw (u
 }
 
 // XModel
-::sal_Bool SAL_CALL OReportDefinition::attachResource( const OUString& /*_rURL*/, const uno::Sequence< beans::PropertyValue >& _aArguments ) throw (uno::RuntimeException)
+::sal_Bool SAL_CALL OReportDefinition::attachResource( const OUString& /*_rURL*/, const uno::Sequence< beans::PropertyValue >& _aArguments ) throw (uno::RuntimeException, std::exception)
 {
     // LLA: we had a deadlock problem in our context, so we get the SolarMutex earlier.
     SolarMutexGuard aSolarGuard;
@@ -1287,19 +1287,19 @@ void OReportDefinition::fillArgs(utl::MediaDescriptor& _aDescriptor)
     setCaption(sCaption);
 }
 
-OUString SAL_CALL OReportDefinition::getURL(  ) throw (uno::RuntimeException)
+OUString SAL_CALL OReportDefinition::getURL(  ) throw (uno::RuntimeException, std::exception)
 {
     return OUString();
 }
 
-uno::Sequence< beans::PropertyValue > SAL_CALL OReportDefinition::getArgs(  ) throw (uno::RuntimeException)
+uno::Sequence< beans::PropertyValue > SAL_CALL OReportDefinition::getArgs(  ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     return m_pImpl->m_aArgs;
 }
 
-void SAL_CALL OReportDefinition::connectController( const uno::Reference< frame::XController >& _xController ) throw (uno::RuntimeException)
+void SAL_CALL OReportDefinition::connectController( const uno::Reference< frame::XController >& _xController ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -1311,7 +1311,7 @@ void SAL_CALL OReportDefinition::connectController( const uno::Reference< frame:
     }
 }
 
-void SAL_CALL OReportDefinition::disconnectController( const uno::Reference< frame::XController >& _xController ) throw (uno::RuntimeException)
+void SAL_CALL OReportDefinition::disconnectController( const uno::Reference< frame::XController >& _xController ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -1322,35 +1322,35 @@ void SAL_CALL OReportDefinition::disconnectController( const uno::Reference< fra
         m_pImpl->m_xCurrentController.clear();
 }
 
-void SAL_CALL OReportDefinition::lockControllers(  ) throw (uno::RuntimeException)
+void SAL_CALL OReportDefinition::lockControllers(  ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     m_pImpl->m_bControllersLocked = sal_True;
 }
 
-void SAL_CALL OReportDefinition::unlockControllers(  ) throw (uno::RuntimeException)
+void SAL_CALL OReportDefinition::unlockControllers(  ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     m_pImpl->m_bControllersLocked = sal_False;
 }
 
-::sal_Bool SAL_CALL OReportDefinition::hasControllersLocked(  ) throw (uno::RuntimeException)
+::sal_Bool SAL_CALL OReportDefinition::hasControllersLocked(  ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     return m_pImpl->m_bControllersLocked;
 }
 
-uno::Reference< frame::XController > SAL_CALL OReportDefinition::getCurrentController(  ) throw (uno::RuntimeException)
+uno::Reference< frame::XController > SAL_CALL OReportDefinition::getCurrentController(  ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     return m_pImpl->m_xCurrentController;
 }
 
-void SAL_CALL OReportDefinition::setCurrentController( const uno::Reference< frame::XController >& _xController ) throw (container::NoSuchElementException, uno::RuntimeException)
+void SAL_CALL OReportDefinition::setCurrentController( const uno::Reference< frame::XController >& _xController ) throw (container::NoSuchElementException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -1359,7 +1359,7 @@ void SAL_CALL OReportDefinition::setCurrentController( const uno::Reference< fra
     m_pImpl->m_xCurrentController = _xController;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::getCurrentSelection(  ) throw (uno::RuntimeException)
+uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::getCurrentSelection(  ) throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< uno::XInterface >();
 }
@@ -1409,7 +1409,7 @@ void OReportDefinition::impl_loadFromStorage_nolck_throw( const uno::Reference< 
 
 // XStorageBasedDocument
 void SAL_CALL OReportDefinition::loadFromStorage( const uno::Reference< embed::XStorage >& _xStorageToLoadFrom
-                                                 , const uno::Sequence< beans::PropertyValue >& _aMediaDescriptor ) throw (lang::IllegalArgumentException, frame::DoubleInitializationException, io::IOException, uno::Exception, uno::RuntimeException)
+                                                 , const uno::Sequence< beans::PropertyValue >& _aMediaDescriptor ) throw (lang::IllegalArgumentException, frame::DoubleInitializationException, io::IOException, uno::Exception, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -1417,7 +1417,7 @@ void SAL_CALL OReportDefinition::loadFromStorage( const uno::Reference< embed::X
     impl_loadFromStorage_nolck_throw( _xStorageToLoadFrom, _aMediaDescriptor );
 }
 
-void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XStorage >& _xStorageToSaveTo, const uno::Sequence< beans::PropertyValue >& _aMediaDescriptor ) throw (lang::IllegalArgumentException, io::IOException, uno::Exception, uno::RuntimeException)
+void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XStorage >& _xStorageToSaveTo, const uno::Sequence< beans::PropertyValue >& _aMediaDescriptor ) throw (lang::IllegalArgumentException, io::IOException, uno::Exception, uno::RuntimeException, std::exception)
 {
     if ( !_xStorageToSaveTo.is() )
         throw lang::IllegalArgumentException(RPT_RESSTRING(RID_STR_ARGUMENT_IS_NULL,m_aProps->m_xContext->getServiceManager()),*this,1);
@@ -1596,7 +1596,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
         xStatusIndicator->end();
 }
 
-void SAL_CALL OReportDefinition::switchToStorage( const uno::Reference< embed::XStorage >& _xStorage ) throw (lang::IllegalArgumentException, io::IOException, uno::Exception, uno::RuntimeException)
+void SAL_CALL OReportDefinition::switchToStorage( const uno::Reference< embed::XStorage >& _xStorage ) throw (lang::IllegalArgumentException, io::IOException, uno::Exception, uno::RuntimeException, std::exception)
 {
     if ( !_xStorage.is() )
         throw lang::IllegalArgumentException(RPT_RESSTRING(RID_STR_ARGUMENT_IS_NULL,m_aProps->m_xContext->getServiceManager()),*this,1);
@@ -1612,14 +1612,14 @@ void SAL_CALL OReportDefinition::switchToStorage( const uno::Reference< embed::X
             ::boost::bind(&document::XStorageChangeListener::notifyStorageChange,_1,boost::cref(static_cast<OWeakObject*>(this)),boost::cref(_xStorage)));
 }
 
-uno::Reference< embed::XStorage > SAL_CALL OReportDefinition::getDocumentStorage(  ) throw (io::IOException, uno::Exception, uno::RuntimeException)
+uno::Reference< embed::XStorage > SAL_CALL OReportDefinition::getDocumentStorage(  ) throw (io::IOException, uno::Exception, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     return m_pImpl->m_xStorage;
 }
 
-void SAL_CALL OReportDefinition::addStorageChangeListener( const uno::Reference< document::XStorageChangeListener >& xListener ) throw (uno::RuntimeException)
+void SAL_CALL OReportDefinition::addStorageChangeListener( const uno::Reference< document::XStorageChangeListener >& xListener ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -1627,7 +1627,7 @@ void SAL_CALL OReportDefinition::addStorageChangeListener( const uno::Reference<
         m_pImpl->m_aStorageChangeListeners.addInterface(xListener);
 }
 
-void SAL_CALL OReportDefinition::removeStorageChangeListener( const uno::Reference< document::XStorageChangeListener >& xListener ) throw (uno::RuntimeException)
+void SAL_CALL OReportDefinition::removeStorageChangeListener( const uno::Reference< document::XStorageChangeListener >& xListener ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -1734,13 +1734,13 @@ sal_Bool OReportDefinition::WriteThroughComponent(
 }
 
 // XLoadable
-void SAL_CALL OReportDefinition::initNew(  ) throw (frame::DoubleInitializationException, io::IOException, uno::Exception, uno::RuntimeException)
+void SAL_CALL OReportDefinition::initNew(  ) throw (frame::DoubleInitializationException, io::IOException, uno::Exception, uno::RuntimeException, std::exception)
 {
      setPageHeaderOn( sal_True );
      setPageFooterOn( sal_True );
 }
 
-void SAL_CALL OReportDefinition::load( const uno::Sequence< beans::PropertyValue >& _rArguments ) throw (frame::DoubleInitializationException, io::IOException, uno::Exception, uno::RuntimeException)
+void SAL_CALL OReportDefinition::load( const uno::Sequence< beans::PropertyValue >& _rArguments ) throw (frame::DoubleInitializationException, io::IOException, uno::Exception, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -1838,7 +1838,7 @@ void SAL_CALL OReportDefinition::load( const uno::Sequence< beans::PropertyValue
 }
 
 // XVisualObject
-void SAL_CALL OReportDefinition::setVisualAreaSize( ::sal_Int64 _nAspect, const awt::Size& _aSize ) throw (lang::IllegalArgumentException, embed::WrongStateException, uno::Exception, uno::RuntimeException)
+void SAL_CALL OReportDefinition::setVisualAreaSize( ::sal_Int64 _nAspect, const awt::Size& _aSize ) throw (lang::IllegalArgumentException, embed::WrongStateException, uno::Exception, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -1851,14 +1851,14 @@ void SAL_CALL OReportDefinition::setVisualAreaSize( ::sal_Int64 _nAspect, const 
     m_pImpl->m_nAspect = _nAspect;
 }
 
-awt::Size SAL_CALL OReportDefinition::getVisualAreaSize( ::sal_Int64 /*_nAspect*/ ) throw (lang::IllegalArgumentException, embed::WrongStateException, uno::Exception, uno::RuntimeException)
+awt::Size SAL_CALL OReportDefinition::getVisualAreaSize( ::sal_Int64 /*_nAspect*/ ) throw (lang::IllegalArgumentException, embed::WrongStateException, uno::Exception, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     return m_pImpl->m_aVisualAreaSize;
 }
 
-embed::VisualRepresentation SAL_CALL OReportDefinition::getPreferredVisualRepresentation( ::sal_Int64 /*_nAspect*/ ) throw (lang::IllegalArgumentException, embed::WrongStateException, uno::Exception, uno::RuntimeException)
+embed::VisualRepresentation SAL_CALL OReportDefinition::getPreferredVisualRepresentation( ::sal_Int64 /*_nAspect*/ ) throw (lang::IllegalArgumentException, embed::WrongStateException, uno::Exception, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -1879,13 +1879,13 @@ embed::VisualRepresentation SAL_CALL OReportDefinition::getPreferredVisualRepres
     return aResult;
 }
 
-::sal_Int32 SAL_CALL OReportDefinition::getMapUnit( ::sal_Int64 /*nAspect*/ ) throw (uno::Exception, uno::RuntimeException)
+::sal_Int32 SAL_CALL OReportDefinition::getMapUnit( ::sal_Int64 /*nAspect*/ ) throw (uno::Exception, uno::RuntimeException, std::exception)
 {
     return embed::EmbedMapUnits::ONE_100TH_MM;
 }
 
 // XModifiable
-::sal_Bool SAL_CALL OReportDefinition::disableSetModified(  ) throw (uno::RuntimeException)
+::sal_Bool SAL_CALL OReportDefinition::disableSetModified(  ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     ::connectivity::checkDisposed( ReportDefinitionBase::rBHelper.bDisposed );
@@ -1895,7 +1895,7 @@ embed::VisualRepresentation SAL_CALL OReportDefinition::getPreferredVisualRepres
     return bWasEnabled;
 }
 
-::sal_Bool SAL_CALL OReportDefinition::enableSetModified(  ) throw (uno::RuntimeException)
+::sal_Bool SAL_CALL OReportDefinition::enableSetModified(  ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     ::connectivity::checkDisposed( ReportDefinitionBase::rBHelper.bDisposed );
@@ -1905,7 +1905,7 @@ embed::VisualRepresentation SAL_CALL OReportDefinition::getPreferredVisualRepres
     return bWasEnabled;
 }
 
-::sal_Bool SAL_CALL OReportDefinition::isSetModifiedEnabled(  ) throw (uno::RuntimeException)
+::sal_Bool SAL_CALL OReportDefinition::isSetModifiedEnabled(  ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     ::connectivity::checkDisposed( ReportDefinitionBase::rBHelper.bDisposed );
@@ -1914,14 +1914,14 @@ embed::VisualRepresentation SAL_CALL OReportDefinition::getPreferredVisualRepres
 }
 
 // XModifiable
-::sal_Bool SAL_CALL OReportDefinition::isModified(  ) throw (uno::RuntimeException)
+::sal_Bool SAL_CALL OReportDefinition::isModified(  ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     return m_pImpl->m_bModified;
 }
 
-void SAL_CALL OReportDefinition::setModified( ::sal_Bool _bModified ) throw (beans::PropertyVetoException, uno::RuntimeException)
+void SAL_CALL OReportDefinition::setModified( ::sal_Bool _bModified ) throw (beans::PropertyVetoException, uno::RuntimeException, std::exception)
 {
     ::osl::ResettableMutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -1945,7 +1945,7 @@ void SAL_CALL OReportDefinition::setModified( ::sal_Bool _bModified ) throw (bea
 }
 
 // XModifyBroadcaster
-void SAL_CALL OReportDefinition::addModifyListener( const uno::Reference< util::XModifyListener >& _xListener ) throw (uno::RuntimeException)
+void SAL_CALL OReportDefinition::addModifyListener( const uno::Reference< util::XModifyListener >& _xListener ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -1953,7 +1953,7 @@ void SAL_CALL OReportDefinition::addModifyListener( const uno::Reference< util::
         m_pImpl->m_aModifyListeners.addInterface(_xListener);
 }
 
-void SAL_CALL OReportDefinition::removeModifyListener( const uno::Reference< util::XModifyListener >& _xListener ) throw (uno::RuntimeException)
+void SAL_CALL OReportDefinition::removeModifyListener( const uno::Reference< util::XModifyListener >& _xListener ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -1976,7 +1976,7 @@ void OReportDefinition::notifyEvent(const OUString& _sEventName)
 }
 
 // document::XEventBroadcaster
-void SAL_CALL OReportDefinition::addEventListener(const uno::Reference< document::XEventListener >& _xListener ) throw (uno::RuntimeException)
+void SAL_CALL OReportDefinition::addEventListener(const uno::Reference< document::XEventListener >& _xListener ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -1984,7 +1984,7 @@ void SAL_CALL OReportDefinition::addEventListener(const uno::Reference< document
         m_pImpl->m_aDocEventListeners.addInterface(_xListener);
 }
 
-void SAL_CALL OReportDefinition::removeEventListener( const uno::Reference< document::XEventListener >& _xListener ) throw (uno::RuntimeException)
+void SAL_CALL OReportDefinition::removeEventListener( const uno::Reference< document::XEventListener >& _xListener ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -2000,7 +2000,7 @@ void SAL_CALL OReportDefinition::notifyEvent( const document::EventObject& aEven
 }
 
 // document::XViewDataSupplier
-uno::Reference< container::XIndexAccess > SAL_CALL OReportDefinition::getViewData(  ) throw (uno::RuntimeException)
+uno::Reference< container::XIndexAccess > SAL_CALL OReportDefinition::getViewData(  ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -2028,21 +2028,21 @@ uno::Reference< container::XIndexAccess > SAL_CALL OReportDefinition::getViewDat
     return m_pImpl->m_xViewData;
 }
 
-void SAL_CALL OReportDefinition::setViewData( const uno::Reference< container::XIndexAccess >& Data ) throw (uno::RuntimeException)
+void SAL_CALL OReportDefinition::setViewData( const uno::Reference< container::XIndexAccess >& Data ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     m_pImpl->m_xViewData = Data;
 }
 
-uno::Reference< report::XFunctions > SAL_CALL OReportDefinition::getFunctions() throw (uno::RuntimeException)
+uno::Reference< report::XFunctions > SAL_CALL OReportDefinition::getFunctions() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     return m_pImpl->m_xFunctions;
 }
 
-uno::Reference< ui::XUIConfigurationManager > SAL_CALL OReportDefinition::getUIConfigurationManager(  ) throw (uno::RuntimeException)
+uno::Reference< ui::XUIConfigurationManager > SAL_CALL OReportDefinition::getUIConfigurationManager(  ) throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< ui::XUIConfigurationManager >( getUIConfigurationManager2(), uno::UNO_QUERY_THROW );
 }
@@ -2064,14 +2064,14 @@ uno::Reference< ui::XUIConfigurationManager2 > OReportDefinition::getUIConfigura
     return m_pImpl->m_xUIConfigurationManager;
 }
 
-uno::Reference< embed::XStorage > SAL_CALL OReportDefinition::getDocumentSubStorage( const OUString& aStorageName, sal_Int32 nMode ) throw (uno::RuntimeException)
+uno::Reference< embed::XStorage > SAL_CALL OReportDefinition::getDocumentSubStorage( const OUString& aStorageName, sal_Int32 nMode ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     return m_pImpl->m_xStorage->openStorageElement(aStorageName, nMode);
 }
 
-uno::Sequence< OUString > SAL_CALL OReportDefinition::getDocumentSubStoragesNames(  ) throw (io::IOException, uno::RuntimeException)
+uno::Sequence< OUString > SAL_CALL OReportDefinition::getDocumentSubStoragesNames(  ) throw (io::IOException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -2079,14 +2079,14 @@ uno::Sequence< OUString > SAL_CALL OReportDefinition::getDocumentSubStoragesName
     return xNameAccess.is() ? xNameAccess->getElementNames() : uno::Sequence< OUString >();
 }
 
-OUString SAL_CALL OReportDefinition::getMimeType() throw (uno::RuntimeException)
+OUString SAL_CALL OReportDefinition::getMimeType() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     return m_pImpl->m_sMimeType;
 }
 
-void SAL_CALL OReportDefinition::setMimeType( const OUString& _mimetype ) throw (lang::IllegalArgumentException, uno::RuntimeException)
+void SAL_CALL OReportDefinition::setMimeType( const OUString& _mimetype ) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -2100,7 +2100,7 @@ void SAL_CALL OReportDefinition::setMimeType( const OUString& _mimetype ) throw 
     set(PROPERTY_MIMETYPE,_mimetype,m_pImpl->m_sMimeType);
 }
 
-uno::Sequence< OUString > SAL_CALL OReportDefinition::getAvailableMimeTypes(  ) throw (lang::DisposedException, uno::Exception, uno::RuntimeException)
+uno::Sequence< OUString > SAL_CALL OReportDefinition::getAvailableMimeTypes(  ) throw (lang::DisposedException, uno::Exception, uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString > s_aList(2);
     s_aList[0] = MIMETYPE_OASIS_OPENDOCUMENT_TEXT;
@@ -2109,7 +2109,7 @@ uno::Sequence< OUString > SAL_CALL OReportDefinition::getAvailableMimeTypes(  ) 
 }
 
 // com::sun::star::XUnoTunnel
-sal_Int64 SAL_CALL OReportDefinition::getSomething( const uno::Sequence< sal_Int8 >& rId ) throw(uno::RuntimeException)
+sal_Int64 SAL_CALL OReportDefinition::getSomething( const uno::Sequence< sal_Int8 >& rId ) throw(uno::RuntimeException, std::exception)
 {
     sal_Int64 nRet = 0;
     if (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
@@ -2131,7 +2131,7 @@ sal_Int64 SAL_CALL OReportDefinition::getSomething( const uno::Sequence< sal_Int
     return nRet;
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL OReportDefinition::getImplementationId(  ) throw (uno::RuntimeException)
+uno::Sequence< sal_Int8 > SAL_CALL OReportDefinition::getImplementationId(  ) throw (uno::RuntimeException, std::exception)
 {
     return OReportDefinition::getUnoTunnelImplementationId();
 }
@@ -2173,7 +2173,7 @@ uno::Reference< uno::XComponentContext > OReportDefinition::getContext()
 }
 
 uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstanceWithArguments( const OUString& aServiceSpecifier, const uno::Sequence< uno::Any >& _aArgs)
-    throw( uno::Exception, uno::RuntimeException )
+    throw( uno::Exception, uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -2197,7 +2197,7 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstanceWith
     return xRet;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstance( const OUString& aServiceSpecifier ) throw(uno::Exception, uno::RuntimeException)
+uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstance( const OUString& aServiceSpecifier ) throw(uno::Exception, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -2317,7 +2317,7 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstance( co
     return m_pImpl->m_pReportModel->createShape(aServiceSpecifier,xShape);
 }
 
-uno::Sequence< OUString > SAL_CALL OReportDefinition::getAvailableServiceNames(void) throw( uno::RuntimeException )
+uno::Sequence< OUString > SAL_CALL OReportDefinition::getAvailableServiceNames(void) throw( uno::RuntimeException, std::exception )
 {
     static const OUString aSvxComponentServiceNameList[] =
     {
@@ -2354,7 +2354,7 @@ uno::Sequence< OUString > SAL_CALL OReportDefinition::getAvailableServiceNames(v
 }
 
 // XShape
-awt::Point SAL_CALL OReportDefinition::getPosition(  ) throw (uno::RuntimeException)
+awt::Point SAL_CALL OReportDefinition::getPosition(  ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -2363,7 +2363,7 @@ awt::Point SAL_CALL OReportDefinition::getPosition(  ) throw (uno::RuntimeExcept
     return awt::Point(m_aProps->m_nPosX,m_aProps->m_nPosY);
 }
 
-void SAL_CALL OReportDefinition::setPosition( const awt::Point& aPosition ) throw (uno::RuntimeException)
+void SAL_CALL OReportDefinition::setPosition( const awt::Point& aPosition ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -2373,7 +2373,7 @@ void SAL_CALL OReportDefinition::setPosition( const awt::Point& aPosition ) thro
     set(PROPERTY_POSITIONY,aPosition.Y,m_aProps->m_nPosY);
 }
 
-awt::Size SAL_CALL OReportDefinition::getSize(  ) throw (uno::RuntimeException)
+awt::Size SAL_CALL OReportDefinition::getSize(  ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -2382,7 +2382,7 @@ awt::Size SAL_CALL OReportDefinition::getSize(  ) throw (uno::RuntimeException)
     return awt::Size(m_aProps->m_nWidth,m_aProps->m_nHeight);
 }
 
-void SAL_CALL OReportDefinition::setSize( const awt::Size& aSize ) throw (beans::PropertyVetoException, uno::RuntimeException)
+void SAL_CALL OReportDefinition::setSize( const awt::Size& aSize ) throw (beans::PropertyVetoException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -2394,7 +2394,7 @@ void SAL_CALL OReportDefinition::setSize( const awt::Size& aSize ) throw (beans:
 
 
 // XShapeDescriptor
-OUString SAL_CALL OReportDefinition::getShapeType(  ) throw (uno::RuntimeException)
+OUString SAL_CALL OReportDefinition::getShapeType(  ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -2421,23 +2421,23 @@ public:
     OStylesHelper(const uno::Type _aType = ::getCppuType(static_cast< uno::Reference< container::XElementAccess >* >(NULL)));
 
     // XNameContainer
-    virtual void SAL_CALL insertByName( const OUString& aName, const uno::Any& aElement ) throw(lang::IllegalArgumentException, container::ElementExistException,lang::WrappedTargetException, uno::RuntimeException);
-    virtual void SAL_CALL removeByName( const OUString& Name ) throw(container::NoSuchElementException, lang::WrappedTargetException,uno::RuntimeException);
+    virtual void SAL_CALL insertByName( const OUString& aName, const uno::Any& aElement ) throw(lang::IllegalArgumentException, container::ElementExistException,lang::WrappedTargetException, uno::RuntimeException, std::exception);
+    virtual void SAL_CALL removeByName( const OUString& Name ) throw(container::NoSuchElementException, lang::WrappedTargetException,uno::RuntimeException, std::exception);
 
     // XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString& aName, const uno::Any& aElement ) throw(lang::IllegalArgumentException, container::NoSuchElementException,lang::WrappedTargetException, uno::RuntimeException);
+    virtual void SAL_CALL replaceByName( const OUString& aName, const uno::Any& aElement ) throw(lang::IllegalArgumentException, container::NoSuchElementException,lang::WrappedTargetException, uno::RuntimeException, std::exception);
 
     // container::XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) throw(uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasElements(  ) throw(uno::RuntimeException);
+    virtual uno::Type SAL_CALL getElementType(  ) throw(uno::RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL hasElements(  ) throw(uno::RuntimeException, std::exception);
     // container::XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount(  ) throw(uno::RuntimeException);
-    virtual uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw(lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getCount(  ) throw(uno::RuntimeException, std::exception);
+    virtual uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw(lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception);
 
     // container::XNameAccess
-    virtual uno::Any SAL_CALL getByName( const OUString& aName ) throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException);
-    virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw(uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw(uno::RuntimeException);
+    virtual uno::Any SAL_CALL getByName( const OUString& aName ) throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception);
+    virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw(uno::RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw(uno::RuntimeException, std::exception);
 };
 
 OStylesHelper::OStylesHelper(const uno::Type _aType)
@@ -2448,25 +2448,25 @@ OStylesHelper::OStylesHelper(const uno::Type _aType)
 ;
 
 // container::XElementAccess
-uno::Type SAL_CALL OStylesHelper::getElementType(  ) throw(uno::RuntimeException)
+uno::Type SAL_CALL OStylesHelper::getElementType(  ) throw(uno::RuntimeException, std::exception)
 {
     return m_aType;
 }
 
-sal_Bool SAL_CALL OStylesHelper::hasElements(  ) throw(uno::RuntimeException)
+sal_Bool SAL_CALL OStylesHelper::hasElements(  ) throw(uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return !m_aElementsPos.empty();
 }
 
 // container::XIndexAccess
-sal_Int32 SAL_CALL OStylesHelper::getCount(  ) throw(uno::RuntimeException)
+sal_Int32 SAL_CALL OStylesHelper::getCount(  ) throw(uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_aElementsPos.size();
 }
 
-uno::Any SAL_CALL OStylesHelper::getByIndex( sal_Int32 Index ) throw(lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
+uno::Any SAL_CALL OStylesHelper::getByIndex( sal_Int32 Index ) throw(lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     if ( Index < 0 || Index >= static_cast<sal_Int32>(m_aElementsPos.size()) )
@@ -2475,7 +2475,7 @@ uno::Any SAL_CALL OStylesHelper::getByIndex( sal_Int32 Index ) throw(lang::Index
 }
 
 // container::XNameAccess
-uno::Any SAL_CALL OStylesHelper::getByName( const OUString& aName ) throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+uno::Any SAL_CALL OStylesHelper::getByName( const OUString& aName ) throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     TStyleElements::iterator aFind = m_aElements.find(aName);
@@ -2484,7 +2484,7 @@ uno::Any SAL_CALL OStylesHelper::getByName( const OUString& aName ) throw(contai
     return uno::makeAny(aFind->second);
 }
 
-uno::Sequence< OUString > SAL_CALL OStylesHelper::getElementNames(  ) throw(uno::RuntimeException)
+uno::Sequence< OUString > SAL_CALL OStylesHelper::getElementNames(  ) throw(uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     uno::Sequence< OUString > aNameList(m_aElementsPos.size());
@@ -2497,14 +2497,14 @@ uno::Sequence< OUString > SAL_CALL OStylesHelper::getElementNames(  ) throw(uno:
     return aNameList;
 }
 
-sal_Bool SAL_CALL OStylesHelper::hasByName( const OUString& aName ) throw(uno::RuntimeException)
+sal_Bool SAL_CALL OStylesHelper::hasByName( const OUString& aName ) throw(uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_aElements.find(aName) != m_aElements.end();
 }
 
 // XNameContainer
-void SAL_CALL OStylesHelper::insertByName( const OUString& aName, const uno::Any& aElement ) throw(lang::IllegalArgumentException, container::ElementExistException,lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OStylesHelper::insertByName( const OUString& aName, const uno::Any& aElement ) throw(lang::IllegalArgumentException, container::ElementExistException,lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     if ( m_aElements.find(aName) != m_aElements.end() )
@@ -2516,7 +2516,7 @@ void SAL_CALL OStylesHelper::insertByName( const OUString& aName, const uno::Any
     m_aElementsPos.push_back(m_aElements.insert(TStyleElements::value_type(aName,aElement)).first);
 }
 
-void SAL_CALL OStylesHelper::removeByName( const OUString& aName ) throw(container::NoSuchElementException, lang::WrappedTargetException,uno::RuntimeException)
+void SAL_CALL OStylesHelper::removeByName( const OUString& aName ) throw(container::NoSuchElementException, lang::WrappedTargetException,uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     TStyleElements::iterator aFind = m_aElements.find(aName);
@@ -2527,7 +2527,7 @@ void SAL_CALL OStylesHelper::removeByName( const OUString& aName ) throw(contain
 }
 
 // XNameReplace
-void SAL_CALL OStylesHelper::replaceByName( const OUString& aName, const uno::Any& aElement ) throw(lang::IllegalArgumentException, container::NoSuchElementException,lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OStylesHelper::replaceByName( const OUString& aName, const uno::Any& aElement ) throw(lang::IllegalArgumentException, container::NoSuchElementException,lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     TStyleElements::iterator aFind = m_aElements.find(aName);
@@ -2538,7 +2538,7 @@ void SAL_CALL OStylesHelper::replaceByName( const OUString& aName, const uno::An
     aFind->second = aElement;
 }
 
-uno::Reference< container::XNameAccess > SAL_CALL OReportDefinition::getStyleFamilies(  ) throw (uno::RuntimeException)
+uno::Reference< container::XNameAccess > SAL_CALL OReportDefinition::getStyleFamilies(  ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -2564,14 +2564,14 @@ uno::Reference< container::XNameAccess > SAL_CALL OReportDefinition::getStyleFam
     }
     return m_pImpl->m_xStyles;
 }
-OUString SAL_CALL  OReportDefinition::getIdentifier(  ) throw (uno::RuntimeException)
+OUString SAL_CALL  OReportDefinition::getIdentifier(  ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     return m_pImpl->m_sIdentifier;
 }
 
-void SAL_CALL OReportDefinition::setIdentifier( const OUString& Identifier ) throw (uno::RuntimeException)
+void SAL_CALL OReportDefinition::setIdentifier( const OUString& Identifier ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -2579,7 +2579,7 @@ void SAL_CALL OReportDefinition::setIdentifier( const OUString& Identifier ) thr
 }
 
 // XNumberFormatsSupplier
-uno::Reference< beans::XPropertySet > SAL_CALL OReportDefinition::getNumberFormatSettings(  ) throw (uno::RuntimeException)
+uno::Reference< beans::XPropertySet > SAL_CALL OReportDefinition::getNumberFormatSettings(  ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     if ( m_pImpl->m_xNumberFormatsSupplier.is() )
@@ -2587,7 +2587,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL OReportDefinition::getNumberForma
     return uno::Reference< beans::XPropertySet >();
 }
 
-uno::Reference< util::XNumberFormats > SAL_CALL OReportDefinition::getNumberFormats(  ) throw (uno::RuntimeException)
+uno::Reference< util::XNumberFormats > SAL_CALL OReportDefinition::getNumberFormats(  ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     if ( m_pImpl->m_xNumberFormatsSupplier.is() )
@@ -2612,26 +2612,26 @@ uno::Reference< task::XInteractionHandler > OReportDefinition::getInteractionHan
     return xRet;
 }
 
-uno::Reference< sdbc::XConnection > SAL_CALL OReportDefinition::getActiveConnection() throw (uno::RuntimeException)
+uno::Reference< sdbc::XConnection > SAL_CALL OReportDefinition::getActiveConnection() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_pImpl->m_xActiveConnection;
 }
 
-void SAL_CALL OReportDefinition::setActiveConnection( const uno::Reference< sdbc::XConnection >& _activeconnection ) throw (lang::IllegalArgumentException, uno::RuntimeException)
+void SAL_CALL OReportDefinition::setActiveConnection( const uno::Reference< sdbc::XConnection >& _activeconnection ) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     if ( !_activeconnection.is() )
         throw lang::IllegalArgumentException();
     set(PROPERTY_ACTIVECONNECTION,_activeconnection,m_pImpl->m_xActiveConnection);
 }
 
-OUString SAL_CALL OReportDefinition::getDataSourceName() throw (uno::RuntimeException)
+OUString SAL_CALL OReportDefinition::getDataSourceName() throw (uno::RuntimeException, std::exception)
 {
     osl::MutexGuard g(m_aMutex);
     return m_pImpl->m_sDataSourceName;
 }
 
-void SAL_CALL OReportDefinition::setDataSourceName(const OUString& the_value) throw (uno::RuntimeException)
+void SAL_CALL OReportDefinition::setDataSourceName(const OUString& the_value) throw (uno::RuntimeException, std::exception)
 {
     set(PROPERTY_DATASOURCENAME,the_value,m_pImpl->m_sDataSourceName);
 }
@@ -2684,7 +2684,7 @@ uno::Reference< frame::XUntitledNumbers > OReportDefinition::impl_getUntitledHel
 
 // css.frame.XTitle
 OUString SAL_CALL OReportDefinition::getTitle()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     // SYNCHRONIZED ->
     SolarMutexGuard aSolarGuard;
@@ -2697,7 +2697,7 @@ OUString SAL_CALL OReportDefinition::getTitle()
 
 // css.frame.XTitle
 void SAL_CALL OReportDefinition::setTitle( const OUString& sTitle )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     // SYNCHRONIZED ->
     SolarMutexGuard aSolarGuard;
@@ -2710,7 +2710,7 @@ void SAL_CALL OReportDefinition::setTitle( const OUString& sTitle )
 
 // css.frame.XTitleChangeBroadcaster
 void SAL_CALL OReportDefinition::addTitleChangeListener( const uno::Reference< frame::XTitleChangeListener >& xListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     // SYNCHRONIZED ->
     SolarMutexGuard aSolarGuard;
@@ -2725,7 +2725,7 @@ void SAL_CALL OReportDefinition::addTitleChangeListener( const uno::Reference< f
 
 // css.frame.XTitleChangeBroadcaster
 void SAL_CALL OReportDefinition::removeTitleChangeListener( const uno::Reference< frame::XTitleChangeListener >& xListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     // SYNCHRONIZED ->
     SolarMutexGuard aSolarGuard;
@@ -2741,7 +2741,7 @@ void SAL_CALL OReportDefinition::removeTitleChangeListener( const uno::Reference
 // css.frame.XUntitledNumbers
 ::sal_Int32 SAL_CALL OReportDefinition::leaseNumber( const uno::Reference< uno::XInterface >& xComponent )
     throw (lang::IllegalArgumentException,
-           uno::RuntimeException         )
+           uno::RuntimeException, std::exception         )
 {
     // object already disposed?
     SolarMutexGuard aSolarGuard;
@@ -2754,7 +2754,7 @@ void SAL_CALL OReportDefinition::removeTitleChangeListener( const uno::Reference
 // css.frame.XUntitledNumbers
 void SAL_CALL OReportDefinition::releaseNumber( ::sal_Int32 nNumber )
     throw (lang::IllegalArgumentException,
-           uno::RuntimeException         )
+           uno::RuntimeException, std::exception         )
 {
     // object already disposed?
     SolarMutexGuard aSolarGuard;
@@ -2767,7 +2767,7 @@ void SAL_CALL OReportDefinition::releaseNumber( ::sal_Int32 nNumber )
 // css.frame.XUntitledNumbers
 void SAL_CALL OReportDefinition::releaseNumberForComponent( const uno::Reference< uno::XInterface >& xComponent )
     throw (lang::IllegalArgumentException,
-           uno::RuntimeException         )
+           uno::RuntimeException, std::exception         )
 {
     // object already disposed?
     SolarMutexGuard aSolarGuard;
@@ -2779,7 +2779,7 @@ void SAL_CALL OReportDefinition::releaseNumberForComponent( const uno::Reference
 
 // css.frame.XUntitledNumbers
 OUString SAL_CALL OReportDefinition::getUntitledPrefix()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     // object already disposed?
     SolarMutexGuard aSolarGuard;
@@ -2789,7 +2789,7 @@ OUString SAL_CALL OReportDefinition::getUntitledPrefix()
     return impl_getUntitledHelper_throw()->getUntitledPrefix ();
 }
 
-uno::Reference< document::XDocumentProperties > SAL_CALL OReportDefinition::getDocumentProperties(  ) throw (uno::RuntimeException)
+uno::Reference< document::XDocumentProperties > SAL_CALL OReportDefinition::getDocumentProperties(  ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -2805,7 +2805,7 @@ uno::Reference< uno::XComponentContext > OReportDefinition::getContext() const
     return m_aProps->m_xContext;
 }
 
-uno::Any SAL_CALL OReportDefinition::getTransferData( const datatransfer::DataFlavor& aFlavor ) throw (datatransfer::UnsupportedFlavorException, io::IOException, uno::RuntimeException)
+uno::Any SAL_CALL OReportDefinition::getTransferData( const datatransfer::DataFlavor& aFlavor ) throw (datatransfer::UnsupportedFlavorException, io::IOException, uno::RuntimeException, std::exception)
 {
     uno::Any aResult;
     if( isDataFlavorSupported( aFlavor ) )
@@ -2827,7 +2827,7 @@ uno::Any SAL_CALL OReportDefinition::getTransferData( const datatransfer::DataFl
     return aResult;
 }
 
-uno::Sequence< datatransfer::DataFlavor > SAL_CALL OReportDefinition::getTransferDataFlavors(  ) throw (uno::RuntimeException)
+uno::Sequence< datatransfer::DataFlavor > SAL_CALL OReportDefinition::getTransferDataFlavors(  ) throw (uno::RuntimeException, std::exception)
 {
     uno::Sequence< datatransfer::DataFlavor > aRet(1);
 
@@ -2838,13 +2838,13 @@ uno::Sequence< datatransfer::DataFlavor > SAL_CALL OReportDefinition::getTransfe
     return aRet;
 }
 
-::sal_Bool SAL_CALL OReportDefinition::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor ) throw (uno::RuntimeException)
+::sal_Bool SAL_CALL OReportDefinition::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor ) throw (uno::RuntimeException, std::exception)
 {
     return aFlavor.MimeType == "image/png";
 }
 
 
-uno::Reference< document::XUndoManager > SAL_CALL OReportDefinition::getUndoManager(  ) throw (uno::RuntimeException)
+uno::Reference< document::XUndoManager > SAL_CALL OReportDefinition::getUndoManager(  ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     return m_pImpl->m_pUndoManager.get();

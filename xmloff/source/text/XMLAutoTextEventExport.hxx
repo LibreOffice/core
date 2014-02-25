@@ -67,7 +67,7 @@ public:
             ::com::sun::star::uno::Any> & rArguments )
         throw(
             ::com::sun::star::uno::Exception,
-            ::com::sun::star::uno::RuntimeException);
+            ::com::sun::star::uno::RuntimeException, std::exception);
 
 protected:
 

@@ -69,12 +69,12 @@ class GlobalSettings_Access : private ThreadHelpBase                         ,  
         virtual ~GlobalSettings_Access();
 
         // XComponent
-        virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
         // settings access
         sal_Bool HasStatesInfo( GlobalSettings::UIElementType eElementType );
@@ -116,7 +116,7 @@ GlobalSettings_Access::~GlobalSettings_Access()
 
 // XComponent
 void SAL_CALL GlobalSettings_Access::dispose()
-throw ( css::uno::RuntimeException )
+throw ( css::uno::RuntimeException, std::exception )
 {
     // SAFE
     ResetableGuard aLock( m_aLock );
@@ -126,18 +126,18 @@ throw ( css::uno::RuntimeException )
 }
 
 void SAL_CALL GlobalSettings_Access::addEventListener( const css::uno::Reference< css::lang::XEventListener >& )
-throw (css::uno::RuntimeException)
+throw (css::uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL GlobalSettings_Access::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& )
-throw (css::uno::RuntimeException)
+throw (css::uno::RuntimeException, std::exception)
 {
 }
 
 // XEventListener
 void SAL_CALL GlobalSettings_Access::disposing( const css::lang::EventObject& )
-throw (css::uno::RuntimeException)
+throw (css::uno::RuntimeException, std::exception)
 {
     // SAFE
     ResetableGuard aLock( m_aLock );

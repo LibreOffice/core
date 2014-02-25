@@ -38,11 +38,11 @@ public:
     virtual ~SwVbaVariable();
 
    // XVariable
-    virtual OUString SAL_CALL getName() throw ( css::uno::RuntimeException );
-    virtual void SAL_CALL setName( const OUString& ) throw ( css::uno::RuntimeException );
-    virtual css::uno::Any SAL_CALL getValue() throw ( css::uno::RuntimeException );
-    virtual void SAL_CALL setValue( const css::uno::Any& rValue ) throw ( css::uno::RuntimeException );
-    virtual sal_Int32 SAL_CALL getIndex() throw ( css::uno::RuntimeException );
+    virtual OUString SAL_CALL getName() throw ( css::uno::RuntimeException, std::exception );
+    virtual void SAL_CALL setName( const OUString& ) throw ( css::uno::RuntimeException, std::exception );
+    virtual css::uno::Any SAL_CALL getValue() throw ( css::uno::RuntimeException, std::exception );
+    virtual void SAL_CALL setValue( const css::uno::Any& rValue ) throw ( css::uno::RuntimeException, std::exception );
+    virtual sal_Int32 SAL_CALL getIndex() throw ( css::uno::RuntimeException, std::exception );
 
     // XHelperInterface
     virtual OUString getServiceImplName();

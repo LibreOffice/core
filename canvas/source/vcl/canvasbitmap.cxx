@@ -72,17 +72,17 @@ namespace vclcanvas
     }
 
 
-    OUString SAL_CALL CanvasBitmap::getImplementationName(  ) throw (uno::RuntimeException)
+    OUString SAL_CALL CanvasBitmap::getImplementationName(  ) throw (uno::RuntimeException, std::exception)
     {
         return OUString( "VCLCanvas.CanvasBitmap" );
     }
 
-    sal_Bool SAL_CALL CanvasBitmap::supportsService( const OUString& ServiceName ) throw (uno::RuntimeException)
+    sal_Bool SAL_CALL CanvasBitmap::supportsService( const OUString& ServiceName ) throw (uno::RuntimeException, std::exception)
     {
         return cppu::supportsService( this, ServiceName );
     }
 
-    uno::Sequence< OUString > SAL_CALL CanvasBitmap::getSupportedServiceNames(  ) throw (uno::RuntimeException)
+    uno::Sequence< OUString > SAL_CALL CanvasBitmap::getSupportedServiceNames(  ) throw (uno::RuntimeException, std::exception)
     {
         uno::Sequence< OUString > aRet(1);
         aRet[0] = "com.sun.star.rendering.CanvasBitmap";
@@ -113,7 +113,7 @@ namespace vclcanvas
         return maCanvasHelper.repaint( rGrf, viewState, renderState, rPt, rSz, rAttr );
     }
 
-    uno::Any SAL_CALL CanvasBitmap::getFastPropertyValue( sal_Int32 nHandle ) throw (uno::RuntimeException)
+    uno::Any SAL_CALL CanvasBitmap::getFastPropertyValue( sal_Int32 nHandle ) throw (uno::RuntimeException, std::exception)
     {
         if( nHandle == 0 ) {
             BitmapEx* pBitmapEx = new BitmapEx( getBitmap() );

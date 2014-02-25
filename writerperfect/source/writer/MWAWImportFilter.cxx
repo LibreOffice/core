@@ -97,20 +97,20 @@ throw (RuntimeException)
 }
 
 sal_Bool SAL_CALL MWAWImportFilter::filter( const Sequence< ::com::sun::star::beans::PropertyValue > &aDescriptor )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     SAL_INFO("writerperfect", "MWAWImportFilter::filter");
     return importImpl ( aDescriptor );
 }
 void SAL_CALL MWAWImportFilter::cancel(  )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     SAL_INFO("writerperfect", "MWAWImportFilter::cancel");
 }
 
 // XImporter
 void SAL_CALL MWAWImportFilter::setTargetDocument( const Reference< ::com::sun::star::lang::XComponent > &xDoc )
-throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
+throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     SAL_INFO("writerperfect", "MWAWImportFilter::getTargetDocument");
     mxDoc = xDoc;
@@ -118,7 +118,7 @@ throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 
 // XExtendedFilterDetection
 OUString SAL_CALL MWAWImportFilter::detect( com::sun::star::uno::Sequence< PropertyValue > &Descriptor )
-throw( com::sun::star::uno::RuntimeException )
+throw( com::sun::star::uno::RuntimeException, std::exception )
 {
     SAL_INFO("writerperfect", "MWAWImportFilter::detect");
 
@@ -264,7 +264,7 @@ throw( com::sun::star::uno::RuntimeException )
 
 // XInitialization
 void SAL_CALL MWAWImportFilter::initialize( const Sequence< Any > &aArguments )
-throw (Exception, RuntimeException)
+throw (Exception, RuntimeException, std::exception)
 {
     SAL_INFO("writerperfect", "MWAWImportFilter::initialize");
     Sequence < PropertyValue > aAnySeq;
@@ -307,17 +307,17 @@ throw( Exception )
 
 // XServiceInfo
 OUString SAL_CALL MWAWImportFilter::getImplementationName(  )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     return MWAWImportFilter_getImplementationName();
 }
 sal_Bool SAL_CALL MWAWImportFilter::supportsService( const OUString &rServiceName )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     return cppu::supportsService( this, rServiceName );
 }
 Sequence< OUString > SAL_CALL MWAWImportFilter::getSupportedServiceNames(  )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     return MWAWImportFilter_getSupportedServiceNames();
 }

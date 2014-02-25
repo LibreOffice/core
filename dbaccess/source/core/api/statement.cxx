@@ -61,7 +61,7 @@ OStatementBase::~OStatementBase()
 }
 
 // com::sun::star::lang::XTypeProvider
-Sequence< Type > OStatementBase::getTypes() throw (RuntimeException)
+Sequence< Type > OStatementBase::getTypes() throw (RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "OStatementBase::getTypes" );
     OTypeCollection aTypes(::getCppuType( (const Reference< XPropertySet > *)0 ),
@@ -81,7 +81,7 @@ Sequence< Type > OStatementBase::getTypes() throw (RuntimeException)
 }
 
 // com::sun::star::uno::XInterface
-Any OStatementBase::queryInterface( const Type & rType ) throw (RuntimeException)
+Any OStatementBase::queryInterface( const Type & rType ) throw (RuntimeException, std::exception)
 {
     Any aIface = OSubComponent::queryInterface( rType );
     if (!aIface.hasValue())
@@ -163,7 +163,7 @@ void OStatementBase::disposing()
 }
 
 // XCloseable
-void OStatementBase::close(void) throw( SQLException, RuntimeException )
+void OStatementBase::close(void) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OStatementBase::close" );
     {
@@ -174,7 +174,7 @@ void OStatementBase::close(void) throw( SQLException, RuntimeException )
 }
 
 // OPropertySetHelper
-Reference< XPropertySetInfo > OStatementBase::getPropertySetInfo() throw (RuntimeException)
+Reference< XPropertySetInfo > OStatementBase::getPropertySetInfo() throw (RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "OStatementBase::getPropertySetInfo" );
     return createPropertySetInfo( getInfoHelper() ) ;
@@ -240,7 +240,7 @@ sal_Bool OStatementBase::convertFastPropertyValue( Any & rConvertedValue, Any & 
     return bModified;
 }
 
-void OStatementBase::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception)
+void OStatementBase::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception, std::exception)
 {
     //SAL_INFO("dbaccess", "OStatementBase::setFastPropertyValue_NoBroadcast" );
     switch ( nHandle )
@@ -297,7 +297,7 @@ void OStatementBase::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
 }
 
 // XWarningsSupplier
-Any OStatementBase::getWarnings(void) throw( SQLException, RuntimeException )
+Any OStatementBase::getWarnings(void) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OStatementBase::getWarnings" );
     MutexGuard aGuard(m_aMutex);
@@ -306,7 +306,7 @@ Any OStatementBase::getWarnings(void) throw( SQLException, RuntimeException )
     return Reference< XWarningsSupplier >(m_xAggregateAsSet, UNO_QUERY)->getWarnings();
 }
 
-void OStatementBase::clearWarnings(void) throw( SQLException, RuntimeException )
+void OStatementBase::clearWarnings(void) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OStatementBase::clearWarnings" );
     MutexGuard aGuard(m_aMutex);
@@ -316,7 +316,7 @@ void OStatementBase::clearWarnings(void) throw( SQLException, RuntimeException )
 }
 
 // ::com::sun::star::util::XCancellable
-void OStatementBase::cancel(void) throw( RuntimeException )
+void OStatementBase::cancel(void) throw( RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OStatementBase::cancel" );
     // no blocking as cancel is typically called from a different thread
@@ -327,7 +327,7 @@ void OStatementBase::cancel(void) throw( RuntimeException )
 }
 
 // XMultipleResults
-Reference< XResultSet > SAL_CALL OStatementBase::getResultSet(  ) throw(SQLException, RuntimeException)
+Reference< XResultSet > SAL_CALL OStatementBase::getResultSet(  ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "OStatementBase::getResultSet" );
     MutexGuard aGuard(m_aMutex);
@@ -341,7 +341,7 @@ Reference< XResultSet > SAL_CALL OStatementBase::getResultSet(  ) throw(SQLExcep
     return Reference< XMultipleResults >(m_xAggregateAsSet, UNO_QUERY)->getResultSet();
 }
 
-sal_Int32 SAL_CALL OStatementBase::getUpdateCount(  ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OStatementBase::getUpdateCount(  ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "OStatementBase::getUpdateCount" );
     MutexGuard aGuard(m_aMutex);
@@ -355,7 +355,7 @@ sal_Int32 SAL_CALL OStatementBase::getUpdateCount(  ) throw(SQLException, Runtim
     return Reference< XMultipleResults >(m_xAggregateAsSet, UNO_QUERY)->getUpdateCount();
 }
 
-sal_Bool SAL_CALL OStatementBase::getMoreResults(  ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OStatementBase::getMoreResults(  ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "OStatementBase::getMoreResults" );
     MutexGuard aGuard(m_aMutex);
@@ -373,7 +373,7 @@ sal_Bool SAL_CALL OStatementBase::getMoreResults(  ) throw(SQLException, Runtime
 }
 
 // XPreparedBatchExecution
-void SAL_CALL OStatementBase::addBatch(  ) throw(SQLException, RuntimeException)
+void SAL_CALL OStatementBase::addBatch(  ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "OStatementBase::addBatch" );
     MutexGuard aGuard(m_aMutex);
@@ -387,7 +387,7 @@ void SAL_CALL OStatementBase::addBatch(  ) throw(SQLException, RuntimeException)
     Reference< XPreparedBatchExecution >(m_xAggregateAsSet, UNO_QUERY)->addBatch();
 }
 
-void SAL_CALL OStatementBase::clearBatch(  ) throw(SQLException, RuntimeException)
+void SAL_CALL OStatementBase::clearBatch(  ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "OStatementBase::clearBatch" );
     MutexGuard aGuard(m_aMutex);
@@ -401,7 +401,7 @@ void SAL_CALL OStatementBase::clearBatch(  ) throw(SQLException, RuntimeExceptio
     Reference< XPreparedBatchExecution >(m_xAggregateAsSet, UNO_QUERY)->clearBatch();
 }
 
-Sequence< sal_Int32 > SAL_CALL OStatementBase::executeBatch(  ) throw(SQLException, RuntimeException)
+Sequence< sal_Int32 > SAL_CALL OStatementBase::executeBatch(  ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "OStatementBase::executeBatch" );
     MutexGuard aGuard(m_aMutex);
@@ -418,7 +418,7 @@ Sequence< sal_Int32 > SAL_CALL OStatementBase::executeBatch(  ) throw(SQLExcepti
     return Reference< XPreparedBatchExecution >(m_xAggregateAsSet, UNO_QUERY)->executeBatch();
 }
 
-Reference< XResultSet > SAL_CALL OStatementBase::getGeneratedValues(  ) throw (SQLException, RuntimeException)
+Reference< XResultSet > SAL_CALL OStatementBase::getGeneratedValues(  ) throw (SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "OStatementBase::getGeneratedValues" );
     MutexGuard aGuard(m_aMutex);
@@ -445,18 +445,18 @@ IMPLEMENT_FORWARD_XINTERFACE2( OStatement, OStatementBase, OStatement_IFACE );
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( OStatement, OStatementBase, OStatement_IFACE );
 
 // XServiceInfo
-OUString OStatement::getImplementationName(  ) throw(RuntimeException)
+OUString OStatement::getImplementationName(  ) throw(RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "OStatement::getImplementationName" );
     return OUString("com.sun.star.sdb.OStatement");
 }
 
-sal_Bool OStatement::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
+sal_Bool OStatement::supportsService( const OUString& _rServiceName ) throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
-Sequence< OUString > OStatement::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > OStatement::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "OStatement::getSupportedServiceNames" );
     Sequence< OUString > aSNS( 1 );
@@ -465,7 +465,7 @@ Sequence< OUString > OStatement::getSupportedServiceNames(  ) throw (RuntimeExce
 }
 
 // XStatement
-Reference< XResultSet > OStatement::executeQuery( const OUString& _rSQL ) throw( SQLException, RuntimeException )
+Reference< XResultSet > OStatement::executeQuery( const OUString& _rSQL ) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OStatement::executeQuery" );
     MutexGuard aGuard(m_aMutex);
@@ -492,7 +492,7 @@ Reference< XResultSet > OStatement::executeQuery( const OUString& _rSQL ) throw(
     return xResultSet;
 }
 
-sal_Int32 OStatement::executeUpdate( const OUString& _rSQL ) throw( SQLException, RuntimeException )
+sal_Int32 OStatement::executeUpdate( const OUString& _rSQL ) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OStatement::executeUpdate" );
     MutexGuard aGuard(m_aMutex);
@@ -504,7 +504,7 @@ sal_Int32 OStatement::executeUpdate( const OUString& _rSQL ) throw( SQLException
     return m_xAggregateStatement->executeUpdate( sSQL );
 }
 
-sal_Bool OStatement::execute( const OUString& _rSQL ) throw( SQLException, RuntimeException )
+sal_Bool OStatement::execute( const OUString& _rSQL ) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OStatement::execute" );
     MutexGuard aGuard(m_aMutex);
@@ -516,7 +516,7 @@ sal_Bool OStatement::execute( const OUString& _rSQL ) throw( SQLException, Runti
     return m_xAggregateStatement->execute( sSQL );
 }
 
-void OStatement::addBatch( const OUString& _rSQL ) throw( SQLException, RuntimeException )
+void OStatement::addBatch( const OUString& _rSQL ) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OStatement::execute" );
     MutexGuard aGuard(m_aMutex);
@@ -531,7 +531,7 @@ void OStatement::addBatch( const OUString& _rSQL ) throw( SQLException, RuntimeE
     Reference< XBatchExecution >(m_xAggregateAsSet, UNO_QUERY)->addBatch( sSQL );
 }
 
-void OStatement::clearBatch( ) throw( SQLException, RuntimeException )
+void OStatement::clearBatch( ) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OStatement::execute" );
     MutexGuard aGuard(m_aMutex);
@@ -544,7 +544,7 @@ void OStatement::clearBatch( ) throw( SQLException, RuntimeException )
     Reference< XBatchExecution >(m_xAggregateAsSet, UNO_QUERY)->clearBatch();
 }
 
-Sequence< sal_Int32 > OStatement::executeBatch( ) throw( SQLException, RuntimeException )
+Sequence< sal_Int32 > OStatement::executeBatch( ) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OStatement::execute" );
     MutexGuard aGuard(m_aMutex);
@@ -557,7 +557,7 @@ Sequence< sal_Int32 > OStatement::executeBatch( ) throw( SQLException, RuntimeEx
 }
 
 
-Reference< XConnection > OStatement::getConnection(void) throw( SQLException, RuntimeException )
+Reference< XConnection > OStatement::getConnection(void) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "OStatement::getConnection" );
     return Reference< XConnection >( m_xParent, UNO_QUERY );

@@ -77,10 +77,10 @@ public:
     virtual ::com::sun::star::uno::Sequence<
             ::com::sun::star::lang::Locale > SAL_CALL
         getLocales()
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL
         hasLocale( const ::com::sun::star::lang::Locale& aLocale )
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     // XThesaurus
     virtual ::com::sun::star::uno::Sequence<
@@ -90,7 +90,7 @@ public:
                 const ::com::sun::star::lang::Locale& aLocale,
                 const ::com::sun::star::beans::PropertyValues& aProperties )
             throw(::com::sun::star::lang::IllegalArgumentException,
-                  ::com::sun::star::uno::RuntimeException);
+                  ::com::sun::star::uno::RuntimeException, std::exception);
 
     // LinguDispatcher
     virtual void

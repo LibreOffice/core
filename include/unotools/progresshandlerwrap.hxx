@@ -36,11 +36,11 @@ public:
 
     // XProgressHandler
     virtual void SAL_CALL push( const ::com::sun::star::uno::Any& Status )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL update( const ::com::sun::star::uno::Any& Status )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL pop()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 };
 
 }   // namespace utl

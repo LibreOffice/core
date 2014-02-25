@@ -542,7 +542,7 @@ void SAL_CALL OFlatTable::disposing(void)
     m_aColumns = NULL;
 }
 
-Sequence< Type > SAL_CALL OFlatTable::getTypes(  ) throw(RuntimeException)
+Sequence< Type > SAL_CALL OFlatTable::getTypes(  ) throw(RuntimeException, std::exception)
 {
     Sequence< Type > aTypes = OTable_TYPEDEF::getTypes();
     vector<Type> aOwnTypes;
@@ -565,7 +565,7 @@ Sequence< Type > SAL_CALL OFlatTable::getTypes(  ) throw(RuntimeException)
 }
 
 
-Any SAL_CALL OFlatTable::queryInterface( const Type & rType ) throw(RuntimeException)
+Any SAL_CALL OFlatTable::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
 {
     if( rType == ::getCppuType((const Reference<XKeysSupplier>*)0)      ||
         rType == ::getCppuType((const Reference<XIndexesSupplier>*)0)   ||
@@ -596,7 +596,7 @@ Sequence< sal_Int8 > OFlatTable::getUnoTunnelImplementationId()
 
 // com::sun::star::lang::XUnoTunnel
 
-sal_Int64 OFlatTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
+sal_Int64 OFlatTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException, std::exception)
 {
     SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::getSomething" );
     return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )

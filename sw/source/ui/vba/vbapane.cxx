@@ -35,13 +35,13 @@ SwVbaPane::~SwVbaPane()
 }
 
 uno::Any SAL_CALL
-SwVbaPane::View() throw ( css::uno::RuntimeException )
+SwVbaPane::View() throw ( css::uno::RuntimeException, std::exception )
 {
     return uno::makeAny( uno::Reference< word::XView >( new SwVbaView( this,  mxContext, mxModel ) ) );
 }
 
 void SAL_CALL
-SwVbaPane::Close( ) throw ( css::uno::RuntimeException )
+SwVbaPane::Close( ) throw ( css::uno::RuntimeException, std::exception )
 {
     OUString url = ".uno:CloseWin";
     dispatchRequests( mxModel,url );

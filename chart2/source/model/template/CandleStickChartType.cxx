@@ -208,20 +208,20 @@ CandleStickChartType::~CandleStickChartType()
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL CandleStickChartType::createClone()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< util::XCloneable >( new CandleStickChartType( *this ));
 }
 
 // ____ XChartType ____
 OUString SAL_CALL CandleStickChartType::getChartType()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK;
 }
 
 uno::Sequence< OUString > SAL_CALL CandleStickChartType::getSupportedMandatoryRoles()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     bool bShowFirst = true;
     bool bShowHiLow = false;
@@ -246,7 +246,7 @@ uno::Sequence< OUString > SAL_CALL CandleStickChartType::getSupportedMandatoryRo
 }
 
 Sequence< OUString > SAL_CALL CandleStickChartType::getSupportedOptionalRoles()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     bool bShowFirst = true;
     bool bShowHiLow = false;
@@ -268,7 +268,7 @@ Sequence< OUString > SAL_CALL CandleStickChartType::getSupportedOptionalRoles()
 }
 
 OUString SAL_CALL CandleStickChartType::getRoleOfSequenceForSeriesLabel()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return OUString("values-last");
 }
@@ -292,14 +292,14 @@ uno::Any CandleStickChartType::GetDefaultValue( sal_Int32 nHandle ) const
 
 // ____ XPropertySet ____
 Reference< beans::XPropertySetInfo > SAL_CALL CandleStickChartType::getPropertySetInfo()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return *StaticCandleStickChartTypeInfo::get();
 }
 
 void SAL_CALL CandleStickChartType::setFastPropertyValue_NoBroadcast(
     sal_Int32 nHandle, const uno::Any& rValue )
-    throw (uno::Exception)
+    throw (uno::Exception, std::exception)
 {
     if(    nHandle == PROP_CANDLESTICKCHARTTYPE_WHITE_DAY
         || nHandle == PROP_CANDLESTICKCHARTTYPE_BLACK_DAY )

@@ -102,7 +102,7 @@ void SAL_CALL ShellStackGuard::disposing (void)
 
 void SAL_CALL ShellStackGuard::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     if (rEvent.Type.equals(FrameworkHelper::msConfigurationUpdateStartEvent))
     {
@@ -122,7 +122,7 @@ void SAL_CALL ShellStackGuard::notifyConfigurationChange (
 
 void SAL_CALL ShellStackGuard::disposing (
     const lang::EventObject& rEvent)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     if (mxConfigurationController.is())
         if (rEvent.Source == mxConfigurationController)

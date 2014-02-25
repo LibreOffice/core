@@ -286,13 +286,13 @@ LegendWrapper::~LegendWrapper()
 
 // ____ XShape ____
 awt::Point SAL_CALL LegendWrapper::getPosition()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return m_spChart2ModelContact->GetLegendPosition();
 }
 
 void SAL_CALL LegendWrapper::setPosition( const awt::Point& aPosition )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< beans::XPropertySet > xProp( this->getInnerPropertySet() );
     if( xProp.is() )
@@ -308,14 +308,14 @@ void SAL_CALL LegendWrapper::setPosition( const awt::Point& aPosition )
 }
 
 awt::Size SAL_CALL LegendWrapper::getSize()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return m_spChart2ModelContact->GetLegendSize();
 }
 
 void SAL_CALL LegendWrapper::setSize( const awt::Size& aSize )
     throw (beans::PropertyVetoException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     Reference< beans::XPropertySet > xProp( this->getInnerPropertySet() );
     if( xProp.is() )
@@ -333,14 +333,14 @@ void SAL_CALL LegendWrapper::setSize( const awt::Size& aSize )
 
 // ____ XShapeDescriptor (base of XShape) ____
 OUString SAL_CALL LegendWrapper::getShapeType()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return OUString( "com.sun.star.chart.ChartLegend" );
 }
 
 // ____ XComponent ____
 void SAL_CALL LegendWrapper::dispose()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
     m_aEventListenerContainer.disposeAndClear( lang::EventObject( xSource ) );
@@ -351,14 +351,14 @@ void SAL_CALL LegendWrapper::dispose()
 
 void SAL_CALL LegendWrapper::addEventListener(
     const Reference< lang::XEventListener >& xListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     m_aEventListenerContainer.addInterface( xListener );
 }
 
 void SAL_CALL LegendWrapper::removeEventListener(
     const Reference< lang::XEventListener >& aListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     m_aEventListenerContainer.removeInterface( aListener );
 }

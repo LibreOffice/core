@@ -96,7 +96,7 @@ PDFDialog::~PDFDialog()
 
 
 Sequence< sal_Int8 > SAL_CALL PDFDialog::getImplementationId()
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     return PDFDialog_getImplementationId();
 }
@@ -104,7 +104,7 @@ Sequence< sal_Int8 > SAL_CALL PDFDialog::getImplementationId()
 
 
 OUString SAL_CALL PDFDialog::getImplementationName()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return PDFDialog_getImplementationName();
 }
@@ -112,7 +112,7 @@ OUString SAL_CALL PDFDialog::getImplementationName()
 
 
 Sequence< OUString > SAL_CALL PDFDialog::getSupportedServiceNames()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return PDFDialog_getSupportedServiceNames();
 }
@@ -144,7 +144,7 @@ void PDFDialog::executedDialog( sal_Int16 nExecutionResult )
 
 
 Reference< XPropertySetInfo > SAL_CALL PDFDialog::getPropertySetInfo()
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     Reference< XPropertySetInfo >  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
@@ -167,7 +167,7 @@ Reference< XPropertySetInfo > SAL_CALL PDFDialog::getPropertySetInfo()
 
 
 Sequence< PropertyValue > SAL_CALL PDFDialog::getPropertyValues()
-    throw ( RuntimeException )
+    throw ( RuntimeException, std::exception )
 {
     sal_Int32 i, nCount;
 
@@ -189,7 +189,7 @@ Sequence< PropertyValue > SAL_CALL PDFDialog::getPropertyValues()
 
 
 void SAL_CALL PDFDialog::setPropertyValues( const Sequence< PropertyValue >& rProps )
-    throw ( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException )
+    throw ( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception )
 {
     maMediaDescriptor = rProps;
 
@@ -206,7 +206,7 @@ void SAL_CALL PDFDialog::setPropertyValues( const Sequence< PropertyValue >& rPr
 
 
 void SAL_CALL PDFDialog::setSourceDocument( const Reference< XComponent >& xDoc )
-    throw(IllegalArgumentException, RuntimeException)
+    throw(IllegalArgumentException, RuntimeException, std::exception)
 {
     mxSrcDoc = xDoc;
 }

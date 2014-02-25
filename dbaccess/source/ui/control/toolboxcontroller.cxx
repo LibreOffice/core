@@ -87,7 +87,7 @@ namespace dbaui
     }
 
     // XInterface
-    Any SAL_CALL OToolboxController::queryInterface( const Type& _rType ) throw (RuntimeException)
+    Any SAL_CALL OToolboxController::queryInterface( const Type& _rType ) throw (RuntimeException, std::exception)
     {
         Any aReturn = ToolboxController::queryInterface(_rType);
         if (!aReturn.hasValue())
@@ -102,7 +102,7 @@ namespace dbaui
     {
         ToolboxController::release();
     }
-    void SAL_CALL OToolboxController::initialize( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException)
+    void SAL_CALL OToolboxController::initialize( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException, std::exception)
     {
         ToolboxController::initialize(_rArguments);
         SolarMutexGuard aSolarMutexGuard;
@@ -148,7 +148,7 @@ namespace dbaui
             pToolBox->SetItemBits(m_nToolBoxId,pToolBox->GetItemBits(m_nToolBoxId) | TIB_DROPDOWN);
         }
     }
-    void SAL_CALL OToolboxController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException )
+    void SAL_CALL OToolboxController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException, std::exception )
     {
         SolarMutexGuard aSolarMutexGuard;
         ::osl::MutexGuard aGuard(m_aMutex);
@@ -224,7 +224,7 @@ namespace dbaui
         return pMenu;
     }
     SAL_WNODEPRECATED_DECLARATIONS_POP
-    Reference< ::com::sun::star::awt::XWindow > SAL_CALL OToolboxController::createPopupWindow() throw (RuntimeException)
+    Reference< ::com::sun::star::awt::XWindow > SAL_CALL OToolboxController::createPopupWindow() throw (RuntimeException, std::exception)
     {
         // execute the menu
         SolarMutexGuard aSolarMutexGuard;

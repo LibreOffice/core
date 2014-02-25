@@ -760,7 +760,7 @@ void SAL_CALL SdStyleSheet::release(  ) throw ()
 // XComponent
 
 
-void SAL_CALL SdStyleSheet::dispose(  ) throw (RuntimeException)
+void SAL_CALL SdStyleSheet::dispose(  ) throw (RuntimeException, std::exception)
 {
     ClearableMutexGuard aGuard( mrBHelper.rMutex );
     if (!mrBHelper.bDisposed && !mrBHelper.bInDispose)
@@ -809,7 +809,7 @@ void SdStyleSheet::disposing()
 
 
 
-void SAL_CALL SdStyleSheet::addEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException)
+void SAL_CALL SdStyleSheet::addEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException, std::exception)
 {
     ClearableMutexGuard aGuard( mrBHelper.rMutex );
     if (mrBHelper.bDisposed || mrBHelper.bInDispose)
@@ -826,7 +826,7 @@ void SAL_CALL SdStyleSheet::addEventListener( const Reference< XEventListener >&
 
 
 
-void SAL_CALL SdStyleSheet::removeEventListener( const Reference< XEventListener >& xListener  ) throw (RuntimeException)
+void SAL_CALL SdStyleSheet::removeEventListener( const Reference< XEventListener >& xListener  ) throw (RuntimeException, std::exception)
 {
     mrBHelper.removeListener( ::getCppuType( &xListener ), xListener );
 }
@@ -835,7 +835,7 @@ void SAL_CALL SdStyleSheet::removeEventListener( const Reference< XEventListener
 // XModifyBroadcaster
 
 
-void SAL_CALL SdStyleSheet::addModifyListener( const Reference< XModifyListener >& xListener ) throw (RuntimeException)
+void SAL_CALL SdStyleSheet::addModifyListener( const Reference< XModifyListener >& xListener ) throw (RuntimeException, std::exception)
 {
     ClearableMutexGuard aGuard( mrBHelper.rMutex );
     if (mrBHelper.bDisposed || mrBHelper.bInDispose)
@@ -854,7 +854,7 @@ void SAL_CALL SdStyleSheet::addModifyListener( const Reference< XModifyListener 
 
 
 
-void SAL_CALL SdStyleSheet::removeModifyListener( const Reference< XModifyListener >& xListener ) throw (RuntimeException)
+void SAL_CALL SdStyleSheet::removeModifyListener( const Reference< XModifyListener >& xListener ) throw (RuntimeException, std::exception)
 {
     mrBHelper.removeListener( cppu::UnoType<XModifyListener>::get(), xListener );
 }
@@ -874,17 +874,17 @@ void SdStyleSheet::notifyModifyListener()
 }
 
 // XServiceInfo
-OUString SAL_CALL SdStyleSheet::getImplementationName() throw(RuntimeException)
+OUString SAL_CALL SdStyleSheet::getImplementationName() throw(RuntimeException, std::exception)
 {
     return OUString( "SdStyleSheet" );
 }
 
-sal_Bool SAL_CALL SdStyleSheet::supportsService( const OUString& ServiceName ) throw(RuntimeException)
+sal_Bool SAL_CALL SdStyleSheet::supportsService( const OUString& ServiceName ) throw(RuntimeException, std::exception)
 {
     return cppu::supportsService( this, ServiceName );
 }
 
-Sequence< OUString > SAL_CALL SdStyleSheet::getSupportedServiceNames() throw(RuntimeException)
+Sequence< OUString > SAL_CALL SdStyleSheet::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     Sequence< OUString > aNameSequence( 10 );
     OUString* pStrings = aNameSequence.getArray();
@@ -904,7 +904,7 @@ Sequence< OUString > SAL_CALL SdStyleSheet::getSupportedServiceNames() throw(Run
 }
 
 // XNamed
-OUString SAL_CALL SdStyleSheet::getName() throw(RuntimeException)
+OUString SAL_CALL SdStyleSheet::getName() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();
@@ -913,7 +913,7 @@ OUString SAL_CALL SdStyleSheet::getName() throw(RuntimeException)
 
 
 
-void SAL_CALL SdStyleSheet::setName( const OUString& rName  ) throw(RuntimeException)
+void SAL_CALL SdStyleSheet::setName( const OUString& rName  ) throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();
@@ -929,7 +929,7 @@ void SAL_CALL SdStyleSheet::setName( const OUString& rName  ) throw(RuntimeExcep
 // XStyle
 
 
-sal_Bool SAL_CALL SdStyleSheet::isUserDefined() throw(RuntimeException)
+sal_Bool SAL_CALL SdStyleSheet::isUserDefined() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();
@@ -938,7 +938,7 @@ sal_Bool SAL_CALL SdStyleSheet::isUserDefined() throw(RuntimeException)
 
 
 
-sal_Bool SAL_CALL SdStyleSheet::isInUse() throw(RuntimeException)
+sal_Bool SAL_CALL SdStyleSheet::isInUse() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();
@@ -947,7 +947,7 @@ sal_Bool SAL_CALL SdStyleSheet::isInUse() throw(RuntimeException)
 
 
 
-OUString SAL_CALL SdStyleSheet::getParentStyle() throw(RuntimeException)
+OUString SAL_CALL SdStyleSheet::getParentStyle() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();
@@ -963,7 +963,7 @@ OUString SAL_CALL SdStyleSheet::getParentStyle() throw(RuntimeException)
 
 
 
-void SAL_CALL SdStyleSheet::setParentStyle( const OUString& rParentName  ) throw(NoSuchElementException, RuntimeException)
+void SAL_CALL SdStyleSheet::setParentStyle( const OUString& rParentName  ) throw(NoSuchElementException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();
@@ -998,7 +998,7 @@ void SAL_CALL SdStyleSheet::setParentStyle( const OUString& rParentName  ) throw
 // XPropertySet
 
 
-Reference< XPropertySetInfo > SdStyleSheet::getPropertySetInfo() throw(RuntimeException)
+Reference< XPropertySetInfo > SdStyleSheet::getPropertySetInfo() throw(RuntimeException, std::exception)
 {
     throwIfDisposed();
     static Reference< XPropertySetInfo > xInfo;
@@ -1009,7 +1009,7 @@ Reference< XPropertySetInfo > SdStyleSheet::getPropertySetInfo() throw(RuntimeEx
 
 
 
-void SAL_CALL SdStyleSheet::setPropertyValue( const OUString& aPropertyName, const Any& aValue ) throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
+void SAL_CALL SdStyleSheet::setPropertyValue( const OUString& aPropertyName, const Any& aValue ) throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();
@@ -1097,7 +1097,7 @@ void SAL_CALL SdStyleSheet::setPropertyValue( const OUString& aPropertyName, con
 
 
 
-Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1194,16 +1194,16 @@ Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName ) thro
 
 
 
-void SAL_CALL SdStyleSheet::addPropertyChangeListener( const OUString& , const Reference< XPropertyChangeListener >&  ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException) {}
-void SAL_CALL SdStyleSheet::removePropertyChangeListener( const OUString& , const Reference< XPropertyChangeListener >&  ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException) {}
-void SAL_CALL SdStyleSheet::addVetoableChangeListener( const OUString& , const Reference< XVetoableChangeListener >&  ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException) {}
-void SAL_CALL SdStyleSheet::removeVetoableChangeListener( const OUString& , const Reference< XVetoableChangeListener >&  ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException) {}
+void SAL_CALL SdStyleSheet::addPropertyChangeListener( const OUString& , const Reference< XPropertyChangeListener >&  ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception) {}
+void SAL_CALL SdStyleSheet::removePropertyChangeListener( const OUString& , const Reference< XPropertyChangeListener >&  ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception) {}
+void SAL_CALL SdStyleSheet::addVetoableChangeListener( const OUString& , const Reference< XVetoableChangeListener >&  ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception) {}
+void SAL_CALL SdStyleSheet::removeVetoableChangeListener( const OUString& , const Reference< XVetoableChangeListener >&  ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception) {}
 
 
 // XPropertyState
 
 
-PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyName ) throw(UnknownPropertyException, RuntimeException)
+PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyName ) throw(UnknownPropertyException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1282,7 +1282,7 @@ PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyN
 
 
 
-Sequence< PropertyState > SAL_CALL SdStyleSheet::getPropertyStates( const Sequence< OUString >& aPropertyName ) throw(UnknownPropertyException, RuntimeException)
+Sequence< PropertyState > SAL_CALL SdStyleSheet::getPropertyStates( const Sequence< OUString >& aPropertyName ) throw(UnknownPropertyException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1302,7 +1302,7 @@ Sequence< PropertyState > SAL_CALL SdStyleSheet::getPropertyStates( const Sequen
 
 
 
-void SAL_CALL SdStyleSheet::setPropertyToDefault( const OUString& PropertyName ) throw(UnknownPropertyException, RuntimeException)
+void SAL_CALL SdStyleSheet::setPropertyToDefault( const OUString& PropertyName ) throw(UnknownPropertyException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1328,7 +1328,7 @@ void SAL_CALL SdStyleSheet::setPropertyToDefault( const OUString& PropertyName )
 
 
 
-Any SAL_CALL SdStyleSheet::getPropertyDefault( const OUString& aPropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+Any SAL_CALL SdStyleSheet::getPropertyDefault( const OUString& aPropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 

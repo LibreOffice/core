@@ -60,19 +60,19 @@ class LdapUserProfileBe : private LdapProfileMutexHolder, public BackendBase
         // XServiceInfo
         virtual OUString SAL_CALL
             getImplementationName(  )
-                throw (uno::RuntimeException) ;
+                throw (uno::RuntimeException, std::exception) ;
 
         virtual sal_Bool SAL_CALL
             supportsService( const OUString& aServiceName )
-                throw (uno::RuntimeException) ;
+                throw (uno::RuntimeException, std::exception) ;
 
         virtual uno::Sequence<OUString> SAL_CALL
             getSupportedServiceNames(  )
-                throw (uno::RuntimeException) ;
+                throw (uno::RuntimeException, std::exception) ;
 
         // XPropertySet
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
-        getPropertySetInfo() throw (css::uno::RuntimeException)
+        getPropertySetInfo() throw (css::uno::RuntimeException, std::exception)
         { return css::uno::Reference< css::beans::XPropertySetInfo >(); }
 
         virtual void SAL_CALL setPropertyValue(
@@ -81,20 +81,20 @@ class LdapUserProfileBe : private LdapProfileMutexHolder, public BackendBase
                 css::beans::UnknownPropertyException,
                 css::beans::PropertyVetoException,
                 css::lang::IllegalArgumentException,
-                css::lang::WrappedTargetException, css::uno::RuntimeException);
+                css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception);
 
         virtual css::uno::Any SAL_CALL getPropertyValue(
             OUString const & PropertyName)
             throw (
                 css::beans::UnknownPropertyException,
-                css::lang::WrappedTargetException, css::uno::RuntimeException);
+                css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception);
 
         virtual void SAL_CALL addPropertyChangeListener(
             OUString const &,
             css::uno::Reference< css::beans::XPropertyChangeListener > const &)
             throw (
                 css::beans::UnknownPropertyException,
-                css::lang::WrappedTargetException, css::uno::RuntimeException)
+                css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
         {}
 
         virtual void SAL_CALL removePropertyChangeListener(
@@ -102,7 +102,7 @@ class LdapUserProfileBe : private LdapProfileMutexHolder, public BackendBase
             css::uno::Reference< css::beans::XPropertyChangeListener > const &)
             throw (
                 css::beans::UnknownPropertyException,
-                css::lang::WrappedTargetException, css::uno::RuntimeException)
+                css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
         {}
 
         virtual void SAL_CALL addVetoableChangeListener(
@@ -110,7 +110,7 @@ class LdapUserProfileBe : private LdapProfileMutexHolder, public BackendBase
             css::uno::Reference< css::beans::XVetoableChangeListener > const &)
             throw (
                 css::beans::UnknownPropertyException,
-                css::lang::WrappedTargetException, css::uno::RuntimeException)
+                css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
         {}
 
         virtual void SAL_CALL removeVetoableChangeListener(
@@ -118,7 +118,7 @@ class LdapUserProfileBe : private LdapProfileMutexHolder, public BackendBase
             css::uno::Reference< css::beans::XVetoableChangeListener > const &)
             throw (
                 css::beans::UnknownPropertyException,
-                css::lang::WrappedTargetException, css::uno::RuntimeException)
+                css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
         {}
 
          /**

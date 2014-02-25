@@ -102,7 +102,7 @@ void GraphicExportFilter::gatherProperties( const Sequence<PropertyValue>& rProp
 }
 
 sal_Bool SAL_CALL GraphicExportFilter::filter( const Sequence<PropertyValue>& rDescriptor )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     gatherProperties(rDescriptor);
 
@@ -143,18 +143,18 @@ sal_Bool SAL_CALL GraphicExportFilter::filter( const Sequence<PropertyValue>& rD
     return false;
 }
 
-void SAL_CALL GraphicExportFilter::cancel( ) throw (RuntimeException)
+void SAL_CALL GraphicExportFilter::cancel( ) throw (RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL GraphicExportFilter::setSourceDocument( const Reference<XComponent>& xDocument )
-    throw (IllegalArgumentException, RuntimeException)
+    throw (IllegalArgumentException, RuntimeException, std::exception)
 {
     mxDocument = xDocument;
 }
 
 void SAL_CALL GraphicExportFilter::initialize( const Sequence<Any>& )
-    throw (Exception, RuntimeException)
+    throw (Exception, RuntimeException, std::exception)
 {
 }
 

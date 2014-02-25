@@ -96,7 +96,7 @@ Indexes::~Indexes()
 {}
 
 void Indexes::refresh()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     try
     {
@@ -200,7 +200,7 @@ void Indexes::appendByDescriptor(
     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor )
     throw (::com::sun::star::sdbc::SQLException,
            ::com::sun::star::container::ElementExistException,
-           ::com::sun::star::uno::RuntimeException)
+           ::com::sun::star::uno::RuntimeException, std::exception)
 {
     Statics & st = getStatics();
     OUString name = extractStringProperty( descriptor, st.NAME );
@@ -251,7 +251,7 @@ void Indexes::appendByDescriptor(
 void Indexes::dropByIndex( sal_Int32 index )
     throw (::com::sun::star::sdbc::SQLException,
            ::com::sun::star::lang::IndexOutOfBoundsException,
-           ::com::sun::star::uno::RuntimeException)
+           ::com::sun::star::uno::RuntimeException, std::exception)
 {
 
 
@@ -282,7 +282,7 @@ void Indexes::dropByIndex( sal_Int32 index )
 
 
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > Indexes::createDataDescriptor()
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return new IndexDescriptor( m_refMutex, m_origin, m_pSettings );
 }
@@ -318,7 +318,7 @@ Reference< com::sun::star::container::XNameAccess > IndexDescriptors::create(
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > IndexDescriptors::createDataDescriptor()
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return new IndexDescriptor( m_refMutex, m_origin, m_pSettings );
 }

@@ -51,7 +51,7 @@ namespace DOM
     /**
     For unparsed entities, the name of the notation for the entity.
     */
-    OUString SAL_CALL CEntity::getNotationName() throw (RuntimeException)
+    OUString SAL_CALL CEntity::getNotationName() throw (RuntimeException, std::exception)
     {
         OSL_ENSURE(false,
                 "CEntity::getNotationName: not implemented (#i113683#)");
@@ -61,7 +61,7 @@ namespace DOM
     /**
     The public identifier associated with the entity, if specified.
     */
-    OUString SAL_CALL CEntity::getPublicId() throw (RuntimeException)
+    OUString SAL_CALL CEntity::getPublicId() throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -76,7 +76,7 @@ namespace DOM
     /**
     The system identifier associated with the entity, if specified.
     */
-    OUString SAL_CALL CEntity::getSystemId() throw (RuntimeException)
+    OUString SAL_CALL CEntity::getSystemId() throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -87,7 +87,7 @@ namespace DOM
         }
         return aID;
     }
-    OUString SAL_CALL CEntity::getNodeName()throw (RuntimeException)
+    OUString SAL_CALL CEntity::getNodeName()throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -99,7 +99,7 @@ namespace DOM
         }
         return aName;
     }
-    OUString SAL_CALL CEntity::getNodeValue() throw (RuntimeException)
+    OUString SAL_CALL CEntity::getNodeValue() throw (RuntimeException, std::exception)
     {
         return OUString();
     }

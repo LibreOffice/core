@@ -47,7 +47,7 @@ public:
     virtual css::uno::Sequence<OUString> getServiceNames();
 
     // XVariables
-    virtual css::uno::Any SAL_CALL Add( const OUString& rName, const css::uno::Any& rValue ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL Add( const OUString& rName, const css::uno::Any& rValue ) throw (css::uno::RuntimeException, std::exception);
 };
 
 #endif // INCLUDED_SW_SOURCE_UI_VBA_VBAVARIABLES_HXX

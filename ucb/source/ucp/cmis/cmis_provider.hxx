@@ -42,7 +42,7 @@ public:
     queryContent( const ::com::sun::star::uno::Reference<
                     ::com::sun::star::ucb::XContentIdentifier >& Identifier )
         throw( ::com::sun::star::ucb::IllegalIdentifierException,
-               ::com::sun::star::uno::RuntimeException );
+               ::com::sun::star::uno::RuntimeException, std::exception );
 
     libcmis::Session* getSession( const OUString& sBindingUrl );
     void registerSession( const OUString& sBindingUrl, libcmis::Session* pSession );

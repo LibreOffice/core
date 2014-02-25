@@ -94,10 +94,10 @@ namespace basprov
             throw (
                     ::com::sun::star::script::provider::ScriptFrameworkErrorException,
                     ::com::sun::star::reflection::InvocationTargetException,
-                    ::com::sun::star::uno::RuntimeException );
+                    ::com::sun::star::uno::RuntimeException, std::exception );
         // XPropertySet
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  )
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
 
         // SfxListener
         virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );

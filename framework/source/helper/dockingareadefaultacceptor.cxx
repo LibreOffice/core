@@ -56,7 +56,7 @@ DockingAreaDefaultAcceptor::~DockingAreaDefaultAcceptor()
 //*****************************************************************************************************************
 //  XDockingAreaAcceptor
 //*****************************************************************************************************************
-css::uno::Reference< css::awt::XWindow > SAL_CALL DockingAreaDefaultAcceptor::getContainerWindow() throw (css::uno::RuntimeException)
+css::uno::Reference< css::awt::XWindow > SAL_CALL DockingAreaDefaultAcceptor::getContainerWindow() throw (css::uno::RuntimeException, std::exception)
 {
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );
@@ -68,7 +68,7 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL DockingAreaDefaultAcceptor::ge
     return xContainerWindow;
 }
 
-sal_Bool SAL_CALL DockingAreaDefaultAcceptor::requestDockingAreaSpace( const css::awt::Rectangle& RequestedSpace ) throw (css::uno::RuntimeException)
+sal_Bool SAL_CALL DockingAreaDefaultAcceptor::requestDockingAreaSpace( const css::awt::Rectangle& RequestedSpace ) throw (css::uno::RuntimeException, std::exception)
 {
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );
@@ -105,7 +105,7 @@ sal_Bool SAL_CALL DockingAreaDefaultAcceptor::requestDockingAreaSpace( const css
     return sal_False;
 }
 
-void SAL_CALL DockingAreaDefaultAcceptor::setDockingAreaSpace( const css::awt::Rectangle& BorderSpace ) throw (css::uno::RuntimeException)
+void SAL_CALL DockingAreaDefaultAcceptor::setDockingAreaSpace( const css::awt::Rectangle& BorderSpace ) throw (css::uno::RuntimeException, std::exception)
 {
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );

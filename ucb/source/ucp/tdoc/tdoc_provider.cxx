@@ -118,7 +118,7 @@ ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 uno::Reference< ucb::XContent > SAL_CALL
 ContentProvider::queryContent(
         const uno::Reference< ucb::XContentIdentifier >& Identifier )
-    throw( ucb::IllegalIdentifierException, uno::RuntimeException )
+    throw( ucb::IllegalIdentifierException, uno::RuntimeException, std::exception )
 {
     Uri aUri( Identifier->getContentIdentifier() );
     if ( !aUri.isValid() )
@@ -156,7 +156,7 @@ ContentProvider::queryContent(
 uno::Reference< ucb::XContent > SAL_CALL
 ContentProvider::createDocumentContent(
         const uno::Reference< frame::XModel >& Model )
-    throw ( lang::IllegalArgumentException, uno::RuntimeException )
+    throw ( lang::IllegalArgumentException, uno::RuntimeException, std::exception )
 {
     // model -> id -> content identifier -> queryContent
     if ( m_xDocsMgr.is() )

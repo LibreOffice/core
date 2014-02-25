@@ -106,7 +106,7 @@ namespace fileaccess {
         virtual com::sun::star::uno::Any SAL_CALL
         queryInterface(
             const com::sun::star::uno::Type& aType )
-            throw( com::sun::star::uno::RuntimeException);
+            throw( com::sun::star::uno::RuntimeException, std::exception);
 
         virtual void SAL_CALL
         acquire(
@@ -128,22 +128,22 @@ namespace fileaccess {
         virtual void SAL_CALL
         disposing(
             const com::sun::star::lang::EventObject& Source )
-            throw( com::sun::star::uno::RuntimeException );
+            throw( com::sun::star::uno::RuntimeException, std::exception );
 
         // XComponent
         virtual void SAL_CALL
         dispose(
             void )
-            throw( com::sun::star::uno::RuntimeException );
+            throw( com::sun::star::uno::RuntimeException, std::exception );
 
         virtual void SAL_CALL
         addEventListener(
             const com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >& xListener )
-            throw( com::sun::star::uno::RuntimeException );
+            throw( com::sun::star::uno::RuntimeException, std::exception );
 
         virtual void SAL_CALL
         removeEventListener( const com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >& aListener )
-            throw( com::sun::star::uno::RuntimeException );
+            throw( com::sun::star::uno::RuntimeException, std::exception );
 
 
         // XRow
@@ -151,7 +151,7 @@ namespace fileaccess {
         wasNull(
             void )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException )
+                   com::sun::star::uno::RuntimeException, std::exception )
         {
             if( 0<= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 m_nWasNull = m_aItems[m_nRow]->wasNull();
@@ -164,7 +164,7 @@ namespace fileaccess {
         getString(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException)
+                   com::sun::star::uno::RuntimeException, std::exception)
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getString( columnIndex );
@@ -176,7 +176,7 @@ namespace fileaccess {
         getBoolean(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException)
+                   com::sun::star::uno::RuntimeException, std::exception)
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getBoolean( columnIndex );
@@ -188,7 +188,7 @@ namespace fileaccess {
         getByte(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException)
+                   com::sun::star::uno::RuntimeException, std::exception)
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getByte( columnIndex );
@@ -201,7 +201,7 @@ namespace fileaccess {
             sal_Int32 columnIndex )
             throw(
                 com::sun::star::sdbc::SQLException,
-                com::sun::star::uno::RuntimeException)
+                com::sun::star::uno::RuntimeException, std::exception)
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getShort( columnIndex );
@@ -213,7 +213,7 @@ namespace fileaccess {
         getInt(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException )
+                   com::sun::star::uno::RuntimeException, std::exception )
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getInt( columnIndex );
@@ -225,7 +225,7 @@ namespace fileaccess {
         getLong(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException)
+                   com::sun::star::uno::RuntimeException, std::exception)
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getLong( columnIndex );
@@ -237,7 +237,7 @@ namespace fileaccess {
         getFloat(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException )
+                   com::sun::star::uno::RuntimeException, std::exception )
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getFloat( columnIndex );
@@ -249,7 +249,7 @@ namespace fileaccess {
         getDouble(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException )
+                   com::sun::star::uno::RuntimeException, std::exception )
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getDouble( columnIndex );
@@ -261,7 +261,7 @@ namespace fileaccess {
         getBytes(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException )
+                   com::sun::star::uno::RuntimeException, std::exception )
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getBytes( columnIndex );
@@ -273,7 +273,7 @@ namespace fileaccess {
         getDate(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException)
+                   com::sun::star::uno::RuntimeException, std::exception)
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getDate( columnIndex );
@@ -285,7 +285,7 @@ namespace fileaccess {
         getTime(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException)
+                   com::sun::star::uno::RuntimeException, std::exception)
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getTime( columnIndex );
@@ -297,7 +297,7 @@ namespace fileaccess {
         getTimestamp(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException)
+                   com::sun::star::uno::RuntimeException, std::exception)
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getTimestamp( columnIndex );
@@ -309,7 +309,7 @@ namespace fileaccess {
         getBinaryStream(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException)
+                   com::sun::star::uno::RuntimeException, std::exception)
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getBinaryStream( columnIndex );
@@ -321,7 +321,7 @@ namespace fileaccess {
         getCharacterStream(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException)
+                   com::sun::star::uno::RuntimeException, std::exception)
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getCharacterStream( columnIndex );
@@ -334,7 +334,7 @@ namespace fileaccess {
             sal_Int32 columnIndex,
             const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& typeMap )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException)
+                   com::sun::star::uno::RuntimeException, std::exception)
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getObject( columnIndex,typeMap );
@@ -346,7 +346,7 @@ namespace fileaccess {
         getRef(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException)
+                   com::sun::star::uno::RuntimeException, std::exception)
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getRef( columnIndex );
@@ -358,7 +358,7 @@ namespace fileaccess {
         getBlob(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException)
+                   com::sun::star::uno::RuntimeException, std::exception)
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getBlob( columnIndex );
@@ -370,7 +370,7 @@ namespace fileaccess {
         getClob(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException)
+                   com::sun::star::uno::RuntimeException, std::exception)
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getClob( columnIndex );
@@ -382,7 +382,7 @@ namespace fileaccess {
         getArray(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException)
+                   com::sun::star::uno::RuntimeException, std::exception)
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getArray( columnIndex );
@@ -397,110 +397,110 @@ namespace fileaccess {
         next(
             void )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException);
+                   com::sun::star::uno::RuntimeException, std::exception);
 
         virtual sal_Bool SAL_CALL
         isBeforeFirst(
             void )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException);
+                   com::sun::star::uno::RuntimeException, std::exception);
 
         virtual sal_Bool SAL_CALL
         isAfterLast(
             void )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException);
+                   com::sun::star::uno::RuntimeException, std::exception);
 
         virtual sal_Bool SAL_CALL
         isFirst(
             void  )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException);
+                   com::sun::star::uno::RuntimeException, std::exception);
 
         virtual sal_Bool SAL_CALL
         isLast(
             void  )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException);
+                   com::sun::star::uno::RuntimeException, std::exception);
 
         virtual void SAL_CALL
         beforeFirst(
             void  )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException);
+                   com::sun::star::uno::RuntimeException, std::exception);
 
         virtual void SAL_CALL
         afterLast(
             void  )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException);
+                   com::sun::star::uno::RuntimeException, std::exception);
 
         virtual sal_Bool SAL_CALL
         first(
             void  )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException);
+                   com::sun::star::uno::RuntimeException, std::exception);
 
         virtual sal_Bool SAL_CALL
         last(
             void  )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException);
+                   com::sun::star::uno::RuntimeException, std::exception);
 
         virtual sal_Int32 SAL_CALL
         getRow(
             void  )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException);
+                   com::sun::star::uno::RuntimeException, std::exception);
 
         virtual sal_Bool SAL_CALL
         absolute(
             sal_Int32 row )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException);
+                   com::sun::star::uno::RuntimeException, std::exception);
 
         virtual sal_Bool SAL_CALL
         relative(
             sal_Int32 rows )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException);
+                   com::sun::star::uno::RuntimeException, std::exception);
 
         virtual sal_Bool SAL_CALL
         previous(
             void  )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException);
+                   com::sun::star::uno::RuntimeException, std::exception);
 
         virtual void SAL_CALL
         refreshRow(
             void  )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException);
+                   com::sun::star::uno::RuntimeException, std::exception);
 
         virtual sal_Bool SAL_CALL
         rowUpdated(
             void )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException);
+                   com::sun::star::uno::RuntimeException, std::exception);
 
         virtual sal_Bool SAL_CALL
         rowInserted(
             void  )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException);
+                   com::sun::star::uno::RuntimeException, std::exception);
 
         virtual sal_Bool SAL_CALL
         rowDeleted(
             void  )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException);
+                   com::sun::star::uno::RuntimeException, std::exception);
 
 
         virtual  com::sun::star::uno::Reference<  com::sun::star::uno::XInterface > SAL_CALL
         getStatement(
             void  )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException);
+                   com::sun::star::uno::RuntimeException, std::exception);
 
 
         // XDynamicResultSet
@@ -509,25 +509,25 @@ namespace fileaccess {
         getStaticResultSet(
             void )
             throw( com::sun::star::ucb::ListenerAlreadySetException,
-                   com::sun::star::uno::RuntimeException );
+                   com::sun::star::uno::RuntimeException, std::exception );
 
         virtual void SAL_CALL
         setListener(
             const com::sun::star::uno::Reference<
             com::sun::star::ucb::XDynamicResultSetListener >& Listener )
             throw( com::sun::star::ucb::ListenerAlreadySetException,
-                   com::sun::star::uno::RuntimeException );
+                   com::sun::star::uno::RuntimeException, std::exception );
 
         virtual void SAL_CALL
         connectToCache( const com::sun::star::uno::Reference< com::sun::star::ucb::XDynamicResultSet > & xCache )
             throw( com::sun::star::ucb::ListenerAlreadySetException,
                    com::sun::star::ucb::AlreadyInitializedException,
                    com::sun::star::ucb::ServiceNotFoundException,
-                   com::sun::star::uno::RuntimeException );
+                   com::sun::star::uno::RuntimeException, std::exception );
 
         virtual sal_Int16 SAL_CALL
         getCapabilities()
-            throw( com::sun::star::uno::RuntimeException );
+            throw( com::sun::star::uno::RuntimeException, std::exception );
 
 
         // XCloseable
@@ -536,37 +536,37 @@ namespace fileaccess {
         close(
             void )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException);
+                   com::sun::star::uno::RuntimeException, std::exception);
 
         // XContentAccess
 
         virtual OUString SAL_CALL
         queryContentIdentifierString(
             void )
-            throw( com::sun::star::uno::RuntimeException );
+            throw( com::sun::star::uno::RuntimeException, std::exception );
 
         virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier > SAL_CALL
         queryContentIdentifier(
             void )
-            throw( com::sun::star::uno::RuntimeException );
+            throw( com::sun::star::uno::RuntimeException, std::exception );
 
         virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContent > SAL_CALL
         queryContent(
             void )
-            throw( com::sun::star::uno::RuntimeException );
+            throw( com::sun::star::uno::RuntimeException, std::exception );
 
         // XResultSetMetaDataSupplier
         virtual com::sun::star::uno::Reference< com::sun::star::sdbc::XResultSetMetaData > SAL_CALL
         getMetaData(
             void )
             throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException);
+                   com::sun::star::uno::RuntimeException, std::exception);
 
 
         // XPropertySet
         virtual com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo()
-            throw( com::sun::star::uno::RuntimeException);
+            throw( com::sun::star::uno::RuntimeException, std::exception);
 
         virtual void SAL_CALL setPropertyValue(
             const OUString& aPropertyName,
@@ -575,14 +575,14 @@ namespace fileaccess {
                    com::sun::star::beans::PropertyVetoException,
                    com::sun::star::lang::IllegalArgumentException,
                    com::sun::star::lang::WrappedTargetException,
-                   com::sun::star::uno::RuntimeException);
+                   com::sun::star::uno::RuntimeException, std::exception);
 
         virtual com::sun::star::uno::Any SAL_CALL
         getPropertyValue(
             const OUString& PropertyName )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
-                   com::sun::star::uno::RuntimeException);
+                   com::sun::star::uno::RuntimeException, std::exception);
 
         virtual void SAL_CALL
         addPropertyChangeListener(
@@ -590,7 +590,7 @@ namespace fileaccess {
             const com::sun::star::uno::Reference< com::sun::star::beans::XPropertyChangeListener >& xListener )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
-                   com::sun::star::uno::RuntimeException);
+                   com::sun::star::uno::RuntimeException, std::exception);
 
         virtual void SAL_CALL
         removePropertyChangeListener(
@@ -598,7 +598,7 @@ namespace fileaccess {
             const com::sun::star::uno::Reference< com::sun::star::beans::XPropertyChangeListener >& aListener )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
-                   com::sun::star::uno::RuntimeException);
+                   com::sun::star::uno::RuntimeException, std::exception);
 
         virtual void SAL_CALL
         addVetoableChangeListener(
@@ -606,14 +606,14 @@ namespace fileaccess {
             const com::sun::star::uno::Reference< com::sun::star::beans::XVetoableChangeListener >& aListener )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
-                   com::sun::star::uno::RuntimeException);
+                   com::sun::star::uno::RuntimeException, std::exception);
 
         virtual void SAL_CALL removeVetoableChangeListener(
             const OUString& PropertyName,
             const com::sun::star::uno::Reference< com::sun::star::beans::XVetoableChangeListener >& aListener )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
-                   com::sun::star::uno::RuntimeException);
+                   com::sun::star::uno::RuntimeException, std::exception);
 
     private:
 

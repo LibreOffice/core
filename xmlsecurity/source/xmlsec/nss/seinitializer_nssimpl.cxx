@@ -65,7 +65,7 @@ SEInitializer_NssImpl::~SEInitializer_NssImpl()
 /* XSEInitializer */
 uno::Reference< cssxc::XXMLSecurityContext > SAL_CALL
     SEInitializer_NssImpl::createSecurityContext( const OUString& )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     CERTCertDBHandle    *pCertHandle = NULL ;
 
@@ -100,7 +100,7 @@ uno::Reference< cssxc::XXMLSecurityContext > SAL_CALL
 }
 
 void SAL_CALL SEInitializer_NssImpl::freeSecurityContext( const uno::Reference< cssxc::XXMLSecurityContext >& )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     /*
      * because the security context will free all its content when it
@@ -141,17 +141,17 @@ uno::Reference< uno::XInterface > SAL_CALL SEInitializer_NssImpl_createInstance(
 
 /* XServiceInfo */
 OUString SAL_CALL SEInitializer_NssImpl::getImplementationName(  )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return SEInitializer_NssImpl_getImplementationName();
 }
 sal_Bool SAL_CALL SEInitializer_NssImpl::supportsService( const OUString& rServiceName )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return SEInitializer_NssImpl_supportsService( rServiceName );
 }
 uno::Sequence< OUString > SAL_CALL SEInitializer_NssImpl::getSupportedServiceNames(  )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return SEInitializer_NssImpl_getSupportedServiceNames();
 }

@@ -78,7 +78,7 @@ namespace dbaui
         m_pData->m_pUndoManager->disposing();
     }
 
-    void SAL_CALL OSingleDocumentController::disposing( const EventObject& i_event ) throw( RuntimeException )
+    void SAL_CALL OSingleDocumentController::disposing( const EventObject& i_event ) throw( RuntimeException, std::exception )
     {
         // simply disambiguate
         OSingleDocumentController_Base::disposing( i_event );
@@ -107,7 +107,7 @@ namespace dbaui
         InvalidateFeature( ID_BROWSER_REDO );
     }
 
-    Reference< XUndoManager > SAL_CALL OSingleDocumentController::getUndoManager(  ) throw (RuntimeException)
+    Reference< XUndoManager > SAL_CALL OSingleDocumentController::getUndoManager(  ) throw (RuntimeException, std::exception)
     {
         return m_pData->m_pUndoManager.get();
     }

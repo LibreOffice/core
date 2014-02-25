@@ -95,12 +95,12 @@ class LateInitListener : public BaseLock // must be the first one to guarantee r
         // document.XEventListener
 
         virtual void SAL_CALL notifyEvent(const css::document::EventObject& aEvent)
-            throw(css::uno::RuntimeException);
+            throw(css::uno::RuntimeException, std::exception);
 
         //---------------------------------------
         // lang.XEventListener
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
-            throw(css::uno::RuntimeException);
+            throw(css::uno::RuntimeException, std::exception);
 };
 
     } // namespace config

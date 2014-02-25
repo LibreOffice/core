@@ -86,7 +86,7 @@ XTYPEPROVIDER_IMPL_2( PropertySetInfo,
 
 // virtual
 uno::Sequence< beans::Property > SAL_CALL PropertySetInfo::getProperties()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     if ( !m_pProps )
     {
@@ -152,7 +152,7 @@ uno::Sequence< beans::Property > SAL_CALL PropertySetInfo::getProperties()
 // virtual
 beans::Property SAL_CALL PropertySetInfo::getPropertyByName(
         const OUString& aName )
-    throw( beans::UnknownPropertyException, uno::RuntimeException )
+    throw( beans::UnknownPropertyException, uno::RuntimeException, std::exception )
 {
     beans::Property aProp;
     if ( queryProperty( aName, aProp ) )
@@ -165,7 +165,7 @@ beans::Property SAL_CALL PropertySetInfo::getPropertyByName(
 // virtual
 sal_Bool SAL_CALL PropertySetInfo::hasPropertyByName(
         const OUString& Name )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     beans::Property aProp;
     return queryProperty( Name, aProp );
@@ -260,7 +260,7 @@ XTYPEPROVIDER_IMPL_2( CommandProcessorInfo,
 // virtual
 uno::Sequence< com::sun::star::ucb::CommandInfo > SAL_CALL
 CommandProcessorInfo::getCommands()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     if ( !m_pCommands )
     {
@@ -300,7 +300,7 @@ com::sun::star::ucb::CommandInfo SAL_CALL
 CommandProcessorInfo::getCommandInfoByName(
         const OUString& Name )
     throw( com::sun::star::ucb::UnsupportedCommandException,
-           uno::RuntimeException )
+           uno::RuntimeException, std::exception )
 {
     com::sun::star::ucb::CommandInfo aInfo;
     if ( queryCommand( Name, aInfo ) )
@@ -314,7 +314,7 @@ CommandProcessorInfo::getCommandInfoByName(
 com::sun::star::ucb::CommandInfo SAL_CALL
 CommandProcessorInfo::getCommandInfoByHandle( sal_Int32 Handle )
     throw( com::sun::star::ucb::UnsupportedCommandException,
-           uno::RuntimeException )
+           uno::RuntimeException, std::exception )
 {
     com::sun::star::ucb::CommandInfo aInfo;
     if ( queryCommand( Handle, aInfo ) )
@@ -327,7 +327,7 @@ CommandProcessorInfo::getCommandInfoByHandle( sal_Int32 Handle )
 // virtual
 sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByName(
        const OUString& Name )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     com::sun::star::ucb::CommandInfo aInfo;
     return queryCommand( Name, aInfo );
@@ -336,7 +336,7 @@ sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByName(
 
 // virtual
 sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByHandle( sal_Int32 Handle )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     com::sun::star::ucb::CommandInfo aInfo;
     return queryCommand( Handle, aInfo );

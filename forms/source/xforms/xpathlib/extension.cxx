@@ -51,7 +51,7 @@ Sequence< OUString > SAL_CALL CLibxml2XFormsExtension::getSupportedServiceNames_
     return aSequence;
 }
 
-Libxml2ExtensionHandle SAL_CALL CLibxml2XFormsExtension::getLibxml2ExtensionHandle() throw (RuntimeException)
+Libxml2ExtensionHandle SAL_CALL CLibxml2XFormsExtension::getLibxml2ExtensionHandle() throw (RuntimeException, std::exception)
 {
     Libxml2ExtensionHandle aHandle;
     aHandle.functionLookupFunction = reinterpret_cast< sal_Int64 >( &xforms_lookupFunc );
@@ -61,7 +61,7 @@ Libxml2ExtensionHandle SAL_CALL CLibxml2XFormsExtension::getLibxml2ExtensionHand
     return aHandle;
 }
 
-void SAL_CALL CLibxml2XFormsExtension::initialize(const Sequence< Any >& aSequence) throw (RuntimeException)
+void SAL_CALL CLibxml2XFormsExtension::initialize(const Sequence< Any >& aSequence) throw (RuntimeException, std::exception)
 {
     if (aSequence.getLength() == 2
         && (aSequence[0] >>= m_aModel)

@@ -146,7 +146,7 @@ namespace dbaccess
         return false;
     }
 
-    void SAL_CALL DocumentEvents::replaceByName( const OUString& _Name, const Any& _Element ) throw (IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
+    void SAL_CALL DocumentEvents::replaceByName( const OUString& _Name, const Any& _Element ) throw (IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_pData->rMutex );
 
@@ -179,7 +179,7 @@ namespace dbaccess
         elementPos->second = aEventDescriptor;
     }
 
-    Any SAL_CALL DocumentEvents::getByName( const OUString& _Name ) throw (NoSuchElementException, WrappedTargetException, RuntimeException)
+    Any SAL_CALL DocumentEvents::getByName( const OUString& _Name ) throw (NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_pData->rMutex );
 
@@ -194,7 +194,7 @@ namespace dbaccess
         return aReturn;
     }
 
-    Sequence< OUString > SAL_CALL DocumentEvents::getElementNames(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL DocumentEvents::getElementNames(  ) throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_pData->rMutex );
 
@@ -208,19 +208,19 @@ namespace dbaccess
         return aNames;
     }
 
-    ::sal_Bool SAL_CALL DocumentEvents::hasByName( const OUString& _Name ) throw (RuntimeException)
+    ::sal_Bool SAL_CALL DocumentEvents::hasByName( const OUString& _Name ) throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_pData->rMutex );
 
         return m_pData->rEventsData.find( _Name ) != m_pData->rEventsData.end();
     }
 
-    Type SAL_CALL DocumentEvents::getElementType(  ) throw (RuntimeException)
+    Type SAL_CALL DocumentEvents::getElementType(  ) throw (RuntimeException, std::exception)
     {
         return ::cppu::UnoType< Sequence< PropertyValue > >::get();
     }
 
-    ::sal_Bool SAL_CALL DocumentEvents::hasElements(  ) throw (RuntimeException)
+    ::sal_Bool SAL_CALL DocumentEvents::hasElements(  ) throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_pData->rMutex );
         return !m_pData->rEventsData.empty();

@@ -80,7 +80,7 @@ public:
             <FALSE/> if there is at least one state set in it.
     */
     virtual sal_Bool SAL_CALL isEmpty ()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     /** Checks if the given state is a member of the state set of this
         object.
@@ -94,7 +94,7 @@ public:
             state set and <FALSE/> otherwise.
     */
     virtual sal_Bool SAL_CALL contains (sal_Int16 aState)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     /** Checks if all of the given states are in this object's state
         set.
@@ -113,12 +113,12 @@ public:
     */
     virtual sal_Bool SAL_CALL containsAll (
         const ::com::sun::star::uno::Sequence<sal_Int16>& rStateSet)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     /** Returns a sequence of all states.
     */
     virtual com::sun::star::uno::Sequence<sal_Int16> SAL_CALL getStates()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     /** Adds a state to the set.
     */
@@ -136,13 +136,13 @@ public:
     */
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL
         getTypes (void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     /** Returns a implementation id.
     */
     virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
         getImplementationId (void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 protected:
     /// Mutex guarding this object.

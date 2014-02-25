@@ -59,17 +59,17 @@ public:
     //----- XPane -------------------------------------------------------------
 
     virtual sal_Bool SAL_CALL isVisible (void)
-        throw (cssu::RuntimeException);
+        throw (cssu::RuntimeException, std::exception);
 
     virtual void SAL_CALL setVisible (sal_Bool bIsVisible)
-        throw (cssu::RuntimeException);
+        throw (cssu::RuntimeException, std::exception);
 
     virtual cssu::Reference<css::accessibility::XAccessible> SAL_CALL getAccessible (void)
-        throw (cssu::RuntimeException);
+        throw (cssu::RuntimeException, std::exception);
 
     virtual void SAL_CALL setAccessible (
         const cssu::Reference<css::accessibility::XAccessible>& rxAccessible)
-        throw (cssu::RuntimeException);
+        throw (cssu::RuntimeException, std::exception);
 
 
 

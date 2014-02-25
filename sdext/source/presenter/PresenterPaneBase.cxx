@@ -164,7 +164,7 @@ awt::Point PresenterPaneBase::GetCalloutAnchor (void) const
 //----- XInitialization -------------------------------------------------------
 
 void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
-    throw (Exception, RuntimeException)
+    throw (Exception, RuntimeException, std::exception)
 {
     ThrowIfDisposed();
 
@@ -261,14 +261,14 @@ void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
 //----- XResourceId -----------------------------------------------------------
 
 Reference<XResourceId> SAL_CALL PresenterPaneBase::getResourceId (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     return mxPaneId;
 }
 
 sal_Bool SAL_CALL PresenterPaneBase::isAnchorOnly (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return true;
 }
@@ -276,28 +276,28 @@ sal_Bool SAL_CALL PresenterPaneBase::isAnchorOnly (void)
 //----- XWindowListener -------------------------------------------------------
 
 void SAL_CALL PresenterPaneBase::windowResized (const awt::WindowEvent& rEvent)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     (void)rEvent;
     ThrowIfDisposed();
 }
 
 void SAL_CALL PresenterPaneBase::windowMoved (const awt::WindowEvent& rEvent)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     (void)rEvent;
     ThrowIfDisposed();
 }
 
 void SAL_CALL PresenterPaneBase::windowShown (const lang::EventObject& rEvent)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     (void)rEvent;
     ThrowIfDisposed();
 }
 
 void SAL_CALL PresenterPaneBase::windowHidden (const lang::EventObject& rEvent)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     (void)rEvent;
     ThrowIfDisposed();
@@ -306,7 +306,7 @@ void SAL_CALL PresenterPaneBase::windowHidden (const lang::EventObject& rEvent)
 //----- lang::XEventListener --------------------------------------------------
 
 void SAL_CALL PresenterPaneBase::disposing (const lang::EventObject& rEvent)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     if (rEvent.Source == mxBorderWindow)
     {

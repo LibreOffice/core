@@ -611,7 +611,7 @@ void BibInterceptorHelper::ReleaseInterceptor()
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL
-    BibInterceptorHelper::queryDispatch( const ::com::sun::star::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags ) throw (::com::sun::star::uno::RuntimeException)
+    BibInterceptorHelper::queryDispatch( const ::com::sun::star::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     Reference< XDispatch > xReturn;
 
@@ -626,7 +626,7 @@ void BibInterceptorHelper::ReleaseInterceptor()
 }
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > > SAL_CALL
-    BibInterceptorHelper::queryDispatches( const ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchDescriptor >& aDescripts ) throw (::com::sun::star::uno::RuntimeException)
+    BibInterceptorHelper::queryDispatches( const ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchDescriptor >& aDescripts ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     Sequence< Reference< XDispatch> > aReturn( aDescripts.getLength() );
     Reference< XDispatch >* pReturn = aReturn.getArray();
@@ -640,23 +640,23 @@ void BibInterceptorHelper::ReleaseInterceptor()
 
 // XDispatchProviderInterceptor
 ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > SAL_CALL
-    BibInterceptorHelper::getSlaveDispatchProvider(  ) throw (::com::sun::star::uno::RuntimeException)
+    BibInterceptorHelper::getSlaveDispatchProvider(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return xSlaveDispatchProvider;
 }
 
-void SAL_CALL BibInterceptorHelper::setSlaveDispatchProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xNewSlaveDispatchProvider ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL BibInterceptorHelper::setSlaveDispatchProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xNewSlaveDispatchProvider ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     xSlaveDispatchProvider = xNewSlaveDispatchProvider;
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > SAL_CALL
-    BibInterceptorHelper::getMasterDispatchProvider(  ) throw (::com::sun::star::uno::RuntimeException)
+    BibInterceptorHelper::getMasterDispatchProvider(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return xMasterDispatchProvider;
 }
 
-void SAL_CALL BibInterceptorHelper::setMasterDispatchProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xNewMasterDispatchProvider ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL BibInterceptorHelper::setMasterDispatchProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xNewMasterDispatchProvider ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     xMasterDispatchProvider = xNewMasterDispatchProvider;
 }
@@ -1164,7 +1164,7 @@ void BibDataManager::setActiveDataTable(const OUString& rTable)
 }
 
 
-void SAL_CALL BibDataManager::load(  ) throw (RuntimeException)
+void SAL_CALL BibDataManager::load(  ) throw (RuntimeException, std::exception)
 {
     if ( isLoaded() )
         // nothing to do
@@ -1183,7 +1183,7 @@ void SAL_CALL BibDataManager::load(  ) throw (RuntimeException)
 }
 
 
-void SAL_CALL BibDataManager::unload(  ) throw (RuntimeException)
+void SAL_CALL BibDataManager::unload(  ) throw (RuntimeException, std::exception)
 {
     if ( !isLoaded() )
         // nothing to do
@@ -1209,7 +1209,7 @@ void SAL_CALL BibDataManager::unload(  ) throw (RuntimeException)
 }
 
 
-void SAL_CALL BibDataManager::reload(  ) throw (RuntimeException)
+void SAL_CALL BibDataManager::reload(  ) throw (RuntimeException, std::exception)
 {
     if ( !isLoaded() )
         // nothing to do
@@ -1234,7 +1234,7 @@ void SAL_CALL BibDataManager::reload(  ) throw (RuntimeException)
 }
 
 
-sal_Bool SAL_CALL BibDataManager::isLoaded(  ) throw (RuntimeException)
+sal_Bool SAL_CALL BibDataManager::isLoaded(  ) throw (RuntimeException, std::exception)
 {
     Reference< XLoadable >xFormAsLoadable( m_xForm, UNO_QUERY );
     DBG_ASSERT( xFormAsLoadable.is() || !m_xForm.is(), "BibDataManager::isLoaded: invalid form!");
@@ -1246,13 +1246,13 @@ sal_Bool SAL_CALL BibDataManager::isLoaded(  ) throw (RuntimeException)
 }
 
 
-void SAL_CALL BibDataManager::addLoadListener( const Reference< XLoadListener >& aListener ) throw (RuntimeException)
+void SAL_CALL BibDataManager::addLoadListener( const Reference< XLoadListener >& aListener ) throw (RuntimeException, std::exception)
 {
     m_aLoadListeners.addInterface( aListener );
 }
 
 
-void SAL_CALL BibDataManager::removeLoadListener( const Reference< XLoadListener >& aListener ) throw (RuntimeException)
+void SAL_CALL BibDataManager::removeLoadListener( const Reference< XLoadListener >& aListener ) throw (RuntimeException, std::exception)
 {
     m_aLoadListeners.removeInterface( aListener );
 }
@@ -1420,13 +1420,13 @@ void SAL_CALL BibDataManager::disposing()
 }
 
 
-void BibDataManager::disposing( const EventObject& /*Source*/ ) throw( ::com::sun::star::uno::RuntimeException )
+void BibDataManager::disposing( const EventObject& /*Source*/ ) throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     // not interested in
 }
 
 
-void BibDataManager::propertyChange(const beans::PropertyChangeEvent& evt) throw( RuntimeException )
+void BibDataManager::propertyChange(const beans::PropertyChangeEvent& evt) throw( RuntimeException, std::exception )
 {
     try
     {

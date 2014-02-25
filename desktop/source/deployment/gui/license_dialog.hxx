@@ -45,8 +45,8 @@ public:
 
     // XExecutableDialog
     virtual void SAL_CALL setTitle( OUString const & title )
-        throw (css::uno::RuntimeException);
-    virtual sal_Int16 SAL_CALL execute() throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
+    virtual sal_Int16 SAL_CALL execute() throw (css::uno::RuntimeException, std::exception);
 };
 }
 #endif

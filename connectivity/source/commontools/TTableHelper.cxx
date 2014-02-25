@@ -61,17 +61,17 @@ protected:
     virtual ~OTableContainerListener(){}
 public:
     OTableContainerListener(OTableHelper* _pComponent) : m_pComponent(_pComponent){}
-    virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& /*Event*/ ) throw (RuntimeException)
+    virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& /*Event*/ ) throw (RuntimeException, std::exception)
     {
     }
-    virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw (RuntimeException)
+    virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw (RuntimeException, std::exception)
     {
         OUString sName;
         Event.Accessor  >>= sName;
         if ( m_aRefNames.find(sName) != m_aRefNames.end() )
             m_pComponent->refreshKeys();
     }
-    virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw (RuntimeException)
+    virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw (RuntimeException, std::exception)
     {
         OUString sOldComposedName,sNewComposedName;
         Event.ReplacedElement   >>= sOldComposedName;
@@ -80,7 +80,7 @@ public:
             m_pComponent->refreshKeys();
     }
     // XEventListener
-    virtual void SAL_CALL disposing( const EventObject& /*_rSource*/ ) throw (RuntimeException)
+    virtual void SAL_CALL disposing( const EventObject& /*_rSource*/ ) throw (RuntimeException, std::exception)
     {
     }
     void clear() { m_pComponent = NULL; }
@@ -492,7 +492,7 @@ OUString OTableHelper::getRenameStart() const
 }
 
 // XRename
-void SAL_CALL OTableHelper::rename( const OUString& newName ) throw(SQLException, ElementExistException, RuntimeException)
+void SAL_CALL OTableHelper::rename( const OUString& newName ) throw(SQLException, ElementExistException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(
@@ -542,7 +542,7 @@ Reference< XDatabaseMetaData> OTableHelper::getMetaData() const
     return m_pImpl->m_xMetaData;
 }
 
-void SAL_CALL OTableHelper::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor ) throw(SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException)
+void SAL_CALL OTableHelper::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor ) throw(SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(
@@ -560,7 +560,7 @@ void SAL_CALL OTableHelper::alterColumnByIndex( sal_Int32 index, const Reference
 }
 
 
-OUString SAL_CALL OTableHelper::getName() throw(RuntimeException)
+OUString SAL_CALL OTableHelper::getName() throw(RuntimeException, std::exception)
 {
     OUString sComposedName;
     sComposedName = ::dbtools::composeTableName(getMetaData(),m_CatalogName,m_SchemaName,m_Name,sal_False,::dbtools::eInDataManipulation);

@@ -101,7 +101,7 @@ void SwLinguServiceEventListener::processDictionaryListEvent(
 
 void SAL_CALL SwLinguServiceEventListener::processLinguServiceEvent(
             const LinguServiceEvent& rLngSvcEvent )
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -131,7 +131,7 @@ void SAL_CALL SwLinguServiceEventListener::processLinguServiceEvent(
 
 void SAL_CALL SwLinguServiceEventListener::disposing(
             const EventObject& rEventObj )
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -143,13 +143,13 @@ void SAL_CALL SwLinguServiceEventListener::disposing(
 
 void SAL_CALL SwLinguServiceEventListener::queryTermination(
             const EventObject& /*rEventObj*/ )
-        throw(TerminationVetoException, RuntimeException)
+        throw(TerminationVetoException, RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL SwLinguServiceEventListener::notifyTermination(
             const EventObject& rEventObj )
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 

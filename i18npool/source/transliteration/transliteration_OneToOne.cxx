@@ -27,7 +27,7 @@ using namespace com::sun::star::uno;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-sal_Int16 SAL_CALL transliteration_OneToOne::getType() throw(RuntimeException)
+sal_Int16 SAL_CALL transliteration_OneToOne::getType() throw(RuntimeException, std::exception)
 {
         // This type is also defined in com/sun/star/util/TransliterationType.hdl
         return TransliterationType::ONE_TO_ONE;
@@ -35,7 +35,7 @@ sal_Int16 SAL_CALL transliteration_OneToOne::getType() throw(RuntimeException)
 
 OUString SAL_CALL
 transliteration_OneToOne::folding( const OUString& /*inStr*/, sal_Int32 /*startPos*/,
-        sal_Int32 /*nCount*/, Sequence< sal_Int32 >& /*offset*/) throw(RuntimeException)
+        sal_Int32 /*nCount*/, Sequence< sal_Int32 >& /*offset*/) throw(RuntimeException, std::exception)
 {
         throw RuntimeException();
 }
@@ -43,14 +43,14 @@ transliteration_OneToOne::folding( const OUString& /*inStr*/, sal_Int32 /*startP
 sal_Bool SAL_CALL
 transliteration_OneToOne::equals( const OUString& /*str1*/, sal_Int32 /*pos1*/, sal_Int32 /*nCount1*/,
         sal_Int32& /*nMatch1*/, const OUString& /*str2*/, sal_Int32 /*pos2*/, sal_Int32 /*nCount2*/, sal_Int32& /*nMatch2*/ )
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     throw RuntimeException();
 }
 
 Sequence< OUString > SAL_CALL
 transliteration_OneToOne::transliterateRange( const OUString& /*str1*/, const OUString& /*str2*/ )
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     throw RuntimeException();
 }
@@ -58,7 +58,7 @@ transliteration_OneToOne::transliterateRange( const OUString& /*str1*/, const OU
 OUString SAL_CALL
 transliteration_OneToOne::transliterate( const OUString& inStr, sal_Int32 startPos,
     sal_Int32 nCount, Sequence< sal_Int32 >& offset)
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     // Create a string buffer which can hold nCount + 1 characters.
     // The reference count is 1 now.
@@ -88,7 +88,7 @@ transliteration_OneToOne::transliterate( const OUString& inStr, sal_Int32 startP
 }
 
 sal_Unicode SAL_CALL
-transliteration_OneToOne::transliterateChar2Char( sal_Unicode inChar) throw(RuntimeException, MultipleCharsOutputException)
+transliteration_OneToOne::transliterateChar2Char( sal_Unicode inChar) throw(RuntimeException, MultipleCharsOutputException, std::exception)
 {
     return func ? func( inChar) : (*table)[ inChar ];
 }

@@ -474,7 +474,7 @@ void SAL_CALL OInterfaceContainer::readEvents(const Reference<XObjectInputStream
 }
 
 
-void SAL_CALL OInterfaceContainer::write( const Reference< XObjectOutputStream >& _rxOutStream ) throw(IOException, RuntimeException)
+void SAL_CALL OInterfaceContainer::write( const Reference< XObjectOutputStream >& _rxOutStream ) throw(IOException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_rMutex );
     sal_Int32 nLen = m_aItems.size();
@@ -532,7 +532,7 @@ namespace
 }
 
 
-void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& _rxInStream ) throw(IOException, RuntimeException)
+void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& _rxInStream ) throw(IOException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_rMutex );
 
@@ -621,20 +621,20 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
 
 // XContainer
 
-void SAL_CALL OInterfaceContainer::addContainerListener(const Reference<XContainerListener>& _rxListener) throw( RuntimeException )
+void SAL_CALL OInterfaceContainer::addContainerListener(const Reference<XContainerListener>& _rxListener) throw( RuntimeException, std::exception )
 {
     m_aContainerListeners.addInterface(_rxListener);
 }
 
 
-void SAL_CALL OInterfaceContainer::removeContainerListener(const Reference<XContainerListener>& _rxListener) throw( RuntimeException )
+void SAL_CALL OInterfaceContainer::removeContainerListener(const Reference<XContainerListener>& _rxListener) throw( RuntimeException, std::exception )
 {
     m_aContainerListeners.removeInterface(_rxListener);
 }
 
 // XEventListener
 
-void SAL_CALL OInterfaceContainer::disposing(const EventObject& _rSource) throw( RuntimeException )
+void SAL_CALL OInterfaceContainer::disposing(const EventObject& _rSource) throw( RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_rMutex );
 
@@ -680,7 +680,7 @@ void SAL_CALL OInterfaceContainer::disposing(const EventObject& _rSource) throw(
 // XPropertyChangeListener
 
 void OInterfaceContainer::propertyChange(const PropertyChangeEvent& evt)
-throw (::com::sun::star::uno::RuntimeException) {
+throw (::com::sun::star::uno::RuntimeException, std::exception) {
     if (evt.PropertyName == PROPERTY_NAME)
     {
         ::osl::MutexGuard aGuard( m_rMutex );
@@ -697,20 +697,20 @@ throw (::com::sun::star::uno::RuntimeException) {
 
 // XElementAccess
 
-sal_Bool SAL_CALL OInterfaceContainer::hasElements() throw( RuntimeException )
+sal_Bool SAL_CALL OInterfaceContainer::hasElements() throw( RuntimeException, std::exception )
 {
     return !m_aMap.empty();
 }
 
 
-Type SAL_CALL OInterfaceContainer::getElementType() throw(RuntimeException)
+Type SAL_CALL OInterfaceContainer::getElementType() throw(RuntimeException, std::exception)
 {
     return m_aElementType;
 }
 
 // XEnumerationAccess
 
-Reference<XEnumeration> SAL_CALL OInterfaceContainer::createEnumeration() throw( RuntimeException )
+Reference<XEnumeration> SAL_CALL OInterfaceContainer::createEnumeration() throw( RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_rMutex );
     return new ::comphelper::OEnumerationByIndex(static_cast<XIndexAccess*>(this));
@@ -718,7 +718,7 @@ Reference<XEnumeration> SAL_CALL OInterfaceContainer::createEnumeration() throw(
 
 // XNameAccess
 
-Any SAL_CALL OInterfaceContainer::getByName( const OUString& _rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
+Any SAL_CALL OInterfaceContainer::getByName( const OUString& _rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     ::std::pair <OInterfaceMap::iterator,
           OInterfaceMap::iterator> aPair = m_aMap.equal_range(_rName);
@@ -730,7 +730,7 @@ Any SAL_CALL OInterfaceContainer::getByName( const OUString& _rName ) throw(NoSu
 }
 
 
-StringSequence SAL_CALL OInterfaceContainer::getElementNames() throw(RuntimeException)
+StringSequence SAL_CALL OInterfaceContainer::getElementNames() throw(RuntimeException, std::exception)
 {
     StringSequence aNameList(m_aItems.size());
     OUString* pStringArray = aNameList.getArray();
@@ -743,7 +743,7 @@ StringSequence SAL_CALL OInterfaceContainer::getElementNames() throw(RuntimeExce
 }
 
 
-sal_Bool SAL_CALL OInterfaceContainer::hasByName( const OUString& _rName ) throw(RuntimeException)
+sal_Bool SAL_CALL OInterfaceContainer::hasByName( const OUString& _rName ) throw(RuntimeException, std::exception)
 {
     ::std::pair <OInterfaceMap::iterator,
           OInterfaceMap::iterator> aPair = m_aMap.equal_range(_rName);
@@ -752,13 +752,13 @@ sal_Bool SAL_CALL OInterfaceContainer::hasByName( const OUString& _rName ) throw
 
 // XIndexAccess
 
-sal_Int32 OInterfaceContainer::getCount() throw( RuntimeException )
+sal_Int32 OInterfaceContainer::getCount() throw( RuntimeException, std::exception )
 {
     return m_aItems.size();
 }
 
 
-Any OInterfaceContainer::getByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
+Any OInterfaceContainer::getByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
     if (_nIndex < 0 || (_nIndex >= (sal_Int32)m_aItems.size()))
         throw IndexOutOfBoundsException();
@@ -944,7 +944,7 @@ void OInterfaceContainer::impl_replacedElement( const ContainerEvent& _rEvent, :
 
 // XIndexContainer
 
-void SAL_CALL OInterfaceContainer::insertByIndex( sal_Int32 _nIndex, const Any& _rElement ) throw(IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
+void SAL_CALL OInterfaceContainer::insertByIndex( sal_Int32 _nIndex, const Any& _rElement ) throw(IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception)
 {
     Reference< XPropertySet > xElement;
     _rElement >>= xElement;
@@ -1032,7 +1032,7 @@ void OInterfaceContainer::implCheckIndex( const sal_Int32 _nIndex ) SAL_THROW( (
 }
 
 
-void SAL_CALL OInterfaceContainer::replaceByIndex(sal_Int32 _nIndex, const Any& Element) throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
+void SAL_CALL OInterfaceContainer::replaceByIndex(sal_Int32 _nIndex, const Any& Element) throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
     ::osl::ClearableMutexGuard aGuard( m_rMutex );
     // check the index
@@ -1085,7 +1085,7 @@ void OInterfaceContainer::implRemoveByIndex( const sal_Int32 _nIndex, ::osl::Cle
 }
 
 
-void SAL_CALL OInterfaceContainer::removeByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
+void SAL_CALL OInterfaceContainer::removeByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
     ::osl::ClearableMutexGuard aGuard( m_rMutex );
     // check the index
@@ -1101,7 +1101,7 @@ ElementDescription* OInterfaceContainer::createElementMetaData( )
 }
 
 
-void SAL_CALL OInterfaceContainer::insertByName(const OUString& _rName, const Any& _rElement) throw( IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException )
+void SAL_CALL OInterfaceContainer::insertByName(const OUString& _rName, const Any& _rElement) throw( IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException, std::exception )
 {
     Reference< XPropertySet > xElementProps;
 
@@ -1132,7 +1132,7 @@ void SAL_CALL OInterfaceContainer::insertByName(const OUString& _rName, const An
 }
 
 
-void SAL_CALL OInterfaceContainer::replaceByName(const OUString& Name, const Any& Element) throw( IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException )
+void SAL_CALL OInterfaceContainer::replaceByName(const OUString& Name, const Any& Element) throw( IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException, std::exception )
 {
     ::osl::ClearableMutexGuard aGuard( m_rMutex );
     ::std::pair <OInterfaceMap::iterator,
@@ -1160,7 +1160,7 @@ void SAL_CALL OInterfaceContainer::replaceByName(const OUString& Name, const Any
 }
 
 
-void SAL_CALL OInterfaceContainer::removeByName(const OUString& Name) throw( NoSuchElementException, WrappedTargetException, RuntimeException )
+void SAL_CALL OInterfaceContainer::removeByName(const OUString& Name) throw( NoSuchElementException, WrappedTargetException, RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_rMutex );
     ::std::pair <OInterfaceMap::iterator,
@@ -1175,7 +1175,7 @@ void SAL_CALL OInterfaceContainer::removeByName(const OUString& Name) throw( NoS
 
 // XEventAttacherManager
 
-void SAL_CALL OInterfaceContainer::registerScriptEvent( sal_Int32 nIndex, const ScriptEventDescriptor& aScriptEvent ) throw(IllegalArgumentException, RuntimeException)
+void SAL_CALL OInterfaceContainer::registerScriptEvent( sal_Int32 nIndex, const ScriptEventDescriptor& aScriptEvent ) throw(IllegalArgumentException, RuntimeException, std::exception)
 {
     ::osl::ClearableMutexGuard aGuard( m_rMutex );
     if ( m_xEventAttacher.is() )
@@ -1187,7 +1187,7 @@ void SAL_CALL OInterfaceContainer::registerScriptEvent( sal_Int32 nIndex, const 
 }
 
 
-void SAL_CALL OInterfaceContainer::registerScriptEvents( sal_Int32 nIndex, const Sequence< ScriptEventDescriptor >& aScriptEvents ) throw(IllegalArgumentException, RuntimeException)
+void SAL_CALL OInterfaceContainer::registerScriptEvents( sal_Int32 nIndex, const Sequence< ScriptEventDescriptor >& aScriptEvents ) throw(IllegalArgumentException, RuntimeException, std::exception)
 {
     ::osl::ClearableMutexGuard aGuard( m_rMutex );
     if ( m_xEventAttacher.is() )
@@ -1199,35 +1199,35 @@ void SAL_CALL OInterfaceContainer::registerScriptEvents( sal_Int32 nIndex, const
 }
 
 
-void SAL_CALL OInterfaceContainer::revokeScriptEvent( sal_Int32 nIndex, const OUString& aListenerType, const OUString& aEventMethod, const OUString& aRemoveListenerParam ) throw(IllegalArgumentException, RuntimeException)
+void SAL_CALL OInterfaceContainer::revokeScriptEvent( sal_Int32 nIndex, const OUString& aListenerType, const OUString& aEventMethod, const OUString& aRemoveListenerParam ) throw(IllegalArgumentException, RuntimeException, std::exception)
 {
     if ( m_xEventAttacher.is() )
         m_xEventAttacher->revokeScriptEvent( nIndex, aListenerType, aEventMethod, aRemoveListenerParam );
 }
 
 
-void SAL_CALL OInterfaceContainer::revokeScriptEvents( sal_Int32 nIndex ) throw(IllegalArgumentException, RuntimeException)
+void SAL_CALL OInterfaceContainer::revokeScriptEvents( sal_Int32 nIndex ) throw(IllegalArgumentException, RuntimeException, std::exception)
 {
     if ( m_xEventAttacher.is() )
         m_xEventAttacher->revokeScriptEvents( nIndex );
 }
 
 
-void SAL_CALL OInterfaceContainer::insertEntry( sal_Int32 nIndex ) throw(IllegalArgumentException, RuntimeException)
+void SAL_CALL OInterfaceContainer::insertEntry( sal_Int32 nIndex ) throw(IllegalArgumentException, RuntimeException, std::exception)
 {
     if ( m_xEventAttacher.is() )
         m_xEventAttacher->insertEntry( nIndex );
 }
 
 
-void SAL_CALL OInterfaceContainer::removeEntry( sal_Int32 nIndex ) throw(IllegalArgumentException, RuntimeException)
+void SAL_CALL OInterfaceContainer::removeEntry( sal_Int32 nIndex ) throw(IllegalArgumentException, RuntimeException, std::exception)
 {
     if ( m_xEventAttacher.is() )
         m_xEventAttacher->removeEntry( nIndex );
 }
 
 
-Sequence< ScriptEventDescriptor > SAL_CALL OInterfaceContainer::getScriptEvents( sal_Int32 nIndex ) throw(IllegalArgumentException, RuntimeException)
+Sequence< ScriptEventDescriptor > SAL_CALL OInterfaceContainer::getScriptEvents( sal_Int32 nIndex ) throw(IllegalArgumentException, RuntimeException, std::exception)
 {
     Sequence< ScriptEventDescriptor > aReturn;
     if ( m_xEventAttacher.is() )
@@ -1242,28 +1242,28 @@ Sequence< ScriptEventDescriptor > SAL_CALL OInterfaceContainer::getScriptEvents(
 }
 
 
-void SAL_CALL OInterfaceContainer::attach( sal_Int32 nIndex, const Reference< XInterface >& xObject, const Any& aHelper ) throw(IllegalArgumentException, ServiceNotRegisteredException, RuntimeException)
+void SAL_CALL OInterfaceContainer::attach( sal_Int32 nIndex, const Reference< XInterface >& xObject, const Any& aHelper ) throw(IllegalArgumentException, ServiceNotRegisteredException, RuntimeException, std::exception)
 {
     if ( m_xEventAttacher.is() )
         m_xEventAttacher->attach( nIndex, xObject, aHelper );
 }
 
 
-void SAL_CALL OInterfaceContainer::detach( sal_Int32 nIndex, const Reference< XInterface >& xObject ) throw(IllegalArgumentException, RuntimeException)
+void SAL_CALL OInterfaceContainer::detach( sal_Int32 nIndex, const Reference< XInterface >& xObject ) throw(IllegalArgumentException, RuntimeException, std::exception)
 {
     if ( m_xEventAttacher.is() )
         m_xEventAttacher->detach( nIndex, xObject );
 }
 
 
-void SAL_CALL OInterfaceContainer::addScriptListener( const Reference< XScriptListener >& xListener ) throw(IllegalArgumentException, RuntimeException)
+void SAL_CALL OInterfaceContainer::addScriptListener( const Reference< XScriptListener >& xListener ) throw(IllegalArgumentException, RuntimeException, std::exception)
 {
     if ( m_xEventAttacher.is() )
         m_xEventAttacher->addScriptListener( xListener );
 }
 
 
-void SAL_CALL OInterfaceContainer::removeScriptListener( const Reference< XScriptListener >& xListener ) throw(IllegalArgumentException, RuntimeException)
+void SAL_CALL OInterfaceContainer::removeScriptListener( const Reference< XScriptListener >& xListener ) throw(IllegalArgumentException, RuntimeException, std::exception)
 {
     if ( m_xEventAttacher.is() )
         m_xEventAttacher->removeScriptListener( xListener );
@@ -1273,7 +1273,7 @@ void SAL_CALL OInterfaceContainer::removeScriptListener( const Reference< XScrip
 //= OFormComponents
 //==================================================================
 
-Any SAL_CALL OFormComponents::queryAggregation(const Type& _rType) throw(RuntimeException)
+Any SAL_CALL OFormComponents::queryAggregation(const Type& _rType) throw(RuntimeException, std::exception)
 {
     Any aReturn = OFormComponents_BASE::queryInterface(_rType);
     if (!aReturn.hasValue())
@@ -1288,7 +1288,7 @@ Any SAL_CALL OFormComponents::queryAggregation(const Type& _rType) throw(Runtime
 }
 
 
-Sequence<Type> SAL_CALL OFormComponents::getTypes() throw(RuntimeException)
+Sequence<Type> SAL_CALL OFormComponents::getTypes() throw(RuntimeException, std::exception)
 {
     return ::comphelper::concatSequences(OInterfaceContainer::getTypes(), FormComponentsBase::getTypes(), OFormComponents_BASE::getTypes());
 }
@@ -1330,14 +1330,14 @@ void OFormComponents::disposing()
 
 //XChild
 
-void OFormComponents::setParent(const InterfaceRef& Parent) throw( NoSupportException, RuntimeException )
+void OFormComponents::setParent(const InterfaceRef& Parent) throw( NoSupportException, RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     m_xParent = Parent;
 }
 
 
-InterfaceRef OFormComponents::getParent() throw( RuntimeException )
+InterfaceRef OFormComponents::getParent() throw( RuntimeException, std::exception )
 {
     return m_xParent;
 }

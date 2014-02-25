@@ -64,7 +64,7 @@ namespace shell { namespace sessioninstall
         g_type_init ();
 #endif
     }
-    void SAL_CALL SyncDbusSessionHelper::InstallPackageNames( const ::sal_uInt32 nXid, const Sequence< OUString >& vPackages, const OUString& sInteraction ) throw (RuntimeException)
+    void SAL_CALL SyncDbusSessionHelper::InstallPackageNames( const ::sal_uInt32 nXid, const Sequence< OUString >& vPackages, const OUString& sInteraction ) throw (RuntimeException, std::exception)
     {
         vector< OString > vPackagesOString;
         vPackagesOString.reserve(vPackages.getLength());
@@ -90,7 +90,7 @@ namespace shell { namespace sessioninstall
                          error.getRef());
     }
 
-    void SAL_CALL SyncDbusSessionHelper::IsInstalled( const OUString& sPackagename, const OUString& sInteraction, ::sal_Bool& o_isInstalled ) throw (RuntimeException)
+    void SAL_CALL SyncDbusSessionHelper::IsInstalled( const OUString& sPackagename, const OUString& sInteraction, ::sal_Bool& o_isInstalled ) throw (RuntimeException, std::exception)
     {
         const OString sPackagenameAscii = OUStringToOString(sPackagename, RTL_TEXTENCODING_ASCII_US);
         const OString sInteractionAscii = OUStringToOString(sInteraction, RTL_TEXTENCODING_ASCII_US);

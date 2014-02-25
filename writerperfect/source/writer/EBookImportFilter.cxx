@@ -117,20 +117,20 @@ throw (RuntimeException)
 }
 
 sal_Bool SAL_CALL EBookImportFilter::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     SAL_INFO("writerperfect", "EBookImportFilter::filter");
     return importImpl ( aDescriptor );
 }
 void SAL_CALL EBookImportFilter::cancel(  )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     SAL_INFO("writerperfect", "EBookImportFilter::cancel");
 }
 
 // XImporter
 void SAL_CALL EBookImportFilter::setTargetDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc )
-throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
+throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     SAL_INFO("writerperfect", "EBookImportFilter::getTargetDocument");
     mxDoc = xDoc;
@@ -138,7 +138,7 @@ throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 
 // XExtendedFilterDetection
 OUString SAL_CALL EBookImportFilter::detect( com::sun::star::uno::Sequence< PropertyValue >& Descriptor )
-throw( com::sun::star::uno::RuntimeException )
+throw( com::sun::star::uno::RuntimeException, std::exception )
 {
     SAL_INFO("writerperfect", "EBookImportFilter::detect");
 
@@ -190,7 +190,7 @@ throw( com::sun::star::uno::RuntimeException )
 
 // XInitialization
 void SAL_CALL EBookImportFilter::initialize( const Sequence< Any >& aArguments )
-throw (Exception, RuntimeException)
+throw (Exception, RuntimeException, std::exception)
 {
     SAL_INFO("writerperfect", "EBookImportFilter::initialize");
     Sequence < PropertyValue > aAnySeq;
@@ -235,17 +235,17 @@ throw( Exception )
 
 // XServiceInfo
 OUString SAL_CALL EBookImportFilter::getImplementationName(  )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     return EBookImportFilter_getImplementationName();
 }
 sal_Bool SAL_CALL EBookImportFilter::supportsService( const OUString &rServiceName )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     return cppu::supportsService( this, rServiceName );
 }
 Sequence< OUString > SAL_CALL EBookImportFilter::getSupportedServiceNames(  )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     return EBookImportFilter_getSupportedServiceNames();
 }

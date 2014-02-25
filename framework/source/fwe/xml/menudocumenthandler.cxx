@@ -172,19 +172,19 @@ ReadMenuDocumentHandlerBase::~ReadMenuDocumentHandlerBase()
 
 void SAL_CALL ReadMenuDocumentHandlerBase::ignorableWhitespace(
     const OUString& )
-throw( SAXException, RuntimeException )
+throw( SAXException, RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL ReadMenuDocumentHandlerBase::processingInstruction(
     const OUString& /*aTarget*/, const OUString& /*aData*/ )
-throw( SAXException, RuntimeException )
+throw( SAXException, RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL ReadMenuDocumentHandlerBase::setDocumentLocator(
     const Reference< XLocator > &xLocator)
-throw(  SAXException, RuntimeException )
+throw(  SAXException, RuntimeException, std::exception )
 {
     m_xLocator = xLocator;
 }
@@ -239,13 +239,13 @@ OReadMenuDocumentHandler::~OReadMenuDocumentHandler()
 
 
 void SAL_CALL OReadMenuDocumentHandler::startDocument(void)
-    throw ( SAXException, RuntimeException )
+    throw ( SAXException, RuntimeException, std::exception )
 {
 }
 
 
 void SAL_CALL OReadMenuDocumentHandler::endDocument(void)
-    throw( SAXException, RuntimeException )
+    throw( SAXException, RuntimeException, std::exception )
 {
     if ( m_nElementDepth > 0 )
     {
@@ -258,7 +258,7 @@ void SAL_CALL OReadMenuDocumentHandler::endDocument(void)
 
 void SAL_CALL OReadMenuDocumentHandler::startElement(
     const OUString& aName, const Reference< XAttributeList > &xAttrList )
-throw( SAXException, RuntimeException )
+throw( SAXException, RuntimeException, std::exception )
 {
     if ( m_bMenuBarMode )
     {
@@ -277,13 +277,13 @@ throw( SAXException, RuntimeException )
 
 
 void SAL_CALL OReadMenuDocumentHandler::characters(const OUString&)
-throw(  SAXException, RuntimeException )
+throw(  SAXException, RuntimeException, std::exception )
 {
 }
 
 
 void SAL_CALL OReadMenuDocumentHandler::endElement( const OUString& aName )
-    throw( SAXException, RuntimeException )
+    throw( SAXException, RuntimeException, std::exception )
 {
     if ( m_bMenuBarMode )
     {
@@ -324,20 +324,20 @@ OReadMenuBarHandler::~OReadMenuBarHandler()
 
 
 void SAL_CALL OReadMenuBarHandler::startDocument(void)
-    throw ( SAXException, RuntimeException )
+    throw ( SAXException, RuntimeException, std::exception )
 {
 }
 
 
 void SAL_CALL OReadMenuBarHandler::endDocument(void)
-    throw( SAXException, RuntimeException )
+    throw( SAXException, RuntimeException, std::exception )
 {
 }
 
 
 void SAL_CALL OReadMenuBarHandler::startElement(
     const OUString& rName, const Reference< XAttributeList > &xAttrList )
-throw( SAXException, RuntimeException )
+throw( SAXException, RuntimeException, std::exception )
 {
     if ( m_bMenuMode )
     {
@@ -426,13 +426,13 @@ throw( SAXException, RuntimeException )
 
 
 void SAL_CALL OReadMenuBarHandler::characters(const OUString&)
-throw(  SAXException, RuntimeException )
+throw(  SAXException, RuntimeException, std::exception )
 {
 }
 
 
 void OReadMenuBarHandler::endElement( const OUString& aName )
-    throw( SAXException, RuntimeException )
+    throw( SAXException, RuntimeException, std::exception )
 {
     if ( m_bMenuMode )
     {
@@ -475,20 +475,20 @@ OReadMenuHandler::~OReadMenuHandler()
 
 
 void SAL_CALL OReadMenuHandler::startDocument(void)
-    throw ( SAXException, RuntimeException )
+    throw ( SAXException, RuntimeException, std::exception )
 {
 }
 
 
 void SAL_CALL OReadMenuHandler::endDocument(void)
-    throw( SAXException, RuntimeException)
+    throw( SAXException, RuntimeException, std::exception)
 {
 }
 
 
 void SAL_CALL OReadMenuHandler::startElement(
     const OUString& aName, const Reference< XAttributeList > &xAttrList )
-throw( SAXException, RuntimeException )
+throw( SAXException, RuntimeException, std::exception )
 {
     if ( m_bMenuPopupMode )
     {
@@ -512,13 +512,13 @@ throw( SAXException, RuntimeException )
 
 
 void SAL_CALL OReadMenuHandler::characters(const OUString&)
-throw(  SAXException, RuntimeException )
+throw(  SAXException, RuntimeException, std::exception )
 {
 }
 
 
 void SAL_CALL OReadMenuHandler::endElement( const OUString& aName )
-    throw( SAXException, RuntimeException )
+    throw( SAXException, RuntimeException, std::exception )
 {
     if ( m_bMenuPopupMode )
     {
@@ -563,19 +563,19 @@ OReadMenuPopupHandler::~OReadMenuPopupHandler()
 
 
 void SAL_CALL OReadMenuPopupHandler::startDocument(void)
-    throw ( SAXException, RuntimeException )
+    throw ( SAXException, RuntimeException, std::exception )
 {
 }
 
 
 void SAL_CALL OReadMenuPopupHandler::endDocument(void)
-    throw( SAXException, RuntimeException)
+    throw( SAXException, RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL OReadMenuPopupHandler::startElement(
     const OUString& rName, const Reference< XAttributeList > &xAttrList )
-throw( SAXException, RuntimeException )
+throw( SAXException, RuntimeException, std::exception )
 {
     ++m_nElementDepth;
 
@@ -716,13 +716,13 @@ throw( SAXException, RuntimeException )
 
 
 void SAL_CALL OReadMenuPopupHandler::characters(const OUString&)
-throw(  SAXException, RuntimeException )
+throw(  SAXException, RuntimeException, std::exception )
 {
 }
 
 
 void SAL_CALL OReadMenuPopupHandler::endElement( const OUString& aName )
-    throw( SAXException, RuntimeException )
+    throw( SAXException, RuntimeException, std::exception )
 {
     --m_nElementDepth;
     if ( m_bMenuMode )

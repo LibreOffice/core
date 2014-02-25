@@ -40,19 +40,19 @@ public:
     VbaTextFrame( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext , css::uno::Reference< css::drawing::XShape > xShape);
     virtual ~VbaTextFrame() {}
     // Attributes
-    virtual sal_Bool SAL_CALL getAutoSize() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setAutoSize( sal_Bool _autosize ) throw (css::uno::RuntimeException);
-    virtual float SAL_CALL getMarginBottom() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setMarginBottom( float _marginbottom ) throw (css::uno::RuntimeException);
-    virtual float SAL_CALL getMarginTop() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setMarginTop( float _margintop ) throw (css::uno::RuntimeException);
-    virtual float SAL_CALL getMarginLeft() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setMarginLeft( float _marginleft ) throw (css::uno::RuntimeException);
-    virtual float SAL_CALL getMarginRight() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setMarginRight( float _marginright ) throw (css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL getAutoSize() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setAutoSize( sal_Bool _autosize ) throw (css::uno::RuntimeException, std::exception);
+    virtual float SAL_CALL getMarginBottom() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setMarginBottom( float _marginbottom ) throw (css::uno::RuntimeException, std::exception);
+    virtual float SAL_CALL getMarginTop() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setMarginTop( float _margintop ) throw (css::uno::RuntimeException, std::exception);
+    virtual float SAL_CALL getMarginLeft() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setMarginLeft( float _marginleft ) throw (css::uno::RuntimeException, std::exception);
+    virtual float SAL_CALL getMarginRight() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setMarginRight( float _marginright ) throw (css::uno::RuntimeException, std::exception);
 
     // Methods
-    virtual css::uno::Any SAL_CALL Characters(  ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL Characters(  ) throw (css::uno::RuntimeException, std::exception);
 
 };
 

@@ -55,7 +55,7 @@ void VbaTextFrame::setMargin( OUString sMarginType, float fMargin )
 
 // Attributes
 sal_Bool SAL_CALL
-VbaTextFrame::getAutoSize() throw (uno::RuntimeException)
+VbaTextFrame::getAutoSize() throw (uno::RuntimeException, std::exception)
 {
     // I don't know why, but in OOo, TextAutoGrowHeight is the property control autosize. not TextFitToSize.
     // TextFitToSize control the text content.
@@ -67,14 +67,14 @@ VbaTextFrame::getAutoSize() throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-VbaTextFrame::setAutoSize( sal_Bool _autosize ) throw (uno::RuntimeException)
+VbaTextFrame::setAutoSize( sal_Bool _autosize ) throw (uno::RuntimeException, std::exception)
 {
     setAsMSObehavior();
     m_xPropertySet->setPropertyValue( "TextAutoGrowHeight", uno::makeAny( _autosize ) );
 }
 
 float SAL_CALL
-VbaTextFrame::getMarginBottom() throw (uno::RuntimeException)
+VbaTextFrame::getMarginBottom() throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nMargin = getMargin( "TextLowerDistance" );
     float fMargin = (float)Millimeter::getInPoints( nMargin );
@@ -82,13 +82,13 @@ VbaTextFrame::getMarginBottom() throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-VbaTextFrame::setMarginBottom( float _marginbottom ) throw (uno::RuntimeException)
+VbaTextFrame::setMarginBottom( float _marginbottom ) throw (uno::RuntimeException, std::exception)
 {
     setMargin( "TextLowerDistance", _marginbottom );
 }
 
 float SAL_CALL
-VbaTextFrame::getMarginTop() throw (uno::RuntimeException)
+VbaTextFrame::getMarginTop() throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nMargin = getMargin( "TextUpperDistance" );
     float fMargin = (float)Millimeter::getInPoints( nMargin );
@@ -96,13 +96,13 @@ VbaTextFrame::getMarginTop() throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-VbaTextFrame::setMarginTop( float _margintop ) throw (uno::RuntimeException)
+VbaTextFrame::setMarginTop( float _margintop ) throw (uno::RuntimeException, std::exception)
 {
     setMargin( "TextUpperDistance", _margintop );
 }
 
 float SAL_CALL
-VbaTextFrame::getMarginLeft() throw (uno::RuntimeException)
+VbaTextFrame::getMarginLeft() throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nMargin = getMargin( "TextLeftDistance" );
     float fMargin = (float)Millimeter::getInPoints( nMargin );
@@ -110,13 +110,13 @@ VbaTextFrame::getMarginLeft() throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-VbaTextFrame::setMarginLeft( float _marginleft ) throw (uno::RuntimeException)
+VbaTextFrame::setMarginLeft( float _marginleft ) throw (uno::RuntimeException, std::exception)
 {
     setMargin( "TextLeftDistance", _marginleft );
 }
 
 float SAL_CALL
-VbaTextFrame::getMarginRight() throw (uno::RuntimeException)
+VbaTextFrame::getMarginRight() throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nMargin = getMargin( "TextRightDistance" );
     float fMargin = (float)Millimeter::getInPoints( nMargin );
@@ -124,7 +124,7 @@ VbaTextFrame::getMarginRight() throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-VbaTextFrame::setMarginRight( float _marginright ) throw (uno::RuntimeException)
+VbaTextFrame::setMarginRight( float _marginright ) throw (uno::RuntimeException, std::exception)
 {
     setMargin( "TextRightDistance" , _marginright );
 }
@@ -132,7 +132,7 @@ VbaTextFrame::setMarginRight( float _marginright ) throw (uno::RuntimeException)
 
 // Methods
 uno::Any SAL_CALL
-VbaTextFrame::Characters() throw (uno::RuntimeException)
+VbaTextFrame::Characters() throw (uno::RuntimeException, std::exception)
 {
     throw uno::RuntimeException( "Not implemented" , uno::Reference< uno::XInterface >() );
 }

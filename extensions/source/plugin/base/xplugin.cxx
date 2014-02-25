@@ -95,12 +95,12 @@ void PluginDisposer::onShot()
         release();
 }
 
-Any XPlugin_Impl::queryInterface( const Type& type ) throw( RuntimeException )
+Any XPlugin_Impl::queryInterface( const Type& type ) throw( RuntimeException, std::exception )
 {
     return OWeakAggObject::queryInterface( type );
 }
 
-Any XPlugin_Impl::queryAggregation( const Type& type ) throw( RuntimeException )
+Any XPlugin_Impl::queryAggregation( const Type& type ) throw( RuntimeException, std::exception )
 {
     Any aRet( cppu::queryInterface( type, static_cast< XPlugin* >(this) ) );
     if( ! aRet.hasValue() )
@@ -229,7 +229,7 @@ IMPL_LINK( XPlugin_Impl, secondLevelDispose, XPlugin_Impl*, /*pThis*/ )
     return 0;
 }
 
-void XPlugin_Impl::dispose() throw()
+void XPlugin_Impl::dispose() throw(std::exception)
 {
     Guard< Mutex > aGuard( m_aMutex );
 
@@ -469,7 +469,7 @@ OUString XPlugin_Impl::getCreationURL()
 
 
 sal_Bool XPlugin_Impl::setModel( const uno::Reference< com::sun::star::awt::XControlModel > & Model )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     Guard< Mutex > aGuard( m_aMutex );
 
@@ -488,7 +488,7 @@ sal_Bool XPlugin_Impl::setModel( const uno::Reference< com::sun::star::awt::XCon
 }
 
 void XPlugin_Impl::createPeer( const uno::Reference< com::sun::star::awt::XToolkit > & xToolkit, const uno::Reference< com::sun::star::awt::XWindowPeer > & Parent )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     Guard< Mutex > aGuard( m_aMutex );
 
@@ -643,7 +643,7 @@ PluginStream* XPlugin_Impl::getStreamFromNPStream( NPStream* stream )
 sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
                                         const uno::Reference< com::sun::star::io::XActiveDataSource > & stream,
                                         const OUString& url, sal_Int32 length,
-                                        sal_Int32 lastmodified, sal_Bool isfile) throw()
+                                        sal_Int32 lastmodified, sal_Bool isfile) throw(std::exception)
 
 {
     Guard< Mutex > aGuard( m_aMutex );
@@ -831,11 +831,11 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
     return bRet;
 }
 
-void XPlugin_Impl::disposing( const com::sun::star::lang::EventObject& /*rSource*/ ) throw()
+void XPlugin_Impl::disposing( const com::sun::star::lang::EventObject& /*rSource*/ ) throw(std::exception)
 {
 }
 
-void XPlugin_Impl::propertyChange( const com::sun::star::beans::PropertyChangeEvent& rEvent ) throw()
+void XPlugin_Impl::propertyChange( const com::sun::star::beans::PropertyChangeEvent& rEvent ) throw(std::exception)
 {
     Guard< Mutex > aGuard( m_aMutex );
 
@@ -860,7 +860,7 @@ void XPlugin_Impl::setPluginContext( const uno::Reference< XPluginContext > & rC
 }
 
 void XPlugin_Impl::setPosSize( sal_Int32 nX_, sal_Int32 nY_, sal_Int32 nWidth_, sal_Int32 nHeight_, sal_Int16 nFlags )
-        throw( RuntimeException )
+        throw( RuntimeException, std::exception )
 {
     Guard< Mutex > aGuard( m_aMutex );
 
@@ -1062,7 +1062,7 @@ void PluginInputStream::setMode( sal_Int32 nMode )
     }
 }
 
-void PluginInputStream::writeBytes( const Sequence<sal_Int8>& Buffer ) throw()
+void PluginInputStream::writeBytes( const Sequence<sal_Int8>& Buffer ) throw(std::exception)
 {
     Guard< Mutex > aGuard( m_pPlugin->getMutex() );
 
@@ -1111,7 +1111,7 @@ void PluginInputStream::writeBytes( const Sequence<sal_Int8>& Buffer ) throw()
     }
 }
 
-void PluginInputStream::closeOutput() throw()
+void PluginInputStream::closeOutput() throw(std::exception)
 {
     Guard< Mutex > aGuard( m_pPlugin->getMutex() );
 
@@ -1130,7 +1130,7 @@ sal_uInt32 PluginInputStream::read( sal_uInt32 offset, sal_Int8* buffer, sal_uIn
     return m_aFileStream.Read( buffer, size );
 }
 
-void PluginInputStream::flush(void) throw()
+void PluginInputStream::flush(void) throw(std::exception)
 {
 }
 

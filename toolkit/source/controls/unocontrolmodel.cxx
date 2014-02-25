@@ -411,7 +411,7 @@ void UnoControlModel::ImplRegisterProperties( const std::list< sal_uInt16 > &rId
 }
 
 // ::com::sun::star::uno::XInterface
-::com::sun::star::uno::Any UnoControlModel::queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Any UnoControlModel::queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     Any aRet = UnoControlModel_Base::queryAggregation( rType );
     if ( !aRet.hasValue() )
@@ -429,7 +429,7 @@ IMPLEMENT_FORWARD_REFCOUNT( UnoControlModel, UnoControlModel_Base )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( UnoControlModel, UnoControlModel_Base, ::cppu::OPropertySetHelper )
 
 
-uno::Reference< util::XCloneable > UnoControlModel::createClone() throw(::com::sun::star::uno::RuntimeException)
+uno::Reference< util::XCloneable > UnoControlModel::createClone() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     UnoControlModel* pClone = Clone();
     uno::Reference< util::XCloneable > xClone( (::cppu::OWeakObject*) pClone, uno::UNO_QUERY );
@@ -437,7 +437,7 @@ uno::Reference< util::XCloneable > UnoControlModel::createClone() throw(::com::s
 }
 
 // ::com::sun::star::lang::XComponent
-void UnoControlModel::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
+void UnoControlModel::dispose(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -451,14 +451,14 @@ void UnoControlModel::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
     OPropertySetHelper::disposing();
 }
 
-void UnoControlModel::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
+void UnoControlModel::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     maDisposeListeners.addInterface( rxListener );
 }
 
-void UnoControlModel::removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
+void UnoControlModel::removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -467,7 +467,7 @@ void UnoControlModel::removeEventListener( const ::com::sun::star::uno::Referenc
 
 
 // ::com::sun::star::beans::XPropertyState
-::com::sun::star::beans::PropertyState UnoControlModel::getPropertyState( const OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
+::com::sun::star::beans::PropertyState UnoControlModel::getPropertyState( const OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -479,7 +479,7 @@ void UnoControlModel::removeEventListener( const ::com::sun::star::uno::Referenc
     return CompareProperties( aValue, aDefault ) ? ::com::sun::star::beans::PropertyState_DEFAULT_VALUE : ::com::sun::star::beans::PropertyState_DIRECT_VALUE;
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState > UnoControlModel::getPropertyStates( const ::com::sun::star::uno::Sequence< OUString >& PropertyNames ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState > UnoControlModel::getPropertyStates( const ::com::sun::star::uno::Sequence< OUString >& PropertyNames ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -495,7 +495,7 @@ void UnoControlModel::removeEventListener( const ::com::sun::star::uno::Referenc
     return aStates;
 }
 
-void UnoControlModel::setPropertyToDefault( const OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
+void UnoControlModel::setPropertyToDefault( const OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     Any aDefaultValue;
     {
@@ -505,7 +505,7 @@ void UnoControlModel::setPropertyToDefault( const OUString& PropertyName ) throw
     setPropertyValue( PropertyName, aDefaultValue );
 }
 
-::com::sun::star::uno::Any UnoControlModel::getPropertyDefault( const OUString& rPropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Any UnoControlModel::getPropertyDefault( const OUString& rPropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -514,7 +514,7 @@ void UnoControlModel::setPropertyToDefault( const OUString& PropertyName ) throw
 
 
 // ::com::sun::star::io::XPersistObjec
-OUString UnoControlModel::getServiceName(  ) throw(::com::sun::star::uno::RuntimeException)
+OUString UnoControlModel::getServiceName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -522,7 +522,7 @@ OUString UnoControlModel::getServiceName(  ) throw(::com::sun::star::uno::Runtim
     return OUString();
 }
 
-void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream >& OutStream ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
+void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream >& OutStream ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -755,7 +755,7 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
     }
 }
 
-void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream >& InStream ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
+void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream >& InStream ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -1022,19 +1022,19 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
 
 
 // ::com::sun::star::lang::XServiceInfo
-OUString UnoControlModel::getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException)
+OUString UnoControlModel::getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "This method should be overloaded!" );
     return OUString();
 
 }
 
-sal_Bool UnoControlModel::supportsService( const OUString& rServiceName ) throw(::com::sun::star::uno::RuntimeException)
+sal_Bool UnoControlModel::supportsService( const OUString& rServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-::com::sun::star::uno::Sequence< OUString > UnoControlModel::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Sequence< OUString > UnoControlModel::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     OUString sName( "com.sun.star.awt.UnoControlModel" );
     return Sequence< OUString >( &sName, 1 );
@@ -1179,7 +1179,7 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
     return !CompareProperties( rConvertedValue, rOldValue );
 }
 
-void UnoControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nPropId, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception)
+void UnoControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nPropId, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception, std::exception)
 {
     // Missing: the fake solo properties of the FontDescriptor
 
@@ -1249,7 +1249,7 @@ void UnoControlModel::getFastPropertyValue( ::com::sun::star::uno::Any& rValue, 
 }
 
 // ::com::sun::star::beans::XPropertySet
-void UnoControlModel::setPropertyValue( const OUString& rPropertyName, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+void UnoControlModel::setPropertyValue( const OUString& rPropertyName, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     sal_Int32 nPropId = 0;
     {
@@ -1264,7 +1264,7 @@ void UnoControlModel::setPropertyValue( const OUString& rPropertyName, const ::c
 }
 
 // ::com::sun::star::beans::XFastPropertySet
-void UnoControlModel::setFastPropertyValue( sal_Int32 nPropId, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+void UnoControlModel::setFastPropertyValue( sal_Int32 nPropId, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     if ( ( nPropId >= BASEPROPERTY_FONTDESCRIPTORPART_START ) && ( nPropId <= BASEPROPERTY_FONTDESCRIPTORPART_END ) )
     {
@@ -1299,13 +1299,13 @@ void UnoControlModel::setFastPropertyValue( sal_Int32 nPropId, const ::com::sun:
 }
 
 // ::com::sun::star::beans::XMultiPropertySet
-::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > UnoControlModel::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > UnoControlModel::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "UnoControlModel::getPropertySetInfo() not possible!" );
     return ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >();
 }
 
-void UnoControlModel::setPropertyValues( const ::com::sun::star::uno::Sequence< OUString >& rPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Values ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+void UnoControlModel::setPropertyValues( const ::com::sun::star::uno::Sequence< OUString >& rPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Values ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
 

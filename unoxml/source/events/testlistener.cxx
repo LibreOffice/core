@@ -61,26 +61,26 @@ namespace DOM { namespace events
     }
 
     Sequence< OUString > SAL_CALL CTestListener::getSupportedServiceNames()
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         return CTestListener::_getSupportedServiceNames();
     }
 
     OUString SAL_CALL CTestListener::getImplementationName()
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         return CTestListener::_getImplementationName();
     }
 
     sal_Bool SAL_CALL CTestListener::supportsService(const OUString& aServiceName)
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         return cppu::supportsService(this, aServiceName);
     }
 
     // --- XInitialize
 
-    void SAL_CALL CTestListener::initialize(const Sequence< Any >& args) throw(RuntimeException)
+    void SAL_CALL CTestListener::initialize(const Sequence< Any >& args) throw(RuntimeException, std::exception)
     {
         if (args.getLength() < 3) throw IllegalArgumentException(
             "Wrong number of arguments", Reference< XInterface >(), 0);
@@ -117,7 +117,7 @@ namespace DOM { namespace events
 
     // --- XEventListener
 
-    void SAL_CALL CTestListener::handleEvent(const Reference< XEvent >& evt) throw (RuntimeException)
+    void SAL_CALL CTestListener::handleEvent(const Reference< XEvent >& evt) throw (RuntimeException, std::exception)
     {
         FILE* f = fopen("C:\\listener.out", "a");
         fprintf(f, "CTestListener::handleEvent in %s\n", U2S(m_name));

@@ -60,7 +60,7 @@ namespace frm
     }
 
 
-    void SAL_CALL OEntryListHelper::setListEntrySource( const Reference< XListEntrySource >& _rxSource ) throw (RuntimeException)
+    void SAL_CALL OEntryListHelper::setListEntrySource( const Reference< XListEntrySource >& _rxSource ) throw (RuntimeException, std::exception)
     {
         ControlModelLock aLock( m_rControlModel );
 
@@ -73,14 +73,14 @@ namespace frm
     }
 
 
-    Reference< XListEntrySource > SAL_CALL OEntryListHelper::getListEntrySource(  ) throw (RuntimeException)
+    Reference< XListEntrySource > SAL_CALL OEntryListHelper::getListEntrySource(  ) throw (RuntimeException, std::exception)
     {
         return m_xListSource;
     }
 
 
 
-    void SAL_CALL OEntryListHelper::entryChanged( const ListEntryEvent& _rEvent ) throw (RuntimeException)
+    void SAL_CALL OEntryListHelper::entryChanged( const ListEntryEvent& _rEvent ) throw (RuntimeException, std::exception)
     {
         ControlModelLock aLock( m_rControlModel );
 
@@ -102,7 +102,7 @@ namespace frm
     }
 
 
-    void SAL_CALL OEntryListHelper::entryRangeInserted( const ListEntryEvent& _rEvent ) throw (RuntimeException)
+    void SAL_CALL OEntryListHelper::entryRangeInserted( const ListEntryEvent& _rEvent ) throw (RuntimeException, std::exception)
     {
         ControlModelLock aLock( m_rControlModel );
 
@@ -139,7 +139,7 @@ namespace frm
     }
 
 
-    void SAL_CALL OEntryListHelper::entryRangeRemoved( const ListEntryEvent& _rEvent ) throw (RuntimeException)
+    void SAL_CALL OEntryListHelper::entryRangeRemoved( const ListEntryEvent& _rEvent ) throw (RuntimeException, std::exception)
     {
         ControlModelLock aLock( m_rControlModel );
 
@@ -167,7 +167,7 @@ namespace frm
     }
 
 
-    void SAL_CALL OEntryListHelper::allEntriesChanged( const EventObject& _rEvent ) throw (RuntimeException)
+    void SAL_CALL OEntryListHelper::allEntriesChanged( const EventObject& _rEvent ) throw (RuntimeException, std::exception)
     {
         ControlModelLock aLock( m_rControlModel );
 
@@ -183,21 +183,21 @@ namespace frm
 
     // XRefreshable
 
-    void SAL_CALL OEntryListHelper::addRefreshListener(const Reference<XRefreshListener>& _rxListener) throw(RuntimeException)
+    void SAL_CALL OEntryListHelper::addRefreshListener(const Reference<XRefreshListener>& _rxListener) throw(RuntimeException, std::exception)
     {
         if ( _rxListener.is() )
             m_aRefreshListeners.addInterface( _rxListener );
     }
 
 
-    void SAL_CALL OEntryListHelper::removeRefreshListener(const Reference<XRefreshListener>& _rxListener) throw(RuntimeException)
+    void SAL_CALL OEntryListHelper::removeRefreshListener(const Reference<XRefreshListener>& _rxListener) throw(RuntimeException, std::exception)
     {
         if ( _rxListener.is() )
             m_aRefreshListeners.removeInterface( _rxListener );
     }
 
 
-    void SAL_CALL OEntryListHelper::refresh() throw(RuntimeException)
+    void SAL_CALL OEntryListHelper::refresh() throw(RuntimeException, std::exception)
     {
         {
             ControlModelLock aLock( m_rControlModel );

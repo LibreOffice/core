@@ -56,7 +56,7 @@ namespace logging
     class CsvFormatter : public CsvFormatter_Base
     {
     public:
-        virtual OUString SAL_CALL formatMultiColumn(const Sequence< OUString>& column_data) throw (RuntimeException);
+        virtual OUString SAL_CALL formatMultiColumn(const Sequence< OUString>& column_data) throw (RuntimeException, std::exception);
 
         // XServiceInfo - static version
         static OUString SAL_CALL getImplementationName_static();
@@ -68,27 +68,27 @@ namespace logging
         virtual ~CsvFormatter();
 
         // XCsvLogFormatter
-        virtual ::sal_Bool SAL_CALL getLogEventNo() throw (RuntimeException);
-        virtual ::sal_Bool SAL_CALL getLogThread() throw (RuntimeException);
-        virtual ::sal_Bool SAL_CALL getLogTimestamp() throw (RuntimeException);
-        virtual ::sal_Bool SAL_CALL getLogSource() throw (RuntimeException);
-        virtual Sequence< OUString > SAL_CALL getColumnnames() throw (RuntimeException);
+        virtual ::sal_Bool SAL_CALL getLogEventNo() throw (RuntimeException, std::exception);
+        virtual ::sal_Bool SAL_CALL getLogThread() throw (RuntimeException, std::exception);
+        virtual ::sal_Bool SAL_CALL getLogTimestamp() throw (RuntimeException, std::exception);
+        virtual ::sal_Bool SAL_CALL getLogSource() throw (RuntimeException, std::exception);
+        virtual Sequence< OUString > SAL_CALL getColumnnames() throw (RuntimeException, std::exception);
 
-        virtual void SAL_CALL setLogEventNo( ::sal_Bool log_event_no ) throw (RuntimeException);
-        virtual void SAL_CALL setLogThread( ::sal_Bool log_thread ) throw (RuntimeException);
-        virtual void SAL_CALL setLogTimestamp( ::sal_Bool log_timestamp ) throw (RuntimeException);
-        virtual void SAL_CALL setLogSource( ::sal_Bool log_source ) throw (RuntimeException);
-        virtual void SAL_CALL setColumnnames( const Sequence< OUString>& column_names) throw (RuntimeException);
+        virtual void SAL_CALL setLogEventNo( ::sal_Bool log_event_no ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL setLogThread( ::sal_Bool log_thread ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL setLogTimestamp( ::sal_Bool log_timestamp ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL setLogSource( ::sal_Bool log_source ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL setColumnnames( const Sequence< OUString>& column_names) throw (RuntimeException, std::exception);
 
         // XLogFormatter
-        virtual OUString SAL_CALL getHead(  ) throw (RuntimeException);
-        virtual OUString SAL_CALL format( const LogRecord& Record ) throw (RuntimeException);
-        virtual OUString SAL_CALL getTail(  ) throw (RuntimeException);
+        virtual OUString SAL_CALL getHead(  ) throw (RuntimeException, std::exception);
+        virtual OUString SAL_CALL format( const LogRecord& Record ) throw (RuntimeException, std::exception);
+        virtual OUString SAL_CALL getTail(  ) throw (RuntimeException, std::exception);
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(RuntimeException);
-        virtual ::sal_Bool SAL_CALL supportsService( const OUString& service_name ) throw(RuntimeException);
-        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException);
+        virtual OUString SAL_CALL getImplementationName() throw(RuntimeException, std::exception);
+        virtual ::sal_Bool SAL_CALL supportsService( const OUString& service_name ) throw(RuntimeException, std::exception);
+        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception);
 
     private:
         ::sal_Bool m_LogEventNo;
@@ -166,58 +166,58 @@ namespace logging
     CsvFormatter::~CsvFormatter()
     { }
 
-    ::sal_Bool CsvFormatter::getLogEventNo() throw (RuntimeException)
+    ::sal_Bool CsvFormatter::getLogEventNo() throw (RuntimeException, std::exception)
     {
         return m_LogEventNo;
     }
 
-    ::sal_Bool CsvFormatter::getLogThread() throw (RuntimeException)
+    ::sal_Bool CsvFormatter::getLogThread() throw (RuntimeException, std::exception)
     {
         return m_LogThread;
     }
 
-    ::sal_Bool CsvFormatter::getLogTimestamp() throw (RuntimeException)
+    ::sal_Bool CsvFormatter::getLogTimestamp() throw (RuntimeException, std::exception)
     {
         return m_LogTimestamp;
     }
 
-    ::sal_Bool CsvFormatter::getLogSource() throw (RuntimeException)
+    ::sal_Bool CsvFormatter::getLogSource() throw (RuntimeException, std::exception)
     {
         return m_LogSource;
     }
 
-    Sequence< OUString > CsvFormatter::getColumnnames() throw (RuntimeException)
+    Sequence< OUString > CsvFormatter::getColumnnames() throw (RuntimeException, std::exception)
     {
         return m_Columnnames;
     }
 
-    void CsvFormatter::setLogEventNo(::sal_Bool log_event_no) throw (RuntimeException)
+    void CsvFormatter::setLogEventNo(::sal_Bool log_event_no) throw (RuntimeException, std::exception)
     {
         m_LogEventNo = log_event_no;
     }
 
-    void CsvFormatter::setLogThread(::sal_Bool log_thread) throw (RuntimeException)
+    void CsvFormatter::setLogThread(::sal_Bool log_thread) throw (RuntimeException, std::exception)
     {
         m_LogThread = log_thread;
     }
 
-    void CsvFormatter::setLogTimestamp(::sal_Bool log_timestamp) throw (RuntimeException)
+    void CsvFormatter::setLogTimestamp(::sal_Bool log_timestamp) throw (RuntimeException, std::exception)
     {
         m_LogTimestamp = log_timestamp;
     }
 
-    void CsvFormatter::setLogSource(::sal_Bool log_source) throw (RuntimeException)
+    void CsvFormatter::setLogSource(::sal_Bool log_source) throw (RuntimeException, std::exception)
     {
         m_LogSource = log_source;
     }
 
-    void CsvFormatter::setColumnnames(const Sequence< OUString >& columnnames) throw (RuntimeException)
+    void CsvFormatter::setColumnnames(const Sequence< OUString >& columnnames) throw (RuntimeException, std::exception)
     {
         m_Columnnames = Sequence< OUString>(columnnames);
         m_MultiColumn = (m_Columnnames.getLength()>1);
     }
 
-    OUString SAL_CALL CsvFormatter::getHead(  ) throw (RuntimeException)
+    OUString SAL_CALL CsvFormatter::getHead(  ) throw (RuntimeException, std::exception)
     {
         OUStringBuffer buf;
         if(m_LogEventNo)
@@ -239,7 +239,7 @@ namespace logging
         return buf.makeStringAndClear();
     }
 
-    OUString SAL_CALL CsvFormatter::format( const LogRecord& record ) throw (RuntimeException)
+    OUString SAL_CALL CsvFormatter::format( const LogRecord& record ) throw (RuntimeException, std::exception)
     {
         OUStringBuffer aLogEntry;
 
@@ -294,12 +294,12 @@ namespace logging
         return aLogEntry.makeStringAndClear();
     }
 
-    OUString SAL_CALL CsvFormatter::getTail(  ) throw (RuntimeException)
+    OUString SAL_CALL CsvFormatter::getTail(  ) throw (RuntimeException, std::exception)
     {
         return OUString();
     }
 
-    OUString SAL_CALL CsvFormatter::formatMultiColumn(const Sequence< OUString>& column_data) throw (RuntimeException)
+    OUString SAL_CALL CsvFormatter::formatMultiColumn(const Sequence< OUString>& column_data) throw (RuntimeException, std::exception)
     {
         sal_Int32 columns = column_data.getLength();
         OUStringBuffer buf;
@@ -312,17 +312,17 @@ namespace logging
         return buf.makeStringAndClear();
     }
 
-    ::sal_Bool SAL_CALL CsvFormatter::supportsService( const OUString& service_name ) throw(RuntimeException)
+    ::sal_Bool SAL_CALL CsvFormatter::supportsService( const OUString& service_name ) throw(RuntimeException, std::exception)
     {
         return cppu::supportsService(this, service_name);
     }
 
-    OUString SAL_CALL CsvFormatter::getImplementationName() throw(RuntimeException)
+    OUString SAL_CALL CsvFormatter::getImplementationName() throw(RuntimeException, std::exception)
     {
         return getImplementationName_static();
     }
 
-    Sequence< OUString > SAL_CALL CsvFormatter::getSupportedServiceNames() throw(RuntimeException)
+    Sequence< OUString > SAL_CALL CsvFormatter::getSupportedServiceNames() throw(RuntimeException, std::exception)
     {
         return getSupportedServiceNames_static();
     }

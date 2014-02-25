@@ -117,14 +117,14 @@ public:
     SAL_DLLPRIVATE void ReleaseShell_Impl();
     SAL_DLLPRIVATE void BorderWidthsChanged_Impl();
 
-    css::uno::Reference< css::task::XStatusIndicator > SAL_CALL getStatusIndicator(  ) throw (css::uno::RuntimeException);
+    css::uno::Reference< css::task::XStatusIndicator > SAL_CALL getStatusIndicator(  ) throw (css::uno::RuntimeException, std::exception);
 
     //____________________________________________________________________________________________________
     //  XController2
     //____________________________________________________________________________________________________
-    virtual css::uno::Reference< css::awt::XWindow > SAL_CALL getComponentWindow() throw (css::uno::RuntimeException);
-    virtual OUString SAL_CALL getViewControllerName() throw (css::uno::RuntimeException);
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getCreationArguments() throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< css::awt::XWindow > SAL_CALL getComponentWindow() throw (css::uno::RuntimeException, std::exception);
+    virtual OUString SAL_CALL getViewControllerName() throw (css::uno::RuntimeException, std::exception);
+    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getCreationArguments() throw (css::uno::RuntimeException, std::exception);
 
     //____________________________________________________________________________________________________
     //  XController
@@ -143,7 +143,7 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL attachFrame( const css::uno::Reference< css::frame::XFrame >& xFrame ) throw( css::uno::RuntimeException ) ;
+    virtual void SAL_CALL attachFrame( const css::uno::Reference< css::frame::XFrame >& xFrame ) throw( css::uno::RuntimeException, std::exception ) ;
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -158,7 +158,7 @@ public:
         @onerror    -
     */
 
-    virtual sal_Bool SAL_CALL attachModel( const css::uno::Reference< css::frame::XModel >& xModel ) throw( css::uno::RuntimeException ) ;
+    virtual sal_Bool SAL_CALL attachModel( const css::uno::Reference< css::frame::XModel >& xModel ) throw( css::uno::RuntimeException, std::exception ) ;
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -173,7 +173,7 @@ public:
         @onerror    -
     */
 
-    virtual sal_Bool SAL_CALL suspend( sal_Bool bSuspend ) throw( css::uno::RuntimeException ) ;
+    virtual sal_Bool SAL_CALL suspend( sal_Bool bSuspend ) throw( css::uno::RuntimeException, std::exception ) ;
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -188,7 +188,7 @@ public:
         @onerror    -
     */
 
-    css::uno::Any SAL_CALL getViewData() throw( css::uno::RuntimeException ) ;
+    css::uno::Any SAL_CALL getViewData() throw( css::uno::RuntimeException, std::exception ) ;
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -203,7 +203,7 @@ public:
         @onerror    -
     */
 
-    void SAL_CALL restoreViewData( const css::uno::Any& aValue ) throw( css::uno::RuntimeException ) ;
+    void SAL_CALL restoreViewData( const css::uno::Any& aValue ) throw( css::uno::RuntimeException, std::exception ) ;
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -218,7 +218,7 @@ public:
         @onerror    -
     */
 
-    css::uno::Reference< css::frame::XFrame > SAL_CALL getFrame() throw( css::uno::RuntimeException ) ;
+    css::uno::Reference< css::frame::XFrame > SAL_CALL getFrame() throw( css::uno::RuntimeException, std::exception ) ;
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -233,7 +233,7 @@ public:
         @onerror    -
     */
 
-    css::uno::Reference< css::frame::XModel > SAL_CALL getModel() throw( css::uno::RuntimeException ) ;
+    css::uno::Reference< css::frame::XModel > SAL_CALL getModel() throw( css::uno::RuntimeException, std::exception ) ;
 
     //____________________________________________________________________________________________________
     //  XDispatchProvider
@@ -254,7 +254,7 @@ public:
 
     virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch(  const   css::util::URL &    aURL            ,
                                                                                   const   OUString &   sTargetFrameName,
-                                                                                  FrameSearchFlags            eSearchFlags    ) throw( css::uno::RuntimeException ) ;
+                                                                                  FrameSearchFlags            eSearchFlags    ) throw( css::uno::RuntimeException, std::exception ) ;
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -269,16 +269,16 @@ public:
         @onerror    -
     */
 
-    virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& seqDescriptor ) throw( css::uno::RuntimeException ) ;
+    virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& seqDescriptor ) throw( css::uno::RuntimeException, std::exception ) ;
 
     //____________________________________________________________________________________________________
     //  XControllerBorder
     //____________________________________________________________________________________________________
 
-    virtual css::frame::BorderWidths SAL_CALL getBorder() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL addBorderResizeListener( const css::uno::Reference< css::frame::XBorderResizeListener >& xListener ) throw (css::uno::RuntimeException);
-    virtual void SAL_CALL removeBorderResizeListener( const css::uno::Reference< css::frame::XBorderResizeListener >& xListener ) throw (css::uno::RuntimeException);
-    virtual css::awt::Rectangle SAL_CALL queryBorderedArea( const css::awt::Rectangle& aPreliminaryRectangle ) throw (css::uno::RuntimeException);
+    virtual css::frame::BorderWidths SAL_CALL getBorder() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL addBorderResizeListener( const css::uno::Reference< css::frame::XBorderResizeListener >& xListener ) throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL removeBorderResizeListener( const css::uno::Reference< css::frame::XBorderResizeListener >& xListener ) throw (css::uno::RuntimeException, std::exception);
+    virtual css::awt::Rectangle SAL_CALL queryBorderedArea( const css::awt::Rectangle& aPreliminaryRectangle ) throw (css::uno::RuntimeException, std::exception);
 
     //____________________________________________________________________________________________________
     //  XComponent
@@ -297,7 +297,7 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL dispose() throw( css::uno::RuntimeException ) ;
+    virtual void SAL_CALL dispose() throw( css::uno::RuntimeException, std::exception ) ;
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -312,7 +312,7 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw( css::uno::RuntimeException ) ;
+    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw( css::uno::RuntimeException, std::exception ) ;
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -327,28 +327,28 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw( css::uno::RuntimeException ) ;
-    virtual void SAL_CALL registerContextMenuInterceptor( const css::uno::Reference< css::ui::XContextMenuInterceptor >& xInterceptor ) throw( css::uno::RuntimeException );
-    virtual void SAL_CALL releaseContextMenuInterceptor( const css::uno::Reference< css::ui::XContextMenuInterceptor >& xInterceptor ) throw( css::uno::RuntimeException );
+    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw( css::uno::RuntimeException, std::exception ) ;
+    virtual void SAL_CALL registerContextMenuInterceptor( const css::uno::Reference< css::ui::XContextMenuInterceptor >& xInterceptor ) throw( css::uno::RuntimeException, std::exception );
+    virtual void SAL_CALL releaseContextMenuInterceptor( const css::uno::Reference< css::ui::XContextMenuInterceptor >& xInterceptor ) throw( css::uno::RuntimeException, std::exception );
 
-    virtual void SAL_CALL addKeyHandler( const css::uno::Reference< css::awt::XKeyHandler >& xHandler ) throw (css::uno::RuntimeException);
-    virtual void SAL_CALL removeKeyHandler( const css::uno::Reference< css::awt::XKeyHandler >& xHandler ) throw (css::uno::RuntimeException);
-    virtual void SAL_CALL addMouseClickHandler( const css::uno::Reference< css::awt::XMouseClickHandler >& xHandler ) throw (css::uno::RuntimeException);
-    virtual void SAL_CALL removeMouseClickHandler( const css::uno::Reference< css::awt::XMouseClickHandler >& xHandler ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL addKeyHandler( const css::uno::Reference< css::awt::XKeyHandler >& xHandler ) throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL removeKeyHandler( const css::uno::Reference< css::awt::XKeyHandler >& xHandler ) throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL addMouseClickHandler( const css::uno::Reference< css::awt::XMouseClickHandler >& xHandler ) throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL removeMouseClickHandler( const css::uno::Reference< css::awt::XMouseClickHandler >& xHandler ) throw (css::uno::RuntimeException, std::exception);
 
     //____________________________________________________________________________________________________
     //  XDispatchInformationProvider
     //____________________________________________________________________________________________________
-    virtual css::uno::Sequence< sal_Int16 > SAL_CALL getSupportedCommandGroups() throw (css::uno::RuntimeException);
-    virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( sal_Int16 nCommandGroup ) throw (css::uno::RuntimeException);
+    virtual css::uno::Sequence< sal_Int16 > SAL_CALL getSupportedCommandGroups() throw (css::uno::RuntimeException, std::exception);
+    virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( sal_Int16 nCommandGroup ) throw (css::uno::RuntimeException, std::exception);
 
     // css::frame::XTitle
-    virtual OUString SAL_CALL getTitle(  ) throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setTitle( const OUString& sTitle ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getTitle(  ) throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setTitle( const OUString& sTitle ) throw (css::uno::RuntimeException, std::exception);
 
     // css::frame::XTitleChangeBroadcaster
-    virtual void SAL_CALL addTitleChangeListener( const css::uno::Reference< css::frame::XTitleChangeListener >& xListener )     throw (css::uno::RuntimeException);
-    virtual void SAL_CALL removeTitleChangeListener( const css::uno::Reference< css::frame::XTitleChangeListener >& xListener ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL addTitleChangeListener( const css::uno::Reference< css::frame::XTitleChangeListener >& xListener )     throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL removeTitleChangeListener( const css::uno::Reference< css::frame::XTitleChangeListener >& xListener ) throw (css::uno::RuntimeException, std::exception);
 
     // FIXME: TL needs this in sw/source/ui/uno/unotxdoc.cxx now;
     // either the _Impl name should vanish or there should be an "official" API

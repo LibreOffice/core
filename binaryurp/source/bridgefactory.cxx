@@ -87,19 +87,19 @@ BridgeFactory::BridgeFactory(
 BridgeFactory::~BridgeFactory() {}
 
 OUString BridgeFactory::getImplementationName()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return static_getImplementationName();
 }
 
 sal_Bool BridgeFactory::supportsService(OUString const & ServiceName)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 css::uno::Sequence< OUString > BridgeFactory::getSupportedServiceNames()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return static_getSupportedServiceNames();
 }
@@ -139,7 +139,7 @@ css::uno::Reference< css::bridge::XBridge > BridgeFactory::createBridge(
 }
 
 css::uno::Reference< css::bridge::XBridge > BridgeFactory::getBridge(
-    OUString const & sName) throw (css::uno::RuntimeException)
+    OUString const & sName) throw (css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard g(*this);
     BridgeMap::iterator i(named_.find(sName));
@@ -148,7 +148,7 @@ css::uno::Reference< css::bridge::XBridge > BridgeFactory::getBridge(
 }
 
 css::uno::Sequence< css::uno::Reference< css::bridge::XBridge > >
-BridgeFactory::getExistingBridges() throw (css::uno::RuntimeException) {
+BridgeFactory::getExistingBridges() throw (css::uno::RuntimeException, std::exception) {
     osl::MutexGuard g(*this);
     if (unnamed_.size() > SAL_MAX_INT32) {
         throw css::uno::RuntimeException(

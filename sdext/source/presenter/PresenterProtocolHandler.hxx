@@ -59,7 +59,7 @@ public:
 
     virtual void SAL_CALL initialize(
         const css::uno::Sequence<css::uno::Any>& aArguments)
-        throw (css::uno::Exception, css::uno::RuntimeException);
+        throw (css::uno::Exception, css::uno::RuntimeException, std::exception);
 
     // XDispatchProvider
 
@@ -68,12 +68,12 @@ public:
             const css::util::URL& aURL,
             const OUString& aTargetFrameName,
             sal_Int32 nSearchFlags )
-        throw(css::uno::RuntimeException);
+        throw(css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Sequence<css::uno::Reference<css::frame::XDispatch> > SAL_CALL
         queryDispatches(
             const css::uno::Sequence< css::frame::DispatchDescriptor>& rDescriptors)
-        throw(css::uno::RuntimeException);
+        throw(css::uno::RuntimeException, std::exception);
 
 private:
     class Dispatch;

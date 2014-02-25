@@ -97,7 +97,7 @@ User::User( const ::rtl::Reference< RefCountedMutex > & refMutex,
         * getStatics().refl.user.pProps )
 {}
 
-Reference< XPropertySet > User::createDataDescriptor(  ) throw (RuntimeException)
+Reference< XPropertySet > User::createDataDescriptor(  ) throw (RuntimeException, std::exception)
 {
     UserDescriptor * pUser = new UserDescriptor( m_refMutex, m_conn, m_pSettings );
     pUser->copyValuesFrom( this );
@@ -106,7 +106,7 @@ Reference< XPropertySet > User::createDataDescriptor(  ) throw (RuntimeException
 }
 
 
-Sequence<Type > User::getTypes() throw( RuntimeException )
+Sequence<Type > User::getTypes() throw( RuntimeException, std::exception )
 {
     static cppu::OTypeCollection *pCollection;
     if( ! pCollection )
@@ -123,12 +123,12 @@ Sequence<Type > User::getTypes() throw( RuntimeException )
     return pCollection->getTypes();
 }
 
-Sequence< sal_Int8> User::getImplementationId() throw( RuntimeException )
+Sequence< sal_Int8> User::getImplementationId() throw( RuntimeException, std::exception )
 {
     return getStatics().refl.user.implementationId;
 }
 
-Any User::queryInterface( const Type & reqType ) throw (RuntimeException)
+Any User::queryInterface( const Type & reqType ) throw (RuntimeException, std::exception)
 {
     Any ret;
 
@@ -143,7 +143,7 @@ Any User::queryInterface( const Type & reqType ) throw (RuntimeException)
 
 void User::changePassword(
     const OUString& oldPassword, const OUString& newPassword )
-    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     (void) oldPassword;
     OUStringBuffer buf(128);
@@ -157,7 +157,7 @@ void User::changePassword(
 }
 
 sal_Int32 User::getPrivileges( const OUString& objName, sal_Int32 objType )
-    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     sal_Int32 ret = 0xffffffff;
     if( isLog( m_pSettings, LogLevel::INFO ) )
@@ -175,7 +175,7 @@ sal_Int32 User::getPrivileges( const OUString& objName, sal_Int32 objType )
 }
 
 sal_Int32 User::getGrantablePrivileges( const OUString& objName, sal_Int32 objType )
-    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     (void) objName; (void) objType;
     // all privileges
@@ -183,7 +183,7 @@ sal_Int32 User::getGrantablePrivileges( const OUString& objName, sal_Int32 objTy
 }
 
 void User::grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges )
-    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     (void) objName; (void) objType; (void) objPrivileges;
     throw com::sun::star::sdbc::SQLException("pq_driver: privilege change not implemented yet",
@@ -191,7 +191,7 @@ void User::grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int3
 }
 
 void User::revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges )
-    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     (void) objName; (void) objType; (void) objPrivileges;
     throw com::sun::star::sdbc::SQLException("pq_driver: privilege change not implemented yet",
@@ -212,7 +212,7 @@ UserDescriptor::UserDescriptor(
         * getStatics().refl.userDescriptor.pProps )
 {}
 
-Reference< XPropertySet > UserDescriptor::createDataDescriptor(  ) throw (RuntimeException)
+Reference< XPropertySet > UserDescriptor::createDataDescriptor(  ) throw (RuntimeException, std::exception)
 {
     UserDescriptor * pUser = new UserDescriptor( m_refMutex, m_conn, m_pSettings );
     pUser->copyValuesFrom( this );

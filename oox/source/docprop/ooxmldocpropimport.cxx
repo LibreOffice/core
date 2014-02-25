@@ -104,17 +104,17 @@ DocumentPropertiesImport::DocumentPropertiesImport( const Reference< XComponentC
 }
 
 // XServiceInfo
-OUString SAL_CALL DocumentPropertiesImport::getImplementationName() throw (RuntimeException)
+OUString SAL_CALL DocumentPropertiesImport::getImplementationName() throw (RuntimeException, std::exception)
 {
     return DocumentPropertiesImport_getImplementationName();
 }
 
-sal_Bool SAL_CALL DocumentPropertiesImport::supportsService( const OUString& rServiceName ) throw (RuntimeException)
+sal_Bool SAL_CALL DocumentPropertiesImport::supportsService( const OUString& rServiceName ) throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL DocumentPropertiesImport::getSupportedServiceNames() throw (RuntimeException)
+Sequence< OUString > SAL_CALL DocumentPropertiesImport::getSupportedServiceNames() throw (RuntimeException, std::exception)
 {
     return DocumentPropertiesImport_getSupportedServiceNames();
 }
@@ -122,7 +122,7 @@ Sequence< OUString > SAL_CALL DocumentPropertiesImport::getSupportedServiceNames
 // XOOXMLDocumentPropertiesImporter
 void SAL_CALL DocumentPropertiesImport::importProperties(
         const Reference< XStorage >& rxSource, const Reference< XDocumentProperties >& rxDocumentProperties )
-        throw (RuntimeException, IllegalArgumentException, SAXException, Exception)
+        throw (RuntimeException, IllegalArgumentException, SAXException, Exception, std::exception)
 {
     if( !mxContext.is() )
         throw RuntimeException();

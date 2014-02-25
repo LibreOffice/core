@@ -41,21 +41,21 @@ RangeSelectionListener::~RangeSelectionListener()
 
 // ____ XRangeSelectionListener ____
 void SAL_CALL RangeSelectionListener::done( const sheet::RangeSelectionEvent& aEvent )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     m_aRange = aEvent.RangeDescriptor;
     m_rParent.listeningFinished( m_aRange );
 }
 
 void SAL_CALL RangeSelectionListener::aborted( const sheet::RangeSelectionEvent& /*aEvent*/ )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     m_rParent.listeningFinished( m_aRange );
 }
 
 // ____ XEventListener ____
 void SAL_CALL RangeSelectionListener::disposing( const lang::EventObject& /*Source*/ )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     m_rParent.disposingRangeSelection();
 }

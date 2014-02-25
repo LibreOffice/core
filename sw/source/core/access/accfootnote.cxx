@@ -72,7 +72,7 @@ SwAccessibleFootnote::~SwAccessibleFootnote()
 }
 
 OUString SAL_CALL SwAccessibleFootnote::getAccessibleDescription (void)
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -95,7 +95,7 @@ OUString SAL_CALL SwAccessibleFootnote::getAccessibleDescription (void)
 }
 
 OUString SAL_CALL SwAccessibleFootnote::getImplementationName()
-        throw( RuntimeException )
+        throw( RuntimeException, std::exception )
 {
     if( AccessibleRole::END_NOTE == GetRole() )
         return OUString(sImplementationNameEndnote);
@@ -104,13 +104,13 @@ OUString SAL_CALL SwAccessibleFootnote::getImplementationName()
 }
 
 sal_Bool SAL_CALL SwAccessibleFootnote::supportsService(const OUString& sTestServiceName)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, sTestServiceName);
 }
 
 Sequence< OUString > SAL_CALL SwAccessibleFootnote::getSupportedServiceNames()
-        throw( uno::RuntimeException )
+        throw( uno::RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
@@ -128,7 +128,7 @@ namespace
 }
 
 Sequence< sal_Int8 > SAL_CALL SwAccessibleFootnote::getImplementationId()
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     return theSwAccessibleFootnoteImplementationId::get().getSeq();
 }

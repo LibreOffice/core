@@ -68,12 +68,12 @@ Reference< XContent > OCommandContainer::createObject( const OUString& _rName)
         return static_cast< css::sdb::XQueryDefinition * > ( new OCommandDefinition( *this, _rName, m_aContext, pElementContent ) );
 }
 
-Reference< XInterface > SAL_CALL OCommandContainer::createInstanceWithArguments(const Sequence< Any >& /*aArguments*/ ) throw (Exception, RuntimeException)
+Reference< XInterface > SAL_CALL OCommandContainer::createInstanceWithArguments(const Sequence< Any >& /*aArguments*/ ) throw (Exception, RuntimeException, std::exception)
 {
     return createInstance( );
 }
 
-Reference< XInterface > SAL_CALL OCommandContainer::createInstance( ) throw (Exception, RuntimeException)
+Reference< XInterface > SAL_CALL OCommandContainer::createInstance( ) throw (Exception, RuntimeException, std::exception)
 {
     if(m_bTables)
         return css::sdb::TableDefinition::createDefault( m_aContext );

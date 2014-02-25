@@ -52,9 +52,9 @@ public:
 
     // XActiveDataStreamer methods.
     virtual void SAL_CALL setStream( const com::sun::star::uno::Reference< com::sun::star::io::XStream >& xStream )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
     virtual com::sun::star::uno::Reference< com::sun::star::io::XStream > SAL_CALL getStream()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 };
 
 } /* namespace ucbhelper */

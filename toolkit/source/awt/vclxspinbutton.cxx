@@ -80,7 +80,7 @@ namespace toolkit
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXSpinButton, VCLXWindow, VCLXSpinButton_Base )
 
 
-    void SAL_CALL VCLXSpinButton::dispose( ) throw(RuntimeException)
+    void SAL_CALL VCLXSpinButton::dispose( ) throw(RuntimeException, std::exception)
     {
         {
             SolarMutexGuard aGuard;
@@ -94,14 +94,14 @@ namespace toolkit
     }
 
 
-    void SAL_CALL VCLXSpinButton::addAdjustmentListener( const Reference< XAdjustmentListener >& listener ) throw (RuntimeException)
+    void SAL_CALL VCLXSpinButton::addAdjustmentListener( const Reference< XAdjustmentListener >& listener ) throw (RuntimeException, std::exception)
     {
         if ( listener.is() )
             maAdjustmentListeners.addInterface( listener );
     }
 
 
-    void SAL_CALL VCLXSpinButton::removeAdjustmentListener( const Reference< XAdjustmentListener >& listener ) throw (RuntimeException)
+    void SAL_CALL VCLXSpinButton::removeAdjustmentListener( const Reference< XAdjustmentListener >& listener ) throw (RuntimeException, std::exception)
     {
         if ( listener.is() )
             maAdjustmentListeners.removeInterface( listener );
@@ -136,13 +136,13 @@ namespace toolkit
     }
 
 
-    void SAL_CALL VCLXSpinButton::setValue( sal_Int32 n ) throw (RuntimeException)
+    void SAL_CALL VCLXSpinButton::setValue( sal_Int32 n ) throw (RuntimeException, std::exception)
     {
         lcl_setSpinButtonValue( GetWindow(), &SpinButton::SetValue, n );
     }
 
 
-    void SAL_CALL VCLXSpinButton::setValues( sal_Int32 minValue, sal_Int32 maxValue, sal_Int32 currentValue ) throw (RuntimeException)
+    void SAL_CALL VCLXSpinButton::setValues( sal_Int32 minValue, sal_Int32 maxValue, sal_Int32 currentValue ) throw (RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
 
@@ -152,49 +152,49 @@ namespace toolkit
     }
 
 
-    sal_Int32 SAL_CALL VCLXSpinButton::getValue(  ) throw (RuntimeException)
+    sal_Int32 SAL_CALL VCLXSpinButton::getValue(  ) throw (RuntimeException, std::exception)
     {
         return lcl_getSpinButtonValue( GetWindow(), &SpinButton::GetValue );
     }
 
 
-    void SAL_CALL VCLXSpinButton::setMinimum( sal_Int32 minValue ) throw (RuntimeException)
+    void SAL_CALL VCLXSpinButton::setMinimum( sal_Int32 minValue ) throw (RuntimeException, std::exception)
     {
         lcl_setSpinButtonValue( GetWindow(), &SpinButton::SetRangeMin, minValue );
     }
 
 
-    void SAL_CALL VCLXSpinButton::setMaximum( sal_Int32 maxValue ) throw (RuntimeException)
+    void SAL_CALL VCLXSpinButton::setMaximum( sal_Int32 maxValue ) throw (RuntimeException, std::exception)
     {
         lcl_setSpinButtonValue( GetWindow(), &SpinButton::SetRangeMax, maxValue );
     }
 
 
-    sal_Int32 SAL_CALL VCLXSpinButton::getMinimum(  ) throw (RuntimeException)
+    sal_Int32 SAL_CALL VCLXSpinButton::getMinimum(  ) throw (RuntimeException, std::exception)
     {
         return lcl_getSpinButtonValue( GetWindow(), &SpinButton::GetRangeMin );
     }
 
 
-    sal_Int32 SAL_CALL VCLXSpinButton::getMaximum(  ) throw (RuntimeException)
+    sal_Int32 SAL_CALL VCLXSpinButton::getMaximum(  ) throw (RuntimeException, std::exception)
     {
         return lcl_getSpinButtonValue( GetWindow(), &SpinButton::GetRangeMax );
     }
 
 
-    void SAL_CALL VCLXSpinButton::setSpinIncrement( sal_Int32 spinIncrement ) throw (RuntimeException)
+    void SAL_CALL VCLXSpinButton::setSpinIncrement( sal_Int32 spinIncrement ) throw (RuntimeException, std::exception)
     {
         lcl_setSpinButtonValue( GetWindow(), &SpinButton::SetValueStep, spinIncrement );
     }
 
 
-    sal_Int32 SAL_CALL VCLXSpinButton::getSpinIncrement(  ) throw (RuntimeException)
+    sal_Int32 SAL_CALL VCLXSpinButton::getSpinIncrement(  ) throw (RuntimeException, std::exception)
     {
         return lcl_getSpinButtonValue( GetWindow(), &SpinButton::GetValueStep );
     }
 
 
-    void SAL_CALL VCLXSpinButton::setOrientation( sal_Int32 orientation ) throw (NoSupportException, RuntimeException)
+    void SAL_CALL VCLXSpinButton::setOrientation( sal_Int32 orientation ) throw (NoSupportException, RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
 
@@ -202,7 +202,7 @@ namespace toolkit
     }
 
 
-    sal_Int32 SAL_CALL VCLXSpinButton::getOrientation(  ) throw (RuntimeException)
+    sal_Int32 SAL_CALL VCLXSpinButton::getOrientation(  ) throw (RuntimeException, std::exception)
     {
         return  ( 0 != ( GetWindow()->GetStyle() & WB_HSCROLL ) )
             ?   ScrollBarOrientation::HORIZONTAL
@@ -242,7 +242,7 @@ namespace toolkit
     }
 
 
-    void SAL_CALL VCLXSpinButton::setProperty( const OUString& PropertyName, const Any& Value ) throw(RuntimeException)
+    void SAL_CALL VCLXSpinButton::setProperty( const OUString& PropertyName, const Any& Value ) throw(RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
 
@@ -292,7 +292,7 @@ namespace toolkit
     }
 
 
-    Any SAL_CALL VCLXSpinButton::getProperty( const OUString& PropertyName ) throw(RuntimeException)
+    Any SAL_CALL VCLXSpinButton::getProperty( const OUString& PropertyName ) throw(RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
 

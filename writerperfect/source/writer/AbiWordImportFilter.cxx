@@ -97,20 +97,20 @@ throw (RuntimeException)
 }
 
 sal_Bool SAL_CALL AbiWordImportFilter::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     SAL_INFO("writerperfect", "AbiWordImportFilter::filter");
     return importImpl ( aDescriptor );
 }
 void SAL_CALL AbiWordImportFilter::cancel(  )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     SAL_INFO("writerperfect", "AbiWordImportFilter::cancel");
 }
 
 // XImporter
 void SAL_CALL AbiWordImportFilter::setTargetDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc )
-throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
+throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     SAL_INFO("writerperfect", "AbiWordImportFilter::getTargetDocument");
     mxDoc = xDoc;
@@ -118,7 +118,7 @@ throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 
 // XExtendedFilterDetection
 OUString SAL_CALL AbiWordImportFilter::detect( com::sun::star::uno::Sequence< PropertyValue >& Descriptor )
-throw( com::sun::star::uno::RuntimeException )
+throw( com::sun::star::uno::RuntimeException, std::exception )
 {
     SAL_INFO("writerperfect", "AbiWordImportFilter::detect");
 
@@ -160,7 +160,7 @@ throw( com::sun::star::uno::RuntimeException )
 
 // XInitialization
 void SAL_CALL AbiWordImportFilter::initialize( const Sequence< Any >& aArguments )
-throw (Exception, RuntimeException)
+throw (Exception, RuntimeException, std::exception)
 {
     SAL_INFO("writerperfect", "AbiWordImportFilter::initialize");
     Sequence < PropertyValue > aAnySeq;
@@ -205,17 +205,17 @@ throw( Exception )
 
 // XServiceInfo
 OUString SAL_CALL AbiWordImportFilter::getImplementationName(  )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     return AbiWordImportFilter_getImplementationName();
 }
 sal_Bool SAL_CALL AbiWordImportFilter::supportsService( const OUString &rServiceName )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     return cppu::supportsService( this, rServiceName );
 }
 Sequence< OUString > SAL_CALL AbiWordImportFilter::getSupportedServiceNames(  )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     return AbiWordImportFilter_getSupportedServiceNames();
 }

@@ -58,29 +58,29 @@ private:
     virtual ~Service() {}
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return read_write_access::getImplementationName(); }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return cppu::supportsService(this, ServiceName); }
 
     virtual css::uno::Sequence< OUString > SAL_CALL
-    getSupportedServiceNames() throw (css::uno::RuntimeException)
+    getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception)
     { return read_write_access::getSupportedServiceNames(); }
 
     virtual void SAL_CALL initialize(
         css::uno::Sequence< css::uno::Any > const & aArguments)
-        throw (css::uno::Exception, css::uno::RuntimeException);
+        throw (css::uno::Exception, css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Any SAL_CALL getByHierarchicalName(
         OUString const & aName)
         throw (
-            css::container::NoSuchElementException, css::uno::RuntimeException)
+            css::container::NoSuchElementException, css::uno::RuntimeException, std::exception)
     { return getRoot()->getByHierarchicalName(aName); }
 
     virtual sal_Bool SAL_CALL hasByHierarchicalName(OUString const & aName)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return getRoot()->hasByHierarchicalName(aName); }
 
     virtual void SAL_CALL replaceByHierarchicalName(
@@ -88,19 +88,19 @@ private:
         throw (
             css::lang::IllegalArgumentException,
             css::container::NoSuchElementException,
-            css::lang::WrappedTargetException, css::uno::RuntimeException)
+            css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
     { getRoot()->replaceByHierarchicalName(aName, aElement); }
 
     virtual void SAL_CALL commitChanges()
-        throw (css::lang::WrappedTargetException, css::uno::RuntimeException)
+        throw (css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
     { getRoot()->commitChanges(); }
 
     virtual sal_Bool SAL_CALL hasPendingChanges()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return getRoot()->hasPendingChanges(); }
 
     virtual css::util::ChangesSet SAL_CALL getPendingChanges()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     { return getRoot()->getPendingChanges(); }
 
     rtl::Reference< RootAccess > getRoot();
@@ -112,7 +112,7 @@ private:
 };
 
 void Service::initialize(css::uno::Sequence< css::uno::Any > const & aArguments)
-    throw (css::uno::Exception, css::uno::RuntimeException)
+    throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     OUString locale;
     if (aArguments.getLength() != 1 || !(aArguments[0] >>= locale)) {

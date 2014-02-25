@@ -59,7 +59,7 @@ class WeakPropertyChangeListener : public ::cppu::WeakImplHelper1<com::sun::star
         }
 
         virtual void SAL_CALL propertyChange(const com::sun::star::beans::PropertyChangeEvent &rEvent )
-            throw(com::sun::star::uno::RuntimeException)
+            throw(com::sun::star::uno::RuntimeException, std::exception)
         {
             com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> xOwner(mxOwner.get(),
                 com::sun::star::uno::UNO_QUERY);
@@ -70,7 +70,7 @@ class WeakPropertyChangeListener : public ::cppu::WeakImplHelper1<com::sun::star
 
         // lang.XEventListener
         virtual void SAL_CALL disposing(const com::sun::star::lang::EventObject& rEvent)
-            throw(com::sun::star::uno::RuntimeException)
+            throw(com::sun::star::uno::RuntimeException, std::exception)
         {
             com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> xOwner(mxOwner.get(),
                 com::sun::star::uno::UNO_QUERY);
@@ -172,7 +172,7 @@ ImeStatusWindow::~ImeStatusWindow()
 }
 
 void SAL_CALL ImeStatusWindow::disposing(css::lang::EventObject const & )
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard(m_aMutex);
     m_xConfig = 0;
@@ -181,7 +181,7 @@ void SAL_CALL ImeStatusWindow::disposing(css::lang::EventObject const & )
 
 void SAL_CALL
 ImeStatusWindow::propertyChange(css::beans::PropertyChangeEvent const & )
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     SfxApplication* pApp = SfxApplication::Get();

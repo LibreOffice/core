@@ -103,7 +103,7 @@ public:
     queryContent( const ::com::sun::star::uno::Reference<
                     ::com::sun::star::ucb::XContentIdentifier >& Identifier )
         throw( ::com::sun::star::ucb::IllegalIdentifierException,
-               ::com::sun::star::uno::RuntimeException );
+               ::com::sun::star::uno::RuntimeException, std::exception );
 
 
     // Additional interfaces

@@ -44,13 +44,13 @@ VbaWindowBase::VbaWindowBase( uno::Sequence< uno::Any > const & args,
 }
 
 sal_Bool SAL_CALL
-VbaWindowBase::getVisible() throw (uno::RuntimeException)
+VbaWindowBase::getVisible() throw (uno::RuntimeException, std::exception)
 {
     return getWindow2()->isVisible();
 }
 
 void SAL_CALL
-VbaWindowBase::setVisible( sal_Bool _visible ) throw (uno::RuntimeException)
+VbaWindowBase::setVisible( sal_Bool _visible ) throw (uno::RuntimeException, std::exception)
 {
     getWindow2()->setVisible( _visible );
 }
@@ -78,49 +78,49 @@ void setPosSize( const uno::Reference< awt::XWindow >& xWindow, sal_Int32 nValue
 }
 
 sal_Int32 SAL_CALL
-VbaWindowBase::getHeight() throw (uno::RuntimeException)
+VbaWindowBase::getHeight() throw (uno::RuntimeException, std::exception)
 {
     return getWindow()->getPosSize().Height;
 }
 
 void SAL_CALL
-VbaWindowBase::setHeight( sal_Int32 _height ) throw (uno::RuntimeException)
+VbaWindowBase::setHeight( sal_Int32 _height ) throw (uno::RuntimeException, std::exception)
 {
     setPosSize( getWindow(), _height, css::awt::PosSize::HEIGHT );
 }
 
 sal_Int32 SAL_CALL
-VbaWindowBase::getLeft() throw (uno::RuntimeException)
+VbaWindowBase::getLeft() throw (uno::RuntimeException, std::exception)
 {
     return getWindow()->getPosSize().X;
 }
 
 void SAL_CALL
-VbaWindowBase::setLeft( sal_Int32 _left ) throw (uno::RuntimeException)
+VbaWindowBase::setLeft( sal_Int32 _left ) throw (uno::RuntimeException, std::exception)
 {
     setPosSize( getWindow(), _left, css::awt::PosSize::X );
 }
 
 sal_Int32 SAL_CALL
-VbaWindowBase::getTop() throw (uno::RuntimeException)
+VbaWindowBase::getTop() throw (uno::RuntimeException, std::exception)
 {
     return getWindow()->getPosSize().Y;
 }
 
 void SAL_CALL
-VbaWindowBase::setTop( sal_Int32 _top ) throw (uno::RuntimeException)
+VbaWindowBase::setTop( sal_Int32 _top ) throw (uno::RuntimeException, std::exception)
 {
     setPosSize( getWindow(), _top, css::awt::PosSize::Y );
 }
 
 sal_Int32 SAL_CALL
-VbaWindowBase::getWidth() throw (uno::RuntimeException)
+VbaWindowBase::getWidth() throw (uno::RuntimeException, std::exception)
 {
     return getWindow()->getPosSize().Width;
 }
 
 void SAL_CALL
-VbaWindowBase::setWidth( sal_Int32 _width ) throw (uno::RuntimeException)
+VbaWindowBase::setWidth( sal_Int32 _width ) throw (uno::RuntimeException, std::exception)
 {
     setPosSize( getWindow(), _width, css::awt::PosSize::WIDTH );
 }

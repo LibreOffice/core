@@ -237,25 +237,25 @@ SwAccessibleCell::~SwAccessibleCell()
 }
 
 OUString SAL_CALL SwAccessibleCell::getAccessibleDescription (void)
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     return GetName();
 }
 
 OUString SAL_CALL SwAccessibleCell::getImplementationName()
-        throw( uno::RuntimeException )
+        throw( uno::RuntimeException, std::exception )
 {
     return OUString(sImplementationName);
 }
 
 sal_Bool SAL_CALL SwAccessibleCell::supportsService(const OUString& sTestServiceName)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, sTestServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL SwAccessibleCell::getSupportedServiceNames()
-        throw( uno::RuntimeException )
+        throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
@@ -287,7 +287,7 @@ void SwAccessibleCell::InvalidatePosOrSize( const SwRect& rOldBox )
 // XAccessibleInterface
 
 uno::Any SwAccessibleCell::queryInterface( const uno::Type& rType )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     if (rType == ::getCppuType((const uno::Reference<XAccessibleExtendedAttributes>*)0))
     {
@@ -317,7 +317,7 @@ uno::Any SwAccessibleCell::queryInterface( const uno::Type& rType )
 
 // XTypeProvider
 uno::Sequence< uno::Type > SAL_CALL SwAccessibleCell::getTypes()
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence< uno::Type > aTypes( SwAccessibleContext::getTypes() );
 
@@ -336,7 +336,7 @@ namespace
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleCell::getImplementationId()
-        throw(uno::RuntimeException)
+        throw(uno::RuntimeException, std::exception)
 {
     return theSwAccessibleCellImplementationId::get().getSeq();
 }
@@ -354,7 +354,7 @@ SwFrmFmt* SwAccessibleCell::GetTblBoxFormat() const
 
 //Implement TableCell currentValue
 uno::Any SwAccessibleCell::getCurrentValue( )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     CHECK_FOR_DEFUNC( XAccessibleValue );
@@ -365,7 +365,7 @@ uno::Any SwAccessibleCell::getCurrentValue( )
 }
 
 sal_Bool SwAccessibleCell::setCurrentValue( const uno::Any& aNumber )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     CHECK_FOR_DEFUNC( XAccessibleValue );
@@ -381,7 +381,7 @@ sal_Bool SwAccessibleCell::setCurrentValue( const uno::Any& aNumber )
 }
 
 uno::Any SwAccessibleCell::getMaximumValue( )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     uno::Any aAny;
     aAny <<= DBL_MAX;
@@ -389,7 +389,7 @@ uno::Any SwAccessibleCell::getMaximumValue( )
 }
 
 uno::Any SwAccessibleCell::getMinimumValue(  )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     uno::Any aAny;
     aAny <<= -DBL_MAX;
@@ -421,7 +421,7 @@ static OUString ReplaceFourChar(OUString oldOUString)
 }
 
 ::com::sun::star::uno::Any SAL_CALL SwAccessibleCell::getExtendedAttributes()
-        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -441,7 +441,7 @@ static OUString ReplaceFourChar(OUString oldOUString)
 }
 
 sal_Int32 SAL_CALL SwAccessibleCell::getBackground()
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -466,46 +466,46 @@ sal_Int32 SAL_CALL SwAccessibleCell::getBackground()
 //=====  XAccessibleSelection  ============================================
 void SwAccessibleCell::selectAccessibleChild(
     sal_Int32 nChildIndex )
-    throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
+    throw ( lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception )
 {
     aSelectionHelper.selectAccessibleChild(nChildIndex);
 }
 
 sal_Bool SwAccessibleCell::isAccessibleChildSelected(
     sal_Int32 nChildIndex )
-    throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
+    throw ( lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception )
 {
     return aSelectionHelper.isAccessibleChildSelected(nChildIndex);
 }
 
 void SwAccessibleCell::clearAccessibleSelection(  )
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     aSelectionHelper.clearAccessibleSelection();
 }
 
 void SwAccessibleCell::selectAllAccessibleChildren(  )
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     aSelectionHelper.selectAllAccessibleChildren();
 }
 
 sal_Int32 SwAccessibleCell::getSelectedAccessibleChildCount(  )
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     return aSelectionHelper.getSelectedAccessibleChildCount();
 }
 
 uno::Reference<XAccessible> SwAccessibleCell::getSelectedAccessibleChild(
     sal_Int32 nSelectedChildIndex )
-    throw ( lang::IndexOutOfBoundsException, uno::RuntimeException)
+    throw ( lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
     return aSelectionHelper.getSelectedAccessibleChild(nSelectedChildIndex);
 }
 
 void SwAccessibleCell::deselectAccessibleChild(
     sal_Int32 nSelectedChildIndex )
-    throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
+    throw ( lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception )
 {
     aSelectionHelper.deselectAccessibleChild(nSelectedChildIndex);
 }

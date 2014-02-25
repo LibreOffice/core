@@ -92,7 +92,7 @@ SvxUnoNumberingRules::~SvxUnoNumberingRules() throw()
 
 //XIndexReplace
 void SAL_CALL SvxUnoNumberingRules::replaceByIndex( sal_Int32 Index, const uno::Any& Element )
-    throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
+    throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -107,7 +107,7 @@ void SAL_CALL SvxUnoNumberingRules::replaceByIndex( sal_Int32 Index, const uno::
 }
 
 // XIndexAccess
-sal_Int32 SAL_CALL SvxUnoNumberingRules::getCount() throw( RuntimeException )
+sal_Int32 SAL_CALL SvxUnoNumberingRules::getCount() throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -115,7 +115,7 @@ sal_Int32 SAL_CALL SvxUnoNumberingRules::getCount() throw( RuntimeException )
 }
 
 Any SAL_CALL SvxUnoNumberingRules::getByIndex( sal_Int32 Index )
-    throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
+    throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -127,24 +127,24 @@ Any SAL_CALL SvxUnoNumberingRules::getByIndex( sal_Int32 Index )
 
 //XElementAccess
 Type SAL_CALL SvxUnoNumberingRules::getElementType()
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return ::getCppuType(( const Sequence< beans::PropertyValue >*)0);
 }
 
-sal_Bool SAL_CALL SvxUnoNumberingRules::hasElements() throw( RuntimeException )
+sal_Bool SAL_CALL SvxUnoNumberingRules::hasElements() throw( RuntimeException, std::exception )
 {
     return sal_True;
 }
 
 // XAnyCompare
-sal_Int16 SAL_CALL SvxUnoNumberingRules::compare( const Any& rAny1, const Any& rAny2 ) throw(RuntimeException)
+sal_Int16 SAL_CALL SvxUnoNumberingRules::compare( const Any& rAny1, const Any& rAny2 ) throw(RuntimeException, std::exception)
 {
     return SvxUnoNumberingRules::Compare( rAny1, rAny2 );
 }
 
 // XCloneable
-Reference< XCloneable > SAL_CALL SvxUnoNumberingRules::createClone(  ) throw (RuntimeException)
+Reference< XCloneable > SAL_CALL SvxUnoNumberingRules::createClone(  ) throw (RuntimeException, std::exception)
 {
     return new SvxUnoNumberingRules(maRule);
 }
@@ -152,17 +152,17 @@ Reference< XCloneable > SAL_CALL SvxUnoNumberingRules::createClone(  ) throw (Ru
 // XServiceInfo
 const char pSvxUnoNumberingRulesService[] = "com.sun.star.text.NumberingRules";
 
-OUString SAL_CALL SvxUnoNumberingRules::getImplementationName(  ) throw(RuntimeException)
+OUString SAL_CALL SvxUnoNumberingRules::getImplementationName(  ) throw(RuntimeException, std::exception)
 {
     return OUString( "SvxUnoNumberingRules" );
 }
 
-sal_Bool SAL_CALL SvxUnoNumberingRules::supportsService( const OUString& ServiceName ) throw(RuntimeException)
+sal_Bool SAL_CALL SvxUnoNumberingRules::supportsService( const OUString& ServiceName ) throw(RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL SvxUnoNumberingRules::getSupportedServiceNames(  ) throw(RuntimeException)
+Sequence< OUString > SAL_CALL SvxUnoNumberingRules::getSupportedServiceNames(  ) throw(RuntimeException, std::exception)
 {
     OUString aService( pSvxUnoNumberingRulesService );
     Sequence< OUString > aSeq( &aService, 1 );
@@ -494,10 +494,10 @@ com::sun::star::uno::Reference< com::sun::star::container::XIndexReplace > SvxCr
 class SvxUnoNumberingRulesCompare : public ::cppu::WeakAggImplHelper1< XAnyCompare >
 {
 public:
-    virtual sal_Int16 SAL_CALL compare( const Any& Any1, const Any& Any2 ) throw(RuntimeException);
+    virtual sal_Int16 SAL_CALL compare( const Any& Any1, const Any& Any2 ) throw(RuntimeException, std::exception);
 };
 
-sal_Int16 SAL_CALL SvxUnoNumberingRulesCompare::compare( const Any& Any1, const Any& Any2 ) throw(RuntimeException)
+sal_Int16 SAL_CALL SvxUnoNumberingRulesCompare::compare( const Any& Any1, const Any& Any2 ) throw(RuntimeException, std::exception)
 {
     return SvxUnoNumberingRules::Compare( Any1, Any2 );
 }

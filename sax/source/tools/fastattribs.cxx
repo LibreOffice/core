@@ -108,7 +108,7 @@ void FastAttributeList::addUnknown( const OString& rName, const sal_Char* pValue
 }
 
 // XFastAttributeList
-sal_Bool FastAttributeList::hasAttribute( ::sal_Int32 Token ) throw (RuntimeException)
+sal_Bool FastAttributeList::hasAttribute( ::sal_Int32 Token ) throw (RuntimeException, std::exception)
 {
     for (size_t i = 0; i < maAttributeTokens.size(); ++i)
         if (maAttributeTokens[i] == Token)
@@ -117,7 +117,7 @@ sal_Bool FastAttributeList::hasAttribute( ::sal_Int32 Token ) throw (RuntimeExce
     return sal_False;
 }
 
-sal_Int32 FastAttributeList::getValueToken( ::sal_Int32 Token ) throw (SAXException, RuntimeException)
+sal_Int32 FastAttributeList::getValueToken( ::sal_Int32 Token ) throw (SAXException, RuntimeException, std::exception)
 {
     for (size_t i = 0; i < maAttributeTokens.size(); ++i)
         if (maAttributeTokens[i] == Token)
@@ -128,7 +128,7 @@ sal_Int32 FastAttributeList::getValueToken( ::sal_Int32 Token ) throw (SAXExcept
     throw SAXException();
 }
 
-sal_Int32 FastAttributeList::getOptionalValueToken( ::sal_Int32 Token, ::sal_Int32 Default ) throw (RuntimeException)
+sal_Int32 FastAttributeList::getOptionalValueToken( ::sal_Int32 Token, ::sal_Int32 Default ) throw (RuntimeException, std::exception)
 {
     for (size_t i = 0; i < maAttributeTokens.size(); ++i)
         if (maAttributeTokens[i] == Token)
@@ -179,7 +179,7 @@ bool FastAttributeList::getAsChar( sal_Int32 nToken, const char*& rPos ) const
     return false;
 }
 
-OUString FastAttributeList::getValue( ::sal_Int32 Token ) throw (SAXException, RuntimeException)
+OUString FastAttributeList::getValue( ::sal_Int32 Token ) throw (SAXException, RuntimeException, std::exception)
 {
     for (size_t i = 0; i < maAttributeTokens.size(); ++i)
         if (maAttributeTokens[i] == Token)
@@ -188,7 +188,7 @@ OUString FastAttributeList::getValue( ::sal_Int32 Token ) throw (SAXException, R
     throw SAXException();
 }
 
-OUString FastAttributeList::getOptionalValue( ::sal_Int32 Token ) throw (RuntimeException)
+OUString FastAttributeList::getOptionalValue( ::sal_Int32 Token ) throw (RuntimeException, std::exception)
 {
     for (size_t i = 0; i < maAttributeTokens.size(); ++i)
         if (maAttributeTokens[i] == Token)
@@ -196,7 +196,7 @@ OUString FastAttributeList::getOptionalValue( ::sal_Int32 Token ) throw (Runtime
 
     return OUString();
 }
-Sequence< Attribute > FastAttributeList::getUnknownAttributes(  ) throw (RuntimeException)
+Sequence< Attribute > FastAttributeList::getUnknownAttributes(  ) throw (RuntimeException, std::exception)
 {
     Sequence< Attribute > aSeq( maUnknownAttributes.size() );
     Attribute* pAttr = aSeq.getArray();
@@ -204,7 +204,7 @@ Sequence< Attribute > FastAttributeList::getUnknownAttributes(  ) throw (Runtime
         (*attrIter).FillAttribute( pAttr++ );
     return aSeq;
 }
-Sequence< FastAttribute > FastAttributeList::getFastAttributes(  ) throw (RuntimeException)
+Sequence< FastAttribute > FastAttributeList::getFastAttributes(  ) throw (RuntimeException, std::exception)
 {
     Sequence< FastAttribute > aSeq( maAttributeTokens.size() );
     FastAttribute* pAttr = aSeq.getArray();

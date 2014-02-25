@@ -77,7 +77,7 @@ void setAlpha( Bitmap& rBitmap, AlphaMask& rAlpha, sal_uInt8 cIndexFrom, sal_Int
 // XGraphicTransformer
 uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::colorChange(
     const uno::Reference< graphic::XGraphic >& rxGraphic, sal_Int32 nColorFrom, sal_Int8 nTolerance, sal_Int32 nColorTo, sal_Int8 nAlphaTo )
-        throw ( lang::IllegalArgumentException, uno::RuntimeException)
+        throw ( lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     const uno::Reference< uno::XInterface > xIFace( rxGraphic, uno::UNO_QUERY );
     ::Graphic aGraphic( *::unographic::Graphic::getImplementation( xIFace ) );
@@ -141,7 +141,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::colorChange(
 
 uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::applyDuotone(
     const uno::Reference< graphic::XGraphic >& rxGraphic, sal_Int32 nColorOne, sal_Int32 nColorTwo )
-        throw ( lang::IllegalArgumentException, uno::RuntimeException)
+        throw ( lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     const uno::Reference< uno::XInterface > xIFace( rxGraphic, uno::UNO_QUERY );
     ::Graphic aGraphic( *::unographic::Graphic::getImplementation( xIFace ) );

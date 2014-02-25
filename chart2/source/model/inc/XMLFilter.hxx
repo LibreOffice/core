@@ -73,23 +73,23 @@ protected:
     virtual sal_Bool SAL_CALL filter(
         const ::com::sun::star::uno::Sequence<
             ::com::sun::star::beans::PropertyValue >& aDescriptor )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL cancel()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // ____ XImporter ____
     virtual void SAL_CALL setTargetDocument(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XComponent >& Document )
         throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException);
+               ::com::sun::star::uno::RuntimeException, std::exception);
 
     // ____ XExporter ____
     virtual void SAL_CALL setSourceDocument(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XComponent >& Document )
         throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException);
+               ::com::sun::star::uno::RuntimeException, std::exception);
 
     inline OUString getDocumentHandler() const { return m_sDocumentHandler; }
     inline void setDocumentHandler(const OUString& _sDocumentHandler) { m_sDocumentHandler = _sDocumentHandler; }
@@ -180,7 +180,7 @@ public:
 protected:
     virtual OUString SAL_CALL
         getImplementationName()
-            throw( ::com::sun::star::uno::RuntimeException )
+            throw( ::com::sun::star::uno::RuntimeException, std::exception )
     {
         return getImplementationName_Static();
     }
@@ -189,7 +189,7 @@ protected:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XComponent >& Document )
         throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException)
+               ::com::sun::star::uno::RuntimeException, std::exception)
     {
         setDocumentHandler( "com.sun.star.comp.report.ImportDocumentHandler" );
         XMLFilter::setTargetDocument(Document);
@@ -200,7 +200,7 @@ protected:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XComponent >& Document )
         throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException)
+               ::com::sun::star::uno::RuntimeException, std::exception)
     {
         setDocumentHandler( "com.sun.star.comp.report.ExportDocumentHandler" );
         XMLFilter::setSourceDocument(Document);

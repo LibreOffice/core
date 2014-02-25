@@ -95,7 +95,7 @@ public:
                             ~ScannerEventListener();
 
     // XEventListener
-    virtual void SAL_CALL   disposing( const lang::EventObject& rEventObject ) throw (uno::RuntimeException);
+    virtual void SAL_CALL   disposing( const lang::EventObject& rEventObject ) throw (uno::RuntimeException, std::exception);
 
     void                    ParentDestroyed() { mpParent = NULL; }
 };
@@ -108,7 +108,7 @@ ScannerEventListener::~ScannerEventListener()
 
 
 
-void SAL_CALL ScannerEventListener::disposing( const lang::EventObject& rEventObject ) throw (uno::RuntimeException)
+void SAL_CALL ScannerEventListener::disposing( const lang::EventObject& rEventObject ) throw (uno::RuntimeException, std::exception)
 {
     if( mpParent )
         mpParent->ScannerEvent( rEventObject );

@@ -62,7 +62,7 @@ JavaInteractionHandler::~JavaInteractionHandler()
 }
 
 Any SAL_CALL JavaInteractionHandler::queryInterface(const Type& aType )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     if (aType == getCppuType(reinterpret_cast<Reference<XInterface>*>(0)))
         return Any( static_cast<XInterface*>(this), aType);
@@ -83,7 +83,7 @@ void SAL_CALL JavaInteractionHandler::release(  ) throw ()
 }
 
 
-void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionRequest >& Request ) throw (RuntimeException)
+void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionRequest >& Request ) throw (RuntimeException, std::exception)
 {
     Any anyExc = Request->getRequest();
     Sequence< Reference< XInteractionContinuation > > aSeqCont = Request->getContinuations();

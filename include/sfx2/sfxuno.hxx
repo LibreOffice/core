@@ -80,9 +80,9 @@ typedef sal_Int32 FrameSearchFlags;
 //                      static xxx::impl_createInstance()
 #define SFX_DECL_XSERVICEINFO_NOFACTORY                                                                                         \
     /* XServiceInfo */                                                                                                          \
-    virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException );                                 \
-    virtual sal_Bool SAL_CALL supportsService( const OUString& sServiceName ) throw( css::uno::RuntimeException );         \
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException );        \
+    virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception );                                 \
+    virtual sal_Bool SAL_CALL supportsService( const OUString& sServiceName ) throw( css::uno::RuntimeException, std::exception );         \
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception );        \
                                                                                                                                 \
     /* Helper for XServiceInfo */                                                                                               \
     static css::uno::Sequence< OUString > impl_getStaticSupportedServiceNames();                                           \

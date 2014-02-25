@@ -154,7 +154,7 @@ ResourceId::~ResourceId (void)
 
 OUString SAL_CALL
     ResourceId::getResourceURL (void)
-    throw(com::sun::star::uno::RuntimeException)
+    throw(com::sun::star::uno::RuntimeException, std::exception)
 {
     if (!maResourceURLs.empty())
         return maResourceURLs[0];
@@ -167,7 +167,7 @@ OUString SAL_CALL
 
 util::URL SAL_CALL
     ResourceId::getFullResourceURL (void)
- throw(com::sun::star::uno::RuntimeException)
+ throw(com::sun::star::uno::RuntimeException, std::exception)
 {
     if (mpURL.get() != NULL)
         return *mpURL;
@@ -192,7 +192,7 @@ util::URL SAL_CALL
 
 sal_Bool SAL_CALL
     ResourceId::hasAnchor (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return maResourceURLs.size()>1;
 }
@@ -202,7 +202,7 @@ sal_Bool SAL_CALL
 
 Reference<XResourceId> SAL_CALL
     ResourceId::getAnchor (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ::rtl::Reference<ResourceId> rResourceId (new ResourceId());
     const sal_Int32 nAnchorCount (maResourceURLs.size()-1);
@@ -220,7 +220,7 @@ Reference<XResourceId> SAL_CALL
 
 Sequence<OUString> SAL_CALL
     ResourceId::getAnchorURLs (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     const sal_Int32 nAnchorCount (maResourceURLs.size() - 1);
     if (nAnchorCount > 0)
@@ -239,7 +239,7 @@ Sequence<OUString> SAL_CALL
 
 OUString SAL_CALL
     ResourceId::getResourceTypePrefix (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     if (!maResourceURLs.empty() )
     {
@@ -264,7 +264,7 @@ OUString SAL_CALL
 
 sal_Int16 SAL_CALL
     ResourceId::compareTo (const Reference<XResourceId>& rxResourceId)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     sal_Int16 nResult (0);
 
@@ -399,7 +399,7 @@ sal_Bool SAL_CALL
     ResourceId::isBoundTo (
         const Reference<XResourceId>& rxResourceId,
         AnchorBindingMode eMode)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     if ( ! rxResourceId.is())
     {
@@ -430,7 +430,7 @@ sal_Bool SAL_CALL
     ResourceId::isBoundToURL (
         const OUString& rsAnchorURL,
         AnchorBindingMode eMode)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return IsBoundToAnchor(&rsAnchorURL, NULL, eMode);
 }
@@ -440,7 +440,7 @@ sal_Bool SAL_CALL
 
 Reference<XResourceId> SAL_CALL
     ResourceId::clone (void)
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     return new ResourceId(maResourceURLs);
 }
@@ -451,7 +451,7 @@ Reference<XResourceId> SAL_CALL
 //----- XInitialization -------------------------------------------------------
 
 void SAL_CALL ResourceId::initialize (const Sequence<Any>& aArguments)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     sal_uInt32 nCount (aArguments.getLength());
     for (sal_uInt32 nIndex=0; nIndex<nCount; ++nIndex)

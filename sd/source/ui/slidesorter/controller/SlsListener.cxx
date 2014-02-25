@@ -444,7 +444,7 @@ IMPL_LINK(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexerEvent
 
 void SAL_CALL Listener::disposing (
     const lang::EventObject& rEventObject)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     if ((mbListeningToDocument || mbListeningToUNODocument)
         && mrSlideSorter.GetModel().GetDocument()!=NULL
@@ -471,7 +471,7 @@ void SAL_CALL Listener::disposing (
 
 void SAL_CALL Listener::notifyEvent (
     const document::EventObject& )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
 }
 
@@ -482,7 +482,7 @@ void SAL_CALL Listener::notifyEvent (
 
 void SAL_CALL Listener::propertyChange (
     const PropertyChangeEvent& rEvent)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
 
@@ -533,7 +533,7 @@ void SAL_CALL Listener::propertyChange (
 //===== frame::XFrameActionListener  ==========================================
 
 void SAL_CALL Listener::frameAction (const frame::FrameActionEvent& rEvent)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     switch (rEvent.Action)
     {
@@ -561,7 +561,7 @@ void SAL_CALL Listener::frameAction (const frame::FrameActionEvent& rEvent)
 
 void SAL_CALL Listener::notifyEvent (
     const AccessibleEventObject& )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
 }
 

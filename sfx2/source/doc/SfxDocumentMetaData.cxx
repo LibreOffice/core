@@ -134,156 +134,156 @@ public:
 
     // ::com::sun::star::lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual ::sal_Bool SAL_CALL supportsService(
-        const OUString & ServiceName) throw (css::uno::RuntimeException);
+        const OUString & ServiceName) throw (css::uno::RuntimeException, std::exception);
     virtual css::uno::Sequence< OUString > SAL_CALL
-        getSupportedServiceNames() throw (css::uno::RuntimeException);
+        getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception);
 
     // ::com::sun::star::lang::XComponent:
-    virtual void SAL_CALL dispose() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception);
 
     // ::com::sun::star::document::XDocumentProperties:
     virtual OUString SAL_CALL getAuthor()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setAuthor(const OUString & the_value)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual OUString SAL_CALL getGenerator()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setGenerator(const OUString & the_value)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual css::util::DateTime SAL_CALL getCreationDate()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setCreationDate(const css::util::DateTime & the_value)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual OUString SAL_CALL getTitle()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setTitle(const OUString & the_value)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual OUString SAL_CALL getSubject()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setSubject(const OUString & the_value)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual OUString SAL_CALL getDescription()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setDescription(const OUString & the_value)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual css::uno::Sequence< OUString > SAL_CALL getKeywords()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setKeywords(
         const css::uno::Sequence< OUString > & the_value)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual css::lang::Locale SAL_CALL getLanguage()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setLanguage(const css::lang::Locale & the_value)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual OUString SAL_CALL getModifiedBy()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setModifiedBy(const OUString & the_value)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual css::util::DateTime SAL_CALL getModificationDate()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setModificationDate(
             const css::util::DateTime & the_value)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual OUString SAL_CALL getPrintedBy()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setPrintedBy(const OUString & the_value)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual css::util::DateTime SAL_CALL getPrintDate()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setPrintDate(const css::util::DateTime & the_value)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual OUString SAL_CALL getTemplateName()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setTemplateName(const OUString & the_value)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual OUString SAL_CALL getTemplateURL()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setTemplateURL(const OUString & the_value)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual css::util::DateTime SAL_CALL getTemplateDate()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setTemplateDate(const css::util::DateTime & the_value)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual OUString SAL_CALL getAutoloadURL()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setAutoloadURL(const OUString & the_value)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual ::sal_Int32 SAL_CALL getAutoloadSecs()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setAutoloadSecs(::sal_Int32 the_value)
-        throw (css::uno::RuntimeException, css::lang::IllegalArgumentException);
+        throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception);
     virtual OUString SAL_CALL getDefaultTarget()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setDefaultTarget(const OUString & the_value)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual css::uno::Sequence< css::beans::NamedValue > SAL_CALL
-        getDocumentStatistics() throw (css::uno::RuntimeException);
+        getDocumentStatistics() throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setDocumentStatistics(
         const css::uno::Sequence< css::beans::NamedValue > & the_value)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual ::sal_Int16 SAL_CALL getEditingCycles()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setEditingCycles(::sal_Int16 the_value)
-        throw (css::uno::RuntimeException, css::lang::IllegalArgumentException);
+        throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception);
     virtual ::sal_Int32 SAL_CALL getEditingDuration()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setEditingDuration(::sal_Int32 the_value)
-        throw (css::uno::RuntimeException, css::lang::IllegalArgumentException);
+        throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception);
     virtual void SAL_CALL resetUserData(const OUString & the_value)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual css::uno::Reference< css::beans::XPropertyContainer > SAL_CALL
-        getUserDefinedProperties() throw (css::uno::RuntimeException);
+        getUserDefinedProperties() throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL loadFromStorage(
         const css::uno::Reference< css::embed::XStorage > & Storage,
         const css::uno::Sequence< css::beans::PropertyValue > & Medium)
         throw (css::uno::RuntimeException, css::lang::IllegalArgumentException,
                css::io::WrongFormatException,
-               css::lang::WrappedTargetException, css::io::IOException);
+               css::lang::WrappedTargetException, css::io::IOException, std::exception);
     virtual void SAL_CALL loadFromMedium(const OUString & URL,
         const css::uno::Sequence< css::beans::PropertyValue > & Medium)
         throw (css::uno::RuntimeException,
                css::io::WrongFormatException,
-               css::lang::WrappedTargetException, css::io::IOException);
+               css::lang::WrappedTargetException, css::io::IOException, std::exception);
     virtual void SAL_CALL storeToStorage(
         const css::uno::Reference< css::embed::XStorage > & Storage,
         const css::uno::Sequence< css::beans::PropertyValue > & Medium)
         throw (css::uno::RuntimeException, css::lang::IllegalArgumentException,
-               css::lang::WrappedTargetException, css::io::IOException);
+               css::lang::WrappedTargetException, css::io::IOException, std::exception);
     virtual void SAL_CALL storeToMedium(const OUString & URL,
         const css::uno::Sequence< css::beans::PropertyValue > & Medium)
         throw (css::uno::RuntimeException,
-               css::lang::WrappedTargetException, css::io::IOException);
+               css::lang::WrappedTargetException, css::io::IOException, std::exception);
 
     // ::com::sun::star::lang::XInitialization:
     virtual void SAL_CALL initialize(
         const css::uno::Sequence< css::uno::Any > & aArguments)
-        throw (css::uno::RuntimeException, css::uno::Exception);
+        throw (css::uno::RuntimeException, css::uno::Exception, std::exception);
 
     // ::com::sun::star::util::XCloneable:
     virtual css::uno::Reference<css::util::XCloneable> SAL_CALL createClone()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     // ::com::sun::star::util::XModifiable:
     virtual ::sal_Bool SAL_CALL isModified(  )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setModified( ::sal_Bool bModified )
-        throw (css::beans::PropertyVetoException, css::uno::RuntimeException);
+        throw (css::beans::PropertyVetoException, css::uno::RuntimeException, std::exception);
 
     // ::com::sun::star::util::XModifyBroadcaster:
     virtual void SAL_CALL addModifyListener(
         const css::uno::Reference< css::util::XModifyListener > & xListener)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL removeModifyListener(
         const css::uno::Reference< css::util::XModifyListener > & xListener)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     // ::com::sun::star::xml::sax::XSAXSerializable
     virtual void SAL_CALL serialize(
         const css::uno::Reference<css::xml::sax::XDocumentHandler>& i_xHandler,
         const css::uno::Sequence< css::beans::StringPair >& i_rNamespaces)
-        throw (css::uno::RuntimeException, css::xml::sax::SAXException);
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception);
 
 protected:
     SfxDocumentMetaData(SfxDocumentMetaData &); // not defined
@@ -367,25 +367,25 @@ protected:
 public:
     CompatWriterDocPropsImpl( css::uno::Reference< css::uno::XComponentContext > const & context) : CompatWriterDocPropsImpl_BASE( context ) {}
 // XCompatWriterDocPropsImpl
-    virtual OUString SAL_CALL getManager() throw (::com::sun::star::uno::RuntimeException) { return msManager; }
-    virtual void SAL_CALL setManager( const OUString& _manager ) throw (::com::sun::star::uno::RuntimeException) { msManager = _manager; }
-    virtual OUString SAL_CALL getCategory() throw (::com::sun::star::uno::RuntimeException){ return msCategory; }
-    virtual void SAL_CALL setCategory( const OUString& _category ) throw (::com::sun::star::uno::RuntimeException){ msCategory = _category; }
-    virtual OUString SAL_CALL getCompany() throw (::com::sun::star::uno::RuntimeException){ return msCompany; }
-    virtual void SAL_CALL setCompany( const OUString& _company ) throw (::com::sun::star::uno::RuntimeException){ msCompany = _company; }
+    virtual OUString SAL_CALL getManager() throw (::com::sun::star::uno::RuntimeException, std::exception) { return msManager; }
+    virtual void SAL_CALL setManager( const OUString& _manager ) throw (::com::sun::star::uno::RuntimeException, std::exception) { msManager = _manager; }
+    virtual OUString SAL_CALL getCategory() throw (::com::sun::star::uno::RuntimeException, std::exception){ return msCategory; }
+    virtual void SAL_CALL setCategory( const OUString& _category ) throw (::com::sun::star::uno::RuntimeException, std::exception){ msCategory = _category; }
+    virtual OUString SAL_CALL getCompany() throw (::com::sun::star::uno::RuntimeException, std::exception){ return msCompany; }
+    virtual void SAL_CALL setCompany( const OUString& _company ) throw (::com::sun::star::uno::RuntimeException, std::exception){ msCompany = _company; }
 
 // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
+    virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
     {
         return OUString("CompatWriterDocPropsImpl");
     }
 
-    virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException)
+    virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception)
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException)
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
     {
         css::uno::Sequence< OUString > aServiceNames(1);
         aServiceNames[ 0 ] = "com.sun.star.writer.DocumentProperties";
@@ -1384,21 +1384,21 @@ SfxDocumentMetaData::SfxDocumentMetaData(
 
 // com.sun.star.uno.XServiceInfo:
 OUString SAL_CALL
-SfxDocumentMetaData::getImplementationName() throw (css::uno::RuntimeException)
+SfxDocumentMetaData::getImplementationName() throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("SfxDocumentMetaData");
 }
 
 ::sal_Bool SAL_CALL
 SfxDocumentMetaData::supportsService(OUString const & serviceName)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, serviceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL
 SfxDocumentMetaData::getSupportedServiceNames()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
 {
     css::uno::Sequence< OUString > s(1);
     s[0] = "com.sun.star.document.DocumentProperties";
@@ -1407,7 +1407,7 @@ SfxDocumentMetaData::getSupportedServiceNames()
 
 
 // ::com::sun::star::lang::XComponent:
-void SAL_CALL SfxDocumentMetaData::dispose() throw (css::uno::RuntimeException)
+void SAL_CALL SfxDocumentMetaData::dispose() throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
     if (!m_isInitialized) {
@@ -1427,21 +1427,21 @@ void SAL_CALL SfxDocumentMetaData::dispose() throw (css::uno::RuntimeException)
 
 // ::com::sun::star::document::XDocumentProperties:
 OUString SAL_CALL
-SfxDocumentMetaData::getAuthor() throw (css::uno::RuntimeException)
+SfxDocumentMetaData::getAuthor() throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
     return getMetaText("meta:initial-creator");
 }
 
 void SAL_CALL SfxDocumentMetaData::setAuthor(const OUString & the_value)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
 {
     setMetaTextAndNotify("meta:initial-creator", the_value);
 }
 
 
 OUString SAL_CALL
-SfxDocumentMetaData::getGenerator() throw (css::uno::RuntimeException)
+SfxDocumentMetaData::getGenerator() throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
     return getMetaText("meta:generator");
@@ -1449,13 +1449,13 @@ SfxDocumentMetaData::getGenerator() throw (css::uno::RuntimeException)
 
 void SAL_CALL
 SfxDocumentMetaData::setGenerator(const OUString & the_value)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
 {
     setMetaTextAndNotify("meta:generator", the_value);
 }
 
 css::util::DateTime SAL_CALL
-SfxDocumentMetaData::getCreationDate() throw (css::uno::RuntimeException)
+SfxDocumentMetaData::getCreationDate() throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
     return textToDateTimeDefault(getMetaText("meta:creation-date"));
@@ -1463,26 +1463,26 @@ SfxDocumentMetaData::getCreationDate() throw (css::uno::RuntimeException)
 
 void SAL_CALL
 SfxDocumentMetaData::setCreationDate(const css::util::DateTime & the_value)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
 {
     setMetaTextAndNotify("meta:creation-date", dateTimeToText(the_value));
 }
 
 OUString SAL_CALL
-SfxDocumentMetaData::getTitle() throw (css::uno::RuntimeException)
+SfxDocumentMetaData::getTitle() throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
     return getMetaText("dc:title");
 }
 
 void SAL_CALL SfxDocumentMetaData::setTitle(const OUString & the_value)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
 {
     setMetaTextAndNotify("dc:title", the_value);
 }
 
 OUString SAL_CALL
-SfxDocumentMetaData::getSubject() throw (css::uno::RuntimeException)
+SfxDocumentMetaData::getSubject() throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
     return getMetaText("dc:subject");
@@ -1490,13 +1490,13 @@ SfxDocumentMetaData::getSubject() throw (css::uno::RuntimeException)
 
 void SAL_CALL
 SfxDocumentMetaData::setSubject(const OUString & the_value)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
 {
     setMetaTextAndNotify("dc:subject", the_value);
 }
 
 OUString SAL_CALL
-SfxDocumentMetaData::getDescription() throw (css::uno::RuntimeException)
+SfxDocumentMetaData::getDescription() throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
     return getMetaText("dc:description");
@@ -1504,13 +1504,13 @@ SfxDocumentMetaData::getDescription() throw (css::uno::RuntimeException)
 
 void SAL_CALL
 SfxDocumentMetaData::setDescription(const OUString & the_value)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
 {
     setMetaTextAndNotify("dc:description", the_value);
 }
 
 css::uno::Sequence< OUString >
-SAL_CALL SfxDocumentMetaData::getKeywords() throw (css::uno::RuntimeException)
+SAL_CALL SfxDocumentMetaData::getKeywords() throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
     return getMetaList("meta:keyword");
@@ -1519,7 +1519,7 @@ SAL_CALL SfxDocumentMetaData::getKeywords() throw (css::uno::RuntimeException)
 void SAL_CALL
 SfxDocumentMetaData::setKeywords(
         const css::uno::Sequence< OUString > & the_value)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::ClearableMutexGuard g(m_aMutex);
     if (setMetaList("meta:keyword", the_value)) {
@@ -1529,7 +1529,7 @@ SfxDocumentMetaData::setKeywords(
 }
 
 css::lang::Locale SAL_CALL
-        SfxDocumentMetaData::getLanguage() throw (css::uno::RuntimeException)
+        SfxDocumentMetaData::getLanguage() throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
     css::lang::Locale loc( LanguageTag( getMetaText("dc:language")).getLocale( false));
@@ -1538,14 +1538,14 @@ css::lang::Locale SAL_CALL
 
 void SAL_CALL
 SfxDocumentMetaData::setLanguage(const css::lang::Locale & the_value)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
 {
     OUString text( LanguageTag::convertToBcp47( the_value, false));
     setMetaTextAndNotify("dc:language", text);
 }
 
 OUString SAL_CALL
-SfxDocumentMetaData::getModifiedBy() throw (css::uno::RuntimeException)
+SfxDocumentMetaData::getModifiedBy() throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
     return getMetaText("dc:creator");
@@ -1553,13 +1553,13 @@ SfxDocumentMetaData::getModifiedBy() throw (css::uno::RuntimeException)
 
 void SAL_CALL
 SfxDocumentMetaData::setModifiedBy(const OUString & the_value)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
 {
     setMetaTextAndNotify("dc:creator", the_value);
 }
 
 css::util::DateTime SAL_CALL
-SfxDocumentMetaData::getModificationDate() throw (css::uno::RuntimeException)
+SfxDocumentMetaData::getModificationDate() throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
     return textToDateTimeDefault(getMetaText("dc:date"));
@@ -1567,13 +1567,13 @@ SfxDocumentMetaData::getModificationDate() throw (css::uno::RuntimeException)
 
 void SAL_CALL
 SfxDocumentMetaData::setModificationDate(const css::util::DateTime & the_value)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
 {
     setMetaTextAndNotify("dc:date", dateTimeToText(the_value));
 }
 
 OUString SAL_CALL
-SfxDocumentMetaData::getPrintedBy() throw (css::uno::RuntimeException)
+SfxDocumentMetaData::getPrintedBy() throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
     return getMetaText("meta:printed-by");
@@ -1581,13 +1581,13 @@ SfxDocumentMetaData::getPrintedBy() throw (css::uno::RuntimeException)
 
 void SAL_CALL
 SfxDocumentMetaData::setPrintedBy(const OUString & the_value)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
 {
     setMetaTextAndNotify("meta:printed-by", the_value);
 }
 
 css::util::DateTime SAL_CALL
-SfxDocumentMetaData::getPrintDate() throw (css::uno::RuntimeException)
+SfxDocumentMetaData::getPrintDate() throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
     return textToDateTimeDefault(getMetaText("meta:print-date"));
@@ -1595,13 +1595,13 @@ SfxDocumentMetaData::getPrintDate() throw (css::uno::RuntimeException)
 
 void SAL_CALL
 SfxDocumentMetaData::setPrintDate(const css::util::DateTime & the_value)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
 {
     setMetaTextAndNotify("meta:print-date", dateTimeToText(the_value));
 }
 
 OUString SAL_CALL
-SfxDocumentMetaData::getTemplateName() throw (css::uno::RuntimeException)
+SfxDocumentMetaData::getTemplateName() throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
     checkInit();
@@ -1610,7 +1610,7 @@ SfxDocumentMetaData::getTemplateName() throw (css::uno::RuntimeException)
 
 void SAL_CALL
 SfxDocumentMetaData::setTemplateName(const OUString & the_value)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::ClearableMutexGuard g(m_aMutex);
     checkInit();
@@ -1622,7 +1622,7 @@ SfxDocumentMetaData::setTemplateName(const OUString & the_value)
 }
 
 OUString SAL_CALL
-SfxDocumentMetaData::getTemplateURL() throw (css::uno::RuntimeException)
+SfxDocumentMetaData::getTemplateURL() throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
     checkInit();
@@ -1631,7 +1631,7 @@ SfxDocumentMetaData::getTemplateURL() throw (css::uno::RuntimeException)
 
 void SAL_CALL
 SfxDocumentMetaData::setTemplateURL(const OUString & the_value)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::ClearableMutexGuard g(m_aMutex);
     checkInit();
@@ -1643,7 +1643,7 @@ SfxDocumentMetaData::setTemplateURL(const OUString & the_value)
 }
 
 css::util::DateTime SAL_CALL
-SfxDocumentMetaData::getTemplateDate() throw (css::uno::RuntimeException)
+SfxDocumentMetaData::getTemplateDate() throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
     checkInit();
@@ -1652,7 +1652,7 @@ SfxDocumentMetaData::getTemplateDate() throw (css::uno::RuntimeException)
 
 void SAL_CALL
 SfxDocumentMetaData::setTemplateDate(const css::util::DateTime & the_value)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::ClearableMutexGuard g(m_aMutex);
     checkInit();
@@ -1664,7 +1664,7 @@ SfxDocumentMetaData::setTemplateDate(const css::util::DateTime & the_value)
 }
 
 OUString SAL_CALL
-SfxDocumentMetaData::getAutoloadURL() throw (css::uno::RuntimeException)
+SfxDocumentMetaData::getAutoloadURL() throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
     checkInit();
@@ -1673,7 +1673,7 @@ SfxDocumentMetaData::getAutoloadURL() throw (css::uno::RuntimeException)
 
 void SAL_CALL
 SfxDocumentMetaData::setAutoloadURL(const OUString & the_value)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::ClearableMutexGuard g(m_aMutex);
     checkInit();
@@ -1685,7 +1685,7 @@ SfxDocumentMetaData::setAutoloadURL(const OUString & the_value)
 }
 
 ::sal_Int32 SAL_CALL
-SfxDocumentMetaData::getAutoloadSecs() throw (css::uno::RuntimeException)
+SfxDocumentMetaData::getAutoloadSecs() throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
     checkInit();
@@ -1694,7 +1694,7 @@ SfxDocumentMetaData::getAutoloadSecs() throw (css::uno::RuntimeException)
 
 void SAL_CALL
 SfxDocumentMetaData::setAutoloadSecs(::sal_Int32 the_value)
-        throw (css::uno::RuntimeException, css::lang::IllegalArgumentException)
+        throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception)
 {
     if (the_value < 0) throw css::lang::IllegalArgumentException(
         OUString("SfxDocumentMetaData::setAutoloadSecs: argument is negative"),
@@ -1709,7 +1709,7 @@ SfxDocumentMetaData::setAutoloadSecs(::sal_Int32 the_value)
 }
 
 OUString SAL_CALL
-SfxDocumentMetaData::getDefaultTarget() throw (css::uno::RuntimeException)
+SfxDocumentMetaData::getDefaultTarget() throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
     checkInit();
@@ -1718,7 +1718,7 @@ SfxDocumentMetaData::getDefaultTarget() throw (css::uno::RuntimeException)
 
 void SAL_CALL
 SfxDocumentMetaData::setDefaultTarget(const OUString & the_value)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::ClearableMutexGuard g(m_aMutex);
     checkInit();
@@ -1730,7 +1730,7 @@ SfxDocumentMetaData::setDefaultTarget(const OUString & the_value)
 }
 
 css::uno::Sequence< css::beans::NamedValue > SAL_CALL
-SfxDocumentMetaData::getDocumentStatistics() throw (css::uno::RuntimeException)
+SfxDocumentMetaData::getDocumentStatistics() throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
     checkInit();
@@ -1760,7 +1760,7 @@ SfxDocumentMetaData::getDocumentStatistics() throw (css::uno::RuntimeException)
 void SAL_CALL
 SfxDocumentMetaData::setDocumentStatistics(
         const css::uno::Sequence< css::beans::NamedValue > & the_value)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::ClearableMutexGuard g(m_aMutex);
     checkInit();
@@ -1792,7 +1792,7 @@ SfxDocumentMetaData::setDocumentStatistics(
 }
 
 ::sal_Int16 SAL_CALL
-SfxDocumentMetaData::getEditingCycles() throw (css::uno::RuntimeException)
+SfxDocumentMetaData::getEditingCycles() throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
     OUString text = getMetaText("meta:editing-cycles");
@@ -1807,7 +1807,7 @@ SfxDocumentMetaData::getEditingCycles() throw (css::uno::RuntimeException)
 
 void SAL_CALL
 SfxDocumentMetaData::setEditingCycles(::sal_Int16 the_value)
-        throw (css::uno::RuntimeException, css::lang::IllegalArgumentException)
+        throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception)
 {
     if (the_value < 0) throw css::lang::IllegalArgumentException(
         OUString("SfxDocumentMetaData::setEditingCycles: argument is negative"),
@@ -1818,7 +1818,7 @@ SfxDocumentMetaData::setEditingCycles(::sal_Int16 the_value)
 }
 
 ::sal_Int32 SAL_CALL
-SfxDocumentMetaData::getEditingDuration() throw (css::uno::RuntimeException)
+SfxDocumentMetaData::getEditingDuration() throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
     return textToDuration(getMetaText("meta:editing-duration"));
@@ -1826,7 +1826,7 @@ SfxDocumentMetaData::getEditingDuration() throw (css::uno::RuntimeException)
 
 void SAL_CALL
 SfxDocumentMetaData::setEditingDuration(::sal_Int32 the_value)
-        throw (css::uno::RuntimeException, css::lang::IllegalArgumentException)
+        throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception)
 {
     if (the_value < 0) throw css::lang::IllegalArgumentException(
         OUString("SfxDocumentMetaData::setEditingDuration: argument is negative"),
@@ -1836,7 +1836,7 @@ SfxDocumentMetaData::setEditingDuration(::sal_Int32 the_value)
 
 void SAL_CALL
 SfxDocumentMetaData::resetUserData(const OUString & the_value)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::ClearableMutexGuard g(m_aMutex);
 
@@ -1864,7 +1864,7 @@ SfxDocumentMetaData::resetUserData(const OUString & the_value)
 
 css::uno::Reference< css::beans::XPropertyContainer > SAL_CALL
 SfxDocumentMetaData::getUserDefinedProperties()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
     checkInit();
@@ -1879,7 +1879,7 @@ SfxDocumentMetaData::loadFromStorage(
         const css::uno::Sequence< css::beans::PropertyValue > & Medium)
     throw (css::uno::RuntimeException, css::lang::IllegalArgumentException,
            css::io::WrongFormatException,
-           css::lang::WrappedTargetException, css::io::IOException)
+           css::lang::WrappedTargetException, css::io::IOException, std::exception)
 {
     if (!xStorage.is()) throw css::lang::IllegalArgumentException(
         OUString("SfxDocumentMetaData::loadFromStorage: argument is null"), *this, 0);
@@ -1949,7 +1949,7 @@ SfxDocumentMetaData::storeToStorage(
         const css::uno::Reference< css::embed::XStorage > & xStorage,
         const css::uno::Sequence< css::beans::PropertyValue > & Medium)
     throw (css::uno::RuntimeException, css::lang::IllegalArgumentException,
-           css::lang::WrappedTargetException, css::io::IOException)
+           css::lang::WrappedTargetException, css::io::IOException, std::exception)
 {
     if (!xStorage.is()) throw css::lang::IllegalArgumentException(
         OUString("SfxDocumentMetaData::storeToStorage:"
@@ -2023,7 +2023,7 @@ void SAL_CALL
 SfxDocumentMetaData::loadFromMedium(const OUString & URL,
         const css::uno::Sequence< css::beans::PropertyValue > & Medium)
     throw (css::uno::RuntimeException, css::io::WrongFormatException,
-           css::lang::WrappedTargetException, css::io::IOException)
+           css::lang::WrappedTargetException, css::io::IOException, std::exception)
 {
     css::uno::Reference<css::io::XInputStream> xIn;
     utl::MediaDescriptor md(Medium);
@@ -2065,7 +2065,7 @@ void SAL_CALL
 SfxDocumentMetaData::storeToMedium(const OUString & URL,
         const css::uno::Sequence< css::beans::PropertyValue > & Medium)
     throw (css::uno::RuntimeException,
-           css::lang::WrappedTargetException, css::io::IOException)
+           css::lang::WrappedTargetException, css::io::IOException, std::exception)
 {
     utl::MediaDescriptor md(Medium);
     if (!URL.isEmpty()) {
@@ -2114,7 +2114,7 @@ SfxDocumentMetaData::storeToMedium(const OUString & URL,
 void SAL_CALL
 SfxDocumentMetaData::initialize(
         const css::uno::Sequence< ::com::sun::star::uno::Any > & aArguments)
-    throw (css::uno::RuntimeException, css::uno::Exception)
+    throw (css::uno::RuntimeException, css::uno::Exception, std::exception)
 {
     // possible arguments:
     // - no argument: default initialization (empty DOM)
@@ -2152,7 +2152,7 @@ SfxDocumentMetaData::initialize(
 // ::com::sun::star::util::XCloneable:
 css::uno::Reference<css::util::XCloneable> SAL_CALL
 SfxDocumentMetaData::createClone()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
     checkInit();
@@ -2183,7 +2183,7 @@ SfxDocumentMetaData::createClone()
 
 // ::com::sun::star::util::XModifiable:
 ::sal_Bool SAL_CALL SfxDocumentMetaData::isModified(  )
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
     checkInit();
@@ -2193,7 +2193,7 @@ SfxDocumentMetaData::createClone()
 }
 
 void SAL_CALL SfxDocumentMetaData::setModified( ::sal_Bool bModified )
-        throw (css::beans::PropertyVetoException, css::uno::RuntimeException)
+        throw (css::beans::PropertyVetoException, css::uno::RuntimeException, std::exception)
 {
     css::uno::Reference<css::util::XModifiable> xMB;
     { // do not lock mutex while notifying (#i93514#) to prevent deadlock
@@ -2231,7 +2231,7 @@ void SAL_CALL SfxDocumentMetaData::setModified( ::sal_Bool bModified )
 // ::com::sun::star::util::XModifyBroadcaster:
 void SAL_CALL SfxDocumentMetaData::addModifyListener(
         const css::uno::Reference< css::util::XModifyListener > & xListener)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
     checkInit();
@@ -2245,7 +2245,7 @@ void SAL_CALL SfxDocumentMetaData::addModifyListener(
 
 void SAL_CALL SfxDocumentMetaData::removeModifyListener(
         const css::uno::Reference< css::util::XModifyListener > & xListener)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
     checkInit();
@@ -2261,7 +2261,7 @@ void SAL_CALL SfxDocumentMetaData::removeModifyListener(
 void SAL_CALL SfxDocumentMetaData::serialize(
     const css::uno::Reference<css::xml::sax::XDocumentHandler>& i_xHandler,
     const css::uno::Sequence< css::beans::StringPair >& i_rNamespaces)
-    throw (css::uno::RuntimeException, css::xml::sax::SAXException)
+    throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
     checkInit();

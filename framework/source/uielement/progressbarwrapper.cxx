@@ -246,21 +246,21 @@ throw (uno::RuntimeException)
 
 // XInitialization
 void SAL_CALL ProgressBarWrapper::initialize( const uno::Sequence< uno::Any >& )
-throw (uno::Exception, uno::RuntimeException)
+throw (uno::Exception, uno::RuntimeException, std::exception)
 {
     // dummy - do nothing
 }
 
 // XUpdatable
 void SAL_CALL ProgressBarWrapper::update()
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     // dummy - do nothing
 }
 
 // XComponent
 void SAL_CALL ProgressBarWrapper::dispose()
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< lang::XComponent > xThis(
         static_cast< cppu::OWeakObject* >(this),
@@ -298,7 +298,7 @@ throw (uno::RuntimeException)
 
 // XUIElement
 uno::Reference< uno::XInterface > SAL_CALL ProgressBarWrapper::getRealInterface()
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     // Ready for multithreading

@@ -68,7 +68,7 @@ namespace ucb { namespace ucp { namespace ext
     }
 
 
-    OUString SAL_CALL ContentProvider::getImplementationName() throw (RuntimeException)
+    OUString SAL_CALL ContentProvider::getImplementationName() throw (RuntimeException, std::exception)
     {
         return getImplementationName_static();
     }
@@ -83,7 +83,7 @@ namespace ucb { namespace ucp { namespace ext
     }
 
 
-    Sequence< OUString > SAL_CALL ContentProvider::getSupportedServiceNames(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL ContentProvider::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
     {
         return getSupportedServiceNames_static();
     }
@@ -120,7 +120,7 @@ namespace ucb { namespace ucp { namespace ext
 
 
     Reference< XContent > SAL_CALL ContentProvider::queryContent( const Reference< XContentIdentifier  >& i_rIdentifier )
-        throw( IllegalIdentifierException, RuntimeException )
+        throw( IllegalIdentifierException, RuntimeException, std::exception )
     {
         // Check URL scheme...
         const OUString sScheme( "vnd.sun.star.extension" );

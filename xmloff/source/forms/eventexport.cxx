@@ -87,13 +87,13 @@ namespace xmloff
         }
     }
 
-    void SAL_CALL OEventDescriptorMapper::replaceByName( const OUString&, const Any& ) throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
+    void SAL_CALL OEventDescriptorMapper::replaceByName( const OUString&, const Any& ) throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
     {
         throw IllegalArgumentException(
             OUString("replacing is not implemented for this wrapper class."), static_cast< ::cppu::OWeakObject* >(this), 1);
     }
 
-    Any SAL_CALL OEventDescriptorMapper::getByName( const OUString& _rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
+    Any SAL_CALL OEventDescriptorMapper::getByName( const OUString& _rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
     {
         MapString2PropertyValueSequence::const_iterator aPos = m_aMappedEvents.find(_rName);
         if (m_aMappedEvents.end() == aPos)
@@ -104,7 +104,7 @@ namespace xmloff
         return makeAny(aPos->second);
     }
 
-    Sequence< OUString > SAL_CALL OEventDescriptorMapper::getElementNames(  ) throw(RuntimeException)
+    Sequence< OUString > SAL_CALL OEventDescriptorMapper::getElementNames(  ) throw(RuntimeException, std::exception)
     {
         Sequence< OUString > aReturn(m_aMappedEvents.size());
         OUString* pReturn = aReturn.getArray();
@@ -117,18 +117,18 @@ namespace xmloff
         return aReturn;
     }
 
-    sal_Bool SAL_CALL OEventDescriptorMapper::hasByName( const OUString& _rName ) throw(RuntimeException)
+    sal_Bool SAL_CALL OEventDescriptorMapper::hasByName( const OUString& _rName ) throw(RuntimeException, std::exception)
     {
         MapString2PropertyValueSequence::const_iterator aPos = m_aMappedEvents.find(_rName);
         return m_aMappedEvents.end() != aPos;
     }
 
-    Type SAL_CALL OEventDescriptorMapper::getElementType(  ) throw(RuntimeException)
+    Type SAL_CALL OEventDescriptorMapper::getElementType(  ) throw(RuntimeException, std::exception)
     {
         return ::getCppuType(static_cast< PropertyValue* >(NULL));
     }
 
-    sal_Bool SAL_CALL OEventDescriptorMapper::hasElements(  ) throw(RuntimeException)
+    sal_Bool SAL_CALL OEventDescriptorMapper::hasElements(  ) throw(RuntimeException, std::exception)
     {
         return !m_aMappedEvents.empty();
     }

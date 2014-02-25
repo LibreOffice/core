@@ -69,42 +69,42 @@ private:
     virtual void SAL_CALL disposing();
 
     virtual rtl::OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & ServiceName)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Sequence< rtl::OUString > SAL_CALL
-    getSupportedServiceNames() throw (css::uno::RuntimeException);
+    getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Any SAL_CALL getByHierarchicalName(
         rtl::OUString const & aName)
         throw (
-            css::container::NoSuchElementException, css::uno::RuntimeException);
+            css::container::NoSuchElementException, css::uno::RuntimeException, std::exception);
 
     virtual sal_Bool SAL_CALL hasByHierarchicalName(rtl::OUString const & aName)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Type SAL_CALL getElementType()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
-    virtual sal_Bool SAL_CALL hasElements() throw (css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasElements() throw (css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
-    createEnumeration() throw (css::uno::RuntimeException);
+    createEnumeration() throw (css::uno::RuntimeException, std::exception);
 
     virtual sal_Bool SAL_CALL has(css::uno::Any const & aElement)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL insert(css::uno::Any const & aElement)
         throw (
             css::lang::IllegalArgumentException,
-            css::container::ElementExistException, css::uno::RuntimeException);
+            css::container::ElementExistException, css::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL remove(css::uno::Any const & aElement)
         throw (
             css::lang::IllegalArgumentException,
-            css::container::NoSuchElementException, css::uno::RuntimeException);
+            css::container::NoSuchElementException, css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Reference< css::reflection::XTypeDescriptionEnumeration >
     SAL_CALL createTypeDescriptionEnumeration(
@@ -114,7 +114,7 @@ private:
         throw (
             css::reflection::NoSuchTypeNameException,
             css::reflection::InvalidTypeNameException,
-            css::uno::RuntimeException);
+            css::uno::RuntimeException, std::exception);
 
     void readRdbs(rtl::OUString const & uris);
 

@@ -55,7 +55,7 @@ AccessiblePresentationShape::~AccessiblePresentationShape (void)
 
 OUString SAL_CALL
     AccessiblePresentationShape::getImplementationName (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return OUString("AccessiblePresentationShape");
 }

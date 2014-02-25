@@ -41,7 +41,7 @@ ChapterCollator::~ChapterCollator()
 }
 
 sal_Int32 SAL_CALL
-ChapterCollator::compareString( const OUString& s1, const OUString& s2) throw(RuntimeException)
+ChapterCollator::compareString( const OUString& s1, const OUString& s2) throw(RuntimeException, std::exception)
 {
     return compareSubstring(s1, 0, s1.getLength(),  s2, 0, s2.getLength());
 }
@@ -50,7 +50,7 @@ ChapterCollator::compareString( const OUString& s1, const OUString& s2) throw(Ru
 
 sal_Int32 SAL_CALL
 ChapterCollator::compareSubstring( const OUString& str1, sal_Int32 off1, sal_Int32 len1,
-    const OUString& str2, sal_Int32 off2, sal_Int32 len2) throw(RuntimeException)
+    const OUString& str2, sal_Int32 off2, sal_Int32 len2) throw(RuntimeException, std::exception)
 {
     if( len1 <= 1 || len2 <= 1 || ! cclass.is() )
         return CollatorImpl::compareSubstring( str1, off1,  len1, str2, off2, len2 );
@@ -77,19 +77,19 @@ ChapterCollator::compareSubstring( const OUString& str1, sal_Int32 off1, sal_Int
 const sal_Char *cChapCollator = "com.sun.star.i18n.ChapterCollator";
 
 OUString SAL_CALL
-ChapterCollator::getImplementationName() throw( RuntimeException )
+ChapterCollator::getImplementationName() throw( RuntimeException, std::exception )
 {
     return OUString::createFromAscii(cChapCollator);
 }
 
 sal_Bool SAL_CALL
-ChapterCollator::supportsService(const OUString& rServiceName) throw( RuntimeException )
+ChapterCollator::supportsService(const OUString& rServiceName) throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL
-ChapterCollator::getSupportedServiceNames() throw( RuntimeException )
+ChapterCollator::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
     aRet[0] = OUString::createFromAscii(cChapCollator);

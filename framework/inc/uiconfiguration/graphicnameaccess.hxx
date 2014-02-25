@@ -39,17 +39,17 @@ namespace framework
             // XNameAccess
             virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
                 throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException,
-                    ::com::sun::star::uno::RuntimeException);
+                    ::com::sun::star::uno::RuntimeException, std::exception);
             virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames()
-                throw(::com::sun::star::uno::RuntimeException);
+                throw(::com::sun::star::uno::RuntimeException, std::exception);
             virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-                throw(::com::sun::star::uno::RuntimeException);
+                throw(::com::sun::star::uno::RuntimeException, std::exception);
 
             // XElementAccess
             virtual sal_Bool SAL_CALL hasElements()
-                throw(::com::sun::star::uno::RuntimeException);
+                throw(::com::sun::star::uno::RuntimeException, std::exception);
             virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  )
-                throw(::com::sun::star::uno::RuntimeException);
+                throw(::com::sun::star::uno::RuntimeException, std::exception);
 
         private:
             typedef BaseHash< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > > NameGraphicHashMap;

@@ -577,7 +577,7 @@ SvXMLImportContext* SchXMLImport::CreateStylesContext(
 }
 
 void SAL_CALL SchXMLImport::setTargetDocument( const uno::Reference< lang::XComponent >& xDoc )
-    throw(lang::IllegalArgumentException, uno::RuntimeException)
+    throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     uno::Reference< chart2::XChartDocument > xOldDoc( GetModel(), uno::UNO_QUERY );
     if( xOldDoc.is() && xOldDoc->hasControllersLocked() )

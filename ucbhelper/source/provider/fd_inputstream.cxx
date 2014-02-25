@@ -57,7 +57,7 @@ namespace ucbhelper
         throw(NotConnectedException,
               BufferSizeExceededException,
               IOException,
-              RuntimeException)
+              RuntimeException, std::exception)
     {
         osl::MutexGuard aGuard(m_aMutex);
 
@@ -85,7 +85,7 @@ namespace ucbhelper
         throw( NotConnectedException,
                BufferSizeExceededException,
                IOException,
-               RuntimeException)
+               RuntimeException, std::exception)
     {
         return readBytes(aData,nMaxBytesToRead);
     }
@@ -96,7 +96,7 @@ namespace ucbhelper
         throw(NotConnectedException,
               BufferSizeExceededException,
               IOException,
-              RuntimeException)
+              RuntimeException, std::exception)
     {
         osl::MutexGuard aGuard(m_aMutex);
         if(!m_tmpfl)
@@ -111,7 +111,7 @@ namespace ucbhelper
     sal_Int32 SAL_CALL FdInputStream::available(void)
         throw(NotConnectedException,
               IOException,
-              RuntimeException)
+              RuntimeException, std::exception)
     {
         return sal::static_int_cast<sal_Int32>(m_nLength - getPosition());
     }
@@ -121,7 +121,7 @@ namespace ucbhelper
     void SAL_CALL FdInputStream::closeInput(void)
         throw(NotConnectedException,
               IOException,
-              RuntimeException)
+              RuntimeException, std::exception)
     {
         osl::MutexGuard aGuard(m_aMutex);
         if(m_tmpfl)
@@ -133,7 +133,7 @@ namespace ucbhelper
     void SAL_CALL FdInputStream::seek(sal_Int64 location)
         throw( IllegalArgumentException,
                IOException,
-               RuntimeException )
+               RuntimeException, std::exception )
     {
         osl::MutexGuard aGuard(m_aMutex);
         if(!m_tmpfl)
@@ -149,7 +149,7 @@ namespace ucbhelper
     FdInputStream::getPosition(
         void )
         throw( IOException,
-               RuntimeException )
+               RuntimeException, std::exception )
     {
         osl::MutexGuard aGuard(m_aMutex);
         if(!m_tmpfl)
@@ -165,7 +165,7 @@ namespace ucbhelper
     sal_Int64 SAL_CALL FdInputStream::getLength(
         void
     ) throw(
-        IOException,RuntimeException
+        IOException,RuntimeException, std::exception
     )
     {
         return m_nLength;

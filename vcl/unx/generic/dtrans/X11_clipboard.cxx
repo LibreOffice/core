@@ -137,7 +137,7 @@ void X11Clipboard::clearContents()
 
 
 Reference< XTransferable > SAL_CALL X11Clipboard::getContents()
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_rSelectionManager.getMutex());
 
@@ -151,7 +151,7 @@ Reference< XTransferable > SAL_CALL X11Clipboard::getContents()
 void SAL_CALL X11Clipboard::setContents(
     const Reference< XTransferable >& xTrans,
     const Reference< XClipboardOwner >& xClipboardOwner )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     // remember old values for callbacks before setting the new ones.
     ClearableMutexGuard aGuard(m_rSelectionManager.getMutex());
@@ -184,7 +184,7 @@ void SAL_CALL X11Clipboard::setContents(
 
 
 OUString SAL_CALL X11Clipboard::getName()
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     return m_rSelectionManager.getString( m_aSelection );
 }
@@ -192,7 +192,7 @@ OUString SAL_CALL X11Clipboard::getName()
 
 
 sal_Int8 SAL_CALL X11Clipboard::getRenderingCapabilities()
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     return RenderingCapabilities::Delayed;
 }
@@ -200,7 +200,7 @@ sal_Int8 SAL_CALL X11Clipboard::getRenderingCapabilities()
 
 
 void SAL_CALL X11Clipboard::addClipboardListener( const Reference< XClipboardListener >& listener )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_rSelectionManager.getMutex() );
     m_aListeners.push_back( listener );
@@ -209,7 +209,7 @@ void SAL_CALL X11Clipboard::addClipboardListener( const Reference< XClipboardLis
 
 
 void SAL_CALL X11Clipboard::removeClipboardListener( const Reference< XClipboardListener >& listener )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_rSelectionManager.getMutex() );
     m_aListeners.remove( listener );
@@ -247,19 +247,19 @@ Reference< XInterface > X11Clipboard::getReference() throw()
 
 
 OUString SAL_CALL X11Clipboard::getImplementationName(  )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     return OUString(X11_CLIPBOARD_IMPLEMENTATION_NAME);
 }
 
 sal_Bool SAL_CALL X11Clipboard::supportsService( const OUString& ServiceName )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL X11Clipboard::getSupportedServiceNames(    )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     return X11Clipboard_getSupportedServiceNames();
 }

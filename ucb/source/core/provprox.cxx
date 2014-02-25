@@ -98,7 +98,7 @@ ONE_INSTANCE_SERVICE_FACTORY_IMPL( UcbContentProviderProxyFactory );
 Reference< XContentProvider > SAL_CALL
 UcbContentProviderProxyFactory::createContentProvider(
                                                 const OUString& Service )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return Reference< XContentProvider >(
                         new UcbContentProviderProxy( m_xSMgr, Service ) );
@@ -140,7 +140,7 @@ XINTERFACE_COMMON_IMPL( UcbContentProviderProxy );
 // virtual
 Any SAL_CALL
 UcbContentProviderProxy::queryInterface( const Type & rType )
-    throw ( RuntimeException )
+    throw ( RuntimeException, std::exception )
 {
     Any aRet = cppu::queryInterface( rType,
                 static_cast< XTypeProvider * >( this ),
@@ -175,7 +175,7 @@ XTYPEPROVIDER_COMMON_IMPL( UcbContentProviderProxy );
 
 
 Sequence< Type > SAL_CALL UcbContentProviderProxy::getTypes()                                                           \
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     // Get original provider an forward the call...
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -216,7 +216,7 @@ XSERVICEINFO_NOFACTORY_IMPL_1( UcbContentProviderProxy,
 Reference< XContent > SAL_CALL UcbContentProviderProxy::queryContent(
                         const Reference< XContentIdentifier >& Identifier )
     throw( IllegalIdentifierException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     // Get original provider an forward the call...
 
@@ -234,7 +234,7 @@ Reference< XContent > SAL_CALL UcbContentProviderProxy::queryContent(
 sal_Int32 SAL_CALL UcbContentProviderProxy::compareContentIds(
                        const Reference< XContentIdentifier >& Id1,
                        const Reference< XContentIdentifier >& Id2 )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     // Get original provider an forward the call...
 
@@ -261,7 +261,7 @@ UcbContentProviderProxy::registerInstance( const OUString& Template,
                                              const OUString& Arguments,
                                              sal_Bool ReplaceExisting )
     throw( IllegalArgumentException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     // Just remember that this method was called ( and the params ).
 
@@ -285,7 +285,7 @@ Reference< XContentProvider > SAL_CALL
 UcbContentProviderProxy::deregisterInstance( const OUString& Template,
                                              const OUString& Arguments )
     throw( IllegalArgumentException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -323,7 +323,7 @@ UcbContentProviderProxy::deregisterInstance( const OUString& Template,
 // virtual
 Reference< XContentProvider > SAL_CALL
 UcbContentProviderProxy::getContentProvider()
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     if ( !m_xProvider.is() )

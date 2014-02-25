@@ -70,7 +70,7 @@ void OFileCatalog::refreshTables()
 }
 
 
-Any SAL_CALL OFileCatalog::queryInterface( const Type & rType ) throw(RuntimeException)
+Any SAL_CALL OFileCatalog::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileCatalog::queryInterface" );
     if( rType == ::getCppuType((const Reference<XGroupsSupplier>*)0) ||
@@ -83,7 +83,7 @@ Any SAL_CALL OFileCatalog::queryInterface( const Type & rType ) throw(RuntimeExc
     return OFileCatalog_BASE::queryInterface(rType);
 }
 
-Sequence< Type > SAL_CALL OFileCatalog::getTypes(  ) throw(RuntimeException)
+Sequence< Type > SAL_CALL OFileCatalog::getTypes(  ) throw(RuntimeException, std::exception)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileCatalog::getTypes" );
     typedef sdbcx::OCatalog OFileCatalog_BASE;

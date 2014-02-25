@@ -156,7 +156,7 @@ void OControl::doSetDelegator()
 }
 
 // UNO Anbindung
-Any SAL_CALL OControl::queryAggregation( const Type& _rType ) throw(RuntimeException)
+Any SAL_CALL OControl::queryAggregation( const Type& _rType ) throw(RuntimeException, std::exception)
 {
     // ask the base class
     Any aReturn( OComponentHelper::queryAggregation(_rType) );
@@ -172,12 +172,12 @@ Any SAL_CALL OControl::queryAggregation( const Type& _rType ) throw(RuntimeExcep
     return aReturn;
 }
 
-Sequence<sal_Int8> SAL_CALL OControl::getImplementationId() throw(RuntimeException)
+Sequence<sal_Int8> SAL_CALL OControl::getImplementationId() throw(RuntimeException, std::exception)
 {
     return OImplementationIds::getImplementationId(getTypes());
 }
 
-Sequence<Type> SAL_CALL OControl::getTypes() throw(RuntimeException)
+Sequence<Type> SAL_CALL OControl::getTypes() throw(RuntimeException, std::exception)
 {
     TypeBag aTypes( _getTypes() );
 
@@ -211,7 +211,7 @@ void OControl::disposing()
 }
 
 // XServiceInfo
-sal_Bool SAL_CALL OControl::supportsService(const OUString& _rsServiceName) throw ( RuntimeException)
+sal_Bool SAL_CALL OControl::supportsService(const OUString& _rsServiceName) throw ( RuntimeException, std::exception)
 {
     return cppu::supportsService(this, _rsServiceName);
 }
@@ -226,7 +226,7 @@ Sequence< OUString > OControl::getAggregateServiceNames()
     return aAggServices;
 }
 
-Sequence<OUString> SAL_CALL OControl::getSupportedServiceNames() throw(RuntimeException)
+Sequence<OUString> SAL_CALL OControl::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     return ::comphelper::concatSequences(
         getAggregateServiceNames(),
@@ -241,7 +241,7 @@ Sequence< OUString > SAL_CALL OControl::getSupportedServiceNames_Static() throw(
 }
 
 // XEventListener
-void SAL_CALL OControl::disposing(const com::sun::star::lang::EventObject& _rEvent) throw (RuntimeException)
+void SAL_CALL OControl::disposing(const com::sun::star::lang::EventObject& _rEvent) throw (RuntimeException, std::exception)
 {
     Reference< XInterface > xAggAsIface;
     query_aggregation(m_xAggregate, xAggAsIface);
@@ -256,13 +256,13 @@ void SAL_CALL OControl::disposing(const com::sun::star::lang::EventObject& _rEve
 }
 
 // XControl
-void SAL_CALL OControl::setContext(const Reference< XInterface >& Context) throw (RuntimeException)
+void SAL_CALL OControl::setContext(const Reference< XInterface >& Context) throw (RuntimeException, std::exception)
 {
     if (m_xControl.is())
         m_xControl->setContext(Context);
 }
 
-Reference< XInterface > SAL_CALL OControl::getContext() throw (RuntimeException)
+Reference< XInterface > SAL_CALL OControl::getContext() throw (RuntimeException, std::exception)
 {
     return m_xControl.is() ? m_xControl->getContext() : Reference< XInterface >();
 }
@@ -283,7 +283,7 @@ void OControl::impl_resetStateGuard_nothrow()
     m_aWindowStateGuard.attach( xWindow, xModel );
 }
 
-void SAL_CALL OControl::createPeer(const Reference<XToolkit>& _rxToolkit, const Reference<XWindowPeer>& _rxParent) throw (RuntimeException)
+void SAL_CALL OControl::createPeer(const Reference<XToolkit>& _rxToolkit, const Reference<XWindowPeer>& _rxParent) throw (RuntimeException, std::exception)
 {
     if ( m_xControl.is() )
     {
@@ -293,12 +293,12 @@ void SAL_CALL OControl::createPeer(const Reference<XToolkit>& _rxToolkit, const 
     }
 }
 
-Reference<XWindowPeer> SAL_CALL OControl::getPeer() throw ( RuntimeException)
+Reference<XWindowPeer> SAL_CALL OControl::getPeer() throw ( RuntimeException, std::exception)
 {
     return m_xControl.is() ? m_xControl->getPeer() : Reference<XWindowPeer>();
 }
 
-sal_Bool SAL_CALL OControl::setModel(const Reference<XControlModel>& Model) throw ( RuntimeException)
+sal_Bool SAL_CALL OControl::setModel(const Reference<XControlModel>& Model) throw ( RuntimeException, std::exception)
 {
     if ( !m_xControl.is() )
         return sal_False;
@@ -308,28 +308,28 @@ sal_Bool SAL_CALL OControl::setModel(const Reference<XControlModel>& Model) thro
     return bSuccess;
 }
 
-Reference<XControlModel> SAL_CALL OControl::getModel() throw ( RuntimeException)
+Reference<XControlModel> SAL_CALL OControl::getModel() throw ( RuntimeException, std::exception)
 {
     return m_xControl.is() ? m_xControl->getModel() : Reference<XControlModel>();
 }
 
-Reference<XView> SAL_CALL OControl::getView() throw ( RuntimeException)
+Reference<XView> SAL_CALL OControl::getView() throw ( RuntimeException, std::exception)
 {
     return m_xControl.is() ? m_xControl->getView() : Reference<XView>();
 }
 
-void SAL_CALL OControl::setDesignMode(sal_Bool bOn) throw ( RuntimeException)
+void SAL_CALL OControl::setDesignMode(sal_Bool bOn) throw ( RuntimeException, std::exception)
 {
     if (m_xControl.is())
         m_xControl->setDesignMode(bOn);
 }
 
-sal_Bool SAL_CALL OControl::isDesignMode() throw ( RuntimeException)
+sal_Bool SAL_CALL OControl::isDesignMode() throw ( RuntimeException, std::exception)
 {
     return m_xControl.is() ? m_xControl->isDesignMode() : sal_True;
 }
 
-sal_Bool SAL_CALL OControl::isTransparent() throw ( RuntimeException)
+sal_Bool SAL_CALL OControl::isTransparent() throw ( RuntimeException, std::exception)
 {
     return m_xControl.is() ? m_xControl->isTransparent() : sal_True;
 }
@@ -353,7 +353,7 @@ Sequence< Type> OBoundControl::_getTypes()
     return TypeBag( OControl::_getTypes(), OBoundControl_BASE::getTypes() ).getTypes();
 }
 
-Any SAL_CALL OBoundControl::queryAggregation(const Type& _rType) throw(RuntimeException)
+Any SAL_CALL OBoundControl::queryAggregation(const Type& _rType) throw(RuntimeException, std::exception)
 {
     Any aReturn;
 
@@ -373,12 +373,12 @@ Any SAL_CALL OBoundControl::queryAggregation(const Type& _rType) throw(RuntimeEx
     return aReturn;
 }
 
-sal_Bool SAL_CALL OBoundControl::getLock() throw(RuntimeException)
+sal_Bool SAL_CALL OBoundControl::getLock() throw(RuntimeException, std::exception)
 {
     return m_bLocked;
 }
 
-void SAL_CALL OBoundControl::setLock(sal_Bool _bLock) throw(RuntimeException)
+void SAL_CALL OBoundControl::setLock(sal_Bool _bLock) throw(RuntimeException, std::exception)
 {
     if (m_bLocked == _bLock)
         return;
@@ -405,12 +405,12 @@ void OBoundControl::_setLock(sal_Bool _bLock)
     }
 }
 
-sal_Bool SAL_CALL OBoundControl::setModel( const Reference< XControlModel >& _rxModel ) throw (RuntimeException)
+sal_Bool SAL_CALL OBoundControl::setModel( const Reference< XControlModel >& _rxModel ) throw (RuntimeException, std::exception)
 {
     return OControl::setModel( _rxModel );
 }
 
-void SAL_CALL OBoundControl::disposing(const EventObject& Source) throw (RuntimeException)
+void SAL_CALL OBoundControl::disposing(const EventObject& Source) throw (RuntimeException, std::exception)
 {
     // just disambiguate
     OControl::disposing(Source);
@@ -422,12 +422,12 @@ void OBoundControl::disposing()
 }
 
 // OControlModel
-Sequence<sal_Int8> SAL_CALL OControlModel::getImplementationId() throw(RuntimeException)
+Sequence<sal_Int8> SAL_CALL OControlModel::getImplementationId() throw(RuntimeException, std::exception)
 {
     return OImplementationIds::getImplementationId(getTypes());
 }
 
-Sequence<Type> SAL_CALL OControlModel::getTypes() throw(RuntimeException)
+Sequence<Type> SAL_CALL OControlModel::getTypes() throw(RuntimeException, std::exception)
 {
     TypeBag aTypes( _getTypes() );
 
@@ -447,7 +447,7 @@ Sequence<Type> OControlModel::_getTypes()
     ).getTypes();
 }
 
-Any SAL_CALL OControlModel::queryAggregation(const Type& _rType) throw (RuntimeException)
+Any SAL_CALL OControlModel::queryAggregation(const Type& _rType) throw (RuntimeException, std::exception)
 {
     // base class 1
     Any aReturn(OComponentHelper::queryAggregation(_rType));
@@ -619,12 +619,12 @@ void OControlModel::doSetDelegator()
 }
 
 // XChild
-Reference< XInterface > SAL_CALL OControlModel::getParent() throw(RuntimeException)
+Reference< XInterface > SAL_CALL OControlModel::getParent() throw(RuntimeException, std::exception)
 {
     return m_xParent;
 }
 
-void SAL_CALL OControlModel::setParent(const Reference< XInterface >& _rxParent) throw(com::sun::star::lang::NoSupportException, RuntimeException)
+void SAL_CALL OControlModel::setParent(const Reference< XInterface >& _rxParent) throw(com::sun::star::lang::NoSupportException, RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard(m_aMutex);
 
@@ -640,20 +640,20 @@ void SAL_CALL OControlModel::setParent(const Reference< XInterface >& _rxParent)
 }
 
 // XNamed
-OUString SAL_CALL OControlModel::getName() throw(RuntimeException)
+OUString SAL_CALL OControlModel::getName() throw(RuntimeException, std::exception)
 {
     OUString aReturn;
     OPropertySetHelper::getFastPropertyValue(PROPERTY_ID_NAME) >>= aReturn;
     return aReturn;
 }
 
-void SAL_CALL OControlModel::setName(const OUString& _rName) throw(RuntimeException)
+void SAL_CALL OControlModel::setName(const OUString& _rName) throw(RuntimeException, std::exception)
 {
         setFastPropertyValue(PROPERTY_ID_NAME, makeAny(_rName));
 }
 
 // XServiceInfo
-sal_Bool SAL_CALL OControlModel::supportsService(const OUString& _rServiceName) throw ( RuntimeException)
+sal_Bool SAL_CALL OControlModel::supportsService(const OUString& _rServiceName) throw ( RuntimeException, std::exception)
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -667,7 +667,7 @@ Sequence< OUString > OControlModel::getAggregateServiceNames()
     return aAggServices;
 }
 
-Sequence<OUString> SAL_CALL OControlModel::getSupportedServiceNames() throw(RuntimeException)
+Sequence<OUString> SAL_CALL OControlModel::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     return ::comphelper::concatSequences(
         getAggregateServiceNames(),
@@ -684,7 +684,7 @@ Sequence< OUString > SAL_CALL OControlModel::getSupportedServiceNames_Static() t
 }
 
 // XEventListener
-void SAL_CALL OControlModel::disposing(const com::sun::star::lang::EventObject& _rSource) throw (RuntimeException)
+void SAL_CALL OControlModel::disposing(const com::sun::star::lang::EventObject& _rSource) throw (RuntimeException, std::exception)
 {
     // release the parent
     if (_rSource.Source == m_xParent)
@@ -732,7 +732,7 @@ void OControlModel::readAggregate( const Reference< XObjectInputStream >& _rxInS
 }
 
 void SAL_CALL OControlModel::write(const Reference<stario::XObjectOutputStream>& _rxOutStream)
-                        throw(stario::IOException, RuntimeException)
+                        throw(stario::IOException, RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard(m_aMutex);
 
@@ -776,7 +776,7 @@ void SAL_CALL OControlModel::write(const Reference<stario::XObjectOutputStream>&
     // EOIN!
 }
 
-void OControlModel::read(const Reference<stario::XObjectInputStream>& InStream) throw (::com::sun::star::io::IOException, RuntimeException)
+void OControlModel::read(const Reference<stario::XObjectInputStream>& InStream) throw (::com::sun::star::io::IOException, RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard(m_aMutex);
 
@@ -970,7 +970,7 @@ sal_Bool OControlModel::convertFastPropertyValue(
 }
 
 void OControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue)
-                        throw (Exception)
+                        throw (Exception, std::exception)
 {
     switch (_nHandle)
     {
@@ -1050,7 +1050,7 @@ Reference< XMultiPropertySet > OControlModel::getPropertiesInterface()
     return Reference< XMultiPropertySet >( *this, UNO_QUERY );
 }
 
-Reference< XPropertySetInfo> SAL_CALL OControlModel::getPropertySetInfo() throw( RuntimeException)
+Reference< XPropertySetInfo> SAL_CALL OControlModel::getPropertySetInfo() throw( RuntimeException, std::exception)
 {
     return createPropertySetInfo( getInfoHelper() );
 }
@@ -1060,22 +1060,22 @@ Reference< XPropertySetInfo> SAL_CALL OControlModel::getPropertySetInfo() throw(
     return m_aPropertyBagHelper.getInfoHelper();
 }
 
-void SAL_CALL OControlModel::addProperty( const OUString& _rName, ::sal_Int16 _nAttributes, const Any& _rInitialValue ) throw (PropertyExistException, IllegalTypeException, IllegalArgumentException, RuntimeException)
+void SAL_CALL OControlModel::addProperty( const OUString& _rName, ::sal_Int16 _nAttributes, const Any& _rInitialValue ) throw (PropertyExistException, IllegalTypeException, IllegalArgumentException, RuntimeException, std::exception)
 {
     m_aPropertyBagHelper.addProperty( _rName, _nAttributes, _rInitialValue );
 }
 
-void SAL_CALL OControlModel::removeProperty( const OUString& _rName ) throw (UnknownPropertyException, NotRemoveableException, RuntimeException)
+void SAL_CALL OControlModel::removeProperty( const OUString& _rName ) throw (UnknownPropertyException, NotRemoveableException, RuntimeException, std::exception)
 {
     m_aPropertyBagHelper.removeProperty( _rName );
 }
 
-Sequence< PropertyValue > SAL_CALL OControlModel::getPropertyValues() throw (RuntimeException)
+Sequence< PropertyValue > SAL_CALL OControlModel::getPropertyValues() throw (RuntimeException, std::exception)
 {
     return m_aPropertyBagHelper.getPropertyValues();
 }
 
-void SAL_CALL OControlModel::setPropertyValues( const Sequence< PropertyValue >& _rProps ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
+void SAL_CALL OControlModel::setPropertyValues( const Sequence< PropertyValue >& _rProps ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
 {
     m_aPropertyBagHelper.setPropertyValues( _rProps );
 }
@@ -1107,7 +1107,7 @@ void OControlModel::firePropertyChanges( const Sequence< sal_Int32 >& _rHandles,
 }
 
 // OBoundControlModel
-Any SAL_CALL OBoundControlModel::queryAggregation( const Type& _rType ) throw (RuntimeException)
+Any SAL_CALL OBoundControlModel::queryAggregation( const Type& _rType ) throw (RuntimeException, std::exception)
 {
     Any aReturn( OControlModel::queryAggregation(_rType) );
     if (!aReturn.hasValue())
@@ -1448,7 +1448,7 @@ void OBoundControlModel::doFormListening( const bool _bStart )
 }
 
 // XChild
-void SAL_CALL OBoundControlModel::setParent(const Reference<XInterface>& _rxParent) throw(com::sun::star::lang::NoSupportException, RuntimeException)
+void SAL_CALL OBoundControlModel::setParent(const Reference<XInterface>& _rxParent) throw(com::sun::star::lang::NoSupportException, RuntimeException, std::exception)
 {
     ControlModelLock aLock( *this );
     FieldChangeNotifier aBoundFieldNotifier( aLock );
@@ -1475,7 +1475,7 @@ void SAL_CALL OBoundControlModel::setParent(const Reference<XInterface>& _rxPare
 }
 
 // XEventListener
-void SAL_CALL OBoundControlModel::disposing(const com::sun::star::lang::EventObject& _rEvent) throw (RuntimeException)
+void SAL_CALL OBoundControlModel::disposing(const com::sun::star::lang::EventObject& _rEvent) throw (RuntimeException, std::exception)
 {
     ControlModelLock aLock( *this );
     if ( _rEvent.Source == getField() )
@@ -1507,7 +1507,7 @@ void SAL_CALL OBoundControlModel::disposing(const com::sun::star::lang::EventObj
 }
 
 // XServiceInfo
-StringSequence SAL_CALL OBoundControlModel::getSupportedServiceNames() throw(RuntimeException)
+StringSequence SAL_CALL OBoundControlModel::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     return ::comphelper::concatSequences(
         getAggregateServiceNames(),
@@ -1526,7 +1526,7 @@ Sequence< OUString > SAL_CALL OBoundControlModel::getSupportedServiceNames_Stati
 }
 
 // XPersist
-void SAL_CALL OBoundControlModel::write( const Reference<stario::XObjectOutputStream>& _rxOutStream ) throw(stario::IOException, RuntimeException)
+void SAL_CALL OBoundControlModel::write( const Reference<stario::XObjectOutputStream>& _rxOutStream ) throw(stario::IOException, RuntimeException, std::exception)
 {
     OControlModel::write(_rxOutStream);
     osl::MutexGuard aGuard(m_aMutex);
@@ -1599,7 +1599,7 @@ void OBoundControlModel::writeCommonProperties(const Reference<stario::XObjectOu
     xMark->deleteMark(nMark);
 }
 
-void SAL_CALL OBoundControlModel::read( const Reference< stario::XObjectInputStream >& _rxInStream ) throw(stario::IOException, RuntimeException)
+void SAL_CALL OBoundControlModel::read( const Reference< stario::XObjectInputStream >& _rxInStream ) throw(stario::IOException, RuntimeException, std::exception)
 {
     OControlModel::read(_rxInStream);
     osl::MutexGuard aGuard(m_aMutex);
@@ -1693,7 +1693,7 @@ Any OBoundControlModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
     return aDefault;
 }
 
-void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception)
+void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception, std::exception)
 {
     switch (nHandle)
     {
@@ -1772,7 +1772,7 @@ void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, co
 }
 
 // XPropertyChangeListener
-void SAL_CALL OBoundControlModel::propertyChange( const PropertyChangeEvent& evt ) throw(RuntimeException)
+void SAL_CALL OBoundControlModel::propertyChange( const PropertyChangeEvent& evt ) throw(RuntimeException, std::exception)
 {
     // if the DBColumn value changed, transfer it to the control
     if ( evt.PropertyName.equals( PROPERTY_VALUE ) )
@@ -1818,7 +1818,7 @@ void SAL_CALL OBoundControlModel::propertyChange( const PropertyChangeEvent& evt
     }
 }
 
-void SAL_CALL OBoundControlModel::onRowSetChanged( const EventObject& /*i_Event*/ ) throw (RuntimeException)
+void SAL_CALL OBoundControlModel::onRowSetChanged( const EventObject& /*i_Event*/ ) throw (RuntimeException, std::exception)
 {
     ControlModelLock aLock( *this );
     FieldChangeNotifier aBoundFieldNotifier( aLock );
@@ -1838,17 +1838,17 @@ void SAL_CALL OBoundControlModel::onRowSetChanged( const EventObject& /*i_Event*
 }
 
 // XBoundComponent
-void SAL_CALL OBoundControlModel::addUpdateListener(const Reference<XUpdateListener>& _rxListener) throw(RuntimeException)
+void SAL_CALL OBoundControlModel::addUpdateListener(const Reference<XUpdateListener>& _rxListener) throw(RuntimeException, std::exception)
 {
     m_aUpdateListeners.addInterface(_rxListener);
 }
 
-void SAL_CALL OBoundControlModel::removeUpdateListener(const Reference< XUpdateListener>& _rxListener) throw(RuntimeException)
+void SAL_CALL OBoundControlModel::removeUpdateListener(const Reference< XUpdateListener>& _rxListener) throw(RuntimeException, std::exception)
 {
     m_aUpdateListeners.removeInterface(_rxListener);
 }
 
-sal_Bool SAL_CALL OBoundControlModel::commit() throw(RuntimeException)
+sal_Bool SAL_CALL OBoundControlModel::commit() throw(RuntimeException, std::exception)
 {
     ControlModelLock aLock( *this );
     OSL_PRECOND( m_bCommitable, "OBoundControlModel::commit: invalid call (I'm not commitable !) " );
@@ -2064,7 +2064,7 @@ void OBoundControlModel::impl_disconnectDatabaseColumn_noNotify()
 }
 
 // XLoadListener
-void SAL_CALL OBoundControlModel::loaded( const EventObject& _rEvent ) throw(RuntimeException)
+void SAL_CALL OBoundControlModel::loaded( const EventObject& _rEvent ) throw(RuntimeException, std::exception)
 {
     ControlModelLock aLock( *this );
     FieldChangeNotifier aBoundFieldNotifier( aLock );
@@ -2076,12 +2076,12 @@ void SAL_CALL OBoundControlModel::loaded( const EventObject& _rEvent ) throw(Run
     impl_connectDatabaseColumn_noNotify( false );
 }
 
-void SAL_CALL OBoundControlModel::unloaded( const com::sun::star::lang::EventObject& /*aEvent*/ ) throw(RuntimeException)
+void SAL_CALL OBoundControlModel::unloaded( const com::sun::star::lang::EventObject& /*aEvent*/ ) throw(RuntimeException, std::exception)
 {
     OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::unloaded: we should never reach this with an external value binding!" );
 }
 
-void SAL_CALL OBoundControlModel::reloading( const com::sun::star::lang::EventObject& /*aEvent*/ ) throw(RuntimeException)
+void SAL_CALL OBoundControlModel::reloading( const com::sun::star::lang::EventObject& /*aEvent*/ ) throw(RuntimeException, std::exception)
 {
     OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::reloading: we should never reach this with an external value binding!" );
     if ( hasExternalValueBinding() )
@@ -2090,7 +2090,7 @@ void SAL_CALL OBoundControlModel::reloading( const com::sun::star::lang::EventOb
     m_bForwardValueChanges = sal_False;
 }
 
-void SAL_CALL OBoundControlModel::unloading(const com::sun::star::lang::EventObject& /*aEvent*/) throw(RuntimeException)
+void SAL_CALL OBoundControlModel::unloading(const com::sun::star::lang::EventObject& /*aEvent*/) throw(RuntimeException, std::exception)
 {
     ControlModelLock aLock( *this );
     FieldChangeNotifier aBoundFieldNotifier( aLock );
@@ -2100,7 +2100,7 @@ void SAL_CALL OBoundControlModel::unloading(const com::sun::star::lang::EventObj
     impl_disconnectDatabaseColumn_noNotify();
 }
 
-void SAL_CALL OBoundControlModel::reloaded( const EventObject& _rEvent ) throw(RuntimeException)
+void SAL_CALL OBoundControlModel::reloaded( const EventObject& _rEvent ) throw(RuntimeException, std::exception)
 {
     ControlModelLock aLock( *this );
     FieldChangeNotifier aBoundFieldNotifier( aLock );
@@ -2223,17 +2223,17 @@ void OBoundControlModel::resetNoBroadcast()
     setControlValue( getDefaultForReset(), eOther );
 }
 
-void OBoundControlModel::addResetListener(const Reference<XResetListener>& l) throw (RuntimeException)
+void OBoundControlModel::addResetListener(const Reference<XResetListener>& l) throw (RuntimeException, std::exception)
 {
     m_aResetHelper.addResetListener( l );
 }
 
-void OBoundControlModel::removeResetListener(const Reference<XResetListener>& l) throw (RuntimeException)
+void OBoundControlModel::removeResetListener(const Reference<XResetListener>& l) throw (RuntimeException, std::exception)
 {
     m_aResetHelper.removeResetListener( l );
 }
 
-void OBoundControlModel::reset() throw (RuntimeException)
+void OBoundControlModel::reset() throw (RuntimeException, std::exception)
 {
     if ( !m_aResetHelper.approveReset() )
        return;
@@ -2486,7 +2486,7 @@ void OBoundControlModel::disconnectExternalValueBinding( )
     onDisconnectedExternalValue();
 }
 
-void SAL_CALL OBoundControlModel::setValueBinding( const Reference< XValueBinding >& _rxBinding ) throw (IncompatibleTypesException, RuntimeException)
+void SAL_CALL OBoundControlModel::setValueBinding( const Reference< XValueBinding >& _rxBinding ) throw (IncompatibleTypesException, RuntimeException, std::exception)
 {
     OSL_PRECOND( m_bSupportsExternalBinding, "OBoundControlModel::setValueBinding: How did you reach this method?" );
         // the interface for this method should not have been exposed if we do not
@@ -2512,7 +2512,7 @@ void SAL_CALL OBoundControlModel::setValueBinding( const Reference< XValueBindin
         connectExternalValueBinding( _rxBinding, aLock );
 }
 
-Reference< XValueBinding > SAL_CALL OBoundControlModel::getValueBinding(  ) throw (RuntimeException)
+Reference< XValueBinding > SAL_CALL OBoundControlModel::getValueBinding(  ) throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     OSL_PRECOND( m_bSupportsExternalBinding, "OBoundControlModel::getValueBinding: How did you reach this method?" );
@@ -2521,7 +2521,7 @@ Reference< XValueBinding > SAL_CALL OBoundControlModel::getValueBinding(  ) thro
     return m_xExternalBinding;
 }
 
-void SAL_CALL OBoundControlModel::modified( const EventObject& _rEvent ) throw ( RuntimeException )
+void SAL_CALL OBoundControlModel::modified( const EventObject& _rEvent ) throw ( RuntimeException, std::exception )
 {
     ControlModelLock aLock( *this );
     OSL_PRECOND( hasExternalValueBinding(), "OBoundControlModel::modified: Where did this come from?" );
@@ -2704,7 +2704,7 @@ void OBoundControlModel::disconnectValidator( )
     onDisconnectedValidator( );
 }
 
-void SAL_CALL OBoundControlModel::setValidator( const Reference< XValidator >& _rxValidator ) throw (VetoException,RuntimeException)
+void SAL_CALL OBoundControlModel::setValidator( const Reference< XValidator >& _rxValidator ) throw (VetoException,RuntimeException, std::exception)
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
     OSL_PRECOND( m_bSupportsValidation, "OBoundControlModel::setValidator: How did you reach this method?" );
@@ -2730,7 +2730,7 @@ void SAL_CALL OBoundControlModel::setValidator( const Reference< XValidator >& _
         connectValidator( _rxValidator );
 }
 
-Reference< XValidator > SAL_CALL OBoundControlModel::getValidator(  ) throw (RuntimeException)
+Reference< XValidator > SAL_CALL OBoundControlModel::getValidator(  ) throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     OSL_PRECOND( m_bSupportsValidation, "OBoundControlModel::getValidator: How did you reach this method?" );
@@ -2740,7 +2740,7 @@ Reference< XValidator > SAL_CALL OBoundControlModel::getValidator(  ) throw (Run
     return m_xValidator;
 }
 
-void SAL_CALL OBoundControlModel::validityConstraintChanged( const EventObject& /*Source*/ ) throw (RuntimeException)
+void SAL_CALL OBoundControlModel::validityConstraintChanged( const EventObject& /*Source*/ ) throw (RuntimeException, std::exception)
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
     OSL_PRECOND( m_bSupportsValidation, "OBoundControlModel::validityConstraintChanged: How did you reach this method?" );
@@ -2750,7 +2750,7 @@ void SAL_CALL OBoundControlModel::validityConstraintChanged( const EventObject& 
     recheckValidity( false );
 }
 
-sal_Bool SAL_CALL OBoundControlModel::isValid(  ) throw (RuntimeException)
+sal_Bool SAL_CALL OBoundControlModel::isValid(  ) throw (RuntimeException, std::exception)
 {
     return m_bIsCurrentValueValid;
 }
@@ -2762,19 +2762,19 @@ sal_Bool SAL_CALL OBoundControlModel::isValid(  ) throw (RuntimeException)
     return getControlValue();
 }
 
-Any SAL_CALL OBoundControlModel::getCurrentValue(  ) throw (RuntimeException)
+Any SAL_CALL OBoundControlModel::getCurrentValue(  ) throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     return getCurrentFormComponentValue();
 }
 
-void SAL_CALL OBoundControlModel::addFormComponentValidityListener( const Reference< validation::XFormComponentValidityListener >& Listener ) throw (NullPointerException, RuntimeException)
+void SAL_CALL OBoundControlModel::addFormComponentValidityListener( const Reference< validation::XFormComponentValidityListener >& Listener ) throw (NullPointerException, RuntimeException, std::exception)
 {
     if ( Listener.is() )
         m_aFormComponentListeners.addInterface( Listener );
 }
 
-void SAL_CALL OBoundControlModel::removeFormComponentValidityListener( const Reference< validation::XFormComponentValidityListener >& Listener ) throw (NullPointerException, RuntimeException)
+void SAL_CALL OBoundControlModel::removeFormComponentValidityListener( const Reference< validation::XFormComponentValidityListener >& Listener ) throw (NullPointerException, RuntimeException, std::exception)
 {
     if ( Listener.is() )
         m_aFormComponentListeners.removeInterface( Listener );

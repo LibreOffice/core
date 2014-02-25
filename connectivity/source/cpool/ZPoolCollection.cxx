@@ -100,12 +100,12 @@ OPoolCollection::~OPoolCollection()
     clearConnectionPools(sal_False);
 }
 
-Reference< XConnection > SAL_CALL OPoolCollection::getConnection( const OUString& _rURL ) throw(SQLException, RuntimeException)
+Reference< XConnection > SAL_CALL OPoolCollection::getConnection( const OUString& _rURL ) throw(SQLException, RuntimeException, std::exception)
 {
     return getConnectionWithInfo(_rURL,Sequence< PropertyValue >());
 }
 
-Reference< XConnection > SAL_CALL OPoolCollection::getConnectionWithInfo( const OUString& _rURL, const Sequence< PropertyValue >& _rInfo ) throw(SQLException, RuntimeException)
+Reference< XConnection > SAL_CALL OPoolCollection::getConnectionWithInfo( const OUString& _rURL, const Sequence< PropertyValue >& _rInfo ) throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     Reference< XConnection > xConnection;
@@ -125,31 +125,31 @@ Reference< XConnection > SAL_CALL OPoolCollection::getConnectionWithInfo( const 
     return xConnection;
 }
 
-void SAL_CALL OPoolCollection::setLoginTimeout( sal_Int32 seconds ) throw(RuntimeException)
+void SAL_CALL OPoolCollection::setLoginTimeout( sal_Int32 seconds ) throw(RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     m_xManager->setLoginTimeout(seconds);
 }
 
-sal_Int32 SAL_CALL OPoolCollection::getLoginTimeout(  ) throw(RuntimeException)
+sal_Int32 SAL_CALL OPoolCollection::getLoginTimeout(  ) throw(RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     return m_xManager->getLoginTimeout();
 }
 
-OUString SAL_CALL OPoolCollection::getImplementationName(  ) throw(RuntimeException)
+OUString SAL_CALL OPoolCollection::getImplementationName(  ) throw(RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     return getImplementationName_Static();
 }
 
-sal_Bool SAL_CALL OPoolCollection::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
+sal_Bool SAL_CALL OPoolCollection::supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception)
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
 
-Sequence< OUString > SAL_CALL OPoolCollection::getSupportedServiceNames(  ) throw(RuntimeException)
+Sequence< OUString > SAL_CALL OPoolCollection::getSupportedServiceNames(  ) throw(RuntimeException, std::exception)
 {
     return getSupportedServiceNames_Static();
 }
@@ -174,7 +174,7 @@ Sequence< OUString > SAL_CALL OPoolCollection::getSupportedServiceNames_Static( 
     return aSupported;
 }
 
-Reference< XDriver > SAL_CALL OPoolCollection::getDriverByURL( const OUString& _rURL ) throw(RuntimeException)
+Reference< XDriver > SAL_CALL OPoolCollection::getDriverByURL( const OUString& _rURL ) throw(RuntimeException, std::exception)
 {
     // returns the original driver when no connection pooling is enabled else it returns the proxy
     MutexGuard aGuard(m_aMutex);
@@ -411,16 +411,16 @@ Any OPoolCollection::getNodeValue(const OUString& _rPath,const Reference<XInterf
     return aReturn;
 }
 
-void SAL_CALL OPoolCollection::queryTermination( const EventObject& /*Event*/ ) throw (::com::sun::star::frame::TerminationVetoException, RuntimeException)
+void SAL_CALL OPoolCollection::queryTermination( const EventObject& /*Event*/ ) throw (::com::sun::star::frame::TerminationVetoException, RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL OPoolCollection::notifyTermination( const EventObject& /*Event*/ ) throw (RuntimeException)
+void SAL_CALL OPoolCollection::notifyTermination( const EventObject& /*Event*/ ) throw (RuntimeException, std::exception)
 {
     clearDesktop();
 }
 
-void SAL_CALL OPoolCollection::disposing( const EventObject& Source ) throw (RuntimeException)
+void SAL_CALL OPoolCollection::disposing( const EventObject& Source ) throw (RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     if ( m_xDesktop == Source.Source )
@@ -448,7 +448,7 @@ void SAL_CALL OPoolCollection::disposing( const EventObject& Source ) throw (Run
     }
 }
 
-void SAL_CALL OPoolCollection::propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (RuntimeException)
+void SAL_CALL OPoolCollection::propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     if(evt.Source == m_xConfigNode)

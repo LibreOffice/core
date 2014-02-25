@@ -64,7 +64,7 @@ StatusBarWrapper::~StatusBarWrapper()
 {
 }
 
-void SAL_CALL StatusBarWrapper::dispose() throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL StatusBarWrapper::dispose() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
 
@@ -88,7 +88,7 @@ void SAL_CALL StatusBarWrapper::dispose() throw (::com::sun::star::uno::RuntimeE
 }
 
 // XInitialization
-void SAL_CALL StatusBarWrapper::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
+void SAL_CALL StatusBarWrapper::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException, std::exception )
 {
     ResetableGuard aLock( m_aLock );
 
@@ -137,7 +137,7 @@ void SAL_CALL StatusBarWrapper::initialize( const Sequence< Any >& aArguments ) 
 }
 
 // XUIElementSettings
-void SAL_CALL StatusBarWrapper::updateSettings() throw ( RuntimeException )
+void SAL_CALL StatusBarWrapper::updateSettings() throw ( RuntimeException, std::exception )
 {
     ResetableGuard aLock( m_aLock );
 
@@ -162,7 +162,7 @@ void SAL_CALL StatusBarWrapper::updateSettings() throw ( RuntimeException )
     }
 }
 
-Reference< XInterface > SAL_CALL StatusBarWrapper::getRealInterface() throw ( RuntimeException )
+Reference< XInterface > SAL_CALL StatusBarWrapper::getRealInterface() throw ( RuntimeException, std::exception )
 {
     ResetableGuard aLock( m_aLock );
 

@@ -330,13 +330,13 @@ uno::Any SvxUnoDrawPool::_getPropertyDefault( const comphelper::PropertyMapEntry
 // XInterface
 
 uno::Any SAL_CALL SvxUnoDrawPool::queryInterface( const uno::Type & rType )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return OWeakAggObject::queryInterface( rType );
 }
 
 uno::Any SAL_CALL SvxUnoDrawPool::queryAggregation( const uno::Type & rType )
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     uno::Any aAny;
 
@@ -367,7 +367,7 @@ void SAL_CALL SvxUnoDrawPool::release() throw ( )
 }
 
 uno::Sequence< uno::Type > SAL_CALL SvxUnoDrawPool::getTypes()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     uno::Sequence< uno::Type > aTypes( 6 );
     uno::Type* pTypes = aTypes.getArray();
@@ -388,24 +388,24 @@ namespace
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL SvxUnoDrawPool::getImplementationId()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return theSvxUnoDrawPoolImplementationId::get().getSeq();
 }
 
 // XServiceInfo
-sal_Bool SAL_CALL SvxUnoDrawPool::supportsService( const  OUString& ServiceName ) throw(uno::RuntimeException)
+sal_Bool SAL_CALL SvxUnoDrawPool::supportsService( const  OUString& ServiceName ) throw(uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-OUString SAL_CALL SvxUnoDrawPool::getImplementationName() throw( uno::RuntimeException )
+OUString SAL_CALL SvxUnoDrawPool::getImplementationName() throw( uno::RuntimeException, std::exception )
 {
     return OUString("SvxUnoDrawPool");
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoDrawPool::getSupportedServiceNames(  )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence< OUString > aSNS( 1 );
     aSNS.getArray()[0] = "com.sun.star.drawing.Defaults";

@@ -66,20 +66,20 @@ void Listener::init( const css::uno::Reference< css::presentation::XSlideShowCon
 //----- XAnimationListener ----------------------------------------------------
 
 void SAL_CALL Listener::beginEvent(const css::uno::Reference<
-    css::animations::XAnimationNode >&  rNode ) throw (css::uno::RuntimeException)
+    css::animations::XAnimationNode >&  rNode ) throw (css::uno::RuntimeException, std::exception)
 {
     (void) rNode;
 }
 
 void SAL_CALL Listener::endEvent( const css::uno::Reference<
-    css::animations::XAnimationNode >& rNode ) throw (css::uno::RuntimeException)
+    css::animations::XAnimationNode >& rNode ) throw (css::uno::RuntimeException, std::exception)
 {
     (void) rNode;
 }
 
 void SAL_CALL Listener::repeat( const css::uno::Reference<
     css::animations::XAnimationNode >& rNode, ::sal_Int32 aRepeat )
-     throw (css::uno::RuntimeException)
+     throw (css::uno::RuntimeException, std::exception)
 {
     (void) rNode;
     (void) aRepeat;
@@ -88,28 +88,28 @@ void SAL_CALL Listener::repeat( const css::uno::Reference<
 //----- XSlideShowListener ----------------------------------------------------
 
 void SAL_CALL Listener::paused (void)
-    throw (com::sun::star::uno::RuntimeException)
+    throw (com::sun::star::uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL Listener::resumed (void)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL Listener::slideEnded (sal_Bool bReverse)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     (void) bReverse;
 }
 
 void SAL_CALL Listener::hyperLinkClicked (const OUString &)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL Listener::slideTransitionStarted (void)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     sal_Int32 aSlide = mController->getCurrentSlideIndex();
 
@@ -125,12 +125,12 @@ void SAL_CALL Listener::slideTransitionStarted (void)
 }
 
 void SAL_CALL Listener::slideTransitionEnded (void)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL Listener::slideAnimationsEnded (void)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
@@ -147,7 +147,7 @@ void SAL_CALL Listener::disposing (void)
 
 void SAL_CALL Listener::disposing (
     const css::lang::EventObject& rEvent)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     (void) rEvent;
     dispose();

@@ -48,23 +48,23 @@ private:
 
 protected:
     // OGenericUnoDialog
-    virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(RuntimeException);
-    virtual OUString SAL_CALL getImplementationName() throw (RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException);
+    virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(RuntimeException, std::exception);
+    virtual OUString SAL_CALL getImplementationName() throw (RuntimeException, std::exception);
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException, std::exception);
     virtual Dialog* createDialog( Window* pParent );
     virtual void executedDialog( sal_Int16 nExecutionResult );
-    virtual Reference< XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(RuntimeException);
+    virtual Reference< XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(RuntimeException, std::exception);
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
     // XPropertyAccess
     using OPropertySetHelper::getPropertyValues;
-    virtual Sequence< PropertyValue > SAL_CALL getPropertyValues(  ) throw (RuntimeException);
+    virtual Sequence< PropertyValue > SAL_CALL getPropertyValues(  ) throw (RuntimeException, std::exception);
     using OPropertySetHelper::setPropertyValues;
-    virtual void SAL_CALL setPropertyValues( const Sequence< PropertyValue >& aProps ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException);
+    virtual void SAL_CALL setPropertyValues( const Sequence< PropertyValue >& aProps ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception);
 
        // XExporter
-    virtual void SAL_CALL setSourceDocument( const Reference< XComponent >& xDoc ) throw(IllegalArgumentException, RuntimeException);
+    virtual void SAL_CALL setSourceDocument( const Reference< XComponent >& xDoc ) throw(IllegalArgumentException, RuntimeException, std::exception);
 
 public:
 

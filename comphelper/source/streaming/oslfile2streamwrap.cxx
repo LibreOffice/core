@@ -38,7 +38,7 @@ OSLInputStreamWrapper::~OSLInputStreamWrapper()
 
 
 sal_Int32 SAL_CALL OSLInputStreamWrapper::readBytes(staruno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
-                throw( stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException )
+                throw( stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException, std::exception )
 {
     if (!m_pFile)
         throw stario::NotConnectedException(OUString(), static_cast<staruno::XWeak*>(this));
@@ -63,7 +63,7 @@ sal_Int32 SAL_CALL OSLInputStreamWrapper::readBytes(staruno::Sequence< sal_Int8 
 }
 
 
-sal_Int32 SAL_CALL OSLInputStreamWrapper::readSomeBytes(staruno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) throw( stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException )
+sal_Int32 SAL_CALL OSLInputStreamWrapper::readSomeBytes(staruno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) throw( stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException, std::exception )
 {
     if (!m_pFile)
         throw stario::NotConnectedException(OUString(), static_cast<staruno::XWeak*>(this));
@@ -75,7 +75,7 @@ sal_Int32 SAL_CALL OSLInputStreamWrapper::readSomeBytes(staruno::Sequence< sal_I
 }
 
 
-void SAL_CALL OSLInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip) throw( stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException )
+void SAL_CALL OSLInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip) throw( stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (!m_pFile)
@@ -93,7 +93,7 @@ void SAL_CALL OSLInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip) throw( st
 }
 
 
-sal_Int32 SAL_CALL OSLInputStreamWrapper::available() throw( stario::NotConnectedException, staruno::RuntimeException )
+sal_Int32 SAL_CALL OSLInputStreamWrapper::available() throw( stario::NotConnectedException, staruno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (!m_pFile)
@@ -123,7 +123,7 @@ sal_Int32 SAL_CALL OSLInputStreamWrapper::available() throw( stario::NotConnecte
 }
 
 
-void SAL_CALL OSLInputStreamWrapper::closeInput() throw( stario::NotConnectedException, staruno::RuntimeException )
+void SAL_CALL OSLInputStreamWrapper::closeInput() throw( stario::NotConnectedException, staruno::RuntimeException, std::exception )
 {
     if (!m_pFile)
         throw stario::NotConnectedException(OUString(), static_cast<staruno::XWeak*>(this));
@@ -143,7 +143,7 @@ OSLOutputStreamWrapper::OSLOutputStreamWrapper(osl::File & _rFile):
 
 OSLOutputStreamWrapper::~OSLOutputStreamWrapper() {}
 
-void SAL_CALL OSLOutputStreamWrapper::writeBytes(const staruno::Sequence< sal_Int8 >& aData) throw( stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException )
+void SAL_CALL OSLOutputStreamWrapper::writeBytes(const staruno::Sequence< sal_Int8 >& aData) throw( stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException, std::exception )
 {
     sal_uInt64 nWritten;
     FileBase::RC eError = rFile.write(aData.getConstArray(),aData.getLength(), nWritten);
@@ -155,12 +155,12 @@ void SAL_CALL OSLOutputStreamWrapper::writeBytes(const staruno::Sequence< sal_In
 }
 
 
-void SAL_CALL OSLOutputStreamWrapper::flush() throw( stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException )
+void SAL_CALL OSLOutputStreamWrapper::flush() throw( stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException, std::exception )
 {
 }
 
 
-void SAL_CALL OSLOutputStreamWrapper::closeOutput() throw( stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException )
+void SAL_CALL OSLOutputStreamWrapper::closeOutput() throw( stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException, std::exception )
 {
     rFile.close();
 }

@@ -81,52 +81,52 @@ public: // XOutputStream
     virtual void SAL_CALL writeBytes(const Sequence< sal_Int8 >& aData)
         throw ( NotConnectedException,
                 BufferSizeExceededException,
-                RuntimeException);
+                RuntimeException, std::exception);
     virtual void SAL_CALL flush(void)
         throw ( NotConnectedException,
                 BufferSizeExceededException,
-                RuntimeException);
+                RuntimeException, std::exception);
     virtual void SAL_CALL closeOutput(void)
         throw ( NotConnectedException,
                 BufferSizeExceededException,
-                RuntimeException);
+                RuntimeException, std::exception);
 
 public: // XMarkable
     virtual sal_Int32 SAL_CALL createMark(void)
-        throw (IOException, RuntimeException);
+        throw (IOException, RuntimeException, std::exception);
     virtual void SAL_CALL deleteMark(sal_Int32 Mark)
         throw (IOException,
                IllegalArgumentException,
-               RuntimeException);
+               RuntimeException, std::exception);
     virtual void SAL_CALL jumpToMark(sal_Int32 nMark)
         throw (IOException,
                IllegalArgumentException,
-               RuntimeException);
+               RuntimeException, std::exception);
     virtual void SAL_CALL jumpToFurthest(void)
-        throw (IOException, RuntimeException);
+        throw (IOException, RuntimeException, std::exception);
     virtual sal_Int32 SAL_CALL offsetToMark(sal_Int32 nMark)
         throw (IOException,
                IllegalArgumentException,
-               RuntimeException);
+               RuntimeException, std::exception);
 
 public: // XActiveDataSource
     virtual void SAL_CALL setOutputStream(const Reference < XOutputStream > & aStream)
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
     virtual Reference < XOutputStream > SAL_CALL getOutputStream(void)
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
 
 public: // XConnectable
     virtual void SAL_CALL setPredecessor(const Reference < XConnectable > & aPredecessor)
-        throw (RuntimeException);
-    virtual Reference < XConnectable > SAL_CALL getPredecessor(void) throw (RuntimeException);
+        throw (RuntimeException, std::exception);
+    virtual Reference < XConnectable > SAL_CALL getPredecessor(void) throw (RuntimeException, std::exception);
     virtual void SAL_CALL setSuccessor(const Reference < XConnectable >& aSuccessor)
-        throw (RuntimeException);
-    virtual Reference<  XConnectable >  SAL_CALL getSuccessor(void) throw (RuntimeException);
+        throw (RuntimeException, std::exception);
+    virtual Reference<  XConnectable >  SAL_CALL getSuccessor(void) throw (RuntimeException, std::exception);
 
 public: // XServiceInfo
-    OUString                     SAL_CALL getImplementationName() throw ();
-    Sequence< OUString >         SAL_CALL getSupportedServiceNames(void) throw ();
-    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw ();
+    OUString                     SAL_CALL getImplementationName() throw (std::exception);
+    Sequence< OUString >         SAL_CALL getSupportedServiceNames(void) throw (std::exception);
+    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw (std::exception);
 
 private:
     // helper methods
@@ -163,7 +163,7 @@ OMarkableOutputStream::~OMarkableOutputStream()
 void OMarkableOutputStream::writeBytes(const Sequence< sal_Int8 >& aData)
     throw ( NotConnectedException,
             BufferSizeExceededException,
-            RuntimeException)
+            RuntimeException, std::exception)
 {
     if( m_bValidStream ) {
         if( m_mapMarks.empty() && ( m_pBuffer->getSize() == 0 ) ) {
@@ -197,7 +197,7 @@ void OMarkableOutputStream::writeBytes(const Sequence< sal_Int8 >& aData)
 void OMarkableOutputStream::flush(void)
     throw ( NotConnectedException,
             BufferSizeExceededException,
-            RuntimeException)
+            RuntimeException, std::exception)
 {
     Reference< XOutputStream > output;
     {
@@ -217,7 +217,7 @@ void OMarkableOutputStream::flush(void)
 void OMarkableOutputStream::closeOutput(void)
     throw ( NotConnectedException,
             BufferSizeExceededException,
-            RuntimeException)
+            RuntimeException, std::exception)
 {
     if( m_bValidStream ) {
         MutexGuard guard( m_mutex );
@@ -244,7 +244,7 @@ void OMarkableOutputStream::closeOutput(void)
 
 sal_Int32 OMarkableOutputStream::createMark(void)
     throw ( IOException,
-            RuntimeException)
+            RuntimeException, std::exception)
 {
     MutexGuard guard( m_mutex );
     sal_Int32 nMark = m_nCurrentMark;
@@ -258,7 +258,7 @@ sal_Int32 OMarkableOutputStream::createMark(void)
 void OMarkableOutputStream::deleteMark(sal_Int32 Mark)
     throw( IOException,
            IllegalArgumentException,
-           RuntimeException)
+           RuntimeException, std::exception)
 {
     MutexGuard guard( m_mutex );
     map<sal_Int32,sal_Int32,less<sal_Int32> >::iterator ii = m_mapMarks.find( Mark );
@@ -279,7 +279,7 @@ void OMarkableOutputStream::deleteMark(sal_Int32 Mark)
 void OMarkableOutputStream::jumpToMark(sal_Int32 nMark)
     throw (IOException,
            IllegalArgumentException,
-           RuntimeException)
+           RuntimeException, std::exception)
 {
     MutexGuard guard( m_mutex );
     map<sal_Int32,sal_Int32,less<sal_Int32> >::iterator ii = m_mapMarks.find( nMark );
@@ -298,7 +298,7 @@ void OMarkableOutputStream::jumpToMark(sal_Int32 nMark)
 
 void OMarkableOutputStream::jumpToFurthest(void)
     throw (IOException,
-           RuntimeException)
+           RuntimeException, std::exception)
 {
     MutexGuard guard( m_mutex );
     m_nCurrentPos = m_pBuffer->getSize();
@@ -308,7 +308,7 @@ void OMarkableOutputStream::jumpToFurthest(void)
 sal_Int32 OMarkableOutputStream::offsetToMark(sal_Int32 nMark)
     throw (IOException,
            IllegalArgumentException,
-           RuntimeException)
+           RuntimeException, std::exception)
 {
 
     MutexGuard guard( m_mutex );
@@ -329,7 +329,7 @@ sal_Int32 OMarkableOutputStream::offsetToMark(sal_Int32 nMark)
 
 // XActiveDataSource2
 void OMarkableOutputStream::setOutputStream(const Reference < XOutputStream >& aStream)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     if( m_output != aStream ) {
         m_output = aStream;
@@ -340,7 +340,7 @@ void OMarkableOutputStream::setOutputStream(const Reference < XOutputStream >& a
     m_bValidStream = m_output.is();
 }
 
-Reference< XOutputStream > OMarkableOutputStream::getOutputStream(void) throw (RuntimeException)
+Reference< XOutputStream > OMarkableOutputStream::getOutputStream(void) throw (RuntimeException, std::exception)
 {
     return m_output;
 }
@@ -348,7 +348,7 @@ Reference< XOutputStream > OMarkableOutputStream::getOutputStream(void) throw (R
 
 
 void OMarkableOutputStream::setSuccessor( const Reference< XConnectable > &r )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
      /// if the references match, nothing needs to be done
      if( m_succ != r ) {
@@ -361,7 +361,7 @@ void OMarkableOutputStream::setSuccessor( const Reference< XConnectable > &r )
          }
      }
 }
-Reference <XConnectable > OMarkableOutputStream::getSuccessor()     throw (RuntimeException)
+Reference <XConnectable > OMarkableOutputStream::getSuccessor()     throw (RuntimeException, std::exception)
 {
     return m_succ;
 }
@@ -369,7 +369,7 @@ Reference <XConnectable > OMarkableOutputStream::getSuccessor()     throw (Runti
 
 // XDataSource
 void OMarkableOutputStream::setPredecessor( const Reference< XConnectable > &r )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     if( r != m_pred ) {
         m_pred = r;
@@ -379,7 +379,7 @@ void OMarkableOutputStream::setPredecessor( const Reference< XConnectable > &r )
         }
     }
 }
-Reference < XConnectable > OMarkableOutputStream::getPredecessor() throw (RuntimeException)
+Reference < XConnectable > OMarkableOutputStream::getPredecessor() throw (RuntimeException, std::exception)
 {
     return m_pred;
 }
@@ -422,19 +422,19 @@ void OMarkableOutputStream::checkMarksAndFlush() throw(     NotConnectedExceptio
 
 
 // XServiceInfo
-OUString OMarkableOutputStream::getImplementationName() throw ()
+OUString OMarkableOutputStream::getImplementationName() throw (std::exception)
 {
     return OMarkableOutputStream_getImplementationName();
 }
 
 // XServiceInfo
-sal_Bool OMarkableOutputStream::supportsService(const OUString& ServiceName) throw ()
+sal_Bool OMarkableOutputStream::supportsService(const OUString& ServiceName) throw (std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo
-Sequence< OUString > OMarkableOutputStream::getSupportedServiceNames(void) throw ()
+Sequence< OUString > OMarkableOutputStream::getSupportedServiceNames(void) throw (std::exception)
 {
     return OMarkableOutputStream_getSupportedServiceNames();
 }
@@ -496,52 +496,52 @@ public: // XInputStream
     virtual sal_Int32 SAL_CALL readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
         throw ( NotConnectedException,
                 BufferSizeExceededException,
-                RuntimeException) ;
+                RuntimeException, std::exception) ;
     virtual sal_Int32 SAL_CALL readSomeBytes(Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead)
         throw ( NotConnectedException,
                 BufferSizeExceededException,
-                RuntimeException);
+                RuntimeException, std::exception);
     virtual void SAL_CALL skipBytes(sal_Int32 nBytesToSkip)
         throw ( NotConnectedException,
                 BufferSizeExceededException,
-                RuntimeException);
+                RuntimeException, std::exception);
 
     virtual sal_Int32 SAL_CALL available(void)
         throw ( NotConnectedException,
-                RuntimeException);
-    virtual void SAL_CALL closeInput(void) throw (NotConnectedException, RuntimeException);
+                RuntimeException, std::exception);
+    virtual void SAL_CALL closeInput(void) throw (NotConnectedException, RuntimeException, std::exception);
 
 public: // XMarkable
     virtual sal_Int32 SAL_CALL createMark(void)
-        throw (IOException, RuntimeException);
+        throw (IOException, RuntimeException, std::exception);
     virtual void SAL_CALL deleteMark(sal_Int32 Mark)
-        throw (IOException, IllegalArgumentException, RuntimeException);
+        throw (IOException, IllegalArgumentException, RuntimeException, std::exception);
     virtual void SAL_CALL jumpToMark(sal_Int32 nMark)
-        throw (IOException, IllegalArgumentException, RuntimeException);
+        throw (IOException, IllegalArgumentException, RuntimeException, std::exception);
     virtual void SAL_CALL jumpToFurthest(void)
-        throw (IOException, RuntimeException);
+        throw (IOException, RuntimeException, std::exception);
     virtual sal_Int32 SAL_CALL offsetToMark(sal_Int32 nMark)
-        throw (IOException, IllegalArgumentException,RuntimeException);
+        throw (IOException, IllegalArgumentException,RuntimeException, std::exception);
 
 public: // XActiveDataSink
     virtual void SAL_CALL setInputStream(const Reference < XInputStream > & aStream)
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
     virtual Reference < XInputStream > SAL_CALL getInputStream(void)
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
 
 public: // XConnectable
     virtual void SAL_CALL setPredecessor(const Reference < XConnectable > & aPredecessor)
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
     virtual Reference < XConnectable > SAL_CALL getPredecessor(void)
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
     virtual void SAL_CALL setSuccessor(const Reference < XConnectable > & aSuccessor)
-        throw (RuntimeException);
-    virtual Reference < XConnectable > SAL_CALL getSuccessor(void) throw (RuntimeException);
+        throw (RuntimeException, std::exception);
+    virtual Reference < XConnectable > SAL_CALL getSuccessor(void) throw (RuntimeException, std::exception);
 
 public: // XServiceInfo
-    OUString                     SAL_CALL getImplementationName() throw ();
-    Sequence< OUString >         SAL_CALL getSupportedServiceNames(void) throw ();
-    sal_Bool                         SAL_CALL  supportsService(const OUString& ServiceName) throw ();
+    OUString                     SAL_CALL getImplementationName() throw (std::exception);
+    Sequence< OUString >         SAL_CALL getSupportedServiceNames(void) throw (std::exception);
+    sal_Bool                         SAL_CALL  supportsService(const OUString& ServiceName) throw (std::exception);
 
 private:
     void checkMarksAndFlush();
@@ -583,7 +583,7 @@ OMarkableInputStream::~OMarkableInputStream()
 sal_Int32 OMarkableInputStream::readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
     throw ( NotConnectedException,
             BufferSizeExceededException,
-            RuntimeException)
+            RuntimeException, std::exception)
 {
     sal_Int32 nBytesRead;
 
@@ -640,7 +640,7 @@ sal_Int32 OMarkableInputStream::readBytes(Sequence< sal_Int8 >& aData, sal_Int32
 sal_Int32 OMarkableInputStream::readSomeBytes(Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead)
     throw ( NotConnectedException,
             BufferSizeExceededException,
-            RuntimeException)
+            RuntimeException, std::exception)
 {
 
     sal_Int32 nBytesRead;
@@ -704,7 +704,7 @@ sal_Int32 OMarkableInputStream::readSomeBytes(Sequence< sal_Int8 >& aData, sal_I
 void OMarkableInputStream::skipBytes(sal_Int32 nBytesToSkip)
     throw ( NotConnectedException,
             BufferSizeExceededException,
-            RuntimeException)
+            RuntimeException, std::exception)
 {
     if ( nBytesToSkip < 0 )
         throw BufferSizeExceededException(
@@ -717,7 +717,7 @@ void OMarkableInputStream::skipBytes(sal_Int32 nBytesToSkip)
     readBytes( seqDummy , nBytesToSkip );
 }
 
-sal_Int32 OMarkableInputStream::available(void) throw (NotConnectedException, RuntimeException)
+sal_Int32 OMarkableInputStream::available(void) throw (NotConnectedException, RuntimeException, std::exception)
 {
     sal_Int32 nAvail;
     if( m_bValidStream ) {
@@ -735,7 +735,7 @@ sal_Int32 OMarkableInputStream::available(void) throw (NotConnectedException, Ru
 }
 
 
-void OMarkableInputStream::closeInput(void) throw (NotConnectedException, RuntimeException)
+void OMarkableInputStream::closeInput(void) throw (NotConnectedException, RuntimeException, std::exception)
 {
     if( m_bValidStream ) {
         MutexGuard guard( m_mutex );
@@ -760,7 +760,7 @@ void OMarkableInputStream::closeInput(void) throw (NotConnectedException, Runtim
 
 // XMarkable
 
-sal_Int32 OMarkableInputStream::createMark(void)            throw (IOException, RuntimeException)
+sal_Int32 OMarkableInputStream::createMark(void)            throw (IOException, RuntimeException, std::exception)
 {
     MutexGuard guard( m_mutex );
     sal_Int32 nMark = m_nCurrentMark;
@@ -771,7 +771,7 @@ sal_Int32 OMarkableInputStream::createMark(void)            throw (IOException, 
     return nMark;
 }
 
-void OMarkableInputStream::deleteMark(sal_Int32 Mark)       throw (IOException, IllegalArgumentException, RuntimeException)
+void OMarkableInputStream::deleteMark(sal_Int32 Mark)       throw (IOException, IllegalArgumentException, RuntimeException, std::exception)
 {
     MutexGuard guard( m_mutex );
     map<sal_Int32,sal_Int32,less<sal_Int32> >::iterator ii = m_mapMarks.find( Mark );
@@ -792,7 +792,7 @@ void OMarkableInputStream::deleteMark(sal_Int32 Mark)       throw (IOException, 
 void OMarkableInputStream::jumpToMark(sal_Int32 nMark)
     throw (IOException,
            IllegalArgumentException,
-           RuntimeException)
+           RuntimeException, std::exception)
 {
     MutexGuard guard( m_mutex );
     map<sal_Int32,sal_Int32,less<sal_Int32> >::iterator ii = m_mapMarks.find( nMark );
@@ -811,7 +811,7 @@ void OMarkableInputStream::jumpToMark(sal_Int32 nMark)
     }
 }
 
-void OMarkableInputStream::jumpToFurthest(void)         throw (IOException, RuntimeException)
+void OMarkableInputStream::jumpToFurthest(void)         throw (IOException, RuntimeException, std::exception)
 {
     MutexGuard guard( m_mutex );
     m_nCurrentPos = m_pBuffer->getSize();
@@ -821,7 +821,7 @@ void OMarkableInputStream::jumpToFurthest(void)         throw (IOException, Runt
 sal_Int32 OMarkableInputStream::offsetToMark(sal_Int32 nMark)
      throw (IOException,
            IllegalArgumentException,
-           RuntimeException)
+           RuntimeException, std::exception)
 {
     MutexGuard guard( m_mutex );
     map<sal_Int32,sal_Int32,less<sal_Int32> >::const_iterator ii = m_mapMarks.find( nMark );
@@ -845,7 +845,7 @@ sal_Int32 OMarkableInputStream::offsetToMark(sal_Int32 nMark)
 
 // XActiveDataSource
 void OMarkableInputStream::setInputStream(const Reference< XInputStream > & aStream)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
 
     if( m_input != aStream ) {
@@ -859,7 +859,7 @@ void OMarkableInputStream::setInputStream(const Reference< XInputStream > & aStr
 
 }
 
-Reference< XInputStream > OMarkableInputStream::getInputStream(void) throw (RuntimeException)
+Reference< XInputStream > OMarkableInputStream::getInputStream(void) throw (RuntimeException, std::exception)
 {
     return m_input;
 }
@@ -868,7 +868,7 @@ Reference< XInputStream > OMarkableInputStream::getInputStream(void) throw (Runt
 
 // XDataSink
 void OMarkableInputStream::setSuccessor( const Reference< XConnectable > &r )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
      /// if the references match, nothing needs to be done
      if( m_succ != r ) {
@@ -883,7 +883,7 @@ void OMarkableInputStream::setSuccessor( const Reference< XConnectable > &r )
      }
 }
 
-Reference < XConnectable >  OMarkableInputStream::getSuccessor() throw (RuntimeException)
+Reference < XConnectable >  OMarkableInputStream::getSuccessor() throw (RuntimeException, std::exception)
 {
     return m_succ;
 }
@@ -891,7 +891,7 @@ Reference < XConnectable >  OMarkableInputStream::getSuccessor() throw (RuntimeE
 
 // XDataSource
 void OMarkableInputStream::setPredecessor( const Reference < XConnectable >  &r )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     if( r != m_pred ) {
         m_pred = r;
@@ -901,7 +901,7 @@ void OMarkableInputStream::setPredecessor( const Reference < XConnectable >  &r 
         }
     }
 }
-Reference< XConnectable >  OMarkableInputStream::getPredecessor() throw (RuntimeException)
+Reference< XConnectable >  OMarkableInputStream::getPredecessor() throw (RuntimeException, std::exception)
 {
     return m_pred;
 }
@@ -938,19 +938,19 @@ void OMarkableInputStream::checkMarksAndFlush()
 }
 
 // XServiceInfo
-OUString OMarkableInputStream::getImplementationName() throw ()
+OUString OMarkableInputStream::getImplementationName() throw (std::exception)
 {
     return OMarkableInputStream_getImplementationName();
 }
 
 // XServiceInfo
-sal_Bool OMarkableInputStream::supportsService(const OUString& ServiceName) throw ()
+sal_Bool OMarkableInputStream::supportsService(const OUString& ServiceName) throw (std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo
-Sequence< OUString > OMarkableInputStream::getSupportedServiceNames(void) throw ()
+Sequence< OUString > OMarkableInputStream::getSupportedServiceNames(void) throw (std::exception)
 {
     return OMarkableInputStream_getSupportedServiceNames();
 }

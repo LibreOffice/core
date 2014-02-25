@@ -83,7 +83,7 @@ void KabCatalog::refreshUsers()
 
 
 // XTablesSupplier
-Reference< XNameAccess > SAL_CALL KabCatalog::getTables(  ) throw(RuntimeException)
+Reference< XNameAccess > SAL_CALL KabCatalog::getTables(  ) throw(RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);

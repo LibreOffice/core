@@ -200,7 +200,7 @@ BaseCoordinateSystem::~BaseCoordinateSystem()
 
 // ____ XCoordinateSystem ____
 sal_Int32 SAL_CALL BaseCoordinateSystem::getDimension()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return m_nDimensionCount;
 }
@@ -210,7 +210,7 @@ void SAL_CALL BaseCoordinateSystem::setAxisByDimension(
     const Reference< chart2::XAxis >& xAxis,
     sal_Int32 nIndex )
     throw (lang::IndexOutOfBoundsException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     if( nDimensionIndex < 0 || nDimensionIndex >= getDimension() )
         throw lang::IndexOutOfBoundsException();
@@ -236,7 +236,7 @@ void SAL_CALL BaseCoordinateSystem::setAxisByDimension(
 Reference< chart2::XAxis > SAL_CALL BaseCoordinateSystem::getAxisByDimension(
             sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex )
     throw (lang::IndexOutOfBoundsException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     if( nDimensionIndex < 0 || nDimensionIndex >= getDimension() )
         throw lang::IndexOutOfBoundsException();
@@ -251,7 +251,7 @@ Reference< chart2::XAxis > SAL_CALL BaseCoordinateSystem::getAxisByDimension(
 
 sal_Int32 SAL_CALL BaseCoordinateSystem::getMaximumAxisIndexByDimension( sal_Int32 nDimensionIndex )
         throw (lang::IndexOutOfBoundsException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     if( nDimensionIndex < 0 || nDimensionIndex >= getDimension() )
         throw lang::IndexOutOfBoundsException();
@@ -268,7 +268,7 @@ sal_Int32 SAL_CALL BaseCoordinateSystem::getMaximumAxisIndexByDimension( sal_Int
 // ____ XChartTypeContainer ____
 void SAL_CALL BaseCoordinateSystem::addChartType( const Reference< chart2::XChartType >& aChartType )
     throw (lang::IllegalArgumentException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     if( ::std::find( m_aChartTypes.begin(), m_aChartTypes.end(), aChartType )
         != m_aChartTypes.end())
@@ -281,7 +281,7 @@ void SAL_CALL BaseCoordinateSystem::addChartType( const Reference< chart2::XChar
 
 void SAL_CALL BaseCoordinateSystem::removeChartType( const Reference< chart2::XChartType >& aChartType )
     throw (container::NoSuchElementException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     ::std::vector< uno::Reference< chart2::XChartType > >::iterator
           aIt( ::std::find( m_aChartTypes.begin(), m_aChartTypes.end(), aChartType ));
@@ -296,14 +296,14 @@ void SAL_CALL BaseCoordinateSystem::removeChartType( const Reference< chart2::XC
 }
 
 Sequence< Reference< chart2::XChartType > > SAL_CALL BaseCoordinateSystem::getChartTypes()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return ContainerHelper::ContainerToSequence( m_aChartTypes );
 }
 
 void SAL_CALL BaseCoordinateSystem::setChartTypes( const Sequence< Reference< chart2::XChartType > >& aChartTypes )
     throw (lang::IllegalArgumentException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     ModifyListenerHelper::removeListenerFromAllElements( m_aChartTypes, m_xModifyEventForwarder );
     m_aChartTypes = ContainerHelper::SequenceToVector( aChartTypes );
@@ -313,7 +313,7 @@ void SAL_CALL BaseCoordinateSystem::setChartTypes( const Sequence< Reference< ch
 
 // ____ XModifyBroadcaster ____
 void SAL_CALL BaseCoordinateSystem::addModifyListener( const Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -327,7 +327,7 @@ void SAL_CALL BaseCoordinateSystem::addModifyListener( const Reference< util::XM
 }
 
 void SAL_CALL BaseCoordinateSystem::removeModifyListener( const Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -342,14 +342,14 @@ void SAL_CALL BaseCoordinateSystem::removeModifyListener( const Reference< util:
 
 // ____ XModifyListener ____
 void SAL_CALL BaseCoordinateSystem::modified( const lang::EventObject& aEvent )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
 // ____ XEventListener (base of XModifyListener) ____
 void SAL_CALL BaseCoordinateSystem::disposing( const lang::EventObject& /* Source */ )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     // nothing
 }
@@ -384,7 +384,7 @@ uno::Any BaseCoordinateSystem::GetDefaultValue( sal_Int32 nHandle ) const
 
 // ____ XPropertySet ____
 Reference< beans::XPropertySetInfo > SAL_CALL BaseCoordinateSystem::getPropertySetInfo()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return *StaticCooSysInfo::get();
 }

@@ -100,7 +100,7 @@ TextSearch::~TextSearch()
     delete pJumpTable2;
 }
 
-void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeException )
+void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeException, std::exception )
 {
     aSrchPara = rOptions;
 
@@ -227,7 +227,7 @@ sal_Bool TextSearch::isCellStart(const OUString& searchStr, sal_Int32 nPos)
 }
 
 SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 startPos, sal_Int32 endPos )
-        throw( RuntimeException )
+        throw( RuntimeException, std::exception )
 {
     SearchResult sres;
 
@@ -326,7 +326,7 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
 }
 
 SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 startPos, sal_Int32 endPos )
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     SearchResult sres;
 
@@ -1042,19 +1042,19 @@ static OUString getImplementationName_Static()
 
 OUString SAL_CALL
 TextSearch::getImplementationName()
-                throw( RuntimeException )
+                throw( RuntimeException, std::exception )
 {
     return getImplementationName_Static();
 }
 
 sal_Bool SAL_CALL TextSearch::supportsService(const OUString& rServiceName)
-                throw( RuntimeException )
+                throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL
-TextSearch::getSupportedServiceNames(void) throw( RuntimeException )
+TextSearch::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
     aRet[0] = getServiceName_Static();

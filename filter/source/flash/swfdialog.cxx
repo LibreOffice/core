@@ -102,7 +102,7 @@ SWFDialog::~SWFDialog()
 
 
 Any SAL_CALL SWFDialog::queryInterface( const Type& rType )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     Any aReturn = OGenericUnoDialog::queryInterface( rType );
 
@@ -133,7 +133,7 @@ void SAL_CALL SWFDialog::release()
 
 
 Sequence< sal_Int8 > SAL_CALL SWFDialog::getImplementationId()
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     return SWFDialog_getImplementationId();
 }
@@ -141,7 +141,7 @@ Sequence< sal_Int8 > SAL_CALL SWFDialog::getImplementationId()
 
 
 OUString SAL_CALL SWFDialog::getImplementationName()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return SWFDialog_getImplementationName();
 }
@@ -149,7 +149,7 @@ OUString SAL_CALL SWFDialog::getImplementationName()
 
 
 Sequence< OUString > SAL_CALL SWFDialog::getSupportedServiceNames()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return SWFDialog_getSupportedServiceNames();
 }
@@ -202,7 +202,7 @@ void SWFDialog::executedDialog( sal_Int16 nExecutionResult )
 
 
 Reference< XPropertySetInfo > SAL_CALL SWFDialog::getPropertySetInfo()
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     Reference< XPropertySetInfo >  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
@@ -225,7 +225,7 @@ Reference< XPropertySetInfo > SAL_CALL SWFDialog::getPropertySetInfo()
 
 
 Sequence< PropertyValue > SAL_CALL SWFDialog::getPropertyValues()
-    throw ( RuntimeException )
+    throw ( RuntimeException, std::exception )
 {
     sal_Int32 i, nCount;
 
@@ -247,7 +247,7 @@ Sequence< PropertyValue > SAL_CALL SWFDialog::getPropertyValues()
 
 
 void SAL_CALL SWFDialog::setPropertyValues( const Sequence< PropertyValue >& rProps )
-    throw ( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException )
+    throw ( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception )
 {
     maMediaDescriptor = rProps;
 
@@ -264,7 +264,7 @@ void SAL_CALL SWFDialog::setPropertyValues( const Sequence< PropertyValue >& rPr
 
 
 void SAL_CALL SWFDialog::setSourceDocument( const Reference< XComponent >& xDoc )
-    throw(IllegalArgumentException, RuntimeException)
+    throw(IllegalArgumentException, RuntimeException, std::exception)
 {
     mxSrcDoc = xDoc;
 }

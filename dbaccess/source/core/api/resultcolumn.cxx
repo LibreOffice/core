@@ -101,7 +101,7 @@ OResultColumn::~OResultColumn()
 }
 
 // com::sun::star::lang::XTypeProvider
-Sequence< sal_Int8 > OResultColumn::getImplementationId() throw (RuntimeException)
+Sequence< sal_Int8 > OResultColumn::getImplementationId() throw (RuntimeException, std::exception)
 {
     static OImplementationId * pId = 0;
     if (! pId)
@@ -117,12 +117,12 @@ Sequence< sal_Int8 > OResultColumn::getImplementationId() throw (RuntimeExceptio
 }
 
 // XServiceInfo
-OUString OResultColumn::getImplementationName(  ) throw(RuntimeException)
+OUString OResultColumn::getImplementationName(  ) throw(RuntimeException, std::exception)
 {
     return OUString("com.sun.star.sdb.OResultColumn");
 }
 
-Sequence< OUString > OResultColumn::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > OResultColumn::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aSNS( 2 );
     aSNS[0] = SERVICE_SDBCX_COLUMN;

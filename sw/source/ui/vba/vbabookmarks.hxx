@@ -55,13 +55,13 @@ public:
     virtual css::uno::Sequence<OUString> getServiceNames();
 
     // XBookmarks
-    virtual sal_Int32 SAL_CALL getDefaultSorting() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setDefaultSorting( sal_Int32 _type ) throw (css::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL getShowHidden() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setShowHidden( sal_Bool _hidden ) throw (css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getDefaultSorting() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setDefaultSorting( sal_Int32 _type ) throw (css::uno::RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL getShowHidden() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setShowHidden( sal_Bool _hidden ) throw (css::uno::RuntimeException, std::exception);
 
-    virtual css::uno::Any SAL_CALL Add( const OUString& rName, const css::uno::Any& rRange ) throw (css::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL Exists( const OUString& rName ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL Add( const OUString& rName, const css::uno::Any& rRange ) throw (css::uno::RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL Exists( const OUString& rName ) throw (css::uno::RuntimeException, std::exception);
 };
 
 #endif // INCLUDED_SW_SOURCE_UI_VBA_VBABOOKMARKS_HXX

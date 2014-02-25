@@ -133,24 +133,24 @@ OOXMLFormulaParser::~OOXMLFormulaParser()
 }
 
 // com.sun.star.lang.XServiceInfo interface -----------------------------------
-OUString SAL_CALL OOXMLFormulaParser::getImplementationName() throw( RuntimeException )
+OUString SAL_CALL OOXMLFormulaParser::getImplementationName() throw( RuntimeException, std::exception )
 {
     return OOXMLFormulaParser_getImplementationName();
 }
 
-sal_Bool SAL_CALL OOXMLFormulaParser::supportsService( const OUString& rService ) throw( RuntimeException )
+sal_Bool SAL_CALL OOXMLFormulaParser::supportsService( const OUString& rService ) throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rService);
 }
 
-Sequence< OUString > SAL_CALL OOXMLFormulaParser::getSupportedServiceNames() throw( RuntimeException )
+Sequence< OUString > SAL_CALL OOXMLFormulaParser::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     return OOXMLFormulaParser_getSupportedServiceNames();
 }
 
 // com.sun.star.lang.XInitialization interface --------------------------------
 
-void SAL_CALL OOXMLFormulaParser::initialize( const Sequence< Any >& rArgs ) throw( Exception, RuntimeException )
+void SAL_CALL OOXMLFormulaParser::initialize( const Sequence< Any >& rArgs ) throw( Exception, RuntimeException, std::exception )
 {
     OSL_ENSURE( rArgs.hasElements(), "OOXMLFormulaParser::initialize - missing arguments" );
     if( !rArgs.hasElements() )
@@ -160,7 +160,7 @@ void SAL_CALL OOXMLFormulaParser::initialize( const Sequence< Any >& rArgs ) thr
 
 // com.sun.star.sheet.XFilterFormulaParser interface --------------------------
 
-OUString SAL_CALL OOXMLFormulaParser::getSupportedNamespace() throw( RuntimeException )
+OUString SAL_CALL OOXMLFormulaParser::getSupportedNamespace() throw( RuntimeException, std::exception )
 {
     return OUString( "http://schemas.microsoft.com/office/excel/formula");
 }
@@ -168,7 +168,7 @@ OUString SAL_CALL OOXMLFormulaParser::getSupportedNamespace() throw( RuntimeExce
 // com.sun.star.sheet.XFormulaParser interface --------------------------------
 
 Sequence< FormulaToken > SAL_CALL OOXMLFormulaParser::parseFormula(
-        const OUString& rFormula, const CellAddress& rReferencePos ) throw( RuntimeException )
+        const OUString& rFormula, const CellAddress& rReferencePos ) throw( RuntimeException, std::exception )
 {
     if( !mxParserImpl )
     {
@@ -179,7 +179,7 @@ Sequence< FormulaToken > SAL_CALL OOXMLFormulaParser::parseFormula(
 }
 
 OUString SAL_CALL OOXMLFormulaParser::printFormula(
-        const Sequence< FormulaToken >& /*rTokens*/, const CellAddress& /*rReferencePos*/ ) throw( RuntimeException )
+        const Sequence< FormulaToken >& /*rTokens*/, const CellAddress& /*rReferencePos*/ ) throw( RuntimeException, std::exception )
 {
     // not implemented
     throw RuntimeException();

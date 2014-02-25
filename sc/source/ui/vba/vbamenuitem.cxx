@@ -16,31 +16,31 @@ ScVbaMenuItem::ScVbaMenuItem( const uno::Reference< ov::XHelperInterface > xPare
 }
 
 OUString SAL_CALL
-ScVbaMenuItem::getCaption() throw ( uno::RuntimeException )
+ScVbaMenuItem::getCaption() throw ( uno::RuntimeException, std::exception )
 {
     return m_xCommandBarControl->getCaption();
 }
 
 void SAL_CALL
-ScVbaMenuItem::setCaption( const OUString& _caption ) throw (uno::RuntimeException)
+ScVbaMenuItem::setCaption( const OUString& _caption ) throw (uno::RuntimeException, std::exception)
 {
     m_xCommandBarControl->setCaption( _caption );
 }
 
 OUString SAL_CALL
-ScVbaMenuItem::getOnAction() throw ( uno::RuntimeException )
+ScVbaMenuItem::getOnAction() throw ( uno::RuntimeException, std::exception )
 {
     return m_xCommandBarControl->getOnAction();
 }
 
 void SAL_CALL
-ScVbaMenuItem::setOnAction( const OUString& _onaction ) throw (uno::RuntimeException)
+ScVbaMenuItem::setOnAction( const OUString& _onaction ) throw (uno::RuntimeException, std::exception)
 {
     m_xCommandBarControl->setOnAction( _onaction );
 }
 
 void SAL_CALL
-ScVbaMenuItem::Delete( ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaMenuItem::Delete( ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     m_xCommandBarControl->Delete();
 }

@@ -72,7 +72,7 @@ Sequence<Type> OFileControlModel::_getTypes()
 
 // XServiceInfo
 
-StringSequence  OFileControlModel::getSupportedServiceNames() throw(RuntimeException)
+StringSequence  OFileControlModel::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     StringSequence aSupported = OControlModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
@@ -114,7 +114,7 @@ OFileControlModel::~OFileControlModel()
 IMPLEMENT_DEFAULT_CLONING( OFileControlModel )
 
 
-Any SAL_CALL OFileControlModel::queryAggregation(const Type& _rType) throw (RuntimeException)
+Any SAL_CALL OFileControlModel::queryAggregation(const Type& _rType) throw (RuntimeException, std::exception)
 {
     Any aReturn = OControlModel::queryAggregation(_rType);
     if (!aReturn.hasValue())
@@ -158,7 +158,7 @@ void OFileControlModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle) con
 }
 
 
-void OFileControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue) throw ( ::com::sun::star::uno::Exception)
+void OFileControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue) throw ( ::com::sun::star::uno::Exception, std::exception)
 {
     switch (nHandle)
     {
@@ -194,13 +194,13 @@ void OFileControlModel::describeFixedProperties( Sequence< Property >& _rProps )
 }
 
 
-OUString SAL_CALL OFileControlModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL OFileControlModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException, std::exception)
 {
     return OUString(FRM_COMPONENT_FILECONTROL);   // old (non-sun) name for compatibility !
 }
 
 
-void OFileControlModel::write(const Reference<stario::XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
+void OFileControlModel::write(const Reference<stario::XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     OControlModel::write(_rxOutStream);
 
@@ -214,7 +214,7 @@ void OFileControlModel::write(const Reference<stario::XObjectOutputStream>& _rxO
 }
 
 
-void OFileControlModel::read(const Reference<stario::XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
+void OFileControlModel::read(const Reference<stario::XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     OControlModel::read(_rxInStream);
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -240,7 +240,7 @@ void OFileControlModel::read(const Reference<stario::XObjectInputStream>& _rxInS
 }
 
 
-void SAL_CALL OFileControlModel::reset() throw ( ::com::sun::star::uno::RuntimeException)
+void SAL_CALL OFileControlModel::reset() throw ( ::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::cppu::OInterfaceIteratorHelper aIter(m_aResetListeners);
     EventObject aEvt(static_cast<XWeak*>(this));
@@ -260,13 +260,13 @@ void SAL_CALL OFileControlModel::reset() throw ( ::com::sun::star::uno::RuntimeE
 }
 
 
-void OFileControlModel::addResetListener(const Reference<XResetListener>& _rxListener) throw ( ::com::sun::star::uno::RuntimeException)
+void OFileControlModel::addResetListener(const Reference<XResetListener>& _rxListener) throw ( ::com::sun::star::uno::RuntimeException, std::exception)
 {
     m_aResetListeners.addInterface(_rxListener);
 }
 
 
-void OFileControlModel::removeResetListener(const Reference<XResetListener>& _rxListener) throw ( ::com::sun::star::uno::RuntimeException)
+void OFileControlModel::removeResetListener(const Reference<XResetListener>& _rxListener) throw ( ::com::sun::star::uno::RuntimeException, std::exception)
 {
     m_aResetListeners.removeInterface(_rxListener);
 }

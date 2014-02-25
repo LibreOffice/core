@@ -35,7 +35,7 @@ using namespace com::sun::star::xml::sax;
 #define ATTRIBUTE_MODIFIER          "modifier"
 #define ATTRIBUTE_URL               "url"
 
-Any SAL_CALL OReadAccelatorDocumentHandler::queryInterface( const Type & rType ) throw( RuntimeException )
+Any SAL_CALL OReadAccelatorDocumentHandler::queryInterface( const Type & rType ) throw( RuntimeException, std::exception )
 {
     Any a = ::cppu::queryInterface( rType ,(static_cast< XDocumentHandler* >(this)));
     if ( a.hasValue() )
@@ -46,19 +46,19 @@ Any SAL_CALL OReadAccelatorDocumentHandler::queryInterface( const Type & rType )
 
 void SAL_CALL OReadAccelatorDocumentHandler::ignorableWhitespace(
     const OUString& )
-throw( SAXException, RuntimeException )
+throw( SAXException, RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL OReadAccelatorDocumentHandler::processingInstruction(
     const OUString&, const OUString& )
-throw( SAXException, RuntimeException )
+throw( SAXException, RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL OReadAccelatorDocumentHandler::setDocumentLocator(
     const Reference< XLocator > &xLocator)
-throw(  SAXException, RuntimeException )
+throw(  SAXException, RuntimeException, std::exception )
 {
     m_xLocator = xLocator;
 }
@@ -76,12 +76,12 @@ OUString OReadAccelatorDocumentHandler::getErrorLineString()
 }
 
 void SAL_CALL OReadAccelatorDocumentHandler::startDocument(void)
-    throw ( SAXException, RuntimeException )
+    throw ( SAXException, RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL OReadAccelatorDocumentHandler::endDocument(void)
-    throw( SAXException, RuntimeException )
+    throw( SAXException, RuntimeException, std::exception )
 {
     if ( m_nElementDepth > 0 )
     {
@@ -94,7 +94,7 @@ void SAL_CALL OReadAccelatorDocumentHandler::endDocument(void)
 
 void SAL_CALL OReadAccelatorDocumentHandler::startElement(
     const OUString& aElementName, const Reference< XAttributeList > &xAttrList )
-throw( SAXException, RuntimeException )
+throw( SAXException, RuntimeException, std::exception )
 {
     m_nElementDepth++;
 
@@ -153,13 +153,13 @@ throw( SAXException, RuntimeException )
 
 
 void SAL_CALL OReadAccelatorDocumentHandler::characters(const OUString&)
-throw(  SAXException, RuntimeException )
+throw(  SAXException, RuntimeException, std::exception )
 {
 }
 
 
 void SAL_CALL OReadAccelatorDocumentHandler::endElement( const OUString& aName )
-    throw( SAXException, RuntimeException )
+    throw( SAXException, RuntimeException, std::exception )
 {
     m_nElementDepth--;
 

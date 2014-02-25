@@ -39,12 +39,12 @@ namespace DOM
         }
     }
 
-    OUString SAL_CALL CComment::getNodeName()throw (RuntimeException)
+    OUString SAL_CALL CComment::getNodeName()throw (RuntimeException, std::exception)
     {
         return OUString("#comment");
     }
 
-    OUString SAL_CALL CComment::getNodeValue() throw (RuntimeException)
+    OUString SAL_CALL CComment::getNodeValue() throw (RuntimeException, std::exception)
     {
         return CCharacterData::getData();
     }

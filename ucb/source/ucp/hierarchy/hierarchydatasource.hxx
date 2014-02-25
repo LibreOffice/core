@@ -66,32 +66,32 @@ public:
     // XComponent
     virtual void SAL_CALL
     dispose()
-        throw ( com::sun::star::uno::RuntimeException );
+        throw ( com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL
     addEventListener( const com::sun::star::uno::Reference<
                         com::sun::star::lang::XEventListener > & xListener )
-        throw ( com::sun::star::uno::RuntimeException );
+        throw ( com::sun::star::uno::RuntimeException, std::exception );
     virtual void SAL_CALL
     removeEventListener( const com::sun::star::uno::Reference<
                             com::sun::star::lang::XEventListener > & aListener )
-        throw ( com::sun::star::uno::RuntimeException );
+        throw ( com::sun::star::uno::RuntimeException, std::exception );
 
     // XMultiServiceFactory
     virtual com::sun::star::uno::Reference<
         com::sun::star::uno::XInterface > SAL_CALL
     createInstance( const OUString & aServiceSpecifier )
         throw ( com::sun::star::uno::Exception,
-                com::sun::star::uno::RuntimeException );
+                com::sun::star::uno::RuntimeException, std::exception );
     virtual com::sun::star::uno::Reference<
         com::sun::star::uno::XInterface > SAL_CALL
     createInstanceWithArguments( const OUString & ServiceSpecifier,
                                  const com::sun::star::uno::Sequence<
                                     com::sun::star::uno::Any > & Arguments )
         throw ( com::sun::star::uno::Exception,
-                com::sun::star::uno::RuntimeException );
+                com::sun::star::uno::RuntimeException, std::exception );
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
     getAvailableServiceNames()
-        throw ( com::sun::star::uno::RuntimeException );
+        throw ( com::sun::star::uno::RuntimeException, std::exception );
 
     // Non-Interface methods
 

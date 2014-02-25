@@ -42,18 +42,18 @@ public:
     ScVbaAssistant( const css::uno::Reference< ov::XHelperInterface > xParent, const css::uno::Reference< css::uno::XComponentContext > xContext );
     virtual ~ScVbaAssistant();
     // XAssistant
-    virtual sal_Bool SAL_CALL getOn() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setOn( sal_Bool _on ) throw (css::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setVisible( sal_Bool _visible ) throw (css::uno::RuntimeException);
-    virtual ::sal_Int32 SAL_CALL getTop() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setTop( ::sal_Int32 _top ) throw (css::uno::RuntimeException);
-    virtual ::sal_Int32 SAL_CALL getLeft() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setLeft( ::sal_Int32 _left ) throw (css::uno::RuntimeException);
-    virtual ::sal_Int32 SAL_CALL getAnimation() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setAnimation( ::sal_Int32 _animation ) throw (css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL getOn() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setOn( sal_Bool _on ) throw (css::uno::RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setVisible( sal_Bool _visible ) throw (css::uno::RuntimeException, std::exception);
+    virtual ::sal_Int32 SAL_CALL getTop() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setTop( ::sal_Int32 _top ) throw (css::uno::RuntimeException, std::exception);
+    virtual ::sal_Int32 SAL_CALL getLeft() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setLeft( ::sal_Int32 _left ) throw (css::uno::RuntimeException, std::exception);
+    virtual ::sal_Int32 SAL_CALL getAnimation() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setAnimation( ::sal_Int32 _animation ) throw (css::uno::RuntimeException, std::exception);
 
-    virtual OUString SAL_CALL Name(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
+    virtual OUString SAL_CALL Name(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception);
     // XHelperInterface
     virtual OUString getServiceImplName();
     virtual css::uno::Sequence<OUString> getServiceNames();

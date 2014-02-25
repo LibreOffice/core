@@ -275,7 +275,7 @@ InputStream::~InputStream()
 }
 
 sal_Int32 SAL_CALL InputStream::readBytes( Sequence< sal_Int8 >& rData, sal_Int32 nBytesToRead )
-        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
+        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception)
 {
     if( nBytesToRead < 0 )
         throw IOException();
@@ -301,13 +301,13 @@ sal_Int32 SAL_CALL InputStream::readBytes( Sequence< sal_Int8 >& rData, sal_Int3
 }
 
 sal_Int32 SAL_CALL InputStream::readSomeBytes( Sequence< sal_Int8 >& rData, sal_Int32 nMaxBytesToRead )
-        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
+        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception)
 {
     return readBytes( rData, nMaxBytesToRead );
 }
 
 void SAL_CALL InputStream::skipBytes( sal_Int32 nBytesToSkip )
-        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
+        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception)
 {
     if( nBytesToSkip < 0 )
         throw IOException();
@@ -321,13 +321,13 @@ void SAL_CALL InputStream::skipBytes( sal_Int32 nBytesToSkip )
     }
 }
 
-sal_Int32 SAL_CALL InputStream::available() throw (NotConnectedException, IOException, RuntimeException)
+sal_Int32 SAL_CALL InputStream::available() throw (NotConnectedException, IOException, RuntimeException, std::exception)
 {
     updateBuffer();
     return maBuffer.getLength() - mnBufferPos;
 }
 
-void SAL_CALL InputStream::closeInput() throw (NotConnectedException, IOException, RuntimeException)
+void SAL_CALL InputStream::closeInput() throw (NotConnectedException, IOException, RuntimeException, std::exception)
 {
     mxTextStrm->closeInput();
 }

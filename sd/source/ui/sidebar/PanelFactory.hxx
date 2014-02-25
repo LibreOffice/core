@@ -74,7 +74,7 @@ public:
         throw(
             css::container::NoSuchElementException,
             css::lang::IllegalArgumentException,
-            cssu::RuntimeException);
+            cssu::RuntimeException, std::exception);
 };
 
 

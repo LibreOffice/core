@@ -147,7 +147,7 @@ PopupWindowController::~PopupWindowController()
 
 // XInterface
 Any SAL_CALL PopupWindowController::queryInterface( const Type& aType )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     Any a( ToolboxController::queryInterface( aType ) );
     if ( a.hasValue() )
@@ -167,13 +167,13 @@ void SAL_CALL PopupWindowController::release() throw ()
 }
 
 // XServiceInfo
-sal_Bool SAL_CALL PopupWindowController::supportsService( const OUString& ServiceName ) throw(RuntimeException)
+sal_Bool SAL_CALL PopupWindowController::supportsService( const OUString& ServiceName ) throw(RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 // XInitialization
-void SAL_CALL PopupWindowController::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+void SAL_CALL PopupWindowController::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     svt::ToolboxController::initialize( aArguments );
     if( !m_aCommandURL.isEmpty() )
@@ -181,7 +181,7 @@ void SAL_CALL PopupWindowController::initialize( const ::com::sun::star::uno::Se
 }
 
 // XComponent
-void SAL_CALL PopupWindowController::dispose() throw (RuntimeException)
+void SAL_CALL PopupWindowController::dispose() throw (RuntimeException, std::exception)
 {
     if( !m_aCommandURL.isEmpty() )
         removeStatusListener( m_aCommandURL );
@@ -191,29 +191,29 @@ void SAL_CALL PopupWindowController::dispose() throw (RuntimeException)
 
 
 // XStatusListener
-void SAL_CALL PopupWindowController::statusChanged( const frame::FeatureStateEvent& rEvent ) throw ( RuntimeException )
+void SAL_CALL PopupWindowController::statusChanged( const frame::FeatureStateEvent& rEvent ) throw ( RuntimeException, std::exception )
 {
     svt::ToolboxController::statusChanged(rEvent);
     enable( rEvent.IsEnabled );
 }
 
 // XToolbarController
-void SAL_CALL PopupWindowController::execute( sal_Int16 KeyModifier ) throw (RuntimeException)
+void SAL_CALL PopupWindowController::execute( sal_Int16 KeyModifier ) throw (RuntimeException, std::exception)
 {
     svt::ToolboxController::execute( KeyModifier );
 }
 
-void SAL_CALL PopupWindowController::click() throw (RuntimeException)
+void SAL_CALL PopupWindowController::click() throw (RuntimeException, std::exception)
 {
     svt::ToolboxController::click();
 }
 
-void SAL_CALL PopupWindowController::doubleClick() throw (RuntimeException)
+void SAL_CALL PopupWindowController::doubleClick() throw (RuntimeException, std::exception)
 {
     svt::ToolboxController::doubleClick();
 }
 
-Reference< awt::XWindow > SAL_CALL PopupWindowController::createPopupWindow() throw (RuntimeException)
+Reference< awt::XWindow > SAL_CALL PopupWindowController::createPopupWindow() throw (RuntimeException, std::exception)
 {
     ToolBox* pToolBox = dynamic_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ) );
     if( pToolBox )
@@ -235,7 +235,7 @@ Reference< awt::XWindow > SAL_CALL PopupWindowController::createPopupWindow() th
 }
 
 Reference< awt::XWindow > SAL_CALL PopupWindowController::createItemWindow( const Reference< awt::XWindow >& /*Parent*/ )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return Reference< awt::XWindow >();
 }

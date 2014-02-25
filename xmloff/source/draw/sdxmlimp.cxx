@@ -329,7 +329,7 @@ SdXMLImport::SdXMLImport(
 
 // XImporter
 void SAL_CALL SdXMLImport::setTargetDocument( const uno::Reference< lang::XComponent >& xDoc )
-    throw(lang::IllegalArgumentException, uno::RuntimeException)
+    throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     SvXMLImport::setTargetDocument( xDoc );
 
@@ -388,7 +388,7 @@ void SAL_CALL SdXMLImport::setTargetDocument( const uno::Reference< lang::XCompo
 
 // XInitialization
 void SAL_CALL SdXMLImport::initialize( const uno::Sequence< uno::Any >& aArguments )
-    throw( uno::Exception, uno::RuntimeException)
+    throw( uno::Exception, uno::RuntimeException, std::exception)
 {
     SvXMLImport::initialize( aArguments );
 

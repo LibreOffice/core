@@ -67,7 +67,7 @@ XTYPEPROVIDER_IMPL_2( ActiveDataSink,
 // virtual
 void SAL_CALL ActiveDataSink::setInputStream(
                         const uno::Reference< io::XInputStream >& aStream )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     m_xStream = aStream;
 }
@@ -75,7 +75,7 @@ void SAL_CALL ActiveDataSink::setInputStream(
 
 // virtual
 uno::Reference< io::XInputStream > SAL_CALL ActiveDataSink::getInputStream()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return m_xStream;
 }

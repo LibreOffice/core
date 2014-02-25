@@ -31,9 +31,9 @@ namespace framework
             virtual ~FooterMenuController();
 
             // XServiceInfo
-            virtual OUString                                        SAL_CALL getImplementationName              (                                                                               ) throw( css::uno::RuntimeException );
-            virtual sal_Bool                                               SAL_CALL supportsService                    ( const OUString&                                        sServiceName    ) throw( css::uno::RuntimeException );
-            virtual css::uno::Sequence< OUString >                  SAL_CALL getSupportedServiceNames           (                                                                               ) throw( css::uno::RuntimeException );
+            virtual OUString                                        SAL_CALL getImplementationName              (                                                                               ) throw( css::uno::RuntimeException, std::exception );
+            virtual sal_Bool                                               SAL_CALL supportsService                    ( const OUString&                                        sServiceName    ) throw( css::uno::RuntimeException, std::exception );
+            virtual css::uno::Sequence< OUString >                  SAL_CALL getSupportedServiceNames           (                                                                               ) throw( css::uno::RuntimeException, std::exception );
             /* Helper for XServiceInfo */
             static css::uno::Sequence< OUString >                   SAL_CALL impl_getStaticSupportedServiceNames(                                                                               );
             static OUString                                         SAL_CALL impl_getStaticImplementationName   (                                                                               );

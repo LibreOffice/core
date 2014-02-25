@@ -194,7 +194,7 @@ uno::Sequence< OUString > GraphicDescriptor::getSupportedServiceNames_Static()
 
 
 uno::Any SAL_CALL GraphicDescriptor::queryAggregation( const uno::Type & rType )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     uno::Any aAny;
 
@@ -217,7 +217,7 @@ uno::Any SAL_CALL GraphicDescriptor::queryAggregation( const uno::Type & rType )
 
 
 uno::Any SAL_CALL GraphicDescriptor::queryInterface( const uno::Type & rType )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return OWeakAggObject::queryInterface( rType );
 }
@@ -241,13 +241,13 @@ void SAL_CALL GraphicDescriptor::release()
 
 
 OUString SAL_CALL GraphicDescriptor::getImplementationName()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return getImplementationName_Static();
 }
 
 sal_Bool SAL_CALL GraphicDescriptor::supportsService( const OUString& ServiceName )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -255,7 +255,7 @@ sal_Bool SAL_CALL GraphicDescriptor::supportsService( const OUString& ServiceNam
 
 
 uno::Sequence< OUString > SAL_CALL GraphicDescriptor::getSupportedServiceNames()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return getSupportedServiceNames_Static();
 }
@@ -263,7 +263,7 @@ uno::Sequence< OUString > SAL_CALL GraphicDescriptor::getSupportedServiceNames()
 
 
 uno::Sequence< uno::Type > SAL_CALL GraphicDescriptor::getTypes()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence< uno::Type >  aTypes( 6 );
     uno::Type*                  pTypes = aTypes.getArray();
@@ -284,7 +284,7 @@ namespace
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL GraphicDescriptor::getImplementationId()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return theGraphicDescriptorUnoTunnelId::get().getSeq();
 }

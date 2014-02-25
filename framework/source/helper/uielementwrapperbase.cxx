@@ -59,7 +59,7 @@ UIElementWrapperBase::~UIElementWrapperBase()
 {
 }
 
-Any SAL_CALL UIElementWrapperBase::queryInterface( const Type& _rType ) throw(RuntimeException)
+Any SAL_CALL UIElementWrapperBase::queryInterface( const Type& _rType ) throw(RuntimeException, std::exception)
 {
     Any aRet = UIElementWrapperBase_BASE::queryInterface( _rType );
     if ( !aRet.hasValue() )
@@ -67,7 +67,7 @@ Any SAL_CALL UIElementWrapperBase::queryInterface( const Type& _rType ) throw(Ru
     return aRet;
 }
 
-Sequence< Type > SAL_CALL UIElementWrapperBase::getTypes(  ) throw(RuntimeException)
+Sequence< Type > SAL_CALL UIElementWrapperBase::getTypes(  ) throw(RuntimeException, std::exception)
 {
     return comphelper::concatSequences(
         UIElementWrapperBase_BASE::getTypes(),
@@ -75,18 +75,18 @@ Sequence< Type > SAL_CALL UIElementWrapperBase::getTypes(  ) throw(RuntimeExcept
     );
 }
 
-void SAL_CALL UIElementWrapperBase::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL UIElementWrapperBase::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     m_aListenerContainer.addInterface( ::getCppuType( ( const css::uno::Reference< css::lang::XEventListener >* ) NULL ), xListener );
 }
 
-void SAL_CALL UIElementWrapperBase::removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL UIElementWrapperBase::removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     m_aListenerContainer.removeInterface( ::getCppuType( ( const css::uno::Reference< css::lang::XEventListener >* ) NULL ), xListener );
 }
 
 void SAL_CALL UIElementWrapperBase::initialize( const Sequence< Any >& aArguments )
-throw ( Exception, RuntimeException )
+throw ( Exception, RuntimeException, std::exception )
 {
     ResetableGuard aLock( m_aLock );
 
@@ -113,24 +113,24 @@ throw ( Exception, RuntimeException )
 }
 
 // XUIElement
-::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > SAL_CALL UIElementWrapperBase::getFrame() throw (::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > SAL_CALL UIElementWrapperBase::getFrame() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame( m_xWeakFrame );
     return xFrame;
 }
 
-OUString SAL_CALL UIElementWrapperBase::getResourceURL() throw (::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL UIElementWrapperBase::getResourceURL() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return m_aResourceURL;
 }
 
-::sal_Int16 SAL_CALL UIElementWrapperBase::getType() throw (::com::sun::star::uno::RuntimeException)
+::sal_Int16 SAL_CALL UIElementWrapperBase::getType() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return m_nType;
 }
 
 // XUpdatable
-void SAL_CALL UIElementWrapperBase::update() throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL UIElementWrapperBase::update() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     // can be implemented by derived class
 }
@@ -147,7 +147,7 @@ sal_Bool SAL_CALL UIElementWrapperBase::convertFastPropertyValue( Any&       /*a
 }
 
 void SAL_CALL UIElementWrapperBase::setFastPropertyValue_NoBroadcast(   sal_Int32               /*nHandle*/ ,
-                                                                        const com::sun::star::uno::Any&    /*aValue*/  ) throw( com::sun::star::uno::Exception )
+                                                                        const com::sun::star::uno::Any&    /*aValue*/  ) throw( com::sun::star::uno::Exception, std::exception )
 {
 }
 
@@ -195,7 +195,7 @@ void SAL_CALL UIElementWrapperBase::getFastPropertyValue( com::sun::star::uno::A
     return(*pInfoHelper);
 }
 
-com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > SAL_CALL UIElementWrapperBase::getPropertySetInfo() throw (::com::sun::star::uno::RuntimeException)
+com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > SAL_CALL UIElementWrapperBase::getPropertySetInfo() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!

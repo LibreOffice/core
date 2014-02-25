@@ -57,7 +57,7 @@ GraphicRendererVCL::~GraphicRendererVCL()
 
 
 uno::Any SAL_CALL GraphicRendererVCL::queryAggregation( const uno::Type & rType )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     uno::Any aAny;
 
@@ -82,7 +82,7 @@ uno::Any SAL_CALL GraphicRendererVCL::queryAggregation( const uno::Type & rType 
 
 
 uno::Any SAL_CALL GraphicRendererVCL::queryInterface( const uno::Type & rType )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return OWeakAggObject::queryInterface( rType );
 }
@@ -106,13 +106,13 @@ void SAL_CALL GraphicRendererVCL::release()
 
 
 OUString SAL_CALL GraphicRendererVCL::getImplementationName()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.comp.graphic.GraphicRendererVCL" );
 }
 
 sal_Bool SAL_CALL GraphicRendererVCL::supportsService( const OUString& ServiceName )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -120,7 +120,7 @@ sal_Bool SAL_CALL GraphicRendererVCL::supportsService( const OUString& ServiceNa
 
 
 uno::Sequence< OUString > SAL_CALL GraphicRendererVCL::getSupportedServiceNames()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence< OUString > aSeq( 1 );
     aSeq.getArray()[ 0 ] = "com.sun.star.graphic.GraphicRendererVCL";
@@ -130,7 +130,7 @@ uno::Sequence< OUString > SAL_CALL GraphicRendererVCL::getSupportedServiceNames(
 
 
 uno::Sequence< uno::Type > SAL_CALL GraphicRendererVCL::getTypes()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence< uno::Type >  aTypes( 7 );
     uno::Type*                  pTypes = aTypes.getArray();
@@ -152,7 +152,7 @@ namespace
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL GraphicRendererVCL::getImplementationId()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return theGraphicRendererVCLUnoTunnelId::get().getSeq();
 }
@@ -275,7 +275,7 @@ void GraphicRendererVCL::_getPropertyValues( const comphelper::PropertyMapEntry*
 
 
 void SAL_CALL GraphicRendererVCL::render( const uno::Reference< graphic::XGraphic >& rxGraphic )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if( mpOutDev && mxDevice.is() && rxGraphic.is() )
     {

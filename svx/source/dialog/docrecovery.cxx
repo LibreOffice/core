@@ -435,7 +435,7 @@ ERecoveryState RecoveryCore::mapDocState2RecoverState(sal_Int32 eDocState)
 
 
 void SAL_CALL RecoveryCore::statusChanged(const css::frame::FeatureStateEvent& aEvent)
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     // a) special notification about start/stop async dispatch!
     //    FeatureDescriptor = "start" || "stop"
@@ -523,7 +523,7 @@ void SAL_CALL RecoveryCore::statusChanged(const css::frame::FeatureStateEvent& a
 
 
 void SAL_CALL RecoveryCore::disposing(const css::lang::EventObject& /*aEvent*/)
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     m_xRealCore.clear();
 }
@@ -616,7 +616,7 @@ PluginProgress::~PluginProgress()
 
 
 void SAL_CALL PluginProgress::dispose()
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     // m_pPluginProgressWindow was deleted ...
     // So the internal pointer of this progress
@@ -626,20 +626,20 @@ void SAL_CALL PluginProgress::dispose()
 
 
 void SAL_CALL PluginProgress::addEventListener(const css::uno::Reference< css::lang::XEventListener >& )
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
 }
 
 
 void SAL_CALL PluginProgress::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& )
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
 }
 
 
 void SAL_CALL PluginProgress::start(const OUString&,
                                           sal_Int32        nRange)
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     if (m_xProgress.is())
         m_xProgress->start(OUString(), nRange);
@@ -647,7 +647,7 @@ void SAL_CALL PluginProgress::start(const OUString&,
 
 
 void SAL_CALL PluginProgress::end()
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     if (m_xProgress.is())
         m_xProgress->end();
@@ -655,7 +655,7 @@ void SAL_CALL PluginProgress::end()
 
 
 void SAL_CALL PluginProgress::setText(const OUString& sText)
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     if (m_xProgress.is())
         m_xProgress->setText(sText);
@@ -663,7 +663,7 @@ void SAL_CALL PluginProgress::setText(const OUString& sText)
 
 
 void SAL_CALL PluginProgress::setValue(sal_Int32 nValue)
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     if (m_xProgress.is())
         m_xProgress->setValue(nValue);
@@ -671,7 +671,7 @@ void SAL_CALL PluginProgress::setValue(sal_Int32 nValue)
 
 
 void SAL_CALL PluginProgress::reset()
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     if (m_xProgress.is())
         m_xProgress->reset();

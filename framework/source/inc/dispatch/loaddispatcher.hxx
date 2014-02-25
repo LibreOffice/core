@@ -103,25 +103,25 @@ class LoadDispatcher : private ThreadHelpBase
         virtual void SAL_CALL dispatchWithNotification(const css::util::URL&                                             aURL      ,
                                                        const css::uno::Sequence< css::beans::PropertyValue >&            lArguments,
                                                        const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
-            throw(css::uno::RuntimeException);
+            throw(css::uno::RuntimeException, std::exception);
 
         // XDispatch
         virtual void SAL_CALL dispatch(const css::util::URL&                                  aURL      ,
                                        const css::uno::Sequence< css::beans::PropertyValue >& lArguments)
-            throw(css::uno::RuntimeException);
+            throw(css::uno::RuntimeException, std::exception);
 
         virtual void SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
                                                 const css::util::URL&                                     aURL     )
-            throw(css::uno::RuntimeException);
+            throw(css::uno::RuntimeException, std::exception);
 
         virtual void SAL_CALL removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
                                                    const css::util::URL&                                     aURL     )
-            throw(css::uno::RuntimeException);
+            throw(css::uno::RuntimeException, std::exception);
 
         // XSynchronousDispatch
         virtual css::uno::Any SAL_CALL dispatchWithReturnValue( const css::util::URL&                                  aURL      ,
                                                                 const css::uno::Sequence< css::beans::PropertyValue >& lArguments )
-            throw( css::uno::RuntimeException );
+            throw( css::uno::RuntimeException, std::exception );
 
     private:
         css::uno::Any impl_dispatch( const css::util::URL& rURL,

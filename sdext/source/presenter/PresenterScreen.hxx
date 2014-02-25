@@ -74,7 +74,7 @@ public:
         const css::uno::Sequence<css::beans::NamedValue >& Arguments)
         throw (css::lang::IllegalArgumentException,
             css::uno::Exception,
-            css::uno::RuntimeException);
+            css::uno::RuntimeException, std::exception);
 
 private:
     PresenterScreenJob (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
@@ -125,7 +125,7 @@ public:
 
     // XEventListener
 
-    virtual void SAL_CALL disposing ( const css::lang::EventObject& rEvent) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL disposing ( const css::lang::EventObject& rEvent) throw (css::uno::RuntimeException, std::exception);
 
 private:
     css::uno::Reference<css::frame::XModel2 > mxModel;

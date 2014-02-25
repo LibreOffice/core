@@ -42,13 +42,13 @@ namespace toolkit
 
 // Methods XElementAccess
 Type NameContainer_Impl::getElementType()
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     return mType;
 }
 
 sal_Bool NameContainer_Impl::hasElements()
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     bool bRet = (mnElementCount > 0);
     return bRet;
@@ -56,7 +56,7 @@ sal_Bool NameContainer_Impl::hasElements()
 
 // Methods XNameAccess
 Any NameContainer_Impl::getByName( const OUString& aName )
-    throw(NoSuchElementException, WrappedTargetException, RuntimeException)
+    throw(NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     NameContainerNameMap::iterator aIt = mHashMap.find( aName );
     if( aIt == mHashMap.end() )
@@ -69,13 +69,13 @@ Any NameContainer_Impl::getByName( const OUString& aName )
 }
 
 Sequence< OUString > NameContainer_Impl::getElementNames()
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     return mNames;
 }
 
 sal_Bool NameContainer_Impl::hasByName( const OUString& aName )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     NameContainerNameMap::iterator aIt = mHashMap.find( aName );
     bool bRet = ( aIt != mHashMap.end() );
@@ -85,7 +85,7 @@ sal_Bool NameContainer_Impl::hasByName( const OUString& aName )
 
 // Methods XNameReplace
 void NameContainer_Impl::replaceByName( const OUString& aName, const Any& aElement )
-    throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
+    throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     Type aAnyType = aElement.getValueType();
     if( mType != aAnyType )
@@ -112,7 +112,7 @@ void NameContainer_Impl::replaceByName( const OUString& aName, const Any& aEleme
 
 // Methods XNameContainer
 void NameContainer_Impl::insertByName( const OUString& aName, const Any& aElement )
-    throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
+    throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException, std::exception)
 {
     Type aAnyType = aElement.getValueType();
     if( mType != aAnyType )
@@ -140,7 +140,7 @@ void NameContainer_Impl::insertByName( const OUString& aName, const Any& aElemen
 }
 
 void NameContainer_Impl::removeByName( const OUString& Name )
-    throw(NoSuchElementException, WrappedTargetException, RuntimeException)
+    throw(NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     NameContainerNameMap::iterator aIt = mHashMap.find( Name );
     if( aIt == mHashMap.end() )
@@ -174,12 +174,12 @@ void NameContainer_Impl::removeByName( const OUString& Name )
 }
 
 // Methods XContainer
-void NameContainer_Impl::addContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& l ) throw(::com::sun::star::uno::RuntimeException)
+void NameContainer_Impl::addContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& l ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     maContainerListeners.addInterface( l );
 }
 
-void NameContainer_Impl::removeContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& l ) throw(::com::sun::star::uno::RuntimeException)
+void NameContainer_Impl::removeContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& l ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     maContainerListeners.removeInterface( l );
 }

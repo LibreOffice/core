@@ -66,7 +66,7 @@ namespace accessibility
             <p>Usually, you derive your class from both ListBoxAccessibleBase and XComponent,
             and call XComponent::dispose here.</p>
         */
-        virtual void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException ) = 0;
+        virtual void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) = 0;
 
         /// to be called in the dispose method of your derived class
         void disposing();

@@ -67,7 +67,7 @@ FrameControl::~FrameControl()
 //  XInterface
 
 
-Any SAL_CALL FrameControl::queryInterface( const Type& rType ) throw( RuntimeException )
+Any SAL_CALL FrameControl::queryInterface( const Type& rType ) throw( RuntimeException, std::exception )
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
@@ -118,7 +118,7 @@ void SAL_CALL FrameControl::release() throw()
 //  XTypeProvider
 
 
-Sequence< Type > SAL_CALL FrameControl::getTypes() throw( RuntimeException )
+Sequence< Type > SAL_CALL FrameControl::getTypes() throw( RuntimeException, std::exception )
 {
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
@@ -151,7 +151,7 @@ Sequence< Type > SAL_CALL FrameControl::getTypes() throw( RuntimeException )
 //  XAggregation
 
 
-Any SAL_CALL FrameControl::queryAggregation( const Type& aType ) throw( RuntimeException )
+Any SAL_CALL FrameControl::queryAggregation( const Type& aType ) throw( RuntimeException, std::exception )
 {
     // Ask for my own supported interfaces ...
     // Attention: XTypeProvider and XInterface are supported by OComponentHelper!
@@ -180,7 +180,7 @@ Any SAL_CALL FrameControl::queryAggregation( const Type& aType ) throw( RuntimeE
 
 
 void SAL_CALL FrameControl::createPeer( const   Reference< XToolkit >&      xToolkit    ,
-                                        const   Reference< XWindowPeer >&   xParentPeer ) throw( RuntimeException )
+                                        const   Reference< XWindowPeer >&   xParentPeer ) throw( RuntimeException, std::exception )
 {
     BaseControl::createPeer( xToolkit, xParentPeer );
     if ( impl_getPeerWindow().is() )
@@ -196,7 +196,7 @@ void SAL_CALL FrameControl::createPeer( const   Reference< XToolkit >&      xToo
 //  XControl
 
 
-sal_Bool SAL_CALL FrameControl::setModel( const Reference< XControlModel >& /*xModel*/ ) throw( RuntimeException )
+sal_Bool SAL_CALL FrameControl::setModel( const Reference< XControlModel >& /*xModel*/ ) throw( RuntimeException, std::exception )
 {
     // We have no model.
     return sal_False ;
@@ -206,7 +206,7 @@ sal_Bool SAL_CALL FrameControl::setModel( const Reference< XControlModel >& /*xM
 //  XControl
 
 
-Reference< XControlModel > SAL_CALL FrameControl::getModel() throw( RuntimeException )
+Reference< XControlModel > SAL_CALL FrameControl::getModel() throw( RuntimeException, std::exception )
 {
     // We have no model.
     return Reference< XControlModel >();
@@ -216,7 +216,7 @@ Reference< XControlModel > SAL_CALL FrameControl::getModel() throw( RuntimeExcep
 //  XControl
 
 
-void SAL_CALL FrameControl::dispose() throw( RuntimeException )
+void SAL_CALL FrameControl::dispose() throw( RuntimeException, std::exception )
 {
     impl_deleteFrame();
     BaseControl::dispose();
@@ -226,7 +226,7 @@ void SAL_CALL FrameControl::dispose() throw( RuntimeException )
 //  XView
 
 
-sal_Bool SAL_CALL FrameControl::setGraphics( const Reference< XGraphics >& /*xDevice*/ ) throw( RuntimeException )
+sal_Bool SAL_CALL FrameControl::setGraphics( const Reference< XGraphics >& /*xDevice*/ ) throw( RuntimeException, std::exception )
 {
     // it is not possible to print this control
     return sal_False ;
@@ -236,7 +236,7 @@ sal_Bool SAL_CALL FrameControl::setGraphics( const Reference< XGraphics >& /*xDe
 //  XView
 
 
-Reference< XGraphics > SAL_CALL FrameControl::getGraphics() throw( RuntimeException )
+Reference< XGraphics > SAL_CALL FrameControl::getGraphics() throw( RuntimeException, std::exception )
 {
     // when its not posible to set graphics ! then its possible to return null
     return Reference< XGraphics >();
@@ -246,7 +246,7 @@ Reference< XGraphics > SAL_CALL FrameControl::getGraphics() throw( RuntimeExcept
 //  XConnectionPointContainer
 
 
-Sequence< Type > SAL_CALL FrameControl::getConnectionPointTypes() throw( RuntimeException )
+Sequence< Type > SAL_CALL FrameControl::getConnectionPointTypes() throw( RuntimeException, std::exception )
 {
     // Forwarded to helper class
     return m_aConnectionPointContainer.getConnectionPointTypes();
@@ -256,7 +256,7 @@ Sequence< Type > SAL_CALL FrameControl::getConnectionPointTypes() throw( Runtime
 //  XConnectionPointContainer
 
 
-Reference< XConnectionPoint > SAL_CALL FrameControl::queryConnectionPoint( const Type& aType ) throw( RuntimeException )
+Reference< XConnectionPoint > SAL_CALL FrameControl::queryConnectionPoint( const Type& aType ) throw( RuntimeException, std::exception )
 {
     // Forwarded to helper class
     return m_aConnectionPointContainer.queryConnectionPoint( aType );
@@ -267,7 +267,7 @@ Reference< XConnectionPoint > SAL_CALL FrameControl::queryConnectionPoint( const
 
 
 void SAL_CALL FrameControl::advise( const   Type&                       aType       ,
-                                    const   Reference< XInterface >&    xListener   ) throw( RuntimeException )
+                                    const   Reference< XInterface >&    xListener   ) throw( RuntimeException, std::exception )
 {
     // Forwarded to helper class
     m_aConnectionPointContainer.advise( aType, xListener );
@@ -278,7 +278,7 @@ void SAL_CALL FrameControl::advise( const   Type&                       aType   
 
 
 void SAL_CALL FrameControl::unadvise(   const   Type&                       aType       ,
-                                        const   Reference< XInterface >&    xListener   ) throw( RuntimeException )
+                                        const   Reference< XInterface >&    xListener   ) throw( RuntimeException, std::exception )
 {
     // Forwarded to helper class
     m_aConnectionPointContainer.unadvise( aType, xListener );
@@ -342,7 +342,7 @@ sal_Bool FrameControl::convertFastPropertyValue(        Any&        rConvertedVa
 
 void FrameControl::setFastPropertyValue_NoBroadcast(            sal_Int32   nHandle ,
                                                         const   Any&        rValue  )
-                                                        throw ( ::com::sun::star::uno::Exception )
+                                                        throw ( ::com::sun::star::uno::Exception, std::exception )
 {
     // this method only set the value
     MutexGuard  aGuard (m_aMutex) ;
@@ -413,7 +413,7 @@ IPropertyArrayHelper& FrameControl::getInfoHelper()
 //  OPropertySetHelper
 
 
-Reference< XPropertySetInfo > SAL_CALL FrameControl::getPropertySetInfo() throw( RuntimeException )
+Reference< XPropertySetInfo > SAL_CALL FrameControl::getPropertySetInfo() throw( RuntimeException, std::exception )
 {
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!

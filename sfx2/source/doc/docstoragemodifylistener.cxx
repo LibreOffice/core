@@ -59,7 +59,7 @@ namespace sfx2
     }
 
 
-    void SAL_CALL DocumentStorageModifyListener::modified( const EventObject& /*aEvent*/ ) throw (RuntimeException)
+    void SAL_CALL DocumentStorageModifyListener::modified( const EventObject& /*aEvent*/ ) throw (RuntimeException, std::exception)
     {
         ::osl::Guard< comphelper::SolarMutex > aGuard( m_rMutex );
         // storageIsModified must not contain any locking!
@@ -68,7 +68,7 @@ namespace sfx2
     }
 
 
-    void SAL_CALL DocumentStorageModifyListener::disposing( const EventObject& /*Source*/ ) throw (RuntimeException)
+    void SAL_CALL DocumentStorageModifyListener::disposing( const EventObject& /*Source*/ ) throw (RuntimeException, std::exception)
     {
         // not interested in. In particular, we do *not* dispose ourself when a storage we're
         // listening at is disposed. The reason here is that this listener instance is *reused*

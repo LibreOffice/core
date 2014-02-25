@@ -105,16 +105,16 @@ class PackageManagerImpl : private ::dp_misc::MutexHolder, public t_pm_helper
 
         // XCommandEnvironment
         virtual css::uno::Reference<css::task::XInteractionHandler> SAL_CALL
-        getInteractionHandler() throw (css::uno::RuntimeException);
+        getInteractionHandler() throw (css::uno::RuntimeException, std::exception);
         virtual css::uno::Reference<css::ucb::XProgressHandler> SAL_CALL
-        getProgressHandler() throw (css::uno::RuntimeException);
+        getProgressHandler() throw (css::uno::RuntimeException, std::exception);
 
         // XProgressHandler
         virtual void SAL_CALL push( css::uno::Any const & Status )
-            throw (css::uno::RuntimeException);
+            throw (css::uno::RuntimeException, std::exception);
         virtual void SAL_CALL update( css::uno::Any const & Status )
-            throw (css::uno::RuntimeException);
-        virtual void SAL_CALL pop() throw (css::uno::RuntimeException);
+            throw (css::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL pop() throw (css::uno::RuntimeException, std::exception);
     };
 
 protected:
@@ -137,31 +137,31 @@ public:
         const & xComponentContext, OUString const & context );
 
     // XComponent
-    virtual void SAL_CALL dispose() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL addEventListener(
         css::uno::Reference<css::lang::XEventListener> const & xListener )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL removeEventListener(
         css::uno::Reference<css::lang::XEventListener> const & xListener )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     // XModifyBroadcaster
     virtual void SAL_CALL addModifyListener(
         css::uno::Reference<css::util::XModifyListener> const & xListener )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL removeModifyListener(
         css::uno::Reference<css::util::XModifyListener> const & xListener )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     // XPackageManager
     virtual OUString SAL_CALL getContext()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual css::uno::Sequence<
         css::uno::Reference<css::deployment::XPackageTypeInfo> > SAL_CALL
-    getSupportedPackageTypes() throw (css::uno::RuntimeException);
+    getSupportedPackageTypes() throw (css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Reference<css::task::XAbortChannel> SAL_CALL
-    createAbortChannel() throw (css::uno::RuntimeException);
+    createAbortChannel() throw (css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Reference<css::deployment::XPackage> SAL_CALL addPackage(
         OUString const & url,
@@ -173,7 +173,7 @@ public:
                css::ucb::CommandFailedException,
                css::ucb::CommandAbortedException,
                css::lang::IllegalArgumentException,
-               css::uno::RuntimeException);
+               css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Reference<css::deployment::XPackage> SAL_CALL importExtension(
         css::uno::Reference<css::deployment::XPackage> const & extension,
@@ -183,7 +183,7 @@ public:
             css::ucb::CommandFailedException,
             css::ucb::CommandAbortedException,
             css::lang::IllegalArgumentException,
-            css::uno::RuntimeException);
+            css::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL removePackage(
         OUString const & id, OUString const & fileName,
@@ -193,7 +193,7 @@ public:
                css::ucb::CommandFailedException,
                css::ucb::CommandAbortedException,
                css::lang::IllegalArgumentException,
-               css::uno::RuntimeException);
+               css::uno::RuntimeException, std::exception);
 
     OUString getDeployPath( ActivePackages::Data const & data );
     css::uno::Reference<css::deployment::XPackage> SAL_CALL getDeployedPackage_(
@@ -209,7 +209,7 @@ public:
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         throw (css::deployment::DeploymentException,
                css::ucb::CommandFailedException,
-               css::lang::IllegalArgumentException, css::uno::RuntimeException);
+               css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception);
 
     css::uno::Sequence< css::uno::Reference<css::deployment::XPackage> >
     getDeployedPackages_(
@@ -222,7 +222,7 @@ public:
                css::ucb::CommandFailedException,
                css::ucb::CommandAbortedException,
                css::lang::IllegalArgumentException,
-               css::uno::RuntimeException);
+               css::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL reinstallDeployedPackages(
         sal_Bool force,
@@ -232,10 +232,10 @@ public:
                css::ucb::CommandFailedException,
                css::ucb::CommandAbortedException,
                css::lang::IllegalArgumentException,
-               css::uno::RuntimeException);
+               css::uno::RuntimeException, std::exception);
 
     virtual ::sal_Bool SAL_CALL isReadOnly(  )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual ::sal_Bool SAL_CALL synchronize(
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
@@ -243,13 +243,13 @@ public:
         throw (css::deployment::DeploymentException,
                css::ucb::CommandFailedException,
                css::ucb::CommandAbortedException,
-               css::uno::RuntimeException);
+               css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > SAL_CALL
     getExtensionsWithUnacceptedLicenses(
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv)
         throw (css::deployment::DeploymentException,
-               css::uno::RuntimeException);
+               css::uno::RuntimeException, std::exception);
 
     virtual sal_Int32 SAL_CALL checkPrerequisites(
         css::uno::Reference<css::deployment::XPackage> const & extension,
@@ -259,7 +259,7 @@ public:
                css::ucb::CommandFailedException,
                css::ucb::CommandAbortedException,
                css::lang::IllegalArgumentException,
-               css::uno::RuntimeException);
+               css::uno::RuntimeException, std::exception);
         };
 
 //______________________________________________________________________________

@@ -35,7 +35,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 OUString SAL_CALL
 ignoreSize_ja_JP::folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
-  throw(RuntimeException)
+  throw(RuntimeException, std::exception)
 {
     smallToLarge_ja_JP t1;
     return t1.transliterate(inStr, startPos, nCount, offset);
@@ -44,7 +44,7 @@ ignoreSize_ja_JP::folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 
 
 Sequence< OUString > SAL_CALL
 ignoreSize_ja_JP::transliterateRange( const OUString& str1, const OUString& str2 )
-  throw(RuntimeException)
+  throw(RuntimeException, std::exception)
 {
     smallToLarge_ja_JP t1;
     largeToSmall_ja_JP t2;
@@ -53,7 +53,7 @@ ignoreSize_ja_JP::transliterateRange( const OUString& str1, const OUString& str2
 }
 
 sal_Unicode SAL_CALL
-ignoreSize_ja_JP::transliterateChar2Char( sal_Unicode inChar) throw(RuntimeException, MultipleCharsOutputException)
+ignoreSize_ja_JP::transliterateChar2Char( sal_Unicode inChar) throw(RuntimeException, MultipleCharsOutputException, std::exception)
 {
     smallToLarge_ja_JP t1;
     return t1.transliterateChar2Char(inChar);

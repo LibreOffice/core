@@ -59,19 +59,19 @@ GraphicProvider::~GraphicProvider()
 }
 
 OUString SAL_CALL GraphicProvider::getImplementationName()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.comp.graphic.GraphicProvider" );
 }
 
 sal_Bool SAL_CALL GraphicProvider::supportsService( const OUString& ServiceName )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService( this, ServiceName );
 }
 
 uno::Sequence< OUString > SAL_CALL GraphicProvider::getSupportedServiceNames()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence< OUString > aSeq( 1 );
     aSeq.getArray()[ 0 ] = "com.sun.star.graphic.GraphicProvider";
@@ -79,7 +79,7 @@ uno::Sequence< OUString > SAL_CALL GraphicProvider::getSupportedServiceNames()
 }
 
 uno::Sequence< uno::Type > SAL_CALL GraphicProvider::getTypes()
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence< uno::Type >  aTypes( 3 );
     uno::Type*                  pTypes = aTypes.getArray();
@@ -97,7 +97,7 @@ namespace
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL GraphicProvider::getImplementationId()
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     return theGraphicProviderUnoTunnelId::get().getSeq();
 }
@@ -312,7 +312,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadResource( const O
 
 
 uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDescriptor( const uno::Sequence< beans::PropertyValue >& rMediaProperties )
-    throw ( io::IOException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+    throw ( io::IOException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     uno::Reference< beans::XPropertySet > xRet;
 
@@ -385,7 +385,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDesc
 
 
 uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( const uno::Sequence< ::beans::PropertyValue >& rMediaProperties )
-    throw ( io::IOException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+    throw ( io::IOException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     uno::Reference< ::graphic::XGraphic >   xRet;
     OUString                                aPath;
@@ -730,7 +730,7 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
 
 
 void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XGraphic >& rxGraphic, const uno::Sequence< beans::PropertyValue >& rMediaProperties )
-    throw ( io::IOException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+    throw ( io::IOException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 

@@ -74,7 +74,7 @@ private:
 
     virtual void SAL_CALL insertExtensionXcsFile(
         sal_Bool shared, OUString const & fileUri)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL insertExtensionXcuFile(
         sal_Bool shared, OUString const & fileUri)
@@ -89,7 +89,7 @@ private:
         OUString const & fileUri,
         css::uno::Sequence< OUString > const & includedPaths,
         css::uno::Sequence< OUString > const & excludedPaths)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     boost::shared_ptr<osl::Mutex> lock_;
     css::uno::Reference< css::uno::XComponentContext > context_;
@@ -97,7 +97,7 @@ private:
 
 void Service::insertExtensionXcsFile(
     sal_Bool shared, OUString const & fileUri)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard g(*lock_);
     Components::getSingleton(context_).insertExtensionXcsFile(shared, fileUri);
@@ -139,7 +139,7 @@ void Service::insertModificationXcuFile(
     OUString const & fileUri,
     css::uno::Sequence< OUString > const & includedPaths,
     css::uno::Sequence< OUString > const & excludedPaths)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     Broadcaster bc;
     {

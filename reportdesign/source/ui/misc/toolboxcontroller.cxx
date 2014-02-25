@@ -54,7 +54,7 @@ namespace rptui
     using namespace util;
     using namespace ui;
 
-OUString SAL_CALL OToolboxController::getImplementationName() throw( RuntimeException )
+OUString SAL_CALL OToolboxController::getImplementationName() throw( RuntimeException, std::exception )
 {
     return getImplementationName_Static();
 }
@@ -72,12 +72,12 @@ Sequence< OUString> OToolboxController::getSupportedServiceNames_Static(void) th
     return aSupported;
 }
 
-::sal_Bool SAL_CALL OToolboxController::supportsService( const OUString& ServiceName ) throw (uno::RuntimeException)
+::sal_Bool SAL_CALL OToolboxController::supportsService( const OUString& ServiceName ) throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString> SAL_CALL OToolboxController::getSupportedServiceNames() throw(RuntimeException)
+Sequence< OUString> SAL_CALL OToolboxController::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     return getSupportedServiceNames_Static();
 }
@@ -103,7 +103,7 @@ OToolboxController::~OToolboxController()
 }
 
 // XInterface
-Any SAL_CALL OToolboxController::queryInterface( const Type& _rType ) throw (RuntimeException)
+Any SAL_CALL OToolboxController::queryInterface( const Type& _rType ) throw (RuntimeException, std::exception)
 {
     Any aReturn = ToolboxController::queryInterface(_rType);
     if (!aReturn.hasValue())
@@ -121,7 +121,7 @@ void SAL_CALL OToolboxController::release() throw ()
     ToolboxController::release();
 }
 
-void SAL_CALL OToolboxController::initialize( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException)
+void SAL_CALL OToolboxController::initialize( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException, std::exception)
 {
     ToolboxController::initialize(_rArguments);
     SolarMutexGuard aSolarMutexGuard;
@@ -198,7 +198,7 @@ void SAL_CALL OToolboxController::initialize( const Sequence< Any >& _rArguments
     }
 }
 
-void SAL_CALL OToolboxController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException )
+void SAL_CALL OToolboxController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     TCommandState::iterator aFind = m_aStates.find( Event.FeatureURL.Complete );
@@ -267,7 +267,7 @@ void SAL_CALL OToolboxController::statusChanged( const FeatureStateEvent& Event 
     }
 }
 
-Reference< awt::XWindow > SAL_CALL OToolboxController::createPopupWindow() throw (RuntimeException)
+Reference< awt::XWindow > SAL_CALL OToolboxController::createPopupWindow() throw (RuntimeException, std::exception)
 {
     // execute the menu
     SolarMutexGuard aSolarMutexGuard;
@@ -280,12 +280,12 @@ Reference< awt::XWindow > SAL_CALL OToolboxController::createPopupWindow() throw
     return xRet;
 }
 
-::sal_Bool SAL_CALL OToolboxController::opensSubToolbar() throw (uno::RuntimeException)
+::sal_Bool SAL_CALL OToolboxController::opensSubToolbar() throw (uno::RuntimeException, std::exception)
 {
     return m_nSlotId == SID_DRAWTBX_CS_BASIC;
 }
 
-OUString SAL_CALL OToolboxController::getSubToolbarName() throw (uno::RuntimeException)
+OUString SAL_CALL OToolboxController::getSubToolbarName() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -295,7 +295,7 @@ OUString SAL_CALL OToolboxController::getSubToolbarName() throw (uno::RuntimeExc
     return OUString();
 }
 
-void SAL_CALL OToolboxController::functionSelected( const OUString& rCommand ) throw (uno::RuntimeException)
+void SAL_CALL OToolboxController::functionSelected( const OUString& rCommand ) throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -307,7 +307,7 @@ void SAL_CALL OToolboxController::functionSelected( const OUString& rCommand ) t
     }
 }
 
-void SAL_CALL OToolboxController::updateImage(  ) throw (uno::RuntimeException)
+void SAL_CALL OToolboxController::updateImage(  ) throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -318,7 +318,7 @@ void SAL_CALL OToolboxController::updateImage(  ) throw (uno::RuntimeException)
 }
 
 uno::Reference< awt::XWindow > SAL_CALL OToolboxController::createItemWindow( const uno::Reference< awt::XWindow >& _xParent)
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< awt::XWindow > xWindow;
     if ( m_pToolbarController.is() )

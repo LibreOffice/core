@@ -80,7 +80,7 @@ SVGFilter::~SVGFilter()
 
 
 sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescriptor )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     Window*     pFocusWindow = Application::GetFocusWindow();
@@ -244,14 +244,14 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
 
 
 
-void SAL_CALL SVGFilter::cancel( ) throw (RuntimeException)
+void SAL_CALL SVGFilter::cancel( ) throw (RuntimeException, std::exception)
 {
 }
 
 
 
 void SAL_CALL SVGFilter::setSourceDocument( const Reference< XComponent >& xDoc )
-    throw (IllegalArgumentException, RuntimeException)
+    throw (IllegalArgumentException, RuntimeException, std::exception)
 {
     mxSrcDoc = xDoc;
 }
@@ -259,14 +259,14 @@ void SAL_CALL SVGFilter::setSourceDocument( const Reference< XComponent >& xDoc 
 
 
 void SAL_CALL SVGFilter::setTargetDocument( const Reference< XComponent >& xDoc )
-    throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
+    throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     mxDstDoc = xDoc;
 }
 
 
 
-OUString SAL_CALL SVGFilter::detect( Sequence< PropertyValue >& io_rDescriptor ) throw (RuntimeException)
+OUString SAL_CALL SVGFilter::detect( Sequence< PropertyValue >& io_rDescriptor ) throw (RuntimeException, std::exception)
 {
     uno::Reference< io::XInputStream > xInput;
 

@@ -119,7 +119,7 @@ IMPLEMENT_SERVICE_INFO_IMPLNAME(ODocumentContainer, "com.sun.star.comp.dba.ODocu
 IMPLEMENT_SERVICE_INFO_SUPPORTS(ODocumentContainer);
 IMPLEMENT_PROPERTYCONTAINER_DEFAULTS(ODocumentContainer)
 
-Sequence< OUString > SAL_CALL ODocumentContainer::getSupportedServiceNames(  ) throw(RuntimeException)
+Sequence< OUString > SAL_CALL ODocumentContainer::getSupportedServiceNames(  ) throw(RuntimeException, std::exception)
 {
     Sequence< OUString > aSupported(1);
     aSupported[0] = m_bFormsContainer ? OUString(SERVICE_NAME_FORM_COLLECTION) : OUString(SERVICE_NAME_REPORT_COLLECTION);
@@ -141,7 +141,7 @@ Reference< XContent > ODocumentContainer::createObject( const OUString& _rName)
     return new ODocumentDefinition( *this, m_aContext, aFind->second, m_bFormsContainer );
 }
 
-Reference< XInterface > SAL_CALL ODocumentContainer::createInstance( const OUString& aServiceSpecifier ) throw (Exception, RuntimeException)
+Reference< XInterface > SAL_CALL ODocumentContainer::createInstance( const OUString& aServiceSpecifier ) throw (Exception, RuntimeException, std::exception)
 {
     return createInstanceWithArguments( aServiceSpecifier, Sequence< Any >() );
 }
@@ -159,7 +159,7 @@ namespace
     }
 }
 
-Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments( const OUString& ServiceSpecifier, const Sequence< Any >& _aArguments ) throw (Exception, RuntimeException)
+Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments( const OUString& ServiceSpecifier, const Sequence< Any >& _aArguments ) throw (Exception, RuntimeException, std::exception)
 {
     Reference< XInterface > xRet;
     Reference< XContent > xContent;
@@ -382,7 +382,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
     return xRet;
 }
 
-Sequence< OUString > SAL_CALL ODocumentContainer::getAvailableServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > SAL_CALL ODocumentContainer::getAvailableServiceNames(  ) throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aSe(3);
     aSe[0] = SERVICE_SDB_DOCUMENTDEFINITION;
@@ -391,7 +391,7 @@ Sequence< OUString > SAL_CALL ODocumentContainer::getAvailableServiceNames(  ) t
     return aSe;
 }
 
-Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 CommandId, const Reference< XCommandEnvironment >& Environment ) throw (Exception, CommandAbortedException, RuntimeException)
+Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 CommandId, const Reference< XCommandEnvironment >& Environment ) throw (Exception, CommandAbortedException, RuntimeException, std::exception)
 {
     Any aRet;
     if ( aCommand.Name.equalsAscii( "open" ) )
@@ -505,7 +505,7 @@ namespace
 Reference< XComponent > SAL_CALL ODocumentContainer::loadComponentFromURL( const OUString& _sURL
                                                                        , const OUString& /*TargetFrameName*/
                                                                        , sal_Int32 /*SearchFlags*/
-                                                                       , const Sequence< PropertyValue >& Arguments ) throw (IOException, IllegalArgumentException, RuntimeException)
+                                                                       , const Sequence< PropertyValue >& Arguments ) throw (IOException, IllegalArgumentException, RuntimeException, std::exception)
 {
     ::SolarMutexGuard aSolarGuard;
 
@@ -551,7 +551,7 @@ Reference< XComponent > SAL_CALL ODocumentContainer::loadComponentFromURL( const
     return xComp;
 }
 
-Any SAL_CALL ODocumentContainer::getByHierarchicalName( const OUString& _sName ) throw (NoSuchElementException, RuntimeException)
+Any SAL_CALL ODocumentContainer::getByHierarchicalName( const OUString& _sName ) throw (NoSuchElementException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     Any aContent;
@@ -562,7 +562,7 @@ Any SAL_CALL ODocumentContainer::getByHierarchicalName( const OUString& _sName )
     throw NoSuchElementException(_sName,*this);
 }
 
-sal_Bool SAL_CALL ODocumentContainer::hasByHierarchicalName( const OUString& _sName ) throw (RuntimeException)
+sal_Bool SAL_CALL ODocumentContainer::hasByHierarchicalName( const OUString& _sName ) throw (RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     Any aContent;
@@ -572,7 +572,7 @@ sal_Bool SAL_CALL ODocumentContainer::hasByHierarchicalName( const OUString& _sN
 }
 
 // XHierarchicalNameContainer
-void SAL_CALL ODocumentContainer::insertByHierarchicalName( const OUString& _sName, const Any& _aElement ) throw (IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
+void SAL_CALL ODocumentContainer::insertByHierarchicalName( const OUString& _sName, const Any& _aElement ) throw (IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException, std::exception)
 {
     Reference< XContent > xContent(_aElement,UNO_QUERY);
     if ( !xContent.is() )
@@ -597,7 +597,7 @@ void SAL_CALL ODocumentContainer::insertByHierarchicalName( const OUString& _sNa
     xNameContainer->insertByName(sName,_aElement);
 }
 
-void SAL_CALL ODocumentContainer::removeByHierarchicalName( const OUString& _sName ) throw (NoSuchElementException, WrappedTargetException, RuntimeException)
+void SAL_CALL ODocumentContainer::removeByHierarchicalName( const OUString& _sName ) throw (NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     if ( _sName.isEmpty() )
         throw NoSuchElementException(_sName,*this);
@@ -613,7 +613,7 @@ void SAL_CALL ODocumentContainer::removeByHierarchicalName( const OUString& _sNa
 }
 
 // XHierarchicalNameReplace
-void SAL_CALL ODocumentContainer::replaceByHierarchicalName( const OUString& _sName, const Any& _aElement ) throw (IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
+void SAL_CALL ODocumentContainer::replaceByHierarchicalName( const OUString& _sName, const Any& _aElement ) throw (IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     Reference< XContent > xContent(_aElement,UNO_QUERY);
     if ( !xContent.is() )
@@ -629,13 +629,13 @@ void SAL_CALL ODocumentContainer::replaceByHierarchicalName( const OUString& _sN
     xNameContainer->replaceByName(sName,_aElement);
 }
 
-OUString SAL_CALL ODocumentContainer::getHierarchicalName() throw (RuntimeException)
+OUString SAL_CALL ODocumentContainer::getHierarchicalName() throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     return impl_getHierarchicalName( false );
 }
 
-OUString SAL_CALL ODocumentContainer::composeHierarchicalName( const OUString& i_rRelativeName ) throw (IllegalArgumentException, NoSupportException, RuntimeException)
+OUString SAL_CALL ODocumentContainer::composeHierarchicalName( const OUString& i_rRelativeName ) throw (IllegalArgumentException, NoSupportException, RuntimeException, std::exception)
 {
     OUStringBuffer aBuffer;
     aBuffer.append( getHierarchicalName() );
@@ -664,7 +664,7 @@ void ODocumentContainer::getPropertyDefaultByHandle( sal_Int32 /*_nHandle*/, Any
     _rDefault.clear();
 }
 
-void SAL_CALL ODocumentContainer::commit(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+void SAL_CALL ODocumentContainer::commit(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     Documents::iterator aIter = m_aDocumentMap.begin();
@@ -680,7 +680,7 @@ void SAL_CALL ODocumentContainer::commit(  ) throw (::com::sun::star::io::IOExce
         xTrans->commit();
 }
 
-void SAL_CALL ODocumentContainer::revert(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+void SAL_CALL ODocumentContainer::revert(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     Documents::iterator aIter = m_aDocumentMap.begin();
@@ -703,7 +703,7 @@ Reference< XStorage> ODocumentContainer::getContainerStorage() const
         :   Reference< XStorage>();
 }
 
-void SAL_CALL ODocumentContainer::removeByName( const OUString& _rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
+void SAL_CALL ODocumentContainer::removeByName( const OUString& _rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     ResettableMutexGuard aGuard(m_aMutex);
 
@@ -729,7 +729,7 @@ void SAL_CALL ODocumentContainer::removeByName( const OUString& _rName ) throw(N
     notifyByName( aGuard, _rName, NULL, NULL, E_REMOVED, ContainerListemers );
 }
 
-void SAL_CALL ODocumentContainer::rename( const OUString& newName ) throw (SQLException, ElementExistException, RuntimeException)
+void SAL_CALL ODocumentContainer::rename( const OUString& newName ) throw (SQLException, ElementExistException, RuntimeException, std::exception)
 {
     try
     {

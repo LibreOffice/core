@@ -94,7 +94,7 @@ void SlideSorterModule::SaveResourceState (void)
 
 void SAL_CALL SlideSorterModule::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     if (rEvent.Type.equals(FrameworkHelper::msResourceActivationEvent))
     {

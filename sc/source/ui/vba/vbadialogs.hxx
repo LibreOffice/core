@@ -35,7 +35,7 @@ public:
     virtual ~ScVbaDialogs() {}
 
     // XCollection
-    virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index ) throw (css::uno::RuntimeException, std::exception);
 
     // XDialogs
     virtual void SAL_CALL Dummy() throw (css::uno::RuntimeException);

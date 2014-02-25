@@ -102,7 +102,7 @@ DispatchProvider::~DispatchProvider()
 */
 css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDispatch( const css::util::URL&  aURL             ,
                                                                                        const OUString& sTargetFrameName ,
-                                                                                             sal_Int32        nSearchFlags     ) throw( css::uno::RuntimeException )
+                                                                                             sal_Int32        nSearchFlags     ) throw( css::uno::RuntimeException, std::exception )
 {
     css::uno::Reference< css::frame::XDispatch > xDispatcher;
 
@@ -137,7 +137,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDis
 
     @threadsafe yes
 */
-css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL DispatchProvider::queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptions ) throw( css::uno::RuntimeException )
+css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL DispatchProvider::queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptions ) throw( css::uno::RuntimeException, std::exception )
 {
     // Create return list - which must have same size then the given descriptor
     // It's not allowed to pack it!

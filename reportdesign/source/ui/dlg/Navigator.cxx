@@ -132,10 +132,10 @@ class NavigatorTree :   public ::cppu::BaseMutex
         virtual void _propertyChanged(const beans::PropertyChangeEvent& _rEvent) throw( uno::RuntimeException);
 
         // OContainerListener
-        virtual void _elementInserted( const container::ContainerEvent& _rEvent ) throw(uno::RuntimeException);
+        virtual void _elementInserted( const container::ContainerEvent& _rEvent ) throw(uno::RuntimeException, std::exception);
         virtual void _elementRemoved( const container::ContainerEvent& _Event )
             throw (uno::RuntimeException, std::exception);
-        virtual void _elementReplaced( const container::ContainerEvent& _rEvent ) throw(uno::RuntimeException);
+        virtual void _elementReplaced( const container::ContainerEvent& _rEvent ) throw(uno::RuntimeException, std::exception);
         virtual void _disposing(const lang::EventObject& _rSource)
             throw (uno::RuntimeException, std::exception);
     };
@@ -840,7 +840,7 @@ void NavigatorTree::UserData::_propertyChanged(const beans::PropertyChangeEvent&
     {}
 }
 
-void NavigatorTree::UserData::_elementInserted( const container::ContainerEvent& _rEvent ) throw(uno::RuntimeException)
+void NavigatorTree::UserData::_elementInserted( const container::ContainerEvent& _rEvent ) throw(uno::RuntimeException, std::exception)
 {
     m_pTree->_elementInserted( _rEvent );
 }
@@ -851,7 +851,7 @@ void NavigatorTree::UserData::_elementRemoved( const container::ContainerEvent& 
     m_pTree->_elementRemoved( _rEvent );
 }
 
-void NavigatorTree::UserData::_elementReplaced( const container::ContainerEvent& _rEvent ) throw(uno::RuntimeException)
+void NavigatorTree::UserData::_elementReplaced( const container::ContainerEvent& _rEvent ) throw(uno::RuntimeException, std::exception)
 {
     m_pTree->_elementReplaced( _rEvent );
 }

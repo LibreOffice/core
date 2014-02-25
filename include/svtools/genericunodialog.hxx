@@ -97,27 +97,27 @@ namespace svt
     public:
         // UNO
         DECLARE_UNO3_DEFAULTS(OGenericUnoDialog, OGenericUnoDialogBase);
-        virtual com::sun::star::uno::Any SAL_CALL queryInterface(const com::sun::star::uno::Type& _rType) throw (com::sun::star::uno::RuntimeException);
+        virtual com::sun::star::uno::Any SAL_CALL queryInterface(const com::sun::star::uno::Type& _rType) throw (com::sun::star::uno::RuntimeException, std::exception);
 
         // XTypeProvider
-        virtual com::sun::star::uno::Sequence<com::sun::star::uno::Type> SAL_CALL getTypes(  ) throw(com::sun::star::uno::RuntimeException);
-        virtual com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(com::sun::star::uno::RuntimeException) = 0;
+        virtual com::sun::star::uno::Sequence<com::sun::star::uno::Type> SAL_CALL getTypes(  ) throw(com::sun::star::uno::RuntimeException, std::exception);
+        virtual com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(com::sun::star::uno::RuntimeException, std::exception) = 0;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(com::sun::star::uno::RuntimeException) = 0;
-        virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(com::sun::star::uno::RuntimeException);
-        virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(com::sun::star::uno::RuntimeException) = 0;
+        virtual OUString SAL_CALL getImplementationName() throw(com::sun::star::uno::RuntimeException, std::exception) = 0;
+        virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(com::sun::star::uno::RuntimeException, std::exception);
+        virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(com::sun::star::uno::RuntimeException, std::exception) = 0;
 
         // OPropertySetHelper
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const com::sun::star::uno::Any& rValue ) throw(com::sun::star::uno::Exception);
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const com::sun::star::uno::Any& rValue ) throw(com::sun::star::uno::Exception, std::exception);
         virtual sal_Bool SAL_CALL convertFastPropertyValue( com::sun::star::uno::Any& rConvertedValue, com::sun::star::uno::Any& rOldValue, sal_Int32 nHandle, const com::sun::star::uno::Any& rValue) throw(com::sun::star::lang::IllegalArgumentException);
 
         // XExecutableDialog
-        virtual void SAL_CALL setTitle( const OUString& aTitle ) throw(::com::sun::star::uno::RuntimeException);
-        virtual sal_Int16 SAL_CALL execute(  ) throw(::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setTitle( const OUString& aTitle ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+        virtual sal_Int16 SAL_CALL execute(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
 
         // XInitialization
-        virtual void SAL_CALL initialize( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArguments ) throw(com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL initialize( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArguments ) throw(com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception);
 
     protected:
         /** create the concret dialog instance. note that m_aMutex is not locked when this method get's called,

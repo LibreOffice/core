@@ -44,9 +44,9 @@ public:
     SwVbaColumns( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::text::XTextTable >& xTextTable, const css::uno::Reference< css::table::XTableColumns >& xTableColumns, sal_Int32 nStartCol, sal_Int32 nEndCol ) throw ( css::uno::RuntimeException );
     virtual ~SwVbaColumns() {}
 
-    virtual sal_Int32 SAL_CALL getWidth(  ) throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setWidth( sal_Int32 _width ) throw (css::uno::RuntimeException);
-    virtual void SAL_CALL Select(  ) throw (css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getWidth(  ) throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setWidth( sal_Int32 _width ) throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL Select(  ) throw (css::uno::RuntimeException, std::exception);
 
     //XCollection
     virtual ::sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException);

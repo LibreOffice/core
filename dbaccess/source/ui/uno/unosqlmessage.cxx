@@ -52,7 +52,7 @@ OSQLMessageDialog::OSQLMessageDialog(const Reference< XComponentContext >& _rxOR
         &m_sHelpURL, ::getCppuType( &m_sHelpURL ) );
 }
 
-Sequence<sal_Int8> SAL_CALL OSQLMessageDialog::getImplementationId(  ) throw(RuntimeException)
+Sequence<sal_Int8> SAL_CALL OSQLMessageDialog::getImplementationId(  ) throw(RuntimeException, std::exception)
 {
     static ::cppu::OImplementationId aId;
     return aId.getImplementationId();
@@ -63,7 +63,7 @@ Reference< XInterface > SAL_CALL OSQLMessageDialog::Create(const Reference< XMul
     return *(new OSQLMessageDialog( comphelper::getComponentContext(_rxFactory) ));
 }
 
-OUString SAL_CALL OSQLMessageDialog::getImplementationName() throw(RuntimeException)
+OUString SAL_CALL OSQLMessageDialog::getImplementationName() throw(RuntimeException, std::exception)
 {
     return getImplementationName_Static();
 }
@@ -73,7 +73,7 @@ OUString OSQLMessageDialog::getImplementationName_Static() throw(RuntimeExceptio
     return OUString("org.openoffice.comp.dbu.OSQLMessageDialog");
 }
 
-::comphelper::StringSequence SAL_CALL OSQLMessageDialog::getSupportedServiceNames() throw(RuntimeException)
+::comphelper::StringSequence SAL_CALL OSQLMessageDialog::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     return getSupportedServiceNames_Static();
 }
@@ -85,7 +85,7 @@ OUString OSQLMessageDialog::getImplementationName_Static() throw(RuntimeExceptio
     return aSupported;
 }
 
-void OSQLMessageDialog::initialize(Sequence<Any> const & args) throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException)
+void OSQLMessageDialog::initialize(Sequence<Any> const & args) throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception)
 {
   OUString title;
   Reference< com::sun::star::awt::XWindow > parentWindow;
@@ -123,7 +123,7 @@ sal_Bool SAL_CALL OSQLMessageDialog::convertFastPropertyValue( Any& _rConvertedV
     }
 }
 
-Reference<XPropertySetInfo>  SAL_CALL OSQLMessageDialog::getPropertySetInfo() throw(RuntimeException)
+Reference<XPropertySetInfo>  SAL_CALL OSQLMessageDialog::getPropertySetInfo() throw(RuntimeException, std::exception)
 {
     Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;

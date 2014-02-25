@@ -60,7 +60,7 @@ IndexColumn::IndexColumn( const ::rtl::Reference< RefCountedMutex > & refMutex,
         * getStatics().refl.indexColumn.pProps )
 {}
 
-Reference< XPropertySet > IndexColumn::createDataDescriptor(  ) throw (RuntimeException)
+Reference< XPropertySet > IndexColumn::createDataDescriptor(  ) throw (RuntimeException, std::exception)
 {
     IndexColumnDescriptor * pIndexColumn = new IndexColumnDescriptor(
         m_refMutex, m_conn, m_pSettings  );
@@ -83,7 +83,7 @@ IndexColumnDescriptor::IndexColumnDescriptor(
         * getStatics().refl.indexColumnDescriptor.pProps )
 {}
 
-Reference< XPropertySet > IndexColumnDescriptor::createDataDescriptor(  ) throw (RuntimeException)
+Reference< XPropertySet > IndexColumnDescriptor::createDataDescriptor(  ) throw (RuntimeException, std::exception)
 {
     IndexColumnDescriptor * pIndexColumn = new IndexColumnDescriptor(
         m_refMutex, m_conn, m_pSettings  );

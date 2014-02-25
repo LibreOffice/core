@@ -6830,9 +6830,9 @@ class PDFStreamIf :
     PDFStreamIf( PDFWriterImpl* pWriter ) : m_pWriter( pWriter ), m_bWrite( true ) {}
     virtual ~PDFStreamIf();
 
-    virtual void SAL_CALL writeBytes( const com::sun::star::uno::Sequence< sal_Int8 >& aData ) throw();
-    virtual void SAL_CALL flush() throw();
-    virtual void SAL_CALL closeOutput() throw();
+    virtual void SAL_CALL writeBytes( const com::sun::star::uno::Sequence< sal_Int8 >& aData ) throw(std::exception);
+    virtual void SAL_CALL flush() throw(std::exception);
+    virtual void SAL_CALL closeOutput() throw(std::exception);
 };
 }
 
@@ -6840,7 +6840,7 @@ PDFStreamIf::~PDFStreamIf()
 {
 }
 
-void SAL_CALL  PDFStreamIf::writeBytes( const com::sun::star::uno::Sequence< sal_Int8 >& aData ) throw()
+void SAL_CALL  PDFStreamIf::writeBytes( const com::sun::star::uno::Sequence< sal_Int8 >& aData ) throw(std::exception)
 {
     if( m_bWrite && aData.getLength() )
     {
@@ -6849,11 +6849,11 @@ void SAL_CALL  PDFStreamIf::writeBytes( const com::sun::star::uno::Sequence< sal
     }
 }
 
-void SAL_CALL PDFStreamIf::flush() throw()
+void SAL_CALL PDFStreamIf::flush() throw(std::exception)
 {
 }
 
-void SAL_CALL PDFStreamIf::closeOutput() throw()
+void SAL_CALL PDFStreamIf::closeOutput() throw(std::exception)
 {
     m_bWrite = false;
 }

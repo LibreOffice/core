@@ -537,12 +537,12 @@ public:
     XoNavigationOrderAccess( std::vector< Reference< XShape > >& rShapes );
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount(  ) throw (RuntimeException);
-    virtual Any SAL_CALL getByIndex( sal_Int32 Index ) throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException);
+    virtual sal_Int32 SAL_CALL getCount(  ) throw (RuntimeException, std::exception);
+    virtual Any SAL_CALL getByIndex( sal_Int32 Index ) throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception);
 
     // XElementAccess
-    virtual Type SAL_CALL getElementType(  ) throw (RuntimeException);
-    virtual sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException);
+    virtual Type SAL_CALL getElementType(  ) throw (RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException, std::exception);
 
 private:
     std::vector< Reference< XShape > > maShapes;
@@ -554,12 +554,12 @@ XoNavigationOrderAccess::XoNavigationOrderAccess( std::vector< Reference< XShape
 }
 
 // XIndexAccess
-sal_Int32 SAL_CALL XoNavigationOrderAccess::getCount(  ) throw (RuntimeException)
+sal_Int32 SAL_CALL XoNavigationOrderAccess::getCount(  ) throw (RuntimeException, std::exception)
 {
     return static_cast< sal_Int32 >( maShapes.size() );
 }
 
-Any SAL_CALL XoNavigationOrderAccess::getByIndex( sal_Int32 Index ) throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
+Any SAL_CALL XoNavigationOrderAccess::getByIndex( sal_Int32 Index ) throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception)
 {
     if( (Index < 0) || (Index > getCount()) )
         throw IndexOutOfBoundsException();
@@ -568,12 +568,12 @@ Any SAL_CALL XoNavigationOrderAccess::getByIndex( sal_Int32 Index ) throw (Index
 }
 
 // XElementAccess
-Type SAL_CALL XoNavigationOrderAccess::getElementType(  ) throw (RuntimeException)
+Type SAL_CALL XoNavigationOrderAccess::getElementType(  ) throw (RuntimeException, std::exception)
 {
     return cppu::UnoType<XShape>::get();
 }
 
-sal_Bool SAL_CALL XoNavigationOrderAccess::hasElements(  ) throw (RuntimeException)
+sal_Bool SAL_CALL XoNavigationOrderAccess::hasElements(  ) throw (RuntimeException, std::exception)
 {
     return maShapes.empty() ? sal_False : sal_True;
 }

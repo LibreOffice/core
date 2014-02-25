@@ -54,7 +54,7 @@ CMimeContentTypeFactory::CMimeContentTypeFactory()
 // createMimeContentType
 
 Reference< XMimeContentType > CMimeContentTypeFactory::createMimeContentType( const OUString& aContentType )
-    throw( IllegalArgumentException, RuntimeException )
+    throw( IllegalArgumentException, RuntimeException, std::exception )
 {
     MutexGuard aGuard( m_aMutex );
     return Reference< XMimeContentType >( new CMimeContentType( aContentType ) );
@@ -63,14 +63,14 @@ Reference< XMimeContentType > CMimeContentTypeFactory::createMimeContentType( co
 // XServiceInfo
 
 OUString SAL_CALL CMimeContentTypeFactory::getImplementationName(  )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return OUString( MIMECONTENTTYPEFACTORY_IMPL_NAME );
 }
 
 //  XServiceInfo
 sal_Bool SAL_CALL CMimeContentTypeFactory::supportsService( const OUString& ServiceName )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -78,7 +78,7 @@ sal_Bool SAL_CALL CMimeContentTypeFactory::supportsService( const OUString& Serv
 //  XServiceInfo
 
 Sequence< OUString > SAL_CALL CMimeContentTypeFactory::getSupportedServiceNames( )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return MimeContentTypeFactory_getSupportedServiceNames( );
 }

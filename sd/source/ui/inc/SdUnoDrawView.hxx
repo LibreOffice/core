@@ -60,11 +60,11 @@ public:
 
     virtual void SAL_CALL addSelectionChangeListener (
         const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
-        throw(css::uno::RuntimeException);
+        throw(css::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL removeSelectionChangeListener (
         const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
-        throw(css::uno::RuntimeException);
+        throw(css::uno::RuntimeException, std::exception);
 
 
     // XDrawView
@@ -75,7 +75,7 @@ public:
                std::exception);
 
     virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage (void)
-        throw(css::uno::RuntimeException);
+        throw(css::uno::RuntimeException, std::exception);
 
 
     // XFastPropertySet
@@ -87,18 +87,18 @@ public:
             css::beans::PropertyVetoException,
             css::lang::IllegalArgumentException,
             css::lang::WrappedTargetException,
-            css::uno::RuntimeException);
+            css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Any SAL_CALL getFastPropertyValue (
         sal_Int32 nHandle)
         throw(css::beans::UnknownPropertyException,
             css::lang::WrappedTargetException,
-            css::uno::RuntimeException);
+            css::uno::RuntimeException, std::exception);
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 protected:
     sal_Bool getMasterPageMode(void) const throw();

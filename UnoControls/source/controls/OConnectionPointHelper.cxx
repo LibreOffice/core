@@ -56,7 +56,7 @@ OConnectionPointHelper::~OConnectionPointHelper()
 //  XInterface
 
 
-Any SAL_CALL OConnectionPointHelper::queryInterface( const Type& aType ) throw( RuntimeException )
+Any SAL_CALL OConnectionPointHelper::queryInterface( const Type& aType ) throw( RuntimeException, std::exception )
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
@@ -107,7 +107,7 @@ void SAL_CALL OConnectionPointHelper::release() throw()
 //  XConnectionPoint
 
 
-Type SAL_CALL OConnectionPointHelper::getConnectionType() throw( RuntimeException )
+Type SAL_CALL OConnectionPointHelper::getConnectionType() throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aSharedMutex );
@@ -131,7 +131,7 @@ Type SAL_CALL OConnectionPointHelper::getConnectionType() throw( RuntimeExceptio
 //  XConnectionPoint
 
 
-Reference< XConnectionPointContainer > SAL_CALL OConnectionPointHelper::getConnectionPointContainer() throw( RuntimeException )
+Reference< XConnectionPointContainer > SAL_CALL OConnectionPointHelper::getConnectionPointContainer() throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aSharedMutex );
@@ -145,7 +145,7 @@ Reference< XConnectionPointContainer > SAL_CALL OConnectionPointHelper::getConne
 
 void SAL_CALL OConnectionPointHelper::advise( const Reference< XInterface >& xListener ) throw( ListenerExistException      ,
                                                                                                 InvalidListenerException    ,
-                                                                                                RuntimeException            )
+                                                                                                RuntimeException, std::exception            )
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aSharedMutex );
@@ -178,7 +178,7 @@ void SAL_CALL OConnectionPointHelper::advise( const Reference< XInterface >& xLi
 //  XConnectionPoint
 
 
-void SAL_CALL OConnectionPointHelper::unadvise( const Reference< XInterface >& xListener ) throw( RuntimeException )
+void SAL_CALL OConnectionPointHelper::unadvise( const Reference< XInterface >& xListener ) throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aSharedMutex );
@@ -199,7 +199,7 @@ void SAL_CALL OConnectionPointHelper::unadvise( const Reference< XInterface >& x
 //  XConnectionPoint
 
 
-Sequence< Reference< XInterface > > SAL_CALL OConnectionPointHelper::getConnections() throw( RuntimeException )
+Sequence< Reference< XInterface > > SAL_CALL OConnectionPointHelper::getConnections() throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aSharedMutex );

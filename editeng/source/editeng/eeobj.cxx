@@ -40,14 +40,14 @@ EditDataObject::~EditDataObject()
 }
 
 // uno::XInterface
-uno::Any EditDataObject::queryInterface( const uno::Type & rType ) throw(uno::RuntimeException)
+uno::Any EditDataObject::queryInterface( const uno::Type & rType ) throw(uno::RuntimeException, std::exception)
 {
     uno::Any aRet = ::cppu::queryInterface( rType, (static_cast< datatransfer::XTransferable* >(this)) );
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
 }
 
 // datatransfer::XTransferable
-uno::Any EditDataObject::getTransferData( const datatransfer::DataFlavor& rFlavor ) throw(datatransfer::UnsupportedFlavorException, io::IOException, uno::RuntimeException)
+uno::Any EditDataObject::getTransferData( const datatransfer::DataFlavor& rFlavor ) throw(datatransfer::UnsupportedFlavorException, io::IOException, uno::RuntimeException, std::exception)
 {
     uno::Any aAny;
 
@@ -80,7 +80,7 @@ uno::Any EditDataObject::getTransferData( const datatransfer::DataFlavor& rFlavo
     return aAny;
 }
 
-uno::Sequence< datatransfer::DataFlavor > EditDataObject::getTransferDataFlavors(  ) throw(uno::RuntimeException)
+uno::Sequence< datatransfer::DataFlavor > EditDataObject::getTransferDataFlavors(  ) throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence< datatransfer::DataFlavor > aDataFlavors(3);
     SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_EDITENGINE, aDataFlavors.getArray()[0] );
@@ -90,7 +90,7 @@ uno::Sequence< datatransfer::DataFlavor > EditDataObject::getTransferDataFlavors
     return aDataFlavors;
 }
 
-sal_Bool EditDataObject::isDataFlavorSupported( const datatransfer::DataFlavor& rFlavor ) throw(uno::RuntimeException)
+sal_Bool EditDataObject::isDataFlavorSupported( const datatransfer::DataFlavor& rFlavor ) throw(uno::RuntimeException, std::exception)
 {
     sal_Bool bSupported = sal_False;
 

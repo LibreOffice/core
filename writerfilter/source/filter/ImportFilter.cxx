@@ -45,7 +45,7 @@ using utl::MediaDescriptor;
 
 
 sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescriptor )
-   throw (uno::RuntimeException)
+   throw (uno::RuntimeException, std::exception)
 {
     if( m_xSrcDoc.is() )
     {
@@ -185,14 +185,14 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
 }
 
 
-void WriterFilter::cancel(  ) throw (uno::RuntimeException)
+void WriterFilter::cancel(  ) throw (uno::RuntimeException, std::exception)
 {
 }
 
 
 
 void WriterFilter::setTargetDocument( const uno::Reference< lang::XComponent >& xDoc )
-   throw (lang::IllegalArgumentException, uno::RuntimeException)
+   throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
    m_xDstDoc = xDoc;
 
@@ -226,14 +226,14 @@ void WriterFilter::setTargetDocument( const uno::Reference< lang::XComponent >& 
 }
 
 void WriterFilter::setSourceDocument( const uno::Reference< lang::XComponent >& xDoc )
-   throw (lang::IllegalArgumentException, uno::RuntimeException)
+   throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
    m_xSrcDoc = xDoc;
 }
 
 
 
-void WriterFilter::initialize( const uno::Sequence< uno::Any >& aArguments ) throw (uno::Exception, uno::RuntimeException)
+void WriterFilter::initialize( const uno::Sequence< uno::Any >& aArguments ) throw (uno::Exception, uno::RuntimeException, std::exception)
 {
    uno::Sequence < beans::PropertyValue > aAnySeq;
    sal_Int32 nLength = aArguments.getLength();
@@ -275,19 +275,19 @@ uno::Reference< uno::XInterface > WriterFilter_createInstance( const uno::Refere
 
 
 
-OUString WriterFilter::getImplementationName(  ) throw (uno::RuntimeException)
+OUString WriterFilter::getImplementationName(  ) throw (uno::RuntimeException, std::exception)
 {
    return WriterFilter_getImplementationName();
 }
 
 
-sal_Bool WriterFilter::supportsService( const OUString& rServiceName ) throw (uno::RuntimeException)
+sal_Bool WriterFilter::supportsService( const OUString& rServiceName ) throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService( this, rServiceName );
 }
 
 
-uno::Sequence< OUString > WriterFilter::getSupportedServiceNames(  ) throw (uno::RuntimeException)
+uno::Sequence< OUString > WriterFilter::getSupportedServiceNames(  ) throw (uno::RuntimeException, std::exception)
 {
     return WriterFilter_getSupportedServiceNames();
 }

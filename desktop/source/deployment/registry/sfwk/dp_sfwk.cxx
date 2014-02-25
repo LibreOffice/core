@@ -75,8 +75,8 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
             OUString const & url, OUString const & libType, bool bRemoved,
             OUString const & identifier);
         // XPackage
-        virtual OUString SAL_CALL getDescription() throw (RuntimeException);
-        virtual OUString SAL_CALL getLicenseText() throw (RuntimeException);
+        virtual OUString SAL_CALL getDescription() throw (RuntimeException, std::exception);
+        virtual OUString SAL_CALL getLicenseText() throw (RuntimeException, std::exception);
     };
     friend class PackageImpl;
 
@@ -96,10 +96,10 @@ public:
 
     // XPackageRegistry
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
-    getSupportedPackageTypes() throw (RuntimeException);
+    getSupportedPackageTypes() throw (RuntimeException, std::exception);
     virtual void SAL_CALL packageRemoved(OUString const & url, OUString const & mediaType)
         throw (deployment::DeploymentException,
-               uno::RuntimeException);
+               uno::RuntimeException, std::exception);
 };
 
 BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
@@ -116,7 +116,7 @@ BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
     return pBackend;
 }
 
-OUString BackendImpl::PackageImpl::getDescription() throw (RuntimeException)
+OUString BackendImpl::PackageImpl::getDescription() throw (RuntimeException, std::exception)
 {
     if (m_descr.isEmpty())
         return Package::getDescription();
@@ -125,7 +125,7 @@ OUString BackendImpl::PackageImpl::getDescription() throw (RuntimeException)
 }
 
 
-OUString BackendImpl::PackageImpl::getLicenseText() throw (RuntimeException)
+OUString BackendImpl::PackageImpl::getLicenseText() throw (RuntimeException, std::exception)
 {
     return Package::getDescription();
 }
@@ -177,14 +177,14 @@ BackendImpl::BackendImpl(
 // XPackageRegistry
 
 Sequence< Reference<deployment::XPackageTypeInfo> >
-BackendImpl::getSupportedPackageTypes() throw (RuntimeException)
+BackendImpl::getSupportedPackageTypes() throw (RuntimeException, std::exception)
 {
     return Sequence< Reference<deployment::XPackageTypeInfo> >(&m_xTypeInfo, 1);
 }
 
 void BackendImpl::packageRemoved(OUString const & /*url*/, OUString const & /*mediaType*/)
         throw (deployment::DeploymentException,
-               uno::RuntimeException)
+               uno::RuntimeException, std::exception)
 {
 }
 

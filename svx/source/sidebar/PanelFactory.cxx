@@ -76,7 +76,7 @@ public:
         throw(
             css::container::NoSuchElementException,
             css::lang::IllegalArgumentException,
-            cssu::RuntimeException);
+            cssu::RuntimeException, std::exception);
 };
 
 PanelFactory::PanelFactory (void)
@@ -100,7 +100,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     throw(
         container::NoSuchElementException,
         lang::IllegalArgumentException,
-        RuntimeException)
+        RuntimeException, std::exception)
 {
     const ::comphelper::NamedValueCollection aArguments (rArguments);
     Reference<frame::XFrame> xFrame (aArguments.getOrDefault("Frame", Reference<frame::XFrame>()));

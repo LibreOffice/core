@@ -62,24 +62,24 @@ namespace sdbtools
     {
     }
 
-    Reference< XTableName > SAL_CALL ConnectionTools::createTableName() throw (RuntimeException)
+    Reference< XTableName > SAL_CALL ConnectionTools::createTableName() throw (RuntimeException, std::exception)
     {
         EntryGuard aGuard( *this );
         return new TableName( getContext(), getConnection() );
     }
 
-    Reference< XObjectNames > SAL_CALL ConnectionTools::getObjectNames() throw (RuntimeException)
+    Reference< XObjectNames > SAL_CALL ConnectionTools::getObjectNames() throw (RuntimeException, std::exception)
     {
         EntryGuard aGuard( *this );
         return new ObjectNames( getContext(), getConnection() );
     }
 
-    Reference< XDataSourceMetaData > SAL_CALL ConnectionTools::getDataSourceMetaData() throw (RuntimeException)
+    Reference< XDataSourceMetaData > SAL_CALL ConnectionTools::getDataSourceMetaData() throw (RuntimeException, std::exception)
     {
         EntryGuard aGuard( *this );
         return new DataSourceMetaData( getContext(), getConnection() );
     }
-    Reference< container::XNameAccess > SAL_CALL ConnectionTools::getFieldsByCommandDescriptor( ::sal_Int32 commandType, const OUString& command, Reference< lang::XComponent >& keepFieldsAlive ) throw (sdbc::SQLException, RuntimeException)
+    Reference< container::XNameAccess > SAL_CALL ConnectionTools::getFieldsByCommandDescriptor( ::sal_Int32 commandType, const OUString& command, Reference< lang::XComponent >& keepFieldsAlive ) throw (sdbc::SQLException, RuntimeException, std::exception)
     {
         EntryGuard aGuard( *this );
         ::dbtools::SQLExceptionInfo aErrorInfo;
@@ -88,7 +88,7 @@ namespace sdbtools
             aErrorInfo.doThrow();
         return xRet;
     }
-    Reference< sdb::XSingleSelectQueryComposer > SAL_CALL ConnectionTools::getComposer( ::sal_Int32 commandType, const OUString& command ) throw (::com::sun::star::uno::RuntimeException)
+    Reference< sdb::XSingleSelectQueryComposer > SAL_CALL ConnectionTools::getComposer( ::sal_Int32 commandType, const OUString& command ) throw (::com::sun::star::uno::RuntimeException, std::exception)
     {
         EntryGuard aGuard( *this );
         dbtools::StatementComposer aComposer(getConnection(), command, commandType, sal_True );
@@ -96,17 +96,17 @@ namespace sdbtools
         return aComposer.getComposer();
     }
 
-    OUString SAL_CALL ConnectionTools::getImplementationName() throw (RuntimeException)
+    OUString SAL_CALL ConnectionTools::getImplementationName() throw (RuntimeException, std::exception)
     {
         return getImplementationName_static();
     }
 
-    ::sal_Bool SAL_CALL ConnectionTools::supportsService(const OUString & _ServiceName) throw (RuntimeException)
+    ::sal_Bool SAL_CALL ConnectionTools::supportsService(const OUString & _ServiceName) throw (RuntimeException, std::exception)
     {
         return cppu::supportsService(this, _ServiceName);
     }
 
-    Sequence< OUString > SAL_CALL ConnectionTools::getSupportedServiceNames() throw (RuntimeException)
+    Sequence< OUString > SAL_CALL ConnectionTools::getSupportedServiceNames() throw (RuntimeException, std::exception)
     {
         return getSupportedServiceNames_static();
     }
@@ -128,7 +128,7 @@ namespace sdbtools
         return *( new ConnectionTools( Reference<XComponentContext>( _rxContext ) ) );
     }
 
-    void SAL_CALL ConnectionTools::initialize(const Sequence< Any > & _rArguments) throw (RuntimeException, Exception)
+    void SAL_CALL ConnectionTools::initialize(const Sequence< Any > & _rArguments) throw (RuntimeException, Exception, std::exception)
     {
         ::osl::MutexGuard aGuard( getMutex() );
 

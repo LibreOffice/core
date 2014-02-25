@@ -92,23 +92,23 @@ public:
 
     // ui::XContextChangeEventListener
     virtual void SAL_CALL notifyContextChangeEvent (const css::ui::ContextChangeEventObject& rEvent)
-        throw(cssu::RuntimeException);
+        throw(cssu::RuntimeException, std::exception);
 
     // XEventListener
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEventObject)
-        throw(cssu::RuntimeException);
+        throw(cssu::RuntimeException, std::exception);
 
     // beans::XPropertyChangeListener
     virtual void SAL_CALL propertyChange (const css::beans::PropertyChangeEvent& rEvent)
-        throw(cssu::RuntimeException);
+        throw(cssu::RuntimeException, std::exception);
 
     // frame::XStatusListener
     virtual void SAL_CALL statusChanged (const css::frame::FeatureStateEvent& rEvent)
-        throw(cssu::RuntimeException);
+        throw(cssu::RuntimeException, std::exception);
 
     // ui::XSidebar
     virtual void SAL_CALL requestLayout (void)
-        throw(cssu::RuntimeException);
+        throw(cssu::RuntimeException, std::exception);
 
     void NotifyResize (void);
 

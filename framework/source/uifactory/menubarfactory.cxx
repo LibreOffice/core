@@ -56,7 +56,7 @@ MenuBarFactory::~MenuBarFactory()
 Reference< XUIElement > SAL_CALL MenuBarFactory::createUIElement(
     const OUString& ResourceURL,
     const Sequence< PropertyValue >& Args )
-throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException )
+throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception )
 {
     Reference< ::com::sun::star::ui::XUIElement > xMenuBar(
             static_cast<OWeakObject *>(new MenuBarWrapper(m_xContext)), UNO_QUERY);

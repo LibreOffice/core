@@ -201,21 +201,21 @@ class Job : private ThreadHelpBase
 
         // XJobListener
         virtual void SAL_CALL jobFinished( const css::uno::Reference< css::task::XAsyncJob >& xJob,
-                                           const css::uno::Any&                               aResult ) throw(css::uno::RuntimeException);
+                                           const css::uno::Any&                               aResult ) throw(css::uno::RuntimeException, std::exception);
 
         // XTerminateListener
         virtual void SAL_CALL queryTermination ( const css::lang::EventObject& aEvent ) throw(css::frame::TerminationVetoException,
-                                                                                              css::uno::RuntimeException          );
-        virtual void SAL_CALL notifyTermination( const css::lang::EventObject& aEvent ) throw(css::uno::RuntimeException          );
+                                                                                              css::uno::RuntimeException, std::exception          );
+        virtual void SAL_CALL notifyTermination( const css::lang::EventObject& aEvent ) throw(css::uno::RuntimeException, std::exception          );
 
         // XCloseListener
         virtual void SAL_CALL queryClosing ( const css::lang::EventObject& aEvent         ,
                                                    sal_Bool                bGetsOwnership ) throw(css::util::CloseVetoException,
-                                                                                                  css::uno::RuntimeException   );
-        virtual void SAL_CALL notifyClosing( const css::lang::EventObject& aEvent         ) throw(css::uno::RuntimeException   );
+                                                                                                  css::uno::RuntimeException, std::exception   );
+        virtual void SAL_CALL notifyClosing( const css::lang::EventObject& aEvent         ) throw(css::uno::RuntimeException, std::exception   );
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw(css::uno::RuntimeException);
+        virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw(css::uno::RuntimeException, std::exception);
 };
 
 } // namespace framework

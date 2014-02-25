@@ -207,67 +207,67 @@ private:
     virtual void SAL_CALL disposing();
 
     virtual rtl::OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & ServiceName)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Sequence< rtl::OUString > SAL_CALL
-    getSupportedServiceNames() throw (css::uno::RuntimeException);
+    getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
         rtl::OUString const & aServiceSpecifier)
-        throw (css::uno::Exception, css::uno::RuntimeException);
+        throw (css::uno::Exception, css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
     createInstanceWithArguments(
         rtl::OUString const & ServiceSpecifier,
         css::uno::Sequence< css::uno::Any > const & Arguments)
-        throw (css::uno::Exception, css::uno::RuntimeException);
+        throw (css::uno::Exception, css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Sequence< rtl::OUString > SAL_CALL
-    getAvailableServiceNames() throw (css::uno::RuntimeException);
+    getAvailableServiceNames() throw (css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
     createInstanceWithContext(
         rtl::OUString const & aServiceSpecifier,
         css::uno::Reference< css::uno::XComponentContext > const & Context)
-        throw (css::uno::Exception, css::uno::RuntimeException);
+        throw (css::uno::Exception, css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
     createInstanceWithArgumentsAndContext(
         rtl::OUString const & ServiceSpecifier,
         css::uno::Sequence< css::uno::Any > const & Arguments,
         css::uno::Reference< css::uno::XComponentContext > const & Context)
-        throw (css::uno::Exception, css::uno::RuntimeException);
+        throw (css::uno::Exception, css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Type SAL_CALL getElementType()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
-    virtual sal_Bool SAL_CALL hasElements() throw (css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasElements() throw (css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
-    createEnumeration() throw (css::uno::RuntimeException);
+    createEnumeration() throw (css::uno::RuntimeException, std::exception);
 
     virtual sal_Bool SAL_CALL has(css::uno::Any const & aElement)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL insert(css::uno::Any const & aElement)
         throw (
             css::lang::IllegalArgumentException,
-            css::container::ElementExistException, css::uno::RuntimeException);
+            css::container::ElementExistException, css::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL remove(css::uno::Any const & aElement)
         throw (
             css::lang::IllegalArgumentException,
-            css::container::NoSuchElementException, css::uno::RuntimeException);
+            css::container::NoSuchElementException, css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
     createContentEnumeration(rtl::OUString const & aServiceName)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
-    getPropertySetInfo() throw (css::uno::RuntimeException);
+    getPropertySetInfo() throw (css::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL setPropertyValue(
         rtl::OUString const & aPropertyName, css::uno::Any const & aValue)
@@ -275,13 +275,13 @@ private:
             css::beans::UnknownPropertyException,
             css::beans::PropertyVetoException,
             css::lang::IllegalArgumentException,
-            css::lang::WrappedTargetException, css::uno::RuntimeException);
+            css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Any SAL_CALL getPropertyValue(
         rtl::OUString const & PropertyName)
         throw (
             css::beans::UnknownPropertyException,
-            css::lang::WrappedTargetException, css::uno::RuntimeException);
+            css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL addPropertyChangeListener(
         rtl::OUString const & aPropertyName,
@@ -289,7 +289,7 @@ private:
             xListener)
         throw (
             css::beans::UnknownPropertyException,
-            css::lang::WrappedTargetException, css::uno::RuntimeException);
+            css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL removePropertyChangeListener(
         rtl::OUString const & aPropertyName,
@@ -297,7 +297,7 @@ private:
             aListener)
         throw (
             css::beans::UnknownPropertyException,
-            css::lang::WrappedTargetException, css::uno::RuntimeException);
+            css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL addVetoableChangeListener(
         rtl::OUString const & PropertyName,
@@ -305,7 +305,7 @@ private:
             aListener)
         throw (
             css::beans::UnknownPropertyException,
-            css::lang::WrappedTargetException, css::uno::RuntimeException);
+            css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL removeVetoableChangeListener(
         rtl::OUString const & PropertyName,
@@ -313,21 +313,21 @@ private:
             aListener)
         throw (
             css::beans::UnknownPropertyException,
-            css::lang::WrappedTargetException, css::uno::RuntimeException);
+            css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Sequence< css::beans::Property > SAL_CALL getProperties()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     virtual css::beans::Property SAL_CALL getPropertyByName(
         rtl::OUString const & aName)
         throw (
-            css::beans::UnknownPropertyException, css::uno::RuntimeException);
+            css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception);
 
     virtual sal_Bool SAL_CALL hasPropertyByName(rtl::OUString const & Name)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL disposing(css::lang::EventObject const & Source)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     // needs to be called with rBHelper.rMutex locked:
     bool isDisposed() { return rBHelper.bDisposed || rBHelper.bInDispose; }

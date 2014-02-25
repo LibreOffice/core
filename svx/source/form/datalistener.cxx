@@ -45,23 +45,23 @@ namespace svxform
     }
 
     // XContainerListener
-    void SAL_CALL DataListener::elementInserted( const ContainerEvent& /*Event*/ ) throw (RuntimeException)
+    void SAL_CALL DataListener::elementInserted( const ContainerEvent& /*Event*/ ) throw (RuntimeException, std::exception)
     {
         m_pNaviWin->NotifyChanges();
     }
 
-    void SAL_CALL DataListener::elementRemoved( const ContainerEvent& /*Event*/ ) throw (RuntimeException)
+    void SAL_CALL DataListener::elementRemoved( const ContainerEvent& /*Event*/ ) throw (RuntimeException, std::exception)
     {
         m_pNaviWin->NotifyChanges();
     }
 
-    void SAL_CALL DataListener::elementReplaced( const ContainerEvent& /*Event*/ ) throw (RuntimeException)
+    void SAL_CALL DataListener::elementReplaced( const ContainerEvent& /*Event*/ ) throw (RuntimeException, std::exception)
     {
         m_pNaviWin->NotifyChanges();
     }
 
     // XFrameActionListener
-    void SAL_CALL DataListener::frameAction( const FrameActionEvent& rActionEvt ) throw (RuntimeException)
+    void SAL_CALL DataListener::frameAction( const FrameActionEvent& rActionEvt ) throw (RuntimeException, std::exception)
     {
         if ( FrameAction_COMPONENT_ATTACHED == rActionEvt.Action ||
              FrameAction_COMPONENT_REATTACHED == rActionEvt.Action )
@@ -71,13 +71,13 @@ namespace svxform
     }
 
     // xml::dom::events::XEventListener
-    void SAL_CALL DataListener::handleEvent( const Reference< XEvent >& /*evt*/ ) throw (RuntimeException)
+    void SAL_CALL DataListener::handleEvent( const Reference< XEvent >& /*evt*/ ) throw (RuntimeException, std::exception)
     {
         m_pNaviWin->NotifyChanges();
     }
 
     // lang::XEventListener
-    void SAL_CALL DataListener::disposing( const EventObject& /*Source*/ ) throw (RuntimeException)
+    void SAL_CALL DataListener::disposing( const EventObject& /*Source*/ ) throw (RuntimeException, std::exception)
     {
         SAL_WARN( "svx.form", "disposing" );
     }

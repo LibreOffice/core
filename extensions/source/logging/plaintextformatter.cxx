@@ -60,14 +60,14 @@ namespace logging
         virtual ~PlainTextFormatter();
 
         // XLogFormatter
-        virtual OUString SAL_CALL getHead(  ) throw (RuntimeException);
-        virtual OUString SAL_CALL format( const LogRecord& Record ) throw (RuntimeException);
-        virtual OUString SAL_CALL getTail(  ) throw (RuntimeException);
+        virtual OUString SAL_CALL getHead(  ) throw (RuntimeException, std::exception);
+        virtual OUString SAL_CALL format( const LogRecord& Record ) throw (RuntimeException, std::exception);
+        virtual OUString SAL_CALL getTail(  ) throw (RuntimeException, std::exception);
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(RuntimeException);
-        virtual ::sal_Bool SAL_CALL supportsService( const OUString& _rServiceName ) throw(RuntimeException);
-        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException);
+        virtual OUString SAL_CALL getImplementationName() throw(RuntimeException, std::exception);
+        virtual ::sal_Bool SAL_CALL supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception);
+        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception);
 
     public:
         // XServiceInfo - static version
@@ -90,7 +90,7 @@ namespace logging
     }
 
 
-    OUString SAL_CALL PlainTextFormatter::getHead(  ) throw (RuntimeException)
+    OUString SAL_CALL PlainTextFormatter::getHead(  ) throw (RuntimeException, std::exception)
     {
         OUStringBuffer aHeader;
         aHeader.appendAscii( "  event no" );                 // column 1: the event number
@@ -107,7 +107,7 @@ namespace logging
     }
 
 
-    OUString SAL_CALL PlainTextFormatter::format( const LogRecord& _rRecord ) throw (RuntimeException)
+    OUString SAL_CALL PlainTextFormatter::format( const LogRecord& _rRecord ) throw (RuntimeException, std::exception)
     {
         char buffer[ 30 ];
         const int buffer_size = sizeof( buffer );
@@ -145,25 +145,25 @@ namespace logging
     }
 
 
-    OUString SAL_CALL PlainTextFormatter::getTail(  ) throw (RuntimeException)
+    OUString SAL_CALL PlainTextFormatter::getTail(  ) throw (RuntimeException, std::exception)
     {
         // no tail
         return OUString();
     }
 
-    ::sal_Bool SAL_CALL PlainTextFormatter::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
+    ::sal_Bool SAL_CALL PlainTextFormatter::supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception)
     {
         return cppu::supportsService(this, _rServiceName);
     }
 
 
-    OUString SAL_CALL PlainTextFormatter::getImplementationName() throw(RuntimeException)
+    OUString SAL_CALL PlainTextFormatter::getImplementationName() throw(RuntimeException, std::exception)
     {
         return getImplementationName_static();
     }
 
 
-    Sequence< OUString > SAL_CALL PlainTextFormatter::getSupportedServiceNames() throw(RuntimeException)
+    Sequence< OUString > SAL_CALL PlainTextFormatter::getSupportedServiceNames() throw(RuntimeException, std::exception)
     {
         return getSupportedServiceNames_static();
     }

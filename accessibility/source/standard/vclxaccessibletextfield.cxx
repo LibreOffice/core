@@ -77,7 +77,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2(VCLXAccessibleTextField, VCLXAccessibleTextComp
 
 Reference<XAccessibleContext> SAL_CALL
     VCLXAccessibleTextField::getAccessibleContext (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return this;
 }
@@ -86,7 +86,7 @@ Reference<XAccessibleContext> SAL_CALL
 //=====  XAccessibleContext  ==================================================
 
 sal_Int32 SAL_CALL VCLXAccessibleTextField::getAccessibleChildCount (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return 0;
 }
@@ -95,7 +95,7 @@ sal_Int32 SAL_CALL VCLXAccessibleTextField::getAccessibleChildCount (void)
 
 
 Reference<XAccessible> SAL_CALL VCLXAccessibleTextField::getAccessibleChild (sal_Int32)
-    throw (IndexOutOfBoundsException, RuntimeException)
+    throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     throw IndexOutOfBoundsException();
 }
@@ -104,7 +104,7 @@ Reference<XAccessible> SAL_CALL VCLXAccessibleTextField::getAccessibleChild (sal
 
 
 sal_Int16 SAL_CALL VCLXAccessibleTextField::getAccessibleRole (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -112,7 +112,7 @@ sal_Int16 SAL_CALL VCLXAccessibleTextField::getAccessibleRole (void)
 }
 
 Reference< XAccessible > SAL_CALL VCLXAccessibleTextField::getAccessibleParent(  )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -124,7 +124,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleTextField::getAccessibleParent( 
 //===== XServiceInfo ==========================================================
 
 OUString VCLXAccessibleTextField::getImplementationName (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleTextField" );
 }
@@ -133,7 +133,7 @@ OUString VCLXAccessibleTextField::getImplementationName (void)
 
 
 Sequence< OUString > VCLXAccessibleTextField::getSupportedServiceNames (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aNames = VCLXAccessibleTextComponent::getSupportedServiceNames();
     sal_Int32 nLength = aNames.getLength();

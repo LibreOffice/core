@@ -1096,7 +1096,7 @@ namespace dbtools
     //= OParameterContinuation
     //====================================================================
 
-    void SAL_CALL OParameterContinuation::setParameters( const Sequence< PropertyValue >& _rValues ) throw( RuntimeException )
+    void SAL_CALL OParameterContinuation::setParameters( const Sequence< PropertyValue >& _rValues ) throw( RuntimeException, std::exception )
     {
         m_aValues = _rValues;
     }

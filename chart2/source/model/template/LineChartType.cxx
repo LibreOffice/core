@@ -152,14 +152,14 @@ LineChartType::~LineChartType()
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL LineChartType::createClone()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< util::XCloneable >( new LineChartType( *this ));
 }
 
 // ____ XChartType ____
 OUString SAL_CALL LineChartType::getChartType()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return CHART2_SERVICE_NAME_CHARTTYPE_LINE;
 }
@@ -182,7 +182,7 @@ uno::Any LineChartType::GetDefaultValue( sal_Int32 nHandle ) const
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL LineChartType::getPropertySetInfo()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return *StaticLineChartTypeInfo::get();
 }

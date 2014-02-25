@@ -52,7 +52,7 @@ namespace fileaccess {
         virtual com::sun::star::uno::Any SAL_CALL
         queryInterface(
             const com::sun::star::uno::Type& rType )
-            throw( com::sun::star::uno::RuntimeException);
+            throw( com::sun::star::uno::RuntimeException, std::exception);
 
         virtual void SAL_CALL
         acquire(
@@ -71,13 +71,13 @@ namespace fileaccess {
 
 
         virtual void SAL_CALL select()
-            throw (::com::sun::star::uno::RuntimeException)
+            throw (::com::sun::star::uno::RuntimeException, std::exception)
         {
             m_bSelected = true;
         }
 
         void SAL_CALL setName(const OUString& Name)
-            throw(::com::sun::star::uno::RuntimeException)
+            throw(::com::sun::star::uno::RuntimeException, std::exception)
         {
             m_aNewName = Name;
         }
@@ -115,7 +115,7 @@ namespace fileaccess {
         virtual com::sun::star::uno::Any SAL_CALL
         queryInterface(
             const com::sun::star::uno::Type& rType )
-            throw( com::sun::star::uno::RuntimeException);
+            throw( com::sun::star::uno::RuntimeException, std::exception);
 
         virtual void SAL_CALL
         acquire(
@@ -134,7 +134,7 @@ namespace fileaccess {
 
 
         virtual void SAL_CALL select()
-            throw (::com::sun::star::uno::RuntimeException)
+            throw (::com::sun::star::uno::RuntimeException, std::exception)
         {
             m_bSelected = true;
         }
@@ -169,7 +169,7 @@ namespace fileaccess {
         virtual com::sun::star::uno::Any SAL_CALL
         queryInterface(
             const com::sun::star::uno::Type& rType )
-            throw( com::sun::star::uno::RuntimeException);
+            throw( com::sun::star::uno::RuntimeException, std::exception);
 
         virtual void SAL_CALL
         acquire(
@@ -187,13 +187,13 @@ namespace fileaccess {
         XTYPEPROVIDER_DECL()
 
         ::com::sun::star::uno::Any SAL_CALL getRequest(  )
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
 
         com::sun::star::uno::Sequence<
             com::sun::star::uno::Reference<
             com::sun::star::task::XInteractionContinuation > > SAL_CALL
         getContinuations(  )
-            throw (::com::sun::star::uno::RuntimeException)
+            throw (::com::sun::star::uno::RuntimeException, std::exception)
         {
             return m_aSeq;
         }

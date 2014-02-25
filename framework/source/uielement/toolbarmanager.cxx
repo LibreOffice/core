@@ -118,7 +118,7 @@ class ImageOrientationListener : public svt::FrameStatusListener
                                   const Reference< XFrame > rFrame );
         virtual ~ImageOrientationListener();
 
-        virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
+        virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException, std::exception );
 
     private:
         Reference< XStatusListener > m_xReceiver;
@@ -138,7 +138,7 @@ ImageOrientationListener::~ImageOrientationListener()
 }
 
 void SAL_CALL ImageOrientationListener::statusChanged( const FeatureStateEvent& Event )
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     if ( m_xReceiver.is() )
         m_xReceiver->statusChanged( Event );
@@ -483,7 +483,7 @@ void ToolBarManager::UpdateController( ::com::sun::star::uno::Reference< ::com::
 }
 
 void ToolBarManager::frameAction( const FrameActionEvent& Action )
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     ResetableGuard aGuard( m_aLock );
     if ( Action.Action == FrameAction_CONTEXT_CHANGED )
@@ -491,7 +491,7 @@ throw ( RuntimeException )
 }
 
 void SAL_CALL ToolBarManager::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event )
-throw ( ::com::sun::star::uno::RuntimeException )
+throw ( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     ResetableGuard aGuard( m_aLock );
     if ( m_bDisposed )
@@ -508,7 +508,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
     }
 }
 
-void SAL_CALL ToolBarManager::disposing( const EventObject& Source ) throw ( RuntimeException )
+void SAL_CALL ToolBarManager::disposing( const EventObject& Source ) throw ( RuntimeException, std::exception )
 {
     {
         ResetableGuard aGuard( m_aLock );
@@ -565,7 +565,7 @@ void SAL_CALL ToolBarManager::disposing( const EventObject& Source ) throw ( Run
 }
 
 // XComponent
-void SAL_CALL ToolBarManager::dispose() throw( RuntimeException )
+void SAL_CALL ToolBarManager::dispose() throw( RuntimeException, std::exception )
 {
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
 
@@ -645,7 +645,7 @@ void SAL_CALL ToolBarManager::dispose() throw( RuntimeException )
     }
 }
 
-void SAL_CALL ToolBarManager::addEventListener( const Reference< XEventListener >& xListener ) throw( RuntimeException )
+void SAL_CALL ToolBarManager::addEventListener( const Reference< XEventListener >& xListener ) throw( RuntimeException, std::exception )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -656,18 +656,18 @@ void SAL_CALL ToolBarManager::addEventListener( const Reference< XEventListener 
     m_aListenerContainer.addInterface( ::getCppuType( ( const Reference< XEventListener >* ) NULL ), xListener );
 }
 
-void SAL_CALL ToolBarManager::removeEventListener( const Reference< XEventListener >& xListener ) throw( RuntimeException )
+void SAL_CALL ToolBarManager::removeEventListener( const Reference< XEventListener >& xListener ) throw( RuntimeException, std::exception )
 {
     m_aListenerContainer.removeInterface( ::getCppuType( ( const Reference< XEventListener >* ) NULL ), xListener );
 }
 
 // XUIConfigurationListener
-void SAL_CALL ToolBarManager::elementInserted( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL ToolBarManager::elementInserted( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     impl_elementChanged(false,Event);
 }
 
-void SAL_CALL ToolBarManager::elementRemoved( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL ToolBarManager::elementRemoved( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     impl_elementChanged(true,Event);
 }
@@ -738,7 +738,7 @@ void ToolBarManager::setToolBarImage(const Image& _aImage,const CommandToInfoMap
     ::std::for_each(_rIDs.begin(),_rIDs.end(),::boost::bind(&ToolBox::SetItemImage,m_pToolBar,_1,_aImage));
 }
 
-void SAL_CALL ToolBarManager::elementReplaced( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL ToolBarManager::elementReplaced( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     impl_elementChanged(false,Event);
 }

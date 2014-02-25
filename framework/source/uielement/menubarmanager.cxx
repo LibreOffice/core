@@ -128,7 +128,7 @@ class StringLength : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XSt
 
         // XStringWidth
         sal_Int32 SAL_CALL queryStringWidth( const OUString& aString )
-            throw (RuntimeException)
+            throw (RuntimeException, std::exception)
         {
             return aString.getLength();
         }
@@ -226,7 +226,7 @@ MenuBarManager::MenuBarManager(
     Init(rFrame,pAddonPopupMenu,bDelete,bDeleteChildren,true);
 }
 
-Any SAL_CALL MenuBarManager::queryInterface( const Type & rType ) throw ( RuntimeException )
+Any SAL_CALL MenuBarManager::queryInterface( const Type & rType ) throw ( RuntimeException, std::exception )
 {
     Any a = ::cppu::queryInterface(
                 rType ,
@@ -256,7 +256,7 @@ void SAL_CALL MenuBarManager::release() throw()
 }
 
 
-Any SAL_CALL MenuBarManager::getMenuHandle( const Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType ) throw (RuntimeException)
+Any SAL_CALL MenuBarManager::getMenuHandle( const Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType ) throw (RuntimeException, std::exception)
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -327,7 +327,7 @@ void MenuBarManager::Destroy()
 }
 
 // XComponent
-void SAL_CALL MenuBarManager::dispose() throw( RuntimeException )
+void SAL_CALL MenuBarManager::dispose() throw( RuntimeException, std::exception )
 {
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
 
@@ -377,7 +377,7 @@ void SAL_CALL MenuBarManager::dispose() throw( RuntimeException )
     }
 }
 
-void SAL_CALL MenuBarManager::addEventListener( const Reference< XEventListener >& xListener ) throw( RuntimeException )
+void SAL_CALL MenuBarManager::addEventListener( const Reference< XEventListener >& xListener ) throw( RuntimeException, std::exception )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -388,7 +388,7 @@ void SAL_CALL MenuBarManager::addEventListener( const Reference< XEventListener 
     m_aListenerContainer.addInterface( ::getCppuType( ( const Reference< XEventListener >* ) NULL ), xListener );
 }
 
-void SAL_CALL MenuBarManager::removeEventListener( const Reference< XEventListener >& xListener ) throw( RuntimeException )
+void SAL_CALL MenuBarManager::removeEventListener( const Reference< XEventListener >& xListener ) throw( RuntimeException, std::exception )
 {
     ResetableGuard aGuard( m_aLock );
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
@@ -396,7 +396,7 @@ void SAL_CALL MenuBarManager::removeEventListener( const Reference< XEventListen
 }
 
 void SAL_CALL MenuBarManager::elementInserted( const ::com::sun::star::ui::ConfigurationEvent& Event )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -412,20 +412,20 @@ throw (RuntimeException)
 }
 
 void SAL_CALL MenuBarManager::elementRemoved( const ::com::sun::star::ui::ConfigurationEvent& Event )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     elementInserted(Event);
 }
 
 void SAL_CALL MenuBarManager::elementReplaced( const ::com::sun::star::ui::ConfigurationEvent& Event )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     elementInserted(Event);
 }
 
 // XFrameActionListener
 void SAL_CALL MenuBarManager::frameAction( const FrameActionEvent& Action )
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -446,7 +446,7 @@ throw ( RuntimeException )
 
 // XStatusListener
 void SAL_CALL MenuBarManager::statusChanged( const FeatureStateEvent& Event )
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     OUString aFeatureURL = Event.FeatureURL.Complete;
 
@@ -653,7 +653,7 @@ void MenuBarManager::RemoveListener()
     m_xFrame = 0;
 }
 
-void SAL_CALL MenuBarManager::disposing( const EventObject& Source ) throw ( RuntimeException )
+void SAL_CALL MenuBarManager::disposing( const EventObject& Source ) throw ( RuntimeException, std::exception )
 {
     MenuItemHandler* pMenuItemDisposing = NULL;
 
@@ -775,7 +775,7 @@ private:
 
     virtual com::sun::star::uno::Any SAL_CALL getValueByName(
         OUString const & Name)
-        throw (com::sun::star::uno::RuntimeException)
+        throw (com::sun::star::uno::RuntimeException, std::exception)
     {
         return Name != JAVA_INTERACTION_HANDLER_NAME && context_.is()
             ? context_->getValueByName(Name)

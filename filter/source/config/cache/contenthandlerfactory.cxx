@@ -51,7 +51,7 @@ ContentHandlerFactory::~ContentHandlerFactory()
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::createInstance(const OUString& sHandler)
     throw(css::uno::Exception       ,
-          css::uno::RuntimeException)
+          css::uno::RuntimeException, std::exception)
 {
     return createInstanceWithArguments(sHandler, css::uno::Sequence< css::uno::Any >());
 }
@@ -61,7 +61,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::crea
 css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::createInstanceWithArguments(const OUString&                     sHandler  ,
                                                                                                         const css::uno::Sequence< css::uno::Any >& lArguments)
     throw(css::uno::Exception       ,
-          css::uno::RuntimeException)
+          css::uno::RuntimeException, std::exception)
 {
     css::uno::Reference< css::uno::XInterface > xHandler;
 
@@ -140,7 +140,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::crea
 
 
 css::uno::Sequence< OUString > SAL_CALL ContentHandlerFactory::getAvailableServiceNames()
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     // must be the same list as ((XNameAccess*)this)->getElementNames() return!
     return BaseContainer::getElementNames();

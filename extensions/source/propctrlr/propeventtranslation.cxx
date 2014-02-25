@@ -50,7 +50,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL PropertyEventTranslation::propertyChange( const PropertyChangeEvent& evt ) throw (RuntimeException)
+    void SAL_CALL PropertyEventTranslation::propertyChange( const PropertyChangeEvent& evt ) throw (RuntimeException, std::exception)
     {
         if ( !m_xDelegator.is() )
             throw DisposedException();
@@ -66,7 +66,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL PropertyEventTranslation::disposing( const EventObject& Source ) throw (RuntimeException)
+    void SAL_CALL PropertyEventTranslation::disposing( const EventObject& Source ) throw (RuntimeException, std::exception)
     {
         if ( !m_xDelegator.is() )
             throw DisposedException();

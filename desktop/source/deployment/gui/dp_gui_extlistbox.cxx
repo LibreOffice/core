@@ -158,7 +158,7 @@ void Entry_Impl::checkDependencies()
 // ExtensionRemovedListener
 
 void ExtensionRemovedListener::disposing( lang::EventObject const & rEvt )
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     uno::Reference< deployment::XPackage > xPackage( rEvt.Source, uno::UNO_QUERY );
 

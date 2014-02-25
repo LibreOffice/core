@@ -249,21 +249,21 @@ namespace accessibility
     // XServiceInfo
 
 
-    OUString AccessibleTabBarPage::getImplementationName() throw (RuntimeException)
+    OUString AccessibleTabBarPage::getImplementationName() throw (RuntimeException, std::exception)
     {
         return OUString( "com.sun.star.comp.svtools.AccessibleTabBarPage" );
     }
 
 
 
-    sal_Bool AccessibleTabBarPage::supportsService( const OUString& rServiceName ) throw (RuntimeException)
+    sal_Bool AccessibleTabBarPage::supportsService( const OUString& rServiceName ) throw (RuntimeException, std::exception)
     {
         return cppu::supportsService(this, rServiceName);
     }
 
 
 
-    Sequence< OUString > AccessibleTabBarPage::getSupportedServiceNames() throw (RuntimeException)
+    Sequence< OUString > AccessibleTabBarPage::getSupportedServiceNames() throw (RuntimeException, std::exception)
     {
         Sequence< OUString > aNames(1);
         aNames[0] = "com.sun.star.awt.AccessibleTabBarPage";
@@ -274,7 +274,7 @@ namespace accessibility
     // XAccessible
 
 
-    Reference< XAccessibleContext > AccessibleTabBarPage::getAccessibleContext(  ) throw (RuntimeException)
+    Reference< XAccessibleContext > AccessibleTabBarPage::getAccessibleContext(  ) throw (RuntimeException, std::exception)
     {
         OExternalLockGuard aGuard( this );
 
@@ -285,7 +285,7 @@ namespace accessibility
     // XAccessibleContext
 
 
-    sal_Int32 AccessibleTabBarPage::getAccessibleChildCount() throw (RuntimeException)
+    sal_Int32 AccessibleTabBarPage::getAccessibleChildCount() throw (RuntimeException, std::exception)
     {
         OExternalLockGuard aGuard( this );
 
@@ -294,7 +294,7 @@ namespace accessibility
 
 
 
-    Reference< XAccessible > AccessibleTabBarPage::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException)
+    Reference< XAccessible > AccessibleTabBarPage::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
     {
         OExternalLockGuard aGuard( this );
 
@@ -306,7 +306,7 @@ namespace accessibility
 
 
 
-    Reference< XAccessible > AccessibleTabBarPage::getAccessibleParent(  ) throw (RuntimeException)
+    Reference< XAccessible > AccessibleTabBarPage::getAccessibleParent(  ) throw (RuntimeException, std::exception)
     {
         OExternalLockGuard aGuard( this );
 
@@ -315,7 +315,7 @@ namespace accessibility
 
 
 
-    sal_Int32 AccessibleTabBarPage::getAccessibleIndexInParent(  ) throw (RuntimeException)
+    sal_Int32 AccessibleTabBarPage::getAccessibleIndexInParent(  ) throw (RuntimeException, std::exception)
     {
         OExternalLockGuard aGuard( this );
 
@@ -328,7 +328,7 @@ namespace accessibility
 
 
 
-    sal_Int16 AccessibleTabBarPage::getAccessibleRole(  ) throw (RuntimeException)
+    sal_Int16 AccessibleTabBarPage::getAccessibleRole(  ) throw (RuntimeException, std::exception)
     {
         OExternalLockGuard aGuard( this );
 
@@ -337,7 +337,7 @@ namespace accessibility
 
 
 
-    OUString AccessibleTabBarPage::getAccessibleDescription( ) throw (RuntimeException)
+    OUString AccessibleTabBarPage::getAccessibleDescription( ) throw (RuntimeException, std::exception)
     {
         OExternalLockGuard aGuard( this );
 
@@ -350,7 +350,7 @@ namespace accessibility
 
 
 
-    OUString AccessibleTabBarPage::getAccessibleName(  ) throw (RuntimeException)
+    OUString AccessibleTabBarPage::getAccessibleName(  ) throw (RuntimeException, std::exception)
     {
         OExternalLockGuard aGuard( this );
 
@@ -359,7 +359,7 @@ namespace accessibility
 
 
 
-    Reference< XAccessibleRelationSet > AccessibleTabBarPage::getAccessibleRelationSet(  ) throw (RuntimeException)
+    Reference< XAccessibleRelationSet > AccessibleTabBarPage::getAccessibleRelationSet(  ) throw (RuntimeException, std::exception)
     {
         OExternalLockGuard aGuard( this );
 
@@ -370,7 +370,7 @@ namespace accessibility
 
 
 
-    Reference< XAccessibleStateSet > AccessibleTabBarPage::getAccessibleStateSet(  ) throw (RuntimeException)
+    Reference< XAccessibleStateSet > AccessibleTabBarPage::getAccessibleStateSet(  ) throw (RuntimeException, std::exception)
     {
         OExternalLockGuard aGuard( this );
 
@@ -391,7 +391,7 @@ namespace accessibility
 
 
 
-    Locale AccessibleTabBarPage::getLocale(  ) throw (IllegalAccessibleComponentStateException, RuntimeException)
+    Locale AccessibleTabBarPage::getLocale(  ) throw (IllegalAccessibleComponentStateException, RuntimeException, std::exception)
     {
         OExternalLockGuard aGuard( this );
 
@@ -402,7 +402,7 @@ namespace accessibility
     // XAccessibleComponent
 
 
-    Reference< XAccessible > AccessibleTabBarPage::getAccessibleAtPoint( const awt::Point& ) throw (RuntimeException)
+    Reference< XAccessible > AccessibleTabBarPage::getAccessibleAtPoint( const awt::Point& ) throw (RuntimeException, std::exception)
     {
         OExternalLockGuard aGuard( this );
 
@@ -411,14 +411,14 @@ namespace accessibility
 
 
 
-    void AccessibleTabBarPage::grabFocus(  ) throw (RuntimeException)
+    void AccessibleTabBarPage::grabFocus(  ) throw (RuntimeException, std::exception)
     {
         // no focus
     }
 
 
 
-    sal_Int32 AccessibleTabBarPage::getForeground(  ) throw (RuntimeException)
+    sal_Int32 AccessibleTabBarPage::getForeground(  ) throw (RuntimeException, std::exception)
     {
         OExternalLockGuard aGuard( this );
 
@@ -436,7 +436,7 @@ namespace accessibility
 
 
 
-    sal_Int32 AccessibleTabBarPage::getBackground(  ) throw (RuntimeException)
+    sal_Int32 AccessibleTabBarPage::getBackground(  ) throw (RuntimeException, std::exception)
     {
         OExternalLockGuard aGuard( this );
 
@@ -456,7 +456,7 @@ namespace accessibility
     // XAccessibleExtendedComponent
 
 
-    Reference< awt::XFont > AccessibleTabBarPage::getFont(  ) throw (RuntimeException)
+    Reference< awt::XFont > AccessibleTabBarPage::getFont(  ) throw (RuntimeException, std::exception)
     {
         OExternalLockGuard aGuard( this );
 
@@ -474,7 +474,7 @@ namespace accessibility
 
 
 
-    OUString AccessibleTabBarPage::getTitledBorderText(  ) throw (RuntimeException)
+    OUString AccessibleTabBarPage::getTitledBorderText(  ) throw (RuntimeException, std::exception)
     {
         OExternalLockGuard aGuard( this );
 
@@ -483,7 +483,7 @@ namespace accessibility
 
 
 
-    OUString AccessibleTabBarPage::getToolTipText(  ) throw (RuntimeException)
+    OUString AccessibleTabBarPage::getToolTipText(  ) throw (RuntimeException, std::exception)
     {
         OExternalLockGuard aGuard( this );
 

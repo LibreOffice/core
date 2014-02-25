@@ -58,7 +58,7 @@ void Graphic::init( const ::Graphic& rGraphic )
 
 
 uno::Any SAL_CALL Graphic::queryAggregation( const uno::Type& rType )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     uno::Any aAny;
     if( rType == ::getCppuType((const uno::Reference< graphic::XGraphic >*)0) )
@@ -76,7 +76,7 @@ uno::Any SAL_CALL Graphic::queryAggregation( const uno::Type& rType )
 
 
 uno::Any SAL_CALL Graphic::queryInterface( const uno::Type & rType )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     ::com::sun::star::uno::Any aReturn = ::unographic::GraphicDescriptor::queryInterface( rType );
     if ( !aReturn.hasValue() )
@@ -133,19 +133,19 @@ uno::Sequence< OUString > Graphic::getSupportedServiceNames_Static()
 }
 
 OUString SAL_CALL Graphic::getImplementationName()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return getImplementationName_Static();
 }
 
 sal_Bool SAL_CALL Graphic::supportsService( const OUString& rServiceName )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService( this, rServiceName );
 }
 
 uno::Sequence< OUString > SAL_CALL Graphic::getSupportedServiceNames()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence< OUString >    aRet( ::unographic::GraphicDescriptor::getSupportedServiceNames() );
     uno::Sequence< OUString >    aNew( getSupportedServiceNames_Static() );
@@ -160,7 +160,7 @@ uno::Sequence< OUString > SAL_CALL Graphic::getSupportedServiceNames()
 }
 
 uno::Sequence< uno::Type > SAL_CALL Graphic::getTypes()
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence< uno::Type >  aRet( ::unographic::GraphicDescriptor::getTypes() );
     sal_Int32                   nOldCount = aRet.getLength();
@@ -175,7 +175,7 @@ uno::Sequence< uno::Type > SAL_CALL Graphic::getTypes()
 
 
 uno::Sequence< sal_Int8 > SAL_CALL Graphic::getImplementationId()
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     return getImplementationId_Static();
 }
@@ -183,7 +183,7 @@ uno::Sequence< sal_Int8 > SAL_CALL Graphic::getImplementationId()
 
 
 ::sal_Int8 SAL_CALL Graphic::getType()
-     throw (uno::RuntimeException)
+     throw (uno::RuntimeException, std::exception)
 {
     ::sal_Int8 cRet = graphic::GraphicType::EMPTY;
 
@@ -197,7 +197,7 @@ uno::Sequence< sal_Int8 > SAL_CALL Graphic::getImplementationId()
 // XBitmap
 
 
-awt::Size SAL_CALL Graphic::getSize(  ) throw (uno::RuntimeException)
+awt::Size SAL_CALL Graphic::getSize(  ) throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -210,7 +210,7 @@ awt::Size SAL_CALL Graphic::getSize(  ) throw (uno::RuntimeException)
 
 
 
-uno::Sequence< ::sal_Int8 > SAL_CALL Graphic::getDIB(  ) throw (uno::RuntimeException)
+uno::Sequence< ::sal_Int8 > SAL_CALL Graphic::getDIB(  ) throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -229,7 +229,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL Graphic::getDIB(  ) throw (uno::RuntimeExce
 
 
 
-uno::Sequence< ::sal_Int8 > SAL_CALL Graphic::getMaskDIB(  ) throw (uno::RuntimeException)
+uno::Sequence< ::sal_Int8 > SAL_CALL Graphic::getMaskDIB(  ) throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -256,7 +256,7 @@ const ::Graphic* Graphic::getImplementation( const uno::Reference< uno::XInterfa
 
 
 sal_Int64 SAL_CALL Graphic::getSomething( const uno::Sequence< sal_Int8 >& rId )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return( ( rId.getLength() == 16 && 0 == memcmp( getImplementationId().getConstArray(), rId.getConstArray(), 16 ) ) ?
             reinterpret_cast< sal_Int64 >( mpGraphic ) :

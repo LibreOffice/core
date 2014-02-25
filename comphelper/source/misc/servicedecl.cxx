@@ -43,11 +43,11 @@ public:
 
     // XServiceInfo:
     virtual OUString SAL_CALL getImplementationName()
-        throw (uno::RuntimeException);
+        throw (uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL supportsService( OUString const& name )
-        throw (uno::RuntimeException);
+        throw (uno::RuntimeException, std::exception);
     virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (uno::RuntimeException);
+        throw (uno::RuntimeException, std::exception);
     // XSingleComponentFactory:
     virtual uno::Reference<uno::XInterface> SAL_CALL createInstanceWithContext(
         uno::Reference<uno::XComponentContext> const& xContext )
@@ -70,19 +70,19 @@ ServiceDecl::Factory::~Factory()
 
 // XServiceInfo:
 OUString ServiceDecl::Factory::getImplementationName()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return m_rServiceDecl.getImplementationName();
 }
 
 sal_Bool ServiceDecl::Factory::supportsService( OUString const& name )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return m_rServiceDecl.supportsService(name);
 }
 
 uno::Sequence<OUString> ServiceDecl::Factory::getSupportedServiceNames()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return m_rServiceDecl.getSupportedServiceNames();
 }

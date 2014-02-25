@@ -77,7 +77,7 @@ public:
                                               SfxItemState eState,
                                               const SfxPoolItem* pState );
 
-    virtual void SAL_CALL update() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL update() throw (::com::sun::star::uno::RuntimeException, std::exception);
 };
 
 //----------------------------------------------------------------------------

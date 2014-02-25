@@ -286,15 +286,15 @@ public:
 
     // ::com::sun::star::lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName()
-        throw (uno::RuntimeException);
+        throw (uno::RuntimeException, std::exception);
     virtual ::sal_Bool SAL_CALL supportsService(
-            const OUString & ServiceName) throw (uno::RuntimeException);
+            const OUString & ServiceName) throw (uno::RuntimeException, std::exception);
     virtual uno::Sequence< OUString > SAL_CALL
-        getSupportedServiceNames() throw (uno::RuntimeException);
+        getSupportedServiceNames() throw (uno::RuntimeException, std::exception);
 
     // ::com::sun::star::rdf::XRepository:
     virtual uno::Reference< rdf::XBlankNode > SAL_CALL createBlankNode()
-        throw (uno::RuntimeException);
+        throw (uno::RuntimeException, std::exception);
     virtual uno::Reference<rdf::XNamedGraph> SAL_CALL importGraph(
             ::sal_Int16 i_Format,
             const uno::Reference< io::XInputStream > & i_xInStream,
@@ -303,7 +303,7 @@ public:
         throw (uno::RuntimeException, lang::IllegalArgumentException,
             datatransfer::UnsupportedFlavorException,
             container::ElementExistException, rdf::ParseException,
-            rdf::RepositoryException, io::IOException);
+            rdf::RepositoryException, io::IOException, std::exception);
     virtual void SAL_CALL exportGraph(::sal_Int16 i_Format,
             const uno::Reference< io::XOutputStream > & i_xOutStream,
             const uno::Reference< rdf::XURI > & i_xGraphName,
@@ -311,38 +311,38 @@ public:
         throw (uno::RuntimeException, lang::IllegalArgumentException,
             datatransfer::UnsupportedFlavorException,
             container::NoSuchElementException, rdf::RepositoryException,
-            io::IOException);
+            io::IOException, std::exception);
     virtual uno::Sequence< uno::Reference< rdf::XURI > > SAL_CALL
-        getGraphNames() throw (uno::RuntimeException, rdf::RepositoryException);
+        getGraphNames() throw (uno::RuntimeException, rdf::RepositoryException, std::exception);
     virtual uno::Reference< rdf::XNamedGraph > SAL_CALL getGraph(
             const uno::Reference< rdf::XURI > & i_xGraphName)
         throw (uno::RuntimeException, lang::IllegalArgumentException,
-            rdf::RepositoryException);
+            rdf::RepositoryException, std::exception);
     virtual uno::Reference< rdf::XNamedGraph > SAL_CALL createGraph(
             const uno::Reference< rdf::XURI > & i_xGraphName)
         throw (uno::RuntimeException, lang::IllegalArgumentException,
-            container::ElementExistException, rdf::RepositoryException);
+            container::ElementExistException, rdf::RepositoryException, std::exception);
     virtual void SAL_CALL destroyGraph(
             const uno::Reference< rdf::XURI > & i_xGraphName)
         throw (uno::RuntimeException, lang::IllegalArgumentException,
-            container::NoSuchElementException, rdf::RepositoryException);
+            container::NoSuchElementException, rdf::RepositoryException, std::exception);
     virtual uno::Reference< container::XEnumeration > SAL_CALL getStatements(
             const uno::Reference< rdf::XResource > & i_xSubject,
             const uno::Reference< rdf::XURI > & i_xPredicate,
             const uno::Reference< rdf::XNode > & i_xObject)
         throw (uno::RuntimeException,
-            rdf::RepositoryException);
+            rdf::RepositoryException, std::exception);
     virtual uno::Reference< rdf::XQuerySelectResult > SAL_CALL
             querySelect(const OUString & i_rQuery)
         throw (uno::RuntimeException, rdf::QueryException,
-            rdf::RepositoryException);
+            rdf::RepositoryException, std::exception);
     virtual uno::Reference< container::XEnumeration > SAL_CALL
         queryConstruct(const OUString & i_rQuery)
         throw (uno::RuntimeException, rdf::QueryException,
-            rdf::RepositoryException);
+            rdf::RepositoryException, std::exception);
     virtual ::sal_Bool SAL_CALL queryAsk(const OUString & i_rQuery)
         throw (uno::RuntimeException, rdf::QueryException,
-            rdf::RepositoryException);
+            rdf::RepositoryException, std::exception);
 
     // ::com::sun::star::rdf::XDocumentRepository:
     virtual void SAL_CALL setStatementRDFa(
@@ -352,27 +352,27 @@ public:
             const OUString & i_rRDFaContent,
             const uno::Reference< rdf::XURI > & i_xRDFaDatatype)
         throw (uno::RuntimeException, lang::IllegalArgumentException,
-            rdf::RepositoryException);
+            rdf::RepositoryException, std::exception);
     virtual void SAL_CALL removeStatementRDFa(
             const uno::Reference< rdf::XMetadatable > & i_xElement)
         throw (uno::RuntimeException, lang::IllegalArgumentException,
-            rdf::RepositoryException);
+            rdf::RepositoryException, std::exception);
     virtual beans::Pair< uno::Sequence<rdf::Statement>, sal_Bool > SAL_CALL
         getStatementRDFa(uno::Reference< rdf::XMetadatable > const& i_xElement)
         throw (uno::RuntimeException, lang::IllegalArgumentException,
-            rdf::RepositoryException);
+            rdf::RepositoryException, std::exception);
     virtual uno::Reference< container::XEnumeration > SAL_CALL
         getStatementsRDFa(
             const uno::Reference< rdf::XResource > & i_xSubject,
             const uno::Reference< rdf::XURI > & i_xPredicate,
             const uno::Reference< rdf::XNode > & i_xObject)
         throw (uno::RuntimeException,
-            rdf::RepositoryException);
+            rdf::RepositoryException, std::exception);
 
     // ::com::sun::star::lang::XInitialization:
     virtual void SAL_CALL initialize(
             const uno::Sequence< ::com::sun::star::uno::Any > & i_rArguments)
-        throw (uno::RuntimeException, uno::Exception);
+        throw (uno::RuntimeException, uno::Exception, std::exception);
 
     // XNamedGraph forwards ---------------------------------------------
     const NamedGraphMap_t::iterator clearGraph_NoLock(
@@ -485,10 +485,10 @@ public:
 
     // ::com::sun::star::container::XEnumeration:
     virtual ::sal_Bool SAL_CALL hasMoreElements()
-        throw (uno::RuntimeException);
+        throw (uno::RuntimeException, std::exception);
     virtual uno::Any SAL_CALL nextElement()
         throw (uno::RuntimeException, container::NoSuchElementException,
-            lang::WrappedTargetException);
+            lang::WrappedTargetException, std::exception);
 
 private:
     // NB: this is not a weak pointer: streams _must_ be deleted before the
@@ -510,7 +510,7 @@ private:
 
 // ::com::sun::star::container::XEnumeration:
 ::sal_Bool SAL_CALL
-librdf_GraphResult::hasMoreElements() throw (uno::RuntimeException)
+librdf_GraphResult::hasMoreElements() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard g(m_rMutex);
     return m_pStream.get() && !librdf_stream_end(m_pStream.get());
@@ -534,7 +534,7 @@ librdf_node* librdf_GraphResult::getContext_Lock() const
 ::com::sun::star::uno::Any SAL_CALL
 librdf_GraphResult::nextElement()
 throw (uno::RuntimeException, container::NoSuchElementException,
-    lang::WrappedTargetException)
+    lang::WrappedTargetException, std::exception)
 {
     ::osl::MutexGuard g(m_rMutex);
     if (!m_pStream.get() || !librdf_stream_end(m_pStream.get())) {
@@ -598,14 +598,14 @@ public:
 
     // ::com::sun::star::container::XEnumeration:
     virtual ::sal_Bool SAL_CALL hasMoreElements()
-        throw (uno::RuntimeException);
+        throw (uno::RuntimeException, std::exception);
     virtual uno::Any SAL_CALL nextElement()
         throw (uno::RuntimeException, container::NoSuchElementException,
-            lang::WrappedTargetException);
+            lang::WrappedTargetException, std::exception);
 
     // ::com::sun::star::rdf::XQuerySelectResult:
     virtual uno::Sequence< OUString > SAL_CALL getBindingNames()
-        throw (uno::RuntimeException);
+        throw (uno::RuntimeException, std::exception);
 
 private:
 
@@ -625,7 +625,7 @@ private:
 
 // ::com::sun::star::container::XEnumeration:
 ::sal_Bool SAL_CALL
-librdf_QuerySelectResult::hasMoreElements() throw (uno::RuntimeException)
+librdf_QuerySelectResult::hasMoreElements() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard g(m_rMutex);
     return !librdf_query_results_finished(m_pQueryResult.get());
@@ -648,7 +648,7 @@ public:
 ::com::sun::star::uno::Any SAL_CALL
 librdf_QuerySelectResult::nextElement()
 throw (uno::RuntimeException, container::NoSuchElementException,
-    lang::WrappedTargetException)
+    lang::WrappedTargetException, std::exception)
 {
     ::osl::MutexGuard g(m_rMutex);
     if (!librdf_query_results_finished(m_pQueryResult.get())) {
@@ -684,7 +684,7 @@ throw (uno::RuntimeException, container::NoSuchElementException,
 
 // ::com::sun::star::rdf::XQuerySelectResult:
 uno::Sequence< OUString > SAL_CALL
-librdf_QuerySelectResult::getBindingNames() throw (uno::RuntimeException)
+librdf_QuerySelectResult::getBindingNames() throw (uno::RuntimeException, std::exception)
 {
     // const - no lock needed
     return m_BindingNames;
@@ -712,38 +712,38 @@ public:
 
     // ::com::sun::star::rdf::XNode:
     virtual OUString SAL_CALL getStringValue()
-        throw (uno::RuntimeException);
+        throw (uno::RuntimeException, std::exception);
 
     // ::com::sun::star::rdf::XURI:
     virtual OUString SAL_CALL getNamespace()
-        throw (uno::RuntimeException);
+        throw (uno::RuntimeException, std::exception);
     virtual OUString SAL_CALL getLocalName()
-        throw (uno::RuntimeException);
+        throw (uno::RuntimeException, std::exception);
 
     // ::com::sun::star::rdf::XNamedGraph:
     virtual uno::Reference<rdf::XURI> SAL_CALL getName()
-        throw (uno::RuntimeException);
+        throw (uno::RuntimeException, std::exception);
     virtual void SAL_CALL clear()
         throw (uno::RuntimeException,
-            container::NoSuchElementException, rdf::RepositoryException);
+            container::NoSuchElementException, rdf::RepositoryException, std::exception);
     virtual void SAL_CALL addStatement(
             const uno::Reference< rdf::XResource > & i_xSubject,
             const uno::Reference< rdf::XURI > & i_xPredicate,
             const uno::Reference< rdf::XNode > & i_xObject)
         throw (uno::RuntimeException, lang::IllegalArgumentException,
-            container::NoSuchElementException, rdf::RepositoryException);
+            container::NoSuchElementException, rdf::RepositoryException, std::exception);
     virtual void SAL_CALL removeStatements(
             const uno::Reference< rdf::XResource > & i_xSubject,
             const uno::Reference< rdf::XURI > & i_xPredicate,
             const uno::Reference< rdf::XNode > & i_xObject)
         throw (uno::RuntimeException,
-            container::NoSuchElementException, rdf::RepositoryException);
+            container::NoSuchElementException, rdf::RepositoryException, std::exception);
     virtual uno::Reference< container::XEnumeration > SAL_CALL getStatements(
             const uno::Reference< rdf::XResource > & i_xSubject,
             const uno::Reference< rdf::XURI > & i_xPredicate,
             const uno::Reference< rdf::XNode > & i_xObject)
         throw (uno::RuntimeException,
-            container::NoSuchElementException, rdf::RepositoryException);
+            container::NoSuchElementException, rdf::RepositoryException, std::exception);
 
 private:
 
@@ -756,34 +756,34 @@ private:
 
 // ::com::sun::star::rdf::XNode:
 OUString SAL_CALL librdf_NamedGraph::getStringValue()
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     return m_xName->getStringValue();
 }
 
 // ::com::sun::star::rdf::XURI:
 OUString SAL_CALL librdf_NamedGraph::getNamespace()
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     return m_xName->getNamespace();
 }
 
 OUString SAL_CALL librdf_NamedGraph::getLocalName()
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     return m_xName->getLocalName();
 }
 
 // ::com::sun::star::rdf::XNamedGraph:
 uno::Reference< rdf::XURI > SAL_CALL librdf_NamedGraph::getName()
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     return m_xName;
 }
 
 void SAL_CALL librdf_NamedGraph::clear()
 throw (uno::RuntimeException,
-    container::NoSuchElementException, rdf::RepositoryException)
+    container::NoSuchElementException, rdf::RepositoryException, std::exception)
 {
     uno::Reference< rdf::XRepository > xRep( m_wRep );
     if (!xRep.is()) {
@@ -803,7 +803,7 @@ void SAL_CALL librdf_NamedGraph::addStatement(
     const uno::Reference< rdf::XURI > & i_xPredicate,
     const uno::Reference< rdf::XNode > & i_xObject)
 throw (uno::RuntimeException, lang::IllegalArgumentException,
-    container::NoSuchElementException, rdf::RepositoryException)
+    container::NoSuchElementException, rdf::RepositoryException, std::exception)
 {
     uno::Reference< rdf::XRepository > xRep( m_wRep );
     if (!xRep.is()) {
@@ -819,7 +819,7 @@ void SAL_CALL librdf_NamedGraph::removeStatements(
     const uno::Reference< rdf::XURI > & i_xPredicate,
     const uno::Reference< rdf::XNode > & i_xObject)
 throw (uno::RuntimeException,
-    container::NoSuchElementException, rdf::RepositoryException)
+    container::NoSuchElementException, rdf::RepositoryException, std::exception)
 {
     uno::Reference< rdf::XRepository > xRep( m_wRep );
     if (!xRep.is()) {
@@ -836,7 +836,7 @@ librdf_NamedGraph::getStatements(
     const uno::Reference< rdf::XURI > & i_xPredicate,
     const uno::Reference< rdf::XNode > & i_xObject)
 throw (uno::RuntimeException,
-    container::NoSuchElementException, rdf::RepositoryException)
+    container::NoSuchElementException, rdf::RepositoryException, std::exception)
 {
     uno::Reference< rdf::XRepository > xRep( m_wRep );
     if (!xRep.is()) {
@@ -892,26 +892,26 @@ librdf_Repository::~librdf_Repository()
 
 // com.sun.star.uno.XServiceInfo:
 OUString SAL_CALL librdf_Repository::getImplementationName()
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     return comp_librdf_Repository::_getImplementationName();
 }
 
 ::sal_Bool SAL_CALL librdf_Repository::supportsService(
-    OUString const & serviceName) throw (uno::RuntimeException)
+    OUString const & serviceName) throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, serviceName);
 }
 
 uno::Sequence< OUString > SAL_CALL
-librdf_Repository::getSupportedServiceNames() throw (uno::RuntimeException)
+librdf_Repository::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
 {
     return comp_librdf_Repository::_getSupportedServiceNames();
 }
 
 // ::com::sun::star::rdf::XRepository:
 uno::Reference< rdf::XBlankNode > SAL_CALL librdf_Repository::createBlankNode()
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
     const boost::shared_ptr<librdf_node> pNode(
@@ -954,7 +954,7 @@ librdf_Repository::importGraph(::sal_Int16 i_Format,
 throw (uno::RuntimeException, lang::IllegalArgumentException,
     datatransfer::UnsupportedFlavorException,
     container::ElementExistException, rdf::ParseException,
-    rdf::RepositoryException, io::IOException)
+    rdf::RepositoryException, io::IOException, std::exception)
 {
     if (!i_xInStream.is()) {
         throw lang::IllegalArgumentException(
@@ -1109,7 +1109,7 @@ librdf_Repository::exportGraph(::sal_Int16 i_Format,
 throw (uno::RuntimeException, lang::IllegalArgumentException,
     datatransfer::UnsupportedFlavorException,
     container::NoSuchElementException, rdf::RepositoryException,
-    io::IOException)
+    io::IOException, std::exception)
 {
     if (!i_xOutStream.is()) {
         throw lang::IllegalArgumentException(
@@ -1249,7 +1249,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
 
 uno::Sequence< uno::Reference< rdf::XURI > > SAL_CALL
 librdf_Repository::getGraphNames()
-throw (uno::RuntimeException, rdf::RepositoryException)
+throw (uno::RuntimeException, rdf::RepositoryException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
     ::comphelper::SequenceAsVector< uno::Reference<rdf::XURI> > ret;
@@ -1263,7 +1263,7 @@ throw (uno::RuntimeException, rdf::RepositoryException)
 uno::Reference< rdf::XNamedGraph > SAL_CALL
 librdf_Repository::getGraph(const uno::Reference< rdf::XURI > & i_xGraphName)
 throw (uno::RuntimeException, lang::IllegalArgumentException,
-    rdf::RepositoryException)
+    rdf::RepositoryException, std::exception)
 {
     if (!i_xGraphName.is()) {
         throw lang::IllegalArgumentException(
@@ -1283,7 +1283,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
 uno::Reference< rdf::XNamedGraph > SAL_CALL
 librdf_Repository::createGraph(const uno::Reference< rdf::XURI > & i_xGraphName)
 throw (uno::RuntimeException, lang::IllegalArgumentException,
-    container::ElementExistException, rdf::RepositoryException)
+    container::ElementExistException, rdf::RepositoryException, std::exception)
 {
     if (!i_xGraphName.is()) {
         throw lang::IllegalArgumentException(
@@ -1317,7 +1317,7 @@ void SAL_CALL
 librdf_Repository::destroyGraph(
         const uno::Reference< rdf::XURI > & i_xGraphName)
 throw (uno::RuntimeException, lang::IllegalArgumentException,
-    container::NoSuchElementException, rdf::RepositoryException)
+    container::NoSuchElementException, rdf::RepositoryException, std::exception)
 {
     if (!i_xGraphName.is()) {
         throw lang::IllegalArgumentException(
@@ -1343,7 +1343,7 @@ librdf_Repository::getStatements(
     const uno::Reference< rdf::XResource > & i_xSubject,
     const uno::Reference< rdf::XURI > & i_xPredicate,
     const uno::Reference< rdf::XNode > & i_xObject)
-throw (uno::RuntimeException, rdf::RepositoryException)
+throw (uno::RuntimeException, rdf::RepositoryException, std::exception)
 {
     if (isMetadatableWithoutMetadata(i_xSubject)   ||
         isMetadatableWithoutMetadata(i_xPredicate) ||
@@ -1381,7 +1381,7 @@ throw (uno::RuntimeException, rdf::RepositoryException)
 
 uno::Reference< rdf::XQuerySelectResult > SAL_CALL
 librdf_Repository::querySelect(const OUString & i_rQuery)
-throw (uno::RuntimeException, rdf::QueryException, rdf::RepositoryException)
+throw (uno::RuntimeException, rdf::QueryException, rdf::RepositoryException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
     const OString query(
@@ -1430,7 +1430,7 @@ throw (uno::RuntimeException, rdf::QueryException, rdf::RepositoryException)
 
 uno::Reference< container::XEnumeration > SAL_CALL
 librdf_Repository::queryConstruct(const OUString & i_rQuery)
-throw (uno::RuntimeException, rdf::QueryException, rdf::RepositoryException)
+throw (uno::RuntimeException, rdf::QueryException, rdf::RepositoryException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
     const OString query(
@@ -1467,7 +1467,7 @@ throw (uno::RuntimeException, rdf::QueryException, rdf::RepositoryException)
 
 ::sal_Bool SAL_CALL
 librdf_Repository::queryAsk(const OUString & i_rQuery)
-throw (uno::RuntimeException, rdf::QueryException, rdf::RepositoryException)
+throw (uno::RuntimeException, rdf::QueryException, rdf::RepositoryException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
 
@@ -1502,7 +1502,7 @@ void SAL_CALL librdf_Repository::setStatementRDFa(
     const OUString & i_rRDFaContent,
     const uno::Reference< rdf::XURI > & i_xRDFaDatatype)
 throw (uno::RuntimeException, lang::IllegalArgumentException,
-    rdf::RepositoryException)
+    rdf::RepositoryException, std::exception)
 {
     static const OUString s_cell("com.sun.star.table.Cell");
     static const OUString s_cellprops("com.sun.star.text.CellProperties"); // for writer
@@ -1615,7 +1615,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
 void SAL_CALL librdf_Repository::removeStatementRDFa(
     const uno::Reference< rdf::XMetadatable > & i_xElement)
 throw (uno::RuntimeException, lang::IllegalArgumentException,
-    rdf::RepositoryException)
+    rdf::RepositoryException, std::exception)
 {
     if (!i_xElement.is()) {
         throw lang::IllegalArgumentException(
@@ -1638,7 +1638,7 @@ beans::Pair< uno::Sequence<rdf::Statement>, sal_Bool > SAL_CALL
 librdf_Repository::getStatementRDFa(
     const uno::Reference< rdf::XMetadatable > & i_xElement)
 throw (uno::RuntimeException, lang::IllegalArgumentException,
-    rdf::RepositoryException)
+    rdf::RepositoryException, std::exception)
 {
     if (!i_xElement.is()) {
         throw lang::IllegalArgumentException(
@@ -1705,7 +1705,7 @@ librdf_Repository::getStatementsRDFa(
     const uno::Reference< rdf::XResource > & i_xSubject,
     const uno::Reference< rdf::XURI > & i_xPredicate,
     const uno::Reference< rdf::XNode > & i_xObject)
-throw (uno::RuntimeException, rdf::RepositoryException)
+throw (uno::RuntimeException, rdf::RepositoryException, std::exception)
 {
     if (isMetadatableWithoutMetadata(i_xSubject)   ||
         isMetadatableWithoutMetadata(i_xPredicate) ||
@@ -1750,7 +1750,7 @@ throw (uno::RuntimeException, rdf::RepositoryException)
 // ::com::sun::star::lang::XInitialization:
 void SAL_CALL librdf_Repository::initialize(
     const uno::Sequence< ::com::sun::star::uno::Any > & i_rArguments)
-throw (uno::RuntimeException, uno::Exception)
+throw (uno::RuntimeException, uno::Exception, std::exception)
 {
     (void) i_rArguments;
 

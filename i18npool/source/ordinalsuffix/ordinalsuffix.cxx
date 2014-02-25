@@ -66,7 +66,7 @@ namespace
  * than english ones, ICU 4.2+ has to be used.
  */
 uno::Sequence< OUString > SAL_CALL OrdinalSuffix::getOrdinalSuffix( sal_Int32 nNumber,
-        const lang::Locale &rLocale ) throw( RuntimeException )
+        const lang::Locale &rLocale ) throw( RuntimeException, std::exception )
 {
     uno::Sequence< OUString > retValue;
 
@@ -135,17 +135,17 @@ uno::Sequence< OUString > SAL_CALL OrdinalSuffix::getOrdinalSuffix( sal_Int32 nN
 
 const sal_Char cOrdinalSuffix[] = "com.sun.star.i18n.OrdinalSuffix";
 
-OUString SAL_CALL OrdinalSuffix::getImplementationName(void) throw( RuntimeException )
+OUString SAL_CALL OrdinalSuffix::getImplementationName(void) throw( RuntimeException, std::exception )
 {
     return OUString::createFromAscii(cOrdinalSuffix);
 }
 
-sal_Bool SAL_CALL OrdinalSuffix::supportsService( const OUString& rServiceName) throw( RuntimeException )
+sal_Bool SAL_CALL OrdinalSuffix::supportsService( const OUString& rServiceName) throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL OrdinalSuffix::getSupportedServiceNames(void) throw( RuntimeException )
+Sequence< OUString > SAL_CALL OrdinalSuffix::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
     aRet[0] = OUString::createFromAscii(cOrdinalSuffix);

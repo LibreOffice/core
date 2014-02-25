@@ -110,24 +110,24 @@ class COMPHELPER_DLLPUBLIC NumberedCollection : private ::cppu::BaseMutex
         /** @see css.frame.XUntitledNumbers */
         virtual ::sal_Int32 SAL_CALL leaseNumber(const css::uno::Reference< css::uno::XInterface >& xComponent)
             throw (css::lang::IllegalArgumentException,
-                   css::uno::RuntimeException         );
+                   css::uno::RuntimeException, std::exception         );
 
         //---------------------------------------
         /** @see css.frame.XUntitledNumbers */
         virtual void SAL_CALL releaseNumber(::sal_Int32 nNumber)
             throw (css::lang::IllegalArgumentException,
-                   css::uno::RuntimeException         );
+                   css::uno::RuntimeException, std::exception         );
 
         //---------------------------------------
         /** @see css.frame.XUntitledNumbers */
         virtual void SAL_CALL releaseNumberForComponent(const css::uno::Reference< css::uno::XInterface >& xComponent)
             throw (css::lang::IllegalArgumentException,
-                   css::uno::RuntimeException         );
+                   css::uno::RuntimeException, std::exception         );
 
         //---------------------------------------
         /** @see css.frame.XUntitledNumbers */
         virtual OUString SAL_CALL getUntitledPrefix()
-            throw (css::uno::RuntimeException);
+            throw (css::uno::RuntimeException, std::exception);
 
     //-------------------------------------------
     // internal

@@ -68,56 +68,56 @@ public:
     virtual void SAL_CALL
     initialize(com::sun::star::uno::Sequence< com::sun::star::uno::Any > const &
                    rArguments)
-        throw (com::sun::star::uno::Exception);
+        throw (com::sun::star::uno::Exception, std::exception);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual sal_Bool SAL_CALL
     supportsService(OUString const & rServiceName)
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
-    getSupportedServiceNames() throw (com::sun::star::uno::RuntimeException);
+    getSupportedServiceNames() throw (com::sun::star::uno::RuntimeException, std::exception);
 
     // XJavaVM
     virtual com::sun::star::uno::Any SAL_CALL
     getJavaVM(com::sun::star::uno::Sequence< sal_Int8 > const & rProcessId)
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual sal_Bool SAL_CALL isVMStarted()
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual sal_Bool SAL_CALL isVMEnabled()
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     // XJavaThreadRegister_11
     virtual sal_Bool SAL_CALL isThreadAttached()
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL registerThread()
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL revokeThread()
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     // XContainerListener
     virtual void SAL_CALL
     disposing(com::sun::star::lang::EventObject const & rSource)
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL
     elementInserted(com::sun::star::container::ContainerEvent const & rEvent)
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL
     elementRemoved(com::sun::star::container::ContainerEvent const & rEvent)
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL
     elementReplaced(com::sun::star::container::ContainerEvent const & rEvent)
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
 private:
     JavaVirtualMachine(JavaVirtualMachine &); // not implemented

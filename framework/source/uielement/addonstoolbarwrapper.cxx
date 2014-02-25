@@ -64,7 +64,7 @@ AddonsToolBarWrapper::~AddonsToolBarWrapper()
 }
 
 // XComponent
-void SAL_CALL AddonsToolBarWrapper::dispose() throw ( RuntimeException )
+void SAL_CALL AddonsToolBarWrapper::dispose() throw ( RuntimeException, std::exception )
 {
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
 
@@ -81,7 +81,7 @@ void SAL_CALL AddonsToolBarWrapper::dispose() throw ( RuntimeException )
 }
 
 // XInitialization
-void SAL_CALL AddonsToolBarWrapper::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
+void SAL_CALL AddonsToolBarWrapper::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException, std::exception )
 {
     ResetableGuard aLock( m_aLock );
 
@@ -143,7 +143,7 @@ void SAL_CALL AddonsToolBarWrapper::initialize( const Sequence< Any >& aArgument
 }
 
 // XUIElement interface
-Reference< XInterface > SAL_CALL AddonsToolBarWrapper::getRealInterface() throw (::com::sun::star::uno::RuntimeException)
+Reference< XInterface > SAL_CALL AddonsToolBarWrapper::getRealInterface() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ResetableGuard aLock( m_aLock );
 

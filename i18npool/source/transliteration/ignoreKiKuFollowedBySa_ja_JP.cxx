@@ -31,7 +31,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 OUString SAL_CALL
 ignoreKiKuFollowedBySa_ja_JP::folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
-  throw(RuntimeException)
+  throw(RuntimeException, std::exception)
 {
     // Create a string buffer which can hold nCount + 1 characters.
     // The reference count is 1 now.

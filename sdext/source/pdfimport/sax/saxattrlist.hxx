@@ -53,15 +53,15 @@ namespace pdfi
         virtual ~SaxAttrList();
 
         // ::com::sun::star::xml::sax::XAttributeList
-        virtual sal_Int16 SAL_CALL getLength() throw();
-        virtual OUString SAL_CALL getNameByIndex(sal_Int16 i) throw();
-        virtual OUString SAL_CALL getTypeByIndex(sal_Int16 i) throw();
-        virtual OUString SAL_CALL getTypeByName(const OUString& aName) throw();
-        virtual OUString SAL_CALL getValueByIndex(sal_Int16 i) throw();
-        virtual OUString SAL_CALL getValueByName(const OUString& aName) throw();
+        virtual sal_Int16 SAL_CALL getLength() throw(std::exception);
+        virtual OUString SAL_CALL getNameByIndex(sal_Int16 i) throw(std::exception);
+        virtual OUString SAL_CALL getTypeByIndex(sal_Int16 i) throw(std::exception);
+        virtual OUString SAL_CALL getTypeByName(const OUString& aName) throw(std::exception);
+        virtual OUString SAL_CALL getValueByIndex(sal_Int16 i) throw(std::exception);
+        virtual OUString SAL_CALL getValueByName(const OUString& aName) throw(std::exception);
 
         // ::com::sun::star::util::XCloneable
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone() throw();
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone() throw(std::exception);
     };
 }
 

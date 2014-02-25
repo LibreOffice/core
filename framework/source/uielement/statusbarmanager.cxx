@@ -164,14 +164,14 @@ StatusBar* StatusBarManager::GetStatusBar() const
 }
 
 void StatusBarManager::frameAction( const frame::FrameActionEvent& Action )
-throw ( uno::RuntimeException )
+throw ( uno::RuntimeException, std::exception )
 {
     ResetableGuard aGuard( m_aLock );
     if ( Action.Action == frame::FrameAction_CONTEXT_CHANGED )
         UpdateControllers();
 }
 
-void SAL_CALL StatusBarManager::disposing( const lang::EventObject& Source ) throw ( uno::RuntimeException )
+void SAL_CALL StatusBarManager::disposing( const lang::EventObject& Source ) throw ( uno::RuntimeException, std::exception )
 {
     {
         ResetableGuard aGuard( m_aLock );
@@ -191,7 +191,7 @@ void SAL_CALL StatusBarManager::disposing( const lang::EventObject& Source ) thr
 }
 
 // XComponent
-void SAL_CALL StatusBarManager::dispose() throw( uno::RuntimeException )
+void SAL_CALL StatusBarManager::dispose() throw( uno::RuntimeException, std::exception )
 {
     uno::Reference< lang::XComponent > xThis(
         static_cast< OWeakObject* >(this), uno::UNO_QUERY );
@@ -238,7 +238,7 @@ void SAL_CALL StatusBarManager::dispose() throw( uno::RuntimeException )
     }
 }
 
-void SAL_CALL StatusBarManager::addEventListener( const uno::Reference< lang::XEventListener >& xListener ) throw( uno::RuntimeException )
+void SAL_CALL StatusBarManager::addEventListener( const uno::Reference< lang::XEventListener >& xListener ) throw( uno::RuntimeException, std::exception )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -250,14 +250,14 @@ void SAL_CALL StatusBarManager::addEventListener( const uno::Reference< lang::XE
         ( const uno::Reference< lang::XEventListener >* ) NULL ), xListener );
 }
 
-void SAL_CALL StatusBarManager::removeEventListener( const uno::Reference< lang::XEventListener >& xListener ) throw( uno::RuntimeException )
+void SAL_CALL StatusBarManager::removeEventListener( const uno::Reference< lang::XEventListener >& xListener ) throw( uno::RuntimeException, std::exception )
 {
     m_aListenerContainer.removeInterface( ::getCppuType(
         ( const uno::Reference< lang::XEventListener >* ) NULL ), xListener );
 }
 
 // XUIConfigurationListener
-void SAL_CALL StatusBarManager::elementInserted( const css::ui::ConfigurationEvent& ) throw ( uno::RuntimeException )
+void SAL_CALL StatusBarManager::elementInserted( const css::ui::ConfigurationEvent& ) throw ( uno::RuntimeException, std::exception )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -265,7 +265,7 @@ void SAL_CALL StatusBarManager::elementInserted( const css::ui::ConfigurationEve
         return;
 }
 
-void SAL_CALL StatusBarManager::elementRemoved( const css::ui::ConfigurationEvent& ) throw ( uno::RuntimeException )
+void SAL_CALL StatusBarManager::elementRemoved( const css::ui::ConfigurationEvent& ) throw ( uno::RuntimeException, std::exception )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -273,7 +273,7 @@ void SAL_CALL StatusBarManager::elementRemoved( const css::ui::ConfigurationEven
         return;
 }
 
-void SAL_CALL StatusBarManager::elementReplaced( const css::ui::ConfigurationEvent& ) throw ( uno::RuntimeException )
+void SAL_CALL StatusBarManager::elementReplaced( const css::ui::ConfigurationEvent& ) throw ( uno::RuntimeException, std::exception )
 {
     ResetableGuard aGuard( m_aLock );
 

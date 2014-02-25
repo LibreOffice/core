@@ -277,23 +277,23 @@ FinalThreadManager::~FinalThreadManager()
 }
 
 // com.sun.star.uno.XServiceInfo:
-OUString SAL_CALL FinalThreadManager::getImplementationName() throw (css::uno::RuntimeException)
+OUString SAL_CALL FinalThreadManager::getImplementationName() throw (css::uno::RuntimeException, std::exception)
 {
     return comp_FinalThreadManager::_getImplementationName();
 }
 
-::sal_Bool SAL_CALL FinalThreadManager::supportsService(OUString const & serviceName) throw (css::uno::RuntimeException)
+::sal_Bool SAL_CALL FinalThreadManager::supportsService(OUString const & serviceName) throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, serviceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL FinalThreadManager::getSupportedServiceNames() throw (css::uno::RuntimeException)
+css::uno::Sequence< OUString > SAL_CALL FinalThreadManager::getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception)
 {
     return comp_FinalThreadManager::_getSupportedServiceNames();
 }
 
 // ::com::sun::star::util::XJobManager:
-void SAL_CALL FinalThreadManager::registerJob(const css::uno::Reference< css::util::XCancellable > & Job) throw (css::uno::RuntimeException)
+void SAL_CALL FinalThreadManager::registerJob(const css::uno::Reference< css::util::XCancellable > & Job) throw (css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard(maMutex);
 
@@ -306,14 +306,14 @@ void SAL_CALL FinalThreadManager::registerJob(const css::uno::Reference< css::ut
     }
 }
 
-void SAL_CALL FinalThreadManager::releaseJob(const css::uno::Reference< css::util::XCancellable > & Job) throw (css::uno::RuntimeException)
+void SAL_CALL FinalThreadManager::releaseJob(const css::uno::Reference< css::util::XCancellable > & Job) throw (css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard(maMutex);
 
     maThreads.remove( Job );
 }
 
-void SAL_CALL FinalThreadManager::cancelAllJobs() throw (css::uno::RuntimeException)
+void SAL_CALL FinalThreadManager::cancelAllJobs() throw (css::uno::RuntimeException, std::exception)
 {
     std::list< css::uno::Reference< css::util::XCancellable > > aThreads;
     {
@@ -347,7 +347,7 @@ void SAL_CALL FinalThreadManager::cancelAllJobs() throw (css::uno::RuntimeExcept
 }
 
 // ::com::sun::star::frame::XTerminateListener
-void SAL_CALL FinalThreadManager::queryTermination( const css::lang::EventObject& ) throw (css::frame::TerminationVetoException, css::uno::RuntimeException)
+void SAL_CALL FinalThreadManager::queryTermination( const css::lang::EventObject& ) throw (css::frame::TerminationVetoException, css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard(maMutex);
 
@@ -391,7 +391,7 @@ void SAL_CALL FinalThreadManager::queryTermination( const css::lang::EventObject
     return;
 }
 
-void SAL_CALL FinalThreadManager::cancelTermination( const css::lang::EventObject& ) throw (css::uno::RuntimeException)
+void SAL_CALL FinalThreadManager::cancelTermination( const css::lang::EventObject& ) throw (css::uno::RuntimeException, std::exception)
 {
     if ( mpPauseThreadStarting != 0 )
     {
@@ -402,7 +402,7 @@ void SAL_CALL FinalThreadManager::cancelTermination( const css::lang::EventObjec
     return;
 }
 
-void SAL_CALL FinalThreadManager::notifyTermination( const css::lang::EventObject& ) throw (css::uno::RuntimeException)
+void SAL_CALL FinalThreadManager::notifyTermination( const css::lang::EventObject& ) throw (css::uno::RuntimeException, std::exception)
 {
     if ( mpTerminateOfficeThread != 0 )
     {
@@ -432,7 +432,7 @@ void SAL_CALL FinalThreadManager::notifyTermination( const css::lang::EventObjec
 }
 
 // ::com::sun:star::lang::XEventListener (inherited via com::sun::star::frame::XTerminateListener)
-void SAL_CALL FinalThreadManager::disposing( const css::lang::EventObject& ) throw (css::uno::RuntimeException)
+void SAL_CALL FinalThreadManager::disposing( const css::lang::EventObject& ) throw (css::uno::RuntimeException, std::exception)
 {
     // nothing to do, because instance doesn't hold any references of observed objects
 }

@@ -338,7 +338,7 @@ sal_Bool AccessibleShape::GetState (sal_Int16 aState)
 
 // OverWrite the parent's getAccessibleName method
 OUString SAL_CALL AccessibleShape::getAccessibleName (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
         ThrowIfDisposed ();
     if (m_pShape && !m_pShape->GetTitle().isEmpty())
@@ -348,7 +348,7 @@ OUString SAL_CALL AccessibleShape::getAccessibleName (void)
 }
 
 OUString SAL_CALL AccessibleShape::getAccessibleDescription (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     if( m_pShape && !m_pShape->GetDescription().isEmpty())
@@ -364,7 +364,7 @@ OUString SAL_CALL AccessibleShape::getAccessibleDescription (void)
 */
 sal_Int32 SAL_CALL
        AccessibleShape::getAccessibleChildCount ()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     sal_Int32 nChildCount = 0;
@@ -387,7 +387,7 @@ sal_Int32 SAL_CALL
 */
 uno::Reference<XAccessible> SAL_CALL
     AccessibleShape::getAccessibleChild (sal_Int32 nIndex)
-    throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
 
@@ -418,7 +418,7 @@ uno::Reference<XAccessible> SAL_CALL
 
 uno::Reference<XAccessibleRelationSet> SAL_CALL
     AccessibleShape::getAccessibleRelationSet (void)
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
     ::utl::AccessibleRelationSetHelper* pRelationSet = new utl::AccessibleRelationSetHelper;
@@ -442,7 +442,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
 */
 uno::Reference<XAccessibleStateSet> SAL_CALL
     AccessibleShape::getAccessibleStateSet (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
     Reference<XAccessibleStateSet> xStateSet;
@@ -547,7 +547,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
 uno::Reference<XAccessible > SAL_CALL
     AccessibleShape::getAccessibleAtPoint (
         const awt::Point& aPoint)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
 
@@ -580,7 +580,7 @@ uno::Reference<XAccessible > SAL_CALL
 
 
 awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard (maMutex);
@@ -695,7 +695,7 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
 
 
 awt::Point SAL_CALL AccessibleShape::getLocation (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     awt::Rectangle aBoundingBox (getBounds());
@@ -706,7 +706,7 @@ awt::Point SAL_CALL AccessibleShape::getLocation (void)
 
 
 awt::Point SAL_CALL AccessibleShape::getLocationOnScreen (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
 
@@ -731,7 +731,7 @@ awt::Point SAL_CALL AccessibleShape::getLocationOnScreen (void)
 
 
 awt::Size SAL_CALL AccessibleShape::getSize (void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     awt::Rectangle aBoundingBox (getBounds());
@@ -742,7 +742,7 @@ awt::Size SAL_CALL AccessibleShape::getSize (void)
 
 
 sal_Int32 SAL_CALL AccessibleShape::getForeground (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     sal_Int32 nColor (0x0ffffffL);
@@ -768,7 +768,7 @@ sal_Int32 SAL_CALL AccessibleShape::getForeground (void)
 
 
 sal_Int32 SAL_CALL AccessibleShape::getBackground (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     sal_Int32 nColor (0L);
@@ -811,7 +811,7 @@ sal_Int32 SAL_CALL AccessibleShape::getBackground (void)
 
 void SAL_CALL AccessibleShape::addAccessibleEventListener (
     const Reference<XAccessibleEventListener >& rxListener)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
@@ -832,7 +832,7 @@ void SAL_CALL AccessibleShape::addAccessibleEventListener (
 
 void SAL_CALL AccessibleShape::removeAccessibleEventListener (
     const Reference<XAccessibleEventListener >& rxListener)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     AccessibleContextBase::removeAccessibleEventListener (rxListener);
     if (mpText != NULL)
@@ -846,7 +846,7 @@ void SAL_CALL AccessibleShape::removeAccessibleEventListener (
 
 com::sun::star::uno::Any SAL_CALL
     AccessibleShape::queryInterface (const com::sun::star::uno::Type & rType)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::com::sun::star::uno::Any aReturn = AccessibleContextBase::queryInterface (rType);
     if ( ! aReturn.hasValue())
@@ -889,14 +889,14 @@ void SAL_CALL
 
 
 void SAL_CALL AccessibleShape::selectAccessibleChild( sal_Int32 )
-throw ( IndexOutOfBoundsException, RuntimeException )
+throw ( IndexOutOfBoundsException, RuntimeException, std::exception )
 {
 }
 
 
 sal_Bool SAL_CALL AccessibleShape::isAccessibleChildSelected( sal_Int32 nChildIndex )
 throw ( IndexOutOfBoundsException,
-       RuntimeException )
+       RuntimeException, std::exception )
 {
     uno::Reference<XAccessible> xAcc = getAccessibleChild( nChildIndex );
     uno::Reference<XAccessibleContext> xContext;
@@ -938,19 +938,19 @@ throw ( IndexOutOfBoundsException,
 
 
 void SAL_CALL AccessibleShape::clearAccessibleSelection(  )
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
 }
 
 
 void SAL_CALL AccessibleShape::selectAllAccessibleChildren(  )
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
 }
 
 
 sal_Int32 SAL_CALL AccessibleShape::getSelectedAccessibleChildCount()
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     sal_Int32 nCount = 0;
     sal_Int32 TotalCount = getAccessibleChildCount();
@@ -962,7 +962,7 @@ throw ( RuntimeException )
 
 
 Reference<XAccessible> SAL_CALL AccessibleShape::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
-throw ( IndexOutOfBoundsException, RuntimeException)
+throw ( IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     if ( nSelectedChildIndex > getSelectedAccessibleChildCount() )
         throw IndexOutOfBoundsException();
@@ -980,14 +980,14 @@ throw ( IndexOutOfBoundsException, RuntimeException)
 
 void SAL_CALL AccessibleShape::deselectAccessibleChild( sal_Int32 )
                                                             throw ( IndexOutOfBoundsException,
-                                                            RuntimeException )
+                                                            RuntimeException, std::exception )
 {
 
 }
 
 //=====  XAccessibleExtendedAttributes  ========================================================
 uno::Any SAL_CALL AccessibleShape::getExtendedAttributes()
-        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     uno::Any strRet;
     OUString style;
@@ -1005,7 +1005,7 @@ uno::Any SAL_CALL AccessibleShape::getExtendedAttributes()
 
 OUString SAL_CALL
     AccessibleShape::getImplementationName (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return OUString("AccessibleShape");
 }
@@ -1015,7 +1015,7 @@ OUString SAL_CALL
 
 uno::Sequence<OUString> SAL_CALL
     AccessibleShape::getSupportedServiceNames (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     // Get list of supported service names from base class...
@@ -1039,7 +1039,7 @@ uno::Sequence<OUString> SAL_CALL
 
 uno::Sequence<uno::Type> SAL_CALL
     AccessibleShape::getTypes (void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     // Get list of types from the context base implementation, ...
@@ -1082,7 +1082,7 @@ uno::Sequence<uno::Type> SAL_CALL
 */
 void SAL_CALL
     AccessibleShape::disposing (const lang::EventObject& aEvent)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard (maMutex);
@@ -1110,7 +1110,7 @@ void SAL_CALL
 
 void SAL_CALL
     AccessibleShape::notifyEvent (const document::EventObject& rEventObject)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     static const OUString sShapeModified ("ShapeModified");
 
@@ -1171,7 +1171,7 @@ AccessibleShape*
 
 sal_Int64 SAL_CALL
     AccessibleShape::getSomething( const uno::Sequence< sal_Int8 >& rIdentifier )
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     sal_Int64 nReturn( 0 );
 
@@ -1376,7 +1376,7 @@ void AccessibleShape::disposing (void)
 
 sal_Int32 SAL_CALL
        AccessibleShape::getAccessibleIndexInParent (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     //  Use a simple but slow solution for now.  Optimize later.
@@ -1424,7 +1424,7 @@ void AccessibleShape::UpdateNameAndDescription (void)
 
 //  Return this object's role.
 sal_Int16 SAL_CALL AccessibleShape::getAccessibleRole (void)
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     sal_Int16 nAccessibleRole =  AccessibleRole::SHAPE ;
     switch (ShapeTypeHandler::Instance().GetTypeId (mxShape))
@@ -1477,7 +1477,7 @@ struct XShapePosCompareHelper
 //=====  XAccessibleGroupPosition  =========================================
 uno::Sequence< sal_Int32 > SAL_CALL
 AccessibleShape::getGroupPosition( const uno::Any& )
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     // we will return the:
     // [0] group level
@@ -1571,7 +1571,7 @@ throw (uno::RuntimeException)
 }
 
 OUString AccessibleShape::getObjectLink( const uno::Any& )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     OUString aRet;
 
@@ -1593,7 +1593,7 @@ OUString AccessibleShape::getObjectLink( const uno::Any& )
 
 //=====  XAccesibleHypertext  ==================================================
 sal_Int32 SAL_CALL AccessibleShape::getHyperLinkCount()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     // MT: Introduced with IA2 CWS, but SvxAccessibleHyperlink was redundant to svx::AccessibleHyperlink which we introduced meanwhile.
     // Code need to be adapted....
@@ -1609,7 +1609,7 @@ sal_Int32 SAL_CALL AccessibleShape::getHyperLinkCount()
 }
 uno::Reference< XAccessibleHyperlink > SAL_CALL
     AccessibleShape::getHyperLink( sal_Int32 )
-    throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     uno::Reference< XAccessibleHyperlink > xRet;
     // MT: Introduced with IA2 CWS, but SvxAccessibleHyperlink was redundant to svx::AccessibleHyperlink which we introduced meanwhile.
@@ -1624,48 +1624,48 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
     return xRet;
 }
 sal_Int32 SAL_CALL AccessibleShape::getHyperLinkIndex( sal_Int32 )
-throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     sal_Int32 nRet = 0;
     return nRet;
 }
 //=====  XAccesibleText  ==================================================
-sal_Int32 SAL_CALL AccessibleShape::getCaretPosition(  ) throw (::com::sun::star::uno::RuntimeException){return 0;}
-sal_Bool SAL_CALL AccessibleShape::setCaretPosition( sal_Int32 ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException){return 0;}
-sal_Unicode SAL_CALL AccessibleShape::getCharacter( sal_Int32 ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException){return 0;}
-::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL AccessibleShape::getCharacterAttributes( sal_Int32, const ::com::sun::star::uno::Sequence< OUString >& ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
+sal_Int32 SAL_CALL AccessibleShape::getCaretPosition(  ) throw (::com::sun::star::uno::RuntimeException, std::exception){return 0;}
+sal_Bool SAL_CALL AccessibleShape::setCaretPosition( sal_Int32 ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception){return 0;}
+sal_Unicode SAL_CALL AccessibleShape::getCharacter( sal_Int32 ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception){return 0;}
+::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL AccessibleShape::getCharacterAttributes( sal_Int32, const ::com::sun::star::uno::Sequence< OUString >& ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     uno::Sequence< ::com::sun::star::beans::PropertyValue > aValues(0);
     return aValues;
 }
-::com::sun::star::awt::Rectangle SAL_CALL AccessibleShape::getCharacterBounds( sal_Int32 ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
+::com::sun::star::awt::Rectangle SAL_CALL AccessibleShape::getCharacterBounds( sal_Int32 ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     return com::sun::star::awt::Rectangle(0, 0, 0, 0 );
 }
-sal_Int32 SAL_CALL AccessibleShape::getCharacterCount(  ) throw (::com::sun::star::uno::RuntimeException){return 0;}
-sal_Int32 SAL_CALL AccessibleShape::getIndexAtPoint( const ::com::sun::star::awt::Point& ) throw (::com::sun::star::uno::RuntimeException){return 0;}
-OUString SAL_CALL AccessibleShape::getSelectedText(  ) throw (::com::sun::star::uno::RuntimeException){return OUString();}
-sal_Int32 SAL_CALL AccessibleShape::getSelectionStart(  ) throw (::com::sun::star::uno::RuntimeException){return 0;}
-sal_Int32 SAL_CALL AccessibleShape::getSelectionEnd(  ) throw (::com::sun::star::uno::RuntimeException){return 0;}
-sal_Bool SAL_CALL AccessibleShape::setSelection( sal_Int32, sal_Int32 ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException){return sal_True;}
-OUString SAL_CALL AccessibleShape::getText(  ) throw (::com::sun::star::uno::RuntimeException){return OUString();}
-OUString SAL_CALL AccessibleShape::getTextRange( sal_Int32, sal_Int32 ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException){return OUString();}
-::com::sun::star::accessibility::TextSegment SAL_CALL AccessibleShape::getTextAtIndex( sal_Int32, sal_Int16 ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+sal_Int32 SAL_CALL AccessibleShape::getCharacterCount(  ) throw (::com::sun::star::uno::RuntimeException, std::exception){return 0;}
+sal_Int32 SAL_CALL AccessibleShape::getIndexAtPoint( const ::com::sun::star::awt::Point& ) throw (::com::sun::star::uno::RuntimeException, std::exception){return 0;}
+OUString SAL_CALL AccessibleShape::getSelectedText(  ) throw (::com::sun::star::uno::RuntimeException, std::exception){return OUString();}
+sal_Int32 SAL_CALL AccessibleShape::getSelectionStart(  ) throw (::com::sun::star::uno::RuntimeException, std::exception){return 0;}
+sal_Int32 SAL_CALL AccessibleShape::getSelectionEnd(  ) throw (::com::sun::star::uno::RuntimeException, std::exception){return 0;}
+sal_Bool SAL_CALL AccessibleShape::setSelection( sal_Int32, sal_Int32 ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception){return sal_True;}
+OUString SAL_CALL AccessibleShape::getText(  ) throw (::com::sun::star::uno::RuntimeException, std::exception){return OUString();}
+OUString SAL_CALL AccessibleShape::getTextRange( sal_Int32, sal_Int32 ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception){return OUString();}
+::com::sun::star::accessibility::TextSegment SAL_CALL AccessibleShape::getTextAtIndex( sal_Int32, sal_Int16 ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::com::sun::star::accessibility::TextSegment aResult;
     return aResult;
 }
-::com::sun::star::accessibility::TextSegment SAL_CALL AccessibleShape::getTextBeforeIndex( sal_Int32, sal_Int16 ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+::com::sun::star::accessibility::TextSegment SAL_CALL AccessibleShape::getTextBeforeIndex( sal_Int32, sal_Int16 ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::com::sun::star::accessibility::TextSegment aResult;
     return aResult;
 }
-::com::sun::star::accessibility::TextSegment SAL_CALL AccessibleShape::getTextBehindIndex( sal_Int32, sal_Int16 ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+::com::sun::star::accessibility::TextSegment SAL_CALL AccessibleShape::getTextBehindIndex( sal_Int32, sal_Int16 ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::com::sun::star::accessibility::TextSegment aResult;
     return aResult;
 }
-sal_Bool SAL_CALL AccessibleShape::copyText( sal_Int32, sal_Int32 ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException){return sal_True;}
+sal_Bool SAL_CALL AccessibleShape::copyText( sal_Int32, sal_Int32 ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception){return sal_True;}
 
 } // end of namespace accessibility
 

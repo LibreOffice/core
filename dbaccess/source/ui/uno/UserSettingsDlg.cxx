@@ -41,7 +41,7 @@ OUserSettingsDialog::OUserSettingsDialog(const Reference< XComponentContext >& _
 {
 }
 
-Sequence<sal_Int8> SAL_CALL OUserSettingsDialog::getImplementationId(  ) throw(RuntimeException)
+Sequence<sal_Int8> SAL_CALL OUserSettingsDialog::getImplementationId(  ) throw(RuntimeException, std::exception)
 {
     static ::cppu::OImplementationId aId;
     return aId.getImplementationId();
@@ -52,7 +52,7 @@ Reference< XInterface > SAL_CALL OUserSettingsDialog::Create(const Reference< XM
     return *(new OUserSettingsDialog( comphelper::getComponentContext(_rxFactory) ));
 }
 
-OUString SAL_CALL OUserSettingsDialog::getImplementationName() throw(RuntimeException)
+OUString SAL_CALL OUserSettingsDialog::getImplementationName() throw(RuntimeException, std::exception)
 {
     return getImplementationName_Static();
 }
@@ -62,7 +62,7 @@ OUString OUserSettingsDialog::getImplementationName_Static() throw(RuntimeExcept
     return OUString("org.openoffice.comp.dbu.OUserSettingsDialog");
 }
 
-::comphelper::StringSequence SAL_CALL OUserSettingsDialog::getSupportedServiceNames() throw(RuntimeException)
+::comphelper::StringSequence SAL_CALL OUserSettingsDialog::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     return getSupportedServiceNames_Static();
 }
@@ -74,7 +74,7 @@ OUString OUserSettingsDialog::getImplementationName_Static() throw(RuntimeExcept
     return aSupported;
 }
 
-Reference<XPropertySetInfo>  SAL_CALL OUserSettingsDialog::getPropertySetInfo() throw(RuntimeException)
+Reference<XPropertySetInfo>  SAL_CALL OUserSettingsDialog::getPropertySetInfo() throw(RuntimeException, std::exception)
 {
     Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;

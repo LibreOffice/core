@@ -65,33 +65,33 @@ public:
 
     virtual void SAL_CALL
         initialize( const css::uno::Sequence < css::uno::Any > & args )
-            throw ( css::uno::Exception, css::uno::RuntimeException);
+            throw ( css::uno::Exception, css::uno::RuntimeException, std::exception);
 
     virtual OUString SAL_CALL
         getRootStorageURI()
-            throw ( ::com::sun::star::uno::RuntimeException );
+            throw ( ::com::sun::star::uno::RuntimeException, std::exception );
 
     virtual OUString SAL_CALL
         getScriptURI( const OUString& rStorageURI )
             throw( css::lang::IllegalArgumentException,
-                   css::uno::RuntimeException );
+                   css::uno::RuntimeException, std::exception );
 
     virtual OUString SAL_CALL
         getStorageURI( const OUString& rScriptURI )
             throw( css::lang::IllegalArgumentException,
-                   css::uno::RuntimeException );
+                   css::uno::RuntimeException, std::exception );
 
     virtual OUString SAL_CALL
         getImplementationName()
-            throw( css::uno::RuntimeException );
+            throw( css::uno::RuntimeException, std::exception );
 
     virtual sal_Bool SAL_CALL
         supportsService( const OUString& ServiceName )
-            throw( css::uno::RuntimeException );
+            throw( css::uno::RuntimeException, std::exception );
 
     virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames()
-            throw( css::uno::RuntimeException );
+            throw( css::uno::RuntimeException, std::exception );
 };
 
 } // namespace func_provider

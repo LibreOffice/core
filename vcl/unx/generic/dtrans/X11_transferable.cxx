@@ -55,7 +55,7 @@ X11Transferable::~X11Transferable()
 
 
 Any SAL_CALL X11Transferable::getTransferData( const DataFlavor& rFlavor )
-    throw(UnsupportedFlavorException, IOException, RuntimeException)
+    throw(UnsupportedFlavorException, IOException, RuntimeException, std::exception)
 {
     Any aRet;
     Sequence< sal_Int8 > aData;
@@ -88,7 +88,7 @@ Any SAL_CALL X11Transferable::getTransferData( const DataFlavor& rFlavor )
 
 
 Sequence< DataFlavor > SAL_CALL X11Transferable::getTransferDataFlavors()
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     Sequence< DataFlavor > aFlavorList;
     bool bSuccess = m_rManager.getPasteDataTypes( m_aSelection ? m_aSelection : XA_PRIMARY, aFlavorList );
@@ -101,7 +101,7 @@ Sequence< DataFlavor > SAL_CALL X11Transferable::getTransferDataFlavors()
 
 
 sal_Bool SAL_CALL X11Transferable::isDataFlavorSupported( const DataFlavor& aFlavor )
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     if( aFlavor.DataType != getCppuType( (Sequence< sal_Int8 >*)0 ) )
     {

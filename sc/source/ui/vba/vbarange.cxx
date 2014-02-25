@@ -298,8 +298,8 @@ class SingleRangeEnumeration : public EnumerationHelper_BASE
 public:
 
     SingleRangeEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< css::uno::XComponentContext >& xContext, const uno::Reference< table::XCellRange >& xRange ) throw ( uno::RuntimeException ) : m_xParent( xParent ), m_xRange( xRange ), mxContext( xContext ), bHasMore( true ) { }
-    virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException) { return bHasMore; }
-    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) { return bHasMore; }
+    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
     {
         if ( !bHasMore )
             throw container::NoSuchElementException();
@@ -322,19 +322,19 @@ private:
 public:
     SingleRangeIndexAccess( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< table::XCellRange >& xRange ):mxParent( xParent ), m_xRange( xRange ), mxContext( xContext ) {}
     // XIndexAccess
-    virtual ::sal_Int32 SAL_CALL getCount() throw (::uno::RuntimeException) { return 1; }
-    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual ::sal_Int32 SAL_CALL getCount() throw (::uno::RuntimeException, std::exception) { return 1; }
+    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
     {
         if ( Index != 0 )
             throw lang::IndexOutOfBoundsException();
         return uno::makeAny( m_xRange );
     }
         // XElementAccess
-        virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException){ return cppu::UnoType<table::XCellRange>::get(); }
+        virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException, std::exception){ return cppu::UnoType<table::XCellRange>::get(); }
 
-        virtual ::sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException) { return sal_True; }
+        virtual ::sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException, std::exception) { return sal_True; }
     // XEnumerationAccess
-    virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration() throw (uno::RuntimeException) { return new SingleRangeEnumeration( mxParent, mxContext, m_xRange ); }
+    virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration() throw (uno::RuntimeException, std::exception) { return new SingleRangeEnumeration( mxParent, mxContext, m_xRange ); }
 
 };
 
@@ -347,7 +347,7 @@ class RangesEnumerationImpl : public EnumerationHelperImpl
 public:
 
     RangesEnumerationImpl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration, bool bIsRows, bool bIsColumns ) throw ( uno::RuntimeException ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ), mbIsRows( bIsRows ), mbIsColumns( bIsColumns ) {}
-    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
     {
         return lcl_makeRange( m_xParent, m_xContext, m_xEnumeration->nextElement(), mbIsRows, mbIsColumns );
     }
@@ -631,9 +631,9 @@ public:
         {
     }
 
-    virtual ::sal_Bool SAL_CALL hasMoreElements() throw (::uno::RuntimeException){ return mCurElem < mMaxElems; }
+    virtual ::sal_Bool SAL_CALL hasMoreElements() throw (::uno::RuntimeException, std::exception){ return mCurElem < mMaxElems; }
 
-    virtual uno::Any SAL_CALL nextElement() throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual uno::Any SAL_CALL nextElement() throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
     {
         if ( !hasMoreElements() )
             throw container::NoSuchElementException();
@@ -681,9 +681,9 @@ public:
         }
         m_it = m_CellPositions.begin();
     }
-    virtual ::sal_Bool SAL_CALL hasMoreElements() throw (::uno::RuntimeException){ return m_it != m_CellPositions.end(); }
+    virtual ::sal_Bool SAL_CALL hasMoreElements() throw (::uno::RuntimeException, std::exception){ return m_it != m_CellPositions.end(); }
 
-    virtual uno::Any SAL_CALL nextElement() throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual uno::Any SAL_CALL nextElement() throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
     {
         if ( !hasMoreElements() )
             throw container::NoSuchElementException();
@@ -1533,7 +1533,7 @@ ScVbaRange::getValue( ValueGetter& valueGetter) throw (uno::RuntimeException)
 }
 
 uno::Any SAL_CALL
-ScVbaRange::getValue() throw (uno::RuntimeException)
+ScVbaRange::getValue() throw (uno::RuntimeException, std::exception)
 {
     // #TODO code within the test below "if ( m_Areas.... " can be removed
     // Test is performed only because m_xRange is NOT set to be
@@ -1591,7 +1591,7 @@ ScVbaRange::setValue( const uno::Any& aValue, ValueSetter& valueSetter, bool bFi
 }
 
 void SAL_CALL
-ScVbaRange::setValue( const uno::Any  &aValue ) throw (uno::RuntimeException)
+ScVbaRange::setValue( const uno::Any  &aValue ) throw (uno::RuntimeException, std::exception)
 {
     // If this is a multiple selection apply setValue over all areas
     if ( m_Areas->getCount() > 1 )
@@ -1606,7 +1606,7 @@ ScVbaRange::setValue( const uno::Any  &aValue ) throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-ScVbaRange::Clear() throw (uno::RuntimeException)
+ScVbaRange::Clear() throw (uno::RuntimeException, std::exception)
 {
     using namespace ::com::sun::star::sheet::CellFlags;
     sal_Int32 nFlags = VALUE | DATETIME | STRING | FORMULA | HARDATTR | EDITATTR | FORMATTED;
@@ -1643,13 +1643,13 @@ ScVbaRange::ClearContents( sal_Int32 nFlags, bool bFireEvent ) throw (uno::Runti
 }
 
 void SAL_CALL
-ScVbaRange::ClearComments() throw (uno::RuntimeException)
+ScVbaRange::ClearComments() throw (uno::RuntimeException, std::exception)
 {
     ClearContents( sheet::CellFlags::ANNOTATION, false );
 }
 
 void SAL_CALL
-ScVbaRange::ClearContents() throw (uno::RuntimeException)
+ScVbaRange::ClearContents() throw (uno::RuntimeException, std::exception)
 {
     using namespace ::com::sun::star::sheet::CellFlags;
     sal_Int32 nFlags = VALUE | DATETIME | STRING | FORMULA;
@@ -1657,7 +1657,7 @@ ScVbaRange::ClearContents() throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-ScVbaRange::ClearFormats() throw (uno::RuntimeException)
+ScVbaRange::ClearFormats() throw (uno::RuntimeException, std::exception)
 {
 	// FIXME: need to check if we need to combine FORMATTED
     using namespace ::com::sun::star::sheet::CellFlags;
@@ -1698,32 +1698,32 @@ ScVbaRange::getFormulaValue( formula::FormulaGrammar::Grammar eGram ) throw (uno
 }
 
 void
-ScVbaRange::setFormula(const uno::Any &rFormula ) throw (uno::RuntimeException)
+ScVbaRange::setFormula(const uno::Any &rFormula ) throw (uno::RuntimeException, std::exception)
 {
     // #FIXME converting "=$a$1" e.g. CONV_XL_A1 -> CONV_OOO                            // results in "=$a$1:a1", temporalily disable conversion
     setFormulaValue( rFormula,formula::FormulaGrammar::GRAM_NATIVE_XL_A1, true );
 }
 
 uno::Any
-ScVbaRange::getFormulaR1C1() throw (::com::sun::star::uno::RuntimeException)
+ScVbaRange::getFormulaR1C1() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return getFormulaValue( formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1 );
 }
 
 void
-ScVbaRange::setFormulaR1C1(const uno::Any& rFormula ) throw (uno::RuntimeException)
+ScVbaRange::setFormulaR1C1(const uno::Any& rFormula ) throw (uno::RuntimeException, std::exception)
 {
     setFormulaValue( rFormula,formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1, true );
 }
 
 uno::Any
-ScVbaRange::getFormula() throw (::com::sun::star::uno::RuntimeException)
+ScVbaRange::getFormula() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return getFormulaValue( formula::FormulaGrammar::GRAM_NATIVE_XL_A1 );
 }
 
 sal_Int32
-ScVbaRange::getCount() throw (uno::RuntimeException)
+ScVbaRange::getCount() throw (uno::RuntimeException, std::exception)
 {
     // If this is a multiple selection apply setValue over all areas
     if ( m_Areas->getCount() > 1 )
@@ -1747,7 +1747,7 @@ ScVbaRange::getCount() throw (uno::RuntimeException)
 }
 
 sal_Int32
-ScVbaRange::getRow() throw (uno::RuntimeException)
+ScVbaRange::getRow() throw (uno::RuntimeException, std::exception)
 {
     // #TODO code within the test below "if ( m_Areas.... " can be removed
     // Test is performed only because m_xRange is NOT set to be
@@ -1763,7 +1763,7 @@ ScVbaRange::getRow() throw (uno::RuntimeException)
 }
 
 sal_Int32
-ScVbaRange::getColumn() throw (uno::RuntimeException)
+ScVbaRange::getColumn() throw (uno::RuntimeException, std::exception)
 {
     // #TODO code within the test below "if ( m_Areas.... " can be removed
     // Test is performed only because m_xRange is NOT set to be
@@ -1779,7 +1779,7 @@ ScVbaRange::getColumn() throw (uno::RuntimeException)
 }
 
 uno::Any
-ScVbaRange::HasFormula() throw (uno::RuntimeException)
+ScVbaRange::HasFormula() throw (uno::RuntimeException, std::exception)
 {
     if ( m_Areas->getCount() > 1 )
     {
@@ -1842,35 +1842,35 @@ ScVbaRange::fillSeries( sheet::FillDirection nFillDirection, sheet::FillMode nFi
 }
 
 void
-ScVbaRange::FillLeft() throw (uno::RuntimeException)
+ScVbaRange::FillLeft() throw (uno::RuntimeException, std::exception)
 {
     fillSeries(sheet::FillDirection_TO_LEFT,
         sheet::FillMode_SIMPLE, sheet::FillDateMode_FILL_DATE_DAY, 0, 0x7FFFFFFF);
 }
 
 void
-ScVbaRange::FillRight() throw (uno::RuntimeException)
+ScVbaRange::FillRight() throw (uno::RuntimeException, std::exception)
 {
     fillSeries(sheet::FillDirection_TO_RIGHT,
         sheet::FillMode_SIMPLE, sheet::FillDateMode_FILL_DATE_DAY, 0, 0x7FFFFFFF);
 }
 
 void
-ScVbaRange::FillUp() throw (uno::RuntimeException)
+ScVbaRange::FillUp() throw (uno::RuntimeException, std::exception)
 {
     fillSeries(sheet::FillDirection_TO_TOP,
         sheet::FillMode_SIMPLE, sheet::FillDateMode_FILL_DATE_DAY, 0, 0x7FFFFFFF);
 }
 
 void
-ScVbaRange::FillDown() throw (uno::RuntimeException)
+ScVbaRange::FillDown() throw (uno::RuntimeException, std::exception)
 {
     fillSeries(sheet::FillDirection_TO_BOTTOM,
         sheet::FillMode_SIMPLE, sheet::FillDateMode_FILL_DATE_DAY, 0, 0x7FFFFFFF);
 }
 
 OUString
-ScVbaRange::getText() throw (uno::RuntimeException)
+ScVbaRange::getText() throw (uno::RuntimeException, std::exception)
 {
     // #TODO code within the test below "if ( m_Areas.... " can be removed
     // Test is performed only because m_xRange is NOT set to be
@@ -1886,7 +1886,7 @@ ScVbaRange::getText() throw (uno::RuntimeException)
 }
 
 uno::Reference< excel::XRange >
-ScVbaRange::Offset( const ::uno::Any &nRowOff, const uno::Any &nColOff ) throw (uno::RuntimeException)
+ScVbaRange::Offset( const ::uno::Any &nRowOff, const uno::Any &nColOff ) throw (uno::RuntimeException, std::exception)
 {
     SCROW nRowOffset = 0;
     SCCOL nColOffset = 0;
@@ -1923,7 +1923,7 @@ ScVbaRange::Offset( const ::uno::Any &nRowOff, const uno::Any &nColOff ) throw (
 }
 
 uno::Reference< excel::XRange >
-ScVbaRange::CurrentRegion() throw (uno::RuntimeException)
+ScVbaRange::CurrentRegion() throw (uno::RuntimeException, std::exception)
 {
     // #TODO code within the test below "if ( m_Areas.... " can be removed
     // Test is performed only because m_xRange is NOT set to be
@@ -1944,7 +1944,7 @@ ScVbaRange::CurrentRegion() throw (uno::RuntimeException)
 }
 
 uno::Reference< excel::XRange >
-ScVbaRange::CurrentArray() throw (uno::RuntimeException)
+ScVbaRange::CurrentArray() throw (uno::RuntimeException, std::exception)
 {
     // #TODO code within the test below "if ( m_Areas.... " can be removed
     // Test is performed only because m_xRange is NOT set to be
@@ -1964,7 +1964,7 @@ ScVbaRange::CurrentArray() throw (uno::RuntimeException)
 }
 
 uno::Any
-ScVbaRange::getFormulaArray() throw (uno::RuntimeException)
+ScVbaRange::getFormulaArray() throw (uno::RuntimeException, std::exception)
 {
     // #TODO code within the test below "if ( m_Areas.... " can be removed
     // Test is performed only because m_xRange is NOT set to be
@@ -2002,7 +2002,7 @@ ScVbaRange::getFormulaArray() throw (uno::RuntimeException)
 }
 
 void
-ScVbaRange::setFormulaArray(const uno::Any& rFormula) throw (uno::RuntimeException)
+ScVbaRange::setFormulaArray(const uno::Any& rFormula) throw (uno::RuntimeException, std::exception)
 {
     // #TODO code within the test below "if ( m_Areas.... " can be removed
     // Test is performed only because m_xRange is NOT set to be
@@ -2038,7 +2038,7 @@ ScVbaRange::setFormulaArray(const uno::Any& rFormula) throw (uno::RuntimeExcepti
 }
 
 OUString
-ScVbaRange::Characters(const uno::Any& Start, const uno::Any& Length) throw (uno::RuntimeException)
+ScVbaRange::Characters(const uno::Any& Start, const uno::Any& Length) throw (uno::RuntimeException, std::exception)
 {
     // #TODO code within the test below "if ( m_Areas.... " can be removed
     // Test is performed only because m_xRange is NOT set to be
@@ -2064,7 +2064,7 @@ ScVbaRange::Characters(const uno::Any& Start, const uno::Any& Length) throw (uno
 }
 
 OUString
-ScVbaRange::Address(  const uno::Any& RowAbsolute, const uno::Any& ColumnAbsolute, const uno::Any& ReferenceStyle, const uno::Any& External, const uno::Any& RelativeTo ) throw (uno::RuntimeException)
+ScVbaRange::Address(  const uno::Any& RowAbsolute, const uno::Any& ColumnAbsolute, const uno::Any& ReferenceStyle, const uno::Any& External, const uno::Any& RelativeTo ) throw (uno::RuntimeException, std::exception)
 {
     if ( m_Areas->getCount() > 1 )
     {
@@ -2163,7 +2163,7 @@ ScVbaRange::Font() throw ( script::BasicErrorException, uno::RuntimeException)
 }
 
 uno::Reference< excel::XRange >
-ScVbaRange::Cells( const uno::Any &nRowIndex, const uno::Any &nColumnIndex ) throw(uno::RuntimeException)
+ScVbaRange::Cells( const uno::Any &nRowIndex, const uno::Any &nColumnIndex ) throw(uno::RuntimeException, std::exception)
 {
     // #TODO code within the test below "if ( m_Areas.... " can be removed
     // Test is performed only because m_xRange is NOT set to be
@@ -2266,7 +2266,7 @@ ScVbaRange::CellsHelper( const uno::Reference< ov::XHelperInterface >& xParent,
 }
 
 void
-ScVbaRange::Select() throw (uno::RuntimeException)
+ScVbaRange::Select() throw (uno::RuntimeException, std::exception)
 {
     ScCellRangesBase* pUnoRangesBase = getCellRangesBase();
     if ( !pUnoRangesBase )
@@ -2316,7 +2316,7 @@ void setCursor(  const SCCOL& nCol, const SCROW& nRow, const uno::Reference< fra
 }
 
 void
-ScVbaRange::Activate() throw (uno::RuntimeException)
+ScVbaRange::Activate() throw (uno::RuntimeException, std::exception)
 {
     // get first cell of current range
     uno::Reference< table::XCellRange > xCellRange;
@@ -2376,7 +2376,7 @@ ScVbaRange::Activate() throw (uno::RuntimeException)
 }
 
 uno::Reference< excel::XRange >
-ScVbaRange::Rows(const uno::Any& aIndex ) throw (uno::RuntimeException)
+ScVbaRange::Rows(const uno::Any& aIndex ) throw (uno::RuntimeException, std::exception)
 {
     OUString sAddress;
 
@@ -2419,7 +2419,7 @@ ScVbaRange::Rows(const uno::Any& aIndex ) throw (uno::RuntimeException)
 }
 
 uno::Reference< excel::XRange >
-ScVbaRange::Columns(const uno::Any& aIndex ) throw (uno::RuntimeException)
+ScVbaRange::Columns(const uno::Any& aIndex ) throw (uno::RuntimeException, std::exception)
 {
     OUString sAddress;
 
@@ -2522,7 +2522,7 @@ ScVbaRange::getMergeCells() throw (script::BasicErrorException, uno::RuntimeExce
 }
 
 void
-ScVbaRange::Copy(const ::uno::Any& Destination) throw (uno::RuntimeException)
+ScVbaRange::Copy(const ::uno::Any& Destination) throw (uno::RuntimeException, std::exception)
 {
     if ( m_Areas->getCount() > 1 )
         throw uno::RuntimeException("That command cannot be used on multiple selections", uno::Reference< uno::XInterface >() );
@@ -2552,7 +2552,7 @@ ScVbaRange::Copy(const ::uno::Any& Destination) throw (uno::RuntimeException)
 }
 
 void
-ScVbaRange::Cut(const ::uno::Any& Destination) throw (uno::RuntimeException)
+ScVbaRange::Cut(const ::uno::Any& Destination) throw (uno::RuntimeException, std::exception)
 {
     if ( m_Areas->getCount() > 1 )
         throw uno::RuntimeException("That command cannot be used on multiple selections", uno::Reference< uno::XInterface >() );
@@ -2626,7 +2626,7 @@ ScVbaRange::getNumberFormat() throw ( script::BasicErrorException, uno::RuntimeE
 }
 
 uno::Reference< excel::XRange >
-ScVbaRange::Resize( const uno::Any &RowSize, const uno::Any &ColumnSize ) throw (uno::RuntimeException)
+ScVbaRange::Resize( const uno::Any &RowSize, const uno::Any &ColumnSize ) throw (uno::RuntimeException, std::exception)
 {
     long nRowSize = 0, nColumnSize = 0;
     sal_Bool bIsRowChanged = ( RowSize >>= nRowSize ), bIsColumnChanged = ( ColumnSize >>= nColumnSize );
@@ -2703,7 +2703,7 @@ uno::Reference< excel::XInterior > ScVbaRange::Interior( ) throw ( script::Basic
         return new ScVbaInterior ( this, mxContext, xProps, getScDocument() );
 }
 uno::Reference< excel::XRange >
-ScVbaRange::Range( const uno::Any &Cell1, const uno::Any &Cell2 ) throw (uno::RuntimeException)
+ScVbaRange::Range( const uno::Any &Cell1, const uno::Any &Cell2 ) throw (uno::RuntimeException, std::exception)
 {
     return Range( Cell1, Cell2, false );
 }
@@ -2811,7 +2811,7 @@ ScVbaRange::Range( const uno::Any &Cell1, const uno::Any &Cell2, bool bForceUseI
 
 // Allow access to underlying openoffice uno api ( useful for debugging
 // with openoffice basic )
-uno::Any SAL_CALL ScVbaRange::getCellRange(  ) throw (uno::RuntimeException)
+uno::Any SAL_CALL ScVbaRange::getCellRange(  ) throw (uno::RuntimeException, std::exception)
 {
     uno::Any aAny;
     if ( mxRanges.is() )
@@ -2878,7 +2878,7 @@ getPasteFormulaBits( sal_Int32 Operation)
 return nFormulaBits;
 }
 void SAL_CALL
-ScVbaRange::PasteSpecial( const uno::Any& Paste, const uno::Any& Operation, const uno::Any& SkipBlanks, const uno::Any& Transpose ) throw (::com::sun::star::uno::RuntimeException)
+ScVbaRange::PasteSpecial( const uno::Any& Paste, const uno::Any& Operation, const uno::Any& SkipBlanks, const uno::Any& Transpose ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     if ( m_Areas->getCount() > 1 )
         throw uno::RuntimeException("That command cannot be used on multiple selections", uno::Reference< uno::XInterface >() );
@@ -2940,19 +2940,19 @@ ScVbaRange::getEntireColumnOrRow( bool bColumn ) throw (uno::RuntimeException)
 }
 
 uno::Reference< excel::XRange > SAL_CALL
-ScVbaRange::getEntireRow() throw (uno::RuntimeException)
+ScVbaRange::getEntireRow() throw (uno::RuntimeException, std::exception)
 {
     return getEntireColumnOrRow(false);
 }
 
 uno::Reference< excel::XRange > SAL_CALL
-ScVbaRange::getEntireColumn() throw (uno::RuntimeException)
+ScVbaRange::getEntireColumn() throw (uno::RuntimeException, std::exception)
 {
     return getEntireColumnOrRow();
 }
 
 uno::Reference< excel::XComment > SAL_CALL
-ScVbaRange::AddComment( const uno::Any& Text ) throw (uno::RuntimeException)
+ScVbaRange::AddComment( const uno::Any& Text ) throw (uno::RuntimeException, std::exception)
 {
     // if there is already a comment in the top-left cell then throw
     if( getComment().is() )
@@ -2976,7 +2976,7 @@ ScVbaRange::AddComment( const uno::Any& Text ) throw (uno::RuntimeException)
 }
 
 uno::Reference< excel::XComment > SAL_CALL
-ScVbaRange::getComment() throw (uno::RuntimeException)
+ScVbaRange::getComment() throw (uno::RuntimeException, std::exception)
 {
     // intentional behavior to return a null object if no
     // comment defined
@@ -3000,7 +3000,7 @@ getRowOrColumnProps( const uno::Reference< table::XCellRange >& xCellRange, bool
 }
 
 uno::Any SAL_CALL
-ScVbaRange::getHidden() throw (uno::RuntimeException)
+ScVbaRange::getHidden() throw (uno::RuntimeException, std::exception)
 {
     // if multi-area result is the result of the
     // first area
@@ -3024,7 +3024,7 @@ ScVbaRange::getHidden() throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-ScVbaRange::setHidden( const uno::Any& _hidden ) throw (uno::RuntimeException)
+ScVbaRange::setHidden( const uno::Any& _hidden ) throw (uno::RuntimeException, std::exception)
 {
     if ( m_Areas->getCount() > 1 )
     {
@@ -3050,7 +3050,7 @@ ScVbaRange::setHidden( const uno::Any& _hidden ) throw (uno::RuntimeException)
 }
 
 ::sal_Bool SAL_CALL
-ScVbaRange::Replace( const OUString& What, const OUString& Replacement, const uno::Any& LookAt, const uno::Any& SearchOrder, const uno::Any& MatchCase, const uno::Any& MatchByte, const uno::Any& SearchFormat, const uno::Any& ReplaceFormat  ) throw (uno::RuntimeException)
+ScVbaRange::Replace( const OUString& What, const OUString& Replacement, const uno::Any& LookAt, const uno::Any& SearchOrder, const uno::Any& MatchCase, const uno::Any& MatchByte, const uno::Any& SearchFormat, const uno::Any& ReplaceFormat  ) throw (uno::RuntimeException, std::exception)
 {
     if ( m_Areas->getCount() > 1 )
     {
@@ -3154,7 +3154,7 @@ ScVbaRange::Replace( const OUString& What, const OUString& Replacement, const un
 }
 
 uno::Reference< excel::XRange > SAL_CALL
-ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& LookIn, const uno::Any& LookAt, const uno::Any& SearchOrder, const uno::Any& SearchDirection, const uno::Any& MatchCase, const uno::Any& /*MatchByte*/, const uno::Any& /*SearchFormat*/ ) throw (uno::RuntimeException)
+ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& LookIn, const uno::Any& LookAt, const uno::Any& SearchOrder, const uno::Any& SearchDirection, const uno::Any& MatchCase, const uno::Any& /*MatchByte*/, const uno::Any& /*SearchFormat*/ ) throw (uno::RuntimeException, std::exception)
 {
     // return a Range object that represents the first cell where that information is found.
     OUString sWhat;
@@ -3398,7 +3398,7 @@ void updateTableSortField( const uno::Reference< table::XCellRange >& xParentRan
 }
 
 void SAL_CALL
-ScVbaRange::Sort( const uno::Any& Key1, const uno::Any& Order1, const uno::Any& Key2, const uno::Any& /*Type*/, const uno::Any& Order2, const uno::Any& Key3, const uno::Any& Order3, const uno::Any& Header, const uno::Any& OrderCustom, const uno::Any& MatchCase, const uno::Any& Orientation, const uno::Any& SortMethod,  const uno::Any& DataOption1, const uno::Any& DataOption2, const uno::Any& DataOption3  ) throw (uno::RuntimeException)
+ScVbaRange::Sort( const uno::Any& Key1, const uno::Any& Order1, const uno::Any& Key2, const uno::Any& /*Type*/, const uno::Any& Order2, const uno::Any& Key3, const uno::Any& Order3, const uno::Any& Header, const uno::Any& OrderCustom, const uno::Any& MatchCase, const uno::Any& Orientation, const uno::Any& SortMethod,  const uno::Any& DataOption1, const uno::Any& DataOption2, const uno::Any& DataOption3  ) throw (uno::RuntimeException, std::exception)
 {
     // #TODO# #FIXME# can we do something with Type
     if ( m_Areas->getCount() > 1 )
@@ -3576,7 +3576,7 @@ ScVbaRange::Sort( const uno::Any& Key1, const uno::Any& Order1, const uno::Any& 
 }
 
 uno::Reference< excel::XRange > SAL_CALL
-ScVbaRange::End( ::sal_Int32 Direction )  throw (uno::RuntimeException)
+ScVbaRange::End( ::sal_Int32 Direction )  throw (uno::RuntimeException, std::exception)
 {
     if ( m_Areas->getCount() > 1 )
     {
@@ -3666,7 +3666,7 @@ ScVbaRange::isSingleCellRange()
 }
 
 uno::Reference< excel::XCharacters > SAL_CALL
-ScVbaRange::characters( const uno::Any& Start, const uno::Any& Length ) throw (uno::RuntimeException)
+ScVbaRange::characters( const uno::Any& Start, const uno::Any& Length ) throw (uno::RuntimeException, std::exception)
 {
     if ( !isSingleCellRange() )
         throw uno::RuntimeException("Can't create Characters property for multicell range ", uno::Reference< uno::XInterface >() );
@@ -3680,7 +3680,7 @@ ScVbaRange::characters( const uno::Any& Start, const uno::Any& Length ) throw (u
 }
 
  void SAL_CALL
-ScVbaRange::Delete( const uno::Any& Shift ) throw (uno::RuntimeException)
+ScVbaRange::Delete( const uno::Any& Shift ) throw (uno::RuntimeException, std::exception)
 {
     if ( m_Areas->getCount() > 1 )
     {
@@ -3728,7 +3728,7 @@ ScVbaRange::Delete( const uno::Any& Shift ) throw (uno::RuntimeException)
 
 //XElementAccess
 sal_Bool SAL_CALL
-ScVbaRange::hasElements() throw (uno::RuntimeException)
+ScVbaRange::hasElements() throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< table::XColumnRowRange > xColumnRowRange(mxRange, uno::UNO_QUERY );
     if ( xColumnRowRange.is() )
@@ -3740,7 +3740,7 @@ ScVbaRange::hasElements() throw (uno::RuntimeException)
 
 // XEnumerationAccess
 uno::Reference< container::XEnumeration > SAL_CALL
-ScVbaRange::createEnumeration() throw (uno::RuntimeException)
+ScVbaRange::createEnumeration() throw (uno::RuntimeException, std::exception)
 {
     if ( mbIsColumns || mbIsRows )
     {
@@ -3758,7 +3758,7 @@ ScVbaRange::createEnumeration() throw (uno::RuntimeException)
 }
 
 OUString SAL_CALL
-ScVbaRange::getDefaultMethodName(  ) throw (uno::RuntimeException)
+ScVbaRange::getDefaultMethodName(  ) throw (uno::RuntimeException, std::exception)
 {
     const static OUString sName( "Item" );
     return sName;
@@ -3801,7 +3801,7 @@ double getDefaultCharWidth( ScDocShell* pDocShell )
 }
 
 uno::Any SAL_CALL
-ScVbaRange::getColumnWidth() throw (uno::RuntimeException)
+ScVbaRange::getColumnWidth() throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nLen = m_Areas->getCount();
     if ( nLen > 1 )
@@ -3838,7 +3838,7 @@ ScVbaRange::getColumnWidth() throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-ScVbaRange::setColumnWidth( const uno::Any& _columnwidth ) throw (uno::RuntimeException)
+ScVbaRange::setColumnWidth( const uno::Any& _columnwidth ) throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nLen = m_Areas->getCount();
     if ( nLen > 1 )
@@ -3873,7 +3873,7 @@ ScVbaRange::setColumnWidth( const uno::Any& _columnwidth ) throw (uno::RuntimeEx
 }
 
 uno::Any SAL_CALL
-ScVbaRange::getWidth() throw (uno::RuntimeException)
+ScVbaRange::getWidth() throw (uno::RuntimeException, std::exception)
 {
     if ( m_Areas->getCount() > 1 )
     {
@@ -3894,7 +3894,7 @@ ScVbaRange::getWidth() throw (uno::RuntimeException)
 }
 
 uno::Any SAL_CALL
-ScVbaRange::Areas( const uno::Any& item) throw (uno::RuntimeException)
+ScVbaRange::Areas( const uno::Any& item) throw (uno::RuntimeException, std::exception)
 {
     if ( !item.hasValue() )
         return uno::makeAny( m_Areas );
@@ -3920,7 +3920,7 @@ ScVbaRange::Borders( const uno::Any& item ) throw( script::BasicErrorException, 
 
 uno::Any SAL_CALL
 ScVbaRange::BorderAround( const css::uno::Any& LineStyle, const css::uno::Any& Weight,
-                const css::uno::Any& ColorIndex, const css::uno::Any& Color ) throw (css::uno::RuntimeException)
+                const css::uno::Any& ColorIndex, const css::uno::Any& Color ) throw (css::uno::RuntimeException, std::exception)
 {
     sal_Int32 nCount = getBorders()->getCount();
 
@@ -4006,7 +4006,7 @@ ScVbaRange::getRowHeight()
 }
 
 void SAL_CALL
-ScVbaRange::setRowHeight( const uno::Any& _rowheight) throw (uno::RuntimeException)
+ScVbaRange::setRowHeight( const uno::Any& _rowheight) throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nLen = m_Areas->getCount();
     if ( nLen > 1 )
@@ -4034,7 +4034,7 @@ ScVbaRange::setRowHeight( const uno::Any& _rowheight) throw (uno::RuntimeExcepti
 }
 
 uno::Any SAL_CALL
-ScVbaRange::getPageBreak() throw (uno::RuntimeException)
+ScVbaRange::getPageBreak() throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nPageBreak = excel::XlPageBreak::xlPageBreakNone;
     ScDocShell* pShell = getDocShellFromRange( mxRange );
@@ -4070,7 +4070,7 @@ ScVbaRange::getPageBreak() throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-ScVbaRange::setPageBreak( const uno::Any& _pagebreak) throw (uno::RuntimeException)
+ScVbaRange::setPageBreak( const uno::Any& _pagebreak) throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nPageBreak = 0;
     _pagebreak >>= nPageBreak;
@@ -4134,7 +4134,7 @@ ScVbaRange::getPosition() throw ( uno::RuntimeException )
     return aPoint;
 }
 uno::Any SAL_CALL
-ScVbaRange::getLeft() throw (uno::RuntimeException)
+ScVbaRange::getLeft() throw (uno::RuntimeException, std::exception)
 {
     // helperapi returns the first ranges left ( and top below )
     if ( m_Areas->getCount() > 1 )
@@ -4145,7 +4145,7 @@ ScVbaRange::getLeft() throw (uno::RuntimeException)
 
 
 uno::Any SAL_CALL
-ScVbaRange::getTop() throw (uno::RuntimeException)
+ScVbaRange::getTop() throw (uno::RuntimeException, std::exception)
 {
     // helperapi returns the first ranges top
     if ( m_Areas->getCount() > 1 )
@@ -4179,7 +4179,7 @@ uno::Reference< sheet::XCellRangeReferrer > getNamedRange( const uno::Reference<
 }
 
 uno::Reference< excel::XName >
-ScVbaRange::getName() throw (uno::RuntimeException)
+ScVbaRange::getName() throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< beans::XPropertySet > xProps( getUnoModel(), uno::UNO_QUERY );
     uno::Reference< table::XCellRange > thisRange( getCellRange(), uno::UNO_QUERY_THROW );
@@ -4206,7 +4206,7 @@ ScVbaRange::getName() throw (uno::RuntimeException)
 }
 
 uno::Reference< excel::XWorksheet >
-ScVbaRange::getWorksheet() throw (uno::RuntimeException)
+ScVbaRange::getWorksheet() throw (uno::RuntimeException, std::exception)
 {
     // #TODO #FIXME parent should always be set up ( currently thats not
     // the case )
@@ -4665,7 +4665,7 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
 }
 
 void SAL_CALL
-ScVbaRange::Insert( const uno::Any& Shift, const uno::Any& /*CopyOrigin*/ ) throw (uno::RuntimeException)
+ScVbaRange::Insert( const uno::Any& Shift, const uno::Any& /*CopyOrigin*/ ) throw (uno::RuntimeException, std::exception)
 {
     // It appears ( from the web ) that the undocumented CopyOrigin
     // param should contain member of enum XlInsertFormatOrigin
@@ -4716,7 +4716,7 @@ ScVbaRange::Insert( const uno::Any& Shift, const uno::Any& /*CopyOrigin*/ ) thro
 }
 
 void SAL_CALL
-ScVbaRange::Autofit() throw (uno::RuntimeException)
+ScVbaRange::Autofit() throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nLen = m_Areas->getCount();
     if ( nLen > 1 )
@@ -4755,7 +4755,7 @@ ScVbaRange::Autofit() throw (uno::RuntimeException)
 }
 
 uno::Any SAL_CALL
-ScVbaRange::Hyperlinks( const uno::Any& aIndex ) throw (uno::RuntimeException)
+ScVbaRange::Hyperlinks( const uno::Any& aIndex ) throw (uno::RuntimeException, std::exception)
 {
     /*  The range object always returns a new Hyperlinks object containing a
         fixed list of existing hyperlinks in the range.
@@ -4776,7 +4776,7 @@ ScVbaRange::Hyperlinks( const uno::Any& aIndex ) throw (uno::RuntimeException)
 }
 
 css::uno::Reference< excel::XValidation > SAL_CALL
-ScVbaRange::getValidation() throw (css::uno::RuntimeException)
+ScVbaRange::getValidation() throw (css::uno::RuntimeException, std::exception)
 {
     if ( !m_xValidation.is() )
         m_xValidation = new ScVbaValidation( this, mxContext, mxRange );
@@ -4849,7 +4849,7 @@ inline uno::Any lclGetPrefixVariant( sal_Unicode cPrefixChar )
 
 } // namespace
 
-uno::Any SAL_CALL ScVbaRange::getPrefixCharacter() throw (uno::RuntimeException)
+uno::Any SAL_CALL ScVbaRange::getPrefixCharacter() throw (uno::RuntimeException, std::exception)
 {
     /*  (1) If Application.TransitionNavigKeys is false, this function returns
         an apostroph character if the text cell begins with an apostroph
@@ -4874,7 +4874,7 @@ uno::Any SAL_CALL ScVbaRange::getPrefixCharacter() throw (uno::RuntimeException)
     throw uno::RuntimeException("Unexpected empty Range object", uno::Reference< uno::XInterface >() );
 }
 
-uno::Any ScVbaRange::getShowDetail() throw ( css::uno::RuntimeException)
+uno::Any ScVbaRange::getShowDetail() throw ( css::uno::RuntimeException, std::exception)
 {
     // #FIXME, If the specified range is in a PivotTable report
 
@@ -4917,7 +4917,7 @@ uno::Any ScVbaRange::getShowDetail() throw ( css::uno::RuntimeException)
     return aNULL();
 }
 
-void ScVbaRange::setShowDetail(const uno::Any& aShowDetail) throw ( css::uno::RuntimeException)
+void ScVbaRange::setShowDetail(const uno::Any& aShowDetail) throw ( css::uno::RuntimeException, std::exception)
 {
     // #FIXME, If the specified range is in a PivotTable report
 
@@ -4953,7 +4953,7 @@ void ScVbaRange::setShowDetail(const uno::Any& aShowDetail) throw ( css::uno::Ru
 }
 
 uno::Reference< excel::XRange > SAL_CALL
-ScVbaRange::MergeArea() throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaRange::MergeArea() throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     uno::Reference< sheet::XSheetCellRange > xMergeShellCellRange(mxRange->getCellRangeByPosition(0,0,0,0), uno::UNO_QUERY_THROW);
     uno::Reference< sheet::XSheetCellCursor > xMergeSheetCursor(xMergeShellCellRange->getSpreadsheet()->createCursorByRange( xMergeShellCellRange ), uno::UNO_QUERY_THROW);
@@ -4982,7 +4982,7 @@ ScVbaRange::MergeArea() throw (script::BasicErrorException, uno::RuntimeExceptio
 }
 
 void SAL_CALL
-ScVbaRange::PrintOut( const uno::Any& From, const uno::Any& To, const uno::Any& Copies, const uno::Any& Preview, const uno::Any& ActivePrinter, const uno::Any& PrintToFile, const uno::Any& Collate, const uno::Any& PrToFileName ) throw (uno::RuntimeException)
+ScVbaRange::PrintOut( const uno::Any& From, const uno::Any& To, const uno::Any& Copies, const uno::Any& Preview, const uno::Any& ActivePrinter, const uno::Any& PrintToFile, const uno::Any& Collate, const uno::Any& PrToFileName ) throw (uno::RuntimeException, std::exception)
 {
     ScDocShell* pShell = NULL;
 
@@ -5016,7 +5016,7 @@ ScVbaRange::PrintOut( const uno::Any& From, const uno::Any& To, const uno::Any& 
 }
 
 void SAL_CALL
-ScVbaRange::AutoFill(  const uno::Reference< excel::XRange >& Destination, const uno::Any& Type ) throw (uno::RuntimeException)
+ScVbaRange::AutoFill(  const uno::Reference< excel::XRange >& Destination, const uno::Any& Type ) throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< excel::XRange > xDest( Destination, uno::UNO_QUERY_THROW );
     ScVbaRange* pRange = getImplementation( xDest );
@@ -5131,7 +5131,7 @@ ScVbaRange::AutoFill(  const uno::Reference< excel::XRange >& Destination, const
                                    nCount, fStep, fEndValue, true, true );
 }
 sal_Bool SAL_CALL
-ScVbaRange::GoalSeek( const uno::Any& Goal, const uno::Reference< excel::XRange >& ChangingCell ) throw (uno::RuntimeException)
+ScVbaRange::GoalSeek( const uno::Any& Goal, const uno::Reference< excel::XRange >& ChangingCell ) throw (uno::RuntimeException, std::exception)
 {
     ScDocShell* pDocShell = getScDocShell();
     sal_Bool bRes = sal_True;
@@ -5161,13 +5161,13 @@ ScVbaRange::GoalSeek( const uno::Any& Goal, const uno::Reference< excel::XRange 
 }
 
 void
-ScVbaRange::Calculate(  ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaRange::Calculate(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     getWorksheet()->Calculate();
 }
 
 uno::Reference< excel::XRange > SAL_CALL
-ScVbaRange::Item( const uno::Any& row, const uno::Any& column ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaRange::Item( const uno::Any& row, const uno::Any& column ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     if ( mbIsRows || mbIsColumns )
     {
@@ -5184,7 +5184,7 @@ ScVbaRange::Item( const uno::Any& row, const uno::Any& column ) throw (script::B
 }
 
 void
-ScVbaRange::AutoOutline(  ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaRange::AutoOutline(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     // #TODO #FIXME needs to check for summary row/col ( whatever they are )
     // not valid for multi Area Addresses
@@ -5208,7 +5208,7 @@ ScVbaRange::AutoOutline(  ) throw (script::BasicErrorException, uno::RuntimeExce
 }
 
 void SAL_CALL
-ScVbaRange:: ClearOutline(  ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaRange:: ClearOutline(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     if ( m_Areas->getCount() > 1 )
     {
@@ -5243,12 +5243,12 @@ ScVbaRange::groupUnGroup( bool bUnGroup ) throw ( script::BasicErrorException, u
 }
 
 void SAL_CALL
-ScVbaRange::Group(  ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaRange::Group(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     groupUnGroup();
 }
 void SAL_CALL
-ScVbaRange::Ungroup(  ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaRange::Ungroup(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     groupUnGroup(true);
 }
@@ -5259,7 +5259,7 @@ static void lcl_mergeCellsOfRange( const uno::Reference< table::XCellRange >& xC
         xMergeable->merge(_bMerge);
 }
 void SAL_CALL
-ScVbaRange::Merge( const uno::Any& Across ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaRange::Merge( const uno::Any& Across ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     if ( m_Areas->getCount() > 1 )
     {
@@ -5288,7 +5288,7 @@ ScVbaRange::Merge( const uno::Any& Across ) throw (script::BasicErrorException, 
 }
 
 void SAL_CALL
-ScVbaRange::UnMerge(  ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaRange::UnMerge(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     if ( m_Areas->getCount() > 1 )
     {
@@ -5304,7 +5304,7 @@ ScVbaRange::UnMerge(  ) throw (script::BasicErrorException, uno::RuntimeExceptio
 }
 
 uno::Any SAL_CALL
-ScVbaRange::getStyle() throw (uno::RuntimeException)
+ScVbaRange::getStyle() throw (uno::RuntimeException, std::exception)
 {
     if ( m_Areas->getCount() > 1 )
     {
@@ -5320,7 +5320,7 @@ ScVbaRange::getStyle() throw (uno::RuntimeException)
     return uno::makeAny( xStyle );
 }
 void SAL_CALL
-ScVbaRange::setStyle( const uno::Any& _style ) throw (uno::RuntimeException)
+ScVbaRange::setStyle( const uno::Any& _style ) throw (uno::RuntimeException, std::exception)
 {
     if ( m_Areas->getCount() > 1 )
     {
@@ -5364,7 +5364,7 @@ ScVbaRange::PreviousNext( bool bIsPrevious )
 }
 
 uno::Reference< excel::XRange > SAL_CALL
-ScVbaRange::Next() throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaRange::Next() throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     if ( m_Areas->getCount() > 1 )
     {
@@ -5375,7 +5375,7 @@ ScVbaRange::Next() throw (script::BasicErrorException, uno::RuntimeException)
 }
 
 uno::Reference< excel::XRange > SAL_CALL
-ScVbaRange::Previous() throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaRange::Previous() throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     if ( m_Areas->getCount() > 1 )
     {
@@ -5386,7 +5386,7 @@ ScVbaRange::Previous() throw (script::BasicErrorException, uno::RuntimeException
 }
 
 uno::Reference< excel::XRange > SAL_CALL
-ScVbaRange::SpecialCells( const uno::Any& _oType, const uno::Any& _oValue) throw ( script::BasicErrorException )
+ScVbaRange::SpecialCells( const uno::Any& _oType, const uno::Any& _oValue) throw ( script::BasicErrorException, std::exception )
 {
     bool bIsSingleCell = isSingleCellRange();
     bool bIsMultiArea = ( m_Areas->getCount() > 1 );
@@ -5549,14 +5549,14 @@ ScVbaRange::SpecialCellsImpl( sal_Int32 nType, const uno::Any& _oValue) throw ( 
 }
 
 void SAL_CALL
-ScVbaRange::RemoveSubtotal(  ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaRange::RemoveSubtotal(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     uno::Reference< sheet::XSubTotalCalculatable > xSub( mxRange, uno::UNO_QUERY_THROW );
     xSub->removeSubTotals();
 }
 
 void SAL_CALL
-ScVbaRange::Subtotal( ::sal_Int32 _nGroupBy, ::sal_Int32 _nFunction, const uno::Sequence< ::sal_Int32 >& _nTotalList, const uno::Any& aReplace, const uno::Any& PageBreaks, const uno::Any& /*SummaryBelowData*/ ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaRange::Subtotal( ::sal_Int32 _nGroupBy, ::sal_Int32 _nFunction, const uno::Sequence< ::sal_Int32 >& _nTotalList, const uno::Any& aReplace, const uno::Any& PageBreaks, const uno::Any& /*SummaryBelowData*/ ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     try
     {
@@ -5645,7 +5645,7 @@ ScVbaRange::getServiceNames()
 }
 
 sal_Bool SAL_CALL
-ScVbaRange::hasError() throw (uno::RuntimeException)
+ScVbaRange::hasError() throw (uno::RuntimeException, std::exception)
 {
     double dResult = 0.0;
     uno::Reference< excel::XApplication > xApplication( Application(), uno::UNO_QUERY_THROW );

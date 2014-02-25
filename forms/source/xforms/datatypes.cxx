@@ -114,63 +114,63 @@ namespace xforms
     OSL_POSTCOND( member == value, "OXSDDataType::setFoo: inconsistency!" );
 
 
-    OUString SAL_CALL OXSDDataType::getName(  ) throw (RuntimeException)
+    OUString SAL_CALL OXSDDataType::getName(  ) throw (RuntimeException, std::exception)
     {
         return m_sName;
     }
 
 
-    void SAL_CALL OXSDDataType::setName( const OUString& aName ) throw (RuntimeException, VetoException)
+    void SAL_CALL OXSDDataType::setName( const OUString& aName ) throw (RuntimeException, VetoException, std::exception)
     {
         // TODO: check the name for conflicts in the repository
         SET_PROPERTY( NAME, aName, m_sName );
     }
 
 
-    OUString SAL_CALL OXSDDataType::getPattern() throw (RuntimeException)
+    OUString SAL_CALL OXSDDataType::getPattern() throw (RuntimeException, std::exception)
     {
         return m_sPattern;
     }
 
 
-    void SAL_CALL OXSDDataType::setPattern( const OUString& _pattern ) throw (RuntimeException)
+    void SAL_CALL OXSDDataType::setPattern( const OUString& _pattern ) throw (RuntimeException, std::exception)
     {
         SET_PROPERTY( XSD_PATTERN, _pattern, m_sPattern );
     }
 
 
-    sal_Int16 SAL_CALL OXSDDataType::getWhiteSpaceTreatment() throw (RuntimeException)
+    sal_Int16 SAL_CALL OXSDDataType::getWhiteSpaceTreatment() throw (RuntimeException, std::exception)
     {
         return m_nWST;
     }
 
 
-    void SAL_CALL OXSDDataType::setWhiteSpaceTreatment( sal_Int16 _whitespacetreatment ) throw (RuntimeException, IllegalArgumentException)
+    void SAL_CALL OXSDDataType::setWhiteSpaceTreatment( sal_Int16 _whitespacetreatment ) throw (RuntimeException, IllegalArgumentException, std::exception)
     {
         SET_PROPERTY( XSD_WHITESPACE, _whitespacetreatment, m_nWST );
     }
 
 
-    sal_Bool SAL_CALL OXSDDataType::getIsBasic() throw (RuntimeException)
+    sal_Bool SAL_CALL OXSDDataType::getIsBasic() throw (RuntimeException, std::exception)
     {
         return m_bIsBasic;
     }
 
 
 
-    sal_Int16 SAL_CALL OXSDDataType::getTypeClass() throw (RuntimeException)
+    sal_Int16 SAL_CALL OXSDDataType::getTypeClass() throw (RuntimeException, std::exception)
     {
         return m_nTypeClass;
     }
 
 
-    sal_Bool OXSDDataType::validate( const OUString& sValue ) throw( RuntimeException )
+    sal_Bool OXSDDataType::validate( const OUString& sValue ) throw( RuntimeException, std::exception )
     {
         return ( _validate( sValue ) == 0 );
     }
 
 
-  OUString OXSDDataType::explainInvalid( const OUString& sValue ) throw( RuntimeException )
+  OUString OXSDDataType::explainInvalid( const OUString& sValue ) throw( RuntimeException, std::exception )
     {
         // get reason
         sal_uInt16 nReason = _validate( sValue );
@@ -266,7 +266,7 @@ namespace xforms
     }
 
 
-    void SAL_CALL OXSDDataType::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue ) throw (Exception)
+    void SAL_CALL OXSDDataType::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue ) throw (Exception, std::exception)
     {
         OXSDDataType_PBase::setFastPropertyValue_NoBroadcast( _nHandle, _rValue );
         if ( _nHandle == PROPERTY_ID_XSD_PATTERN )
@@ -294,37 +294,37 @@ namespace xforms
     }
 
 
-    void SAL_CALL OXSDDataType::setPropertyValue( const OUString& aPropertyName, const Any& aValue ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
+    void SAL_CALL OXSDDataType::setPropertyValue( const OUString& aPropertyName, const Any& aValue ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
     {
         OXSDDataType_PBase::setPropertyValue( aPropertyName, aValue );
     }
 
 
-    Any SAL_CALL OXSDDataType::getPropertyValue( const OUString& PropertyName ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
+    Any SAL_CALL OXSDDataType::getPropertyValue( const OUString& PropertyName ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
     {
         return OXSDDataType_PBase::getPropertyValue( PropertyName );
     }
 
 
-    void SAL_CALL OXSDDataType::addPropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
+    void SAL_CALL OXSDDataType::addPropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
     {
         OXSDDataType_PBase::addPropertyChangeListener( aPropertyName, xListener );
     }
 
 
-    void SAL_CALL OXSDDataType::removePropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& aListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
+    void SAL_CALL OXSDDataType::removePropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& aListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
     {
         OXSDDataType_PBase::removePropertyChangeListener( aPropertyName, aListener );
     }
 
 
-    void SAL_CALL OXSDDataType::addVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
+    void SAL_CALL OXSDDataType::addVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
     {
         OXSDDataType_PBase::addVetoableChangeListener( PropertyName, aListener );
     }
 
 
-    void SAL_CALL OXSDDataType::removeVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
+    void SAL_CALL OXSDDataType::removeVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
     {
         OXSDDataType_PBase::removeVetoableChangeListener( PropertyName, aListener );
     }
@@ -363,7 +363,7 @@ namespace xforms
 
 
     void SAL_CALL OValueLimitedType_Base::setFastPropertyValue_NoBroadcast(
-        sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue ) throw (::com::sun::star::uno::Exception)
+        sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue ) throw (::com::sun::star::uno::Exception, std::exception)
     {
         OXSDDataType::setFastPropertyValue_NoBroadcast( _nHandle, _rValue );
 

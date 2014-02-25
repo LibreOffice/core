@@ -459,7 +459,7 @@ DataSeriesPointWrapper::DataSeriesPointWrapper(
 }
 
 void SAL_CALL DataSeriesPointWrapper::initialize( const uno::Sequence< uno::Any >& aArguments )
-                throw ( uno::Exception, uno::RuntimeException)
+                throw ( uno::Exception, uno::RuntimeException, std::exception)
 {
     OSL_PRECOND(aArguments.getLength() >= 1,"need at least 1 argument to initialize the DataSeriesPointWrapper: series reference + optional datapoint index");
 
@@ -504,7 +504,7 @@ DataSeriesPointWrapper::~DataSeriesPointWrapper()
 
 // ____ XComponent ____
 void SAL_CALL DataSeriesPointWrapper::dispose()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
     m_aEventListenerContainer.disposeAndClear( lang::EventObject( xSource ) );
@@ -515,21 +515,21 @@ void SAL_CALL DataSeriesPointWrapper::dispose()
 
 void SAL_CALL DataSeriesPointWrapper::addEventListener(
     const uno::Reference< lang::XEventListener >& xListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     m_aEventListenerContainer.addInterface( xListener );
 }
 
 void SAL_CALL DataSeriesPointWrapper::removeEventListener(
     const uno::Reference< lang::XEventListener >& aListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     m_aEventListenerContainer.removeInterface( aListener );
 }
 
 // ____ XEventListener ____
 void SAL_CALL DataSeriesPointWrapper::disposing( const lang::EventObject& /*Source*/ )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
 }
 
@@ -605,7 +605,7 @@ awt::Size DataSeriesPointWrapper::getCurrentSizeForReference()
 
 //XPropertyState
 beans::PropertyState SAL_CALL DataSeriesPointWrapper::getPropertyState( const OUString& rPropertyName )
-                                    throw (beans::UnknownPropertyException, uno::RuntimeException)
+                                    throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     beans::PropertyState aState( beans::PropertyState_DIRECT_VALUE );
 
@@ -635,7 +635,7 @@ beans::PropertyState SAL_CALL DataSeriesPointWrapper::getPropertyState( const OU
 }
 
 void SAL_CALL DataSeriesPointWrapper::setPropertyToDefault( const OUString& rPropertyName )
-                                    throw (beans::UnknownPropertyException, uno::RuntimeException)
+                                    throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     if( m_eType == DATA_SERIES )
         WrappedPropertySet::setPropertyToDefault( rPropertyName );
@@ -646,7 +646,7 @@ void SAL_CALL DataSeriesPointWrapper::setPropertyToDefault( const OUString& rPro
     }
 }
 Any SAL_CALL DataSeriesPointWrapper::getPropertyDefault( const OUString& rPropertyName )
-                                    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+                                    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     Any aRet;
     try
@@ -748,7 +748,7 @@ const std::vector< WrappedProperty* > DataSeriesPointWrapper::createWrappedPrope
 }
 
 void SAL_CALL DataSeriesPointWrapper::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
-                                    throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+                                    throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     if(rPropertyName == "Lines")
     {
@@ -809,7 +809,7 @@ void SAL_CALL DataSeriesPointWrapper::setPropertyValue( const OUString& rPropert
 }
 
 Any SAL_CALL DataSeriesPointWrapper::getPropertyValue( const OUString& rPropertyName )
-                throw ( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+                throw ( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     if( m_eType == DATA_POINT )
     {

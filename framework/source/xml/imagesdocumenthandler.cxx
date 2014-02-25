@@ -145,12 +145,12 @@ OReadImagesDocumentHandler::~OReadImagesDocumentHandler()
 
 // XDocumentHandler
 void SAL_CALL OReadImagesDocumentHandler::startDocument(void)
-throw ( SAXException, RuntimeException )
+throw ( SAXException, RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL OReadImagesDocumentHandler::endDocument(void)
-throw(  SAXException, RuntimeException )
+throw(  SAXException, RuntimeException, std::exception )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -560,24 +560,24 @@ void SAL_CALL OReadImagesDocumentHandler::endElement(const OUString& aName)
 }
 
 void SAL_CALL OReadImagesDocumentHandler::characters(const OUString&)
-throw(  SAXException, RuntimeException )
+throw(  SAXException, RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL OReadImagesDocumentHandler::ignorableWhitespace(const OUString&)
-throw(  SAXException, RuntimeException )
+throw(  SAXException, RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL OReadImagesDocumentHandler::processingInstruction(
     const OUString& /*aTarget*/, const OUString& /*aData*/ )
-throw(  SAXException, RuntimeException )
+throw(  SAXException, RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL OReadImagesDocumentHandler::setDocumentLocator(
     const Reference< XLocator > &xLocator)
-throw(  SAXException, RuntimeException )
+throw(  SAXException, RuntimeException, std::exception )
 {
     ResetableGuard aGuard( m_aLock );
 

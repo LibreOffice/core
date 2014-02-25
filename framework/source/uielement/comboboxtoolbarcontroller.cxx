@@ -168,7 +168,7 @@ ComboboxToolbarController::~ComboboxToolbarController()
 
 
 void SAL_CALL ComboboxToolbarController::dispose()
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarMutexGuard;
 

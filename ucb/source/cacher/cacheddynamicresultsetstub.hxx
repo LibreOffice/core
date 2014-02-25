@@ -104,7 +104,7 @@ public:
     createCachedDynamicResultSetStub(
                 const com::sun::star::uno::Reference<
                     com::sun::star::ucb::XDynamicResultSet > & Source )
-                throw( com::sun::star::uno::RuntimeException );
+                throw( com::sun::star::uno::RuntimeException, std::exception );
 
 
     virtual void SAL_CALL connectToCache(
@@ -120,7 +120,7 @@ public:
                 throw (
                   com::sun::star::ucb::ListenerAlreadySetException
                 , com::sun::star::ucb::AlreadyInitializedException
-                , com::sun::star::uno::RuntimeException
+                , com::sun::star::uno::RuntimeException, std::exception
                  );
 };
 

@@ -1664,14 +1664,14 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
 
 void SAL_CALL FilterOptionsContinuation::setFilterOptions(
                 const uno::Sequence<beans::PropertyValue>& rProps )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     rProperties = rProps;
 }
 
 uno::Sequence< beans::PropertyValue > SAL_CALL
     FilterOptionsContinuation::getFilterOptions()
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     return rProperties;
 }
@@ -1699,14 +1699,14 @@ RequestFilterOptions::RequestFilterOptions( uno::Reference< frame::XModel > rMod
 }
 
 uno::Any SAL_CALL RequestFilterOptions::getRequest()
-        throw( uno::RuntimeException )
+        throw( uno::RuntimeException, std::exception )
 {
     return m_aRequest;
 }
 
 uno::Sequence< uno::Reference< task::XInteractionContinuation > >
     SAL_CALL RequestFilterOptions::getContinuations()
-        throw( uno::RuntimeException )
+        throw( uno::RuntimeException, std::exception )
 {
     return m_lContinuations;
 }
@@ -1722,9 +1722,9 @@ class RequestPackageReparation_Impl : public ::cppu::WeakImplHelper1< task::XInt
 public:
     RequestPackageReparation_Impl( OUString aName );
     sal_Bool    isApproved();
-    virtual uno::Any SAL_CALL getRequest() throw( uno::RuntimeException );
+    virtual uno::Any SAL_CALL getRequest() throw( uno::RuntimeException, std::exception );
     virtual uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations()
-        throw( uno::RuntimeException );
+        throw( uno::RuntimeException, std::exception );
 };
 
 RequestPackageReparation_Impl::RequestPackageReparation_Impl( OUString aName )
@@ -1748,14 +1748,14 @@ sal_Bool RequestPackageReparation_Impl::isApproved()
 }
 
 uno::Any SAL_CALL RequestPackageReparation_Impl::getRequest()
-        throw( uno::RuntimeException )
+        throw( uno::RuntimeException, std::exception )
 {
     return m_aRequest;
 }
 
 uno::Sequence< uno::Reference< task::XInteractionContinuation > >
     SAL_CALL RequestPackageReparation_Impl::getContinuations()
-        throw( uno::RuntimeException )
+        throw( uno::RuntimeException, std::exception )
 {
     return m_lContinuations;
 }
@@ -1790,9 +1790,9 @@ class NotifyBrokenPackage_Impl : public ::cppu::WeakImplHelper1< task::XInteract
 
 public:
     NotifyBrokenPackage_Impl( OUString aName );
-    virtual uno::Any SAL_CALL getRequest() throw( uno::RuntimeException );
+    virtual uno::Any SAL_CALL getRequest() throw( uno::RuntimeException, std::exception );
     virtual uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations()
-        throw( uno::RuntimeException );
+        throw( uno::RuntimeException, std::exception );
 };
 
 NotifyBrokenPackage_Impl::NotifyBrokenPackage_Impl( OUString aName )
@@ -1809,14 +1809,14 @@ NotifyBrokenPackage_Impl::NotifyBrokenPackage_Impl( OUString aName )
 }
 
 uno::Any SAL_CALL NotifyBrokenPackage_Impl::getRequest()
-        throw( uno::RuntimeException )
+        throw( uno::RuntimeException, std::exception )
 {
     return m_aRequest;
 }
 
 uno::Sequence< uno::Reference< task::XInteractionContinuation > >
     SAL_CALL NotifyBrokenPackage_Impl::getContinuations()
-        throw( uno::RuntimeException )
+        throw( uno::RuntimeException, std::exception )
 {
     return m_lContinuations;
 }

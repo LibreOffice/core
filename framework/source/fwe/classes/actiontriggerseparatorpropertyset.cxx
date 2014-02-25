@@ -61,7 +61,7 @@ ActionTriggerSeparatorPropertySet::~ActionTriggerSeparatorPropertySet()
 
 // XInterface
 Any SAL_CALL ActionTriggerSeparatorPropertySet::queryInterface( const Type& aType )
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     Any a = ::cppu::queryInterface(
                 aType,
@@ -93,19 +93,19 @@ void ActionTriggerSeparatorPropertySet::release() throw()
 
 // XServiceInfo
 OUString SAL_CALL ActionTriggerSeparatorPropertySet::getImplementationName()
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     return OUString( IMPLEMENTATIONNAME_ACTIONTRIGGERSEPARATOR );
 }
 
 sal_Bool SAL_CALL ActionTriggerSeparatorPropertySet::supportsService( const OUString& ServiceName )
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL ActionTriggerSeparatorPropertySet::getSupportedServiceNames()
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     Sequence< OUString > seqServiceNames( 1 );
     seqServiceNames[0] = OUString( SERVICENAME_ACTIONTRIGGERSEPARATOR );
@@ -113,7 +113,7 @@ throw ( RuntimeException )
 }
 
 // XTypeProvider
-Sequence< Type > SAL_CALL ActionTriggerSeparatorPropertySet::getTypes() throw ( RuntimeException )
+Sequence< Type > SAL_CALL ActionTriggerSeparatorPropertySet::getTypes() throw ( RuntimeException, std::exception )
 {
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
@@ -144,7 +144,7 @@ Sequence< Type > SAL_CALL ActionTriggerSeparatorPropertySet::getTypes() throw ( 
     return pTypeCollection->getTypes() ;
 }
 
-Sequence< sal_Int8 > SAL_CALL ActionTriggerSeparatorPropertySet::getImplementationId() throw ( RuntimeException )
+Sequence< sal_Int8 > SAL_CALL ActionTriggerSeparatorPropertySet::getImplementationId() throw ( RuntimeException, std::exception )
 {
     // Create one Id for all instances of this class.
     // Use ethernet address to do this! (sal_True)
@@ -199,7 +199,7 @@ throw( IllegalArgumentException )
 
 void SAL_CALL ActionTriggerSeparatorPropertySet::setFastPropertyValue_NoBroadcast(
     sal_Int32 nHandle, const Any& aValue )
-throw( Exception )
+throw( Exception, std::exception )
 {
     ::osl::MutexGuard aGuard( LockHelper::getGlobalLock().getShareableOslMutex() );
 
@@ -252,7 +252,7 @@ void SAL_CALL ActionTriggerSeparatorPropertySet::getFastPropertyValue(
 }
 
 Reference< XPropertySetInfo > SAL_CALL ActionTriggerSeparatorPropertySet::getPropertySetInfo()
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!

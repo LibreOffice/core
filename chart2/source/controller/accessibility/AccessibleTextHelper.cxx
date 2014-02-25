@@ -55,7 +55,7 @@ AccessibleTextHelper::~AccessibleTextHelper()
 // ____ XInitialization ____
 void SAL_CALL AccessibleTextHelper::initialize( const Sequence< uno::Any >& aArguments )
     throw (uno::Exception,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     OUString aCID;
     Reference< XAccessible > xEventSource;
@@ -101,7 +101,7 @@ void SAL_CALL AccessibleTextHelper::initialize( const Sequence< uno::Any >& aArg
 
 // ____ XAccessibleContext ____
 ::sal_Int32 SAL_CALL AccessibleTextHelper::getAccessibleChildCount()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if( m_pTextHelper )
     {
@@ -113,7 +113,7 @@ void SAL_CALL AccessibleTextHelper::initialize( const Sequence< uno::Any >& aArg
 
 Reference< XAccessible > SAL_CALL AccessibleTextHelper::getAccessibleChild( ::sal_Int32 i )
     throw (lang::IndexOutOfBoundsException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     if( m_pTextHelper )
     {
@@ -124,49 +124,49 @@ Reference< XAccessible > SAL_CALL AccessibleTextHelper::getAccessibleChild( ::sa
 }
 
 Reference< XAccessible > SAL_CALL AccessibleTextHelper::getAccessibleParent()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "Not implemented in this helper" );
     return Reference< XAccessible >();
 }
 
 ::sal_Int32 SAL_CALL AccessibleTextHelper::getAccessibleIndexInParent()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "Not implemented in this helper" );
     return -1;
 }
 
 ::sal_Int16 SAL_CALL AccessibleTextHelper::getAccessibleRole()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "Not implemented in this helper" );
     return AccessibleRole::UNKNOWN;
 }
 
 OUString SAL_CALL AccessibleTextHelper::getAccessibleDescription()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "Not implemented in this helper" );
     return OUString();
 }
 
 OUString SAL_CALL AccessibleTextHelper::getAccessibleName()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "Not implemented in this helper" );
     return OUString();
 }
 
 Reference< XAccessibleRelationSet > SAL_CALL AccessibleTextHelper::getAccessibleRelationSet()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "Not implemented in this helper" );
     return Reference< XAccessibleRelationSet >();
 }
 
 Reference< XAccessibleStateSet > SAL_CALL AccessibleTextHelper::getAccessibleStateSet()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "Not implemented in this helper" );
     return Reference< XAccessibleStateSet >();
@@ -174,7 +174,7 @@ Reference< XAccessibleStateSet > SAL_CALL AccessibleTextHelper::getAccessibleSta
 
 lang::Locale SAL_CALL AccessibleTextHelper::getLocale()
     throw (IllegalAccessibleComponentStateException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "Not implemented in this helper" );
     return lang::Locale();

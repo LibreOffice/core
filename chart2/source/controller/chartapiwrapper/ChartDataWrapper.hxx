@@ -59,84 +59,84 @@ public:
 
 protected:
     // ____ XDateCategories ____
-    virtual ::com::sun::star::uno::Sequence< double > SAL_CALL getDateCategories() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setDateCategories( const ::com::sun::star::uno::Sequence< double >& rDates ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< double > SAL_CALL getDateCategories() throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setDateCategories( const ::com::sun::star::uno::Sequence< double >& rDates ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // ____ XAnyDescriptionAccess ____
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > > SAL_CALL
-        getAnyRowDescriptions() throw (::com::sun::star::uno::RuntimeException);
+        getAnyRowDescriptions() throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setAnyRowDescriptions(
         const ::com::sun::star::uno::Sequence<
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& aRowDescriptions )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > > SAL_CALL
-        getAnyColumnDescriptions() throw (::com::sun::star::uno::RuntimeException);
+        getAnyColumnDescriptions() throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setAnyColumnDescriptions(
         const ::com::sun::star::uno::Sequence<
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& aColumnDescriptions )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // ____ XComplexDescriptionAccess (base of XAnyDescriptionAccess) ____
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< OUString > > SAL_CALL
-        getComplexRowDescriptions() throw (::com::sun::star::uno::RuntimeException);
+        getComplexRowDescriptions() throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setComplexRowDescriptions(
         const ::com::sun::star::uno::Sequence<
         ::com::sun::star::uno::Sequence< OUString > >& aRowDescriptions )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< OUString > > SAL_CALL
-        getComplexColumnDescriptions() throw (::com::sun::star::uno::RuntimeException);
+        getComplexColumnDescriptions() throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setComplexColumnDescriptions(
         const ::com::sun::star::uno::Sequence<
         ::com::sun::star::uno::Sequence< OUString > >& aColumnDescriptions )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // ____ XChartDataArray (base of XComplexDescriptionAccess) ____
     virtual ::com::sun::star::uno::Sequence<
         ::com::sun::star::uno::Sequence<
         double > > SAL_CALL getData()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setData( const ::com::sun::star::uno::Sequence<
                                    ::com::sun::star::uno::Sequence<
                                    double > >& aData )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Sequence<
         OUString > SAL_CALL getRowDescriptions()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setRowDescriptions( const ::com::sun::star::uno::Sequence<
                                               OUString >& aRowDescriptions )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Sequence<
         OUString > SAL_CALL getColumnDescriptions()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setColumnDescriptions( const ::com::sun::star::uno::Sequence<
                                                  OUString >& aColumnDescriptions )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // ____ XChartData (base of XChartDataArray) ____
     virtual void SAL_CALL addChartDataChangeEventListener( const ::com::sun::star::uno::Reference<
                                                            ::com::sun::star::chart::XChartDataChangeEventListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL removeChartDataChangeEventListener( const ::com::sun::star::uno::Reference<
                                                               ::com::sun::star::chart::XChartDataChangeEventListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual double SAL_CALL getNotANumber()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL isNotANumber( double nNumber )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // ____ XComponent ____
     virtual void SAL_CALL dispose()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference<
                                             ::com::sun::star::lang::XEventListener >& xListener )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference<
                                                ::com::sun::star::lang::XEventListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // ____ XEventListener ____
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     void fireChartDataChangeEvent( ::com::sun::star::chart::ChartDataChangeEvent& aEvent );
 

@@ -172,10 +172,10 @@ public:
                                 : m_xInteractionHandler( rxInteractionHandler )
                             {}
 
-    virtual uno::Reference<task::XInteractionHandler> SAL_CALL getInteractionHandler() throw (uno::RuntimeException)
+    virtual uno::Reference<task::XInteractionHandler> SAL_CALL getInteractionHandler() throw (uno::RuntimeException, std::exception)
     { return m_xInteractionHandler; }
 
-    virtual uno::Reference<ucb::XProgressHandler> SAL_CALL    getProgressHandler() throw (uno::RuntimeException)
+    virtual uno::Reference<ucb::XProgressHandler> SAL_CALL    getProgressHandler() throw (uno::RuntimeException, std::exception)
     { return m_xProgressHandler; }
 };
 
@@ -2224,19 +2224,19 @@ public:
     ~SfxDocTplService();
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     {
         return OUString("com.sun.star.comp.sfx2.DocumentTemplates");
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     {
         return cppu::supportsService(this, ServiceName);
     }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     {
         css::uno::Sequence< OUString > aSeq(1);
         aSeq[0] = OUString("com.sun.star.frame.DocumentTemplates");
@@ -2245,27 +2245,27 @@ public:
 
 
     // --- XLocalizable ---
-    void SAL_CALL                   setLocale( const css::lang::Locale & eLocale ) throw( css::uno::RuntimeException );
-    css::lang::Locale SAL_CALL              getLocale() throw( css::uno::RuntimeException );
+    void SAL_CALL                   setLocale( const css::lang::Locale & eLocale ) throw( css::uno::RuntimeException, std::exception );
+    css::lang::Locale SAL_CALL              getLocale() throw( css::uno::RuntimeException, std::exception );
 
     // --- XDocumentTemplates ---
-    css::uno::Reference< css::ucb::XContent > SAL_CALL  getContent() throw( css::uno::RuntimeException );
+    css::uno::Reference< css::ucb::XContent > SAL_CALL  getContent() throw( css::uno::RuntimeException, std::exception );
     sal_Bool SAL_CALL               storeTemplate( const OUString& GroupName,
                                                    const OUString& TemplateName,
-                                                   const css::uno::Reference< css::frame::XStorable >& Storable ) throw( css::uno::RuntimeException );
+                                                   const css::uno::Reference< css::frame::XStorable >& Storable ) throw( css::uno::RuntimeException, std::exception );
     sal_Bool SAL_CALL               addTemplate( const OUString& GroupName,
                                                  const OUString& TemplateName,
-                                                 const OUString& SourceURL ) throw( css::uno::RuntimeException );
+                                                 const OUString& SourceURL ) throw( css::uno::RuntimeException, std::exception );
     sal_Bool SAL_CALL               removeTemplate( const OUString& GroupName,
-                                                    const OUString& TemplateName ) throw( css::uno::RuntimeException );
+                                                    const OUString& TemplateName ) throw( css::uno::RuntimeException, std::exception );
     sal_Bool SAL_CALL               renameTemplate( const OUString& GroupName,
                                                     const OUString& OldTemplateName,
-                                                    const OUString& NewTemplateName ) throw( css::uno::RuntimeException );
-    sal_Bool SAL_CALL               addGroup( const OUString& GroupName ) throw( css::uno::RuntimeException );
-    sal_Bool SAL_CALL               removeGroup( const OUString& GroupName ) throw( css::uno::RuntimeException );
+                                                    const OUString& NewTemplateName ) throw( css::uno::RuntimeException, std::exception );
+    sal_Bool SAL_CALL               addGroup( const OUString& GroupName ) throw( css::uno::RuntimeException, std::exception );
+    sal_Bool SAL_CALL               removeGroup( const OUString& GroupName ) throw( css::uno::RuntimeException, std::exception );
     sal_Bool SAL_CALL               renameGroup( const OUString& OldGroupName,
-                                                 const OUString& NewGroupName ) throw( css::uno::RuntimeException );
-    void SAL_CALL                   update() throw( css::uno::RuntimeException );
+                                                 const OUString& NewGroupName ) throw( css::uno::RuntimeException, std::exception );
+    void SAL_CALL                   update() throw( css::uno::RuntimeException, std::exception );
 };
 
 
@@ -2286,7 +2286,7 @@ SfxDocTplService::~SfxDocTplService()
 
 
 Locale SAL_CALL SfxDocTplService::getLocale()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return pImp->getLocale();
 }
@@ -2294,7 +2294,7 @@ Locale SAL_CALL SfxDocTplService::getLocale()
 
 
 void SAL_CALL SfxDocTplService::setLocale( const Locale & rLocale )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     pImp->setLocale( rLocale );
 }
@@ -2303,7 +2303,7 @@ void SAL_CALL SfxDocTplService::setLocale( const Locale & rLocale )
 //--- XDocumentTemplates ---
 
 uno::Reference< ucb::XContent > SAL_CALL SfxDocTplService::getContent()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     if ( pImp->init() )
         return pImp->getContent().get();
@@ -2315,7 +2315,7 @@ uno::Reference< ucb::XContent > SAL_CALL SfxDocTplService::getContent()
 sal_Bool SAL_CALL SfxDocTplService::storeTemplate( const OUString& GroupName,
                                                    const OUString& TemplateName,
                                                    const uno::Reference< frame::XStorable >& Storable )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     if ( pImp->init() )
         return pImp->storeTemplate( GroupName, TemplateName, Storable );
@@ -2327,7 +2327,7 @@ sal_Bool SAL_CALL SfxDocTplService::storeTemplate( const OUString& GroupName,
 sal_Bool SAL_CALL SfxDocTplService::addTemplate( const OUString& rGroupName,
                                                  const OUString& rTemplateName,
                                                  const OUString& rSourceURL )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     if ( pImp->init() )
         return pImp->addTemplate( rGroupName, rTemplateName, rSourceURL );
@@ -2338,7 +2338,7 @@ sal_Bool SAL_CALL SfxDocTplService::addTemplate( const OUString& rGroupName,
 
 sal_Bool SAL_CALL SfxDocTplService::removeTemplate( const OUString& rGroupName,
                                                     const OUString& rTemplateName )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     if ( pImp->init() )
         return pImp->removeTemplate( rGroupName, rTemplateName );
@@ -2350,7 +2350,7 @@ sal_Bool SAL_CALL SfxDocTplService::removeTemplate( const OUString& rGroupName,
 sal_Bool SAL_CALL SfxDocTplService::renameTemplate( const OUString& rGroupName,
                                                     const OUString& rOldName,
                                                     const OUString& rNewName )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     if ( rOldName == rNewName )
         return sal_True;
@@ -2363,7 +2363,7 @@ sal_Bool SAL_CALL SfxDocTplService::renameTemplate( const OUString& rGroupName,
 
 
 sal_Bool SAL_CALL SfxDocTplService::addGroup( const OUString& rGroupName )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     if ( pImp->init() )
         return pImp->addGroup( rGroupName );
@@ -2373,7 +2373,7 @@ sal_Bool SAL_CALL SfxDocTplService::addGroup( const OUString& rGroupName )
 
 
 sal_Bool SAL_CALL SfxDocTplService::removeGroup( const OUString& rGroupName )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     if ( pImp->init() )
         return pImp->removeGroup( rGroupName );
@@ -2384,7 +2384,7 @@ sal_Bool SAL_CALL SfxDocTplService::removeGroup( const OUString& rGroupName )
 
 sal_Bool SAL_CALL SfxDocTplService::renameGroup( const OUString& rOldName,
                                                  const OUString& rNewName )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     if ( rOldName == rNewName )
         return sal_True;
@@ -2397,7 +2397,7 @@ sal_Bool SAL_CALL SfxDocTplService::renameGroup( const OUString& rOldName,
 
 
 void SAL_CALL SfxDocTplService::update()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     if ( pImp->init() )
         pImp->update( sal_True );

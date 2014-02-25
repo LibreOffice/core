@@ -35,7 +35,7 @@ ScPageObj::~ScPageObj() throw()
 {
 }
 
-uno::Reference<drawing::XShape > ScPageObj::_CreateShape( SdrObject *pObj ) const throw()
+uno::Reference<drawing::XShape > ScPageObj::_CreateShape( SdrObject *pObj ) const throw(std::exception)
 {
     uno::Reference<drawing::XShape> xShape(SvxFmDrawPage::_CreateShape( pObj ));
 
@@ -45,19 +45,19 @@ uno::Reference<drawing::XShape > ScPageObj::_CreateShape( SdrObject *pObj ) cons
 }
 
 OUString SAL_CALL ScPageObj::getImplementationName()
-                                throw(uno::RuntimeException)
+                                throw(uno::RuntimeException, std::exception)
 {
     return OUString("ScPageObj");
 }
 
 sal_Bool SAL_CALL ScPageObj::supportsService( const OUString& rServiceName )
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence<OUString> SAL_CALL ScPageObj::getSupportedServiceNames()
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence<OUString> aRet(1);
     aRet[0] = "com.sun.star.sheet.SpreadsheetDrawPage";

@@ -53,18 +53,18 @@ public:
     static SvXMLAttributeList* getImplementation( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > ) throw();
 
     // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     // ::com::sun::star::xml::sax::XAttributeList
-    virtual sal_Int16 SAL_CALL getLength(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual OUString SAL_CALL getNameByIndex(sal_Int16 i) throw( ::com::sun::star::uno::RuntimeException );
-    virtual OUString SAL_CALL getTypeByIndex(sal_Int16 i) throw( ::com::sun::star::uno::RuntimeException );
-    virtual OUString SAL_CALL getTypeByName(const OUString& aName) throw( ::com::sun::star::uno::RuntimeException );
-    virtual OUString SAL_CALL getValueByIndex(sal_Int16 i) throw( ::com::sun::star::uno::RuntimeException );
-    virtual OUString SAL_CALL getValueByName(const OUString& aName) throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Int16 SAL_CALL getLength(void) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    virtual OUString SAL_CALL getNameByIndex(sal_Int16 i) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    virtual OUString SAL_CALL getTypeByIndex(sal_Int16 i) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    virtual OUString SAL_CALL getTypeByName(const OUString& aName) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    virtual OUString SAL_CALL getValueByIndex(sal_Int16 i) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    virtual OUString SAL_CALL getValueByName(const OUString& aName) throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     // ::com::sun::star::util::XCloneable
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()   throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()   throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     // methods that are not contained in any interface
     void AddAttribute( const OUString &sName , const OUString &sValue );

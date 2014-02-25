@@ -197,7 +197,7 @@ ImageProducer::~ImageProducer()
 
 
 // ::com::sun::star::uno::XInterface
-::com::sun::star::uno::Any ImageProducer::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Any ImageProducer::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
                                         (static_cast< ::com::sun::star::lang::XInitialization* >(this)),
@@ -218,7 +218,7 @@ void ImageProducer::addConsumer( const ::com::sun::star::uno::Reference< ::com::
 
 
 
-void ImageProducer::removeConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& rxConsumer ) throw(::com::sun::star::uno::RuntimeException)
+void ImageProducer::removeConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& rxConsumer ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     ConsumerList_t::reverse_iterator riter = std::find(maConsList.rbegin(),maConsList.rend(),rxConsumer);
 
@@ -285,7 +285,7 @@ void ImageProducer::NewDataAvailable()
 
 
 
-void ImageProducer::startProduction() throw(::com::sun::star::uno::RuntimeException)
+void ImageProducer::startProduction() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     if( !maConsList.empty() || maDoneHdl.IsSet() )
     {
@@ -548,7 +548,7 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
     }
 }
 
-void ImageProducer::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+void ImageProducer::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     if ( aArguments.getLength() == 1 )
     {

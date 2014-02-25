@@ -74,19 +74,19 @@ public:
     virtual ~DocumentAcceleratorConfiguration();
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     {
         return OUString("com.sun.star.comp.framework.DocumentAcceleratorConfiguration");
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     {
         return cppu::supportsService(this, ServiceName);
     }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     {
         css::uno::Sequence< OUString > aSeq(1);
         aSeq[0] = OUString("com.sun.star.ui.DocumentAcceleratorConfiguration");
@@ -95,10 +95,10 @@ public:
 
     // XUIConfigurationStorage
     virtual void SAL_CALL setStorage(const css::uno::Reference< css::embed::XStorage >& xStorage)
-        throw(css::uno::RuntimeException);
+        throw(css::uno::RuntimeException, std::exception);
 
     virtual sal_Bool SAL_CALL hasStorage()
-        throw(css::uno::RuntimeException);
+        throw(css::uno::RuntimeException, std::exception);
 
 private:
 
@@ -144,7 +144,7 @@ DocumentAcceleratorConfiguration::~DocumentAcceleratorConfiguration()
 
 
 void SAL_CALL DocumentAcceleratorConfiguration::setStorage(const css::uno::Reference< css::embed::XStorage >& xStorage)
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     // Attention! xStorage must be accepted too, if it's NULL !
 
@@ -164,7 +164,7 @@ void SAL_CALL DocumentAcceleratorConfiguration::setStorage(const css::uno::Refer
 
 
 sal_Bool SAL_CALL DocumentAcceleratorConfiguration::hasStorage()
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);

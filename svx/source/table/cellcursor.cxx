@@ -57,21 +57,21 @@ CellCursor::~CellCursor()
 // XCellCursor
 
 
-Reference< XCell > SAL_CALL CellCursor::getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow ) throw (IndexOutOfBoundsException, RuntimeException)
+Reference< XCell > SAL_CALL CellCursor::getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     return CellRange::getCellByPosition( nColumn, nRow );
 }
 
 
 
-Reference< XCellRange > SAL_CALL CellCursor::getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom ) throw (IndexOutOfBoundsException, RuntimeException)
+Reference< XCellRange > SAL_CALL CellCursor::getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     return CellRange::getCellRangeByPosition( nLeft, nTop, nRight, nBottom );
 }
 
 
 
-Reference< XCellRange > SAL_CALL CellCursor::getCellRangeByName( const OUString& aRange ) throw (RuntimeException)
+Reference< XCellRange > SAL_CALL CellCursor::getCellRangeByName( const OUString& aRange ) throw (RuntimeException, std::exception)
 {
     return CellRange::getCellRangeByName( aRange );
 }
@@ -80,7 +80,7 @@ Reference< XCellRange > SAL_CALL CellCursor::getCellRangeByName( const OUString&
 // XCellCursor
 
 
-void SAL_CALL CellCursor::gotoStart(  ) throw (RuntimeException)
+void SAL_CALL CellCursor::gotoStart(  ) throw (RuntimeException, std::exception)
 {
     mnRight = mnLeft;
     mnBottom = mnTop;
@@ -88,7 +88,7 @@ void SAL_CALL CellCursor::gotoStart(  ) throw (RuntimeException)
 
 
 
-void SAL_CALL CellCursor::gotoEnd(  ) throw (RuntimeException)
+void SAL_CALL CellCursor::gotoEnd(  ) throw (RuntimeException, std::exception)
 {
     mnLeft = mnRight;
     mnTop = mnBottom;
@@ -96,7 +96,7 @@ void SAL_CALL CellCursor::gotoEnd(  ) throw (RuntimeException)
 
 
 
-void SAL_CALL CellCursor::gotoNext(  ) throw (RuntimeException)
+void SAL_CALL CellCursor::gotoNext(  ) throw (RuntimeException, std::exception)
 {
     if( mxTable.is() )
     {
@@ -125,7 +125,7 @@ void SAL_CALL CellCursor::gotoNext(  ) throw (RuntimeException)
 
 
 
-void SAL_CALL CellCursor::gotoPrevious(  ) throw (RuntimeException)
+void SAL_CALL CellCursor::gotoPrevious(  ) throw (RuntimeException, std::exception)
 {
     if( mxTable.is() )
     {
@@ -146,7 +146,7 @@ void SAL_CALL CellCursor::gotoPrevious(  ) throw (RuntimeException)
 
 
 
-void SAL_CALL CellCursor::gotoOffset( ::sal_Int32 nColumnOffset, ::sal_Int32 nRowOffset ) throw (RuntimeException)
+void SAL_CALL CellCursor::gotoOffset( ::sal_Int32 nColumnOffset, ::sal_Int32 nRowOffset ) throw (RuntimeException, std::exception)
 {
     if( mxTable.is() )
     {
@@ -245,7 +245,7 @@ bool CellCursor::GetMergedSelection( CellPos& rStart, CellPos& rEnd )
 
 
 
-void SAL_CALL CellCursor::merge(  ) throw (NoSupportException, RuntimeException)
+void SAL_CALL CellCursor::merge(  ) throw (NoSupportException, RuntimeException, std::exception)
 {
     CellPos aStart, aEnd;
     if( !GetMergedSelection( aStart, aEnd ) )
@@ -512,7 +512,7 @@ void CellCursor::split_vertical( sal_Int32 nRows )
 
 
 
-void SAL_CALL CellCursor::split( sal_Int32 nColumns, sal_Int32 nRows ) throw (NoSupportException, IllegalArgumentException, RuntimeException)
+void SAL_CALL CellCursor::split( sal_Int32 nColumns, sal_Int32 nRows ) throw (NoSupportException, IllegalArgumentException, RuntimeException, std::exception)
 {
     if( (nColumns < 0) || (nRows < 0) )
         throw IllegalArgumentException();
@@ -551,7 +551,7 @@ void SAL_CALL CellCursor::split( sal_Int32 nColumns, sal_Int32 nRows ) throw (No
 
 
 
-sal_Bool SAL_CALL CellCursor::isMergeable(  ) throw (RuntimeException)
+sal_Bool SAL_CALL CellCursor::isMergeable(  ) throw (RuntimeException, std::exception)
 {
     CellPos aStart, aEnd;
     return GetMergedSelection( aStart, aEnd ) ? sal_True : sal_False;

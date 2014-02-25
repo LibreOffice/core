@@ -58,25 +58,25 @@ public:
     virtual ~DefaultGridColumnModel();
 
     // XGridColumnModel
-    virtual ::sal_Int32 SAL_CALL getColumnCount() throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< css::awt::grid::XGridColumn > SAL_CALL createColumn(  ) throw (css::uno::RuntimeException);
-    virtual ::sal_Int32 SAL_CALL addColumn(const css::uno::Reference< css::awt::grid::XGridColumn > & column) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException);
-    virtual void SAL_CALL removeColumn( ::sal_Int32 i_columnIndex )  throw (css::uno::RuntimeException, css::lang::IndexOutOfBoundsException);
-    virtual css::uno::Sequence< css::uno::Reference< css::awt::grid::XGridColumn > > SAL_CALL getColumns() throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< css::awt::grid::XGridColumn > SAL_CALL getColumn(::sal_Int32 index) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
-    virtual void SAL_CALL setDefaultColumns(sal_Int32 rowElements) throw (css::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getColumnCount() throw (css::uno::RuntimeException, std::exception);
+    virtual css::uno::Reference< css::awt::grid::XGridColumn > SAL_CALL createColumn(  ) throw (css::uno::RuntimeException, std::exception);
+    virtual ::sal_Int32 SAL_CALL addColumn(const css::uno::Reference< css::awt::grid::XGridColumn > & column) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception);
+    virtual void SAL_CALL removeColumn( ::sal_Int32 i_columnIndex )  throw (css::uno::RuntimeException, css::lang::IndexOutOfBoundsException, std::exception);
+    virtual css::uno::Sequence< css::uno::Reference< css::awt::grid::XGridColumn > > SAL_CALL getColumns() throw (css::uno::RuntimeException, std::exception);
+    virtual css::uno::Reference< css::awt::grid::XGridColumn > SAL_CALL getColumn(::sal_Int32 index) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setDefaultColumns(sal_Int32 rowElements) throw (css::uno::RuntimeException, std::exception);
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException);
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception);
+    virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception);
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception);
 
     // XContainer
-    virtual void SAL_CALL addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) throw (css::uno::RuntimeException);
-    virtual void SAL_CALL removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) throw (css::uno::RuntimeException, std::exception);
 
     // XCloneable
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException, std::exception);
 
     // OComponentHelper
     virtual void SAL_CALL disposing();
@@ -138,13 +138,13 @@ private:
     }
 
 
-    ::sal_Int32 SAL_CALL DefaultGridColumnModel::getColumnCount() throw (RuntimeException)
+    ::sal_Int32 SAL_CALL DefaultGridColumnModel::getColumnCount() throw (RuntimeException, std::exception)
     {
         return m_aColumns.size();
     }
 
 
-    Reference< XGridColumn > SAL_CALL DefaultGridColumnModel::createColumn(  ) throw (RuntimeException)
+    Reference< XGridColumn > SAL_CALL DefaultGridColumnModel::createColumn(  ) throw (RuntimeException, std::exception)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
         return new GridColumn();
@@ -152,7 +152,7 @@ private:
 
 
     ::sal_Int32 SAL_CALL DefaultGridColumnModel::addColumn( const Reference< XGridColumn > & i_column )
-        throw (RuntimeException, css::lang::IllegalArgumentException)
+        throw (RuntimeException, css::lang::IllegalArgumentException, std::exception)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
@@ -178,7 +178,7 @@ private:
 
 
     void SAL_CALL DefaultGridColumnModel::removeColumn( ::sal_Int32 i_columnIndex )
-        throw (RuntimeException, css::lang::IndexOutOfBoundsException)
+        throw (RuntimeException, css::lang::IndexOutOfBoundsException, std::exception)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
@@ -227,7 +227,7 @@ private:
     }
 
 
-    Sequence< Reference< XGridColumn > > SAL_CALL DefaultGridColumnModel::getColumns() throw (RuntimeException)
+    Sequence< Reference< XGridColumn > > SAL_CALL DefaultGridColumnModel::getColumns() throw (RuntimeException, std::exception)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
         return ::comphelper::containerToSequence( m_aColumns );
@@ -235,7 +235,7 @@ private:
 
 
     Reference< XGridColumn > SAL_CALL DefaultGridColumnModel::getColumn(::sal_Int32 index)
-        throw (css::lang::IndexOutOfBoundsException, RuntimeException)
+        throw (css::lang::IndexOutOfBoundsException, RuntimeException, std::exception)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
@@ -246,7 +246,7 @@ private:
     }
 
 
-    void SAL_CALL DefaultGridColumnModel::setDefaultColumns(sal_Int32 rowElements) throw (RuntimeException)
+    void SAL_CALL DefaultGridColumnModel::setDefaultColumns(sal_Int32 rowElements) throw (RuntimeException, std::exception)
     {
         ::std::vector< ContainerEvent > aRemovedColumns;
         ::std::vector< ContainerEvent > aInsertedColumns;
@@ -330,17 +330,17 @@ private:
     }
 
 
-    OUString SAL_CALL DefaultGridColumnModel::getImplementationName(  ) throw (RuntimeException)
+    OUString SAL_CALL DefaultGridColumnModel::getImplementationName(  ) throw (RuntimeException, std::exception)
     {
         return OUString("stardiv.Toolkit.DefaultGridColumnModel");
     }
 
-    sal_Bool SAL_CALL DefaultGridColumnModel::supportsService( const OUString& i_serviceName ) throw (RuntimeException)
+    sal_Bool SAL_CALL DefaultGridColumnModel::supportsService( const OUString& i_serviceName ) throw (RuntimeException, std::exception)
     {
         return cppu::supportsService(this, i_serviceName);
     }
 
-    Sequence< OUString > SAL_CALL DefaultGridColumnModel::getSupportedServiceNames(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL DefaultGridColumnModel::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
     {
         const OUString aServiceName("com.sun.star.awt.grid.DefaultGridColumnModel");
         const Sequence< OUString > aSeq( &aServiceName, 1 );
@@ -348,14 +348,14 @@ private:
     }
 
 
-    void SAL_CALL DefaultGridColumnModel::addContainerListener( const Reference< XContainerListener >& i_listener ) throw (RuntimeException)
+    void SAL_CALL DefaultGridColumnModel::addContainerListener( const Reference< XContainerListener >& i_listener ) throw (RuntimeException, std::exception)
     {
         if ( i_listener.is() )
             m_aContainerListeners.addInterface( i_listener );
     }
 
 
-    void SAL_CALL DefaultGridColumnModel::removeContainerListener( const Reference< XContainerListener >& i_listener ) throw (RuntimeException)
+    void SAL_CALL DefaultGridColumnModel::removeContainerListener( const Reference< XContainerListener >& i_listener ) throw (RuntimeException, std::exception)
     {
         if ( i_listener.is() )
             m_aContainerListeners.removeInterface( i_listener );
@@ -392,7 +392,7 @@ private:
     }
 
 
-    Reference< css::util::XCloneable > SAL_CALL DefaultGridColumnModel::createClone(  ) throw (RuntimeException)
+    Reference< css::util::XCloneable > SAL_CALL DefaultGridColumnModel::createClone(  ) throw (RuntimeException, std::exception)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
         return new DefaultGridColumnModel( *this );

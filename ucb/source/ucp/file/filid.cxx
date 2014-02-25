@@ -71,7 +71,7 @@ FileContentIdentifier::release(
 uno::Any SAL_CALL
 FileContentIdentifier::queryInterface(
     const uno::Type& rType )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     uno::Any aRet = cppu::queryInterface( rType,
                                           (static_cast< lang::XTypeProvider* >(this)),
@@ -82,7 +82,7 @@ FileContentIdentifier::queryInterface(
 
 uno::Sequence< sal_Int8 > SAL_CALL
 FileContentIdentifier::getImplementationId()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     static cppu::OImplementationId* pId = NULL;
     if ( !pId )
@@ -101,7 +101,7 @@ FileContentIdentifier::getImplementationId()
 uno::Sequence< uno::Type > SAL_CALL
 FileContentIdentifier::getTypes(
     void )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     static cppu::OTypeCollection* pCollection = NULL;
     if ( !pCollection ) {
@@ -122,7 +122,7 @@ OUString
 SAL_CALL
 FileContentIdentifier::getContentIdentifier(
     void )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return m_aContentId;
 }
@@ -131,7 +131,7 @@ FileContentIdentifier::getContentIdentifier(
 OUString SAL_CALL
 FileContentIdentifier::getContentProviderScheme(
     void )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return m_aProviderScheme;
 }

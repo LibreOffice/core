@@ -110,7 +110,7 @@ XTYPEPROVIDER_IMPL_2( CommandEnvironment,
 // virtual
 Reference< XInteractionHandler > SAL_CALL
 CommandEnvironment::getInteractionHandler()
-    throw ( RuntimeException )
+    throw ( RuntimeException, std::exception )
 {
     return m_pImpl->m_xInteractionHandler;
 }
@@ -119,7 +119,7 @@ CommandEnvironment::getInteractionHandler()
 // virtual
 Reference< XProgressHandler > SAL_CALL
 CommandEnvironment::getProgressHandler()
-    throw ( RuntimeException )
+    throw ( RuntimeException, std::exception )
 {
     return m_pImpl->m_xProgressHandler;
 }

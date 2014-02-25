@@ -34,64 +34,64 @@ namespace DOM { namespace events
     {
     }
 
-    OUString SAL_CALL CEvent::getType() throw (RuntimeException)
+    OUString SAL_CALL CEvent::getType() throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
         return m_eventType;
     }
 
     Reference< XEventTarget > SAL_CALL
-    CEvent::getTarget() throw (RuntimeException)
+    CEvent::getTarget() throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
         return m_target;
     }
 
     Reference< XEventTarget > SAL_CALL
-    CEvent::getCurrentTarget() throw (RuntimeException)
+    CEvent::getCurrentTarget() throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
         return m_currentTarget;
     }
 
-    PhaseType SAL_CALL CEvent::getEventPhase() throw (RuntimeException)
+    PhaseType SAL_CALL CEvent::getEventPhase() throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
         return m_phase;
     }
 
-    sal_Bool SAL_CALL CEvent::getBubbles() throw (RuntimeException)
+    sal_Bool SAL_CALL CEvent::getBubbles() throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
         return m_bubbles;
     }
 
-    sal_Bool SAL_CALL CEvent::getCancelable() throw (RuntimeException)
+    sal_Bool SAL_CALL CEvent::getCancelable() throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
         return m_cancelable;
     }
 
     com::sun::star::util::Time SAL_CALL
-    CEvent::getTimeStamp() throw (RuntimeException)
+    CEvent::getTimeStamp() throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
         return m_time;
     }
 
-    void SAL_CALL CEvent::stopPropagation() throw (RuntimeException)
+    void SAL_CALL CEvent::stopPropagation() throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
         if (m_cancelable) { m_canceled = sal_True; }
     }
 
-    void SAL_CALL CEvent::preventDefault() throw (RuntimeException)
+    void SAL_CALL CEvent::preventDefault() throw (RuntimeException, std::exception)
     {
     }
 
     void SAL_CALL
     CEvent::initEvent(OUString const& eventTypeArg, sal_Bool canBubbleArg,
-        sal_Bool cancelableArg) throw (RuntimeException)
+        sal_Bool cancelableArg) throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
 

@@ -125,21 +125,21 @@ public:
     ManifestImport( std::vector < ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > > & rNewVector );
     ~ManifestImport( void );
     virtual void SAL_CALL startDocument(  )
-        throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL endDocument(  )
-        throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL startElement( const OUString& aName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttribs )
-        throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL endElement( const OUString& aName )
-        throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL characters( const OUString& aChars )
-        throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces )
-        throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData )
-        throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setDocumentLocator( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >& xLocator )
-        throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception);
 private:
     void doFileEntry(StringHashMap &rConvertedAttribs) throw(::com::sun::star::uno::RuntimeException);
     void doEncryptionData(StringHashMap &rConvertedAttribs) throw(::com::sun::star::uno::RuntimeException);

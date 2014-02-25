@@ -64,19 +64,19 @@ public:
     // XRoot
     virtual void SAL_CALL startDocument(
         Reference< xml::input::XNamespaceMapping > const & xNamespaceMapping )
-        throw (xml::sax::SAXException, RuntimeException);
+        throw (xml::sax::SAXException, RuntimeException, std::exception);
     virtual void SAL_CALL endDocument()
-        throw (xml::sax::SAXException, RuntimeException);
+        throw (xml::sax::SAXException, RuntimeException, std::exception);
     virtual void SAL_CALL processingInstruction(
         OUString const & rTarget, OUString const & rData )
-        throw (xml::sax::SAXException, RuntimeException);
+        throw (xml::sax::SAXException, RuntimeException, std::exception);
     virtual void SAL_CALL setDocumentLocator(
         Reference< xml::sax::XLocator > const & xLocator )
-        throw (xml::sax::SAXException, RuntimeException);
+        throw (xml::sax::SAXException, RuntimeException, std::exception);
     virtual Reference< xml::input::XElement > SAL_CALL startRootElement(
         sal_Int32 nUid, OUString const & rLocalName,
         Reference< xml::input::XAttributes > const & xAttributes )
-        throw (xml::sax::SAXException, RuntimeException);
+        throw (xml::sax::SAXException, RuntimeException, std::exception);
 };
 
 class ModuleElement
@@ -101,27 +101,27 @@ public:
 
     // XElement
     virtual Reference< xml::input::XElement > SAL_CALL getParent()
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
     virtual OUString SAL_CALL getLocalName()
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
     virtual sal_Int32 SAL_CALL getUid()
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
     virtual Reference< xml::input::XAttributes > SAL_CALL getAttributes()
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
     virtual void SAL_CALL ignorableWhitespace(
         OUString const & rWhitespaces )
-        throw (xml::sax::SAXException, RuntimeException);
+        throw (xml::sax::SAXException, RuntimeException, std::exception);
     virtual void SAL_CALL characters( OUString const & rChars )
-        throw (xml::sax::SAXException, RuntimeException);
+        throw (xml::sax::SAXException, RuntimeException, std::exception);
     virtual void SAL_CALL processingInstruction(
         OUString const & rTarget, OUString const & rData )
-        throw (xml::sax::SAXException, RuntimeException);
+        throw (xml::sax::SAXException, RuntimeException, std::exception);
     virtual void SAL_CALL endElement()
-        throw (xml::sax::SAXException, RuntimeException);
+        throw (xml::sax::SAXException, RuntimeException, std::exception);
     virtual Reference< xml::input::XElement > SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         Reference< xml::input::XAttributes > const & xAttributes )
-        throw (xml::sax::SAXException, RuntimeException);
+        throw (xml::sax::SAXException, RuntimeException, std::exception);
 };
 
 }

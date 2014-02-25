@@ -71,7 +71,7 @@ HyphenatedWord::~HyphenatedWord()
 
 
 OUString SAL_CALL HyphenatedWord::getWord()
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return aWord;
@@ -79,7 +79,7 @@ OUString SAL_CALL HyphenatedWord::getWord()
 
 
 Locale SAL_CALL HyphenatedWord::getLocale()
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -88,7 +88,7 @@ Locale SAL_CALL HyphenatedWord::getLocale()
 
 
 sal_Int16 SAL_CALL HyphenatedWord::getHyphenationPos()
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return nHyphenationPos;
@@ -96,7 +96,7 @@ sal_Int16 SAL_CALL HyphenatedWord::getHyphenationPos()
 
 
 OUString SAL_CALL HyphenatedWord::getHyphenatedWord()
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return aHyphenatedWord;
@@ -104,7 +104,7 @@ OUString SAL_CALL HyphenatedWord::getHyphenatedWord()
 
 
 sal_Int16 SAL_CALL HyphenatedWord::getHyphenPos()
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return nHyphPos;
@@ -112,7 +112,7 @@ sal_Int16 SAL_CALL HyphenatedWord::getHyphenPos()
 
 
 sal_Bool SAL_CALL HyphenatedWord::isAlternativeSpelling()
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return bIsAltSpelling;
@@ -138,7 +138,7 @@ PossibleHyphens::~PossibleHyphens()
 
 
 OUString SAL_CALL PossibleHyphens::getWord()
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return aWord;
@@ -146,7 +146,7 @@ OUString SAL_CALL PossibleHyphens::getWord()
 
 
 Locale SAL_CALL PossibleHyphens::getLocale()
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return LanguageTag::convertToLocale( nLanguage );
@@ -154,7 +154,7 @@ Locale SAL_CALL PossibleHyphens::getLocale()
 
 
 OUString SAL_CALL PossibleHyphens::getPossibleHyphens()
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return aWordWithHyphens;
@@ -162,7 +162,7 @@ OUString SAL_CALL PossibleHyphens::getPossibleHyphens()
 
 
 Sequence< sal_Int16 > SAL_CALL PossibleHyphens::getHyphenationPositions()
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return aOrigHyphenPos;

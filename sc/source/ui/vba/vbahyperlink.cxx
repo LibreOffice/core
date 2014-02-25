@@ -104,52 +104,52 @@ ScVbaHyperlink::~ScVbaHyperlink()
 {
 }
 
-OUString ScVbaHyperlink::getName() throw (uno::RuntimeException)
+OUString ScVbaHyperlink::getName() throw (uno::RuntimeException, std::exception)
 {
     // it seems this attribute is same as TextToDisplay
     return getTextToDisplay();
 }
 
-void ScVbaHyperlink::setName( const OUString& rName ) throw (uno::RuntimeException)
+void ScVbaHyperlink::setName( const OUString& rName ) throw (uno::RuntimeException, std::exception)
 {
     setTextToDisplay( rName );
 }
 
-OUString ScVbaHyperlink::getAddress() throw (uno::RuntimeException)
+OUString ScVbaHyperlink::getAddress() throw (uno::RuntimeException, std::exception)
 {
     return getUrlComponents().first;
 }
 
-void ScVbaHyperlink::setAddress( const OUString& rAddress ) throw (uno::RuntimeException)
+void ScVbaHyperlink::setAddress( const OUString& rAddress ) throw (uno::RuntimeException, std::exception)
 {
     UrlComponents aUrlComp = getUrlComponents();
     aUrlComp.first = rAddress;
     setUrlComponents( aUrlComp );
 }
 
-OUString ScVbaHyperlink::getSubAddress() throw (uno::RuntimeException)
+OUString ScVbaHyperlink::getSubAddress() throw (uno::RuntimeException, std::exception)
 {
     return getUrlComponents().second;
 }
 
-void ScVbaHyperlink::setSubAddress( const OUString& rSubAddress ) throw (uno::RuntimeException)
+void ScVbaHyperlink::setSubAddress( const OUString& rSubAddress ) throw (uno::RuntimeException, std::exception)
 {
     UrlComponents aUrlComp = getUrlComponents();
     aUrlComp.second = rSubAddress;
     setUrlComponents( aUrlComp );
 }
 
-OUString SAL_CALL ScVbaHyperlink::getScreenTip() throw (uno::RuntimeException)
+OUString SAL_CALL ScVbaHyperlink::getScreenTip() throw (uno::RuntimeException, std::exception)
 {
     return maScreenTip;
 }
 
-void SAL_CALL ScVbaHyperlink::setScreenTip( const OUString& rScreenTip ) throw (uno::RuntimeException)
+void SAL_CALL ScVbaHyperlink::setScreenTip( const OUString& rScreenTip ) throw (uno::RuntimeException, std::exception)
 {
     maScreenTip = rScreenTip;
 }
 
-OUString ScVbaHyperlink::getTextToDisplay() throw (uno::RuntimeException)
+OUString ScVbaHyperlink::getTextToDisplay() throw (uno::RuntimeException, std::exception)
 {
     ensureTextField();
     OUString aTextToDisplay;
@@ -157,18 +157,18 @@ OUString ScVbaHyperlink::getTextToDisplay() throw (uno::RuntimeException)
     return aTextToDisplay;
 }
 
-void ScVbaHyperlink::setTextToDisplay( const OUString& rTextToDisplay ) throw (uno::RuntimeException)
+void ScVbaHyperlink::setTextToDisplay( const OUString& rTextToDisplay ) throw (uno::RuntimeException, std::exception)
 {
     ensureTextField();
     mxTextField->setPropertyValue("Representation", uno::Any( rTextToDisplay ) );
 }
 
-sal_Int32 SAL_CALL ScVbaHyperlink::getType() throw (uno::RuntimeException)
+sal_Int32 SAL_CALL ScVbaHyperlink::getType() throw (uno::RuntimeException, std::exception)
 {
     return mnType;
 }
 
-uno::Reference< excel::XRange > SAL_CALL ScVbaHyperlink::getRange() throw (uno::RuntimeException)
+uno::Reference< excel::XRange > SAL_CALL ScVbaHyperlink::getRange() throw (uno::RuntimeException, std::exception)
 {
     if( mnType == office::MsoHyperlinkType::msoHyperlinkRange )
     {
@@ -187,7 +187,7 @@ uno::Reference< excel::XRange > SAL_CALL ScVbaHyperlink::getRange() throw (uno::
     throw uno::RuntimeException();
 }
 
-uno::Reference< msforms::XShape > SAL_CALL ScVbaHyperlink::getShape() throw (uno::RuntimeException)
+uno::Reference< msforms::XShape > SAL_CALL ScVbaHyperlink::getShape() throw (uno::RuntimeException, std::exception)
 {
     // error if called at a range Hyperlink object
     return uno::Reference< msforms::XShape >( getParent(), uno::UNO_QUERY_THROW );

@@ -117,7 +117,7 @@ ContentProvider::queryContent(
             const uno::Reference<
                     ucb::XContentIdentifier >& Identifier )
     throw( ucb::IllegalIdentifierException,
-           uno::RuntimeException )
+           uno::RuntimeException, std::exception )
 {
     // Check URL scheme...
 

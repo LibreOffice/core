@@ -49,21 +49,21 @@ public:
 
     // XCommandEnvironment
     virtual css::uno::Reference<css::task::XInteractionHandler > SAL_CALL
-    getInteractionHandler() throw (css::uno::RuntimeException);
+    getInteractionHandler() throw (css::uno::RuntimeException, std::exception);
     virtual css::uno::Reference<css::ucb::XProgressHandler >
-    SAL_CALL getProgressHandler() throw (css::uno::RuntimeException);
+    SAL_CALL getProgressHandler() throw (css::uno::RuntimeException, std::exception);
 
     // XInteractionHandler
     virtual void SAL_CALL handle(
         css::uno::Reference<css::task::XInteractionRequest > const & xRequest )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     // XProgressHandler
     virtual void SAL_CALL push( css::uno::Any const & Status )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL update( css::uno::Any const & Status )
-        throw (css::uno::RuntimeException);
-    virtual void SAL_CALL pop() throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL pop() throw (css::uno::RuntimeException, std::exception);
 };
 
 class TmpRepositoryCommandEnv : public BaseCommandEnv
@@ -75,7 +75,7 @@ public:
 // XInteractionHandler
     virtual void SAL_CALL handle(
         css::uno::Reference<css::task::XInteractionRequest > const & xRequest )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
 };
 
@@ -98,7 +98,7 @@ public:
 // XInteractionHandler
     virtual void SAL_CALL handle(
         css::uno::Reference<css::task::XInteractionRequest > const & xRequest )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
 };
 
@@ -116,7 +116,7 @@ public:
 // XInteractionHandler
     virtual void SAL_CALL handle(
         css::uno::Reference<css::task::XInteractionRequest > const & xRequest )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
 };
 
@@ -135,7 +135,7 @@ public:
     // XInteractionHandler
     virtual void SAL_CALL handle(
         css::uno::Reference<css::task::XInteractionRequest > const & xRequest )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     // Set to true if a PlatformException or a DependencyException were handled.
     css::uno::Any m_Exception;

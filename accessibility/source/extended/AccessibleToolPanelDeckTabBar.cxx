@@ -74,7 +74,7 @@ namespace accessibility
         }
 
         // XAccessible
-        virtual Reference< XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (RuntimeException)
+        virtual Reference< XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (RuntimeException, std::exception)
         {
             return m_xContext;
         }
@@ -284,7 +284,7 @@ namespace accessibility
     {
     }
 
-    sal_Int32 SAL_CALL AccessibleToolPanelTabBar::getAccessibleChildCount(  ) throw (RuntimeException)
+    sal_Int32 SAL_CALL AccessibleToolPanelTabBar::getAccessibleChildCount(  ) throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *m_pImpl );
 
@@ -296,7 +296,7 @@ namespace accessibility
             +   ( bHasScrollForward ? 1 : 0 );
     }
 
-    Reference< XAccessible > SAL_CALL AccessibleToolPanelTabBar::getAccessibleChild( sal_Int32 i_nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+    Reference< XAccessible > SAL_CALL AccessibleToolPanelTabBar::getAccessibleChild( sal_Int32 i_nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
     {
         MethodGuard aGuard( *m_pImpl );
 
@@ -323,13 +323,13 @@ namespace accessibility
         return m_pImpl->getAccessiblePanelItem( i_nIndex - ( bHasScrollBack ? 1 : 0 ) );
     }
 
-    Reference< XAccessible > SAL_CALL AccessibleToolPanelTabBar::getAccessibleParent(  ) throw (RuntimeException)
+    Reference< XAccessible > SAL_CALL AccessibleToolPanelTabBar::getAccessibleParent(  ) throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *m_pImpl );
         return m_pImpl->getAccessibleParent();
     }
 
-    sal_Int16 SAL_CALL AccessibleToolPanelTabBar::getAccessibleRole(  ) throw (RuntimeException)
+    sal_Int16 SAL_CALL AccessibleToolPanelTabBar::getAccessibleRole(  ) throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *m_pImpl );
         return AccessibleRole::PAGE_TAB_LIST;
@@ -344,7 +344,7 @@ namespace accessibility
         }
     }
 
-    Reference< XAccessible > SAL_CALL AccessibleToolPanelTabBar::getAccessibleAtPoint( const UnoPoint& i_rPoint ) throw (RuntimeException)
+    Reference< XAccessible > SAL_CALL AccessibleToolPanelTabBar::getAccessibleAtPoint( const UnoPoint& i_rPoint ) throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *m_pImpl );
 

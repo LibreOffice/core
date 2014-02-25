@@ -181,16 +181,16 @@ public:
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException);
 
     // XEventListener
-    virtual void disposing( const lang::EventObject& Source ) throw (uno::RuntimeException);
+    virtual void disposing( const lang::EventObject& Source ) throw (uno::RuntimeException, std::exception);
 
     // XAccessibleEventListener
-    virtual void notifyEvent( const accessibility::AccessibleEventObject& aEvent ) throw( uno::RuntimeException );
+    virtual void notifyEvent( const accessibility::AccessibleEventObject& aEvent ) throw( uno::RuntimeException, std::exception );
 };
 
 /*****************************************************************************/
 
 void DocumentFocusListener::disposing( const lang::EventObject& aEvent )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
 
     // Unref the object here, but do not remove as listener since the object
@@ -203,7 +203,7 @@ void DocumentFocusListener::disposing( const lang::EventObject& aEvent )
 /*****************************************************************************/
 
 void DocumentFocusListener::notifyEvent( const accessibility::AccessibleEventObject& aEvent )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     switch( aEvent.EventId )
     {

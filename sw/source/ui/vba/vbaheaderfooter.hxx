@@ -39,11 +39,11 @@ public:
     virtual ~SwVbaHeaderFooter(){}
 
     // Attributes
-    virtual ::sal_Bool SAL_CALL getIsHeader() throw (css::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL getLinkToPrevious() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setLinkToPrevious( ::sal_Bool _linktoprevious ) throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< ::ooo::vba::word::XRange > SAL_CALL getRange() throw (css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL Shapes( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL getIsHeader() throw (css::uno::RuntimeException, std::exception);
+    virtual ::sal_Bool SAL_CALL getLinkToPrevious() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setLinkToPrevious( ::sal_Bool _linktoprevious ) throw (css::uno::RuntimeException, std::exception);
+    virtual css::uno::Reference< ::ooo::vba::word::XRange > SAL_CALL getRange() throw (css::uno::RuntimeException, std::exception);
+    virtual css::uno::Any SAL_CALL Shapes( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException, std::exception);
 
     // XHelperInterface
     virtual OUString getServiceImplName();

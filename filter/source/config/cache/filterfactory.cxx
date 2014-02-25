@@ -69,7 +69,7 @@ FilterFactory::~FilterFactory()
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstance(const OUString& sFilter)
     throw(css::uno::Exception       ,
-          css::uno::RuntimeException)
+          css::uno::RuntimeException, std::exception)
 {
     return createInstanceWithArguments(sFilter, css::uno::Sequence< css::uno::Any >());
 }
@@ -79,7 +79,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
 css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstanceWithArguments(const OUString&                     sFilter   ,
                                                                                                 const css::uno::Sequence< css::uno::Any >& lArguments)
     throw(css::uno::Exception       ,
-          css::uno::RuntimeException)
+          css::uno::RuntimeException, std::exception)
 {
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -158,7 +158,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
 
 
 css::uno::Sequence< OUString > SAL_CALL FilterFactory::getAvailableServiceNames()
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     /* Attention: Instead of getElementNames() this method have to return only filter names,
                   which can be created as UNO Services really. Thats why we search for filters,
@@ -186,7 +186,7 @@ css::uno::Sequence< OUString > SAL_CALL FilterFactory::getAvailableServiceNames(
 
 
 css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::createSubSetEnumerationByQuery(const OUString& sQuery)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     // reject old deprecated queries ...
     if (sQuery.matchAsciiL("_filterquery_",13,0))

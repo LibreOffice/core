@@ -662,7 +662,7 @@ void ChildrenManagerImpl::SetInfo (const AccessibleShapeTreeInfo& rShapeTreeInfo
 
 void SAL_CALL
     ChildrenManagerImpl::disposing (const lang::EventObject& rEventObject)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if (rEventObject.Source == maShapeTreeInfo.GetModelBroadcaster()
             || rEventObject.Source == maShapeTreeInfo.GetController())
@@ -698,7 +698,7 @@ void SAL_CALL
 void SAL_CALL
     ChildrenManagerImpl::notifyEvent (
         const document::EventObject& rEventObject)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     static const OUString sShapeInserted ("ShapeInserted");
     static const OUString sShapeRemoved ("ShapeRemoved");
@@ -718,7 +718,7 @@ void SAL_CALL
 
 void  SAL_CALL
     ChildrenManagerImpl::selectionChanged (const lang::EventObject& /*rEvent*/)
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     UpdateSelection ();
 }

@@ -52,28 +52,28 @@ class OReadAccelatorDocumentHandler : public ::com::sun::star::xml::sax::XDocume
         virtual void SAL_CALL release() throw()
             { OWeakObject::release(); }
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
-            const ::com::sun::star::uno::Type & rType ) throw( ::com::sun::star::uno::RuntimeException );
+            const ::com::sun::star::uno::Type & rType ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
         // XDocumentHandler
         virtual void SAL_CALL startDocument(void)
-            throw ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
+            throw ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception );
         virtual void SAL_CALL endDocument(void)
-            throw ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
+            throw ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception );
         virtual void SAL_CALL startElement(
             const OUString& aName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > &xAttribs )
-            throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
+            throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception );
         virtual void SAL_CALL endElement(const OUString& aName) throw
-            ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
+            ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception );
         virtual void SAL_CALL characters(const OUString& aChars)
-            throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
+            throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception );
         virtual void SAL_CALL ignorableWhitespace(const OUString& aWhitespaces)
-            throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
+            throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception );
         virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData )
-            throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
+            throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception );
         virtual void SAL_CALL setDocumentLocator(
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator > &xLocator)
-            throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
+            throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception );
 
     private:
         OUString getErrorLineString();

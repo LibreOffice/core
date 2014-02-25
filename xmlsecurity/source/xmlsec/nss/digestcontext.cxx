@@ -33,7 +33,7 @@ ODigestContext::~ODigestContext()
 }
 
 void SAL_CALL ODigestContext::updateDigest( const uno::Sequence< ::sal_Int8 >& aData )
-    throw (lang::DisposedException, uno::RuntimeException)
+    throw (lang::DisposedException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -62,7 +62,7 @@ void SAL_CALL ODigestContext::updateDigest( const uno::Sequence< ::sal_Int8 >& a
 }
 
 uno::Sequence< ::sal_Int8 > SAL_CALL ODigestContext::finalizeDigestAndDispose()
-    throw (lang::DisposedException, uno::RuntimeException)
+    throw (lang::DisposedException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 

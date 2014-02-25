@@ -54,7 +54,7 @@ SelectionChangeHandler::~SelectionChangeHandler (void)
 
 
 void SAL_CALL SelectionChangeHandler::selectionChanged (const lang::EventObject&)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if (maSelectionChangeCallback)
     {
@@ -72,7 +72,7 @@ void SAL_CALL SelectionChangeHandler::selectionChanged (const lang::EventObject&
 
 
 void SAL_CALL SelectionChangeHandler::disposing (const lang::EventObject&)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
 }
 

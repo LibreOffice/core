@@ -188,7 +188,7 @@ Reference< XConnection > SAL_CALL OConnectionPool::getConnectionWithInfo( const 
     return xConnection;
 }
 
-void SAL_CALL OConnectionPool::disposing( const ::com::sun::star::lang::EventObject& Source ) throw (RuntimeException)
+void SAL_CALL OConnectionPool::disposing( const ::com::sun::star::lang::EventObject& Source ) throw (RuntimeException, std::exception)
 {
     Reference<XConnection> xConnection(Source.Source,UNO_QUERY);
     if(xConnection.is())
@@ -300,7 +300,7 @@ Reference< XConnection> OConnectionPool::getPooledConnection(TConnectionMap::ite
     return xConnection;
 }
 
-void SAL_CALL OConnectionPool::propertyChange( const PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL OConnectionPool::propertyChange( const PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     if(getTimeoutNodeName() == evt.PropertyName)
     {

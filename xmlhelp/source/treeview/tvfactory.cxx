@@ -61,7 +61,7 @@ TVFactory::release(
 Any SAL_CALL
 TVFactory::queryInterface(
     const Type& rType )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     Any aRet = cppu::queryInterface( rType,
                                      (static_cast< XServiceInfo* >(this)),
@@ -82,7 +82,7 @@ XTYPEPROVIDER_IMPL_3( TVFactory,
 
 OUString SAL_CALL
 TVFactory::getImplementationName()
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return TVFactory::getImplementationName_static();
 }
@@ -90,7 +90,7 @@ TVFactory::getImplementationName()
 sal_Bool SAL_CALL
 TVFactory::supportsService(
     const OUString& ServiceName )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return
         ServiceName.equalsAscii( "com.sun.star.help.TreeView" ) ||
@@ -99,7 +99,7 @@ TVFactory::supportsService(
 
 Sequence< OUString > SAL_CALL
 TVFactory::getSupportedServiceNames( void )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return TVFactory::getSupportedServiceNames_static();
 }
@@ -110,7 +110,7 @@ Reference< XInterface > SAL_CALL
 TVFactory::createInstance(
     const OUString& aServiceSpecifier )
     throw( Exception,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     Any aAny;
     aAny <<= OUString();
@@ -130,7 +130,7 @@ TVFactory::createInstanceWithArguments(
     const OUString& ServiceSpecifier,
     const Sequence< Any >& Arguments )
     throw( Exception,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     (void)ServiceSpecifier;
 
@@ -172,7 +172,7 @@ TVFactory::createInstanceWithArguments(
 
 Sequence< OUString > SAL_CALL
 TVFactory::getAvailableServiceNames( )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     Sequence< OUString > seq( 1 );
     seq[0] = "com.sun.star.ucb.HierarchyDataReadAccess";

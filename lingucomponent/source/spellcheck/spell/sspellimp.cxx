@@ -103,7 +103,7 @@ PropertyHelper_Spelling & SpellChecker::GetPropHelper_Impl()
 }
 
 Sequence< Locale > SAL_CALL SpellChecker::getLocales()
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -229,7 +229,7 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
 }
 
 sal_Bool SAL_CALL SpellChecker::hasLocale(const Locale& rLocale)
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -368,7 +368,7 @@ sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rL
 
 sal_Bool SAL_CALL SpellChecker::isValid( const OUString& rWord, const Locale& rLocale,
             const PropertyValues& rProperties )
-        throw(IllegalArgumentException, RuntimeException)
+        throw(IllegalArgumentException, RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -482,7 +482,7 @@ Reference< XSpellAlternatives >
 Reference< XSpellAlternatives > SAL_CALL SpellChecker::spell(
         const OUString& rWord, const Locale& rLocale,
         const PropertyValues& rProperties )
-        throw(IllegalArgumentException, RuntimeException)
+        throw(IllegalArgumentException, RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -511,7 +511,7 @@ Reference< XInterface > SAL_CALL SpellChecker_CreateInstance(
 
 sal_Bool SAL_CALL SpellChecker::addLinguServiceEventListener(
         const Reference< XLinguServiceEventListener >& rxLstnr )
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -525,7 +525,7 @@ sal_Bool SAL_CALL SpellChecker::addLinguServiceEventListener(
 
 sal_Bool SAL_CALL SpellChecker::removeLinguServiceEventListener(
         const Reference< XLinguServiceEventListener >& rxLstnr )
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -538,14 +538,14 @@ sal_Bool SAL_CALL SpellChecker::removeLinguServiceEventListener(
 }
 
 OUString SAL_CALL SpellChecker::getServiceDisplayName( const Locale& /*rLocale*/ )
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return OUString( "Hunspell SpellChecker" );
 }
 
 void SAL_CALL SpellChecker::initialize( const Sequence< Any >& rArguments )
-        throw(Exception, RuntimeException)
+        throw(Exception, RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -572,7 +572,7 @@ void SAL_CALL SpellChecker::initialize( const Sequence< Any >& rArguments )
 }
 
 void SAL_CALL SpellChecker::dispose()
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -591,7 +591,7 @@ void SAL_CALL SpellChecker::dispose()
 }
 
 void SAL_CALL SpellChecker::addEventListener( const Reference< XEventListener >& rxListener )
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -600,7 +600,7 @@ void SAL_CALL SpellChecker::addEventListener( const Reference< XEventListener >&
 }
 
 void SAL_CALL SpellChecker::removeEventListener( const Reference< XEventListener >& rxListener )
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -610,7 +610,7 @@ void SAL_CALL SpellChecker::removeEventListener( const Reference< XEventListener
 
 // Service specific part
 OUString SAL_CALL SpellChecker::getImplementationName()
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -618,13 +618,13 @@ OUString SAL_CALL SpellChecker::getImplementationName()
 }
 
 sal_Bool SAL_CALL SpellChecker::supportsService( const OUString& ServiceName )
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL SpellChecker::getSupportedServiceNames()
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 

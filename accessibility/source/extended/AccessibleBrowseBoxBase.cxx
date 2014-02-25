@@ -118,7 +118,7 @@ void SAL_CALL AccessibleBrowseBoxBase::disposing()
 // XAccessibleContext ---------------------------------------------------------
 
 Reference< XAccessible > SAL_CALL AccessibleBrowseBoxBase::getAccessibleParent()
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
@@ -126,7 +126,7 @@ Reference< XAccessible > SAL_CALL AccessibleBrowseBoxBase::getAccessibleParent()
 }
 
 sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getAccessibleIndexInParent()
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
@@ -162,7 +162,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getAccessibleIndexInParent()
 }
 
 OUString SAL_CALL AccessibleBrowseBoxBase::getAccessibleDescription()
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
@@ -170,7 +170,7 @@ OUString SAL_CALL AccessibleBrowseBoxBase::getAccessibleDescription()
 }
 
 OUString SAL_CALL AccessibleBrowseBoxBase::getAccessibleName()
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
@@ -179,7 +179,7 @@ OUString SAL_CALL AccessibleBrowseBoxBase::getAccessibleName()
 
 Reference< XAccessibleRelationSet > SAL_CALL
 AccessibleBrowseBoxBase::getAccessibleRelationSet()
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     ensureIsAlive();
     // BrowseBox does not have relations.
@@ -188,7 +188,7 @@ AccessibleBrowseBoxBase::getAccessibleRelationSet()
 
 Reference< XAccessibleStateSet > SAL_CALL
 AccessibleBrowseBoxBase::getAccessibleStateSet()
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
@@ -197,7 +197,7 @@ AccessibleBrowseBoxBase::getAccessibleStateSet()
 }
 
 lang::Locale SAL_CALL AccessibleBrowseBoxBase::getLocale()
-    throw ( IllegalAccessibleComponentStateException, uno::RuntimeException )
+    throw ( IllegalAccessibleComponentStateException, uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
@@ -214,31 +214,31 @@ lang::Locale SAL_CALL AccessibleBrowseBoxBase::getLocale()
 // XAccessibleComponent -------------------------------------------------------
 
 sal_Bool SAL_CALL AccessibleBrowseBoxBase::containsPoint( const awt::Point& rPoint )
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     return Rectangle( Point(), getBoundingBox().GetSize() ).IsInside( VCLPoint( rPoint ) );
 }
 
 awt::Rectangle SAL_CALL AccessibleBrowseBoxBase::getBounds()
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     return AWTRectangle( getBoundingBox() );
 }
 
 awt::Point SAL_CALL AccessibleBrowseBoxBase::getLocation()
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     return AWTPoint( getBoundingBox().TopLeft() );
 }
 
 awt::Point SAL_CALL AccessibleBrowseBoxBase::getLocationOnScreen()
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     return AWTPoint( getBoundingBoxOnScreen().TopLeft() );
 }
 
 awt::Size SAL_CALL AccessibleBrowseBoxBase::getSize()
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     return AWTSize( getBoundingBox().GetSize() );
 }
@@ -268,7 +268,7 @@ sal_Bool SAL_CALL AccessibleBrowseBoxBase::isFocusTraversable()
         xStateSet->contains( AccessibleStateType::FOCUSABLE ) : sal_False;
 }
 
-void SAL_CALL AccessibleBrowseBoxBase::focusGained( const ::com::sun::star::awt::FocusEvent& ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL AccessibleBrowseBoxBase::focusGained( const ::com::sun::star::awt::FocusEvent& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     com::sun::star::uno::Any aFocused;
     com::sun::star::uno::Any aEmpty;
@@ -278,7 +278,7 @@ void SAL_CALL AccessibleBrowseBoxBase::focusGained( const ::com::sun::star::awt:
 }
 
 
-void SAL_CALL AccessibleBrowseBoxBase::focusLost( const ::com::sun::star::awt::FocusEvent& ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL AccessibleBrowseBoxBase::focusLost( const ::com::sun::star::awt::FocusEvent& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     com::sun::star::uno::Any aFocused;
     com::sun::star::uno::Any aEmpty;
@@ -290,7 +290,7 @@ void SAL_CALL AccessibleBrowseBoxBase::focusLost( const ::com::sun::star::awt::F
 
 void SAL_CALL AccessibleBrowseBoxBase::addAccessibleEventListener(
         const Reference< XAccessibleEventListener>& _rxListener )
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     if ( _rxListener.is() )
     {
@@ -304,7 +304,7 @@ void SAL_CALL AccessibleBrowseBoxBase::addAccessibleEventListener(
 
 void SAL_CALL AccessibleBrowseBoxBase::removeAccessibleEventListener(
         const Reference< XAccessibleEventListener>& _rxListener )
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     if( _rxListener.is() && getClientId( ) )
     {
@@ -332,7 +332,7 @@ namespace
 }
 
 Sequence< sal_Int8 > SAL_CALL AccessibleBrowseBoxBase::getImplementationId()
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     return theAccessibleBrowseBoxBaseImplementationId::get().getSeq();
 }
@@ -341,13 +341,13 @@ Sequence< sal_Int8 > SAL_CALL AccessibleBrowseBoxBase::getImplementationId()
 
 sal_Bool SAL_CALL AccessibleBrowseBoxBase::supportsService(
         const OUString& rServiceName )
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL AccessibleBrowseBoxBase::getSupportedServiceNames()
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     const OUString aServiceName( "com.sun.star.accessibility.AccessibleContext" );
     return Sequence< OUString >( &aServiceName, 1 );
@@ -484,7 +484,7 @@ void AccessibleBrowseBoxBase::commitEvent(
 }
 
 sal_Int16 SAL_CALL AccessibleBrowseBoxBase::getAccessibleRole()
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     ensureIsAlive();
     sal_Int16 nRole = AccessibleRole::UNKNOWN;
@@ -521,17 +521,17 @@ Any SAL_CALL AccessibleBrowseBoxBase::getAccessibleKeyBinding()
 }
 
 Reference<XAccessible > SAL_CALL AccessibleBrowseBoxBase::getAccessibleAtPoint( const ::com::sun::star::awt::Point& )
-        throw ( uno::RuntimeException )
+        throw ( uno::RuntimeException, std::exception )
 {
     return NULL;
 }
 
-void SAL_CALL AccessibleBrowseBoxBase::disposing( const ::com::sun::star::lang::EventObject& ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL AccessibleBrowseBoxBase::disposing( const ::com::sun::star::lang::EventObject& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     m_xFocusWindow = NULL;
 }
 
-sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getForeground(  ) throw (::com::sun::star::uno::RuntimeException)
+sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getForeground(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
@@ -557,7 +557,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getForeground(  ) throw (::com::sun:
     return nColor;
 }
 
-sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getBackground(  ) throw (::com::sun::star::uno::RuntimeException)
+sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getBackground(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
@@ -584,7 +584,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( BrowseBoxAccessibleElement, AccessibleBrowseBo
 
 // XAccessible ----------------------------------------------------------------
 
-Reference< XAccessibleContext > SAL_CALL BrowseBoxAccessibleElement::getAccessibleContext() throw ( uno::RuntimeException )
+Reference< XAccessibleContext > SAL_CALL BrowseBoxAccessibleElement::getAccessibleContext() throw ( uno::RuntimeException, std::exception )
 {
     ensureIsAlive();
     return this;

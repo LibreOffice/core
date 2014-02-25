@@ -69,11 +69,11 @@ class PackageInformationProvider :
 
     // XPackageInformationProvider
     virtual OUString SAL_CALL getPackageLocation( const OUString& extensionId )
-        throw ( uno::RuntimeException );
+        throw ( uno::RuntimeException, std::exception );
     virtual uno::Sequence< uno::Sequence< OUString > > SAL_CALL isUpdateAvailable( const OUString& extensionId )
-        throw ( uno::RuntimeException );
+        throw ( uno::RuntimeException, std::exception );
     virtual uno::Sequence< uno::Sequence< OUString > > SAL_CALL getExtensionList()
-        throw ( uno::RuntimeException );
+        throw ( uno::RuntimeException, std::exception );
 
 private:
 
@@ -138,7 +138,7 @@ OUString PackageInformationProvider::getPackageLocation(
 
 OUString SAL_CALL
 PackageInformationProvider::getPackageLocation( const OUString& _sExtensionId )
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     OUString aLocationURL = getPackageLocation( OUString("user"), _sExtensionId );
 
@@ -162,7 +162,7 @@ PackageInformationProvider::getPackageLocation( const OUString& _sExtensionId )
 
 uno::Sequence< uno::Sequence< OUString > > SAL_CALL
 PackageInformationProvider::isUpdateAvailable( const OUString& _sExtensionId )
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     uno::Sequence< uno::Sequence< OUString > > aList;
 
@@ -273,7 +273,7 @@ PackageInformationProvider::isUpdateAvailable( const OUString& _sExtensionId )
 
 
 uno::Sequence< uno::Sequence< OUString > > SAL_CALL PackageInformationProvider::getExtensionList()
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     const uno::Reference<deployment::XExtensionManager> mgr =
         deployment::ExtensionManager::get(mxContext);

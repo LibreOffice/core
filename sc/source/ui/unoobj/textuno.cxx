@@ -123,7 +123,7 @@ const EditTextObject* ScHeaderFooterContentObj::GetRightEditObject() const
 // XHeaderFooterContent
 
 uno::Reference<text::XText> SAL_CALL ScHeaderFooterContentObj::getLeftText()
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Reference<text::XText> xInt(*mxLeftText, uno::UNO_QUERY);
@@ -131,7 +131,7 @@ uno::Reference<text::XText> SAL_CALL ScHeaderFooterContentObj::getLeftText()
 }
 
 uno::Reference<text::XText> SAL_CALL ScHeaderFooterContentObj::getCenterText()
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Reference<text::XText> xInt(*mxCenterText, uno::UNO_QUERY);
@@ -139,7 +139,7 @@ uno::Reference<text::XText> SAL_CALL ScHeaderFooterContentObj::getCenterText()
 }
 
 uno::Reference<text::XText> SAL_CALL ScHeaderFooterContentObj::getRightText()
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Reference<text::XText> xInt(*mxRightText, uno::UNO_QUERY);
@@ -149,7 +149,7 @@ uno::Reference<text::XText> SAL_CALL ScHeaderFooterContentObj::getRightText()
 // XUnoTunnel
 
 sal_Int64 SAL_CALL ScHeaderFooterContentObj::getSomething(
-                const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException)
+                const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException, std::exception)
 {
     if ( rId.getLength() == 16 &&
           0 == memcmp( getUnoTunnelId().getConstArray(),
@@ -303,7 +303,7 @@ const SvxUnoText& ScHeaderFooterTextObj::GetUnoText()
 // XText
 
 uno::Reference<text::XTextCursor> SAL_CALL ScHeaderFooterTextObj::createTextCursor()
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return new ScHeaderFooterTextCursor( *this );
@@ -311,7 +311,7 @@ uno::Reference<text::XTextCursor> SAL_CALL ScHeaderFooterTextObj::createTextCurs
 
 uno::Reference<text::XTextCursor> SAL_CALL ScHeaderFooterTextObj::createTextCursorByRange(
                                     const uno::Reference<text::XTextRange>& aTextPosition )
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (!mxUnoText.is())
@@ -331,7 +331,7 @@ void ScHeaderFooterTextObj::FillDummyFieldData( ScHeaderFieldData& rData )
     rData.nTotalPages   = 99;
 }
 
-OUString SAL_CALL ScHeaderFooterTextObj::getString() throw(uno::RuntimeException)
+OUString SAL_CALL ScHeaderFooterTextObj::getString() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     OUString aRet;
@@ -361,7 +361,7 @@ OUString SAL_CALL ScHeaderFooterTextObj::getString() throw(uno::RuntimeException
     return aRet;
 }
 
-void SAL_CALL ScHeaderFooterTextObj::setString( const OUString& aText ) throw(uno::RuntimeException)
+void SAL_CALL ScHeaderFooterTextObj::setString( const OUString& aText ) throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     OUString aString(aText);
@@ -374,7 +374,7 @@ void SAL_CALL ScHeaderFooterTextObj::setString( const OUString& aText ) throw(un
 
 void SAL_CALL ScHeaderFooterTextObj::insertString( const uno::Reference<text::XTextRange>& xRange,
                                             const OUString& aString, sal_Bool bAbsorb )
-                                throw(uno::RuntimeException)
+                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (!mxUnoText.is())
@@ -385,7 +385,7 @@ void SAL_CALL ScHeaderFooterTextObj::insertString( const uno::Reference<text::XT
 void SAL_CALL ScHeaderFooterTextObj::insertControlCharacter(
                                             const uno::Reference<text::XTextRange>& xRange,
                                             sal_Int16 nControlCharacter, sal_Bool bAbsorb )
-                                throw(lang::IllegalArgumentException, uno::RuntimeException)
+                                throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (!mxUnoText.is())
@@ -397,7 +397,7 @@ void SAL_CALL ScHeaderFooterTextObj::insertTextContent(
                                             const uno::Reference<text::XTextRange >& xRange,
                                             const uno::Reference<text::XTextContent >& xContent,
                                             sal_Bool bAbsorb )
-                                throw(lang::IllegalArgumentException, uno::RuntimeException)
+                                throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( xContent.is() && xRange.is() )
@@ -477,7 +477,7 @@ void SAL_CALL ScHeaderFooterTextObj::insertTextContent(
 
 void SAL_CALL ScHeaderFooterTextObj::removeTextContent(
                                             const uno::Reference<text::XTextContent>& xContent )
-                                throw(container::NoSuchElementException, uno::RuntimeException)
+                                throw(container::NoSuchElementException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( xContent.is() )
@@ -495,7 +495,7 @@ void SAL_CALL ScHeaderFooterTextObj::removeTextContent(
     mxUnoText->removeTextContent( xContent );
 }
 
-uno::Reference<text::XText> SAL_CALL ScHeaderFooterTextObj::getText() throw(uno::RuntimeException)
+uno::Reference<text::XText> SAL_CALL ScHeaderFooterTextObj::getText() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (!mxUnoText.is())
@@ -503,7 +503,7 @@ uno::Reference<text::XText> SAL_CALL ScHeaderFooterTextObj::getText() throw(uno:
     return mxUnoText->getText();
 }
 
-uno::Reference<text::XTextRange> SAL_CALL ScHeaderFooterTextObj::getStart() throw(uno::RuntimeException)
+uno::Reference<text::XTextRange> SAL_CALL ScHeaderFooterTextObj::getStart() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (!mxUnoText.is())
@@ -511,7 +511,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScHeaderFooterTextObj::getStart() thro
     return mxUnoText->getStart();
 }
 
-uno::Reference<text::XTextRange> SAL_CALL ScHeaderFooterTextObj::getEnd() throw(uno::RuntimeException)
+uno::Reference<text::XTextRange> SAL_CALL ScHeaderFooterTextObj::getEnd() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (!mxUnoText.is())
@@ -522,7 +522,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScHeaderFooterTextObj::getEnd() throw(
 // XTextFieldsSupplier
 
 uno::Reference<container::XEnumerationAccess> SAL_CALL ScHeaderFooterTextObj::getTextFields()
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     // all fields
@@ -530,7 +530,7 @@ uno::Reference<container::XEnumerationAccess> SAL_CALL ScHeaderFooterTextObj::ge
 }
 
 uno::Reference<container::XNameAccess> SAL_CALL ScHeaderFooterTextObj::getTextFieldMasters()
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     //  sowas gibts nicht im Calc (?)
     return NULL;
@@ -541,7 +541,7 @@ uno::Reference<container::XNameAccess> SAL_CALL ScHeaderFooterTextObj::getTextFi
 void SAL_CALL ScHeaderFooterTextObj::moveTextRange(
                                         const uno::Reference<text::XTextRange>& xRange,
                                         sal_Int16 nParagraphs )
-                                        throw(uno::RuntimeException)
+                                        throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (!mxUnoText.is())
@@ -552,7 +552,7 @@ void SAL_CALL ScHeaderFooterTextObj::moveTextRange(
 // XEnumerationAccess
 
 uno::Reference<container::XEnumeration> SAL_CALL ScHeaderFooterTextObj::createEnumeration()
-                                                throw(uno::RuntimeException)
+                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (!mxUnoText.is())
@@ -562,7 +562,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScHeaderFooterTextObj::createEn
 
 // XElementAccess
 
-uno::Type SAL_CALL ScHeaderFooterTextObj::getElementType() throw(uno::RuntimeException)
+uno::Type SAL_CALL ScHeaderFooterTextObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (!mxUnoText.is())
@@ -570,7 +570,7 @@ uno::Type SAL_CALL ScHeaderFooterTextObj::getElementType() throw(uno::RuntimeExc
     return mxUnoText->getElementType();
 }
 
-sal_Bool SAL_CALL ScHeaderFooterTextObj::hasElements() throw(uno::RuntimeException)
+sal_Bool SAL_CALL ScHeaderFooterTextObj::hasElements() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (!mxUnoText.is())
@@ -601,13 +601,13 @@ ScCellTextCursor::~ScCellTextCursor() throw()
 
 // SvxUnoTextCursor methods reimplemented here to return the right objects:
 
-uno::Reference<text::XText> SAL_CALL ScCellTextCursor::getText() throw(uno::RuntimeException)
+uno::Reference<text::XText> SAL_CALL ScCellTextCursor::getText() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return &rTextObj;
 }
 
-uno::Reference<text::XTextRange> SAL_CALL ScCellTextCursor::getStart() throw(uno::RuntimeException)
+uno::Reference<text::XTextRange> SAL_CALL ScCellTextCursor::getStart() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -624,7 +624,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScCellTextCursor::getStart() throw(uno
     return xRange;
 }
 
-uno::Reference<text::XTextRange> SAL_CALL ScCellTextCursor::getEnd() throw(uno::RuntimeException)
+uno::Reference<text::XTextRange> SAL_CALL ScCellTextCursor::getEnd() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -644,7 +644,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScCellTextCursor::getEnd() throw(uno::
 // XUnoTunnel
 
 sal_Int64 SAL_CALL ScCellTextCursor::getSomething(
-                const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException)
+                const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException, std::exception)
 {
     if ( rId.getLength() == 16 &&
           0 == memcmp( getUnoTunnelId().getConstArray(),
@@ -697,13 +697,13 @@ ScHeaderFooterTextCursor::~ScHeaderFooterTextCursor() throw()
 
 // SvxUnoTextCursor methods reimplemented here to return the right objects:
 
-uno::Reference<text::XText> SAL_CALL ScHeaderFooterTextCursor::getText() throw(uno::RuntimeException)
+uno::Reference<text::XText> SAL_CALL ScHeaderFooterTextCursor::getText() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return &rTextObj;
 }
 
-uno::Reference<text::XTextRange> SAL_CALL ScHeaderFooterTextCursor::getStart() throw(uno::RuntimeException)
+uno::Reference<text::XTextRange> SAL_CALL ScHeaderFooterTextCursor::getStart() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -720,7 +720,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScHeaderFooterTextCursor::getStart() t
     return xRange;
 }
 
-uno::Reference<text::XTextRange> SAL_CALL ScHeaderFooterTextCursor::getEnd() throw(uno::RuntimeException)
+uno::Reference<text::XTextRange> SAL_CALL ScHeaderFooterTextCursor::getEnd() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -740,7 +740,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScHeaderFooterTextCursor::getEnd() thr
 // XUnoTunnel
 
 sal_Int64 SAL_CALL ScHeaderFooterTextCursor::getSomething(
-                const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException)
+                const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException, std::exception)
 {
     if ( rId.getLength() == 16 &&
           0 == memcmp( getUnoTunnelId().getConstArray(),
@@ -793,13 +793,13 @@ ScDrawTextCursor::~ScDrawTextCursor() throw()
 
 // SvxUnoTextCursor methods reimplemented here to return the right objects:
 
-uno::Reference<text::XText> SAL_CALL ScDrawTextCursor::getText() throw(uno::RuntimeException)
+uno::Reference<text::XText> SAL_CALL ScDrawTextCursor::getText() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return xParentText;
 }
 
-uno::Reference<text::XTextRange> SAL_CALL ScDrawTextCursor::getStart() throw(uno::RuntimeException)
+uno::Reference<text::XTextRange> SAL_CALL ScDrawTextCursor::getStart() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -816,7 +816,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScDrawTextCursor::getStart() throw(uno
     return xRange;
 }
 
-uno::Reference<text::XTextRange> SAL_CALL ScDrawTextCursor::getEnd() throw(uno::RuntimeException)
+uno::Reference<text::XTextRange> SAL_CALL ScDrawTextCursor::getEnd() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -836,7 +836,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScDrawTextCursor::getEnd() throw(uno::
 // XUnoTunnel
 
 sal_Int64 SAL_CALL ScDrawTextCursor::getSomething(
-                const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException)
+                const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException, std::exception)
 {
     if ( rId.getLength() == 16 &&
           0 == memcmp( getUnoTunnelId().getConstArray(),

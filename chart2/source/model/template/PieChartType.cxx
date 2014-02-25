@@ -145,14 +145,14 @@ PieChartType::~PieChartType()
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL PieChartType::createClone()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< util::XCloneable >( new PieChartType( *this ));
 }
 
 // ____ XChartType ____
 OUString SAL_CALL PieChartType::getChartType()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return CHART2_SERVICE_NAME_CHARTTYPE_PIE;
 }
@@ -160,7 +160,7 @@ OUString SAL_CALL PieChartType::getChartType()
 Reference< chart2::XCoordinateSystem > SAL_CALL
     PieChartType::createCoordinateSystem( ::sal_Int32 DimensionCount )
     throw (lang::IllegalArgumentException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     Reference< chart2::XCoordinateSystem > xResult(
         new PolarCoordinateSystem(
@@ -214,7 +214,7 @@ uno::Any PieChartType::GetDefaultValue( sal_Int32 nHandle ) const
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL PieChartType::getPropertySetInfo()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return *StaticPieChartTypeInfo::get();
 }

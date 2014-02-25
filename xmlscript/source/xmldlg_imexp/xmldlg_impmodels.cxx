@@ -42,7 +42,7 @@ namespace xmlscript
 Reference< xml::input::XElement > Frame::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
-        throw (xml::sax::SAXException, RuntimeException)
+        throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     if ( !m_xContainer.is() )
         m_xContainer.set( _pImport->_xDialogModelFactory->createInstance( "com.sun.star.awt.UnoFrameModel" ), UNO_QUERY );
@@ -72,7 +72,7 @@ Reference< xml::input::XElement > Frame::startChildElement(
 }
 
 void Frame::endElement()
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
         if ( !m_xContainer.is() )
             m_xContainer.set( _pImport->_xDialogModelFactory->createInstance( "com.sun.star.awt.UnoFrameModel" ), UNO_QUERY );
@@ -109,7 +109,7 @@ void Frame::endElement()
 Reference< xml::input::XElement > MultiPage::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     // event
     if (_pImport->isEventElement( nUid, rLocalName ))
@@ -133,7 +133,7 @@ Reference< xml::input::XElement > MultiPage::startChildElement(
 }
 
 void MultiPage::endElement()
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
         Reference< beans::XPropertySet > xProps( m_xContainer, UNO_QUERY_THROW );
         // _pImport is what we need to add to ( e.g. the dialog in this case )
@@ -163,7 +163,7 @@ void MultiPage::endElement()
 Reference< xml::input::XElement > Page::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     // event
     if (_pImport->isEventElement( nUid, rLocalName ))
@@ -186,7 +186,7 @@ Reference< xml::input::XElement > Page::startChildElement(
 }
 
 void Page::endElement()
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
         Reference< beans::XPropertySet > xProps( m_xContainer, UNO_QUERY_THROW );
 
@@ -216,7 +216,7 @@ void Page::endElement()
 Reference< xml::input::XElement > ProgressBarElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     // event
     if (_pImport->isEventElement( nUid, rLocalName ))
@@ -232,7 +232,7 @@ Reference< xml::input::XElement > ProgressBarElement::startChildElement(
     }
 }
 void ProgressBarElement::endElement()
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     ControlImportContext ctx( _pImport, getControlId( _xAttributes ), "com.sun.star.awt.UnoControlProgressBarModel" );
 
@@ -260,7 +260,7 @@ void ProgressBarElement::endElement()
 Reference< xml::input::XElement > ScrollBarElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     // event
     if (_pImport->isEventElement( nUid, rLocalName ))
@@ -273,7 +273,7 @@ Reference< xml::input::XElement > ScrollBarElement::startChildElement(
     }
 }
 void ScrollBarElement::endElement()
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     ControlImportContext ctx( _pImport, getControlId( _xAttributes ), getControlModelName( "com.sun.star.awt.UnoControlScrollBarModel" , _xAttributes ) );
 
@@ -310,7 +310,7 @@ void ScrollBarElement::endElement()
 Reference< xml::input::XElement > SpinButtonElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     // event
     if (_pImport->isEventElement( nUid, rLocalName ))
@@ -324,7 +324,7 @@ Reference< xml::input::XElement > SpinButtonElement::startChildElement(
 }
 
 void SpinButtonElement::endElement()
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     ControlImportContext ctx( _pImport, getControlId( _xAttributes ), getControlModelName( "com.sun.star.awt.UnoControlSpinButtonModel", _xAttributes ) );
 
@@ -358,7 +358,7 @@ void SpinButtonElement::endElement()
 Reference< xml::input::XElement > FixedLineElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     // event
     if (_pImport->isEventElement( nUid, rLocalName ))
@@ -371,7 +371,7 @@ Reference< xml::input::XElement > FixedLineElement::startChildElement(
     }
 }
 void FixedLineElement::endElement()
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     ControlImportContext ctx(_pImport, getControlId( _xAttributes ), "com.sun.star.awt.UnoControlFixedLineModel" );
 
@@ -398,7 +398,7 @@ void FixedLineElement::endElement()
 Reference< xml::input::XElement > PatternFieldElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     // event
     if (_pImport->isEventElement( nUid, rLocalName ))
@@ -411,7 +411,7 @@ Reference< xml::input::XElement > PatternFieldElement::startChildElement(
     }
 }
 void PatternFieldElement::endElement()
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     ControlImportContext ctx( _pImport, getControlId( _xAttributes ), "com.sun.star.awt.UnoControlPatternFieldModel" );
 
@@ -446,7 +446,7 @@ void PatternFieldElement::endElement()
 Reference< xml::input::XElement > FormattedFieldElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     // event
     if (_pImport->isEventElement( nUid, rLocalName ))
@@ -460,7 +460,7 @@ Reference< xml::input::XElement > FormattedFieldElement::startChildElement(
 }
 
 void FormattedFieldElement::endElement()
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     ControlImportContext ctx( _pImport, getControlId( _xAttributes ), "com.sun.star.awt.UnoControlFormattedFieldModel" );
 
@@ -574,7 +574,7 @@ void FormattedFieldElement::endElement()
 Reference< xml::input::XElement > TimeFieldElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     // event
     if (_pImport->isEventElement( nUid, rLocalName ))
@@ -587,7 +587,7 @@ Reference< xml::input::XElement > TimeFieldElement::startChildElement(
     }
 }
 void TimeFieldElement::endElement()
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     ControlImportContext ctx( _pImport, getControlId( _xAttributes ), "com.sun.star.awt.UnoControlTimeFieldModel" );
 
@@ -628,7 +628,7 @@ void TimeFieldElement::endElement()
 Reference< xml::input::XElement > NumericFieldElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     // event
     if (_pImport->isEventElement( nUid, rLocalName ))
@@ -641,7 +641,7 @@ Reference< xml::input::XElement > NumericFieldElement::startChildElement(
     }
 }
 void NumericFieldElement::endElement()
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     ControlImportContext ctx( _pImport, getControlId( _xAttributes ), "com.sun.star.awt.UnoControlNumericFieldModel" );
 
@@ -682,7 +682,7 @@ void NumericFieldElement::endElement()
 Reference< xml::input::XElement > DateFieldElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     // event
     if (_pImport->isEventElement( nUid, rLocalName ))
@@ -695,7 +695,7 @@ Reference< xml::input::XElement > DateFieldElement::startChildElement(
     }
 }
 void DateFieldElement::endElement()
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     ControlImportContext ctx( _pImport, getControlId( _xAttributes ), "com.sun.star.awt.UnoControlDateFieldModel" );
 
@@ -737,7 +737,7 @@ void DateFieldElement::endElement()
 Reference< xml::input::XElement > CurrencyFieldElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     // event
     if (_pImport->isEventElement( nUid, rLocalName ))
@@ -750,7 +750,7 @@ Reference< xml::input::XElement > CurrencyFieldElement::startChildElement(
     }
 }
 void CurrencyFieldElement::endElement()
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     ControlImportContext ctx( _pImport, getControlId( _xAttributes ), "com.sun.star.awt.UnoControlCurrencyFieldModel" );
 
@@ -793,7 +793,7 @@ void CurrencyFieldElement::endElement()
 Reference< xml::input::XElement > FileControlElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     // event
     if (_pImport->isEventElement( nUid, rLocalName ))
@@ -806,7 +806,7 @@ Reference< xml::input::XElement > FileControlElement::startChildElement(
     }
 }
 void FileControlElement::endElement()
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     ControlImportContext ctx( _pImport, getControlId( _xAttributes ), "com.sun.star.awt.UnoControlFileControlModel" );
 
@@ -837,7 +837,7 @@ void FileControlElement::endElement()
 Reference< xml::input::XElement > TreeControlElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     // event
     if (_pImport->isEventElement( nUid, rLocalName ))
@@ -850,7 +850,7 @@ Reference< xml::input::XElement > TreeControlElement::startChildElement(
     }
 }
 void TreeControlElement::endElement()
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     ControlImportContext ctx( _pImport, getControlId( _xAttributes ), "com.sun.star.awt.tree.TreeControlModel" );
 
@@ -883,7 +883,7 @@ void TreeControlElement::endElement()
 Reference< xml::input::XElement > ImageControlElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     // event
     if (_pImport->isEventElement( nUid, rLocalName ))
@@ -897,7 +897,7 @@ Reference< xml::input::XElement > ImageControlElement::startChildElement(
 }
 
 void ImageControlElement::endElement()
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     ControlImportContext ctx( _pImport, getControlId( _xAttributes ), "com.sun.star.awt.UnoControlImageControlModel" );
 
@@ -926,7 +926,7 @@ void ImageControlElement::endElement()
 Reference< xml::input::XElement > TextElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     // event
     if (_pImport->isEventElement( nUid, rLocalName ))
@@ -940,7 +940,7 @@ Reference< xml::input::XElement > TextElement::startChildElement(
 }
 
 void TextElement::endElement()
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     ControlImportContext ctx( _pImport, getControlId( _xAttributes ), "com.sun.star.awt.UnoControlFixedTextModel" );
 
@@ -973,7 +973,7 @@ void TextElement::endElement()
 Reference< xml::input::XElement > FixedHyperLinkElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     // event
     if (_pImport->isEventElement( nUid, rLocalName ))
@@ -986,7 +986,7 @@ Reference< xml::input::XElement > FixedHyperLinkElement::startChildElement(
     }
 }
 void FixedHyperLinkElement::endElement()
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     ControlImportContext ctx( _pImport, getControlId( _xAttributes ), "com.sun.star.awt.UnoControlFixedHyperlinkModel" );
 
@@ -1022,7 +1022,7 @@ void FixedHyperLinkElement::endElement()
 Reference< xml::input::XElement > TextFieldElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     // event
     if (_pImport->isEventElement( nUid, rLocalName ))
@@ -1035,7 +1035,7 @@ Reference< xml::input::XElement > TextFieldElement::startChildElement(
     }
 }
 void TextFieldElement::endElement()
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     ControlImportContext ctx( _pImport, getControlId( _xAttributes ), "com.sun.star.awt.UnoControlEditModel" );
     Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
@@ -1081,7 +1081,7 @@ void TextFieldElement::endElement()
 Reference< xml::input::XElement > TitledBoxElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     // event
     if (_pImport->isEventElement( nUid, rLocalName ))
@@ -1121,7 +1121,7 @@ Reference< xml::input::XElement > TitledBoxElement::startChildElement(
 }
 
 void TitledBoxElement::endElement()
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     {
     ControlImportContext ctx(_pImport, getControlId( _xAttributes ), "com.sun.star.awt.UnoControlGroupBoxModel" );
@@ -1203,7 +1203,7 @@ void TitledBoxElement::endElement()
 Reference< xml::input::XElement > RadioElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     // event
     if (_pImport->isEventElement( nUid, rLocalName ))
@@ -1220,7 +1220,7 @@ Reference< xml::input::XElement > RadioElement::startChildElement(
 Reference< xml::input::XElement > RadioGroupElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     if (_pImport->XMLNS_DIALOGS_UID != nUid)
     {
@@ -1242,7 +1242,7 @@ Reference< xml::input::XElement > RadioGroupElement::startChildElement(
     }
 }
 void RadioGroupElement::endElement()
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     for ( size_t nPos = 0; nPos < _radios.size(); ++nPos )
     {
@@ -1299,7 +1299,7 @@ void RadioGroupElement::endElement()
 Reference< xml::input::XElement > MenuPopupElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     if (_pImport->XMLNS_DIALOGS_UID != nUid)
     {
@@ -1352,7 +1352,7 @@ Sequence< sal_Int16 > MenuPopupElement::getSelectedItems()
 Reference< xml::input::XElement > MenuListElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     // event
     if (_pImport->isEventElement( nUid, rLocalName ))
@@ -1376,7 +1376,7 @@ Reference< xml::input::XElement > MenuListElement::startChildElement(
 }
 
 void MenuListElement::endElement()
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     ControlImportContext ctx( _pImport, getControlId( _xAttributes ), getControlModelName( "com.sun.star.awt.UnoControlListBoxModel", _xAttributes  ) );
     Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
@@ -1420,7 +1420,7 @@ void MenuListElement::endElement()
 Reference< xml::input::XElement > ComboBoxElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     // event
     if (_pImport->isEventElement( nUid, rLocalName ))
@@ -1443,7 +1443,7 @@ Reference< xml::input::XElement > ComboBoxElement::startChildElement(
     }
 }
 void ComboBoxElement::endElement()
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     ControlImportContext ctx( _pImport, getControlId( _xAttributes ), getControlModelName( "com.sun.star.awt.UnoControlComboBoxModel", _xAttributes ) );
     Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
@@ -1487,7 +1487,7 @@ void ComboBoxElement::endElement()
 Reference< xml::input::XElement > CheckBoxElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     // event
     if (_pImport->isEventElement( nUid, rLocalName ))
@@ -1500,7 +1500,7 @@ Reference< xml::input::XElement > CheckBoxElement::startChildElement(
     }
 }
 void CheckBoxElement::endElement()
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     ControlImportContext ctx( _pImport, getControlId( _xAttributes ), "com.sun.star.awt.UnoControlCheckBoxModel" );
     Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
@@ -1553,7 +1553,7 @@ void CheckBoxElement::endElement()
 Reference< xml::input::XElement > ButtonElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     // event
     if (_pImport->isEventElement( nUid, rLocalName ))
@@ -1567,7 +1567,7 @@ Reference< xml::input::XElement > ButtonElement::startChildElement(
 }
 
 void ButtonElement::endElement()
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     ControlImportContext ctx( _pImport, getControlId( _xAttributes ), "com.sun.star.awt.UnoControlButtonModel" );
 
@@ -1617,7 +1617,7 @@ void ButtonElement::endElement()
 Reference< xml::input::XElement > BulletinBoardElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     if (_pImport->XMLNS_DIALOGS_UID != nUid)
     {
@@ -1778,13 +1778,13 @@ BulletinBoardElement::BulletinBoardElement(
 Reference< xml::input::XElement > StyleElement::startChildElement(
     sal_Int32 /*nUid*/, OUString const & /*rLocalName*/,
     Reference< xml::input::XAttributes > const & /*xAttributes*/ )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     throw xml::sax::SAXException( "unexpected sub elements of style!", Reference< XInterface >(), Any() );
 }
 
 void StyleElement::endElement()
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     Reference< xml::input::XAttributes > xStyle;
     OUString aStyleId( _xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID, "style-id" ) );
@@ -1802,7 +1802,7 @@ void StyleElement::endElement()
 Reference< xml::input::XElement > StylesElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     if (_pImport->XMLNS_DIALOGS_UID != nUid)
     {
@@ -1823,7 +1823,7 @@ Reference< xml::input::XElement > StylesElement::startChildElement(
 Reference< xml::input::XElement > WindowElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     // event
     if (_pImport->isEventElement( nUid, rLocalName ))
@@ -1851,7 +1851,7 @@ Reference< xml::input::XElement > WindowElement::startChildElement(
 }
 
 void WindowElement::endElement()
-    throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     Reference< beans::XPropertySet > xProps(
         _pImport->_xDialogModel, UNO_QUERY_THROW );

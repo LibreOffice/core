@@ -38,7 +38,7 @@ Reference< XInterface > SAL_CALL PluginModel_CreateInstance( const Reference< ::
     return xService;
 }
 
-Any PluginModel::queryAggregation( const Type& type ) throw( RuntimeException )
+Any PluginModel::queryAggregation( const Type& type ) throw( RuntimeException, std::exception )
 {
     Any aRet( ::cppu::queryInterface( type,
                                       static_cast< ::com::sun::star::lang::XComponent* >(this),
@@ -100,7 +100,7 @@ PluginModel::~PluginModel()
 {
 }
 
-Reference< ::com::sun::star::beans::XPropertySetInfo >  PluginModel::getPropertySetInfo() throw()
+Reference< ::com::sun::star::beans::XPropertySetInfo >  PluginModel::getPropertySetInfo() throw(std::exception)
 {
     static Reference< ::com::sun::star::beans::XPropertySetInfo > aInfo =
         createPropertySetInfo( *this );
@@ -134,7 +134,7 @@ sal_Bool PluginModel::convertFastPropertyValue( Any & rConvertedValue,
 
 void PluginModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle,
                                                     const Any& rValue )
-    throw(::com::sun::star::uno::Exception)
+    throw(::com::sun::star::uno::Exception, std::exception)
 {
     if( rValue.getValueTypeClass() == TypeClass_STRING ) // FIXME wrong type!
 
@@ -157,19 +157,19 @@ void PluginModel::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const t
 }
 
 //---- ::com::sun::star::lang::XComponent ----------------------------------------------------------------------------------
-void PluginModel::addEventListener( const Reference< ::com::sun::star::lang::XEventListener > & l ) throw()
+void PluginModel::addEventListener( const Reference< ::com::sun::star::lang::XEventListener > & l ) throw(std::exception)
 {
     m_aDisposeListeners.push_back( l );
 }
 
 //---- ::com::sun::star::lang::XComponent ----------------------------------------------------------------------------------
-void PluginModel::removeEventListener( const Reference< ::com::sun::star::lang::XEventListener > & l ) throw()
+void PluginModel::removeEventListener( const Reference< ::com::sun::star::lang::XEventListener > & l ) throw(std::exception)
 {
     m_aDisposeListeners.remove( l );
 }
 
 //---- ::com::sun::star::lang::XComponent ----------------------------------------------------------------------------------
-void PluginModel::dispose(void) throw()
+void PluginModel::dispose(void) throw(std::exception)
 {
     // send disposing events
     ::com::sun::star::lang::EventObject aEvt;
@@ -186,17 +186,17 @@ void PluginModel::dispose(void) throw()
 
 
 // ::com::sun::star::io::XPersistObject
-OUString PluginModel::getServiceName() throw()
+OUString PluginModel::getServiceName() throw(std::exception)
 {
     return OUString("com.sun.star.plugin.PluginModel");
 }
 
-void PluginModel::write(const Reference< ::com::sun::star::io::XObjectOutputStream > & OutStream) throw()
+void PluginModel::write(const Reference< ::com::sun::star::io::XObjectOutputStream > & OutStream) throw(std::exception)
 {
     OutStream->writeUTF( m_aCreationURL );
 }
 
-void PluginModel::read(const Reference< ::com::sun::star::io::XObjectInputStream > & InStream) throw()
+void PluginModel::read(const Reference< ::com::sun::star::io::XObjectInputStream > & InStream) throw(std::exception)
 {
     m_aCreationURL = InStream->readUTF();
 }

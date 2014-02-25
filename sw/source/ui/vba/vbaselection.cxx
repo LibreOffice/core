@@ -98,7 +98,7 @@ uno::Reference< text::XTextRange > SwVbaSelection::GetSelectedRange() throw ( un
 }
 
 uno::Reference< word::XRange > SAL_CALL
-SwVbaSelection::getRange() throw ( uno::RuntimeException )
+SwVbaSelection::getRange() throw ( uno::RuntimeException, std::exception )
 {
     uno::Reference< text::XTextRange > xTextRange = GetSelectedRange();
     uno::Reference< text::XTextDocument > xDocument( mxModel, uno::UNO_QUERY_THROW );
@@ -106,26 +106,26 @@ SwVbaSelection::getRange() throw ( uno::RuntimeException )
 }
 
 OUString SAL_CALL
-SwVbaSelection::getText() throw ( uno::RuntimeException )
+SwVbaSelection::getText() throw ( uno::RuntimeException, std::exception )
 {
     return getRange()->getText();
 }
 
 void SAL_CALL
-SwVbaSelection::setText( const OUString& rText ) throw ( uno::RuntimeException )
+SwVbaSelection::setText( const OUString& rText ) throw ( uno::RuntimeException, std::exception )
 {
     getRange()->setText( rText );
 }
 
 void SAL_CALL
-SwVbaSelection::TypeText( const OUString& rText ) throw ( uno::RuntimeException )
+SwVbaSelection::TypeText( const OUString& rText ) throw ( uno::RuntimeException, std::exception )
 {
     // FIXME: handle the property Options.ReplaceSelection, the default value is sal_True
     setText( rText );
 }
 
 void SAL_CALL
-SwVbaSelection::HomeKey( const uno::Any& _unit, const uno::Any& _extend ) throw ( uno::RuntimeException )
+SwVbaSelection::HomeKey( const uno::Any& _unit, const uno::Any& _extend ) throw ( uno::RuntimeException, std::exception )
 {
     sal_Int32 nUnit = word::WdUnits::wdLine;
     sal_Int32 nExtend = word::WdMovementType::wdMove;
@@ -160,7 +160,7 @@ SwVbaSelection::HomeKey( const uno::Any& _unit, const uno::Any& _extend ) throw 
 }
 
 void SAL_CALL
-SwVbaSelection::EndKey( const uno::Any& _unit, const uno::Any& _extend ) throw ( uno::RuntimeException )
+SwVbaSelection::EndKey( const uno::Any& _unit, const uno::Any& _extend ) throw ( uno::RuntimeException, std::exception )
 {
     sal_Int32 nUnit = word::WdUnits::wdLine;
     sal_Int32 nExtend = word::WdMovementType::wdMove;
@@ -195,7 +195,7 @@ SwVbaSelection::EndKey( const uno::Any& _unit, const uno::Any& _extend ) throw (
 }
 
 void SAL_CALL
-SwVbaSelection::Delete( const uno::Any& _unit, const uno::Any& _count ) throw ( uno::RuntimeException )
+SwVbaSelection::Delete( const uno::Any& _unit, const uno::Any& _count ) throw ( uno::RuntimeException, std::exception )
 {
     sal_Int32 nUnit = word::WdUnits::wdLine;
     sal_Int32 nCount = 0;
@@ -399,7 +399,7 @@ void SwVbaSelection::NextCell( sal_Int32 nCount, word::E_DIRECTION eDirection ) 
 }
 
 void SAL_CALL
-SwVbaSelection::MoveRight( const uno::Any& _unit, const uno::Any& _count, const uno::Any& _extend ) throw ( uno::RuntimeException )
+SwVbaSelection::MoveRight( const uno::Any& _unit, const uno::Any& _count, const uno::Any& _extend ) throw ( uno::RuntimeException, std::exception )
 {
     sal_Int32 nCount = 1;
 
@@ -419,7 +419,7 @@ SwVbaSelection::MoveRight( const uno::Any& _unit, const uno::Any& _count, const 
 }
 
 void SAL_CALL
-SwVbaSelection::MoveLeft( const uno::Any& _unit, const uno::Any& _count, const uno::Any& _extend ) throw ( uno::RuntimeException )
+SwVbaSelection::MoveLeft( const uno::Any& _unit, const uno::Any& _count, const uno::Any& _extend ) throw ( uno::RuntimeException, std::exception )
 {
     sal_Int32 nCount = 1;
     if( _count.hasValue() )
@@ -438,7 +438,7 @@ SwVbaSelection::MoveLeft( const uno::Any& _unit, const uno::Any& _count, const u
 }
 
 void SAL_CALL
-SwVbaSelection::MoveDown( const uno::Any& _unit, const uno::Any& _count, const uno::Any& _extend ) throw ( uno::RuntimeException )
+SwVbaSelection::MoveDown( const uno::Any& _unit, const uno::Any& _count, const uno::Any& _extend ) throw ( uno::RuntimeException, std::exception )
 {
     sal_Int32 nCount = 1;
 
@@ -458,7 +458,7 @@ SwVbaSelection::MoveDown( const uno::Any& _unit, const uno::Any& _count, const u
 }
 
 void SAL_CALL
-SwVbaSelection::MoveUp( const uno::Any& _unit, const uno::Any& _count, const uno::Any& _extend ) throw ( uno::RuntimeException )
+SwVbaSelection::MoveUp( const uno::Any& _unit, const uno::Any& _count, const uno::Any& _extend ) throw ( uno::RuntimeException, std::exception )
 {
     sal_Int32 nCount = 1;
 
@@ -478,7 +478,7 @@ SwVbaSelection::MoveUp( const uno::Any& _unit, const uno::Any& _count, const uno
 }
 
 void SAL_CALL
-SwVbaSelection::TypeParagraph() throw ( uno::RuntimeException )
+SwVbaSelection::TypeParagraph() throw ( uno::RuntimeException, std::exception )
 {
     // #FIXME: if the selection is an entire paragraph, it's replaced
     // by the new paragraph
@@ -489,70 +489,70 @@ SwVbaSelection::TypeParagraph() throw ( uno::RuntimeException )
 }
 
 void SAL_CALL
-SwVbaSelection::InsertParagraph() throw ( uno::RuntimeException )
+SwVbaSelection::InsertParagraph() throw ( uno::RuntimeException, std::exception )
 {
     // #FIME: the selection should include the new paragraph.
     getRange()->InsertParagraph();
 }
 
 void SAL_CALL
-SwVbaSelection::InsertParagraphBefore() throw ( uno::RuntimeException )
+SwVbaSelection::InsertParagraphBefore() throw ( uno::RuntimeException, std::exception )
 {
     getRange()->InsertParagraphBefore();
 }
 
 void SAL_CALL
-SwVbaSelection::InsertParagraphAfter() throw ( uno::RuntimeException )
+SwVbaSelection::InsertParagraphAfter() throw ( uno::RuntimeException, std::exception )
 {
     getRange()->InsertParagraphAfter();
 }
 
 uno::Reference< word::XParagraphFormat > SAL_CALL
-SwVbaSelection::getParagraphFormat() throw ( uno::RuntimeException )
+SwVbaSelection::getParagraphFormat() throw ( uno::RuntimeException, std::exception )
 {
     return getRange()->getParagraphFormat();
 }
 
 void SAL_CALL
-SwVbaSelection::setParagraphFormat( const uno::Reference< word::XParagraphFormat >& rParagraphFormat ) throw ( uno::RuntimeException )
+SwVbaSelection::setParagraphFormat( const uno::Reference< word::XParagraphFormat >& rParagraphFormat ) throw ( uno::RuntimeException, std::exception )
 {
     return getRange()->setParagraphFormat( rParagraphFormat );
 }
 
 uno::Reference< word::XFind > SAL_CALL
-SwVbaSelection::getFind() throw ( uno::RuntimeException )
+SwVbaSelection::getFind() throw ( uno::RuntimeException, std::exception )
 {
     uno::Reference< text::XTextRange > xTextRange = GetSelectedRange();
     return uno::Reference< word::XFind >( new SwVbaFind( this, mxContext, mxModel, xTextRange ) );
 }
 
 uno::Any SAL_CALL
-SwVbaSelection::getStyle() throw ( uno::RuntimeException )
+SwVbaSelection::getStyle() throw ( uno::RuntimeException, std::exception )
 {
     return getRange()->getStyle();
 }
 
 void SAL_CALL
-SwVbaSelection::setStyle( const uno::Any& rStyle ) throw ( uno::RuntimeException )
+SwVbaSelection::setStyle( const uno::Any& rStyle ) throw ( uno::RuntimeException, std::exception )
 {
     uno::Reference< beans::XPropertySet > xParaProps( mxTextViewCursor, uno::UNO_QUERY_THROW );
     return SwVbaStyle::setStyle( xParaProps, rStyle );
 }
 
 uno::Reference< word::XFont > SAL_CALL
-SwVbaSelection::getFont() throw ( uno::RuntimeException )
+SwVbaSelection::getFont() throw ( uno::RuntimeException, std::exception )
 {
     return getRange()->getFont();
 }
 
 void SAL_CALL
-SwVbaSelection::TypeBackspace() throw ( uno::RuntimeException )
+SwVbaSelection::TypeBackspace() throw ( uno::RuntimeException, std::exception )
 {
     OUString url = ".uno:SwBackspace";
     dispatchRequests( mxModel,url );
 }
 
-uno::Reference< word::XRange > SAL_CALL SwVbaSelection::GoTo( const uno::Any& _what, const uno::Any& _which, const uno::Any& _count, const uno::Any& _name ) throw (uno::RuntimeException)
+uno::Reference< word::XRange > SAL_CALL SwVbaSelection::GoTo( const uno::Any& _what, const uno::Any& _which, const uno::Any& _count, const uno::Any& _name ) throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nWhat = 0;
     if( !( _what >>= nWhat ) )
@@ -657,17 +657,17 @@ uno::Reference< word::XRange > SAL_CALL SwVbaSelection::GoTo( const uno::Any& _w
     return getRange();
 }
 
-::sal_Int32 SAL_CALL SwVbaSelection::getLanguageID() throw (uno::RuntimeException)
+::sal_Int32 SAL_CALL SwVbaSelection::getLanguageID() throw (uno::RuntimeException, std::exception)
 {
     return getRange()->getLanguageID();
 }
 
-void SAL_CALL SwVbaSelection::setLanguageID( ::sal_Int32 _languageid ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaSelection::setLanguageID( ::sal_Int32 _languageid ) throw (uno::RuntimeException, std::exception)
 {
     getRange()->setLanguageID( _languageid );
 }
 
-uno::Any SAL_CALL SwVbaSelection::Information( sal_Int32 _type ) throw (uno::RuntimeException)
+uno::Any SAL_CALL SwVbaSelection::Information( sal_Int32 _type ) throw (uno::RuntimeException, std::exception)
 {
     uno::Any result;
     switch( _type )
@@ -769,13 +769,13 @@ uno::Any SAL_CALL SwVbaSelection::Information( sal_Int32 _type ) throw (uno::Run
     return result;
 }
 
-void SAL_CALL SwVbaSelection::InsertBreak( const uno::Any& _breakType ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaSelection::InsertBreak( const uno::Any& _breakType ) throw (uno::RuntimeException, std::exception)
 {
     getRange()->InsertBreak( _breakType );
 }
 
 uno::Any SAL_CALL
-SwVbaSelection::Tables( const uno::Any& aIndex ) throw (uno::RuntimeException)
+SwVbaSelection::Tables( const uno::Any& aIndex ) throw (uno::RuntimeException, std::exception)
 {
     // Hacky implementation due to missing api ( and lack of knowledge )
     // we can only support a selection that is a single table
@@ -824,7 +824,7 @@ SwVbaSelection::Tables( const uno::Any& aIndex ) throw (uno::RuntimeException)
 }
 
 uno::Any SAL_CALL
-SwVbaSelection::Fields( const uno::Any& index ) throw (uno::RuntimeException)
+SwVbaSelection::Fields( const uno::Any& index ) throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< XCollection > xCol( new SwVbaFields( mxParent, mxContext, mxModel ) );
     if ( index.hasValue() )
@@ -833,7 +833,7 @@ SwVbaSelection::Fields( const uno::Any& index ) throw (uno::RuntimeException)
 }
 
 uno::Reference< word::XHeaderFooter > SAL_CALL
-SwVbaSelection::getHeaderFooter() throw ( uno::RuntimeException )
+SwVbaSelection::getHeaderFooter() throw ( uno::RuntimeException, std::exception )
 {
     if( HeaderFooterHelper::isHeaderFooter( mxModel ) )
     {
@@ -852,7 +852,7 @@ SwVbaSelection::getHeaderFooter() throw ( uno::RuntimeException )
 }
 
 uno::Any SAL_CALL
-SwVbaSelection::ShapeRange( ) throw (uno::RuntimeException)
+SwVbaSelection::ShapeRange( ) throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< drawing::XShapes > xShapes( mxModel->getCurrentSelection(), uno::UNO_QUERY );
     if ( !xShapes.is() )
@@ -868,38 +868,38 @@ SwVbaSelection::ShapeRange( ) throw (uno::RuntimeException)
     return uno::makeAny( uno::Reference< msforms::XShapeRange >( new ScVbaShapeRange( this, mxContext, xShapesAccess, xDrawPage, mxModel ) ) );
 }
 
-::sal_Int32 SAL_CALL SwVbaSelection::getStart() throw (uno::RuntimeException)
+::sal_Int32 SAL_CALL SwVbaSelection::getStart() throw (uno::RuntimeException, std::exception)
 {
     return getRange()->getStart();
 }
 
-void SAL_CALL SwVbaSelection::setStart( ::sal_Int32 _start ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaSelection::setStart( ::sal_Int32 _start ) throw (uno::RuntimeException, std::exception)
 {
     getRange()->setStart( _start );
 }
-::sal_Int32 SAL_CALL SwVbaSelection::getEnd() throw (uno::RuntimeException)
+::sal_Int32 SAL_CALL SwVbaSelection::getEnd() throw (uno::RuntimeException, std::exception)
 {
     return getRange()->getEnd();
 }
 
-void SAL_CALL SwVbaSelection::setEnd( ::sal_Int32 _end ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaSelection::setEnd( ::sal_Int32 _end ) throw (uno::RuntimeException, std::exception)
 {
     getRange()->setEnd( _end );
 }
 
-void SAL_CALL SwVbaSelection::SelectRow() throw (uno::RuntimeException)
+void SAL_CALL SwVbaSelection::SelectRow() throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< word::XRows > xRows( Rows( uno::Any() ), uno::UNO_QUERY_THROW );
     xRows->Select();
 }
 
-void SAL_CALL SwVbaSelection::SelectColumn() throw (uno::RuntimeException)
+void SAL_CALL SwVbaSelection::SelectColumn() throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< word::XColumns > xColumns( Columns( uno::Any() ), uno::UNO_QUERY_THROW );
     xColumns->Select();
 }
 
-uno::Any SAL_CALL SwVbaSelection::Rows( const uno::Any& index ) throw (uno::RuntimeException)
+uno::Any SAL_CALL SwVbaSelection::Rows( const uno::Any& index ) throw (uno::RuntimeException, std::exception)
 {
     OUString sTLName;
     OUString sBRName;
@@ -925,7 +925,7 @@ uno::Any SAL_CALL SwVbaSelection::Rows( const uno::Any& index ) throw (uno::Runt
     return uno::makeAny( xCol );
 }
 
-uno::Any SAL_CALL SwVbaSelection::Columns( const uno::Any& index ) throw (uno::RuntimeException)
+uno::Any SAL_CALL SwVbaSelection::Columns( const uno::Any& index ) throw (uno::RuntimeException, std::exception)
 {
     OUString sTLName;
     OUString sBRName;
@@ -1008,7 +1008,7 @@ void SwVbaSelection::GetSelectedCellRange( OUString& sTLName, OUString& sBRName 
     }
 }
 
-uno::Any SAL_CALL SwVbaSelection::Cells( const uno::Any& index ) throw (uno::RuntimeException)
+uno::Any SAL_CALL SwVbaSelection::Cells( const uno::Any& index ) throw (uno::RuntimeException, std::exception)
 {
     OUString sTLName;
     OUString sBRName;
@@ -1039,25 +1039,25 @@ uno::Any SAL_CALL SwVbaSelection::Cells( const uno::Any& index ) throw (uno::Run
     return uno::makeAny( xCol );
 }
 
-void SAL_CALL SwVbaSelection::Copy(  ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaSelection::Copy(  ) throw (uno::RuntimeException, std::exception)
 {
     OUString url = ".uno:Copy";
     dispatchRequests( mxModel,url );
 }
 
-void SAL_CALL SwVbaSelection::CopyAsPicture(  ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaSelection::CopyAsPicture(  ) throw (uno::RuntimeException, std::exception)
 {
     // seems not support in Writer
     Copy();
 }
 
-void SAL_CALL SwVbaSelection::Paste(  ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaSelection::Paste(  ) throw (uno::RuntimeException, std::exception)
 {
     OUString url = ".uno:Paste";
     dispatchRequests( mxModel,url );
 }
 
-void SAL_CALL SwVbaSelection::Collapse( const uno::Any& Direction ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaSelection::Collapse( const uno::Any& Direction ) throw (uno::RuntimeException, std::exception)
 {
     if( word::gotoSelectedObjectAnchor( mxModel ) )
         return;
@@ -1086,7 +1086,7 @@ void SAL_CALL SwVbaSelection::Collapse( const uno::Any& Direction ) throw (uno::
     }
 }
 
-void SAL_CALL SwVbaSelection::WholeStory(  ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaSelection::WholeStory(  ) throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< text::XText > xText = word::getCurrentXText( mxModel );
     // FIXME: for i#7747,if the first line is a table, it fails to select all the contents in the story.
@@ -1111,7 +1111,7 @@ void SAL_CALL SwVbaSelection::WholeStory(  ) throw (uno::RuntimeException)
     mxTextViewCursor->gotoRange( xEnd, sal_True );
 }
 
-::sal_Bool SAL_CALL SwVbaSelection::InRange( const uno::Reference< ::ooo::vba::word::XRange >& Range ) throw (uno::RuntimeException)
+::sal_Bool SAL_CALL SwVbaSelection::InRange( const uno::Reference< ::ooo::vba::word::XRange >& Range ) throw (uno::RuntimeException, std::exception)
 {
     return getRange()->InRange( Range );
 }
@@ -1134,7 +1134,7 @@ void SAL_CALL SwVbaSelection::SplitTable()
 }
 
 uno::Any SAL_CALL
-SwVbaSelection::Paragraphs( const uno::Any& aIndex ) throw (uno::RuntimeException)
+SwVbaSelection::Paragraphs( const uno::Any& aIndex ) throw (uno::RuntimeException, std::exception)
 {
     // Hacky implementation due to missing api ( and lack of knowledge )
     // we can only support a selection that is a single paragraph

@@ -46,7 +46,7 @@ RtfFilter::~RtfFilter()
 {
 }
 
-sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescriptor) throw(uno::RuntimeException)
+sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescriptor) throw(uno::RuntimeException, std::exception)
 {
     sal_uInt32 nStartTime = osl_getGlobalTimer();
     if (m_xSrcDoc.is())
@@ -143,37 +143,37 @@ sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescrip
     return bResult;
 }
 
-void RtfFilter::cancel() throw(uno::RuntimeException)
+void RtfFilter::cancel() throw(uno::RuntimeException, std::exception)
 {
 }
 
-void RtfFilter::setSourceDocument(const uno::Reference< lang::XComponent >& xDoc) throw(lang::IllegalArgumentException, uno::RuntimeException)
+void RtfFilter::setSourceDocument(const uno::Reference< lang::XComponent >& xDoc) throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     m_xSrcDoc = xDoc;
 }
 
-void RtfFilter::setTargetDocument(const uno::Reference< lang::XComponent >& xDoc) throw(lang::IllegalArgumentException, uno::RuntimeException)
+void RtfFilter::setTargetDocument(const uno::Reference< lang::XComponent >& xDoc) throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     m_xDstDoc = xDoc;
 }
 
-void RtfFilter::initialize(const uno::Sequence< uno::Any >& /*aArguments*/) throw(uno::Exception, uno::RuntimeException)
+void RtfFilter::initialize(const uno::Sequence< uno::Any >& /*aArguments*/) throw(uno::Exception, uno::RuntimeException, std::exception)
 {
     // The DOCX exporter here extracts 'type' of the filter, ie 'Word' or
     // 'Word Template' but we don't need it for RTF.
 }
 
-OUString RtfFilter::getImplementationName() throw(uno::RuntimeException)
+OUString RtfFilter::getImplementationName() throw(uno::RuntimeException, std::exception)
 {
     return RtfFilter_getImplementationName();
 }
 
-sal_Bool RtfFilter::supportsService(const OUString& rServiceName) throw(uno::RuntimeException)
+sal_Bool RtfFilter::supportsService(const OUString& rServiceName) throw(uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > RtfFilter::getSupportedServiceNames() throw(uno::RuntimeException)
+uno::Sequence< OUString > RtfFilter::getSupportedServiceNames() throw(uno::RuntimeException, std::exception)
 {
     return RtfFilter_getSupportedServiceNames();
 }

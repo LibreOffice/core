@@ -109,41 +109,41 @@ namespace frm
         virtual ~FormOperations();
 
         // XInitialization
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception);
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
         // XFormOperations
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > SAL_CALL getCursor() throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate > SAL_CALL getUpdateCursor() throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > SAL_CALL getController() throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFeatureInvalidation > SAL_CALL getFeatureInvalidation() throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setFeatureInvalidation(const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFeatureInvalidation > & the_value) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::form::runtime::FeatureState SAL_CALL getState(::sal_Int16 Feature) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::sal_Bool SAL_CALL isEnabled(::sal_Int16 Feature) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL execute(::sal_Int16 Feature) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::WrappedTargetException);
-        virtual void SAL_CALL executeWithArguments(::sal_Int16 Feature, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& Arguments) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::WrappedTargetException);
-        virtual ::sal_Bool SAL_CALL commitCurrentRecord(::sal_Bool & RecordInserted) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::sdbc::SQLException);
-        virtual ::sal_Bool SAL_CALL commitCurrentControl() throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::sdbc::SQLException);
-        virtual ::sal_Bool SAL_CALL isInsertionRow() throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::WrappedTargetException);
-        virtual ::sal_Bool SAL_CALL isModifiedRow() throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::WrappedTargetException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > SAL_CALL getCursor() throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate > SAL_CALL getUpdateCursor() throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > SAL_CALL getController() throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFeatureInvalidation > SAL_CALL getFeatureInvalidation() throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL setFeatureInvalidation(const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFeatureInvalidation > & the_value) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual ::com::sun::star::form::runtime::FeatureState SAL_CALL getState(::sal_Int16 Feature) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual ::sal_Bool SAL_CALL isEnabled(::sal_Int16 Feature) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL execute(::sal_Int16 Feature) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::WrappedTargetException, std::exception);
+        virtual void SAL_CALL executeWithArguments(::sal_Int16 Feature, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& Arguments) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::WrappedTargetException, std::exception);
+        virtual ::sal_Bool SAL_CALL commitCurrentRecord(::sal_Bool & RecordInserted) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::sdbc::SQLException, std::exception);
+        virtual ::sal_Bool SAL_CALL commitCurrentControl() throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::sdbc::SQLException, std::exception);
+        virtual ::sal_Bool SAL_CALL isInsertionRow() throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::WrappedTargetException, std::exception);
+        virtual ::sal_Bool SAL_CALL isModifiedRow() throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::WrappedTargetException, std::exception);
 
         // XRowSetListener
-        virtual void SAL_CALL cursorMoved( const ::com::sun::star::lang::EventObject& event ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL rowChanged( const ::com::sun::star::lang::EventObject& event ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL rowSetChanged( const ::com::sun::star::lang::EventObject& event ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL cursorMoved( const ::com::sun::star::lang::EventObject& event ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL rowChanged( const ::com::sun::star::lang::EventObject& event ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL rowSetChanged( const ::com::sun::star::lang::EventObject& event ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
         // XModifyListener
-        virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& _rSource ) throw( ::com::sun::star::uno::RuntimeException );
+        virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& _rSource ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
         // XPropertyChangeListener
-        virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
         // XComponent/OComponentHelper
         virtual void SAL_CALL disposing();

@@ -166,7 +166,7 @@ void EncryptorImpl::startEngine( const Reference<
 
 /* XReferenceCollector */
 void SAL_CALL EncryptorImpl::setReferenceCount(sal_Int32)
-    throw (Exception, RuntimeException)
+    throw (Exception, RuntimeException, std::exception)
 {
     /*
      * dummp method, because there is only one reference in
@@ -176,27 +176,27 @@ void SAL_CALL EncryptorImpl::setReferenceCount(sal_Int32)
 }
 
 void SAL_CALL EncryptorImpl::setReferenceId( sal_Int32 id )
-    throw (Exception, RuntimeException)
+    throw (Exception, RuntimeException, std::exception)
 {
     m_nReferenceId = id;
 }
 
 /* XEncryptionResultBroadcaster */
 void SAL_CALL EncryptorImpl::addEncryptionResultListener( const Reference< cssxc::sax::XEncryptionResultListener >& listener )
-        throw (Exception, RuntimeException)
+        throw (Exception, RuntimeException, std::exception)
 {
     m_xResultListener = listener;
     tryToPerform();
 }
 
 void SAL_CALL EncryptorImpl::removeEncryptionResultListener( const Reference< cssxc::sax::XEncryptionResultListener >&)
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
 {
 }
 
 /* XInitialization */
 void SAL_CALL EncryptorImpl::initialize( const Sequence< Any >& aArguments )
-    throw (Exception, RuntimeException)
+    throw (Exception, RuntimeException, std::exception)
 {
     OSL_ASSERT(aArguments.getLength() == 5);
 
@@ -237,19 +237,19 @@ Reference< XInterface > SAL_CALL EncryptorImpl_createInstance(
 
 /* XServiceInfo */
 OUString SAL_CALL EncryptorImpl::getImplementationName(  )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return EncryptorImpl_getImplementationName();
 }
 
 sal_Bool SAL_CALL EncryptorImpl::supportsService( const OUString& rServiceName )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL EncryptorImpl::getSupportedServiceNames(  )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return EncryptorImpl_getSupportedServiceNames();
 }

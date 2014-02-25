@@ -75,7 +75,7 @@ XMLAutoTextEventExport::~XMLAutoTextEventExport()
 
 void XMLAutoTextEventExport::initialize(
     const Sequence<Any> & rArguments )
-        throw(uno::Exception, uno::RuntimeException)
+        throw(uno::Exception, uno::RuntimeException, std::exception)
 {
     if (rArguments.getLength() > 1)
     {

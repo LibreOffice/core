@@ -28,7 +28,7 @@ ScVbaPivotTable::ScVbaPivotTable( const uno::Reference< uno::XComponentContext >
 }
 
 uno::Reference< excel::XPivotCache >
-ScVbaPivotTable::PivotCache() throw (uno::RuntimeException)
+ScVbaPivotTable::PivotCache() throw (uno::RuntimeException, std::exception)
 {
     // #FIXME with a quick example failed to determine what the parent
     // should be, leaving as null at the moment

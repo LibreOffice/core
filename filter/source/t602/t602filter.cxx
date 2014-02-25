@@ -140,7 +140,7 @@ T602ImportFilter::~T602ImportFilter()
 
 // XExtendedTypeDetection
 OUString T602ImportFilter::detect( Sequence<PropertyValue>& Descriptor)
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     sal_Int32 nLength = Descriptor.getLength();
     const PropertyValue * pValue = Descriptor.getConstArray();
@@ -168,21 +168,21 @@ OUString T602ImportFilter::detect( Sequence<PropertyValue>& Descriptor)
 
 // XFilter
 sal_Bool SAL_CALL T602ImportFilter::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return importImpl ( aDescriptor );
 }
 
 // XImporter
 void SAL_CALL T602ImportFilter::setTargetDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc )
-    throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
+    throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     mxDoc = xDoc;
 }
 
 // XInitialization
 void SAL_CALL T602ImportFilter::initialize( const Sequence< Any >& aArguments )
-    throw (Exception, RuntimeException)
+    throw (Exception, RuntimeException, std::exception)
 {
     Sequence < PropertyValue > aAnySeq;
     sal_Int32 nLength = aArguments.getLength();
@@ -842,19 +842,19 @@ void T602ImportFilter::Read602()
 
 // XServiceInfo
 OUString SAL_CALL T602ImportFilter::getImplementationName(  )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return T602ImportFilter_getImplementationName();
 }
 
 sal_Bool SAL_CALL T602ImportFilter::supportsService( const OUString& rServiceName )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return cppu::supportsService( this, rServiceName );
 }
 
 Sequence< OUString > SAL_CALL T602ImportFilter::getSupportedServiceNames(  )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return T602ImportFilter_getSupportedServiceNames();
 }
@@ -893,14 +893,14 @@ T602ImportFilterDialog::~T602ImportFilterDialog()
 // XLocalizable
 
 void SAL_CALL T602ImportFilterDialog::setLocale( const Locale& eLocale )
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     meLocale = eLocale;
     initLocale();
 }
 
 Locale SAL_CALL T602ImportFilterDialog::getLocale()
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return meLocale;
 }
@@ -1102,12 +1102,12 @@ ResMgr* T602ImportFilterDialog::getResMgr()
 }
 
 void SAL_CALL T602ImportFilterDialog::setTitle( const OUString& )
-            throw (::com::sun::star::uno::RuntimeException)
+            throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
 }
 
 sal_Int16 SAL_CALL T602ImportFilterDialog::execute()
-            throw (::com::sun::star::uno::RuntimeException)
+            throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     if (OptionsDlg())
         return com::sun::star::ui::dialogs::ExecutableDialogResults::OK;
@@ -1121,33 +1121,33 @@ OUString T602ImportFilterDialog::getResStr( sal_Int16 resid )
     return sStr;
 }
 
-uno::Sequence<beans::PropertyValue> SAL_CALL T602ImportFilterDialog::getPropertyValues() throw(uno::RuntimeException)
+uno::Sequence<beans::PropertyValue> SAL_CALL T602ImportFilterDialog::getPropertyValues() throw(uno::RuntimeException, std::exception)
 {
     return uno::Sequence<beans::PropertyValue>();
 }
 
 void SAL_CALL T602ImportFilterDialog::setPropertyValues( const uno::Sequence<beans::PropertyValue>& )
                     throw(beans::UnknownPropertyException, beans::PropertyVetoException,
-                            lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+                            lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
 }
 
 
 // XServiceInfo
 OUString SAL_CALL T602ImportFilterDialog::getImplementationName(  )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return T602ImportFilterDialog_getImplementationName();
 }
 
 sal_Bool SAL_CALL T602ImportFilterDialog::supportsService( const OUString& rServiceName )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return cppu::supportsService( this, rServiceName );
 }
 
 Sequence< OUString > SAL_CALL T602ImportFilterDialog::getSupportedServiceNames(  )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return T602ImportFilterDialog_getSupportedServiceNames();
 }

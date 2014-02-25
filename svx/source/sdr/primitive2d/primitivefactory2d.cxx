@@ -41,14 +41,14 @@ public:
     PrimitiveFactory2D(): PrimitiveFactory2DImplBase(m_aMutex) {}
 
             // Methods from XPrimitiveFactory2D
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XPrimitive2D > > SAL_CALL createPrimitivesFromXShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aParms ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XPrimitive2D > > SAL_CALL createPrimitivesFromXDrawPage( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xDrawPage, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aParms ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XPrimitive2D > > SAL_CALL createPrimitivesFromXShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aParms ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XPrimitive2D > > SAL_CALL createPrimitivesFromXDrawPage( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xDrawPage, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aParms ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 };
 
 Primitive2DSequence SAL_CALL PrimitiveFactory2D::createPrimitivesFromXShape(
     const uno::Reference< drawing::XShape >& xShape,
-    const uno::Sequence< beans::PropertyValue >& /*aParms*/ ) throw (uno::RuntimeException)
+    const uno::Sequence< beans::PropertyValue >& /*aParms*/ ) throw (uno::RuntimeException, std::exception)
 {
     Primitive2DSequence aRetval;
 
@@ -68,7 +68,7 @@ Primitive2DSequence SAL_CALL PrimitiveFactory2D::createPrimitivesFromXShape(
 
 Primitive2DSequence SAL_CALL PrimitiveFactory2D::createPrimitivesFromXDrawPage(
     const uno::Reference< drawing::XDrawPage >& xDrawPage,
-    const uno::Sequence< beans::PropertyValue >& /*aParms*/ ) throw (uno::RuntimeException)
+    const uno::Sequence< beans::PropertyValue >& /*aParms*/ ) throw (uno::RuntimeException, std::exception)
 {
     Primitive2DSequence aRetval;
 

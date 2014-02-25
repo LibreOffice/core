@@ -61,21 +61,21 @@ private:
     virtual ~UUIInteractionRequestStringResolver() SAL_THROW(());
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual sal_Bool SAL_CALL supportsService(OUString const &
                           rServiceName)
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames()
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual com::sun::star::beans::Optional< OUString > SAL_CALL
     getStringFromInformationalRequest(
         const com::sun::star::uno::Reference<
             com::sun::star::task::XInteractionRequest >& Request )
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 };
 
 #endif // UUI_REQUESTSTRINGRESOLVER_HXX

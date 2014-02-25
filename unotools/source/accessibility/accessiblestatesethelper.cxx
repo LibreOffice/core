@@ -163,7 +163,7 @@ AccessibleStateSetHelper::~AccessibleStateSetHelper(void)
             <FALSE/> if there is at least one state set in it.
     */
 sal_Bool SAL_CALL AccessibleStateSetHelper::isEmpty ()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard (maMutex);
     return mpHelperImpl->IsEmpty();
@@ -181,7 +181,7 @@ sal_Bool SAL_CALL AccessibleStateSetHelper::isEmpty ()
             state set and <FALSE/> otherwise.
     */
 sal_Bool SAL_CALL AccessibleStateSetHelper::contains (sal_Int16 aState)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard (maMutex);
     return mpHelperImpl->Contains(aState);
@@ -204,7 +204,7 @@ sal_Bool SAL_CALL AccessibleStateSetHelper::contains (sal_Int16 aState)
     */
 sal_Bool SAL_CALL AccessibleStateSetHelper::containsAll
     (const uno::Sequence<sal_Int16>& rStateSet)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard (maMutex);
     sal_Int32 nCount(rStateSet.getLength());
@@ -220,7 +220,7 @@ sal_Bool SAL_CALL AccessibleStateSetHelper::containsAll
 }
 
 uno::Sequence<sal_Int16> SAL_CALL AccessibleStateSetHelper::getStates()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard(maMutex);
     return mpHelperImpl->GetStates();
@@ -244,7 +244,7 @@ void AccessibleStateSetHelper::RemoveState(sal_Int16 aState)
 
 uno::Sequence< ::com::sun::star::uno::Type>
     AccessibleStateSetHelper::getTypes (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     const ::com::sun::star::uno::Type aTypeList[] = {
         ::getCppuType((const uno::Reference<
@@ -264,7 +264,7 @@ namespace
 
 uno::Sequence<sal_Int8> SAL_CALL
     AccessibleStateSetHelper::getImplementationId (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return theAccessibleStateSetHelperUnoTunnelId::get().getSeq();
 }

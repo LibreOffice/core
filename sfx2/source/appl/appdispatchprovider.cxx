@@ -69,36 +69,36 @@ public:
 
     virtual void SAL_CALL initialize(
         css::uno::Sequence<css::uno::Any> const & aArguments)
-        throw (css::uno::Exception, css::uno::RuntimeException);
+        throw (css::uno::Exception, css::uno::RuntimeException, std::exception);
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Reference < css::frame::XDispatch > SAL_CALL queryDispatch(
             const css::util::URL& aURL, const OUString& sTargetFrameName,
             FrameSearchFlags eSearchFlags )
-        throw( css::uno::RuntimeException );
+        throw( css::uno::RuntimeException, std::exception );
 
     virtual css::uno::Sequence< css::uno::Reference < css::frame::XDispatch > > SAL_CALL queryDispatches(
             const css::uno::Sequence < css::frame::DispatchDescriptor >& seqDescriptor )
-        throw( css::uno::RuntimeException );
+        throw( css::uno::RuntimeException, std::exception );
 
     virtual css::uno::Sequence< sal_Int16 > SAL_CALL getSupportedCommandGroups()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( sal_Int16 )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 };
 
 void SfxAppDispatchProvider::initialize(
     css::uno::Sequence<css::uno::Any> const & aArguments)
-    throw (css::uno::Exception, css::uno::RuntimeException)
+    throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     css::uno::Reference<css::frame::XFrame> f;
     if (aArguments.getLength() != 1 || !(aArguments[0] >>= f)) {
@@ -109,17 +109,17 @@ void SfxAppDispatchProvider::initialize(
     m_xFrame = f;
 }
 
-OUString SAL_CALL SfxAppDispatchProvider::getImplementationName() throw( css::uno::RuntimeException )
+OUString SAL_CALL SfxAppDispatchProvider::getImplementationName() throw( css::uno::RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.comp.sfx2.AppDispatchProvider" );
 }
 
-sal_Bool SAL_CALL SfxAppDispatchProvider::supportsService( const OUString& sServiceName ) throw( css::uno::RuntimeException )
+sal_Bool SAL_CALL SfxAppDispatchProvider::supportsService( const OUString& sServiceName ) throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL SfxAppDispatchProvider::getSupportedServiceNames() throw( css::uno::RuntimeException )
+css::uno::Sequence< OUString > SAL_CALL SfxAppDispatchProvider::getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception )
 {
     css::uno::Sequence< OUString > seqServiceNames( 2 );
     seqServiceNames.getArray()[0] = "com.sun.star.frame.DispatchProvider";
@@ -130,7 +130,7 @@ css::uno::Sequence< OUString > SAL_CALL SfxAppDispatchProvider::getSupportedServ
 Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch(
     const util::URL& aURL,
     const OUString& /*sTargetFrameName*/,
-    FrameSearchFlags /*eSearchFlags*/ ) throw( RuntimeException )
+    FrameSearchFlags /*eSearchFlags*/ ) throw( RuntimeException, std::exception )
 {
     sal_uInt16                  nId( 0 );
     sal_Bool                bMasterCommand( sal_False );
@@ -165,7 +165,7 @@ Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch(
 }
 
 Sequence< Reference < XDispatch > > SAL_CALL SfxAppDispatchProvider::queryDispatches( const Sequence < DispatchDescriptor >& seqDescriptor )
-throw( RuntimeException )
+throw( RuntimeException, std::exception )
 {
     sal_Int32 nCount = seqDescriptor.getLength();
     uno::Sequence< uno::Reference < frame::XDispatch > > lDispatcher(nCount);
@@ -177,7 +177,7 @@ throw( RuntimeException )
 }
 
 Sequence< sal_Int16 > SAL_CALL SfxAppDispatchProvider::getSupportedCommandGroups()
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -210,7 +210,7 @@ throw (uno::RuntimeException)
 }
 
 Sequence< frame::DispatchInformation > SAL_CALL SfxAppDispatchProvider::getConfigurableDispatchInformation( sal_Int16 nCmdGroup )
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     std::list< frame::DispatchInformation > aCmdList;
 

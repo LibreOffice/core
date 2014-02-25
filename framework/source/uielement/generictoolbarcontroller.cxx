@@ -120,7 +120,7 @@ GenericToolbarController::~GenericToolbarController()
 }
 
 void SAL_CALL GenericToolbarController::dispose()
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarMutexGuard;
 
@@ -131,7 +131,7 @@ throw ( RuntimeException )
 }
 
 void SAL_CALL GenericToolbarController::execute( sal_Int16 KeyModifier )
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     Reference< XDispatch >       xDispatch;
     Reference< XURLTransformer > xURLTransformer;
@@ -178,7 +178,7 @@ throw ( RuntimeException )
 }
 
 void GenericToolbarController::statusChanged( const FeatureStateEvent& Event )
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarMutexGuard;
 
@@ -338,13 +338,13 @@ Toolbarmenu::~Toolbarmenu()
     OSL_TRACE("**** destructing Toolbarmenu 0x%x", this );
 }
 
-void SAL_CALL MenuToolbarController::click() throw (RuntimeException)
+void SAL_CALL MenuToolbarController::click() throw (RuntimeException, std::exception)
 {
     createPopupWindow();
 }
 
 Reference< XWindow > SAL_CALL
-MenuToolbarController::createPopupWindow() throw (::com::sun::star::uno::RuntimeException)
+MenuToolbarController::createPopupWindow() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     if ( !pMenu )
     {

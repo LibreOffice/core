@@ -92,28 +92,28 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
 
         // XNameAccess
         virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
-            throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception);
 
         virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames()
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
 
         virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
 
         // XElementAccess
         virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
 
         virtual sal_Bool SAL_CALL hasElements()
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
 
         // container.XContainerListener
-        virtual void SAL_CALL     elementInserted( const ContainerEvent& aEvent ) throw(RuntimeException);
-        virtual void SAL_CALL     elementRemoved ( const ContainerEvent& aEvent ) throw(RuntimeException);
-        virtual void SAL_CALL     elementReplaced( const ContainerEvent& aEvent ) throw(RuntimeException);
+        virtual void SAL_CALL     elementInserted( const ContainerEvent& aEvent ) throw(RuntimeException, std::exception);
+        virtual void SAL_CALL     elementRemoved ( const ContainerEvent& aEvent ) throw(RuntimeException, std::exception);
+        virtual void SAL_CALL     elementReplaced( const ContainerEvent& aEvent ) throw(RuntimeException, std::exception);
 
         // lang.XEventListener
-        virtual void SAL_CALL disposing( const EventObject& aEvent ) throw(RuntimeException);
+        virtual void SAL_CALL disposing( const EventObject& aEvent ) throw(RuntimeException, std::exception);
 
     protected:
         virtual ::com::sun::star::uno::Any SAL_CALL getByNameImpl( const OUString& aName );
@@ -257,7 +257,7 @@ Any SAL_CALL ConfigurationAccess_UICommand::getByNameImpl( const OUString& rComm
 }
 
 Any SAL_CALL ConfigurationAccess_UICommand::getByName( const OUString& rCommandURL )
-throw ( NoSuchElementException, WrappedTargetException, RuntimeException)
+throw ( NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     Any aRet( getByNameImpl( rCommandURL ) );
     if( !aRet.hasValue() )
@@ -267,26 +267,26 @@ throw ( NoSuchElementException, WrappedTargetException, RuntimeException)
 }
 
 Sequence< OUString > SAL_CALL ConfigurationAccess_UICommand::getElementNames()
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     return getAllCommands();
 }
 
 sal_Bool SAL_CALL ConfigurationAccess_UICommand::hasByName( const OUString& rCommandURL )
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return getByNameImpl( rCommandURL ).hasValue();
 }
 
 // XElementAccess
 Type SAL_CALL ConfigurationAccess_UICommand::getElementType()
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     return( ::getCppuType( (const Sequence< PropertyValue >*)NULL ) );
 }
 
 sal_Bool SAL_CALL ConfigurationAccess_UICommand::hasElements()
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     // There must are global commands!
     return sal_True;
@@ -562,21 +562,21 @@ sal_Bool ConfigurationAccess_UICommand::initializeConfigAccess()
 }
 
 // container.XContainerListener
-void SAL_CALL ConfigurationAccess_UICommand::elementInserted( const ContainerEvent& ) throw(RuntimeException)
+void SAL_CALL ConfigurationAccess_UICommand::elementInserted( const ContainerEvent& ) throw(RuntimeException, std::exception)
 {
     osl::MutexGuard g(m_aMutex);
     m_bCacheFilled = sal_False;
     fillCache();
 }
 
-void SAL_CALL ConfigurationAccess_UICommand::elementRemoved( const ContainerEvent& ) throw(RuntimeException)
+void SAL_CALL ConfigurationAccess_UICommand::elementRemoved( const ContainerEvent& ) throw(RuntimeException, std::exception)
 {
     osl::MutexGuard g(m_aMutex);
     m_bCacheFilled = sal_False;
     fillCache();
 }
 
-void SAL_CALL ConfigurationAccess_UICommand::elementReplaced( const ContainerEvent& ) throw(RuntimeException)
+void SAL_CALL ConfigurationAccess_UICommand::elementReplaced( const ContainerEvent& ) throw(RuntimeException, std::exception)
 {
     osl::MutexGuard g(m_aMutex);
     m_bCacheFilled = sal_False;
@@ -584,7 +584,7 @@ void SAL_CALL ConfigurationAccess_UICommand::elementReplaced( const ContainerEve
 }
 
 // lang.XEventListener
-void SAL_CALL ConfigurationAccess_UICommand::disposing( const EventObject& aEvent ) throw(RuntimeException)
+void SAL_CALL ConfigurationAccess_UICommand::disposing( const EventObject& aEvent ) throw(RuntimeException, std::exception)
 {
     // SAFE
     // remove our reference to the config access
@@ -668,7 +668,7 @@ Reference< XNameAccess > UICommandDescription::impl_createConfigAccess(const OUS
 }
 
 Any SAL_CALL UICommandDescription::getByName( const OUString& aName )
-throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     Any a;
 
@@ -709,7 +709,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
 }
 
 Sequence< OUString > SAL_CALL UICommandDescription::getElementNames()
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard g(rBHelper.rMutex);
 
@@ -727,7 +727,7 @@ throw (::com::sun::star::uno::RuntimeException)
 }
 
 sal_Bool SAL_CALL UICommandDescription::hasByName( const OUString& aName )
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard g(rBHelper.rMutex);
 
@@ -737,13 +737,13 @@ throw (::com::sun::star::uno::RuntimeException)
 
 // XElementAccess
 Type SAL_CALL UICommandDescription::getElementType()
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return( ::getCppuType( (const Reference< XNameAccess >*)NULL ) );
 }
 
 sal_Bool SAL_CALL UICommandDescription::hasElements()
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     // generic UI commands are always available!
     return sal_True;

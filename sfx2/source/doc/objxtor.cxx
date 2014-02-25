@@ -157,24 +157,24 @@ class SfxModelListener_Impl : public ::cppu::WeakImplHelper1< ::com::sun::star::
 public:
     SfxModelListener_Impl( SfxObjectShell* pDoc ) : mpDoc(pDoc) {};
     virtual void SAL_CALL queryClosing( const com::sun::star::lang::EventObject& aEvent, sal_Bool bDeliverOwnership )
-        throw ( com::sun::star::uno::RuntimeException, com::sun::star::util::CloseVetoException) ;
-    virtual void SAL_CALL notifyClosing( const com::sun::star::lang::EventObject& aEvent ) throw ( com::sun::star::uno::RuntimeException ) ;
-    virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& aEvent ) throw ( com::sun::star::uno::RuntimeException ) ;
+        throw ( com::sun::star::uno::RuntimeException, com::sun::star::util::CloseVetoException, std::exception) ;
+    virtual void SAL_CALL notifyClosing( const com::sun::star::lang::EventObject& aEvent ) throw ( com::sun::star::uno::RuntimeException, std::exception ) ;
+    virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& aEvent ) throw ( com::sun::star::uno::RuntimeException, std::exception ) ;
 
 };
 
 void SAL_CALL SfxModelListener_Impl::queryClosing( const com::sun::star::lang::EventObject& , sal_Bool )
-    throw ( com::sun::star::uno::RuntimeException, com::sun::star::util::CloseVetoException)
+    throw ( com::sun::star::uno::RuntimeException, com::sun::star::util::CloseVetoException, std::exception)
 {
 }
 
-void SAL_CALL SfxModelListener_Impl::notifyClosing( const com::sun::star::lang::EventObject& ) throw ( com::sun::star::uno::RuntimeException )
+void SAL_CALL SfxModelListener_Impl::notifyClosing( const com::sun::star::lang::EventObject& ) throw ( com::sun::star::uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarGuard;
     mpDoc->Broadcast( SfxSimpleHint(SFX_HINT_DEINITIALIZING) );
 }
 
-void SAL_CALL SfxModelListener_Impl::disposing( const com::sun::star::lang::EventObject& _rEvent ) throw ( com::sun::star::uno::RuntimeException )
+void SAL_CALL SfxModelListener_Impl::disposing( const com::sun::star::lang::EventObject& _rEvent ) throw ( com::sun::star::uno::RuntimeException, std::exception )
 {
     // am I ThisComponent in AppBasic?
     SolarMutexGuard aSolarGuard;

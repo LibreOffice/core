@@ -79,14 +79,14 @@ public:
     virtual void SAL_CALL
         notifyConfigurationChange (
             const ::com::sun::star::drawing::framework::ConfigurationChangeEvent& rEvent)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 
     //----- XEventListener ----------------------------------------------------
 
     virtual void SAL_CALL disposing(
         const com::sun::star::lang::EventObject& rEvent)
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
 
     //----- XTabBar -----------------------------------------------------------
@@ -95,42 +95,42 @@ public:
         SAL_CALL addTabBarButtonAfter (
             const ::com::sun::star::drawing::framework::TabBarButton& rButton,
             const ::com::sun::star::drawing::framework::TabBarButton& rAnchor)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void
         SAL_CALL appendTabBarButton (
             const ::com::sun::star::drawing::framework::TabBarButton& rButton)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void
         SAL_CALL removeTabBarButton (
             const ::com::sun::star::drawing::framework::TabBarButton& rButton)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual sal_Bool
         SAL_CALL hasTabBarButton (
             const ::com::sun::star::drawing::framework::TabBarButton& rButton)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual ::com::sun::star::uno::Sequence<com::sun::star::drawing::framework::TabBarButton>
         SAL_CALL getTabBarButtons (void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 
     //----- XResource ---------------------------------------------------------
 
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::framework::XResourceId> SAL_CALL getResourceId (void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual sal_Bool SAL_CALL isAnchorOnly (void)
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
 
     //----- XUnoTunnel --------------------------------------------------------
 
     virtual sal_Int64 SAL_CALL getSomething (const com::sun::star::uno::Sequence<sal_Int8>& rId)
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
 
 

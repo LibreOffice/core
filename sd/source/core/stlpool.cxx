@@ -1199,24 +1199,24 @@ void SdStyleSheetPool::throwIfDisposed() throw(::com::sun::star::uno::RuntimeExc
 }
 
 // XServiceInfo
-OUString SAL_CALL SdStyleSheetPool::getImplementationName() throw(RuntimeException)
+OUString SAL_CALL SdStyleSheetPool::getImplementationName() throw(RuntimeException, std::exception)
 {
     return OUString( "SdStyleSheetPool" );
 }
 
-sal_Bool SAL_CALL SdStyleSheetPool::supportsService( const OUString& ServiceName ) throw(RuntimeException)
+sal_Bool SAL_CALL SdStyleSheetPool::supportsService( const OUString& ServiceName ) throw(RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL SdStyleSheetPool::getSupportedServiceNames() throw(RuntimeException)
+Sequence< OUString > SAL_CALL SdStyleSheetPool::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     OUString aStr("com.sun.star.style.StyleFamilies");
     return Sequence< OUString >( &aStr, 1 );
 }
 
 // XNameAccess
-Any SAL_CALL SdStyleSheetPool::getByName( const OUString& aName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
+Any SAL_CALL SdStyleSheetPool::getByName( const OUString& aName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     throwIfDisposed();
 
@@ -1240,7 +1240,7 @@ Any SAL_CALL SdStyleSheetPool::getByName( const OUString& aName ) throw(NoSuchEl
 
 
 
-Sequence< OUString > SAL_CALL SdStyleSheetPool::getElementNames() throw(RuntimeException)
+Sequence< OUString > SAL_CALL SdStyleSheetPool::getElementNames() throw(RuntimeException, std::exception)
 {
     throwIfDisposed();
 
@@ -1261,7 +1261,7 @@ Sequence< OUString > SAL_CALL SdStyleSheetPool::getElementNames() throw(RuntimeE
 
 
 
-sal_Bool SAL_CALL SdStyleSheetPool::hasByName( const OUString& aName ) throw(RuntimeException)
+sal_Bool SAL_CALL SdStyleSheetPool::hasByName( const OUString& aName ) throw(RuntimeException, std::exception)
 {
     throwIfDisposed();
 
@@ -1287,7 +1287,7 @@ sal_Bool SAL_CALL SdStyleSheetPool::hasByName( const OUString& aName ) throw(Run
 // XElementAccess
 
 
-Type SAL_CALL SdStyleSheetPool::getElementType() throw(RuntimeException)
+Type SAL_CALL SdStyleSheetPool::getElementType() throw(RuntimeException, std::exception)
 {
     throwIfDisposed();
 
@@ -1296,7 +1296,7 @@ Type SAL_CALL SdStyleSheetPool::getElementType() throw(RuntimeException)
 
 
 
-sal_Bool SAL_CALL SdStyleSheetPool::hasElements() throw(RuntimeException)
+sal_Bool SAL_CALL SdStyleSheetPool::hasElements() throw(RuntimeException, std::exception)
 {
     return sal_True;
 }
@@ -1305,7 +1305,7 @@ sal_Bool SAL_CALL SdStyleSheetPool::hasElements() throw(RuntimeException)
 // XIndexAccess
 
 
-sal_Int32 SAL_CALL SdStyleSheetPool::getCount() throw(RuntimeException)
+sal_Int32 SAL_CALL SdStyleSheetPool::getCount() throw(RuntimeException, std::exception)
 {
     throwIfDisposed();
 
@@ -1314,7 +1314,7 @@ sal_Int32 SAL_CALL SdStyleSheetPool::getCount() throw(RuntimeException)
 
 
 
-Any SAL_CALL SdStyleSheetPool::getByIndex( sal_Int32 Index ) throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
+Any SAL_CALL SdStyleSheetPool::getByIndex( sal_Int32 Index ) throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception)
 {
     switch( Index )
     {
@@ -1345,7 +1345,7 @@ Any SAL_CALL SdStyleSheetPool::getByIndex( sal_Int32 Index ) throw(IndexOutOfBou
 // XComponent
 
 
-void SAL_CALL SdStyleSheetPool::dispose() throw (RuntimeException)
+void SAL_CALL SdStyleSheetPool::dispose() throw (RuntimeException, std::exception)
 {
     if( mpDoc )
     {
@@ -1378,13 +1378,13 @@ void SAL_CALL SdStyleSheetPool::dispose() throw (RuntimeException)
 
 
 
-void SAL_CALL SdStyleSheetPool::addEventListener( const Reference< XEventListener >& /*xListener*/ ) throw (RuntimeException)
+void SAL_CALL SdStyleSheetPool::addEventListener( const Reference< XEventListener >& /*xListener*/ ) throw (RuntimeException, std::exception)
 {
 }
 
 
 
-void SAL_CALL SdStyleSheetPool::removeEventListener( const Reference< XEventListener >& /*aListener*/ ) throw (RuntimeException)
+void SAL_CALL SdStyleSheetPool::removeEventListener( const Reference< XEventListener >& /*aListener*/ ) throw (RuntimeException, std::exception)
 {
 }
 

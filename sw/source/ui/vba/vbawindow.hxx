@@ -38,15 +38,15 @@ public:
         throw (css::uno::RuntimeException);
 
     // Attributes
-    virtual css::uno::Any SAL_CALL getView() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setView( const css::uno::Any& _view ) throw (css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL getWindowState() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setWindowState( const css::uno::Any& _windowstate ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL getView() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setView( const css::uno::Any& _view ) throw (css::uno::RuntimeException, std::exception);
+    virtual css::uno::Any SAL_CALL getWindowState() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setWindowState( const css::uno::Any& _windowstate ) throw (css::uno::RuntimeException, std::exception);
     // Methods
-    virtual void SAL_CALL Activate(  ) throw (css::uno::RuntimeException);
-    virtual void SAL_CALL Close( const css::uno::Any& SaveChanges, const css::uno::Any& RouteDocument ) throw (css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL Panes( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL ActivePane() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL Activate(  ) throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL Close( const css::uno::Any& SaveChanges, const css::uno::Any& RouteDocument ) throw (css::uno::RuntimeException, std::exception);
+    virtual css::uno::Any SAL_CALL Panes( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException, std::exception);
+    virtual css::uno::Any SAL_CALL ActivePane() throw (css::uno::RuntimeException, std::exception);
     // XHelperInterface
     virtual OUString getServiceImplName();
     virtual css::uno::Sequence<OUString> getServiceNames();

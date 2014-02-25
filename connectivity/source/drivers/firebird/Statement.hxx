@@ -59,34 +59,34 @@ namespace connectivity
             // XStatement
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL
                 executeQuery(const ::rtl::OUString& sql)
-                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception);
             virtual sal_Int32 SAL_CALL executeUpdate(const ::rtl::OUString& sqlIn)
-                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception);
             virtual sal_Bool SAL_CALL
                 execute(const ::rtl::OUString& sql)
-                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception);
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL
                 getConnection()
-                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception);
 
             // XBatchExecution - UNSUPPORTED
-            virtual void SAL_CALL addBatch( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL clearBatch(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL executeBatch(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL addBatch( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception);
+            virtual void SAL_CALL clearBatch(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception);
+            virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL executeBatch(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception);
 
             // XInterface
             virtual ::com::sun::star::uno::Any SAL_CALL
                 queryInterface(const ::com::sun::star::uno::Type & rType)
-                throw(::com::sun::star::uno::RuntimeException);
+                throw(::com::sun::star::uno::RuntimeException, std::exception);
 
             //XTypeProvider
             virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL
                 getTypes()
-                throw(::com::sun::star::uno::RuntimeException);
+                throw(::com::sun::star::uno::RuntimeException, std::exception);
             // XCloseable
             virtual void SAL_CALL close()
                 throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::uno::RuntimeException);
+                      ::com::sun::star::uno::RuntimeException, std::exception);
             // OComponentHelper
             virtual void SAL_CALL disposing();
 

@@ -81,7 +81,7 @@ namespace dlgprov
                    ::com::sun::star::beans::IntrospectionException,
                    ::com::sun::star::script::CannotCreateAdapterException,
                    ::com::sun::star::lang::ServiceNotRegisteredException,
-                   ::com::sun::star::uno::RuntimeException);
+                   ::com::sun::star::uno::RuntimeException, std::exception);
     };
 
 
@@ -109,13 +109,13 @@ namespace dlgprov
 
         // XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
 
         // XAllListener
         virtual void SAL_CALL firing( const ::com::sun::star::script::AllEventObject& Event )
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
         virtual ::com::sun::star::uno::Any SAL_CALL approveFiring( const ::com::sun::star::script::AllEventObject& Event )
-            throw (::com::sun::star::reflection::InvocationTargetException, ::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::reflection::InvocationTargetException, ::com::sun::star::uno::RuntimeException, std::exception);
     };
 
 
@@ -138,13 +138,13 @@ namespace dlgprov
 
         // XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
 
         // XScriptListener
         virtual void SAL_CALL firing( const ::com::sun::star::script::ScriptEvent& aScriptEvent )
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
         virtual ::com::sun::star::uno::Any SAL_CALL approveFiring( const ::com::sun::star::script::ScriptEvent& aScriptEvent )
-            throw (::com::sun::star::reflection::InvocationTargetException, ::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::reflection::InvocationTargetException, ::com::sun::star::uno::RuntimeException, std::exception);
     };
 
 

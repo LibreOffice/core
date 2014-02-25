@@ -63,7 +63,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
             container::NoSuchElementException,
             io::IOException,
             uno::Exception,
-            uno::RuntimeException)
+            uno::RuntimeException, std::exception)
 {
     SAL_INFO( "embeddedobj.common", "embeddedobj (mv76033) OOoEmbeddedObjectFactory::createInstanceInitFromEntry" );
 
@@ -153,7 +153,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
     throw ( lang::IllegalArgumentException,
             io::IOException,
             uno::Exception,
-            uno::RuntimeException)
+            uno::RuntimeException, std::exception)
 {
     SAL_INFO( "embeddedobj.common", "embeddedobj (mv76033) OOoEmbeddedObjectFactory::createInstanceInitFromMediaDescriptor" );
 
@@ -217,7 +217,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
     throw ( lang::IllegalArgumentException,
             io::IOException,
             uno::Exception,
-            uno::RuntimeException)
+            uno::RuntimeException, std::exception)
 {
     SAL_INFO( "embeddedobj.common", "embeddedobj (mv76033) OOoEmbeddedObjectFactory::createInstanceInitNew" );
 
@@ -269,7 +269,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
     throw ( lang::IllegalArgumentException,
             io::IOException,
             uno::Exception,
-            uno::RuntimeException )
+            uno::RuntimeException, std::exception )
 {
     SAL_INFO( "embeddedobj.common", "embeddedobj (mv76033) OOoEmbeddedObjectFactory::createInstanceUserInit" );
 
@@ -327,7 +327,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
         throw ( lang::IllegalArgumentException,
                 io::IOException,
                 uno::Exception,
-                uno::RuntimeException )
+                uno::RuntimeException, std::exception )
 {
     SAL_INFO( "embeddedobj.common", "embeddedobj (mv76033) OOoEmbeddedObjectFactory::createInstanceLink" );
 
@@ -438,19 +438,19 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
 }
 
 OUString SAL_CALL OOoEmbeddedObjectFactory::getImplementationName()
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     return impl_staticGetImplementationName();
 }
 
 sal_Bool SAL_CALL OOoEmbeddedObjectFactory::supportsService( const OUString& ServiceName )
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL OOoEmbeddedObjectFactory::getSupportedServiceNames()
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     return impl_staticGetSupportedServiceNames();
 }
@@ -485,7 +485,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoSpecialEmbeddedObjectFactory::crea
     throw ( lang::IllegalArgumentException,
             io::IOException,
             uno::Exception,
-            uno::RuntimeException )
+            uno::RuntimeException, std::exception )
 {
     uno::Sequence< beans::NamedValue > aObject = m_aConfigHelper.GetObjectPropsByClassID( aClassID );
     if ( !aObject.getLength() )
@@ -500,19 +500,19 @@ uno::Reference< uno::XInterface > SAL_CALL OOoSpecialEmbeddedObjectFactory::crea
 }
 
 OUString SAL_CALL OOoSpecialEmbeddedObjectFactory::getImplementationName()
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     return impl_staticGetImplementationName();
 }
 
 sal_Bool SAL_CALL OOoSpecialEmbeddedObjectFactory::supportsService( const OUString& ServiceName )
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL OOoSpecialEmbeddedObjectFactory::getSupportedServiceNames()
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     return impl_staticGetSupportedServiceNames();
 }

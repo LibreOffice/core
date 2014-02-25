@@ -43,9 +43,9 @@ public:
     explicit SequenceOutputStreamService();
 
     // ::com::sun::star::lang::XServiceInfo:
-    virtual OUString SAL_CALL getImplementationName() throw ( uno::RuntimeException );
-    virtual ::sal_Bool SAL_CALL supportsService( const OUString & ServiceName ) throw ( uno::RuntimeException );
-    virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw ( uno::RuntimeException );
+    virtual OUString SAL_CALL getImplementationName() throw ( uno::RuntimeException, std::exception );
+    virtual ::sal_Bool SAL_CALL supportsService( const OUString & ServiceName ) throw ( uno::RuntimeException, std::exception );
+    virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw ( uno::RuntimeException, std::exception );
 
     // XServiceInfo - static versions (used for component registration)
     static OUString SAL_CALL getImplementationName_static();
@@ -53,12 +53,12 @@ public:
     static uno::Reference< uno::XInterface > SAL_CALL Create( const uno::Reference< uno::XComponentContext >& );
 
     // ::com::sun::star::io::XOutputStream:
-    virtual void SAL_CALL writeBytes( const uno::Sequence< ::sal_Int8 > & aData ) throw ( io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException );
-    virtual void SAL_CALL flush() throw ( uno::RuntimeException, io::NotConnectedException, io::BufferSizeExceededException, io::IOException );
-    virtual void SAL_CALL closeOutput() throw ( uno::RuntimeException, io::NotConnectedException, io::BufferSizeExceededException, io::IOException );
+    virtual void SAL_CALL writeBytes( const uno::Sequence< ::sal_Int8 > & aData ) throw ( io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException, std::exception );
+    virtual void SAL_CALL flush() throw ( uno::RuntimeException, io::NotConnectedException, io::BufferSizeExceededException, io::IOException, std::exception );
+    virtual void SAL_CALL closeOutput() throw ( uno::RuntimeException, io::NotConnectedException, io::BufferSizeExceededException, io::IOException, std::exception );
 
     // ::com::sun::star::io::XSequenceOutputStream:
-    virtual uno::Sequence< ::sal_Int8 > SAL_CALL getWrittenBytes(  ) throw ( io::NotConnectedException, io::IOException, uno::RuntimeException);
+    virtual uno::Sequence< ::sal_Int8 > SAL_CALL getWrittenBytes(  ) throw ( io::NotConnectedException, io::IOException, uno::RuntimeException, std::exception);
 
 private:
     SequenceOutputStreamService( SequenceOutputStreamService & ); //not defined
@@ -77,7 +77,7 @@ SequenceOutputStreamService::SequenceOutputStreamService()
 }
 
 // com.sun.star.uno.XServiceInfo:
-OUString SAL_CALL SequenceOutputStreamService::getImplementationName() throw ( uno::RuntimeException )
+OUString SAL_CALL SequenceOutputStreamService::getImplementationName() throw ( uno::RuntimeException, std::exception )
 {
     return getImplementationName_static();
 }
@@ -87,12 +87,12 @@ OUString SAL_CALL SequenceOutputStreamService::getImplementationName_static()
     return OUString("com.sun.star.comp.SequenceOutputStreamService");
 }
 
-::sal_Bool SAL_CALL SequenceOutputStreamService::supportsService( OUString const & serviceName ) throw ( uno::RuntimeException )
+::sal_Bool SAL_CALL SequenceOutputStreamService::supportsService( OUString const & serviceName ) throw ( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, serviceName);
 }
 
-uno::Sequence< OUString > SAL_CALL SequenceOutputStreamService::getSupportedServiceNames() throw ( uno::RuntimeException )
+uno::Sequence< OUString > SAL_CALL SequenceOutputStreamService::getSupportedServiceNames() throw ( uno::RuntimeException, std::exception )
 {
     return getSupportedServiceNames_static();
 }
@@ -111,7 +111,7 @@ uno::Reference< uno::XInterface > SAL_CALL SequenceOutputStreamService::Create(
 }
 
 // ::com::sun::star::io::XOutputStream:
-void SAL_CALL SequenceOutputStreamService::writeBytes( const uno::Sequence< ::sal_Int8 > & aData ) throw ( uno::RuntimeException, io::NotConnectedException, io::BufferSizeExceededException, io::IOException )
+void SAL_CALL SequenceOutputStreamService::writeBytes( const uno::Sequence< ::sal_Int8 > & aData ) throw ( uno::RuntimeException, io::NotConnectedException, io::BufferSizeExceededException, io::IOException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( !m_xOutputStream.is() )
@@ -121,7 +121,7 @@ void SAL_CALL SequenceOutputStreamService::writeBytes( const uno::Sequence< ::sa
     m_aSequence = aData;
 }
 
-void SAL_CALL SequenceOutputStreamService::flush() throw ( uno::RuntimeException, io::NotConnectedException, io::BufferSizeExceededException, io::IOException )
+void SAL_CALL SequenceOutputStreamService::flush() throw ( uno::RuntimeException, io::NotConnectedException, io::BufferSizeExceededException, io::IOException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( !m_xOutputStream.is() )
@@ -130,7 +130,7 @@ void SAL_CALL SequenceOutputStreamService::flush() throw ( uno::RuntimeException
     m_xOutputStream->flush();
 };
 
-void SAL_CALL SequenceOutputStreamService::closeOutput() throw ( uno::RuntimeException, io::NotConnectedException, io::BufferSizeExceededException, io::IOException )
+void SAL_CALL SequenceOutputStreamService::closeOutput() throw ( uno::RuntimeException, io::NotConnectedException, io::BufferSizeExceededException, io::IOException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( !m_xOutputStream.is() )
@@ -141,7 +141,7 @@ void SAL_CALL SequenceOutputStreamService::closeOutput() throw ( uno::RuntimeExc
 }
 
 // ::com::sun::star::io::XSequenceOutputStream:
-uno::Sequence< ::sal_Int8 > SAL_CALL SequenceOutputStreamService::getWrittenBytes() throw ( io::NotConnectedException, io::IOException, uno::RuntimeException)
+uno::Sequence< ::sal_Int8 > SAL_CALL SequenceOutputStreamService::getWrittenBytes() throw ( io::NotConnectedException, io::IOException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( !m_xOutputStream.is() )

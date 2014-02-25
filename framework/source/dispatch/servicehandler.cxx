@@ -91,7 +91,7 @@ ServiceHandler::~ServiceHandler()
 */
 css::uno::Reference< css::frame::XDispatch > SAL_CALL ServiceHandler::queryDispatch( const css::util::URL&  aURL    ,
                                                                                      const OUString& /*sTarget*/ ,
-                                                                                           sal_Int32        /*nFlags*/  ) throw( css::uno::RuntimeException )
+                                                                                           sal_Int32        /*nFlags*/  ) throw( css::uno::RuntimeException, std::exception )
 {
     css::uno::Reference< css::frame::XDispatch > xDispatcher;
     if (aURL.Complete.startsWith(PROTOCOL_VALUE))
@@ -105,7 +105,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL ServiceHandler::queryDispa
     @short      do the same like dispatch() but for multiple requests at the same time
     @descr      -
 */
-css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL ServiceHandler::queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor ) throw( css::uno::RuntimeException )
+css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL ServiceHandler::queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor ) throw( css::uno::RuntimeException, std::exception )
 {
     sal_Int32 nCount = lDescriptor.getLength();
     css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > lDispatcher( nCount );
@@ -132,7 +132,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Serv
                     list of optional arguments for this request
 */
 void SAL_CALL ServiceHandler::dispatch( const css::util::URL&                                  aURL       ,
-                                    const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) throw( css::uno::RuntimeException )
+                                    const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) throw( css::uno::RuntimeException, std::exception )
 {
     // dispatch() is an [oneway] call ... and may our user release his reference to us immediately.
     // So we should hold us self alive till this call ends.
@@ -157,7 +157,7 @@ void SAL_CALL ServiceHandler::dispatch( const css::util::URL&                   
 */
 void SAL_CALL ServiceHandler::dispatchWithNotification( const css::util::URL&                                             aURL      ,
                                                         const css::uno::Sequence< css::beans::PropertyValue >&            lArguments,
-                                                        const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) throw( css::uno::RuntimeException )
+                                                        const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) throw( css::uno::RuntimeException, std::exception )
 {
     // This class was designed to die by reference. And if user release his reference to us immediately after calling this method
     // we can run into some problems. So we hold us self alive till this method ends.
@@ -270,7 +270,7 @@ css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( con
                     URL about listener will be informed, if something occurred
 */
 void SAL_CALL ServiceHandler::addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/ ,
-                                                 const css::util::URL&                                     /*aURL*/      ) throw( css::uno::RuntimeException )
+                                                 const css::util::URL&                                     /*aURL*/      ) throw( css::uno::RuntimeException, std::exception )
 {
     // not suported yet
 }
@@ -278,7 +278,7 @@ void SAL_CALL ServiceHandler::addStatusListener( const css::uno::Reference< css:
 
 
 void SAL_CALL ServiceHandler::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/ ,
-                                                    const css::util::URL&                                     /*aURL*/      ) throw( css::uno::RuntimeException )
+                                                    const css::util::URL&                                     /*aURL*/      ) throw( css::uno::RuntimeException, std::exception )
 {
     // not suported yet
 }

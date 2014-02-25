@@ -115,20 +115,20 @@ namespace pcr
     //= UNO helpers
     //========================================================================
 #define DECLARE_XCOMPONENT() \
-    virtual void SAL_CALL dispose(  ) throw (::com::sun::star::uno::RuntimeException); \
-    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException); \
-    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL dispose(  ) throw (::com::sun::star::uno::RuntimeException, std::exception); \
+    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception); \
+    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 #define IMPLEMENT_FORWARD_XCOMPONENT( classname, baseclass ) \
-    void SAL_CALL classname::dispose(  ) throw (::com::sun::star::uno::RuntimeException) \
+    void SAL_CALL classname::dispose(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) \
     { \
     baseclass::WeakComponentImplHelperBase::dispose(); \
     } \
-    void SAL_CALL classname::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& _Listener ) throw (::com::sun::star::uno::RuntimeException) \
+    void SAL_CALL classname::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& _Listener ) throw (::com::sun::star::uno::RuntimeException, std::exception) \
     { \
         baseclass::WeakComponentImplHelperBase::addEventListener( _Listener ); \
     } \
-    void SAL_CALL classname::removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& _Listener ) throw (::com::sun::star::uno::RuntimeException) \
+    void SAL_CALL classname::removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& _Listener ) throw (::com::sun::star::uno::RuntimeException, std::exception) \
     { \
         baseclass::WeakComponentImplHelperBase::removeEventListener( _Listener ); \
     } \

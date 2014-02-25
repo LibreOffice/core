@@ -51,7 +51,7 @@ using com::sun::star::xml::sax::XParser;
 
 
 sal_Bool SAL_CALL FreehandImportFilter::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     SAL_INFO("writerperfect", "FreehandImportFilter::filter");
     sal_Int32 nLength = aDescriptor.getLength();
@@ -90,14 +90,14 @@ throw (RuntimeException)
 }
 
 void SAL_CALL FreehandImportFilter::cancel(  )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     SAL_INFO("writerperfect", "FreehandImportFilter::cancel");
 }
 
 // XImporter
 void SAL_CALL FreehandImportFilter::setTargetDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc )
-throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
+throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     SAL_INFO("writerperfect", "FreehandImportFilter::setTargetDocument");
     mxDoc = xDoc;
@@ -105,7 +105,7 @@ throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 
 // XExtendedFilterDetection
 OUString SAL_CALL FreehandImportFilter::detect( com::sun::star::uno::Sequence< PropertyValue >& Descriptor )
-throw( com::sun::star::uno::RuntimeException )
+throw( com::sun::star::uno::RuntimeException, std::exception )
 {
     SAL_INFO("writerperfect", "FreehandImportFilter::detect");
     OUString sTypeName;
@@ -145,7 +145,7 @@ throw( com::sun::star::uno::RuntimeException )
 
 // XInitialization
 void SAL_CALL FreehandImportFilter::initialize( const Sequence< Any >& aArguments )
-throw (Exception, RuntimeException)
+throw (Exception, RuntimeException, std::exception)
 {
     SAL_INFO("writerperfect", "FreehandImportFilter::initialize");
     Sequence < PropertyValue > aAnySeq;
@@ -191,19 +191,19 @@ throw( Exception )
 
 // XServiceInfo
 OUString SAL_CALL FreehandImportFilter::getImplementationName(  )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     SAL_INFO("writerperfect", "FreehandImportFilter::getImplementationName");
     return FreehandImportFilter_getImplementationName();
 }
 sal_Bool SAL_CALL FreehandImportFilter::supportsService( const OUString &rServiceName )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     SAL_INFO("writerperfect", "FreehandImportFilter::supportsService");
     return cppu::supportsService( this, rServiceName );
 }
 Sequence< OUString > SAL_CALL FreehandImportFilter::getSupportedServiceNames(  )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     SAL_INFO("writerperfect", "FreehandImportFilter::getSupportedServiceNames");
     return FreehandImportFilter_getSupportedServiceNames();

@@ -900,7 +900,7 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
                 embed::WrongStateException,
                 io::IOException,
                 uno::Exception,
-                uno::RuntimeException )
+                uno::RuntimeException, std::exception )
 {
     SAL_INFO( "embeddedobj.common", "embeddedobj (mv76033) OCommonEmbeddedObject::setPersistentEntry" );
 
@@ -1128,7 +1128,7 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
                 embed::WrongStateException,
                 io::IOException,
                 uno::Exception,
-                uno::RuntimeException )
+                uno::RuntimeException, std::exception )
 {
     SAL_INFO( "embeddedobj.common", "embeddedobj (mv76033) OCommonEmbeddedObject::storeToEntry" );
 
@@ -1254,7 +1254,7 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
                 embed::WrongStateException,
                 io::IOException,
                 uno::Exception,
-                uno::RuntimeException )
+                uno::RuntimeException, std::exception )
 {
     SAL_INFO( "embeddedobj.common", "embeddedobj (mv76033) OCommonEmbeddedObject::storeAsEntry" );
 
@@ -1391,7 +1391,7 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
 void SAL_CALL OCommonEmbeddedObject::saveCompleted( sal_Bool bUseNew )
         throw ( embed::WrongStateException,
                 uno::Exception,
-                uno::RuntimeException )
+                uno::RuntimeException, std::exception )
 {
     SAL_INFO( "embeddedobj.common", "embeddedobj (mv76033) OCommonEmbeddedObject::saveCompleted" );
 
@@ -1473,7 +1473,7 @@ void SAL_CALL OCommonEmbeddedObject::saveCompleted( sal_Bool bUseNew )
 
 sal_Bool SAL_CALL OCommonEmbeddedObject::hasEntry()
         throw ( embed::WrongStateException,
-                uno::RuntimeException )
+                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -1493,7 +1493,7 @@ sal_Bool SAL_CALL OCommonEmbeddedObject::hasEntry()
 
 OUString SAL_CALL OCommonEmbeddedObject::getEntryName()
         throw ( embed::WrongStateException,
-                uno::RuntimeException )
+                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -1519,7 +1519,7 @@ void SAL_CALL OCommonEmbeddedObject::storeOwn()
         throw ( embed::WrongStateException,
                 io::IOException,
                 uno::Exception,
-                uno::RuntimeException )
+                uno::RuntimeException, std::exception )
 {
     SAL_INFO( "embeddedobj.common", "embeddedobj (mv76033) OCommonEmbeddedObject::storeOwn" );
 
@@ -1605,7 +1605,7 @@ void SAL_CALL OCommonEmbeddedObject::storeOwn()
 
 sal_Bool SAL_CALL OCommonEmbeddedObject::isReadonly()
         throw ( embed::WrongStateException,
-                uno::RuntimeException )
+                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -1634,7 +1634,7 @@ void SAL_CALL OCommonEmbeddedObject::reload(
                 embed::WrongStateException,
                 io::IOException,
                 uno::Exception,
-                uno::RuntimeException )
+                uno::RuntimeException, std::exception )
 {
     // TODO: use lObjArgs
     // for now this method is used only to switch readonly state
@@ -1758,7 +1758,7 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
                 embed::WrongStateException,
                 io::IOException,
                 uno::Exception,
-                uno::RuntimeException )
+                uno::RuntimeException, std::exception )
 {
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -1848,7 +1848,7 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
 
 sal_Bool SAL_CALL  OCommonEmbeddedObject::isLink()
         throw ( embed::WrongStateException,
-                uno::RuntimeException )
+                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -1861,7 +1861,7 @@ sal_Bool SAL_CALL  OCommonEmbeddedObject::isLink()
 OUString SAL_CALL OCommonEmbeddedObject::getLinkURL()
         throw ( embed::WrongStateException,
                 uno::Exception,
-                uno::RuntimeException )
+                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )

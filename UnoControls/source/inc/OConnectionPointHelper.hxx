@@ -101,7 +101,7 @@ public:
     */
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     /**_______________________________________________________________________________________________________
         @short      increment refcount
@@ -153,7 +153,7 @@ public:
     */
 
     virtual ::com::sun::star::uno::Type SAL_CALL getConnectionType()
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -169,7 +169,7 @@ public:
     */
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XConnectionPointContainer > SAL_CALL getConnectionPointContainer()
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -189,7 +189,7 @@ public:
     ) throw (
         ::com::sun::star::lang::ListenerExistException,
         ::com::sun::star::lang::InvalidListenerException ,
-        ::com::sun::star::uno::RuntimeException
+        ::com::sun::star::uno::RuntimeException, std::exception
     );
 
     /**_________________________________________________________________________________________________________
@@ -206,7 +206,7 @@ public:
     */
 
     virtual void SAL_CALL unadvise( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xListener )
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -222,7 +222,7 @@ public:
     */
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > > SAL_CALL getConnections()
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 
 //  private methods

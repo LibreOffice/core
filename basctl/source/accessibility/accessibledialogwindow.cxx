@@ -608,17 +608,17 @@ void AccessibleDialogWindow::disposing()
 }
 
 // XServiceInfo
-OUString AccessibleDialogWindow::getImplementationName() throw (RuntimeException)
+OUString AccessibleDialogWindow::getImplementationName() throw (RuntimeException, std::exception)
 {
     return OUString( "com.sun.star.comp.basctl.AccessibleWindow" );
 }
 
-sal_Bool AccessibleDialogWindow::supportsService( const OUString& rServiceName ) throw (RuntimeException)
+sal_Bool AccessibleDialogWindow::supportsService( const OUString& rServiceName ) throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > AccessibleDialogWindow::getSupportedServiceNames() throw (RuntimeException)
+Sequence< OUString > AccessibleDialogWindow::getSupportedServiceNames() throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aNames(1);
     aNames[0] = "com.sun.star.awt.AccessibleWindow" ;
@@ -626,7 +626,7 @@ Sequence< OUString > AccessibleDialogWindow::getSupportedServiceNames() throw (R
 }
 
 // XAccessible
-Reference< XAccessibleContext > AccessibleDialogWindow::getAccessibleContext(  ) throw (RuntimeException)
+Reference< XAccessibleContext > AccessibleDialogWindow::getAccessibleContext(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -634,7 +634,7 @@ Reference< XAccessibleContext > AccessibleDialogWindow::getAccessibleContext(  )
 }
 
 // XAccessibleContext
-sal_Int32 AccessibleDialogWindow::getAccessibleChildCount() throw (RuntimeException)
+sal_Int32 AccessibleDialogWindow::getAccessibleChildCount() throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -643,7 +643,7 @@ sal_Int32 AccessibleDialogWindow::getAccessibleChildCount() throw (RuntimeExcept
 
 
 
-Reference< XAccessible > AccessibleDialogWindow::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException)
+Reference< XAccessible > AccessibleDialogWindow::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -671,7 +671,7 @@ Reference< XAccessible > AccessibleDialogWindow::getAccessibleChild( sal_Int32 i
 
 
 
-Reference< XAccessible > AccessibleDialogWindow::getAccessibleParent(  ) throw (RuntimeException)
+Reference< XAccessible > AccessibleDialogWindow::getAccessibleParent(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -688,7 +688,7 @@ Reference< XAccessible > AccessibleDialogWindow::getAccessibleParent(  ) throw (
 
 
 
-sal_Int32 AccessibleDialogWindow::getAccessibleIndexInParent(  ) throw (RuntimeException)
+sal_Int32 AccessibleDialogWindow::getAccessibleIndexInParent(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -715,7 +715,7 @@ sal_Int32 AccessibleDialogWindow::getAccessibleIndexInParent(  ) throw (RuntimeE
 
 
 
-sal_Int16 AccessibleDialogWindow::getAccessibleRole(  ) throw (RuntimeException)
+sal_Int16 AccessibleDialogWindow::getAccessibleRole(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -724,7 +724,7 @@ sal_Int16 AccessibleDialogWindow::getAccessibleRole(  ) throw (RuntimeException)
 
 
 
-OUString AccessibleDialogWindow::getAccessibleDescription(  ) throw (RuntimeException)
+OUString AccessibleDialogWindow::getAccessibleDescription(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -737,7 +737,7 @@ OUString AccessibleDialogWindow::getAccessibleDescription(  ) throw (RuntimeExce
 
 
 
-OUString AccessibleDialogWindow::getAccessibleName(  ) throw (RuntimeException)
+OUString AccessibleDialogWindow::getAccessibleName(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -750,7 +750,7 @@ OUString AccessibleDialogWindow::getAccessibleName(  ) throw (RuntimeException)
 
 
 
-Reference< XAccessibleRelationSet > AccessibleDialogWindow::getAccessibleRelationSet(  ) throw (RuntimeException)
+Reference< XAccessibleRelationSet > AccessibleDialogWindow::getAccessibleRelationSet(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -761,7 +761,7 @@ Reference< XAccessibleRelationSet > AccessibleDialogWindow::getAccessibleRelatio
 
 
 
-Reference< XAccessibleStateSet > AccessibleDialogWindow::getAccessibleStateSet(  ) throw (RuntimeException)
+Reference< XAccessibleStateSet > AccessibleDialogWindow::getAccessibleStateSet(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -782,7 +782,7 @@ Reference< XAccessibleStateSet > AccessibleDialogWindow::getAccessibleStateSet( 
 
 
 
-Locale AccessibleDialogWindow::getLocale(  ) throw (IllegalAccessibleComponentStateException, RuntimeException)
+Locale AccessibleDialogWindow::getLocale(  ) throw (IllegalAccessibleComponentStateException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -793,7 +793,7 @@ Locale AccessibleDialogWindow::getLocale(  ) throw (IllegalAccessibleComponentSt
 // XAccessibleComponent
 
 
-Reference< XAccessible > AccessibleDialogWindow::getAccessibleAtPoint( const awt::Point& rPoint ) throw (RuntimeException)
+Reference< XAccessible > AccessibleDialogWindow::getAccessibleAtPoint( const awt::Point& rPoint ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -822,7 +822,7 @@ Reference< XAccessible > AccessibleDialogWindow::getAccessibleAtPoint( const awt
 
 
 
-void AccessibleDialogWindow::grabFocus(  ) throw (RuntimeException)
+void AccessibleDialogWindow::grabFocus(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -832,7 +832,7 @@ void AccessibleDialogWindow::grabFocus(  ) throw (RuntimeException)
 
 
 
-sal_Int32 AccessibleDialogWindow::getForeground(  ) throw (RuntimeException)
+sal_Int32 AccessibleDialogWindow::getForeground(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -857,7 +857,7 @@ sal_Int32 AccessibleDialogWindow::getForeground(  ) throw (RuntimeException)
 
 
 
-sal_Int32 AccessibleDialogWindow::getBackground(  ) throw (RuntimeException)
+sal_Int32 AccessibleDialogWindow::getBackground(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -877,7 +877,7 @@ sal_Int32 AccessibleDialogWindow::getBackground(  ) throw (RuntimeException)
 // XAccessibleExtendedComponent
 
 
-Reference< awt::XFont > AccessibleDialogWindow::getFont(  ) throw (RuntimeException)
+Reference< awt::XFont > AccessibleDialogWindow::getFont(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -903,7 +903,7 @@ Reference< awt::XFont > AccessibleDialogWindow::getFont(  ) throw (RuntimeExcept
 
 
 
-OUString AccessibleDialogWindow::getTitledBorderText(  ) throw (RuntimeException)
+OUString AccessibleDialogWindow::getTitledBorderText(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -912,7 +912,7 @@ OUString AccessibleDialogWindow::getTitledBorderText(  ) throw (RuntimeException
 
 
 
-OUString AccessibleDialogWindow::getToolTipText(  ) throw (RuntimeException)
+OUString AccessibleDialogWindow::getToolTipText(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -927,7 +927,7 @@ OUString AccessibleDialogWindow::getToolTipText(  ) throw (RuntimeException)
 // XAccessibleSelection
 
 
-void AccessibleDialogWindow::selectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+void AccessibleDialogWindow::selectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -947,7 +947,7 @@ void AccessibleDialogWindow::selectAccessibleChild( sal_Int32 nChildIndex ) thro
 
 
 
-sal_Bool AccessibleDialogWindow::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+sal_Bool AccessibleDialogWindow::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -973,7 +973,7 @@ void AccessibleDialogWindow::clearAccessibleSelection()
 
 
 
-void AccessibleDialogWindow::selectAllAccessibleChildren(  ) throw (RuntimeException)
+void AccessibleDialogWindow::selectAllAccessibleChildren(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -983,7 +983,7 @@ void AccessibleDialogWindow::selectAllAccessibleChildren(  ) throw (RuntimeExcep
 
 
 
-sal_Int32 AccessibleDialogWindow::getSelectedAccessibleChildCount(  ) throw (RuntimeException)
+sal_Int32 AccessibleDialogWindow::getSelectedAccessibleChildCount(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -1000,7 +1000,7 @@ sal_Int32 AccessibleDialogWindow::getSelectedAccessibleChildCount(  ) throw (Run
 
 
 
-Reference< XAccessible > AccessibleDialogWindow::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+Reference< XAccessible > AccessibleDialogWindow::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
@@ -1023,7 +1023,7 @@ Reference< XAccessible > AccessibleDialogWindow::getSelectedAccessibleChild( sal
 
 
 
-void AccessibleDialogWindow::deselectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+void AccessibleDialogWindow::deselectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 

@@ -87,19 +87,19 @@ IdlClassImpl::~IdlClassImpl()
 // XIdlClassImpl default implementation
 
 TypeClass IdlClassImpl::getTypeClass()
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return _eTypeClass;
 }
 
 OUString IdlClassImpl::getName()
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return _aName;
 }
 
 sal_Bool IdlClassImpl::equals( const Reference< XIdlClass >& xType )
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return (xType.is() &&
             (xType->getTypeClass() == _eTypeClass) && (xType->getName() == _aName));
@@ -122,7 +122,7 @@ static const sal_Bool s_aAssignableFromTab[11][11] =
 };
 
 sal_Bool IdlClassImpl::isAssignableFrom( const Reference< XIdlClass > & xType )
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     TypeClass eAssign = getTypeClass();
     if (equals( xType ) || eAssign == TypeClass_ANY) // default shot
@@ -142,7 +142,7 @@ sal_Bool IdlClassImpl::isAssignableFrom( const Reference< XIdlClass > & xType )
 }
 
 void IdlClassImpl::createObject( Any & rObj )
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     rObj.clear();
     uno_any_destruct( &rObj, reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
@@ -152,21 +152,21 @@ void IdlClassImpl::createObject( Any & rObj )
 // what TODO ????
 
 Sequence< Reference< XIdlClass > > IdlClassImpl::getClasses()
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "### unexpected use!" );
     return Sequence< Reference< XIdlClass > >();
 }
 
 Reference< XIdlClass > IdlClassImpl::getClass( const OUString & )
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "### unexpected use!" );
     return Reference< XIdlClass >();
 }
 
 Sequence< Reference< XIdlClass > > IdlClassImpl::getInterfaces()
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
 //      OSL_FAIL( "### unexpected use!" );
     return Sequence< Reference< XIdlClass > >();
@@ -174,52 +174,52 @@ Sequence< Reference< XIdlClass > > IdlClassImpl::getInterfaces()
 
 // structs, interfaces
 
-Sequence< Reference< XIdlClass > > IdlClassImpl::getSuperclasses() throw(::com::sun::star::uno::RuntimeException)
+Sequence< Reference< XIdlClass > > IdlClassImpl::getSuperclasses() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return Sequence< Reference< XIdlClass > >();
 }
 // structs
 
 Reference< XIdlField > IdlClassImpl::getField( const OUString & )
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return Reference< XIdlField >();
 }
 
 Sequence< Reference< XIdlField > > IdlClassImpl::getFields()
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return Sequence< Reference< XIdlField > >();
 }
 // interfaces
 
 Uik IdlClassImpl::getUik()
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return Uik();
 }
 
 Reference< XIdlMethod > IdlClassImpl::getMethod( const OUString & )
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return Reference< XIdlMethod >();
 }
 
 Sequence< Reference< XIdlMethod > > IdlClassImpl::getMethods()
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return Sequence< Reference< XIdlMethod > >();
 }
 // array
 
 Reference< XIdlClass > IdlClassImpl::getComponentType()
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return Reference< XIdlClass >();
 }
 
 Reference< XIdlArray > IdlClassImpl::getArray()
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return Reference< XIdlArray >();
 }
@@ -258,7 +258,7 @@ IdlMemberImpl::~IdlMemberImpl()
 // XIdlMember
 
 Reference< XIdlClass > IdlMemberImpl::getDeclaringClass()
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     if (! _xDeclClass.is())
     {
@@ -271,7 +271,7 @@ Reference< XIdlClass > IdlMemberImpl::getDeclaringClass()
 }
 
 OUString IdlMemberImpl::getName()
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return _aName;
 }

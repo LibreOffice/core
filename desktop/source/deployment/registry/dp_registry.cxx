@@ -111,7 +111,7 @@ public:
         Reference<XComponentContext> const & xComponentContext );
 
     // XUpdatable
-    virtual void SAL_CALL update() throw (RuntimeException);
+    virtual void SAL_CALL update() throw (RuntimeException, std::exception);
 
     // XPackageRegistry
     virtual Reference<deployment::XPackage> SAL_CALL bindPackage(
@@ -120,12 +120,12 @@ public:
         throw (deployment::DeploymentException,
                deployment::InvalidRemovedParameterException,
                CommandFailedException,
-               lang::IllegalArgumentException, RuntimeException);
+               lang::IllegalArgumentException, RuntimeException, std::exception);
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
-    getSupportedPackageTypes() throw (RuntimeException);
+    getSupportedPackageTypes() throw (RuntimeException, std::exception);
     virtual void SAL_CALL packageRemoved(OUString const & url, OUString const & mediaType)
                 throw (deployment::DeploymentException,
-                RuntimeException);
+                RuntimeException, std::exception);
 
 };
 
@@ -180,7 +180,7 @@ OUString normalizeMediaType( OUString const & mediaType )
 void PackageRegistryImpl::packageRemoved(
     OUString const & url, OUString const & mediaType)
     throw (css::deployment::DeploymentException,
-           css::uno::RuntimeException)
+           css::uno::RuntimeException, std::exception)
 {
     const t_string2registry::const_iterator i =
         m_mediaType2backend.find(mediaType);
@@ -444,7 +444,7 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
 
 // XUpdatable: broadcast to backends
 
-void PackageRegistryImpl::update() throw (RuntimeException)
+void PackageRegistryImpl::update() throw (RuntimeException, std::exception)
 {
     check();
     t_registryset::const_iterator iPos( m_allBackends.begin() );
@@ -463,7 +463,7 @@ Reference<deployment::XPackage> PackageRegistryImpl::bindPackage(
     OUString const & identifier, Reference<XCommandEnvironment> const & xCmdEnv )
     throw (deployment::DeploymentException, deployment::InvalidRemovedParameterException,
            CommandFailedException,
-           lang::IllegalArgumentException, RuntimeException)
+           lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     check();
     OUString mediaType(mediaType_);
@@ -535,7 +535,7 @@ Reference<deployment::XPackage> PackageRegistryImpl::bindPackage(
 
 
 Sequence< Reference<deployment::XPackageTypeInfo> >
-PackageRegistryImpl::getSupportedPackageTypes() throw (RuntimeException)
+PackageRegistryImpl::getSupportedPackageTypes() throw (RuntimeException, std::exception)
 {
     return comphelper::containerToSequence(m_typesInfos);
 }

@@ -955,7 +955,7 @@ sal_Int32 SAXEventKeeperImpl::createBlocker(sal_Int32 nSecurityId)
 
 /* XSAXEventKeeper */
 sal_Int32 SAL_CALL SAXEventKeeperImpl::addElementCollector(  )
-    throw (cssu::RuntimeException)
+    throw (cssu::RuntimeException, std::exception)
 {
     return createElementCollector(
         cssxc::sax::ConstOfSecurityId::UNDEFINEDSECURITYID,
@@ -965,32 +965,32 @@ sal_Int32 SAL_CALL SAXEventKeeperImpl::addElementCollector(  )
 }
 
 void SAL_CALL SAXEventKeeperImpl::removeElementCollector( sal_Int32 id )
-    throw (cssu::RuntimeException)
+    throw (cssu::RuntimeException, std::exception)
 {
     markElementMarkBuffer(id);
 }
 
 sal_Int32 SAL_CALL SAXEventKeeperImpl::addBlocker(  )
-    throw (cssu::RuntimeException)
+    throw (cssu::RuntimeException, std::exception)
 {
     return createBlocker(cssxc::sax::ConstOfSecurityId::UNDEFINEDSECURITYID);
 }
 
 void SAL_CALL SAXEventKeeperImpl::removeBlocker( sal_Int32 id )
-    throw (cssu::RuntimeException)
+    throw (cssu::RuntimeException, std::exception)
 {
     markElementMarkBuffer(id);
 }
 
 sal_Bool SAL_CALL SAXEventKeeperImpl::isBlocking(  )
-    throw (cssu::RuntimeException)
+    throw (cssu::RuntimeException, std::exception)
 {
     return (m_pCurrentBlockingBufferNode != NULL);
 }
 
 cssu::Reference< cssxw::XXMLElementWrapper > SAL_CALL
     SAXEventKeeperImpl::getElement( sal_Int32 id )
-    throw (cssu::RuntimeException)
+    throw (cssu::RuntimeException, std::exception)
 {
     cssu::Reference< cssxw::XXMLElementWrapper > rc;
 
@@ -1006,7 +1006,7 @@ cssu::Reference< cssxw::XXMLElementWrapper > SAL_CALL
 void SAL_CALL SAXEventKeeperImpl::setElement(
     sal_Int32 id,
     const cssu::Reference< cssxw::XXMLElementWrapper >& aElement )
-    throw (cssu::RuntimeException)
+    throw (cssu::RuntimeException, std::exception)
 {
     if (aElement.is())
     {
@@ -1037,7 +1037,7 @@ void SAL_CALL SAXEventKeeperImpl::setElement(
 
 cssu::Reference< cssxs::XDocumentHandler > SAL_CALL SAXEventKeeperImpl::setNextHandler(
     const cssu::Reference< cssxs::XDocumentHandler >& xNewHandler )
-    throw (cssu::RuntimeException)
+    throw (cssu::RuntimeException, std::exception)
 {
     cssu::Reference< cssxs::XDocumentHandler > xOldHandler = m_xNextHandler;
 
@@ -1046,7 +1046,7 @@ cssu::Reference< cssxs::XDocumentHandler > SAL_CALL SAXEventKeeperImpl::setNextH
 }
 
 OUString SAL_CALL SAXEventKeeperImpl::printBufferNodeTree()
-    throw (cssu::RuntimeException)
+    throw (cssu::RuntimeException, std::exception)
 {
     OUString rc;
 
@@ -1061,7 +1061,7 @@ OUString SAL_CALL SAXEventKeeperImpl::printBufferNodeTree()
 }
 
 cssu::Reference< cssxw::XXMLElementWrapper > SAL_CALL SAXEventKeeperImpl::getCurrentBlockingNode()
-    throw (cssu::RuntimeException)
+    throw (cssu::RuntimeException, std::exception)
 {
     cssu::Reference< cssxw::XXMLElementWrapper > rc;
 
@@ -1077,7 +1077,7 @@ cssu::Reference< cssxw::XXMLElementWrapper > SAL_CALL SAXEventKeeperImpl::getCur
 sal_Int32 SAL_CALL SAXEventKeeperImpl::addSecurityElementCollector(
     cssxc::sax::ElementMarkPriority priority,
     sal_Bool modifyElement )
-    throw (cssu::RuntimeException)
+    throw (cssu::RuntimeException, std::exception)
 {
     return createElementCollector(
         cssxc::sax::ConstOfSecurityId::UNDEFINEDSECURITYID,
@@ -1089,7 +1089,7 @@ sal_Int32 SAL_CALL SAXEventKeeperImpl::addSecurityElementCollector(
 sal_Int32 SAL_CALL SAXEventKeeperImpl::cloneElementCollector(
     sal_Int32 referenceId,
     cssxc::sax::ElementMarkPriority priority )
-    throw (cssu::RuntimeException)
+    throw (cssu::RuntimeException, std::exception)
 {
     sal_Int32 nId = -1;
 
@@ -1121,7 +1121,7 @@ sal_Int32 SAL_CALL SAXEventKeeperImpl::cloneElementCollector(
 }
 
 void SAL_CALL SAXEventKeeperImpl::setSecurityId( sal_Int32 id, sal_Int32 securityId )
-    throw (cssu::RuntimeException)
+    throw (cssu::RuntimeException, std::exception)
 {
     ElementMark* pElementMark = findElementMarkBuffer(id);
     if (pElementMark != NULL)
@@ -1135,7 +1135,7 @@ void SAL_CALL SAXEventKeeperImpl::setSecurityId( sal_Int32 id, sal_Int32 securit
 void SAL_CALL SAXEventKeeperImpl::addReferenceResolvedListener(
     sal_Int32 referenceId,
     const cssu::Reference< cssxc::sax::XReferenceResolvedListener >& listener )
-    throw (cssu::RuntimeException)
+    throw (cssu::RuntimeException, std::exception)
 {
     ElementCollector* pElementCollector = (ElementCollector*)findElementMarkBuffer(referenceId);
     if (pElementCollector != NULL)
@@ -1147,27 +1147,27 @@ void SAL_CALL SAXEventKeeperImpl::addReferenceResolvedListener(
 void SAL_CALL SAXEventKeeperImpl::removeReferenceResolvedListener(
     sal_Int32 /*referenceId*/,
     const cssu::Reference< cssxc::sax::XReferenceResolvedListener >&)
-    throw (cssu::RuntimeException)
+    throw (cssu::RuntimeException, std::exception)
 {
 }
 
 /* XSAXEventKeeperStatusChangeBroadcaster */
 void SAL_CALL SAXEventKeeperImpl::addSAXEventKeeperStatusChangeListener(
     const cssu::Reference< cssxc::sax::XSAXEventKeeperStatusChangeListener >& listener )
-    throw (cssu::RuntimeException)
+    throw (cssu::RuntimeException, std::exception)
 {
     m_xSAXEventKeeperStatusChangeListener = listener;
 }
 
 void SAL_CALL SAXEventKeeperImpl::removeSAXEventKeeperStatusChangeListener(
     const cssu::Reference< cssxc::sax::XSAXEventKeeperStatusChangeListener >&)
-    throw (cssu::RuntimeException)
+    throw (cssu::RuntimeException, std::exception)
 {
 }
 
 /* XDocumentHandler */
 void SAL_CALL SAXEventKeeperImpl::startDocument(  )
-    throw (cssxs::SAXException, cssu::RuntimeException)
+    throw (cssxs::SAXException, cssu::RuntimeException, std::exception)
 {
     if ( m_xNextHandler.is())
     {
@@ -1176,7 +1176,7 @@ void SAL_CALL SAXEventKeeperImpl::startDocument(  )
 }
 
 void SAL_CALL SAXEventKeeperImpl::endDocument(  )
-    throw (cssxs::SAXException, cssu::RuntimeException)
+    throw (cssxs::SAXException, cssu::RuntimeException, std::exception)
 {
     if ( m_xNextHandler.is())
     {
@@ -1187,7 +1187,7 @@ void SAL_CALL SAXEventKeeperImpl::endDocument(  )
 void SAL_CALL SAXEventKeeperImpl::startElement(
     const OUString& aName,
     const cssu::Reference< cssxs::XAttributeList >& xAttribs )
-    throw (cssxs::SAXException, cssu::RuntimeException)
+    throw (cssxs::SAXException, cssu::RuntimeException, std::exception)
 {
         /*
          * If there is a following handler and no blocking now, then
@@ -1231,7 +1231,7 @@ void SAL_CALL SAXEventKeeperImpl::startElement(
 }
 
 void SAL_CALL SAXEventKeeperImpl::endElement( const OUString& aName )
-    throw (cssxs::SAXException, cssu::RuntimeException)
+    throw (cssxs::SAXException, cssu::RuntimeException, std::exception)
 {
         sal_Bool bIsCurrent = m_xXMLDocument->isCurrent(m_pCurrentBufferNode->getXMLElement());
 
@@ -1288,7 +1288,7 @@ void SAL_CALL SAXEventKeeperImpl::endElement( const OUString& aName )
 }
 
 void SAL_CALL SAXEventKeeperImpl::characters( const OUString& aChars )
-    throw (cssxs::SAXException, cssu::RuntimeException)
+    throw (cssxs::SAXException, cssu::RuntimeException, std::exception)
 {
     if (!m_bIsForwarding)
     {
@@ -1310,14 +1310,14 @@ void SAL_CALL SAXEventKeeperImpl::characters( const OUString& aChars )
 }
 
 void SAL_CALL SAXEventKeeperImpl::ignorableWhitespace( const OUString& aWhitespaces )
-    throw (cssxs::SAXException, cssu::RuntimeException)
+    throw (cssxs::SAXException, cssu::RuntimeException, std::exception)
 {
     characters( aWhitespaces );
 }
 
 void SAL_CALL SAXEventKeeperImpl::processingInstruction(
     const OUString& aTarget, const OUString& aData )
-    throw (cssxs::SAXException, cssu::RuntimeException)
+    throw (cssxs::SAXException, cssu::RuntimeException, std::exception)
 {
     if (!m_bIsForwarding)
     {
@@ -1339,13 +1339,13 @@ void SAL_CALL SAXEventKeeperImpl::processingInstruction(
 }
 
 void SAL_CALL SAXEventKeeperImpl::setDocumentLocator( const cssu::Reference< cssxs::XLocator >&)
-    throw (cssxs::SAXException, cssu::RuntimeException)
+    throw (cssxs::SAXException, cssu::RuntimeException, std::exception)
 {
 }
 
 /* XInitialization */
 void SAL_CALL SAXEventKeeperImpl::initialize( const cssu::Sequence< cssu::Any >& aArguments )
-    throw (cssu::Exception, cssu::RuntimeException)
+    throw (cssu::Exception, cssu::RuntimeException, std::exception)
 {
     OSL_ASSERT(aArguments.getLength() == 1);
 
@@ -1384,19 +1384,19 @@ cssu::Reference< cssu::XInterface > SAL_CALL SAXEventKeeperImpl_createInstance(
 
 /* XServiceInfo */
 OUString SAL_CALL SAXEventKeeperImpl::getImplementationName(  )
-    throw (cssu::RuntimeException)
+    throw (cssu::RuntimeException, std::exception)
 {
     return SAXEventKeeperImpl_getImplementationName();
 }
 
 sal_Bool SAL_CALL SAXEventKeeperImpl::supportsService( const OUString& rServiceName )
-    throw (cssu::RuntimeException)
+    throw (cssu::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 cssu::Sequence< OUString > SAL_CALL SAXEventKeeperImpl::getSupportedServiceNames(  )
-    throw (cssu::RuntimeException)
+    throw (cssu::RuntimeException, std::exception)
 {
     return SAXEventKeeperImpl_getSupportedServiceNames();
 }

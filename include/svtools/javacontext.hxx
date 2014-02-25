@@ -52,7 +52,7 @@ namespace svt
         // XInterface
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
             const ::com::sun::star::uno::Type& aType )
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
 
         virtual void SAL_CALL acquire() throw ();
 
@@ -60,7 +60,7 @@ namespace svt
 
         // XCurrentContext
         virtual com::sun::star::uno::Any SAL_CALL getValueByName( const OUString& Name )
-            throw (com::sun::star::uno::RuntimeException);
+            throw (com::sun::star::uno::RuntimeException, std::exception);
 
     private:
         SVT_DLLPRIVATE JavaContext(); //not implemented

@@ -77,7 +77,7 @@ XTYPEPROVIDER_IMPL_2( ContentIdentifier,
 
 // virtual
 OUString SAL_CALL ContentIdentifier::getContentIdentifier()
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return m_aContentId;
 }
@@ -85,7 +85,7 @@ OUString SAL_CALL ContentIdentifier::getContentIdentifier()
 
 // virtual
 OUString SAL_CALL ContentIdentifier::getContentProviderScheme()
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     if ( m_aProviderScheme.isEmpty() && !m_aContentId.isEmpty() )
     {

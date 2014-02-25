@@ -51,7 +51,7 @@ OConnectionPointContainerHelper::~OConnectionPointContainerHelper()
 //  XInterface
 
 
-Any SAL_CALL OConnectionPointContainerHelper::queryInterface( const Type& aType ) throw( RuntimeException )
+Any SAL_CALL OConnectionPointContainerHelper::queryInterface( const Type& aType ) throw( RuntimeException, std::exception )
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
@@ -102,7 +102,7 @@ void SAL_CALL OConnectionPointContainerHelper::release() throw()
 //  XConnectionPointContainer
 
 
-Sequence< Type > SAL_CALL OConnectionPointContainerHelper::getConnectionPointTypes() throw( RuntimeException )
+Sequence< Type > SAL_CALL OConnectionPointContainerHelper::getConnectionPointTypes() throw( RuntimeException, std::exception )
 {
     // Container is threadsafe himself !
     return m_aMultiTypeContainer.getContainedTypes();
@@ -112,7 +112,7 @@ Sequence< Type > SAL_CALL OConnectionPointContainerHelper::getConnectionPointTyp
 //  XConnectionPointContainer
 
 
-Reference< XConnectionPoint > SAL_CALL OConnectionPointContainerHelper::queryConnectionPoint( const Type& aType ) throw( RuntimeException )
+Reference< XConnectionPoint > SAL_CALL OConnectionPointContainerHelper::queryConnectionPoint( const Type& aType ) throw( RuntimeException, std::exception )
 {
     // Set default return value, if method failed.
     Reference< XConnectionPoint > xConnectionPoint;
@@ -136,7 +136,7 @@ Reference< XConnectionPoint > SAL_CALL OConnectionPointContainerHelper::queryCon
 
 
 void SAL_CALL OConnectionPointContainerHelper::advise(  const   Type&                       aType       ,
-                                                        const   Reference< XInterface >&    xListener   ) throw( RuntimeException )
+                                                        const   Reference< XInterface >&    xListener   ) throw( RuntimeException, std::exception )
 {
     // Container is threadsafe himself !
     m_aMultiTypeContainer.addInterface( aType, xListener );
@@ -147,7 +147,7 @@ void SAL_CALL OConnectionPointContainerHelper::advise(  const   Type&           
 
 
 void SAL_CALL OConnectionPointContainerHelper::unadvise(    const   Type&                       aType       ,
-                                                            const   Reference< XInterface >&    xListener   ) throw( RuntimeException )
+                                                            const   Reference< XInterface >&    xListener   ) throw( RuntimeException, std::exception )
 {
     // Container is threadsafe himself !
     m_aMultiTypeContainer.removeInterface( aType, xListener );

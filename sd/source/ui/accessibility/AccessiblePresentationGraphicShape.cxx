@@ -53,7 +53,7 @@ AccessiblePresentationGraphicShape::~AccessiblePresentationGraphicShape (void)
 
 OUString SAL_CALL
     AccessiblePresentationGraphicShape::getImplementationName (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return OUString("AccessiblePresentationGraphicShape");
 }
@@ -113,7 +113,7 @@ OUString
 }
 
 sal_Int16 SAL_CALL AccessiblePresentationGraphicShape::getAccessibleRole ()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return  AccessibleRole::GRAPHIC ;
 }

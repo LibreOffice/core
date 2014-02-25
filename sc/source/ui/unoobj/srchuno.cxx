@@ -100,14 +100,14 @@ ScCellSearchObj::~ScCellSearchObj()
 
 // XSearchDescriptor
 
-OUString SAL_CALL ScCellSearchObj::getSearchString() throw(uno::RuntimeException)
+OUString SAL_CALL ScCellSearchObj::getSearchString() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return pSearchItem->GetSearchString();
 }
 
 void SAL_CALL ScCellSearchObj::setSearchString( const OUString& aString )
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     pSearchItem->SetSearchString( aString );
@@ -115,14 +115,14 @@ void SAL_CALL ScCellSearchObj::setSearchString( const OUString& aString )
 
 // XReplaceDescriptor
 
-OUString SAL_CALL ScCellSearchObj::getReplaceString() throw(uno::RuntimeException)
+OUString SAL_CALL ScCellSearchObj::getReplaceString() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return pSearchItem->GetReplaceString();
 }
 
 void SAL_CALL ScCellSearchObj::setReplaceString( const OUString& aReplaceString )
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     pSearchItem->SetReplaceString( aReplaceString );
@@ -131,7 +131,7 @@ void SAL_CALL ScCellSearchObj::setReplaceString( const OUString& aReplaceString 
 // XPropertySet
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScCellSearchObj::getPropertySetInfo()
-                                                        throw(uno::RuntimeException)
+                                                        throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     static uno::Reference<beans::XPropertySetInfo> aRef(
@@ -143,7 +143,7 @@ void SAL_CALL ScCellSearchObj::setPropertyValue(
                         const OUString& aPropertyName, const uno::Any& aValue )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
                         lang::IllegalArgumentException, lang::WrappedTargetException,
-                        uno::RuntimeException)
+                        uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     OUString aString(aPropertyName);
@@ -165,7 +165,7 @@ void SAL_CALL ScCellSearchObj::setPropertyValue(
 
 uno::Any SAL_CALL ScCellSearchObj::getPropertyValue( const OUString& aPropertyName )
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
-                        uno::RuntimeException)
+                        uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     OUString aString(aPropertyName);
@@ -192,19 +192,19 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScCellSearchObj )
 
 // XServiceInfo
 
-OUString SAL_CALL ScCellSearchObj::getImplementationName() throw(uno::RuntimeException)
+OUString SAL_CALL ScCellSearchObj::getImplementationName() throw(uno::RuntimeException, std::exception)
 {
     return OUString( "ScCellSearchObj" );
 }
 
 sal_Bool SAL_CALL ScCellSearchObj::supportsService( const OUString& rServiceName )
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence<OUString> SAL_CALL ScCellSearchObj::getSupportedServiceNames()
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence<OUString> aRet(2);
     OUString* pArray = aRet.getArray();
@@ -216,7 +216,7 @@ uno::Sequence<OUString> SAL_CALL ScCellSearchObj::getSupportedServiceNames()
 // XUnoTunnel
 
 sal_Int64 SAL_CALL ScCellSearchObj::getSomething(
-                const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException)
+                const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException, std::exception)
 {
     if ( rId.getLength() == 16 &&
           0 == memcmp( getUnoTunnelId().getConstArray(),

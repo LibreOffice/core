@@ -281,7 +281,7 @@ void Calendar_jewish::mapToGregorian() throw(RuntimeException)
 // Methods in XExtendedCalendar
 OUString SAL_CALL
 Calendar_jewish::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     nNativeNumberMode = NativeNumberMode::NATNUM2;  // make Hebrew number for Jewish calendar
 

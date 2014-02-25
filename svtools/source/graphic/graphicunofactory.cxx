@@ -42,24 +42,24 @@ public:
     GObjectImpl(uno::Sequence< uno::Any > const & args) throw (uno::RuntimeException);
 
      // XGraphicObject
-    virtual uno::Reference< graphic::XGraphic > SAL_CALL getGraphic() throw (uno::RuntimeException);
-    virtual void SAL_CALL setGraphic( const uno::Reference< graphic::XGraphic >& _graphic ) throw (uno::RuntimeException);
-    OUString SAL_CALL getUniqueID() throw (uno::RuntimeException);
+    virtual uno::Reference< graphic::XGraphic > SAL_CALL getGraphic() throw (uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setGraphic( const uno::Reference< graphic::XGraphic >& _graphic ) throw (uno::RuntimeException, std::exception);
+    OUString SAL_CALL getUniqueID() throw (uno::RuntimeException, std::exception);
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     {
         return OUString("com.sun.star.graphic.GraphicObject");
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     {
         return cppu::supportsService(this, ServiceName);
     }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     {
         uno::Sequence< OUString > aRet(1);
         OUString* pArray = aRet.getArray();
@@ -82,7 +82,7 @@ GObjectImpl::GObjectImpl(const uno::Sequence< uno::Any >& args) throw (uno::Runt
        mpGObject.reset( new GraphicObject() );
 }
 
-uno::Reference< graphic::XGraphic > SAL_CALL GObjectImpl::getGraphic() throw (uno::RuntimeException)
+uno::Reference< graphic::XGraphic > SAL_CALL GObjectImpl::getGraphic() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( !mpGObject.get() )
@@ -90,7 +90,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL GObjectImpl::getGraphic() throw (un
     return mpGObject->GetGraphic().GetXGraphic();
 }
 
-void SAL_CALL GObjectImpl::setGraphic( const uno::Reference< graphic::XGraphic >& _graphic ) throw (uno::RuntimeException)
+void SAL_CALL GObjectImpl::setGraphic( const uno::Reference< graphic::XGraphic >& _graphic ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( !mpGObject.get() )
@@ -99,7 +99,7 @@ void SAL_CALL GObjectImpl::setGraphic( const uno::Reference< graphic::XGraphic >
     mpGObject->SetGraphic( aGraphic );
 }
 
-OUString SAL_CALL GObjectImpl::getUniqueID() throw (uno::RuntimeException)
+OUString SAL_CALL GObjectImpl::getUniqueID() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     OUString sId;

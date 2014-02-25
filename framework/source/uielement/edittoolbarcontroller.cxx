@@ -149,7 +149,7 @@ EditToolbarController::~EditToolbarController()
 
 
 void SAL_CALL EditToolbarController::dispose()
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarMutexGuard;
 

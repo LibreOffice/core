@@ -56,7 +56,7 @@ void OGeometryControlModel<CONTROLMODEL>::fillProperties(::com::sun::star::uno::
 
 //--------------------------------------------------------------------
 template <class CONTROLMODEL>
-::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL OGeometryControlModel<CONTROLMODEL>::getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL OGeometryControlModel<CONTROLMODEL>::getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     static ::cppu::OImplementationId * pId = NULL;
     if ( !pId )

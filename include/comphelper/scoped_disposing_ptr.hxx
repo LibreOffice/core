@@ -100,7 +100,7 @@ private:
     private:
         // XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& rEvt )
-            throw (::com::sun::star::uno::RuntimeException)
+            throw (::com::sun::star::uno::RuntimeException, std::exception)
         {
             bool shutDown = (rEvt.Source == m_xComponent);
 
@@ -121,12 +121,12 @@ private:
         // XTerminateListener
         virtual void SAL_CALL queryTermination( const ::com::sun::star::lang::EventObject& )
             throw(::com::sun::star::frame::TerminationVetoException,
-                  ::com::sun::star::uno::RuntimeException)
+                  ::com::sun::star::uno::RuntimeException, std::exception)
         {
         }
 
         virtual void SAL_CALL notifyTermination( const ::com::sun::star::lang::EventObject& rEvt )
-            throw (::com::sun::star::uno::RuntimeException)
+            throw (::com::sun::star::uno::RuntimeException, std::exception)
         {
             disposing(rEvt);
         }

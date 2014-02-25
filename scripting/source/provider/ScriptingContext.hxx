@@ -50,7 +50,7 @@ public:
     // XInterface
 
     css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType )
-        throw( css::uno::RuntimeException )
+        throw( css::uno::RuntimeException, std::exception )
     {
         css::uno::Any aRet( OPropertySetHelper::queryInterface( rType ) );
         return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));

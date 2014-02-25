@@ -793,7 +793,7 @@ namespace comphelper
     // XAccessibleText
 
 
-    sal_Unicode OAccessibleTextHelper::getCharacter( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+    sal_Unicode OAccessibleTextHelper::getCharacter( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
     {
         OExternalLockGuard aGuard( this );
 
@@ -802,7 +802,7 @@ namespace comphelper
 
 
 
-    sal_Int32 OAccessibleTextHelper::getCharacterCount() throw (RuntimeException)
+    sal_Int32 OAccessibleTextHelper::getCharacterCount() throw (RuntimeException, std::exception)
     {
         OExternalLockGuard aGuard( this );
 
@@ -811,7 +811,7 @@ namespace comphelper
 
 
 
-    OUString OAccessibleTextHelper::getSelectedText() throw (RuntimeException)
+    OUString OAccessibleTextHelper::getSelectedText() throw (RuntimeException, std::exception)
     {
         OExternalLockGuard aGuard( this );
 
@@ -820,7 +820,7 @@ namespace comphelper
 
 
 
-    sal_Int32 OAccessibleTextHelper::getSelectionStart() throw (RuntimeException)
+    sal_Int32 OAccessibleTextHelper::getSelectionStart() throw (RuntimeException, std::exception)
     {
         OExternalLockGuard aGuard( this );
 
@@ -829,7 +829,7 @@ namespace comphelper
 
 
 
-    sal_Int32 OAccessibleTextHelper::getSelectionEnd() throw (RuntimeException)
+    sal_Int32 OAccessibleTextHelper::getSelectionEnd() throw (RuntimeException, std::exception)
     {
         OExternalLockGuard aGuard( this );
 
@@ -838,7 +838,7 @@ namespace comphelper
 
 
 
-    OUString OAccessibleTextHelper::getText() throw (RuntimeException)
+    OUString OAccessibleTextHelper::getText() throw (RuntimeException, std::exception)
     {
         OExternalLockGuard aGuard( this );
 
@@ -847,7 +847,7 @@ namespace comphelper
 
 
 
-    OUString OAccessibleTextHelper::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+    OUString OAccessibleTextHelper::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
     {
         OExternalLockGuard aGuard( this );
 
@@ -856,7 +856,7 @@ namespace comphelper
 
 
 
-    TextSegment OAccessibleTextHelper::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (IndexOutOfBoundsException, IllegalArgumentException, RuntimeException)
+    TextSegment OAccessibleTextHelper::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (IndexOutOfBoundsException, IllegalArgumentException, RuntimeException, std::exception)
     {
         OExternalLockGuard aGuard( this );
 
@@ -865,7 +865,7 @@ namespace comphelper
 
 
 
-    TextSegment OAccessibleTextHelper::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (IndexOutOfBoundsException, IllegalArgumentException, RuntimeException)
+    TextSegment OAccessibleTextHelper::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (IndexOutOfBoundsException, IllegalArgumentException, RuntimeException, std::exception)
     {
         OExternalLockGuard aGuard( this );
 
@@ -874,7 +874,7 @@ namespace comphelper
 
 
 
-    TextSegment OAccessibleTextHelper::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (IndexOutOfBoundsException, IllegalArgumentException, RuntimeException)
+    TextSegment OAccessibleTextHelper::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (IndexOutOfBoundsException, IllegalArgumentException, RuntimeException, std::exception)
     {
         OExternalLockGuard aGuard( this );
 

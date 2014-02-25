@@ -65,14 +65,14 @@ protected:
     virtual ~ScAccessibleDataPilotButton(void);
 public:
     // XAccessibleAction
-    virtual sal_Int32 SAL_CALL getAccessibleActionCount( ) throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL doAccessibleAction ( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-    virtual OUString SAL_CALL getAccessibleActionDescription ( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleKeyBinding > SAL_CALL getAccessibleActionKeyBinding( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getAccessibleActionCount( ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL doAccessibleAction ( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception);
+    virtual OUString SAL_CALL getAccessibleActionDescription ( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleKeyBinding > SAL_CALL getAccessibleActionKeyBinding( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception);
     ///=====  XInterface  =====================================================
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
         ::com::sun::star::uno::Type const & rType )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL acquire() throw ();
     virtual void SAL_CALL release() throw ();
     ///=====  XAccessibleComponent  ============================================
@@ -80,51 +80,51 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
         SAL_CALL getAccessibleAtPoint(
         const ::com::sun::star::awt::Point& rPoint )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual sal_Bool SAL_CALL isVisible(  )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL grabFocus(  )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual sal_Int32 SAL_CALL getForeground(  )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual sal_Int32 SAL_CALL getBackground(  )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     ///=====  XAccessibleContext  ==============================================
 
     /// Return the number of currently visible children.
     virtual sal_Int32 SAL_CALL
-        getAccessibleChildCount(void) throw (::com::sun::star::uno::RuntimeException);
+        getAccessibleChildCount(void) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     /// Return the specified child or NULL if index is invalid.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleChild(sal_Int32 nIndex)
         throw (::com::sun::star::uno::RuntimeException,
-                ::com::sun::star::lang::IndexOutOfBoundsException);
+                ::com::sun::star::lang::IndexOutOfBoundsException, std::exception);
 
     /// Return this objects index among the parents children.
     virtual sal_Int32 SAL_CALL
         getAccessibleIndexInParent(void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     /// Return the set of current states.
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
         getAccessibleStateSet(void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleRelationSet >
-        SAL_CALL getAccessibleRelationSet(  ) throw (::com::sun::star::uno::RuntimeException);
+        SAL_CALL getAccessibleRelationSet(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
     ///=====  XServiceInfo  ====================================================
 
     /** Returns an identifier for the implementation of this object.
     */
     virtual OUString SAL_CALL
         getImplementationName(void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     ///=====  XTypeProvider  ===================================================
 
@@ -132,7 +132,7 @@ public:
     */
     virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
         getImplementationId(void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 protected:
     /// Return this object's description.
@@ -143,15 +143,15 @@ protected:
     /// Return the object's current name.
     virtual OUString SAL_CALL
         createAccessibleName(void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     /// Return the object's current bounding box relative to the desktop.
     virtual Rectangle GetBoundingBoxOnScreen(void) const
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     /// Return the object's current bounding box relative to the parent object.
     virtual Rectangle GetBoundingBox(void) const
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 private:
     ScDPFieldControlBase* mpFieldWindow;
@@ -382,7 +382,7 @@ void ScAccessibleDataPilotControl::LostFocus()
 
 uno::Reference< XAccessible > SAL_CALL ScAccessibleDataPilotControl::getAccessibleAtPoint(
         const awt::Point& rPoint )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     uno::Reference<XAccessible> xAcc;
     if (containsPoint(rPoint))
@@ -403,13 +403,13 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDataPilotControl::getAccessib
 }
 
 sal_Bool SAL_CALL ScAccessibleDataPilotControl::isVisible(  )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     return sal_True;
 }
 
 void SAL_CALL ScAccessibleDataPilotControl::grabFocus(  )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -418,7 +418,7 @@ void SAL_CALL ScAccessibleDataPilotControl::grabFocus(  )
 }
 
 sal_Int32 SAL_CALL ScAccessibleDataPilotControl::getForeground(  )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -431,7 +431,7 @@ sal_Int32 SAL_CALL ScAccessibleDataPilotControl::getForeground(  )
 }
 
 sal_Int32 SAL_CALL ScAccessibleDataPilotControl::getBackground(  )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -447,7 +447,7 @@ sal_Int32 SAL_CALL ScAccessibleDataPilotControl::getBackground(  )
     ///=====  XAccessibleContext  ==============================================
 
 sal_Int32 SAL_CALL ScAccessibleDataPilotControl::getAccessibleChildCount(void)
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -455,7 +455,7 @@ sal_Int32 SAL_CALL ScAccessibleDataPilotControl::getAccessibleChildCount(void)
 }
 
 uno::Reference< XAccessible> SAL_CALL ScAccessibleDataPilotControl::getAccessibleChild(sal_Int32 nIndex)
-        throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
+        throw (uno::RuntimeException, lang::IndexOutOfBoundsException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -486,7 +486,7 @@ uno::Reference< XAccessible> SAL_CALL ScAccessibleDataPilotControl::getAccessibl
 }
 
 uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessibleDataPilotControl::getAccessibleStateSet(void)
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -511,7 +511,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessibleDataPilotControl::getAc
     ///=====  XServiceInfo  ====================================================
 
 OUString SAL_CALL ScAccessibleDataPilotControl::getImplementationName(void)
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     return OUString("ScAccessibleDataPilotControl");
 }
@@ -524,7 +524,7 @@ namespace
 }
 
 uno::Sequence<sal_Int8> SAL_CALL ScAccessibleDataPilotControl::getImplementationId(void)
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     return theScAccessibleDataPilotControlImplementationId::get().getSeq();
 }
@@ -543,7 +543,7 @@ OUString SAL_CALL ScAccessibleDataPilotControl::createAccessibleDescription(void
 }
 
 OUString SAL_CALL ScAccessibleDataPilotControl::createAccessibleName(void)
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -554,7 +554,7 @@ OUString SAL_CALL ScAccessibleDataPilotControl::createAccessibleName(void)
 }
 
 Rectangle ScAccessibleDataPilotControl::GetBoundingBoxOnScreen(void) const
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     if (mpFieldWindow)
         return mpFieldWindow->GetWindowExtentsRelative(NULL);
@@ -563,7 +563,7 @@ Rectangle ScAccessibleDataPilotControl::GetBoundingBoxOnScreen(void) const
 }
 
 Rectangle ScAccessibleDataPilotControl::GetBoundingBox(void) const
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     if (mpFieldWindow)
         return mpFieldWindow->GetWindowExtentsRelative(mpFieldWindow->GetAccessibleParentWindow());
@@ -622,19 +622,19 @@ void ScAccessibleDataPilotButton::ResetFocused()
 
 uno::Reference< XAccessible > SAL_CALL ScAccessibleDataPilotButton::getAccessibleAtPoint(
         const ::com::sun::star::awt::Point& /* rPoint */ )
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return NULL;
 }
 
 sal_Bool SAL_CALL ScAccessibleDataPilotButton::isVisible(  )
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return sal_True;
 }
 
 void SAL_CALL ScAccessibleDataPilotButton::grabFocus(  )
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -645,7 +645,7 @@ void SAL_CALL ScAccessibleDataPilotButton::grabFocus(  )
 }
 
 sal_Int32 SAL_CALL ScAccessibleDataPilotButton::getForeground(  )
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -658,7 +658,7 @@ throw (uno::RuntimeException)
 }
 
 sal_Int32 SAL_CALL ScAccessibleDataPilotButton::getBackground(  )
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -673,20 +673,20 @@ throw (uno::RuntimeException)
     ///=====  XAccessibleContext  ==============================================
 
 sal_Int32 SAL_CALL ScAccessibleDataPilotButton::getAccessibleChildCount(void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return 0;
 }
 
 uno::Reference< XAccessible> SAL_CALL ScAccessibleDataPilotButton::getAccessibleChild(sal_Int32 /* nIndex */)
         throw (::com::sun::star::uno::RuntimeException,
-                ::com::sun::star::lang::IndexOutOfBoundsException)
+                ::com::sun::star::lang::IndexOutOfBoundsException, std::exception)
 {
     throw lang::IndexOutOfBoundsException();
 }
 
 sal_Int32 SAL_CALL ScAccessibleDataPilotButton::getAccessibleIndexInParent(void)
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -694,7 +694,7 @@ sal_Int32 SAL_CALL ScAccessibleDataPilotButton::getAccessibleIndexInParent(void)
 }
 
 uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessibleDataPilotButton::getAccessibleStateSet(void)
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -720,7 +720,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessibleDataPilotButton::getAcc
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleRelationSet >
-    SAL_CALL ScAccessibleDataPilotButton::getAccessibleRelationSet( ) throw (::com::sun::star::uno::RuntimeException)
+    SAL_CALL ScAccessibleDataPilotButton::getAccessibleRelationSet( ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -741,7 +741,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessibleDataPilotButton::getAcc
 ///=====  XServiceInfo  ====================================================
 
 OUString SAL_CALL ScAccessibleDataPilotButton::getImplementationName(void)
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return OUString("ScAccessibleDataPilotButton");
 }
@@ -754,7 +754,7 @@ namespace
 }
 
 uno::Sequence<sal_Int8> SAL_CALL ScAccessibleDataPilotButton::getImplementationId(void)
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return theScAccessibleDataPilotButtonImplementationId::get().getSeq();
 }
@@ -770,7 +770,7 @@ OUString SAL_CALL ScAccessibleDataPilotButton::createAccessibleDescription(void)
 }
 
 OUString SAL_CALL ScAccessibleDataPilotButton::createAccessibleName(void)
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -781,7 +781,7 @@ OUString SAL_CALL ScAccessibleDataPilotButton::createAccessibleName(void)
 }
 
 Rectangle ScAccessibleDataPilotButton::GetBoundingBoxOnScreen(void) const
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     Rectangle aRect(GetBoundingBox());
 
@@ -795,7 +795,7 @@ Rectangle ScAccessibleDataPilotButton::GetBoundingBoxOnScreen(void) const
 }
 
 Rectangle ScAccessibleDataPilotButton::GetBoundingBox(void) const
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     if (mpFieldWindow)
         return Rectangle (mpFieldWindow->GetFieldPosition(const_cast<ScAccessibleDataPilotButton*> (this)->getAccessibleIndexInParent()), mpFieldWindow->GetFieldSize());
@@ -806,26 +806,26 @@ Rectangle ScAccessibleDataPilotButton::GetBoundingBox(void) const
 
 // XAccessibleAction
 
-sal_Int32 ScAccessibleDataPilotButton::getAccessibleActionCount( ) throw (uno::RuntimeException)
+sal_Int32 ScAccessibleDataPilotButton::getAccessibleActionCount( ) throw (uno::RuntimeException, std::exception)
 {
     return 1;
 }
 
-sal_Bool ScAccessibleDataPilotButton::doAccessibleAction ( sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+sal_Bool ScAccessibleDataPilotButton::doAccessibleAction ( sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
     if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
         throw lang::IndexOutOfBoundsException();
     return sal_True;
 }
 
-OUString ScAccessibleDataPilotButton::getAccessibleActionDescription ( sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+OUString ScAccessibleDataPilotButton::getAccessibleActionDescription ( sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
     if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
         throw lang::IndexOutOfBoundsException();
     return OUString("press");
 }
 
-::com::sun::star::uno::Reference< XAccessibleKeyBinding > ScAccessibleDataPilotButton::getAccessibleActionKeyBinding( sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Reference< XAccessibleKeyBinding > ScAccessibleDataPilotButton::getAccessibleActionKeyBinding( sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -845,7 +845,7 @@ OUString ScAccessibleDataPilotButton::getAccessibleActionDescription ( sal_Int32
 }
 
 uno::Any SAL_CALL ScAccessibleDataPilotButton::queryInterface( uno::Type const & rType )
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     uno::Any aAny (ScAccessibleContextBase::queryInterface(rType));
     if(!aAny.hasValue())

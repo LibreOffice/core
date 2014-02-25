@@ -75,7 +75,7 @@ static void lcl_throwIndexOutOfBoundsException( )
     }
 
 
-    OUString UnoControlRoadmapModel::getServiceName() throw(RuntimeException)
+    OUString UnoControlRoadmapModel::getServiceName() throw(RuntimeException, std::exception)
     {
         return OUString::createFromAscii( szServiceName_UnoControlRoadmapModel );
     }
@@ -111,7 +111,7 @@ static void lcl_throwIndexOutOfBoundsException( )
     }
 
 
-    Reference< XInterface > SAL_CALL UnoControlRoadmapModel::createInstance(  ) throw (Exception, ::com::sun::star::uno::RuntimeException)
+    Reference< XInterface > SAL_CALL UnoControlRoadmapModel::createInstance(  ) throw (Exception, ::com::sun::star::uno::RuntimeException, std::exception)
     {
         ORoadmapEntry* pRoadmapItem = new ORoadmapEntry();
         Reference< XInterface > xNewRoadmapItem = (::cppu::OWeakObject*)pRoadmapItem;
@@ -119,7 +119,7 @@ static void lcl_throwIndexOutOfBoundsException( )
     }
 
 
-    Reference< XInterface > SAL_CALL UnoControlRoadmapModel::createInstanceWithArguments( const Sequence< Any >& /*aArguments*/ ) throw (Exception, RuntimeException)
+    Reference< XInterface > SAL_CALL UnoControlRoadmapModel::createInstanceWithArguments( const Sequence< Any >& /*aArguments*/ ) throw (Exception, RuntimeException, std::exception)
     {
         // Todo: implementation of the arguments handling
         ORoadmapEntry* pRoadmapItem = new ORoadmapEntry();
@@ -132,7 +132,7 @@ static void lcl_throwIndexOutOfBoundsException( )
 
 
 
-    ::com::sun::star::uno::Any  SAL_CALL UnoControlRoadmapModel::queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
+    ::com::sun::star::uno::Any  SAL_CALL UnoControlRoadmapModel::queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception)
     {
         Any aRet = UnoControlRoadmapModel_Base::queryAggregation( rType );
         if ( !aRet.hasValue() )
@@ -156,19 +156,19 @@ static void lcl_throwIndexOutOfBoundsException( )
 
     // beans::XMultiPropertySet
 
-    Reference< XPropertySetInfo > UnoControlRoadmapModel::getPropertySetInfo(  ) throw(RuntimeException)
+    Reference< XPropertySetInfo > UnoControlRoadmapModel::getPropertySetInfo(  ) throw(RuntimeException, std::exception)
     {
         static Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;
     }
 
 
-    sal_Int32 SAL_CALL UnoControlRoadmapModel::getCount() throw(RuntimeException)
+    sal_Int32 SAL_CALL UnoControlRoadmapModel::getCount() throw(RuntimeException, std::exception)
     {
         return maRoadmapItems.size();
     }
 
-    Any SAL_CALL UnoControlRoadmapModel::getByIndex( sal_Int32 Index ) throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
+    Any SAL_CALL UnoControlRoadmapModel::getByIndex( sal_Int32 Index ) throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
     {
         if (( Index >= (sal_Int32)maRoadmapItems.size()) || (Index < 0))
             lcl_throwIndexOutOfBoundsException( );
@@ -262,7 +262,7 @@ static void lcl_throwIndexOutOfBoundsException( )
 
 
     void SAL_CALL UnoControlRoadmapModel::insertByIndex( const sal_Int32 Index, const Any& _Element)
-                                    throw (IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
+                                    throw (IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
     {
         if ( ( Index >= ( (sal_Int32)maRoadmapItems.size() + 1 ) ) || (Index < 0))
             lcl_throwIndexOutOfBoundsException( );
@@ -286,7 +286,7 @@ static void lcl_throwIndexOutOfBoundsException( )
 
 
     void SAL_CALL UnoControlRoadmapModel::removeByIndex( sal_Int32 Index)
-                                                throw    (IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
+                                                throw    (IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
     {
         if (( Index > (sal_Int32)maRoadmapItems.size()) || (Index < 0))
             lcl_throwIndexOutOfBoundsException( );
@@ -317,7 +317,7 @@ static void lcl_throwIndexOutOfBoundsException( )
 
 
     void SAL_CALL UnoControlRoadmapModel::replaceByIndex( const sal_Int32 Index, const Any& _Element)
-                                throw (IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
+                                throw (IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
     {
         Reference< XInterface > xRoadmapItem;
         _Element >>= xRoadmapItem;
@@ -330,25 +330,25 @@ static void lcl_throwIndexOutOfBoundsException( )
     }
 
 
-    Type SAL_CALL UnoControlRoadmapModel::getElementType() throw(RuntimeException)
+    Type SAL_CALL UnoControlRoadmapModel::getElementType() throw(RuntimeException, std::exception)
     {
         Type aType = getCppuType( ( Reference< XPropertySet>* ) NULL );
         return aType;
     }
 
 
-    sal_Bool SAL_CALL UnoControlRoadmapModel::hasElements() throw(RuntimeException)
+    sal_Bool SAL_CALL UnoControlRoadmapModel::hasElements() throw(RuntimeException, std::exception)
     {
         return !maRoadmapItems.empty();
     }
 
 
-    void SAL_CALL UnoControlRoadmapModel::addContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+    void SAL_CALL UnoControlRoadmapModel::addContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception)
     {
         maContainerListeners.addInterface( xListener );
     }
 
-    void SAL_CALL UnoControlRoadmapModel::removeContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+    void SAL_CALL UnoControlRoadmapModel::removeContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception)
     {
         maContainerListeners.removeInterface( xListener );
     }
@@ -367,7 +367,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( UnoRoadmapControl, UnoControlRoadmap_Base, Uno
 IMPLEMENT_FORWARD_XINTERFACE2( UnoRoadmapControl, UnoControlRoadmap_Base, UnoControlRoadmap_IBase )
 
 
-sal_Bool SAL_CALL UnoRoadmapControl::setModel(const Reference< XControlModel >& _rModel) throw ( RuntimeException )
+sal_Bool SAL_CALL UnoRoadmapControl::setModel(const Reference< XControlModel >& _rModel) throw ( RuntimeException, std::exception )
     {
 
 
@@ -393,7 +393,7 @@ sal_Bool SAL_CALL UnoRoadmapControl::setModel(const Reference< XControlModel >& 
 
 
 
-    void UnoRoadmapControl::dispose() throw(RuntimeException)
+    void UnoRoadmapControl::dispose() throw(RuntimeException, std::exception)
     {
         EventObject aEvt;
         aEvt.Source = (::cppu::OWeakObject*)this;
@@ -403,7 +403,7 @@ sal_Bool SAL_CALL UnoRoadmapControl::setModel(const Reference< XControlModel >& 
 
 
 
-void UnoRoadmapControl::elementInserted( const ContainerEvent& rEvent )throw(RuntimeException)
+void UnoRoadmapControl::elementInserted( const ContainerEvent& rEvent )throw(RuntimeException, std::exception)
 {
     Reference< XInterface > xRoadmapItem;
     rEvent.Element >>= xRoadmapItem;
@@ -422,7 +422,7 @@ void UnoRoadmapControl::elementInserted( const ContainerEvent& rEvent )throw(Run
 }
 
 
-void UnoRoadmapControl::elementRemoved( const ContainerEvent& rEvent )throw(RuntimeException)
+void UnoRoadmapControl::elementRemoved( const ContainerEvent& rEvent )throw(RuntimeException, std::exception)
 {
     Reference< XContainerListener >  xPeer(getPeer(), UNO_QUERY);
     if ( xPeer.is() )
@@ -435,7 +435,7 @@ void UnoRoadmapControl::elementRemoved( const ContainerEvent& rEvent )throw(Runt
 }
 
 
-void UnoRoadmapControl::elementReplaced( const ContainerEvent& rEvent )throw(RuntimeException)
+void UnoRoadmapControl::elementReplaced( const ContainerEvent& rEvent )throw(RuntimeException, std::exception)
 {
     Reference< XContainerListener >  xPeer(getPeer(), UNO_QUERY);
     if ( xPeer.is() )
@@ -443,7 +443,7 @@ void UnoRoadmapControl::elementReplaced( const ContainerEvent& rEvent )throw(Run
 }
 
 
-void SAL_CALL UnoRoadmapControl::itemStateChanged( const ItemEvent& rEvent ) throw (RuntimeException)
+void SAL_CALL UnoRoadmapControl::itemStateChanged( const ItemEvent& rEvent ) throw (RuntimeException, std::exception)
 {
     sal_Int16 CurItemIndex = sal::static_int_cast< sal_Int16 >(rEvent.ItemId);
     Any aAny;
@@ -456,7 +456,7 @@ void SAL_CALL UnoRoadmapControl::itemStateChanged( const ItemEvent& rEvent ) thr
 }
 
 
-void SAL_CALL UnoRoadmapControl::addItemListener( const Reference< XItemListener >& l ) throw (RuntimeException)
+void SAL_CALL UnoRoadmapControl::addItemListener( const Reference< XItemListener >& l ) throw (RuntimeException, std::exception)
 {
     maItemListeners.addInterface( l );
     if( getPeer().is() && maItemListeners.getLength() == 1 )
@@ -467,7 +467,7 @@ void SAL_CALL UnoRoadmapControl::addItemListener( const Reference< XItemListener
 }
 
 
-void SAL_CALL UnoRoadmapControl::removeItemListener( const Reference< XItemListener >& l ) throw (RuntimeException)
+void SAL_CALL UnoRoadmapControl::removeItemListener( const Reference< XItemListener >& l ) throw (RuntimeException, std::exception)
 {
     if( getPeer().is() && maItemListeners.getLength() == 1 )
     {
@@ -479,7 +479,7 @@ void SAL_CALL UnoRoadmapControl::removeItemListener( const Reference< XItemListe
 }
 
 
-void SAL_CALL UnoRoadmapControl::propertyChange( const PropertyChangeEvent& evt ) throw (RuntimeException)
+void SAL_CALL UnoRoadmapControl::propertyChange( const PropertyChangeEvent& evt ) throw (RuntimeException, std::exception)
 {
     Reference< XPropertyChangeListener >  xPeer(getPeer(), UNO_QUERY);
     if ( xPeer.is() )

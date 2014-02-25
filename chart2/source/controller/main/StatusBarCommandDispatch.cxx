@@ -89,7 +89,7 @@ void StatusBarCommandDispatch::fireStatusEvent(
 void SAL_CALL StatusBarCommandDispatch::dispatch(
     const util::URL& /* URL */,
     const Sequence< beans::PropertyValue >& /* Arguments */ )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     // nothing to do here
 }
@@ -104,7 +104,7 @@ void SAL_CALL StatusBarCommandDispatch::disposing()
 
 // ____ XEventListener (base of XModifyListener) ____
 void SAL_CALL StatusBarCommandDispatch::disposing( const lang::EventObject& /* Source */ )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     m_xModifiable.clear();
     m_xSelectionSupplier.clear();
@@ -112,7 +112,7 @@ void SAL_CALL StatusBarCommandDispatch::disposing( const lang::EventObject& /* S
 
 // ____ XModifyListener ____
 void SAL_CALL StatusBarCommandDispatch::modified( const lang::EventObject& aEvent )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if( m_xModifiable.is())
         m_bIsModified = m_xModifiable->isModified();
@@ -122,7 +122,7 @@ void SAL_CALL StatusBarCommandDispatch::modified( const lang::EventObject& aEven
 
 // ____ XSelectionChangeListener ____
 void SAL_CALL StatusBarCommandDispatch::selectionChanged( const lang::EventObject& /* aEvent */ )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if( m_xSelectionSupplier.is())
         m_aSelectedOID = ObjectIdentifier( m_xSelectionSupplier->getSelection() );

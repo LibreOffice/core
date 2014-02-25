@@ -55,14 +55,14 @@ void VCLXAccessibleFixedHyperlink::implGetLineBoundary( i18n::Boundary& rBoundar
 // XServiceInfo
 
 
-OUString VCLXAccessibleFixedHyperlink::getImplementationName() throw (uno::RuntimeException)
+OUString VCLXAccessibleFixedHyperlink::getImplementationName() throw (uno::RuntimeException, std::exception)
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleFixedHyperlink" );
 }
 
 
 
-uno::Sequence< OUString > VCLXAccessibleFixedHyperlink::getSupportedServiceNames() throw (uno::RuntimeException)
+uno::Sequence< OUString > VCLXAccessibleFixedHyperlink::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString > aNames(1);
     aNames[0] = "com.sun.star.awt.AccessibleFixedHyperlink";

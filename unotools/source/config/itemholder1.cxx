@@ -95,7 +95,7 @@ void ItemHolder1::holdConfigItem(EItem eItem)
 
 
 void SAL_CALL ItemHolder1::disposing(const css::lang::EventObject&)
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     css::uno::Reference< css::uno::XInterface > xSelfHold(static_cast< css::lang::XEventListener* >(this), css::uno::UNO_QUERY);
     impl_releaseAllItems();

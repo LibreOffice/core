@@ -44,14 +44,14 @@ public:
     virtual ~SwVbaView();
 
    // XView
-    virtual ::sal_Int32 SAL_CALL getSeekView() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setSeekView( ::sal_Int32 _seekview ) throw (css::uno::RuntimeException);
-    virtual ::sal_Int32 SAL_CALL getSplitSpecial() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setSplitSpecial( ::sal_Int32 _splitspecial ) throw (css::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL getTableGridLines() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setTableGridLines( ::sal_Bool _tablegridlines ) throw (css::uno::RuntimeException);
-    virtual ::sal_Int32 SAL_CALL getType() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setType( ::sal_Int32 _type ) throw (css::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getSeekView() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setSeekView( ::sal_Int32 _seekview ) throw (css::uno::RuntimeException, std::exception);
+    virtual ::sal_Int32 SAL_CALL getSplitSpecial() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setSplitSpecial( ::sal_Int32 _splitspecial ) throw (css::uno::RuntimeException, std::exception);
+    virtual ::sal_Bool SAL_CALL getTableGridLines() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setTableGridLines( ::sal_Bool _tablegridlines ) throw (css::uno::RuntimeException, std::exception);
+    virtual ::sal_Int32 SAL_CALL getType() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setType( ::sal_Int32 _type ) throw (css::uno::RuntimeException, std::exception);
 
     // XHelperInterface
     virtual OUString getServiceImplName();

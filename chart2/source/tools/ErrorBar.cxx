@@ -127,14 +127,14 @@ ErrorBar::~ErrorBar()
 {}
 
 uno::Reference< util::XCloneable > SAL_CALL ErrorBar::createClone()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< util::XCloneable >( new ErrorBar( *this ));
 }
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL ErrorBar::getPropertySetInfo()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     static uno::Reference< beans::XPropertySetInfo > aRef (
             new SfxItemPropertySetInfo( GetErrorBarPropertySet()->getPropertyMap() ) );
@@ -143,7 +143,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL ErrorBar::getPropertySetInfo(
 
 void ErrorBar::setPropertyValue( const OUString& rPropName, const uno::Any& rAny )
     throw (beans::UnknownPropertyException, beans::PropertyVetoException,
-            lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+            lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -216,7 +216,7 @@ OUString getSourceRangeStrFromLabeledSequences( uno::Sequence< uno::Reference< c
 }
 
 uno::Any ErrorBar::getPropertyValue(const OUString& rPropName)
-    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -269,7 +269,7 @@ uno::Any ErrorBar::getPropertyValue(const OUString& rPropName)
 }
 
 beans::PropertyState ErrorBar::getPropertyState( const OUString& rPropName )
-        throw (com::sun::star::beans::UnknownPropertyException)
+        throw (com::sun::star::beans::UnknownPropertyException, std::exception)
 {
     if(rPropName == "ErrorBarStyle")
     {
@@ -340,7 +340,7 @@ beans::PropertyState ErrorBar::getPropertyState( const OUString& rPropName )
 }
 
 uno::Sequence< beans::PropertyState > ErrorBar::getPropertyStates( const uno::Sequence< OUString >& rPropNames )
-        throw (com::sun::star::beans::UnknownPropertyException)
+        throw (com::sun::star::beans::UnknownPropertyException, std::exception)
 {
     uno::Sequence< beans::PropertyState > aRet( rPropNames.getLength() );
     for(sal_Int32 i = 0; i < rPropNames.getLength(); ++i)
@@ -351,41 +351,41 @@ uno::Sequence< beans::PropertyState > ErrorBar::getPropertyStates( const uno::Se
 }
 
 void ErrorBar::setPropertyToDefault( const OUString& )
-        throw (beans::UnknownPropertyException)
+        throw (beans::UnknownPropertyException, std::exception)
 {
     //keep them unimplemented for now
 }
 
 uno::Any ErrorBar::getPropertyDefault( const OUString& )
-        throw (beans::UnknownPropertyException, lang::WrappedTargetException)
+        throw (beans::UnknownPropertyException, lang::WrappedTargetException, std::exception)
 {
     //keep them unimplemented for now
     return uno::Any();
 }
 
 void ErrorBar::addPropertyChangeListener( const OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& )
-    throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
 }
 
 void ErrorBar::removePropertyChangeListener( const OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& )
-    throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
 }
 
 void ErrorBar::addVetoableChangeListener( const OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& )
-    throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
 }
 
 void ErrorBar::removeVetoableChangeListener( const OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& )
-    throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
 }
 
 // ____ XModifyBroadcaster ____
 void SAL_CALL ErrorBar::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -399,7 +399,7 @@ void SAL_CALL ErrorBar::addModifyListener( const uno::Reference< util::XModifyLi
 }
 
 void SAL_CALL ErrorBar::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -414,21 +414,21 @@ void SAL_CALL ErrorBar::removeModifyListener( const uno::Reference< util::XModif
 
 // ____ XModifyListener ____
 void SAL_CALL ErrorBar::modified( const lang::EventObject& aEvent )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
 // ____ XEventListener (base of XModifyListener) ____
 void SAL_CALL ErrorBar::disposing( const lang::EventObject& /* Source */ )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     // nothing
 }
 
 // ____ XDataSink ____
 void SAL_CALL ErrorBar::setData( const uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > >& aData )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     ModifyListenerHelper::removeListenerFromAllElements( m_aDataSequences, m_xModifyEventForwarder );
     EventListenerHelper::removeListenerFromAllElements( m_aDataSequences, this );
@@ -439,7 +439,7 @@ void SAL_CALL ErrorBar::setData( const uno::Sequence< uno::Reference< chart2::da
 
 // ____ XDataSource ____
 uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > SAL_CALL ErrorBar::getDataSequences()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return ContainerHelper::ContainerToSequence( m_aDataSequences );
 }

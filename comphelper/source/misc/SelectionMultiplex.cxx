@@ -123,7 +123,7 @@ void OSelectionChangeMultiplexer::dispose()
 
 // XEventListener
 
-void SAL_CALL OSelectionChangeMultiplexer::disposing( const  EventObject& _rSource) throw( RuntimeException)
+void SAL_CALL OSelectionChangeMultiplexer::disposing( const  EventObject& _rSource) throw( RuntimeException, std::exception)
 {
     if (m_pListener)
     {
@@ -144,7 +144,7 @@ void SAL_CALL OSelectionChangeMultiplexer::disposing( const  EventObject& _rSour
 
 // XSelectionChangeListener
 
-void SAL_CALL OSelectionChangeMultiplexer::selectionChanged( const  EventObject& _rEvent ) throw( RuntimeException)
+void SAL_CALL OSelectionChangeMultiplexer::selectionChanged( const  EventObject& _rEvent ) throw( RuntimeException, std::exception)
 {
     if (m_pListener && !locked())
         m_pListener->_selectionChanged(_rEvent);

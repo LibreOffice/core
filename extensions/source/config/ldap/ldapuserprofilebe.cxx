@@ -175,7 +175,7 @@ void LdapUserProfileBe::setPropertyValue(
     throw (
         css::beans::UnknownPropertyException, css::beans::PropertyVetoException,
         css::lang::IllegalArgumentException, css::lang::WrappedTargetException,
-        css::uno::RuntimeException)
+        css::uno::RuntimeException, std::exception)
 {
     throw css::lang::IllegalArgumentException(
         OUString("setPropertyValue not supported"),
@@ -186,7 +186,7 @@ css::uno::Any LdapUserProfileBe::getPropertyValue(
     OUString const & PropertyName)
     throw (
         css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
-        css::uno::RuntimeException)
+        css::uno::RuntimeException, std::exception)
 {
     for (sal_Int32 i = 0;;) {
         sal_Int32 j = PropertyName.indexOf(',', i);
@@ -218,7 +218,7 @@ OUString SAL_CALL LdapUserProfileBe::getLdapUserProfileBeName(void) {
 
 
 OUString SAL_CALL LdapUserProfileBe::getImplementationName(void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return getLdapUserProfileBeName() ;
 }
@@ -232,14 +232,14 @@ uno::Sequence<OUString> SAL_CALL LdapUserProfileBe::getLdapUserProfileBeServiceN
 }
 
 sal_Bool SAL_CALL LdapUserProfileBe::supportsService(const OUString& aServiceName)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, aServiceName);
 }
 
 uno::Sequence<OUString>
 SAL_CALL LdapUserProfileBe::getSupportedServiceNames(void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return getLdapUserProfileBeServiceNames() ;
 }

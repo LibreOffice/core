@@ -178,7 +178,7 @@ XSERVICEINFO_IMPL_1( FTPContent,
 
 // virtual
 OUString SAL_CALL FTPContent::getContentType()
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return OUString(FTP_CONTENT_TYPE);
 }
@@ -193,7 +193,7 @@ OUString SAL_CALL FTPContent::getContentType()
 
 //virtual
 void SAL_CALL FTPContent::abort( sal_Int32 /*CommandId*/ )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
 }
 
@@ -274,7 +274,7 @@ Any SAL_CALL FTPContent::execute(
     throw(
         Exception,
         CommandAbortedException,
-        RuntimeException
+        RuntimeException, std::exception
     )
 {
     ACTION action(NOACTION);
@@ -620,7 +620,7 @@ Any SAL_CALL FTPContent::execute(
 
 Sequence<ContentInfo > SAL_CALL
 FTPContent::queryCreatableContentsInfo(  )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return queryCreatableContentsInfo_Static();
 }
@@ -654,7 +654,7 @@ FTPContent::queryCreatableContentsInfo_Static(  )
 
 Reference<XContent > SAL_CALL
 FTPContent::createNewContent( const ContentInfo& Info )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     if( Info.Type =="application/vnd.sun.staroffice.ftp-file" || Info.Type == "application/vnd.sun.staroffice.ftp-folder" )
         return new FTPContent(m_xContext,
@@ -669,7 +669,7 @@ FTPContent::createNewContent( const ContentInfo& Info )
 
 Reference<XInterface > SAL_CALL
 FTPContent::getParent(  )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     Reference<XContentIdentifier>
         xIdent(new FTPContentIdentifier(m_aFTPURL.parent(false)));
@@ -680,7 +680,7 @@ FTPContent::getParent(  )
 void SAL_CALL
 FTPContent::setParent(const Reference<XInterface >& /*Parent*/ )
     throw (NoSupportException,
-           RuntimeException)
+           RuntimeException, std::exception)
 {
     throw NoSupportException();
 }

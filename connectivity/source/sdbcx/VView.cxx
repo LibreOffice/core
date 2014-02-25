@@ -82,12 +82,12 @@ void OView::disposing(void)
     ::osl::MutexGuard aGuard(m_aMutex);
 }
 
-Sequence< Type > SAL_CALL OView::getTypes(  ) throw(RuntimeException)
+Sequence< Type > SAL_CALL OView::getTypes(  ) throw(RuntimeException, std::exception)
 {
     return ::comphelper::concatSequences(ODescriptor::getTypes(),OView_BASE::getTypes());
 }
 
-Any SAL_CALL OView::queryInterface( const Type & rType ) throw(RuntimeException)
+Any SAL_CALL OView::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
 {
     Any aRet = OView_BASE::queryInterface( rType);
     return aRet.hasValue() ? aRet : ODescriptor::queryInterface( rType);
@@ -103,7 +103,7 @@ Any SAL_CALL OView::queryInterface( const Type & rType ) throw(RuntimeException)
     return *const_cast<OView*>(this)->getArrayHelper(isNew() ? 1 : 0);
 }
 
-OUString SAL_CALL OView::getName() throw(::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL OView::getName() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     OUString sComposedName;
     if(m_xMetaData.is())
@@ -117,12 +117,12 @@ OUString SAL_CALL OView::getName() throw(::com::sun::star::uno::RuntimeException
     return sComposedName;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OView::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OView::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 
-void SAL_CALL OView::setName( const OUString& ) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OView::setName( const OUString& ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
 }
 

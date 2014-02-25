@@ -32,7 +32,7 @@ namespace desktop
 
         // XCurrentContext
         virtual com::sun::star::uno::Any SAL_CALL getValueByName( const OUString& Name )
-            throw (com::sun::star::uno::RuntimeException);
+            throw (com::sun::star::uno::RuntimeException, std::exception);
 
     private:
             com::sun::star::uno::Reference< com::sun::star::uno::XCurrentContext > m_xNextContext;

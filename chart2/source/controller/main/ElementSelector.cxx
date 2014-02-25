@@ -262,7 +262,7 @@ ElementSelectorToolbarController::~ElementSelectorToolbarController()
 {
 }
 // XInterface
-Any SAL_CALL ElementSelectorToolbarController::queryInterface( const Type& _rType ) throw (RuntimeException)
+Any SAL_CALL ElementSelectorToolbarController::queryInterface( const Type& _rType ) throw (RuntimeException, std::exception)
 {
     Any aReturn = ToolboxController::queryInterface(_rType);
     if (!aReturn.hasValue())
@@ -277,11 +277,11 @@ void SAL_CALL ElementSelectorToolbarController::release() throw ()
 {
     ToolboxController::release();
 }
-void SAL_CALL ElementSelectorToolbarController::initialize( const Sequence< Any >& rArguments ) throw (Exception, RuntimeException)
+void SAL_CALL ElementSelectorToolbarController::initialize( const Sequence< Any >& rArguments ) throw (Exception, RuntimeException, std::exception)
 {
     ToolboxController::initialize(rArguments);
 }
-void SAL_CALL ElementSelectorToolbarController::statusChanged( const frame::FeatureStateEvent& rEvent ) throw ( RuntimeException )
+void SAL_CALL ElementSelectorToolbarController::statusChanged( const frame::FeatureStateEvent& rEvent ) throw ( RuntimeException, std::exception )
 {
     if( m_apSelectorListBox.get() )
     {
@@ -296,7 +296,7 @@ void SAL_CALL ElementSelectorToolbarController::statusChanged( const frame::Feat
     }
 }
 uno::Reference< awt::XWindow > SAL_CALL ElementSelectorToolbarController::createItemWindow( const uno::Reference< awt::XWindow >& xParent )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< awt::XWindow > xItemWindow;
     if( !m_apSelectorListBox.get() )

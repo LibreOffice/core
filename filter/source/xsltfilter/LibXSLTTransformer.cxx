@@ -376,13 +376,13 @@ namespace XSLT
     void
     LibXSLTTransformer::setInputStream(
             const css::uno::Reference<XInputStream>& inputStream)
-            throw (RuntimeException)
+            throw (RuntimeException, std::exception)
     {
         m_rInputStream = inputStream;
     }
 
     css::uno::Reference<XInputStream>
-    LibXSLTTransformer::getInputStream() throw (RuntimeException)
+    LibXSLTTransformer::getInputStream() throw (RuntimeException, std::exception)
     {
         return m_rInputStream;
     }
@@ -390,20 +390,20 @@ namespace XSLT
     void
     LibXSLTTransformer::setOutputStream(
             const css::uno::Reference<XOutputStream>& outputStream)
-            throw (RuntimeException)
+            throw (RuntimeException, std::exception)
     {
         m_rOutputStream = outputStream;
     }
 
     css::uno::Reference<XOutputStream>
-    LibXSLTTransformer::getOutputStream() throw (RuntimeException)
+    LibXSLTTransformer::getOutputStream() throw (RuntimeException, std::exception)
     {
         return m_rOutputStream;
     }
 
     void
     LibXSLTTransformer::addListener(const css::uno::Reference<XStreamListener>& listener)
-            throw (RuntimeException)
+            throw (RuntimeException, std::exception)
     {
         m_listeners.insert(m_listeners.begin(), listener);
     }
@@ -411,13 +411,13 @@ namespace XSLT
     void
     LibXSLTTransformer::removeListener(
             const css::uno::Reference<XStreamListener>& listener)
-            throw (RuntimeException)
+            throw (RuntimeException, std::exception)
     {
         m_listeners.remove(listener);
     }
 
     void
-    LibXSLTTransformer::start() throw (RuntimeException)
+    LibXSLTTransformer::start() throw (RuntimeException, std::exception)
     {
         ListenerList::iterator it;
         ListenerList* l = &m_listeners;
@@ -462,7 +462,7 @@ namespace XSLT
     }
 
     void
-    LibXSLTTransformer::terminate() throw (RuntimeException)
+    LibXSLTTransformer::terminate() throw (RuntimeException, std::exception)
     {
         if (m_Reader.is())
         {
@@ -475,7 +475,7 @@ namespace XSLT
 
     void
     LibXSLTTransformer::initialize(const Sequence<Any>& args)
-            throw (RuntimeException)
+            throw (RuntimeException, std::exception)
     {
         Sequence<Any> params;
         args[0] >>= params;

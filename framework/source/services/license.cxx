@@ -196,7 +196,7 @@ static OUString _getCurrentDateString()
 
 // execution of license check...
 css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::NamedValue >& )
-    throw( css::lang::IllegalArgumentException, css::uno::Exception)
+    throw( css::lang::IllegalArgumentException, css::uno::Exception, std::exception)
 {
     // return value
     Any aRet; aRet <<= sal_False;
@@ -303,17 +303,17 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
     return aRet;
 }
 
-void SAL_CALL License::close(sal_Bool /*bDeliverOwnership*/) throw (css::util::CloseVetoException)
+void SAL_CALL License::close(sal_Bool /*bDeliverOwnership*/) throw (css::util::CloseVetoException, std::exception)
 {
     if (!m_bTerminate)
         throw CloseVetoException();
 }
 void SAL_CALL License::addCloseListener(const css::uno::Reference< css::util::XCloseListener >&)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
 }
 void SAL_CALL License::removeCloseListener(const css::uno::Reference< css::util::XCloseListener >&)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
 }
 

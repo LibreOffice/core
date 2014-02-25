@@ -196,7 +196,7 @@ IMPLEMENT_SERVICE_INFO(OCalcConnection, "com.sun.star.sdbc.drivers.calc.Connecti
 
 
 
-Reference< XDatabaseMetaData > SAL_CALL OCalcConnection::getMetaData(  ) throw(SQLException, RuntimeException)
+Reference< XDatabaseMetaData > SAL_CALL OCalcConnection::getMetaData(  ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcConnection::getMetaData" );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -231,7 +231,7 @@ Reference< XDatabaseMetaData > SAL_CALL OCalcConnection::getMetaData(  ) throw(S
 
 
 
-Reference< XStatement > SAL_CALL OCalcConnection::createStatement(  ) throw(SQLException, RuntimeException)
+Reference< XStatement > SAL_CALL OCalcConnection::createStatement(  ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcConnection::createStatement" );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -246,7 +246,7 @@ Reference< XStatement > SAL_CALL OCalcConnection::createStatement(  ) throw(SQLE
 
 
 Reference< XPreparedStatement > SAL_CALL OCalcConnection::prepareStatement( const OUString& sql )
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcConnection::prepareStatement" );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -263,7 +263,7 @@ Reference< XPreparedStatement > SAL_CALL OCalcConnection::prepareStatement( cons
 
 
 Reference< XPreparedStatement > SAL_CALL OCalcConnection::prepareCall( const OUString& /*sql*/ )
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcConnection::prepareCall" );
     ::osl::MutexGuard aGuard( m_aMutex );

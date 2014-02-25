@@ -42,14 +42,14 @@ IndexEntrySupplier_Unicode::~IndexEntrySupplier_Unicode()
 }
 
 sal_Bool SAL_CALL IndexEntrySupplier_Unicode::loadAlgorithm( const lang::Locale& rLocale,
-    const OUString& rAlgorithm, sal_Int32 collatorOptions ) throw (RuntimeException)
+    const OUString& rAlgorithm, sal_Int32 collatorOptions ) throw (RuntimeException, std::exception)
 {
     index->init(rLocale, rAlgorithm);
     return IndexEntrySupplier_Common::loadAlgorithm(rLocale, rAlgorithm, collatorOptions);
 }
 
 OUString SAL_CALL IndexEntrySupplier_Unicode::getIndexKey( const OUString& rIndexEntry,
-    const OUString& rPhoneticEntry, const lang::Locale& rLocale ) throw (RuntimeException)
+    const OUString& rPhoneticEntry, const lang::Locale& rLocale ) throw (RuntimeException, std::exception)
 {
     return index->getIndexDescription(getEntry(rIndexEntry, rPhoneticEntry, rLocale));
 }
@@ -57,7 +57,7 @@ OUString SAL_CALL IndexEntrySupplier_Unicode::getIndexKey( const OUString& rInde
 sal_Int16 SAL_CALL IndexEntrySupplier_Unicode::compareIndexEntry(
     const OUString& rIndexEntry1, const OUString& rPhoneticEntry1, const lang::Locale& rLocale1,
     const OUString& rIndexEntry2, const OUString& rPhoneticEntry2, const lang::Locale& rLocale2 )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     sal_Int16 result =
             index->getIndexWeight(getEntry(rIndexEntry1, rPhoneticEntry1, rLocale1)) -
@@ -70,7 +70,7 @@ sal_Int16 SAL_CALL IndexEntrySupplier_Unicode::compareIndexEntry(
 }
 
 OUString SAL_CALL IndexEntrySupplier_Unicode::getIndexCharacter( const OUString& rIndexEntry,
-    const lang::Locale& rLocale, const OUString& rAlgorithm ) throw (RuntimeException) {
+    const lang::Locale& rLocale, const OUString& rAlgorithm ) throw (RuntimeException, std::exception) {
 
     if (loadAlgorithm( rLocale, rAlgorithm, CollatorOptions::CollatorOptions_IGNORE_CASE_ACCENT))
         return index->getIndexDescription(rIndexEntry);

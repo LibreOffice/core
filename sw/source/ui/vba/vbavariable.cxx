@@ -36,26 +36,26 @@ SwVbaVariable::~SwVbaVariable()
 }
 
 OUString SAL_CALL
-SwVbaVariable::getName() throw ( css::uno::RuntimeException )
+SwVbaVariable::getName() throw ( css::uno::RuntimeException, std::exception )
 {
     return maName;
 }
 
 void SAL_CALL
-SwVbaVariable::setName( const OUString& ) throw ( css::uno::RuntimeException )
+SwVbaVariable::setName( const OUString& ) throw ( css::uno::RuntimeException, std::exception )
 {
     throw uno::RuntimeException(" Fail to set name", uno::Reference< uno::XInterface >() );
 }
 
 uno::Any SAL_CALL
-SwVbaVariable::getValue() throw ( css::uno::RuntimeException )
+SwVbaVariable::getValue() throw ( css::uno::RuntimeException, std::exception )
 {
     uno::Reference< beans::XPropertySet > xProp( mxUserDefined, uno::UNO_QUERY_THROW );
     return xProp->getPropertyValue( maName );
 }
 
 void SAL_CALL
-SwVbaVariable::setValue( const uno::Any& rValue ) throw ( css::uno::RuntimeException )
+SwVbaVariable::setValue( const uno::Any& rValue ) throw ( css::uno::RuntimeException, std::exception )
 {
     // FIXME: fail to set the value if the new type of vaue is differenct from the original one.
     uno::Reference< beans::XPropertySet > xProp( mxUserDefined, uno::UNO_QUERY_THROW );
@@ -63,7 +63,7 @@ SwVbaVariable::setValue( const uno::Any& rValue ) throw ( css::uno::RuntimeExcep
 }
 
 sal_Int32 SAL_CALL
-SwVbaVariable::getIndex() throw ( css::uno::RuntimeException )
+SwVbaVariable::getIndex() throw ( css::uno::RuntimeException, std::exception )
 {
     const uno::Sequence< beans::PropertyValue > props = mxUserDefined->getPropertyValues();
     for (sal_Int32 i = 0; i < props.getLength(); ++i)

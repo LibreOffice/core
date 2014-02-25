@@ -47,7 +47,7 @@ namespace stoc_connector {
 
     sal_Int32 PipeConnection::read( Sequence < sal_Int8 > & aReadBytes , sal_Int32 nBytesToRead )
             throw(::com::sun::star::io::IOException,
-                  ::com::sun::star::uno::RuntimeException)
+                  ::com::sun::star::uno::RuntimeException, std::exception)
     {
         if( ! m_nStatus )
         {
@@ -64,7 +64,7 @@ namespace stoc_connector {
 
     void PipeConnection::write( const Sequence < sal_Int8 > &seq )
             throw(::com::sun::star::io::IOException,
-                  ::com::sun::star::uno::RuntimeException)
+                  ::com::sun::star::uno::RuntimeException, std::exception)
     {
         if( ! m_nStatus )
         {
@@ -80,14 +80,14 @@ namespace stoc_connector {
 
     void PipeConnection::flush( )
             throw(::com::sun::star::io::IOException,
-                  ::com::sun::star::uno::RuntimeException)
+                  ::com::sun::star::uno::RuntimeException, std::exception)
     {
 
     }
 
     void PipeConnection::close()
             throw(::com::sun::star::io::IOException,
-                  ::com::sun::star::uno::RuntimeException)
+                  ::com::sun::star::uno::RuntimeException, std::exception)
     {
         // ensure that close is called only once
         if(1 == osl_atomic_increment( (&m_nStatus) ) )
@@ -97,7 +97,7 @@ namespace stoc_connector {
     }
 
     OUString PipeConnection::getDescription()
-            throw( ::com::sun::star::uno::RuntimeException)
+            throw( ::com::sun::star::uno::RuntimeException, std::exception)
     {
         return m_sDescription;
     }

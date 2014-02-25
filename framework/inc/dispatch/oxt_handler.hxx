@@ -84,23 +84,23 @@ class Oxt_Handler  :    // baseclasses
         //---------------------------------------------------------------------------------------------------------
         virtual void SAL_CALL dispatchWithNotification(const css::util::URL&                                             aURL      ,
                                                        const css::uno::Sequence< css::beans::PropertyValue >&            lArguments,
-                                                       const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) throw( css::uno::RuntimeException );
+                                                       const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) throw( css::uno::RuntimeException, std::exception );
 
         //---------------------------------------------------------------------------------------------------------
         //  XDispatch
         //---------------------------------------------------------------------------------------------------------
         virtual void SAL_CALL dispatch              (  const css::util::URL&                                     aURL        ,
-                                                       const css::uno::Sequence< css::beans::PropertyValue >&    lArguments  ) throw( css::uno::RuntimeException );
+                                                       const css::uno::Sequence< css::beans::PropertyValue >&    lArguments  ) throw( css::uno::RuntimeException, std::exception );
         // not supported !
         virtual void SAL_CALL addStatusListener     (  const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/   ,
-                                                       const css::util::URL&                                     /*aURL*/        ) throw( css::uno::RuntimeException ) {};
+                                                       const css::util::URL&                                     /*aURL*/        ) throw( css::uno::RuntimeException, std::exception ) {};
         virtual void SAL_CALL removeStatusListener  (  const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/   ,
-                                                       const css::util::URL&                                     /*aURL*/        ) throw( css::uno::RuntimeException ) {};
+                                                       const css::util::URL&                                     /*aURL*/        ) throw( css::uno::RuntimeException, std::exception ) {};
 
         //---------------------------------------------------------------------------------------------------------
         //  XExtendedFilterDetection
         //---------------------------------------------------------------------------------------------------------
-        virtual OUString SAL_CALL detect     (        css::uno::Sequence< css::beans::PropertyValue >&    lDescriptor ) throw( css::uno::RuntimeException );
+        virtual OUString SAL_CALL detect     (        css::uno::Sequence< css::beans::PropertyValue >&    lDescriptor ) throw( css::uno::RuntimeException, std::exception );
 
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods

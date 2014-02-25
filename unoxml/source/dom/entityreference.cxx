@@ -46,7 +46,7 @@ namespace DOM
         }
     }
 
-    OUString SAL_CALL CEntityReference::getNodeName()throw (RuntimeException)
+    OUString SAL_CALL CEntityReference::getNodeName()throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -59,7 +59,7 @@ namespace DOM
         return aName;
     }
 
-    OUString SAL_CALL CEntityReference::getNodeValue() throw (RuntimeException)
+    OUString SAL_CALL CEntityReference::getNodeValue() throw (RuntimeException, std::exception)
     {
         return OUString();
     }

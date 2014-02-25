@@ -84,25 +84,25 @@ public:
 
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
-        throw ( css::uno::Exception, css::uno::RuntimeException );
+        throw ( css::uno::Exception, css::uno::RuntimeException, std::exception );
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw ( css::uno::RuntimeException );
+        throw ( css::uno::RuntimeException, std::exception );
     virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName )
-        throw ( css::uno::RuntimeException );
+        throw ( css::uno::RuntimeException, std::exception );
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw ( css::uno::RuntimeException );
+        throw ( css::uno::RuntimeException, std::exception );
 
     // XCustomShapeEngine
     virtual css::uno::Reference< css::drawing::XShape > SAL_CALL render()
-        throw ( css::uno::RuntimeException );
+        throw ( css::uno::RuntimeException, std::exception );
     virtual css::awt::Rectangle SAL_CALL getTextBounds()
-        throw ( css::uno::RuntimeException );
+        throw ( css::uno::RuntimeException, std::exception );
     virtual css::drawing::PolyPolygonBezierCoords SAL_CALL getLineGeometry()
-        throw ( css::uno::RuntimeException );
+        throw ( css::uno::RuntimeException, std::exception );
     virtual css::uno::Sequence< css::uno::Reference< css::drawing::XCustomShapeHandle > > SAL_CALL getInteraction()
-        throw ( css::uno::RuntimeException );
+        throw ( css::uno::RuntimeException, std::exception );
 };
 
 EnhancedCustomShapeEngine::EnhancedCustomShapeEngine() :
@@ -127,7 +127,7 @@ void SAL_CALL EnhancedCustomShapeEngine::release() throw()
 // XInitialization ------------------------------------------------------------
 
 void SAL_CALL EnhancedCustomShapeEngine::initialize( const Sequence< Any >& aArguments )
-    throw ( Exception, RuntimeException )
+    throw ( Exception, RuntimeException, std::exception )
 {
     sal_Int32 i;
     Sequence< beans::PropertyValue > aParameter;
@@ -148,17 +148,17 @@ void SAL_CALL EnhancedCustomShapeEngine::initialize( const Sequence< Any >& aArg
 
 // XServiceInfo ---------------------------------------------------------------
 OUString SAL_CALL EnhancedCustomShapeEngine::getImplementationName()
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.drawing.EnhancedCustomShapeEngine" );
 }
 sal_Bool SAL_CALL EnhancedCustomShapeEngine::supportsService( const OUString& rServiceName )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 Sequence< OUString > SAL_CALL EnhancedCustomShapeEngine::getSupportedServiceNames()
-    throw ( RuntimeException )
+    throw ( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
@@ -272,7 +272,7 @@ void SetTemporary( uno::Reference< drawing::XShape >& xShape )
 }
 
 Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
-    throw ( RuntimeException )
+    throw ( RuntimeException, std::exception )
 {
     Reference< drawing::XShape > xShape;
     SdrObject* pSdrObjCustomShape( GetSdrObjectFromXShape( mxShape ) );
@@ -371,7 +371,7 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
 }
 
 awt::Rectangle SAL_CALL EnhancedCustomShapeEngine::getTextBounds()
-    throw ( RuntimeException )
+    throw ( RuntimeException, std::exception )
 {
     awt::Rectangle aTextRect;
     SdrObject* pSdrObjCustomShape( GetSdrObjectFromXShape( mxShape ) );
@@ -392,7 +392,7 @@ awt::Rectangle SAL_CALL EnhancedCustomShapeEngine::getTextBounds()
 }
 
 drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEngine::getLineGeometry()
-    throw ( RuntimeException )
+    throw ( RuntimeException, std::exception )
 {
     drawing::PolyPolygonBezierCoords aPolyPolygonBezierCoords;
     SdrObject* pSdrObjCustomShape( GetSdrObjectFromXShape( mxShape ) );
@@ -473,7 +473,7 @@ drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEngine::getLineGeom
 }
 
 Sequence< Reference< drawing::XCustomShapeHandle > > SAL_CALL EnhancedCustomShapeEngine::getInteraction()
-    throw ( RuntimeException )
+    throw ( RuntimeException, std::exception )
 {
     sal_uInt32 i, nHdlCount = 0;
     SdrObject* pSdrObjCustomShape = GetSdrObjectFromXShape( mxShape );

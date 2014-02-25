@@ -143,7 +143,7 @@ void FlushListener::SetPropSet( Reference< XLinguProperties > &rPS )
 
 
 void SAL_CALL FlushListener::disposing( const EventObject& rSource )
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -162,7 +162,7 @@ void SAL_CALL FlushListener::disposing( const EventObject& rSource )
 
 void SAL_CALL FlushListener::processDictionaryListEvent(
             const DictionaryListEvent& rDicListEvent )
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -185,7 +185,7 @@ void SAL_CALL FlushListener::processDictionaryListEvent(
 
 void SAL_CALL FlushListener::propertyChange(
             const PropertyChangeEvent& rEvt )
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 

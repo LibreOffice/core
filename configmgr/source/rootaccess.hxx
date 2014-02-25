@@ -82,12 +82,12 @@ public:
     virtual void SAL_CALL addChangesListener(
         com::sun::star::uno::Reference< com::sun::star::util::XChangesListener >
             const & aListener)
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL removeChangesListener(
         com::sun::star::uno::Reference< com::sun::star::util::XChangesListener >
             const & aListener)
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL commitChanges()
         throw (
@@ -96,10 +96,10 @@ public:
             std::exception);
 
     virtual sal_Bool SAL_CALL hasPendingChanges()
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual com::sun::star::util::ChangesSet SAL_CALL getPendingChanges()
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
 private:
     virtual ~RootAccess();
@@ -130,10 +130,10 @@ private:
 
     virtual com::sun::star::uno::Any SAL_CALL queryInterface(
         com::sun::star::uno::Type const & aType)
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     typedef
         std::multiset<

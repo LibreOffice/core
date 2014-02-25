@@ -80,17 +80,17 @@ OBookmarkContainer::~OBookmarkContainer()
 }
 
 // XServiceInfo
-OUString SAL_CALL OBookmarkContainer::getImplementationName(  ) throw(RuntimeException)
+OUString SAL_CALL OBookmarkContainer::getImplementationName(  ) throw(RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.dba.OBookmarkContainer");
 }
 
-sal_Bool SAL_CALL OBookmarkContainer::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
+sal_Bool SAL_CALL OBookmarkContainer::supportsService( const OUString& _rServiceName ) throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
-Sequence< OUString > SAL_CALL OBookmarkContainer::getSupportedServiceNames(  ) throw(RuntimeException)
+Sequence< OUString > SAL_CALL OBookmarkContainer::getSupportedServiceNames(  ) throw(RuntimeException, std::exception)
 {
     Sequence< OUString > aReturn(1);
     aReturn.getArray()[0] = "com.sun.star.sdb.DefinitionContainer";
@@ -98,7 +98,7 @@ Sequence< OUString > SAL_CALL OBookmarkContainer::getSupportedServiceNames(  ) t
 }
 
 // XNameContainer
-void SAL_CALL OBookmarkContainer::insertByName( const OUString& _rName, const Any& aElement ) throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
+void SAL_CALL OBookmarkContainer::insertByName( const OUString& _rName, const Any& aElement ) throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_rMutex);
     checkValid(sal_True);
@@ -126,7 +126,7 @@ void SAL_CALL OBookmarkContainer::insertByName( const OUString& _rName, const An
     }
 }
 
-void SAL_CALL OBookmarkContainer::removeByName( const OUString& _rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
+void SAL_CALL OBookmarkContainer::removeByName( const OUString& _rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     OUString sOldBookmark;
     {
@@ -158,7 +158,7 @@ void SAL_CALL OBookmarkContainer::removeByName( const OUString& _rName ) throw(N
 }
 
 // XNameReplace
-void SAL_CALL OBookmarkContainer::replaceByName( const OUString& _rName, const Any& aElement ) throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
+void SAL_CALL OBookmarkContainer::replaceByName( const OUString& _rName, const Any& aElement ) throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     ClearableMutexGuard aGuard(m_rMutex);
     checkValid(sal_True);
@@ -193,14 +193,14 @@ void SAL_CALL OBookmarkContainer::replaceByName( const OUString& _rName, const A
     }
 }
 
-void SAL_CALL OBookmarkContainer::addContainerListener( const Reference< XContainerListener >& _rxListener ) throw(RuntimeException)
+void SAL_CALL OBookmarkContainer::addContainerListener( const Reference< XContainerListener >& _rxListener ) throw(RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_rMutex);
     if (_rxListener.is())
         m_aContainerListeners.addInterface(_rxListener);
 }
 
-void SAL_CALL OBookmarkContainer::removeContainerListener( const Reference< XContainerListener >& _rxListener ) throw(RuntimeException)
+void SAL_CALL OBookmarkContainer::removeContainerListener( const Reference< XContainerListener >& _rxListener ) throw(RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_rMutex);
     if (_rxListener.is())
@@ -208,14 +208,14 @@ void SAL_CALL OBookmarkContainer::removeContainerListener( const Reference< XCon
 }
 
 // XElementAccess
-Type SAL_CALL OBookmarkContainer::getElementType( ) throw (RuntimeException)
+Type SAL_CALL OBookmarkContainer::getElementType( ) throw (RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_rMutex);
     checkValid(sal_False);
     return ::getCppuType( static_cast< OUString* >(NULL) );
 }
 
-sal_Bool SAL_CALL OBookmarkContainer::hasElements( ) throw (RuntimeException)
+sal_Bool SAL_CALL OBookmarkContainer::hasElements( ) throw (RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_rMutex);
     checkValid(sal_False);
@@ -223,7 +223,7 @@ sal_Bool SAL_CALL OBookmarkContainer::hasElements( ) throw (RuntimeException)
 }
 
 // XEnumerationAccess
-Reference< XEnumeration > SAL_CALL OBookmarkContainer::createEnumeration(  ) throw(RuntimeException)
+Reference< XEnumeration > SAL_CALL OBookmarkContainer::createEnumeration(  ) throw(RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_rMutex);
     checkValid(sal_False);
@@ -231,14 +231,14 @@ Reference< XEnumeration > SAL_CALL OBookmarkContainer::createEnumeration(  ) thr
 }
 
 // XIndexAccess
-sal_Int32 SAL_CALL OBookmarkContainer::getCount(  ) throw(RuntimeException)
+sal_Int32 SAL_CALL OBookmarkContainer::getCount(  ) throw(RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_rMutex);
     checkValid(sal_False);
     return m_aBookmarks.size();
 }
 
-Any SAL_CALL OBookmarkContainer::getByIndex( sal_Int32 _nIndex ) throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
+Any SAL_CALL OBookmarkContainer::getByIndex( sal_Int32 _nIndex ) throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_rMutex);
     checkValid(sal_False);
@@ -249,7 +249,7 @@ Any SAL_CALL OBookmarkContainer::getByIndex( sal_Int32 _nIndex ) throw(IndexOutO
     return makeAny(m_aBookmarksIndexed[_nIndex]->second);
 }
 
-Any SAL_CALL OBookmarkContainer::getByName( const OUString& _rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
+Any SAL_CALL OBookmarkContainer::getByName( const OUString& _rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_rMutex);
     checkValid(sal_False);
@@ -260,7 +260,7 @@ Any SAL_CALL OBookmarkContainer::getByName( const OUString& _rName ) throw(NoSuc
     return makeAny(m_aBookmarks[_rName]);
 }
 
-Sequence< OUString > SAL_CALL OBookmarkContainer::getElementNames(  ) throw(RuntimeException)
+Sequence< OUString > SAL_CALL OBookmarkContainer::getElementNames(  ) throw(RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_rMutex);
     checkValid(sal_False);
@@ -279,7 +279,7 @@ Sequence< OUString > SAL_CALL OBookmarkContainer::getElementNames(  ) throw(Runt
     return aNames;
 }
 
-sal_Bool SAL_CALL OBookmarkContainer::hasByName( const OUString& _rName ) throw(RuntimeException)
+sal_Bool SAL_CALL OBookmarkContainer::hasByName( const OUString& _rName ) throw(RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_rMutex);
     checkValid(sal_False);
@@ -336,12 +336,12 @@ void OBookmarkContainer::checkValid(sal_Bool /*_bIntendWriteAccess*/) const thro
 {
 }
 
-Reference< XInterface > SAL_CALL OBookmarkContainer::getParent(  ) throw (RuntimeException)
+Reference< XInterface > SAL_CALL OBookmarkContainer::getParent(  ) throw (RuntimeException, std::exception)
 {
     return m_rParent;
 }
 
-void SAL_CALL OBookmarkContainer::setParent( const Reference< XInterface >& /*Parent*/ ) throw (NoSupportException, RuntimeException)
+void SAL_CALL OBookmarkContainer::setParent( const Reference< XInterface >& /*Parent*/ ) throw (NoSupportException, RuntimeException, std::exception)
 {
     throw NoSupportException();
 }

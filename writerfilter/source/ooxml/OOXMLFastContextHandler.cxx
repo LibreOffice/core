@@ -226,7 +226,7 @@ bool OOXMLFastContextHandler::prepareMceContext(Token_t nElement, const uno::Ref
 void SAL_CALL OOXMLFastContextHandler::startFastElement
 (Token_t Element,
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
-    throw (uno::RuntimeException, xml::sax::SAXException)
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
 #ifdef DEBUG_CONTEXT_HANDLER
     debug_logger->startElement("contexthandler.element");
@@ -252,7 +252,7 @@ void SAL_CALL OOXMLFastContextHandler::startFastElement
 void SAL_CALL OOXMLFastContextHandler::startUnknownElement
 (const OUString & Namespace, const OUString & Name,
  const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
-throw (uno::RuntimeException, xml::sax::SAXException)
+throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
 #ifdef DEBUG_CONTEXT_HANDLER
     debug_logger->startElement("contexthandler.unknown-element");
@@ -266,7 +266,7 @@ throw (uno::RuntimeException, xml::sax::SAXException)
 }
 
 void SAL_CALL OOXMLFastContextHandler::endFastElement(Token_t Element)
-throw (uno::RuntimeException, xml::sax::SAXException)
+throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
 #ifdef DEBUG_CONTEXT_HANDLER
     string sToken = fastTokenToId(Element);
@@ -317,7 +317,7 @@ void OOXMLFastContextHandler::lcl_endFastElement
 
 void SAL_CALL OOXMLFastContextHandler::endUnknownElement
 (const OUString & , const OUString & )
-throw (uno::RuntimeException, xml::sax::SAXException)
+throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
 #ifdef DEBUG_CONTEXT_HANDLER
     debug_logger->endElement();
@@ -329,7 +329,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
  OOXMLFastContextHandler::createFastChildContext
 (Token_t Element,
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
-    throw (uno::RuntimeException, xml::sax::SAXException)
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
 #ifdef DEBUG_CONTEXT_HANDLER
     debug_logger->startElement("contexthandler.createFastChildContext");
@@ -365,7 +365,7 @@ OOXMLFastContextHandler::createUnknownChildContext
 (const OUString & Namespace,
  const OUString & Name,
  const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
-    throw (uno::RuntimeException, xml::sax::SAXException)
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
 #ifdef DEBUG_CONTEXT_HANDLER
     debug_logger->startElement("contexthandler.createUnknownChildContext");
@@ -383,7 +383,7 @@ OOXMLFastContextHandler::createUnknownChildContext
 
 void SAL_CALL OOXMLFastContextHandler::characters
 (const OUString & aChars)
-    throw (uno::RuntimeException, xml::sax::SAXException)
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     lcl_characters(aChars);
 }
@@ -1734,7 +1734,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
 OOXMLFastContextHandlerTable::createFastChildContext
 (Token_t Element,
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
-    throw (uno::RuntimeException, xml::sax::SAXException)
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     addCurrentChild();
 
@@ -2080,7 +2080,7 @@ void SAL_CALL OOXMLFastContextHandlerShape::startUnknownElement
 (const OUString & Namespace,
  const OUString & Name,
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
-    throw (uno::RuntimeException, xml::sax::SAXException)
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     if (mrShapeContext.is())
         mrShapeContext->startUnknownElement(Namespace, Name, Attribs);
@@ -2141,7 +2141,7 @@ void OOXMLFastContextHandlerShape::lcl_endFastElement
 void SAL_CALL OOXMLFastContextHandlerShape::endUnknownElement
 (const OUString & Namespace,
  const OUString & Name)
-    throw (uno::RuntimeException, xml::sax::SAXException)
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     if (mrShapeContext.is())
         mrShapeContext->endUnknownElement(Namespace, Name);
@@ -2210,7 +2210,7 @@ OOXMLFastContextHandlerShape::createUnknownChildContext
 (const OUString & Namespace,
  const OUString & Name,
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
-    throw (uno::RuntimeException, xml::sax::SAXException)
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     uno::Reference< xml::sax::XFastContextHandler > xResult;
 
@@ -2254,7 +2254,7 @@ void SAL_CALL OOXMLFastContextHandlerWrapper::startUnknownElement
 (const OUString & Namespace,
  const OUString & Name,
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
-    throw (uno::RuntimeException, xml::sax::SAXException)
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     if (mxContext.is())
         mxContext->startUnknownElement(Namespace, Name, Attribs);
@@ -2263,7 +2263,7 @@ void SAL_CALL OOXMLFastContextHandlerWrapper::startUnknownElement
 void SAL_CALL OOXMLFastContextHandlerWrapper::endUnknownElement
 (const OUString & Namespace,
  const OUString & Name)
-    throw (uno::RuntimeException, xml::sax::SAXException)
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     if (mxContext.is())
         mxContext->endUnknownElement(Namespace, Name);
@@ -2274,7 +2274,7 @@ OOXMLFastContextHandlerWrapper::createUnknownChildContext
 (const OUString & Namespace,
  const OUString & Name,
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
-    throw (uno::RuntimeException, xml::sax::SAXException)
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     uno::Reference< xml::sax::XFastContextHandler > xResult;
 

@@ -40,7 +40,7 @@ UnoControlContainerModel::UnoControlContainerModel( const ::com::sun::star::uno:
     ImplRegisterProperty( BASEPROPERTY_TEXT );
 }
 
-OUString UnoControlContainerModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
+OUString UnoControlContainerModel::getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return OUString::createFromAscii( szServiceName_UnoControlContainerModel );
 }
@@ -56,7 +56,7 @@ OUString UnoControlContainerModel::getServiceName() throw(::com::sun::star::uno:
 }
 
 
-::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > UnoControlContainerModel::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > UnoControlContainerModel::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     static ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;

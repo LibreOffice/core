@@ -409,121 +409,121 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
     }
 }
 
-sal_Bool SAL_CALL OCacheSet::wasNull(  ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OCacheSet::wasNull(  ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "OCacheSet::wasNull" );
     return m_xDriverRow->wasNull();
 }
 
-OUString SAL_CALL OCacheSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OCacheSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "OCacheSet::getString" );
     return m_xDriverRow->getString(columnIndex);
 }
 
-sal_Bool SAL_CALL OCacheSet::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OCacheSet::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "OCacheSet::getBoolean" );
     return m_xDriverRow->getBoolean(columnIndex);
 }
 
-sal_Int8 SAL_CALL OCacheSet::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+sal_Int8 SAL_CALL OCacheSet::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "OCacheSet::getByte" );
     return m_xDriverRow->getByte(columnIndex);
 }
 
-sal_Int16 SAL_CALL OCacheSet::getShort( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+sal_Int16 SAL_CALL OCacheSet::getShort( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "OCacheSet::getShort" );
     return m_xDriverRow->getShort(columnIndex);
 }
 
-sal_Int32 SAL_CALL OCacheSet::getInt( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OCacheSet::getInt( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "OCacheSet::getInt" );
     return m_xDriverRow->getInt(columnIndex);
 }
 
-sal_Int64 SAL_CALL OCacheSet::getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+sal_Int64 SAL_CALL OCacheSet::getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "OCacheSet::getLong" );
     return m_xDriverRow->getLong(columnIndex);
 }
 
-float SAL_CALL OCacheSet::getFloat( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+float SAL_CALL OCacheSet::getFloat( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "OCacheSet::getFloat" );
     return m_xDriverRow->getFloat(columnIndex);
 }
 
-double SAL_CALL OCacheSet::getDouble( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+double SAL_CALL OCacheSet::getDouble( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "OCacheSet::getDouble" );
     return m_xDriverRow->getDouble(columnIndex);
 }
 
-Sequence< sal_Int8 > SAL_CALL OCacheSet::getBytes( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Sequence< sal_Int8 > SAL_CALL OCacheSet::getBytes( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "OCacheSet::getBytes" );
     return m_xDriverRow->getBytes(columnIndex);
 }
 
-::com::sun::star::util::Date SAL_CALL OCacheSet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+::com::sun::star::util::Date SAL_CALL OCacheSet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "OCacheSet::getDate" );
     return m_xDriverRow->getDate(columnIndex);
 }
 
-::com::sun::star::util::Time SAL_CALL OCacheSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+::com::sun::star::util::Time SAL_CALL OCacheSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "OCacheSet::getTime" );
     return m_xDriverRow->getTime(columnIndex);
 }
 
-::com::sun::star::util::DateTime SAL_CALL OCacheSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+::com::sun::star::util::DateTime SAL_CALL OCacheSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "OCacheSet::getTimestamp" );
     return m_xDriverRow->getTimestamp(columnIndex);
 }
 
-Reference< ::com::sun::star::io::XInputStream > SAL_CALL OCacheSet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< ::com::sun::star::io::XInputStream > SAL_CALL OCacheSet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "OCacheSet::getBinaryStream" );
     return m_xDriverRow->getBinaryStream(columnIndex);
 }
 
-Reference< ::com::sun::star::io::XInputStream > SAL_CALL OCacheSet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< ::com::sun::star::io::XInputStream > SAL_CALL OCacheSet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "OCacheSet::getCharacterStream" );
     return m_xDriverRow->getCharacterStream(columnIndex);
 }
 
-Any SAL_CALL OCacheSet::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException)
+Any SAL_CALL OCacheSet::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "OCacheSet::getObject" );
     return m_xDriverRow->getObject(columnIndex,typeMap);
 }
 
-Reference< XRef > SAL_CALL OCacheSet::getRef( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< XRef > SAL_CALL OCacheSet::getRef( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "OCacheSet::getRef" );
     return m_xDriverRow->getRef(columnIndex);
 }
 
-Reference< XBlob > SAL_CALL OCacheSet::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< XBlob > SAL_CALL OCacheSet::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "OCacheSet::getBlob" );
     return m_xDriverRow->getBlob(columnIndex);
 }
 
-Reference< XClob > SAL_CALL OCacheSet::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< XClob > SAL_CALL OCacheSet::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "OCacheSet::getClob" );
     return m_xDriverRow->getClob(columnIndex);
 }
 
-Reference< XArray > SAL_CALL OCacheSet::getArray( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< XArray > SAL_CALL OCacheSet::getArray( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "OCacheSet::getArray" );
     return m_xDriverRow->getArray(columnIndex);

@@ -50,41 +50,41 @@ ScVbaCharacters::ScVbaCharacters( const uno::Reference< XHelperInterface >& xPar
 }
 
 OUString SAL_CALL
-ScVbaCharacters::getCaption() throw (css::uno::RuntimeException)
+ScVbaCharacters::getCaption() throw (css::uno::RuntimeException, std::exception)
 {
     return m_xTextRange->getString();
 }
 void SAL_CALL
-ScVbaCharacters::setCaption( const OUString& _caption ) throw (css::uno::RuntimeException)
+ScVbaCharacters::setCaption( const OUString& _caption ) throw (css::uno::RuntimeException, std::exception)
 {
     m_xTextRange->setString( _caption );
 
 }
 
 ::sal_Int32 SAL_CALL
-ScVbaCharacters::getCount() throw (css::uno::RuntimeException)
+ScVbaCharacters::getCount() throw (css::uno::RuntimeException, std::exception)
 {
     return getCaption().getLength();
 }
 
 OUString SAL_CALL
-ScVbaCharacters::getText() throw (css::uno::RuntimeException)
+ScVbaCharacters::getText() throw (css::uno::RuntimeException, std::exception)
 {
     return getCaption();
 }
 void SAL_CALL
-ScVbaCharacters::setText( const OUString& _text ) throw (css::uno::RuntimeException)
+ScVbaCharacters::setText( const OUString& _text ) throw (css::uno::RuntimeException, std::exception)
 {
     setCaption( _text );
 }
 uno::Reference< excel::XFont > SAL_CALL
-ScVbaCharacters::getFont() throw (css::uno::RuntimeException)
+ScVbaCharacters::getFont() throw (css::uno::RuntimeException, std::exception)
 {
     uno::Reference< beans::XPropertySet > xProps( m_xTextRange, uno::UNO_QUERY_THROW );
     return uno::Reference< excel::XFont >( new ScVbaFont( this, mxContext, m_aPalette, xProps ) );
 }
 void SAL_CALL
-ScVbaCharacters::setFont( const uno::Reference< excel::XFont >& /*_font*/ ) throw (css::uno::RuntimeException)
+ScVbaCharacters::setFont( const uno::Reference< excel::XFont >& /*_font*/ ) throw (css::uno::RuntimeException, std::exception)
 {
     // #TODO #FIXME needs implementation, or can't be done?
     throw uno::RuntimeException("Not Implemented", uno::Reference< XInterface >() );
@@ -93,13 +93,13 @@ ScVbaCharacters::setFont( const uno::Reference< excel::XFont >& /*_font*/ ) thro
 
 // Methods
 void SAL_CALL
-ScVbaCharacters::Insert( const OUString& rString ) throw (css::uno::RuntimeException)
+ScVbaCharacters::Insert( const OUString& rString ) throw (css::uno::RuntimeException, std::exception)
 {
     m_xSimpleText->insertString( m_xTextRange, rString, bReplace );
 }
 
 void SAL_CALL
-ScVbaCharacters::Delete(  ) throw (css::uno::RuntimeException)
+ScVbaCharacters::Delete(  ) throw (css::uno::RuntimeException, std::exception)
 {
     // #FIXME #TODO is this a bit suspect?, I wonder should the contents
     // of the cell be deleted from the parent ( range )

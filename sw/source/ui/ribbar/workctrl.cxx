@@ -76,7 +76,7 @@ SwTbxInsertCtrl::~SwTbxInsertCtrl()
 {
 }
 
-void SAL_CALL SwTbxInsertCtrl::update() throw (uno::RuntimeException)
+void SAL_CALL SwTbxInsertCtrl::update() throw (uno::RuntimeException, std::exception)
 {
     ToolBox& rTbx = GetToolBox();
     OUString aSlotURL = "slot:" + OUString::number( nLastSlotId);

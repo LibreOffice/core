@@ -43,10 +43,10 @@ public:
 
             // XEventListener
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
-                                            throw(::com::sun::star::uno::RuntimeException);
+                                            throw(::com::sun::star::uno::RuntimeException, std::exception);
             // XClipboardListener
     virtual void SAL_CALL changedContents( const ::com::sun::star::datatransfer::clipboard::ClipboardEvent& event )
-                                            throw(::com::sun::star::uno::RuntimeException);
+                                            throw(::com::sun::star::uno::RuntimeException, std::exception);
 };
 
 #endif

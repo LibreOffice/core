@@ -58,7 +58,7 @@ sal_Int32 SwVbaRevision::GetPosition() throw (css::uno::RuntimeException)
 }
 
 void SAL_CALL
-SwVbaRevision::Accept() throw ( css::uno::RuntimeException )
+SwVbaRevision::Accept() throw ( css::uno::RuntimeException, std::exception )
 {
     SwDoc* pDoc = word::getDocShell( mxModel )->GetDoc();
     if( pDoc )
@@ -66,7 +66,7 @@ SwVbaRevision::Accept() throw ( css::uno::RuntimeException )
 }
 
 void SAL_CALL
-SwVbaRevision::Reject( ) throw ( css::uno::RuntimeException )
+SwVbaRevision::Reject( ) throw ( css::uno::RuntimeException, std::exception )
 {
     SwDoc* pDoc = word::getDocShell( mxModel )->GetDoc();
     if( pDoc )

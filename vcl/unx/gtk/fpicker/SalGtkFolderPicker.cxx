@@ -75,7 +75,7 @@ void SAL_CALL SalGtkFolderPicker::disposing( const lang::EventObject& )
 }
 
 void SAL_CALL SalGtkFolderPicker::setDisplayDirectory( const OUString& aDirectory )
-    throw( lang::IllegalArgumentException, uno::RuntimeException )
+    throw( lang::IllegalArgumentException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -95,7 +95,7 @@ void SAL_CALL SalGtkFolderPicker::setDisplayDirectory( const OUString& aDirector
         aTxt.getStr() );
 }
 
-OUString SAL_CALL SalGtkFolderPicker::getDisplayDirectory() throw( uno::RuntimeException )
+OUString SAL_CALL SalGtkFolderPicker::getDisplayDirectory() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -109,7 +109,7 @@ OUString SAL_CALL SalGtkFolderPicker::getDisplayDirectory() throw( uno::RuntimeE
     return aCurrentFolderName;
 }
 
-OUString SAL_CALL SalGtkFolderPicker::getDirectory() throw( uno::RuntimeException )
+OUString SAL_CALL SalGtkFolderPicker::getDirectory() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -124,7 +124,7 @@ OUString SAL_CALL SalGtkFolderPicker::getDirectory() throw( uno::RuntimeExceptio
 }
 
 void SAL_CALL SalGtkFolderPicker::setDescription( const OUString& /*rDescription*/ )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
 }
 
@@ -132,7 +132,7 @@ void SAL_CALL SalGtkFolderPicker::setDescription( const OUString& /*rDescription
 // XExecutableDialog functions
 
 
-void SAL_CALL SalGtkFolderPicker::setTitle( const OUString& aTitle ) throw( uno::RuntimeException )
+void SAL_CALL SalGtkFolderPicker::setTitle( const OUString& aTitle ) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -143,7 +143,7 @@ void SAL_CALL SalGtkFolderPicker::setTitle( const OUString& aTitle ) throw( uno:
     gtk_window_set_title( GTK_WINDOW( m_pDialog ), aWindowTitle.getStr() );
 }
 
-sal_Int16 SAL_CALL SalGtkFolderPicker::execute() throw( uno::RuntimeException )
+sal_Int16 SAL_CALL SalGtkFolderPicker::execute() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -181,7 +181,7 @@ sal_Int16 SAL_CALL SalGtkFolderPicker::execute() throw( uno::RuntimeException )
 // XCancellable
 
 
-void SAL_CALL SalGtkFolderPicker::cancel() throw( uno::RuntimeException )
+void SAL_CALL SalGtkFolderPicker::cancel() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 

@@ -82,10 +82,10 @@ class SwDBTreeList_Impl : public cppu::WeakImplHelper1 < XContainerListener >
             pWrtSh(pShell) {}
         ~SwDBTreeList_Impl();
 
-    virtual void SAL_CALL elementInserted( const ContainerEvent& Event ) throw (RuntimeException);
-    virtual void SAL_CALL elementRemoved( const ContainerEvent& Event ) throw (RuntimeException);
-    virtual void SAL_CALL elementReplaced( const ContainerEvent& Event ) throw (RuntimeException);
-    virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException);
+    virtual void SAL_CALL elementInserted( const ContainerEvent& Event ) throw (RuntimeException, std::exception);
+    virtual void SAL_CALL elementRemoved( const ContainerEvent& Event ) throw (RuntimeException, std::exception);
+    virtual void SAL_CALL elementReplaced( const ContainerEvent& Event ) throw (RuntimeException, std::exception);
+    virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException, std::exception);
 
     sal_Bool                        HasContext();
     SwWrtShell*                 GetWrtShell() { return pWrtSh;}
@@ -108,12 +108,12 @@ SwDBTreeList_Impl::~SwDBTreeList_Impl()
     }
 }
 
-void SwDBTreeList_Impl::elementInserted( const ContainerEvent&  ) throw (RuntimeException)
+void SwDBTreeList_Impl::elementInserted( const ContainerEvent&  ) throw (RuntimeException, std::exception)
 {
     // information not needed
 }
 
-void SwDBTreeList_Impl::elementRemoved( const ContainerEvent& rEvent ) throw (RuntimeException)
+void SwDBTreeList_Impl::elementRemoved( const ContainerEvent& rEvent ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     OUString sSource;
@@ -128,12 +128,12 @@ void SwDBTreeList_Impl::elementRemoved( const ContainerEvent& rEvent ) throw (Ru
     }
 }
 
-void SwDBTreeList_Impl::disposing( const EventObject&  ) throw (RuntimeException)
+void SwDBTreeList_Impl::disposing( const EventObject&  ) throw (RuntimeException, std::exception)
 {
     xDBContext = 0;
 }
 
-void SwDBTreeList_Impl::elementReplaced( const ContainerEvent& rEvent ) throw (RuntimeException)
+void SwDBTreeList_Impl::elementReplaced( const ContainerEvent& rEvent ) throw (RuntimeException, std::exception)
 {
     elementRemoved(rEvent);
 }

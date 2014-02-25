@@ -302,7 +302,7 @@ void TableModel::UndoRemoveColumns( sal_Int32 nIndex, ColumnVector& aCols, CellV
 // XTable
 
 
-Reference< XCellCursor > SAL_CALL TableModel::createCursor() throw (RuntimeException)
+Reference< XCellCursor > SAL_CALL TableModel::createCursor() throw (RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
     return createCursorByRange( Reference< XCellRange >( this ) );
@@ -310,7 +310,7 @@ Reference< XCellCursor > SAL_CALL TableModel::createCursor() throw (RuntimeExcep
 
 
 
-Reference< XCellCursor > SAL_CALL TableModel::createCursorByRange( const Reference< XCellRange >& rRange ) throw (IllegalArgumentException, RuntimeException)
+Reference< XCellCursor > SAL_CALL TableModel::createCursorByRange( const Reference< XCellRange >& rRange ) throw (IllegalArgumentException, RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
 
@@ -324,7 +324,7 @@ Reference< XCellCursor > SAL_CALL TableModel::createCursorByRange( const Referen
 
 
 
-sal_Int32 SAL_CALL TableModel::getRowCount() throw (RuntimeException)
+sal_Int32 SAL_CALL TableModel::getRowCount() throw (RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
     return getRowCountImpl();
@@ -332,7 +332,7 @@ sal_Int32 SAL_CALL TableModel::getRowCount() throw (RuntimeException)
 
 
 
-sal_Int32 SAL_CALL TableModel::getColumnCount() throw (RuntimeException)
+sal_Int32 SAL_CALL TableModel::getColumnCount() throw (RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
     return getColumnCountImpl();
@@ -342,7 +342,7 @@ sal_Int32 SAL_CALL TableModel::getColumnCount() throw (RuntimeException)
 // XComponent
 
 
-void TableModel::dispose() throw (RuntimeException)
+void TableModel::dispose() throw (RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
     TableModelBase::dispose();
@@ -350,14 +350,14 @@ void TableModel::dispose() throw (RuntimeException)
 
 
 
-void SAL_CALL TableModel::addEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException)
+void SAL_CALL TableModel::addEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException, std::exception)
 {
     TableModelBase::addEventListener( xListener );
 }
 
 
 
-void SAL_CALL TableModel::removeEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException)
+void SAL_CALL TableModel::removeEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException, std::exception)
 {
     TableModelBase::removeEventListener( xListener );
 }
@@ -366,7 +366,7 @@ void SAL_CALL TableModel::removeEventListener( const Reference< XEventListener >
 // XModifiable
 
 
-sal_Bool SAL_CALL TableModel::isModified(  ) throw (RuntimeException)
+sal_Bool SAL_CALL TableModel::isModified(  ) throw (RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
     return mbModified;
@@ -374,7 +374,7 @@ sal_Bool SAL_CALL TableModel::isModified(  ) throw (RuntimeException)
 
 
 
-void SAL_CALL TableModel::setModified( sal_Bool bModified ) throw (PropertyVetoException, RuntimeException)
+void SAL_CALL TableModel::setModified( sal_Bool bModified ) throw (PropertyVetoException, RuntimeException, std::exception)
 {
     {
         ::SolarMutexGuard aGuard;
@@ -388,14 +388,14 @@ void SAL_CALL TableModel::setModified( sal_Bool bModified ) throw (PropertyVetoE
 // XModifyBroadcaster
 
 
-void SAL_CALL TableModel::addModifyListener( const Reference< XModifyListener >& xListener ) throw (RuntimeException)
+void SAL_CALL TableModel::addModifyListener( const Reference< XModifyListener >& xListener ) throw (RuntimeException, std::exception)
 {
     rBHelper.addListener( cppu::UnoType<XModifyListener>::get() , xListener );
 }
 
 
 
-void SAL_CALL TableModel::removeModifyListener( const Reference< XModifyListener >& xListener ) throw (RuntimeException)
+void SAL_CALL TableModel::removeModifyListener( const Reference< XModifyListener >& xListener ) throw (RuntimeException, std::exception)
 {
     rBHelper.removeListener( cppu::UnoType<XModifyListener>::get() , xListener );
 }
@@ -404,7 +404,7 @@ void SAL_CALL TableModel::removeModifyListener( const Reference< XModifyListener
 // XColumnRowRange
 
 
-Reference< XTableColumns > SAL_CALL TableModel::getColumns() throw (RuntimeException)
+Reference< XTableColumns > SAL_CALL TableModel::getColumns() throw (RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
 
@@ -415,7 +415,7 @@ Reference< XTableColumns > SAL_CALL TableModel::getColumns() throw (RuntimeExcep
 
 
 
-Reference< XTableRows > SAL_CALL TableModel::getRows() throw (RuntimeException)
+Reference< XTableRows > SAL_CALL TableModel::getRows() throw (RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
 
@@ -428,7 +428,7 @@ Reference< XTableRows > SAL_CALL TableModel::getRows() throw (RuntimeException)
 // XCellRange
 
 
-Reference< XCell > SAL_CALL TableModel::getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow ) throw ( IndexOutOfBoundsException, RuntimeException)
+Reference< XCell > SAL_CALL TableModel::getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow ) throw ( IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
 
@@ -441,7 +441,7 @@ Reference< XCell > SAL_CALL TableModel::getCellByPosition( sal_Int32 nColumn, sa
 
 
 
-Reference< XCellRange > SAL_CALL TableModel::getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom ) throw (IndexOutOfBoundsException, RuntimeException)
+Reference< XCellRange > SAL_CALL TableModel::getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
 
@@ -456,7 +456,7 @@ Reference< XCellRange > SAL_CALL TableModel::getCellRangeByPosition( sal_Int32 n
 
 
 
-Reference< XCellRange > SAL_CALL TableModel::getCellRangeByName( const OUString& /*aRange*/ ) throw (RuntimeException)
+Reference< XCellRange > SAL_CALL TableModel::getCellRangeByName( const OUString& /*aRange*/ ) throw (RuntimeException, std::exception)
 {
     return Reference< XCellRange >();
 }
@@ -465,7 +465,7 @@ Reference< XCellRange > SAL_CALL TableModel::getCellRangeByName( const OUString&
 // XPropertySet
 
 
-Reference< XPropertySetInfo > SAL_CALL TableModel::getPropertySetInfo(  ) throw (RuntimeException)
+Reference< XPropertySetInfo > SAL_CALL TableModel::getPropertySetInfo(  ) throw (RuntimeException, std::exception)
 {
     Reference< XPropertySetInfo > xInfo;
     return xInfo;
@@ -473,38 +473,38 @@ Reference< XPropertySetInfo > SAL_CALL TableModel::getPropertySetInfo(  ) throw 
 
 
 
-void SAL_CALL TableModel::setPropertyValue( const OUString& /*aPropertyName*/, const Any& /*aValue*/ ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
+void SAL_CALL TableModel::setPropertyValue( const OUString& /*aPropertyName*/, const Any& /*aValue*/ ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
 
 
 
-Any SAL_CALL TableModel::getPropertyValue( const OUString& /*PropertyName*/ ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
+Any SAL_CALL TableModel::getPropertyValue( const OUString& /*PropertyName*/ ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
     return Any();
 }
 
 
 
-void SAL_CALL TableModel::addPropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< XPropertyChangeListener >& /*xListener*/ ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
+void SAL_CALL TableModel::addPropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< XPropertyChangeListener >& /*xListener*/ ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
 
 
 
-void SAL_CALL TableModel::removePropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< XPropertyChangeListener >& /*xListener*/ ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
+void SAL_CALL TableModel::removePropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< XPropertyChangeListener >& /*xListener*/ ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
 
 
 
-void SAL_CALL TableModel::addVetoableChangeListener( const OUString& /*aPropertyName*/, const Reference< XVetoableChangeListener >& /*xListener*/ ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
+void SAL_CALL TableModel::addVetoableChangeListener( const OUString& /*aPropertyName*/, const Reference< XVetoableChangeListener >& /*xListener*/ ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
 
 
 
-void SAL_CALL TableModel::removeVetoableChangeListener( const OUString& /*aPropertyName*/, const Reference< XVetoableChangeListener >& /*xListener*/ ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
+void SAL_CALL TableModel::removeVetoableChangeListener( const OUString& /*aPropertyName*/, const Reference< XVetoableChangeListener >& /*xListener*/ ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
 
@@ -512,13 +512,13 @@ void SAL_CALL TableModel::removeVetoableChangeListener( const OUString& /*aPrope
 // XFastPropertySet
 
 
-void SAL_CALL TableModel::setFastPropertyValue( ::sal_Int32 /*nHandle*/, const Any& /*aValue*/ ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
+void SAL_CALL TableModel::setFastPropertyValue( ::sal_Int32 /*nHandle*/, const Any& /*aValue*/ ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
 
 
 
-Any SAL_CALL TableModel::getFastPropertyValue( ::sal_Int32 /*nHandle*/ ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
+Any SAL_CALL TableModel::getFastPropertyValue( ::sal_Int32 /*nHandle*/ ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
     Any aAny;
     return aAny;
@@ -579,14 +579,14 @@ void TableModel::disposing()
 // XBroadcaster
 
 
-void TableModel::lockBroadcasts() throw (RuntimeException)
+void TableModel::lockBroadcasts() throw (RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
     ++mnNotifyLock;
 }
 
 
-void TableModel::unlockBroadcasts() throw (RuntimeException)
+void TableModel::unlockBroadcasts() throw (RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
     --mnNotifyLock;

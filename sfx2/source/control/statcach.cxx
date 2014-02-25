@@ -69,7 +69,7 @@ BindDispatch_Impl::BindDispatch_Impl( const ::com::sun::star::uno::Reference< ::
     aStatus.IsEnabled = sal_True;
 }
 
-void SAL_CALL BindDispatch_Impl::disposing( const ::com::sun::star::lang::EventObject& ) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL BindDispatch_Impl::disposing( const ::com::sun::star::lang::EventObject& ) throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     if ( xDisp.is() )
     {
@@ -78,7 +78,7 @@ void SAL_CALL BindDispatch_Impl::disposing( const ::com::sun::star::lang::EventO
     }
 }
 
-void SAL_CALL  BindDispatch_Impl::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& rEvent ) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL  BindDispatch_Impl::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& rEvent ) throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     aStatus = rEvent;
     if ( !pCache )

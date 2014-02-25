@@ -112,11 +112,11 @@ class VBAProjectListener : public ContainerListenerHelper
 public:
     VBAProjectListener( ScMacroManager* pMacroMgr ) : mpMacroMgr( pMacroMgr ) {}
     // XEventListener
-    virtual void SAL_CALL disposing( const lang::EventObject& /*Source*/ ) throw(RuntimeException) {}
+    virtual void SAL_CALL disposing( const lang::EventObject& /*Source*/ ) throw(RuntimeException, std::exception) {}
 
     // XContainerListener
-    virtual void SAL_CALL elementInserted( const container::ContainerEvent& /*Event*/ ) throw(RuntimeException){}
-    virtual void SAL_CALL elementReplaced( const container::ContainerEvent& Event ) throw(RuntimeException)
+    virtual void SAL_CALL elementInserted( const container::ContainerEvent& /*Event*/ ) throw(RuntimeException, std::exception){}
+    virtual void SAL_CALL elementReplaced( const container::ContainerEvent& Event ) throw(RuntimeException, std::exception)
     {
         OUString sModuleName;
         Event.Accessor >>= sModuleName;
@@ -124,7 +124,7 @@ public:
         mpMacroMgr->InitUserFuncData();
         mpMacroMgr->BroadcastModuleUpdate(sModuleName);
     }
-    virtual void SAL_CALL elementRemoved( const container::ContainerEvent& /*Event*/ ) throw(RuntimeException){}
+    virtual void SAL_CALL elementRemoved( const container::ContainerEvent& /*Event*/ ) throw(RuntimeException, std::exception){}
 
 };
 

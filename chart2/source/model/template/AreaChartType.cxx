@@ -40,14 +40,14 @@ AreaChartType::~AreaChartType()
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL AreaChartType::createClone()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< util::XCloneable >( new AreaChartType( *this ));
 }
 
 // ____ XChartType ____
 OUString SAL_CALL AreaChartType::getChartType()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return CHART2_SERVICE_NAME_CHARTTYPE_AREA;
 }

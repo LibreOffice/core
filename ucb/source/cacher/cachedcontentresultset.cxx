@@ -419,15 +419,15 @@ public:
     // XPropertySetInfo
     virtual Sequence< com::sun::star::beans::Property > SAL_CALL
     getProperties()
-        throw( RuntimeException );
+        throw( RuntimeException, std::exception );
 
     virtual com::sun::star::beans::Property SAL_CALL
     getPropertyByName( const OUString& aName )
-        throw( com::sun::star::beans::UnknownPropertyException, RuntimeException );
+        throw( com::sun::star::beans::UnknownPropertyException, RuntimeException, std::exception );
 
     virtual sal_Bool SAL_CALL
     hasPropertyByName( const OUString& Name )
-        throw( RuntimeException );
+        throw( RuntimeException, std::exception );
 };
 
 OUString    CCRS_PropertySetInfo::m_aPropertyNameForCount( "RowCount" );
@@ -535,7 +535,7 @@ XTYPEPROVIDER_IMPL_2( CCRS_PropertySetInfo
 
 //virtual
 Sequence< Property > SAL_CALL CCRS_PropertySetInfo
-    ::getProperties() throw( RuntimeException )
+    ::getProperties() throw( RuntimeException, std::exception )
 {
     return *m_pProperties;
 }
@@ -543,7 +543,7 @@ Sequence< Property > SAL_CALL CCRS_PropertySetInfo
 //virtual
 Property SAL_CALL CCRS_PropertySetInfo
     ::getPropertyByName( const OUString& aName )
-        throw( UnknownPropertyException, RuntimeException )
+        throw( UnknownPropertyException, RuntimeException, std::exception )
 {
     if ( aName.isEmpty() )
         throw UnknownPropertyException();
@@ -558,7 +558,7 @@ Property SAL_CALL CCRS_PropertySetInfo
 //virtual
 sal_Bool SAL_CALL CCRS_PropertySetInfo
     ::hasPropertyByName( const OUString& Name )
-        throw( RuntimeException )
+        throw( RuntimeException, std::exception )
 {
     return ( impl_getPos( Name ) != -1 );
 }
@@ -918,7 +918,7 @@ XINTERFACE_COMMON_IMPL( CachedContentResultSet )
 
 Any SAL_CALL CachedContentResultSet
     ::queryInterface( const Type&  rType )
-    throw ( RuntimeException )
+    throw ( RuntimeException, std::exception )
 {
     //list all interfaces inclusive baseclasses of interfaces
 
@@ -974,7 +974,7 @@ void SAL_CALL CachedContentResultSet
            PropertyVetoException,
            IllegalArgumentException,
            WrappedTargetException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     impl_EnsureNotDisposed();
 
@@ -1085,7 +1085,7 @@ Any SAL_CALL CachedContentResultSet
     ::getPropertyValue( const OUString& rPropertyName )
     throw( UnknownPropertyException,
            WrappedTargetException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     impl_EnsureNotDisposed();
 
@@ -1281,7 +1281,7 @@ return m_aCache##XXX.get##XXX( nRow );
 // virtual
 OUString SAL_CALL CachedContentResultSet
     ::queryContentIdentifierString()
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     XCONTENTACCESS_queryXXX( queryContentIdentifierString, ContentIdentifierString, OUString )
 }
@@ -1290,7 +1290,7 @@ OUString SAL_CALL CachedContentResultSet
 // virtual
 Reference< XContentIdentifier > SAL_CALL CachedContentResultSet
     ::queryContentIdentifier()
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     XCONTENTACCESS_queryXXX( queryContentIdentifier, ContentIdentifier, Reference< XContentIdentifier > )
 }
@@ -1299,7 +1299,7 @@ Reference< XContentIdentifier > SAL_CALL CachedContentResultSet
 // virtual
 Reference< XContent > SAL_CALL CachedContentResultSet
     ::queryContent()
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     XCONTENTACCESS_queryXXX( queryContent, Content, Reference< XContent > )
 }
@@ -1312,7 +1312,7 @@ Reference< XContent > SAL_CALL CachedContentResultSet
 sal_Bool SAL_CALL CachedContentResultSet
     ::next()
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     impl_EnsureNotDisposed();
 
@@ -1353,7 +1353,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 sal_Bool SAL_CALL CachedContentResultSet
     ::previous()
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     impl_EnsureNotDisposed();
 
@@ -1394,7 +1394,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 sal_Bool SAL_CALL CachedContentResultSet
     ::absolute( sal_Int32 row )
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     impl_EnsureNotDisposed();
 
@@ -1513,7 +1513,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 sal_Bool SAL_CALL CachedContentResultSet
     ::relative( sal_Int32 rows )
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     impl_EnsureNotDisposed();
 
@@ -1568,7 +1568,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 sal_Bool SAL_CALL CachedContentResultSet
     ::first()
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     impl_EnsureNotDisposed();
 
@@ -1603,7 +1603,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 sal_Bool SAL_CALL CachedContentResultSet
     ::last()
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     impl_EnsureNotDisposed();
 
@@ -1652,7 +1652,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 void SAL_CALL CachedContentResultSet
     ::beforeFirst()
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     impl_EnsureNotDisposed();
 
@@ -1668,7 +1668,7 @@ void SAL_CALL CachedContentResultSet
 void SAL_CALL CachedContentResultSet
     ::afterLast()
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     impl_EnsureNotDisposed();
 
@@ -1684,7 +1684,7 @@ void SAL_CALL CachedContentResultSet
 sal_Bool SAL_CALL CachedContentResultSet
     ::isAfterLast()
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     impl_EnsureNotDisposed();
 
@@ -1717,7 +1717,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 sal_Bool SAL_CALL CachedContentResultSet
     ::isBeforeFirst()
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     impl_EnsureNotDisposed();
 
@@ -1753,7 +1753,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 sal_Bool SAL_CALL CachedContentResultSet
     ::isFirst()
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     impl_EnsureNotDisposed();
 
@@ -1788,7 +1788,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 sal_Bool SAL_CALL CachedContentResultSet
     ::isLast()
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     impl_EnsureNotDisposed();
 
@@ -1821,7 +1821,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 sal_Int32 SAL_CALL CachedContentResultSet
     ::getRow()
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     impl_EnsureNotDisposed();
 
@@ -1835,7 +1835,7 @@ sal_Int32 SAL_CALL CachedContentResultSet
 void SAL_CALL CachedContentResultSet
     ::refreshRow()
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     impl_EnsureNotDisposed();
 
@@ -1847,7 +1847,7 @@ void SAL_CALL CachedContentResultSet
 sal_Bool SAL_CALL CachedContentResultSet
     ::rowUpdated()
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     impl_EnsureNotDisposed();
 
@@ -1858,7 +1858,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 sal_Bool SAL_CALL CachedContentResultSet
     ::rowInserted()
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     impl_EnsureNotDisposed();
 
@@ -1870,7 +1870,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 sal_Bool SAL_CALL CachedContentResultSet
     ::rowDeleted()
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     impl_EnsureNotDisposed();
 
@@ -1882,7 +1882,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 Reference< XInterface > SAL_CALL CachedContentResultSet
     ::getStatement()
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     impl_EnsureNotDisposed();
     //@todo ?return anything
@@ -1897,7 +1897,7 @@ Reference< XInterface > SAL_CALL CachedContentResultSet
 sal_Bool SAL_CALL CachedContentResultSet
     ::wasNull()
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     impl_EnsureNotDisposed();
     impl_init_xRowOrigin();
@@ -1918,7 +1918,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 OUString SAL_CALL CachedContentResultSet
     ::getString( sal_Int32 columnIndex )
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     return rowOriginGet<OUString>(&css::sdbc::XRow::getString, columnIndex);
 }
@@ -1927,7 +1927,7 @@ OUString SAL_CALL CachedContentResultSet
 sal_Bool SAL_CALL CachedContentResultSet
     ::getBoolean( sal_Int32 columnIndex )
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     return rowOriginGet<sal_Bool>(&css::sdbc::XRow::getBoolean, columnIndex);
 }
@@ -1936,7 +1936,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 sal_Int8 SAL_CALL CachedContentResultSet
     ::getByte( sal_Int32 columnIndex )
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     return rowOriginGet<sal_Int8>(&css::sdbc::XRow::getByte, columnIndex);
 }
@@ -1945,7 +1945,7 @@ sal_Int8 SAL_CALL CachedContentResultSet
 sal_Int16 SAL_CALL CachedContentResultSet
     ::getShort( sal_Int32 columnIndex )
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     return rowOriginGet<sal_Int16>(&css::sdbc::XRow::getShort, columnIndex);
 }
@@ -1954,7 +1954,7 @@ sal_Int16 SAL_CALL CachedContentResultSet
 sal_Int32 SAL_CALL CachedContentResultSet
     ::getInt( sal_Int32 columnIndex )
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     return rowOriginGet<sal_Int32>(&css::sdbc::XRow::getInt, columnIndex);
 }
@@ -1963,7 +1963,7 @@ sal_Int32 SAL_CALL CachedContentResultSet
 sal_Int64 SAL_CALL CachedContentResultSet
     ::getLong( sal_Int32 columnIndex )
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     return rowOriginGet<sal_Int64>(&css::sdbc::XRow::getLong, columnIndex);
 }
@@ -1972,7 +1972,7 @@ sal_Int64 SAL_CALL CachedContentResultSet
 float SAL_CALL CachedContentResultSet
     ::getFloat( sal_Int32 columnIndex )
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     return rowOriginGet<float>(&css::sdbc::XRow::getFloat, columnIndex);
 }
@@ -1981,7 +1981,7 @@ float SAL_CALL CachedContentResultSet
 double SAL_CALL CachedContentResultSet
     ::getDouble( sal_Int32 columnIndex )
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     return rowOriginGet<double>(&css::sdbc::XRow::getDouble, columnIndex);
 }
@@ -1990,7 +1990,7 @@ double SAL_CALL CachedContentResultSet
 Sequence< sal_Int8 > SAL_CALL CachedContentResultSet
     ::getBytes( sal_Int32 columnIndex )
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     return rowOriginGet< css::uno::Sequence<sal_Int8> >(
         &css::sdbc::XRow::getBytes, columnIndex);
@@ -2000,7 +2000,7 @@ Sequence< sal_Int8 > SAL_CALL CachedContentResultSet
 Date SAL_CALL CachedContentResultSet
     ::getDate( sal_Int32 columnIndex )
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     return rowOriginGet<css::util::Date>(
         &css::sdbc::XRow::getDate, columnIndex);
@@ -2010,7 +2010,7 @@ Date SAL_CALL CachedContentResultSet
 Time SAL_CALL CachedContentResultSet
     ::getTime( sal_Int32 columnIndex )
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     return rowOriginGet<css::util::Time>(
         &css::sdbc::XRow::getTime, columnIndex);
@@ -2020,7 +2020,7 @@ Time SAL_CALL CachedContentResultSet
 DateTime SAL_CALL CachedContentResultSet
     ::getTimestamp( sal_Int32 columnIndex )
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     return rowOriginGet<css::util::DateTime>(
         &css::sdbc::XRow::getTimestamp, columnIndex);
@@ -2031,7 +2031,7 @@ Reference< com::sun::star::io::XInputStream >
     SAL_CALL CachedContentResultSet
     ::getBinaryStream( sal_Int32 columnIndex )
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     return rowOriginGet< css::uno::Reference<css::io::XInputStream> >(
         &css::sdbc::XRow::getBinaryStream, columnIndex);
@@ -2042,7 +2042,7 @@ Reference< com::sun::star::io::XInputStream >
     SAL_CALL CachedContentResultSet
     ::getCharacterStream( sal_Int32 columnIndex )
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     return rowOriginGet< css::uno::Reference<css::io::XInputStream> >(
         &css::sdbc::XRow::getCharacterStream, columnIndex);
@@ -2054,7 +2054,7 @@ Any SAL_CALL CachedContentResultSet
            const Reference<
             com::sun::star::container::XNameAccess >& typeMap )
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     //if you change this function please pay attention to
     //function template rowOriginGet, where this is similar implemented
@@ -2098,7 +2098,7 @@ Any SAL_CALL CachedContentResultSet
 Reference< XRef > SAL_CALL CachedContentResultSet
     ::getRef( sal_Int32 columnIndex )
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     return rowOriginGet< css::uno::Reference<css::sdbc::XRef> >(
         &css::sdbc::XRow::getRef, columnIndex);
@@ -2108,7 +2108,7 @@ Reference< XRef > SAL_CALL CachedContentResultSet
 Reference< XBlob > SAL_CALL CachedContentResultSet
     ::getBlob( sal_Int32 columnIndex )
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     return rowOriginGet< css::uno::Reference<css::sdbc::XBlob> >(
         &css::sdbc::XRow::getBlob, columnIndex);
@@ -2118,7 +2118,7 @@ Reference< XBlob > SAL_CALL CachedContentResultSet
 Reference< XClob > SAL_CALL CachedContentResultSet
     ::getClob( sal_Int32 columnIndex )
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     return rowOriginGet< css::uno::Reference<css::sdbc::XClob> >(
         &css::sdbc::XRow::getClob, columnIndex);
@@ -2128,7 +2128,7 @@ Reference< XClob > SAL_CALL CachedContentResultSet
 Reference< XArray > SAL_CALL CachedContentResultSet
     ::getArray( sal_Int32 columnIndex )
     throw( SQLException,
-           RuntimeException )
+           RuntimeException, std::exception )
 {
     return rowOriginGet< css::uno::Reference<css::sdbc::XArray> >(
         &css::sdbc::XRow::getArray, columnIndex);
@@ -2211,7 +2211,7 @@ Reference< XResultSet > SAL_CALL CachedContentResultSetFactory
     ::createCachedContentResultSet(
             const Reference< XResultSet > & xSource,
             const Reference< XContentIdentifierMapping > & xMapping )
-            throw( com::sun::star::uno::RuntimeException )
+            throw( com::sun::star::uno::RuntimeException, std::exception )
 {
     Reference< XResultSet > xRet;
     xRet = new CachedContentResultSet( m_xContext, xSource, xMapping );

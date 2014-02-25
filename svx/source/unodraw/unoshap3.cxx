@@ -80,7 +80,7 @@ void Svx3DSceneObject::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
 }
 
 
-uno::Any SAL_CALL Svx3DSceneObject::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
+uno::Any SAL_CALL Svx3DSceneObject::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException, std::exception)
 {
     uno::Any aAny;
 
@@ -93,7 +93,7 @@ uno::Any SAL_CALL Svx3DSceneObject::queryAggregation( const uno::Type & rType ) 
     return aAny;
 }
 
-uno::Any SAL_CALL Svx3DSceneObject::queryInterface( const uno::Type & rType ) throw( uno::RuntimeException )
+uno::Any SAL_CALL Svx3DSceneObject::queryInterface( const uno::Type & rType ) throw( uno::RuntimeException, std::exception )
 {
     return SvxShape::queryInterface( rType );
 }
@@ -111,7 +111,7 @@ void SAL_CALL Svx3DSceneObject::release() throw ( )
 // XTypeProvider
 
 uno::Sequence< uno::Type > SAL_CALL Svx3DSceneObject::getTypes()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
 
     return SvxShape::getTypes();
@@ -123,14 +123,14 @@ namespace
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL Svx3DSceneObject::getImplementationId()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return theSvx3DSceneObjectImplementationId::get().getSeq();
 }
 
 
 void SAL_CALL Svx3DSceneObject::add( const Reference< drawing::XShape >& xShape )
-    throw( uno::RuntimeException)
+    throw( uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -159,7 +159,7 @@ void SAL_CALL Svx3DSceneObject::add( const Reference< drawing::XShape >& xShape 
 
 
 void SAL_CALL Svx3DSceneObject::remove( const Reference< drawing::XShape >& xShape )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -200,7 +200,7 @@ void SAL_CALL Svx3DSceneObject::remove( const Reference< drawing::XShape >& xSha
 
 
 sal_Int32 SAL_CALL Svx3DSceneObject::getCount()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -214,7 +214,7 @@ sal_Int32 SAL_CALL Svx3DSceneObject::getCount()
 
 
 uno::Any SAL_CALL Svx3DSceneObject::getByIndex( sal_Int32 Index )
-    throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
+    throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -238,14 +238,14 @@ uno::Any SAL_CALL Svx3DSceneObject::getByIndex( sal_Int32 Index )
 // ::com::sun::star::container::XElementAccess
 
 uno::Type SAL_CALL Svx3DSceneObject::getElementType()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return ::getCppuType(( const Reference< drawing::XShape>*)0);
 }
 
 
 sal_Bool SAL_CALL Svx3DSceneObject::hasElements()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -471,7 +471,7 @@ bool Svx3DSceneObject::getPropertyValueImpl( const OUString& rName, const SfxIte
 
 // ::com::sun::star::lang::XServiceInfo
 uno::Sequence< OUString > SAL_CALL Svx3DSceneObject::getSupportedServiceNames()
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
     comphelper::ServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.drawing.Shape3DScene" );
@@ -601,7 +601,7 @@ bool Svx3DCubeObject::getPropertyValueImpl( const OUString& rName, const SfxItem
 
 // ::com::sun::star::lang::XServiceInfo
 uno::Sequence< OUString > SAL_CALL Svx3DCubeObject::getSupportedServiceNames()
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
     comphelper::ServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.drawing.Shape3D",
@@ -717,7 +717,7 @@ bool Svx3DSphereObject::getPropertyValueImpl( const OUString& rName, const SfxIt
 
 // ::com::sun::star::lang::XServiceInfo
 uno::Sequence< OUString > SAL_CALL Svx3DSphereObject::getSupportedServiceNames()
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
     comphelper::ServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.drawing.Shape3D",
@@ -925,7 +925,7 @@ bool Svx3DLatheObject::getPropertyValueImpl( const OUString& rName, const SfxIte
 
 // ::com::sun::star::lang::XServiceInfo
 uno::Sequence< OUString > SAL_CALL Svx3DLatheObject::getSupportedServiceNames()
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
     comphelper::ServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.drawing.Shape3D",
@@ -1036,7 +1036,7 @@ bool Svx3DExtrudeObject::getPropertyValueImpl( const OUString& rName, const SfxI
 
 // ::com::sun::star::lang::XServiceInfo
 uno::Sequence< OUString > SAL_CALL Svx3DExtrudeObject::getSupportedServiceNames()
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
     comphelper::ServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.drawing.Shape3D",
@@ -1181,7 +1181,7 @@ bool Svx3DPolygonObject::getPropertyValueImpl( const OUString& rName, const SfxI
 
 // ::com::sun::star::lang::XServiceInfo
 uno::Sequence< OUString > SAL_CALL Svx3DPolygonObject::getSupportedServiceNames()
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
     comphelper::ServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.drawing.Shape3D",

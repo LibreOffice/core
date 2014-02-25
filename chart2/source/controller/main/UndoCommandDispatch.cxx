@@ -92,7 +92,7 @@ void UndoCommandDispatch::fireStatusEvent(
 void SAL_CALL UndoCommandDispatch::dispatch(
     const util::URL& URL,
     const Sequence< beans::PropertyValue >& /* Arguments */ )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if( m_xUndoManager.is() )
     {
@@ -134,7 +134,7 @@ void SAL_CALL UndoCommandDispatch::disposing()
 
 // ____ XEventListener (base of XModifyListener) ____
 void SAL_CALL UndoCommandDispatch::disposing( const lang::EventObject& /* Source */ )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     m_xUndoManager.clear();
     m_xModel.clear();

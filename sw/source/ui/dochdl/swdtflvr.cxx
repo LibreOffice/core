@@ -3541,7 +3541,7 @@ const Sequence< sal_Int8 >& SwTransferable::getUnoTunnelId()
     return theSwTransferableUnoTunnelId::get().getSeq();
 }
 
-sal_Int64 SwTransferable::getSomething( const Sequence< sal_Int8 >& rId ) throw( RuntimeException )
+sal_Int64 SwTransferable::getSomething( const Sequence< sal_Int8 >& rId ) throw( RuntimeException, std::exception )
 {
     sal_Int64 nRet;
     if( ( rId.getLength() == 16 ) &&

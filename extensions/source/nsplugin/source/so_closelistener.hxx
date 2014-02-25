@@ -44,11 +44,11 @@ public:
     void StopPreventClose() { m_bPreventClose = sal_False; }
 
     virtual void SAL_CALL queryClosing( const ::com::sun::star::lang::EventObject& aEvent, sal_Bool bDeliverOwnership )
-        throw ( ::com::sun::star::uno::RuntimeException, ::com::sun::star::util::CloseVetoException );
+        throw ( ::com::sun::star::uno::RuntimeException, ::com::sun::star::util::CloseVetoException, std::exception );
 
-    virtual void SAL_CALL notifyClosing( const ::com::sun::star::lang::EventObject& aEvent ) throw ( ::com::sun::star::uno::RuntimeException ) ;
+    virtual void SAL_CALL notifyClosing( const ::com::sun::star::lang::EventObject& aEvent ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) ;
 
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent ) throw ( ::com::sun::star::uno::RuntimeException ) ;
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) ;
 };
 
 #endif

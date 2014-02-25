@@ -80,32 +80,32 @@ public:
         const com::sun::star::uno::Reference<
             com::sun::star::xml::crypto::sax::XEncryptionResultListener >&
             listener )
-            throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
+            throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception);
         virtual void SAL_CALL removeEncryptionResultListener(
             const com::sun::star::uno::Reference<
                 com::sun::star::xml::crypto::sax::XEncryptionResultListener >&
                 listener )
-            throw (com::sun::star::uno::RuntimeException);
+            throw (com::sun::star::uno::RuntimeException, std::exception);
 
     /* XReferenceCollector */
     virtual void SAL_CALL setReferenceCount( sal_Int32 count )
-        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL setReferenceId( sal_Int32 id )
-        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception);
 
     /* XInitialization */
     virtual void SAL_CALL initialize(
         const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArguments )
-        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception);
 
     /* XServiceInfo */
     virtual OUString SAL_CALL getImplementationName(  )
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 };
 
 OUString EncryptorImpl_getImplementationName()

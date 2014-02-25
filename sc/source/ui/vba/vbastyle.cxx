@@ -86,25 +86,25 @@ ScVbaStyle::ScVbaStyle( const uno::Reference< XHelperInterface >& xParent, const
 
 
 ::sal_Bool SAL_CALL
-ScVbaStyle::BuiltIn() throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaStyle::BuiltIn() throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     return !mxStyle->isUserDefined();
 
 }
 void SAL_CALL
-ScVbaStyle::setName( const OUString& Name ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaStyle::setName( const OUString& Name ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     mxStyle->setName(Name);
 }
 
 OUString SAL_CALL
-ScVbaStyle::getName() throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaStyle::getName() throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     return mxStyle->getName();
 }
 
 void SAL_CALL
-ScVbaStyle::setNameLocal( const OUString& NameLocal ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaStyle::setNameLocal( const OUString& NameLocal ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     try
     {
@@ -117,7 +117,7 @@ ScVbaStyle::setNameLocal( const OUString& NameLocal ) throw (script::BasicErrorE
 }
 
 OUString SAL_CALL
-ScVbaStyle::getNameLocal() throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaStyle::getNameLocal() throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     OUString sName;
     try
@@ -132,7 +132,7 @@ ScVbaStyle::getNameLocal() throw (script::BasicErrorException, uno::RuntimeExcep
 }
 
 void SAL_CALL
-ScVbaStyle::Delete() throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaStyle::Delete() throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     try
     {

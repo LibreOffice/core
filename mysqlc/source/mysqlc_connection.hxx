@@ -148,78 +148,78 @@ namespace connectivity
 
             // XServiceInfo
             virtual OUString SAL_CALL getImplementationName()
-                throw (css::uno::RuntimeException) SAL_OVERRIDE;
+                throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
             virtual sal_Bool SAL_CALL supportsService(
-                OUString const & ServiceName) throw (css::uno::RuntimeException)
+                OUString const & ServiceName) throw (css::uno::RuntimeException, std::exception)
                 SAL_OVERRIDE;
 
             virtual css::uno::Sequence<OUString> SAL_CALL
-            getSupportedServiceNames() throw (css::uno::RuntimeException)
+            getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception)
                 SAL_OVERRIDE;
 
             // XConnection
             my_XStatementRef SAL_CALL createStatement()
-                                                                throw(SQLException, RuntimeException);
+                                                                throw(SQLException, RuntimeException, std::exception);
 
             my_XPreparedStatementRef SAL_CALL prepareStatement(const OUString& sql)
-                                                                throw(SQLException, RuntimeException);
+                                                                throw(SQLException, RuntimeException, std::exception);
 
             my_XPreparedStatementRef SAL_CALL prepareCall(const OUString& sql)
-                                                                throw(SQLException, RuntimeException);
+                                                                throw(SQLException, RuntimeException, std::exception);
 
             OUString SAL_CALL nativeSQL(const OUString& sql)
-                                                                throw(SQLException, RuntimeException);
+                                                                throw(SQLException, RuntimeException, std::exception);
 
             void SAL_CALL setAutoCommit(sal_Bool autoCommit)
-                                                                throw(SQLException, RuntimeException);
+                                                                throw(SQLException, RuntimeException, std::exception);
 
             sal_Bool SAL_CALL getAutoCommit()
-                                                                throw(SQLException, RuntimeException);
+                                                                throw(SQLException, RuntimeException, std::exception);
 
             void SAL_CALL commit()
-                                                                throw(SQLException, RuntimeException);
+                                                                throw(SQLException, RuntimeException, std::exception);
 
             void SAL_CALL rollback()
-                                                                throw(SQLException, RuntimeException);
+                                                                throw(SQLException, RuntimeException, std::exception);
 
             sal_Bool SAL_CALL isClosed()
-                                                                throw(SQLException, RuntimeException);
+                                                                throw(SQLException, RuntimeException, std::exception);
 
             my_XDatabaseMetaDataRef SAL_CALL getMetaData()
-                                                                throw(SQLException, RuntimeException);
+                                                                throw(SQLException, RuntimeException, std::exception);
 
             void SAL_CALL setReadOnly(sal_Bool readOnly)
-                                                                throw(SQLException, RuntimeException);
+                                                                throw(SQLException, RuntimeException, std::exception);
 
             sal_Bool SAL_CALL isReadOnly()
-                                                                throw(SQLException, RuntimeException);
+                                                                throw(SQLException, RuntimeException, std::exception);
 
             void SAL_CALL setCatalog(const OUString& catalog)
-                                                                throw(SQLException, RuntimeException);
+                                                                throw(SQLException, RuntimeException, std::exception);
 
             OUString SAL_CALL getCatalog()
-                                                                throw(SQLException, RuntimeException);
+                                                                throw(SQLException, RuntimeException, std::exception);
 
             void SAL_CALL setTransactionIsolation(sal_Int32 level)
-                                                                throw(SQLException, RuntimeException);
+                                                                throw(SQLException, RuntimeException, std::exception);
 
             sal_Int32 SAL_CALL getTransactionIsolation()
-                                                                throw(SQLException, RuntimeException);
+                                                                throw(SQLException, RuntimeException, std::exception);
 
             my_XNameAccessRef SAL_CALL getTypeMap()
-                                                                throw(SQLException, RuntimeException);
+                                                                throw(SQLException, RuntimeException, std::exception);
 
             void SAL_CALL setTypeMap(const my_XNameAccessRef& typeMap)
-                                                                throw(SQLException, RuntimeException);
+                                                                throw(SQLException, RuntimeException, std::exception);
             // XCloseable
             void SAL_CALL close()
-                                                                throw(SQLException, RuntimeException);
+                                                                throw(SQLException, RuntimeException, std::exception);
             // XWarningsSupplier
             ::com::sun::star::uno::Any SAL_CALL getWarnings()
-                                                                throw(SQLException, RuntimeException);
+                                                                throw(SQLException, RuntimeException, std::exception);
             void SAL_CALL clearWarnings()
-                                                                throw(SQLException, RuntimeException);
+                                                                throw(SQLException, RuntimeException, std::exception);
 
             // TODO: Not used
             //sal_Int32 sdbcColumnType(OUString typeName);

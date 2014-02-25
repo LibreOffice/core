@@ -136,7 +136,7 @@ Reference< XDispatch > SAL_CALL HelpInterceptor_Impl::queryDispatch(
 
     const URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags )
 
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 
 {
     Reference< XDispatch > xResult;
@@ -161,7 +161,7 @@ Sequence < Reference < XDispatch > > SAL_CALL HelpInterceptor_Impl::queryDispatc
 
     const Sequence< DispatchDescriptor >& aDescripts )
 
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 
 {
     Sequence< Reference< XDispatch > > aReturn( aDescripts.getLength() );
@@ -179,7 +179,7 @@ Sequence < Reference < XDispatch > > SAL_CALL HelpInterceptor_Impl::queryDispatc
 
 Reference< XDispatchProvider > SAL_CALL HelpInterceptor_Impl::getSlaveDispatchProvider()
 
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 
 {
     return m_xSlaveDispatcher;
@@ -189,7 +189,7 @@ Reference< XDispatchProvider > SAL_CALL HelpInterceptor_Impl::getSlaveDispatchPr
 
 void SAL_CALL HelpInterceptor_Impl::setSlaveDispatchProvider( const Reference< XDispatchProvider >& xNewSlave )
 
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 
 {
     m_xSlaveDispatcher = xNewSlave;
@@ -199,7 +199,7 @@ void SAL_CALL HelpInterceptor_Impl::setSlaveDispatchProvider( const Reference< X
 
 Reference< XDispatchProvider > SAL_CALL HelpInterceptor_Impl::getMasterDispatchProvider()
 
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 
 {
     return m_xMasterDispatcher;
@@ -209,7 +209,7 @@ Reference< XDispatchProvider > SAL_CALL HelpInterceptor_Impl::getMasterDispatchP
 
 void SAL_CALL HelpInterceptor_Impl::setMasterDispatchProvider( const Reference< XDispatchProvider >& xNewMaster )
 
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 
 {
     m_xMasterDispatcher = xNewMaster;
@@ -220,7 +220,7 @@ void SAL_CALL HelpInterceptor_Impl::setMasterDispatchProvider( const Reference< 
 
 Sequence< OUString > SAL_CALL HelpInterceptor_Impl::getInterceptedURLs()
 
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 
 {
     Sequence< OUString > aURLList( 1 );
@@ -232,7 +232,7 @@ Sequence< OUString > SAL_CALL HelpInterceptor_Impl::getInterceptedURLs()
 // XDispatch
 
 void SAL_CALL HelpInterceptor_Impl::dispatch(
-    const URL& aURL, const Sequence< ::com::sun::star::beans::PropertyValue >& ) throw( RuntimeException )
+    const URL& aURL, const Sequence< ::com::sun::star::beans::PropertyValue >& ) throw( RuntimeException, std::exception )
 {
     sal_Bool bBack = ( OUString( ".uno:Backward" ) == aURL.Complete );
     if ( bBack || OUString( ".uno:Forward" ) == aURL.Complete )
@@ -271,7 +271,7 @@ void SAL_CALL HelpInterceptor_Impl::dispatch(
 
 
 void SAL_CALL HelpInterceptor_Impl::addStatusListener(
-    const Reference< XStatusListener >& xControl, const URL& ) throw( RuntimeException )
+    const Reference< XStatusListener >& xControl, const URL& ) throw( RuntimeException, std::exception )
 {
     DBG_ASSERT( !m_xListener.is(), "listener already exists" );
     m_xListener = xControl;
@@ -280,7 +280,7 @@ void SAL_CALL HelpInterceptor_Impl::addStatusListener(
 
 
 void SAL_CALL HelpInterceptor_Impl::removeStatusListener(
-    const Reference< XStatusListener >&, const URL&) throw( RuntimeException )
+    const Reference< XStatusListener >&, const URL&) throw( RuntimeException, std::exception )
 {
     m_xListener = 0;
 }
@@ -297,7 +297,7 @@ HelpListener_Impl::HelpListener_Impl( HelpInterceptor_Impl* pInter )
 
 void SAL_CALL HelpListener_Impl::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event )
 
-    throw( ::com::sun::star::uno::RuntimeException )
+    throw( ::com::sun::star::uno::RuntimeException, std::exception )
 
 {
     INetURLObject aObj( Event.FeatureURL.Complete );
@@ -309,7 +309,7 @@ void SAL_CALL HelpListener_Impl::statusChanged( const ::com::sun::star::frame::F
 
 void SAL_CALL HelpListener_Impl::disposing( const ::com::sun::star::lang::EventObject& )
 
-    throw( ::com::sun::star::uno::RuntimeException )
+    throw( ::com::sun::star::uno::RuntimeException, std::exception )
 
 {
     pInterceptor->removeStatusListener( this, ::com::sun::star::util::URL() );
@@ -329,12 +329,12 @@ HelpStatusListener_Impl::~HelpStatusListener_Impl()
 }
 
 void HelpStatusListener_Impl::statusChanged(
-    const FeatureStateEvent& rEvent ) throw( RuntimeException )
+    const FeatureStateEvent& rEvent ) throw( RuntimeException, std::exception )
 {
     aStateEvent = rEvent;
 }
 
-void HelpStatusListener_Impl::disposing( const EventObject& ) throw( RuntimeException )
+void HelpStatusListener_Impl::disposing( const EventObject& ) throw( RuntimeException, std::exception )
 {
     xDispatch->removeStatusListener(this, com::sun::star::util::URL());
     xDispatch = 0;

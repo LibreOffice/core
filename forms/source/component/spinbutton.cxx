@@ -117,7 +117,7 @@ namespace frm
     }
 
 
-    void OSpinButtonModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue ) throw ( Exception )
+    void OSpinButtonModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue ) throw ( Exception, std::exception )
     {
         switch ( _nHandle )
         {
@@ -190,14 +190,14 @@ namespace frm
     }
 
 
-    OUString SAL_CALL OSpinButtonModel::getServiceName() throw( RuntimeException )
+    OUString SAL_CALL OSpinButtonModel::getServiceName() throw( RuntimeException, std::exception )
     {
         return OUString(FRM_SUN_COMPONENT_SPINBUTTON);
     }
 
 
     void SAL_CALL OSpinButtonModel::write( const Reference< XObjectOutputStream >& _rxOutStream )
-        throw( IOException, RuntimeException )
+        throw( IOException, RuntimeException, std::exception )
     {
         OBoundControlModel::write( _rxOutStream );
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -213,7 +213,7 @@ namespace frm
     }
 
 
-    void SAL_CALL OSpinButtonModel::read( const Reference< XObjectInputStream>& _rxInStream ) throw( IOException, RuntimeException )
+    void SAL_CALL OSpinButtonModel::read( const Reference< XObjectInputStream>& _rxInStream ) throw( IOException, RuntimeException, std::exception )
     {
         OBoundControlModel::read( _rxInStream );
         ::osl::MutexGuard aGuard( m_aMutex );

@@ -46,9 +46,9 @@ public:
 
     // XContentIdentifier
     virtual OUString SAL_CALL getContentIdentifier()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
     virtual OUString SAL_CALL getContentProviderScheme()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 
 private:
     OUString m_aContentId;

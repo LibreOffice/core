@@ -53,18 +53,18 @@ public:
         m_context(context) {}
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & serviceName)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Sequence< OUString > SAL_CALL
-    getSupportedServiceNames() throw (css::uno::RuntimeException);
+    getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Reference< css::uri::XUriReference > SAL_CALL
     createVndSunStarPkgUrlReference(
         css::uno::Reference< css::uri::XUriReference > const & authority)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
 private:
     Factory(Factory &); // not implemented
@@ -76,7 +76,7 @@ private:
 };
 
 OUString Factory::getImplementationName()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return
         stoc_services::VndSunStarPkgUrlReferenceFactory::
@@ -84,13 +84,13 @@ OUString Factory::getImplementationName()
 }
 
 sal_Bool Factory::supportsService(OUString const & serviceName)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, serviceName);
 }
 
 css::uno::Sequence< OUString > Factory::getSupportedServiceNames()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return stoc_services::VndSunStarPkgUrlReferenceFactory::
         getSupportedServiceNames();
@@ -99,7 +99,7 @@ css::uno::Sequence< OUString > Factory::getSupportedServiceNames()
 css::uno::Reference< css::uri::XUriReference >
 Factory::createVndSunStarPkgUrlReference(
     css::uno::Reference< css::uri::XUriReference > const & authority)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     OSL_ASSERT(authority.is());
     if (authority->isAbsolute() && !authority->hasFragment()) {

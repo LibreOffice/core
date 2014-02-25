@@ -53,19 +53,19 @@ css::uno::Sequence< OUString > MorkDriver::getSupportedServiceNames_Static(  ) t
 }
 
 OUString SAL_CALL MorkDriver::getImplementationName()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return getImplementationName_Static();
 }
 
 sal_Bool SAL_CALL MorkDriver::supportsService(const OUString& serviceName)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, serviceName);
 }
 
 css::uno::Sequence< OUString > MorkDriver::getSupportedServiceNames()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return getSupportedServiceNames_Static();
 }
@@ -73,7 +73,7 @@ css::uno::Sequence< OUString > MorkDriver::getSupportedServiceNames()
 css::uno::Reference< css::sdbc::XConnection > MorkDriver::connect(
     OUString const & url,
     css::uno::Sequence< css::beans::PropertyValue > const & info)
-    throw (css::sdbc::SQLException, css::uno::RuntimeException)
+    throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     SAL_INFO("connectivity.mork", "=> MorkDriver::connect()" );
 
@@ -86,7 +86,7 @@ css::uno::Reference< css::sdbc::XConnection > MorkDriver::connect(
 }
 
 sal_Bool MorkDriver::acceptsURL(OUString const & url)
-    throw (css::sdbc::SQLException, css::uno::RuntimeException)
+    throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     SAL_INFO("connectivity.mork", "=> MorkDriver::acceptsURL()" );
     // Skip 'sdbc:mozab: part of URL
@@ -130,19 +130,19 @@ sal_Bool MorkDriver::acceptsURL(OUString const & url)
 css::uno::Sequence< css::sdbc::DriverPropertyInfo > MorkDriver::getPropertyInfo(
     OUString const & url,
     css::uno::Sequence< css::beans::PropertyValue > const & info)
-    throw (css::sdbc::SQLException, css::uno::RuntimeException)
+    throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     //... TODO
     (void) url; (void) info; // avoid warnings
     return css::uno::Sequence< css::sdbc::DriverPropertyInfo >();
 }
 
-sal_Int32 MorkDriver::getMajorVersion() throw (css::uno::RuntimeException) {
+sal_Int32 MorkDriver::getMajorVersion() throw (css::uno::RuntimeException, std::exception) {
     //... TODO
     return 0;
 }
 
-sal_Int32 MorkDriver::getMinorVersion() throw (css::uno::RuntimeException) {
+sal_Int32 MorkDriver::getMinorVersion() throw (css::uno::RuntimeException, std::exception) {
     //... TODO
     return 0;
 }

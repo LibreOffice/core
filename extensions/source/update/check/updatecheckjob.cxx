@@ -83,25 +83,25 @@ public:
 
     // XJob
     virtual uno::Any SAL_CALL execute(const uno::Sequence<beans::NamedValue>&)
-        throw (lang::IllegalArgumentException, uno::Exception);
+        throw (lang::IllegalArgumentException, uno::Exception, std::exception);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw (uno::RuntimeException);
+        throw (uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL supportsService(OUString const & serviceName)
-        throw (uno::RuntimeException);
+        throw (uno::RuntimeException, std::exception);
     virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw (uno::RuntimeException);
+        throw (uno::RuntimeException, std::exception);
 
     // XEventListener
     virtual void SAL_CALL disposing( ::com::sun::star::lang::EventObject const & evt )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // XTerminateListener
     virtual void SAL_CALL queryTermination( lang::EventObject const & evt )
-        throw ( frame::TerminationVetoException, uno::RuntimeException );
+        throw ( frame::TerminationVetoException, uno::RuntimeException, std::exception );
     virtual void SAL_CALL notifyTermination( lang::EventObject const & evt )
-        throw ( uno::RuntimeException );
+        throw ( uno::RuntimeException, std::exception );
 
 private:
     uno::Reference<uno::XComponentContext>  m_xContext;
@@ -181,7 +181,7 @@ UpdateCheckJob::getImplName()
 
 uno::Any
 UpdateCheckJob::execute(const uno::Sequence<beans::NamedValue>& namedValues)
-    throw (lang::IllegalArgumentException, uno::Exception)
+    throw (lang::IllegalArgumentException, uno::Exception, std::exception)
 {
     for ( sal_Int32 n=namedValues.getLength(); n-- > 0; )
     {
@@ -263,7 +263,7 @@ void UpdateCheckJob::handleExtensionUpdates( const uno::Sequence< beans::NamedVa
 
 
 OUString SAL_CALL
-UpdateCheckJob::getImplementationName() throw (uno::RuntimeException)
+UpdateCheckJob::getImplementationName() throw (uno::RuntimeException, std::exception)
 {
     return getImplName();
 }
@@ -271,13 +271,13 @@ UpdateCheckJob::getImplementationName() throw (uno::RuntimeException)
 
 
 uno::Sequence< OUString > SAL_CALL
-UpdateCheckJob::getSupportedServiceNames() throw (uno::RuntimeException)
+UpdateCheckJob::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
 {
     return getServiceNames();
 }
 
 sal_Bool SAL_CALL
-UpdateCheckJob::supportsService( OUString const & serviceName ) throw (uno::RuntimeException)
+UpdateCheckJob::supportsService( OUString const & serviceName ) throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, serviceName);
 }
@@ -285,7 +285,7 @@ UpdateCheckJob::supportsService( OUString const & serviceName ) throw (uno::Runt
 
 // XEventListener
 void SAL_CALL UpdateCheckJob::disposing( lang::EventObject const & rEvt )
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     bool shutDown = ( rEvt.Source == m_xDesktop );
 
@@ -299,13 +299,13 @@ void SAL_CALL UpdateCheckJob::disposing( lang::EventObject const & rEvt )
 
 // XTerminateListener
 void SAL_CALL UpdateCheckJob::queryTermination( lang::EventObject const & )
-    throw ( frame::TerminationVetoException, uno::RuntimeException )
+    throw ( frame::TerminationVetoException, uno::RuntimeException, std::exception )
 {
 }
 
 
 void SAL_CALL UpdateCheckJob::notifyTermination( lang::EventObject const & )
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     if ( m_pInitThread.get() != 0 )
     {

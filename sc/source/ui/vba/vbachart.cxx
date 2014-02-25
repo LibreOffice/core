@@ -78,7 +78,7 @@ ScVbaChart::ScVbaChart( const css::uno::Reference< ov::XHelperInterface >& _xPar
 }
 
 OUString SAL_CALL
-ScVbaChart::getName() throw (css::uno::RuntimeException)
+ScVbaChart::getName() throw (css::uno::RuntimeException, std::exception)
 {
     OUString sName;
     uno::Reference< beans::XPropertySet > xProps( mxChartDocument, uno::UNO_QUERY_THROW );
@@ -93,13 +93,13 @@ ScVbaChart::getName() throw (css::uno::RuntimeException)
 }
 
 uno::Any  SAL_CALL
-ScVbaChart::SeriesCollection(const uno::Any&) throw (uno::RuntimeException)
+ScVbaChart::SeriesCollection(const uno::Any&) throw (uno::RuntimeException, std::exception)
 {
     return uno::Any();
 }
 
 ::sal_Int32 SAL_CALL
-ScVbaChart::getChartType() throw ( uno::RuntimeException, script::BasicErrorException)
+ScVbaChart::getChartType() throw ( uno::RuntimeException, script::BasicErrorException, std::exception)
 {
     sal_Int32 nChartType = -1;
     try
@@ -218,7 +218,7 @@ ScVbaChart::getChartType() throw ( uno::RuntimeException, script::BasicErrorExce
 }
 
 void SAL_CALL
-ScVbaChart::setChartType( ::sal_Int32 _nChartType ) throw ( uno::RuntimeException, script::BasicErrorException)
+ScVbaChart::setChartType( ::sal_Int32 _nChartType ) throw ( uno::RuntimeException, script::BasicErrorException, std::exception)
 {
 try
 {
@@ -544,7 +544,7 @@ try
 }
 
 void SAL_CALL
-ScVbaChart::Activate() throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaChart::Activate() throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     // #TODO how are Chart sheets handled ( I know we don't even consider
     // them in the worksheets/sheets collections ), but.....???
@@ -559,7 +559,7 @@ ScVbaChart::Activate() throw (script::BasicErrorException, uno::RuntimeException
 }
 
 void SAL_CALL
-ScVbaChart::setSourceData( const css::uno::Reference< ::ooo::vba::excel::XRange >& _xCalcRange, const css::uno::Any& _aPlotBy ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
+ScVbaChart::setSourceData( const css::uno::Reference< ::ooo::vba::excel::XRange >& _xCalcRange, const css::uno::Any& _aPlotBy ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception)
 {
     try
     {
@@ -645,7 +645,7 @@ ScVbaChart::setDefaultChartType() throw ( script::BasicErrorException )
 }
 
 void
-ScVbaChart::setPlotBy( ::sal_Int32 _nPlotBy ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
+ScVbaChart::setPlotBy( ::sal_Int32 _nPlotBy ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception)
 {
     try
     {
@@ -670,7 +670,7 @@ ScVbaChart::setPlotBy( ::sal_Int32 _nPlotBy ) throw (css::script::BasicErrorExce
 }
 
 ::sal_Int32 SAL_CALL
-ScVbaChart::getPlotBy(  ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaChart::getPlotBy(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     try
     {
@@ -710,19 +710,19 @@ ScVbaChart::setDiagram( const OUString& _sDiagramType ) throw( script::BasicErro
 // #TODO find out why we have Location/getLocation ? there is afaiks no
 // Location property, just a Location function for the Chart object
 sal_Int32 SAL_CALL
-ScVbaChart::Location() throw (css::script::BasicErrorException, css::uno::RuntimeException)
+ScVbaChart::Location() throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception)
 {
     return getLocation();
 }
 
 sal_Int32 SAL_CALL
-ScVbaChart::getLocation() throw (css::script::BasicErrorException, css::uno::RuntimeException)
+ScVbaChart::getLocation() throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception)
 {
      return -1;
 }
 
 void SAL_CALL
-ScVbaChart::setLocation( ::sal_Int32 /*where*/, const css::uno::Any& /*Name*/ ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaChart::setLocation( ::sal_Int32 /*where*/, const css::uno::Any& /*Name*/ ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     // Helper api just stubs out the code <shrug>
     // #TODO come back and make sense out of this
@@ -810,7 +810,7 @@ ScVbaChart::setLocation( ::sal_Int32 /*where*/, const css::uno::Any& /*Name*/ ) 
 }
 
 sal_Bool SAL_CALL
-ScVbaChart::getHasTitle(  ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaChart::getHasTitle(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     sal_Bool bHasTitle = false;
     try
@@ -825,7 +825,7 @@ ScVbaChart::getHasTitle(  ) throw (script::BasicErrorException, uno::RuntimeExce
 }
 
 void SAL_CALL
-ScVbaChart::setHasTitle( ::sal_Bool bTitle ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaChart::setHasTitle( ::sal_Bool bTitle ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     try
     {
@@ -839,7 +839,7 @@ ScVbaChart::setHasTitle( ::sal_Bool bTitle ) throw (script::BasicErrorException,
 }
 
 ::sal_Bool SAL_CALL
-ScVbaChart::getHasLegend(  ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaChart::getHasLegend(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     sal_Bool bHasLegend = false;
     try
@@ -854,7 +854,7 @@ ScVbaChart::getHasLegend(  ) throw (script::BasicErrorException, uno::RuntimeExc
 }
 
 void SAL_CALL
-ScVbaChart::setHasLegend( ::sal_Bool bLegend ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaChart::setHasLegend( ::sal_Bool bLegend ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     try
     {
@@ -867,7 +867,7 @@ ScVbaChart::setHasLegend( ::sal_Bool bLegend ) throw (script::BasicErrorExceptio
 }
 
 uno::Reference< excel::XChartTitle > SAL_CALL
-ScVbaChart::getChartTitle(  ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaChart::getChartTitle(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     uno::Reference< drawing::XShape > xTitleShape = mxChartDocument->getTitle();
     // #TODO check parent
@@ -875,7 +875,7 @@ ScVbaChart::getChartTitle(  ) throw (script::BasicErrorException, uno::RuntimeEx
 }
 
 uno::Any SAL_CALL
-ScVbaChart::Axes( const uno::Any& Type, const uno::Any& AxisGroup ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaChart::Axes( const uno::Any& Type, const uno::Any& AxisGroup ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     // mmm chart probably is the parent, #TODO check parent
     uno::Reference< excel::XAxes > xAxes = new ScVbaAxes( this, mxContext, this );

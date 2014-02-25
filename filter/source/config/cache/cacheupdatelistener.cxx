@@ -82,7 +82,7 @@ void CacheUpdateListener::stopListening()
 
 
 void SAL_CALL  CacheUpdateListener::changesOccurred(const css::util::ChangesEvent& aEvent)
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -182,7 +182,7 @@ void SAL_CALL  CacheUpdateListener::changesOccurred(const css::util::ChangesEven
 
 
 void SAL_CALL CacheUpdateListener::disposing(const css::lang::EventObject& aEvent)
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);

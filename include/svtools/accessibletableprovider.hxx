@@ -147,7 +147,7 @@ public:
 
     virtual css::uno::Reference< css::accessibility::XAccessible >
         SAL_CALL getAccessibleChild( sal_Int32 nChildIndex )
-            throw ( css::lang::IndexOutOfBoundsException, css::uno::RuntimeException ) = 0;
+            throw ( css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception ) = 0;
 
     /** returns the accessible object for the row or the column header bar
     */

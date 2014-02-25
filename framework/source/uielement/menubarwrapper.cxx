@@ -94,7 +94,7 @@ MenuBarWrapper::~MenuBarWrapper()
 {
 }
 
-void SAL_CALL MenuBarWrapper::dispose() throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL MenuBarWrapper::dispose() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
 
@@ -113,7 +113,7 @@ void SAL_CALL MenuBarWrapper::dispose() throw (::com::sun::star::uno::RuntimeExc
 }
 
 // XInitialization
-void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
+void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException, std::exception )
 {
 
     ResetableGuard aLock( m_aLock );
@@ -203,7 +203,7 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
 }
 
 // XUIElementSettings
-void SAL_CALL MenuBarWrapper::updateSettings() throw ( RuntimeException )
+void SAL_CALL MenuBarWrapper::updateSettings() throw ( RuntimeException, std::exception )
 {
     ResetableGuard aLock( m_aLock );
 
@@ -256,13 +256,13 @@ void MenuBarWrapper::fillPopupControllerCache()
 
 // XElementAccess
 Type SAL_CALL MenuBarWrapper::getElementType()
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return ::getCppuType(( Reference< XDispatchProvider >*)0);
 }
 
 ::sal_Bool SAL_CALL MenuBarWrapper::hasElements()
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ResetableGuard aLock( m_aLock );
 
@@ -278,7 +278,7 @@ Any SAL_CALL MenuBarWrapper::getByName(
     const OUString& aName )
 throw ( container::NoSuchElementException,
         lang::WrappedTargetException,
-        uno::RuntimeException)
+        uno::RuntimeException, std::exception)
 {
     ResetableGuard aLock( m_aLock );
 
@@ -299,7 +299,7 @@ throw ( container::NoSuchElementException,
 }
 
 Sequence< OUString > SAL_CALL MenuBarWrapper::getElementNames()
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ResetableGuard aLock( m_aLock );
 
@@ -323,7 +323,7 @@ throw (::com::sun::star::uno::RuntimeException)
 
 ::sal_Bool SAL_CALL MenuBarWrapper::hasByName(
     const OUString& aName )
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ResetableGuard aLock( m_aLock );
 
@@ -340,7 +340,7 @@ throw (::com::sun::star::uno::RuntimeException)
 }
 
 // XUIElement
-Reference< XInterface > SAL_CALL MenuBarWrapper::getRealInterface() throw ( RuntimeException )
+Reference< XInterface > SAL_CALL MenuBarWrapper::getRealInterface() throw ( RuntimeException, std::exception )
 {
     if ( m_bDisposed )
         throw DisposedException();

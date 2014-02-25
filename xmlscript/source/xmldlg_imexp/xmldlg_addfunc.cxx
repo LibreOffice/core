@@ -47,10 +47,10 @@ public:
 
     // XInputStreamProvider
     virtual Reference< io::XInputStream > SAL_CALL createInputStream()
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
 };
 Reference< io::XInputStream > InputStreamProvider::createInputStream()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return ::xmlscript::createInputStream( _bytes );
 }

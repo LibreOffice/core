@@ -96,7 +96,7 @@ void SAL_CALL ViewShellWrapper::disposing (void)
     mpViewShell.reset();
 }
 
-uno::Any SAL_CALL ViewShellWrapper::queryInterface( const uno::Type & rType ) throw(uno::RuntimeException)
+uno::Any SAL_CALL ViewShellWrapper::queryInterface( const uno::Type & rType ) throw(uno::RuntimeException, std::exception)
 {
     if( mpSlideSorterViewShell &&
         rType == ::getCppuType( static_cast< uno::Reference< view::XSelectionSupplier > * >( 0 ) ) )
@@ -124,7 +124,7 @@ uno::Any SAL_CALL ViewShellWrapper::queryInterface( const uno::Type & rType ) th
 //----- XResource -------------------------------------------------------------
 
 Reference<XResourceId> SAL_CALL ViewShellWrapper::getResourceId (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return mxViewId;
 }
@@ -133,7 +133,7 @@ Reference<XResourceId> SAL_CALL ViewShellWrapper::getResourceId (void)
 
 
 sal_Bool SAL_CALL ViewShellWrapper::isAnchorOnly (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return false;
 }
@@ -141,7 +141,7 @@ sal_Bool SAL_CALL ViewShellWrapper::isAnchorOnly (void)
 
 //----- XSelectionSupplier --------------------------------------------------
 
-sal_Bool SAL_CALL ViewShellWrapper::select( const ::com::sun::star::uno::Any& aSelection ) throw(lang::IllegalArgumentException, uno::RuntimeException)
+sal_Bool SAL_CALL ViewShellWrapper::select( const ::com::sun::star::uno::Any& aSelection ) throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     if (!mpSlideSorterViewShell)
         return false;
@@ -203,11 +203,11 @@ uno::Any SAL_CALL ViewShellWrapper::getSelection()
     return aResult;
 }
 
-void SAL_CALL ViewShellWrapper::addSelectionChangeListener( const uno::Reference< view::XSelectionChangeListener >& ) throw(uno::RuntimeException)
+void SAL_CALL ViewShellWrapper::addSelectionChangeListener( const uno::Reference< view::XSelectionChangeListener >& ) throw(uno::RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL ViewShellWrapper::removeSelectionChangeListener( const uno::Reference< view::XSelectionChangeListener >& ) throw(uno::RuntimeException)
+void SAL_CALL ViewShellWrapper::removeSelectionChangeListener( const uno::Reference< view::XSelectionChangeListener >& ) throw(uno::RuntimeException, std::exception)
 {
 }
 
@@ -216,7 +216,7 @@ void SAL_CALL ViewShellWrapper::removeSelectionChangeListener( const uno::Refere
 
 sal_Bool SAL_CALL ViewShellWrapper::relocateToAnchor (
     const Reference<XResource>& xResource)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     sal_Bool bResult (false);
 
@@ -269,7 +269,7 @@ const Sequence<sal_Int8>& ViewShellWrapper::getUnoTunnelId (void)
 
 
 sal_Int64 SAL_CALL ViewShellWrapper::getSomething (const Sequence<sal_Int8>& rId)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     sal_Int64 nResult = 0;
 
@@ -288,7 +288,7 @@ sal_Int64 SAL_CALL ViewShellWrapper::getSomething (const Sequence<sal_Int8>& rId
 //===== awt::XWindowListener ==================================================
 
 void SAL_CALL ViewShellWrapper::windowResized (const awt::WindowEvent& rEvent)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     (void)rEvent;
     ViewShell* pViewShell (mpViewShell.get());
@@ -300,7 +300,7 @@ void SAL_CALL ViewShellWrapper::windowResized (const awt::WindowEvent& rEvent)
 
 
 void SAL_CALL ViewShellWrapper::windowMoved (const awt::WindowEvent& rEvent)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     (void)rEvent;
 }
@@ -309,7 +309,7 @@ void SAL_CALL ViewShellWrapper::windowMoved (const awt::WindowEvent& rEvent)
 
 
 void SAL_CALL ViewShellWrapper::windowShown (const lang::EventObject& rEvent)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     (void)rEvent;
     ViewShell* pViewShell (mpViewShell.get());
@@ -321,7 +321,7 @@ void SAL_CALL ViewShellWrapper::windowShown (const lang::EventObject& rEvent)
 
 
 void SAL_CALL ViewShellWrapper::windowHidden (const lang::EventObject& rEvent)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     (void)rEvent;
 }
@@ -332,7 +332,7 @@ void SAL_CALL ViewShellWrapper::windowHidden (const lang::EventObject& rEvent)
 //===== XEventListener ========================================================
 
 void SAL_CALL ViewShellWrapper::disposing (const lang::EventObject& rEvent)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     if (rEvent.Source == mxWindow)
         mxWindow = NULL;

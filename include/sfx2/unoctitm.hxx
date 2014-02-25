@@ -60,10 +60,10 @@ public:
                                 { return aCommand; }
 
     // XStatusListener
-    virtual void SAL_CALL statusChanged(const ::com::sun::star::frame::FeatureStateEvent& Event) throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL statusChanged(const ::com::sun::star::frame::FeatureStateEvent& Event) throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     // Something else
-    virtual void    SAL_CALL            disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException );
+    virtual void    SAL_CALL            disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException, std::exception );
     void                        UnBind();
     void                        GetNewDispatch();
     void                        ReleaseDispatch();
@@ -90,10 +90,10 @@ public:
     // XDispatch
     virtual void SAL_CALL dispatchWithNotification( const ::com::sun::star::util::URL& aURL,
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchResultListener >& rListener ) throw( ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL dispatch( const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs ) throw( ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL addStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL removeStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( ::com::sun::star::uno::RuntimeException );
+                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchResultListener >& rListener ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    virtual void SAL_CALL dispatch( const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    virtual void SAL_CALL addStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    virtual void SAL_CALL removeStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     // Something else
     void                ReleaseAll();
@@ -120,16 +120,16 @@ public:
     virtual void SAL_CALL       dispatchWithNotification( const ::com::sun::star::util::URL& aURL,
                                                           const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs,
                                                           const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchResultListener >& rListener )
-                                throw( ::com::sun::star::uno::RuntimeException );
+                                throw( ::com::sun::star::uno::RuntimeException, std::exception );
     virtual void   SAL_CALL     dispatch( const ::com::sun::star::util::URL& aURL,
                                           const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs )
-                                throw( ::com::sun::star::uno::RuntimeException );
+                                throw( ::com::sun::star::uno::RuntimeException, std::exception );
     virtual void   SAL_CALL     addStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl,
                                                    const ::com::sun::star::util::URL& aURL)
-                                throw( ::com::sun::star::uno::RuntimeException );
+                                throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException) ;
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception) ;
     static const ::com::sun::star::uno::Sequence< sal_Int8 >& impl_getStaticIdentifier();
 
     static sal_Bool         IsMasterUnoCommand( const ::com::sun::star::util::URL& aURL );

@@ -68,46 +68,46 @@ namespace x11 {
          */
 
         virtual OUString SAL_CALL getImplementationName(  )
-            throw(RuntimeException);
+            throw(RuntimeException, std::exception);
 
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-            throw(RuntimeException);
+            throw(RuntimeException, std::exception);
 
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-            throw(RuntimeException);
+            throw(RuntimeException, std::exception);
 
         /*
          * XClipboard
          */
 
         virtual com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL getContents()
-            throw(RuntimeException);
+            throw(RuntimeException, std::exception);
 
         virtual void SAL_CALL setContents(
             const com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTrans,
             const com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
-            throw(RuntimeException);
+            throw(RuntimeException, std::exception);
 
         virtual OUString SAL_CALL getName()
-            throw(RuntimeException);
+            throw(RuntimeException, std::exception);
 
         /*
          * XClipboardEx
          */
 
         virtual sal_Int8 SAL_CALL getRenderingCapabilities()
-            throw(RuntimeException);
+            throw(RuntimeException, std::exception);
 
         /*
          * XClipboardNotifier
          */
         virtual void SAL_CALL addClipboardListener(
             const com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
-            throw(RuntimeException);
+            throw(RuntimeException, std::exception);
 
         virtual void SAL_CALL removeClipboardListener(
             const com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
-            throw(RuntimeException);
+            throw(RuntimeException, std::exception);
 
         /*
          *  SelectionAdaptor

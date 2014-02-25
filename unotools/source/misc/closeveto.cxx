@@ -60,11 +60,11 @@ namespace utl
         }
 
         // XCloseListener
-        virtual void SAL_CALL queryClosing( const EventObject& Source, ::sal_Bool GetsOwnership ) throw (CloseVetoException, RuntimeException);
-        virtual void SAL_CALL notifyClosing( const EventObject& Source ) throw (RuntimeException);
+        virtual void SAL_CALL queryClosing( const EventObject& Source, ::sal_Bool GetsOwnership ) throw (CloseVetoException, RuntimeException, std::exception);
+        virtual void SAL_CALL notifyClosing( const EventObject& Source ) throw (RuntimeException, std::exception);
 
         // XEventListener
-        virtual void SAL_CALL disposing( const EventObject& Source) throw (RuntimeException);
+        virtual void SAL_CALL disposing( const EventObject& Source) throw (RuntimeException, std::exception);
 
         bool hasOwnership() const { return m_bHasOwnership; }
 
@@ -78,7 +78,7 @@ namespace utl
     };
 
 
-    void SAL_CALL CloseListener_Impl::queryClosing( const EventObject& i_source, ::sal_Bool i_deliverOwnership ) throw (CloseVetoException, RuntimeException)
+    void SAL_CALL CloseListener_Impl::queryClosing( const EventObject& i_source, ::sal_Bool i_deliverOwnership ) throw (CloseVetoException, RuntimeException, std::exception)
     {
         (void)i_source;
 
@@ -89,13 +89,13 @@ namespace utl
     }
 
 
-    void SAL_CALL CloseListener_Impl::notifyClosing( const EventObject& i_source ) throw (RuntimeException)
+    void SAL_CALL CloseListener_Impl::notifyClosing( const EventObject& i_source ) throw (RuntimeException, std::exception)
     {
         (void)i_source;
     }
 
 
-    void SAL_CALL CloseListener_Impl::disposing( const EventObject& i_source ) throw (RuntimeException)
+    void SAL_CALL CloseListener_Impl::disposing( const EventObject& i_source ) throw (RuntimeException, std::exception)
     {
         (void)i_source;
     }

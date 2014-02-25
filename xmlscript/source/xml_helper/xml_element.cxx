@@ -65,20 +65,20 @@ void XMLElement::dump( Reference< xml::sax::XDocumentHandler > const & xOut )
 
 // XAttributeList
 sal_Int16 XMLElement::getLength()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return static_cast<sal_Int16>(_attrNames.size());
 }
 
 OUString XMLElement::getNameByIndex( sal_Int16 nPos )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     OSL_ASSERT( (size_t)nPos < _attrNames.size() );
     return _attrNames[ nPos ];
 }
 
 OUString XMLElement::getTypeByIndex( sal_Int16 nPos )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     OSL_ASSERT( (size_t)nPos < _attrNames.size() );
     static_cast<void>(nPos);
@@ -87,21 +87,21 @@ OUString XMLElement::getTypeByIndex( sal_Int16 nPos )
 }
 
 OUString XMLElement::getTypeByName( OUString const & /*rName*/ )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     // xxx todo
     return OUString();
 }
 
 OUString XMLElement::getValueByIndex( sal_Int16 nPos )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     OSL_ASSERT( (size_t)nPos < _attrNames.size() );
     return _attrValues[ nPos ];
 }
 
 OUString XMLElement::getValueByName( OUString const & rName )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     for ( size_t nPos = 0; nPos < _attrNames.size(); ++nPos )
     {

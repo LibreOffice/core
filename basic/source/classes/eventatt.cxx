@@ -155,23 +155,23 @@ public:
 
     // Methods of XAllListener
     virtual void SAL_CALL firing(const ScriptEvent& aScriptEvent)
-        throw( RuntimeException );
+        throw( RuntimeException, std::exception );
     virtual Any SAL_CALL approveFiring(const ScriptEvent& aScriptEvent)
-        throw( InvocationTargetException, RuntimeException );
+        throw( InvocationTargetException, RuntimeException, std::exception );
 
     // Methods of XEventListener
     virtual void SAL_CALL disposing(const EventObject& Source)
-        throw( RuntimeException );
+        throw( RuntimeException, std::exception );
 };
 
 // Methods XAllListener
-void BasicScriptListener_Impl::firing( const ScriptEvent& aScriptEvent ) throw ( RuntimeException )
+void BasicScriptListener_Impl::firing( const ScriptEvent& aScriptEvent ) throw ( RuntimeException, std::exception )
 {
     firing_impl( aScriptEvent, NULL );
 }
 
 Any BasicScriptListener_Impl::approveFiring( const ScriptEvent& aScriptEvent )
-    throw ( InvocationTargetException, RuntimeException )
+    throw ( InvocationTargetException, RuntimeException, std::exception )
 {
     Any aRetAny;
     firing_impl( aScriptEvent, &aRetAny );
@@ -179,7 +179,7 @@ Any BasicScriptListener_Impl::approveFiring( const ScriptEvent& aScriptEvent )
 }
 
 // Methods XEventListener
-void BasicScriptListener_Impl::disposing(const EventObject& ) throw ( RuntimeException )
+void BasicScriptListener_Impl::disposing(const EventObject& ) throw ( RuntimeException, std::exception )
 {
     // TODO: ???
     //SolarMutexGuard aGuard;

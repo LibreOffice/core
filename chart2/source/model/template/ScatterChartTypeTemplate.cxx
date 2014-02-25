@@ -184,7 +184,7 @@ uno::Any ScatterChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL ScatterChartTypeTemplate::getPropertySetInfo()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return *StaticScatterChartTypeTemplateInfo::get();
 }
@@ -206,7 +206,7 @@ void SAL_CALL ScatterChartTypeTemplate::applyStyle(
     ::sal_Int32 nChartTypeIndex,
     ::sal_Int32 nSeriesIndex,
     ::sal_Int32 nSeriesCount )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     ChartTypeTemplate::applyStyle( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
 
@@ -228,7 +228,7 @@ void SAL_CALL ScatterChartTypeTemplate::applyStyle(
 
 // ____ XChartTypeTemplate ____
 sal_Bool SAL_CALL ScatterChartTypeTemplate::supportsCategories()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return sal_False;
 }
@@ -236,7 +236,7 @@ sal_Bool SAL_CALL ScatterChartTypeTemplate::supportsCategories()
 sal_Bool SAL_CALL ScatterChartTypeTemplate::matchesTemplate(
     const Reference< chart2::XDiagram >& xDiagram,
     sal_Bool bAdaptProperties )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     sal_Bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram, bAdaptProperties );
 
@@ -354,7 +354,7 @@ Reference< chart2::XChartType > ScatterChartTypeTemplate::getChartTypeForIndex( 
 
 Reference< chart2::XChartType > SAL_CALL ScatterChartTypeTemplate::getChartTypeForNewSeries(
         const uno::Sequence< Reference< chart2::XChartType > >& aFormerlyUsedChartTypes )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Reference< chart2::XChartType > xResult;
 
@@ -387,7 +387,7 @@ Reference< chart2::XChartType > SAL_CALL ScatterChartTypeTemplate::getChartTypeF
 }
 
 Reference< chart2::XDataInterpreter > SAL_CALL ScatterChartTypeTemplate::getDataInterpreter()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if( ! m_xDataInterpreter.is())
         m_xDataInterpreter.set( new XYDataInterpreter( GetComponentContext()) );

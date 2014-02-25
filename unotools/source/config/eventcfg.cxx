@@ -345,39 +345,39 @@ GlobalEventConfig::~GlobalEventConfig()
     }
 }
 
-Reference< container::XNameReplace > SAL_CALL GlobalEventConfig::getEvents() throw (::com::sun::star::uno::RuntimeException)
+Reference< container::XNameReplace > SAL_CALL GlobalEventConfig::getEvents() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     Reference< container::XNameReplace > ret(this);
     return ret;
 }
 
-void SAL_CALL GlobalEventConfig::replaceByName( const OUString& aName, const Any& aElement ) throw (lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, RuntimeException)
+void SAL_CALL GlobalEventConfig::replaceByName( const OUString& aName, const Any& aElement ) throw (lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, RuntimeException, std::exception)
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pImpl->replaceByName( aName, aElement );
 }
-Any SAL_CALL GlobalEventConfig::getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, RuntimeException)
+Any SAL_CALL GlobalEventConfig::getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, RuntimeException, std::exception)
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pImpl->getByName( aName );
 }
-Sequence< OUString > SAL_CALL GlobalEventConfig::getElementNames(  ) throw (RuntimeException)
+Sequence< OUString > SAL_CALL GlobalEventConfig::getElementNames(  ) throw (RuntimeException, std::exception)
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pImpl->getElementNames( );
 }
-sal_Bool SAL_CALL GlobalEventConfig::hasByName( const OUString& aName ) throw (RuntimeException)
+sal_Bool SAL_CALL GlobalEventConfig::hasByName( const OUString& aName ) throw (RuntimeException, std::exception)
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pImpl->hasByName( aName );
 }
-Type SAL_CALL GlobalEventConfig::getElementType(  ) throw (RuntimeException)
+Type SAL_CALL GlobalEventConfig::getElementType(  ) throw (RuntimeException, std::exception)
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pImpl->getElementType( );
 }
-sal_Bool SAL_CALL GlobalEventConfig::hasElements(  ) throw (RuntimeException)
+sal_Bool SAL_CALL GlobalEventConfig::hasElements(  ) throw (RuntimeException, std::exception)
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pImpl->hasElements( );

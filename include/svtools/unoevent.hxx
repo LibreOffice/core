@@ -95,7 +95,7 @@ public:
                 ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::container::NoSuchElementException,
                 ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException);
+                ::com::sun::star::uno::RuntimeException, std::exception);
 
     // XNameAccess (via XNameReplace)
     /// calls getByName(sal_uInt16)
@@ -104,39 +104,39 @@ public:
             throw(
                 ::com::sun::star::container::NoSuchElementException,
                 ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException);
+                ::com::sun::star::uno::RuntimeException, std::exception);
 
     // XNameAxcess (via XNameReplace)
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
                                                         getElementNames()
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     // XNameAccess (via XNameReplace)
     virtual sal_Bool SAL_CALL hasByName(
         const OUString& rName )
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     // XElementAccess (via XNameReplace)
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     // XElementAccess (via XNameReplace)
     virtual sal_Bool SAL_CALL hasElements()
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     // XServiceInfo
     /// must be implemented in subclass
     virtual OUString SAL_CALL getImplementationName(void)
-        throw( ::com::sun::star::uno::RuntimeException ) = 0;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) = 0;
 
     // XServiceInfo
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     // XServiceInfo
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames(void)
-            throw( ::com::sun::star::uno::RuntimeException );
+            throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 protected:
 
@@ -264,7 +264,7 @@ public:
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName(void)
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 protected:
 

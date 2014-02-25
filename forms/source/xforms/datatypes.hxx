@@ -87,25 +87,25 @@ namespace xforms
         DECLARE_XINTERFACE()
         DECLARE_XTYPEPROVIDER()
 
-        virtual OUString SAL_CALL getName(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::util::VetoException);
-        virtual OUString SAL_CALL getPattern() throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setPattern( const OUString& _pattern ) throw (::com::sun::star::uno::RuntimeException);
-        virtual sal_Int16 SAL_CALL getWhiteSpaceTreatment() throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setWhiteSpaceTreatment( sal_Int16 _whitespacetreatment ) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException);
-        virtual sal_Bool SAL_CALL getIsBasic() throw (::com::sun::star::uno::RuntimeException);
-        virtual sal_Int16 SAL_CALL getTypeClass() throw (::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL setName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::util::VetoException, std::exception);
+        virtual OUString SAL_CALL getPattern() throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL setPattern( const OUString& _pattern ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual sal_Int16 SAL_CALL getWhiteSpaceTreatment() throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL setWhiteSpaceTreatment( sal_Int16 _whitespacetreatment ) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, std::exception);
+        virtual sal_Bool SAL_CALL getIsBasic() throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual sal_Int16 SAL_CALL getTypeClass() throw (::com::sun::star::uno::RuntimeException, std::exception);
 
-        virtual sal_Bool SAL_CALL validate( const OUString& value ) throw (::com::sun::star::uno::RuntimeException);
-        virtual OUString SAL_CALL explainInvalid( const OUString& value ) throw (::com::sun::star::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL validate( const OUString& value ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual OUString SAL_CALL explainInvalid( const OUString& value ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
         // XPropertySet - is a base of XDataType and needs to be disambiguated
-        virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception);
+        virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception);
 
     public:
         OXSDDataType* clone( const OUString& _rNewName ) const;
@@ -117,7 +117,7 @@ namespace xforms
                                         sal_Int32 nHandle,
                                         const ::com::sun::star::uno::Any& rValue
                                     )
-                                    throw (::com::sun::star::uno::Exception);
+                                    throw (::com::sun::star::uno::Exception, std::exception);
 
         // --- own overridables ---
         // helper for implementing cloning of data types
@@ -196,7 +196,7 @@ namespace xforms
                                         sal_Int32 nHandle,
                                         const ::com::sun::star::uno::Any& rValue
                                     )
-                                    throw (::com::sun::star::uno::Exception);
+                                    throw (::com::sun::star::uno::Exception, std::exception);
 
         // OXSDDataType overridables
         virtual bool            _getValue( const OUString& value, double& fValue );

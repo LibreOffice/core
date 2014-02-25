@@ -43,19 +43,19 @@ public:
     virtual ~CURI() {}
 
     // ::com::sun::star::lang::XServiceInfo:
-    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL supportsService(const OUString & ServiceName) throw (css::uno::RuntimeException);
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception);
+    virtual ::sal_Bool SAL_CALL supportsService(const OUString & ServiceName) throw (css::uno::RuntimeException, std::exception);
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception);
 
     // ::com::sun::star::lang::XInitialization:
-    virtual void SAL_CALL initialize(const css::uno::Sequence< ::com::sun::star::uno::Any > & aArguments) throw (css::uno::RuntimeException, css::uno::Exception);
+    virtual void SAL_CALL initialize(const css::uno::Sequence< ::com::sun::star::uno::Any > & aArguments) throw (css::uno::RuntimeException, css::uno::Exception, std::exception);
 
     // ::com::sun::star::rdf::XNode:
-    virtual OUString SAL_CALL getStringValue() throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getStringValue() throw (css::uno::RuntimeException, std::exception);
 
     // ::com::sun::star::rdf::XURI:
-    virtual OUString SAL_CALL getLocalName() throw (css::uno::RuntimeException);
-    virtual OUString SAL_CALL getNamespace() throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getLocalName() throw (css::uno::RuntimeException, std::exception);
+    virtual OUString SAL_CALL getNamespace() throw (css::uno::RuntimeException, std::exception);
 
 private:
     CURI(const CURI &); // not defined
@@ -75,17 +75,17 @@ CURI::CURI(css::uno::Reference< css::uno::XComponentContext > const & context) :
 {}
 
 // com.sun.star.uno.XServiceInfo:
-OUString SAL_CALL CURI::getImplementationName() throw (css::uno::RuntimeException)
+OUString SAL_CALL CURI::getImplementationName() throw (css::uno::RuntimeException, std::exception)
 {
     return comp_CURI::_getImplementationName();
 }
 
-::sal_Bool SAL_CALL CURI::supportsService(OUString const & serviceName) throw (css::uno::RuntimeException)
+::sal_Bool SAL_CALL CURI::supportsService(OUString const & serviceName) throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, serviceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL CURI::getSupportedServiceNames() throw (css::uno::RuntimeException)
+css::uno::Sequence< OUString > SAL_CALL CURI::getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception)
 {
     return comp_CURI::_getSupportedServiceNames();
 }
@@ -712,7 +712,7 @@ void SAL_CALL CURI::initFromConstant(const sal_Int16 i_Constant)
 }
 
 // ::com::sun::star::lang::XInitialization:
-void SAL_CALL CURI::initialize(const css::uno::Sequence< ::com::sun::star::uno::Any > & aArguments) throw (css::uno::RuntimeException, css::uno::Exception)
+void SAL_CALL CURI::initialize(const css::uno::Sequence< ::com::sun::star::uno::Any > & aArguments) throw (css::uno::RuntimeException, css::uno::Exception, std::exception)
 {
     sal_Int32 len = aArguments.getLength();
     if ((len < 1) || (len > 2)) {
@@ -786,18 +786,18 @@ void SAL_CALL CURI::initialize(const css::uno::Sequence< ::com::sun::star::uno::
 }
 
 // ::com::sun::star::rdf::XNode:
-OUString SAL_CALL CURI::getStringValue() throw (css::uno::RuntimeException)
+OUString SAL_CALL CURI::getStringValue() throw (css::uno::RuntimeException, std::exception)
 {
     return m_Namespace + m_LocalName;
 }
 
 // ::com::sun::star::rdf::XURI:
-OUString SAL_CALL CURI::getNamespace() throw (css::uno::RuntimeException)
+OUString SAL_CALL CURI::getNamespace() throw (css::uno::RuntimeException, std::exception)
 {
     return m_Namespace;
 }
 
-OUString SAL_CALL CURI::getLocalName() throw (css::uno::RuntimeException)
+OUString SAL_CALL CURI::getLocalName() throw (css::uno::RuntimeException, std::exception)
 {
     return m_LocalName;
 }

@@ -78,31 +78,31 @@ public:
 
     /* XBlockerMonitor */
     virtual void SAL_CALL setBlockerId( sal_Int32 id )
-            throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
+            throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception);
 
     /* XSignatureCreationResultBroadcaster */
     void SAL_CALL addSignatureCreationResultListener(
         const com::sun::star::uno::Reference<
             com::sun::star::xml::crypto::sax::XSignatureCreationResultListener >& listener )
-        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception);
 
     void SAL_CALL removeSignatureCreationResultListener(
         const com::sun::star::uno::Reference<
             com::sun::star::xml::crypto::sax::XSignatureCreationResultListener >& listener )
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     /* XInitialization */
     virtual void SAL_CALL initialize(
         const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArguments )
-        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception);
 
     /* XServiceInfo */
     virtual OUString SAL_CALL getImplementationName(  )
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 };
 
 OUString SignatureCreatorImpl_getImplementationName()

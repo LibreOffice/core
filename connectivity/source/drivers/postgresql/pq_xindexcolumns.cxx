@@ -109,7 +109,7 @@ static sal_Int32 findInSequence( const Sequence< OUString > & seq , const OUStri
 }
 
 void IndexColumns::refresh()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     try
     {
@@ -166,7 +166,7 @@ void IndexColumns::appendByDescriptor(
     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& /*future*/ )
     throw (::com::sun::star::sdbc::SQLException,
            ::com::sun::star::container::ElementExistException,
-           ::com::sun::star::uno::RuntimeException)
+           ::com::sun::star::uno::RuntimeException, std::exception)
 {
     throw com::sun::star::sdbc::SQLException(
         "SDBC-POSTGRESQL: IndexesColumns.appendByDescriptor not yet implemented",
@@ -183,7 +183,7 @@ void IndexColumns::appendByDescriptor(
 void IndexColumns::dropByName( const OUString& elementName )
     throw (::com::sun::star::sdbc::SQLException,
            ::com::sun::star::container::NoSuchElementException,
-           ::com::sun::star::uno::RuntimeException)
+           ::com::sun::star::uno::RuntimeException, std::exception)
 {
     (void) elementName;
     throw com::sun::star::sdbc::SQLException(
@@ -209,7 +209,7 @@ void IndexColumns::dropByName( const OUString& elementName )
 void IndexColumns::dropByIndex( sal_Int32 index )
     throw (::com::sun::star::sdbc::SQLException,
            ::com::sun::star::lang::IndexOutOfBoundsException,
-           ::com::sun::star::uno::RuntimeException)
+           ::com::sun::star::uno::RuntimeException, std::exception)
 {
     (void) index;
     throw com::sun::star::sdbc::SQLException(
@@ -247,7 +247,7 @@ void IndexColumns::dropByIndex( sal_Int32 index )
 
 
 Reference< ::com::sun::star::beans::XPropertySet > IndexColumns::createDataDescriptor()
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return new IndexColumnDescriptor( m_refMutex, m_origin, m_pSettings );
 }
@@ -286,7 +286,7 @@ Reference< com::sun::star::container::XNameAccess > IndexColumnDescriptors::crea
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > IndexColumnDescriptors::createDataDescriptor()
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return new IndexColumnDescriptor( m_refMutex, m_origin, m_pSettings );
 }

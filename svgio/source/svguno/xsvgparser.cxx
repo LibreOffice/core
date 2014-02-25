@@ -55,12 +55,12 @@ namespace svgio
             // XSvgParser
             virtual uno::Sequence< uno::Reference< ::graphic::XPrimitive2D > > SAL_CALL getDecomposition(
                 const uno::Reference< ::io::XInputStream >& xSVGStream,
-                const OUString& aAbsolutePath) throw (uno::RuntimeException);
+                const OUString& aAbsolutePath) throw (uno::RuntimeException, std::exception);
 
             // XServiceInfo
-            virtual OUString SAL_CALL getImplementationName() throw(uno::RuntimeException);
-            virtual ::sal_Bool SAL_CALL supportsService(const OUString&) throw(uno::RuntimeException);
-            virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(uno::RuntimeException);
+            virtual OUString SAL_CALL getImplementationName() throw(uno::RuntimeException, std::exception);
+            virtual ::sal_Bool SAL_CALL supportsService(const OUString&) throw(uno::RuntimeException, std::exception);
+            virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(uno::RuntimeException, std::exception);
         };
     } // end of namespace svgreader
 } // end of namespace svgio
@@ -106,7 +106,7 @@ namespace svgio
 
         uno::Sequence< uno::Reference< ::graphic::XPrimitive2D > > XSvgParser::getDecomposition(
             const uno::Reference< ::io::XInputStream >& xSVGStream,
-            const OUString& aAbsolutePath ) throw (uno::RuntimeException)
+            const OUString& aAbsolutePath ) throw (uno::RuntimeException, std::exception)
         {
             drawinglayer::primitive2d::Primitive2DSequence aRetval;
 
@@ -171,17 +171,17 @@ namespace svgio
             return aRetval;
         }
 
-        OUString SAL_CALL XSvgParser::getImplementationName() throw(uno::RuntimeException)
+        OUString SAL_CALL XSvgParser::getImplementationName() throw(uno::RuntimeException, std::exception)
         {
             return(XSvgParser_getImplementationName());
         }
 
-        sal_Bool SAL_CALL XSvgParser::supportsService(const OUString& rServiceName) throw(uno::RuntimeException)
+        sal_Bool SAL_CALL XSvgParser::supportsService(const OUString& rServiceName) throw(uno::RuntimeException, std::exception)
         {
             return cppu::supportsService(this, rServiceName);
         }
 
-        uno::Sequence< OUString > SAL_CALL XSvgParser::getSupportedServiceNames() throw(uno::RuntimeException)
+        uno::Sequence< OUString > SAL_CALL XSvgParser::getSupportedServiceNames() throw(uno::RuntimeException, std::exception)
         {
             return XSvgParser_getSupportedServiceNames();
         }

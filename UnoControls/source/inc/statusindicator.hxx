@@ -120,7 +120,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
         */
 
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
-            throw( ::com::sun::star::uno::RuntimeException );
+            throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
         /**_______________________________________________________________________________________________________
             @short      increment refcount
@@ -172,7 +172,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
         */
 
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
-            throw( ::com::sun::star::uno::RuntimeException );
+            throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 
         //  XAggregation
@@ -192,7 +192,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
         */
 
         virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& aType )
-            throw( ::com::sun::star::uno::RuntimeException );
+            throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 
         //  XStatusIndicator
@@ -214,7 +214,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
         virtual void SAL_CALL start(
             const OUString&  sText   ,
             sal_Int32 nRange
-        ) throw( ::com::sun::star::uno::RuntimeException );
+        ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
         /*-****************************************************************************************************
             @short      -
@@ -229,7 +229,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL end() throw( ::com::sun::star::uno::RuntimeException );
+        virtual void SAL_CALL end() throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
         /*-****************************************************************************************************
             @short      -
@@ -244,7 +244,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL reset() throw( ::com::sun::star::uno::RuntimeException );
+        virtual void SAL_CALL reset() throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
         /*-****************************************************************************************************
             @short      -
@@ -259,7 +259,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL setText( const OUString& sText ) throw( ::com::sun::star::uno::RuntimeException );
+        virtual void SAL_CALL setText( const OUString& sText ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
         /*-****************************************************************************************************
             @short      -
@@ -274,7 +274,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL setValue( sal_Int32 nValue ) throw( ::com::sun::star::uno::RuntimeException );
+        virtual void SAL_CALL setValue( sal_Int32 nValue ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 
         //  XLayoutConstrains
@@ -293,7 +293,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
             @onerror    -
         */
 
-        virtual ::com::sun::star::awt::Size SAL_CALL getMinimumSize() throw( ::com::sun::star::uno::RuntimeException );
+        virtual ::com::sun::star::awt::Size SAL_CALL getMinimumSize() throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
         /**_______________________________________________________________________________________________________
             @short      -
@@ -308,7 +308,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
             @onerror    -
         */
 
-        virtual ::com::sun::star::awt::Size SAL_CALL getPreferredSize() throw( ::com::sun::star::uno::RuntimeException );
+        virtual ::com::sun::star::awt::Size SAL_CALL getPreferredSize() throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
         /**_______________________________________________________________________________________________________
             @short      -
@@ -324,7 +324,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
         */
 
         virtual ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& aNewSize )
-            throw( ::com::sun::star::uno::RuntimeException );
+            throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 
         //  XControl
@@ -346,7 +346,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
         virtual void SAL_CALL createPeer(
             const   ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >&    xToolkit    ,
             const   ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& xParent
-        ) throw( ::com::sun::star::uno::RuntimeException );
+        ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
         /**_______________________________________________________________________________________________________
             @short      -
@@ -362,7 +362,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
         */
 
         virtual sal_Bool SAL_CALL setModel( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xModel )
-            throw( ::com::sun::star::uno::RuntimeException );
+            throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
         /**_______________________________________________________________________________________________________
             @short      -
@@ -378,7 +378,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
         */
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > SAL_CALL getModel()
-            throw( ::com::sun::star::uno::RuntimeException );
+            throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 
         //  XComponent
@@ -397,7 +397,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
             @onerror    -
         */
 
-        virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException );
+        virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 
         //  XWindow
@@ -420,7 +420,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
                                             sal_Int32   nY      ,
                                             sal_Int32   nWidth  ,
                                             sal_Int32   nHeight ,
-                                            sal_Int16   nFlags  ) throw( ::com::sun::star::uno::RuntimeException );
+                                            sal_Int16   nFlags  ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 
         //  BaseControl

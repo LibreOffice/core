@@ -212,13 +212,13 @@ public:
 
     // XCurrentContext
     virtual com::sun::star::uno::Any SAL_CALL getValueByName( const OUString& Name )
-            throw (com::sun::star::uno::RuntimeException);
+            throw (com::sun::star::uno::RuntimeException, std::exception);
 
 private:
     com::sun::star::uno::Reference< com::sun::star::uno::XCurrentContext > m_xNextContext;
 };
 
-uno::Any SAL_CALL DesktopEnvironmentContext::getValueByName( const OUString& Name) throw (uno::RuntimeException)
+uno::Any SAL_CALL DesktopEnvironmentContext::getValueByName( const OUString& Name) throw (uno::RuntimeException, std::exception)
 {
     uno::Any retVal;
 
@@ -329,12 +329,12 @@ namespace
  */
 class VCLUnoWrapperDeleter : public cppu::WeakImplHelper1<com::sun::star::lang::XEventListener>
 {
-    virtual void SAL_CALL disposing(lang::EventObject const& rSource) throw(uno::RuntimeException);
+    virtual void SAL_CALL disposing(lang::EventObject const& rSource) throw(uno::RuntimeException, std::exception);
 };
 
 void
 VCLUnoWrapperDeleter::disposing(lang::EventObject const& /* rSource */)
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     ImplSVData* const pSVData = ImplGetSVData();
     if (pSVData && pSVData->mpUnoWrapper)

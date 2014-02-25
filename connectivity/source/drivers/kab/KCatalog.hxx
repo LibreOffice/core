@@ -46,7 +46,7 @@ namespace connectivity
 
             // XTablesSupplier
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getTables(
-                    ) throw(::com::sun::star::uno::RuntimeException);
+                    ) throw(::com::sun::star::uno::RuntimeException, std::exception);
         };
     }
 }

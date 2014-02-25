@@ -90,7 +90,7 @@ namespace connectivity
                                                 throw (::com::sun::star::lang::IllegalArgumentException);
 
             void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue)
-                                                throw(::com::sun::star::uno::Exception);
+                                                throw(::com::sun::star::uno::Exception, std::exception);
 
             void SAL_CALL getFastPropertyValue(Any& rValue, sal_Int32 nHandle) const;
             virtual ~OCommonStatement();
@@ -112,47 +112,47 @@ namespace connectivity
 
             // XInterface
             Any SAL_CALL queryInterface(const ::com::sun::star::uno::Type & rType)
-                                                throw(RuntimeException);
+                                                throw(RuntimeException, std::exception);
 
             //XTypeProvider
             ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
-                                                throw(RuntimeException);
+                                                throw(RuntimeException, std::exception);
 
             // XPropertySet
             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
-                                                throw(RuntimeException);
+                                                throw(RuntimeException, std::exception);
 
             // XStatement
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL executeQuery(const OUString& sql)
-                                                throw(SQLException, RuntimeException);
+                                                throw(SQLException, RuntimeException, std::exception);
 
             sal_Int32 SAL_CALL executeUpdate(const OUString& sql)
-                                                throw(SQLException, RuntimeException);
+                                                throw(SQLException, RuntimeException, std::exception);
 
             sal_Bool SAL_CALL execute( const OUString& sql )
-                                                throw(SQLException, RuntimeException);
+                                                throw(SQLException, RuntimeException, std::exception);
 
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnection()
-                                                throw(SQLException, RuntimeException);
+                                                throw(SQLException, RuntimeException, std::exception);
 
             // XWarningsSupplier
-            Any SAL_CALL getWarnings()      throw(SQLException, RuntimeException);
+            Any SAL_CALL getWarnings()      throw(SQLException, RuntimeException, std::exception);
 
-            void SAL_CALL clearWarnings()       throw(SQLException, RuntimeException);
+            void SAL_CALL clearWarnings()       throw(SQLException, RuntimeException, std::exception);
 
             // XCancellable
-            void SAL_CALL cancel()              throw(RuntimeException);
+            void SAL_CALL cancel()              throw(RuntimeException, std::exception);
 
             // XCloseable
-            void SAL_CALL close()               throw(SQLException, RuntimeException);
+            void SAL_CALL close()               throw(SQLException, RuntimeException, std::exception);
 
             // XMultipleResults
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL getResultSet()
-                                                throw(SQLException, RuntimeException);
+                                                throw(SQLException, RuntimeException, std::exception);
 
-            sal_Int32 SAL_CALL getUpdateCount() throw(SQLException, RuntimeException);
+            sal_Int32 SAL_CALL getUpdateCount() throw(SQLException, RuntimeException, std::exception);
 
-            sal_Bool SAL_CALL getMoreResults()  throw(SQLException, RuntimeException);
+            sal_Bool SAL_CALL getMoreResults()  throw(SQLException, RuntimeException, std::exception);
 
             // other methods
             OConnection* getOwnConnection() const { return m_pConnection;}
@@ -175,30 +175,30 @@ namespace connectivity
             OStatement(OConnection* _pConnection, sql::Statement *_cppStatement) : OCommonStatement(_pConnection, _cppStatement) {}
 
             virtual OUString SAL_CALL getImplementationName()
-                throw (css::uno::RuntimeException) SAL_OVERRIDE;
+                throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
             virtual sal_Bool SAL_CALL supportsService(
-                OUString const & ServiceName) throw (css::uno::RuntimeException)
+                OUString const & ServiceName) throw (css::uno::RuntimeException, std::exception)
                 SAL_OVERRIDE;
 
             virtual css::uno::Sequence<OUString> SAL_CALL
-            getSupportedServiceNames() throw (css::uno::RuntimeException)
+            getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception)
                 SAL_OVERRIDE;
 
             Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType )
-                                                throw(RuntimeException);
+                                                throw(RuntimeException, std::exception);
 
             void SAL_CALL acquire()             throw();
             void SAL_CALL release()             throw();
 
             // XBatchExecution
             void SAL_CALL addBatch(const OUString& sql)
-                                                throw(SQLException, RuntimeException);
+                                                throw(SQLException, RuntimeException, std::exception);
 
-            void SAL_CALL clearBatch()          throw(SQLException, RuntimeException);
+            void SAL_CALL clearBatch()          throw(SQLException, RuntimeException, std::exception);
 
             ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL executeBatch()
-                                                throw(SQLException, RuntimeException);
+                                                throw(SQLException, RuntimeException, std::exception);
 
         };
     }

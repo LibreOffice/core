@@ -61,11 +61,11 @@ private:
 
     virtual void SAL_CALL initialize(
         css::uno::Sequence< css::uno::Any > const & arguments)
-        throw (css::uno::Exception);
+        throw (css::uno::Exception, std::exception);
 };
 
 void Impl::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
-    throw (css::uno::Exception)
+    throw (css::uno::Exception, std::exception)
 {
     ::sal_Bool arg0 = sal_Bool();
     ::sal_Int8 arg1 = sal_Int8();
@@ -208,24 +208,24 @@ private:
 
     virtual void SAL_CALL initialize(
         css::uno::Sequence< css::uno::Any > const & arguments)
-        throw (css::uno::Exception);
+        throw (css::uno::Exception, std::exception);
 
     //XMultiBase1
     virtual double SAL_CALL getatt1()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setatt1( double _att1 )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::sal_Int32 SAL_CALL fn11( ::sal_Int32 arg )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual OUString SAL_CALL fn12( const OUString& arg )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 
     double m_attr1;
 };
 
 void Impl2::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
-    throw (css::uno::Exception)
+    throw (css::uno::Exception, std::exception)
 {
     ttb::TestPolyStruct< css::uno::Type > arg0;
     ttb::TestPolyStruct< css::uno::Any > arg1;
@@ -411,24 +411,24 @@ void Impl2::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
 
 //XMultiBase1
 double Impl2::getatt1()
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return m_attr1;
 }
 
-void Impl2::setatt1( double _att1 )throw (::com::sun::star::uno::RuntimeException)
+void Impl2::setatt1( double _att1 )throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     m_attr1 = _att1;
 }
 
 ::sal_Int32 Impl2::fn11( ::sal_Int32 arg )
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return 11 * arg;
 }
 
 OUString Impl2::fn12( const OUString& arg )
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return OUString("12") + arg;
 }

@@ -1516,7 +1516,7 @@ bool OKeySet::fillAllRows()
 }
 
 // XRow
-sal_Bool SAL_CALL OKeySet::wasNull(  ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OKeySet::wasNull(  ) throw(SQLException, RuntimeException, std::exception)
 {
    SAL_INFO("dbaccess", "OKeySet::wasNull" );
     if ( ! m_xRow.is() )
@@ -1536,133 +1536,133 @@ inline void OKeySet::ensureRowForData( ) throw(SQLException, RuntimeException)
     OSL_ENSURE(m_xRow.is(),"m_xRow is null! I've called throwSQLException but execution continued?");
 }
 
-OUString SAL_CALL OKeySet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OKeySet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
    SAL_INFO("dbaccess", "OKeySet::getString" );
     ensureRowForData();
     return m_xRow->getString(columnIndex);
 }
 
-sal_Bool SAL_CALL OKeySet::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OKeySet::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
    SAL_INFO("dbaccess", "OKeySet::getBoolean" );
     ensureRowForData();
     return m_xRow->getBoolean(columnIndex);
 }
 
-sal_Int8 SAL_CALL OKeySet::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+sal_Int8 SAL_CALL OKeySet::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
    SAL_INFO("dbaccess", "OKeySet::getByte" );
     ensureRowForData();
     return m_xRow->getByte(columnIndex);
 }
 
-sal_Int16 SAL_CALL OKeySet::getShort( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+sal_Int16 SAL_CALL OKeySet::getShort( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
    SAL_INFO("dbaccess", "OKeySet::getShort" );
     ensureRowForData();
     return m_xRow->getShort(columnIndex);
 }
 
-sal_Int32 SAL_CALL OKeySet::getInt( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OKeySet::getInt( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
    SAL_INFO("dbaccess", "OKeySet::getInt" );
     ensureRowForData();
     return m_xRow->getInt(columnIndex);
 }
 
-sal_Int64 SAL_CALL OKeySet::getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+sal_Int64 SAL_CALL OKeySet::getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
    SAL_INFO("dbaccess", "OKeySet::getLong" );
     ensureRowForData();
     return m_xRow->getLong(columnIndex);
 }
 
-float SAL_CALL OKeySet::getFloat( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+float SAL_CALL OKeySet::getFloat( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
    SAL_INFO("dbaccess", "OKeySet::getFloat" );
     ensureRowForData();
     return m_xRow->getFloat(columnIndex);
 }
 
-double SAL_CALL OKeySet::getDouble( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+double SAL_CALL OKeySet::getDouble( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
    SAL_INFO("dbaccess", "OKeySet::getDouble" );
     ensureRowForData();
     return m_xRow->getDouble(columnIndex);
 }
 
-Sequence< sal_Int8 > SAL_CALL OKeySet::getBytes( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Sequence< sal_Int8 > SAL_CALL OKeySet::getBytes( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
    SAL_INFO("dbaccess", "OKeySet::getBytes" );
     ensureRowForData();
     return m_xRow->getBytes(columnIndex);
 }
 
-::com::sun::star::util::Date SAL_CALL OKeySet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+::com::sun::star::util::Date SAL_CALL OKeySet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
    SAL_INFO("dbaccess", "OKeySet::getDate" );
     ensureRowForData();
     return m_xRow->getDate(columnIndex);
 }
 
-::com::sun::star::util::Time SAL_CALL OKeySet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+::com::sun::star::util::Time SAL_CALL OKeySet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
    SAL_INFO("dbaccess", "OKeySet::getTime" );
     ensureRowForData();
     return m_xRow->getTime(columnIndex);
 }
 
-::com::sun::star::util::DateTime SAL_CALL OKeySet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+::com::sun::star::util::DateTime SAL_CALL OKeySet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
    SAL_INFO("dbaccess", "OKeySet::getTimestamp" );
     ensureRowForData();
     return m_xRow->getTimestamp(columnIndex);
 }
 
-Reference< ::com::sun::star::io::XInputStream > SAL_CALL OKeySet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< ::com::sun::star::io::XInputStream > SAL_CALL OKeySet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
    SAL_INFO("dbaccess", "OKeySet::getBinaryStream" );
     ensureRowForData();
     return m_xRow->getBinaryStream(columnIndex);
 }
 
-Reference< ::com::sun::star::io::XInputStream > SAL_CALL OKeySet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< ::com::sun::star::io::XInputStream > SAL_CALL OKeySet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
    SAL_INFO("dbaccess", "OKeySet::getCharacterStream" );
     ensureRowForData();
     return m_xRow->getCharacterStream(columnIndex);
 }
 
-Any SAL_CALL OKeySet::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException)
+Any SAL_CALL OKeySet::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException, std::exception)
 {
    SAL_INFO("dbaccess", "OKeySet::getObject" );
     ensureRowForData();
     return m_xRow->getObject(columnIndex,typeMap);
 }
 
-Reference< XRef > SAL_CALL OKeySet::getRef( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< XRef > SAL_CALL OKeySet::getRef( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
    SAL_INFO("dbaccess", "OKeySet::getRef" );
     ensureRowForData();
     return m_xRow->getRef(columnIndex);
 }
 
-Reference< XBlob > SAL_CALL OKeySet::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< XBlob > SAL_CALL OKeySet::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
    SAL_INFO("dbaccess", "OKeySet::getBlob" );
     ensureRowForData();
     return m_xRow->getBlob(columnIndex);
 }
 
-Reference< XClob > SAL_CALL OKeySet::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< XClob > SAL_CALL OKeySet::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
    SAL_INFO("dbaccess", "OKeySet::getClob" );
     ensureRowForData();
     return m_xRow->getClob(columnIndex);
 }
 
-Reference< XArray > SAL_CALL OKeySet::getArray( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< XArray > SAL_CALL OKeySet::getArray( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
    SAL_INFO("dbaccess", "OKeySet::getArray" );
     ensureRowForData();

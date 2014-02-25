@@ -163,7 +163,7 @@ IMPL_LINK( FocusWindowWaitCursor, DestroyedLink, VclWindowEvent*, pEvent )
 }
 
 sal_Bool SAL_CALL PDFFilter::filter( const Sequence< PropertyValue >& rDescriptor )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     FocusWindowWaitCursor aCur;
 
@@ -174,14 +174,14 @@ sal_Bool SAL_CALL PDFFilter::filter( const Sequence< PropertyValue >& rDescripto
 
 
 
-void SAL_CALL PDFFilter::cancel( ) throw (RuntimeException)
+void SAL_CALL PDFFilter::cancel( ) throw (RuntimeException, std::exception)
 {
 }
 
 
 
 void SAL_CALL PDFFilter::setSourceDocument( const Reference< XComponent >& xDoc )
-    throw (IllegalArgumentException, RuntimeException)
+    throw (IllegalArgumentException, RuntimeException, std::exception)
 {
     mxSrcDoc = xDoc;
 }
@@ -189,7 +189,7 @@ void SAL_CALL PDFFilter::setSourceDocument( const Reference< XComponent >& xDoc 
 
 
 void SAL_CALL PDFFilter::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& )
-    throw (Exception, RuntimeException)
+    throw (Exception, RuntimeException, std::exception)
 {
 }
 
@@ -215,7 +215,7 @@ Reference< XInterface > SAL_CALL PDFFilter_createInstance( const Reference< XMul
 
 
 OUString SAL_CALL PDFFilter::getImplementationName()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return PDFFilter_getImplementationName();
 }
@@ -223,14 +223,14 @@ OUString SAL_CALL PDFFilter::getImplementationName()
 
 
 sal_Bool SAL_CALL PDFFilter::supportsService( const OUString& rServiceName )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return cppu::supportsService( this, rServiceName );
 }
 
 
 
-::com::sun::star::uno::Sequence< OUString > SAL_CALL PDFFilter::getSupportedServiceNames(  ) throw (RuntimeException)
+::com::sun::star::uno::Sequence< OUString > SAL_CALL PDFFilter::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
 {
     return PDFFilter_getSupportedServiceNames();
 }

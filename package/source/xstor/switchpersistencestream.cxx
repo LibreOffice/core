@@ -212,7 +212,7 @@ void SwitchablePersistenceStream::CloseAll_Impl()
 
 // com::sun::star::io::XStream
 uno::Reference< io::XInputStream > SAL_CALL SwitchablePersistenceStream::getInputStream(  )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -222,7 +222,7 @@ uno::Reference< io::XInputStream > SAL_CALL SwitchablePersistenceStream::getInpu
 }
 
 uno::Reference< io::XOutputStream > SAL_CALL SwitchablePersistenceStream::getOutputStream(  )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -233,7 +233,7 @@ uno::Reference< io::XOutputStream > SAL_CALL SwitchablePersistenceStream::getOut
 
 // com::sun::star::io::XInputStream
 ::sal_Int32 SAL_CALL SwitchablePersistenceStream::readBytes( uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nBytesToRead )
-    throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
+    throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -248,7 +248,7 @@ uno::Reference< io::XOutputStream > SAL_CALL SwitchablePersistenceStream::getOut
 }
 
 ::sal_Int32 SAL_CALL SwitchablePersistenceStream::readSomeBytes( uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nMaxBytesToRead )
-    throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
+    throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -263,7 +263,7 @@ uno::Reference< io::XOutputStream > SAL_CALL SwitchablePersistenceStream::getOut
 }
 
 void SAL_CALL SwitchablePersistenceStream::skipBytes( ::sal_Int32 nBytesToSkip )
-    throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
+    throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -278,7 +278,7 @@ void SAL_CALL SwitchablePersistenceStream::skipBytes( ::sal_Int32 nBytesToSkip )
 }
 
 ::sal_Int32 SAL_CALL SwitchablePersistenceStream::available(  )
-    throw (io::NotConnectedException, io::IOException, uno::RuntimeException)
+    throw (io::NotConnectedException, io::IOException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -293,7 +293,7 @@ void SAL_CALL SwitchablePersistenceStream::skipBytes( ::sal_Int32 nBytesToSkip )
 }
 
 void SAL_CALL SwitchablePersistenceStream::closeInput()
-    throw (io::NotConnectedException, io::IOException, uno::RuntimeException)
+    throw (io::NotConnectedException, io::IOException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -307,7 +307,7 @@ void SAL_CALL SwitchablePersistenceStream::closeInput()
 
 // com::sun::star::io::XOutputStream
 void SAL_CALL SwitchablePersistenceStream::writeBytes( const uno::Sequence< ::sal_Int8 >& aData )
-    throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
+    throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -325,7 +325,7 @@ void SAL_CALL SwitchablePersistenceStream::writeBytes( const uno::Sequence< ::sa
 }
 
 void SAL_CALL SwitchablePersistenceStream::flush(  )
-    throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
+    throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -346,7 +346,7 @@ void SAL_CALL SwitchablePersistenceStream::flush(  )
 }
 
 void SAL_CALL SwitchablePersistenceStream::closeOutput(  )
-    throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
+    throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -360,7 +360,7 @@ void SAL_CALL SwitchablePersistenceStream::closeOutput(  )
 
 // com::sun::star::io::XTruncate
 void SAL_CALL SwitchablePersistenceStream::truncate(  )
-    throw (io::IOException, uno::RuntimeException)
+    throw (io::IOException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -379,7 +379,7 @@ void SAL_CALL SwitchablePersistenceStream::truncate(  )
 
 // com::sun::star::io::XSeekable
 void SAL_CALL SwitchablePersistenceStream::seek( ::sal_Int64 location )
-    throw (lang::IllegalArgumentException, io::IOException, uno::RuntimeException)
+    throw (lang::IllegalArgumentException, io::IOException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -394,7 +394,7 @@ void SAL_CALL SwitchablePersistenceStream::seek( ::sal_Int64 location )
 }
 
 ::sal_Int64 SAL_CALL SwitchablePersistenceStream::getPosition(  )
-    throw (io::IOException, uno::RuntimeException)
+    throw (io::IOException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -409,7 +409,7 @@ void SAL_CALL SwitchablePersistenceStream::seek( ::sal_Int64 location )
 }
 
 ::sal_Int64 SAL_CALL SwitchablePersistenceStream::getLength(  )
-    throw (io::IOException, uno::RuntimeException)
+    throw (io::IOException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -424,7 +424,7 @@ void SAL_CALL SwitchablePersistenceStream::seek( ::sal_Int64 location )
 }
 
 void SAL_CALL SwitchablePersistenceStream::waitForCompletion()
-    throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     if ( !m_pStreamData )
         throw io::NotConnectedException();

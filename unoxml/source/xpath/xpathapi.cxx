@@ -76,19 +76,19 @@ namespace XPath
     }
 
     Sequence< OUString > SAL_CALL CXPathAPI::getSupportedServiceNames()
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         return CXPathAPI::_getSupportedServiceNames();
     }
 
     OUString SAL_CALL CXPathAPI::getImplementationName()
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         return CXPathAPI::_getImplementationName();
     }
 
     sal_Bool SAL_CALL CXPathAPI::supportsService(const OUString& aServiceName)
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         return cppu::supportsService(this, aServiceName);
     }
@@ -96,7 +96,7 @@ namespace XPath
     void SAL_CALL CXPathAPI::registerNS(
             const OUString& aPrefix,
             const OUString& aURI)
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -106,7 +106,7 @@ namespace XPath
     void SAL_CALL CXPathAPI::unregisterNS(
             const OUString& aPrefix,
             const OUString& aURI)
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -211,7 +211,7 @@ namespace XPath
     Reference< XNodeList > SAL_CALL CXPathAPI::selectNodeList(
             const Reference< XNode >& contextNode,
             const OUString& expr)
-        throw (RuntimeException, XPathException)
+        throw (RuntimeException, XPathException, std::exception)
     {
         Reference< XXPathObject > xobj = eval(contextNode, expr);
         return xobj->getNodeList();
@@ -224,7 +224,7 @@ namespace XPath
             const Reference< XNode >&  contextNode,
             const OUString& expr,
             const Reference< XNode >&  namespaceNode)
-        throw (RuntimeException, XPathException)
+        throw (RuntimeException, XPathException, std::exception)
     {
         lcl_collectRegisterNamespaces(*this, namespaceNode);
         return selectNodeList(contextNode, expr);
@@ -236,7 +236,7 @@ namespace XPath
     Reference< XNode > SAL_CALL CXPathAPI::selectSingleNode(
             const Reference< XNode >& contextNode,
             const OUString& expr)
-        throw (RuntimeException, XPathException)
+        throw (RuntimeException, XPathException, std::exception)
     {
         Reference< XNodeList > aList = selectNodeList(contextNode, expr);
         Reference< XNode > aNode = aList->item(0);
@@ -251,7 +251,7 @@ namespace XPath
             const Reference< XNode >& contextNode,
             const OUString& expr,
             const Reference< XNode >&  namespaceNode )
-        throw (RuntimeException, XPathException)
+        throw (RuntimeException, XPathException, std::exception)
     {
         lcl_collectRegisterNamespaces(*this, namespaceNode);
         return selectSingleNode(contextNode, expr);
@@ -314,7 +314,7 @@ namespace XPath
     Reference< XXPathObject > SAL_CALL CXPathAPI::eval(
             Reference< XNode > const& xContextNode,
             const OUString& expr)
-        throw (RuntimeException, XPathException)
+        throw (RuntimeException, XPathException, std::exception)
     {
         if (!xContextNode.is()) { throw RuntimeException(); }
 
@@ -390,7 +390,7 @@ namespace XPath
             const Reference< XNode >& contextNode,
             const OUString& expr,
             const Reference< XNode >& namespaceNode)
-        throw (RuntimeException, XPathException)
+        throw (RuntimeException, XPathException, std::exception)
     {
         lcl_collectRegisterNamespaces(*this, namespaceNode);
         return eval(contextNode, expr);
@@ -403,7 +403,7 @@ namespace XPath
      */
     void SAL_CALL CXPathAPI::registerExtension(
             const OUString& aName)
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -419,7 +419,7 @@ namespace XPath
      */
     void SAL_CALL CXPathAPI::registerExtensionInstance(
             Reference< XXPathExtension> const& xExtension)
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         if (!xExtension.is()) {
             throw RuntimeException();

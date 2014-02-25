@@ -233,19 +233,19 @@ uno::Sequence< uno::Sequence< beans::StringPair > > OFOPXMLHelper::GetParsingRes
 
 
 void SAL_CALL OFOPXMLHelper::startDocument()
-        throw(xml::sax::SAXException, uno::RuntimeException)
+        throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
 }
 
 
 void SAL_CALL OFOPXMLHelper::endDocument()
-        throw(xml::sax::SAXException, uno::RuntimeException)
+        throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
 }
 
 
 void SAL_CALL OFOPXMLHelper::startElement( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs )
-        throw( xml::sax::SAXException, uno::RuntimeException )
+        throw( xml::sax::SAXException, uno::RuntimeException, std::exception )
 {
     if ( m_nFormat == RELATIONINFO_FORMAT )
     {
@@ -393,7 +393,7 @@ void SAL_CALL OFOPXMLHelper::startElement( const OUString& aName, const uno::Ref
 
 
 void SAL_CALL OFOPXMLHelper::endElement( const OUString& aName )
-    throw( xml::sax::SAXException, uno::RuntimeException )
+    throw( xml::sax::SAXException, uno::RuntimeException, std::exception )
 {
     if ( m_nFormat == RELATIONINFO_FORMAT || m_nFormat == CONTENTTYPE_FORMAT )
     {
@@ -410,25 +410,25 @@ void SAL_CALL OFOPXMLHelper::endElement( const OUString& aName )
 
 
 void SAL_CALL OFOPXMLHelper::characters( const OUString& /*aChars*/ )
-        throw(xml::sax::SAXException, uno::RuntimeException)
+        throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
 }
 
 
 void SAL_CALL OFOPXMLHelper::ignorableWhitespace( const OUString& /*aWhitespaces*/ )
-        throw(xml::sax::SAXException, uno::RuntimeException)
+        throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
 }
 
 
 void SAL_CALL OFOPXMLHelper::processingInstruction( const OUString& /*aTarget*/, const OUString& /*aData*/ )
-        throw(xml::sax::SAXException, uno::RuntimeException)
+        throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
 }
 
 
 void SAL_CALL OFOPXMLHelper::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& /*xLocator*/ )
-        throw(xml::sax::SAXException, uno::RuntimeException)
+        throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
 }
 

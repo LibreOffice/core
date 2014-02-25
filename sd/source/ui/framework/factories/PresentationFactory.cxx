@@ -56,7 +56,7 @@ public:
 
     virtual void SAL_CALL initialize(
         const ::com::sun::star::uno::Sequence<com::sun::star::uno::Any>& aArguments)
-        throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception);
 };
 
 
@@ -79,10 +79,10 @@ public:
 
     // XView
 
-    virtual Reference<XResourceId> SAL_CALL getResourceId (void) throw (RuntimeException)
+    virtual Reference<XResourceId> SAL_CALL getResourceId (void) throw (RuntimeException, std::exception)
     { return mxResourceId; };
 
-    virtual sal_Bool SAL_CALL isAnchorOnly (void) throw (RuntimeException)
+    virtual sal_Bool SAL_CALL isAnchorOnly (void) throw (RuntimeException, std::exception)
     { return false; }
 
 
@@ -169,7 +169,7 @@ void SAL_CALL PresentationFactory::disposing (void)
 
 Reference<XResource> SAL_CALL PresentationFactory::createResource (
     const Reference<XResourceId>& rxViewId)
-    throw (RuntimeException, IllegalArgumentException, WrappedTargetException)
+    throw (RuntimeException, IllegalArgumentException, WrappedTargetException, std::exception)
 {
     ThrowIfDisposed();
 
@@ -185,7 +185,7 @@ Reference<XResource> SAL_CALL PresentationFactory::createResource (
 
 void SAL_CALL PresentationFactory::releaseResource (
     const Reference<XResource>& rxView)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     (void)rxView;
@@ -211,7 +211,7 @@ void SAL_CALL PresentationFactory::releaseResource (
 
 void SAL_CALL PresentationFactory::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     (void)rEvent;
 }
@@ -223,7 +223,7 @@ void SAL_CALL PresentationFactory::notifyConfigurationChange (
 
 void SAL_CALL PresentationFactory::disposing (
     const lang::EventObject& rEventObject)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     (void)rEventObject;
 }
@@ -278,7 +278,7 @@ void PresentationFactoryProvider::disposing (void)
 
 void SAL_CALL PresentationFactoryProvider::initialize(
     const Sequence<Any>& aArguments)
-    throw (Exception, RuntimeException)
+    throw (Exception, RuntimeException, std::exception)
 {
     if (aArguments.getLength() > 0)
     {

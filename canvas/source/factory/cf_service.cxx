@@ -98,31 +98,31 @@ public:
     CanvasFactory( Reference<XComponentContext> const & xContext );
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (RuntimeException);
+    virtual OUString SAL_CALL getImplementationName() throw (RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL supportsService( OUString const & serviceName )
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
     virtual Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
 
     // XMultiComponentFactory
     virtual Sequence<OUString> SAL_CALL getAvailableServiceNames()
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
     virtual Reference<XInterface> SAL_CALL createInstanceWithContext(
         OUString const & name,
-        Reference<XComponentContext> const & xContext ) throw (Exception);
+        Reference<XComponentContext> const & xContext ) throw (Exception, std::exception);
     virtual Reference<XInterface> SAL_CALL
     createInstanceWithArgumentsAndContext(
         OUString const & name,
         Sequence<Any> const & args,
-        Reference<XComponentContext> const & xContext ) throw (Exception);
+        Reference<XComponentContext> const & xContext ) throw (Exception, std::exception);
 
     // XMultiServiceFactory
     virtual Reference<XInterface> SAL_CALL createInstance(
         OUString const & name )
-        throw (Exception);
+        throw (Exception, std::exception);
     virtual Reference<XInterface> SAL_CALL createInstanceWithArguments(
         OUString const & name, Sequence<Any> const & args )
-        throw (Exception);
+        throw (Exception, std::exception);
 };
 
 CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
@@ -226,26 +226,26 @@ Reference<XInterface> create( Reference<XComponentContext> const & xContext )
 }
 
 // XServiceInfo
-OUString CanvasFactory::getImplementationName() throw (RuntimeException)
+OUString CanvasFactory::getImplementationName() throw (RuntimeException, std::exception)
 {
     return getImplName();
 }
 
 sal_Bool CanvasFactory::supportsService( OUString const & serviceName )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, serviceName);
 }
 
 Sequence<OUString> CanvasFactory::getSupportedServiceNames()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return getSuppServices();
 }
 
 // XMultiComponentFactory
 Sequence<OUString> CanvasFactory::getAvailableServiceNames()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     Sequence<OUString> aServiceNames(m_aAvailableImplementations.size());
     std::transform(m_aAvailableImplementations.begin(),
@@ -257,7 +257,7 @@ Sequence<OUString> CanvasFactory::getAvailableServiceNames()
 
 Reference<XInterface> CanvasFactory::createInstanceWithContext(
     OUString const & name, Reference<XComponentContext> const & xContext )
-    throw (Exception)
+    throw (Exception, std::exception)
 {
     return createInstanceWithArgumentsAndContext(
         name, Sequence<Any>(), xContext );
@@ -468,7 +468,7 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
 
 Reference<XInterface> CanvasFactory::createInstanceWithArgumentsAndContext(
     OUString const & preferredOne, Sequence<Any> const & args,
-    Reference<XComponentContext> const & xContext ) throw (Exception)
+    Reference<XComponentContext> const & xContext ) throw (Exception, std::exception)
 {
     Reference<XInterface> xCanvas(
         lookupAndUse( preferredOne, args, xContext ) );
@@ -482,7 +482,7 @@ Reference<XInterface> CanvasFactory::createInstanceWithArgumentsAndContext(
 // XMultiServiceFactory
 
 Reference<XInterface> CanvasFactory::createInstance( OUString const & name )
-    throw (Exception)
+    throw (Exception, std::exception)
 {
     return createInstanceWithArgumentsAndContext(
         name, Sequence<Any>(), m_xContext );
@@ -490,7 +490,7 @@ Reference<XInterface> CanvasFactory::createInstance( OUString const & name )
 
 
 Reference<XInterface> CanvasFactory::createInstanceWithArguments(
-    OUString const & name, Sequence<Any> const & args ) throw (Exception)
+    OUString const & name, Sequence<Any> const & args ) throw (Exception, std::exception)
 {
     return createInstanceWithArgumentsAndContext(
         name, args, m_xContext );

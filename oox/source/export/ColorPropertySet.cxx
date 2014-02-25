@@ -43,9 +43,9 @@ public:
 
 protected:
     // ____ XPropertySetInfo ____
-    virtual Sequence< Property > SAL_CALL getProperties()                throw (RuntimeException);
-    virtual Property SAL_CALL getPropertyByName( const OUString& aName ) throw (UnknownPropertyException, RuntimeException);
-    virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name )  throw (RuntimeException);
+    virtual Sequence< Property > SAL_CALL getProperties()                throw (RuntimeException, std::exception);
+    virtual Property SAL_CALL getPropertyByName( const OUString& aName ) throw (UnknownPropertyException, RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name )  throw (RuntimeException, std::exception);
 
 private:
     OUString m_aColorPropName;
@@ -60,14 +60,14 @@ lcl_ColorPropertySetInfo::lcl_ColorPropertySetInfo( bool bFillColor ) :
 {}
 
 Sequence< Property > SAL_CALL lcl_ColorPropertySetInfo::getProperties()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
 
     return Sequence< Property >( & m_aColorProp, 1 );
 }
 
 Property SAL_CALL lcl_ColorPropertySetInfo::getPropertyByName( const OUString& aName )
-    throw (UnknownPropertyException, RuntimeException)
+    throw (UnknownPropertyException, RuntimeException, std::exception)
 {
     if( aName.equals( m_aColorPropName ))
         return m_aColorProp;
@@ -75,7 +75,7 @@ Property SAL_CALL lcl_ColorPropertySetInfo::getPropertyByName( const OUString& a
 }
 
 sal_Bool SAL_CALL lcl_ColorPropertySetInfo::hasPropertyByName( const OUString& Name )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return Name.equals( m_aColorPropName );
 }
@@ -103,7 +103,7 @@ ColorPropertySet::~ColorPropertySet()
 // ____ XPropertySet ____
 
 Reference< XPropertySetInfo > SAL_CALL ColorPropertySet::getPropertySetInfo()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if( ! m_xInfo.is())
         m_xInfo.set( new lcl_ColorPropertySetInfo( m_bIsFillColor ));
@@ -116,7 +116,7 @@ void SAL_CALL ColorPropertySet::setPropertyValue( const OUString& /* aPropertyNa
            PropertyVetoException,
            lang::IllegalArgumentException,
            lang::WrappedTargetException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     aValue >>= m_nColor;
 }
@@ -124,7 +124,7 @@ void SAL_CALL ColorPropertySet::setPropertyValue( const OUString& /* aPropertyNa
 uno::Any SAL_CALL ColorPropertySet::getPropertyValue( const OUString& aPropertyName )
     throw (UnknownPropertyException,
            lang::WrappedTargetException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     if( aPropertyName == "FillStyle" && m_bIsFillColor )
     {
@@ -137,7 +137,7 @@ uno::Any SAL_CALL ColorPropertySet::getPropertyValue( const OUString& aPropertyN
 void SAL_CALL ColorPropertySet::addPropertyChangeListener( const OUString& /* aPropertyName */, const Reference< XPropertyChangeListener >& /* xListener */ )
     throw (UnknownPropertyException,
            lang::WrappedTargetException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "Not Implemented" );
     return;
@@ -146,7 +146,7 @@ void SAL_CALL ColorPropertySet::addPropertyChangeListener( const OUString& /* aP
 void SAL_CALL ColorPropertySet::removePropertyChangeListener( const OUString& /* aPropertyName */, const Reference< XPropertyChangeListener >& /* aListener */ )
     throw (UnknownPropertyException,
            lang::WrappedTargetException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "Not Implemented" );
     return;
@@ -155,7 +155,7 @@ void SAL_CALL ColorPropertySet::removePropertyChangeListener( const OUString& /*
 void SAL_CALL ColorPropertySet::addVetoableChangeListener( const OUString& /* PropertyName */, const Reference< XVetoableChangeListener >& /* aListener */ )
     throw (UnknownPropertyException,
            lang::WrappedTargetException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "Not Implemented" );
     return;
@@ -164,7 +164,7 @@ void SAL_CALL ColorPropertySet::addVetoableChangeListener( const OUString& /* Pr
 void SAL_CALL ColorPropertySet::removeVetoableChangeListener( const OUString& /* PropertyName */, const Reference< XVetoableChangeListener >& /* aListener */ )
     throw (UnknownPropertyException,
            lang::WrappedTargetException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "Not Implemented" );
     return;
@@ -174,14 +174,14 @@ void SAL_CALL ColorPropertySet::removeVetoableChangeListener( const OUString& /*
 
 PropertyState SAL_CALL ColorPropertySet::getPropertyState( const OUString& /* PropertyName */ )
     throw (UnknownPropertyException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     return PropertyState_DIRECT_VALUE;
 }
 
 Sequence< PropertyState > SAL_CALL ColorPropertySet::getPropertyStates( const Sequence< OUString >& /* aPropertyName */ )
     throw (UnknownPropertyException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     PropertyState aState = PropertyState_DIRECT_VALUE;
     return Sequence< PropertyState >( & aState, 1 );
@@ -189,7 +189,7 @@ Sequence< PropertyState > SAL_CALL ColorPropertySet::getPropertyStates( const Se
 
 void SAL_CALL ColorPropertySet::setPropertyToDefault( const OUString& PropertyName )
     throw (UnknownPropertyException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     if( PropertyName.equals( m_aColorPropName ))
         m_nColor = m_nDefaultColor;
@@ -198,7 +198,7 @@ void SAL_CALL ColorPropertySet::setPropertyToDefault( const OUString& PropertyNa
 uno::Any SAL_CALL ColorPropertySet::getPropertyDefault( const OUString& aPropertyName )
     throw (UnknownPropertyException,
            lang::WrappedTargetException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     if( aPropertyName.equals( m_aColorPropName ))
         return uno::makeAny( m_nDefaultColor );

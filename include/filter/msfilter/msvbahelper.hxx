@@ -65,30 +65,30 @@ public:
     // com.sun.star.lang.XServiceInfo interface -------------------------------
 
     virtual OUString SAL_CALL
-                        getImplementationName() throw (::com::sun::star::uno::RuntimeException);
+                        getImplementationName() throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual sal_Bool SAL_CALL
                         supportsService( const OUString& rService )
-                            throw (::com::sun::star::uno::RuntimeException);
+                            throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
-                        getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException);
+                        getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // com.sun.star.lang.XInitialization interface ----------------------------
 
     virtual void SAL_CALL initialize(
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rArgs )
-                            throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+                            throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception);
 
     // com.sun.star.script.vba.XVBAMacroResolver interface --------------------
 
     virtual OUString SAL_CALL
                         resolveVBAMacroToScriptURL( const OUString& rVBAMacroName )
-                            throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+                            throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual OUString SAL_CALL
                         resolveScriptURLtoVBAMacro( const OUString& rScriptURL )
-                            throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+                            throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception);
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > mxModel;

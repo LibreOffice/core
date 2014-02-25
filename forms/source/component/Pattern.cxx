@@ -62,7 +62,7 @@ Sequence<Type> OPatternControl::_getTypes()
 }
 
 
-StringSequence OPatternControl::getSupportedServiceNames() throw()
+StringSequence OPatternControl::getSupportedServiceNames() throw(std::exception)
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
@@ -115,7 +115,7 @@ IMPLEMENT_DEFAULT_CLONING( OPatternModel )
 
 // XServiceInfo
 
-StringSequence SAL_CALL OPatternModel::getSupportedServiceNames() throw()
+StringSequence SAL_CALL OPatternModel::getSupportedServiceNames() throw(std::exception)
 {
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
@@ -139,7 +139,7 @@ void OPatternModel::describeFixedProperties( Sequence< Property >& _rProps ) con
 }
 
 
-OUString SAL_CALL OPatternModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL OPatternModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException, std::exception)
 {
     return OUString(FRM_COMPONENT_PATTERNFIELD);  // old (non-sun) name for compatibility !
 }

@@ -73,15 +73,15 @@ public:
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
                                 const ::com::sun::star::uno::Type & rType )
-                                    throw(::com::sun::star::uno::RuntimeException);
+                                    throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                             // XViewPane
-    virtual sal_Int32 SAL_CALL getFirstVisibleColumn() throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getFirstVisibleColumn() throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL   setFirstVisibleColumn( sal_Int32 nFirstVisibleColumn )
                                 throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual sal_Int32 SAL_CALL getFirstVisibleRow() throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getFirstVisibleRow() throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL   setFirstVisibleRow( sal_Int32 nFirstVisibleRow )
                                 throw(::com::sun::star::uno::RuntimeException,
                                       std::exception);
@@ -91,39 +91,39 @@ public:
 
                             // XCellRangeReferrer
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange > SAL_CALL
-                            getReferredCells() throw(::com::sun::star::uno::RuntimeException);
+                            getReferredCells() throw(::com::sun::star::uno::RuntimeException, std::exception);
 
                             // XFormLayerAccess
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > SAL_CALL
                             getFormController( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::form::XForm >& Form )
-                                    throw (::com::sun::star::uno::RuntimeException);
+                                    throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::sal_Bool SAL_CALL
                             isFormDesignMode(  )
-                                throw (::com::sun::star::uno::RuntimeException);
+                                throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL   setFormDesignMode( ::sal_Bool DesignMode )
-                                throw (::com::sun::star::uno::RuntimeException);
+                                throw (::com::sun::star::uno::RuntimeException, std::exception);
 
                             // XControlAccess
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > SAL_CALL
                             getControl( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::awt::XControlModel >& xModel )
                                     throw(::com::sun::star::container::NoSuchElementException,
-                                        ::com::sun::star::uno::RuntimeException);
+                                        ::com::sun::star::uno::RuntimeException, std::exception);
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
 
                             // XTypeProvider
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
 };
 
 
@@ -137,7 +137,7 @@ public:
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
                                 const ::com::sun::star::uno::Type & rType )
-                                    throw(::com::sun::star::uno::RuntimeException);
+                                    throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL   acquire() throw();
     virtual void SAL_CALL   release() throw();
 };
@@ -216,7 +216,7 @@ public:
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
                                 const ::com::sun::star::uno::Type & rType )
-                                    throw(::com::sun::star::uno::RuntimeException);
+                                    throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL   acquire() throw();
     virtual void SAL_CALL   release() throw();
 
@@ -246,7 +246,7 @@ public:
                                            std::exception);
     virtual void SAL_CALL   removeSelectionChangeListener( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::view::XSelectionChangeListener >& xListener )
-                                    throw(::com::sun::star::uno::RuntimeException);
+                                    throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     //! XPrintable?
 
@@ -281,39 +281,39 @@ public:
                                         ::com::sun::star::beans::XPropertyChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException);
+                                    ::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL   addVetoableChangeListener( const OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException);
+                                    ::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL   removeVetoableChangeListener( const OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException);
+                                    ::com::sun::star::uno::RuntimeException, std::exception);
 
                             // XEnumerationAccess
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL
-                            createEnumeration() throw(::com::sun::star::uno::RuntimeException);
+                            createEnumeration() throw(::com::sun::star::uno::RuntimeException, std::exception);
 
                             // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index )
                                 throw(::com::sun::star::lang::IndexOutOfBoundsException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException);
+                                    ::com::sun::star::uno::RuntimeException, std::exception);
 
                             // XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
-                                throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException, std::exception);
 
                             // XSpreadsheetView
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet > SAL_CALL
-                            getActiveSheet() throw(::com::sun::star::uno::RuntimeException);
+                            getActiveSheet() throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL   setActiveSheet( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::sheet::XSpreadsheet >& xActiveSheet )
                                     throw(::com::sun::star::uno::RuntimeException,
@@ -327,7 +327,7 @@ public:
                                            std::exception);
     virtual void SAL_CALL removeEnhancedMouseClickHandler( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::awt::XEnhancedMouseClickHandler >& aListener )
-                                    throw (::com::sun::star::uno::RuntimeException);
+                                    throw (::com::sun::star::uno::RuntimeException, std::exception);
 
                             //XActivationBroadcaster
 
@@ -337,12 +337,12 @@ public:
                                            std::exception);
     virtual void SAL_CALL removeActivationEventListener( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::sheet::XActivationEventListener >& aListener )
-                                    throw (::com::sun::star::uno::RuntimeException);
+                                    throw (::com::sun::star::uno::RuntimeException, std::exception);
 
                             // XViewSplitable
-    virtual sal_Bool SAL_CALL getIsWindowSplit() throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getSplitHorizontal() throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getSplitVertical() throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL getIsWindowSplit() throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual sal_Int32 SAL_CALL getSplitHorizontal() throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual sal_Int32 SAL_CALL getSplitVertical() throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Int32 SAL_CALL getSplitColumn()
         throw(::com::sun::star::uno::RuntimeException,
               std::exception);
@@ -353,7 +353,7 @@ public:
                                       std::exception);
 
                             // XViewFreezable
-    virtual sal_Bool SAL_CALL hasFrozenPanes() throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasFrozenPanes() throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL   freezeAtPosition( sal_Int32 nColumns, sal_Int32 nRows )
                                 throw(::com::sun::star::uno::RuntimeException,
                                       std::exception);
@@ -361,35 +361,35 @@ public:
                             // XRangeSelection
     virtual void SAL_CALL   startRangeSelection( const ::com::sun::star::uno::Sequence<
                                 ::com::sun::star::beans::PropertyValue >& aArguments )
-                                    throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   abortRangeSelection() throw(::com::sun::star::uno::RuntimeException);
+                                    throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL   abortRangeSelection() throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL   addRangeSelectionListener( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::sheet::XRangeSelectionListener >& aListener )
                                     throw (::com::sun::star::uno::RuntimeException,
                                            std::exception);
     virtual void SAL_CALL   removeRangeSelectionListener( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::sheet::XRangeSelectionListener >& aListener )
-                                    throw(::com::sun::star::uno::RuntimeException);
+                                    throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL   addRangeSelectionChangeListener( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::sheet::XRangeSelectionChangeListener >& aListener )
                                     throw (::com::sun::star::uno::RuntimeException,
                                            std::exception);
     virtual void SAL_CALL   removeRangeSelectionChangeListener( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::sheet::XRangeSelectionChangeListener >& aListener )
-                                    throw(::com::sun::star::uno::RuntimeException);
+                                    throw(::com::sun::star::uno::RuntimeException, std::exception);
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
 
                             // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence<
                                     sal_Int8 >& aIdentifier )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
     static ScTabViewObj* getImplementation( const com::sun::star::uno::Reference<
@@ -397,9 +397,9 @@ public:
 
                             // XTypeProvider
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     // XTransferableSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL getTransferable()
@@ -427,7 +427,7 @@ public:
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
         const ::com::sun::star::uno::Type & rType)
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL acquire() throw();
     virtual void SAL_CALL release() throw();
@@ -436,7 +436,7 @@ public:
 
     // XSelectedSheetsSupplier
     virtual ::com::sun::star::uno::Sequence<sal_Int32> SAL_CALL getSelectedSheets()
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
 };
 
 #endif

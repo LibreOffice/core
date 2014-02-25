@@ -316,7 +316,7 @@ namespace DOM
 
 
     void SAL_CALL CDocument::addListener(const Reference< XStreamListener >& aListener )
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -324,7 +324,7 @@ namespace DOM
     }
 
     void SAL_CALL CDocument::removeListener(const Reference< XStreamListener >& aListener )
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -361,7 +361,7 @@ namespace DOM
     } // extern "C"
 
     void SAL_CALL CDocument::start()
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         listenerlist_t streamListeners;
         {
@@ -402,20 +402,20 @@ namespace DOM
     }
 
     void SAL_CALL CDocument::terminate()
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         // not supported
     }
 
     void SAL_CALL CDocument::setOutputStream( const Reference< XOutputStream >& aStream )
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
         m_rOutputStream = aStream;
     }
 
-    Reference< XOutputStream > SAL_CALL  CDocument::getOutputStream() throw (RuntimeException)
+    Reference< XOutputStream > SAL_CALL  CDocument::getOutputStream() throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -424,7 +424,7 @@ namespace DOM
 
     // Creates an Attr of the given name.
     Reference< XAttr > SAL_CALL CDocument::createAttribute(const OUString& name)
-        throw (RuntimeException, DOMException)
+        throw (RuntimeException, DOMException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -441,7 +441,7 @@ namespace DOM
     // Creates an attribute of the given qualified name and namespace URI.
     Reference< XAttr > SAL_CALL CDocument::createAttributeNS(
             const OUString& ns, const OUString& qname)
-        throw (RuntimeException, DOMException)
+        throw (RuntimeException, DOMException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -476,7 +476,7 @@ namespace DOM
 
     // Creates a CDATASection node whose value is the specified string.
     Reference< XCDATASection > SAL_CALL CDocument::createCDATASection(const OUString& data)
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -494,7 +494,7 @@ namespace DOM
 
     // Creates a Comment node given the specified string.
     Reference< XComment > SAL_CALL CDocument::createComment(const OUString& data)
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -509,7 +509,7 @@ namespace DOM
 
     //Creates an empty DocumentFragment object.
     Reference< XDocumentFragment > SAL_CALL CDocument::createDocumentFragment()
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -522,7 +522,7 @@ namespace DOM
 
     // Creates an element of the type specified.
     Reference< XElement > SAL_CALL CDocument::createElement(const OUString& tagName)
-        throw (RuntimeException, DOMException)
+        throw (RuntimeException, DOMException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -538,7 +538,7 @@ namespace DOM
     // Creates an element of the given qualified name and namespace URI.
     Reference< XElement > SAL_CALL CDocument::createElementNS(
             const OUString& ns, const OUString& qname)
-        throw (RuntimeException, DOMException)
+        throw (RuntimeException, DOMException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -574,7 +574,7 @@ namespace DOM
 
     //Creates an EntityReference object.
     Reference< XEntityReference > SAL_CALL CDocument::createEntityReference(const OUString& name)
-        throw (RuntimeException, DOMException)
+        throw (RuntimeException, DOMException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -591,7 +591,7 @@ namespace DOM
     // data strings.
     Reference< XProcessingInstruction > SAL_CALL CDocument::createProcessingInstruction(
             const OUString& target, const OUString& data)
-        throw (RuntimeException, DOMException)
+        throw (RuntimeException, DOMException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -609,7 +609,7 @@ namespace DOM
 
     // Creates a Text node given the specified string.
     Reference< XText > SAL_CALL CDocument::createTextNode(const OUString& data)
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -625,7 +625,7 @@ namespace DOM
     // The Document Type Declaration (see DocumentType) associated with this
     // document.
     Reference< XDocumentType > SAL_CALL CDocument::getDoctype()
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -639,7 +639,7 @@ namespace DOM
     // This is a convenience attribute that allows direct access to the child
     // node that is the root element of the document.
     Reference< XElement > SAL_CALL CDocument::getDocumentElement()
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -680,7 +680,7 @@ namespace DOM
     // Returns the Element whose ID is given by elementId.
     Reference< XElement > SAL_CALL
     CDocument::getElementById(const OUString& elementId)
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -699,7 +699,7 @@ namespace DOM
 
     Reference< XNodeList > SAL_CALL
     CDocument::getElementsByTagName(OUString const& rTagname)
-            throw (RuntimeException)
+            throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -710,7 +710,7 @@ namespace DOM
 
     Reference< XNodeList > SAL_CALL CDocument::getElementsByTagNameNS(
             OUString const& rNamespaceURI, OUString const& rLocalName)
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -721,7 +721,7 @@ namespace DOM
     }
 
     Reference< XDOMImplementation > SAL_CALL CDocument::getImplementation()
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         // does not need mutex currently
         return Reference< XDOMImplementation >(CDOMImplementation::get());
@@ -906,7 +906,7 @@ namespace DOM
 
     Reference< XNode > SAL_CALL CDocument::importNode(
             Reference< XNode > const& xImportedNode, sal_Bool deep)
-        throw (RuntimeException, DOMException)
+        throw (RuntimeException, DOMException, std::exception)
     {
         if (!xImportedNode.is()) { throw RuntimeException(); }
 
@@ -935,20 +935,20 @@ namespace DOM
         return xNode;
     }
 
-    OUString SAL_CALL CDocument::getNodeName()throw (RuntimeException)
+    OUString SAL_CALL CDocument::getNodeName()throw (RuntimeException, std::exception)
     {
         // does not need mutex currently
         return OUString("#document");
     }
 
-    OUString SAL_CALL CDocument::getNodeValue() throw (RuntimeException)
+    OUString SAL_CALL CDocument::getNodeValue() throw (RuntimeException, std::exception)
     {
         // does not need mutex currently
         return OUString();
     }
 
     Reference< XNode > SAL_CALL CDocument::cloneNode(sal_Bool bDeep)
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -963,7 +963,7 @@ namespace DOM
         return xRet;
     }
 
-    Reference< XEvent > SAL_CALL CDocument::createEvent(const OUString& aType) throw (RuntimeException)
+    Reference< XEvent > SAL_CALL CDocument::createEvent(const OUString& aType) throw (RuntimeException, std::exception)
     {
         // does not need mutex currently
         events::CEvent *pEvent = 0;
@@ -992,7 +992,7 @@ namespace DOM
     void SAL_CALL CDocument::serialize(
             const Reference< XDocumentHandler >& i_xHandler,
             const Sequence< beans::StringPair >& i_rNamespaces)
-        throw (RuntimeException, SAXException)
+        throw (RuntimeException, SAXException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -1021,7 +1021,7 @@ namespace DOM
                                             const Reference< XFastTokenHandler >& i_xTokenHandler,
                                             const Sequence< beans::StringPair >& i_rNamespaces,
                                             const Sequence< beans::Pair< OUString, sal_Int32 > >& i_rRegisterNamespaces )
-        throw (SAXException, RuntimeException)
+        throw (SAXException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
 

@@ -163,9 +163,9 @@ public:
      }
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName ) throw (RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException);
+    virtual OUString SAL_CALL getImplementationName() throw (RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName ) throw (RuntimeException, std::exception);
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException, std::exception);
 
     // XLBTestBase
     virtual void SAL_CALL setValues( sal_Bool bBool, sal_Unicode cChar, sal_Int8 nByte,
@@ -178,7 +178,7 @@ public:
                                      const ::com::sun::star::uno::Any& rAny,
                                      const ::com::sun::star::uno::Sequence<TestElement >& rSequence,
                                      const TestData& rStruct )
-        throw(com::sun::star::uno::RuntimeException);
+        throw(com::sun::star::uno::RuntimeException, std::exception);
 
     virtual TestData SAL_CALL setValues2( sal_Bool& bBool, sal_Unicode& cChar, sal_Int8& nByte,
                                                 sal_Int16& nShort, sal_uInt16& nUShort,
@@ -190,7 +190,7 @@ public:
                                                 ::com::sun::star::uno::Any& rAny,
                                                 ::com::sun::star::uno::Sequence<TestElement >& rSequence,
                                                 TestData& rStruct )
-        throw(com::sun::star::uno::RuntimeException);
+        throw(com::sun::star::uno::RuntimeException, std::exception);
 
     virtual TestData SAL_CALL getValues( sal_Bool& bBool, sal_Unicode& cChar, sal_Int8& nByte,
                                                sal_Int16& nShort, sal_uInt16& nUShort,
@@ -202,228 +202,228 @@ public:
                                                ::com::sun::star::uno::Any& rAny,
                                                ::com::sun::star::uno::Sequence< TestElement >& rSequence,
                                                TestData& rStruct )
-        throw(com::sun::star::uno::RuntimeException);
+        throw(com::sun::star::uno::RuntimeException, std::exception);
 
-    virtual SmallStruct SAL_CALL echoSmallStruct(const SmallStruct& rStruct) throw(com::sun::star::uno::RuntimeException)
+    virtual SmallStruct SAL_CALL echoSmallStruct(const SmallStruct& rStruct) throw(com::sun::star::uno::RuntimeException, std::exception)
         { return rStruct; }
-    virtual MediumStruct SAL_CALL echoMediumStruct(const MediumStruct& rStruct) throw(com::sun::star::uno::RuntimeException)
+    virtual MediumStruct SAL_CALL echoMediumStruct(const MediumStruct& rStruct) throw(com::sun::star::uno::RuntimeException, std::exception)
         { return rStruct; }
-    virtual BigStruct SAL_CALL echoBigStruct(const BigStruct& rStruct) throw(com::sun::star::uno::RuntimeException)
+    virtual BigStruct SAL_CALL echoBigStruct(const BigStruct& rStruct) throw(com::sun::star::uno::RuntimeException, std::exception)
         { return rStruct; }
-    virtual TwoFloats SAL_CALL echoTwoFloats(const TwoFloats& rStruct) throw(com::sun::star::uno::RuntimeException)
+    virtual TwoFloats SAL_CALL echoTwoFloats(const TwoFloats& rStruct) throw(com::sun::star::uno::RuntimeException, std::exception)
         { return rStruct; }
-    virtual FourFloats SAL_CALL echoFourFloats(const FourFloats& rStruct) throw(com::sun::star::uno::RuntimeException)
+    virtual FourFloats SAL_CALL echoFourFloats(const FourFloats& rStruct) throw(com::sun::star::uno::RuntimeException, std::exception)
         { return rStruct; }
-    virtual MixedFloatAndInteger SAL_CALL echoMixedFloatAndInteger(const MixedFloatAndInteger& rStruct) throw(com::sun::star::uno::RuntimeException)
+    virtual MixedFloatAndInteger SAL_CALL echoMixedFloatAndInteger(const MixedFloatAndInteger& rStruct) throw(com::sun::star::uno::RuntimeException, std::exception)
         { return rStruct; }
-    virtual ThreeByteStruct SAL_CALL echoThreeByteStruct(const ThreeByteStruct& rStruct) throw(com::sun::star::uno::RuntimeException)
+    virtual ThreeByteStruct SAL_CALL echoThreeByteStruct(const ThreeByteStruct& rStruct) throw(com::sun::star::uno::RuntimeException, std::exception)
         { return rStruct; }
-    virtual sal_Int32 SAL_CALL testPPCAlignment( sal_Int64, sal_Int64, sal_Int32, sal_Int64, sal_Int32 i2 ) throw(com::sun::star::uno::RuntimeException)
+    virtual sal_Int32 SAL_CALL testPPCAlignment( sal_Int64, sal_Int64, sal_Int32, sal_Int64, sal_Int32 i2 ) throw(com::sun::star::uno::RuntimeException, std::exception)
         { return i2; }
-    virtual double SAL_CALL testTenDoubles( double d1, double d2, double d3, double d4, double d5, double d6, double d7, double d8, double d9, double d10 ) throw(com::sun::star::uno::RuntimeException)
+    virtual double SAL_CALL testTenDoubles( double d1, double d2, double d3, double d4, double d5, double d6, double d7, double d8, double d9, double d10 ) throw(com::sun::star::uno::RuntimeException, std::exception)
         { return d1 + d2 + d3 + d4 + d5 + d6 + d7 + d8 + d9 + d10; }
-    virtual sal_Bool SAL_CALL getBool() throw(com::sun::star::uno::RuntimeException)
+    virtual sal_Bool SAL_CALL getBool() throw(com::sun::star::uno::RuntimeException, std::exception)
         { return _aData.Bool; }
-    virtual sal_Int8 SAL_CALL getByte() throw(com::sun::star::uno::RuntimeException)
+    virtual sal_Int8 SAL_CALL getByte() throw(com::sun::star::uno::RuntimeException, std::exception)
         { return _aData.Byte; }
-    virtual sal_Unicode SAL_CALL getChar() throw(com::sun::star::uno::RuntimeException)
+    virtual sal_Unicode SAL_CALL getChar() throw(com::sun::star::uno::RuntimeException, std::exception)
         { return _aData.Char; }
-    virtual sal_Int16 SAL_CALL getShort() throw(com::sun::star::uno::RuntimeException)
+    virtual sal_Int16 SAL_CALL getShort() throw(com::sun::star::uno::RuntimeException, std::exception)
         { return _aData.Short; }
-    virtual sal_uInt16 SAL_CALL getUShort() throw(com::sun::star::uno::RuntimeException)
+    virtual sal_uInt16 SAL_CALL getUShort() throw(com::sun::star::uno::RuntimeException, std::exception)
         { return _aData.UShort; }
-    virtual sal_Int32 SAL_CALL getLong() throw(com::sun::star::uno::RuntimeException)
+    virtual sal_Int32 SAL_CALL getLong() throw(com::sun::star::uno::RuntimeException, std::exception)
         { return _aData.Long; }
-    virtual sal_uInt32 SAL_CALL getULong() throw(com::sun::star::uno::RuntimeException)
+    virtual sal_uInt32 SAL_CALL getULong() throw(com::sun::star::uno::RuntimeException, std::exception)
         { return _aData.ULong; }
-    virtual sal_Int64 SAL_CALL getHyper() throw(com::sun::star::uno::RuntimeException)
+    virtual sal_Int64 SAL_CALL getHyper() throw(com::sun::star::uno::RuntimeException, std::exception)
         { return _aData.Hyper; }
-    virtual sal_uInt64 SAL_CALL getUHyper() throw(com::sun::star::uno::RuntimeException)
+    virtual sal_uInt64 SAL_CALL getUHyper() throw(com::sun::star::uno::RuntimeException, std::exception)
         { return _aData.UHyper; }
-    virtual float SAL_CALL getFloat() throw(com::sun::star::uno::RuntimeException)
+    virtual float SAL_CALL getFloat() throw(com::sun::star::uno::RuntimeException, std::exception)
         { return _aData.Float; }
-    virtual double SAL_CALL getDouble() throw(com::sun::star::uno::RuntimeException)
+    virtual double SAL_CALL getDouble() throw(com::sun::star::uno::RuntimeException, std::exception)
         { return _aData.Double; }
-    virtual TestEnum SAL_CALL getEnum() throw(com::sun::star::uno::RuntimeException)
+    virtual TestEnum SAL_CALL getEnum() throw(com::sun::star::uno::RuntimeException, std::exception)
         { return _aData.Enum; }
-    virtual OUString SAL_CALL getString() throw(com::sun::star::uno::RuntimeException)
+    virtual OUString SAL_CALL getString() throw(com::sun::star::uno::RuntimeException, std::exception)
         { return _aData.String; }
-    virtual com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getInterface(  ) throw(com::sun::star::uno::RuntimeException)
+    virtual com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getInterface(  ) throw(com::sun::star::uno::RuntimeException, std::exception)
         { return _aData.Interface; }
-    virtual com::sun::star::uno::Any SAL_CALL getAny() throw(com::sun::star::uno::RuntimeException)
+    virtual com::sun::star::uno::Any SAL_CALL getAny() throw(com::sun::star::uno::RuntimeException, std::exception)
         { return _aData.Any; }
-    virtual com::sun::star::uno::Sequence< TestElement > SAL_CALL getSequence() throw(com::sun::star::uno::RuntimeException)
+    virtual com::sun::star::uno::Sequence< TestElement > SAL_CALL getSequence() throw(com::sun::star::uno::RuntimeException, std::exception)
         { return _aData.Sequence; }
-    virtual TestData SAL_CALL getStruct() throw(com::sun::star::uno::RuntimeException)
+    virtual TestData SAL_CALL getStruct() throw(com::sun::star::uno::RuntimeException, std::exception)
         { return _aStructData; }
 
-    virtual void SAL_CALL setBool( sal_Bool _bool ) throw(::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL setBool( sal_Bool _bool ) throw(::com::sun::star::uno::RuntimeException, std::exception)
         { _aData.Bool = _bool; }
-    virtual void SAL_CALL setByte( sal_Int8 _byte ) throw(::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL setByte( sal_Int8 _byte ) throw(::com::sun::star::uno::RuntimeException, std::exception)
         { _aData.Byte = _byte; }
-    virtual void SAL_CALL setChar( sal_Unicode _char ) throw(::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL setChar( sal_Unicode _char ) throw(::com::sun::star::uno::RuntimeException, std::exception)
         { _aData.Char = _char; }
-    virtual void SAL_CALL setShort( sal_Int16 _short ) throw(::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL setShort( sal_Int16 _short ) throw(::com::sun::star::uno::RuntimeException, std::exception)
         { _aData.Short = _short; }
-    virtual void SAL_CALL setUShort( sal_uInt16 _ushort ) throw(::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL setUShort( sal_uInt16 _ushort ) throw(::com::sun::star::uno::RuntimeException, std::exception)
         { _aData.UShort = _ushort; }
-    virtual void SAL_CALL setLong( sal_Int32 _long ) throw(::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL setLong( sal_Int32 _long ) throw(::com::sun::star::uno::RuntimeException, std::exception)
         { _aData.Long = _long; }
-    virtual void SAL_CALL setULong( sal_uInt32 _ulong ) throw(::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL setULong( sal_uInt32 _ulong ) throw(::com::sun::star::uno::RuntimeException, std::exception)
         { _aData.ULong = _ulong; }
-    virtual void SAL_CALL setHyper( sal_Int64 _hyper ) throw(::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL setHyper( sal_Int64 _hyper ) throw(::com::sun::star::uno::RuntimeException, std::exception)
         { _aData.Hyper = _hyper; }
-    virtual void SAL_CALL setUHyper( sal_uInt64 _uhyper ) throw(::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL setUHyper( sal_uInt64 _uhyper ) throw(::com::sun::star::uno::RuntimeException, std::exception)
         { _aData.UHyper = _uhyper; }
-    virtual void SAL_CALL setFloat( float _float ) throw(::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL setFloat( float _float ) throw(::com::sun::star::uno::RuntimeException, std::exception)
         { _aData.Float = _float; }
-    virtual void SAL_CALL setDouble( double _double ) throw(::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL setDouble( double _double ) throw(::com::sun::star::uno::RuntimeException, std::exception)
         { _aData.Double = _double; }
-    virtual void SAL_CALL setEnum( TestEnum _enum ) throw(::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL setEnum( TestEnum _enum ) throw(::com::sun::star::uno::RuntimeException, std::exception)
         { _aData.Enum = _enum; }
-    virtual void SAL_CALL setString( const OUString& _string ) throw(::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL setString( const OUString& _string ) throw(::com::sun::star::uno::RuntimeException, std::exception)
         { _aData.String = _string; }
-    virtual void SAL_CALL setInterface( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _interface ) throw(::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL setInterface( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _interface ) throw(::com::sun::star::uno::RuntimeException, std::exception)
         { _aData.Interface = _interface; }
-    virtual void SAL_CALL setAny( const ::com::sun::star::uno::Any& _any ) throw(::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL setAny( const ::com::sun::star::uno::Any& _any ) throw(::com::sun::star::uno::RuntimeException, std::exception)
         { _aData.Any = _any; }
-    virtual void SAL_CALL setSequence( const ::com::sun::star::uno::Sequence<TestElement >& _sequence ) throw(::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL setSequence( const ::com::sun::star::uno::Sequence<TestElement >& _sequence ) throw(::com::sun::star::uno::RuntimeException, std::exception)
         { _aData.Sequence = _sequence; }
-    virtual void SAL_CALL setStruct( const TestData& _struct ) throw(::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL setStruct( const TestData& _struct ) throw(::com::sun::star::uno::RuntimeException, std::exception)
         { _aStructData = _struct; }
 
-    virtual sal_Int32 SAL_CALL getRaiseAttr1() throw (RuntimeException)
+    virtual sal_Int32 SAL_CALL getRaiseAttr1() throw (RuntimeException, std::exception)
     { throw RuntimeException(); }
 
     virtual void SAL_CALL setRaiseAttr1(sal_Int32)
-        throw (IllegalArgumentException, RuntimeException)
+        throw (IllegalArgumentException, RuntimeException, std::exception)
     { throw IllegalArgumentException(); }
 
     virtual sal_Int32 SAL_CALL getRaiseAttr2()
-        throw (IllegalArgumentException, RuntimeException)
+        throw (IllegalArgumentException, RuntimeException, std::exception)
     { throw IllegalArgumentException(); }
 
     virtual TestPolyStruct< sal_Bool > SAL_CALL transportPolyBoolean(
-        TestPolyStruct< sal_Bool > const & arg) throw (RuntimeException)
+        TestPolyStruct< sal_Bool > const & arg) throw (RuntimeException, std::exception)
     { return arg; }
 
     virtual void SAL_CALL transportPolyHyper(TestPolyStruct< sal_Int64 > &)
-        throw (RuntimeException) {}
+        throw (RuntimeException, std::exception) {}
 
     virtual void SAL_CALL transportPolySequence(
         TestPolyStruct< Sequence< Any > > const & arg1,
-        TestPolyStruct< Sequence< Any > > & arg2) throw (RuntimeException)
+        TestPolyStruct< Sequence< Any > > & arg2) throw (RuntimeException, std::exception)
     { arg2 = arg1; }
 
     virtual TestPolyStruct< sal_Int32 > SAL_CALL getNullPolyLong()
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     { return TestPolyStruct< sal_Int32 >(0); /* work around MS compiler bug */ }
 
     virtual TestPolyStruct< OUString > SAL_CALL getNullPolyString()
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     { return TestPolyStruct< OUString >(); }
 
     virtual TestPolyStruct< Type > SAL_CALL getNullPolyType()
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     { return TestPolyStruct< Type >(); }
 
     virtual TestPolyStruct< Any > SAL_CALL getNullPolyAny()
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     { return TestPolyStruct< Any >(); }
 
     virtual TestPolyStruct< Sequence< sal_Bool > > SAL_CALL
-    getNullPolySequence() throw (RuntimeException)
+    getNullPolySequence() throw (RuntimeException, std::exception)
     { return TestPolyStruct< Sequence< sal_Bool > >(); }
 
     virtual TestPolyStruct< TestEnum > SAL_CALL getNullPolyEnum()
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     { return TestPolyStruct< TestEnum >(
         test::testtools::bridgetest::TestEnum_TEST);
           /* work around MS compiler bug */ }
 
     virtual TestPolyStruct< TestBadEnum > SAL_CALL getNullPolyBadEnum()
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     { return TestPolyStruct< TestBadEnum >(
         test::testtools::bridgetest::TestBadEnum_M);
           /* explicitly instantiate with default enumerator */ }
 
     virtual TestPolyStruct< TestStruct > SAL_CALL getNullPolyStruct()
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     { return TestPolyStruct< TestStruct >(); }
 
     virtual TestPolyStruct< Reference< XBridgeTestBase > > SAL_CALL
-    getNullPolyInterface() throw (RuntimeException)
+    getNullPolyInterface() throw (RuntimeException, std::exception)
     { return TestPolyStruct< Reference< XBridgeTestBase > >(); }
 
     virtual ::com::sun::star::uno::Any SAL_CALL transportAny(
         const ::com::sun::star::uno::Any& value )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL call( sal_Int32 nCallId, sal_Int32 nWaitMUSEC )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL callOneway( sal_Int32 nCallId, sal_Int32 nWaitMUSEC )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL sequenceOfCallTestPassed(  )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL startRecursiveCall(
         const ::com::sun::star::uno::Reference< XRecursiveCall >& xCall, sal_Int32 nToCall )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
 
-    virtual Reference< XMulti > SAL_CALL getMulti() throw (RuntimeException);
+    virtual Reference< XMulti > SAL_CALL getMulti() throw (RuntimeException, std::exception);
 
     virtual OUString SAL_CALL testMulti(Reference< XMulti > const & multi)
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
 
 public: // XBridgeTest
     virtual TestData SAL_CALL raiseException( sal_Int16 nArgumentPos, const OUString & rMsg, const Reference< XInterface > & xCOntext )
-        throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL raiseRuntimeExceptionOneway(
         const OUString& Message, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Context )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
 
-    virtual sal_Int32 SAL_CALL getRuntimeException() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setRuntimeException( sal_Int32 _runtimeexception ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getRuntimeException() throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setRuntimeException( sal_Int32 _runtimeexception ) throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     // XBridgeTest2
     virtual Sequence< sal_Bool > SAL_CALL setSequenceBool(
-        const Sequence< sal_Bool >& aSeq ) throw (RuntimeException);
+        const Sequence< sal_Bool >& aSeq ) throw (RuntimeException, std::exception);
     virtual Sequence< sal_Unicode > SAL_CALL setSequenceChar(
-        const Sequence< sal_Unicode >& aSeq ) throw (RuntimeException);
+        const Sequence< sal_Unicode >& aSeq ) throw (RuntimeException, std::exception);
     virtual Sequence< sal_Int8 > SAL_CALL setSequenceByte(
-        const Sequence< sal_Int8 >& aSeq ) throw (RuntimeException);
+        const Sequence< sal_Int8 >& aSeq ) throw (RuntimeException, std::exception);
     virtual Sequence< sal_Int16 > SAL_CALL setSequenceShort(
-        const Sequence< sal_Int16 >& aSeq ) throw (RuntimeException);
+        const Sequence< sal_Int16 >& aSeq ) throw (RuntimeException, std::exception);
     virtual Sequence< sal_uInt16 > SAL_CALL setSequenceUShort(
-        const Sequence< sal_uInt16 >& aSeq ) throw (RuntimeException);
+        const Sequence< sal_uInt16 >& aSeq ) throw (RuntimeException, std::exception);
     virtual Sequence< sal_Int32 > SAL_CALL setSequenceLong(
-        const Sequence< sal_Int32 >& aSeq ) throw (RuntimeException);
+        const Sequence< sal_Int32 >& aSeq ) throw (RuntimeException, std::exception);
     virtual Sequence< sal_uInt32 > SAL_CALL setSequenceULong(
-        const Sequence< sal_uInt32 >& aSeq ) throw (RuntimeException);
+        const Sequence< sal_uInt32 >& aSeq ) throw (RuntimeException, std::exception);
     virtual Sequence< sal_Int64 > SAL_CALL setSequenceHyper(
-        const Sequence< sal_Int64 >& aSeq ) throw (RuntimeException);
+        const Sequence< sal_Int64 >& aSeq ) throw (RuntimeException, std::exception);
     virtual Sequence< sal_uInt64 > SAL_CALL setSequenceUHyper(
-        const Sequence< sal_uInt64 >& aSeq ) throw (RuntimeException);
+        const Sequence< sal_uInt64 >& aSeq ) throw (RuntimeException, std::exception);
     virtual Sequence< float > SAL_CALL setSequenceFloat(
-        const Sequence< float >& aSeq ) throw (RuntimeException);
+        const Sequence< float >& aSeq ) throw (RuntimeException, std::exception);
     virtual Sequence< double > SAL_CALL setSequenceDouble(
-        const Sequence< double >& aSeq ) throw (RuntimeException);
+        const Sequence< double >& aSeq ) throw (RuntimeException, std::exception);
     virtual Sequence< TestEnum > SAL_CALL setSequenceEnum(
-        const Sequence< TestEnum >& aSeq ) throw (RuntimeException) ;
+        const Sequence< TestEnum >& aSeq ) throw (RuntimeException, std::exception) ;
     virtual Sequence< OUString > SAL_CALL setSequenceString(
-        const Sequence< OUString >& aString ) throw (RuntimeException);
+        const Sequence< OUString >& aString ) throw (RuntimeException, std::exception);
     virtual Sequence< Reference< XInterface > > SAL_CALL setSequenceXInterface(
         const Sequence< Reference< XInterface > >& aSeq )
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
     virtual Sequence<Any > SAL_CALL setSequenceAny(
-        const Sequence<Any >& aSeq ) throw (RuntimeException);
+        const Sequence<Any >& aSeq ) throw (RuntimeException, std::exception);
     virtual Sequence<TestElement > SAL_CALL setSequenceStruct(
-        const Sequence< TestElement >& aSeq ) throw (RuntimeException);
+        const Sequence< TestElement >& aSeq ) throw (RuntimeException, std::exception);
     virtual Sequence< Sequence< sal_Int32 > > SAL_CALL setDim2(
-        const Sequence<Sequence< sal_Int32 > >& aSeq ) throw (RuntimeException);
+        const Sequence<Sequence< sal_Int32 > >& aSeq ) throw (RuntimeException, std::exception);
     virtual Sequence< Sequence< Sequence< sal_Int32 > > > SAL_CALL setDim3(
         const Sequence< Sequence< Sequence< sal_Int32 > > >& aSeq )
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
     virtual void SAL_CALL setSequencesInOut(Sequence< sal_Bool >& aSeqBoolean,
                                 Sequence< sal_Unicode >& aSeqChar,
                                 Sequence< sal_Int8 >& aSeqByte,
@@ -441,7 +441,7 @@ public: // XBridgeTest
                                 Sequence< Any >& aSeqAny,
                                 Sequence< Sequence< sal_Int32 > >& aSeqDim2,
                                 Sequence< Sequence< Sequence< sal_Int32 > > >& aSeqDim3 )
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
     virtual void SAL_CALL setSequencesOut( Sequence< sal_Bool >& aSeqBoolean,
                              Sequence< sal_Unicode >& aSeqChar,
                              Sequence< sal_Int8 >& aSeqByte,
@@ -459,16 +459,16 @@ public: // XBridgeTest
                              Sequence< Any >& aSeqAny,
                              Sequence< Sequence< sal_Int32 > >& aSeqDim2,
                              Sequence< Sequence< Sequence< sal_Int32 > > >& aSeqDim3 )
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
     virtual void SAL_CALL testConstructorsService(
         Reference< XComponentContext > const & context)
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
     virtual Reference< XCurrentContextChecker > SAL_CALL
     getCurrentContextChecker()
-        throw (RuntimeException);
+        throw (RuntimeException, std::exception);
 
 public:
-    virtual void SAL_CALL callRecursivly( const ::com::sun::star::uno::Reference< XRecursiveCall >& xCall, sal_Int32 nToCall ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL callRecursivly( const ::com::sun::star::uno::Reference< XRecursiveCall >& xCall, sal_Int32 nToCall ) throw(::com::sun::star::uno::RuntimeException, std::exception);
 };
 
 //Dummy class for XComponent implementation
@@ -480,7 +480,7 @@ public:
 
 };
 
-Any Test_Impl::transportAny( const Any & value ) throw ( ::com::sun::star::uno::RuntimeException)
+Any Test_Impl::transportAny( const Any & value ) throw ( ::com::sun::star::uno::RuntimeException, std::exception)
 {
     return value;
 }
@@ -499,7 +499,7 @@ void wait(sal_Int32 microSeconds) {
 
 }
 
-void Test_Impl::call( sal_Int32 nCallId , sal_Int32 nWaitMUSEC ) throw(::com::sun::star::uno::RuntimeException)
+void Test_Impl::call( sal_Int32 nCallId , sal_Int32 nWaitMUSEC ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     wait(nWaitMUSEC);
     if( m_bFirstCall )
@@ -514,7 +514,7 @@ void Test_Impl::call( sal_Int32 nCallId , sal_Int32 nWaitMUSEC ) throw(::com::su
 }
 
 
-void Test_Impl::callOneway( sal_Int32 nCallId , sal_Int32 nWaitMUSEC ) throw (::com::sun::star::uno::RuntimeException)
+void Test_Impl::callOneway( sal_Int32 nCallId , sal_Int32 nWaitMUSEC ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     wait(nWaitMUSEC);
     m_bSequenceOfCallTestPassed = m_bSequenceOfCallTestPassed && (nCallId > m_nLastCallId);
@@ -522,7 +522,7 @@ void Test_Impl::callOneway( sal_Int32 nCallId , sal_Int32 nWaitMUSEC ) throw (::
 }
 
 
-sal_Bool Test_Impl::sequenceOfCallTestPassed() throw (::com::sun::star::uno::RuntimeException)
+sal_Bool Test_Impl::sequenceOfCallTestPassed() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return m_bSequenceOfCallTestPassed;
 }
@@ -530,7 +530,7 @@ sal_Bool Test_Impl::sequenceOfCallTestPassed() throw (::com::sun::star::uno::Run
 
 void SAL_CALL Test_Impl::startRecursiveCall(
     const ::com::sun::star::uno::Reference< XRecursiveCall >& xCall, sal_Int32 nToCall )
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     MutexGuard guard( m_mutex );
     if( nToCall )
@@ -544,7 +544,7 @@ void SAL_CALL Test_Impl::startRecursiveCall(
 void SAL_CALL Test_Impl::callRecursivly(
     const ::com::sun::star::uno::Reference< XRecursiveCall >& xCall,
     sal_Int32 nToCall )
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     MutexGuard guard( m_mutex );
     if( nToCall )
@@ -554,12 +554,12 @@ void SAL_CALL Test_Impl::callRecursivly(
     }
 }
 
-Reference< XMulti > Test_Impl::getMulti() throw (RuntimeException) {
+Reference< XMulti > Test_Impl::getMulti() throw (RuntimeException, std::exception) {
     return new testtools::bridgetest::Multi;
 }
 
 OUString Test_Impl::testMulti(Reference< XMulti > const & multi)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return testtools::bridgetest::testMulti(multi);
 }
@@ -575,7 +575,7 @@ void Test_Impl::setValues( sal_Bool bBool, sal_Unicode cChar, sal_Int8 nByte,
                            const ::com::sun::star::uno::Any& rAny,
                            const ::com::sun::star::uno::Sequence<TestElement >& rSequence,
                            const TestData& rStruct )
-    throw(com::sun::star::uno::RuntimeException)
+    throw(com::sun::star::uno::RuntimeException, std::exception)
 {
     assign( _aData,
             bBool, cChar, nByte, nShort, nUShort, nLong, nULong, nHyper, nUHyper, fFloat, fDouble,
@@ -593,7 +593,7 @@ TestData Test_Impl::setValues2( sal_Bool& bBool, sal_Unicode& cChar, sal_Int8& n
                                 ::com::sun::star::uno::Any& rAny,
                                 ::com::sun::star::uno::Sequence<TestElement >& rSequence,
                                 TestData& rStruct )
-    throw(com::sun::star::uno::RuntimeException)
+    throw(com::sun::star::uno::RuntimeException, std::exception)
 {
     assign( _aData,
             bBool, cChar, nByte, nShort, nUShort, nLong, nULong, nHyper, nUHyper, fFloat, fDouble,
@@ -617,7 +617,7 @@ TestData Test_Impl::getValues( sal_Bool& bBool, sal_Unicode& cChar, sal_Int8& nB
                                ::com::sun::star::uno::Any& rAny,
                                ::com::sun::star::uno::Sequence<TestElement >& rSequence,
                                TestData& rStruct )
-    throw(com::sun::star::uno::RuntimeException)
+    throw(com::sun::star::uno::RuntimeException, std::exception)
 {
     bBool = _aData.Bool;
     cChar = _aData.Char;
@@ -640,7 +640,7 @@ TestData Test_Impl::getValues( sal_Bool& bBool, sal_Unicode& cChar, sal_Int8& nB
 }
 
 TestData Test_Impl::raiseException( sal_Int16 nArgumentPos, const OUString & rMsg, const Reference< XInterface > & xContext )
-    throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     IllegalArgumentException aExc;
     aExc.ArgumentPosition = nArgumentPos;
@@ -650,7 +650,7 @@ TestData Test_Impl::raiseException( sal_Int16 nArgumentPos, const OUString & rMs
 }
 
 void Test_Impl::raiseRuntimeExceptionOneway( const OUString & rMsg, const Reference< XInterface > & xContext )
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     RuntimeException aExc;
     aExc.Message          = _aData.String = rMsg;
@@ -694,7 +694,7 @@ void dothrow( RuntimeException const & e )
 }
 
 sal_Int32 Test_Impl::getRuntimeException()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     try
     {
@@ -708,7 +708,7 @@ sal_Int32 Test_Impl::getRuntimeException()
     return 0; // for dummy
 }
 
-void Test_Impl::setRuntimeException( sal_Int32 ) throw(::com::sun::star::uno::RuntimeException)
+void Test_Impl::setRuntimeException( sal_Int32 ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     RuntimeException aExc;
     aExc.Message          = _aData.String;
@@ -718,91 +718,91 @@ void Test_Impl::setRuntimeException( sal_Int32 ) throw(::com::sun::star::uno::Ru
 
 // XBridgeTest2 -------------------------------------------------------------
 Sequence< sal_Bool > SAL_CALL Test_Impl::setSequenceBool(
-        const Sequence< sal_Bool >& aSeq ) throw (RuntimeException)
+        const Sequence< sal_Bool >& aSeq ) throw (RuntimeException, std::exception)
 {
     _arBool = aSeq;
     return aSeq;
 }
 
 Sequence< sal_Unicode > SAL_CALL Test_Impl::setSequenceChar(
-        const Sequence< sal_Unicode >& aSeq ) throw (RuntimeException)
+        const Sequence< sal_Unicode >& aSeq ) throw (RuntimeException, std::exception)
 {
     _arChar = aSeq;
     return aSeq;
 }
 
 Sequence< sal_Int8 > SAL_CALL Test_Impl::setSequenceByte(
-        const Sequence< sal_Int8 >& aSeq ) throw (RuntimeException)
+        const Sequence< sal_Int8 >& aSeq ) throw (RuntimeException, std::exception)
 {
     _arByte = aSeq;
     return aSeq;
 }
 
 Sequence< sal_Int16 > SAL_CALL Test_Impl::setSequenceShort(
-        const Sequence< sal_Int16 >& aSeq ) throw (RuntimeException)
+        const Sequence< sal_Int16 >& aSeq ) throw (RuntimeException, std::exception)
 {
     _arShort = aSeq;
     return aSeq;
 }
 
 Sequence< sal_uInt16 > SAL_CALL Test_Impl::setSequenceUShort(
-        const Sequence< sal_uInt16 >& aSeq ) throw (RuntimeException)
+        const Sequence< sal_uInt16 >& aSeq ) throw (RuntimeException, std::exception)
 {
     _arUShort = aSeq;
     return aSeq;
 }
 
 Sequence< sal_Int32 > SAL_CALL Test_Impl::setSequenceLong(
-        const Sequence< sal_Int32 >& aSeq ) throw (RuntimeException)
+        const Sequence< sal_Int32 >& aSeq ) throw (RuntimeException, std::exception)
 {
     _arLong = aSeq;
     return aSeq;
 }
 
 Sequence< sal_uInt32 > SAL_CALL Test_Impl::setSequenceULong(
-        const Sequence< sal_uInt32 >& aSeq ) throw (RuntimeException)
+        const Sequence< sal_uInt32 >& aSeq ) throw (RuntimeException, std::exception)
 {
     _arULong = aSeq;
     return aSeq;
 }
 
 Sequence< sal_Int64 > SAL_CALL Test_Impl::setSequenceHyper(
-        const Sequence< sal_Int64 >& aSeq ) throw (RuntimeException)
+        const Sequence< sal_Int64 >& aSeq ) throw (RuntimeException, std::exception)
 {
     _arHyper = aSeq;
     return aSeq;
 }
 
 Sequence< sal_uInt64 > SAL_CALL Test_Impl::setSequenceUHyper(
-        const Sequence< sal_uInt64 >& aSeq ) throw (RuntimeException)
+        const Sequence< sal_uInt64 >& aSeq ) throw (RuntimeException, std::exception)
 {
     _arUHyper = aSeq;
     return aSeq;
 }
 
 Sequence< float > SAL_CALL Test_Impl::setSequenceFloat(
-        const Sequence< float >& aSeq ) throw (RuntimeException)
+        const Sequence< float >& aSeq ) throw (RuntimeException, std::exception)
 {
     _arFloat = aSeq;
     return aSeq;
 }
 
 Sequence< double > SAL_CALL Test_Impl::setSequenceDouble(
-    const Sequence< double >& aSeq ) throw (RuntimeException)
+    const Sequence< double >& aSeq ) throw (RuntimeException, std::exception)
 {
     _arDouble = aSeq;
     return aSeq;
 }
 
 Sequence< TestEnum > SAL_CALL Test_Impl::setSequenceEnum(
-    const Sequence< TestEnum >& aSeq ) throw (RuntimeException)
+    const Sequence< TestEnum >& aSeq ) throw (RuntimeException, std::exception)
 {
     _arEnum = aSeq;
     return aSeq;
 }
 
 Sequence< OUString > SAL_CALL Test_Impl::setSequenceString(
-    const Sequence< OUString >& aSeq ) throw (RuntimeException)
+    const Sequence< OUString >& aSeq ) throw (RuntimeException, std::exception)
 {
     _arString = aSeq;
     return aSeq;
@@ -810,28 +810,28 @@ Sequence< OUString > SAL_CALL Test_Impl::setSequenceString(
 
 Sequence< Reference< XInterface > > SAL_CALL Test_Impl::setSequenceXInterface(
         const Sequence< Reference< XInterface > >& aSeq )
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
 {
     _arObject = aSeq;
     return aSeq;
 }
 
 Sequence<Any > SAL_CALL Test_Impl::setSequenceAny(
-    const Sequence<Any >& aSeq ) throw (RuntimeException)
+    const Sequence<Any >& aSeq ) throw (RuntimeException, std::exception)
 {
     _arAny = aSeq;
     return aSeq;
 }
 
 Sequence<TestElement > SAL_CALL Test_Impl::setSequenceStruct(
-    const Sequence< TestElement >& aSeq ) throw (RuntimeException)
+    const Sequence< TestElement >& aSeq ) throw (RuntimeException, std::exception)
 {
     _arStruct = aSeq;
     return aSeq;
 }
 
 Sequence< Sequence< sal_Int32 > > SAL_CALL Test_Impl::setDim2(
-        const Sequence<Sequence< sal_Int32 > >& aSeq ) throw (RuntimeException)
+        const Sequence<Sequence< sal_Int32 > >& aSeq ) throw (RuntimeException, std::exception)
 {
     _arLong2 = aSeq;
     return aSeq;
@@ -839,7 +839,7 @@ Sequence< Sequence< sal_Int32 > > SAL_CALL Test_Impl::setDim2(
 
 Sequence< Sequence< Sequence< sal_Int32 > > > SAL_CALL Test_Impl::setDim3(
         const Sequence< Sequence< Sequence< sal_Int32 > > >& aSeq )
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
 {
     _arLong3 = aSeq;
     return aSeq;
@@ -862,7 +862,7 @@ void SAL_CALL Test_Impl::setSequencesInOut(Sequence< sal_Bool >& aSeqBoolean,
                                 Sequence< Any >& aSeqAny,
                                 Sequence< Sequence< sal_Int32 > >& aSeqDim2,
                                 Sequence< Sequence< Sequence< sal_Int32 > > >& aSeqDim3 )
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
 {
     _arBool = aSeqBoolean;
     _arChar = aSeqChar;
@@ -900,7 +900,7 @@ void SAL_CALL Test_Impl::setSequencesOut( Sequence< sal_Bool >& aSeqBoolean,
                              Sequence< Any >& aSeqAny,
                              Sequence< Sequence< sal_Int32 > >& aSeqDim2,
                              Sequence< Sequence< Sequence< sal_Int32 > > >& aSeqDim3 )
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
 {
     aSeqBoolean = _arBool;
     aSeqChar = _arChar;
@@ -922,7 +922,7 @@ void SAL_CALL Test_Impl::setSequencesOut( Sequence< sal_Bool >& aSeqBoolean,
 }
 
 void Test_Impl::testConstructorsService(
-    Reference< XComponentContext > const & context) throw (RuntimeException)
+    Reference< XComponentContext > const & context) throw (RuntimeException, std::exception)
 {
     Sequence< sal_Bool > arg14(1); arg14[0] = true;
     Sequence< sal_Int8 > arg15(1); arg15[0] = SAL_MIN_INT8;
@@ -1139,7 +1139,7 @@ void Test_Impl::testConstructorsService(
 }
 
 Reference< XCurrentContextChecker > Test_Impl::getCurrentContextChecker()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return new testtools::bridgetest::CurrentContextChecker;
 }
@@ -1147,19 +1147,19 @@ Reference< XCurrentContextChecker > Test_Impl::getCurrentContextChecker()
 // XServiceInfo
 
 OUString Test_Impl::getImplementationName()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return OUString( IMPLNAME );
 }
 
 sal_Bool Test_Impl::supportsService( const OUString & rServiceName )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > Test_Impl::getSupportedServiceNames()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return bridge_object::getSupportedServiceNames();
 }

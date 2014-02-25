@@ -330,7 +330,7 @@ Reference< XBlob> Connection::createBlob(ISC_QUAD* pBlobId)
 
 //----- XConnection ----------------------------------------------------------
 Reference< XStatement > SAL_CALL Connection::createStatement( )
-                                        throw(SQLException, RuntimeException)
+                                        throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("connectivity.firebird", "createStatement().");
 
@@ -377,7 +377,7 @@ OUString Connection::transformPreparedStatement(const OUString& _sSQL)
 
 Reference< XPreparedStatement > SAL_CALL Connection::prepareStatement(
             const OUString& _sSql)
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("connectivity.firebird", "prepareStatement() "
              "called with sql: " << _sSql);
@@ -398,7 +398,7 @@ Reference< XPreparedStatement > SAL_CALL Connection::prepareStatement(
 }
 
 Reference< XPreparedStatement > SAL_CALL Connection::prepareCall(
-                const OUString& _sSql ) throw(SQLException, RuntimeException)
+                const OUString& _sSql ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("connectivity.firebird", "prepareCall(). "
              "_sSql: " << _sSql);
@@ -413,7 +413,7 @@ Reference< XPreparedStatement > SAL_CALL Connection::prepareCall(
 }
 
 OUString SAL_CALL Connection::nativeSQL( const OUString& _sSql )
-                                        throw(SQLException, RuntimeException)
+                                        throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
     // We do not need to adapt the SQL for Firebird atm.
@@ -421,7 +421,7 @@ OUString SAL_CALL Connection::nativeSQL( const OUString& _sSql )
 }
 
 void SAL_CALL Connection::setAutoCommit( sal_Bool autoCommit )
-                                        throw(SQLException, RuntimeException)
+                                        throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
     checkDisposed(Connection_BASE::rBHelper.bDisposed);
@@ -434,7 +434,7 @@ void SAL_CALL Connection::setAutoCommit( sal_Bool autoCommit )
     }
 }
 
-sal_Bool SAL_CALL Connection::getAutoCommit() throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL Connection::getAutoCommit() throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
     checkDisposed(Connection_BASE::rBHelper.bDisposed);
@@ -511,7 +511,7 @@ isc_tr_handle& Connection::getTransaction()
     return m_aTransactionHandle;
 }
 
-void SAL_CALL Connection::commit() throw(SQLException, RuntimeException)
+void SAL_CALL Connection::commit() throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
     checkDisposed(Connection_BASE::rBHelper.bDisposed);
@@ -528,7 +528,7 @@ void SAL_CALL Connection::commit() throw(SQLException, RuntimeException)
     }
 }
 
-void SAL_CALL Connection::rollback() throw(SQLException, RuntimeException)
+void SAL_CALL Connection::rollback() throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
     checkDisposed(Connection_BASE::rBHelper.bDisposed);
@@ -541,7 +541,7 @@ void SAL_CALL Connection::rollback() throw(SQLException, RuntimeException)
     }
 }
 
-sal_Bool SAL_CALL Connection::isClosed(  ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL Connection::isClosed(  ) throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
 
@@ -549,7 +549,7 @@ sal_Bool SAL_CALL Connection::isClosed(  ) throw(SQLException, RuntimeException)
     return Connection_BASE::rBHelper.bDisposed;
 }
 
-Reference< XDatabaseMetaData > SAL_CALL Connection::getMetaData(  ) throw(SQLException, RuntimeException)
+Reference< XDatabaseMetaData > SAL_CALL Connection::getMetaData(  ) throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
     checkDisposed(Connection_BASE::rBHelper.bDisposed);
@@ -567,7 +567,7 @@ Reference< XDatabaseMetaData > SAL_CALL Connection::getMetaData(  ) throw(SQLExc
 }
 
 void SAL_CALL Connection::setReadOnly(sal_Bool readOnly)
-                                            throw(SQLException, RuntimeException)
+                                            throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
     checkDisposed(Connection_BASE::rBHelper.bDisposed);
@@ -576,7 +576,7 @@ void SAL_CALL Connection::setReadOnly(sal_Bool readOnly)
     setupTransaction();
 }
 
-sal_Bool SAL_CALL Connection::isReadOnly() throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL Connection::isReadOnly() throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
     checkDisposed(Connection_BASE::rBHelper.bDisposed);
@@ -585,19 +585,19 @@ sal_Bool SAL_CALL Connection::isReadOnly() throw(SQLException, RuntimeException)
 }
 
 void SAL_CALL Connection::setCatalog(const OUString& /*catalog*/)
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedException("setCatalog", *this);
 }
 
 OUString SAL_CALL Connection::getCatalog()
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedException("getCatalog", *this);
     return OUString();
 }
 
-void SAL_CALL Connection::setTransactionIsolation( sal_Int32 level ) throw(SQLException, RuntimeException)
+void SAL_CALL Connection::setTransactionIsolation( sal_Int32 level ) throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
     checkDisposed(Connection_BASE::rBHelper.bDisposed);
@@ -606,7 +606,7 @@ void SAL_CALL Connection::setTransactionIsolation( sal_Int32 level ) throw(SQLEx
     setupTransaction();
 }
 
-sal_Int32 SAL_CALL Connection::getTransactionIsolation(  ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL Connection::getTransactionIsolation(  ) throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
     checkDisposed(Connection_BASE::rBHelper.bDisposed);
@@ -614,21 +614,21 @@ sal_Int32 SAL_CALL Connection::getTransactionIsolation(  ) throw(SQLException, R
     return m_aTransactionIsolation;
 }
 
-Reference< XNameAccess > SAL_CALL Connection::getTypeMap() throw(SQLException, RuntimeException)
+Reference< XNameAccess > SAL_CALL Connection::getTypeMap() throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFeatureNotImplementedException( "XConnection::getTypeMap", *this );
     return 0;
 }
 
 void SAL_CALL Connection::setTypeMap(const Reference< XNameAccess >& typeMap)
-                                            throw(SQLException, RuntimeException)
+                                            throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFeatureNotImplementedException( "XConnection::setTypeMap", *this );
     (void) typeMap;
 }
 
 //----- XCloseable -----------------------------------------------------------
-void SAL_CALL Connection::close(  ) throw(SQLException, RuntimeException)
+void SAL_CALL Connection::close(  ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("connectivity.firebird", "close().");
 
@@ -642,20 +642,20 @@ void SAL_CALL Connection::close(  ) throw(SQLException, RuntimeException)
 }
 
 // XWarningsSupplier
-Any SAL_CALL Connection::getWarnings(  ) throw(SQLException, RuntimeException)
+Any SAL_CALL Connection::getWarnings(  ) throw(SQLException, RuntimeException, std::exception)
 {
     // when you collected some warnings -> return it
     return Any();
 }
 
-void SAL_CALL Connection::clearWarnings(  ) throw(SQLException, RuntimeException)
+void SAL_CALL Connection::clearWarnings(  ) throw(SQLException, RuntimeException, std::exception)
 {
     // you should clear your collected warnings here
 }
 
 // XDocumentEventListener
 void SAL_CALL Connection::documentEventOccured( const DocumentEvent& _Event )
-                                                        throw(RuntimeException)
+                                                        throw(RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
 
@@ -687,7 +687,7 @@ void SAL_CALL Connection::documentEventOccured( const DocumentEvent& _Event )
 }
 // XEventListener
 void SAL_CALL Connection::disposing(const EventObject& /*rSource*/)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
 }
 

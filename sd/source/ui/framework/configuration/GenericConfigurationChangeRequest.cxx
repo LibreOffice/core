@@ -52,7 +52,7 @@ GenericConfigurationChangeRequest::~GenericConfigurationChangeRequest (void) thr
 
 void SAL_CALL GenericConfigurationChangeRequest::execute (
     const Reference<XConfiguration>& rxConfiguration)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     if (rxConfiguration.is())
     {
@@ -73,7 +73,7 @@ void SAL_CALL GenericConfigurationChangeRequest::execute (
 
 
 OUString SAL_CALL GenericConfigurationChangeRequest::getName (void)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     return OUString("GenericConfigurationChangeRequest ")
         + (meMode==Activation ? OUString("activate ") : OUString("deactivate "))
@@ -84,7 +84,7 @@ OUString SAL_CALL GenericConfigurationChangeRequest::getName (void)
 
 
 void SAL_CALL GenericConfigurationChangeRequest::setName (const OUString& rsName)
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     (void)rsName;
     // Ignored.

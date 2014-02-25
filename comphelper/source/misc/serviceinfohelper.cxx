@@ -27,13 +27,13 @@ namespace comphelper
 {
 
 /** returns an empty UString(). most times sufficient */
-OUString SAL_CALL ServiceInfoHelper::getImplementationName() throw( ::com::sun::star::uno::RuntimeException )
+OUString SAL_CALL ServiceInfoHelper::getImplementationName() throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     return OUString();
 }
 
 /** the base implementation has no supported services */
-::com::sun::star::uno::Sequence< OUString > ServiceInfoHelper::getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException )
+::com::sun::star::uno::Sequence< OUString > ServiceInfoHelper::getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     ::com::sun::star::uno::Sequence< OUString> aSeq(0);
     return aSeq;

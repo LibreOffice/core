@@ -723,13 +723,13 @@ private:
 
     // XEventListener:
     virtual void SAL_CALL disposing( lang::EventObject const& evt )
-        throw (uno::RuntimeException);
+        throw (uno::RuntimeException, std::exception);
     // XModifyListener:
     virtual void SAL_CALL modified( const lang::EventObject& aEvent )
-        throw (uno::RuntimeException);
+        throw (uno::RuntimeException, std::exception);
     // XPaintListener:
     virtual void SAL_CALL windowPaint( const awt::PaintEvent& e )
-        throw (uno::RuntimeException);
+        throw (uno::RuntimeException, std::exception);
 
     // WeakComponentImplHelperBase:
     virtual void SAL_CALL disposing();
@@ -1032,7 +1032,7 @@ void SlideView::_dispose()
 
 // XEventListener
 void SlideView::disposing( lang::EventObject const& evt )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     (void)evt;
 
@@ -1050,7 +1050,7 @@ void SlideView::disposing( lang::EventObject const& evt )
 
 // XModifyListener
 void SlideView::modified( const lang::EventObject& /*aEvent*/ )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     osl::MutexGuard const guard( m_aMutex );
 
@@ -1100,7 +1100,7 @@ void SlideView::modified( const lang::EventObject& /*aEvent*/ )
 
 // XPaintListener
 void SlideView::windowPaint( const awt::PaintEvent& /*e*/ )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( m_aMutex );
 

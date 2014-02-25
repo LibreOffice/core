@@ -109,28 +109,28 @@ namespace XSLT
         // XActiveDataSink
         virtual void SAL_CALL
         setInputStream(const com::sun::star::uno::Reference<XInputStream>& inputStream)
-                throw (RuntimeException);
+                throw (RuntimeException, std::exception);
         virtual com::sun::star::uno::Reference<XInputStream> SAL_CALL
-        getInputStream() throw (RuntimeException);
+        getInputStream() throw (RuntimeException, std::exception);
         // XActiveDataSource
         virtual void SAL_CALL
         setOutputStream(const com::sun::star::uno::Reference<XOutputStream>& outputStream)
-                throw (RuntimeException);
+                throw (RuntimeException, std::exception);
         virtual com::sun::star::uno::Reference<XOutputStream> SAL_CALL
-        getOutputStream() throw (RuntimeException);
+        getOutputStream() throw (RuntimeException, std::exception);
         // XActiveDataControl
         virtual void SAL_CALL
         addListener(const com::sun::star::uno::Reference<XStreamListener>& listener)
-                throw (RuntimeException);
+                throw (RuntimeException, std::exception);
         virtual void SAL_CALL
         removeListener(const com::sun::star::uno::Reference<XStreamListener>& listener)
-                throw (RuntimeException);
+                throw (RuntimeException, std::exception);
         virtual void SAL_CALL
-        start() throw (RuntimeException);
+        start() throw (RuntimeException, std::exception);
         virtual void SAL_CALL
-        terminate() throw (RuntimeException);
+        terminate() throw (RuntimeException, std::exception);
         virtual void SAL_CALL
-        initialize(const Sequence<Any>& params) throw (RuntimeException);
+        initialize(const Sequence<Any>& params) throw (RuntimeException, std::exception);
 
         void SAL_CALL
         done();

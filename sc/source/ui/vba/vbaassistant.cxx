@@ -42,60 +42,60 @@ ScVbaAssistant::~ScVbaAssistant()
 {
 }
 
-sal_Bool SAL_CALL ScVbaAssistant::getVisible() throw (uno::RuntimeException)
+sal_Bool SAL_CALL ScVbaAssistant::getVisible() throw (uno::RuntimeException, std::exception)
 {
     return m_bIsVisible;
 }
 
-void SAL_CALL ScVbaAssistant::setVisible( sal_Bool bVisible ) throw (uno::RuntimeException)
+void SAL_CALL ScVbaAssistant::setVisible( sal_Bool bVisible ) throw (uno::RuntimeException, std::exception)
 {
     m_bIsVisible = bVisible;
 }
 
-sal_Bool SAL_CALL ScVbaAssistant::getOn() throw (uno::RuntimeException)
+sal_Bool SAL_CALL ScVbaAssistant::getOn() throw (uno::RuntimeException, std::exception)
 {
     return false;
 }
 
-void SAL_CALL ScVbaAssistant::setOn( sal_Bool bOn ) throw (uno::RuntimeException)
+void SAL_CALL ScVbaAssistant::setOn( sal_Bool bOn ) throw (uno::RuntimeException, std::exception)
 {
     setVisible( bOn );
 }
 
 
 ::sal_Int32 SAL_CALL
-ScVbaAssistant::getTop() throw (css::uno::RuntimeException)
+ScVbaAssistant::getTop() throw (css::uno::RuntimeException, std::exception)
 {
     return m_nPointsTop;
 }
 void SAL_CALL
-ScVbaAssistant::setTop( ::sal_Int32 _top ) throw (css::uno::RuntimeException)
+ScVbaAssistant::setTop( ::sal_Int32 _top ) throw (css::uno::RuntimeException, std::exception)
 {
     m_nPointsTop = _top;
 }
 ::sal_Int32 SAL_CALL
-ScVbaAssistant::getLeft() throw (css::uno::RuntimeException)
+ScVbaAssistant::getLeft() throw (css::uno::RuntimeException, std::exception)
 {
     return m_nPointsLeft;
 }
 void SAL_CALL
-ScVbaAssistant::setLeft( ::sal_Int32 _left ) throw (css::uno::RuntimeException)
+ScVbaAssistant::setLeft( ::sal_Int32 _left ) throw (css::uno::RuntimeException, std::exception)
 {
     m_nPointsLeft = _left;
 }
 ::sal_Int32 SAL_CALL
-ScVbaAssistant::getAnimation() throw (css::uno::RuntimeException)
+ScVbaAssistant::getAnimation() throw (css::uno::RuntimeException, std::exception)
 {
     return m_nAnimation;
 }
 void SAL_CALL
-ScVbaAssistant::setAnimation( ::sal_Int32 _animation ) throw (css::uno::RuntimeException)
+ScVbaAssistant::setAnimation( ::sal_Int32 _animation ) throw (css::uno::RuntimeException, std::exception)
 {
     m_nAnimation = _animation;
 }
 
 OUString SAL_CALL
-ScVbaAssistant::Name(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
+ScVbaAssistant::Name(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception)
 {
     return m_sName;
 }

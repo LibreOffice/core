@@ -113,7 +113,7 @@ void SAL_CALL ScAccessibleContextBase::disposing()
 //=====  XInterface  =====================================================
 
 uno::Any SAL_CALL ScAccessibleContextBase::queryInterface( uno::Type const & rType )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     uno::Any aAny (ScAccessibleContextBaseWeakImpl::queryInterface(rType));
     return aAny.hasValue() ? aAny : ScAccessibleContextBaseImplEvent::queryInterface(rType);
@@ -150,7 +150,7 @@ void ScAccessibleContextBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 uno::Reference< XAccessibleContext> SAL_CALL
     ScAccessibleContextBase::getAccessibleContext(void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return this;
 }
@@ -158,7 +158,7 @@ uno::Reference< XAccessibleContext> SAL_CALL
 //=====  XAccessibleComponent  ================================================
 
 sal_Bool SAL_CALL ScAccessibleContextBase::containsPoint(const awt::Point& rPoint )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -174,7 +174,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleContextBase::getAccessibleAtP
 }
 
 awt::Rectangle SAL_CALL ScAccessibleContextBase::getBounds(  )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -182,7 +182,7 @@ awt::Rectangle SAL_CALL ScAccessibleContextBase::getBounds(  )
 }
 
 awt::Point SAL_CALL ScAccessibleContextBase::getLocation(  )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -190,7 +190,7 @@ awt::Point SAL_CALL ScAccessibleContextBase::getLocation(  )
 }
 
 awt::Point SAL_CALL ScAccessibleContextBase::getLocationOnScreen(  )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -198,7 +198,7 @@ awt::Point SAL_CALL ScAccessibleContextBase::getLocationOnScreen(  )
 }
 
 awt::Size SAL_CALL ScAccessibleContextBase::getSize(  )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -231,19 +231,19 @@ sal_Bool SAL_CALL ScAccessibleContextBase::isVisible()
 }
 
 void SAL_CALL ScAccessibleContextBase::grabFocus(  )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL("not implemented");
 }
 
 sal_Int32 SAL_CALL ScAccessibleContextBase::getForeground(  )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     return COL_BLACK;
 }
 
 sal_Int32 SAL_CALL ScAccessibleContextBase::getBackground(  )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     return COL_WHITE;
 }
@@ -268,14 +268,14 @@ uno::Reference<XAccessible> SAL_CALL
 
 uno::Reference<XAccessible> SAL_CALL
        ScAccessibleContextBase::getAccessibleParent(void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return mxParent;
 }
 
 sal_Int32 SAL_CALL
        ScAccessibleContextBase::getAccessibleIndexInParent(void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -309,14 +309,14 @@ sal_Int32 SAL_CALL
 
 sal_Int16 SAL_CALL
     ScAccessibleContextBase::getAccessibleRole(void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return maRole;
 }
 
 OUString SAL_CALL
        ScAccessibleContextBase::getAccessibleDescription(void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -342,7 +342,7 @@ OUString SAL_CALL
 
 OUString SAL_CALL
        ScAccessibleContextBase::getAccessibleName(void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -376,7 +376,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
 
 uno::Reference<XAccessibleStateSet> SAL_CALL
         ScAccessibleContextBase::getAccessibleStateSet(void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference<XAccessibleStateSet>();
 }
@@ -384,7 +384,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
 lang::Locale SAL_CALL
        ScAccessibleContextBase::getLocale(void)
     throw (IllegalAccessibleComponentStateException,
-        uno::RuntimeException)
+        uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -406,7 +406,7 @@ lang::Locale SAL_CALL
 void SAL_CALL
        ScAccessibleContextBase::addAccessibleEventListener(
            const uno::Reference<XAccessibleEventListener>& xListener)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if (xListener.is())
     {
@@ -424,7 +424,7 @@ void SAL_CALL
 void SAL_CALL
        ScAccessibleContextBase::removeAccessibleEventListener(
         const uno::Reference<XAccessibleEventListener>& xListener)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if (xListener.is())
     {
@@ -449,7 +449,7 @@ void SAL_CALL
 
 void SAL_CALL ScAccessibleContextBase::disposing(
     const lang::EventObject& rSource )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (rSource.Source == mxParent)
@@ -458,26 +458,26 @@ void SAL_CALL ScAccessibleContextBase::disposing(
 
 void SAL_CALL ScAccessibleContextBase::notifyEvent(
         const AccessibleEventObject& /* aEvent */ )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
 }
 
 //=====  XServiceInfo  ========================================================
 OUString SAL_CALL ScAccessibleContextBase::getImplementationName(void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return OUString("ScAccessibleContextBase");
 }
 
 sal_Bool SAL_CALL ScAccessibleContextBase::supportsService(const OUString& sServiceName)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, sServiceName);
 }
 
 uno::Sequence< OUString> SAL_CALL
        ScAccessibleContextBase::getSupportedServiceNames(void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     uno::Sequence<OUString> aServiceNames(2);
     OUString* pServiceNames = aServiceNames.getArray();
@@ -493,7 +493,7 @@ uno::Sequence< OUString> SAL_CALL
 //=====  XTypeProvider  =======================================================
 
 uno::Sequence< uno::Type > SAL_CALL ScAccessibleContextBase::getTypes()
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     return comphelper::concatSequences(ScAccessibleContextBaseWeakImpl::getTypes(), ScAccessibleContextBaseImplEvent::getTypes());
 }
@@ -505,7 +505,7 @@ namespace
 
 uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleContextBase::getImplementationId(void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return theScAccessibleContextBaseImplementationId::get().getSeq();
 }

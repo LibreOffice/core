@@ -72,7 +72,7 @@ const sal_Char * const MYIMPLNAME = "com.sun.star.comp.ScriptProtocolHandler";
 
 void SAL_CALL ScriptProtocolHandler::initialize(
     const css::uno::Sequence < css::uno::Any >& aArguments )
-    throw ( css::uno::Exception )
+    throw ( css::uno::Exception, std::exception )
 {
     if ( m_bInitialised )
     {
@@ -93,7 +93,7 @@ void SAL_CALL ScriptProtocolHandler::initialize(
 
 Reference< XDispatch > SAL_CALL ScriptProtocolHandler::queryDispatch(
     const URL& aURL, const OUString& sTargetFrameName, sal_Int32 nSearchFlags )
-    throw( ::com::sun::star::uno::RuntimeException )
+    throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     (void)sTargetFrameName;
     (void)nSearchFlags;
@@ -118,7 +118,7 @@ Reference< XDispatch > SAL_CALL ScriptProtocolHandler::queryDispatch(
 Sequence< Reference< XDispatch > > SAL_CALL
 ScriptProtocolHandler::queryDispatches(
 const Sequence < DispatchDescriptor >& seqDescriptor )
-throw( RuntimeException )
+throw( RuntimeException, std::exception )
 {
     sal_Int32 nCount = seqDescriptor.getLength();
     Sequence< Reference< XDispatch > > lDispatcher( nCount );
@@ -134,7 +134,7 @@ throw( RuntimeException )
 void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
     const URL& aURL, const Sequence < PropertyValue >& lArgs,
     const Reference< XDispatchResultListener >& xListener )
-    throw ( RuntimeException )
+    throw ( RuntimeException, std::exception )
 {
 
     sal_Bool bSuccess = sal_False;
@@ -297,14 +297,14 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
 
 void SAL_CALL ScriptProtocolHandler::dispatch(
 const URL& aURL, const Sequence< PropertyValue >& lArgs )
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     dispatchWithNotification( aURL, lArgs, Reference< XDispatchResultListener >() );
 }
 
 void SAL_CALL ScriptProtocolHandler::addStatusListener(
 const Reference< XStatusListener >& xControl, const URL& aURL )
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     (void)xControl;
     (void)aURL;
@@ -314,7 +314,7 @@ throw ( RuntimeException )
 
 void SAL_CALL ScriptProtocolHandler::removeStatusListener(
 const Reference< XStatusListener >& xControl, const URL& aURL )
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     (void)xControl;
     (void)aURL;
@@ -410,21 +410,21 @@ ScriptProtocolHandler::~ScriptProtocolHandler()
 
 /* XServiceInfo */
 OUString SAL_CALL ScriptProtocolHandler::getImplementationName( )
-throw( RuntimeException )
+throw( RuntimeException, std::exception )
 {
     return impl_getStaticImplementationName();
 }
 
 /* XServiceInfo */
 sal_Bool SAL_CALL ScriptProtocolHandler::supportsService(const OUString& sServiceName )
-throw( RuntimeException )
+throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
 /* XServiceInfo */
 Sequence< OUString > SAL_CALL ScriptProtocolHandler::getSupportedServiceNames()
-throw( RuntimeException )
+throw( RuntimeException, std::exception )
 {
     return impl_getStaticSupportedServiceNames();
 }

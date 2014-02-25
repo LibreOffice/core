@@ -94,7 +94,7 @@ class ShellJob : private ThreadHelpBase
         virtual css::uno::Any SAL_CALL execute(const css::uno::Sequence< css::beans::NamedValue >& lArguments)
             throw(css::lang::IllegalArgumentException,
                   css::uno::Exception                ,
-                  css::uno::RuntimeException         );
+                  css::uno::RuntimeException, std::exception         );
 
     //-------------------------------------------
     // helper

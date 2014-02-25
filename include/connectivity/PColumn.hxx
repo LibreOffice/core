@@ -146,7 +146,7 @@ namespace connectivity
 
             virtual void construct();
 
-            virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
         private:
             using OOrderColumn_BASE::createArrayHelper;
         };

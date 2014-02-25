@@ -37,12 +37,12 @@ public:
     virtual ~SwVbaAddin();
 
     // Attributes
-    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setName( const OUString& _name ) throw (css::uno::RuntimeException);
-    virtual OUString SAL_CALL getPath() throw (css::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL getAutoload() throw (css::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL getInstalled() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setInstalled( ::sal_Bool _installed ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setName( const OUString& _name ) throw (css::uno::RuntimeException, std::exception);
+    virtual OUString SAL_CALL getPath() throw (css::uno::RuntimeException, std::exception);
+    virtual ::sal_Bool SAL_CALL getAutoload() throw (css::uno::RuntimeException, std::exception);
+    virtual ::sal_Bool SAL_CALL getInstalled() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setInstalled( ::sal_Bool _installed ) throw (css::uno::RuntimeException, std::exception);
 
     // XHelperInterface
     virtual OUString getServiceImplName();

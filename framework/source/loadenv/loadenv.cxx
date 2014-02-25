@@ -116,20 +116,20 @@ class LoadEnvListener : private ThreadHelpBase
 
         // frame.XLoadEventListener
         virtual void SAL_CALL loadFinished(const css::uno::Reference< css::frame::XFrameLoader >& xLoader)
-            throw(css::uno::RuntimeException);
+            throw(css::uno::RuntimeException, std::exception);
 
         virtual void SAL_CALL loadCancelled(const css::uno::Reference< css::frame::XFrameLoader >& xLoader)
-            throw(css::uno::RuntimeException);
+            throw(css::uno::RuntimeException, std::exception);
 
 
         // frame.XDispatchResultListener
         virtual void SAL_CALL dispatchFinished(const css::frame::DispatchResultEvent& aEvent)
-            throw(css::uno::RuntimeException);
+            throw(css::uno::RuntimeException, std::exception);
 
 
         // lang.XEventListener
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
-            throw(css::uno::RuntimeException);
+            throw(css::uno::RuntimeException, std::exception);
 };
 
 
@@ -469,7 +469,7 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::getTargetComponent() const
 
 
 void SAL_CALL LoadEnvListener::loadFinished(const css::uno::Reference< css::frame::XFrameLoader >&)
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
@@ -484,7 +484,7 @@ void SAL_CALL LoadEnvListener::loadFinished(const css::uno::Reference< css::fram
 
 
 void SAL_CALL LoadEnvListener::loadCancelled(const css::uno::Reference< css::frame::XFrameLoader >&)
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
@@ -499,7 +499,7 @@ void SAL_CALL LoadEnvListener::loadCancelled(const css::uno::Reference< css::fra
 
 
 void SAL_CALL LoadEnvListener::dispatchFinished(const css::frame::DispatchResultEvent& aEvent)
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
@@ -529,7 +529,7 @@ void SAL_CALL LoadEnvListener::dispatchFinished(const css::frame::DispatchResult
 
 
 void SAL_CALL LoadEnvListener::disposing(const css::lang::EventObject&)
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);

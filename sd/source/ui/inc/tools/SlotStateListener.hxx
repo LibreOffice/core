@@ -97,13 +97,13 @@ public:
     virtual void SAL_CALL
         statusChanged (
             const ::com::sun::star::frame::FeatureStateEvent& rState)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     //=====  lang::XEventListener  ============================================
 
     virtual void SAL_CALL
         disposing(const com::sun::star::lang::EventObject& rEvent)
-        throw(com::sun::star::uno::RuntimeException);
+        throw(com::sun::star::uno::RuntimeException, std::exception);
 
 protected:
     /** This method is called by the WeakComponentImplHelper base class in

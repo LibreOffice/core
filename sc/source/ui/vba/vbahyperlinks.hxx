@@ -117,9 +117,9 @@ public:
     virtual css::uno::Reference< ov::excel::XHyperlink > SAL_CALL Add(
         const css::uno::Any& rAnchor, const css::uno::Any& rAddress, const css::uno::Any& rSubAddress,
         const css::uno::Any& rScreenTip, const css::uno::Any& rTextToDisplay )
-            throw (css::uno::RuntimeException);
+            throw (css::uno::RuntimeException, std::exception);
 
-    virtual void SAL_CALL Delete() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL Delete() throw (css::uno::RuntimeException, std::exception);
 
     // XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException);

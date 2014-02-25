@@ -49,42 +49,42 @@ public:
 
     // ::com::sun::star::xml::sax::XFastDocumentHandler:
     virtual void SAL_CALL startDocument()
-        throw (uno::RuntimeException, xml::sax::SAXException);
+        throw (uno::RuntimeException, xml::sax::SAXException, std::exception);
     virtual void SAL_CALL endDocument()
-        throw (uno::RuntimeException, xml::sax::SAXException);
+        throw (uno::RuntimeException, xml::sax::SAXException, std::exception);
     virtual void SAL_CALL setDocumentLocator
     (const uno::Reference< xml::sax::XLocator > & xLocator)
-        throw (uno::RuntimeException, xml::sax::SAXException);
+        throw (uno::RuntimeException, xml::sax::SAXException, std::exception);
 
     // ::com::sun::star::xml::sax::XFastContextHandler:
     virtual void SAL_CALL startFastElement
     (::sal_Int32 Element,
      const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
-        throw (uno::RuntimeException, xml::sax::SAXException);
+        throw (uno::RuntimeException, xml::sax::SAXException, std::exception);
     virtual void SAL_CALL startUnknownElement
     (const OUString & Namespace,
      const OUString & Name,
      const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
-        throw (uno::RuntimeException, xml::sax::SAXException);
+        throw (uno::RuntimeException, xml::sax::SAXException, std::exception);
     virtual void SAL_CALL endFastElement(::sal_Int32 Element)
-        throw (uno::RuntimeException, xml::sax::SAXException);
+        throw (uno::RuntimeException, xml::sax::SAXException, std::exception);
     virtual void SAL_CALL endUnknownElement
     (const OUString & Namespace,
      const OUString & Name)
-        throw (uno::RuntimeException, xml::sax::SAXException);
+        throw (uno::RuntimeException, xml::sax::SAXException, std::exception);
     virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     createFastChildContext
     (::sal_Int32 Element,
      const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
-        throw (uno::RuntimeException, xml::sax::SAXException);
+        throw (uno::RuntimeException, xml::sax::SAXException, std::exception);
     virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     createUnknownChildContext
     (const OUString & Namespace,
      const OUString & Name,
      const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
-        throw (uno::RuntimeException, xml::sax::SAXException);
+        throw (uno::RuntimeException, xml::sax::SAXException, std::exception);
     virtual void SAL_CALL characters(const OUString & aChars)
-        throw (uno::RuntimeException, xml::sax::SAXException);
+        throw (uno::RuntimeException, xml::sax::SAXException, std::exception);
 
     void setIsSubstream( bool bSubstream );
 

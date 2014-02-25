@@ -1285,7 +1285,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
                 embed::WrongStateException,
                 io::IOException,
                 uno::Exception,
-                uno::RuntimeException )
+                uno::RuntimeException, std::exception )
 {
     SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::setPersistentEntry" );
 
@@ -1493,7 +1493,7 @@ void SAL_CALL OleEmbeddedObject::storeToEntry( const uno::Reference< embed::XSto
                 embed::WrongStateException,
                 io::IOException,
                 uno::Exception,
-                uno::RuntimeException )
+                uno::RuntimeException, std::exception )
 {
     SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::storeToEntry" );
 
@@ -1527,7 +1527,7 @@ void SAL_CALL OleEmbeddedObject::storeAsEntry( const uno::Reference< embed::XSto
                 embed::WrongStateException,
                 io::IOException,
                 uno::Exception,
-                uno::RuntimeException )
+                uno::RuntimeException, std::exception )
 {
     SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::storeAsEntry" );
 
@@ -1556,7 +1556,7 @@ void SAL_CALL OleEmbeddedObject::storeAsEntry( const uno::Reference< embed::XSto
 void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
         throw ( embed::WrongStateException,
                 uno::Exception,
-                uno::RuntimeException )
+                uno::RuntimeException, std::exception )
 {
     SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::saveCompleted" );
 
@@ -1656,7 +1656,7 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
 
 sal_Bool SAL_CALL OleEmbeddedObject::hasEntry()
         throw ( embed::WrongStateException,
-                uno::RuntimeException )
+                uno::RuntimeException, std::exception )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -1685,7 +1685,7 @@ sal_Bool SAL_CALL OleEmbeddedObject::hasEntry()
 
 OUString SAL_CALL OleEmbeddedObject::getEntryName()
         throw ( embed::WrongStateException,
-                uno::RuntimeException )
+                uno::RuntimeException, std::exception )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -1721,7 +1721,7 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
         throw ( embed::WrongStateException,
                 io::IOException,
                 uno::Exception,
-                uno::RuntimeException )
+                uno::RuntimeException, std::exception )
 {
     SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::storeOwn" );
 
@@ -1839,7 +1839,7 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
 
 sal_Bool SAL_CALL OleEmbeddedObject::isReadonly()
         throw ( embed::WrongStateException,
-                uno::RuntimeException )
+                uno::RuntimeException, std::exception )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -1877,7 +1877,7 @@ void SAL_CALL OleEmbeddedObject::reload(
                 embed::WrongStateException,
                 io::IOException,
                 uno::Exception,
-                uno::RuntimeException )
+                uno::RuntimeException, std::exception )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -1920,7 +1920,7 @@ void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorag
                 embed::WrongStateException,
                 io::IOException,
                 uno::Exception,
-                uno::RuntimeException )
+                uno::RuntimeException, std::exception )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XLinkageSupport > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -2036,7 +2036,7 @@ void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorag
 
 sal_Bool SAL_CALL  OleEmbeddedObject::isLink()
         throw ( embed::WrongStateException,
-                uno::RuntimeException )
+                uno::RuntimeException, std::exception )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XLinkageSupport > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -2058,7 +2058,7 @@ sal_Bool SAL_CALL  OleEmbeddedObject::isLink()
 OUString SAL_CALL OleEmbeddedObject::getLinkURL()
         throw ( embed::WrongStateException,
                 uno::Exception,
-                uno::RuntimeException )
+                uno::RuntimeException, std::exception )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XLinkageSupport > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );

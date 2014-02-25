@@ -184,12 +184,12 @@ OReadStatusBarDocumentHandler::~OReadStatusBarDocumentHandler()
 
 // XDocumentHandler
 void SAL_CALL OReadStatusBarDocumentHandler::startDocument(void)
-throw ( SAXException, RuntimeException )
+throw ( SAXException, RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL OReadStatusBarDocumentHandler::endDocument(void)
-throw(  SAXException, RuntimeException )
+throw(  SAXException, RuntimeException, std::exception )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -204,7 +204,7 @@ throw(  SAXException, RuntimeException )
 
 void SAL_CALL OReadStatusBarDocumentHandler::startElement(
     const OUString& aName, const Reference< XAttributeList > &xAttribs )
-throw(  SAXException, RuntimeException )
+throw(  SAXException, RuntimeException, std::exception )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -403,7 +403,7 @@ throw(  SAXException, RuntimeException )
 }
 
 void SAL_CALL OReadStatusBarDocumentHandler::endElement(const OUString& aName)
-throw(  SAXException, RuntimeException )
+throw(  SAXException, RuntimeException, std::exception )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -445,24 +445,24 @@ throw(  SAXException, RuntimeException )
 }
 
 void SAL_CALL OReadStatusBarDocumentHandler::characters(const OUString&)
-throw(  SAXException, RuntimeException )
+throw(  SAXException, RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL OReadStatusBarDocumentHandler::ignorableWhitespace(const OUString&)
-throw(  SAXException, RuntimeException )
+throw(  SAXException, RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL OReadStatusBarDocumentHandler::processingInstruction(
     const OUString& /*aTarget*/, const OUString& /*aData*/ )
-throw(  SAXException, RuntimeException )
+throw(  SAXException, RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL OReadStatusBarDocumentHandler::setDocumentLocator(
     const Reference< XLocator > &xLocator)
-throw(  SAXException, RuntimeException )
+throw(  SAXException, RuntimeException, std::exception )
 {
     ResetableGuard aGuard( m_aLock );
 

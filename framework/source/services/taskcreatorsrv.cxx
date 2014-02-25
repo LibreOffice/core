@@ -67,19 +67,19 @@ public:
     virtual ~TaskCreatorService(                                                                   );
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     {
         return OUString("com.sun.star.comp.framework.TaskCreator");
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     {
         return cppu::supportsService(this, ServiceName);
     }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, std::exception)
     {
         css::uno::Sequence< OUString > aSeq(1);
         aSeq[0] = OUString("com.sun.star.frame.TaskCreator");
@@ -89,11 +89,11 @@ public:
     // XSingleServiceFactory
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance()
         throw(css::uno::Exception       ,
-              css::uno::RuntimeException);
+              css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments(const css::uno::Sequence< css::uno::Any >& lArguments)
         throw(css::uno::Exception       ,
-              css::uno::RuntimeException);
+              css::uno::RuntimeException, std::exception);
 
 private:
 
@@ -130,7 +130,7 @@ TaskCreatorService::~TaskCreatorService()
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createInstance()
     throw(css::uno::Exception       ,
-          css::uno::RuntimeException)
+          css::uno::RuntimeException, std::exception)
 {
     return createInstanceWithArguments(css::uno::Sequence< css::uno::Any >());
 }
@@ -138,7 +138,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createInstanceWithArguments(const css::uno::Sequence< css::uno::Any >& lArguments)
     throw(css::uno::Exception       ,
-          css::uno::RuntimeException)
+          css::uno::RuntimeException, std::exception)
 {
     ::comphelper::SequenceAsHashMap lArgs(lArguments);
 

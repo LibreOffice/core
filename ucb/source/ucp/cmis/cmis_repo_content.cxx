@@ -284,25 +284,25 @@ namespace cmis
         ContentImplHelper::release();
     }
 
-    uno::Any SAL_CALL RepoContent::queryInterface( const uno::Type & rType ) throw ( uno::RuntimeException )
+    uno::Any SAL_CALL RepoContent::queryInterface( const uno::Type & rType ) throw ( uno::RuntimeException, std::exception )
     {
         return ContentImplHelper::queryInterface(rType);
     }
 
-    OUString SAL_CALL RepoContent::getImplementationName() throw( uno::RuntimeException )
+    OUString SAL_CALL RepoContent::getImplementationName() throw( uno::RuntimeException, std::exception )
     {
        return OUString("com.sun.star.comp.CmisRepoContent");
     }
 
     uno::Sequence< OUString > SAL_CALL RepoContent::getSupportedServiceNames()
-           throw( uno::RuntimeException )
+           throw( uno::RuntimeException, std::exception )
     {
        uno::Sequence< OUString > aSNS( 1 );
        aSNS.getArray()[ 0 ] = "com.sun.star.ucb.Content";
        return aSNS;
     }
 
-    OUString SAL_CALL RepoContent::getContentType() throw( uno::RuntimeException )
+    OUString SAL_CALL RepoContent::getContentType() throw( uno::RuntimeException, std::exception )
     {
         return OUString( CMIS_REPO_TYPE );
     }
@@ -311,7 +311,7 @@ namespace cmis
         const ucb::Command& aCommand,
         sal_Int32 /*CommandId*/,
         const uno::Reference< ucb::XCommandEnvironment >& xEnv )
-            throw( uno::Exception, ucb::CommandAbortedException, uno::RuntimeException )
+            throw( uno::Exception, ucb::CommandAbortedException, uno::RuntimeException, std::exception )
     {
         SAL_INFO( "ucb.ucp.cmis", "RepoContent::execute( ) - " << aCommand.Name );
 
@@ -348,13 +348,13 @@ namespace cmis
         return aRet;
     }
 
-    void SAL_CALL RepoContent::abort( sal_Int32 /*CommandId*/ ) throw( uno::RuntimeException )
+    void SAL_CALL RepoContent::abort( sal_Int32 /*CommandId*/ ) throw( uno::RuntimeException, std::exception )
     {
         SAL_INFO( "ucb.ucp.cmis", "TODO - RepoContent::abort()" );
         // TODO Implement me
     }
 
-    uno::Sequence< uno::Type > SAL_CALL RepoContent::getTypes() throw( uno::RuntimeException )
+    uno::Sequence< uno::Type > SAL_CALL RepoContent::getTypes() throw( uno::RuntimeException, std::exception )
     {
         static cppu::OTypeCollection aFolderCollection
             (CPPU_TYPE_REF( lang::XTypeProvider ),

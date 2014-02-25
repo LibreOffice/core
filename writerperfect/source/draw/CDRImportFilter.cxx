@@ -55,7 +55,7 @@ using com::sun::star::xml::sax::XParser;
 
 
 sal_Bool SAL_CALL CDRImportFilter::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     SAL_INFO("writerperfect", "CDRImportFilter::filter");
     sal_Int32 nLength = aDescriptor.getLength();
@@ -94,14 +94,14 @@ throw (RuntimeException)
 }
 
 void SAL_CALL CDRImportFilter::cancel(  )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     SAL_INFO("writerperfect", "CDRImportFilter::cancel");
 }
 
 // XImporter
 void SAL_CALL CDRImportFilter::setTargetDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc )
-throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
+throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     SAL_INFO("writerperfect", "CDRImportFilter::setTargetDocument");
     mxDoc = xDoc;
@@ -109,7 +109,7 @@ throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 
 // XExtendedFilterDetection
 OUString SAL_CALL CDRImportFilter::detect( com::sun::star::uno::Sequence< PropertyValue >& Descriptor )
-throw( com::sun::star::uno::RuntimeException )
+throw( com::sun::star::uno::RuntimeException, std::exception )
 {
     SAL_INFO("writerperfect", "CDRImportFilter::detect");
     OUString sTypeName;
@@ -149,7 +149,7 @@ throw( com::sun::star::uno::RuntimeException )
 
 // XInitialization
 void SAL_CALL CDRImportFilter::initialize( const Sequence< Any >& aArguments )
-throw (Exception, RuntimeException)
+throw (Exception, RuntimeException, std::exception)
 {
     SAL_INFO("writerperfect", "CDRImportFilter::initialize");
     Sequence < PropertyValue > aAnySeq;
@@ -195,19 +195,19 @@ throw( Exception )
 
 // XServiceInfo
 OUString SAL_CALL CDRImportFilter::getImplementationName(  )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     SAL_INFO("writerperfect", "CDRImportFilter::getImplementationName");
     return CDRImportFilter_getImplementationName();
 }
 sal_Bool SAL_CALL CDRImportFilter::supportsService( const OUString &rServiceName )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     SAL_INFO("writerperfect", "CDRImportFilter::supportsService");
     return cppu::supportsService( this, rServiceName );
 }
 Sequence< OUString > SAL_CALL CDRImportFilter::getSupportedServiceNames(  )
-throw (RuntimeException)
+throw (RuntimeException, std::exception)
 {
     SAL_INFO("writerperfect", "CDRImportFilter::getSupportedServiceNames");
     return CDRImportFilter_getSupportedServiceNames();

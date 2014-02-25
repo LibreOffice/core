@@ -57,7 +57,7 @@ LateInitListener::~LateInitListener()
 
 
 void SAL_CALL LateInitListener::notifyEvent(const css::document::EventObject& aEvent)
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     // wait for events which either
     // a) indicate completed open of the first document in which case launch thread
@@ -101,7 +101,7 @@ void SAL_CALL LateInitListener::notifyEvent(const css::document::EventObject& aE
 
 
 void SAL_CALL LateInitListener::disposing(const css::lang::EventObject& /* aEvent */ )
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     // ???
     // Normaly it should never be called. Because we cancel our listener connection

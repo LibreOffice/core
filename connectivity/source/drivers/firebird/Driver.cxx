@@ -127,19 +127,19 @@ Sequence< OUString > FirebirdDriver::getSupportedServiceNames_Static() throw (Ru
     return aSNS;
 }
 
-OUString SAL_CALL FirebirdDriver::getImplementationName() throw(RuntimeException)
+OUString SAL_CALL FirebirdDriver::getImplementationName() throw(RuntimeException, std::exception)
 {
     return getImplementationName_Static();
 }
 
 sal_Bool SAL_CALL FirebirdDriver::supportsService(const OUString& _rServiceName)
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
 Sequence< OUString > SAL_CALL FirebirdDriver::getSupportedServiceNames()
-    throw(RuntimeException)
+    throw(RuntimeException, std::exception)
 {
     return getSupportedServiceNames_Static();
 }
@@ -147,7 +147,7 @@ Sequence< OUString > SAL_CALL FirebirdDriver::getSupportedServiceNames()
 // ----  XDriver -------------------------------------------------------------
 Reference< XConnection > SAL_CALL FirebirdDriver::connect(
     const OUString& url, const Sequence< PropertyValue >& info )
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     Reference< XConnection > xConnection;
 
@@ -169,7 +169,7 @@ Reference< XConnection > SAL_CALL FirebirdDriver::connect(
 }
 
 sal_Bool SAL_CALL FirebirdDriver::acceptsURL( const OUString& url )
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     SvtMiscOptions aMiscOptions;
 
@@ -179,7 +179,7 @@ sal_Bool SAL_CALL FirebirdDriver::acceptsURL( const OUString& url )
 
 Sequence< DriverPropertyInfo > SAL_CALL FirebirdDriver::getPropertyInfo(
     const OUString& url, const Sequence< PropertyValue >& info )
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     (void) info;
     if ( ! acceptsURL(url) )
@@ -192,14 +192,14 @@ Sequence< DriverPropertyInfo > SAL_CALL FirebirdDriver::getPropertyInfo(
     return Sequence< DriverPropertyInfo >();
 }
 
-sal_Int32 SAL_CALL FirebirdDriver::getMajorVersion(  ) throw(RuntimeException)
+sal_Int32 SAL_CALL FirebirdDriver::getMajorVersion(  ) throw(RuntimeException, std::exception)
 {
     // The major and minor version are sdbc driver specific. Must begin with 1.0
     // as per http://api.libreoffice.org/docs/common/ref/com/sun/star/sdbc/XDriver.html
     return 1;
 }
 
-sal_Int32 SAL_CALL FirebirdDriver::getMinorVersion(  ) throw(RuntimeException)
+sal_Int32 SAL_CALL FirebirdDriver::getMinorVersion(  ) throw(RuntimeException, std::exception)
 {
     return 0;
 }
@@ -207,7 +207,7 @@ sal_Int32 SAL_CALL FirebirdDriver::getMinorVersion(  ) throw(RuntimeException)
 //----- XDataDefinitionSupplier
 uno::Reference< XTablesSupplier > SAL_CALL FirebirdDriver::getDataDefinitionByConnection(
                                     const uno::Reference< XConnection >& rConnection)
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     Connection* pConnection = static_cast< Connection* >(rConnection.get());
     return uno::Reference< XTablesSupplier >(pConnection->createCatalog(), UNO_QUERY);
@@ -216,7 +216,7 @@ uno::Reference< XTablesSupplier > SAL_CALL FirebirdDriver::getDataDefinitionByCo
 uno::Reference< XTablesSupplier > SAL_CALL FirebirdDriver::getDataDefinitionByURL(
                     const OUString& rURL,
                     const uno::Sequence< PropertyValue >& rInfo)
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     uno::Reference< XConnection > xConnection = connect(rURL, rInfo);
     return getDataDefinitionByConnection(xConnection);

@@ -109,7 +109,7 @@ LWPFilterReader::~LWPFilterReader()
 }
 
 sal_Bool LWPFilterReader::filter( const Sequence< PropertyValue >& aDescriptor )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     OUString sURL;
     for( sal_Int32 i = 0; i < aDescriptor.getLength(); i++ )
@@ -126,7 +126,7 @@ sal_Bool LWPFilterReader::filter( const Sequence< PropertyValue >& aDescriptor )
     return (ReadWordproFile(inputStream, m_DocumentHandler) == 0);
 }
 
-void LWPFilterReader::cancel() throw (com::sun::star::uno::RuntimeException)
+void LWPFilterReader::cancel() throw (com::sun::star::uno::RuntimeException, std::exception)
 {
 }
 
@@ -163,35 +163,35 @@ LWPFilterImportFilter::~LWPFilterImportFilter()
 }
 
 sal_Bool LWPFilterImportFilter::filter( const Sequence< PropertyValue >& aDescriptor )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     sal_Bool ret =  rFilter->filter( aDescriptor );
 
     return ret;
 }
 
-void LWPFilterImportFilter::cancel() throw (::com::sun::star::uno::RuntimeException)
+void LWPFilterImportFilter::cancel() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     rFilter->cancel();
 }
 
 void LWPFilterImportFilter::setTargetDocument( const uno::Reference< XComponent >& xDoc )
-    throw( IllegalArgumentException, RuntimeException )
+    throw( IllegalArgumentException, RuntimeException, std::exception )
 {
     rImporter->setTargetDocument( xDoc );
 }
 
-OUString LWPFilterImportFilter::getImplementationName() throw()
+OUString LWPFilterImportFilter::getImplementationName() throw(std::exception)
 {
     return OUString( STR_IMPLEMENTATION_NAME );
 }
 
-sal_Bool LWPFilterImportFilter::supportsService( const OUString& ServiceName ) throw()
+sal_Bool LWPFilterImportFilter::supportsService( const OUString& ServiceName ) throw(std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString> LWPFilterImportFilter::getSupportedServiceNames( void ) throw()
+Sequence< OUString> LWPFilterImportFilter::getSupportedServiceNames( void ) throw(std::exception)
 {
     Sequence< OUString > seq(1);
     seq[0] = STR_SERVICE_NAME;
@@ -200,7 +200,7 @@ Sequence< OUString> LWPFilterImportFilter::getSupportedServiceNames( void ) thro
 
 
 OUString SAL_CALL LWPFilterImportFilter::detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     OUString   ret;
     OUString aTypeName;            // a name describing the type (from MediaDescriptor, usually from flat detection)

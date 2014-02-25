@@ -64,7 +64,7 @@ public:
 
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL
-            getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException);
+            getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // XAccessibleContext
 
@@ -73,48 +73,48 @@ public:
         boxes.
     */
     sal_Int32 SAL_CALL getAccessibleChildCount (void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     /** For drop down list boxes the text field is a not editable
         <type>VCLXAccessibleTextField</type>, for combo boxes it is an
         editable <type>VLCAccessibleEdit</type>.
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (sal_Int32 i)
-        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception);
     /** The role is always <const
         scope="com::sun::star::accessibility">AccessibleRole::COMBO_BOX</const>.
     */
     sal_Int16 SAL_CALL getAccessibleRole (void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     sal_Int32 SAL_CALL getAccessibleIndexInParent (void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // XAccessibleAction
 
     /** There is one action for drop down boxes and none for others.
     */
     virtual sal_Int32 SAL_CALL getAccessibleActionCount (void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     /** The action for drop down boxes lets the user toggle the visibility of the
         popup menu.
     */
     virtual sal_Bool SAL_CALL doAccessibleAction (sal_Int32 nIndex)
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
-            ::com::sun::star::uno::RuntimeException);
+            ::com::sun::star::uno::RuntimeException, std::exception);
     /** The returned string is assoicated with resource
         <const>RID_STR_ACC_ACTION_TOGGLEPOPUP</const>.
     */
     virtual OUString SAL_CALL getAccessibleActionDescription (sal_Int32 nIndex)
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
-            ::com::sun::star::uno::RuntimeException);
+            ::com::sun::star::uno::RuntimeException, std::exception);
     /** No keybinding returned so far.
     */
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleKeyBinding > SAL_CALL
             getAccessibleActionKeyBinding( sal_Int32 nIndex )
                 throw (::com::sun::star::lang::IndexOutOfBoundsException,
-                       ::com::sun::star::uno::RuntimeException);
+                       ::com::sun::star::uno::RuntimeException, std::exception);
 
     // XComponent
 
@@ -126,17 +126,17 @@ public:
     //=====  XAccessibleValue  ================================================
 
     virtual ::com::sun::star::uno::Any SAL_CALL getCurrentValue( )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual sal_Bool SAL_CALL setCurrentValue(
         const ::com::sun::star::uno::Any& aNumber )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual ::com::sun::star::uno::Any SAL_CALL getMaximumValue(  )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual ::com::sun::star::uno::Any SAL_CALL getMinimumValue(  )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     bool IsDropDownBox() {return m_bIsDropDownBox;};
     BoxType GetBoxType() { return m_aBoxType;};
 protected:

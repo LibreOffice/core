@@ -177,7 +177,7 @@ void ScAccessiblePageHeader::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 //=====  XAccessibleComponent  ============================================
 
 uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeader::getAccessibleAtPoint( const awt::Point& aPoint )
-                                throw (uno::RuntimeException)
+                                throw (uno::RuntimeException, std::exception)
 {
     uno::Reference<XAccessible> xRet;
 
@@ -205,7 +205,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeader::getAccessibleAtPo
     return xRet;
 }
 
-void SAL_CALL ScAccessiblePageHeader::grabFocus() throw (uno::RuntimeException)
+void SAL_CALL ScAccessiblePageHeader::grabFocus() throw (uno::RuntimeException, std::exception)
 {
      SolarMutexGuard aGuard;
     IsObjectValid();
@@ -219,7 +219,7 @@ void SAL_CALL ScAccessiblePageHeader::grabFocus() throw (uno::RuntimeException)
 
 //=====  XAccessibleContext  ==============================================
 
-sal_Int32 SAL_CALL ScAccessiblePageHeader::getAccessibleChildCount() throw (uno::RuntimeException)
+sal_Int32 SAL_CALL ScAccessiblePageHeader::getAccessibleChildCount() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -253,7 +253,7 @@ sal_Int32 SAL_CALL ScAccessiblePageHeader::getAccessibleChildCount() throw (uno:
 }
 
 uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeader::getAccessibleChild( sal_Int32 nIndex )
-                                throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+                                throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -284,13 +284,13 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeader::getAccessibleChil
     return xRet;
 }
 
-sal_Int32 SAL_CALL ScAccessiblePageHeader::getAccessibleIndexInParent() throw (uno::RuntimeException)
+sal_Int32 SAL_CALL ScAccessiblePageHeader::getAccessibleIndexInParent() throw (uno::RuntimeException, std::exception)
 {
     return mnIndex;
 }
 
 uno::Reference< XAccessibleStateSet > SAL_CALL ScAccessiblePageHeader::getAccessibleStateSet()
-                                throw (uno::RuntimeException)
+                                throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Reference<XAccessibleStateSet> xParentStates;
@@ -316,13 +316,13 @@ uno::Reference< XAccessibleStateSet > SAL_CALL ScAccessiblePageHeader::getAccess
 
 //=====  XServiceInfo  ====================================================
 
-OUString SAL_CALL ScAccessiblePageHeader::getImplementationName() throw(uno::RuntimeException)
+OUString SAL_CALL ScAccessiblePageHeader::getImplementationName() throw(uno::RuntimeException, std::exception)
 {
     return OUString("ScAccessiblePageHeader");
 }
 
 uno::Sequence<OUString> SAL_CALL ScAccessiblePageHeader::getSupportedServiceNames()
-                                                    throw(uno::RuntimeException)
+                                                    throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
     sal_Int32 nOldSize(aSequence.getLength());
@@ -343,13 +343,13 @@ OUString SAL_CALL ScAccessiblePageHeader::createAccessibleDescription(void)
 }
 
 OUString SAL_CALL ScAccessiblePageHeader::createAccessibleName(void)
-                    throw (uno::RuntimeException)
+                    throw (uno::RuntimeException, std::exception)
 {
     OUString sName(SC_RESSTR(mbHeader ? STR_ACC_HEADER_NAME : STR_ACC_FOOTER_NAME));
     return sName.replaceFirst("%1", SC_RESSTR(SCSTR_UNKNOWN));
 }
 
-Rectangle ScAccessiblePageHeader::GetBoundingBoxOnScreen() const throw (uno::RuntimeException)
+Rectangle ScAccessiblePageHeader::GetBoundingBoxOnScreen() const throw (uno::RuntimeException, std::exception)
 {
     Rectangle aCellRect(GetBoundingBox());
     if (mpViewShell)
@@ -365,7 +365,7 @@ Rectangle ScAccessiblePageHeader::GetBoundingBoxOnScreen() const throw (uno::Run
     return aCellRect;
 }
 
-Rectangle ScAccessiblePageHeader::GetBoundingBox() const throw (uno::RuntimeException)
+Rectangle ScAccessiblePageHeader::GetBoundingBox() const throw (uno::RuntimeException, std::exception)
 {
     Rectangle aRect;
     if (mpViewShell)

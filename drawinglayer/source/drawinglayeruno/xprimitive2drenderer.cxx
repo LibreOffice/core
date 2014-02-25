@@ -61,12 +61,12 @@ namespace drawinglayer
                 ::sal_uInt32 DPI_X,
                 ::sal_uInt32 DPI_Y,
                 const ::com::sun::star::geometry::RealRectangle2D& Range,
-                ::sal_uInt32 MaximumQuadraticPixels) throw (uno::RuntimeException);
+                ::sal_uInt32 MaximumQuadraticPixels) throw (uno::RuntimeException, std::exception);
 
             // XServiceInfo
-            virtual OUString SAL_CALL getImplementationName() throw(uno::RuntimeException);
-            virtual ::sal_Bool SAL_CALL supportsService(const OUString&) throw(uno::RuntimeException);
-            virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(uno::RuntimeException);
+            virtual OUString SAL_CALL getImplementationName() throw(uno::RuntimeException, std::exception);
+            virtual ::sal_Bool SAL_CALL supportsService(const OUString&) throw(uno::RuntimeException, std::exception);
+            virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(uno::RuntimeException, std::exception);
         };
     } // end of namespace unorenderer
 } // end of namespace drawinglayer
@@ -118,7 +118,7 @@ namespace drawinglayer
             ::sal_uInt32 DPI_X,
             ::sal_uInt32 DPI_Y,
             const ::com::sun::star::geometry::RealRectangle2D& Range,
-            ::sal_uInt32 MaximumQuadraticPixels) throw (uno::RuntimeException)
+            ::sal_uInt32 MaximumQuadraticPixels) throw (uno::RuntimeException, std::exception)
         {
             uno::Reference< rendering::XBitmap > XBitmap;
 
@@ -187,17 +187,17 @@ namespace drawinglayer
             return XBitmap;
         }
 
-        OUString SAL_CALL XPrimitive2DRenderer::getImplementationName() throw(uno::RuntimeException)
+        OUString SAL_CALL XPrimitive2DRenderer::getImplementationName() throw(uno::RuntimeException, std::exception)
         {
             return(XPrimitive2DRenderer_getImplementationName());
         }
 
-        sal_Bool SAL_CALL XPrimitive2DRenderer::supportsService(const OUString& rServiceName) throw(uno::RuntimeException)
+        sal_Bool SAL_CALL XPrimitive2DRenderer::supportsService(const OUString& rServiceName) throw(uno::RuntimeException, std::exception)
         {
             return cppu::supportsService(this, rServiceName);
         }
 
-        uno::Sequence< OUString > SAL_CALL XPrimitive2DRenderer::getSupportedServiceNames() throw(uno::RuntimeException)
+        uno::Sequence< OUString > SAL_CALL XPrimitive2DRenderer::getSupportedServiceNames() throw(uno::RuntimeException, std::exception)
         {
             return XPrimitive2DRenderer_getSupportedServiceNames();
         }

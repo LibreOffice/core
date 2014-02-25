@@ -893,10 +893,10 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             void doLoadAsync();
 
             // XTerminateListener
-            virtual void SAL_CALL queryTermination( const com::sun::star::lang::EventObject& Event ) throw (TerminationVetoException, RuntimeException);
-            virtual void SAL_CALL notifyTermination( const com::sun::star::lang::EventObject& Event ) throw (RuntimeException);
+            virtual void SAL_CALL queryTermination( const com::sun::star::lang::EventObject& Event ) throw (TerminationVetoException, RuntimeException, std::exception);
+            virtual void SAL_CALL notifyTermination( const com::sun::star::lang::EventObject& Event ) throw (RuntimeException, std::exception);
             // XEventListener
-            virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
         private:
             DECL_LINK( OnOpenDocument, void* );
@@ -970,15 +970,15 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             return 0L;
         }
 
-        void SAL_CALL AsyncLoader::queryTermination( const com::sun::star::lang::EventObject& /*Event*/ ) throw (TerminationVetoException, RuntimeException)
+        void SAL_CALL AsyncLoader::queryTermination( const com::sun::star::lang::EventObject& /*Event*/ ) throw (TerminationVetoException, RuntimeException, std::exception)
         {
             throw TerminationVetoException();
         }
 
-        void SAL_CALL AsyncLoader::notifyTermination( const com::sun::star::lang::EventObject& /*Event*/ ) throw (RuntimeException)
+        void SAL_CALL AsyncLoader::notifyTermination( const com::sun::star::lang::EventObject& /*Event*/ ) throw (RuntimeException, std::exception)
         {
         }
-        void SAL_CALL AsyncLoader::disposing( const com::sun::star::lang::EventObject& /*Source*/ ) throw (RuntimeException)
+        void SAL_CALL AsyncLoader::disposing( const com::sun::star::lang::EventObject& /*Source*/ ) throw (RuntimeException, std::exception)
         {
         }
     }

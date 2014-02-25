@@ -102,7 +102,7 @@ MenuDispatcher::~MenuDispatcher()
 //  XDispatch
 //*****************************************************************************************************************
 void SAL_CALL MenuDispatcher::dispatch(    const   URL&                        /*aURL*/            ,
-                                            const   Sequence< PropertyValue >&  /*seqProperties*/   ) throw( RuntimeException )
+                                            const   Sequence< PropertyValue >&  /*seqProperties*/   ) throw( RuntimeException, std::exception )
 {
 }
 
@@ -110,7 +110,7 @@ void SAL_CALL MenuDispatcher::dispatch(    const   URL&                        /
 //  XDispatch
 //*****************************************************************************************************************
 void SAL_CALL MenuDispatcher::addStatusListener(   const   uno::Reference< XStatusListener >&   xControl,
-                                                    const   URL&                            aURL    ) throw( RuntimeException )
+                                                    const   URL&                            aURL    ) throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );
@@ -125,7 +125,7 @@ void SAL_CALL MenuDispatcher::addStatusListener(   const   uno::Reference< XStat
 //  XDispatch
 //*****************************************************************************************************************
 void SAL_CALL MenuDispatcher::removeStatusListener(    const   uno::Reference< XStatusListener >&   xControl,
-                                                        const   URL&                            aURL    ) throw( RuntimeException )
+                                                        const   URL&                            aURL    ) throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );
@@ -140,7 +140,7 @@ void SAL_CALL MenuDispatcher::removeStatusListener(    const   uno::Reference< X
 //   XFrameActionListener
 //*****************************************************************************************************************
 
-void SAL_CALL MenuDispatcher::frameAction( const FrameActionEvent& aEvent ) throw ( RuntimeException )
+void SAL_CALL MenuDispatcher::frameAction( const FrameActionEvent& aEvent ) throw ( RuntimeException, std::exception )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -178,7 +178,7 @@ void SAL_CALL MenuDispatcher::frameAction( const FrameActionEvent& aEvent ) thro
 //*****************************************************************************************************************
 //   XEventListener
 //*****************************************************************************************************************
-void SAL_CALL MenuDispatcher::disposing( const EventObject& ) throw( RuntimeException )
+void SAL_CALL MenuDispatcher::disposing( const EventObject& ) throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );

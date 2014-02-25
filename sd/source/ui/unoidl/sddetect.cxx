@@ -103,7 +103,7 @@ SdFilterDetect::~SdFilterDetect()
 {
 }
 
-OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDescriptor ) throw( RuntimeException )
+OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDescriptor ) throw( RuntimeException, std::exception )
 {
     Reference< XInputStream > xStream;
     Reference< XContent > xContent;
@@ -523,19 +523,19 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
 }
 
 // XServiceInfo
-OUString SAL_CALL SdFilterDetect::getImplementationName() throw( RuntimeException )
+OUString SAL_CALL SdFilterDetect::getImplementationName() throw( RuntimeException, std::exception )
 {
     return impl_getStaticImplementationName();
 }
                                                                                                                                 \
 // XServiceInfo
-sal_Bool SAL_CALL SdFilterDetect::supportsService( const OUString& sServiceName ) throw( RuntimeException )
+sal_Bool SAL_CALL SdFilterDetect::supportsService( const OUString& sServiceName ) throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
 // XServiceInfo
-Sequence< OUString > SAL_CALL SdFilterDetect::getSupportedServiceNames() throw( RuntimeException )
+Sequence< OUString > SAL_CALL SdFilterDetect::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     return impl_getStaticSupportedServiceNames();
 }

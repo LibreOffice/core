@@ -102,7 +102,7 @@ XTYPEPROVIDER_IMPL_3( ContentProviderImplHelper,
 // virtual
 sal_Bool SAL_CALL ContentProviderImplHelper::supportsService(
                                             const OUString& ServiceName )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -111,7 +111,7 @@ sal_Bool SAL_CALL ContentProviderImplHelper::supportsService(
 sal_Int32 SAL_CALL ContentProviderImplHelper::compareContentIds(
         const uno::Reference< com::sun::star::ucb::XContentIdentifier >& Id1,
         const uno::Reference< com::sun::star::ucb::XContentIdentifier >& Id2 )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     // Simply do a string compare.
 

@@ -36,11 +36,11 @@ public:
 
     // XEventListener
     virtual void disposing( const ::com::sun::star::lang::EventObject& Source )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // XAccessibleEventListener
     virtual void notifyEvent( const ::com::sun::star::accessibility::AccessibleEventObject& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
     AtkObjectWrapper *mpWrapper;
     AccessibleVector m_aChildList;

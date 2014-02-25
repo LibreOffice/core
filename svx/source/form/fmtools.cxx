@@ -329,7 +329,7 @@ FmXDisposeMultiplexer::~FmXDisposeMultiplexer()
 
 // ::com::sun::star::lang::XEventListener
 
-void FmXDisposeMultiplexer::disposing(const ::com::sun::star::lang::EventObject& _Source) throw( RuntimeException )
+void FmXDisposeMultiplexer::disposing(const ::com::sun::star::lang::EventObject& _Source) throw( RuntimeException, std::exception )
 {
     Reference< ::com::sun::star::lang::XEventListener> xPreventDelete(this);
 

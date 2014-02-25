@@ -70,21 +70,21 @@ namespace migration
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName()
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
         virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName )
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
         virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
 
         // XInitialization
         virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
-            throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception);
 
         // XJob
         virtual ::com::sun::star::uno::Any SAL_CALL execute(
             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& Arguments )
             throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::Exception,
-                ::com::sun::star::uno::RuntimeException);
+                ::com::sun::star::uno::RuntimeException, std::exception);
     };
 
 //.........................................................................

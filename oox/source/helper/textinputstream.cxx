@@ -47,15 +47,15 @@ public:
     explicit            UnoBinaryInputStream( BinaryInputStream& rInStrm );
 
     virtual sal_Int32 SAL_CALL readBytes( Sequence< sal_Int8 >& rData, sal_Int32 nBytesToRead )
-                        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException);
+                        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception);
     virtual sal_Int32 SAL_CALL readSomeBytes( Sequence< sal_Int8 >& rData, sal_Int32 nMaxBytesToRead )
-                        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException);
+                        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception);
     virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
-                        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException);
+                        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception);
     virtual sal_Int32 SAL_CALL available()
-                        throw (NotConnectedException, IOException, RuntimeException);
+                        throw (NotConnectedException, IOException, RuntimeException, std::exception);
     virtual void SAL_CALL closeInput()
-                        throw (NotConnectedException, IOException, RuntimeException);
+                        throw (NotConnectedException, IOException, RuntimeException, std::exception);
 
 private:
     void                ensureConnected() const throw (NotConnectedException);
@@ -72,33 +72,33 @@ UnoBinaryInputStream::UnoBinaryInputStream( BinaryInputStream& rInStrm ) :
 }
 
 sal_Int32 SAL_CALL UnoBinaryInputStream::readBytes( Sequence< sal_Int8 >& rData, sal_Int32 nBytesToRead )
-        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
+        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception)
 {
     ensureConnected();
     return mpInStrm->readData( rData, nBytesToRead, 1 );
 }
 
 sal_Int32 SAL_CALL UnoBinaryInputStream::readSomeBytes( Sequence< sal_Int8 >& rData, sal_Int32 nMaxBytesToRead )
-        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
+        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception)
 {
     ensureConnected();
     return mpInStrm->readData( rData, nMaxBytesToRead, 1 );
 }
 
 void SAL_CALL UnoBinaryInputStream::skipBytes( sal_Int32 nBytesToSkip )
-        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
+        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception)
 {
     ensureConnected();
     mpInStrm->skip( nBytesToSkip, 1 );
 }
 
-sal_Int32 SAL_CALL UnoBinaryInputStream::available() throw (NotConnectedException, IOException, RuntimeException)
+sal_Int32 SAL_CALL UnoBinaryInputStream::available() throw (NotConnectedException, IOException, RuntimeException, std::exception)
 {
     ensureConnected();
     throw RuntimeException( "Functionality not supported", Reference< XInputStream >() );
 }
 
-void SAL_CALL UnoBinaryInputStream::closeInput() throw (NotConnectedException, IOException, RuntimeException)
+void SAL_CALL UnoBinaryInputStream::closeInput() throw (NotConnectedException, IOException, RuntimeException, std::exception)
 {
     ensureConnected();
     mpInStrm->close();

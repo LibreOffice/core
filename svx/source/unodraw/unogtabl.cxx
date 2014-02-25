@@ -42,11 +42,11 @@ public:
     virtual NameOrIndex* createItem() const throw();
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw( uno::RuntimeException );
-    virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) throw( uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw( uno::RuntimeException, std::exception );
+    virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) throw( uno::RuntimeException, std::exception);
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) throw( uno::RuntimeException);
+    virtual uno::Type SAL_CALL getElementType(  ) throw( uno::RuntimeException, std::exception);
 };
 
 SvxUnoGradientTable::SvxUnoGradientTable( SdrModel* pModel ) throw()
@@ -58,13 +58,13 @@ SvxUnoGradientTable::~SvxUnoGradientTable() throw()
 {
 }
 
-OUString SAL_CALL SvxUnoGradientTable::getImplementationName() throw( uno::RuntimeException )
+OUString SAL_CALL SvxUnoGradientTable::getImplementationName() throw( uno::RuntimeException, std::exception )
 {
     return OUString("SvxUnoGradientTable");
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoGradientTable::getSupportedServiceNames(  )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence< OUString > aSNS( 1 );
     aSNS.getArray()[0] = "com.sun.star.drawing.GradientTable";
@@ -80,7 +80,7 @@ NameOrIndex* SvxUnoGradientTable::createItem() const throw()
 
 // XElementAccess
 uno::Type SAL_CALL SvxUnoGradientTable::getElementType(  )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     return ::getCppuType((const struct awt::Gradient*)0);
 }

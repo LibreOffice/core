@@ -65,13 +65,13 @@ public:
                             const OUString& rElementName );
     virtual             ~OleOutputStream();
 
-    virtual void SAL_CALL seek( sal_Int64 nPos ) throw( IllegalArgumentException, IOException, RuntimeException );
-    virtual sal_Int64 SAL_CALL getPosition() throw( IOException, RuntimeException );
-    virtual sal_Int64 SAL_CALL getLength() throw( IOException, RuntimeException );
+    virtual void SAL_CALL seek( sal_Int64 nPos ) throw( IllegalArgumentException, IOException, RuntimeException, std::exception );
+    virtual sal_Int64 SAL_CALL getPosition() throw( IOException, RuntimeException, std::exception );
+    virtual sal_Int64 SAL_CALL getLength() throw( IOException, RuntimeException, std::exception );
 
-    virtual void SAL_CALL writeBytes( const Sequence< sal_Int8 >& rData ) throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException );
-    virtual void SAL_CALL flush() throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException );
-    virtual void SAL_CALL closeOutput() throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException );
+    virtual void SAL_CALL writeBytes( const Sequence< sal_Int8 >& rData ) throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception );
+    virtual void SAL_CALL flush() throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception );
+    virtual void SAL_CALL closeOutput() throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception );
 
 private:
     void                ensureSeekable() const throw( IOException );
@@ -107,37 +107,37 @@ OleOutputStream::~OleOutputStream()
 {
 }
 
-void SAL_CALL OleOutputStream::seek( sal_Int64 nPos ) throw( IllegalArgumentException, IOException, RuntimeException )
+void SAL_CALL OleOutputStream::seek( sal_Int64 nPos ) throw( IllegalArgumentException, IOException, RuntimeException, std::exception )
 {
     ensureSeekable();
     mxSeekable->seek( nPos );
 }
 
-sal_Int64 SAL_CALL OleOutputStream::getPosition() throw( IOException, RuntimeException )
+sal_Int64 SAL_CALL OleOutputStream::getPosition() throw( IOException, RuntimeException, std::exception )
 {
     ensureSeekable();
     return mxSeekable->getPosition();
 }
 
-sal_Int64 SAL_CALL OleOutputStream::getLength() throw( IOException, RuntimeException )
+sal_Int64 SAL_CALL OleOutputStream::getLength() throw( IOException, RuntimeException, std::exception )
 {
     ensureSeekable();
     return mxSeekable->getLength();
 }
 
-void SAL_CALL OleOutputStream::writeBytes( const Sequence< sal_Int8 >& rData ) throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException )
+void SAL_CALL OleOutputStream::writeBytes( const Sequence< sal_Int8 >& rData ) throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception )
 {
     ensureConnected();
     mxOutStrm->writeBytes( rData );
 }
 
-void SAL_CALL OleOutputStream::flush() throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException )
+void SAL_CALL OleOutputStream::flush() throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception )
 {
     ensureConnected();
     mxOutStrm->flush();
 }
 
-void SAL_CALL OleOutputStream::closeOutput() throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException )
+void SAL_CALL OleOutputStream::closeOutput() throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception )
 {
     ensureConnected();
     ensureSeekable();

@@ -104,39 +104,39 @@ awt::Point AccessibleChartView::GetUpperLeftOnScreen() const
 
 // ________ XAccessibleContext ________
 OUString SAL_CALL AccessibleChartView::getAccessibleName()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return SCH_RESSTR(STR_OBJECT_DIAGRAM);
 }
 
 OUString SAL_CALL AccessibleChartView::getAccessibleDescription()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return getAccessibleName();
 }
 
 Reference< XAccessible > SAL_CALL AccessibleChartView::getAccessibleParent()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return Reference< XAccessible >( m_xParent );
 }
 
 sal_Int32 SAL_CALL AccessibleChartView::getAccessibleIndexInParent()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     // the document is always the only child of the window
     return 0;
 }
 
 sal_Int16 SAL_CALL AccessibleChartView::getAccessibleRole()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return AccessibleRole::DOCUMENT;
 }
 
 // ________ XAccessibleComponent ________
 awt::Rectangle SAL_CALL AccessibleChartView::getBounds()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     awt::Rectangle aResult( GetWindowPosSize());
     Reference< XAccessible > xParent( m_xParent );
@@ -154,7 +154,7 @@ awt::Rectangle SAL_CALL AccessibleChartView::getBounds()
 }
 
 awt::Point SAL_CALL AccessibleChartView::getLocationOnScreen()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     awt::Rectangle aBounds( getBounds());
     awt::Point aResult;
@@ -173,7 +173,7 @@ awt::Point SAL_CALL AccessibleChartView::getLocationOnScreen()
 // lang::XInitialization
 
 void SAL_CALL AccessibleChartView::initialize( const Sequence< Any >& rArguments )
-                throw (uno::Exception, uno::RuntimeException)
+                throw (uno::Exception, uno::RuntimeException, std::exception)
 {
     //0: view::XSelectionSupplier offers notifications for selection changes and access to the selection itself
     //1: frame::XModel representing the chart model - offers access to object data
@@ -348,7 +348,7 @@ ExplicitValueProvider* AccessibleChartView::getExplicitValueProvider()
 // view::XSelectionChangeListener
 
 void SAL_CALL AccessibleChartView::selectionChanged( const lang::EventObject& /*rEvent*/ )
-                throw (uno::RuntimeException)
+                throw (uno::RuntimeException, std::exception)
 {
     Reference< view::XSelectionSupplier > xSelectionSupplier;
     {
@@ -379,7 +379,7 @@ void SAL_CALL AccessibleChartView::disposing()
 
 // XEventListener
 void SAL_CALL AccessibleChartView::disposing( const lang::EventObject& /*Source*/ )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
 }
 

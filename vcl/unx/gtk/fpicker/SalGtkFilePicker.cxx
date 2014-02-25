@@ -317,7 +317,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
 
 
 void SAL_CALL SalGtkFilePicker::addFilePickerListener( const uno::Reference<XFilePickerListener>& xListener )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -327,7 +327,7 @@ void SAL_CALL SalGtkFilePicker::addFilePickerListener( const uno::Reference<XFil
 }
 
 void SAL_CALL SalGtkFilePicker::removeFilePickerListener( const uno::Reference<XFilePickerListener>& )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -600,7 +600,7 @@ void SalGtkFilePicker::ensureFilterList( const OUString& _rInitialCurrentFilter 
 
 
 void SAL_CALL SalGtkFilePicker::appendFilter( const OUString& aTitle, const OUString& aFilter )
-    throw( lang::IllegalArgumentException, uno::RuntimeException )
+    throw( lang::IllegalArgumentException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -621,7 +621,7 @@ void SAL_CALL SalGtkFilePicker::appendFilter( const OUString& aTitle, const OUSt
 
 
 void SAL_CALL SalGtkFilePicker::setCurrentFilter( const OUString& aTitle )
-    throw( lang::IllegalArgumentException, uno::RuntimeException )
+    throw( lang::IllegalArgumentException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -687,7 +687,7 @@ void SalGtkFilePicker::UpdateFilterfromUI()
     }
 }
 
-OUString SAL_CALL SalGtkFilePicker::getCurrentFilter() throw( uno::RuntimeException )
+OUString SAL_CALL SalGtkFilePicker::getCurrentFilter() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -708,7 +708,7 @@ OUString SAL_CALL SalGtkFilePicker::getCurrentFilter() throw( uno::RuntimeExcept
 
 
 void SAL_CALL SalGtkFilePicker::appendFilterGroup( const OUString& /*sGroupTitle*/, const uno::Sequence<beans::StringPair>& aFilters )
-    throw( lang::IllegalArgumentException, uno::RuntimeException )
+    throw( lang::IllegalArgumentException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -739,7 +739,7 @@ void SAL_CALL SalGtkFilePicker::appendFilterGroup( const OUString& /*sGroupTitle
 // XFilePicker functions
 
 
-void SAL_CALL SalGtkFilePicker::setMultiSelectionMode( sal_Bool bMode ) throw( uno::RuntimeException )
+void SAL_CALL SalGtkFilePicker::setMultiSelectionMode( sal_Bool bMode ) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -749,7 +749,7 @@ void SAL_CALL SalGtkFilePicker::setMultiSelectionMode( sal_Bool bMode ) throw( u
 }
 
 void SAL_CALL SalGtkFilePicker::setDefaultName( const OUString& aName )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -764,21 +764,21 @@ void SAL_CALL SalGtkFilePicker::setDefaultName( const OUString& aName )
 }
 
 void SAL_CALL SalGtkFilePicker::setDisplayDirectory( const OUString& rDirectory )
-    throw( lang::IllegalArgumentException, uno::RuntimeException )
+    throw( lang::IllegalArgumentException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
     implsetDisplayDirectory(rDirectory);
 }
 
-OUString SAL_CALL SalGtkFilePicker::getDisplayDirectory() throw( uno::RuntimeException )
+OUString SAL_CALL SalGtkFilePicker::getDisplayDirectory() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
     return implgetDisplayDirectory();
 }
 
-uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getFiles() throw( uno::RuntimeException )
+uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getFiles() throw( uno::RuntimeException, std::exception )
 {
     // no member access => no mutex needed
 
@@ -811,7 +811,7 @@ bool lcl_matchFilter( const rtl::OUString& rFilter, const rtl::OUString& rExt )
 
 }
 
-uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw( uno::RuntimeException )
+uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -960,14 +960,14 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw( uno
 // XExecutableDialog functions
 
 
-void SAL_CALL SalGtkFilePicker::setTitle( const OUString& rTitle ) throw( uno::RuntimeException )
+void SAL_CALL SalGtkFilePicker::setTitle( const OUString& rTitle ) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
     implsetTitle(rTitle);
 }
 
-sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException )
+sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -1331,7 +1331,7 @@ uno::Any SalGtkFilePicker::HandleGetListValue(GtkComboBox *pWidget, sal_Int16 nC
 }
 
 void SAL_CALL SalGtkFilePicker::setValue( sal_Int16 nControlId, sal_Int16 nControlAction, const uno::Any& rValue )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -1359,7 +1359,7 @@ void SAL_CALL SalGtkFilePicker::setValue( sal_Int16 nControlId, sal_Int16 nContr
 }
 
 uno::Any SAL_CALL SalGtkFilePicker::getValue( sal_Int16 nControlId, sal_Int16 nControlAction )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -1384,7 +1384,7 @@ uno::Any SAL_CALL SalGtkFilePicker::getValue( sal_Int16 nControlId, sal_Int16 nC
 }
 
 void SAL_CALL SalGtkFilePicker::enableControl( sal_Int16 nControlId, sal_Bool bEnable )
-throw( uno::RuntimeException )
+throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -1412,7 +1412,7 @@ throw( uno::RuntimeException )
 }
 
 void SAL_CALL SalGtkFilePicker::setLabel( sal_Int16 nControlId, const OUString& rLabel )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -1449,7 +1449,7 @@ void SAL_CALL SalGtkFilePicker::setLabel( sal_Int16 nControlId, const OUString& 
 }
 
 OUString SAL_CALL SalGtkFilePicker::getLabel( sal_Int16 nControlId )
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -1473,7 +1473,7 @@ OUString SAL_CALL SalGtkFilePicker::getLabel( sal_Int16 nControlId )
 // XFilePreview functions
 
 
-uno::Sequence<sal_Int16> SAL_CALL SalGtkFilePicker::getSupportedImageFormats() throw( uno::RuntimeException )
+uno::Sequence<sal_Int16> SAL_CALL SalGtkFilePicker::getSupportedImageFormats() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -1483,7 +1483,7 @@ uno::Sequence<sal_Int16> SAL_CALL SalGtkFilePicker::getSupportedImageFormats() t
     return uno::Sequence<sal_Int16>();
 }
 
-sal_Int32 SAL_CALL SalGtkFilePicker::getTargetColorDepth() throw( uno::RuntimeException )
+sal_Int32 SAL_CALL SalGtkFilePicker::getTargetColorDepth() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -1493,7 +1493,7 @@ sal_Int32 SAL_CALL SalGtkFilePicker::getTargetColorDepth() throw( uno::RuntimeEx
     return 0;
 }
 
-sal_Int32 SAL_CALL SalGtkFilePicker::getAvailableWidth() throw( uno::RuntimeException )
+sal_Int32 SAL_CALL SalGtkFilePicker::getAvailableWidth() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -1502,7 +1502,7 @@ sal_Int32 SAL_CALL SalGtkFilePicker::getAvailableWidth() throw( uno::RuntimeExce
     return m_PreviewImageWidth;
 }
 
-sal_Int32 SAL_CALL SalGtkFilePicker::getAvailableHeight() throw( uno::RuntimeException )
+sal_Int32 SAL_CALL SalGtkFilePicker::getAvailableHeight() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -1512,7 +1512,7 @@ sal_Int32 SAL_CALL SalGtkFilePicker::getAvailableHeight() throw( uno::RuntimeExc
 }
 
 void SAL_CALL SalGtkFilePicker::setImage( sal_Int16 /*aImageFormat*/, const uno::Any& /*aImage*/ )
-    throw( lang::IllegalArgumentException, uno::RuntimeException )
+    throw( lang::IllegalArgumentException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -1612,7 +1612,7 @@ void SalGtkFilePicker::update_preview_cb( GtkFileChooser *file_chooser, SalGtkFi
         g_free( filename );
 }
 
-sal_Bool SAL_CALL SalGtkFilePicker::setShowState( sal_Bool bShowState ) throw( uno::RuntimeException )
+sal_Bool SAL_CALL SalGtkFilePicker::setShowState( sal_Bool bShowState ) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -1646,7 +1646,7 @@ sal_Bool SAL_CALL SalGtkFilePicker::setShowState( sal_Bool bShowState ) throw( u
     return true;
 }
 
-sal_Bool SAL_CALL SalGtkFilePicker::getShowState() throw( uno::RuntimeException )
+sal_Bool SAL_CALL SalGtkFilePicker::getShowState() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -1660,7 +1660,7 @@ sal_Bool SAL_CALL SalGtkFilePicker::getShowState() throw( uno::RuntimeException 
 
 
 void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArguments )
-    throw( uno::Exception, uno::RuntimeException )
+    throw( uno::Exception, uno::RuntimeException, std::exception )
 {
     // parameter checking
     uno::Any aAny;
@@ -1824,7 +1824,7 @@ void SalGtkFilePicker::preview_toggled_cb( GObject *cb, SalGtkFilePicker* pobjFP
 // XCancellable
 
 
-void SAL_CALL SalGtkFilePicker::cancel() throw( uno::RuntimeException )
+void SAL_CALL SalGtkFilePicker::cancel() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 

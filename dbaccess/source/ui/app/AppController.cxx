@@ -159,7 +159,7 @@ using ::com::sun::star::sdb::application::NamedDatabaseObject;
 namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;
 namespace DatabaseObjectContainer = ::com::sun::star::sdb::application::DatabaseObjectContainer;
 
-OUString SAL_CALL OApplicationController::getImplementationName() throw( RuntimeException )
+OUString SAL_CALL OApplicationController::getImplementationName() throw( RuntimeException, std::exception )
 {
     return getImplementationName_Static();
 }
@@ -176,7 +176,7 @@ Sequence< OUString> OApplicationController::getSupportedServiceNames_Static(void
     return aSupported;
 }
 
-Sequence< OUString> SAL_CALL OApplicationController::getSupportedServiceNames() throw(RuntimeException)
+Sequence< OUString> SAL_CALL OApplicationController::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     return getSupportedServiceNames_Static();
 }
@@ -471,7 +471,7 @@ sal_Bool OApplicationController::Construct(Window* _pParent)
     return sal_True;
 }
 
-void SAL_CALL OApplicationController::disposing(const EventObject& _rSource) throw( RuntimeException )
+void SAL_CALL OApplicationController::disposing(const EventObject& _rSource) throw( RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( getMutex() );
     Reference<XConnection> xCon(_rSource.Source, UNO_QUERY);
@@ -509,7 +509,7 @@ void SAL_CALL OApplicationController::disposing(const EventObject& _rSource) thr
     }
 }
 
-sal_Bool SAL_CALL OApplicationController::suspend(sal_Bool bSuspend) throw( RuntimeException )
+sal_Bool SAL_CALL OApplicationController::suspend(sal_Bool bSuspend) throw( RuntimeException, std::exception )
 {
     // notify the OnPrepareViewClosing event (before locking any mutex)
     Reference< XDocumentEventBroadcaster > xBroadcaster( m_xModel, UNO_QUERY );
@@ -1526,7 +1526,7 @@ OApplicationView*   OApplicationController::getContainer() const
 }
 
 // ::com::sun::star::container::XContainerListener
-void SAL_CALL OApplicationController::elementInserted( const ContainerEvent& _rEvent ) throw(RuntimeException)
+void SAL_CALL OApplicationController::elementInserted( const ContainerEvent& _rEvent ) throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
@@ -1562,7 +1562,7 @@ void SAL_CALL OApplicationController::elementInserted( const ContainerEvent& _rE
     }
 }
 
-void SAL_CALL OApplicationController::elementRemoved( const ContainerEvent& _rEvent ) throw(RuntimeException)
+void SAL_CALL OApplicationController::elementRemoved( const ContainerEvent& _rEvent ) throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
@@ -1596,7 +1596,7 @@ void SAL_CALL OApplicationController::elementRemoved( const ContainerEvent& _rEv
     }
 }
 
-void SAL_CALL OApplicationController::elementReplaced( const ContainerEvent& _rEvent ) throw(RuntimeException)
+void SAL_CALL OApplicationController::elementReplaced( const ContainerEvent& _rEvent ) throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
@@ -2573,7 +2573,7 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
     return DND_ACTION_NONE;
 }
 
-Reference< XModel >  SAL_CALL OApplicationController::getModel(void) throw( RuntimeException )
+Reference< XModel >  SAL_CALL OApplicationController::getModel(void) throw( RuntimeException, std::exception )
 {
     return m_xModel;
 }
@@ -2652,7 +2652,7 @@ void OApplicationController::OnFirstControllerConnected()
     return;
 }
 
-void SAL_CALL OApplicationController::attachFrame( const Reference< XFrame > & i_rxFrame ) throw( RuntimeException )
+void SAL_CALL OApplicationController::attachFrame( const Reference< XFrame > & i_rxFrame ) throw( RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( getMutex() );
 
@@ -2661,7 +2661,7 @@ void SAL_CALL OApplicationController::attachFrame( const Reference< XFrame > & i
         onAttachedFrame();
 }
 
-sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > & _rxModel) throw( RuntimeException )
+sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > & _rxModel) throw( RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( getMutex() );
     const Reference< XOfficeDatabaseDocument > xOfficeDoc( _rxModel, UNO_QUERY );
@@ -2789,17 +2789,17 @@ OUString OApplicationController::getCurrentlySelectedName(sal_Int32& _rnCommandT
     return sName;
 }
 
-void SAL_CALL OApplicationController::addSelectionChangeListener( const Reference< view::XSelectionChangeListener >& _Listener ) throw (RuntimeException)
+void SAL_CALL OApplicationController::addSelectionChangeListener( const Reference< view::XSelectionChangeListener >& _Listener ) throw (RuntimeException, std::exception)
 {
     m_pSelectionNotifier->addListener( _Listener );
 }
 
-void SAL_CALL OApplicationController::removeSelectionChangeListener( const Reference< view::XSelectionChangeListener >& _Listener ) throw (RuntimeException)
+void SAL_CALL OApplicationController::removeSelectionChangeListener( const Reference< view::XSelectionChangeListener >& _Listener ) throw (RuntimeException, std::exception)
 {
     m_pSelectionNotifier->removeListener( _Listener );
 }
 
-::sal_Bool SAL_CALL OApplicationController::select( const Any& _aSelection ) throw (IllegalArgumentException, RuntimeException)
+::sal_Bool SAL_CALL OApplicationController::select( const Any& _aSelection ) throw (IllegalArgumentException, RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
@@ -2921,7 +2921,7 @@ void SAL_CALL OApplicationController::removeSelectionChangeListener( const Refer
     return sal_True;
 }
 
-Any SAL_CALL OApplicationController::getSelection(  ) throw (RuntimeException)
+Any SAL_CALL OApplicationController::getSelection(  ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );

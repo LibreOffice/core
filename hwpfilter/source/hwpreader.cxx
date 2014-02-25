@@ -123,7 +123,7 @@ HwpReader::~HwpReader()
 }
 
 
-sal_Bool HwpReader::filter(const Sequence< PropertyValue >& rDescriptor) throw(RuntimeException)
+sal_Bool HwpReader::filter(const Sequence< PropertyValue >& rDescriptor) throw(RuntimeException, std::exception)
 {
     utl::MediaDescriptor aDescriptor(rDescriptor);
     aDescriptor.addInputStream();

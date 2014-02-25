@@ -98,34 +98,34 @@ class PopupMenuDispatcher :     // baseclasses
 
         // XInitialization
         virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& lArguments ) throw( css::uno::Exception       ,
-                                                                                                         css::uno::RuntimeException);
+                                                                                                         css::uno::RuntimeException, std::exception);
         // XDispatchProvider
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL queryDispatch(
             const ::com::sun::star::util::URL&  aURL        ,
             const OUString& sTarget     ,
             sal_Int32              nFlags      )
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
         virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches(
             const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor )
-        throw( css::uno::RuntimeException );
+        throw( css::uno::RuntimeException, std::exception );
 
         //  XDispatch
         virtual void SAL_CALL dispatch( const css::util::URL&                                  aURL,
-                                        const css::uno::Sequence< css::beans::PropertyValue >& seqProperties ) throw( css::uno::RuntimeException );
+                                        const css::uno::Sequence< css::beans::PropertyValue >& seqProperties ) throw( css::uno::RuntimeException, std::exception );
 
         virtual void SAL_CALL addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl,
-                                                 const css::util::URL&                                     aURL ) throw( css::uno::RuntimeException );
+                                                 const css::util::URL&                                     aURL ) throw( css::uno::RuntimeException, std::exception );
 
         virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl,
-                                                    const css::util::URL&                                     aURL  ) throw( css::uno::RuntimeException );
+                                                    const css::util::URL&                                     aURL  ) throw( css::uno::RuntimeException, std::exception );
 
 
         //   XFrameActionListener
-        virtual void SAL_CALL frameAction( const css::frame::FrameActionEvent& aEvent ) throw ( css::uno::RuntimeException );
+        virtual void SAL_CALL frameAction( const css::frame::FrameActionEvent& aEvent ) throw ( css::uno::RuntimeException, std::exception );
 
         //   XEventListener
-        void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
+        void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException, std::exception );
 
     //  protected methods
     protected:

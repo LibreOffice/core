@@ -49,7 +49,7 @@ ONumericControl::ONumericControl(const Reference<XComponentContext>& _rxFactory)
 }
 
 
-StringSequence ONumericControl::getSupportedServiceNames() throw()
+StringSequence ONumericControl::getSupportedServiceNames() throw(std::exception)
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
@@ -115,7 +115,7 @@ IMPLEMENT_DEFAULT_CLONING( ONumericModel )
 
 // XServiceInfo
 
-StringSequence ONumericModel::getSupportedServiceNames() throw()
+StringSequence ONumericModel::getSupportedServiceNames() throw(std::exception)
 {
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
 
@@ -147,7 +147,7 @@ void ONumericModel::describeFixedProperties( Sequence< Property >& _rProps ) con
 }
 
 
-OUString SAL_CALL ONumericModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL ONumericModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException, std::exception)
 {
     return OUString(FRM_COMPONENT_NUMERICFIELD);  // old (non-sun) name for compatibility !
 }

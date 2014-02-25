@@ -32,16 +32,16 @@
 using namespace ::com::sun::star;
 
 void SAL_CALL PluginDocumentClosePreventer::queryClosing( const lang::EventObject& /*aEvent*/, sal_Bool /*bDeliverOwnership*/ )
-        throw ( uno::RuntimeException, util::CloseVetoException )
+        throw ( uno::RuntimeException, util::CloseVetoException, std::exception )
 {
     if ( m_bPreventClose )
         throw util::CloseVetoException();
 }
 
-void SAL_CALL PluginDocumentClosePreventer::notifyClosing( const lang::EventObject& /*aEvent*/ ) throw ( uno::RuntimeException )
+void SAL_CALL PluginDocumentClosePreventer::notifyClosing( const lang::EventObject& /*aEvent*/ ) throw ( uno::RuntimeException, std::exception )
 {}
 
-void SAL_CALL PluginDocumentClosePreventer::disposing( const lang::EventObject& /*aEvent*/ ) throw ( uno::RuntimeException )
+void SAL_CALL PluginDocumentClosePreventer::disposing( const lang::EventObject& /*aEvent*/ ) throw ( uno::RuntimeException, std::exception )
 {}
 
 

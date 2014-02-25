@@ -53,7 +53,7 @@ cssu::Sequence< sal_Int8 > XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementat
 }
 
 sal_Int64 SAL_CALL XMLElementWrapper_XmlSecImpl::getSomething( const cssu::Sequence< sal_Int8 >& aIdentifier )
-    throw (cssu::RuntimeException)
+    throw (cssu::RuntimeException, std::exception)
 {
     if (aIdentifier.getLength() == 16 &&
         0 == memcmp(
@@ -102,17 +102,17 @@ cssu::Reference< cssu::XInterface > SAL_CALL
 
 /* XServiceInfo */
 OUString SAL_CALL XMLElementWrapper_XmlSecImpl::getImplementationName(  )
-    throw (cssu::RuntimeException)
+    throw (cssu::RuntimeException, std::exception)
 {
     return XMLElementWrapper_XmlSecImpl_getImplementationName();
 }
 sal_Bool SAL_CALL XMLElementWrapper_XmlSecImpl::supportsService( const OUString& rServiceName )
-    throw (cssu::RuntimeException)
+    throw (cssu::RuntimeException, std::exception)
 {
     return XMLElementWrapper_XmlSecImpl_supportsService( rServiceName );
 }
 cssu::Sequence< OUString > SAL_CALL XMLElementWrapper_XmlSecImpl::getSupportedServiceNames(  )
-    throw (cssu::RuntimeException)
+    throw (cssu::RuntimeException, std::exception)
 {
     return XMLElementWrapper_XmlSecImpl_getSupportedServiceNames();
 }

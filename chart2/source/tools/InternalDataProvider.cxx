@@ -585,7 +585,7 @@ void InternalDataProvider::createDefaultData()
 
 // ____ XDataProvider ____
 ::sal_Bool SAL_CALL InternalDataProvider::createDataSourcePossible( const Sequence< beans::PropertyValue >& /* aArguments */ )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return true;
 }
@@ -611,7 +611,7 @@ sal_Int32 lcl_getInnerLevelCount( const vector< vector< uno::Any > >& rLabels )
 Reference< chart2::data::XDataSource > SAL_CALL InternalDataProvider::createDataSource(
     const Sequence< beans::PropertyValue >& aArguments )
     throw (lang::IllegalArgumentException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     OUString aRangeRepresentation;
     bool bUseColumns = true;
@@ -701,7 +701,7 @@ Reference< chart2::data::XDataSource > SAL_CALL InternalDataProvider::createData
 
 Sequence< beans::PropertyValue > SAL_CALL InternalDataProvider::detectArguments(
     const Reference< chart2::data::XDataSource >& /* xDataSource */ )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Sequence< beans::PropertyValue > aArguments( 4 );
     aArguments[0] = beans::PropertyValue(
@@ -726,7 +726,7 @@ Sequence< beans::PropertyValue > SAL_CALL InternalDataProvider::detectArguments(
 }
 
 ::sal_Bool SAL_CALL InternalDataProvider::createDataSequenceByRangeRepresentationPossible( const OUString& /* aRangeRepresentation */ )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return true;
 }
@@ -734,7 +734,7 @@ Sequence< beans::PropertyValue > SAL_CALL InternalDataProvider::detectArguments(
 Reference< chart2::data::XDataSequence > SAL_CALL InternalDataProvider::createDataSequenceByRangeRepresentation(
     const OUString& aRangeRepresentation )
     throw (lang::IllegalArgumentException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     if( aRangeRepresentation.match( lcl_aCategoriesRangeName ))
     {
@@ -766,7 +766,7 @@ Reference< chart2::data::XDataSequence > SAL_CALL InternalDataProvider::createDa
 }
 
 Reference< sheet::XRangeSelection > SAL_CALL InternalDataProvider::getRangeSelection()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     // there is no range selection component
     return Reference< sheet::XRangeSelection >();
@@ -774,7 +774,7 @@ Reference< sheet::XRangeSelection > SAL_CALL InternalDataProvider::getRangeSelec
 
 // ____ XInternalDataProvider ____
 ::sal_Bool SAL_CALL InternalDataProvider::hasDataByRangeRepresentation( const OUString& aRange )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     sal_Bool bResult = false;
 
@@ -798,7 +798,7 @@ Reference< sheet::XRangeSelection > SAL_CALL InternalDataProvider::getRangeSelec
 }
 
 Sequence< uno::Any > SAL_CALL InternalDataProvider::getDataByRangeRepresentation( const OUString& aRange )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     Sequence< uno::Any > aResult;
 
@@ -872,7 +872,7 @@ Sequence< uno::Any > SAL_CALL InternalDataProvider::getDataByRangeRepresentation
 
 void SAL_CALL InternalDataProvider::setDataByRangeRepresentation(
     const OUString& aRange, const Sequence< uno::Any >& aNewData )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     vector< uno::Any > aNewVector( ContainerHelper::SequenceToVector(aNewData) );
     if( aRange.match( lcl_aLabelRangePrefix ) )
@@ -938,7 +938,7 @@ void SAL_CALL InternalDataProvider::setDataByRangeRepresentation(
 }
 
 void SAL_CALL InternalDataProvider::insertSequence( ::sal_Int32 nAfterIndex )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if( m_bDataInColumns )
     {
@@ -953,7 +953,7 @@ void SAL_CALL InternalDataProvider::insertSequence( ::sal_Int32 nAfterIndex )
 }
 
 void SAL_CALL InternalDataProvider::deleteSequence( ::sal_Int32 nAtIndex )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     lcl_deleteMapReferences( OUString::number( nAtIndex ));
     lcl_deleteMapReferences( lcl_aLabelRangePrefix + OUString::number( nAtIndex ));
@@ -970,7 +970,7 @@ void SAL_CALL InternalDataProvider::deleteSequence( ::sal_Int32 nAtIndex )
 }
 
 void SAL_CALL InternalDataProvider::appendSequence()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if( m_bDataInColumns )
         m_aInternalData.appendColumn();
@@ -979,7 +979,7 @@ void SAL_CALL InternalDataProvider::appendSequence()
 }
 
 void SAL_CALL InternalDataProvider::insertComplexCategoryLevel( sal_Int32 nLevel )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     OSL_ENSURE( nLevel> 0, "you can only insert category levels > 0" );//the first categories level cannot be deleted, check the calling code for error
     if( nLevel>0 )
@@ -996,7 +996,7 @@ void SAL_CALL InternalDataProvider::insertComplexCategoryLevel( sal_Int32 nLevel
     }
 }
 void SAL_CALL InternalDataProvider::deleteComplexCategoryLevel( sal_Int32 nLevel )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     OSL_ENSURE( nLevel>0, "you can only delete category levels > 0" );//the first categories level cannot be deleted, check the calling code for error
     if( nLevel>0 )
@@ -1014,7 +1014,7 @@ void SAL_CALL InternalDataProvider::deleteComplexCategoryLevel( sal_Int32 nLevel
 }
 
 void SAL_CALL InternalDataProvider::insertDataPointForAllSequences( ::sal_Int32 nAfterIndex )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nMaxRep = 0;
     if( m_bDataInColumns )
@@ -1038,7 +1038,7 @@ void SAL_CALL InternalDataProvider::insertDataPointForAllSequences( ::sal_Int32 
 }
 
 void SAL_CALL InternalDataProvider::deleteDataPointForAllSequences( ::sal_Int32 nAtIndex )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nMaxRep = 0;
     if( m_bDataInColumns )
@@ -1062,7 +1062,7 @@ void SAL_CALL InternalDataProvider::deleteDataPointForAllSequences( ::sal_Int32 
 }
 
 void SAL_CALL InternalDataProvider::swapDataPointWithNextOneForAllSequences( ::sal_Int32 nAtIndex )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if( m_bDataInColumns )
         m_aInternalData.swapRowWithNext( nAtIndex );
@@ -1082,7 +1082,7 @@ void SAL_CALL InternalDataProvider::swapDataPointWithNextOneForAllSequences( ::s
 }
 
 void SAL_CALL InternalDataProvider::registerDataSequenceForChanges( const Reference< chart2::data::XDataSequence >& xSeq )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     if( xSeq.is())
         lcl_addDataSequenceToMap( xSeq->getSourceRangeRepresentation(), xSeq );
@@ -1091,7 +1091,7 @@ void SAL_CALL InternalDataProvider::registerDataSequenceForChanges( const Refere
 // ____ XRangeXMLConversion ____
 OUString SAL_CALL InternalDataProvider::convertRangeToXML( const OUString& aRangeRepresentation )
     throw (lang::IllegalArgumentException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     XMLRangeHelper::CellRange aRange;
     aRange.aTableName = "local-table";
@@ -1169,7 +1169,7 @@ OUString SAL_CALL InternalDataProvider::convertRangeToXML( const OUString& aRang
 
 OUString SAL_CALL InternalDataProvider::convertRangeFromXML( const OUString& aXMLRange )
     throw (lang::IllegalArgumentException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     XMLRangeHelper::CellRange aRange( XMLRangeHelper::getCellRangeFromXMLString( aXMLRange ));
     if( aRange.aUpperLeft.bIsEmpty )
@@ -1298,7 +1298,7 @@ uno::Sequence< OUString > SplitCategoriesProvider_ForComplexDescriptions::getStr
 }//anonymous namespace
 
 // ____ XDateCategories ____
-Sequence< double > SAL_CALL InternalDataProvider::getDateCategories() throw (uno::RuntimeException)
+Sequence< double > SAL_CALL InternalDataProvider::getDateCategories() throw (uno::RuntimeException, std::exception)
 {
     double fNan = InternalDataProvider::getNotANumber();
     double fValue = fNan;
@@ -1316,7 +1316,7 @@ Sequence< double > SAL_CALL InternalDataProvider::getDateCategories() throw (uno
     return aDoubles;
 }
 
-void SAL_CALL InternalDataProvider::setDateCategories( const Sequence< double >& rDates ) throw (uno::RuntimeException)
+void SAL_CALL InternalDataProvider::setDateCategories( const Sequence< double >& rDates ) throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nCount = rDates.getLength();
     vector< vector< uno::Any > > aNewCategories;
@@ -1336,56 +1336,56 @@ void SAL_CALL InternalDataProvider::setDateCategories( const Sequence< double >&
 }
 
 // ____ XAnyDescriptionAccess ____
-Sequence< Sequence< uno::Any > > SAL_CALL InternalDataProvider::getAnyRowDescriptions() throw (uno::RuntimeException)
+Sequence< Sequence< uno::Any > > SAL_CALL InternalDataProvider::getAnyRowDescriptions() throw (uno::RuntimeException, std::exception)
 {
     return lcl_convertVectorVectorToSequenceSequence( m_aInternalData.getComplexRowLabels() );
 }
-void SAL_CALL InternalDataProvider::setAnyRowDescriptions( const Sequence< Sequence< uno::Any > >& aRowDescriptions ) throw (uno::RuntimeException)
+void SAL_CALL InternalDataProvider::setAnyRowDescriptions( const Sequence< Sequence< uno::Any > >& aRowDescriptions ) throw (uno::RuntimeException, std::exception)
 {
     m_aInternalData.setComplexRowLabels( lcl_convertSequenceSequenceToVectorVector( aRowDescriptions ) );
 }
-Sequence< Sequence< uno::Any > > SAL_CALL InternalDataProvider::getAnyColumnDescriptions() throw (uno::RuntimeException)
+Sequence< Sequence< uno::Any > > SAL_CALL InternalDataProvider::getAnyColumnDescriptions() throw (uno::RuntimeException, std::exception)
 {
     return lcl_convertVectorVectorToSequenceSequence( m_aInternalData.getComplexColumnLabels() );
 }
-void SAL_CALL InternalDataProvider::setAnyColumnDescriptions( const Sequence< Sequence< uno::Any > >& aColumnDescriptions ) throw (uno::RuntimeException)
+void SAL_CALL InternalDataProvider::setAnyColumnDescriptions( const Sequence< Sequence< uno::Any > >& aColumnDescriptions ) throw (uno::RuntimeException, std::exception)
 {
     m_aInternalData.setComplexColumnLabels( lcl_convertSequenceSequenceToVectorVector( aColumnDescriptions ) );
 }
 
 // ____ XComplexDescriptionAccess ____
-Sequence< Sequence< OUString > > SAL_CALL InternalDataProvider::getComplexRowDescriptions() throw (uno::RuntimeException)
+Sequence< Sequence< OUString > > SAL_CALL InternalDataProvider::getComplexRowDescriptions() throw (uno::RuntimeException, std::exception)
 {
     return lcl_convertComplexAnyVectorToStringSequence( m_aInternalData.getComplexRowLabels() );
 }
-void SAL_CALL InternalDataProvider::setComplexRowDescriptions( const Sequence< Sequence< OUString > >& aRowDescriptions ) throw (uno::RuntimeException)
+void SAL_CALL InternalDataProvider::setComplexRowDescriptions( const Sequence< Sequence< OUString > >& aRowDescriptions ) throw (uno::RuntimeException, std::exception)
 {
     m_aInternalData.setComplexRowLabels( lcl_convertComplexStringSequenceToAnyVector(aRowDescriptions) );
 }
-Sequence< Sequence< OUString > > SAL_CALL InternalDataProvider::getComplexColumnDescriptions() throw (uno::RuntimeException)
+Sequence< Sequence< OUString > > SAL_CALL InternalDataProvider::getComplexColumnDescriptions() throw (uno::RuntimeException, std::exception)
 {
     return lcl_convertComplexAnyVectorToStringSequence( m_aInternalData.getComplexColumnLabels() );
 }
-void SAL_CALL InternalDataProvider::setComplexColumnDescriptions( const Sequence< Sequence< OUString > >& aColumnDescriptions ) throw (uno::RuntimeException)
+void SAL_CALL InternalDataProvider::setComplexColumnDescriptions( const Sequence< Sequence< OUString > >& aColumnDescriptions ) throw (uno::RuntimeException, std::exception)
 {
     m_aInternalData.setComplexColumnLabels( lcl_convertComplexStringSequenceToAnyVector(aColumnDescriptions) );
 }
 
 // ____ XChartDataArray ____
 Sequence< Sequence< double > > SAL_CALL InternalDataProvider::getData()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return m_aInternalData.getData();
 }
 
 void SAL_CALL InternalDataProvider::setData( const Sequence< Sequence< double > >& rDataInRows )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return m_aInternalData.setData( rDataInRows );
 }
 
 void SAL_CALL InternalDataProvider::setRowDescriptions( const Sequence< OUString >& aRowDescriptions )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     vector< vector< uno::Any > > aComplexDescriptions( aRowDescriptions.getLength() );
     transform( aComplexDescriptions.begin(), aComplexDescriptions.end(), aRowDescriptions.getConstArray(),
@@ -1394,7 +1394,7 @@ void SAL_CALL InternalDataProvider::setRowDescriptions( const Sequence< OUString
 }
 
 void SAL_CALL InternalDataProvider::setColumnDescriptions( const Sequence< OUString >& aColumnDescriptions )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     vector< vector< uno::Any > > aComplexDescriptions( aColumnDescriptions.getLength() );
     transform( aComplexDescriptions.begin(), aComplexDescriptions.end(), aColumnDescriptions.getConstArray(),
@@ -1403,7 +1403,7 @@ void SAL_CALL InternalDataProvider::setColumnDescriptions( const Sequence< OUStr
 }
 
 Sequence< OUString > SAL_CALL InternalDataProvider::getRowDescriptions()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     vector< vector< uno::Any > > aComplexLabels( m_aInternalData.getComplexRowLabels() );
     SplitCategoriesProvider_ForComplexDescriptions aProvider( aComplexLabels );
@@ -1411,7 +1411,7 @@ Sequence< OUString > SAL_CALL InternalDataProvider::getRowDescriptions()
 }
 
 Sequence< OUString > SAL_CALL InternalDataProvider::getColumnDescriptions()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     vector< vector< uno::Any > > aComplexLabels( m_aInternalData.getComplexColumnLabels() );
     SplitCategoriesProvider_ForComplexDescriptions aProvider( aComplexLabels );
@@ -1421,18 +1421,18 @@ Sequence< OUString > SAL_CALL InternalDataProvider::getColumnDescriptions()
 // ____ XChartData (base of XChartDataArray) ____
 void SAL_CALL InternalDataProvider::addChartDataChangeEventListener(
     const Reference< ::com::sun::star::chart::XChartDataChangeEventListener >& )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL InternalDataProvider::removeChartDataChangeEventListener(
     const Reference< ::com::sun::star::chart::XChartDataChangeEventListener >& )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
 }
 
 double SAL_CALL InternalDataProvider::getNotANumber()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     double fNan;
     ::rtl::math::setNan( & fNan );
@@ -1440,13 +1440,13 @@ double SAL_CALL InternalDataProvider::getNotANumber()
 }
 
 ::sal_Bool SAL_CALL InternalDataProvider::isNotANumber( double nNumber )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return ::rtl::math::isNan( nNumber )
         || ::rtl::math::isInf( nNumber );
 }
 // lang::XInitialization:
-void SAL_CALL InternalDataProvider::initialize(const uno::Sequence< uno::Any > & _aArguments) throw (uno::RuntimeException, uno::Exception)
+void SAL_CALL InternalDataProvider::initialize(const uno::Sequence< uno::Any > & _aArguments) throw (uno::RuntimeException, uno::Exception, std::exception)
 {
     comphelper::SequenceAsHashMap aArgs(_aArguments);
     if ( aArgs.getUnpackedValueOrDefault( "CreateDefaultData" ,sal_False) )
@@ -1454,7 +1454,7 @@ void SAL_CALL InternalDataProvider::initialize(const uno::Sequence< uno::Any > &
 }
 // ____ XCloneable ____
 Reference< util::XCloneable > SAL_CALL InternalDataProvider::createClone()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return Reference< util::XCloneable >( new InternalDataProvider( *this ));
 }

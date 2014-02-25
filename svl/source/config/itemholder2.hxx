@@ -43,7 +43,7 @@ class ItemHolder2 : private ItemHolderMutexBase
     public:
 
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
-            throw(css::uno::RuntimeException);
+            throw(css::uno::RuntimeException, std::exception);
 
     // helper
     private:

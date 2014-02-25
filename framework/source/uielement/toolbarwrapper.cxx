@@ -75,7 +75,7 @@ void SAL_CALL ToolBarWrapper::release() throw()
 }
 
 uno::Any SAL_CALL ToolBarWrapper::queryInterface( const uno::Type & rType )
-throw( ::com::sun::star::uno::RuntimeException )
+throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     Any a = ::cppu::queryInterface(
                 rType ,
@@ -88,7 +88,7 @@ throw( ::com::sun::star::uno::RuntimeException )
 }
 
 // XComponent
-void SAL_CALL ToolBarWrapper::dispose() throw ( RuntimeException )
+void SAL_CALL ToolBarWrapper::dispose() throw ( RuntimeException, std::exception )
 {
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
 
@@ -113,7 +113,7 @@ void SAL_CALL ToolBarWrapper::dispose() throw ( RuntimeException )
 }
 
 // XInitialization
-void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
+void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException, std::exception )
 {
     ResetableGuard aLock( m_aLock );
 
@@ -193,13 +193,13 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments ) th
 }
 
 // XEventListener
-void SAL_CALL ToolBarWrapper::disposing( const ::com::sun::star::lang::EventObject& ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL ToolBarWrapper::disposing( const ::com::sun::star::lang::EventObject& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     // nothing todo
 }
 
 // XUpdatable
-void SAL_CALL ToolBarWrapper::update() throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL ToolBarWrapper::update() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ResetableGuard aLock( m_aLock );
 
@@ -212,7 +212,7 @@ void SAL_CALL ToolBarWrapper::update() throw (::com::sun::star::uno::RuntimeExce
 }
 
 // XUIElementSettings
-void SAL_CALL ToolBarWrapper::updateSettings() throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL ToolBarWrapper::updateSettings() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ResetableGuard aLock( m_aLock );
 
@@ -251,7 +251,7 @@ void ToolBarWrapper::impl_fillNewData()
 }
 
 // XUIElement interface
-Reference< XInterface > SAL_CALL ToolBarWrapper::getRealInterface(  ) throw (::com::sun::star::uno::RuntimeException)
+Reference< XInterface > SAL_CALL ToolBarWrapper::getRealInterface(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ResetableGuard aLock( m_aLock );
 
@@ -272,7 +272,7 @@ Reference< XInterface > SAL_CALL ToolBarWrapper::getRealInterface(  ) throw (::c
 void SAL_CALL ToolBarWrapper::functionExecute(
     const OUString& aUIElementName,
     const OUString& aCommand )
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ResetableGuard aLock( m_aLock );
 
@@ -284,7 +284,7 @@ throw (::com::sun::star::uno::RuntimeException)
     }
 }
 
-void SAL_CALL ToolBarWrapper::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const com::sun::star::uno::Any&  aValue ) throw( com::sun::star::uno::Exception )
+void SAL_CALL ToolBarWrapper::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const com::sun::star::uno::Any&  aValue ) throw( com::sun::star::uno::Exception, std::exception )
 {
     ResetableGuard aLock( m_aLock );
     sal_Bool bNoClose( m_bNoClose );

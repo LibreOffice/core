@@ -67,23 +67,23 @@ namespace connectivity
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rDescriptor)
                 throw(::com::sun::star::sdbc::SQLException,
                       ::com::sun::star::container::NoSuchElementException,
-                      ::com::sun::star::uno::RuntimeException);
+                      ::com::sun::star::uno::RuntimeException, std::exception);
 
             // XRename -- UNSUPPORTED
             virtual void SAL_CALL rename(const ::rtl::OUString& sName)
                 throw(::com::sun::star::sdbc::SQLException,
                       ::com::sun::star::container::ElementExistException,
-                      ::com::sun::star::uno::RuntimeException);
+                      ::com::sun::star::uno::RuntimeException, std::exception);
 
             //XInterface
             virtual ::com::sun::star::uno::Any
                     SAL_CALL queryInterface(const ::com::sun::star::uno::Type & rType)
-                throw(::com::sun::star::uno::RuntimeException);
+                throw(::com::sun::star::uno::RuntimeException, std::exception);
 
             //XTypeProvider
             virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
                     SAL_CALL getTypes()
-                throw(::com::sun::star::uno::RuntimeException);
+                throw(::com::sun::star::uno::RuntimeException, std::exception);
 
         };
 

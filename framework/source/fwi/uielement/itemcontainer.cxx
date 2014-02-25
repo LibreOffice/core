@@ -152,7 +152,7 @@ ItemContainer* ItemContainer::GetImplementation( const ::com::sun::star::uno::Re
 
 // XElementAccess
 sal_Bool SAL_CALL ItemContainer::hasElements()
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     ShareGuard aLock( m_aShareMutex );
     return ( !m_aItemVector.empty() );
@@ -160,14 +160,14 @@ throw ( RuntimeException )
 
 // XIndexAccess
 sal_Int32 SAL_CALL ItemContainer::getCount()
-throw ( RuntimeException )
+throw ( RuntimeException, std::exception )
 {
     ShareGuard aLock( m_aShareMutex );
     return m_aItemVector.size();
 }
 
 Any SAL_CALL ItemContainer::getByIndex( sal_Int32 Index )
-throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
+throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
     ShareGuard aLock( m_aShareMutex );
     if ( sal_Int32( m_aItemVector.size()) > Index )
@@ -178,7 +178,7 @@ throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
 
 // XIndexContainer
 void SAL_CALL ItemContainer::insertByIndex( sal_Int32 Index, const Any& aItem )
-throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
+throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
     Sequence< PropertyValue > aSeq;
     if ( aItem >>= aSeq )
@@ -201,7 +201,7 @@ throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetExcept
 }
 
 void SAL_CALL ItemContainer::removeByIndex( sal_Int32 nIndex )
-throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
+throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
     ShareGuard aLock( m_aShareMutex );
     if ( (sal_Int32)m_aItemVector.size() > nIndex )
@@ -213,7 +213,7 @@ throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
 }
 
 void SAL_CALL ItemContainer::replaceByIndex( sal_Int32 Index, const Any& aItem )
-throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
+throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
     Sequence< PropertyValue > aSeq;
     if ( aItem >>= aSeq )

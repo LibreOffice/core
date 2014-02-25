@@ -153,7 +153,7 @@ AccessibleRelationSetHelper::~AccessibleRelationSetHelper(void)
     */
 sal_Int32 SAL_CALL
     AccessibleRelationSetHelper::getRelationCount(  )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard (maMutex);
     return mpHelperImpl->getRelationCount();
@@ -175,7 +175,7 @@ sal_Int32 SAL_CALL
  AccessibleRelation SAL_CALL
         AccessibleRelationSetHelper::getRelation( sal_Int32 nIndex )
             throw (lang::IndexOutOfBoundsException,
-                    uno::RuntimeException)
+                    uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard (maMutex);
     return mpHelperImpl->getRelation(nIndex);
@@ -195,7 +195,7 @@ sal_Int32 SAL_CALL
     */
 sal_Bool SAL_CALL
     AccessibleRelationSetHelper::containsRelation( sal_Int16 aRelationType )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard (maMutex);
     return mpHelperImpl->containsRelation(aRelationType);
@@ -214,7 +214,7 @@ sal_Bool SAL_CALL
     */
 AccessibleRelation SAL_CALL
         AccessibleRelationSetHelper::getRelationByType( sal_Int16 aRelationType )
-            throw (uno::RuntimeException)
+            throw (uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard (maMutex);
     return mpHelperImpl->getRelationByType(aRelationType);
@@ -231,7 +231,7 @@ void AccessibleRelationSetHelper::AddRelation(const AccessibleRelation& rRelatio
 
 uno::Sequence< ::com::sun::star::uno::Type>
     AccessibleRelationSetHelper::getTypes (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard (maMutex);
     const ::com::sun::star::uno::Type aTypeList[] = {
@@ -252,7 +252,7 @@ namespace
 
 uno::Sequence<sal_Int8> SAL_CALL
     AccessibleRelationSetHelper::getImplementationId (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return theAccessibleRelationSetHelperUnoTunnelId::get().getSeq();
 }

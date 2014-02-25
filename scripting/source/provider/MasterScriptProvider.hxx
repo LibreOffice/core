@@ -56,41 +56,41 @@ public:
 
     // XServiceInfo implementation
     virtual OUString SAL_CALL getImplementationName( )
-        throw( css::uno::RuntimeException );
+        throw( css::uno::RuntimeException, std::exception );
 
     // XBrowseNode implementation
     virtual OUString SAL_CALL getName()
-        throw ( css::uno::RuntimeException );
+        throw ( css::uno::RuntimeException, std::exception );
     virtual css::uno::Sequence< css::uno::Reference< css::script::browse::XBrowseNode > > SAL_CALL getChildNodes()
-        throw ( css::uno::RuntimeException );
+        throw ( css::uno::RuntimeException, std::exception );
     virtual sal_Bool SAL_CALL hasChildNodes()
-        throw ( css::uno::RuntimeException );
+        throw ( css::uno::RuntimeException, std::exception );
     virtual sal_Int16 SAL_CALL getType()
-        throw ( css::uno::RuntimeException );
+        throw ( css::uno::RuntimeException, std::exception );
     // XNameContainer
-    virtual void SAL_CALL insertByName( const OUString& aName, const css::uno::Any& aElement ) throw ( css::lang::IllegalArgumentException, css::container::ElementExistException, css::lang::WrappedTargetException, css::uno::RuntimeException);
-    virtual void SAL_CALL removeByName( const OUString& Name ) throw ( css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+    virtual void SAL_CALL insertByName( const OUString& aName, const css::uno::Any& aElement ) throw ( css::lang::IllegalArgumentException, css::container::ElementExistException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL removeByName( const OUString& Name ) throw ( css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception);
 
     // XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString& aName, const css::uno::Any& aElement ) throw ( css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+    virtual void SAL_CALL replaceByName( const OUString& aName, const css::uno::Any& aElement ) throw ( css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception);
     // XNameAccess
-    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) throw ( css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException);
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw ( css::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) throw ( css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception);
+    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw ( css::uno::RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType(  ) throw ( css::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasElements(  ) throw ( css::uno::RuntimeException);
+    virtual css::uno::Type SAL_CALL getElementType(  ) throw ( css::uno::RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL hasElements(  ) throw ( css::uno::RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw( css::uno::RuntimeException );
+        throw( css::uno::RuntimeException, std::exception );
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames( )
-        throw( css::uno::RuntimeException );
+        throw( css::uno::RuntimeException, std::exception );
 
     // XScriptProvider implementation
     virtual css::uno::Reference < css::script::provider::XScript > SAL_CALL
         getScript( const OUString& scriptURI )
         throw( css::script::provider::ScriptFrameworkErrorException,
-               css::uno::RuntimeException );
+               css::uno::RuntimeException, std::exception );
 
     /**
      *  XInitialise implementation
@@ -99,7 +99,7 @@ public:
      * containing the URI
      */
     virtual void SAL_CALL initialize( const css::uno::Sequence < css::uno::Any > & args )
-        throw ( css::uno::Exception, css::uno::RuntimeException);
+        throw ( css::uno::Exception, css::uno::RuntimeException, std::exception);
 
     // Public method to return all Language Providers in this MasterScriptProviders
     // context.

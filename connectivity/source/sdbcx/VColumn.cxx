@@ -33,14 +33,14 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 
 
-OUString SAL_CALL OColumn::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL OColumn::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     if(isNew())
         return OUString("com.sun.star.sdbcx.VColumnDescription");
     return OUString("com.sun.star.sdbcx.VColumn");
 }
 
-::com::sun::star::uno::Sequence< OUString > SAL_CALL OColumn::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Sequence< OUString > SAL_CALL OColumn::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::com::sun::star::uno::Sequence< OUString > aSupported(1);
     if(isNew())
@@ -51,7 +51,7 @@ OUString SAL_CALL OColumn::getImplementationName(  ) throw (::com::sun::star::un
     return aSupported;
 }
 
-sal_Bool SAL_CALL OColumn::supportsService( const OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException)
+sal_Bool SAL_CALL OColumn::supportsService( const OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -130,7 +130,7 @@ void SAL_CALL OColumn::release() throw()
     OColumnDescriptor_BASE::release();
 }
 
-Any SAL_CALL OColumn::queryInterface( const Type & rType ) throw(RuntimeException)
+Any SAL_CALL OColumn::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
 {
     Any aRet = ODescriptor::queryInterface( rType);
     if(!aRet.hasValue())
@@ -143,7 +143,7 @@ Any SAL_CALL OColumn::queryInterface( const Type & rType ) throw(RuntimeExceptio
     return aRet;
 }
 
-Sequence< Type > SAL_CALL OColumn::getTypes(  ) throw(RuntimeException)
+Sequence< Type > SAL_CALL OColumn::getTypes(  ) throw(RuntimeException, std::exception)
 {
     if(isNew())
         return ::comphelper::concatSequences(ODescriptor::getTypes(),OColumnDescriptor_BASE::getTypes());
@@ -181,7 +181,7 @@ void OColumn::disposing(void)
 
 }
 
-Reference< XPropertySet > SAL_CALL OColumn::createDataDescriptor(  ) throw(RuntimeException)
+Reference< XPropertySet > SAL_CALL OColumn::createDataDescriptor(  ) throw(RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OColumnDescriptor_BASE::rBHelper.bDisposed);
@@ -206,18 +206,18 @@ Reference< XPropertySet > SAL_CALL OColumn::createDataDescriptor(  ) throw(Runti
     return pNewColumn;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OColumn::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OColumn::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 
 // XNamed
-OUString SAL_CALL OColumn::getName(  ) throw(::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL OColumn::getName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return m_Name;
 }
 
-void SAL_CALL OColumn::setName( const OUString& aName ) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OColumn::setName( const OUString& aName ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     m_Name = aName;
 }

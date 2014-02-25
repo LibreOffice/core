@@ -221,13 +221,13 @@ void OConnection::construct(const OUString& url, const Sequence< PropertyValue >
 }
 /* }}} */
 
-OUString OConnection::getImplementationName() throw (css::uno::RuntimeException)
+OUString OConnection::getImplementationName() throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("com.sun.star.sdbc.drivers.mysqlc.OConnection");
 }
 
 css::uno::Sequence<OUString> OConnection::getSupportedServiceNames()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     css::uno::Sequence<OUString> s(1);
     s[0] = "com.sun.star.sdbc.Connection";
@@ -235,14 +235,14 @@ css::uno::Sequence<OUString> OConnection::getSupportedServiceNames()
 }
 
 sal_Bool OConnection::supportsService(OUString const & ServiceName)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 /* {{{ OConnection::createStatement() -I- */
 Reference< XStatement > SAL_CALL OConnection::createStatement()
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OConnection::createStatement");
     MutexGuard aGuard(m_aMutex);
@@ -265,7 +265,7 @@ Reference< XStatement > SAL_CALL OConnection::createStatement()
 
 /* {{{ OConnection::createStatement() -I- */
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement(const OUString& _sSql)
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OConnection::prepareStatement");
     MutexGuard aGuard(m_aMutex);
@@ -289,7 +289,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement(const OUS
 
 /* {{{ OConnection::prepareCall() -U- */
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall(const OUString& /*_sSql*/ )
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OConnection::prepareCall");
     MutexGuard aGuard(m_aMutex);
@@ -303,7 +303,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall(const OUString
 
 /* {{{ OConnection::nativeSQL() -I- */
 OUString SAL_CALL OConnection::nativeSQL(const OUString& _sSql)
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OConnection::nativeSQL");
     MutexGuard aGuard(m_aMutex);
@@ -323,7 +323,7 @@ OUString SAL_CALL OConnection::nativeSQL(const OUString& _sSql)
 
 /* {{{ OConnection::setAutoCommit() -I- */
 void SAL_CALL OConnection::setAutoCommit(sal_Bool autoCommit)
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OConnection::setAutoCommit");
     MutexGuard aGuard(m_aMutex);
@@ -339,7 +339,7 @@ void SAL_CALL OConnection::setAutoCommit(sal_Bool autoCommit)
 
 /* {{{ OConnection::getAutoCommit() -I- */
 sal_Bool SAL_CALL OConnection::getAutoCommit()
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OConnection::getAutoCommit");
     // you have to distinguish which if you are in autocommit mode or not
@@ -361,7 +361,7 @@ sal_Bool SAL_CALL OConnection::getAutoCommit()
 
 /* {{{ OConnection::commit() -I- */
 void SAL_CALL OConnection::commit()
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OConnection::commit");
     MutexGuard aGuard(m_aMutex);
@@ -377,7 +377,7 @@ void SAL_CALL OConnection::commit()
 
 /* {{{ OConnection::rollback() -I- */
 void SAL_CALL OConnection::rollback()
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OConnection::rollback");
     MutexGuard aGuard(m_aMutex);
@@ -393,7 +393,7 @@ void SAL_CALL OConnection::rollback()
 
 /* {{{ OConnection::isClosed() -I- */
 sal_Bool SAL_CALL OConnection::isClosed()
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OConnection::isClosed");
     MutexGuard aGuard(m_aMutex);
@@ -406,7 +406,7 @@ sal_Bool SAL_CALL OConnection::isClosed()
 
 /* {{{ OConnection::createStatement() -I- */
 Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData()
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OConnection::getMetaData");
     MutexGuard aGuard(m_aMutex);
@@ -429,7 +429,7 @@ Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData()
 
 /* {{{ OConnection::createStatement() -I- */
 void SAL_CALL OConnection::setReadOnly(sal_Bool readOnly)
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OConnection::setReadOnly");
     MutexGuard aGuard(m_aMutex);
@@ -442,7 +442,7 @@ void SAL_CALL OConnection::setReadOnly(sal_Bool readOnly)
 
 /* {{{ OConnection::createStatement() -I- */
 sal_Bool SAL_CALL OConnection::isReadOnly()
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OConnection::isReadOnly");
     MutexGuard aGuard(m_aMutex);
@@ -456,7 +456,7 @@ sal_Bool SAL_CALL OConnection::isReadOnly()
 
 /* {{{ OConnection::createStatement() -I- */
 void SAL_CALL OConnection::setCatalog(const OUString& catalog)
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OConnection::setCatalog");
     MutexGuard aGuard(m_aMutex);
@@ -474,7 +474,7 @@ void SAL_CALL OConnection::setCatalog(const OUString& catalog)
 
 /* {{{ OConnection::createStatement() -I- */
 OUString SAL_CALL OConnection::getCatalog()
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OConnection::getCatalog");
     MutexGuard aGuard(m_aMutex);
@@ -493,7 +493,7 @@ OUString SAL_CALL OConnection::getCatalog()
 
 /* {{{ OConnection::createStatement() -I- */
 void SAL_CALL OConnection::setTransactionIsolation(sal_Int32 level)
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OConnection::setTransactionIsolation");
     MutexGuard aGuard(m_aMutex);
@@ -531,7 +531,7 @@ void SAL_CALL OConnection::setTransactionIsolation(sal_Int32 level)
 
 /* {{{ OConnection::createStatement() -I- */
 sal_Int32 SAL_CALL OConnection::getTransactionIsolation()
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OConnection::getTransactionIsolation");
     MutexGuard aGuard(m_aMutex);
@@ -556,7 +556,7 @@ sal_Int32 SAL_CALL OConnection::getTransactionIsolation()
 
 /* {{{ OConnection::getTypeMap() -I- */
 Reference<XNameAccess> SAL_CALL OConnection::getTypeMap()
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OConnection::getTypeMap");
     MutexGuard aGuard(m_aMutex);
@@ -573,7 +573,7 @@ Reference<XNameAccess> SAL_CALL OConnection::getTypeMap()
 
 /* {{{ OConnection::setTypeMap() -I- */
 void SAL_CALL OConnection::setTypeMap(const Reference<XNameAccess >& typeMap)
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OConnection::setTypeMap");
     MutexGuard aGuard(m_aMutex);
@@ -587,7 +587,7 @@ void SAL_CALL OConnection::setTypeMap(const Reference<XNameAccess >& typeMap)
 // XCloseable
 /* {{{ OConnection::close() -I- */
 void SAL_CALL OConnection::close()
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OConnection::close");
     /*
@@ -607,7 +607,7 @@ void SAL_CALL OConnection::close()
 // XWarningsSupplier
 /* {{{ OConnection::getWarnings() -I- */
 Any SAL_CALL OConnection::getWarnings()
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     Any x = Any();
     OSL_TRACE("OConnection::getWarnings");
@@ -619,7 +619,7 @@ Any SAL_CALL OConnection::getWarnings()
 
 /* {{{ OConnection::clearWarnings() -I- */
 void SAL_CALL OConnection::clearWarnings()
-    throw(SQLException, RuntimeException)
+    throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OConnection::clearWarnings");
     // you should clear your collected warnings here#

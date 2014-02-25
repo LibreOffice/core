@@ -175,13 +175,13 @@ namespace ucb { namespace ucp { namespace ext
     }
 
 
-    OUString SAL_CALL Content::getImplementationName() throw( RuntimeException )
+    OUString SAL_CALL Content::getImplementationName() throw( RuntimeException, std::exception )
     {
         return OUString(  "org.openoffice.comp.ucp.ext.Content"  );
     }
 
 
-    Sequence< OUString > SAL_CALL Content::getSupportedServiceNames() throw( RuntimeException )
+    Sequence< OUString > SAL_CALL Content::getSupportedServiceNames() throw( RuntimeException, std::exception )
     {
         Sequence< OUString > aServiceNames(2);
         aServiceNames[0] = "com.sun.star.ucb.Content";
@@ -190,7 +190,7 @@ namespace ucb { namespace ucp { namespace ext
     }
 
 
-    OUString SAL_CALL Content::getContentType() throw( RuntimeException )
+    OUString SAL_CALL Content::getContentType() throw( RuntimeException, std::exception )
     {
         impl_determineContentType();
         return *m_aContentType;
@@ -198,7 +198,7 @@ namespace ucb { namespace ucp { namespace ext
 
 
     Any SAL_CALL Content::execute( const Command& aCommand, sal_Int32 /* CommandId */, const Reference< XCommandEnvironment >& i_rEvironment )
-        throw( Exception, CommandAbortedException, RuntimeException )
+        throw( Exception, CommandAbortedException, RuntimeException, std::exception )
     {
         Any aRet;
 
@@ -289,7 +289,7 @@ namespace ucb { namespace ucp { namespace ext
     }
 
 
-    void SAL_CALL Content::abort( sal_Int32 ) throw( RuntimeException )
+    void SAL_CALL Content::abort( sal_Int32 ) throw( RuntimeException, std::exception )
     {
     }
 

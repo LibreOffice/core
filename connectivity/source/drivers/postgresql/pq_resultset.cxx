@@ -131,7 +131,7 @@ Any ResultSet::getValue( sal_Int32 columnIndex )
 ResultSet::~ResultSet()
 {}
 
-void ResultSet::close(  ) throw (SQLException, RuntimeException)
+void ResultSet::close(  ) throw (SQLException, RuntimeException, std::exception)
 {
     Reference< XInterface > owner;
     {
@@ -147,7 +147,7 @@ void ResultSet::close(  ) throw (SQLException, RuntimeException)
     }
 }
 
-Reference< XResultSetMetaData > ResultSet::getMetaData(  ) throw (SQLException, RuntimeException)
+Reference< XResultSetMetaData > ResultSet::getMetaData(  ) throw (SQLException, RuntimeException, std::exception)
 {
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
@@ -156,7 +156,7 @@ Reference< XResultSetMetaData > ResultSet::getMetaData(  ) throw (SQLException, 
 }
 
 sal_Int32 ResultSet::findColumn( const OUString& columnName )
-        throw (SQLException, RuntimeException)
+        throw (SQLException, RuntimeException, std::exception)
 {
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
