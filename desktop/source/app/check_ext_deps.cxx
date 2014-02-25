@@ -18,6 +18,7 @@
  */
 
 #include <config_folders.h>
+#include <config_features.h>
 
 #include "osl/file.hxx"
 #include "osl/mutex.hxx"
@@ -421,8 +422,10 @@ void Desktop::SynchronizeExtensionRepositories()
     if (m_bCleanedExtensionCache) {
         deployment::ExtensionManager::get(context)->reinstallDeployedExtensions(
             true, "user", Reference<task::XAbortChannel>(), silent);
+#if !HAVE_FEATURE_MACOSX_SANDBOX
         task::OfficeRestartManager::get(context)->requestRestart(
             silent->getInteractionHandler());
+#endif
     } else {
         // reinstallDeployedExtensions above already calls syncRepositories
         // internally:
