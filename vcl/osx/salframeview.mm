@@ -765,11 +765,11 @@ private:
 
         if( bNewSeries )
             mfMagnifyDeltaSum = 0.0;
-        mfMagnifyDeltaSum += [pEvent deltaZ];
+        mfMagnifyDeltaSum += [pEvent magnification];
 
 		mfLastMagnifyTime = [pEvent timestamp];
 		// TODO: change to 0.1 when COMMAND_WHEEL_ZOOM handlers allow finer zooming control
-		static const float fMagnifyFactor = 0.25;
+		static const float fMagnifyFactor = 0.25*500;
         static const float fMinMagnifyStep = 15.0 / fMagnifyFactor;
         if( fabs(mfMagnifyDeltaSum) <= fMinMagnifyStep )
             return;
