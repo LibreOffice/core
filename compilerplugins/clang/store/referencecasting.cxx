@@ -61,8 +61,8 @@ void ReferenceCasting::run()
 //           (ImplicitCastExpr 0x205d3a0 <col:33> 'class com::sun::star::uno::BaseReference' lvalue <DerivedToBase (BaseReference)>
 //             (DeclRefExpr 0x20582a0 <col:33> 'css::uno::Reference<B>':'class com::sun::star::uno::Reference<class B>' lvalue Var 0x20530e0 'refB' 'css::uno::Reference<B>':'class com::sun::star::uno::Reference<class B>')))
 //         (DeclRefExpr 0x2058398 <col:39, col:49> 'enum com::sun::star::uno::UnoReference_Query' EnumConstant 0x1831de0 'UNO_QUERY' 'enum com::sun::star::uno::UnoReference_Query'))")))
-//
-//
+
+
 // This:
 // static void example_method1(css::uno::Reference<A>)
 // {

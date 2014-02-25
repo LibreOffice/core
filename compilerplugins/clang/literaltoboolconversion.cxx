@@ -118,9 +118,9 @@ bool LiteralToBoolConversion::VisitImplicitCastExpr(
         }
 // At least Clang 3.2 would erroneously warn about Cache::add
 // (binaryurp/source/cache.hxx:53)
-//
+
 //   if( !size_) {
-//
+
 // as "implicit conversion (IntegralToBoolean) of null pointer constant of type
 // 'std::size_t' (aka 'unsigned long') to 'bool'":
 #if (__clang_major__ == 3 && __clang_minor__ >= 4) || __clang_major__ > 3
