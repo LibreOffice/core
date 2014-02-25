@@ -1321,7 +1321,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case NS_ooxml::LN_EG_RPrBase_shadow:
     case NS_ooxml::LN_EG_RPrBase_caps:
     case NS_ooxml::LN_EG_RPrBase_smallCaps:
-    case NS_sprm::LN_CFVanish: //sprmCFVanish
+    case NS_ooxml::LN_EG_RPrBase_vanish:
+    case NS_ooxml::LN_EG_RPrBase_webHidden:
         {
             PropertyIds ePropertyId = PROP_CHAR_WEIGHT; //initialized to prevent warning!
             switch( nSprmId )
@@ -1348,7 +1349,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             case NS_ooxml::LN_EG_RPrBase_smallCaps:
                 ePropertyId = PROP_CHAR_CASE_MAP;
                 break;
-            case NS_sprm::LN_CFVanish: /*sprmCFVanish*/
+            case NS_ooxml::LN_EG_RPrBase_vanish:
+            case NS_ooxml::LN_EG_RPrBase_webHidden:
                 ePropertyId = PROP_CHAR_HIDDEN;
                 break;
             case NS_ooxml::LN_EG_RPrBase_emboss:
@@ -1429,7 +1431,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                     break;
                     case NS_ooxml::LN_EG_RPrBase_outline:
                     case NS_ooxml::LN_EG_RPrBase_shadow:
-                    case NS_sprm::LN_CFVanish: /*sprmCFVanish*/
+                    case NS_ooxml::LN_EG_RPrBase_vanish:
+                    case NS_ooxml::LN_EG_RPrBase_webHidden:
                         rContext->Insert(ePropertyId, uno::makeAny( nIntValue ? true : false ));
                     break;
                     case NS_ooxml::LN_EG_RPrBase_smallCaps:

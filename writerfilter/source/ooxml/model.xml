@@ -23807,8 +23807,8 @@
       <element name="imprint" tokenid="ooxml:EG_RPrBase_imprint"/>
       <element name="noProof" tokenid="ooxml:EG_RPrBase_noProof"/>
       <element name="snapToGrid" tokenid="ooxml:EG_RPrBase_snapToGrid"/>
-      <element name="vanish" tokenid="sprm:CFVanish"/>
-      <element name="webHidden" tokenid="sprm:CFVanish"/>
+      <element name="vanish" tokenid="ooxml:EG_RPrBase_vanish"/>
+      <element name="webHidden" tokenid="ooxml:EG_RPrBase_webHidden"/>
       <element name="color" tokenid="ooxml:EG_RPrBase_color"/>
       <element name="spacing" tokenid="sprm:CDxaSpace"/>
       <element name="w" tokenid="sprm:CCharScale"/>
