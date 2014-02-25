@@ -34,7 +34,7 @@ public class WeakReference
     // XAdapter interface, which is done in the constructors. Assume we have this code
     // WeakReference ref= new WeakReference();
     // ref = someOtherWeakReference;
-    //
+
     // ref would not be notified (XReference.dispose()) because it did not register
     // itself. Therefore the XAdapter would be kept aliver although this is not
     // necessary.

@@ -127,7 +127,7 @@ public final class java_environment implements IEnvironment {
     }
 
     // TODO  What's this???  java.lang.Object#equals requires reflexivity...
-    //
+
     // Maybe this was hacked in so that different bridges use different
     // instances of java_environment.  That is desirable for the following
     // reason:  An OID is bridged in over bridge A, a proxy is created on the
