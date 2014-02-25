@@ -416,7 +416,8 @@ public:
                             // XDDELinkResults
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >
         SAL_CALL getResults(  )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
     virtual void SAL_CALL setResults(
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& aResults )
         throw (::com::sun::star::uno::RuntimeException);

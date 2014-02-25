@@ -1179,7 +1179,7 @@ void SAL_CALL ScDDELinkObj::removeRefreshListener(
 // XDDELinkResults
 
 uno::Sequence< uno::Sequence< uno::Any > > ScDDELinkObj::getResults(  )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Sequence< uno::Sequence< uno::Any > > aReturn;
