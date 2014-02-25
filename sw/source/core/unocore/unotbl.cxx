@@ -2531,7 +2531,9 @@ uno::Reference< table::XCellRange >  SwXTextTable::GetRangeByName(SwFrmFmt* pFmt
 
 uno::Reference< table::XCellRange >  SwXTextTable::getCellRangeByPosition(sal_Int32 nLeft, sal_Int32 nTop,
                 sal_Int32 nRight, sal_Int32 nBottom)
-    throw( uno::RuntimeException, lang::IndexOutOfBoundsException )
+    throw (uno::RuntimeException,
+           lang::IndexOutOfBoundsException,
+           std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Reference< table::XCellRange >  aRef;
