@@ -28,9 +28,9 @@ class ModalDialog;
 class MenuBar;
 class TaskPaneList;
 
-// --------------
+
 // - Icon-Types -
-// --------------
+
 
 #define ICON_LO_DEFAULT                 1
 #define ICON_TEXT_DOCUMENT              2
@@ -48,9 +48,9 @@ class TaskPaneList;
 #define ICON_MACROLIBRARY               1
 #define ICON_SETUP                      500
 
-// -------------------
+
 // - WindowStateData -
-// -------------------
+
 
 #define WINDOWSTATE_MASK_X                  ((sal_uLong)0x00000001)
 #define WINDOWSTATE_MASK_Y                  ((sal_uLong)0x00000002)
@@ -117,9 +117,9 @@ public:
     unsigned int GetMaximizedHeight() const { return mnMaximizedHeight; }
 };
 
-// ----------------------
+
 // - SystemWindow-Types -
-// ----------------------
+
 
 #define MENUBAR_MODE_NORMAL         ((sal_uInt16)0)
 #define MENUBAR_MODE_HIDE           ((sal_uInt16)1)
@@ -128,9 +128,9 @@ public:
 #define TITLE_BUTTON_HIDE           ((sal_uInt16)2)
 #define TITLE_BUTTON_MENU           ((sal_uInt16)4)
 
-// ----------------
+
 // - SystemWindow -
-// ----------------
+
 
 
 class VCL_DLLPUBLIC SystemWindow : public Window

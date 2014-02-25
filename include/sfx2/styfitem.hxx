@@ -56,7 +56,7 @@ public:
     const SfxStyleFilter& GetFilterList() const { return aFilterList; }
     const Image&    GetImage() const { return aImage; }
 
-    // --------------------------------------------------------------------
+
     class GrantAccess { friend class SfxStyleFamilies; };
     void            SetImage( const Image& _rImg ) { aImage = _rImg; }
 };

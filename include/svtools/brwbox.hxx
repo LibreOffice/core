@@ -47,9 +47,9 @@ namespace utl {
     class AccessibleStateSetHelper;
 }
 
-// -------------------
+
 // - BrowseBox-Types -
-// -------------------
+
 
 #define BROWSER_INVALIDID           SAL_MAX_UINT16
 #define BROWSER_ENDOFSELECTION      (static_cast<long>(SFX_ENDOFSELECTION))
@@ -122,9 +122,9 @@ typedef sal_uLong BrowserMode;
 #define BROWSER_MOVECOLUMNLEFT          756
 #define BROWSER_MOVECOLUMNRIGHT         757
 
-// ---------------
+
 // - BrowseEvent -
-// ---------------
+
 
 class BrowseEvent
 {
@@ -148,9 +148,9 @@ public:
     const Rectangle&    GetRect() const { return aRect; }
 };
 
-// ---------------------
+
 // - BrowserMouseEvent -
-// ---------------------
+
 
 class BrowserMouseEvent: public MouseEvent, public BrowseEvent
 {
@@ -162,9 +162,9 @@ public:
                        const Rectangle& rRect );
 };
 
-// --------------------------
+
 // - BrowserAcceptDropEvent -
-// --------------------------
+
 
 class BrowserAcceptDropEvent : public AcceptDropEvent, public BrowseEvent
 {
@@ -173,9 +173,9 @@ public:
     BrowserAcceptDropEvent( BrowserDataWin* pWin, const AcceptDropEvent& rEvt );
 };
 
-// ---------------------------
+
 // - BrowserExecuteDropEvent -
-// ---------------------------
+
 
 class BrowserExecuteDropEvent : public ExecuteDropEvent, public BrowseEvent
 {
@@ -184,9 +184,9 @@ public:
     BrowserExecuteDropEvent( BrowserDataWin* pWin, const ExecuteDropEvent& rEvt );
 };
 
-// -------------
+
 // - BrowseBox -
-// -------------
+
 
 // TODO
 // The whole selection thingie in this class is somewhat .... suspicious to me.
@@ -816,7 +816,7 @@ private:
     using Window::ToTop;
 };
 
-//-------------------------------------------------------------------
+
 inline const DataFlavorExVector& BrowseBox::GetDataFlavors() const
 {
     return *reinterpret_cast<DataFlavorExVector*>(implGetDataFlavors());

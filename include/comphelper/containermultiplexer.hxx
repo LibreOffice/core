@@ -25,15 +25,15 @@
 #include <osl/mutex.hxx>
 #include <comphelper/comphelperdllapi.h>
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
+
 
     class OContainerListenerAdapter;
-    //=====================================================================
+
     //= OContainerListener
-    //=====================================================================
+
     /** a non-UNO container listener
         <p>Useful if you have a non-refcountable class which should act as container listener.<br/>
         In this case, derive this class from OContainerListener, and create an adapter
@@ -67,9 +67,9 @@ namespace comphelper
         void setAdapter(OContainerListenerAdapter* _pAdapter);
     };
 
-    //=====================================================================
+
     //= OContainerListenerAdapter
-    //=====================================================================
+
     class COMPHELPER_DLLPUBLIC OContainerListenerAdapter
             :public cppu::WeakImplHelper1< ::com::sun::star::container::XContainerListener >
     {
@@ -105,9 +105,9 @@ namespace comphelper
                     getContainer() const { return m_xContainer; }
     };
 
-//.........................................................................
+
 }   // namespace dbaui
-//.........................................................................
+
 
 #endif // INCLUDED_COMPHELPER_CONTAINERMULTIPLEXER_HXX
 

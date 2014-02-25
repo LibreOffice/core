@@ -129,7 +129,7 @@ public:
     InheritedHelperInterfaceImpl3< Ifc1, Ifc2, Ifc3 >( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext ) : Base( xParent, xContext ) {}
 };
 
-// ============================================================================
+
 
 /** Helper macro to implement the method 'getServiceImplName()' of the
     'ooo.vba.XHelperInterface' interface. Will return the class name as service
@@ -141,7 +141,7 @@ OUString classname::getServiceImplName() \
     return OUString( #classname ); \
 }
 
-// ----------------------------------------------------------------------------
+
 
 /** Helper macro to implement the method 'getServiceNames()' for a single
     service name.
@@ -158,7 +158,7 @@ css::uno::Sequence< OUString > classname::getServiceNames() \
     return saServiceNames; \
 }
 
-// ----------------------------------------------------------------------------
+
 
 /** Helper macro to declare the methods 'getServiceImplName()' and
     'getServiceNames()' of the 'ooo.vba.XHelperInterface' interface in a class
@@ -168,7 +168,7 @@ css::uno::Sequence< OUString > classname::getServiceNames() \
     virtual OUString getServiceImplName(); \
     virtual css::uno::Sequence< OUString > getServiceNames();
 
-// ----------------------------------------------------------------------------
+
 
 /** Helper macro to implement the methods 'getServiceImplName()' and
     'getServiceNames()' of the 'ooo.vba.XHelperInterface' interface. Will
@@ -178,7 +178,7 @@ css::uno::Sequence< OUString > classname::getServiceNames() \
 VBAHELPER_IMPL_GETSERVICEIMPLNAME( classname ) \
 VBAHELPER_IMPL_GETSERVICENAMES( classname, servicename )
 
-// ============================================================================
+
 
 #endif
 

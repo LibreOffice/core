@@ -42,7 +42,7 @@
 // SdrItemPool V4+++, 07-06-1999
 //     15 new Items for NotPersist (Reserve)
 //     15 new Items for GrafItems
-//
+
 //   WhichMapping:
 //     V1 Range = 1000..1065  (66)
 //     V2 Range = 1000..1123 (124) (58 neue Whiches)

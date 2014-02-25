@@ -43,7 +43,7 @@ namespace ucbhelper {
 
 class PropertyValues;
 
-//=========================================================================
+
 
 /**
   * This class implements the interface XRow. After construction of a valueset
@@ -180,9 +180,9 @@ public:
         throw( ::com::sun::star::sdbc::SQLException,
                ::com::sun::star::uno::RuntimeException, std::exception );
 
-    //////////////////////////////////////////////////////////////////////
+
     // Non-interface methods
-    //////////////////////////////////////////////////////////////////////
+
 
     void appendString( const OUString& rPropName, const OUString& rValue );
     void appendString( const sal_Char* pAsciiPropName, const OUString& rValue )

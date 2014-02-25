@@ -26,9 +26,9 @@
 
 class ToolBox;
 
-// ------------------------
+
 // - FloatingWindow-Types -
-// ------------------------
+
 
 #define FLOATWIN_POPUPMODE_ALLOWTEAROFF         ((sal_uLong)0x00000001)
 #define FLOATWIN_POPUPMODE_ANIMATIONSLIDE       ((sal_uLong)0x00000002)
@@ -60,9 +60,9 @@ class ToolBox;
 #define FLOATWIN_TITLE_POPUP                    ((sal_uInt16)0x0004)
 #define FLOATWIN_TITLE_NONE                     ((sal_uInt16)0x0008)
 
-// ------------------
+
 // - FloatingWindow -
-// ------------------
+
 
 class VCL_DLLPUBLIC FloatingWindow : public SystemWindow
 {

@@ -24,7 +24,7 @@
 
 #include <drawinglayer/processor3d/defaultprocessor3d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -84,7 +84,7 @@ namespace drawinglayer
     } // end of namespace processor3d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif //INCLUDED_DRAWINGLAYER_PROCESSOR3D_CUTFINDPROCESSOR3D_HXX
 

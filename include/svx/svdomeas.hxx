@@ -24,9 +24,9 @@
 #include <svx/svxdllapi.h>
 #include <editeng/measfld.hxx>
 
-//************************************************************
+
 //  Initial Declarations
-//************************************************************
+
 
 class SdrOutliner;
 struct ImpMeasureRec;
@@ -36,9 +36,9 @@ namespace sdr { namespace properties {
     class MeasureProperties;
 }}
 
-//************************************************************
+
 //   Auxiliary Class SdrMeasureObjGeoData
-//************************************************************
+
 
 class SdrMeasureObjGeoData : public SdrTextObjGeoData
 {
@@ -51,9 +51,9 @@ public:
     virtual ~SdrMeasureObjGeoData();
 };
 
-//************************************************************
+
 //   SdrMeasureObj
-//************************************************************
+
 
 class SVX_DLLPUBLIC SdrMeasureObj : public SdrTextObj
 {
@@ -152,8 +152,6 @@ public:
     virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon);
 };
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//
 // Creating:
 // ~~~~~~~~~
 // dragging reference point 1 to reference point 2 -> reference edge
@@ -202,8 +200,6 @@ public:
 // Connecting to a maximum of two objects
 // -> during Copy, etc. use the respective code of the connectors?!?
 // this probably will be pretty complicated ...
-//
-/////////////////////////////////////////////////////////////////////////////////////////////////
 
 #endif // INCLUDED_SVX_SVDOMEAS_HXX
 

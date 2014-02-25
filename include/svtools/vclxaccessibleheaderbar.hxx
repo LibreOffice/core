@@ -29,9 +29,9 @@
 #endif
 class HeaderBar;
 
-//  ----------------------------------------------------
+
 //  class VCLXAccessibleHeaderBar
-//  ----------------------------------------------------
+
 
 typedef std::vector< ::com::sun::star::uno::WeakReference< ::com::sun::star::accessibility::XAccessible > >
     ListItems;

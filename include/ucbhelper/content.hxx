@@ -60,7 +60,7 @@ namespace com { namespace sun { namespace star { namespace uno {
 namespace ucbhelper
 {
 
-//=========================================================================
+
 
 /**
   * These are the possible values for the parameter eMode of method
@@ -85,7 +85,7 @@ enum InsertOperation
     InsertOperation_CHECKIN  // check-in source data
 };
 
-//=========================================================================
+
 
 class Content_Impl;
 
@@ -185,9 +185,9 @@ public:
                     ::com::sun::star::uno::XComponentContext >& rCtx,
             Content& rContent );
 
-    //////////////////////////////////////////////////////////////////////
+
     // Direct access to UCB content.
-    //////////////////////////////////////////////////////////////////////
+
 
     /**
       * This method provides access to the "native" UCB content interface(s).
@@ -201,9 +201,9 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >
     get() const;
 
-    //////////////////////////////////////////////////////////////////////
+
     // Object identity.
-    //////////////////////////////////////////////////////////////////////
+
 
     /**
       * This method returns the URL of the content.
@@ -212,9 +212,9 @@ public:
       */
     const OUString& getURL() const;
 
-    //////////////////////////////////////////////////////////////////////
+
     // Command environment.
-    //////////////////////////////////////////////////////////////////////
+
 
     /**
       * This method returns the environment to use when executing commands.
@@ -234,9 +234,9 @@ public:
             const ::com::sun::star::uno::Reference<
                     ::com::sun::star::ucb::XCommandEnvironment >& xNewEnv );
 
-    //////////////////////////////////////////////////////////////////////
+
     // Access to supported commands/properties.
-    //////////////////////////////////////////////////////////////////////
+
 
     /**
       * This methods provides access to meta data of the commands supported
@@ -264,9 +264,9 @@ public:
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
 
-    //////////////////////////////////////////////////////////////////////
+
     // Access to property value(s).
-    //////////////////////////////////////////////////////////////////////
+
 
     /**
       * This method can be used to read a single property value.
@@ -376,9 +376,9 @@ public:
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
 
-    //////////////////////////////////////////////////////////////////////
+
     // General command execution.
-    //////////////////////////////////////////////////////////////////////
+
 
     /**
       * This method can be used to execute any command supported by the
@@ -397,9 +397,9 @@ public:
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
 
-    //////////////////////////////////////////////////////////////////////
+
     // Special commands.
-    //////////////////////////////////////////////////////////////////////
+
 
     /**
       * This methods gives access to the children of a folder content.
@@ -686,9 +686,9 @@ public:
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
 
-    //////////////////////////////////////////////////////////////////////
+
     // Required properties.
-    //////////////////////////////////////////////////////////////////////
+
 
     /**
       * This method returns the value of the content's property "IsFolder".

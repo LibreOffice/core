@@ -28,14 +28,14 @@
 
 class StyleSettings;
 
-//........................................................................
+
 namespace svt { namespace table
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= ITableRenderer
-    //====================================================================
+
     /** interface to implement by components rendering a ->TableControl
     */
     class SAL_NO_VTABLE ITableRenderer
@@ -278,9 +278,9 @@ namespace svt { namespace table
     };
     typedef ::boost::shared_ptr< ITableRenderer > PTableRenderer;
 
-//........................................................................
+
 } } // namespace svt::table
-//........................................................................
+
 
 #endif // INCLUDED_SVTOOLS_TABLE_TABLERENDERER_HXX
 

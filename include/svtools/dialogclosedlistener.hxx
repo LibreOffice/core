@@ -25,14 +25,14 @@
 #include <com/sun/star/ui/dialogs/XDialogClosedListener.hpp>
 #include <tools/link.hxx>
 
-//.........................................................................
+
 namespace svt
 {
-//.........................................................................
 
-    //=====================================================================
+
+
     //= ODialogClosedListener
-    //=====================================================================
+
     /**
         C++ class to implement a ::com::sun::star::ui::dialogs::XDialogClosedListener
     */
@@ -60,9 +60,9 @@ namespace svt
         virtual void SAL_CALL   disposing( const ::com::sun::star::lang::EventObject& Source ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
     };
 
-//.........................................................................
+
 }   // namespace svt
-//.........................................................................
+
 
 #endif// COMPHELPER_DIALOGCLOSEDLISTENER_HXX
 

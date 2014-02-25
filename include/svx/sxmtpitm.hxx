@@ -26,9 +26,9 @@
 enum SdrMeasureTextHPos {SDRMEASURE_TEXTHAUTO,SDRMEASURE_TEXTLEFTOUTSIDE,SDRMEASURE_TEXTINSIDE,SDRMEASURE_TEXTRIGHTOUTSIDE};
 enum SdrMeasureTextVPos {SDRMEASURE_TEXTVAUTO,SDRMEASURE_ABOVE,SDRMEASURETEXT_BREAKEDLINE,SDRMEASURE_BELOW,SDRMEASURETEXT_VERTICALCENTERED};
 
-//------------------------------
+
 // class SdrMeasureTextHPosItem
-//------------------------------
+
 class SVX_DLLPUBLIC SdrMeasureTextHPosItem: public SfxEnumItem {
 public:
     TYPEINFO();
@@ -46,9 +46,9 @@ public:
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, OUString& rText, const IntlWrapper * = 0) const;
 };
 
-//------------------------------
+
 // class SdrMeasureTextVPosItem
-//------------------------------
+
 class SVX_DLLPUBLIC SdrMeasureTextVPosItem: public SfxEnumItem {
 public:
     TYPEINFO();

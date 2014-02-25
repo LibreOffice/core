@@ -63,7 +63,7 @@ template< typename PixelType,
     }
 };
 
-//-----------------------------------------------------------------------------
+
 
 template< class Iterator,
           class Accessor,
@@ -95,7 +95,7 @@ template< int BitsPerPixel,
                (1UL << BitsPerPixel)-1 >
 {};
 
-//-----------------------------------------------------------------------------
+
 
 // 1bpp MSB
 typedef PixelFormatTraitsTemplate_PackedGreylevel<1, true> PixelFormatTraits_GREY1_MSB;

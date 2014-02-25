@@ -30,15 +30,15 @@
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 #include <vector>
 
-//________________________________________________________________________________________________________________
+
 //  some other includes
-//________________________________________________________________________________________________________________
+
 
 #include <sfx2/viewfrm.hxx>
 
-//________________________________________________________________________________________________________________
+
 //  forwards, typedefs, declarations
-//________________________________________________________________________________________________________________
+
 
 class SystemWindow;
 class SfxSlot;
@@ -74,7 +74,7 @@ enum SfxPopupAction
     SFX_POPUP_SHOW
 };
 
-//====================================================================
+
 class SFX2_DLLPUBLIC SfxBindings: public SfxBroadcaster
 
 /*  [Description]
@@ -215,7 +215,7 @@ public:
 #define DLEAVEREGISTRATIONS() LeaveRegistrations()
 #endif
 
-//--------------------------------------------------------------------
+
 
 inline bool SfxBindings::IsInRegistrations() const
 
@@ -240,7 +240,7 @@ inline bool SfxBindings::IsInRegistrations() const
     return 0 != nRegLevel;
 }
 
-//--------------------------------------------------------------------
+
 
 #endif
 

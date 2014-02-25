@@ -23,7 +23,7 @@
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <vcl/region.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -80,7 +80,7 @@ namespace sdr
     } // end of namespace overlay
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SDR_OVERLAY_OVERLAYSELECTION_HXX
 

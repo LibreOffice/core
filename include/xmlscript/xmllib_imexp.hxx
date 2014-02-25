@@ -28,7 +28,7 @@
 namespace xmlscript
 {
 
-//==============================================================================
+
 // Library container export
 // HACK C++ struct to transport info. Later the container
 // itself should do the export/import and use exportet XML

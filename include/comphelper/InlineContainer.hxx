@@ -53,7 +53,7 @@ public:
     }
 };
 
-// ----------------------------------------
+
 
 /** Creates a vector which contains an arbitrary number of elements.
 
@@ -76,7 +76,7 @@ public:
     }
 };
 
-// ----------------------------------------
+
 
 /** Creates a set which contains an arbitrary number of elements.
 
@@ -100,7 +100,7 @@ public:
     }
 };
 
-// ----------------------------------------
+
 
 /** usage:
 

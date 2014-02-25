@@ -23,13 +23,13 @@
 #include <svx/sdr/contact/viewcontactofsdrrectobj.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predeclarations
 
 class SdrOle2Obj;
 class Graphic;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -77,7 +77,7 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFSDROLE2OBJ_HXX
 

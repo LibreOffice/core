@@ -24,9 +24,9 @@
 #include <i18nlangtag/lang.h>
 #include <svtools/svtdllapi.h>
 
-//========================================================================
+
 //  class SvtLanguageTable
-//========================================================================
+
 
 class SVT_DLLPUBLIC SvtLanguageTable : public ResStringArray
 {

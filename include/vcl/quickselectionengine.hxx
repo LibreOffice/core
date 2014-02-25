@@ -26,16 +26,16 @@
 
 class KeyEvent;
 
-//........................................................................
+
 namespace vcl
 {
-//........................................................................
+
 
     typedef const void* StringEntryIdentifier;
 
-    //====================================================================
+
     //= ISearchableStringList
-    //====================================================================
+
     // TODO: consolidate this with ::vcl::IMnemonicEntryList
     class SAL_NO_VTABLE VCL_DLLPUBLIC ISearchableStringList
     {
@@ -61,9 +61,9 @@ namespace vcl
         ~ISearchableStringList() {}
     };
 
-    //====================================================================
+
     //= QuickSelectionEngine
-    //====================================================================
+
     struct QuickSelectionEngine_Data;
     class VCL_DLLPUBLIC QuickSelectionEngine
     {
@@ -85,9 +85,9 @@ namespace vcl
         QuickSelectionEngine& operator=( const QuickSelectionEngine& ); // never implemented
     };
 
-//........................................................................
+
 } // namespace vcl
-//........................................................................
+
 
 #endif // INCLUDED_VCL_QUICKSELECTIONENGINE_HXX
 

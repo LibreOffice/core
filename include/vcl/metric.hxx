@@ -28,9 +28,9 @@ class ImplFontCharMap;
 
 typedef sal_uInt32 sal_UCS4;
 
-// ------------
+
 // - FontInfo -
-// ------------
+
 
 class VCL_DLLPUBLIC FontInfo : public Font
 {
@@ -52,9 +52,9 @@ public:
                             { return !operator==( rInfo ); }
 };
 
-// --------------
+
 // - FontMetric -
-// --------------
+
 
 class VCL_DLLPUBLIC FontMetric : public FontInfo
 {
@@ -76,9 +76,9 @@ public:
                             { return !operator==( rMetric ); }
 };
 
-// ---------------
+
 // - FontCharMap -
-// ---------------
+
 
 class VCL_DLLPUBLIC FontCharMap
 {
@@ -112,9 +112,9 @@ private:
     void                operator=( const FontCharMap& );
 };
 
-// ----------------
+
 // - TextRectInfo -
-// ----------------
+
 
 class VCL_DLLPUBLIC TextRectInfo
 {

@@ -23,9 +23,9 @@
 #include <svx/svddef.hxx>
 #include <svx/svxdllapi.h>
 
-//------------------------------
+
 // class SdrTextAniDirectionItem
-//------------------------------
+
 
 enum SdrTextAniDirection {SDRTEXTANI_LEFT,
                           SDRTEXTANI_RIGHT,

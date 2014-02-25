@@ -23,9 +23,9 @@
 #include <svx/svddef.hxx>
 #include <svx/svxdllapi.h>
 
-//------------------------------
+
 // class SdrTextAniKindItem
-//------------------------------
+
 
 enum SdrTextAniKind {SDRTEXTANI_NONE,
                      SDRTEXTANI_BLINK,
@@ -42,7 +42,7 @@ enum SdrTextAniKind {SDRTEXTANI_NONE,
 //                (Only if count! = 0)
 // - SDRTEXTANI_SCROLL:
 //   Text just scrolls all the way through, and starts over when it is done.
-//
+
 //   Delay in ms: (except delay = 0 means 50ms (20Hz) default)
 //   Count = number of passes (0 = go forever)
 //   Direction: the direction to scroll

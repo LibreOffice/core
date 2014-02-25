@@ -23,14 +23,14 @@
 #include <svtools/svtdllapi.h>
 #include <svtools/transfer.hxx>
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= OStringTransferable
-    //====================================================================
+
     class SVT_DLLPUBLIC OStringTransferable : public TransferableHelper
     {
     protected:
@@ -45,9 +45,9 @@ namespace svt
         virtual sal_Bool            GetData( const ::com::sun::star::datatransfer::DataFlavor& _rFlavor );
     };
 
-    //====================================================================
+
     //= OStringTransfer
-    //====================================================================
+
     class OStringTransfer
     {
     public:
@@ -67,9 +67,9 @@ namespace svt
         SVT_DLLPUBLIC static void           StartStringDrag( const OUString& _rContent, Window* _pWindow, sal_Int8 _nDragSourceActions );
     };
 
-//........................................................................
+
 }   // namespace svt
-//........................................................................
+
 
 #endif // INCLUDED_SVTOOLS_STRINGTRANSFER_HXX
 

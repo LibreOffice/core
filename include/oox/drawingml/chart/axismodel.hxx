@@ -27,7 +27,7 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 struct AxisDispUnitsModel
 {
@@ -47,7 +47,7 @@ struct AxisDispUnitsModel
                         ~AxisDispUnitsModel();
 };
 
-// ============================================================================
+
 
 struct AxisModel
 {
@@ -94,7 +94,7 @@ struct AxisModel
                         ~AxisModel();
 };
 
-// ============================================================================
+
 
 } // namespace chart
 } // namespace drawingml

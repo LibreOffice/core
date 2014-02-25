@@ -33,9 +33,9 @@ namespace formula
         protected:
             ~ExternalReferenceHelper() {}
     };
-// =============================================================================
+
 } // formula
-// =============================================================================
+
 #endif // INCLUDED_FORMULA_EXTERNALREFERENCEHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

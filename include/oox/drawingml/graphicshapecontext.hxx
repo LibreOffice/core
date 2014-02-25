@@ -36,7 +36,7 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 };
 
-// ====================================================================
+
 
 class OOX_DLLPUBLIC GraphicalObjectFrameContext : public ShapeContext
 {
@@ -49,7 +49,7 @@ private:
     bool                mbEmbedShapesInChart;
 };
 
-// ====================================================================
+
 
 class OleObjectGraphicDataContext : public ShapeContext
 {
@@ -62,7 +62,7 @@ private:
     ::oox::vml::OleObjectInfo& mrOleObjectInfo;
 };
 
-// ====================================================================
+
 
 class Diagram;
 
@@ -81,7 +81,7 @@ private:
     OUString msCs;
 };
 
-// ====================================================================
+
 
 class ChartGraphicDataContext : public ShapeContext
 {
@@ -99,7 +99,7 @@ private:
     ChartShapeInfo&     mrChartShapeInfo;
 };
 
-// ====================================================================
+
 
 } }
 

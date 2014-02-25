@@ -23,7 +23,7 @@
 #include <svx/svxids.hrc>
 #include <svx/svxdllapi.h>
 
-//-------------------------------------------------------------------------
+
 
 class SVX_DLLPUBLIC SvxViewLayoutItem: public SfxUInt16Item
 {
@@ -48,7 +48,7 @@ public:
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );   // leer
 };
 
-//------------------------------------------------------------------------
+
 
 #endif
 

@@ -25,7 +25,7 @@
 #include <rtl/ustring.hxx>
 #include <sfx2/dllapi.h>
 
-//--------------------------------------------------------------------
+
 
 #define SFX_SLOT_CACHABLE      0x0001L // exclusiv to VOLATILE, default
 #define SFX_SLOT_VOLATILE      0x0002L // per Timer every 2s get new,
@@ -73,7 +73,7 @@
 #define SFX_SLOT_IMAGEREFLECTION  0x800000L // Mirror image on Vertical/
                                            // Bi-directional writing
 
-//--------------------------------------------------------------------
+
 
 class SfxRequest;
 class SfxItemSet;
@@ -99,7 +99,7 @@ class SfxItemSet;
 
 #define SFX_STUB_PTR_STATE_NONE &SfxShell::EmptyStateStub
 
-//--------------------------------------------------------------------
+
 
 enum SfxSlotKind
 {
@@ -108,7 +108,7 @@ enum SfxSlotKind
     SFX_KIND_ATTR
 };
 
-//=========================================================================
+
 
 struct SfxTypeAttrib
 {
@@ -213,7 +213,7 @@ SFX_DECL_TYPE(18); // for SvxSearchItem
 #define SFX_ARGUMENT( ArgSlotId, ArgName, ArgTypeId ) \
             { (const SfxType*) &a##ArgTypeId##_Impl, ArgName, ArgSlotId }
 
-//--------------------------------------------------------------------
+
 
 class SfxPoolItem;
 
@@ -229,7 +229,7 @@ struct SfxFormalArgument
                             { return (SfxPoolItem*) pType->aTypeId(); }
 };
 
-//--------------------------------------------------------------------
+
 
 class SfxSlot
 {
@@ -286,7 +286,7 @@ public:
     const SfxSlot*  GetNextSlot() const { return pNextSlot; }
 };
 
-//=========================================================================
+
 
 // returns the id of the function
 
@@ -294,7 +294,7 @@ inline sal_uInt16 SfxSlot::GetSlotId() const
 {
     return nSlotId;
 }
-//--------------------------------------------------------------------
+
 // returns the help-id of the slot
 
 inline sal_uIntPtr SfxSlot::GetHelpId() const
@@ -302,7 +302,7 @@ inline sal_uIntPtr SfxSlot::GetHelpId() const
     return nHelpId;
 }
 
-//--------------------------------------------------------------------
+
 
 // returns  a bitfield with flags
 
@@ -310,7 +310,7 @@ inline sal_uIntPtr SfxSlot::GetMode() const
 {
     return nFlags;
 }
-//--------------------------------------------------------------------
+
 
 // determines if the specified mode is assigned
 
@@ -318,7 +318,7 @@ inline sal_Bool SfxSlot::IsMode( sal_uIntPtr nMode ) const
 {
     return (nFlags & nMode) != 0;
 }
-//--------------------------------------------------------------------
+
 
 // returns the id of the associated group
 

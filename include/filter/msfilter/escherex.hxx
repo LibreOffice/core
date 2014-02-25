@@ -344,7 +344,7 @@ enum ESCHER_wMode
 };
 
 
-//
+
 enum ESCHER_ShapePath
 {
     ESCHER_ShapeLines,          // A line of straight segments
@@ -364,7 +364,7 @@ enum ESCHER_WrapMode
     ESCHER_WrapThrough
 };
 
-//
+
 enum ESCHER_bwMode
 {
     ESCHER_bwColor,             // only used for predefined shades
@@ -486,7 +486,7 @@ enum ESCHER_BlipFlags
     ESCHER_BlipFlagLinkToFile = 8
 };
 
-//
+
 enum ESCHER_3DRenderMode
 {
     ESCHER_FullRender,      // Generate a full rendering
@@ -494,7 +494,7 @@ enum ESCHER_3DRenderMode
     ESCHER_BoundingCube     // Generate a bounding cube
 };
 
-//
+
 enum ESCHER_xFormType
 {
     ESCHER_xFormAbsolute,   // Apply transform in absolute space centered on shape
@@ -502,7 +502,7 @@ enum ESCHER_xFormType
     ESCHER_xFormDrawing     // Apply transform in drawing space
 };
 
-//
+
 enum ESCHER_ShadowType
 {
     ESCHER_ShadowOffset,    // N pixel offset shadow
@@ -942,7 +942,7 @@ enum ESCHER_LineCap
 
 const sal_uInt32 DFF_DGG_CLUSTER_SIZE       = 0x00000400;   /// Shape IDs per cluster in DGG atom.
 
-// ---------------------------------------------------------------------------------------------
+
 
 namespace com { namespace sun { namespace star {
     namespace awt {
@@ -1012,7 +1012,7 @@ struct EscherPropertyValueHelper
     );
 };
 
-// ---------------------------------------------------------------------------------------------
+
 
 struct EscherPersistEntry
 {
@@ -1023,7 +1023,7 @@ struct EscherPersistEntry
 
 };
 
-// ---------------------------------------------------------------------------------------------
+
 
 class EscherBlibEntry
 {
@@ -1065,7 +1065,7 @@ public:
     sal_Bool        operator==( const EscherBlibEntry& ) const;
 };
 
-// ---------------------------------------------------------------------------------------------
+
 
 #define _E_GRAPH_PROV_USE_INSTANCES             1
 #define _E_GRAPH_PROV_DO_NOT_ROTATE_METAFILES   2
@@ -1146,7 +1146,7 @@ public:
                     ~EscherSolverContainer();
 };
 
-// ---------------------------------------------------------------------------------------------
+
 
 #define ESCHER_CREATEPOLYGON_LINE           1
 #define ESCHER_CREATEPOLYGON_POLYLINE       2
@@ -1359,7 +1359,7 @@ public:
     static sal_Bool     GetAdjustmentValue( const com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue & rkProp, sal_Int32 nIndex, sal_Int32 nAdjustmentsWhichNeedsToBeConverted, sal_Int32& nValue );
 };
 
-// ---------------------------------------------------------------------------------------------
+
 
 typedef ::std::vector< EscherPersistEntry* > EscherPersistTable_impl;
 
@@ -1381,7 +1381,7 @@ public:
     virtual     ~EscherPersistTable();
 };
 
-// ---------------------------------------------------------------------------------------------
+
 
 class EscherEx;
 
@@ -1477,7 +1477,7 @@ public:
 };
 
 
-// ============================================================================
+
 
 /** Instance for global DFF data, shared through various instances of EscherEx. */
 class MSFILTER_DLLPUBLIC EscherExGlobal : public EscherGraphicProvider
@@ -1559,7 +1559,7 @@ private:
 
 typedef ::boost::shared_ptr< EscherExGlobal > EscherExGlobalRef;
 
-// ---------------------------------------------------------------------------------------------
+
 
 class SdrObject;
 class SdrPage;
@@ -1650,7 +1650,7 @@ public:
     sal_uLong       GetStreamPos() const    { return mpOutStrm->Tell(); }
 
                 // features during the creation of the following Containers:
-                //
+
                 //      ESCHER_DggContainer:    a EscherDgg Atom is automatically being created and managed
                 //      ESCHER_DgContainer:     a EscherDg Atom is automatically being created and managed
                 //      ESCHER_SpgrContainer:

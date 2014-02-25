@@ -19,7 +19,7 @@
 #ifndef INCLUDED_EDITENG_SVXENUM_HXX
 #define INCLUDED_EDITENG_SVXENUM_HXX
 
-// -----------------------------------------------------------------------
+
 
 enum SvxCaseMap
 {
@@ -142,7 +142,7 @@ enum SvxCellOrientation
 enum SvxDrawToolEnum
 {
     SVX_SNAP_DRAW_SELECT,
-    //
+
     SVX_SNAP_DRAW_LINE,
     SVX_SNAP_DRAW_RECT,
     SVX_SNAP_DRAW_ELLIPSE,

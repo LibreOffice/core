@@ -30,9 +30,9 @@ namespace utl {
   struct FontNameAttr;
 }
 
-// ----------------
+
 // - SubsFontName -
-// ----------------
+
 
 #define SUBSFONT_ONLYONE    ((sal_uLong)0x00000001)
 #define SUBSFONT_MS         ((sal_uLong)0x00000002)
@@ -45,9 +45,9 @@ UNOTOOLS_DLLPUBLIC void AddTokenFontName( OUString& rName, const OUString& rNewT
 
 struct UNOTOOLS_DLLPUBLIC FontNameHash { int operator()(const OUString&) const; };
 
-// ---------------
+
 // - ConvertChar -
-// ---------------
+
 
 class UNOTOOLS_DLLPUBLIC ConvertChar
 {

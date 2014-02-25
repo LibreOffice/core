@@ -26,9 +26,9 @@
 
 class DataChangedEvent;
 
-// -------------------------
+
 // - ScrollableWindow-Type -
-// -------------------------
+
 
 typedef sal_uInt16 ScrollableWindowFlags;
 
@@ -37,9 +37,9 @@ typedef sal_uInt16 ScrollableWindowFlags;
 #define SCRWIN_HCENTER       4
 #define SCRWIN_DEFAULT       (SCRWIN_THUMBDRAGGING | SCRWIN_VCENTER | SCRWIN_HCENTER)
 
-// --------------------
+
 // - ScrollableWindow -
-// --------------------
+
 
 class SVT_DLLPUBLIC ScrollableWindow: public Window
 {

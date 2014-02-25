@@ -54,7 +54,7 @@ struct ThreadHelpBase2
 class FWE_DLLPUBLIC PreventDuplicateInteraction : private ThreadHelpBase2
                                     ,public ::cppu::WeakImplHelper1< css::task::XInteractionHandler2 >
 {
-    //_____________________________________
+
     // structs, types etcp.
     public:
 
@@ -90,7 +90,7 @@ class FWE_DLLPUBLIC PreventDuplicateInteraction : private ThreadHelpBase2
 
         typedef ::std::vector< InteractionInfo > InteractionList;
 
-    //_____________________________________
+
     // member
     private:
 
@@ -106,11 +106,11 @@ class FWE_DLLPUBLIC PreventDuplicateInteraction : private ThreadHelpBase2
             object was used.*/
         InteractionList m_lInteractionRules;
 
-    //_____________________________________
+
     // uno interface
     public:
 
-        //_________________________________
+
         /**
             @interface  XInteractionHandler
             @short      called from outside to handle a problem
@@ -124,7 +124,7 @@ class FWE_DLLPUBLIC PreventDuplicateInteraction : private ThreadHelpBase2
         virtual void SAL_CALL handle(const css::uno::Reference< css::task::XInteractionRequest >& xRequest)
             throw(css::uno::RuntimeException, std::exception);
 
-        //_________________________________
+
         /**
             @interface  XInteractionHandler2
             @short      called from outside to handle a problem
@@ -138,7 +138,7 @@ class FWE_DLLPUBLIC PreventDuplicateInteraction : private ThreadHelpBase2
         virtual ::sal_Bool SAL_CALL handleInteractionRequest( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& xRequest )
             throw (::com::sun::star::uno::RuntimeException, std::exception);
 
-        //_________________________________
+
         /**
             @interface  XInterface
             @short      called to query another interface of the component
@@ -148,11 +148,11 @@ class FWE_DLLPUBLIC PreventDuplicateInteraction : private ThreadHelpBase2
         */
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
             throw (::com::sun::star::uno::RuntimeException, std::exception);
-    //_____________________________________
+
     // c++ interface
     public:
 
-        //_________________________________
+
         /**
             @short      ctor to guarantee right initialized instances of this class
             @descr      It uses the given uno service manager to create the global
@@ -165,13 +165,13 @@ class FWE_DLLPUBLIC PreventDuplicateInteraction : private ThreadHelpBase2
         */
         PreventDuplicateInteraction(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
 
-        //_________________________________
+
         /**
             @short      dtor to free used memory.
          */
         virtual ~PreventDuplicateInteraction();
 
-        //_________________________________
+
         /**
             @short      set the outside interaction handler, which must be used internally
                         if the interaction will not be blocked by the set list of rules.
@@ -183,7 +183,7 @@ class FWE_DLLPUBLIC PreventDuplicateInteraction : private ThreadHelpBase2
          */
         virtual void setHandler(const css::uno::Reference< css::task::XInteractionHandler >& xHandler);
 
-        //_________________________________
+
         /**
             @short      instead of setting an outside interaction handler, this method
                         make sure the default UUI interaction handler of the office is used.
@@ -192,7 +192,7 @@ class FWE_DLLPUBLIC PreventDuplicateInteraction : private ThreadHelpBase2
          */
         virtual void useDefaultUUIHandler();
 
-        //_________________________________
+
         /**
             @short      add a new interaction to the list of interactions, which
                         must be handled by this helper.
@@ -210,7 +210,7 @@ class FWE_DLLPUBLIC PreventDuplicateInteraction : private ThreadHelpBase2
         */
         virtual void addInteractionRule(const PreventDuplicateInteraction::InteractionInfo& aInteractionInfo);
 
-        //_________________________________
+
         /**
             @short      return the info struct for the specified interaction.
 

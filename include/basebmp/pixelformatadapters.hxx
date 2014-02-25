@@ -55,7 +55,7 @@ template< typename Getter,
     };
 };
 
-//-----------------------------------------------------------------------------
+
 
 /** Convert color value to pixel data type
  */
@@ -68,7 +68,7 @@ template< class Accessor, typename DataType > struct ColorConvert
     }
 };
 
-//-----------------------------------------------------------------------------
+
 
 /** Macro generates partial specialization for color-conversion
     UnaryFunctionAccessorAdapter, and the given getter/setter functors

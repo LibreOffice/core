@@ -24,9 +24,9 @@
 
 enum SdrMeasureKind     {SDRMEASURE_STD,SDRMEASURE_RADIUS}; // n.i.
 
-//------------------------------
+
 // class SdrMeasureKindItem (n.i.)
-//------------------------------
+
 class SdrMeasureKindItem: public SfxEnumItem {
 public:
     TYPEINFO();

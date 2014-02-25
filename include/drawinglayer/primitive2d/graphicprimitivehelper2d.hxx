@@ -23,12 +23,12 @@
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <svtools/grfmgr.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predefines
 
 class Graphic;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -64,7 +64,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_DRAWINGLAYER_PRIMITIVE2D_GRAPHICPRIMITIVEHELPER2D_HXX
 

@@ -24,14 +24,14 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/comphelperdllapi.h>
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
 
-//========================================================================
+
+
 //= IndexAccessIterator
-//========================================================================
+
 /** an iterator that iterates through all elements, starting from an XIndexAccess (pre-order)
 */
 class COMPHELPER_DLLPUBLIC IndexAccessIterator
@@ -70,9 +70,9 @@ protected:
     virtual bool ShouldStepInto(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& /*xContainer*/) const { return true; }
 };
 
-//.........................................................................
+
 }   // namespace comphelper
-//.........................................................................
+
 
 #endif // INCLUDED_COMPHELPER_CONTAINER_HXX
 

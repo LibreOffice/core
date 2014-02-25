@@ -77,7 +77,7 @@ class NotifyEvent;
 #define DEFAULT_MARGIN_WIDTH 8
 #define DEFAULT_MARGIN_HEIGHT 12
 
-//========================================================================
+
 
 //  @[SfxViewShell-Flags]
 
@@ -96,7 +96,7 @@ class NotifyEvent;
     <SfxViewShell>.
 */
 
-//=========================================================================
+
 
 #define SFX_DECL_VIEWFACTORY(Class) \
 private: \
@@ -124,7 +124,7 @@ public: \
 class SfxInPlaceClient;
 typedef ::std::vector< SfxInPlaceClient* > SfxInPlaceClientList;
 
-// -----------------------------------------------------------------------
+
 class SFX2_DLLPUBLIC SfxViewShell: public SfxShell, public SfxListener
 {
 #ifdef INCLUDED_SFX2_VIEWSH_HXX
@@ -296,7 +296,7 @@ public:
     SAL_DLLPRIVATE sal_Bool ExecKey_Impl(const KeyEvent& aKey);
 };
 
-//========================================================================
+
 
 inline void SfxViewShell::LostFocus() const
 
@@ -317,7 +317,7 @@ inline void SfxViewShell::LostFocus() const
 {
 }
 
-//------------------------------------------------------------------------
+
 
 inline SfxViewFrame* SfxViewShell::GetViewFrame() const
 

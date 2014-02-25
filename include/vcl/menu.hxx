@@ -55,9 +55,9 @@ namespace accessibility {
 
 namespace vcl { struct MenuLayoutData; }
 
-// --------------
+
 // - Menu-Types -
-// --------------
+
 
 #define MENU_APPEND             ((sal_uInt16)0xFFFF)
 #define MENU_ITEM_NOTFOUND      ((sal_uInt16)0xFFFF)
@@ -91,9 +91,9 @@ struct ImplMenuDelData
     bool isDeleted() const { return mpMenu == 0; }
 };
 
-// --------
+
 // - Menu -
-// --------
+
 
 struct MenuLogo
 {
@@ -357,9 +357,9 @@ public:
     void                DeHighlight() { HighlightItem( 0xFFFF ); } // MENUITEMPOS_INVALID
 };
 
-// -----------
+
 // - MenuBar -
-// -----------
+
 
 class VCL_DLLPUBLIC MenuBar : public Menu
 {
@@ -443,9 +443,9 @@ inline MenuBar& MenuBar::operator =( const MenuBar& rMenu )
 }
 
 
-// -------------
+
 // - PopupMenu -
-// -------------
+
 
 class VCL_DLLPUBLIC PopupMenu : public Menu
 {

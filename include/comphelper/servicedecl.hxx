@@ -299,9 +299,9 @@ struct class_ : public serviceimpl_base< detail::ServiceImpl<ImplT_>, WithArgsT 
     explicit class_( PostProcessFuncT const& postProcessFunc ) : baseT( postProcessFunc ) {}
 };
 
-//
+
 // component_... helpers with arbitrary service declarations:
-//
+
 
 #define COMPHELPER_SERVICEDECL_getFactory(z_, n_, unused_) \
     if (pRet == 0) \

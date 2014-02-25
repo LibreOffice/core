@@ -75,9 +75,9 @@ public:
 
 };
 
-//  ----------------------------------------------------
+
 //  class UnoControlEditModel
-//  ----------------------------------------------------
+
 class UnoControlEditModel : public UnoControlModel
 {
 protected:
@@ -101,9 +101,9 @@ public:
     DECLIMPL_SERVICEINFO_DERIVED( UnoControlEditModel, UnoControlModel, szServiceName2_UnoControlEditModel )
 };
 
-//  ----------------------------------------------------
+
 //  class UnoEditControl
-//  ----------------------------------------------------
+
 typedef ::cppu::ImplHelper4  <   ::com::sun::star::awt::XTextComponent
                              ,   ::com::sun::star::awt::XTextListener
                              ,   ::com::sun::star::awt::XLayoutConstrains
@@ -179,9 +179,9 @@ public:
     sal_Bool SAL_CALL setModel(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& Model) throw ( ::com::sun::star::uno::RuntimeException, std::exception );
 };
 
-//  ----------------------------------------------------
+
 //  class UnoControlFileControlModel
-//  ----------------------------------------------------
+
 class UnoControlFileControlModel : public UnoControlModel
 {
 protected:
@@ -204,9 +204,9 @@ public:
     DECLIMPL_SERVICEINFO_DERIVED( UnoControlFileControlModel, UnoControlModel, szServiceName2_UnoControlFileControlModel )
 };
 
-//  ----------------------------------------------------
+
 //  class UnoFileControl
-//  ----------------------------------------------------
+
 class UnoFileControl : public UnoEditControl
 {
 public:
@@ -217,9 +217,9 @@ public:
     DECLIMPL_SERVICEINFO_DERIVED( UnoFileControl, UnoEditControl, szServiceName2_UnoControlFileControl )
 };
 
-//  ----------------------------------------------------
+
 //  class GraphicControlModel
-//  ----------------------------------------------------
+
 class GraphicControlModel : public UnoControlModel
 {
 private:
@@ -247,9 +247,9 @@ private:
         GraphicControlModel& operator=( const GraphicControlModel& );   // never implemented
 };
 
-//  ----------------------------------------------------
+
 //  class UnoControlButtonModel
-//  ----------------------------------------------------
+
 class UnoControlButtonModel : public GraphicControlModel
 {
 protected:
@@ -272,9 +272,9 @@ public:
     DECLIMPL_SERVICEINFO_DERIVED( UnoControlButtonModel, GraphicControlModel, szServiceName2_UnoControlButtonModel )
 };
 
-//  ----------------------------------------------------
+
 //  class UnoButtonControl
-//  ----------------------------------------------------
+
 typedef ::cppu::AggImplInheritanceHelper4   <   UnoControlBase
                                             ,   ::com::sun::star::awt::XButton
                                             ,   ::com::sun::star::awt::XToggleButton
@@ -322,9 +322,9 @@ public:
     DECLIMPL_SERVICEINFO_DERIVED( UnoButtonControl, UnoControlBase, szServiceName2_UnoControlButton )
 };
 
-//  ----------------------------------------------------
+
 //  class UnoControlImageControlModel
-//  ----------------------------------------------------
+
 class UnoControlImageControlModel : public GraphicControlModel
 {
 private:
@@ -353,9 +353,9 @@ public:
     void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception, std::exception);
 };
 
-//  ----------------------------------------------------
+
 //  class UnoImageControlControl
-//  ----------------------------------------------------
+
 typedef ::cppu::AggImplInheritanceHelper1   <   UnoControlBase
                                             ,   ::com::sun::star::awt::XLayoutConstrains
                                             >   UnoImageControlControl_Base;
@@ -384,9 +384,9 @@ public:
     DECLIMPL_SERVICEINFO_DERIVED( UnoImageControlControl, UnoControlBase, szServiceName2_UnoControlImageControl )
 };
 
-//  ----------------------------------------------------
+
 //  class UnoControlRadioButtonModel
-//  ----------------------------------------------------
+
 class UnoControlRadioButtonModel :  public GraphicControlModel
 
 {
@@ -411,9 +411,9 @@ public:
 
 };
 
-//  ----------------------------------------------------
+
 //  class UnoRadioButtonControl
-//  ----------------------------------------------------
+
 typedef ::cppu::AggImplInheritanceHelper4   <   UnoControlBase
                                             ,   ::com::sun::star::awt::XButton
                                             ,   ::com::sun::star::awt::XRadioButton
@@ -464,9 +464,9 @@ public:
 
 };
 
-//  ----------------------------------------------------
+
 //  class UnoControlCheckBoxModel
-//  ----------------------------------------------------
+
 class UnoControlCheckBoxModel : public GraphicControlModel
 {
 protected:
@@ -489,9 +489,9 @@ public:
     DECLIMPL_SERVICEINFO_DERIVED( UnoControlCheckBoxModel, GraphicControlModel, szServiceName2_UnoControlCheckBoxModel )
 };
 
-//  ----------------------------------------------------
+
 //  class UnoCheckBoxControl
-//  ----------------------------------------------------
+
 typedef ::cppu::AggImplInheritanceHelper4   <   UnoControlBase
                                             ,   ::com::sun::star::awt::XButton
                                             ,   ::com::sun::star::awt::XCheckBox
@@ -545,9 +545,9 @@ public:
 
 };
 
-//  ----------------------------------------------------
+
 //  class UnoControlFixedTextModel
-//  ----------------------------------------------------
+
 class UnoControlFixedHyperlinkModel : public UnoControlModel
 {
 protected:
@@ -570,9 +570,9 @@ public:
     DECLIMPL_SERVICEINFO_DERIVED( UnoControlFixedHyperlinkModel, UnoControlModel, szServiceName_UnoControlFixedHyperlinkModel )
 };
 
-//  ----------------------------------------------------
+
 //  class UnoFixedHyperlinkControl
-//  ----------------------------------------------------
+
 class UnoFixedHyperlinkControl : public UnoControlBase,
                                  public ::com::sun::star::awt::XFixedHyperlink,
                                  public ::com::sun::star::awt::XLayoutConstrains
@@ -619,9 +619,9 @@ public:
     DECLIMPL_SERVICEINFO_DERIVED( UnoFixedHyperlinkControl, UnoControlBase, szServiceName_UnoControlFixedHyperlink )
 };
 
-//  ----------------------------------------------------
+
 //  class UnoControlFixedTextModel
-//  ----------------------------------------------------
+
 class UnoControlFixedTextModel : public UnoControlModel
 {
 protected:
@@ -645,9 +645,9 @@ public:
 
 };
 
-//  ----------------------------------------------------
+
 //  class UnoFixedTextControl
-//  ----------------------------------------------------
+
 class UnoFixedTextControl : public UnoControlBase,
                             public ::com::sun::star::awt::XFixedText,
                             public ::com::sun::star::awt::XLayoutConstrains
@@ -684,9 +684,9 @@ public:
 
 };
 
-//  ----------------------------------------------------
+
 //  class UnoControlGroupBoxModel
-//  ----------------------------------------------------
+
 class UnoControlGroupBoxModel : public UnoControlModel
 {
 protected:
@@ -710,9 +710,9 @@ public:
 
 };
 
-//  ----------------------------------------------------
+
 //  class UnoGroupBoxControl
-//  ----------------------------------------------------
+
 class UnoGroupBoxControl :  public UnoControlBase
 {
 public:
@@ -726,9 +726,9 @@ public:
 
 };
 
-//  ----------------------------------------------------
+
 //  class UnoControlListBoxModel
-//  ----------------------------------------------------
+
 struct UnoControlListBoxModel_Data;
 typedef ::cppu::AggImplInheritanceHelper1   <   UnoControlModel
                                             ,   ::com::sun::star::awt::XItemList
@@ -830,9 +830,9 @@ protected:
     ::cppu::OInterfaceContainerHelper                   m_aItemListListeners;
 };
 
-//  ----------------------------------------------------
+
 //  class UnoListBoxControl
-//  ----------------------------------------------------
+
 typedef ::cppu::AggImplInheritanceHelper5   <   UnoControlBase
                                             ,   ::com::sun::star::awt::XListBox
                                             ,   ::com::sun::star::awt::XItemListener
@@ -910,9 +910,9 @@ private:
     ItemListenerMultiplexer     maItemListeners;
 };
 
-//  ----------------------------------------------------
+
 //  class UnoControlComboBoxModel
-//  ----------------------------------------------------
+
 class UnoControlComboBoxModel : public UnoControlListBoxModel
 {
 protected:
@@ -939,9 +939,9 @@ public:
 
 };
 
-//  ----------------------------------------------------
+
 //  class UnoComboBoxControl
-//  ----------------------------------------------------
+
 class UnoComboBoxControl :  public UnoEditControl
                         ,   public ::com::sun::star::awt::XComboBox
                         ,   public ::com::sun::star::awt::XItemListener
@@ -1008,9 +1008,9 @@ protected:
 
 };
 
-//  ----------------------------------------------------
+
 //  class UnoSpinFieldControl
-//  ----------------------------------------------------
+
 class UnoSpinFieldControl : public UnoEditControl,
                             public ::com::sun::star::awt::XSpinField
 {
@@ -1047,9 +1047,9 @@ public:
 };
 
 
-//  ----------------------------------------------------
+
 //  class UnoControlDateFieldModel
-//  ----------------------------------------------------
+
 class UnoControlDateFieldModel : public UnoControlModel
 {
 protected:
@@ -1073,9 +1073,9 @@ public:
 
 };
 
-//  ----------------------------------------------------
+
 //  class UnoDateFieldControl
-//  ----------------------------------------------------
+
 class UnoDateFieldControl : public UnoSpinFieldControl,
                             public ::com::sun::star::awt::XDateField
 {
@@ -1123,9 +1123,9 @@ public:
     DECLIMPL_SERVICEINFO_DERIVED( UnoDateFieldControl, UnoSpinFieldControl, szServiceName2_UnoControlDateField )
 };
 
-//  ----------------------------------------------------
+
 //  class UnoControlTimeFieldModel
-//  ----------------------------------------------------
+
 class UnoControlTimeFieldModel : public UnoControlModel
 {
 protected:
@@ -1149,9 +1149,9 @@ public:
 
 };
 
-//  ----------------------------------------------------
+
 //  class UnoTimeFieldControl
-//  ----------------------------------------------------
+
 class UnoTimeFieldControl : public UnoSpinFieldControl,
                             public ::com::sun::star::awt::XTimeField
 {
@@ -1198,9 +1198,9 @@ public:
 
 };
 
-//  ----------------------------------------------------
+
 //  class UnoControlNumericFieldModel
-//  ----------------------------------------------------
+
 class UnoControlNumericFieldModel : public UnoControlModel
 {
 protected:
@@ -1224,9 +1224,9 @@ public:
 
 };
 
-//  ----------------------------------------------------
+
 //  class UnoNumericFieldControl
-//  ----------------------------------------------------
+
 class UnoNumericFieldControl :  public UnoSpinFieldControl,
                                 public ::com::sun::star::awt::XNumericField
 {
@@ -1275,9 +1275,9 @@ public:
 
 };
 
-//  ----------------------------------------------------
+
 //  class UnoControlCurrencyFieldModel
-//  ----------------------------------------------------
+
 class UnoControlCurrencyFieldModel : public UnoControlModel
 {
 protected:
@@ -1301,9 +1301,9 @@ public:
 
 };
 
-//  ----------------------------------------------------
+
 //  class UnoCurrencyFieldControl
-//  ----------------------------------------------------
+
 class UnoCurrencyFieldControl : public UnoSpinFieldControl,
                                 public ::com::sun::star::awt::XCurrencyField
 {
@@ -1351,9 +1351,9 @@ public:
     DECLIMPL_SERVICEINFO_DERIVED( UnoCurrencyFieldControl, UnoSpinFieldControl, szServiceName2_UnoControlCurrencyField )
 };
 
-//  ----------------------------------------------------
+
 //  class UnoControlPatternFieldModel
-//  ----------------------------------------------------
+
 class UnoControlPatternFieldModel : public UnoControlModel
 {
 protected:
@@ -1377,9 +1377,9 @@ public:
 
 };
 
-//  ----------------------------------------------------
+
 //  class UnoPatternFieldControl
-//  ----------------------------------------------------
+
 class UnoPatternFieldControl :  public UnoSpinFieldControl,
                                 public ::com::sun::star::awt::XPatternField
 {
@@ -1412,9 +1412,9 @@ public:
 
 };
 
-//  ----------------------------------------------------
+
 //  class UnoControlProgressBarModel
-//  ----------------------------------------------------
+
 class UnoControlProgressBarModel :  public UnoControlModel
 {
 protected:
@@ -1437,9 +1437,9 @@ public:
     DECLIMPL_SERVICEINFO_DERIVED( UnoControlProgressBarModel, UnoControlModel, szServiceName2_UnoControlProgressBarModel )
 };
 
-//  ----------------------------------------------------
+
 //  class UnoProgressBarControl
-//  ----------------------------------------------------
+
 class UnoProgressBarControl :   public UnoControlBase,
                                 public ::com::sun::star::awt::XProgressBar
 {
@@ -1468,9 +1468,9 @@ public:
 };
 
 
-//  ----------------------------------------------------
+
 //  class UnoControlFixedLineModel
-//  ----------------------------------------------------
+
 class UnoControlFixedLineModel : public UnoControlModel
 {
 protected:
@@ -1494,9 +1494,9 @@ public:
 
 };
 
-//  ----------------------------------------------------
+
 //  class UnoFixedLineControl
-//  ----------------------------------------------------
+
 class UnoFixedLineControl : public UnoControlBase
 {
 public:

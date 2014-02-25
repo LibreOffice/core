@@ -26,17 +26,17 @@
 
 #include <boost/unordered_map.hpp>
 
-//........................................................................
+
 namespace vcl
 {
-//........................................................................
+
 
     typedef boost::unordered_map< OUString, OUString, OUStringHash > OUStrMap;
     class SmallOUStrMap : public OUStrMap { public: SmallOUStrMap() : OUStrMap(1) {} };
 
-    //====================================================================
+
     //= SettingsConfigItem
-    //====================================================================
+
     class VCL_DLLPUBLIC SettingsConfigItem : public ::utl::ConfigItem
     {
 
@@ -57,9 +57,9 @@ namespace vcl
         virtual void Commit();
     };
 
-//........................................................................
+
 } // namespace vcl
-//........................................................................
+
 
 #endif // INCLUDED_VCL_CONFIGSETTINGS_HXX
 

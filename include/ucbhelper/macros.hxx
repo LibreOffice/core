@@ -29,16 +29,16 @@
 #include <osl/mutex.hxx>
 #include <ucbhelper/getcomponentcontext.hxx>
 
-//=========================================================================
+
 
 #define CPPU_TYPE( T )      getCppuType( static_cast< T * >( 0 ) )
 #define CPPU_TYPE_REF( T )  CPPU_TYPE( com::sun::star::uno::Reference< T > )
 
-//=========================================================================
-//
+
+
 // XInterface decl.
-//
-//=========================================================================
+
+
 
 #define XINTERFACE_DECL()                                                   \
     virtual com::sun::star::uno::Any SAL_CALL                               \
@@ -51,11 +51,11 @@
     release()                                                               \
         throw();
 
-//=========================================================================
-//
+
+
 // XInterface impl. internals.
-//
-//=========================================================================
+
+
 
 #define XINTERFACE_COMMON_IMPL( Class )                                     \
 void SAL_CALL Class::acquire()                                              \
@@ -82,11 +82,11 @@ com::sun::star::uno::Any SAL_CALL Class::queryInterface(                    \
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );   \
 }
 
-//=========================================================================
-//
+
+
 // XInterface impl.
-//
-//=========================================================================
+
+
 
 // 1 interface implemented
 #define XINTERFACE_IMPL_1( Class, Ifc1 )                                    \
@@ -298,11 +298,11 @@ QUERYINTERFACE_IMPL_START( Class )                                          \
     (static_cast< I15* >(this))                                           \
 QUERYINTERFACE_IMPL_END
 
-//=========================================================================
-//
+
+
 // XTypeProvider decl.
-//
-//=========================================================================
+
+
 
 #define XTYPEPROVIDER_DECL()                                                \
     virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL              \
@@ -312,11 +312,11 @@ QUERYINTERFACE_IMPL_END
     getTypes()                                                              \
         throw( com::sun::star::uno::RuntimeException, std::exception );
 
-//=========================================================================
-//
+
+
 // XTypeProvider impl. internals
-//
-//=========================================================================
+
+
 
 #define XTYPEPROVIDER_COMMON_IMPL( Class )                                  \
 com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL                          \
@@ -357,11 +357,11 @@ Class::getTypes()                                                           \
     return (*pCollection).getTypes();                                       \
 }
 
-//=========================================================================
-//
+
+
 // XTypeProvider impl.
-//
-//=========================================================================
+
+
 
 // 1 interface supported
 #define XTYPEPROVIDER_IMPL_1( Class, I1 )                                   \
@@ -573,11 +573,11 @@ GETTYPES_IMPL_START( Class )                                                \
     CPPU_TYPE_REF( I15 )                                                    \
 GETTYPES_IMPL_END
 
-//=========================================================================
-//
+
+
 // XServiceInfo decl.
-//
-//=========================================================================
+
+
 
 #define XSERVICEINFO_NOFACTORY_DECL()                                       \
     virtual OUString SAL_CALL                                          \
@@ -603,11 +603,11 @@ GETTYPES_IMPL_END
     createServiceFactory( const com::sun::star::uno::Reference<             \
             com::sun::star::lang::XMultiServiceFactory >& rxServiceMgr );
 
-//=========================================================================
-//
+
+
 // XServiceInfo impl. internals
-//
-//=========================================================================
+
+
 
 #define XSERVICEINFO_COMMOM_IMPL( Class, ImplName )                         \
 OUString SAL_CALL Class::getImplementationName()                       \
@@ -670,11 +670,11 @@ Class##_CreateInstance( const com::sun::star::uno::Reference<               \
                             com::sun::star::uno::XInterface >::query( pX ); \
 }
 
-//=========================================================================
-//
+
+
 // XServiceInfo impl.
-//
-//=========================================================================
+
+
 
 #define ONE_INSTANCE_SERVICE_FACTORY_IMPL( Class )                          \
 com::sun::star::uno::Reference<                                             \

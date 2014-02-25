@@ -37,7 +37,7 @@ namespace ucbhelper {
 
 class InteractionContinuation;
 
-//============================================================================
+
 struct InteractionRequest_Impl;
 
 /**
@@ -142,7 +142,7 @@ public:
         const rtl::Reference< InteractionContinuation > & rxSelection );
 };
 
-//============================================================================
+
 struct InteractionContinuation_Impl;
 
 /**
@@ -173,7 +173,7 @@ public:
     InteractionContinuation( InteractionRequest * pRequest );
 };
 
-//============================================================================
+
 /**
   * This class implements a standard interaction continuation, namely the
   * interface XInteractionAbort. Instances of this class can be passed
@@ -210,7 +210,7 @@ public:
         throw( com::sun::star::uno::RuntimeException, std::exception );
 };
 
-//============================================================================
+
 /**
   * This class implements a standard interaction continuation, namely the
   * interface XInteractionRetry. Instances of this class can be passed
@@ -247,7 +247,7 @@ public:
         throw( com::sun::star::uno::RuntimeException, std::exception );
 };
 
-//============================================================================
+
 /**
   * This class implements a standard interaction continuation, namely the
   * interface XInteractionApprove. Instances of this class can be passed
@@ -284,7 +284,7 @@ public:
         throw( com::sun::star::uno::RuntimeException, std::exception );
 };
 
-//============================================================================
+
 /**
   * This class implements a standard interaction continuation, namely the
   * interface XInteractionDisapprove. Instances of this class can be passed
@@ -321,7 +321,7 @@ public:
         throw( com::sun::star::uno::RuntimeException, std::exception );
 };
 
-//============================================================================
+
 /**
   * This class implements a standard interaction continuation, namely the
   * interface XInteractionSupplyAuthentication. Instances of this class can be
@@ -557,7 +557,7 @@ public:
     bool getUseSystemCredentials() const { return m_bUseSystemCredentials; }
 };
 
-//============================================================================
+
 inline InteractionSupplyAuthentication::InteractionSupplyAuthentication(
                     InteractionRequest * pRequest,
                     bool bCanSetRealm,
@@ -589,7 +589,7 @@ inline InteractionSupplyAuthentication::InteractionSupplyAuthentication(
         = com::sun::star::ucb::RememberAuthentication_NO;
 }
 
-//============================================================================
+
 inline InteractionSupplyAuthentication::InteractionSupplyAuthentication(
     InteractionRequest * pRequest,
     bool bCanSetRealm,
@@ -623,7 +623,7 @@ inline InteractionSupplyAuthentication::InteractionSupplyAuthentication(
 {
 }
 
-//============================================================================
+
 /**
   * This class implements a standard interaction continuation, namely the
   * interface XInteractionSupplyName. Instances of this class can be passed
@@ -676,7 +676,7 @@ public:
     const OUString & getName() const { return m_aName; }
 };
 
-//============================================================================
+
 /**
   * This class implements a standard interaction continuation, namely the
   * interface XInteractionReplaceExistingData. Instances of this class can be
