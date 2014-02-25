@@ -323,7 +323,8 @@ public:
 
     virtual void SAL_CALL addEnhancedMouseClickHandler( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::awt::XEnhancedMouseClickHandler >& aListener )
-                                    throw (::com::sun::star::uno::RuntimeException);
+                                    throw (::com::sun::star::uno::RuntimeException,
+                                           std::exception);
     virtual void SAL_CALL removeEnhancedMouseClickHandler( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::awt::XEnhancedMouseClickHandler >& aListener )
                                     throw (::com::sun::star::uno::RuntimeException);

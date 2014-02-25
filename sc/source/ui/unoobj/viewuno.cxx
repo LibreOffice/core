@@ -1398,7 +1398,7 @@ void ScTabViewObj::EndActivationListening()
 }
 
 void SAL_CALL ScTabViewObj::addEnhancedMouseClickHandler( const uno::Reference< awt::XEnhancedMouseClickHandler >& aListener )
-                                    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
