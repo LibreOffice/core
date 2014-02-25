@@ -170,7 +170,7 @@ DocumentSignatureHelper::getDocumentAlgorithm(
 //The function creates a list of files which are to be signed or for which
 //the signature is to be validated. The strings are UTF8 encoded URIs which
 //contain '/' as path separators.
-//
+
 //The algorithm how document signatures are created and validated has
 //changed over time. The change affects only which files within the document
 //are changed. Document signatures created by OOo 2.x only used particular files. Since
@@ -179,7 +179,7 @@ DocumentSignatureHelper::getDocumentAlgorithm(
 //Signatures are validated according to the algorithm which was then used for validation.
 //That is, when validating a signature which was created by OOo 3.0, then mimetype and
 //META-INF are not used.
-//
+
 //When a signature is created then we always use the latest algorithm. That is, we use
 //that of OOo 3.2
 std::vector< OUString >

@@ -439,10 +439,10 @@ void SecurityEnvironment_NssImpl::updateSlots()
 //              interfaces and services used for public key signature and encryption are not published
 //              and the encryption is not used in OOo. Therefore it does not do any harm to remove
 //              this code, hence allowing smart cards which cannot generate this type of key.
-//
+
 //              By doing this, the encryption may fail if a smart card is being used which does not
 //              support this key generation.
-//
+
                 pSymKey = PK11_KeyGen( pSlot , CKM_DES3_CBC, NULL, 128, NULL ) ;
 //              if( pSymKey == NULL )
 //              {
@@ -842,7 +842,7 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
         cvout[2].type = cert_po_end;
 
         // We check SSL server certificates, CA certificates and signing sertificates.
-        //
+
         // ToDo check keyusage, looking at CERT_KeyUsageAndTypeForCertUsage (
         // mozilla/security/nss/lib/certdb/certdb.c indicates that
         // certificateUsageSSLClient, certificateUsageSSLServer and certificateUsageSSLCA
