@@ -401,7 +401,7 @@ bool EditTextObject::Store( SvStream& rOStream ) const
 
 EditTextObject* EditTextObject::Create( SvStream& rIStream, SfxItemPool* pGlobalTextObjectPool )
 {
-    sal_uLong nStartPos = rIStream.Tell();
+    sal_Size nStartPos = rIStream.Tell();
 
     // First check what type of Object...
     sal_uInt16 nWhich;
