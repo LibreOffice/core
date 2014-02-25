@@ -21,9 +21,9 @@
 // testcomponent - Loads a service and its testcomponent from dlls performs a test.
 // Expands the dll-names depending on the actual environment.
 // Example : testcomponent com.sun.star.io.Pipe stm
-//
+
 // Therefor the testcode must exist in teststm and the testservice must be named com.sun.star.io.Pipe
-//
+
 
 #include <stdio.h>
 #include <com/sun/star/registry/XImplementationRegistration.hpp>

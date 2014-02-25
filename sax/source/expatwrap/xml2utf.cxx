@@ -344,9 +344,9 @@ void XMLFile2UTFConverter::initializeDecoding()
 
 
 
-//
+
 // Text2UnicodeConverter
-//
+
 
 Text2UnicodeConverter::Text2UnicodeConverter( const OString &sEncoding )
 {
@@ -450,9 +450,9 @@ Sequence<sal_Unicode> Text2UnicodeConverter::convert( const Sequence<sal_Int8> &
 
 
 
-//
+
 // Unicode2TextConverter
-//
+
 
 Unicode2TextConverter::Unicode2TextConverter( rtl_TextEncoding encoding )
 {

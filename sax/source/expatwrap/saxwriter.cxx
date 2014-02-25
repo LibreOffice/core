@@ -806,7 +806,7 @@ inline sal_Int32 calcXMLByteLength( const sal_Unicode *pStr, sal_Int32 nStrLen,
                 case 9:         // &#x09;
                     if( bNormalizeWhitespace )
                     {
-                        nOutputLength += 6;       //
+                        nOutputLength += 6;
                     }
                     else
                     {

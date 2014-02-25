@@ -759,9 +759,9 @@ void SaxExpatParser_Impl::parse( )
 }
 
 
-//
+
 // The C-Callbacks
-//
+
 
 void SaxExpatParser_Impl::callbackStartElement( void *pvThis ,
                                                 const XML_Char *pwName ,
