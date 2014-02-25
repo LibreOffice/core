@@ -566,7 +566,7 @@ public:
     bool IsInTable() const;
 
     /// Set the pCurPam appropriately and call WriteText().
-    ///
+    /
     /// Used to export paragraphs in footnotes/endnotes/etc.
     void WriteSpecialText( sal_uLong nStart, sal_uLong nEnd, sal_uInt8 nTTyp );
 
@@ -643,13 +643,13 @@ public:
     virtual bool ignoreAttributeForStyles( sal_uInt16 /*nWhich*/ ) const { return false; }
 
     /// Guess the script (asian/western).
-    ///
+    /
     /// Sadly word does not have two different sizes for asian font size and
     /// western font size, it has two different fonts, but not sizes, so we
     /// have to use our guess as to the script used and disable the export of
     /// one type. The same occurs for font weight and posture (bold and
     /// italic).
-    ///
+    /
     /// In addition WW7- has only one character language identifier while WW8+
     /// has two
     virtual bool CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich ) = 0;
@@ -702,7 +702,7 @@ public:
     void OutputSectionBreaks( const SfxItemSet *pSet, const SwNode& rNd, bool isCellOpen = false);
 
     /// Write section properties.
-    ///
+    /
     /// pA is ignored for docx.
     void SectionProperties( const WW8_SepInfo& rSectionInfo, WW8_PdAttrDesc* pA = NULL );
 
@@ -821,12 +821,12 @@ protected:
     virtual void AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, sal_uLong nLnNum ) = 0;
 
     /// Call the right (virtual) function according to the type of the item.
-    ///
+    /
     /// One of OutputTextNode(), OutputGrfNode(), or OutputOLENode()
     void OutputContentNode( const SwCntntNode& );
 
     /// Find the nearest bookmark from the current position.
-    ///
+    /
     /// Returns false when there is no bookmark.
     bool NearestBookmark( sal_Int32& rNearest, const sal_Int32 nAktPos, bool bNextPositionOnly );
 
@@ -836,7 +836,7 @@ protected:
             IMarkVector& rArr );
 
     /// Find the nearest annotation mark from the current position.
-    ///
+    /
     /// Returns false when there is no annotation mark.
     bool NearestAnnotationMark( sal_Int32& rNearest, const sal_Int32 nAktPos, bool bNextPositionOnly );
 

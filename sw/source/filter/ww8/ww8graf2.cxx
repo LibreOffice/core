@@ -491,7 +491,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
         {
             // Soeben haben wir einen Grafik-Link ins Doc inserted.
             // Wir muessen ihn jetzt noch Positioniern und Skalieren.
-            //
+
             WW8PicDesc aPD( aPic );
 
             WW8FlySet aFlySet( *this, pPaM, aPic, aPD.nWidth, aPD.nHeight );

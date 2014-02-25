@@ -57,7 +57,7 @@
 
 using namespace ::com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////
+
 
 sal_uLong SwReader::Read( const Reader& rOptions )
 {

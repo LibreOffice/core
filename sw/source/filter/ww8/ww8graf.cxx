@@ -2829,7 +2829,7 @@ SwFlyFrmFmt* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
     {
         // The Text is not read into SdrTextObj!  Rather insert a frame and
         // insert the text from nStartCp to nEndCp.
-        //
+
         // More attributes can be used in a frame compared to the
         // Edit-Engine, and it can contain field, OLEs or graphics...
         Rectangle aInnerDist(pRecord->nDxTextLeft, pRecord->nDyTextTop,

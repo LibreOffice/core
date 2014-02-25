@@ -148,9 +148,9 @@ public:
     void SetResizeHTMLTable()   { bResizeHTMLTable = sal_True; } // same
     void SetONECalcLowers()     { bONECalcLowers = sal_True;   }
 
-    //
+
     // Start: New stuff for breaking table rows
-    //
+
     sal_Bool HasFollowFlowLine() const { return bHasFollowFlowLine; }
     void SetFollowFlowLine( sal_Bool bNew ) { bHasFollowFlowLine = bNew; }
     //return the SwTabFrm (if any) that this SwTabFrm is a follow flow line for
@@ -195,9 +195,9 @@ public:
     }
 
     bool RemoveFollowFlowLine();
-    //
+
     // End: New stuff for breaking table rows
-    //
+
 
     sal_Bool CalcFlyOffsets(
         SwTwips& rUpper,

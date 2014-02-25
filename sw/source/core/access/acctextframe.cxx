@@ -168,9 +168,9 @@ void SAL_CALL
     SwAccessibleContext::release ();
 }
 
-//
+
 //=====  XAccessibleSelection  ============================================
-//
+
 
 
 void SAL_CALL SwAccessibleTextFrame::selectAccessibleChild( sal_Int32 )

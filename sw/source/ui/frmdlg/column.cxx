@@ -648,7 +648,7 @@ sal_Bool SwColumnPage::FillItemSet(SfxItemSet &rSet)
         m_pCLNrEdt->GetDownHdl().Call(m_pCLNrEdt);
     // set in ItemSet setzen
     // the current settings are already present
-    //
+
     const SfxPoolItem* pOldItem;
     const SwFmtCol& rCol = pColMgr->GetColumns();
     if(0 == (pOldItem = GetOldItem( rSet, RES_COL )) ||

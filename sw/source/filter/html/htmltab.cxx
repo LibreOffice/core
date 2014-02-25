@@ -1922,7 +1922,7 @@ void HTMLTable::InheritBorders( const HTMLTable *pParent,
     // ob eine Umrandung der Tabelle noetig/moeglich ist, weil das davon
     // abhaengt, ob "Filler"-Zellen eingefuegt werden. Hier werden deshalb
     // erstmal nur Informationen gesammelt
-    //
+
     if( 0==nRow && pParent->bTopBorder && bFirstPara )
     {
         bTopBorder = true;

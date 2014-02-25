@@ -39,7 +39,7 @@ using namespace ::com::sun::star;
 
 class SwSearchProperties_Impl
 {
-    beans::PropertyValue**          pValueArr; //
+    beans::PropertyValue**          pValueArr;
     sal_uInt32                      nArrLen;
     const PropertyEntryVector_t     aPropertyEntries;
 public:

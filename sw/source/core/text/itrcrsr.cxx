@@ -180,9 +180,9 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
     const bool bListLevelIndentsApplicableAndLabelAlignmentActive(
         AreListLevelIndentsApplicableAndLabelAlignmentActive( *(pFrm->GetTxtNode()) ) );
 
-    //
+
     // Carefully adjust the text formatting ranges.
-    //
+
     // This whole area desperately needs some rework. There are
     // quite a couple of values that need to be considered:
     // 1. paragraph indent

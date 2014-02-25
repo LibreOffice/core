@@ -1662,11 +1662,11 @@ static void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
     const SwTabFrm* pLastValidTab = pTab;
     while ( pTab->GetFollow() )
     {
-        //
+
         // Check if pTab->GetFollow() is a valid follow table:
         // Only follow tables with at least on non-FollowFlowLine
         // should be considered.
-        //
+
         if ( pTab->HasFollowFlowLine() )
         {
             pTab = pTab->GetFollow();

@@ -2203,7 +2203,7 @@ SwTwips SwWW8ImplReader::MoveOutsideFly(SwFrmFmt *pFlyFmt,
                         if (aIdx == aEnd && pNd && pNd->GetTxt().isEmpty())
                         {
                             //An extra pre-created by writer unused paragraph
-                            //
+
                             //delete after import is complete rather than now
                             //to avoid the complication of managing uncommitted
                             //ctrlstack properties that refer to it.
@@ -4049,7 +4049,7 @@ void SwWW8ImplReader::Read_LineSpace( sal_uInt16, const sal_uInt8* pData, short 
 // 0.2*Zeilenabstand "nach".
 // Bei "Mindestens" sind es 1*Zeilenabstand "vor" und 0*Zeilenabstand "nach".
 // Bei Mehrfach sind es 0 "vor" und min( 0cm, FontSize*(nFach-1) ) "nach".
-//
+
 // SW hat auch einen impliziten Zeilenabstand. er betraegt bei "mindestens"
 // 1*Zeilenabstand "vor" und 0 "nach"
 // bei proportional betraegt er min( 0cm, FontSize*(nFach-1) ) sowohl "vor"

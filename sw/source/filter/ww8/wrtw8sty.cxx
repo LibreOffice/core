@@ -794,7 +794,7 @@ wwFont::wwFont(const OUString &rFamilyName, FontPitch ePitch, FontFamily eFamily
 
     ShortToSVBT16( 400, &maWW8_FFN[2] );        // don't know any better
                                                 // 400 == FW_NORMAL (windows.h)
-                                                //
+
     //#i61927# For unicode fonts like Arial Unicode, Word 97+ sets the chs
     //to SHIFTJIS presumably to capture that it's a multi-byte encoding font
     //but Word95 doesn't do this, and sets it to 0 (ANSI), so we should do the
@@ -2546,7 +2546,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                 }
 
                 // documents layout of WriteShort's below:
-                //
+
                 // SVBT16 ibst;      // index into GrpXstAtnOwners
                 // SVBT16 ak;        // not used
                 // SVBT16 grfbmc;    // not used

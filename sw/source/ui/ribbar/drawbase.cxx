@@ -452,7 +452,7 @@ void SwDrawBase::Deactivate()
 }
 
 // Process keyboard events
-//
+
 // If a KeyEvent is processed then the return value is sal_True, otherwise
 // Sal_False.
 
@@ -537,7 +537,7 @@ sal_Bool SwDrawBase::KeyInput(const KeyEvent& rKEvt)
 }
 
 // Process keyboard events
-//
+
 // If a KeyEvent is processed then the return value is sal_True, otherwise
 // Sal_False.
 

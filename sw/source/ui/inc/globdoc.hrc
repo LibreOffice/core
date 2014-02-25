@@ -30,7 +30,7 @@
 
 
 #define MN_GLOBAL_TEXT_POPUPMENU                  (RC_GLOBDOC_BEGIN + 63)
-// ------------------------------------------------------------------------
+
 
 #define GLOBDOC_ACT_END             MN_GLOBAL_TEXT_POPUPMENU
 

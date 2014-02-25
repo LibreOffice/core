@@ -1886,9 +1886,9 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                     SwStyleNameMapper::FillUIName(aTmp, aStyleName,
                             lcl_GetSwEnumFromSfxEnum(eFamily), true);
 
-                    //
+
                     // check for correct context and style name
-                    //
+
                     sal_Int16 nIdx = GetCommandContextIndex( pSeq[i].Name );
 
                     pBasePool->SetSearchMask( SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_ALL );

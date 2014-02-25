@@ -31,7 +31,7 @@
 namespace sw { namespace sidebarwindows {
 
 // helper SwPostItShadowPrimitive
-//
+
 // Used to allow view-dependent primitive definition. For that purpose, the
 // initially created primitive (this one) always has to be view-independent,
 // but the decomposition is made view-dependent. Very simple primitive which

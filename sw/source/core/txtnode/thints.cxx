@@ -573,7 +573,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
 // This function takes care for the following text attribute:
 // RES_TXTATR_CHARFMT, RES_TXTATR_AUTOFMT
 // These attributes have to be handled in a special way (Portion building).
-//
+
 // The new attribute will be split by any existing RES_TXTATR_AUTOFMT or
 // RES_TXTATR_CHARFMT. The new attribute itself will
 // split any existing RES_TXTATR_AUTOFMT or RES_TXTATR_CHARFMT.
@@ -594,10 +594,10 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
             RES_TXTATR_AUTOFMT == rNewHint.Which(),
             "Expecting CHARFMT or AUTOFMT" );
 
-    //
+
     // 2. Find the hints which cover the start and end position
     // of the new hint. These hints have to be split into two portions:
-    //
+
     if ( !bNoLengthAttribute ) // nothing to do for no length attributes
     {
         for ( sal_uInt16 i = 0; i < Count(); ++i )
@@ -657,9 +657,9 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
         CHECK_NOTMERGED; // ignore flags not set properly yet, don't check them
 #endif
 
-    //
+
     // 4. Split rNewHint into 1 ... n new hints:
-    //
+
     std::set<sal_Int32> aBounds;
     aBounds.insert( nThisStart );
     aBounds.insert( nThisEnd );
@@ -688,9 +688,9 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
     ++aStartIter;
     bool bDestroyHint = true;
 
-    //
+
     // Insert the 1...n new parts of the new attribute:
-    //
+
     while ( aStartIter != aEndIter || bNoLengthAttribute )
     {
         OSL_ENSURE( bNoLengthAttribute || nPorStart < *aStartIter, "AUTOSTYLES: BuildPortion trouble" );
@@ -2515,9 +2515,9 @@ void SwTxtNode::FmtToTxtAttr( SwTxtNode* pNd )
     {
         // There are five possible combinations of items from this and
         // pNd (pNd is the 'main' node):
-        //
+
         //  case    pNd     this     action
-        //  ----------------------------------------------------
+
         //     1     -       -      do nothing
         //     2     -       a      convert item to attr of this
         //     3     a       -      convert item to attr of pNd

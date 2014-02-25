@@ -340,9 +340,9 @@ void SwView::CheckVisArea()
 }
 
 /// Calculate the visible range.
-//
+
 //  OUT Point *pPt:             new position of the visible area
-//
+
 //  IN  Rectangle &rRect:       Rectangle, which should be located
 //                              within the new visible area.
 //  sal_uInt16 nRange           optional accurate indication of the

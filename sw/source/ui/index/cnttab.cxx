@@ -711,7 +711,7 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
         }
     }
     // now the other styles
-    //
+
     const SwTxtFmtColl *pColl   = 0;
     const sal_uInt16 nSz = rWrtSh.GetTxtFmtCollCount();
 
@@ -2262,7 +2262,7 @@ IMPL_LINK_NOARG(SwTOXEntryTabPage, AllLevelsHdl)
         OUString sNewToken = m_pTokenWIN->GetPattern();
         for(sal_uInt16 i = 1; i < m_pCurrentForm->GetFormMax(); i++)
             m_pCurrentForm->SetPattern(i, sNewToken);
-        //
+
         ModifyHdl(this);
     }
     return 0;

@@ -260,7 +260,7 @@ public:
     SwUndoCpyDoc( const SwPaM& );
 };
 
-//--------------------------------------------------------------------
+
 
 class SwUndoFlyBase : public SwUndo, private SwUndoSaveSection
 {

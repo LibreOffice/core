@@ -271,9 +271,9 @@ public:
     // single argument ctors shall be explicit.
     explicit SwTOXMgr(SwWrtShell* pShell);
 
-    //
+
     // methods for directory marks
-    //
+
     void    InsertTOXMark(const SwTOXMarkDescription& rDesc);
 
     void    UpdateTOXMark(const SwTOXMarkDescription& rDesc);
@@ -290,9 +290,9 @@ public:
     SwTOXMark*          GetCurTOXMark();
     void                SetCurTOXMark(sal_uInt16 nId);
 
-    //
+
     // methods for directories
-    //
+
     sal_Bool    UpdateOrInsertTOX(const SwTOXDescription& rDesc, SwTOXBase** ppBase = 0, const SfxItemSet* pSet = 0);
 
     const SwTOXType*    GetTOXType(TOXTypes eTyp, sal_uInt16 nId) const;

@@ -509,10 +509,10 @@ void SwXMLExport::_ExportContent()
 
 
 
-//
+
 // uno component registration
 // helper functions for export service(s)
-//
+
 
 // OOo
 OUString SAL_CALL SwXMLExportOOO_getImplementationName() throw()

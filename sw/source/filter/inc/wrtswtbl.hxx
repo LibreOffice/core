@@ -34,9 +34,9 @@ class SvxBrushItem;
 
 namespace editeng { class SvxBorderLine; }
 
-//---------------------------------------------------------------------------
+
 //       Code aus dem HTML-Filter fuers schreiben von Tabellen
-//---------------------------------------------------------------------------
+
 
 #define COLFUZZY 20
 #define ROWFUZZY 20
@@ -44,7 +44,7 @@ namespace editeng { class SvxBorderLine; }
 #define ROW_DFLT_HEIGHT (2*ROWFUZZY)+1
 
 
-//-----------------------------------------------------------------------
+
 
 class SW_DLLPUBLIC SwWriteTableCell
 {
@@ -98,7 +98,7 @@ public:
 typedef boost::ptr_vector<SwWriteTableCell> SwWriteTableCells;
 
 
-//-----------------------------------------------------------------------
+
 
 class SW_DLLPUBLIC SwWriteTableRow
 {
@@ -169,7 +169,7 @@ public:
 };
 
 
-//-----------------------------------------------------------------------
+
 
 class SW_DLLPUBLIC SwWriteTableCol
 {
@@ -230,7 +230,7 @@ public:
     ~SwWriteTableCols() { DeleteAndDestroyAll(); }
 };
 
-//-----------------------------------------------------------------------
+
 
 class SW_DLLPUBLIC SwWriteTable
 {

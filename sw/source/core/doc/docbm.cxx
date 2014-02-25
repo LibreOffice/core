@@ -1098,7 +1098,7 @@ namespace
     // Array structure: 2 longs,
     //  1st long contains the type and position in the DocArray,
     //  2nd long contains the ContentPosition
-    //
+
     //  CntntType --
     //          0x8000 = Bookmark Pos1
     //          0x8001 = Bookmark Pos2

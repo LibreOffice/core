@@ -134,9 +134,9 @@ using namespace msfilter::util;
 // Zusatz-Filter-Flags, gueltig ab Winword 8
 #define WW8FL_NO_FLY_FOR_TXBX         1
 
-//-----------------------------------------
+
 //            Listen-Manager (ab Ver8)
-//-----------------------------------------
+
 
 struct WW8LFOInfo;
 
@@ -320,9 +320,9 @@ public:
     rtl_TextEncoding GetCJKCharSet() const;
 };
 
-//-----------------------------------------
+
 //            Stack
-//-----------------------------------------
+
 class SwWW8FltControlStack : public SwFltControlStack
 {
 private:
@@ -553,9 +553,9 @@ class WW8FieldEntry
 };
 
 
-//-----------------------------------------
+
 //    Mini-Merker fuer einige Flags
-//-----------------------------------------
+
 class WW8ReaderSave
 {
 private:
@@ -607,9 +607,9 @@ private:
 };
 
 
-//-----------------------------------------
+
 //    Formulas
-//-----------------------------------------
+
 enum SwWw8ControlType
 {
     WW8_CT_EDIT,
@@ -881,12 +881,12 @@ public:
 //Various writer elements like frames start off containing a blank paragraph,
 //sometimes this paragraph turns out to be extraneous, e.g. the frame should
 //only contain a table with no trailing paragraph.
-//
+
 //We want to remove these extra paragraphs, but removing them during the parse
 //is problematic, because we don't want to remove any paragraphs that are still
 //addressed by property entries in a SwFltControlStack which have not yet been
 //committed to the document.
-//
+
 //Safest thing is to not delete SwTxtNodes from a document during import, and
 //remove these extraneous paragraphs at the end after all SwFltControlStack are
 //destroyed.
@@ -1037,9 +1037,9 @@ struct WW8TabBandDesc
     enum wwDIR {wwTOP = 0, wwLEFT = 1, wwBOTTOM = 2, wwRIGHT = 3};
 };
 
-//-----------------------------------------
+
 //            Storage-Reader
-//-----------------------------------------
+
 typedef std::set<WW8_CP> cp_set;
 typedef std::vector<WW8_CP> cp_vector;
 
@@ -1357,7 +1357,7 @@ private:
     cp_vector maEndParaPos;
     WW8_CP maCurrAttrCP;
     bool mbOnLoadingMain:1;
-//---------------------------------------------
+
 
     const SprmReadInfo& GetSprmReadInfo(sal_uInt16 nId) const;
 
@@ -1535,7 +1535,7 @@ private:
 // Nummerierungen / Aufzaehlungen ( Autonumbered List Data Descriptor )
 // Liste:        ANLD ( Autonumbered List Data Descriptor )
 //   eine Ebene: ANLV ( Autonumber Level Descriptor )
-//
+
 // Chg7-8:
 // Listen sind in WW8 eigene Strukturen, die ueber folgende drei Tabellen
 // verwaltet werden: rglst, hpllfo und hsttbListNames

@@ -1835,9 +1835,9 @@ void SwWW8ImplReader::ImportDop()
         xDocuProps->setPrintDate(uDT);
     }
 
-    //
+
     // COMPATIBILITY FLAGS START
-    //
+
 
     // #i78951# - remember the unknown compatability options
     // so as to export them out
@@ -1919,9 +1919,9 @@ void SwWW8ImplReader::ImportDop()
     rDoc.set(IDocumentSettingAccess::TAB_OVER_MARGIN, true);
     rDoc.set(IDocumentSettingAccess::SURROUND_TEXT_WRAP_SMALL, true);
 
-    //
+
     // COMPATIBILITY FLAGS END
-    //
+
 
     // Import magic doptypography information, if its there
     if (pWwFib->nFib > 105)
@@ -2611,18 +2611,18 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
 // All other sprms then refer to that APO and not to the normal text
 // surrounding it.
 // The same holds true for a Table (sprm 24 (0x2416)) and Anls (sprm 13).
-//
+
 // WW: Table in APO is possible (Both Start-Ends occur at the same time)
 // WW: APO in Table not possible
-//
+
 // This mean that of a Table is the content of a APO, the APO start needs
 // to be edited first, so that the Table remains in the APO and not the
 // other way around.
 // At the End, however, we need to edit the Table End first as the APO
 // must end after that Table (or else we never find the APO End).
-//
+
 // The same holds true for Fly / Anl, Tab / Anl, Fly / Tab / Anl.
-//
+
 // If the Table is within an APO the TabRowEnd Area misses the
 // APO settings.
 // To not end the APO there, we do not call ProcessApo
@@ -3186,24 +3186,24 @@ namespace
 // Microsoft Word basically categorizes text into East Asian, Complex, ASCII,
 // NonEastAsian/HighAnsi, with some shared characters and some properties to
 // hint as to which way to bias those shared characters.
-//
+
 // That's four categories, we however have three categories. Given that problem
 // here we would ideally find out "what would word do" to see what font/language
 // word would assign to characters based on the unicode range they fall into and
 // hack the word one onto the range we use. However it's unclear what word's
 // categorization is. So we don't do that here yet.
-//
+
 // Additional to the categorization, when word encounters weak text for ambigious
 // chars it uses idcthint to indicate which way to bias. We don't have a idcthint
 // feature in writer.
-//
+
 // So what we currently do here then is to split our text into non-weak/weak
 // sections and uses word's idcthint to determine what font it would use and
 // force that on for the segment. Following what we *do* know about word's
 // categorization, we know that the range 0x0020 and 0x007F is sprmCRgFtc0 in
 // word, something we map to LATIN, so we consider all weaks chars in that range
 // to auto-bias to LATIN.
-//
+
 // See https://bugs.libreoffice.org/show_bug.cgi?id=34319 for an example
 void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const OUString& rAddString)
 {
@@ -3823,8 +3823,8 @@ bool SwWW8ImplReader::IsParaEndInCPs(sal_Int32 nStart, sal_Int32 nEnd,bool bSdOD
     for (cp_vector::const_reverse_iterator aItr = maEndParaPos.rbegin(); aItr!= maEndParaPos.rend(); ++aItr)
     {
         //Revised 2012.8.16,to the 0x0D,the attribute will have two situations
-        //*********within***********exact******//
-        //*********but also sample with only left and the position of 0x0d is the edge of the right side***********//
+        //*********within***********exact******
+        //*********but also sample with only left and the position of 0x0d is the edge of the right side***********
         if ( bSdOD && ( (nStart < *aItr && nEnd > *aItr) || ( nStart == nEnd && *aItr == nStart)) )
             return true;
         else if ( !bSdOD &&  (nStart < *aItr && nEnd >= *aItr) )

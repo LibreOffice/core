@@ -56,9 +56,9 @@ class SfxHint;
     code gets polluted by pointer casts (see switerator.hxx).
  */
 
-// ----------
+
 // SwClient
-// ----------
+
 
 class SW_DLLPUBLIC SwClient : ::boost::noncopyable
 {
@@ -116,9 +116,9 @@ inline SwClient::SwClient() :
     pLeft(0), pRight(0), pRegisteredIn(0), mbIsAllowedToBeRemovedInModifyCall(false)
 {}
 
-// ----------
+
 // SwModify
-// ----------
+
 
 // class has a doubly linked list for dependencies
 class SW_DLLPUBLIC SwModify: public SwClient
@@ -172,9 +172,9 @@ public:
     bool IsLastDepend() { return pRoot && pRoot->IsLast(); }
 };
 
-// ----------
+
 // SwDepend
-// ----------
+
 
 /*
  * Helper class for objects that need to depend on more than one SwClient
