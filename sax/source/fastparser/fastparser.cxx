@@ -607,7 +607,7 @@ void Entity::throwException( const ::rtl::Reference< FastLocatorImpl > &xDocumen
 // In the single threaded case we emit events via our C
 // callbacks, so any exception caught must be queued up until
 // we can safely re-throw it from our C++ parent of parse()
-//
+
 // If multi-threaded, we need to push an EXCEPTION event, at
 // which point we transfer ownership of maSavedException to
 // the consuming thread.
@@ -1087,9 +1087,9 @@ void FastSaxParserImpl::parse()
 }
 
 
-//
+
 // The C-Callbacks
-//
+
 
 
 void FastSaxParserImpl::callbackStartElement( const XML_Char* pwName, const XML_Char** awAttributes )
