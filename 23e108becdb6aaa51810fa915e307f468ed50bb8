@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a890539_d0764206",
+        "filename": "rsc/inc/rscpar.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-02-25T13:39:33Z",
+      "side": 1,
+      "message": "still adds sal_uIntPtr",
+      "revId": "23e108becdb6aaa51810fa915e307f468ed50bb8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
