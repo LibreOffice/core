@@ -29,21 +29,21 @@
 namespace filter{ namespace config {
 
 
-//_______________________________________________
+
 
 /** @short      implements the service <type scope="com.sun.star.document">TypeDetection</type>.
  */
 class TypeDetection : public ::cppu::ImplInheritanceHelper1< BaseContainer                 ,
                                                              css::document::XTypeDetection >
 {
-//-------------------------------------------
+
 // native interface
 
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
 public:
 
-    //---------------------------------------
+
     // ctor/dtor
 
     /** @short  standard ctor to connect this interface wrapper to
@@ -54,13 +54,13 @@ public:
      */
     TypeDetection(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
 
-    //---------------------------------------
+
 
     /** @short  standard dtor.
      */
     virtual ~TypeDetection();
 
-//-------------------------------------------
+
 // private helper
 
 private:
@@ -80,7 +80,7 @@ private:
         const com::sun::star::util::URL& aParsedURL, utl::MediaDescriptor& rDescriptor,
         FlatDetection& rFlatTypes);
 
-    //---------------------------------------
+
 
     /** @short      make a combined flat/deep type detection
 
@@ -132,7 +132,7 @@ private:
                                                      OUStringList&                  rUsedDetectors,
                                                      OUString&               rLastChance   );
 
-    //---------------------------------------
+
 
     /** @short      seek a might existing stream to position 0.
 
@@ -146,7 +146,7 @@ private:
      */
     void impl_seekStreamToZero(utl::MediaDescriptor& rDescriptor);
 
-    //---------------------------------------
+
 
     /** @short      make deep type detection for a specified
                     detect service (threadsafe!).
@@ -168,7 +168,7 @@ private:
     OUString impl_askDetectService(const OUString&               sDetectService,
                                                 utl::MediaDescriptor& rDescriptor   );
 
-    //---------------------------------------
+
 
     /** @short      try to find an interaction handler and
                     ask him to select a possible filter for
@@ -185,7 +185,7 @@ private:
      */
     OUString impl_askUserForTypeAndFilterIfAllowed(utl::MediaDescriptor& rDescriptor);
 
-    //---------------------------------------
+
 
     /** @short      check if an input stream is already part of the
                     given MediaDesciptor and creates a new one if necessary.
@@ -223,7 +223,7 @@ private:
     void impl_openStream(utl::MediaDescriptor& rDescriptor)
         throw (css::uno::Exception);
 
-    //---------------------------------------
+
 
     /** @short      validate the specified type and its relation ships
                     and set all needed information related to this type
@@ -246,7 +246,7 @@ private:
     sal_Bool impl_validateAndSetTypeOnDescriptor(      utl::MediaDescriptor& rDescriptor,
                                                  const OUString&               sType      );
 
-    //---------------------------------------
+
 
     /** @short      validate the specified filter and its relation ships
                     and set all needed information related to this filter
@@ -268,7 +268,7 @@ private:
     sal_Bool impl_validateAndSetFilterOnDescriptor(      utl::MediaDescriptor& rDescriptor,
                                                    const OUString&               sFilter    );
 
-    //---------------------------------------
+
 
     /** @short      remove anythimng related to a TYPE/FILTER entry from the
                     specified MediaDescriptor.
@@ -283,7 +283,7 @@ private:
      */
     void impl_removeTypeFilterFromDescriptor(utl::MediaDescriptor& rDescriptor);
 
-    //---------------------------------------
+
 
     /** @short      search the best suitable filter for the given type
                     and add it into the media descriptor.
@@ -318,12 +318,12 @@ private:
     void impl_checkResultsAndAddBestFilter(utl::MediaDescriptor& rDescriptor,
                                            OUString&               sType      );
 
-//-------------------------------------------
+
 // uno interface
 
 public:
 
-    //---------------------------------------
+
     // XTypeDetection
 
     virtual OUString SAL_CALL queryTypeByURL(const OUString& sURL)
@@ -333,12 +333,12 @@ public:
                                                            sal_Bool                                         bAllowDeep )
         throw (css::uno::RuntimeException, std::exception);
 
-//-------------------------------------------
+
 // static uno helper!
 
 public:
 
-    //---------------------------------------
+
 
     /** @short  return the uno implementation name of this class.
 
@@ -350,7 +350,7 @@ public:
      */
     static OUString impl_getImplementationName();
 
-    //---------------------------------------
+
 
     /** @short  return the list of supported uno services of this class.
 
@@ -362,7 +362,7 @@ public:
      */
     static css::uno::Sequence< OUString > impl_getSupportedServiceNames();
 
-    //---------------------------------------
+
 
     /** @short  return a new intsnace of this class.
 

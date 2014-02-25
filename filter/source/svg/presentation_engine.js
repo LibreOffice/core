@@ -887,7 +887,7 @@ function instantiate( TemplateClass, BaseType )
 }
 
 
-// ------------------------------------------------------------------------------------------ //
+
 /**********************************
  ** Helper functions and classes **
  **********************************/
@@ -1082,7 +1082,7 @@ function isTextFieldElement( aElement )
            ( sClassName === aDateTimeClassName );
 }
 
-// ------------------------------------------------------------------------------------------ //
+
 /*********************
  ** Debug Utilities **
  *********************/
@@ -1151,7 +1151,7 @@ aAnimatedElementDebugPrinter.off();
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 /************************
  ***   Core Classes   ***
  ************************/
@@ -2201,7 +2201,7 @@ SlideNumberFieldHandler.prototype.update = function( nPageNumber )
         this.aTextContentProvider.update( this, nPageNumber );
 };
 
-// ------------------------------------------------------------------------------------------ //
+
 /******************************************************************************
  * Text Field Content Provider Class Hierarchy
  *
@@ -2351,7 +2351,7 @@ SlideNumberProvider.prototype.createSlideNumberText = function( nSlideNumber, sN
 
 
 
-//------------------------------------------------------------------------------------------- //
+
 /********************************
  ** Slide Index Classes **
  ********************************/
@@ -2745,7 +2745,7 @@ Thumbnail.prototype.onMouseOver = function()
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 /** Initialization function.
  *  The whole presentation is set-up in this function.
  */
@@ -2778,9 +2778,9 @@ function init()
 //        }
 
 
-    //=====================================//
-    //  == animations parsing test ==      //
-    //=====================================//
+
+    //  == animations parsing test ==
+
 
 //        var aSlideShowContext = aSlideShow.getContext();
 //        var aSlideAnimations = new SlideAnimations( aSlideShowContext );
@@ -2945,7 +2945,7 @@ function abandonIndexMode()
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 // helper functions
 
 
@@ -3121,7 +3121,7 @@ function matrixToString( aSVGMatrix )
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 // Attribute Parsers
 
 function numberParser( sValue )
@@ -3226,7 +3226,7 @@ function colorParser( sValue )
  *      RGB and HSL color classes
  **********************************************************************************************/
 
-// ------------------------------------------------------------------------------------------ //
+
 function RGBColor( nRed, nGreen, nBlue )
 {
     this.eColorSpace = COLOR_SPACE_RGB;
@@ -3344,7 +3344,7 @@ RGBColor.interpolate = function( aStartRGB , aEndRGB, nT )
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function HSLColor( nHue, nSaturation, nLuminance )
 {
     this.eColorSpace = COLOR_SPACE_HSL;
@@ -3814,7 +3814,7 @@ PriorityQueue.prototype.pop = function()
  *      AnimationNode Class Hierarchy
  **********************************************************************************************/
 
-// ------------------------------------------------------------------------------------------ //
+
 
 // Node Types
 var ANIMATION_NODE_CUSTOM               = 0;
@@ -3844,7 +3844,7 @@ aAnimationNodeTypeInMap = {
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function getAnimationElementType( aElement )
 {
     var sName = aElement.localName.toLowerCase();
@@ -3858,7 +3858,7 @@ function getAnimationElementType( aElement )
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 
 // Node States
 var INVALID_NODE                = 0;
@@ -4223,7 +4223,7 @@ REVERSEMETHOD_FLIP_Y                    = 6;
 aReverseMethodOutMap = ['ignore', 'invert sweep', 'subtract polygon',
                         'subtract and invert', 'rotate 180', 'flip x', 'flip y'];
 
-// ------------------------------------------------------------------------------------------ //
+
 // Transition filter info table
 
 var aTransitionInfoTable = {};
@@ -4445,7 +4445,7 @@ aTransitionInfoTable[CHECKERBOARDWIPE_TRANSITION][ACROSS_TRANS_SUBTYPE] =
     'scaleIsotropically' : false
 };
 
-// ------------------------------------------------------------------------------------------ //
+
 // Transition tables
 
 function createStateTransitionTable()
@@ -4530,7 +4530,7 @@ function createStateTransitionTable()
 var aStateTransitionTable = createStateTransitionTable();
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function getTransitionTable( eRestartMode, eFillMode )
 {
     // If restart mode has not been resolved we use 'never'.
@@ -4555,7 +4555,7 @@ function getTransitionTable( eRestartMode, eFillMode )
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 
 // Event Triggers
 var EVENT_TRIGGER_UNKNOWN               = 0;
@@ -4593,7 +4593,7 @@ function getEventTriggerType( sEventTrigger )
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 
 // Timing Types
 var UNKNOWN_TIMING          = 0;
@@ -4859,7 +4859,7 @@ Timing.prototype.info = function( bVerbose )
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function Duration( sDurationAttribute )
 {
     this.bIndefinite = false;
@@ -4925,7 +4925,7 @@ Duration.prototype.info= function()
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function AnimationNode()
 {
 }
@@ -4941,7 +4941,7 @@ AnimationNode.prototype.notifyDeactivating = function() {};
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function NodeContext( aSlideShowContext )
 {
     this.aContext = aSlideShowContext;
@@ -4978,7 +4978,7 @@ NodeContext.prototype.makeSourceEventElement = function( sId, aEventBaseElem )
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function StateTransition( aBaseNode )
 {
     this.aNode = aBaseNode;
@@ -5027,7 +5027,7 @@ StateTransition.prototype.clear = function()
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function BaseNode( aAnimElem, aParentNode, aNodeContext )
 {
     this.nId = getUniqueId();
@@ -5586,7 +5586,7 @@ BaseNode.prototype.DBG = function( sMessage, nTime )
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function AnimationBaseNode( aAnimElem, aParentNode, aNodeContext )
 {
     AnimationBaseNode.superclass.constructor.call( this, aAnimElem, aParentNode, aNodeContext );
@@ -5836,7 +5836,7 @@ AnimationBaseNode.prototype.info = function( bVerbose )
 };
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function AnimationBaseNode2( aAnimElem, aParentNode, aNodeContext )
 {
     AnimationBaseNode2.superclass.constructor.call( this, aAnimElem, aParentNode, aNodeContext );
@@ -5898,7 +5898,7 @@ AnimationBaseNode2.prototype.info = function( bVerbose )
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function AnimationBaseNode3( aAnimElem, aParentNode, aNodeContext )
 {
     AnimationBaseNode3.superclass.constructor.call( this, aAnimElem, aParentNode, aNodeContext );
@@ -6027,7 +6027,7 @@ AnimationBaseNode3.prototype.info = function( bVerbose )
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function BaseContainerNode( aAnimElem, aParentNode, aNodeContext )
 {
     BaseContainerNode.superclass.constructor.call( this, aAnimElem, aParentNode, aNodeContext );
@@ -6309,7 +6309,7 @@ BaseContainerNode.prototype.info = function( bVerbose )
     return sInfo;
 };
 
-// ------------------------------------------------------------------------------------------ //
+
 function ParallelTimeContainer( aAnimElem, aParentNode, aNodeContext )
 {
     ParallelTimeContainer.superclass.constructor.call( this, aAnimElem, aParentNode, aNodeContext );
@@ -6355,7 +6355,7 @@ ParallelTimeContainer.prototype.notifyDeactivating = function( aAnimationNode )
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function SequentialTimeContainer( aAnimElem, aParentNode, aNodeContext )
 {
     SequentialTimeContainer.superclass.constructor.call( this, aAnimElem, aParentNode, aNodeContext );
@@ -6626,7 +6626,7 @@ SequentialTimeContainer.prototype.dispose = function()
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function PropertyAnimationNode(  aAnimElem, aParentNode, aNodeContext )
 {
     PropertyAnimationNode.superclass.constructor.call( this, aAnimElem, aParentNode, aNodeContext );
@@ -6725,7 +6725,7 @@ PropertyAnimationNode.prototype.createActivity = function()
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function AnimationSetNode(  aAnimElem, aParentNode, aNodeContext )
 {
     AnimationSetNode.superclass.constructor.call( this, aAnimElem, aParentNode, aNodeContext );
@@ -6749,7 +6749,7 @@ AnimationSetNode.prototype.createActivity = function()
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function AnimationColorNode(  aAnimElem, aParentNode, aNodeContext )
 {
     AnimationColorNode.superclass.constructor.call( this, aAnimElem, aParentNode, aNodeContext );
@@ -6905,7 +6905,7 @@ AnimationColorNode.prototype.info = function( bVerbose )
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function AnimationTransitionFilterNode(  aAnimElem, aParentNode, aNodeContext )
 {
     AnimationTransitionFilterNode.superclass.constructor.call( this, aAnimElem, aParentNode, aNodeContext );
@@ -7024,7 +7024,7 @@ AnimationTransitionFilterNode.prototype.info = function( bVerbose )
  *      Animation Node Factory
  **********************************************************************************************/
 
-// ------------------------------------------------------------------------------------------ //
+
 function createAnimationTree( aRootElement, aNodeContext )
 {
     return createAnimationNode( aRootElement, null, aNodeContext );
@@ -7032,7 +7032,7 @@ function createAnimationTree( aRootElement, aNodeContext )
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function createAnimationNode( aElement, aParentNode, aNodeContext )
 {
     assert( aElement, 'createAnimationNode: invalid animation element' );
@@ -7110,7 +7110,7 @@ function createAnimationNode( aElement, aParentNode, aNodeContext )
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function createChildNode( aElement, aParentNode, aNodeContext )
 {
     var aChildNode = createAnimationNode( aElement, aParentNode, aNodeContext );
@@ -7129,7 +7129,7 @@ function createChildNode( aElement, aParentNode, aNodeContext )
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function createIteratedNodes( aElement, aContainerNode, aNodeContext )
 {
     // not implemented
@@ -7142,7 +7142,7 @@ function createIteratedNodes( aElement, aContainerNode, aNodeContext )
  **********************************************************************************************/
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function makeScaler( nScale )
 {
     if( ( typeof( nScale ) !== typeof( 0 ) ) || !isFinite( nScale ) )
@@ -7159,7 +7159,7 @@ function makeScaler( nScale )
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function createPropertyAnimation( sAttrName, aAnimatedElement, nWidth, nHeight )
 {
     if( !aAttributeMap[ sAttrName ] )
@@ -7192,7 +7192,7 @@ function createPropertyAnimation( sAttrName, aAnimatedElement, nWidth, nHeight )
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 /** createShapeTransition
  *
  *  @param aActivityParamSet
@@ -7259,7 +7259,7 @@ function createShapeTransition( aActivityParamSet, aAnimatedElement,
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 /** Class ClippingAnimation
  *  This class performs a shape transition where the effect is achieved by
  *  clipping the shape to be animated with a parametric path.
@@ -7339,7 +7339,7 @@ ClippingAnimation.prototype.getUnderlyingValue = function()
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function GenericAnimation( aGetValueFunc, aSetValueFunc, aGetModifier, aSetModifier )
 {
     assert( aGetValueFunc && aSetValueFunc,
@@ -7392,7 +7392,7 @@ GenericAnimation.prototype.getUnderlyingValue = function()
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function HSLAnimationWrapper( aColorAnimation )
 {
     assert( aColorAnimation,
@@ -7423,7 +7423,7 @@ HSLAnimationWrapper.prototype.getUnderlyingValue = function()
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 /** Class SlideChangeBase
  *  The base abstract class of classes performing slide transitions.
  *
@@ -7501,7 +7501,7 @@ SlideChangeBase.prototype.performOut = function( nValue )
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 /** Class FadingSlideChange
  *  This class performs a slide transition by fading out the leaving slide and
  *  fading in the entering slide.
@@ -7560,7 +7560,7 @@ FadingSlideChange.prototype.performOut = function( nT )
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 /** Class FadingOverColorSlideChange
  *  This class performs a slide transition by fading out the leaving slide to
  *  a given color and fading in the entering slide from the same color.
@@ -7647,7 +7647,7 @@ FadingOverColorSlideChange.prototype.createColorPlaneElement = function()
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 /** Class MovingSlideChange
  *  This class performs a slide transition that involves translating the leaving
  *  slide and/or the entering one in a given direction.
@@ -7719,7 +7719,7 @@ MovingSlideChange.prototype.performOut = function( nT )
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 /** Class ClippedSlideChange
  *  This class performs a slide transition where the entering slide wipes
  *  the leaving one out. The wipe effect is achieved by clipping the entering
@@ -7783,7 +7783,7 @@ ClippedSlideChange.prototype.performOut = function( nT )
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 /** Class ClippingFunctor
  *  This class is responsible for computing the <path> used for clipping
  *  the entering slide in a polypolygon clipping slide transition or the
@@ -7944,7 +7944,7 @@ ClippingFunctor.prototype.perform = function( nT, nWidth, nHeight )
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 /** createClipPolyPolygon
  *
  *  @param nType
@@ -8002,7 +8002,7 @@ function createClipPolyPolygon( nType, nSubtype )
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function createUnitSquarePath()
 {
     var aPath = document.createElementNS( NSS['svg'], 'path' );
@@ -8019,7 +8019,7 @@ function pruneScaleValue( nVal )
         return (nVal > 0.00001 ? nVal : 0.00001);
 }
 
-// ------------------------------------------------------------------------------------------ //
+
 /** Class BarWipePath
  *  This class handles a <path> element that defines a unit square and
  *  transforms it accordingly to a parameter in the [0,1] range for performing
@@ -8070,7 +8070,7 @@ BarWipePath.prototype.perform = function( nT )
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 /** Class FourBoxWipePath
  *  This class handles a path made up by four squares and is utilized for
  *  performing fourBoxWipe transitions.
@@ -8137,7 +8137,7 @@ FourBoxWipePath.prototype.perform = function( nT )
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 /** Class EllipseWipePath
  *  This class handles a parametric ellipse represented by a path made up of
  *  cubic Bezier curve segments that helps in performing the ellipseWipe
@@ -8177,7 +8177,7 @@ EllipseWipePath.prototype.perform = function( nT )
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 /** Class PinWheelWipePath
  *  This class handles a parametric poly-path that is used for performing
  *  a spinWheelWipe transition.
@@ -8251,7 +8251,7 @@ PinWheelWipePath.prototype.perform = function( nT )
 };
 
 
-// ------------------------------------------------------------------------------------------ //
+
 /** Class CheckerBoardWipePath
  *
  *  @param unitsPerEdge
@@ -8307,7 +8307,7 @@ CheckerBoardWipePath.prototype.perform = function( nT )
 };
 
 
-// ------------------------------------------------------------------------------------------ //
+
 /** Class AnimatedSlide
  *  This class handle a slide element during a slide transition.
  *
@@ -8545,7 +8545,7 @@ AnimatedSlide.prototype.setClipPath = function( aClipPathContent )
 };
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function AnimatedElement( aElement )
 {
     if( !aElement )
@@ -9119,7 +9119,7 @@ AnimatedElement.prototype.DBG = function( sMessage, nTime )
     aAnimatedElementDebugPrinter.print( 'AnimatedElement(' + this.getId() + ')' + sMessage, nTime );
 };
 
-// ------------------------------------------------------------------------------------------ //
+
 function AnimatedTextElement( aElement, aEventMultiplexer )
 {
     var theDocument = document;
@@ -9406,7 +9406,7 @@ AnimatedTextElement.prototype.restoreState = function( nAnimationNodeId )
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 /** Class SlideTransition
  *  This class is responsible for initializing the properties of a slide
  *  transition and create the object that actually will perform the transition.
@@ -9699,7 +9699,7 @@ SlideTransition.prototype.info = function()
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 // SlideAnimations
 
 function SlideAnimations( aSlideShowContext )
@@ -9851,7 +9851,7 @@ SlideAnimations.prototype.chargeInterAnimEvents = function()
  *      Event classes and helper functions
  **********************************************************************************************/
 
-// ------------------------------------------------------------------------------------------ //
+
 function Event()
 {
     this.nId = Event.getUniqueId();
@@ -9872,7 +9872,7 @@ Event.prototype.getId = function()
 };
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function DelayEvent( aFunctor, nTimeout )
 {
     DelayEvent.superclass.constructor.call( this );
@@ -9917,7 +9917,7 @@ DelayEvent.prototype.charge = function()
 };
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function makeEvent( aFunctor )
 {
     return new DelayEvent( aFunctor, 0.0 );
@@ -9925,7 +9925,7 @@ function makeEvent( aFunctor )
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function makeDelay( aFunctor, nTimeout )
 {
     return new DelayEvent( aFunctor, nTimeout );
@@ -9933,7 +9933,7 @@ function makeDelay( aFunctor, nTimeout )
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function registerEvent( nNodeId, aTiming, aEvent, aNodeContext )
 {
     var aSlideShowContext = aNodeContext.aContext;
@@ -10061,7 +10061,7 @@ registerEvent.DBG = function( aTiming, nTime )
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function SourceEventElement( sId, aElement, aEventMultiplexer )
 {
     this.sId = sId;
@@ -10126,7 +10126,7 @@ SourceEventElement.prototype.setDefaultCursor = function()
     this.aElement.setAttribute( 'style', 'cursor: default' );
 };
 
-// ------------------------------------------------------------------------------------------ //
+
 
 function HyperlinkElement( sId, aEventMultiplexer )
 {
@@ -10245,7 +10245,7 @@ HyperlinkElement.prototype.setDefaultCursor = function()
 };
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function InteractiveAnimationSequence( nId )
 {
     this.nId = nId;
@@ -10302,7 +10302,7 @@ InteractiveAnimationSequence.prototype.end = function()
     this.bIsRunning = false;
 };
 
-// ------------------------------------------------------------------------------------------ //
+
 /** class PriorityEntry
  *  It provides an entry type for priority queues.
  *  Higher is the value of nPriority higher is the priority of the created entry.
@@ -10336,7 +10336,7 @@ PriorityEntry.compare = function( aLhsEntry, aRhsEntry )
 };
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function EventMultiplexer( aTimerEventQueue )
 {
     this.nId = EventMultiplexer.getUniqueId();
@@ -10619,7 +10619,7 @@ aInterpolatorHandler.aLerpFunctorMap[ CALC_MODE_LINEAR ][ COLOR_PROPERTY ][ COLO
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function KeyStopLerp( aValueList )
 {
     KeyStopLerp.validateInput( aValueList );
@@ -10766,7 +10766,7 @@ aOperatorSetMap[ COLOR_PROPERTY ].scale = function( k, v )
  *      Activity Class Hierarchy
  **********************************************************************************************/
 
-// ------------------------------------------------------------------------------------------ //
+
 function ActivityParamSet()
 {
     this.aEndEvent = null;
@@ -10783,7 +10783,7 @@ function ActivityParamSet()
     this.aDiscreteTimes = new Array();
 }
 
-// ------------------------------------------------------------------------------------------ //
+
 function AnimationActivity()
 {
     this.nId = AnimationActivity.getUniqueId();
@@ -10805,7 +10805,7 @@ AnimationActivity.prototype.getId = function()
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function SetActivity( aCommonParamSet, aAnimation, aToAttr  )
 {
     SetActivity.superclass.constructor.call( this );
@@ -10881,7 +10881,7 @@ SetActivity.prototype.setTargets = function( aTargetElement )
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function ActivityBase( aCommonParamSet )
 {
     ActivityBase.superclass.constructor.call( this );
@@ -11092,7 +11092,7 @@ ActivityBase.prototype.performEnd = function()
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function SimpleContinuousActivityBase( aCommonParamSet )
 {
     SimpleContinuousActivityBase.superclass.constructor.call( this, aCommonParamSet );
@@ -11297,7 +11297,7 @@ SimpleContinuousActivityBase.prototype.simplePerform = function( nSimpleTime, nR
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function ContinuousKeyTimeActivityBase( aCommonParamSet )
 {
     var nSize = aCommonParamSet.aDiscreteTimes.length;
@@ -11340,7 +11340,7 @@ ContinuousKeyTimeActivityBase.prototype.simplePerform = function( nSimpleTime, n
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function ContinuousActivityBase( aCommonParamSet )
 {
     ContinuousActivityBase.superclass.constructor.call( this, aCommonParamSet );
@@ -11361,7 +11361,7 @@ ContinuousActivityBase.prototype.simplePerform = function( nSimpleTime, nRepeatC
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function SimpleActivity( aCommonParamSet, aNumberAnimation, eDirection )
 {
     assert( ( eDirection == BACKWARD ) || ( eDirection == FORWARD ),
@@ -11416,7 +11416,7 @@ SimpleActivity.prototype.performEnd = function()
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 //  FromToByActivity< BaseType > template class
 
 
@@ -11631,7 +11631,7 @@ var LinearFromToByActivity = instantiate( FromToByActivityTemplate, ContinuousAc
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 //  ValueListActivity< BaseType > template class
 
 
@@ -11748,7 +11748,7 @@ var LinearValueListActivity = instantiate( ValueListActivityTemplate, Continuous
  *      Activity Factory
  **********************************************************************************************/
 
-// ------------------------------------------------------------------------------------------ //
+
 function createActivity( aActivityParamSet, aAnimationNode, aAnimation, aInterpolator )
 {
     var eCalcMode = aAnimationNode.getCalcMode();
@@ -11844,7 +11844,7 @@ function createActivity( aActivityParamSet, aAnimationNode, aAnimation, aInterpo
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function createValueListActivity( aActivityParamSet, aAnimationNode, aAnimation,
                                   aInterpolator, ClassTemplateInstance, bAccumulate, eValueType )
 {
@@ -11874,7 +11874,7 @@ function createValueListActivity( aActivityParamSet, aAnimationNode, aAnimation,
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function createFromToByActivity( aActivityParamSet, aAnimationNode, aAnimation,
                                  aInterpolator, ClassTemplateInstance, bAccumulate, eValueType )
 {
@@ -11913,7 +11913,7 @@ function createFromToByActivity( aActivityParamSet, aAnimationNode, aAnimation,
 }
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function extractAttributeValues( eValueType, aValueList, aValueSet, aBBox, nSlideWidth, nSlideHeight )
 {
     var i;
@@ -11954,7 +11954,7 @@ function extractAttributeValues( eValueType, aValueList, aValueSet, aBBox, nSlid
 
 }
 
-// ------------------------------------------------------------------------------------------ //
+
 function evalValuesAttribute( aValueList, aValueSet, aBBox, nSlideWidth, nSlideHeight )
 {
     var width = aBBox.width / nSlideWidth;
@@ -11975,7 +11975,7 @@ function evalValuesAttribute( aValueList, aValueSet, aBBox, nSlideWidth, nSlideH
  *      SlideShow, SlideShowContext and FrameSynchronization
  **********************************************************************************************/
 
-// ------------------------------------------------------------------------------------------ //
+
 
 // direction of animation, important: not change the values!
 var BACKWARD    = 0;
@@ -12031,7 +12031,7 @@ Effect.prototype.end = function()
     this.eState = Effect.ENDED;
 };
 
-// ------------------------------------------------------------------------------------------ //
+
 
 function SlideShow()
 {
@@ -12674,7 +12674,7 @@ var aSlideShow = null;
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function SlideShowContext( aTimerEventQueue, aEventMultiplexer, aNextEffectEventArray, aInteractiveAnimationSequenceMap, aActivityQueue)
 {
     this.aTimerEventQueue = aTimerEventQueue;
@@ -12687,7 +12687,7 @@ function SlideShowContext( aTimerEventQueue, aEventMultiplexer, aNextEffectEvent
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function FrameSynchronization( nFrameDuration )
 {
     this.nFrameDuration = nFrameDuration;
@@ -12733,7 +12733,7 @@ FrameSynchronization.prototype.deactivate = function()
  *      TimerEventQueue, ActivityQueue and ElapsedTime
  **********************************************************************************************/
 
-//------------------------------------------------------------------------------------------- //
+
 function NextEffectEventArray()
 {
     this.aEventArray = new Array();
@@ -12773,7 +12773,7 @@ NextEffectEventArray.prototype.clear = function( )
 
 
 
-//------------------------------------------------------------------------------------------- //
+
 function TimerEventQueue( aTimer )
 {
     this.aTimer = aTimer;
@@ -12870,7 +12870,7 @@ TimerEventQueue.prototype.insert = function( aEventEntry )
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function EventEntry( aEvent, nTime )
 {
     this.aEvent = aEvent;
@@ -12885,7 +12885,7 @@ EventEntry.compare = function( aLhsEventEntry, aRhsEventEntry )
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function ActivityQueue( aTimer )
 {
     this.aTimer = aTimer;
@@ -13018,7 +13018,7 @@ ActivityQueue.prototype.size = function()
 
 
 
-// ------------------------------------------------------------------------------------------ //
+
 function ElapsedTime( aTimeBase )
 {
     this.aTimeBase = aTimeBase;

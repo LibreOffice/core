@@ -31,21 +31,21 @@ namespace filter{
     namespace config{
 
 
-//_______________________________________________
+
 
 /** @short      implements the service <type scope="com.sun.star.document">FilterFactory</type>.
  */
 class FilterFactory : public ::cppu::ImplInheritanceHelper1< BaseContainer                   ,
                                                              css::lang::XMultiServiceFactory >
 {
-    //-------------------------------------------
+
     // native interface
 
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
     public:
 
-        //---------------------------------------
+
         // ctor/dtor
 
         /** @short  standard ctor to connect this interface wrapper to
@@ -56,18 +56,18 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper1< BaseContainer      
          */
         FilterFactory(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
 
-        //---------------------------------------
+
 
         /** @short  standard dtor.
          */
         virtual ~FilterFactory();
 
-    //-------------------------------------------
+
     // uno interface
 
     public:
 
-        //---------------------------------------
+
         // XMultiServiceFactory
 
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(const OUString& sFilter)
@@ -82,18 +82,18 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper1< BaseContainer      
         virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames()
             throw(css::uno::RuntimeException, std::exception);
 
-        //---------------------------------------
+
         // XContainerQuery
 
         virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByQuery(const OUString& sQuery)
             throw (css::uno::RuntimeException, std::exception);
 
-    //-------------------------------------------
+
     // internal helper!
 
     private:
 
-        //---------------------------------------
+
 
         /** @short  implement the container string query: "matchByDocumentService=:iflags=:eflags=:..."
 
@@ -105,13 +105,13 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper1< BaseContainer      
          */
         OUStringList impl_queryMatchByDocumentService(const QueryTokenizer& lTokens) const;
 
-        //---------------------------------------
+
 
         /** TODO document me
          */
         OUStringList impl_getListOfInstalledModules() const;
 
-        //---------------------------------------
+
 
         /** @short  implement the container string query:
                     "getSortedFilterList()[:module=<xxx>]:[iflags=<xxx>][:eflags=<xxx>]"
@@ -124,7 +124,7 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper1< BaseContainer      
          */
         OUStringList impl_getSortedFilterList(const QueryTokenizer& lTokens) const;
 
-        //---------------------------------------
+
 
         /** TODO document me
          */
@@ -132,7 +132,7 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper1< BaseContainer      
                                                              sal_Int32        nIFlags,
                                                              sal_Int32        nEFlags) const;
 
-        //---------------------------------------
+
 
         /** @short  read a specialized and sorted list of filter names from
                     the configuration (matching the specified module)
@@ -145,12 +145,12 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper1< BaseContainer      
          */
         OUStringList impl_readSortedFilterListFromConfig(const OUString& sModule) const;
 
-    //-------------------------------------------
+
     // static uno helper!
 
     public:
 
-        //---------------------------------------
+
 
         /** @short  return the uno implementation name of this class.
 
@@ -162,7 +162,7 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper1< BaseContainer      
          */
         static OUString impl_getImplementationName();
 
-        //---------------------------------------
+
 
         /** @short  return the list of supported uno services of this class.
 
@@ -174,7 +174,7 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper1< BaseContainer      
          */
         static css::uno::Sequence< OUString > impl_getSupportedServiceNames();
 
-        //---------------------------------------
+
 
         /** @short  return a new intsnace of this class.
 

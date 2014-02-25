@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FILTER_SOURCE_CONFIG_CACHE_MACROS_HXX
 #define INCLUDED_FILTER_SOURCE_CONFIG_CACHE_MACROS_HXX
 
-//_______________________________________________
+
 
 #include <rtl/ustring.hxx>
 

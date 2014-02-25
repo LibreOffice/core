@@ -22,9 +22,9 @@
 
 #include <vcl/bmpacc.hxx>
 
-// --------------------
+
 // - GIFLZWCompressor -
-// --------------------
+
 
 class   GIFImageDataOutputStream;
 struct  GIFLZWCTreeNode;

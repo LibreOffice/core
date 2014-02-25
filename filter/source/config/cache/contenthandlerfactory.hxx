@@ -30,21 +30,21 @@ namespace filter{
     namespace config{
 
 
-//_______________________________________________
+
 
 /** @short      implements the service <type scope="com.sun.star.document">ContentHandlerFactory</type>.
  */
 class ContentHandlerFactory : public ::cppu::ImplInheritanceHelper1< BaseContainer                   ,
                                                                      css::frame::XLoaderFactory >
 {
-    //-------------------------------------------
+
     // native interface
 
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
     public:
 
-        //---------------------------------------
+
         // ctor/dtor
 
         /** @short  standard ctor to connect this interface wrapper to
@@ -55,18 +55,18 @@ class ContentHandlerFactory : public ::cppu::ImplInheritanceHelper1< BaseContain
          */
         ContentHandlerFactory(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
 
-        //---------------------------------------
+
 
         /** @short  standard dtor.
          */
         virtual ~ContentHandlerFactory();
 
-    //-------------------------------------------
+
     // uno interface
 
     public:
 
-        //---------------------------------------
+
         // XMultiServiceFactory
 
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(const OUString& sHandler)
@@ -81,12 +81,12 @@ class ContentHandlerFactory : public ::cppu::ImplInheritanceHelper1< BaseContain
         virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames()
             throw(css::uno::RuntimeException, std::exception);
 
-    //-------------------------------------------
+
     // static uno helper!
 
     public:
 
-        //---------------------------------------
+
 
         /** @short  return the uno implementation name of this class.
 
@@ -98,7 +98,7 @@ class ContentHandlerFactory : public ::cppu::ImplInheritanceHelper1< BaseContain
          */
         static OUString impl_getImplementationName();
 
-        //---------------------------------------
+
 
         /** @short  return the list of supported uno services of this class.
 
@@ -110,7 +110,7 @@ class ContentHandlerFactory : public ::cppu::ImplInheritanceHelper1< BaseContain
          */
         static css::uno::Sequence< OUString > impl_getSupportedServiceNames();
 
-        //---------------------------------------
+
 
         /** @short  return a new intsnace of this class.
 

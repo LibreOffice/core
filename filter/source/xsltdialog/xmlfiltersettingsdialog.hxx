@@ -32,7 +32,7 @@
 
 #include "xmlfiltercommon.hxx"
 
-// --------------------------------------------------------------------
+
 
 class HeaderBar;
 class XMLFilterListBox;
@@ -54,7 +54,7 @@ public:
     virtual bool Notify( NotifyEvent& rNEvt );
 };
 
-// --------------------------------------------------------------------
+
 
 class HeaderBar;
 
@@ -80,7 +80,7 @@ public:
     virtual void    Paint( const Rectangle& rRect );
 };
 
-// --------------------------------------------------------------------
+
 
 class XMLFilterSettingsDialog : public ModelessDialog
 {

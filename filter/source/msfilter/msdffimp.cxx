@@ -366,7 +366,7 @@ DffPropertyReader::~DffPropertyReader()
     delete pDefaultPropSet;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SvStream& operator>>( SvStream& rIn, SvxMSDffConnectorRule& rRule )
 {
@@ -762,7 +762,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 static basegfx::B2DPolyPolygon GetLineArrow( const sal_Int32 nLineWidth, const MSO_LineEnd eLineEnd,
     const MSO_LineEndWidth eLineWidth, const MSO_LineEndLength eLineLength,
@@ -1007,9 +1007,9 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
         if ( nLineFlags & 0x10 )
         {
             sal_Bool bScaleArrows = rManager.pSdrModel->GetScaleUnit() == MAP_TWIP;
-            ///////////////
-            // LineStart //
-            ///////////////
+
+            // LineStart
+
             if ( IsProperty( DFF_Prop_lineStartArrowhead ) )
             {
                 MSO_LineEnd         eLineEnd = (MSO_LineEnd)GetPropertyValue( DFF_Prop_lineStartArrowhead );
@@ -1025,9 +1025,9 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
                 rSet.Put( XLineStartItem( aArrowName, aPolyPoly) );
                 rSet.Put( XLineStartCenterItem( bArrowCenter ) );
             }
-            /////////////
-            // LineEnd //
-            /////////////
+
+            // LineEnd
+
             if ( IsProperty( DFF_Prop_lineEndArrowhead ) )
             {
                 MSO_LineEnd         eLineEnd = (MSO_LineEnd)GetPropertyValue( DFF_Prop_lineEndArrowhead );
@@ -1516,9 +1516,9 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
 
     sal_uInt32 nAdjustmentsWhichNeedsToBeConverted = 0;
 
-    ///////////////////////////////////////
-    // creating SdrCustomShapeGeometryItem //
-    ///////////////////////////////////////
+
+    // creating SdrCustomShapeGeometryItem
+
     typedef uno::Sequence< beans::PropertyValue > PropSeq;
     typedef std::vector< beans::PropertyValue > PropVec;
     typedef PropVec::iterator PropVecIter;
@@ -1530,17 +1530,17 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
     PropVec aPropVec;
     PropertyValue aProp;
 
-    /////////////////////////////////////////////////////////////////////
-    // "Type" property, including the predefined CustomShape type name //
-    /////////////////////////////////////////////////////////////////////
+
+    // "Type" property, including the predefined CustomShape type name
+
     const OUString sType( "Type" );
     aProp.Name  = sType;
     aProp.Value <<= EnhancedCustomShapeTypeNames::Get( rObjData.eShapeType );
     aPropVec.push_back( aProp );
 
-    ///////////////
-    // "ViewBox" //
-    ///////////////
+
+    // "ViewBox"
+
 
     sal_Int32 nCoordWidth = 21600;  // needed to replace handle type center with absolute value
     sal_Int32 nCoordHeight= 21600;
@@ -1556,9 +1556,9 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         aProp.Value <<= aViewBox;
         aPropVec.push_back( aProp );
     }
-    /////////////////////
-    // TextRotateAngle //
-    /////////////////////
+
+    // TextRotateAngle
+
     if ( IsProperty( DFF_Prop_txflTextFlow ) || IsProperty( DFF_Prop_cdirFont ) )
     {
         sal_Int32 nTextRotateAngle = 0;
@@ -1592,9 +1592,9 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             aPropVec.push_back( aProp );
         }
     }
-    //////////////////////////////////////////
-    // "Extrusion" PropertySequence element //
-    //////////////////////////////////////////
+
+    // "Extrusion" PropertySequence element
+
     sal_Bool bExtrusionOn = ( GetPropertyValue( DFF_Prop_fc3DLightFace ) & 8 ) != 0;
     if ( bExtrusionOn )
     {
@@ -1860,9 +1860,9 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         aPropVec.push_back( aProp );
     }
 
-    /////////////////////////////////////////
-    // "Equations" PropertySequence element //
-    /////////////////////////////////////////
+
+    // "Equations" PropertySequence element
+
     if ( IsProperty( DFF_Prop_pFormulas ) )
     {
         sal_uInt16 nNumElem = 0;
@@ -1889,9 +1889,9 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         aPropVec.push_back( aProp );
     }
 
-    ////////////////////////////////////////
-    // "Handles" PropertySequence element //
-    ////////////////////////////////////////
+
+    // "Handles" PropertySequence element
+
     if ( IsProperty( DFF_Prop_Handles ) )
     {
         sal_uInt16 nNumElem = 0;
@@ -2099,9 +2099,9 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             }
         }
     }
-    /////////////////////////////////////
-    // "Path" PropertySequence element //
-    /////////////////////////////////////
+
+    // "Path" PropertySequence element
+
     {
         PropVec aPathPropVec;
 
@@ -2396,9 +2396,9 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             aPropVec.push_back( aProp );
         }
     }
-    /////////////////////////////////////////
-    // "TextPath" PropertySequence element //
-    /////////////////////////////////////////
+
+    // "TextPath" PropertySequence element
+
     sal_Bool bTextPathOn = ( GetPropertyValue( DFF_Prop_gtextFStrikethrough ) & 0x4000 ) != 0;
     if ( bTextPathOn )
     {
@@ -2464,7 +2464,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         aProp.Value <<= aTextPathPropSeq;
         aPropVec.push_back( aProp );
     }
-    ////////////////////////
+
     // "AdjustmentValues" // The AdjustmentValues are imported at last, because depending to the type of the
     //////////////////////// handle (POLAR) we will convert the adjustment value from a fixed float to double
 
@@ -4094,7 +4094,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
             rSt.ReadUInt32( nUDData );
             if ( rSt.GetError() != 0 )
                 break;
-            if ( nPID == 447 ) //
+            if ( nPID == 447 )
             {
                 mbRotateGranientFillWithAngle = nUDData & 0x20;
                 break;
@@ -5745,7 +5745,7 @@ void SvxMSDffManager::GetCtrlData( sal_uInt32 nOffsDgg_ )
 
 // from here on: Drawing Group Container  i.e. Ddocument-wide valid data
 //                      =======================           ========
-//
+
 void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uLong nLenDgg )
 {
     sal_uInt8   nVer;
@@ -5830,7 +5830,7 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uLong nLe
 
 // from now on: Drawing Container  which means Pages (Sheet, Slide) - wide valid data
 //                      =================               ======
-//
+
 void SvxMSDffManager::GetDrawingContainerData( SvStream& rSt, sal_uLong nLenDg,
                                                const unsigned long nDrawingContainerId )
 {
@@ -5928,7 +5928,7 @@ sal_Bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
     MSO_SPT         eShapeType      = mso_sptNil;
 
     // analyze Shape
-    //
+
     do
     {
         if(!this->ReadCommonRecordHeader( rSt, nVer, nInst, nFbt, nLength)) return sal_False;
@@ -6053,9 +6053,9 @@ sal_Bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
     }
     while( nReadSpCont < nLenShapeCont );
 
-    //
+
     // Now possibly store the information for subsequent accesses to the shape
-    //
+
     if( aInfo.nShapeId )
     {
         // Possibly allow replacement of textboxes with frames

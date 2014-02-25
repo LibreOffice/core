@@ -1849,7 +1849,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
 }
 
 
-/////////////////////////////////////////////////////////////////////////
+
 
 
 void Writer::Impl_addStraightLine( BitStream& rBits, Point& rLastPoint,

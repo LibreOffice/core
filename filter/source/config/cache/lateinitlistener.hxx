@@ -35,7 +35,7 @@ namespace filter{
     namespace config{
 
 
-//_______________________________________________
+
 
 /** @short      implements a listener, which will update the
                 global filter cache of an office, after zje office
@@ -50,7 +50,7 @@ namespace filter{
 class LateInitListener : public BaseLock // must be the first one to guarantee right initialized mutex member!
                        , public ::cppu::WeakImplHelper1< css::document::XEventListener >
 {
-    //-------------------------------------------
+
     // member
 
     private:
@@ -59,12 +59,12 @@ class LateInitListener : public BaseLock // must be the first one to guarantee r
                     out, when the first office document was opened successfully. */
         css::uno::Reference< css::document::XEventBroadcaster > m_xBroadcaster;
 
-    //-------------------------------------------
+
     // native interface
 
     public:
 
-        //---------------------------------------
+
         // ctor/dtor
 
         /** @short  initialize new instance of this class.
@@ -80,24 +80,24 @@ class LateInitListener : public BaseLock // must be the first one to guarantee r
          */
         LateInitListener(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
 
-        //---------------------------------------
+
 
         /** @short  standard dtor.
          */
         virtual ~LateInitListener();
 
-    //-------------------------------------------
+
     // uno interface
 
     public:
 
-        //---------------------------------------
+
         // document.XEventListener
 
         virtual void SAL_CALL notifyEvent(const css::document::EventObject& aEvent)
             throw(css::uno::RuntimeException, std::exception);
 
-        //---------------------------------------
+
         // lang.XEventListener
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
             throw(css::uno::RuntimeException, std::exception);
