@@ -35,7 +35,7 @@
 static LanguageType nImplSystemLanguage = LANGUAGE_DONTKNOW;
 static LanguageType nImplSystemUILanguage = LANGUAGE_DONTKNOW;
 
-// =======================================================================
+
 
 static LanguageType GetSVLang( LANGID nWinLangId )
 {
