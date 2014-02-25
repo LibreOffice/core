@@ -1217,7 +1217,8 @@ void SwXTextViewCursor::gotoEnd(sal_Bool bExpand) throw( uno::RuntimeException )
         throw uno::RuntimeException();
 }
 
-sal_Bool SwXTextViewCursor::jumpToFirstPage(void) throw( uno::RuntimeException )
+sal_Bool SwXTextViewCursor::jumpToFirstPage()
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     sal_Bool bRet = sal_False;

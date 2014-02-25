@@ -206,7 +206,9 @@ public:
     virtual void SAL_CALL gotoRange( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& xRange, sal_Bool bExpand ) throw(::com::sun::star::uno::RuntimeException);
 
     //XPageCursor
-    virtual sal_Bool SAL_CALL jumpToFirstPage(void) throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL jumpToFirstPage()
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
     virtual sal_Bool SAL_CALL jumpToLastPage()
         throw (::com::sun::star::uno::RuntimeException,
                std::exception);
