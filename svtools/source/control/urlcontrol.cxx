@@ -22,14 +22,14 @@
 #include <svtools/urlcontrol.hxx>
 #include <vcl/layout.hxx>
 
-//.........................................................................
+
 namespace svt
 {
-//.........................................................................
 
-    //=====================================================================
+
+
     //= OFileURLControl
-    //=====================================================================
+
 
     OFileURLControl::OFileURLControl(Window* _pParent, const ResId& _rId)
         : SvtURLBox(_pParent, _rId, INET_PROT_FILE)
@@ -88,8 +88,8 @@ namespace svt
         return SvtURLBox::Notify(_rNEvt);
     }
 
-//.........................................................................
+
 }   // namespace svt
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

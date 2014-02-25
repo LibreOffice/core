@@ -44,10 +44,10 @@
 
 #define MIN_COLUMN_WIDTH_PIXEL  4
 
-//......................................................................................................................
+
 namespace svt { namespace table
 {
-//......................................................................................................................
+
 
     using ::com::sun::star::accessibility::AccessibleTableModelChange;
     using ::com::sun::star::uno::makeAny;
@@ -58,9 +58,9 @@ namespace svt { namespace table
     namespace AccessibleEventId = ::com::sun::star::accessibility::AccessibleEventId;
     namespace AccessibleTableModelChangeType = ::com::sun::star::accessibility::AccessibleTableModelChangeType;
 
-    //==================================================================================================================
+
     //= SuppressCursor
-    //==================================================================================================================
+
     class SuppressCursor
     {
     private:
@@ -78,9 +78,9 @@ namespace svt { namespace table
         }
     };
 
-    //====================================================================
+
     //= EmptyTableModel
-    //====================================================================
+
     /** default implementation of an ->ITableModel, used as fallback when no
         real model is present
 
@@ -232,15 +232,15 @@ namespace svt { namespace table
     };
 
 
-    //====================================================================
+
     //= TableControl_Impl
-    //====================================================================
+
     DBG_NAME( TableControl_Impl )
 
 #ifdef DBG_UTIL
-    //====================================================================
+
     //= SuspendInvariants
-    //====================================================================
+
     class SuspendInvariants
     {
     private:
@@ -268,7 +268,7 @@ namespace svt { namespace table
 #endif
 
 #ifdef DBG_UTIL
-    //====================================================================
+
     const char* TableControl_Impl_checkInvariants( const void* _pInstance )
     {
         return static_cast< const TableControl_Impl* >( _pInstance )->impl_checkInvariants();
@@ -818,7 +818,7 @@ namespace svt { namespace table
 
     namespace
     {
-        //..............................................................................................................
+
         /// determines whether a scrollbar is needed for the given values
         bool lcl_determineScrollbarNeed( long const i_position, ScrollbarVisibility const i_visibility,
             long const i_availableSpace, long const i_neededSpace )
@@ -834,7 +834,7 @@ namespace svt { namespace table
             return true;
         }
 
-        //..............................................................................................................
+
         void lcl_setButtonRepeat( Window& _rWindow, sal_uLong _nDelay )
         {
             AllSettings aSettings = _rWindow.GetSettings();
@@ -846,7 +846,7 @@ namespace svt { namespace table
             _rWindow.SetSettings( aSettings, sal_True );
         }
 
-        //..............................................................................................................
+
         bool lcl_updateScrollbar( Window& _rParent, ScrollBar*& _rpBar,
             bool const i_needBar, long _nVisibleUnits,
             long _nPosition, long _nLineSize, long _nRange,
@@ -886,7 +886,7 @@ namespace svt { namespace table
             return ( bHaveBar != i_needBar );
         }
 
-        //..............................................................................................................
+
         /** returns the number of rows fitting into the given range,
             for the given row height. Partially fitting rows are counted, too, if the
             respective parameter says so.
@@ -898,7 +898,7 @@ namespace svt { namespace table
                 :   _nOverallHeight / _nRowHeightPixel;
         }
 
-        //..............................................................................................................
+
         /** returns the number of columns fitting into the given area,
             with the first visible column as given. Partially fitting columns are counted, too,
             if the respective parameter says so.
@@ -1189,12 +1189,12 @@ namespace svt { namespace table
         SuppressCursor aHideCursor( *this );
 
         // layouting steps:
-        //
+
         // 1. adjust column widths, leaving space for a vertical scrollbar
         // 2. determine need for a vertical scrollbar
         //    - V-YES: all fine, result from 1. is still valid
         //    - V-NO: result from 1. is still under consideration
-        //
+
         // 3. determine need for a horizontal scrollbar
         //   - H-NO: all fine, result from 2. is still valid
         //   - H-YES: reconsider need for a vertical scrollbar, if result of 2. was V-NO
@@ -1431,7 +1431,7 @@ namespace svt { namespace table
         // headers
         Rectangle const aAllCellsWithHeaders( impl_getAllVisibleCellsArea() );
 
-        // ............................
+
         // draw the header column area
         if ( m_pModel->hasColumnHeaders() )
         {
@@ -1488,7 +1488,7 @@ namespace svt { namespace table
             }
         }
 
-        // ............................
+
         // draw the table content row by row
 
         TableSize colCount = getModel()->getColumnCount();
@@ -2750,9 +2750,9 @@ namespace svt { namespace table
              m_pAccessibleTable->commitEvent( i_eventID, i_newValue, i_oldValue );
     }
 
-    //==================================================================================================================
+
     //= TableFunctionSet
-    //==================================================================================================================
+
 
     TableFunctionSet::TableFunctionSet(TableControl_Impl* _pTableControl)
         :m_pTableControl( _pTableControl)
@@ -2895,8 +2895,8 @@ namespace svt { namespace table
         }
     }
 
-//......................................................................................................................
+
 } } // namespace svt::table
-//......................................................................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2540,9 +2540,9 @@ void SvxIconChoiceCtrl_Impl::DeselectAllBut( SvxIconChoiceCtrlEntry* pThisEntryN
     sal_Bool bPaintSync )
 {
     ClearSelectedRectList();
-    //
+
     // TODO: work through z-order list, if necessary!
-    //
+
     size_t nCount = aEntries.size();
     for( size_t nCur = 0; nCur < nCount; nCur++ )
     {
@@ -2961,9 +2961,9 @@ IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, EditTimeoutHdl)
 }
 
 
-//
+
 // Function to align entries to the grid
-//
+
 
 // pStart == 0: align all entries
 // else: align all entries of the row from pStart on (including pStart)
@@ -3085,12 +3085,12 @@ SvxIconChoiceCtrlTextMode SvxIconChoiceCtrl_Impl::GetEntryTextModeSmart( const S
     return eMode;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-//
+
+
 // Draw my own focusrect, because the focusrect of the outputdevice has got the inverted color
 // of the background. But what will we see, if the backgroundcolor is gray ? - We will see
 // a gray focusrect on a gray background !!!
-//
+
 void SvxIconChoiceCtrl_Impl::ShowFocus ( Rectangle& rRect )
 {
     Color aBkgColor ( pView->GetBackground().GetColor() );
@@ -3141,8 +3141,8 @@ sal_Bool SvxIconChoiceCtrl_Impl::IsMnemonicChar( sal_Unicode cChar, sal_uLong& r
     return bRet;
 }
 
-//
-////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 IMPL_LINK(SvxIconChoiceCtrl_Impl, UserEventHdl, void*, nId )
 {

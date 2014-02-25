@@ -35,7 +35,7 @@
 #include <svtools/svtools.hrc>
 #include <limits>
 
-// =======================================================================
+
 
 #define TABBAR_OFFSET_X         7
 #define TABBAR_OFFSET_X2        2
@@ -44,7 +44,7 @@
 
 const sal_uInt16 ADDNEWPAGE_AREAWIDTH = 10;
 
-// =======================================================================
+
 
 struct ImplTabBarItem
 {
@@ -91,7 +91,7 @@ struct ImplTabBarItem
     }
 };
 
-// =======================================================================
+
 
 
 // - ImplTabButton -
@@ -128,7 +128,7 @@ void ImplTabButton::Command( const CommandEvent& rCEvt )
     PushButton::Command(rCEvt);
 }
 
-// =======================================================================
+
 
 bool ImplTabButton::PreNotify( NotifyEvent& rNEvt )
 {
@@ -144,7 +144,7 @@ bool ImplTabButton::PreNotify( NotifyEvent& rNEvt )
     return PushButton::PreNotify( rNEvt );
 }
 
-// =======================================================================
+
 
 
 // - ImplTabSizer -
@@ -242,7 +242,7 @@ void ImplTabSizer::Paint( const Rectangle& )
     aDecoView.DrawButton( Rectangle( Point( nOffX, 0 ), aOutputSize ), BUTTON_DRAW_NOLIGHTBORDER );
 }
 
-// =======================================================================
+
 
 // Is not named Impl. as it may be called or overloaded
 
@@ -363,7 +363,7 @@ IMPL_LINK_NOARG(TabBarEdit, ImplEndTimerHdl)
     return 0;
 }
 
-// =======================================================================
+
 struct TabBar_Impl
 {
     ImplTabSizer*                   mpSizer;
@@ -379,7 +379,7 @@ struct TabBar_Impl
     }
 };
 
-// =======================================================================
+
 
 const sal_uInt16 TabBar::APPEND         = ::std::numeric_limits<sal_uInt16>::max();
 const sal_uInt16 TabBar::PAGE_NOT_FOUND = ::std::numeric_limits<sal_uInt16>::max();

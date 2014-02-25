@@ -25,14 +25,14 @@
 
 #include <vector>
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= ToolPanelCollection_Data
-    //====================================================================
+
     struct ToolPanelCollection_Data
     {
         ::std::vector< PToolPanel >                 aPanels;
@@ -40,9 +40,9 @@ namespace svt
         PanelDeckListeners                          aListeners;
     };
 
-    //====================================================================
+
     //= ToolPanelCollection
-    //====================================================================
+
 
     ToolPanelCollection::ToolPanelCollection()
         :m_pData( new ToolPanelCollection_Data )
@@ -180,8 +180,8 @@ namespace svt
         m_pData->aListeners.RemoveListener( i_rListener );
     }
 
-//........................................................................
+
 } // namespace svt
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

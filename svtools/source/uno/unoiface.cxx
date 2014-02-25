@@ -53,9 +53,9 @@ namespace
     }
 }
 
-//  ----------------------------------------------------
+
 //  help function for the toolkit...
-//  ----------------------------------------------------
+
 
 extern "C" {
 
@@ -169,9 +169,9 @@ SAL_DLLPUBLIC_EXPORT Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::
 
 }   // extern "C"
 
-//  ----------------------------------------------------
+
 //  class VCLXMultiLineEdit
-//  ----------------------------------------------------
+
 VCLXMultiLineEdit::VCLXMultiLineEdit()
     :maTextListeners( *this )
     ,meLineEndType( LINEEND_LF )    // default behavior before introducing this property: LF (unix-like)
@@ -532,9 +532,9 @@ void VCLXMultiLineEdit::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
     VCLXWindow::ImplGetPropertyIds( rIds, true );
 
 }
-//  ----------------------------------------------------
+
 //  class VCLXFileControl
-//  ----------------------------------------------------
+
 VCLXFileControl::VCLXFileControl() : maTextListeners( *this )
 {
 }
@@ -801,9 +801,9 @@ void VCLXFileControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 }
 
 
-//  ----------------------------------------------------
+
 //  class SVTXFormattedField
-//  ----------------------------------------------------
+
 
 SVTXFormattedField::SVTXFormattedField()
     :m_pCurrentSupplier(NULL)
@@ -1396,9 +1396,9 @@ void SVTXFormattedField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 }
 
 
-//  ----------------------------------------------------
+
 //  class SVTXRoadmap
-//  ----------------------------------------------------
+
 
 using namespace svt;
 
@@ -1656,9 +1656,9 @@ void SVTXRoadmap::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
     VCLXGraphicControl::ImplGetPropertyIds( rIds );
 }
 
-//  ----------------------------------------------------
+
 //  class SVTXNumericField
-//  ----------------------------------------------------
+
 SVTXNumericField::SVTXNumericField()
 {
 }
@@ -1823,9 +1823,9 @@ void SVTXNumericField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
     SVTXFormattedField::ImplGetPropertyIds( rIds );
 }
 
-//  ----------------------------------------------------
+
 //  class SVTXCurrencyField
-//  ----------------------------------------------------
+
 SVTXCurrencyField::SVTXCurrencyField()
 {
 }
@@ -2056,9 +2056,9 @@ void SVTXCurrencyField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 }
 
 
-//  ----------------------------------------------------
+
 //  class VCLXProgressBar
-//  ----------------------------------------------------
+
 
 VCLXProgressBar::VCLXProgressBar()
             :m_nValue(0)
@@ -2304,9 +2304,9 @@ void VCLXProgressBar::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 }
 
 
-//  ----------------------------------------------------
+
 //  class SVTXDateField
-//  ----------------------------------------------------
+
 SVTXDateField::SVTXDateField()
     :VCLXDateField()
 {

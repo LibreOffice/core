@@ -1852,11 +1852,11 @@ bool HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
 {
     // If the string matches one of the following regular expressions then
     // the document is a HTML document.
-    //
+
     // ^[^<]*<[^ \t]*[> \t]
     //        -------
     // ^<!
-    //
+
     // where the underlined subexpression has to be a HTML token
     OString sCmp;
     bool bUCS2B = false;

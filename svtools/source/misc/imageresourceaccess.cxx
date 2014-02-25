@@ -31,10 +31,10 @@
 #include <cppuhelper/implbase2.hxx>
 #include <comphelper/processfactory.hxx>
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
+
 
     using namespace ::utl;
     using namespace ::com::sun::star::io;
@@ -43,9 +43,9 @@ namespace svt
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::graphic;
 
-    //====================================================================
+
     //= StreamSupplier
-    //====================================================================
+
     typedef ::cppu::WeakImplHelper2 <   XStream
                                     ,   XSeekable
                                     >   StreamSupplier_Base;
@@ -120,9 +120,9 @@ namespace svt
         return m_xSeekable->getLength();
     }
 
-    //====================================================================
+
     //= GraphicAccess
-    //====================================================================
+
 
     bool GraphicAccess::isSupportedURL( const OUString& _rURL )
     {
@@ -186,8 +186,8 @@ namespace svt
         return new OSeekableInputStreamWrapper( getImageStream( _rxContext, _rImageResourceURL ), true );   // take ownership
     }
 
-//........................................................................
+
 } // namespace svt
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

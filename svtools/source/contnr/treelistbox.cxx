@@ -2103,12 +2103,12 @@ void SvTreeListBox::CheckButtonHdl()
         pImp->CallEventListeners( VCLEVENT_CHECKBOX_TOGGLE, (void*)pCheckButtonData->GetActEntry() );
 }
 
-//
+
 // TODO: Currently all data is cloned so that they conform to the default tree
 // view format. Actually, the model should be used as a reference here. This
 // leads to us _not_ calling SvTreeListEntry::Clone, but only its base class
 // SvTreeListEntry.
-//
+
 
 SvTreeListEntry* SvTreeListBox::CloneEntry( SvTreeListEntry* pSource )
 {

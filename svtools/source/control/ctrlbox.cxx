@@ -62,9 +62,9 @@
 
 using namespace ::com::sun::star;
 
-// ========================================================================
+
 // ColorListBox
-// ========================================================================
+
 
 
 // - ImplColorListData -
@@ -317,9 +317,9 @@ void ColorListBox::UserDraw( const UserDrawEvent& rUDEvt )
         ListBox::DrawEntry( rUDEvt, true, true, false );
 }
 
-// =======================================================================
+
 // LineListBox
-// =======================================================================
+
 
 BorderWidthImpl::BorderWidthImpl( sal_uInt16 nFlags, double nRate1, double nRate2, double nRateGap ):
     m_nFlags( nFlags ),
@@ -1013,9 +1013,9 @@ void LineListBox::DataChanged( const DataChangedEvent& rDCEvt )
 }
 
 
-// ===================================================================
+
 // FontNameBox
-// ===================================================================
+
 
 FontNameBox::FontNameBox( Window* pParent, WinBits nWinStyle ) :
     ComboBox( pParent, nWinStyle )
@@ -1399,9 +1399,9 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
     }
 }
 
-// ===================================================================
+
 // FontStyleBox
-// ===================================================================
+
 
 FontStyleBox::FontStyleBox( Window* pParent, const ResId& rResId ) :
     ComboBox( pParent, rResId )
@@ -1637,9 +1637,9 @@ void FontStyleBox::Fill( const OUString& rName, const FontList* pList )
     }
 }
 
-// ===================================================================
+
 // FontSizeBox
-// ===================================================================
+
 
 FontSizeBox::FontSizeBox( Window* pParent, WinBits nWinSize ) :
     MetricBox( pParent, nWinSize )

@@ -101,7 +101,7 @@ OUString makeShortRepresentativeSymbolTextForSelectedFont(OutputDevice &rDevice)
 
 //These ones are typically for use in the font dropdown box beside the
 //fontname, so say things roughly like "Script/Alphabet/Name-Of-Major-Language"
-//
+
 //Here we don't always know the language of course, only the script that can be
 //written with the font. Often that's one single language written in that
 //script, or a handful of related languages where the name of the script is the
@@ -493,10 +493,10 @@ OUString makeMinimalTextForScript(UScriptCode eScript)
 
 //These ones are typically for use in the font preview window in format
 //character
-//
+
 //There we generally know the language. Though its possible for the language to
 //be "none".
-//
+
 //Currently we fall back to makeShortRepresentativeTextForScript when we don't
 //have suitable strings
 OUString makeRepresentativeTextForLanguage(LanguageType eLang)

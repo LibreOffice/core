@@ -41,10 +41,10 @@
 #include <functional>
 #include <algorithm>
 
-//.........................................................................
+
 namespace svt
 {
-//.........................................................................
+
 
     using namespace ::utl;
     using namespace ::com::sun::star;
@@ -52,9 +52,9 @@ namespace svt
     using namespace ::com::sun::star::ucb;
     using namespace ::com::sun::star::uno;
 
-    //=====================================================================
+
     //= helpers
-    //=====================================================================
+
 
     SvStream& WriteDateTime( SvStream& _rStorage, const util::DateTime& _rDate )
     {
@@ -107,9 +107,9 @@ namespace svt
         return !( _rLHS == _rRHS );
     }
 
-    //=====================================================================
+
     //= TemplateContent
-    //=====================================================================
+
     struct TemplateContent;
     typedef ::std::vector< ::rtl::Reference< TemplateContent > >    TemplateFolderContent;
     typedef TemplateFolderContent::const_iterator           ConstFolderIterator;
@@ -177,9 +177,9 @@ namespace svt
         DBG_DTOR( TemplateContent, NULL );
     }
 
-    //=====================================================================
+
     //= stl helpers
-    //=====================================================================
+
 
     /// compares two TemplateContent by URL
     struct TemplateContentURLLess
@@ -234,7 +234,7 @@ namespace svt
                                         ,   bool
                                         >
     {
-        //.................................................................
+
         bool operator() (const ::rtl::Reference< TemplateContent >& _rLHS, const ::rtl::Reference< TemplateContent >& _rRHS )
         {
             if ( !_rLHS.is() || !_rRHS.is() )
@@ -349,7 +349,7 @@ namespace svt
                                 xOfficeInstDirs )
         : StorageHelper( _rStorage ), m_xOfficeInstDirs( xOfficeInstDirs ) { }
 
-        //.................................................................
+
         void operator() ( const TemplateContent& _rContent ) const
         {
             // store the info about this content
@@ -372,7 +372,7 @@ namespace svt
             );
         }
 
-        //.................................................................
+
         void operator() ( const ::rtl::Reference< TemplateContent >& _rxContent ) const
         {
             if ( _rxContent.is() )
@@ -396,7 +396,7 @@ namespace svt
                                 xOfficeInstDirs )
         : StorageHelper( _rStorage ), m_xOfficeInstDirs( xOfficeInstDirs ) { }
 
-        //.................................................................
+
         void operator() ( TemplateContent& _rContent ) const
         {
             // store the info about this content
@@ -428,7 +428,7 @@ namespace svt
             );
         }
 
-        //.................................................................
+
         void operator() ( const ::rtl::Reference< TemplateContent >& _rxContent ) const
         {
             if ( _rxContent.is() )
@@ -438,9 +438,9 @@ namespace svt
         }
     };
 
-    //=====================================================================
+
     //= TemplateFolderCacheImpl
-    //=====================================================================
+
     class TemplateFolderCacheImpl
     {
     private:
@@ -842,9 +842,9 @@ namespace svt
         return m_xOfficeInstDirs;
     }
 
-    //=====================================================================
+
     //= TemplateFolderCache
-    //=====================================================================
+
 
     TemplateFolderCache::TemplateFolderCache( sal_Bool _bAutoStoreState )
         :m_pImpl( new TemplateFolderCacheImpl( _bAutoStoreState ) )
@@ -869,8 +869,8 @@ namespace svt
         m_pImpl->storeState( _bForceRetrieval );
     }
 
-//.........................................................................
+
 }   // namespace sfx2
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

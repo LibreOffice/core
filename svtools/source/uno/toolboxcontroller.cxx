@@ -706,7 +706,7 @@ void ToolboxController::dispatchCommand( const OUString& sCommandURL, const Sequ
     }
 }
 
-//
+
 
 com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo >  SAL_CALL ToolboxController::getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException)
 {

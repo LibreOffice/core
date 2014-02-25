@@ -45,9 +45,9 @@ namespace com { namespace sun { namespace star { namespace util {
 
 class SvNumberFormatsSupplierObj;
 
-//  ----------------------------------------------------
+
 //  class VCLXMultiLineEdit
-//  ----------------------------------------------------
+
 class VCLXMultiLineEdit :   public ::com::sun::star::awt::XTextComponent,
                             public ::com::sun::star::awt::XTextArea,
                             public ::com::sun::star::awt::XTextLayoutConstrains,
@@ -111,9 +111,9 @@ public:
 };
 
 
-//  ----------------------------------------------------
+
 //  class VCLXFileControl
-//  ----------------------------------------------------
+
 class VCLXFileControl : ::com::sun::star::awt::XTextComponent, public ::com::sun::star::awt::XTextLayoutConstrains, public VCLXWindow
 {
 protected:
@@ -164,9 +164,9 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
+
 //  class SVTXFormattedField
-//  ----------------------------------------------------
+
 
 class SVTXFormattedField : public VCLXSpinField
 {
@@ -218,9 +218,9 @@ protected:
 
 
 
-//  ----------------------------------------------------
+
 //  class SVTXRoadmap
-//  ----------------------------------------------------
+
 
 namespace svt
 {
@@ -288,9 +288,9 @@ protected:
 
 
 
-//  ----------------------------------------------------
+
 //  class SVTXNumericField
-//  ----------------------------------------------------
+
 class SVTXNumericField : public ::com::sun::star::awt::XNumericField, public SVTXFormattedField
 {
 public:
@@ -328,9 +328,9 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-// ----------------------------------------------------
+
 //  class VCLXCurrencyField
-//  ----------------------------------------------------
+
 class SVTXCurrencyField : public ::com::sun::star::awt::XCurrencyField, public SVTXFormattedField
 {
 public:
@@ -372,9 +372,9 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
+
 //  class VCLXProgressBar
-//  ----------------------------------------------------
+
 class VCLXProgressBar : public ::com::sun::star::awt::XProgressBar,
                         public VCLXWindow
 {
@@ -414,9 +414,9 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
+
 //  class SVTXDateField
-//  ----------------------------------------------------
+
 class SVTXDateField : public VCLXDateField
 {
 public:

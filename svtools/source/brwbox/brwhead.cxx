@@ -21,7 +21,7 @@
 #include <svtools/brwhead.hxx>
 #include <svtools/brwbox.hxx>
 
-//===================================================================
+
 
 BrowserHeader::BrowserHeader( BrowseBox* pParent, WinBits nWinBits )
  :HeaderBar( pParent, nWinBits )

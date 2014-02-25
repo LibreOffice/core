@@ -26,9 +26,9 @@
 
 namespace unographic {
 
-// ----------------------
+
 // - GraphicTransformer -
-// ----------------------
+
 
 typedef ::cppu::WeakAggImplHelper1<
     ::com::sun::star::graphic::XGraphicTransformer

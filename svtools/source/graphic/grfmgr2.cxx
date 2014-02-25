@@ -1695,13 +1695,13 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
         aTmpGraphic = GraphicObject( aTileBitmap );
 
         // fill stripes left over from upstream levels:
-        //
+
         //  x0000
         //  0
         //  0
         //  0
         //  0
-        //
+
         // where x denotes the place filled by our recursive predecessors
 
         // check whether we have to fill stripes here. Although not
@@ -1839,7 +1839,7 @@ bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const Rectangle& rArea, c
         static_cast<sal_Int64>(nTileCacheSize1D)*nTileCacheSize1D )
     {
         // First combine very small bitmaps into a larger tile
-        // ===================================================
+
 
         VirtualDevice   aVDev;
         const int       nNumTilesInCacheX( (nTileCacheSize1D + rSizePixel.Width()-1) / rSizePixel.Width() );
@@ -1917,7 +1917,7 @@ bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const Rectangle& rArea, c
         pOut->IntersectClipRegion( rArea );
 
         // Paint all tiles
-        // ===============
+
 
         bRet = ImplDrawTiled( *pOut, aOutStart,
                               (aOutArea.GetWidth() + aOutArea.Left() - aOutStart.X() + rSizePixel.Width() - 1) / rSizePixel.Width(),

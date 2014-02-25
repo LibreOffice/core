@@ -224,7 +224,7 @@ void ColorConfig_Impl::Load(const OUString& rScheme)
         aCurrentVal.getConstArray()[0] >>= sScheme;
     }
     m_sLoadedScheme = sScheme;
-    //
+
     uno::Sequence < OUString > aColorNames = GetPropertyNames(sScheme);
     uno::Sequence< uno::Any > aColors = GetProperties( aColorNames );
     const uno::Any* pColors = aColors.getConstArray();

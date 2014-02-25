@@ -30,10 +30,10 @@
 #include <vcl/vclevent.hxx>
 #include <vcl/svapp.hxx>
 
-//......................................................................................................................
+
 namespace svt
 {
-//......................................................................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -51,9 +51,9 @@ namespace svt
     namespace AccessibleStateType = ::com::sun::star::accessibility::AccessibleStateType;
     namespace AccessibleEventId = ::com::sun::star::accessibility::AccessibleEventId;
 
-    //==================================================================================================================
+
     //= ToolPanelDrawerContext
-    //==================================================================================================================
+
     class ToolPanelDrawerContext : public VCLXAccessibleComponent
     {
     public:
@@ -106,9 +106,9 @@ namespace svt
             i_rStateSet.AddState( AccessibleStateType::FOCUSED );
     }
 
-    //==================================================================================================================
+
     //= ToolPanelDrawerPeer
-    //==================================================================================================================
+
 
     ToolPanelDrawerPeer::ToolPanelDrawerPeer()
         :VCLXWindow()
@@ -127,8 +127,8 @@ namespace svt
         return new ToolPanelDrawerContext( *this );
     }
 
-//......................................................................................................................
+
 } // namespace svt
-//......................................................................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

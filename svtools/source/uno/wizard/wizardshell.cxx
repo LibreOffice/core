@@ -27,10 +27,10 @@
 
 #include <vcl/msgbox.hxx>
 
-//......................................................................................................................
+
 namespace svt { namespace uno
 {
-//......................................................................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -49,7 +49,7 @@ namespace svt { namespace uno
 
     namespace WizardTravelType = ::com::sun::star::ui::dialogs::WizardTravelType;
 
-    //==================================================================================================================
+
     namespace
     {
 
@@ -60,9 +60,9 @@ namespace svt { namespace uno
         }
     }
 
-    //==================================================================================================================
+
     //= WizardShell
-    //==================================================================================================================
+
 
     WizardShell::WizardShell( Window* i_pParent, const Reference< XWizard >& i_rWizard, const Reference< XWizardController >& i_rController,
             const Sequence< Sequence< sal_Int16 > >& i_rPaths )
@@ -263,8 +263,8 @@ namespace svt { namespace uno
         return WizardShell_Base::onFinish();
     }
 
-//......................................................................................................................
+
 } } // namespace svt::uno
-//......................................................................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -334,7 +334,7 @@ uno::Sequence< beans::PropertyValue > ExportDialog::GetFilterData( sal_Bool bUpd
     return aRet;
 }
 
-//
+
 awt::Size ExportDialog::GetOriginalSize()
 {
     basegfx::B2DRange aShapesRange;

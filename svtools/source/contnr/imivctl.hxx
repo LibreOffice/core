@@ -38,10 +38,10 @@ class SvxIconChoiceCtrlEntry;
 class IcnViewEdit_Impl;
 class IcnGridMap_Impl;
 
-///////////////////////////////////////////////////////////////////////////////
-//
+
+
 // some defines
-//
+
 #define PAINTFLAG_HOR_CENTERED  0x0001
 #define PAINTFLAG_VER_CENTERED  0x0002
 
@@ -76,10 +76,10 @@ class IcnGridMap_Impl;
 
 #define VIEWMODE_MASK   (WB_ICON | WB_SMALLICON | WB_DETAILS)
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+
+
+
+
 enum IcnViewFieldType
 {
     IcnViewFieldTypeDontknow = 0,
@@ -87,10 +87,10 @@ enum IcnViewFieldType
     IcnViewFieldTypeText = 2
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
+
+
 // Data about the focus of entries
-//
+
 struct LocalFocus
 {
     sal_Bool    bOn;
@@ -100,10 +100,10 @@ struct LocalFocus
     LocalFocus() { bOn = sal_False; }
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
+
+
 // Entry-List
-//
+
 typedef ::std::vector< SvxIconChoiceCtrlEntry* > SvxIconChoiceCtrlEntryList_impl;
 
 class EntryList_Impl
@@ -143,10 +143,10 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
+
+
 // Implementation-class of IconChoiceCtrl
-//
+
 
 typedef boost::ptr_map<sal_uInt16, SvxIconChoiceCtrlColumnInfo> SvxIconChoiceCtrlColumnInfoMap;
 typedef std::vector<SvxIconChoiceCtrlEntry*> SvxIconChoiceCtrlEntryPtrVec;
@@ -560,7 +560,7 @@ public:
                         }
 };
 
-// ----------------------------------------------------------------------------------------------
+
 
 typedef std::map<sal_uInt16, SvxIconChoiceCtrlEntryPtrVec> IconChoiceMap;
 
@@ -617,7 +617,7 @@ public:
     static void             DestroyGridAdjustData( IconChoiceMap& rLists );
 };
 
-// ----------------------------------------------------------------------------------------------
+
 
 typedef sal_uLong GridId;
 
