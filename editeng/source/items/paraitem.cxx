@@ -78,7 +78,7 @@ TYPEINIT1_FACTORY(SvxScriptSpaceItem, SfxBoolItem, new SvxScriptSpaceItem(sal_Fa
 TYPEINIT1_FACTORY(SvxHangingPunctuationItem, SfxBoolItem, new SvxHangingPunctuationItem(false, 0));
 TYPEINIT1_FACTORY(SvxForbiddenRuleItem, SfxBoolItem, new SvxForbiddenRuleItem(false, 0));
 TYPEINIT1_FACTORY(SvxParaVertAlignItem, SfxUInt16Item, new SvxParaVertAlignItem(0, 0));
-TYPEINIT1_FACTORY(SvxParaGridItem, SfxBoolItem, new SvxParaGridItem(sal_True, 0));
+TYPEINIT1_FACTORY(SvxParaGridItem, SfxBoolItem, new SvxParaGridItem(true, 0));
 
 
 
@@ -1619,7 +1619,7 @@ bool SvxParaVertAlignItem::operator==( const SfxPoolItem& rItem ) const
 }
 
 
-SvxParaGridItem::SvxParaGridItem( sal_Bool bOn, const sal_uInt16 nId )
+SvxParaGridItem::SvxParaGridItem( bool bOn, const sal_uInt16 nId )
     : SfxBoolItem( nId, bOn )
 {
 }

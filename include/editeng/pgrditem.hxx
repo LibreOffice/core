@@ -35,7 +35,7 @@ class EDITENG_DLLPUBLIC SvxParaGridItem : public SfxBoolItem
 public:
     TYPEINFO();
 
-    SvxParaGridItem( const sal_Bool bSnapToGrid /*= sal_True*/,
+    SvxParaGridItem( const bool bSnapToGrid /*= true*/,
                      const sal_uInt16 nId  );
 
     // "pure virtual Methods" from SfxPoolItem
