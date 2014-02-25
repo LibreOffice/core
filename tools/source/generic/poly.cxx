@@ -794,10 +794,10 @@ static void ImplAdaptiveSubdivide( ::std::back_insert_iterator< ::std::vector< P
 
     // Perform bezier flatness test (lecture notes from R. Schaback,
     // Mathematics of Computer-Aided Design, Uni Goettingen, 2000)
-    //
+
     // ||P(t) - L(t)|| <= max     ||b_j - b_0 - j/n(b_n - b_0)||
     //                    0<=j<=n
-    //
+
     // What is calculated here is an upper bound to the distance from
     // a line through b_0 and b_3 (P1 and P4 in our notation) and the
     // curve. We can drop 0 and n from the running indices, since the
@@ -1298,7 +1298,7 @@ Rectangle Polygon::GetBoundRect() const
     // BoundRect of the Polygon (to get that, use basegfx::B2DPolygon classes),
     // but will always create a valid BoundRect, at least as long as this method
     // 'blindly' travels over all points, including control points.
-    //
+
     // DBG_ASSERT( !mpImplPolygon->mpFlagAry, "GetBoundRect could fail with beziers!" );
 
     sal_uInt16  nCount = mpImplPolygon->mnPoints;
@@ -1635,7 +1635,7 @@ void impCorrectContinuity(basegfx::B2DPolygon& roPolygon, sal_uInt32 nIndex, sal
         if(roPolygon.isPrevControlPointUsed(nIndex) && roPolygon.isNextControlPointUsed(nIndex))
         {
             // #i115917# Patch from osnola (modified, thanks for showing the porblem)
-            //
+
             // The correction is needed because an integer polygon with control points
             // is converted to double precision. When C1 or C2 is used the involved vectors
             // may not have the same directions/lengths since these come from integer coordinates
@@ -1643,10 +1643,10 @@ void impCorrectContinuity(basegfx::B2DPolygon& roPolygon, sal_uInt32 nIndex, sal
             // is in the range of +-1 in y and y, thus 0.0 <= error <= sqrt(2.0). Nonetheless,
             // it needs to be corrected to be able to detect the continuity in this points
             // correctly.
-            //
+
             // We only have the integer data here (already in double precision form, but no mantisses
             // used), so the best correction is to use:
-            //
+
             // for C1: The longest vector since it potentially has best preserved the original vector.
             //         Even better the sum of the vectors, weighted by their length. This gives the
             //         normal vector addition to get the vector itself, lengths need to be preserved.

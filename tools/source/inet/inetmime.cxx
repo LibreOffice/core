@@ -2400,16 +2400,16 @@ OUString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
     // letters within words, like "Appel
     // =?iso-8859-1?Q?=E0?=t=?iso-8859-1?Q?=E9?=moin", so it seems best to
     // detect encoded words even when not propperly surrounded by white space.
-    //
+
     // Non US-ASCII characters in rBody are treated as ISO-8859-1.
-    //
+
     // encoded-word = "=?"
     //     1*(%x21 / %x23-27 / %x2A-2B / %x2D / %30-39 / %x41-5A / %x5E-7E)
     //     ["*" 1*8ALPHA *("-" 1*8ALPHA)] "?"
     //     ("B?" *(4base64) (4base64 / 3base64 "=" / 2base64 "==")
     //      / "Q?" 1*(%x21-3C / %x3E / %x40-7E / "=" 2HEXDIG))
     //     "?="
-    //
+
     // base64 = ALPHA / DIGIT / "+" / "/"
 
     const sal_Char * pBegin = rBody.getStr();
