@@ -2563,7 +2563,7 @@ uno::Reference< table::XCellRange >  SwXTextTable::getCellRangeByPosition(sal_In
 }
 
 uno::Reference< table::XCellRange >  SwXTextTable::getCellRangeByName(const OUString& aRange)
-    throw( uno::RuntimeException )
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Reference< table::XCellRange >  aRef;
