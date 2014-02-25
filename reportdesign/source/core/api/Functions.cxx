@@ -24,10 +24,10 @@
 #include <comphelper/property.hxx>
 #include <boost/mem_fn.hpp>
 #include <algorithm>
-// =============================================================================
+
 namespace reportdesign
 {
-// =============================================================================
+
     using namespace com::sun::star;
 
 OFunctions::OFunctions(const uno::Reference< report::XFunctionsSupplier >& _xParent,const uno::Reference< uno::XComponentContext >& context)
@@ -39,7 +39,7 @@ OFunctions::OFunctions(const uno::Reference< report::XFunctionsSupplier >& _xPar
 }
 
 // TODO: VirtualFunctionFinder: This is virtual function!
-//
+
 OFunctions::~OFunctions()
 {
 }
@@ -50,7 +50,7 @@ void SAL_CALL OFunctions::dispose() throw(uno::RuntimeException)
 }
 
 // TODO: VirtualFunctionFinder: This is virtual function!
-//
+
 void SAL_CALL OFunctions::disposing()
 {
     ::std::for_each(m_aFunctions.begin(),m_aFunctions.end(),::boost::mem_fn(&com::sun::star::report::XFunction::dispose));
@@ -186,8 +186,8 @@ void OFunctions::checkIndex(sal_Int32 _nIndex)
     if ( _nIndex < 0 || static_cast<sal_Int32>(m_aFunctions.size()) <= _nIndex )
         throw lang::IndexOutOfBoundsException();
 }
-// =============================================================================
+
 }
-// =============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

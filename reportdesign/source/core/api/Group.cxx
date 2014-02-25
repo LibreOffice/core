@@ -30,10 +30,10 @@
 #include <cppuhelper/supportsservice.hxx>
 #include "Functions.hxx"
 
-// =============================================================================
+
 namespace reportdesign
 {
-// =============================================================================
+
     using namespace com::sun::star;
     using namespace comphelper;
 
@@ -52,7 +52,7 @@ OGroup::OGroup(const uno::Reference< report::XGroups >& _xParent
 }
 
 // TODO: VirtualFunctionFinder: This is virtual function!
-//
+
 OGroup::~OGroup()
 {
 }
@@ -105,7 +105,7 @@ void SAL_CALL OGroup::dispose() throw(uno::RuntimeException)
 }
 
 // TODO: VirtualFunctionFinder: This is virtual function!
-//
+
 void SAL_CALL OGroup::disposing()
 {
     m_xHeader.clear();
@@ -330,8 +330,8 @@ uno::Reference< report::XFunctions > SAL_CALL OGroup::getFunctions() throw (uno:
 {
     return m_xFunctions;
 }
-// =============================================================================
+
 } // namespace reportdesign
-// =============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

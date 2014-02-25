@@ -32,10 +32,10 @@
 
 #define MIN_WIDTH   80
 #define MIN_HEIGHT  20
-// =============================================================================
+
 namespace reportdesign
 {
-// =============================================================================
+
     using namespace com::sun::star;
     using namespace comphelper;
 uno::Sequence< OUString > lcl_getLineOptionals()
@@ -567,8 +567,8 @@ void SAL_CALL OFixedLine::setPrintRepeatedValues( ::sal_Bool /*_printrepeatedval
 }
 
 
-// =============================================================================
+
 } // namespace reportdesign
-// =============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

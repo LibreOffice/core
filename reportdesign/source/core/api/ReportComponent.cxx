@@ -37,10 +37,10 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
-// =============================================================================
+
 namespace reportdesign
 {
-// =============================================================================
+
     using namespace com::sun::star;
     using namespace comphelper;
 
@@ -132,9 +132,9 @@ OReportComponentProperties::~OReportComponentProperties()
         m_xProxy.clear();
     }
 }
-// =============================================================================
+
 } // namespace reportdesign
-// =============================================================================
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

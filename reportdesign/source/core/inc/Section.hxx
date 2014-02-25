@@ -103,13 +103,13 @@ namespace reportdesign
         void init();
     protected:
         // TODO: VirtualFunctionFinder: This is virtual function!
-        //
+
         virtual ~OSection();
 
         /** this function is called upon disposing the component
         */
         // TODO: VirtualFunctionFinder: This is virtual function!
-        //
+
         virtual void SAL_CALL disposing();
     public:
         typedef ::comphelper::ImplementationReference< OSection ,::com::sun::star::report::XSection,::com::sun::star::uno::XWeak > TSection;

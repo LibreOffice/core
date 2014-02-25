@@ -32,15 +32,15 @@
 #include "AddField.hxx"
 #include "helpids.hrc"
 
-//============================================================================
+
 namespace rptui
 {
     using namespace formula;
     using namespace ::com::sun::star;
 
-//  --------------------------------------------------------------------------
+
 //      Initialisierung / gemeinsame Funktionen  fuer Dialog
-//  --------------------------------------------------------------------------
+
 
 FormulaDialog::FormulaDialog(Window* pParent
                              , const uno::Reference<lang::XMultiServiceFactory>& _xServiceFactory
@@ -96,9 +96,9 @@ FormulaDialog::~FormulaDialog()
     StoreFormEditData( m_pFormulaData );
 }
 
-//  --------------------------------------------------------------------------
+
 //                          Funktionen fuer rechte Seite
-//  --------------------------------------------------------------------------
+
 bool FormulaDialog::calculateValue( const OUString& rStrExp, OUString& rStrResult )
 {
     rStrResult = rStrExp;

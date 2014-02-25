@@ -30,7 +30,7 @@
 #include "metadata.hxx"
 #include <tools/urlobj.hxx>
 
-//........................................................................
+
 namespace rptui
 {
     OUString HelpIdUrl::getHelpURL( const OString& sHelpId )
@@ -47,9 +47,9 @@ namespace rptui
     using namespace com::sun::star;
     using com::sun::star::inspection::PropertyCategoryDescriptor;
 
-    //====================================================================
+
     //= DefaultComponentInspectorModel
-    //====================================================================
+
 
     DefaultComponentInspectorModel::DefaultComponentInspectorModel( const Reference< XComponentContext >& _rxContext)
         :m_xContext( _rxContext )
@@ -251,8 +251,8 @@ namespace rptui
         return m_xComponent->getPropertyOrderIndex(_rPropertyName);
     }
 
-//........................................................................
+
 } // namespace rptui
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

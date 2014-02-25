@@ -30,13 +30,13 @@ namespace com { namespace sun { namespace star { namespace lang {
     class XMultiServiceFactory;
 } } } }
 
-//============================================================================
+
 namespace rptui
 {
-//============================================================================
+
 class OAddFieldWindow;
 
-//============================================================================
+
 class FormulaDialog : public formula::FormulaModalDialog,
                       public formula::IControlReferenceHandler
 {
@@ -96,9 +96,9 @@ protected:
     void         HighlightFunctionParas(const OUString& aFormula);
 };
 
-// =============================================================================
+
 } // rptui
-// =============================================================================
+
 
 #endif // RPTUI_FORMULA_HXX
 

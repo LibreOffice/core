@@ -37,9 +37,9 @@ namespace rptui
 class OSectionView;
 class ODesignView;
 class OObjectBase;
-//============================================================================
+
 // PropBrw
-//============================================================================
+
 
 class PropBrw : public DockingWindow , public SfxListener, public SfxBroadcaster
 {
@@ -103,9 +103,9 @@ public:
 private:
     using Window::Update;
 };
-//==============================================================================
+
 } // rptui
-//==============================================================================
+
 #endif // _REPORT_PROPBRW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

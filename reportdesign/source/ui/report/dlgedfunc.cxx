@@ -393,9 +393,9 @@ void DlgEdFunc::activateOle(SdrObject* _pObj)
     if ( _pObj )
     {
         const sal_uInt16 nSdrObjKind = _pObj->GetObjIdentifier();
-        //
+
         //  OLE: activate
-        //
+
         if (nSdrObjKind == OBJ_OLE2)
         {
             bool bIsInplaceOle = false;

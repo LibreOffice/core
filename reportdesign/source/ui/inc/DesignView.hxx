@@ -53,8 +53,8 @@ namespace rptui
     class PropBrw;
     class OAddFieldWindow;
     class ONavigator;
-    //==================================================================
-    //==================================================================
+
+
     class ODesignView : public dbaui::ODataView, public SfxBroadcaster, public IMarkedSection
     {
     private:
@@ -273,9 +273,9 @@ namespace rptui
         */
         sal_uInt16 getZoomFactor(SvxZoomType _eType) const;
     };
-//==================================================================
+
 }   //rptui
-//==================================================================
+
 #endif // RPTUI_DESIGNVIEW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

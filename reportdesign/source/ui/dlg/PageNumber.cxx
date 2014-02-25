@@ -38,9 +38,9 @@ namespace rptui
 using namespace ::com::sun::star;
 using namespace ::comphelper;
 
-//========================================================================
+
 // class OPageNumberDialog
-//========================================================================
+
 OPageNumberDialog::OPageNumberDialog( Window* _pParent
                                            ,const uno::Reference< report::XReportDefinition >& _xHoldAlive
                                            ,OReportController* _pController)
@@ -118,8 +118,8 @@ short OPageNumberDialog::Execute()
     }
     return nRet;
 }
-// =============================================================================
+
 } // rptui
-// =============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

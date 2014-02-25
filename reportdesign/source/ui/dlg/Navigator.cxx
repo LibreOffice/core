@@ -896,9 +896,9 @@ ONavigatorImpl::~ONavigatorImpl()
 const long STD_WIN_SIZE_X = 210;
 const long STD_WIN_SIZE_Y = 280;
 const long LISTBOX_BORDER = 2;
-//========================================================================
+
 // class ONavigator
-//========================================================================
+
 ONavigator::ONavigator( Window* _pParent
                         ,OReportController& _rController)
     : FloatingWindow( _pParent, ModuleRes(RID_NAVIGATOR) )
@@ -926,7 +926,7 @@ void ONavigator::Resize()
 
     Size aSize( GetOutputSizePixel() );
 
-    //////////////////////////////////////////////////////////////////////
+
 
     // Groesse der form::ListBox anpassen
     Point aLBPos( LISTBOX_BORDER, LISTBOX_BORDER );
@@ -944,8 +944,8 @@ void ONavigator::GetFocus()
     if ( m_pImpl->m_pNavigatorTree.get() )
         m_pImpl->m_pNavigatorTree->GrabFocus();
 }
-// =============================================================================
+
 } // rptui
-// =============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

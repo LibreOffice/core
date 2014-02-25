@@ -76,9 +76,9 @@ namespace rptxml
         static SvXMLTokenMap* GetSubDocumentElemTokenMap();
 
     };
-// -----------------------------------------------------------------------------
+
 } // rptxml
-// -----------------------------------------------------------------------------
+
 #endif // RPT_XMLHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

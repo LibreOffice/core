@@ -62,9 +62,9 @@ public:
     virtual ~OPageNumberDialog();
     virtual short   Execute();
 };
-// =============================================================================
+
 } // namespace rptui
-// =============================================================================
+
 #endif // RPTUI_PAGENUMBER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

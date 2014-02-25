@@ -31,14 +31,14 @@
     ::osl::MutexGuard aGuard(theOModuleMutex::get()); \
     ensureImpl()
 
-//.........................................................................
+
 namespace rptui
 {
-//.........................................................................
+
     using namespace ::com::sun::star;
-//=========================================================================
+
 //= OModuleImpl
-//=========================================================================
+
 /** implementation for <type>OModule</type>. not threadsafe, has to be guarded by it's owner
 */
 class OModuleImpl
@@ -80,9 +80,9 @@ ResMgr* OModuleImpl::getResManager()
     return m_pResources;
 }
 
-//=========================================================================
+
 //= OModule
-//=========================================================================
+
 
 namespace
 {
@@ -125,8 +125,8 @@ void OModule::ensureImpl()
     s_pImpl = new OModuleImpl();
 }
 
-//.........................................................................
+
 }   // namespace dbaui
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

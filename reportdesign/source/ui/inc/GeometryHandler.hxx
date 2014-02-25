@@ -37,10 +37,10 @@
 #include <comphelper/listenernotification.hxx>
 #include "metadata.hxx"
 
-//........................................................................
+
 namespace rptui
 {
-//........................................................................
+
 
     struct DefaultFunction
     {
@@ -308,9 +308,9 @@ namespace rptui
         mutable bool                                                                        m_bNewFunction;
         bool                                                                                m_bIn;
     };
-//........................................................................
+
 } // namespace rptui
-//........................................................................
+
 
 #endif // RPT_GeometryHandler_HXX
 
