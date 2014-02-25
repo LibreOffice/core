@@ -48,10 +48,10 @@ using namespace com::sun::star;
 
 //cppunit calls instantiates a new TextFixture for each test and calls setUp
 //and tearDown on that for every test in a fixture
-//
+
 //We basically need to call dispose on our root component context context to
 //shut down cleanly in the right order.
-//
+
 //But we can't setup and tear down the root component context for
 //every test because all the uno singletons will be invalid after
 //the first dispose. So lets setup the default context once before
