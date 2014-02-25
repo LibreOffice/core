@@ -93,7 +93,6 @@ public:
     virtual void SAL_CALL initialize( const Sequence< Any >& aArguments )
         throw(Exception, RuntimeException);
 
-
     // XDragSource
     virtual sal_Bool SAL_CALL isDragImageSupported(  ) throw(RuntimeException);
     virtual sal_Int32 SAL_CALL getDefaultCursor( sal_Int8 dragAction )
@@ -111,8 +110,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
 
-
-
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(
             /* [in] */ REFIID riid,
             /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
@@ -120,7 +117,6 @@ public:
     virtual ULONG STDMETHODCALLTYPE AddRef( );
 
     virtual ULONG STDMETHODCALLTYPE Release( );
-
 
     // IDropSource
     virtual HRESULT STDMETHODCALLTYPE QueryContinueDrag(
@@ -131,7 +127,6 @@ public:
         /* [in] */ DWORD dwEffect);
 
 };
-
 
 #endif
 

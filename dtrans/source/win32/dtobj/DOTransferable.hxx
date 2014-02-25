@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifndef _DOTRANSFERABLE_HXX_
 #define _DOTRANSFERABLE_HXX_
 
@@ -41,9 +40,7 @@ class CDOTransferable : public ::cppu::WeakImplHelper2< ::com::sun::star::datatr
 public:
     typedef com::sun::star::uno::Sequence< sal_Int8 > ByteSequence_t;
 
-    //------------------------------------------------------------------------
     // XTransferable
-    //------------------------------------------------------------------------
 
     virtual ::com::sun::star::uno::Any SAL_CALL getTransferData( const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
         throw( ::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException );
@@ -53,12 +50,11 @@ public:
 
     virtual sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
         throw( ::com::sun::star::uno::RuntimeException );
-    //------------------------------------------------------------------------
+
     // XSystemTransferable
-    //------------------------------------------------------------------------
+
     virtual ::com::sun::star::uno::Any SAL_CALL getData( const com::sun::star::uno::Sequence<sal_Int8>& aProcessId  ) throw
     (::com::sun::star::uno::RuntimeException);
-
 
 private:
     // should be created only by CDTransObjFactory
@@ -66,9 +62,7 @@ private:
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
         IDataObjectPtr rDataObject );
 
-    //------------------------------------------------------------------------
     // some helper functions
-    //------------------------------------------------------------------------
 
     void SAL_CALL initFlavorList( );
 

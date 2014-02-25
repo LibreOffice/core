@@ -36,9 +36,7 @@
 #include <process.h>
 #include "XTDo.hxx"
 
-
 // my defines
-
 
 #define WRITE_CB
 #define EVT_MANUAL_RESET     TRUE
@@ -47,16 +45,12 @@
 #define WAIT_MSGLOOP
 #define RAW_MARSHALING
 
-
 //  namesapces
-
 
 using namespace ::rtl;
 using namespace ::std;
 
-
 //  globales
-
 
 HANDLE  g_hEvtThreadWakeup;
 
@@ -66,7 +60,6 @@ HANDLE  g_hEvtThreadWakeup;
     IStream* g_pStm;
 #endif
 
-//################################################################
 // a thread in another apartment to test apartment transparency
 
 unsigned int _stdcall ThreadProc(LPVOID pParam)
@@ -114,11 +107,7 @@ unsigned int _stdcall ThreadProc(LPVOID pParam)
     return 0;
 }
 
-//################################################################
-
-
 //  main
-
 
 int SAL_CALL main( int nArgc, char* Argv[] )
 {

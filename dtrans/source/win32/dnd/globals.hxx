@@ -30,7 +30,6 @@
 #endif
 #include <sal/types.h>
 
-
 #define DNDSOURCE_SERVICE_NAME  "com.sun.star.datatransfer.dnd.OleDragSource"
 #define DNDSOURCE_IMPL_NAME  "com.sun.star.comp.datatransfer.dnd.OleDragSource_V1"
 
@@ -71,13 +70,10 @@ DWORD dndActionsToDropEffects( sal_Int8 actions);
 // or Alt).
 DWORD dndActionsToSingleDropEffect( sal_Int8 actions);
 
-
-
 struct MutexDummy
 {
     osl::Mutex m_mutex;
 };
-
 
 #endif
 

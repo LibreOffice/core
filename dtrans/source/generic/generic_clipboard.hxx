@@ -28,11 +28,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
-// ------------------------------------------------------------------------
-
 #define GENERIC_CLIPBOARD_IMPLEMENTATION_NAME "com.sun.star.comp.datatransfer.clipboard.GenericClipboard"
-
-// ------------------------------------------------------------------------
 
 namespace dtrans
 {
@@ -113,8 +109,6 @@ namespace dtrans
     };
 
 }
-
-// ------------------------------------------------------------------------
 
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL GenericClipboard_getSupportedServiceNames();
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL GenericClipboard_createInstance(

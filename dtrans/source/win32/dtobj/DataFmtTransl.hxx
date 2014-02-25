@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifndef _DATAFMTTRANSL_HXX_
 #define _DATAFMTTRANSL_HXX_
 
@@ -35,9 +34,7 @@
 #pragma warning(pop)
 #endif
 
-//-----------------------------------------------
 // declaration
-//-----------------------------------------------
 
 class CFormatEtc;
 

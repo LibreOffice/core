@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifndef _MCNTTYPE_HXX_
 #define _MCNTTYPE_HXX_
 
@@ -35,9 +34,7 @@ class CMimeContentType : public
 public:
     CMimeContentType( const OUString& aCntType );
 
-    //-------------------------------------------
     // XMimeContentType
-    //-------------------------------------------
 
     virtual OUString SAL_CALL getMediaType(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual OUString SAL_CALL getMediaSubtype(  ) throw(::com::sun::star::uno::RuntimeException);

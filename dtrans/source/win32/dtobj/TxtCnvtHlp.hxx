@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifndef _TXTCNVTHLP_HXX_
 #define _TXTCNVTHLP_HXX_
 

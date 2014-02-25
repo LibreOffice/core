@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifndef _WINCLIPBOARD_HXX_
 #define _WINCLIPBOARD_HXX_
 
@@ -40,7 +39,6 @@
 // forward
 class CWinClipbImpl;
 
-//------------------------------------------------------------------------
 // implements the XClipboard[Ex] ... interfaces
 // for the clipboard viewer mechanism we need a static callback function
 // and a static member to reasocciate from this static function to the
@@ -49,7 +47,6 @@ class CWinClipbImpl;
 // because we assume to be instanciated only once
 // this will be asured by an OneInstanceFactory of the service and not
 // by this class!
-//------------------------------------------------------------------------
 
 // helper class, so that the mutex is constructed
 // before the constructor of WeakComponentImplHelper
@@ -72,9 +69,7 @@ public:
     CWinClipboard( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                    const OUString& aClipboardName );
 
-    //------------------------------------------------
     // XClipboard
-    //------------------------------------------------
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL getContents(  )
         throw( ::com::sun::star::uno::RuntimeException );
@@ -87,21 +82,15 @@ public:
     virtual OUString SAL_CALL getName(  )
         throw( ::com::sun::star::uno::RuntimeException );
 
-    //------------------------------------------------
     // XFlushableClipboard
-    //------------------------------------------------
 
     virtual void SAL_CALL flushClipboard( ) throw( com::sun::star::uno::RuntimeException );
 
-    //------------------------------------------------
     // XClipboardEx
-    //------------------------------------------------
 
     virtual sal_Int8 SAL_CALL getRenderingCapabilities(  ) throw( ::com::sun::star::uno::RuntimeException );
 
-    //------------------------------------------------
     // XClipboardNotifier
-    //------------------------------------------------
 
     virtual void SAL_CALL addClipboardListener(
         const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
@@ -111,16 +100,12 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
         throw( ::com::sun::star::uno::RuntimeException );
 
-    //------------------------------------------------
     // overwrite base class method, which is called
     // by base class dispose function
-    //------------------------------------------------
 
     virtual void SAL_CALL disposing();
 
-    //------------------------------------------------
     // XServiceInfo
-    //------------------------------------------------
 
     virtual OUString SAL_CALL getImplementationName(  )
         throw(::com::sun::star::uno::RuntimeException);
@@ -140,7 +125,6 @@ private:
 
     friend class CWinClipbImpl;
 };
-
 
 #endif
 

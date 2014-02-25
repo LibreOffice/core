@@ -21,9 +21,7 @@
 #include <osl/diagnose.h>
 #include "DTransHelper.hxx"
 
-
 // implementation
-
 
 CStgTransferHelper::CStgTransferHelper( sal_Bool bAutoInit,
                                         HGLOBAL hGlob,
@@ -35,10 +33,7 @@ CStgTransferHelper::CStgTransferHelper( sal_Bool bAutoInit,
         init( hGlob, m_bDelStgOnRelease );
 }
 
-
 // dtor
-
-
 
 CStgTransferHelper::~CStgTransferHelper( )
 {
@@ -46,9 +41,7 @@ CStgTransferHelper::~CStgTransferHelper( )
         m_lpStream->Release( );
 }
 
-
 // TransferData into the
-
 
 void SAL_CALL CStgTransferHelper::write( const void* lpData, ULONG cb, ULONG* cbWritten )
 {
@@ -71,9 +64,7 @@ void SAL_CALL CStgTransferHelper::write( const void* lpData, ULONG cb, ULONG* cb
 #endif
 }
 
-
 // read
-
 
 void SAL_CALL CStgTransferHelper::read( LPVOID pv, ULONG cb, ULONG* pcbRead )
 {
@@ -86,9 +77,7 @@ void SAL_CALL CStgTransferHelper::read( LPVOID pv, ULONG cb, ULONG* pcbRead )
         throw CStgTransferException( hr );
 }
 
-
 // GetHGlobal
-
 
 HGLOBAL SAL_CALL CStgTransferHelper::getHGlobal( ) const
 {
@@ -106,9 +95,7 @@ HGLOBAL SAL_CALL CStgTransferHelper::getHGlobal( ) const
     return hGlob;
 }
 
-
 // getIStream
-
 
 void SAL_CALL CStgTransferHelper::getIStream( LPSTREAM* ppStream )
 {
@@ -118,9 +105,7 @@ void SAL_CALL CStgTransferHelper::getIStream( LPSTREAM* ppStream )
         static_cast< LPUNKNOWN >( *ppStream )->AddRef( );
 }
 
-
 // Init
-
 
 void SAL_CALL CStgTransferHelper::init( SIZE_T newSize,
                                         sal_uInt32 uiFlags,
@@ -149,9 +134,7 @@ void SAL_CALL CStgTransferHelper::init( SIZE_T newSize,
 #endif
 }
 
-
 // Init
-
 
 void SAL_CALL CStgTransferHelper::init( HGLOBAL hGlob,
                                          sal_Bool bDelStgOnRelease )
@@ -165,9 +148,7 @@ void SAL_CALL CStgTransferHelper::init( HGLOBAL hGlob,
         throw CStgTransferException( hr );
 }
 
-
 // free the global memory and invalidate the stream pointer
-
 
 void SAL_CALL CStgTransferHelper::cleanup( )
 {
@@ -185,9 +166,7 @@ void SAL_CALL CStgTransferHelper::cleanup( )
     }
 }
 
-
 // return the size of memory we point to
-
 
 sal_uInt32 SAL_CALL CStgTransferHelper::memSize( CLIPFORMAT cf ) const
 {

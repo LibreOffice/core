@@ -37,13 +37,9 @@ GenericClipboard::GenericClipboard() :
 {
 }
 
-
-
 GenericClipboard::~GenericClipboard()
 {
 }
-
-
 
 void SAL_CALL GenericClipboard::initialize( const Sequence< Any >& aArguments )
     throw(Exception, RuntimeException)
@@ -59,8 +55,6 @@ void SAL_CALL GenericClipboard::initialize( const Sequence< Any >& aArguments )
     }
 }
 
-
-
 OUString SAL_CALL GenericClipboard::getImplementationName(  )
     throw(RuntimeException)
 {
@@ -73,15 +67,11 @@ sal_Bool SAL_CALL GenericClipboard::supportsService( const OUString& ServiceName
     return cppu::supportsService(this, ServiceName);
 }
 
-
-
 Sequence< OUString > SAL_CALL GenericClipboard::getSupportedServiceNames(    )
     throw(RuntimeException)
 {
     return GenericClipboard_getSupportedServiceNames();
 }
-
-
 
 Reference< XTransferable > SAL_CALL GenericClipboard::getContents()
     throw(RuntimeException)
@@ -89,8 +79,6 @@ Reference< XTransferable > SAL_CALL GenericClipboard::getContents()
     MutexGuard aGuard(m_aMutex);
     return m_aContents;
 }
-
-
 
 void SAL_CALL GenericClipboard::setContents(const Reference< XTransferable >& xTrans,
                                       const Reference< XClipboardOwner >& xClipboardOwner )
@@ -128,24 +116,17 @@ void SAL_CALL GenericClipboard::setContents(const Reference< XTransferable >& xT
     }
 }
 
-
-
 OUString SAL_CALL GenericClipboard::getName()
     throw(RuntimeException)
 {
     return m_aName;
 }
 
-
-
 sal_Int8 SAL_CALL GenericClipboard::getRenderingCapabilities()
     throw(RuntimeException)
 {
     return RenderingCapabilities::Delayed;
 }
-
-
-
 
 void SAL_CALL GenericClipboard::addClipboardListener( const Reference< XClipboardListener >& listener )
     throw(RuntimeException)
@@ -157,8 +138,6 @@ void SAL_CALL GenericClipboard::addClipboardListener( const Reference< XClipboar
         rBHelper.aLC.addInterface( getCppuType( (const ::com::sun::star::uno::Reference< XClipboardListener > *) 0), listener );
 }
 
-
-
 void SAL_CALL GenericClipboard::removeClipboardListener( const Reference< XClipboardListener >& listener )
     throw(RuntimeException)
 {
@@ -168,16 +147,12 @@ void SAL_CALL GenericClipboard::removeClipboardListener( const Reference< XClipb
         rBHelper.aLC.removeInterface( getCppuType( (const Reference< XClipboardListener > *) 0 ), listener ); \
 }
 
-
-
 Sequence< OUString > SAL_CALL GenericClipboard_getSupportedServiceNames()
 {
     Sequence< OUString > aRet(1);
     aRet[0] = "com.sun.star.datatransfer.clipboard.GenericClipboard";
     return aRet;
 }
-
-
 
 Reference< XInterface > SAL_CALL GenericClipboard_createInstance(
     const Reference< XMultiServiceFactory > & /*xMultiServiceFactory*/)

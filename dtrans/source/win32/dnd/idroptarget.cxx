@@ -35,7 +35,6 @@ IDropTargetImpl::~IDropTargetImpl()
 {
 }
 
-
 //IDropTarget
 HRESULT STDMETHODCALLTYPE IDropTargetImpl::QueryInterface( REFIID riid, void  **ppvObject)
 {

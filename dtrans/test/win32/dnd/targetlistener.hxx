@@ -50,7 +50,6 @@ public:
     virtual void SAL_CALL disposing( const EventObject& Source )
         throw(RuntimeException);
 
-
     virtual void SAL_CALL drop( const DropTargetDropEvent& dtde )
         throw(RuntimeException);
     virtual void SAL_CALL dragEnter( const DropTargetDragEnterEvent& dtde )

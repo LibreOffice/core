@@ -43,7 +43,6 @@ public:
     TargetDropContext( DropTarget* pTarget);
     ~TargetDropContext();
 
-
     // XDropTargetDragContext
     virtual void SAL_CALL acceptDrop( sal_Int8 dropOperation )
         throw( RuntimeException);

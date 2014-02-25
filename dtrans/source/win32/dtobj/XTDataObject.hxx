@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifndef _XTDATAOBJECT_HXX_
 #define _XTDATAOBJECT_HXX_
 
@@ -67,9 +66,7 @@ public:
                    const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& aXTransferable );
     virtual ~CXTDataObject() {}
 
-    //-----------------------------------------------------------------
     // ole interface implementation
-    //-----------------------------------------------------------------
 
     //IUnknown interface methods
     STDMETHODIMP           QueryInterface(REFIID iid, LPVOID* ppvObject);
@@ -126,10 +123,6 @@ private:
     CDataFormatTranslator                                                                  m_DataFormatTranslator;
     CFormatRegistrar                                                                       m_FormatRegistrar;
 };
-
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
 
 class CEnumFormatEtc : public IEnumFORMATETC
 {

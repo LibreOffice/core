@@ -38,7 +38,6 @@
 #include "globals.hxx"
 #include "../../inc/DtObjFactory.hxx"
 
-
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace cppu;
@@ -106,7 +105,6 @@ private:
     Reference<XDropTargetDragContext> m_currentDragContext;
     Reference<XDropTargetDropContext> m_currentDropContext;
 
-
 private:
     DropTarget();
     DropTarget(DropTarget&);
@@ -140,7 +138,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
 
-
     // Functions called from the IDropTarget implementation ( m_pDropTarget)
     virtual HRESULT DragEnter(
             /* [unique][in] */ IDataObject *pDataObj,
@@ -161,7 +158,6 @@ public:
             /* [in] */ POINTL pt,
             /* [out][in] */ DWORD *pdwEffect);
 
-
 // Non - interface functions --------------------------------------------------
 // XDropTargetDropContext delegated from DropContext
 
@@ -173,7 +169,6 @@ public:
     void _acceptDrag( sal_Int8 dragOperation, const Reference<XDropTargetDragContext>& context);
     void _rejectDrag( const Reference<XDropTargetDragContext>& context);
 
-
 protected:
     // Gets the current action dependend on the pressed modifiers, the effects
     // supported by the drop source (IDropSource) and the default actions of the
@@ -182,19 +177,13 @@ protected:
     // Only filters with the default actions
     inline sal_Int8 getFilteredActions( DWORD grfKeyState);
 
-
-
     void fire_drop( const DropTargetDropEvent& dte);
     void fire_dragEnter( const DropTargetDragEnterEvent& dtde );
     void fire_dragExit( const DropTargetEvent& dte );
     void fire_dragOver( const DropTargetDragEvent& dtde );
     void fire_dropActionChanged( const DropTargetDragEvent& dtde );
 
-
-
-
 };
-
 
 #endif
 

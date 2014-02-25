@@ -43,7 +43,6 @@ Reference< XInterface > SAL_CALL createDropTarget( const Reference< XMultiServic
     return Reference<XInterface>( static_cast<XInitialization*>(pTarget), UNO_QUERY);
 }
 
-
 extern "C"
 {
 
