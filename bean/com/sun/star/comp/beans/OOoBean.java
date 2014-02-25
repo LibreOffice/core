@@ -1029,7 +1029,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         bIgnoreVisibility = false;
     }
 
-    //--------------------------------------------------------------------------
+
     /** Applies all tool visiblities to the real thing.
 
         @deprecated Clients should use the service com.sun.star.frame.LayoutManager,
@@ -1300,9 +1300,9 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         return bStatusBarVisible;
     }
 
-    //===========================================================================
+
     // Helper Methods / Internal Methods
-    //---------------------------------------------------------------------------
+
 
     // general instance intializer
     {
@@ -1362,9 +1362,9 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         return aExtendedArguments;
     }
 
-    //===========================================================================
+
     // Helper Classes
-    //---------------------------------------------------------------------------
+
 
     /** Helper class to listen on the connection to learn when it dies.
 

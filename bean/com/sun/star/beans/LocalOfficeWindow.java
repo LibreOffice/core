@@ -251,7 +251,7 @@ public class LocalOfficeWindow
      */
     private native int getNativeWindowSystemType();
 
-        //---------------------------------------------------------------------------
+
         /** Helper class to watch calls into OOo with a timeout.
          * @deprecated
          */

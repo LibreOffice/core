@@ -20,7 +20,7 @@ package com.sun.star.comp.beans;
 
 import com.sun.star.uno.UnoRuntime;
 
-//==========================================================================
+
 /** Wrapper base class for UNO services which emulates the upcoming
     mode of automatic runtime Java classes to get rid of the need for
     queryInterface.
@@ -55,9 +55,9 @@ class Wrapper
             com.sun.star.lang.XComponent.class, xProxy );
     }
 
-    //==============================================================
+
     // com.sun.star.uno.IQueryInterface
-    //--------------------------------------------------------------
+
 
     public String getOid()
     {
@@ -74,9 +74,9 @@ class Wrapper
         return xQueryInterface.queryInterface( aType );
     }
 
-    //==============================================================
+
     // com.sun.star.lang.XComponent
-    //--------------------------------------------------------------
+
 
     public void dispose(  )
     {
