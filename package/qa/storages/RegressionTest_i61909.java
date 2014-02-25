@@ -125,9 +125,9 @@ public class RegressionTest_i61909 implements StorageTest {
             if ( !m_aTestHelper.disposeStorage( xTempStorage ) )
                 return false;
 
-            // ================================================
+
             // now reopen the storage, and insert a new stream
-            // ================================================
+
 
             Object oStep2TempStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );
             XStorage xStep2TempStorage = (XStorage) UnoRuntime.queryInterface( XStorage.class, oStep2TempStorage );
@@ -149,9 +149,9 @@ public class RegressionTest_i61909 implements StorageTest {
             if ( !m_aTestHelper.disposeStorage( xStep2TempStorage ) )
                 return false;
 
-            // ================================================
+
             // now access the stream using ZipInputStream
-            // ================================================
+
 
             URI aUri = new URI( sTempFileURL );
             File aFile = new File( aUri );

@@ -123,9 +123,9 @@ public class RegressionTest_i29321 implements StorageTest {
                                                             ElementModes.WRITE ) )
                 return false;
 
-            // ================================================
+
             // commit the storages twice to test the bug scenario
-            // ================================================
+
 
             // commit lowlevel substorage first
             if ( !m_aTestHelper.commitStorage( xTempSubSubStorage ) )
@@ -151,9 +151,9 @@ public class RegressionTest_i29321 implements StorageTest {
             if ( !m_aTestHelper.commitStorage( xTempStorage ) )
                 return false;
 
-            // ================================================
+
             // check the storages and streams without closing
-            // ================================================
+
 
             if ( !m_aTestHelper.checkStorageProperties( xTempSubSubStorage, "MediaType6", false, ElementModes.WRITE ) )
                 return false;

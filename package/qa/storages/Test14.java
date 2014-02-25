@@ -119,11 +119,11 @@ public class Test14 implements StorageTest {
             if ( !m_aTestHelper.disposeStorage( xTempFileStorage ) )
                 return false;
 
-            // ================================================
+
             // now reopen the storage,
             // check all the written and copied information
             // and change it
-            // ================================================
+
 
             // the temporary file must not be locked any more after storage disposing
             oTempFileStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );
@@ -164,10 +164,10 @@ public class Test14 implements StorageTest {
             if ( !m_aTestHelper.disposeStorage( xTempFileStorage ) )
                 return false;
 
-            // ================================================
+
             // now reopen the storage,
             // check all the written information
-            // ================================================
+
 
             // the temporary file must not be locked any more after storage disposing
             pArgs[1] = new Integer( ElementModes.READ );

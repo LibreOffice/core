@@ -158,10 +158,10 @@ public class RegressionTest_i49755 implements StorageTest {
             if ( !m_aTestHelper.disposeStorage( xTempStorage ) )
                 return false;
 
-            // ================================================
+
             // now change the contents of the second substorage
             // without changing of the contents of the first substorage
-            // ================================================
+
 
             Object oStep2TempStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );
             XStorage xStep2TempStorage = (XStorage) UnoRuntime.queryInterface( XStorage.class, oStep2TempStorage );
@@ -196,10 +196,10 @@ public class RegressionTest_i49755 implements StorageTest {
                 return false;
 
 
-            // ================================================
+
             // now check all the written information
             // and the raw stream contents
-            // ================================================
+
 
             // close the output part of the temporary stream
             // the output part must present since we already wrote to the stream

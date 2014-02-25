@@ -756,7 +756,7 @@ void OStorage_Impl::CopyToStorage( const uno::Reference< embed::XStorage >& xDes
         // {
         //  // Relations info stream is a writeonly property, introduced only to optimyze copying
         //  // Should be used carefuly since no check for stream consistency is done, and the stream must not stay locked
-        //
+
         //  OUString aRelInfoString = "RelationsInfoStream";
         //  xPropSet->setPropertyValue( aRelInfoString, uno::makeAny( GetSeekableTempCopy( xRelInfoStream, m_xFactory ) ) );
         // }

@@ -109,9 +109,9 @@ public class Test10 implements StorageTest {
                                                             ElementModes.WRITE ) )
                 return false;
 
-            // ==============================
+
             // check cloning at current state
-            // ==============================
+
 
             // the new storage still was not commited so the clone must be empty
             XStorage xClonedSubStorage = m_aTestHelper.cloneSubStorage( m_xStorageFactory, xTempStorage, "SubStorage1" );
@@ -160,9 +160,9 @@ public class Test10 implements StorageTest {
             if ( !m_aTestHelper.disposeStream( xClonedBigSubStream, "BigSubStream1" ) )
                 return false;
 
-            // ==============================
+
             // commit substorage and check cloning
-            // ==============================
+
 
             if ( !m_aTestHelper.commitStorage( xTempSubStorage ) )
                 return false;
@@ -208,9 +208,9 @@ public class Test10 implements StorageTest {
 
             xCloneOfRoot = null;
 
-            // ==============================
+
             // commit root storage and check cloning
-            // ==============================
+
 
             if ( !m_aTestHelper.commitStorage( xTempStorage ) )
                 return false;

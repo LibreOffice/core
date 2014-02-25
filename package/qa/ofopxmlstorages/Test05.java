@@ -249,9 +249,9 @@ public class Test05 implements StorageTest {
                 return false;
 
 
-            // ================================================
+
             // now check all the written and copied information
-            // ================================================
+
 
             XStorage xResultStorage = m_aTestHelper.createStorageFromURL( m_xStorageFactory,
                                                                             sTempFileURL,

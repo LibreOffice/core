@@ -115,9 +115,9 @@ public class RegressionTest_i30677 implements StorageTest {
                                                             ElementModes.WRITE ) )
                 return false;
 
-            // ================================================
+
             // commit the storages
-            // ================================================
+
 
             // commit lowlevel substorage first
             if ( !m_aTestHelper.commitStorage( xTempSubSubStorage ) )
@@ -131,9 +131,9 @@ public class RegressionTest_i30677 implements StorageTest {
             if ( !m_aTestHelper.commitStorage( xTempStorage ) )
                 return false;
 
-            // ================================================
+
             // dispose the storages
-            // ================================================
+
 
             // dispose lowerest substorage
             if ( !m_aTestHelper.disposeStorage( xTempSubSubStorage ) )
@@ -147,9 +147,9 @@ public class RegressionTest_i30677 implements StorageTest {
             if ( !m_aTestHelper.disposeStorage( xTempStorage ) )
                 return false;
 
-            // ================================================
+
             // reopen the storage and rewrite the stream
-            // ================================================
+
 
             oTempStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );
             xTempStorage = (XStorage) UnoRuntime.queryInterface( XStorage.class, oTempStorage );
@@ -187,9 +187,9 @@ public class RegressionTest_i30677 implements StorageTest {
             if ( !m_aTestHelper.WriteBytesToSubstream( xTempSubSubStorage, "SubSubStream1", "MediaType1", true, pBytes2 ) )
                 return false;
 
-            // ================================================
+
             // commit the storages
-            // ================================================
+
 
             // commit lowlevel substorage first
             if ( !m_aTestHelper.commitStorage( xTempSubSubStorage ) )
@@ -203,9 +203,9 @@ public class RegressionTest_i30677 implements StorageTest {
             if ( !m_aTestHelper.commitStorage( xTempStorage ) )
                 return false;
 
-            // ================================================
+
             // dispose the storages
-            // ================================================
+
 
             // dispose lowerest substorage
             if ( !m_aTestHelper.disposeStorage( xTempSubSubStorage ) )
@@ -219,9 +219,9 @@ public class RegressionTest_i30677 implements StorageTest {
             if ( !m_aTestHelper.disposeStorage( xTempStorage ) )
                 return false;
 
-            // ================================================
+
             // reopen the storages and check the contents
-            // ================================================
+
 
             pArgs[1] = new Integer( ElementModes.READ );
             oTempStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );

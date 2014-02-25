@@ -118,10 +118,10 @@ public class RegressionTest_i59886 implements StorageTest {
             if ( !m_aTestHelper.disposeStorage( xTempStorage ) )
                 return false;
 
-            // ================================================
+
             // now reopen the storage, set the common storage key
             // and copy the storage
-            // ================================================
+
 
             Object oStep2TempStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );
             XStorage xStep2TempStorage = (XStorage) UnoRuntime.queryInterface( XStorage.class, oStep2TempStorage );
@@ -201,9 +201,9 @@ public class RegressionTest_i59886 implements StorageTest {
             if ( !m_aTestHelper.disposeStorage( xStep2TempStorage ) )
                 return false;
 
-            // ================================================
+
             // now check all the information in the copy
-            // ================================================
+
 
             if ( !m_aTestHelper.checkStorageProperties( xTargetStorage, "MediaType3", true, ElementModes.WRITE ) )
                 return false;

@@ -51,10 +51,10 @@ public class RegressionTest_i30400 implements StorageTest {
     {
         try
         {
-            // ================================================
+
             // create a temporary stream and a storage based on it
             // fill the storage with the data that will be used for testing
-            // ================================================
+
 
             XStream xTempFileStream = m_aTestHelper.CreateTempFileStream( m_xMSF );
             if ( xTempFileStream == null )
@@ -138,16 +138,16 @@ public class RegressionTest_i30400 implements StorageTest {
                                                             ElementModes.WRITE ) )
                 return false;
 
-            // ================================================
+
             // check the copying with renaming
-            // ================================================
+
 
             if ( !TestCopyWithRenaming( xTempStorage, xTempSubStorage, xTempSubSubStorage ) )
                 return false;
 
-            // ================================================
+
             // commit the storages
-            // ================================================
+
 
             // commit lowlevel substorage
             if ( !m_aTestHelper.commitStorage( xTempSubSubStorage ) )
@@ -161,9 +161,9 @@ public class RegressionTest_i30400 implements StorageTest {
             if ( !m_aTestHelper.commitStorage( xTempStorage ) )
                 return false;
 
-            // ================================================
+
             // dispose the storages
-            // ================================================
+
 
             // dispose lowerest substorage
             if ( !m_aTestHelper.disposeStorage( xTempSubSubStorage ) )
@@ -177,9 +177,9 @@ public class RegressionTest_i30400 implements StorageTest {
             if ( !m_aTestHelper.disposeStorage( xTempStorage ) )
                 return false;
 
-            // ================================================
+
             // reopen the target storage readonly, and check the copying with renaming
-            // ================================================
+
 
             pArgs[1] = new Integer( ElementModes.READ );
             oTempStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );
@@ -233,10 +233,10 @@ public class RegressionTest_i30400 implements StorageTest {
     public boolean TestCopyWithRenaming( XStorage xTempStorage, XStorage xTempSubStorage, XStorage xTempSubSubStorage )
         throws com.sun.star.uno.Exception
     {
-        // ================================================
+
         // create a second temporary stream and copy all the staff there
         // with renaming, check the success
-        // ================================================
+
 
         XStream xTempFileStream2 = m_aTestHelper.CreateTempFileStream( m_xMSF );
         if ( xTempFileStream2 == null )
@@ -302,9 +302,9 @@ public class RegressionTest_i30400 implements StorageTest {
         if ( !m_aTestHelper.copyElementTo( xTempStorage, "SubStorage1", xTempStorage2, "SubStorage1_renamed" ) )
             return false;
 
-        // ================================================
+
         // commit the storages, and check the renaming in all stages
-        // ================================================
+
 
         // commit substorage to let the renaming take place
         if ( !m_aTestHelper.commitStorage( xTempSubSubStorage2 ) )
@@ -318,9 +318,9 @@ public class RegressionTest_i30400 implements StorageTest {
         if ( !m_aTestHelper.commitStorage( xTempStorage2 ) )
             return false;
 
-        // ================================================
+
         // dispose the storages
-        // ================================================
+
 
         // dispose lowerest substorage
         if ( !m_aTestHelper.disposeStorage( xTempSubSubStorage2 ) )
@@ -334,9 +334,9 @@ public class RegressionTest_i30400 implements StorageTest {
         if ( !m_aTestHelper.disposeStorage( xTempStorage2 ) )
             return false;
 
-        // ================================================
+
         // reopen the target storage readonly, and check the contents
-        // ================================================
+
 
         pArgs[1] = new Integer( ElementModes.READ );
         oTempStorage2 = m_xStorageFactory.createInstanceWithArguments( pArgs );

@@ -114,10 +114,10 @@ public class RegressionTest_i46848 implements StorageTest {
             if ( !m_aTestHelper.disposeStorage( xTempStorage ) )
                 return false;
 
-            // ================================================
+
             // create a new storage based on the stream and change the mediatype of the substorage
             // as described in the bug description
-            // ================================================
+
 
             oTempStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );
             xTempStorage = (XStorage) UnoRuntime.queryInterface( XStorage.class, oTempStorage );
@@ -160,9 +160,9 @@ public class RegressionTest_i46848 implements StorageTest {
             if ( !m_aTestHelper.disposeStorage( xTempStorage ) )
                 return false;
 
-            // ================================================
+
             // create a new readonly storage based on the stream and check the contents
-            // ================================================
+
 
             pArgs[1] = new Integer( ElementModes.READ );
             oTempStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );

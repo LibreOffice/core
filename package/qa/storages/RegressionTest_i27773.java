@@ -36,9 +36,9 @@ import share.LogWriter;
 import complex.storages.TestHelper;
 import complex.storages.StorageTest;
 
-///////////////////////////////////
+
 // Tests also fix for i51352
-///////////////////////////////////
+
 
 public class RegressionTest_i27773 implements StorageTest {
 
@@ -167,10 +167,10 @@ public class RegressionTest_i27773 implements StorageTest {
             if ( !m_aTestHelper.copyElementTo( xTempStorage, "EmptySubStorage1", xTempStorage, "EmptySubStorage1_copy" ) )
                 return false;
 
-            // ================================================
+
             // copy all the changed and noncommited substorages
             // and dispose them
-            // ================================================
+
 
             if ( !m_aTestHelper.commitStorage( xEmptySubSubStorage ) )
                 return false;
@@ -198,9 +198,9 @@ public class RegressionTest_i27773 implements StorageTest {
             if ( !m_aTestHelper.disposeStorage( xTempStorage ) )
                 return false;
 
-            // ================================================
+
             // reopen the storage in readonly mode an check contents
-            // ================================================
+
 
             pArgs[1] = new Integer( ElementModes.READ );
 
