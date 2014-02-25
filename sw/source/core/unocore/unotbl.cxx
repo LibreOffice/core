@@ -1748,7 +1748,8 @@ void SwXTextTableCursor::gotoEnd(sal_Bool Expand) throw( uno::RuntimeException )
     }
 }
 
-sal_Bool SwXTextTableCursor::mergeRange(void) throw( uno::RuntimeException )
+sal_Bool SwXTextTableCursor::mergeRange()
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     sal_Bool bRet = sal_False;
