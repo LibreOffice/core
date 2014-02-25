@@ -107,7 +107,7 @@ namespace /* private */
     };
 
 
-    //
+
 
 
     struct GetFileNameParam
@@ -126,7 +126,7 @@ namespace /* private */
     };
 
 
-    //
+
 
 
     unsigned __stdcall ThreadProc(void* pParam)
@@ -197,7 +197,7 @@ namespace /* private */
 
 
 
-//
+
 
 
 CGetFileNameWrapper::CGetFileNameWrapper() :
@@ -206,7 +206,7 @@ CGetFileNameWrapper::CGetFileNameWrapper() :
 }
 
 
-//
+
 
 
 bool CGetFileNameWrapper::getOpenFileName(LPOPENFILENAME lpofn)
@@ -237,7 +237,7 @@ bool CGetFileNameWrapper::getOpenFileName(LPOPENFILENAME lpofn)
 }
 
 
-//
+
 
 
 bool CGetFileNameWrapper::getSaveFileName(LPOPENFILENAME lpofn)
@@ -263,7 +263,7 @@ bool CGetFileNameWrapper::getSaveFileName(LPOPENFILENAME lpofn)
 }
 
 
-//
+
 
 
 int CGetFileNameWrapper::commDlgExtendedError( )

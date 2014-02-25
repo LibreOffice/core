@@ -145,7 +145,7 @@ OUString CWinFileOpenImpl::getDisplayDirectory() throw(uno::RuntimeException)
 }
 
 
-//
+
 
 
 void SAL_CALL CWinFileOpenImpl::setDefaultName(const OUString& aName)
@@ -261,7 +261,7 @@ OUString SAL_CALL CWinFileOpenImpl::getCurrentFilter() throw(uno::RuntimeExcepti
 }
 
 
-//
+
 
 
 inline void SAL_CALL CWinFileOpenImpl::appendFilterGroupSeparator()
@@ -295,9 +295,9 @@ void SAL_CALL CWinFileOpenImpl::appendFilterGroup(const OUString& sGroupTitle, c
     }
 }
 
-//=================================================================================================================
+
 // XExtendedFilePicker
-//=================================================================================================================
+
 
 // #i90917: Due to a different feature set for the system-dependent file pickers
 // it's possible that generic code (e.g. sfx2) provides control ids
@@ -347,7 +347,7 @@ void SAL_CALL CWinFileOpenImpl::enableControl(sal_Int16 ControlID, sal_Bool bEna
 }
 
 
-//
+
 
 
 void SAL_CALL CWinFileOpenImpl::setLabel( sal_Int16 aControlId, const OUString& aLabel )
@@ -359,7 +359,7 @@ void SAL_CALL CWinFileOpenImpl::setLabel( sal_Int16 aControlId, const OUString& 
 }
 
 
-//
+
 
 
 OUString SAL_CALL CWinFileOpenImpl::getLabel( sal_Int16 aControlId )
@@ -373,7 +373,7 @@ OUString SAL_CALL CWinFileOpenImpl::getLabel( sal_Int16 aControlId )
 }
 
 
-//
+
 
 
 uno::Sequence<sal_Int16> SAL_CALL CWinFileOpenImpl::getSupportedImageFormats()
@@ -383,7 +383,7 @@ uno::Sequence<sal_Int16> SAL_CALL CWinFileOpenImpl::getSupportedImageFormats()
 }
 
 
-//
+
 
 
 sal_Int32 SAL_CALL CWinFileOpenImpl::getTargetColorDepth()
@@ -393,7 +393,7 @@ sal_Int32 SAL_CALL CWinFileOpenImpl::getTargetColorDepth()
 }
 
 
-//
+
 
 
 sal_Int32 SAL_CALL CWinFileOpenImpl::getAvailableWidth()
@@ -403,7 +403,7 @@ sal_Int32 SAL_CALL CWinFileOpenImpl::getAvailableWidth()
 }
 
 
-//
+
 
 
 sal_Int32 SAL_CALL CWinFileOpenImpl::getAvailableHeight()
@@ -413,7 +413,7 @@ sal_Int32 SAL_CALL CWinFileOpenImpl::getAvailableHeight()
 }
 
 
-//
+
 
 
 void SAL_CALL CWinFileOpenImpl::setImage(sal_Int16 aImageFormat, const uno::Any& aImage)
@@ -423,7 +423,7 @@ void SAL_CALL CWinFileOpenImpl::setImage(sal_Int16 aImageFormat, const uno::Any&
 }
 
 
-//
+
 
 
 sal_Bool SAL_CALL CWinFileOpenImpl::setShowState(sal_Bool bShowState)
@@ -433,7 +433,7 @@ sal_Bool SAL_CALL CWinFileOpenImpl::setShowState(sal_Bool bShowState)
 }
 
 
-//
+
 
 
 sal_Bool SAL_CALL CWinFileOpenImpl::getShowState()
@@ -443,7 +443,7 @@ sal_Bool SAL_CALL CWinFileOpenImpl::getShowState()
 }
 
 
-//
+
 
 
 void SAL_CALL CWinFileOpenImpl::cancel()
@@ -478,7 +478,7 @@ sal_Int16 SAL_CALL CWinFileOpenImpl::getFocused()
 }
 
 
-//
+
 
 
 inline sal_Bool SAL_CALL CWinFileOpenImpl::IsCustomControlHelpRequested(LPHELPINFO lphi) const
@@ -560,7 +560,7 @@ LRESULT CALLBACK CWinFileOpenImpl::SubClassFunc(
 }
 
 
-//
+
 
 
 void SAL_CALL CWinFileOpenImpl::InitControlLabel(HWND hWnd)
@@ -596,7 +596,7 @@ void SAL_CALL CWinFileOpenImpl::InitCustomControlContainer(HWND hCustomControl)
 }
 
 
-//
+
 
 
 void SAL_CALL CWinFileOpenImpl::CacheControlState(HWND hWnd)
@@ -606,7 +606,7 @@ void SAL_CALL CWinFileOpenImpl::CacheControlState(HWND hWnd)
 }
 
 
-//
+
 
 
 BOOL CALLBACK CWinFileOpenImpl::EnumChildWndProc(HWND hWnd, LPARAM lParam)
@@ -638,7 +638,7 @@ BOOL CALLBACK CWinFileOpenImpl::EnumChildWndProc(HWND hWnd, LPARAM lParam)
 }
 
 
-//
+
 
 
 sal_uInt32 SAL_CALL CWinFileOpenImpl::onFileOk()
@@ -656,7 +656,7 @@ sal_uInt32 SAL_CALL CWinFileOpenImpl::onFileOk()
 }
 
 
-//
+
 
 
 void SAL_CALL CWinFileOpenImpl::onSelChanged(HWND)
@@ -791,7 +791,7 @@ void SAL_CALL CWinFileOpenImpl::onInitDone()
 }
 
 
-//
+
 
 
 void SAL_CALL CWinFileOpenImpl::onFolderChanged()
@@ -801,7 +801,7 @@ void SAL_CALL CWinFileOpenImpl::onFolderChanged()
 }
 
 
-//
+
 
 
 void SAL_CALL CWinFileOpenImpl::onTypeChanged(sal_uInt32)
@@ -833,7 +833,7 @@ sal_uInt32 SAL_CALL CWinFileOpenImpl::onCtrlCommand(
 }
 
 
-//
+
 
 
 void CWinFileOpenImpl::onWMSize()
@@ -844,7 +844,7 @@ void CWinFileOpenImpl::onWMSize()
 }
 
 
-//
+
 
 
 void CWinFileOpenImpl::onWMShow(sal_Bool bShow)
@@ -853,7 +853,7 @@ void CWinFileOpenImpl::onWMShow(sal_Bool bShow)
 }
 
 
-//
+
 
 
 void CWinFileOpenImpl::onWMWindowPosChanged()
@@ -862,7 +862,7 @@ void CWinFileOpenImpl::onWMWindowPosChanged()
 }
 
 
-//
+
 
 
 void CWinFileOpenImpl::onCustomControlHelpRequest(LPHELPINFO lphi)
@@ -882,7 +882,7 @@ void CWinFileOpenImpl::onCustomControlHelpRequest(LPHELPINFO lphi)
 }
 
 
-//
+
 
 
 void SAL_CALL CWinFileOpenImpl::onInitDialog(HWND hwndDlg)
@@ -923,7 +923,7 @@ void CWinFileOpenImpl::postModal(sal_Int16 nDialogResult)
 }
 
 
-//
+
 
 
 void SAL_CALL CWinFileOpenImpl::SetDefaultExtension()
@@ -973,7 +973,7 @@ void SAL_CALL CWinFileOpenImpl::SetDefaultExtension()
 }
 
 
-//
+
 
 
 void SAL_CALL CWinFileOpenImpl::InitialSetDefaultName()

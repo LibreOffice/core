@@ -23,7 +23,7 @@
 #include <functional>
 
 
-//
+
 
 
 namespace /* private */
@@ -57,7 +57,7 @@ namespace /* private */
 }
 
 
-//
+
 
 
 CCustomControlContainer::~CCustomControlContainer()
@@ -66,7 +66,7 @@ CCustomControlContainer::~CCustomControlContainer()
 }
 
 
-//
+
 
 
 void SAL_CALL CCustomControlContainer::Align()
@@ -78,7 +78,7 @@ void SAL_CALL CCustomControlContainer::Align()
 }
 
 
-//
+
 
 
 void SAL_CALL CCustomControlContainer::SetFont(HFONT hFont)
@@ -92,7 +92,7 @@ void SAL_CALL CCustomControlContainer::SetFont(HFONT hFont)
 }
 
 
-//
+
 
 
 void SAL_CALL CCustomControlContainer::AddControl(CCustomControl* aCustomControl)
@@ -101,7 +101,7 @@ void SAL_CALL CCustomControlContainer::AddControl(CCustomControl* aCustomControl
 }
 
 
-//
+
 
 
 void SAL_CALL CCustomControlContainer::RemoveControl(CCustomControl* aCustomControl)
@@ -119,7 +119,7 @@ void SAL_CALL CCustomControlContainer::RemoveControl(CCustomControl* aCustomCont
 }
 
 
-//
+
 
 
 void SAL_CALL CCustomControlContainer::RemoveAllControls()

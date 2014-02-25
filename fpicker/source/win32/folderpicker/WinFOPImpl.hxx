@@ -24,9 +24,9 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include "MtaFop.hxx"
 
-//------------------------------------------------------------------------
+
 // forward
-//------------------------------------------------------------------------
+
 
 class CFolderPicker;
 
@@ -35,16 +35,16 @@ class CWinFolderPickerImpl : public CMtaFolderPicker
 public:
     CWinFolderPickerImpl( CFolderPicker* aFolderPicker );
 
-    //-----------------------------------------------------------------------------------------
+
     // XExecutableDialog
-    //-----------------------------------------------------------------------------------------
+
 
     virtual sal_Int16 SAL_CALL execute(  )
         throw( com::sun::star::uno::RuntimeException );
 
-    //-----------------------------------------------------
+
     // XFolderPicker
-    //-----------------------------------------------------
+
 
     virtual void SAL_CALL setDisplayDirectory( const OUString& aDirectory )
         throw( com::sun::star::lang::IllegalArgumentException, com::sun::star::uno::RuntimeException );

@@ -64,7 +64,7 @@ namespace
 }
 
 
-//
+
 
 
 CFilePicker::CFilePicker( const uno::Reference<lang::XMultiServiceFactory>& xServiceMgr) :
@@ -102,7 +102,7 @@ void SAL_CALL CFilePicker::addFilePickerListener(const uno::Reference<XFilePicke
 }
 
 
-//
+
 
 
 void SAL_CALL CFilePicker::removeFilePickerListener(const uno::Reference<XFilePickerListener>& xListener )
@@ -129,7 +129,7 @@ void SAL_CALL CFilePicker::disposing(const lang::EventObject& aEvent) throw(uno:
 }
 
 
-//
+
 
 
 void SAL_CALL CFilePicker::fileSelectionChanged(FilePickerEvent aEvent)
@@ -140,7 +140,7 @@ void SAL_CALL CFilePicker::fileSelectionChanged(FilePickerEvent aEvent)
 }
 
 
-//
+
 
 
 void SAL_CALL CFilePicker::directoryChanged(FilePickerEvent aEvent)
@@ -151,7 +151,7 @@ void SAL_CALL CFilePicker::directoryChanged(FilePickerEvent aEvent)
 }
 
 
-//
+
 
 
 void SAL_CALL CFilePicker::controlStateChanged(FilePickerEvent aEvent)
@@ -162,7 +162,7 @@ void SAL_CALL CFilePicker::controlStateChanged(FilePickerEvent aEvent)
 }
 
 
-//
+
 
 
 void SAL_CALL CFilePicker::dialogSizeChanged()
@@ -218,7 +218,7 @@ OUString SAL_CALL CFilePicker::helpRequested(FilePickerEvent aEvent) const
 }
 
 
-//
+
 
 
 bool CFilePicker::startupEventNotification(bool bStartupSuspended)
@@ -227,7 +227,7 @@ bool CFilePicker::startupEventNotification(bool bStartupSuspended)
 }
 
 
-//
+
 
 
 void CFilePicker::shutdownEventNotification()
@@ -236,7 +236,7 @@ void CFilePicker::shutdownEventNotification()
 }
 
 
-//
+
 
 
 void CFilePicker::suspendEventNotification()
@@ -245,7 +245,7 @@ void CFilePicker::suspendEventNotification()
 }
 
 
-//
+
 
 
 void CFilePicker::resumeEventNotification()
@@ -265,7 +265,7 @@ void SAL_CALL CFilePicker::setMultiSelectionMode(sal_Bool bMode) throw(uno::Runt
 }
 
 
-//
+
 
 
 void SAL_CALL CFilePicker::setTitle(const OUString& aTitle) throw(uno::RuntimeException)
@@ -276,7 +276,7 @@ void SAL_CALL CFilePicker::setTitle(const OUString& aTitle) throw(uno::RuntimeEx
 }
 
 
-//
+
 
 
 void SAL_CALL CFilePicker::appendFilter(const OUString& aTitle, const OUString& aFilter)
@@ -288,7 +288,7 @@ void SAL_CALL CFilePicker::appendFilter(const OUString& aTitle, const OUString& 
 }
 
 
-//
+
 
 
 void SAL_CALL CFilePicker::setCurrentFilter(const OUString& aTitle)
@@ -300,7 +300,7 @@ void SAL_CALL CFilePicker::setCurrentFilter(const OUString& aTitle)
 }
 
 
-//
+
 
 
 OUString SAL_CALL CFilePicker::getCurrentFilter() throw(uno::RuntimeException)
@@ -311,7 +311,7 @@ OUString SAL_CALL CFilePicker::getCurrentFilter() throw(uno::RuntimeException)
 }
 
 
-//
+
 
 
 void SAL_CALL CFilePicker::appendFilterGroup(const OUString& sGroupTitle, const uno::Sequence<beans::StringPair>& aFilters)
@@ -323,7 +323,7 @@ void SAL_CALL CFilePicker::appendFilterGroup(const OUString& sGroupTitle, const 
 }
 
 
-//
+
 
 
 void SAL_CALL CFilePicker::setDefaultName(const OUString& aName)
@@ -335,7 +335,7 @@ void SAL_CALL CFilePicker::setDefaultName(const OUString& aName)
 }
 
 
-//
+
 
 
 void SAL_CALL CFilePicker::setDisplayDirectory(const OUString& aDirectory)
@@ -347,7 +347,7 @@ void SAL_CALL CFilePicker::setDisplayDirectory(const OUString& aDirectory)
 }
 
 
-//
+
 
 
 OUString SAL_CALL CFilePicker::getDisplayDirectory() throw(uno::RuntimeException)
@@ -358,7 +358,7 @@ OUString SAL_CALL CFilePicker::getDisplayDirectory() throw(uno::RuntimeException
 }
 
 
-//
+
 
 
 uno::Sequence<OUString> SAL_CALL CFilePicker::getFiles() throw(uno::RuntimeException)
@@ -369,7 +369,7 @@ uno::Sequence<OUString> SAL_CALL CFilePicker::getFiles() throw(uno::RuntimeExcep
 }
 
 
-//
+
 
 uno::Sequence< OUString > SAL_CALL CFilePicker::getSelectedFiles() throw (uno::RuntimeException)
 {
@@ -409,7 +409,7 @@ uno::Sequence< OUString > SAL_CALL CFilePicker::getSelectedFiles() throw (uno::R
 }
 
 
-//
+
 
 
 sal_Int16 SAL_CALL CFilePicker::execute() throw(uno::RuntimeException)
@@ -454,7 +454,7 @@ void SAL_CALL CFilePicker::setValue(sal_Int16 aControlId, sal_Int16 aControlActi
 }
 
 
-//
+
 
 
 uno::Any SAL_CALL CFilePicker::getValue(sal_Int16 aControlId, sal_Int16 aControlAction)
@@ -467,7 +467,7 @@ uno::Any SAL_CALL CFilePicker::getValue(sal_Int16 aControlId, sal_Int16 aControl
 }
 
 
-//
+
 
 
 void SAL_CALL CFilePicker::enableControl(sal_Int16 aControlId, sal_Bool bEnable)
@@ -480,7 +480,7 @@ throw(uno::RuntimeException)
 }
 
 
-//
+
 
 
 void SAL_CALL CFilePicker::setLabel(sal_Int16 aControlId, const OUString& aLabel)
@@ -493,7 +493,7 @@ void SAL_CALL CFilePicker::setLabel(sal_Int16 aControlId, const OUString& aLabel
 }
 
 
-//
+
 
 
 OUString SAL_CALL CFilePicker::getLabel(sal_Int16 aControlId)
@@ -506,7 +506,7 @@ OUString SAL_CALL CFilePicker::getLabel(sal_Int16 aControlId)
 }
 
 
-//
+
 
 
 uno::Sequence<sal_Int16> SAL_CALL CFilePicker::getSupportedImageFormats() throw (uno::RuntimeException)
@@ -518,7 +518,7 @@ uno::Sequence<sal_Int16> SAL_CALL CFilePicker::getSupportedImageFormats() throw 
 }
 
 
-//
+
 
 
 sal_Int32 SAL_CALL CFilePicker::getTargetColorDepth() throw (uno::RuntimeException)
@@ -530,7 +530,7 @@ sal_Int32 SAL_CALL CFilePicker::getTargetColorDepth() throw (uno::RuntimeExcepti
 }
 
 
-//
+
 
 
 sal_Int32 SAL_CALL CFilePicker::getAvailableWidth() throw (uno::RuntimeException)
@@ -542,7 +542,7 @@ sal_Int32 SAL_CALL CFilePicker::getAvailableWidth() throw (uno::RuntimeException
 }
 
 
-//
+
 
 
 sal_Int32 SAL_CALL CFilePicker::getAvailableHeight() throw (uno::RuntimeException)
@@ -554,7 +554,7 @@ sal_Int32 SAL_CALL CFilePicker::getAvailableHeight() throw (uno::RuntimeExceptio
 }
 
 
-//
+
 
 
 void SAL_CALL CFilePicker::setImage(sal_Int16 aImageFormat, const uno::Any& aImage)
@@ -567,7 +567,7 @@ void SAL_CALL CFilePicker::setImage(sal_Int16 aImageFormat, const uno::Any& aIma
 }
 
 
-//
+
 
 
 sal_Bool SAL_CALL CFilePicker::setShowState(sal_Bool bShowState) throw (uno::RuntimeException)
@@ -579,7 +579,7 @@ sal_Bool SAL_CALL CFilePicker::setShowState(sal_Bool bShowState) throw (uno::Run
 }
 
 
-//
+
 
 
 sal_Bool SAL_CALL CFilePicker::getShowState() throw (uno::RuntimeException)
@@ -591,7 +591,7 @@ sal_Bool SAL_CALL CFilePicker::getShowState() throw (uno::RuntimeException)
 }
 
 
-//
+
 
 
 void SAL_CALL CFilePicker::initialize(const uno::Sequence<uno::Any>& aArguments)
@@ -692,7 +692,7 @@ void SAL_CALL CFilePicker::initialize(const uno::Sequence<uno::Any>& aArguments)
 }
 
 
-//
+
 
 
 void SAL_CALL CFilePicker::cancel()

@@ -27,14 +27,14 @@
 #include "SolarMutex.hxx"
 
 
-//
+
 
 
 using namespace com::sun::star;
 using ::com::sun::star::ui::dialogs::XFilePickerListener;
 
 
-//
+
 
 
 CAsyncEventNotifier::CAsyncEventNotifier(cppu::OBroadcastHelper& rBroadcastHelper) :
@@ -59,7 +59,7 @@ CAsyncEventNotifier::CAsyncEventNotifier(cppu::OBroadcastHelper& rBroadcastHelpe
 }
 
 
-//
+
 
 
 CAsyncEventNotifier::~CAsyncEventNotifier()
@@ -71,7 +71,7 @@ CAsyncEventNotifier::~CAsyncEventNotifier()
 }
 
 
-//
+
 
 
 void SAL_CALL CAsyncEventNotifier::addListener(const uno::Type&                         aType    ,
@@ -91,7 +91,7 @@ void SAL_CALL CAsyncEventNotifier::addListener(const uno::Type&                 
 }
 
 
-//
+
 
 
 void SAL_CALL CAsyncEventNotifier::removeListener(const uno::Type&                         aType    ,
@@ -106,7 +106,7 @@ void SAL_CALL CAsyncEventNotifier::removeListener(const uno::Type&              
 }
 
 
-//
+
 
 
 bool SAL_CALL CAsyncEventNotifier::startup(bool bCreateSuspended)
@@ -138,7 +138,7 @@ bool SAL_CALL CAsyncEventNotifier::startup(bool bCreateSuspended)
 }
 
 
-//
+
 
 
 void SAL_CALL CAsyncEventNotifier::shutdown()
@@ -176,7 +176,7 @@ void SAL_CALL CAsyncEventNotifier::shutdown()
 }
 
 
-//
+
 
 
 void CAsyncEventNotifier::suspend()
@@ -185,7 +185,7 @@ void CAsyncEventNotifier::suspend()
 }
 
 
-//
+
 
 
 void CAsyncEventNotifier::resume()
@@ -194,7 +194,7 @@ void CAsyncEventNotifier::resume()
 }
 
 
-//
+
 
 
 void SAL_CALL CAsyncEventNotifier::notifyEvent(CEventNotification* EventNotification)
@@ -211,7 +211,7 @@ void SAL_CALL CAsyncEventNotifier::notifyEvent(CEventNotification* EventNotifica
 }
 
 
-//
+
 
 
 size_t SAL_CALL CAsyncEventNotifier::getEventListSize()
@@ -221,7 +221,7 @@ size_t SAL_CALL CAsyncEventNotifier::getEventListSize()
 }
 
 
-//
+
 
 
 void SAL_CALL CAsyncEventNotifier::resetNotifyEvent()
@@ -232,7 +232,7 @@ void SAL_CALL CAsyncEventNotifier::resetNotifyEvent()
 }
 
 
-//
+
 
 
 CEventNotification* SAL_CALL CAsyncEventNotifier::getNextEventRecord()
@@ -242,7 +242,7 @@ CEventNotification* SAL_CALL CAsyncEventNotifier::getNextEventRecord()
 }
 
 
-//
+
 
 
 void SAL_CALL CAsyncEventNotifier::removeNextEventRecord()
@@ -252,7 +252,7 @@ void SAL_CALL CAsyncEventNotifier::removeNextEventRecord()
 }
 
 
-//
+
 
 
 void SAL_CALL CAsyncEventNotifier::run()
@@ -298,7 +298,7 @@ void SAL_CALL CAsyncEventNotifier::run()
 }
 
 
-//
+
 
 
 unsigned int WINAPI CAsyncEventNotifier::ThreadProc(LPVOID pParam)

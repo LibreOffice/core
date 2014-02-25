@@ -24,9 +24,9 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <rtl/ustring.hxx>
 
-//---------------------------------------------
+
 // declaration
-//---------------------------------------------
+
 
 class CControlCommandResult
 {
@@ -49,9 +49,9 @@ private:
     sal_Bool m_bResult;
 };
 
-//---------------------------------------------
-//
-//---------------------------------------------
+
+
+
 
 class CValueCommandResult : public CControlCommandResult
 {
@@ -71,9 +71,9 @@ private:
     ::com::sun::star::uno::Any m_aValue;
 };
 
-//---------------------------------------------
-//
-//---------------------------------------------
+
+
+
 
 class CLabelCommandResult : public CControlCommandResult
 {

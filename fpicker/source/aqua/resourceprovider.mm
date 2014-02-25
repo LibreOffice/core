@@ -31,24 +31,24 @@
 
 #include "resourceprovider.hxx"
 
-//------------------------------------------------------------
+
 // namespace directives
-//------------------------------------------------------------
+
 
 using rtl::OUString;
 using namespace ::com::sun::star::ui::dialogs::ExtendedFilePickerElementIds;
 using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 
-//------------------------------------------------------------
-//
-//------------------------------------------------------------
+
+
+
 
 static const char* RES_NAME = "fps_office";
 static const char* OTHER_RES_NAME = "svt";
 
-//------------------------------------------------------------
+
 // we have to translate control ids to resource ids
-//------------------------------------------------------------
+
 
 struct _Entry
 {
@@ -84,9 +84,9 @@ _Entry OtherCtrlIdToResIdTable[] = {
 const sal_Int32 SIZE_TABLE = SAL_N_ELEMENTS( CtrlIdToResIdTable );
 const sal_Int32 OTHER_SIZE_TABLE = SAL_N_ELEMENTS( OtherCtrlIdToResIdTable );
 
-//------------------------------------------------------------
-//
-//------------------------------------------------------------
+
+
+
 
 sal_Int16 CtrlIdToResId( sal_Int32 aControlId )
 {
@@ -120,17 +120,17 @@ sal_Int16 OtherCtrlIdToResId( sal_Int32 aControlId )
     return aResId;
 }
 
-//------------------------------------------------------------
-//
-//------------------------------------------------------------
+
+
+
 
 class CResourceProvider_Impl
 {
 public:
 
-    //-------------------------------------
-    //
-    //-------------------------------------
+
+
+
 
     CResourceProvider_Impl( )
     {
@@ -138,9 +138,9 @@ public:
         m_OtherResMgr = ResMgr::CreateResMgr( OTHER_RES_NAME );
     }
 
-    //-------------------------------------
-    //
-    //-------------------------------------
+
+
+
 
     ~CResourceProvider_Impl( )
     {
@@ -148,9 +148,9 @@ public:
         delete m_OtherResMgr;
     }
 
-    //-------------------------------------
-    //
-    //-------------------------------------
+
+
+
 
     NSString* getResString( sal_Int16 aId )
     {
@@ -186,27 +186,27 @@ public:
     ResMgr* m_OtherResMgr;
 };
 
-//------------------------------------------------------------
-//
-//------------------------------------------------------------
+
+
+
 
 CResourceProvider::CResourceProvider( ) :
     m_pImpl( new CResourceProvider_Impl() )
 {
 }
 
-//------------------------------------------------------------
-//
-//------------------------------------------------------------
+
+
+
 
 CResourceProvider::~CResourceProvider( )
 {
     delete m_pImpl;
 }
 
-//------------------------------------------------------------
-//
-//------------------------------------------------------------
+
+
+
 
 NSString* CResourceProvider::getResString( sal_Int32 aId )
 {

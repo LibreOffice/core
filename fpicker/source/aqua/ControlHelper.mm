@@ -42,9 +42,9 @@ using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 using namespace ::rtl;
 
 #pragma mark Constructor / Destructor
-//------------------------------------------------------------------------------------
+
 // Constructor / Destructor
-//------------------------------------------------------------------------------------
+
 ControlHelper::ControlHelper()
 : m_pUserPane(NULL)
 , m_pFilterControl(nil)
@@ -103,9 +103,9 @@ ControlHelper::~ControlHelper()
 }
 
 #pragma mark XInitialization delegate
-//------------------------------------------------
+
 // XInitialization delegate
-//------------------------------------------------
+
 void ControlHelper::initialize( sal_Int16 nTemplateId )
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "templateId", nTemplateId);
@@ -153,9 +153,9 @@ void ControlHelper::initialize( sal_Int16 nTemplateId )
 }
 
 #pragma mark XFilePickerControlAccess delegates
-//------------------------------------------------------------------------------------
+
 // XFilePickerControlAccess functions
-//------------------------------------------------------------------------------------
+
 
 void ControlHelper::enableControl( const sal_Int16 nControlId, const sal_Bool bEnable ) const
 {
@@ -466,9 +466,9 @@ void ControlHelper::createUserPane()
 }
 
 #pragma mark Private / Misc
-//------------------------------------------------------------------------------------
+
 // Private / Misc
-//------------------------------------------------------------------------------------
+
 void ControlHelper::createControls()
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);

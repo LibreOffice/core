@@ -61,7 +61,7 @@ namespace // private
     };
 
 
-    //
+
 
 
     inline
@@ -81,7 +81,7 @@ namespace // private
     }
 
 
-    //
+
 
 
     inline
@@ -91,7 +91,7 @@ namespace // private
     }
 
 
-    //
+
 
 
     inline
@@ -219,7 +219,7 @@ CFilePreview* CFilePreview::createInstance(
 }
 
 
-//
+
 
 
 CFilePreview::CFilePreview(
@@ -273,7 +273,7 @@ CFilePreview::CFilePreview(
 }
 
 
-//
+
 
 
 CFilePreview::~CFilePreview( )
@@ -366,7 +366,7 @@ sal_Bool SAL_CALL CFilePreview::getPos( POINT& ulCorner ) const
 }
 
 
-//
+
 
 
 void SAL_CALL CFilePreview::enable( sal_Bool bEnable )
@@ -428,7 +428,7 @@ sal_Bool SAL_CALL CFilePreview::update( const OUString& aFileName )
 }
 
 
-//
+
 
 
 void SAL_CALL CFilePreview::onPaint( HWND hWnd, HDC hDC )
@@ -481,7 +481,7 @@ void SAL_CALL CFilePreview::onPaint( HWND hWnd, HDC hDC )
 }
 
 
-//
+
 
 
 sal_Bool CFilePreview::loadFile( const OUString& aFileName )
@@ -552,7 +552,7 @@ CLEANUP_AND_EXIT:
 }
 
 
-//
+
 
 
 LRESULT CALLBACK CFilePreview::WndProc(

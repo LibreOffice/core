@@ -29,7 +29,7 @@
 #include <string>
 
 
-//
+
 
 
 using ::com::sun::star::uno::Sequence;
@@ -38,7 +38,7 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::lang::IllegalArgumentException;
 
 
-//
+
 
 
 namespace /* private */
@@ -57,7 +57,7 @@ ATOM CDIBPreview::s_ClassAtom = 0;
 sal_Int32 CDIBPreview::s_RegisterDibPreviewWndCount = 0;
 
 
-//
+
 
 
 CDIBPreview::CDIBPreview(HINSTANCE instance,HWND parent,sal_Bool bShowWindow) :
@@ -96,7 +96,7 @@ CDIBPreview::CDIBPreview(HINSTANCE instance,HWND parent,sal_Bool bShowWindow) :
 }
 
 
-//
+
 
 
 CDIBPreview::~CDIBPreview( )
@@ -110,7 +110,7 @@ CDIBPreview::~CDIBPreview( )
 }
 
 
-//
+
 
 
 sal_Int32 SAL_CALL CDIBPreview::getTargetColorDepth() throw (RuntimeException)
@@ -125,7 +125,7 @@ sal_Int32 SAL_CALL CDIBPreview::getTargetColorDepth() throw (RuntimeException)
 }
 
 
-//
+
 
 
 sal_Int32 SAL_CALL CDIBPreview::getAvailableWidth() throw (RuntimeException)
@@ -142,7 +142,7 @@ sal_Int32 SAL_CALL CDIBPreview::getAvailableWidth() throw (RuntimeException)
 }
 
 
-//
+
 
 
 sal_Int32 SAL_CALL CDIBPreview::getAvailableHeight() throw (RuntimeException)
@@ -159,7 +159,7 @@ sal_Int32 SAL_CALL CDIBPreview::getAvailableHeight() throw (RuntimeException)
 }
 
 
-//
+
 
 
 void SAL_CALL CDIBPreview::setImage(sal_Int16 aImageFormat, const Any& aImage)
@@ -182,7 +182,7 @@ void SAL_CALL CDIBPreview::setImage(sal_Int16 aImageFormat, const Any& aImage)
 }
 
 
-//
+
 
 
 sal_Bool SAL_CALL CDIBPreview::setShowState(sal_Bool bShowState) throw (RuntimeException)
@@ -193,7 +193,7 @@ sal_Bool SAL_CALL CDIBPreview::setShowState(sal_Bool bShowState) throw (RuntimeE
 }
 
 
-//
+
 
 
 sal_Bool SAL_CALL CDIBPreview::getShowState() throw (RuntimeException)
@@ -202,7 +202,7 @@ sal_Bool SAL_CALL CDIBPreview::getShowState() throw (RuntimeException)
 }
 
 
-//
+
 
 
 HWND SAL_CALL CDIBPreview::getWindowHandle() const
@@ -211,7 +211,7 @@ HWND SAL_CALL CDIBPreview::getWindowHandle() const
 }
 
 
-//
+
 
 
 void SAL_CALL CDIBPreview::onPaint(HWND hWnd, HDC hDC)
@@ -307,7 +307,7 @@ void SAL_CALL CDIBPreview::onPaint(HWND hWnd, HDC hDC)
 }
 
 
-//
+
 
 
 LRESULT CALLBACK CDIBPreview::WndProc(
@@ -375,7 +375,7 @@ LRESULT CALLBACK CDIBPreview::WndProc(
 }
 
 
-//
+
 
 
 ATOM SAL_CALL CDIBPreview::RegisterDibPreviewWindowClass()
@@ -418,7 +418,7 @@ ATOM SAL_CALL CDIBPreview::RegisterDibPreviewWindowClass()
 }
 
 
-//
+
 
 
 void SAL_CALL CDIBPreview::UnregisterDibPreviewWindowClass()

@@ -23,7 +23,7 @@
 #include "filepickerstate.hxx"
 
 
-//
+
 
 
 CControlCommand::CControlCommand( sal_Int16 aControlId ) :
@@ -33,7 +33,7 @@ CControlCommand::CControlCommand( sal_Int16 aControlId ) :
 }
 
 
-//
+
 
 
 CControlCommand::~CControlCommand( )
@@ -41,7 +41,7 @@ CControlCommand::~CControlCommand( )
 }
 
 
-//
+
 
 
 CControlCommandResult* SAL_CALL CControlCommand::handleRequest( CControlCommandRequest* pRequest )
@@ -69,7 +69,7 @@ CControlCommandResult* SAL_CALL CControlCommand::handleRequest( CControlCommandR
 }
 
 
-//
+
 
 
 CControlCommand* SAL_CALL CControlCommand::getNextCommand( ) const
@@ -78,7 +78,7 @@ CControlCommand* SAL_CALL CControlCommand::getNextCommand( ) const
 }
 
 
-//
+
 
 
 void SAL_CALL CControlCommand::setNextCommand( CControlCommand* nextCommand )
@@ -87,7 +87,7 @@ void SAL_CALL CControlCommand::setNextCommand( CControlCommand* nextCommand )
 }
 
 
-//
+
 
 
 sal_Int16 SAL_CALL CControlCommand::getControlId( ) const
@@ -97,7 +97,7 @@ sal_Int16 SAL_CALL CControlCommand::getControlId( ) const
 
 
 
-//
+
 
 
 CValueControlCommand::CValueControlCommand(
@@ -111,7 +111,7 @@ CValueControlCommand::CValueControlCommand(
 }
 
 
-//
+
 
 
 void SAL_CALL CValueControlCommand::exec( CFilePickerState* aFilePickerState )
@@ -125,7 +125,7 @@ void SAL_CALL CValueControlCommand::exec( CFilePickerState* aFilePickerState )
 }
 
 
-//
+
 
 
 CControlCommandResult* SAL_CALL CValueControlCommand::handleRequest( CControlCommandRequest* aRequest )
@@ -159,7 +159,7 @@ CControlCommandResult* SAL_CALL CValueControlCommand::handleRequest( CControlCom
 }
 
 
-//
+
 
 
 sal_Int16 SAL_CALL CValueControlCommand::getControlAction( ) const
@@ -168,7 +168,7 @@ sal_Int16 SAL_CALL CValueControlCommand::getControlAction( ) const
 }
 
 
-//
+
 
 
 ::com::sun::star::uno::Any SAL_CALL CValueControlCommand::getValue( ) const
@@ -178,7 +178,7 @@ sal_Int16 SAL_CALL CValueControlCommand::getControlAction( ) const
 
 
 
-//
+
 
 
 CLabelControlCommand::CLabelControlCommand(
@@ -190,7 +190,7 @@ CLabelControlCommand::CLabelControlCommand(
 }
 
 
-//
+
 
 
 void SAL_CALL CLabelControlCommand::exec( CFilePickerState* aFilePickerState )
@@ -201,7 +201,7 @@ void SAL_CALL CLabelControlCommand::exec( CFilePickerState* aFilePickerState )
 }
 
 
-//
+
 
 
 CControlCommandResult* SAL_CALL CLabelControlCommand::handleRequest( CControlCommandRequest* aRequest )
@@ -236,7 +236,7 @@ CControlCommandResult* SAL_CALL CLabelControlCommand::handleRequest( CControlCom
 }
 
 
-//
+
 
 
 OUString SAL_CALL CLabelControlCommand::getLabel( ) const
@@ -245,7 +245,7 @@ OUString SAL_CALL CLabelControlCommand::getLabel( ) const
 }
 
 
-//
+
 
 
 CEnableControlCommand::CEnableControlCommand(
@@ -257,7 +257,7 @@ CEnableControlCommand::CEnableControlCommand(
 }
 
 
-//
+
 
 
 void SAL_CALL CEnableControlCommand::exec( CFilePickerState* aFilePickerState )

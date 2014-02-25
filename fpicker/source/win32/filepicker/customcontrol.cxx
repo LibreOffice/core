@@ -20,7 +20,7 @@
 #include "customcontrol.hxx"
 
 
-//
+
 
 
 CCustomControl::~CCustomControl()
@@ -28,7 +28,7 @@ CCustomControl::~CCustomControl()
 }
 
 
-//
+
 
 
 void SAL_CALL CCustomControl::AddControl(CCustomControl*)
@@ -37,7 +37,7 @@ void SAL_CALL CCustomControl::AddControl(CCustomControl*)
 }
 
 
-//
+
 
 
 void SAL_CALL CCustomControl::RemoveControl(CCustomControl*)
@@ -46,7 +46,7 @@ void SAL_CALL CCustomControl::RemoveControl(CCustomControl*)
 }
 
 
-//
+
 
 
 void SAL_CALL CCustomControl::RemoveAllControls()

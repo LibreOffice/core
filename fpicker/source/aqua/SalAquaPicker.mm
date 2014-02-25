@@ -42,9 +42,9 @@
 #define CLASS_NAME "SalAquaPicker"
 #define kSetHideExtensionStateKey @"NSNavLastUserSetHideExtensionButtonState"
 
-//------------------------------------------------------------------------
+
 // namespace directives
-//------------------------------------------------------------------------
+
 
 using namespace ::rtl;
 using namespace ::com::sun::star;

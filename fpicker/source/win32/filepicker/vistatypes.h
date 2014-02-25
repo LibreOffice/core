@@ -27,9 +27,9 @@ namespace fpicker{
 namespace win32{
 namespace vista{
 
-//-----------------------------------------------------------------------------
+
 // types, const etcpp.
-//-----------------------------------------------------------------------------
+
 
 typedef ComPtr< IFileDialog         , IID_IFileDialog                             > TFileDialog;
 typedef ComPtr< IFileOpenDialog     , IID_IFileOpenDialog  , CLSID_FileOpenDialog > TFileOpenDialog;

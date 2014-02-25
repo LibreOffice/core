@@ -25,12 +25,12 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include "pickercallbacks.hxx"
 
-//.........................................................................
+
 namespace svt
 {
-//.........................................................................
 
-    // --------------------------------------------------------------------
+
+
     namespace InternalFilePickerElementIds
     {
         static const sal_Int16 PUSHBUTTON_HELP = (sal_Int16)0x1000;
@@ -40,7 +40,7 @@ namespace svt
         static const sal_Int16 FIXEDTEXT_CURRENTFOLDER = (sal_Int16)0x1004;
     }
 
-    // --------------------------------------------------------------------
+
     /** implements the XControlAccess, XControlInformation and XFilePickerControlAccess for the file picker
     */
     class OControlAccess
@@ -109,9 +109,9 @@ namespace svt
 
     };
 
-//.........................................................................
+
 }   // namespace svt
-//.........................................................................
+
 
 #endif // SVTOOLS_CONTROLACCESS_HXX
 

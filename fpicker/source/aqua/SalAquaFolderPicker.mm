@@ -45,9 +45,9 @@
 #pragma mark DEFINES
 #define CLASS_NAME "SalAquaFolderPicker"
 
-//------------------------------------------------------------------------
+
 // namespace directives
-//------------------------------------------------------------------------
+
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -55,9 +55,9 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
-//------------------------------------------------------------------------
+
 // helper functions
-//------------------------------------------------------------------------
+
 
 namespace
 {
@@ -71,9 +71,9 @@ namespace
     }
 }
 
-//-----------------------------------------------------------------------------------------
+
 // constructor
-//-----------------------------------------------------------------------------------------
+
 SalAquaFolderPicker::SalAquaFolderPicker( const uno::Reference<lang::XMultiServiceFactory>& xServiceMgr ) :
     m_xServiceMgr( xServiceMgr )
 {
@@ -84,9 +84,9 @@ SalAquaFolderPicker::SalAquaFolderPicker( const uno::Reference<lang::XMultiServi
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
-//-----------------------------------------------------------------------------------------
+
 // XExecutableDialog functions
-//-----------------------------------------------------------------------------------------
+
 
 void SAL_CALL SalAquaFolderPicker::setTitle( const rtl::OUString& aTitle ) throw( uno::RuntimeException )
 {
@@ -130,9 +130,9 @@ sal_Int16 SAL_CALL SalAquaFolderPicker::execute() throw( uno::RuntimeException )
     return retVal;
 }
 
-//------------------------------------------------------------------------------------
+
 // XFolderPicker functions
-//------------------------------------------------------------------------------------
+
 
 void SAL_CALL SalAquaFolderPicker::setDisplayDirectory( const rtl::OUString& aDirectory )
     throw( lang::IllegalArgumentException, uno::RuntimeException )
@@ -202,9 +202,9 @@ void SAL_CALL SalAquaFolderPicker::setDescription( const rtl::OUString& rDescrip
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
-// -------------------------------------------------
+
 // XServiceInfo
-// -------------------------------------------------
+
 
 rtl::OUString SAL_CALL SalAquaFolderPicker::getImplementationName()
     throw( uno::RuntimeException )
@@ -233,9 +233,9 @@ uno::Sequence<rtl::OUString> SAL_CALL SalAquaFolderPicker::getSupportedServiceNa
     return FolderPicker_getSupportedServiceNames();
 }
 
-//------------------------------------------------------------------------------------
+
 // XCancellable
-//------------------------------------------------------------------------------------
+
 
 void SAL_CALL SalAquaFolderPicker::cancel() throw( uno::RuntimeException )
 {
@@ -248,9 +248,9 @@ void SAL_CALL SalAquaFolderPicker::cancel() throw( uno::RuntimeException )
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
-// -------------------------------------------------
+
 // XEventListener
-// -------------------------------------------------
+
 
 void SAL_CALL SalAquaFolderPicker::disposing( const lang::EventObject& )
     throw( uno::RuntimeException )

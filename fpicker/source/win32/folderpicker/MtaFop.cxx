@@ -113,7 +113,7 @@ CMtaFolderPicker::CMtaFolderPicker( sal_uInt32 Flags ) :
     ZeroMemory( &m_bi, sizeof( m_bi ) );
 
     // !!!!!!!!!!!!!!!!!  IMPORTANT !!!!!!!!!!!!!!!!!!!
-    //
+
     // Remember: This HACK prevents you from stepping
     // through your code in the debugger because if you
     // set a break point in the ctor here the debugger
@@ -226,7 +226,7 @@ CMtaFolderPicker::~CMtaFolderPicker( )
 }
 
 
-//
+
 
 
 sal_Bool CMtaFolderPicker::browseForFolder( )
@@ -310,7 +310,7 @@ sal_Bool CMtaFolderPicker::browseForFolder( )
 }
 
 
-//
+
 
 
 void SAL_CALL CMtaFolderPicker::setDisplayDirectory( const OUString& aDirectory )
@@ -319,7 +319,7 @@ void SAL_CALL CMtaFolderPicker::setDisplayDirectory( const OUString& aDirectory 
 }
 
 
-//
+
 
 
 OUString SAL_CALL CMtaFolderPicker::getDisplayDirectory( )
@@ -328,7 +328,7 @@ OUString SAL_CALL CMtaFolderPicker::getDisplayDirectory( )
 }
 
 
-//
+
 
 
 OUString SAL_CALL CMtaFolderPicker::getDirectory( )
@@ -337,7 +337,7 @@ OUString SAL_CALL CMtaFolderPicker::getDirectory( )
 }
 
 
-//
+
 
 
 void SAL_CALL CMtaFolderPicker::setDescription( const OUString& aDescription )
@@ -346,7 +346,7 @@ void SAL_CALL CMtaFolderPicker::setDescription( const OUString& aDescription )
 }
 
 
-//
+
 
 
 void SAL_CALL CMtaFolderPicker::setTitle( const OUString& aTitle )
@@ -355,7 +355,7 @@ void SAL_CALL CMtaFolderPicker::setTitle( const OUString& aTitle )
 }
 
 
-//
+
 
 
 OUString SAL_CALL CMtaFolderPicker::getTitle( )
@@ -382,7 +382,7 @@ void SAL_CALL CMtaFolderPicker::cancel( )
 }
 
 
-//
+
 
 
 sal_Bool SAL_CALL CMtaFolderPicker::onBrowseForFolder( )
@@ -410,7 +410,7 @@ sal_Bool SAL_CALL CMtaFolderPicker::onBrowseForFolder( )
 }
 
 
-//
+
 
 
 void SAL_CALL CMtaFolderPicker::releaseItemIdList( LPITEMIDLIST lpItemIdList )
@@ -425,7 +425,7 @@ void SAL_CALL CMtaFolderPicker::releaseItemIdList( LPITEMIDLIST lpItemIdList )
 }
 
 
-//
+
 
 
 LPITEMIDLIST SAL_CALL CMtaFolderPicker::getItemIdListFromPath( const OUString& aDirectory )
@@ -454,7 +454,7 @@ LPITEMIDLIST SAL_CALL CMtaFolderPicker::getItemIdListFromPath( const OUString& a
 }
 
 
-//
+
 
 
 OUString SAL_CALL CMtaFolderPicker::getPathFromItemIdList( LPCITEMIDLIST lpItemIdList )
@@ -472,7 +472,7 @@ OUString SAL_CALL CMtaFolderPicker::getPathFromItemIdList( LPCITEMIDLIST lpItemI
 }
 
 
-//
+
 
 
 void SAL_CALL CMtaFolderPicker::enableOk( sal_Bool bEnable )
@@ -487,7 +487,7 @@ void SAL_CALL CMtaFolderPicker::enableOk( sal_Bool bEnable )
 }
 
 
-//
+
 
 
 void SAL_CALL CMtaFolderPicker::setSelection( const OUString& aDirectory )
@@ -502,7 +502,7 @@ void SAL_CALL CMtaFolderPicker::setSelection( const OUString& aDirectory )
 }
 
 
-//
+
 
 
 void SAL_CALL CMtaFolderPicker::setStatusText( const OUString& aStatusText )
@@ -517,7 +517,7 @@ void SAL_CALL CMtaFolderPicker::setStatusText( const OUString& aStatusText )
 }
 
 
-//
+
 
 
 void SAL_CALL CMtaFolderPicker::onInitialized( )
@@ -537,7 +537,7 @@ void SAL_CALL CMtaFolderPicker::onInitialized( )
 }
 
 
-//
+
 
 
 sal_uInt32 CMtaFolderPicker::onValidateFailed()
@@ -547,7 +547,7 @@ sal_uInt32 CMtaFolderPicker::onValidateFailed()
 }
 
 
-//
+
 
 
 int CALLBACK CMtaFolderPicker::FolderPickerCallback( HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData )
@@ -658,7 +658,7 @@ LRESULT CALLBACK CMtaFolderPicker::StaWndProc( HWND hWnd, UINT uMsg, WPARAM wPar
 }
 
 
-//
+
 
 
 sal_Bool SAL_CALL CMtaFolderPicker::createStaRequestWindow( )
@@ -689,7 +689,7 @@ sal_Bool SAL_CALL CMtaFolderPicker::createStaRequestWindow( )
 }
 
 
-//
+
 
 
 unsigned int CMtaFolderPicker::run( )
@@ -733,7 +733,7 @@ unsigned int CMtaFolderPicker::run( )
 }
 
 
-//
+
 
 
 unsigned int WINAPI CMtaFolderPicker::StaThreadProc( LPVOID pParam )
@@ -754,7 +754,7 @@ unsigned int WINAPI CMtaFolderPicker::StaThreadProc( LPVOID pParam )
 }
 
 
-//
+
 
 
 ATOM SAL_CALL CMtaFolderPicker::RegisterStaRequestWindowClass( )
@@ -794,7 +794,7 @@ ATOM SAL_CALL CMtaFolderPicker::RegisterStaRequestWindowClass( )
 }
 
 
-//
+
 
 
 void SAL_CALL CMtaFolderPicker::UnregisterStaRequestWindowClass( )

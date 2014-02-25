@@ -270,7 +270,7 @@ namespace
         _rHomeDir = "";
 
         // now ask the content broker for a provider for this scheme
-        //=================================================================
+
         try
         {
             // get the provider for the current scheme
@@ -321,9 +321,9 @@ namespace
     }
 }
 
-//***************************************************************************
+
 // ControlChain_Impl
-//***************************************************************************
+
 
 struct ControlChain_Impl
 {
@@ -335,7 +335,7 @@ struct ControlChain_Impl
     ~ControlChain_Impl();
 };
 
-//***************************************************************************
+
 
 ControlChain_Impl::ControlChain_Impl
 (
@@ -348,7 +348,7 @@ ControlChain_Impl::ControlChain_Impl
 {
 }
 
-//***************************************************************************
+
 
 ControlChain_Impl::~ControlChain_Impl()
 {
@@ -359,9 +359,9 @@ ControlChain_Impl::~ControlChain_Impl()
     delete _pNext;
 }
 
-//*****************************************************************************
+
 // SvtFileDialog
-//*****************************************************************************
+
 SvtFileDialog::SvtFileDialog
 (
     Window* _pParent,
@@ -390,7 +390,7 @@ SvtFileDialog::SvtFileDialog
     Init_Impl( nBits );
 }
 
-//*****************************************************************************
+
 
 SvtFileDialog::SvtFileDialog ( Window* _pParent, WinBits nBits )
     :ModalDialog( _pParent, SvtResId( DLG_FPICKER_EXPLORERFILE ) )
@@ -412,7 +412,7 @@ SvtFileDialog::SvtFileDialog ( Window* _pParent, WinBits nBits )
     Init_Impl( nBits );
 }
 
-//*****************************************************************************
+
 
 SvtFileDialog::~SvtFileDialog()
 {
@@ -463,7 +463,7 @@ SvtFileDialog::~SvtFileDialog()
     delete _pUserControls;
 }
 
-//*****************************************************************************
+
 
 void SvtFileDialog::Init_Impl
 (
@@ -765,7 +765,7 @@ void SvtFileDialog::Init_Impl
     );
 }
 
-//*****************************************************************************
+
 
 IMPL_STATIC_LINK( SvtFileDialog, NewFolderHdl_Impl, PushButton*, EMPTYARG )
 {
@@ -795,7 +795,7 @@ IMPL_STATIC_LINK( SvtFileDialog, NewFolderHdl_Impl, PushButton*, EMPTYARG )
     return 0;
 }
 
-//*****************************************************************************
+
 
 IMPL_STATIC_LINK_NOINSTANCE( SvtFileDialog, ViewHdl_Impl, ImageButton*, EMPTYARG )
 {
@@ -1241,14 +1241,14 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
     return nRet;
 }
 
-//*****************************************************************************
+
 
 void SvtFileDialog::EnableAutocompletion( sal_Bool _bEnable )
 {
     _pImp->_pEdFileName->EnableAutocompletion( _bEnable );
 }
 
-//*****************************************************************************
+
 
 IMPL_STATIC_LINK( SvtFileDialog, FilterSelectHdl_Impl, ListBox*, pBox )
 {
@@ -1334,7 +1334,7 @@ IMPL_STATIC_LINK( SvtFileDialog, FilterSelectHdl_Impl, ListBox*, pBox )
     return 0;
 }
 
-//*****************************************************************************
+
 
 IMPL_STATIC_LINK( SvtFileDialog, FileNameGetFocusHdl_Impl, void*, EMPTYARG )
 {
@@ -1343,7 +1343,7 @@ IMPL_STATIC_LINK( SvtFileDialog, FileNameGetFocusHdl_Impl, void*, EMPTYARG )
     return 0;
 }
 
-//*****************************************************************************
+
 
 IMPL_STATIC_LINK( SvtFileDialog, FileNameModifiedHdl_Impl, void*, EMPTYARG )
 {
@@ -1351,7 +1351,7 @@ IMPL_STATIC_LINK( SvtFileDialog, FileNameModifiedHdl_Impl, void*, EMPTYARG )
     return 0;
 }
 
-//*****************************************************************************
+
 
 IMPL_STATIC_LINK ( SvtFileDialog, URLBoxModifiedHdl_Impl, void*, EMPTYARG )
 {
@@ -1360,7 +1360,7 @@ IMPL_STATIC_LINK ( SvtFileDialog, URLBoxModifiedHdl_Impl, void*, EMPTYARG )
     return 0;
 }
 
-//*****************************************************************************
+
 
 IMPL_STATIC_LINK ( SvtFileDialog, ConnectToServerPressed_Hdl, void*, EMPTYARG )
 {
@@ -1386,7 +1386,7 @@ IMPL_STATIC_LINK ( SvtFileDialog, ConnectToServerPressed_Hdl, void*, EMPTYARG )
     return 0;
 }
 
-//*****************************************************************************
+
 
 IMPL_LINK_NOARG ( SvtFileDialog, AddPlacePressed_Hdl )
 {
@@ -1400,7 +1400,7 @@ IMPL_LINK_NOARG ( SvtFileDialog, AddPlacePressed_Hdl )
     return 0;
 }
 
-//*****************************************************************************
+
 
 IMPL_LINK_NOARG ( SvtFileDialog, RemovePlacePressed_Hdl )
 {
@@ -1408,7 +1408,7 @@ IMPL_LINK_NOARG ( SvtFileDialog, RemovePlacePressed_Hdl )
     return 0;
 }
 
-//*****************************************************************************
+
 
 SvtFileDialogFilter_Impl* SvtFileDialog::FindFilter_Impl
 (
@@ -1469,7 +1469,7 @@ SvtFileDialogFilter_Impl* SvtFileDialog::FindFilter_Impl
     return pFoundFilter;
 }
 
-//*****************************************************************************
+
 
 void SvtFileDialog::ExecuteFilter()
 {
@@ -1477,7 +1477,7 @@ void SvtFileDialog::ExecuteFilter()
     executeAsync( AsyncPickerAction::eExecuteFilter, OUString(), getMostCurrentFilter( _pImp ) );
 }
 
-//*****************************************************************************
+
 
 void SvtFileDialog::OpenMultiSelection_Impl()
 
@@ -1505,7 +1505,7 @@ void SvtFileDialog::OpenMultiSelection_Impl()
         EndDialog( sal_True );
 }
 
-//*****************************************************************************
+
 
 void SvtFileDialog::UpdateControls( const OUString& rURL )
 {
@@ -1513,7 +1513,7 @@ void SvtFileDialog::UpdateControls( const OUString& rURL )
 
     INetURLObject aObj( rURL );
 
-    //=========================================================================
+
     {
         OUString sText;
         DBG_ASSERT( INET_PROT_NOT_VALID != aObj.GetProtocol(), "SvtFileDialog::UpdateControls: Invalid URL!" );
@@ -1552,13 +1552,13 @@ void SvtFileDialog::UpdateControls( const OUString& rURL )
         _pImp->_pEdCurrentPath->SetText( sText );
     }
 
-    //=========================================================================
+
     _aPath = rURL;
     if ( _pFileNotifier )
         _pFileNotifier->notify( DIRECTORY_CHANGED, 0 );
 }
 
-//*****************************************************************************
+
 
 IMPL_LINK( SvtFileDialog, SelectHdl_Impl, SvTabListBox*, pBox )
 {
@@ -1612,7 +1612,7 @@ IMPL_LINK( SvtFileDialog, SelectHdl_Impl, SvTabListBox*, pBox )
     return 0;
 }
 
-//*****************************************************************************
+
 
 IMPL_LINK_NOARG(SvtFileDialog, DblClickHdl_Impl)
 {
@@ -1623,7 +1623,7 @@ IMPL_LINK_NOARG(SvtFileDialog, DblClickHdl_Impl)
     return 0;
 }
 
-//*****************************************************************************
+
 
 IMPL_LINK_NOARG(SvtFileDialog, EntrySelectHdl_Impl)
 {
@@ -1632,7 +1632,7 @@ IMPL_LINK_NOARG(SvtFileDialog, EntrySelectHdl_Impl)
     return 0;
 }
 
-//*****************************************************************************
+
 
 IMPL_LINK( SvtFileDialog, OpenDoneHdl_Impl, SvtFileView*, pView )
 {
@@ -1656,7 +1656,7 @@ IMPL_LINK( SvtFileDialog, OpenDoneHdl_Impl, SvtFileView*, pView )
     return 0;
 }
 
-//*****************************************************************************
+
 
 IMPL_LINK_NOARG(SvtFileDialog, AutoExtensionHdl_Impl)
 {
@@ -1670,7 +1670,7 @@ IMPL_LINK_NOARG(SvtFileDialog, AutoExtensionHdl_Impl)
     return 0;
 }
 
-//*****************************************************************************
+
 
 IMPL_LINK( SvtFileDialog, ClickHdl_Impl, CheckBox*, pCheckBox )
 {
@@ -1698,7 +1698,7 @@ IMPL_LINK( SvtFileDialog, ClickHdl_Impl, CheckBox*, pCheckBox )
     return 0;
 }
 
-//*****************************************************************************
+
 
 IMPL_LINK_NOARG(SvtFileDialog, PlayButtonHdl_Impl)
 {
@@ -1709,7 +1709,7 @@ IMPL_LINK_NOARG(SvtFileDialog, PlayButtonHdl_Impl)
     return 0;
 }
 
-//*****************************************************************************
+
 
 bool SvtFileDialog::Notify( NotifyEvent& rNEvt )
 
@@ -1742,14 +1742,14 @@ bool SvtFileDialog::Notify( NotifyEvent& rNEvt )
     return nRet || ModalDialog::Notify( rNEvt );
 }
 
-//*****************************************************************************
+
 
 long SvtFileDialog::OK()
 {
     return sal_True;
 }
 
-//*****************************************************************************
+
 
 class SvtDefModalDialogParent_Impl
 {
@@ -1764,7 +1764,7 @@ public:
     ~SvtDefModalDialogParent_Impl() { Application::SetDefDialogParent( _pOld ); }
 };
 
-//*****************************************************************************
+
 
 
 void SvtFileDialog::updateListboxLabelSizes()
@@ -2091,7 +2091,7 @@ short SvtFileDialog::PrepareExecute()
             _aPath += aFileNameOnly;
     }
 
-    //.....................................................................
+
     _aPath = implGetInitialURL( _aPath, GetStandardDir() );
 
     if ( _pImp->_nStyle & WB_SAVEAS && !m_bHasFilename )
@@ -2217,7 +2217,7 @@ void SvtFileDialog::executeAsync( ::svt::AsyncPickerAction::Action _eAction,
     m_bInExecuteAsync = false;
 }
 
-//*****************************************************************************
+
 
 void SvtFileDialog::FileSelect()
 {
@@ -2225,7 +2225,7 @@ void SvtFileDialog::FileSelect()
         _pFileNotifier->notify( FILE_SELECTION_CHANGED, 0 );
 }
 
-//*****************************************************************************
+
 
 void SvtFileDialog::FilterSelect()
 {
@@ -2234,7 +2234,7 @@ void SvtFileDialog::FilterSelect()
                                 LISTBOX_FILTER );
 }
 
-//*****************************************************************************
+
 
 void SvtFileDialog::SetStandardDir( const OUString& rStdDir )
 
@@ -2255,13 +2255,13 @@ void SvtFileDialog::SetBlackList( const ::com::sun::star::uno::Sequence< OUStrin
     _pImp->SetBlackList( rBlackList );
 }
 
-//*****************************************************************************
+
 
 const ::com::sun::star::uno::Sequence< OUString >& SvtFileDialog::GetBlackList() const
 {
     return _pImp->GetBlackList();
 }
-//*****************************************************************************
+
 
 const OUString& SvtFileDialog::GetStandardDir() const
 
@@ -2274,7 +2274,7 @@ const OUString& SvtFileDialog::GetStandardDir() const
     return _pImp->GetStandardDir();
 }
 
-//*****************************************************************************
+
 
 void SvtFileDialog::PrevLevel_Impl()
 {
@@ -2284,7 +2284,7 @@ void SvtFileDialog::PrevLevel_Impl()
     executeAsync( AsyncPickerAction::ePrevLevel, sDummy, sDummy );
 }
 
-//*****************************************************************************
+
 
 void SvtFileDialog::OpenURL_Impl( const OUString& _rURL )
 {
@@ -2293,7 +2293,7 @@ void SvtFileDialog::OpenURL_Impl( const OUString& _rURL )
     executeAsync( AsyncPickerAction::eOpenURL, _rURL, getMostCurrentFilter( _pImp ) );
 }
 
-//*****************************************************************************
+
 SvtFileDialogFilter_Impl* SvtFileDialog::implAddFilter( const OUString& _rFilter, const OUString& _rType )
 {
     SvtFileDialogFilter_Impl* pNewFilter = new SvtFileDialogFilter_Impl( _rFilter, _rType );
@@ -2305,7 +2305,7 @@ SvtFileDialogFilter_Impl* SvtFileDialog::implAddFilter( const OUString& _rFilter
     return pNewFilter;
 }
 
-//*****************************************************************************
+
 
 void SvtFileDialog::AddFilter( const OUString& _rFilter, const OUString& _rType )
 {
@@ -2313,7 +2313,7 @@ void SvtFileDialog::AddFilter( const OUString& _rFilter, const OUString& _rType 
     implAddFilter ( _rFilter, _rType );
 }
 
-//*****************************************************************************
+
 void SvtFileDialog::AddFilterGroup( const OUString& _rFilter, const Sequence< StringPair >& _rFilters )
 {
     DBG_ASSERT( !IsInExecute(), "SvtFileDialog::AddFilter: currently executing!" );
@@ -2344,7 +2344,7 @@ void SvtFileDialog::SetCurFilter( const OUString& rFilter )
     }
 }
 
-//*****************************************************************************
+
 
 OUString SvtFileDialog::GetCurFilter() const
 {
@@ -2362,14 +2362,14 @@ OUString SvtFileDialog::getCurFilter( ) const
     return GetCurFilter();
 }
 
-//*****************************************************************************
+
 
 sal_uInt16 SvtFileDialog::GetFilterCount() const
 {
     return _pImp->_pFilter->size();
 }
 
-//*****************************************************************************
+
 
 const OUString& SvtFileDialog::GetFilterName( sal_uInt16 nPos ) const
 {
@@ -2377,7 +2377,7 @@ const OUString& SvtFileDialog::GetFilterName( sal_uInt16 nPos ) const
     return (*_pImp->_pFilter)[ nPos ].GetName();
 }
 
-//*****************************************************************************
+
 
 void SvtFileDialog::InitSize()
 {
@@ -2409,7 +2409,7 @@ void SvtFileDialog::InitSize()
     }
 }
 
-//*****************************************************************************
+
 
 std::vector<OUString> SvtFileDialog::GetPathList() const
 {
@@ -2436,7 +2436,7 @@ std::vector<OUString> SvtFileDialog::GetPathList() const
     return aList;
 }
 
-//*****************************************************************************
+
 
 void SvtFileDialog::implArrangeControls()
 {
@@ -2483,7 +2483,7 @@ void SvtFileDialog::implArrangeControls()
     _pImp->_pEdFileName->GrabFocus();
 }
 
-//*****************************************************************************
+
 
 sal_Bool SvtFileDialog::IsolateFilterFromPath_Impl( OUString& rPath, OUString& rFilter )
 {
@@ -3095,7 +3095,7 @@ void SvtFileDialog::ReleaseOwnership( Window* pUserControl )
     }
 }
 
-//***************************************************************************
+
 
 sal_Bool SvtFileDialog::AddControl( Window* pControl, sal_Bool bNewLine )
 {

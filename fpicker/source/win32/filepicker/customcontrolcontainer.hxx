@@ -24,12 +24,12 @@
 
 #include <list>
 
-//-----------------------------------
+
 // A container for custom controls
 // the container is resposible for
 // the destruction of the custom
 // controls
-//-----------------------------------
+
 
 class CCustomControlContainer : public CCustomControl
 {

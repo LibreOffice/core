@@ -35,7 +35,7 @@
 
 #include "../misc/WinImplHelper.hxx"
 
-//
+
 
 
 using com::sun::star::uno::Any;
@@ -48,7 +48,7 @@ using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 using namespace ::com::sun::star::ui::dialogs::ListboxControlActions;
 
 
-//
+
 
 
 const sal_Int32 MAX_LABEL = 256;
@@ -63,7 +63,7 @@ CFilePickerState::~CFilePickerState( )
 }
 
 
-//
+
 
 
 CNonExecuteFilePickerState::CNonExecuteFilePickerState( ) :
@@ -72,7 +72,7 @@ CNonExecuteFilePickerState::CNonExecuteFilePickerState( ) :
 }
 
 
-//
+
 
 
 CNonExecuteFilePickerState::~CNonExecuteFilePickerState( )
@@ -81,7 +81,7 @@ CNonExecuteFilePickerState::~CNonExecuteFilePickerState( )
 }
 
 
-//
+
 
 
 void SAL_CALL CNonExecuteFilePickerState::setValue( sal_Int16 aControlId, sal_Int16 aControlAction, const Any& aValue )
@@ -93,7 +93,7 @@ void SAL_CALL CNonExecuteFilePickerState::setValue( sal_Int16 aControlId, sal_In
 }
 
 
-//
+
 
 
 Any SAL_CALL CNonExecuteFilePickerState::getValue( sal_Int16 aControlId, sal_Int16 aControlAction )
@@ -136,7 +136,7 @@ Any SAL_CALL CNonExecuteFilePickerState::getValue( sal_Int16 aControlId, sal_Int
 }
 
 
-//
+
 
 
 void SAL_CALL CNonExecuteFilePickerState::enableControl( sal_Int16 aControlId, sal_Bool bEnable )
@@ -148,7 +148,7 @@ void SAL_CALL CNonExecuteFilePickerState::enableControl( sal_Int16 aControlId, s
 }
 
 
-//
+
 
 
 void SAL_CALL CNonExecuteFilePickerState::setLabel( sal_Int16 aControlId, const OUString& aLabel )
@@ -160,7 +160,7 @@ void SAL_CALL CNonExecuteFilePickerState::setLabel( sal_Int16 aControlId, const 
 }
 
 
-//
+
 
 
 OUString SAL_CALL CNonExecuteFilePickerState::getLabel( sal_Int16 aControlId )
@@ -204,7 +204,7 @@ OUString MatchFixBrokenPath(const OUString& path)
 }
 
 
-//
+
 
 static OUString trimTrailingSpaces(const OUString& rString)
 {
@@ -282,7 +282,7 @@ Sequence< OUString > SAL_CALL CNonExecuteFilePickerState::getFiles( CFileOpenDia
 }
 
 
-//
+
 
 
 OUString SAL_CALL CNonExecuteFilePickerState::getDisplayDirectory( CFileOpenDialog* aFileOpenDialog )
@@ -301,7 +301,7 @@ OUString SAL_CALL CNonExecuteFilePickerState::getDisplayDirectory( CFileOpenDial
 }
 
 
-//
+
 
 
 void SAL_CALL CNonExecuteFilePickerState::reset( )
@@ -320,7 +320,7 @@ void SAL_CALL CNonExecuteFilePickerState::reset( )
 }
 
 
-//
+
 
 
 CControlCommand* SAL_CALL CNonExecuteFilePickerState::getControlCommand( ) const
@@ -353,10 +353,10 @@ void SAL_CALL CNonExecuteFilePickerState::addControlCommand( CControlCommand* aC
     }
 }
 
-//#######################################################################
 
 
-//
+
+
 
 
 CExecuteFilePickerState::CExecuteFilePickerState( HWND hwndDlg ) :
@@ -365,7 +365,7 @@ CExecuteFilePickerState::CExecuteFilePickerState( HWND hwndDlg ) :
 }
 
 
-//
+
 
 
 void SAL_CALL CExecuteFilePickerState::setValue( sal_Int16 aControlId, sal_Int16 aControlAction, const Any& aValue )
@@ -407,7 +407,7 @@ void SAL_CALL CExecuteFilePickerState::setValue( sal_Int16 aControlId, sal_Int16
 }
 
 
-//
+
 
 
 Any SAL_CALL CExecuteFilePickerState::getValue( sal_Int16 aControlId, sal_Int16 aControlAction )
@@ -446,7 +446,7 @@ Any SAL_CALL CExecuteFilePickerState::getValue( sal_Int16 aControlId, sal_Int16 
 }
 
 
-//
+
 
 
 void SAL_CALL CExecuteFilePickerState::enableControl( sal_Int16 aControlId, sal_Bool bEnable )
@@ -459,7 +459,7 @@ void SAL_CALL CExecuteFilePickerState::enableControl( sal_Int16 aControlId, sal_
 }
 
 
-//
+
 
 
 void SAL_CALL CExecuteFilePickerState::setLabel( sal_Int16 aControlId, const OUString& aLabel )
@@ -479,7 +479,7 @@ void SAL_CALL CExecuteFilePickerState::setLabel( sal_Int16 aControlId, const OUS
 }
 
 
-//
+
 
 
 OUString SAL_CALL CExecuteFilePickerState::getLabel( sal_Int16 aControlId )
@@ -504,7 +504,7 @@ OUString SAL_CALL CExecuteFilePickerState::getLabel( sal_Int16 aControlId )
 }
 
 
-//
+
 
 
 Sequence< OUString > SAL_CALL CExecuteFilePickerState::getFiles( CFileOpenDialog* aFileOpenDialog )
@@ -540,7 +540,7 @@ Sequence< OUString > SAL_CALL CExecuteFilePickerState::getFiles( CFileOpenDialog
 }
 
 
-//
+
 
 
 OUString SAL_CALL CExecuteFilePickerState::getDisplayDirectory( CFileOpenDialog* aFileOpenDialog )
@@ -559,7 +559,7 @@ OUString SAL_CALL CExecuteFilePickerState::getDisplayDirectory( CFileOpenDialog*
 }
 
 
-//
+
 
 
 void SAL_CALL CExecuteFilePickerState::initFilePickerControls( CControlCommand* firstControlCommand )
@@ -574,7 +574,7 @@ void SAL_CALL CExecuteFilePickerState::initFilePickerControls( CControlCommand* 
 }
 
 
-//
+
 
 
 void SAL_CALL CExecuteFilePickerState::cacheControlState( HWND hwndControl, CFilePickerState* aNonExecFilePickerState )
@@ -632,7 +632,7 @@ void SAL_CALL CExecuteFilePickerState::cacheControlState( HWND hwndControl, CFil
 }
 
 
-//
+
 
 
 void SAL_CALL CExecuteFilePickerState::setHwnd( HWND hwndDlg )
@@ -641,7 +641,7 @@ void SAL_CALL CExecuteFilePickerState::setHwnd( HWND hwndDlg )
 }
 
 
-//
+
 
 
 inline sal_Bool SAL_CALL CExecuteFilePickerState::IsListboxControl( HWND hwndControl ) const
@@ -666,7 +666,7 @@ inline sal_Int16 SAL_CALL CExecuteFilePickerState::ListboxIdToListboxLabelId( sa
 }
 
 
-//
+
 
 
 inline HWND SAL_CALL CExecuteFilePickerState::GetListboxLabelItem( sal_Int16 aControlId ) const
@@ -680,7 +680,7 @@ inline HWND SAL_CALL CExecuteFilePickerState::GetListboxLabelItem( sal_Int16 aCo
 }
 
 
-//
+
 
 
 HWND SAL_CALL CExecuteFilePickerState::GetHwndDlgItem( sal_Int16 aControlId, sal_Bool bIncludeStdCtrls ) const
