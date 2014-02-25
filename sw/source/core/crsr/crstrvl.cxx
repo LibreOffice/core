@@ -727,7 +727,6 @@ sal_Bool SwCrsrShell::MoveFldType(
     }
     const _SetGetExpFld& rFnd = **it;
 
-
     SET_CURR_SHELL( this );
     SwCallLink aLk( *this ); // watch Crsr-Moves
     SwCrsrSaveState aSaveState( *pCrsr );
@@ -762,7 +761,6 @@ sal_Bool SwCrsrShell::GotoFld( const SwFmtFld& rFld )
     return bRet;
 }
 
-
 SwTxtFld * SwCrsrShell::GetTxtFldAtPos(
     const SwPosition* pPos,
     const bool bIncludeInputFldAtStart ) const
@@ -777,7 +775,6 @@ SwTxtFld * SwCrsrShell::GetTxtFldAtPos(
 
     return pTxtFld;
 }
-
 
 SwField* SwCrsrShell::GetFieldAtCrsr(
     const SwPaM* pCrsr,
@@ -802,7 +799,6 @@ SwField* SwCrsrShell::GetFieldAtCrsr(
     return pFieldAtCrsr;
 }
 
-
 SwField* SwCrsrShell::GetCurFld( const bool bIncludeInputFldAtStart ) const
 {
     SwPaM* pCrsr = GetCrsr();
@@ -824,7 +820,6 @@ SwField* SwCrsrShell::GetCurFld( const bool bIncludeInputFldAtStart ) const
     return pCurFld;
 }
 
-
 bool SwCrsrShell::CrsrInsideInputFld() const
 {
     bool bCrsrInsideInputFld = false;
@@ -842,12 +837,10 @@ bool SwCrsrShell::CrsrInsideInputFld() const
     return bCrsrInsideInputFld;
 }
 
-
 bool SwCrsrShell::PosInsideInputFld( const SwPosition& rPos ) const
 {
     return dynamic_cast<const SwTxtInputFld*>(GetTxtFldAtPos( &rPos, false )) != NULL;
 }
-
 
 bool SwCrsrShell::DocPtInsideInputFld( const Point& rDocPt ) const
 {
@@ -860,7 +853,6 @@ bool SwCrsrShell::DocPtInsideInputFld( const Point& rDocPt ) const
     return false;
 }
 
-
 sal_Int32 SwCrsrShell::StartOfInputFldAtPos( const SwPosition& rPos ) const
 {
     const SwTxtInputFld* pTxtInputFld = dynamic_cast<const SwTxtInputFld*>(GetTxtFldAtPos( &rPos, true ));
@@ -872,7 +864,6 @@ sal_Int32 SwCrsrShell::StartOfInputFldAtPos( const SwPosition& rPos ) const
     return *(pTxtInputFld->GetStart());
 }
 
-
 sal_Int32 SwCrsrShell::EndOfInputFldAtPos( const SwPosition& rPos ) const
 {
     const SwTxtInputFld* pTxtInputFld = dynamic_cast<const SwTxtInputFld*>(GetTxtFldAtPos( &rPos, true ));
@@ -883,7 +874,6 @@ sal_Int32 SwCrsrShell::EndOfInputFldAtPos( const SwPosition& rPos ) const
     }
     return *(pTxtInputFld->End());
 }
-
 
 void SwCrsrShell::GotoOutline( sal_uInt16 nIdx )
 {
@@ -1700,7 +1690,6 @@ bool SwContentAtPos::IsInRTLText()const
     return bRet;
 }
 
-
 sal_Bool SwCrsrShell::SelectTxt( const sal_Int32 nStart,
                                  const sal_Int32 nEnd )
 {
@@ -1724,7 +1713,6 @@ sal_Bool SwCrsrShell::SelectTxt( const sal_Int32 nStart,
 
     return bRet;
 }
-
 
 sal_Bool SwCrsrShell::SelectTxtAttr( sal_uInt16 nWhich,
                                      sal_Bool bExpand,

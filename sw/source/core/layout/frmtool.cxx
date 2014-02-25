@@ -2278,7 +2278,7 @@ const SdrObject *SwOrderIter::Prev()
 //   when attaching it again. Only the pointers necessary for the chain connection need to be
 //   adjusted. The correction happens in RestoreCntnt(). In between all access is restricted.
 //   During this action, the Flys are detached from the page.
-//
+
 // #115759# - 'remove' also drawing object from page and
 // at-fly anchored objects from page
 static void lcl_RemoveObjsFromPage( SwFrm* _pFrm )

@@ -60,7 +60,6 @@ uno::Reference< text::XTextRange > SwVbaRangeHelper::getRangeByPosition( const u
     return xRange;
 }
 
-
 void SwVbaRangeHelper::insertString( uno::Reference< text::XTextRange >& rTextRange, uno::Reference< text::XText >& rText, const OUString& rStr, sal_Bool _bAbsorb ) throw ( uno::RuntimeException )
 {
     sal_Int32 nlastIndex = 0;

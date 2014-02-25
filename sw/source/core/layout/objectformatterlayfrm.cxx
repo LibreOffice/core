@@ -121,7 +121,6 @@ bool SwObjectFormatterLayFrm::_AdditionalFormatObjsOnPage()
         return false;
     }
 
-
     SwPageFrm& rPageFrm = static_cast<SwPageFrm&>(GetAnchorFrm());
 
     if ( !rPageFrm.GetSortedObjs() )

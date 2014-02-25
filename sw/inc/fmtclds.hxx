@@ -43,7 +43,6 @@ public:
 
     sal_Bool operator==( const SwColumn & ) const;
 
-
     void SetWishWidth( sal_uInt16 nNew ) { nWish  = nNew; }
     void SetUpper( sal_uInt16  nNew ) { nUpper = nNew; }
     void SetLower( sal_uInt16  nNew ) { nLower = nNew; }
@@ -119,7 +118,6 @@ public:
     editeng::SvxBorderStyle     GetLineStyle() const  { return eLineStyle;}
     sal_uLong           GetLineWidth() const  { return nLineWidth;}
     const Color&    GetLineColor() const { return aLineColor;}
-
 
     SwColLineAdj     GetLineAdj() const { return eAdj; }
     sal_Bool             IsOrtho()    const { return bOrtho; }

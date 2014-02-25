@@ -379,7 +379,6 @@ bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
             OSL_ENSURE(aMoveArr[nLevel] >= 0,
                 "move table: current TxtColl not found when building table!");
 
-
             if (nLevel < MAXLEVEL && aMoveArr[nLevel] >= 0)
             {
                 pColl = aCollArr[ aMoveArr[nLevel] ];
@@ -682,7 +681,7 @@ static sal_uInt16 lcl_FindOutlineNum( const SwNodes& rNds, OUString& rName )
 // Add this bullet point:
 
 // A Name can contain a Number and/or the Text.
-//
+
 // First, we try to find the correct Entry via the Number.
 // If it exists, we compare the Text, to see if it's the right one.
 // If that's not the case, we search again via the Text. If it is

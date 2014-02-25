@@ -316,7 +316,7 @@ public:
     virtual void SectionBiDi( bool bBiDi ) = 0;
 
     /// The style of the page numbers.
-    ///
+    /
     virtual void SectionPageNumbering( sal_uInt16 nNumType, ::boost::optional<sal_uInt16> oPageRestartNumber ) = 0;
 
     /// The type of breaking.
@@ -472,7 +472,7 @@ protected:
     virtual void TextFlyContent( const SwFmtFlyCnt& );
 
     /// Sfx item RES_TXTATR_FTN
-    ///
+    /
     /// This one is common for both WW8AttributeOutput as well as
     /// DocxAttributeOutput.
     void TextFootnote( const SwFmtFtn& );

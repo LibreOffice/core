@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_INC_FMTFLCNT_HXX
 #define INCLUDED_SW_INC_FMTFLCNT_HXX
 
-
 #include <svl/poolitem.hxx>
 
 class SwFrmFmt;

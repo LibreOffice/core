@@ -22,7 +22,6 @@
 
 #include <svx/SmartTagMgr.hxx>
 
-
 /*************************************************************************
  *                      class SwSmartTagMgr
  *

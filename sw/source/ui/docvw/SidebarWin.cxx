@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <SidebarWin.hxx>
 #include <SidebarWinAcc.hxx>
 #include <PostItMgr.hxx>
@@ -324,7 +323,6 @@ void SwSidebarWin::InitControls()
         aSettings.SetStyleSettings(aStyleSettings);
         mpMetadataDate->SetSettings(aSettings);
     }
-
 
     SwDocShell* aShell = mrView.GetDocShell();
     mpOutliner = new Outliner(&aShell->GetPool(),OUTLINERMODE_TEXTOBJECT);
@@ -954,7 +952,6 @@ void SwSidebarWin::DeactivatePostIt()
     if ( !Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
         GetOutlinerView()->SetBackgroundColor(COL_TRANSPARENT);
 
-
     if ( !IsProtected() && Engine()->GetEditEngine().GetText().isEmpty() )
     {
         mnEventId = Application::PostUserEvent( LINK( this, SwSidebarWin, DeleteHdl), 0 );
@@ -1123,7 +1120,6 @@ IMPL_LINK_NOARG(SwSidebarWin, DeleteHdl)
     Delete();
     return 0;
 }
-
 
 void SwSidebarWin::ResetAttributes()
 {

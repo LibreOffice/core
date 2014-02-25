@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_HTML_HTMLFORM_HXX
 #define INCLUDED_SW_SOURCE_FILTER_HTML_HTMLFORM_HXX
 
-
 enum HTMLEventType
 {
     HTML_ET_ONSUBMITFORM,   HTML_ET_ONRESETFORM,
@@ -36,10 +35,6 @@ extern const sal_Char * aEventMethodTable[];
 extern const sal_Char * aEventSDOptionTable[];
 extern const sal_Char * aEventOptionTable[];
 
-
-
-
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

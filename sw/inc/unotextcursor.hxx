@@ -49,7 +49,6 @@
 #include <unobaseclass.hxx>
 #include <TextCursorHelper.hxx>
 
-
 class SwDoc;
 struct SwPosition;
 class SwUnoCrsr;

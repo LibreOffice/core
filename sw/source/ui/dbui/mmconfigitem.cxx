@@ -149,7 +149,6 @@ class SwMailMergeConfigItem_Impl : public utl::ConfigItem
     sal_Bool                                bIsGreetingLineInMail_LastUserSetting;
     sal_Bool                                bIsGreetingLine_LastUserSetting;
 
-
     const Sequence< OUString>&       GetPropertyNames();
 
 public:
@@ -503,7 +502,7 @@ void  SwMailMergeConfigItem_Impl::Commit()
     {
         switch(nProp)
         {
-            case 0: pValues[nProp] <<= bIsOutputToLetter; break;//
+            case 0: pValues[nProp] <<= bIsOutputToLetter; break;
             case 1: pValues[nProp] <<= bIncludeCountry; break;
             case 2: pValues[nProp] <<= sExcludeCountry; break;
             case 3: pValues[nProp] <<= GetAddressBlocks(sal_True); break;
@@ -1238,7 +1237,6 @@ Sequence< OUString> SwMailMergeConfigItem::GetColumnAssignment(
     }
     return aRet;
 }
-
 
 // returns the name that is assigned as e-mail column of the current data base
 OUString     SwMailMergeConfigItem::GetAssignedColumn(sal_uInt32 nColumn) const

@@ -59,8 +59,6 @@ class SW_DLLPUBLIC SwFmtFrmSize: public SfxPoolItem
     // the object is placed (PrtArea) and to the screen width
     // minus borders in BrowseView if the environment is the page.
 
-
-
 public:
     SwFmtFrmSize( SwFrmSize eSize = ATT_VAR_SIZE,
                   SwTwips nWidth = 0, SwTwips nHeight = 0 );

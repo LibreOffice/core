@@ -89,7 +89,6 @@ namespace svtools{ class ColorConfig;}
 #define VIEWOPT_2_SHADOWCRSR        0x01000000L
 #define VIEWOPT_2_V_RULER_RIGHT     0x02000000L
 
-
 // Table background.
 #define TBL_DEST_CELL   0
 #define TBL_DEST_ROW    1
@@ -268,7 +267,6 @@ public:
     inline void SetShowHiddenChar( sal_Bool b )
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_CHAR_HIDDEN ) : ( nCoreOptions &= ~VIEWOPT_1_CHAR_HIDDEN); }
 
-
     inline sal_Bool IsShowHiddenField() const
         { return !bReadonly && (nCoreOptions & VIEWOPT_1_FLD_HIDDEN) ? sal_True : sal_False; }
     inline void SetShowHiddenField( sal_Bool b )
@@ -438,7 +436,6 @@ public:
     inline bool operator == ( const SwViewOption &rOpt ) const;
     inline bool operator != ( const SwViewOption &rOpt ) const  { return !(*this == rOpt); }
 
-
 /*---------------------------------------------------------------------------
     Options from nUIOptions
 ----------------------------------------------------------------------------*/
@@ -606,7 +603,6 @@ public:
     static void     ApplyColorConfigValues(const svtools::ColorConfig& rConfig);
 };
 
-
 inline bool SwViewOption::operator==( const SwViewOption &rOpt ) const
 {
     return IsEqualFlags( rOpt ) && nZoom == rOpt.GetZoom();
@@ -619,10 +615,8 @@ inline void SwViewOption::SetUIOptions( const SwViewOption& rVOpt )
     nShdwCrsrFillMode = rVOpt.nShdwCrsrFillMode;
 }
 
-
 // Helper function for checking HTML-capabilities.
 SW_DLLPUBLIC sal_uInt16     GetHtmlMode(const SwDocShell*);
-
 
 #endif
 

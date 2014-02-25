@@ -22,7 +22,6 @@
 
 #include <tools/solar.h>
 
-
 // define for cursor travelling normally in western text cells and chars do
 // the same, but in complex text cell skip over legatures and char skip
 // into it.

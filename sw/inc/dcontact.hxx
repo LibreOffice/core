@@ -147,7 +147,6 @@ public:
     */
     virtual void MoveObjToInvisibleLayer( SdrObject* _pDrawObj );
 
-    // -------------------------------------------------------------------------
     /** some virtual helper methods for information
      about the object (Writer fly frame resp. drawing object) */
     const SwFmtAnchor& GetAnchorFmt() const
@@ -171,8 +170,6 @@ public:
     }
 
     const SwIndex&     GetCntntAnchorIndex() const;
-
-    // -------------------------------------------------------------------------
 
     /** get data collection of anchored objects, handled by with contact
 
@@ -322,7 +319,6 @@ class SwDrawVirtObj : public SdrVirtObj
 };
 
 bool CheckControlLayer( const SdrObject *pObj );
-
 
 /** ContactObject for connection of formats as representatives of draw objects
  in SwClient and the objects themselves in Drawing (SDrObjUserCall). */

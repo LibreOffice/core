@@ -45,7 +45,6 @@ protected:
 public:
     SwXRedlines(SwDoc* pDoc);
 
-
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException );
@@ -76,7 +75,6 @@ protected:
 public:
     SwXRedlineEnumeration(SwDoc& rDoc);
 
-
     //XEnumeration
     virtual sal_Bool SAL_CALL hasMoreElements(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Any SAL_CALL nextElement(void) throw( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException );
@@ -89,7 +87,6 @@ protected:
     //SwClient
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 };
-
 
 #endif
 

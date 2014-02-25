@@ -350,7 +350,6 @@ namespace sw { namespace mark
         , m_pDoc(&rDoc)
     { }
 
-
     ::sw::mark::IMark* MarkManager::makeMark(const SwPaM& rPaM,
         const OUString& rName,
         const IDocumentMarkAccess::MarkType eType)
@@ -491,7 +490,6 @@ namespace sw { namespace mark
         return pFieldMark;
     }
 
-
     ::sw::mark::IMark* MarkManager::getMarkForTxtNode(
         const SwTxtNode& rTxtNode,
         const IDocumentMarkAccess::MarkType eType )
@@ -504,7 +502,6 @@ namespace sw { namespace mark
         const SwPaM aPaM(aPos);
         return makeMark(aPaM, OUString(), eType);
     }
-
 
     sw::mark::IMark* MarkManager::makeAnnotationMark(
         const SwPaM& rPaM,
@@ -550,7 +547,6 @@ namespace sw { namespace mark
         return true;
     }
 
-
     void MarkManager::correctMarksAbsolute(
         const SwNodeIndex& rOldNode,
         const SwPosition& rNewPos,
@@ -593,7 +589,6 @@ namespace sw { namespace mark
 #endif
     }
 
-
     void MarkManager::correctMarksRelative(const SwNodeIndex& rOldNode, const SwPosition& rNewPos, const sal_Int32 nOffset)
     {
         const SwNode* const pOldNode = &rOldNode.GetNode();
@@ -635,7 +630,6 @@ namespace sw { namespace mark
         lcl_DebugMarks(m_vAllMarks);
 #endif
     }
-
 
     void MarkManager::deleteMarks(
             const SwNodeIndex& rStt,
@@ -1006,7 +1000,6 @@ namespace sw { namespace mark
         return m_vCommonMarks.size();
     }
 
-
     IDocumentMarkAccess::const_iterator_t MarkManager::getAnnotationMarksBegin() const
     {
         return m_vAnnotationMarks.begin();
@@ -1098,7 +1091,7 @@ namespace
     // Array structure: 2 longs,
     //  1st long contains the type and position in the DocArray,
     //  2nd long contains the ContentPosition
-    //
+
     //  CntntType --
     //          0x8000 = Bookmark Pos1
     //          0x8001 = Bookmark Pos2
@@ -1343,7 +1336,6 @@ void SaveBookmark::SetInDoc(
         }
     }
 }
-
 
 // _DelBookmarks, _{Save,Restore}CntntIdx
 

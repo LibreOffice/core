@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <comphelper/string.hxx>
 #include <vcl/builder.hxx>
 #include "actctrl.hxx"
@@ -26,7 +25,6 @@ void NumEditAction::Action()
 {
     aActionLink.Call( this );
 }
-
 
 bool NumEditAction::Notify( NotifyEvent& rNEvt )
 {

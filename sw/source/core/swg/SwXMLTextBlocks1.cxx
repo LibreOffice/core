@@ -265,7 +265,6 @@ sal_uLong SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
     return nRet;
 }
 
-
 sal_uLong SwXMLTextBlocks::GetBlockText( const OUString& rShort, OUString& rText )
 {
     sal_uLong n = 0;
@@ -568,7 +567,6 @@ sal_uLong SwXMLTextBlocks::SetMacroTable(
             Sequence<Any> aParams(2);
             aParams[0] <<= xDocHandler;
             aParams[1] <<= xEvents;
-
 
             // get filter component
             OUString sFilterComponent = bOasis

@@ -44,8 +44,6 @@
 
 using namespace ::com::sun::star;
 
-//////////////////////////////////////////////////////////////////////
-
 SdrHHCWrapper::SdrHHCWrapper( SwView* pVw,
        LanguageType nSourceLanguage, LanguageType nTargetLanguage,
        const Font* pTargetFnt,
@@ -78,7 +76,6 @@ SdrHHCWrapper::SdrHHCWrapper( SwView* pVw,
     // Hack: all SdrTextObj attributes should be transferred to EditEngine
     pOutlView->SetBackgroundColor( Color( COL_WHITE ) );
 
-
     InsertView( pOutlView );
     Point aPoint( 0, 0 );
      Rectangle aRect( aPoint, aSize );
@@ -101,12 +98,10 @@ SdrHHCWrapper::~SdrHHCWrapper()
     delete pOutlView;
 }
 
-
 void SdrHHCWrapper::StartTextConversion()
 {
     pOutlView->StartTextConversion( nSourceLang, nTargetLang, pTargetFont, nOptions, static_cast<sal_Bool>(bIsInteractive), sal_True );
 }
-
 
 sal_Bool SdrHHCWrapper::ConvertNextDocument()
 {
@@ -176,7 +171,5 @@ sal_Bool SdrHHCWrapper::ConvertNextDocument()
 
     return bNextDoc;
 }
-
-//////////////////////////////////////////////////////////////////////
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

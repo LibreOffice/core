@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "PostItMgr.hxx"
 #include <postithelper.hxx>
 
@@ -60,7 +59,6 @@
 #include <sfx2/request.hxx>
 #include <sfx2/event.hxx>
 #include <svl/srchitem.hxx>
-
 
 #include <svl/languageoptions.hxx>
 #include <svtools/langtab.hxx>
@@ -796,7 +794,6 @@ void SwPostItMgr::LayoutPostIts()
                     CheckForRemovedPostIts();
             }
 
-
             // notes scrollbar is otherwise not drawn correctly for some cases
             // scrollbar area is enough
             if (bUpdate)
@@ -1252,7 +1249,6 @@ void SwPostItMgr::Hide()
     }
 }
 
-
 void SwPostItMgr::Show()
 {
     for(SwSidebarItem_iterator i = mvPostItFlds.begin(); i != mvPostItFlds.end() ; ++i)
@@ -1486,7 +1482,6 @@ Rectangle SwPostItMgr::GetTopScrollRect(const unsigned long aPage) const
     return Rectangle(aPointTop,aSize);
 }
 
-
 //IMPORTANT: if you change the rects here, also change SwPageFrm::PaintNotesSidebar()
 bool SwPostItMgr::ScrollbarHit(const unsigned long aPage,const Point &aPoint)
 {
@@ -1568,7 +1563,6 @@ void SwPostItMgr::CorrectPositions()
         }
     }
 }
-
 
 bool SwPostItMgr::ShowNotes() const
 {

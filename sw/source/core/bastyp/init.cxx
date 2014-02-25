@@ -419,7 +419,6 @@ SfxItemInfo aSlotTab[] =
     { 0, SFX_ITEM_POOLABLE }                            // RES_UNKNOWNATR_CONTAINER
 };
 
-
 sal_uInt16* SwAttrPool::pVersionMap1 = 0;
 sal_uInt16* SwAttrPool::pVersionMap2 = 0;
 sal_uInt16* SwAttrPool::pVersionMap3 = 0;
@@ -504,7 +503,6 @@ void _InitCore()
 
 // CharakterAttr - Dummies
     aAttrTab[ RES_CHRATR_DUMMY3 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_CHRATR_DUMMY3 );
-
 
     aAttrTab[ RES_TXTATR_REFMARK - POOLATTR_BEGIN ] =       new SwFmtRefMark( OUString() );
     aAttrTab[ RES_TXTATR_TOXMARK - POOLATTR_BEGIN ] =       new SwTOXMark;

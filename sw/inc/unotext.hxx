@@ -31,7 +31,6 @@
 
 #include <unobaseclass.hxx>
 
-
 namespace com { namespace sun { namespace star {
     namespace text {
         class XTextContent;
@@ -44,8 +43,6 @@ class SwStartNode;
 class SwPaM;
 class OTextCursorHelper;
 class SwXTextRange;
-
-
 
 class SwXText
     : public ::com::sun::star::lang::XTypeProvider
@@ -94,7 +91,6 @@ public:
                 ::com::sun::star::text::XTextCursor >
         CreateCursor()
         throw (::com::sun::star::uno::RuntimeException);
-
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(

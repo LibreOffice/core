@@ -112,7 +112,6 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
 
     virtual void SetFixFields(bool bOnlyTimeDate, const DateTime* pNewDateTime) = 0;
 
-
     // In Calculator set all SetExpression fields that are valid up to the indicated position
     // (Node [ + ::com::sun::star::ucb::Content]).
     // A generated list of all fields may be passed along too

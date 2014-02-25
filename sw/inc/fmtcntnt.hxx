@@ -26,7 +26,6 @@
 class SwNodeIndex;
 class SwStartNode;
 
-
 /// Cntnt, content of frame (header, footer, fly).
 class SW_DLLPUBLIC SwFmtCntnt: public SfxPoolItem
 {

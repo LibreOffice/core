@@ -24,7 +24,6 @@
 
 // Inlines
 
-
 // Implementation of FrameAttribute methods of SwAttrSet.
 inline const SvxPaperBinItem &SwAttrSet::GetPaperBin(sal_Bool bInP) const
     { return (const SvxPaperBinItem&)Get( RES_PAPER_BIN,bInP); }
@@ -58,7 +57,6 @@ inline const SvxFrameDirectionItem &SwAttrSet::GetFrmDir(sal_Bool bInP) const
     { return (const SvxFrameDirectionItem&)Get( RES_FRAMEDIR,bInP); }
 inline const SdrTextVertAdjustItem &SwAttrSet::GetTextVertAdjust(sal_Bool bInP) const
     { return (const SdrTextVertAdjustItem&)Get( RES_TEXT_VERT_ADJUST,bInP); }
-
 
 // Implementation of FrameAttribute methods of SwFmt.
 inline const SvxPaperBinItem &SwFmt::GetPaperBin(sal_Bool bInP) const

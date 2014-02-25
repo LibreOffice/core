@@ -1157,9 +1157,8 @@ class NestedUserCallHdl
         }
 };
 
-//
 // !!!ATTENTION!!! The object may commit suicide!!!
-//
+
 void SwDrawContact::_Changed( const SdrObject& rObj,
                               SdrUserCallType eType,
                               const Rectangle* pOldBoundRect )

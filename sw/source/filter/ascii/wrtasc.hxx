@@ -24,7 +24,6 @@
 
 extern SwNodeFnTab aASCNodeFnTab;
 
-
 // The ASC writer
 
 class SwASCWriter : public Writer
@@ -39,7 +38,6 @@ public:
 
     OUString GetLineEnd() const { return m_sLineEnd; }
 };
-
 
 #endif  //  _ INCLUDED_SW_SOURCE_FILTER_ASCII_WRTASC_HXX
 

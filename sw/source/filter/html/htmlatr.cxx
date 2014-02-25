@@ -149,7 +149,6 @@ void SwHTMLWriter::OutAndSetDefList( sal_uInt16 nNewLvl )
     nDefListLvl = nNewLvl;
 }
 
-
 void SwHTMLWriter::ChangeParaToken( sal_uInt16 nNew )
 {
     if( nNew != nLastParaToken && HTML_PREFORMTXT_ON == nLastParaToken )
@@ -389,7 +388,6 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
             }
         }
 
-
         // Die diversen default-Abstaende aus der Vorlage oder der
         // Vergleischs-Vorlage merken
         const SvxLRSpaceItem &rLRSpace =
@@ -616,7 +614,6 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         pNodeItemSet ? ((const SvxULSpaceItem &)pNodeItemSet->Get(RES_UL_SPACE))
                      : rFmt.GetULSpace();
 
-
     if( (rHWrt.bOutHeader &&
          rWrt.pCurPam->GetPoint()->nNode.GetIndex() ==
             rWrt.pCurPam->GetMark()->nNode.GetIndex()) ||
@@ -649,7 +646,6 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
 
         return;
     }
-
 
     // soll ein ALIGN=... geschrieben werden?
     const SfxPoolItem* pAdjItem = 0;
@@ -1051,7 +1047,6 @@ void OutHTML_SwFmtOff( Writer& rWrt, const SwHTMLTxtCollOutputInfo& rInfo )
     }
 }
 
-
 class HTMLSttEndPos
 {
     sal_Int32 nStart;
@@ -1096,7 +1091,6 @@ enum HTMLOnOffState { HTML_NOT_SUPPORTED,   // nicht unterst. Attribut
                       HTML_DROPCAP_VALUE,   // DropCap-Attributs
                       HTML_AUTOFMT_VALUE }; // Attribute for automatic character styles
 
-
 class HTMLEndPosLst
 {
     _HTMLEndLst aStartLst;  // nach Anfangs-Psoitionen sortierte Liste
@@ -1111,11 +1105,10 @@ class HTMLEndPosLst
     SwDoc *pDoc;            // das aktuelle Dokument
     SwDoc* pTemplate;       // die HTML-Vorlage (oder 0)
     const Color* pDfltColor;// die Default-Vordergrund-Farbe
-    std::set<OUString>& rScriptTxtStyles;    //
+    std::set<OUString>& rScriptTxtStyles;
 
     sal_uLong nHTMLMode;
     sal_Bool bOutStyles : 1;    // werden Styles exportiert
-
 
     // die Position eines Items in der Start-/Ende-Liste suchen
     sal_uInt16 _FindStartPos( const HTMLSttEndPos *pPos ) const;
@@ -1136,7 +1129,6 @@ class HTMLEndPosLst
     // exportiert wird wie das uebergebene Item im gleichen Bereich?
     sal_Bool ExistsOffTagItem( sal_uInt16 nWhich, sal_Int32 nStartPos,
                                           sal_Int32 nEndPos );
-
 
     // das Ende eines gesplitteten Items anpassen
     void FixSplittedItem( HTMLSttEndPos *pPos, sal_Int32 nNewEnd,
@@ -1187,7 +1179,6 @@ public:
     sal_Bool IsHTMLMode( sal_uLong nMode ) const { return (nHTMLMode & nMode) != 0; }
 };
 
-
 sal_uInt16 HTMLEndPosLst::_FindStartPos( const HTMLSttEndPos *pPos ) const
 {
     sal_uInt16 i;
@@ -1210,7 +1201,6 @@ sal_uInt16 HTMLEndPosLst::_FindEndPos( const HTMLSttEndPos *pPos ) const
 
     return i==aEndLst.size() ? USHRT_MAX : i;
 }
-
 
 void HTMLEndPosLst::_InsertItem( HTMLSttEndPos *pPos, sal_uInt16 nEndPos )
 {
@@ -1514,7 +1504,6 @@ void HTMLEndPosLst::FixSplittedItem( HTMLSttEndPos *pPos, sal_Int32 nNewEnd,
     }
 }
 
-
 void HTMLEndPosLst::InsertItem( const SfxPoolItem& rItem, sal_Int32 nStart,
                                                           sal_Int32 nEnd )
 {
@@ -1546,8 +1535,6 @@ void HTMLEndPosLst::InsertItem( const SfxPoolItem& rItem, sal_Int32 nStart,
     // ein Attribut muss noch eingefuegt werden
     _InsertItem( new HTMLSttEndPos( rItem, nStart, nEnd ), i );
 }
-
-
 
 void HTMLEndPosLst::SplitItem( const SfxPoolItem& rItem, sal_Int32 nStart,
                                                            sal_Int32 nEnd )
@@ -1662,8 +1649,6 @@ HTMLEndPosLst::~HTMLEndPosLst()
     OSL_ENSURE(aStartLst.empty(), "Start List not empty in destructor");
     OSL_ENSURE(aEndLst.empty(), "End List not empty in destructor");
 }
-
-
 
 void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
                             sal_Int32 nStart, sal_Int32 nEnd,
@@ -2067,7 +2052,6 @@ void HTMLEndPosLst::OutEndAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
     }
 }
 
-
 /* Ausgabe der Nodes */
 Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
 {
@@ -2297,7 +2281,6 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     if( !bOldLFPossible && rHTMLWrt.bLFPossible )
         rHTMLWrt.OutNewLine();
 
-
     // dann die Bookmarks (inkl. End-Tag)
     rHTMLWrt.bOutOpts = sal_False;
     rHTMLWrt.OutBookmarks();
@@ -2345,7 +2328,6 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                            rHTMLWrt.aChrFmtInfos, sal_False, sal_True );
     }
 
-
     if( !aOutlineTxt.isEmpty() || rHTMLWrt.pFmtFtn )
     {
         // Absatz-Attribute ausgeben, damit der Text die Attribute des
@@ -2371,7 +2353,6 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     // erstmal den Start berichtigen. D.h. wird nur ein Teil vom Satz
     // ausgegeben, so muessen auch da die Attribute stimmen!!
     rHTMLWrt.bTxtAttr = sal_True;
-
 
     sal_uInt16 nAttrPos = 0;
     sal_Int32 nStrPos = rHTMLWrt.pCurPam->GetPoint()->nContent.GetIndex();
@@ -2662,7 +2643,6 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     return rHTMLWrt;
 }
 
-
 sal_uInt32 SwHTMLWriter::ToPixel( sal_uInt32 nVal, const bool bVert ) const
 {
     if( Application::GetDefaultDevice() && nVal )
@@ -2676,7 +2656,6 @@ sal_uInt32 SwHTMLWriter::ToPixel( sal_uInt32 nVal, const bool bVert ) const
     return nVal;
 }
 
-
 static Writer& OutHTML_CSS1Attr( Writer& rWrt, const SfxPoolItem& rHt )
 {
     // wenn gerade Hints geschrieben werden versuchen wir den Hint als
@@ -2687,7 +2666,6 @@ static Writer& OutHTML_CSS1Attr( Writer& rWrt, const SfxPoolItem& rHt )
 
     return rWrt;
 }
-
 
 /* File CHRATR.HXX: */
 
@@ -2721,7 +2699,6 @@ static Writer& OutHTML_SvxColor( Writer& rWrt, const SfxPoolItem& rHt )
 
     return rWrt;
 }
-
 
 static Writer& OutHTML_SwPosture( Writer& rWrt, const SfxPoolItem& rHt )
 {
@@ -2844,7 +2821,6 @@ static Writer& OutHTML_SwWeight( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
-
 static Writer& OutHTML_SwCrossedOut( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
@@ -2865,7 +2841,6 @@ static Writer& OutHTML_SwCrossedOut( Writer& rWrt, const SfxPoolItem& rHt )
 
     return rWrt;
 }
-
 
 static Writer& OutHTML_SvxEscapement( Writer& rWrt, const SfxPoolItem& rHt )
 {
@@ -2897,8 +2872,6 @@ static Writer& OutHTML_SvxEscapement( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
-
-
 static Writer& OutHTML_SwUnderline( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
@@ -2919,7 +2892,6 @@ static Writer& OutHTML_SwUnderline( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
-
 static Writer& OutHTML_SwFlyCnt( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
@@ -2934,7 +2906,6 @@ static Writer& OutHTML_SwFlyCnt( Writer& rWrt, const SfxPoolItem& rHt )
     rHTMLWrt.OutFrmFmt( nMode, rFmt, pSdrObj );
     return rWrt;
 }
-
 
 // Das ist jetzt unser Blink-Item. Blinkend wird eingeschaltet, indem man
 // das Item auf sal_True setzt!
@@ -3232,7 +3203,6 @@ static Writer& OutHTML_SvxAdjust( Writer& rWrt, const SfxPoolItem& rHt )
  * Es sind lokale Strukturen, die nur innerhalb der HTML-DLL
  * bekannt sein muessen.
  */
-
 
 SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_CHRATR_CASEMAP   */          OutHTML_CSS1Attr,

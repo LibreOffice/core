@@ -25,7 +25,6 @@
 
 #include <boost/utility.hpp>
 
-
 class SfxItemPool;
 class SvXMLAttrContainerItem;
 class SwFmtRuby;
@@ -38,7 +37,6 @@ class SwFmtFlyCnt;
 class SwTOXMark;
 class SwFmtRefMark;
 class SwFmtMeta;
-
 
 class SwTxtAttr : private boost::noncopyable
 {
@@ -134,7 +132,6 @@ public:
     virtual sal_Int32* GetEnd();
 };
 
-
 // --------------- Inline Implementations ------------------------
 
 inline const sal_Int32* SwTxtAttr::End() const
@@ -167,8 +164,6 @@ inline void SwTxtAttr::SetDontExpand( bool bDontExpand )
         m_bDontExpand = bDontExpand;
     }
 }
-
-//------------------------------------------------------------------------
 
 inline const SwFmtCharFmt& SwTxtAttr::GetCharFmt() const
 {

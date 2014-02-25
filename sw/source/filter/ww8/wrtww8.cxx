@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <iostream>
 
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -154,7 +153,6 @@ public:
 
     sal_uInt8 *CopyLastSprms(sal_uInt8 &rLen, bool bVer8);
 };
-
 
 // class WW8_WrPc collects all piece entries for one piece
 class WW8_WrPc
@@ -683,8 +681,6 @@ const SfxPoolItem& MSWordExportBase::GetItem(sal_uInt16 nWhich) const
     return *pItem;
 }
 
-
-
 WW8_WrPlc1::WW8_WrPlc1( sal_uInt16 nStructSz )
     : nStructSiz( nStructSz )
 {
@@ -730,7 +726,6 @@ void WW8_WrPlc1::Finish( sal_uLong nLastCp, sal_uLong nSttCp )
     }
 }
 
-
 void WW8_WrPlc1::Write( SvStream& rStrm )
 {
     sal_uInt32 i;
@@ -739,7 +734,6 @@ void WW8_WrPlc1::Write( SvStream& rStrm )
     if( i )
         rStrm.Write( pData, (i-1) * nStructSiz );
 }
-
 
 // Class WW8_WrPlcFld for fields
 
@@ -827,8 +821,6 @@ void WW8_WrMagicTable::Append( WW8_CP nCp, sal_uLong nData)
     }
 }
 
-
-
 void SwWW8Writer::FillCount( SvStream& rStrm, sal_uLong nCount )
 {
     static const sal_uInt32 aNulls[16] =
@@ -858,9 +850,6 @@ sal_uLong SwWW8Writer::FillUntil( SvStream& rStrm, sal_uLong nEndPos )
 #endif
     return rStrm.Tell();
 }
-
-
-
 
 WW8_WrPlcPn::WW8_WrPlcPn( WW8Export& rWr, ePLCFT ePl, WW8_FC nStartFc )
     : rWrt(rWr), nFkpStartPage(0), ePlc(ePl), nMark(0)
@@ -980,8 +969,6 @@ void WW8_WrPlcPn::WritePlc()
         rWrt.pFib->lcbPlcfbtePapx = rWrt.pTableStrm->Tell() - nFcStart;
     }
 }
-
-
 
 WW8_WrFkp::WW8_WrFkp(ePLCFT ePl, WW8_FC nStartFc, bool bWrtWW8)
     : ePlc(ePl), nStartGrp(511), nOldStartGrp(511),
@@ -1258,7 +1245,6 @@ void WW8_WrPct::AppendPc(WW8_FC nStartFc, bool bIsUnicode)
     if( bIsUni )
         nStartCp >>= 1;                 // for Unicode: number of characters / 2
 
-
     if ( !bIsUnicode )
     {
         nStartFc <<= 1;                 // Address * 2
@@ -1274,7 +1260,6 @@ void WW8_WrPct::AppendPc(WW8_FC nStartFc, bool bIsUnicode)
     bIsUni = bIsUnicode;
 }
 
-
 void WW8_WrPct::WritePc( WW8Export& rWrt )
 {
     sal_uLong nPctStart;
@@ -1289,7 +1274,6 @@ void WW8_WrPct::WritePc( WW8Export& rWrt )
     for( aIter = aPcts.begin(); aIter != aPcts.end(); ++aIter )     // ranges
         SwWW8Writer::WriteLong( *rWrt.pTableStrm,
                                 aIter->GetStartCp() );
-
 
     // calculate the last Pos
     sal_uLong nStartCp = rWrt.pFib->fcMac - nOldFc;
@@ -1550,9 +1534,6 @@ void MSWordExportBase::AppendWordBookmark( const OUString& rName )
     AppendBookmark( BookmarkToWord( rName ) );
 }
 
-
-
-
 void WW8_WrtRedlineAuthor::Write( Writer& rWrt )
 {
     WW8Export & rWW8Wrt = *(((SwWW8Writer&)rWrt).m_pExport);
@@ -1569,8 +1550,6 @@ sal_uInt16 WW8Export::AddRedlineAuthor( sal_uInt16 nId )
     }
     return pRedlAuthors->AddName( SW_MOD()->GetRedlineAuthor( nId ) );
 }
-
-
 
 void WW8Export::WriteAsStringTable(const std::vector<OUString>& rStrings,
     sal_Int32& rfcSttbf, sal_Int32& rlcbSttbf, sal_uInt16 nExtraLen)
@@ -1691,7 +1670,6 @@ void SwWW8Writer::WriteString_xstz(SvStream& rStrm, const OUString& rStr, bool b
         SwWW8Writer::InsUInt16(aBytes, 0);
     rStrm.Write(&aBytes[0], aBytes.size());
 }
-
 
 void SwWW8Writer::WriteString8(SvStream& rStrm, const OUString& rStr,
     bool bAddZero, rtl_TextEncoding eCodeSet)
@@ -3172,7 +3150,6 @@ void WW8Export::ExportDocument_Impl()
     pPiece = new WW8_WrPct( pFib->fcMin, bWrtWW8 );
     pDop = new WW8Dop;
 
-
     pDop->fRevMarking = 0 != ( nsRedlineMode_t::REDLINE_ON & mnRedlineMode );
     pDop->fRMView = 0 != ( nsRedlineMode_t::REDLINE_SHOW_DELETE & mnRedlineMode );
     pDop->fRMPrint = pDop->fRMView;
@@ -3268,7 +3245,6 @@ void WW8Export::ExportDocument_Impl()
     delete pFib;
     GetWriter().SetStream( 0 );
 
-
     xWwStrm->SetBufferSize( 0 );
     if( bWrtWW8 )
     {
@@ -3282,7 +3258,6 @@ void WW8Export::ExportDocument_Impl()
         }
     }
 }
-
 
 void WW8Export::PrepareStorage()
 {
@@ -3495,7 +3470,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL ExportDOC( const OUString& rFltNam
     xRet = new SwWW8Writer( rFltName, rBaseURL );
 }
 
-
 extern "C" SAL_DLLPUBLIC_EXPORT sal_uLong SAL_CALL GetSaveWarningOfMSVBAStorage_ww8(  SfxObjectShell &rDocS )
 {
     return SvxImportMSVBasic::GetSaveWarningOfMSVBAStorage( rDocS );
@@ -3535,7 +3509,6 @@ void WW8_WrPlcFtnEdn::WritePlc( WW8Export& rWrt ) const
             rWrt.pFib->lcbPlcfendRef );
     }
 }
-
 
 bool WW8_WrPlcAnnotations::WriteTxt( WW8Export& rWrt )
 {
@@ -3620,7 +3593,6 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     const ::sw::mark::IFieldmark* pFieldmark = &rFieldmark;
     const ::sw::mark::ICheckboxFieldmark* pAsCheckbox = dynamic_cast< const ::sw::mark::ICheckboxFieldmark* >( pFieldmark );
 
-
     OSL_ENSURE(rFieldmark.GetFieldname() == ODF_FORMTEXT ||
                 rFieldmark.GetFieldname() == ODF_FORMDROPDOWN ||
                 rFieldmark.GetFieldname() == ODF_FORMCHECKBOX, "Unknown field type!!!");
@@ -3666,7 +3638,6 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
         FFDataHeader() : version( 0xFFFFFFFF ), bits(0), cch(0), hps(0) {}
     };
 
-
     FFDataHeader aFldHeader;
     aFldHeader.bits |= (type & 0x03);
 
@@ -3703,7 +3674,6 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     const OUString ffstattext;
     const OUString ffentrymcr;
     const OUString ffexitmcr;
-
 
     const sal_uInt8 aFldData[] =
     {
@@ -3751,7 +3721,6 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
         SwWW8Writer::WriteString_xstz( *pDataStrm, ffdeftext, true );
     if ( type )
         pDataStrm->WriteUInt16( sal_uInt16(0) );
-
 
     SwWW8Writer::WriteString_xstz( *pDataStrm, OUString( ffformat ), true );
     SwWW8Writer::WriteString_xstz( *pDataStrm, OUString( ffhelptext ), true );

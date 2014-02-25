@@ -37,7 +37,6 @@
 #include <fldedt.hxx>
 #include <crsskip.hxx>
 
-
 #include <cmdid.h>
 #include <helpid.h>
 #include <globals.hrc>

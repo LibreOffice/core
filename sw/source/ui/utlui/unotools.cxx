@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <swtypes.hxx>
 #include <globals.hrc>
 #include <misc.hrc>
@@ -179,7 +178,7 @@ static void disableScrollBars(uno::Reference< beans::XPropertySet > xViewProps,
     //turn off scrollbars
     //turn back on online mode if that's what we want
     //which subverts the (dodgy/buggy) scrollbar setting
-    //
+
     //To reproduce this problem, in edit->autotext and click through
     //the examples and see if the preview gets a horizontal scrollbar
     uno::Any aFalseSet(uno::makeAny(sal_False));

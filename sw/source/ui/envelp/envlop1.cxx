@@ -47,7 +47,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::rtl;
 
-
 //impl in envimg.cxx
 extern SW_DLLPUBLIC OUString MakeSender();
 
@@ -352,6 +351,5 @@ void SwEnvPage::Reset(const SfxItemSet& rSet)
     m_pSenderBox->Check  (aItem.bSend);
     m_pSenderBox->GetClickHdl().Call(m_pSenderBox);
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

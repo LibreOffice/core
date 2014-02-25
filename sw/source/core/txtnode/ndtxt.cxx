@@ -185,9 +185,7 @@ SwTxtNode *SwNodes::MakeTxtNode( const SwNodeIndex & rWhere,
     } while( true );
 }
 
-
 // SwTxtNode
-
 
 SwTxtNode::SwTxtNode( const SwNodeIndex &rWhere,
                       SwTxtFmtColl *pTxtColl,
@@ -830,7 +828,6 @@ void SwTxtNode::NewAttrSet( SwAttrPool& rPool )
     mpAttrSet = GetDoc()->GetIStyleAccess().getAutomaticStyle( aNewAttrSet, IStyleAccess::AUTO_STYLE_PARA );
 }
 
-
 // override SwIndexReg::Update => text hints do not need SwIndex for start/end!
 void SwTxtNode::Update(
     SwIndex const & rPos,
@@ -1116,7 +1113,6 @@ void SwTxtNode::_ChgTxtCollUpdateNum( const SwTxtFmtColl *pOldColl,
         pDoc->GetNodes().UpdateOutlineNode(*this);
     }
 
-
     SwNodes& rNds = GetNodes();
     // Update beim Level 0 noch die Fussnoten !!
     if( ( !nNewLevel || !nOldLevel) && !pDoc->GetFtnIdxs().empty() &&
@@ -1312,7 +1308,6 @@ SwTxtFld* SwTxtNode::GetFldTxtAttrAt(
 
     return pTxtFld;
 }
-
 
 /*************************************************************************
  *                          CopyHint()
@@ -1802,7 +1797,6 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
     CHECK_SWPHINTS(this);
 }
 
-
 OUString SwTxtNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
         const IDocumentContentOperations::InsertFlags nMode )
 {
@@ -1947,7 +1941,6 @@ void SwTxtNode::CutText( SwTxtNode * const pDest,
         EraseText( rStart, nLen );
     }
 }
-
 
 void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
          const SwIndex & rStart, sal_Int32 nLen, const bool bUpdate )
@@ -2296,7 +2289,6 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
     SwDelTxt aDelHint( nTxtStartIdx, nLen );
     ModifyNotification( 0, &aDelHint );
 }
-
 
 void SwTxtNode::EraseText(const SwIndex &rIdx, const sal_Int32 nCount,
         const IDocumentContentOperations::InsertFlags nMode )
@@ -2802,7 +2794,7 @@ OUString SwTxtNode::GetNumString( const bool _bInclPrefixAndSuffixStrings,
         SvxNumberType const& rNumberType(
                 pRule->Get( static_cast<sal_uInt16>(nLevel) ) );
         if (rNumberType.IsTxtFmt() ||
-        //
+
             (style::NumberingType::NUMBER_NONE == rNumberType.GetNumberingType()))
         {
             return pRule->MakeNumString( GetNum()->GetNumberVector(),
@@ -2917,7 +2909,6 @@ bool SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
     return false;
 }
 
-//
 SwTwips SwTxtNode::GetAdditionalIndentForStartingNewList() const
 {
     SwTwips nAdditionalIndent = 0;
@@ -4330,7 +4321,7 @@ namespace {
                 {
                     mbAddTxtNodeToList = true;
                     // #i105562#
-                    //
+
                     mrTxtNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
                 }
             }
@@ -4918,7 +4909,6 @@ sal_uInt16 SwTxtNode::ResetAllAttr()
 
     return nRet;
 }
-
 
 sal_uInt32 SwTxtNode::GetRsid( sal_Int32 nStt, sal_Int32 nEnd ) const
 {

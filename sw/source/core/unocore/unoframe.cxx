@@ -739,7 +739,6 @@ bool SwGraphicProperties_Impl::AnyToItemSet(
         lcl_FillMirror ( rGrSet, *pItemSet, pHEvenMirror, pHOddMirror, pVMirror, bRet );
     }
 
-
     static const :: sal_uInt16 nIDs[] =
     {
         RES_GRFATR_CROPGRF,
@@ -789,10 +788,9 @@ bool SwOLEProperties_Impl::AnyToItemSet(
          && !GetProperty(FN_EMBEDDED_OBJECT, 0, pTemp) )
         return false;
     SwFrameProperties_Impl::AnyToItemSet( pDoc, rFrmSet, rSet, rSizeFound);
-    //
+
     return true;
 }
-
 
 class SwXFrame::Impl
 {
@@ -804,7 +802,6 @@ public:
 
     Impl() : m_EventListeners(m_Mutex) { }
 };
-
 
 namespace
 {
@@ -1370,7 +1367,6 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                                 RES_FRMATR_BEGIN, RES_FRMATR_END - 1 );
                     aSet.SetParent(&pFmt->GetAttrSet());
                     SwFmtAnchor aAnchor = (const :: SwFmtAnchor&)aSet.Get(pEntry->nWID);
-
 
                     SwPosition aPos(*pFrame->GetFrmFmt()->GetCntnt().GetCntntIdx());
                     aAnchor.SetAnchor(&aPos);
@@ -3174,7 +3170,6 @@ uno::Reference< graphic::XGraphic > SAL_CALL SwXTextEmbeddedObject::getReplaceme
     return uno::Reference< graphic::XGraphic >();
 }
 
-
 OUString SwXTextEmbeddedObject::getImplementationName(void) throw( uno::RuntimeException )
 
 {
@@ -3262,7 +3257,6 @@ void SwXOLEListener::disposing( const lang::EventObject& rEvent )
     SolarMutexGuard aGuard;
 
     uno::Reference< util::XModifyListener >  xListener( this );
-
 
     uno::Reference< frame::XModel >  xModel( rEvent.Source, uno::UNO_QUERY );
     uno::Reference< util::XModifyBroadcaster >  xBrdcst(xModel, uno::UNO_QUERY);

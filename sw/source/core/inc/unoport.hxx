@@ -44,12 +44,10 @@
 #include <calbck.hxx>
 #include <unobaseclass.hxx>
 
-
 class SwFmtFld;
 class SwFrmFmt;
 class SwRangeRedline;
 class SwTxtRuby;
-
 
 typedef ::std::deque<
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > >
@@ -79,7 +77,6 @@ enum SwTextPortionType
     PORTION_ANNOTATION,
     PORTION_ANNOTATION_END
 };
-
 
 class SwXTextPortion : public cppu::WeakImplHelper8
 <
@@ -281,7 +278,6 @@ public:
 
     SwXTextPortionEnumeration(SwPaM& rParaCrsr,
         TextRangeList_t const & rPortions );
-
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 

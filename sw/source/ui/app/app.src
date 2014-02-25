@@ -284,9 +284,9 @@ String STR_DOC_STAT
     Text [ en-US ] = "Statistics" ;
 };
 
- // ----------------------------
+
  // Statusbar-titles
- // ----------------------------
+
 
 String STR_STATSTR_W4WREAD
 {

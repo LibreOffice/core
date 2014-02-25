@@ -50,7 +50,6 @@
 
 #include "chrdlg.hrc"
 
-
 using namespace css;
 using namespace css::uno;
 using namespace css::lang;
@@ -186,7 +185,6 @@ void SwDropCapsPict::InitPrinter( void )
 /****************************************************************************
  Create Default-String from character-count (A, AB, ABC, ...)
 ****************************************************************************/
-
 
 OUString GetDefaultString(sal_uInt16 nChars)
 {
@@ -668,7 +666,6 @@ void  SwDropCapsPage::Reset(const SfxItemSet &rSet)
 Page: CheckBox's Click-Handler
 ****************************************************************************/
 
-
 IMPL_LINK_NOARG(SwDropCapsPage, ClickHdl)
 {
     sal_Bool bChecked = m_pDropCapsBox->IsChecked();
@@ -703,7 +700,6 @@ IMPL_LINK_NOARG(SwDropCapsPage, ClickHdl)
 Page: CheckBox's Click-Handler
 ****************************************************************************/
 
-
 IMPL_LINK_NOARG(SwDropCapsPage, WholeWordHdl)
 {
     m_pDropCapsField->Enable( !m_pWholeWordCB->IsChecked() );
@@ -719,7 +715,6 @@ IMPL_LINK_NOARG(SwDropCapsPage, WholeWordHdl)
 /****************************************************************************
 Page: SpinFields' Modify-Handler
 ****************************************************************************/
-
 
 IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit *, pEdit )
 {
@@ -780,7 +775,6 @@ IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit *, pEdit )
 Page: Template-Box' Select-Handler.
 *****************************************************************************/
 
-
 IMPL_LINK_NOARG_INLINE_START(SwDropCapsPage, SelectHdl)
 {
     m_pPict->UpdatePaintSettings();
@@ -840,8 +834,5 @@ void SwDropCapsPage::FillSet( SfxItemSet &rSet )
         }
     }
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

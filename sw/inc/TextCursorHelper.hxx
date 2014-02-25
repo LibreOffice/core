@@ -46,5 +46,4 @@ protected:
 
 #endif // INCLUDED_SW_INC_TEXTCURSORHELPER_HXX
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

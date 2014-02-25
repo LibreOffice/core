@@ -32,7 +32,6 @@ class SwTableAutoFmt;
 class SwView;
 struct SwInsertTableOptions;
 
-
 class SwInsTableDlg : public SfxModalDialog
 {
     TableNameEdit*  m_pNameEdit;

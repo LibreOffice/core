@@ -21,7 +21,6 @@
 
 #include <unotext.hxx>
 
-
 class SwRangeRedline;
 
 /**

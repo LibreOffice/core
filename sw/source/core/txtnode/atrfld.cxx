@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "fldbas.hxx"
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
@@ -151,7 +150,6 @@ void SwFmtFld::RegisterToFieldType( SwFieldType& rType )
 {
     rType.Add(this);
 }
-
 
 // #111840#
 void SwFmtFld::SetField(SwField * _pField)
@@ -292,7 +290,6 @@ bool SwFmtFld::GetInfo( SfxPoolItem& rInfo ) const
     return false;
 }
 
-
 bool SwFmtFld::IsFldInDoc() const
 {
     return mpTxtFld != NULL
@@ -305,7 +302,6 @@ sal_Bool SwFmtFld::IsProtect() const
            && mpTxtFld->GetpTxtNode() != NULL
            && mpTxtFld->GetpTxtNode()->IsProtect();
 }
-
 
 SwTxtFld::SwTxtFld(
     SwFmtFld & rAttr,
@@ -329,7 +325,6 @@ SwTxtFld::~SwTxtFld( )
         rFmtFld.ClearTxtFld();
     }
 }
-
 
 bool SwTxtFld::IsFldInDoc() const
 {
@@ -368,7 +363,6 @@ void SwTxtFld::ExpandTxtFld() const
 
     const_cast<SwTxtFld*>(this)->NotifyContentChange( const_cast<SwFmtFld&>(GetFmtFld()) );
 }
-
 
 void SwTxtFld::CopyTxtFld( SwTxtFld *pDest ) const
 {
@@ -443,7 +437,6 @@ void SwTxtFld::NotifyContentChange(SwFmtFld& rFmtFld)
     }
 }
 
-
 // input field in-place editing
 SwTxtInputFld::SwTxtInputFld(
     SwFmtFld & rAttr,
@@ -474,18 +467,15 @@ sal_Int32* SwTxtInputFld::GetEnd()
     return &m_nEnd;
 }
 
-
 void SwTxtInputFld::LockNotifyContentChange()
 {
     m_bLockNotifyContentChange = true;
 }
 
-
 void SwTxtInputFld::UnlockNotifyContentChange()
 {
     m_bLockNotifyContentChange = false;
 }
-
 
 void SwTxtInputFld::NotifyContentChange( SwFmtFld& rFmtFld )
 {
@@ -546,9 +536,6 @@ void SwTxtInputFld::UpdateTextNodeContent( const OUString& rNewContent )
     GetTxtNode().ReplaceText( aIdx, nDelLen, rNewContent );
 }
 
-
-
-
 // text annotation field
 SwTxtAnnotationFld::SwTxtAnnotationFld(
     SwFmtFld & rAttr,
@@ -561,7 +548,6 @@ SwTxtAnnotationFld::SwTxtAnnotationFld(
 SwTxtAnnotationFld::~SwTxtAnnotationFld()
 {
 }
-
 
 ::sw::mark::IMark* SwTxtAnnotationFld::GetAnnotationMark(
     SwDoc* pDoc ) const

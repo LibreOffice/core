@@ -206,7 +206,6 @@ public:
     sal_Bool IsLockDeleteContent()  const { return bLockDeleteContent; }
     void SetLockDeleteContent( sal_Bool bNew ) { bLockDeleteContent = bNew; }
 
-
     sal_Bool IsClipped()        const   { return bHeightClipped || bWidthClipped; }
     sal_Bool IsHeightClipped()  const   { return bHeightClipped; }
     sal_Bool IsWidthClipped()   const   { return bWidthClipped;  }
@@ -223,7 +222,6 @@ public:
     // the graphic during paint. Default value: sal_False
     sal_Bool GetContour( PolyPolygon&   rContour,
                      const sal_Bool _bForPaint = sal_False ) const;
-
 
     // Paint on this shell (consider Preview, print flag, etc. recursively)?
     static sal_Bool IsPaint( SdrObject *pObj, const SwViewShell *pSh );

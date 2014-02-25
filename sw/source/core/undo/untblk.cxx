@@ -156,7 +156,6 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
                 pPam->GetMark()->nNode.GetNode().GetTxtNode() &&
                 pPam->GetPoint()->nNode.GetNode().GetTxtNode();
 
-
     // Is there any content? (loading from template does not have content)
     if( nSttNode != nEndNode || nSttCntnt != nEndCntnt )
     {

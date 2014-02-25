@@ -27,7 +27,6 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 
-
 typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XParagraph > SwVbaParagraph_BASE;
 
 class SwVbaParagraph : public SwVbaParagraph_BASE
@@ -49,7 +48,6 @@ public:
     virtual OUString getServiceImplName();
     virtual css::uno::Sequence<OUString> getServiceNames();
 };
-
 
 /* class SwVbaParagraphs */
 typedef CollTestImplHelper< ooo::vba::word::XParagraphs > SwVbaParagraphs_BASE;

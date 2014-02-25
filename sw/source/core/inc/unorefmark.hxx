@@ -30,7 +30,6 @@
 
 #include <unobaseclass.hxx>
 
-
 class SwDoc;
 class SwModify;
 class SwFmtRefMark;

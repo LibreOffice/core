@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <cstdarg>
 
 #include <hintids.hxx>
@@ -406,7 +405,6 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         pSh->FindPageDescByName( pDesc->GetName(),
                                     sal_False,
                                     &nPos );
-
 
         pSh->ChgPageDesc( nPos, *pDesc);
         pSh->ChgCurPageDesc(*pDesc);

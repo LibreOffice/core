@@ -58,7 +58,6 @@ public:
                         }
                     }
 
-
     sal_Int32   GetOutlineLevel()const {return nOutlineLevel;}
     void        SetOutlineLevel(sal_Int32 nSet){
                         if(nOutlineLevel != nSet)
@@ -76,7 +75,6 @@ public:
                         nRegionMode = nSet;
                     }
                 }
-
 
     sal_Int32   GetActiveBlock()const {return nActiveBlock;}
     void        SetActiveBlock(sal_Int32 nSet){

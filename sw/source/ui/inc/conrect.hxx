@@ -46,8 +46,6 @@ class ConstRectangle : public SwDrawBase
     virtual void Activate(const sal_uInt16 nSlotId);    // activate function
 };
 
-
-
 #endif // INCLUDED_SW_SOURCE_UI_INC_CONRECT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

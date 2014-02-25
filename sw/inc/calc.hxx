@@ -120,7 +120,6 @@ public:
         {}
     virtual ~SwSbxValue();
 
-
     sal_Bool GetBool() const;
     double GetDouble() const;
     SwSbxValue& MakeDouble();
@@ -181,7 +180,6 @@ class SwCalc
     SwCalcOper  eCurrOper;
     SwCalcOper  eCurrListOper;
     SwCalcError eError;
-
 
     SwCalcOper  GetToken();
     SwSbxValue  Expr();

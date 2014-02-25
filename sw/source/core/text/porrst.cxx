@@ -122,7 +122,6 @@ void SwBreakPortion::HandlePortion( SwPortionHandler& rPH ) const
     rPH.Text( GetLen(), GetWhichPor() );
 }
 
-
 SwKernPortion::SwKernPortion( SwLinePortion &rPortion, short nKrn,
                               bool bBG, bool bGK ) :
     nKern( nKrn ), bBackground( bBG ), bGridKern( bGK )
@@ -163,7 +162,7 @@ void SwKernPortion::Paint( const SwTxtPaintInfo &rInf ) const
         if( rInf.GetFont()->IsPaintBlank() )
         {
             OUString aTxtDouble("  ");
-            //
+
             SwRect aClipRect;
             rInf.CalcRect( *this, &aClipRect, 0 );
             SwSaveClip aClip( (OutputDevice*)rInf.GetOut() );

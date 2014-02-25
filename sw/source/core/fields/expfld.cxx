@@ -550,7 +550,6 @@ extern void InsertSort( std::vector<sal_uInt16>& rArr, sal_uInt16 nIdx, sal_uInt
             pNd->GetNodes().IsDocNodes() )
             InsertSort( aArr, ((SwSetExpField*)pF->GetField())->GetSeqNumber() );
 
-
     // check first if number already exists
     sal_uInt16 nNum = rFld.GetSeqNumber();
     if( USHRT_MAX != nNum )
@@ -868,10 +867,10 @@ void SwGetExpField::SetValue( const double& rAny )
  */
 sal_Int32 SwGetExpField::GetReferenceTextPos( const SwFmtFld& rFmt, SwDoc& rDoc, sal_Int32 nHint)
 {
-    //
+
     const SwTxtFld* pTxtFld = rFmt.GetTxtFld();
     const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();
-    //
+
     sal_Int32 nRet = nHint ? nHint : *pTxtFld->GetStart() + 1;
     OUString sNodeText = rTxtNode.GetTxt();
 
@@ -947,7 +946,6 @@ void SwSetExpField::SetPar2(const OUString& rStr)
             SetExpandedFormula(rStr);
     }
 }
-
 
 bool SwSetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
@@ -1035,7 +1033,6 @@ bool SwSetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return true;
 }
 
-
 bool SwSetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
@@ -1101,8 +1098,6 @@ bool SwSetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     return true;
 }
 
-
-
 SwInputFieldType::SwInputFieldType( SwDoc* pD )
     : SwFieldType( RES_INPUTFLD )
     , pDoc( pD )
@@ -1133,7 +1128,6 @@ SwInputField::SwInputField( SwInputFieldType* pFieldType,
 SwInputField::~SwInputField()
 {
 }
-
 
 void SwInputField::SetFmtFld( SwFmtFld& rFmtFld )
 {
@@ -1244,14 +1238,12 @@ OUString SwInputField::Expand() const
     return OUString();
 }
 
-
 bool SwInputField::isFormField() const
 {
     return mbIsFormField
            || !aHelp.isEmpty()
            || !aToolTip.isEmpty();
 }
-
 
 bool SwInputField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
@@ -1296,7 +1288,6 @@ bool SwInputField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     }
     return true;
 }
-
 
 /// set condition
 void SwInputField::SetPar1(const OUString& rStr)

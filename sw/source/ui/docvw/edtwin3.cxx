@@ -35,8 +35,6 @@
 #include <frmatr.hxx>
 #include <editeng/frmdiritem.hxx>
 
-
-
 // Core-Notify
 void ScrollMDI( SwViewShell* pVwSh, const SwRect &rRect,
                 sal_uInt16 nRangeX, sal_uInt16 nRangeY)

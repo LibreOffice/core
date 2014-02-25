@@ -41,7 +41,6 @@ namespace SWUnoHelper {
 // exceptions.
 sal_Int32 GetEnumAsInt32( const com::sun::star::uno::Any& rVal );
 
-
 // methods for UCB actions:
     // delete the file under this URL
 SW_DLLPUBLIC sal_Bool UCB_DeleteFile( const OUString& rURL );

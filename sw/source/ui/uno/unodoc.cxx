@@ -28,7 +28,6 @@
 
 using namespace ::com::sun::star;
 
-//============================================================
 // com.sun.star.comp.Writer.TextDocument
 
 uno::Sequence< OUString > SAL_CALL SwTextDocument_getSupportedServiceNames() throw()
@@ -57,7 +56,6 @@ uno::Reference< uno::XInterface > SAL_CALL SwTextDocument_createInstance(
     return uno::Reference< uno::XInterface >( pShell->GetModel() );
 }
 
-//============================================================
 // com.sun.star.comp.Writer.WebDocument
 
 uno::Sequence< OUString > SAL_CALL SwWebDocument_getSupportedServiceNames() throw()
@@ -86,7 +84,6 @@ uno::Reference< uno::XInterface > SAL_CALL SwWebDocument_createInstance(
     return uno::Reference< uno::XInterface >( pShell->GetModel() );
 }
 
-//============================================================
 // com.sun.star.comp.Writer.GlobalDocument
 
 uno::Sequence< OUString > SAL_CALL SwGlobalDocument_getSupportedServiceNames() throw()

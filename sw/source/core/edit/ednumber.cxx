@@ -664,7 +664,6 @@ bool SwEditShell::NumOrNoNum(
     return bRet;
 }
 
-
 sal_Bool SwEditShell::IsNoNum( sal_Bool bChkStart ) const
 {
     // a Backspace in the paragraph without number becomes a Delete

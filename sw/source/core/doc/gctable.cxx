@@ -244,7 +244,6 @@ void sw_GC_Line_Border( const SwTableLine* pLine, _SwGCLineBorder* pGCPara )
                                                 *pTopLine, nSttTop, true );
                 if( !nTopEndPos ) nTopEndPos = nTopPos;
 
-
                 if( nTopEndPos <= nBtmEndPos )
                 {
                     // Delete the TopBorders until BottomEndPos

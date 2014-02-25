@@ -68,7 +68,6 @@ class SwCache
 
           sal_uInt16 nCurMax;           //Mehr werden nicht aufgenommen.
 
-
     void DeleteObj( SwCacheObj *pObj );
 
 #ifdef DBG_UTIL
@@ -279,7 +278,6 @@ inline SwCacheObj *SwCacheAccess::Get()
         _Get();
     return pObj;
 }
-
 
 #endif
 

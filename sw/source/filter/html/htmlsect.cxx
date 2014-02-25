@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <rtl/uri.hxx>
 
 #include <svl/urihelper.hxx>
@@ -58,7 +57,6 @@
                                 HTML_CNTXT_KEEP_ATTRS)
 #define CONTEXT_FLAGS_HDRFTR (CONTEXT_FLAGS_MULTICOL)
 #define CONTEXT_FLAGS_FTN (CONTEXT_FLAGS_MULTICOL)
-
 
 using namespace ::com::sun::star;
 
@@ -764,7 +762,6 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
     PushContext( pCntxt );
 }
 
-
 void SwHTMLParser::InsertFlyFrame( const SfxItemSet& rItemSet,
                                    _HTMLAttrContext *pCntxt,
                                    const OUString& rName,
@@ -790,8 +787,6 @@ void SwHTMLParser::InsertFlyFrame( const SfxItemSet& rItemSet,
     SwPosition aNewPos( SwNodeIndex( rFlyCntIdx, 1 ), SwIndex( pCNd, 0 ) );
     SaveDocContext( pCntxt, nFlags, &aNewPos );
 }
-
-
 
 void SwHTMLParser::MovePageDescAttrs( SwNode *pSrcNd,
                                       sal_uLong nDestIdx,

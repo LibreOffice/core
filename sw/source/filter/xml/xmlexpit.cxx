@@ -568,7 +568,6 @@ bool SvXMLExportItemMapper::QueryXMLValue(
             sal_uInt16 nLeftDist    = pBox->GetDistance( BOX_LINE_LEFT );
             sal_uInt16 nRightDist   = pBox->GetDistance( BOX_LINE_RIGHT );
 
-
             // check if we need to export it
             switch( nMemberId )
             {

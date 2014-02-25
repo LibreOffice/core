@@ -184,7 +184,6 @@ public:
         { m_TempPasswd = rPasswd; }
 };
 
-
 SectRepr::SectRepr( sal_uInt16 nPos, SwSection& rSect )
     : m_SectionData( rSect )
     , m_Brush( RES_BACKGROUND )
@@ -237,7 +236,6 @@ void SectRepr::SetFile( const OUString& rFile )
     }
 }
 
-
 void SectRepr::SetFilter( const OUString& rFilter )
 {
     OUString sNewFile;
@@ -282,7 +280,6 @@ void SectRepr::SetSubRegion(const OUString& rSubRegion)
     }
 }
 
-
 OUString SectRepr::GetFile() const
 {
     OUString sLinkFile( m_SectionData.GetLinkFileName() );
@@ -302,7 +299,6 @@ OUString SectRepr::GetFile() const
     }
     return sLinkFile;
 }
-
 
 OUString SectRepr::GetSubRegion() const
 {
@@ -1836,8 +1832,6 @@ IMPL_LINK( SwInsertSectionTabPage, DlgClosedHdl, sfx2::FileDialogHelper *, _pFil
     Application::SetDefDialogParent( m_pOldDefDlgParent );
     return 0;
 }
-
-
 
 // numbering format conversion:
 // ListBox  - format            - enum-value

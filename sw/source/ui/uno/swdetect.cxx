@@ -415,7 +415,6 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
             lDescriptor[nIndexOfDocumentTitle].Value <<= aDocumentTitle;
     }
 
-
     return aTypeName;
 }
 

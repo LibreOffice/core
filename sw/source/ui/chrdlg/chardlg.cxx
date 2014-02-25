@@ -307,5 +307,4 @@ IMPL_LINK_NOARG(SwCharURLPage, EventHdl)
     return 0;
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

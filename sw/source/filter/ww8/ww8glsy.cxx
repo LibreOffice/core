@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <tools/urlobj.hxx>
 #include <svl/urihelper.hxx>
 #include <rtl/tencinfo.h>
@@ -32,7 +31,6 @@
 #include <docary.hxx>
 #include "ww8glsy.hxx"
 #include "ww8par.hxx"
-
 
 WW8Glossary::WW8Glossary(SvStorageStreamRef &refStrm, sal_uInt8 nVersion,
     SvStorage *pStg)
@@ -188,7 +186,6 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
     return bRet;
 }
 
-
 bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
 {
     bool bRet=false;
@@ -237,7 +234,6 @@ bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
     }
     return bRet;
 }
-
 
 bool WW8GlossaryFib::IsGlossaryFib()
 {

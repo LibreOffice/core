@@ -36,7 +36,6 @@
 #define SWPAGE_WIDE_VALUE2     2880
 #define SWPAGE_WIDE_VALUE3     1800
 
-
 namespace svx { namespace sidebar {
     class ValueSetWithTextControl;
 } }
@@ -46,7 +45,6 @@ static const long MINBODY = 284; //0.5 cm in twips
 namespace sw { namespace sidebar {
 
 class PagePropertyPanel;
-
 
 class PageMarginControl
     : public ::svx::sidebar::PopupControl

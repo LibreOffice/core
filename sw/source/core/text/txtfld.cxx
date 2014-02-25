@@ -55,7 +55,6 @@
  *                      SwTxtFormatter::NewFldPortion()
  *************************************************************************/
 
-
 static bool lcl_IsInBody( SwFrm *pFrm )
 {
     if ( pFrm->IsInDocBody() )
@@ -69,7 +68,6 @@ static bool lcl_IsInBody( SwFrm *pFrm )
         return pTmp->IsInDocBody();
     }
 }
-
 
 SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
                                                 const SwTxtAttr *pHint ) const
@@ -419,7 +417,6 @@ SwLinePortion *SwTxtFormatter::NewExtraPortion( SwTxtFormatInfo &rInf )
  *                      SwTxtFormatter::NewNumberPortion()
  *************************************************************************/
 
-
 SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
 {
     if( rInf.IsNumDone() || rInf.GetTxtStart() != nStart
@@ -478,9 +475,8 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
             {
                 const Font *pFmtFnt = rNumFmt.GetBulletFont();
 
-                //
                 // Build a new bullet font basing on the current paragraph font:
-                //
+
                 pNumFnt = new SwFont( &rInf.GetCharAttr(), pIDSA );
 
                 // #i53199#
@@ -501,10 +497,9 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                     pNumFnt->SetWeight( WEIGHT_NORMAL, SW_CTL );
                 }
 
-                //
                 // Apply the explicit attributes from the character style
                 // associated with the numering to the new bullet font.
-                //
+
                 if( pFmt )
                     pNumFnt->SetDiffFnt( pFmt, pIDSA );
 
@@ -544,9 +539,9 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                 // vorliegt!
                 if( !aTxt.isEmpty() )
                 {
-                    //
+
                     // Build a new numbering font basing on the current paragraph font:
-                    //
+
                     pNumFnt = new SwFont( &rInf.GetCharAttr(), pIDSA );
 
                     // #i53199#
@@ -559,11 +554,9 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                         pNumFnt->SetOverline( UNDERLINE_NONE );
                     }
 
-
-                    //
                     // Apply the explicit attributes from the character style
                     // associated with the numering to the new bullet font.
-                    //
+
                     if( pFmt )
                         pNumFnt->SetDiffFnt( pFmt, pIDSA );
 

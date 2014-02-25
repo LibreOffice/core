@@ -30,7 +30,6 @@ class SwTxtNode;
 class SwTxtAttr;
 class SfxPoolItem;
 
-
 class SwScriptIterator
 {
     const OUString& m_rText;
@@ -48,7 +47,6 @@ public:
     sal_Int32 GetScriptChgPos() const { return (m_nChgPos == -1) ? COMPLETE_STRING : m_nChgPos; }
     const OUString& GetText() const { return m_rText; }
 };
-
 
 class SwTxtAttrIterator
 {
@@ -73,7 +71,6 @@ public:
     sal_Int32 GetChgPos() const        { return nChgPos; }
 };
 
-
 class SwLanguageIterator : public SwTxtAttrIterator
 {
 public:
@@ -86,7 +83,6 @@ public:
     sal_uInt16 GetLanguage() const
         { return ((SvxLanguageItem&)GetAttr()).GetValue(); }
 };
-
 
 #endif
 

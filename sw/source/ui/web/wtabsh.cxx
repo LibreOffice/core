@@ -23,7 +23,6 @@
 #include <sfx2/objface.hxx>
 #include <svl/srchitem.hxx>
 
-
 #include "cmdid.h"
 #include "globals.hrc"
 #include "uitool.hxx"
@@ -58,7 +57,5 @@ SwWebTableShell::SwWebTableShell(SwView &_rView) :
 SwWebTableShell::~SwWebTableShell()
 {
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

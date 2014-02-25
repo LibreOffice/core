@@ -38,7 +38,7 @@ class SwViewShell;
 class IDocumentSettingAccess;
 
 const sal_Unicode CH_BLANK = ' ';   // ' ' blank spaces
-const sal_Unicode CH_BREAK = 0x0A;  //
+const sal_Unicode CH_BREAK = 0x0A;
 const sal_Unicode CH_TAB   = '\t';  // \t
 const sal_Unicode CH_PAR    = 0xB6;     // paragraph
 const sal_Unicode CH_BULLET = 0xB7;     // centered dot
@@ -463,7 +463,6 @@ inline void SwSubFont::SetColor( const Color& rColor )
     pMagic = 0;
     Font::SetColor( rColor );
 }
-
 
 // encapsulated SV-Font-method
 inline void SwSubFont::SetFillColor( const Color& rColor )
@@ -1043,7 +1042,6 @@ public:
     // the x coordinate of the starting point has to be set for each portion
     void SetPos( const Point& rPoint ) { aPos = rPoint;  }
 };
-
 
 /*************************************************************************
  *                      class SvStatistics

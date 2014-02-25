@@ -66,7 +66,6 @@ class SW_DLLPUBLIC SwDocStyleSheet : public SfxStyleSheetBase
 
     sal_Bool                bPhysical;
 
-
     /// Make empty shell a real StyleSheet (Core).
     SAL_DLLPRIVATE void              Create();
 
@@ -183,13 +182,11 @@ public:
     void InvalidateIterator();
 };
 
-
 class SwDocStyleSheetPool : public SfxStyleSheetBasePool
 {
     rtl::Reference< SwDocStyleSheet > mxStyleSheet;
     SwDoc&              rDoc;
     sal_Bool                bOrganizer : 1;     ///< Organizer
-
 
     virtual SfxStyleSheetBase* Create( const OUString&, SfxStyleFamily, sal_uInt16 nMask);
     virtual SfxStyleSheetBase* Create( const SfxStyleSheetBase& );
@@ -233,7 +230,6 @@ protected:
 private:
     SwDocStyleSheetPool( const SwDocStyleSheetPool& );
 };
-
 
 #endif
 

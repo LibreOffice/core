@@ -240,5 +240,4 @@ extern sdecl::ServiceDecl const serviceDecl(
     "ooo.vba.word.WrapFormat" );
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

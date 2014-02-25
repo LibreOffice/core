@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <hintids.hxx>
 #include <hints.hxx>
 #include <sfx2/objsh.hxx>
@@ -34,10 +33,8 @@
 #include <fmtruby.hxx>
 #include <fmtmeta.hxx>
 
-
 TYPEINIT1(SwTxtINetFmt,SwClient);
 TYPEINIT1(SwTxtRuby,SwClient);
-
 
 /*************************************************************************
  *                      class SwTxtCharFmt
@@ -83,7 +80,6 @@ bool SwTxtCharFmt::GetInfo( SfxPoolItem& rInfo ) const
     return false;
 }
 
-
 /*************************************************************************
  *                        class SwTxtAttrNesting
  *************************************************************************/
@@ -103,7 +99,6 @@ SwTxtAttrNesting::SwTxtAttrNesting( SfxPoolItem & i_rAttr,
 SwTxtAttrNesting::~SwTxtAttrNesting()
 {
 }
-
 
 /*************************************************************************
  *                      class SwTxtINetFmt
@@ -291,7 +286,6 @@ SwCharFmt* SwTxtRuby::GetCharFmt()
 
     return pRet;
 }
-
 
 /*************************************************************************
  *                        class SwTxtMeta

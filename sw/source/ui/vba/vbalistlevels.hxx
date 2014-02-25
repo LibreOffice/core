@@ -24,7 +24,6 @@
 #include <vbahelper/vbahelperinterface.hxx>
 #include "vbalisthelper.hxx"
 
-
 typedef CollTestImplHelper< ooo::vba::word::XListLevels > SwVbaListLevels_BASE;
 
 class SwVbaListLevels : public SwVbaListLevels_BASE

@@ -28,7 +28,6 @@
 #include <flyenum.hxx>
 #include <pam.hxx>
 
-
 class SfxItemSet;
 class SfxItemPropertySet;
 struct SfxItemPropertySimpleEntry;
@@ -128,7 +127,6 @@ namespace SwUnoCursorHelper
     void    makeTableCellRedline( SwTableBox& rTableBox, const OUString& RedlineType,
             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& RedlineProperties )
                 throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-
 
     /// @param bTableMode: attributes should be applied to a table selection
     void SetCrsrAttr(SwPaM & rPam, const SfxItemSet & rSet,

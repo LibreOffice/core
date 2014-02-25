@@ -488,7 +488,6 @@ SwShellCrsr::SwShellCrsr(
     , pPt(SwPaM::GetPoint())
 {}
 
-
 SwShellCrsr::SwShellCrsr(
     const SwCrsrShell& rCShell,
     const SwPosition &rPos,

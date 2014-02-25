@@ -75,12 +75,10 @@ PageColumnControl::PageColumnControl(
     FreeResource();
 }
 
-
 PageColumnControl::~PageColumnControl(void)
 {
     delete mpColumnValueSet;
 }
-
 
 IMPL_LINK(PageColumnControl, ImplColumnHdl, void *, pControl)
 {
@@ -106,7 +104,6 @@ IMPL_LINK(PageColumnControl, MoreButtonClickHdl_Impl, void *, EMPTYARG)
     mrPagePropPanel.ClosePageColumnPopup();
     return 0;
 }
-
 
 } } // end of namespace sw::sidebar
 

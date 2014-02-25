@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <SwSpellDialogChildWindow.hxx>
 #include <vcl/msgbox.hxx>
 #include <editeng/svxacorr.hxx>
@@ -49,7 +48,6 @@
 #include <dialog.hrc>
 #include <cmdid.h>
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
@@ -57,7 +55,6 @@ using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::beans;
 
 SFX_IMPL_CHILDWINDOW_WITHID(SwSpellDialogChildWindow, FN_SPELL_GRAMMAR_DIALOG)
-
 
 #define SPELL_START_BODY        0   // body text area
 #define SPELL_START_OTHER       1   // frame, footnote, header, footer
@@ -169,14 +166,12 @@ SwSpellDialogChildWindow::~SwSpellDialogChildWindow ()
     delete m_pSpellState;
 }
 
-
 SfxChildWinInfo SwSpellDialogChildWindow::GetInfo (void) const
 {
     SfxChildWinInfo aInfo = svx::SpellDialogChildWindow::GetInfo();
     aInfo.bVisible = sal_False;
     return aInfo;
 }
-
 
 svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence(bool bRecheck)
 {

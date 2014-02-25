@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <hintids.hxx>
 #include <tools/solar.h>
 #include <editeng/paperinf.hxx>
@@ -525,7 +524,6 @@ void Ww1SingleSprmTDefTable10::Start(
         }
     }
 }
-
 
 void Ww1SingleSprmTDyaRowHeight::Start(
     Ww1Shell& rOut, sal_uInt8 /*nId*/, sal_uInt8* pSprm, sal_uInt16 /*nSize*/, Ww1Manager& /*rMan*/)

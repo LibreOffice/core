@@ -21,7 +21,6 @@
 
 #include <sfx2/tabdlg.hxx>
 
-
 #include <vcl/menu.hxx>
 
 #include <vcl/button.hxx>

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <cstdarg>
 
 #include <hintids.hxx>
@@ -248,7 +247,6 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
             aDesc.ChgHeaderShare(sal_False);
             rFmt.SetFmtAttr(SwFmtFooter(sal_Bool(sal_False)));
             aDesc.ChgFooterShare(sal_False);
-
 
             aDesc.SetUseOn(nsUseOnPage::PD_ALL);                // Site numbering
 

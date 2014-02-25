@@ -25,11 +25,9 @@
 
 #include <cppuhelper/implbase2.hxx>
 
-
 class SfxPoolItem;
 class SwClient;
 class SwDoc;
-
 
 typedef ::cppu::WeakImplHelper2
 <   ::com::sun::star::lang::XServiceInfo
@@ -84,7 +82,6 @@ class UnoActionRemoveContext
 
 /// helper function for implementing SwClient::Modify
 void ClientModify(SwClient* pClient, const SfxPoolItem *pOld, const SfxPoolItem *pNew);
-
 
 #include <boost/utility.hpp>
 #include <osl/mutex.hxx>

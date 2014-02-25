@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_INC_FCHRFMT_HXX
 #define INCLUDED_SW_INC_FCHRFMT_HXX
 
-
 #include <svl/poolitem.hxx>
 #include <calbck.hxx>
 #include <format.hxx>
@@ -29,7 +28,6 @@ class SwTxtCharFmt;
 class IntlWrapper;
 
 // ATT_CHARFMT *********************************************
-
 
 class SW_DLLPUBLIC SwFmtCharFmt: public SfxPoolItem, public SwClient
 {

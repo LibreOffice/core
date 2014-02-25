@@ -538,7 +538,6 @@ void SwSection::SetRefObject( SwServerObject* pObj )
     m_RefObj = pObj;
 }
 
-
 void SwSection::SetCondHidden(bool const bFlag)
 {
     if (!m_Data.IsCondHidden() == !bFlag)
@@ -808,7 +807,6 @@ void SwSectionFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             }
         }
         return ;
-
 
     case RES_PROTECT:
     case RES_EDIT_IN_READONLY: // edit in readonly sections

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <hintids.hxx>
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
@@ -96,7 +95,6 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace ::sfx2;
 using ::com::sun::star::util::SearchOptions;
 
-
 #define SWSRCVIEWFLAGS ( SFX_VIEW_CAN_PRINT|\
                       SFX_VIEW_NO_NEWWINDOW )
 
@@ -153,7 +151,6 @@ static void lcl_PrintHeader( OutputDevice &rOutDev, sal_uInt16 nPages, sal_uInt1
         Point( nXLeft, nYTop ),
         Size( nXRight-nXLeft, aSz.Height() - nYTop - BMARGPRN + nBorder ) ) );
 
-
     long nY = TMARGPRN-2*nBorder;
     Point aPos( nLeftMargin, nY );
     rOutDev.DrawText( aPos, rTitle );
@@ -169,7 +166,6 @@ static void lcl_PrintHeader( OutputDevice &rOutDev, sal_uInt16 nPages, sal_uInt1
         aPos.X() += rOutDev.GetTextWidth( rTitle );
         rOutDev.DrawText( aPos, aPageStr );
     }
-
 
     nY = TMARGPRN-nBorder;
 
@@ -626,7 +622,6 @@ sal_uInt16 SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
             bNotFoundMessage = true;
         }
 
-
         if(!bApi)
         {
             if(bNotFoundMessage)
@@ -857,7 +852,6 @@ void SwSrcView::Load(SwDocShell* pDocShell)
             pInStream->Seek(0);
             pInStream->SetStreamCharSet( eDestEnc );
 
-
             aEditWin.Read(*pInStream);
         }
     }
@@ -875,6 +869,5 @@ void SwSrcView::Load(SwDocShell* pDocShell)
     aEditWin.GetTextEngine()->ResetUndo();
     aEditWin.GetOutWin()->GrabFocus();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -632,7 +632,6 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
         pFEShell->GetPageNumber(-1,sal_True,nPage,nLogPage,sDisplay);
         sAttrName = "page-name:";
 
-
         sValue = sAttrName + sDisplay ;
         sAttrName = ";page-number:";
         sValue += sAttrName;
@@ -642,10 +641,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
         sValue += OUString::number( pCrsrShell->GetPageCnt() ) ;
         sValue += ";";
 
-
         sAttrName = "line-number:";
-
-
 
         SwCntntFrm* pCurrFrm = pCrsrShell->GetCurrFrm();
         SwPageFrm* pCurrPage=((SwFrm*)pCurrFrm)->FindPageFrm();
@@ -744,7 +740,6 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
         sValue += OUString::number( nLineNum ) ;
 
         sValue += ";";
-
 
         SwFrm* pCurrCol=((SwFrm*)pCurrFrm)->FindColFrm();
 

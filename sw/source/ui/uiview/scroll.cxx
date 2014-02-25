@@ -17,13 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "swtypes.hxx"
 #include "swrect.hxx"
 #include "scroll.hxx"
 
 #define SCROLL_LINE_SIZE 250
-
 
 SwScrollbar::SwScrollbar( Window *pWin, sal_Bool bHoriz ) :
     ScrollBar( pWin,
@@ -37,7 +35,6 @@ SwScrollbar::SwScrollbar( Window *pWin, sal_Bool bHoriz ) :
     if( bHoriz )
         EnableRTL( false );
 }
-
 
  SwScrollbar::~SwScrollbar() {}
 

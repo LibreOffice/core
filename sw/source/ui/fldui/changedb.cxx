@@ -49,7 +49,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::uno;
 
-
 /*--------------------------------------------------------------------
     Description: edit insert-field
  --------------------------------------------------------------------*/

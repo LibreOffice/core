@@ -88,7 +88,6 @@ void _RestoreCntntIdx( SwDoc* pDoc, std::vector<sal_uLong>& rSaveArr,
 void _RestoreCntntIdx( std::vector<sal_uLong>& rSaveArr, const SwNode& rNd,
                         sal_Int32 nLen, sal_Int32 nCorrLen );
 
-
 /** data structure to temporarily hold fly anchor positions relative to some
  *  location. */
 struct _SaveFly
@@ -113,7 +112,6 @@ void _SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
 void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
                     const SwNodeIndex& rPtNdIdx );
 
-
 class SwDataChanged
 {
     const SwPaM* pPam;
@@ -131,7 +129,6 @@ public:
     sal_Int32 GetCntnt() const { return nCntnt; }
 };
 
-
 // Funktions-Deklaration damit auch alles unter der CrsrShell mal die
 // Crsr verschieben kann
 // die Funktionen rufen nicht die SwDoc::Corr - Methoden!
@@ -144,7 +141,6 @@ void PaMCorrAbs( const SwPaM& rRange,
 void PaMCorrRel( const SwNodeIndex &rOldNode,
                  const SwPosition &rNewPos,
                  const sal_Int32 nOffset = 0 );
-
 
 // Hilfsklasse zum kopieren von absatzgebundenen Flys. Durch die Sortierung
 // nach der Ordnungsnummer wird versucht die layout seitige Anordnung
@@ -172,7 +168,6 @@ public:
     const SwFmtAnchor* GetAnchor() const        { return pAnchor; }
 };
 
-
 class SwTblNumFmtMerge
 {
     SvNumberFormatter* pNFmt;
@@ -180,7 +175,6 @@ public:
     SwTblNumFmtMerge( const SwDoc& rSrc, SwDoc& rDest );
     ~SwTblNumFmtMerge();
 };
-
 
 class _SaveRedlEndPosForRestore
 {
@@ -194,7 +188,6 @@ public:
     ~_SaveRedlEndPosForRestore();
     void Restore() { if( pSavArr ) _Restore(); }
 };
-
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_MVSAVE_HXX
 

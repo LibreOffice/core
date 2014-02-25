@@ -272,7 +272,6 @@ double SwSortBoxElement::GetValue( sal_uInt16 nKey ) const
     else
         pFndBox = pBox->GetBox(nRow, nCol);         // Sort columns
 
-
     double nVal;
     if( pFndBox )
     {

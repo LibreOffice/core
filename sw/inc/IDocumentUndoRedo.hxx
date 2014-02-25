@@ -24,7 +24,6 @@
 
 #include <swundo.hxx>
 
-
 class SwRewriter;
 class SwNodes;
 class SwUndo;
@@ -32,8 +31,6 @@ class SwUndo;
 namespace sw {
     class RepeatContext;
 }
-
-
 
 /** IDocumentUndoRedo
 */
@@ -202,7 +199,6 @@ protected:
     virtual ~IDocumentUndoRedo() {};
 };
 
-
 namespace sw {
 
 class UndoGuard
@@ -269,7 +265,6 @@ private:
     IDocumentUndoRedo & m_rUndoRedo;
     bool const m_bDrawUndoWasEnabled;
 };
-
 
 } // namespace sw
 

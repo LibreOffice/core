@@ -91,7 +91,6 @@
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <swabstdlg.hxx>
 
-
 #include <vcl/status.hxx>
 
 #include "salhelper/simplereferenceobject.hxx"
@@ -100,7 +99,6 @@
 #include <unomid.h>
 
 using namespace ::com::sun::star;
-
 
 // Slotmaps for the application's methods
 
@@ -868,8 +866,6 @@ const SwMasterUsrPref *SwModule::GetUsrPref(sal_Bool bWeb) const
     }
     return  bWeb ? pWebUsrPref : pUsrPref;
 }
-
-
 
 void NewXForms( SfxRequest& rReq )
 {

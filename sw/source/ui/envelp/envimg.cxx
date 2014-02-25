@@ -44,8 +44,6 @@
 using namespace utl;
 using namespace ::com::sun::star::uno;
 
-
-
 TYPEINIT1_AUTOFACTORY( SwEnvItem, SfxPoolItem );
 
 SW_DLLPUBLIC OUString MakeSender()

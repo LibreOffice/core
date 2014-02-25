@@ -19,7 +19,6 @@
 
 #include <config_features.h>
 
-
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -62,7 +61,6 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/protitem.hxx>
 #include <editeng/flstitem.hxx>
-
 
 #include <frmatr.hxx>
 #include <charatr.hxx>
@@ -223,11 +221,8 @@ sal_uLong HTMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, 
                                     ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
     }
 
-
     return nRet;
 }
-
-
 
 SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCrsr, SvStream& rIn,
                             const OUString& rPath,
@@ -888,7 +883,6 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( false ).nNode.GetIndex() )
             bSetModEnabled = false; // this is unnecessary here
         }
     }
-
 
     // Wenn die Dokuemnt-SwViewShell noch existiert und eine Action
     // offen ist (muss bei Abbruch nicht sein), die Action beenden,
@@ -1758,7 +1752,6 @@ void SwHTMLParser::NextToken( int nToken )
         }
         break;
 
-
     case HTML_STRIKE_ON:
     case HTML_STRIKETHROUGH_ON:
         {
@@ -1798,7 +1791,6 @@ void SwHTMLParser::NextToken( int nToken )
     case HTML_SPAN_ON:
         NewStdAttr( HTML_SPAN_ON );
         break;
-
 
     case HTML_ITALIC_OFF:
     case HTML_BOLD_OFF:
@@ -2039,7 +2031,6 @@ void SwHTMLParser::NextToken( int nToken )
     if( !aParaAttrs.empty() && pPam->GetPoint()->nContent.GetIndex() )
         aParaAttrs.clear();
 }
-
 
 extern bool swhtml_css1atr_equalFontItems( const SfxPoolItem& r1, const SfxPoolItem& r2 );
 
@@ -2380,7 +2371,6 @@ sal_Bool SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, sal_Bool bUpdateNu
         }
     }
 
-
     if( !pTable && !--nParaCnt )
         Show();
 
@@ -2461,7 +2451,6 @@ void SwHTMLParser::AddParSpace()
         }
     }
 }
-
 
 void SwHTMLParser::Show()
 {
@@ -2642,7 +2631,6 @@ SwViewShell *SwHTMLParser::CheckActionViewShell()
     return pActionViewShell;
 }
 
-
 void SwHTMLParser::_SetAttr( sal_Bool bChkEnd, sal_Bool bBeforeTable,
                              _HTMLAttrs *pPostIts )
 {
@@ -2704,7 +2692,6 @@ void SwHTMLParser::_SetAttr( sal_Bool bChkEnd, sal_Bool bBeforeTable,
                 aParaAttrs.pop_back();
             }
 
-
             // dann also setzen
             aSetAttrTab.erase( aSetAttrTab.begin() + n );
 
@@ -2718,7 +2705,6 @@ void SwHTMLParser::_SetAttr( sal_Bool bChkEnd, sal_Bool bBeforeTable,
                     pAttr = pPrev;
                     continue; //break;
                 }
-
 
                 pCNd = pAttr->nSttPara.GetNode().GetCntntNode();
                 if( !pCNd )
@@ -2747,8 +2733,6 @@ void SwHTMLParser::_SetAttr( sal_Bool bChkEnd, sal_Bool bBeforeTable,
                     }
                 }
                 pAttrPam->GetPoint()->nNode = pAttr->nSttPara;
-
-
 
                 // durch das Loeschen von BRs kann der Start-Index
                 // auch mal hinter das Ende des Textes zeigen
@@ -2996,7 +2980,6 @@ void SwHTMLParser::NewAttr( _HTMLAttr **ppAttr, const SfxPoolItem& rItem )
         (*ppAttr) = new _HTMLAttr( *pPam->GetPoint(), rItem, ppAttr );
 }
 
-
 void SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
                             sal_Bool bChkEmpty )
 {
@@ -3039,7 +3022,6 @@ void SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
 
     // nun das Attrubut beenden
     _HTMLAttr *pNext = pAttr->GetNext();
-
 
     sal_Bool bInsert;
     sal_uInt16 nScriptItem = 0;
@@ -3558,7 +3540,6 @@ void SwHTMLParser::EndTag( int nToken )
     }
 }
 
-
 void SwHTMLParser::NewBasefontAttr()
 {
     OUString aId, aStyle, aClass, aLang, aDir;
@@ -3800,7 +3781,6 @@ void SwHTMLParser::NewFontAttr( int nToken )
         }
     }
 
-
     // einen neuen Kontext anlegen
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( static_cast< sal_uInt16 >(nToken) );
 
@@ -3830,7 +3810,6 @@ void SwHTMLParser::NewFontAttr( int nToken )
             SvxFontItem aFontCTL( eFamily, aFontName, aStyleName, ePitch, eEnc, RES_CHRATR_CTL_FONT );
             aItemSet.Put( aFontCTL );
         }
-
 
         if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang, &aDir ) )
             DoPositioning( aItemSet, aPropInfo, pCntxt );
@@ -3875,7 +3854,6 @@ void SwHTMLParser::EndFontAttr( int nToken )
     if( aFontStack.size() > nFontStMin )
         aFontStack.erase( aFontStack.begin() + aFontStack.size() - 1 );
 }
-
 
 void SwHTMLParser::NewPara()
 {
@@ -3999,7 +3977,6 @@ void SwHTMLParser::EndPara( sal_Bool bReal )
 
     nOpenParaToken = 0;
 }
-
 
 void SwHTMLParser::NewHeading( int nToken )
 {
@@ -4126,7 +4103,6 @@ void SwHTMLParser::EndHeading()
 
     nFontStHeadStart = nFontStMin;
 }
-
 
 void SwHTMLParser::NewTxtFmtColl( int nToken, sal_uInt16 nColl )
 {
@@ -4255,7 +4231,6 @@ void SwHTMLParser::EndTxtFmtColl( int nToken )
     SetTxtCollAttrs();
 }
 
-
 void SwHTMLParser::NewDefList()
 {
     OUString aId, aStyle, aClass, aLang, aDir;
@@ -4294,7 +4269,6 @@ void SwHTMLParser::NewDefList()
     // ein Level mehr
     nDefListDeep++;
 
-
     sal_Bool bInDD = sal_False, bNotInDD = sal_False;
     sal_uInt16 nPos = aContexts.size();
     while( !bInDD && !bNotInDD && nPos>nContextStMin )
@@ -4314,7 +4288,6 @@ void SwHTMLParser::NewDefList()
             break;
         }
     }
-
 
     // ... und in einem Kontext merken
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( HTML_DEFLIST_ON );
@@ -4471,7 +4444,6 @@ void SwHTMLParser::EndDefListItem( int nToken, sal_Bool bSetColl,
         SetTxtCollAttrs();
 }
 
-
 sal_Bool SwHTMLParser::HasCurrentParaFlys( sal_Bool bNoSurroundOnly,
                                        sal_Bool bSurroundOnly ) const
 {
@@ -4542,7 +4514,6 @@ sal_Bool SwHTMLParser::HasCurrentParaFlys( sal_Bool bNoSurroundOnly,
     return bFound;
 }
 
-
 // die speziellen Methoden zum Einfuegen von Objecten
 
 const SwFmtColl *SwHTMLParser::GetCurrFmtColl() const
@@ -4550,7 +4521,6 @@ const SwFmtColl *SwHTMLParser::GetCurrFmtColl() const
     const SwCntntNode* pCNd = pPam->GetCntntNode();
     return &pCNd->GetAnyFmtColl();
 }
-
 
 void SwHTMLParser::SetTxtCollAttrs( _HTMLAttrContext *pContext )
 {
@@ -4775,7 +4745,6 @@ void SwHTMLParser::SetTxtCollAttrs( _HTMLAttrContext *pContext )
     }
 }
 
-
 void SwHTMLParser::NewCharFmt( int nToken )
 {
     OUString aId, aStyle, aLang, aDir;
@@ -4812,7 +4781,6 @@ void SwHTMLParser::NewCharFmt( int nToken )
     SwCharFmt* pCFmt = pCSS1Parser->GetChrFmt( static_cast< sal_uInt16 >(nToken), aClass );
     OSL_ENSURE( pCFmt, "keine Zeichenvorlage zu Token gefunden" );
 
-
     // Styles parsen (zu Class siehe auch NewPara)
     if( HasStyleOptions( aStyle, aId, aEmptyOUStr, &aLang, &aDir ) )
     {
@@ -4837,8 +4805,6 @@ void SwHTMLParser::NewCharFmt( int nToken )
     // den Kontext merken
     PushContext( pCntxt );
 }
-
-
 
 void SwHTMLParser::InsertSpacer()
 {
@@ -5051,8 +5017,6 @@ SwTwips SwHTMLParser::GetCurrentBrowseWidth()
     return aHTMLPageSize.Width();
 }
 
-
-
 void SwHTMLParser::InsertIDOption()
 {
     OUString aId;
@@ -5070,9 +5034,6 @@ void SwHTMLParser::InsertIDOption()
     if( !aId.isEmpty() )
         InsertBookmark( aId );
 }
-
-
-
 
 void SwHTMLParser::InsertLineBreak()
 {
@@ -5464,7 +5425,6 @@ void SwHTMLParser::ParseMoreMetaOptions()
     SwFmtFld aFmtFld( aPostItFld );
     InsertAttr( aFmtFld );
 }
-
 
 _HTMLAttr::_HTMLAttr( const SwPosition& rPos, const SfxPoolItem& rItem,
                       _HTMLAttr **ppHd ) :

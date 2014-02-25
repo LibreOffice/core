@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svx/svdobj.hxx>
 #include <init.hxx>
 #include <fesh.hxx>
@@ -50,9 +49,7 @@
 #include <dflyobj.hxx>
 #include <dcontact.hxx>
 
-
 using namespace com::sun::star;
-
 
 TYPEINIT1(SwFEShell,SwEditShell)
 
@@ -75,7 +72,6 @@ void SwFEShell::EndAllActionAndCall()
     } while( this != ( pTmp = (SwViewShell*)pTmp->GetNext() ));
 }
 
-
 /***********************************************************************
 #*  Class       :  SwFEShell
 #*  Method      :  GetCntntPos
@@ -87,7 +83,6 @@ Point SwFEShell::GetCntntPos( const Point& rPoint, sal_Bool bNext ) const
     SET_CURR_SHELL( (SwViewShell*)this );
     return GetLayout()->GetNextPrevCntntPos( rPoint, bNext );
 }
-
 
 const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
                                         const uno::Reference < embed::XEmbeddedObject >& xObj ) const
@@ -171,7 +166,6 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
     return bFrm ? pFrm->Frm() : pFrm->Prt();
 }
 
-
 sal_uInt16 SwFEShell::GetPageNumber( const Point &rPoint ) const
 {
     const SwFrm *pPage = GetLayout()->Lower();
@@ -182,7 +176,6 @@ sal_uInt16 SwFEShell::GetPageNumber( const Point &rPoint ) const
     else
         return 0;
 }
-
 
 sal_Bool SwFEShell::GetPageNumber( long nYPos, sal_Bool bAtCrsrPos, sal_uInt16& rPhyNum, sal_uInt16& rVirtNum, OUString &rDisplay) const
 {
@@ -530,7 +523,6 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rTxt, cons
         EndAllActionAndCall();
     }
 }
-
 
 /***********************************************************************
 #*  Class       :  SwFEShell

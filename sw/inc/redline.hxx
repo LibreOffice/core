@@ -103,7 +103,6 @@ public:
     SfxItemSet* GetItemSet( ) const;
 };
 
-
 class SW_DLLPUBLIC SwRedlineData
 {
     friend class SwRangeRedline;
@@ -180,7 +179,6 @@ public:
 
     OUString GetDescr() const;
 };
-
 
 class SW_DLLPUBLIC SwRangeRedline : public SwPaM
 {
@@ -381,7 +379,6 @@ public:
     sal_Int16 Which() const { return nWhich; }
         const SwView* GetView() const { return pView; }
 };
-
 
 #endif
 

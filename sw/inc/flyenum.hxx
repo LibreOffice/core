@@ -39,9 +39,6 @@ enum FlyCntType
 #define SW_CHAIN_SOURCE_CHAINED 5       ///< Source already has a follow.
 #define SW_CHAIN_SELF           6       ///< Self-chaining is not allowed.
 
-
-
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

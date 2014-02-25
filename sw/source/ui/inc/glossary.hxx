@@ -51,8 +51,6 @@ class Menu;
 
 const short RET_EDIT = 100;
 
-//------------------------------------------------------------------
-
 class SwGlTreeListBox : public SvTreeListBox
 {
     const OUString    sReadonly;
@@ -84,7 +82,6 @@ public:
     void Clear();
 };
 
-//------------------------------------------------------------------
 class SwOneExampleFrame;
 class SwGlossaryDlg : public SvxStandardDialog
 {
@@ -116,7 +113,6 @@ class SwGlossaryDlg : public SvxStandardDialog
     OUString        sResumeShortName;
     sal_Bool            bResume;
 
-
     const sal_Bool      bSelection : 1;
     sal_Bool            bReadOnly : 1;
     sal_Bool            bIsOld : 1;
@@ -138,7 +134,6 @@ class SwGlossaryDlg : public SvxStandardDialog
     DECL_LINK( PathHdl, Button * );
     DECL_LINK( CheckBoxHdl, CheckBox * );
     DECL_LINK( PreviewLoadedHdl, void * );
-
 
     virtual void    Apply();
     void            Init();

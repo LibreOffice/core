@@ -107,7 +107,6 @@ class SwAuthenticationSettingsDialog : public SfxModalDialog
     DECL_LINK( CheckBoxHdl_Impl, CheckBox*);
     DECL_LINK(RadioButtonHdl_Impl, void *);
 
-
 public:
     SwAuthenticationSettingsDialog(SwMailConfigPage* pParent, SwMailMergeConfigItem& rItem);
     ~SwAuthenticationSettingsDialog();
@@ -229,7 +228,6 @@ SwTestAccountSettingsDialog::SwTestAccountSettingsDialog(SwMailConfigPage* pPare
     get(m_pResult2, "result2");
     m_sCompleted = m_pResult1->GetText();
     m_sFailed = m_pResult2->GetText();
-
 
     SfxImageManager* pManager = SfxImageManager::GetImageManager( SW_MOD() );
     m_aFailedImg = pManager->GetImage(FN_FORMULA_CANCEL);

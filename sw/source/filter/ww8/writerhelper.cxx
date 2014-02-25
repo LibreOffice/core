@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/util/XCloseable.hpp>
 
 #include <doc.hxx>
@@ -53,7 +52,6 @@
 
 using namespace com::sun::star;
 using namespace nsSwGetPoolIdFromName;
-
 
 namespace
 {
@@ -593,7 +591,6 @@ namespace sw
             return 0;
         }
 
-
         SwNoTxtNode *GetNoTxtNodeFromSwFrmFmt(const SwFrmFmt &rFmt)
         {
             const SwNodeIndex *pIndex = rFmt.GetCntnt().GetCntntIdx();
@@ -692,7 +689,6 @@ namespace sw
             maStack.push_back(new SwFltStackEntry(rPos,rAttr.Clone()));
         }
 
-
         class SameOpenRedlineType :
             public std::unary_function<const SwFltStackEntry*, bool>
         {
@@ -763,7 +759,6 @@ namespace sw
             delete pEntry;
         }
 
-
         bool CompareRedlines::operator()(const SwFltStackEntry *pOneE,
             const SwFltStackEntry *pTwoE) const
         {
@@ -779,7 +774,6 @@ namespace sw
             else
                 return (pOne->aStamp < pTwo->aStamp) ? true : false;
         }
-
 
         RedlineStack::~RedlineStack()
         {

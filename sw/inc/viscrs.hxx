@@ -56,7 +56,6 @@ public:
     void SetDragCrsr( bool bFlag = true ) { m_bIsDragCrsr = bFlag; }
 };
 
-
 // From here classes/methods for selections.
 
 namespace sdr { namespace overlay { class OverlayObject; }}
@@ -113,7 +112,6 @@ public:
                                     long* pX = 0, long* pY = 0 );
 };
 
-
 class SwShellCrsr : public virtual SwCursor, public SwSelPaintRects
 {
     // Document positions of start/end characters of a SSelection.
@@ -160,8 +158,6 @@ public:
 
     DECL_FIXEDMEMPOOL_NEWDEL( SwShellCrsr )
 };
-
-
 
 class SwShellTableCrsr : public virtual SwShellCrsr, public virtual SwTableCursor
 {

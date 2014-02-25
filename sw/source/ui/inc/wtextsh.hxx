@@ -22,7 +22,6 @@
 
 #include "textsh.hxx"
 
-
 class SwWebTextShell: public SwTextShell
 {
 
@@ -35,7 +34,5 @@ public:
 };
 
 #endif
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

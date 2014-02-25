@@ -106,7 +106,6 @@
 #include <unoparagraph.hxx>
 #include <comphelper/servicehelper.hxx>
 
-
 using namespace ::com::sun::star;
 
 // Helper classes

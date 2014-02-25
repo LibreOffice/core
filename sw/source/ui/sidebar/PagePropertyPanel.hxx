@@ -73,7 +73,6 @@ namespace sw { namespace sidebar {
             return mpBindings;
         }
 
-
         ::svx::sidebar::PopupControl* CreatePageOrientationControl( ::svx::sidebar::PopupContainer* pParent );
         void ExecuteOrientationChange( const sal_Bool bLandscape );
         void ClosePageOrientationPopup();

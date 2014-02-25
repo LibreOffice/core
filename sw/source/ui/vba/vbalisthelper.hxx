@@ -15,7 +15,6 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <boost/shared_ptr.hpp>
 
-
 class SwVbaListHelper;
 typedef ::boost::shared_ptr< SwVbaListHelper > SwVbaListHelperRef;
 

@@ -207,7 +207,6 @@ void SwEditShell::Insert2(SwField& rFld, const bool bForceExpandHints)
     EndAllAction();
 }
 
-
 /// Are the PaMs positioned on fields?
 static SwTxtFld* lcl_FindInputFld( SwDoc* pDoc, SwField& rFld )
 {

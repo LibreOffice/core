@@ -1855,7 +1855,6 @@ SwTxtFmtColl* SwDoc::CopyTxtColl( const SwTxtFmtColl& rColl )
     if( pParent != rColl.DerivedFrom() )
         pParent = CopyTxtColl( *(SwTxtFmtColl*)rColl.DerivedFrom() );
 
-
 //FEATURE::CONDCOLL
     if( RES_CONDTXTFMTCOLL == rColl.Which() )
     {

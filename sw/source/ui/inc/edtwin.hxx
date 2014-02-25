@@ -28,7 +28,6 @@
 #include <svtools/transfer.hxx>
 #include <swevent.hxx>
 
-
 class   SwWrtShell;
 class   SwView;
 class   SwRect;
@@ -125,8 +124,8 @@ friend void     PageNumNotify(  SwViewShell* pVwSh,
                     m_bIsInDrag       : 1, // don't execute StartExecuteDrag twice
                     m_bOldIdle        : 1, // to stop to idle
                     m_bOldIdleSet     : 1, // during QeueryDrop
-                    m_bTblInsDelMode  : 1, //
-                    m_bTblIsInsMode   : 1, //
+                    m_bTblInsDelMode  : 1,
+                    m_bTblIsInsMode   : 1,
                     m_bChainMode      : 1, // connect frames
                     m_bWasShdwCrsr    : 1, // ShadowCrsr was on in MouseButtonDown
                     m_bLockInput      : 1, // lock while calc panel is active
@@ -194,7 +193,6 @@ protected:
     virtual void    GetFocus();
     virtual void    LoseFocus();
 
-
     virtual void    MouseMove(const MouseEvent& rMEvt);
     virtual void    MouseButtonDown(const MouseEvent& rMEvt);
     virtual void    MouseButtonUp(const MouseEvent& rMEvt);
@@ -239,7 +237,6 @@ public:
     void            InsFrm(sal_uInt16 nCols);
     void            StopInsFrm();
     sal_uInt16      GetFrmColCount() const {return m_nInsFrmColCount;} // column number for interactive frame
-
 
     void            SetChainMode( sal_Bool bOn );
     sal_Bool            IsChainMode() const             { return m_bChainMode; }

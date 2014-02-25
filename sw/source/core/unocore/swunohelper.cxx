@@ -53,7 +53,6 @@ sal_Int32 GetEnumAsInt32( const ::com::sun::star::uno::Any& rVal )
     return eVal;
 }
 
-
 // methods for UCB actions
 sal_Bool UCB_DeleteFile( const OUString& rURL )
 {

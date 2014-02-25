@@ -155,7 +155,6 @@ const sal_Char cDataSourceName[] = "DataSourceName";
 const sal_Char cSelection[] = "Selection";
 const sal_Char cActiveConnection[] = "ActiveConnection";
 
-
 // Use nameless namespace to avoid to rubbish the global namespace
 
 namespace
@@ -1820,7 +1819,6 @@ sal_Bool SwNewDBMgr::GetColumnCnt(const OUString& rSourceName, const OUString& r
     return bRet;
 }
 
-
 // reads the column data at the current position
 sal_Bool    SwNewDBMgr::GetMergeColumnCnt(const OUString& rColumnName, sal_uInt16 nLanguage,
                                 OUString &rResult, double *pNumber, sal_uInt32 * /*pFormat*/)
@@ -2066,7 +2064,6 @@ sal_uInt32      SwNewDBMgr::GetSelectedRecordId(
     }
     return nRet;
 }
-
 
 // close all data sources - after fields were updated
 void    SwNewDBMgr::CloseAll(sal_Bool bIncludingMerge)
@@ -2674,7 +2671,6 @@ uno::Reference<XResultSet> SwNewDBMgr::createCursor(const OUString& _sDataSource
     return xResultSet;
 }
 
-
 // merge all data into one resulting document and return the number of merged documents
 sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                             SwView& rSourceView )
@@ -2759,12 +2755,10 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
         bool bPageStylesWithHeaderFooter = rMaster.GetHeader().IsActive()  ||
                                         rMaster.GetFooter().IsActive();
 
-
         // copy compatibility options
         lcl_CopyCompatibilityOptions( rSourceShell, *pTargetShell);
         // #72821# copy dynamic defaults
         lcl_CopyDynamicDefaults( *rSourceShell.GetDoc(), *pTargetShell->GetDoc() );
-
 
         long nStartRow, nEndRow;
         sal_uLong nDocNo = 1;

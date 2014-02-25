@@ -21,7 +21,6 @@
 
 #include <sfx2/tabdlg.hxx>
 
-
 #include "swtypes.hxx"
 #include "swtablerep.hxx"
 
@@ -44,7 +43,6 @@ public:
      SwTableTabDlg( Window* pParent, SfxItemPool& Pool,
                     const SfxItemSet* pItemSet, SwWrtShell* pSh );
 };
-
 
 #endif
 

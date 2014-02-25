@@ -40,10 +40,7 @@
 #include <statstr.hrc>
 #include <swerror.h>
 
-//////////////////////////////////////////////////////////////////////////
-
 // Hash-Code errechnen (muss nicht eindeutig sein)
-
 
 sal_uInt16 SwImpBlocks::Hash( const OUString& r )
 {
@@ -56,7 +53,6 @@ sal_uInt16 SwImpBlocks::Hash( const OUString& r )
     }
     return n;
 }
-
 
 SwBlockName::SwBlockName( const OUString& rShort, const OUString& rLong )
     : aShort( rShort ), aLong( rLong ), aPackageName (rShort),
@@ -74,7 +70,6 @@ SwBlockName::SwBlockName( const OUString& rShort, const OUString& rLong, const O
     nHashL = SwImpBlocks::Hash( rLong );
 }
 
-
 // Ist die angegebene Datei ein Storage oder gibt es sie nicht?
 
 short SwImpBlocks::GetFileType( const OUString& rFile )
@@ -88,7 +83,6 @@ short SwImpBlocks::GetFileType( const OUString& rFile )
     //otherwise return NONE
     return SWBLK_NONE;
 }
-
 
 SwImpBlocks::SwImpBlocks( const OUString& rFile, sal_Bool )
     : aFile( rFile ),
@@ -104,7 +98,6 @@ SwImpBlocks::SwImpBlocks( const OUString& rFile, sal_Bool )
     aObj.setExtension( OUString() );
     aName = aObj.GetBase();
 }
-
 
 SwImpBlocks::~SwImpBlocks()
 {
@@ -128,7 +121,6 @@ SwPaM* SwImpBlocks::MakePaM()
     return pPam;
 }
 
-
 sal_uInt16 SwImpBlocks::GetCount() const
 {
     return aNames.size();
@@ -149,7 +141,6 @@ sal_uInt16 SwImpBlocks::GetIndex( const OUString& rShort ) const
     return (sal_uInt16) -1;
 }
 
-
 sal_uInt16 SwImpBlocks::GetLongIndex( const OUString& rLong ) const
 {
     sal_uInt16 nHash = Hash( rLong );
@@ -163,14 +154,12 @@ sal_uInt16 SwImpBlocks::GetLongIndex( const OUString& rLong ) const
     return (sal_uInt16) -1;
 }
 
-
 OUString SwImpBlocks::GetShortName( sal_uInt16 n ) const
 {
     if( n < aNames.size() )
         return aNames[n]->aShort;
     return OUString();
 }
-
 
 OUString SwImpBlocks::GetLongName( sal_uInt16 n ) const
 {
@@ -201,8 +190,6 @@ void SwImpBlocks::AddName( const OUString& rShort, const OUString& rLong,
     aNames.insert( pNew );
 }
 
-
-
 sal_Bool SwImpBlocks::IsFileChanged() const
 {
     Date aTempDateModified( aDateModified );
@@ -212,7 +199,6 @@ sal_Bool SwImpBlocks::IsFileChanged() const
           ( aDateModified != aTempDateModified ||
             aTimeModified != aTempTimeModified );
 }
-
 
 void SwImpBlocks::Touch()
 {
@@ -241,9 +227,6 @@ sal_Bool SwImpBlocks::PutMuchEntries( sal_Bool )
     return sal_False;
 }
 
-////////////////////////////////////////////////////////////////////////////
-
-
 SwTextBlocks::SwTextBlocks( const OUString& rFile )
     : pImp( 0 ), nErr( 0 )
 {
@@ -268,13 +251,11 @@ OUString SwTextBlocks::GetName()
     return pImp ? pImp->aName : OUString();
 }
 
-
 void SwTextBlocks::SetName( const OUString& r )
 {
     if( pImp )
         pImp->SetName( r );
 }
-
 
 sal_Bool SwTextBlocks::IsOld() const
 {
@@ -287,24 +268,20 @@ sal_Bool SwTextBlocks::IsOld() const
     return sal_False;
 }
 
-
 sal_uInt16 SwTextBlocks::GetCount() const
 {
     return pImp ? pImp->GetCount() : 0;
 }
-
 
 sal_uInt16 SwTextBlocks::GetIndex( const OUString& r ) const
 {
     return pImp ? pImp->GetIndex( r ) : (sal_uInt16) -1;
 }
 
-
 sal_uInt16 SwTextBlocks::GetLongIndex( const OUString& r ) const
 {
     return pImp ? (sal_uInt16)(pImp->GetLongIndex( r )) : (sal_uInt16) -1;
 }
-
 
 OUString SwTextBlocks::GetShortName( sal_uInt16 n ) const
 {
@@ -313,14 +290,12 @@ OUString SwTextBlocks::GetShortName( sal_uInt16 n ) const
     return OUString();
 }
 
-
 OUString SwTextBlocks::GetLongName( sal_uInt16 n ) const
 {
     if( pImp )
         return pImp->GetLongName( n );
     return OUString();
 }
-
 
 sal_Bool SwTextBlocks::Delete( sal_uInt16 n )
 {
@@ -348,7 +323,6 @@ sal_Bool SwTextBlocks::Delete( sal_uInt16 n )
     }
     return sal_False;
 }
-
 
 sal_uInt16 SwTextBlocks::Rename( sal_uInt16 n, const OUString* s, const OUString* l )
 {
@@ -436,13 +410,11 @@ sal_Bool SwTextBlocks::BeginGetDoc( sal_uInt16 n )
     return sal_False;
 }
 
-
 void SwTextBlocks::EndGetDoc()
 {
     if( pImp && !pImp->bInPutMuchBlocks )
         pImp->CloseFile();
 }
-
 
 sal_Bool SwTextBlocks::BeginPutDoc( const OUString& s, const OUString& l )
 {
@@ -467,7 +439,6 @@ sal_Bool SwTextBlocks::BeginPutDoc( const OUString& s, const OUString& l )
     }
     return 0 == nErr;
 }
-
 
 sal_uInt16 SwTextBlocks::PutDoc()
 {
@@ -541,14 +512,12 @@ sal_uInt16 SwTextBlocks::PutText( const OUString& rShort, const OUString& rName,
     return nIdx;
 }
 
-
 SwDoc* SwTextBlocks::GetDoc()
 {
     if( pImp )
         return pImp->pDoc;
     return 0;
 }
-
 
 void SwTextBlocks::ClearDoc()
 {
@@ -559,12 +528,10 @@ void SwTextBlocks::ClearDoc()
     }
 }
 
-
 OUString SwTextBlocks::GetFileName() const
 {
     return pImp->GetFileName();
 }
-
 
 sal_Bool SwTextBlocks::IsReadOnly() const
 {

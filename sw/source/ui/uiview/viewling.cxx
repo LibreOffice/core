@@ -447,7 +447,6 @@ void SwView::HyphenateDocument()
 
         Reference< XLinguProperties >  xProp( ::GetLinguPropertySet() );
 
-
         m_pWrtShell->StartUndo(UNDO_INSATTR);         // valid later
 
         sal_Bool bHyphSpecial = xProp.is() ? xProp->getIsHyphSpecial() : sal_False;
@@ -735,7 +734,6 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
                                 uno::Sequence< beans::PropertyValue > aArgs;
                                 xDispatch = xDispatchProvider->queryDispatch( aURL, OUString(), 0 );
 
-
                                 if (xDispatch.is())
                                 {
                                     // Execute dispatch asynchronously
@@ -776,7 +774,6 @@ sal_Bool SwView::ExecSmartTagPopup( const Point& rPt )
     const sal_Bool bOldViewLock = m_pWrtShell->IsViewLocked();
     m_pWrtShell->LockView( sal_True );
     m_pWrtShell->Push();
-
 
     // get word that was clicked on
     // This data structure maps a smart tag type string to the property bag

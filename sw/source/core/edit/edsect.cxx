@@ -30,7 +30,6 @@
 #include <tabfrm.hxx>
 #include <rootfrm.hxx>
 
-
 SwSection const*
 SwEditShell::InsertSection(
         SwSectionData & rNewData, SfxItemSet const*const pAttr)
@@ -289,7 +288,6 @@ sal_uInt16 SwEditShell::GetFullSelectedSectionCount() const
     FOREACHPAM_END()
     return nRet;
 }
-
 
 /** Find the suitable node for a special insert (alt-enter).
  *

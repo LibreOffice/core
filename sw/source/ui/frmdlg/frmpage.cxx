@@ -828,7 +828,6 @@ void SwFrmPage::setOptimalRelWidth()
     m_pHoriRelationLB->Clear();
 }
 
-
 SwFrmPage::~SwFrmPage()
 {
 }
@@ -2368,7 +2367,6 @@ void SwFrmPage::SetFormatUsed(sal_Bool bFmt)
     }
 }
 
-
 void SwFrmPage::EnableVerticalPositioning( bool bEnable )
 {
     m_bAllowVertPositioning = bEnable;
@@ -2379,7 +2377,6 @@ void SwFrmPage::EnableVerticalPositioning( bool bEnable )
     m_pVertRelationFT->Enable( bEnable );
     m_pVertRelationLB->Enable( bEnable );
 }
-
 
 SwGrfExtPage::SwGrfExtPage(Window *pParent, const SfxItemSet &rSet)
     : SfxTabPage(pParent, "PicturePage",

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <UndoInsert.hxx>
 
 #include <hintids.hxx>
@@ -55,9 +54,6 @@
 #include <undo.hrc>
 
 using namespace ::com::sun::star;
-
-
-
 
 // INSERT
 
@@ -296,7 +292,6 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
     DELETEZ(pUndoTxt);
 }
 
-
 void SwUndoInsert::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc *const pTmpDoc = & rContext.GetDoc();
@@ -484,9 +479,7 @@ SwRewriter SwUndoInsert::GetRewriter() const
     return aResult;
 }
 
-
-// SwUndoReplace /////////////////////////////////////////////////////////
-
+// SwUndoReplace
 
 class SwUndoReplace::Impl
     : private SwUndoSaveCntnt
@@ -515,7 +508,6 @@ public:
     OUString const& GetOld() const { return m_sOld; }
     OUString const& GetIns() const { return m_sIns; }
 };
-
 
 SwUndoReplace::SwUndoReplace(SwPaM const& rPam,
         OUString const& rIns, bool const bRegExp)
@@ -790,9 +782,7 @@ void SwUndoReplace::Impl::SetEnd(SwPaM const& rPam)
     m_nEndCnt = pEnd->nContent.GetIndex();
 }
 
-
-// SwUndoReRead //////////////////////////////////////////////////////////
-
+// SwUndoReRead
 
 SwUndoReRead::SwUndoReRead( const SwPaM& rPam, const SwGrfNode& rGrfNd )
     : SwUndo( UNDO_REREAD ), nPos( rPam.GetPoint()->nNode.GetIndex() )
@@ -800,14 +790,12 @@ SwUndoReRead::SwUndoReRead( const SwPaM& rPam, const SwGrfNode& rGrfNd )
     SaveGraphicData( rGrfNd );
 }
 
-
 SwUndoReRead::~SwUndoReRead()
 {
     delete pGrf;
     delete pNm;
     delete pFltr;
 }
-
 
 void SwUndoReRead::SetAndSave(::sw::UndoRedoContext & rContext)
 {
@@ -843,18 +831,15 @@ void SwUndoReRead::SetAndSave(::sw::UndoRedoContext & rContext)
     rContext.SetSelections(pGrfNd->GetFlyFmt(), 0);
 }
 
-
 void SwUndoReRead::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SetAndSave(rContext);
 }
 
-
 void SwUndoReRead::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SetAndSave(rContext);
 }
-
 
 void SwUndoReRead::SaveGraphicData( const SwGrfNode& rGrfNd )
 {
@@ -873,7 +858,6 @@ void SwUndoReRead::SaveGraphicData( const SwGrfNode& rGrfNd )
     }
     nMirr = rGrfNd.GetSwAttrSet().GetMirrorGrf().GetValue();
 }
-
 
 SwUndoInsertLabel::SwUndoInsertLabel( const SwLabelType eTyp,
                                       const OUString &rTxt,
@@ -948,7 +932,6 @@ void SwUndoInsertLabel::UndoImpl(::sw::UndoRedoContext & rContext)
         NODE.pUndoInsNd = new SwUndoDelete( aPam, sal_True );
     }
 }
-
 
 void SwUndoInsertLabel::RedoImpl(::sw::UndoRedoContext & rContext)
 {

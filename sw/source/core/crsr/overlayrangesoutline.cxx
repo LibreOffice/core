@@ -23,8 +23,6 @@
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
-
 namespace
 {
     // combine ranges geometrically to a single, ORed polygon
@@ -105,5 +103,4 @@ namespace sw
     } // end of namespace overlay
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
 // eof

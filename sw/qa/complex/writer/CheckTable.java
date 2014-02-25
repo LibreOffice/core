@@ -36,7 +36,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-
 public class CheckTable
 {
     private static final OfficeConnection connection = new OfficeConnection();

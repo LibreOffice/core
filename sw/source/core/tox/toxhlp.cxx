@@ -25,7 +25,6 @@
 
 using namespace ::com::sun::star;
 
-
 IndexEntrySupplierWrapper::IndexEntrySupplierWrapper()
 {
     uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();

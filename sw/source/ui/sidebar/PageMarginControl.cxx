@@ -32,7 +32,6 @@
 #define SWPAGE_DOWN_GVALUE      "Sw_Page_Down"
 #define SWPAGE_MIRROR_GVALUE    "Sw_Page_Mirrored"
 
-
 namespace sw { namespace sidebar {
 
 PageMarginControl::PageMarginControl(
@@ -128,14 +127,12 @@ PageMarginControl::PageMarginControl(
     FreeResource();
 }
 
-
 PageMarginControl::~PageMarginControl(void)
 {
     delete mpMarginValueSet;
 
     StoreUserCustomValues();
 }
-
 
 void PageMarginControl::SetMetricFieldMaxValues( const Size aPageSize )
 {
@@ -163,7 +160,6 @@ void PageMarginControl::SetMetricFieldMaxValues( const Size aPageSize )
     nMax = nPH - nMT -  MINBODY;
     maBottomMarginEdit.SetMax(maTopMarginEdit.Normalize(nMax), FUNIT_TWIP);
 }
-
 
 void PageMarginControl::FillValueSet(
     const bool bLandscape,
@@ -259,7 +255,6 @@ void PageMarginControl::FillValueSet(
         SW_RESSTR(STR_LCVALUE), &aHelpText );
 }
 
-
 void PageMarginControl::SelectValueSetItem()
 {
     const long cTolerance = 5;
@@ -304,7 +299,6 @@ void PageMarginControl::SelectValueSetItem()
     mpMarginValueSet->Format();
     mpMarginValueSet->StartSelection();
 };
-
 
 IMPL_LINK(PageMarginControl, ImplMarginHdl, void *, pControl)
 {
@@ -385,7 +379,6 @@ IMPL_LINK(PageMarginControl, ImplMarginHdl, void *, pControl)
     return 0;
 }
 
-
 IMPL_LINK( PageMarginControl, ModifyLRMarginHdl, MetricField *, EMPTYARG )
 {
     mpMarginValueSet->SetNoSelection();
@@ -413,7 +406,6 @@ IMPL_LINK( PageMarginControl, ModifyULMarginHdl, MetricField *, EMPTYARG )
     mbCustomValuesUsed = true;
     return 0;
 }
-
 
 bool PageMarginControl::GetUserCustomValues()
 {
@@ -516,7 +508,6 @@ void PageMarginControl::StoreUserCustomValues()
     aSeq[0].Value <<= ::rtl::OUString::number( (mbMirrored ? 1 : 0) );
     aWinOpt5.SetUserData( aSeq );
 }
-
 
 } } // end of namespace sw::sidebar
 

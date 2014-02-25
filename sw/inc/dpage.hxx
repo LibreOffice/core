@@ -50,6 +50,4 @@ public:
 
 #endif // INCLUDED_SW_INC_DPAGE_HXX
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

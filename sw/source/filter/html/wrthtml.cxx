@@ -124,7 +124,6 @@ SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL )
     nDirection = FRMDIR_HORI_LEFT_TOP;
 }
 
-
 SwHTMLWriter::~SwHTMLWriter()
 {
     delete pNumRuleInfo;
@@ -320,7 +319,6 @@ sal_uLong SwHTMLWriter::WriteStream()
         }
     }
 
-
     // Tabelle fuer die freifliegenden Rahmen erzeugen, aber nur wenn
     // das gesamte Dokument geschrieben wird
     pHTMLPosFlyFrms = 0;
@@ -505,7 +503,6 @@ static bool lcl_html_IsMultiColEnd( const SwHTMLWriter& rHTMLWrt, sal_uLong nInd
 
     return bRet;
 }
-
 
 static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
                                      const SwSection& rSection,
@@ -778,7 +775,6 @@ void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
 
     bWriteAll = bSaveWriteAll;          // wieder auf alten Wert zurueck
 }
-
 
 // schreibe die StyleTabelle, algemeine Angaben,Header/Footer/Footnotes
 static void OutBodyColor( const sal_Char *pTag, const SwFmt *pFmt,
@@ -1327,7 +1323,6 @@ HTMLSaveData::HTMLSaveData( SwHTMLWriter& rWriter, sal_uLong nStt,
         rWrt.nDirection = rWrt.GetHTMLDirection( pFrmFmt->GetAttrSet() );
 }
 
-
 HTMLSaveData::~HTMLSaveData()
 {
     delete rWrt.pCurPam;                    // Pam wieder loeschen
@@ -1358,11 +1353,9 @@ HTMLSaveData::~HTMLSaveData()
     }
 }
 
-
 void GetHTMLWriter( const OUString&, const OUString& rBaseURL, WriterRef& xRet )
 {
     xRet = new SwHTMLWriter( rBaseURL );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

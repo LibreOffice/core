@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
@@ -63,7 +62,6 @@
 #include "htmlfly.hxx"
 
 using namespace ::com::sun::star;
-////////////////////////////////////////////////////////////
 
 const sal_uLong HTML_FRMOPTS_IMG_ALL        =
     HTML_FRMOPT_ALT |
@@ -126,7 +124,6 @@ const sal_uLong HTML_FRMOPTS_CNTNR          =
     HTML_FRMOPT_ABSSIZE |
     HTML_FRMOPT_S_PIXSIZE;
 
-
 static Writer& OutHTML_FrmFmtTableNode( Writer& rWrt, const SwFrmFmt& rFrmFmt );
 static Writer& OutHTML_FrmFmtAsMulticol( Writer& rWrt, const SwFrmFmt& rFmt,
                                          sal_Bool bInCntnr );
@@ -141,8 +138,6 @@ static Writer& OutHTML_FrmFmtGrfNode( Writer& rWrt, const SwFrmFmt& rFmt,
 
 static Writer& OutHTML_FrmFmtAsMarquee( Writer& rWrt, const SwFrmFmt& rFrmFmt,
                                         const SdrObject& rSdrObj    );
-
-
 
 extern HTMLOutEvent aAnchorEventTable[];
 
@@ -160,8 +155,6 @@ static HTMLOutEvent aIMapEventTable[] =
     { OOO_STRING_SVTOOLS_HTML_O_SDonmouseout,       OOO_STRING_SVTOOLS_HTML_O_onmouseout,       SFX_EVENT_MOUSEOUT_OBJECT   },
     { 0,                        0,                      0                           }
 };
-
-
 
 sal_uInt16 SwHTMLWriter::GuessFrmType( const SwFrmFmt& rFrmFmt,
                                    const SdrObject*& rpSdrObj )
@@ -524,7 +517,6 @@ void SwHTMLWriter::OutFrmFmt( sal_uInt8 nMode, const SwFrmFmt& rFrmFmt,
         HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_span, sal_False );
 }
 
-
 OString SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
                                      const OUString& rAlternateTxt,
                                      sal_uInt32 nFrmOpts,
@@ -555,7 +547,6 @@ OString SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
         Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
         OutDirection( nDir );
     }
-
 
     // ALT
     if( (nFrmOpts & HTML_FRMOPT_ALT) && !rAlternateTxt.isEmpty() )
@@ -610,7 +601,6 @@ OString SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).append("=\"").
             append(pStr).append("\"");
     }
-
 
     // HSPACE und VSPACE
     Size aTwipSpc( 0, 0 );
@@ -1149,7 +1139,6 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) )
         rHTMLWrt.OutCSS1_FrmFmtOptions( rFrmFmt, nFrmOpts );
 
-
     if( nFrmOpts & HTML_FRMOPT_BORDER )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_border).
@@ -1224,9 +1213,6 @@ Writer& OutHTML_BulletImage( Writer& rWrt,
 
     return rWrt;
 }
-
-
-
 
 static Writer& OutHTML_FrmFmtTableNode( Writer& rWrt, const SwFrmFmt& rFrmFmt )
 {
@@ -1459,7 +1445,6 @@ static Writer & OutHTML_FrmFmtAsImage( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     return rWrt;
 }
 
-
 static Writer& OutHTML_FrmFmtGrfNode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
                                       sal_Bool bInCntnr )
 {
@@ -1482,7 +1467,6 @@ static Writer& OutHTML_FrmFmtGrfNode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
     return rWrt;
 }
-
 
 static Writer& OutHTML_FrmFmtAsMarquee( Writer& rWrt, const SwFrmFmt& rFrmFmt,
                                   const SdrObject& rSdrObj  )
@@ -1513,8 +1497,6 @@ static Writer& OutHTML_FrmFmtAsMarquee( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
     return rWrt;
 }
-
-
 
 Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrmFmt& rFrmFmt,
                               sal_Bool bHeader )
@@ -1595,7 +1577,6 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     return rWrt;
 }
 
-
 void SwHTMLWriter::AddLinkTarget( const OUString& rURL )
 {
     if( rURL.isEmpty() || rURL[0] != '#' )
@@ -1673,7 +1654,7 @@ void SwHTMLWriter::AddLinkTarget( const OUString& rURL )
     }
     else if( sCmp == "text" )
     {
-        //
+
     }
 }
 
@@ -1719,8 +1700,6 @@ void SwHTMLWriter::CollectLinkTargets()
         }
     }
 }
-
-
 
 SwHTMLPosFlyFrm::SwHTMLPosFlyFrm( const SwPosFlyFrm& rPosFly,
                                   const SdrObject *pSdrObj,

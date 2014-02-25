@@ -58,7 +58,6 @@ public:
     virtual SwRewriter GetRewriter() const;
 };
 
-
 class SwUndoInsBookmark : public SwUndoBookmark
 {
 public:

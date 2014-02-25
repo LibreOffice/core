@@ -203,9 +203,8 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
                     nScript = g_pBreakIt->GetBreakIter()->getScriptType( aTxt, nChg );
             }
 
-            //
             // nNextScriptChg will be evaluated during SwFldPortion::Format()
-            //
+
             if (nChg < aTxt.getLength() && nChg >= 0)
                 nNextScriptChg = g_pBreakIt->GetBreakIter()->endOfScript( aTxt, nChg, nScript );
             else
@@ -465,7 +464,6 @@ SwPosSize SwFldPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
     return aSize;
 }
 
-
 // class SwHiddenPortion
 
 SwFldPortion *SwHiddenPortion::Clone(const OUString &rExpand ) const
@@ -491,7 +489,6 @@ bool SwHiddenPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) con
     // Nicht auf IsHidden() abfragen !
     return SwFldPortion::GetExpTxt( rInf, rTxt );
 }
-
 
 // class SwNumberPortion
 
@@ -734,7 +731,6 @@ static sal_Char const sDoubleSpace[] = "  ";
     }
 }
 
-
 // class SwBulletPortion
 
 SwBulletPortion::SwBulletPortion( const sal_Unicode cBullet,
@@ -750,7 +746,6 @@ SwBulletPortion::SwBulletPortion( const sal_Unicode cBullet,
 {
     SetWhichPor( POR_BULLET );
 }
-
 
 // class SwGrfNumPortion
 
@@ -941,7 +936,6 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
                 ( (Graphic*) pBrush->GetGraphic() )->StopAnimation(0,nId);
                 rInf.GetTxtFrm()->getRootFrm()->GetCurrShell()->InvalidateWindows( aTmp );
             }
-
 
             else if ( pViewShell &&
                      !pViewShell->GetAccessibilityOptions()->IsStopAnimatedGraphics() &&

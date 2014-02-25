@@ -907,7 +907,6 @@ SwCntntNode::SwCntntNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType,
 {
 }
 
-
 SwCntntNode::~SwCntntNode()
 {
     // The base class SwClient of SwFrm excludes itself from the dependency list!
@@ -1306,7 +1305,6 @@ SwCntntNode *SwCntntNode::JoinNext()
 {
     return this;
 }
-
 
 SwCntntNode *SwCntntNode::JoinPrev()
 {

@@ -52,7 +52,6 @@
 // is set in GetCharRect and is interpreted in UnitUp/Down.
 bool SwTxtCursor::bRightMargin = false;
 
-
 /*************************************************************************
  *                    lcl_GetCharRectInsideField
  *
@@ -180,9 +179,8 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
     const bool bListLevelIndentsApplicableAndLabelAlignmentActive(
         AreListLevelIndentsApplicableAndLabelAlignmentActive( *(pFrm->GetTxtNode()) ) );
 
-    //
     // Carefully adjust the text formatting ranges.
-    //
+
     // This whole area desperately needs some rework. There are
     // quite a couple of values that need to be considered:
     // 1. paragraph indent
@@ -1448,7 +1446,6 @@ sal_Int32 SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
         ( pPor->IsMarginPortion() && nWidth > nX + 30 ) ) )
         ((SwCrsrMoveState*)pCMS)->bPosCorr = sal_True;
 
-
     // #i27615#
     if (pCMS)
     {
@@ -1676,7 +1673,6 @@ sal_Int32 SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                 {
                     nX = std::max(0, nX - GetInfo().GetFont()->GetLeftBorderSpace());
                 }
-
 
                 aDrawInf.SetOfst( nX );
 

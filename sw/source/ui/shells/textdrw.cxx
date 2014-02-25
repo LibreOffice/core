@@ -79,7 +79,6 @@ void SwBaseShell::InsertURLButton(const OUString& rURL, const OUString& rTarget,
 
             uno::Reference< beans::XPropertySet >  xPropSet(xControlModel, uno::UNO_QUERY);
 
-
             uno::Any aTmp;
 
             aTmp <<= OUString(rTxt);
@@ -98,7 +97,6 @@ void SwBaseShell::InsertURLButton(const OUString& rURL, const OUString& rTarget,
                 aTmp <<= rTarget;
                 xPropSet->setPropertyValue( "TargetFrame", aTmp );
             }
-
 
             form::FormButtonType eButtonType = form::FormButtonType_URL;
             aTmp.setValue( &eButtonType, ::getCppuType((const form::FormButtonType*)0));

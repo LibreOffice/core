@@ -95,7 +95,6 @@ static OUString lcl_GetRedlineHelp( const SwRangeRedline& rRedl, sal_Bool bBallo
     return sBuf.makeStringAndClear();
 }
 
-
 void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 {
     SwWrtShell &rSh = m_rView.GetWrtShell();

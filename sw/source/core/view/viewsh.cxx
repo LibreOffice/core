@@ -1478,20 +1478,20 @@ void SwViewShell::_PaintDesktop( const SwRegionRects &rRegion )
         // This is done in the users of this method, for each SWpage before painting it.
         // Since the MapMode is not correct here, the call to DLPostPaint2 will paint
         // existing FormControls due to the current MapMode.
-        //
+
         // There are basically three solutions for this:
-        //
+
         // (1) Set the MapMode correct, move the background painting to the users of
         //     this code
-        //
+
         // (2) Do no DLPrePaint2/DLPostPaint2 here; no SdrObjects are allowed to lie in
         //     the desktop region. Disadvantage: the desktop will not be part of the
         //     buffers, e.g. overlay. Thus, as soon as overlay will be used over the
         //     desktop, it will not work.
-        //
+
         // (3) expand DLPostPaint2 with a flag to signal if FormControl paints shall
         //     be done or not
-        //
+
         // Currently, (3) will be the best possible solution. It will keep overlay and
         // buffering intact and work without MapMode for single pages. In the medium
         // to long run, (1) will need to be used and the bool bPaintFormLayer needs

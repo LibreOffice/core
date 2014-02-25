@@ -301,7 +301,6 @@ SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
         { OUString(UNO_NAME_BREAK_TYPE), RES_BREAK,                 cppu::UnoType<css::style::BreakType>::get(),           PropertyAttribute::MAYBEVOID, 0}, \
         { OUString(UNO_NAME_PAGE_DESC_NAME), RES_PAGEDESC,          cppu::UnoType<OUString>::get(),            PropertyAttribute::MAYBEVOID, MID_PAGEDESC_PAGEDESCNAME },
 
-
 #define TABSTOPS_MAP_ENTRY                { OUString(UNO_NAME_TABSTOPS), RES_PARATR_TABSTOP,   cppu::UnoType< cppu::UnoSequenceType<css::style::TabStop> >::get(),   PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},
 
 #define COMMON_CRSR_PARA_PROPERTIES \
@@ -327,8 +326,6 @@ SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
         { OUString(UNO_NAME_HYPER_LINK_EVENTS), RES_TXTATR_INETFMT,     cppu::UnoType<css::container::XNameReplace>::get(), PropertyAttribute::MAYBEVOID, MID_URL_HYPERLINKEVENTS},\
         { OUString(UNO_NAME_NESTED_TEXT_CONTENT), FN_UNO_NESTED_TEXT_CONTENT, cppu::UnoType<css::text::XTextContent>::get(), PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },\
         TABSTOPS_MAP_ENTRY
-
-
 
 #define _BASE_INDEX_PROPERTIES_\
         { OUString(UNO_NAME_TITLE), WID_IDX_TITLE,  cppu::UnoType<OUString>::get()  , PROPERTY_NONE,     0},\
@@ -413,13 +410,10 @@ SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
     { OUString(UNO_NAME_LINE_WIDTH), RES_BOX, cppu::UnoType<sal_Int32>::get(),  0, LINE_WIDTH |CONVERT_TWIPS }, \
     { OUString(UNO_NAME_TEXT_VERT_ADJUST), RES_TEXT_VERT_ADJUST, cppu::UnoType<css::drawing::TextVerticalAdjust>::get(), PROPERTY_NONE ,0},
 
-
-
 #define COMMON_TEXT_CONTENT_PROPERTIES \
         { OUString(UNO_NAME_ANCHOR_TYPE), FN_UNO_ANCHOR_TYPE, cppu::UnoType<css::text::TextContentAnchorType>::get(),              PropertyAttribute::READONLY, MID_ANCHOR_ANCHORTYPE},\
         ANCHOR_TYPES_PROPERTY\
         { OUString(UNO_NAME_TEXT_WRAP), FN_UNO_TEXT_WRAP,   cppu::UnoType<css::text::WrapTextMode>::get(),                 PropertyAttribute::READONLY, MID_SURROUND_SURROUNDTYPE  },
-
 
 #define     _PROP_DIFF_FONTHEIGHT \
                     { OUString(UNO_NAME_CHAR_PROP_HEIGHT), RES_CHRATR_FONTSIZE ,            cppu::UnoType<float>::get(),                                           PROPERTY_NONE , MID_FONTHEIGHT_PROP},\
@@ -428,7 +422,6 @@ SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
                     { OUString(UNO_NAME_CHAR_DIFF_HEIGHT_ASIAN), RES_CHRATR_CJK_FONTSIZE ,          cppu::UnoType<sal_Int16>::get(),    PROPERTY_NONE , MID_FONTHEIGHT_DIFF|CONVERT_TWIPS},\
                     { OUString(UNO_NAME_CHAR_PROP_HEIGHT_COMPLEX), RES_CHRATR_CTL_FONTSIZE ,            cppu::UnoType<float>::get(),                                           PROPERTY_NONE , MID_FONTHEIGHT_PROP},\
                     { OUString(UNO_NAME_CHAR_DIFF_HEIGHT_COMPLEX), RES_CHRATR_CTL_FONTSIZE ,            cppu::UnoType<sal_Int16>::get(),    PROPERTY_NONE , MID_FONTHEIGHT_DIFF|CONVERT_TWIPS},
-
 
 #define COMMON_PARA_STYLE_PROPERTIES \
                     { OUString(UNO_NAME_BREAK_TYPE), RES_BREAK,                 cppu::UnoType<css::style::BreakType>::get(),       PROPERTY_NONE, 0},\
@@ -543,7 +536,6 @@ SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
                     { OUString(UNO_NAME_HIDDEN), FN_UNO_HIDDEN,     cppu::UnoType<bool>::get(), PROPERTY_NONE, 0}, \
                     { OUString(UNO_NAME_STYLE_INTEROP_GRAB_BAG), FN_UNO_STYLE_INTEROP_GRAB_BAG, cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(), PROPERTY_NONE, 0},
 
-
 #define COMMON_FLDTYP_PROPERTIES \
                     { OUString(UNO_NAME_IS_FIELD_USED),      FIELD_PROP_IS_FIELD_USED,      cppu::UnoType<float>::get(), PropertyAttribute::READONLY, 0},\
                     { OUString(UNO_NAME_IS_FIELD_DISPLAYED), FIELD_PROP_IS_FIELD_DISPLAYED, cppu::UnoType<sal_Int16>::get(), PropertyAttribute::READONLY, 0},\
@@ -571,7 +563,6 @@ SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
                     { OUString(UNO_NAME_PARA_LINE_SPACING), RES_PARATR_LINESPACING, cppu::UnoType<css::style::LineSpacing>::get(),       PropertyAttribute::MAYBEVOID,     CONVERT_TWIPS},   \
                     { OUString(UNO_NAME_PARA_RIGHT_MARGIN), RES_LR_SPACE,           cppu::UnoType<sal_Int32>::get(),           PropertyAttribute::MAYBEVOID, MID_R_MARGIN|CONVERT_TWIPS},  \
                     { OUString(UNO_NAME_TABSTOPS), RES_PARATR_TABSTOP,   cppu::UnoType< cppu::UnoSequenceType<css::style::TabStop> >::get(),   PropertyAttribute::MAYBEVOID, CONVERT_TWIPS}, \
-
 
 const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(sal_uInt16 nPropertyId)
 {
@@ -957,7 +948,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_FOOTER_HEIGHT), FN_UNO_FOOTER_HEIGHT,       cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE ,MID_SIZE_HEIGHT|CONVERT_TWIPS         },
                     { OUString(UNO_NAME_FOOTER_IS_ON), FN_UNO_FOOTER_ON,            cppu::UnoType<bool>::get(),         PROPERTY_NONE ,0         },
                     { OUString(UNO_NAME_FOOTER_DYNAMIC_SPACING), FN_UNO_FOOTER_EAT_SPACING,            cppu::UnoType<bool>::get(),         PropertyAttribute::MAYBEVOID ,0         },
-
 
                     { OUString(UNO_NAME_IS_LANDSCAPE), SID_ATTR_PAGE,           cppu::UnoType<bool>::get(),             PROPERTY_NONE ,MID_PAGE_ORIENTATION   },
                     { OUString(UNO_NAME_NUMBERING_TYPE), SID_ATTR_PAGE,             cppu::UnoType<sal_Int16>::get(),           PROPERTY_NONE , MID_PAGE_NUMTYPE       },

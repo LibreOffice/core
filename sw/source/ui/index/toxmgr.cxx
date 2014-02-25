@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <wrtsh.hxx>
 #include <shellres.hxx>
 #include <swwait.hxx>
@@ -33,7 +32,6 @@
     Description: handle indexes with TOXMgr
  --------------------------------------------------------------------*/
 
-
 SwTOXMgr::SwTOXMgr(SwWrtShell* pShell):
     pSh(pShell)
 {
@@ -45,12 +43,10 @@ SwTOXMgr::SwTOXMgr(SwWrtShell* pShell):
     Description: handle current TOXMarks
  --------------------------------------------------------------------*/
 
-
 sal_uInt16 SwTOXMgr::GetTOXMarks()
 {
     return pSh->GetCurTOXMarks(aCurMarks);
 }
-
 
 SwTOXMark* SwTOXMgr::GetTOXMark(sal_uInt16 nId)
 {
@@ -58,7 +54,6 @@ SwTOXMark* SwTOXMgr::GetTOXMark(sal_uInt16 nId)
         return aCurMarks[nId];
     return 0;
 }
-
 
 void SwTOXMgr::DeleteTOXMark()
 {
@@ -139,7 +134,6 @@ void    SwTOXMgr::InsertTOXMark(const SwTOXMarkDescription& rDesc)
     Description: Update of TOXMarks
  --------------------------------------------------------------------*/
 
-
 void SwTOXMgr::UpdateTOXMark(const SwTOXMarkDescription& rDesc)
 {
     OSL_ENSURE(pCurTOXMark, "no current TOXMark");
@@ -213,11 +207,9 @@ void SwTOXMgr::UpdateTOXMark(const SwTOXMarkDescription& rDesc)
     }
 }
 
-
 /*--------------------------------------------------------------------
     Description:    determine UserTypeID
  --------------------------------------------------------------------*/
-
 
 sal_uInt16 SwTOXMgr::GetUserTypeID(const OUString& rStr)
 {
@@ -237,7 +229,6 @@ sal_uInt16 SwTOXMgr::GetUserTypeID(const OUString& rStr)
     Description: traveling between TOXMarks
  --------------------------------------------------------------------*/
 
-
 void SwTOXMgr::NextTOXMark(sal_Bool bSame)
 {
     OSL_ENSURE(pCurTOXMark, "no current TOXMark");
@@ -247,7 +238,6 @@ void SwTOXMgr::NextTOXMark(sal_Bool bSame)
         pCurTOXMark = (SwTOXMark*)&pSh->GotoTOXMark( *pCurTOXMark, eDir );
     }
 }
-
 
 void SwTOXMgr::PrevTOXMark(sal_Bool bSame)
 {
@@ -400,7 +390,6 @@ sal_Bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
         break;
     }
 
-
     OSL_ENSURE(pNewTOX, "no TOXBase created!" );
     if(!pNewTOX)
         return sal_False;
@@ -507,7 +496,5 @@ void SwTOXDescription::ApplyTo(SwTOXBase& rTOXBase)
     rTOXBase.SetSortAlgorithm(sSortAlgorithm);
 
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

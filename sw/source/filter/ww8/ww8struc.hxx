@@ -143,7 +143,6 @@ struct Word2CHPX
     }
 };
 
-
 typedef sal_Int16 WW8_PN;
 typedef sal_Int32 WW8_FC;
 typedef sal_Int32 WW8_CP;
@@ -226,8 +225,6 @@ struct WW8_FFN : public WW8_FFN_BASE
                                         // name of an alternate font to use if the first named
                                         // font does not exist on this system.
 };
-
-
 
 struct WW8_BRCVer6  // alter Border Code
 {
@@ -331,15 +328,11 @@ struct WW8_DOGRID
     short dxaGrid;  // width of each grid square
     short dyaGrid;  // height of each grid square
 
-
-
     /* a c h t u n g :     es duerfen keine solchen Bitfelder ueber einen eingelesenes Byte-Array
                             gelegt werden!!
                             stattdessen ist ein aBits1 darueber zu legen, das mit & auszulesen ist
     GRUND: Compiler auf Intel und Sparc sortieren die Bits unterschiedlich
     */
-
-
 
     short dyGridDisplay:7;  // the number of grid squares (in the y direction)
                                                     // between each gridline drawn on the screen. 0 means
@@ -460,7 +453,6 @@ struct WW8_TCell    // hiermit wird weitergearbeitet (entspricht weitestgehend d
 };
 // cbTC (count of bytes of a TC) is 18(decimal), 12(hex).
 
-
 struct WW8_TCellVer6    // wird aus der Datei gelesen
 {
     sal_uInt8  aBits1Ver6;
@@ -484,7 +476,6 @@ struct WW8_TCellVer8    // wird aus der Datei gelesen
     WW8_BRC rgbrcVer8[4];   // Dokumentation siehe oben unter WW8_TCell
 };
 // cbTC (count of bytes of a TC) is 20(decimal), 14(hex).
-
 
 struct WW8_SHD              // struct SHD fehlt in der Beschreibung
 {
@@ -619,7 +610,6 @@ struct WW8_DPHEAD
     SVBT16 dya;         // 0xa
 };
 
-
 struct WW8_DP_LINETYPE
 {
     SVBT32 lnpc;            // LiNe Property Color -- RGB color value
@@ -661,7 +651,7 @@ struct WW8_DP_LINE
 {
 //  WW8_DPHEAD dphead;      // 0    Common header for a drawing primitive
     SVBT16 xaStart;         // starting point for line
-    SVBT16 yaStart;         //
+    SVBT16 yaStart;
     SVBT16 xaEnd;           // ending point for line
     SVBT16 yaEnd;
     WW8_DP_LINETYPE aLnt;
@@ -768,7 +758,7 @@ struct WW8_ATRD                 // fuer die 8-Version
 
 struct WW8_ATRDEXTRA
 {
-    // ---  Extended bit since Word 2002 --- //
+    // ---  Extended bit since Word 2002 ---
 
     SVBT32 dttm;
     SVBT16 bf;
@@ -852,7 +842,6 @@ public:
 public:
     enum FSPAOrient {RelPgMargin, RelPageBorder, RelText};
 };
-
 
 struct WW8_FSPA_SHADOW  // alle Member an gleicher Position und Groesse,
 {                                               // wegen:  pF = (WW8_FSPA*)pFS;

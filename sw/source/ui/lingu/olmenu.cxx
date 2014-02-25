@@ -93,11 +93,9 @@
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/frame/theUICommandDescription.hpp>
 
-
 using namespace ::com::sun::star;
 
 extern void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const SfxItemSet *pArgs, SfxRequest *pReq );
-
 
 /// @returns : the language for the selected text that is set for the
 ///     specified attribute (script type).
@@ -197,7 +195,6 @@ void SwSpellPopup::fillLangPopupMenu(
         }
     }
 
-
     sal_uInt16 nItemId = nLangItemIdStart;
     std::set< OUString >::const_iterator it;
     for (it = aLangItems.begin(); it != aLangItems.end(); ++it)
@@ -266,7 +263,6 @@ OUString RetrieveLabelFromCommand( const OUString& aCmdURL )
 
     return aLabel;
 }
-
 
 SwSpellPopup::SwSpellPopup(
         SwWrtShell* pWrtSh,
@@ -414,7 +410,7 @@ SwSpellPopup::SwSpellPopup(
     EnableItem( MN_ADD_TO_DIC_SINGLE, ((nItemId - MN_DICTIONARIES_START) == 1)?sal_True:sal_False );
 
     //ADD NEW LANGUAGE MENU ITEM
-    ///////////////////////////////////////////////////////////////////////////
+
     OUString aScriptTypesInUse( OUString::number( pWrtSh->GetScriptType() ) );
     SvtLanguageTable aLanguageTable;
 
@@ -453,13 +449,9 @@ SwSpellPopup::SwSpellPopup(
         SetItemImage( MN_SPELLING_DLG, rImg );
     }
 
-    //////////////////////////////////////////////////////////////////////////////////
-
     checkRedline();
     RemoveDisabledEntries( true, true );
 }
-
-
 
 SwSpellPopup::SwSpellPopup(
     SwWrtShell *pWrtSh,
@@ -568,7 +560,7 @@ m_aInfo16( SW_RES(IMG_INFO_16) )
     EnableItem( MN_ADD_TO_DIC_SINGLE, false );
 
     //ADD NEW LANGUAGE MENU ITEM
-    ///////////////////////////////////////////////////////////////////////////
+
     OUString aScriptTypesInUse( OUString::number( pWrtSh->GetScriptType() ) );
     SvtLanguageTable aLanguageTable;
 
@@ -606,8 +598,6 @@ m_aInfo16( SW_RES(IMG_INFO_16) )
         Image rImg = ::GetImage( xFrame, ".uno:SpellingAndGrammarDialog", false );
         SetItemImage( MN_SPELLING_DLG, rImg );
     }
-
-    //////////////////////////////////////////////////////////////////////////////////
 
     checkRedline();
     RemoveDisabledEntries( true, true );

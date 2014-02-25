@@ -131,7 +131,7 @@ interface TextEditView : BaseTextEditView
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 }
- //=========================================================================
+
 
 shell SwView
 
@@ -266,7 +266,7 @@ interface TextPrintPreview
     [
         StateMethod = StateUndo ;
     ]
-    //---------------------------------------------------------------------
+
     // Begin StatusBar
     FN_STAT_ZOOM // status()
     [
@@ -308,11 +308,11 @@ interface TextPrintPreview
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
-    //----------------------------------------------
+
     // End StatusBar
 }
 
- //=========================================================================
+
 
 shell SwPagePreview
 {

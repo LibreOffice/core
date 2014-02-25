@@ -255,7 +255,6 @@ public:
                     { bHTML ? (aWebTableConfig.bInsTblChangeNumFormat = b) : (aTableConfig.bInsTblChangeNumFormat = b);
                       bHTML ? aWebTableConfig.SetModified() : aTableConfig.SetModified();}
 
-
     sal_Bool        IsInsTblAlignNum(sal_Bool bHTML) const
                     { return bHTML ? aWebTableConfig.bInsTblAlignNum : aTableConfig.bInsTblAlignNum; }
     void        SetInsTblAlignNum( sal_Bool bHTML, sal_Bool b )
@@ -270,7 +269,6 @@ public:
 
     const InsCaptionOpt* GetCapOption(sal_Bool bHTML, const SwCapObjType eType, const SvGlobalName *pOleId);
     sal_Bool        SetCapOption(sal_Bool bHTML, const InsCaptionOpt* pOpt);
-
 
     sal_Bool        IsGrfToGalleryAsLnk() const     { return aMiscConfig.bGrfToGalleryAsLnk; }
     void        SetGrfToGalleryAsLnk( sal_Bool b )  { aMiscConfig.bGrfToGalleryAsLnk = b;
@@ -301,7 +299,6 @@ public:
                         aMiscConfig.SetModified();
                         aMiscConfig.bAskForMailMergeInPrint = bSet;
                     }
-
 
     OUString    GetNameFromColumn() const       { return aMiscConfig.sNameFromColumn; }
     void        SetNameFromColumn( const OUString& rSet )       { aMiscConfig.sNameFromColumn = rSet;

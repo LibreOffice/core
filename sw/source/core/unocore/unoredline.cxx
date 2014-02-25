@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 
@@ -42,7 +41,6 @@
 #include <unoredline.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
-
 
 using namespace ::com::sun::star;
 

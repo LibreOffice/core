@@ -50,7 +50,6 @@ public:
     const OUString& GetShortName(){return aShortName;}
 };
 
-
 class SwWebGlosDocShell : public SwWebDocShell
 {
     OUString          aLongName;

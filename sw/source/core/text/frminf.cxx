@@ -116,7 +116,6 @@ SwTwips SwTxtFrmInfo::GetLineStart( const SwTxtCursor &rLine ) const
     return rLine.GetLineStart();
 }
 
-
 /*************************************************************************
  *                   SwTxtFrmInfo::GetLineStart()
  *************************************************************************/

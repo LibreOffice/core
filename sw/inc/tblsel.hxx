@@ -74,7 +74,6 @@ SW_DLLPUBLIC void GetTblSel( const SwCrsrShell& rShell, SwSelBoxes& rBoxes,
 void GetTblSel( const SwCursor& rCrsr, SwSelBoxes& rBoxes,
                 const SwTblSearchType = nsSwTblSearchType::TBLSEARCH_NONE );
 
-
 // As before, but don't start from selection but from Start- EndFrms.
 void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
                 SwSelBoxes& rBoxes, SwCellFrms* pCells,
@@ -145,8 +144,6 @@ void MakeSelUnions( SwSelUnions&, const SwLayoutFrm *pStart,
                     const SwLayoutFrm *pEnd,
                     const SwTblSearchType = nsSwTblSearchType::TBLSEARCH_NONE );
 
-
-
 // These classes copy the current table selections (rBoxes) into a
 // separate structure while keeping the table structure.
 
@@ -188,7 +185,6 @@ public:
     void ClearLineBehind() { pLineBehind = 0; }
 };
 
-
 class _FndLine
 {
     SwTableLine* pLine;
@@ -206,7 +202,6 @@ public:
     void SetUpper( _FndBox* pUp ) { pUpper = pUp; }
 };
 
-
 struct _FndPara
 {
     const SwSelBoxes& rBoxes;
@@ -222,8 +217,6 @@ struct _FndPara
 };
 
 SW_DLLPUBLIC void ForEach_FndLineCopyCol(SwTableLines& rLines, _FndPara* pFndPara );
-
-
 
 #endif // INCLUDED_SW_INC_TBLSEL_HXX
 

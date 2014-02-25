@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "viewsh.hxx"
 #include "rootfrm.hxx"
 #include "txtfrm.hxx"
@@ -37,7 +36,6 @@
  * for being visible or invisible with IsVisible().
  *************************************************************************/
 SwBlink *pBlink = NULL;
-
 
 SwBlink::SwBlink()
 {

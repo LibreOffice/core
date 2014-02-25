@@ -24,7 +24,6 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 
-
 class SW_DLLPUBLIC PrintMonitor: public ModelessDialog
 {
 public:

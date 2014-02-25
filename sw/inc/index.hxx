@@ -133,7 +133,6 @@ public:
     void MoveTo( SwIndexReg& rArr );
 };
 
-
 #ifndef DBG_UTIL
 
 inline sal_Int32 SwIndex::operator++()

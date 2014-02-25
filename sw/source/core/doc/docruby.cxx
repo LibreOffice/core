@@ -280,7 +280,6 @@ sal_Bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_
             bIgnoreChar = true;
             break;
 
-
         case UnicodeType::OTHER_LETTER:
             bChkNxtWrd = true;
 

@@ -80,7 +80,6 @@
 
 using namespace ::com::sun::star::i18n;
 
-
 SwpHints::SwpHints()
     : m_pHistory(0)
     , m_bFontChange(true)
@@ -569,11 +568,10 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
     return true;
 }
 
-
 // This function takes care for the following text attribute:
 // RES_TXTATR_CHARFMT, RES_TXTATR_AUTOFMT
 // These attributes have to be handled in a special way (Portion building).
-//
+
 // The new attribute will be split by any existing RES_TXTATR_AUTOFMT or
 // RES_TXTATR_CHARFMT. The new attribute itself will
 // split any existing RES_TXTATR_AUTOFMT or RES_TXTATR_CHARFMT.
@@ -594,10 +592,9 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
             RES_TXTATR_AUTOFMT == rNewHint.Which(),
             "Expecting CHARFMT or AUTOFMT" );
 
-    //
     // 2. Find the hints which cover the start and end position
     // of the new hint. These hints have to be split into two portions:
-    //
+
     if ( !bNoLengthAttribute ) // nothing to do for no length attributes
     {
         for ( sal_uInt16 i = 0; i < Count(); ++i )
@@ -657,9 +654,8 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
         CHECK_NOTMERGED; // ignore flags not set properly yet, don't check them
 #endif
 
-    //
     // 4. Split rNewHint into 1 ... n new hints:
-    //
+
     std::set<sal_Int32> aBounds;
     aBounds.insert( nThisStart );
     aBounds.insert( nThisEnd );
@@ -688,9 +684,8 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
     ++aStartIter;
     bool bDestroyHint = true;
 
-    //
     // Insert the 1...n new parts of the new attribute:
-    //
+
     while ( aStartIter != aEndIter || bNoLengthAttribute )
     {
         OSL_ENSURE( bNoLengthAttribute || nPorStart < *aStartIter, "AUTOSTYLES: BuildPortion trouble" );
@@ -1110,7 +1105,6 @@ SwTxtAttr* MakeTxtAttr( SwDoc & rDoc, const SfxItemSet& rSet,
     SwTxtAttr* pNew = MakeTxtAttr( rDoc, aNewAutoFmt, nStt, nEnd );
     return pNew;
 }
-
 
 // loesche das Text-Attribut (muss beim Pool abgemeldet werden!)
 void SwTxtNode::DestroyAttr( SwTxtAttr* pAttr )
@@ -1649,7 +1643,6 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
     return bRet;
 }
 
-
 /*************************************************************************
  *                        SwTxtNode::DeleteAttribute()
  *************************************************************************/
@@ -1852,7 +1845,6 @@ bool SwTxtNode::TryCharSetExpandToNum(const SfxItemSet& aCharSet)
             }
         }
     }
-
 
     return bRet;
 }
@@ -2297,13 +2289,11 @@ bool SwTxtNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
     return rSet.Count() != 0;
 }
 
-
 namespace
 {
 
 typedef std::pair<sal_uInt16, sal_uInt16> AttrSpan_t;
 typedef std::multimap<AttrSpan_t, const SwTxtAttr*> AttrSpanMap_t;
-
 
 struct IsAutoStyle
 {
@@ -2314,7 +2304,6 @@ struct IsAutoStyle
         return i_rAttrSpan.second && i_rAttrSpan.second->Which() == RES_TXTATR_AUTOFMT;
     }
 };
-
 
 /** Removes from io_rAttrSet all items that are set by style on the
     given span.
@@ -2358,7 +2347,6 @@ private:
     SfxItemSet& m_rAttrSet;
 };
 
-
 /** Collects all style-covered spans from i_rHints to o_rSpanMap. In
     addition inserts dummy spans with pointer to format equal to 0 for
     all gaps (i.e. spans not covered by any style). This simplifies
@@ -2400,7 +2388,6 @@ lcl_CollectHintSpans(const SwpHints& i_rHints, const sal_uInt16 nLength,
     }
 }
 
-
 void
 lcl_FillWhichIds(const SfxItemSet& i_rAttrSet, std::vector<sal_uInt16>& o_rClearIds)
 {
@@ -2427,7 +2414,6 @@ struct SfxItemSetClearer
 };
 
 }
-
 
 /** Does the hard work of SwTxtNode::FmtToTxtAttr: the real conversion
     of items to automatic styles.
@@ -2515,9 +2501,9 @@ void SwTxtNode::FmtToTxtAttr( SwTxtNode* pNd )
     {
         // There are five possible combinations of items from this and
         // pNd (pNd is the 'main' node):
-        //
+
         //  case    pNd     this     action
-        //  ----------------------------------------------------
+
         //     1     -       -      do nothing
         //     2     -       a      convert item to attr of this
         //     3     a       -      convert item to attr of pNd
@@ -2660,7 +2646,6 @@ bool SwpHints::CalcHiddenParaField()
     SetHiddenParaField( bNewHasHiddenParaField );
     return bOldHasHiddenParaField != bNewHasHiddenParaField;
 }
-
 
 /*************************************************************************
  *                      SwpHints::NoteInHistory()
@@ -3218,7 +3203,6 @@ bool SwpHints::TryInsertHint(
         return true;
     }
 
-
     // Ab hier gibt es nur noch pHint mit einem EndIdx !!!
 
     if( *pHtEnd < nHtStart )
@@ -3452,7 +3436,6 @@ sal_uInt16 SwTxtNode::GetLang( const sal_Int32 nBegin, const sal_Int32 nLen,
     return nRet;
 }
 
-
 sal_Unicode GetCharOfTxtAttr( const SwTxtAttr& rAttr )
 {
     sal_Unicode cRet = CH_TXTATR_BREAKWORD;
@@ -3480,6 +3463,5 @@ sal_Unicode GetCharOfTxtAttr( const SwTxtAttr& rAttr )
     }
     return cRet;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

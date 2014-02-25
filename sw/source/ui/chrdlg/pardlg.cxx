@@ -157,11 +157,9 @@ SwParaDlg::SwParaDlg(Window *pParent,
         SetCurPageId(sDefPage);
 }
 
-
 SwParaDlg::~SwParaDlg()
 {
 }
-
 
 void SwParaDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
 {
@@ -244,7 +242,5 @@ void SwParaDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
     }
 
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

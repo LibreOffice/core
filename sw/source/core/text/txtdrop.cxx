@@ -245,7 +245,6 @@ bool SwTxtNode::GetDropSize(int& rFontHeight, int& rDropHeight, int& rDropDescen
     return true;
 }
 
-
 // Manipulate the width, otherwise the chars are being stretched
 void SwDropPortion::PaintTxt( const SwTxtPaintInfo &rInf ) const
 {

@@ -73,7 +73,6 @@ public:
     void SetName( const OUString& rNm )     { sName = rNm; }
 };
 
-
 inline const SwFmtURL &SwAttrSet::GetURL(sal_Bool bInP) const
     { return (const SwFmtURL&)Get( RES_URL,bInP); }
 

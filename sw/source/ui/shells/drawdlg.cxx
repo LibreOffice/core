@@ -160,7 +160,6 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             break;
     }
 
-
     if (pDoc->IsChanged())
         GetShell().SetModified();
     else

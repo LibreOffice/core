@@ -35,10 +35,7 @@
 
 #include <unobaseclass.hxx>
 
-
 class SwSectionFmt;
-
-
 
 struct SwTextSectionProperties_Impl;
 

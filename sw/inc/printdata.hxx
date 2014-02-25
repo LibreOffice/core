@@ -44,9 +44,6 @@ class SfxViewShell;
 class SwPrintUIOptions;
 class SwRenderData;
 
-////////////////////////////////////////////////////////////
-
-
 class SwPrintData
 {
     const SwPrintUIOptions *    m_pPrintUIOptions;  // not owner
@@ -173,10 +170,6 @@ public:
     virtual void doSetModified () { bModified = sal_True;}
 };
 
-
-////////////////////////////////////////////////////////////
-
-
 class SwPrintUIOptions : public vcl::PrinterOptionsHelper
 {
     OutputDevice* m_pLast;
@@ -206,9 +199,6 @@ public:
     bool IsPrintGraphics() const;
     bool IsPrintDrawings() const;
 };
-
-
-////////////////////////////////////////////////////////////
 
 /** A class that stores temporary data that is needed for rendering the document.
    Usually this data is created when 'getRendererCount' is called and
@@ -254,7 +244,6 @@ public:
     SwRenderData();
     ~SwRenderData();
 
-
     bool HasPostItData() const  { return m_pPostItShell != 0; }
     void CreatePostItData( SwDoc *pDoc, const SwViewOption *pViewOpt, OutputDevice *pOutDev );
     void DeletePostItData();
@@ -273,7 +262,6 @@ public:
     SwPrintData const*  GetSwPrtOptions() const { return m_pPrtOptions.get(); }
     void MakeSwPrtOptions( SwDocShell const*const pDocShell,
             SwPrintUIOptions const*const pOpt, bool const bIsPDFExport );
-
 
     typedef std::vector< std::pair< sal_Int32, sal_Int32 > >    PagePairsVec_t;
 
@@ -298,9 +286,6 @@ public:
     OUString   GetPageRange() const                            { return m_aPageRange; }
     void            SetPageRange( const OUString &rRange )     { m_aPageRange = rRange; }
 };
-
-
-////////////////////////////////////////////////////////////
 
 /// last remnants of swprtopt.hxx:
 #define POSTITS_NONE    0

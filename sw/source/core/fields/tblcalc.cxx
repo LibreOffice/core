@@ -130,7 +130,6 @@ void SwTblField::SetSubType(sal_uInt16 nType)
     nSubType = nType;
 }
 
-
 void SwTblField::SetValue( const double& rVal )
 {
     SwValueField::SetValue(rVal);

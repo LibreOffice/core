@@ -32,7 +32,6 @@
 SV_DECL_REF( SwServerObject )
 #endif
 
-
 struct SwPosition;
 
 namespace sw { namespace mark

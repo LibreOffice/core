@@ -45,7 +45,6 @@ class SwTable;
 class SwNumberTreeNode;
 class SvxLanguageItem;
 
-
 /*
  * Mapping of OOo elements to tagged pdf elements:
  *

@@ -23,7 +23,6 @@
 #include <ooo/vba/word/XTables.hpp>
 #include <vbahelper/vbacollectionimpl.hxx>
 
-
 typedef CollTestImplHelper< ov::word::XTables > SwVbaTables_BASE;
 
 class SwVbaTables : public SwVbaTables_BASE

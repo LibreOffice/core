@@ -114,7 +114,6 @@ public:
     OUTPUT_OPERATOR
 };
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -162,7 +162,6 @@ public:
 
 };
 
-
 class SW_DLLPUBLIC SwAttrSet : public SfxItemSet
 {
     // Pointer for Modify-System

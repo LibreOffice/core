@@ -963,7 +963,7 @@ sal_Bool SwAccessibleParagraph::GetTextBoundary(
                             {
                                 nLast += pWrongList->Len( nWrongPos );
                             }
-                            //
+
                             const bool bIn = pWrongList->InWrongWord(nBegin, nLen); // && !pTxtNode->IsSymbol(nBegin) )
                             if(bIn)
                             {
@@ -1262,7 +1262,6 @@ uno::Sequence< OUString > getSupplementalAttributeNames()
     }
     return *pNames;
 }
-
 
 // XInterface
 
@@ -2561,7 +2560,6 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const awt::Point& rPoint )
 {
     SolarMutexGuard aGuard;
 
-
     CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
     // construct SwPosition (where GetCrsrOfst() will put the result into)
@@ -2859,7 +2857,6 @@ OUString SwAccessibleParagraph::getTextRange(
     // IndexOutOfBoundsException
     if( nIndex == rText.getLength() )
         return aResult;
-
 
     // get first word, then skip to next word
     i18n::Boundary aBound;
@@ -3274,7 +3271,6 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
         sal_Int32 nAStt = -1;
         sal_Bool bH = sal_False;
         sal_Bool bA = sal_False;
-
 
         if( pHt )
             nHStt = *pHt->GetStart();
@@ -3903,7 +3899,6 @@ sal_Bool SwAccessibleParagraph::GetSelectionAtIndex(
 {
         if(nIndex < 0) return sal_False;
 
-
     sal_Bool bRet = sal_False;
     nStart = -1;
     nEnd = -1;
@@ -4060,7 +4055,6 @@ sal_Int16 SAL_CALL SwAccessibleParagraph::getAccessibleRole (void) throw (::com:
         return AccessibleRole::PARAGRAPH;
     }
 }
-
 
 //Get the real heading level, Heading1 ~ Heading10
 sal_Int32 SwAccessibleParagraph::GetRealHeadingLevel()

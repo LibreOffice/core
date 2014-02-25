@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <editeng/svxenum.hxx>
 #include <numrule.hxx>
 #include <SwNodeNum.hxx>
@@ -101,7 +100,6 @@ void SwNodeNum::PreAdd()
     {
         GetNumRule()->AddTxtNode( *(GetTxtNode()) );
     }
-
 
     {
         if ( GetTxtNode() &&
@@ -224,7 +222,6 @@ bool SwNodeNum::IsCountedForNumbering() const
              GetTxtNode()->HasNumber() ||   // text node
              GetTxtNode()->HasBullet() );   // text node
 }
-
 
 void SwNodeNum::NotifyNode()
 {

@@ -37,8 +37,6 @@ using namespace utl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-
-
 void SwMasterUsrPref::SetUsrPref(const SwViewOption &rCopy)
 {
     *((SwViewOption*)this) = rCopy;
@@ -99,7 +97,6 @@ Sequence<OUString> SwContentViewConfig::GetPropertyNames()
         "Update/Link",                          // 16
         "Update/Field",                         // 17
         "Update/Chart"                          // 18
-
 
     };
     const int nCount = bWeb ? 12 : 19;
@@ -591,6 +588,5 @@ void SwWebColorConfig::Load()
         }
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

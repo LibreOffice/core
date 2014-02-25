@@ -106,7 +106,6 @@ inline SwDbgOut::SwDbgOut( OutputDevice* pOutDev, const bool bOn )
                :pOut( bOn ? pOutDev : 0 )
 { }
 
-
 inline DbgBackColor::DbgBackColor( OutputDevice* pOutDev, const bool bOn,
                            ColorData eColor )
     :SwDbgOut( pOutDev, bOn )
@@ -145,8 +144,6 @@ inline DbgRect::DbgRect( OutputDevice* pOutDev, const Rectangle &rRect,
 }
 
 #endif
-
-
 
 #endif
 

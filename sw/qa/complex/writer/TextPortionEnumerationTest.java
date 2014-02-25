@@ -72,7 +72,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Stack;
 
-
 class TreeNodeEnum
 {
     private Object[] m_Elements;
@@ -413,8 +412,6 @@ class Range
     { m_Start = (short) start; m_End = (short) end; m_Node = node; }
 }
 
-//----------------------------------------------------------------------
-
 /* this is where we nail the pudding to the wall */
 class FuzzyTester
 {
@@ -605,9 +602,6 @@ class FuzzyTester
     }
 }
 
-
-//----------------------------------------------------------------------
-
 class EnumConverter
 {
     private Stack<TreeNode> m_Stack;
@@ -780,9 +774,6 @@ class EnumConverter
         return ret;
     }
 }
-
-
-//----------------------------------------------------------------------
 
 abstract class Inserter
 {
@@ -1109,7 +1100,6 @@ class TreeInserter extends Inserter
     }
 }
 
-
 // FIXME: this does not account for inserted dummy characters!
 class RangeInserter extends Inserter
 {
@@ -1184,9 +1174,6 @@ class RangeInserter extends Inserter
         return null;
     }
 }
-
-
-//----------------------------------------------------------------------
 
 public class TextPortionEnumerationTest
 {
@@ -3204,7 +3191,6 @@ public class TextPortionEnumerationTest
         }
         bSuccess = xWordCursor.gotoPreviousWord(false);         //at start of "Two"
         assertTrue("gotoPreviousWord(): failed", bSuccess);
-
 
         bSuccess = xWordCursor.gotoPreviousWord(false);         //cannot leave metafield
         assertFalse("gotoPreviousWord(): succeeded", bSuccess);
