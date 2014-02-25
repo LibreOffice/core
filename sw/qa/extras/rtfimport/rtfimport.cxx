@@ -1398,7 +1398,7 @@ DECLARE_RTFIMPORT_TEST(testNestedTable, "rhbz1065629.rtf")
         getProperty<table::BorderLine2>(xCell, "TopBorder"));
     CPPUNIT_ASSERT_BORDER_EQUAL(fullPtSolid,
         getProperty<table::BorderLine2>(xCell, "BottomBorder"));
-    CPPUNIT_ASSERT_EQUAL(0xCC0000, getProperty<sal_Int32>(xCell, "BackColor"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xCC0000), getProperty<sal_Int32>(xCell, "BackColor"));
     xCell.set(xTable->getCellByName("A2"), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xCell.is());
     table::BorderLine2 halfPtSolid(
