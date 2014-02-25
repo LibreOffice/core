@@ -21,7 +21,7 @@ CLANGCXXFLAGS=-O2 -Wall -Wextra -g
 # Clang headers require these.
 CLANGDEFS=-D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -fno-rtti
 # All include locations needed.
-CLANGINCLUDES=-isystem $(CLANGDIR)/include -isystem $(CLANGDIR)/tools/clang/include -isystem $(CLANGBUILD)/include -isystem $(CLANGBUILD)/tools/clang/include
+CLANGINCLUDES=-isystem $(CLANGDIR)/include -isystem $(CLANGDIR)/tools/clang/include
 
 # Clang/LLVM libraries are intentionally not linked in, they are usually built as static libraries, which means the resulting
 # plugin would be big (even though the clang binary already includes it all) and it'd be necessary to explicitly specify
@@ -93,7 +93,7 @@ $(CLANGOUTDIR)/plugin.so: $(CLANGOBJS)
 			-Wl$(CLANG_COMMA)-undefined -Wl$(CLANG_COMMA)suppress)
 
 # Clang most probably doesn't maintain binary compatibility, so rebuild when clang changes.
-$(CLANGOUTDIR)/clang-timestamp: $(CLANGBUILD)/bin/clang
+$(CLANGOUTDIR)/clang-timestamp: $(CLANGDIR)/bin/clang
 	$(QUIET)touch $@
 
 # vim: set noet sw=4 ts=4:
