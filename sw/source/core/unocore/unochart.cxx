@@ -1388,7 +1388,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
 
 uno::Reference< chart2::data::XDataSequence > SwChartDataProvider::Impl_createDataSequenceByRangeRepresentation(
         const OUString& rRangeRepresentation, sal_Bool bTestOnly )
-    throw (lang::IllegalArgumentException, uno::RuntimeException)
+    throw (lang::IllegalArgumentException, uno::RuntimeException,
+           std::exception)
 {
     if (bDisposed)
         throw lang::DisposedException();
