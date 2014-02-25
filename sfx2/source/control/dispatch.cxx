@@ -2416,7 +2416,7 @@ sal_Bool SfxDispatcher::IsUpdated_Impl() const
 void SfxDispatcher::SetDisableFlags( sal_uInt32 nFlags )
 {
     pImp->nDisableFlags = nFlags;
-    for ( SfxShellStack_Impl::const_reverse_iterator it = pImp->aStack.rbegin(); it != pImp->aStack.rend(); ++it )
+    for ( SfxShellStack_Impl::reverse_iterator it = pImp->aStack.rbegin(); it != pImp->aStack.rend(); ++it )
         (*it)->SetDisableFlags( nFlags );
 }
 
