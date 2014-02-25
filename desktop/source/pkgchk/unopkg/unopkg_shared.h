@@ -53,23 +53,23 @@ struct LockFileException : public css::uno::Exception
         css::uno::Exception(sMessage, css::uno::Reference< css::uno::XInterface > ()) {}
 };
 
-//==============================================================================
+
 OUString toString( OptionInfo const * info );
 
-//==============================================================================
+
 OptionInfo const * getOptionInfo(
     OptionInfo const * list,
     OUString const & opt, sal_Unicode copt = '\0' );
 
-//==============================================================================
+
 bool isOption( OptionInfo const * option_info, sal_uInt32 * pIndex );
 
-//==============================================================================
+
 bool readArgument(
     OUString * pValue, OptionInfo const * option_info,
     sal_uInt32 * pIndex );
 
-//==============================================================================
+
 inline bool readOption(
     bool * flag, OptionInfo const * option_info, sal_uInt32 * pIndex )
 {
@@ -80,33 +80,33 @@ inline bool readOption(
     }
     return false;
 }
-//==============================================================================
+
 
 /** checks if an argument is a bootstrap variable. These start with -env:. For example
     -env:UNO_JAVA_JFW_USER_DATA=file:///d:/user
 */
 bool isBootstrapVariable(sal_uInt32 * pIndex);
-//==============================================================================
+
 OUString const & getExecutableDir();
 
-//==============================================================================
+
 OUString const & getProcessWorkingDir();
 
-//==============================================================================
+
 OUString makeAbsoluteFileUrl(
     OUString const & sys_path, OUString const & base_url,
     bool throw_exc = true );
 
-//##############################################################################
 
-//==============================================================================
+
+
 css::uno::Reference<css::ucb::XCommandEnvironment> createCmdEnv(
     css::uno::Reference<css::uno::XComponentContext> const & xContext,
     OUString const & logFile,
     bool option_force_overwrite,
     bool option_verbose,
     bool option_suppressLicense);
-//==============================================================================
+
 void printf_packages(
     ::std::vector<
     css::uno::Reference<css::deployment::XPackage> > const & allExtensions,
@@ -114,9 +114,9 @@ void printf_packages(
     css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
     sal_Int32 level = 0 );
 
-//##############################################################################
 
-//==============================================================================
+
+
 css::uno::Reference<css::uno::XComponentContext> getUNO(
     bool verbose, bool shared, bool bGui,
     css::uno::Reference<css::uno::XComponentContext> & out_LocalComponentContext);

@@ -45,7 +45,7 @@ namespace backend
 namespace sfwk
 {
 
-//==============================================================================
+
 class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 {
     class PackageImpl : public ::dp_registry::backend::Package

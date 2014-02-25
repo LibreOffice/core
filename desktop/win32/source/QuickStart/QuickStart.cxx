@@ -18,7 +18,7 @@
  */
 
 // QuickStart.cpp : Defines the entry point for the application.
-//
+
 
 #include "StdAfx.h"
 #include "resource.h"

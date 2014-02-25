@@ -25,17 +25,17 @@
 #include <vector>
 #include <memory>
 
-//.........................................................................
+
 namespace migration
 {
-//.........................................................................
+
 
     typedef ::std::vector< OUString > TStringVector;
     typedef ::std::auto_ptr< TStringVector > TStringVectorPtr;
 
-//.........................................................................
+
 }   // namespace migration
-//.........................................................................
+
 
 #endif // INCLUDED_DESKTOP_SOURCE_MIGRATION_SERVICES_MISC_HXX
 

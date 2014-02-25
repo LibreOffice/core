@@ -63,7 +63,7 @@ namespace dp_gui {
 
 enum PackageState { REGISTERED, NOT_REGISTERED, AMBIGUOUS, NOT_AVAILABLE };
 
-//==============================================================================
+
 
 class SelectedPackage: public salhelper::SimpleReferenceObject {
 public:

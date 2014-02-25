@@ -36,7 +36,7 @@ class Content;
 namespace dp_misc
 {
 
-//==============================================================================
+
 void xml_parse(
     css::uno::Reference< css::xml::sax::XDocumentHandler > const & xDocHandler,
     ::ucbhelper::Content & ucb_content,

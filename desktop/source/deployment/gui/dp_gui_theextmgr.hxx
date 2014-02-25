@@ -36,13 +36,13 @@
 #include "dp_gui_dialog2.hxx"
 #include "dp_gui_updatedata.hxx"
 
-//==============================================================================
+
 namespace dp_gui {
 
-//------------------------------------------------------------------------------
+
 class ExtensionCmdQueue;
 
-//------------------------------------------------------------------------------
+
 class TheExtensionManager :
     public ::cppu::WeakImplHelper2< ::com::sun::star::frame::XTerminateListener,
                                     ::com::sun::star::util::XModifyListener >
@@ -80,7 +80,7 @@ public:
     bool Close();
     bool isVisible();
 
-    //-----------------
+
     bool checkUpdates( bool showUpdateOnly, bool parentVisible );
     bool installPackage( const OUString &rPackageURL, bool bWarnUser = false );
     void createPackageList();
@@ -95,7 +95,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XExtensionManager > getExtensionManager() const { return m_xExtensionManager; }
     bool isReadOnly( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage ) const;
 
-    //-----------------
+
     static ::rtl::Reference<TheExtensionManager> get(
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> const & xContext,
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow> const & xParent = 0,

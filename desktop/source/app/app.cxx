@@ -213,7 +213,7 @@ void removeTree(OUString const & url) {
 
 // Remove any existing UserInstallation's extensions cache data remaining from
 // old installations.  This addresses at least two problems:
-//
+
 // For one, apparently due to the old share/prereg/bundled mechanism (disabled
 // since 5c47e5f63a79a9e72ec4a100786b1bbf65137ed4 "fdo#51252 Disable copying
 // share/prereg/bundled to avoid startup crashes"), the user/extensions/bundled
@@ -221,12 +221,12 @@ void removeTree(OUString const & url) {
 // twice, which got changed from active to passive registration in one LO
 // version, but the version of the corresponding bundled extension only
 // incremented in a later LO version).
-//
+
 // For another, UserInstallations have been seen in the wild where no extensions
 // were installed per-user (any longer), but user/uno_packages/cache/registry/
 // com.sun.star.comp.deployment.component.PackageRegistryBackend/*.rdb files
 // contained data nevertheless.
-//
+
 // When a LO upgrade is detected (i.e., no user/extensions/buildid or one
 // containing an old build ID), then user/extensions and
 // user/uno_packages/cache/registry/
@@ -234,11 +234,11 @@ void removeTree(OUString const & url) {
 // removed.  That should prevent any problems starting the service manager due
 // to old junk.  Later on in Desktop::SynchronizeExtensionRepositories, the
 // removed cache data is recreated.
-//
+
 // Multiple instances of soffice.bin can execute this code in parallel for a
 // single UserInstallation, as it is called before OfficeIPCThread is set up.
 // Therefore, any errors here only lead to SAL_WARNs.
-//
+
 // At least in theory, this function could be removed again once no
 // UserInstallation can be poisoned by old junk any more.
 bool cleanExtensionCache() {
@@ -454,7 +454,7 @@ OUString MakeStartupConfigAccessErrorMessage( OUString const & aInternalErrMsg )
     return aDiagnosticMessage.makeStringAndClear();
 }
 
-//=============================================================================
+
 // shows a simple error box with the given message ... but exits from these process !
 // Fatal errors cant be solved by the process ... nor any recovery can help.
 // Mostly the installation was damaged and must be repaired manually .. or by calling
@@ -463,7 +463,7 @@ OUString MakeStartupConfigAccessErrorMessage( OUString const & aInternalErrMsg )
 // the current office process ! No pipe requests, no menu/toolbar/shortuct actions
 // are allowed. Otherwise we will force a "crash inside a crash".
 // Thats why we have to use a special native message box here which does not use yield :-)
-//=============================================================================
+
 void FatalError(const OUString& sMessage)
 {
     OUString sProductKey = ::utl::Bootstrap::getProductKey();
@@ -1939,14 +1939,14 @@ void Desktop::OverrideSystemSettings( AllSettings& rSettings )
     rSettings.SetStyleSettings ( hStyleSettings );
 }
 
-// ========================================================================
+
 IMPL_LINK_NOARG(Desktop, AsyncInitFirstRun)
 {
     DoFirstRunInitializations();
     return 0L;
 }
 
-// ========================================================================
+
 
 class ExitTimer : public Timer
 {
@@ -2805,7 +2805,7 @@ void Desktop::CloseSplashScreen()
     }
 }
 
-// ========================================================================
+
 void Desktop::DoFirstRunInitializations()
 {
     try
@@ -2867,7 +2867,7 @@ void Desktop::ShowBackingComponent(Desktop * progress)
     }
 }
 
-// ========================================================================
+
 void Desktop::CheckFirstRun( )
 {
     if (officecfg::Office::Common::Misc::FirstRun::get())
