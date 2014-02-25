@@ -455,7 +455,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
             // // System.out.print(cbs[i].getBoundary() + " ");
             // // }
             // // System.out.println();
-            //
+
             // LOGGER.error("A cell cannot span less than the declared columns: Declared=" + initialColumnSpan + " Computed="
             // + span);
             // }
@@ -471,7 +471,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
         }
 
         // All styles have to be processed or you will loose the paragraph-styles and inline text-styles.
-        // ..
+
         performStyleProcessing(attrs);
 
         final AttributeList attrList = buildAttributeList(attrs);
@@ -557,7 +557,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
                 // at this point we need to generate the table-columns section based on our boundary table
                 // <table:shapes>
                 // <draw:frame />
-                // ..
+
                 // </table:shapes>
                 xmlWriter.writeTag(OfficeNamespaces.TABLE_NS, OfficeToken.SHAPES, null, XmlWriterSupport.OPEN);
 
@@ -589,7 +589,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
             // at this point we need to generate the table-columns section based on our boundary table
             // <table-columns>
             // <table-column style-name="coX"/>
-            // ..
+
             // </table-columns>
             // the first boundary is '0' which is a placeholder so we will ignore it
             xmlWriter.writeTag(OfficeNamespaces.TABLE_NS, OfficeToken.TABLE_COLUMNS, null, XmlWriterSupport.OPEN);
@@ -710,7 +710,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
         return "raw/" + PentahoReportEngineMetaData.OPENDOCUMENT_SPREADSHEET;
     }
 
-    // /////////////////////////////////////////////////////////////////////////
+
     public void processText(final String text) throws DataSourceException, ReportProcessingException
     {
         if (!(isRepeatingSection() || isElementBoundaryCollectionPass()))

@@ -727,7 +727,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
 //    if (expectedTableRowCount > 0)
 //    {
 //      // Some other row. Create a keep-together
-//
+
 //    }
 //    else
 //    {
