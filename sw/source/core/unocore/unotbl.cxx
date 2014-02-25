@@ -1880,7 +1880,10 @@ void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName,
 }
 
 uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+    throw (beans::UnknownPropertyException,
+           lang::WrappedTargetException,
+           uno::RuntimeException,
+           std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Any aRet;
