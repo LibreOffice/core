@@ -746,7 +746,8 @@ void SwXDrawPage::remove(const uno::Reference< drawing::XShape > & xShape) throw
     xComp->dispose();
 }
 
-uno::Reference< drawing::XShapeGroup >  SwXDrawPage::group(const uno::Reference< drawing::XShapes > & xShapes) throw( uno::RuntimeException )
+uno::Reference< drawing::XShapeGroup >  SwXDrawPage::group(const uno::Reference< drawing::XShapes > & xShapes)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if(!pDoc || !xShapes.is())
