@@ -1097,7 +1097,7 @@ void HwpReader::makeMasterStyles()
 
             continue;
         }
-// ------------- header ------------- //
+// ------------- header -------------
         if( pPage->header )
         {
             rstartEl(ascii("style:header"), rList);
@@ -1197,7 +1197,7 @@ void HwpReader::makeMasterStyles()
             rendEl(ascii("text:p"));
             rendEl(ascii("style:header"));
         }
-// ------------- footer ------------- //
+// ------------- footer -------------
         if( pPage->footer )
         {
             rstartEl(ascii("style:footer"), rList);
@@ -1851,7 +1851,7 @@ void HwpReader::makeTStyle(CharShape * cshape)
 
 void HwpReader::makeTableStyle(Table *tbl)
 {
-// --------------- table ---------------- //
+// --------------- table ----------------
     TxtBox *hbox = tbl->box;
 
     padd(ascii("style:name"), sXML_CDATA,
@@ -1868,7 +1868,7 @@ void HwpReader::makeTableStyle(Table *tbl)
     rendEl(ascii("style:properties"));
     rendEl(ascii("style:style"));
 
-// --------------- column ---------------- //
+// --------------- column ----------------
     for (size_t i = 0 ; i < tbl->columns.nCount -1 ; i++)
     {
         sprintf(buf,"Table%d.%c",hbox->style.boxnum, static_cast<char>('A'+i));
@@ -1884,7 +1884,7 @@ void HwpReader::makeTableStyle(Table *tbl)
         rendEl(ascii("style:style"));
     }
 
-// --------------- row ---------------- //
+// --------------- row ----------------
     for (size_t i = 0 ; i < tbl->rows.nCount -1 ; i++)
     {
         sprintf(buf,"Table%d.row%" SAL_PRI_SIZET "u",hbox->style.boxnum, i + 1);
@@ -1900,7 +1900,7 @@ void HwpReader::makeTableStyle(Table *tbl)
         rendEl(ascii("style:style"));
     }
 
-// --------------- cell --------------------- //
+// --------------- cell ---------------------
     for (std::list<TCell*>::iterator it = tbl->cells.begin(), aEnd = tbl->cells.end(); it != aEnd; ++it)
     {
         TCell *tcell = *it;
@@ -3432,7 +3432,7 @@ void HwpReader::makeTable(TxtBox * hbox)
     pList->clear();
 
     Table *tbl = hbox->m_pTable;
-// ----------- column ---------------- //
+// ----------- column ----------------
     for (size_t i = 0 ; i < tbl->columns.nCount -1 ; i++)
     {
         sprintf(buf,"Table%d.%c",hbox->style.boxnum, static_cast<char>('A'+i));
@@ -3442,7 +3442,7 @@ void HwpReader::makeTable(TxtBox * hbox)
         rendEl(ascii("table:table-column"));
     }
 
-// ----------- cell ---------------- //
+// ----------- cell ----------------
     int j = -1, k = -1;
     for (std::list<TCell*>::iterator it = tbl->cells.begin(), aEnd = tbl->cells.end(); it != aEnd; ++it)
     {
@@ -3454,7 +3454,7 @@ void HwpReader::makeTable(TxtBox * hbox)
                 rendEl(ascii("table:table-row"));
                 k = j;
             }
-// --------------- row ---------------- //
+// --------------- row ----------------
             sprintf(buf,"Table%d.row%d",hbox->style.boxnum, tcell->nRowIndex + 1);
             padd(ascii("table:style-name"), sXML_CDATA, ascii( buf ));
             rstartEl(ascii("table:table-row"), rList);
