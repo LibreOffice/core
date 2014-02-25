@@ -722,6 +722,8 @@ static IsoLanguageScriptCountryEntry const aImplIsoLangScriptEntries[] =
     { LANGUAGE_BOSNIAN_LATIN_LSO,                   "bs-Latn", ""  , LANGUAGE_BOSNIAN_LSO },   // MS, though Latn is suppress-script
     { LANGUAGE_CHINESE_TRADITIONAL_LSO,             "zh-Hant", ""  , 0     },
     { LANGUAGE_USER_MANINKAKAN_EASTERN_LATIN,      "emk-Latn", "GN", 0     },
+    { LANGUAGE_USER_CREE_PLAINS_LATIN,             "crk-Latn", "CN", 0     },
+    { LANGUAGE_USER_CREE_PLAINS_SYLLABICS,         "crk-Cans", "CN", 0     },
     { LANGUAGE_DONTKNOW,                            "",        ""  , 0     }    // marks end of table
 };
 

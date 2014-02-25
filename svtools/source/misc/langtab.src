@@ -380,6 +380,8 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Puinave" ; LANGUAGE_USER_PUINAVE ; > ;
         < "Maninkakan, Eastern, Latin" ; LANGUAGE_USER_MANINKAKAN_EASTERN_LATIN ; > ;
         < "Avar" ; LANGUAGE_USER_AVAR ; > ;
+        < "Cree, Plains, Latin" ; LANGUAGE_USER_CREE_PLAINS_LATIN ; > ;
+        < "Cree, Plains, Syllabics" ; LANGUAGE_USER_CREE_PLAINS_SYLLABICS ; > ;
     };
 };
 
