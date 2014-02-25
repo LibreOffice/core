@@ -33,11 +33,11 @@
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 #include <drawinglayer/attribute/sdrlightingattribute3d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 using namespace com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace
 {
@@ -133,7 +133,7 @@ namespace
     }
 } // end of anonymous namespace
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class ZBufferRasterConverter3D : public basegfx::RasterConverter3D
 {
@@ -460,7 +460,7 @@ void ZBufferRasterConverter3D::processLineSpan(const basegfx::RasterConversionLi
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // helper class to buffer output for transparent rasterprimitives (filled areas
 // and lines) until the end of processing. To ensure correct transparent
 // visualisation, ZBuffers require to not set Z and to mix with the transparent
@@ -537,7 +537,7 @@ public:
     bool getIsLine() const { return mbIsLine; }
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {

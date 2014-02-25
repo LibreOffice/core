@@ -22,7 +22,7 @@
 #include <basegfx/tools/gradienttools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -60,7 +60,7 @@ namespace drawinglayer
     } // end of namespace texture
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -97,7 +97,7 @@ namespace drawinglayer
     } // end of namespace texture
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -138,7 +138,7 @@ namespace drawinglayer
                 {
                     const double fPos(fStripeWidth * a);
                     // optimized below...
-                    //
+
                     // basegfx::B2DHomMatrix aNew;
                     // aNew.scale(0.5, 0.5);
                     // aNew.translate(0.5, 0.5);
@@ -162,7 +162,7 @@ namespace drawinglayer
     } // end of namespace texture
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -203,7 +203,7 @@ namespace drawinglayer
                 {
                     // const double fPos(fStripeWidth * a);
                     // optimized below...
-                    //
+
                     // basegfx::B2DHomMatrix aNew;
                     // aNew.scale(0.50, (1.0 - fPos));
                     // aNew.translate(0.5, 0.0);
@@ -225,7 +225,7 @@ namespace drawinglayer
     } // end of namespace texture
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -282,7 +282,7 @@ namespace drawinglayer
     } // end of namespace texture
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -359,7 +359,7 @@ namespace drawinglayer
     } // end of namespace texture
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -418,7 +418,7 @@ namespace drawinglayer
     } // end of namespace texture
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -495,7 +495,7 @@ namespace drawinglayer
     } // end of namespace texture
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -596,7 +596,7 @@ namespace drawinglayer
     } // end of namespace texture
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {

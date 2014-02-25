@@ -33,11 +33,11 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 using namespace ::com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -71,7 +71,7 @@ namespace drawinglayer
     } // end of namespace unorenderer
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 // uno functions
 
 namespace drawinglayer
@@ -98,7 +98,7 @@ namespace drawinglayer
     } // end of namespace unorenderer
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {

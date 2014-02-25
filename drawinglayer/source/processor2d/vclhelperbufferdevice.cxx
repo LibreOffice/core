@@ -27,7 +27,7 @@
 #include <vcl/lazydelete.hxx>
 #include <vcl/dibtools.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // buffered VDev usage
 
 namespace
@@ -198,7 +198,7 @@ namespace
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // support for rendering Bitmap and BitmapEx contents
 
 namespace drawinglayer

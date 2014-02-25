@@ -19,11 +19,11 @@
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 using namespace com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -61,7 +61,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 // eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

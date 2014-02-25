@@ -54,11 +54,11 @@
 #include <drawinglayer/primitive2d/epsprimitive2d.hxx>
 #include <numeric>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 using namespace com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace
 {
@@ -197,7 +197,7 @@ namespace
     };
 } // end of anonymous namespace
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace
 {
@@ -357,7 +357,7 @@ namespace
     };
 } // end of anonymous namespace
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace
 {
@@ -383,7 +383,7 @@ namespace
     }
 } // end of anonymous namespace
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace
 {
@@ -463,7 +463,7 @@ namespace
     };
 } // end of anonymous namespace
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace
 {
@@ -517,7 +517,7 @@ namespace
     };
 } // end of anonymous namespace
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -565,7 +565,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace
 {
@@ -957,7 +957,7 @@ namespace
         // initially and then using a lot of push/pop actions, the pop always leads
         // to setting a 'new' ClipPolyPolygon which indeed is the return to the ClipPolyPolygon
         // of the properties next on the stack.
-        //
+
         // This ClipPolyPolygon is identical to the current one, so there is no need to
         // create a MaskPrimitive2D containing the up-to-now created primitives, but
         // this was done before. While this does not lead to wrong primitive
@@ -3161,7 +3161,7 @@ namespace
     }
 } // end of anonymous namespace
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {

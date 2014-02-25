@@ -23,7 +23,7 @@
 #include <drawinglayer/attribute/sdrlightattribute3d.hxx>
 #include <rtl/instance.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
