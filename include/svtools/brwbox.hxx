@@ -210,10 +210,6 @@ class SVT_DLLPUBLIC BrowseBox
         ,public DropTargetHelper
         ,public svt::IAccessibleTableProvider
 {
-    #define NO_CURSOR_HIDE      0
-    #define HARD_CURSOR_HIDE    1
-    #define SMART_CURSOR_HIDE   2
-
     friend class BrowserDataWin;
     friend class ::svt::BrowseBoxImpl;
 
@@ -268,7 +264,7 @@ private:
     sal_Bool            bNotToggleSel;  // set while in ToggleSelection() etc.
     sal_Bool            bHasFocus;      // set/unset in Get/LoseFocus
     sal_Bool            bHideSelect;    // hide selection (highlight)
-    sal_Bool            bHideCursor;    // hide cursor (frame)
+    TriState            bHideCursor;    // hide cursor (frame)
     Range           aSelRange;      // for selection expansion
 
     BrowserColumns* pCols;          // array of column-descriptions

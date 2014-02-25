@@ -96,7 +96,7 @@ void BrowseBox::ConstructImpl( BrowserMode nMode )
     bHit = sal_False;
     mbInteractiveRowHeight = sal_False;
     bHideSelect = sal_False;
-    bHideCursor = NO_CURSOR_HIDE;
+    bHideCursor = TRISTATE_FALSE;
     nRowCount = 0;
     m_bFocusOnlyCursor = sal_True;
     m_aCursorColor = COL_TRANSPARENT;
@@ -2291,15 +2291,15 @@ void BrowseBox::SetMode( BrowserMode nMode )
 
     bHideSelect = ((nMode & BROWSER_HIDESELECT) == BROWSER_HIDESELECT);
     // default: do not hide the cursor at all (untaken scrolling and such)
-    bHideCursor = NO_CURSOR_HIDE;
+    bHideCursor = TRISTATE_FALSE;
 
     if ( BROWSER_SMART_HIDECURSOR == ( nMode & BROWSER_SMART_HIDECURSOR ) )
     {   // smart cursor hide overrules hard cursor hide
-        bHideCursor = SMART_CURSOR_HIDE;
+        bHideCursor = TRISTATE_INDET;
     }
     else if ( BROWSER_HIDECURSOR == ( nMode & BROWSER_HIDECURSOR ) )
     {
-        bHideCursor = HARD_CURSOR_HIDE;
+        bHideCursor = TRISTATE_TRUE;
     }
 
     m_bFocusOnlyCursor = ((nMode & BROWSER_CURSOR_WO_FOCUS) == 0);

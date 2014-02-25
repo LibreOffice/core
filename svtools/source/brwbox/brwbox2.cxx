@@ -383,12 +383,12 @@ void BrowseBox::ToggleSelection( sal_Bool bForce )
 void BrowseBox::DrawCursor()
 {
     bool bReallyHide = false;
-    if ( SMART_CURSOR_HIDE == bHideCursor )
+    if ( bHideCursor == TRISTATE_INDET )
     {
         if ( !GetSelectRowCount() && !GetSelectColumnCount() )
             bReallyHide = true;
     }
-    else if ( HARD_CURSOR_HIDE == bHideCursor )
+    else if ( bHideCursor == TRISTATE_TRUE )
     {
         bReallyHide = true;
     }
