@@ -66,19 +66,19 @@ AnimationBaseNode::AnimationBaseNode(
                                               uno::UNO_QUERY );
 
     // distinguish 5 cases:
-    //
+
     //  - plain shape target
     //  (NodeContext.mpMasterShapeSubset full set)
-    //
+
     //  - parent-generated subset (generate an
     //  independent subset)
-    //
+
     //  - parent-generated subset from iteration
     //  (generate a dependent subset)
-    //
+
     //  - XShape target at the XAnimatioNode (generate
     //  a plain shape target)
-    //
+
     //  - ParagraphTarget target at the XAnimationNode
     //  (generate an independent shape subset)
     if( rContext.mpMasterShapeSubset )
@@ -271,7 +271,7 @@ void AnimationBaseNode::activate_st()
         // determine whether an
         // Activity::getUnderlyingValue() yields the
         // DOM value, or already a summed-up conglomerate)
-        //
+
         // Note that this poses problems with our
         // hybrid activity duration (time or min number of frames),
         // since if activities

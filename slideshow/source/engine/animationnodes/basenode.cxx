@@ -675,7 +675,7 @@ void BaseNode::setSelf( const BaseNodeSharedPtr& rSelf )
 }
 
 // Debug
-//=========================================================================
+
 
 #if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)
 void BaseNode::showState() const

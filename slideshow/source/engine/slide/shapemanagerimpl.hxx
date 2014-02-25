@@ -85,14 +85,14 @@ public:
     void deactivate();
 
     // Disposable interface
-    // ---------------------------------------------------------------
+
 
     virtual void dispose();
 
 private:
 
     // MouseEventHandler interface
-    // ---------------------------------------------------------------
+
 
     virtual bool handleMousePressed(
         ::com::sun::star::awt::MouseEvent const& evt );
@@ -109,7 +109,7 @@ private:
 
 
     // ViewUpdate interface
-    // -------------------------------------------------------------------
+
 
     virtual bool update();
     virtual bool update( ViewSharedPtr const& rView );
@@ -117,7 +117,7 @@ private:
 
 
     // ShapeManager interface
-    // ---------------------------------------------------
+
 
     virtual void enterAnimationMode( const AnimatableShapeSharedPtr& rShape );
     virtual void leaveAnimationMode( const AnimatableShapeSharedPtr& rShape );
@@ -130,7 +130,7 @@ private:
 
 
     // SubsettableShapeManager interface
-    // ---------------------------------------------------
+
 
     virtual boost::shared_ptr<AttributableShape> getSubsetShape(
         const boost::shared_ptr<AttributableShape>& rOrigShape,
@@ -148,7 +148,7 @@ private:
 
 
     // ShapeListenerEventHandler
-    // ---------------------------------------------
+
 
     virtual bool listenerAdded( const ::com::sun::star::uno::Reference<
                                    ::com::sun::star::presentation::XShapeEventListener>& xListener,
@@ -161,7 +161,7 @@ private:
                                      ::com::sun::star::drawing::XShape>&                   xShape );
 
     // ShapeCursorEventHandler interface
-    // ---------------------------------------------------------------
+
 
     virtual bool cursorChanged( const ::com::sun::star::uno::Reference<
                                    ::com::sun::star::drawing::XShape>&   xShape,

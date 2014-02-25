@@ -46,11 +46,11 @@ namespace slideshow
     namespace internal
     {
 
-        //////////////////////////////////////////////////////////////////////
-        //
+
+
         // Private methods
-        //
-        //////////////////////////////////////////////////////////////////////
+
+
 
         void DrawShapeSubsetting::ensureInitializedNodeTree() const
         {
@@ -226,11 +226,11 @@ namespace slideshow
             }
         }
 
-        //////////////////////////////////////////////////////////////////////
-        //
+
+
         // Public methods
-        //
-        //////////////////////////////////////////////////////////////////////
+
+
 
         DrawShapeSubsetting::DrawShapeSubsetting() :
             maActionClassVector(),
@@ -392,7 +392,7 @@ namespace slideshow
             // update currently active subset for _our_ shape (the
             // part of this shape that is visible, i.e. not displayed
             // in subset shapes)
-            // ======================================================
+
 
             // init bounds
             mnMinSubsetActionIndex = SAL_MAX_INT32;

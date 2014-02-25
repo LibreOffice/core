@@ -14,7 +14,7 @@
 + (NSOpenGLPixelFormat*)defaultPixelFormat
 {
 // first simple implementation (let's see later with more complex )
-    NSOpenGLPixelFormatAttribute attributes [] = 
+    NSOpenGLPixelFormatAttribute attributes [] =
     {
         NSOpenGLPFAWindow,
         NSOpenGLPFADoubleBuffer,	// double buffered
@@ -123,7 +123,7 @@
 {
     // get context. will create if we don't have one yet
     NSOpenGLContext* context = [self openGLContext];
-    
+
     // make sure we are ready to draw
     [super lockFocus];
 
@@ -163,7 +163,7 @@
 }
 
 
-- (void)encodeWithCoder:(NSCoder *)coder 
+- (void)encodeWithCoder:(NSCoder *)coder
 {
 
     [super encodeWithCoder:coder];
@@ -174,7 +174,7 @@
     }
 }
 
-- (id)initWithCoder:(NSCoder *)coder 
+- (id)initWithCoder:(NSCoder *)coder
 {
 
     self = [super initWithCoder:coder];
@@ -184,9 +184,9 @@
     } else {
         _pixelFormat = [[coder decodeObjectForKey:@"NSPixelFormat"] retain];
     }
-    
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_surfaceNeedsUpdate:) name:NSViewGlobalFrameDidChangeNotification object:self];
-    
+
     return self;
 }
 

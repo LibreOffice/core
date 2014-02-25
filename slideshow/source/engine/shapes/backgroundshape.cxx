@@ -121,7 +121,7 @@ namespace slideshow
         };
 
 
-        ////////////////////////////////////////////////////////////////////////////////
+
 
 
         BackgroundShape::BackgroundShape( const uno::Reference< drawing::XDrawPage >& xDrawPage,
@@ -308,7 +308,7 @@ namespace slideshow
             return false; // we're not animatable
         }
 
-        //////////////////////////////////////////////////////////
+
 
         ShapeSharedPtr createBackgroundShape(
             const uno::Reference< drawing::XDrawPage >& xDrawPage,

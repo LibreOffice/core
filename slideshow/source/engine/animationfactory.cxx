@@ -504,7 +504,7 @@ namespace slideshow
                         // shape's hold state), or by the animation
                         // node (then, it's a forced end, and we
                         // _have_ to snap back).
-                        //
+
                         // To reiterate: normally, we're called from
                         // the Activity first, thus the
                         // notifyShapeUpdate() below will update to

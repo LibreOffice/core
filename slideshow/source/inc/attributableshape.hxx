@@ -47,7 +47,7 @@ namespace slideshow
         {
         public:
             // Attribute layer methods
-            //------------------------------------------------------------------
+
 
             /** Create a new shape attribute layer.
 
@@ -124,7 +124,7 @@ namespace slideshow
             virtual void setVisibility( bool bVisible ) = 0;
 
             // Sub-item handling
-            //------------------------------------------------------------------
+
 
             /** Retrieve interface for DocTreeNode creation.
 

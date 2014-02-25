@@ -138,7 +138,7 @@ public:
         // e.g. activity counting does not work - subset
         // would be removed after first animation node
         // disables it).
-        //
+
         // NOTE: this is only a problem for animation
         // nodes that explicitly call
         // disableSubsetShape(). Independent shape subsets
@@ -299,9 +299,9 @@ bool implCreateIteratedNodes(
         // method). For ONLY_TEXT effects,
         // we skip this part, to animate
         // only the text.
-        //
+
         // OR
-        //
+
         // prepend with subset animation for full
         // _paragraph_, from which the individual
         // paragraph subsets are subtracted. Note that the

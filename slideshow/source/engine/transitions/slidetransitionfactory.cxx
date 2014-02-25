@@ -862,7 +862,7 @@ NumberAnimationSharedPtr createSlideWipeTransition(
         // normal, 'forward' slide wipe effect. Since the old
         // content is still on screen (and does not move), we omit
         // the 'leaving' slide.
-        // =======================================================
+
 
         return NumberAnimationSharedPtr(
             new MovingSlideChange(
@@ -880,7 +880,7 @@ NumberAnimationSharedPtr createSlideWipeTransition(
         // 'reversed' slide wipe effect. Reverse for slide wipes
         // means, that the new slide is in the back, statically,
         // and the old one is moving off in the foreground.
-        // =======================================================
+
 
         return NumberAnimationSharedPtr(
             new MovingSlideChange( leavingSlide,

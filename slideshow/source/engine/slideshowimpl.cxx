@@ -2060,7 +2060,7 @@ sal_Bool SlideShowImpl::update( double & nNextTimeout )
 
             // TODO(Q3): remove need to call dequeued() from
             // activities. feels like a wart.
-            //
+
             // Rationale for ActivitiesQueue::processDequeued(): when
             // an activity ends, it usually pushed the end state to
             // the animated shape in question, and ends the animation

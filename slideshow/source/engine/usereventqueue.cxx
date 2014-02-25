@@ -639,8 +639,6 @@ void UserEventQueue::registerEvent(
 }
 
 
-// Public methods
-// =====================================================
 
 UserEventQueue::UserEventQueue( EventMultiplexer&   rMultiplexer,
                                 EventQueue&         rEventQueue,

@@ -356,16 +356,16 @@ namespace slideshow
 
 
             // Workaround for MSVC compiler anomaly (stack trashing)
-            //
+
             // The default ureal_parser_policies implementation of parse_exp
             // triggers a really weird error in MSVC7 (Version 13.00.9466), in
             // that the real_parser_impl::parse_main() call of parse_exp()
             // overwrites the frame pointer _on the stack_ (EBP of the calling
             // function gets overwritten while lying on the stack).
-            //
+
             // For the time being, our parser thus can only read the 1.0E10
             // notation, not the 1.0e10 one.
-            //
+
             // TODO(F1): Also handle the 1.0e10 case here.
             template< typename T > struct custom_real_parser_policies : public ::boost::spirit::ureal_parser_policies<T>
             {

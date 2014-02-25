@@ -73,7 +73,7 @@ namespace slideshow
 
 
             // animation methods
-            //------------------------------------------------------------------
+
 
             /** Notify the ViewShape that an animation starts now
 
@@ -101,7 +101,7 @@ namespace slideshow
 
 
             // render methods
-            //------------------------------------------------------------------
+
 
             enum UpdateFlags
             {

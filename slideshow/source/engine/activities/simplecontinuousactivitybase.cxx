@@ -75,12 +75,12 @@ namespace slideshow
                 double(mnCurrPerformCalls) / mnMinNumberOfFrames );
 
             // okay, so now, the decision is easy:
-            //
+
             // If the fraction of time elapsed is smaller than the
             // number of calls required to be performed, then we calc
             // the position on the animation range according to
             // elapsed time. That is, we're so to say ahead of time.
-            //
+
             // In contrary, if the fraction of time elapsed is larger,
             // then we're lagging, and we thus calc the position on
             // the animation time line according to the fraction of
@@ -213,7 +213,7 @@ namespace slideshow
                     // with modf, nRelativeSimpleTime will never
                     // become 1.0, since nRepeats is incremented and
                     // nRelativeSimpleTime set to 0.0 then.
-                    //
+
                     // For the animation to reach its final value,
                     // nRepeats must although become
                     // maRepeats.getValue()-1.0, and

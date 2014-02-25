@@ -92,7 +92,7 @@ namespace slideshow
             static ::boost::shared_ptr< Layer > createLayer( const basegfx::B2DRange& rMaxLayerBounds );
 
 
-            /////////////////////////////////////////////////////////////////////
+
 
 
             /** Predicate, whether this layer is the special
@@ -133,7 +133,7 @@ namespace slideshow
             void setShapeViews( ShapeSharedPtr const& rShape ) const;
 
 
-            /////////////////////////////////////////////////////////////////////
+
 
 
             /** Change layer priority range.

@@ -160,36 +160,36 @@ namespace slideshow
             {
                 /*
                 // calc accelerated/decelerated time.
-                //
+
                 // We have three intervals:
                 // 1 [0,a]
                 // 2 [a,d]
                 // 3 [d,1] (with a and d being acceleration/deceleration
                 // fraction, resp.)
-                //
+
                 // The change rate during interval 1 is constantly
                 // increasing, reaching 1 at a. It then stays at 1,
                 // starting a linear decrease at d, ending with 0 at
                 // time 1. The integral of this function is the
                 // required new time nT'.
-                //
+
                 // As we arbitrarily assumed 1 as the upper value of
                 // the change rate, the integral must be normalized to
                 // reach nT'=1 at the end of the interval. This
                 // normalization constant is:
-                //
+
                 // c = 1 - 0.5a - 0.5d
-                //
+
                 // The integral itself then amounts to:
-                //
+
                 // 0.5 nT^2 / a + (nT-a) + (nT - 0.5 nT^2 / d)
-                //
+
                 // (where each of the three summands correspond to the
                 // three intervals above, and are applied only if nT
                 // has reached the corresponding interval)
-                //
+
                 // The graph of the change rate is a trapezoid:
-                //
+
                 //   |
                 //  1|      /--------------\
                 //   |     /                \
@@ -197,7 +197,7 @@ namespace slideshow
                 //   |   /                    \
                 //   -----------------------------
                 //      0   a              d  1
-                //
+
                 //*/
                 const double nC( 1.0 - 0.5*mnAccelerationFraction - 0.5*mnDecelerationFraction );
 

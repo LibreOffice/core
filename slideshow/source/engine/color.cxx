@@ -154,7 +154,7 @@ namespace slideshow
 
 
         // HSLColor
-        // ===============================================
+
 
         HSLColor::HSLTriple::HSLTriple() :
             mnHue(),
@@ -286,7 +286,7 @@ namespace slideshow
 
 
         // RGBColor
-        // ===============================================
+
 
 
         RGBColor::RGBTriple::RGBTriple() :

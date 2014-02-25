@@ -36,7 +36,7 @@ class MetaAction;
 class GDIMetaFile;
 class Graphic;
 
-// -----------------------------------------------------------------------------
+
 
 namespace slideshow
 {

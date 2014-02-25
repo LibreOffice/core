@@ -644,7 +644,7 @@ namespace slideshow
                         // which happens to be the destination
                         // canvas transformation without any
                         // translational components.
-                        //
+
                         // But then, the render transformation as
                         // calculated by getShapeTransformation()
                         // above outputs the shape at its real

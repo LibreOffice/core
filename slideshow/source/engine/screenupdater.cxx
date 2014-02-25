@@ -110,15 +110,15 @@ namespace internal
             return;
 
         // cases:
-        //
+
         // (a) no update necessary at all
-        //
+
         // (b) no ViewUpdate-generated update
         //     I. update all views requested -> for_each( mrViewContainer )
         //    II. update some views requested -> for_each( maViewUpdateRequests )
-        //
+
         // (c) ViewUpdate-triggered update - update all views
-        //
+
 
         // any ViewUpdate-triggered updates?
         const bool bViewUpdatesNeeded(
