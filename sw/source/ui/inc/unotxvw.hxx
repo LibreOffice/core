@@ -244,7 +244,9 @@ public:
     virtual sal_Bool SAL_CALL screenDown()
         throw (::com::sun::star::uno::RuntimeException,
                std::exception);
-    virtual sal_Bool SAL_CALL screenUp(void) throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL screenUp()
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
 
     //XViewCursor
     virtual sal_Bool SAL_CALL goDown(sal_Int16 nCount, sal_Bool bExpand)

@@ -1351,7 +1351,8 @@ sal_Bool SwXTextViewCursor::screenDown()
     return bRet;
 }
 
-sal_Bool SwXTextViewCursor::screenUp(void) throw( uno::RuntimeException )
+sal_Bool SwXTextViewCursor::screenUp()
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     sal_Bool bRet = sal_False;
