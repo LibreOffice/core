@@ -37,7 +37,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
 
-///////////////////////////////////////////////////////////////////////////
+
 
 namespace {
 template < typename T >
@@ -71,7 +71,7 @@ SmToken::SmToken(SmTokenType eTokenType,
     nCol = nRow = 0;
 }
 
-///////////////////////////////////////////////////////////////////////////
+
 
 
 static const SmTokenTableEntry aTokenTable[] =
@@ -129,11 +129,11 @@ static const SmTokenTableEntry aTokenTable[] =
     { "dlrarrow" , TDLRARROW, MS_DLRARROW, TGSTANDALONE, 5},
     { "dot", TDOT, MS_DOT, TGATTRIBUT, 5},
     { "dotsaxis", TDOTSAXIS, MS_DOTSAXIS, TGSTANDALONE, 5}, // 5 to continue expression
-    { "dotsdiag", TDOTSDIAG, MS_DOTSUP, TGSTANDALONE, 5},   //
-    { "dotsdown", TDOTSDOWN, MS_DOTSDOWN, TGSTANDALONE, 5},  //
-    { "dotslow", TDOTSLOW, MS_DOTSLOW, TGSTANDALONE, 5},    //
-    { "dotsup", TDOTSUP, MS_DOTSUP, TGSTANDALONE, 5},      //
-    { "dotsvert", TDOTSVERT, MS_DOTSVERT, TGSTANDALONE, 5}, //
+    { "dotsdiag", TDOTSDIAG, MS_DOTSUP, TGSTANDALONE, 5},
+    { "dotsdown", TDOTSDOWN, MS_DOTSDOWN, TGSTANDALONE, 5},
+    { "dotslow", TDOTSLOW, MS_DOTSLOW, TGSTANDALONE, 5},
+    { "dotsup", TDOTSUP, MS_DOTSUP, TGSTANDALONE, 5},
+    { "dotsvert", TDOTSVERT, MS_DOTSVERT, TGSTANDALONE, 5},
     { "downarrow" , TDOWNARROW, MS_DOWNARROW, TGSTANDALONE, 5},
     { "drarrow" , TDRARROW, MS_DRARROW, TGSTANDALONE, 5},
     { "emptyset" , TEMPTYSET, MS_EMPTYSET, TGSTANDALONE, 5},
@@ -232,10 +232,10 @@ static const SmTokenTableEntry aTokenTable[] =
     { "prod", TPROD, MS_PROD, TGOPER, 5},
     { "prop", TPROP, MS_PROP, TGRELATION, 0},
     { "rangle", TRANGLE, MS_RMATHANGLE, TGRBRACES, 0},  //! 0 to terminate expression
-    { "rbrace", TRBRACE, MS_RBRACE, TGRBRACES, 0},  //
-    { "rceil", TRCEIL, MS_RCEIL, TGRBRACES, 0}, //
-    { "rdbracket", TRDBRACKET, MS_RDBRACKET, TGRBRACES, 0}, //
-    { "rdline", TRDLINE, MS_DVERTLINE, TGRBRACES, 0},   //
+    { "rbrace", TRBRACE, MS_RBRACE, TGRBRACES, 0},
+    { "rceil", TRCEIL, MS_RCEIL, TGRBRACES, 0},
+    { "rdbracket", TRDBRACKET, MS_RDBRACKET, TGRBRACES, 0},
+    { "rdline", TRDLINE, MS_DVERTLINE, TGRBRACES, 0},
     { "red", TRED, '\0', TGCOLOR, 0},
     { "rfloor", TRFLOOR, MS_RFLOOR, TGRBRACES, 0},  //! 0 to terminate expression
     { "right", TRIGHT, '\0', 0, 0},
@@ -314,7 +314,7 @@ const SmTokenTableEntry * SmParser::GetTokenTableEntry( const OUString &rName )
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+
 
 #if OSL_DEBUG_LEVEL > 1
 
@@ -942,9 +942,9 @@ void SmParser::NextToken()
 }
 
 
-////////////////////////////////////////
+
 // grammar
-//
+
 
 
 void SmParser::Table()
@@ -1743,10 +1743,10 @@ void SmParser::UnOper()
         // (text, group, level of the used token are of no interrest here)
         // we'll use row & column of the keyword for abs
         aNodeToken.eType = TABS;
-        //
+
         aNodeToken.cMathChar = MS_VERTLINE;
         SmNode* pLeft = new SmMathSymbolNode(aNodeToken);
-        //
+
         aNodeToken.cMathChar = MS_VERTLINE;
         SmNode* pRight = new SmMathSymbolNode(aNodeToken);
 

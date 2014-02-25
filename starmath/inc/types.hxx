@@ -23,11 +23,11 @@
 #include <sal/types.h>
 #define FONTNAME_MATH   "OpenSymbol"
 
-/////////////////////////////////////////////////////////////////
+
 
 enum SmPrintSize { PRINT_SIZE_NORMAL, PRINT_SIZE_SCALED, PRINT_SIZE_ZOOMED };
 
-/////////////////////////////////////////////////////////////////
+
 
 inline sal_Bool IsInPrivateUseArea( sal_Unicode cChar ) { return 0xE000 <= cChar  &&  cChar <= 0xF8FF; }
 
@@ -36,12 +36,12 @@ inline sal_Bool IsGreekChar( sal_Unicode cChar ) { return 0x0370 <= cChar  &&  c
 
 sal_Unicode ConvertMathToMathML( sal_Unicode cChar );
 
-/////////////////////////////////////////////////////////////////
+
 // enum definitions for characters from the 'StarSymbol' font
 // (some chars have more than one alias!)
 //! Note: not listed here does not(!) mean "not used"
 //!     (see %alpha ... %gamma for example)
-//
+
 enum MathSymbol
 {
     MS_FACT         = (sal_Unicode) 0x0021,

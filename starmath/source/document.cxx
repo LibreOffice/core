@@ -104,7 +104,7 @@ using namespace ::com::sun::star::uno;
 #define SmDocShell
 #include "smslots.hxx"
 
-////////////////////////////////////////////////////////////
+
 
 
 TYPEINIT1( SmDocShell, SfxObjectShell );
@@ -302,9 +302,9 @@ void SmDocShell::ArrangeFormula()
     pOutDev->SetLayoutMode( TEXT_LAYOUT_BIDI_LTR );
     sal_Int16 nDigitLang = pOutDev->GetDigitLanguage();
     pOutDev->SetDigitLanguage( LANGUAGE_ENGLISH );
-    //
+
     pTree->Arrange(*pOutDev, rFormat);
-    //
+
     pOutDev->SetLayoutMode( nLayoutMode );
     pOutDev->SetDigitLanguage( nDigitLang );
 
@@ -317,12 +317,12 @@ void SmDocShell::ArrangeFormula()
 
 void SetEditEngineDefaultFonts(SfxItemPool &rEditEngineItemPool)
 {
-        //
+
         // set fonts to be used
-        //
+
         SvtLinguOptions aOpt;
         SvtLinguConfig().GetOptions( aOpt );
-        //
+
         struct FontDta {
             sal_Int16       nFallbackLang;
             sal_Int16       nLang;
@@ -343,7 +343,7 @@ void SetEditEngineDefaultFonts(SfxItemPool &rEditEngineItemPool)
         aTable[0].nLang = aOpt.nDefaultLanguage;
         aTable[1].nLang = aOpt.nDefaultLanguage_CJK;
         aTable[2].nLang = aOpt.nDefaultLanguage_CTL;
-        //
+
         for (int i = 0;  i < 3;  ++i)
         {
             const FontDta &rFntDta = aTable[i];
@@ -474,7 +474,7 @@ void SmDocShell::DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSel
     //Drawing using visitor
     SmDrawingVisitor(rDev, rPosition, pTree);
 
-    //
+
     rDev.SetLayoutMode( nLayoutMode );
     rDev.SetDigitLanguage( nDigitLang );
 
@@ -523,7 +523,7 @@ SmCursor& SmDocShell::GetCursor(){
     return *pCursor;
 }
 
-////////////////////////////////////////
+
 
 SmPrinterAccess::SmPrinterAccess( SmDocShell &rDocShell )
 {
@@ -587,7 +587,7 @@ SmPrinterAccess::~SmPrinterAccess()
         pRefDev->Pop();
 }
 
-////////////////////////////////////////
+
 
 Printer* SmDocShell::GetPrt()
 {

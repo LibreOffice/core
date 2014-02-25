@@ -51,10 +51,10 @@ namespace com { namespace sun { namespace star { namespace accessibility {
 struct AccessibleEventObject;
 }}}}
 
-//////////////////////////////////////////////////////////////////////
-//
+
+
 // classes and helper-classes used for accessibility in the graphic-window
-//
+
 
 typedef
 cppu::WeakImplHelper6
@@ -152,10 +152,10 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 };
 
-//////////////////////////////////////////////////////////////////////
-//
+
+
 // classes and helper-classes used for accessibility in the command-window
-//
+
 
 class SmEditAccessible;
 class SmEditSource;
@@ -385,7 +385,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 };
 
-//////////////////////////////////////////////////////////////////////
+
 
 #endif
 

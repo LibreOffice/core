@@ -36,7 +36,7 @@ namespace com { namespace sun { namespace star {
 } } }
 
 
-////////////////////////////////////////////////////////////
+
 
 class SmXMLExportWrapper
 {
@@ -72,7 +72,7 @@ public:
         const sal_Char* pComponentName );
 };
 
-////////////////////////////////////////////////////////////
+
 
 class SmXMLExport : public SvXMLExport
 {
@@ -124,7 +124,7 @@ public:
     sal_Bool GetSuccess() {return bSuccess;}
 };
 
-////////////////////////////////////////////////////////////
+
 
 #endif
 

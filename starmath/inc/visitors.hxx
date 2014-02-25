@@ -88,7 +88,7 @@ private:
     void VisitChildren( SmNode* pNode );
 };
 
-/////////////////////////////// SmDefaultingVisitor ////////////////////////////////
+// SmDefaultingVisitor
 
 
 /** Visitor that uses DefaultVisit for handling visits by default
@@ -133,7 +133,7 @@ protected:
     virtual void DefaultVisit( SmNode* pNode ) = 0;
 };
 
-/////////////////////////////// SmCaretDrawingVisitor ////////////////////////////////
+// SmCaretDrawingVisitor
 
 /** Visitor for drawing a caret position */
 class SmCaretDrawingVisitor : public SmDefaultingVisitor
@@ -155,7 +155,7 @@ protected:
     void DefaultVisit( SmNode* pNode );
 };
 
-/////////////////////////////// SmCaretPos2LineVisitor ////////////////////////////////
+// SmCaretPos2LineVisitor
 
 /** Visitor getting a line from a caret position */
 class SmCaretPos2LineVisitor : public SmDefaultingVisitor
@@ -184,7 +184,7 @@ protected:
     void DefaultVisit( SmNode* pNode );
 };
 
-/////////////////////////////// SmDrawingVisitor ////////////////////////////////
+// SmDrawingVisitor
 
 /** Visitor for drawing SmNodes to OutputDevice */
 class SmDrawingVisitor : public SmVisitor
@@ -249,7 +249,7 @@ private:
     Point Position;
 };
 
-/////////////////////////////// SmSetSelectionVisitor ////////////////////////////////
+// SmSetSelectionVisitor
 
 /** Set Selection Visitor
  * Sets the IsSelected( ) property on all SmNodes of the tree
@@ -291,7 +291,7 @@ private:
 };
 
 
-/////////////////////////////// SmCaretPosGraphBuildingVisitor ////////////////////////////////
+// SmCaretPosGraphBuildingVisitor
 
 
 /** A visitor for building a SmCaretPosGraph
@@ -357,7 +357,7 @@ private:
     SmCaretPosGraph*      pGraph;
 };
 
-/////////////////////////////// SmCloningVisitor ///////////////////////////////
+// SmCloningVisitor
 
 /** Visitor for cloning a pNode
  *
@@ -406,7 +406,7 @@ private:
 };
 
 
-/////////////////////////////// SmSelectionDrawingVisitor ///////////////////////////////
+// SmSelectionDrawingVisitor
 
 class SmSelectionDrawingVisitor : public SmDefaultingVisitor
 {
@@ -431,7 +431,7 @@ private:
     void VisitChildren( SmNode* pNode );
 };
 
-/////////////////////////////// SmNodeToTextVisitor ///////////////////////////////
+// SmNodeToTextVisitor
 
 /** Extract command text from pNodes */
 class SmNodeToTextVisitor : public SmVisitor

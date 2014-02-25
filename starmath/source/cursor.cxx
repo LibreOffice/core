@@ -1550,7 +1550,7 @@ void SmCursor::MoveAfterBracket(SmBraceNode* pBraceNode, bool bMoveAnchor)
 }
 
 
-/////////////////////////////////////// SmNodeListParser ///////////////////////////////////////
+/////////////////////////////////////// SmNodeListParser
 
 SmNode* SmNodeListParser::Parse(SmNodeList* list, bool bDeleteErrorNodes){
     pList = list;
