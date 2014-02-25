@@ -234,9 +234,9 @@ public:
 
     //XViewCursor
     virtual sal_Bool SAL_CALL goDown(sal_Int16 nCount, sal_Bool bExpand) throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL goUp(sal_Int16 nCount, sal_Bool bExpand) throw( ::com::sun::star::uno::RuntimeException );
-//    virtual sal_Bool goLeft(sal_Int16 nCount, sal_Bool bExpand) throw( ::com::sun::star::uno::RuntimeException );
-//    virtual sal_Bool goRight(sal_Int16 nCount, sal_Bool bExpand) throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL goUp(sal_Int16 nCount, sal_Bool bExpand)
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
 
     //XLineCursor
     virtual sal_Bool SAL_CALL isAtStartOfLine()
