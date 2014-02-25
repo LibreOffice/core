@@ -24,9 +24,9 @@
 #include <svx/svdglue.hxx>
 #include <svx/svxdllapi.h>
 
-//************************************************************
+
 //   Vorausdeklarationen
-//************************************************************
+
 
 class SdrDragMethod;
 class SdrPageView;
@@ -35,9 +35,9 @@ namespace sdr { namespace properties {
     class ConnectorProperties;
 }}
 
-//************************************************************
+
 //   Hilfsklasse SdrObjConnection
-//************************************************************
+
 
 class SdrObjConnection
 {
@@ -79,9 +79,9 @@ public:
     inline SdrObject* GetObject() const { return pObj; }
 };
 
-//************************************************************
+
 //   Hilfsklasse SdrEdgeInfoRec
-//************************************************************
+
 
 enum SdrEdgeLineCode {OBJ1LINE2,OBJ1LINE3,OBJ2LINE2,OBJ2LINE3,MIDDLELINE};
 
@@ -123,9 +123,9 @@ public:
     long ImpGetLineVersatz(SdrEdgeLineCode eLineCode, const XPolygon& rXP) const;
 };
 
-//************************************************************
+
 //   Hilfsklasse SdrEdgeObjGeoData
-//************************************************************
+
 
 class SdrEdgeObjGeoData : public SdrTextObjGeoData
 {
@@ -142,9 +142,9 @@ public:
     virtual ~SdrEdgeObjGeoData();
 };
 
-//************************************************************
+
 //   Hilfsklasse SdrEdgeObj
-//************************************************************
+
 
 class SVX_DLLPUBLIC SdrEdgeObj : public SdrTextObj
 {
@@ -317,8 +317,6 @@ public:
     basegfx::B2DPolygon ImplAddConnectorOverlay(SdrDragMethod& rDragMethod, bool bTail1, bool bTail2, bool bDetail) const;
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
 // Zur Bestimmung der Verlaufslinie werden folgende Item-Parameter des SdrItemPool verwendet:
 //
 //  sal_uInt16 EdgeFlowAngle       Default 9000 (=90.00 Deg), min 0, max 9000
@@ -430,8 +428,6 @@ public:
 //                     das gesamte Objekt umfasst, so versucht der
 //                     Verbinder von den 4 Scheitelpunktklebepunkten (und
 //                     zwar nur von denen) den guenstigsten herauszufinden.
-//
-//////////////////////////////////////////////////////////////////////////////////////////////////
 
 #endif // INCLUDED_SVX_SVDOEDGE_HXX
 

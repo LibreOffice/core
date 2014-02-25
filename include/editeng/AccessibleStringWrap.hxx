@@ -29,11 +29,11 @@ class SvxFont;
 class Rectangle;
 class Point;
 
-//------------------------------------------------------------------------
-//
+
+
 // AccessibleStringWrap declaration
-//
-//------------------------------------------------------------------------
+
+
 
 class AccessibleStringWrap
 {

@@ -28,14 +28,14 @@
 #include <vector>
 #include <boost/shared_ptr.hpp>
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
 
-    //=====================================================================
+
+
     //= IWindowOperator
-    //=====================================================================
+
     /** an abstract interface for operating on a ->Window
     */
     class SVT_DLLPUBLIC SAL_NO_VTABLE IWindowOperator
@@ -55,9 +55,9 @@ namespace svt
     };
     typedef ::boost::shared_ptr< IWindowOperator >  PWindowOperator;
 
-    //=====================================================================
+
     //= IWindowEventFilter
-    //=====================================================================
+
     /** an abstract interface for deciding whether a ->VclWindowEvent
         is worth paying attention to
     */
@@ -70,9 +70,9 @@ namespace svt
     };
     typedef ::boost::shared_ptr< IWindowEventFilter >   PWindowEventFilter;
 
-    //=====================================================================
+
     //= DialogController
-    //=====================================================================
+
     struct DialogController_Data;
     /** a class controlling interactions between dialog controls
 
@@ -125,9 +125,9 @@ namespace svt
     };
     typedef ::boost::shared_ptr< DialogController > PDialogController;
 
-    //=====================================================================
+
     //= ControlDependencyManager
-    //=====================================================================
+
     struct ControlDependencyManager_Data;
     /** helper class for managing control dependencies
 
@@ -185,9 +185,9 @@ namespace svt
         ControlDependencyManager& operator=( const ControlDependencyManager& ); // never implemented
     };
 
-    //=====================================================================
+
     //= EnableOnCheck
-    //=====================================================================
+
     /** a helper class implementing the ->IWindowOperator interface,
         which enables a dependent window depending on the check state of
         an instigator window.
@@ -221,9 +221,9 @@ namespace svt
         }
     };
 
-    //=====================================================================
+
     //= FilterForRadioOrCheckToggle
-    //=====================================================================
+
     /** a helper class implementing the ->IWindowEventFilter interface,
         which filters for radio buttons or check boxes being toggled.
 
@@ -251,9 +251,9 @@ namespace svt
         }
     };
 
-    //=====================================================================
+
     //= RadioDependentEnabler
-    //=====================================================================
+
     /** a ->DialogController derivee which enables or disables its dependent windows,
         depending on the check state of a radio button.
 
@@ -285,9 +285,9 @@ namespace svt
         }
     };
 
-//........................................................................
+
 } // namespace svt
-//........................................................................
+
 
 #endif // INCLUDED_SVTOOLS_DIALOGCONTROLLING_HXX
 

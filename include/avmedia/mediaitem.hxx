@@ -44,9 +44,9 @@ class SvStream;
 namespace avmedia
 {
 
-//---------------
+
 // - MediaState -
-// --------------
+
 
 enum MediaState
 {
@@ -56,9 +56,9 @@ enum MediaState
     MEDIASTATE_PAUSE = 3
 };
 
-// -------------
+
 // - MediaItem -
-// -------------
+
 
 class AVMEDIA_DLLPUBLIC MediaItem : public SfxPoolItem
 {

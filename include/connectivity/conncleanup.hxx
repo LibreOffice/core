@@ -26,14 +26,14 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <connectivity/dbtoolsdllapi.hxx>
 
-//.........................................................................
+
 namespace dbtools
 {
-//.........................................................................
 
-    //=====================================================================
+
+
     //= OAutoConnectionDisposer
-    //=====================================================================
+
     typedef ::cppu::WeakImplHelper2 <   ::com::sun::star::beans::XPropertyChangeListener,
                                         ::com::sun::star::sdbc::XRowSetListener
                                     >   OAutoConnectionDisposer_Base;
@@ -81,9 +81,9 @@ namespace dbtools
         sal_Bool    isPropertyListening() const { return m_bPropertyListening; }
     };
 
-//.........................................................................
+
 }   // namespace dbtools
-//.........................................................................
+
 
 #endif // INCLUDED_CONNECTIVITY_CONNCLEANUP_HXX
 

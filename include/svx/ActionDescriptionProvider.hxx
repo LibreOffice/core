@@ -25,7 +25,7 @@
 // header for class OUString
 #include <rtl/ustring.hxx>
 
-//-----------------------------------------------------------------------------
+
 /** This class provides localized descriptions for some basic actions done with objects.
 The strings are intended to be provided to the user e.g. as description for undo actions in the menu.
 The name of the object acted on and the type of action needs to be given as input parameter.

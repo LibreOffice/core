@@ -37,15 +37,15 @@
 #include <boost/optional.hpp>
 #include <boost/enable_shared_from_this.hpp>
 
-//........................................................................
+
 namespace svt { namespace table
 {
-//........................................................................
 
 
-    //====================================================================
+
+
     //= ScrollbarVisibility
-    //====================================================================
+
     enum ScrollbarVisibility
     {
         /** enumeration value denoting that a scrollbar should never be visible, even
@@ -61,9 +61,9 @@ namespace svt { namespace table
         ScrollbarShowAlways
     };
 
-    //====================================================================
+
     //= ITableModelListener
-    //====================================================================
+
     typedef sal_Int32   ColumnAttributeGroup;
     #define COL_ATTRS_NONE          (0x00000000)
     /// denotes column attributes related to the width of the column
@@ -73,9 +73,9 @@ namespace svt { namespace table
     /// denotes the entirety of column attributes
     #define COL_ATTRS_ALL           (0x7FFFFFFF)
 
-    //====================================================================
+
     //= ITableModelListener
-    //====================================================================
+
     /** declares an interface to be implemented by components interested in
         changes in an ->ITableModel
     */
@@ -159,9 +159,9 @@ namespace svt { namespace table
     };
     typedef ::boost::shared_ptr< ITableModelListener > PTableModelListener;
 
-    //====================================================================
+
     //= IColumnModel
-    //====================================================================
+
     /** interface to be implemented by table column models
     */
     class SAL_NO_VTABLE IColumnModel
@@ -313,9 +313,9 @@ namespace svt { namespace table
     };
     typedef ::boost::shared_ptr< IColumnModel > PColumnModel;
 
-    //====================================================================
+
     //= ITableModel
-    //====================================================================
+
     /** declares the interface to implement by an abtract table model
     */
     class SAL_NO_VTABLE SVT_DLLPUBLIC ITableModel
@@ -534,9 +534,9 @@ namespace svt { namespace table
     };
     typedef ::boost::shared_ptr< ITableModel > PTableModel;
 
-//........................................................................
+
 } } // namespace svt::table
-//........................................................................
+
 
 #endif // INCLUDED_SVTOOLS_TABLE_TABLEMODEL_HXX
 

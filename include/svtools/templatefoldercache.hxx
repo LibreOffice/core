@@ -23,14 +23,14 @@
 #include <svtools/svtdllapi.h>
 #include <sal/types.h>
 
-//.........................................................................
+
 namespace svt
 {
-//.........................................................................
 
-    //=====================================================================
+
+
     //= TemplateFolderCache
-    //=====================================================================
+
     class TemplateFolderCacheImpl;
     /** allows to cache the state of the template directories of OOo
         <p>Usually, this class is used together with an instance of a the
@@ -93,9 +93,9 @@ namespace svt
         void        storeState( sal_Bool _bForceRetrieval = sal_False );
     };
 
-//.........................................................................
+
 }   // namespace svt
-//.........................................................................
+
 
 #endif // INCLUDED_SVTOOLS_TEMPLATEFOLDERCACHE_HXX
 

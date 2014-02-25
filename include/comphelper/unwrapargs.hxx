@@ -31,9 +31,9 @@
 
 namespace comphelper {
 
-//
+
 // generating helper functions to unwrap the service's argument sequence:
-//
+
 
 /// @internal
 namespace detail {

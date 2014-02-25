@@ -33,7 +33,7 @@
 
 class SfxObjectShell;
 
-//-------------------------------------------------------------------
+
 
 class SFX2_DLLPUBLIC SfxEventHint : public SfxHint
 {
@@ -59,7 +59,7 @@ public:
                         { return pObjShell; }
 };
 
-//-------------------------------------------------------------------
+
 
 class SFX2_DLLPUBLIC SfxViewEventHint : public SfxEventHint
 {
@@ -82,7 +82,7 @@ public:
                         { return xViewController; }
 };
 
-//-------------------------------------------------------------------
+
 
 class SfxNamedHint : public SfxHint
 {

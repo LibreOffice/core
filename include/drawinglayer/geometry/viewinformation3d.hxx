@@ -27,7 +27,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <o3tl/cow_wrapper.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predefines
 
 namespace drawinglayer { namespace geometry {
@@ -38,7 +38,7 @@ namespace basegfx {
     class B3DHomMatrix;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -165,7 +165,7 @@ namespace drawinglayer
     } // end of namespace geometry
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif //INCLUDED_DRAWINGLAYER_GEOMETRY_VIEWINFORMATION3D_HXX
 

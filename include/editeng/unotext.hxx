@@ -156,10 +156,10 @@ struct ESelection;
 EDITENG_DLLPUBLIC void GetSelection( struct ESelection& rSel, SvxTextForwarder* pForwarder ) throw();
 EDITENG_DLLPUBLIC void CheckSelection( struct ESelection& rSel, SvxTextForwarder* pForwarder ) throw();
 
-// ====================================================================
+
 // This class implements a SvxEditSource and SvxTextForwarder and does
 // nothing otherwise
-// ====================================================================
+
 
 class SvxDummyTextSource : public SvxEditSource, public SvxTextForwarder
 {
@@ -232,7 +232,7 @@ namespace accessibility
     class AccessibleEditableTextPara;
 }
 
-// ====================================================================
+
 class EDITENG_DLLPUBLIC SvxUnoTextRangeBase : public ::com::sun::star::text::XTextRange,
                             public ::com::sun::star::beans::XPropertySet,
                             public ::com::sun::star::beans::XMultiPropertySet,
@@ -346,7 +346,7 @@ public:
     static  ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_Static( ) SAL_THROW(());
 };
 
-// ====================================================================
+
 
 class SvxUnoTextBase;
 class EDITENG_DLLPUBLIC SvxUnoTextRange : public SvxUnoTextRangeBase,
@@ -455,7 +455,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
 };
 
-// ====================================================================
+
 class EDITENG_DLLPUBLIC SvxUnoText : public SvxUnoTextBase,
                     public ::cppu::OWeakAggObject
 {
@@ -481,7 +481,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
 };
 
-// ====================================================================
+
 
 class SvxUnoTextContentEnumeration : public ::cppu::WeakAggImplHelper1< ::com::sun::star::container::XEnumeration >
 {
@@ -500,7 +500,7 @@ public:
     virtual ::com::sun::star::uno::Any SAL_CALL nextElement(  ) throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception);
 };
 
-// ====================================================================
+
 #include <com/sun/star/text/XTextContent.hpp>
 
 class SvxUnoTextContent : public SvxUnoTextRangeBase,
@@ -576,7 +576,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
 };
 
-// ====================================================================
+
 
 class SvxUnoTextRangeEnumeration : public ::cppu::WeakAggImplHelper1< ::com::sun::star::container::XEnumeration >
 {
@@ -597,7 +597,7 @@ public:
     virtual ::com::sun::star::uno::Any SAL_CALL nextElement(  ) throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception);
 };
 
-// ====================================================================
+
 
 class EDITENG_DLLPUBLIC SvxUnoTextCursor : public SvxUnoTextRangeBase,
                          public ::com::sun::star::text::XTextCursor,

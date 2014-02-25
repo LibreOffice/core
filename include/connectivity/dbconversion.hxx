@@ -64,10 +64,10 @@ namespace com
     }
 }
 
-//.........................................................................
+
 namespace dbtools
 {
-//.........................................................................
+
 
     class OOO_DLLPUBLIC_DBTOOLS DBTypeConversion
     {
@@ -200,9 +200,9 @@ namespace dbtools
             SAL_THROW((::com::sun::star::sdbc::SQLException));
     };
 
-//.........................................................................
+
 }   // namespace dbtools
-//.........................................................................
+
 
 #endif // INCLUDED_CONNECTIVITY_DBCONVERSION_HXX
 

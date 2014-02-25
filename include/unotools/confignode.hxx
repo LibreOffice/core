@@ -33,14 +33,14 @@ namespace comphelper
     class ComponentContext;
 }
 
-//........................................................................
+
 namespace utl
 {
-//........................................................................
 
-    //========================================================================
+
+
     //= OConfigurationNode
-    //========================================================================
+
     class OConfigurationTreeRoot;
     /** a small wrapper around a configuration node.<p/>
         Nodes in the terminology used herein are <em>inner</em> nodes of a configuration
@@ -178,7 +178,7 @@ namespace utl
         /// invalidate the object
         virtual void clear() throw();
 
-        // -----------------------
+
         // meta information about the node
 
         /// checks whether or not the object represents a set node.
@@ -211,9 +211,9 @@ namespace utl
         OUString normalizeName(const OUString& _rName, NAMEORIGIN _eOrigin) const;
     };
 
-    //========================================================================
+
     //= OConfigurationTreeRoot
-    //========================================================================
+
     /** a specialized version of a OConfigurationNode, representing the root
         of a configuration sub tree<p/>
         Only this class is able to commit any changes made any any OConfigurationNode
@@ -316,9 +316,9 @@ namespace utl
         virtual void clear() throw();
     };
 
-//........................................................................
+
 }   // namespace utl
-//........................................................................
+
 
 #endif // INCLUDED_UNOTOOLS_CONFIGNODE_HXX
 

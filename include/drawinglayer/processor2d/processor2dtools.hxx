@@ -23,12 +23,12 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predefines
 
 class OutputDevice;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -73,7 +73,7 @@ namespace drawinglayer
     } // end of namespace processor2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif //INCLUDED_DRAWINGLAYER_PROCESSOR2D_PROCESSOR2DTOOLS_HXX
 

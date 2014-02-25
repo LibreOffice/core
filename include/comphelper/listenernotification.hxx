@@ -27,14 +27,14 @@
 
 #include <memory>
 
-//........................................................................
+
 namespace comphelper
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= OListenerContainer
-    //====================================================================
+
     /** abstract base class which manages a listener container, including
         THB's listener notification pattern which cares for removing listeners
         which throw an DisposedException upon notification
@@ -141,7 +141,7 @@ namespace comphelper
                         )   SAL_THROW( ( ::com::sun::star::uno::Exception ) ) = 0;
     };
 
-    //====================================================================
+
     inline bool OListenerContainer::empty() const SAL_THROW(())
     {
         return ( m_aListeners.getLength() == 0 );
@@ -152,9 +152,9 @@ namespace comphelper
         return m_aListeners.getLength();
     }
 
-    //====================================================================
+
     //= OSimpleListenerContainer
-    //====================================================================
+
     /** helper class for simple notification of the form LISTENER::METHOD( EVENT )
 
         This class is not threadsafe!
@@ -209,7 +209,7 @@ namespace comphelper
                         )   SAL_THROW( ( ::com::sun::star::uno::Exception ) );
     };
 
-    //--------------------------------------------------------------------
+
     template< class LISTENER, class EVENT >
     inline bool OSimpleListenerContainer< LISTENER, EVENT >::notify( const EventClass& _rEvent, NotificationMethod _pNotify ) SAL_THROW(( ::com::sun::star::uno::Exception ))
     {
@@ -219,7 +219,7 @@ namespace comphelper
         return bRet;
     }
 
-    //--------------------------------------------------------------------
+
     template< class LISTENER, class EVENT >
     inline bool OSimpleListenerContainer< LISTENER, EVENT >::implNotify(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& _rxListener,
@@ -231,9 +231,9 @@ namespace comphelper
         return true;
     }
 
-    //====================================================================
+
     //= OListenerContainerBase
-    //====================================================================
+
     /** is a specialization of OListenerContainer which saves you some additional type casts,
         by making the required listener and event types template arguments.
     */
@@ -289,9 +289,9 @@ namespace comphelper
         );
     }
 
-//........................................................................
+
 } // namespace comphelper
-//........................................................................
+
 
 #endif // INCLUDED_COMPHELPER_LISTENERNOTIFICATION_HXX
 

@@ -24,7 +24,7 @@
 
 namespace svx {
 
-// ============================================================================
+
 
 /** Enumerates all borders a frame selection control can contain. */
 enum FrameBorderType
@@ -49,7 +49,7 @@ SVX_DLLPUBLIC FrameBorderType GetFrameBorderTypeFromIndex( size_t nIndex );
 /** Returns the zero-based index of a valid frame border type. */
 size_t GetIndexFromFrameBorderType( FrameBorderType eBorder );
 
-// ============================================================================
+
 
 } // namespace svx
 

@@ -122,10 +122,10 @@ namespace basegfx
             aNewConnectedComponent.maTotalBounds = rRange;
 
 
-            //
+
             //  STAGE 1: Search for intersecting maDisjunctAggregatesList entries
-            //  =================================================================
-            //
+
+
 
             // if rRange is empty, it will intersect with no
             // maDisjunctAggregatesList member. Thus, we can safe us
@@ -197,10 +197,10 @@ namespace basegfx
                 while( bSomeAggregatesChanged );
             }
 
-            //
+
             //  STAGE 2: Add newly generated connected component list element
-            //  =============================================================
-            //
+
+
 
             // add new component to the end of the component list
             aNewConnectedComponent.maComponentList.push_back(

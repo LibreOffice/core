@@ -31,8 +31,6 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
 //  Klassenhierarchie der View:
 //         SfxListener
 //         SdrPaintView    PntV   Action            ModChg   Attr   Notify
@@ -50,8 +48,6 @@
 //
 //         SdrCreateView   CrtV   Action
 //         SdrView         View
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class SvxURLField;
 
@@ -258,8 +254,6 @@ public:
 
 #endif // INCLUDED_SVX_SVDVIEW_HXX
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
 // Die App macht sich zunaechst ein SdrModel.
 // Anschliessend oeffnet sie ein Win und erzeugt dann eine SdrView.
 // An der SdrView meldet sie dann mit der Methode ShowSdrPage() eine Seite an.
@@ -299,7 +293,5 @@ public:
 //   ~~~~~~~~~~
 //     Pointer GetPreferredPointer(const Point& rMousePos, const OutputDevice* pOut, sal_uInt16 nTol=0) const;
 //     OUString GetStatusText();
-//
-///////////////////////////////////////////////////////////////////////////////////////////////// */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

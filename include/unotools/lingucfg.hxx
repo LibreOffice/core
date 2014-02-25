@@ -162,16 +162,16 @@ public:
     SvtLinguConfig();
     virtual ~SvtLinguConfig();
 
-    //
+
     // borrowed from utl::ConfigItem
-    //
+
     com::sun::star::uno::Sequence< OUString >
         GetNodeNames( const OUString &rNode );
-    //
+
     com::sun::star::uno::Sequence< com::sun::star::uno::Any >
         GetProperties(
             const com::sun::star::uno::Sequence< OUString > &rNames );
-    //
+
     bool
         ReplaceSetProperties(
             const OUString &rNode,
@@ -196,7 +196,7 @@ public:
     //! linguistic configuration only
     //!
     bool GetElementNamesFor( const OUString &rNodeName, com::sun::star::uno::Sequence< OUString > &rElementNames ) const;
-    //
+
     bool GetSupportedDictionaryFormatsFor( const OUString &rSetName, const OUString &rSetEntry, com::sun::star::uno::Sequence< OUString > &rFormatList ) const;
 
     bool GetDictionaryEntry( const OUString &rNodeName, SvtLinguConfigDictionaryEntry &rDicEntry ) const;

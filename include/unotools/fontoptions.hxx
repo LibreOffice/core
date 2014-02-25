@@ -25,7 +25,7 @@
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          forward declaration to our private date container implementation
     @descr          We use these class as internal member to support small memory requirements.
                     You can create the container if it is necessary. The class which use these mechanism
@@ -34,7 +34,7 @@
 
 class SvtFontOptions_Impl;
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          collect information about font features
     @descr          -
 
@@ -47,7 +47,7 @@ class SvtFontOptions_Impl;
 class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtFontOptions : public utl::detail::Options
 {
     public:
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      standard constructor and destructor
             @descr      This will initialize an instance with default values.
                         We implement these class with a refcount mechanism! Every instance of this class increase it
@@ -66,7 +66,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtFontOptions : public utl::detail::Op
          SvtFontOptions();
         virtual ~SvtFontOptions();
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      interface methods to get and set value of config key "org.openoffice.Office.Common/Font"
             @descr      These values defines different states of font handling.
 
@@ -95,7 +95,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtFontOptions : public utl::detail::Op
         void        EnableFontWYSIWYG           ( bool bState   )       ;
     private:
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      return a reference to a static mutex
             @descr      These class use his own static mutex to be threadsafe.
                         We create a static mutex only for one ime and use at different times.

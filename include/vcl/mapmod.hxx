@@ -29,9 +29,9 @@
 
 class SvStream;
 
-// --------------
+
 // - ImplMapMode -
-// --------------
+
 
 class   OutputDevice;
 
@@ -57,9 +57,9 @@ public:
                     ImplMapMode( const ImplMapMode& rImpMapMode );
 };
 
-// -----------
+
 // - MapMode -
-// -----------
+
 
 class VCL_DLLPUBLIC MapMode
 {

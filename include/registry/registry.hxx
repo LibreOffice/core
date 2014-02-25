@@ -87,7 +87,7 @@ REG_DLLPUBLIC Registry_Api* REGISTRY_CALLTYPE initRegistry_Api(void);
 
 class RegistryKey;
 
-//-----------------------------------------------------------------------------
+
 
 /** The Registry provides the functionality to read and write information in a registry file.
 
@@ -231,7 +231,7 @@ protected:
 };
 
 
-//-----------------------------------------------------------------------------
+
 
 /** RegistryKeyArray represents an array of open keys.
 
@@ -312,7 +312,7 @@ protected:
     Registry        m_registry;
 };
 
-//-----------------------------------------------------------------------------
+
 
 /** RegistryValueList represents a value list of the specified type.
 
@@ -386,7 +386,7 @@ protected:
     Registry        m_registry;
 };
 
-//-----------------------------------------------------------------------------
+
 
 /** RegistryKey reads or writes information of the underlying key in a registry.
 
@@ -672,7 +672,7 @@ protected:
 };
 
 
-//-----------------------------------------------------------------------------
+
 
 inline RegistryKeyArray::RegistryKeyArray()
     : m_length(0)
@@ -722,7 +722,7 @@ inline RegError RegistryKeyArray::closeKeyHandles()
         return(REG_INVALID_KEY);
 }
 
-//-----------------------------------------------------------------------------
+
 
 inline RegistryKeyNames::RegistryKeyNames()
     : m_length(0)
@@ -773,7 +773,7 @@ inline RegError RegistryKeyNames::freeKeyNames()
         return REG_INVALID_KEY;
 }
 
-//-----------------------------------------------------------------------------
+
 
 inline RegistryKey::RegistryKey()
     : m_hImpl(NULL)
@@ -1146,7 +1146,7 @@ inline rtl::OUString RegistryKey::getRegistryName()
             return rtl::OUString();
     }
 
-//-----------------------------------------------------------------------------
+
 
 inline Registry::Registry()
     : m_pApi(initRegistry_Api())

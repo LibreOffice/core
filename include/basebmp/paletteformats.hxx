@@ -35,7 +35,7 @@
 namespace basebmp
 {
 
-//-----------------------------------------------------------------------------
+
 
 /** Lookup index value for given color value in a PaletteImageAccessor
  */
@@ -48,7 +48,7 @@ template< class Accessor > struct ColorLookup
     }
 };
 
-//-----------------------------------------------------------------------------
+
 
 // partial specialization of AccessorTraits for PaletteAccessor
 template< class Accessor, typename ColorType > struct AccessorTraits<
@@ -83,7 +83,7 @@ template< class Accessor, typename ColorType > struct AccessorTraits<
     };
 };
 
-//-----------------------------------------------------------------------------
+
 
 template< typename ColorType > struct PaletteAccessorSelector
 {
@@ -93,7 +93,7 @@ template< typename ColorType > struct PaletteAccessorSelector
     };
 };
 
-//-----------------------------------------------------------------------------
+
 
 template< class Iterator,
           class Accessor > struct PixelFormatTraitsTemplate_Palette
@@ -113,7 +113,7 @@ template< int BitsPerPixel,
                NonStandardAccessor< sal_uInt8 > >
 {};
 
-//-----------------------------------------------------------------------------
+
 
 // 1bpp MSB
 typedef PixelFormatTraitsTemplate_PackedPalette<1, true>  PixelFormatTraits_PAL1_MSB;

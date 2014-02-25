@@ -56,7 +56,7 @@ namespace ucbhelper_impl { struct ContentImplHelper_Impl; }
 namespace ucbhelper
 {
 
-//=========================================================================
+
 
 class ContentProviderImplHelper;
 
@@ -484,9 +484,9 @@ public:
         throw( com::sun::star::lang::NoSupportException,
                com::sun::star::uno::RuntimeException, std::exception );
 
-    //////////////////////////////////////////////////////////////////////
+
     // Non-interface methods.
-    //////////////////////////////////////////////////////////////////////
+
 
     /**
       * This method returns the provider of the content.

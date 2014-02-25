@@ -36,9 +36,9 @@
 #include <basegfx/vector/b2enums.hxx>
 #include <svx/svxdllapi.h>
 
-//************************************************************
+
 // Forward declaration
-//************************************************************
+
 
 class SfxPoolItem;
 class Viewport3D;

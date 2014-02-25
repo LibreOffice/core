@@ -25,14 +25,14 @@
 #include <svx/sdtakitm.hxx>
 #include <svx/svxdllapi.h>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predeclarations
 
 class SdrObject;
 class GeoStat;
 class Bitmap;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -75,7 +75,7 @@ namespace sdr
             // overload for acessing the SdrObject
             virtual SdrObject* TryToGetSdrObject() const;
 
-            //////////////////////////////////////////////////////////////////////////////
+
             // primitive stuff
 
             // add Gluepoints (if available)
@@ -89,7 +89,7 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFSDROBJ_HXX
 

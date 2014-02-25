@@ -24,14 +24,14 @@
 
 class SdrObject;
 
-//........................................................................
+
 namespace svx
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= SdrObjectFilter
-    //====================================================================
+
     /** specifies a boolean predicate on the set of all SdrObjects - vulgo a filter.
     */
     class SVX_DLLPUBLIC SAL_NO_VTABLE ISdrObjectFilter
@@ -42,9 +42,9 @@ namespace svx
         virtual         ~ISdrObjectFilter() = 0;
     };
 
-//........................................................................
+
 } // namespace svx
-//........................................................................
+
 
 #endif // INCLUDED_SVX_SDROBJECTFILTER_HXX
 

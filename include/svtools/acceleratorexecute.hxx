@@ -45,7 +45,7 @@ struct TMutexInit
     ::osl::Mutex m_aLock;
 };
 
-//===============================================
+
 /**
     @descr  implements a helper, which can be used to
             convert vcl key codes into awt key codes ...
@@ -71,7 +71,7 @@ struct TMutexInit
  */
 class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
 {
-    //-------------------------------------------
+
     // const, types
     private:
 
@@ -80,7 +80,7 @@ class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
                 remove this resource here if we go forwards to next major */
         typedef ::std::vector< ::std::pair< css::util::URL, css::uno::Reference< css::frame::XDispatch > > > TCommandQueue;
 
-    //-------------------------------------------
+
     // member
     private:
 
@@ -108,11 +108,11 @@ class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
                 remove this resource here if we go forwards to next major */
         ::vcl::EventPoster m_aAsyncCallback;
 
-    //-------------------------------------------
+
     // interface
     public:
 
-        //---------------------------------------
+
         /** @short  factory method to create new accelerator
                     helper instance.
 
@@ -138,11 +138,11 @@ class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
          */
         static AcceleratorExecute* createAcceleratorHelper();
 
-        //---------------------------------------
+
         /** @short  fight against inlining ... */
         virtual ~AcceleratorExecute();
 
-        //---------------------------------------
+
         /** @short  init this instance.
 
             @descr  It must be called as first method after creation.
@@ -169,7 +169,7 @@ class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
         virtual void init(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                           const css::uno::Reference< css::frame::XFrame >&              xEnv );
 
-        //---------------------------------------
+
         /** @short  trigger this accelerator.
 
             @descr  The internal configuartions are used to find
@@ -194,29 +194,29 @@ class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
         * @return The command or an empty string if the key event could not be found.
         */
         OUString  findCommand(const ::com::sun::star::awt::KeyEvent& aKey);
-        //---------------------------------------
+
         /** TODO document me */
         static css::awt::KeyEvent st_VCLKey2AWTKey(const KeyCode&            aKey);
         static KeyCode            st_AWTKey2VCLKey(const css::awt::KeyEvent& aKey);
 
-        //---------------------------------------
+
         /** TODO document me */
         static css::uno::Reference< css::ui::XAcceleratorConfiguration > st_openGlobalConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
 
-        //---------------------------------------
+
         /** TODO document me */
         static css::uno::Reference< css::ui::XAcceleratorConfiguration > st_openModuleConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext ,
                                                                                               const css::uno::Reference< css::frame::XFrame >&              xFrame);
 
-        //---------------------------------------
+
         /** TODO document me */
         static css::uno::Reference< css::ui::XAcceleratorConfiguration > st_openDocConfig(const css::uno::Reference< css::frame::XModel >& xModel);
 
-    //-------------------------------------------
+
     // internal
     private:
 
-        //---------------------------------------
+
         /** @short  allow creation of instances of this class
                     by using our factory only!
          */
@@ -224,15 +224,15 @@ class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
 
         AcceleratorExecute(const AcceleratorExecute& rCopy);
         void operator=(const AcceleratorExecute&) {};
-        //---------------------------------------
+
         /** TODO document me */
         SVT_DLLPRIVATE OUString impl_ts_findCommand(const css::awt::KeyEvent& aKey);
 
-        //---------------------------------------
+
         /** TODO document me */
         SVT_DLLPRIVATE css::uno::Reference< css::util::XURLTransformer > impl_ts_getURLParser();
 
-        //---------------------------------------
+
         /** @deprecated
                 replaced by internal class AsyncAccelExec ...
                 remove this resource here if we go forwards to next major */

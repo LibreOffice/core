@@ -24,7 +24,7 @@
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // GroupPrimitive2D class
 
 namespace drawinglayer
@@ -88,7 +88,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif //INCLUDED_DRAWINGLAYER_PRIMITIVE2D_GROUPPRIMITIVE2D_HXX
 

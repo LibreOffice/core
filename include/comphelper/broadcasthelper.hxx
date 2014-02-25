@@ -26,14 +26,14 @@
 //... namespace comphelper .......................................................
 namespace comphelper
 {
-//.........................................................................
 
-    //==================================================================================
+
+
     //= OMutexAndBroadcastHelper - a class which holds a Mutex and a OBroadcastHelper;
     //=                 needed because when deriving from OPropertySetHelper,
     //=                 the OBroadcastHelper has to be initialized before
     //=                 the OPropertySetHelper
-    //==================================================================================
+
     class OMutexAndBroadcastHelper
     {
     protected:

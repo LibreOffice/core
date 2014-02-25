@@ -64,7 +64,7 @@ public:
     sal_uInt16              GetStyle() const { return _nStyle; }
 };
 
-////////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVL_CNTWALL_HXX
 

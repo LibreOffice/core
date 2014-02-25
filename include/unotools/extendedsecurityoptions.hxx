@@ -26,7 +26,7 @@
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          forward declaration to our private date container implementation
     @descr          We use these class as internal member to support small memory requirements.
                     You can create the container if it is necessary. The class which use these mechanism
@@ -35,7 +35,7 @@
 
 class SvtExtendedSecurityOptions_Impl;
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          collect information about security features
     @descr          -
 
@@ -58,7 +58,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtExtendedSecurityOptions : public utl
             OPEN_ALWAYS
         };
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      standard constructor and destructor
             @descr      This will initialize an instance with default values.
                         We implement these class with a refcount mechanism! Every instance of this class increase it
@@ -81,7 +81,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtExtendedSecurityOptions : public utl
 
     private:
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      return a reference to a static mutex
             @descr      These class is partially threadsafe (for de-/initialization only).
                         All access methods are'nt safe!
@@ -97,9 +97,9 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtExtendedSecurityOptions : public utl
 
         UNOTOOLS_DLLPRIVATE static ::osl::Mutex& GetInitMutex();
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private member
-    //-------------------------------------------------------------------------------------------------------------
+
 
     private:
 

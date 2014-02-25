@@ -27,7 +27,7 @@
 #include <unotools/unotoolsdllapi.h>
 #include <unotools/options.hxx>
 
-//-----------------------------------------------------------------------------
+
 namespace com{ namespace sun{ namespace star{
     namespace uno{
         class Any;
@@ -42,7 +42,7 @@ namespace com{ namespace sun{ namespace star{
         class XChangesListener;
     }
 }}}
-//-----------------------------------------------------------------------------
+
 namespace utl
 {
 #define CONFIG_MODE_IMMEDIATE_UPDATE    0x00
@@ -82,7 +82,7 @@ namespace utl
             void                    CallNotify(
                                 const com::sun::star::uno::Sequence<OUString>& aPropertyNames);
 
-            //***********************************************************************************************************************
+
             // In special mode ALL_LOCALES we must support reading/writing of localized cfg entries as Sequence< PropertyValue >.
             // These methods are helper to convert given lists of names and Any-values.
             // format:  PropertyValue.Name  = <locale as ISO string>

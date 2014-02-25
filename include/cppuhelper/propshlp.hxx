@@ -207,7 +207,7 @@ private:
 };
 
 
-//-----------------------------------------------------------------------------
+
 // helper defines needed for an interface container with a 32 bit key values
 
 struct equalInt32_Impl
@@ -730,7 +730,7 @@ protected:
 };
 
 } // end namespace cppuhelper
-#endif  //
+#endif
 
 
 

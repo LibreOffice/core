@@ -772,7 +772,7 @@ VCL_DLLPUBLIC inline bool isContainerWindow(const Window *pWindow)
 //layout and isn't visible yet
 VCL_DLLPUBLIC bool isInitialLayout(const Window *pWindow);
 
-// retro-fitting utilities //
+// retro-fitting utilities
 
 //Get a Size which is large enough to contain all children with
 //an equal amount of space at top left and bottom right

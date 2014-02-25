@@ -26,7 +26,7 @@
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // HelplinePrimitive2D class
 
 namespace drawinglayer
@@ -107,7 +107,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif //INCLUDED_DRAWINGLAYER_PRIMITIVE2D_HELPLINEPRIMITIVE2D_HXX
 

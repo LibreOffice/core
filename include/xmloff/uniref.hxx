@@ -110,10 +110,10 @@ public:
 
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
+
+
 // Inline-implementations of UniReference
-//
+
 
 /** Create a new reference with the same element as in rRef and acquire this one.*/
 template< class T >

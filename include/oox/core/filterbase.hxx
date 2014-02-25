@@ -74,7 +74,7 @@ namespace oox { namespace ole {
 namespace oox {
 namespace core {
 
-// ============================================================================
+
 
 enum OoxmlVersion
 {
@@ -114,7 +114,7 @@ public:
     /** Derived classes implement export of the entire document. */
     virtual bool        exportDocument() = 0;
 
-    // ------------------------------------------------------------------------
+
 
     /** Returns the component context passed in the filter constructor (always existing). */
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
@@ -253,7 +253,7 @@ public:
     virtual void SAL_CALL cancel()
                             throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
-    // ------------------------------------------------------------------------
+
 protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
                         implGetInputStream( utl::MediaDescriptor& rMediaDesc ) const;
@@ -287,7 +287,7 @@ private:
     boost::scoped_ptr< FilterBaseImpl > mxImpl;
 };
 
-// ============================================================================
+
 
 } // namespace core
 } // namespace oox

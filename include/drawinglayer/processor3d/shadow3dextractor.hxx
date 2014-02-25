@@ -32,7 +32,7 @@
 #include <basegfx/polygon/b3dpolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {

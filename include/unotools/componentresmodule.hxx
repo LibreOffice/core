@@ -28,16 +28,16 @@
 
 class ResMgr;
 
-//........................................................................
+
 namespace utl
 {
-//........................................................................
+
 
     class OComponentResModuleImpl;
 
-    //====================================================================
+
     //= OComponentResourceModule
-    //====================================================================
+
     /** extends the comphelper::OModule implementation with
         simply resource access
     */
@@ -62,9 +62,9 @@ namespace utl
         virtual void onLastClient();
     };
 
-    //=========================================================================
+
     //= ModuleRes
-    //=========================================================================
+
     /** specialized ResId, using the resource manager provided by a given OModule
     */
     class UNOTOOLS_DLLPUBLIC ModuleRes : public ::ResId
@@ -73,9 +73,9 @@ namespace utl
         ModuleRes( sal_uInt16 _nId, OComponentResourceModule& _rModule ) : ResId( _nId, *_rModule.getResManager() ) { }
     };
 
-    //====================================================================
+
     //= defining a concrete module
-    //====================================================================
+
 #define DEFINE_MODULE( ModuleClass, ClientClass, ResClass ) \
     /* -------------------------------------------------------------------- */ \
     class ModuleClass : public ::utl::OComponentResourceModule \
@@ -140,9 +140,9 @@ namespace utl
         } \
     };
 
-    //====================================================================
+
     //= implementing a concrete module
-    //====================================================================
+
 #define IMPLEMENT_MODULE( ModuleClass, resprefix ) \
     struct CreateModuleClass \
     { \
@@ -171,9 +171,9 @@ namespace utl
             create( CreateModuleClass(), ::osl::GetGlobalMutex() ); \
     } \
 
-//........................................................................
+
 } // namespace utl
-//........................................................................
+
 
 #endif // INCLUDED_UNOTOOLS_COMPONENTRESMODULE_HXX
 

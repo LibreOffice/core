@@ -54,7 +54,7 @@ struct ShapeStyleRef
 
 typedef ::std::map< sal_Int32, ShapeStyleRef > ShapeStyleRefMap;
 
-// ============================================================================
+
 
 /** Additional information for a chart embedded in a drawing shape. */
 struct ChartShapeInfo
@@ -65,7 +65,7 @@ struct ChartShapeInfo
     explicit     ChartShapeInfo( bool bEmbedShapes ) : mbEmbedShapes( bEmbedShapes ) {}
 };
 
-// ============================================================================
+
 
 class OOX_DLLPUBLIC Shape
     : public boost::enable_shared_from_this< Shape >
@@ -286,7 +286,7 @@ private:
     com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> maDiagramDoms;
 };
 
-// ============================================================================
+
 
 } }
 

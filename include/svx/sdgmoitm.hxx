@@ -25,9 +25,9 @@
 #include <svx/svddef.hxx>
 #include <svx/svxdllapi.h>
 
-//------------------
+
 // SdrGrafModeItem -
-//------------------
+
 
 class SVX_DLLPUBLIC SdrGrafModeItem : public SfxEnumItem
 {

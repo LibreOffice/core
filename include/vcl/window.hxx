@@ -116,9 +116,9 @@ namespace vcl {
 
 namespace svt { class PopupWindowControllerImpl; }
 
-// ---------------
+
 // - WindowTypes -
-// ---------------
+
 
 // Type fuer GetWindow()
 #define WINDOW_PARENT                   ((sal_uInt16)0)
@@ -305,9 +305,9 @@ typedef sal_uInt16 StateChangedType;
 #define DLGWINDOW_NEXT                  1
 #define DLGWINDOW_FIRST                 2
 
-// ----------
+
 // - Window -
-// ----------
+
 
 #ifdef DBG_UTIL
 const char* ImplDbgCheckWindow( const void* pObj );
@@ -356,10 +356,10 @@ private:
     //       to this central file, all members are now hidden
     //       in the WindowImpl class and all inline functions
     //       were removed
-    //
+
     //       Please do *not* add new members or inline functions to class Window,
     //       but use class WindowImpl instead
-    //
+
     WindowImpl* mpWindowImpl;
 
     // This is a first attempt to start to remove the dependency of Window on
@@ -1254,9 +1254,9 @@ public:
      */
     void reorderWithinParent(sal_uInt16 nNewPosition);
 
-    //-------------------------------------
+
     //  Native Widget Rendering functions
-    //-------------------------------------
+
 
     // form controls must never use native widgets, this can be toggled here
     void    EnableNativeWidget( bool bEnable = true );
@@ -1269,9 +1269,9 @@ public:
     */
     void doLazyDelete();
 
-    //-------------------------------------
+
     //  Keyboard access functions
-    //-------------------------------------
+
 
     /** Query the states of keyboard indicators - Caps Lock, Num Lock and
         Scroll Lock.  Use the following mask to retrieve the state of each

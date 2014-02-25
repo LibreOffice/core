@@ -29,9 +29,9 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <svx/svxdllapi.h>
 
-//************************************************************
+
 //   Initial Declarations
-//************************************************************
+
 
 class SdrObjList;
 class SdrObjListIter;
@@ -71,9 +71,9 @@ struct SdrCustomShapeInteraction
     sal_Int32                                                                       nMode;
 };
 
-//************************************************************
+
 //   SdrObjCustomShape
-//************************************************************
+
 
 class SVX_DLLPUBLIC SdrObjCustomShape : public SdrTextObj
 {

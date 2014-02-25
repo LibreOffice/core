@@ -29,9 +29,9 @@
 
 class UserDrawEvent;
 
-// -------------
+
 // - FixedText -
-// -------------
+
 
 class VCL_DLLPUBLIC FixedText : public Control
 {
@@ -90,9 +90,9 @@ public:
     virtual void    LoseFocus();
 };
 
-// -------------
+
 // - FixedLine -
-// -------------
+
 
 class VCL_DLLPUBLIC FixedLine : public Control
 {
@@ -124,9 +124,9 @@ public:
     virtual Size    GetOptimalSize() const;
 };
 
-// ---------------
+
 // - FixedBitmap -
-// ---------------
+
 
 class VCL_DLLPUBLIC FixedBitmap : public Control
 {
@@ -160,9 +160,9 @@ public:
     const Bitmap&   GetBitmap() const { return maBitmap; }
 };
 
-// --------------
+
 // - FixedImage -
-// --------------
+
 
 class VCL_DLLPUBLIC FixedImage : public Control
 {

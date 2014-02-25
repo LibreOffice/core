@@ -25,9 +25,9 @@
 
 namespace dbaui
 {
-    // =========================================================================
+
     // a helper for multi-threaded handling of async events
-    // -------------------------------------------------------------------------
+
     /** handles asynchronous links which may be called in multi-threaded environments
         If you use an instance of this class as member of your own class, it will handle
         several crucial points for you (for instance the case that somebody posts the

@@ -158,7 +158,7 @@ public:
     // incompatible with the rest of the Create functionality of SvDraw, needs
     // to set the following flag. It affects the following object types:
     // OBJ_POLY, OBJ_PLIN, OBJ_PATHLINE, OBJ_PATHFILL
-    //
+
     // This flag should be regarded as temporary. The affected applications should
     // be changed soon.
     // Default = sal_False;

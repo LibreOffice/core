@@ -37,11 +37,11 @@ namespace cppu {
 
 namespace ucbhelper {
 
-//=========================================================================
+
 
 #define DYNAMICRESULTSET_SERVICE_NAME "com.sun.star.ucb.DynamicResultSet"
 
-//=========================================================================
+
 
 /**
   * This is an abstract base class for implementations of the service
@@ -183,9 +183,9 @@ public:
     getCapabilities()
         throw( com::sun::star::uno::RuntimeException, std::exception );
 
-    //////////////////////////////////////////////////////////////////////
+
     // Non-interface methods.
-    //////////////////////////////////////////////////////////////////////
+
 
     /**
       * This method returns, whether the resultset is static or dynamic.

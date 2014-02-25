@@ -27,9 +27,9 @@
 
 enum SdrCaptionEscDir {SDRCAPT_ESCHORIZONTAL,SDRCAPT_ESCVERTICAL,SDRCAPT_ESCBESTFIT};
 
-//------------------------------
+
 // class SdrCaptionEscDirItem
-//------------------------------
+
 class SVX_DLLPUBLIC SdrCaptionEscDirItem: public SfxEnumItem {
 public:
     TYPEINFO();
@@ -45,37 +45,37 @@ public:
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, OUString& rText, const IntlWrapper * = 0) const;
 };
 
-//------------------------------------
+
 // class SdrCaptionEscIsRelItem
 // sal_True=Linienaustrittsposition relativ
 // sal_False=Linienaustrittsposition absolut
-//------------------------------------
+
 class SdrCaptionEscIsRelItem: public SdrYesNoItem {
 public:
     SdrCaptionEscIsRelItem(sal_Bool bRel=sal_True): SdrYesNoItem(SDRATTR_CAPTIONESCISREL,bRel) {}
     SdrCaptionEscIsRelItem(SvStream& rIn) : SdrYesNoItem(SDRATTR_CAPTIONESCISREL,rIn)  {}
 };
 
-//------------------------------------
+
 // class SdrCaptionEscRelItem
 // Relativer Linienaustritt
 //     0 =   0.00% = oben bzw. links,
 // 10000 = 100.00% = rechts bzw. unten
 // nur wenn SdrCaptionEscIsRelItem=TRUE
-//------------------------------------
+
 class SdrCaptionEscRelItem: public SfxInt32Item {
 public:
     SdrCaptionEscRelItem(long nEscRel=5000): SfxInt32Item(SDRATTR_CAPTIONESCREL,nEscRel) {}
     SdrCaptionEscRelItem(SvStream& rIn)    : SfxInt32Item(SDRATTR_CAPTIONESCREL,rIn)     {}
 };
 
-//------------------------------------
+
 // class SdrCaptionEscAbsItem
 // Absoluter Linienaustritt
 // 0  = oben bzw. links,
 // >0 = in Richtung rechts bzw. unten
 // nur wenn SdrCaptionEscIsRelItem=FALSE
-//------------------------------------
+
 class SdrCaptionEscAbsItem: public SdrMetricItem {
 public:
     SdrCaptionEscAbsItem(long nEscAbs=0): SdrMetricItem(SDRATTR_CAPTIONESCABS,nEscAbs) {}

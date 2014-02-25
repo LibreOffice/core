@@ -144,11 +144,11 @@ public:
     virtual sal_uInt16 GetVersion() const;
 };
 
-//=========================================================================
+
 
 typedef std::vector< rtl::Reference< SfxStyleSheetBase > > SfxStyles;
 
-//=========================================================================
+
 
 class SVL_DLLPUBLIC SfxStyleSheetIterator
 
@@ -192,7 +192,7 @@ friend class SfxStyleSheetBasePool;
 };
 
 typedef ::boost::shared_ptr< SfxStyleSheetIterator > SfxStyleSheetIteratorPtr;
-//=========================================================================
+
 
 class SfxStyleSheetBasePool_Impl;
 
@@ -264,7 +264,7 @@ public:
     SfxStyleFamily              GetSearchFamily() const  { return nSearchFamily; }
 };
 
-//=========================================================================
+
 
 class SVL_DLLPUBLIC SfxStyleSheet: public SfxStyleSheetBase,
                      public SfxListener, public SfxBroadcaster, public svl::StyleSheetUser
@@ -290,7 +290,7 @@ protected:
     virtual             ~SfxStyleSheet();
 };
 
-//=========================================================================
+
 
 class SVL_DLLPUBLIC SfxStyleSheetPool: public SfxStyleSheetBasePool
 {
@@ -305,7 +305,7 @@ public:
 //  virtual sal_Bool CopyTo(SfxStyleSheetPool &rDest, const String &rSourceName);
 };
 
-//=========================================================================
+
 
 #define SFX_STYLESHEET_CREATED       1  // neu
 #define SFX_STYLESHEET_MODIFIED      2  // ver"andert
@@ -318,7 +318,7 @@ public:
                                        // ueber die STYLESHEET Hints
                                        // verschickt werden sollen.
 
-//========================================================================
+
 
 class SVL_DLLPUBLIC SfxStyleSheetPoolHint : public SfxHint
 {
@@ -332,7 +332,7 @@ public:
                         { return nHint; }
 };
 
-//=========================================================================
+
 
 class SVL_DLLPUBLIC SfxStyleSheetHint: public SfxHint
 {

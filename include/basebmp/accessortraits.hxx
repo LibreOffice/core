@@ -69,7 +69,7 @@ template< class Accessor,
         type;
 };
 
-//-----------------------------------------------------------------------------
+
 
 /** Traits template for Accessor
 

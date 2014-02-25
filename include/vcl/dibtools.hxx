@@ -24,14 +24,14 @@
 #include <tools/rc.hxx>
 #include <vcl/region.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predefines
 
 class SvStream;
 class BitmapEx;
 class Bitmap;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 bool VCL_DLLPUBLIC ReadDIB( // ReadDIB(rBitmap, rIStm, true);
     Bitmap& rTarget,
@@ -47,7 +47,7 @@ bool VCL_DLLPUBLIC ReadDIBV5(
     Bitmap& rTargetAlpha,
     SvStream& rIStm);
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 bool VCL_DLLPUBLIC WriteDIB( // WriteDIB(rBitmap, rOStm, false, true);
     const Bitmap& rSource,
@@ -64,10 +64,10 @@ bool VCL_DLLPUBLIC WriteDIBV5(
     const Bitmap& rSourceAlpha,
     SvStream& rOStm);
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_VCL_DIBTOOLS_HXX
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

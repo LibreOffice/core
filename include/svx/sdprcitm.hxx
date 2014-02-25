@@ -23,10 +23,10 @@
 #include <svx/svxdllapi.h>
 
 
-//------------------------------------------------------------
+
 // class SdrPercentItem
 // Integer percents of 0
-//------------------------------------------------------------
+
 
 class SVX_DLLPUBLIC SdrPercentItem : public SfxUInt16Item
 {
@@ -41,10 +41,10 @@ public:
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, OUString& rText, const IntlWrapper * = 0) const;
 };
 
-//------------------------------------------------------------
+
 // class SdrSignedPercentItem
 // Integer percents of +/-
-//------------------------------------------------------------
+
 
 class SVX_DLLPUBLIC SdrSignedPercentItem : public SfxInt16Item
 {

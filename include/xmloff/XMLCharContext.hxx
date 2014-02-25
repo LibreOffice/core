@@ -59,7 +59,7 @@ public:
     virtual void InsertControlCharacter(sal_Int16   _nControl);
     virtual void InsertString(const OUString& _sString);
 };
-// ---------------------------------------------------------------------
+
 #endif // INCLUDED_XMLOFF_XMLCHARCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

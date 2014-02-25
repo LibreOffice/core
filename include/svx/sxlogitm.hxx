@@ -22,18 +22,18 @@
 #include <svx/svddef.hxx>
 #include <svx/sdmetitm.hxx>
 
-//------------------------------
+
 // class SdrLogicSizeWidthItem
-//------------------------------
+
 class SdrLogicSizeWidthItem: public SdrMetricItem {
 public:
     SdrLogicSizeWidthItem(long nWdt=0): SdrMetricItem(SDRATTR_LOGICSIZEWIDTH,nWdt)  {}
     SdrLogicSizeWidthItem(SvStream& rIn): SdrMetricItem(SDRATTR_LOGICSIZEWIDTH,rIn) {}
 };
 
-//------------------------------
+
 // class SdrLogicSizeWidthItem
-//------------------------------
+
 class SdrLogicSizeHeightItem: public SdrMetricItem {
 public:
     SdrLogicSizeHeightItem(long nHgt=0): SdrMetricItem(SDRATTR_LOGICSIZEHEIGHT,nHgt)  {}

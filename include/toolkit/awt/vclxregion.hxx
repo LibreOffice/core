@@ -29,9 +29,9 @@
 
 #include <vcl/region.hxx>
 
-//  ----------------------------------------------------
+
 //  class VCLXRegion
-//  ----------------------------------------------------
+
 
 class VCLXRegion :  public ::com::sun::star::awt::XRegion,
                     public ::com::sun::star::lang::XTypeProvider,

@@ -26,7 +26,7 @@
 class SfxListener;
 class SfxHint;
 
-//-------------------------------------------------------------------------
+
 
 class SVL_DLLPUBLIC SfxBroadcaster
 {

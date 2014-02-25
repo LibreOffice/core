@@ -28,14 +28,14 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <svx/svxdllapi.h>
 
-//........................................................................
+
 namespace svx
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= OComponentTransferable
-    //====================================================================
+
     class SVX_DLLPUBLIC OComponentTransferable : public TransferableHelper
     {
     protected:
@@ -68,9 +68,9 @@ namespace svx
         static sal_uInt32   getDescriptorFormatId(sal_Bool _bExtractForm);
     };
 
-//........................................................................
+
 }   // namespace svx
-//........................................................................
+
 
 #endif // INCLUDED_SVX_DBAOBJECTEX_HXX
 
