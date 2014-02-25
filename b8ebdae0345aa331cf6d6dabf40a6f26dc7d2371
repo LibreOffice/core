@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a890539_93dcc476",
+        "filename": "sc/source/ui/unoobj/scdetect.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 520,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-02-25T19:07:02Z",
+      "side": 0,
+      "message": "umm.. this _removes_ the check for a 0-length file, are you sure that doesn\u0027t reintroduce fdo#46699 for which this check was added with commit 09d98dfe89a651c1b33a07c3d23e20b266d163e7",
+      "range": {
+        "startLine": 520,
+        "startChar": 20,
+        "endLine": 520,
+        "endChar": 25
+      },
+      "revId": "b8ebdae0345aa331cf6d6dabf40a6f26dc7d2371",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
