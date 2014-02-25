@@ -50,7 +50,7 @@
 
 namespace framework{
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     We must save information about our listener and URL for listening.
     We implement this as a hashtable for strings.
 *//*-*************************************************************************************************************/
@@ -59,7 +59,7 @@ typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<  OUString         ,
                                                         OUStringHash > IMPL_ListenerHashContainer;
 
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          helper for desktop only(!) to create new tasks on demand for dispatches
     @descr          Use this class as member only! Never use it as baseclass.
                     XInterface will be ambigous and we hold a weakcss::uno::Reference to ouer OWNER - not to our SUPERCLASS!
@@ -85,9 +85,9 @@ class PopupMenuDispatcher :     // baseclasses
                                            css::frame::XFrameActionListener,
                                            css::lang::XInitialization >
 {
-    //-------------------------------------------------------------------------------------------------------------
+
     //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+
     public:
 
         //  constructor / destructor

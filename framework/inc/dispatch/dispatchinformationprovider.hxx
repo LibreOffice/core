@@ -36,20 +36,20 @@
 
 namespace framework{
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          a helper to merge dispatch information of different sources together.
 *//*-*************************************************************************************************************/
 class DispatchInformationProvider : private ThreadHelpBase
                                   , public  ::cppu::WeakImplHelper1< css::frame::XDispatchInformationProvider >
 {
-    //_______________________
+
     // member
     private:
 
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
         css::uno::WeakReference< css::frame::XFrame > m_xFrame;
 
-    //_______________________
+
     // interface
     public:
 
@@ -64,7 +64,7 @@ class DispatchInformationProvider : private ThreadHelpBase
         virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation(sal_Int16 nCommandGroup)
             throw (css::uno::RuntimeException, std::exception);
 
-    //_______________________
+
     // helper
     private:
 

@@ -30,7 +30,7 @@
 
 namespace framework{
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          implement a read/write lock with fairness between read/write accessors
     @descr          These implementation never should used as base class! Use it as a member every time.
                     Use ReadGuard and/or WriteGuard in your methods (which work with these lock)
@@ -49,12 +49,12 @@ namespace framework{
 class FairRWLock : public  IRWLock
                  , private INonCopyable
 {
-    //-------------------------------------------------------------------------------------------------------------
+
     //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+
     public:
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      standard ctor
             @descr      Initialize instance with right start values for correct working.
                         no reader could exist               =>  m_nReadCount   = 0
@@ -77,7 +77,7 @@ class FairRWLock : public  IRWLock
         {
         }
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @interface  IRWLock
             @short      set lock for reading
             @descr      A guard should call this method to acquire read access on your member.
@@ -110,7 +110,7 @@ class FairRWLock : public  IRWLock
             ++m_nReadCount;
         }
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @interface  IRWLock
             @short      reset lock for reading
             @descr      A guard should call this method to release read access on your member.
@@ -138,7 +138,7 @@ class FairRWLock : public  IRWLock
             }
         }
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @interface  IRWLock
             @short      set lock for writing
             @descr      A guard should call this method to acquire write access on your member.
@@ -164,7 +164,7 @@ class FairRWLock : public  IRWLock
             m_aWriteCondition.wait();
         }
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @interface  IRWLock
             @short      reset lock for writing
             @descr      A guard should call this method to release write access on your member.
@@ -186,7 +186,7 @@ class FairRWLock : public  IRWLock
             m_aSerializer.release();
         }
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @interface  IRWLock
             @short      downgrade a write access to a read access
             @descr      A guard should call this method to change a write to a read access.
@@ -223,9 +223,9 @@ class FairRWLock : public  IRWLock
             m_aSerializer.release();
         }
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private member
-    //-------------------------------------------------------------------------------------------------------------
+
     private:
 
         ::osl::Mutex        m_aAccessLock       ;   /// regulate access on internal member of this instance

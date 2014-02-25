@@ -44,7 +44,7 @@
 
 namespace framework{
 
-//-----------------------------------------------
+
 /**
     @short          helper to handle all URLs related to the StartModule
  */
@@ -54,35 +54,35 @@ class StartModuleDispatcher : // baseclasses ... order is necessary for right in
                                          css::frame::XNotifyingDispatch,             // => XDispatch
                                          css::frame::XDispatchInformationProvider >
 {
-    //-------------------------------------------
+
     // member
 
     private:
 
-        //---------------------------------------
+
         /** @short reference to an uno service manager,
                    which can be used to create own needed
                    uno resources. */
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
-        //---------------------------------------
+
         /** @short  our "context" frame. */
         css::uno::WeakReference< css::frame::XFrame > m_xOwner;
 
-        //---------------------------------------
+
         /** @short  the original queryDispatch() target. */
         OUString m_sDispatchTarget;
 
-        //---------------------------------------
+
         /** @short  list of registered status listener */
         ListenerHash m_lStatusListener;
 
-    //-------------------------------------------
+
     // native interface
 
     public:
 
-        //---------------------------------------
+
         /** @short  connect a new StartModuleDispatcher instance to its "owner frame".
 
             @descr  Such "owner frame" is used as context for all related operations.
@@ -101,24 +101,24 @@ class StartModuleDispatcher : // baseclasses ... order is necessary for right in
                               const css::uno::Reference< css::frame::XFrame >&              xFrame ,
                               const OUString&                                        sTarget);
 
-        //---------------------------------------
+
         /** @short  does nothing real. */
         virtual ~StartModuleDispatcher();
 
-    //-------------------------------------------
+
     // uno interface
 
     public:
 
-        //---------------------------------------
 
-        //---------------------------------------
+
+
         // XNotifyingDispatch
         virtual void SAL_CALL dispatchWithNotification( const css::util::URL&                                             aURL      ,
                                                         const css::uno::Sequence< css::beans::PropertyValue >&            lArguments,
                                                         const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) throw(css::uno::RuntimeException, std::exception);
 
-        //---------------------------------------
+
         // XDispatch
         virtual void SAL_CALL dispatch            ( const css::util::URL&                                     aURL      ,
                                                     const css::uno::Sequence< css::beans::PropertyValue >&    lArguments) throw(css::uno::RuntimeException, std::exception);
@@ -127,22 +127,22 @@ class StartModuleDispatcher : // baseclasses ... order is necessary for right in
         virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener ,
                                                     const css::util::URL&                                     aURL      ) throw(css::uno::RuntimeException, std::exception);
 
-        //---------------------------------------
+
         // XDispatchInformationProvider
         virtual css::uno::Sequence< sal_Int16 >                       SAL_CALL getSupportedCommandGroups         (                         ) throw (css::uno::RuntimeException, std::exception);
         virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( sal_Int16 nCommandGroup ) throw (css::uno::RuntimeException, std::exception);
 
-    //-------------------------------------------
+
     // internal helper
 
     private:
 
-        //---------------------------------------
+
         /** @short  check if StartModule can be shown.
          */
         ::sal_Bool implts_isBackingModePossible();
 
-        //---------------------------------------
+
         /** @short  open the special BackingComponent (now StartModule)
 
             @return [bool]
@@ -150,7 +150,7 @@ class StartModuleDispatcher : // baseclasses ... order is necessary for right in
          */
         ::sal_Bool implts_establishBackingMode();
 
-        //---------------------------------------
+
         /** @short  notify a DispatchResultListener.
 
             @descr  We check the listener reference before we use it.

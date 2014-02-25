@@ -38,7 +38,7 @@
 
 namespace framework{
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          implement XEnumerationAccess interface as helper to create many oneway enumeration of components
     @descr          We share mutex and framecontainer with ouer owner and have full access to his child tasks.
                     (Ouer owner can be the Desktop only!) We create oneway enumerations on demand. These "lists"
@@ -59,17 +59,17 @@ namespace framework{
 class OComponentAccess  :   private ThreadHelpBase                      ,   // Must be the first of baseclasses - Is necessary for right initialization of objects!
                             public ::cppu::WeakImplHelper1< ::com::sun::star::container::XEnumerationAccess >
 {
-    //-------------------------------------------------------------------------------------------------------------
+
     //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+
 
     public:
 
-        //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
 
-        /*-****************************************************************************************************//**
+        //  constructor / destructor
+
+
+        /*-****************************************************************************************************
             @short      constructor to initialize this instance
             @descr      A desktop will create an enumeration-access-object. An enumeration is a oneway-list and a
                         snapshot of the components of current tasks under the desktop.
@@ -86,11 +86,11 @@ class OComponentAccess  :   private ThreadHelpBase                      ,   // M
 
         OComponentAccess( const css::uno::Reference< css::frame::XDesktop >& xOwner );
 
-        //---------------------------------------------------------------------------------------------------------
-        //  XEnumerationAccess
-        //---------------------------------------------------------------------------------------------------------
 
-        /*-****************************************************************************************************//**
+        //  XEnumerationAccess
+
+
+        /*-****************************************************************************************************
             @short      create a new enumeration of components
             @descr      You can call this method to get a new snapshot from all components of all tasks of the desktop as an enumeration.
 
@@ -107,11 +107,11 @@ class OComponentAccess  :   private ThreadHelpBase                      ,   // M
 
         virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw( css::uno::RuntimeException, std::exception );
 
-        //---------------------------------------------------------------------------------------------------------
-        //  XElementAccess
-        //---------------------------------------------------------------------------------------------------------
 
-        /*-****************************************************************************************************//**
+        //  XElementAccess
+
+
+        /*-****************************************************************************************************
             @short      get the type of elements in enumeration
             @descr      -
 
@@ -126,7 +126,7 @@ class OComponentAccess  :   private ThreadHelpBase                      ,   // M
 
         virtual css::uno::Type SAL_CALL getElementType() throw( css::uno::RuntimeException, std::exception );
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      get state of componentlist of enumeration.
             @descr      -
 
@@ -141,13 +141,13 @@ class OComponentAccess  :   private ThreadHelpBase                      ,   // M
 
         virtual sal_Bool SAL_CALL hasElements() throw( css::uno::RuntimeException, std::exception );
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  protected methods
-    //-------------------------------------------------------------------------------------------------------------
+
 
     protected:
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      standard destructor
             @descr      This method destruct an instance of this class and clear some member.
                         Don't use an instance of this class as normal member. Use it dynamicly with a pointer.
@@ -164,13 +164,13 @@ class OComponentAccess  :   private ThreadHelpBase                      ,   // M
 
         virtual ~OComponentAccess();
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private methods
-    //-------------------------------------------------------------------------------------------------------------
+
 
     private:
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      recursive method (!) to collect all components of all frames from the subtree of given node
             @descr      This is necessary to create the enumeration.
 
@@ -187,7 +187,7 @@ class OComponentAccess  :   private ThreadHelpBase                      ,   // M
         void impl_collectAllChildComponents(    const   css::uno::Reference< css::frame::XFramesSupplier >&                 xNode           ,
                                                           css::uno::Sequence< css::uno::Reference< css::lang::XComponent > >&   seqComponents   );
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      get the component of a frame
             @descr      The component of a frame can be the window, the controller or the model.
 
@@ -201,12 +201,12 @@ class OComponentAccess  :   private ThreadHelpBase                      ,   // M
 
         css::uno::Reference< css::lang::XComponent > impl_getFrameComponent( const css::uno::Reference< css::frame::XFrame >& xFrame ) const;
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  debug methods
     //  (should be private everyway!)
-    //-------------------------------------------------------------------------------------------------------------
 
-        /*-****************************************************************************************************//**
+
+        /*-****************************************************************************************************
             @short      debug-method to check incoming parameter of some other mehods of this class
             @descr      The following methods are used to check parameters for other methods
                         of this class. The return value is used directly for an ASSERT(...).
@@ -224,10 +224,10 @@ class OComponentAccess  :   private ThreadHelpBase                      ,   // M
 
         static sal_Bool impldbg_checkParameter_OComponentAccessCtor( const css::uno::Reference< css::frame::XDesktop >& xOwner );
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  variables
     //  (should be private everyway!)
-    //-------------------------------------------------------------------------------------------------------------
+
 
     private:
 

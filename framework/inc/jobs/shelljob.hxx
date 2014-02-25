@@ -37,7 +37,7 @@
 namespace framework{
 
 
-//_______________________________________________
+
 /** @short  implements a job component which can be used
             to execute system shell commands.
 
@@ -52,19 +52,19 @@ namespace framework{
 class ShellJob : private ThreadHelpBase
                ,public ::cppu::WeakImplHelper2< ::com::sun::star::lang::XServiceInfo,::com::sun::star::task::XJob >
 {
-    //-------------------------------------------
+
     // member
     private:
 
-        //.......................................
+
         /** @short  reference to an uno service manager. */
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
-    //-------------------------------------------
+
     // native interface
     public:
 
-        //---------------------------------------
+
         /** @short  create new instance of this class.
 
             @param  xContext
@@ -73,7 +73,7 @@ class ShellJob : private ThreadHelpBase
          */
         ShellJob(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
-        //---------------------------------------
+
         /** @short  does nothing real ...
 
             @descr  But it should exists as virtual function,
@@ -82,11 +82,11 @@ class ShellJob : private ThreadHelpBase
          */
         virtual ~ShellJob();
 
-    //-------------------------------------------
+
     // uno interface
     public:
 
-        //---------------------------------------
+
         // css.lang.XServiceInfo
         DECLARE_XSERVICEINFO
 
@@ -96,11 +96,11 @@ class ShellJob : private ThreadHelpBase
                   css::uno::Exception                ,
                   css::uno::RuntimeException, std::exception         );
 
-    //-------------------------------------------
+
     // helper
     private:
 
-        //---------------------------------------
+
         /** generate a return value for method execute()
             which will force deactivation of this job for further requests.
 
@@ -108,7 +108,7 @@ class ShellJob : private ThreadHelpBase
          */
         static css::uno::Any impl_generateAnswer4Deactivation();
 
-        //---------------------------------------
+
         /** substitute all might existing placeholder variables
             within the configured command.
 
@@ -124,7 +124,7 @@ class ShellJob : private ThreadHelpBase
          */
         OUString impl_substituteCommandVariables(const OUString& sCommand);
 
-        //---------------------------------------
+
         /** executes the command.
 
             @param  sCommand

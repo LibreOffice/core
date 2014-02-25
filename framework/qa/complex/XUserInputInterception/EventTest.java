@@ -50,8 +50,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openoffice.test.OfficeConnection;
 import static org.junit.Assert.*;
-// ------------------------------------------
-//-----------------------------------------------
+
+
 /**
  * This <CODE>ComplexTest</CODE> checks the interface
  * <CODE>XUserInputInterception</CODE>. Therefore it creates a document,
@@ -62,10 +62,10 @@ import static org.junit.Assert.*;
  * @descr checks is a simple way the interface XUserInputInteraction
  */
 public class EventTest {
-    //-------------------------------------------
+
     // some const
 
-    //-------------------------------------------
+
     // member
 
     /** indicates if the mousePressed event was called*/
@@ -87,10 +87,10 @@ public class EventTest {
      */
     final int m_threadWait = 3000;
 
-    //-------------------------------------------
+
     // test environment
 
-    //-------------------------------------------
+
     /**
      * The test methods are:
      * <ul>
@@ -117,7 +117,7 @@ public class EventTest {
 //        };
 //    }
 
-    //-------------------------------------------
+
     /**
      * creates the mebmer <CODE>m_xMSF</CODE> and <CODE>m_SOF</CODE>
      * @short Create the environment for following tests.
@@ -135,7 +135,7 @@ public class EventTest {
         }
     }
 
-    //-------------------------------------------
+
     /**
      * closes the document
      * @short close the document.

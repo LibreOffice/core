@@ -43,7 +43,7 @@
 
 namespace framework{
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          handler to detect and play sounds ("wav" and "au" only!)
     @descr          Register this implementation as a content handler to detect and/or play wav- and au-sounds.
                     It doesn't depend from the target platform. But one instance of this class
@@ -63,32 +63,32 @@ class Oxt_Handler  :    // baseclasses
                                     css::frame::XNotifyingDispatch, // => XDispatch
                                     css::document::XExtendedFilterDetection >
 {
-    //-------------------------------------------------------------------------------------------------------------
+
     //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+
     public:
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
+
                  Oxt_Handler( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
         virtual ~Oxt_Handler(                                                                        );
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  XInterface, XTypeProvider, XServiceInfo
-        //---------------------------------------------------------------------------------------------------------
+
         DECLARE_XSERVICEINFO
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  XNotifyingDispatch
-        //---------------------------------------------------------------------------------------------------------
+
         virtual void SAL_CALL dispatchWithNotification(const css::util::URL&                                             aURL      ,
                                                        const css::uno::Sequence< css::beans::PropertyValue >&            lArguments,
                                                        const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) throw( css::uno::RuntimeException, std::exception );
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  XDispatch
-        //---------------------------------------------------------------------------------------------------------
+
         virtual void SAL_CALL dispatch              (  const css::util::URL&                                     aURL        ,
                                                        const css::uno::Sequence< css::beans::PropertyValue >&    lArguments  ) throw( css::uno::RuntimeException, std::exception );
         // not supported !
@@ -97,25 +97,23 @@ class Oxt_Handler  :    // baseclasses
         virtual void SAL_CALL removeStatusListener  (  const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/   ,
                                                        const css::util::URL&                                     /*aURL*/        ) throw( css::uno::RuntimeException, std::exception ) {};
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  XExtendedFilterDetection
-        //---------------------------------------------------------------------------------------------------------
         virtual OUString SAL_CALL detect     (        css::uno::Sequence< css::beans::PropertyValue >&    lDescriptor ) throw( css::uno::RuntimeException, std::exception );
 
-    //-------------------------------------------------------------------------------------------------------------
     //  protected methods
-    //-------------------------------------------------------------------------------------------------------------
+
     protected:
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private methods
-    //-------------------------------------------------------------------------------------------------------------
+
     private:
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  variables
     //  (should be private everyway!)
-    //-------------------------------------------------------------------------------------------------------------
+
     private:
 
         css::uno::Reference< css::lang::XMultiServiceFactory >     m_xFactory          ;   /// global uno service factory to create new services

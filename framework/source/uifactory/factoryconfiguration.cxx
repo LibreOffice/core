@@ -56,9 +56,9 @@ OUString getHashKeyFromStrings( const OUString& aCommandURL, const OUString& aMo
     return aKey.makeStringAndClear();
 }
 
-//*****************************************************************************************************************
+
 //  XInterface, XTypeProvider
-//*****************************************************************************************************************
+
 ConfigurationAccess_ControllerFactory::ConfigurationAccess_ControllerFactory( const Reference< XComponentContext >& rxContext, const OUString& _sRoot,bool _bAskValue ) :
     ThreadHelpBase(),
     m_aPropCommand( "Command" ),

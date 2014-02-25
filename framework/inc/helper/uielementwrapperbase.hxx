@@ -49,9 +49,9 @@ class UIElementWrapperBase : protected ThreadHelpBase                           
                              public ::cppu::OPropertySetHelper                  ,
                              public UIElementWrapperBase_BASE
 {
-    //-------------------------------------------------------------------------------------------------------------
+
     //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+
     public:
          UIElementWrapperBase( sal_Int16 nType );
         virtual  ~UIElementWrapperBase();
@@ -83,9 +83,9 @@ class UIElementWrapperBase : protected ThreadHelpBase                           
         virtual  ::sal_Int16 SAL_CALL getType() throw (::com::sun::star::uno::RuntimeException, std::exception);
         virtual  ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getRealInterface() throw (::com::sun::star::uno::RuntimeException, std::exception) = 0;
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  protected methods
-    //-------------------------------------------------------------------------------------------------------------
+
     protected:
 
         //  OPropertySetHelper

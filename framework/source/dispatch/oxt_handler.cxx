@@ -33,9 +33,9 @@
 
 namespace framework{
 
-//*****************************************************************************************************************
+
 //  XInterface, XTypeProvider, XServiceInfo
-//*****************************************************************************************************************
+
 
 DEFINE_XSERVICEINFO_MULTISERVICE    (   Oxt_Handler                                                ,
                                         ::cppu::OWeakObject                                        ,
@@ -48,7 +48,7 @@ DEFINE_INIT_SERVICE                 (   Oxt_Handler,
                                         }
                                     )
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      standard ctor
     @descr      These initialize a new instance of this class with needed information for work.
 
@@ -68,7 +68,7 @@ Oxt_Handler::Oxt_Handler( const css::uno::Reference< css::lang::XMultiServiceFac
 {
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      standard dtor
     @descr      -
 
@@ -91,7 +91,7 @@ Oxt_Handler::~Oxt_Handler()
     }
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @interface  ::com::sun::star::frame::XDispatch
 
     @short      try to load audio file
@@ -150,7 +150,7 @@ void SAL_CALL Oxt_Handler::dispatch( const css::util::URL&                      
     dispatchWithNotification( aURL, lArguments, css::uno::Reference< css::frame::XDispatchResultListener >() );
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @interface  ::com::sun::star::document::XExtendedFilterDetection
 
     @short      try to detect file (given as argument included in "lDescriptor")

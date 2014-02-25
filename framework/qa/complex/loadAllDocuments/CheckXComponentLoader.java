@@ -48,7 +48,7 @@ import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XCloseable;
 
-//-----------------------------------------------
+
 /** @short  Check the interface method XComponentLoader.loadComponentFromURL()
 
     @descr  A prerequisite for this test is a server which allows access to files
@@ -68,7 +68,7 @@ import com.sun.star.util.XCloseable;
  */
 public class CheckXComponentLoader
 {
-    //-------------------------------------------
+
     // some const
 
     /** used to classify the result of a loadComponentFromURL() request. */
@@ -89,7 +89,7 @@ public class CheckXComponentLoader
     private static final String PREFIX_PASSWORD_TEMPFILE = ".sxw";
     private static final String DEFAULT_PASSWORD         = "DefaultPasswordForComponentLoaderTest";
 
-    //-------------------------------------------
+
     // member
 
     /** points to the global uno service manager. */
@@ -116,10 +116,10 @@ public class CheckXComponentLoader
     /** files of m_sTestDocPath to test. */
     private static ArrayList<String> m_lTestFiles = null;
 
-    //-------------------------------------------
+
     // test environment
 
-    //-------------------------------------------
+
     /** @short  A function to tell the framework,
                 which test functions are available.
 
@@ -139,7 +139,7 @@ public class CheckXComponentLoader
 //        };
 //    }
 
-    //-------------------------------------------
+
     /** @short  Create the environment for following tests.
 
         @descr  Use either a component loader from desktop or
@@ -227,7 +227,7 @@ public class CheckXComponentLoader
         }
     }
 
-    //-------------------------------------------
+
     /** @short  close the environment.
      */
     @After public void after()
@@ -244,7 +244,7 @@ public class CheckXComponentLoader
         m_xLoader = null;
     }
 
-    //-------------------------------------------
+
     /** @short  Look for files in the given directory for loading.
      */
     @Test public void checkUsingOfMediaDescriptor()
@@ -292,7 +292,7 @@ public class CheckXComponentLoader
         }
     }
 
-    //-------------------------------------------
+
     /** TODO document me and move this method to a more global helper! */
     private String impl_getTempFileName(String sTempPath,
                                         String sSuffix  ,
@@ -319,7 +319,7 @@ public class CheckXComponentLoader
         return null;
     }
 
-    //-------------------------------------------
+
     /** TODO document me and move this method to a more global helper! */
     private void impl_createTempOfficeDocument(XComponentLoader xLoader   ,
                                                String           sSourceURL,
@@ -368,7 +368,7 @@ public class CheckXComponentLoader
         }
     }
 
-    //-------------------------------------------
+
     /** @short  Check the password handling.
 
         @descr  The used password is the one given

@@ -28,7 +28,7 @@
 
 namespace framework{
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          These values describe our supported queries for type, filter ... properties.
                     They are used by our FilterFactory or ouer TypeDetection to return
                     subsets of our cached configuration.
@@ -44,7 +44,7 @@ namespace framework{
 #define BASE_QUERY_MATH                                 DECLARE_ASCII("_query_math"    )
 #define BASE_QUERY_GRAPHICS                             DECLARE_ASCII("_query_graphics")
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          These parameters can be used in combination with BASE_QUERY_... defines to
                     specialize it.
                     use follow syntax to do so:     "<query>[:<param>[=<value>]]"
@@ -75,23 +75,23 @@ namespace framework{
 #define QUERYPARAMVALUE_SORT_PROP_NAME                  DECLARE_ASCII("name"            )
 #define QUERYPARAMVALUE_SORT_PROP_UINAME                DECLARE_ASCII("uiname"          )
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          Helper class to support easy building of a query statements.
 *//*-*************************************************************************************************************/
 class QueryBuilder
 {
     public:
-        //---------------------------------------------------------------------------------------------------------
+
         // start with empty query
-        //---------------------------------------------------------------------------------------------------------
+
         QueryBuilder()
         {
             resetAll();
         }
 
-        //---------------------------------------------------------------------------------------------------------
+
         // returns full query as copy of internal set values
-        //---------------------------------------------------------------------------------------------------------
+
         OUString getQuery()
         {
             OUStringBuffer sCopy( m_sParams );
@@ -99,17 +99,17 @@ class QueryBuilder
             return sCopy.makeStringAndClear();
         }
 
-        //---------------------------------------------------------------------------------------------------------
+
         // set new or change existing base query part
-        //---------------------------------------------------------------------------------------------------------
+
         void setBase( const OUString& sBase )
         {
             m_sBase = sBase;
         }
 
-        //---------------------------------------------------------------------------------------------------------
+
         // add new parameter (with optional value) to param list
-        //---------------------------------------------------------------------------------------------------------
+
         void addParam( const OUString& sParam, const OUString& sValue = OUString() )
         {
             m_sParams.append( SEPARATOR_QUERYPARAM );
@@ -121,19 +121,19 @@ class QueryBuilder
             }
         }
 
-        //---------------------------------------------------------------------------------------------------------
+
         // forget all setted params and start with empty ones
         // Attention: base of query isn't changed!
-        //---------------------------------------------------------------------------------------------------------
+
         void resetParams()
         {
             m_sParams.makeStringAndClear();
             m_sParams.ensureCapacity( 256 );
         }
 
-        //---------------------------------------------------------------------------------------------------------
+
         // start with new empty query
-        //---------------------------------------------------------------------------------------------------------
+
         void resetAll()
         {
             m_sBase = OUString();
@@ -146,18 +146,18 @@ class QueryBuilder
 
 };      // class QueryBuilder
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          Helper class to analyze queries and split into his different parts (base, params and values).
 *//*-*************************************************************************************************************/
 class QueryAnalyzer
 {
     public:
 
-        //---------------------------------------------------------------------------------------------------------
+
         // it's will not perform to compare strings as query type ...
         // so we convert it into these enum values.
         // default = E_ALL!
-        //---------------------------------------------------------------------------------------------------------
+
         enum EQuery
         {
             E_ALL       ,
@@ -172,20 +172,20 @@ class QueryAnalyzer
             E_GRAPHICS
         };
 
-        //---------------------------------------------------------------------------------------------------------
+
         // these are valid values for param "sort_prop".
         // other ones are not supported!
         // default = E_NAME
-        //---------------------------------------------------------------------------------------------------------
+
         enum ESortProp
         {
             E_NAME      ,
             E_UINAME
         };
 
-        //---------------------------------------------------------------------------------------------------------
+
         // analyze given query and split it into his different parts; <base>:<param1>:<param2=value>...
-        //---------------------------------------------------------------------------------------------------------
+
         QueryAnalyzer(const OUString& sQuery)
             // Don't forget to set default values for non given params!
             :   m_eQuery        ( E_ALL      )   // return ALL filter ...
@@ -320,16 +320,16 @@ class QueryAnalyzer
             }
         }
 
-        //---------------------------------------------------------------------------------------------------------
+
         // return type of query. User can decide then, which action should be started.
         // For faster work we converted query string into corresponding enum value!
-        //---------------------------------------------------------------------------------------------------------
+
         EQuery getQueryType() const { return m_eQuery; }
 
-        //---------------------------------------------------------------------------------------------------------
+
         // access to additional parameter values
         // Methods return default of really set values!
-        //---------------------------------------------------------------------------------------------------------
+
         sal_uInt32 getIFlags       () const { return m_nIFlags       ; }
         sal_uInt32 getEFlags       () const { return m_nEFlags       ; }
         ESortProp  getSortProp     () const { return m_eSortProp     ; }
@@ -338,10 +338,10 @@ class QueryAnalyzer
         sal_Bool   getUseOrder     () const { return m_bUseOrder     ; }
         sal_Bool   getDefaultFirst () const { return m_bDefaultFirst ; }
 
-        //---------------------------------------------------------------------------------------------------------
+
         // this method checks if given string match any supported query.
         // (ignore additional parameters!)
-        //---------------------------------------------------------------------------------------------------------
+
         static sal_Bool isQuery( const OUString& sQuery )
         {
             return(

@@ -26,7 +26,7 @@
 
 namespace framework{
 
-//_______________________________________________
+
 /** properties for "Frame" class */
 
 #define FRAME_PROPNAME_ASCII_DISPATCHRECORDERSUPPLIER   "DispatchRecorderSupplier"
@@ -52,7 +52,7 @@ namespace framework{
 
 #define FRAME_PROPCOUNT                                 5
 
-//_______________________________________________
+
 /** properties for "Desktop" class */
 
 #define DESKTOP_PROPNAME_ASCII_ACTIVEFRAME              "ActiveFrame"
@@ -78,7 +78,7 @@ namespace framework{
 
 #define DESKTOP_PROPCOUNT                               5
 
-//_______________________________________________
+
 /** properties for "PathSettings" class */
 
 #define PATHSETTINGS_PROPNAME_ASCII_ADDIN               "Addin"
@@ -161,7 +161,7 @@ namespace framework{
 
 #define PATHSETTINGS_PROPCOUNT                          24
 
-//_______________________________________________
+
 /** properties for "LayoutManager" class */
 
 #define LAYOUTMANAGER_PROPNAME_ASCII_MENUBARCLOSER          "MenuBarCloser"
@@ -185,7 +185,7 @@ namespace framework{
 #define LAYOUTMANAGER_PROPHANDLE_LOCKCOUNT              4
 #define LAYOUTMANAGER_PROPHANDLE_PRESERVE_CONTENT_SIZE  5
 
-//_______________________________________________
+
 /** properties for "UICommandDescription" class */
 #define UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDIMAGELIST        "private:resource/image/commandimagelist"
 #define UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDROTATEIMAGELIST  "private:resource/image/commandrotateimagelist"
@@ -199,7 +199,7 @@ namespace framework{
 #define UICOMMANDDESCRIPTION_PROPERTIES_IMAGE_ROTATED           4
 #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON            8
 
-//_______________________________________________
+
 /** properties for "AutoRecovery" class */
 
 #define AUTORECOVERY_PROPNAME_ASCII_EXISTS_RECOVERYDATA "ExistsRecoveryData"
@@ -216,14 +216,14 @@ namespace framework{
 
 #define AUTORECOVERY_PROPCOUNT                          3
 
-//_______________________________________________
+
 /** properties for Filter config */
 
 #define FILTER_PROPNAME_ASCII_DOCUMENTSERVICE           "DocumentService"
 
 #define FILTER_PROPNAME_DOCUMENTSERVICE                 OUString( FILTER_PROPNAME_ASCII_DOCUMENTSERVICE )
 
-//_______________________________________________
+
 /** properties for office module config (Setup.xcu) */
 
 #define OFFICEFACTORY_PROPNAME_ASCII_WINDOWATTRIBUTES   "ooSetupFactoryWindowAttributes"
@@ -234,7 +234,7 @@ namespace framework{
 #define OFFICEFACTORY_PROPNAME_UINAME                   OUString( OFFICEFACTORY_PROPNAME_ASCII_UINAME )
 #define OFFICEFACTORY_PROPNAME_ICON                     OUString( OFFICEFACTORY_PROPNAME_ASCII_ICON )
 
-//_______________________________________________
+
 /** properties for tab window (old) */
 #define TABWINDOW_PROPNAME_ASCII_PARENTWINDOW           "ParentWindow"
 #define TABWINDOW_PROPNAME_ASCII_TOPWINDOW              "TopWindow"
@@ -248,14 +248,14 @@ namespace framework{
 #define TABWINDOWSERVICE_PROPHANDLE_WINDOW              0
 #define TABWINDOWSERVICE_PROPCOUNT                      1
 
-//_______________________________________________
+
 /** provides some helper methods to implement property sets. */
 
 class PropHelper
 {
     public:
 
-    //___________________________________________
+
 
     /** checks if given property will be changed by this settings.
      *  We compare the content of the given any values. If they are different we return sal_True - sal_False otherwise.

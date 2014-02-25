@@ -35,16 +35,16 @@
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ustring.hxx>
 
-//_________________________________________________________________________________________________________________
+
 //  Namespace
-//_________________________________________________________________________________________________________________
+
 
 namespace framework
 {
 
-//*****************************************************************************************************************
+
 //  Configuration access class for PopupMenuControllerFactory implementation
-//*****************************************************************************************************************
+
 class ConfigurationAccess_ControllerFactory : // interfaces
                                                     private ThreadHelpBase,
                                                     public  ::cppu::WeakImplHelper1< ::com::sun::star::container::XContainerListener>

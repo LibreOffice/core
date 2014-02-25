@@ -26,7 +26,7 @@
 
 namespace framework{
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @descr          Describe different states of a feature of following implementation.
                     During lifetime of an object different working states occur:
                         initialization - working - closing - closed
@@ -44,7 +44,7 @@ enum EWorkingMode
     E_CLOSE          // Object is dead!             -> all calls are rejected!
 };
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @descr          If a request was refused by a transaction manager (internal state different E_WORK ...)
                     user can check the reason by using this enum values.
 *//*-*************************************************************************************************************/
@@ -56,7 +56,7 @@ enum ERejectReason
     E_CLOSED
 };
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @descr          A transaction object should support throwing exceptions if user used it at wrong working mode.
                     e.g. We can throw a DisposedException if user try to work and our mode is E_CLOSE!
                     But sometimes he dont need this feature - will handle it by himself.
@@ -94,7 +94,7 @@ enum EExceptionMode
     E_SOFTEXCEPTIONS
 };
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @descr          How can you use the transaction manager?
                     Use it in combination with an TransactionGuard, which register your transaction in ctor
                     and release in dtor automaticly! Follow interface class can be used to make using
@@ -102,12 +102,12 @@ enum EExceptionMode
 *//*-*************************************************************************************************************/
 class ITransactionManager
 {
-    //-------------------------------------------------------------------------------------------------------------
+
     //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+
     public:
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @descr      These functions must be supported by a derived class!
                             getWorkingMode()        -return current set working mode
                             setWorkingMode()        -change working mode

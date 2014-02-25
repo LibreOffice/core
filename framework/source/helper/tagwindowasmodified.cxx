@@ -42,18 +42,18 @@
 namespace framework{
 
 
-//*****************************************************************************************************************
+
 TagWindowAsModified::TagWindowAsModified()
     : ThreadHelpBase          (&Application::GetSolarMutex())
 {
 }
 
-//*****************************************************************************************************************
+
 TagWindowAsModified::~TagWindowAsModified()
 {
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL TagWindowAsModified::initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
     throw(css::uno::Exception       ,
           css::uno::RuntimeException, std::exception)
@@ -76,7 +76,7 @@ void SAL_CALL TagWindowAsModified::initialize(const css::uno::Sequence< css::uno
     impl_update (xFrame);
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL TagWindowAsModified::modified(const css::lang::EventObject& aEvent)
     throw(css::uno::RuntimeException, std::exception)
 {
@@ -116,7 +116,7 @@ void SAL_CALL TagWindowAsModified::modified(const css::lang::EventObject& aEvent
     // <- SYNCHRONIZED
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL TagWindowAsModified::frameAction(const css::frame::FrameActionEvent& aEvent)
     throw(css::uno::RuntimeException, std::exception)
 {
@@ -142,7 +142,7 @@ void SAL_CALL TagWindowAsModified::frameAction(const css::frame::FrameActionEven
     impl_update (xFrame);
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL TagWindowAsModified::disposing(const css::lang::EventObject& aEvent)
     throw(css::uno::RuntimeException, std::exception)
 {
@@ -173,7 +173,7 @@ void SAL_CALL TagWindowAsModified::disposing(const css::lang::EventObject& aEven
     // <- SAFE ----------------------------------
 }
 
-//*****************************************************************************************************************
+
 void TagWindowAsModified::impl_update (const css::uno::Reference< css::frame::XFrame >& xFrame)
 {
     if ( ! xFrame.is ())

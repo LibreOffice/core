@@ -28,14 +28,14 @@
 namespace framework{
 
 
-//***********************************************
+
 WakeUpThread::WakeUpThread(const css::uno::Reference< css::util::XUpdatable >& xListener)
     : ThreadHelpBase(         )
     , m_xListener   (xListener)
 {
 }
 
-//***********************************************
+
 void SAL_CALL WakeUpThread::run()
 {
     ::osl::Condition aSleeper;
@@ -60,7 +60,7 @@ void SAL_CALL WakeUpThread::run()
     }
 }
 
-//***********************************************
+
 void SAL_CALL WakeUpThread::onTerminated()
 {
     delete this;

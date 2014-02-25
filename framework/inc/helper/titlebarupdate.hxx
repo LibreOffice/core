@@ -37,7 +37,7 @@
 
 namespace framework{
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          helps our frame on setting title/icon on the titlebar (including updates)
 
     @devstatus      draft
@@ -51,7 +51,7 @@ class TitleBarUpdate : // baseclasses (order necessary for right initialization!
                                  , css::frame::XTitleChangeListener // => XEventListener
                                  , css::frame::XFrameActionListener > // => XEventListener
 {
-    //________________________________
+
     // structs, types
 
     private:
@@ -66,7 +66,7 @@ class TitleBarUpdate : // baseclasses (order necessary for right initialization!
             ::sal_Int32 nIcon;
         };
 
-    //________________________________
+
     // member
 
     private:
@@ -77,46 +77,46 @@ class TitleBarUpdate : // baseclasses (order necessary for right initialization!
         /// reference to the frame which was created by the office himself
         css::uno::WeakReference< css::frame::XFrame > m_xFrame;
 
-    //________________________________
+
     // interface
 
     public:
 
-        //____________________________
+
         // ctor/dtor
                  TitleBarUpdate(const css::uno::Reference< css::uno::XComponentContext >& xContext);
         virtual ~TitleBarUpdate(                                                                   );
 
-        //____________________________
+
         // XInterface, XTypeProvider
 
-        //____________________________
+
         // XInitialization
         virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
             throw(css::uno::Exception       ,
                   css::uno::RuntimeException, std::exception);
 
-        //____________________________
+
         // XFrameActionListener
         virtual void SAL_CALL frameAction(const css::frame::FrameActionEvent& aEvent)
             throw(css::uno::RuntimeException, std::exception);
 
-        //____________________________
+
         // XTitleChangeListener
         virtual void SAL_CALL titleChanged(const css::frame::TitleChangedEvent& aEvent)
             throw (css::uno::RuntimeException, std::exception);
 
-        //____________________________
+
         // XEventListener
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
             throw(css::uno::RuntimeException, std::exception);
 
-    //________________________________
+
     // helper
 
     private:
 
-        //____________________________
+
         /** @short  identify the application module, which  is used behind the component
                     of our frame.
 
@@ -134,7 +134,7 @@ class TitleBarUpdate : // baseclasses (order necessary for right initialization!
         ::sal_Bool implst_getModuleInfo(const css::uno::Reference< css::frame::XFrame >& xFrame,
                                               TModuleInfo&                               rInfo );
 
-        //____________________________
+
         /** @short  set a new icon and title on the title bar of our connected frame window.
 
             @descr  It does not check if an update is really needed. That has to be done outside.
@@ -143,7 +143,7 @@ class TitleBarUpdate : // baseclasses (order necessary for right initialization!
          */
         void impl_forceUpdate();
 
-        //____________________________
+
         /** @short  identify the current component (inside the connected frame)
                     and set the right module icon on the title bar.
 
@@ -153,7 +153,7 @@ class TitleBarUpdate : // baseclasses (order necessary for right initialization!
          */
         void impl_updateIcon(const css::uno::Reference< css::frame::XFrame >& xFrame);
 
-        //____________________________
+
         /** @short  gets the current title from the frame and set it on the window.
 
             @param  xFrame

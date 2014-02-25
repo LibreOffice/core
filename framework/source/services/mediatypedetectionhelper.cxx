@@ -27,17 +27,17 @@ namespace framework
 using namespace ::com::sun::star        ;
 using namespace ::rtl                   ;
 
-//*****************************************************************************************************************
+
 //  constructor
-//*****************************************************************************************************************
+
 MediaTypeDetectionHelper::MediaTypeDetectionHelper( const uno::Reference< lang::XMultiServiceFactory >& xFactory )
     : m_xFactory( xFactory )
 {
 }
 
-//*****************************************************************************************************************
+
 //  destructor
-//*****************************************************************************************************************
+
 MediaTypeDetectionHelper::~MediaTypeDetectionHelper()
 {
 }
@@ -53,9 +53,9 @@ DEFINE_INIT_SERVICE                 (   MediaTypeDetectionHelper,
                                         }
                                     )
 
-//*****************************************************************************************************************
+
 //   XStringMapping
-//*****************************************************************************************************************
+
 
 sal_Bool SAL_CALL MediaTypeDetectionHelper::mapStrings(uno::Sequence< OUString >& rSeq)
     throw (uno::RuntimeException, std::exception)

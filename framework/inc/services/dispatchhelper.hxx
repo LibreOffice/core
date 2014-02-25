@@ -50,7 +50,7 @@ class DispatchHelper : public ThreadHelpBase                      // must be the
                       ,public ::cppu::WeakImplHelper3< ::com::sun::star::lang::XServiceInfo,::com::sun::star::frame::XDispatchHelper,::com::sun::star::frame::XDispatchResultListener >
 {
 
-    //-------------------------------------------
+
     // member
 
     private:
@@ -66,23 +66,23 @@ class DispatchHelper : public ThreadHelpBase                      // must be the
 
         css::uno::Reference< css::uno::XInterface > m_xBroadcaster;
 
-    //-------------------------------------------
+
     // interface
 
     public:
 
-        //---------------------------------------
+
         // ctor/dtor
 
                  DispatchHelper( const css::uno::Reference< css::uno::XComponentContext >& xContext );
         virtual ~DispatchHelper(                                                                    );
 
-        //---------------------------------------
+
         // XInterface, XTypeProvider, XServiceInfo
 
         DECLARE_XSERVICEINFO
 
-        //---------------------------------------
+
         // XDispatchHelper
         virtual css::uno::Any SAL_CALL executeDispatch(
                                         const css::uno::Reference< css::frame::XDispatchProvider >& xDispatchProvider ,
@@ -92,13 +92,13 @@ class DispatchHelper : public ThreadHelpBase                      // must be the
                                         const css::uno::Sequence< css::beans::PropertyValue >&      lArguments        )
         throw(css::uno::RuntimeException, std::exception);
 
-        //---------------------------------------
+
         // XDispatchResultListener
         virtual void SAL_CALL dispatchFinished(
                                 const css::frame::DispatchResultEvent& aResult )
         throw(css::uno::RuntimeException, std::exception);
 
-        //---------------------------------------
+
         // XEventListener
         virtual void SAL_CALL disposing(
                                 const css::lang::EventObject& aEvent )

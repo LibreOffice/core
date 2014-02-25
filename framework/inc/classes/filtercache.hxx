@@ -50,7 +50,7 @@
 
 namespace framework{
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          cache for all filter and type information
     @descr          Frameloader - and filterfactory need some information about our current registered filters and types.
                     For better performance its necessary to cache all needed values.
@@ -68,20 +68,20 @@ class FilterCache   :   private ThreadHelpBase
 {
     public:
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+
 
     public:
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
+
 
         FilterCache( sal_Int32 nVersion = DEFAULT_FILTERCACHE_VERSION,
                      sal_Int16 nMode    = DEFAULT_FILTERCACHE_MODE   );
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      standard destructor to delete instance
             @descr      This will clear the cache if last owner release it.
 
@@ -97,7 +97,7 @@ class FilterCache   :   private ThreadHelpBase
 
         void flush( DataContainer::ECFGType eType );
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      get the current state of the cache
             @descr      Call this methods to get information about the state of the current cache.
 
@@ -117,7 +117,7 @@ class FilterCache   :   private ThreadHelpBase
         sal_Bool hasLoaders         () const;
         sal_Bool hasContentHandlers () const;
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      search routines to find items which match given parameter
             @descr      Mostly we search for a type first and get all information about filter, detector and loader
                         services from the other configuration tables which are registered for this type.
@@ -164,7 +164,7 @@ class FilterCache   :   private ThreadHelpBase
                                                             CheckedStringListIterator&  aStartEntry         ,
                                                             OUString&            sResult             ) const;
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      get all properties of a cache entry by given name
             @descr      If you need additional information about our internal cache values
                         you can use these methods to get a list of all cached config values
@@ -205,7 +205,7 @@ class FilterCache   :   private ThreadHelpBase
         sal_Bool                                            existsLoader                    (   const   OUString&    sName   ) const;
         sal_Bool                                            existsContentHandler            (   const   OUString&    sName   ) const;
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      support special query modes
             @descr      Our owner services need sometimes a special mode to query for subsets of our configuration!
                         They give us a special query string - we return right values.
@@ -223,7 +223,7 @@ class FilterCache   :   private ThreadHelpBase
 
         css::uno::Any queryFilters( const OUString& sQuery ) const;
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      support registration of elements in current configuration
             @descr      Use this methods to add or remove items in our configuration files.
                         We use the globale configuration to do that ... in fat office "share/config/registry/..."!
@@ -313,9 +313,9 @@ class FilterCache   :   private ThreadHelpBase
         sal_Bool validateAndRepairLoader();
         sal_Bool validateAndRepairHandler();
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private variables
-    //-------------------------------------------------------------------------------------------------------------
+
     private:
 
         static sal_Int32        m_nRefCount         ;

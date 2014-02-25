@@ -65,9 +65,9 @@ class ActionTriggerPropertySet :  public ThreadHelpBase                       , 
         virtual FWE_DLLPUBLIC ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     private:
-        //---------------------------------------------------------------------------------------------------------
+
         //  OPropertySetHelper
-        //---------------------------------------------------------------------------------------------------------
+
         virtual sal_Bool SAL_CALL convertFastPropertyValue( com::sun::star::uno::Any&       aConvertedValue,
                                                             com::sun::star::uno::Any&       aOldValue,
                                                             sal_Int32                       nHandle,
@@ -88,9 +88,9 @@ class ActionTriggerPropertySet :  public ThreadHelpBase                       , 
 
         static const com::sun::star::uno::Sequence< com::sun::star::beans::Property > impl_getStaticPropertyDescriptor();
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  helper
-        //---------------------------------------------------------------------------------------------------------
+
 
         sal_Bool impl_tryToChangeProperty(  const   OUString&              aCurrentValue   ,
                                             const   com::sun::star::uno::Any&   aNewValue       ,
@@ -107,9 +107,9 @@ class ActionTriggerPropertySet :  public ThreadHelpBase                       , 
                                             com::sun::star::uno::Any&           aOldValue       ,
                                             com::sun::star::uno::Any&           aConvertedValue ) throw( com::sun::star::lang::IllegalArgumentException );
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  members
-        //---------------------------------------------------------------------------------------------------------
+
 
         OUString                                                         m_aCommandURL;
         OUString                                                         m_aHelpURL;

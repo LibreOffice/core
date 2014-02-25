@@ -55,7 +55,7 @@ class InterceptionHelper : // order of base classes is important for right initi
                                      css::frame::XDispatchProviderInterception,
                                      css::lang::XEventListener >
 {
-    //_____________________________________________________
+
     // structs, helper
 
     /** @short bind an interceptor component to it's URL pattern registration. */
@@ -73,7 +73,7 @@ class InterceptionHelper : // order of base classes is important for right initi
         css::uno::Sequence< OUString > lURLPattern;
     };
 
-    //_____________________________________________________
+
 
     /** @short implements a list of items of type InterceptorInfo, and provides some special
                functions on it.
@@ -85,7 +85,7 @@ class InterceptionHelper : // order of base classes is important for right initi
     {
         public:
 
-            //_____________________________________________
+
 
             /** @short search for an interceptor inside this list using it's reference.
 
@@ -107,7 +107,7 @@ class InterceptionHelper : // order of base classes is important for right initi
                 return end();
             }
 
-            //_____________________________________________
+
 
             /** @short search for an interceptor inside this list using it's reference.
 
@@ -136,7 +136,7 @@ class InterceptionHelper : // order of base classes is important for right initi
             }
     };
 
-    //_____________________________________________________
+
     // member
 
     private:
@@ -157,12 +157,12 @@ class InterceptionHelper : // order of base classes is important for right initi
                    The last or the first registered one. */
         static sal_Bool m_bPreferrFirstInterceptor;
 
-    //_____________________________________________________
+
     // native interface
 
     public:
 
-        //_________________________________________________
+
 
         /** @short creates a new interception helper instance.
 
@@ -177,7 +177,7 @@ class InterceptionHelper : // order of base classes is important for right initi
 
     protected:
 
-        //_________________________________________________
+
 
         /** @short standard destructor.
 
@@ -187,12 +187,12 @@ class InterceptionHelper : // order of base classes is important for right initi
          */
         virtual ~InterceptionHelper();
 
-    //_____________________________________________________
+
     // uno interface
 
     public:
 
-        //_________________________________________________
+
         // XDispatchProvider
 
         /** @short  query for a dispatch, which implements the requested feature.
@@ -220,7 +220,7 @@ class InterceptionHelper : // order of base classes is important for right initi
                                                                                           sal_Int32        nSearchFlags    )
             throw(css::uno::RuntimeException, std::exception);
 
-        //_________________________________________________
+
         // XDispatchProvider
 
         /** @short implements an optimized queryDispatch() for remote.
@@ -237,7 +237,7 @@ class InterceptionHelper : // order of base classes is important for right initi
         virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches(const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor)
             throw(css::uno::RuntimeException, std::exception);
 
-        //_________________________________________________
+
         // XDispatchProviderInterception
 
         /** @short      register an interceptor.
@@ -256,7 +256,7 @@ class InterceptionHelper : // order of base classes is important for right initi
         virtual void SAL_CALL registerDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
             throw(css::uno::RuntimeException, std::exception);
 
-        //_________________________________________________
+
         // XDispatchProviderInterception
 
         /** @short      release an interceptor.
@@ -271,7 +271,7 @@ class InterceptionHelper : // order of base classes is important for right initi
          */
         virtual void SAL_CALL releaseDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor ) throw( css::uno::RuntimeException, std::exception );
 
-        //_________________________________________________
+
         // XEventListener
 
         /** @short      Is called from our owner frame, in case he will be disposed.

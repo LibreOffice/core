@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FRAMEWORK_INC_HELPER_STATUSINDICATOR_HXX
 #define INCLUDED_FRAMEWORK_INC_HELPER_STATUSINDICATOR_HXX
 
-//_______________________________________________
+
 // include files of own module
 
 #include <helper/statusindicatorfactory.hxx>
@@ -29,11 +29,11 @@
 #include <macros/xtypeprovider.hxx>
 #include <macros/generic.hxx>
 
-//_______________________________________________
+
 // include UNO interfaces
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
-//_______________________________________________
+
 // include all others
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -42,7 +42,7 @@
 namespace framework{
 
 
-//_______________________________________________
+
 /**
     @short          implement a status indicator object
 
@@ -62,7 +62,7 @@ namespace framework{
 class StatusIndicator : private ThreadHelpBase                  // Order of baseclasses is necessary for right initializaton!
                       , public  ::cppu::WeakImplHelper1< css::task::XStatusIndicator >
 {
-    //-------------------------------------------
+
     // member
     private:
 
@@ -76,11 +76,11 @@ class StatusIndicator : private ThreadHelpBase                  // Order of base
          */
         css::uno::WeakReference< css::task::XStatusIndicatorFactory > m_xFactory;
 
-    //-------------------------------------------
+
     // c++ interface
     public:
 
-        //----------------------------------------
+
         /** @short  initialize new instance of this class.
 
             @param  pFactory
@@ -88,16 +88,16 @@ class StatusIndicator : private ThreadHelpBase                  // Order of base
          */
         StatusIndicator(StatusIndicatorFactory* pFactory);
 
-        //----------------------------------------
+
         /** @short  does nothing real ....
          */
         virtual ~StatusIndicator();
 
-    //-------------------------------------------
+
     // uno interface
     public:
 
-        //---------------------------------------
+
         // XStatusIndicator
         virtual void SAL_CALL start(const OUString& sText ,
                                           sal_Int32        nRange)

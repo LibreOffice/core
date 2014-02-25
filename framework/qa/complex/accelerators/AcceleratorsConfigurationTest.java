@@ -48,8 +48,8 @@ import org.junit.Test;
 import org.openoffice.test.FileHelper;
 import org.openoffice.test.OfficeConnection;
 import static org.junit.Assert.*;
-// ------------------------------------------
-//-----------------------------------------------
+
+
 
 /** @short todo document me
  */
@@ -66,9 +66,9 @@ public class AcceleratorsConfigurationTest
     private XNameAccess m_xPrimaryKeys = null;
     private XNameAccess m_xSecondaryKeys = null;
 
-    //-------------------------------------------
+
     // test environment
-    //-----------------------------------------------
+
     /** @short todo document me
      */
 //  public String[] getTestMethodNames()
@@ -80,7 +80,7 @@ public class AcceleratorsConfigurationTest
 //                "checkDocumentAccelCfg"
 //          };
 //  }
-    //-----------------------------------------------
+
     /** @short Create the environment for following tests.
      */
     @Before
@@ -104,7 +104,7 @@ public class AcceleratorsConfigurationTest
         }
     }
 
-    //-------------------------------------------
+
     /** @short  close the environment.
      */
     @After
@@ -117,7 +117,7 @@ public class AcceleratorsConfigurationTest
         m_xSmgr = null;
     }
 
-    //-------------------------------------------
+
     /** @todo document me.
      */
     @Test
@@ -159,7 +159,7 @@ public class AcceleratorsConfigurationTest
         impl_checkGetPreferredKeyEventsForCommandList(m_xGlobalAccelCfg, xPrimaryAccess, sCommandList);
     }
 
-    //-------------------------------------------
+
     /** @todo document me.
      */
     @Test
@@ -198,7 +198,7 @@ public class AcceleratorsConfigurationTest
             XNameAccess xPrimaryAccess = UnoRuntime.queryInterface(XNameAccess.class, xPrimaryModules.getByName(sModules[i]));
             XNameAccess xSecondaryAccess = UnoRuntime.queryInterface(XNameAccess.class, xSecondaryModules.getByName(sModules[i]));
 
-            //--------------------------------------------
+
             if (sModules[i].equals("com.sun.star.presentation.PresentationDocument"))
             {
                 sKeys = new String[]
@@ -229,7 +229,7 @@ public class AcceleratorsConfigurationTest
             }
             impl_checkGetKeyCommands(m_xModuleAccelCfg, xPrimaryAccess, sKeys);
 
-            //--------------------------------------------
+
             String[] sCommands;
             if (sModules[i].equals("com.sun.star.presentation.PresentationDocument"))
             {
@@ -277,7 +277,7 @@ public class AcceleratorsConfigurationTest
             }
             impl_checkSetKeyCommands(m_xModuleAccelCfg, xPrimaryAccess, xSecondaryAccess, sKeys, sCommands);
 
-            //--------------------------------------------
+
             if (sModules[i].equals("com.sun.star.presentation.PresentationDocument"))
             {
                 sKeys = new String[]
@@ -308,7 +308,7 @@ public class AcceleratorsConfigurationTest
             }
             impl_checkRemoveKeyCommands(m_xModuleAccelCfg, xPrimaryAccess, xSecondaryAccess, sKeys);
 
-            //--------------------------------------------
+
             String[] sCommandList;
             if (sModules[i].equals("com.sun.star.presentation.PresentationDocument"))
             {
@@ -342,7 +342,7 @@ public class AcceleratorsConfigurationTest
         }
     }
 
-    //-------------------------------------------
+
     /** @todo document me.
      */
     @Test
@@ -362,7 +362,7 @@ public class AcceleratorsConfigurationTest
         LoadDocumentAcceleratorConfiguration(sDocCfgName);
     }
 
-    //-------------------------------------------
+
     /** @todo document me.
      */
     private void impl_checkGetKeyCommands(XAcceleratorConfiguration xAccelCfg, XNameAccess xAccess, String[] sKeys)
@@ -404,7 +404,7 @@ public class AcceleratorsConfigurationTest
         }
     }
 
-    //-------------------------------------------
+
     /** @todo document me.
      */
     private void impl_checkSetKeyCommands(XAcceleratorConfiguration xAccelCfg, XNameAccess xPrimaryAccess, XNameAccess xSecondaryAccess, String[] sKeys, String[] sCommands)
@@ -476,7 +476,7 @@ public class AcceleratorsConfigurationTest
         }
     }
 
-    //-------------------------------------------
+
     /** @todo document me.
      */
     private void impl_checkRemoveKeyCommands(XAcceleratorConfiguration xAccelCfg, XNameAccess xPrimaryAccess, XNameAccess xSecondaryAccess, String[] sKeys)
@@ -519,7 +519,7 @@ public class AcceleratorsConfigurationTest
         }
     }
 
-    //-------------------------------------------
+
     /** @todo document me.
      */
     private void impl_checkGetPreferredKeyEventsForCommandList(XAcceleratorConfiguration xAccelCfg, XNameAccess xPrimaryAccess, String[] sCommandList)
@@ -549,7 +549,7 @@ public class AcceleratorsConfigurationTest
         }
     }
 
-    //-------------------------------------------
+
     /** @todo document me.
      */
     private String getCommandFromConfiguration(XNameAccess xAccess, String sKey)
@@ -572,7 +572,7 @@ public class AcceleratorsConfigurationTest
         return sCommand;
     }
 
-    //-------------------------------------------
+
     /** @todo document me.
      */
     private void LoadDocumentAcceleratorConfiguration(String sDocCfgName)
@@ -608,7 +608,7 @@ public class AcceleratorsConfigurationTest
         }
     }
 
-    //-------------------------------------------
+
     /** @todo document me.
      */
     private void SaveDocumentAcceleratorConfiguration(String sDocCfgName)
@@ -644,7 +644,7 @@ public class AcceleratorsConfigurationTest
         }
     }
 
-    //-------------------------------------------
+
     /** @todo document me.
      */
     private com.sun.star.awt.KeyEvent convertShortcut2AWTKey(String sShortcut)
@@ -674,7 +674,7 @@ public class AcceleratorsConfigurationTest
         return aKeyEvent;
     }
 
-    //-------------------------------------------
+
     /** @todo document me.
      */
     private String convertAWTKey2Shortcut(com.sun.star.awt.KeyEvent aKeyEvent)
@@ -701,7 +701,7 @@ public class AcceleratorsConfigurationTest
         return sShortcut;
     }
 
-    //-------------------------------------------
+
     /** @todo document me.
      */
     private String getOfficeLocale()
@@ -723,7 +723,7 @@ public class AcceleratorsConfigurationTest
         return sLocale;
     }
 
-    //-------------------------------------------
+
     /** @todo document me.
      */
     private void setOfficeLocale(String sLocale)
@@ -743,7 +743,7 @@ public class AcceleratorsConfigurationTest
         }
     }
 
-    //-------------------------------------------
+
     /** @todo document me.
      */
     private XNameAccess openConfig(XMultiServiceFactory xSMGR,

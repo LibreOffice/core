@@ -44,7 +44,7 @@
 namespace framework{
 
 
-//*****************************************************************************************************************
+
 PersistentWindowState::PersistentWindowState(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : ThreadHelpBase          (&Application::GetSolarMutex())
     , m_xContext              (xContext                     )
@@ -52,12 +52,12 @@ PersistentWindowState::PersistentWindowState(const css::uno::Reference< css::uno
 {
 }
 
-//*****************************************************************************************************************
+
 PersistentWindowState::~PersistentWindowState()
 {
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL PersistentWindowState::initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
     throw(css::uno::Exception       ,
           css::uno::RuntimeException, std::exception)
@@ -88,7 +88,7 @@ void SAL_CALL PersistentWindowState::initialize(const css::uno::Sequence< css::u
     xFrame->addFrameActionListener(this);
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEvent& aEvent)
     throw(css::uno::RuntimeException, std::exception)
 {
@@ -149,14 +149,14 @@ void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEv
     }
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL PersistentWindowState::disposing(const css::lang::EventObject&)
     throw(css::uno::RuntimeException, std::exception)
 {
     // nothing todo here - because we hold the frame as weak reference only
 }
 
-//*****************************************************************************************************************
+
 OUString PersistentWindowState::implst_identifyModule(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                                              const css::uno::Reference< css::frame::XFrame >&              xFrame)
 {
@@ -177,7 +177,7 @@ OUString PersistentWindowState::implst_identifyModule(const css::uno::Reference<
     return sModuleName;
 }
 
-//*****************************************************************************************************************
+
 OUString PersistentWindowState::implst_getWindowStateFromConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                                                        const OUString&                                    sModuleName)
 {
@@ -208,7 +208,7 @@ OUString PersistentWindowState::implst_getWindowStateFromConfig(const css::uno::
     return sWindowState;
 }
 
-//*****************************************************************************************************************
+
 void PersistentWindowState::implst_setWindowStateOnConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                                           const OUString&                                    sModuleName ,
                                                           const OUString&                                    sWindowState)
@@ -237,7 +237,7 @@ void PersistentWindowState::implst_setWindowStateOnConfig(const css::uno::Refere
         {}
 }
 
-//*****************************************************************************************************************
+
 OUString PersistentWindowState::implst_getWindowStateFromWindow(const css::uno::Reference< css::awt::XWindow >& xWindow)
 {
     OUString sWindowState;
@@ -267,7 +267,7 @@ OUString PersistentWindowState::implst_getWindowStateFromWindow(const css::uno::
 }
 
 
-//*********************************************************************************************************
+
 void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Reference< css::awt::XWindow >& xWindow     ,
                                                           const OUString&                          sWindowState)
 {

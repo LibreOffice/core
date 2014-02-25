@@ -37,9 +37,9 @@ namespace framework{
 class ProgressBarWrapper : public UIElementWrapperBase
 {
     public:
-        //---------------------------------------------------------------------------------------------------------
+
         //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
+
         ProgressBarWrapper();
         virtual ~ProgressBarWrapper();
 
@@ -67,10 +67,10 @@ class ProgressBarWrapper : public UIElementWrapperBase
         // XUIElement
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getRealInterface() throw (::com::sun::star::uno::RuntimeException, std::exception);
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  variables
     //  (should be private everyway!)
-    //-------------------------------------------------------------------------------------------------------------
+
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >         m_xStatusBar;    // Reference to our status bar XWindow
         ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface >  m_xProgressBarIfacWrapper;

@@ -49,10 +49,10 @@ namespace framework{
 
 _________________________________________________________________________________________________________________*/
 
-//*****************************************************************************************************************
+
 //  private
 //  implementation of XTypeProvider::getImplementationId()
-//*****************************************************************************************************************
+
 #define PRIVATE_DEFINE_XTYPEPROVIDER_GETIMPLEMENTATIONID( CLASS )                                                                               \
     ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL CLASS::getImplementationId() throw( ::com::sun::star::uno::RuntimeException, std::exception )          \
     {                                                                                                                                           \
@@ -78,10 +78,10 @@ ________________________________________________________________________________
         return pID->getImplementationId();                                                                                                      \
     }
 
-//*****************************************************************************************************************
+
 //  private
 //  implementation of XTypeProvider::getTypes() with max. 12 interfaces!
-//*****************************************************************************************************************
+
 #define PRIVATE_DEFINE_XTYPEPROVIDER_GETTYPES( CLASS, TYPES )                                                                                   \
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL CLASS::getTypes() throw( ::com::sun::star::uno::RuntimeException, std::exception )  \
     {                                                                                                                                           \
@@ -108,10 +108,10 @@ ________________________________________________________________________________
         return pTypeCollection->getTypes();                                                                                                     \
     }
 
-//*****************************************************************************************************************
+
 //  private
 //  implementation of XTypeProvider::getTypes() with more then 12 interfaces!
-//*****************************************************************************************************************
+
 #define PRIVATE_DEFINE_XTYPEPROVIDER_GETTYPES_LARGE( CLASS, TYPES_FIRST, TYPES_SECOND )                                                         \
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL CLASS::getTypes() throw( ::com::sun::star::uno::RuntimeException, std::exception )  \
     {                                                                                                                                           \
@@ -160,10 +160,10 @@ ________________________________________________________________________________
         return *pTypeCollection;                                                                                                                \
     }
 
-//*****************************************************************************************************************
+
 //  private
 //  implementation of XTypeProvider::getTypes() with using max. 12 interfaces + baseclass!
-//*****************************************************************************************************************
+
 #define PRIVATE_DEFINE_XTYPEPROVIDER_GETTYPES_BASECLASS( CLASS, BASECLASS, TYPES )                                                              \
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL CLASS::getTypes() throw( ::com::sun::star::uno::RuntimeException )  \
     {                                                                                                                                           \
@@ -211,10 +211,10 @@ ________________________________________________________________________________
         return *pTypeCollection;                                                                                                                \
     }
 
-//*****************************************************************************************************************
+
 //  private
 //  help macros to replace TYPES in getTypes() [see before]
-//*****************************************************************************************************************
+
 #define PRIVATE_DEFINE_TYPE_1( TYPE1 )                                                                                                          \
     ::getCppuType(( const ::com::sun::star::uno::Reference< TYPE1 >*)NULL )
 
@@ -262,10 +262,10 @@ ________________________________________________________________________________
     PRIVATE_DEFINE_TYPE_11( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8, TYPE9, TYPE10, TYPE11 ),                                    \
     ::getCppuType(( const ::com::sun::star::uno::Reference< TYPE12 >*)NULL )
 
-//*****************************************************************************************************************
+
 //  private
 //  complete implementation of XTypeProvider
-//*****************************************************************************************************************
+
 #define PRIVATE_DEFINE_XTYPEPROVIDER_PURE( CLASS )                                                                                                          \
     PRIVATE_DEFINE_XTYPEPROVIDER_GETIMPLEMENTATIONID( CLASS )                                                                                               \
     PRIVATE_DEFINE_XTYPEPROVIDER_GETTYPES( CLASS, ::getCppuType(( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider >*)NULL ) )
@@ -282,18 +282,18 @@ ________________________________________________________________________________
     PRIVATE_DEFINE_XTYPEPROVIDER_GETIMPLEMENTATIONID( CLASS )                                                                                               \
     PRIVATE_DEFINE_XTYPEPROVIDER_GETTYPES_BASECLASS( CLASS, BASECLASS, TYPES )
 
-//*****************************************************************************************************************
+
 //  public
 //  declaration of XTypeProvider
-//*****************************************************************************************************************
+
 #define FWK_DECLARE_XTYPEPROVIDER                                                                                                                               \
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes           () throw( ::com::sun::star::uno::RuntimeException, std::exception );\
     virtual ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
-//*****************************************************************************************************************
+
 //  public
 //  implementation of XTypeProvider
-//*****************************************************************************************************************
+
 //  implementation of XTypeProvider without additional interface for getTypes()
 //  XTypeProvider is used as the only one interface automaticly.
 //  Following defines don't use XTypeProvider automaticly!!!!

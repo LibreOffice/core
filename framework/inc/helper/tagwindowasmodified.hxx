@@ -36,7 +36,7 @@
 
 namespace framework{
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          listen for modify events on model and tag frame container window so it can react accordingly
     @descr          Used e.g. by our MAC port where such state is shown separately on some controls of the
                     title bar.
@@ -58,7 +58,7 @@ class TagWindowAsModified :   // baseclasses (order necessary for right initiali
                                           css::frame::XFrameActionListener, // => XEventListener
                                           css::util::XModifyListener >       // => XEventListener
 {
-    //________________________________
+
     // member
 
     private:
@@ -72,43 +72,43 @@ class TagWindowAsModified :   // baseclasses (order necessary for right initiali
         /// we list on the model for modify events
         css::uno::WeakReference< css::frame::XModel > m_xModel;
 
-    //________________________________
+
     // interface
 
     public:
 
-        //____________________________
+
         // ctor/dtor
                  TagWindowAsModified();
         virtual ~TagWindowAsModified(                                                                   );
 
-        //____________________________
+
         // XInterface, XTypeProvider
 
-        //____________________________
+
         // XInitialization
         virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
             throw(css::uno::Exception       ,
                   css::uno::RuntimeException, std::exception);
 
-        //____________________________
+
         // XModifyListener
         virtual void SAL_CALL modified(const css::lang::EventObject& aEvent)
             throw(css::uno::RuntimeException, std::exception);
 
-        //____________________________
+
         // XFrameActionListener
         virtual void SAL_CALL frameAction(const css::frame::FrameActionEvent& aEvent)
             throw(css::uno::RuntimeException, std::exception);
 
-        //____________________________
+
         // XEventListener
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
             throw(css::uno::RuntimeException, std::exception);
 
     private:
 
-        //____________________________
+
         // @todo document me
         void impl_update(const css::uno::Reference< css::frame::XFrame >& xFrame);
 

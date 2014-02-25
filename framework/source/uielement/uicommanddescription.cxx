@@ -78,9 +78,9 @@ const sal_Int32   COMMAND_PROPERTY_MIRROR               = 4;
 namespace framework
 {
 
-//*****************************************************************************************************************
+
 //  Configuration access class for PopupMenuControllerFactory implementation
-//*****************************************************************************************************************
+
 
 class ConfigurationAccess_UICommand : // Order is necessary for right initialization!
                                         public  ::cppu::WeakImplHelper2<XNameAccess,XContainerListener>
@@ -179,9 +179,9 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
         sal_Bool                          m_bGenericDataRetrieved;
 };
 
-//*****************************************************************************************************************
+
 //  XInterface, XTypeProvider
-//*****************************************************************************************************************
+
 ConfigurationAccess_UICommand::ConfigurationAccess_UICommand( const OUString& aModuleName, const Reference< XNameAccess >& rGenericUICommands, const Reference< XComponentContext>& rxContext ) :
     m_aConfigCmdAccess( CONFIGURATION_ROOT_ACCESS ),
     m_aConfigPopupAccess( CONFIGURATION_ROOT_ACCESS ),

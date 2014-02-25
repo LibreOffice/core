@@ -34,7 +34,7 @@
 
 namespace framework{
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          implement a transaction manager to support non breakable interface methods
     @descr          Use it to support non breakable interface methods without using any thread
                     synchronization like e.g. mutex, rw-lock!
@@ -51,9 +51,9 @@ namespace framework{
 class FWI_DLLPUBLIC TransactionManager : public  ITransactionManager
                          , private INonCopyable
 {
-    //-------------------------------------------------------------------------------------------------------------
+
     //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+
     public:
 
                                    TransactionManager           (                                              );
@@ -64,16 +64,16 @@ class FWI_DLLPUBLIC TransactionManager : public  ITransactionManager
         virtual void               registerTransaction          ( EExceptionMode eMode, ERejectReason& eReason ) throw( css::uno::RuntimeException, css::lang::DisposedException );
         virtual void               unregisterTransaction        (                                              ) throw( css::uno::RuntimeException, css::lang::DisposedException );
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private methods
-    //-------------------------------------------------------------------------------------------------------------
+
     private:
 
         void impl_throwExceptions( EExceptionMode eMode, ERejectReason eReason ) const throw( css::uno::RuntimeException, css::lang::DisposedException );
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private member
-    //-------------------------------------------------------------------------------------------------------------
+
     private:
 
         mutable ::osl::Mutex    m_aAccessLock           ;   /// regulate access on internal member of this instance

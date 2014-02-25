@@ -63,7 +63,7 @@ enum ELoadState
     E_INTERACTION
 };
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      implement the topframe of frame tree
     @descr      This is the root of the frame tree. The desktop has no window, is not visible but he is the logical
                 "masternode" to build the hierarchy.
@@ -105,7 +105,7 @@ class Desktop : private osl::Mutex,
     // internal used types, const etcpp.
     private:
 
-        //---------------------------------------------------------------------
+
         /** used temporary to know which listener was already called or not. */
         typedef ::std::vector< css::uno::Reference< css::frame::XTerminateListener > > TTerminateListenerList;
 
@@ -138,7 +138,7 @@ class Desktop : private osl::Mutex,
         // XTypeProvider
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
 
-        //---------------------------------------------------------------------
+
         /**
             @interface  XDesktop
 
@@ -170,7 +170,7 @@ class Desktop : private osl::Mutex,
         virtual ::sal_Bool SAL_CALL terminate()
             throw( css::uno::RuntimeException, std::exception );
 
-        //---------------------------------------------------------------------
+
         /**
             @interface  XDesktop
 
@@ -193,7 +193,7 @@ class Desktop : private osl::Mutex,
         virtual void SAL_CALL addTerminateListener( const css::uno::Reference< css::frame::XTerminateListener >& xListener )
             throw( css::uno::RuntimeException, std::exception );
 
-        //---------------------------------------------------------------------
+
         /**
             @interface  XDesktop
 
@@ -305,9 +305,9 @@ class Desktop : private osl::Mutex,
         // non-virtual and non-UNO for now
         bool SAL_CALL terminateQuickstarterToo()
             throw( css::uno::RuntimeException );
-    //-------------------------------------------------------------------------------------------------------------
+
     //  protected methods
-    //-------------------------------------------------------------------------------------------------------------
+
     protected:
 
         //  OPropertySetHelper
@@ -323,15 +323,15 @@ class Desktop : private osl::Mutex,
         virtual ::cppu::IPropertyArrayHelper&                       SAL_CALL getInfoHelper                   (                                       );
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo              (                                       ) throw (css::uno::RuntimeException, std::exception);
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private methods
-    //-------------------------------------------------------------------------------------------------------------
+
     private:
 
         css::uno::Reference< css::lang::XComponent >            impl_getFrameComponent          ( const css::uno::Reference< css::frame::XFrame >&  xFrame          ) const;
         static const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor(                                                                   );
 
-        //---------------------------------------------------------------------
+
         /** calls queryTermination() on every registered termination listener.
          *
          *  Note: Only normal termination listener (registered in list m_aListenerContainer
@@ -352,7 +352,7 @@ class Desktop : private osl::Mutex,
         void impl_sendQueryTerminationEvent(TTerminateListenerList& lCalledListener,
                                             ::sal_Bool&             bVeto          );
 
-        //---------------------------------------------------------------------
+
         /** calls cancelTermination() on every termination listener
          *  where queryTermination() was called before.
          *
@@ -368,7 +368,7 @@ class Desktop : private osl::Mutex,
          */
         void impl_sendCancelTerminationEvent(const TTerminateListenerList& lCalledListener);
 
-        //---------------------------------------------------------------------
+
         /** calls notifyTermination() on every registered termination listener.
          *
          *  Note: Only normal termination listener (registered in list m_aListenerContainer
@@ -377,7 +377,7 @@ class Desktop : private osl::Mutex,
          */
         void impl_sendNotifyTerminationEvent();
 
-        //---------------------------------------------------------------------
+
         /** try to close all open frames.
          *
          *  Iterates over all child frames and try to close them.
@@ -395,10 +395,10 @@ class Desktop : private osl::Mutex,
          */
         ::sal_Bool impl_closeFrames(::sal_Bool bAllowUI);
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  debug methods
     //  (should be private everytime!)
-    //-------------------------------------------------------------------------------------------------------------
+
     private:
 
         static sal_Bool implcp_addEventListener         ( const css::uno::Reference< css::lang::XEventListener >&           xListener        );
@@ -407,10 +407,10 @@ class Desktop : private osl::Mutex,
         sal_Bool m_bIsTerminated ;  /// check flag to protect us against dispose before terminate!
                                     /// see dispose() for further information!
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  variables
     //  (should be private everytime!)
-    //-------------------------------------------------------------------------------------------------------------
+
     private:
 
         css::uno::Reference< css::uno::XComponentContext >              m_xContext                  ;   /// reference to factory, which has create this instance
@@ -427,13 +427,13 @@ class Desktop : private osl::Mutex,
         OUString                                                 m_sTitle                    ;
         css::uno::Reference< css::frame::XDispatchRecorderSupplier >    m_xDispatchRecorderSupplier ;
 
-        //---------------------------------------------------------------------
+
         /** special terminate listener to close pipe and block external requests
           * during/after termination process is/was running
           */
         css::uno::Reference< css::frame::XTerminateListener > m_xPipeTerminator;
 
-        //---------------------------------------------------------------------
+
         /** special terminate listener shown inside system tray (quick starter)
           * Will hinder the office on shutdown ... but wish to allow closing
           * of open documents. And because thats different to a normal terminate listener
@@ -441,7 +441,7 @@ class Desktop : private osl::Mutex,
           */
         css::uno::Reference< css::frame::XTerminateListener > m_xQuickLauncher;
 
-        //---------------------------------------------------------------------
+
         /** special terminate listener which loads images asynchronous for current open documents.
           * Because internally it uses blocking system APIs ... it cant be guaranteed that
           * running jobs can be cancelled successfully if the corressponding document will be closed ...
@@ -451,7 +451,7 @@ class Desktop : private osl::Mutex,
           */
         css::uno::Reference< css::frame::XTerminateListener > m_xSWThreadManager;
 
-        //---------------------------------------------------------------------
+
         /** special terminate listener shuting down the SfxApplication.
           * Because these desktop instance closes documents and informs listener
           * only ... it does not really shutdown the whole application.

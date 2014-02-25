@@ -66,9 +66,9 @@ class ToolBarWrapper : public ::com::sun::star::ui::XUIFunctionListener,
         using cppu::OPropertySetHelper::disposing;
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  protected methods
-    //-------------------------------------------------------------------------------------------------------------
+
     protected:
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const com::sun::star::uno::Any&  aValue ) throw( com::sun::star::uno::Exception, std::exception );
         virtual void impl_fillNewData();

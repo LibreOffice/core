@@ -45,7 +45,7 @@ class SystemWindow;
 
 namespace framework{
 
-//-----------------------------------------------
+
 /**
     @short          helper to dispatch the URLs ".uno:CloseDoc"/".uno:CloseWin"/".uno:CloseFrame"
                     to close a frame/document or the whole application implicitly in case it was the last frame
@@ -62,12 +62,12 @@ class CloseDispatcher : // baseclasses ... order is necessary for right initiali
                                     css::frame::XNotifyingDispatch,             // => XDispatch
                                     css::frame::XDispatchInformationProvider >
 {
-    //-------------------------------------------
+
     // types
 
     private:
 
-        //---------------------------------------
+
         /** @short  describe, which request must be done here.
         @descr      The incoming URLs {.uno:CloseDoc/CloseWin and CloseFrame
                     can be classified so and checked later performant.}*/
@@ -78,53 +78,53 @@ class CloseDispatcher : // baseclasses ... order is necessary for right initiali
             E_CLOSE_WIN
         };
 
-    //-------------------------------------------
+
     // member
 
     private:
 
-        //---------------------------------------
+
         /** @short reference to an uno service manager,
                    which can be used to create own needed
                    uno resources. */
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
-        //---------------------------------------
+
         /** @short  reference to the target frame, which should be
                     closed by this dispatch. */
         css::uno::WeakReference< css::frame::XFrame > m_xCloseFrame;
 
-        //---------------------------------------
+
         /** @short  used for asynchronous callbacks within the main thread.
             @descr  Internally we work asynchronous. Because our callis
                     are not aware, that her request can kill its own environment ... */
         ::vcl::EventPoster m_aAsyncCallback;
 
-        //---------------------------------------
+
         /** @short  used inside asyncronous callback to decide,
                     which operation must be executed. */
         EOperation m_eOperation;
 
-        //---------------------------------------
+
         /** @short  for asynchronous operations we must hold us self alive! */
         css::uno::Reference< css::uno::XInterface > m_xSelfHold;
 
-        //---------------------------------------
+
         /** @short  list of registered status listener */
         ListenerHash m_lStatusListener;
 
-        //---------------------------------------
+
         /** @short  holded alive for internally asynchronous operations! */
         css::uno::Reference< css::frame::XDispatchResultListener > m_xResultListener;
 
         SystemWindow* m_pSysWindow;
 
-    //-------------------------------------------
+
     // native interface
 
     public:
 
-        //---------------------------------------
+
         /** @short  connect a new CloseDispatcher instance to its frame.
             @descr  One CloseDispatcher instance is bound to onw frame only.
                     That makes an implementation (e.g. of listener support)
@@ -144,22 +144,22 @@ class CloseDispatcher : // baseclasses ... order is necessary for right initiali
                         const css::uno::Reference< css::frame::XFrame >&          xFrame ,
                         const OUString&                                           sTarget);
 
-        //---------------------------------------
+
         /** @short  does nothing real. */
         virtual ~CloseDispatcher();
 
-    //-------------------------------------------
+
     // uno interface
 
     public:
 
-        //---------------------------------------
+
         // XNotifyingDispatch
         virtual void SAL_CALL dispatchWithNotification( const css::util::URL&                                             aURL      ,
                                                         const css::uno::Sequence< css::beans::PropertyValue >&            lArguments,
                                                         const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) throw(css::uno::RuntimeException, std::exception);
 
-        //---------------------------------------
+
         // XDispatch
         virtual void SAL_CALL dispatch            ( const css::util::URL&                                     aURL      ,
                                                     const css::uno::Sequence< css::beans::PropertyValue >&    lArguments) throw(css::uno::RuntimeException, std::exception);
@@ -168,17 +168,17 @@ class CloseDispatcher : // baseclasses ... order is necessary for right initiali
         virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener ,
                                                     const css::util::URL&                                     aURL      ) throw(css::uno::RuntimeException, std::exception);
 
-        //---------------------------------------
+
         // XDispatchInformationProvider
         virtual css::uno::Sequence< sal_Int16 >                       SAL_CALL getSupportedCommandGroups         (                         ) throw (css::uno::RuntimeException, std::exception);
         virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( sal_Int16 nCommandGroup ) throw (css::uno::RuntimeException, std::exception);
 
-    //-------------------------------------------
+
     // internal helper
 
     private:
 
-        //---------------------------------------
+
         /** @short  a callback for asynchronous started operations.
 
             @descr  As already mentione, we make internally all operations
@@ -187,7 +187,7 @@ class CloseDispatcher : // baseclasses ... order is necessary for right initiali
         */
         DECL_LINK( impl_asyncCallback, void* );
 
-        //---------------------------------------
+
         /** @short  prepare m_xCloseFrame so it should be closeable without problems.
 
             @descr  Thats needed to be shure, that the document cant disagree
@@ -213,7 +213,7 @@ class CloseDispatcher : // baseclasses ... order is necessary for right initiali
                                                      sal_Bool                                   bCloseAllOtherViewsToo,
                                                      sal_Bool&                                  bControllerSuspended  );
 
-        //---------------------------------------
+
         /** @short  close the member m_xCloseFrame.
 
             @descr  This method does not look for any document
@@ -230,7 +230,7 @@ class CloseDispatcher : // baseclasses ... order is necessary for right initiali
          */
         sal_Bool implts_closeFrame();
 
-        //---------------------------------------
+
         /** @short  set the special BackingComponent (now StartModule)
                     as new component of our m_xCloseFrame.
 
@@ -239,7 +239,7 @@ class CloseDispatcher : // baseclasses ... order is necessary for right initiali
          */
         sal_Bool implts_establishBackingMode();
 
-        //---------------------------------------
+
         /** @short  calls XDesktop->terminate().
 
             @descr  No office code has to be called
@@ -253,7 +253,7 @@ class CloseDispatcher : // baseclasses ... order is necessary for right initiali
          */
         sal_Bool implts_terminateApplication();
 
-        //---------------------------------------
+
         /** @short  notify a DispatchResultListener.
 
             @descr  We check the listener reference before we use it.
@@ -273,7 +273,7 @@ class CloseDispatcher : // baseclasses ... order is necessary for right initiali
                                                sal_Int16                                                   nState   ,
                                          const css::uno::Any&                                              aResult  );
 
-        //---------------------------------------
+
         /** @short  try to find the right target frame where this close request
                     must be really done.
 
