@@ -110,7 +110,7 @@ void SfxMenuImageControl_Impl::Update()
     }
 }
 
-//=========================================================================
+
 
 static Image RetrieveAddOnImage( Reference< com::sun::star::frame::XFrame >& rFrame,
                                  const OUString& aImageId,
@@ -134,7 +134,7 @@ static Image RetrieveAddOnImage( Reference< com::sun::star::frame::XFrame >& rFr
     return aImage;
 }
 
-//=========================================================================
+
 
 /*  This helper function checks whether a Slot-id in the current application
     status is visible or not. This relates to the application status to see
@@ -153,7 +153,7 @@ sal_Bool IsItemHidden_Impl( sal_uInt16 nItemId, int bOleServer, int bMac )
              ( nItemId == SID_EXITANDRETURN || nItemId == SID_UPDATEDOC ) );
 }
 
-//====================================================================
+
 
 void SfxVirtualMenu::Construct_Impl()
 {

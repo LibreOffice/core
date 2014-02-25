@@ -25,7 +25,7 @@
 class StarBASIC;
 class SbxObject;
 
-//=========================================================================
+
 
 SbxVariable* MakeVariable( StarBASIC *pBas, SbxObject *pObject,
                    const char *pName, sal_uIntPtr nSID, SbxDataType eType=SbxOBJECT,

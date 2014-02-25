@@ -30,10 +30,10 @@
 #include <algorithm>
 #include <functional>
 
-//........................................................................
+
 namespace sfx2
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -52,9 +52,9 @@ namespace sfx2
     using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::lang::XInitialization;
 
-    //====================================================================
+
     //= SfxModelFactory - declaration
-    //====================================================================
+
     typedef ::cppu::WeakImplHelper2 <   XSingleServiceFactory
                                     ,   XServiceInfo
                                     >   SfxModelFactory_Base;
@@ -97,9 +97,9 @@ namespace sfx2
         const SfxModelFactoryFunc                   m_pComponentFactoryFunc;
     };
 
-    //====================================================================
+
     //= SfxModelFactory - implementation
-    //====================================================================
+
 
     SfxModelFactory::SfxModelFactory( const Reference< XMultiServiceFactory >& _rxServiceFactory,
             const OUString& _rImplementationName, const SfxModelFactoryFunc _pComponentFactoryFunc,

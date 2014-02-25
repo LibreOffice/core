@@ -142,7 +142,7 @@ using namespace ::com::sun::star::document;
 using namespace ::rtl;
 using namespace ::cppu;
 
-//=========================================================================
+
 void impl_addToModelCollection(const css::uno::Reference< css::frame::XModel >& xModel)
 {
     if (!xModel.is())
@@ -161,7 +161,7 @@ void impl_addToModelCollection(const css::uno::Reference< css::frame::XModel >& 
     }
 }
 
-//=========================================================================
+
 
 sal_Bool SfxObjectShell::Save()
 {

@@ -144,7 +144,7 @@ sal_Bool GetSplitSizeFromString( const OUString& rStr, Size& rSize )
     return sal_False;
 }
 
-//=========================================================================
+
 SfxChildWindow::SfxChildWindow(Window *pParentWindow, sal_uInt16 nId)
     : pParent(pParentWindow)
     , nType(nId)

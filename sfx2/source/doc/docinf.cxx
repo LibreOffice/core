@@ -32,7 +32,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/dibtools.hxx>
 #include "oleprops.hxx"
-// ============================================================================
+
 
 // stream names
 #define STREAM_SUMMARYINFO      "\005SummaryInformation"

@@ -1619,7 +1619,7 @@ void SfxViewFrame::DoAdjustPosSizePixel //! divide on Inner.../Outer...
     }
 }
 
-//========================================================================
+
 
 bool SfxViewFrameItem::operator==( const SfxPoolItem &rItem ) const
 {

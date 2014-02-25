@@ -25,7 +25,7 @@
 #include <limits.h>
 #include <algorithm>
 
-//====================================================================
+
 // add nOffset to each bit-value in the set
 
 BitSet BitSet::operator<<( sal_uInt16 nOffset ) const

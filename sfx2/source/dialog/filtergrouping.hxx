@@ -24,10 +24,10 @@
 #include <com/sun/star/container/XEnumeration.hpp>
 #include "filedlgimpl.hxx"
 
-//........................................................................
+
 namespace sfx2
 {
-//........................................................................
+
 
     class TSortedFilterList
     {
@@ -46,7 +46,7 @@ namespace sfx2
             const SfxFilter* impl_getFilter(sal_Int32 nIndex);
     };
 
-    //--------------------------------------------------------------------
+
     /** adds the given filters to the filter manager.
         <p>To be used when saving generic files.</p>
     */
@@ -65,7 +65,7 @@ namespace sfx2
         FileDialogHelper_Impl& _rFileDlgImpl
         );
 
-    //--------------------------------------------------------------------
+
     /** adds the given filters to the filter manager.
         <p>To be used when opening generic files.</p>
     */
@@ -76,7 +76,7 @@ namespace sfx2
         FileDialogHelper_Impl& _rFileDlgImpl
     );
 
-    //--------------------------------------------------------------------
+
     /** adds the given extension to the display text.
         <p>To be used when opening or save generic files.</p>
     */
@@ -87,9 +87,9 @@ namespace sfx2
         FileDialogHelper_Impl& _rFileDlgImpl
     );
 
-//........................................................................
+
 }   // namespace sfx2
-//........................................................................
+
 
 #endif // INCLUDED_SFX2_SOURCE_DIALOG_FILTERGROUPING_HXX
 

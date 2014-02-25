@@ -66,7 +66,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 
-//====================================================================
+
 
 // binds the instance to the specified id and assignes the title
 

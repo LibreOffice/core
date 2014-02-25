@@ -92,7 +92,7 @@ import org.openoffice.test.tools.SpreadsheetDocument;
  */
 public class UndoManager
 {
-    // -----------------------------------------------------------------------------------------------------------------
+
     @Before
     public void beforeTest() throws com.sun.star.uno.Exception
     {
@@ -108,7 +108,7 @@ public class UndoManager
         globalFactory.insert( m_callbackFactory );
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     @Test
     public void checkWriterUndo() throws Exception
     {
@@ -116,7 +116,7 @@ public class UndoManager
         impl_checkUndo();
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
 //FIXME fails fdo#35663   @Test
     public void checkCalcUndo() throws Exception
     {
@@ -124,7 +124,7 @@ public class UndoManager
         impl_checkUndo();
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     @Test
     public void checkDrawUndo() throws Exception
     {
@@ -132,7 +132,7 @@ public class UndoManager
         impl_checkUndo();
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     @Test
     public void checkImpressUndo() throws Exception
     {
@@ -140,7 +140,7 @@ public class UndoManager
         impl_checkUndo();
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     @Test
     public void checkChartUndo() throws Exception
     {
@@ -148,7 +148,7 @@ public class UndoManager
         impl_checkUndo();
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     @Test
     public void checkBrokenScripts() throws com.sun.star.uno.Exception, InterruptedException
     {
@@ -161,7 +161,7 @@ public class UndoManager
         impl_setupBrokenBasicScript();
         final String scriptURI = "vnd.sun.star.script:default.callbacks.brokenScript?language=Basic&location=document";
 
-        // .............................................................................................................
+
         // scenario 1: Pressing a button which is bound to execute the script
         // (This is one of the many cases where SfxObjectShell::CallXScript is invoked)
 
@@ -191,7 +191,7 @@ public class UndoManager
         // auto-closed the context after the macro finished.
         assertEquals( "undo context was not auto-closed as expected", 0, m_undoListener.getCurrentUndoContextDepth() );
 
-        // .............................................................................................................
+
         // scenario 2: dispatching the script URL. Technically, this is equivalent to configuring the
         // script into a menu or toolbar, and selecting the respective menu/toolbar item
         m_callbackCalled = false;
@@ -200,7 +200,7 @@ public class UndoManager
         // same as above: The script didn't close the context, but the OOo framework should have
         assertEquals( "undo context was not auto-closed as expected", 0, m_undoListener.getCurrentUndoContextDepth() );
 
-        // .............................................................................................................
+
         // scenario 3: assigning the script to some document event, and triggering this event
         final XEventsSupplier eventSupplier = UnoRuntime.queryInterface( XEventsSupplier.class, m_currentDocument.getDocument() );
         final XNameReplace events = UnoRuntime.queryInterface( XNameReplace.class, eventSupplier.getEvents() );
@@ -217,7 +217,7 @@ public class UndoManager
         // same as above: The script didn't close the context, but the OOo framework should have
         assertEquals( "undo context was not auto-closed as expected", 0, m_undoListener.getCurrentUndoContextDepth() );
 
-        // .............................................................................................................
+
         // scenario 4: let the script enter an Undo context, but not close it, as usual.
         // Additionally, let the script close the document - the OOo framework code which cares for
         // auto-closing of Undo contexts should survive this, ideally ...
@@ -229,7 +229,7 @@ public class UndoManager
         m_currentDocument = null;
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     @Test
     public void checkSerialization() throws com.sun.star.uno.Exception, InterruptedException
     {
@@ -282,7 +282,7 @@ public class UndoManager
         assertEquals( "not all actions have been undone", actionCount, actionsUndone[0].intValue() );
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     @After
     public void afterTest()
     {
@@ -295,7 +295,7 @@ public class UndoManager
         m_callbackFactory.dispose();
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * @return returns the undo manager belonging to a given document
      */
@@ -307,7 +307,7 @@ public class UndoManager
         return undoManager;
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     private void impl_waitFor( final Object i_condition, final int i_milliSeconds ) throws InterruptedException
     {
         synchronized( i_condition )
@@ -316,7 +316,7 @@ public class UndoManager
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     private void impl_setupBrokenBasicScript()
     {
         try
@@ -350,7 +350,7 @@ public class UndoManager
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     private XPropertySet impl_setupButton() throws com.sun.star.uno.Exception
     {
         // let the document create a shape
@@ -383,7 +383,7 @@ public class UndoManager
         return UnoRuntime.queryInterface( XPropertySet.class, controlModel );
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     private void impl_assignScript( final XPropertySet i_controlModel, final String i_interfaceName,
         final String i_interfaceMethod, final String i_scriptURI )
     {
@@ -419,7 +419,7 @@ public class UndoManager
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     private void impl_clickButton( final XPropertySet i_buttonModel ) throws NoSuchElementException, IndexOutOfBoundsException
     {
         final XControlAccess controlAccess = UnoRuntime.queryInterface( XControlAccess.class,
@@ -438,7 +438,7 @@ public class UndoManager
         fail("did not find the accessible action named 'press'");
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     private static class UndoListener implements XUndoManagerListener
     {
         public void undoActionAdded( UndoManagerEvent i_event )
@@ -606,7 +606,7 @@ public class UndoManager
         private final Object    m_allContextsClosedCondition = new Object();
     };
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     private void impl_checkUndo() throws Exception
     {
         System.out.println( "testing: " + m_currentTestCase.getDocumentDescription() );
@@ -640,7 +640,7 @@ public class UndoManager
         assertTrue( "document is closed, but the UndoManagerListener has not been notified of the disposal", m_undoListener.isDisposed() );
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     private void impl_testSingleModification( final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
     {
         m_currentTestCase.doSingleModification();
@@ -669,7 +669,7 @@ public class UndoManager
         assertEquals( "UI-Undo does not notify the listener", 2, m_undoListener.getUndoActionCount() );
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     private void impl_testMultipleModifications( final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
     {
         m_undoListener.reset();
@@ -697,7 +697,7 @@ public class UndoManager
         m_currentTestCase.verifyInitialDocumentState();
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     private void impl_testCustomUndoActions( final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
     {
         i_undoManager.clear();
@@ -756,7 +756,7 @@ public class UndoManager
         assertTrue( action1.disposed() && action2.disposed() );
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     private void impl_testLocking( final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
     {
         i_undoManager.reset();
@@ -798,10 +798,10 @@ public class UndoManager
         assertTrue( "unlocking the manager when it is not locked should throw", caughtExpected );
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     private void impl_testContextHandling( final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
     {
-        // .............................................................................................................
+
         // part I: non-empty contexts
         i_undoManager.reset();
         m_undoListener.reset();
@@ -851,7 +851,7 @@ public class UndoManager
         assertArrayEquals( new String[0], i_undoManager.getAllRedoActionTitles() );
         assertTrue( m_undoListener.wasRedoStackCleared() );
 
-        // .............................................................................................................
+
         // part II: empty contexts
         i_undoManager.reset();
         m_undoListener.reset();
@@ -866,7 +866,7 @@ public class UndoManager
             i_undoManager.isUndoPossible() );
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     private void impl_testNestedContexts( final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
     {
         i_undoManager.reset();
@@ -894,7 +894,7 @@ public class UndoManager
         assertTrue( "nested actions not properly undone", action1.undoCalled() && action2.undoCalled() && action3.undoCalled() );
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     private void impl_testErrorHandling( final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
     {
         i_undoManager.reset();
@@ -1008,7 +1008,7 @@ public class UndoManager
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     private void impl_testStackHandling( final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
     {
         i_undoManager.reset();
@@ -1034,7 +1034,7 @@ public class UndoManager
         assertFalse( "adding a new action should have cleared the Redo stack", i_undoManager.isRedoPossible() );
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     private void impl_testClearance( final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
     {
         i_undoManager.reset();
@@ -1096,7 +1096,7 @@ public class UndoManager
         assertEquals( "seems that |reset| did not really close the open contexts", 1, m_undoListener.getCurrentUndoContextDepth() );
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     private void impl_testHiddenContexts( final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
     {
         i_undoManager.reset();
@@ -1179,13 +1179,13 @@ public class UndoManager
         assertTrue( action3.undoCalled() );
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     private XComponentContext getContext()
     {
         return m_connection.getComponentContext();
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     private XMultiServiceFactory getORB()
     {
         final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(
@@ -1193,7 +1193,7 @@ public class UndoManager
         return xMSF1;
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     @BeforeClass
     public static void setUpConnection() throws Exception
     {
@@ -1203,7 +1203,7 @@ public class UndoManager
         m_connection.setUp();
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     @AfterClass
     public static void tearDownConnection() throws InterruptedException, com.sun.star.uno.Exception
     {
@@ -1214,7 +1214,7 @@ public class UndoManager
         System.out.println( "--------------------------------------------------------------------------------" );
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     private static class CustomUndoAction implements XUndoAction, XComponent
     {
         CustomUndoAction()
@@ -1299,7 +1299,7 @@ public class UndoManager
         private final short m_failWhich;
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     private static class CountingUndoAction implements XUndoAction
     {
         CountingUndoAction( final int i_expectedOrder, final Object i_lock, final Integer[] i_actionsUndoneCounter )
@@ -1332,19 +1332,19 @@ public class UndoManager
         private Integer[]       m_actionsUndoneCounter;
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     private static String getCallbackUndoContextTitle()
     {
         return "Some Unfinished Undo Context";
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     private static String getCallbackComponentServiceName()
     {
         return "org.openoffice.complex.sfx2.Callback";
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * a factory for a callback component which, at OOo runtime, is inserted into OOo's "component repository"
      */
@@ -1401,7 +1401,7 @@ public class UndoManager
         private final ArrayList<XEventListener> m_eventListeners = new ArrayList<XEventListener>();
     };
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     private class CallbackComponent implements XJob, XTypeProvider
     {
         CallbackComponent()

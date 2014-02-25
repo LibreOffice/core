@@ -84,13 +84,13 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::cppu;
 
-//=========================================================================
+
 DBG_NAME(SfxViewShell)
 
 #define SfxViewShell
 #include "sfxslots.hxx"
 
-//=========================================================================
+
 
 class SfxClipboardChangeListener : public ::cppu::WeakImplHelper1<
     datatransfer::clipboard::XClipboardListener >
@@ -215,7 +215,7 @@ void SAL_CALL SfxClipboardChangeListener::changedContents( const datatransfer::c
     Application::PostUserEvent( STATIC_LINK( 0, SfxClipboardChangeListener, AsyncExecuteHdl_Impl ), pInfo );
 }
 
-//=========================================================================
+
 
 static OUString RetrieveLabelFromCommand(
     const OUString& rCommandURL,
@@ -275,7 +275,7 @@ static OUString RetrieveLabelFromCommand(
     return aLabel;
 }
 
-//=========================================================================
+
 SfxViewShell_Impl::SfxViewShell_Impl(sal_uInt16 const nFlags)
 : aInterceptorContainer( aMutex )
 ,   m_bControllerSet(false)
@@ -292,7 +292,7 @@ SfxViewShell_Impl::SfxViewShell_Impl(sal_uInt16 const nFlags)
 ,   m_pAccExec(0)
 {}
 
-//=========================================================================
+
 SFX_IMPL_INTERFACE(SfxViewShell,SfxShell,SfxResId(0))
 {
 }

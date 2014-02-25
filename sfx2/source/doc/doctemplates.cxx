@@ -84,7 +84,7 @@
 #include <vector>
 
 
-//=============================================================================
+
 
 #define SERVICENAME_TYPEDETECTION           "com.sun.star.document.TypeDetection"
 
@@ -111,7 +111,7 @@
 
 #define C_DELIM                 ';'
 
-//=============================================================================
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -146,7 +146,7 @@ class WaitWindow_Impl : public WorkWindow
 #define X_OFFSET 15
 #define Y_OFFSET 15
 
-//=============================================================================
+
 
 struct NamePair_Impl
 {
@@ -314,7 +314,7 @@ public:
     void                        finished() { mpUpdater = NULL; }
 };
 
-//=============================================================================
+
 
 class Updater_Impl : public ::osl::Thread
 {
@@ -329,7 +329,7 @@ public:
     virtual void SAL_CALL   onTerminated();
 };
 
-//=============================================================================
+
 
 class DocTemplates_EntryData_Impl
 {
@@ -366,7 +366,7 @@ public:
     void                setType( const OUString& rType ) { maType = rType; }
 };
 
-//=============================================================================
+
 
 class GroupData_Impl
 {
