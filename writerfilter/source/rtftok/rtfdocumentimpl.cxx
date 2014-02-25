@@ -2044,7 +2044,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 }
                 m_aTableBufferStack.pop_back();
                 m_aTableBufferStack.back().push_back(
-                        Buf_t(BUFFER_NESTROW, 0, pBuffer));
+                        Buf_t(BUFFER_NESTROW, RTFValue::Pointer_t(), pBuffer));
 
                 m_aNestedTableCellsSprms.clear();
                 m_aNestedTableCellsAttributes.clear();
