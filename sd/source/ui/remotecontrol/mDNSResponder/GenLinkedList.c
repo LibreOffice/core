@@ -32,7 +32,7 @@
 #define     ASSIGNLINK( e, l, o)    ( *((void**)((char*) (e) + (o))) = (l))
 
 
-//        GenLinkedList        /////////////////////////////////////////////////////////////
+//        GenLinkedList
 
 void        InitLinkedList( GenLinkedList *pList, size_t linkOffset)
 /* Initialize the block of memory pointed to by pList as a linked list. */
@@ -124,7 +124,7 @@ int         ReplaceElem( GenLinkedList *pList, void *elemInList, void *newElem)
 }
 
 
-//        GenDoubleLinkedList        /////////////////////////////////////////////////////////
+//        GenDoubleLinkedList
 
 void        InitDoubleLinkedList( GenDoubleLinkedList *pList, size_t fwdLinkOffset,
                                   size_t backLinkOffset)
@@ -183,7 +183,7 @@ void            DLLRemoveFromList( GenDoubleLinkedList *pList, void *elem)
 }
 
 
-//        GenLinkedOffsetList        /////////////////////////////////////////////////////
+//        GenLinkedOffsetList
 
 // Extract the Next offset from element
 #define     GETOFFSET( e, o)    ( *(size_t*)((char*) (e) + (o)) )

@@ -21,7 +21,7 @@
 
 #include "sdiocmpt.hxx"
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 old_SdrDownCompat::old_SdrDownCompat(SvStream& rNewStream, sal_uInt16 nNewMode)
 :   rStream(rNewStream),

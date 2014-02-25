@@ -348,7 +348,7 @@ void Configuration::ThrowIfDisposed (void) const
 
 
 
-//=============================================================================
+
 
 bool AreConfigurationsEquivalent (
     const Reference<XConfiguration>& rxConfiguration1,

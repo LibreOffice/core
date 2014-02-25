@@ -23,9 +23,9 @@
 
 #include <tools/link.hxx>
 
-//-----------------------
+
 // class SdObjectFactory
-//-----------------------
+
 class SdrObjFactory;
 
 class SdObjectFactory

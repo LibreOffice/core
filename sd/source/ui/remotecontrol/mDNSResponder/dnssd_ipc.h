@@ -30,9 +30,9 @@
 #define INCLUDED_SD_SOURCE_UI_REMOTECONTROL_MDNSRESPONDER_DNSSD_IPC_H
 
 
-//
+
 // Common cross platform services
-//
+
 #if defined(WIN32)
 #   include <winsock2.h>
 #endif

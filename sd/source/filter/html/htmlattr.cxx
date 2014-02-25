@@ -22,21 +22,21 @@
 #include <vcl/decoview.hxx>
 
 
-// =====================================================================
-// =====================================================================
+
+
 SdHtmlAttrPreview::SdHtmlAttrPreview( Window* pParent, const ResId& rResId )
 :Control( pParent, rResId )
 {
 }
 
-// =====================================================================
-// =====================================================================
+
+
 SdHtmlAttrPreview::~SdHtmlAttrPreview()
 {
 }
 
-// =====================================================================
-// =====================================================================
+
+
 void SdHtmlAttrPreview::Paint( const Rectangle& rRect )
 {
     DecorationView aDecoView( this );
@@ -72,8 +72,8 @@ void SdHtmlAttrPreview::Paint( const Rectangle& rRect )
                          TEXT_DRAW_CENTER|TEXT_DRAW_VCENTER );
 }
 
-// =====================================================================
-// =====================================================================
+
+
 void SdHtmlAttrPreview::SetColors( Color& aBack, Color& aText, Color& aLink,
                                    Color& aVLink, Color& aALink )
 {

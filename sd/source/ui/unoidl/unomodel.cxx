@@ -160,7 +160,7 @@ void SdUnoForbiddenCharsTable::Notify( SfxBroadcaster&, const SfxHint& rHint ) t
     }
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 const sal_Int32 WID_MODEL_LANGUAGE           =  1;
 const sal_Int32 WID_MODEL_TABSTOP            =  2;
@@ -2129,10 +2129,10 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                                     // insert the bookmark to this page into the NamedDestinations
                                     if( pPDFExtOutDevData->GetIsExportNamedDestinations() )
                                         pPDFExtOutDevData->CreateNamedDest( aPageName, aPageRect,  nPageNumber - 1 );
-                                    //
+
                                     // add the name to the outline, (almost) same code as in sc/source/ui/unoobj/docuno.cxx
                                     // issue #i40318.
-                                    //
+
                                     if( pPDFExtOutDevData->GetIsExportBookmarks() )
                                     {
                                         // Destination Export
@@ -2333,9 +2333,9 @@ void SAL_CALL SdXImpressDocument::dispose() throw (::com::sun::star::uno::Runtim
     }
 }
 
-//=============================================================================
+
 // class SdDrawPagesAccess
-//=============================================================================
+
 
 SdDrawPagesAccess::SdDrawPagesAccess( SdXImpressDocument& rMyModel )  throw()
 :   mpModel( &rMyModel)
@@ -2589,9 +2589,9 @@ void SAL_CALL SdDrawPagesAccess::removeEventListener( const uno::Reference< lang
     OSL_FAIL( "not implemented!" );
 }
 
-//=============================================================================
+
 // class SdMasterPagesAccess
-//=============================================================================
+
 
 SdMasterPagesAccess::SdMasterPagesAccess( SdXImpressDocument& rMyModel ) throw()
 :   mpModel(&rMyModel)
@@ -2841,9 +2841,9 @@ uno::Sequence< OUString > SAL_CALL SdMasterPagesAccess::getSupportedServiceNames
     return aSeq;
 }
 
-//=============================================================================
+
 // class SdDocLinkTargets
-//=============================================================================
+
 
 SdDocLinkTargets::SdDocLinkTargets( SdXImpressDocument& rMyModel ) throw()
 : mpModel( &rMyModel )

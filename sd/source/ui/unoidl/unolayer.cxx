@@ -53,9 +53,9 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-//=============================================================================
+
 // class SdLayer
-//=============================================================================
+
 
 #define WID_LAYER_LOCKED    1
 #define WID_LAYER_PRINTABLE 2
@@ -445,9 +445,9 @@ void SAL_CALL SdLayer::removeEventListener( const uno::Reference< lang::XEventLi
 }
 
 
-//=============================================================================
+
 // class SdLayerManager
-//=============================================================================
+
 
 /** */
 SdLayerManager::SdLayerManager( SdXImpressDocument& rMyModel ) throw()

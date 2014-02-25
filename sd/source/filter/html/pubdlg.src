@@ -29,7 +29,7 @@ ModalDialog DLG_PUBLISHING
     Text [ en-US ] = "HTML Export" ;
     Moveable = TRUE ;
 
-    // Page 1, choose a design //
+    // Page 1, choose a design
     FixedLine PAGE1_TITEL
     {
         Pos = MAP_APPFONT ( 6 , 9 ) ;
@@ -81,7 +81,7 @@ ModalDialog DLG_PUBLISHING
     };
 
 
-    // Page 2, type of publishing //
+    // Page 2, type of publishing
     FixedLine PAGE2_TITEL
     {
         Pos = MAP_APPFONT ( 6, 9 ) ;
@@ -161,7 +161,7 @@ ModalDialog DLG_PUBLISHING
         Border = TRUE;
     };
 
-    // Special options for html //
+    // Special options for html
     FixedLine PAGE2_TITEL_HTML
     {
         Pos = MAP_APPFONT( 138, 9 );
@@ -192,7 +192,7 @@ ModalDialog DLG_PUBLISHING
         Text [ en-US ] = "Show notes";
     };
 
-    // Special options for kiosk //
+    // Special options for kiosk
     FixedLine PAGE2_TITEL_KIOSK
     {
         Pos = MAP_APPFONT( 138, 9 );
@@ -259,7 +259,7 @@ ModalDialog DLG_PUBLISHING
         Text [ en-US ] = "~Endless" ;
     };
 
-    // Special options for WebCast //
+    // Special options for WebCast
     FixedLine PAGE2_TITEL_WEBCAST
     {
         Pos = MAP_APPFONT( 138, 9 );
@@ -331,9 +331,9 @@ ModalDialog DLG_PUBLISHING
         LEFT = TRUE;
     };
 
-    // Page 3, Misc Options, Picture Format and Resolution //
+    // Page 3, Misc Options, Picture Format and Resolution
 
-    // Picture Format //
+    // Picture Format
     FixedLine PAGE3_TITEL_1
     {
         Pos = MAP_APPFONT ( 6, 9 ) ;
@@ -388,7 +388,7 @@ ModalDialog DLG_PUBLISHING
         Vert = TRUE;
     };
 
-    // Resolution //
+    // Resolution
     FixedLine PAGE3_TITEL_2
     {
         Pos = MAP_APPFONT( 138, 9 );
@@ -420,7 +420,7 @@ ModalDialog DLG_PUBLISHING
         Text [ en-US ] = "High resolution (~1024x768 pixels)";
     };
 
-    // Resolution //
+    // Resolution
     FixedLine PAGE3_TITEL_3
     {
         Pos = MAP_APPFONT( 6, 85 );
@@ -444,7 +444,7 @@ ModalDialog DLG_PUBLISHING
         Text [ en-US ] = "Export ~hidden slides" ;
     };
 
-    // Page 4, information for titel page //
+    // Page 4, information for titel page
     FixedLine PAGE4_TITEL_1
     {
         Pos = MAP_APPFONT ( 6 , 9 ) ;
@@ -536,7 +536,7 @@ ModalDialog DLG_PUBLISHING
         Text [ en-US ] = "Note: 'Created with %PRODUCTNAME'";
     };
 
-    // Page 5, Buttons //
+    // Page 5, Buttons
     FixedLine PAGE5_TITEL
     {
         Pos = MAP_APPFONT ( 6 , 9 ) ;
@@ -560,7 +560,7 @@ ModalDialog DLG_PUBLISHING
         Size = MAP_APPFONT ( 243, 95 ) ;
     };
 
-    // Page 6, colorscheme //
+    // Page 6, colorscheme
     FixedLine PAGE6_TITEL
     {
         Pos = MAP_APPFONT ( 6 , 9 ) ;

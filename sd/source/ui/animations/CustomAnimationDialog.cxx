@@ -99,7 +99,7 @@ extern void fillDurationComboBox( ListBox* pBox );
 extern OUString getShapeDescription( const Reference< XShape >& xShape, bool bWithText = true );
 extern OUString getPropertyName( sal_Int32 nPropertyType );
 
-// ====================================================================
+
 
 class PresetPropertyBox  : public PropertySubControl
 {
@@ -186,7 +186,7 @@ Control* PresetPropertyBox::getControl()
     return mpControl;
 }
 
-// ====================================================================
+
 
 class ColorPropertyBox  : public PropertySubControl
 {
@@ -270,7 +270,7 @@ Control* ColorPropertyBox::getControl()
     return mpControl;
 }
 
-// ====================================================================
+
 
 class FontPropertyBox : public PropertySubControl
 {
@@ -355,7 +355,7 @@ Control* FontPropertyBox::getControl()
     return mpControl;
 }
 
-// ====================================================================
+
 
 class DropdownMenuBox : public Edit
 {
@@ -530,7 +530,7 @@ Control* CharHeightPropertyBox::getControl()
     return mpControl;
 }
 
-// ====================================================================
+
 
 class TransparencyPropertyBox : public PropertySubControl
 {
@@ -972,7 +972,7 @@ Control* ScalePropertyBox::getControl()
     return mpControl;
 }
 
-// ====================================================================
+
 
 class FontStylePropertyBox : public PropertySubControl
 {
@@ -1109,7 +1109,7 @@ Control* FontStylePropertyBox::getControl()
     return mpControl;
 }
 
-// ====================================================================
+
 
 class CustomAnimationEffectTabPage : public TabPage
 {
@@ -1211,9 +1211,9 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
         OUString aPresetId;
         pSet->getPropertyValue( nHandlePresetId ) >>= aPresetId;
 
-        //
+
         // property 1
-        //
+
 
         if( pSet->getPropertyState( nHandleProperty1Type ) != STLPropertyState_AMBIGUOUS )
         {
@@ -1242,9 +1242,9 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
 
         mpFTProperty1->Enable( mpLBProperty1->IsEnabled() );
 
-        //
+
         // accelerate & deccelerate
-        //
+
 
         if( pSet->getPropertyState( nHandleAccelerate ) == STLPropertyState_DIRECT )
         {
@@ -1260,9 +1260,9 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
         }
     }
 
-    //
+
     // init after effect controls
-    //
+
 
     mpLBAfterEffect->SetSelectHdl( LINK( this, CustomAnimationEffectTabPage, implSelectHdl ) );
     mpLBTextAnim->SetSelectHdl( LINK( this, CustomAnimationEffectTabPage, implSelectHdl ) );
@@ -2405,7 +2405,7 @@ void PropertyControl::Resize()
     ListBox::Resize();
 }
 
-// ====================================================================
+
 
 PropertySubControl::~PropertySubControl()
 {

@@ -25,9 +25,9 @@
 #include <tools/errinf.hxx>
 #include "sdfilter.hxx"
 
-// ---------------
+
 // - SdCGMFilter -
-// ---------------
+
 
 class SdGRFFilter : public SdFilter
 {
