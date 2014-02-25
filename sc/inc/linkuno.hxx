@@ -484,7 +484,8 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDDELink > SAL_CALL addDDELink(
         const OUString& aApplication, const OUString& aTopic,
         const OUString& aItem, ::com::sun::star::sheet::DDELinkMode nMode )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
