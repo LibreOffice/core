@@ -3155,17 +3155,22 @@ void checkBounds(
     if (!rRef.IsRowRel())
         return;
 
+    ScRange aCheckRange = rCxt.maRange;
+    if (rCxt.meMode == URM_MOVE)
+        // Check bounds against the old range prior to the move.
+        aCheckRange.Move(-rCxt.mnColDelta, -rCxt.mnRowDelta, -rCxt.mnTabDelta);
+
     ScRange aAbs(rRef.toAbs(rPos));
     aAbs.aEnd.IncRow(nGroupLen-1);
-    if (!rCxt.maRange.Intersects(aAbs))
+    if (!aCheckRange.Intersects(aAbs))
         return;
 
     // Get the boundary row positions.
-    if (aAbs.aEnd.Row() < rCxt.maRange.aStart.Row())
+    if (aAbs.aEnd.Row() < aCheckRange.aStart.Row())
         // No intersections.
         return;
 
-    if (aAbs.aStart.Row() <= rCxt.maRange.aStart.Row())
+    if (aAbs.aStart.Row() <= aCheckRange.aStart.Row())
     {
         //    +-+ <---- top
         //    | |
@@ -3175,11 +3180,11 @@ void checkBounds(
         // +-------+
 
         // Add offset from the reference top to the cell position.
-        SCROW nOffset = rCxt.maRange.aStart.Row() - aAbs.aStart.Row();
+        SCROW nOffset = aCheckRange.aStart.Row() - aAbs.aStart.Row();
         rBounds.push_back(rPos.Row()+nOffset);
     }
 
-    if (aAbs.aEnd.Row() >= rCxt.maRange.aEnd.Row())
+    if (aAbs.aEnd.Row() >= aCheckRange.aEnd.Row())
     {
         // only check for end range
 
@@ -3191,7 +3196,7 @@ void checkBounds(
         //    +-+
 
         // Ditto.
-        SCROW nOffset = rCxt.maRange.aEnd.Row() + 1 - aAbs.aStart.Row();
+        SCROW nOffset = aCheckRange.aEnd.Row() + 1 - aAbs.aStart.Row();
         rBounds.push_back(rPos.Row()+nOffset);
     }
 }

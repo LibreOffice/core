@@ -141,12 +141,6 @@ private:
         const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc, const ScAddress* pUndoCellPos );
 
     /**
-     * Update reference in response to cell move.
-     */
-    bool UpdateReferenceOnMove(
-        const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc, const ScAddress* pUndoCellPos );
-
-    /**
      * Update reference in response to cell copy-n-paste.
      */
     bool UpdateReferenceOnCopy(
@@ -251,6 +245,12 @@ public:
 
     bool UpdateReference(
         const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc = NULL, const ScAddress* pUndoCellPos = NULL );
+
+    /**
+     * Update reference in response to cell move.
+     */
+    bool UpdateReferenceOnMove(
+        const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc, const ScAddress* pUndoCellPos );
 
     void            TransposeReference();
     void            UpdateTranspose( const ScRange& rSource, const ScAddress& rDest,

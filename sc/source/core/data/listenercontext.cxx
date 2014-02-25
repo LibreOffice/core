@@ -52,12 +52,32 @@ ColumnBlockPosition* StartListeningContext::getBlockPosition(SCTAB nTab, SCCOL n
     return mpSet->getBlockPosition(nTab, nCol);
 }
 
-EndListeningContext::EndListeningContext(ScDocument& rDoc) :
-    mrDoc(rDoc), maSet(false), mpPosSet(new ColumnBlockPositionSet(rDoc)) {}
+EndListeningContext::EndListeningContext(ScDocument& rDoc, ScTokenArray* pOldCode) :
+    mrDoc(rDoc), maSet(false), mpPosSet(new ColumnBlockPositionSet(rDoc)),
+    mpOldCode(pOldCode), maPosDelta(0,0,0) {}
+
+void EndListeningContext::setPositionDelta( const ScAddress& rDelta )
+{
+    maPosDelta = rDelta;
+}
 
 ScDocument& EndListeningContext::getDoc()
 {
     return mrDoc;
+}
+
+ScTokenArray* EndListeningContext::getOldCode()
+{
+    return mpOldCode;
+}
+
+ScAddress EndListeningContext::getOldPosition( const ScAddress& rPos ) const
+{
+    ScAddress aOldPos = rPos;
+    aOldPos.IncCol(maPosDelta.Col());
+    aOldPos.IncRow(maPosDelta.Row());
+    aOldPos.IncTab(maPosDelta.Tab());
+    return aOldPos;
 }
 
 ColumnBlockPosition* EndListeningContext::getBlockPosition(SCTAB nTab, SCCOL nCol)

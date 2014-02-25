@@ -17,6 +17,7 @@
 #include <boost/scoped_ptr.hpp>
 
 class ScDocument;
+class ScTokenArray;
 
 namespace sc {
 
@@ -39,9 +40,17 @@ class EndListeningContext : boost::noncopyable
     ScDocument& mrDoc;
     ColumnSpanSet maSet;
     boost::scoped_ptr<ColumnBlockPositionSet> mpPosSet;
+    ScTokenArray* mpOldCode;
+    ScAddress maPosDelta; // Add this to get the old position prior to the move.
+
 public:
-    EndListeningContext(ScDocument& rDoc);
+    EndListeningContext(ScDocument& rDoc, ScTokenArray* pOldCode = NULL);
+
+    void setPositionDelta( const ScAddress& rDelta );
+
     ScDocument& getDoc();
+    ScTokenArray* getOldCode();
+    ScAddress getOldPosition( const ScAddress& rPos ) const;
 
     ColumnBlockPosition* getBlockPosition(SCTAB nTab, SCCOL nCol);
 
