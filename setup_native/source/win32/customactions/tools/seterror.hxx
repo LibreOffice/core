@@ -20,7 +20,7 @@
 #ifndef _SETERROR_HXX_
 #define _SETERROR_HXX_
 
-//----------------------------------------------------------
+
 // list of own error codes
 
 #define MSI_ERROR_NEW_VERSION_FOUND         9010
@@ -28,7 +28,7 @@
 
 #define MSI_ERROR_DIRECTORY_NOT_EMPTY       9030
 
-//----------------------------------------------------------
+
 
 void SetMsiErrorCode( int nErrorCode );
 
