@@ -29,14 +29,6 @@ void resolveSprmProps(Properties & rHandler, Sprm & rSprm)
         pProperties->resolve(rHandler);
 }
 
-void resolveAttributeProperties(Properties & rHandler, Value & val)
-{
-    writerfilter::Reference<Properties>::Pointer_t pProperties = val.getProperties();
-    if( pProperties.get())
-        pProperties->resolve(rHandler);
-}
-
-
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
