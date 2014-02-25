@@ -412,7 +412,7 @@ void PageCache_Impl::rescale_Impl (sal_Size new_size)
         }
         if (old_table != m_hash_table_0)
         {
-            //
+
             rtl_freeMemory (old_table);
         }
     }

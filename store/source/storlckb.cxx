@@ -101,7 +101,7 @@ storeError OStoreLockBytes::create (
             return store_E_NotFile;
     }
 
-    // ...
+
     inode_holder_type xNode (aPage.get());
     if (eMode != store_AccessReadOnly)
         eErrCode = xManager->acquirePage (xNode->m_aDescr, store_AccessReadWrite);
@@ -110,7 +110,7 @@ storeError OStoreLockBytes::create (
     if (eErrCode != store_E_None)
         return eErrCode;
 
-    // ...
+
     m_xManager   = xManager;
     m_xNode      = xNode;
     m_bWriteable = (eMode != store_AccessReadOnly);
