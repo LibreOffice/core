@@ -219,7 +219,9 @@ public:
     virtual sal_Bool SAL_CALL jumpToPreviousPage(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual sal_Bool SAL_CALL jumpToEndOfPage(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual sal_Bool SAL_CALL jumpToStartOfPage(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Int16 SAL_CALL getPage(void) throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Int16 SAL_CALL getPage()
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
 
     //XTextRange
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >  SAL_CALL getText(void) throw( ::com::sun::star::uno::RuntimeException );

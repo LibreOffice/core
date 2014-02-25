@@ -1316,7 +1316,8 @@ sal_Bool SwXTextViewCursor::jumpToStartOfPage(void) throw( uno::RuntimeException
     return bRet;
 }
 
-sal_Int16 SwXTextViewCursor::getPage(void) throw( uno::RuntimeException )
+sal_Int16 SwXTextViewCursor::getPage()
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     sal_Int16 nRet = 0;
