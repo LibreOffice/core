@@ -192,7 +192,7 @@ public class Convert implements Cloneable {
         if (toOffice) {
 
             //  From device format to Office format
-            //
+
             DocumentDeserializerFactory myDocDeserializerFactory =
                 ci.getDocDeserializerFactory();
             DocumentDeserializer deser =
@@ -206,7 +206,7 @@ public class Convert implements Cloneable {
         } else {
 
             //  From Office format to device format
-            //
+
             DocumentSerializerFactory myDocSerializerFactory =
                 ci.getDocSerializerFactory();
 
@@ -244,7 +244,7 @@ public class Convert implements Cloneable {
         if (toOffice) {
 
             //  From device format to Office format
-            //
+
             DocumentDeserializerFactory myDocDeserializerFactory =
                 ci.getDocDeserializerFactory();
             DocumentDeserializer deser =
@@ -260,7 +260,7 @@ public class Convert implements Cloneable {
         } else {
 
             //  From Office format to device format
-            //
+
             DocumentSerializerFactory myDocSerializerFactory =
                 ci.getDocSerializerFactory();
 

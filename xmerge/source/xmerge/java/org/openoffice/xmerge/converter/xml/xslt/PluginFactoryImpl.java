@@ -153,7 +153,7 @@ public final class PluginFactoryImpl extends PluginFactory
     } catch (Exception e) {
 
         // It is okay for the property file to not exist.
-        //
+
     }
     return ext;
     }

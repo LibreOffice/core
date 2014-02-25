@@ -56,7 +56,7 @@ public final class ConverterInfoMgr {
         ConverterInfo converterInfo;
 
         // Validate
-        //
+
         if (ci.getDisplayName() == null) {
             RegistryException re = new RegistryException(
                 "Converter must have valid name.");
@@ -80,7 +80,7 @@ public final class ConverterInfoMgr {
 
         // Verify there is no converter with the same Display Name in
         // the registry.
-        //
+
         Iterator<ConverterInfo> ciEnum = converterInfoList.iterator();
         while (ciEnum.hasNext()) {
             converterInfo = ciEnum.next();
@@ -93,7 +93,7 @@ public final class ConverterInfoMgr {
 
         // Since this is a adding to a static Vector, make sure this
         // add method call is synchronized.
-        //
+
         synchronized (converterInfoList) {
             converterInfoList.add(ci);
         }
@@ -216,7 +216,7 @@ public final class ConverterInfoMgr {
         }
 
         // Loop over elements comparing with deviceFromMime
-        //
+
         Iterator<ConverterInfo> ciEnum = converterInfoList.iterator();
         while (ciEnum.hasNext()) {
 
@@ -225,7 +225,7 @@ public final class ConverterInfoMgr {
             Iterator<String> fromEnum = converterInfo.getDeviceMime();
 
             // Loop over the deviceMime types.
-            //
+
             while (fromEnum.hasNext()) {
                 String fromDeviceInfo = fromEnum.next();
                 if (deviceMime.trim().equals(fromDeviceInfo) &&
@@ -259,7 +259,7 @@ public final class ConverterInfoMgr {
         ConverterInfo[] converterInfo = new ConverterInfo[2];
 
         // Loop over elements comparing with deviceFromMime
-        //
+
         Iterator<ConverterInfo> cifEnum = converterInfoList.iterator();
         while (cifEnum.hasNext()) {
 
@@ -269,7 +269,7 @@ public final class ConverterInfoMgr {
 
             // Loop over the deviceMime types looking for a deviceFromMime
             // match.
-            //
+
             while (fromEnum.hasNext()) {
                 String fromDeviceInfo = fromEnum.next();
 
@@ -277,7 +277,7 @@ public final class ConverterInfoMgr {
 
                     // Found a a match for deviceFrom.  Now loop over the
                     // elements comparing with deviceToMime
-                    //
+
                     Iterator<ConverterInfo> citEnum = converterInfoList.iterator();
                     while (citEnum.hasNext()) {
 
@@ -287,14 +287,14 @@ public final class ConverterInfoMgr {
 
                         // Loop over deviceMime types looking for a
                         // deviceToMime match.
-                        //
+
                         while (toEnum.hasNext()) {
                             String toDeviceInfo = toEnum.next();
                             if (deviceToMime.trim().equals(toDeviceInfo) &&
                                 fromOfficeInfo.equals(toOfficeInfo)) {
 
                                 // Found a match
-                                //
+
                                 return (converterInfo);
                             }
                         }
@@ -343,12 +343,12 @@ public final class ConverterInfoMgr {
             System.out.println("");
 
             // Quit
-            //
+
             if (c == 'Q') {
                 exitFlag = true;
 
             // Load by Jarfile
-            //
+
             } else if (c == 'L') {
 
                 System.out.println("Enter path to jarfile: ");
@@ -374,7 +374,7 @@ public final class ConverterInfoMgr {
                 }
 
             // Unload by Display Name or Jarfile
-            //
+
         } else if (c == 'T') {
         if (validate== true){
             System.out.println("Validation switched off");
@@ -414,7 +414,7 @@ public final class ConverterInfoMgr {
                 }
 
             // Find Office Mime
-            //
+
             } else if (c == 'F' || c == 'C') {
 
                 String findMimeOne = null;
@@ -467,7 +467,7 @@ public final class ConverterInfoMgr {
                 }
 
             // View
-            //
+
             } else if (c == 'V') {
 
                 Iterator<ConverterInfo> ciEnum = ConverterInfoMgr.getConverterInfoEnumeration();

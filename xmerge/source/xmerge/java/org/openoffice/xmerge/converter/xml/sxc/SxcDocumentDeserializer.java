@@ -167,7 +167,7 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
         // use any value for password here.  If StarCalc XML supports
         // passwords in the future, we should try to get the correct
         // password value here.
-        //
+
         decoder = createDecoder(workbookName, worksheetNames, "password");
 
         Debug.log(Debug.TRACE, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
@@ -438,7 +438,7 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
         // The number of columns in the spreadsheet
         int lastColumn = decoder.getNumberOfColumns();
 
-        //
+
         Node autoStylesNode = null;
 
         // Loop over all cells in the spreadsheet

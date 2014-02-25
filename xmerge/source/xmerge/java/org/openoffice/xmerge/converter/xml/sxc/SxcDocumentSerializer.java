@@ -717,7 +717,7 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
         } else {
 
             // Text node, Date node, or Time node
-            //
+
             Debug.log(Debug.INFO,
             "TextNode, DateNode, TimeNode or BooleanNode\n");
             // This handles the case where we have style information but no content

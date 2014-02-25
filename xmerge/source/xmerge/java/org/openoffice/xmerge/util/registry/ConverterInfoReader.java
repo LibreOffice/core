@@ -89,19 +89,19 @@ public class ConverterInfoReader {
         jarfilename       = jar;
 
         // Get Jar via URL
-        //
+
         url               = new URL("jar:" + jar + "!/META-INF/converter.xml");
         jarConnection     = (JarURLConnection)url.openConnection();
         jarentry          = jarConnection.getJarEntry();
         jarfile           = jarConnection.getJarFile();
 
         // Build the InputSource
-        //
+
         istream           = jarfile.getInputStream(jarentry);
         isource           = new InputSource(istream);
 
         // Get the DOM builder and build the document.
-        //
+
         builderFactory    = DocumentBuilderFactory.newInstance();
 
     //DTD validation
@@ -109,12 +109,12 @@ public class ConverterInfoReader {
         System.out.println("Validating xml...");
         builderFactory.setValidating(true);
         }
-    //
+
         builder           = builderFactory.newDocumentBuilder();
     document          = builder.parse(isource);
 
         // Parse the document.
-        //
+
         parseDocument();
     }
 
