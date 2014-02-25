@@ -147,14 +147,6 @@ sal_uInt32 Decrypt::aes128ecb(vector<sal_uInt8>& output, vector<sal_uInt8>& inpu
     return outputLength;
 }
 
-sal_uInt32 Decrypt::aes128cbc(vector<sal_uInt8>& output, vector<sal_uInt8>& input, vector<sal_uInt8>& key, vector<sal_uInt8>& iv)
-{
-    sal_uInt32 outputLength = 0;
-    Decrypt crypto(key, iv, Crypto::AES_128_CBC);
-    outputLength = crypto.update(output, input);
-    return outputLength;
-}
-
 // ENCRYPT
 
 Encrypt::Encrypt(vector<sal_uInt8>& key, vector<sal_uInt8>& iv, CryptoType type) :

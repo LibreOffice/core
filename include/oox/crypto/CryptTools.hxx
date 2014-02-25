@@ -101,11 +101,6 @@ public:
                     std::vector<sal_uInt8>& input,
                     std::vector<sal_uInt8>& key );
 
-    static sal_uInt32 aes128cbc(
-                    std::vector<sal_uInt8>& output,
-                    std::vector<sal_uInt8>& input,
-                    std::vector<sal_uInt8>& key,
-                    std::vector<sal_uInt8>& iv );
 };
 
 class Encrypt : public Crypto
