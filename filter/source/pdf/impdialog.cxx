@@ -55,7 +55,7 @@ PDFFilterResId::PDFFilterResId( sal_uInt32 nId ) : ResId( nId, getPDFFilterResMg
 
 using namespace ::com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // tabbed PDF dialog implementation
 // please note: the default used here are the same as per specification,
 // they should be the same in  PDFFilter::implExport and  in PDFExport::PDFExport
@@ -275,7 +275,7 @@ ImpPDFTabDialog::ImpPDFTabDialog(Window* pParent, Sequence< PropertyValue >& rFi
 
 //remove the reset button, not needed in this tabbed dialog
     RemoveResetButton();
-/////////////////
+
 }
 
 ImpPDFTabSecurityPage* ImpPDFTabDialog::getSecurityPage() const
@@ -983,7 +983,7 @@ IMPL_LINK( ImpPDFTabOpnFtrPage, ToggleRbMagnHdl, void*, )
     return 0;
 }
 
-////////////////////////////////////////////////////////
+
 // The Viewer preferences tab page
 
 ImpPDFTabViewerPage::ImpPDFTabViewerPage( Window* pParent,
@@ -1290,7 +1290,7 @@ void ImpPDFTabSecurityPage::enablePermissionControls()
     mpContent->Enable(bLocalEnable);
 }
 
-////////////////////////////////////////////////////////
+
 // This tab page is under control of the PDF/A-1a checkbox:
 // implement a method to do it.
 
@@ -1307,7 +1307,7 @@ void    ImpPDFTabSecurityPage::ImplPDFASecurityControl( sal_Bool bEnableSecurity
     enablePermissionControls();
 }
 
-////////////////////////////////////////////////////////
+
 // The link preferences tab page (relative and other stuff)
 
 ImpPDFTabLinksPage::ImpPDFTabLinksPage( Window* pParent,
@@ -1396,7 +1396,7 @@ void ImpPDFTabLinksPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent )
     // now check the status of PDF/A selection
     // and set the link action accordingly
     // PDF/A-1 doesn't allow launch action on links
-    //
+
     ImpPDFTabGeneralPage* pGeneralPage = paParent ? paParent->getGeneralPage() : NULL;
     if (pGeneralPage)
         ImplPDFALinkControl(!pGeneralPage->mpCbPDFA1b->IsChecked());
@@ -1553,7 +1553,7 @@ IMPL_LINK_NOARG(ImplErrorDialog, SelectHdl)
     return 0;
 }
 
-////////////////////////////////////////////////////////
+
 // The digital signatures tab page
 
 ImpPDFTabSigningPage::ImpPDFTabSigningPage(Window* pParent, const SfxItemSet& rCoreSet)

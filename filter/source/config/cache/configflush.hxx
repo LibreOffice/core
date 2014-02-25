@@ -30,7 +30,7 @@ namespace filter{
     namespace config{
 
 
-//_______________________________________________
+
 
 /** @short      supports registration of XRefreshListener
                 on the global filter configuration.
@@ -44,7 +44,7 @@ class ConfigFlush : public BaseLock
                                                     css::lang::XServiceInfo
                                                   >
 {
-    //-------------------------------------------
+
     // member
 
     protected:
@@ -56,30 +56,30 @@ class ConfigFlush : public BaseLock
         /** @short  holds all listener, which are registered at this instance. */
         ::cppu::OMultiTypeInterfaceContainerHelper m_lListener;
 
-    //-------------------------------------------
+
     // native interface
 
     public:
 
-        //---------------------------------------
+
         // ctor/dtor
 
         /** @short  standard ctor.
          */
         ConfigFlush(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
 
-        //---------------------------------------
+
 
         /** @short  standard dtor.
          */
         virtual ~ConfigFlush();
 
-    //-------------------------------------------
+
     // uno interface
 
     public:
 
-        //---------------------------------------
+
         // XServiceInfo
 
         virtual OUString SAL_CALL getImplementationName()
@@ -91,7 +91,7 @@ class ConfigFlush : public BaseLock
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
             throw (css::uno::RuntimeException, std::exception);
 
-        //---------------------------------------
+
         // XRefreshable
 
         virtual void SAL_CALL refresh()
@@ -103,7 +103,7 @@ class ConfigFlush : public BaseLock
         virtual void SAL_CALL removeRefreshListener(const css::uno::Reference< css::util::XRefreshListener >& xListener)
             throw(css::uno::RuntimeException, std::exception);
 
-        //---------------------------------------
+
         // interface to register/create this instance as an UNO service
         static OUString impl_getImplementationName();
         static css::uno::Sequence< OUString > impl_getSupportedServiceNames();

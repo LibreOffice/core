@@ -79,7 +79,7 @@ void RASWriter::ImplCallback( sal_uLong nYPos )
         xStatusIndicator->setValue( (sal_uInt16)( ( 100 * nYPos ) / mnHeight ) );
 }
 
-//  ------------------------------------------------------------------------
+
 
 sal_Bool RASWriter::WriteRAS( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem)
 {

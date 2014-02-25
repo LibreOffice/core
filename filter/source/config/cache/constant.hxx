@@ -26,7 +26,7 @@
     can be used instead of loadAll()!*/
 // #define LOAD_IMPLICIT
 
-//_______________________________________________
+
 
 /** @short  used to identify a some generic item properties against the
             configuration API and can be used at all name containers

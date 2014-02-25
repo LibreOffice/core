@@ -29,9 +29,9 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::osl;
 
-//==================================================================
+
 //= OOutputStreamWrapper
-//==================================================================
+
 
 void SAL_CALL OOutputStreamWrapper::writeBytes(const staruno::Sequence< sal_Int8 >& aData) throw( stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException, std::exception )
 {

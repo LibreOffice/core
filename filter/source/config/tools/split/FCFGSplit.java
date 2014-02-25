@@ -18,14 +18,14 @@
 
 package com.sun.star.filter.config.tools.split;
 
-//_______________________________________________
+
 
 import java.lang.*;
 import java.util.*;
 import java.io.*;
 import com.sun.star.filter.config.tools.utils.*;
 
-//_______________________________________________
+
 
 /**
  *  Implements a simple command line tool, which can read a given xml
@@ -37,7 +37,7 @@ import com.sun.star.filter.config.tools.utils.*;
  */
 public class FCFGSplit
 {
-    //___________________________________________
+
     // private const
 
     /** specify the command line parameter to set the debug level for this app. */
@@ -127,7 +127,7 @@ public class FCFGSplit
     private static final java.lang.String DEFAULT_SUBDIR_MODULE_SCHART                = "SChart"                              ;
     private static final java.lang.String DEFAULT_SUBDIR_MODULE_OTHERS                = "Others"                              ;
 
-    //___________________________________________
+
     // private member
 
     /** contains the name of the reading xcu file. */
@@ -235,7 +235,7 @@ public class FCFGSplit
     private static boolean m_bRemoveGraphicFilters;
     private static boolean m_bSetDefaultDetector;
 
-    //___________________________________________
+
     // main
 
     /** main.
@@ -256,7 +256,7 @@ public class FCFGSplit
         // can be used as exit code
         int nErr = 0;
 
-        // --------------------------------------------------------------------
+
         // analyze command line parameter
         ConfigHelper aCmdLine = null;
         try
@@ -270,7 +270,7 @@ public class FCFGSplit
             System.exit(--nErr);
         }
 
-        // --------------------------------------------------------------------
+
         // help requested?
         if (aCmdLine.isHelp())
         {
@@ -278,7 +278,7 @@ public class FCFGSplit
             System.exit(--nErr);
         }
 
-        // --------------------------------------------------------------------
+
         // initialize an output channel for errors/warnings etc.
         int nLevel = aCmdLine.getInt(CMD_DEBUG, Logger.LEVEL_DETAILEDINFOS);
         m_aDebug = new Logger(nLevel);
@@ -292,7 +292,7 @@ public class FCFGSplit
             System.exit(--nErr);
         }
 
-        // --------------------------------------------------------------------
+
         // check if the required resources exists
         java.io.File aXMLFile = new java.io.File(m_sXMLFile);
         if (!aXMLFile.exists() || !aXMLFile.isFile())
@@ -320,7 +320,7 @@ public class FCFGSplit
             System.exit(--nErr);
         }
 
-        // --------------------------------------------------------------------
+
         // load the xml file
         m_aDebug.setGlobalInfo("loading xml file \""+aXMLFile.getPath()+"\" ...");
         long t_load_start = System.currentTimeMillis();
@@ -336,7 +336,7 @@ public class FCFGSplit
         }
         long t_load_end = System.currentTimeMillis();
 
-        // --------------------------------------------------------------------
+
         // validate the content, fix some problems and convert it to the output format
         m_aDebug.setGlobalInfo("validate and transform to output format ...");
         long t_transform_start = System.currentTimeMillis();
@@ -365,7 +365,7 @@ public class FCFGSplit
         }
         long t_transform_end = System.currentTimeMillis();
 
-        // --------------------------------------------------------------------
+
         // generate all xml fragments
         m_aDebug.setGlobalInfo("generate xml fragments into directory \""+aOutDir.getPath()+"\" ...");
         long t_split_start = System.currentTimeMillis();
@@ -421,7 +421,7 @@ public class FCFGSplit
         }
         long t_split_end = System.currentTimeMillis();
 
-        // --------------------------------------------------------------------
+
         // generate some special views
         m_aDebug.setGlobalInfo("generate views and statistics ...");
         long t_statistics_start = System.currentTimeMillis();
@@ -438,7 +438,7 @@ public class FCFGSplit
         }
         long t_statistics_end = System.currentTimeMillis();
 
-        // --------------------------------------------------------------------
+
         // analyze some time stamps
         long t_end = System.currentTimeMillis();
 
@@ -467,7 +467,7 @@ public class FCFGSplit
         System.exit(0);
     }
 
-    //___________________________________________
+
 
     /** read the configuration file.
      *
@@ -516,7 +516,7 @@ public class FCFGSplit
         m_nOutFormat = Cache.mapFormatString2Format(sFormat);
     }
 
-    //___________________________________________
+
 
     /** prints out a copyright message on stdout.
      */
@@ -529,7 +529,7 @@ public class FCFGSplit
         System.out.println(sOut.toString());
     }
 
-    //___________________________________________
+
 
     /** prints out a help message on stdout.
      */

@@ -120,20 +120,20 @@ private:
     double              nBoundingY1;
     double              nBoundingX2;
     double              nBoundingY2;
-                                            //
+
     StackMember*        pGDIStack;
     sal_uLong           mnCursorPos;        // current cursor position in output
     Color               aColor;             // current color which is used for output
     sal_Bool            bLineColor;
     Color               aLineColor;         // current GDIMetafile color settings
-    sal_Bool            bFillColor;         //
-    Color               aFillColor;         //
-    Color               aTextColor;         //
-    sal_Bool            bTextFillColor;     //
-    Color               aTextFillColor;     //
-    Color               aBackgroundColor;   //
+    sal_Bool            bFillColor;
+    Color               aFillColor;
+    Color               aTextColor;
+    sal_Bool            bTextFillColor;
+    Color               aTextFillColor;
+    Color               aBackgroundColor;
     sal_Bool            bRegionChanged;
-    TextAlign           eTextAlign;         //
+    TextAlign           eTextAlign;
 
     double                      fLineWidth;
     double                      fMiterLimit;

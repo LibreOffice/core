@@ -52,7 +52,7 @@ inline OUString VAL(sal_Int32 in)
 namespace swf {
 
 class Writer;
-// -----------------------------------------------------------------------------
+
 
 class ShapeInfo
 {
@@ -101,7 +101,7 @@ public:
 
 typedef ::std::vector<ShapeInfo*> ShapeInfoVector;
 
-// -----------------------------------------------------------------------------
+
 
 struct ShapeAnimationInfo
 {
@@ -113,7 +113,7 @@ struct ShapeAnimationInfo
 
 typedef std::vector<ShapeAnimationInfo> ShapeAnimationInfoVector;
 
-// -----------------------------------------------------------------------------
+
 
 struct PageInfo
 {
@@ -141,11 +141,11 @@ struct PageInfo
 
 };
 
-// -----------------------------------------------------------------------------
+
 
 typedef ::std::map<sal_uInt32, PageInfo> PageInfoMap;
 
-// -----------------------------------------------------------------------------
+
 
 class FlashExporter
 {

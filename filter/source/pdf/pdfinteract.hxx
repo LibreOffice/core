@@ -30,9 +30,9 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-// -------------
+
 // - PDFFilter -
-// -------------
+
 
 class PDFInteractionHandler : public cppu::WeakImplHelper2 < task::XInteractionHandler2,
                                                              XServiceInfo >
@@ -54,22 +54,22 @@ public:
     virtual     ~PDFInteractionHandler();
 };
 
-// -----------------------------------------------------------------------------
+
 
 OUString PDFInteractionHandler_getImplementationName ()
     throw ( RuntimeException );
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL PDFInteractionHandler_supportsService( const OUString& ServiceName )
     throw ( RuntimeException );
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< OUString > SAL_CALL PDFInteractionHandler_getSupportedServiceNames(  )
     throw ( RuntimeException );
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XInterface >
 SAL_CALL PDFInteractionHandler_createInstance( const Reference< XMultiServiceFactory > & rSMgr)

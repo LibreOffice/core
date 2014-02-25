@@ -18,13 +18,13 @@
 
 package com.sun.star.filter.config.tools.split;
 
-//_______________________________________________
+
 
 import java.lang.*;
 import java.io.*;
 import com.sun.star.filter.config.tools.utils.*;
 
-//_______________________________________________
+
 
 /**
  *  Data container for class Splitter.

@@ -30,7 +30,7 @@ namespace filter{
     namespace config{
 
 
-//_______________________________________________
+
 
 /** @short      implements a listener, which will update the
                 global filter cache, if the underlying configuration
@@ -39,7 +39,7 @@ namespace filter{
 class CacheUpdateListener : public BaseLock // must be the first one to guarantee right initialized mutex member!
                           , public ::cppu::WeakImplHelper1< css::util::XChangesListener >
 {
-    //-------------------------------------------
+
     // member
 
     private:
@@ -57,12 +57,12 @@ class CacheUpdateListener : public BaseLock // must be the first one to guarante
                     it must put into the filter cache, if the configuration notifys changes ... */
         FilterCache::EItemType m_eConfigType;
 
-    //-------------------------------------------
+
     // native interface
 
     public:
 
-        //---------------------------------------
+
         // ctor/dtor
 
         /** @short  initialize new instance of this class.
@@ -82,36 +82,36 @@ class CacheUpdateListener : public BaseLock // must be the first one to guarante
                             const css::uno::Reference< css::uno::XInterface >& xConfigAccess,
                             FilterCache::EItemType eConfigType);
 
-        //---------------------------------------
+
 
         /** @short  standard dtor.
          */
         virtual ~CacheUpdateListener();
 
-        //---------------------------------------
+
 
         /** @short  starts listening.
          */
         virtual void startListening();
 
-        //---------------------------------------
+
 
         /** @short  stop listening.
          */
         virtual void stopListening();
 
-    //-------------------------------------------
+
     // uno interface
 
     public:
 
-        //---------------------------------------
+
         // XChangesListener
 
         virtual void SAL_CALL changesOccurred(const css::util::ChangesEvent& aEvent)
             throw(css::uno::RuntimeException, std::exception);
 
-        //---------------------------------------
+
         // lang.XEventListener
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
             throw(css::uno::RuntimeException, std::exception);

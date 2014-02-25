@@ -22,7 +22,7 @@
 #include <svx/unopage.hxx>
 #include <vcl/mapmod.hxx>
 
-// ===================================================================
+
 // fractions of Draw PPTWriter etc.
 
 enum ImplEESdrPageType { NORMAL = 0, MASTER = 1, NOTICE = 2, UNDEFINED = 3 };
@@ -92,7 +92,7 @@ public:
 
 
 
-// -------------------------------------------------------------------
+
 // fractions of the Draw PPTWriter
 
 class EscherEx;
@@ -173,7 +173,7 @@ public:
 };
 
 
-// ===================================================================
+
 
 class SdrObject;
 class SdrPage;

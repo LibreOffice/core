@@ -28,21 +28,21 @@
 
 #include <vector>
 
-// --------------------------------------------------------------------
+
 
 extern OUString string_encode( const OUString & rText );
 extern OUString string_decode( const OUString & rText );
 
-// --------------------------------------------------------------------
+
 
 extern bool isFileURL( const OUString & rURL );
 
-// --------------------------------------------------------------------
+
 
 bool copyStreams( ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xIS, ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xOS );
 bool createDirectory( OUString& rURL );
 
-// --------------------------------------------------------------------
+
 
 class filter_info_impl
 {
@@ -76,7 +76,7 @@ public:
     com::sun::star::uno::Sequence< OUString > getFilterUserData() const;
 };
 
-// --------------------------------------------------------------------
+
 
 struct application_info_impl
 {
@@ -88,7 +88,7 @@ struct application_info_impl
     application_info_impl( const sal_Char * pDocumentService, ResId& rUINameRes, const sal_Char * mpXMLImporter, const sal_Char * mpXMLExporter );
 };
 
-// --------------------------------------------------------------------
+
 
 extern std::vector< application_info_impl* >& getApplicationInfos();
 extern OUString getApplicationUIName( const OUString& rServiceName );

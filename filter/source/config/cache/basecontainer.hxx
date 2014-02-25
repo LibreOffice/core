@@ -38,7 +38,7 @@ namespace filter{
     namespace config{
 
 
-//_______________________________________________
+
 
 /** @short      implements the interface css::container::XNameContainer
                 on top of a FilterCache reference.
@@ -59,7 +59,7 @@ class BaseContainer : public BaseLock
                                                       css::container::XContainerQuery ,
                                                       css::util::XFlushable           >
 {
-    //-------------------------------------------
+
     // member
 
     protected:
@@ -103,12 +103,12 @@ class BaseContainer : public BaseLock
         /** @short  holds all listener, which are registered at this instance. */
         ::cppu::OMultiTypeInterfaceContainerHelper m_lListener;
 
-    //-------------------------------------------
+
     // native interface
 
     public:
 
-        //---------------------------------------
+
         // ctor/dtor
 
         /** @short  standard ctor.
@@ -123,13 +123,13 @@ class BaseContainer : public BaseLock
          */
         BaseContainer();
 
-        //---------------------------------------
+
 
         /** @short  standard dtor.
          */
         virtual ~BaseContainer();
 
-        //---------------------------------------
+
 
         /** @short  initialize this generic intsnace with some specialized values
                     from our derived object.
@@ -160,19 +160,19 @@ class BaseContainer : public BaseLock
                           const css::uno::Sequence< OUString >&                  lServiceNames      ,
                                 FilterCache::EItemType                                  eType              );
 
-    //-------------------------------------------
+
     // helper
 
     protected:
 
-        //---------------------------------------
+
 
         /** @short  check if the underlying configuration data was already loaded
                     and do it if necessary automaticly.
          */
         void impl_loadOnDemand();
 
-        //---------------------------------------
+
 
         /** @short  it creates the global instance m_pFilterCache, which is a copy
                     of the global instance m_rCache, and will be used to change the
@@ -184,7 +184,7 @@ class BaseContainer : public BaseLock
         void impl_initFlushMode()
             throw (css::uno::RuntimeException);
 
-        //---------------------------------------
+
 
         /** @short  returns a pointer to the current used cache member.
 
@@ -206,12 +206,12 @@ class BaseContainer : public BaseLock
          */
         FilterCache* impl_getWorkingCache() const;
 
-    //-------------------------------------------
+
     // uno interface
 
     public:
 
-        //---------------------------------------
+
         // XServiceInfo
 
         virtual OUString SAL_CALL getImplementationName()
@@ -223,7 +223,7 @@ class BaseContainer : public BaseLock
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
             throw (css::uno::RuntimeException, std::exception);
 
-        //---------------------------------------
+
         // XNameContainer
 
         virtual void SAL_CALL insertByName(const OUString& sItem ,
@@ -238,7 +238,7 @@ class BaseContainer : public BaseLock
                    css::lang::WrappedTargetException     ,
                    css::uno::RuntimeException, std::exception            );
 
-        //---------------------------------------
+
         // XNameReplace
 
         virtual void SAL_CALL replaceByName(const OUString& sItem ,
@@ -248,7 +248,7 @@ class BaseContainer : public BaseLock
                    css::lang::WrappedTargetException     ,
                    css::uno::RuntimeException, std::exception            );
 
-        //---------------------------------------
+
         // XElementAccess
 
         virtual css::uno::Any SAL_CALL getByName(const OUString& sItem)
@@ -268,7 +268,7 @@ class BaseContainer : public BaseLock
         virtual sal_Bool SAL_CALL hasElements()
             throw (css::uno::RuntimeException, std::exception);
 
-        //---------------------------------------
+
         // XContainerQuery
 
         // must be implemented really by derived class ...
@@ -280,7 +280,7 @@ class BaseContainer : public BaseLock
         virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByProperties(const css::uno::Sequence< css::beans::NamedValue >& lProperties)
             throw (css::uno::RuntimeException, std::exception);
 
-        //---------------------------------------
+
         // XFlushable
 
         virtual void SAL_CALL flush()

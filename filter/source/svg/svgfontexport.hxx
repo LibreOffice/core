@@ -30,9 +30,9 @@
 #include <rtl/ustring.hxx>
 #include <tools/fontenum.hxx>
 
-// -----------------
+
 // - SVGFontExport -
-// -----------------
+
 
 
 class ObjectRepresentation;

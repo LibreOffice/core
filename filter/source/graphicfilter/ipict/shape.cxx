@@ -105,9 +105,9 @@ namespace PictReaderShape {
     return true;
   }
 
-  //
+
   //-------------------- draws a line --------------------
-  //
+
   void drawLine(VirtualDevice *dev, Point const &orig, Point const &dest, Size const &pSize) {
     if (drawLineHQ(dev,orig,dest,pSize)) return;
 
