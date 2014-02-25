@@ -35,9 +35,9 @@
 #import "RemoteControlContainer.h"
 #import "MultiClickRemoteBehavior.h"
 
-// -------------------------------------------------------------------------------------------
+
 // Sample Code 3: Multi Click Behavior and Hold Event Simulation
-// -------------------------------------------------------------------------------------------
+
 
 @implementation AppleRemoteMainController
 
