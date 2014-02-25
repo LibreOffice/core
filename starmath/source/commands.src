@@ -1197,7 +1197,7 @@ String RID_CATEGORY_EXAMPLES
     Text [ en-US ] = "Examples" ;
 };
 
-//////////////////////////////////////////
+
 
 
 Menu RID_COMMANDMENU

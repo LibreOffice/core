@@ -35,7 +35,7 @@ namespace com { namespace sun { namespace star {
         class XPropertySet; }
 } } }
 
-////////////////////////////////////////////////////////////
+
 
 class SmXMLImportWrapper
 {
@@ -67,7 +67,7 @@ public:
         const sal_Char* pFilterName );
 };
 
-////////////////////////////////////////////////////////////
+
 
 class SmXMLImport : public SvXMLImport
 {
@@ -260,7 +260,7 @@ public:
     virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps);
 };
 
-////////////////////////////////////////////////////////////
+
 
 enum SmXMLMathElemTokenMap
 {
@@ -342,7 +342,7 @@ enum SmXMLAnnotationAttrTokenMap
     XML_TOK_ENCODING
 };
 
-////////////////////////////////////////////////////////////
+
 
 #endif
 

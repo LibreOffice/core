@@ -91,7 +91,7 @@ private:
     long _height;
 };
 
-/////////////////////////////// SmCaretPosGraph////////////////////////////////
+// SmCaretPosGraph
 
 /** An entry in SmCaretPosGraph */
 struct SmCaretPosGraphEntry{

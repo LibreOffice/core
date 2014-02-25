@@ -90,7 +90,7 @@ using namespace com::sun::star;
 using namespace com::sun::star::accessibility;
 using namespace com::sun::star::uno;
 
-//////////////////////////////////////////////////////////////////////
+
 
 SmGraphicWindow::SmGraphicWindow(SmViewShell* pShell):
     ScrollableWindow(&pShell->GetViewFrame()->GetWindow(), 0),
@@ -159,10 +159,10 @@ void SmGraphicWindow::MouseButtonDown(const MouseEvent& rMEvt)
 
     GrabFocus();
 
-    //
+
     // set formula-cursor and selection of edit window according to the
     // position clicked at
-    //
+
     SAL_WARN_IF( rMEvt.GetClicks() == 0, "starmath", "0 clicks" );
     if ( rMEvt.IsLeft() )
     {
@@ -817,7 +817,7 @@ IMPL_LINK( SmCmdBoxWindow, InitialFocusTimerHdl, Timer *, EMPTYARG /*pTimer*/ )
     // to allow for immediate typing.
     // Problem: There is no proper way to do this
     // Thus: this timer based soultion has been implemented (see GrabFocus below)
-    //
+
     // Follow-up problem (#i114910): grabing the focus may bust the help system since
     // it relies on getting the current frame which conflicts with grabbing the focus.
     // Thus aside from the 'GrabFocus' call everything else is to get the

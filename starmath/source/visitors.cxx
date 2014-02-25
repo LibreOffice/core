@@ -9,7 +9,7 @@
 #include "visitors.hxx"
 #include "cursor.hxx"
 
-///////////////////////////////////// SmVisitorTest /////////////////////////////////////
+// SmVisitorTest
 
 void SmVisitorTest::Visit( SmTableNode* pNode )
 {
@@ -180,7 +180,7 @@ void SmVisitorTest::VisitChildren( SmNode* pNode )
         it->Accept( this );
 }
 
-/////////////////////////////// SmDefaultingVisitor ////////////////////////////////
+// SmDefaultingVisitor
 
 void SmDefaultingVisitor::Visit( SmTableNode* pNode )
 {
@@ -317,7 +317,7 @@ void SmDefaultingVisitor::Visit( SmVerticalBraceNode* pNode )
     DefaultVisit( pNode );
 }
 
-/////////////////////////////// SmCaretDrawingVisitor ////////////////////////////////
+// SmCaretDrawingVisitor
 
 SmCaretDrawingVisitor::SmCaretDrawingVisitor( OutputDevice& rDevice,
                                              SmCaretPos position,
@@ -402,7 +402,7 @@ void SmCaretDrawingVisitor::DefaultVisit( SmNode* pNode )
     rDev.DrawLine( pLeft, pRight );
 }
 
-/////////////////////////////// SmCaretPos2LineVisitor ////////////////////////////////
+// SmCaretPos2LineVisitor
 
 void SmCaretPos2LineVisitor::Visit( SmTextNode* pNode )
 {
@@ -434,7 +434,7 @@ void SmCaretPos2LineVisitor::DefaultVisit( SmNode* pNode )
     line = SmCaretLine( p1.X( ), p1.Y( ), pNode->GetHeight( ) );
 }
 
-/////////////////////////////// Nasty temporary device!!! ////////////////////////////////
+// Nasty temporary device!!!
 
 #include <tools/gen.hxx>
 #include <tools/fract.hxx>
@@ -513,7 +513,7 @@ void SmTmpDevice2::SetFont( const Font &rNewFont )
     rOutDev.SetTextColor( Impl_GetColor( rNewFont.GetColor( ) ) );
 }
 
-/////////////////////////////// SmDrawingVisitor ////////////////////////////////
+// SmDrawingVisitor
 
 void SmDrawingVisitor::Visit( SmTableNode* pNode )
 {
@@ -762,7 +762,7 @@ void SmDrawingVisitor::DrawChildren( SmNode* pNode )
     }
 }
 
-/////////////////////////////// SmSetSelectionVisitor ////////////////////////////////
+// SmSetSelectionVisitor
 
 SmSetSelectionVisitor::SmSetSelectionVisitor( SmCaretPos startPos, SmCaretPos endPos, SmNode* pTree) {
     StartPos    = startPos;
@@ -960,7 +960,7 @@ void SmSetSelectionVisitor::Visit( SmFontNode* pNode ) {
     VisitCompositionNode( pNode );
 }
 
-/////////////////////////////// SmCaretPosGraphBuildingVisitor ////////////////////////////////
+// SmCaretPosGraphBuildingVisitor
 
 SmCaretPosGraphBuildingVisitor::SmCaretPosGraphBuildingVisitor( SmNode* pRootNode ) {
     pRightMost  = NULL;
@@ -1781,7 +1781,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmPolyLineNode* )
     //Do nothing
 }
 
-/////////////////////////////// SmCloningVisitor ///////////////////////////////
+// SmCloningVisitor
 
 SmNode* SmCloningVisitor::Clone( SmNode* pNode )
 {
@@ -2030,7 +2030,7 @@ void SmCloningVisitor::Visit( SmVerticalBraceNode* pNode )
     pResult = pClone;
 }
 
-/////////////////////////////// SmSelectionDrawingVisitor ///////////////////////////////
+// SmSelectionDrawingVisitor
 
 SmSelectionDrawingVisitor::SmSelectionDrawingVisitor( OutputDevice& rDevice, SmNode* pTree, Point Offset )
     : rDev( rDevice ) {
@@ -2101,7 +2101,7 @@ void SmSelectionDrawingVisitor::Visit( SmTextNode* pNode )
     }
 }
 
-/////////////////////////////// SmNodeToTextVisitor ///////////////////////////////
+// SmNodeToTextVisitor
 
 SmNodeToTextVisitor::SmNodeToTextVisitor( SmNode* pNode, OUString &rText )
 {
