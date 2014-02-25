@@ -142,9 +142,9 @@ int GetError()
 }
 }
 
-//
+
 // class ResData
-//
+
 
 bool ResData::SetId( const OString& rId, sal_uInt16 nLevel )
 {
@@ -172,9 +172,9 @@ bool ResData::SetId( const OString& rId, sal_uInt16 nLevel )
     return false;
 }
 
-//
+
 // class Export
-//
+
 
 namespace
 {

@@ -143,9 +143,9 @@ int GetError()
 }
 }
 
-//
+
 // class XRMResParser
-//
+
 
 
 XRMResParser::XRMResParser()
@@ -290,9 +290,9 @@ void XRMResParser::Error( const OString &rError )
     yyerror(( char * ) rError.getStr());
 }
 
-//
+
 // class XMLResExport
-//
+
 
 XRMResExport::XRMResExport(
     const OString &rOutputFile, const OString &rFilePath )
@@ -369,9 +369,9 @@ void XRMResExport::EndOfText(
     pResData = NULL;
 }
 
-//
+
 // class XRMResMerge
-//
+
 
 XRMResMerge::XRMResMerge(
     const OString &rMergeSource, const OString &rOutputFile,

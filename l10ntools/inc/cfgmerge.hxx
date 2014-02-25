@@ -31,9 +31,9 @@
 typedef boost::unordered_map<OString, OString, OStringHash> OStringHashMap;
 
 
-//
+
 // class CfgStackData
-//
+
 
 class CfgStackData
 {
@@ -60,9 +60,9 @@ public:
 
 };
 
-//
+
 // class CfgStack
-//
+
 
 class CfgStack
 {

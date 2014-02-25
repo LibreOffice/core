@@ -43,9 +43,9 @@ using namespace osl;
 #define ID          "id"
 #define OLDREF      "oldref"
 
-//
+
 // class XMLChildNode
-//
+
 
 XMLChildNode::XMLChildNode( XMLParentNode *pPar )
     : m_pParent( pPar )
@@ -70,9 +70,9 @@ XMLChildNode& XMLChildNode::operator=(const XMLChildNode& rObj)
     return *this;
 }
 
-//
+
 // class XMLParentNode
-//
+
 
 XMLParentNode::~XMLParentNode()
 {
@@ -153,9 +153,9 @@ void XMLParentNode::RemoveAndDeleteAllChildren()
     }
 }
 
-//
+
 // class XMLFile
-//
+
 
 void XMLFile::Write( OString const &aFilename )
 {
@@ -790,9 +790,9 @@ void XMLElement::Print(XMLNode *pCur, OStringBuffer& rBuffer, bool bRootelement 
     }
 }
 
-//
+
 // class SimpleXMLParser
-//
+
 
 namespace
 {

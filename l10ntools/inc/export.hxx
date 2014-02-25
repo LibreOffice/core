@@ -55,9 +55,9 @@ typedef boost::unordered_map<OString, bool, OStringHash>
 #define SOURCE_LANGUAGE "en-US"
 #define X_COMMENT "x-comment"
 
-//
+
 // class ResData
-//
+
 
 #define ID_LEVEL_NULL       0x0000
 #define ID_LEVEL_TEXT       0x0002
@@ -98,9 +98,9 @@ public:
 };
 
 
-//
+
 // class Export
-//
+
 
 #define LIST_NON                    0x0000
 #define LIST_STRING                 0x0001
@@ -185,9 +185,9 @@ public:
 };
 
 
-//
+
 // class MergeEntrys
-//
+
 
 /// Purpose: holds information of data to merge
 class MergeEntrys
@@ -224,9 +224,9 @@ public:
 
 };
 
-//
+
 // class MergeDataHashMap
-//
+
 
 class MergeData;
 
@@ -271,9 +271,9 @@ class MergeDataHashMap
         HashMap_t m_aHashMap;
 };
 
-//
+
 // class MergeData
-//
+
 
 /// Purpose: holds information of data to merge (one resource)
 class MergeData
@@ -296,9 +296,9 @@ public:
     bool operator==( ResData *pData );
 };
 
-//
+
 // class MergeDataFile
-//
+
 
 /// Purpose: holds information of data to merge, read from PO file
 class MergeDataFile

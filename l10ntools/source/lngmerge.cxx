@@ -44,9 +44,9 @@ static void lcl_RemoveUTF8ByteOrderMarker( OString &rString )
 
 }
 
-//
+
 // class LngParser
-//
+
 LngParser::LngParser(const OString &rLngFile)
     : nError( LNG_OK )
     , pLines( NULL )

@@ -134,7 +134,7 @@ static void checkFunctionNames(OString aLanguage)
 {
     std::map<OString,sal_uInt16> aLocalizedFunctionNames;
     std::map<OString,sal_uInt16> aLocalizedCoreFunctionNames;
-    //
+
     std::list<PoEntry> repeatedEntries;
 
     OString aPoPaths[4];
@@ -277,7 +277,7 @@ static void checkFunctionNames(OString aLanguage)
                 "\nDuplicated translation is: " << it->first << "\n\n";
         }
     }
-    //
+
     for (int i=0;i<4;i++)
     {
         aPoInput.open(aPoPaths[i]);
