@@ -23,9 +23,9 @@
 #include <vcl/dllapi.h>
 #include <vcl/bitmap.hxx>
 
-// -------------
+
 // - AlphaMask -
-// -------------
+
 
 class ImageList;
 class BitmapEx;

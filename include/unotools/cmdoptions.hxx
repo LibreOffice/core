@@ -27,12 +27,12 @@
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @descr          The method GetList() returns a list of property values.
                     Use follow defines to separate values by names.
 *//*-*************************************************************************************************************/
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          forward declaration to our private date container implementation
     @descr          We use these class as internal member to support small memory requirements.
                     You can create the container if it is necessary. The class which use these mechanism
@@ -41,7 +41,7 @@
 
 class SvtCommandOptions_Impl;
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          collect information about dynamic menus
     @descr          Make it possible to configure dynamic menu structures of menus like "new" or "wizard".
 
@@ -63,7 +63,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtCommandOptions : public utl::detail:
             CMDOPTION_NONE
         };
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      standard constructor and destructor
             @descr      This will initialize an instance with default values.
                         We implement these class with a refcount mechanism! Every instance of this class increase it
@@ -82,7 +82,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtCommandOptions : public utl::detail:
          SvtCommandOptions();
         virtual ~SvtCommandOptions();
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      return complete specified list
             @descr      Call it to get all entries of an dynamic menu.
                         We return a list of all nodes with his names and properties.
@@ -97,7 +97,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtCommandOptions : public utl::detail:
 
         bool HasEntries( CmdOption eOption ) const;
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      Lookup if a command URL is inside a given list
             @descr      Lookup if a command URL is inside a given lst
 
@@ -112,7 +112,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtCommandOptions : public utl::detail:
 
         bool Lookup( CmdOption eOption, const OUString& aCommandURL ) const;
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      register an office frame, which must update its dispatches if
                         the underlying configuration was changed.
 
@@ -131,7 +131,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtCommandOptions : public utl::detail:
 
     private:
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      return a reference to a static mutex
             @descr      These class is partially threadsafe (for de-/initialization only).
                         All access methods are'nt safe!

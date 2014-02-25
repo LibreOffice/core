@@ -785,10 +785,10 @@ typedef enum
  } MSO_SPT;
 
 // different enums from the OfficeDraw documentation, Appendix D - beginning
-//
+
 // note: in opposite to the MS documentation, they all
 // start with "mso_" instead of "mso"
-//
+
 enum MSO_ShapePath {
    mso_shapeLines,        // A line of straight segments
    mso_shapeLinesClosed,  // A closed polygonal object

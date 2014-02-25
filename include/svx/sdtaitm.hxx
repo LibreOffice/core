@@ -23,9 +23,9 @@
 #include <svx/svddef.hxx>
 #include <svx/svxdllapi.h>
 
-//------------------------------
+
 // class SdrTextVertAdjustItem
-//------------------------------
+
 
 enum SdrTextVertAdjust {SDRTEXTVERTADJUST_TOP,      // aligned to top (normally used)
                         SDRTEXTVERTADJUST_CENTER,   // centered (for example for the title texts in Draw)
@@ -51,9 +51,9 @@ public:
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, OUString& rText, const IntlWrapper * = 0) const;
 };
 
-//------------------------------
+
 // class SdrTextHorzAdjustItem
-//------------------------------
+
 
 enum SdrTextHorzAdjust {SDRTEXTHORZADJUST_LEFT,     // left adjusted
                         SDRTEXTHORZADJUST_CENTER,   // centered (for example for title texts in Draw)

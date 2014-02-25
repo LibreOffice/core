@@ -25,7 +25,7 @@
 #include <vcl/virdev.hxx>
 #include <svx/svxdllapi.h>
 
-// ============================================================================
+
 
 /** A list box string item which stores its text and font. */
 class SvLBoxFontString : public SvLBoxString
@@ -56,7 +56,7 @@ public:
 };
 
 
-// ============================================================================
+
 
 /** A list box supporting formatted string entries. */
 class SVX_DLLPUBLIC SvxFontListBox : public SvTabListBox
@@ -98,7 +98,7 @@ protected:
                                     SvLBoxButtonKind eButtonKind);
 };
 
-// ============================================================================
+
 
 #endif
 

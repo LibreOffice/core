@@ -26,7 +26,7 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 struct DataLabelModel;
 
@@ -42,7 +42,7 @@ public:
     virtual void        onCharacters( const OUString& rChars );
 };
 
-// ============================================================================
+
 
 struct DataLabelsModel;
 
@@ -58,7 +58,7 @@ public:
     virtual void        onCharacters( const OUString& rChars );
 };
 
-// ============================================================================
+
 
 struct PictureOptionsModel;
 
@@ -73,7 +73,7 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
 
-// ============================================================================
+
 
 struct ErrorBarModel;
 
@@ -88,7 +88,7 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
 
-// ============================================================================
+
 
 struct TrendlineLabelModel;
 
@@ -103,7 +103,7 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
 
-// ============================================================================
+
 
 struct TrendlineModel;
 
@@ -119,7 +119,7 @@ public:
     virtual void        onCharacters( const OUString& rChars );
 };
 
-// ============================================================================
+
 
 struct DataPointModel;
 
@@ -134,7 +134,7 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
 
-// ============================================================================
+
 
 struct SeriesModel;
 
@@ -149,7 +149,7 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
 
-// ============================================================================
+
 
 /** Handler for a data series context for area chart types (c:ser element).
  */
@@ -162,7 +162,7 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
 
-// ============================================================================
+
 
 /** Handler for a data series context for bar chart types (c:ser element).
  */
@@ -175,7 +175,7 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
 
-// ============================================================================
+
 
 /** Handler for a data series context for bubble chart types (c:ser element).
  */
@@ -188,7 +188,7 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
 
-// ============================================================================
+
 
 /** Handler for a data series context for line and stock chart types (c:ser
     element).
@@ -202,7 +202,7 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
 
-// ============================================================================
+
 
 /** Handler for a data series context for pie and doughnut chart types (c:ser
     element).
@@ -216,7 +216,7 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
 
-// ============================================================================
+
 
 /** Handler for a data series context for radar chart types (c:ser element).
  */
@@ -229,7 +229,7 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
 
-// ============================================================================
+
 
 /** Handler for a data series context for scatter chart types (c:ser element).
  */
@@ -242,7 +242,7 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
 
-// ============================================================================
+
 
 /** Handler for a data series context for scatter chart types (c:ser element).
  */
@@ -255,7 +255,7 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
 
-// ============================================================================
+
 
 } // namespace chart
 } // namespace drawingml

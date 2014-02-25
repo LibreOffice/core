@@ -34,14 +34,14 @@ namespace com { namespace sun { namespace star { namespace accessibility {
     class XAccessible;
 } } } }
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= IToolPanel
-    //====================================================================
+
     /** abstract interface for a single tool panel
     */
     class SVT_DLLPUBLIC IToolPanel : public ::rtl::IReference
@@ -111,9 +111,9 @@ namespace svt
 
     typedef ::rtl::Reference< IToolPanel >  PToolPanel;
 
-    //====================================================================
+
     //= ToolPanelBase
-    //====================================================================
+
     /** base class for tool panel implementations, adding ref count implementation to the IToolPanel interface,
         but still being abstract
     */
@@ -129,9 +129,9 @@ namespace svt
         DECLARE_IREFERENCE()
     };
 
-//........................................................................
+
 } // namespace svt
-//........................................................................
+
 
 #endif // INCLUDED_SVTOOLS_TOOLPANEL_TOOLPANEL_HXX
 

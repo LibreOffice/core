@@ -33,7 +33,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <toolkit/awt/vclxcontainer.hxx>
 
-//  ----------------------------------------------------
+
 typedef ::cppu::ImplInheritanceHelper2 <    VCLXContainer
                                             ,   ::com::sun::star::awt::tab::XTabPageContainer
                                             ,   ::com::sun::star::container::XContainerListener

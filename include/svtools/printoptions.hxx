@@ -28,9 +28,9 @@
 
 class SvtPrintOptions_Impl;
 
-// -----------------------
+
 // - SvtBasePrintOptions -
-// -----------------------
+
 
 class PrinterOptions;
 
@@ -81,9 +81,9 @@ public:
     void        SetPrinterOptions( const PrinterOptions& rOptions );
 };
 
-// ---------------------
+
 // - SvtPrinterOptions -
-// ---------------------
+
 
 class SVT_DLLPUBLIC SvtPrinterOptions : public SvtBasePrintOptions
 {
@@ -98,9 +98,9 @@ public:
     virtual ~SvtPrinterOptions();
 };
 
-// -----------------------
+
 // - SvtPrintFileOptions -
-// -----------------------
+
 
 class SVT_DLLPUBLIC SvtPrintFileOptions : public SvtBasePrintOptions
 {

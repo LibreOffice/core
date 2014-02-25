@@ -31,10 +31,10 @@ namespace comphelper
     namespace stario    = ::com::sun::star::io;
     namespace staruno   = ::com::sun::star::uno;
 
-//==================================================================
+
 // FmUnoIOStream,
 // Stream to read and write data, based on File
-//==================================================================
+
 class COMPHELPER_DLLPUBLIC OSLInputStreamWrapper : public ::cppu::WeakImplHelper1<stario::XInputStream>
 {
     ::osl::Mutex    m_aMutex;
@@ -52,10 +52,10 @@ public:
     virtual void        SAL_CALL    closeInput() throw(stario::NotConnectedException, staruno::RuntimeException, std::exception);
 };
 
-//==================================================================
+
 // FmUnoOutStream,
 // data sink for the files
-//==================================================================
+
 class OSLOutputStreamWrapper : public ::cppu::WeakImplHelper1<stario::XOutputStream>
 {
 public:

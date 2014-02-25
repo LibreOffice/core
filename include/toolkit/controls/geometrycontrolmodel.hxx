@@ -45,14 +45,14 @@ namespace com { namespace sun { namespace star {
     }
 }}}
 
-//........................................................................
+
 // namespace toolkit
 // {
-//........................................................................
 
-    //====================================================================
+
+
     //= OGeometryControlModel_Base
-    //====================================================================
+
     typedef ::cppu::WeakAggComponentImplHelper2 <   ::com::sun::star::util::XCloneable
                                                 ,   ::com::sun::star::script::XScriptEventsSupplier
                                                 >   OGCM_Base;
@@ -165,17 +165,17 @@ namespace com { namespace sun { namespace star {
         void registerProperties();
     };
 
-    //====================================================================
+
     //= OTemplateInstanceDisambiguation
-    //====================================================================
+
     template <class CONTROLMODEL>
     class OTemplateInstanceDisambiguation
     {
     };
 
-    //====================================================================
+
     //= OGeometryControlModel
-    //====================================================================
+
     /*  example for usage:
             Reference< XAggregation > xIFace = new ::toolkit::OGeometryControlModel< UnoControlButtonModel > ();
     */
@@ -208,9 +208,9 @@ namespace com { namespace sun { namespace star {
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
     };
 
-    //====================================================================
+
     //= OCommonGeometryControlModel
-    //====================================================================
+
     /** allows to extend an arbitrary com.sun.star.awt::UnoControlModel with geometry
         information.
     */
@@ -255,9 +255,9 @@ namespace com { namespace sun { namespace star {
 
 #include <toolkit/controls/geometrycontrolmodel_impl.hxx>
 
-//........................................................................
+
 // }    // namespace toolkit
-//........................................................................
+
 
 #endif // INCLUDED_TOOLKIT_CONTROLS_GEOMETRYCONTROLMODEL_HXX
 

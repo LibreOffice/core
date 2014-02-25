@@ -45,9 +45,9 @@
 
 typedef std::map<sal_uInt16, ::com::sun::star::uno::Any> ImplPropertyTable;
 
-//  ----------------------------------------------------
+
 //  class UnoControlModel
-//  ----------------------------------------------------
+
 
 typedef ::cppu::WeakAggImplHelper7  <   ::com::sun::star::awt::XControlModel
                                     ,   ::com::sun::star::beans::XPropertyState

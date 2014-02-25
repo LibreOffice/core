@@ -58,9 +58,9 @@ typedef ::std::list< ::rtl::OString >               StringList;
 typedef ::std::vector< ::rtl::OString >             StringVector;
 typedef ::std::set< ::rtl::OString, LessString >    StringSet;
 
-//*************************************************************************
+
 // FileStream
-//*************************************************************************
+
 enum FileAccessMode
 {
     FAM_READ,                   // "r"
@@ -99,9 +99,9 @@ private:
 };
 
 
-//*************************************************************************
+
 // Helper functions
-//*************************************************************************
+
 ::rtl::OString getTempDir(const ::rtl::OString& sFileName);
 
 ::rtl::OString createFileNameFromType(const ::rtl::OString& destination,

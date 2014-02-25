@@ -26,7 +26,7 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 struct TextModel;
 
@@ -42,7 +42,7 @@ public:
     virtual void        onCharacters( const OUString& rChars );
 };
 
-// ============================================================================
+
 
 struct TitleModel;
 
@@ -57,7 +57,7 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
 
-// ============================================================================
+
 
 struct LegendModel;
 
@@ -72,7 +72,7 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
 
-// ============================================================================
+
 
 } // namespace chart
 } // namespace drawingml

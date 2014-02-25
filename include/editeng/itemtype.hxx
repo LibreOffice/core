@@ -41,14 +41,14 @@ EDITENG_DLLPUBLIC OUString GetMetricText( long nVal, SfxMapUnit eSrcUnit, SfxMap
 OUString GetColorString( const Color& rCol );
 EDITENG_DLLPUBLIC sal_uInt16 GetMetricId( SfxMapUnit eUnit );
 
-// -----------------------------------------------------------------------
+
 
 inline OUString GetBoolString(bool bVal)
 {
     return EE_RESSTR(bVal ? RID_SVXITEMS_TRUE : RID_SVXITEMS_FALSE);
 }
 
-// -----------------------------------------------------------------------
+
 
 inline long Scale( long nVal, long nMult, long nDiv )
 {

@@ -28,7 +28,7 @@
 #include <comphelper/broadcasthelper.hxx>
 #include <basegfx/range/b2drange.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 /** defines for DeclPrimitive2DIDBlock and ImplPrimitive2DIDBlock
     Added to be able to simply change identification stuff later, e.g. add
     a identification string and/or ID to the interface and to the implementation
@@ -41,7 +41,7 @@
 #define ImplPrimitive2DIDBlock(TheClass, TheID) \
     sal_uInt32 TheClass::getPrimitive2DID() const { return TheID; }
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predefines
 
 namespace drawinglayer { namespace geometry {
@@ -55,7 +55,7 @@ namespace drawinglayer { namespace primitive2d {
     typedef ::com::sun::star::uno::Sequence< Primitive2DReference > Primitive2DSequence;
 }}
 
-//////////////////////////////////////////////////////////////////////////////
+
 // basePrimitive2D class
 
 namespace drawinglayer
@@ -167,9 +167,9 @@ namespace drawinglayer
             /// The default implementation will return an empty sequence
             virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
-            //
+
             // Methods from XPrimitive2D
-            //
+
 
             /** The getDecomposition implementation for UNO API will use getDecomposition from this implementation. It
                 will construct a ViewInformation2D from the ViewParameters for that purpose
@@ -184,7 +184,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 // BufferedDecompositionPrimitive2D class
 
 namespace drawinglayer
@@ -255,7 +255,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 // tooling
 
 namespace drawinglayer
@@ -289,7 +289,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif //INCLUDED_DRAWINGLAYER_PRIMITIVE2D_BASEPRIMITIVE2D_HXX
 

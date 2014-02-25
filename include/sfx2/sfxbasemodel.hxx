@@ -104,9 +104,9 @@ struct  IMPL_SfxBaseModel_DataContainer     ;   // impl. struct to hold member o
 namespace sfx { namespace intern {
     class ViewCreationGuard;
 } }
-//________________________________________________________________________________________________________
+
 //  class declarations
-//________________________________________________________________________________________________________
+
 
 /**_______________________________________________________________________________________________________
     @short      -
@@ -172,15 +172,15 @@ class SFX2_DLLPUBLIC SfxBaseModel   :   protected ::cppu::BaseMutex
                                     ,   public SfxListener
 {
 
-//________________________________________________________________________________________________________
+
 //  public methods
-//________________________________________________________________________________________________________
+
 
 public:
 
-    //____________________________________________________________________________________________________
+
     //  constructor/destructor
-    //____________________________________________________________________________________________________
+
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -212,9 +212,9 @@ public:
 
     virtual ~SfxBaseModel() ;
 
-    //____________________________________________________________________________________________________
+
     //  XInterface
-    //____________________________________________________________________________________________________
+
 
     /**___________________________________________________________________________________________________
         @short      give answer, if interface is supported
@@ -263,9 +263,9 @@ public:
 
     virtual void SAL_CALL release() throw() ;
 
-    //____________________________________________________________________________________________________
+
     //  XTypeProvider
-    //____________________________________________________________________________________________________
+
 
     /**___________________________________________________________________________________________________
         @short      get information about supported interfaces
@@ -299,9 +299,9 @@ public:
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw( css::uno::RuntimeException, std::exception ) ;
 
 
-    //____________________________________________________________________________________________________
+
     //  XStarBasicAccess
-    //____________________________________________________________________________________________________
+
 
     /**___________________________________________________________________________________________________
         @seealso    XStarBasicAccess
@@ -330,9 +330,9 @@ public:
             throw(css::container::NoSuchElementException, css::uno::RuntimeException, std::exception);
 
 
-    //____________________________________________________________________________________________________
+
     //  XChild
-    //____________________________________________________________________________________________________
+
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -365,9 +365,9 @@ public:
     virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& xParent ) throw(css::lang::NoSupportException,
                                                                                         css::uno::RuntimeException, std::exception);
 
-    //____________________________________________________________________________________________________
+
     //  XComponent
-    //____________________________________________________________________________________________________
+
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -419,9 +419,9 @@ public:
         SAL_CALL getDocumentProperties()
         throw (css::uno::RuntimeException, std::exception);
 
-    //____________________________________________________________________________________________________
+
     //  XEventListener
-    //____________________________________________________________________________________________________
+
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -438,9 +438,9 @@ public:
 
     virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception);
 
-    //____________________________________________________________________________________________________
+
     //  XModel
-    //____________________________________________________________________________________________________
+
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -610,9 +610,9 @@ public:
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getCurrentSelection() throw (css::uno::RuntimeException, std::exception);
 
-    //____________________________________________________________________________________________________
+
     //  XModel2
-    //____________________________________________________________________________________________________
+
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL getControllers()
         throw (css::uno::RuntimeException, std::exception);
 
@@ -631,9 +631,9 @@ public:
                css::lang::IllegalArgumentException,
                css::uno::Exception, std::exception                );
 
-    //____________________________________________________________________________________________________
+
     //  XModifiable2
-    //____________________________________________________________________________________________________
+
 
     virtual ::sal_Bool SAL_CALL disableSetModified(  ) throw (css::uno::RuntimeException, std::exception);
     virtual ::sal_Bool SAL_CALL enableSetModified(  ) throw (css::uno::RuntimeException, std::exception);
@@ -700,29 +700,29 @@ public:
 
     virtual void SAL_CALL removeModifyListener(const css::uno::Reference< css::util::XModifyListener > & xListener) throw( css::uno::RuntimeException, std::exception ) ;
 
-    //____________________________________________________________________________________________________
+
     //  XCloseable
-    //____________________________________________________________________________________________________
+
 
     virtual void SAL_CALL close( sal_Bool bDeliverOwnership ) throw (css::util::CloseVetoException, css::uno::RuntimeException, std::exception);
 
-    //____________________________________________________________________________________________________
+
     //  XCloseBroadcaster
-    //____________________________________________________________________________________________________
+
 
     virtual void SAL_CALL addCloseListener( const css::uno::Reference< css::util::XCloseListener >& xListener ) throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL removeCloseListener( const css::uno::Reference< css::util::XCloseListener >& xListener ) throw (css::uno::RuntimeException, std::exception);
 
-    //____________________________________________________________________________________________________
+
     //  XPrintJobBroadcaster
-    //____________________________________________________________________________________________________
+
 
     virtual void SAL_CALL addPrintJobListener( const css::uno::Reference< css::view::XPrintJobListener >& xListener ) throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL removePrintJobListener( const css::uno::Reference< css::view::XPrintJobListener >& xListener ) throw (css::uno::RuntimeException, std::exception);
 
-    //____________________________________________________________________________________________________
+
     //  XPrintable
-    //____________________________________________________________________________________________________
+
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -770,16 +770,16 @@ public:
     virtual void SAL_CALL print( const css::uno::Sequence< css::beans::PropertyValue >& seqOptions )
         throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception);
 
-    //____________________________________________________________________________________________________
+
     //  XStorable2
-    //____________________________________________________________________________________________________
+
 
     virtual void SAL_CALL storeSelf( const  css::uno::Sequence< css::beans::PropertyValue >&   seqArguments    )
         throw (css::lang::IllegalArgumentException, css::io::IOException, css::uno::RuntimeException, std::exception);
 
-    //____________________________________________________________________________________________________
+
     //  XStorable
-    //____________________________________________________________________________________________________
+
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -877,9 +877,9 @@ public:
 
 
 
-    //____________________________________________________________________________________________________
+
     //  XLoadable
-    //____________________________________________________________________________________________________
+
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -919,9 +919,9 @@ public:
                css::uno::RuntimeException,
                css::uno::Exception, std::exception);
 
-    //____________________________________________________________________________________________________
+
     //  XDocumentSubStorageSupplier
-    //____________________________________________________________________________________________________
+
 
     virtual css::uno::Reference< css::embed::XStorage > SAL_CALL getDocumentSubStorage( const OUString& aStorageName, sal_Int32 nMode )
         throw ( css::uno::RuntimeException, std::exception );
@@ -929,9 +929,9 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getDocumentSubStoragesNames()
         throw ( css::io::IOException, css::uno::RuntimeException, std::exception );
 
-    //____________________________________________________________________________________________________
+
     //  XStorageBasedDocument
-    //____________________________________________________________________________________________________
+
 
     virtual void SAL_CALL loadFromStorage( const css::uno::Reference< css::embed::XStorage >& xStorage,
                                             const css::uno::Sequence< css::beans::PropertyValue >& aMediaDescriptor )
@@ -967,9 +967,9 @@ public:
             const css::uno::Reference< css::document::XStorageChangeListener >& xListener )
         throw ( css::uno::RuntimeException, std::exception );
 
-    //____________________________________________________________________________________________________
+
     //  XVisualObject
-    //____________________________________________________________________________________________________
+
 
     virtual void SAL_CALL setVisualAreaSize( sal_Int64 nAspect, const css::awt::Size& aSize )
         throw ( css::lang::IllegalArgumentException,
@@ -993,20 +993,19 @@ public:
         throw ( css::uno::Exception,
                 css::uno::RuntimeException, std::exception );
 
-    //____________________________________________________________________________________________________
+
     //  XScriptProviderSupplier
-    //____________________________________________________________________________________________________
+
 
     virtual css::uno::Reference< css::script::provider::XScriptProvider > SAL_CALL getScriptProvider() throw ( css::uno::RuntimeException, std::exception );
 
-    //____________________________________________________________________________________________________
+
     //  XUIConfigurationManagerSupplier
-    //____________________________________________________________________________________________________
     virtual css::uno::Reference< css::ui::XUIConfigurationManager > SAL_CALL getUIConfigurationManager() throw ( css::uno::RuntimeException, std::exception );
 
-    //____________________________________________________________________________________________________
+
     //  XTransferable
-    //____________________________________________________________________________________________________
+
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -1060,9 +1059,9 @@ public:
         throw (css::uno::RuntimeException, std::exception);
 
 
-    //____________________________________________________________________________________________________
+
     //  XEventsSupplier
-    //____________________________________________________________________________________________________
+
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -1080,23 +1079,23 @@ public:
     virtual css::uno::Reference< css::container::XNameReplace > SAL_CALL getEvents() throw( css::uno::RuntimeException, std::exception );
 
 
-    //____________________________________________________________________________________________________
+
     //  XEmbeddedScripts
-    //____________________________________________________________________________________________________
+
 
     virtual css::uno::Reference< css::script::XStorageBasedLibraryContainer > SAL_CALL getBasicLibraries() throw (css::uno::RuntimeException, std::exception);
     virtual css::uno::Reference< css::script::XStorageBasedLibraryContainer > SAL_CALL getDialogLibraries() throw (css::uno::RuntimeException, std::exception);
     virtual ::sal_Bool SAL_CALL getAllowMacroExecution() throw (css::uno::RuntimeException, std::exception);
 
-    //____________________________________________________________________________________________________
+
     //  XScriptInvocationContext
-    //____________________________________________________________________________________________________
+
 
     virtual css::uno::Reference< css::document::XEmbeddedScripts > SAL_CALL getScriptContainer() throw (css::uno::RuntimeException, std::exception);
 
-    //____________________________________________________________________________________________________
+
     //  XEventBroadcaster
-    //____________________________________________________________________________________________________
+
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -1128,17 +1127,17 @@ public:
 
     virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::document::XEventListener >& xListener ) throw( css::uno::RuntimeException, std::exception );
 
-    //____________________________________________________________________________________________________
+
     //  XDocumentEventBroadcaster
-    //____________________________________________________________________________________________________
+
 
     virtual void SAL_CALL addDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& _Listener ) throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL removeDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& _Listener ) throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL notifyDocumentEvent( const OUString& _EventName, const css::uno::Reference< css::frame::XController2 >& _ViewController, const css::uno::Any& _Supplement ) throw (css::lang::IllegalArgumentException, css::lang::NoSupportException, css::uno::RuntimeException, std::exception);
 
-    //____________________________________________________________________________________________________
+
     //  XUnoTunnel
-    //____________________________________________________________________________________________________
+
 
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException, std::exception);
 
@@ -1200,7 +1199,7 @@ public:
     // css.document.XUndoManagerSupplier
     virtual css::uno::Reference< css::document::XUndoManager > SAL_CALL getUndoManager(  ) throw (css::uno::RuntimeException, std::exception);
 
-    //____________________________________________________________________________________________________
+
 
     // css::rdf::XNode:
     virtual OUString SAL_CALL getStringValue()
@@ -1337,9 +1336,9 @@ public:
 
     sal_Bool getBoolPropertyValue( const OUString& rName ) throw ( css::uno::RuntimeException );
 
-    //____________________________________________________________________________________________________
+
     //  SfxListener
-    //____________________________________________________________________________________________________
+
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -1357,9 +1356,9 @@ public:
     void Notify(            SfxBroadcaster& aBC     ,
                     const   SfxHint&        aHint   ) ;
 
-    //____________________________________________________________________________________________________
+
     //  public IMPL?
-    //____________________________________________________________________________________________________
+
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -1420,9 +1419,9 @@ protected:
 
     void setGrabBagItem(const com::sun::star::uno::Any& rVal);
 
-//________________________________________________________________________________________________________
+
 //  private methods
-//________________________________________________________________________________________________________
+
 
 private:
 
@@ -1467,9 +1466,9 @@ private:
 
     SAL_DLLPRIVATE void handleLoadError( sal_uInt32 nError, SfxMedium* pMedium );
 
-//________________________________________________________________________________________________________
+
 //  private variables and methods
-//________________________________________________________________________________________________________
+
 
 private:
 

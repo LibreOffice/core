@@ -34,9 +34,9 @@ namespace cppu { class IPropertyArrayHelper; }
 
 namespace comphelper
 {
-    //************************************************************
+
     //  OIdPropertyArrayUsageHelper
-    //************************************************************
+
     template <typename TYPE> struct OIdPropertyArrayUsageHelperMutex
             : public rtl::Static< ::osl::Mutex, OIdPropertyArrayUsageHelperMutex<TYPE> > {};
 
@@ -82,14 +82,14 @@ namespace comphelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper(sal_Int32 nId) const = 0;
     };
 
-    //------------------------------------------------------------------
+
     template<class TYPE>
     sal_Int32                       OIdPropertyArrayUsageHelper< TYPE >::s_nRefCount    = 0;
 
     template<class TYPE>
     OIdPropertyArrayMap*            OIdPropertyArrayUsageHelper< TYPE >::s_pMap = NULL;
 
-    //------------------------------------------------------------------
+
     template <class TYPE>
     OIdPropertyArrayUsageHelper<TYPE>::OIdPropertyArrayUsageHelper()
     {
@@ -100,7 +100,7 @@ namespace comphelper
         ++s_nRefCount;
     }
 
-    //------------------------------------------------------------------
+
     template <class TYPE>
     ::cppu::IPropertyArrayHelper* OIdPropertyArrayUsageHelper<TYPE>::getArrayHelper(sal_Int32 nId)
     {

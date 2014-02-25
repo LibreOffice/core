@@ -25,10 +25,10 @@
 #include <vcl/tabpage.hxx>
 
 class Bitmap;
-//.........................................................................
+
 namespace svt
 {
-//.........................................................................
+
 
 // wizard buttons
 #define WZB_NONE                0x0000
@@ -41,9 +41,9 @@ namespace svt
 // wizard states
 #define WZS_INVALID_STATE       ((WizardState)-1)
 
-    //=====================================================================
+
     //= WizardTypes
-    //=====================================================================
+
     struct WizardTypes
     {
         typedef sal_Int16  WizardState;
@@ -59,7 +59,7 @@ namespace svt
     class SAL_NO_VTABLE IWizardPageController
     {
     public:
-        //-----------------------------------------------------------------
+
         // This methods  behave somewhat different than ActivatePage/DeactivatePage
         // The latter are handled by the base class itself whenever changing the pages is in the offing,
         // i.e., when it's already decided which page is the next.
@@ -82,9 +82,9 @@ namespace svt
         ~IWizardPageController() {}
     };
 
-    //=====================================================================
+
     //= OWizardPage
-    //=====================================================================
+
     class OWizardMachine;
     struct WizardPageImplData;
 
@@ -119,9 +119,9 @@ namespace svt
         void    updateDialogTravelUI();
     };
 
-    //=====================================================================
+
     //= OWizardMachine
-    //=====================================================================
+
     struct WizardMachineImplData;
     /** implements some kind of finite automata, where the states of the automata exactly correlate
         with tab pages.
@@ -376,9 +376,9 @@ namespace svt
         OWizardMachine& m_rWizard;
     };
 
-//.........................................................................
+
 }   // namespace svt
-//.........................................................................
+
 
 #endif // INCLUDED_SVTOOLS_WIZARDMACHINE_HXX
 

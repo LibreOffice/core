@@ -27,7 +27,7 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 /** Relative shape position in a chart object. */
 struct AnchorPosModel
@@ -39,7 +39,7 @@ struct AnchorPosModel
     bool         isValid() const { return (0.0 <= mfX) && (mfX <= 1.0) && (0.0 <= mfY) && (mfY <= 1.0); }
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Absolute shape size in a chart object (in EMUs). */
 struct AnchorSizeModel : public EmuSize
@@ -48,7 +48,7 @@ struct AnchorSizeModel : public EmuSize
     bool         isValid() const { return (Width >= 0) && (Height >= 0); }
 };
 
-// ============================================================================
+
 
 /** Contains the position of a shape in the chart object. Supports different
     shape anchor modes (absolute, relative).
@@ -75,7 +75,7 @@ private:
 
 typedef ::boost::shared_ptr< ShapeAnchor > ShapeAnchorRef;
 
-// ============================================================================
+
 
 /** Handler for a chart drawing fragment (c:userShapes root element).
  */
@@ -104,7 +104,7 @@ private:
     bool                mbOleSupport;           /// True = allow to insert OLE objects into the drawing page.
 };
 
-// ============================================================================
+
 
 } // namespace chart
 } // namespace drawingml

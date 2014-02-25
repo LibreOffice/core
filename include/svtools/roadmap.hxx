@@ -29,10 +29,10 @@
 
 
 class Bitmap;
-//.........................................................................
+
 namespace svt
 {
-//.........................................................................
+
 
     struct RoadmapTypes
     {
@@ -44,9 +44,9 @@ namespace svt
     class RoadmapImpl;
     class RoadmapItem;
 
-    //=====================================================================
+
     //= Roadmap
-    //=====================================================================
+
     class SVT_DLLPUBLIC ORoadmap : public Control, public RoadmapTypes
     {
     protected:
@@ -114,9 +114,9 @@ namespace svt
         void                        UpdatefollowingHyperLabels( ItemIndex _Index );
     };
 
-//.........................................................................
+
 }   // namespace svt
-//.........................................................................
+
 
 #endif
 

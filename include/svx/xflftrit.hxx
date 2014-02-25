@@ -23,9 +23,9 @@
 #include <svx/xflgrit.hxx>
 #include <svx/svxdllapi.h>
 
-//-----------------------------------
+
 // class XFillFloatTransparenceItem -
-//-----------------------------------
+
 
 class SVX_DLLPUBLIC XFillFloatTransparenceItem : public XFillGradientItem
 {

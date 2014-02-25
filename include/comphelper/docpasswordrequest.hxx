@@ -30,7 +30,7 @@ namespace comphelper {
 class AbortContinuation;
 class PasswordContinuation;
 
-// ============================================================================
+
 
 /** Selects which UNO document password request type to use. */
 enum DocPasswordRequestType
@@ -39,7 +39,7 @@ enum DocPasswordRequestType
     DocPasswordRequestType_MS           /// Uses the com.sun.star.task.DocumentMSPasswordRequest request.
 };
 
-// ============================================================================
+
 
 class COMPHELPER_DLLPUBLIC SimplePasswordRequest :
         public cppu::WeakImplHelper1<css::task::XInteractionRequest>
@@ -63,7 +63,7 @@ private:
     PasswordContinuation *          mpPassword;
 };
 
-// ============================================================================
+
 
 /** Implements the task.XInteractionRequest interface for requesting a password
     string for a document.
@@ -97,7 +97,7 @@ private:
     PasswordContinuation *          mpPassword;
 };
 
-// ============================================================================
+
 
 } // namespace comphelper
 

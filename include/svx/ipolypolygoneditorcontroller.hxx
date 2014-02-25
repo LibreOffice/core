@@ -23,9 +23,9 @@
 #include <svx/svxdllapi.h>
 #include <svx/svdedtv.hxx>
 
-//************************************************************
+
 //   Defines
-//************************************************************
+
 
 enum SdrPathSmoothKind  {SDRPATHSMOOTH_DONTCARE,   // only for status query
                          SDRPATHSMOOTH_ANGULAR,    // angular

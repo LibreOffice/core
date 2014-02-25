@@ -27,7 +27,7 @@
 #include <svx/svdotext.hxx>
 #include <svx/svxdllapi.h>
 
-//------------------------------------------------------------------------
+
 
 class SvStream;
 class SfxStyleSheet;
@@ -46,9 +46,9 @@ struct ImplTableShadowPaintInfo;
     typedef rtl::Reference< Cell > CellRef;
 #endif
 
-//------------------------------------------------------------------------
+
 // SdrTableHitKind
-//------------------------------------------------------------------------
+
 
 enum TableHitKind
 {
@@ -59,7 +59,7 @@ enum TableHitKind
     SDRTABLEHIT_VERTICAL_BORDER
 };
 
-//------------------------------------------------------------------------
+
 
 struct CellPos
 {
@@ -73,9 +73,9 @@ struct CellPos
     bool operator!=( const CellPos& r ) const { return (r.mnCol != mnCol) || (r.mnRow != mnRow); }
 };
 
-//------------------------------------------------------------------------
+
 // TableStyleSettings
-//------------------------------------------------------------------------
+
 
 struct SVX_DLLPUBLIC TableStyleSettings
 {
@@ -93,9 +93,9 @@ struct SVX_DLLPUBLIC TableStyleSettings
     bool operator==( const TableStyleSettings& r ) const;
 };
 
-//------------------------------------------------------------------------
+
 //   SdrTableObj
-//------------------------------------------------------------------------
+
 
 class SdrTableObjImpl;
 
@@ -268,14 +268,14 @@ public:
     virtual void onEditOutlinerStatusEvent( EditStatus* pEditStatus );
 
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    //
+
+
     // transformation interface for StarOfficeAPI. This implements support for
     // homogen 3x3 matrices containing the transformation of the SdrObject. At the
     // moment it contains a shearX, rotation and translation, but for setting all linear
     // transforms like Scale, ShearX, ShearY, Rotate and Translate are supported.
-    //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
     // gets base transformation and rectangle of object. If it's an SdrPathObj it fills the PolyPolygon
     // with the base geometry and returns TRUE. Otherwise it returns FALSE.
     virtual sal_Bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const;
@@ -319,7 +319,7 @@ private:
     SdrTableObjImpl*    mpImpl;
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 } }
 

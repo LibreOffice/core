@@ -30,14 +30,14 @@
 #include <functional>
 #include <memory>
 
-//......................................................................................................................
+
 namespace comphelper
 {
-//......................................................................................................................
 
-    //==================================================================================================================
+
+
     //= IKeyPredicateLess
-    //==================================================================================================================
+
     class SAL_NO_VTABLE IKeyPredicateLess
     {
     public:
@@ -45,9 +45,9 @@ namespace comphelper
         virtual ~IKeyPredicateLess() {}
     };
 
-    //==================================================================================================================
+
     //= LessPredicateAdapter
-    //==================================================================================================================
+
     struct LessPredicateAdapter : public ::std::binary_function< ::com::sun::star::uno::Any, ::com::sun::star::uno::Any, bool >
     {
         LessPredicateAdapter( const IKeyPredicateLess& _predicate )
@@ -67,9 +67,9 @@ namespace comphelper
         LessPredicateAdapter(); // never implemented
     };
 
-    //==================================================================================================================
+
     //= ScalarPredicateLess
-    //==================================================================================================================
+
     template< typename SCALAR >
     class ScalarPredicateLess : public IKeyPredicateLess
     {
@@ -85,9 +85,9 @@ namespace comphelper
         }
     };
 
-    //==================================================================================================================
+
     //= StringPredicateLess
-    //==================================================================================================================
+
     class StringPredicateLess : public IKeyPredicateLess
     {
     public:
@@ -102,9 +102,9 @@ namespace comphelper
         }
     };
 
-    //==================================================================================================================
+
     //= StringCollationPredicateLess
-    //==================================================================================================================
+
     class StringCollationPredicateLess : public IKeyPredicateLess
     {
     public:
@@ -127,9 +127,9 @@ namespace comphelper
         ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator > const m_collator;
     };
 
-    //==================================================================================================================
+
     //= TypePredicateLess
-    //==================================================================================================================
+
     class TypePredicateLess : public IKeyPredicateLess
     {
     public:
@@ -144,9 +144,9 @@ namespace comphelper
         }
     };
 
-    //==================================================================================================================
+
     //= EnumPredicateLess
-    //==================================================================================================================
+
     class EnumPredicateLess : public IKeyPredicateLess
     {
     public:
@@ -171,9 +171,9 @@ namespace comphelper
         ::com::sun::star::uno::Type const   m_enumType;
     };
 
-    //==================================================================================================================
+
     //= InterfacePredicateLess
-    //==================================================================================================================
+
     class InterfacePredicateLess : public IKeyPredicateLess
     {
     public:
@@ -190,9 +190,9 @@ namespace comphelper
         }
     };
 
-    //==================================================================================================================
+
     //= getStandardLessPredicate
-    //==================================================================================================================
+
     /** creates a default IKeyPredicateLess instance for the given UNO type
         @param i_type
             the type for which a predicate instance should be created
@@ -210,9 +210,9 @@ namespace comphelper
             ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator > const & i_collator
         );
 
-//......................................................................................................................
+
 } // namespace comphelper
-//......................................................................................................................
+
 
 #endif // INCLUDED_COMPHELPER_ANYCOMPARE_HXX
 

@@ -40,9 +40,9 @@ public:
 
     sal_Int32   GetTransliterationFlags() const;
 
-    //
+
     // General Options
-    //
+
 
     bool    IsWholeWordsOnly() const;
     bool    IsBackwards() const;
@@ -61,9 +61,9 @@ public:
     void    SetMatchCase( bool bVal );      // also Japanese search option
     void    SetNotes( bool bVal);
 
-    //
+
     // Japanese search options
-    //
+
 
     bool    IsMatchFullHalfWidthForms() const;
     bool    IsMatchHiraganaKatakana() const;

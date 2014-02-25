@@ -24,9 +24,9 @@
 #include <vcl/bitmapex.hxx>
 #include <vector>
 
-// -------------
+
 // - PNGReader -
-// -------------
+
 
 namespace vcl
 {

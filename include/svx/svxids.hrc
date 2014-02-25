@@ -32,9 +32,9 @@
 #undef SID_INSERT_FRAME
 #endif
 
-// --------------------------------------------------------------------------
+
 // Member-Id's
-// --------------------------------------------------------------------------
+
 
 #define MID_APPFLAG             0x20
 #define MID_AUTOBREAK           0x21
@@ -88,23 +88,23 @@
 #define MID_ZOOMSLIDER_MINZOOM          0x7b
 #define MID_ZOOMSLIDER_MAXZOOM          0x7c
 
-// --------------------------------------------------------------------------
+
 // Event-Id's Block 1
-// --------------------------------------------------------------------------
+
 
 #define SVX_EVENT_COLUM_WINDOW_EXECUTE      (EVENT_SVX_START)
 
-// --------------------------------------------------------------------------
+
 // Event-Id's Block 2
-// --------------------------------------------------------------------------
+
 
 #define SVX_EVENT_IMAGE_LOAD                (SID_LIB_START)
 #define SVX_EVENT_IMAGE_ABORT               (SID_LIB_START + 1)
 #define SVX_EVENT_IMAGE_ERROR               (SID_LIB_START + 2)
 
-// --------------------------------------------------------------------------
+
 // Function-Id's
-// --------------------------------------------------------------------------
+
 
 // Function-Id's
 #define FID_SVX_START                       (SID_LIB_START + 500)
@@ -118,9 +118,9 @@
 #define FID_SEARCH_SEARCHSET                (FID_SVX_START + 4)
 #define FID_SEARCH_REPLACESET               (FID_SVX_START + 5)
 
-// --------------------------------------------------------------------------
+
 // SFX-Id's
-// --------------------------------------------------------------------------
+
 
 #define SID_POLY_MERGE                      (SID_SFX_START + 679)
 #define SID_POLY_SUBSTRACT                  (SID_SFX_START + 680)
@@ -128,9 +128,9 @@
 #define SID_POLY_FORMEN                     (SID_SFX_START + 682)
 #define SID_DISTRIBUTE_DLG                  (SID_SFX_START + 683)
 
-// --------------------------------------------------------------------------
+
 // Basic IDE-Id's
-// --------------------------------------------------------------------------
+
 
 #define SID_BASICIDE_TOGGLEBRKPNT           ( SID_BASICIDE_START +  0 )
 #define SID_BASICIDE_ADDWATCH               ( SID_BASICIDE_START +  1 )
@@ -174,17 +174,17 @@
 #define SID_BASICIDE_IMAGESTART             ( SID_BASICIDE_START + 50 )
 #define SID_OPTIONS_TREEDIALOG              ( SID_BASICIDE_START + 862)
 
-// --------------------------------------------------------------------------
+
 // StarBase-Id's
-// --------------------------------------------------------------------------
+
 
 #define SID_SBA_BRW_UPDATE                  (SID_SBA_START+100) // Daten in Felder
 #define SID_SBA_BRW_INSERT                  (SID_SBA_START+101) // Daten in Text
 #define SID_SBA_BRW_MERGE                   (SID_SBA_START+102) // Serienbrief
 
-// --------------------------------------------------------------------------
+
 // SD-Id's
-// --------------------------------------------------------------------------
+
 
 #define SID_RULER                           (SID_SD_START+40)
 #define SID_BEZIER_CONVERT                  (SID_SD_START+65)
@@ -232,9 +232,9 @@
 #define ID_VAL_USELASTCOLUMNSTYLE           (SID_SD_START+327)
 #define ID_VAL_USEBANDINGCOLUMNSTYLE        (SID_SD_START+328)
 
-// --------------------------------------------------------------------------
+
 // Writer-Id's
-// --------------------------------------------------------------------------
+
 #define FN_EDIT                 (SID_SW_START +  100)
 #define FN_NUM_BULLET_OFF       (FN_EDIT + 37)  /* Numerierung aus */
 #define FN_NUM_BULLET_ON        (FN_EDIT + 38)  /* Numerierung mit Bullets an */
@@ -267,12 +267,12 @@
 #define FN_PGPREVIEW            (SID_SW_START + 1250)
 #define FN_SHOW_MULTIPLE_PAGES  (FN_PGPREVIEW + 2)
 
-// --------------------------------------------------------------------------
+
 // Svx-Id's
 // When adding new entries here, note that other SID_SVX_START entries exist in
 // include/editeng/editids.hrc and include/sfx2/sfxsids.hrc so don't use the
 // same id for two different attributes
-// --------------------------------------------------------------------------
+
 
 #define SID_ATTR_BORDER_INNER                           ( SID_SVX_START + 23 )
 
@@ -963,9 +963,9 @@
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
 #define SID_SVX_FIRSTFREE                               (SID_ATTR_BORDER_STYLES + 1)
 
-// --------------------------------------------------------------------------
+
 // Overflow check for slot IDs
-// --------------------------------------------------------------------------
+
 
 #if SID_SVX_FIRSTFREE > SID_SVX_END
 #error Resource-Ueberlauf in #line, #file

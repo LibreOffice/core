@@ -26,7 +26,7 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 struct ChartSpaceModel;
 
@@ -46,7 +46,7 @@ public:
     ::oox::core::XmlFilterBase& mpFilterBase;
 };
 
-// ============================================================================
+
 
 } // namespace chart
 } // namespace drawingml

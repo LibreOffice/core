@@ -27,18 +27,18 @@
 namespace com { namespace sun { namespace star { namespace uno { class Any; }}}}
 struct SystemParentData;
 
-// ----------------------
+
 // - WorkWindow - Types -
-// ----------------------
+
 
 // Presentation Flags
 #define PRESENTATION_HIDEALLAPPS    ((sal_uInt16)0x0001)
 #define PRESENTATION_NOFULLSCREEN   ((sal_uInt16)0x0002)
 #define PRESENTATION_NOAUTOSHOW     ((sal_uInt16)0x0004)
 
-// --------------
+
 // - WorkWindow -
-// --------------
+
 
 class VCL_DLLPUBLIC WorkWindow : public SystemWindow
 {

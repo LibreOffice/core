@@ -28,14 +28,14 @@
 #include <memory>
 #include <connectivity/dbtoolsdllapi.hxx>
 
-//........................................................................
+
 namespace dbtools
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= StatementComposer
-    //====================================================================
+
     struct StatementComposer_Data;
     /** a class which is able to compose queries (SELECT statements) from a command and a command type
     */
@@ -93,9 +93,9 @@ namespace dbtools
         StatementComposer();    // not implemented
     };
 
-//........................................................................
+
 } // namespace dbtools
-//........................................................................
+
 
 #endif // INCLUDED_CONNECTIVITY_STATEMENTCOMPOSER_HXX
 

@@ -28,7 +28,7 @@ namespace com { namespace sun { namespace star { namespace io {
     class XOutputStream;
 } } } }
 
-//============================================================================
+
 class SVL_DLLPUBLIC SvOutputStream: public SvStream
 {
     com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >

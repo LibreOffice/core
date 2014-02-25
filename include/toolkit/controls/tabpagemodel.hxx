@@ -55,9 +55,9 @@ public:
     css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception);
 };
 
-//  ----------------------------------------------------
+
 //  class UnoTabPageControl
-//  ----------------------------------------------------
+
 typedef ::cppu::AggImplInheritanceHelper2   <   ControlContainerBase
                                             ,   ::com::sun::star::awt::tab::XTabPage
                                             ,   ::com::sun::star::awt::XWindowListener

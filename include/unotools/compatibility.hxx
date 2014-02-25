@@ -26,9 +26,9 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <unotools/options.hxx>
 
-//_________________________________________________________________________________________________________________
+
 //  types, enums, ...
-//_________________________________________________________________________________________________________________
+
 
 enum CompatibilityOptions
 {
@@ -45,7 +45,7 @@ enum CompatibilityOptions
     COPT_EXPAND_WORDSPACE
 };
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @descr          The method GetList() returns a list of property values.
                     Use follow defines to separate values by names.
 *//*-*************************************************************************************************************/
@@ -65,11 +65,11 @@ enum CompatibilityOptions
 
 #define COMPATIBILITY_DEFAULT_NAME                          OUString( "_default" )
 
-//_________________________________________________________________________________________________________________
-//  forward declarations
-//_________________________________________________________________________________________________________________
 
-/*-************************************************************************************************************//**
+//  forward declarations
+
+
+/*-************************************************************************************************************
     @short          forward declaration to our private date container implementation
     @descr          We use these class as internal member to support small memory requirements.
                     You can create the container if it is necessary. The class which use these mechanism
@@ -78,7 +78,7 @@ enum CompatibilityOptions
 
 class SvtCompatibilityOptions_Impl;
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          collect information about dynamic menus
     @descr          Make it possible to configure dynamic menu structures of menus like "new" or "wizard".
 
@@ -90,17 +90,17 @@ class SvtCompatibilityOptions_Impl;
 
 class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
 {
-    //-------------------------------------------------------------------------------------------------------------
+
     //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+
 
     public:
 
-        //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
 
-        /*-****************************************************************************************************//**
+        //  constructor / destructor
+
+
+        /*-****************************************************************************************************
             @short      standard constructor and destructor
             @descr      This will initialize an instance with default values.
                         We implement these class with a refcount mechanism! Every instance of this class increase it
@@ -119,11 +119,11 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
          SvtCompatibilityOptions();
         virtual ~SvtCompatibilityOptions();
 
-        //---------------------------------------------------------------------------------------------------------
-        //  interface
-        //---------------------------------------------------------------------------------------------------------
 
-        /*-****************************************************************************************************//**
+        //  interface
+
+
+        /*-****************************************************************************************************
             @short      clear complete specified list
             @descr      Call this methods to clear the whole list.
 
@@ -139,7 +139,7 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
 
         void SetDefault( OUString sName, bool bValue );
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      return complete specified list
             @descr      Call it to get all entries of compatibility options.
                         We return a list of all nodes with its names and properties.
@@ -154,7 +154,7 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
 
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > GetList() const;
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      append a new item
             @descr
 
@@ -194,13 +194,13 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
         bool        IsConsiderWrappingStyle() const;
         bool        IsExpandWordSpace() const;
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private methods
-    //-------------------------------------------------------------------------------------------------------------
+
 
     private:
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      return a reference to a static mutex
             @descr      These class is partially threadsafe (for de-/initialization only).
                         All access methods are'nt safe!
@@ -216,9 +216,9 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
 
         UNOTOOLS_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private member
-    //-------------------------------------------------------------------------------------------------------------
+
 
     private:
 

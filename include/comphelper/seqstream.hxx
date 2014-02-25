@@ -32,10 +32,10 @@
 namespace comphelper
 {
 
-//==================================================================
+
 // SequenceInputStream
 // stream for reading data from a sequence of bytes
-//==================================================================
+
 
 
 class COMPHELPER_DLLPUBLIC SequenceInputStream

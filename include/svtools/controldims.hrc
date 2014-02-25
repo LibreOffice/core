@@ -20,17 +20,17 @@
 #ifndef _SVT_CONTROLDIMS_HRC_
 #define _SVT_CONTROLDIMS_HRC_
 
-//
+
 // From: Dialogue Specification and Guidelines - Visual Design V1.3
 // by Christian Jansen
-//
 
-//
+
+
 // Usage:
-// ======
-//
+
+
 // all values have to be mapped by MAP_APPFONT
-//
+
 
 // Base
 #define RSC_BS_CHARHEIGHT                   8

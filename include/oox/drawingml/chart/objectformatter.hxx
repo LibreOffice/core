@@ -34,7 +34,7 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 /** Enumerates different object types for specific automatic formatting behaviour. */
 enum ObjectType
@@ -67,7 +67,7 @@ enum ObjectType
     OBJECTTYPE_DATATABLE                /// Data table.
 };
 
-// ============================================================================
+
 
 struct ChartSpaceModel;
 struct ObjectFormatterData;
@@ -146,7 +146,7 @@ private:
     ::boost::shared_ptr< ObjectFormatterData > mxData;
 };
 
-// ============================================================================
+
 
 } // namespace chart
 } // namespace drawingml

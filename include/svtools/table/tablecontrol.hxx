@@ -31,17 +31,17 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
 
-//........................................................................
+
 
 namespace svt { namespace table
 {
-//........................................................................
+
 
     class TableControl_Impl;
 
-    //====================================================================
+
     //= TableControl
-    //====================================================================
+
     /** a basic control which manages table-like data, i.e. a number of cells
         organized in <code>m</code> rows and <code>n</code> columns.
 
@@ -164,7 +164,7 @@ namespace svt { namespace table
         void commitCellEventIfAccessibleAlive( sal_Int16 const i_eventID, const css::uno::Any& i_newValue, const css::uno::Any& i_oldValue );
         void commitTableEventIfAccessibleAlive( sal_Int16 const i_eventID, const css::uno::Any& i_newValue, const css::uno::Any& i_oldValue );
 
-        // .............................................................................................................
+
         // IAccessibleTable
         virtual Rectangle GetWindowExtentsRelative( Window *pRelativeWindow ) const;
         virtual void GrabFocus();
@@ -198,7 +198,7 @@ namespace svt { namespace table
         virtual bool IsRowSelected( sal_Int32 const i_rowIndex ) const;
         virtual void SelectRow( sal_Int32 const i_rowIndex, bool const i_select );
         virtual void SelectAllRows( bool const i_select );
-        // .............................................................................................................
+
 
     private:
         DECL_DLLPRIVATE_LINK( ImplSelectHdl, void* );
@@ -209,9 +209,9 @@ namespace svt { namespace table
         TableControl& operator=( const TableControl& ); // never implemented
     };
 
-//........................................................................
+
 } } // namespace svt::table
-//........................................................................
+
 
 #endif // INCLUDED_SVTOOLS_TABLE_TABLECONTROL_HXX
 

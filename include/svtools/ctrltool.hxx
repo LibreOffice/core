@@ -132,9 +132,9 @@ von der FontList, sollte deshalb das Array nicht mehr referenziert werden.
 
 *************************************************************************/
 
-// ------------
+
 // - FontList -
-// ------------
+
 
 #define FONTLIST_FONTINFO_NOTFOUND  ((sal_uInt16)0xFFFF)
 
@@ -212,9 +212,9 @@ private:
 };
 
 
-// -----------------
+
 // - FontSizeNames -
-// -----------------
+
 
 class SVT_DLLPUBLIC FontSizeNames
 {

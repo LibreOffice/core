@@ -29,9 +29,9 @@
 #include <vcl/unowrap.hxx>
 #include <vcl/window.hxx>
 
-//  ----------------------------------------------------
+
 //  class UnoWrapper
-//  ----------------------------------------------------
+
 
 class UnoWrapper : public UnoWrapperBase
 {

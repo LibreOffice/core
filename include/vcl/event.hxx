@@ -42,9 +42,9 @@ enum TextDirectionality {
     TextDirectionality_TopToBottom_RightToLeft
 };
 
-// ------------
+
 // - KeyEvent -
-// ------------
+
 class VCL_DLLPUBLIC KeyEvent
 {
 private:
@@ -81,9 +81,9 @@ inline KeyEvent::KeyEvent( sal_Unicode nChar, const KeyCode& rKeyCode,
     mnRepeat    = nRepeat;
 }
 
-// --------------------
+
 // - MouseEvent-Types -
-// --------------------
+
 
 // Maus-Move-Modi
 #define MOUSE_SIMPLEMOVE        ((sal_uInt16)0x0001)
@@ -105,9 +105,9 @@ inline KeyEvent::KeyEvent( sal_Unicode nChar, const KeyCode& rKeyCode,
 #define MOUSE_MIDDLE            ((sal_uInt16)0x0002)
 #define MOUSE_RIGHT             ((sal_uInt16)0x0004)
 
-// --------------
+
 // - MouseEvent -
-// --------------
+
 
 class VCL_DLLPUBLIC MouseEvent
 {
@@ -237,9 +237,9 @@ public:
     }
 };
 
-// -------------
+
 // - HelpEvent -
-// -------------
+
 
 #define HELPMODE_CONTEXT        ((sal_uInt16)0x0001)
 #define HELPMODE_EXTENDED       ((sal_uInt16)0x0002)
@@ -283,9 +283,9 @@ inline HelpEvent::HelpEvent( sal_uInt16 nHelpMode )
     mbKeyboardActivated = true;
 }
 
-// -----------------
+
 // - UserDrawEvent -
-// -----------------
+
 
 class VCL_DLLPUBLIC UserDrawEvent
 {
@@ -324,9 +324,9 @@ inline UserDrawEvent::UserDrawEvent( OutputDevice* pOut,
     mnStyle     = nStyle;
 }
 
-// ------------------
+
 // - Tracking-Types -
-// ------------------
+
 
 #define ENDTRACK_CANCEL         ((sal_uInt16)0x0001)
 #define ENDTRACK_KEY            ((sal_uInt16)0x0002)
@@ -336,9 +336,9 @@ inline UserDrawEvent::UserDrawEvent( OutputDevice* pOut,
 
 #define TRACKING_REPEAT         ((sal_uInt16)0x0100)
 
-// -----------------
+
 // - TrackingEvent -
-// -----------------
+
 
 class VCL_DLLPUBLIC TrackingEvent
 {
@@ -375,9 +375,9 @@ inline TrackingEvent::TrackingEvent( const MouseEvent& rMEvt,
     mnFlags = nTrackFlags;
 }
 
-// ---------------
+
 // - NotifyEvent -
-// ---------------
+
 
 #define EVENT_MOUSEBUTTONDOWN   1
 #define EVENT_MOUSEBUTTONUP     2
@@ -461,9 +461,9 @@ inline const CommandEvent* NotifyEvent::GetCommandEvent() const
         return NULL;
 }
 
-// --------------------
+
 // - DataChangedEvent -
-// --------------------
+
 
 #define DATACHANGED_SETTINGS            ((sal_uInt16)1)
 #define DATACHANGED_DISPLAY             ((sal_uInt16)2)

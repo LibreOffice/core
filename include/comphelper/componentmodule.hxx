@@ -31,10 +31,10 @@
 #include <rtl/string.hxx>
 #include <rtl/instance.hxx>
 
-//........................................................................
+
 namespace comphelper
 {
-//........................................................................
+
 
     /** factory factory declaration
     */
@@ -46,9 +46,9 @@ namespace comphelper
         rtl_ModuleCount*
     ) SAL_THROW(());
 
-    //=========================================================================
+
     //= ComponentDescription
-    //=========================================================================
+
     struct COMPHELPER_DLLPUBLIC ComponentDescription
     {
         /// the implementation name of the component
@@ -89,9 +89,9 @@ namespace comphelper
         }
     };
 
-    //=========================================================================
+
     //= OModule
-    //=========================================================================
+
     class OModuleImpl;
     class COMPHELPER_DLLPUBLIC OModule
     {
@@ -166,9 +166,9 @@ namespace comphelper
         OModule& operator=( const OModule& );   // never implemented
     };
 
-    //=========================================================================
+
     //= OModuleClient
-    //=========================================================================
+
     /** base class for objects which uses any global module-specific resources
     */
     class COMPHELPER_DLLPUBLIC OModuleClient
@@ -181,9 +181,9 @@ namespace comphelper
         ~OModuleClient()                                            { m_rModule.revokeClient( OModule::ClientAccess() ); }
     };
 
-    //==========================================================================
+
     //= OAutoRegistration
-    //==========================================================================
+
     template <class TYPE>
     class OAutoRegistration
     {
@@ -214,9 +214,9 @@ namespace comphelper
         );
     }
 
-    //==========================================================================
+
     //= OSingletonRegistration
-    //==========================================================================
+
     template <class TYPE>
     class OSingletonRegistration
     {
@@ -240,7 +240,7 @@ namespace comphelper
     };
 
     template <class TYPE>
-    //--------------------------------------------------------------------------
+
     OSingletonRegistration<TYPE>::OSingletonRegistration( OModule& _rModule )
     {
         _rModule.registerImplementation( ComponentDescription(
@@ -252,9 +252,9 @@ namespace comphelper
         ) );
     }
 
-//........................................................................
+
 } // namespace comphelper
-//........................................................................
+
 
 #endif // INCLUDED_COMPHELPER_COMPONENTMODULE_HXX
 

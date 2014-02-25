@@ -31,7 +31,7 @@ class NumericField;
 
 namespace svx {
 
-// ============================================================================
+
 
 class DialControlBmp : public VirtualDevice
 {
@@ -166,7 +166,7 @@ private:
     DECL_LINK( LinkedFieldModifyHdl, NumericField* );
 };
 
-// ============================================================================
+
 
 /** Wrapper for usage of a DialControl in item connections. */
 class SVX_DLLPUBLIC DialControlWrapper : public sfx::SingleControlWrapper< DialControl, sal_Int32 >
@@ -181,12 +181,12 @@ public:
     virtual void        SetControlValue( sal_Int32 nValue );
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** An item<->control connection for a DialControl. */
 typedef sfx::ItemControlConnection< sfx::Int32ItemWrapper, DialControlWrapper > DialControlConnection;
 
-// ============================================================================
+
 
 } // namespace svx
 

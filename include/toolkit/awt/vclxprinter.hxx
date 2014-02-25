@@ -45,9 +45,9 @@
      sal_uInt16 Orientation;    // PORTRAIT, LANDSCAPE
 */
 
-//  ----------------------------------------------------
+
 //  class VCLXPrinterPropertySet
-//  ----------------------------------------------------
+
 
 typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::awt::XPrinterPropertySet
                                 >   VCLXPrinterPropertySet_Base;
@@ -98,9 +98,9 @@ public:
     void SAL_CALL setBinarySetup( const ::com::sun::star::uno::Sequence< sal_Int8 >& data ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception);
 };
 
-//  ----------------------------------------------------
+
 //  class VCLXPrinter
-//  ----------------------------------------------------
+
 
 typedef ::cppu::ImplInheritanceHelper1  <   VCLXPrinterPropertySet
                                         ,   ::com::sun::star::awt::XPrinter
@@ -137,9 +137,9 @@ public:
     void SAL_CALL endPage(  ) throw(::com::sun::star::awt::PrinterException, ::com::sun::star::uno::RuntimeException, std::exception);
 };
 
-//  ----------------------------------------------------
+
 //  class VCLXInfoPrinter
-//  ----------------------------------------------------
+
 
 typedef ::cppu::ImplInheritanceHelper1  <   VCLXPrinterPropertySet
                                         ,   ::com::sun::star::awt::XInfoPrinter
@@ -170,9 +170,9 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice > SAL_CALL createDevice(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
 };
 
-//  ----------------------------------------------------
+
 //  class VCLXPrinterServer
-//  ----------------------------------------------------
+
 
 typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::awt::XPrinterServer
                                 >   VCLXPrinterServer_Base;

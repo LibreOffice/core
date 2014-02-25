@@ -46,7 +46,7 @@ struct VCL_DLLPUBLIC PPDValue
     OUString        m_aValue;
 };
 
-// ----------------------------------------------------------------------
+
 
 /*
  * PPDKey - a container for the available options (=values) of a PPD keyword
@@ -105,7 +105,7 @@ struct PPDKeyhash
         { return (size_t)pKey; }
 };
 
-// ----------------------------------------------------------------------
+
 
 /*
  * PPDParser - parses a PPD file and contains all available keys from it
@@ -255,7 +255,7 @@ public:
                                      const com::sun::star::lang::Locale& i_rLocale = com::sun::star::lang::Locale() ) const;
 };
 
-// ----------------------------------------------------------------------
+
 
 /*
  * PPDContext - a class to manage user definable states based on the

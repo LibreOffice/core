@@ -27,7 +27,7 @@
 
 namespace oox {
 
-// ============================================================================
+
 
 /** Template for a vector of ref-counted objects with additional accessor functions.
 
@@ -186,7 +186,7 @@ private:
                         }
 };
 
-// ============================================================================
+
 
 } // namespace oox
 

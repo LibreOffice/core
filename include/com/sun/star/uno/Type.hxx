@@ -32,60 +32,60 @@ namespace star
 namespace uno
 {
 
-//__________________________________________________________________________________________________
+
 inline Type::Type() SAL_THROW(())
 {
     _pType = reinterpret_cast< const ::com::sun::star::uno::Type * >(
         ::typelib_static_type_getByTypeClass( typelib_TypeClass_VOID ) )->getTypeLibType();
     ::typelib_typedescriptionreference_acquire( _pType );
 }
-//__________________________________________________________________________________________________
+
 inline Type::Type( TypeClass eTypeClass, const ::rtl::OUString & rTypeName ) SAL_THROW(())
     : _pType( 0 )
 {
     ::typelib_typedescriptionreference_new( &_pType, (typelib_TypeClass)eTypeClass, rTypeName.pData );
 }
-//__________________________________________________________________________________________________
+
 inline Type::Type( TypeClass eTypeClass, const sal_Char * pTypeName ) SAL_THROW(())
     : _pType( 0 )
 {
     ::typelib_typedescriptionreference_newByAsciiName( &_pType, (typelib_TypeClass)eTypeClass, pTypeName );
 }
-//__________________________________________________________________________________________________
+
 inline Type::Type( typelib_TypeDescriptionReference * pType ) SAL_THROW(())
     : _pType( pType )
 {
     ::typelib_typedescriptionreference_acquire( _pType );
 }
-//__________________________________________________________________________________________________
+
 inline Type::Type( typelib_TypeDescriptionReference * pType, UnoType_NoAcquire ) SAL_THROW(())
     : _pType( pType )
 {
 }
-//__________________________________________________________________________________________________
+
 inline Type::Type( typelib_TypeDescriptionReference * pType, __sal_NoAcquire ) SAL_THROW(())
     : _pType( pType )
 {
 }
-//__________________________________________________________________________________________________
+
 inline Type::Type( const Type & rType ) SAL_THROW(())
     : _pType( rType._pType )
 {
     ::typelib_typedescriptionreference_acquire( _pType );
 }
-//__________________________________________________________________________________________________
+
 inline ::rtl::OUString Type::getTypeName() const SAL_THROW(())
 {
     return ::rtl::OUString( _pType->pTypeName );
 }
-//__________________________________________________________________________________________________
+
 inline Type & Type::operator = ( const Type & rType ) SAL_THROW(())
 {
     ::typelib_typedescriptionreference_assign( &_pType, rType._pType );
     return *this;
 }
 
-//__________________________________________________________________________________________________
+
 template< class T >
 typelib_TypeDescriptionReference * Array< T >::s_pType = 0;
 

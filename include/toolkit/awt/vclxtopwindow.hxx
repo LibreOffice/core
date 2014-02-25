@@ -78,9 +78,9 @@ public:
     virtual void SAL_CALL setDisplay( ::sal_Int32 _display ) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IndexOutOfBoundsException, std::exception);
 };
 
-//  ----------------------------------------------------
+
 //  class VCLXTopWindow
-//  ----------------------------------------------------
+
 
 class TOOLKIT_DLLPUBLIC VCLXTopWindow: public VCLXTopWindow_Base,
                      public VCLXContainer

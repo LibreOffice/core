@@ -43,7 +43,7 @@ class SdrModel;
 
 class SfxBindings;
 
-//------------------------------------------------------------------------
+
 
 namespace svx
 {
@@ -62,7 +62,7 @@ public:
     virtual SfxPopupWindow*     CreatePopupWindow();
 };
 
-//------------------------------------------------------------------------
+
 
 class FontworkCharacterSpacingDialog : public ModalDialog
 {

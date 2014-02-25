@@ -127,11 +127,11 @@ public:
 enum PptPageKind { PPT_MASTERPAGE, PPT_SLIDEPAGE, PPT_NOTEPAGE };
 
 enum PptPageFormat
-{   PPTPF_SCREEN,   //
+{   PPTPF_SCREEN,
     PPTPF_USLETTER, // 8.5x11"
     PPTPF_A4,       // 210x297mm
     PPTPF_35MMDIA,  // DIA
-    PPTPF_OVERHEAD, //
+    PPTPF_OVERHEAD,
     PPTPF_CUSTOM
 };
 
@@ -446,7 +446,7 @@ public:
     void                ImportHeaderFooterContainer( DffRecordHeader& rHeader, HeaderFooterEntry& rEntry );
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 #define SD_HEADERFOOTER_DATE        1
 #define SD_HEADERFOOTER_TODAYDATE   2
@@ -508,7 +508,7 @@ struct ProcessData
     ~ProcessData() { delete[] pTableRowProperties; };
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 typedef ::std::vector< SdHyperlinkEntry* > SdHyperlinkEntryList;
 class SdrTextObj;

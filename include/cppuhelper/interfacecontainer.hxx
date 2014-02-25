@@ -33,7 +33,7 @@ inline OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::OMul
     m_pMap = new InterfaceMap;
 }
 
-//===================================================================
+
 template< class key , class hashImpl , class equalImpl >
 inline OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::~OMultiTypeInterfaceContainerHelperVar()
     SAL_THROW(())
@@ -50,7 +50,7 @@ inline OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::~OMu
     delete m_pMap;
 }
 
-//===================================================================
+
 template< class key , class hashImpl , class equalImpl >
 inline ::com::sun::star::uno::Sequence< key > OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::getContainedTypes() const
     SAL_THROW(())
@@ -83,7 +83,7 @@ inline ::com::sun::star::uno::Sequence< key > OMultiTypeInterfaceContainerHelper
     return ::com::sun::star::uno::Sequence<key>();
 }
 
-//===================================================================
+
 template< class key , class hashImpl , class equalImpl >
 OInterfaceContainerHelper * OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::getContainer(
     const key & rKey ) const SAL_THROW(())
@@ -96,7 +96,7 @@ OInterfaceContainerHelper * OMultiTypeInterfaceContainerHelperVar< key , hashImp
     return 0;
 }
 
-//===================================================================
+
 template< class key , class hashImpl , class equalImpl >
 sal_Int32 OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::addInterface(
     const key & rKey,
@@ -115,7 +115,7 @@ sal_Int32 OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::a
         return ((OInterfaceContainerHelper*)(*iter).second)->addInterface( rListener );
 }
 
-//===================================================================
+
 template< class key , class hashImpl , class equalImpl >
 inline sal_Int32 OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::removeInterface(
     const key & rKey,
@@ -134,7 +134,7 @@ inline sal_Int32 OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalIm
     return 0;
 }
 
-//===================================================================
+
 template< class key , class hashImpl , class equalImpl >
 void OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::disposeAndClear(
     const ::com::sun::star::lang::EventObject & rEvt )
@@ -172,7 +172,7 @@ void OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::dispos
     delete [] ppListenerContainers;
 }
 
-//===================================================================
+
 template< class key , class hashImpl , class equalImpl >
 void OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::clear() SAL_THROW(())
 {

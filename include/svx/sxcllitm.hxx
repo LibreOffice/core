@@ -23,24 +23,24 @@
 #include <svx/sdynitm.hxx>
 #include <svx/sdmetitm.hxx>
 
-//------------------------------------
+
 // class SdrCaptionLineLenItem
 // Laenge der ersten Austrittslinie
 // Nur bei Type3 und Type4
 // Nur relevant, wenn SdrCaptionFitLineLenItem=FALSE
-//------------------------------------
+
 class SdrCaptionLineLenItem: public SdrMetricItem {
 public:
     SdrCaptionLineLenItem(long nLineLen=0): SdrMetricItem(SDRATTR_CAPTIONLINELEN,nLineLen) {}
     SdrCaptionLineLenItem(SvStream& rIn)  : SdrMetricItem(SDRATTR_CAPTIONLINELEN,rIn)      {}
 };
 
-//------------------------------------
+
 // class SdrCaptionFitLineLenItem
 // Laenge der ersten Austrittslinie automatisch berechnen oder
 // Vorgabe (SdrCaptionLineLenItem) verwenden.
 // Nur bei Type3 und Type4
-//------------------------------------
+
 class SdrCaptionFitLineLenItem: public SdrYesNoItem {
 public:
     SdrCaptionFitLineLenItem(sal_Bool bBestFit=sal_True): SdrYesNoItem(SDRATTR_CAPTIONFITLINELEN,bBestFit) {}

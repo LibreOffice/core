@@ -73,7 +73,7 @@ ClassName* ClassName::GetImplementation( const ::com::sun::star::uno::Reference<
     return xUT.is() ? reinterpret_cast<ClassName*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething( ClassName::GetUnoTunnelId() ))) : NULL; \
 }
 
-// -------------------------------------------------------------------------------------
+
 
 #define IMPL_IMPLEMENTATION_ID( ClassName ) \
 ::com::sun::star::uno::Sequence< sal_Int8 > ClassName::getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) \
@@ -104,7 +104,7 @@ IMPL_IMPLEMENTATION_ID( ClassName ) \
             static ::cppu::OTypeCollection collection( \
             getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider>* ) NULL ),
 
-// -------------------------------------------------------------------------------------
+
 
 #define IMPL_XTYPEPROVIDER_END \
             ); \
@@ -114,7 +114,7 @@ IMPL_IMPLEMENTATION_ID( ClassName ) \
     return (*pCollection).getTypes(); \
 }
 
-// -------------------------------------------------------------------------------------
+
 
 #define DECL_LISTENERMULTIPLEXER_START( ClassName, InterfaceName ) \
 class ClassName : public ListenerMultiplexerBase, public InterfaceName \
@@ -126,7 +126,7 @@ public: \
     void                        SAL_CALL release() throw()  { ListenerMultiplexerBase::release(); } \
     void                        SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception);
 
-// -------------------------------------------------------------------------------------
+
 
 #define DECL_LISTENERMULTIPLEXER_START_DLLPUB( ClassName, InterfaceName ) \
 class TOOLKIT_DLLPUBLIC ClassName : public ListenerMultiplexerBase, public InterfaceName \
@@ -138,12 +138,12 @@ public: \
     void                        SAL_CALL release() throw()  { ListenerMultiplexerBase::release(); } \
     void                        SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception);
 
-// -------------------------------------------------------------------------------------
+
 
 #define DECL_LISTENERMULTIPLEXER_END \
 };
 
-// -------------------------------------------------------------------------------------
+
 
 #define IMPL_LISTENERMULTIPLEXER_BASEMETHODS( ClassName, InterfaceName ) \
 ClassName::ClassName( ::cppu::OWeakObject& rSource ) \
@@ -161,7 +161,7 @@ void ClassName::disposing( const ::com::sun::star::lang::EventObject& ) throw(::
 { \
 }
 
-// -------------------------------------------------------------------------------------
+
 
 #if OSL_DEBUG_LEVEL > 0
     #define DISPLAY_EXCEPTION( ClassName, MethodName, e )    \
@@ -257,7 +257,7 @@ IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_BODY( ClassName, InterfaceName, MethodNa
 void ClassName::MethodName( const EventType& evt ) throw(::com::sun::star::uno::RuntimeException, std::exception) \
 IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_BODY( ClassName, InterfaceName, MethodName, EventType )
 
-// -------------------------------------------------------------------------------------
+
 
 #define DECLIMPL_SUPPORTS_SERVICE( ) \
     sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception) \
@@ -271,7 +271,7 @@ IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_BODY( ClassName, InterfaceName, MethodNa
         return sal_False; \
     }
 
-// -------------------------------------------------------------------------------------
+
 
 #define DECLIMPL_SERVICEINFO_DERIVED( ImplName, BaseClass, ServiceName ) \
     OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) { return OUString("stardiv.Toolkit." #ImplName ); } \
@@ -283,7 +283,7 @@ IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_BODY( ClassName, InterfaceName, MethodNa
                                 return aNames; \
                             } \
 
-// -------------------------------------------------------------------------------------
+
 
 #define DECLIMPL_SERVICEINFO( ImplName, ServiceName ) \
     OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) { return OUString("stardiv.Toolkit." #ImplName ); } \

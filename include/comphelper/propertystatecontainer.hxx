@@ -29,14 +29,14 @@
 
 #include <map>
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
 
-    //=====================================================================
+
+
     //= OPropertyStateContainer
-    //=====================================================================
+
     typedef ::cppu::ImplHelper1 <   ::com::sun::star::beans::XPropertyState
                                 >   OPropertyStateContainer_TBase;
 
@@ -57,14 +57,14 @@ namespace comphelper
         */
         OPropertyStateContainer( ::cppu::OBroadcastHelper&  _rBHelper );
 
-        // ................................................................
+
         // XPropertyState
         virtual ::com::sun::star::beans::PropertyState SAL_CALL getPropertyState( const OUString& PropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception);
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState > SAL_CALL getPropertyStates( const ::com::sun::star::uno::Sequence< OUString >& aPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception);
         virtual void SAL_CALL setPropertyToDefault( const OUString& PropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception);
         virtual ::com::sun::star::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception);
 
-        // ................................................................
+
         // own overridables
         // these are the impl-methods for the XPropertyState members - they are implemented already by this class,
         // but you may want to override them for whatever reasons (for instance, if your derived class
@@ -105,9 +105,9 @@ namespace comphelper
         sal_Int32   getHandleForName( const OUString& _rPropertyName ) SAL_THROW( ( ::com::sun::star::beans::UnknownPropertyException ) );
     };
 
-//.........................................................................
+
 }   // namespace comphelper
-//.........................................................................
+
 
 #endif // INCLUDED_COMPHELPER_PROPERTYSTATECONTAINER_HXX
 

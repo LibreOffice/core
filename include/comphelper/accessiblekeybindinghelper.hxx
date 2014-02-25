@@ -28,14 +28,14 @@
 
 #include <comphelper/comphelperdllapi.h>
 
-//..............................................................................
+
 namespace comphelper
 {
-//..............................................................................
 
-    //==============================================================================
+
+
     // OAccessibleKeyBindingHelper
-    //==============================================================================
+
 
     typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::accessibility::XAccessibleKeyBinding
                                     >   OAccessibleKeyBindingHelper_Base;
@@ -66,9 +66,9 @@ namespace comphelper
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::awt::KeyStroke > SAL_CALL getAccessibleKeyBinding( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception);
     };
 
-//..............................................................................
+
 }   // namespace comphelper
-//..............................................................................
+
 
 #endif // INCLUDED_COMPHELPER_ACCESSIBLEKEYBINDINGHELPER_HXX
 

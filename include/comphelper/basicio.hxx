@@ -24,10 +24,10 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <comphelper/comphelperdllapi.h>
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
+
 
 namespace stario    = ::com::sun::star::io;
 namespace staruno   = ::com::sun::star::uno;
@@ -93,9 +93,9 @@ const staruno::Reference<stario::XObjectOutputStream>& operator << (const starun
     return _rxOutStream;
 }
 
-//.........................................................................
+
 }   // namespace comphelper
-//.........................................................................
+
 
 #endif // INCLUDED_COMPHELPER_BASICIO_HXX
 

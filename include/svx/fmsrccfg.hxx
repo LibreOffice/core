@@ -24,7 +24,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <svx/svxdllapi.h>
 
-// ===================================================================================================
+
 
 #define MATCHING_ANYWHERE       0
 #define MATCHING_BEGINNING      1
@@ -37,14 +37,14 @@
 // to be adapted)
 
 
-//........................................................................
+
 namespace svxform
 {
-//........................................................................
 
-    // ===================================================================================================
+
+
     // = struct FmSearchParams - parameters of a search
-    // ===================================================================================================
+
 
     struct SVX_DLLPUBLIC FmSearchParams
     {
@@ -75,7 +75,7 @@ namespace svxform
 
         sal_Bool        bSoundsLikeCJK;
 
-        // ......................................
+
         FmSearchParams();
 
         sal_Bool    isIgnoreWidthCJK( ) const;
@@ -87,9 +87,9 @@ namespace svxform
         void        setCaseSensitive( sal_Bool _bCase );
     };
 
-    // ===================================================================================================
+
     // = class FmSearchConfigItem - a ConfigItem, that remembers search parameters
-    // ===================================================================================================
+
 
     class SVX_DLLPUBLIC FmSearchConfigItem
                 :protected  FmSearchParams
@@ -136,11 +136,11 @@ namespace svxform
         SVX_DLLPRIVATE void implTranslateToConfig( );
     };
 
-//........................................................................
-}   // namespace svxform
-//........................................................................
 
-// ===================================================================================================
+}   // namespace svxform
+
+
+
 
 #endif // INCLUDED_SVX_FMSRCCFG_HXX
 

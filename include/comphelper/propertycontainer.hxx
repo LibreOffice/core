@@ -25,10 +25,10 @@
 #include <com/sun/star/uno/Type.hxx>
 #include <comphelper/comphelperdllapi.h>
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
+
 
 /** a OPropertySetHelper implementation which is just a simple container for properties represented
     by class members, usually in a derived class.
@@ -77,9 +77,9 @@ protected:
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception);
 };
 
-//.........................................................................
+
 }   // namespace comphelper
-//.........................................................................
+
 
 #endif // INCLUDED_COMPHELPER_PROPERTYCONTAINER_HXX
 

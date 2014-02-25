@@ -49,11 +49,11 @@ enum SdrEndTextEditKind {SDRENDTEXTEDIT_UNCHANGED, // Textobjekt unveraendert
                          SDRENDTEXTEDIT_DELETED,   // Textobjekt implizit geloescht
                          SDRENDTEXTEDIT_SHOULDBEDELETED}; // Fuer Writer: Textobjekt sollte geloescht werden
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // - Allgemeines Edit fuer objektspeziefische Eigenschaften
 // - Textedit fuer alle vom SdrTextObj abgeleiteten Zeichenobjekte
 // - Macromodus
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 class SVX_DLLPUBLIC SdrObjEditView: public SdrGlueEditView
 {
@@ -134,7 +134,7 @@ protected:
     virtual ~SdrObjEditView();
 
 public:
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
     // used to call the old ImpPaintOutlinerView. Will be replaced when the
     // outliner will be displayed on the overlay in edit mode.
     void TextEditDrawing(SdrPaintWindow& rPaintWindow) const;
@@ -150,9 +150,9 @@ public:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
     virtual void ModelHasChanged();
 
-    //************************************************************************
+
     // TextEdit ueber einen Outliner
-    //************************************************************************
+
     // QuickTextEditMode bedeutet, dass Objekte mit Text sofort beim Anklicken
     // editiert werden sollen. Default=TRUE. Persistent.
     void SetQuickTextEditMode(sal_Bool bOn) { bQuickTextEditMode=bOn; }
@@ -237,9 +237,9 @@ public:
     sal_uInt16 GetSelectionLevel() const;
 
 
-    //************************************************************************
+
     // Object-MacroModus (z.B. Rect als Button oder sowas):
-    //************************************************************************
+
     // Persistent. Default TRUE. SvDraw wertet das Flag u.a. bei
     // SdrView::GetPreferredPointer() aus. Hat nur Wirkung, wenn das Dokument
     // Draw-Objekte mit Macrofunktionalitaet hat (SdrObject::HasMacro()==sal_True).

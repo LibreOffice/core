@@ -36,9 +36,9 @@ class OutputDevice;
 namespace svx {
 namespace frame {
 
-// ============================================================================
+
 // Enums
-// ============================================================================
+
 
 /** Specifies how the reference points for frame borders are used.
  */
@@ -62,9 +62,9 @@ enum RefMode
     REFMODE_END
 };
 
-// ============================================================================
+
 // Classes
-// ============================================================================
+
 
 /** Contains the widths of primary and secondary line of a frame style.
 
@@ -180,7 +180,7 @@ inline bool operator>( const Style& rL, const Style& rR ) { return rR < rL; }
 inline bool operator<=( const Style& rL, const Style& rR ) { return !(rR < rL); }
 inline bool operator>=( const Style& rL, const Style& rR ) { return !(rL < rR); }
 
-// ----------------------------------------------------------------------------
+
 
 /** Extends the Style struct with an angle for diagonal frame borders.
 
@@ -206,9 +206,9 @@ private:
     double              mfAngle;    /// Angle between this and hor. or vert. border.
 };
 
-// ============================================================================
+
 // Various helper functions
-// ============================================================================
+
 
 /** Returns the angle between horizontal border of a rectangle and its diagonal.
 
@@ -244,7 +244,7 @@ inline double GetHorDiagAngle( const Point& rP1, const Point& rP2 )
 inline double GetHorDiagAngle( const Rectangle& rRect )
 { return GetHorDiagAngle( rRect.GetWidth(), rRect.GetHeight() ); }
 
-// ----------------------------------------------------------------------------
+
 
 /** Returns the angle between vertical border of a rectangle and its diagonal.
 
@@ -281,7 +281,7 @@ inline double GetVerDiagAngle( const Point& rP1, const Point& rP2 )
 inline double GetVerDiagAngle( const Rectangle& rRect )
 { return GetVerDiagAngle( rRect.GetWidth(), rRect.GetHeight() ); }
 
-// ============================================================================
+
 
 /** Returns an X coordinate for a diagonal frame border in the specified height.
 
@@ -397,7 +397,7 @@ long GetBRDiagOffset( long nVerOffs, long nDiagOffs, double fAngle );
  */
 long GetTRDiagOffset( long nVerOffs, long nDiagOffs, double fAngle );
 
-// ============================================================================
+
 
 /** Checks whether two horizontal frame borders are "connectable".
 
@@ -440,9 +440,9 @@ SVX_DLLPUBLIC bool CheckFrameBorderConnectable(
     const Style&        rBFromBR        /// Horizontal frame border from bottom-right to connection point.
 );
 
-// ============================================================================
+
 // Drawing functions
-// ============================================================================
+
 
 /** Draws a horizontal frame border, regards all connected frame styles.
 
@@ -580,7 +580,7 @@ SVX_DLLPUBLIC void DrawHorFrameBorder(
     const Color*        pForceColor = 0 /// If specified, overrides frame border color.
 );
 
-// ============================================================================
+
 
 /** Draws a vertical frame border, regards all connected frame styles.
 
@@ -651,7 +651,7 @@ SVX_DLLPUBLIC void DrawVerFrameBorder(
     const Color*        pForceColor = 0 /// If specified, overrides frame border color.
 );
 
-// ============================================================================
+
 
 /** Draws both diagonal frame borders, regards all connected frame styles.
 
@@ -680,7 +680,7 @@ SVX_DLLPUBLIC void DrawDiagFrameBorders(
     bool                bDiagDblClip = false    /// true = Use clipping for crossing double frame borders.
 );
 
-// ============================================================================
+
 
 } // namespace frame
 } // namespace svx

@@ -30,12 +30,12 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <tools/debug.hxx>
 
-//.........................................................................
+
 namespace utl
 {
-//.........................................................................
 
-//=========================================================================
+
+
 // to shorten some lines ...
 typedef ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  TypeSequence;
 
@@ -74,11 +74,11 @@ public:
 typedef std::map<TypeSequence, ::cppu::OImplementationId, TypeSequenceLess>
 MapType2Id;
 
-//.........................................................................
-}   // namespace utl
-//.........................................................................
 
-//=========================================================================
+}   // namespace utl
+
+
+
 /** defines a helper class for implementing the XTypeProvider::getImplementationId.
     it maps sequences of ::com::sun::star::uno::Type to implementation ids
     (which means sequences of bytes).<BR>

@@ -28,9 +28,9 @@
 
 #include <toolkit/awt/vclxwindow.hxx>
 
-//  ----------------------------------------------------
+
 //  class VCLXSystemDependendtWindow
-//  ----------------------------------------------------
+
 
 class TOOLKIT_DLLPUBLIC VCLXSystemDependentWindow : public ::com::sun::star::awt::XSystemDependentWindowPeer,
                                                     public VCLXWindow

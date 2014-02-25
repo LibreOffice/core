@@ -20,12 +20,12 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_DRAWINGLAYER_PRIMITIVETYPES3D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_DRAWINGLAYER_PRIMITIVETYPES3D_HXX
 
-//////////////////////////////////////////////////////////////////////////////
+
 // define ranges for other libraries
 
 #define PRIMITIVE3D_ID_RANGE_DRAWINGLAYER           (0 << 16)
 
-//////////////////////////////////////////////////////////////////////////////
+
 // local primitives
 
 #define PRIMITIVE3D_ID_GROUPPRIMITIVE3D                         (PRIMITIVE3D_ID_RANGE_DRAWINGLAYER| 0)
@@ -48,7 +48,7 @@
 #define PRIMITIVE3D_ID_TRANSFORMPRIMITIVE3D                     (PRIMITIVE3D_ID_RANGE_DRAWINGLAYER| 17)
 #define PRIMITIVE3D_ID_HIDDENGEOMETRYPRIMITIVE3D                (PRIMITIVE3D_ID_RANGE_DRAWINGLAYER| 18)
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_DRAWINGLAYER_PRIMITIVE3D_DRAWINGLAYER_PRIMITIVETYPES3D_HXX
 

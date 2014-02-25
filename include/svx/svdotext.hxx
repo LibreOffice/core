@@ -33,9 +33,9 @@
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <svx/svdpagv.hxx>
 
-//************************************************************
+
 //   Vorausdeklarationen
-//************************************************************
+
 
 class OutlinerParaObject;
 class SdrOutliner;
@@ -70,15 +70,15 @@ namespace sdr { namespace table {
     class SdrTableRTFParser;
 }}
 
-//************************************************************
+
 //   Defines
-//************************************************************
+
 
 #define SDRUSERDATA_OBJTEXTLINK         (1)
 
-//************************************************************
+
 //   Hilfsklasse SdrTextObjGeoData
-//************************************************************
+
 
 class SdrTextObjGeoData : public SdrObjGeoData
 {
@@ -87,9 +87,9 @@ public:
     GeoStat                     aGeo;
 };
 
-//************************************************************
+
 //   Hilfsklasse ImpSdrObjTextLinkUserData
-//************************************************************
+
 
 class ImpSdrObjTextLinkUserData : public SdrObjUserData
 {
@@ -120,9 +120,9 @@ namespace sdr
     } // end of namespace properties
 } // end of namespace sdr
 
-//************************************************************
+
 //   SdrTextObj
-//************************************************************
+
 
 class SVX_DLLPUBLIC SdrTextObj : public SdrAttrObj, public svx::ITextProvider
 {
@@ -518,14 +518,14 @@ public:
     /** called from the SdrObjEditView during text edit when the status of the edit outliner changes */
     virtual void onEditOutlinerStatusEvent( EditStatus* pEditStatus );
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    //
+
+
     // transformation interface for StarOfficeAPI. This implements support for
     // homogen 3x3 matrices containing the transformation of the SdrObject. At the
     // moment it contains a shearX, rotation and translation, but for setting all linear
     // transforms like Scale, ShearX, ShearY, Rotate and Translate are supported.
-    //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
     // gets base transformation and rectangle of object. If it's an SdrPathObj it fills the PolyPolygon
     // with the base geometry and returns TRUE. Otherwise it returns FALSE.
     virtual sal_Bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const;
@@ -555,7 +555,7 @@ public:
     void SetObjectItemNoBroadcast(const SfxPoolItem& rItem);
 
 public:
-    //////////////////////////////////////////////////////////////////////////////
+
     // text primitive decomposition helpers
     void impDecomposeContourTextPrimitive(
         drawinglayer::primitive2d::Primitive2DSequence& rTarget,
@@ -578,7 +578,7 @@ public:
         const drawinglayer::primitive2d::SdrStretchTextPrimitive2D& rSdrStretchTextPrimitive,
         const drawinglayer::geometry::ViewInformation2D& aViewInformation) const;
 
-    //////////////////////////////////////////////////////////////////////////////
+
     // timing generators
     void impGetBlinkTextTiming(drawinglayer::animation::AnimationEntryList& rAnimList) const;
     void impGetScrollTextTiming(drawinglayer::animation::AnimationEntryList& rAnimList, double fFrameLength, double fTextLength) const;
@@ -590,7 +590,7 @@ public:
     static bool HasTextImpl( SdrOutliner* pOutliner );
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SVDOTEXT_HXX
 

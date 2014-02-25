@@ -23,7 +23,7 @@ class VclBuilderContainer;
 //right, get both of their non-preview areas to request the same size so that
 //the preview appears in the same place in each one so flipping between tabs
 //isn't distracting as it jumps around
-//
+
 //there has to be a "maingrid" container which contains all the widgets
 //except for the preview widget
 void SFX2_DLLPUBLIC setPreviewsToSamePlace(Window *pParent, VclBuilderContainer *pPage);
