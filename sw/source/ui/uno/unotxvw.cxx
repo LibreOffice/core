@@ -1365,7 +1365,8 @@ sal_Bool SwXTextViewCursor::screenUp(void) throw( uno::RuntimeException )
     return bRet;
 }
 
-uno::Reference< text::XText >  SwXTextViewCursor::getText(void) throw( uno::RuntimeException )
+uno::Reference< text::XText >  SwXTextViewCursor::getText()
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Reference< text::XText >  xRet;

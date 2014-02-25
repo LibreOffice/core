@@ -224,7 +224,9 @@ public:
                std::exception);
 
     //XTextRange
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >  SAL_CALL getText(void) throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >  SAL_CALL getText()
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > SAL_CALL  getStart(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > SAL_CALL   getEnd()
         throw (::com::sun::star::uno::RuntimeException,
