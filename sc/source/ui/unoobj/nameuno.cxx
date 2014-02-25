@@ -245,7 +245,7 @@ OUString SAL_CALL ScNamedRangeObj::getContent() throw(uno::RuntimeException)
 }
 
 void SAL_CALL ScNamedRangeObj::setContent( const OUString& aContent )
-                                                throw(uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     OUString aContStr(aContent);

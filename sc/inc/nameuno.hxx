@@ -82,7 +82,8 @@ public:
                             /// XNamedRange
     virtual OUString SAL_CALL getContent() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setContent( const OUString& aContent )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw (::com::sun::star::uno::RuntimeException,
+                                       std::exception);
     virtual ::com::sun::star::table::CellAddress SAL_CALL getReferencePosition()
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setReferencePosition(
