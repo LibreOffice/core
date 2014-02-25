@@ -299,10 +299,10 @@ namespace rtl_ustr
 //         CPPUNIT_TEST(hashCode_003);
 //         CPPUNIT_TEST_SUITE_END();
 //     }; // class compare
-//
-//
-//
-//
+
+
+
+
     class indexOfChar : public CppUnit::TestFixture
     {
     public:
@@ -348,7 +348,7 @@ namespace rtl_ustr
         CPPUNIT_TEST_SUITE_END();
     }; // class indexOfChar
 
-//
+
     class lastIndexOfChar : public CppUnit::TestFixture
     {
     public:

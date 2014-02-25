@@ -36,19 +36,19 @@ extern "C"
 
 
 
-//------------------------------------------------------------------------
+
 // common used string resource
 // these common used string will be used as assist resource in test
 // they are mostly OS independent, some of the resource can be reused
 // so, acommon test data repository will be better since it can be
 // shared among all test code
-//------------------------------------------------------------------------
+
 
 const sal_Char pBuffer_Char[]   = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const sal_Char pBuffer_Number[] = "1234567890";
 const sal_Char pBuffer_Blank[]  = "";
 
-//------------------------------------------------------------------------
+
 // OS dependent/independent definitions/includes
 // we use FILE_PREFIX for URL prefix,
 //        TEST_PLATFORM for test platform initial,
@@ -57,17 +57,17 @@ const sal_Char pBuffer_Blank[]  = "";
 //        PATH_LIST_DELIMITER for separator of path list in comrresponding platform,
 //        PATH_SEPARATOR for separator in URL or system path in comrresponding platform,
 //        PATH_MAX/MAX_PATH for max path length in comrresponding platform,
-//------------------------------------------------------------------------
 
-//------------------------------------------------------------------------
+
+
 // OS independent const definition
-//------------------------------------------------------------------------
+
 #   define FILE_PREFIX          "file:///"
 #   define TEST_FILE_SIZE       1024
 
-//------------------------------------------------------------------------
+
 // OS dependent declaration and includes
-//------------------------------------------------------------------------
+
 #if ( defined UNX )  //Unix
 #   include <unistd.h>
 #   include <limits.h>
@@ -106,12 +106,12 @@ const sal_Char pBuffer_Blank[]  = "";
 #endif
 
 
-//------------------------------------------------------------------------
+
 // macro definition for the ASCII array/OUString declarations,
 // we use p### for the ASCII array,
 //        a### for the OUString,
 //        n###Len for its length
-//------------------------------------------------------------------------
+
 
 #define OSLTEST_DECLARE( str_name, str_value ) \
     ::rtl::OUString a##str_name = rtl::OUString::createFromAscii( ( str_value ) )
@@ -119,9 +119,9 @@ const sal_Char pBuffer_Blank[]  = "";
 #define OSLTEST_DECLARE_UTF8(str_name, str_value ) \
     ::rtl::OUString a##str_name = ::rtl::Uri::decode( ::rtl::OUString::createFromAscii( ( str_value ) ), rtl_UriDecodeToIuri, RTL_TEXTENCODING_UTF8)
 
-//------------------------------------------------------------------------
+
 // OS independent file definition
-//------------------------------------------------------------------------
+
 OSLTEST_DECLARE( NullURL,  "" );
 OSLTEST_DECLARE( SlashURL, PATH_SEPARATOR );
 OSLTEST_DECLARE( PreURL, FILE_PREFIX );
@@ -132,9 +132,9 @@ OSLTEST_DECLARE( TempDirectorySys,  TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP );
 OSLTEST_DECLARE( UserDirectoryURL,  FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "" );
 OSLTEST_DECLARE( UserDirectorySys,  TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "" );
 
-//------------------------------------------------------------------------
+
 // common used URL:temp, canonical, root, relative, link,etc
-//------------------------------------------------------------------------
+
 OSLTEST_DECLARE( CanURL1,  FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/canonical.name" );
 OSLTEST_DECLARE( CanURL2,  "ca@#;+.,$///78no\0ni..name" );
 OSLTEST_DECLARE( CanURL3,  "ca@#;+.,$//tmp/678nonical//name" );
@@ -158,9 +158,9 @@ OSLTEST_DECLARE( RelURL5,  TEST_PLATFORM_TEMP "/./../" TEST_PLATFORM_TEMP );
 OSLTEST_DECLARE( LnkURL1,  FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/link.file" );
 OSLTEST_DECLARE( HidURL1,  ".hiddenfile" );
 
-//------------------------------------------------------------------------
+
 // common used System Path:temp, root,etc
-//------------------------------------------------------------------------
+
 OSLTEST_DECLARE( RootSys,  TEST_PLATFORM_ROOT );
 OSLTEST_DECLARE( SysPath1, TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/system.path" );
 OSLTEST_DECLARE( SysPath2, TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/system/path" );
@@ -170,11 +170,11 @@ OSLTEST_DECLARE_UTF8( SysPath5, TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/%E6%9C%A
 OSLTEST_DECLARE( SysPathLnk, TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/link.file" );
 OSLTEST_DECLARE( FifoSys,  TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/tmpdir/fifo" );
 
-//------------------------------------------------------------------------
+
 // FileType URL, we pick some canonical file in corresponding system for test:
 // socket, link, etc.
 // Note that this may be changed in the different platform, so be careful to use.
-//------------------------------------------------------------------------
+
 #if ( defined UNX )                                                    //          Unix
 OSLTEST_DECLARE( TypeURL1,  FILE_PREFIX "dev/ccv");                    //socket    Solaris/Linux
 OSLTEST_DECLARE( TypeURL2,  FILE_PREFIX "devices/pseudo/tcp@0:tcp");   //special   Solaris/Linux
@@ -185,10 +185,10 @@ OSLTEST_DECLARE( TypeURL2,  FILE_PREFIX "" );
 OSLTEST_DECLARE( TypeURL3,  FILE_PREFIX "" );
 #endif
 
-//------------------------------------------------------------------------
+
 // Volume device URL, we pick some canonical volume device for test:
 // UNIX file system, Floppy Disk, Proc file system, Temp file system, Compact Disk.
-//------------------------------------------------------------------------
+
 #if ( defined UNX )                                     //          Unix
 OSLTEST_DECLARE( VolURL1,  FILE_PREFIX  "");            //ufs       Solaris/Linux
 #ifdef SOLARIS

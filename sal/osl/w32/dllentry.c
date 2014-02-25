@@ -35,9 +35,9 @@
 
 #include "internal/rtllifecycle.h"
 
-//------------------------------------------------------------------------------
+
 // externals
-//------------------------------------------------------------------------------
+
 
 extern DWORD            g_dwTLSTextEncodingIndex;
 extern void SAL_CALL    _osl_callThreadKeyCallbackOnThreadDetach(void);
@@ -304,7 +304,7 @@ BOOL WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved )
                 {
                     // No error check, it works or it does not
                     // Thread should only be started for headless mode, see desktop/win32/source/officeloader.cxx
-                    CreateThread( NULL, 0, ParentMonitorThreadProc, (LPVOID)dwParentProcessId, 0, &dwThreadId ); //
+                    CreateThread( NULL, 0, ParentMonitorThreadProc, (LPVOID)dwParentProcessId, 0, &dwThreadId );
                 }
             }
 
