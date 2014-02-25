@@ -21,7 +21,7 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <svgio/svgreader/svgdocument.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace svgio
 {
@@ -193,7 +193,7 @@ namespace svgio
     } // end of namespace svgreader
 } // end of namespace svgio
 
-//////////////////////////////////////////////////////////////////////////////
+
 // eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
