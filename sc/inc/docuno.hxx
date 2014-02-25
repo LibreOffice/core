@@ -219,7 +219,8 @@ public:
                                 const ::com::sun::star::table::CellAddress& aFormulaPosition,
                                 const ::com::sun::star::table::CellAddress& aVariablePosition,
                                 const OUString& aGoalValue )
-                                    throw(::com::sun::star::uno::RuntimeException);
+                                    throw (::com::sun::star::uno::RuntimeException,
+                                           std::exception);
 
                             /// XConsolidatable
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XConsolidationDescriptor >

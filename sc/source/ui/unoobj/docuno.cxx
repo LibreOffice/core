@@ -1473,7 +1473,8 @@ sheet::GoalResult SAL_CALL ScModelObj::seekGoal(
                                 const table::CellAddress& aFormulaPosition,
                                 const table::CellAddress& aVariablePosition,
                                 const OUString& aGoalValue )
-                                    throw(uno::RuntimeException)
+                                    throw (uno::RuntimeException,
+                                           std::exception)
 {
     SolarMutexGuard aGuard;
     sheet::GoalResult aResult;
