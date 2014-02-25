@@ -2,21 +2,21 @@
 +++ build/xmlsec1-1.2.14/include/xmlsec/xmlsec.h	2011-02-13 03:09:42.917240245 -0600
 @@ -11,16 +11,16 @@
  #ifndef __XMLSEC_H__
- #define __XMLSEC_H__    
- 
+ #define __XMLSEC_H__
+
 -#ifdef __cplusplus
 -extern "C" {
--#endif /* __cplusplus */ 
+-#endif /* __cplusplus */
 -
  #include <libxml/tree.h>
- 
+
  #include <xmlsec/version.h>
  #include <xmlsec/exports.h>
  #include <xmlsec/strings.h>
- 
+
 +#ifdef __cplusplus
 +extern "C" {
-+#endif /* __cplusplus */ 
++#endif /* __cplusplus */
 +
  /***********************************************************************
   *

@@ -1,9 +1,9 @@
 --- foo/foo/foo/boost/config/compiler/clang.hpp
 +++ foo/foo/foo/boost/config/compiler/clang.hpp
 @@ -10,6 +10,8 @@
- 
+
  #define BOOST_HAS_PRAGMA_ONCE
- 
+
 +#include <utility>
 +
  #if !__has_feature(cxx_exceptions) && !defined(BOOST_NO_EXCEPTIONS)
@@ -12,9 +12,9 @@
 @@ -128,7 +130,7 @@
  #  define BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX
  #endif
- 
+
 -#if !__has_feature(cxx_rvalue_references)
 +#if !__has_feature(cxx_rvalue_references) || (defined(__APPLE__) && !defined(_LIBCPP_VERSION))
  #  define BOOST_NO_CXX11_RVALUE_REFERENCES
  #endif
- 
+

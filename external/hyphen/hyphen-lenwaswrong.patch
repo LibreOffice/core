@@ -7,5 +7,5 @@
 -     hyphens2 = hnj_malloc (word_size);
 +     hyphens2 = hnj_malloc (word_size + 3);
       for (i = 0; i < word_size; i++) rep2[i] = NULL;
-      for (i = 0; i < word_size; i++) if 
+      for (i = 0; i < word_size; i++) if
          (hyphens[i]&1 || (begin > 0 && i + 1 == word_size)) {

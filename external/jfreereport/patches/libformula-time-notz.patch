@@ -9,7 +9,7 @@
 +    //      in the absence of a date, it cannot know whether it is meant in the winter-timezone
 +    //      or in the summer (daylight saving time) timezone, and will always display the winter timezone.
 +    // timeFormats.add(DateFormat.getTimeInstance(DateFormat.FULL, activeLocale));
- 
+
      datetimeFormats.add(DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, activeLocale));
      dateFormats.add(DateFormat.getDateInstance(DateFormat.LONG, activeLocale));
 -    timeFormats.add(DateFormat.getTimeInstance(DateFormat.LONG, activeLocale));
@@ -17,6 +17,6 @@
 +    //      in the absence of a date, it cannot know whether it is meant in the winter-timezone
 +    //      or in the summer (daylight saving time) timezone, and will always display the winter timezone.
 +    // timeFormats.add(DateFormat.getTimeInstance(DateFormat.LONG, activeLocale));
- 
+
      datetimeFormats.add(DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM, activeLocale));
      dateFormats.add(DateFormat.getDateInstance(DateFormat.MEDIUM, activeLocale));

@@ -14,7 +14,7 @@
 +++ b/b/nspr/configure
 @@ -3888,7 +3889,7 @@
  fi
- 
+
      DSO_CFLAGS=-fPIC
 -    DSO_LDOPTS='-dynamiclib -compatibility_version 1 -current_version 1 -all_load -install_name @executable_path/$@ -headerpad_max_install_names'
 +    DSO_LDOPTS='-dynamiclib -compatibility_version 1 -current_version 1 -all_load -install_name @__________________________________________________OOO/$@ -headerpad_max_install_names'
@@ -24,9 +24,9 @@
 --- a/a/nss/coreconf/Darwin.mk
 +++ b/b/nss/coreconf/Darwin.mk
 @@ -39,8 +39,12 @@
- 
+
  DEFAULT_COMPILER = gcc
- 
+
 -CC		= gcc
 -CCC		= g++
 +# CC is taken from environment automatically.
@@ -36,10 +36,10 @@
 +CCC		= $(CXX)
 +
  RANLIB		= ranlib
- 
+
  ifndef CPU_ARCH
 @@ -57,19 +57,25 @@
- 
+
  ifeq (,$(filter-out i%86,$(CPU_ARCH)))
  ifdef USE_64
 +ifeq (,$(findstring -arch ,$(CC)))
@@ -63,10 +63,10 @@
 +endif
  endif
  endif
- 
+
 @@ -64,12 +64,16 @@
  endif
- 
+
  ifneq (,$(MACOS_SDK_DIR))
 +    CLANG_VERSION_FULL := $(shell $(CC) -v 2>&1 | grep "clang version" | sed -e "s/^.*clang version[  ]*//" | awk '{ print $$1 }')
      GCC_VERSION_FULL := $(shell $(CC) -dumpversion)
@@ -76,7 +76,7 @@
 +    ifneq (,$(CLANG_VERSION_FULL))
 +        DARWIN_SDK_CFLAGS = -isysroot $(MACOS_SDK_DIR)
 +        DARWIN_SDK_SHLIBFLAGS = -isysroot $(MACOS_SDK_DIR)
- 
+
 -    ifeq (,$(filter-out 2 3,$(GCC_VERSION_MAJOR)))
 +    else ifeq (,$(filter-out 2 3,$(GCC_VERSION_MAJOR)))
          # GCC <= 3
@@ -88,6 +88,6 @@
  # May override this with -bundle to create a loadable module.
 -DSO_LDOPTS	= -dynamiclib $(DARWIN_DYLIB_VERSIONS) -install_name @executable_path/$(notdir $@) -headerpad_max_install_names
 +DSO_LDOPTS	= -dynamiclib $(DARWIN_DYLIB_VERSIONS) -install_name @__________________________________________________OOO/$(notdir $@) -headerpad_max_install_names
- 
+
  MKSHLIB		= $(CC) $(DSO_LDOPTS) $(DARWIN_SDK_SHLIBFLAGS)
  DLL_SUFFIX	= dylib

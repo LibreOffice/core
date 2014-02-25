@@ -5,17 +5,17 @@ diff -rc clucene.orig/src/core/CLucene/store/MMapInput.cpp clucene/src/core/CLuc
 *** 115,121 ****
   	{
     }
-    
+
 !   bool MMapIndexInput::open(const char* path, IndexInput*& ret, CLuceneError& error, int32_t __bufferSize )    {
-  
+
   	//Func - Constructor.
   	//       Opens the file named path
 --- 115,121 ----
   	{
     }
-    
+
 !   bool MMapIndexInput::Open(const char* path, IndexInput*& ret, CLuceneError& error, int32_t __bufferSize )    {
-  
+
   	//Func - Constructor.
   	//       Opens the file named path
 diff -rc clucene.orig/src/core/CLucene/store/_MMapIndexInput.h clucene/src/core/CLucene/store/_MMapIndexInput.h
@@ -27,7 +27,7 @@ diff -rc clucene.orig/src/core/CLucene/store/_MMapIndexInput.h clucene/src/core/
     MMapIndexInput(Internal* _internal);
   public:
 !   static bool open(const char* path, IndexInput*& ret, CLuceneError& error, int32_t __bufferSize);
-  
+
     ~MMapIndexInput();
     IndexInput* clone() const;
 --- 18,24 ----
@@ -35,6 +35,6 @@ diff -rc clucene.orig/src/core/CLucene/store/_MMapIndexInput.h clucene/src/core/
     MMapIndexInput(Internal* _internal);
   public:
 !   static bool Open(const char* path, IndexInput*& ret, CLuceneError& error, int32_t __bufferSize);
-  
+
     ~MMapIndexInput();
     IndexInput* clone() const;

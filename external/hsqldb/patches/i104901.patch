@@ -23,5 +23,5 @@
 +			table.colSizes[colIndex]    = oldCol.getSize();
 +            table.colDefaults[colIndex] = oldCol.getDefaultExpression();
              table.resetDefaultsFlag();
- 
+
              return;

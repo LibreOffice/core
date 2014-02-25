@@ -3,7 +3,7 @@
 @@ -46,10 +46,6 @@
  AC_PATH_PROG(HELP2MAN, help2man)
  AC_PATH_PROG(MAN2HTML, man2html)
- 
+
 -dnl Make sure we have an ANSI compiler
 -AM_C_PROTOTYPES
 -test "z$U" != "z" && AC_MSG_ERROR(Compiler not ANSI compliant)

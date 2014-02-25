@@ -23,7 +23,7 @@
 --- misc/openssl-0.9.8v/ms/do_ms.bat	2009-07-28 14:51:19.000000000 +0200
 +++ build/openssl-0.9.8v/ms/do_ms.bat	2010-03-26 12:19:19.399047300 +0100
 @@ -1,11 +1,11 @@
- 
+
 -perl util\mkfiles.pl >MINFO
 -perl util\mk1mf.pl no-asm VC-WIN32 >ms\nt.mak
 -perl util\mk1mf.pl dll no-asm VC-WIN32 >ms\ntdll.mak
@@ -38,7 +38,7 @@
 -perl util\mk1mf.pl no-asm VC-CE >ms\ce.mak
 -perl util\mk1mf.pl dll no-asm VC-CE >ms\cedll.mak
 -:skipce
- 
+
 -perl util\mkdef.pl 32 libeay > ms\libeay32.def
 -perl util\mkdef.pl 32 ssleay > ms\ssleay32.def
 +%1 util\mkdef.pl 32 libeay > ms\libeay32.def
@@ -48,15 +48,15 @@
 @@ -128,7 +128,7 @@
  $inc_def="outinc";
  $tmp_def="tmp";
- 
+
 -$perl="perl" unless defined $perl;
 +$perl="$ENV{PERL}" unless defined $perl;
  $mkdir="-mkdir" unless defined $mkdir;
- 
+
  ($ssl,$crypto)=("ssl","crypto");
 @@ -290,6 +290,11 @@
  	chop;
- 
+
  	($key,$val)=/^([^=]+)=(.*)/;
 +
 +	# On some Windows machines, $val has linefeeds at the end, which confuses
@@ -76,12 +76,12 @@
  LIB_CFLAG=$lib_cflag
  SHLIB_CFLAG=$shl_cflag
 @@ -544,7 +544,7 @@
- 
+
  LINK=$link
  LFLAGS=$lflags
 -RSC=$rsc
 +RSC=$rsc \$(SOLARINC)
- 
+
  # The output directory for everything intersting
  OUT_D=$out_dir
 @@ -730,7 +735,7 @@
@@ -97,7 +97,7 @@
 +++ build/openssl-0.9.8v/util/pl/VC-32.pl	2010-03-26 12:04:20.977172300 +0100
 @@ -32,7 +32,7 @@
  $l_flags =~ s/-L(\S+)/\/libpath:$1/g;
- 
+
  # C compiler stuff
 -$cc='cl';
 +$cc=$ENV{'CC'};
@@ -106,7 +106,7 @@
      # Note that we currently don't have /WX on Win64! There is a lot of
 @@ -103,21 +103,21 @@
      }
- 
+
      $cc='$(CC)';
 -    $base_cflags=' /W3 /WX /GF /Gy /nologo -DUNICODE -D_UNICODE -DOPENSSL_SYSNAME_WINCE -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DDSO_WIN32 -DNO_CHMOD -DOPENSSL_SMALL_FOOTPRINT';
 +    $base_cflags=' -W3 -GF -Gy -nologo -DUNICODE -D_UNICODE -DOPENSSL_SYSNAME_WINCE -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DDSO_WIN32 -DNO_CHMOD -DOPENSSL_SMALL_FOOTPRINT';
@@ -135,12 +135,12 @@
      }
  $mlflags='';
 @@ -138,7 +138,7 @@
- 
+
  $obj='.obj';
  $asm_suffix='.asm';
 -$ofile="/Fo";
 +$ofile="-Fo.\\";
- 
+
  # EXE linking stuff
  $link="link";
 --- build/openssl-0.9.8v/ms/uplink.c

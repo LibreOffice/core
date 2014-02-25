@@ -8,5 +8,5 @@
 +#if !defined(_XOPEN_SOURCE_EXTENDED) && (defined(__IBMC__) || defined(__IBMCPP__))
  #   define _XOPEN_SOURCE_EXTENDED 1
  #endif
- 
+
 

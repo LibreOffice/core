@@ -7,5 +7,5 @@
 -    super(message, ex);
 +    super(message, (Throwable) ex);
    }
- 
+
    /**

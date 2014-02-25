@@ -6,7 +6,7 @@
  	xmlsec-mingw.h \
 +	akmngr.c \
  	$(NULL)
- 
+
  if SHAREDLIB_HACK
 --- misc/xmlsec1-1.2.14/src/mscrypto/Makefile.in	2009-06-26 05:53:32.000000000 +0900
 +++ misc/build/xmlsec1-1.2.14/src/mscrypto/Makefile.in	2009-09-30 19:00:50.107375000 +0900
@@ -43,13 +43,13 @@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libxmlsec1_mscrypto_la-x509.Plo@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libxmlsec1_mscrypto_la-x509vfy.Plo@am__quote@
 +@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libxmlsec1_mscrypto_la-akmngr.Plo@am__quote@
- 
+
  .c.o:
  @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
 @@ -470,6 +474,13 @@
  @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
  @am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libxmlsec1_mscrypto_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libxmlsec1_mscrypto_la-app.lo `test -f 'app.c' || echo '$(srcdir)/'`app.c
- 
+
 +libxmlsec1_mscrypto_la-akmngr.lo: akmngr.c
 +@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libxmlsec1_mscrypto_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libxmlsec1_mscrypto_la-akmngr.lo -MD -MP -MF "$(DEPDIR)/libxmlsec1_mscrypto_la-akmngr.Tpo" -c -o libxmlsec1_mscrypto_la-akmngr.lo `test -f 'akmngr.c' || echo '$(srcdir)/'`akmngr.c; \
 +@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libxmlsec1_mscrypto_la-akmngr.Tpo" "$(DEPDIR)/libxmlsec1_mscrypto_la-akmngr.Plo"; else rm -f "$(DEPDIR)/libxmlsec1_mscrypto_la-akmngr.Tpo"; exit 1; fi

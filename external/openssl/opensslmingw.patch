@@ -36,12 +36,12 @@
 +++ misc/build/openssl-0.9.8v/ms/mingw32.bat	2009-03-30 11:54:10.000000000 +0200
 @@ -79,15 +79,41 @@
  rem copy ms\tlhelp32.h outinc
- 
+
  echo Building the libraries
 -mingw32-make -f ms/mingw32a.mak
 +make -f ms/mingw32a.mak
  if errorlevel 1 goto end
- 
+
  echo Generating the DLLs and input libraries
 -dllwrap --dllname libeay32.dll --output-lib out/libeay32.a --def ms/libeay32.def out/libcrypto.a -lwsock32 -lgdi32
 +mv out/libcrypto.a out/libcrypto_static.a
@@ -55,16 +55,16 @@
 +if errorlevel 1 goto end
 +if "%MINGW_SHARED_GXXLIB%"=="YES" goto shared_gxxlib
 +if "%MINGW_SHARED_GCCLIB%"=="YES" goto shared_gcclib
-+gcc --shared --enable-pseudo-reloc -Wl,-Map,out/libeay32.map ms/libeay32.def -o out/libeay32.dll out/libcrypto_static.a -lwsock32 -lgdi32 
++gcc --shared --enable-pseudo-reloc -Wl,-Map,out/libeay32.map ms/libeay32.def -o out/libeay32.dll out/libcrypto_static.a -lwsock32 -lgdi32
 +if errorlevel 1 goto end
-+gcc --shared --enable-pseudo-reloc -Wl,-Map,out/ssleay32.map -Lout ms/ssleay32.def -o out/ssleay32.dll out/libssl_static.a -lcrypto 
++gcc --shared --enable-pseudo-reloc -Wl,-Map,out/ssleay32.map -Lout ms/ssleay32.def -o out/ssleay32.dll out/libssl_static.a -lcrypto
 +if errorlevel 1 goto end
 +goto finished
 +
 +:shared_gcclib
-+gcc --shared -shared-libgcc --enable-pseudo-reloc -Wl,-Map,out/libeay32.map ms/libeay32.def -o out/libeay32.dll out/libcrypto_static.a -lwsock32 -lgdi32 
++gcc --shared -shared-libgcc --enable-pseudo-reloc -Wl,-Map,out/libeay32.map ms/libeay32.def -o out/libeay32.dll out/libcrypto_static.a -lwsock32 -lgdi32
 +if errorlevel 1 goto end
-+gcc --shared -shared-libgcc --enable-pseudo-reloc -Wl,-Map,out/ssleay32.map -Lout ms/ssleay32.def -o out/ssleay32.dll out/libssl_static.a -lcrypto 
++gcc --shared -shared-libgcc --enable-pseudo-reloc -Wl,-Map,out/ssleay32.map -Lout ms/ssleay32.def -o out/ssleay32.dll out/libssl_static.a -lcrypto
 +if errorlevel 1 goto end
 +goto finished
 +
@@ -74,10 +74,10 @@
 +gcc --shared -shared-libgcc --enable-pseudo-reloc -Wl,-Map,out/ssleay32.map -Lout ms/ssleay32.def -o out/ssleay32.dll out/libssl_static.a -lcrypto %MINGW_SHARED_LIBSTDSPP%
 +if errorlevel 1 goto end
 +goto finished
- 
+
 +:finished
  echo Done compiling OpenSSL
- 
+
  :end
 --- misc/openssl-0.9.8v/util/pl/Mingw32.pl	2006-05-05 15:19:34.000000000 +0200
 +++ misc/build/openssl-0.9.8v/util/pl/Mingw32.pl	2009-03-30 11:55:04.000000000 +0200
@@ -87,7 +87,7 @@
  $rm='rm -f';
 -$mkdir='gmkdir';
 +#$mkdir='gmkdir';
- 
+
 -$o='\\';
 -$cp='copy';
 -$rm='del';
@@ -95,11 +95,11 @@
 +#$cp='copy';
 +#$rm='del';
  $mkdir='mkdir';
- 
+
  # C compiler stuff
 @@ -87,7 +87,8 @@
  	($Name=$name) =~ tr/a-z/A-Z/;
- 
+
  	$ret.="$target: \$(${Name}OBJ)\n";
 -	$ret.="\tif exist $target \$(RM) $target\n";
 +    $ret.="\t\$(RM) $target\n";

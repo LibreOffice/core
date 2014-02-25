@@ -13,9 +13,9 @@ index f27148d..7198103 100644
 --- a/src/lib/CWDbaseContent.cxx
 +++ b/src/lib/CWDbaseContent.cxx
 @@ -33,7 +33,6 @@
- 
+
  #include <time.h>
- 
+
 -#include <cmath>
  #include <cstring>
  #include <ctime>
@@ -23,11 +23,11 @@ index f27148d..7198103 100644
 @@ -41,6 +40,8 @@
  #include <set>
  #include <sstream>
- 
+
 +#include <boost/math/special_functions/fpclassify.hpp>
 +
  #include <libwpd/libwpd.h>
- 
+
  #include "MWAWContentListener.hxx"
 @@ -969,7 +970,7 @@ void CWDbaseContent::send(double val, CWStyleManager::CellFormat const &format)
      if (type>=10&&type<=11) type += 4;
@@ -38,6 +38,6 @@ index f27148d..7198103 100644
      s << val;
      listener->insertUnicodeString(s.str().c_str());
      return;
--- 
+--
 1.8.3.1
 

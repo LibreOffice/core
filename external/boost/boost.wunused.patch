@@ -17,4 +17,4 @@
 +            (void) other;
              BOOST_ASSERT(node_alloc() == other.node_alloc());
          }
- 
+

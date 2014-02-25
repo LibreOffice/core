@@ -3,7 +3,7 @@
 @@ -10,6 +10,9 @@
  #include "hunspell.hxx"
  #include "csutil.hxx"
- 
+
 +// switch off iconv support for tests (fixing Solaris problems)
 +#undef HAVE_ICONV
 +

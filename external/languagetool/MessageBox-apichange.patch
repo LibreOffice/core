@@ -2,7 +2,7 @@
 +++ misc/build/JLanguageTool-1.7.0/src/java/org/languagetool/openoffice/OOoAboutDialog.java	2013-07-11 13:34:46.666424549 +0100
 @@ -19,6 +19,7 @@
  package org.languagetool.openoffice;
- 
+
  import com.sun.star.awt.Rectangle;
 +import com.sun.star.awt.MessageBoxType;
  import com.sun.star.awt.XMessageBox;
@@ -24,7 +24,7 @@
              getAboutText());
      box.execute();
    }
-   
+
 -}
 \ No newline at end of file
 +}

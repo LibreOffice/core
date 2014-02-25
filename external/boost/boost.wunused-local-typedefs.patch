@@ -57,7 +57,7 @@
 @@ -215,7 +215,6 @@
    {
      std::istream_iterator<std::basic_string<charT>, charT> beg(is), eos;
-     
+
 -    typedef boost::date_time::all_date_names_put<greg_facet_config, charT> facet_def;
      d = from_stream(beg, eos);
      return is;
@@ -71,7 +71,7 @@
 -  typedef BOOST_DEDUCED_TYPENAME impl::type cons_element;
    return impl::call(c).head;
  }
- 
+
 --- misc/boost_1_44_0/boost/bind/arg.hpp
 +++ misc/build/boost_1_44_0/boost/bind/arg.hpp
 @@ -35,6 +35,8 @@
@@ -82,7 +82,7 @@
 +            // silence -Werror=unused-local-typedefs (GCC 4.8)
      }
  };
- 
+
 --- misc/boost_1_44_0/boost/concept/detail/general.hpp
 +++ misc/build/boost_1_44_0/boost/concept/detail/general.hpp
 @@ -68,7 +68,9 @@
@@ -93,15 +93,15 @@
 +      BOOST_PP_CAT(boost_concept_check,__LINE__); \
 +    void BOOST_PP_CAT(boost_concept_check_dummy,__LINE__)(BOOST_PP_CAT(boost_concept_check,__LINE__) *)
 +        // silence -Werror=unused-local-typedefs (GCC 4.8)
- 
+
  }}
- 
+
 --- misc/boost_1_44_0/boost/date_time/date_parsing.hpp
 +++ misc/build/boost_1_44_0/boost/date_time/date_parsing.hpp
 @@ -113,7 +113,6 @@
          spec_str = "mdy";
        }
- 
+
 -      typedef typename date_type::year_type year_type;
        typedef typename date_type::month_type month_type;
        unsigned pos = 0;
@@ -114,16 +114,16 @@
 +      //typedef typename date_type::year_type year_type;
        //typename date_type::ymd_type ymd((year_type::min)(),1,1);
        unsigned short y = 0, m = 0, d = 0;
- 
+
 --- misc/boost_1_44_0/boost/date_time/local_time/local_time_io.hpp
 +++ misc/build/boost_1_44_0/boost/date_time/local_time/local_time_io.hpp
 @@ -36,7 +36,6 @@
      boost::io::ios_flags_saver iflags(os);
-     typedef local_date_time time_type;//::utc_time_type typename 
+     typedef local_date_time time_type;//::utc_time_type typename
      typedef date_time::time_facet<time_type, CharT> custom_time_facet;
 -    typedef std::time_put<CharT> std_time_facet;
      std::ostreambuf_iterator<CharT> oitr(os);
- 
+
      if(std::has_facet<custom_time_facet>(os.getloc())) {
 @@ -123,7 +122,6 @@
               const boost::local_time::local_time_period& p) {
@@ -190,7 +190,7 @@
 --- misc/boost_1_44_0/boost/multi_array/concept_checks.hpp
 +++ misc/build/boost_1_44_0/boost/multi_array/concept_checks.hpp
 @@ -39,8 +39,6 @@
- 
+
      template <typename Array, typename IdxGen, typename Call_Type>
      static void call(Array& a, const IdxGen& idgen, Call_Type c) {
 -      typedef typename Array::index_range index_range_;
@@ -199,7 +199,7 @@
      }
    };
 @@ -50,8 +48,6 @@
- 
+
      template <typename Array, typename IdxGen, typename Call_Type>
      static void call(Array& a, const IdxGen& idgen, Call_Type) {
 -      typedef typename Array::index_range index_range_;
@@ -214,11 +214,11 @@
          typedef impl::grammar_helper_base<GrammarT> helper_base_t;
          typedef grammar_helper_list<GrammarT> helper_list_t;
 -        typedef typename helper_list_t::vector_t::reverse_iterator iterator_t;
- 
+
          helper_list_t&  helpers =
  # if !defined(__GNUC__) || (__GNUC__ > 2)
 @@ -318,6 +317,7 @@
- 
+
  # if (defined(BOOST_MSVC) && (BOOST_MSVC < 1300)) \
      || defined(BOOST_INTEL_CXX_VERSION)
 +        typedef typename helper_list_t::vector_t::reverse_iterator iterator_t;
@@ -234,7 +234,7 @@
 -            typedef typename parser_result<self_t, ScannerT>::type result_t;
              typedef typename ScannerT::value_t value_t;
              typedef typename ScannerT::iterator_t iterator_t;
- 
+
 --- misc/boost_1_44_0/boost/spirit/home/classic/error_handling/exceptions.hpp
 +++ misc/build/boost_1_44_0/boost/spirit/home/classic/error_handling/exceptions.hpp
 @@ -140,7 +140,6 @@
@@ -242,7 +242,7 @@
          {
              typedef typename parser_result<ParserT, ScannerT>::type result_t;
 -            typedef typename ScannerT::iterator_t iterator_t;
- 
+
              result_t hit = this->subject().parse(scan);
              if (!hit)
 --- misc/boost_1_44_0/boost/spirit/home/classic/utility/functor_parser.hpp
@@ -254,5 +254,5 @@
 -            typedef typename parser_result<self_t, ScannerT>::type result_t;
 -            typedef typename ScannerT::value_t      value_t;
              typedef typename ScannerT::iterator_t   iterator_t;
- 
+
              iterator_t const s(scan.first);

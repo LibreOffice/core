@@ -222,7 +222,7 @@ index 57864d9..af16616 100644
 @@ -441,6 +443,38 @@ void AtomTest::getDocumentTest( )
      CPPUNIT_ASSERT_MESSAGE( "Content length is missing", 12345 == document->getContentLength( ) );
  }
- 
+
 +void AtomTest::getDocumentRelationshipsTest( )
 +{
 +    curl_mockup_reset( );
@@ -264,17 +264,17 @@ index 538c98e..d5e0c7a 100644
 +++ src/libcmis/object.cxx
 @@ -105,10 +105,10 @@ namespace libcmis
              xmlXPathFreeObject( xpathObj );
- 
+
              // First get the type id as it will give us the property definitions
 -            string typeIdReq( "//cmis:propertyId[@propertyDefinitionId='cmis:objectTypeId']/cmis:value/text()" );
 +            string typeIdReq( "/*/cmis:properties/cmis:propertyId[@propertyDefinitionId='cmis:objectTypeId']/cmis:value/text()" );
              m_typeId = libcmis::getXPathValue( xpathCtx, typeIdReq );
- 
+
 -            string propertiesReq( "//cmis:properties/*" );
 +            string propertiesReq( "/*/cmis:properties/*" );
              xpathObj = xmlXPathEvalExpression( BAD_CAST( propertiesReq.c_str() ), xpathCtx );
              if ( NULL != xpathObj && NULL != xpathObj->nodesetval )
              {
--- 
+--
 1.8.4.4
 

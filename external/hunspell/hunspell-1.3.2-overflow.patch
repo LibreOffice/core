@@ -3,16 +3,16 @@
 @@ -6,6 +6,8 @@
  #include <stdio.h>
  #include <ctype.h>
- 
+
 +#include <limits>
 +
  #include <vector>
- 
+
  #include "affixmgr.hxx"
 @@ -4000,7 +4002,10 @@
-              case 3: { 
+              case 3: {
                         np++;
-                        numents = atoi(piece); 
+                        numents = atoi(piece);
 -                       if (numents == 0) {
 +                       if ((numents <= 0) ||
 +                           ((::std::numeric_limits<size_t>::max()
@@ -34,7 +34,7 @@
 @@ -233,10 +233,19 @@
                      case 1: { achar = *piece; break; }
                      case 2: { if (*piece == 'Y') ff = XPRODUCT; break; }
-                     case 3: { numents = atoi(piece); 
+                     case 3: { numents = atoi(piece);
 -                              ptr = malloc(numents * sizeof(struct affent));
 -                              ptr->achar = achar;
 -                              ptr->xpflg = ff;
@@ -68,7 +68,7 @@
 @@ -158,10 +159,19 @@
                      case 1: { achar = *piece; break; }
                      case 2: { if (*piece == 'Y') ff = XPRODUCT; break; }
-                     case 3: { numents = atoi(piece); 
+                     case 3: { numents = atoi(piece);
 -                              ptr = malloc(numents * sizeof(struct affent));
 -                              ptr->achar = achar;
 -                              ptr->xpflg = ff;

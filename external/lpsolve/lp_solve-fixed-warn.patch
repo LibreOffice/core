@@ -3,7 +3,7 @@
 @@ -160,7 +160,7 @@
  {
    int i, k = 0;
- 
+
 -  fprintf(output, label);
 +  fputs(label, output);
    fprintf(output, "\n");
@@ -12,20 +12,20 @@
 @@ -189,7 +189,7 @@
    if(last < 0)
      last = lp->rows;
- 
+
 -  fprintf(output, label);
 +  fputs(label, output);
    fprintf(output, "\n");
- 
+
    if(first == 0) {
 @@ -254,7 +254,7 @@
    if(last < 0)
      last = lp->rows;
- 
+
 -  fprintf(output, label);
 +  fputs(label, output);
    fprintf(output, "\n");
- 
+
    for(i = first; i <= last; i++) {
 --- misc/build/lp_solve_5.5/lp_rlp.h	2007-01-14 10:31:52.000000000 -0800
 +++ misc/build/lp_solve_5.5/lp_rlp.h	2007-01-14 10:31:52.000000000 -0800
@@ -36,14 +36,14 @@
 -#define ECHO (void) fwrite( lp_yytext, lp_yyleng, 1, lp_yyout )
 +#define ECHO if(fwrite( lp_yytext, lp_yyleng, 1, lp_yyout ) != 1) YY_FATAL_ERROR( "can't write into lp_yytext" )
  #endif
- 
+
  /* Gets input and stuffs it into "buf".  number of characters read, or YY_NULL,
 --- misc/build/lp_solve_5.5/shared/commonlib.c	2007-01-14 10:33:14.000000000 -0800
 +++ misc/build/lp_solve_5.5/shared/commonlib.c	2007-01-14 10:33:14.000000000 -0800
 @@ -715,7 +715,7 @@
  {
    int i, k = 0;
- 
+
 -  fprintf(output, label);
 +  fputs(label, output);
    fprintf(output, "\n");
@@ -52,7 +52,7 @@
 @@ -734,7 +734,7 @@
  {
    int i, k = 0;
- 
+
 -  fprintf(output, label);
 +  fputs(label, output);
    fprintf(output, "\n");
@@ -61,7 +61,7 @@
 @@ -756,7 +756,7 @@
  {
    int i, k = 0;
- 
+
 -  fprintf(output, label);
 +  fputs(label, output);
    fprintf(output, "\n");
@@ -70,7 +70,7 @@
 --- misc/build/lp_solve_5.5/shared/mmio.c	2007-01-14 10:33:14.000000000 -0800
 +++ misc/build/lp_solve_5.5/shared/mmio.c	2007-01-14 10:33:14.000000000 -0800
 @@ -74,7 +74,11 @@
-  
+
      for (i=0; i<nz; i++)
      {
 -        fscanf(f, "%d %d %lg\n", &I[i], &J[i], &val[i]);

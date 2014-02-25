@@ -3,9 +3,9 @@
 @@ -1552,7 +1552,7 @@
              return columnQuoted;
          }
- 
+
 -        return false;
 +        return true;
      }
- 
+
      /**

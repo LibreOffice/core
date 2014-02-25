@@ -3,7 +3,7 @@
 @@ -98,16 +98,24 @@
        <echo message="ant.java.hasjsse=${ant.java.hasjsse}" />
     </target>
- 
+
 -   <target name="javaversion6">
 +   <target name="javaversion7" unless="ant.java.iscjavaset">
 +      <available classname="java.util.Objects" property="ant.java.iscjava17"/>
@@ -14,19 +14,19 @@
        <available classname="java.net.IDN" property="ant.java.iscjava16"/>
 +      <available classname="java.net.IDN" property="ant.java.iscjavaset"/>
     </target>
- 
+
 -   <target name="javaversion4" depends="javaversion6" unless="ant.java.iscjava16">
 +   <target name="javaversion4" depends="javaversion6" unless="ant.java.iscjavaset">
        <available classname="java.nio.Buffer" property="ant.java.iscjava14"/>
 +      <available classname="java.nio.Buffer" property="ant.java.iscjavaset"/>
     </target>
- 
+
 -   <target name="javaversion2" depends="javaversion4" unless="ant.java.iscjava14">
 +   <target name="javaversion2" depends="javaversion4" unless="ant.java.iscjavaset">
        <available classname="java.lang.ref.Reference" property="ant.java.iscjava12"/>
 +      <available classname="java.lang.ref.Reference" property="ant.java.iscjavaset"/>
     </target>
- 
+
     <target name="-prepare" depends="init,javaversion2">
 @@ -166,6 +177,7 @@
        <java classname="org.hsqldb.util.CodeSwitcher" classpath="classes" >
@@ -51,7 +51,7 @@
 +        <arg value="-JAVA7"/>
         </java>
      </target>
- 
+
 @@ -218,6 +232,7 @@
        <java classname="org.hsqldb.util.CodeSwitcher" classpath="classes" >
          <arg file="${src}/org/hsqldb/lib/java/JavaSystem.java"/>
@@ -67,7 +67,7 @@
 +        <arg value="-JAVA7"/>
         </java>
      </target>
- 
+
 @@ -253,6 +269,43 @@
        <java classname="org.hsqldb.util.CodeSwitcher" classpath="classes" >
          <arg file="${src}/org/hsqldb/lib/java/JavaSystem.java"/>
@@ -119,7 +119,7 @@
 +        <arg value="+JAVA7"/>
        </java>
      </target>
- 
+
 -    <target name="store" depends="switchtojdk16"
 +    <target name="store" depends="switchtojdk17"
              description="compiles the /store folder">
@@ -129,7 +129,7 @@
 +++ misc/build/hsqldb/src/org/hsqldb/jdbc/jdbcCallableStatement.java	2012-02-08 15:47:35.842635642 +0000
 @@ -3375,4 +3375,18 @@
  */
- 
+
  //#endif JAVA6
 +
 +//#ifdef JAVA7
@@ -150,7 +150,7 @@
 +++ misc/build/hsqldb/src/org/hsqldb/jdbc/jdbcConnection.java	2012-02-08 15:47:35.851635628 +0000
 @@ -48,6 +48,12 @@
  */
- 
+
  //#endif JAVA6
 +
 +//#ifdef JAVA7
@@ -163,7 +163,7 @@
  import java.sql.SQLWarning;
 @@ -2793,4 +2799,31 @@
  */
- 
+
  //#endif JAVA6
 +
 +//#ifdef JAVA7
@@ -181,7 +181,7 @@
 +    {
 +        throw new UnsupportedOperationException("Not supported yet.");
 +    }
-+    
++
 +    public String getSchema() throws SQLException
 +    {
 +        throw new UnsupportedOperationException("Not supported yet.");
@@ -197,7 +197,7 @@
 +++ misc/build/hsqldb/src/org/hsqldb/jdbc/jdbcDatabaseMetaData.java	2012-02-08 15:47:35.835635654 +0000
 @@ -5693,4 +5693,21 @@
  */
- 
+
  //#endif JAVA6
 +
 +
@@ -222,18 +222,18 @@
 @@ -47,6 +47,11 @@
  //#endif JAVA4
  import org.hsqldb.jdbcDriver;
- 
+
 +//#ifdef JAVA7
 +import java.sql.SQLFeatureNotSupportedException;
 +import java.util.logging.Logger;
 +//#endif JAVA7
 +
  // boucherb@users 20040411 - doc 1.7.2 - javadoc updates toward 1.7.2 final
- 
+
  /**
 @@ -323,4 +328,15 @@
  */
- 
+
  //#endif JAVA6
 +
 +//#ifdef JAVA7
@@ -251,7 +251,7 @@
 +++ misc/build/hsqldb/src/org/hsqldb/jdbc/jdbcResultSet.java	2012-02-08 15:47:35.866635606 +0000
 @@ -5324,4 +5324,19 @@
  */
- 
+
  //#endif JAVA6
 +
 +//#ifdef JAVA7
@@ -293,7 +293,7 @@
 @@ -42,6 +42,11 @@
  import org.hsqldb.persist.HsqlDatabaseProperties;
  import org.hsqldb.persist.HsqlProperties;
- 
+
 +//#ifdef JAVA7
 +import java.sql.SQLFeatureNotSupportedException;
 +import java.util.logging.Logger;

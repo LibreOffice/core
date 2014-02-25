@@ -8,7 +8,7 @@
 +ifeq ($(CAIRO_HAS_PDF_SURFACE),1)
  req_cairo_deflate_stream_sources = $(cairo_deflate_stream_sources)
  endif
- 
+
 @@ -248,7 +248,7 @@
  	cairo-xlib-surface-private.h \
  	cairo-xlib-xrender-private.h \
@@ -35,22 +35,22 @@
 +ifeq ($(BUILD_PRIVATE_GLEW),1)
  cairo_gl_sources += glew/glew.c
  endif
- 
+
 @@ -373,7 +373,7 @@
- 
+
  cairo_script_headers = cairo-script.h
  cairo_script_sources = cairo-script-surface.c
 -if CAIRO_HAS_SCRIPT_SURFACE
 +ifeq ($(CAIRO_HAS_SCRIPT_SURFACE),1)
  req_cairo_deflate_stream_sources = $(cairo_deflate_stream_sources)
  endif
- 
+
 @@ -383,7 +383,7 @@
- 
+
  cairo_xml_headers = cairo-xml.h
  cairo_xml_sources = cairo-xml-surface.c
 -if CAIRO_HAS_XML_SURFACE
 +ifeq ($(CAIRO_HAS_XML_SURFACE),1)
  req_cairo_deflate_stream_sources = $(cairo_deflate_stream_sources)
  endif
- 
+

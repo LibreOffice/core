@@ -3,12 +3,12 @@
 @@ -13,84 +13,29 @@
  GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
  GEN_DEPS.cc=	$(CXX) -E -MM $(DEFS) $(CPPFLAGS)
- 
+
 -## Commands to link
 -## We need to use the C++ linker, even when linking C programs, since
 -##  our libraries contain C++ code (C++ static init not called)
--LINK.c=		$(AIX_PREDELETE) $(CXX) $(CXXFLAGS) $(LDFLAGS) 
--LINK.cc=	$(AIX_PREDELETE) $(CXX) $(CXXFLAGS) $(LDFLAGS) 
+-LINK.c=		$(AIX_PREDELETE) $(CXX) $(CXXFLAGS) $(LDFLAGS)
+-LINK.cc=	$(AIX_PREDELETE) $(CXX) $(CXXFLAGS) $(LDFLAGS)
 -
 -## Shared library options
 -LD_SOOPTIONS= -Wl,-bsymbolic
@@ -19,7 +19,7 @@
 -
 -## Compiler switch to embed a runtime search path
 -LD_RPATH=	-I
--LD_RPATH_PRE=	
+-LD_RPATH_PRE=
 +## Flags for position independent code
 +SHAREDLIBCFLAGS = -fPIC
 +SHAREDLIBCXXFLAGS = -fPIC
@@ -28,25 +28,25 @@
 +## Additional flags when building libraries and with threads
 +THREADSCPPFLAGS = -D_REENTRANT -D_THREAD_SAFE
 +LIBCPPFLAGS =
- 
+
 -## enable the shared lib loader
 -LDFLAGS += -Wl,-bbigtoc
 +LD_RPATH=
 +LD_RPATH_PRE=
- 
+
  ## These are the library specific LDFLAGS
  LDFLAGSICUDT=-nodefaultlibs -nostdlib
- 
+
 -## We need to delete things prior to linking, or else we'll get
--## SEVERE ERROR: output file in use ..  on AIX. 
+-## SEVERE ERROR: output file in use ..  on AIX.
 -## But, shell script version should NOT delete target as we don't
 -## have $@ in that context.  (SH = only shell script, icu-config)
--AIX_PREDELETE=rm -f $@ ; 
+-AIX_PREDELETE=rm -f $@ ;
 -#SH# AIX_PREDELETE=
 -
  ## Environment variable to set a runtime search path
  LDLIBRARYPATH_ENVVAR = LIBPATH
- 
+
 -## Override Versioned target for a shared library.
 -FINAL_SO_TARGET=  $(basename $(SO_TARGET))$(SO_TARGET_VERSION).$(SO)
 -MIDDLE_SO_TARGET= $(basename $(SO_TARGET))$(SO_TARGET_VERSION_MAJOR).$(SO)
@@ -62,7 +62,7 @@
 -endif
 -
 -## Compiler switch to embed a library name. Not present on AIX.
--LD_SONAME = 
+-LD_SONAME =
 -
 -## The type of assembly needed when pkgdata is used for generating shared libraries.
 -GENCCODE_ASSEMBLY=-a xlc
@@ -73,7 +73,7 @@
 -SO=	a
 -A=	a
 +SO=	so
- 
+
  ## Non-shared intermediate object suffix
 -STATIC_O = o
 -
@@ -94,12 +94,12 @@
 -	@echo "Building an import list for $<"
 -	@$(SHELL) -ec "echo '#! $*.a($*.so)' | cat - $< > $@"
 +STATIC_O = ao
- 
+
  ## Compilation rules
  %.$(STATIC_O): $(srcdir)/%.c
 @@ -118,10 +63,10 @@
  		[ -s $@ ] || rm -f $@'
- 
+
  ## Versioned libraries rules
 -%$(SO_TARGET_VERSION_MAJOR).$(SO): %$(SO_TARGET_VERSION).$(SO)
 -	$(RM) $@ && ln -s ${*F}$(SO_TARGET_VERSION).$(SO) $@
@@ -109,13 +109,13 @@
 +	$(RM) $@ && ln -s ${<F} $@
 +%.$(SO): %.$(SO).$(SO_TARGET_VERSION_MAJOR)
 +	$(RM) $@ && ln -s ${*F}.$(SO).$(SO_TARGET_VERSION) $@
- 
- 
+
+
  ## BIR  - bind with internal references [so app data and icu data doesn't collide]
 --- misc/icu/source/tools/pkgdata/pkgdata.cpp	2013-04-06 20:56:00.935656635 +0100
 +++ misc/build/icu/source/tools/pkgdata/pkgdata.cpp	2013-10-31 20:38:10.623984554 +0700
 @@ -888,7 +888,7 @@
- 
+
          uprv_strcat(pkgDataFlags[SO_EXT], ".");
          uprv_strcat(pkgDataFlags[SO_EXT], pkgDataFlags[A_EXT]);
 -#elif U_PLATFORM == U_PF_OS400 || defined(_AIX)

@@ -4,36 +4,36 @@ diff -ur glm.org/glm/core/_detail.hpp glm/glm/core/_detail.hpp
 @@ -136,12 +136,12 @@
  			i(0)
  		{}
- 
+
 -		GLM_FUNC_QUALIFIER uif32(float f) :
 -			f(f)
 +		GLM_FUNC_QUALIFIER uif32(float f_) :
 +			f(f_)
  		{}
- 
+
 -		GLM_FUNC_QUALIFIER uif32(unsigned int i) :
 -			i(i)
 +		GLM_FUNC_QUALIFIER uif32(unsigned int i_) :
 +			i(i_)
  		{}
- 
+
  		float f;
 @@ -154,12 +154,12 @@
  			i(0)
  		{}
- 
+
 -		GLM_FUNC_QUALIFIER uif64(double f) :
 -			f(f)
 +		GLM_FUNC_QUALIFIER uif64(double f_) :
 +			f(f_)
  		{}
- 
+
 -		GLM_FUNC_QUALIFIER uif64(uint64 i) :
 -			i(i)
 +		GLM_FUNC_QUALIFIER uif64(uint64 i_) :
 +			i(i_)
  		{}
- 
+
  		double f;
 diff -ur glm.org/glm/core/type_vec1.hpp glm/glm/core/type_vec1.hpp
 --- glm.org/glm/core/type_vec1.hpp	2013-12-08 17:04:59.706365245 +0100
@@ -44,81 +44,81 @@ diff -ur glm.org/glm/core/type_vec1.hpp glm/glm/core/type_vec1.hpp
  		GLM_FUNC_DECL explicit tvec1(
 -			value_type const & s);
 +			value_type const & s_);
+
  
- 		//////////////////////////////////////
  		// Swizzle constructors
- 
+
 -		GLM_FUNC_DECL tvec1(tref1<T> const & r);
 +		GLM_FUNC_DECL tvec1(tref1<T> const & r_);
+
  
- 		//////////////////////////////////////
  		// Convertion scalar constructors
- 
+
  		//! Explicit converions (From section 5.4.1 Conversion and scalar constructors of GLSL 1.30.08 specification)
- 		template <typename U> 
+ 		template <typename U>
 -		GLM_FUNC_DECL explicit tvec1(U const & s);
 +		GLM_FUNC_DECL explicit tvec1(U const & s_);
+
  
- 		//////////////////////////////////////
  		// Convertion vector constructors
 @@ -121,19 +121,19 @@
  		GLM_FUNC_DECL tvec1<T> & operator= (tvec1<U> const & v);
- 
- 		template <typename U> 
+
+ 		template <typename U>
 -		GLM_FUNC_DECL tvec1<T> & operator+=(U const & s);
 +		GLM_FUNC_DECL tvec1<T> & operator+=(U const & s_);
- 		template <typename U> 
+ 		template <typename U>
  		GLM_FUNC_DECL tvec1<T> & operator+=(tvec1<U> const & v);
- 		template <typename U> 
+ 		template <typename U>
 -		GLM_FUNC_DECL tvec1<T> & operator-=(U const & s);
 +		GLM_FUNC_DECL tvec1<T> & operator-=(U const & s_);
- 		template <typename U> 
+ 		template <typename U>
  		GLM_FUNC_DECL tvec1<T> & operator-=(tvec1<U> const & v);
- 		template <typename U> 
+ 		template <typename U>
 -		GLM_FUNC_DECL tvec1<T> & operator*=(U const & s);
 +		GLM_FUNC_DECL tvec1<T> & operator*=(U const & s_);
- 		template <typename U> 
+ 		template <typename U>
  		GLM_FUNC_DECL tvec1<T> & operator*=(tvec1<U> const & v);
- 		template <typename U> 
+ 		template <typename U>
 -		GLM_FUNC_DECL tvec1<T> & operator/=(U const & s);
 +		GLM_FUNC_DECL tvec1<T> & operator/=(U const & s_);
- 		template <typename U> 
+ 		template <typename U>
  		GLM_FUNC_DECL tvec1<T> & operator/=(tvec1<U> const & v);
  		GLM_FUNC_DECL tvec1<T> & operator++();
 @@ -143,27 +143,27 @@
  		// Unary bit operators
- 
- 		template <typename U> 
+
+ 		template <typename U>
 -		GLM_FUNC_DECL tvec1<T> & operator%=(U const & s);
 +		GLM_FUNC_DECL tvec1<T> & operator%=(U const & s_);
- 		template <typename U> 
+ 		template <typename U>
  		GLM_FUNC_DECL tvec1<T> & operator%=(tvec1<U> const & v);
- 		template <typename U> 
+ 		template <typename U>
 -		GLM_FUNC_DECL tvec1<T> & operator&=(U const & s);
 +		GLM_FUNC_DECL tvec1<T> & operator&=(U const & s_);
- 		template <typename U> 
+ 		template <typename U>
  		GLM_FUNC_DECL tvec1<T> & operator&=(tvec1<U> const & v);
- 		template <typename U> 
+ 		template <typename U>
 -		GLM_FUNC_DECL tvec1<T> & operator|=(U const & s);
 +		GLM_FUNC_DECL tvec1<T> & operator|=(U const & s_);
- 		template <typename U> 
+ 		template <typename U>
  		GLM_FUNC_DECL tvec1<T> & operator|=(tvec1<U> const & v);
- 		template <typename U> 
+ 		template <typename U>
 -		GLM_FUNC_DECL tvec1<T> & operator^=(U const & s);
 +		GLM_FUNC_DECL tvec1<T> & operator^=(U const & s_);
- 		template <typename U> 
+ 		template <typename U>
  		GLM_FUNC_DECL tvec1<T> & operator^=(tvec1<U> const & v);
- 		template <typename U> 
+ 		template <typename U>
 -		GLM_FUNC_DECL tvec1<T> & operator<<=(U const & s);
 +		GLM_FUNC_DECL tvec1<T> & operator<<=(U const & s_);
- 		template <typename U> 
+ 		template <typename U>
  		GLM_FUNC_DECL tvec1<T> & operator<<=(tvec1<U> const & v);
- 		template <typename U> 
+ 		template <typename U>
 -		GLM_FUNC_DECL tvec1<T> & operator>>=(U const & s);
 +		GLM_FUNC_DECL tvec1<T> & operator>>=(U const & s_);
- 		template <typename U> 
+ 		template <typename U>
  		GLM_FUNC_DECL tvec1<T> & operator>>=(tvec1<U> const & v);
- 
+
 diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
 --- glm.org/glm/core/type_vec1.inl	2013-12-08 17:04:59.707365220 +0100
 +++ glm/glm/core/type_vec1.inl	2013-12-08 17:07:20.081840460 +0100
@@ -132,8 +132,8 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
 -		x(s)
 +		x(s_)
  	{}
+
  
- 	//////////////////////////////////////
 @@ -98,9 +98,9 @@
  	template <typename T>
  	GLM_FUNC_QUALIFIER tvec1<T>::tvec1
@@ -144,10 +144,10 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
 -		x(r.x)
 +		x(r_.x)
  	{}
+
  
- 	//////////////////////////////////////
 @@ -110,9 +110,9 @@
- 	template <typename U> 
+ 	template <typename U>
  	GLM_FUNC_QUALIFIER tvec1<T>::tvec1
  	(
 -		U const & s
@@ -156,10 +156,10 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
 -		x(value_type(s))
 +		x(value_type(s_))
  	{}
+
  
- 	//////////////////////////////////////
 @@ -173,10 +173,10 @@
- 	template <typename U> 
+ 	template <typename U>
  	GLM_FUNC_QUALIFIER tvec1<T> & tvec1<T>::operator+=
  	(
 -		U const & s
@@ -170,9 +170,9 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
 +		this->x += T(s_);
  		return *this;
  	}
- 
+
 @@ -195,10 +195,10 @@
- 	template <typename U> 
+ 	template <typename U>
  	GLM_FUNC_QUALIFIER tvec1<T> & tvec1<T>::operator-=
  	(
 -		U const & s
@@ -183,9 +183,9 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
 +		this->x -= T(s_);
  		return *this;
  	}
- 
+
 @@ -217,10 +217,10 @@
- 	template <typename U> 
+ 	template <typename U>
  	GLM_FUNC_QUALIFIER tvec1<T> & tvec1<T>::operator*=
  	(
 -		U const & s
@@ -196,9 +196,9 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
 +		this->x *= T(s_);
  		return *this;
  	}
- 
+
 @@ -239,10 +239,10 @@
- 	template <typename U> 
+ 	template <typename U>
  	GLM_FUNC_QUALIFIER tvec1<T> & tvec1<T>::operator/=
  	(
 -		U const & s
@@ -209,9 +209,9 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
 +		this->x /= T(s_);
  		return *this;
  	}
- 
+
 @@ -301,10 +301,10 @@
- 	template <typename U> 
+ 	template <typename U>
  	GLM_FUNC_QUALIFIER tvec1<T> & tvec1<T>::operator%=
  	(
 -		U const & s
@@ -222,9 +222,9 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
 +		this->x %= T(s_);
  		return *this;
  	}
- 
+
 @@ -323,10 +323,10 @@
- 	template <typename U> 
+ 	template <typename U>
  	GLM_FUNC_QUALIFIER tvec1<T> & tvec1<T>::operator&=
  	(
 -		U const & s
@@ -235,9 +235,9 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
 +		this->x &= T(s_);
  		return *this;
  	}
- 
+
 @@ -345,10 +345,10 @@
- 	template <typename U> 
+ 	template <typename U>
  	GLM_FUNC_QUALIFIER tvec1<T> & tvec1<T>::operator|=
  	(
 -		U const & s
@@ -248,9 +248,9 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
 +		this->x |= T(s_);
  		return *this;
  	}
- 
+
 @@ -367,10 +367,10 @@
- 	template <typename U> 
+ 	template <typename U>
  	GLM_FUNC_QUALIFIER tvec1<T> & tvec1<T>::operator^=
  	(
 -		U const & s
@@ -261,9 +261,9 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
 +		this->x ^= T(s_);
  		return *this;
  	}
- 
+
 @@ -389,10 +389,10 @@
- 	template <typename U> 
+ 	template <typename U>
  	GLM_FUNC_QUALIFIER tvec1<T> & tvec1<T>::operator<<=
  	(
 -		U const & s
@@ -274,9 +274,9 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
 +		this->x <<= T(s_);
  		return *this;
  	}
- 
+
 @@ -411,10 +411,10 @@
- 	template <typename U> 
+ 	template <typename U>
  	GLM_FUNC_QUALIFIER tvec1<T> & tvec1<T>::operator>>=
  	(
 -		U const & s
@@ -287,24 +287,24 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
 +		this->x >>= T(s_);
  		return *this;
  	}
- 
+
 @@ -434,21 +434,21 @@
- 
+
  	template <typename T>
- 	GLM_FUNC_QUALIFIER T 
+ 	GLM_FUNC_QUALIFIER T
 -	tvec1<T>::swizzle(comp x) const
 +	tvec1<T>::swizzle(comp x_) const
  	{
 -		return (*this)[x];
 +		return (*this)[x_];
  	}
- 
+
  	template <typename T>
- 	GLM_FUNC_QUALIFIER tvec2<T> 
+ 	GLM_FUNC_QUALIFIER tvec2<T>
  	tvec1<T>::swizzle
  	(
--		comp x, 
-+		comp x_, 
+-		comp x,
++		comp x_,
  		comp y
  	) const
  	{
@@ -313,14 +313,14 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
 +			(*this)[x_],
  			(*this)[y]);
  	}
- 
+
 @@ -456,13 +456,13 @@
- 	GLM_FUNC_QUALIFIER tvec3<T> 
+ 	GLM_FUNC_QUALIFIER tvec3<T>
  	tvec1<T>::swizzle
  	(
--		comp x, 
-+		comp x_, 
- 		comp y, 
+-		comp x,
++		comp x_,
+ 		comp y,
  		comp z
  	) const
  	{
@@ -331,13 +331,13 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
  			(*this)[z]);
  	}
 @@ -471,14 +471,14 @@
- 	GLM_FUNC_QUALIFIER tvec4<T> 
+ 	GLM_FUNC_QUALIFIER tvec4<T>
  	tvec1<T>::swizzle
  	(
--		comp x, 
-+		comp x_, 
- 		comp y, 
- 		comp z, 
+-		comp x,
++		comp x_,
+ 		comp y,
+ 		comp z,
  		comp w
  	) const
  	{
@@ -348,7 +348,7 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
  			(*this)[z],
  			(*this)[w]);
 @@ -488,11 +488,11 @@
- 	GLM_FUNC_QUALIFIER tref1<T> 
+ 	GLM_FUNC_QUALIFIER tref1<T>
  	tvec1<T>::swizzle
  	(
 -		comp x
@@ -359,12 +359,12 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
 -			(*this)[x]);
 +			(*this)[x_]);
  	}
+
  
- 	//////////////////////////////////////
 @@ -502,22 +502,22 @@
- 	GLM_FUNC_QUALIFIER tvec1<T> operator+ 
+ 	GLM_FUNC_QUALIFIER tvec1<T> operator+
  	(
- 		tvec1<T> const & v, 
+ 		tvec1<T> const & v,
 -		typename tvec1<T>::value_type const & s
 +		typename tvec1<T>::value_type const & s_
  	)
@@ -373,12 +373,12 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
 -			v.x + s);
 +			v.x + s_);
  	}
- 
- 	template <typename T> 
- 	GLM_FUNC_QUALIFIER tvec1<T> operator+ 
+
+ 	template <typename T>
+ 	GLM_FUNC_QUALIFIER tvec1<T> operator+
  	(
--		typename tvec1<T>::value_type const & s, 
-+		typename tvec1<T>::value_type const & s_, 
+-		typename tvec1<T>::value_type const & s,
++		typename tvec1<T>::value_type const & s_,
  		tvec1<T> const & v
  	)
  	{
@@ -386,12 +386,12 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
 -			s + v.x);
 +			s_ + v.x);
  	}
- 
- 	template <typename T> 
+
+ 	template <typename T>
 @@ -536,22 +536,22 @@
- 	GLM_FUNC_QUALIFIER tvec1<T> operator- 
+ 	GLM_FUNC_QUALIFIER tvec1<T> operator-
  	(
- 		tvec1<T> const & v, 
+ 		tvec1<T> const & v,
 -		typename tvec1<T>::value_type const & s
 +		typename tvec1<T>::value_type const & s_
  	)
@@ -400,11 +400,11 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
 -			v.x - s);
 +			v.x - s_);
  	}
- 
- 	template <typename T> 
- 	GLM_FUNC_QUALIFIER tvec1<T> operator- 
+
+ 	template <typename T>
+ 	GLM_FUNC_QUALIFIER tvec1<T> operator-
  	(
--		typename tvec1<T>::value_type const & s, 
+-		typename tvec1<T>::value_type const & s,
 +		typename tvec1<T>::value_type const & s_,
  		tvec1<T> const & v
  	)
@@ -413,12 +413,12 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
 -			s - v.x);
 +			s_ - v.x);
  	}
- 
- 	template <typename T> 
+
+ 	template <typename T>
 @@ -570,22 +570,22 @@
- 	GLM_FUNC_QUALIFIER tvec1<T> operator* 
+ 	GLM_FUNC_QUALIFIER tvec1<T> operator*
  	(
- 		tvec1<T> const & v, 
+ 		tvec1<T> const & v,
 -		typename tvec1<T>::value_type const & s
 +		typename tvec1<T>::value_type const & s_
  	)
@@ -427,11 +427,11 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
 -			v.x * s);
 +			v.x * s_);
  	}
- 
- 	template <typename T> 
- 	GLM_FUNC_QUALIFIER tvec1<T> operator* 
+
+ 	template <typename T>
+ 	GLM_FUNC_QUALIFIER tvec1<T> operator*
  	(
--		typename tvec1<T>::value_type const & s, 
+-		typename tvec1<T>::value_type const & s,
 +		typename tvec1<T>::value_type const & s_,
  		tvec1<T> const & v
  	)
@@ -440,12 +440,12 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
 -			s * v.x);
 +			s_ * v.x);
  	}
- 
- 	template <typename T> 
+
+ 	template <typename T>
 @@ -604,22 +604,22 @@
- 	GLM_FUNC_QUALIFIER tvec1<T> operator/ 
+ 	GLM_FUNC_QUALIFIER tvec1<T> operator/
  	(
- 		tvec1<T> const & v, 
+ 		tvec1<T> const & v,
 -		typename tvec1<T>::value_type const & s
 +		typename tvec1<T>::value_type const & s_
  	)
@@ -454,11 +454,11 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
 -			v.x / s);
 +			v.x / s_);
  	}
- 
- 	template <typename T> 
- 	GLM_FUNC_QUALIFIER tvec1<T> operator/ 
+
+ 	template <typename T>
+ 	GLM_FUNC_QUALIFIER tvec1<T> operator/
  	(
--		typename tvec1<T>::value_type const & s, 
+-		typename tvec1<T>::value_type const & s,
 +		typename tvec1<T>::value_type const & s_,
  		tvec1<T> const & v
  	)
@@ -467,12 +467,12 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
 -			s / v.x);
 +			s_ / v.x);
  	}
- 
- 	template <typename T> 
+
+ 	template <typename T>
 @@ -673,22 +673,22 @@
- 	GLM_FUNC_QUALIFIER tvec1<T> operator% 
+ 	GLM_FUNC_QUALIFIER tvec1<T> operator%
  	(
- 		tvec1<T> const & v, 
+ 		tvec1<T> const & v,
 -		typename tvec1<T>::value_type const & s
 +		typename tvec1<T>::value_type const & s_
  	)
@@ -481,11 +481,11 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
 -			v.x % s);
 +			v.x % s_);
  	}
- 
+
  	template <typename T>
- 	GLM_FUNC_QUALIFIER tvec1<T> operator% 
+ 	GLM_FUNC_QUALIFIER tvec1<T> operator%
  	(
--		typename tvec1<T>::value_type const & s, 
+-		typename tvec1<T>::value_type const & s,
 +		typename tvec1<T>::value_type const & s_,
  		tvec1<T> const & v
  	)
@@ -494,12 +494,12 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
 -			s % v.x);
 +			s_ % v.x);
  	}
- 
+
  	template <typename T>
 @@ -706,22 +706,22 @@
- 	GLM_FUNC_QUALIFIER tvec1<T> operator& 
+ 	GLM_FUNC_QUALIFIER tvec1<T> operator&
  	(
- 		tvec1<T> const & v, 
+ 		tvec1<T> const & v,
 -		typename tvec1<T>::value_type const & s
 +		typename tvec1<T>::value_type const & s_
  	)
@@ -508,11 +508,11 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
 -			v.x & s);
 +			v.x & s_);
  	}
- 
+
  	template <typename T>
- 	GLM_FUNC_QUALIFIER tvec1<T> operator& 
+ 	GLM_FUNC_QUALIFIER tvec1<T> operator&
  	(
--		typename tvec1<T>::value_type const & s, 
+-		typename tvec1<T>::value_type const & s,
 +		typename tvec1<T>::value_type const & s_,
  		tvec1<T> const & v
  	)
@@ -521,12 +521,12 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
 -			s & v.x);
 +			s_ & v.x);
  	}
- 
+
  	template <typename T>
 @@ -739,22 +739,22 @@
- 	GLM_FUNC_QUALIFIER tvec1<T> operator| 
+ 	GLM_FUNC_QUALIFIER tvec1<T> operator|
  	(
- 		tvec1<T> const & v, 
+ 		tvec1<T> const & v,
 -		typename tvec1<T>::value_type const & s
 +		typename tvec1<T>::value_type const & s_
  	)
@@ -535,11 +535,11 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
 -			v.x | s);
 +			v.x | s_);
  	}
- 
+
  	template <typename T>
- 	GLM_FUNC_QUALIFIER tvec1<T> operator| 
+ 	GLM_FUNC_QUALIFIER tvec1<T> operator|
  	(
--		typename tvec1<T>::value_type const & s, 
+-		typename tvec1<T>::value_type const & s,
 +		typename tvec1<T>::value_type const & s_,
  		tvec1<T> const & v
  	)
@@ -548,12 +548,12 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
 -			s | v.x);
 +			s_ | v.x);
  	}
- 
+
  	template <typename T>
 @@ -772,22 +772,22 @@
- 	GLM_FUNC_QUALIFIER tvec1<T> operator^ 
+ 	GLM_FUNC_QUALIFIER tvec1<T> operator^
  	(
- 		tvec1<T> const & v, 
+ 		tvec1<T> const & v,
 -		typename tvec1<T>::value_type const & s
 +		typename tvec1<T>::value_type const & s_
  	)
@@ -562,11 +562,11 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
 -			v.x ^ s);
 +			v.x ^ s_);
  	}
- 
+
  	template <typename T>
- 	GLM_FUNC_QUALIFIER tvec1<T> operator^ 
+ 	GLM_FUNC_QUALIFIER tvec1<T> operator^
  	(
--		typename tvec1<T>::value_type const & s, 
+-		typename tvec1<T>::value_type const & s,
 +		typename tvec1<T>::value_type const & s_,
  		tvec1<T> const & v
  	)
@@ -575,12 +575,12 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
 -			s ^ v.x);
 +			s_ ^ v.x);
  	}
- 
+
  	template <typename T>
 @@ -805,22 +805,22 @@
- 	GLM_FUNC_QUALIFIER tvec1<T> operator<< 
+ 	GLM_FUNC_QUALIFIER tvec1<T> operator<<
  	(
- 		tvec1<T> const & v, 
+ 		tvec1<T> const & v,
 -		typename tvec1<T>::value_type const & s
 +		typename tvec1<T>::value_type const & s_
  	)
@@ -589,11 +589,11 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
 -			v.x << s);
 +			v.x << s_);
  	}
- 
+
  	template <typename T>
- 	GLM_FUNC_QUALIFIER tvec1<T> operator<< 
+ 	GLM_FUNC_QUALIFIER tvec1<T> operator<<
  	(
--		typename tvec1<T>::value_type const & s, 
+-		typename tvec1<T>::value_type const & s,
 +		typename tvec1<T>::value_type const & s_,
  		tvec1<T> const & v
  	)
@@ -602,12 +602,12 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
 -			s << v.x);
 +			s_ << v.x);
  	}
- 
+
  	template <typename T>
 @@ -838,22 +838,22 @@
- 	GLM_FUNC_QUALIFIER tvec1<T> operator>> 
+ 	GLM_FUNC_QUALIFIER tvec1<T> operator>>
  	(
- 		tvec1<T> const & v, 
+ 		tvec1<T> const & v,
 -		typename tvec1<T>::value_type const & s
 +		typename tvec1<T>::value_type const & s_
  	)
@@ -616,11 +616,11 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
 -			v.x >> s);
 +			v.x >> s_);
  	}
- 
+
  	template <typename T>
- 	GLM_FUNC_QUALIFIER tvec1<T> operator>> 
+ 	GLM_FUNC_QUALIFIER tvec1<T> operator>>
  	(
--		typename tvec1<T>::value_type const & s, 
+-		typename tvec1<T>::value_type const & s,
 +		typename tvec1<T>::value_type const & s_,
  		tvec1<T> const & v
  	)
@@ -629,10 +629,10 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
 -			s >> v.x);
 +			s_ >> v.x);
  	}
- 
+
  	template <typename T>
 @@ -883,9 +883,9 @@
- 	template <typename T> 
+ 	template <typename T>
  	GLM_FUNC_QUALIFIER tref1<T>::tref1
  	(
 -		T & x
@@ -641,8 +641,8 @@ diff -ur glm.org/glm/core/type_vec1.inl glm/glm/core/type_vec1.inl
 -		x(x)
 +		x(x_)
  	{}
- 
- 	template <typename T> 
+
+ 	template <typename T>
 diff -ur glm.org/glm/core/type_vec2.inl glm/glm/core/type_vec2.inl
 --- glm.org/glm/core/type_vec2.inl	2013-12-08 17:04:59.705365270 +0100
 +++ glm/glm/core/type_vec2.inl	2013-12-08 17:07:20.078840535 +0100
@@ -658,7 +658,7 @@ diff -ur glm.org/glm/core/type_vec2.inl glm/glm/core/type_vec2.inl
 +		x(s_),
 +		y(s_)
  	{}
- 
+
  	template <typename T>
 @@ -113,10 +113,10 @@
  	template <typename T>
@@ -672,10 +672,10 @@ diff -ur glm.org/glm/core/type_vec2.inl glm/glm/core/type_vec2.inl
 +		x(r_.x),
 +		y(r_.y)
  	{}
+
  
- 	//////////////////////////////////////
 @@ -126,10 +126,10 @@
- 	template <typename U> 
+ 	template <typename U>
  	GLM_FUNC_QUALIFIER tvec2<T>::tvec2
  	(
 -		U const & x
@@ -686,12 +686,12 @@ diff -ur glm.org/glm/core/type_vec2.inl glm/glm/core/type_vec2.inl
 +		x(value_type(x_)),
 +		y(value_type(x_))
  	{}
- 
+
  	template <typename T>
 @@ -204,10 +204,10 @@
- 
+
  	template <typename T>
- 	template <typename U> 
+ 	template <typename U>
 -	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator+=(U s)
 +	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator+=(U s_)
  	{
@@ -701,11 +701,11 @@ diff -ur glm.org/glm/core/type_vec2.inl glm/glm/core/type_vec2.inl
 +		this->y += T(s_);
  		return *this;
  	}
- 
+
 @@ -225,10 +225,10 @@
- 
+
  	template <typename T>
- 	template <typename U> 
+ 	template <typename U>
 -	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator-=(U s)
 +	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator-=(U s_)
  	{
@@ -715,11 +715,11 @@ diff -ur glm.org/glm/core/type_vec2.inl glm/glm/core/type_vec2.inl
 +		this->y -= T(s_);
  		return *this;
  	}
- 
+
 @@ -246,10 +246,10 @@
- 
+
  	template <typename T>
- 	template <typename U> 
+ 	template <typename U>
 -	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator*=(U s)
 +	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator*=(U s_)
  	{
@@ -729,11 +729,11 @@ diff -ur glm.org/glm/core/type_vec2.inl glm/glm/core/type_vec2.inl
 +		this->y *= T(s_);
  		return *this;
  	}
- 
+
 @@ -267,10 +267,10 @@
- 
+
  	template <typename T>
- 	template <typename U> 
+ 	template <typename U>
 -	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator/=(U s)
 +	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator/=(U s_)
  	{
@@ -743,11 +743,11 @@ diff -ur glm.org/glm/core/type_vec2.inl glm/glm/core/type_vec2.inl
 +		this->y /= T(s_);
  		return *this;
  	}
- 
+
 @@ -330,10 +330,10 @@
- 
+
  	template <typename T>
- 	template <typename U> 
+ 	template <typename U>
 -	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator%=(U s)
 +	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator%=(U s_)
  	{
@@ -757,11 +757,11 @@ diff -ur glm.org/glm/core/type_vec2.inl glm/glm/core/type_vec2.inl
 +		this->y %= T(s_);
  		return *this;
  	}
- 
+
 @@ -351,10 +351,10 @@
- 
+
  	template <typename T>
- 	template <typename U> 
+ 	template <typename U>
 -	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator&=(U s)
 +	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator&=(U s_)
  	{
@@ -771,11 +771,11 @@ diff -ur glm.org/glm/core/type_vec2.inl glm/glm/core/type_vec2.inl
 +		this->y &= T(s_);
  		return *this;
  	}
- 
+
 @@ -372,10 +372,10 @@
- 
+
  	template <typename T>
- 	template <typename U> 
+ 	template <typename U>
 -	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator|=(U s)
 +	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator|=(U s_)
  	{
@@ -785,11 +785,11 @@ diff -ur glm.org/glm/core/type_vec2.inl glm/glm/core/type_vec2.inl
 +		this->y |= T(s_);
  		return *this;
  	}
- 
+
 @@ -393,10 +393,10 @@
- 
+
  	template <typename T>
- 	template <typename U> 
+ 	template <typename U>
 -	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator^=(U s)
 +	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator^=(U s_)
  	{
@@ -799,11 +799,11 @@ diff -ur glm.org/glm/core/type_vec2.inl glm/glm/core/type_vec2.inl
 +		this->y ^= T(s_);
  		return *this;
  	}
- 
+
 @@ -414,10 +414,10 @@
- 
+
  	template <typename T>
- 	template <typename U> 
+ 	template <typename U>
 -	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator<<=(U s)
 +	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator<<=(U s_)
  	{
@@ -813,11 +813,11 @@ diff -ur glm.org/glm/core/type_vec2.inl glm/glm/core/type_vec2.inl
 +		this->y <<= T(s_);
  		return *this;
  	}
- 
+
 @@ -435,10 +435,10 @@
- 
+
  	template <typename T>
- 	template <typename U> 
+ 	template <typename U>
 -	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator>>=(U s)
 +	GLM_FUNC_QUALIFIER tvec2<T> & tvec2<T>::operator>>=(U s_)
  	{
@@ -827,7 +827,7 @@ diff -ur glm.org/glm/core/type_vec2.inl glm/glm/core/type_vec2.inl
 +		this->y >>= T(s_);
  		return *this;
  	}
- 
+
 @@ -460,50 +460,50 @@
  	template <typename T>
  	GLM_FUNC_QUALIFIER typename tvec2<T>::value_type tvec2<T>::swizzle
@@ -839,13 +839,13 @@ diff -ur glm.org/glm/core/type_vec2.inl glm/glm/core/type_vec2.inl
 -		return (*this)[x];
 +		return (*this)[x_];
  	}
- 
+
  	template <typename T>
  	GLM_FUNC_QUALIFIER tvec2<T> tvec2<T>::swizzle
  	(
--		comp x, 
+-		comp x,
 -		comp y
-+		comp x_, 
++		comp x_,
 +		comp y_
  	) const
  	{
@@ -855,14 +855,14 @@ diff -ur glm.org/glm/core/type_vec2.inl glm/glm/core/type_vec2.inl
 +			(*this)[x_],
 +			(*this)[y_]);
  	}
- 
+
  	template <typename T>
  	GLM_FUNC_QUALIFIER tvec3<T> tvec2<T>::swizzle
  	(
--		comp x, 
--		comp y, 
-+		comp x_, 
-+		comp y_, 
+-		comp x,
+-		comp y,
++		comp x_,
++		comp y_,
  		comp z
  	) const
  	{
@@ -873,15 +873,15 @@ diff -ur glm.org/glm/core/type_vec2.inl glm/glm/core/type_vec2.inl
 +			(*this)[y_],
  			(*this)[z]);
  	}
- 
+
  	template <typename T>
  	GLM_FUNC_QUALIFIER tvec4<T> tvec2<T>::swizzle
  	(
--		comp x, 
--		comp y, 
-+		comp x_, 
-+		comp y_, 
- 		comp z, 
+-		comp x,
+-		comp y,
++		comp x_,
++		comp y_,
+ 		comp z,
  		comp w
  	) const
  	{
@@ -897,9 +897,9 @@ diff -ur glm.org/glm/core/type_vec2.inl glm/glm/core/type_vec2.inl
  	template <typename T>
  	GLM_FUNC_QUALIFIER tref2<T> tvec2<T>::swizzle
  	(
--		comp x, 
+-		comp x,
 -		comp y
-+		comp x_, 
++		comp x_,
 +		comp y_
  	)
  	{
@@ -909,12 +909,12 @@ diff -ur glm.org/glm/core/type_vec2.inl glm/glm/core/type_vec2.inl
 +			(*this)[x_],
 +			(*this)[y_]);
  	}
+
  
- 	//////////////////////////////////////
 @@ -527,12 +527,12 @@
- 	GLM_FUNC_QUALIFIER tvec2<T> operator+ 
+ 	GLM_FUNC_QUALIFIER tvec2<T> operator+
  	(
- 		tvec2<T> const & v, 
+ 		tvec2<T> const & v,
 -		T const & s
 +		T const & s_
  	)
@@ -925,15 +925,15 @@ diff -ur glm.org/glm/core/type_vec2.inl glm/glm/core/type_vec2.inl
 +			v.x + T(s_),
 +			v.y + T(s_));
  	}
- 
- 	template <typename T> 
+
+ 	template <typename T>
 @@ -942,11 +942,11 @@
- 	template <typename T> 
+ 	template <typename T>
  	tref2<T>::tref2
  	(
--		T & x, 
+-		T & x,
 -		T & y
-+		T & x_, 
++		T & x_,
 +		T & y_
  	) :
 -		x(x),
@@ -941,14 +941,14 @@ diff -ur glm.org/glm/core/type_vec2.inl glm/glm/core/type_vec2.inl
 +		x(x_),
 +		y(y_)
  	{}
- 
- 	template <typename T> 
+
+ 	template <typename T>
 diff -ur glm.org/glm/core/type_vec3.hpp glm/glm/core/type_vec3.hpp
 --- glm.org/glm/core/type_vec3.hpp	2013-12-08 17:04:59.707365220 +0100
 +++ glm/glm/core/type_vec3.hpp	2013-12-08 17:07:20.081840460 +0100
 @@ -170,15 +170,15 @@
  		}
- 
+
  		template <int E0, int E1>
 -		GLM_FUNC_DECL tvec3(glm::detail::swizzle<2, T, tvec2<T>, E0, E1, -1, -2> const & v, T const & s)
 +		GLM_FUNC_DECL tvec3(glm::detail::swizzle<2, T, tvec2<T>, E0, E1, -1, -2> const & v, T const & s_)
@@ -956,7 +956,7 @@ diff -ur glm.org/glm/core/type_vec3.hpp glm/glm/core/type_vec3.hpp
 -			*this = tvec3<T>(v(), s);
 +			*this = tvec3<T>(v(), s_);
  		}
- 
+
  		template <int E0, int E1>
 -		GLM_FUNC_DECL tvec3(T const & s, glm::detail::swizzle<2, T, tvec2<T>, E0, E1, -1, -2> const & v)
 +		GLM_FUNC_DECL tvec3(T const & s_, glm::detail::swizzle<2, T, tvec2<T>, E0, E1, -1, -2> const & v)
@@ -964,8 +964,8 @@ diff -ur glm.org/glm/core/type_vec3.hpp glm/glm/core/type_vec3.hpp
 -			*this = tvec3<T>(s, v());
 +			*this = tvec3<T>(s_, v());
  		}
+
  
- 		//////////////////////////////////////
 diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 --- glm.org/glm/core/type_vec3.inl	2013-12-08 17:04:59.706365245 +0100
 +++ glm/glm/core/type_vec3.inl	2013-12-08 17:07:20.079840510 +0100
@@ -983,7 +983,7 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +		y(s_),
 +		z(s_)
  	{}
- 
+
  	template <typename T>
 @@ -118,11 +118,11 @@
  	template <typename T>
@@ -999,27 +999,27 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +		y(r_.y),
 +		z(r_.z)
  	{}
- 
+
  	template <typename T>
 @@ -130,21 +130,21 @@
  	GLM_FUNC_QUALIFIER tvec3<T>::tvec3
  	(
- 		tref2<A> const & v, 
+ 		tref2<A> const & v,
 -		B const & s
 +		B const & s_
- 	) : 
+ 	) :
  		x(value_type(v.x)),
  		y(value_type(v.y)),
 -		z(value_type(s))
 +		z(value_type(s_))
  	{}
- 
+
  	template <typename T>
- 	template <typename A, typename B> 
+ 	template <typename A, typename B>
  	GLM_FUNC_QUALIFIER tvec3<T>::tvec3
  	(
--		A const & s, 
-+		A const & s_, 
+-		A const & s,
++		A const & s_,
  		tref2<B> const & v
  	) :
 -		x(value_type(s)),
@@ -1028,7 +1028,7 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
  		z(value_type(v.y))
  	{}
 @@ -156,24 +156,24 @@
- 	template <typename U> 
+ 	template <typename U>
  	GLM_FUNC_QUALIFIER tvec3<T>::tvec3
  	(
 -		U const & s
@@ -1041,16 +1041,16 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +		y(value_type(s_)),
 +		z(value_type(s_))
  	{}
- 
+
  	template <typename T>
- 	template <typename A, typename B, typename C> 
+ 	template <typename A, typename B, typename C>
  	GLM_FUNC_QUALIFIER tvec3<T>::tvec3
  	(
--		A const & x, 
--		B const & y, 
+-		A const & x,
+-		B const & y,
 -		C const & z
-+		A const & x_, 
-+		B const & y_, 
++		A const & x_,
++		B const & y_,
 +		C const & z_
  	) :
 -		x(value_type(x)),
@@ -1060,12 +1060,12 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +		y(value_type(y_)),
 +		z(value_type(z_))
  	{}
+
  
- 	//////////////////////////////////////
 @@ -184,21 +184,21 @@
  	GLM_FUNC_QUALIFIER tvec3<T>::tvec3
  	(
- 		tvec2<A> const & v, 
+ 		tvec2<A> const & v,
 -		B const & s
 +		B const & s_
  	) :
@@ -1074,13 +1074,13 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 -		z(value_type(s))
 +		z(value_type(s_))
  	{}
- 
+
  	template <typename T>
- 	template <typename A, typename B> 
+ 	template <typename A, typename B>
  	GLM_FUNC_QUALIFIER tvec3<T>::tvec3
- 	(	
--		A const & s, 
-+		A const & s_, 
+ 	(
+-		A const & s,
++		A const & s_,
  		tvec2<B> const & v
  	) :
 -		x(value_type(s)),
@@ -1089,9 +1089,9 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
  		z(value_type(v.y))
  	{}
 @@ -255,11 +255,11 @@
- 
+
  	template <typename T>
- 	template <typename U> 
+ 	template <typename U>
 -	GLM_FUNC_QUALIFIER tvec3<T> & tvec3<T>::operator+=(U s)
 +	GLM_FUNC_QUALIFIER tvec3<T> & tvec3<T>::operator+=(U s_)
  	{
@@ -1103,11 +1103,11 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +		this->z += T(s_);
  		return *this;
  	}
- 
+
 @@ -278,11 +278,11 @@
- 
+
  	template <typename T>
- 	template <typename U> 
+ 	template <typename U>
 -	GLM_FUNC_QUALIFIER tvec3<T> & tvec3<T>::operator-=(U s)
 +	GLM_FUNC_QUALIFIER tvec3<T> & tvec3<T>::operator-=(U s_)
  	{
@@ -1119,11 +1119,11 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +		this->z -= T(s_);
  		return *this;
  	}
- 
+
 @@ -301,11 +301,11 @@
- 
+
  	template <typename T>
- 	template <typename U> 
+ 	template <typename U>
 -	GLM_FUNC_QUALIFIER tvec3<T> & tvec3<T>::operator*=(U s)
 +	GLM_FUNC_QUALIFIER tvec3<T> & tvec3<T>::operator*=(U s_)
  	{
@@ -1135,11 +1135,11 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +		this->z *= T(s_);
  		return *this;
  	}
- 
+
 @@ -324,11 +324,11 @@
- 
+
  	template <typename T>
- 	template <typename U> 
+ 	template <typename U>
 -	GLM_FUNC_QUALIFIER tvec3<T> & tvec3<T>::operator/=(U s)
 +	GLM_FUNC_QUALIFIER tvec3<T> & tvec3<T>::operator/=(U s_)
  	{
@@ -1151,11 +1151,11 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +		this->z /= T(s_);
  		return *this;
  	}
- 
+
 @@ -391,11 +391,11 @@
- 
+
  	template <typename T>
- 	template <typename U> 
+ 	template <typename U>
 -	GLM_FUNC_QUALIFIER tvec3<T> & tvec3<T>::operator%=(U s)
 +	GLM_FUNC_QUALIFIER tvec3<T> & tvec3<T>::operator%=(U s_)
  	{
@@ -1167,11 +1167,11 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +		this->z %= s_;
  		return *this;
  	}
- 
+
 @@ -414,11 +414,11 @@
- 
+
  	template <typename T>
- 	template <typename U> 
+ 	template <typename U>
 -	GLM_FUNC_QUALIFIER tvec3<T> & tvec3<T>::operator&=(U s)
 +	GLM_FUNC_QUALIFIER tvec3<T> & tvec3<T>::operator&=(U s_)
  	{
@@ -1183,11 +1183,11 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +		this->z &= s_;
  		return *this;
  	}
- 
+
 @@ -437,11 +437,11 @@
- 
+
  	template <typename T>
- 	template <typename U> 
+ 	template <typename U>
 -	GLM_FUNC_QUALIFIER tvec3<T> & tvec3<T>::operator|=(U s)
 +	GLM_FUNC_QUALIFIER tvec3<T> & tvec3<T>::operator|=(U s_)
  	{
@@ -1199,11 +1199,11 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +		this->z |= s_;
  		return *this;
  	}
- 
+
 @@ -460,11 +460,11 @@
- 
+
  	template <typename T>
- 	template <typename U> 
+ 	template <typename U>
 -	GLM_FUNC_QUALIFIER tvec3<T> & tvec3<T>::operator^=(U s)
 +	GLM_FUNC_QUALIFIER tvec3<T> & tvec3<T>::operator^=(U s_)
  	{
@@ -1215,11 +1215,11 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +		this->z ^= s_;
  		return *this;
  	}
- 
+
 @@ -483,11 +483,11 @@
- 
+
  	template <typename T>
- 	template <typename U> 
+ 	template <typename U>
 -	GLM_FUNC_QUALIFIER tvec3<T> & tvec3<T>::operator<<=(U s)
 +	GLM_FUNC_QUALIFIER tvec3<T> & tvec3<T>::operator<<=(U s_)
  	{
@@ -1231,11 +1231,11 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +		this->z <<= s_;
  		return *this;
  	}
- 
+
 @@ -506,11 +506,11 @@
- 
+
  	template <typename T>
- 	template <typename U> 
+ 	template <typename U>
 -	GLM_FUNC_QUALIFIER tvec3<T> & tvec3<T>::operator>>=(U s)
 +	GLM_FUNC_QUALIFIER tvec3<T> & tvec3<T>::operator>>=(U s_)
  	{
@@ -1247,9 +1247,9 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +		this->z >>= T(s_);
  		return *this;
  	}
- 
+
 @@ -534,78 +534,78 @@
- 	GLM_FUNC_QUALIFIER typename tvec3<T>::value_type 
+ 	GLM_FUNC_QUALIFIER typename tvec3<T>::value_type
  	tvec3<T>::swizzle
  	(
 -		comp x
@@ -1259,13 +1259,13 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 -		return (*this)[x];
 +		return (*this)[x_];
  	}
- 
+
  	template <typename T>
  	GLM_FUNC_QUALIFIER tvec2<T> tvec3<T>::swizzle
  	(
--		comp x, 
+-		comp x,
 -		comp y
-+		comp x_, 
++		comp x_,
 +		comp y_
  	) const
  	{
@@ -1275,15 +1275,15 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +			(*this)[x_],
 +			(*this)[y_]);
  	}
- 
+
  	template <typename T>
  	GLM_FUNC_QUALIFIER tvec3<T> tvec3<T>::swizzle
  	(
--		comp x, 
--		comp y, 
+-		comp x,
+-		comp y,
 -		comp z
-+		comp x_, 
-+		comp y_, 
++		comp x_,
++		comp y_,
 +		comp z_
  	) const
  	{
@@ -1295,16 +1295,16 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +			(*this)[y_],
 +			(*this)[z_]);
  	}
- 
+
  	template <typename T>
  	GLM_FUNC_QUALIFIER tvec4<T> tvec3<T>::swizzle
  	(
--		comp x, 
--		comp y, 
--		comp z, 
-+		comp x_, 
-+		comp y_, 
-+		comp z_, 
+-		comp x,
+-		comp y,
+-		comp z,
++		comp x_,
++		comp y_,
++		comp z_,
  		comp w
  	) const
  	{
@@ -1317,13 +1317,13 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +			(*this)[z_],
  			(*this)[w]);
  	}
- 
+
  	template <typename T>
  	GLM_FUNC_QUALIFIER tref2<T> tvec3<T>::swizzle
  	(
--		comp x, 
+-		comp x,
 -		comp y
-+		comp x_, 
++		comp x_,
 +		comp y_
  	)
  	{
@@ -1333,15 +1333,15 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +			(*this)[x_],
 +			(*this)[y_]);
  	}
- 
+
  	template <typename T>
  	GLM_FUNC_QUALIFIER tref3<T> tvec3<T>::swizzle
  	(
--		comp x, 
--		comp y, 
+-		comp x,
+-		comp y,
 -		comp z
-+		comp x_, 
-+		comp y_, 
++		comp x_,
++		comp y_,
 +		comp z_
  	)
  	{
@@ -1353,12 +1353,12 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +			(*this)[y_],
 +			(*this)[z_]);
  	}
+
  
- 	//////////////////////////////////////
 @@ -615,26 +615,26 @@
  	GLM_FUNC_QUALIFIER tvec3<T> operator+
  	(
- 		tvec3<T> const & v, 
+ 		tvec3<T> const & v,
 -		T const & s
 +		T const & s_
  	)
@@ -1371,12 +1371,12 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +			v.y + T(s_),
 +			v.z + T(s_));
  	}
- 
- 	template <typename T> 
- 	GLM_FUNC_QUALIFIER tvec3<T> operator+ 
+
+ 	template <typename T>
+ 	GLM_FUNC_QUALIFIER tvec3<T> operator+
  	(
--		T const & s, 
-+		T const & s_, 
+-		T const & s,
++		T const & s_,
  		tvec3<T> const & v
  	)
  	{
@@ -1388,12 +1388,12 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +			T(s_) + v.y,
 +			T(s_) + v.z);
  	}
- 
- 	template <typename T> 
+
+ 	template <typename T>
 @@ -655,26 +655,26 @@
- 	GLM_FUNC_QUALIFIER tvec3<T> operator- 
+ 	GLM_FUNC_QUALIFIER tvec3<T> operator-
  	(
- 		tvec3<T> const & v, 
+ 		tvec3<T> const & v,
 -		T const & s
 +		T const & s_
  	)
@@ -1406,12 +1406,12 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +			v.y - T(s_),
 +			v.z - T(s_));
  	}
- 
- 	template <typename T> 
- 	GLM_FUNC_QUALIFIER tvec3<T> operator- 
+
+ 	template <typename T>
+ 	GLM_FUNC_QUALIFIER tvec3<T> operator-
  	(
--		T const & s, 
-+		T const & s_, 
+-		T const & s,
++		T const & s_,
  		tvec3<T> const & v
  	)
  	{
@@ -1423,12 +1423,12 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +			T(s_) - v.y,
 +			T(s_) - v.z);
  	}
- 
- 	template <typename T> 
+
+ 	template <typename T>
 @@ -695,26 +695,26 @@
  	GLM_FUNC_QUALIFIER tvec3<T> operator*
  	(
- 		tvec3<T> const & v, 
+ 		tvec3<T> const & v,
 -		T const & s
 +		T const & s_
  	)
@@ -1441,12 +1441,12 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +			v.y * T(s_),
 +			v.z * T(s_));
  	}
- 
- 	template <typename T> 
- 	GLM_FUNC_QUALIFIER tvec3<T> operator* 
+
+ 	template <typename T>
+ 	GLM_FUNC_QUALIFIER tvec3<T> operator*
  	(
--		T const & s, 
-+		T const & s_, 
+-		T const & s,
++		T const & s_,
  		tvec3<T> const & v
  	)
  	{
@@ -1458,12 +1458,12 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +			T(s_) * v.y,
 +			T(s_) * v.z);
  	}
- 
- 	template <typename T> 
+
+ 	template <typename T>
 @@ -735,26 +735,26 @@
  	GLM_FUNC_QUALIFIER tvec3<T> operator/
  	(
- 		tvec3<T> const & v, 
+ 		tvec3<T> const & v,
 -		T const & s
 +		T const & s_
  	)
@@ -1476,12 +1476,12 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +			v.y / T(s_),
 +			v.z / T(s_));
  	}
- 
- 	template <typename T> 
- 	GLM_FUNC_QUALIFIER tvec3<T> operator/ 
+
+ 	template <typename T>
+ 	GLM_FUNC_QUALIFIER tvec3<T> operator/
  	(
--		T const & s, 
-+		T const & s_, 
+-		T const & s,
++		T const & s_,
  		tvec3<T> const & v
  	)
  	{
@@ -1493,12 +1493,12 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +			T(s_) / v.y,
 +			T(s_) / v.z);
  	}
- 
- 	template <typename T> 
+
+ 	template <typename T>
 @@ -816,26 +816,26 @@
- 	GLM_FUNC_QUALIFIER tvec3<T> operator% 
+ 	GLM_FUNC_QUALIFIER tvec3<T> operator%
  	(
- 		tvec3<T> const & v, 
+ 		tvec3<T> const & v,
 -		T const & s
 +		T const & s_
  	)
@@ -1511,12 +1511,12 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +			v.y % T(s_),
 +			v.z % T(s_));
  	}
- 
+
  	template <typename T>
  	GLM_FUNC_QUALIFIER tvec3<T> operator%
  	(
--		T const & s, 
-+		T const & s_, 
+-		T const & s,
++		T const & s_,
  		tvec3<T> const & v
  	)
  	{
@@ -1528,12 +1528,12 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +			T(s_) % v.y,
 +			T(s_) % v.z);
  	}
- 
+
  	template <typename T>
 @@ -855,26 +855,26 @@
- 	GLM_FUNC_QUALIFIER tvec3<T> operator& 
+ 	GLM_FUNC_QUALIFIER tvec3<T> operator&
  	(
- 		tvec3<T> const & v, 
+ 		tvec3<T> const & v,
 -		T const & s
 +		T const & s_
  	)
@@ -1546,12 +1546,12 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +			v.y & T(s_),
 +			v.z & T(s_));
  	}
- 
+
  	template <typename T>
- 	GLM_FUNC_QUALIFIER tvec3<T> operator& 
+ 	GLM_FUNC_QUALIFIER tvec3<T> operator&
  	(
--		T const & s, 
-+		T const & s_, 
+-		T const & s,
++		T const & s_,
  		tvec3<T> const & v
  	)
  	{
@@ -1563,12 +1563,12 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +			T(s_) & v.y,
 +			T(s_) & v.z);
  	}
- 
+
  	template <typename T>
 @@ -894,26 +894,26 @@
- 	GLM_FUNC_QUALIFIER tvec3<T> operator| 
+ 	GLM_FUNC_QUALIFIER tvec3<T> operator|
  	(
- 		tvec3<T> const & v, 
+ 		tvec3<T> const & v,
 -		T const & s
 +		T const & s_
  	)
@@ -1581,12 +1581,12 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +			v.y | T(s_),
 +			v.z | T(s_));
  	}
- 
+
  	template <typename T>
- 	GLM_FUNC_QUALIFIER tvec3<T> operator| 
+ 	GLM_FUNC_QUALIFIER tvec3<T> operator|
  	(
--		T const & s, 
-+		T const & s_, 
+-		T const & s,
++		T const & s_,
  		tvec3<T> const & v
  	)
  	{
@@ -1598,12 +1598,12 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +			T(s_) | v.y,
 +			T(s_) | v.z);
  	}
- 
+
  	template <typename T>
 @@ -933,26 +933,26 @@
- 	GLM_FUNC_QUALIFIER tvec3<T> operator^ 
+ 	GLM_FUNC_QUALIFIER tvec3<T> operator^
  	(
- 		tvec3<T> const & v, 
+ 		tvec3<T> const & v,
 -		T const & s
 +		T const & s_
  	)
@@ -1616,12 +1616,12 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +			v.y ^ T(s_),
 +			v.z ^ T(s_));
  	}
- 
+
  	template <typename T>
- 	GLM_FUNC_QUALIFIER tvec3<T> operator^ 
+ 	GLM_FUNC_QUALIFIER tvec3<T> operator^
  	(
--		T const & s, 
-+		T const & s_, 
+-		T const & s,
++		T const & s_,
  		tvec3<T> const & v
  	)
  	{
@@ -1633,12 +1633,12 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +			T(s_) ^ v.y,
 +			T(s_) ^ v.z);
  	}
- 
+
  	template <typename T>
 @@ -972,26 +972,26 @@
- 	GLM_FUNC_QUALIFIER tvec3<T> operator<< 
+ 	GLM_FUNC_QUALIFIER tvec3<T> operator<<
  	(
- 		tvec3<T> const & v, 
+ 		tvec3<T> const & v,
 -		T const & s
 +		T const & s_
  	)
@@ -1651,12 +1651,12 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +			v.y << T(s_),
 +			v.z << T(s_));
  	}
- 
+
  	template <typename T>
- 	GLM_FUNC_QUALIFIER tvec3<T> operator<< 
+ 	GLM_FUNC_QUALIFIER tvec3<T> operator<<
  	(
--		T const & s, 
-+		T const & s_, 
+-		T const & s,
++		T const & s_,
  		tvec3<T> const & v
  	)
  	{
@@ -1668,12 +1668,12 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +			T(s_) << v.y,
 +			T(s_) << v.z);
  	}
- 
+
  	template <typename T>
 @@ -1011,26 +1011,26 @@
- 	GLM_FUNC_QUALIFIER tvec3<T> operator>> 
+ 	GLM_FUNC_QUALIFIER tvec3<T> operator>>
  	(
- 		tvec3<T> const & v, 
+ 		tvec3<T> const & v,
 -		T const & s
 +		T const & s_
  	)
@@ -1686,12 +1686,12 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +			v.y >> T(s_),
 +			v.z >> T(s_));
  	}
- 
+
  	template <typename T>
- 	GLM_FUNC_QUALIFIER tvec3<T> operator>> 
+ 	GLM_FUNC_QUALIFIER tvec3<T> operator>>
  	(
--		T const & s, 
-+		T const & s_, 
+-		T const & s,
++		T const & s_,
  		tvec3<T> const & v
  	)
  	{
@@ -1703,12 +1703,12 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +			s_ >> T(v.y),
 +			s_ >> T(v.z));
  	}
- 
+
  	template <typename T>
 @@ -1062,10 +1062,10 @@
  	// tref definition
- 
- 	template <typename T> 
+
+ 	template <typename T>
 -	GLM_FUNC_QUALIFIER tref3<T>::tref3(T & x, T & y, T & z) :
 -		x(x),
 -		y(y),
@@ -1718,14 +1718,14 @@ diff -ur glm.org/glm/core/type_vec3.inl glm/glm/core/type_vec3.inl
 +		y(y_),
 +		z(z_)
  	{}
- 
- 	template <typename T> 
+
+ 	template <typename T>
 diff -ur glm.org/glm/core/type_vec4.hpp glm/glm/core/type_vec4.hpp
 --- glm.org/glm/core/type_vec4.hpp	2013-12-08 17:04:59.705365270 +0100
 +++ glm/glm/core/type_vec4.hpp	2013-12-08 17:07:20.078840535 +0100
 @@ -177,33 +177,33 @@
  		}
- 
+
  		template <int E0, int E1>
 -		GLM_FUNC_DECL tvec4(T const & x, T const & y, glm::detail::swizzle<2, T, tvec2<T>, E0, E1, -1, -2> const & v)
 +		GLM_FUNC_DECL tvec4(T const & x_, T const & y_, glm::detail::swizzle<2, T, tvec2<T>, E0, E1, -1, -2> const & v)
@@ -1733,7 +1733,7 @@ diff -ur glm.org/glm/core/type_vec4.hpp glm/glm/core/type_vec4.hpp
 -			*this = tvec4<T>(x, y, v());
 +			*this = tvec4<T>(x_, y_, v());
  		}
- 
+
  		template <int E0, int E1>
 -		GLM_FUNC_DECL tvec4(T const & x, glm::detail::swizzle<2, T, tvec2<T>, E0, E1, -1, -2> const & v, T const & w)
 +		GLM_FUNC_DECL tvec4(T const & x_, glm::detail::swizzle<2, T, tvec2<T>, E0, E1, -1, -2> const & v, T const & w_)
@@ -1741,7 +1741,7 @@ diff -ur glm.org/glm/core/type_vec4.hpp glm/glm/core/type_vec4.hpp
 -			*this = tvec4<T>(x, v(), w);
 +			*this = tvec4<T>(x_, v(), w);
  		}
- 
+
  		template <int E0, int E1>
 -		GLM_FUNC_DECL tvec4(glm::detail::swizzle<2, T, tvec2<T>, E0, E1, -1, -2> const & v, T const & z, T const & w)
 +		GLM_FUNC_DECL tvec4(glm::detail::swizzle<2, T, tvec2<T>, E0, E1, -1, -2> const & v, T const & z_, T const & w_)
@@ -1749,7 +1749,7 @@ diff -ur glm.org/glm/core/type_vec4.hpp glm/glm/core/type_vec4.hpp
 -			*this = tvec4<T>(v(), z, w);
 +			*this = tvec4<T>(v(), z_, w_);
  		}
- 
+
  		template <int E0, int E1, int E2>
 -		GLM_FUNC_DECL tvec4(glm::detail::swizzle<3, T, tvec3<T>, E0, E1, E2, -1> const & v, T const & w)
 +		GLM_FUNC_DECL tvec4(glm::detail::swizzle<3, T, tvec3<T>, E0, E1, E2, -1> const & v, T const & w_)
@@ -1757,7 +1757,7 @@ diff -ur glm.org/glm/core/type_vec4.hpp glm/glm/core/type_vec4.hpp
 -			*this = tvec4<T>(v(), w);
 +			*this = tvec4<T>(v(), w_);
  		}
- 
+
  		template <int E0, int E1, int E2>
 -		GLM_FUNC_DECL tvec4(T const & x, glm::detail::swizzle<3, T, tvec3<T>, E0, E1, E2, -1> const & v)
 +		GLM_FUNC_DECL tvec4(T const & x_, glm::detail::swizzle<3, T, tvec3<T>, E0, E1, E2, -1> const & v)
@@ -1765,8 +1765,8 @@ diff -ur glm.org/glm/core/type_vec4.hpp glm/glm/core/type_vec4.hpp
 -			*this = tvec4<T>(x, v());
 +			*this = tvec4<T>(x_, v());
  		}
+
  
- 		//////////////////////////////////////
 diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 --- glm.org/glm/core/type_vec4.inl	2013-12-08 17:04:59.706365245 +0100
 +++ glm/glm/core/type_vec4.inl	2013-12-08 17:07:20.079840510 +0100
@@ -1786,7 +1786,7 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +		z(s_),
 +		w(s_)
  	{}
- 
+
  	template <typename T>
 @@ -123,12 +123,12 @@
  	template <typename T>
@@ -1804,12 +1804,12 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +		z(r_.z),
 +		w(r_.w)
  	{}
- 
+
  	template <typename T>
 @@ -178,22 +178,22 @@
  	GLM_FUNC_QUALIFIER tvec4<T>::tvec4
  	(
- 		tref3<A> const & v, 
+ 		tref3<A> const & v,
 -		B const & s
 +		B const & s_
  	) :
@@ -1819,13 +1819,13 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 -		w(value_type(s))
 +		w(value_type(s_))
  	{}
- 
+
  	template <typename T>
- 	template <typename A, typename B> 
+ 	template <typename A, typename B>
  	GLM_FUNC_QUALIFIER tvec4<T>::tvec4
  	(
--		A const & s, 
-+		A const & s_, 
+-		A const & s,
++		A const & s_,
  		tref3<B> const & v
  	) :
 -		x(value_type(s)),
@@ -1834,7 +1834,7 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
  		z(value_type(v.y)),
  		w(value_type(v.z))
 @@ -245,27 +245,27 @@
- 	template <typename U> 
+ 	template <typename U>
  	GLM_FUNC_QUALIFIER tvec4<T>::tvec4
  	(
 -		U const & x
@@ -1849,23 +1849,23 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +		z(value_type(x_)),
 +		w(value_type(x_))
  	{}
- 
+
  	template <typename T>
- 	template <typename A, typename B, typename C, typename D> 
+ 	template <typename A, typename B, typename C, typename D>
  	GLM_FUNC_QUALIFIER tvec4<T>::tvec4
  	(
--		A const & x, 
--		B const & y, 
--		C const & z, 
+-		A const & x,
+-		B const & y,
+-		C const & z,
 -		D const & w
 -	) :
 -		x(value_type(x)),
 -		y(value_type(y)),
 -		z(value_type(z)),
 -		w(value_type(w))
-+		A const & x_, 
-+		B const & y_, 
-+		C const & z_, 
++		A const & x_,
++		B const & y_,
++		C const & z_,
 +		D const & w_
 +	) :
 +		x(value_type(x_)),
@@ -1873,12 +1873,12 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +		z(value_type(z_)),
 +		w(value_type(w_))
  	{}
+
  
- 	//////////////////////////////////////
 @@ -318,22 +318,22 @@
  	GLM_FUNC_QUALIFIER tvec4<T>::tvec4
  	(
- 		tvec3<A> const & v, 
+ 		tvec3<A> const & v,
 -		B const & s
 +		B const & s_
  	) :
@@ -1888,13 +1888,13 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 -		w(value_type(s))
 +		w(value_type(s_))
  	{}
- 
+
  	template <typename T>
- 	template <typename A, typename B> 
+ 	template <typename A, typename B>
  	GLM_FUNC_QUALIFIER tvec4<T>::tvec4
  	(
--		A const & s, 
-+		A const & s_, 
+-		A const & s,
++		A const & s_,
  		tvec3<B> const & v
  	) :
 -		x(value_type(s)),
@@ -1903,9 +1903,9 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
  		z(value_type(v.y)),
  		w(value_type(v.z))
 @@ -396,12 +396,12 @@
- 
+
  	template <typename T>
- 	template <typename U> 
+ 	template <typename U>
 -	GLM_FUNC_QUALIFIER tvec4<T> & tvec4<T>::operator+= (U s)
 +	GLM_FUNC_QUALIFIER tvec4<T> & tvec4<T>::operator+= (U s_)
  	{
@@ -1919,11 +1919,11 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +		this->w += T(s_);
  		return *this;
  	}
- 
+
 @@ -421,12 +421,12 @@
- 
+
  	template <typename T>
- 	template <typename U> 
+ 	template <typename U>
 -	GLM_FUNC_QUALIFIER tvec4<T> & tvec4<T>::operator-= (U s)
 +	GLM_FUNC_QUALIFIER tvec4<T> & tvec4<T>::operator-= (U s_)
  	{
@@ -1937,11 +1937,11 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +		this->w -= T(s_);
  		return *this;
  	}
- 
+
 @@ -446,12 +446,12 @@
- 
+
  	template <typename T>
- 	template <typename U> 
+ 	template <typename U>
 -	GLM_FUNC_QUALIFIER tvec4<T> & tvec4<T>::operator*= (U s)
 +	GLM_FUNC_QUALIFIER tvec4<T> & tvec4<T>::operator*= (U s_)
  	{
@@ -1955,11 +1955,11 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +		this->w *= T(s_);
  		return *this;
  	}
- 
+
 @@ -471,12 +471,12 @@
- 
+
  	template <typename T>
- 	template <typename U> 
+ 	template <typename U>
 -	GLM_FUNC_QUALIFIER tvec4<T> & tvec4<T>::operator/= (U s)
 +	GLM_FUNC_QUALIFIER tvec4<T> & tvec4<T>::operator/= (U s_)
  	{
@@ -1973,11 +1973,11 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +		this->w /= T(s_);
  		return *this;
  	}
- 
+
 @@ -519,12 +519,12 @@
- 
+
  	template <typename T>
- 	template <typename U> 
+ 	template <typename U>
 -	GLM_FUNC_QUALIFIER tvec4<T> & tvec4<T>::operator%= (U s)
 +	GLM_FUNC_QUALIFIER tvec4<T> & tvec4<T>::operator%= (U s_)
  	{
@@ -1991,11 +1991,11 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +		this->w %= T(s_);
  		return *this;
  	}
- 
+
 @@ -544,12 +544,12 @@
- 
+
  	template <typename T>
- 	template <typename U> 
+ 	template <typename U>
 -	GLM_FUNC_QUALIFIER tvec4<T> & tvec4<T>::operator&= (U s)
 +	GLM_FUNC_QUALIFIER tvec4<T> & tvec4<T>::operator&= (U s_)
  	{
@@ -2009,11 +2009,11 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +		this->w &= T(s_);
  		return *this;
  	}
- 
+
 @@ -569,12 +569,12 @@
- 
+
  	template <typename T>
- 	template <typename U> 
+ 	template <typename U>
 -	GLM_FUNC_QUALIFIER tvec4<T> & tvec4<T>::operator|= (U s)
 +	GLM_FUNC_QUALIFIER tvec4<T> & tvec4<T>::operator|= (U s_)
  	{
@@ -2027,11 +2027,11 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +		this->w |= T(s_);
  		return *this;
  	}
- 
+
 @@ -594,12 +594,12 @@
- 
+
  	template <typename T>
- 	template <typename U> 
+ 	template <typename U>
 -	GLM_FUNC_QUALIFIER tvec4<T> & tvec4<T>::operator^= (U s)
 +	GLM_FUNC_QUALIFIER tvec4<T> & tvec4<T>::operator^= (U s_)
  	{
@@ -2045,11 +2045,11 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +		this->w ^= T(s_);
  		return *this;
  	}
- 
+
 @@ -619,12 +619,12 @@
- 
+
  	template <typename T>
- 	template <typename U> 
+ 	template <typename U>
 -	GLM_FUNC_QUALIFIER tvec4<T> & tvec4<T>::operator<<= (U s)
 +	GLM_FUNC_QUALIFIER tvec4<T> & tvec4<T>::operator<<= (U s_)
  	{
@@ -2063,11 +2063,11 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +		this->w <<= T(s_);
  		return *this;
  	}
- 
+
 @@ -644,12 +644,12 @@
- 
+
  	template <typename T>
- 	template <typename U> 
+ 	template <typename U>
 -	GLM_FUNC_QUALIFIER tvec4<T> & tvec4<T>::operator>>= (U s)
 +	GLM_FUNC_QUALIFIER tvec4<T> & tvec4<T>::operator>>= (U s_)
  	{
@@ -2081,11 +2081,11 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +		this->w >>= T(s_);
  		return *this;
  	}
- 
+
 @@ -674,94 +674,94 @@
- 	GLM_FUNC_QUALIFIER typename tvec4<T>::value_type 
+ 	GLM_FUNC_QUALIFIER typename tvec4<T>::value_type
  	tvec4<T>::swizzle
- 	(	
+ 	(
 -		comp x
 +		comp x_
  	) const
@@ -2093,13 +2093,13 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 -		return (*this)[x];
 +		return (*this)[x_];
  	}
- 
+
  	template <typename T>
  	GLM_FUNC_QUALIFIER tvec2<T> tvec4<T>::swizzle
  	(
--		comp x, 
+-		comp x,
 -		comp y
-+		comp x_, 
++		comp x_,
 +		comp y_
  	) const
  	{
@@ -2109,15 +2109,15 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +			(*this)[x_],
 +			(*this)[y_]);
  	}
- 
+
  	template <typename T>
  	GLM_FUNC_QUALIFIER tvec3<T> tvec4<T>::swizzle
  	(
--		comp x, 
--		comp y, 
+-		comp x,
+-		comp y,
 -		comp z
-+		comp x_, 
-+		comp y_, 
++		comp x_,
++		comp y_,
 +		comp z_
  	) const
  	{
@@ -2129,17 +2129,17 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +			(*this)[y_],
 +			(*this)[z_]);
  	}
- 
+
  	template <typename T>
  	GLM_FUNC_QUALIFIER tvec4<T> tvec4<T>::swizzle
  	(
--		comp x, 
--		comp y, 
--		comp z, 
+-		comp x,
+-		comp y,
+-		comp z,
 -		comp w
-+		comp x_, 
-+		comp y_, 
-+		comp z_, 
++		comp x_,
++		comp y_,
++		comp z_,
 +		comp w_
  	) const
  	{
@@ -2153,13 +2153,13 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +			(*this)[z_],
 +			(*this)[w_]);
  	}
- 
+
  	template <typename T>
  	GLM_FUNC_QUALIFIER tref2<T> tvec4<T>::swizzle
  	(
--		comp x, 
+-		comp x,
 -		comp y
-+		comp x_, 
++		comp x_,
 +		comp y_
  	)
  	{
@@ -2169,15 +2169,15 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +			(*this)[x_],
 +			(*this)[y_]);
  	}
- 
+
  	template <typename T>
  	GLM_FUNC_QUALIFIER tref3<T> tvec4<T>::swizzle
  	(
--		comp x, 
--		comp y, 
+-		comp x,
+-		comp y,
 -		comp z
-+		comp x_, 
-+		comp y_, 
++		comp x_,
++		comp y_,
 +		comp z_
  	)
  	{
@@ -2189,17 +2189,17 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +			(*this)[y_],
 +			(*this)[z_]);
  	}
- 
+
  	template <typename T>
  	GLM_FUNC_QUALIFIER tref4<T> tvec4<T>::swizzle
  	(
--		comp x, 
--		comp y, 
--		comp z, 
+-		comp x,
+-		comp y,
+-		comp z,
 -		comp w
-+		comp x_, 
-+		comp y_, 
-+		comp z_, 
++		comp x_,
++		comp y_,
++		comp z_,
 +		comp w_
  	)
  	{
@@ -2213,12 +2213,12 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +			(*this)[z_],
 +			(*this)[w_]);
  	}
+
  
- 	//////////////////////////////////////
 @@ -771,28 +771,28 @@
- 	GLM_FUNC_QUALIFIER tvec4<T> operator+ 
+ 	GLM_FUNC_QUALIFIER tvec4<T> operator+
  	(
- 		tvec4<T> const & v, 
+ 		tvec4<T> const & v,
 -		typename tvec4<T>::value_type const & s
 +		typename tvec4<T>::value_type const & s_
  	)
@@ -2233,12 +2233,12 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +			v.z + s_,
 +			v.w + s_);
  	}
- 
- 	template <typename T> 
- 	GLM_FUNC_QUALIFIER tvec4<T> operator+ 
+
+ 	template <typename T>
+ 	GLM_FUNC_QUALIFIER tvec4<T> operator+
  	(
--		typename tvec4<T>::value_type const & s, 
-+		typename tvec4<T>::value_type const & s_, 
+-		typename tvec4<T>::value_type const & s,
++		typename tvec4<T>::value_type const & s_,
  		tvec4<T> const & v
  	)
  	{
@@ -2252,12 +2252,12 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +			s_ + v.z,
 +			s_ + v.w);
  	}
- 
- 	template <typename T> 
+
+ 	template <typename T>
 @@ -814,28 +814,28 @@
- 	GLM_FUNC_QUALIFIER tvec4<T> operator- 
+ 	GLM_FUNC_QUALIFIER tvec4<T> operator-
  	(
- 		tvec4<T> const & v, 
+ 		tvec4<T> const & v,
 -		typename tvec4<T>::value_type const & s
 +		typename tvec4<T>::value_type const & s_
  	)
@@ -2272,12 +2272,12 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +			v.z - s_,
 +			v.w - s_);
  	}
- 
- 	template <typename T> 
- 	GLM_FUNC_QUALIFIER tvec4<T> operator- 
+
+ 	template <typename T>
+ 	GLM_FUNC_QUALIFIER tvec4<T> operator-
  	(
--		typename tvec4<T>::value_type const & s, 
-+		typename tvec4<T>::value_type const & s_, 
+-		typename tvec4<T>::value_type const & s,
++		typename tvec4<T>::value_type const & s_,
  		tvec4<T> const & v
  	)
  	{
@@ -2291,12 +2291,12 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +			s_ - v.z,
 +			s_ - v.w);
  	}
- 
- 	template <typename T> 
+
+ 	template <typename T>
 @@ -857,28 +857,28 @@
- 	GLM_FUNC_QUALIFIER tvec4<T> operator* 
+ 	GLM_FUNC_QUALIFIER tvec4<T> operator*
  	(
- 		tvec4<T> const & v, 
+ 		tvec4<T> const & v,
 -		typename tvec4<T>::value_type const & s
 +		typename tvec4<T>::value_type const & s_
  	)
@@ -2311,12 +2311,12 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +			v.z * s_,
 +			v.w * s_);
  	}
- 
- 	template <typename T> 
- 	GLM_FUNC_QUALIFIER tvec4<T> operator* 
+
+ 	template <typename T>
+ 	GLM_FUNC_QUALIFIER tvec4<T> operator*
  	(
--		typename tvec4<T>::value_type const & s, 
-+		typename tvec4<T>::value_type const & s_, 
+-		typename tvec4<T>::value_type const & s,
++		typename tvec4<T>::value_type const & s_,
  		tvec4<T> const & v
  	)
  	{
@@ -2330,12 +2330,12 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +			s_ * v.z,
 +			s_ * v.w);
  	}
- 
- 	template <typename T> 
+
+ 	template <typename T>
 @@ -900,28 +900,28 @@
- 	GLM_FUNC_QUALIFIER tvec4<T> operator/ 
+ 	GLM_FUNC_QUALIFIER tvec4<T> operator/
  	(
- 		tvec4<T> const & v, 
+ 		tvec4<T> const & v,
 -		typename tvec4<T>::value_type const & s
 +		typename tvec4<T>::value_type const & s_
  	)
@@ -2350,12 +2350,12 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +			v.z / s_,
 +			v.w / s_);
  	}
- 
- 	template <typename T> 
- 	GLM_FUNC_QUALIFIER tvec4<T> operator/ 
+
+ 	template <typename T>
+ 	GLM_FUNC_QUALIFIER tvec4<T> operator/
  	(
--		typename tvec4<T>::value_type const & s, 
-+		typename tvec4<T>::value_type const & s_, 
+-		typename tvec4<T>::value_type const & s,
++		typename tvec4<T>::value_type const & s_,
  		tvec4<T> const & v
  	)
  	{
@@ -2369,12 +2369,12 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +			s_ / v.z,
 +			s_ / v.w);
  	}
- 
- 	template <typename T> 
+
+ 	template <typename T>
 @@ -1012,28 +1012,28 @@
- 	GLM_FUNC_QUALIFIER tvec4<T> operator% 
+ 	GLM_FUNC_QUALIFIER tvec4<T> operator%
  	(
- 		tvec4<T> const & v, 
+ 		tvec4<T> const & v,
 -		typename tvec4<T>::value_type const & s
 +		typename tvec4<T>::value_type const & s_
  	)
@@ -2389,12 +2389,12 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +			v.z % s_,
 +			v.w % s_);
  	}
- 
+
  	template <typename T>
- 	GLM_FUNC_QUALIFIER tvec4<T> operator% 
+ 	GLM_FUNC_QUALIFIER tvec4<T> operator%
  	(
--		typename tvec4<T>::value_type const & s, 
-+		typename tvec4<T>::value_type const & s_, 
+-		typename tvec4<T>::value_type const & s,
++		typename tvec4<T>::value_type const & s_,
  		tvec4<T> const & v
  	)
  	{
@@ -2408,12 +2408,12 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +			s_ % v.z,
 +			s_ % v.w);
  	}
- 
+
  	template <typename T>
 @@ -1054,28 +1054,28 @@
- 	GLM_FUNC_QUALIFIER tvec4<T> operator& 
+ 	GLM_FUNC_QUALIFIER tvec4<T> operator&
  	(
- 		tvec4<T> const & v, 
+ 		tvec4<T> const & v,
 -		typename tvec4<T>::value_type const & s
 +		typename tvec4<T>::value_type const & s_
  	)
@@ -2428,12 +2428,12 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +			v.z & s_,
 +			v.w & s_);
  	}
- 
+
  	template <typename T>
- 	GLM_FUNC_QUALIFIER tvec4<T> operator& 
+ 	GLM_FUNC_QUALIFIER tvec4<T> operator&
  	(
--		typename tvec4<T>::value_type const & s, 
-+		typename tvec4<T>::value_type const & s_, 
+-		typename tvec4<T>::value_type const & s,
++		typename tvec4<T>::value_type const & s_,
  		tvec4<T> const & v
  	)
  	{
@@ -2447,12 +2447,12 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +			s_ & v.z,
 +			s_ & v.w);
  	}
- 
+
  	template <typename T>
 @@ -1096,28 +1096,28 @@
  	GLM_FUNC_QUALIFIER tvec4<T> operator|
  	(
- 		tvec4<T> const & v, 
+ 		tvec4<T> const & v,
 -		typename tvec4<T>::value_type const & s
 +		typename tvec4<T>::value_type const & s_
  	)
@@ -2467,12 +2467,12 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +			v.z | s_,
 +			v.w | s_);
  	}
- 
+
  	template <typename T>
  	GLM_FUNC_QUALIFIER tvec4<T> operator|
  	(
--		typename tvec4<T>::value_type const & s, 
-+		typename tvec4<T>::value_type const & s_, 
+-		typename tvec4<T>::value_type const & s,
++		typename tvec4<T>::value_type const & s_,
  		tvec4<T> const & v
  	)
  	{
@@ -2486,12 +2486,12 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +			s_ | v.z,
 +			s_ | v.w);
  	}
- 
+
  	template <typename T>
 @@ -1138,28 +1138,28 @@
  	GLM_FUNC_QUALIFIER tvec4<T> operator^
  	(
- 		tvec4<T> const & v, 
+ 		tvec4<T> const & v,
 -		typename tvec4<T>::value_type const & s
 +		typename tvec4<T>::value_type const & s_
  	)
@@ -2506,12 +2506,12 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +			v.z ^ s_,
 +			v.w ^ s_);
  	}
- 
+
  	template <typename T>
  	GLM_FUNC_QUALIFIER tvec4<T> operator^
  	(
--		typename tvec4<T>::value_type const & s, 
-+		typename tvec4<T>::value_type const & s_, 
+-		typename tvec4<T>::value_type const & s,
++		typename tvec4<T>::value_type const & s_,
  		tvec4<T> const & v
  	)
  	{
@@ -2525,7 +2525,7 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +			s_ ^ v.z,
 +			s_ ^ v.w);
  	}
- 
+
  	template <typename T>
 @@ -1180,28 +1180,28 @@
  	GLM_FUNC_QUALIFIER tvec4<T> operator<<
@@ -2545,7 +2545,7 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +			v.z << s_,
 +			v.w << s_);
  	}
- 
+
  	template <typename T>
  	GLM_FUNC_QUALIFIER tvec4<T> operator<<
  	(
@@ -2564,7 +2564,7 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +			s_ << v.z,
 +			s_ << v.w);
  	}
- 
+
  	template <typename T>
 @@ -1222,28 +1222,28 @@
  	GLM_FUNC_QUALIFIER tvec4<T> operator>>
@@ -2584,7 +2584,7 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +			v.z >> s_,
 +			v.w >> s_);
  	}
- 
+
  	template <typename T>
  	GLM_FUNC_QUALIFIER tvec4<T> operator>>
  	(
@@ -2603,24 +2603,24 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +			s_ >> v.z,
 +			s_ >> v.w);
  	}
- 
+
  	template <typename T>
 @@ -1279,15 +1279,15 @@
- 	template <typename T> 
+ 	template <typename T>
  	tref4<T>::tref4
  	(
--		T & x, 
--		T & y, 
--		T & z, 
+-		T & x,
+-		T & y,
+-		T & z,
 -		T & w
 -	) :
 -		x(x),
 -		y(y),
 -		z(z),
 -		w(w)
-+		T & x_, 
-+		T & y_, 
-+		T & z_, 
++		T & x_,
++		T & y_,
++		T & z_,
 +		T & w_
 +	) :
 +		x(x_),
@@ -2628,22 +2628,22 @@ diff -ur glm.org/glm/core/type_vec4.inl glm/glm/core/type_vec4.inl
 +		z(z_),
 +		w(w_)
  	{}
- 
- 	template <typename T> 
+
+ 	template <typename T>
 diff -ur glm.org/glm/gtc/quaternion.inl glm/glm/gtc/quaternion.inl
 --- glm.org/glm/gtc/quaternion.inl	2013-12-08 17:04:59.707365220 +0100
 +++ glm/glm/gtc/quaternion.inl	2013-12-08 17:07:20.081840460 +0100
 @@ -60,15 +60,15 @@
- 	template <typename T> 
+ 	template <typename T>
  	GLM_FUNC_QUALIFIER tquat<T>::tquat
  	(
--		value_type const & w, 
--		value_type const & x, 
--		value_type const & y, 
+-		value_type const & w,
+-		value_type const & x,
+-		value_type const & y,
 -		value_type const & z
-+		value_type const & w_, 
-+		value_type const & x_, 
-+		value_type const & y_, 
++		value_type const & w_,
++		value_type const & x_,
++		value_type const & y_,
 +		value_type const & z_
  	) :
 -		x(x),
@@ -2655,5 +2655,5 @@ diff -ur glm.org/glm/gtc/quaternion.inl glm/glm/gtc/quaternion.inl
 +		z(z_),
 +		w(w_)
  	{}
+
  
- 	//////////////////////////////////////////////////////////////

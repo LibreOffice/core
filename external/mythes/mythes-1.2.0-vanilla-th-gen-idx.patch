@@ -3,7 +3,7 @@
 @@ -1,11 +1,25 @@
 -#!/usr/bin/perl
 -
--# perl program to take a thesaurus structured text data file 
+-# perl program to take a thesaurus structured text data file
 -# and create the proper sorted index file (.idx)
 +:
 +eval 'exec perl -wS $0 ${1+"$@"}'
@@ -29,13 +29,13 @@
 -# typically invoked as follows:
 -# cat th_en_US_new.dat | ./th_gen_idx.pl > th_en_US_new.idx
  #
- 
+
  sub by_entry {
      my ($aent, $aoff) = split('\|',$a);
 @@ -13,6 +34,27 @@ sub by_entry {
      $aent cmp $bent;
  }
- 
+
 +#FIXME: someone may want "infile" or even parameter parsing
 +sub get_outfile {
 +	my $next_is_file = 0;
@@ -68,7 +68,7 @@
 +
 +$outfile = get_outfile();
 +usage() if ( $outfile eq "" );
- 
+
  # top line of thesaurus provides encoding
  $encoding=<STDIN>;
 @@ -51,9 +97,13 @@ while ($rec=<STDIN>){
@@ -87,4 +87,4 @@
 +    print OUTFILE "$one\n";
  }
 +close OUTFILE;
- 
+

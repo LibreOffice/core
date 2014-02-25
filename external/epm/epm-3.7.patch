@@ -2,9 +2,9 @@ diff -urN epm-3.7-old//bsd.c epm-3.7/bsd.c
 --- misc/epm-3.7/bsd.c	2003-01-14 17:05:01.000000000 +0000
 +++ misc/build/epm-3.7/bsd.c	2010-04-19 22:52:32.000000000 +0000
 @@ -26,6 +26,13 @@
- 
+
  #include "epm.h"
- 
+
 +void cr2semicolon(char *command)
 +{
 +  int len, i;
@@ -12,11 +12,11 @@ diff -urN epm-3.7-old//bsd.c epm-3.7/bsd.c
 +  for (i=0;i<len;i++)
 +    if(*(command+i)=='\n') *(command+i)=';';
 +}
- 
+
  /*
   * 'make_bsd()' - Make a FreeBSD software distribution package.
 @@ -149,8 +156,17 @@
- 
+
    for (i = dist->num_depends, d = dist->depends; i > 0; i --, d ++)
    {
 +#ifdef __FreeBSD__
@@ -47,7 +47,7 @@ diff -urN epm-3.7-old//bsd.c epm-3.7/bsd.c
        case COMMAND_POST_REMOVE :
 @@ -199,7 +217,7 @@
        */
- 
+
        fprintf(fp, "@exec /bin/mkdir -p %s\n", file->dst);
 -      fprintf(fp, "@exec /bin/chown %s:%s %s\n", file->user, file->group,
 +      fprintf(fp, "@exec /usr/sbin/chown %s:%s %s\n", file->user, file->group,
@@ -57,18 +57,18 @@ diff -urN epm-3.7-old//bsd.c epm-3.7/bsd.c
 @@ -326,12 +344,13 @@
    if (Verbosity)
      puts("Building FreeBSD pkg binary distribution...");
- 
+
 -  if (run_command(NULL, "pkg_create -p / -s %s -c %s -d %s -f %s %s",
 +  if (run_command(NULL, "/usr/sbin/pkg_create -p / -s %s -c %s -d %s -f %s %s",
                    current, commentname, descrname, plistname, name))
      return (1);
- 
+
 -  if (run_command(NULL, "mv %s.tgz %s", name, directory))
 -    return (1);
 +  if (run_command(NULL, "mv %s.tbz %s", name, directory))
 +    if (run_command(NULL, "mv %s.tgz %s", name, directory))
 +      return (1);
- 
+
   /*
    * Remove temporary files...
 diff -urN epm-3.7-old//configure epm-3.7/configure
@@ -77,19 +77,19 @@ diff -urN epm-3.7-old//configure epm-3.7/configure
 @@ -1238,6 +1238,11 @@
  fi
  fi;
- 
+
 +# Check whether --enable-fltk or --disable-fltk was given.
 +if test "${enable_fltk+set}" = set; then
 +  enableval="$enable_fltk"
 +fi;
 +
- 
+
  # Check whether --with-docdir or --without-docdir was given.
  if test "${with_docdir+set}" = set; then
 @@ -4904,36 +4909,38 @@
  fi
- 
- 
+
+
 -# Extract the first word of "fltk-config", so it can be a program name with args.
 -set dummy fltk-config; ac_word=$2
 -echo "$as_me:$LINENO: checking for $ac_word" >&5
@@ -138,7 +138,7 @@ diff -urN epm-3.7-old//configure epm-3.7/configure
 +    fi
 +  done
 +  done
-+  
++
 +    ;;
 +  esac
    fi
@@ -150,13 +150,13 @@ diff -urN epm-3.7-old//configure epm-3.7/configure
 +  FLTKCONFIG=$ac_cv_path_FLTKCONFIG
  fi
 -FLTKCONFIG=$ac_cv_path_FLTKCONFIG
- 
+
  if test -n "$FLTKCONFIG"; then
    echo "$as_me:$LINENO: result: $FLTKCONFIG" >&5
 @@ -4950,8 +4957,10 @@
  	INSTALL_GUIS=""
  	INSTALL_OSX=""
- 
+
 +if eval "test x$enable_fltk = xyes"; then
  	{ echo "$as_me:$LINENO: WARNING: Sorry, setup GUI requires FLTK 1.1.x." >&5
  echo "$as_me: WARNING: Sorry, setup GUI requires FLTK 1.1.x." >&2;}
@@ -168,20 +168,20 @@ diff -urN epm-3.7-old//deb.c epm-3.7/deb.c
 --- misc/epm-3.7/deb.c	2003-01-15 14:29:24.000000000 +0000
 +++ misc/build/epm-3.7/deb.c	2010-04-19 22:53:34.000000000 +0000
 @@ -26,6 +26,28 @@
- 
+
  #include "epm.h"
- 
+
 +/*
 + * 'add_size()' - Append Installed-Size tag to DEBIAN/control file
 + */
-+ 
++
 +int                             /* O - 0 = success, 1 = fail */
 +add_size(FILE       *fpControl, /* Control file stream */
 +         const char *directory) /* Directory containing all files to package */
 +{
 +    FILE *fp;
 +    char command[1024];
-+    
++
 +    snprintf(command, sizeof(command), "du -k -s %s", directory);
 +    fp = popen(command, "r");
 +    if( NULL != fp )
@@ -193,13 +193,13 @@ diff -urN epm-3.7-old//deb.c epm-3.7/deb.c
 +    }
 +    return 1;
 +}
- 
+
  /*
   * 'make_deb()' - Make a Debian software distribution package.
 @@ -61,18 +83,37 @@
    if (Verbosity)
      puts("Creating Debian distribution...");
- 
+
 +  /*
 +   * Use debian default naming scheme
 +   */
@@ -235,13 +235,13 @@ diff -urN epm-3.7-old//deb.c epm-3.7/deb.c
    else
 -    snprintf(name, sizeof(name), "%s-%s", prodname, dist->version);
 +    snprintf(name, sizeof(name), "%s_%s", prodname, dist->version);
- 
+
   /*
    * Write the control file for DPKG...
 @@ -108,8 +141,20 @@
    * (which we change in get_platform to a common name)
    */
- 
+
 -  if (strcmp(platform->machine, "intel") == 0)
 +  if (!strcmp(platform->machine, "intel"))
 +#ifdef __FreeBSD_kernel__
@@ -259,7 +259,7 @@ diff -urN epm-3.7-old//deb.c epm-3.7/deb.c
 +    fputs("Architecture: powerpc\n", fp);
    else
      fprintf(fp, "Architecture: %s\n", platform->machine);
- 
+
 @@ -139,7 +192,7 @@
  	  else
  	  {
@@ -274,25 +274,25 @@ diff -urN epm-3.7-old//deb.c epm-3.7/deb.c
      }
    }
 -
-+  
++
    fclose(fp);
 -
-+  
++
   /*
    * Write the preinst file for DPKG...
    */
 @@ -417,6 +462,27 @@
      }
    }
- 
-+  
-+  /* 
+
++
++  /*
 +   * Calculate and append Installed-Size to DEBIAN/control
 +   */
-+   
++
 +  if (Verbosity)
 +    puts("Calculating Installed-Size...");
-+  
++
 +  snprintf(filename, sizeof(filename), "%s/%s/DEBIAN/control", directory, name);
 +  if ((fp = fopen(filename, "a")) == NULL)
 +  {
@@ -301,10 +301,10 @@ diff -urN epm-3.7-old//deb.c epm-3.7/deb.c
 +    return (1);
 +  }
 +
-+  snprintf(filename, sizeof(filename), "%s/%s", directory, name);  
++  snprintf(filename, sizeof(filename), "%s/%s", directory, name);
 +  add_size(fp, filename);
 +  fclose(fp);
-+ 
++
 +
   /*
    * Build the distribution from the spec file...
@@ -323,13 +323,13 @@ diff -urN epm-3.7-old//dist.c epm-3.7/dist.c
 +  if (strstr(platform->machine, "86") != NULL)
 +    strcpy(platform->machine, "intel");
 +  else
-+    strcpy(platform->machine, "powerpc");  
++    strcpy(platform->machine, "powerpc");
  #else
    for (temp = platform->machine; *temp != '\0'; temp ++)
      if (*temp == '-' || *temp == '_')
 @@ -407,7 +412,12 @@
        *temp = tolower(*temp);
- 
+
    if (strstr(platform->machine, "86") != NULL)
 -    strcpy(platform->machine, "intel");
 +  {
@@ -357,10 +357,10 @@ diff -urN epm-3.7-old//file.c epm-3.7/file.c
 +++ misc/build/epm-3.7/file.c	2010-04-19 22:52:32.000000000 +0000
 @@ -108,7 +108,6 @@
    fclose(dstfile);
- 
+
    chmod(dst, mode);
 -  chown(dst, owner, group);
- 
+
    return (0);
  }
 @@ -138,7 +137,6 @@
@@ -370,14 +370,14 @@ diff -urN epm-3.7-old//file.c epm-3.7/file.c
 -	chown(buffer, owner, group);
        }
      }
- 
+
 @@ -151,7 +149,6 @@
    {
      mkdir(buffer, 0777);
      chmod(buffer, mode | 0700);
 -    chown(buffer, owner, group);
    }
- 
+
    return (0);
 diff -urN epm-3.7-old//osx.c epm-3.7/osx.c
 --- misc/epm-3.7/osx.c	2003-07-23 21:41:08.000000000 +0000
@@ -385,7 +385,7 @@ diff -urN epm-3.7-old//osx.c epm-3.7/osx.c
 @@ -373,7 +373,7 @@
    else
      snprintf(filename, sizeof(filename), "%s/%s", current, directory);
- 
+
 -  run_command(NULL, "/Developer/Applications/PackageMaker.app/"
 +  run_command(NULL, "/Developer/Applications/Utilities/PackageMaker.app/"
                      "Contents/MacOS/PackageMaker -build "
@@ -395,9 +395,9 @@ diff -urN epm-3.7-old//pkg.c epm-3.7/pkg.c
 --- misc/epm-3.7/pkg.c	2002-12-17 18:57:56.000000000 +0000
 +++ misc/build/epm-3.7/pkg.c	2010-04-19 22:52:32.000000000 +0000
 @@ -429,75 +429,6 @@
- 
+
    fclose(fp);
- 
+
 - /*
 -  * Build the distribution from the prototype file...
 -  */
@@ -469,12 +469,12 @@ diff -urN epm-3.7-old//pkg.c epm-3.7/pkg.c
 -
    return (0);
  }
- 
+
 diff -urN epm-3.7-old//qprintf.c epm-3.7/qprintf.c
 --- misc/epm-3.7-old/qprintf.c	2003-01-27 21:48:03.000000000 +0000
 +++ misc/build/epm-3.7/qprintf.c	2010-04-19 22:52:32.000000000 +0000
 @@ -181,12 +181,19 @@
- 
+
              for (i = slen; i > 0; i --, s ++, bytes ++)
  	    {
 +#if defined(__FreeBSD__)
@@ -493,7 +493,7 @@ diff -urN epm-3.7-old//qprintf.c epm-3.7/qprintf.c
 +#endif
  	      putc(*s, fp);
  	    }
- 
+
 diff -urN epm-3.7-old//rpm.c epm-3.7/rpm.c
 --- misc/epm-3.7/rpm.c	2003-10-01 19:27:15.000000000 +0000
 +++ misc/build/epm-3.7/rpm.c	2010-04-19 22:52:32.000000000 +0000
@@ -514,11 +514,11 @@ diff -urN epm-3.7-old//rpm.c epm-3.7/rpm.c
 +      fprintf(fp, "Obsoletes: %s", dname);
      else
        fprintf(fp, "Conflicts: %s", dname);
- 
+
 @@ -186,15 +188,33 @@
    for (i = 0; i < dist->num_descriptions; i ++)
      fprintf(fp, "%s\n", dist->descriptions[i]);
- 
+
 -  fputs("%pre\n", fp);
 +  /*
 +   * %pre
@@ -533,7 +533,7 @@ diff -urN epm-3.7-old//rpm.c epm-3.7/rpm.c
        fprintf(fp, "%s\n", c->command);
 +    }
 +  }
- 
+
 -  fputs("%post\n", fp);
 +  /*
 +   * %post
@@ -548,22 +548,22 @@ diff -urN epm-3.7-old//rpm.c epm-3.7/rpm.c
        fprintf(fp, "%s\n", c->command);
 +    }
 +  }
- 
+
    for (i = dist->num_files, file = dist->files; i > 0; i --, file ++)
      if (tolower(file->type) == 'i')
 @@ -202,6 +222,8 @@
- 
+
    if (i)
    {
 +    if (1 == ++n)  /* If not previously done so, write %post here */
 +      fputs("%post\n", fp);
      fputs("if test \"x$1\" = x1; then\n", fp);
      fputs("	echo Setting up init scripts...\n", fp);
- 
+
 @@ -259,13 +281,17 @@
      fputs("fi\n", fp);
    }
- 
+
 -  fputs("%preun\n", fp);
 +  /*
 +   * %preun
@@ -572,27 +572,27 @@ diff -urN epm-3.7-old//rpm.c epm-3.7/rpm.c
    for (i = dist->num_files, file = dist->files; i > 0; i --, file ++)
      if (tolower(file->type) == 'i')
        break;
- 
+
    if (i)
    {
 +    fputs("%preun\n", fp); ++n; /* Need to write %preun here */
      fputs("if test \"x$1\" = x0; then\n", fp);
      fputs("	echo Cleaning up init scripts...\n", fp);
- 
+
 @@ -315,13 +341,29 @@
    }
- 
+
    for (i = dist->num_commands, c = dist->commands; i > 0; i --, c ++)
 +  {
      if (c->type == COMMAND_PRE_REMOVE)
 +    {
 +      if (1 == ++n)  /* Only write %preun if not previously done so */
 +        fputs("%preun\n", fp);
-+	    
++
        fprintf(fp, "%s\n", c->command);
 +    }
 +  }
- 
+
 -  fputs("%postun\n", fp);
 +  /*
 +   * %post
@@ -607,13 +607,13 @@ diff -urN epm-3.7-old//rpm.c epm-3.7/rpm.c
        fprintf(fp, "%s\n", c->command);
 +    }
 +  }
- 
+
    fputs("%files\n", fp);
    for (i = dist->num_files, file = dist->files; i > 0; i --, file ++)
 @@ -415,53 +457,6 @@
      }
    }
- 
+
 - /*
 -  * Build the distribution from the spec file...
 -  */
@@ -663,4 +663,4 @@ diff -urN epm-3.7-old//rpm.c epm-3.7/rpm.c
 -
    return (0);
  }
- 
+

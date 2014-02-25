@@ -2,21 +2,21 @@
 +++ misc/build/libxml2-2.7.6/libxml2.syms	Wed Jul  7 15:43:17 2010
 @@ -2184,10 +2184,10 @@
  } LIBXML2_2.6.27;
- 
+
  LIBXML2_2.6.29 {
 -    global:
 +#    global:
- 
+
  # threads
 -  xmlDllMain;
 +#WIN32 only!  xmlDllMain;
  } LIBXML2_2.6.28;
- 
+
  LIBXML2_2.6.32 {
 @@ -2231,3 +2231,43 @@
    xmlXPathSetContextNode;
  } LIBXML2_2.9.0;
- 
+
 +# HACK: export global variable accessor functions (globals.h)
 +LIBXML2_GLOBAL_VARIABLES {
 +    global:

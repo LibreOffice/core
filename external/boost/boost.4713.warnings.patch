@@ -22,7 +22,7 @@
 @@ -49,7 +49,7 @@
              : first(rp->first), second(rp->second)
              { }
-             
+
 -            const ref_pair* const operator->() const
 +            const ref_pair* operator->() const
              {
@@ -32,25 +32,25 @@
 +++ misc/build/boost_1_44_0/boost/ptr_container/ptr_map_adapter.hpp	2011-02-04 16:39:19.000000000 +0100
 @@ -477,6 +477,7 @@
          }
-                 
+
          ptr_map_adapter( const ptr_map_adapter& r )
 +          : base_type()
          {
-             map_basic_clone_and_insert( r.begin(), r.end() );      
+             map_basic_clone_and_insert( r.begin(), r.end() );
          }
 --- misc/boost_1_44_0/boost/ptr_container/ptr_sequence_adapter.hpp	2009-11-01 12:07:12.000000000 +0100
 +++ misc/build/boost_1_44_0/boost/ptr_container/ptr_sequence_adapter.hpp	2011-02-04 16:39:19.000000000 +0100
 @@ -476,19 +476,19 @@
      public: // C-array support
-     
-         void transfer( iterator before, value_type* from, 
--                       size_type size, bool delete_from = true ) // strong 
-+                       size_type size_, bool delete_from = true ) // strong 
+
+         void transfer( iterator before, value_type* from,
+-                       size_type size, bool delete_from = true ) // strong
++                       size_type size_, bool delete_from = true ) // strong
          {
              BOOST_ASSERT( from != 0 );
              if( delete_from )
              {
-                 BOOST_DEDUCED_TYPENAME base_type::scoped_deleter 
+                 BOOST_DEDUCED_TYPENAME base_type::scoped_deleter
 -                    deleter( from, size );                                // nothrow
 -                this->base().insert( before.base(), from, from + size );  // strong
 +                    deleter( from, size_ );                                // nothrow
@@ -63,7 +63,7 @@
 +                this->base().insert( before.base(), from, from + size_ ); // strong
              }
          }
- 
+
 @@ -671,6 +671,7 @@
          void range_check_impl( iterator first, iterator last,
                                 std::random_access_iterator_tag )
@@ -71,7 +71,7 @@
 +            (void)first; (void)last;
              BOOST_ASSERT( first <= last && "out of range unique()/erase_if()" );
              BOOST_ASSERT( this->begin() <= first && "out of range unique()/erase_if()" );
-             BOOST_ASSERT( last <= this->end() && "out of range unique()/erase_if)(" );             
+             BOOST_ASSERT( last <= this->end() && "out of range unique()/erase_if)(" );
 --- misc/boost_1_44_0/boost/spirit/home/classic/symbols/symbols.hpp	2008-06-22 17:05:38.000000000 +0200
 +++ misc/build/boost_1_44_0/boost/spirit/home/classic/symbols/symbols.hpp	2011-02-04 16:39:19.000000000 +0100
 @@ -102,13 +102,13 @@
@@ -80,7 +80,7 @@
          iterator_t first = scan.first;
 -        typename SetT::search_info result = SetT::find(scan);
 +        typename SetT::search_info result_ = SetT::find(scan);
- 
+
 -        if (result.data)
 +        if (result_.data)
              return scan.
@@ -101,7 +101,7 @@
 -        bad_ptr_container_operation( const char* what ) : what_( what )
 +        bad_ptr_container_operation( const char* _what ) : what_( _what )
          { }
-         
+
          virtual const char* what() const throw()
 @@ -38,7 +38,7 @@
      class bad_index : public bad_ptr_container_operation
@@ -111,21 +111,21 @@
 +        bad_index( const char* _what ) : bad_ptr_container_operation( _what )
          { }
      };
- 
+
 --- misc/boost_1_44_0/boost/ptr_container/detail/reversible_ptr_container.hpp	2011-02-05 09:49:30.373931807 +0000
 +++ misc/build/boost_1_44_0/boost/ptr_container/detail/reversible_ptr_container.hpp	2011-02-05 09:49:34.804931932 +0000
 @@ -278,9 +278,9 @@
- 
+
      private:
          template< class ForwardIterator >
--        ForwardIterator advance( ForwardIterator begin, size_type n ) 
-+        ForwardIterator advance( ForwardIterator begin_, size_type n ) 
+-        ForwardIterator advance( ForwardIterator begin, size_type n )
++        ForwardIterator advance( ForwardIterator begin_, size_type n )
          {
 -            ForwardIterator iter = begin;
 +            ForwardIterator iter = begin_;
              std::advance( iter, n );
              return iter;
-         }        
+         }
 --- misc/boost_1_44_0/boost/ptr_container/detail/static_move_ptr.hpp	2011-02-05 09:55:44.846931338 +0000
 +++ misc/build/boost_1_44_0/boost/ptr_container/detail/static_move_ptr.hpp	2011-02-05 09:56:42.760931701 +0000
 @@ -151,7 +151,7 @@
@@ -166,14 +166,14 @@
 -                                rhs, nil_t()));
 +                                rhs_, nil_t()));
          }
- 
+
          typename DefT::embed_t rhs;
 --- misc/boost_1_44_0/boost/ptr_container/ptr_sequence_adapter.hpp	2011-02-09 08:49:00.416529470 +0000
 +++ misc/build/boost_1_44_0/boost/ptr_container/ptr_sequence_adapter.hpp	2011-02-09 08:50:44.607653864 +0000
 @@ -510,72 +510,72 @@
- 
+
      public: // resize
- 
+
 -        void resize( size_type size ) // basic
 +        void resize( size_type size_ ) // basic
          {
@@ -181,22 +181,22 @@
 -            if( old_size > size )
 +            if( old_size > size_ )
              {
--                this->erase( boost::next( this->begin(), size ), this->end() );  
-+                this->erase( boost::next( this->begin(), size_ ), this->end() );  
+-                this->erase( boost::next( this->begin(), size ), this->end() );
++                this->erase( boost::next( this->begin(), size_ ), this->end() );
              }
 -            else if( size > old_size )
 +            else if( size_ > old_size )
              {
 -                for( ; old_size != size; ++old_size )
 +                for( ; old_size != size_; ++old_size )
-                     this->push_back( new BOOST_DEDUCED_TYPENAME 
-                                      boost::remove_pointer<value_type>::type() ); 
+                     this->push_back( new BOOST_DEDUCED_TYPENAME
+                                      boost::remove_pointer<value_type>::type() );
              }
- 
+
 -            BOOST_ASSERT( this->size() == size );
 +            BOOST_ASSERT( this->size() == size_ );
          }
- 
+
 -        void resize( size_type size, value_type to_clone ) // basic
 +        void resize( size_type size_, value_type to_clone ) // basic
          {
@@ -204,21 +204,21 @@
 -            if( old_size > size )
 +            if( old_size > size_ )
              {
--                this->erase( boost::next( this->begin(), size ), this->end() );  
-+                this->erase( boost::next( this->begin(), size_ ), this->end() );  
+-                this->erase( boost::next( this->begin(), size ), this->end() );
++                this->erase( boost::next( this->begin(), size_ ), this->end() );
              }
 -            else if( size > old_size )
 +            else if( size_ > old_size )
              {
 -                for( ; old_size != size; ++old_size )
 +                for( ; old_size != size_; ++old_size )
-                     this->push_back( this->null_policy_allocate_clone( to_clone ) ); 
+                     this->push_back( this->null_policy_allocate_clone( to_clone ) );
              }
- 
--            BOOST_ASSERT( this->size() == size );        
-+            BOOST_ASSERT( this->size() == size_ );        
+
+-            BOOST_ASSERT( this->size() == size );
++            BOOST_ASSERT( this->size() == size_ );
          }
- 
+
 -        void rresize( size_type size ) // basic
 +        void rresize( size_type size_ ) // basic
          {
@@ -226,23 +226,23 @@
 -            if( old_size > size )
 +            if( old_size > size_ )
              {
-                 this->erase( this->begin(), 
--                             boost::next( this->begin(), old_size - size ) );  
-+                             boost::next( this->begin(), old_size - size_ ) );  
+                 this->erase( this->begin(),
+-                             boost::next( this->begin(), old_size - size ) );
++                             boost::next( this->begin(), old_size - size_ ) );
              }
 -            else if( size > old_size )
 +            else if( size_ > old_size )
              {
 -                for( ; old_size != size; ++old_size )
 +                for( ; old_size != size_; ++old_size )
-                     this->push_front( new BOOST_DEDUCED_TYPENAME 
-                                       boost::remove_pointer<value_type>::type() ); 
+                     this->push_front( new BOOST_DEDUCED_TYPENAME
+                                       boost::remove_pointer<value_type>::type() );
              }
- 
+
 -            BOOST_ASSERT( this->size() == size );
 +            BOOST_ASSERT( this->size() == size_ );
          }
- 
+
 -        void rresize( size_type size, value_type to_clone ) // basic
 +        void rresize( size_type size_, value_type to_clone ) // basic
          {
@@ -250,27 +250,27 @@
 -            if( old_size > size )
 +            if( old_size > size_ )
              {
-                 this->erase( this->begin(), 
--                             boost::next( this->begin(), old_size - size ) );  
-+                             boost::next( this->begin(), old_size - size_ ) );  
+                 this->erase( this->begin(),
+-                             boost::next( this->begin(), old_size - size ) );
++                             boost::next( this->begin(), old_size - size_ ) );
              }
 -            else if( size > old_size )
 +            else if( size_ > old_size )
              {
 -                for( ; old_size != size; ++old_size )
 +                for( ; old_size != size_; ++old_size )
-                     this->push_front( this->null_policy_allocate_clone( to_clone ) ); 
+                     this->push_front( this->null_policy_allocate_clone( to_clone ) );
              }
- 
+
 -            BOOST_ASSERT( this->size() == size );
 +            BOOST_ASSERT( this->size() == size_ );
-         }           
-                 
+         }
+
      public: // algorithms
 --- misc/boost_1_44_0/boost/ptr_container/detail/reversible_ptr_container.hpp	2011-03-04 11:33:36.269274940 +0000
 +++ misc/build/boost_1_44_0/boost/ptr_container/detail/reversible_ptr_container.hpp	2011-03-04 11:33:36.269274940 +0000
 @@ -259,6 +259,10 @@
- 
+
          static void enforce_null_policy( const Ty_* x, const char* msg )
          {
 +#ifdef BOOST_PTR_CONTAINER_NO_EXCEPTIONS
@@ -279,4 +279,4 @@
 +#endif
              if( !allow_null )
              {
-                 BOOST_PTR_CONTAINER_THROW_EXCEPTION( 0 == x && "null not allowed", 
+                 BOOST_PTR_CONTAINER_THROW_EXCEPTION( 0 == x && "null not allowed",

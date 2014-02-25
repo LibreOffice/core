@@ -7,10 +7,10 @@
 -    int i = 1;
 +    int i = 0;
      int j;
- 
+
      // ignore numbers
      for (j = word_size - 1; j > 0 && word[j] <= '9' && word[j] >= '0'; j--) i--;
- 
+
 -    for (j = word_size - 2; i < rhmin && j > 0; j--) {
 +    for (j = word_size - 1; i < rhmin && j > 0; j--) {
        // check length of the non-standard part

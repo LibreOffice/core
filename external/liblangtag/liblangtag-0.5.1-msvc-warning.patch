@@ -17,5 +17,5 @@
 +	lt_ext_module_get_tag_func_t   get_tag;
 +	lt_ext_module_validate_func_t  validate_tag;
  };
- 
- 
+
+

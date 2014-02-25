@@ -3,10 +3,10 @@
 @@ -357,37 +357,6 @@
  #  define BOOST_LIB_PREFIX "lib"
  #endif
- 
--//
+
+-
 -// now include the lib:
--//
+-
 -#if defined(BOOST_LIB_NAME) \
 -      && defined(BOOST_LIB_PREFIX) \
 -      && defined(BOOST_LIB_TOOLSET) \
@@ -35,6 +35,6 @@
 -#  error "some required macros where not defined (internal logic error)."
 -#endif
 -
- 
+
  #endif // _MSC_VER || __BORLANDC__
- 
+

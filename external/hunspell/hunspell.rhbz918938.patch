@@ -3,7 +3,7 @@
 @@ -12,6 +12,8 @@
  #endif
  #include "csutil.hxx"
- 
+
 +#include <string>
 +
  Hunspell::Hunspell(const char * affpath, const char * dpath, const char * key)
@@ -12,7 +12,7 @@
 @@ -1710,6 +1712,19 @@
      return n;
  }
- 
+
 +namespace
 +{
 +    void myrep(std::string& str, const std::string& search, const std::string& replace)

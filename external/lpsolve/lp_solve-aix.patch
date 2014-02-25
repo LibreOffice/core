@@ -31,9 +31,9 @@
 @@ -56,7 +56,7 @@
  /* Define user program feature option switches                               */
  /* ------------------------------------------------------------------------- */
- 
+
 -#if !defined _WINDOWS && !defined _WIN32 && !defined WIN32
 +#if !defined _WINDOWS && !defined _WIN32 && !defined WIN32 && !defined(_AIX)
  # define _isnan(x) FALSE
  #endif
- 
+

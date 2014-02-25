@@ -12,7 +12,7 @@ index b537a09..b4e037d 100644
 -    else
 +    if ( str.empty( ) )
 +        return type;
-+    try 
++    try
      {
 -        Type backupType = type;
 -        type = json_bool;
@@ -50,8 +50,8 @@ index b537a09..b4e037d 100644
 +            {
 +                parseInteger( str );
 +            }
-+            catch(...) 
-+            { 
++            catch(...)
++            {
 +                type = backupType;
 +            }
          }
@@ -69,8 +69,8 @@ index b537a09..b4e037d 100644
 -                {
 -                    parseInteger( str );
 -                }
--                catch(...) 
--                { 
+-                catch(...)
+-                {
 -                    type = backupType;
 -                }
 +                parseDouble( str );
@@ -83,12 +83,12 @@ index b537a09..b4e037d 100644
 -                {
 -                    parseDouble( str );
 -                }
--                catch(...) 
--                { 
+-                catch(...)
+-                {
 -                    type = backupType;
 -                }
-+            catch(...) 
-+            { 
++            catch(...)
++            {
 +                type = backupType;
              }
          }

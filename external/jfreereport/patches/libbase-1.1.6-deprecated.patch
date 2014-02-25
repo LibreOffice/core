@@ -7,5 +7,5 @@
 -    super(s, e);
 +    super(s, (Throwable) e);
    }
- 
+
    /**

@@ -2,25 +2,25 @@
 +++ misc/build/xmlsec1-1.2.14/Makefile.am
 @@ -1,8 +1,9 @@
  NULL =
- 
+
  SAFE_VERSION	= @XMLSEC_VERSION_SAFE@
 -SUBDIRS 	= include src apps man docs
 -TEST_APP 	= apps/xmlsec1$(EXEEXT)
-+#Do not build xmlsec1 app. It is not needed. Also the libtool includes 
++#Do not build xmlsec1 app. It is not needed. Also the libtool includes
 +#a -L/path_to_lib_dir which may contain an incompatible lixbml2.
 +SUBDIRS = include src man docs
  DEFAULT_CRYPTO	= @XMLSEC_CRYPTO@
- 
+
  bin_SCRIPTS 	= xmlsec1-config
 --- misc/xmlsec1-1.2.14/Makefile.in	2009-06-25 22:53:34.000000000 +0200
 +++ misc/build/xmlsec1-1.2.14/Makefile.in	2009-10-01 10:32:48.708515261 +0200
 @@ -341,8 +341,9 @@
  top_srcdir = @top_srcdir@
- NULL = 
+ NULL =
  SAFE_VERSION = @XMLSEC_VERSION_SAFE@
 -SUBDIRS = include src apps man docs
 -TEST_APP = apps/xmlsec1$(EXEEXT)
-+#Do not build xmlsec1 app. It is not needed. Also the libtool includes 
++#Do not build xmlsec1 app. It is not needed. Also the libtool includes
 +#a -L/path_to_lib_dir which may contain an incompatible lixbml2.
 +SUBDIRS = include src man docs
  DEFAULT_CRYPTO = @XMLSEC_CRYPTO@
@@ -37,28 +37,28 @@
 +LIBXML_CFLAGS="$LIBXML_CFLAGS"
 +LIBXML_LIBS="$LIBXML_LIBS"
  LIBXML_FOUND="no"
- AC_ARG_WITH(libxml, 
+ AC_ARG_WITH(libxml,
      [  --with-libxml=[PFX]       libxml2 location]
 @@ -202,6 +202,8 @@
      [  --with-libxml-src=[PFX]   not installed yet libxml2 location]
  )
- 
+
 +if test "z$LIBXML_CFLAGS" = "z" -o "z$LIBXML_LIBS" = "z"; then
 +
- if test "z$with_libxml" = "zno" -o "z$with_libxml_src" = "zno"; then 
-     AC_MSG_CHECKING(for libxml2 libraries >= $LIBXML_MIN_VERSION) 
+ if test "z$with_libxml" = "zno" -o "z$with_libxml_src" = "zno"; then
+     AC_MSG_CHECKING(for libxml2 libraries >= $LIBXML_MIN_VERSION)
      AC_MSG_ERROR(libxml2 >= $LIBXML_MIN_VERSION is required for $XMLSEC_PACKAGE)
 @@ -245,6 +247,8 @@
      fi
  fi
- 
+
 +fi
 +
  AC_SUBST(LIBXML_CFLAGS)
  AC_SUBST(LIBXML_LIBS)
  AC_SUBST(LIBXML_CONFIG)
 @@ -555,12 +559,26 @@
-     
+
  XMLSEC_NO_NSS="1"
  MOZILLA_MIN_VERSION="1.4"
 +if test "z$MOZ_FLAVOUR" = "zfirefox" ; then
@@ -70,7 +70,7 @@
  NSS_LIBS=""
 -NSS_LIBS_LIST="-lnss3 -lsmime3"
 -NSPR_LIBS_LIST="-lnspr4 -lplds4 -lplc4"
-+ 
++
 +case $host_os in
 +cygwin* | mingw* | pw32*)
 +  NSS_LIBS_LIST="-lnss3 -lsmime3"
@@ -106,12 +106,12 @@
 @@ -612,8 +640,8 @@
          ac_mozilla_name=mozilla-$MOZILLA_MIN_VERSION
      fi
- 
+
 -    ac_nss_lib_dir="/usr/lib /usr/lib64 /usr/local/lib /usr/lib/$ac_mozilla_name /usr/local/lib/$ac_mozilla_name"
 -    ac_nss_inc_dir="/usr/include /usr/include/mozilla /usr/local/include /usr/local/include/mozilla /usr/include/$ac_mozilla_name /usr/local/include/$ac_mozilla_name"
 +    ac_nss_lib_dir="${WORKDIR}/UnpackedTarball/nss/dist/out/lib"
 +    ac_nss_inc_dir="${WORKDIR}/UnpackedTarball/nss/dist/out/include ${WORKDIR}/UnpackedTarball/nss/dist/public"
- 
+
      AC_MSG_CHECKING(for nspr libraries >= $NSPR_MIN_VERSION)
      NSPR_INCLUDES_FOUND="no"
 @@ -634,21 +662,21 @@
@@ -133,7 +133,7 @@
      		break
      	    fi
  	done
- 	
+ 
  	for dir in $ac_nss_lib_dir ; do
 -    	    if test -f $dir/libnspr4$shrext ; then
 +	    if test -f $dir/libnspr4.so -o -f $dir/libnspr4.dylib ; then
@@ -142,7 +142,7 @@
              	    NSPR_LIBS="$NSPR_LIBS_LIST"
 @@ -719,7 +747,7 @@
          done
-        
+
          for dir in $ac_nss_lib_dir ; do
 -    	    if test -f $dir/libnss3$shrext ; then
 +            if test -f $dir/libnss3.so -o -f $dir/libnss3.dylib ; then
@@ -150,7 +150,7 @@
      		if test "z$dir" = "z/usr/lib" ; then
          	    NSS_LIBS="$NSS_LIBS_LIST"
 @@ -738,7 +766,7 @@
- 
+
      if test "z$NSS_INCLUDES_FOUND" = "zyes" -a "z$NSS_LIBS_FOUND" = "zyes" ; then
         OLD_CPPFLAGS=$CPPFLAGS
 -       CPPFLAGS="$NSS_CFLAGS"
@@ -163,9 +163,9 @@
 @@ -376,7 +376,7 @@
  XMLSEC_OPENSSL_SOLIBS   = libeay32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib
  XMLSEC_OPENSSL_ALIBS    = libeay32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib
- 
+
 -XMLSEC_NSS_SOLIBS   	= smime3.lib ssl3.lib nss3.lib libnspr4.lib libplds4.lib libplc4.lib kernel32.lib user32.lib gdi32.lib
 +XMLSEC_NSS_SOLIBS   	= smime3.lib nss3.lib nspr4.lib kernel32.lib user32.lib gdi32.lib
  XMLSEC_NSS_ALIBS    	= smime3.lib ssl3.lib nss3.lib libnspr4_s.lib libplds4_s.lib libplc4_s.lib kernel32.lib user32.lib gdi32.lib
- 
+
  XMLSEC_MSCRYPTO_SOLIBS  = kernel32.lib user32.lib gdi32.lib Crypt32.lib Advapi32.lib

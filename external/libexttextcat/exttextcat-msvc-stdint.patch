@@ -3,7 +3,7 @@
 @@ -45,18 +45,7 @@
  {
  #endif
- 
+
 -#ifdef _MSC_VER
 -    typedef __int8 int8_t;
 -    typedef unsigned __int8 uint8_t;
@@ -16,6 +16,6 @@
 -#else
  #   include <stdint.h>
 -#endif
- 
+
      typedef uint32_t uint4;
      typedef uint16_t uint2;

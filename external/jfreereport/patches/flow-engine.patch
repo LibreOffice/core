@@ -1,7 +1,7 @@
 --- misc/flow-engine-0.9.4/build.xml	(Revision 6728)
 +++ misc/build/flow-engine-0.9.4/build.xml	(Arbeitskopie)
 @@ -24,9 +24,13 @@
- 
+
    <!-- Setup the compile classpath -->
    <path id="classpath">
 -    <fileset dir="lib">
@@ -15,5 +15,5 @@
 +    <pathelement path="${libserializer.jar}"/>
 +    <pathelement path="${libxml.jar}"/>
    </path>
- 
+
     <!-- Kill all the created directories -->

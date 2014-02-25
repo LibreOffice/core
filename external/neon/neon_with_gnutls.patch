@@ -3,7 +3,7 @@
 @@ -48,6 +48,26 @@
  #include <iconv.h>
  #endif
- 
+
 +
 +/* GnuTLS removed these symbols from 2.99.0.
 + *

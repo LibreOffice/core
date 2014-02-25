@@ -3,7 +3,7 @@
 @@ -2973,7 +2973,8 @@
  #define SYSV 1
  EOF
- 
+
 -    DSO_LDOPTS='-brtl -bnortllib -bM:SRE -bnoentry -bexpall -blibpath:/usr/lib:/lib'
 +    MKSHLIB='$(CCC) -shared $(DSO_LDOPTS) -o $@'
 +    DSO_LDOPTS='-Wl,-brtl -Wl,-bnortllib -Wl,-blibpath:/usr/lib:/lib'
@@ -46,7 +46,7 @@
 +++ b/b/nspr/pr/src/Makefile.in	2010-08-18 07:24:49.000000000 -0500
 @@ -110,7 +110,6 @@
  endif
- 
+
  ifeq ($(OS_ARCH),AIX)
 -DSO_LDOPTS	+= -binitfini::_PR_Fini
  OS_LIBS		= -lodm -lcfg
@@ -55,29 +55,29 @@
 --- a/a/nss/coreconf/AIX.mk	2010-08-18 07:23:06.000000000 -0500
 +++ b/b/nss/coreconf/AIX.mk	2010-08-18 07:26:26.000000000 -0500
 @@ -62,35 +62,30 @@
- 
+
  DEFAULT_COMPILER = xlc_r
- 
+
 -CC		= xlc_r
 -CCC		= xlC_r
 +CCC		= $(CXX)
- 
+
  CPU_ARCH	= rs6000
- 
+
  RANLIB		= ranlib
- 
+
  OS_CFLAGS	= -DAIX -DSYSV
 -OS_LIBS 	+= -blibpath:/usr/lib:/lib -lc -lm
 +OS_LIBS 	+= -Wl,-blibpath:/usr/lib:/lib -lc -lm
- 
+
 -DSO_LDOPTS	= -brtl -bnortllib -bM:SRE -bnoentry
 -MKSHLIB 	= $(LD) $(DSO_LDOPTS) -blibpath:/usr/lib:/lib -lc -lm
 +DSO_LDOPTS	= -Wl,-brtl -Wl,-bnortllib
 +MKSHLIB 	= $(CC) --shared $(DSO_LDOPTS) -Wl,-blibpath:/usr/lib:/lib -lc -lm
- 
+
  AIX_WRAP	= $(DIST)/lib/aixwrap.o
  AIX_TMP		= $(OBJDIR)/_aix_tmp.o
- 
+
  ifdef MAPFILE
 -DSO_LDOPTS	+= -bexport:$(MAPFILE)
 +DSO_LDOPTS	+= -Wl,-bexport:$(MAPFILE)
@@ -85,10 +85,10 @@
 -DSO_LDOPTS	+= -bexpall
 +DSO_LDOPTS	+= -Wl,-bexpall
  endif
- 
+
  PROCESS_MAP_FILE = grep -v ';+' $< | grep -v ';-' | \
                  sed -e 's; DATA ;;' -e 's,;;,,' -e 's,;.*,,' > $@
- 
+
 -ifdef BUILD_OPT
 -	OPTIMIZER += -qmaxmem=-1
 -endif
@@ -100,44 +100,44 @@
 +++ b/b/nss/cmd/platlibs.mk	2010-08-18 07:26:48.000000000 -0500
 @@ -136,7 +136,7 @@
  	$(NULL)
- 
- ifeq ($(OS_ARCH), AIX) 
--EXTRA_SHARED_LIBS += -brtl 
-+EXTRA_SHARED_LIBS += -Wl,-brtl 
+
+ ifeq ($(OS_ARCH), AIX)
+-EXTRA_SHARED_LIBS += -brtl
++EXTRA_SHARED_LIBS += -Wl,-brtl
  endif
- 
+
  # $(PROGRAM) has NO explicit dependencies on $(EXTRA_SHARED_LIBS)
 @@ -186,7 +186,7 @@
  	$(NULL)
- 
- ifeq ($(OS_ARCH), AIX) 
--EXTRA_SHARED_LIBS += -brtl 
-+EXTRA_SHARED_LIBS += -Wl,-brtl 
+
+ ifeq ($(OS_ARCH), AIX)
+-EXTRA_SHARED_LIBS += -brtl
++EXTRA_SHARED_LIBS += -Wl,-brtl
  endif
- 
+
  # $(PROGRAM) has NO explicit dependencies on $(EXTRA_SHARED_LIBS)
 --- a/a/nss/cmd/shlibsign/mangle/Makefile	2010-08-18 07:23:20.000000000 -0500
 +++ b/b/nss/cmd/shlibsign/mangle/Makefile	2010-08-18 07:42:44.000000000 -0500
 @@ -75,7 +75,9 @@
- 
+
  endif
- 
+
 -
 +ifeq ($(OS), AIX)
 +EXTRA_SHARED_LIBS += -lpthreads
 +endif
- 
+
  #######################################################################
  # (5) Execute "global" rules. (OPTIONAL)                              #
 --- a/a/nss/cmd/shlibsign/Makefile	2010-08-18 08:00:17.000000000 -0500
 +++ b/b/nss/cmd/shlibsign/Makefile	2010-08-18 07:55:55.000000000 -0500
 @@ -45,6 +45,9 @@
- 
+
  endif
- 
+
 +ifeq ($(OS), AIX)
 +EXTRA_SHARED_LIBS += -lpthreads
 +endif
- 
+
  # sign any and all shared libraries that contain the word freebl
  ifeq ($(NSS_BUILD_WITHOUT_SOFTOKEN),1)

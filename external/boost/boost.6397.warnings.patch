@@ -11,7 +11,7 @@
      // ignore the bits above the ones we want
 -    bits <<= CHAR_BIT - bit_count;
 +    bits <<= CHAR_BIT - bit_count_;
- 
+
      // compute the CRC for each bit, starting with the upper ones
      unsigned char const  high_bit_mask = 1u << ( CHAR_BIT - 1u );
 -    for ( std::size_t i = bit_count ; i > 0u ; --i, bits <<= 1u )
@@ -22,7 +22,7 @@
 --- misc/boost_1_44_0/boost/multi_array/concept_checks.hpp	2012-01-12 20:21:29.790009198 +0000
 +++ misc/build/boost_1_44_0/boost/multi_array/concept_checks.hpp	2012-01-12 20:29:56.482879277 +0000
 @@ -39,8 +39,8 @@
- 
+
      template <typename Array, typename IdxGen, typename Call_Type>
      static void call(Array& a, const IdxGen& idgen, Call_Type c) {
 -      typedef typename Array::index_range index_range;
@@ -33,7 +33,7 @@
      }
    };
 @@ -50,8 +50,8 @@
- 
+
      template <typename Array, typename IdxGen, typename Call_Type>
      static void call(Array& a, const IdxGen& idgen, Call_Type) {
 -      typedef typename Array::index_range index_range;
@@ -46,20 +46,20 @@
 @@ -153,27 +153,27 @@
        const_constraints(a);
      }
- 
+
 -    void const_constraints(const Array& a) {
 +    void const_constraints(const Array& a_) {
- 
+
        //      value_type vt = a[ id ];
- 
+
        // Test slicing, keeping only the first dimension, losing the rest
 -      detail::idgen_helper<NumDims-1>::call(a,idgen[range],id);
 +      detail::idgen_helper<NumDims-1>::call(a_,idgen[range],id);
- 
+
        // Test slicing, keeping all dimensions.
 -      detail::idgen_helper<NumDims-1>::call(a,idgen[range],range);
 +      detail::idgen_helper<NumDims-1>::call(a_,idgen[range],range);
- 
+
 -      st = a.size();
 -      st = a.num_dimensions();
 -      st = a.num_elements();
@@ -83,43 +83,43 @@
 +      crit = a_.rend();
 +      eltp = a_.origin();
      }
- 
+
      typedef typename Array::value_type value_type;
 --- misc/boost_1_44_0/boost/multi_array/extent_range.hpp	2012-01-12 20:21:29.790009198 +0000
 +++ misc/build/boost_1_44_0/boost/multi_array/extent_range.hpp	2012-01-12 20:32:16.696241748 +0000
 @@ -26,11 +26,11 @@
    typedef Extent index;
    typedef SizeType size_type;
- 
+
 -  extent_range(index start, index finish) :
 -    super_type(start,finish) { }
 +  extent_range(index start_, index finish_) :
 +    super_type(start_,finish_) { }
- 
+
 -  extent_range(index finish) :
 -    super_type(0,finish) { }
 +  extent_range(index finish_) :
 +    super_type(0,finish_) { }
- 
+
    extent_range() : super_type(0,0) { }
- 
+
 --- misc/boost_1_44_0/boost/multi_array/index_range.hpp	2012-01-12 20:21:29.790009198 +0000
 +++ misc/build/boost_1_44_0/boost/multi_array/index_range.hpp	2012-01-12 20:31:29.405781105 +0000
 @@ -60,8 +60,8 @@
        degenerate_ = true;
      }
- 
+
 -    explicit index_range(index start, index finish, index stride=1)
 -      : start_(start), finish_(finish), stride_(stride),
 +    explicit index_range(index i_start, index i_finish, index i_stride=1)
 +      : start_(i_start), finish_(i_finish), stride_(i_stride),
          degenerate_(false)
      { }
- 
+
 @@ -107,11 +107,11 @@
- 
+
      index stride() const { return stride_; }
- 
+
 -    void set_index_range(index start, index finish, index stride=1)
 +    void set_index_range(index i_start, index i_finish, index i_stride=1)
      {
@@ -130,47 +130,47 @@
 +      finish_ = i_finish;
 +      stride_ = i_stride;
      }
- 
-     static index_range all() 
+
+     static index_range all()
 --- misc/boost_1_44_0/boost/multi_array/multi_array_ref.hpp	2012-01-12 20:21:29.790009198 +0000
 +++ misc/build/boost_1_44_0/boost/multi_array/multi_array_ref.hpp	2012-01-12 20:25:49.280492556 +0000
 @@ -86,24 +86,24 @@
        num_elements_(other.num_elements_)  {  }
- 
+
    template <typename ExtentList>
 -  explicit const_multi_array_ref(TPtr base, const ExtentList& extents) :
 +  explicit const_multi_array_ref(TPtr base, const ExtentList& extents_) :
      base_(base), storage_(c_storage_order()) {
      boost::function_requires<
        CollectionConcept<ExtentList> >();
- 
+
      index_base_list_.assign(0);
 -    init_multi_array_ref(extents.begin());
 +    init_multi_array_ref(extents_.begin());
    }
-   
+
    template <typename ExtentList>
 -  explicit const_multi_array_ref(TPtr base, const ExtentList& extents,
 +  explicit const_multi_array_ref(TPtr base, const ExtentList& extents_,
-                        const general_storage_order<NumDims>& so) : 
+                        const general_storage_order<NumDims>& so) :
      base_(base), storage_(so) {
      boost::function_requires<
        CollectionConcept<ExtentList> >();
- 
+
      index_base_list_.assign(0);
 -    init_multi_array_ref(extents.begin());
 +    init_multi_array_ref(extents_.begin());
    }
-   
+
    explicit const_multi_array_ref(TPtr base,
 @@ -124,13 +124,13 @@
    }
-   
+
    template <class InputIterator>
 -  void assign(InputIterator begin, InputIterator end) {
 +  void assign(InputIterator begin_, InputIterator end_) {
      boost::function_requires<InputIteratorConcept<InputIterator> >();
- 
+
 -    InputIterator in_iter = begin;
 +    InputIterator in_iter = begin_;
      T* out_iter = base_;
@@ -178,11 +178,11 @@
 -    while (in_iter != end && copy_count < num_elements_) {
 +    while (in_iter != end_ && copy_count < num_elements_) {
        *out_iter++ = *in_iter++;
-       copy_count++;      
+       copy_count++;
      }
 @@ -161,14 +161,14 @@
    }
- 
+
    template <typename SizeList>
 -  void reshape(const SizeList& extents) {
 +  void reshape(const SizeList& extents_) {
@@ -192,15 +192,15 @@
 -                 std::accumulate(extents.begin(),extents.end(),
 +                 std::accumulate(extents_.begin(),extents_.end(),
                                   size_type(1),std::multiplies<size_type>()));
- 
+
 -    std::copy(extents.begin(),extents.end(),extent_list_.begin());
 +    std::copy(extents_.begin(),extents_.end(),extent_list_.begin());
      this->compute_strides(stride_list_,extent_list_,storage_);
- 
+
      origin_offset_ =
 @@ -208,11 +208,11 @@
    }
- 
+
    template <typename IndexList>
 -  const element& operator()(IndexList indices) const {
 +  const element& operator()(IndexList indices_) const {
@@ -211,10 +211,10 @@
 +                                      indices_,origin(),
                                        shape(),strides(),index_bases());
    }
- 
+
 @@ -231,12 +231,12 @@
  #endif // BOOST_MSVC
-   typename const_array_view<NDims>::type 
+   typename const_array_view<NDims>::type
    operator[](const detail::multi_array::
 -             index_gen<NumDims,NDims>& indices)
 +             index_gen<NumDims,NDims>& indices_)
@@ -257,7 +257,7 @@
       extent_list.assign(0);
 @@ -374,12 +374,12 @@
                boost::mem_fun_ref(&extent_range::start));
- 
+
      // calculate the extents
 -    extent_list extents;
 +    extent_list extents_;
@@ -265,15 +265,15 @@
 -              extents.begin(),
 +              extents_.begin(),
                boost::mem_fun_ref(&extent_range::size));
- 
+
 -    init_multi_array_ref(extents.begin());
 +    init_multi_array_ref(extents_.begin());
    }
- 
- 
+
+
 @@ -445,16 +445,16 @@
    };
- 
+
    template <class ExtentList>
 -  explicit multi_array_ref(T* base, const ExtentList& extents) :
 -    super_type(base,extents) {
@@ -282,7 +282,7 @@
      boost::function_requires<
        CollectionConcept<ExtentList> >();
    }
- 
+
    template <class ExtentList>
 -  explicit multi_array_ref(T* base, const ExtentList& extents,
 +  explicit multi_array_ref(T* base, const ExtentList& extents_,
@@ -294,7 +294,7 @@
    }
 @@ -509,11 +509,11 @@
    element* data() { return super_type::base_; }
- 
+
    template <class IndexList>
 -  element& operator()(const IndexList& indices) {
 +  element& operator()(const IndexList& indices_) {
@@ -308,7 +308,7 @@
    }
 @@ -535,11 +535,11 @@
  #endif // BOOST_MSVC
-   typename array_view<NDims>::type 
+   typename array_view<NDims>::type
    operator[](const detail::multi_array::
 -             index_gen<NumDims,NDims>& indices) {
 +             index_gen<NumDims,NDims>& indices_) {
@@ -322,7 +322,7 @@
                                        this->index_bases(),
 @@ -576,10 +576,10 @@
    const element* data() const { return super_type::data(); }
- 
+
    template <class IndexList>
 -  const element& operator()(const IndexList& indices) const {
 +  const element& operator()(const IndexList& indices_) const {
@@ -331,11 +331,11 @@
 -    return super_type::operator()(indices);
 +    return super_type::operator()(indices_);
    }
- 
+
    const_reference operator[](index idx) const {
 @@ -597,9 +597,9 @@
  #endif // BOOST_MSVC
-   typename const_array_view<NDims>::type 
+   typename const_array_view<NDims>::type
    operator[](const detail::multi_array::
 -             index_gen<NumDims,NDims>& indices)
 +             index_gen<NumDims,NDims>& indices_)
@@ -343,7 +343,7 @@
 -    return super_type::operator[](indices);
 +    return super_type::operator[](indices_);
    }
-   
+
    const_iterator begin() const {
 @@ -622,9 +622,9 @@
    // This is only supplied to support multi_array's default constructor
@@ -355,9 +355,9 @@
 +                           const index* index_bases_,
 +                           const size_type* extents_) :
 +    super_type(base,so,index_bases_,extents_) { }
- 
+
  };
- 
+
 --- misc/boost_1_44_0/boost/multi_array/storage_order.hpp	2012-01-12 20:21:29.790009198 +0000
 +++ misc/build/boost_1_44_0/boost/multi_array/storage_order.hpp	2012-01-12 20:30:57.667472937 +0000
 @@ -34,10 +34,10 @@
@@ -373,12 +373,12 @@
 +      boost::detail::multi_array::copy_n(i_ordering,NumDims,ordering_.begin());
 +      boost::detail::multi_array::copy_n(i_ascending,NumDims,ascending_.begin());
      }
- 
+
      // RG - ideally these would not be necessary, but some compilers
 --- misc/boost_1_44_0/boost/multi_array/subarray.hpp	2012-01-12 20:21:29.790009198 +0000
 +++ misc/build/boost_1_44_0/boost/multi_array/subarray.hpp	2012-01-12 20:27:12.346292228 +0000
 @@ -181,9 +181,9 @@
- 
+
    const_sub_array (TPtr base,
                   const size_type* extents,
 -                 const index* strides,
@@ -390,7 +390,7 @@
    }
 
 @@ -369,9 +369,9 @@
- 
+
    sub_array (T* base,
              const size_type* extents,
 -            const index* strides,
@@ -399,7 +399,7 @@
 -    super_type(base,extents,strides,index_base) {
 +    super_type(base,extents,_strides,index_base) {
    }
- 
+
  };
 --- misc/boost_1_44_0/boost/multi_array/view.hpp	2012-01-12 20:21:29.790009198 +0000
 +++ misc/build/boost_1_44_0/boost/multi_array/view.hpp	2012-01-12 20:26:36.350945110 +0000
@@ -407,10 +407,10 @@
    template <typename ExtentList, typename Index>
    explicit const_multi_array_view(TPtr base,
                             const ExtentList& extents,
--                           const boost::array<Index,NumDims>& strides): 
-+                           const boost::array<Index,NumDims>& strides_): 
+-                           const boost::array<Index,NumDims>& strides):
++                           const boost::array<Index,NumDims>& strides_):
      base_(base), origin_offset_(0) {
- 
+
      index_base_list_.assign(0);
 @@ -240,7 +240,7 @@
      boost::detail::multi_array::
@@ -418,7 +418,7 @@
      boost::detail::multi_array::
 -      copy_n(strides.begin(),NumDims,stride_list_.begin());
 +      copy_n(strides_.begin(),NumDims,stride_list_.begin());
- 
+
      // Calculate the array size
      num_elements_ = std::accumulate(extent_list_.begin(),extent_list_.end(),
 @@ -441,8 +441,8 @@
@@ -429,20 +429,20 @@
 -    super_type(base,extents,strides) { }
 +                            const boost::array<Index,NumDims>& _strides) :
 +    super_type(base,extents,_strides) { }
- 
+
  };
- 
+
 --- misc/boost_1_44_0/boost/multi_array.hpp	2012-09-28 13:06:44.796521371 +0100
 +++ misc/build/boost_1_44_0/boost/multi_array.hpp	2012-09-28 13:07:25.119002500 +0100
 @@ -139,20 +139,20 @@
- 
+
    explicit multi_array() :
      super_type((T*)initial_base_,c_storage_order(),
 -               /*index_bases=*/0, /*extents=*/0) {
 +               /*index_bases=*/0, /*extents_=*/0) {
-     allocate_space(); 
+     allocate_space();
    }
- 
+
    template <class ExtentList>
    explicit multi_array(
 -      ExtentList const& extents
@@ -459,8 +459,8 @@
        detail::multi_array::CollectionConcept<ExtentList> >();
      allocate_space();
 @@ -160,19 +160,19 @@
- 
-     
+
+
    template <class ExtentList>
 -  explicit multi_array(ExtentList const& extents,
 +  explicit multi_array(ExtentList const& extents_,
@@ -471,7 +471,7 @@
        detail::multi_array::CollectionConcept<ExtentList> >();
      allocate_space();
    }
- 
+
    template <class ExtentList>
 -  explicit multi_array(ExtentList const& extents,
 +  explicit multi_array(ExtentList const& extents_,
@@ -483,26 +483,26 @@
        detail::multi_array::CollectionConcept<ExtentList> >();
      allocate_space();
 @@ -381,7 +381,7 @@
- 
- 
+
+
    template <typename ExtentList>
 -  multi_array& resize(const ExtentList& extents) {
 +  multi_array& resize(const ExtentList& extents_) {
      boost::function_requires<
        detail::multi_array::CollectionConcept<ExtentList> >();
- 
+
 @@ -390,7 +390,7 @@
- 
+
      for (int i=0; i != NumDims; ++i) {
        typedef typename gen_type::range range_type;
 -      ranges.ranges_[i] = range_type(0,extents[i]);
 +      ranges.ranges_[i] = range_type(0,extents_[i]);
      }
-     
+
      return this->resize(ranges);
 @@ -423,9 +423,9 @@
      // Build index_gen objects to create views with the same shape
- 
+
      // these need to be separate to handle non-zero index bases
 -    typedef detail::multi_array::index_gen<NumDims,NumDims> index_gen;
 -    index_gen old_idxes;
@@ -510,7 +510,7 @@
 +    typedef detail::multi_array::index_gen<NumDims,NumDims> lcl_index_gen;
 +    lcl_index_gen old_idxes;
 +    lcl_index_gen new_idxes;
- 
+
      std::transform(new_array.index_base_list_.begin(),
                     new_array.index_base_list_.end(),
 --- misc/boost_1_44_0/boost/random/mersenne_twister.hpp
@@ -529,7 +529,7 @@
 +        if(x_arg.i < y_arg.i) return x_arg.equal_imp(y_arg);
 +        else return y_arg.equal_imp(x_arg);
      }
-     
+
      /**
       * Returns true if the two generators are in different states.
       */
@@ -539,14 +539,14 @@
 +    friend bool operator!=(const mersenne_twister_engine& x_arg,
 +                           const mersenne_twister_engine& y_arg)
 +    { return !(x_arg == y_arg); }
- 
+
  private:
      /// \cond show_private
 --- misc/boost_1_44_0/boost/uuid/uuid_io.hpp
 +++ misc/build/boost_1_44_0/boost/uuid/uuid_io.hpp
 @@ -59,7 +59,7 @@
          }
-         
+
          if (flags & std::ios_base::left) {
 -            for (std::streamsize i=uuid_width; i<width; i++) {
 +            for (std::streamsize s=uuid_width; s<width; ++s) {
@@ -558,11 +558,11 @@
 @@ -30,8 +30,8 @@
  public:
      typedef uuid result_type;
- 
+
 -    explicit name_generator(uuid const& namespace_uuid)
 -        : namespace_uuid(namespace_uuid)
 +    explicit name_generator(uuid const& namespace_uuid_)
 +        : namespace_uuid(namespace_uuid_)
      {}
- 
+
      uuid operator()(const char* name) {

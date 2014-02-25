@@ -29,7 +29,7 @@
 @@ -192,6 +192,15 @@ typedef int                  cmsBool;
  # endif
  #endif
- 
+
 +// LibreOffice always builds this as DLL and with the stdcall calling
 +// convention, so make this usable from outside without having to
 +// specify CMS_DLL manually whenever the library is used.

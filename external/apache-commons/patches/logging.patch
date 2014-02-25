@@ -2,21 +2,21 @@
 +++ misc/build/commons-logging-1.1.1-src/build.xml     2008-06-24 14:23:56.316301736 +0200
 @@ -127,10 +127,10 @@
  <!-- ========== Compiler Defaults ========================================= -->
- 
+
    <!-- Version of java class files to generate. -->
 -  <property name="target.version" value="1.1"/>
 +  <property name="target.version" value="1.5"/>
- 
+
    <!-- Version of java source to accept -->
 -  <property name="source.version" value="1.2"/>
 +  <property name="source.version" value="1.3"/>
- 
+
    <!-- Should Java compilations set the 'debug' compiler option? -->
    <property name="compile.debug"           value="true"/>
 @@ -280,6 +280,10 @@
                 classpathref="compile.classpath"
                 classname="org.apache.avalon.framework.logger.Logger"/>
- 
+
 +    <available property="servlet-api.present"
 +               classpathref="compile.classpath"
 +               classname="javax.servlet.ServletContextListener"/>
@@ -32,4 +32,4 @@
 +               unless="servlet-api.present"/>
      </javac>
    </target>
- 
+

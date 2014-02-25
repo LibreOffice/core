@@ -1,7 +1,7 @@
 --- misc/boost_1_44_0/boost/bind/bind.hpp	2009-11-30 21:30:22.000000000 +0100
 +++ misc/build/boost_1_44_0/boost/bind/bind.hpp	2012-01-20 12:44:07.111316403 +0100
 @@ -143,7 +143,7 @@
- 
+
  template<class F> struct unwrapper
  {
 -    static inline F & unwrap( F & f, long )
@@ -10,36 +10,36 @@
          return f;
      }
 @@ -226,7 +226,7 @@
- 
+
      A1 operator[] (boost::arg<1>) const { return base_type::a1_; }
- 
+
 -    A1 operator[] (boost::arg<1> (*) ()) const { return base_type::a1_; }
 +    A1 operator[] (__attribute__ ((unused)) boost::arg<1> (*) ()) const { return base_type::a1_; }
- 
+
      template<class T> T & operator[] ( _bi::value<T> & v ) const { return v.get(); }
- 
+
 @@ -238,22 +238,22 @@
- 
+
      template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
- 
+
 -    template<class R, class F, class A> R operator()(type<R>, F & f, A & a, long)
 +    template<class R, class F, class A> R operator()(type<R>, F & f, A & a, __attribute__ ((unused)) long)
      {
          return unwrapper<F>::unwrap(f, 0)(a[base_type::a1_]);
      }
- 
+
 -    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a, long) const
 +    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a, __attribute__ ((unused)) long) const
      {
          return unwrapper<F const>::unwrap(f, 0)(a[base_type::a1_]);
      }
- 
+
 -    template<class F, class A> void operator()(type<void>, F & f, A & a, int)
 +    template<class F, class A> void operator()(type<void>, F & f, A & a, __attribute__ ((unused)) int)
      {
          unwrapper<F>::unwrap(f, 0)(a[base_type::a1_]);
      }
- 
+
 -    template<class F, class A> void operator()(type<void>, F const & f, A & a, int) const
 +    template<class F, class A> void operator()(type<void>, F const & f, A & a, __attribute__ ((unused)) int) const
      {
@@ -48,45 +48,45 @@
 @@ -285,8 +285,8 @@
      A1 operator[] (boost::arg<1>) const { return base_type::a1_; }
      A2 operator[] (boost::arg<2>) const { return base_type::a2_; }
- 
+
 -    A1 operator[] (boost::arg<1> (*) ()) const { return base_type::a1_; }
 -    A2 operator[] (boost::arg<2> (*) ()) const { return base_type::a2_; }
 +    A1 operator[] (__attribute__ ((unused)) boost::arg<1> (*) ()) const { return base_type::a1_; }
 +    A2 operator[] (__attribute__ ((unused)) boost::arg<2> (*) ()) const { return base_type::a2_; }
- 
+
      template<class T> T & operator[] (_bi::value<T> & v) const { return v.get(); }
- 
+
 @@ -298,22 +298,22 @@
- 
+
      template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
- 
+
 -    template<class R, class F, class A> R operator()(type<R>, F & f, A & a, long)
 +    template<class R, class F, class A> R operator()(type<R>, F & f, A & a, __attribute__ ((unused)) long)
      {
          return unwrapper<F>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_]);
      }
- 
+
 -    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a, long) const
 +    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a, __attribute__ ((unused)) long) const
      {
          return unwrapper<F const>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_]);
      }
- 
+
 -    template<class F, class A> void operator()(type<void>, F & f, A & a, int)
 +    template<class F, class A> void operator()(type<void>, F & f, A & a, __attribute__ ((unused)) int)
      {
          unwrapper<F>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_]);
      }
- 
+
 -    template<class F, class A> void operator()(type<void>, F const & f, A & a, int) const
 +    template<class F, class A> void operator()(type<void>, F const & f, A & a, __attribute__ ((unused)) int) const
      {
          unwrapper<F const>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_]);
      }
 @@ -377,7 +377,7 @@
- 
+
      template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
- 
+
 -    template<class R, class F, class A> R operator()(type<R>, F & f, A & a, long)
 +    template<class R, class F, class A> R operator()(type<R>, F & f, A & a, __attribute__ ((unused)) long)
      {
@@ -95,13 +95,13 @@
 @@ -387,12 +387,12 @@
          return unwrapper<F const>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_], a[base_type::a3_]);
      }
- 
+
 -    template<class F, class A> void operator()(type<void>, F & f, A & a, int)
 +    template<class F, class A> void operator()(type<void>, F & f, A & a, __attribute__ ((unused)) int)
      {
          unwrapper<F>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_], a[base_type::a3_]);
      }
- 
+
 -    template<class F, class A> void operator()(type<void>, F const & f, A & a, int) const
 +    template<class F, class A> void operator()(type<void>, F const & f, A & a, __attribute__ ((unused)) int) const
      {
@@ -110,7 +110,7 @@
 @@ -427,10 +427,10 @@
      A3 operator[] (boost::arg<3>) const { return base_type::a3_; }
      A4 operator[] (boost::arg<4>) const { return base_type::a4_; }
- 
+
 -    A1 operator[] (boost::arg<1> (*) ()) const { return base_type::a1_; }
 -    A2 operator[] (boost::arg<2> (*) ()) const { return base_type::a2_; }
 -    A3 operator[] (boost::arg<3> (*) ()) const { return base_type::a3_; }
@@ -119,13 +119,13 @@
 +    A2 operator[] (__attribute__ ((unused)) boost::arg<2> (*) ()) const { return base_type::a2_; }
 +    A3 operator[] (__attribute__ ((unused)) boost::arg<3> (*) ()) const { return base_type::a3_; }
 +    A4 operator[] (__attribute__ ((unused)) boost::arg<4> (*) ()) const { return base_type::a4_; }
- 
+
      template<class T> T & operator[] (_bi::value<T> & v) const { return v.get(); }
- 
+
 @@ -442,7 +442,7 @@
- 
+
      template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
- 
+
 -    template<class R, class F, class A> R operator()(type<R>, F & f, A & a, long)
 +    template<class R, class F, class A> R operator()(type<R>, F & f, A & a, __attribute__ ((unused)) long)
      {
@@ -134,16 +134,16 @@
 @@ -452,7 +452,7 @@
          return unwrapper<F const>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_], a[base_type::a3_], a[base_type::a4_]);
      }
- 
+
 -    template<class F, class A> void operator()(type<void>, F & f, A & a, int)
 +    template<class F, class A> void operator()(type<void>, F & f, A & a, __attribute__ ((unused)) int)
      {
          unwrapper<F>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_], a[base_type::a3_], a[base_type::a4_]);
      }
 @@ -510,7 +510,7 @@
- 
+
      template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
- 
+
 -    template<class R, class F, class A> R operator()(type<R>, F & f, A & a, long)
 +    template<class R, class F, class A> R operator()(type<R>, F & f, A & a, __attribute__ ((unused)) long)
      {
@@ -152,7 +152,7 @@
 @@ -520,7 +520,7 @@
          return unwrapper<F const>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_], a[base_type::a3_], a[base_type::a4_], a[base_type::a5_]);
      }
- 
+
 -    template<class F, class A> void operator()(type<void>, F & f, A & a, int)
 +    template<class F, class A> void operator()(type<void>, F & f, A & a, __attribute__ ((unused)) int)
      {
@@ -161,7 +161,7 @@
 @@ -591,7 +591,7 @@
          return unwrapper<F const>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_], a[base_type::a3_], a[base_type::a4_], a[base_type::a5_], a[base_type::a6_]);
      }
- 
+
 -    template<class F, class A> void operator()(type<void>, F & f, A & a, int)
 +    template<class F, class A> void operator()(type<void>, F & f, A & a, __attribute__ ((unused)) int)
      {
@@ -172,7 +172,7 @@
 @@ -328,7 +328,7 @@
          return (u.*f_);
      }
- 
+
 -    template<class U> R const & call(U & u, void const *) const
 +    template<class U> R const & call(U & u, __attribute__ ((unused)) void const *) const
      {
@@ -183,7 +183,7 @@
 @@ -35,7 +35,7 @@
          BOOST_MEM_FN_RETURN (u.*f_)();
      }
- 
+
 -    template<class U> R call(U & u, void const *) const
 +    template<class U> R call(U & u, __attribute__ ((unused)) void const *) const
      {
@@ -192,7 +192,7 @@
 @@ -100,7 +100,7 @@
          BOOST_MEM_FN_RETURN (u.*f_)();
      }
- 
+
 -    template<class U> R call(U & u, void const *) const
 +    template<class U> R call(U & u, __attribute__ ((unused)) void const *) const
      {
@@ -201,13 +201,13 @@
 @@ -146,12 +146,12 @@
      BOOST_MEM_FN_TYPEDEF(R (BOOST_MEM_FN_CC T::*F) (A1))
      F f_;
- 
+
 -    template<class U, class B1> R call(U & u, T const *, B1 & b1) const
 +    template<class U, class B1> R call(U & u, __attribute__ ((unused)) T const *, B1 & b1) const
      {
          BOOST_MEM_FN_RETURN (u.*f_)(b1);
      }
- 
+
 -    template<class U, class B1> R call(U & u, void const *, B1 & b1) const
 +    template<class U, class B1> R call(U & u, __attribute__ ((unused)) void const *, B1 & b1) const
      {
@@ -216,7 +216,7 @@
 @@ -217,7 +217,7 @@
          BOOST_MEM_FN_RETURN (u.*f_)(b1);
      }
- 
+
 -    template<class U, class B1> R call(U & u, void const *, B1 & b1) const
 +    template<class U, class B1> R call(U & u, __attribute__ ((unused)) void const *, B1 & b1) const
      {
@@ -225,7 +225,7 @@
 @@ -266,7 +266,7 @@
          BOOST_MEM_FN_RETURN (u.*f_)(b1, b2);
      }
- 
+
 -    template<class U, class B1, class B2> R call(U & u, void const *, B1 & b1, B2 & b2) const
 +    template<class U, class B1, class B2> R call(U & u, __attribute__ ((unused)) void const *, B1 & b1, B2 & b2) const
      {
@@ -234,7 +234,7 @@
 @@ -330,7 +330,7 @@
          BOOST_MEM_FN_RETURN (u.*f_)(b1, b2);
      }
- 
+
 -    template<class U, class B1, class B2> R call(U & u, void const *, B1 & b1, B2 & b2) const
 +    template<class U, class B1, class B2> R call(U & u, __attribute__ ((unused)) void const *, B1 & b1, B2 & b2) const
      {
@@ -243,7 +243,7 @@
 @@ -379,7 +379,7 @@
          BOOST_MEM_FN_RETURN (u.*f_)(b1, b2, b3);
      }
- 
+
 -    template<class U, class B1, class B2, class B3> R call(U & u, void const *, B1 & b1, B2 & b2, B3 & b3) const
 +    template<class U, class B1, class B2, class B3> R call(U & u, __attribute__ ((unused)) void const *, B1 & b1, B2 & b2, B3 & b3) const
      {
@@ -252,7 +252,7 @@
 @@ -492,7 +492,7 @@
          BOOST_MEM_FN_RETURN (u.*f_)(b1, b2, b3, b4);
      }
- 
+
 -    template<class U, class B1, class B2, class B3, class B4> R call(U & u, void const *, B1 & b1, B2 & b2, B3 & b3, B4 & b4) const
 +    template<class U, class B1, class B2, class B3, class B4> R call(U & u, __attribute__ ((unused)) void const *, B1 & b1, B2 & b2, B3 & b3, B4 & b4) const
      {
@@ -261,7 +261,7 @@
 @@ -556,7 +556,7 @@
          BOOST_MEM_FN_RETURN (u.*f_)(b1, b2, b3, b4);
      }
- 
+
 -    template<class U, class B1, class B2, class B3, class B4> R call(U & u, void const *, B1 & b1, B2 & b2, B3 & b3, B4 & b4) const
 +    template<class U, class B1, class B2, class B3, class B4> R call(U & u, __attribute__ ((unused)) void const *, B1 & b1, B2 & b2, B3 & b3, B4 & b4) const
      {
@@ -270,7 +270,7 @@
 --- misc/boost_1_44_0/boost/detail/dynamic_bitset.hpp	2008-10-21 20:13:59.000000000 +0200
 +++ misc/build/boost_1_44_0/boost/detail/dynamic_bitset.hpp	2012-01-20 12:44:07.113316394 +0100
 @@ -100,8 +100,8 @@
- 
+
       template <typename Iterator>
       inline std::size_t do_count(Iterator first, std::size_t length,
 -                                 int /*dummy param*/,
@@ -284,7 +284,7 @@
 +++ misc/build/boost_1_44_0/boost/foreach.hpp	2012-01-20 12:44:07.114316390 +0100
 @@ -610,7 +610,7 @@
  }
- 
+
  template<typename T>
 -inline auto_any<T *> contain(T &t, boost::mpl::false_ *) // lvalue
 +inline auto_any<T *> contain(T &t, __attribute__ ((unused)) boost::mpl::false_ *) // lvalue
@@ -292,7 +292,7 @@
      // Cannot seem to get sunpro to handle addressof() with array types.
      #if BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x570))
 @@ -641,7 +641,7 @@
- 
+
  template<typename T, typename C>
  inline auto_any<BOOST_DEDUCED_TYPENAME foreach_iterator<T, C>::type>
 -begin(auto_any_t col, type2type<T, C> *, boost::mpl::false_ *) // lvalue
@@ -301,7 +301,7 @@
      typedef BOOST_DEDUCED_TYPENAME type2type<T, C>::type type;
      typedef BOOST_DEDUCED_TYPENAME foreach_iterator<T, C>::type iterator;
 @@ -678,7 +678,7 @@
- 
+
  template<typename T, typename C>
  inline auto_any<BOOST_DEDUCED_TYPENAME foreach_iterator<T, C>::type>
 -end(auto_any_t col, type2type<T, C> *, boost::mpl::false_ *) // lvalue
@@ -311,7 +311,7 @@
      typedef BOOST_DEDUCED_TYPENAME foreach_iterator<T, C>::type iterator;
 @@ -707,7 +707,7 @@
  // done
- //
+
  template<typename T, typename C>
 -inline bool done(auto_any_t cur, auto_any_t end, type2type<T, C> *)
 +inline bool done(auto_any_t cur, auto_any_t end, __attribute__ ((unused)) type2type<T, C> *)
@@ -320,7 +320,7 @@
      return auto_any_cast<iter_t, boost::mpl::false_>(cur) == auto_any_cast<iter_t, boost::mpl::false_>(end);
 @@ -725,7 +725,7 @@
  // next
- //
+
  template<typename T, typename C>
 -inline void next(auto_any_t cur, type2type<T, C> *)
 +inline void next(auto_any_t cur, __attribute__ ((unused)) type2type<T, C> *)
@@ -328,7 +328,7 @@
      typedef BOOST_DEDUCED_TYPENAME foreach_iterator<T, C>::type iter_t;
      ++auto_any_cast<iter_t, boost::mpl::false_>(cur);
 @@ -736,7 +736,7 @@
- //
+
  template<typename T, typename C>
  inline BOOST_DEDUCED_TYPENAME foreach_reference<T, C>::type
 -deref(auto_any_t cur, type2type<T, C> *)
@@ -406,24 +406,24 @@
         assign_value(expr, is_reference_predicate());
       }
 @@ -846,12 +846,12 @@
- 
+
  template<class T>
  inline
 -bool operator == ( none_t , optional<T> const& y )
 +bool operator == ( __attribute__ ((unused)) none_t , optional<T> const& y )
  { return equal_pointees(optional<T>() ,y); }
- 
+
  template<class T>
  inline
 -bool operator < ( none_t , optional<T> const& y )
 +bool operator < ( __attribute__ ((unused)) none_t , optional<T> const& y )
  { return less_pointees(optional<T>() ,y); }
- 
+
  template<class T>
 --- misc/boost_1_44_0/boost/spirit/home/classic/actor/ref_const_ref_actor.hpp	2008-06-22 17:05:38.000000000 +0200
 +++ misc/build/boost_1_44_0/boost/spirit/home/classic/actor/ref_const_ref_actor.hpp	2012-01-20 12:44:07.124316347 +0100
 @@ -63,8 +63,8 @@
- 
+
          template<typename IteratorT>
              void operator()(
 -            IteratorT const& /*first*/,
@@ -449,7 +449,7 @@
 +        __attribute__ ((unused)) IteratorT const&    last) const
      {}
  };
- 
+
 --- misc/boost_1_44_0/boost/spirit/home/classic/core/composite/impl/directives.ipp	2008-06-22 17:05:38.000000000 +0200
 +++ misc/build/boost_1_44_0/boost/spirit/home/classic/core/composite/impl/directives.ipp	2012-01-20 12:44:07.124316347 +0100
 @@ -41,7 +41,7 @@
@@ -493,7 +493,7 @@
 @@ -83,7 +83,7 @@
          {   // Does _not_ copy the helpers member !
          }
- 
+
 -        grammar_helper_list& operator=(grammar_helper_list const& x)
 +        grammar_helper_list& operator=(__attribute__ ((unused)) grammar_helper_list const& x)
          {   // Does _not_ copy the helpers member !
@@ -503,28 +503,28 @@
 +++ misc/build/boost_1_44_0/boost/spirit/home/classic/core/non_terminal/parser_context.hpp	2012-01-20 12:44:07.124316347 +0100
 @@ -51,15 +51,15 @@
          typedef parser_context_linker<parser_context<AttrT> > context_linker_t;
- 
+
          template <typename ParserT>
 -        parser_context(ParserT const&) {}
 +        parser_context(__attribute__ ((unused)) ParserT const&) {}
- 
+
          template <typename ParserT, typename ScannerT>
          void
 -        pre_parse(ParserT const&, ScannerT const&) {}
 +        pre_parse(__attribute__ ((unused)) ParserT const&, __attribute__ ((unused)) ScannerT const&) {}
- 
+
          template <typename ResultT, typename ParserT, typename ScannerT>
          ResultT&
 -        post_parse(ResultT& hit, ParserT const&, ScannerT const&)
 +        post_parse(ResultT& hit, __attribute__ ((unused)) ParserT const&, __attribute__ ((unused)) ScannerT const&)
          { return hit; }
      };
- 
+
 --- misc/boost_1_44_0/boost/spirit/home/classic/core/primitives/impl/numerics.ipp	2012-01-20 15:24:32.364576113 +0100
 +++ misc/build/boost_1_44_0/boost/spirit/home/classic/core/primitives/impl/numerics.ipp	2012-01-20 12:44:07.125316343 +0100
 @@ -240,7 +240,7 @@
          }
- 
+
          template <>
 -        inline bool allow_more_digits<-1>(std::size_t)
 +        inline bool allow_more_digits<-1>(__attribute__ ((unused)) std::size_t)
@@ -535,7 +535,7 @@
 +++ misc/build/boost_1_44_0/boost/spirit/home/classic/core/primitives/primitives.hpp	2012-01-20 12:44:07.125316343 +0100
 @@ -316,7 +316,7 @@
          anychar_parser() {}
- 
+
          template <typename CharT>
 -        bool test(CharT) const
 +        bool test(__attribute__ ((unused)) CharT) const
@@ -566,7 +566,7 @@
          {
              return match<AttrT>(length, val);
          }
- 
+
          template <typename MatchT, typename IteratorT>
          void group_match(
 -            MatchT&             /*m*/,
@@ -577,7 +577,7 @@
 +            __attribute__ ((unused)) parser_id const&    /*id*/,
 +            __attribute__ ((unused)) IteratorT const&    /*first*/,
 +            __attribute__ ((unused)) IteratorT const&    /*last*/) const {}
- 
+
          template <typename Match1T, typename Match2T>
          void concat_match(Match1T& l, Match2T const& r) const
 @@ -126,8 +126,8 @@
@@ -594,18 +594,18 @@
 --- misc/boost_1_44_0/boost/spirit/home/classic/core/scanner/skipper.hpp	2008-06-22 17:05:38.000000000 +0200
 +++ misc/build/boost_1_44_0/boost/spirit/home/classic/core/scanner/skipper.hpp	2012-01-20 12:44:07.126316338 +0100
 @@ -82,7 +82,7 @@
- 
+
          template <typename ScannerT>
          void
 -        skip(ScannerT const& /*scan*/) const {}
 +        skip(__attribute__ ((unused)) ScannerT const& /*scan*/) const {}
      };
- 
-     ///////////////////////////////////////////////////////////////////////////
+
+
 --- misc/boost_1_44_0/boost/spirit/home/classic/meta/impl/refactoring.ipp	2008-06-22 17:05:38.000000000 +0200
 +++ misc/build/boost_1_44_0/boost/spirit/home/classic/meta/impl/refactoring.ipp	2012-01-20 12:44:07.126316338 +0100
 @@ -92,7 +92,7 @@
- 
+
          template <typename ParserT, typename ScannerT, typename BinaryT>
          static typename parser_result<ParserT, ScannerT>::type
 -        parse(ParserT const &, ScannerT const& scan, BinaryT const& binary)
@@ -644,15 +644,15 @@
 +++ misc/build/boost_1_44_0/boost/spirit/home/classic/utility/impl/chset.ipp
 @@ -129,7 +129,7 @@
  }
- 
+
  template <typename CharT>
 -inline chset<CharT>::chset(nothing_parser arg_)
 +inline chset<CharT>::chset(__attribute__ ((unused)) nothing_parser arg_)
  : ptr(new basic_chset<CharT>()) {}
- 
+
  template <typename CharT>
 @@ -182,7 +182,7 @@
- 
+
  template <typename CharT>
  inline chset<CharT>&
 -chset<CharT>::operator=(anychar_parser rhs)
@@ -661,7 +661,7 @@
      utility::impl::detach_clear(ptr);
      ptr->set(
 @@ -194,7 +194,7 @@
- 
+
  template <typename CharT>
  inline chset<CharT>&
 -chset<CharT>::operator=(nothing_parser rhs)
@@ -672,7 +672,7 @@
 --- misc/boost_1_44_0/boost/spirit/home/classic/utility/impl/chset_operators.ipp	2008-06-22 17:05:38.000000000 +0200
 +++ misc/build/boost_1_44_0/boost/spirit/home/classic/utility/impl/chset_operators.ipp	2012-01-20 12:44:07.127316333 +0100
 @@ -576,7 +576,7 @@
- //////////////////////////////////
+
  template <typename CharT>
  inline chset<CharT>
 -operator-(anychar_parser, chset<CharT> const& b)
@@ -709,27 +709,27 @@
 @@ -211,7 +211,7 @@
      typedef nil_t& rtype;
      typedef nil_t const& crtype;
- 
+
 -    static nil_t    get(TupleT const& t)    { return nil_t(); }
 +    static nil_t    get(__attribute__ ((unused)) TupleT const& t)    { return nil_t(); }
  };
- 
- //////////////////////////////////
+
+
 --- misc/boost_1_44_0/boost/throw_exception.hpp	2010-07-03 23:32:02.000000000 +0200
 +++ misc/build/boost_1_44_0/boost/throw_exception.hpp	2012-01-20 12:44:07.127316333 +0100
 @@ -49,7 +49,7 @@
- 
+
  #else
- 
+
 -inline void throw_exception_assert_compatibility( std::exception const & ) { }
 +inline void throw_exception_assert_compatibility( __attribute__ ((unused)) std::exception const & ) { }
- 
+
  template<class E> BOOST_ATTRIBUTE_NORETURN inline void throw_exception( E const & e )
  {
 --- misc/boost_1_44_0/boost/utility/addressof.hpp	2009-05-16 20:15:17.000000000 +0200
 +++ misc/build/boost_1_44_0/boost/utility/addressof.hpp	2012-01-20 12:44:07.128316328 +0100
 @@ -34,7 +34,7 @@
- 
+
  template<class T> struct addressof_impl
  {
 -    static inline T * f( T & v, long )
@@ -791,7 +791,7 @@
 +++ misc/build/boost_1_44_0/boost/variant/get.hpp	2012-01-20 12:44:07.129316324 +0100
 @@ -85,7 +85,7 @@
      }
- 
+
      template <typename U>
 -    pointer operator()(const U&) const
 +    pointer operator()(__attribute__ ((unused)) const U&) const
@@ -801,16 +801,16 @@
 --- misc/boost_1_44_0/boost/variant/variant.hpp	2010-06-10 17:32:07.000000000 +0200
 +++ misc/build/boost_1_44_0/boost/variant/variant.hpp	2012-01-20 12:44:07.129316324 +0100
 @@ -290,7 +290,7 @@
- 
+
      template <typename T>
          BOOST_VARIANT_AUX_RETURN_VOID_TYPE
 -    internal_visit(T& operand, int) const
 +    internal_visit(T& operand, __attribute__ ((unused)) int) const
      {
          operand.~T();
- 
+
 @@ -404,7 +404,7 @@
- 
+
      template <typename T>
          BOOST_VARIANT_AUX_RETURN_VOID_TYPE
 -    internal_visit(const T& operand, int) const
@@ -819,7 +819,7 @@
          new(storage_) T(operand);
          BOOST_VARIANT_AUX_RETURN_VOID;
 @@ -454,7 +454,7 @@
- 
+
      template <typename T>
          BOOST_VARIANT_AUX_RETURN_VOID_TYPE
 -    internal_visit(T& lhs_content, int) const
@@ -829,7 +829,7 @@
          // Compile error here indicates one of variant's bounded types does
 @@ -502,7 +502,7 @@
      }
- 
+
      template <typename U>
 -    bool operator()(U&) BOOST_NOEXCEPT
 +    bool operator()(__attribute__ ((unused)) U&) BOOST_NOEXCEPT
@@ -838,7 +838,7 @@
      }
 @@ -827,7 +827,7 @@
  public: // internal visitor interfaces
- 
+
      template <typename T>
 -    result_type internal_visit(T& operand, int)
 +    result_type internal_visit(T& operand, __attribute__ ((unused)) int)
@@ -847,13 +847,13 @@
      }
 @@ -1225,7 +1225,7 @@
      public: // internal visitor interfaces (below)
- 
+
          template <typename T>
 -        int internal_visit(T& operand, int) const
 +        int internal_visit(T& operand, __attribute__ ((unused)) int) const
          {
              // NOTE TO USER :
-             // Compile error here indicates one of the source variant's types 
+             // Compile error here indicates one of the source variant's types
 @@ -1288,7 +1288,7 @@
      template <typename T>
      void convert_construct(
@@ -882,7 +882,7 @@
      {
          convert_construct_variant(operand);
 @@ -1553,7 +1553,7 @@
- 
+
          template <typename RhsT>
              BOOST_VARIANT_AUX_RETURN_VOID_TYPE
 -        internal_visit(const RhsT& rhs_content, int)
@@ -893,24 +893,24 @@
 --- misc/boost_1_44_0/boost/ptr_container/detail/default_deleter.hpp
 +++ misc/build/boost_1_44_0/boost/ptr_container/detail/default_deleter.hpp
 @@ -61,7 +61,7 @@
- { 
+ {
      default_deleter() { }
      template<typename TT>
 -    default_deleter(default_deleter<TT> tt) { }
 +    default_deleter(__attribute__ ((unused)) default_deleter<TT> tt) { }
  };
- 
+
  } } } // End namespaces ptr_container_detail, move_ptrs, boost.
 --- misc/boost_1_44_0/boost/ptr_container/ptr_sequence_adapter.hpp
 +++ misc/build/boost_1_44_0/boost/ptr_container/ptr_sequence_adapter.hpp
 @@ -664,8 +664,8 @@
-             
+
          }
- 
--        void range_check_impl( iterator first, iterator last, 
+
+-        void range_check_impl( iterator first, iterator last,
 -                               std::bidirectional_iterator_tag )
-+        void range_check_impl( __attribute__ ((unused)) iterator first, __attribute__ ((unused)) iterator last, 
++        void range_check_impl( __attribute__ ((unused)) iterator first, __attribute__ ((unused)) iterator last,
 +                               std::bidirectional_iterator_tag )
          { /* do nothing */ }
- 
+
          void range_check_impl( iterator first, iterator last,

@@ -14,14 +14,14 @@ index fca366c..dd83ace 100644
 @@ -2668,7 +2668,7 @@ bool HMWJGraph::sendGroup(HMWJGraphInternal::Group const &group, MWAWPosition po
      return true;
    }
- 
+
 -  std::multimap<long, int>::const_iterator fIt;
 +  std::map<long, int>::const_iterator fIt;
    int numFrames = int(m_state->m_framesList.size());
    for (size_t c=0; c<group.m_childsList.size(); ++c) {
      long fId=group.m_childsList[c];
 @@ -2690,7 +2690,7 @@ bool HMWJGraph::sendGroup(HMWJGraphInternal::Group const &group, MWAWPosition po
- 
+
  bool HMWJGraph::canCreateGraphic(HMWJGraphInternal::Group const &group)
  {
 -  std::multimap<long, int>::const_iterator fIt;
@@ -47,6 +47,6 @@ index fca366c..dd83ace 100644
    int numFrames = int(m_state->m_framesList.size());
    for (size_t c=0; c<numChilds; ++c) {
      long fId=group.m_childsList[c];
--- 
+--
 1.8.3.1
 

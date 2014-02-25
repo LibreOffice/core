@@ -10,7 +10,7 @@ diff -ru langtag.orig/liblangtag/lt-trie.c langtag/liblangtag/lt-trie.c
 -	lt_list_t   *stack;
 -	lt_string_t *pos_str;
 -} lt_trie_iter_t;
- 
+
  /*< private >*/
  static lt_trie_node_t *
 diff -ru langtag.orig/liblangtag/lt-trie.h langtag/liblangtag/lt-trie.h
@@ -18,7 +18,7 @@ diff -ru langtag.orig/liblangtag/lt-trie.h langtag/liblangtag/lt-trie.h
 +++ UnpackedTarball/langtag/liblangtag/lt-trie.h	2013-04-30 14:57:57.746969291 +0200
 @@ -21,7 +21,11 @@
  LT_BEGIN_DECLS
- 
+
  typedef struct _lt_trie_t	lt_trie_t;
 -typedef struct _lt_trie_iter_t  lt_trie_iter_t;
 +typedef struct _lt_trie_iter_t {
@@ -26,6 +26,6 @@ diff -ru langtag.orig/liblangtag/lt-trie.h langtag/liblangtag/lt-trie.h
 +	lt_list_t   *stack;
 +	lt_string_t *pos_str;
 +} lt_trie_iter_t;
- 
+
  lt_trie_t      *lt_trie_new        (void);
  lt_trie_t      *lt_trie_ref        (lt_trie_t         *trie);

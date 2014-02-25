@@ -3,11 +3,11 @@
 @@ -406,6 +406,20 @@
      return(0);
  }
- 
+
 +#if !defined(LIBXML_VERSION) || LIBXML_VERSION < 20704
 +/*
 + * xmlC14NMode:
-+ * 
++ *
 + * Predefined values for C14N modes
 + *
 + */
@@ -18,6 +18,6 @@
 +} xmlC14NMode;
 +#endif
 +
- static int 
- xmlSecTransformC14NExecute(xmlSecTransformId id, xmlSecNodeSetPtr nodes, xmlChar** nsList, 
+ static int
+ xmlSecTransformC14NExecute(xmlSecTransformId id, xmlSecNodeSetPtr nodes, xmlChar** nsList,
  			   xmlOutputBufferPtr buf) {

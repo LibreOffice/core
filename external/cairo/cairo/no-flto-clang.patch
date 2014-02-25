@@ -3,9 +3,9 @@
 @@ -17236,7 +17236,7 @@ MAYBE_WARN="-Wall -Wextra \
  MAYBE_WARN="$MAYBE_WARN -erroff=E_ENUM_TYPE_MISMATCH_ARG \
  			-erroff=E_ENUM_TYPE_MISMATCH_OP"
- 
+
 -MAYBE_WARN="$MAYBE_WARN -fno-strict-aliasing -fno-common -flto"
 +MAYBE_WARN="$MAYBE_WARN -fno-strict-aliasing -fno-common"
- 
+
  MAYBE_WARN="$MAYBE_WARN -Wp,-D_FORTIFY_SOURCE=2"
- 
+

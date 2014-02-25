@@ -3,12 +3,12 @@
 @@ -25,25 +25,23 @@
  #ifndef _SQL_BUILD_CONFIG_H_
  #define _SQL_BUILD_CONFIG_H_
- 
+
 -#ifndef CPPCONN_PUBLIC_FUNC
 +#ifndef _SAL_TYPES_H_
 +#include <sal/types.h>
 +#endif
- 
+
 -#if defined(_WIN32)
   // mysqlcppconn_EXPORTS is added by cmake and defined for dynamic lib build only
    #ifdef mysqlcppconn_EXPORTS
@@ -27,10 +27,10 @@
 -#else
 -  #define CPPCONN_PUBLIC_FUNC
 -#endif
- 
+
 -#endif    //#ifndef CPPCONN_PUBLIC_FUNC
 +  #define CPPCONN_PUBLIC_EXCEPTION SAL_EXCEPTION_DLLPUBLIC_EXPORT
- 
+
  #endif    //#ifndef _SQL_BUILD_CONFIG_H_
 --- misc/mysql-connector-c++-1.1.0/cppconn/exception.h	2009-08-20 17:51:23.000000000 +0200
 +++ misc/build/mysql-connector-c++-1.1.0/cppconn/exception.h	2009-09-11 09:41:41.076379817 +0200
@@ -46,29 +46,29 @@
 @@ -83,26 +83,26 @@
  	MEMORY_ALLOC_OPERATORS(SQLException)
  };
- 
+
 -struct CPPCONN_PUBLIC_FUNC MethodNotImplementedException : public SQLException
 +struct CPPCONN_PUBLIC_EXCEPTION MethodNotImplementedException : public SQLException
  {
  	MethodNotImplementedException(const MethodNotImplementedException& e) : SQLException(e.what(), e.sql_state, e.errNo) { }
  	MethodNotImplementedException(const std::string& reason) : SQLException(reason, "", 0) {}
  };
- 
+
 -struct CPPCONN_PUBLIC_FUNC InvalidArgumentException : public SQLException
 +struct CPPCONN_PUBLIC_EXCEPTION InvalidArgumentException : public SQLException
  {
  	InvalidArgumentException(const InvalidArgumentException& e) : SQLException(e.what(), e.sql_state, e.errNo) { }
  	InvalidArgumentException(const std::string& reason) : SQLException(reason, "", 0) {}
  };
- 
+
 -struct CPPCONN_PUBLIC_FUNC InvalidInstanceException : public SQLException
 +struct CPPCONN_PUBLIC_EXCEPTION InvalidInstanceException : public SQLException
  {
  	InvalidInstanceException(const InvalidInstanceException& e) : SQLException(e.what(), e.sql_state, e.errNo) { }
  	InvalidInstanceException(const std::string& reason) : SQLException(reason, "", 0) {}
  };
- 
- 
+
+
 -struct CPPCONN_PUBLIC_FUNC NonScrollableException : public SQLException
 +struct CPPCONN_PUBLIC_EXCEPTION NonScrollableException : public SQLException
  {
@@ -77,9 +77,9 @@
 --- misc/mysql-connector-c++-1.1.0/driver/mysql_debug.h	2009-08-13 17:13:46.000000000 +0200
 +++ misc/build/mysql-connector-c++-1.1.0/driver/mysql_debug.h	2009-08-14 09:56:37.015625000 +0200
 @@ -25,16 +25,6 @@
- 
- 
- 
+
+
+
 -#if defined(WE_HAVE_VARARGS_MACRO_SUPPORT) && (CPPCONN_TRACE_ENABLED || defined(SAL_DLLPRIVATE))
 -	#define CPP_ENTER(msg)			const boost::shared_ptr< MySQL_DebugLogger > __l = this->logger;(void)__l;\
 -									MySQL_DebugEnterEvent __this_func(__LINE__, __FILE__, msg, this->logger)
@@ -98,20 +98,20 @@
  	static inline void CPP_INFO_FMT(...) {}
  	static inline void CPP_ERR_FMT(...) {}
 -#endif
- 
+
  #include <stack>
  #include "mysql_util.h"
 --- misc/mysql-connector-c++-1.1.0/driver/mysql_prepared_statement.cpp	2013-03-06 10:29:26.890721534 +0100
 +++ misc/build/mysql-connector-c++-1.1.0/driver/mysql_prepared_statement.cpp	2013-03-06 10:32:02.979904080 +0100
 @@ -46,6 +46,10 @@
- 
+
  #include "mysql_debug.h"
- 
+
 +#ifndef CR_INVALID_BUFFER_USE
 +#define CR_INVALID_BUFFER_USE	2035
 +#endif
 +
- 
+
  namespace sql
  {
 

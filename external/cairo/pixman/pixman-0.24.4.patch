@@ -32,9 +32,9 @@
 --- misc/pixman-0.24.4/configure	2011-11-06 22:11:27.000000000 +0100
 +++ misc/build/pixman-0.24.4/configure	2011-12-16 09:06:16.482898083 +0100
 @@ -20202,6 +20202,13 @@
- 
- 
- 
+
+
+
 +# getisax is falsely detected when using OOo build script on Linux/FBSD...
 +case "$build_os" in
 +     linux-gnu*)
@@ -42,13 +42,13 @@
 +     freebsd*)
 +	;;
 +     *)
- 
+
  for ac_func in getisax
  do
 @@ -20304,6 +20311,8 @@
  done
- 
- 
+
+
 +	;;
 +esac
   { $as_echo "$as_me:$LINENO: checking whether byte ordering is bigendian" >&5
@@ -70,15 +70,15 @@
  #include <stdio.h>
  #include <stdlib.h>
 +#include <limits.h>
- 
+
  #include "pixman-private.h"
- 
+
 --- misc/pixman-0.24.4/pixman/pixman-mmx.c	2011-11-06 13:47:42.000000000 -0700
 +++ misc/build/pixman-0.24.4/pixman/pixman-mmx.c	2011-12-19 00:41:42.280402800 -0700
 @@ -309,7 +309,7 @@
- 
+
  /* Elemental unaligned loads */
- 
+
 -static __inline__ __m64 ldq_u(uint64_t *p)
 +static inline __m64 ldq_u(uint64_t *p)
  {
@@ -87,7 +87,7 @@
 @@ -328,7 +328,7 @@
  #endif
  }
- 
+
 -static __inline__ uint32_t ldl_u(uint32_t *p)
 +static inline uint32_t ldl_u(uint32_t *p)
  {

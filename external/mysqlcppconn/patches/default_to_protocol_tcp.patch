@@ -3,7 +3,7 @@
 @@ -437,6 +437,9 @@
  		}
  	}
- 
+
 +	int default_protocol_tcp = MYSQL_PROTOCOL_TCP;
 +	proxy->options(MYSQL_OPT_PROTOCOL, (const char *) &default_protocol_tcp);
 +

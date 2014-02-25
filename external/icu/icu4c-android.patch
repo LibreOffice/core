@@ -1,14 +1,14 @@
 --- misc/icu/source/config/mh-linux	2013-10-05 03:50:00.000000000 +0700
 +++ misc/build/icu/source/config/mh-linux	2013-11-10 17:11:46.856222557 +0700
 @@ -25,7 +25,7 @@
- 
+
  ## Compiler switch to embed a library name
  # The initial tab in the next line is to prevent icu-config from reading it.
 -	LD_SONAME = -Wl,-soname -Wl,$(notdir $(MIDDLE_SO_TARGET))
 +	#LD_SONAME = -Wl,-soname -Wl,$(notdir $(MIDDLE_SO_TARGET))
  #SH# # We can't depend on MIDDLE_SO_TARGET being set.
  #SH# LD_SONAME=
- 
+
 --- misc/icu/source/configure	2013-10-05 03:54:58.000000000 +0700
 +++ misc/build/icu/source/configure	2013-11-10 17:19:19.200218763 +0700
 @@ -4872,7 +4872,7 @@
@@ -64,6 +64,6 @@
 -#   define U_EXPORT __attribute__((visibility("default")))
 +#   define U_EXPORT
  #elif (defined(__SUNPRO_CC) && __SUNPRO_CC >= 0x550) \
-    || (defined(__SUNPRO_C) && __SUNPRO_C >= 0x550) 
+    || (defined(__SUNPRO_C) && __SUNPRO_C >= 0x550)
  #   define U_EXPORT __global
 

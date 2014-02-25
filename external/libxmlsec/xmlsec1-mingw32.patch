@@ -2,16 +2,16 @@
 +++ misc/build/xmlsec1-1.2.14/configure.in	2009-09-29 15:49:39.614223428 +0200
 @@ -33,6 +33,8 @@
  AC_HEADER_STDC
- 
+
  LT_INIT
 +dnl force the right implib extension for mingw
 +libext=dll.a
- 
+
  dnl
  dnl Find programs
 @@ -672,6 +674,26 @@
  	done
- 	
+ 
  	for dir in $ac_nss_lib_dir ; do
 +            case $host_os in
 +            cygwin* | mingw* | pw32*)
@@ -44,10 +44,10 @@
 +            esac
  	done
      fi
- 
+
 @@ -743,6 +767,25 @@
          done
-        
+
          for dir in $ac_nss_lib_dir ; do
 +            case $host_os in
 +            cygwin* | mingw* | pw32*)
@@ -79,7 +79,7 @@
 +            esac
  	done
      fi
- 
+
 @@ -927,7 +972,7 @@
  dnl cannot detect __stdcall functions
  dnl    AC_CHECK_LIB(crypt32, CertOpenStore, ....
@@ -91,7 +91,7 @@
  	#include <windows.h>
 @@ -944,15 +989,7 @@
      XMLSEC_NO_MSCRYPTO="0"
- 
+
      MSCRYPTO_CFLAGS="$MSCRYPTO_CFLAGS -DXMLSEC_CRYPTO_MSCRYPTO=1"
 -    case $host in
 -	*-*-mingw*)
@@ -111,7 +111,7 @@
 @@ -4868,6 +4868,11 @@
  	fi
  	;;
- 
+
 +      *.lib)
 +	deplibs="$deplibs $arg"
 +	continue
@@ -136,7 +136,7 @@
 @@ -1126,6 +1126,7 @@
      NULL,                   /* void* reserved1; */
  };
- 
+
 +#ifndef __MINGW32__
  /**
   * xmlSecNssTransformKWAes128GetKlass:
@@ -146,13 +146,13 @@
      return(&xmlSecNssKWAes256Klass);
  }
 +#endif /* __MINGW32__ */
- 
+
  #endif /* XMLSEC_NO_AES */
- 
+
 @@ -1197,6 +1199,7 @@
      NULL,                   /* void* reserved1; */
  };
- 
+
 +#ifndef __MINGW32__
  /**
   * xmlSecNssTransformKWDes3GetKlass:
@@ -162,6 +162,6 @@
      return(&xmlSecNssKWDes3Klass);
  }
 +#endif /* __MINGW32__ */
- 
+
  #endif /* XMLSEC_NO_DES */
- 
+

@@ -42,7 +42,7 @@ index f58c8fb..2887483 100644
 --- a/docs/libcurl/curl_easy_setopt.3
 +++ b/docs/libcurl/curl_easy_setopt.3
 @@ -2549,9 +2549,10 @@ is ignored.
- 
+
  .IP CURLOPT_CERTINFO
  Pass a long set to 1 to enable libcurl's certificate chain info gatherer. With
 -this enabled, libcurl (if built with OpenSSL) will extract lots of information
@@ -60,17 +60,17 @@ index abd1fa0..4be5baa 100644
 +++ b/lib/hostcheck.c
 @@ -23,7 +23,7 @@
  #include "curl_setup.h"
- 
+
  #if defined(USE_SSLEAY) || defined(USE_AXTLS) || defined(USE_QSOSSL) || \
 -    defined(USE_GSKIT)
 +    defined(USE_GSKIT) || defined(USE_NSS)
  /* these backends use functions from this file */
- 
+
  #include "hostcheck.h"
 @@ -94,4 +94,4 @@ int Curl_cert_hostcheck(const char *match_pattern, const char *hostname)
    return 0;
  }
- 
+
 -#endif /* SSLEAY or AXTLS or QSOSSL or GSKIT */
 +#endif /* SSLEAY or AXTLS or QSOSSL or GSKIT or NSS */
 diff --git a/lib/nss.c b/lib/nss.c
@@ -85,13 +85,13 @@ index 43576e6..2562fcf 100644
 +  CERTCertificate *cert3;
 +  PRTime now;
 +  int i;
- 
+
    if(SSL_GetChannelInfo(sock, &channel, sizeof channel) ==
       SECSuccess && channel.length == sizeof channel &&
 @@ -663,11 +667,45 @@ static void display_conn_info(struct connectdata *conn, PRFileDesc *sock)
      }
    }
- 
+
 -  infof(conn->data, "Server certificate:\n");
 -
    cert = SSL_PeerCertificate(sock);
@@ -135,7 +135,7 @@ index 43576e6..2562fcf 100644
 +      }
 +    }
 +  }
- 
+
    return;
  }
 diff --git a/lib/url.c b/lib/url.c
@@ -157,25 +157,25 @@ index 94b89b2..d6aa045 100644
 --- a/lib/x509asn1.c
 +++ b/lib/x509asn1.c
 @@ -22,7 +22,7 @@
- 
+
  #include "curl_setup.h"
- 
+
 -#if defined(USE_QSOSSL) || defined(USE_GSKIT)
 +#if defined(USE_QSOSSL) || defined(USE_GSKIT) || defined(USE_NSS)
- 
+
  #include <curl/curl.h>
  #include "urldata.h"
 @@ -803,7 +803,7 @@ static const char * dumpAlgo(curl_asn1Element * param,
    return OID2str(oid.beg, oid.end, TRUE);
  }
- 
+
 -static void do_pubkey_field(struct SessionHandle *data, int certnum,
 +static void do_pubkey_field(struct SessionHandle * data, int certnum,
                              const char * label, curl_asn1Element * elem)
  {
    const char * output;
 @@ -812,8 +812,10 @@ static void do_pubkey_field(struct SessionHandle *data, int certnum,
- 
+
    output = Curl_ASN1tostr(elem, 0);
    if(output) {
 -    Curl_ssl_push_certinfo(data, certnum, label, output);
@@ -210,13 +210,13 @@ index 94b89b2..d6aa045 100644
 @@ -896,6 +901,10 @@ CURLcode Curl_extract_certinfo(struct connectdata * conn,
    size_t i;
    size_t j;
- 
+
 +  if(!data->set.ssl.certinfo)
 +    if(certnum)
 +      return CURLE_OK;
 +
    /* Prepare the certificate information for curl_easy_getinfo(). */
- 
+
    /* Extract the certificate ASN.1 elements. */
 @@ -905,35 +914,44 @@ CURLcode Curl_extract_certinfo(struct connectdata * conn,
    ccp = Curl_DNtostr(&cert.subject);
@@ -229,7 +229,7 @@ index 94b89b2..d6aa045 100644
 +  if(!certnum)
 +    infof(data, "%2d Subject: %s\n", certnum, ccp);
    free((char *) ccp);
- 
+
    /* Issuer. */
    ccp = Curl_DNtostr(&cert.issuer);
    if(!ccp)
@@ -241,7 +241,7 @@ index 94b89b2..d6aa045 100644
 +  if(!certnum)
 +    infof(data, "   Issuer: %s\n", ccp);
    free((char *) ccp);
- 
+
    /* Version (always fits in less than 32 bits). */
    version = 0;
    for(ccp = cert.version.beg; ccp < cert.version.end; ccp++)
@@ -261,7 +261,7 @@ index 94b89b2..d6aa045 100644
 +  }
 +  if(!certnum)
 +    infof(data, "   Version: %lu (0x%lx)\n", version + 1, version);
- 
+
    /* Serial number. */
    ccp = Curl_ASN1tostr(&cert.serialNumber, 0);
    if(!ccp)
@@ -273,7 +273,7 @@ index 94b89b2..d6aa045 100644
 +  if(!certnum)
 +    infof(data, "   Serial Number: %s\n", ccp);
    free((char *) ccp);
- 
+
    /* Signature algorithm .*/
 @@ -941,24 +959,30 @@ CURLcode Curl_extract_certinfo(struct connectdata * conn,
                   cert.signatureAlgorithm.end);
@@ -286,7 +286,7 @@ index 94b89b2..d6aa045 100644
 +  if(!certnum)
 +    infof(data, "   Signature Algorithm: %s\n", ccp);
    free((char *) ccp);
- 
+
    /* Start Date. */
    ccp = Curl_ASN1tostr(&cert.notBefore, 0);
    if(!ccp)
@@ -298,7 +298,7 @@ index 94b89b2..d6aa045 100644
 +  if(!certnum)
 +    infof(data, "   Start Date: %s\n", ccp);
    free((char *) ccp);
- 
+
    /* Expire Date. */
    ccp = Curl_ASN1tostr(&cert.notAfter, 0);
    if(!ccp)
@@ -310,7 +310,7 @@ index 94b89b2..d6aa045 100644
 +  if(!certnum)
 +    infof(data, "   Expire Date: %s\n", ccp);
    free((char *) ccp);
- 
+
    /* Public Key Algorithm. */
 @@ -966,8 +990,10 @@ CURLcode Curl_extract_certinfo(struct connectdata * conn,
                   cert.subjectPublicKeyAlgorithm.end);
@@ -324,7 +324,7 @@ index 94b89b2..d6aa045 100644
 +    infof(data, "   Public Key Algorithm: %s\n", ccp);
    do_pubkey(data, certnum, ccp, &param, &cert.subjectPublicKey);
    free((char *) ccp);
- 
+
 @@ -977,8 +1003,10 @@ CURLcode Curl_extract_certinfo(struct connectdata * conn,
    ccp = Curl_ASN1tostr(&cert.signature, 0);
    if(!ccp)
@@ -336,7 +336,7 @@ index 94b89b2..d6aa045 100644
 +  if(!certnum)
 +    infof(data, "   Signature: %s\n", ccp);
    free((char *) ccp);
- 
+
    /* Generate PEM certificate. */
 @@ -987,7 +1015,7 @@ CURLcode Curl_extract_certinfo(struct connectdata * conn,
                            &cp1, &cl1);
@@ -363,7 +363,7 @@ index 94b89b2..d6aa045 100644
 @@ -1148,4 +1178,4 @@ CURLcode Curl_verifyhost(struct connectdata * conn,
    return CURLE_PEER_FAILED_VERIFICATION;
  }
- 
+
 -#endif /* USE_QSOSSL or USE_GSKIT */
 +#endif /* USE_QSOSSL or USE_GSKIT or USE_NSS */
 diff --git a/lib/x509asn1.h b/lib/x509asn1.h
@@ -371,21 +371,21 @@ index 2276b5b..1741d6d 100644
 --- a/lib/x509asn1.h
 +++ b/lib/x509asn1.h
 @@ -25,7 +25,7 @@
- 
+
  #include "curl_setup.h"
- 
+
 -#if defined(USE_QSOSSL) || defined(USE_GSKIT)
 +#if defined(USE_QSOSSL) || defined(USE_GSKIT) || defined(USE_NSS)
- 
+
  #include "urldata.h"
- 
+
 @@ -125,5 +125,5 @@ CURLcode Curl_extract_certinfo(struct connectdata * conn, int certnum,
  CURLcode Curl_verifyhost(struct connectdata * conn,
                           const char * beg, const char * end);
- 
+
 -#endif /* USE_QSOSSL or USE_GSKIT */
 +#endif /* USE_QSOSSL or USE_GSKIT or USE_NSS */
  #endif /* HEADER_CURL_X509ASN1_H */
--- 
+--
 1.8.4.2
 

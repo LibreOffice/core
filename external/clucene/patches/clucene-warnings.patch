@@ -3,7 +3,7 @@
 @@ -7,6 +7,12 @@
  #ifndef _lucene_analysis_AnalysisHeader_
  #define _lucene_analysis_AnalysisHeader_
- 
+
 +#include <config_global.h>
 +#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
 +# pragma GCC diagnostic push
@@ -15,7 +15,7 @@
  #include "CLucene/LuceneThreads.h"
 @@ -361,4 +361,8 @@
  };
- 
+
  CL_NS_END
 +
 +#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
@@ -27,19 +27,19 @@
 @@ -7,6 +7,12 @@
  #ifndef _lucene_search_Searcher_
  #define _lucene_search_Searcher_
- 
+
 +#include <config_global.h>
 +#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
 +# pragma GCC diagnostic push
 +# pragma GCC diagnostic ignored "-Woverloaded-virtual"
 +#endif
 +
- 
+
  //#include "CLucene/index/IndexReader.h"
  CL_CLASS_DEF(index,Term)
 @@ -180,4 +180,8 @@
  	};
- 
+
  CL_NS_END
 +
 +#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
@@ -51,7 +51,7 @@
 @@ -7,6 +7,12 @@
  #ifndef _lucene_store_IndexInput_
  #define _lucene_store_IndexInput_
- 
+
 +#include <config_global.h>
 +#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
 +# pragma GCC diagnostic push
@@ -60,7 +60,7 @@
 +
  #include "CLucene/LuceneThreads.h"
  #include "CLucene/util/Equators.h"
- 
+
 @@ -195,4 +195,8 @@
  		virtual void seekInternal(const int64_t pos) = 0;
  	};
@@ -75,7 +75,7 @@
 @@ -7,6 +7,13 @@
  #ifndef _lucene_util_Array_
  #define _lucene_util_Array_
- 
+
 +#include <config_global.h>
 +#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
 +# pragma GCC diagnostic push
@@ -85,10 +85,10 @@
 +
  #include <stdlib.h>
  #include <string.h>
- 
+
 @@ -338,4 +338,8 @@
- 
- 
+
+
  CL_NS_END
 +
 +#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
@@ -100,7 +100,7 @@
 @@ -7,6 +7,12 @@
  #ifndef _lucene_util_PriorityQueue_
  #define _lucene_util_PriorityQueue_
- 
+
 +#include <config_global.h>
 +#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
 +# pragma GCC diagnostic push
@@ -108,11 +108,11 @@
 +#endif
 +
  #include <stdlib.h>
- 
+
  CL_NS_DEF(util)
 @@ -199,4 +199,8 @@
  	};
- 
+
  CL_NS_END
 +
 +#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE

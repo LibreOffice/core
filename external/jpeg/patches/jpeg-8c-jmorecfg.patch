@@ -3,16 +3,16 @@
 @@ -21,7 +21,7 @@
   * We do not support run-time selection of data precision, sorry.
   */
- 
+
 -#define BITS_IN_JSAMPLE  8	/* use 8 or 12 */
 +#define BITS_IN_JSAMPLE  8	/* use 8                                                                                                                                                                                                                             or 12 */
- 
- 
+
+
  /*
 @@ -158,7 +158,8 @@
- 
+
  /* INT32 must hold at least signed 32-bit values. */
- 
+
 -#ifndef XMD_H			/* X11/xmd.h correctly defines INT32 */
 +#ifndef XMD_H           /* X11/xmd.h correctly defines INT32 */
 +#ifndef _SOLAR_H
@@ -25,5 +25,5 @@
  #endif
 +#endif
  #endif
- 
+
  /* Datatype used for image dimensions.  The JPEG standard only supports

@@ -27,7 +27,7 @@ diff -ru misc/commons-httpclient-3.1/src/java/org/apache/commons/httpclient/Http
 @@ -33,7 +33,7 @@
  /**
   * Signals that an error has occurred.
-  * 
+  *
 - * @author Ortwin Gl?ck
 + * @author Ortwin Glueck
   * @version $Revision: 480424 $ $Date: 2006-11-29 06:56:49 +0100 (Wed, 29 Nov 2006) $
@@ -38,8 +38,8 @@ diff -ru misc/commons-httpclient-3.1/src/java/org/apache/commons/httpclient/Http
 +++ misc/build/commons-httpclient-3.1/src/java/org/apache/commons/httpclient/HttpContentTooLargeException.java	2012-05-07 12:37:50.000000000 -0500
 @@ -3,7 +3,7 @@
  /**
-  * Signals that the response content was larger than anticipated. 
-  * 
+  * Signals that the response content was larger than anticipated.
+  *
 - * @author Ortwin Glück
 + * @author Ortwin Glueck
   */
@@ -56,7 +56,7 @@ diff -ru misc/commons-httpclient-3.1/src/java/org/apache/commons/httpclient/Wire
 + * @author Ortwin Glueck
   * @author <a href="mailto:mbowler@GargoyleSoftware.com">Mike Bowler</a>
   * @author <a href="mailto:oleg@ural.ru">Oleg Kalnichevski</a>
-  * 
+  *
 diff -ru misc/commons-httpclient-3.1/src/java/org/apache/commons/httpclient/auth/BasicScheme.java misc/build/commons-httpclient-3.1/src/java/org/apache/commons/httpclient/auth/BasicScheme.java
 --- misc/commons-httpclient-3.1/src/java/org/apache/commons/httpclient/auth/BasicScheme.java	2012-05-07 12:34:01.000000000 -0500
 +++ misc/build/commons-httpclient-3.1/src/java/org/apache/commons/httpclient/auth/BasicScheme.java	2012-05-07 12:37:50.000000000 -0500

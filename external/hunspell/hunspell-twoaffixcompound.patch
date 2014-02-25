@@ -11,7 +11,7 @@
 @@ -404,6 +405,10 @@
            }
         }
- 
+
 +       if (strncmp(line,"COMPOUNDMORESUFFIXES",20) == 0) {
 +                   compoundmoresuffixes = 1;
 +       }
@@ -21,15 +21,15 @@
         }
 @@ -1626,8 +1631,9 @@
              if (onlycpdrule) break;
-             if (compoundflag && 
+             if (compoundflag &&
               !(rv = prefix_check(st, i, hu_mov_rule ? IN_CPD_OTHER : IN_CPD_BEGIN, compoundflag))) {
 -                if ((rv = suffix_check(st, i, 0, NULL, NULL, 0, NULL,
 -                        FLAG_NULL, compoundflag, hu_mov_rule ? IN_CPD_OTHER : IN_CPD_BEGIN)) && !hu_mov_rule &&
 +                if (((rv = suffix_check(st, i, 0, NULL, NULL, 0, NULL,
-+                        FLAG_NULL, compoundflag, hu_mov_rule ? IN_CPD_OTHER : IN_CPD_BEGIN)) || 
++                        FLAG_NULL, compoundflag, hu_mov_rule ? IN_CPD_OTHER : IN_CPD_BEGIN)) ||
 +                        (compoundmoresuffixes && (rv = suffix_check_twosfx(st, i, 0, NULL, compoundflag)))) && !hu_mov_rule &&
                      sfx->getCont() &&
-                         ((compoundforbidflag && TESTAFF(sfx->getCont(), compoundforbidflag, 
+                         ((compoundforbidflag && TESTAFF(sfx->getCont(), compoundforbidflag,
                              sfx->getContLen())) || (compoundend &&
 @@ -1640,9 +1646,11 @@
              if (rv ||
@@ -53,7 +53,7 @@
 +                        FLAG_NULL, compoundflag, hu_mov_rule ? IN_CPD_OTHER : IN_CPD_BEGIN)) ||
 +                        (compoundmoresuffixes && (rv = suffix_check_twosfx(st, i, 0, NULL, compoundflag)))) && !hu_mov_rule &&
                      sfx->getCont() &&
-                         ((compoundforbidflag && TESTAFF(sfx->getCont(), compoundforbidflag, 
+                         ((compoundforbidflag && TESTAFF(sfx->getCont(), compoundforbidflag,
                              sfx->getContLen())) || (compoundend &&
 @@ -2132,9 +2141,11 @@
              if (rv ||

@@ -3,10 +3,10 @@
 @@ -72,7 +72,7 @@
          difference_type offset_;
      };
- 
+
 -    static void initialize(BaseType &) {}
 +    static void initialize(__attribute__ ((unused)) BaseType &) {}
- 
+
      static reference dereference(BaseType const & d)
          { return const_cast<reference>(*(*d.line_start_ + d.offset_)); }
 --- misc/vigra1.6.0/include/vigra/diff2d.hxx	2012-01-19 22:49:11.280074335 +0100
@@ -14,19 +14,19 @@
 @@ -60,7 +60,7 @@
      typedef Diff const *                    pointer;
      typedef std::random_access_iterator_tag iterator_category;
- 
+
 -    static void initialize(BaseType &) {}
 +    static void initialize(__attribute__ ((unused)) BaseType &) {}
- 
+
      static reference dereference(BaseType const & d)
          { return d; }
 @@ -102,7 +102,7 @@
      typedef Diff const *                    pointer;
      typedef std::random_access_iterator_tag iterator_category;
- 
+
 -    static void initialize(BaseType & /*d*/) {}
 +    static void initialize(__attribute__ ((unused)) BaseType & /*d*/) {}
- 
+
      static reference dereference(BaseType const & d)
          { return d; }
 --- misc/vigra1.6.0/include/vigra/rgbvalue.hxx

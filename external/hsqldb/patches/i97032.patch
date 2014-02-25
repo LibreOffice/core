@@ -6,5 +6,5 @@
              setProperty(hsqldb_nio_data_file, false);
 +			setProperty(hsqldb_lock_file, true);
          }
- 
+
          // OOo end

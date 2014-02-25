@@ -2,7 +2,7 @@
 +++ misc/build/xsltml_2.1.2/cmarkup.xsl	2008-03-07 21:36:34.000000000 +0100
 @@ -5,9 +5,9 @@
  		version='1.0'>
-                 
+
  <!-- ====================================================================== -->
 -<!-- $Id: cmarkup.xsl,v 1.8 2003/06/10 12:24:04 shade33 Exp $
 +<!-- $Id: cmarkup.xsl 2755 2008-03-07 20:35:56Z hauma $
@@ -11,7 +11,7 @@
 +     See ./README or http://xsltml.sf.net for
       copyright and other information                                        -->
  <!-- ====================================================================== -->
- 
+
 @@ -156,7 +156,7 @@
  		<xsl:text> &amp; \text{if $</xsl:text>
  		<xsl:apply-templates select="*[2]"/>
@@ -19,7 +19,7 @@
 -		<xsl:if test="not(position()=last()) or ../m:otherwise"><xsl:text>\\ </xsl:text></xsl:if>
 +		<xsl:if test="not(position()=last()) or ../m:otherwise"><xsl:text>\\ &#13;&#10;</xsl:text></xsl:if>
  </xsl:template>
- 
+
  <xsl:template match="m:otherwise">
 @@ -223,7 +223,7 @@
  <xsl:template match="m:apply[*[1][self::m:minus] and count(*)=2]">
@@ -29,28 +29,28 @@
 +		<xsl:with-param name="p" select="2"/>
  	</xsl:apply-templates>
  </xsl:template>
- 
+
 @@ -234,7 +234,8 @@
  		<xsl:with-param name="p" select="$p"/>
  		<xsl:with-param name="this-p" select="2"/>
  	</xsl:call-template>
 -</xsl:template>
-+</xsl:template> 
++</xsl:template>
 +
- 
+
  <!-- 4.4.3.6  plus-->
  <xsl:template match="m:apply[*[1][self::m:plus]]">
 @@ -585,12 +586,15 @@
  </xsl:template>
- 
+
  <xsl:template match="m:apply[*[1][self::m:partialdiff]]" priority="1">
 -	<xsl:text>\frac{\partial^{</xsl:text>
 +	<xsl:text>\frac{\partial</xsl:text>
  	<xsl:choose>
  		<xsl:when test="m:degree">
-+			<xsl:text>^{</xsl:text>	
++			<xsl:text>^{</xsl:text>
  			<xsl:apply-templates select="m:degree/node()"/>
-+			<xsl:text>}</xsl:text>		
++			<xsl:text>}</xsl:text>
  		</xsl:when>
  		<xsl:when test="m:bvar/m:degree[string(number(.))='NaN']">
 +			<xsl:text>^{</xsl:text>
@@ -61,19 +61,19 @@
  				<xsl:text>+</xsl:text>
  				<xsl:value-of select="count(m:bvar[not(m:degree)])"/>
  			</xsl:if>
-+			<xsl:text>}</xsl:text>			
++			<xsl:text>}</xsl:text>
 +		</xsl:when>
 +		<xsl:when test="sum(m:bvar/m:degree)+count(m:bvar[not(m:degree)]) > 1">
 +				<xsl:text>^{</xsl:text>
 +				<xsl:value-of select="sum(m:bvar/m:degree)+count(m:bvar[not(m:degree)])"/>
-+				<xsl:text>}</xsl:text>		
++				<xsl:text>}</xsl:text>
  		</xsl:when>
 -		<xsl:otherwise>
 -			<xsl:value-of select="sum(m:bvar/m:degree)+count(m:bvar[not(m:degree)])"/>
 -		</xsl:otherwise>
  	</xsl:choose>
 -	<xsl:text>}</xsl:text>
-+	<xsl:text> </xsl:text>		
++	<xsl:text> </xsl:text>
  	<xsl:apply-templates select="*[last()]"/>
  	<xsl:text>}{</xsl:text>
  	<xsl:for-each select="m:bvar">
@@ -93,13 +93,13 @@
 -	<xsl:if test="position()!=last()"><xsl:text>\\ </xsl:text></xsl:if>
 +	<xsl:if test="position()!=last()"><xsl:text>\\ &#13;&#10;</xsl:text></xsl:if>
  </xsl:template>
- 
+
  <!-- 4.4.10.4 determinant  -->
 --- misc/xsltml_2.1.2/entities.xsl	2009-03-27 08:11:02.000000000 +0100
 +++ misc/build/xsltml_2.1.2/entities.xsl	2008-03-07 21:36:34.000000000 +0100
 @@ -4,17 +4,56 @@
                  version='1.0'>
-                 
+
  <!-- ====================================================================== -->
 -<!-- $Id: entities.xsl,v 1.13 2003/06/10 12:28:03 shade33 Exp $
 +<!-- $Id: entities.xsl 2755 2008-03-07 20:35:56Z hauma $
@@ -110,21 +110,21 @@
  <!-- ====================================================================== -->
 +<xsl:variable name="apos">'</xsl:variable>
 +
-+<!-- 
-+	Missing MathML equivalents for: 
++<!--
++	Missing MathML equivalents for:
 +
 +	a \leslant b
 +	a \geslant b
-+	
++
 +	Unsupported in WikiMedia:
-+	
++
 +	\oiint x
 +	\oiiint x
 +	ƛ
 +	\adots
-+	
++
 + -->
- 
+
  <xsl:template name="replaceEntities">
  	<xsl:param name="content"/>
  	<xsl:if test="string-length($content)>0">
@@ -160,7 +160,7 @@
  	C1 Controls and Latin-1 Supplement
  	Range: 0080-00FF
  	http://www.unicode.org/charts/PDF/U0080.pdf	                    -->
--<!-- ====================================================================== -->	
+-<!-- ====================================================================== -->
 +<!-- ====================================================================== -->
 +		<xsl:when test="starts-with($content,'&#x000A1;')"><xsl:value-of select="'\textexclamdown '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x000A1;')"/></xsl:call-template></xsl:when>
 +		<xsl:when test="starts-with($content,'&#x000A2;')"><xsl:value-of select="'\mbox{\textcent}'" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x000A2;')"/></xsl:call-template></xsl:when>
@@ -440,7 +440,7 @@
  	Greek
  	Range: 0370-03FF
  	http://www.unicode.org/charts/PDF/U0370.pdf	                    -->
--<!-- ====================================================================== -->	
+-<!-- ====================================================================== -->
 -		<xsl:when test="starts-with($content,'&#x00391;')"><xsl:value-of select="'{\rm A}'" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x00391;')"/></xsl:call-template></xsl:when>	<!--greek capital letter alpha -->
 -		<xsl:when test="starts-with($content,'&#x00392;')"><xsl:value-of select="'{\rm B}'" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x00392;')"/></xsl:call-template></xsl:when>	<!-- greek capital letter beta -->
 -		<xsl:when test="starts-with($content,'&#x00393;')"><xsl:value-of select="'\Gamma '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x00393;')"/></xsl:call-template></xsl:when>	<!--/Gamma capital Gamma, Greek -->
@@ -474,7 +474,7 @@
 +<xsl:when test="starts-with($content,'&#x0038E;')"><xsl:value-of select="concat('\mathrm{',$apos,'Y}')" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x0038E;')"/></xsl:call-template></xsl:when>
 +<xsl:when test="starts-with($content,'&#x0038F;')"><xsl:value-of select="concat('\mathrm{',$apos,'\Omega}')" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x0038F;')"/></xsl:call-template></xsl:when>
 +<xsl:when test="starts-with($content,'&#x00390;')"><xsl:value-of select="'\acute{\ddot{\iota}}'" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x00390;')"/></xsl:call-template></xsl:when>
-+	
++
 +<xsl:when test="starts-with($content,'&#x00391;')"><xsl:value-of select="'\Alpha '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x00391;')"/></xsl:call-template></xsl:when>
 +<xsl:when test="starts-with($content,'&#x00392;')"><xsl:value-of select="'\Beta '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x00392;')"/></xsl:call-template></xsl:when>
 +<xsl:when test="starts-with($content,'&#x00393;')"><xsl:value-of select="'\Gamma '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x00393;')"/></xsl:call-template></xsl:when>
@@ -530,7 +530,7 @@
 +<xsl:when test="starts-with($content,'&#x003E0;')"><xsl:value-of select="'\Sampi '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x003E0;')"/></xsl:call-template></xsl:when>
  		<xsl:when test="starts-with($content,'&#x003F0;')"><xsl:value-of select="'\varkappa '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x003F0;')"/></xsl:call-template></xsl:when>	<!--/varkappa -->
  		<xsl:when test="starts-with($content,'&#x003F1;')"><xsl:value-of select="'\varrho '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x003F1;')"/></xsl:call-template></xsl:when>	<!--/varrho -->
--		
+-
 +<xsl:when test="starts-with($content,'&#x003F5;')"><xsl:value-of select="'\epsilon '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x003F5;')"/></xsl:call-template></xsl:when>
 +<xsl:when test="starts-with($content,'&#x003F6;')"><xsl:value-of select="'\backepsilon '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x003F6;')"/></xsl:call-template></xsl:when>
  <!-- ====================================================================== -->
@@ -634,12 +634,12 @@
 +<xsl:when test="starts-with($content,'&#x0213F;')"><xsl:value-of select="'\BbbPi '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x0213F;')"/></xsl:call-template></xsl:when>
 +<xsl:when test="starts-with($content,'&#x02140;')"><xsl:value-of select="'\bbsum '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02140;')"/></xsl:call-template></xsl:when>
 +<xsl:when test="starts-with($content,'&#x02141;')"><xsl:value-of select="'\Game '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02141;')"/></xsl:call-template></xsl:when>
-+		
++
  		<xsl:when test="starts-with($content,'&#x02145;')"><xsl:value-of select="'D'" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02145;')"/></xsl:call-template></xsl:when>		<!--D for use in differentials, e.g., within integrals -->
  		<xsl:when test="starts-with($content,'&#x02146;')"><xsl:value-of select="'d'" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02146;')"/></xsl:call-template></xsl:when>		<!--d for use in differentials, e.g., within integrals -->
  		<xsl:when test="starts-with($content,'&#x02147;')"><xsl:value-of select="'e'" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02147;')"/></xsl:call-template></xsl:when>		<!--e use for the exponential base of the natural logarithms -->
  		<xsl:when test="starts-with($content,'&#x02148;')"><xsl:value-of select="'i'" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02148;')"/></xsl:call-template></xsl:when>		<!--i for use as a square root of -1 -->
- 		<xsl:when test="starts-with($content,'&#x02149;')"><xsl:value-of select="'j'" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02149;')"/></xsl:call-template></xsl:when>		
+ 		<xsl:when test="starts-with($content,'&#x02149;')"><xsl:value-of select="'j'" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02149;')"/></xsl:call-template></xsl:when>
 -
 +<!-- ====================================================================== -->
 +<!-- 	Unicode 3.2
@@ -704,7 +704,7 @@
  		<xsl:when test="starts-with($content,'&#x021D5;')"><xsl:value-of select="'\Updownarrow '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x021D5;')"/></xsl:call-template></xsl:when>	<!--/Updownarrow A: up&down dbl arrow -->
  		<xsl:when test="starts-with($content,'&#x021DA;')"><xsl:value-of select="'\Lleftarrow '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x021DA;')"/></xsl:call-template></xsl:when>	<!--/Lleftarrow A: left triple arrow --> <!-- Required amssymb -->
  		<xsl:when test="starts-with($content,'&#x021DB;')"><xsl:value-of select="'\Rrightarrow '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x021DB;')"/></xsl:call-template></xsl:when>	<!--/Rrightarrow A: right triple arrow --> <!-- Required amssymb -->
--		
+-
 +<xsl:when test="starts-with($content,'&#x021DD;')"><xsl:value-of select="'\rightsquigarrow '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x021DD;')"/></xsl:call-template></xsl:when>
 +<xsl:when test="starts-with($content,'&#x021F5;')"><xsl:value-of select="'\DownArrowUpArrow '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x021F5;')"/></xsl:call-template></xsl:when>
 +<xsl:when test="starts-with($content,'&#x021FD;')"><xsl:value-of select="'\leftarrowtriangle '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x021FD;')"/></xsl:call-template></xsl:when>
@@ -722,7 +722,7 @@
  		<xsl:when test="starts-with($content,'&#x02208;')"><xsl:value-of select="'\in '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02208;')"/></xsl:call-template></xsl:when>		<!--/in R: set membership  -->
  		<xsl:when test="starts-with($content,'&#x02209;')"><xsl:value-of select="'\notin '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02209;')"/></xsl:call-template></xsl:when>		<!--/notin N: negated set membership -->
 @@ -236,7 +637,6 @@
- 		<xsl:when test="starts-with($content,'&#x02212;')"><xsl:value-of select="'-'" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02212;')"/></xsl:call-template></xsl:when>		<!--B: minus sign -->		
+ 		<xsl:when test="starts-with($content,'&#x02212;')"><xsl:value-of select="'-'" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02212;')"/></xsl:call-template></xsl:when>		<!--B: minus sign -->
  		<xsl:when test="starts-with($content,'&#x02213;')"><xsl:value-of select="'\mp '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02213;')"/></xsl:call-template></xsl:when>		<!--/mp B: minus-or-plus sign -->
  		<xsl:when test="starts-with($content,'&#x02214;')"><xsl:value-of select="'\dotplus '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02214;')"/></xsl:call-template></xsl:when>	<!--/dotplus B: plus sign, dot above --> <!-- Required amssymb -->
 -<!--		<xsl:when test="starts-with($content,'&#x02215;')"><xsl:value-of select="' '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02215;')"/></xsl:call-template></xsl:when>-->
@@ -765,9 +765,9 @@
 +		<xsl:when test="starts-with($content,'&#x02237;')"><xsl:value-of select="'\Colon '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02237;')"/></xsl:call-template></xsl:when>	<!--/Colon, two colons -->
 +		<xsl:when test="starts-with($content,'&#x02238;')"><xsl:value-of select="'\dotminus '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02238;')"/></xsl:call-template></xsl:when>		<!--/dotminus B: minus sign, dot above -->
  <!--		<xsl:when test="starts-with($content,'&#x02239;')"><xsl:value-of select="' '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02239;')"/></xsl:call-template></xsl:when>		-->
--<!--		<xsl:when test="starts-with($content,'&#x0223A;')"><xsl:value-of select="' '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x0223A;')"/></xsl:call-template></xsl:when>		minus with four dots, geometric properties -->		
+-<!--		<xsl:when test="starts-with($content,'&#x0223A;')"><xsl:value-of select="' '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x0223A;')"/></xsl:call-template></xsl:when>		minus with four dots, geometric properties -->
 -<!--		<xsl:when test="starts-with($content,'&#x0223B;')"><xsl:value-of select="' '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x0223B;')"/></xsl:call-template></xsl:when>		homothetic -->
-+		<xsl:when test="starts-with($content,'&#x0223A;')"><xsl:value-of select="'\mathbin{{:}\!\!{-}\!\!{:}}'" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x0223A;')"/></xsl:call-template></xsl:when> <!-- minus with four dots, geometric properties -->		
++		<xsl:when test="starts-with($content,'&#x0223A;')"><xsl:value-of select="'\mathbin{{:}\!\!{-}\!\!{:}}'" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x0223A;')"/></xsl:call-template></xsl:when> <!-- minus with four dots, geometric properties -->
 +		<xsl:when test="starts-with($content,'&#x0223B;')"><xsl:value-of select="'\kernelcontraction '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x0223B;')"/></xsl:call-template></xsl:when>			<!-- homothetic -->
  		<xsl:when test="starts-with($content,'&#x0223C;')"><xsl:value-of select="'\sim '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x0223C;')"/></xsl:call-template></xsl:when>		<!--/sim R: similar -->
  		<xsl:when test="starts-with($content,'&#x0223D;')"><xsl:value-of select="'\backsim '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x0223D;')"/></xsl:call-template></xsl:when>	<!--/backsim R: reverse similar --> <!-- Required amssymb -->
@@ -827,7 +827,7 @@
 +		<xsl:when test="starts-with($content,'&#x0225B;')"><xsl:value-of select="'\starequal '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x0225B;')"/></xsl:call-template></xsl:when>	<!--equal, asterisk above -->
  		<xsl:when test="starts-with($content,'&#x0225C;')"><xsl:value-of select="'\triangleq '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x0225C;')"/></xsl:call-template></xsl:when>	<!--/triangleq R: triangle, equals --> <!-- Required amssymb -->
  <!-- ? -->	<xsl:when test="starts-with($content,'&#x0225D;')"><xsl:value-of select="'\stackrel{\scriptscriptstyle\mathrm{def}}{=}'" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x0225D;')"/></xsl:call-template></xsl:when>
- <!-- ? -->	<xsl:when test="starts-with($content,'&#x0225E;')"><xsl:value-of select="'\stackrel{\scriptscriptstyle\mathrm{m}}{=}'" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x0225E;')"/></xsl:call-template></xsl:when>	
+ <!-- ? -->	<xsl:when test="starts-with($content,'&#x0225E;')"><xsl:value-of select="'\stackrel{\scriptscriptstyle\mathrm{m}}{=}'" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x0225E;')"/></xsl:call-template></xsl:when>
 -<!-- ? -->	<xsl:when test="starts-with($content,'&#x0225F;')"><xsl:value-of select="'\stackrel{?}{=}'" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x0225F;')"/></xsl:call-template></xsl:when>	<!--/questeq R: equal with questionmark -->
 +		<xsl:when test="starts-with($content,'&#x0225F;')"><xsl:value-of select="'\questeq '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x0225F;')"/></xsl:call-template></xsl:when>	<!--/questeq R: equal with questionmark -->
  <!--		<xsl:when test="starts-with($content,'&#x02260;&#x0FE00;')"><xsl:value-of select="' '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02260;&#x0FE00;')"/></xsl:call-template></xsl:when>	not equal, dot -->
@@ -867,7 +867,7 @@
 +<!--		<xsl:when test="starts-with($content,'&#x02271;&#x020E5;')"><xsl:value-of select="'\ngeq '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02271;&#x020E5;')"/></xsl:call-template></xsl:when> /ngeq N: not greater-than-or-equal --> <!-- Required amssymb -->
 +		<xsl:when test="starts-with($content,'&#x02271;')"><xsl:value-of select="'\ngeq '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02271;')"/></xsl:call-template></xsl:when>		<!--/ngeqq N: not greater, dbl equals --> <!-- Required amssymb -->
  		<xsl:when test="starts-with($content,'&#x02272;')"><xsl:value-of select="'\lesssim '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02272;')"/></xsl:call-template></xsl:when>	<!--/lesssim R: less, similar --> <!-- Required amssymb -->
- 		<xsl:when test="starts-with($content,'&#x02273;')"><xsl:value-of select="'\gtrsim '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02273;')"/></xsl:call-template></xsl:when>	<!--/gtrsim R: greater, similar --> <!-- Required amssymb -->		
+ 		<xsl:when test="starts-with($content,'&#x02273;')"><xsl:value-of select="'\gtrsim '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02273;')"/></xsl:call-template></xsl:when>	<!--/gtrsim R: greater, similar --> <!-- Required amssymb -->
 -		<xsl:when test="starts-with($content,'&#x02274;')"><xsl:value-of select="'\not\lesssim '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02274;')"/></xsl:call-template></xsl:when>	<!--not less, similar --> <!-- Required amssymb -->
 -		<xsl:when test="starts-with($content,'&#x02275;')"><xsl:value-of select="'\not\gtrsim '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02275;')"/></xsl:call-template></xsl:when>	<!--not greater, similar --> <!-- Required amssymb -->
 +		<xsl:when test="starts-with($content,'&#x02274;')"><xsl:value-of select="'\ElsevierGlyph{2274} '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02274;')"/></xsl:call-template></xsl:when>	<!--not less, similar --> <!-- Required amssymb -->
@@ -880,9 +880,9 @@
 +		<xsl:when test="starts-with($content,'&#x02279;')"><xsl:value-of select="'\notgreaterless '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02279;')"/></xsl:call-template></xsl:when>	<!--not greater, less --> <!-- Required amssymb -->
  		<xsl:when test="starts-with($content,'&#x0227A;')"><xsl:value-of select="'\prec '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x0227A;')"/></xsl:call-template></xsl:when>		<!--/prec R: precedes -->
  		<xsl:when test="starts-with($content,'&#x0227B;')"><xsl:value-of select="'\succ '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x0227B;')"/></xsl:call-template></xsl:when>		<!--/succ R: succeeds -->
- 		<xsl:when test="starts-with($content,'&#x0227C;')"><xsl:value-of select="'\preccurlyeq '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x0227C;')"/></xsl:call-template></xsl:when>	<!--/preccurlyeq R: precedes, curly eq --> <!-- Required amssymb -->		
+ 		<xsl:when test="starts-with($content,'&#x0227C;')"><xsl:value-of select="'\preccurlyeq '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x0227C;')"/></xsl:call-template></xsl:when>	<!--/preccurlyeq R: precedes, curly eq --> <!-- Required amssymb -->
  		<xsl:when test="starts-with($content,'&#x0227D;')"><xsl:value-of select="'\succcurlyeq '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x0227D;')"/></xsl:call-template></xsl:when>	<!--/succcurlyeq R: succeeds, curly eq --> <!-- Required amssymb -->
-+		<xsl:when test="starts-with($content,'&#x0227E;&#x00338;')"><xsl:value-of select="'\nprecsim '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x0227E;&#x00338;')"/></xsl:call-template></xsl:when>	
++		<xsl:when test="starts-with($content,'&#x0227E;&#x00338;')"><xsl:value-of select="'\nprecsim '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x0227E;&#x00338;')"/></xsl:call-template></xsl:when>
  		<xsl:when test="starts-with($content,'&#x0227E;')"><xsl:value-of select="'\precsim '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x0227E;')"/></xsl:call-template></xsl:when>	<!--/precsim R: precedes, similar --> <!-- Required amssymb -->
 +		<xsl:when test="starts-with($content,'&#x0227F;&#x00338;')"><xsl:value-of select="'\nsuccsim '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x0227F;&#x00338;')"/></xsl:call-template></xsl:when>
  		<xsl:when test="starts-with($content,'&#x0227F;')"><xsl:value-of select="'\succsim '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x0227F;')"/></xsl:call-template></xsl:when>	<!--/succsim R: succeeds, similar --> <!-- Required amssymb -->
@@ -904,7 +904,7 @@
 +		<xsl:when test="starts-with($content,'&#x0228F;')"><xsl:value-of select="'\sqsubset '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x0228F;')"/></xsl:call-template></xsl:when>
 +		<xsl:when test="starts-with($content,'&#x02290;&#x00338;')"><xsl:value-of select="'\NotSquareSuperset '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02290;&#x00338;')"/></xsl:call-template></xsl:when>
 +		<xsl:when test="starts-with($content,'&#x02290;')"><xsl:value-of select="'\sqsupset '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02290;')"/></xsl:call-template></xsl:when>
-+		<xsl:when test="starts-with($content,'&#x02291;')"><xsl:value-of select="'\sqsubseteq '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02291;')"/></xsl:call-template></xsl:when>		
++		<xsl:when test="starts-with($content,'&#x02291;')"><xsl:value-of select="'\sqsubseteq '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02291;')"/></xsl:call-template></xsl:when>
 +		<xsl:when test="starts-with($content,'&#x02292;')"><xsl:value-of select="'\sqsupseteq '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02292;')"/></xsl:call-template></xsl:when>
  		<xsl:when test="starts-with($content,'&#x02293;')"><xsl:value-of select="'\sqcap '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02293;')"/></xsl:call-template></xsl:when>		<!--/sqcap B: square intersection -->
 -		<xsl:when test="starts-with($content,'&#x02294;')"><xsl:value-of select="'\bigsqcup '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02294;')"/></xsl:call-template></xsl:when>		<!--/sqcup B: square union -->
@@ -1000,7 +1000,7 @@
  <!-- 	Unicode 3.2
  	Miscellaneous Technical
 @@ -404,20 +881,22 @@
- <!-- ====================================================================== -->		
+ <!-- ====================================================================== -->
  		<xsl:when test="starts-with($content,'&#x025A1;')"><xsl:value-of select="'\square '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x025A1;')"/></xsl:call-template></xsl:when>	<!--/square, square --> <!-- Required amssymb -->
  		<xsl:when test="starts-with($content,'&#x025AA;')"><xsl:value-of select="'\blacksquare '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x025AA;')"/></xsl:call-template></xsl:when>	<!--/blacksquare, square, filled  --> <!-- Required amssymb -->
 +
@@ -1013,9 +1013,9 @@
 +<!-- Entities undefined in Unicode, but used by OOo for parenteses. -->
 +		<xsl:when test='starts-with($content,"&#xe09e;")'><xsl:value-of select='"("' /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#xe09e;')"/></xsl:call-template></xsl:when>
 +		<xsl:when test='starts-with($content,"&#xe09f;")'><xsl:value-of select='")"' /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#xe09f;')"/></xsl:call-template></xsl:when>
- 		
- 		<xsl:when test='starts-with($content,"&apos;")'><xsl:value-of select='"\text{&apos;}"' /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select='substring-after($content, "&apos;")'/></xsl:call-template></xsl:when><!-- \text required amslatex -->
  
+ 		<xsl:when test='starts-with($content,"&apos;")'><xsl:value-of select='"\text{&apos;}"' /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select='substring-after($content, "&apos;")'/></xsl:call-template></xsl:when><!-- \text required amslatex -->
+
  		<xsl:when test='starts-with($content,"{")'><xsl:value-of select='"\{"' /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '{')"/></xsl:call-template></xsl:when>
  		<xsl:when test='starts-with($content,"}")'><xsl:value-of select='"\}"' /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '}')"/></xsl:call-template></xsl:when>
 -
@@ -1037,11 +1037,11 @@
  			<xsl:when test='starts-with($content,"_")'><xsl:value-of select='"\_"' /><xsl:call-template name="replaceMtextEntities"><xsl:with-param name="content" select="substring-after($content, '_')"/></xsl:call-template></xsl:when>
 -			<xsl:when test='starts-with($content,"\")'><xsl:call-template name="replaceMtextEntities"><xsl:with-param name="content" select="substring-after($content, '\')"/></xsl:call-template></xsl:when>
 +			<xsl:when test='starts-with($content,"\")'><xsl:call-template name="replaceMtextEntities"><xsl:with-param name="content" select="substring-after($content, '\')"/></xsl:call-template></xsl:when>
-+			
++
 +			<!-- Ignore "lower than" and "greater than" symbols, which break the MediaWiki parser in text mode. -->
 +			<xsl:when test='starts-with($content,"&gt;")'><xsl:call-template name="replaceMtextEntities"><xsl:with-param name="content" select="substring-after($content, '&gt;')"/></xsl:call-template></xsl:when>
 +			<xsl:when test='starts-with($content,"&lt;")'><xsl:call-template name="replaceMtextEntities"><xsl:with-param name="content" select="substring-after($content, '&lt;')"/></xsl:call-template></xsl:when>
-+			
++
  			<xsl:otherwise>
  				<xsl:value-of select="substring($content,1,1)"/>
  				<xsl:call-template name="replaceMtextEntities">
@@ -1054,7 +1054,7 @@
 +		xmlns:m="http://www.w3.org/1998/Math/MathML"
 +		xmlns:oomath="http://www.w3.org/1998/Math/MathML"
                  version='1.0'>
- 
+
  <!-- ====================================================================== -->
 -<!-- $Id: glayout.xsl,v 1.5 2003/06/10 12:24:04 shade33 Exp $
 +<!-- $Id: glayout.xsl 2755 2008-03-07 20:35:56Z hauma $
@@ -1063,9 +1063,9 @@
 +     See ./README or http://xsltml.sf.net for
       copyright and other information                                        -->
  <!-- ====================================================================== -->
- 
+
 @@ -92,17 +93,16 @@
- 
+
  <xsl:template match="m:mfenced">
  	<xsl:choose>
 -		<xsl:when test="@open">
@@ -1112,22 +1112,22 @@
 +			</xsl:call-template>
  		</xsl:when>
  		<xsl:otherwise><xsl:text>\right)</xsl:text></xsl:otherwise>
- 	</xsl:choose>	
+ 	</xsl:choose>
  </xsl:template>
- 
+
  <xsl:template match="m:mphantom">
 -	<xsl:text>\phantom{</xsl:text>
 -	<xsl:apply-templates/>
 +<!-- Not supported by MediaWiki. -->
-+<!-- 
++<!--
 + 	<xsl:text>\phantom{</xsl:text>
 + -->
 +	<xsl:apply-templates/>
-+<!-- 
++<!--
  	<xsl:text>}</xsl:text>
 + -->
  </xsl:template>
- 
+
  <xsl:template match="m:menclose">
 @@ -193,15 +197,21 @@
  		</xsl:call-template>
@@ -1158,7 +1158,7 @@
 +++ misc/build/xsltml_2.1.2/mmltex.xsl	2008-03-07 21:36:34.000000000 +0100
 @@ -6,9 +6,9 @@
  <xsl:output method="text" indent="no" encoding="UTF-8"/>
- 
+
  <!-- ====================================================================== -->
 -<!-- $Id: mmltex.xsl,v 1.7 2003/06/10 12:24:04 shade33 Exp $
 +<!-- $Id: mmltex.xsl 2755 2008-03-07 20:35:56Z hauma $
@@ -1167,7 +1167,7 @@
 +     See ./README or http://xsltml.sf.net for
       copyright and other information                                        -->
  <!-- ====================================================================== -->
- 
+
 --- misc/xsltml_2.1.2/scripts.xsl	2009-03-27 08:11:02.000000000 +0100
 +++ misc/build/xsltml_2.1.2/scripts.xsl	2008-03-07 21:36:34.000000000 +0100
 @@ -1,12 +1,13 @@
@@ -1177,7 +1177,7 @@
 +		xmlns:m="http://www.w3.org/1998/Math/MathML"
 +		xmlns:oomath="http://www.w3.org/1998/Math/MathML"
                  version='1.0'>
-                 
+
  <!-- ====================================================================== -->
 -<!-- $Id: scripts.xsl,v 1.4 2003/06/10 12:24:04 shade33 Exp $
 +<!-- $Id: scripts.xsl 2755 2008-03-07 20:35:56Z hauma $
@@ -1186,7 +1186,7 @@
 +     See ./README or http://xsltml.sf.net for
       copyright and other information                                        -->
  <!-- ====================================================================== -->
- 
+
 @@ -23,7 +24,7 @@
  			</xsl:call-template>
  			<xsl:text>}</xsl:text>
@@ -1261,7 +1261,7 @@
 + 			<xsl:apply-templates select="./*[1]"/>
 + 			<xsl:text>}</xsl:text>
 + 		</xsl:when>
-+ 		
++ 
 + 		<xsl:when test="$over='&#x00302;' or $over='&#x0005E;' or $over='&#x2c6;'"> <!-- Hat or circ - circumflex accent -->
  			<xsl:choose>
 -				<xsl:when test="@accent='true'">
@@ -1285,7 +1285,7 @@
 -<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 -		xmlns:m="http://www.w3.org/1998/Math/MathML"
 -                version='1.0'>
--                
+-
 -<!-- ====================================================================== -->
 -<!-- $id: tables.xsl, 2002/17/05 Exp $
 -     This file is part of the XSLT MathML Library distribution.
@@ -1416,7 +1416,7 @@
 +<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 +		xmlns:m="http://www.w3.org/1998/Math/MathML"
 +                version='1.0'>
-+                
++
 +<!-- ====================================================================== -->
 +<!-- $Id: tables.xsl 2755 2008-03-07 20:35:56Z hauma $
 +     This file is part of the XSLT MathML Library distribution.
@@ -1640,7 +1640,7 @@
 +		xmlns:m="http://www.w3.org/1998/Math/MathML"
 +		xmlns:oomath="http://www.w3.org/1998/Math/MathML"
                  version='1.0'>
-                 
+
  <!-- ====================================================================== -->
 -<!-- $Id: tokens.xsl,v 1.7 2003/06/10 12:24:05 shade33 Exp $
 +<!-- $Id: tokens.xsl 2755 2008-03-07 20:35:56Z hauma $
@@ -1649,10 +1649,10 @@
 +     See ./README or http://xsltml.sf.net for
       copyright and other information                                        -->
  <!-- ====================================================================== -->
- 
+
 @@ -22,7 +23,15 @@
  </xsl:template>
- 
+
  <xsl:template name="mi">
 +	<xsl:variable name="op">
 +		<xsl:value-of select="concat(' ',normalize-space(.),' ')"/>
@@ -1662,7 +1662,7 @@
 +			<xsl:text>\</xsl:text>
 +				<xsl:value-of select="normalize-space(.)"/>
 +			<xsl:text> </xsl:text>
-+		</xsl:when>	
++		</xsl:when>
  		<xsl:when test="string-length(normalize-space(.))>1 and not(@mathvariant)">
  			<xsl:text>\mathrm{</xsl:text>
  				<xsl:apply-templates/>
@@ -1695,7 +1695,7 @@
 +		<xsl:text>}</xsl:text>
 +	</xsl:if>
  </xsl:template>
- 
+
  <xsl:template match="m:mspace">
 @@ -111,10 +123,16 @@
  		</xsl:call-template>

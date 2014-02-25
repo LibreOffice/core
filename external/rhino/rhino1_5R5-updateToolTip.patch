@@ -3,7 +3,7 @@
 @@ -1045,9 +1045,18 @@
              } );
      }
- 
+
 +    // Fix taken from <ftp://ftp.mozilla.org/pub/mozilla.org/js/rhino1_7R2.zip>
 +    // toolsrc/org/mozilla/javascript/tools/debugger/SwingGui.java:
      private void updateToolTip() {

@@ -7,11 +7,11 @@
 -  xsltMatchPattern;
 +#NOT_IMPLEMENTED  xsltMatchPattern;
    xsltTestCompMatchList;
- 
+
  # preproc
 @@ -406,7 +406,7 @@
      global:
- 
+
  # xsltInternals
 -  xsltConstNamespaceNameXSLT; # variable
 +#XSLT_REFACTORED_XSLT_NSCOMP  xsltConstNamespaceNameXSLT; # variable
@@ -20,7 +20,7 @@
    xsltInitCtxtKey;
 @@ -415,24 +415,24 @@
    xsltInit;
- 
+
  # xsltInternals
 -  xsltParseAnyXSLTElem;
 -  xsltParseSequenceConstructor;
@@ -38,11 +38,11 @@
    xsltReleaseRVT;
 -  xsltRestoreDocumentNamespaces;
 +#XSLT_REFACTORED_XSLT_NSCOMP  xsltRestoreDocumentNamespaces;
- 
+
  # extensions
 -  xsltStyleStylesheetLevelGetExtData;
 +#XSLT_REFACTORED  xsltStyleStylesheetLevelGetExtData;
- 
+
  # xsltInternals
  # xsltTransStorageAdd; removed in 1.1.28
  # xsltTransStorageRemove; removed in 1.1.28
@@ -50,10 +50,10 @@
 -  xsltXSLTAttrMarker; # variable
 +#XSLT_REFACTORED  xsltXSLTAttrMarker; # variable
  } LIBXML2_1.1.9;
- 
+
  LIBXML2_1.1.20 {
 @@ -475,5 +475,9 @@
- 
+
  # xsltutils
    xsltXPathCompileFlags;
 +
@@ -61,4 +61,4 @@
 +    local:
 +  *;
  } LIBXML2_1.1.26;
- 
+

@@ -51,12 +51,12 @@ extern "C"
 JRIGlobalRef Private_GetJavaClass(void);
 
 //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\.
-////\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//.
+////\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
 // Private_GetJavaClass (global function)
-//
+
 //  Given a Java class reference (thru NPP_GetJavaClass) inform JRT
 //  of this class existence
-//
+
 JRIGlobalRef
 Private_GetJavaClass(void)
 {
@@ -70,11 +70,11 @@ Private_GetJavaClass(void)
 #endif /* OJI */
 
 //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\.
-////\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//.
+////\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
 //                      PLUGIN DLL entry points
-//
+
 // These are the Windows specific DLL entry points. They must be exoprted
-//
+
 
 // we need these to be global since we have to fill one of its field
 // with a data (class) which requires knowlwdge of the navigator
@@ -83,13 +83,13 @@ Private_GetJavaClass(void)
 static NPPluginFuncs* g_pluginFuncs;
 
 //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\.
-////\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//.
+////\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
 // NP_GetEntryPoints
-//
+
 //  fills in the func table used by Navigator to call entry points in
 //  plugin DLL.  Note that these entry points ensure that DS is loaded
 //  by using the NP_LOADDS macro, when compiling for Win16
-//
+
 NPError WINAPI NP_EXPORT
 NP_GetEntryPoints(NPPluginFuncs* pFuncs)
 {
@@ -118,11 +118,11 @@ NP_GetEntryPoints(NPPluginFuncs* pFuncs)
 }
 
 //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\.
-////\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//.
+////\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
 // NP_Initialize
-//
+
 //  called immediately after the plugin DLL is loaded
-//
+
 NPError WINAPI NP_EXPORT
 NP_Initialize(NPNetscapeFuncs* pFuncs)
 {
@@ -154,13 +154,13 @@ NP_Initialize(NPNetscapeFuncs* pFuncs)
 }
 
 //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\.
-////\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//.
+////\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
 // NP_Shutdown
-//
+
 //  called immediately before the plugin DLL is unloaded.
 //  This functio shuold check for some ref count on the dll to see if it is
 //  unloadable or it needs to stay in memory.
-//
+
 void WINAPI NP_EXPORT
 NP_Shutdown()
 {
@@ -174,7 +174,7 @@ char * NP_GetMIMEDescription()
 }
 
 //                      END - PLUGIN DLL entry points
-////\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//.
+////\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
 //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\.
 
 /*    NAVIGATOR Entry points    */

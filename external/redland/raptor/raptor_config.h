@@ -337,7 +337,7 @@
 #undef inline
 #endif
 
-// from raptor_config_cmake.h.in ////////////////////////////////////////////
+// from raptor_config_cmake.h.in
 
 #ifdef WIN32
 #  define WIN32_LEAN_AND_MEAN

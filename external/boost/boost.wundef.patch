@@ -13,7 +13,7 @@
 +++ foo/foo/foo/boost/multi_array/base.hpp
 @@ -65,7 +65,7 @@
  // object creation in small-memory environments.  Thus, the objects
- // can be left undefined by defining BOOST_MULTI_ARRAY_NO_GENERATORS 
+ // can be left undefined by defining BOOST_MULTI_ARRAY_NO_GENERATORS
  // before loading multi_array.hpp.
 -#if !BOOST_MULTI_ARRAY_NO_GENERATORS
 +#if !defined(BOOST_MULTI_ARRAY_NO_GENERATORS) || !BOOST_MULTI_ARRAY_NO_GENERATORS
@@ -96,4 +96,4 @@
 +#if defined(BOOST_MSVC) && BOOST_MSVC
  #  pragma warning(disable: 4913) // user defined binary operator ',' exists but no overload could convert all operands, default built-in binary operator ',' used
  #endif
- 
+

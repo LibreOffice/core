@@ -7,25 +7,25 @@
 -WINLIBS      = ws2_32.lib wldap32.lib advapi32.lib
 +WINLIBS      = ws2_32.lib wldap32.lib advapi32.lib winhttp.lib
  CFLAGS       = $(CFLAGS) $(EXCFLAGS)
- 
+
  CFGSET       = FALSE
 --- curl-7.26.0/lib/url.c
 +++ misc/build/curl-7.26.0/lib/url.c
 @@ -80,6 +80,10 @@ void idn_free (void *ptr);
  int curl_win32_idn_to_ascii(const char *in, char **out);
  #endif  /* USE_LIBIDN */
- 
+
 +#ifdef WIN32
 +#include <WinHttp.h>
 +#endif
 +
  #include "urldata.h"
  #include "netrc.h"
- 
+
 @@ -4111,6 +4115,21 @@ static bool check_noproxy(const char* name, const char* no_proxy)
    return FALSE;
  }
- 
+
 +#ifdef WIN32
 +static char* wstrToCstr( LPWSTR wStr )
 +{
@@ -49,7 +49,7 @@
  {
    char *proxy = NULL;
 +  char *no_proxy=NULL;
- 
+
  #ifndef CURL_DISABLE_HTTP
    /* If proxy was not specified, we check for default proxy environment
 @@ -4138,7 +4158,63 @@ static char *detect_proxy(struct connectdata *conn)
@@ -115,7 +115,7 @@
 +  }
 +#else /* !WIN32 */
    char proxy_env[128];
- 
+
    no_proxy=curl_getenv("no_proxy");
 @@ -4189,9 +4265,9 @@ static char *detect_proxy(struct connectdata *conn)
      }
@@ -126,5 +126,5 @@
      free(no_proxy);
 -
  #else /* !CURL_DISABLE_HTTP */
- 
+
    (void)conn;

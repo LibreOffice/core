@@ -21,6 +21,6 @@ index 3b3e08a..1c12d56 100644
    CentralDirectoryEntry entry = m_cdir.begin()->second;
    m_input->seek(entry.offset, WPX_SEEK_SET);
    LocalFileHeader header;
--- 
+--
 1.8.3.1
 

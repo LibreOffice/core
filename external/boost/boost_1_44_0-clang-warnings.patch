@@ -3,7 +3,7 @@
 @@ -16,6 +16,12 @@
  #ifndef BOOST_RANDOM_LAGGED_FIBONACCI_HPP
  #define BOOST_RANDOM_LAGGED_FIBONACCI_HPP
- 
+
 +#include <config_global.h>
 +#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
 +# pragma GCC diagnostic push
@@ -14,9 +14,9 @@
  #include <iosfwd>
  #include <algorithm>     // std::max
 @@ -537,4 +537,8 @@
- 
+
  } // namespace boost
- 
+
 +#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
 +# pragma GCC diagnostic pop
 +#endif
@@ -27,7 +27,7 @@
 @@ -16,6 +16,12 @@
  #ifndef BOOST_RANDOM_SHUFFLE_OUTPUT_HPP
  #define BOOST_RANDOM_SHUFFLE_OUTPUT_HPP
- 
+
 +#include <config_global.h>
 +#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
 +# pragma GCC diagnostic push
@@ -35,12 +35,12 @@
 +#endif
 +
  #include <boost/random/shuffle_order.hpp>
- 
+
  namespace boost {
 @@ -52,4 +52,8 @@
  }
  }
- 
+
 +#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
 +# pragma GCC diagnostic pop
 +#endif
@@ -51,7 +51,7 @@
 @@ -16,6 +16,12 @@
  #ifndef BOOST_RANDOM_SUBTRACT_WITH_CARRY_HPP
  #define BOOST_RANDOM_SUBTRACT_WITH_CARRY_HPP
- 
+
 +#include <config_global.h>
 +#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
 +# pragma GCC diagnostic push
@@ -64,7 +64,7 @@
 @@ -614,4 +614,8 @@
  } // namespace random
  } // namespace boost
- 
+
 +#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
 +# pragma GCC diagnostic pop
 +#endif

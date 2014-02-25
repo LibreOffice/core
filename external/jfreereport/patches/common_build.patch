@@ -8,7 +8,7 @@
 +      <contains string="${project.revision}" substring="\$\{" />
      </condition>
    </fail>
- 
+
 @@ -270,7 +270,7 @@ TYPICAL TARGET SEQUENCE
    <property name="impl.title" value="${Implementation-Title}" description="Sets the title of the project based on the Implementation-Title found in the manifest file (if one is supplied and nothing is specified in the build.properties)" />
    <fail message="A project title has not been determined!">
@@ -17,7 +17,7 @@
 +      <contains string="${impl.title}" substring="\$\{" />
      </condition>
    </fail>
- 
+
 @@ -497,7 +497,7 @@
          Sets a property build.id to the either "development" or the svn revision
          if in release mode
@@ -57,7 +57,7 @@
 +        <available file="$(res.dir)" type="dir" />
 +    </condition>
 +    <antcall target="copy.res" />
- 
+
 -    <if>
 -      <not>
 -        <isset property="jar.include.source" />
@@ -89,14 +89,14 @@
 +        <flattenmapper/>
 +    </uptodate>
 + </target>
- 
- 
+
+
    <!--=======================================================================
 @@ -1167,7 +1177,6 @@
    <target name="generate.manifest" depends="init,set-build.id">
      <delete file="${dist.manifest.file}" />
      <touch file="${dist.manifest.file}" />
 -    <copy file="${manifest.file}" tofile="${dist.manifest.file}" overwrite="true" failonerror="false" />
- 
+
      <manifest file="${dist.manifest.file}" mode="update">
        <attribute name="Implementation-Title" value="${impl.title}" />
