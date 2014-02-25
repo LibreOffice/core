@@ -100,7 +100,7 @@ bool checkEmpty(OUString const & string, char const * message) {
 
 }
 
-//==================================================================================================
+
 class TestBridgeImpl : public osl::DebugBase<TestBridgeImpl>,
                        public WeakImplHelper2< XMain, XServiceInfo >
 {
@@ -123,7 +123,7 @@ public:
     virtual sal_Int32 SAL_CALL run( const Sequence< OUString > & rArgs ) throw (RuntimeException, std::exception);
 };
 
-//==================================================================================================
+
 static sal_Bool equals( const TestElement & rData1, const TestElement & rData2 )
 {
     check( rData1.Bool == rData2.Bool, "### bool does not match!" );
@@ -158,7 +158,7 @@ static sal_Bool equals( const TestElement & rData1, const TestElement & rData2 )
             rData1.Interface == rData2.Interface &&
             rData1.Any == rData2.Any);
 }
-//==================================================================================================
+
 static sal_Bool equals( const TestData & rData1, const TestData & rData2 )
 {
     sal_Int32 nLen;
@@ -182,7 +182,7 @@ static sal_Bool equals( const TestData & rData1, const TestData & rData2 )
     }
     return sal_False;
 }
-//==================================================================================================
+
 static void assign( TestElement & rData,
                     sal_Bool bBool, sal_Unicode cChar, sal_Int8 nByte,
                     sal_Int16 nShort, sal_uInt16 nUShort,
@@ -363,7 +363,7 @@ void MyClass::release() throw ()
     OWeakObject::release();
 }
 
-//==================================================================================================
+
 static sal_Bool performTest(
     const Reference<XComponentContext> & xContext,
     const Reference<XBridgeTest > & xLBT,
@@ -948,7 +948,7 @@ static sal_Bool raiseOnewayException( const Reference < XBridgeTest > & xLBT )
     return bReturn;
 }
 
-//==================================================================================================
+
 static sal_Bool raiseException( const Reference< XBridgeTest > & xLBT )
 {
     sal_Int32 nCount = 0;
@@ -1138,7 +1138,7 @@ inline bool makeSurrogate(
     return rOut.is();
 }
 
-//==================================================================================================
+
 sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
     throw (RuntimeException, std::exception)
 {
@@ -1253,9 +1253,9 @@ Sequence< OUString > TestBridgeImpl::getSupportedServiceNames()
     return bridge_test::getSupportedServiceNames();
 }
 
-// ...
 
-//==================================================================================================
+
+
 static Reference< XInterface > SAL_CALL TestBridgeImpl_create(
     const Reference< XComponentContext > & xContext )
 {
@@ -1267,7 +1267,7 @@ static Reference< XInterface > SAL_CALL TestBridgeImpl_create(
 
 extern "C"
 {
-//==================================================================================================
+
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager,
     SAL_UNUSED_PARAMETER void * )

@@ -25,7 +25,7 @@ using unoidl.com.sun.star.lang;
 using unoidl.com.sun.star.container;
 
 
-//==============================================================================
+
 internal class Factory :
     WeakComponentBase, XSingleComponentFactory, XServiceInfo
 {
