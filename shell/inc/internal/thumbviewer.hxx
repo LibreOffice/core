@@ -45,9 +45,9 @@ public:
     CThumbviewer(long RefCnt = 1);
     virtual ~CThumbviewer();
 
-    //-----------------------------
+
     // IUnknown methods
-    //-----------------------------
+
 
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(
             REFIID riid,
@@ -57,9 +57,9 @@ public:
 
     virtual ULONG STDMETHODCALLTYPE Release( void);
 
-    //----------------------------
+
     // IExtractImage methods
-    //----------------------------
+
 
     virtual HRESULT STDMETHODCALLTYPE Extract(HBITMAP *phBmpImage);
 
@@ -71,15 +71,15 @@ public:
         DWORD dwRecClrDepth,
         DWORD *pdwFlags);
 
-    //----------------------------
+
     // IPersist methods
-    //----------------------------
+
 
     virtual HRESULT STDMETHODCALLTYPE GetClassID(CLSID* pClassID);
 
-    //----------------------------
+
     // IPersistFile methods
-    //----------------------------
+
 
     virtual HRESULT STDMETHODCALLTYPE IsDirty();
 

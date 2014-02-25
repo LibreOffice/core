@@ -43,32 +43,32 @@ public:
              CPropertyHdl(long RefCnt = 1);
     virtual ~CPropertyHdl();
 
-    //-----------------------------
+
     // IUnknown methods
-    //-----------------------------
+
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(
             REFIID riid,
             void __RPC_FAR *__RPC_FAR *ppvObject );
     virtual ULONG STDMETHODCALLTYPE AddRef( void );
     virtual ULONG STDMETHODCALLTYPE Release( void );
 
-    //-----------------------------
+
     // IPropertyStore
-    //-----------------------------
+
     virtual HRESULT STDMETHODCALLTYPE GetCount( DWORD *pcProps );
     virtual HRESULT STDMETHODCALLTYPE GetAt( DWORD iProp, PROPERTYKEY *pkey );
     virtual HRESULT STDMETHODCALLTYPE GetValue( REFPROPERTYKEY key, PROPVARIANT *pPropVar );
     virtual HRESULT STDMETHODCALLTYPE SetValue( REFPROPERTYKEY key, REFPROPVARIANT propVar );
     virtual HRESULT STDMETHODCALLTYPE Commit();
 
-    //-----------------------------
+
     // IPropertyStoreCapabilities
-    //-----------------------------
+
     virtual HRESULT STDMETHODCALLTYPE IsPropertyWritable( REFPROPERTYKEY key );
 
-    //-----------------------------
+
     // IInitializeWithStream
-    //-----------------------------
+
     virtual HRESULT STDMETHODCALLTYPE Initialize(IStream *pStream, DWORD grfMode);
 
 private:
@@ -86,18 +86,18 @@ public:
     CClassFactory( const CLSID& clsid );
     virtual ~CClassFactory();
 
-    //-----------------------------
+
     // IUnknown methods
-    //-----------------------------
+
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(
             REFIID riid,
             void __RPC_FAR *__RPC_FAR *ppvObject);
     virtual ULONG STDMETHODCALLTYPE AddRef( void );
     virtual ULONG STDMETHODCALLTYPE Release( void );
 
-    //-----------------------------
+
     // IClassFactory methods
-    //-----------------------------
+
     virtual HRESULT STDMETHODCALLTYPE CreateInstance(
             IUnknown __RPC_FAR *pUnkOuter,
             REFIID riid,

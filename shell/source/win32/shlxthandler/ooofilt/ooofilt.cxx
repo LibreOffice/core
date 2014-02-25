@@ -26,7 +26,7 @@
 //              the extension .sxw .sxi, etc) and ODF files and extract
 //              their content, author, keywords,subject,comments and title
 //              to be filtered.
-//
+
 //  Platform:   Windows 2000, Windows XP
 
 #include "internal/contentreader.hxx"

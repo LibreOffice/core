@@ -32,7 +32,7 @@
 #include <memory>
 #include "document_statistic.hxx"
 
-//------------------------------------
+
 
 class list_view_builder;
 typedef std::auto_ptr<list_view_builder> list_view_builder_ptr;
@@ -41,7 +41,7 @@ typedef std::auto_ptr<list_view_builder> list_view_builder_ptr;
 list_view_builder_ptr create_list_view_builder(
     HWND hwnd_lv, const std::wstring& col1, const std::wstring& col2);
 
-//------------------------------------
+
 
 class list_view_builder
 {
@@ -73,7 +73,7 @@ private:
     friend list_view_builder_ptr create_list_view_builder(HWND hwnd_lv, const std::wstring& col1, const std::wstring& col2);
 };
 
-//------------------------------------
+
 
 class winxp_list_view_builder : public list_view_builder
 {
