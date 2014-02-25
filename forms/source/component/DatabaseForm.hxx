@@ -82,19 +82,19 @@ namespace com { namespace sun { namespace star { namespace sdbc {
 class Timer;
 class INetMIMEMessage;
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
 
-//========================================================================
+
+
 //= html tools
-//========================================================================
+
 
 const sal_uInt16 SUCCESSFUL_REPRESENT_TEXT          = 0x0001;
 const sal_uInt16 SUCCESSFUL_REPRESENT_FILE          = 0x0002;
 
-//------------------------------------------------------------------------------
+
 class HtmlSuccessfulObj
 {
 public:
@@ -117,7 +117,7 @@ public:
 
 typedef std::vector<HtmlSuccessfulObj> HtmlSuccessfulObjList;
 
-//========================================================================
+
 class OGroupManager;
 class OFormSubmitResetThread;
 typedef ::cppu::ImplHelper12    <   ::com::sun::star::form::XForm
@@ -553,9 +553,9 @@ inline void ODatabaseForm::submitNBC(const ::com::sun::star::uno::Reference< ::c
     submit_impl(Control, MouseEvt, false);
 }
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_DATABASEFORM_HXX
 

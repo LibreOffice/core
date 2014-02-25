@@ -30,9 +30,9 @@
 #include <cppuhelper/weak.hxx>
 
 
-// -----------------
+
 // - ImageProducer -
-// -----------------
+
 
 
 

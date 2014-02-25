@@ -28,10 +28,10 @@
 
 #include <tools/diagnose_ex.h>
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -57,9 +57,9 @@ namespace frm
 
     namespace ImageType = ::com::sun::star::ui::ImageType;
 
-    //====================================================================
+
     //= DocumentCommandImageProvider
-    //====================================================================
+
     class DocumentCommandImageProvider : public ICommandImageProvider
     {
     public:
@@ -166,8 +166,8 @@ namespace frm
         return pImageProvider;
     }
 
-//........................................................................
+
 } // namespace frm
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

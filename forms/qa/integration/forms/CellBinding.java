@@ -281,7 +281,7 @@ public class CellBinding extends complexlib.ComplexTestCase
         short col = (short)0;
         short row = (short)18;
 
-        // ...............................................................
+
         // add a list entry source which fills the list boxes list from cells in the
         // spreadsheet
         short sourceCol = (short)4;
@@ -292,11 +292,11 @@ public class CellBinding extends complexlib.ComplexTestCase
         //setListSource( listBox, sourceCol, row, (short)( row + 2 ) );
             // TODO: this is currently prone to deadlocks
 
-        // ...............................................................
+
         // bind to a cell
         bindToCell( listBox, col, row );
 
-        // ...............................................................
+
         // do the tests
         listBox.setPropertyValue( "SelectedItems", new short[] { (short)0 } );
         verifyStringCellContent( col, row, "Apples", "programmatically selecting a list entry is not propagated to the cell." );
@@ -323,7 +323,7 @@ public class CellBinding extends complexlib.ComplexTestCase
         short col = (short)0;
         short row = (short)21;
 
-        // ...............................................................
+
         // add a list entry source which fills the list boxes list from cells in the
         // spreadsheet
         short sourceCol = (short)4;
@@ -334,11 +334,11 @@ public class CellBinding extends complexlib.ComplexTestCase
         //setListSource( listBox, sourceCol, row, (short)( row + 2 ) );
             // TODO: this is currently prone to deadlocks
 
-        // ...............................................................
+
         // bind to a cell
         bindToCell( listBox, col, row, "com.sun.star.table.ListPositionCellBinding" );
 
-        // ...............................................................
+
         // do the tests
         listBox.setPropertyValue( "SelectedItems", new short[] { (short)0 } );
         verifyNumericCellContent( col, row, 1, "programmatically selecting a list entry is not propagated (as index) to the cell." );

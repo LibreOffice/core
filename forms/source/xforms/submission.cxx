@@ -373,9 +373,9 @@ Model* Submission::getModelImpl() const
 }
 
 
-//
+
 // Property-Set implementation
-//
+
 
 #define HANDLE_ID 0
 #define HANDLE_Bind 1
@@ -645,7 +645,7 @@ Reference< XDocumentFragment > Submission::createSubmissionDocument(const Refere
     Reference< XDocument > aDocument = aDocBuilder->newDocument();
     Reference< XDocumentFragment > aFragment = aDocument->createDocumentFragment();
 
-    //
+
     if (aObj->getObjectType() == XPathObjectType_XPATH_NODESET)
     {
         Reference< XNodeList > aList = aObj->getNodeList();

@@ -33,9 +33,9 @@ using com::sun::star::xml::dom::DocumentBuilder;
 using com::sun::star::xml::dom::XDocumentBuilder;
 
 
-//
+
 // determine valid XML name
-//
+
 
 // character class:
 // 1: NameStartChar

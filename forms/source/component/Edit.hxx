@@ -27,13 +27,13 @@
 
 namespace dbtools { class FormattedColumnValue; }
 
-//.........................................................................
+
 namespace frm
 {
 
-//==================================================================
+
 //= OEditModel
-//==================================================================
+
 class OEditModel
                 :public OEditBaseModel
 {
@@ -118,9 +118,9 @@ private:
     bool    implActsAsRichText( ) const;
 };
 
-//==================================================================
+
 //= OEditControl
-//==================================================================
+
 typedef ::cppu::ImplHelper3<    ::com::sun::star::awt::XFocusListener,
                                 ::com::sun::star::awt::XKeyListener,
                                 ::com::sun::star::form::XChangeBroadcaster > OEditControl_BASE;
@@ -172,9 +172,9 @@ private:
     DECL_LINK( OnKeyPressed, void* );
 };
 
-//.........................................................................
+
 }
-//.........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_EDIT_HXX
 

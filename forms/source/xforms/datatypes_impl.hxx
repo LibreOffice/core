@@ -21,7 +21,7 @@
     #error "not to be included directly!"
 #endif
 
-//--------------------------------------------------------------------
+
 template< typename CONCRETE_DATA_TYPE_IMPL, typename SUPERCLASS >
 ODerivedDataType< CONCRETE_DATA_TYPE_IMPL, SUPERCLASS >::ODerivedDataType( const OUString& _rName, sal_Int16 _nTypeClass )
     :SUPERCLASS( _rName, _nTypeClass )
@@ -29,7 +29,7 @@ ODerivedDataType< CONCRETE_DATA_TYPE_IMPL, SUPERCLASS >::ODerivedDataType( const
 {
 }
 
-//--------------------------------------------------------------------
+
 template< typename CONCRETE_DATA_TYPE_IMPL, typename SUPERCLASS >
 ::cppu::IPropertyArrayHelper* ODerivedDataType< CONCRETE_DATA_TYPE_IMPL, SUPERCLASS >::createArrayHelper( ) const
 {
@@ -38,14 +38,14 @@ template< typename CONCRETE_DATA_TYPE_IMPL, typename SUPERCLASS >
     return new ::cppu::OPropertyArrayHelper( aProps );
 }
 
-//--------------------------------------------------------------------
+
 template< typename CONCRETE_DATA_TYPE_IMPL, typename SUPERCLASS >
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL ODerivedDataType< CONCRETE_DATA_TYPE_IMPL, SUPERCLASS >::getPropertySetInfo() throw( ::com::sun::star::uno::RuntimeException )
 {
         return ::cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper() );
 }
 
-//--------------------------------------------------------------------
+
 template< typename CONCRETE_DATA_TYPE_IMPL, typename SUPERCLASS >
 ::cppu::IPropertyArrayHelper& SAL_CALL ODerivedDataType< CONCRETE_DATA_TYPE_IMPL, SUPERCLASS >::getInfoHelper()
 {
@@ -59,7 +59,7 @@ template< typename CONCRETE_DATA_TYPE_IMPL, typename SUPERCLASS >
 }
 
 
-//--------------------------------------------------------------------
+
 template< typename VALUE_TYPE >
 OValueLimitedType< VALUE_TYPE >::OValueLimitedType( const OUString& _rName, sal_Int16 _nTypeClass )
     :OValueLimitedType_Base( _rName, _nTypeClass )

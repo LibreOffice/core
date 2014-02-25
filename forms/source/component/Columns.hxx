@@ -37,14 +37,14 @@
 
 using namespace comphelper;
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
 
-//==================================================================
+
+
 // OGridColumn
-//==================================================================
+
 typedef ::cppu::WeakAggComponentImplHelper2 <   ::com::sun::star::lang::XUnoTunnel
                                             ,   ::com::sun::star::util::XCloneable > OGridColumn_BASE;
 class OGridColumn   :public ::comphelper::OBaseMutex
@@ -203,8 +203,8 @@ DECL_COLUMN(FormattedFieldColumn)
 
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_COLUMNS_HXX
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

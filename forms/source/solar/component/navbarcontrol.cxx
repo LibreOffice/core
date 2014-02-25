@@ -45,10 +45,10 @@ extern "C" void SAL_CALL createRegistryInfo_ONavigationBarControl()
     static ::frm::OMultiInstanceAutoRegistration< ::frm::ONavigationBarControl > aAutoRegistration;
 }
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
@@ -65,9 +65,9 @@ namespace frm
         xTypedPeer->method( param1 );  \
     }
 
-    //==================================================================
+
     // ONavigationBarControl
-    //==================================================================
+
 
     ONavigationBarControl::ONavigationBarControl( const Reference< XComponentContext >& _rxORB)
         :UnoControl(), m_xContext(_rxORB)
@@ -96,7 +96,7 @@ namespace frm
 
     namespace
     {
-        //..............................................................
+
         static WinBits lcl_getWinBits_nothrow( const Reference< XControlModel >& _rxModel )
         {
             WinBits nBits = 0;
@@ -229,9 +229,9 @@ namespace frm
         FORWARD_TO_PEER_1( XVclWindowPeer, setDesignMode, _bOn );
     }
 
-    //==================================================================
+
     // ONavigationBarPeer
-    //==================================================================
+
 
     ONavigationBarPeer* ONavigationBarPeer::Create( const Reference< XComponentContext >& _rxORB,
         Window* _pParentWindow, const Reference< XControlModel >& _rxModel )
@@ -517,8 +517,8 @@ namespace frm
         _rFeatureIds.push_back( FormFeature::RemoveFilterAndSort );
     }
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

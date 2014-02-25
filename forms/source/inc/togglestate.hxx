@@ -20,16 +20,16 @@
 #ifndef INCLUDED_FORMS_SOURCE_INC_TOGGLESTATE_HXX
 #define INCLUDED_FORMS_SOURCE_INC_TOGGLESTATE_HXX
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     enum ToggleState { TRISTATE_FALSE = 0, TRISTATE_TRUE = 1, TRISTATE_INDET = 2 };
 
-//........................................................................
+
 } // namespace frm
-//........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_INC_TOGGLESTATE_HXX
 

@@ -459,7 +459,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
         }
     }
 
-    //=========================================================================
+
     /* ------------------------------------------------------------------ */
     private boolean ensureDataSource() throws Exception
     {

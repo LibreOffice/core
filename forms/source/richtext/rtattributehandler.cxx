@@ -35,13 +35,13 @@
 #include <editeng/frmdiritem.hxx>
 #include <editeng/scripttypeitem.hxx>
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
-    //====================================================================
+
+
     //= ReferenceBase
-    //====================================================================
+
 
     oslInterlockedCount SAL_CALL ReferenceBase::acquire()
     {
@@ -59,9 +59,9 @@ namespace frm
     {
     }
 
-    //====================================================================
+
     //= AttributeHandler
-    //====================================================================
+
 
     AttributeHandler::AttributeHandler( AttributeId _nAttributeId, WhichId _nWhichId )
         :m_nAttribute( _nAttributeId )
@@ -125,9 +125,9 @@ namespace frm
         return aState;
     }
 
-    //====================================================================
+
     //= AttributeHandlerFactory
-    //====================================================================
+
 
     namespace
     {
@@ -199,9 +199,9 @@ namespace frm
         return pReturn;
     }
 
-    //====================================================================
+
     //= ParaAlignmentHandler
-    //====================================================================
+
 
     ParaAlignmentHandler::ParaAlignmentHandler( AttributeId _nAttributeId )
         :AttributeHandler( _nAttributeId, EE_PARA_JUST )
@@ -235,9 +235,9 @@ namespace frm
         _rNewAttribs.Put( SvxAdjustItem( m_eAdjust, getWhich() ) );
     }
 
-    //====================================================================
+
     //= LineSpacingHandler
-    //====================================================================
+
 
     LineSpacingHandler::LineSpacingHandler( AttributeId _nAttributeId )
         :AttributeHandler( _nAttributeId, EE_PARA_SBL )
@@ -278,9 +278,9 @@ namespace frm
         _rNewAttribs.Put( aLineSpacing );
     }
 
-    //====================================================================
+
     //= EscapementHandler
-    //====================================================================
+
 
     EscapementHandler::EscapementHandler( AttributeId _nAttributeId )
         :AttributeHandler( _nAttributeId, EE_CHAR_ESCAPEMENT )
@@ -315,9 +315,9 @@ namespace frm
         _rNewAttribs.Put( SvxEscapementItem( bIsChecked ? SVX_ESCAPEMENT_OFF : m_eEscapement, getWhich() ) );
     }
 
-    //====================================================================
+
     //= SlotHandler
-    //====================================================================
+
 
     SlotHandler::SlotHandler( AttributeId _nAttributeId, WhichId _nWhichId )
         :AttributeHandler( _nAttributeId, _nWhichId )
@@ -358,9 +358,9 @@ namespace frm
             OSL_FAIL( "SlotHandler::executeAttribute: need attributes to do something!" );
     }
 
-    //====================================================================
+
     //= FontSizeHandler
-    //====================================================================
+
 
     FontSizeHandler::FontSizeHandler( AttributeId _nAttributeId, WhichId _nWhichId )
         :AttributeHandler( _nAttributeId, _nWhichId )
@@ -429,9 +429,9 @@ namespace frm
         }
     }
 
-    //====================================================================
+
     //= ParagraphDirectionHandler
-    //====================================================================
+
 
     ParagraphDirectionHandler::ParagraphDirectionHandler( AttributeId _nAttributeId )
         :AttributeHandler( _nAttributeId, EE_PARA_WRITINGDIR )
@@ -477,9 +477,9 @@ namespace frm
             _rNewAttribs.Put( SvxAdjustItem( m_eDefaultAdjustment, EE_PARA_JUST ) );
     }
 
-    //====================================================================
+
     //= BooleanHandler
-    //====================================================================
+
 
     BooleanHandler::BooleanHandler( AttributeId _nAttributeId, WhichId _nWhichId )
         :AttributeHandler( _nAttributeId, _nWhichId )
@@ -509,8 +509,8 @@ namespace frm
         }
     }
 
-//........................................................................
+
 }   // namespace frm
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

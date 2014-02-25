@@ -35,14 +35,14 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase6.hxx>
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= FormOperations
-    //====================================================================
+
     typedef ::cppu::WeakComponentImplHelper6    <   ::com::sun::star::form::runtime::XFormOperations
                                                 ,   ::com::sun::star::lang::XInitialization
                                                 ,   ::com::sun::star::lang::XServiceInfo
@@ -376,9 +376,9 @@ namespace frm
         };
     };
 
-//........................................................................
+
 } // namespace frm
-//........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_RUNTIME_FORMOPERATIONS_HXX
 

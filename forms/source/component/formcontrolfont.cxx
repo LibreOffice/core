@@ -28,10 +28,10 @@
 #include <com/sun/star/awt/FontRelief.hpp>
 #include <com/sun/star/awt/FontEmphasisMark.hpp>
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 
     using namespace ::comphelper;
     using namespace ::com::sun::star::uno;
@@ -119,9 +119,9 @@ namespace frm
         }
     }
 
-    //=====================================================================
+
     //= FontControlModel
-    //=====================================================================
+
 
     FontControlModel::FontControlModel( bool _bToolkitCompatibleDefaults )
         :m_nFontRelief( FontRelief::NONE )
@@ -571,8 +571,8 @@ namespace frm
         return aReturn;
     }
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

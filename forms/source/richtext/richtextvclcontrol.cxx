@@ -38,16 +38,16 @@
 #include <editeng/editids.hrc>
 #include <svx/svxids.hrc>
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::awt;
 
-    //====================================================================
+
     //= RichTextControl
-    //====================================================================
+
 
     RichTextControl::RichTextControl( RichTextEngine* _pEngine, Window* _pParent, WinBits _nStyle,
         ITextAttributeListener* _pTextAttribListener, ITextSelectionListener* _pSelectionListener )
@@ -363,9 +363,9 @@ namespace frm
         return m_pImpl->GetHideInactiveSelection( );
     }
 
-//........................................................................
+
 }   // namespace frm
-//........................................................................
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

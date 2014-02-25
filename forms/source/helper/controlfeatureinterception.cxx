@@ -20,19 +20,19 @@
 #include "controlfeatureinterception.hxx"
 #include "urltransformer.hxx"
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::lang;
 
-    //====================================================================
+
     //= ControlFeatureInterception
-    //====================================================================
+
 
     ControlFeatureInterception::ControlFeatureInterception( const Reference< XComponentContext >& _rxORB )
         :m_pUrlTransformer( new UrlTransformer( _rxORB ) )
@@ -150,8 +150,8 @@ namespace frm
         return queryDispatch( m_pUrlTransformer->getStrictURLFromAscii( _pAsciiURL ) );
     }
 
-//........................................................................
+
 } // namespace frm
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

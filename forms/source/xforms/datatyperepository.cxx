@@ -32,10 +32,10 @@
 #include <algorithm>
 #include <o3tl/compat_functional.hxx>
 
-//........................................................................
+
 namespace xforms
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::RuntimeException;
@@ -51,9 +51,9 @@ namespace xforms
     using ::com::sun::star::xsd::XDataType;
     using namespace frm;
 
-    //====================================================================
+
     //= ODataTypeRepository
-    //====================================================================
+
 
     ODataTypeRepository::ODataTypeRepository( )
     {
@@ -272,8 +272,8 @@ namespace xforms
         REGISTER_VOID_PROP( XSD_MIN_INCLUSIVE_INT, m_aMinInclusive, ValueType );
         REGISTER_VOID_PROP( XSD_MIN_EXCLUSIVE_INT, m_aMinExclusive, ValueType );
     }
-//........................................................................
+
 } // namespace xforms
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

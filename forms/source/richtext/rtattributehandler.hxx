@@ -28,14 +28,14 @@
 class SfxItemSet;
 class SfxPoolItem;
 class SfxItemPool;
-//........................................................................
+
 namespace frm
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= ReferenceBase
-    //====================================================================
+
     class ReferenceBase : public ::rtl::IReference
     {
     protected:
@@ -50,9 +50,9 @@ namespace frm
         virtual ~ReferenceBase();
     };
 
-    //====================================================================
+
     //= IAttributeHandler
-    //====================================================================
+
     class IAttributeHandler : public ::rtl::IReference
     {
     public:
@@ -64,9 +64,9 @@ namespace frm
         ~IAttributeHandler() {}
     };
 
-    //====================================================================
+
     //= AttributeHandler
-    //====================================================================
+
     class AttributeHandler  :public ReferenceBase
                             ,public IAttributeHandler
     {
@@ -104,9 +104,9 @@ namespace frm
         virtual ~AttributeHandler();
     };
 
-    //====================================================================
+
     //= AttributeHandlerFactory
-    //====================================================================
+
     class AttributeHandlerFactory
     {
     public:
@@ -119,9 +119,9 @@ namespace frm
         ~AttributeHandlerFactory();                                             // never implemented
     };
 
-    //====================================================================
+
     //= ParaAlignmentHandler
-    //====================================================================
+
     class ParaAlignmentHandler : public AttributeHandler
     {
     private:
@@ -135,9 +135,9 @@ namespace frm
         virtual     void                executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const;
     };
 
-    //====================================================================
+
     //= LineSpacingHandler
-    //====================================================================
+
     class LineSpacingHandler : public AttributeHandler
     {
     private:
@@ -151,9 +151,9 @@ namespace frm
         virtual     void                executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const;
     };
 
-    //====================================================================
+
     //= EscapementHandler
-    //====================================================================
+
     class EscapementHandler : public AttributeHandler
     {
     private:
@@ -167,9 +167,9 @@ namespace frm
         virtual     void                executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const;
     };
 
-    //====================================================================
+
     //= SlotHandler
-    //====================================================================
+
     class SlotHandler : public AttributeHandler
     {
     private:
@@ -183,9 +183,9 @@ namespace frm
         virtual     void            executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const;
     };
 
-    //====================================================================
+
     //= BooleanHandler
-    //====================================================================
+
     class BooleanHandler : public AttributeHandler
     {
     public:
@@ -196,9 +196,9 @@ namespace frm
         virtual     void                executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const;
     };
 
-    //====================================================================
+
     //= FontSizeHandler
-    //====================================================================
+
     class FontSizeHandler : public AttributeHandler
     {
     public:
@@ -209,9 +209,9 @@ namespace frm
         virtual     void            executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const;
     };
 
-    //====================================================================
+
     //= ParagraphDirectionHandler
-    //====================================================================
+
     class ParagraphDirectionHandler : public AttributeHandler
     {
     private:
@@ -227,9 +227,9 @@ namespace frm
         virtual     void                executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const;
     };
 
-//........................................................................
+
 } // namespace frm
-//........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_RICHTEXT_RTATTRIBUTEHANDLER_HXX
 

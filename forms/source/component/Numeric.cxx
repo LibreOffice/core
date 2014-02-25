@@ -21,10 +21,10 @@
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
@@ -38,9 +38,9 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::form::binding;
 
-//==================================================================
+
 // ONumericControl
-//==================================================================
+
 
 
 ONumericControl::ONumericControl(const Reference<XComponentContext>& _rxFactory)
@@ -72,9 +72,9 @@ Sequence<Type> ONumericControl::_getTypes()
     return OBoundControl::_getTypes();
 }
 
-//==================================================================
+
 // ONumericModel
-//==================================================================
+
 
 InterfaceRef SAL_CALL ONumericModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
@@ -203,8 +203,8 @@ void ONumericModel::resetNoBroadcast()
     m_aSaveValue.clear();
 }
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

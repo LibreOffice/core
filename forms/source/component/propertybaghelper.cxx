@@ -35,10 +35,10 @@
 
 #define NEW_HANDLE_BASE 10000
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::uno::Sequence;
@@ -57,9 +57,9 @@ namespace frm
 
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
 
-    //====================================================================
+
     //= helper
-    //====================================================================
+
     namespace
     {
 
@@ -70,9 +70,9 @@ namespace frm
         }
     }
 
-    //====================================================================
+
     //= PropertyBagHelper
-    //====================================================================
+
 
     PropertyBagHelper::PropertyBagHelper( IPropertyBagHelperContext& _rContext )
         :m_rContext( _rContext )
@@ -338,8 +338,8 @@ namespace frm
         xMe->setPropertyValues( aNames, aValues );
     }
 
-//........................................................................
+
 } // namespace frm
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

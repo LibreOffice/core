@@ -67,10 +67,10 @@ extern "C" void SAL_CALL createRegistryInfo_FormOperations()
     static ::frm::OMultiInstanceAutoRegistration< ::frm::FormOperations > aAutoRegistration;
 }
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     using ::dbtools::SQLExceptionInfo;
     using ::com::sun::star::uno::Reference;
@@ -121,9 +121,9 @@ namespace frm
     namespace FormFeature = ::com::sun::star::form::runtime::FormFeature;
     namespace RowChangeAction = ::com::sun::star::sdb::RowChangeAction;
 
-    //====================================================================
+
     //= FormOperations
-    //====================================================================
+
 
     FormOperations::FormOperations( const Reference< XComponentContext >& _rxContext )
         :FormOperations_Base( m_aMutex )
@@ -1760,8 +1760,8 @@ namespace frm
         }
     }
 
-//........................................................................
+
 } // namespace frm
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

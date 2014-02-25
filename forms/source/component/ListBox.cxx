@@ -59,7 +59,7 @@
 #include <iterator>
 
 
-//.........................................................................
+
 namespace frm
 {
     using namespace ::com::sun::star::uno;
@@ -78,9 +78,9 @@ namespace frm
 
     using ::connectivity::ORowSetValue;
 
-    //==============================================================================
+
     //= helper
-    //==============================================================================
+
     namespace
     {
 
@@ -123,14 +123,14 @@ namespace frm
         }
     }
 
-    //==============================================================================
+
     //= ItemEventDescription
-    //==============================================================================
+
     typedef ::comphelper::EventHolder< ItemEvent >    ItemEventDescription;
 
-    //==============================================================================
+
     //= OListBoxModel
-    //==============================================================================
+
 
     InterfaceRef SAL_CALL OListBoxModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
     {
@@ -1410,7 +1410,7 @@ namespace frm
 
     namespace
     {
-        //................................................................
+
         struct ExtractStringFromSequence_Safe : public ::std::unary_function< sal_Int16, OUString >
         {
         protected:
@@ -1428,7 +1428,7 @@ namespace frm
             }
         };
 
-        //................................................................
+
         Any lcl_getSingleSelectedEntry( const Sequence< sal_Int16 >& _rSelectSequence, const Sequence< OUString >& _rStringList )
         {
             Any aReturn;
@@ -1448,7 +1448,7 @@ namespace frm
             return aReturn;
         }
 
-        //................................................................
+
         Any lcl_getMultiSelectedEntries( const Sequence< sal_Int16 >& _rSelectSequence, const Sequence< OUString >& _rStringList )
         {
             Sequence< OUString > aSelectedEntriesTexts( _rSelectSequence.getLength() );
@@ -1461,7 +1461,7 @@ namespace frm
             return makeAny( aSelectedEntriesTexts );
         }
 
-        //................................................................
+
         struct ExtractAnyFromValueList_Safe : public ::std::unary_function< sal_Int16, Any >
         {
         protected:
@@ -1479,7 +1479,7 @@ namespace frm
             }
         };
 
-        //................................................................
+
         Any lcl_getSingleSelectedEntryAny( const Sequence< sal_Int16 >& _rSelectSequence, const ValueList& _rStringList )
         {
             Any aReturn;
@@ -1495,7 +1495,7 @@ namespace frm
             return aReturn;
         }
 
-        //................................................................
+
         Any lcl_getMultiSelectedEntriesAny( const Sequence< sal_Int16 >& _rSelectSequence, const ValueList& _rStringList )
         {
             Sequence< Any > aSelectedEntriesValues( _rSelectSequence.getLength() );
@@ -1722,9 +1722,9 @@ namespace frm
             initFromField( m_xCursor );
     }
 
-    //==================================================================
+
     // OListBoxControl
-    //==================================================================
+
 
 
     InterfaceRef SAL_CALL OListBoxControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
@@ -2129,8 +2129,8 @@ namespace frm
             m_xAggregateListBox->makeVisible( nEntry );
     }
 
-//.........................................................................
+
 }
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

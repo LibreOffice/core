@@ -36,14 +36,14 @@
 
 #include <memory>
 
-//........................................................................
+
 namespace xforms
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= OXSDDataType
-    //====================================================================
+
     typedef ::cppu::WeakImplHelper1             <   ::com::sun::star::xsd::XDataType
                                                 >   OXSDDataType_Base;
     typedef ::comphelper::OMutexAndBroadcastHelper  OXSDDataType_BBase;
@@ -135,9 +135,9 @@ namespace xforms
         virtual void        registerProperties();
     };
 
-    //====================================================================
+
     //= helper for deriving from OXSDDataType
-    //====================================================================
+
 #define DECLARE_DEFAULT_CLONING( classname )        \
     virtual OXSDDataType* createClone( const OUString& _rName ) const;    \
     virtual void       initializeClone( const OXSDDataType& _rCloneSource ); \
@@ -169,9 +169,9 @@ namespace xforms
     registerMayBeVoidProperty( PROPERTY_##prop, PROPERTY_ID_##prop, ::com::sun::star::beans::PropertyAttribute::BOUND | ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, \
         &memberAny, ::getCppuType( static_cast< type* >( NULL ) ) );
 
-    //====================================================================
+
     //= OValueLimitedType_Base
-    //====================================================================
+
     class OValueLimitedType_Base : public OXSDDataType
     {
     protected:
@@ -225,9 +225,9 @@ namespace xforms
         virtual void normalizeValue( const ::com::sun::star::uno::Any& _rValue, double& _rDoubleValue ) const = 0;
     };
 
-    //====================================================================
+
     //= OValueLimitedType
-    //====================================================================
+
     template < typename VALUE_TYPE >
     class OValueLimitedType : public OValueLimitedType_Base
     {
@@ -243,9 +243,9 @@ namespace xforms
         virtual void            registerProperties();
     };
 
-    //====================================================================
+
     //= ODerivedDataType
-    //====================================================================
+
     /** helper class for implementing interfaces derived from XDataType
     */
     template< typename CONCRETE_DATA_TYPE_IMPL, typename SUPERCLASS = OXSDDataType >
@@ -267,9 +267,9 @@ namespace xforms
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
     };
 
-    //====================================================================
+
     //= OBooleanType
-    //====================================================================
+
     class OBooleanType;
     typedef ODerivedDataType< OBooleanType > OBooleanType_Base;
     class OBooleanType : public OBooleanType_Base
@@ -285,9 +285,9 @@ namespace xforms
         virtual OUString _explainInvalid( sal_uInt16 nReason );
     };
 
-    //====================================================================
+
     //= OStringType
-    //====================================================================
+
     class OStringType;
     typedef ODerivedDataType< OStringType > OStringType_Base;
     class OStringType   :public OStringType_Base
@@ -312,9 +312,9 @@ namespace xforms
         virtual void            registerProperties();
     };
 
-    //====================================================================
+
     //= ODecimalType
-    //====================================================================
+
     class ODecimalType;
     typedef ODerivedDataType< ODecimalType, OValueLimitedType< double > > ODecimalType_Base;
     class ODecimalType : public ODecimalType_Base
@@ -342,9 +342,9 @@ namespace xforms
         using ODecimalType_Base::initializeTypedClone;
     };
 
-    //====================================================================
+
     //=
-    //====================================================================
+
 #define DEFAULT_DECLARE_SUBTYPE( classname, valuetype )         \
     class classname;                                            \
     typedef ODerivedDataType< classname, OValueLimitedType< valuetype > > classname##_Base;  \
@@ -368,24 +368,24 @@ namespace xforms
         using classname##_Base::initializeTypedClone;          \
     };
 
-    //====================================================================
+
     //= ODateType
-    //====================================================================
+
     DEFAULT_DECLARE_SUBTYPE( ODateType, ::com::sun::star::util::Date )
 
-    //====================================================================
+
     //= OTimeType
-    //====================================================================
+
     DEFAULT_DECLARE_SUBTYPE( OTimeType, ::com::sun::star::util::Time )
 
-    //====================================================================
+
     //= ODateTimeType
-    //====================================================================
+
     DEFAULT_DECLARE_SUBTYPE( ODateTimeType, ::com::sun::star::util::DateTime )
 
-    //====================================================================
+
     //= OShortIntegerType
-    //====================================================================
+
     class OShortIntegerType;
     typedef ODerivedDataType< OShortIntegerType, OValueLimitedType< sal_Int16 > > OShortIntegerType_Base;
     class OShortIntegerType : public OShortIntegerType_Base
@@ -407,9 +407,9 @@ namespace xforms
         using OShortIntegerType_Base::initializeTypedClone;
     };
 
-//........................................................................
+
 } // namespace xforms
-//........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_XFORMS_DATATYPES_HXX
 
