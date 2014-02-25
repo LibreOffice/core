@@ -3009,7 +3009,7 @@ uno::Sequence< beans::PropertyValue > SwXTextTable::createSortDescriptor(void)
 }
 
 void SwXTextTable::sort(const uno::Sequence< beans::PropertyValue >& rDescriptor)
-    throw( uno::RuntimeException )
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     SwSortOptions aSortOpt;

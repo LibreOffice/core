@@ -368,7 +368,9 @@ public:
 
     //XSortable
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL createSortDescriptor(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL sort(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& xDescriptor) throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL sort(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& xDescriptor)
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
 
     //XAutoFormattable
     virtual void SAL_CALL autoFormat(const OUString& aName)
