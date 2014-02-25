@@ -25,11 +25,11 @@
 #include "accessibility/extended/AccessibleGridControlHeaderCell.hxx"
 #include "accessibility/extended/AccessibleGridControlTableBase.hxx"
 
-// ============================================================================
+
 
 namespace accessibility {
 
-// ============================================================================
+
 
 /** This class represents the accessible object of a header bar of a Grid Control
    (row or column header bar). This object supports the
@@ -200,11 +200,11 @@ inline sal_Bool AccessibleGridControlHeader::isColumnBar() const
     return getType() == ::svt::table::TCTYPE_COLUMNHEADERBAR;
 }
 
-// ============================================================================
+
 
 } // namespace accessibility
 
-// ============================================================================
+
 
 #endif // ACCESSIBILITY_EXT_ACCESSIBILEGRIDCONTROLHEADER_HXX
 

@@ -23,14 +23,14 @@
 #include "accessibility/extended/AccessibleBrowseBoxBase.hxx"
 #include <svtools/AccessibleBrowseBoxObjType.hxx>
 
-// .................................................................................
+
 namespace accessibility
 {
-// .................................................................................
 
-    // =============================================================================
+
+
     // = AccessibleBrowseBoxCell
-    // =============================================================================
+
     /** common accessibility-functionality for browse box elements which occupy a cell
     */
     class AccessibleBrowseBoxCell : public AccessibleBrowseBoxBase
@@ -70,9 +70,9 @@ namespace accessibility
         AccessibleBrowseBoxCell& operator=( const AccessibleBrowseBoxCell& );   // never implemented
     };
 
-// .................................................................................
+
 }   // namespace accessibility
-// .................................................................................
+
 
 
 #endif // ACCESSIBILITY_ACCESSIBLE_BROWSE_BOX_CELL_HXX

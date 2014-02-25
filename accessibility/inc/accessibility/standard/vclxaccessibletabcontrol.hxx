@@ -28,9 +28,9 @@
 class TabControl;
 
 
-//  ----------------------------------------------------
+
 //  class VCLXAccessibleTabControl
-//  ----------------------------------------------------
+
 
 typedef ::cppu::ImplHelper1 <
     ::com::sun::star::accessibility::XAccessibleSelection > VCLXAccessibleTabControl_BASE;

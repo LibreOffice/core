@@ -38,9 +38,9 @@ using namespace ::com::sun::star::accessibility;
 
 namespace
 {
-    // =========================================================================
+
     // = OToolBoxWindowItemContext
-    // =========================================================================
+
     /** XAccessibleContext implementation for a toolbox item which is represented by a VCL Window
     */
     class OToolBoxWindowItemContext : public OAccessibleContextWrapper
@@ -70,9 +70,9 @@ namespace
         return m_nIndexInParent;
     }
 
-    // =========================================================================
+
     // = OToolBoxWindowItem
-    // =========================================================================
+
     typedef ::cppu::ImplHelper1 <   XUnoTunnel
                                 >   OToolBoxWindowItem_Base;
 

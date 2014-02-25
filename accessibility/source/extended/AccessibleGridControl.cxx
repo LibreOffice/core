@@ -27,12 +27,12 @@
 #include <comphelper/types.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
-// ============================================================================
+
 
 namespace accessibility
 {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
@@ -41,7 +41,7 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::svt;
 using namespace ::svt::table;
 
-// ============================================================================
+
 class AccessibleGridControl_Impl
 {
 public:
@@ -402,9 +402,9 @@ void AccessibleGridControl::commitTableEvent(sal_Int16 _nEventId,const Any& _rNe
             m_pImpl->m_pTable->commitEvent(_nEventId,_rNewValue,_rOldValue);
     }
 }
-// ============================================================================
+
 // = AccessibleGridControlAccess
-// ============================================================================
+
 
 
 AccessibleGridControlAccess::AccessibleGridControlAccess(
@@ -456,7 +456,7 @@ bool AccessibleGridControlAccess::isContextAlive() const
     return  ( NULL != m_pContext ) && m_pContext->isAlive();
 }
 
-// ============================================================================
+
 
 }   // namespace accessibility
 

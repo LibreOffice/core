@@ -31,14 +31,14 @@ namespace utl {
 class AccessibleStateSetHelper;
 }
 
-//.........................................................................
+
 namespace accessibility
 {
-//.........................................................................
 
-    //  ----------------------------------------------------
+
+
     //  class AccessibleTabBarPage
-    //  ----------------------------------------------------
+
 
     typedef ::cppu::ImplHelper2<
         ::com::sun::star::accessibility::XAccessible,
@@ -121,9 +121,9 @@ namespace accessibility
         virtual OUString SAL_CALL getToolTipText(  ) throw (::com::sun::star::uno::RuntimeException);
     };
 
-//.........................................................................
+
 }   // namespace accessibility
-//.........................................................................
+
 
 #endif // ACCESSIBILITY_EXT_ACCESSIBLETABBARPAGE_HXX_
 

@@ -28,9 +28,9 @@
 #include <cppuhelper/implbase2.hxx>
 
 
-//  ----------------------------------------------------
+
 //  class VCLXAccessibleRadioButton
-//  ----------------------------------------------------
+
 
 typedef ::cppu::ImplHelper2<
     ::com::sun::star::accessibility::XAccessibleAction,

@@ -26,9 +26,9 @@
 
 class StatusBar;
 
-//  ----------------------------------------------------
+
 //  class VCLXAccessibleStatusBar
-//  ----------------------------------------------------
+
 
 class VCLXAccessibleStatusBar : public VCLXAccessibleComponent
 {
