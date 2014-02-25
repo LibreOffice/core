@@ -2489,12 +2489,12 @@ structure_header :
         // Polymorphic struct type templates with base types would cause various
         // problems in language bindings, so forbid them here.  For example,
         // GCC prior to version 3.4 fails with code like
-        //
+
         //  struct Base { ... };
         //  template< typename typeparam_T > struct Derived: public Base {
         //      int member1 CPPU_GCC3_ALIGN(Base);
         //      ... };
-        //
+
         // (Note that plain struct types with instantiated polymorphic struct
         // type bases, which might also cause problems in language bindings, are
         // already rejected on a syntactic level.)
