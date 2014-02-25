@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//////////////////////////////////////////////////////////////////////
+
 // AccTextBase.cpp: implementation of the CAccTextBase class.
-//////////////////////////////////////////////////////////////////////
+
 #include "stdafx.h"
 #include <string>
 
@@ -38,9 +38,9 @@ using namespace com::sun::star::accessibility;
 using namespace com::sun::star::uno;
 using namespace rtl;
 
-//////////////////////////////////////////////////////////////////////
+
 // Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+
 
 static OUString ReplaceFourChar(OUString oldOUString);
 
@@ -529,7 +529,7 @@ STDMETHODIMP CAccTextBase::get_textBeforeOffset(long offset, IA2TextBoundaryType
         return E_FAIL;
 
     // In New UNO IAccessibleText.idl these constant values are defined as follows:
-    //
+
     //  const long TEXT_BOUNDARY_CHAR = -1;
     //  const long TEXT_BOUNDARY_TO_CURSOR_POS = -2;
     //  const long TEXT_BOUNDARY_START_OF_WORD = -3;
@@ -538,9 +538,9 @@ STDMETHODIMP CAccTextBase::get_textBeforeOffset(long offset, IA2TextBoundaryType
     //  const long TEXT_BOUNDARY_END_OF_SENTENCE = -6;
     //  const long TEXT_BOUNDARY_START_OF_LINE = -7;
     //  const long TEXT_BOUNDARY_END_OF_LINE = -8;
-    //
+
     // In UNO, the corresponding values are as follows:
-    //
+
     //  const short CHARACTER = 1;
     //  const short WORD = 2;
     //  const short SENTENCE = 3;
@@ -548,7 +548,7 @@ STDMETHODIMP CAccTextBase::get_textBeforeOffset(long offset, IA2TextBoundaryType
     //  const short LINE = 5;
     //  const short GLYPH = 6;
     //  const short ATTRIBUTE_RUN = 7;
-    //
+
 
     long            lUnoBoundaryType;
 
@@ -616,7 +616,7 @@ STDMETHODIMP CAccTextBase::get_textAfterOffset(long offset, IA2TextBoundaryType 
         return E_FAIL;
 
     // In New UNO IAccessibleText.idl these constant values are defined as follows:
-    //
+
     //  const long TEXT_BOUNDARY_CHAR = -1;
     //  const long TEXT_BOUNDARY_TO_CURSOR_POS = -2;
     //  const long TEXT_BOUNDARY_START_OF_WORD = -3;
@@ -625,9 +625,9 @@ STDMETHODIMP CAccTextBase::get_textAfterOffset(long offset, IA2TextBoundaryType 
     //  const long TEXT_BOUNDARY_END_OF_SENTENCE = -6;
     //  const long TEXT_BOUNDARY_START_OF_LINE = -7;
     //  const long TEXT_BOUNDARY_END_OF_LINE = -8;
-    //
+
     // In UNO, the corresponding values are as follows:
-    //
+
     //  const short CHARACTER = 1;
     //  const short WORD = 2;
     //  const short SENTENCE = 3;
@@ -635,7 +635,7 @@ STDMETHODIMP CAccTextBase::get_textAfterOffset(long offset, IA2TextBoundaryType 
     //  const short LINE = 5;
     //  const short GLYPH = 6;
     //  const short ATTRIBUTE_RUN = 7;
-    //
+
 
     long            lUnoBoundaryType;
     switch(boundaryType)
@@ -702,7 +702,7 @@ STDMETHODIMP CAccTextBase::get_textAtOffset(long offset, IA2TextBoundaryType bou
         return E_FAIL;
 
     // In New UNO IAccessibleText.idl these constant values are defined as follows:
-    //
+
     //  const long TEXT_BOUNDARY_CHAR = -1;
     //  const long TEXT_BOUNDARY_TO_CURSOR_POS = -2;
     //  const long TEXT_BOUNDARY_START_OF_WORD = -3;
@@ -711,9 +711,9 @@ STDMETHODIMP CAccTextBase::get_textAtOffset(long offset, IA2TextBoundaryType bou
     //  const long TEXT_BOUNDARY_END_OF_SENTENCE = -6;
     //  const long TEXT_BOUNDARY_START_OF_LINE = -7;
     //  const long TEXT_BOUNDARY_END_OF_LINE = -8;
-    //
+
     // In UNO, the corresponding values are as follows:
-    //
+
     //  const short CHARACTER = 1;
     //  const short WORD = 2;
     //  const short SENTENCE = 3;
@@ -721,7 +721,7 @@ STDMETHODIMP CAccTextBase::get_textAtOffset(long offset, IA2TextBoundaryType bou
     //  const short LINE = 5;
     //  const short GLYPH = 6;
     //  const short ATTRIBUTE_RUN = 7;
-    //
+
 
     long            lUnoBoundaryType;
 
