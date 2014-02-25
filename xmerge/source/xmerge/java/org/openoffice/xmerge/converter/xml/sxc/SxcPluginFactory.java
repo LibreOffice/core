@@ -54,7 +54,7 @@ public abstract class SxcPluginFactory
         throws IOException {
 
         // read zipped XML stream
-        //
+
         SxcDocument doc = new SxcDocument(name);
         doc.read(is);
         return doc;
@@ -64,7 +64,7 @@ public abstract class SxcPluginFactory
         throws IOException {
 
         // read zipped XML stream
-        //
+
         SxcDocument doc = new SxcDocument(name);
         doc.read(is,isZip);
         return doc;

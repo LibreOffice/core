@@ -231,7 +231,7 @@ public class ParaStyle extends Style implements Cloneable {
         // Look for children.  Only ones we care about are "style:properties"
         // nodes.  If any are found, recursively traverse them, passing
         // along the style element to add properties to.
-        //
+
         if (node.hasChildNodes()) {
             NodeList children = node.getChildNodes();
             int len = children.getLength();

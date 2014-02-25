@@ -44,7 +44,7 @@ public class ConverterInfo {
 
     static {
        // This needs to be updated to reflect all valid office types.
-       //
+
        validOfficeTypes = new String[2];
        validOfficeTypes[0] = SxwType;
        validOfficeTypes[1] = SxcType;
@@ -110,7 +110,7 @@ public class ConverterInfo {
         piClassLoader = this.getClass().getClassLoader();
 
         // Get instance of the PluginFactory.
-        //
+
         try {
             URL jarURL = new URL(jarName);
             URLClassLoader loader = new URLClassLoader(new URL[] { jarURL },
@@ -123,7 +123,7 @@ public class ConverterInfo {
             piPluginFactory = ( PluginFactory ) construct.newInstance(arguments);
 
             // See which interfaces the plug-in PluginFactory supports.
-            //
+
             Class<?>[] cl = piPluginFactory.getClass().getInterfaces();
             for (int i=0; i < cl.length; i++) {
 
@@ -185,7 +185,7 @@ public class ConverterInfo {
         piClassLoader = this.getClass().getClassLoader();
 
         // Get instance of the PluginFactory.
-        //
+
         try {
             URL jarURL = new URL(jarName);
             URLClassLoader loader = new URLClassLoader(new URL[] { jarURL },
@@ -198,7 +198,7 @@ public class ConverterInfo {
             piPluginFactory = ( PluginFactory ) construct.newInstance(arguments);
 
             // See which interfaces the plug-in PluginFactory supports.
-            //
+
             Class<?>[] cl = piPluginFactory.getClass().getInterfaces();
             for (int i=0; i < cl.length; i++) {
 

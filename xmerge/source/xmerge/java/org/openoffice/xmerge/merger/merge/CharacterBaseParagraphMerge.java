@@ -143,7 +143,7 @@ public final class CharacterBaseParagraphMerge
         String tmpString;
 
         // Handle situation where getNodeValue returns null
-        //
+
         if (orgNode.getNodeValue() != null)
            tmpString = orgNode.getNodeValue();
         else
@@ -167,11 +167,11 @@ public final class CharacterBaseParagraphMerge
         int lastDiffPosition = -1;
 
         // starting to diff
-        //
+
         for (int j = startDiffNum; j < endDiffNum; j++) {
 
             // copy any contents before the diff
-            //
+
             if (diffs[j].getOrgPosition() > orgTextPosition) {
                 // need to flush first
                 if (cacheLength > 0) {
@@ -199,7 +199,7 @@ public final class CharacterBaseParagraphMerge
 
             // for any deleted characters, just skip without copy
             // but still need to take care the cached characters
-            //
+
             if (diffs[j].getOperation() == Difference.DELETE) {
                 orgTextPosition++;
 
