@@ -243,7 +243,7 @@ vector<ScTokenRef>* TokenTable::getAllRanges() const
     return pTokens.release();
 }
 
-// ============================================================================
+
 
 typedef std::map<sal_uInt32, FormulaToken*> FormulaTokenMap;
 typedef std::map<sal_uInt32, FormulaTokenMap*> FormulaTokenMapMap;
@@ -830,7 +830,7 @@ void Chart2Positioner::createPositionMap()
     }
 }
 
-// ============================================================================
+
 
 /**
  * Function object to create a range string from a token list.
@@ -1266,7 +1266,7 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
     }
 
     // Check if the following conditions are met:
-    //
+
     // 1) The upper-left corner cell is not included.
     // 2) The three adjacent cells of that corner cell are included.
 

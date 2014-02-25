@@ -129,9 +129,9 @@ public:
 
 }
 
-//
+
 // function objects for sorting of the column and row members:
-//
+
 
 class ScDPRowMembersOrder
 {
@@ -2357,9 +2357,9 @@ void ScDPDataMember::UpdateRunningTotals(
                         long nRowPos = 0;
                         long nColPos = 0;
 
-                        //
+
                         //  find the reference field in column or row dimensions
-                        //
+
 
                         if ( bRefDimInRow )     //  look in row dimensions
                         {
@@ -2441,9 +2441,9 @@ void ScDPDataMember::UpdateRunningTotals(
                         if ( !bRefDimInCol && !bRefDimInRow )   // invalid dimension specified
                             bNoDetailsInRef = true;             // pSelectDim is then already NULL
 
-                        //
+
                         //  get the member for the reference item and do the calculation
-                        //
+
 
                         if ( bRunningTotal )
                         {
@@ -2590,9 +2590,9 @@ void ScDPDataMember::UpdateRunningTotals(
                               eRefType == sheet::DataPilotFieldReferenceType::TOTAL_PERCENTAGE ||
                               eRefType == sheet::DataPilotFieldReferenceType::INDEX )
                     {
-                        //
+
                         //  set total values when they are encountered (always before their use)
-                        //
+
 
                         ScDPAggData* pColTotalData = pRefMember->GetColTotal( nMemberMeasure );
                         ScDPAggData* pRowTotalData = rTotals.GetRowTotal( nMemberMeasure );
@@ -2609,9 +2609,9 @@ void ScDPDataMember::UpdateRunningTotals(
                         if ( rTotals.IsInColRoot() && pColTotalData )
                             pColTotalData->SetAuxiliary( fTotalValue );
 
-                        //
+
                         //  find relation to total values
-                        //
+
 
                         switch ( eRefType )
                         {

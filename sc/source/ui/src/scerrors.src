@@ -22,9 +22,9 @@
 
 Resource RID_ERRHDLSC
 {
-     //------------------------------------------------------------
+
      // ERRORS -----------------------------------------------------
-     //------------------------------------------------------------
+
     String SCERR_IMPORT_CONNECT & ERRCODE_RES_MASK
     {
         Text [ en-US ] = "Impossible to connect to the file." ;
@@ -103,9 +103,9 @@ Resource RID_ERRHDLSC
     {
         Text [ en-US ] = "Cell $(ARG1) contains a string that is longer in the selected target character set \"$(ARG2)\" than the given field width." ;
     };
-     //------------------------------------------------------------
+
      // WARNINGS ---------------------------------------------------
-     //------------------------------------------------------------
+
     String SCWARN_EXPORT_ASCII & ERRCODE_RES_MASK
     {
         Text [ en-US ] = "Only the active sheet was saved." ;

@@ -26,7 +26,7 @@
 class XclImpStream;
 class XclExpStream;
 
-// ============================================================================
+
 
 /** A 2D cell address struct with Excel column and row indexes. */
 struct XclAddress
@@ -66,7 +66,7 @@ inline XclExpStream& operator<<( XclExpStream& rStrm, const XclAddress& rXclPos 
     return rStrm;
 }
 
-// ----------------------------------------------------------------------------
+
 
 /** A 2D cell range address struct with Excel column and row indexes. */
 struct XclRange
@@ -116,7 +116,7 @@ inline XclExpStream& operator<<( XclExpStream& rStrm, const XclRange& rXclRange 
     return rStrm;
 }
 
-// ----------------------------------------------------------------------------
+
 
 /** A 2D cell range address list with Excel column and row indexes. */
 class XclRangeList : public ::std::vector< XclRange >
@@ -144,7 +144,7 @@ inline XclExpStream& operator<<( XclExpStream& rStrm, const XclRangeList& rXclRa
     return rStrm;
 }
 
-// ============================================================================
+
 
 class XclTracer;
 
@@ -162,7 +162,7 @@ public:
     /** Returns whether the "some sheets have been cut" warning box should be shown. */
     inline bool         IsTabTruncated() const { return mbTabTrunc; }
 
-    // ------------------------------------------------------------------------
+
 
     /** Checks if the passed sheet index is valid.
         @param nScTab  The sheet index to check.
@@ -171,7 +171,7 @@ public:
         @return  true = Sheet index in nScTab is valid. */
     bool                CheckScTab( SCTAB nScTab, bool bWarn );
 
-    // ------------------------------------------------------------------------
+
 protected:
     XclTracer&          mrTracer;       /// Tracer for invalid addresses.
     ScAddress           maMaxPos;       /// Default maximum position.
@@ -182,7 +182,7 @@ protected:
     bool                mbTabTrunc;     /// Flag for "tables truncated" warning box.
 };
 
-// ============================================================================
+
 
 #endif
 

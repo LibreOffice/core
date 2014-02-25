@@ -36,9 +36,9 @@ using namespace ::ooo::vba;
 
 
 
-// =============================================================================
+
 // ScVbaGlobals
-// =============================================================================
+
 
 //ScVbaGlobals::ScVbaGlobals(  css::uno::Reference< css::uno::XComponentContext >const& rxContext,  ) : ScVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext )
 
@@ -60,9 +60,9 @@ ScVbaGlobals::~ScVbaGlobals()
     OSL_TRACE("ScVbaGlobals::~ScVbaGlobals");
 }
 
-// =============================================================================
+
 // XGlobals
-// =============================================================================
+
 uno::Reference<excel::XApplication >
 ScVbaGlobals::getApplication() throw (uno::RuntimeException)
 {

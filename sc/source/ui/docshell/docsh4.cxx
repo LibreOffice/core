@@ -1868,10 +1868,10 @@ void ScDocShell::GetSbxState( SfxItemSet &rSet )
     //  SID_TABLES_GET (Tables),
     //  SID_PIVOT_GET (DataPilotTables) - removed (old Basic)
 
-        //
+
         //  Wenn hier Slots von der View-Shell executed werden, muss auch der
         //  GetState weitergeleitet werden!
-        //
+
 
     ScTabViewShell* pVisibleSh = GetBestViewShell();        // sichtbare View
     if ( pVisibleSh )

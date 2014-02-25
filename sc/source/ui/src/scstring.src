@@ -106,7 +106,7 @@ String SCSTR_AUDITSHELL
     Text [ en-US ] = "Detective Fill Mode" ;
 };
 
- // -----------------------------------------------------------------------
+
 
 String STR_ROWHEIGHT
 {

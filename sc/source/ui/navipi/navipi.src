@@ -147,12 +147,12 @@ Window RID_SCDLG_NAVIGATOR
                 HelpId = HID_SC_NAVIPI_DOWN ;
                 Text [ en-US ] = "End" ;
             };
-             //--------------------------------------------
+
              //         ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR; };
-             //--------------------------------------------
-             //----------------------------------------
+
+
             ToolBoxItem { Type = TOOLBOXITEM_BREAK ; };
-             //----------------------------------------
+
             ToolBoxItem
             {
                 Identifier = IID_ZOOMOUT ;

@@ -27,7 +27,7 @@
 
 class ScViewData;
 
-// ---------------------------------------------------------------------------
+
 
 //  initial size
 #define SC_TABBAR_DEFWIDTH      270

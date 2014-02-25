@@ -35,7 +35,7 @@
         SFX_DECL_CHILDWINDOW_WITHID(Class);                                     \
     };
 
-//==================================================================
+
 
 DECL_WRAPPER_WITHID(ScNameDlgWrapper)
 DECL_WRAPPER_WITHID(ScNameDefDlgWrapper)
@@ -165,7 +165,7 @@ public:
     void                Show( sal_uInt16 nFlags ){ if( !m_bVisibleLock ) SfxChildWindow::Show( nFlags ); }
 };
 
-//==================================================================
+
 
 
 #endif // SC_REFFACT_HXX

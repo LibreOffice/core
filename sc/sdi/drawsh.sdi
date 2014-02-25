@@ -50,7 +50,7 @@ interface TableDraw
     SID_STYLE_HIDE              [ StateMethod = StateDisableItems; Export = FALSE; ]
     SID_STYLE_SHOW              [ StateMethod = StateDisableItems; Export = FALSE; ]
 
-     //----------------------------------------------------------------------------
+
     SID_TEXT_STANDARD       [ ExecMethod = ExecDrawAttr; StateMethod = NoState; Export = FALSE; ]
     SID_DRAWTEXT_ATTR_DLG   [ ExecMethod = ExecDrawAttr; StateMethod = NoState; Export = FALSE; ]
 
@@ -250,7 +250,7 @@ interface TableDraw
 }
 
 
- // ===========================================================================
+
 shell ScDrawShell
 {
     import TableDraw;

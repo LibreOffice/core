@@ -71,7 +71,7 @@ using namespace com::sun::star;
 // STATIC DATA ---------------------------------------------------------------
 
 
-//============================================================================
+
 
 //  GlobalName der Writer-DocShell kommt jetzt aus comphelper/classids.hxx
 
@@ -764,9 +764,9 @@ static bool lcl_SelHasAttrib( ScDocument* pDoc, SCCOL nCol1, SCROW nRow1, SCCOL 
     return false;
 }
 
-//
+
 //      Einfuegen auf Tabelle:
-//
+
 
 //  internes Paste
 
@@ -1207,10 +1207,10 @@ bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
     rMark.SetMarkArea( aUserRange );
     MarkDataChanged();
 
-        //
+
         //  Aus Clipboard kopieren,
         //  wenn gerechnet werden soll, Originaldaten merken
-        //
+
 
     ScDocument* pMixDoc = NULL;
     if (nFunction)
@@ -1750,7 +1750,7 @@ void ScViewFunc::PostPasteFromClip(const ScRangeList& rPasteRanges, const ScMark
 
 
 //      D R A G   A N D   D R O P
-//
+
 //  innerhalb des Dokuments
 
 bool ScViewFunc::MoveBlockTo( const ScRange& rSource, const ScAddress& rDestPos,

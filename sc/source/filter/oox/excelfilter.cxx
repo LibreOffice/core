@@ -33,7 +33,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sheet;
@@ -43,7 +43,7 @@ using namespace ::oox::core;
 
 using ::oox::drawingml::table::TableStyleListPtr;
 
-// ============================================================================
+
 
 OUString ExcelFilter_getImplementationName()
 {

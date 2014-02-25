@@ -90,7 +90,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::container;
@@ -106,7 +106,7 @@ using ::oox::core::FragmentHandler;
 using ::oox::core::XmlFilterBase;
 using ::oox::drawingml::Theme;
 
-// ============================================================================
+
 
 bool IgnoreCaseCompare::operator()( const OUString& rName1, const OUString& rName2 ) const
 {
@@ -115,7 +115,7 @@ bool IgnoreCaseCompare::operator()( const OUString& rName1, const OUString& rNam
         rName1.getStr(), rName1.getLength(), rName2.getStr(), rName2.getLength() ) < 0;
 }
 
-// ============================================================================
+
 
 class WorkbookGlobals : boost::noncopyable
 {
@@ -707,7 +707,7 @@ void WorkbookGlobals::recalcFormulaCells()
         rDoc.CalcFormulaTree(false, true, false);
 }
 
-// ============================================================================
+
 
 WorkbookHelper::~WorkbookHelper()
 {
@@ -1034,7 +1034,7 @@ BiffCodecHelper& WorkbookHelper::getCodecHelper() const
     return mrBookGlob.getCodecHelper();
 }
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

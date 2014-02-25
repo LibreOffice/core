@@ -28,7 +28,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 struct ScenarioCellModel
 {
@@ -40,7 +40,7 @@ struct ScenarioCellModel
     explicit            ScenarioCellModel();
 };
 
-// ----------------------------------------------------------------------------
+
 
 struct ScenarioModel
 {
@@ -53,7 +53,7 @@ struct ScenarioModel
     explicit            ScenarioModel();
 };
 
-// ----------------------------------------------------------------------------
+
 
 class Scenario : public WorkbookHelper
 {
@@ -81,7 +81,7 @@ private:
     sal_Int16           mnSheet;            /// Index of the sheet this scenario is based on.
 };
 
-// ============================================================================
+
 
 struct SheetScenariosModel
 {
@@ -91,7 +91,7 @@ struct SheetScenariosModel
     explicit            SheetScenariosModel();
 };
 
-// ----------------------------------------------------------------------------
+
 
 class SheetScenarios : public WorkbookHelper
 {
@@ -116,7 +116,7 @@ private:
     sal_Int16           mnSheet;
 };
 
-// ============================================================================
+
 
 class ScenarioBuffer : public WorkbookHelper
 {
@@ -134,7 +134,7 @@ private:
     SheetScenariosMap   maSheetScenarios;
 };
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

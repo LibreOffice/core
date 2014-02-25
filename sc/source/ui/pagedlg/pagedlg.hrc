@@ -21,7 +21,7 @@
 #include "sc.hrc"
                     // -> RID_SCPAGE_AREAS
 
-//================================================
+
 // TabPage: Tabelle
 
 #define IMG_LEFTRIGHT       (SC_DIALOGS_START + 43 + 23)

@@ -55,9 +55,9 @@ TYPEINIT1(ScCondFormatItem,    SfxPoolItem);
 
 
 
-//
+
 //      General Help Function
-//
+
 
 bool ScHasPriority( const ::editeng::SvxBorderLine* pThis, const ::editeng::SvxBorderLine* pOther )
 {
@@ -88,9 +88,9 @@ bool ScHasPriority( const ::editeng::SvxBorderLine* pThis, const ::editeng::SvxB
 }
 
 
-//
+
 //      Item - Implementierungen
-//
+
 
 
 // Merge
@@ -1107,7 +1107,7 @@ ScDoubleItem::~ScDoubleItem()
 }
 
 
-// ============================================================================
+
 
 ScPageScaleToItem::ScPageScaleToItem() :
     SfxPoolItem( ATTR_PAGE_SCALETO ),
@@ -1217,7 +1217,7 @@ bool ScPageScaleToItem::PutValue( const uno::Any& rAny, sal_uInt8 nMemberId )
     return bRet;
 }
 
-// ============================================================================
+
 
 ScCondFormatItem::ScCondFormatItem():
     SfxPoolItem( ATTR_CONDITIONAL )

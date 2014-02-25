@@ -297,7 +297,7 @@ public:
                                                  const IntlWrapper* pIntl = 0 ) const;
 };
 
-//
+
 
 class ScDoubleItem : public SfxPoolItem
 {

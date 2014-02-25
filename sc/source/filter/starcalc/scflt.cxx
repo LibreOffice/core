@@ -911,9 +911,9 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
 
             if ( pRepeatRow || pRepeatCol )
             {
-                //
+
                 // an allen Tabellen setzen
-                //
+
                 for ( SCTAB nTab = 0, nTabCount = pDoc->GetTableCount(); nTab < nTabCount; ++nTab )
                 {
                     pDoc->SetRepeatColRange( nTab, pRepeatCol );

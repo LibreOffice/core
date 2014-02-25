@@ -36,7 +36,7 @@ namespace ooo {
 namespace vba {
 namespace excel {
 
-// ============================================================================
+
 
 // nTabs empty means apply zoom to all sheets
 void implSetZoom( const css::uno::Reference< css::frame::XModel >& xModel, sal_Int16 nZoom, std::vector< SCTAB >& nTabs );
@@ -61,7 +61,7 @@ css::uno::Reference< ooo::vba::XHelperInterface > getUnoSheetModuleObj( const cs
 ScDocShell* GetDocShellFromRange( const css::uno::Reference< css::uno::XInterface >& xRange ) throw ( css::uno::RuntimeException );
 void setUpDocumentModules( const css::uno::Reference< css::sheet::XSpreadsheetDocument >& xDoc );
 
-// ============================================================================
+
 
 class ScVbaCellRangeAccess
 {
@@ -82,7 +82,7 @@ template < typename ImplObject >
             throw css::uno::RuntimeException("Internal error, can't exctract implementation object", rxWrapperIf );
         return pObj;
     }
-// ============================================================================
+
 
 } // namespace excel
 } // namespace vba

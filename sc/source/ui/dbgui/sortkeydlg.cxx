@@ -11,7 +11,7 @@
 #include "sortdlg.hxx"
 #include <vcl/layout.hxx>
 
-// =======================================================================
+
 
 ScSortKeyItem::ScSortKeyItem(Window* pParent)
 {
@@ -41,7 +41,7 @@ void ScSortKeyItem::EnableField()
     m_pFrame->Enable();
 }
 
-// =======================================================================
+
 
 ScSortKeyWindow::ScSortKeyWindow(SfxTabPage* pParent, ScSortKeyItems& rSortKeyItems)
     : mrSortKeyItems(rSortKeyItems)
@@ -84,7 +84,7 @@ void ScSortKeyWindow::DoScroll(sal_Int32 nNewPos)
     m_pBox->SetPosPixel(Point(0, nNewPos));
 }
 
-// =======================================================================
+
 
 ScSortKeyCtrl::ScSortKeyCtrl(SfxTabPage* pParent, ScSortKeyItems& rItems)
     : m_aSortWin(pParent, rItems)

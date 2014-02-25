@@ -89,7 +89,7 @@ enum ObjectSelectionType
     OST_Media
 };
 
-//==================================================================
+
 
 
 class ScTabViewShell: public SfxViewShell, public ScDBFunc
@@ -421,7 +421,7 @@ public:
     void SetForceFocusOnCurCell(bool bFlag) { bForceFocusOnCurCell=bFlag; }
 };
 
-//==================================================================
+
 
 
 #endif

@@ -347,9 +347,9 @@ SCROW ScMarkArray::GetMarkEnd( SCROW nRow, bool bUp ) const
     return nRet;
 }
 
-//
+
 //  -------------- Iterator ----------------------------------------------
-//
+
 
 ScMarkArrayIter::ScMarkArrayIter( const ScMarkArray* pNewArray ) :
     pArray( pNewArray ),

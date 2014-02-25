@@ -141,11 +141,11 @@ ScDrawTextObjectBar::~ScDrawTextObjectBar()
     }
 }
 
-//========================================================================
-//
+
+
 //          Funktionen
-//
-//========================================================================
+
+
 
 void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
 {
@@ -544,11 +544,11 @@ void ScDrawTextObjectBar::GetClipState( SfxItemSet& rSet )
     }
 }
 
-//========================================================================
-//
+
+
 //          Attribute
-//
-//========================================================================
+
+
 
 void ScDrawTextObjectBar::ExecuteToggle( SfxRequest &rReq )
 {

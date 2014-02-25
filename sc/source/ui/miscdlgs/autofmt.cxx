@@ -53,7 +53,7 @@
 #define FRAME_OFFSET 4
 
 
-//========================================================================
+
 // ScAutoFmtPreview
 
 ScAutoFmtPreview::ScAutoFmtPreview( Window* pParent, const ResId& rRes, ScDocument* pDoc ) :

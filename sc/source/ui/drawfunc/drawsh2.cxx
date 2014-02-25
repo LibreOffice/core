@@ -282,9 +282,9 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
     svx::FontworkBar::getState( pView, rSet );
 }
 
-//
+
 //          Attribute fuer Drawing-Objekte
-//
+
 
 void ScDrawShell::GetDrawAttrState( SfxItemSet& rSet )
 {

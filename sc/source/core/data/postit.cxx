@@ -50,7 +50,7 @@
 #include <utility>
 
 
-// ============================================================================
+
 
 namespace {
 
@@ -62,7 +62,7 @@ const long SC_NOTECAPTION_OFFSET_Y          = -1500;    /// Default Y offset of 
 const long SC_NOTECAPTION_OFFSET_X          =  1500;    /// Default X offset of note captions to left border of anchor cell.
 const long SC_NOTECAPTION_BORDERDIST_TEMP   =   100;    /// Distance of temporary note captions to visible sheet area.
 
-// ============================================================================
+
 
 /** Static helper functions for caption objects. */
 class ScCaptionUtil
@@ -158,7 +158,7 @@ void ScCaptionUtil::SetCaptionItems( SdrCaptionObj& rCaption, const SfxItemSet& 
     rCaption.SetSpecialTextBoxShadow();
 }
 
-// ============================================================================
+
 
 /** Helper for creation and manipulation of caption drawing objects independent
     from cell annotations. */
@@ -404,7 +404,7 @@ void ScCaptionCreator::Initialize()
     }
 }
 
-// ============================================================================
+
 
 /** Helper for creation of permanent caption drawing objects for cell notes. */
 class ScNoteCaptionCreator : public ScCaptionCreator
@@ -458,7 +458,7 @@ ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& r
 
 } // namespace
 
-// ============================================================================
+
 
 struct ScCaptionInitData
 {
@@ -482,7 +482,7 @@ ScCaptionInitData::ScCaptionInitData() :
 {
 }
 
-// ============================================================================
+
 
 ScNoteData::ScNoteData( bool bShown ) :
     mpCaption( 0 ),
@@ -494,7 +494,7 @@ ScNoteData::~ScNoteData()
 {
 }
 
-// ============================================================================
+
 
 ScPostIt::ScPostIt( ScDocument& rDoc, const ScAddress& rPos, bool bShown ) :
     mrDoc( rDoc ),
@@ -791,7 +791,7 @@ void ScPostIt::RemoveCaption()
     maNoteData.mpCaption = 0;
 }
 
-// ============================================================================
+
 
 SdrCaptionObj* ScNoteUtil::CreateTempCaption(
         ScDocument& rDoc, const ScAddress& rPos, SdrPage& rDrawPage,

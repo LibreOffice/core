@@ -33,7 +33,7 @@ namespace com { namespace sun { namespace star {
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 /** Contains UNO API filter settings for a column in a filtered range. */
 struct ApiFilterSettings
@@ -50,7 +50,7 @@ struct ApiFilterSettings
     void appendField( bool bAnd, const std::vector<OUString>& rValues );
 };
 
-// ============================================================================
+
 
 /** Base class for specific filter settings for a column in a filtered range.
  */
@@ -70,7 +70,7 @@ public:
 
 typedef ::boost::shared_ptr< FilterSettingsBase > FilterSettingsRef;
 
-// ============================================================================
+
 
 /** Settings for a discrete filter, specifying a list of values to be shown in
     the filtered range.
@@ -96,7 +96,7 @@ private:
     bool                mbShowBlank;
 };
 
-// ============================================================================
+
 
 /** Settings for a top-10 filter. */
 class Top10Filter : public FilterSettingsBase
@@ -118,7 +118,7 @@ private:
     bool                mbPercent;      /// True = percentage, false = number of items.
 };
 
-// ============================================================================
+
 
 /** A filter criterion for a custom filter. */
 struct FilterCriterionModel
@@ -137,7 +137,7 @@ struct FilterCriterionModel
     void                readBiffData( SequenceInputStream& rStrm );
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Settings for a custom filter, specifying one or two comparison operators
     associated with some values.
@@ -166,7 +166,7 @@ private:
     bool                mbAnd;
 };
 
-// ============================================================================
+
 
 /** A column in a filtered range. Contains an object with specific filter
     settings for the cells in the column.
@@ -200,7 +200,7 @@ private:
     bool                mbShowButton;
 };
 
-// ============================================================================
+
 
 class AutoFilter : public WorkbookHelper
 {
@@ -227,7 +227,7 @@ private:
     ::com::sun::star::table::CellRangeAddress maRange;
 };
 
-// ============================================================================
+
 
 class AutoFilterBuffer : public WorkbookHelper
 {
@@ -254,7 +254,7 @@ private:
     AutoFilterVector    maAutoFilters;
 };
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

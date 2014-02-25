@@ -27,7 +27,7 @@ namespace com { namespace sun { namespace star { namespace util { struct Date; }
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 /** Settings for workbook write protection. */
 struct FileSharingModel
@@ -39,7 +39,7 @@ struct FileSharingModel
     explicit            FileSharingModel();
 };
 
-// ============================================================================
+
 
 /** Global workbook settings. */
 struct WorkbookSettingsModel
@@ -58,7 +58,7 @@ struct WorkbookSettingsModel
     void                setBiffObjectMode( sal_uInt16 nObjMode );
 };
 
-// ============================================================================
+
 
 /** Workbook calculation settings. */
 struct CalcSettingsModel
@@ -79,7 +79,7 @@ struct CalcSettingsModel
     explicit            CalcSettingsModel();
 };
 
-// ============================================================================
+
 
 class WorkbookSettings : public WorkbookHelper
 {
@@ -118,7 +118,7 @@ private:
     CalcSettingsModel   maCalcSettings;
 };
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

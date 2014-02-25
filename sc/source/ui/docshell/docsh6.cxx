@@ -67,9 +67,9 @@ struct ScStylePair
 
 
 
-//
+
 //  Ole
-//
+
 
 void ScDocShell::SetVisArea( const Rectangle & rVisArea )
 {
@@ -215,9 +215,9 @@ void ScDocShell::UpdateOle( const ScViewData* pViewData, bool bSnapSize )
         SetVisAreaOrSize( aNewArea, true ); // hier muss auch der Start angepasst werden
 }
 
-//
+
 //  Style-Krempel fuer Organizer etc.
-//
+
 
 SfxStyleSheetBasePool* ScDocShell::GetStyleSheetPool()
 {

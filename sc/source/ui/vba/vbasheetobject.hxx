@@ -31,7 +31,7 @@ namespace com { namespace sun { namespace star {
     namespace drawing { class XControlShape; }
 } } }
 
-// ============================================================================
+
 
 typedef InheritedHelperInterfaceImpl1< ov::excel::XCharacters > ScVbaButtonCharacters_BASE;
 
@@ -75,7 +75,7 @@ private:
     sal_Int32 mnLength;
 };
 
-// ============================================================================
+
 
 typedef InheritedHelperInterfaceImpl1< ov::excel::XSheetObject > ScVbaSheetObject_BASE;
 
@@ -121,7 +121,7 @@ protected:
     css::uno::Reference< css::beans::XPropertySet > mxShapeProps;
 };
 
-// ============================================================================
+
 
 typedef ::cppu::ImplInheritanceHelper1< ScVbaSheetObjectBase, ov::excel::XControlObject > ScVbaControlObject_BASE;
 
@@ -168,7 +168,7 @@ protected:
     OUString maEventMethod;
 };
 
-// ============================================================================
+
 
 typedef ::cppu::ImplInheritanceHelper1< ScVbaControlObjectBase, ov::excel::XButton > ScVbaButton_BASE;
 
@@ -206,7 +206,7 @@ protected:
     virtual void implSetDefaultProperties() throw (css::uno::RuntimeException);
 };
 
-// ============================================================================
+
 
 #endif
 

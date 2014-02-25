@@ -185,7 +185,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
     pBtnCancel->SetClickHdl  ( LINK( this, ScFilterDlg, EndDlgHdl ) );
     pBtnHeader->SetClickHdl  ( LINK( this, ScFilterDlg, CheckBoxHdl ) );
     pBtnCase->SetClickHdl    ( LINK( this, ScFilterDlg, CheckBoxHdl ) );
-    //
+
     pLbField1->SetSelectHdl  ( LINK( this, ScFilterDlg, LbSelectHdl ) );
     pLbField2->SetSelectHdl  ( LINK( this, ScFilterDlg, LbSelectHdl ) );
     pLbField3->SetSelectHdl  ( LINK( this, ScFilterDlg, LbSelectHdl ) );
@@ -692,7 +692,7 @@ bool ScFilterDlg::IsRefInputMode() const
 
 
 // Handler:
-// ========
+
 
 IMPL_LINK( ScFilterDlg, EndDlgHdl, Button*, pBtn )
 {

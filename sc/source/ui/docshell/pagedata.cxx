@@ -21,7 +21,7 @@
 
 #include "pagedata.hxx"
 
-//============================================================================
+
 
 ScPrintRangeData::ScPrintRangeData()
 {
@@ -64,7 +64,7 @@ void ScPrintRangeData::SetPagesY( size_t nCount, const SCROW* pData )
     nPagesY = nCount;
 }
 
-//============================================================================
+
 
 ScPageBreakData::ScPageBreakData(size_t nMax)
 {

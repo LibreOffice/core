@@ -2552,7 +2552,7 @@ void XclExpFmlaCompImpl::AppendExt( const OUString& rString )
     lclAppend( mxData->maExtDataVec, GetRoot(), rString, (meBiff == EXC_BIFF8) ? EXC_STR_DEFAULT : EXC_STR_8BITLENGTH );
 }
 
-// ============================================================================
+
 
 namespace {
 

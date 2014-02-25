@@ -1083,9 +1083,9 @@ void ScDrawLayer::MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCR
             aTopLeft.Y() += aMove.Y();
     }
 
-        //
+
         //      Detektiv-Pfeile: Zellpositionen anpassen
-        //
+
 
     MoveCells( nTab, nCol1,nRow1, nCol2,nRow2, nDx,nDy, bUpdateNoteCaptionPos );
 }

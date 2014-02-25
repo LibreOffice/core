@@ -38,18 +38,18 @@ Menu RID_POPUP_CELLS
             HelpId = CMD_SID_CELL_FORMAT_RESET ;
             Text [ en-US ] = "Clear ~Direct Formatting" ;
         };
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         MenuItem
         {
             Identifier = FID_CELL_FORMAT ;
             HelpId = CMD_FID_CELL_FORMAT ;
             Text [ en-US ] = "~Format Cells..." ;
         };
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         MenuItem
         {
             Identifier = FID_INS_CELL ;
@@ -80,9 +80,9 @@ Menu RID_POPUP_CELLS
             HelpId = CMD_FID_MERGE_OFF ;
             Text [ en-US ] = "Split Cells..." ;
         };
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         MenuItem
         {
             Identifier = SID_INSERT_POSTIT ;
@@ -107,9 +107,9 @@ Menu RID_POPUP_CELLS
             HelpId = CMD_FID_HIDE_NOTE ;
             Text [ en-US ] = "~Hide Comment" ;
         };
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
 
         MenuItem
         {
@@ -168,9 +168,9 @@ Menu RID_POPUP_CELLS
                 };
             };
         };
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         MenuItem
         {
             Identifier = SID_DATA_SELECT ;
@@ -237,9 +237,9 @@ Menu RID_POPUP_TAB
             HelpId = CMD_FID_TAB_EVENTS ;
             Text [ en-US ] = "Sheet E~vents..." ;
         };
-        //------------------------------
+
         MenuItem { Separator = TRUE ; };
-        //------------------------------
+
         MenuItem
         {
             Identifier = FID_TABLE_HIDE ;
@@ -252,9 +252,9 @@ Menu RID_POPUP_TAB
             HelpId = CMD_FID_TABLE_SHOW ;
             Text [ en-US ] = "~Show..." ;
         };
-        //------------------------------
+
         MenuItem { Separator = TRUE ; };
-        //------------------------------
+
         MenuItem
         {
             Identifier = FID_TAB_SELECTALL ;
@@ -365,9 +365,9 @@ Menu RID_POPUP_EDIT
             HelpId = CMD_SID_CELL_FORMAT_RESET ;
             Text [ en-US ] = "~Default" ;
         };
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         MenuItem // Menu-Controller
          // Menu-Controller
          // Menu-Controller
@@ -444,9 +444,9 @@ Menu RID_POPUP_EDIT
                 };
             };
         };
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         MenuItem
         {
             Text [ en-US ] = "Insert Fields" ;
@@ -477,9 +477,9 @@ Menu RID_POPUP_EDIT
         {
             ITEM_FORMAT_CHAR_DLG
         };
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         MenuItem
         {
             ITEM_OPEN_HYPERLINK
@@ -550,18 +550,18 @@ Menu RID_POPUP_PAGEBREAK
             HelpId = CMD_SID_CELL_FORMAT_RESET ;
             Text [ en-US ] = "~Default" ;
         };
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         MenuItem
         {
             Identifier = FID_CELL_FORMAT ;
             HelpId = CMD_FID_CELL_FORMAT ;
             Text [ en-US ] = "~Format Cells..." ;
         };
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         MenuItem
         {
             Identifier = FID_INS_ROWBRK ;
@@ -586,9 +586,9 @@ Menu RID_POPUP_PAGEBREAK
             HelpId = CMD_FID_RESET_PRINTZOOM ;
             Text [ en-US ] = "Reset Scale" ;
         };
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         MenuItem
         {
             Identifier = SID_DEFINE_PRINTAREA ;
@@ -607,18 +607,18 @@ Menu RID_POPUP_PAGEBREAK
             HelpId = CMD_SID_DELETE_PRINTAREA ;
             Text [ en-US ] = "Undo Print Range" ;
         };
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         MenuItem
         {
             Identifier = SID_FORMATPAGE ;
             HelpId = CMD_SID_FORMATPAGE ;
             Text [ en-US ] = "Page Format..." ;
         };
-         //------------------------------
+
         MenuItem { Separator = TRUE ; };
-         //------------------------------
+
         MenuItem
         {
             Identifier = FID_SHOW_NOTE ;

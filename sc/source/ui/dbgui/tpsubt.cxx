@@ -31,7 +31,7 @@
 #include "subtdlg.hxx"
 #include "tpsubt.hxx"
 
-//========================================================================
+
 // Subtotals group tabpage:
 
 ScTpSubTotalGroup::ScTpSubTotalGroup( Window* pParent,
@@ -404,7 +404,7 @@ IMPL_LINK( ScTpSubTotalGroup, CheckHdl, ListBox *, pLb )
     return 0;
 }
 
-//========================================================================
+
 // Derived Group TabPages:
 
 SfxTabPage* ScTpSubTotalGroup1::Create( Window*         pParent,
@@ -454,7 +454,7 @@ sal_Bool ScTpSubTotalGroup2::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET
 sal_Bool ScTpSubTotalGroup3::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET(3); }
 #undef FILL
 
-//========================================================================
+
 // Optionen-Tabpage:
 
 ScTpSubTotalOptions::ScTpSubTotalOptions( Window*               pParent,

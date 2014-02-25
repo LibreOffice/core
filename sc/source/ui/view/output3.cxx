@@ -35,7 +35,7 @@
 
 #include <svx/fmview.hxx>
 
-//==================================================================
+
 
 // #i72502#
 Point ScOutputData::PrePrintDrawingLayer(long nLogStX, long nLogStY )

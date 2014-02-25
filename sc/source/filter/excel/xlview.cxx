@@ -101,6 +101,6 @@ XclSelectionData& XclTabViewData::CreateSelectionData( sal_uInt8 nPane )
     return *rxSelData;
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

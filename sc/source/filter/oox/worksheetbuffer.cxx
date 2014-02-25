@@ -37,14 +37,14 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::uno;
 
 
-// ============================================================================
+
 
 SheetInfoModel::SheetInfoModel() :
     mnBiffHandle( -1 ),
@@ -53,7 +53,7 @@ SheetInfoModel::SheetInfoModel() :
 {
 }
 
-// ============================================================================
+
 
 WorksheetBuffer::WorksheetBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -221,7 +221,7 @@ void WorksheetBuffer::insertSheet( const SheetInfoModel& rModel )
     maSheetInfosByName[ lclQuoteName( rModel.maName ) ] = xSheetInfo;
 }
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

@@ -737,9 +737,9 @@ const sal_uInt16 EXC_ID_CHPLOTGROWTH            = 0x1064;
 const sal_uInt16 EXC_ID_CHSERINDEX              = 0x1065;
 const sal_uInt16 EXC_ID_CHUNKNOWN               = 0xFFFF;
 
-// ============================================================================
+
 // Structs and classes
-// ============================================================================
+
 
 // Common =====================================================================
 
@@ -753,7 +753,7 @@ struct XclChRectangle
     explicit            XclChRectangle();
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Specifies the position of a data series or data point. */
 struct XclChDataPointPos
@@ -768,7 +768,7 @@ struct XclChDataPointPos
 
 bool operator<( const XclChDataPointPos& rL, const XclChDataPointPos& rR );
 
-// ----------------------------------------------------------------------------
+
 
 /** Contains the type and context of a block of future records which are
     guarded by CHFRBLOCKBEGIN and CHFRBLOCKEND records. */
@@ -793,7 +793,7 @@ struct XclChFramePos
     explicit            XclChFramePos();
 };
 
-// ----------------------------------------------------------------------------
+
 
 struct XclChLineFormat
 {
@@ -805,7 +805,7 @@ struct XclChLineFormat
     explicit            XclChLineFormat();
 };
 
-// ----------------------------------------------------------------------------
+
 
 struct XclChAreaFormat
 {
@@ -817,7 +817,7 @@ struct XclChAreaFormat
     explicit            XclChAreaFormat();
 };
 
-// ----------------------------------------------------------------------------
+
 
 class SfxItemSet;
 class EscherPropertyContainer;
@@ -834,7 +834,7 @@ struct XclChEscherFormat
                         ~XclChEscherFormat();
 };
 
-// ----------------------------------------------------------------------------
+
 
 struct XclChPicFormat
 {
@@ -845,7 +845,7 @@ struct XclChPicFormat
     explicit            XclChPicFormat();
 };
 
-// ----------------------------------------------------------------------------
+
 
 struct XclChFrame
 {
@@ -877,7 +877,7 @@ struct XclChObjectLink
     explicit            XclChObjectLink();
 };
 
-// ----------------------------------------------------------------------------
+
 
 struct XclChFrLabelProps
 {
@@ -887,7 +887,7 @@ struct XclChFrLabelProps
     explicit            XclChFrLabelProps();
 };
 
-// ----------------------------------------------------------------------------
+
 
 struct XclChText
 {
@@ -916,7 +916,7 @@ struct XclChMarkerFormat
     explicit            XclChMarkerFormat();
 };
 
-// ----------------------------------------------------------------------------
+
 
 struct XclCh3dDataFormat
 {
@@ -926,7 +926,7 @@ struct XclCh3dDataFormat
     explicit            XclCh3dDataFormat();
 };
 
-// ----------------------------------------------------------------------------
+
 
 struct XclChDataFormat
 {
@@ -937,7 +937,7 @@ struct XclChDataFormat
     explicit            XclChDataFormat();
 };
 
-// ----------------------------------------------------------------------------
+
 
 struct XclChSerTrendLine
 {
@@ -952,7 +952,7 @@ struct XclChSerTrendLine
     explicit            XclChSerTrendLine();
 };
 
-// ----------------------------------------------------------------------------
+
 
 struct XclChSerErrorBar
 {
@@ -965,7 +965,7 @@ struct XclChSerErrorBar
     explicit            XclChSerErrorBar();
 };
 
-// ----------------------------------------------------------------------------
+
 
 struct XclChSeries
 {
@@ -994,7 +994,7 @@ struct XclChType
     explicit            XclChType();
 };
 
-// ----------------------------------------------------------------------------
+
 
 struct XclChChart3d
 {
@@ -1009,7 +1009,7 @@ struct XclChChart3d
     explicit            XclChChart3d();
 };
 
-// ----------------------------------------------------------------------------
+
 
 struct XclChLegend
 {
@@ -1021,7 +1021,7 @@ struct XclChLegend
     explicit            XclChLegend();
 };
 
-// ----------------------------------------------------------------------------
+
 
 struct XclChTypeGroup
 {
@@ -1031,7 +1031,7 @@ struct XclChTypeGroup
     explicit            XclChTypeGroup();
 };
 
-// ----------------------------------------------------------------------------
+
 
 struct XclChProperties
 {
@@ -1053,7 +1053,7 @@ struct XclChLabelRange
     explicit            XclChLabelRange();
 };
 
-// ----------------------------------------------------------------------------
+
 
 struct XclChDateRange
 {
@@ -1070,7 +1070,7 @@ struct XclChDateRange
     explicit            XclChDateRange();
 };
 
-// ----------------------------------------------------------------------------
+
 
 struct XclChValueRange
 {
@@ -1084,7 +1084,7 @@ struct XclChValueRange
     explicit            XclChValueRange();
 };
 
-// ----------------------------------------------------------------------------
+
 
 struct XclChTick
 {
@@ -1099,7 +1099,7 @@ struct XclChTick
     explicit            XclChTick();
 };
 
-// ----------------------------------------------------------------------------
+
 
 struct XclChAxis
 {
@@ -1111,7 +1111,7 @@ struct XclChAxis
     sal_Int32           GetApiAxisDimension() const;
 };
 
-// ----------------------------------------------------------------------------
+
 
 struct XclChAxesSet
 {
@@ -1198,7 +1198,7 @@ struct XclChFormatInfo
     bool                mbIsFrame;          /// true = Object is a frame, false = Object is a line.
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Provides access to chart auto formatting for all available object types. */
 class XclChFormatInfoProvider
@@ -1294,7 +1294,7 @@ struct XclChExtTypeInfo : public XclChTypeInfo
                             { return IsSeriesFrameFormat() ? EXC_CHOBJTYPE_FILLEDSERIES : EXC_CHOBJTYPE_LINEARSERIES; }
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Provides access to chart type info structs for all available chart types. */
 class XclChTypeInfoProvider
@@ -1363,7 +1363,7 @@ private:
     sal_Int32           mnIndex;                /// Index to create unique identifiers.
 };
 
-// ----------------------------------------------------------------------------
+
 
 struct XclFontData;
 
@@ -1458,7 +1458,7 @@ private:
     ScfPropSetHelper    maBitmapHlp;        /// Properties for bitmaps.
 };
 
-// ============================================================================
+
 
 /** Base struct for internal root data structs for import and export. */
 struct XclChRootData
@@ -1499,7 +1499,7 @@ struct XclChRootData
                         GetTitleShape( const XclChTextKey& rTitleKey ) const;
 };
 
-// ============================================================================
+
 
 #endif
 

@@ -43,7 +43,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::table;
@@ -52,7 +52,7 @@ using namespace ::com::sun::star::uno;
 using ::oox::core::Relation;
 using ::oox::core::Relations;
 
-// ============================================================================
+
 
 namespace {
 
@@ -68,7 +68,7 @@ const sal_uInt16 BIFF12_EXTNAME_ICONIFIED   = 0x0020;
 
 } // namespace
 
-// ============================================================================
+
 
 ExternalNameModel::ExternalNameModel() :
     mbBuiltIn( false ),
@@ -80,7 +80,7 @@ ExternalNameModel::ExternalNameModel() :
 {
 }
 
-// ============================================================================
+
 
 ExternalName::ExternalName( const ExternalLink& rParentLink ) :
     DefinedNameBase( rParentLink ),
@@ -271,7 +271,7 @@ void ExternalName::setResultSize( sal_Int32 nColumns, sal_Int32 nRows )
     maCurrIt = maResults.begin();
 }
 
-// ============================================================================
+
 
 void LinkSheetRange::setDeleted()
 {
@@ -309,7 +309,7 @@ void LinkSheetRange::setExternalRange( sal_Int32 nDocLink, sal_Int32 nFirst, sal
     }
 }
 
-// ============================================================================
+
 
 ExternalLink::ExternalLink( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -624,7 +624,7 @@ ExternalNameRef ExternalLink::createExternalName()
     return xExtName;
 }
 
-// ============================================================================
+
 
 RefSheetsModel::RefSheetsModel() :
     mnExtRefId( -1 ),
@@ -796,7 +796,7 @@ const RefSheetsModel* ExternalLinkBuffer::getRefSheets( sal_Int32 nRefId ) const
         &maRefSheets[ static_cast< size_t >( nRefId ) ] : 0;
 }
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

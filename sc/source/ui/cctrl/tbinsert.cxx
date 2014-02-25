@@ -39,9 +39,9 @@
 SFX_IMPL_TOOLBOX_CONTROL( ScTbxInsertCtrl, SfxUInt16Item);
 
 
-//
+
 //  ToolBox - Controller
-//
+
 
 
 ScTbxInsertCtrl::ScTbxInsertCtrl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx  ) :

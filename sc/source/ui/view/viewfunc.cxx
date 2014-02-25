@@ -77,7 +77,7 @@
 #include "tokenarray.hxx"
 #include <rowheightcontext.hxx>
 
-//==================================================================
+
 
 static void lcl_PostRepaintCondFormat( const ScConditionalFormat *pCondFmt, ScDocShell *pDocSh )
 {
@@ -90,7 +90,7 @@ static void lcl_PostRepaintCondFormat( const ScConditionalFormat *pCondFmt, ScDo
 }
 
 
-//==================================================================
+
 
 ScViewFunc::ScViewFunc( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell ) :
     ScTabView( pParent, rDocSh, pViewShell ),
@@ -633,9 +633,9 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
     ScEditableTester aTester( pDoc, nTab, nCol,nRow, nCol,nRow );
     if (aTester.IsEditable())
     {
-        //
+
         //      test for attribute
-        //
+
         bool bSimple = false;
         bool bCommon = false;
         ScPatternAttr* pCellAttrs = NULL;
@@ -672,9 +672,9 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
         // #i97726# always get text for "repeat" of undo action
         aString = ScEditUtil::GetSpaceDelimitedString(aEngine);
 
-        //
+
         //      undo
-        //
+
 
         EditTextObject* pUndoData = NULL;
         ScUndoEnterData::ValuesType aOldValues;
@@ -693,9 +693,9 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             pUndoData = rData.Clone();
         }
 
-        //
+
         //      enter data
-        //
+
 
         if (bCommon)
             pDoc->ApplyPattern(nCol,nRow,nTab,*pCellAttrs);         //! undo
@@ -884,11 +884,11 @@ void ScViewFunc::GetSelectionFrame( SvxBoxItem&     rLineOuter,
     }
 }
 
-//
+
 //  apply attribute - undo OK
 //
 //  complete set ( ATTR_STARTINDEX, ATTR_ENDINDEX )
-//
+
 
 void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
                                   const SfxItemSet* pOldSet,

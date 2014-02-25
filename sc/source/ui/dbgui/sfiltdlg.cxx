@@ -42,7 +42,7 @@
                                     ScGlobal::GetRscString(rid) ).Execute()
 
 
-//============================================================================
+
 //  class ScSpecialFilterDialog
 
 
@@ -51,8 +51,8 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Wi
                                         const SfxItemSet&   rArgSet )
 
     :   ScAnyRefDlg ( pB, pCW, pParent, "AdvancedFilterDialog", "modules/scalc/ui/advancedfilterdialog.ui" ),
-        //
-        //
+
+
         aStrUndefined   ( SC_RESSTR(SCSTR_UNDEFINED) ),
         pOptionsMgr     ( NULL ),
         nWhichQuery     ( rArgSet.GetPool()->GetWhich( SID_QUERY ) ),
@@ -287,7 +287,7 @@ bool ScSpecialFilterDlg::IsRefInputMode() const
 
 
 // Handler:
-// ========
+
 
 IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
 {

@@ -203,7 +203,7 @@ private:
     bool                mbMultipleUrls;     /// true = Multiple URL fields processed.
 };
 
-// ----------------------------------------------------------------------------
+
 
 class EditEngine;
 class EditTextObject;
@@ -413,7 +413,7 @@ private:
     XclExpUrlHelper();
 };
 
-// ----------------------------------------------------------------------------
+
 class ScMatrix;
 
 /** Contains cached values in a 2-dimensional array. */
@@ -435,7 +435,7 @@ private:
     const ScMatrix& mrMatrix;
 };
 
-// ============================================================================
+
 
 #endif
 

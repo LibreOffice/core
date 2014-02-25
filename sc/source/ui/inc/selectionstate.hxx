@@ -23,7 +23,7 @@
 #include <editeng/editdata.hxx>
 #include "rangelst.hxx"
 
-// ============================================================================
+
 
 /** Enumerates all possible types of selections in a Calc document. */
 enum ScSelectionType
@@ -35,7 +35,7 @@ enum ScSelectionType
     SC_SELECTTYPE_EDITDRAW          /// Edit mode in drawing object (with or without selection).
 };
 
-// ----------------------------------------------------------------------------
+
 
 class ScViewData;
 
@@ -65,7 +65,7 @@ private:
 bool operator==( const ScSelectionState& rL, const ScSelectionState& rR );
 inline bool operator!=( const ScSelectionState& rL, const ScSelectionState& rR ) { return !(rL == rR); }
 
-// ============================================================================
+
 
 #endif
 

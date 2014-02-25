@@ -26,7 +26,7 @@
 
 using ::std::numeric_limits;
 
-// ============================================================================
+
 
 template<typename _ValueType, typename _ExtValueType = _ValueType>
 class ScFlatSegmentsImpl
@@ -236,7 +236,7 @@ bool ScFlatSegmentsImpl<_ValueType, _ExtValueType>::getNext(RangeData& rData)
     return true;
 }
 
-// ============================================================================
+
 
 class ScFlatUInt16SegmentsImpl : public ScFlatSegmentsImpl<sal_uInt16, sal_uInt32>
 {
@@ -271,7 +271,7 @@ bool ScFlatBoolSegmentsImpl::setFalse(SCCOLROW nPos1, SCCOLROW nPos2)
     return setValue(nPos1, nPos2, false);
 }
 
-// ============================================================================
+
 
 ScFlatBoolRowSegments::ForwardIterator::ForwardIterator(ScFlatBoolRowSegments& rSegs) :
     mrSegs(rSegs), mnCurPos(0), mnLastPos(-1), mbCurValue(false)
@@ -400,7 +400,7 @@ SCROW ScFlatBoolRowSegments::findLastNotOf(bool bValue) const
     return static_cast<SCROW>(mpImpl->findLastNotOf(bValue));
 }
 
-// ============================================================================
+
 
 ScFlatBoolColSegments::ScFlatBoolColSegments() :
     mpImpl(new ScFlatBoolSegmentsImpl(static_cast<SCCOLROW>(MAXCOL)))
@@ -448,7 +448,7 @@ void ScFlatBoolColSegments::insertSegment(SCCOL nCol, SCCOL nSize, bool bSkipSta
     mpImpl->insertSegment(static_cast<SCCOLROW>(nCol), static_cast<SCCOLROW>(nSize), bSkipStartBoundary);
 }
 
-// ============================================================================
+
 
 ScFlatUInt16RowSegments::ForwardIterator::ForwardIterator(ScFlatUInt16RowSegments& rSegs) :
     mrSegs(rSegs), mnCurPos(0), mnLastPos(-1), mnCurValue(0)

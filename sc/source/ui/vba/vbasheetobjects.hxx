@@ -30,12 +30,12 @@ namespace com { namespace sun { namespace star {
     namespace sheet { class XSpreadsheet; }
 } } }
 
-// ============================================================================
+
 
 class ScVbaObjectContainer;
 typedef ::rtl::Reference< ScVbaObjectContainer > ScVbaObjectContainerRef;
 
-// ============================================================================
+
 
 typedef CollTestImplHelper< ov::XCollection > ScVbaSheetObjects_BASE;
 
@@ -65,7 +65,7 @@ protected:
     ScVbaObjectContainerRef mxContainer;
 };
 
-// ============================================================================
+
 
 typedef ::cppu::ImplInheritanceHelper1< ScVbaSheetObjectsBase, ov::excel::XGraphicObjects > ScVbaGraphicObjects_BASE;
 
@@ -85,7 +85,7 @@ public:
         const css::uno::Any& rHeight ) throw (css::uno::RuntimeException, std::exception);
 };
 
-// ============================================================================
+
 
 /** Collection containing all button controls from a sheet (not ActiveX controls). */
 class ScVbaButtons : public ScVbaGraphicObjectsBase
@@ -100,7 +100,7 @@ public:
     VBAHELPER_DECL_XHELPERINTERFACE
 };
 
-// ============================================================================
+
 
 #endif
 

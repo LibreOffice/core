@@ -743,9 +743,9 @@ void ScDocument::FillInfo(
     //  bedingte Formatierung Ende
 
 
-                //
+
                 //      Daten von zusammengefassten Zellen anpassen
-                //
+
 
     if (bAnyMerged)
     {
@@ -954,7 +954,7 @@ void ScDocument::FillInfo(
     rTabInfo.mnArrCount = sal::static_int_cast<sal_uInt16>(nArrCount);
     rTabInfo.mbPageMode = bPageMode;
 
-    // ========================================================================
+
     // *** create the frame border array ***
 
     // RowInfo structs are filled in the range [ 0 , nArrCount-1 ]
@@ -1123,7 +1123,7 @@ void ScDocument::FillInfo(
         rArray.MirrorSelfX( true, false );
 }
 
-// ============================================================================
+
 
 ScTableInfo::ScTableInfo() :
     mpRowInfo( new RowInfo[ ROWINFO_MAX ] ),
@@ -1140,6 +1140,6 @@ ScTableInfo::~ScTableInfo()
     delete [] mpRowInfo;
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

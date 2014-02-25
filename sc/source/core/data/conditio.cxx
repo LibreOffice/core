@@ -2218,7 +2218,7 @@ void ScConditionalFormatList::RenameCellStyle( const OUString& rOld, const OUStr
 bool ScConditionalFormatList::CheckAllEntries()
 {
     bool bValid = true;
-    //
+
     // need to check which must be deleted
     iterator itr = begin();
     while(itr != end())

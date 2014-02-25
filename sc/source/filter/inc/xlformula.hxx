@@ -149,7 +149,7 @@ const sal_uInt16 EXC_TOK_NLR_REL            = 0x8000;   /// True = Natural langu
 const sal_uInt32 EXC_TOK_NLR_ADDREL         = 0x80000000;   /// NLR relative (in appended data).
 const sal_uInt32 EXC_TOK_NLR_ADDMASK        = 0x3FFFFFFF;   /// Mask for number of appended ranges.
 
-// ----------------------------------------------------------------------------
+
 
 /** Type of a formula. */
 enum XclFormulaType
@@ -334,7 +334,7 @@ struct XclFunctionInfo
     OUString            GetAddInEquivalentFuncName() const;
 };
 
-// ----------------------------------------------------------------------------
+
 
 class XclRoot;
 
@@ -422,7 +422,7 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclTokenArray& rTokArr );
 /** Calls the Write() function at the passed token array. */
 XclExpStream& operator<<( XclExpStream& rStrm, const XclTokenArrayRef& rxTokArr );
 
-// ----------------------------------------------------------------------------
+
 
 namespace formula { class FormulaToken; }
 class ScTokenArray;
@@ -466,7 +466,7 @@ private:
     bool                mbSkipSpaces;       /// true = Skip whitespace tokens.
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Contains all cell references that can be extracted from a multiple operations formula. */
 struct XclMultipleOpRefs
@@ -479,7 +479,7 @@ struct XclMultipleOpRefs
     bool                mbDblRefMode;       /// true = One formula with row and column values.
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** A helper with Excel specific token array functions.
 
@@ -541,7 +541,7 @@ public:
     static bool GetMultipleOpRefs( XclMultipleOpRefs& rRefs, const ScTokenArray& rScTokArr, const ScAddress& rScPos );
 };
 
-// ----------------------------------------------------------------------------
+
 
 inline sal_uInt8 XclTokenArrayHelper::GetTokenId( sal_uInt8 nBaseId, sal_uInt8 nTokenClass )
 {
@@ -557,7 +557,7 @@ inline void XclTokenArrayHelper::ChangeTokenClass( sal_uInt8& rnTokenId, sal_uIn
     ::set_flag( rnTokenId, nTokenClass );
 }
 
-// ============================================================================
+
 
 #endif
 

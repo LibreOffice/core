@@ -904,7 +904,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             }
             break;
 
-        //  ----------------------------------------------------------------
+
 
         case FID_CHG_SHOW:
             {

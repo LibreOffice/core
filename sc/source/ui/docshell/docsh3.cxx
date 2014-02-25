@@ -64,9 +64,9 @@
 
 
 
-//
+
 //          Redraw - Benachrichtigungen
-//
+
 
 
 void ScDocShell::PostEditView( ScEditEngineDefaulter* pEditEngine, const ScAddress& rCursorPos )
@@ -732,9 +732,9 @@ void ScDocShell::CompareDocument( ScDocument& rOtherDoc )
 }
 
 
-//
+
 //              Merge (Aenderungen zusammenfuehren)
-//
+
 
 
 static inline sal_Bool lcl_Equal( const ScChangeAction* pA, const ScChangeAction* pB, sal_Bool bIgnore100Sec )

@@ -31,7 +31,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sheet;
@@ -39,7 +39,7 @@ using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 
 
-// ============================================================================
+
 
 namespace {
 
@@ -72,8 +72,8 @@ const sal_Int16 BIFF8_MAXTAB        = BIFF5_MAXTAB;
 
 } // namespace
 
-// ============================================================================
-// ============================================================================
+
+
 
 CellAddress ApiCellRangeList::getBaseAddress() const
 {
@@ -82,7 +82,7 @@ CellAddress ApiCellRangeList::getBaseAddress() const
     return CellAddress( front().Sheet, front().StartColumn, front().StartRow );
 }
 
-// ============================================================================
+
 
 void BinAddress::read( SequenceInputStream& rStrm )
 {
@@ -95,7 +95,7 @@ void BinAddress::read( BiffInputStream& rStrm, bool bCol16Bit, bool bRow32Bit )
     mnCol = bCol16Bit ? rStrm.readuInt16() : rStrm.readuInt8();
 }
 
-// ============================================================================
+
 
 void BinRange::read( SequenceInputStream& rStrm )
 {
@@ -110,7 +110,7 @@ void BinRange::read( BiffInputStream& rStrm, bool bCol16Bit, bool bRow32Bit )
     maLast.mnCol = bCol16Bit ? rStrm.readuInt16() : rStrm.readuInt8();
 }
 
-// ============================================================================
+
 
 void BinRangeList::read( SequenceInputStream& rStrm )
 {
@@ -120,7 +120,7 @@ void BinRangeList::read( SequenceInputStream& rStrm )
         aIt->read( rStrm );
 }
 
-// ============================================================================
+
 
 AddressConverter::AddressConverter( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -544,7 +544,7 @@ void AddressConverter::initializeMaxPos(
     }
 }
 
-// ============================================================================
+
 
 } // namespace xls
 } // namespace oox

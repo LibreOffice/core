@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// ============================================================================
+
 
 #ifndef _SC_CSVGRID_HXX
 #define _SC_CSVGRID_HXX
@@ -33,7 +33,7 @@
 #include "csvsplits.hxx"
 
 
-// ----------------------------------------------------------------------------
+
 
 namespace svtools { class ColorConfig; }
 class EditEngine;
@@ -42,7 +42,7 @@ class ScAsciiOptions;
 class ScAccessibleCsvControl;
 
 
-// ============================================================================
+
 
 const sal_uInt8 CSV_COLFLAG_NONE    = 0x00;         /// Nothing set.
 const sal_uInt8 CSV_COLFLAG_SELECT  = 0x01;         /// Column is selected.
@@ -50,7 +50,7 @@ const sal_uInt8 CSV_COLFLAG_SELECT  = 0x01;         /// Column is selected.
 const sal_uInt32 CSV_COLUMN_INVALID = CSV_VEC_NOTFOUND;
 
 
-// ----------------------------------------------------------------------------
+
 
 /** This struct contains the state of one table column. */
 struct ScCsvColState
@@ -78,12 +78,12 @@ inline void ScCsvColState::Select( bool bSel )
 }
 
 
-// ----------------------------------------------------------------------------
+
 
 typedef ::std::vector< ScCsvColState > ScCsvColStateVec;
 
 
-// ============================================================================
+
 
 /** A data grid control for the CSV import dialog. The design of this control
     simulates a Calc spreadsheet with row and column headers. */
@@ -123,7 +123,7 @@ private:
     sal_uInt32                  mnMTCurrCol;        /// Current column of mouse tracking.
     bool                        mbMTSelecting;      /// Mouse tracking: true = select, false = deselect.
 
-    // ------------------------------------------------------------------------
+
 public:
     explicit                    ScCsvGrid( ScCsvControl& rParent );
     virtual                     ~ScCsvGrid();
@@ -347,7 +347,7 @@ protected:
 };
 
 
-// ============================================================================
+
 
 #endif
 

@@ -24,7 +24,7 @@
 
 #include "viewdata.hxx"
 
-// ---------------------------------------------------------------------------
+
 
 class ScTabView;
 class ScViewData;
@@ -78,7 +78,7 @@ public:
 };
 
 
-// ---------------------------------------------------------------------------
+
 
 
 class ScHeaderFunctionSet : public FunctionSet          // Column / row headers

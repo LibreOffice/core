@@ -18,9 +18,9 @@
 
 // This file has been automatically generated.  Do not hand-edit this!
 
-// ---------------------------------------------------------------------------
+
 // French language locale (automatically generated)
-// ---------------------------------------------------------------------------
+
 static const Locale aFr("fr", "", "");
 
 // pre instantiations of localized function names
@@ -73,9 +73,9 @@ static const TransItem pFr[] = {
 
 addToMap(pFr, aFr);
 
-// ---------------------------------------------------------------------------
+
 // Hungarian language locale (automatically generated)
-// ---------------------------------------------------------------------------
+
 static const Locale aHu("hu", "", "");
 
 // pre instantiations of localized function names
@@ -143,9 +143,9 @@ static const TransItem pHu[] = {
 
 addToMap(pHu, aHu);
 
-// ---------------------------------------------------------------------------
+
 // German language locale (automatically generated)
-// ---------------------------------------------------------------------------
+
 static const Locale aDe("de", "", "");
 
 // pre instantiations of localized function names

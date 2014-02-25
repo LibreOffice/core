@@ -173,7 +173,7 @@ struct ScGridWindow::MouseEventState
 
 #define SC_FILTERLISTBOX_LINES  12
 
-// ============================================================================
+
 
 ScGridWindow::VisibleRange::VisibleRange() :
     mnCol1(0), mnCol2(MAXCOL), mnRow1(0), mnRow2(MAXROW)
@@ -197,7 +197,7 @@ bool ScGridWindow::VisibleRange::set(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
     return bChanged;
 }
 
-// ============================================================================
+
 
 class ScFilterListBox : public ListBox
 {
@@ -333,7 +333,7 @@ void ScFilterListBox::SelectHdl()
     }
 }
 
-// ============================================================================
+
 
 // use a System floating window for the above filter listbox
 class ScFilterFloatingWindow : public FloatingWindow
@@ -360,7 +360,7 @@ Window* ScFilterFloatingWindow::GetPreferredKeyInputWindow()
     return GetWindow(WINDOW_FIRSTCHILD) ? GetWindow(WINDOW_FIRSTCHILD)->GetPreferredKeyInputWindow() : NULL;    // will be the FilterBox
 }
 
-// ============================================================================
+
 
 static sal_Bool lcl_IsEditableMatrix( ScDocument* pDoc, const ScRange& rRange )
 {
@@ -1897,9 +1897,9 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
         }
     }
 
-            //
+
             //      scenario selection
-            //
+
 
     ScRange aScenRange;
     if ( rMEvt.IsLeft() && HasScenarioButton( aPos, aScenRange ) )
@@ -1908,9 +1908,9 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
         return;
     }
 
-            //
+
             //      Doppelklick angefangen ?
-            //
+
 
     // StopMarking kann aus DrawMouseButtonDown gerufen werden
 
@@ -1925,9 +1925,9 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
             nMouseStatus = SC_GM_TABDOWN;
     }
 
-            //
+
             //      Links in Edit-Zellen
-            //
+
 
     sal_Bool bAlt = rMEvt.IsMod2();
     if ( !bAlt && rMEvt.IsLeft() &&
@@ -1938,9 +1938,9 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
         return;
     }
 
-            //
+
             //      Gridwin - SelectionEngine
-            //
+
 
     if ( rMEvt.IsLeft() )
     {
@@ -2159,9 +2159,9 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     if (bRefMode)
         pScMod->EndReference();
 
-        //
+
         //  Giesskannen-Modus (Gestalter)
-        //
+
 
     if (pScMod->GetIsWaterCan())
     {
@@ -2213,9 +2213,9 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             pView->ResetBrushDocument();            // invalidates pBrushDoc pointer
     }
 
-            //
+
             //      double click (only left button)
-            //
+
 
     sal_Bool bDouble = ( rMEvt.GetClicks() == 2 && rMEvt.IsLeft() );
     if ( bDouble && !bRefMode && nMouseStatus == SC_GM_DBLDOWN && !pScMod->IsRefDialogOpen() )
@@ -2298,9 +2298,9 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         return;
     }
 
-            //
+
             //      Links in edit cells
-            //
+
 
     sal_Bool bAlt = rMEvt.IsMod2();
     if ( !bAlt && !bRefMode && !bDouble && nMouseStatus == SC_GM_URLDOWN )
@@ -2383,9 +2383,9 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         }
     }
 
-            //
+
             //      Gridwin - SelectionEngine
-            //
+
 
     //  SelMouseButtonDown is called only for left button, but SelMouseButtonUp would return
     //  sal_True for any call, so IsLeft must be checked here, too.
@@ -5662,9 +5662,9 @@ void ScGridWindow::UpdateCursorOverlay()
 
     std::vector<Rectangle> aPixelRects;
 
-    //
+
     //  determine the cursor rectangles in pixels (moved from ScGridWindow::DrawCursor)
-    //
+
 
     SCTAB nTab = pViewData->GetTabNo();
     SCCOL nX = pViewData->GetCurX();
@@ -5839,9 +5839,9 @@ void ScGridWindow::UpdateAutoFillOverlay()
 
     DeleteAutoFillOverlay();
 
-    //
+
     //  get the AutoFill handle rectangle in pixels
-    //
+
 
     if ( bAutoMarkVisible && aAutoMarkPos.Tab() == pViewData->GetTabNo() &&
          !pViewData->HasEditView(eWhich) && pViewData->IsActive() )
@@ -5916,9 +5916,9 @@ void ScGridWindow::UpdateDragRectOverlay()
 
     DeleteDragRectOverlay();
 
-    //
+
     //  get the rectangles in pixels (moved from DrawDragRect)
-    //
+
 
     if ( bDragRect || bPagebreakDrawn )
     {
@@ -6092,9 +6092,9 @@ void ScGridWindow::UpdateShrinkOverlay()
 
     DeleteShrinkOverlay();
 
-    //
+
     //  get the rectangle in pixels
-    //
+
 
     Rectangle aPixRect;
     ScRange aRange;

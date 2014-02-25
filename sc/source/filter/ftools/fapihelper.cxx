@@ -278,7 +278,7 @@ void ScfPropertySet::SetProperties( const Sequence< OUString >& rPropNames, cons
     }
 }
 
-// ============================================================================
+
 
 ScfPropSetHelper::ScfPropSetHelper( const sal_Char* const* ppcPropNames ) :
     mnNextIdx( 0 )
@@ -384,6 +384,6 @@ Any* ScfPropSetHelper::GetNextAny()
     return pAny;
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

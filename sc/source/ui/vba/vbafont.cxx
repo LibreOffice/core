@@ -253,7 +253,7 @@ ScVbaFont::getColorIndex() throw ( uno::RuntimeException, std::exception )
     return ScVbaFont_BASE::getColorIndex();
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
+
 void  SAL_CALL
 ScVbaFont::setStandardFontSize( const uno::Any& /*aValue*/ ) throw( uno::RuntimeException, std::exception )
 {

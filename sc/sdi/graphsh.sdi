@@ -148,7 +148,7 @@ interface GraphSelection
     ]
 }
 
- // ===========================================================================
+
 shell ScGraphicShell : ScDrawShell
 {
     import GraphSelection;

@@ -43,7 +43,7 @@
 #include <editeng/flstitem.hxx>
 #include <svl/aeitem.hxx>
 #include <svx/flagsdef.hxx>
-//==================================================================
+
 
 ScStyleDlg::ScStyleDlg( Window*             pParent,
                         SfxStyleSheetBase&  rStyleBase,
