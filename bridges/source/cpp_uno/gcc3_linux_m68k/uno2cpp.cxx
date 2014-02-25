@@ -70,7 +70,6 @@ void MapReturn(long d0, long d1, typelib_TypeClass eReturnType, long *pRegisterR
 
 namespace
 {
-//================================================================
 
 void callVirtualMethod(
     void * pThis,
@@ -150,7 +149,7 @@ void callVirtualMethod(
         *pDS++ = *reinterpret_cast<sal_uInt8 *>( pSV );
 
 namespace {
-//=======================================================================
+
 static void cpp_call(
     bridges::cpp_uno::shared::UnoInterfaceProxy * pThis,
     bridges::cpp_uno::shared::VtableSlot aVtableSlot,

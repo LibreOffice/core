@@ -37,7 +37,7 @@ using namespace ::com::sun::star::uno;
 namespace
 {
 
-//==================================================================================================
+
 static typelib_TypeClass cpp2uno_call(
     bridges::cpp_uno::shared::CppInterfaceProxy * pThis,
     const typelib_TypeDescription * pMemberTypeDescr,
@@ -322,7 +322,7 @@ static typelib_TypeClass cpp2uno_call(
 }
 
 
-//==================================================================================================
+
 static typelib_TypeClass cpp_mediate(
     sal_uInt64 nOffsetAndIndex,
         void ** gpreg, void ** fpreg, long sp,

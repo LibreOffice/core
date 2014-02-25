@@ -326,7 +326,6 @@ static typelib_TypeClass cpp2uno_call(
 }
 
 
-//============================================================================
 static typelib_TypeClass cpp_mediate(
     sal_uInt64 nOffsetAndIndex,
     void ** gpreg, void ** fpreg, void ** ovrflw,

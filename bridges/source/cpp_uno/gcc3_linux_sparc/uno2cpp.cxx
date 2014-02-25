@@ -32,7 +32,6 @@ using namespace com::sun::star::uno;
 
 namespace
 {
-//==================================================================================================
 // The call instruction within the asm section of callVirtualMethod may throw
 // exceptions.  So that the compiler handles this correctly, it is important
 // that (a) callVirtualMethod might call dummy_can_throw_anything (although this
@@ -271,7 +270,6 @@ void callVirtualMethod( void * pAdjustedThisPtr,
     }
 }
 
-//=================================================================================================
 static void cpp_call(
     bridges::cpp_uno::shared::UnoInterfaceProxy * pThis,
     bridges::cpp_uno::shared::VtableSlot aVtableSlot,

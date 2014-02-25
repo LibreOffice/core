@@ -210,7 +210,6 @@ void MapReturn(sal_uInt32 r0, sal_uInt32 r1, typelib_TypeDescriptionReference * 
 
 namespace
 {
-//================================================================
 
 void callVirtualMethod(
     void * pThis,
@@ -325,7 +324,7 @@ void callVirtualMethod(
 // while doubles need to have an 8 byte alignment, so only go into double registers starting
 // at every other single register. For ex a float, double, float sequence will fill registers
 // s0, d1, and s1, actually corresponding to the linear order s0,s1, d1.
-//
+
 // These use the single/double register array and counters and ignore the pGPR argument
 // nSR and nDR are the number of single and double precision registers that are no longer
 // available
@@ -377,7 +376,7 @@ void callVirtualMethod(
                 *pDS++ = *reinterpret_cast<sal_uInt8 *>( pSV );
 
 namespace {
-//=======================================================================
+
 static void cpp_call(
     bridges::cpp_uno::shared::UnoInterfaceProxy * pThis,
     bridges::cpp_uno::shared::VtableSlot aVtableSlot,

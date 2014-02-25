@@ -349,7 +349,6 @@ static typelib_TypeClass cpp2uno_call(
 }
 
 
-//==================================================================================================
 static typelib_TypeClass cpp_mediate(
     sal_Int32 nFunctionIndex,
         sal_Int32 nVtableOffset,
@@ -485,7 +484,6 @@ static typelib_TypeClass cpp_mediate(
     return eRet;
 }
 
-//==================================================================================================
 /**
  * is called on incoming vtable calls
  * (called by asm snippets)
@@ -631,7 +629,6 @@ unsigned char *  codeSnippet( unsigned char * code, sal_Int32 functionIndex, sal
     // if no dedicated floating point registers are used than we have NULL
     // pointer there
     //  li      r6, 0
-    //
 
     // #now load up the pointer to the overflow call stack
     //  addi    r7,r1,8

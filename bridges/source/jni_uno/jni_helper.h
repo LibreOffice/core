@@ -29,7 +29,6 @@
 namespace jni_uno
 {
 
-//------------------------------------------------------------------------------
 inline void jstring_to_ustring(
     JNI_context const & jni, rtl_uString ** out_ustr, jstring jstr )
 {
@@ -56,7 +55,6 @@ inline void jstring_to_ustring(
     }
 }
 
-//------------------------------------------------------------------------------
 inline OUString jstring_to_oustring(
     JNI_context const & jni, jstring jstr )
 {
@@ -65,7 +63,6 @@ inline OUString jstring_to_oustring(
     return OUString( ustr, SAL_NO_ACQUIRE );
 }
 
-//------------------------------------------------------------------------------
 inline jstring ustring_to_jstring(
     JNI_context const & jni, rtl_uString const * ustr )
 {
@@ -75,7 +72,6 @@ inline jstring ustring_to_jstring(
 }
 
 
-//------------------------------------------------------------------------------
 // if inException, does not handle exceptions, in which case returned value will
 // be null if exception occurred:
 inline jclass find_class(
@@ -101,7 +97,6 @@ inline jclass find_class(
 }
 
 
-//------------------------------------------------------------------------------
 inline jobject create_type( JNI_context const & jni, jclass clazz )
 {
     JNI_info const * jni_info = jni.get_info();
@@ -113,7 +108,6 @@ inline jobject create_type( JNI_context const & jni, jclass clazz )
     return jo_type;
 }
 
-//------------------------------------------------------------------------------
 inline jobject create_type(
     JNI_context const & jni, typelib_TypeDescriptionReference * type )
 {
@@ -138,7 +132,6 @@ inline jobject create_type(
     return jo_type;
 }
 
-//------------------------------------------------------------------------------
 inline jobject compute_oid( JNI_context const & jni, jobject jo )
 {
     JNI_info const * jni_info = jni.get_info();

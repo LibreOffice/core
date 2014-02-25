@@ -27,7 +27,7 @@ import com.sun.star.uno.IEnvironment;
 import com.sun.star.uno.IQueryInterface;
 
 
-//==============================================================================
+
 public final class JNI_proxy implements java.lang.reflect.InvocationHandler
 {
     static {
@@ -63,7 +63,7 @@ public final class JNI_proxy implements java.lang.reflect.InvocationHandler
     protected String m_oid;
     protected Class m_class;
 
-    //__________________________________________________________________________
+
     public static String get_stack_trace( Throwable throwable )
         throws Throwable
     {
@@ -92,10 +92,8 @@ public final class JNI_proxy implements java.lang.reflect.InvocationHandler
         return "\njava stack trace:\n" + trace;
     }
 
-    //__________________________________________________________________________
     private native void finalize( long bridge_handle );
 
-    //__________________________________________________________________________
     public void finalize()
     {
         AsynchronousFinalizer.add(new AsynchronousFinalizer.Job() {
@@ -105,7 +103,6 @@ public final class JNI_proxy implements java.lang.reflect.InvocationHandler
             });
     }
 
-    //__________________________________________________________________________
     private JNI_proxy(
         long bridge_handle, IEnvironment java_env,
         long receiver_handle, long td_handle, Type type, String oid )
@@ -119,7 +116,6 @@ public final class JNI_proxy implements java.lang.reflect.InvocationHandler
         m_class = m_type.getZClass();
     }
 
-    //__________________________________________________________________________
     public static Object create(
         long bridge_handle, IEnvironment java_env,
         long receiver_handle, long td_handle, Type type, String oid,
@@ -132,7 +128,6 @@ public final class JNI_proxy implements java.lang.reflect.InvocationHandler
         return java_env.registerInterface( proxy, new String [] { oid }, type );
     }
 
-    //__________________________________________________________________________
     public static java.lang.reflect.Constructor get_proxy_ctor( Class clazz )
         throws Throwable
     {
@@ -143,13 +138,12 @@ public final class JNI_proxy implements java.lang.reflect.InvocationHandler
         return proxy_class.getConstructor( s_InvocationHandler );
     }
 
-    //__________________________________________________________________________
     private native Object dispatch_call(
         long bridge_handle, String method, Object args [] )
         throws Throwable;
 
     // InvocationHandler impl
-    //__________________________________________________________________________
+
     public Object invoke(
         Object proxy, java.lang.reflect.Method method, Object args [] )
         throws Throwable
