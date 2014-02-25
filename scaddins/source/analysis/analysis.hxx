@@ -234,7 +234,7 @@ public:
     virtual double SAL_CALL     getFvschedule( double fPrinc, const css::uno::Sequence< css::uno::Sequence< double > >& rSchedule ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 };
 
-//------------------------------------------------------------------
+
 
 #endif
 

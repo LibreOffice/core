@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//------------------------------------------------------------------
-//
+
+
 // date functions add in
-//
-//------------------------------------------------------------------
+
+
 
 #ifndef _SCA_DATEFUNC_HXX
 #define _SCA_DATEFUNC_HXX
@@ -38,7 +38,7 @@
 #include <tools/rc.hxx>
 #include <tools/resary.hxx>
 
-//------------------------------------------------------------------
+
 
 class ScaList
 {
@@ -83,7 +83,7 @@ inline void ScaList::Append( void* pNew )
 }
 
 
-//------------------------------------------------------------------
+
 
 class ScaStringList : protected ScaList
 {
@@ -130,7 +130,7 @@ inline void ScaStringList::Append( const OUString& rNew )
 }
 
 
-//------------------------------------------------------------------
+
 
 class ScaResId : public ResId
 {
@@ -139,7 +139,7 @@ public:
 };
 
 
-//------------------------------------------------------------------
+
 
 class ScaResStringLoader : public Resource
 {
@@ -162,7 +162,7 @@ inline ScaResStringLoader::ScaResStringLoader( sal_uInt16 nResId, sal_uInt16 nSt
 }
 
 
-//------------------------------------------------------------------
+
 
 class ScaResStringArrLoader : public Resource
 {
@@ -185,7 +185,7 @@ inline ScaResStringArrLoader::ScaResStringArrLoader( sal_uInt16 nResId, sal_uInt
 }
 
 
-//------------------------------------------------------------------
+
 
 class ScaResPublisher : public Resource
 {
@@ -199,7 +199,7 @@ public:
 };
 
 
-//------------------------------------------------------------------
+
 
 class ScaFuncRes : public Resource
 {
@@ -208,7 +208,7 @@ public:
 };
 
 
-//------------------------------------------------------------------
+
 
 enum ScaCategory
 {
@@ -264,7 +264,7 @@ public:
 };
 
 
-//------------------------------------------------------------------
+
 
 class ScaFuncDataList : private ScaList
 {
@@ -303,8 +303,8 @@ inline ScaFuncData* ScaFuncDataList::Next()
 }
 
 
-//------------------------------------------------------------------
-//------------------------------------------------------------------
+
+
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL DateFunctionAddIn_CreateInstance(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
@@ -413,7 +413,7 @@ public:
                                 throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
 };
 
-//------------------------------------------------------------------
+
 
 #endif  // _SCA_DATEFUNC_HXX
 

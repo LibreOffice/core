@@ -24,7 +24,7 @@ namespace bs {
 
 namespace types {
 enum Greeks {
-    Value    = 0,        //
+    Value    = 0,
     Delta    = 1,        // d/dS
     Gamma    = 2,        // d^2/dS^2
     Theta    = 3,        // d/dt

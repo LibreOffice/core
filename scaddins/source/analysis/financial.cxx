@@ -458,7 +458,7 @@ double SAL_CALL AnalysisAddIn::getOddlyield( const css::uno::Reference< css::bea
 }
 
 
-// ============================================================================
+
 // XIRR helper functions
 
 #define V_(i) (rValues.Get(i))
@@ -562,7 +562,7 @@ double SAL_CALL AnalysisAddIn::getXirr(
 }
 
 
-// ============================================================================
+
 
 double SAL_CALL AnalysisAddIn::getXnpv(
     double fRate, const css::uno::Sequence< css::uno::Sequence< double > >& rValues, const css::uno::Sequence< css::uno::Sequence< sal_Int32 > >& rDates ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException )

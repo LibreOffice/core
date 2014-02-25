@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//------------------------------------------------------------------
-//
+
+
 // option pricing functions add in
-//
+
 // most parts of this files are technical UNO details which are
 // all copied from ../datefunc/datefunc.hxx
 // to avoid having to rename all classes to do with UNO
 // technicalities we use our own namespace
-//
-//------------------------------------------------------------------
+
+
 
 #ifndef _SCA_PRICING_HXX
 #define _SCA_PRICING_HXX
@@ -47,7 +47,7 @@
 
 
 
-//------------------------------------------------------------------
+
 
 namespace sca {
 namespace pricing {
@@ -95,7 +95,7 @@ inline void ScaList::Append( void* pNew )
 }
 
 
-//------------------------------------------------------------------
+
 
 class ScaStringList : protected ScaList
 {
@@ -142,7 +142,7 @@ inline void ScaStringList::Append( const OUString& rNew )
 }
 
 
-//------------------------------------------------------------------
+
 
 class ScaResId : public ResId
 {
@@ -151,7 +151,7 @@ public:
 };
 
 
-//------------------------------------------------------------------
+
 
 class ScaResStringLoader : public Resource
 {
@@ -174,7 +174,7 @@ inline ScaResStringLoader::ScaResStringLoader( sal_uInt16 nResId, sal_uInt16 nSt
 }
 
 
-//------------------------------------------------------------------
+
 
 class ScaResStringArrLoader : public Resource
 {
@@ -197,7 +197,7 @@ inline ScaResStringArrLoader::ScaResStringArrLoader( sal_uInt16 nResId, sal_uInt
 }
 
 
-//------------------------------------------------------------------
+
 
 class ScaResPublisher : public Resource
 {
@@ -211,7 +211,7 @@ public:
 };
 
 
-//------------------------------------------------------------------
+
 
 class ScaFuncRes : public Resource
 {
@@ -220,7 +220,7 @@ public:
 };
 
 
-//------------------------------------------------------------------
+
 
 enum ScaCategory
 {
@@ -276,7 +276,7 @@ public:
 };
 
 
-//------------------------------------------------------------------
+
 
 class ScaFuncDataList : private ScaList
 {
@@ -319,8 +319,8 @@ inline ScaFuncData* ScaFuncDataList::Next()
 
 
 
-//------------------------------------------------------------------
-//------------------------------------------------------------------
+
+
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL PricingFunctionAddIn_CreateInstance(
     const css::uno::Reference< css::lang::XMultiServiceFactory >& );
@@ -381,9 +381,9 @@ public:
     virtual sal_Bool SAL_CALL   supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException );
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException );
 
-    // ----------------------------------------
+
     //  methods from own interfaces start here
-    // ----------------------------------------
+
 
     virtual double SAL_CALL getOptBarrier( double spot, double vol,
             double r, double rf, double T, double strike,
@@ -407,7 +407,7 @@ public:
             const css::uno::Any& strikeval, const css::uno::Any& put_call ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
 };
-//------------------------------------------------------------------
+
 
 #endif
 

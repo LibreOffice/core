@@ -20,21 +20,21 @@
 
 // options prices and greeks in the Black-Scholes model
 // also known as TV (theoretical value)
-//
+
 // the code is structured as follows:
-//
+
 // (1) basic assets
 //   - cash-or-nothing option:  bincash()
 //   - asset-or-nothing option: binasset()
-//
+
 // (2) derived basic assets, can all be priced based on (1)
 //   - vanilla put/call:  putcall() = +/- ( binasset() - K*bincash() )
 //   - truncated put/call (barriers active at maturity only)
-//
+
 // (3) write a wrapper function to include all vanilla pricers
 //   - this is so we don't duplicate code when pricing barriers
 //     as this is derived from vanillas
-//
+
 // (4) single barrier options (knock-out), priced based on truncated vanillas
 //   - it follows from the reflection principle that the price W(S) of a
 //     single barrier option is given by
@@ -44,28 +44,28 @@
 //   - to reduce code duplication and in anticipation of double barrier
 //     options we write the following function
 //        barrier_term(S,c) = V(c*S) - (B/S)^a V(c*B^2/S)
-//
+
 //  (5) double barrier options (knock-out)
 //   - value is an infinite sum over option prices of the corresponding
 //     truncated vanillas (truncated at both barriers):
-//
+
 //   W(S)=sum (B2/B1)^(i*a) (V(S(B2/B1)^(2i)) - (B1/S)^a V(B1^2/S (B2/B1)^(2i))
-//
+
 //  (6) write routines for put/call barriers and touch options which
 //     mainly call the general double barrier pricer
 //     the main routines are touch() and barrier()
 //     both can price in/out barriers, double/single barriers as well as
 //     vanillas
-//
-//
+
+
 // the framework allows any barriers to be priced as long as we define
 // the value/greek functions for the corresponding truncated vanilla
 // and wrap them into internal::vanilla() and internal::vanilla_trunc()
-//
+
 // disadvantage of that approach is that due to the rules of
 // differentiations the formulas for greeks become long and possible
 // simplifications in the formulas won't be made
-//
+
 // other code inefficiency due to multiplication with pm (+/- 1)
 //   cvtsi2sd: int-->double, 6/3 cycles
 //   mulsd: double-double multiplication, 5/1 cycles
@@ -73,7 +73,7 @@
 //   which are efficient
 //   note this is tiny anyway as compared to exp/log (100 cycles),
 //   pow (200 cycles), erf (70 cycles)
-//
+
 // this code is not tested for numerical instability, ie overruns,
 // underruns, accuracy, etc
 
