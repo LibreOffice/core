@@ -353,9 +353,15 @@ DECLARE_ODFEXPORT_TEST(testTextFrameVertAdjust, "textframe-vertadjust.odt")
 
 DECLARE_ODFEXPORT_TEST(testShapeRelsize, "shape-relsize.odt")
 {
+    uno::Reference<drawing::XShape> xShape = getShape(1);
     // These were all 0, as style:rel-width/height was ignored on import for shapes.
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(40), getProperty<sal_Int16>(getShape(1), "RelativeWidth"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(20), getProperty<sal_Int16>(getShape(1), "RelativeHeight"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(40), getProperty<sal_Int16>(xShape, "RelativeWidth"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(20), getProperty<sal_Int16>(xShape, "RelativeHeight"));
+
+    // Relation was "page" for both width and height, should be "paragraph" for width.
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::FRAME, getProperty<sal_Int16>(xShape, "RelativeWidthRelation"));
+    // And make sure that height stays "page".
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xShape, "RelativeHeightRelation"));
 }
 
 #endif

@@ -1797,6 +1797,10 @@ uno::Sequence< beans::PropertyState > SwXShape::getPropertyStates(
                     pRet[nProperty] = beans::PropertyState_DIRECT_VALUE;
                 else if(bGroupMember)
                     pRet[nProperty] = beans::PropertyState_DEFAULT_VALUE;
+                else if (pEntry->nWID == RES_FRM_SIZE &&
+                         (pEntry->nMemberId == MID_FRMSIZE_REL_HEIGHT_RELATION ||
+                          pEntry->nMemberId == MID_FRMSIZE_REL_WIDTH_RELATION))
+                    pRet[nProperty] = beans::PropertyState_DIRECT_VALUE;
                 else if(pFmt)
                 {
                     const SwAttrSet& rSet = pFmt->GetAttrSet();
