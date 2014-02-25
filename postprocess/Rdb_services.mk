@@ -152,7 +152,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 			winaccessibility/source/service/winaccessibility \
 		) \
 	) \
-	$(if $(DISABLE_NEON),, \
+	$(if $(WITH_WEBDAV), \
 		ucb/source/ucp/webdav-neon/ucpdav1 \
 	) \
 	$(if $(DISABLE_SCRIPTING),, \

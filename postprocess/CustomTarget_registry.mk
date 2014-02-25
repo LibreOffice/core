@@ -335,7 +335,7 @@ ifneq (unx,$(GUIBASE))
 postprocess_FILES_main += \
 	$(postprocess_MOD)/org/openoffice/Office/Paths-notunixdesktop.xcu
 endif
-ifeq ($(DISABLE_NEON),$(false))
+ifneq ($(WITH_WEBDAV),)
 postprocess_FILES_main += $(postprocess_MOD)/org/openoffice/ucb/Configuration-neon.xcu
 endif
 ifeq ($(ENABLE_EVOAB2),TRUE)
