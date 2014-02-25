@@ -1,7 +1,7 @@
 // -*- Mode: ObjC; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-//
+
 // This file is part of the LibreOffice project.
-//
+
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -29,7 +29,7 @@ static CGRect portrait,landscape;
 -(CGRect) getFullFrameForRect:(CGRect) similarRect{
     [self fetchStatics];
     if(similarRect.size.width >smaller){
-        
+
         return landscape;
     }
     return portrait;
@@ -48,16 +48,16 @@ static CGRect portrait,landscape;
 
 -(BOOL)returnSuccees:(BOOL) success forAction:(NSString *) action andAlertForError:(NSError *) error  {
     if(!success){
-        
+
         UIAlertView *failedDeleteAlert =
         [[UIAlertView alloc]initWithTitle:@"Meh:"
                                   message:[NSString stringWithFormat:@"Failed to perform: %@",action]
                                  delegate:self
                         cancelButtonTitle:@"Close"
                         otherButtonTitles:nil];
-        
+
         [failedDeleteAlert show];
-        
+
         NSLog(@"Could not %@ :%@ ",action,[error localizedDescription]);
     }
     return success;

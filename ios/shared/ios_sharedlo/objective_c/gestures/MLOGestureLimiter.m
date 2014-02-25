@@ -1,7 +1,7 @@
 // -*- Mode: ObjC; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-//
+
 // This file is part of the LibreOffice project.
-//
+
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -39,7 +39,7 @@ static const CGFloat DELTA_SCALE_ZOOM_IN_THRESHOLD=1.5f,
     return self.actualZoom;
 }
 -(id) initWithGestureEngine:(MLOGestureEngine *) engine{
- 
+
     self =  [self init];
     if(self){
         self.engine= engine;
@@ -63,10 +63,10 @@ static const CGFloat DELTA_SCALE_ZOOM_IN_THRESHOLD=1.5f,
                 return @"swipe LEFT (scroll right)";
             }
             return @"swipe RIGHT (scroll left)";
-            
+
         case DELTA_Y:
             if(delta < 0.0f){
-                
+
                 return @"swipe UP (scroll down)";
             }
             return @"swipe DOWN (scroll up)";
@@ -91,44 +91,44 @@ static const CGFloat DELTA_SCALE_ZOOM_IN_THRESHOLD=1.5f,
 
 
 -(CGFloat)limitDelta:(CGFloat) delta direction:(MLOPixelDeltaDirection) direction{
-    
+
     if(delta==0){
         return 0;
     }
     CGFloat deltaInLogic = [self pixelsToLogic:delta];
-    
+
     CGFloat limit = [self limitForRawDelta:deltaInLogic direction:direction];
-    
+
     if(deltaInLogic > 0){
         deltaInLogic = min(limit,deltaInLogic);
     }else{
         deltaInLogic = max(limit,deltaInLogic);
     }
-    
+
     [self updateCenterInLogic:deltaInLogic direction:direction];
-    
+
     return [self logicToPixels:deltaInLogic];
 }
 
 -(CGFloat) limitForRawDelta:(CGFloat) raw direction:(MLOPixelDeltaDirection) direction{
-      
+
     CGFloat halfscreen = [self halfViewSizeInLogic:direction];
     CGFloat center = [self viewCenterCord:direction];
-    
+
     CGFloat limit;
-    
+
     if(raw < 0.0f){
-    
+
         CGFloat document = [self documentSizeInLogic:direction];
         limit = halfscreen + center - document;
-        
+
         if(LOG_GESTURE_LIMITING){
             NSLog(@"%@ LIMIT: raw=%f limit(%f) = halfscreen(%f) + center(%f) - document(%f)",MLOPixelDeltaDirectionString(direction),raw,limit,halfscreen,center,document);
         }
-        
+
     }else{
         limit = center - halfscreen;
-        
+
         if(LOG_GESTURE_LIMITING){
             NSLog(@"%@ LIMIT: raw=%f limit(%f) = center(%f) - halfscreen(%f)",MLOPixelDeltaDirectionString(direction),raw,limit,center,halfscreen);
         }
@@ -137,7 +137,7 @@ static const CGFloat DELTA_SCALE_ZOOM_IN_THRESHOLD=1.5f,
         // negative means limit flipped sign, so limit is zero
         return 0;
     }
-    
+
     return limit;
 }
 
@@ -193,7 +193,7 @@ static const CGFloat DELTA_SCALE_ZOOM_IN_THRESHOLD=1.5f,
                                              self.halfViewSizeInLogic.height);
         self.didCreateViewCenterInLogic = YES;
     }
-    
+
     return self.viewCenterInLogic;
 }
 
@@ -204,15 +204,15 @@ static const CGFloat DELTA_SCALE_ZOOM_IN_THRESHOLD=1.5f,
 }
 
 -(void)updateActualZoom:(CGFloat) newActualZoom{
-    
+
     CGFloat viewResizeScale = self.actualZoom / newActualZoom;
-    
+
     self.halfViewSizeInLogic = CGSizeMake(self.halfViewSizeInLogic.width * viewResizeScale,
                                           self.halfViewSizeInLogic.height * viewResizeScale);
     self.actualZoom = newActualZoom;
-    
+
     static const CGFloat PIXEL_TO_LOGIC_RATION_TIMES_HUNDRED = PIXEL_TO_LOGIC_RATIO * 100.0f;
-    
+
     self.actualPixelToLogicScale  = PIXEL_TO_LOGIC_RATION_TIMES_HUNDRED / newActualZoom;
  }
 
@@ -230,27 +230,27 @@ static const CGFloat DELTA_SCALE_ZOOM_IN_THRESHOLD=1.5f,
     }
 }
 -(CGFloat) inPinchGetRatioToLastScale:(CGFloat)newScale{
-    
+
     CGFloat newZoom = self.initialPinchZoom *newScale;
-    
+
     newZoom = max(min(newZoom, MAX_ZOOM),MIN_ZOOM);
-    
+
     NSLog(@"new zoom is %f",newZoom);
-    
+
     [self updateActualZoom:newZoom];
-    
+
     newScale = newZoom / self.initialPinchZoom;
-    
+
     CGFloat scaleRatioToLastScale  = newScale / self.previousPinchScale;
-    
+
     self.previousPinchScale =newScale;
-    
+
     return scaleRatioToLastScale;
 }
 
 -(void)fireLoZoomEventsDuringPinch{
     CGFloat deltaScale = self.previousPinchScale / self.previousScaleSentToLibreOffice;
-    
+
     if((deltaScale > DELTA_SCALE_ZOOM_IN_THRESHOLD) ||
        (deltaScale < DELTA_SCALE_ZOOM_OUT_THRESHOLD)){
         self.previousScaleSentToLibreOffice = self.previousPinchScale;

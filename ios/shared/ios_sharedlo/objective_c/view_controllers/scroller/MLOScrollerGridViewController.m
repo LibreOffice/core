@@ -1,7 +1,7 @@
 // -*- Mode: ObjC; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-//
+
 // This file is part of the LibreOffice project.
-//
+
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -25,14 +25,14 @@ static const CGFloat GRID_LINE_WIDTH=1.5f,
 
 
 -(void)hide{
-    
+
     [self resetMembers];
-    
+
     for(UIView * cell in _pages){
         [cell removeFromSuperview];
         cell.alpha=0.0f;
     }
-    
+
     [_pages removeAllObjects];
 
 }
@@ -63,10 +63,10 @@ static const CGFloat GRID_LINE_WIDTH=1.5f,
 
 -(UIView *) getNewCell{
     UIView * cell =[UIView new];
-    
+
     cell.backgroundColor = [UIColor blackColor];
     cell.alpha = UNSELECTED_ALPHA;
-    
+
     [_mainViewController.canvas addSubview:cell];
 
     return cell;
@@ -75,27 +75,27 @@ static const CGFloat GRID_LINE_WIDTH=1.5f,
 -(void)onPageCountChanged:(NSInteger) newPageCount{
     if(_pageCount!=newPageCount){
         _pageCount = newPageCount;
-        
+
         NSInteger currentSize = [_pages count];
-    
+
         NSInteger delta = abs(currentSize-newPageCount);
-        
+
         if(delta>0){
             BOOL isAdd = currentSize< newPageCount;
-            
+
             for (NSInteger i=0; i<delta; i++) {
-            
+
                if(isAdd){
-                                    
+
                    [_pages addObject:[self getNewCell]];
-                   
+
                }else{
                    [_pages removeLastObject];
                }
            }
-            
+
            [self reshape];
-            
+
             if(!isAdd){
                 if(_currentPage > newPageCount){
                     [self onCurrentPageChanged:newPageCount];
@@ -108,13 +108,13 @@ static const CGFloat GRID_LINE_WIDTH=1.5f,
 -(void)reshape{
     if((_x>=0) &&(_pageCount>0)){
         _gridCellHeight= (_height - GRID_LINE_WIDTH*(_pageCount +1 ))/_pageCount;
- 
+
         CGFloat y = GRID_LINE_WIDTH;
-        
+
         for (UIView * cell in _pages){
-        
+
             cell.frame = CGRectMake(_x+GRID_LINE_WIDTH, y, GRID_ACTUAL_WIDTH, _gridCellHeight);
-        
+
             y+=_gridCellHeight +GRID_LINE_WIDTH;
         }
     }
@@ -130,7 +130,7 @@ static const CGFloat GRID_LINE_WIDTH=1.5f,
         }
         _currentPage  = newCurrentPage;
     }
-    
+
 }
 
 @end

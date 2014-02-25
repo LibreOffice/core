@@ -1,7 +1,7 @@
 // -*- Mode: ObjC; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-//
+
 // This file is part of the LibreOffice project.
-//
+
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -59,7 +59,7 @@ static const BOOL IS_SHOW_TOOLTIP =NO;
 }
 
 -(void) addToMainViewController{
-    
+
     [_mainViewController.canvas addSubview:_scroller];
     [_mainViewController.canvas addSubview:_tooltip];
 }
@@ -67,7 +67,7 @@ static const BOOL IS_SHOW_TOOLTIP =NO;
 -(void) showLibreOffice{
     [_data showLibreOffice];
     [self contentHasChanged];
-    
+
     if(mlo_is_document_open()){
         [self updateByLogic:NO];
     }
@@ -93,11 +93,11 @@ static const BOOL IS_SHOW_TOOLTIP =NO;
 }
 
 -(void)updateByLogic:(BOOL) isShow {
-        
+
     if(_isContentChanged){
-        
+
        [_grid onPageCountChanged:[_data getTotalPages]];
-        
+
         _isContentChanged=NO;
     }
 
@@ -126,10 +126,10 @@ static const BOOL IS_SHOW_TOOLTIP =NO;
 
 
 -(void) reset{
-    
+
     [_scroller hide];
     [_tooltip hide];
-    
+
     _hasUpdated=NO;
     [self onRotate];
 }

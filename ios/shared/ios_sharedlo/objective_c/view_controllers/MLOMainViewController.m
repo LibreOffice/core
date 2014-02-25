@@ -1,7 +1,7 @@
 // -*- Mode: ObjC; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-//
+
 // This file is part of the LibreOffice project.
-//
+
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -39,15 +39,15 @@ static const CGFloat
 -(void)showLibreOffice:(UIWindow *) window{
 
     self.topBarHeight = TOP_BAR_HEIGHT;
-    
+
     [[UIApplication sharedApplication]setStatusBarHidden:YES];
-    
+
     self.view.bounds = self.view.frame = [self getFullFrameForRect:self.view.frame];
 
     [self.role initWindow:window];
-    
+
     [self onStart];
-    
+
     [self.topbar showLibreOffice];
 
     [self.role showLibreOffice];
@@ -61,7 +61,7 @@ static const CGFloat
 
 -(void) hideLibreOffice{
     if(self.focused){
-        
+
         self.focused = NO;
 
         [self.topbar hideLibreOffice];
@@ -70,7 +70,7 @@ static const CGFloat
 
         [self.role hideLibreOffice];
         [self.view removeFromSuperview];
-        
+
         [[MLOManager getInstance] hideLibreOffice];
     }
 }
@@ -90,19 +90,19 @@ static const CGFloat
 - (id) init{
     self = [super init];
     if(self){
-        
+
         self.role = [MLOAppRoleFactory getInstanceWithMainViewController:self];
-        
+
         [self initCanvas];
 
         [self.role initSubviews];
 
         self.topbar = [[MLOTopbarViewController alloc] initWithMainViewController:self];
-        
+
         [self addSubviews];
-        
+
         [self onStart];
-    
+
         self.focused = NO;
         self.topBarHeight = TOP_BAR_HEIGHT;
     }
@@ -123,15 +123,15 @@ static const CGFloat
 -(void) toggleExpand{
     CGFloat targetHeight = (_topBarHeight==0.0f)?TOP_BAR_HEIGHT:0.0f;
     CGRect mainFrame = self.view.frame;
-    
+
     [UIView animateWithDuration:EXPAND_DURATION animations:^(void){
-    
+
         self.canvas.frame = CGRectMake(0, targetHeight, mainFrame.size.width, mainFrame.size.height - targetHeight);
         self.renderManager.view.alpha= 0.0f;
 
-        
+
     } completion:^(BOOL completed){
-    
+
         self.topBarHeight = targetHeight;
         [self rotate];
         [self.toolbar expandDidToggle];
@@ -141,21 +141,21 @@ static const CGFloat
 -(void)resize{
     CGRect mainViewRect = [self getFullFrameForRect:self.view.bounds];
     LOG_RECT(mainViewRect, @"MLO Resize: main view");
-    
+
     self.view.bounds = self.view.frame = mainViewRect;
-    
+
     CGFloat width = self.view.frame.size.width;
     CGFloat height = self.view.frame.size.height - self.topBarHeight;
-    
+
     CGRect canvasRect =CGRectMake(0, _topBarHeight, width, height);
     self.canvas.frame =  canvasRect;
     [self.role setWidth:width height:height];
-    
+
     LOG_RECT(canvasRect, @"MLO Resize: canvas");
 }
 
 -(void) addSubviews{
-    
+
     [self.topbar addToMainViewController];
     [self.view addSubview:self.canvas];
     self.view.backgroundColor = [UIColor whiteColor];

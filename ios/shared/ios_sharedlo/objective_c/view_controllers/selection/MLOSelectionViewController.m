@@ -1,7 +1,7 @@
 // -*- Mode: ObjC; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-//
+
 // This file is part of the LibreOffice project.
-//
+
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -41,7 +41,7 @@ static const CGFloat FOCUS_DIM=20.0f;
         self.magnifierShown =NO;
         self.finger = CGPointMake(0,0);
     }
-    
+
     return self;
 }
 -(void) addToMainViewController{
@@ -94,7 +94,7 @@ static const CGFloat FOCUS_DIM=20.0f;
         [_magnifier showAt:self.finger];
         self.magnifierShown=YES;
     }
-    
+
     [_mainViewController.renderManager renderNow];
 }
 
@@ -107,7 +107,7 @@ static const CGFloat FOCUS_DIM=20.0f;
 
     if((pointA.y < pointB.y) ||
        ((pointA.y == pointB.y) && (pointA.x < pointB.x))){
-        
+
         [self showAtTopLeft:pointA bottomRight:pointB showMenu:showMenu];
     }else{
         [self showAtTopLeft:pointB bottomRight:pointA showMenu:showMenu];
@@ -115,7 +115,7 @@ static const CGFloat FOCUS_DIM=20.0f;
 }
 
 -(void)showAtCenter:(CGPoint) center selectAll:(BOOL) isSelectAll{
-    
+
     CGFloat width = _mainViewController.canvas.frame.size.width;
     CGFloat height = _mainViewController.canvas.frame.size.height;
 
@@ -129,7 +129,7 @@ static const CGFloat FOCUS_DIM=20.0f;
     UIMenuController *menuController = [UIMenuController sharedMenuController];
 
     [menuController setMenuItems:[self getMenuItems:isSelectAll]];
-    
+
     [menuController setTargetRect:self.focus.frame
                            inView:_mainViewController.canvas];
     [menuController setMenuVisible:YES animated:YES];
@@ -147,13 +147,13 @@ static const CGFloat FOCUS_DIM=20.0f;
             NSLog(@"Creating contextual menu with Copy, Select All, and Define");
 
             return @[[self copyItem], [self selectAllItem], [self defineItem]];
-            
+
         }
          NSLog(@"Creating contextual menu with Copy and Select All");
-        
+
          return @[[self copyItem],[self selectAllItem]];
     }
-    
+
     NSLog(@"Creating contextual menu with Copy only");
 
     return @[[self copyItem]];
@@ -192,7 +192,7 @@ static const CGFloat FOCUS_DIM=20.0f;
     [self hideTouchTrackers];
 
     [self hideMenu:animate];
-    
+
     [self.focus resignFirstResponder];
     self.focus.frame =CGRECT_ZERO;
 }
@@ -225,7 +225,7 @@ static const CGFloat FOCUS_DIM=20.0f;
 
 -(void)defineBuffer{
     [[[MLOThesaurusViewController alloc] initWithSelectionViewController:self] show];
-    
+
 }
 
 @end

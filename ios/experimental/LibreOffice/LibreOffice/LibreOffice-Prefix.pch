@@ -1,6 +1,6 @@
-//
+
 // Prefix header for all source files of the 'LibreOffice' target in the 'LibreOffice' project
-//
+
 
 #import <Availability.h>
 

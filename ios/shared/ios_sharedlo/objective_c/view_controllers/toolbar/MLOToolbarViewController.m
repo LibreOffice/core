@@ -1,7 +1,7 @@
 // -*- Mode: ObjC; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-//
+
 // This file is part of the LibreOffice project.
-//
+
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -38,7 +38,7 @@
                        //[self createPrintButton]
                        ];
         self.tappable = NO;
-        
+
         _previousHeightOffset=-1.0f;
 
     }
@@ -46,18 +46,18 @@
 }
 
 -(void)addToMainViewController{
-    
+
     for (MLOToolbarButton * button in _buttons) {
-        
+
         [button addToToolbarControler:self];
-        
+
         [_mainViewController.canvas addSubview:button];
     }
     [_finder addToMainViewController:_mainViewController];
 }
 
 -(void)showLibreOffice{
-    
+
     for (MLOToolbarButton * button in _buttons) {
         [button showLibreOffice];
     }
@@ -103,7 +103,7 @@
      onTapRelease:      ^{  [self.finder hide]; }];
 
     self.finder = [[MLOFinder alloc] initWithToolbarButton:findButton];
-    
+
     return findButton;
 }
 

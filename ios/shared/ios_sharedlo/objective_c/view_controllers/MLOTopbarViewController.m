@@ -1,7 +1,7 @@
 // -*- Mode: ObjC; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-//
+
 // This file is part of the LibreOffice project.
-//
+
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -31,20 +31,20 @@ static const CGFloat
     self = [self init];
     if(self){
         self.mainViewController = mainViewController;
-        
+
         self.blackbox = [[UIView alloc] initWithFrame:CGRECT_ZERO];
         _blackbox.backgroundColor = [UIColor blackColor];
-        
+
         self.label = [[UILabel alloc] initWithFrame:CGRECT_ZERO];
         _label.textColor = [UIColor whiteColor];
         _label.backgroundColor = [UIColor clearColor];
         _label.textAlignment = NSTextAlignmentCenter;
         _label.font =[UIFont systemFontOfSize:FONT_SIZE];
-        
+
         self.buttonImage = [MLOResourceImage backWithSize:NORMAL];
         self.button = [MLOButton buttonWithImage:_buttonImage];
         [_button addTarget:_mainViewController action:@selector(hideLibreOffice)];
-        
+
         [self hideLibreOffice];
     }
     return self;
@@ -72,20 +72,20 @@ static const CGFloat
 }
 
 -(void)onRotate{
-    
+
     CGFloat screenWidth = _mainViewController.view.frame.size.width;
-    
+
     _blackbox.frame = CGRectMake(0,0,screenWidth,TOP_BAR_HEIGHT);
-    
+
     _button.frame = CGRectMake(0,//BUTTON_LEFT_SPACING,
                                0,//(TOP_BAR_HEIGHT - _buttonImage.image.size.height)/2.0f,
                                TOP_BAR_HEIGHT,// _buttonImage.image.size.width,
                                TOP_BAR_HEIGHT);//     _buttonImage.image.size.height);
-    
+
     static const CGFloat
         LABEL_Y = (TOP_BAR_HEIGHT - FONT_SIZE)/4.0f,
         LABEL_HEIGHT = TOP_BAR_HEIGHT - LABEL_Y;
-    
+
     _label.frame = CGRectMake(BUTTON_LEFT_SPACING, LABEL_Y, screenWidth-BUTTON_LEFT_SPACING, LABEL_HEIGHT);
 }
 

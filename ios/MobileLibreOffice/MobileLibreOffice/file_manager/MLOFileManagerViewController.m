@@ -1,7 +1,7 @@
 // -*- Mode: ObjC; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-//
+
 // This file is part of the LibreOffice project.
-//
+
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -31,14 +31,14 @@ static const CGFloat EMPTY_LABEL_WIDTH = 500.0f,
 -(id) initWithAppViewController:(MLOAppViewController *) appViewController{
     self = [super init];
     if(self){
-        
+
         self.isInit = NO;
         self.isFirstRotation = YES;
         self.appViewController = appViewController;
         self.cache = [[MLOFileCacheManager alloc] initWithFileManager:self];
         self.list = [[MLOFileListViewController alloc] initWithFileManager:self];
         [self initEmptyLabel];
-    
+
     }
     return self;
 }
@@ -59,23 +59,23 @@ static const CGFloat EMPTY_LABEL_WIDTH = 500.0f,
     }
 }
 -(void)show{
-    
+
     [[UIApplication sharedApplication]setStatusBarHidden:YES];
-    
+
     if(!self.isInit){
         self.isInit = YES;
-        
+
         [self.appViewController.view addSubview:self.view];
         [self.view addSubview:self.list.view];
         [self.view addSubview:self.emptyLabel];
-        
+
         [self fade:0.0f];
     }
-    
+
     [self reloadData];
-    
+
     [self onRotate];
-        
+
     [self animateFade:1.0f];
 }
 
@@ -89,56 +89,56 @@ static const CGFloat EMPTY_LABEL_WIDTH = 500.0f,
 }
 
 -(void)onRotate{
-    
+
     CGRect superFrame = [self currentFullscreenFrame];
-    
+
     if(self.isFirstRotation){
         self.isFirstRotation = NO;
         self.view.frame = superFrame;
     }else{
         self.view.frame = CGRectMake(0,0, superFrame.size.height, superFrame.size.width);
     }
-    
+
     LOG_RECT(self.view.frame, @"MLOFileManagerViewController frame");
-    
+
     if([self updateSubviewsAndIsHasItems]){
-        
+
         [self.list onRotate];
     }
 }
 
 -(BOOL)updateSubviewsAndIsHasItems{
     if([self.cache count]==0){
-        
+
         CGSize size =[self currentFullscreenFrame].size;
-        
+
         self.emptyLabel.frame = CGRectMake((size.width - EMPTY_LABEL_WIDTH)/2.0f,
                                            size.height -(EMPTY_LABEL_HEIGHT+ 50),
                                            EMPTY_LABEL_WIDTH,
                                            EMPTY_LABEL_HEIGHT);
-        
+
         self.emptyLabel.adjustsFontSizeToFitWidth=YES;
-        
+
         self.emptyLabel.alpha = 1.0f;
         self.list.view.alpha = 0.0f;
-        
+
         return NO;
-    
+
     }
-    
+
     self.emptyLabel.alpha = 0.0f;
     self.list.view.alpha = 1.0f;
-    
+
     return YES;
 
 }
 
 -(void)animateFade:(CGFloat) alphaTarget{
-    
+
     if(self.view.alpha!=alphaTarget){
-    
+
         [UIView animateWithDuration:FADE_TIME animations:^{
-            
+
             [self fade:alphaTarget];
         }];
     }

@@ -1,6 +1,6 @@
-//
+
 // Prefix header for all source files of the 'MobileLibreOffice' target in the 'MobileLibreOffice' project
-//
+
 
 #import <Availability.h>
 

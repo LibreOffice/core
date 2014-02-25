@@ -1,7 +1,7 @@
 // -*- Mode: ObjC; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-//
+
 // This file is part of the LibreOffice project.
-//
+
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -26,12 +26,12 @@ static NSUInteger cachedFilesCounter = 0;
 
 -(BOOL)createByCachingFilePath:(NSString *) originFilePath{
     self.cachedFileNameWithExtension = [originFilePath lastPathComponent];
-    
+
     NSString * newFileName = [NSString stringWithFormat:@"%d%@",cachedFilesCounter++,self.cachedFileNameWithExtension];
     self.cachedFilePath = [self cachedFilePath:newFileName];
-    
+
     NSError * error;
-    
+
     return [self returnSuccees:[[NSFileManager defaultManager] copyItemAtPath:originFilePath
                                                                        toPath:self.cachedFilePath
                                                                         error:&error]
@@ -46,15 +46,15 @@ static NSUInteger cachedFilesCounter = 0;
 }
 
 +(void)setCachedFilesCount:(NSUInteger) count{
-    cachedFilesCounter = count;    
+    cachedFilesCounter = count;
 }
 
 -(id)initWithOriginFilePath:(NSString *) originFilePath{
-    
+
     self = [self init];
-    
+
     if(self){
-        
+
         if(![self createByCachingFilePath:originFilePath]){
             self = nil;
         }
@@ -79,7 +79,7 @@ static NSUInteger cachedFilesCounter = 0;
 
 -(BOOL)deleteFile{
     NSError * error;
-    
+
     return [self returnSuccees:[[NSFileManager defaultManager] removeItemAtPath:self.cachedFilePath
                                                                           error:&error]
                      forAction:[NSString stringWithFormat:@"delete the cached file %@",self.cachedFilePath]

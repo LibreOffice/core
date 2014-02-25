@@ -1,7 +1,7 @@
 // -*- Mode: ObjC; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-//
+
 // This file is part of the LibreOffice project.
-//
+
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -61,13 +61,13 @@ static const int INT_RESET= -1;
 -(void)reset{
     _tooltipMaxY= _tooltipPageHeight = _tooltipX = _totalPages = _totalHeightInLogic = _frameWidth= _frameHeight= _scrollerX= _scrollerTotalHeight = FLOAT_RESET;
     _left = _top = _zoom = _visibleLeft = _visibleTop = _visibleRight = _visibleBottom = _zoomType = _isBooklet = INT_RESET;
-    
+
 }
 
 -(void) updateViewData{
-    
+
     mlo_fetch_view_data(_mutableString);
-    
+
     sscanf([_mutableString UTF8String], "%d;%d;%d;%d;%d;%d;%d;%d;%d;",
            &_left,
            &_top,
@@ -78,7 +78,7 @@ static const int INT_RESET= -1;
            &_visibleBottom,
            &_zoomType,
            &_isBooklet);
-    
+
     if(LOG_GET_VIEW_DATA){
         NSLog(@"left=%d top=%d zoom=%d vLeft=%d vTop=%d vRight=%d vBottom=%d zoomType=%d isBooklet=%d",
               _left,
@@ -102,41 +102,41 @@ static const int INT_RESET= -1;
         DOUBLE_SCROLLER_PADDING =2*SCROLLER_PADDING,
         GRID_X_OFFSET= MLO_SCROLLER_GRID_WIDTH,
         TOOLTIP_X_OFFSET= GRID_X_OFFSET + GRID_TO_TOOLTIP_DISTANCE+ TOOLTIP_WIDTH;
-    
+
     CGRect canvasFrame = _mainViewController.canvas.frame;
-    
+
     _frameHeight = canvasFrame.size.height;
-    
+
     _frameWidth = canvasFrame.size.width;
-    
+
     _scrollerX = _frameWidth - SCROLLLER_X_OFFSET;
-    
+
     _tooltipX = _frameWidth - TOOLTIP_X_OFFSET;
-    
+
     _tooltipMaxY = _frameHeight - TOOLTIP_HEIGHT;
-    
+
     _scrollerTotalHeight =_frameHeight -DOUBLE_SCROLLER_PADDING;
-    
+
     _tooltipPageHeight = _frameHeight/_totalPages;
-    
+
     [grid onRotate:_frameWidth - GRID_X_OFFSET];
 }
 
 -(NSInteger) getTotalPages{
-    
+
     NSInteger newTotalPages= mlo_get_page_count();
-    
+
     if(newTotalPages!= _totalPages){
-                
+
         _totalPages = newTotalPages;
         _totalHeightInLogic = _totalPages* PORTRAIT_PAGE_HEIGHT_IN_LOGIC_WITH_SEPARATOR;
-        
+
         _tooltipPageHeight = _frameHeight/_totalPages;
-        
+
         _mainViewController.gestureEngine.limiter.documentSizeInLogic = CGSizeMake(CANVAS_WIDTH_IN_LOGIC,
                                                                                    _totalHeightInLogic);
     }
-    
+
     return newTotalPages;
 }
 
@@ -166,19 +166,19 @@ static const int INT_RESET= -1;
     return [self getNewScrollerFrame];
 }
 -(CGRect)getNewScrollerFrame{
-    
+
     [self updateViewData];
-    
+
     CGFloat topRatio = max(_visibleTop / _totalHeightInLogic,0.0);
     CGFloat heightRatio = min((_visibleBottom / _totalHeightInLogic) - topRatio,1.0);
-    
+
     return CGRectMake(_scrollerX,
                       SCROLLER_PADDING +topRatio*_scrollerTotalHeight,
                       SCROLLER_WIDTH,
                       heightRatio*_scrollerTotalHeight);
 }
 -(NSInteger) getCurrentPage{
-        
+
     return min(
                max(
                    ceilf(
@@ -191,11 +191,11 @@ static const int INT_RESET= -1;
 
 -(void) updateTooltip:(MLOScrollerTooltip *) tooltip withGrid:(MLOScrollerGridViewController *) grid{
     if(mlo_is_document_open() && _visibleTop>=0){
-        
+
         NSInteger currentPage = [self getCurrentPage];
 
         if(tooltip){
-        
+
             [tooltip updateWithFrame:CGRectMake(_tooltipX,
                                                 min(_tooltipPageHeight * (currentPage -1),_tooltipMaxY),
                                                 TOOLTIP_WIDTH,

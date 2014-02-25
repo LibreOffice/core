@@ -1,7 +1,7 @@
 // -*- Mode: ObjC; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-//
+
 // This file is part of the LibreOffice project.
-//
+
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -32,7 +32,7 @@ static const NSTimeInterval FADE_IN_DURATION = 0.3;
 
 -(id) init{
     self = [super init];
-    
+
     if (self) {
         self.mainViewController = nil;
         self.invoker = nil;
@@ -65,22 +65,22 @@ static const NSTimeInterval FADE_IN_DURATION = 0.3;
 - (void)application:(UIApplication *)application didChangeStatusBarFrame:(CGRect)oldStatusBarFrame
 {
     IGNORE_ARG(application);
-    
+
     IGNORE_ARG(oldStatusBarFrame);
-    
+
     [self.mainViewController rotate];
 }
 
 -(void)start{
-    
+
     NSLog(@"L O : START LIBRE OFFICE");
-    
+
     if (![self isInit]) {
-        
+
         NSLog(@"L O : BEGINNING INITIALIZATION");
-        
+
         [self initLo];
-        
+
         NSLog(@"L O : INITIALIZATION COMPLETED!!!");
     }else{
         NSLog(@"L O : SKIPPED. ALREADY INITIALIZED.");
@@ -95,19 +95,19 @@ static const NSTimeInterval FADE_IN_DURATION = 0.3;
 }
 
 -(void) initLo{
-    
+
     self.mainViewController = [MLOMainViewController new];
-    
+
     [[[NSThread alloc] initWithTarget:self selector:@selector(threadMainMethod:) object:nil] start];
-    
+
 }
 
 -(void)addLibreOfficeAsSubview:(UIView * ) superview{
-    
+
     self.mainViewController.view.alpha = 0;
-    
+
     [superview addSubview: self.mainViewController.view];
-    
+
     [UIView animateWithDuration:FADE_IN_DURATION animations:^(){
         self.mainViewController.view.alpha = 1;
     }];
@@ -115,39 +115,39 @@ static const NSTimeInterval FADE_IN_DURATION = 0.3;
 
 -(void)showLibreOfficeAfterAddingToSuperView:(UIWindow *) window{
     window.backgroundColor = [UIColor whiteColor];
-    
+
     [_mainViewController showLibreOffice:window];
 }
 
 - (void)threadMainMethod:(id)argument
 {
     IGNORE_ARG(argument);
-    
+
     @autoreleasepool {
         NSLog(@"CALLING mlo_initialize");
-        
+
         mlo_initialize();
-        
+
         NSLog(@"touch_lo_runMain RETURNED\r\n\r\nCALLING lo_runMain");
-        
+
         touch_lo_runMain();
-        
+
         NSLog(@"lo_runMain RETURNED");
     }
 }
 
 -(void) hideLibreOffice{
-    
+
     [self.invoker willHideLibreOffice];
-    
+
     mlo_close();
-    
+
     [self resetOpenedFile];
-    
+
     [self.mainViewController.view removeFromSuperview];
-    
+
     [self.invoker didHideLibreOffice];
-    
+
 }
 
 -(CGRect) bounds{
@@ -171,7 +171,7 @@ static const NSTimeInterval FADE_IN_DURATION = 0.3;
         [invoker didShowLibreOffice];
     }else{
         [self hideLibreOffice];
-        
+
     }
 }
 
@@ -185,7 +185,7 @@ static const NSTimeInterval FADE_IN_DURATION = 0.3;
 
 
 -(NSString *)extension{
-    
+
     NSString * extension= [self.openedFilePath pathExtension];
     NSLog(@"File extension is %@",extension);
     return extension;

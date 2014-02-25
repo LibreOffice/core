@@ -1,7 +1,7 @@
 // -*- Mode: ObjC; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-//
+
 // This file is part of the LibreOffice project.
-//
+
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -38,16 +38,16 @@ static const BOOL IS_FLASH_ON_TAP = NO;
 
 -(void)addToToolbarControler:(MLOToolbarViewController *) toolbar{
     self.toolbarController = toolbar;
-    
+
 }
 +(MLOToolbarButton *)buttonWithImage:(MLOResourceImage *) image onTap:(MLOToolbarButtonCallback) onTap tapRelease:(MLOToolbarButtonTapReleaseType)type{
     return [MLOToolbarButton buttonWithImage:image onTap:onTap tapRelease:type onTapRelease:MLO_TOOLBAR_BUTTON_STUB_CALLBACK];
 }
 +(MLOToolbarButton *)buttonWithImage:(MLOResourceImage *) image onTap:(MLOToolbarButtonCallback) onTap tapRelease:(MLOToolbarButtonTapReleaseType)type onTapRelease:(MLOToolbarButtonCallback)onTapRelease
 {
-    
+
     MLOToolbarButton * button = [MLOToolbarButton buttonWithType:UIButtonTypeCustom];
-  
+
     if(button){
 
         button.mainImage = image;
@@ -55,20 +55,20 @@ static const BOOL IS_FLASH_ON_TAP = NO;
         button.tapReleaseType = type;
         button.onTapRelease = onTapRelease;
         button.alternateImage=nil;
-        
+
         static const CGFloat BUTTON_X=BUTTON_IMAGE_X_EDGE_OF_CANVAS_PADDING -BUTTON_THICKENING,
                 BUTTON_TWICE_THICKENING=2.0f*BUTTON_THICKENING;
-        
+
         button.frame = CGRectMake(BUTTON_X,
                                   toolbarButtonsTotalHeight-BUTTON_THICKENING,
                                   image.image.size.width + BUTTON_TWICE_THICKENING,
                                   image.image.size.height + BUTTON_TWICE_THICKENING);
-        
+
         toolbarButtonsTotalHeight += image.image.size.height + BUTTON_IMAGE_Y_SPACING;
 
         [button reset:0];
         [button addAction:@selector(onTapAction)];
-        
+
     }
     return button;
 }
@@ -102,7 +102,7 @@ static const BOOL IS_FLASH_ON_TAP = NO;
 
 -(void)switchImage{
     if(_alternateImage!=nil){
-        
+
         [self setDefaultImage:_currentImageIsMain ? _alternateImage.image : _mainImage.image ];
         _currentImageIsMain^=YES;
     }
@@ -115,7 +115,7 @@ static const BOOL IS_FLASH_ON_TAP = NO;
         }
     }else{
         _isTapped=YES;
-        
+
         if(IS_FLASH_ON_TAP){
             [_toolbarController.mainViewController flash];
         }
@@ -130,12 +130,12 @@ static const BOOL IS_FLASH_ON_TAP = NO;
 
 -(void) fadeToUntapped{
     if(self.alpha>UNTAPPED_ALPHA){
-        
+
         [UIView animateWithDuration:FADE_TO_UNTAPPED_TIME animations:^{
             self.alpha = UNTAPPED_ALPHA;
         }];
     }
-    
+
     _isTapped = NO;
 }
 

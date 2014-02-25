@@ -1,7 +1,7 @@
 // -*- Mode: ObjC; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-//
+
 // This file is part of the LibreOffice project.
-//
+
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -57,16 +57,16 @@ static const CGFloat
 @implementation MLOFinder
 
 -(id)initWithToolbarButton:(MLOToolbarButton *) findButton{
-    
+
     self = [super init];
     if(self){
 
         self.selectedIndex = -1;
         self.selectionCount = -1;
-        
+
         MLOResourceImage * leftButtonImage = [MLOResourceImage left];
         MLOResourceImage * rightButtonImage =[MLOResourceImage right];
-        
+
         CGFloat leftButtonWidth =leftButtonImage.image.size.width;
         CGFloat rightButtonWidth = rightButtonImage.image.size.width;
 
@@ -74,14 +74,14 @@ static const CGFloat
 
         CGFloat xOrigin = findButtonFrame.origin.x + findButtonFrame.size.width + SPACING_FROM_FIND_TOOLBAR_BUTTON;
         CGFloat yOrigin = findButtonFrame.origin.y;
-        
+
         CGFloat leftButtonXOrigin = xOrigin + BLACK_BOX_INNER_PADDING_X;
 
         CGFloat textAreaXOrigin = leftButtonXOrigin +leftButtonWidth + TEXT_AREA_TO_NAVIAGATION_BUTTONS_SPACING;
         CGFloat textAreaYOrigin = yOrigin +BLACK_BOX_INNER_PADDING_Y;
 
         CGFloat rightButtonXOrigin = textAreaXOrigin + TEXT_AREA_WIDTH + TEXT_AREA_TO_NAVIAGATION_BUTTONS_SPACING;
-        
+
         [self addBlackBoxXOrigin:   xOrigin
                          yOrigin:   yOrigin
                            width:   leftButtonWidth +
@@ -122,7 +122,7 @@ static const CGFloat
 -(void) onTap:(MLOFindSelectionType) type{
     self.selectedIndex = mlo_find(_lastSearched, type);
     [self updateLabel];
-    
+
 }
 
 -(void)updateLabel{
@@ -136,7 +136,7 @@ static const CGFloat
         self.label.text = @"Find";
         navigationAlpha = 0.0f;
     }
-    
+
     [self.mainViewController.gestureEngine.renderer renderNow];
 
     if(_leftButton.alpha != navigationAlpha){
@@ -153,7 +153,7 @@ static const CGFloat
     MLOButton * button = [MLOButton buttonWithImage:image];
 
     CGFloat height = image.image.size.height;
-    
+
     if(height < BLACK_BOX_INNER_HEIGHT){
         yOrigin += (BLACK_BOX_INNER_HEIGHT - height)/2.0f;
     }
@@ -214,7 +214,7 @@ static const CGFloat
 }
 -(void)hide{
     [self fadeTo:FADE_OUT_TARGET];
-    
+
     [_textField resignFirstResponder];
 }
 
@@ -222,7 +222,7 @@ static const CGFloat
     if(_blackBox.alpha !=alphaTarget){
 
         BOOL isFadeNavigationButton = (_selectionCount > 0) || (alphaTarget == 0.0f);
-       
+
         [UIView animateWithDuration:FADE_DURATION animations:^{
              _blackBox.alpha    =   alphaTarget;
             _label.alpha        =   alphaTarget;
@@ -246,30 +246,30 @@ static const CGFloat
     self.mainViewController = mainViewController;
 }
 - (void)onTextChanged{
-    
+
     self.findTime  = [NSDate dateWithTimeIntervalSinceNow:FIND_DELAY];
 
     [self performSelector:@selector(invokeFind) withObject:nil afterDelay:FIND_INVOCATION];
-    
+
 }
 
 -(void) invokeFind{
-    
+
     if(![[_findTime laterDate:[NSDate date]] isEqualToDate:_findTime]){
-        
+
         NSInteger trimmedLength = [_textField.text  stringByTrimmingCharactersInSet: [NSCharacterSet whitespaceCharacterSet]].length;
-        
+
         if( (_textField.text.length > 0) &&
             (trimmedLength>0) &&
            ![_textField.text isEqualToString:_lastSearched]){
-            
+
             self.lastSearched  = [_textField.text copy];
-            
+
             self.selectionCount = mlo_find(_lastSearched, MARK_FIRST);
             self.selectedIndex = 0;
 
         }else if(trimmedLength==0){
-            
+
             self.lastSearched =@"";
             self.selectionCount = -1;
             self.selectedIndex = -1;

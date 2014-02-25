@@ -1,7 +1,7 @@
 // -*- Mode: ObjC; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-//
+
 // This file is part of the LibreOffice project.
-//
+
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -66,15 +66,15 @@ static const CGFloat LINE_HEIGHT = 20.0f,
                                 0,
                                 frameWidth,
                                 VERTICAL_PADDING + LINE_HEIGHT + handleHeightWithSpacingToLine);
-        
+
         self.lineTop = CGPointMake(SIDE_PADDING + ((handleWidth - LINE_WIDTH) / 2.0f),
                                    lineYOrigin);
-        
+
         self.pivot = CGPointMake(frameWidth/2.0f,
                                  pivotY);
-        
+
         UIImageView * handle = [[UIImageView alloc] initWithImage:handleImage.image];
-        
+
         [self addSubview: handle];
         handle.frame = CGRectMake(SIDE_PADDING,
                                   handleYOrigin,

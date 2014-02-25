@@ -1,7 +1,7 @@
 // -*- Mode: ObjC; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-//
+
 // This file is part of the LibreOffice project.
-//
+
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -28,11 +28,11 @@ static const CGFloat DEFAULT_FADE_DURAION= 1.0f;
         self.defaultRect = frame;
         self.backgroundColor = color;
         self.fadeDuration = DEFAULT_FADE_DURAION;
-        
+
         if([self isLegalNewAlpha:alpha]){
             self.alpha = alpha;
         }
-        
+
         if(cornerRadius >= 0){
             [self.layer setCornerRadius:cornerRadius];
             [self.layer setMasksToBounds:YES];
@@ -42,7 +42,7 @@ static const CGFloat DEFAULT_FADE_DURAION= 1.0f;
 }
 
 - (id)initHiddedWithColor:(UIColor *) color cornerRadius:(CGFloat) cornerRadius{
-    
+
     return [self initWithFrame:CGRECT_ZERO color:color cornerRadius:cornerRadius alpha: 0.0f];
 }
 
@@ -83,11 +83,11 @@ static const CGFloat DEFAULT_FADE_DURAION= 1.0f;
 
 -(void)fadeToPercent:(CGFloat) toPercent{
     if([self isLegalNewAlpha:toPercent]){
-    
+
         [UIView animateWithDuration:1.0 animations:^{
-            
+
             self.alpha = toPercent;
-            
+
         }];
     }
 }

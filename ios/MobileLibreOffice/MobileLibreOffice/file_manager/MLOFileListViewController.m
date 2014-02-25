@@ -1,7 +1,7 @@
 // -*- Mode: ObjC; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-//
+
 // This file is part of the LibreOffice project.
-//
+
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -23,18 +23,18 @@
 
     if(self){
         self.fileManager = fileManager;
-        
+
         self.list = [UITableView new];
-        
+
         self.view.backgroundColor = [UIColor clearColor];
-        
+
         [self reloadData];
     }
     return self;
 }
 
 -(void)onRotate{
-    
+
     self.list.frame = [self.fileManager currentFullscreenFrame];
 }
 
@@ -73,11 +73,11 @@
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         [self.fileManager.cache deleteIndexPath:indexPath];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-        
+
         if(![self hasFiles]){
             [self.fileManager reloadData];
         }
-    }   
+    }
 }
 
 
