@@ -30,9 +30,9 @@
 
 namespace connectivity
 {
-    //**************************************************************
+
     //************ Class: ODatabaseMetaDataResultSetMetaData
-    //**************************************************************
+
     typedef ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XResultSetMetaData>   ODatabaseMetaResultSetMetaData_BASE;
 
     class OOO_DLLPUBLIC_DBTOOLS ODatabaseMetaDataResultSetMetaData :    public  ODatabaseMetaResultSetMetaData_BASE

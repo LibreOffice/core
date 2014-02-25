@@ -28,9 +28,9 @@ namespace connectivity
 {
     namespace dbase
     {
-        //==================================================================
+
         // IndexIterator
-        //==================================================================
+
         class OIndexIterator
         {
         protected:

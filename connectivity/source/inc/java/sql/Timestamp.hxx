@@ -26,9 +26,9 @@
 
 namespace connectivity
 {
-    //**************************************************************
+
     //************ Class: java.sql.Date
-    //**************************************************************
+
 
     class java_sql_Date : public java_util_Date
     {
@@ -47,9 +47,9 @@ namespace connectivity
     };
 
 
-    //**************************************************************
+
     //************ Class: java.sql.Time
-    //**************************************************************
+
 
     class java_sql_Time : public java_util_Date
     {
@@ -66,9 +66,9 @@ namespace connectivity
         static jclass st_getMyClass();
     };
 
-    //**************************************************************
+
     //************ Class: java.sql.Timestamp
-    //**************************************************************
+
     class java_sql_Timestamp : public java_util_Date
     {
     protected:

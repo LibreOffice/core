@@ -22,9 +22,9 @@
 
 #include "resource/conn_shared_res.hrc"
 #include "resource/common_res.hrc"
-// ============================================================================
+
 // = the file driver's resource strings
-// ============================================================================
+
 
 #define STR_QUERY_COMPLEX_COUNT         ( STR_FILE_BASE +    0 )
 #define STR_QUERY_INVALID_BETWEEN       ( STR_FILE_BASE +    1 )

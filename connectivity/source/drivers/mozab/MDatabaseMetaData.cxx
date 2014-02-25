@@ -854,7 +854,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLE
         OUString("TABLE"),
         OUString("VIEW")
         // Currently we only support a 'TABLE' and 'VIEW' nothing more complex
-        //
+
         // OUString("SYSTEM TABLE"),
         // OUString("GLOBAL TEMPORARY"),
         // OUString("LOCAL TEMPORARY"),

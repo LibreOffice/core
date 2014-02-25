@@ -38,9 +38,9 @@ using namespace com::sun::star::sdb;
 using namespace com::sun::star::frame;
 using namespace connectivity::macab;
 
-// =======================================================================
+
 // = MacabImplModule
-// =======================================================================
+
 
 MacabImplModule::MacabImplModule()
     :m_bAttemptedLoadModule(false)
@@ -64,7 +64,7 @@ namespace
         _rFunction = NULL;
         if ( _rModule )
         {
-            //
+
             const OUString sSymbolName = OUString::createFromAscii( _pAsciiSymbolName );
             _rFunction = (FUNCTION)( osl_getSymbol( _rModule, sSymbolName.pData ) );
 
@@ -167,9 +167,9 @@ void MacabImplModule::shutdown()
     impl_unloadModule();
 }
 
-// =======================================================================
+
 // = MacabDriver
-// =======================================================================
+
 MacabDriver::MacabDriver(
     const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext)
     : MacabDriver_BASE(m_aMutex),

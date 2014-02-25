@@ -34,9 +34,9 @@ using namespace connectivity::mozab;
 
 NS_IMPL_THREADSAFE_ISUPPORTS1(connectivity::mozab::MQueryHelper,nsIAbDirectoryQueryResultListener)
 
-//
+
 // class MQueryHelperResultEntry
-//
+
 
 
 MQueryHelperResultEntry::MQueryHelperResultEntry()
@@ -83,9 +83,9 @@ void MQueryHelperResultEntry::setValue( const OString &key, const OUString & rVa
 {
     m_Fields[ key ] = rValue;
 }
-//
+
 // class MQueryHelper
-//
+
 MQueryHelper::MQueryHelper()
     :m_nIndex( 0 )
     ,m_bHasMore( sal_True )

@@ -50,10 +50,10 @@ namespace connectivity
                                                     ::com::sun::star::sdbc::XWarningsSupplier,
                                                     ::com::sun::star::sdbc::XCloseable> OCommonStatement_IBASE;
 
-        //**************************************************************
+
         //************ Class: OCommonStatement
         // is a base class for the normal statement and for the prepared statement
-        //**************************************************************
+
         class OCommonStatement;
         typedef ::connectivity::OSubComponent< OCommonStatement, OCommonStatement_IBASE >  OCommonStatement_SBASE;
 
@@ -115,9 +115,9 @@ namespace connectivity
             virtual ~OCommonStatement();
 
         protected:
-            //
+
             // Driver Internal Methods
-            //
+
             enum StatementType { eSelect, eCreateTable };
             /** called to do the parsing of a to-be-executed SQL statement, and set all members as needed
             */

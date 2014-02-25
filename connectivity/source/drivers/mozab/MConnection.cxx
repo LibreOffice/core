@@ -64,9 +64,9 @@ using namespace com::sun::star::sdbcx;
 
 namespace connectivity { namespace mozab {
 
-// =====================================================================
+
 // = ConnectionImplData
-// =====================================================================
+
 struct ConnectionImplData
 {
     ::boost::shared_ptr< ::comphelper::OfficeResourceBundle >   pResourceBundle;
@@ -144,9 +144,9 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
     OSL_TRACE("IN OConnection::construct()" );
     //  open file
     setURL(url);
-    //
+
     // Skip 'sdbc:mozab: part of URL
-    //
+
     sal_Int32 nLen = url.indexOf(':');
     nLen = url.indexOf(':',nLen+1);
     OSL_ENSURE( url.copy( 0, nLen ) == "sdbc:address", "OConnection::construct: invalid start of the URI - should never have survived XDriver::acceptsURL!" );
@@ -178,20 +178,20 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
     OSL_TRACE("URI = %s", ((OUtoCStr(aAddrbookURI)) ? (OUtoCStr(aAddrbookURI)):("NULL")) );
     OSL_TRACE("Scheme = %s\n", ((OUtoCStr(aAddrbookScheme)) ?  (OUtoCStr(aAddrbookScheme)):("NULL")) );
 
-    //
+
     // Now we have a URI convert it to a MozillaURI
-    //
+
     // The Mapping being used is:
-    //
+
     // * for Mozilla
-    //      "sdbc:address:mozilla:"        -> abdirectory://
+    //      "sdbc:address:mozilla:"        -> abdirectory:
     // * for LDAP
-    //      "sdbc:address:ldap:"           -> abldapdirectory://
+    //      "sdbc:address:ldap:"           -> abldapdirectory:
     // * for Outlook (using MAPI API)
     //      "sdbc:address:outlook:"        -> aboutlookdirectory://op/
     // * for windows system address book
     //      "sdbc:address:outlookexp:"     -> aboutlookdirectory://oe/
-    //
+
         m_sBindDN   = "";
         m_sPassword = "";
         m_bUseSSL   = sal_False;

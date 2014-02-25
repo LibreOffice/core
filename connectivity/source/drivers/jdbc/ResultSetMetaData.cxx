@@ -28,9 +28,9 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-//**************************************************************
+
 //************ Class: java.sql.ResultSetMetaData
-//**************************************************************
+
 
 jclass java_sql_ResultSetMetaData::theClass = 0;
 java_sql_ResultSetMetaData::java_sql_ResultSetMetaData( JNIEnv * pEnv, jobject myObj, const java::sql::ConnectionLog& _rResultSetLogger, java_sql_Connection& _rCon  )

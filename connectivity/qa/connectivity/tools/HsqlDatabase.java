@@ -38,14 +38,14 @@ import java.io.File;
 public class HsqlDatabase extends AbstractDatabase
 {
 
-    // --------------------------------------------------------------------------------------------------------
+
     public HsqlDatabase(final XMultiServiceFactory orb) throws Exception
     {
         super(orb);
         createDBDocument();
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     public HsqlDatabase(final XMultiServiceFactory orb, final String _existingDocumentURL) throws Exception
     {
         super(orb, _existingDocumentURL);

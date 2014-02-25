@@ -130,10 +130,10 @@ namespace connectivity
             }
         };
 
-        //**************************************************************
+
         //************ Class: OCommonStatement
         // is a base class for the normal statement and for the prepared statement
-        //**************************************************************
+
         class OCommonStatement;
         typedef OSubComponent< OCommonStatement, OCommonStatement_IBase >   OStatement_CBase;
 

@@ -22,14 +22,14 @@
 
 #include <jvmaccess/virtualmachine.hxx>
 
-//........................................................................
+
 namespace connectivity { namespace jdbc
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= LocalRef
-    //====================================================================
+
     /** helper class to hold a local ref to a JNI object
 
         Note that this class never actually calls NewLocalRef. It is assumed that all objects
@@ -88,9 +88,9 @@ namespace connectivity { namespace jdbc
         T       m_object;
     };
 
-//........................................................................
+
 } } // namespace connectivity::jdbc
-//........................................................................
+
 
 #endif // CONNECTIVITY_LOCALREF_HXX
 

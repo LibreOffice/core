@@ -29,9 +29,9 @@ namespace connectivity
 {
     namespace evoab
     {
-        //**************************************************************
+
         //************ Class: OEvoabDatabaseMetaData
-        //**************************************************************
+
         typedef struct{
             gboolean bIsSplittedValue;
             GParamSpec *pField;

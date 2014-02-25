@@ -43,9 +43,9 @@ namespace connectivity
 
         typedef std::vector< ::com::sun::star::uno::WeakReferenceHelper > OWeakRefArray;
 
-        // ===============================================================
+
         // = MacabImplModule
-        // ===============================================================
+
         class MacabImplModule
         {
         private:
@@ -109,9 +109,9 @@ namespace connectivity
 
         };
 
-        // ===============================================================
+
         // = MacabDriver
-        // ===============================================================
+
         typedef ::cppu::WeakComponentImplHelper3<   ::com::sun::star::sdbc::XDriver,
                                                     ::com::sun::star::lang::XServiceInfo,
                                                     ::com::sun::star::frame::XTerminateListener > MacabDriver_BASE;

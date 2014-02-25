@@ -40,9 +40,9 @@
 namespace connectivity
 {
     class OConnectionPool;
-    //==========================================================================
+
     /// OPoolTimer - Invalidates the connection pool
-    //==========================================================================
+
     class OPoolTimer : public ::salhelper::Timer
     {
         OConnectionPool* m_pPool;
@@ -55,10 +55,10 @@ namespace connectivity
         virtual void SAL_CALL onShot();
     };
 
-    //==========================================================================
+
     //= OConnectionPool - the one-instance service for PooledConnections
     //= manages the active connections and the connections in the pool
-    //==========================================================================
+
     typedef ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListener>  OConnectionPool_Base;
 
     // typedef for the interanl structure

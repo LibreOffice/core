@@ -60,7 +60,7 @@ void main( int argc, char * argv[] )
             Sequence<PropertyValue> aValue;
     //      aValue.getArray()[0] = PropertyValue( OUString("user"),0,makeAny(OUString("TEST1")),PropertyState_DIRECT_VALUE);
     //      aValue.getArray()[1] = PropertyValue( OUString("password"),0,makeAny(OUString("TEST1")),PropertyState_DIRECT_VALUE);
-    //
+
             m_xConnection = m_xDriver->connect(OUString("sdbc:dbase:g:\\"),aValue);
             if(m_xConnection.is())
             {

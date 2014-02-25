@@ -28,10 +28,10 @@
 
 namespace connectivity
 {
-    //==========================================================================
+
     //= OPooledConnection -
     //= allows to pool a real connection
-    //==========================================================================
+
     typedef ::cppu::WeakComponentImplHelper2<    ::com::sun::star::sdbc::XPooledConnection
                                                 ,::com::sun::star::lang::XEventListener>    OPooledConnection_Base;
 

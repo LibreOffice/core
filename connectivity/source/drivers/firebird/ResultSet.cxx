@@ -394,7 +394,7 @@ ORowSetValue OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_S
     // (bottom of page) for a chart of possible conversions, we should allow all
     // of these -- Blob/Clob will probably need some specialist handling especially
     // w.r.t. to generating Strings for them.
-    //
+
     // Basically we just have to map to the correct direct request and
     // ORowSetValue does the rest for us here.
     switch (m_pSqlda->sqlvar[nColumnIndex-1].sqltype & ~1)

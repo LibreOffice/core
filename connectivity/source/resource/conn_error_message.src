@@ -19,11 +19,11 @@
 
 // note: the resource IDs of the strings herein *must* correspond to the
 // com::sun::star::sdb::ErrorCondition values.
-//
+
 // For a given error condition value n, the message string must have ID
 // <code>256 + 2*n</code>, and the SQL state string (if applicable) must
 // have ID <code>256 + 2*n + 1</code>.
-//
+
 // The messages must be localized, the SQL states must *not*.
 
 // ROW_SET_OPERATION_VETOED = 100

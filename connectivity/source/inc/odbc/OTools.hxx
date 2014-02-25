@@ -228,7 +228,7 @@ namespace connectivity
         {
             OTools::getValue(_pConnection,_aStatementHandle,columnIndex,_nType,_bWasNull,_xInterface,&_rValue,sizeof _rValue);
         }
-        //-----------------------------------------------------------------------------
+
 
 
     }

@@ -31,9 +31,9 @@ namespace connectivity
 {
     namespace odbc
     {
-        //**************************************************************
+
         //************ Class: ResultSetMetaData
-        //**************************************************************
+
         typedef ::cppu::WeakImplHelper1<        ::com::sun::star::sdbc::XResultSetMetaData>   OResultSetMetaData_BASE;
 
         class OOO_DLLPUBLIC_ODBCBASE OResultSetMetaData :

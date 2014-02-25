@@ -52,9 +52,9 @@ namespace connectivity
                                                     ::com::sun::star::sdbc::XMultipleResults> OStatement_BASE;
 
         class OResultSet;
-        //**************************************************************
+
         //************ Class: java.sql.Statement
-        //**************************************************************
+
         class OOO_DLLPUBLIC_ODBCBASE OStatement_Base :
                                         public comphelper::OBaseMutex,
                                         public  OStatement_BASE,
@@ -109,11 +109,11 @@ namespace connectivity
             sal_Bool lockIfNecessary (const OUString& sql) throw( ::com::sun::star::sdbc::SQLException);
             sal_Int32 getColumnCount () throw( ::com::sun::star::sdbc::SQLException);
 
-            //--------------------------------------------------------------------
+
             // getResultSet
             // getResultSet returns the current result as a ResultSet.  It
             // returns NULL if the current result is not a ResultSet.
-            //--------------------------------------------------------------------
+
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > getResultSet (sal_Bool checkCount) throw( ::com::sun::star::sdbc::SQLException);
             /**
                 creates the driver specific resultset (factory)

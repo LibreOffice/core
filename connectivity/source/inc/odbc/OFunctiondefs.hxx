@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//--------------------------------------------------------------------------
+
 #ifndef _CONNECTIVITY_OFUNCTIONDEFS_HXX_
 #define _CONNECTIVITY_OFUNCTIONDEFS_HXX_
 
@@ -50,7 +50,7 @@
 
 #endif
 
-//--------------------------------------------------------------------------
+
 
 #ifdef UNX
 
@@ -77,7 +77,7 @@
 
 #endif // UNX
 
-//--------------------------------------------------------------------------
+
 
 #ifndef SQL_WCHAR
 #define SQL_WCHAR           (-8)

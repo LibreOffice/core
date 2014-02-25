@@ -94,10 +94,10 @@ namespace connectivity
             OLEVariant(const ::com::sun::star::uno::Sequence< sal_Int8 >& x);
             OLEVariant& operator=(const OLEVariant& varSrc);
             // Assign a const VARIANT& (::VariantCopy handles everything)
-            //
+
             OLEVariant& operator=(const tagVARIANT& varSrc);
             // Assign a const VARIANT* (::VariantCopy handles everything)
-            //
+
             OLEVariant& operator=(const VARIANT* pSrc);
             void setByte(sal_uInt8 n)               ;
             void setInt16(sal_Int16 n)              ;

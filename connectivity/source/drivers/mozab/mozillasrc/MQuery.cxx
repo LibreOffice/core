@@ -53,7 +53,7 @@ using namespace connectivity;
 
 // Used to store an nsIAbDirectoryQuery member without the need to use Mozilla
 // types in the MQuery.hxx file.
-//
+
 namespace connectivity {
     namespace mozab {
         struct MQueryDirectory {
@@ -86,7 +86,7 @@ MQuery::~MQuery()
 
     // MQueryHelper is reference counted, so we need to decrement the
     // count here.
-    //
+
     if ( m_aQueryDirectory->contextId != -1 && m_aQueryDirectory->directoryQuery !=
     NULL )
         m_aQueryDirectory->directoryQuery->StopQuery(m_aQueryDirectory->contextId);
@@ -109,7 +109,7 @@ void MQuery::construct()
     m_aQueryDirectory = new MQueryDirectory();
     // MQueryHelper is reference counted, so we need to add to the
     // count here to prevent accidental deletion else where...
-    //
+
     m_aQueryHelper = new MQueryHelper();
     NS_IF_ADDREF( m_aQueryHelper);
 }
@@ -564,11 +564,11 @@ sal_Int32 MQuery::executeQueryProxied(OConnection* _pCon)
 }
 
 
-//
-//
+
+
 //  If the query executed is being done asynchronously then this may return
 //  -1 as the count, ie. it's undetermined.
-//
+
 sal_Int32
 MQuery::getRowCount()
 {
@@ -576,21 +576,21 @@ MQuery::getRowCount()
 }
 
 
-//
-//
+
+
 // As opposed to getRowCount() this returns the actual number of rows fetched
 // so far (if is an async query)
-//
+
 sal_uInt32
 MQuery::getRealRowCount()
 {
     return( m_aQueryHelper->getRealCount() );
 }
 
-//
+
 //  If the query executed is being done asynchronously then this may be
 //  false
-//
+
 sal_Bool
 MQuery::queryComplete( void )
 {

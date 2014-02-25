@@ -54,9 +54,9 @@ namespace connectivity
             friend class connectivity::OSubComponent<OConnection, OConnection_BASE>;
 
         protected:
-            //====================================================================
+
             // Data attributes
-            //====================================================================
+
             OTypeInfoMap                m_aTypeInfo;    //  vector containing an entry
                                                                                 //  for each row returned by
                                                                                 //  DatabaseMetaData.getTypeInfo.
@@ -114,7 +114,7 @@ namespace connectivity
             // XWarningsSupplier
             virtual ::com::sun::star::uno::Any SAL_CALL getWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL clearWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            //
+
             WpADOConnection* getConnection() { return m_pAdoConnection; }
             void setCatalog(const ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbcx::XTablesSupplier>& _xCat) { m_xCatalog = _xCat; }
             void setCatalog(OCatalog* _pCatalog) { m_pCatalog = _pCatalog; }

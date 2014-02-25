@@ -20,7 +20,7 @@
 #ifndef CONNECTIVITY_SHARED_RES_HRC
 #define CONNECTIVITY_SHARED_RES_HRC
 
-// ============================================================================
+
 // = normal resource ids, per driver
 
 // Mozilla driver resource ids
@@ -54,7 +54,7 @@
 
 // hsqldb driver resource ids
 #define STR_HSQLDB_BASE                 1750
-// ============================================================================
+
 // = resource ids for log messages
 #define STR_LOG_MESSAGE_BASE            10000
 

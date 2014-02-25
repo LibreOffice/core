@@ -51,9 +51,9 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 
-//**************************************************************
+
 //************ Class: java.sql.Statement
-//**************************************************************
+
 
 jclass java_sql_Statement_Base::theClass = 0;
 

@@ -23,9 +23,9 @@
 #include "resource/conn_shared_res.hrc"
 #include "resource/common_res.hrc"
 
-// ============================================================================
+
 // = the calc driver's resource strings
-// ============================================================================
+
 
 #define STR_CANNOT_OPEN_BOOK    ( STR_EVOAB2_BASE +    0 )
 #define STR_SORT_BY_COL_ONLY    ( STR_EVOAB2_BASE +    1 )

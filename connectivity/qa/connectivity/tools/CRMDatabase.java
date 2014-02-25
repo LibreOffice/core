@@ -88,7 +88,7 @@ public class CRMDatabase
         m_connection = m_database.defaultConnection();
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     /** returns the database document underlying the CRM database
      */
     public final HsqlDatabase getDatabase()
@@ -96,7 +96,7 @@ public class CRMDatabase
         return m_database;
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     /** returns the default connection to the database
      */
     public final Connection getConnection()
@@ -104,7 +104,7 @@ public class CRMDatabase
         return m_connection;
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     public void saveAndClose() throws SQLException, IOException
     {
         XDatabaseDocumentUI ui = getDocumentUI();
@@ -114,14 +114,14 @@ public class CRMDatabase
         m_database.closeAndDelete();
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     public XDatabaseDocumentUI getDocumentUI()
     {
         XModel docModel = UnoRuntime.queryInterface( XModel.class, m_database.getDatabaseDocument() );
         return UnoRuntime.queryInterface( XDatabaseDocumentUI.class, docModel.getCurrentController() );
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     public XController loadSubComponent( final int _objectType, final String _name ) throws IllegalArgumentException, SQLException, NoSuchElementException
     {
         XDatabaseDocumentUI docUI = getDocumentUI();
@@ -136,7 +136,7 @@ public class CRMDatabase
         return document.getCurrentController();
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     private void createTables() throws SQLException
     {
         HsqlTableDescriptor table = new HsqlTableDescriptor( "categories",
@@ -206,7 +206,7 @@ public class CRMDatabase
         m_connection.refreshTables();
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     private void validateUnparseable()
     {
     /*
@@ -242,7 +242,7 @@ public class CRMDatabase
             */
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     private void createQueries() throws ElementExistException, WrappedTargetException, com.sun.star.lang.IllegalArgumentException
     {
         m_database.getDataSource().createQuery(

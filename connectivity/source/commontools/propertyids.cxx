@@ -85,9 +85,9 @@ namespace dbtools
         const sal_Char* getPROPERTY_ID_ACTIVE_CONNECTION()  { return    "ActiveConnection"; }
         const sal_Char* getPROPERTY_ID_LABEL()              { return    "Label"; }
 
-    //============================================================
+
     //= error messages
-    //============================================================
+
         const sal_Char* getSQLSTATE_SEQUENCE()              { return    "HY010"; }
         const sal_Char* getSTR_DELIMITER()                  { return    "/"; }
 

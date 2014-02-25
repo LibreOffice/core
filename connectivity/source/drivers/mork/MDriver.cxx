@@ -90,7 +90,7 @@ sal_Bool MorkDriver::acceptsURL(OUString const & url)
 {
     SAL_INFO("connectivity.mork", "=> MorkDriver::acceptsURL()" );
     // Skip 'sdbc:mozab: part of URL
-    //
+
     sal_Int32 nLen = url.indexOf(':');
     nLen = url.indexOf(':',nLen+1);
     OUString aAddrbookURI(url.copy(nLen+1));

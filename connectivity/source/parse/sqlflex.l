@@ -1,14 +1,14 @@
 %{
 
-//
+
 // This file is part of the LibreOffice project.
-//
+
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
-//
+
 // This file incorporates work covered by the following license notice:
-//
+
 //   Licensed to the Apache Software Foundation (ASF) under one or more
 //   contributor license agreements. See the NOTICE file distributed
 //   with this work for additional information regarding copyright
@@ -16,7 +16,7 @@
 //   License, Version 2.0 (the "License"); you may not use this file
 //   except in compliance with the License. You may obtain a copy of
 //   the License at http://www.apache.org/licenses/LICENSE-2.0 .
-//
+
 
 #include "sal/config.h"
 
@@ -59,8 +59,8 @@
 
 using namespace connectivity;
 
-//=============================================================================
-//
+
+
 // Erzeugung der Blaetter fuer die Token
 // Blaetter werden generell vom Lexer erzeugt
 
@@ -91,8 +91,8 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
     xxx_pGLOBAL_SQLSCAN->SQLyyerror(msg);           \
 }
 
-//
-//=============================================================================
+
+
 
 %}
 
@@ -691,7 +691,7 @@ sal_Int32 gatherNamePre(const sal_Char* text)
 using namespace connectivity;
 
 static bool IN_SQLyyerror;
-//------------------------------------------------------------------------------
+
 OSQLScanner::OSQLScanner()
             : m_pContext(NULL)
             , m_nCurrentPos(0)
@@ -701,11 +701,11 @@ OSQLScanner::OSQLScanner()
     IN_SQLyyerror = false;
 }
 
-//------------------------------------------------------------------------------
+
 OSQLScanner::~OSQLScanner()
 {
 }
-//------------------------------------------------------------------------------
+
 void OSQLScanner::SQLyyerror(char const *fmt)
 {
 
@@ -765,7 +765,7 @@ void OSQLScanner::SQLyyerror(char const *fmt)
 	YY_FLUSH_BUFFER;
 }
 
-//------------------------------------------------------------------------------
+
 void OSQLScanner::prepareScan(const ::rtl::OUString & rNewStatement, const IParseContext* pContext, sal_Bool bInternational)
 {
     YY_FLUSH_BUFFER;
@@ -778,7 +778,7 @@ void OSQLScanner::prepareScan(const ::rtl::OUString & rNewStatement, const IPars
     m_pContext = pContext;
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int32 OSQLScanner::SQLyygetc(void)
 {
 	sal_Int32 nPos = (m_nCurrentPos >= m_sStatement.getLength()) ? EOF : m_sStatement.getStr()[m_nCurrentPos];
@@ -786,24 +786,24 @@ sal_Int32 OSQLScanner::SQLyygetc(void)
     return nPos;
 }
 
-//------------------------------------------------------------------------------
+
 IParseContext::InternationalKeyCode OSQLScanner::getInternationalTokenID(const sal_Char* sToken) const
 {
     OSL_ENSURE(m_pContext, "OSQLScanner::getInternationalTokenID: No Context set");
     return (m_bInternational) ? m_pContext->getIntlKeyCode(::rtl::OString(sToken) ) : IParseContext::KEY_NONE;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32	OSQLScanner::GetGERRule() const		{ return PREDICATE_GER; }
 sal_Int32	OSQLScanner::GetENGRule() const		{ return PREDICATE_ENG; }
 sal_Int32	OSQLScanner::GetSQLRule() const		{ return SQL; }
 sal_Int32	OSQLScanner::GetDATERule() const	{ return DATE; }
 sal_Int32	OSQLScanner::GetSTRINGRule() const	{ return STRING; }
-// -------------------------------------------------------------------------
+
 void OSQLScanner::setScanner(sal_Bool _bNull)
 {
 	xxx_pGLOBAL_SQLSCAN = _bNull ? NULL : this;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 OSQLScanner::SQLlex()
 {
 	return SQLyylex();

@@ -58,9 +58,9 @@ void throwNoSuchElementException() throw(NoSuchElementException)
     throw NoSuchElementException();
 }
 
-//==========================================================================
+
 //= ODriverEnumeration
-//==========================================================================
+
 class ODriverEnumeration : public ::cppu::WeakImplHelper1< XEnumeration >
 {
     friend class OSDBCDriverManager;
@@ -107,9 +107,9 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
     return makeAny( *m_aPos++ );
 }
 
-    //=====================================================================
+
     //= helper
-    //=====================================================================
+
 
     /// an STL functor which ensures that a SdbcDriver described by a DriverAccess is loaded
     struct EnsureDriver : public ::std::unary_function< DriverAccess, DriverAccess >
@@ -167,7 +167,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
         // ctor
         AcceptsURL( const OUString& _rURL ) : m_rURL( _rURL ) { }
 
-        //.................................................................
+
         bool operator()( const Reference<XDriver>& _rDriver ) const
         {
             // ask the driver
@@ -224,7 +224,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
     /// an STL argorithm compatible predicate comparing two DriverAccess instances by their implementation names
     struct CompareDriverAccessByName : public ::std::binary_function< DriverAccess, DriverAccess, bool >
     {
-        //.................................................................
+
         bool operator()( const DriverAccess& lhs, const DriverAccess& rhs )
         {
             return lhs.sImplementationName < rhs.sImplementationName ? true : false;
@@ -236,16 +236,16 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
     {
         OUString m_sImplName;
         EqualDriverAccessToName(const OUString& _sImplName) : m_sImplName(_sImplName){}
-        //.................................................................
+
         bool operator()( const DriverAccess& lhs)
         {
             return lhs.sImplementationName.equals(m_sImplName);
         }
     };
 
-//==========================================================================
+
 //= OSDBCDriverManager
-//==========================================================================
+
 
 OSDBCDriverManager::OSDBCDriverManager( const Reference< XComponentContext >& _rxContext )
     :m_xContext( _rxContext )

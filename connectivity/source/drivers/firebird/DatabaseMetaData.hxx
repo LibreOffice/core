@@ -29,9 +29,9 @@ namespace connectivity
 {
     namespace firebird
     {
-        //**************************************************************
+
         //************ Class: ODatabaseMetaData
-        //**************************************************************
+
 
         typedef ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XDatabaseMetaData> ODatabaseMetaData_BASE;
 

@@ -34,10 +34,10 @@
 #include <tools/diagnose_ex.h>
 #include <unotools/sharedunocomponent.hxx>
 
-//........................................................................
+
 namespace connectivity { namespace hsqldb
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -55,9 +55,9 @@ namespace connectivity { namespace hsqldb
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::sdbc::XRow;
 
-    //====================================================================
+
     //= HView
-    //====================================================================
+
 
     HView::HView( const Reference< XConnection >& _rxConnection, sal_Bool _bCaseSensitive,
         const OUString& _rSchemaName, const OUString& _rName )
@@ -81,12 +81,12 @@ namespace connectivity { namespace hsqldb
         // not really atomic ... as long as we do not have something like
         //   ALTER VIEW <name> TO <command>
         // in HSQL, we need to do it this way ...
-        //
+
         // I can imagine scenarios where this fails, e.g. when dropping the view
         // succeedes, re-creating it fails, some other thread alters a table which
         // the view was based on, and then we try to restore the view with the
         // original command, which then fails, too.
-        //
+
         // However, there's not much chance to prevent this kind of errors without
         // backend support.
 
@@ -194,8 +194,8 @@ namespace connectivity { namespace hsqldb
         return sCommand;
     }
 
-//........................................................................
+
 } } // namespace connectivity::hsqldb
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

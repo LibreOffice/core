@@ -341,9 +341,9 @@ sal_Bool OResultSet::pushCard(sal_uInt32 cardNumber) throw(SQLException, Runtime
     {
         if ( (m_aRow->get())[i].isBound() )
         {
-            //
+
             // Everything in the addressbook is a string!
-            //
+
             if ( !m_aQuery.setRowValue( (m_aRow->get())[i], cardNumber, m_aColumnNames[i-1], DataType::VARCHAR ))
             {
                 m_pStatement->getOwnConnection()->throwSQLException( m_aQuery.getError(), *this );
@@ -383,9 +383,9 @@ sal_Bool OResultSet::fetchRow(sal_Int32 cardNumber,sal_Bool bForceReload) throw(
     {
         if ( (m_aRow->get())[i].isBound() )
         {
-            //
+
             // Everything in the addressbook is a string!
-            //
+
             if ( !m_aQuery.getRowValue( (m_aRow->get())[i], cardNumber, m_aColumnNames[i-1], DataType::VARCHAR ))
             {
                 m_pStatement->getOwnConnection()->throwSQLException( m_aQuery.getError(), *this );
@@ -1399,7 +1399,7 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
                             // the getXXX methods are 1-based ...
                         sal_Int32 nTableColumnPos = i + 1;
                             // get first table column is the bookmark column
-                            // ...
+
 #if OSL_DEBUG_LEVEL > 0
                         OSL_TRACE("Set Col Mapping: %d -> %d", nSelectColumnPos, nTableColumnPos );
 #endif
@@ -1432,9 +1432,9 @@ sal_Bool OResultSet::isCount() const
 }
 
 
-//
+
 // Check for valid row in m_aQuery
-//
+
 sal_Bool OResultSet::validRow( sal_uInt32 nRow )
 {
     sal_Int32  nNumberOfRecords = m_aQuery.getRealRowCount();

@@ -46,10 +46,10 @@ namespace
     const double fNanoSecondsPerDay = nanoSecInSec * secInMin * minInHour * 24.0;
 }
 
-//.........................................................................
+
 namespace dbtools
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::util;
@@ -447,9 +447,9 @@ namespace dbtools
         return aTime;
     }
 
-//.........................................................................
+
 }   // namespace dbtools
-//.........................................................................
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

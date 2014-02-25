@@ -264,7 +264,7 @@ nsProfile::SetCurrentProfile(const PRUnichar * aCurrentProfile)
 
     }
 
-//
+
 //  // Do the profile switch
     gDirServiceProvider->SetProfileDir(profileDir);
     mCurrentProfileName.Assign(aCurrentProfile);

@@ -23,9 +23,9 @@
 #include "resource/conn_shared_res.hrc"
 #include "resource/common_res.hrc"
 
-// ============================================================================
+
 // = the calc driver's resource strings
-// ============================================================================
+
 
 #define STR_LOAD_FILE_ERROR_MESSAGE ( STR_CALC_BASE +    0 )
 

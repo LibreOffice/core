@@ -40,11 +40,11 @@ typedef Reference< XSingleServiceFactory > (SAL_CALL *createFactoryFunc)
             rtl_ModuleCount* _pTemp
         );
 
-//***************************************************************************************
-//
+
+
 // The required C-Api must be provided!
 // It contains of 3 special functions that have to be exported.
-//
+
 
 
 void REGISTER_PROVIDER(

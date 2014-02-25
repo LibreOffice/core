@@ -29,12 +29,12 @@
 
 #define PROPERTY_ID_VALUE   1000
 
-//........................................................................
+
 namespace dbtools
 {
 namespace param
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::sdbc::XParameters;
@@ -62,9 +62,9 @@ namespace param
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
     namespace DataType = ::com::sun::star::sdbc::DataType;
 
-    //====================================================================
+
     //= ParameterWrapper
-    //====================================================================
+
 
     ParameterWrapper::ParameterWrapper( const Reference< XPropertySet >& _rxColumn )
         :PropertyBase( m_aBHelper )
@@ -246,9 +246,9 @@ namespace param
         m_aBHelper.bDisposed = sal_True;
     }
 
-    //====================================================================
+
     //= ParameterWrapperContainer
-    //====================================================================
+
 
     ParameterWrapperContainer::ParameterWrapperContainer()
         :ParameterWrapperContainer_Base( m_aMutex )
@@ -344,8 +344,8 @@ namespace param
         m_aParameters.swap( aEmpty );
     }
 
-//........................................................................
+
 } } // namespace dbtools::param
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

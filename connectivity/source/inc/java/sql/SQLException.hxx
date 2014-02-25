@@ -25,9 +25,9 @@
 namespace connectivity
 {
     namespace starsdbc  = ::com::sun::star::sdbc;
-    //**************************************************************
+
     //************ Class: java.sql.SQLException
-    //**************************************************************
+
     class java_sql_SQLException_BASE;
     class java_sql_SQLException :   public starsdbc::SQLException
     {

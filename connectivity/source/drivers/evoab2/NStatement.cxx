@@ -598,9 +598,9 @@ Reference< XPropertySetInfo > SAL_CALL OCommonStatement::getPropertySetInfo(  ) 
     return ::cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper() );
 }
 
-// =============================================================================
+
 // = OStatement
-// =============================================================================
+
 
 IMPLEMENT_SERVICE_INFO( OStatement, "com.sun.star.comp.sdbcx.evoab.OStatement", "com.sun.star.sdbc.Statement" );
 

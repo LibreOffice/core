@@ -108,21 +108,21 @@ bool getLocalFromWeakRef( jweak& _weak, LocalRef< T >& _inout_local )
 // Load a class.  A map from pairs of (classPath, name) to pairs of weak Java
 // references to (ClassLoader, Class) is maintained, so that a class is only
 // loaded once.
-//
+
 // It may happen that the weak reference to the ClassLoader becomes null while
 // the reference to the Class remains non-null (in case the Class was actually
 // loaded by some parent of the ClassLoader), in which case the ClassLoader is
 // resurrected (which cannot cause any classes to be loaded multiple times, as
 // the ClassLoader is no longer reachable, so no classes it has ever loaded are
 // still reachable).
-//
+
 // Similarly, it may happen that the weak reference to the Class becomes null
 // while the reference to the ClassLoader remains non-null, in which case the
 // Class is simply re-loaded.
-//
+
 // This code is close to the implementation of jvmaccess::ClassPath::loadClass
 // in jvmaccess/classpath.hxx, but not close enough to avoid the duplication.
-//
+
 // If false is returned, a (still pending) JNI exception occurred.
 bool loadClass(
     Reference< XComponentContext > const & context, JNIEnv& environment,
@@ -252,9 +252,9 @@ bool loadClass(
 
 IMPLEMENT_SERVICE_INFO(java_sql_Connection,"com.sun.star.sdbcx.JConnection","com.sun.star.sdbc.Connection");
 
-//**************************************************************
+
 //************ Class: java.sql.Connection
-//**************************************************************
+
 jclass java_sql_Connection::theClass = 0;
 
 java_sql_Connection::java_sql_Connection( const java_sql_Driver& _rDriver )

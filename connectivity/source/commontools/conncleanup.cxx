@@ -22,26 +22,26 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <osl/diagnose.h>
 
-//.........................................................................
+
 namespace dbtools
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::lang;
 
-    //=====================================================================
+
     static const OUString& getActiveConnectionPropertyName()
     {
         static const OUString s_sActiveConnectionPropertyName( "ActiveConnection" );
         return s_sActiveConnectionPropertyName;
     }
 
-    //=====================================================================
+
     //= OAutoConnectionDisposer
-    //=====================================================================
+
 
     OAutoConnectionDisposer::OAutoConnectionDisposer(const Reference< XRowSet >& _rxRowSet, const Reference< XConnection >& _rxConnection)
         :m_xRowSet( _rxRowSet )
@@ -165,11 +165,11 @@ namespace dbtools
                 // ActiveConnection twice. This is a error in forms/source/component/DatabaseForm.cxx, but
                 // changing this would require incompatible changes we can't do for a while.
                 // So for the moment, we have to live with it here.
-                //
+
                 // The only scenario where this doubled notification causes problems is when the connection
                 // of the form is reset to the one we're responsible for (m_xOriginalConnection), so we
                 // check this here.
-                //
+
                 // Yes, this is a HACK :(
                 if ( xNewConnection.get() != m_xOriginalConnection.get() )
                 {
@@ -229,8 +229,8 @@ namespace dbtools
     }
 
 
-//.........................................................................
+
 }   // namespace dbtools
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

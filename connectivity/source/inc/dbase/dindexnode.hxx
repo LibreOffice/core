@@ -37,9 +37,9 @@ namespace connectivity
 
         class ONDXNode;
         class ODbaseIndex;
-        //==================================================================
+
         // Index Key
-        //==================================================================
+
         typedef file::OOperand ONDXKey_BASE;
         class ONDXKey : public ONDXKey_BASE
         {
@@ -83,9 +83,9 @@ namespace connectivity
 
 
 
-        //==================================================================
+
         // Index Page Pointer
-        //==================================================================
+
         SV_DECL_REF(ONDXPage) // Base class - because we need to store additional information
 
 
@@ -108,9 +108,9 @@ namespace connectivity
             sal_Bool HasPage() const {return nPagePos != 0;}
             //  sal_Bool Is() const { return isValid(); }
         };
-        //==================================================================
+
         // Index Page
-        //==================================================================
+
         class ONDXPage : public SvRefBase
         {
             friend class ODbaseIndex;
@@ -217,9 +217,9 @@ namespace connectivity
 
         typedef ::std::vector<ONDXPage*>    ONDXPageList;
 
-        //==================================================================
+
         // Index Node
-        //==================================================================
+
         class ONDXNode
         {
             friend class ONDXPage;
@@ -247,9 +247,9 @@ namespace connectivity
             void Write(SvStream &rStream, const ONDXPage& rPage) const;
             void Read(SvStream &rStream, ODbaseIndex&);
         };
-        //==================================================================
+
         // inline implementation
-        //==================================================================
+
 //      inline ONDXKey::ONDXKey(const ORowSetValue& rVal, sal_Int32 eType, sal_uInt32 nRec)
 //          : ONDXKey_BASE(eType)
 //          , nRecord(nRec),xValue(rVal)

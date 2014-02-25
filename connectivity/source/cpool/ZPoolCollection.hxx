@@ -43,10 +43,10 @@
 namespace connectivity
 {
     class OConnectionPool;
-    //==========================================================================
+
     //= OPoolCollection - the one-instance service for PooledConnections
     //= manages the active connections and the connections in the pool
-    //==========================================================================
+
     typedef ::cppu::WeakImplHelper4<    ::com::sun::star::sdbc::XConnectionPool,
                                         ::com::sun::star::lang::XServiceInfo,
                                         ::com::sun::star::frame::XTerminateListener,
@@ -57,7 +57,7 @@ namespace connectivity
     class OPoolCollection : public OPoolCollection_Base
     {
 
-        //==========================================================================
+
         typedef ::comphelper::OInterfaceCompare< ::com::sun::star::sdbc::XDriver >  ODriverCompare;
         typedef std::map<OUString, OConnectionPool*> OConnectionPools;
 

@@ -1026,7 +1026,7 @@ sal_Bool OResultSet::Move(IResultSetHelper::Movement eCursorPosition, sal_Int32 
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::Move" );
 
 //IgnoreDeletedRows:
-//
+
     sal_Int32 nTempPos = m_nRowPos;
 
     if (m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT &&
