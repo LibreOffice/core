@@ -456,9 +456,9 @@ sal_uLong DictionaryNeo::saveEntries(const OUString &rURL)
     sal_uLong nErr = sal::static_int_cast< sal_uLong >(-1);
     SvStreamPtr pStream = SvStreamPtr( utl::UcbStreamHelper::CreateStream( xStream ) );
 
-    //
+
     // Always write as the latest version, i.e. DIC_VERSION_7
-    //
+
     rtl_TextEncoding eEnc = RTL_TEXTENCODING_UTF8;
     pStream->WriteLine(OString(pVerOOo7));
     if (0 != (nErr = pStream->GetError()))
