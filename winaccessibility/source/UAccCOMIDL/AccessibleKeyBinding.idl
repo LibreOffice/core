@@ -24,34 +24,28 @@ import "AccessibleKeyStroke.idl";
 [object, uuid(6B1923AC-3E9A-4336-99E1-A69EA4E946E9)]
 interface IAccessibleKeyBinding : IUnknown
 {
-  ///
-  /// get number of key bindings for this object
-  ///
+  // get number of key bindings for this object
   [propget] HRESULT nKeyBindings
     (
      [out, retval] long *nKeyBindings
      );
 
-  ///
-  /// get length of keystroke sequence for specified key binding
-  ///
+  // get length of keystroke sequence for specified key binding
   [propget] HRESULT keyStrokeSequenceLength
     (
      [in] long keyBindingIndex,
      [out] long *sequenceLength
      );
 
-  ///
-  /// The returned sequence of key strokes describes one method
-  /// to invoke the associated action (the one from which you
-  /// obtained the object at which you called this method) by
-  /// pressing keys. The keys specified by each of the returned
-  /// key strokes have to be pressed at the same time (the
-  /// Control-key and the A-key for example). The keys of one key
-  /// stroke have to be released before pressing those of the next.
-  /// The order of the key strokes in the sequence define the order
-  /// in which to press them.
-  ///
+  // The returned sequence of key strokes describes one method
+  // to invoke the associated action (the one from which you
+  // obtained the object at which you called this method) by
+  // pressing keys. The keys specified by each of the returned
+  // key strokes have to be pressed at the same time (the
+  // Control-key and the A-key for example). The keys of one key
+  // stroke have to be released before pressing those of the next.
+  // The order of the key strokes in the sequence define the order
+  // in which to press them.
   [propget] HRESULT keyBinding
     (
      [in] long keyBindingIndex,

@@ -312,7 +312,7 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
     }
     else if(ouName.compareTo(L"ParaTabStops") == 0)
     {
-        //
+
         // Convert to the Sequence with TabStop element.
         vector< ::com::sun::star::style::TabStop > vecTabStop;
         ::com::sun::star::style::TabStop tabStop;
@@ -395,7 +395,7 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
         }
         while(pos < ouValue.getLength());
 
-        //
+
         // Dump into Sequence.
         int iSeqLen = (vecTabStop.size() == 0) ? 1 : vecTabStop.size();
         Sequence< ::com::sun::star::style::TabStop > seqTabStop(iSeqLen);

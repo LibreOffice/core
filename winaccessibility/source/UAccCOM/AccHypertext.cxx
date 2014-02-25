@@ -29,8 +29,8 @@
 using namespace com::sun::star::accessibility;
 using namespace com::sun::star::uno;
 
-/////////////////////////////////////////////////////////////////////////////
-//
+
+
 /**
    * Get special selection.
    * @param startOffset Start selection offset.

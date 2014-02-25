@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//////////////////////////////////////////////////////////////////////
+
 // AccActionBase.h: interface for the CAccActionBase class.
-//////////////////////////////////////////////////////////////////////
+
 
 #if !defined(AFX_ACCACTIONBASE_H__F87FAD24_D66E_4D22_9B24_3304A303DC84__INCLUDED_)
 #define AFX_ACCACTIONBASE_H__F87FAD24_D66E_4D22_9B24_3304A303DC84__INCLUDED_

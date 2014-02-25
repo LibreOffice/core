@@ -62,27 +62,27 @@ public:
 
     // IEnumVARIANT
 
-    //
+
     HRESULT STDMETHODCALLTYPE Next(ULONG cElements,VARIANT __RPC_FAR *pvar,ULONG __RPC_FAR *pcElementFetched);
 
-    //
+
     HRESULT STDMETHODCALLTYPE Skip(ULONG cElements);
 
-    //
+
     HRESULT STDMETHODCALLTYPE Reset( void);
 
-    //
+
     HRESULT STDMETHODCALLTYPE Clone(IEnumVARIANT __RPC_FAR *__RPC_FAR *ppenum);
 
     // IEnumVariant
 
-    //
+
     HRESULT STDMETHODCALLTYPE PutSelection(hyper pXSelection);
 
-    //
+
     static HRESULT STDMETHODCALLTYPE Create(CEnumVariant __RPC_FAR *__RPC_FAR *ppenum);
 
-    //
+
     long GetCountOfElements();
 
 private:
