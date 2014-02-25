@@ -267,7 +267,7 @@ public class Control extends Shape
 
     /** the peer should be retrieved every time before it is used because it
      * might be disposed otherwise
-     * 
+     *
      * @return
      */
     public XLayoutConstrains getPeer()
@@ -295,7 +295,7 @@ public class Control extends Shape
                 }
                 else
                 {
-                    xPropertySet.setPropertyValue("EffectiveValue", new Double(dblEffMax)); //new Double(100000.2)); //
+                    xPropertySet.setPropertyValue("EffectiveValue", new Double(dblEffMax)); //new Double(100000.2));
                 }
                 aPreferredSize = getPeer().getPreferredSize();
                 xPropertySet.setPropertyValue("EffectiveValue", com.sun.star.uno.Any.VOID);

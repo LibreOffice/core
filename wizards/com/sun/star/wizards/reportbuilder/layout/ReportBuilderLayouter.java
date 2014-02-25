@@ -117,7 +117,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
 
     /**
      * Layout the complete report new, by all information we know until this time.
-     * 
+     *
      * If there are some information less, it is no problem for this function, they will be leaved out.
      * It is possible to call this function after every change, but be careful, could take a little bit longer.
      */
@@ -158,7 +158,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
             Logger.getLogger(ReportBuilderLayouter.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    // -------------------------------------------------------------------------
+
 
     /**
      * Remove all Groups
@@ -178,7 +178,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
             }
         }
     }
-    // -------------------------------------------------------------------------
+
 
     /**
      * Remove all fields
@@ -334,7 +334,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         }
         return m_nPageWidth;
     }
-    // -------------------------------------------------------------------------
+
 
     /**
      * Stores the Group names. To insert/create a report with such group names, call layout()
@@ -380,7 +380,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
             }
         }
     }
-    // -------------------------------------------------------------------------
+
 
     protected int insertGroups()
     {
@@ -464,7 +464,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         return lastGroupPosition;
     }
 
-    // -------------------------------------------------------------------------
+
     /**
      * Give a list off all field title names to insert the field title names, call layout()
      * @param _aFieldTitleNames
@@ -474,7 +474,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         m_aFieldTitleNames = _aFieldTitleNames;
     }
 
-    // -------------------------------------------------------------------------
+
     protected String getTitleFromFieldName(String _sField)
     {
         for (int i = 0; i < m_aFieldNames.length; i++)
@@ -510,7 +510,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         }
         return false;
     }
-    // -------------------------------------------------------------------------
+
 
     /**
      * Helper to get all field names without the names which are already in the group names
@@ -560,7 +560,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         return aNewList;
     }
 
-    // -------------------------------------------------------------------------
+
     protected int calculateFieldWidth(int _nLeftIndent, int _nFieldCount)
     {
         int nWidth = 3000;
@@ -575,10 +575,10 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
     {
         return getNamesWithoutGroupNames(m_aFieldNames, m_aFieldTitleNames);
     }
-    // -------------------------------------------------------------------------
+
 
     abstract protected void insertDetailFieldTitles(int lastGroupPostion);
-    // -------------------------------------------------------------------------
+
 
     /**
      * Give a list off all field names to insert the field names, call layout()
@@ -604,7 +604,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         return ((m_aGroupNames == null) ? 0 : m_aGroupNames.length);
     }
 
-    // -------------------------------------------------------------------------
+
     protected String[] getFieldNames()
     {
         return getNamesWithoutGroupNames(m_aFieldNames, null);
@@ -633,7 +633,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
             }
         }
     }
-    // -------------------------------------------------------------------------
+
 
     protected Rectangle insertLabel(XSection _xSection, String _sLabel, Rectangle _aRect, int _nWidth, SectionObject _aSO)
     {
@@ -687,7 +687,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         }
         return _aRect;
     }
-    // -------------------------------------------------------------------------
+
 
     protected String convertToFieldName(String _sElementName)
     {
@@ -706,13 +706,13 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         }
         return _sName;
     }
-    // -------------------------------------------------------------------------
+
 
     /**
      * Insert a already formatted field name into a given section
-     * 
+     *
      * Use 'convertToFieldName(dbfield)' to convert a dbfield name in the right.
-     * 
+     *
      * @param _xSection        in which section the formatted field will store
      * @param _sFormattedfield as String a dbfield or an other function
      * @param _aRect           .X, .Y are the absolute position (1/100mm) where the formatted field will set
@@ -824,7 +824,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         return _aRect;
     }
 
-    // -------------------------------------------------------------------------
+
 // TODO: check with Query, this code will not work with Queries
     public void setTableName(int _aType, String _sTableName)
     {
@@ -833,7 +833,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
 
         getReportDefinition().setCommandType(_aType);
         getReportDefinition().setCommand(_sTableName);
-    }    // -------------------------------------------------------------------------
+    }
     protected XMultiServiceFactory m_xMSF;
 
     protected XMultiServiceFactory getMSFofReportDefinition()
@@ -844,7 +844,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         }
         return m_xMSF;
     }
-    // -------------------------------------------------------------------------
+
 
     protected Rectangle insertVerticalLine(XSection _xSection, Rectangle _aRect, int _nWidth, int _nHeight)
     {
@@ -884,7 +884,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         }
         return _aRect;
     }
-    // -------------------------------------------------------------------------
+
 
     protected void clearReportHeader()
     {
@@ -985,7 +985,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
             }
         }
     }
-    // -------------------------------------------------------------------------
+
 
     protected void clearPageHeader()
     {
@@ -1051,7 +1051,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
     /**
      * Returns the width and height of a given string (_sText) in 1/100mm drawn in the given font descriptor.
      * TODO: This function is a performance leak, we could store already calculated values in a map, to build a cache. Access should be much faster then.
-     * 
+     *
      * @param _sText
      * @param _aFont
      * @return width of given text in 1/100mm

@@ -103,7 +103,7 @@ public class FilterComponent
     final int SO_THIRDBOOLFIELDNAME = 256 + 3;
     final int SO_FOURTHBOOLFIELDNAME = 256 + 4;
     int SO_BOOLEANLIST[] =
-    
+
 
     {
         SO_FIRSTBOOLFIELDNAME, SO_SECONDBOOLFIELDNAME, SO_THIRDBOOLFIELDNAME, SO_FOURTHBOOLFIELDNAME
@@ -522,10 +522,10 @@ public class FilterComponent
         iDateTimeFormat = oQueryMetaData.getNumberFormatter().defineNumberFormat("YYYY-MM-DD HH:MM:SS");
     }
 
-    // -------------------------------------------------------------------------
-    // 
-    // 
-    // -------------------------------------------------------------------------
+
+
+
+
     final class ControlRow
     {
 
@@ -718,7 +718,7 @@ public class FilterComponent
 
         /**
          * @returns true if the current condition is complete, all needed fields are filled with values.
-         * So we can enable the next. 
+         * So we can enable the next.
          */
         boolean isConditionComplete()
         {

@@ -52,7 +52,7 @@
 
 
 
-// ============================================================================
+
 
 String RID_COMMON_START + 0
 {
@@ -165,7 +165,7 @@ String RID_COMMON_START + 21
 };
 
 
-// end of common section ======================================================
+// end of common section
 
 
 String RID_DB_COMMON_START + 0
@@ -292,9 +292,9 @@ String RID_DB_COMMON_START + 45
 
 
 
-// ============================================================================
+
 // Form Wizard
-// ============================================================================
+
 
 String RID_DB_FORM_WIZARD_START + 0
 {
@@ -645,7 +645,7 @@ String RID_DB_FORM_WIZARD_START + 98
 };
 
 
-// ============================================================================
+
 
 String RID_DB_QUERY_WIZARD_START + 0
 {
@@ -766,7 +766,7 @@ String RID_DB_QUERY_WIZARD_START + 25
     Text [ en-US] = "Value";
 };
 
-// --------------------------------------
+
 // don't change anything to the next 10 values
 // they are list elements and need to be as follows
 String RID_DB_QUERY_WIZARD_START + 26
@@ -819,7 +819,7 @@ String RID_DB_QUERY_WIZARD_START + 35
 {
     Text [ en-US] = "is not null";
 };
-// --------------------------------------
+
 
 String RID_DB_QUERY_WIZARD_START + 36
 {
@@ -1088,11 +1088,6 @@ String RID_DB_QUERY_WIZARD_START + 96
 {
     Text [ en-US] = "<FIELDNAME> <LOGICOPERATOR> <VALUE>";
 };
-
-
-
-
-// ============================================================================
 
 String RID_DB_REPORT_WIZARD_START + 0
 {
@@ -1606,7 +1601,7 @@ String RID_DB_REPORT_WIZARD_START + 122
     Text [ en-US ] = "Worldmap";
 };
 
-// ============================================================================
+
 
 String RID_DB_TABLE_WIZARD_START + 1
 {
@@ -1857,14 +1852,7 @@ String RID_DB_TABLE_WIZARD_START + 51
      Text [ en-US] = "The field '%FIELDNAME' already exists.";
 };
 
-
-
-// ============================================================================
-// ============================						  ======================
-// ======================		 LETTER WIZARD RESOURCES		 ================
-// ============================						  ======================
-// ============================================================================
-
+// LETTER WIZARD RESOURCES
 
 String RID_LETTERWIZARDDIALOG_START + 1
 {
@@ -2191,7 +2179,7 @@ String RID_LETTERWIZARDDIALOG_START + 66
     Text [ en-US] = "Red Line";
 };
 
-//====================== Letter Wizard Greeting Start
+// Letter Wizard Greeting Start
 String RID_LETTERWIZARDSALUTATION_START + 1
 {
     Text [ en-US] = "To Whom it May Concern";
@@ -2207,7 +2195,7 @@ String RID_LETTERWIZARDSALUTATION_START + 3
     Text [ en-US] = "Hello";
 };
 
-//====================== Letter Wizard Greeting Start
+// Letter Wizard Greeting Start
 String RID_LETTERWIZARDGREETING_START + 1
 {
     Text [ en-US] = "Sincerely";
@@ -2224,7 +2212,7 @@ String RID_LETTERWIZARDGREETING_START + 3
 };
 
 
-//====================== Letter Wizard Roadmap Start
+// Letter Wizard Roadmap Start
 String RID_LETTERWIZARDROADMAP_START + 1
 {
     Text [ en-US] = "Page design";
@@ -2255,13 +2243,7 @@ String RID_LETTERWIZARDROADMAP_START + 6
     Text [ en-US] = "Name and location";
 };
 
-
-// ============================================================================
-// ============================						  ======================
-// ======================		 FAX WIZARD RESOURCES		 ================
-// ============================						  ======================
-// ============================================================================
-
+// FAX WIZARD RESOURCES
 
 String RID_FAXWIZARDDIALOG_START + 1
 {
@@ -2538,7 +2520,7 @@ String RID_FAXWIZARDDIALOG_START + 55
     Text [ en-US] = "Modern Fax from Private";
 };
 
-//====================== Fax Wizard Communication Start
+// Fax Wizard Communication Start
 String RID_FAXWIZARDCOMMUNICATION_START + 1
 {
     Text [ en-US] = "Important Information!";
@@ -2554,7 +2536,7 @@ String RID_FAXWIZARDCOMMUNICATION_START + 3
     Text [ en-US] = "News!";
 };
 
-//====================== Fax Wizard Salutation Start
+// Fax Wizard Salutation Start
 String RID_FAXWIZARDSALUTATION_START + 1
 {
     Text [ en-US] = "To whom it may concern,";
@@ -2576,7 +2558,7 @@ String RID_FAXWIZARDSALUTATION_START + 4
 };
 
 
-//====================== Fax Wizard Greeting Start
+// Fax Wizard Greeting Start
 String RID_FAXWIZARDGREETING_START + 1
 {
     Text [ en-US] = "Sincerely";
@@ -2598,7 +2580,7 @@ String RID_FAXWIZARDGREETING_START + 4
 };
 
 
-//====================== Fax Wizard Roadmap Start
+// Fax Wizard Roadmap Start
 String RID_FAXWIZARDROADMAP_START + 1
 {
     Text [ en-US] = "Page design";
@@ -2624,16 +2606,7 @@ String RID_FAXWIZARDROADMAP_START + 5
     Text [ en-US] = "Name and location";
 };
 
-
-
-
-// ============================================================================
-// ============================						  ======================
-// ======================		 WEB WIZARD RESOURCES		 ================
-// ============================						  ======================
-// ============================================================================
-
-
+// WEB WIZARD RESOURCES
 String RID_WEBWIZARDDIALOG_START +1
 {
     Text [ en-US  ] = "Web Wizard";
@@ -3282,15 +3255,7 @@ String RID_WEBWIZARDDIALOG_START +152
     Text [ en-US  ] = "File not found. Would you like to specify a new file location?";
 };
 
-
-
-// ============================================================================
-// =================		 WEB WIZARD FTP DIALOG RESOURCES	  =============
-// ============================================================================
-
-
-
-
+// WEB WIZARD FTP DIALOG RESOURCES
 String RID_WEBWIZARDDIALOG_FTP +0
 {
     Text [ en-US  ] = "FTP Connection";
@@ -3386,13 +3351,7 @@ String RID_WEBWIZARDDIALOG_FTP +18
     Text [ en-US  ] = "Connecting...";
 };
 
-
-// ============================================================================
-// ============================						  ======================
-// ======================		 AGENDA WIZARD RESOURCES		 ================
-// ============================						  ======================
-// ============================================================================
-
+// AGENDA WIZARD RESOURCES
 String RID_AGENDAWIZARDDIALOG_START +1
 {
     Text [en-US ] = "Agenda Wizard";

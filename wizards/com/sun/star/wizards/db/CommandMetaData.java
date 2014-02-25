@@ -583,7 +583,7 @@ public class CommandMetaData extends DBMetaData
     }
 
     /**@deprecated use 'RelationController' class instead
-     * 
+     *
      * @param _stablename
      * @param _ncommandtype
      * @return
@@ -630,7 +630,7 @@ public class CommandMetaData extends DBMetaData
     }
 
     /**@deprecated use 'RelationController' class instead
-     * 
+     *
      * @param _sreferencedtablename
      * @return
      */

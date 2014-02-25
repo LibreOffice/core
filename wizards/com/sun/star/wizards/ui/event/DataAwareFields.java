@@ -23,10 +23,10 @@ import com.sun.star.uno.Any;
 
 /**
  * This class is a factory for Value objects for different types of
- * memebers. 
+ * memebers.
  * Other than some Value implementations classes this class contains static
  * type conversion methods and factory methods.
- * 
+ *
  * @see com.sun.star.wizards.ui.event.DataAware.Value
  */
 public class DataAwareFields
@@ -38,7 +38,7 @@ public class DataAwareFields
     /**
      * returns a Value Object which sets and gets values
      * and converting them to other types, according to the "value" argument.
-     * 
+     *
      * @param owner
      * @param fieldname
      * @param value

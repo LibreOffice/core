@@ -426,7 +426,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
      */
 
     /**
-     * 
+     *
      * @param _ndialogpage
      * @param ooldValue
      * @param onewValue

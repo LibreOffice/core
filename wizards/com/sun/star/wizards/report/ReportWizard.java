@@ -648,9 +648,6 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
             bdoenable = m_reportDocument.getRecordParser().hasEscapeProcessing(oCommand.getPropertySet());
         }
         super.setStepEnabled(SOSORTPAGE, bdoenable);
-
-        // int nCommandType = this.CurDBCommandFieldSelection.getSelectedCommandType();
-        // super.setStepEnabled(SOSORTPAGE, (nCommandType == CommandType.TABLE));
     }
 
     public class FieldSelectionListener implements com.sun.star.wizards.ui.XFieldSelectionListener
@@ -714,30 +711,4 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
         {
         }
     }
-
-//    public void tests()
-//    {
-//
-//        Calendar aCalendar = new GregorianCalendar();
-//        aCalendar.setTimeInMillis(1202382900000L);
-//        String aCalStr = aCalendar.toString();
-//
-//        Date aDate = new Date();
-//        aDate.setSeconds(0);
-//        aDate.setMinutes(15);
-//        aDate.setHours(12);
-//        // aDate.setMonth(2);
-//        // aDate.setYear(2008);
-//        // aDate.setDay(7);
-//        long nTime = aDate.getTime();
-//        Long aLong = new Long(nTime);
-//        String aStr = aLong.toString();
-//
-//        Date aNewDate = new Date(1202382900000L);
-////         aNewDate.
-//        String aDateStr = aNewDate.toString();
-////         Datetime aNewTime = new Time(1202382900);
-////         String aTimeStr = aNewTime.toString();
-//
-//    }
 }

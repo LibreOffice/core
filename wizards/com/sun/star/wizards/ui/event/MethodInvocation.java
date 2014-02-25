@@ -63,7 +63,7 @@ public class MethodInvocation
     }
 
     /**
-     * Returns the result of calling the method on the object, or null, if no result. 
+     * Returns the result of calling the method on the object, or null, if no result.
      */
     public Object invoke(Object param) throws IllegalAccessException, InvocationTargetException
     {
