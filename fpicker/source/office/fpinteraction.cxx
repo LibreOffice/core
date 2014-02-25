@@ -25,17 +25,17 @@
 #include <com/sun/star/task/XInteractionDisapprove.hpp>
 #include <com/sun/star/task/XInteractionRetry.hpp>
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
+
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::task;
     using namespace ::com::sun::star::ucb;
 
-    //====================================================================
+
     //= OFilePickerInteractionHandler
-    //====================================================================
+
     DBG_NAME( OFilePickerInteractionHandler )
 
     OFilePickerInteractionHandler::OFilePickerInteractionHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxMaster )
@@ -153,8 +153,8 @@ namespace svt
         return sal_False;
     }
 
-//........................................................................
+
 }   // namespace svt
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

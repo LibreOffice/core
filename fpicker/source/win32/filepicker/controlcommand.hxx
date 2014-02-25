@@ -24,17 +24,17 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <rtl/ustring.hxx>
 
-//---------------------------------------------
-//
-//---------------------------------------------
+
+
+
 
 class CFilePickerState;
 class CControlCommandRequest;
 class CControlCommandResult;
 
-//---------------------------------------------
-//
-//---------------------------------------------
+
+
+
 
 class CControlCommand
 {
@@ -65,9 +65,9 @@ private:
     sal_Int16        m_aControlId;
 };
 
-//---------------------------------------------
-//
-//---------------------------------------------
+
+
+
 
 class CValueControlCommand : public CControlCommand
 {
@@ -90,9 +90,9 @@ private:
     ::com::sun::star::uno::Any m_aValue;
 };
 
-//---------------------------------------------
-//
-//---------------------------------------------
+
+
+
 
 class CLabelControlCommand : public CControlCommand
 {
@@ -111,9 +111,9 @@ private:
     OUString m_aLabel;
 };
 
-//---------------------------------------------
-//
-//---------------------------------------------
+
+
+
 
 class CEnableControlCommand : public CControlCommand
 {

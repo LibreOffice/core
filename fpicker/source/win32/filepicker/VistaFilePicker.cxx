@@ -332,7 +332,7 @@ void SAL_CALL VistaFilePicker::setValue(      ::sal_Int16    nControlId    ,
 }
 
 
-//
+
 
 
 css::uno::Any SAL_CALL VistaFilePicker::getValue(::sal_Int16 nControlId    ,
@@ -350,7 +350,7 @@ css::uno::Any SAL_CALL VistaFilePicker::getValue(::sal_Int16 nControlId    ,
 }
 
 
-//
+
 
 
 void SAL_CALL VistaFilePicker::enableControl(::sal_Int16 nControlId,
@@ -366,7 +366,7 @@ void SAL_CALL VistaFilePicker::enableControl(::sal_Int16 nControlId,
 }
 
 
-//
+
 
 
 void SAL_CALL VistaFilePicker::setLabel(      ::sal_Int16      nControlId,
@@ -382,7 +382,7 @@ void SAL_CALL VistaFilePicker::setLabel(      ::sal_Int16      nControlId,
 }
 
 
-//
+
 
 
 OUString SAL_CALL VistaFilePicker::getLabel(::sal_Int16 nControlId)
@@ -398,7 +398,7 @@ OUString SAL_CALL VistaFilePicker::getLabel(::sal_Int16 nControlId)
 }
 
 
-//
+
 
 
 css::uno::Sequence< ::sal_Int16 > SAL_CALL VistaFilePicker::getSupportedImageFormats()
@@ -408,7 +408,7 @@ css::uno::Sequence< ::sal_Int16 > SAL_CALL VistaFilePicker::getSupportedImageFor
 }
 
 
-//
+
 
 
 sal_Int32 SAL_CALL VistaFilePicker::getTargetColorDepth()
@@ -418,7 +418,7 @@ sal_Int32 SAL_CALL VistaFilePicker::getTargetColorDepth()
 }
 
 
-//
+
 
 
 sal_Int32 SAL_CALL VistaFilePicker::getAvailableWidth()
@@ -428,7 +428,7 @@ sal_Int32 SAL_CALL VistaFilePicker::getAvailableWidth()
 }
 
 
-//
+
 
 
 sal_Int32 SAL_CALL VistaFilePicker::getAvailableHeight()
@@ -438,7 +438,7 @@ sal_Int32 SAL_CALL VistaFilePicker::getAvailableHeight()
 }
 
 
-//
+
 
 
 void SAL_CALL VistaFilePicker::setImage(      sal_Int16      /*nImageFormat*/,
@@ -449,7 +449,7 @@ void SAL_CALL VistaFilePicker::setImage(      sal_Int16      /*nImageFormat*/,
 }
 
 
-//
+
 
 
 sal_Bool SAL_CALL VistaFilePicker::setShowState(sal_Bool /*bShowState*/)
@@ -459,7 +459,7 @@ sal_Bool SAL_CALL VistaFilePicker::setShowState(sal_Bool /*bShowState*/)
 }
 
 
-//
+
 
 
 sal_Bool SAL_CALL VistaFilePicker::getShowState()
@@ -469,7 +469,7 @@ sal_Bool SAL_CALL VistaFilePicker::getShowState()
 }
 
 
-//
+
 
 
 void SAL_CALL VistaFilePicker::initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
@@ -593,7 +593,7 @@ void SAL_CALL VistaFilePicker::initialize(const css::uno::Sequence< css::uno::An
 }
 
 
-//
+
 
 
 void SAL_CALL VistaFilePicker::cancel()

@@ -34,16 +34,16 @@
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
-//---------------------------------------------
-//
-//---------------------------------------------
+
+
+
 
 class CControlCommand;
 class CFileOpenDialog;
 
-//---------------------------------------------
+
 // declaration
-//---------------------------------------------
+
 
 class CFilePickerState
 {
@@ -65,9 +65,9 @@ public:
     virtual OUString SAL_CALL getDisplayDirectory( CFileOpenDialog* aFileOpenDialog ) = 0;
 };
 
-//---------------------------------------------
+
 // this class is not thread-safe
-//---------------------------------------------
+
 
 class CNonExecuteFilePickerState : public CFilePickerState
 {
@@ -101,9 +101,9 @@ private:
     CControlCommand* m_FirstControlCommand;
 };
 
-//---------------------------------------------
+
 // this class is not thread-safe
-//---------------------------------------------
+
 
 class CExecuteFilePickerState : public CFilePickerState
 {

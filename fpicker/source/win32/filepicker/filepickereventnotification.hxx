@@ -24,10 +24,10 @@
 #include <com/sun/star/ui/dialogs/XFilePickerListener.hpp>
 #include <com/sun/star/ui/dialogs/FilePickerEvent.hpp>
 
-//-----------------------------------
+
 // A FilePicker event without
 // parameter
-//-----------------------------------
+
 
 class CFilePickerEventNotification : public CEventNotification
 {
@@ -43,9 +43,9 @@ private:
     EventListenerMethod_t m_EventListenerMethod;
 };
 
-//----------------------------------
+
 // A FilePicker event with parameter
-//----------------------------------
+
 
 class CFilePickerParamEventNotification : public CEventNotification
 {

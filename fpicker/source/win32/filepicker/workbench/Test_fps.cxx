@@ -46,9 +46,9 @@
 
 #include "..\FPServiceInfo.hxx"
 
-//
+
 //  namesapces
-//
+
 
 using namespace ::rtl                   ;
 using namespace ::cppu                  ;

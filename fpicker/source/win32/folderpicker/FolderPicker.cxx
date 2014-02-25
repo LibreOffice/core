@@ -58,7 +58,7 @@ namespace
 }
 
 
-//
+
 
 
 CFolderPicker::CFolderPicker( const Reference< XMultiServiceFactory >& xServiceMgr ) :
@@ -68,7 +68,7 @@ CFolderPicker::CFolderPicker( const Reference< XMultiServiceFactory >& xServiceM
 }
 
 
-//
+
 
 
 void SAL_CALL CFolderPicker::setTitle( const OUString& aTitle ) throw( RuntimeException )
@@ -79,7 +79,7 @@ void SAL_CALL CFolderPicker::setTitle( const OUString& aTitle ) throw( RuntimeEx
 }
 
 
-//
+
 
 
 void SAL_CALL CFolderPicker::setDisplayDirectory( const OUString& aDirectory )
@@ -91,7 +91,7 @@ void SAL_CALL CFolderPicker::setDisplayDirectory( const OUString& aDirectory )
 }
 
 
-//
+
 
 
 OUString SAL_CALL CFolderPicker::getDisplayDirectory( )
@@ -103,7 +103,7 @@ OUString SAL_CALL CFolderPicker::getDisplayDirectory( )
 }
 
 
-//
+
 
 
 OUString SAL_CALL CFolderPicker::getDirectory( ) throw( RuntimeException )
@@ -114,7 +114,7 @@ OUString SAL_CALL CFolderPicker::getDirectory( ) throw( RuntimeException )
 }
 
 
-//
+
 
 
 void SAL_CALL CFolderPicker::setDescription( const OUString& aDescription ) throw( RuntimeException )
@@ -125,7 +125,7 @@ void SAL_CALL CFolderPicker::setDescription( const OUString& aDescription ) thro
 }
 
 
-//
+
 
 
 sal_Int16 SAL_CALL CFolderPicker::execute( )

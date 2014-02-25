@@ -66,7 +66,7 @@ namespace /* private */
 };
 
 
-//
+
 
 
 CFileOpenDialog::CFileOpenDialog(
@@ -127,7 +127,7 @@ CFileOpenDialog::CFileOpenDialog(
 }
 
 
-//
+
 
 
 CFileOpenDialog::~CFileOpenDialog()
@@ -135,7 +135,7 @@ CFileOpenDialog::~CFileOpenDialog()
 }
 
 
-//
+
 
 
 void SAL_CALL CFileOpenDialog::setTitle(const OUString& aTitle)
@@ -145,7 +145,7 @@ void SAL_CALL CFileOpenDialog::setTitle(const OUString& aTitle)
 }
 
 
-//
+
 
 
 void CFileOpenDialog::setFilter(const OUString& aFilter)
@@ -160,7 +160,7 @@ void CFileOpenDialog::setFilter(const OUString& aFilter)
 }
 
 
-//
+
 
 
 bool CFileOpenDialog::setFilterIndex(sal_uInt32 aIndex)
@@ -171,7 +171,7 @@ bool CFileOpenDialog::setFilterIndex(sal_uInt32 aIndex)
 }
 
 
-//
+
 
 
 sal_uInt32 CFileOpenDialog::getSelectedFilterIndex() const
@@ -180,7 +180,7 @@ sal_uInt32 CFileOpenDialog::getSelectedFilterIndex() const
 }
 
 
-//
+
 
 
 void SAL_CALL CFileOpenDialog::setDefaultName(const OUString& aName)
@@ -191,7 +191,7 @@ void SAL_CALL CFileOpenDialog::setDefaultName(const OUString& aName)
 }
 
 
-//
+
 
 
 void SAL_CALL CFileOpenDialog::setDisplayDirectory(const OUString& aDirectory)
@@ -201,7 +201,7 @@ void SAL_CALL CFileOpenDialog::setDisplayDirectory(const OUString& aDirectory)
 }
 
 
-//
+
 
 
 OUString SAL_CALL CFileOpenDialog::getLastDisplayDirectory() const
@@ -210,7 +210,7 @@ OUString SAL_CALL CFileOpenDialog::getLastDisplayDirectory() const
 }
 
 
-//
+
 
 
 OUString SAL_CALL CFileOpenDialog::getFullFileName() const
@@ -220,7 +220,7 @@ OUString SAL_CALL CFileOpenDialog::getFullFileName() const
 }
 
 
-//
+
 
 
 OUString SAL_CALL CFileOpenDialog::getFileName() const
@@ -229,7 +229,7 @@ OUString SAL_CALL CFileOpenDialog::getFileName() const
 }
 
 
-//
+
 
 
 OUString CFileOpenDialog::getFileExtension()
@@ -242,7 +242,7 @@ OUString CFileOpenDialog::getFileExtension()
 }
 
 
-//
+
 
 
 void CFileOpenDialog::setDefaultFileExtension(const OUString& aExtension)
@@ -252,7 +252,7 @@ void CFileOpenDialog::setDefaultFileExtension(const OUString& aExtension)
 }
 
 
-//
+
 
 
 void SAL_CALL CFileOpenDialog::setMultiSelectionMode(bool bMode)
@@ -264,7 +264,7 @@ void SAL_CALL CFileOpenDialog::setMultiSelectionMode(bool bMode)
 }
 
 
-//
+
 
 
 bool SAL_CALL CFileOpenDialog::getMultiSelectionMode() const
@@ -273,7 +273,7 @@ bool SAL_CALL CFileOpenDialog::getMultiSelectionMode() const
 }
 
 
-//
+
 
 
 sal_Int16 SAL_CALL CFileOpenDialog::doModal()
@@ -305,7 +305,7 @@ sal_Int16 SAL_CALL CFileOpenDialog::doModal()
 }
 
 
-//
+
 
 
 sal_uInt32 SAL_CALL CFileOpenDialog::getLastDialogError() const
@@ -314,7 +314,7 @@ sal_uInt32 SAL_CALL CFileOpenDialog::getLastDialogError() const
 }
 
 
-//
+
 
 
 bool SAL_CALL CFileOpenDialog::preModal()
@@ -323,7 +323,7 @@ bool SAL_CALL CFileOpenDialog::preModal()
 }
 
 
-//
+
 
 
 void SAL_CALL CFileOpenDialog::postModal(sal_Int16 nDialogResult)
@@ -340,7 +340,7 @@ void SAL_CALL CFileOpenDialog::postModal(sal_Int16 nDialogResult)
 }
 
 
-//
+
 
 
 OUString SAL_CALL CFileOpenDialog::getCurrentFilePath() const
@@ -362,7 +362,7 @@ OUString SAL_CALL CFileOpenDialog::getCurrentFilePath() const
 }
 
 
-//
+
 
 
 OUString SAL_CALL CFileOpenDialog::getCurrentFolderPath() const
@@ -384,7 +384,7 @@ OUString SAL_CALL CFileOpenDialog::getCurrentFolderPath() const
 }
 
 
-//
+
 
 
 OUString SAL_CALL CFileOpenDialog::getCurrentFileName() const
@@ -406,7 +406,7 @@ OUString SAL_CALL CFileOpenDialog::getCurrentFileName() const
 }
 
 
-//
+
 
 
 sal_uInt32 SAL_CALL CFileOpenDialog::onShareViolation(const OUString&)
@@ -415,7 +415,7 @@ sal_uInt32 SAL_CALL CFileOpenDialog::onShareViolation(const OUString&)
 }
 
 
-//
+
 
 
 sal_uInt32 SAL_CALL CFileOpenDialog::onFileOk()
@@ -424,7 +424,7 @@ sal_uInt32 SAL_CALL CFileOpenDialog::onFileOk()
 }
 
 
-//
+
 
 
 void SAL_CALL CFileOpenDialog::onSelChanged(HWND)
@@ -432,7 +432,7 @@ void SAL_CALL CFileOpenDialog::onSelChanged(HWND)
 }
 
 
-//
+
 
 
 void SAL_CALL CFileOpenDialog::onHelp()
@@ -440,7 +440,7 @@ void SAL_CALL CFileOpenDialog::onHelp()
 }
 
 
-//
+
 
 
 void SAL_CALL CFileOpenDialog::onInitDone()
@@ -449,7 +449,7 @@ void SAL_CALL CFileOpenDialog::onInitDone()
 }
 
 
-//
+
 
 
 void SAL_CALL CFileOpenDialog::onFolderChanged()
@@ -457,7 +457,7 @@ void SAL_CALL CFileOpenDialog::onFolderChanged()
 }
 
 
-//
+
 
 
 void SAL_CALL CFileOpenDialog::onTypeChanged(sal_uInt32)
@@ -465,7 +465,7 @@ void SAL_CALL CFileOpenDialog::onTypeChanged(sal_uInt32)
 }
 
 
-//
+
 
 
 sal_uInt32 SAL_CALL CFileOpenDialog::onCtrlCommand(HWND, sal_uInt16, sal_uInt16)
@@ -474,7 +474,7 @@ sal_uInt32 SAL_CALL CFileOpenDialog::onCtrlCommand(HWND, sal_uInt16, sal_uInt16)
 }
 
 
-//
+
 
 
 sal_uInt32 SAL_CALL CFileOpenDialog::onWMNotify( HWND, LPOFNOTIFY lpOfNotify )
@@ -513,7 +513,7 @@ sal_uInt32 SAL_CALL CFileOpenDialog::onWMNotify( HWND, LPOFNOTIFY lpOfNotify )
 }
 
 
-//
+
 
 
 void SAL_CALL CFileOpenDialog::handleInitDialog(HWND hwndDlg, HWND hwndChild)
@@ -529,7 +529,7 @@ void SAL_CALL CFileOpenDialog::handleInitDialog(HWND hwndDlg, HWND hwndChild)
 }
 
 
-//
+
 
 
 UINT_PTR CALLBACK CFileOpenDialog::ofnHookProc(
@@ -580,7 +580,7 @@ UINT_PTR CALLBACK CFileOpenDialog::ofnHookProc(
 }
 
 
-//
+
 
 
 LRESULT CALLBACK CFileOpenDialog::BaseDlgProc(
@@ -609,7 +609,7 @@ LRESULT CALLBACK CFileOpenDialog::BaseDlgProc(
 }
 
 
-//
+
 
 
 CFileOpenDialog* SAL_CALL CFileOpenDialog::getCurrentInstance(HWND hwnd)
@@ -620,7 +620,7 @@ CFileOpenDialog* SAL_CALL CFileOpenDialog::getCurrentInstance(HWND hwnd)
 }
 
 
-//
+
 
 
 void SAL_CALL CFileOpenDialog::centerPositionToParent() const

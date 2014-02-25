@@ -108,7 +108,7 @@ namespace // private
     };
 
 
-    //
+
 
 
     CTRL_SETVALUE_FUNCTION_T SAL_CALL GetCtrlSetValueFunction(
@@ -123,7 +123,7 @@ namespace // private
     }
 
 
-    //
+
 
 
     CTRL_GETVALUE_FUNCTION_T SAL_CALL GetCtrlGetValueFunction(
@@ -138,7 +138,7 @@ namespace // private
     }
 
 
-    //
+
 
 
     inline
@@ -148,7 +148,7 @@ namespace // private
     }
 
 
-    //
+
 
 
     inline
@@ -174,7 +174,7 @@ namespace // private
 }; // end namespace
 
 
-//
+
 
 
 CTRL_SETVALUE_FUNCTION_T SAL_CALL GetCtrlSetValueFunction( CTRL_CLASS aCtrlClass, sal_Int16 aCtrlAction )
@@ -189,7 +189,7 @@ CTRL_SETVALUE_FUNCTION_T SAL_CALL GetCtrlSetValueFunction( CTRL_CLASS aCtrlClass
 }
 
 
-//
+
 
 
 CTRL_GETVALUE_FUNCTION_T SAL_CALL GetCtrlGetValueFunction( CTRL_CLASS aCtrlClass, sal_Int16 aCtrlAction )
@@ -204,7 +204,7 @@ CTRL_GETVALUE_FUNCTION_T SAL_CALL GetCtrlGetValueFunction( CTRL_CLASS aCtrlClass
 }
 
 
-//
+
 
 
 CTRL_CLASS SAL_CALL GetCtrlClass( HWND hwndCtrl )
@@ -235,7 +235,7 @@ CTRL_CLASS SAL_CALL GetCtrlClass( HWND hwndCtrl )
 }
 
 
-//
+
 
 
 int SAL_CALL CommonFilePickerCtrlIdToWinFileOpenCtrlId( sal_Int16 aControlId )

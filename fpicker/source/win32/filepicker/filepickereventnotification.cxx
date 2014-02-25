@@ -38,7 +38,7 @@ CFilePickerEventNotification::CFilePickerEventNotification(EventListenerMethod_t
 }
 
 
-//
+
 
 
 void SAL_CALL CFilePickerEventNotification::notifyEventListener( Reference< XInterface > xListener )
@@ -49,7 +49,7 @@ void SAL_CALL CFilePickerEventNotification::notifyEventListener( Reference< XInt
 }
 
 
-//##################################################
+
 
 
 

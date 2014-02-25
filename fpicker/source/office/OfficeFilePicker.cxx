@@ -53,9 +53,9 @@ using namespace     ::com::sun::star::beans;
 using namespace     ::com::sun::star::awt;
 using namespace     ::utl;
 
-//=====================================================================
 
-//=====================================================================
+
+
 
 struct FilterEntry
 {
@@ -91,7 +91,7 @@ public:
     const UnoFilterEntry*   endSubFilters() const { return m_aSubFilters.getConstArray() + m_aSubFilters.getLength(); }
 };
 
-//=====================================================================
+
 
 
 FilterEntry::FilterEntry( const OUString& _rTitle, const UnoFilterList& _rSubFilters )
@@ -340,7 +340,7 @@ void SvtFilePicker::notify( sal_Int16 _nEventId, sal_Int16 _nControlId )
 
 
 namespace {
-    //................................................................................
+
     struct FilterTitleMatch : public ::std::unary_function< FilterEntry, bool >
     {
     protected:
@@ -349,7 +349,7 @@ namespace {
     public:
         FilterTitleMatch( const OUString& _rTitle ) : rTitle( _rTitle ) { }
 
-        //............................................................................
+
         bool operator () ( const FilterEntry& _rEntry )
         {
             sal_Bool bMatch;

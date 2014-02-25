@@ -29,10 +29,10 @@
 #include <vcl/msgbox.hxx>
 #include "iodlg.hxx"
 
-//.........................................................................
+
 namespace svt
 {
-//.........................................................................
+
 
 #define PROPERTY_ID_HELPURL     1
 #define PROPERTY_ID_WINDOW      2
@@ -384,7 +384,7 @@ namespace svt
         // is either handled in the thread which opened the dialog (which may even be
         // this thread here), or, if no dialog is open, in the thread doing scheduling
         // currently. Both is okay for us ....
-        //
+
         // Note that we could do check if we are really executing the dialog currently.
         // but the information would be potentially obsolete at the moment our event
         // arrives, so we need to check it there, anyway ...
@@ -490,8 +490,8 @@ namespace svt
         return bKnown;
     }
 
-//.........................................................................
+
 }   // namespace svt
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

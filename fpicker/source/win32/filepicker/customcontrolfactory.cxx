@@ -25,7 +25,7 @@
 #include <osl/diagnose.h>
 
 
-//
+
 
 
 CCustomControl* CCustomControlFactory::CreateCustomControl(HWND aControlHandle, HWND aParentHandle)
@@ -67,7 +67,7 @@ CCustomControl* CCustomControlFactory::CreateCustomControl(HWND aControlHandle, 
 }
 
 
-//
+
 
 
 CCustomControl* CCustomControlFactory::CreateCustomControlContainer()

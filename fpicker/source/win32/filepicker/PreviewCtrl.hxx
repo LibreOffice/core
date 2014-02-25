@@ -27,9 +27,9 @@
 
 #include <memory>
 
-//---------------------------------------------
+
 // declaration
-//---------------------------------------------
+
 
 class CDimension
 {
@@ -50,7 +50,7 @@ public:
     sal_Int32 m_cy;
 };
 
-//--------------------------------------------------
+
 // we use OleInitialize here because we are calling
 // some Ole functions to realize the picture preview
 // and we expect to be called from the main thread
@@ -58,7 +58,7 @@ public:
 // OleInitialize (the main thread should be an STA)
 // When OleInitialize should fail at worst the
 // preview doesn't work
-//--------------------------------------------------
+
 
 class CAutoOleInit
 {
@@ -81,7 +81,7 @@ public:
     }
 };
 
-//---------------------------------------------
+
 // A simple file preview class to preview some
 // common picture formats like *.gif, *jpg, etc.
 // This class is not thread-safe and is
@@ -93,7 +93,7 @@ public:
 // only on shutdown (unloading of the dll) -
 // it's a question of taste (other solutions
 // are possible)
-//---------------------------------------------
+
 
 class CFilePreview
 {

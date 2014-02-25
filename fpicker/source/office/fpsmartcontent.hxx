@@ -26,14 +26,14 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <ucbhelper/content.hxx>
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= SmartContent
-    //====================================================================
+
     /** a "smart content" which basically wraps an UCB content, but caches some information
         so that repeatedly recreating it may be faster
     */
@@ -202,9 +202,9 @@ namespace svt
         inline  sal_Bool    is( )           { return is( getURL() ); }
     };
 
-//........................................................................
+
 } // namespace svt
-//........................................................................
+
 
 #endif // SVTOOLS_SOURCE_FILEPICKER_FPSMARTCONTENT_HXX
 

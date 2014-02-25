@@ -139,7 +139,7 @@ sal_Bool SAL_CALL CFilterContainer::getFilter( const OUString& aName, OUString& 
 }
 
 
-//
+
 
 
 sal_Bool SAL_CALL CFilterContainer::getFilter( sal_Int32 aIndex, OUString& theFilter ) const
@@ -160,7 +160,7 @@ sal_Bool SAL_CALL CFilterContainer::getFilter( sal_Int32 aIndex, OUString& theFi
 }
 
 
-//
+
 
 
 sal_Int32 SAL_CALL CFilterContainer::getFilterPos( const OUString& aName ) const
@@ -228,7 +228,7 @@ OUString SAL_CALL CFilterContainer::getCurrentFilter() const
     return m_sCurrentFilter;
 }
 
-//###################################################################
+
 
 
 
@@ -262,7 +262,7 @@ static sal_uInt32 _getTotalFilterLength( CFilterContainer& aFilterContainer )
 }
 
 
-//
+
 
 
 inline

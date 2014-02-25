@@ -22,9 +22,9 @@
 
 #include <sal/types.h>
 
-//---------------------------------------------
+
 // declaration
-//---------------------------------------------
+
 
 class CControlCommandRequest
 {
@@ -47,9 +47,9 @@ private:
     sal_Int16 m_aControlId;
 };
 
-//---------------------------------------------
-//
-//---------------------------------------------
+
+
+
 
 class CValueControlCommandRequest : public CControlCommandRequest
 {

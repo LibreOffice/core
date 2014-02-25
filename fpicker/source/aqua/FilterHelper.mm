@@ -34,7 +34,7 @@
 #define CLASS_NAME "FilterEntry"
 
 #pragma mark FilterEntry
-//---------------------------------------------------------------------
+
 FilterEntry::FilterEntry( const rtl::OUString& _rTitle, const UnoFilterList& _rSubFilters )
 :m_sTitle( _rTitle )
 ,m_aSubFilters( _rSubFilters )
@@ -43,7 +43,7 @@ FilterEntry::FilterEntry( const rtl::OUString& _rTitle, const UnoFilterList& _rS
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
-//---------------------------------------------------------------------
+
 sal_Bool FilterEntry::hasSubFilters() const
 {
 //    OSL_TRACE(">>> FilterEntry::%s", __func__);
@@ -52,7 +52,7 @@ sal_Bool FilterEntry::hasSubFilters() const
     return bReturn;
 }
 
-//---------------------------------------------------------------------
+
 sal_Int32 FilterEntry::getSubFilters( UnoFilterList& _rSubFilterList )
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
@@ -89,7 +89,7 @@ isFilterString( const rtl::OUString& rFilterString, const char *pMatch )
     return bIsFilter;
 }
 
-//=====================================================================
+
 
 static rtl::OUString
 shrinkFilterName( const rtl::OUString aFilterName, bool bAllowNoStar = false )
@@ -121,9 +121,9 @@ shrinkFilterName( const rtl::OUString aFilterName, bool bAllowNoStar = false )
     return aRealName;
 }
 
-//------------------------------------------------------------------------------------
+
 namespace {
-    //................................................................................
+
     struct FilterTitleMatch : public ::std::unary_function< FilterEntry, bool >
     {
 protected:
@@ -132,7 +132,7 @@ protected:
 public:
         FilterTitleMatch( const rtl::OUString _rTitle ) : rTitle( _rTitle ) { }
 
-        //............................................................................
+
         bool operator () ( const FilterEntry& _rEntry )
         {
             sal_Bool bMatch;
@@ -202,7 +202,7 @@ FilterHelper::~FilterHelper()
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
-//------------------------------------------------------------------------------------
+
 sal_Bool FilterHelper::FilterNameExists( const rtl::OUString rTitle )
 {
     sal_Bool bRet = sal_False;
@@ -218,7 +218,7 @@ sal_Bool FilterHelper::FilterNameExists( const rtl::OUString rTitle )
     return bRet;
 }
 
-//------------------------------------------------------------------------------------
+
 sal_Bool FilterHelper::FilterNameExists( const UnoFilterList& _rGroupedFilters )
 {
     sal_Bool bRet = sal_False;
@@ -240,7 +240,7 @@ sal_Bool FilterHelper::FilterNameExists( const UnoFilterList& _rGroupedFilters )
     return bRet;
 }
 
-//------------------------------------------------------------------------------------
+
 void FilterHelper::ensureFilterList( const ::rtl::OUString& _rInitialCurrentFilter )
 {
     //OSL_TRACE(">>> FilterHelper::%s", __func__);

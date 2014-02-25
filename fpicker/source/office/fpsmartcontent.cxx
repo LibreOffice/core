@@ -30,10 +30,10 @@
 #include <tools/solar.h>
 #include <tools/debug.hxx>
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::task;
@@ -41,9 +41,9 @@ namespace svt
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::container;
 
-    //====================================================================
+
     //= SmartContent
-    //====================================================================
+
 
     SmartContent::SmartContent()
         :m_pContent( NULL )
@@ -341,8 +341,8 @@ namespace svt
         return aCreatedUrl;
     }
 
-//........................................................................
+
 } // namespace svt
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

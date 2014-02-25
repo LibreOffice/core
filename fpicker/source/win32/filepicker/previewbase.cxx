@@ -26,7 +26,7 @@ using namespace com::sun::star::lang;
 
 
 
-//
+
 
 
 PreviewBase::PreviewBase() :
@@ -36,7 +36,7 @@ PreviewBase::PreviewBase() :
 }
 
 
-//
+
 
 
 PreviewBase::~PreviewBase()
@@ -44,7 +44,7 @@ PreviewBase::~PreviewBase()
 }
 
 
-//
+
 
 
 sal_Int32 SAL_CALL PreviewBase::getTargetColorDepth() throw (RuntimeException)
@@ -53,7 +53,7 @@ sal_Int32 SAL_CALL PreviewBase::getTargetColorDepth() throw (RuntimeException)
 }
 
 
-//
+
 
 
 sal_Int32 SAL_CALL PreviewBase::getAvailableWidth() throw (RuntimeException)
@@ -62,7 +62,7 @@ sal_Int32 SAL_CALL PreviewBase::getAvailableWidth() throw (RuntimeException)
 }
 
 
-//
+
 
 
 sal_Int32 SAL_CALL PreviewBase::getAvailableHeight() throw (RuntimeException)
@@ -71,7 +71,7 @@ sal_Int32 SAL_CALL PreviewBase::getAvailableHeight() throw (RuntimeException)
 }
 
 
-//
+
 
 
 void SAL_CALL PreviewBase::setImage( sal_Int16 aImageFormat, const ::com::sun::star::uno::Any& aImage )
@@ -91,7 +91,7 @@ void SAL_CALL PreviewBase::setImage( sal_Int16 aImageFormat, const ::com::sun::s
 }
 
 
-//
+
 
 
 void SAL_CALL PreviewBase::getImage(sal_Int16& aImageFormat,com::sun::star::uno::Any& aImage)
@@ -101,7 +101,7 @@ void SAL_CALL PreviewBase::getImage(sal_Int16& aImageFormat,com::sun::star::uno:
 }
 
 
-//
+
 
 
 sal_Bool SAL_CALL PreviewBase::setShowState( sal_Bool bShowState ) throw (RuntimeException)
@@ -111,7 +111,7 @@ sal_Bool SAL_CALL PreviewBase::setShowState( sal_Bool bShowState ) throw (Runtim
 }
 
 
-//
+
 
 
 sal_Bool SAL_CALL PreviewBase::getShowState() throw (RuntimeException)
@@ -120,7 +120,7 @@ sal_Bool SAL_CALL PreviewBase::getShowState() throw (RuntimeException)
 }
 
 
-//
+
 
 
 sal_Bool SAL_CALL PreviewBase::getImaginaryShowState() const
@@ -129,7 +129,7 @@ sal_Bool SAL_CALL PreviewBase::getImaginaryShowState() const
 }
 
 
-//
+
 
 
 HWND SAL_CALL PreviewBase::getWindowHandle() const

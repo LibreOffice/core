@@ -52,9 +52,9 @@ public:
                                     SvtFolderPicker( const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
     virtual                        ~SvtFolderPicker();
 
-    //------------------------------------------------------------------------------------
+
     // XFolderPicker2 functions
-    //------------------------------------------------------------------------------------
+
 
     virtual void SAL_CALL           setDisplayDirectory( const OUString& aDirectory ) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
     virtual OUString SAL_CALL    getDisplayDirectory() throw( ::com::sun::star::uno::RuntimeException );
@@ -64,21 +64,21 @@ public:
     virtual void SAL_CALL cancel()
         throw (com::sun::star::uno::RuntimeException);
 
-    //------------------------------------------------------------------------------------
+
     // XExecutableDialog functions
-    //------------------------------------------------------------------------------------
+
     virtual void SAL_CALL setTitle( const OUString& _rTitle ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int16 SAL_CALL execute(  ) throw (::com::sun::star::uno::RuntimeException);
 
-    //------------------------------------------------------------------------------------
+
     // XAsynchronousExecutableDialog functions
-    //------------------------------------------------------------------------------------
+
     virtual void SAL_CALL       setDialogTitle( const OUString& _rTitle ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL       startExecuteModal( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XDialogClosedListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
 
-    //------------------------------------------------------------------------------------
+
     // XServiceInfo functions
-    //------------------------------------------------------------------------------------
+
 
     /* XServiceInfo */
     virtual OUString SAL_CALL    getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
@@ -96,9 +96,9 @@ public:
         throw( com::sun::star::uno::Exception );
 
 protected:
-    //------------------------------------------------------------------------------------
+
     // OCommonPicker overridables
-    //------------------------------------------------------------------------------------
+
     virtual SvtFileDialog*  implCreateDialog( Window* _pParent );
     virtual sal_Int16       implExecutePicker( );
 };

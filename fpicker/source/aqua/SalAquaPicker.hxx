@@ -33,9 +33,9 @@
 #import <Cocoa/Cocoa.h>
 #include <postmac.h>
 
-//----------------------------------------------------------
+
 // class declaration
-//----------------------------------------------------------
+
 
 class SalAquaPicker
 {
