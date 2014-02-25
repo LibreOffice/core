@@ -1466,7 +1466,9 @@ public:
     }
 
     // XNameAccess
-    virtual uno::Any SAL_CALL getByName( const OUString& aName ) throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual uno::Any SAL_CALL getByName( const OUString& aName )
+        throw (container::NoSuchElementException, lang::WrappedTargetException,
+               uno::RuntimeException, std::exception)
     {
         uno::Sequence< beans::PropertyValue > aProperties;
         ScMacroInfo* pInfo = getInfo();
