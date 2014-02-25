@@ -2320,7 +2320,7 @@ uno::Sequence< OUString > SwXTextTable::getCellNames(void) throw( uno::RuntimeEx
 }
 
 uno::Reference< text::XTextTableCursor > SwXTextTable::createCursorByCellName(const OUString& CellName)
-    throw( uno::RuntimeException )
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Reference< text::XTextTableCursor >  xRet;
