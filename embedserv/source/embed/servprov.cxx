@@ -97,7 +97,7 @@ void o2u_attachCurrentThread()
 }
 
 
-//===============================================================================
+
 // EmbedServer_Impl
 
 EmbedServer_Impl::EmbedServer_Impl( const uno::Reference<lang::XMultiServiceFactory>& xFactory):
@@ -187,7 +187,7 @@ uno::Sequence< sal_Int8 > SAL_CALL EmbedServer_Impl::getImplementationId() throw
     return (*pId).getImplementationId();
 }
 
-//===============================================================================
+
 // EmbedProviderFactory_Impl
 
 EmbedProviderFactory_Impl::EmbedProviderFactory_Impl(const uno::Reference<lang::XMultiServiceFactory>& xFactory, const GUID* pGuid)

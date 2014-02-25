@@ -41,9 +41,9 @@ enum InitModes {
     LOAD_FROM_FILE
 };
 
-// ==================================
+
 // this is a common baseclass that is used to count the objects
-// ==================================
+
 class InprocCountedObject_Impl
 {
 public:
@@ -51,9 +51,9 @@ public:
     ~InprocCountedObject_Impl();
 };
 
-// ==================================
+
 // this is the inprocess embedded object implementation class
-// ==================================
+
 class InprocEmbedDocument_Impl : public InprocCountedObject_Impl
                                , public IOleObject
                                , public IDataObject
