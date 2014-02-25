@@ -87,7 +87,7 @@ public class GfxCompare extends EnhancedComplexTestCase
             compare(sFile1, sFile2);
         }
 
-    // -----------------------------------------------------------------------------
+
 
     String createJPEG(String _sFile, String _sAdditional)
         {

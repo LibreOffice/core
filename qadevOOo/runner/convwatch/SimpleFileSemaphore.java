@@ -65,7 +65,7 @@ public class SimpleFileSemaphore /* extends *//* implements */
         {
             return m_aInternSemaphoreFile;
         }
-// ------------------------------------------------------------------------------
+
 // wait until resource is available
     public void P(File _aSemaphore)
         {
@@ -114,7 +114,7 @@ public class SimpleFileSemaphore /* extends *//* implements */
             }
         }
 
-// ------------------------------------------------------------------------------
+
 // block a resource
     public void V(File _aSemaphore)
         {

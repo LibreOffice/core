@@ -17,7 +17,7 @@
  */
 
 package convwatch;
-//
+
 // class OSHelper
 // {
 //     public static boolean isWindows()
@@ -60,7 +60,7 @@ package convwatch;
 //             }
 //             return false;
 //         }
-//
+
 //     public static boolean isUnix()
 //         {
 //             if (isLinuxIntel() ||
@@ -71,5 +71,5 @@ package convwatch;
 //             }
 //             return false;
 //         }
-//
+
 // }

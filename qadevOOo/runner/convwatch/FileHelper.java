@@ -66,7 +66,7 @@ public class FileHelper
             //     System.out.println( _sFile );
             //     System.out.println( aFile.getAbsolutePath() );
             //     MessageBox("Der JavaProzess wartet auf eine interaktion ihrerseits.");
-            //
+
             //     File aFile2 = new File(_sFile);
             //     if (aFile2.exists())
             //     {
@@ -181,7 +181,7 @@ public class FileHelper
 
     // makeDirectories("", "/tmp/a/b");
     // creates all directories /tmp/a/b
-    //
+
     public static void makeDirectories(String first, String path)
         {
             makeDirectories(first, path, "0777");

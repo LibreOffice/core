@@ -105,7 +105,7 @@ public class DBHelper
             }
 
             // String aInsertStr = "";
-            //
+
             // aInsertStr = "INSERT INTO " + _sTableName + " (" + value_names + " ) VALUES (" + values + ")";
             // ExecSQL(_aCon, aInsertStr);
             StringBuffer aInsertStr = new StringBuffer();
@@ -125,7 +125,7 @@ public class DBHelper
             }
 
             // String aUpdateStr = "";
-            //
+
             // aUpdateStr = "UPDATE " + _sTableName + " SET " + _sSet + " WHERE " + _sWhere;
             // ExecSQL( _aCon, aUpdateStr );
             StringBuffer aUpdateStr = new StringBuffer();

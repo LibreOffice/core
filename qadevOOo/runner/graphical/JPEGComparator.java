@@ -402,7 +402,7 @@ public class JPEGComparator extends EnhancedComplexTestCase
             String sDestination = FileHelper.appendPath(sDestinationPath, sNewSourceBasename);
             FileHelper.copy(sSource, sDestination);
             sSourceBasename = sNewSourceBasename;
-            //
+
             JPEGCreator.convertToNearSameFileWithWidth340(sDestination);
         }
         String sDifferenceBasename = "Difference_between_" + FileHelper.getNameNoSuffix(sSourceBasename) + "_and_" + FileHelper.getNameNoSuffix(sDestinationBasename) + ".jpg";
