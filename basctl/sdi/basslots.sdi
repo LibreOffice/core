@@ -25,7 +25,7 @@ HelpText( "BasicIDE" )
 SlotIdFile( "basslots.hrc" )
 ]
 {
-    //=========================================================================
+
     include "sfxitems.sdi"
     include "sfx.sdi"
     include "svxitems.sdi"

@@ -1407,10 +1407,10 @@ ItemType DialogWindow::GetType () const
 }
 
 
-//
+
 // DialogWindowLayout
-// ==================
-//
+
+
 
 DialogWindowLayout::DialogWindowLayout (Window* pParent, ObjectCatalog& rObjectCatalog_) :
     Layout(pParent),

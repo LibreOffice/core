@@ -119,9 +119,9 @@ public:
     virtual ItemType GetType () const;
 };
 
-//
+
 // DialogWindowLayout
-//
+
 class DialogWindowLayout : public Layout
 {
 public:

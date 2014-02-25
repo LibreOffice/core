@@ -45,10 +45,10 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
 
-//
+
 // BaseWindow
-// ==========
-//
+
+
 
 DBG_NAME( BaseWindow )
 
@@ -270,10 +270,10 @@ bool BaseWindow::HasActiveEditor () const
 }
 
 
-//
+
 // DockingWindow
-// =============
-//
+
+
 
 // style bits for DockingWindow
 WinBits const DockingWindow::StyleBits =
@@ -427,10 +427,10 @@ void DockingWindow::DockThis ()
 }
 
 
-//
+
 // ExtendedEdit
-// ============
-//
+
+
 
 ExtendedEdit::ExtendedEdit( Window* pParent, IDEResId nRes ) :
     Edit( pParent, nRes )
@@ -463,10 +463,10 @@ IMPL_LINK_INLINE_START( ExtendedEdit, EditAccHdl, Accelerator *, pAcc )
 IMPL_LINK_INLINE_END( ExtendedEdit, EditAccHdl, Accelerator *, pAcc )
 
 
-//
+
 //  TabBar
-// ========
-//
+
+
 
 TabBar::TabBar( Window* pParent ) :
     ::TabBar( pParent, WinBits( WB_3DLOOK | WB_SCROLL | WB_BORDER | WB_SIZEABLE | WB_DRAG ) )
@@ -723,10 +723,10 @@ sal_uLong CalcLineCount( SvStream& rStream )
     return nCRs;
 }
 
-//
+
 // LibInfos
-// ========
-//
+
+
 
 LibInfos::LibInfos ()
 { }

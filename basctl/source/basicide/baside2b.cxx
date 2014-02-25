@@ -182,10 +182,10 @@ void lcl_SeparateNameAndIndex( const OUString& rVName, OUString& rVar, OUString&
 } // namespace
 
 
-//
+
 // EditorWindow
-// ============
-//
+
+
 
 class EditorWindow::ChangesListener:
     public cppu::WeakImplHelper1< beans::XPropertiesChangeListener >
@@ -1351,10 +1351,10 @@ void EditorWindow::ForceSyntaxTimeout()
 }
 
 
-//
+
 // BreakPointWindow
-// ================
-//
+
+
 
 BreakPointWindow::BreakPointWindow (Window* pParent, ModulWindow* pModulWindow)
     : Window(pParent, WB_BORDER)
@@ -1571,10 +1571,10 @@ void BreakPointWindow::setBackgroundColor(Color aColor)
 }
 
 
-//
+
 // WatchWindow
-// ===========
-//
+
+
 
 namespace
 {
@@ -1871,10 +1871,10 @@ void WatchWindow::UpdateWatches( bool bBasicStopped )
 }
 
 
-//
+
 // StackWindow
-// ===========
-//
+
+
 
 StackWindow::StackWindow (Layout* pParent) :
     DockingWindow(pParent),
@@ -2005,10 +2005,10 @@ void StackWindow::UpdateCalls()
 }
 
 
-//
+
 // ComplexEditorWindow
-// ===================
-//
+
+
 
 ComplexEditorWindow::ComplexEditorWindow( ModulWindow* pParent ) :
     Window( pParent, WB_3DLOOK | WB_CLIPCHILDREN ),
@@ -2112,10 +2112,10 @@ EditorWindow::GetComponentInterface(sal_Bool bCreate)
 }
 
 
-//
+
 // WatchTreeListBox
-// ================
-//
+
+
 
 WatchTreeListBox::WatchTreeListBox( Window* pParent, WinBits nWinBits )
     : SvHeaderTabListBox( pParent, nWinBits )

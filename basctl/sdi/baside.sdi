@@ -27,9 +27,9 @@ shell basctl_Shell
 {
     import BasicIDEView [Automation];
 
-    // ========================================================
+
     // Current, je nach aktuellem Fenster:
-    // ========================================================
+
     SID_SHOWLINES
     [
         StateMethod = GetState;
@@ -132,9 +132,9 @@ shell basctl_Shell
         StateMethod = GetState;
     ]
 
-    // ========================================================
+
     // Global: Egal, welches Fenster gerade aktiv ist:
-    // ========================================================
+
     SID_BASICIDE_LIBSELECTOR
     [
         StateMethod = GetState;
@@ -320,9 +320,9 @@ shell basctl_Shell
         StateMethod = GetState;
     ]
 
-    // ========================================================
+
     // Nur, wenn BasicFenster oben
-    // ========================================================
+
     SID_BASICRUN
     [
         ExecMethod  = ExecuteBasic;
@@ -407,9 +407,9 @@ shell basctl_Shell
         StateMethod = GetState;
     ]
 
-    // ========================================================
+
     // Nur, wenn Dialogfenster oben
-    // ========================================================
+
     SID_CHOOSE_CONTROLS
     [
         ExecMethod      = ExecuteDialog;

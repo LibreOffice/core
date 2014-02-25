@@ -179,10 +179,10 @@ bool EntryDescriptor::operator == (EntryDescriptor const& rDesc) const
         m_eType == rDesc.m_eType;
 }
 
-//
+
 // TreeListBox
-// ===========
-//
+
+
 
 TreeListBox::TreeListBox (Window* pParent, ResId const& rRes)
     : SvTreeListBox( pParent, IDEResId( sal::static_int_cast<sal_uInt16>( rRes.GetId() ) ) )

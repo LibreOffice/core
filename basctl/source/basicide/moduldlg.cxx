@@ -47,10 +47,10 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::resource;
 
-//
+
 // ExtTreeListBox
-// ==============
-//
+
+
 
 ExtTreeListBox::ExtTreeListBox(Window* pParent, WinBits nStyle)
     : TreeListBox(pParent, nStyle)
@@ -463,10 +463,10 @@ sal_Bool ExtTreeListBox::NotifyCopyingMoving( SvTreeListEntry* pTarget, SvTreeLi
     return 2;   // open...
 }
 
-//
+
 // OrganizeDialog
-// ==============
-//
+
+
 
 OrganizeDialog::OrganizeDialog(Window* pParent, sal_Int16 tabId,
     EntryDescriptor& rDesc )
@@ -551,10 +551,10 @@ IMPL_LINK( OrganizeDialog, ActivatePageHdl, TabControl *, pTabCtrl )
     return 0;
 }
 
-//
+
 // ObjectPage
-// ==========
-//
+
+
 
 ObjectPage::ObjectPage(Window *pParent, const OString &rName, sal_uInt16 nMode)
     : TabPage(pParent, rName, OUString("modules/BasicIDE/ui/") +
