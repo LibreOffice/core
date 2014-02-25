@@ -984,7 +984,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     SectionPropertyMap * pSectionContext = m_pImpl->GetSectionContext();
     Value::Pointer_t pValue = rSprm.getValue();
     sal_Int32 nIntValue = pValue->getInt();
-    OUString sStringValue = pValue->getString();
+    const OUString sStringValue = pValue->getString();
     PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
 
     switch(nSprmId)
@@ -1002,7 +1002,10 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         rContext->Insert(PROP_PARA_KEEP_TOGETHER, uno::makeAny( nIntValue ? true : false) );
         break;
     case NS_ooxml::LN_CT_PPrBase_pageBreakBefore:
-        rContext->Insert(PROP_BREAK_TYPE, uno::makeAny( com::sun::star::style::BreakType_PAGE_BEFORE ) );
+        if ( nIntValue == 1 )
+        {
+            rContext->Insert(PROP_BREAK_TYPE, uno::makeAny( com::sun::star::style::BreakType_PAGE_BEFORE ) );
+        }
     break;
     case NS_ooxml::LN_CT_NumPr_ilvl:
             if (nIntValue < 0 || 10 <= nIntValue) // Writer can't do everything
