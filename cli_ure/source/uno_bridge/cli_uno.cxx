@@ -56,13 +56,13 @@ System::Object^ Bridge::call_uno(uno_Interface * pUnoI,
     //Prepare memory that contains all converted arguments and return valuse
     //The memory block contains first pointers to the arguments which are in the same block
     // For example, 2 arguments, 1 ret.
-    //
+
     //      | Pointer
     //      | Pointer
     //      | Return value
     //      | Arg 1
     //      | Arg 2
-    //
+
     // If an argument is larger then union largest, such as some structures, then the pointer
     // points to an extra block of memory. The same goes for a big return value.
 
