@@ -39,15 +39,15 @@ oDoc = XSCRIPTCONTEXT.getDocument();
 xSDoc = UnoRuntime.queryInterface(XSpreadsheetDocument, oDoc);
 //get the XModel interface from the document
 xModel = UnoRuntime.queryInterface(XModel,oDoc);
-//get the XIndexAccess interface used to access each sheet 
+//get the XIndexAccess interface used to access each sheet
 xSheetsIndexAccess = UnoRuntime.queryInterface(XIndexAccess, xSDoc.getSheets());
 //get the XStorable interface used to save the document
 xStorable = UnoRuntime.queryInterface(XStorable,xSDoc);
-//get the XModifiable interface used to indicate if the document has been 
+//get the XModifiable interface used to indicate if the document has been
 //changed
 xModifiable = UnoRuntime.queryInterface(XModifiable,xSDoc);
 
-//set up an array of PropertyValue objects used to save each sheet in the 
+//set up an array of PropertyValue objects used to save each sheet in the
 //document
 storeProps = new Array;//PropertyValue[1];
 storeProps[0] = new PropertyValue();
@@ -68,7 +68,7 @@ for(var i=0;i<xSheetsIndexAccess.getCount();i++)
 for(var i=0;i<xSheetsIndexAccess.getCount();i++)
 {
 	xPropSet = AnyConverter.toObject( new Type(XPropertySet), xSheetsIndexAccess.getByIndex(i));
-	xPropSet.setPropertyValue("IsVisible", true);	
+	xPropSet.setPropertyValue("IsVisible", true);
 }
 
 function setAllButOneHidden(xSheetsIndexAccess,vis) {
@@ -85,4 +85,4 @@ function setAllButOneHidden(xSheetsIndexAccess,vis) {
 			xPropSet.setPropertyValue("IsVisible", false);
 		}
 	}
-} 
+}

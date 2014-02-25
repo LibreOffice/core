@@ -29,14 +29,14 @@
 class BasicManager;
 
 
-//.........................................................................
+
 namespace basprov
 {
-//.........................................................................
 
-    //  ----------------------------------------------------
+
+
     //  class BasicLibraryNodeImpl
-    //  ----------------------------------------------------
+
 
     typedef ::cppu::WeakImplHelper1<
         ::com::sun::star::script::browse::XBrowseNode > BasicLibraryNodeImpl_BASE;
@@ -72,9 +72,9 @@ namespace basprov
             throw (::com::sun::star::uno::RuntimeException);
     };
 
-//.........................................................................
+
 }   // namespace basprov
-//.........................................................................
+
 
 #endif // SCRIPTING_BASLIBNODE_HXX
 

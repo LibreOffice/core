@@ -40,7 +40,7 @@ namespace func_provider
 {
 
 //Typedefs
-//=============================================================================
+
 
 
 typedef ::std::map  <   css::uno::Reference< css::uno::XInterface >
@@ -75,7 +75,7 @@ public:
             SAL_THROW(( css::lang::IllegalArgumentException, css::uno::RuntimeException ));
 
     //XEventListener
-    //======================================================================
+
 
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source )
         throw ( css::uno::RuntimeException );

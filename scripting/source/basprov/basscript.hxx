@@ -31,14 +31,14 @@
 
 class BasicManager;
 
-//.........................................................................
+
 namespace basprov
 {
-//.........................................................................
 
-    //  ----------------------------------------------------
+
+
     //  class BasicScriptImpl
-    //  ----------------------------------------------------
+
 
     typedef ::cppu::WeakImplHelper1<
         ::com::sun::star::script::provider::XScript > BasicScriptImpl_BASE;
@@ -103,9 +103,9 @@ namespace basprov
         virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
     };
 
-//.........................................................................
+
 }   // namespace basprov
-//.........................................................................
+
 
 #endif // SCRIPTING_BASSCRIPT_HXX
 

@@ -31,7 +31,7 @@ import org.openide.util.NbBundle;
 // ISSUES:
 // - This FS saves (updates) the file on 'setDocument' or 'removeNotify'.
 //   It has to let the user to decide to update or not.
-//
+
 // TODOS:
 // - 'Update' action on the mounted document which saves all recent modifications.
 // - To introduce 'scope' editable property to control editable portion of

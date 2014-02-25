@@ -56,7 +56,7 @@ if (pset.getPropertyValue("Label").equals("Exit"))
     // getContext() on the XControl interface
     xDialog = UnoRuntime.queryInterface(
         XDialog, control.getContext());
-    
+
     // Close the dialog
     xDialog.endExecute();
 }
@@ -78,7 +78,7 @@ else
     red = java.awt.Color.red.getRGB();
 
     replaceable =
-        UnoRuntime.queryInterface(XReplaceable, XSCRIPTCONTEXT.getDocument()); 
+        UnoRuntime.queryInterface(XReplaceable, XSCRIPTCONTEXT.getDocument());
 
     descriptor = replaceable.createReplaceDescriptor();
 
@@ -110,9 +110,9 @@ else
         descriptor.setPropertyValue("SearchWords", new java.lang.Boolean(true));
 
         // Replaces all instances of searchKey with new Text properties
-        // and gets the number of instances of the searchKey 
-        descriptor.setSearchString(searchKey); 
-        descriptor.setReplaceString(searchKey); 
+        // and gets the number of instances of the searchKey
+        descriptor.setSearchString(searchKey);
+        descriptor.setReplaceString(searchKey);
         replaceable.replaceAll(descriptor);
     }
     catch (e) {

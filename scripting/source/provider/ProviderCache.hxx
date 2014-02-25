@@ -39,7 +39,7 @@ namespace func_provider
 {
 
 //Typedefs
-//=============================================================================
+
 
 struct ProviderDetails
 {

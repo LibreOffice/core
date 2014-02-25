@@ -55,9 +55,9 @@ using namespace ::sf_misc;
 
 namespace func_provider
 {
-//*************************************************************************
+
 //  Definitions for MasterScriptProviderFactory global methods.
-//*************************************************************************
+
 
 OUString SAL_CALL mspf_getImplementationName() ;
 Reference< XInterface > SAL_CALL mspf_create( Reference< XComponentContext > const & xComponentContext );
@@ -77,10 +77,10 @@ bool endsWith( const OUString& target,
 }
 
 /* should be available in some central location. */
-//*************************************************************************
+
 // XScriptProvider implementation
-//
-//*************************************************************************
+
+
 MasterScriptProvider::MasterScriptProvider( const Reference< XComponentContext > & xContext ) throw ( RuntimeException ):
         m_xContext( xContext ), m_bIsValid( false ), m_bInitialised( false ),
         m_bIsPkgMSP( false ), m_pPCache( 0 )
@@ -91,7 +91,7 @@ MasterScriptProvider::MasterScriptProvider( const Reference< XComponentContext >
     m_bIsValid = true;
 }
 
-//*************************************************************************
+
 MasterScriptProvider::~MasterScriptProvider()
 {
     if ( m_pPCache )
@@ -101,7 +101,7 @@ MasterScriptProvider::~MasterScriptProvider()
     m_pPCache = 0;
 }
 
-//*************************************************************************
+
 void SAL_CALL MasterScriptProvider::initialize( const Sequence < Any >& args )
 throw ( Exception, RuntimeException )
 {
@@ -125,7 +125,7 @@ throw ( Exception, RuntimeException )
         // check if first parameter is a string
         // if it is, this implies that this is a MSP created
         // with a user or share ctx ( used for browse functionality )
-        //
+
         if ( args[ 0 ] >>= m_sCtxString )
         {
             invokeArgs[ 0  ] = args[ 0 ];
@@ -213,7 +213,7 @@ throw ( Exception, RuntimeException )
 }
 
 
-//*************************************************************************
+
 void MasterScriptProvider::createPkgProvider()
 {
     try
@@ -240,7 +240,7 @@ void MasterScriptProvider::createPkgProvider()
     }
 }
 
-//*************************************************************************
+
 Reference< provider::XScript >
 MasterScriptProvider::getScript( const OUString& scriptURI )
 throw ( provider::ScriptFrameworkErrorException,
@@ -369,14 +369,14 @@ throw ( provider::ScriptFrameworkErrorException,
 
     return xScript;
 }
-//*************************************************************************
+
 bool
 MasterScriptProvider::isValid()
 {
     return m_bIsValid;
 }
 
-//*************************************************************************
+
 ProviderCache*
 MasterScriptProvider::providerCache()
 {
@@ -403,7 +403,7 @@ MasterScriptProvider::providerCache()
 }
 
 
-//*************************************************************************
+
 OUString SAL_CALL
 MasterScriptProvider::getName()
         throw ( css::uno::RuntimeException )
@@ -433,7 +433,7 @@ MasterScriptProvider::getName()
     return m_sNodeName;
 }
 
-//*************************************************************************
+
 Sequence< Reference< browse::XBrowseNode > > SAL_CALL
 MasterScriptProvider::getChildNodes()
         throw ( css::uno::RuntimeException )
@@ -463,7 +463,7 @@ MasterScriptProvider::getChildNodes()
     return children;
 }
 
-//*************************************************************************
+
 sal_Bool SAL_CALL
 MasterScriptProvider::hasChildNodes()
         throw ( css::uno::RuntimeException )
@@ -471,7 +471,7 @@ MasterScriptProvider::hasChildNodes()
     return sal_True;
 }
 
-//*************************************************************************
+
 sal_Int16 SAL_CALL
 MasterScriptProvider::getType()
         throw ( css::uno::RuntimeException )
@@ -479,7 +479,7 @@ MasterScriptProvider::getType()
     return browse::BrowseNodeTypes::CONTAINER;
 }
 
-//*************************************************************************
+
 
 OUString
 MasterScriptProvider::parseLocationName( const OUString& location )
@@ -493,7 +493,7 @@ MasterScriptProvider::parseLocationName( const OUString& location )
     return temp;
 }
 
-//*************************************************************************
+
 // Register Package
 void SAL_CALL
 MasterScriptProvider::insertByName( const OUString& aName, const Any& aElement ) throw ( lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, css::uno::RuntimeException)
@@ -573,7 +573,7 @@ MasterScriptProvider::insertByName( const OUString& aName, const Any& aElement )
    }
 }
 
-//*************************************************************************
+
 // Revoke Package
 void SAL_CALL
 MasterScriptProvider::removeByName( const OUString& Name ) throw ( container::NoSuchElementException, lang::WrappedTargetException, RuntimeException)
@@ -648,7 +648,7 @@ MasterScriptProvider::removeByName( const OUString& Name ) throw ( container::No
     }
 }
 
-//*************************************************************************
+
 void SAL_CALL
 MasterScriptProvider::replaceByName( const OUString& aName, const Any& aElement ) throw ( lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, RuntimeException)
 {
@@ -662,7 +662,7 @@ MasterScriptProvider::replaceByName( const OUString& aName, const Any& aElement 
                 Reference< XInterface >() );
     }
 }
-//*************************************************************************
+
 Any SAL_CALL
 MasterScriptProvider::getByName( const OUString& aName ) throw ( container::NoSuchElementException, lang::WrappedTargetException, RuntimeException)
 {
@@ -677,7 +677,7 @@ MasterScriptProvider::getByName( const OUString& aName ) throw ( container::NoSu
     }
     return result;
 }
-//*************************************************************************
+
 sal_Bool SAL_CALL
 MasterScriptProvider::hasByName( const OUString& aName ) throw (RuntimeException)
 {
@@ -750,7 +750,7 @@ MasterScriptProvider::hasByName( const OUString& aName ) throw (RuntimeException
     return result;
 }
 
-//*************************************************************************
+
 Sequence< OUString > SAL_CALL
 MasterScriptProvider::getElementNames(  ) throw ( RuntimeException)
 {
@@ -763,7 +763,7 @@ MasterScriptProvider::getElementNames(  ) throw ( RuntimeException)
     }
     return names;
 }
-//*************************************************************************
+
 Type SAL_CALL
 MasterScriptProvider::getElementType(  ) throw ( RuntimeException)
 {
@@ -771,7 +771,7 @@ MasterScriptProvider::getElementType(  ) throw ( RuntimeException)
     Type t;
     return t;
 }
-//*************************************************************************
+
 sal_Bool SAL_CALL MasterScriptProvider::hasElements(  ) throw ( RuntimeException)
 {
     // TODO needs implementing
@@ -783,7 +783,7 @@ sal_Bool SAL_CALL MasterScriptProvider::hasElements(  ) throw ( RuntimeException
     return false;
 }
 
-//*************************************************************************
+
 Sequence< Reference< provider::XScriptProvider > > SAL_CALL
 MasterScriptProvider::getAllProviders() throw ( css::uno::RuntimeException )
 {
@@ -801,7 +801,7 @@ MasterScriptProvider::getAllProviders() throw ( css::uno::RuntimeException )
 }
 
 
-//*************************************************************************
+
 OUString SAL_CALL MasterScriptProvider::getImplementationName( )
 throw( RuntimeException )
 {
@@ -814,7 +814,7 @@ throw( RuntimeException )
     return cppu::supportsService(this, serviceName);
 }
 
-//*************************************************************************
+
 Sequence< OUString > SAL_CALL MasterScriptProvider::getSupportedServiceNames( )
 throw( RuntimeException )
 {
@@ -839,14 +839,14 @@ Sequence< OUString > SAL_CALL bnf_getSupportedServiceNames();
 
 namespace scripting_runtimemgr
 {
-//*************************************************************************
+
 Reference< XInterface > SAL_CALL sp_create(
     const Reference< XComponentContext > & xCompC )
 {
     return ( cppu::OWeakObject * ) new ::func_provider::MasterScriptProvider( xCompC );
 }
 
-//*************************************************************************
+
 Sequence< OUString > sp_getSupportedServiceNames( )
     SAL_THROW(())
 {
@@ -859,7 +859,7 @@ Sequence< OUString > sp_getSupportedServiceNames( )
     return Sequence< OUString >( names, 3 );
 }
 
-//*************************************************************************
+
 OUString sp_getImplementationName( )
 SAL_THROW(())
 {
@@ -922,9 +922,9 @@ static const struct cppu::ImplementationEntry s_entries [] =
     };
 }
 
-//############################################################################
+
 //#### EXPORTED ##############################################################
-//############################################################################
+
 
 extern "C"
 {

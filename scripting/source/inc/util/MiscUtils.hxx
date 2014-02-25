@@ -154,6 +154,6 @@ static OUString parseLocationName( const OUString& location )
 
 };
 } // namespace sf_misc
-#endif //
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

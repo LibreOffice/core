@@ -31,19 +31,19 @@ importClass(Packages.com.sun.star.frame.XModel);
 // to all JavaScript scripts in the global variable "XSCRIPTCONTEXT". This
 // variable can be used to access the document for which this script
 // was invoked.
-// 
-// Methods available are: 
-// 
+
+// Methods available are:
+
 //   XSCRIPTCONTEXT.getDocument() returns XModel
 //   XSCRIPTCONTEXT.getInvocationContext() returns XScriptInvocationContext or NULL
 //   XSCRIPTCONTEXT.getDesktop() returns XDesktop
 //   XSCRIPTCONTEXT.getComponentContext() returns XComponentContext
-//
+
 // For more information on using this class see the scripting
 // developer guides at:
-// 
+
 //   http://api.libreoffice.org/docs/DevelopersGuide/ScriptingFramework/ScriptingFramework.xhtml
-//
+
 
 oDoc = UnoRuntime.queryInterface(XModel,XSCRIPTCONTEXT.getInvocationContext());
 if ( !oDoc )

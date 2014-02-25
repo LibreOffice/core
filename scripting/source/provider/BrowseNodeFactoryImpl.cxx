@@ -663,9 +663,9 @@ BrowseNodeFactoryImpl::~BrowseNodeFactoryImpl()
 }
 
 
-//############################################################################
+
 // Implementation of XBrowseNodeFactory
-//############################################################################
+
 
 /*
  * The selector hierarchy is the standard hierarchy for organizers with the
@@ -704,13 +704,13 @@ BrowseNodeFactoryImpl::getOrganizerHierarchy()
     Reference< browse::XBrowseNode > xRet = new  DefaultRootBrowseNode( m_xComponentContext );
     return xRet;
 }
-//############################################################################
-// Helper methods
-//############################################################################
 
-//############################################################################
+// Helper methods
+
+
+
 // Namespace global methods for setting up BrowseNodeFactory service
-//############################################################################
+
 
 Sequence< OUString > SAL_CALL
 bnf_getSupportedServiceNames( )
@@ -738,9 +738,9 @@ bnf_create( Reference< XComponentContext > const & xComponentContext )
         new BrowseNodeFactoryImpl( xComponentContext ) );
 }
 
-//############################################################################
+
 // Implementation of XServiceInfo
-//############################################################################
+
 
 OUString SAL_CALL
 BrowseNodeFactoryImpl::getImplementationName()

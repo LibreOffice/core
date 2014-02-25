@@ -53,7 +53,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::reflection;
 
 
-//.........................................................................
+
 namespace dlgprov
 {
 
@@ -147,11 +147,11 @@ namespace dlgprov
         }
     }
 
-//.........................................................................
 
-    // =============================================================================
+
+
     // DialogEventsAttacherImpl
-    // =============================================================================
+
 
     DialogEventsAttacherImpl::DialogEventsAttacherImpl( const Reference< XComponentContext >& rxContext, const Reference< frame::XModel >& rxModel, const Reference< awt::XControl >& rxControl, const Reference< XInterface >& rxHandler, const Reference< beans::XIntrospectionAccess >& rxIntrospect, bool bProviderMode, const Reference< script::XScriptListener >& rxRTLListener, const OUString& sDialogLibName )
         :mbUseFakeVBAEvents( false ), m_xContext( rxContext )
@@ -371,9 +371,9 @@ namespace dlgprov
     }
 
 
-    // =============================================================================
+
     // DialogAllListenerImpl
-    // =============================================================================
+
 
     DialogAllListenerImpl::DialogAllListenerImpl( const Reference< XScriptListener >& rxListener,
         const OUString& rScriptType, const OUString& rScriptCode )
@@ -443,9 +443,9 @@ namespace dlgprov
     }
 
 
-    // =============================================================================
+
     // DialogScriptListenerImpl
-    // =============================================================================
+
 
     DialogUnoScriptListenerImpl::DialogUnoScriptListenerImpl( const Reference< XComponentContext >& rxContext,
             const Reference< ::com::sun::star::frame::XModel >& rxModel,
@@ -684,8 +684,8 @@ namespace dlgprov
 
 
 
-//.........................................................................
+
 }   // namespace dlgprov
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

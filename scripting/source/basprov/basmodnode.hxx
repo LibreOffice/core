@@ -28,14 +28,14 @@
 class SbModule;
 
 
-//.........................................................................
+
 namespace basprov
 {
-//.........................................................................
 
-    //  ----------------------------------------------------
+
+
     //  class BasicModuleNodeImpl
-    //  ----------------------------------------------------
+
 
     typedef ::cppu::WeakImplHelper1<
         ::com::sun::star::script::browse::XBrowseNode > BasicModuleNodeImpl_BASE;
@@ -66,9 +66,9 @@ namespace basprov
             throw (::com::sun::star::uno::RuntimeException);
     };
 
-//.........................................................................
+
 }   // namespace basprov
-//.........................................................................
+
 
 #endif // SCRIPTING_BASMODNODE_HXX
 

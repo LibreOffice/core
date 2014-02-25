@@ -99,7 +99,7 @@ public class ScriptContext extends PropertySet implements XScriptContext
         return sc;
     }
 
-    //----------------------------------------------------------------------
+
     /**
         Obtain the document reference on which the script can operate
 
