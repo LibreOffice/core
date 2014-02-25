@@ -48,7 +48,7 @@ using namespace ::com::sun::star::registry;
 
 namespace io_TextOutputStream
 {
-//===========================================================================
+
 // Implementation XTextOutputStream
 
 typedef WeakImplHelper2< XTextOutputStream2, XServiceInfo > TextOutputStreamHelper;
@@ -159,7 +159,7 @@ Sequence<sal_Int8> OTextOutputStream::implConvert( const OUString& rSource )
 }
 
 
-//===========================================================================
+
 // XTextOutputStream
 
 void OTextOutputStream::writeString( const OUString& aString )
@@ -192,7 +192,7 @@ void OTextOutputStream::setEncoding( const OUString& Encoding )
     mEncoding = Encoding;
 }
 
-//===========================================================================
+
 // XOutputStream
 void OTextOutputStream::writeBytes( const Sequence< sal_Int8 >& aData )
     throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
@@ -226,7 +226,7 @@ void OTextOutputStream::checkOutputStream()
 }
 
 
-//===========================================================================
+
 // XActiveDataSource
 
 void OTextOutputStream::setOutputStream( const Reference< XOutputStream >& aStream )

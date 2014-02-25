@@ -472,9 +472,9 @@ Sequence<OUString> OMarkableOutputStream_getSupportedServiceNames(void)
 
 
 
-//
+
 // XMarkableInputStream
-//
+
 
 
 class OMarkableInputStream :
