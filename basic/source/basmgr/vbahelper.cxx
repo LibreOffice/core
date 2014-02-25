@@ -36,7 +36,7 @@ namespace vba {
 
 using namespace ::com::sun::star;
 
-// ============================================================================
+
 
 namespace {
 
@@ -180,21 +180,21 @@ struct StaticCurrDirPool : public ::rtl::Static< CurrDirPool, StaticCurrDirPool 
 
 } // namespace
 
-// ============================================================================
+
 
 void lockControllersOfAllDocuments( const uno::Reference< frame::XModel >& rxModel, sal_Bool bLockControllers )
 {
     lclIterateDocuments( &lclLockControllers, rxModel, bLockControllers );
 }
 
-// ============================================================================
+
 
 void enableContainerWindowsOfAllDocuments( const uno::Reference< frame::XModel >& rxModel, sal_Bool bEnableWindows )
 {
     lclIterateDocuments( &lclEnableContainerWindows, rxModel, bEnableWindows );
 }
 
-// ============================================================================
+
 
 void registerCurrentDirectory( const uno::Reference< frame::XModel >& rxModel, const OUString& rPath )
 {
@@ -215,7 +215,7 @@ void registerCurrentDirectory( const uno::Reference< frame::XModel >& rxModel, c
     }
 }
 
-// ============================================================================
+
 
 } // namespace vba
 } // namespace basic

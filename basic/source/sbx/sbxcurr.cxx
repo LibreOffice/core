@@ -86,7 +86,7 @@ static OUString ImpCurrencyToString( const sal_Int64 &rVal )
         // but more natural as only the necessary digits
         // to the right of the decimal places are displayed
         // It would be great to conditionally be able to display like that too
-        //
+
         // Val   OOo (Cur)  VBA (Cur)
         // ---   ---------  ---------
         // 0     0.0000     0

@@ -3783,8 +3783,8 @@ OUString getBasicTypeName( SbxDataType eType )
         "Boolean",          // SbxBOOL
         "Variant",          // SbxVARIANT
         "DataObject",       // SbxDATAOBJECT
-        "Unknown Type",     //
-        "Unknown Type",     //
+        "Unknown Type",
+        "Unknown Type",
         "Char",             // SbxCHAR
         "Byte",             // SbxBYTE
         "UShort",           // SbxUSHORT

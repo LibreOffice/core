@@ -64,7 +64,7 @@ using com::sun::star::uno::Any;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::lang::XMultiServiceFactory;
 
-// ============================================================================
+
 
 class DocBasicItem : public ::cppu::WeakImplHelper1< util::XCloseListener >
 {
@@ -208,7 +208,7 @@ StarBASIC* lclGetDocBasicForModule( SbModule* pModule )
 
 } // namespace
 
-// ============================================================================
+
 
 SbxObject* StarBASIC::getVBAGlobals( )
 {
@@ -468,7 +468,7 @@ SbxObject* SbOLEFactory::CreateObject( const OUString& rClassName )
 }
 
 
-//========================================================================
+
 // SbFormFactory, show user forms by: dim as new <user form name>
 
 class SbFormFactory : public SbxFactory
@@ -512,7 +512,7 @@ SbxObject* SbFormFactory::CreateObject( const OUString& rClassName )
 }
 
 
-//========================================================================
+
 // SbTypeFactory
 
 SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj )
@@ -2009,7 +2009,7 @@ Reference< frame::XModel > StarBASIC::GetModelFromBasic( SbxObject* pBasic )
 }
 
 
-//========================================================================
+
 // #118116 Implementation Collection object
 
 TYPEINIT1(BasicCollection,SbxObject)

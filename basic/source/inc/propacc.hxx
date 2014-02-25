@@ -35,7 +35,7 @@ typedef ::cppu::WeakImplHelper2< ::com::sun::star::beans::XPropertySet,
                                  ::com::sun::star::beans::XPropertyAccess > SbPropertyValuesHelper;
 
 
-//==========================================================================
+
 
 class SbPropertyValues:     public SbPropertyValuesHelper
 {
@@ -86,7 +86,7 @@ public:
     virtual void SAL_CALL setPropertyValues(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& PropertyValues_) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 };
 
-//==========================================================================
+
 
 typedef ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertySetInfo > SbPropertySetInfoHelper;
 
@@ -128,7 +128,7 @@ public:
         throw( ::com::sun::star::uno::RuntimeException );
 };
 
-//=========================================================================
+
 
 class StarBASIC;
 class SbxArray;

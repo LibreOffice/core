@@ -47,7 +47,7 @@
 
 #include <basic/basicmanagerrepository.hxx>
 #include <basic/basmgr.hxx>
-//==================================================================================================
+
 
 #include <xmlscript/xmldlg_imexp.hxx>
 #include <sbunoobj.hxx>
@@ -564,6 +564,6 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
 }
 
 
-//===================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

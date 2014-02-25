@@ -61,10 +61,10 @@ public:
 template < class T, class S >
 class PCodeBuffConvertor
 {
-    T m_nSize; //
+    T m_nSize;
     sal_uInt8* m_pStart;
     sal_uInt8* m_pCnvtdBuf;
-    S m_nCnvtdSize; //
+    S m_nCnvtdSize;
 
     //  Disable usual copying symantics and bodgy default ctor
     PCodeBuffConvertor();
