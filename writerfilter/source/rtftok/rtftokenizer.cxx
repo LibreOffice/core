@@ -277,8 +277,10 @@ int RTFTokenizer::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
 {
     if (m_rImport.getDestinationState() == DESTINATION_SKIP)
         return 0;
-    /*SAL_INFO("writefilter", OSL_THIS_FUNC << ": keyword '\\" << rKeyword.getStr() <<
-               "' with param? " << (bParam ? 1 : 0) <<" param val: '" << (bParam ? nParam : 0) << "'");*/
+#if OSL_DEBUG_LEVEL > 1
+    SAL_INFO("writerfilter.rtf", OSL_THIS_FUNC << ": keyword '\\" << rKeyword.getStr() <<
+               "' with param? " << (bParam ? 1 : 0) <<" param val: '" << (bParam ? nParam : 0) << "'");
+#endif
     RTFSymbol aSymbol;
     aSymbol.sKeyword = rKeyword.getStr();
     std::vector<RTFSymbol>::iterator low = std::lower_bound(m_aRTFControlWords.begin(), m_aRTFControlWords.end(), aSymbol);
