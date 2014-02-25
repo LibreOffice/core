@@ -694,6 +694,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_FRENCH_BURKINA_FASO   0x800C  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_FRENCH)) */
 #define LANGUAGE_USER_PUINAVE               0x068E
 #define LANGUAGE_USER_MANINKAKAN_EASTERN_LATIN  0x068F
+#define LANGUAGE_USER_AVAR                  0x0690
 
 
 /* Primary language ID range for on-the-fly assignment. */
