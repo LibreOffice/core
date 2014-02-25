@@ -37,9 +37,9 @@
 
 #include <cppuhelper/implbase3.hxx>
 
-//************************************************************
+
 //  OStatementBase
-//************************************************************
+
 class OStatementBase :  public comphelper::OBaseMutex,
                         public OSubComponent,
                         public ::cppu::OPropertySetHelper,
@@ -129,9 +129,9 @@ protected:
     using ::cppu::OPropertySetHelper::getFastPropertyValue;
 };
 
-//************************************************************
+
 //  OStatement
-//************************************************************
+
 typedef ::cppu::ImplHelper3 <   ::com::sun::star::sdbc::XStatement
                             ,   ::com::sun::star::lang::XServiceInfo
                             ,   ::com::sun::star::sdbc::XBatchExecution

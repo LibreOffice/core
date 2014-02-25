@@ -31,11 +31,11 @@ import connectivity.tools.CRMDatabase;
 // ---------- junit imports -----------------
 import org.junit.Test;
 import static org.junit.Assert.*;
-// ------------------------------------------
+
 
 public class UISettings extends TestCase
 {
-    // --------------------------------------------------------------------------------------------------------
+
     /** verifies that aliases for inner queries work as expected
      */
     @Test

@@ -42,7 +42,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-// ------------------------------------------
+
 
 /** complex test case for Base's application UI
  */
@@ -58,7 +58,7 @@ public class CopyTableWizard extends CRMBasedTestCase
         super();
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
 
     @After
     @Override
@@ -88,7 +88,7 @@ public class CopyTableWizard extends CRMBasedTestCase
         }
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     class CopyThread implements Runnable
     {
 
@@ -217,5 +217,5 @@ public class CopyTableWizard extends CRMBasedTestCase
         {
         }
     }
-    // --------------------------------------------------------------------------------------------------------
+
 }

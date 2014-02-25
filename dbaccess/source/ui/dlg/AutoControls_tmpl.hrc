@@ -105,7 +105,7 @@
         WordBreak = TRUE;                                                                           \
     };
 
-// -------------------------------------------------------------------------------------------------
+
 
 
 #define  AUTO_BROWSECONTROLGROUP( AUTO_X, AUTO_Y, AUTOPAGE_X, AUTO_HID, AUTO_HID2)                                      \
@@ -143,7 +143,7 @@
          Text[ en-US ]  = "Create New";                                                     \
     };
 
-// --------------------------------------------------------------------------------------------------
+
 
 
 #define AUTO_NAMECONTROLGROUP(AUTO_Y, AUTO_HID)                                                     \
@@ -163,7 +163,7 @@
         Border = TRUE ;                                                                             \
     };
 
-// --------------------------------------------------------------------------------------------------
+
 
 
 #define AUTO_HOSTCONTROLGROUP(AUTO_Y, AUTO_HID)                                                     \
@@ -183,7 +183,7 @@
         Border = TRUE ;                                                                             \
     };
 
-// --------------------------------------------------------------------------------------------------
+
 
 
 #define AUTO_BASEDNCONTROLGROUP(AUTO_Y, AUTO_HID)                                                   \
@@ -203,7 +203,7 @@
         Border = TRUE ;                                                                             \
     };                                                                                              \
 
-// --------------------------------------------------------------------------------------------------
+
 
 // MBA: the HID set in the FixText can't make any sense; in case this macro was called from within the
 // AUTOHELP_JDBCCONTROLGROUP, the FixText would have got the same HID as an EditField from the
@@ -233,7 +233,7 @@
         Text[ en-US ]   = "" ;                                                                      \
     };
 
-//-------------------------------------------------------------------------
+
 
 #define AUTO_CHARSET( AUTO_Y, AUTOPAGE_X )                                                          \
     FixedLine FL_DATACONVERT                                                                        \
@@ -259,7 +259,7 @@
         CurPos = 0 ;                                                                                \
     };                                                                                              \
 
-// --------------------------------------------------------------------------------------------------
+
 #define AUTO_SEPARATORCONTROLGROUP(AUTO_Y,AUTOPAGE_X)                                               \
                                                                                                     \
     FixedText FT_AUTOEXTENSIONHEADER                                                                \
@@ -432,14 +432,14 @@
     };
 
 
-// --------------------------------------------------------------------------------------------------
+
 
 #define AUTO_HELP_BROWSECONTROLGROUP(AUTO_LINECOUNT, AUTO_HID, AUTO_HID2)                           \
     AUTO_WIZARDHELPTEXT(AUTO_LINECOUNT)                                                 \
     AUTO_BROWSECONTROLGROUP(START_X, INIT_Y + AUTO_LINECOUNT * FIXEDTEXT_HEIGHT + 2, WIZARD_PAGE_X, AUTO_HID, AUTO_HID2)
 
 
-// --------------------------------------------------------------------------------------------------
+
 
 #define AUTO_JDBCDRIVERCLASSGROUP(AUTO_Y, AUTO_HID, AUTO_HID2)                                   \
                                                                                       \
@@ -469,7 +469,7 @@
         Text[ en-US ]  = "Test class" ;                                                                             \
     };
 
-// --------------------------------------------------------------------------------------------------
+
 
 #define AUTO_SOCKETCONTROLGROUP(AUTO_Y)                                                             \
     FixedText FT_SOCKET                                                                             \
@@ -497,7 +497,7 @@
     AUTO_JDBCDRIVERCLASSGROUP(146, AUTO_HID4, AUTO_HID5)
 
 
-// --------------------------------------------------------------------------------------------------
+
 
 #endif
 

@@ -47,7 +47,7 @@ import org.junit.Before;
 import org.junit.Test;
 // import org.openoffice.test.OfficeConnection;
 import static org.junit.Assert.*;
-// ------------------------------------------
+
 
 
 /** complex test case for Base's application UI
@@ -62,7 +62,7 @@ public class Beamer extends TestCase
         super();
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     @Before
     @Override
     public void before() throws Exception, java.lang.Exception
@@ -75,14 +75,14 @@ public class Beamer extends TestCase
         docModel = UnoRuntime.queryInterface(XModel.class, loadedComponent);
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     @After
     @Override
     public void after()
     {
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     @Test
     public void testBeamer() throws Exception, IOException, java.lang.Exception
     {
