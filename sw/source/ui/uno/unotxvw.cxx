@@ -1586,7 +1586,8 @@ Sequence< PropertyState >  SwXTextViewCursor::getPropertyStates(
 }
 
 void  SwXTextViewCursor::setPropertyToDefault( const OUString& rPropertyName )
-                                        throw(UnknownPropertyException, RuntimeException)
+    throw (UnknownPropertyException, RuntimeException,
+           std::exception)
 {
     SolarMutexGuard aGuard;
     if(m_pView)

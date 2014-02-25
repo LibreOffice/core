@@ -280,7 +280,10 @@ public:
         throw (::com::sun::star::beans::UnknownPropertyException,
                ::com::sun::star::uno::RuntimeException,
                std::exception);
-    virtual void SAL_CALL setPropertyToDefault( const OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setPropertyToDefault( const OUString& PropertyName )
+        throw (::com::sun::star::beans::UnknownPropertyException,
+               ::com::sun::star::uno::RuntimeException,
+               std::exception);
     virtual ::com::sun::star::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName )
         throw (::com::sun::star::beans::UnknownPropertyException,
                ::com::sun::star::lang::WrappedTargetException,
