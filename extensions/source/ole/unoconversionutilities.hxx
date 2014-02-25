@@ -272,7 +272,7 @@ bool convertSelfToCom( T& unoInterface, VARIANT * pVar)
 // some services or types for which the local factory is used. The exceptions
 // are:  all structs.
 // Param anyObject - contains the object ( interface, struct) for what we need an invocation object.
-//
+
 template<class T>
 Reference< XSingleServiceFactory > UnoConversionUtilities<T>::getInvocationFactory(const Any& anyObject)
 {

@@ -36,14 +36,14 @@ namespace com { namespace sun { namespace star {
         struct LineDescriptor;
     }
 } } }
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= PropertyHandlerHelper
-    //====================================================================
+
     class PropertyHandlerHelper
     {
     public:
@@ -201,9 +201,9 @@ namespace pcr
         PropertyHandlerHelper& operator=( const PropertyHandlerHelper& );   // never implemented
     };
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 #endif // EXTENSIONS_SOURCE_PROPCTRLR_HANDLERHELPER_HXX
 

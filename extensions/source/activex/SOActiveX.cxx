@@ -37,7 +37,7 @@
 #define STAROFFICE_WINDOWCLASS "SOParentWindow"
 
 
-/////////////////////////////////////////////////////////////////////////////
+
 
 void OutputError_Impl( HWND hw, HRESULT ErrorCode )
 {
@@ -140,7 +140,7 @@ HRESULT GetPropertiesFromIDisp( IDispatch* pdispObject,
 
     return S_OK;
 }
-/////////////////////////////////////////////////////////////////////////////
+
 // CSOActiveX
 
 CSOActiveX::CSOActiveX()

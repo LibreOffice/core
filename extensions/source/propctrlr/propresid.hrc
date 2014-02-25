@@ -26,9 +26,9 @@
     // arbitrary at the moment
 #define RID_FORMBROWSER_START           RID_PROPCONTROLLER_START + 2000
 
-// -----------------------------------------------------------------------
+
 // - Strings
-// -----------------------------------------------------------------------
+
 
 #define RID_STR_STANDARD                    ( RID_PROPCONTROLLER_START +  0 )
 #define RID_STR_PROPPAGE_DEFAULT            ( RID_PROPCONTROLLER_START +  1 )

@@ -22,7 +22,7 @@
 
 #include "propresid.hrc"
 
-// -----------------------------------------------------------------------
+
 // - Strings
 
 #define RID_STR_FORMS                       ( RID_FORMBROWSER_START +   1 )
@@ -269,12 +269,12 @@
 #define RID_STR_SCROLL_LEFT                 ( RID_FORMBROWSER_START + 259 )
 
 
-// -----------------------------------------------------------------------
+
 // - message strings
 
 #define RID_STR_CONFIRM_DELETE_DATA_TYPE    ( RID_FORMBROWSER_START + 500 )
 
-// -----------------------------------------------------------------------
+
 // - dialogs
 
 #define RID_DLG_SELECTLABELCONTROL          ( RID_PROPCONTROLLER_START +  0 )
@@ -283,12 +283,12 @@
 #define RID_DLG_SELECTION                   ( RID_PROPCONTROLLER_START +  3 )
 #define RID_DLG_NEW_DATA_TYPE               ( RID_PROPCONTROLLER_START +  4 )
 
-// -----------------------------------------------------------------------
+
 // - ImageLists
 
 #define RID_IL_FORMEXPLORER                 ( RID_PROPCONTROLLER_START +  0 )
 
-// -----------------------------------------------------------------------
+
 // - untyped resources
 
 #define RID_RSC_ENUM_SCROLLBARS             ( RID_PROPCONTROLLER_START +  0 )
@@ -325,9 +325,9 @@
 #define RID_RSC_ENUM_TEXT_ANCHOR_TYPE       ( RID_PROPCONTROLLER_START + 31 )
 #define RID_RSC_ENUM_SHEET_ANCHOR_TYPE      ( RID_PROPCONTROLLER_START + 32 )
 
-// -----------------------------------------------------------------------
+
 // - ImageList - local ids
-// -----------------------------------------------------------------------
+
 // HACK HACK HACK
 // as long as we have no real property browser, but this outsourcing only,
 // we do not duplicate images. Instead we do some hard coding for the image ids

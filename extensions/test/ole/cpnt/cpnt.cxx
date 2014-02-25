@@ -1826,7 +1826,7 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
             arAny[11] <<= _short;
             sal_Int32 _long= -1;
             arAny[12] <<= _long;
-//
+
             Sequence<Any> params( arAny, 13);
 
             xInv->invoke( OUString( L"inoutValuesAll"), params, seqIndices, seqOutParams);

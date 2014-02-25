@@ -29,10 +29,10 @@
 #include "modulepcr.hxx"
 #include "propresid.hrc"
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::Type;
@@ -41,9 +41,9 @@ namespace pcr
 
     namespace PropertyControlType = ::com::sun::star::inspection::PropertyControlType;
 
-    //==================================================================
+
     // NumberFormatSampleField
-    //==================================================================
+
 
     bool NumberFormatSampleField::PreNotify( NotifyEvent& rNEvt )
     {
@@ -83,9 +83,9 @@ namespace pcr
         }
     }
 
-    //==================================================================
+
     // OFormatSampleControl
-    //==================================================================
+
 
     OFormatSampleControl::OFormatSampleControl( Window* pParent, WinBits nWinStyle )
         :OFormatSampleControl_Base( PropertyControlType::Unknown, pParent, nWinStyle )
@@ -165,9 +165,9 @@ namespace pcr
         return ::getCppuType( static_cast< sal_Int32* >( NULL ) );
     }
 
-    //==================================================================
+
     // class OFormattedNumericControl
-    //==================================================================
+
     DBG_NAME(OFormattedNumericControl);
 
     OFormattedNumericControl::OFormattedNumericControl( Window* pParent, WinBits nWinStyle )
@@ -261,9 +261,9 @@ namespace pcr
         }
     }
 
-    //========================================================================
+
     //= OFileUrlControl
-    //========================================================================
+
 
     OFileUrlControl::OFileUrlControl( Window* pParent, WinBits nWinStyle )
         :OFileUrlControl_Base( PropertyControlType::Unknown, pParent, nWinStyle | WB_DROPDOWN )
@@ -307,9 +307,9 @@ namespace pcr
         return ::getCppuType( static_cast< OUString* >( NULL ) );
     }
 
-    //========================================================================
+
     //= OTimeDurationControl
-    //========================================================================
+
 
     OTimeDurationControl::OTimeDurationControl( ::Window* pParent, WinBits nWinStyle )
         :ONumericControl( pParent, nWinStyle )
@@ -350,8 +350,8 @@ namespace pcr
         return 0L;
     }
 
-//............................................................................
+
 } // namespace pcr
-//............................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

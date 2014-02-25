@@ -29,12 +29,12 @@ class   BibDataManager;
 
 namespace com{ namespace sun{ namespace star{ namespace awt{ class XFocusListener;}}}}
 
-//.........................................................................
+
 namespace bib
 {
-//.........................................................................
 
-    // -----------------------------------------------------------------------
+
+
     class BibView : public BibWindow, public FormControlContainer
     {
     private:
@@ -69,9 +69,9 @@ namespace bib
         virtual sal_Bool        HandleShortCutKey( const KeyEvent& rKeyEvent ); // returns true, if key was handled
     };
 
-//.........................................................................
+
 }   // namespace bib
-//.........................................................................
+
 
 #endif
 

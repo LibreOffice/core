@@ -53,7 +53,7 @@ enum SOVersion {
     OO_UNKNOWN
 };
 
-/////////////////////////////////////////////////////////////////////////////
+
 // CSOActiveX
 class ATL_NO_VTABLE CSOActiveX :
     public CComObjectRootEx<CComSingleThreadModel>,

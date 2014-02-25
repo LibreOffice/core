@@ -38,10 +38,10 @@ extern "C" void SAL_CALL createRegistryInfo_EFormsPropertyHandler()
     ::pcr::EFormsPropertyHandler::registerImplementation();
 }
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
@@ -53,9 +53,9 @@ namespace pcr
     using namespace ::com::sun::star::form::binding;
     using namespace ::com::sun::star::inspection;
 
-    //====================================================================
+
     //= EFormsPropertyHandler
-    //====================================================================
+
     DBG_NAME( EFormsPropertyHandler )
 
     EFormsPropertyHandler::EFormsPropertyHandler( const Reference< XComponentContext >& _rxContext )
@@ -214,7 +214,7 @@ namespace pcr
                     // This is because we "simulate" the Model property by remembering the
                     // value ourself. Other instances might, however, not know this value,
                     // but prefer to retrieve it somewhere else - e.g. from the EFormsHelper
-                    //
+
                     // The really correct solution would be if *all* property handlers
                     // obtain a "current property value" for *all* properties from a central
                     // instance. Then, handler A could ask it for the value of property
@@ -598,8 +598,8 @@ namespace pcr
         }
     }
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

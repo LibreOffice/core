@@ -27,15 +27,15 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <rtl/ref.hxx>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     class XSDDataType;
-    //====================================================================
+
     //= XSDValidationHelper
-    //====================================================================
+
     class XSDValidationHelper : public EFormsHelper
     {
     private:
@@ -132,9 +132,9 @@ namespace pcr
                 ) const SAL_THROW(());
     };
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 #endif // EXTENSIONS_SOURCE_PROPCTRLR_XSDVALIDATIONHELPER_HXX
 

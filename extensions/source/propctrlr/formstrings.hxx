@@ -20,10 +20,10 @@
 #ifndef _EXTENSIONS_FORMSCTRLR_FORMSTRINGS_HXX_
 #define _EXTENSIONS_FORMSCTRLR_FORMSTRINGS_HXX_
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     #define PROPERTY_DEFAULTCONTROL          "DefaultControl"
     #define PROPERTY_INTROSPECTEDOBJECT      "IntrospectedObject"
@@ -291,9 +291,9 @@ namespace pcr
     #define SERVICE_ADDRESS_CONVERSION      "com.sun.star.table.CellAddressConversion"
     #define SERVICE_RANGEADDRESS_CONVERSION "com.sun.star.table.CellRangeAddressConversion"
 
-//............................................................................
+
 } // namespace pcr
-//............................................................................
+
 
 #endif // _EXTENSIONS_FORMSCTRLR_FORMSTRINGS_HXX_
 

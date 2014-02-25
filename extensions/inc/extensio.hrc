@@ -21,7 +21,7 @@
 
 #include <svl/solar.hrc>
 
-// -----------------------------------------------------------------------
+
 // - resource id ranges
 
 #define RID_ABP_START       ( RID_MORE_EXTENSIONS_START +   0 )

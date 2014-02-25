@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 // XCallback_Impl.idl : IDL source for XCallback_Impl.dll
-//
+
 
 // This file will be processed by the MIDL tool to
 // produce the type library (XCallback_Impl.tlb) and marshalling code.

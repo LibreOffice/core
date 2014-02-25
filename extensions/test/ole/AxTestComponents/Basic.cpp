@@ -21,7 +21,7 @@
 #include "Basic.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
+
 // CBasic
 CBasic::CBasic():   m_cPrpByte(0),m_nPrpShort(0),m_lPrpLong(0),m_fPrpFloat(0), m_dPrpDouble(0),m_PrpArray(0),
 m_safearray(NULL), m_bool(VARIANT_FALSE),

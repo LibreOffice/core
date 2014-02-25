@@ -23,14 +23,14 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
 
-    //========================================================================
+
+
     //= PushButtonNavigation
-    //========================================================================
+
     class PushButtonNavigation
     {
     protected:
@@ -93,9 +93,9 @@ namespace pcr
         sal_Int32 implGetCurrentButtonType() const SAL_THROW(( ::com::sun::star::uno::Exception ));
     };
 
-//............................................................................
+
 }   // namespace pcr
-//............................................................................
+
 
 #endif // EXTENSIONS_PROPCTRLR_PUSHBUTTONNAVIGATION_HXX
 

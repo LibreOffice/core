@@ -23,7 +23,7 @@
 #include "abpilot.hrc"
 #include "extensio.hrc"
 
-//========================================================================
+
 // basics
 
 #define RID_DIALOG_START                RID_ABP_START
@@ -34,7 +34,7 @@
 #define RID_QUERYBOX_START              RID_ABP_START
 #define RID_BITMAP_START                RID_ABP_START
 
-//========================================================================
+
 // dialogs
 
 #define RID_DLG_ADDRESSBOOKSOURCEPILOT  ( RID_DIALOG_START +  0 )
@@ -42,7 +42,7 @@
 
 #define RID_DIALOG_END                  RID_DLG_ADDRESSBOOKSOURCEPILOT
 
-//========================================================================
+
 // tab pages
 
 #define RID_PAGE_SELECTABTYPE           ( RID_PAGE_START +  0 )
@@ -54,7 +54,7 @@
 
 #define RID_PAGE_END                    RID_PAGE_FINAL
 
-//========================================================================
+
 // strings
 
 #define RID_STR_DEFAULT_NAME            ( RID_STRING_START +  0 )
@@ -67,7 +67,7 @@
 
 #define RID_STRING_END                  RID_STR_NOFIELDSASSIGNED
 
-//========================================================================
+
 // error boxes
 
 #define RID_ERR_NEEDTYPESELECTION       ( RID_ERRORBOX_START +  0 )
@@ -75,7 +75,7 @@
 
 #define RID_ERRORBOX_END                RID_ERR_NEEDTYPESELECTION
 
-//========================================================================
+
 // query boxes
 
 #define RID_QRY_NOTABLES                ( RID_QUERYBOX_START +  0 )
@@ -85,7 +85,7 @@
 
 #define RID_QUERYBOX_END                RID_QRY_NO_EVO_GW
 
-//========================================================================
+
 // untyped resources
 
 #define RID_RSC_NOTUSEDYET              ( RID_UNTYPED_START +  0 )
@@ -93,7 +93,7 @@
 
 #define RID_UNTYPED_END                 RID_RSC_NOTUSEDYET
 
-//========================================================================
+
 // bitmaps
 
 #define BMP_HEADERIMAGE                 ( RID_BITMAP_START +  0 )
@@ -101,8 +101,8 @@
 
 #define RID_BITMAP_END                  BMP_HEADERIMAGE
 
-//========================================================================
-//========================================================================
+
+
 //= range checks
 
 #if RID_DIALOG_END > RID_ABP_END
@@ -127,15 +127,15 @@
     #error "please adjust the resource id ranges!!"
 #endif
 
-//========================================================================
+
 // local resource ids
 
-//........................................................................
+
 #define FL_SEPARATOR            1
 #define FL_TYPE                 2
 #define FL_NAME                 3
 
-//........................................................................
+
 #define FT_TYPE_HINTS            1
 #define FT_ADMINEXPLANATION      3
 #define FT_NAME_EXPL             4
@@ -147,7 +147,7 @@
 #define FT_DUPLICATENAME        10
 #define FT_LOCATION             11
 
-//........................................................................
+
 #define RB_MORK                 1
 #define RB_THUNDERBIRD          2
 #define RB_EVOLUTION            3
@@ -160,34 +160,34 @@
 #define RB_EVOLUTION_GROUPWISE  10
 #define RB_EVOLUTION_LDAP       11
 
-//........................................................................
+
 #define ET_DATASOURCENAME       1
 
-//........................................................................
+
 #define PB_INVOKE_ADMIN_DIALOG  1
 #define PB_INVOKE_FIELDS_DIALOG 2
 #define PB_BROWSE               3
 
-//........................................................................
+
 #define LB_TABLELIST            1
 
-//........................................................................
+
 #define CB_REGISTER_DS          1
 
-//........................................................................
+
 #define CBB_LOCATION            1
 
-//........................................................................
+
 #define STR_SELECT_ABTYPE           1
 #define STR_INVOKE_ADMIN_DIALOG     2
 #define STR_TABLE_SELECTION         3
 #define STR_MANUAL_FIELD_MAPPING    4
 #define STR_FINAL_CONFIRM           5
 
-//========================================================================
+
 // some defines
 
-//........................................................................
+
 #define WINDOW_SIZE_X   240
 #define WINDOW_SIZE_Y   185
 
@@ -201,7 +201,7 @@
 
 #define BORDER_X        12
 
-//........................................................................
+
 
 #endif // EXTENSIONS_ABPRESID_HRC
 

@@ -32,10 +32,10 @@
 #define GBW_STATE_DBFIELD           3
 #define GBW_STATE_FINALIZE          4
 
-//.........................................................................
+
 namespace dbp
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -43,9 +43,9 @@ namespace dbp
     using namespace ::com::sun::star::form;
     using namespace ::svt;
 
-    //=====================================================================
+
     //= OGroupBoxWizard
-    //=====================================================================
+
 
     OGroupBoxWizard::OGroupBoxWizard( Window* _pParent,
             const Reference< XPropertySet >& _rxObjectModel, const Reference< XComponentContext >& _rxContext )
@@ -181,9 +181,9 @@ namespace dbp
         return OControlWizard::onFinish();
     }
 
-    //=====================================================================
+
     //= ORadioSelectionPage
-    //=====================================================================
+
 
     ORadioSelectionPage::ORadioSelectionPage( OControlWizard* _pParent )
         :OGBWPage(_pParent, ModuleRes(RID_PAGE_GROUPRADIOSELECTION))
@@ -338,9 +338,9 @@ namespace dbp
         }
     }
 
-    //=====================================================================
+
     //= ODefaultFieldSelectionPage
-    //=====================================================================
+
 
     ODefaultFieldSelectionPage::ODefaultFieldSelectionPage( OControlWizard* _pParent )
         :OMaybeListSelectionPage(_pParent, ModuleRes(RID_PAGE_DEFAULTFIELDSELECTION))
@@ -389,9 +389,9 @@ namespace dbp
         return sal_True;
     }
 
-    //=====================================================================
+
     //= OOptionValuesPage
-    //=====================================================================
+
 
     OOptionValuesPage::OOptionValuesPage( OControlWizard* _pParent )
         :OGBWPage(_pParent, ModuleRes(RID_PAGE_OPTIONVALUES))
@@ -483,9 +483,9 @@ namespace dbp
         return sal_True;
     }
 
-    //=====================================================================
+
     //= OOptionDBFieldPage
-    //=====================================================================
+
 
     OOptionDBFieldPage::OOptionDBFieldPage( OControlWizard* _pParent )
         :ODBFieldPage(_pParent)
@@ -499,9 +499,9 @@ namespace dbp
         return getSettings().sDBField;
     }
 
-    //=====================================================================
+
     //= OFinalizeGBWPage
-    //=====================================================================
+
 
     OFinalizeGBWPage::OFinalizeGBWPage( OControlWizard* _pParent )
         :OGBWPage(_pParent, ModuleRes(RID_PAGE_OPTIONS_FINAL))
@@ -546,8 +546,8 @@ namespace dbp
         return sal_True;
     }
 
-//.........................................................................
+
 }   // namespace dbp
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

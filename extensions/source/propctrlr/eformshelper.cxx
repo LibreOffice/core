@@ -36,10 +36,10 @@
 #include <algorithm>
 #include <o3tl/compat_functional.hxx>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
@@ -50,9 +50,9 @@ namespace pcr
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::form;
 
-    //====================================================================
+
     //= file-local helpers
-    //====================================================================
+
     namespace
     {
 
@@ -67,9 +67,9 @@ namespace pcr
         }
     }
 
-    //====================================================================
+
     //= EFormsHelper
-    //====================================================================
+
 
     EFormsHelper::EFormsHelper( ::osl::Mutex& _rMutex, const Reference< XPropertySet >& _rxControlModel, const Reference< frame::XModel >& _rxContextDocument )
         :m_xControlModel( _rxControlModel )
@@ -576,7 +576,7 @@ namespace pcr
 
     namespace
     {
-        //................................................................
+
         struct PropertyBagInserter : public ::std::unary_function< Property, void >
         {
         private:
@@ -591,7 +591,7 @@ namespace pcr
             }
         };
 
-        //................................................................
+
         Reference< XPropertySetInfo > collectPropertiesGetInfo( const Reference< XPropertySet >& _rxProps, PropertyBag& _rBag )
         {
             Reference< XPropertySetInfo > xInfo;
@@ -773,8 +773,8 @@ namespace pcr
         }
     }
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

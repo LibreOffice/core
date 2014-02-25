@@ -32,14 +32,14 @@ namespace com { namespace sun { namespace star {
     }
 } } }
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= XSDDataType
-    //====================================================================
+
     class XSDDataType : public ::rtl::IReference
     {
     private:
@@ -95,9 +95,9 @@ namespace pcr
         XSDDataType& operator=( const XSDDataType& );   // never implemented
     };
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 #endif // EXTENSIONS_SOURCE_PROPCTRLR_XSDDATATYPES_HXX
 

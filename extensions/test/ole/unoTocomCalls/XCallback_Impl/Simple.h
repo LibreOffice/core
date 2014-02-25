@@ -23,7 +23,7 @@
 
 #include "resource.h"
 
-/////////////////////////////////////////////////////////////////////////////
+
 // CSimple
 class ATL_NO_VTABLE CSimple :
     public CComObjectRootEx<CComSingleThreadModel>,

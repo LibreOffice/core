@@ -27,15 +27,15 @@
 #include <functional>
 #include <set>
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     OUString GetUIHeadlineName(sal_Int16 _nClassId, const ::com::sun::star::uno::Any& _rUnoObject);
     sal_Int16 classifyComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent );
 
-    //========================================================================
+
     struct FindPropertyByHandle : public ::std::unary_function< ::com::sun::star::beans::Property, bool >
     {
     private:
@@ -49,7 +49,7 @@ namespace pcr
         }
     };
 
-    //========================================================================
+
     struct FindPropertyByName : public ::std::unary_function< ::com::sun::star::beans::Property, bool >
     {
     private:
@@ -63,7 +63,7 @@ namespace pcr
         }
     };
 
-    //========================================================================
+
     struct PropertyLessByName
                 :public ::std::binary_function  <   ::com::sun::star::beans::Property,
                                                     ::com::sun::star::beans::Property,
@@ -76,7 +76,7 @@ namespace pcr
         }
     };
 
-    //========================================================================
+
     struct TypeLessByName
                 :public ::std::binary_function  <   ::com::sun::star::uno::Type,
                                                     ::com::sun::star::uno::Type,
@@ -89,12 +89,12 @@ namespace pcr
         }
     };
 
-    //========================================================================
+
     typedef ::std::set< ::com::sun::star::beans::Property, PropertyLessByName > PropertyBag;
 
-//............................................................................
+
 } // namespace pcr
-//............................................................................
+
 
 #endif // _EXTENSIONS_FORMSCTRLR_FORMBROWSERTOOLS_HXX_
 

@@ -57,17 +57,17 @@
 #include <svx/flagsdef.hxx>
 #include <vcl/settings.hxx>
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
 
-    //========================================================================
+
     //= OFontPropertyExtractor
-    //========================================================================
+
     class OFontPropertyExtractor
     {
     protected:
@@ -167,9 +167,9 @@ namespace pcr
             _rSet.InvalidateItem(_nItemId);
     }
 
-    //========================================================================
+
     //= ControlCharacterDialog
-    //========================================================================
+
 
     ControlCharacterDialog::ControlCharacterDialog(Window* _pParent, const SfxItemSet& _rCoreSet)
         : SfxTabDialog(_pParent, "ControlFontDialog",
@@ -305,7 +305,7 @@ namespace pcr
 
         try
         {
-            // --------------------------
+
             // font name
             SfxItemState eState = _rSet.GetItemState(CFID_FONT);
 
@@ -320,7 +320,7 @@ namespace pcr
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_CHARSET  , makeAny((sal_Int16)rFontItem.GetCharSet()));
             }
 
-            // --------------------------
+
             // font height
             eState = _rSet.GetItemState(CFID_HEIGHT);
 
@@ -334,7 +334,7 @@ namespace pcr
 
             }
 
-            // --------------------------
+
             // font weight
             eState = _rSet.GetItemState(CFID_WEIGHT);
 
@@ -347,7 +347,7 @@ namespace pcr
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_WEIGHT,makeAny(nWeight));
             }
 
-            // --------------------------
+
             // font slant
             eState = _rSet.GetItemState(CFID_POSTURE);
 
@@ -360,7 +360,7 @@ namespace pcr
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_SLANT, makeAny((sal_Int16)eSlant));
             }
 
-            // --------------------------
+
             // font underline
             eState = _rSet.GetItemState(CFID_UNDERLINE);
 
@@ -382,7 +382,7 @@ namespace pcr
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_TEXTLINECOLOR, aUnoColor );
             }
 
-            // --------------------------
+
             // font strikeout
             eState = _rSet.GetItemState(CFID_STRIKEOUT);
 
@@ -396,7 +396,7 @@ namespace pcr
             }
 
 
-            // --------------------------
+
             // font wordline mode
             eState = _rSet.GetItemState(CFID_WORDLINEMODE);
 
@@ -409,7 +409,7 @@ namespace pcr
             }
 
 
-            // --------------------------
+
             // text color
             eState = _rSet.GetItemState(CFID_CHARCOLOR);
 
@@ -427,7 +427,7 @@ namespace pcr
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_TEXTCOLOR, aUnoColor );
             }
 
-            // --------------------------
+
             // font relief
             eState = _rSet.GetItemState(CFID_RELIEF);
 
@@ -439,7 +439,7 @@ namespace pcr
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_RELIEF, makeAny((sal_Int16)rReliefItem.GetValue()) );
             }
 
-            // --------------------------
+
             // font emphasis mark
             eState = _rSet.GetItemState(CFID_EMPHASIS);
 
@@ -590,8 +590,8 @@ namespace pcr
         }
     }
 
-//............................................................................
+
 }   // namespace pcr
-//............................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

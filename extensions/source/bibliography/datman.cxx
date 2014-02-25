@@ -1386,13 +1386,13 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
             // now if the form where we inserted the new model is already loaded, notify the model of this
             // Note that this implementation below is a HACK as it relies on the fact that the model adds itself
             // as load listener to it's parent, which is an implementation detail of the model.
-            //
+
             // the better solution would be the following:
             // in the current scenario, we insert a control model into a form. This results in the control model
             // adding itself as load listener to the form. Now, the form should realize that it's already loaded
             // and notify the model (which it knows as XLoadListener only) immediately. This seems to make sense.
             // (as an anologon to the XStatusListener semantics).
-            //
+
             // But this would be way too risky for this last-day fix here.
             Reference< XLoadable > xLoad( m_xForm, UNO_QUERY );
             if ( xLoad.is() && xLoad->isLoaded() )

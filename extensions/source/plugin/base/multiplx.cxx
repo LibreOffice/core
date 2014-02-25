@@ -29,9 +29,9 @@
 #include <osl/diagnose.h>
 #include <plugin/multiplx.hxx>
 
-//  ---------------------------------------------------------------------
+
 //  class MRCListenerMultiplexerHelper
-//  ---------------------------------------------------------------------
+
 MRCListenerMultiplexerHelper::MRCListenerMultiplexerHelper
 (
       const Reference< ::com::sun::star::awt::XWindow >  & rControl

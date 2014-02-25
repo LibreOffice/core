@@ -25,11 +25,11 @@
 
 <script language="JScript">
 function callOleTest(	 id)
-{   
+{
 	var factory= new ActiveXObject("com.sun.star.ServiceManager");
 	var oletest= factory.createInstance("oletest.OleTest");
 //	alert(oletest);
-		
+
 	var arr= new Array( 1, 2, 3, 4, 0);
 	var arrDouble= new Array( 1.2345, 12.345, 123,45, 1234.5, 12345);
 	var arrBool= new Array( 1, 0, 2, 0, 3);
@@ -43,7 +43,7 @@ function callOleTest(	 id)
 //	ob.value= "A JScript object";
 //	var arrObject= new Array( ob, ob, ob);
 
-	
+
 	var arrout1= new Array();
 	var arrout2= new Array();
 	var arrout3= new Array();
@@ -64,9 +64,9 @@ function callOleTest(	 id)
 	switch( id)
 	{
 	// Array in-params
-	case 1: 
+	case 1:
 		 value.Set("[]byte", arr)
-		 ret= oletest.methodByte( value); 
+		 ret= oletest.methodByte( value);
 		sfarray= new VBArray( ret);
 		document.writeln( "Param: " + arr.toString()  + "<br>");
 		document.writeln( "Returns a Sequence&lt BYTE &gt <br>" + sfarray.toArray()) ; break;
@@ -78,69 +78,69 @@ function callOleTest(	 id)
 		document.writeln( "Param: " + arrDouble.toString() +"<br>");
 		document.writeln( "Returns a Sequence&lt double &gt <br>" + sfarray.toArray()) ; break;
 
-	case 3:	
+	case 3:
 		value.Set("[]boolean", arrBool)
-		ret= oletest.methodBool( value); 
+		ret= oletest.methodBool( value);
 		sfarray= new VBArray( ret);
 		document.writeln( "Param: " + arrBool.toString() +"<br>");
 		document.writeln( "Returns a Sequence&lt BOOL &gt <br>" + sfarray.toArray()) ; break;
 
-	case 4: 
+	case 4:
 		value.Set("[]short", arr)
-		ret= oletest.methodShort( value); 
+		ret= oletest.methodShort( value);
 		sfarray= new VBArray( ret);
 		document.writeln( "Param: " + arr.toString() +"<br>");
 		document.writeln( "Returns a Sequence&lt SHORT &gt <br>" + sfarray.toArray()) ; break;
 
-	case 5: 
+	case 5:
 		value.Set("[]unsigned short", arr)
 		ret= oletest.methodUShort( value);
 		sfarray= new VBArray( ret);
 		document.writeln( "Param: " + arr.toString() +"<br>");
 		document.writeln( "Returns a Sequence&lt unsigned SHORT &gt <br>" + sfarray.toArray()) ; break;
 
-	case 6: 		
+	case 6: 
 		value.Set("[]long", arr)
-		ret= oletest.methodLong( value); 
+		ret= oletest.methodLong( value);
 		sfarray= new VBArray( ret);
 		document.writeln( "Param: " + arr.toString() +"<br>");
 		document.writeln( "Returns a Sequence&lt LONG &gt <br>" + sfarray.toArray()) ; break;
 
-	case 7:	
+	case 7:
 		value.Set("[]unsigned long", arr)
 		ret= oletest.methodULong( value);
 		sfarray= new VBArray( ret);
 		document.writeln( "Param: " + arr.toString() +"<br>");
 		document.writeln( "Returns a Sequence&lt unsigned LONG &gt <br>" + sfarray.toArray()) ; break;
 
-	case 8: 
+	case 8:
 		value.Set("[]char", arrChar)
-		ret= oletest.methodChar( value); 
+		ret= oletest.methodChar( value);
 		sfarray= new VBArray( ret);
 		document.writeln( "Param: " + arrChar.toString() +"<br>");
 		document.writeln( "Returns a Sequence&lt wchar_t &gt <br>" + sfarray.toArray()) ; break;
 
-	case 9:	
+	case 9:
 		value.Set("[]string", arrString)
-		ret= oletest.methodString( value); 
-		sfarray= new VBArray( ret);	
+		ret= oletest.methodString( value);
+		sfarray= new VBArray( ret);
 		document.writeln( "Param: " + arrString.toString() +"<br>");
 		document.writeln( "Returns a Sequence&lt UString &gt <br>" + sfarray.toArray()) ; break;
 
-	case 10: 
+	case 10:
 		value.Set("[]any", arrAny)
 		ret= oletest.methodAny( value);
 		sfarray= new VBArray( ret);
 		document.writeln( "Param: " + arrAny.toString() +"<br>");
 		document.writeln( "Returns a Sequence&lt UsrAny &gt <br>" + sfarray.toArray() ) ; break;
-		
-	case 11: 
+
+	case 11:
 		var allArray= new Array();
 		for(var i= 0; i <3; i++)
 		{
 			var value1= oletest._GetValueObject();
 			value1.Set("[]long", arr);
-			allArray[i]= value1;			
+			allArray[i]= value1;
 		}
 
 		value.Set("[][]long", allArray);
@@ -150,7 +150,7 @@ function callOleTest(	 id)
 		document.writeln( "Param: " + arrSeq.toString() +"<br>");
 		document.writeln("Returns a Sequence&lt Sequence &lt long &gt&gt <br>") ;
 		var arr1= new Array();
-		arr1= sfarray.toArray(); 
+		arr1= sfarray.toArray();
 		for( i=0; i < arr1.length; i++)
 		{
 			sfarray2= new VBArray( arr1[i]);
@@ -160,7 +160,7 @@ function callOleTest(	 id)
 		}
 		break;
 
-	case 12: 
+	case 12:
 		var array1= new Array();
 		for(var i= 0; i <3; i++)
 		{
@@ -171,18 +171,18 @@ function callOleTest(	 id)
 				value2.Set("[]long", arr);
 				array2[j]= value2;
 			}
-			
+
 			var value1= oletest._GetValueObject();
-			value1.Set("[][]long", array2)	
-			array1[i]= value1;		
+			value1.Set("[][]long", array2)
+			array1[i]= value1;
 		}
 		var valueAll= oletest._GetValueObject();
 		valueAll.Set("[][][]long",array1);
 
-		ret= oletest.methodSequence2( valueAll); 
+		ret= oletest.methodSequence2( valueAll);
 		document.writeln( "Param: " + arrSeq2.toString() +"<br>");
 		sfarray1= new VBArray( ret);
-		arr1= sfarray1.toArray(); 
+		arr1= sfarray1.toArray();
 		for( i=0; i < arr1.length; i++)
 		{
 			sfarray2= new VBArray( arr1[i]);
@@ -195,12 +195,12 @@ function callOleTest(	 id)
 				document.write( i+ " ");
 				document.writeln(j + ": "+ arr3.toString() + "<br>" );
 			}
-		
+
 		}
 		break;
 
 	case 13:
-		
+
 		var ar= new Array();
 		for( i=0; i< 3; i++)
 		{
@@ -235,105 +235,105 @@ function callOleTest(	 id)
 
 
 	// Properties: setting and getting values
-	case 200: 
+	case 200:
 		value.Set("[]byte", arr)
 		oletest.AttrByte = value;
-		ret= oletest.AttrByte; 
+		ret= oletest.AttrByte;
 		sfarray= new VBArray( ret);
 		document.writeln("Setting AttrByte: " + arr.toString() + "<p>");
 		document.writeln("Getting AttrByte: " + sfarray.toArray()); break;
 
-	case 201: 
+	case 201:
 		value.Set("[]double", arrDouble)
-		oletest.AttrDouble= value; 
-		ret= oletest.AttrDouble; 
+		oletest.AttrDouble= value;
+		ret= oletest.AttrDouble;
 		sfarray= new VBArray( ret);
 		document.writeln("Setting AttrDouble: " + arrDouble.toString() + "<p>");
 		document.writeln("Getting AttrDouble: " + sfarray.toArray()); break;
 
-	case 202: 
+	case 202:
 		value.Set("[]boolean", arrBool)
 		oletest.AttrBool= value;
-		ret= oletest.AttrBool; 
+		ret= oletest.AttrBool;
 		sfarray= new VBArray( ret);
 		document.writeln("Setting AttrBool: " + arrBool.toString() + "<p>");
 		document.writeln("Getting AttrBool: " + sfarray.toArray()); break;
 
-	case 203: 
+	case 203:
 		value.Set("[]short", arr)
-		oletest.AttrShort= value; 
-		ret= oletest.AttrShort; 
+		oletest.AttrShort= value;
+		ret= oletest.AttrShort;
 		sfarray= new VBArray( ret);
 		document.writeln("Setting AttrShort: " + arr.toString() + "<p>");
 		document.writeln("Getting AttrShort: " + sfarray.toArray()); break;
 
-	case 204: 
+	case 204:
 		value.Set("[]unsigned short", arr)
-		oletest.AttrUShort= value; 
-		ret= oletest.AttrUShort; 
+		oletest.AttrUShort= value;
+		ret= oletest.AttrUShort;
 		sfarray= new VBArray( ret);
 		document.writeln("Setting AttrUShort: " + arr.toString() + "<p>");
 		document.writeln("Getting AttrUShort: " + sfarray.toArray()); break;
 
-	case 205: 
+	case 205:
 		value.Set("[]long", arr)
-		oletest.AttrLong= value; 
-		ret= oletest.AttrLong; 
+		oletest.AttrLong= value;
+		ret= oletest.AttrLong;
 		sfarray= new VBArray( ret);
 		document.writeln("Setting AttrLong: " + arr.toString() + "<p>");
 		document.writeln("Getting AttrLong: " + sfarray.toArray()); break;
 
-	case 206: 
+	case 206:
 		value.Set("[]unsigned long", arr)
-		oletest.AttrULong= value; 
-		ret= oletest.AttrULong; 
+		oletest.AttrULong= value;
+		ret= oletest.AttrULong;
 		sfarray= new VBArray( ret);
 		document.writeln("Setting AttrULong: " + arr.toString() + "<p>");
 		document.writeln("Getting AttrULong: " + sfarray.toArray()); break;
 
-	case 207: 
+	case 207:
 		value.Set("[]char", arrChar)
-		oletest.AttrChar= value; 
-		ret= oletest.AttrChar; 
+		oletest.AttrChar= value;
+		ret= oletest.AttrChar;
 		sfarray= new VBArray( ret);
 		document.writeln("Setting AttrChar: " + arrChar.toString() + "<p>");
 		document.writeln("Getting AttrChar: " + sfarray.toArray()); break;
 
-	case 208: 
+	case 208:
 		value.Set("[]string", arrString)
-		oletest.AttrString= value; 
-		ret= oletest.AttrString; 
+		oletest.AttrString= value;
+		ret= oletest.AttrString;
 		sfarray= new VBArray( ret);
 		document.writeln("Setting AttrString: " + arrString.toString() + "<p>");
 		document.writeln("Getting AttrString: " + sfarray.toArray()); break;
 
-	case 209: 
+	case 209:
 		value.Set("[]any", arrAny)
-		oletest.AttrAny= value; 
-		ret= oletest.AttrAny; 
+		oletest.AttrAny= value;
+		ret= oletest.AttrAny;
 		sfarray= new VBArray( ret);
 		document.writeln("Setting AttrAny: " + arrAny.toString() + "<p>");
 		document.writeln("Getting AttrAny: " + sfarray.toArray()); break;
 
-	case 210: 
+	case 210:
 		var allArray= new Array();
 		for(var i= 0; i <3; i++)
 		{
 			var value1= oletest._GetValueObject();
 			value1.Set("[]long", arr);
-			allArray[i]= value1;			
+			allArray[i]= value1;
 		}
 
 		value.Set("[][]long", allArray);
 
-		oletest.AttrSequence= value; 
-		ret= oletest.AttrSequence; 
+		oletest.AttrSequence= value;
+		ret= oletest.AttrSequence;
 		sfarray= new VBArray( ret);
 
 		document.writeln( "Param: " + arrSeq.toString() +"<br>");
 		document.writeln("Returns a Sequence&lt Sequence &lt long &gt&gt <br>") ;
 		var arr1= new Array();
-		arr1= sfarray.toArray(); 
+		arr1= sfarray.toArray();
 		for( i=0; i < arr1.length; i++)
 		{
 			sfarray2= new VBArray( arr1[i]);
@@ -343,7 +343,7 @@ function callOleTest(	 id)
 		}
 		break;
 
-	case 211: 
+	case 211:
 		var array1= new Array();
 		for(var i= 0; i <3; i++)
 		{
@@ -354,18 +354,18 @@ function callOleTest(	 id)
 				value2.Set("[]long", arr);
 				array2[j]= value2;
 			}
-			
+
 			var value1= oletest._GetValueObject();
-			value1.Set("[][]long", array2)	
-			array1[i]= value1;		
+			value1.Set("[][]long", array2)
+			array1[i]= value1;
 		}
 		var valueAll= oletest._GetValueObject();
 		valueAll.Set("[][][]long",array1);
 
-		oletest.AttrSequence2= valueAll; 
-		ret= oletest.AttrSequence2; 
+		oletest.AttrSequence2= valueAll;
+		ret= oletest.AttrSequence2;
 		sfarray1= new VBArray( ret);
-		arr1= sfarray1.toArray(); 
+		arr1= sfarray1.toArray();
 		for( i=0; i < arr1.length; i++)
 		{
 			sfarray2= new VBArray( arr1[i]);
@@ -378,7 +378,7 @@ function callOleTest(	 id)
 				document.write( i+ " ");
 				document.writeln(j + ": "+ arr3.toString() + "<br>" );
 			}
-		
+
 		}
 		break;
 
@@ -393,7 +393,7 @@ function callOleTest(	 id)
 			ar[i]= valueObject;
 		}
 		value.Set("[]com.sun.star.uno.XInterface", ar);
-		
+
 		oletest.AttrXInterface= value;
 		ret= oletest.AttrXInterface;
 		sfarray= new VBArray( ret);
@@ -414,29 +414,29 @@ function callOleTest(	 id)
 		break;
 
 	// Out-parameter ------------------------------------------------------------
-	case (2000): 
-		
+	case (2000):
+
 		oletest.testout_methodByte( outValue );
 		alert("byte: " + outValue.Get() ); 	break;
-	case (2001): 
+	case (2001):
 		oletest.testout_methodDouble( outValue );
 		alert( "double: " + outValue.Get() ); break;
 	case (2002):
 		oletest.testout_methodBool( outValue );
 		alert( "boolean: " + outValue.Get() );	break;
-	case (2003): 
+	case (2003):
 		oletest.testout_methodShort( outValue );
 		alert( "short: " + outValue.Get() ); break;
 	case (2004):
 		oletest.testout_methodUShort( outValue );
 		alert( "unsigned short: " + outValue.Get() ); break;
-	case (2005): 
+	case (2005):
 		oletest.testout_methodLong( outValue );
 		alert( "long: " + outValue.Get() );	break;
-	case (2006): 
+	case (2006):
 		oletest.testout_methodULong( outValue );
 		alert( "unsigned long: " + outValue.Get() ); break;
-	case (2007): 
+	case (2007):
 		oletest.testout_methodChar( outValue );
 		alert( "char: " + outValue.Get() );	break;
 	case (2008):
@@ -452,7 +452,7 @@ function callOleTest(	 id)
 		document.writeln("use the browser's back arrow to go to the previous page <p>");
 		document.writeln( arr.toString());
 		break;
-	case (2011): 
+	case (2011):
 		oletest.testout_methodSequence2( outValue );
 		var sfarray= new VBArray( outValue.Get());
 		arr= sfarray.toArray();
@@ -481,11 +481,11 @@ function callOleTest(	 id)
 
 	// INOUT - Parameter -------------------------------------------------------------------------------
 	// The in value has to be placed on index 0 of the passed in array
-	case (500): 
+	case (500):
 		inoutValue.InitInOutParam("byte", 100);
 		oletest.testinout_methodByte( inoutValue );
 		alert("byte: " + inoutValue.Get() ); 	break;
-	case (501): 
+	case (501):
 		inoutValue.InitInOutParam("double", 3.14);
 		oletest.testinout_methodDouble( inoutValue );
 		alert( "double: " + inoutValue.Get() ); break;
@@ -493,7 +493,7 @@ function callOleTest(	 id)
 		inoutValue.InitInOutParam("boolean", false);
 		oletest.testinout_methodBool( inoutValue );
 		alert( "boolean: " + inoutValue.Get() );	break;
-	case (503): 
+	case (503):
 		inoutValue.InitInOutParam( "short", 200);
 		oletest.testinout_methodShort( inoutValue );
 		alert( "short: " + inoutValue.Get() ); break;
@@ -501,15 +501,15 @@ function callOleTest(	 id)
 		inoutValue.InitInOutParam("unsigned short", 300);
 		oletest.testinout_methodUShort( inoutValue );
 		alert( "unsigned short: " + inoutValue.Get() ); break;
-	case (505): 
+	case (505):
 		inoutValue.InitInOutParam("long", 400);
 		oletest.testinout_methodLong( inoutValue );
 		alert( "long: " + inoutValue.Get() );	break;
-	case (506): 
+	case (506):
 		inoutValue.InitInOutParam( "unsigned long", 500);
 		oletest.testinout_methodULong( inoutValue );
 		alert( "unsigned long: " + inoutValue.Get() ); break;
-	case (507): 
+	case (507):
 		inoutValue.InitInOutParam( "char", "A");
 		oletest.testinout_methodChar( inoutValue );
 		alert( "char: " + inoutValue.Get() );	break;
@@ -531,7 +531,7 @@ function callOleTest(	 id)
 		document.writeln("use the browser's back arrow to go to the previous page <p>");
 		document.writeln( arr.toString());
 		break;
-	case (511): 
+	case (511):
 		inoutValue.InitInOutParam( "[][]long", arrSeq);
 		oletest.testinout_methodSequence2( inoutValue );
 		var sfarray= new VBArray( inoutValue.Get());
@@ -552,11 +552,11 @@ function callOleTest(	 id)
 		oletest.testinout_methodXInterface( inoutValue);
 		document.write("Out value: " + inoutValue.Get().value );
 		break;
-		
 
 
-	 
-	
+
+
+
 	// Test ANY
 	// Methods
 	case 1000:
@@ -564,7 +564,7 @@ function callOleTest(	 id)
 		ret= oletest.methodAnyTest1( i);
 		document.writeln( "in: " + i + " ret: " + ret);
 		break;
-	case 1001: 
+	case 1001:
 		i= 3.14;
 		ret= oletest.methodAnyTest1( i);
 		document.writeln( "in: " + i + " ret: " + ret);
@@ -595,7 +595,7 @@ function callOleTest(	 id)
 		ret= oletest.AttrAny2;
 		document.writeln( "set: " + i + " get: " + ret);
 		break;
-	case 1011: 
+	case 1011:
 		i= 3.14;
 		oletest.AttrAny2= i;
 		ret= oletest.AttrAny2;
@@ -650,7 +650,7 @@ function funcOut( out)
 <script language="VBScript">
 
 sub callBasic(id)
-	
+
 	Dim factory
 	Set	factory= GetObject("", "com.sun.star.ServiceManager")
 
@@ -672,7 +672,7 @@ sub callBasic(id)
 			arrDim2Int(i,j) = i*2 + j
 		Next
 	Next
-	
+
 	Dim arrDim3Int(1,1,1)
 	For i= 0 To 1
 		For j= 0 To 1
@@ -685,7 +685,7 @@ sub callBasic(id)
 
 	set outValue= factory.Bridge_GetValueObject()
 	outValue.InitOutParam
-	set value= factory.Bridge_GetValueObject()	
+	set value= factory.Bridge_GetValueObject()
 	select case id
 		case 0
 			value.Set "[]byte", arrInt
@@ -763,47 +763,47 @@ sub callBasic(id)
 			a= 100
 			document.write "param: " & CStr(  a) & "<br>"
 			oletest.testinout_methodByte a
-			document.write a 
+			document.write a
 		case 101
 			a= 1.11
 			document.write "param: " & CStr(  a) & "<br>"
 			oletest.testinout_methodDouble a
-			document.write a 
+			document.write a
 		case 102
 			a= 5
 			document.write "param: "& CStr(  a) & "<br>"
 			oletest.testinout_methodBool a
-			document.write a 
+			document.write a
 		case 103
 			a= -10
 			document.write "param: "& CStr(  a) & "<br>"
 			oletest.testinout_methodShort a
-			document.write a 
+			document.write a
 		case 104
 			a= 128
 			document.write "param: "& CStr(  a) & "<br>"
 			oletest.testinout_methodUShort a
-			document.write a 
+			document.write a
 		case 105
 			a= 65556
 			document.write "param: "& CStr(  a) & "<br>"
 			oletest.testinout_methodLong a
-			document.write a 
+			document.write a
 		case 106
 			a= 65556
 			document.write "param: "& CStr(  a) & "<br>"
 			oletest.testinout_methodULong a
-			document.write a 
+			document.write a
 		case 107
 			a= "ein test string"
 			document.write "param: "& CStr(  a) & "<br>"
 			oletest.testinout_methodString a
-			document.write a 
+			document.write a
 		case 108
 			a= "W"
 			document.write "param: "& CStr(  a) & "<br>"
 			oletest.testinout_methodChar a
-			document.write a 
+			document.write a
 		case 109
 			a= "Ein String im Any"
 			document.write "param: "& CStr(  a) & "<br>"
@@ -811,69 +811,69 @@ sub callBasic(id)
 			document.write a
 // Attributes -----------------------------------------------------------------
 		case 200
-			document.write "set: " 
-			printArray arrInt 
+			document.write "set: "
+			printArray arrInt
 			oletest.AttrByte= arrInt
 			b= oletest.AttrByte
 			call printArrayEx( "<br> get: ", "<br>", b)
 		case 201
-			document.write "set: " 
-			printArray arrDouble 
+			document.write "set: "
+			printArray arrDouble
 			oletest.AttrDouble= arrDouble
 			b= oletest.AttrDouble
 			call printArrayEx( "<br> get: ", "<br>", b)
 		case 202
-			document.write "set: " 
-			printArray arrBool : 
+			document.write "set: "
+			printArray arrBool :
 			oletest.AttrBool= arrBool
 			b= oletest.AttrBool
 			call printArrayEx( "<br> get: ", "<br>", b)
 		case 203
-			document.write "set: " 
-			printArray arrInt2 : 
+			document.write "set: "
+			printArray arrInt2 :
 			oletest.AttrShort= arrInt2
 			b= oletest.AttrShort
 			call printArrayEx( "<br> get: ", "<br>", b)
 		case 204
-			document.write "set: " 
-			printArray arrInt 
+			document.write "set: "
+			printArray arrInt
 			oletest.AttrUShort= arrInt
 			b= oletest.AttrUShort
 			call printArrayEx( "<br> get: ", "<br>", b)
 		case 205
-			document.write "set: " 
+			document.write "set: "
 			printArray arrInt2
 			oletest.AttrLong= arrInt2
 			b= oletest.AttrLong
 			call printArrayEx( "<br> get: ", "<br>", b)
 		case 206
-			document.write "set: " 
-			printArray arrInt 
+			document.write "set: "
+			printArray arrInt
 			oletest.AttrULong= arrInt
 			b= oletest.AttrULong
 			call printArrayEx( "<br> get: ", "<br>", b)
 		case 207
-			document.write "set: " 
-			printArray arrString 
+			document.write "set: "
+			printArray arrString
 			oletest.AttrString= arrString
 			b= oletest.AttrString
 			call printArrayEx( "<br> get: ", "<br>", b)
 		case 208
-			document.write "set: " 
+			document.write "set: "
 			printArray arrChar
 			oletest.AttrChar= arrChar
 			b= oletest.AttrChar
 			call printArrayEx( "<br> get: ", "<br>", b)
 		case 209
-			document.write "set: " 
+			document.write "set: "
 			printArray arrAny
 			oletest.AttrAny= arrAny
 			b= oletest.AttrAny
 			call printArrayEx( "<br> get: ", "<br>", b)
 
 		case 210
-			document.write "set: <br>" 
-			printArray2 arrDim2Int : 
+			document.write "set: <br>"
+			printArray2 arrDim2Int :
 			oletest.AttrSequence= arrDim2Int
 			ret= oletest.AttrSequence
 			document.write "get: "
@@ -884,11 +884,11 @@ sub callBasic(id)
 				next
 			next
 
-// out params			
+// out params
 		case 300
 			oletest.testout_methodByte( outValue )
 			alert("byte: " &  outValue.Get() )
-		
+
 
 	end select
 end sub
@@ -904,7 +904,7 @@ end sub
 sub printArray2( arr)
 		elements1= UBound( arr, 1) - LBound( arr, 1) +1
 		elements2= UBound( arr, 2) - LBound( arr, 2) +1
-		
+
 		For i=0 To elements1 -1
 			document.write( "array " & CStr( i) & ": "  )
 			For j=0 To elements2 -1
@@ -979,7 +979,7 @@ In Out Parameter <br>
 <button onclick='callOleTest( 512)'>XInterface </Button>
 <p>
 
-Tests Array/Sequence conversion with Attributes. All params are of type Sequence and 
+Tests Array/Sequence conversion with Attributes. All params are of type Sequence and
  the element type of the Sequence is written on the buttons. <br>
 <button onclick='callOleTest( 200)'>byte </Button>
 <button onclick='callOleTest( 201)'>double</Button>
@@ -1017,7 +1017,7 @@ Test of Any parameter in a property. Any contains:<br>
 <h2> Visual Basic Tests </h2>
 Test array /Sequence conversion and return value<br>
 Template: <b> Sequence &lt type &gt method( Sequence&lt type &gt ) </b>
-<p> 
+<p>
 
 
 <button onclick='callBasic(0)'>byte</button>
@@ -1028,8 +1028,8 @@ Template: <b> Sequence &lt type &gt method( Sequence&lt type &gt ) </b>
 <button onclick='callBasic(4)'>u short</button>
 <button onclick='callBasic(5)'>long</button>
 <button onclick='callBasic(6)'>u long</button>
-<button onclick='callBasic(7)'>string</button>	 
-<button onclick='callBasic(8)'>char</button>	
+<button onclick='callBasic(7)'>string</button>
+<button onclick='callBasic(8)'>char</button>
 <button onclick='callBasic(9)'>any</button> <br>
 <button onclick='callBasic(10)'>Seq &lt int &gt</button>
 -->
@@ -1046,13 +1046,13 @@ Template: <b> void method( Sequence &lt type &gt ) </b> <br>
 <button onclick='callBasic(104)'>u short</button>
 <button onclick='callBasic(105)'>long</button>
 <button onclick='callBasic(106)'>u long</button>
-<button onclick='callBasic(107)'>string</button>	 
-<button onclick='callBasic(108)'>char</button>	
+<button onclick='callBasic(107)'>string</button>
+<button onclick='callBasic(108)'>char</button>
 <button onclick='callBasic(109)'>any</button> <br>
 -->
 <p>
 <!--
-Tests Array/Sequence conversion with <b>Attributes</b>. All params are of type Sequence and 
+Tests Array/Sequence conversion with <b>Attributes</b>. All params are of type Sequence and
  the element type of the Sequence is written on the buttons. <br>
 <button onclick='callBasic( 200)'>byte </Button>
 <button onclick='callBasic( 201)'>double</Button>

@@ -17,7 +17,7 @@
  */
 
 // so_activex.idl : IDL source for so_activex.dll
-//
+
 
 // This file will be processed by the MIDL tool to
 // produce the type library (so_activex.tlb) and marshalling code.

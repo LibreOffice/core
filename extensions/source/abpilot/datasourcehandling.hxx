@@ -25,7 +25,7 @@
 
 #include "abptypes.hxx"
 
-//========================================================================
+
 namespace com { namespace sun { namespace star {
     namespace beans {
         class XPropertySet;
@@ -35,14 +35,14 @@ namespace com { namespace sun { namespace star {
 class Window;
 
 
-//.........................................................................
+
 namespace abp
 {
-//.........................................................................
 
-    //=====================================================================
+
+
     //= ODataSourceContext
-    //=====================================================================
+
     struct ODataSourceContextImpl;
     class ODataSource;
     /// a non-UNO wrapper for the data source context
@@ -97,9 +97,9 @@ namespace abp
         ODataSource createNewDBase( const OUString& _rName ) SAL_THROW (( ));
     };
 
-    //=====================================================================
+
     //= ODataSource
-    //=====================================================================
+
     struct ODataSourceImpl;
     struct PackageAccessControl;
     /** a non-UNO wrapper for a data source
@@ -114,9 +114,9 @@ namespace abp
         ODataSourceImpl*    m_pImpl;
 
     public:
-        // ----------------------------------------------------------------
+
         // - ctor/dtor/assignment
-        // ----------------------------------------------------------------
+
         /// constructs an object which is initially invalid
         ODataSource(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB
@@ -131,11 +131,11 @@ namespace abp
         /// assignment
         ODataSource& operator=( const ODataSource& _rSource );
 
-        // ----------------------------------------------------------------
+
         /// checks whether or not the object represents a valid data source
         sal_Bool    isValid() const SAL_THROW (( ));
 
-        // ----------------------------------------------------------------
+
         /// removes the data source represented by the object from the data source context
         void        remove() SAL_THROW (( ));
             // TODO: put this into the context class
@@ -148,9 +148,9 @@ namespace abp
         sal_Bool    rename( const OUString& _rName ) SAL_THROW (( ));
             // TODO: put this into the context class
 
-        // ----------------------------------------------------------------
+
         // - connection handling
-        // ----------------------------------------------------------------
+
         /** connects to the data source represented by this object
             @param _pMessageParent
                 the window to use as parent for any error messages. If this is <NULL/>, no messages are displayed
@@ -171,7 +171,7 @@ namespace abp
         /// register the data source under the given name in the configuration
         void        registerDataSource( const OUString& _sRegisteredDataSourceName )  SAL_THROW (( ));
 
-        // ----------------------------------------------------------------
+
         /** retrieves the tables names from the connection
             <p>to be called when <method>isConnection</method> returns <TRUE/> only</p>
         */
@@ -185,7 +185,7 @@ namespace abp
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getDataSource() const SAL_THROW (( ));
 
 
-        // ----------------------------------------------------------------
+
         /** set a new data source.
             <p>Available to selected clients only</p>
         */
@@ -199,9 +199,9 @@ namespace abp
         ODataSource( ); // never implemented
     };
 
-//.........................................................................
+
 }   // namespace abp
-//.........................................................................
+
 
 #endif // EXTENSIONS_ABP_DATASOURCEHANDLING_HXX
 

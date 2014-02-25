@@ -23,10 +23,10 @@
 #include "controlwizard.hxx"
 #include "commonpagesdbp.hxx"
 
-//.........................................................................
+
 namespace dbp
 {
-//.........................................................................
+
 
 #define LCW_STATE_DATASOURCE_SELECTION  0
 #define LCW_STATE_TABLESELECTION        1
@@ -34,9 +34,9 @@ namespace dbp
 #define LCW_STATE_FIELDLINK             3
 #define LCW_STATE_COMBODBFIELD          4
 
-    //=====================================================================
+
     //= OListComboSettings
-    //=====================================================================
+
     struct OListComboSettings : public OControlWizardSettings
     {
         OUString          sListContentTable;
@@ -45,9 +45,9 @@ namespace dbp
         OUString          sLinkedListField;
     };
 
-    //=====================================================================
+
     //= OListComboWizard
-    //=====================================================================
+
     class OListComboWizard : public OControlWizard
     {
     protected:
@@ -82,9 +82,9 @@ namespace dbp
         void implApplySettings();
     };
 
-    //=====================================================================
+
     //= OLCPage
-    //=====================================================================
+
     class OLCPage : public OControlWizardPage
     {
     public:
@@ -101,9 +101,9 @@ namespace dbp
             getTableFields(sal_Bool _bNeedIt);
     };
 
-    //=====================================================================
+
     //= OContentTableSelection
-    //=====================================================================
+
     class OContentTableSelection : public OLCPage
     {
     protected:
@@ -128,9 +128,9 @@ namespace dbp
         DECL_LINK( OnTableSelected, ListBox* );
     };
 
-    //=====================================================================
+
     //= OContentFieldSelection
-    //=====================================================================
+
     class OContentFieldSelection : public OLCPage
     {
     protected:
@@ -158,9 +158,9 @@ namespace dbp
         virtual bool        canAdvance() const;
     };
 
-    //=====================================================================
+
     //= OLinkFieldsPage
-    //=====================================================================
+
     class OLinkFieldsPage : public OLCPage
     {
     protected:
@@ -190,9 +190,9 @@ namespace dbp
         DECL_LINK(OnSelectionModified, void*);
     };
 
-    //=====================================================================
+
     //= OComboDBFieldPage
-    //=====================================================================
+
     class OComboDBFieldPage : public ODBFieldPage
     {
     public:
@@ -211,9 +211,9 @@ namespace dbp
         virtual OUString& getDBFieldSetting();
     };
 
-//.........................................................................
+
 }   // namespace dbp
-//.........................................................................
+
 
 #endif // _EXTENSIONS_DBP_LISTCOMBOWIZARD_HXX_
 

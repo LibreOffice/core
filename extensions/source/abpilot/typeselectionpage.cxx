@@ -25,17 +25,17 @@
 #include <com/sun/star/sdbc/DriverManager.hpp>
 #include <comphelper/processfactory.hxx>
 
-//.........................................................................
+
 namespace abp
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdbc;
 
-    //=====================================================================
+
     //= TypeSelectionPage
-    //=====================================================================
+
 
     TypeSelectionPage::TypeSelectionPage( OAddessBookSourcePilot* _pParent )
         :AddressBookSourcePage(_pParent, ModuleRes(RID_PAGE_SELECTABTYPE))
@@ -65,18 +65,18 @@ namespace abp
         // of fdo#57285 "Address Book Data Source Wizard lists 'Mac OS X address
         // book' on Linux" and fdo#57322 "Moz-free LDAP Address Book driver."
         // In accordance with ancient OOo 3.3, this is as follows:
-        //
+
         // On Linux:
         // - EVOLUTION, EVOLUTION_GROUPWISE, EVOLUTION_LDAP (if applicable)
         // - MORK (via mork driver, which is built unconditionally)
         // - KAB (if applicable)
         // - OTHER
-        //
+
         // On Mac OS X:
         // - MACAB (if applicable)
         // - MORK (via mork driver, which is built unconditionally)
         // - OTHER
-        //
+
         // On Windows:
         // - MORK, THUNDERBIRD, LDAP, OUTLOOK, OUTLOOKEXPRESS (via mozab driver,
         //   if WITH_MOZILLA)
@@ -272,8 +272,8 @@ namespace abp
         return 0L;
     }
 
-//.........................................................................
+
 }   // namespace abp
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

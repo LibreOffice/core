@@ -27,16 +27,16 @@
 
 #include <memory>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     class CellBindingHelper;
     class IPropertyEnumRepresentation;
-    //====================================================================
+
     //= CellBindingPropertyHandler
-    //====================================================================
+
     class CellBindingPropertyHandler;
     typedef HandlerComponentBase< CellBindingPropertyHandler > CellBindingPropertyHandler_Base;
     class CellBindingPropertyHandler : public CellBindingPropertyHandler_Base
@@ -91,9 +91,9 @@ namespace pcr
         void impl_updateDependentProperty_nothrow( PropertyId _nPropId, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI >& _rxInspectorUI ) const;
     };
 
-//........................................................................
+
 } // namespace pcr
-//........................................................................
+
 
 #endif // EXTENSIONS_SOURCE_PROPCTRLR_CELLBINDINGHANDLER_HXX
 

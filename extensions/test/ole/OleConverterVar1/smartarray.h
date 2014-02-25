@@ -162,17 +162,17 @@ public:
 //      rgsabound[0].lLbound= 0;
 //      m_array= SafeArrayCreateVector( VT_UNKNOWN, 0, count);
 //      SafeArrayLock( m_array);
-//
+
 //      IUnknown* *pData;
 //      if( m_array && (SUCCEEDED( SafeArrayAccessData( m_array, (void**)&pData)) ) )
 //      {
-//
+
 //          for( int i=0; i< count; i++)
 //          {
 //              CComVariant varSource( parParams[i]);
 //              switch (destVartype)
 //              {
-//
+
 //              case VT_UNKNOWN:
 //                  {
 //                      pData[i]= parParams[i];

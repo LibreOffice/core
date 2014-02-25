@@ -26,14 +26,14 @@
 class SfxItemSet;
 class SfxItemPool;
 class SfxPoolItem;
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= OControlFontDialog
-    //====================================================================
+
     class OControlFontDialog;
     typedef ::svt::OGenericUnoDialog                                        OControlFontDialog_DBase;
     typedef ::comphelper::OPropertyArrayUsageHelper< OControlFontDialog >   OControlFontDialog_PBase;
@@ -87,9 +87,9 @@ namespace pcr
         virtual void    executedDialog(sal_Int16 _nExecutionResult);
     };
 
-//........................................................................
+
 }   // namespace pcr
-//........................................................................
+
 
 #endif // _EXTENSIONS_PROPCTRLR_CONTROLFONTDIALOG_HXX_
 
