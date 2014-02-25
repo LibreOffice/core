@@ -748,7 +748,7 @@ SfxPoolItem* SvxLRSpaceItem::Create( SvStream& rStrm, sal_uInt16 nVersion ) cons
     {
         rStrm.ReadUInt16( left ).ReadUInt16( prpleft ).ReadUInt16( right ).ReadUInt16( prpright ).ReadInt16( firstline ).                 ReadUInt16( prpfirstline ).ReadUInt16( txtleft ).ReadSChar( autofirst );
 
-        sal_uInt32 nPos = rStrm.Tell();
+        sal_Size nPos = rStrm.Tell();
         sal_uInt32 nMarker;
         rStrm.ReadUInt32( nMarker );
         if ( nMarker == BULLETLR_MARKER )

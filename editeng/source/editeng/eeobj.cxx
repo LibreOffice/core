@@ -64,7 +64,7 @@ uno::Any EditDataObject::getTransferData( const datatransfer::DataFlavor& rFlavo
 
         SvMemoryStream* pStream = ( nT == SOT_FORMATSTR_ID_EDITENGINE ) ? &GetStream() : &GetRTFStream();
         pStream->Seek( STREAM_SEEK_TO_END );
-        sal_uLong nLen = pStream->Tell();
+        sal_Size nLen = pStream->Tell();
         pStream->Seek(0);
 
         uno::Sequence< sal_Int8 > aSeq( nLen );
