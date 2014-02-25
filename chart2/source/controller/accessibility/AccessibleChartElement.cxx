@@ -117,7 +117,7 @@ void AccessibleChartElement::InitTextEdit()
         }
 }
 
-//
+
 //             Interfaces
 
 // ________ AccessibleBase::XAccessibleContext ________

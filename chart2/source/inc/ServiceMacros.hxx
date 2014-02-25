@@ -27,9 +27,9 @@ static com::sun::star::uno::Sequence< OUString >
     Class::getSupportedServiceNames_Static();
 */
 
-//
+
 // XServiceInfo decl
-//
+
 namespace apphelper
 {
 
@@ -48,9 +48,9 @@ namespace apphelper
     static ::com::sun::star::uno::Sequence< OUString >               \
         getSupportedServiceNames_Static();
 
-//
+
 // XServiceInfo impl
-//
+
 
 #define APPHELPER_XSERVICEINFO_IMPL( Class, ImplName )                              \
 OUString SAL_CALL Class::getImplementationName()                     \
@@ -87,9 +87,9 @@ Class::getSupportedServiceNames()                                           \
     return getSupportedServiceNames_Static();                               \
 }
 
-//
+
 // Service factory helper decl+impl
-//
+
 //to use this macro you need to provide a constructor:
 //class( Reference< XComponentContext > const & xContext )
 //and implement OWeakObject

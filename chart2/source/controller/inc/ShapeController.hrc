@@ -19,7 +19,7 @@
 #ifndef CHART_SHAPECONTROLLER_HRC
 #define CHART_SHAPECONTROLLER_HRC
 
-//-----------------------------------------------------------------------------
+
 //Command Ids:
 #define COMMAND_ID_FORMAT_LINE                  1
 #define COMMAND_ID_FORMAT_AREA                  2

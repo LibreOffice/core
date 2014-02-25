@@ -36,7 +36,7 @@
 #define FT_TEXTDIR              6038
 #define LB_TEXTDIR              6039
 
-//------------
+
 //from old chart tplabel.hrc
 
 #define CB_AXIS_LABEL_SCHOW_DESCR       1

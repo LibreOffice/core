@@ -20,10 +20,10 @@
 #ifndef _CHART2_RESOURCE_IDS_HRC
 #define _CHART2_RESOURCE_IDS_HRC
 
-//-----------------------------------------------------------------------------
+
 //for strings see Strings.hrc
 //for Bimaps see Bimaps.hrc
-//-----------------------------------------------------------------------------
+
 //Dialog Ids:
 #define DLG_CHART_WIZARD    902
 #define DLG_DATA_SOURCE     901
@@ -31,7 +31,7 @@
 #define DLG_LEGEND          835
 #define DLG_SPLINE_PROPERTIES 904
 
-//-----------------------------------------------------------------------------
+
 //TabPage Ids:
 #define TP_LEGEND_POS   900
 #define TP_DATA_DESCR   901
@@ -52,12 +52,12 @@
 #define TP_YERRORBAR    919
 #define TP_XERRORBAR    923
 
-//-----------------------------------------------------------------------------
+
 //listbox Ids:
 #define LB_BAR_GEOMETRY 1000
 #define LB_TEXT_SEPARATOR 1001
 
-//-----------------------------------------------------------------------------
+
 
 #endif
 

@@ -156,7 +156,7 @@ protected: //member
 
     typedef std::pair< sal_Int32, sal_Int32 > tFullAxisIndex; //first index is the dimension, second index is the axis index that indicates whether this is a main or secondary axis
 
-    //
+
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShapes >                m_xLogicTargetForGrids;
     ::com::sun::star::uno::Reference<
@@ -171,7 +171,7 @@ protected: //member
     CuboidPlanePosition m_eBackWallPos;
     CuboidPlanePosition m_eBottomPos;
 
-    //
+
     MergedMinimumAndMaximumSupplier m_aMergedMinimumAndMaximumSupplier; //this is used only for autoscaling purpose
 
     ::com::sun::star::uno::Sequence< OUString > m_aSeriesNamesForZAxis;

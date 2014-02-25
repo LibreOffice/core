@@ -21,7 +21,7 @@
 
 #include <svl/solar.hrc>
 
-//-----------------------------------------------------------------------------
+
 // context menus
 
 #define RID_CONTEXTMENU_SHAPE       (RID_APP_START + 1)

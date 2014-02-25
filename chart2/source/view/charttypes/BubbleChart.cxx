@@ -217,7 +217,7 @@ void BubbleChart::createShapes()
     m_bPointsWereSkipped = false;
     sal_Int32 nSkippedPoints = 0;
     sal_Int32 nCreatedPoints = 0;
-    //
+
 
     calculateMaximumLogicBubbleSize();
     calculateBubbleSizeScalingFactor();

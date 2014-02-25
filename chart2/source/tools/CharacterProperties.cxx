@@ -243,7 +243,7 @@ void CharacterProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharacterPropertiesAsian
-    // =====
+
     // CharFontNameAsian
     rOutProperties.push_back(
         Property( "CharFontNameAsian",
@@ -310,7 +310,7 @@ void CharacterProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
     // CharacterPropertiesComplex
-    // ===
+
     // CharFontNameComplex
     rOutProperties.push_back(
         Property( "CharFontNameComplex",

@@ -61,6 +61,6 @@ String STR_LINETYPE_STEPPED
     Text [ en-US ] = "Stepped";
 };
 
-//-----------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

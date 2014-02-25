@@ -101,7 +101,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
         };
     }
 
-    // ____________
+
 
     public void before()
     {
@@ -117,7 +117,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
             XChartDocument.class, mxChartModel );
     }
 
-    // ____________
+
 
     public void after()
     {
@@ -140,7 +140,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
         }
     }
 
-    // ____________
+
 
     public void testTitle()
     {
@@ -190,7 +190,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
         }
     }
 
-    // ____________
+
 
     public void testSubTitle()
     {
@@ -235,7 +235,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
         }
     }
 
-    // ------------
+
 
     public void testDiagram()
     {
@@ -348,7 +348,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
         }
     }
 
-    // ------------
+
 
     public void testAxis()
     {
@@ -445,7 +445,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
         }
     }
 
-    // ------------
+
 
     public void testLegend()
     {
@@ -492,7 +492,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
         }
     }
 
-    // ------------
+
 
     public void testArea()
     {
@@ -528,7 +528,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
         }
     }
 
-    // ------------
+
 
     public void testChartType()
     {
@@ -594,7 +594,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
         }
     }
 
-    // ------------
+
 
     public void testAggregation()
     {
@@ -608,7 +608,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
         assure( "querying back to old interface failed", xDoc != null );
     }
 
-    // ------------
+
 
     public void testDataSeriesAndPoints()
     {
@@ -707,7 +707,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
         }
     }
 
-    // ------------
+
 
     public void testStatistics()
     {
@@ -729,7 +729,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
         }
     }
 
-    // ------------
+
 
     public void setStockData_Type4()
     {
@@ -783,7 +783,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
         }
     }
 
-    // ------------
+
 
     public void testStockProperties()
     {
@@ -831,7 +831,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
         }
     }
 
-    // ------------
+
 
     public void testFactory()
     {
@@ -851,7 +851,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
         }
     }
 
-    // ------------
+
 
     public void testData()
     {
@@ -932,13 +932,13 @@ public class TestCaseOldAPI extends ComplexTestCase {
         }
     }
 
-    // ================================================================================
+
 
     private XModel                    mxChartModel;
     private XChartDocument            mxOldDoc;
     private boolean                   mbCreateView;
 
-    // --------------------------------------------------------------------------------
+
 
     private XModel createDocument( String sDocType )
     {
@@ -965,7 +965,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
         return aResult;
     }
 
-    // ------------
+
 
     public XModel createChartModel()
     {
@@ -985,7 +985,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
         return aResult;
     }
 
-    // ------------
+
 
     private XComponentContext getComponentContext( XMultiServiceFactory xFact )
     {
@@ -1010,7 +1010,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
         return xResult;
     }
 
-    // ------------
+
 
     private void printInterfacesAndServices( Object oObj )
     {
@@ -1020,7 +1020,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
         util.dbg.printInterfaces( (XInterface)oObj, true );
     }
 
-    // ------------
+
 
     /// see rtl/math.hxx
     private boolean approxEqual( double a, double b )
@@ -1032,7 +1032,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
             < ((a < 0.0 ? -a : a) * (1.0 / (16777216.0 * 16777216.0)));
     }
 
-    // ------------
+
     /** returns true if a and b differ no more than tolerance.
 
         @param tolerance
