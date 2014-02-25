@@ -100,9 +100,9 @@ namespace connectivity
             sal_Bool CreateMemoFile(const INetURLObject& aFile);
             sal_Bool HasMemoFields() const { return m_aHeader.db_typ > dBaseIV;}
             sal_Bool ReadMemoHeader();
-            sal_Bool ReadMemo(sal_uIntPtr nBlockNo, ORowSetValue& aVariable);
+            sal_Bool ReadMemo(sal_Size nBlockNo, ORowSetValue& aVariable);
 
-            sal_Bool WriteMemo(const ORowSetValue& aVariable, sal_uIntPtr& rBlockNr);
+            sal_Bool WriteMemo(const ORowSetValue& aVariable, sal_Size& rBlockNr);
             sal_Bool WriteBuffer();
             sal_Bool UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols, bool bForceAllFields);
             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> isUniqueByColumnName(sal_Int32 _nColumnPos);

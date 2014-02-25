@@ -859,7 +859,7 @@ SvStream& connectivity::dbase::WriteONDXPage(SvStream &rStream, const ONDXPage& 
         memset(aEmptyData,0x00,DINDEX_PAGE_SIZE);
         rStream.Write((sal_uInt8*)aEmptyData,DINDEX_PAGE_SIZE);
     }
-    sal_uIntPtr nCurrentPos = rStream.Seek(rPage.GetPagePos() * DINDEX_PAGE_SIZE);
+    sal_Size nCurrentPos = rStream.Seek(rPage.GetPagePos() * DINDEX_PAGE_SIZE);
     OSL_UNUSED( nCurrentPos );
 
     nValue = rPage.nCount;
@@ -873,9 +873,9 @@ SvStream& connectivity::dbase::WriteONDXPage(SvStream &rStream, const ONDXPage& 
     // check if we have to fill the stream with '\0'
     if(i < rPage.rIndex.getHeader().db_maxkeys)
     {
-        sal_uIntPtr nTell = rStream.Tell() % DINDEX_PAGE_SIZE;
+        sal_Size nTell = rStream.Tell() % DINDEX_PAGE_SIZE;
         sal_uInt16 nBufferSize = rStream.GetBufferSize();
-        sal_uIntPtr nRemainSize = nBufferSize - nTell;
+        sal_Size nRemainSize = nBufferSize - nTell;
         if ( nRemainSize <= nBufferSize )
         {
             char* pEmptyData = new char[nRemainSize];
