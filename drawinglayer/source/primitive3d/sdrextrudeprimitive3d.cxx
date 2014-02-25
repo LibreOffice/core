@@ -29,11 +29,11 @@
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
 #include <drawinglayer/attribute/sdrshadowattribute.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 using namespace com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -198,14 +198,14 @@ namespace drawinglayer
 
                         // to create vertical edges at non-C1/C2 steady loops, use maCorrectedPolyPolygon
                         // directly since the 3D Polygons do not suport this.
-                        //
+
                         // Unfortunately there is no bezier polygon provided by the chart module; one reason is
                         // that the API for extrude wants a 3D polygon geometry (for historical reasons, i guess)
                         // and those have no beziers. Another reason is that he chart module uses self-created
                         // stuff to create the 2D geometry (in ShapeFactory::createPieSegment), but this geometry
                         // does not contain bezier infos, either. The only way which is possible for now is to 'detect'
                         // candidates for vertical edges of pie segments by looking for the angles in the polygon.
-                        //
+
                         // This is all not very well designed ATM. Ideally, the ReducedLineGeometry is responsible
                         // for creating the outer geometry edges (createReducedOutlines), but for special edges
                         // like the vertical ones for pie center and both start/end, the incarnation with the

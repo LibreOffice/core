@@ -28,7 +28,7 @@
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <vcl/svapp.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // VDev RevDevice provider
 
 namespace
@@ -38,7 +38,7 @@ namespace
     //the scoped_timed_RefDev owns a ImpTimeRefDev and releases it on dtor
     //or disposing of the default XComponentContext which causes the underlying
     //OutputDevice to get released
-    //
+
     //The ImpTimerRefDev itself, if the timeout ever gets hit, will call
     //reset on the scoped_timed_RefDev to release the ImpTimerRefDev early
     //if its unused for a few minutes
@@ -119,7 +119,7 @@ namespace
     }
 } // end of anonymous namespace
 
-//////////////////////////////////////////////////////////////////////////////
+
 // access to one global ImpTimedRefDev incarnation in namespace drawinglayer::primitive
 
 namespace drawinglayer
@@ -358,7 +358,7 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 // helper methods for vcl font handling
 
 namespace drawinglayer

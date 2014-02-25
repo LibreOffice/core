@@ -24,7 +24,7 @@
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -38,7 +38,7 @@ namespace drawinglayer
                 {
                     // TextDecoratedPortionPrimitive2D can produce the following primitives
                     // when being decomposed:
-                    //
+
                     // - TextSimplePortionPrimitive2D
                     // - PolygonWavePrimitive2D
                     //      - PolygonStrokePrimitive2D
@@ -65,7 +65,7 @@ namespace drawinglayer
                 {
                     // TextSimplePortionPrimitive2D can produce the following primitives
                     // when being decomposed:
-                    //
+
                     // - PolyPolygonColorPrimitive2D
                     // - TextEffectPrimitive2D
                     //      - ModifiedColorPrimitive2D
@@ -84,11 +84,11 @@ namespace drawinglayer
                 // TextDecoratedPortionPrimitive2D, inside of the mnInText marks
                 // the following primitives can occur containing geometry data
                 // from text decomposition:
-                //
+
                 // - PolyPolygonColorPrimitive2D
                 // - PolygonHairlinePrimitive2D
                 // - PolyPolygonHairlinePrimitive2D (for convenience)
-                //
+
                 case PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D :
                 {
                     if(mnInText)

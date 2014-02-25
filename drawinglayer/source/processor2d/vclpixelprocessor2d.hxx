@@ -27,7 +27,7 @@
 
 #include <boost/scoped_ptr.hpp>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // predefines
 
 namespace drawinglayer { namespace primitive2d {
@@ -37,7 +37,7 @@ namespace drawinglayer { namespace primitive2d {
     class BorderLinePrimitive2D;
 }}
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -77,7 +77,7 @@ namespace drawinglayer
     } // end of namespace processor2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_DRAWINGLAYER_PROCESSOR2D_VCLPIXELPROCESSOR2D_HXX
 

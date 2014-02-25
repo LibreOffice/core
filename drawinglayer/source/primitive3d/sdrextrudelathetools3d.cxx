@@ -32,12 +32,12 @@
 #include <drawinglayer/geometry/viewinformation3d.hxx>
 #include <numeric>
 
-//////////////////////////////////////////////////////////////////////////////
+
 // decompositon helpers for extrude/lathe (rotation) objects
 
 namespace
 {
-    //////////////////////////////////////////////////////////////////////////////
+
     // common helpers
 
     basegfx::B2DPolyPolygon impScalePolyPolygonOnCenter(
@@ -343,7 +343,7 @@ namespace
     }
 } // end of anonymous namespace
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {

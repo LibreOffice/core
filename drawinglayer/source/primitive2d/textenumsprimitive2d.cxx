@@ -19,7 +19,7 @@
 
 #include <drawinglayer/primitive2d/textenumsprimitive2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {

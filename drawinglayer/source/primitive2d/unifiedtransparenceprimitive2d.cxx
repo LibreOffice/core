@@ -26,11 +26,11 @@
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 using namespace com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -76,16 +76,16 @@ namespace drawinglayer
                 // corresponding to the transparence value. Problem is that in most systems, the right
                 // and bottom pixel array is not filled when filling polygons, thus this would not
                 // always produce a complete transparent bitmap. There are some solutions:
-                //
+
                 // - Grow the used polygon range by one discrete unit in X and Y. This
                 // will make the decomposition view-dependent.
-                //
+
                 // - For all filled polygon renderings, dra wthe polygon outline extra. This
                 // would lead to unwanted side effects when using concatenated polygons.
-                //
+
                 // - At this decomposition, add a filled polygon and a hairline polygon. This
                 // solution stays view-independent.
-                //
+
                 // I will take the last one here. The small overhead of two primitives will only be
                 // used when UnifiedTransparencePrimitive2D is not handled directly.
                 const basegfx::B2DRange aPolygonRange(getB2DRangeFromPrimitive2DSequence(getChildren(), rViewInformation));

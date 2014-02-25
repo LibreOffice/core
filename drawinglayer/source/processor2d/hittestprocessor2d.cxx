@@ -33,7 +33,7 @@
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -213,12 +213,12 @@ namespace drawinglayer
 
                 // This is needed to check hit with 3D shadows, too. HitTest is without shadow
                 // to keep compatible with previous versions. Keeping here as reference
-                //
+
                 // if(!getHit())
                 // {
                 //     // if scene has shadow, check hit with shadow, too
                 //     const primitive2d::Primitive2DSequence xExtracted2DSceneShadow(rCandidate.getShadow2D(getViewInformation2D()));
-                //
+
                 //     if(xExtracted2DSceneShadow.hasElements())
                 //     {
                 //         // proccess extracted 2D content
@@ -236,14 +236,14 @@ namespace drawinglayer
                 }
 
                 // This is what the previous version did. Keeping it here for reference
-                //
+
                 // // 2D Scene primitive containing 3D stuff; extract 2D contour in world coordinates
                 // // This may be refined later to an own 3D HitTest renderer which processes the 3D
                 // // geometry directly
                 // const primitive2d::ScenePrimitive2D& rScenePrimitive2DCandidate(static_cast< const primitive2d::ScenePrimitive2D& >(rCandidate));
                 // const primitive2d::Primitive2DSequence xExtracted2DSceneGeometry(rScenePrimitive2DCandidate.getGeometry2D());
                 // const primitive2d::Primitive2DSequence xExtracted2DSceneShadow(rScenePrimitive2DCandidate.getShadow2D(getViewInformation2D()));
-                //
+
                 // if(xExtracted2DSceneGeometry.hasElements() || xExtracted2DSceneShadow.hasElements())
                 // {
                 //     // proccess extracted 2D content
@@ -523,7 +523,7 @@ namespace drawinglayer
                     {
                         // Class of primitives for which just the BoundRect of the primitive itself
                         // will be used for HitTest currently.
-                        //
+
                         // This may be refined in the future, e.g:
                         // - For Bitamps, the mask and/or transparence information may be used
                         // - For MetaFiles, the MetaFile content may be used

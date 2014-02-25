@@ -22,7 +22,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <rtl/instance.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {

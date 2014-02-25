@@ -444,10 +444,10 @@ namespace drawinglayer
             if(bTryTilingDirect && rFillGraphicAttribute.getTiling())
             {
                 // content is bitmap(ex)
-                //
+
                 // for SVG support, force decomposition when SVG is present. This will lead to use
                 // the primitive representation of the svg directly.
-                //
+
                 // when graphic is animated, force decomposition to use the correct graphic, else
                 // fill style will not be animated
                 if(GRAPHIC_BITMAP == rFillGraphicAttribute.getGraphic().GetType()
