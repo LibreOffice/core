@@ -223,7 +223,6 @@ void    XFFrameStyle::ToXml(IXFStream *pStrm)
     pAttrList->AddAttribute( A2OUSTR("style:horizontal-pos"), GetFrameXPos(m_eXPos) );
     pAttrList->AddAttribute( A2OUSTR("style:horizontal-rel"), GetFrameXRel(m_eXRel) );
 
-    //
     pStrm->StartElement( A2OUSTR("style:properties") );
     if( m_pColumns )
         m_pColumns->ToXml(pStrm);

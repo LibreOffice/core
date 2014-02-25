@@ -202,7 +202,6 @@ void LwpPageLayout::ParseBorders(XFPageMaster *pm1)
     }
 }
 
-
 /**
 * @descr:   set page shadow
 *
@@ -749,7 +748,6 @@ void LwpHeaderLayout::Read()
     m_pObjStrm->SkipExtra();
 }
 
-
 void LwpHeaderLayout::RegisterStyle(XFPageMaster* pm1)
 {
     XFHeaderStyle* pHeaderStyle = new XFHeaderStyle();
@@ -858,7 +856,6 @@ void LwpHeaderLayout::ParseBackColor(XFHeaderStyle* pHeaderStyle)
         pHeaderStyle->SetBackColor(XFColor(pColor->To24Color()));
     }
 }
-
 
 void LwpHeaderLayout::ParseWaterMark(XFHeaderStyle * pHeaderStyle)
 {
@@ -1048,7 +1045,6 @@ void LwpFooterLayout::RegisterStyle(XFMasterPage* mp1)
     }
     mp1->SetFooter(pFooter);
 }
-
 
 void LwpFooterLayout::ParseWaterMark(XFFooterStyle * pFooterStyle)
 {

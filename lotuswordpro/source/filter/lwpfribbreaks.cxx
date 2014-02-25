@@ -124,7 +124,6 @@ void LwpFribPageBreak::Read(LwpObjectStream * pObjStrm, sal_uInt16 /*len*/)
     m_Layout.ReadIndexed(pObjStrm);
 }
 
-
 void LwpFribPageBreak::RegisterBreakStyle(LwpPara* pPara)
 {
     XFParaStyle* pBaseStyle =  pPara->GetXFParaStyle();

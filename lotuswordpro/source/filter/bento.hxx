@@ -408,9 +408,7 @@ public: // Internal methods
     pCBenNamedObjectListElmt pPrevNamedObjectListElmt);
     const char * GetName() { return csName.data(); }
 
-
     const char * GetNameCStr() { return csName.c_str(); }
-
 
     void SetPosition(BenContainerPos Pos) { cPos = Pos; }
     BenContainerPos GetPosition(void) { return cPos; }
@@ -444,7 +442,6 @@ public: // Internal methods
     pPrevNamedObjectListElmt) { ; }
     virtual bool IsTypeName();
 };
-
 
 } // end namespace OpenStormBento
 #endif

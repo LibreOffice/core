@@ -60,7 +60,6 @@
 #ifndef     _IXFSTREAM_INC
 #define     _IXFSTREAM_INC
 
-
 #include <rtl/ustring.hxx>
 
 class IXFAttrList;

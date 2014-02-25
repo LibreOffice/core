@@ -84,9 +84,8 @@ bool LtgGmTime(long rtime,LtTm& rtm)
     tmptim = (long)(caltim / FOURYEAR_SEC);
     caltim -= ((long)tmptim * FOURYEAR_SEC);
 
-    //
     //Determine which year of the interval
-    //
+
     // 1970, 1974, 1978,...,etc.
     tmptim = (tmptim * 4) + 70;
 
@@ -117,20 +116,19 @@ bool LtgGmTime(long rtime,LtTm& rtm)
         }
     }
 
-    //
     //tmptim now holds the value for tm_year. caltim now holds the
     //number of elapsed seconds since the beginning of that year.
-    //
+
     rtm.tm_year = tmptim;
-    //
+
     //Determine days since January 1 (0 - 365). This is the tm_yday value.
     //Leave caltim with number of elapsed seconds in that day.
-    //
+
     rtm.tm_yday = (long)(caltim / DAY_SEC);
     caltim -= (long)(rtm.tm_yday) * DAY_SEC;
-    //
+
     //Determine months since January (0 - 11) and day of month (1 - 31)
-    //
+
     long* mdays;
     if ( islpyr )
     {
@@ -147,14 +145,13 @@ bool LtgGmTime(long rtime,LtTm& rtm)
 
     rtm.tm_mday = rtm.tm_yday - mdays[tmptim];
 
-    //
     //Determine days since Sunday (0 - 6)
-    //
+
     rtm.tm_wday = ((long)(rtime / DAY_SEC) + BASE_DOW) % 7;
-    //
+
     //Determine hours since midnight (0 - 23), minutes after the hour
     //(0 - 59), and seconds after the minute (0 - 59).
-    //
+
     rtm.tm_hour = (long)(caltim / 3600);
     caltim -= (long)rtm.tm_hour * 3600;
 
@@ -163,9 +160,6 @@ bool LtgGmTime(long rtime,LtTm& rtm)
 
     rtm.tm_isdst = 0;
 
-    //
-    //
-    //
     //adjust year & month
     rtm.tm_year += 1900;
     ++(rtm.tm_mon);

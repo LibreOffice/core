@@ -85,7 +85,6 @@
 
 #include "lwpsilverbullet.hxx"
 
-
 LwpParaStyle::LwpParaStyle(LwpObjectHeader& objHdr, LwpSvStream* pStrm) :
 LwpTextStyle(objHdr, pStrm), m_pKinsokuOptsOverride(new LwpKinsokuOptsOverride),
 m_pBulletOverride(new LwpBulletOverride)
@@ -152,7 +151,6 @@ void LwpParaStyle::Read()
             m_BackgroundStyle.ReadIndexed(m_pObjStrm);
             m_pObjStrm->SkipExtra();
         }
-
 
     }
 }
@@ -222,7 +220,6 @@ void LwpParaStyle::Apply(XFParaStyle *pParaStyle)
             pParaStyle->SetBackColor( aXFColor );
         }
     }
-
 
     //add tab style
     pPiece = dynamic_cast<LwpVirtualPiece*>(m_TabStyle.obj());
@@ -686,7 +683,6 @@ void LwpParaStyle::ApplyTab(XFParaStyle *pParaStyle, LwpTabOverride *pTabOverRid
 
 }
 
-
 void LwpParaStyle::RegisterStyle()
 {
     XFParaStyle* pStyle = new XFParaStyle();
@@ -778,7 +774,6 @@ LwpNumberingOverride* LwpParaStyle::GetNumberingOverride() const
         return dynamic_cast<LwpNumberingOverride*>(pPiece->GetOverride());
     return NULL;
 }
-
 
 /**************************************************************************
  * @short:

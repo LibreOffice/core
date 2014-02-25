@@ -108,7 +108,6 @@ protected:
     LwpOverride     *m_pOverride;
 };
 
-
 class LwpParaBorderPiece : public LwpVirtualPiece
 {
 public:
@@ -144,7 +143,6 @@ public:
         m_pOverride = new LwpTabOverride();
     }
 };
-
 
 class LwpBackgroundPiece : public LwpVirtualPiece
 {

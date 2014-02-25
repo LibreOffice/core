@@ -146,7 +146,6 @@ void    XFContentContainer::Reset()
     m_aContents.clear();
 }
 
-
 IXFContent* XFContentContainer::FindFirstContent(enumXFContent type)
 {
     IXFContent *pRet = NULL;

@@ -80,8 +80,6 @@ void LwpHyphenOptions::Read(LwpObjectStream *pStrm)
     pStrm->SkipExtra();
 }
 
-
-
 LwpTextLanguage::LwpTextLanguage(){}
 LwpTextLanguage::~LwpTextLanguage(){}
 

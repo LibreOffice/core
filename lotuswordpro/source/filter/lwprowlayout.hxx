@@ -113,7 +113,6 @@ public:
     void RegisterCurRowStyle(XFRow* pXFRow,sal_uInt16 nRowMark);
 };
 
-
 /**
  * @brief
  * VO_ROWHEADINGLAYOUT obj

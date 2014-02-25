@@ -170,7 +170,6 @@ enum enumXFEmphasize
     enumXFEmphasizeAccent
 };
 
-
 enum enumXFAlignType
 {
     enumXFAlignNone = 0,
@@ -506,7 +505,6 @@ enum enumXFFWShadow
     enumXFFWShadowVertical,
     enumXFFWShadowSlant
 };
-
 
 #endif
 

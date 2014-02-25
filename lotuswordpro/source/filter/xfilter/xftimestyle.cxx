@@ -122,7 +122,6 @@ enumXFStyle XFTimeStyle::GetStyleFamily()
     return enumXFStyleTime;
 }
 
-
 void    XFTimeStyle::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();

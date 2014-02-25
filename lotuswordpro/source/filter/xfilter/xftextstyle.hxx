@@ -82,7 +82,6 @@ public:
 
     XFFont* GetFont(){ return m_pFont; }
 
-
     virtual enumXFStyle GetStyleFamily();
 
     virtual sal_Bool    Equal(IXFStyle *pStyle);

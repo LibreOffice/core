@@ -87,7 +87,6 @@
 #include "lwpchangemgr.hxx"
 #include "lwpglobalmgr.hxx"
 
-
 LwpFribPtr::LwpFribPtr()
     : m_pFribs(NULL),m_pXFPara(NULL),m_pPara(NULL)
 {

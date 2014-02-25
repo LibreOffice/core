@@ -75,9 +75,6 @@ CUtListElmt::~CUtListElmt()
     }
 }
 
-
-
-
 CUtList::~CUtList()
 {
     pCUtListElmt pTerminating = GetTerminating();
@@ -118,9 +115,6 @@ CUtList::Destroy()
         pCurr = pNext;
     }
 }
-
-
-
 
 CUtOwningList::~CUtOwningList()
 {

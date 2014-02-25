@@ -134,7 +134,6 @@ void LwpIndexManager::Read(LwpSvStream* pStrm)
             //New Code
             ReadObjIndex( pStrm );
 
-
             //Read object in root, these objects are between the leaf objects
             if(k!=m_nLeafCount-1)
             {
@@ -162,7 +161,6 @@ void LwpIndexManager::ReadRootData(LwpObjectStream* pObjStrm)
         akey->id.Read(pObjStrm);
         m_RootObjs.push_back(akey);
 
-
         sal_uInt16 k = 0;
 
         for (k = 1; k < KeyCount; k++)
@@ -183,7 +181,6 @@ void LwpIndexManager::ReadRootData(LwpObjectStream* pObjStrm)
     ReadTimeTable(pObjStrm);
 
 }
-
 
 //Add new method to handle ObjIndex data
 /**
@@ -226,7 +223,6 @@ void LwpIndexManager::ReadObjIndexData(LwpObjectStream* pObjStrm)
         if (nPos != nActualPos)
             throw BadSeek();
 
-
         ReadLeafIndex(pObjStrm->GetStream());
 
         if(j!=LeafCount-1)
@@ -240,7 +236,6 @@ void LwpIndexManager::ReadObjIndexData(LwpObjectStream* pObjStrm)
     vObjIndexs.clear();
     m_TempVec.clear();
 }
-
 
 /**
  * @descr   Read VO_OBJINDEX
@@ -264,7 +259,6 @@ void LwpIndexManager::ReadObjIndex( LwpSvStream *pStrm )
 
     delete pObjStrm;
 }
-
 
 /**
  * @descr   Read VO_LEAFOBJINDEX
@@ -327,7 +321,6 @@ sal_uInt32 LwpIndexManager::GetObjOffset( LwpObjectID objid )
 
     //sal_uInt16 L, U, M;
     sal_uInt32 L, U, M;
-
 
     L = 0;
     U = m_nKeyCount;

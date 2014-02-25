@@ -67,7 +67,6 @@
 #include "lwpobj.hxx"
 #include "lwpdlvlist.hxx"
 
-
 class LwpAtomHolder;
 class LwpTextLanguageOverride;
 class LwpTextAttributeOverride;

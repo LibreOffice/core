@@ -96,7 +96,6 @@ XFRow& XFRow::operator=(const XFRow& other)
     return *this;
 }
 
-
 XFRow::~XFRow()
 {
     std::map<sal_Int32,XFCell*>::iterator it;

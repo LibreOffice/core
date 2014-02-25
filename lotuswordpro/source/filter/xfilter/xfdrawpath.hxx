@@ -137,7 +137,6 @@ inline void XFSvgPathEntry::AddPoint(XFPoint pt)
     m_aPoints.push_back(pt);
 }
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

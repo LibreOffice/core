@@ -62,7 +62,6 @@
 #include "xffont.hxx"
 #include "xfbgimage.hxx"
 
-
 XFCellStyle::XFCellStyle()
 {
     m_eHoriAlign = enumXFAlignNone;

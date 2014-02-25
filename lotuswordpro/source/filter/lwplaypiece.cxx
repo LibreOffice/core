@@ -320,7 +320,6 @@ void LwpLayoutGutters::Read()
     }
 }
 
-
 void LwpLayoutGutters::Parse(IXFStream* /*pOutputStream*/)
 {}
 

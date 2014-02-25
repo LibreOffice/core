@@ -64,7 +64,6 @@
 
 #include "lwppagehint.hxx"
 
-
 void LwpSLVListHead::Read(LwpObjectStream* pObjStrm)
 {
     m_ListHead.ReadIndexed(pObjStrm);

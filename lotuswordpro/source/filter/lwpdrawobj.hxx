@@ -143,7 +143,6 @@ public:
     inline  DrawObjectType GetObjectType() const { return m_eType; }
 };
 
-
 /**
  * @brief
  * Lwp-draw-group object.
@@ -163,7 +162,6 @@ protected:
     virtual XFFrame* CreateDrawObj(const OUString& /*rStyleName*/) { return NULL; }
     virtual XFFrame* CreateStandardDrawObj(const OUString& /*rStyleName*/) { return NULL; }
 };
-
 
 /**
  * @brief
@@ -205,7 +203,6 @@ protected:
     virtual XFFrame* CreateDrawObj(const OUString& rStyleName);
     virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName);
 };
-
 
  /**
  * @brief
@@ -270,7 +267,6 @@ protected:
     virtual XFFrame* CreateDrawObj(const OUString& rStyleName);
     virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName);
 };
-
 
 /**
  * @brief

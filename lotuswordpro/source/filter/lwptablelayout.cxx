@@ -748,7 +748,6 @@ void LwpTableLayout::RegisterStyle()
     // Parse table
     ParseTable();
 
-
     //Comment:The old code doesn't check if the LwpFoundry pointer is NULL,
     //        So the NULL pointer cause sodc frozee. Add code to check the
     //        the pointer.
@@ -1105,7 +1104,6 @@ void LwpTableLayout::PutCellVals(LwpFoundry* pFoundry, LwpObjectID aTableID)
     //New Code
     if( !pFoundry ) return;
 
-
     try{
 
         LwpDLVListHeadHolder* pHolder = (LwpDLVListHeadHolder*)pFoundry->GetNumberManager()->GetTableRangeID().obj();
@@ -1402,7 +1400,6 @@ XFCell* LwpTableLayout::GetCellsMap(sal_uInt16 nRow,sal_uInt8 nCol)
     return NULL;
 }
 
-
 //add end by
 LwpColumnLayout::LwpColumnLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpVirtualLayout(objHdr, pStrm)
@@ -1507,7 +1504,6 @@ void LwpSuperGlossaryLayout::Read()
     LwpSuperTableLayout::Read();
     m_pObjStrm->SkipExtra();
 }
-
 
 LwpParallelColumnsLayout::LwpParallelColumnsLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpTableLayout(objHdr, pStrm)
 {

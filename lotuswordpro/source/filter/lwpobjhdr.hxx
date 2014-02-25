@@ -62,7 +62,6 @@
  Jan 2005           Created
  ************************************************************************/
 
-
 #ifndef _LWPOBJECTHEADER_HXX
 #define _LWPOBJECTHEADER_HXX
 

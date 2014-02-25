@@ -56,7 +56,6 @@
 #ifndef     _LWPBACKGROUNDOVERRIDE_HXX
 #define     _LWPBACKGROUNDOVERRIDE_HXX
 
-
 #include "lwpoverride.hxx"
 #include "lwpbackgroundstuff.hxx"
 

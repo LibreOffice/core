@@ -156,6 +156,5 @@ inline void XFDrawObject::SetSkewY(double cy)
     m_fSkewY = cy*2*PI/360;
 }
 
-
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

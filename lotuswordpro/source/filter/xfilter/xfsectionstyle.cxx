@@ -137,6 +137,5 @@ void XFSectionStyle::ToXml(IXFStream *pStrm)
 
     pStrm->EndElement( A2OUSTR("style:style") );
 
-
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -361,7 +361,7 @@ LwpObject* LwpObjectFactory::CreateObject(sal_uInt32 type, LwpObjectHeader &objH
             newObj = new LwpOleObject(objHdr, m_pSvStream);
             break;
         }
-        //
+
         case VO_GRAPHIC:
         {
             newObj = new LwpGraphicObject(objHdr, m_pSvStream);
@@ -372,7 +372,7 @@ LwpObject* LwpObjectFactory::CreateObject(sal_uInt32 type, LwpObjectHeader &objH
             newObj = new LwpDocData(objHdr, m_pSvStream);
             break;
         }
-        //
+
         case VO_DROPCAPLAYOUT:
         {
             newObj = new LwpDropcapLayout(objHdr, m_pSvStream);

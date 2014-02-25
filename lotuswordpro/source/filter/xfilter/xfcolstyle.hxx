@@ -105,6 +105,5 @@ inline double XFColStyle::GetWidth()
     return m_fWidth;
 }
 
-
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

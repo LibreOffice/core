@@ -70,7 +70,6 @@ LwpHeadContent::LwpHeadContent(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpContent(objHdr, pStrm)
 {}
 
-
 void LwpHeadContent::Read()
 {
     LwpContent::Read();

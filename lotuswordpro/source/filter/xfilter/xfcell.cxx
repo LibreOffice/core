@@ -160,7 +160,6 @@ void    XFCell::Add(IXFContent *pContent)
     }
 }
 
-
 void    XFCell::SetValue(double value)
 {
     SetValue(DoubleToOUString(value,18));

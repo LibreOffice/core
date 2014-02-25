@@ -450,7 +450,6 @@ void LwpIndentOverride::Read(LwpObjectStream* pStrm)
     pStrm->SkipExtra();
 }
 
-
 /*class LwpAmikakeOverride*/
 LwpAmikakeOverride::LwpAmikakeOverride() :
 m_pBackgroundStuff(new LwpBackgroundStuff), m_nType(AMIKAKE_NONE)

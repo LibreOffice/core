@@ -150,7 +150,6 @@ public:
 
     enumXFAlignType GetAlighType();
 
-
     /**
      * @descr   Set last line alignment property of the paragraph.
      * @param   eAlign alignment type,left,right,center or justify.

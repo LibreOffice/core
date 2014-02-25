@@ -65,7 +65,6 @@
 #include <rtl/ustring.hxx>
 #include <string>
 
-
 #define A2OUSTR(str)    OUString::createFromAscii(str)
 
 OUString   Int32ToOUString(sal_Int32 num);

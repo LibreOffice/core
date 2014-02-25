@@ -199,7 +199,6 @@ void XFImageStyle::ToXml(IXFStream *pStrm)
         pAttrList->AddAttribute(A2OUSTR("fo:clip"),clip);
     }
 
-    //
     pStrm->StartElement( A2OUSTR("style:properties") );
     pStrm->EndElement( A2OUSTR("style:properties") );
 

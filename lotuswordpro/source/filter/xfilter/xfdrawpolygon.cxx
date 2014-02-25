@@ -88,7 +88,6 @@ void XFDrawPolygon::ToXml(IXFStream *pStrm)
     strPoints = strPoints.trim();
     pAttrList->AddAttribute( A2OUSTR("draw:points"), strPoints);
 
-    //
     SetPosition(rect.GetX(),rect.GetY(),rect.GetWidth(),rect.GetHeight());
     XFDrawObject::ToXml(pStrm);
 

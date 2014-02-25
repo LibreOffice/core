@@ -254,7 +254,6 @@ void    XFIndex::ToXml(IXFStream *pStrm)
     pStrm->EndElement( strIndexName );
 }
 
-
 void XFIndexTemplate::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();

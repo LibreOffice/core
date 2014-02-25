@@ -118,7 +118,6 @@ public:
     inline void RevertKeepWithPrevious();
     inline void RevertUseNextStyle();
 
-
     void OverridePageBreakBefore(sal_Bool bVal);
     void OverridePageBreakAfter(sal_Bool bVal);
     void OverridePageBreakWithin(sal_Bool bVal);
@@ -127,7 +126,6 @@ public:
     void OverrideKeepWithNext(sal_Bool bVal);
     void OverrideKeepWithPrevious(sal_Bool bVal);
     void OverrideUseNextStyle(sal_Bool bVal);
-
 
     inline LwpAtomHolder* GetNextStyle();
     //end add
@@ -246,7 +244,6 @@ inline LwpAtomHolder* LwpBreaksOverride::GetNextStyle()
 {
     return m_pNextStyle;
 }
-
 
 #endif
 

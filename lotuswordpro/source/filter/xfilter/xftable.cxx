@@ -111,8 +111,6 @@ XFTable& XFTable::operator =(const XFTable& other)
     return *this;
 }
 
-
-
 XFTable::~XFTable()
 {
     std::map<sal_uInt16, XFRow*>::iterator it;

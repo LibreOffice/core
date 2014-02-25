@@ -66,7 +66,6 @@
 #ifndef _LWPDOCUMENT_HXX
 #define _LWPDOCUMENT_HXX
 
-
 #include "lwpobj.hxx"
 #include "lwpsortopt.hxx"
 #include "lwpuidoc.hxx"
