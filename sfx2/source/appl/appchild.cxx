@@ -34,7 +34,7 @@
 #include <sfx2/module.hxx>
 #include <sfx2/sfxsids.hrc>
 
-//=========================================================================
+
 
 
 void SfxApplication::RegisterChildWindow_Impl( SfxModule *pMod, SfxChildWinFactory *pFact )

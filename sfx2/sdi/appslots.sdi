@@ -220,7 +220,7 @@ interface Application
     ]
 }
 
- //=========================================================================
+
 
 shell SfxApplication
 {
@@ -261,7 +261,7 @@ shell SfxApplication
         ExecMethod = OfaExec_Impl;
     ]
 
-    //----------------------------------------------------------------------
+
 
     SID_OFFICE_CHECK_PLZ
     [

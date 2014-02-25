@@ -25,7 +25,7 @@
 
 TYPEINIT1_AUTOFACTORY(SfxTemplateItem, SfxFlagItem);
 
-//=========================================================================
+
 
 SfxTemplateItem::SfxTemplateItem() :
     SfxFlagItem()

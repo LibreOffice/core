@@ -20,7 +20,7 @@
 #include "doc.hrc"
 #define __RSC
 
- // -----------------------------------------------------------------------
+
 QueryBox MSG_CONFIRM_FILTER
 {
     Buttons = WB_YES_NO ;

@@ -1470,7 +1470,7 @@ IMPL_LINK_NOARG ( SfxBaseController, CheckOutHandler )
 }
 
 
-//=============================================================================
+
 Reference< frame::XTitle > SfxBaseController::impl_getTitleHelper ()
 {
     SolarMutexGuard aGuard;
@@ -1491,7 +1491,7 @@ Reference< frame::XTitle > SfxBaseController::impl_getTitleHelper ()
     return m_pData->m_xTitleHelper;
 }
 
-//=============================================================================
+
 // frame::XTitle
 OUString SAL_CALL SfxBaseController::getTitle()
     throw (RuntimeException)
@@ -1499,7 +1499,7 @@ OUString SAL_CALL SfxBaseController::getTitle()
     return impl_getTitleHelper()->getTitle ();
 }
 
-//=============================================================================
+
 // frame::XTitle
 void SAL_CALL SfxBaseController::setTitle(const OUString& sTitle)
     throw (RuntimeException)
@@ -1507,7 +1507,7 @@ void SAL_CALL SfxBaseController::setTitle(const OUString& sTitle)
     impl_getTitleHelper()->setTitle (sTitle);
 }
 
-//=============================================================================
+
 // frame::XTitleChangeBroadcaster
 void SAL_CALL SfxBaseController::addTitleChangeListener(const Reference< frame::XTitleChangeListener >& xListener)
     throw (RuntimeException)
@@ -1517,7 +1517,7 @@ void SAL_CALL SfxBaseController::addTitleChangeListener(const Reference< frame::
         xBroadcaster->addTitleChangeListener (xListener);
 }
 
-//=============================================================================
+
 // frame::XTitleChangeBroadcaster
 void SAL_CALL SfxBaseController::removeTitleChangeListener(const Reference< frame::XTitleChangeListener >& xListener)
     throw (RuntimeException)

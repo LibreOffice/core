@@ -324,7 +324,7 @@ String RID_STR_HLPFILENOTEXIST
     Text [ en-US ] = "The help file for this topic is not installed." ;
 };
 
- //----------------------------------------------------------------------------
+
 
 String RID_ENVTOOLBOX
 {

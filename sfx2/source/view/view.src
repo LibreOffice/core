@@ -64,7 +64,7 @@ String STR_PRINT_NEWORISIZE
     Text [ en-US ] = "The page size and orientation have been modified.\nWould you like to save the new settings in the\nactive document?" ;
 };
 
- // -----------------------------------------------------------------------
+
 InfoBox MSG_CANT_CLOSE
 {
     Message [ en-US ] = "The document cannot be closed because a\n print job is being carried out." ;

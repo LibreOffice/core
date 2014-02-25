@@ -78,7 +78,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-//====================================================================
+
 
 static
 bool operator> (const util::DateTime& i_rLeft, const util::DateTime& i_rRight)
@@ -172,7 +172,7 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent ) const
     return pFile;
 }
 
-//====================================================================
+
 
 void SfxObjectShell::UpdateDocInfoForSave()
 {

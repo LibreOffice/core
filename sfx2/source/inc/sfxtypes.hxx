@@ -41,7 +41,7 @@
 #endif
 #endif
 
-//------------------------------------------------------------------------
+
 
 // Macro for the Call-Profiler under WinNT
 // with S_CAP a measurement can be started, and stopped with E_CAP
@@ -84,7 +84,7 @@ struct _Capper
 #define DBG_OUTF(x)
 #endif
 
-//------------------------------------------------------------------------
+
 
 #if defined(DBG_UTIL) && defined(WNT)
 
@@ -110,7 +110,7 @@ public:
 #define SFX_STACK(s)
 #endif
 
-//------------------------------------------------------------------------
+
 
 struct StringList_Impl : private Resource
 {

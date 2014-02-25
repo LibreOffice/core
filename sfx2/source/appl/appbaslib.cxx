@@ -36,7 +36,7 @@ using namespace ::com::sun::star::embed;
 using ::osl::MutexGuard;
 using ::osl::Mutex;
 
-//============================================================================
+
 SfxBasicManagerHolder::SfxBasicManagerHolder()
     :mpBasicManager( NULL )
 {
@@ -153,7 +153,7 @@ SfxBasicManagerHolder::LegacyPsswdBinaryLimitExceeded( Sequence< OUString >& sMo
     return sal_True;
 }
 
-//============================================================================
+
 // Service for application library container
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
@@ -165,7 +165,7 @@ com_sun_star_comp_sfx2_ApplicationDialogLibraryContainer_get_implementation(
     return SFX_APP()->GetDialogContainer();
 }
 
-//============================================================================
+
 // Service for application library container
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL

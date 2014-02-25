@@ -157,7 +157,7 @@ public:
     void SetAttribute( const SvKeyValue& rKV );
 };
 
-//=========================================================================
+
 
 sal_uInt16 const aTitleMap_Impl[3][2] =
 {
@@ -167,7 +167,7 @@ sal_uInt16 const aTitleMap_Impl[3][2] =
     /*  SFX_TITLE_HISTORY   */  {   32,                 SFX_TITLE_FULLNAME }
 };
 
-//=========================================================================
+
 
 void SfxObjectShell::AbortImport()
 {

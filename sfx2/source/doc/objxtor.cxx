@@ -108,7 +108,7 @@ using namespace ::com::sun::star::document;
 using ::basic::BasicManagerRepository;
 #include <uno/mapping.hxx>
 
-//====================================================================
+
 
 DBG_NAME(SfxObjectShell)
 
@@ -149,7 +149,7 @@ OString lclGetVBAGlobalConstName( const Reference< XInterface >& rxComponent )
 
 } // namespace
 
-//=========================================================================
+
 
 class SfxModelListener_Impl : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XCloseListener >
 {

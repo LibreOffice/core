@@ -20,10 +20,10 @@
 #include <sfx2/docstoragemodifylistener.hxx>
 #include <comphelper/solarmutex.hxx>
 
-//........................................................................
+
 namespace sfx2
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -36,9 +36,9 @@ namespace sfx2
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::lang::EventObject;
 
-    //====================================================================
+
     //=
-    //====================================================================
+
 
     DocumentStorageModifyListener::DocumentStorageModifyListener( IModifiableDocument& _rDocument, comphelper::SolarMutex& _rMutex )
         :m_pDocument( &_rDocument )
@@ -75,8 +75,8 @@ namespace sfx2
         // in case the document is re-based to another storage.
     }
 
-//........................................................................
+
 } // namespace sfx2
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

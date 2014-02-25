@@ -243,7 +243,7 @@ SfxApplication::~SfxApplication()
     pApp = 0;
 }
 
-//====================================================================
+
 
 const OUString& SfxApplication::GetLastDir_Impl() const
 

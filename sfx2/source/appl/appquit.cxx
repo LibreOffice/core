@@ -56,7 +56,7 @@
 
 using ::basic::BasicManagerRepository;
 
-//===================================================================
+
 sal_Bool SfxApplication::QueryExit_Impl()
 {
     sal_Bool bQuit = sal_True;

@@ -37,7 +37,7 @@
 
 DBG_NAME(SfxInterface)
 
-//====================================================================
+
 
 extern "C"
 #ifdef WNT
@@ -52,7 +52,7 @@ SfxCompareSlots_Impl( const void* pSmaller, const void* pBigger )
            ( (int) ((SfxSlot*)pBigger)->GetSlotId() );
 }
 
-//=========================================================================
+
 
 struct SfxObjectUI_Impl
 {
@@ -111,9 +111,9 @@ struct SfxInterface_Impl
 
 static SfxObjectUI_Impl* CreateObjectBarUI_Impl( sal_uInt16 nPos, const ResId& rResId, sal_uInt32 nFeature, const OUString *pStr );
 
-//====================================================================
 
-//====================================================================
+
+
 // constuctor, registeres a new unit
 
 SfxInterface::SfxInterface( const char *pClassName,

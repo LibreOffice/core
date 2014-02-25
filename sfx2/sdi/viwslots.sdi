@@ -21,7 +21,7 @@ interface View
     Automation = FALSE ;
 ]
 {
-     //---------------------------------------------------------------------
+
     SID_MAIL_SENDDOC // ole(no) api(todo)
     [
         ExecMethod = ExecMisc_Impl ;
@@ -57,7 +57,7 @@ interface View
         ExecMethod = ExecMisc_Impl ;
         StateMethod = GetState_Impl ;
     ]
-     //---------------------------------------------------------------------
+
     SID_PRINTDOC // ole(no) api(play/rec)
     [
         ExecMethod = ExecPrint_Impl ;
@@ -93,7 +93,7 @@ interface View
     ]
 }
 
- //=========================================================================
+
 
 shell SfxViewShell
 {

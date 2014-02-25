@@ -95,7 +95,7 @@ Menu MN_CONTEXT_TEMPLDLG
     };
 };
 
- //------------------------------------------------------------------------
+
 String SID_NAVIGATOR
 {
     Text [ en-US ] = "Navigator";

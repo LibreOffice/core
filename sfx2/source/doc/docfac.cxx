@@ -55,15 +55,15 @@
 
 using namespace ::com::sun::star;
 
-//========================================================================
+
 
 typedef std::vector<SfxViewFactory*> SfxViewFactoryArr_Impl;
 
-//========================================================================
+
 
 DBG_NAME(SfxObjectFactory)
 
-//========================================================================
+
 
 struct SfxObjectFactory_Impl
 {
@@ -86,7 +86,7 @@ struct SfxObjectFactory_Impl
         {}
 };
 
-//========================================================================
+
 
 SfxFilterContainer* SfxObjectFactory::GetFilterContainer( sal_Bool /*bForceLoad*/ ) const
 {

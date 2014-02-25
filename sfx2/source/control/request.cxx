@@ -41,7 +41,7 @@
 #include <sfx2/objface.hxx>
 #include <rtl/strbuf.hxx>
 
-//===================================================================
+
 
 using namespace ::com::sun::star;
 
@@ -93,7 +93,7 @@ struct SfxRequest_Impl: public SfxListener
 };
 
 
-//====================================================================
+
 
 void SfxRequest_Impl::Notify( SfxBroadcaster&, const SfxHint &rHint )
 {
@@ -102,7 +102,7 @@ void SfxRequest_Impl::Notify( SfxBroadcaster&, const SfxHint &rHint )
         pAnti->Cancel();
 }
 
-//====================================================================
+
 
 void SfxRequest_Impl::SetPool( SfxItemPool *pNewPool )
 {
@@ -116,7 +116,7 @@ void SfxRequest_Impl::SetPool( SfxItemPool *pNewPool )
     }
 }
 
-//====================================================================
+
 
 
 SfxRequest::~SfxRequest()

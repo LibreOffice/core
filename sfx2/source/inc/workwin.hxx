@@ -41,7 +41,7 @@
 class SfxSplitWindow;
 class SfxWorkWindow;
 
-//====================================================================
+
 // This struct makes all relevant Informationen available of Toolboxes
 
 struct SfxObjectBar_Impl
@@ -64,7 +64,7 @@ struct SfxObjectBar_Impl
     {}
 };
 
-//------------------------------------------------------------------------------
+
 // This struct makes all relevant Informationen available of the status bar
 
 struct SfxStatBar_Impl
@@ -80,7 +80,7 @@ struct SfxStatBar_Impl
     {}
 };
 
-//------------------------------------------------------------------------------
+
 
 #define CHILD_NOT_VISIBLE   0
 #define CHILD_ACTIVE       1    // not disabled through HidePopups
@@ -170,7 +170,7 @@ struct SfxObjectBarList_Impl
 #define SFX_SPLITWINDOWS_BOTTOM 3
 #define SFX_SPLITWINDOWS_MAX    4
 
-//--------------------------------------------------------------------
+
 
 class LayoutManagerListener : public ::cppu::WeakImplHelper2<
                                          css::frame::XLayoutManagerListener,
@@ -182,21 +182,21 @@ class LayoutManagerListener : public ::cppu::WeakImplHelper2<
 
         void setFrame( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  XComponent
-        //---------------------------------------------------------------------------------------------------------
+
         virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException );
 
-        //---------------------------------------------------------------------------------------------------------
+
         //  XEventListener
-        //---------------------------------------------------------------------------------------------------------
+
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent ) throw( ::com::sun::star::uno::RuntimeException );
 
-        //---------------------------------------------------------------------------------------------------------
+
         // XLayoutManagerEventListener
-        //---------------------------------------------------------------------------------------------------------
+
         virtual void SAL_CALL layoutEvent( const ::com::sun::star::lang::EventObject& aSource, ::sal_Int16 eLayoutEvent, const ::com::sun::star::uno::Any& aInfo ) throw (::com::sun::star::uno::RuntimeException);
 
     private:

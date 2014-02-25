@@ -181,9 +181,9 @@ static sal_Int32 getDontFlags( sal_Int8 nStoreMode )
             | ( ( ( nStoreMode & EXPORT_REQUESTED ) && !( nStoreMode & WIDEEXPORT_REQUESTED ) ) ? SFX_FILTER_IMPORT : 0 ) );
 }
 
-//=========================================================================
+
 // class DocumentSettingsGuard
-//=========================================================================
+
 
 class DocumentSettingsGuard
 {
@@ -244,9 +244,9 @@ public:
 };
 } // anonymous namespace
 
-//=========================================================================
+
 // class ModelData_Impl
-//=========================================================================
+
 class ModelData_Impl
 {
     SfxStoringHelper* m_pOwner;
@@ -1298,9 +1298,9 @@ OUString ModelData_Impl::GetRecommendedName( const OUString& aSuggestedName, con
 }
 
 
-//=========================================================================
+
 // class SfxStoringHelper
-//=========================================================================
+
 
 SfxStoringHelper::SfxStoringHelper()
 {

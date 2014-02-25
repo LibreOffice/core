@@ -81,7 +81,7 @@ DBG_NAME(SfxBindingsNextJob_Impl)
 DBG_NAME(SfxBindingsUpdate_Impl)
 DBG_NAME(SfxBindingsInvalidateAll)
 
-//====================================================================
+
 
 static sal_uInt16 nTimeOut = 300;
 
@@ -91,11 +91,11 @@ static sal_uInt16 nTimeOut = 300;
 
 typedef boost::unordered_map< sal_uInt16, bool > InvalidateSlotMap;
 
-//====================================================================
+
 
 typedef std::vector<SfxStateCache*> SfxStateCacheArr_Impl;
 
-//====================================================================
+
 
 class SfxAsyncExec_Impl
 {
@@ -207,7 +207,7 @@ public:
     }
 };
 
-//==========================================================================
+
 
 SfxBindings::SfxBindings()
 :   pImp(new SfxBindings_Impl),
@@ -238,7 +238,7 @@ SfxBindings::SfxBindings()
     pImp->aTimer.SetTimeoutHdl( LINK(this, SfxBindings, NextJob_Impl) );
 }
 
-//====================================================================
+
 
 SfxBindings::~SfxBindings()
 

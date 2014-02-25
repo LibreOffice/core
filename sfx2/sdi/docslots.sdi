@@ -53,7 +53,7 @@ interface Documents
     ]
 }
 
- //=========================================================================
+
 interface Document
 [
     Automation = FALSE ;
@@ -199,7 +199,7 @@ interface OfficeDocument : Document
     ]
 }
 
- //=========================================================================
+
 
 shell SfxObjectShell
 {

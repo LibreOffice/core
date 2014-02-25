@@ -9,13 +9,13 @@ import org.junit.BeforeClass;
 
 public class JUnitBasedTest
 {
-    // -----------------------------------------------------------------------------------------------------------------
+
     protected XComponentContext getContext()
     {
         return m_connection.getComponentContext();
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     protected XMultiServiceFactory getORB()
     {
         final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(
@@ -23,7 +23,7 @@ public class JUnitBasedTest
         return xMSF1;
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     @BeforeClass
     public static void setUpConnection() throws Exception
     {
@@ -32,7 +32,7 @@ public class JUnitBasedTest
         m_connection.setUp();
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+
     @AfterClass
     public static void tearDownConnection() throws InterruptedException, com.sun.star.uno.Exception
     {

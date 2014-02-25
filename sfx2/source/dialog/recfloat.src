@@ -20,7 +20,7 @@
 #include "helpid.hrc"
 #include "dialog.hrc"
 
- // -----------------------------------------------------------------------
+
 #define STD_MASKCOLOR Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; }
 
 FloatingWindow SID_RECORDING_FLOATWINDOW
