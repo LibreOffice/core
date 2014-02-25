@@ -2027,7 +2027,7 @@ sal_Bool SbJScriptModule::StoreData( SvStream& rStrm ) const
 }
 
 
-/////////////////////////////////////////////////////////////////////////
+
 
 SbMethod::SbMethod( const OUString& r, SbxDataType t, SbModule* p )
         : SbxMethod( r, t ), pMod( p )

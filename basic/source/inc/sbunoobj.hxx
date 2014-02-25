@@ -364,7 +364,7 @@ void disposeComVariablesForBasic( StarBASIC* pBasic );
 void clearNativeObjectWrapperVector( void );
 
 
-//========================================================================
+
 // #118116 Collection object
 
 class BasicCollection : public SbxObject

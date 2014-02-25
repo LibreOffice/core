@@ -244,7 +244,7 @@ SbiRuntime::pStep2 SbiRuntime::aStep2[] = {// all opcodes with two operands
 };
 
 
-//                              SbiRTLData                              //
+//                              SbiRTLData
 
 SbiRTLData::SbiRTLData()
 {
@@ -261,7 +261,7 @@ SbiRTLData::~SbiRTLData()
     delete pWildCard;
 }
 
-//                              SbiInstance                             //
+//                              SbiInstance
 
 // 16.10.96: #31460 new concept for StepInto/Over/Out
 // The decision whether StepPoint shall be called is done with the help of
@@ -563,7 +563,7 @@ SbMethod* SbiInstance::GetCaller( sal_uInt16 nLevel )
     return p ? p->GetCaller() : NULL;
 }
 
-//                              SbiInstance                             //
+//                              SbiInstance
 
 // Attention: pMeth can also be NULL (on a call of the init-code)
 
@@ -1294,8 +1294,8 @@ SbiForStack* SbiRuntime::FindForStackItemForCollection( class BasicCollection* p
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//
+
+
 //  DLL-calls
 
 void SbiRuntime::DllCall
@@ -2988,7 +2988,7 @@ void SbiRuntime::StepJUMPF( sal_uInt32 nOp1 )
 // ONJUMP 2
 // JUMP target1
 // JUMP target2
-// ...
+
 // if 0x8000 is set in the operand, push the return address (ON..GOSUB)
 
 void SbiRuntime::StepONJUMP( sal_uInt32 nOp1 )

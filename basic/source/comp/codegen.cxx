@@ -512,7 +512,7 @@ public:
                     nOp1 = static_cast<T>( convertBufferOffSet(m_pStart, nOp1) );
                 break;
             default:
-                break; //
+                break;
 
         }
         m_ConvertedBuf += (S)nOp1;
