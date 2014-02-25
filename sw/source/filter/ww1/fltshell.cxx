@@ -1310,13 +1310,13 @@ const SfxPoolItem& SwFltOutDoc::GetAttr(sal_uInt16 nWhich)
 
 const SfxPoolItem& SwFltFormatCollection::GetAttr(sal_uInt16 nWhich)
 {
-    return GetColl()->GetFmtAttr(nWhich);   // mit Parents
+    return GetColl()->GetFmtAttr(nWhich);   // with Parents
 }
 
-// GetNodeOrStyAttr holt Attribute fuer Toggle- und Modify-Attribute:
-// Bei Formatdefinitionen aus dem altuellen Style mit Parents
-// sonst aus dem Node mit Parents
-// Im Stack wird nicht nachgesehen
+// GetNodeOrStyAttr fetches attributes for toggle and modify attributes:
+// For format definitions, the current style with parents is
+// consulted, otherwise the node with parents.
+// The stack is never used.
 const SfxPoolItem& SwFltOutDoc::GetNodeOrStyAttr(sal_uInt16 nWhich)
 {
     SwCntntNode * pNd = pPaM->GetPoint()->nNode.GetNode().GetCntntNode();

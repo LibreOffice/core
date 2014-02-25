@@ -349,7 +349,7 @@ Ww1Fonts::Ww1Fonts(Ww1Fib& rInFib, sal_uLong nFieldFlgs)
                         break;
                     nMax++;
                     nLeft -= nNextSiz;
-                    if(nLeft < 1)           // naechste Laenge muss gelesen werden koennen
+                    if(nLeft < 1)           // need to be able to read next length
                         break;
                     p = (W1_FFN *)(((char*)p) + nNextSiz);
                 }
@@ -400,7 +400,7 @@ Ww1Dop::Ww1Dop(Ww1Fib& _rFib)
 Ww1Picture::Ww1Picture(SvStream& rStream, sal_uLong ulFilePos)
     : bOK(false), pPic(0)
 {
-    ulFilePos &= 0xffffff; //~ ww1: warum auch immer - im highbyte steht eine 5?!?!
+    ulFilePos &= 0xffffff; //~ ww1: for some reason the high byte contains 5?!?!
     SVBT32 lcb;
     if (rStream.Seek(ulFilePos) == (sal_uLong)ulFilePos)
         if (rStream.Read(&lcb, sizeof(lcb)) == (sal_uLong)sizeof(lcb))
@@ -709,8 +709,8 @@ sal_uInt16 Ww1SprmPapx::SprmSize(sal_uInt8*, sal_uInt16 nSize)
 {
     sal_uInt16 nRet = 0;
     if (nSize >= sizeof(W1_PAPX))
-        nRet = nSize - ( sizeof(W1_PAPX) - 1 ); // im W1_PAPX ist das
-                                                // 1. SprmByte enthalten
+        nRet = nSize - ( sizeof(W1_PAPX) - 1 ); // the 1st SprmByte is contained
+                                                // in the W1_PAPX
     return nRet;
 }
 
@@ -781,11 +781,10 @@ sal_uInt8* Ww1Plc::GetData(sal_uInt16 nIndex)
 }
 
 // PlcBookmarks
-// class Ww1StringList liest im Ctor eine Anzahl von P-Strings aus dem Stream
-// in den Speicher und patcht sie zu C-Strings um.
-// Die Anzahl wird in nMax zurueckgeliefert.
-// im Index 0 stehen alle Strings nacheinander, ab Index 1 werden
-// die einzelnen Strings referenziert.
+// class Ww1StringList reads a number of P strings from the stream into memory
+// and patches them into C strings
+// nMax returns the count
+// Index 0 references all strings; index 1 and higher reference individual strings
 Ww1StringList::Ww1StringList( SvStream& rSt, sal_uLong nFc, sal_uInt16 nCb )
     : pIdxA(0), nMax(0)
 {
@@ -795,18 +794,18 @@ Ww1StringList::Ww1StringList( SvStream& rSt, sal_uLong nFc, sal_uInt16 nCb )
         OSL_ENSURE(nCb > sizeof(nCountBytes), "Ww1StringList");
         if (rSt.Seek(nFc) == (sal_uLong)nFc)
             if (rSt.Read(nCountBytes, sizeof(nCountBytes))
-                     == sizeof(nCountBytes)) // Laenge steht hier nochmal
+                     == sizeof(nCountBytes)) // length again
             {
                 OSL_ENSURE(SVBT16ToShort(nCountBytes)
                          == nCb, "redundant-size missmatch");
-                                    // hoffentlich sind sie immer gleich
+                                    // let's hope that they are always equal
                 sal_Char* pA = new sal_Char[nCb - sizeof(nCountBytes) + 1];
-                                    // Alloziere PString-Array
+                                    // allocating PString array
                 //~ Ww1: new-NULL
                 if (rSt.Read(pA, nCb - sizeof(nCountBytes))
-                        == (sal_uLong)nCb - sizeof(nCountBytes))    // lese alle
+                        == (sal_uLong)nCb - sizeof(nCountBytes))    // read all
                 {}// do nothing
-                                    // Zaehle, wieviele Fonts enthalten
+                                    // Count number of fonts
                 long nLeft = nCb - sizeof(nCountBytes);
                 sal_Char* p = pA;
                 while (true)
@@ -817,32 +816,32 @@ Ww1StringList::Ww1StringList( SvStream& rSt, sal_uLong nFc, sal_uInt16 nCb )
                         break;
                     nMax++;
                     nLeft -= nNextSiz;
-                    if(nLeft < 1)           // naechste Laenge muss gelesen werden koennen
+                    if(nLeft < 1)           // need to be able to read next length
                         break;
                     p = p + nNextSiz;
                 }
                 if (nMax)
                 {
-                    pIdxA = new sal_Char*[nMax+1];      // alloziere Index-Array
-                    pIdxA[0] = pA;                      // Index 0 : alles
-                                                        // ab Index 1 C-Strings
-                    pIdxA[1] = pA + 1;                  // fuelle Index-Array
+                    pIdxA = new sal_Char*[nMax+1];      // allocate index array
+                    pIdxA[0] = pA;                      // Index 0 : everything
+                                                        // from index 1 C strings
+                    pIdxA[1] = pA + 1;                  // fill index array
                     sal_uInt16 i = 2;
                     p = pA;
                     sal_uInt8 nL = *p;
                     while(true)
                     {
-                        p += nL + 1;                    // Neues Laengen-Byte
-                        nL = *p;                        // merke Laenge
-                        *p = '\0';                      // mach C-String draus
+                        p += nL + 1;                    // new length byte
+                        nL = *p;                        // remember length
+                        *p = '\0';                      // make C string
                         if( i > nMax )
                             break;
-                        pIdxA[i] = p + 1;               // Ptr auf C-String
+                        pIdxA[i] = p + 1;               // Ptr to C string
                         i++;
                     }
                 }
                 else
-                    pIdxA = 0;  // Keine Eintraege -> kein Array
+                    pIdxA = 0;  // No entries -> no array
             }
     }
 }
@@ -867,17 +866,16 @@ Ww1Bookmarks::Ww1Bookmarks(Ww1Fib& rInFib)
     bOK = !aNames.GetError() && !pPos[0]->GetError() && !pPos[1]->GetError();
 }
 
-// Der Operator ++ hat eine Tuecke: Wenn 2 Bookmarks aneinandergrenzen, dann
-// sollte erst das Ende des ersten und dann der Anfang des 2. erreicht werden.
-// Liegen jedoch 2 Bookmarks der Laenge 0 aufeinander, *muss* von jedem Bookmark
-// erst der Anfang und dann das Ende gefunden werden.
-// Der Fall: ][
+// There's one twist to this operator++: in the case of 2 adjacent bookmarks,
+// the end of the first one should be reached first, and then the start of the
+// second one. However, if there are 2 bookmarks of length 0 on top of each
+// other, each bookmarks' respective start *must* be found before its end.
+// The case: ][
 //            [...]
 //           ][
-// ist noch nicht geloest, dabei muesste ich in den Anfangs- und Endindices
-// vor- und zurueckspringen, wobei ein weiterer Index oder ein Bitfeld
-// oder etwas aehnliches zum Merken der bereits abgearbeiteten Bookmarks
-// noetig wird.
+// is not solved yet. I'd need to jump back and forth in the start and end
+// indices, using another index or a bitfield or something similar for keeping
+// track of already processed bookmarks.
 void Ww1Bookmarks::operator++()
 {
     if( bOK )
@@ -966,12 +964,11 @@ sal_Bool Ww1FkpPap::Fill(sal_uInt16 nIndex, sal_uInt8*& p, sal_uInt16& rnCountBy
         OSL_ENSURE(nOffset>(sal_uInt16)(Count()*sizeof(SVBT32)), "calc error");
         rnCountBytes = *(aFkp+nOffset) * 2;
         nOffset += sizeof(sal_uInt8);
-        if( nOffset + rnCountBytes < 511 )  // SH: Assert schlug 1 zu frueh zu
-            rnCountBytes++;                 // SH: Ich weiss nicht genau,
-                                            // ob das letzte Byte des PAPX
-                                            // genutzt wird, aber so vergessen
-                                            // wir keins und sind trotzdem
-                                            // auf der sicheren Seite
+        if( nOffset + rnCountBytes < 511 )  // SH: Assert triggered 1 too early
+            rnCountBytes++;                 // SH: I'm not entirely sure if the last
+                                            // byte of the PAPX is used, but this way
+                                            // we don't forget any and are on the
+                                            // safe side either way
         OSL_ENSURE(nOffset+rnCountBytes <= 511, "calc error");
         p = aFkp + nOffset;
     }
@@ -987,7 +984,7 @@ sal_Bool Ww1FkpPap::Fill(sal_uInt16 nIndex, sal_uInt8*& p, sal_uInt16& rnCountBy
 sal_Bool Ww1FkpChp::Fill(sal_uInt16 nIndex, W1_CHP& aChp)
 {
     OSL_ENSURE( nIndex < Count(), "Ww1FkpChp::Fill() Index out of Range" );
-    memset(&aChp, 0, sizeof(aChp)); // Default, da verkuerzt gespeichert
+    memset(&aChp, 0, sizeof(aChp));
     sal_uInt16 nOffset = GetData(nIndex)[0] * 2;
     if (nOffset)
     {
@@ -1050,10 +1047,9 @@ void Ww1Pap::Seek(sal_uLong ulSeek)
         ++(*this);
 }
 
-// SH: Where hat einen Parameter mitbekommen, der sagt, ob bei Neuanlegen eines
-// Fkps der zugehoerige Index auf 0 gesetzt werden soll
-// ( darf fuer Push/Pop nicht passieren )
-// Ein eleganterer Weg faellt mir auf die Schnelle nicht ein
+// SH: Where has been passed a parameter which determines if the index should be set
+// to 0 upon constructing a new Fkp (must not happen for Push/Pop)
+// Can't think of an elegant way for now
 sal_uLong Ww1Pap::Where( sal_Bool bSetIndex )
 {
     sal_uLong ulRet = 0xffffffff;
@@ -1082,8 +1078,8 @@ void Ww1Pap::operator++()
         }
 }
 
-// SH: FindSprm sucht in grpprl nach Sprm nId
-// Rueckgabe: Pointer oder 0
+// SH: FindSprm looks for Sprm nId in grpprl
+// Return value: pointer or 0
 sal_Bool Ww1Pap::FindSprm(sal_uInt16 nId, sal_uInt8* pStart, sal_uInt8* pEnd)
 {
     Ww1Sprm aSprm( pStart, static_cast< sal_uInt16 >(pEnd-pStart) );
@@ -1113,7 +1109,7 @@ sal_Bool Ww1Pap::HasId0(sal_uInt16 nId)
     sal_uInt8* pByte;
     sal_uInt16 n;
     if( pPap->Fill(nFkpIndex, pByte, n) ){
-        sal_uInt8* p2 = ((W1_PAPX*)(pByte))->grpprlGet(); // SH: Offset fehlte
+        sal_uInt8* p2 = ((W1_PAPX*)(pByte))->grpprlGet(); // SH: Offset was missing
         bRet = FindSprm( nId, p2, pByte + n );
     }
     return bRet;
@@ -1148,10 +1144,9 @@ void Ww1Chp::Seek(sal_uLong ulSeek)
         ++(*this);
 }
 
-// SH: Where hat einen Parameter mitbekommen, der sagt, ob bei Neuanlegen eines
-// Fkps der zugehoerige Index auf 0 gesetzt werden soll
-// ( darf fuer Push/Pop nicht passieren )
-// Ein eleganterer Weg faellt mir auf die Schnelle nicht ein
+// SH: Where has been passed a parameter which determines if the index should be set
+// to 0 upon constructing a new Fkp (must not happen for Push/Pop)
+// Can't think of an elegant way for now
 sal_uLong Ww1Chp::Where( sal_Bool bSetIndex )
 {
     sal_uLong ulRet = 0xffffffff;

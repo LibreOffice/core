@@ -65,25 +65,20 @@ class Ww1SprmSep;
 class Ww1Style;
 class Ww1StyleSheet;
 
-// nach moeglichkeit wurden in diesem modul methoden aehnlicher
-// funktionalitaet gleich benannt. Die namen wurden wenn moeglich vom
-// ww-filter uebernommen.
-// Where() gibt die position eines elements. dies kann sowohl eine
-// seek-position im stream als auch ein relativer offset sein, da dies
-// bei word durcheinander geht.  die methoden sind durch kommentare
-// gekennzeichnet, ob sie sich auf positionen in der datei oder
-// innerhalb des textes beziehen. vorsicht: innerhalb des textes kann
-// verschiedene texte in der datei bedeuten.
-// Count() gibt die anzahl der elemente zurueck. vorsicht bei
-// n/n-1-feldern (word speichert strukturen gern in doppel-arrays, in
-// denen das erste n elemente, das zweite jedoch n-1 elemente
-// enthaelt.
-// Fill() fuellt uebergebene referenzen mit daten aus den
-// word-strukturen.
-// GetData() gibt zeiger auf den datenbereich zurueck
-// GetError() gibt zurueck, ob fehler aufgetreten ist
-// Start(), Stop(), Out(), op<< siehe modul w1filter
-// Dump() siehe modul w1dump
+// If possible, methods with similar functionality were given similar
+// names in this module. The names were taken from ww filter, if
+// possible.
+// Where() returns an element's position. This can be either a seek
+// position in the stream or a relative offset inside the text, since
+// these are mixed up in Word. The methods' comments indicate which of
+// these options they apply to.
+// Count() returns the number of elements. Be careful with n/n-1
+// fields (Word likes to store structures in double arrays, with the
+// first one containing n elements, and the second one n-1.
+// Fill() fills passed references with data from Word structures.
+// GetData() returns pointers to the data range
+// Start(), Stop(), Out(), op<< see module w1filter
+// Dump() see module w1dump
 
 // file information block: root of the evil: it's at the start of the
 // file (seek(0)) and contains all positions of the structures of the
@@ -118,7 +113,7 @@ public:
 };
 
 // ww-files can contain several blocks of text (main-text,
-// footnotes etc). PlainText vereinigt die gemeinsamkeiten
+// footnotes etc). PlainText unifies the overlaps
 class Ww1PlainText
 {
 protected:
@@ -276,9 +271,9 @@ public:
         return !bOK; }
 };
 
-// ww kennt nur font-nummern beim formatieren. nebenher gibts ein
-// array von fonts, damit man aus der nummer einen konkreten font
-// machen kann.
+// ww only knows font numbers during formatting. Independently, there
+// is an array of fonts, so that the number can be converted to a
+// specific font.
 class Ww1Fonts
 {
 protected:
@@ -303,28 +298,27 @@ public:
 };
 
 // SingleSprm
-// diese klassen ersetzen die aSprmTab etc des ww6-filters. die
-// funktionspointer sind hier virtuale methoden, fuer die typen (byte,
-// word, var-sized etc) gibt es abgeleitete klassen. diese haben
-// methoden zum bestimmen der groesze, dumpen und shell-ausgeben der
-// Sprms.
-// die klassen werden mit new (in InitTab()) erzeugt und nach ihrem
-// code in die tabelle gestellt. zum aktivieren ruft man nun nur noch
-// die entsprechende methode des objektes in der tabelle auf.
-// wohlgemerkt: SingleSprms sind die _beschreibung_ und _funktion_ der
-// Sprms, nicht deren inhalt. dieser musz uebergeben werden an die
-// einzelnen methoden wie Size, Dump und Start/Stop.
+// These classes replace aSprmTab etc. from ww6 filter. The function
+// pointers are virtual methods. There exist derived classes for
+// specific types (byte, word, var-sized etc.). They have methods for
+// determining their sizes, for dumping and outputting the Sprms to
+// the shell.
+// The classes get created with new (in InitTab()) and added to the
+// table according to their code. For activating them the respective
+// method has to be called on an object in the table.
+// Take note: SingleSprms only describe Sprms, they don't carry their
+// content, which must be passed to the individual methods such as
+// Size, Dump and Start/Stop.
 class Ww1SingleSprm
 {
 public:
 #ifdef DUMP
-    // allein die virtuellen methoden stehen in der vtab, also je nachdem,
-    // ob fuer dumper oder filter uebersetzt wird ausblenden: das spart
-    // platz. ausserdem stehen die methoden fuer dumper bzw filter in
-    // verschiedenen modulen, die im jeweils anderen projekt nicht
-    // uebersetzt werden. das diese dann beim linken nicht zur verfuegung
-    // stehen faellt dann auch nicht auf. Der Namensstring ist nur im
-    // Dumper noetig: weg damit im Filter.
+    // The vtab only contains the virtual methods; we hide them
+    // depending on what we compile for (dumper or filter). This saves
+    // space. Furthermore, these method's implementations live in
+    // different modules which only get compiled and linked when
+    // required by the respective project. The name string is only
+    // required by the dumper -- let's not include it in the filter.
     void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
     void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
     virtual std::ostream& Dump(std::ostream&, sal_uInt8*, sal_uInt16);
@@ -481,8 +475,8 @@ public:
 
 class Ww1SingleSprmPBrc : public Ww1SingleSprmWord {
 protected:
-    // spezielle start-routine, je nach sprm verschieden versorgt
-    // mit einem BoxItem.
+    // specific start routines, supplied with different BoxItems
+    // depending on sprm
     void Start(Ww1Shell&, sal_uInt8, W1_BRC10*, sal_uInt16, Ww1Manager&, SvxBoxItem&);
     void Start(Ww1Shell&, sal_uInt8, W1_BRC*, sal_uInt16, Ww1Manager&, SvxBoxItem&);
 
@@ -503,10 +497,9 @@ public:
 #define BRC_RIGHT ((sal_uInt16)3)
 #define BRC_ANZ ((sal_uInt16)BRC_RIGHT-BRC_TOP+1)
 
-// Die BRC-struktur fuer 1.0 versionen von word sind verschieden von
-// denen der folgenden versionen. diese werden zum glueck aber auch
-// von anderen sprms abgerufen.
-// SH: Ab sofort alle 4 Umrandungen ueber nur 1 Klasse.
+// The BRC structure for 1.0 versions of Word differ from the ones in
+// later versions. Luckily, they will be queried by other sprms.
+// SH: From now on, all 4 borders handled by a single class.
 class Ww1SingleSprmPBrc10 : public Ww1SingleSprmPBrc
 {
     sal_uInt16 nLine;   // BRC_TOP, BRC_LEFT, ...
@@ -556,7 +549,7 @@ public:
     Ww1SingleSprmPChgTabsPapx(sal_Char* sName) :
         Ww1SingleSprmByteSized(0, sName) {
         }
-  // Size() is not yet activated!
+    // Size() is not yet activated!
     void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
     void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
 };
@@ -625,10 +618,10 @@ public:
     void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
 };
 
-// Klassendefinitionen fuer Tabellen-Fastsave-Attribute
-// Da wir kein Fastsave unterstuetzen, brauchen wir's nicht
+// Class definitions for table fastsave attributes
+// Because we don't support fastsave, we don't need it
 
-// Klassendefinitionen fuer Apos ( == Flys )
+// Class definitions for Apos ( == Flys )
 
 class Ww1SingleSprmPpc : public Ww1SingleSprmByte {
 public:
@@ -670,7 +663,7 @@ public:
     void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
 };
 
-// der tatsaechlich in der datei auftretende datentyp Sprm
+// The data type Sprm actually appearing in the file
 class Ww1Sprm
 {
     sal_Bool ReCalc();
@@ -690,9 +683,9 @@ protected:
     sal_Bool bOK;
     sal_uInt16* pArr;
     sal_uInt16 count;
-    // ohne Token, mit laengen-byte/word
+    // without token, with length byte/word
     sal_uInt16 GetSize(sal_uInt8 nId, sal_uInt8* pSprm);
-    // mit Token und LaengenByte
+    // with token and length byte
     sal_uInt16 GetSizeBrutto(sal_uInt8* pSprm) {
         sal_uInt8 nId = *pSprm++;
         return GetSize(nId, pSprm) + 1; }
@@ -736,9 +729,8 @@ public:
     void WriteBmp(SvStream&);
 };
 
-// eine der wichtigen array-strukturen der ww-dateien. sie beinhalten
-// n+1 dateipositionen und n attribute, die zwischen den
-// dateipositionen gelten.
+// One of the important array structures in ww files. They contain n+1
+// file positions and n attributes applying in between them.
 class Ww1Plc
 {
     sal_uInt8* p;
@@ -922,8 +914,7 @@ public:
     {}
 };
 
-// aehnlich den plcs aufgebaute arrays, die sich auf eine groesze von
-// 512 byte beschraenken
+// Arrays very similar to the plcs; limited to a size of 512 bytes
 class Ww1Fkp
 {
 protected:
@@ -935,7 +926,7 @@ public:
     Ww1Fkp(SvStream&, sal_uLong, sal_uInt16);
     friend std::ostream& operator <<(std::ostream&, Ww1Fkp&);
     sal_uInt16 Count() const            { return *(aFkp+511); }
-    sal_uLong Where(sal_uInt16); // wie im entsprechenden fkp
+    sal_uLong Where(sal_uInt16); // like in the corresponding fkp
 };
 
 class Ww1FkpPap : public Ww1Fkp
@@ -1008,31 +999,31 @@ public:
     void Out(Ww1Shell&);
 };
 
-// Header/Footer/Footnoteseparators sind einer nach dem naechsten in
-// einem eigenen text gespeichert. ein plc trennt diesen text in
-// einzelne teile.  diese werden durchnummeriert als ihdd. nun gibt es
-// 9 verschiedene funktionen fuer diese texte. wird eine davon
-// angefordert, ist es der erste, beim naechstern der 2 ihdd und so
-// weiter.  welcher textteil also welcher typ sein wird laeszt sich
-// nur bei sequenziellem lesen der datei bestimmen. die 9 typen sind:
-// fusznoten-trenner, folge-fusznoten-trenner, folge-fusznoten-notiz,
-// gerade-seiten kopfzeilen, ungerade seiten kopfzeilen, dto 2*
-// fuszzeilen, kopf & fuszzeilen, wenn erste seite andere zeilen hat.
-// HeaderFooter merkt sich fuer jede der 9 die momentane einstellung
-// (jedoch nicht die alten) und den naechstvergebbaren ihdd.  ist ein
-// teil nicht vorhanden bekommt er den wert 0xffff.
+// Header/footer/footnote separators are stored in a separate text one
+// after the other. A plc partitions these texts into several
+// parts. They are numbered as ihdd. There are 9 different functions
+// for these texts. When one of them is requested, it applies to the
+// first ihdd, the next time to the second and so on. Which type a
+// given text part will be treated as can only be determined by
+// reading the file sequentially. The 9 types are: footnote separator,
+// footnote continuation separator, footnote continuation note, even
+// page header, odd page header, even page footer, odd page footer,
+// header and footer for the first page. HeaderFooter remembers the
+// current setting for each of these (but not the previous one) and
+// the following ihdd. A part of type 0xffff denotes a non-existing
+// part.
 class Ww1HeaderFooter : public Ww1PlcHdd
 {
-    sal_uInt16 nextIhdd;        // naechster textteil im HddText
-    sal_uInt16 nFtnSep;         // fusznoten trenner
-    sal_uInt16 nFtnFollowSep;   // folge fusznoten trenner
-    sal_uInt16 nFtnNote;        // folgefunsznotennotiz
-    sal_uInt16 nEvenHeadL;      // kopfzeilen grader seiten
-    sal_uInt16 nOddHeadL;       // kopfzeilen ungrader seiten
-    sal_uInt16 nEvenFootL;      // fuszzeilen grader seiten
-    sal_uInt16 nOddFootL;       // fuszzeilen ungerader seiten
-    sal_uInt16 nFirstHeadL;     // kopfzeilen der ersten seite
-    sal_uInt16 nFirstFootL;     // fuszzeilen der ersten seite
+    sal_uInt16 nextIhdd;        // next text part in HddText
+    sal_uInt16 nFtnSep;         // footnote separator
+    sal_uInt16 nFtnFollowSep;   // footnote continuation separator
+    sal_uInt16 nFtnNote;        // footnote continuation note
+    sal_uInt16 nEvenHeadL;
+    sal_uInt16 nOddHeadL;
+    sal_uInt16 nEvenFootL;
+    sal_uInt16 nOddFootL;
+    sal_uInt16 nFirstHeadL;
+    sal_uInt16 nFirstFootL;
     enum HeaderFooterMode {
         None, FtnSep, FtnFollowSep, FtnNote, EvenHeadL, OddHeadL,
         EvenFootL, OddFootL, FirstHeadL, MaxHeaderFooterMode
@@ -1148,7 +1139,7 @@ public:
 class Ww1Fields : public Ww1PlcFields
 {
     sal_uInt16 nPlcIndex;
-    OUString sErgebnis; // das von word errechnete ergebniss
+    OUString sResult; // Calculated by Word
     SwField* pField;
     sal_uLong Where(sal_uInt16 nIndex)  // within the text
         { return Ww1PlcFields::Where(nIndex) - rFib.GetFIB().fcMinGet(); }
@@ -1419,9 +1410,9 @@ public:
     }
 };
 
-// zentraler aufhaenger der ww-seite des filters, konstruiert aus dem
-// inputstream (ww-datei) enthaelt er alles, was noetig ist, um in die
-// shell (pm-seite) gepiped zu werden.
+// Central point of access for the ww side of the filter, constructed
+// from the input stream (ww file). It contains everything necessary
+// for being piped into the shell (pm side).
 class Ww1Manager
 {
     sal_Bool bOK;
@@ -1431,17 +1422,17 @@ class Ww1Manager
     Ww1Fib aFib;
     Ww1Dop aDop;
     Ww1Fonts aFonts;
-    // ab jetzt alles paarig, fuer 'pushed':
+    // from now on, everything in pairs, for 'pushed':
     Ww1DocText aDoc;
     Ww1PlainText* pDoc;
     sal_uLong ulDocSeek;
     sal_uLong* pSeek;
     Ww1TextFields aFld;
     Ww1Fields* pFld;
-    // selbst 'push'bar:
+    // 'push'able itself:
     Ww1Chp aChp;
     Ww1Pap aPap;
-    // nicht in textbereichen vorhanden, wenn ge'pushed'
+    // not present in text ranges if 'pushed'
     Ww1Footnotes aFtn;
     Ww1Bookmarks aBooks;
     Ww1Sep aSep;
