@@ -56,7 +56,7 @@ import com.sun.star.uno.UnoRuntime;
 
 public class FilterOptions
 {
-    //_____________________________________
+
     // public member to provide these options to our outside filter class
     public  com.sun.star.io.XInputStream            m_xInput        ;
     public  com.sun.star.io.XOutputStream           m_xOutput       ;
@@ -67,12 +67,12 @@ public class FilterOptions
     public  boolean                                 m_bCaseChange   ;
     public  boolean                                 m_bLower        ;
 
-    //_____________________________________
+
     // private members for internal things
     private XMultiComponentFactory m_xMCF         ;
     private XComponentContext m_Ctx                ;
 
-    //_____________________________________
+
     // interface
     /**
      * creates a new instance of this class
@@ -187,7 +187,7 @@ public class FilterOptions
         return(m_xInput!=null || m_xOutput!=null);
     }
 
-    //_____________________________________
+
     // helper
     /**
      * In case we couldn't found any valid stream inside the given MediaDescriptor,

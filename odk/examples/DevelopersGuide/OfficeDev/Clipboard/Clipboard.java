@@ -45,9 +45,9 @@ import com.sun.star.datatransfer.clipboard.XSystemClipboard;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.AnyConverter;
 
-//-------------------------------------------------
+
 // Demonstrates the usage of the clipboard service
-//-------------------------------------------------
+
 
 public class Clipboard
 {
@@ -89,9 +89,9 @@ public class Clipboard
 
             XSystemClipboard xClipboard = SystemClipboard.create(xOfficeContext);
 
-            //---------------------------------------------------
+
             // registering as clipboard listener
-            //---------------------------------------------------
+
 
             ClipboardListener aClipListener= new ClipboardListener();
 
@@ -100,9 +100,9 @@ public class Clipboard
             // Read ClipBoard
             readClipBoard(xClipboard);
 
-            //---------------------------------------------------
+
             // becoming a clipboard owner
-            //---------------------------------------------------
+
 
             System.out.println("Becoming a clipboard owner...");
             System.out.println("");
@@ -130,9 +130,9 @@ public class Clipboard
             // Read ClipBoard again
             readClipBoard(xClipboard);
 
-            //---------------------------------------------------
+
             // unregistering as clipboard listener
-            //---------------------------------------------------
+
             xClipboard.removeClipboardListener(aClipListener);
 
             // close test document
@@ -157,9 +157,9 @@ public class Clipboard
     public static void readClipBoard(XClipboard xClipboard)
         throws java.lang.Exception
     {
-        //---------------------------------------------------
+
         // get a list of formats currently on the clipboard
-        //---------------------------------------------------
+
 
         XTransferable xTransferable = xClipboard.getContents();
 

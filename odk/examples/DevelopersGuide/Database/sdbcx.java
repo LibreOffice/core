@@ -123,7 +123,7 @@ public class sdbcx
                 new com.sun.star.beans.PropertyValue("user",0,"test1",com.sun.star.beans.PropertyState.DIRECT_VALUE),
                 new com.sun.star.beans.PropertyValue("password",0,"test1",com.sun.star.beans.PropertyState.DIRECT_VALUE)
             };
-            //
+
 
             // now create a connection to adabas
             con = xDriver.connect(adabasURL,adabasProps);
@@ -172,10 +172,10 @@ public class sdbcx
         }
     }
 
-    //###########################################################
+
     // 15. example
     // print all columns of a XColumnsSupplier
-    //###########################################################
+
     public static void printColumns(XColumnsSupplier xColumnsSup) throws com.sun.star.uno.Exception,SQLException
     {
         System.out.println("Example printColumns");
@@ -186,10 +186,10 @@ public class sdbcx
         for ( int i =0; i<= aColumnNames.length-1; i++)
             System.out.println("    " + aColumnNames[i]);
     }
-    //###########################################################
+
     // 16. example
     // print all keys inclusive the columns of a key
-    //###########################################################
+
     public static void printKeys(XColumnsSupplier xColumnsSup) throws com.sun.star.uno.Exception,SQLException
     {
         System.out.println("Example printKeys");
@@ -208,10 +208,10 @@ public class sdbcx
             }
         }
     }
-    //###########################################################
+
     // 17. example
     // print all keys inclusive the columns of a key
-    //###########################################################
+
     public static void printIndexes(XColumnsSupplier xColumnsSup) throws com.sun.star.uno.Exception,SQLException
     {
         System.out.println("Example printIndexes");
@@ -231,10 +231,10 @@ public class sdbcx
         }
     }
 
-    //###########################################################
+
     // 18. example
     // column properties
-    //###########################################################
+
     public static void printColumnProperties(Object column) throws com.sun.star.uno.Exception,SQLException
     {
         System.out.println("Example printColumnProperties");
@@ -256,10 +256,10 @@ public class sdbcx
             System.out.println("DefaultValue:    " + xProp.getPropertyValue("DefaultValue"));
     }
 
-    //###########################################################
+
     // 19. example
     // index properties
-    //###########################################################
+
     public static void printIndexProperties(Object index) throws com.sun.star.uno.Exception,SQLException
     {
         System.out.println("Example printIndexProperties");
@@ -271,10 +271,10 @@ public class sdbcx
         System.out.println("IsClustered:       " + xProp.getPropertyValue("IsClustered"));
     }
 
-    //###########################################################
+
     // 20. example
     // key properties
-    //###########################################################
+
     public static void printKeyProperties(Object key) throws com.sun.star.uno.Exception,SQLException
     {
         System.out.println("Example printKeyProperties");
@@ -286,10 +286,10 @@ public class sdbcx
         System.out.println("DeleteRule:      " + xProp.getPropertyValue("DeleteRule"));
     }
 
-    //###########################################################
+
     // 21. example
     // print all groups and the users with their privileges who belong to this group
-    //###########################################################
+
     public static void printGroups(XTablesSupplier xTabSup) throws com.sun.star.uno.Exception,SQLException
     {
         System.out.println("Example printGroups");
@@ -320,10 +320,10 @@ public class sdbcx
         }
     }
 
-    //###########################################################
+
     // 22. example
     // create the table salesmen
-    //###########################################################
+
     public static void createTableSalesMen(XNameAccess xTables) throws com.sun.star.uno.Exception,SQLException
     {
         System.out.println("Example createTableSalesMen");
@@ -395,10 +395,10 @@ public class sdbcx
         }
     }
 
-    //###########################################################
+
     // 23. example
     // create a user
-    //###########################################################
+
     public static void createUser(XNameAccess xUsers) throws com.sun.star.uno.Exception,SQLException
     {
         System.out.println("Example createUser");

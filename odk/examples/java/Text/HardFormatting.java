@@ -32,15 +32,15 @@
  *
  *************************************************************************/
 
-//***************************************************************************
+
 // comment: Step 1: get the Desktop object from the office
 //          Step 2: open an empty text document
 //          Step 3: enter a example text
 //          Step 4: get some text attributes
 //          Step 5: check the PropertyState from the selection
-//
+
 //          Chapter 4.1.4 Hard formatting
-//***************************************************************************
+
 
 import com.sun.star.uno.UnoRuntime;
 

@@ -135,9 +135,9 @@ public class SampleThesaurus extends ComponentBase implements
     // __________ interface methods __________
 
 
-    //*****************
+
     //XSupportedLocales
-    //*****************
+
     public Locale[] getLocales()
         throws com.sun.star.uno.RuntimeException
     {
@@ -158,9 +158,9 @@ public class SampleThesaurus extends ComponentBase implements
         return bRes;
     }
 
-    //**********
+
     //XThesaurus
-    //**********
+
     public XMeaning[] queryMeanings(
             String aTerm, Locale aLocale,
             PropertyValue[] aProperties )
@@ -203,18 +203,18 @@ public class SampleThesaurus extends ComponentBase implements
     }
 
 
-    //********************
+
     // XServiceDisplayName
-    //********************
+
     public String getServiceDisplayName( Locale aLocale )
         throws com.sun.star.uno.RuntimeException
     {
         return "Java Samples";
     }
 
-    //****************
+
     // XInitialization
-    //****************
+
     public void initialize( Object[] aArguments )
         throws com.sun.star.uno.Exception,
                com.sun.star.uno.RuntimeException
@@ -229,9 +229,9 @@ public class SampleThesaurus extends ComponentBase implements
         }
     }
 
-    //*************
+
     // XServiceInfo
-    //*************
+
     public boolean supportsService( String aServiceName )
         throws com.sun.star.uno.RuntimeException
     {

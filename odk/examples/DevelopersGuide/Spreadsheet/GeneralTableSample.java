@@ -43,7 +43,7 @@ import com.sun.star.uno.RuntimeException;
 public class GeneralTableSample extends SpreadsheetDocHelper
 {
 
-// ________________________________________________________________
+
 
     public static void main( String args[] )
     {
@@ -64,7 +64,7 @@ public class GeneralTableSample extends SpreadsheetDocHelper
         System.exit( 0 );
     }
 
-// ________________________________________________________________
+
 
     /// This sample function modifies cells and cell ranges.
     public void doSampleFunction() throws RuntimeException, Exception
@@ -217,12 +217,12 @@ public class GeneralTableSample extends SpreadsheetDocHelper
         xSheet.getCellByPosition( 2, 9 ).setFormula( aText );
     }
 
-// ________________________________________________________________
+
 
     public GeneralTableSample( String[] args )
     {
         super( args );
     }
 
-// ________________________________________________________________
+
 }

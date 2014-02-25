@@ -32,14 +32,14 @@
  *
  *************************************************************************/
 
-//***************************************************************************
+
 // comment: Step 1: get the Desktop object from the office
 //          Step 2: open an empty text document
 //          Step 3: create a new Paragraph style
 //          Step 4: apply the Paragraph style
-//
+
 //          Chapter 4.1.3 Defining Your Own Style
-//***************************************************************************
+
 
 import com.sun.star.uno.UnoRuntime;
 

@@ -49,7 +49,7 @@ import java.util.*;
  */
 public class ViewContainer extends Thread
 {
-    // ____________________
+
 
     /**
      * provides a singleton view container
@@ -65,7 +65,7 @@ public class ViewContainer extends Thread
         return maSingleton;
     }
 
-    // ____________________
+
 
     /**
      * ctor
@@ -80,7 +80,7 @@ public class ViewContainer extends Thread
         Runtime.getRuntime().addShutdownHook(this);
     }
 
-    // ____________________
+
 
     /**
      * This register a new view inside this global container
@@ -97,7 +97,7 @@ public class ViewContainer extends Thread
         }
     }
 
-    // ____________________
+
 
     /**
      * This deregister a view from this global container.
@@ -158,7 +158,7 @@ public class ViewContainer extends Thread
         }
     }
 
-    // ____________________
+
 
     /**
      * add/remove listener for possibe shutdown events
@@ -172,7 +172,7 @@ public class ViewContainer extends Thread
         }
     }
 
-    // ____________________
+
 
     public void removeListener( IShutdownListener rListener )
     {
@@ -183,7 +183,7 @@ public class ViewContainer extends Thread
         }
     }
 
-    // ____________________
+
 
     /**
      * Is called from current runtime system of the java machine
@@ -237,14 +237,14 @@ public class ViewContainer extends Thread
         }
     }
 
-    // ____________________
+
 
     /**
      * @const   BASICNAME   it's used to create uinque names for all regieterd views
      */
     private static final String BASICNAME = "Document View ";
 
-    // ____________________
+
 
     /**
      * @member  mbInplace           indicates using of inplace office frames instead of outplace ones

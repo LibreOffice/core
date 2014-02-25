@@ -53,9 +53,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 
-//##################################################################################################
+
 //#### EXPORTED ####################################################################################
-//##################################################################################################
+
 
 /**
  * This function is called to get service factories for an implementation.

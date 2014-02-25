@@ -1296,7 +1296,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
             // just in case the listener has been added to several controls,
             // we make sure we refer to the right one
             if (sName.equals("CommandButton1")) {
-                //...
+
             }
         }catch (com.sun.star.uno.Exception ex){
             /* perform individual exception handling here.

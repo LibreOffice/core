@@ -71,9 +71,9 @@ namespace connectivity
             };
 
             ::std::vector< Parameter>       m_aParameters;
-            //====================================================================
+
             // Data attributes
-            //====================================================================
+
             TTypeInfoVector                 m_aTypeInfo;    // Hashtable containing an entry
                                                                         //  for each row returned by
                                                                         //  DatabaseMetaData.getTypeInfo.

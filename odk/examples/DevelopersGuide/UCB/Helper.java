@@ -147,17 +147,17 @@ public class Helper {
     Object executeCommand( XInterface ifc, String commandName, Object argument )
         throws com.sun.star.ucb.CommandAbortedException, com.sun.star.uno.Exception  {
 
-        /////////////////////////////////////////////////////////////////////
+
         // Obtain command processor interface from given content.
-        /////////////////////////////////////////////////////////////////////
+
 
         XCommandProcessor cmdProcessor
             = UnoRuntime.queryInterface(
             XCommandProcessor.class, ifc );
 
-        /////////////////////////////////////////////////////////////////////
+
         // Assemble command to execute.
-        /////////////////////////////////////////////////////////////////////
+
 
         Command command = new Command();
         command.Name     = commandName;

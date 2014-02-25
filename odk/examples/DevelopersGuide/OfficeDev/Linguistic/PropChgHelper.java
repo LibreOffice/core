@@ -138,9 +138,9 @@ public class PropChgHelper implements
 
     // __________ interface methods __________
 
-    //***************
+
     // XEventListener
-    //***************
+
     public void disposing( EventObject aSource )
             throws com.sun.star.uno.RuntimeException
     {
@@ -150,18 +150,18 @@ public class PropChgHelper implements
         }
     }
 
-    //************************
+
     // XPropertyChangeListener
-    //************************
+
     public void propertyChange( PropertyChangeEvent aEvt )
             throws com.sun.star.uno.RuntimeException
     {
         // will be overloaded in derived classes
     }
 
-    //******************************
+
     // XLinguServiceEventBroadcaster
-    //******************************
+
     public boolean addLinguServiceEventListener(
             XLinguServiceEventListener xListener )
         throws com.sun.star.uno.RuntimeException

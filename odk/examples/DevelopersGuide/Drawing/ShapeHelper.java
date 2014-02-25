@@ -59,7 +59,7 @@ import com.sun.star.text.XTextRange;
 public class ShapeHelper
 {
     // __________ static helper methods __________
-    //
+
     public static XPropertySet createAndInsertShape( XComponent xDrawDoc,
             XShapes xShapes, Point aPos, Size aSize, String sShapeType )
         throws java.lang.Exception

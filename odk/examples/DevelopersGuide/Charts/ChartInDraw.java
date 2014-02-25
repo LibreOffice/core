@@ -60,7 +60,7 @@ import com.sun.star.beans.UnknownPropertyException;
 
 public class ChartInDraw
 {
-    // ____________________
+
 
     public static void main( String args[] )
     {
@@ -108,7 +108,7 @@ public class ChartInDraw
     }
 
 
-    // ________________________________________
+
 
     public ChartInDraw( XChartDocument aChartDoc )
     {
@@ -116,7 +116,7 @@ public class ChartInDraw
         maDiagram       = maChartDocument.getDiagram();
     }
 
-    // ____________________
+
 
     public void lockControllers()
         throws RuntimeException
@@ -124,7 +124,7 @@ public class ChartInDraw
         UnoRuntime.queryInterface( XModel.class, maChartDocument ).lockControllers();
     }
 
-    // ____________________
+
 
     public void unlockControllers()
         throws RuntimeException
@@ -132,7 +132,7 @@ public class ChartInDraw
         UnoRuntime.queryInterface( XModel.class, maChartDocument ).unlockControllers();
     }
 
-    // ____________________
+
 
     public void testArea()
         throws RuntimeException, UnknownPropertyException, PropertyVetoException,
@@ -148,7 +148,7 @@ public class ChartInDraw
         }
     }
 
-    // ____________________
+
 
     public void testWall()
         throws RuntimeException, UnknownPropertyException, PropertyVetoException,
@@ -162,7 +162,7 @@ public class ChartInDraw
         aWall.setPropertyValue( "FillStyle",  FillStyle.SOLID );
     }
 
-    // ____________________
+
 
     public void testTitle()
         throws RuntimeException, UnknownPropertyException, PropertyVetoException,
@@ -183,7 +183,7 @@ public class ChartInDraw
         }
     }
 
-    // ____________________
+
 
     public void testLegend()
         throws RuntimeException, UnknownPropertyException, PropertyVetoException,
@@ -197,7 +197,7 @@ public class ChartInDraw
         aLegendProp.setPropertyValue( "FillColor", new Integer( 0xeeddee ));
     }
 
-    // ____________________
+
 
     public void testThreeD()
         throws RuntimeException, UnknownPropertyException, PropertyVetoException,
@@ -283,10 +283,10 @@ public class ChartInDraw
         aDiaProp.setPropertyValue( "D3DSceneLightOn1", new Boolean( true ));
     }
 
-    // ______________________________
-    //
+
+
     // private members
-    // ______________________________
+
 
     private XChartDocument maChartDocument;
     private XDiagram       maDiagram;

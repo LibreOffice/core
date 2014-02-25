@@ -690,7 +690,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
         // ensure that we have the tables needed for our example
         ensureTables();
 
-        // --------------------------------------------------------------
+
         /* create some shapes */
         XPropertySet xSNRField =    m_formLayer.insertControlLine( "NumericField", "SNR", "", 3 );
                                     m_formLayer.insertControlLine( "TextField", "FIRSTNAME", "", 11);
@@ -704,7 +704,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
         xSNRField.setPropertyValue( "DecimalAccuracy", new Short( (short)0 ) );
         xZipField.setPropertyValue( "DecimalAccuracy", new Short( (short)0 ) );
 
-        // --------------------------------------------------------------
+
         /** need the form the control models belong to
             for this, we simply obtain the parent for any of the control models we have
 
@@ -720,7 +720,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
         m_xMasterForm.setPropertyValue( "CommandType", new Integer( CommandType.TABLE ) );
         m_xMasterForm.setPropertyValue( "Command", "SALESMEN" );
 
-        // --------------------------------------------------------------
+
         // insert the buttons
         // create our button operator, if necessary
         m_aOperator = new ButtonOperator( m_xCtx, m_document, m_xMasterForm );
@@ -732,7 +732,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
         createButton( 42, 63, 8, "new", ">*", FormFeature.MoveToInsertRow );
         createButton( 58, 63, 13, "reload", "reload", FormFeature.ReloadForm );
 
-        // --------------------------------------------------------------
+
         // create a sub for for the sales
 
         // for this, first create a sub form and bind it to the SALES table
@@ -786,7 +786,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
         xFormReset.addResetListener( this );
 
 
-        // --------------------------------------------------------------
+
         // the option for filtering the sales form
         XIndexContainer xSalesFilterForm = m_document.createSiblingForm( xSalesForm, "SalesFilter" );
         XPropertySet xSFFProps = UNO.queryPropertySet( xSalesFilterForm );
@@ -806,7 +806,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
             xManualFilter, xApplyFilter );
 
 
-        // --------------------------------------------------------------
+
         // the options section
         // for this, we need a form which is a sibling of our master form (don't want to interfere
         // the controls which represent options only with the controls which are used for data access)
@@ -858,7 +858,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
         // initally, we want to generate keys when moving to a new record
         xKeyGen.setPropertyValue( "DefaultState", new Short( (short)1 ) );
 
-        // --------------------------------------------------------------
+
         // second options block
         xLabel = m_formLayer.createControlAndShape( "GroupBox", 103, 33, 56, 25, xOptionsForm  );
         xLabel.setPropertyValue( "Name", "Misc" );

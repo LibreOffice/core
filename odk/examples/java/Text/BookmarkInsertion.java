@@ -32,14 +32,14 @@
  *
  *************************************************************************/
 
-//***************************************************************************
+
 // comment: Step 1: get the Desktop object from the office
 //          Step 2: open an empty text document
 //          Step 3: enter a example text
 //          Step 4: insert some bookmarks
-//
+
 //          Chapter 5.1.1.4 Inserting bookmarks
-//***************************************************************************
+
 
 import com.sun.star.uno.UnoRuntime;
 

@@ -62,7 +62,7 @@ public class SpreadsheetSample : SpreadsheetDocHelper
         doApplicationSettingsSamples();
     }
 
-// ________________________________________________________________
+
 
     /** All samples regarding the service com.sun.star.sheet.SheetCell. */
     private void doCellSamples()
@@ -172,7 +172,7 @@ public class SpreadsheetSample : SpreadsheetDocHelper
         xAnnotation.setIsVisible( true );
     }
 
-// ________________________________________________________________
+
 
     /** All samples regarding the service com.sun.star.sheet.SheetCellRange. */
     private void doCellRangeSamples()
@@ -498,7 +498,7 @@ public class SpreadsheetSample : SpreadsheetDocHelper
             xSheet.getCellRangeByName( aRange );
     }
 
-// ________________________________________________________________
+
 
     /** All samples regarding cell range collections. */
     private void doCellRangesSamples()
@@ -570,7 +570,7 @@ public class SpreadsheetSample : SpreadsheetDocHelper
             + " resulting list: " + xContainer.getRangeAddressesAsString() );
     }
 
-// ________________________________________________________________
+
 
     /** All samples regarding cell cursors. */
     private void doCellCursorSamples()
@@ -606,7 +606,7 @@ public class SpreadsheetSample : SpreadsheetDocHelper
             "The used area is: " + getCellRangeAddressString( xCursor, true ) );
     }
 
-// ________________________________________________________________
+
 
     /** All samples regarding the formatting of cells and ranges. */
     private void doFormattingSamples()
@@ -792,7 +792,7 @@ public class SpreadsheetSample : SpreadsheetDocHelper
                 xEntries ) );
     }
 
-// ________________________________________________________________
+
 
     /** All samples regarding the spreadsheet document. */
     private void doDocumentSamples()
@@ -986,7 +986,7 @@ public class SpreadsheetSample : SpreadsheetDocHelper
         xScenario.apply();
     }
 
-// ________________________________________________________________
+
 
     private void doNamedRangesSamples()
     {
@@ -1064,7 +1064,7 @@ public class SpreadsheetSample : SpreadsheetDocHelper
         xSheet.getCellByPosition( 8, 49 ).setFormula( "=Apples+Oranges" );
     }
 
-// ________________________________________________________________
+
 
     /** Helper for doDatabaseSamples: get name of first database. */
     private String getFirstDatabaseName()
@@ -1338,7 +1338,7 @@ public class SpreadsheetSample : SpreadsheetDocHelper
             Console.WriteLine("can't get database");
     }
 
-// ________________________________________________________________
+
 
     private void doDataPilotSamples()
     {
@@ -1419,7 +1419,7 @@ public class SpreadsheetSample : SpreadsheetDocHelper
                 unoidl.com.sun.star.sheet.GeneralFunction.AVERAGE ) );
     }
 
-// ________________________________________________________________
+
 
     private void doFunctionAccessSamples()
     {
@@ -1469,7 +1469,7 @@ public class SpreadsheetSample : SpreadsheetDocHelper
         Console.WriteLine();
     }
 
-// ________________________________________________________________
+
 
     private void doApplicationSettingsSamples()
     {
@@ -1490,6 +1490,6 @@ public class SpreadsheetSample : SpreadsheetDocHelper
             Console.WriteLine( aEntries[i] );
     }
 
-// ________________________________________________________________
+
 
 }

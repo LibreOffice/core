@@ -119,9 +119,9 @@ public class ResourceManager {
              ( transOperation.equals( "copy" ) || transOperation.equals( "move" ) ||
                transOperation.equals( "link" ))) {
 
-            /////////////////////////////////////////////////////////////////////
+
             // Copy, move or create a link for a resource to another location...
-            /////////////////////////////////////////////////////////////////////
+
             GlobalTransferCommandArgument arg = new GlobalTransferCommandArgument();
             if ( transOperation.equals( "copy" )) {
                 arg.Operation = TransferCommandOperation.COPY;

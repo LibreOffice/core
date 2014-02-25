@@ -42,14 +42,14 @@ public class ViewSample : SpreadsheetDocHelper
         }
     }
 
-// ________________________________________________________________
+
 
     public ViewSample( String[] args )
         : base( args )
     {
     }
     
-// ________________________________________________________________
+
 
     /** This sample function performs all changes on the view. */
     public void doSampleFunction()
@@ -135,7 +135,7 @@ public class ViewSample : SpreadsheetDocHelper
         }
     }
 
-// ________________________________________________________________
+
 
     //  listener to react on finished selection
 
@@ -177,6 +177,6 @@ public class ViewSample : SpreadsheetDocHelper
         }
     }
 
-// ________________________________________________________________
+
 
 }

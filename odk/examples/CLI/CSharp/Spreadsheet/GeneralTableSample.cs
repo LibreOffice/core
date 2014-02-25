@@ -42,13 +42,13 @@ public class GeneralTableSample : SpreadsheetDocHelper
         }
     }
 
-// ________________________________________________________________
+
     
     public GeneralTableSample( String[] args ) : base( args )
     {
     }
 
-// ________________________________________________________________
+
 
     /// This sample function modifies cells and cell ranges.
     public void doSampleFunction()

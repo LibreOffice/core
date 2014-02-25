@@ -36,9 +36,9 @@ import com.sun.star.datatransfer.XTransferable;
 import com.sun.star.datatransfer.clipboard.XClipboard;
 import com.sun.star.datatransfer.clipboard.XClipboardOwner;
 
-//--------------------------
+
 //  A simple clipboard owner
-//--------------------------
+
 
 public class ClipboardOwner implements XClipboardOwner
 {
