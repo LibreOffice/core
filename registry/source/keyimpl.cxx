@@ -30,9 +30,9 @@ using namespace store;
 
 namespace { static char const VALUE_PREFIX[] = "$VL_"; }
 
-//*********************************************************************
+
 //  ORegKey()
-//
+
 ORegKey::ORegKey(const OUString& keyName, ORegistry* pReg)
     : m_refCount(1)
     , m_name(keyName)
@@ -42,43 +42,43 @@ ORegKey::ORegKey(const OUString& keyName, ORegistry* pReg)
 {
 }
 
-//*********************************************************************
+
 //  ~ORegKey()
-//
+
 ORegKey::~ORegKey()
 {
     OSL_POSTCOND(m_refCount == 0, "registry::ORegKey::dtor(): refcount not zero.");
 }
 
-//*********************************************************************
+
 //  releaseKey
-//
+
 RegError ORegKey::releaseKey(RegKeyHandle hKey)
 {
     return m_pRegistry->releaseKey(hKey);
 }
 
-//*********************************************************************
+
 //  createKey
-//
+
 RegError ORegKey::createKey(const OUString& keyName, RegKeyHandle* phNewKey)
 {
     return m_pRegistry->createKey(this, keyName, phNewKey);
 }
 
 
-//*********************************************************************
+
 //  openKey
-//
+
 RegError ORegKey::openKey(const OUString& keyName, RegKeyHandle* phOpenKey)
 {
     return m_pRegistry->openKey(this, keyName, phOpenKey);
 }
 
 
-//*********************************************************************
+
 //  openSubKeys
-//
+
 RegError ORegKey::openSubKeys(const OUString& keyName, RegKeyHandle** phOpenSubKeys, sal_uInt32* pnSubKeys)
 {
     RegError _ret = REG_NO_ERROR;
@@ -138,9 +138,9 @@ RegError ORegKey::openSubKeys(const OUString& keyName, RegKeyHandle** phOpenSubK
 }
 
 
-//*********************************************************************
+
 //  getKeyNames
-//
+
 RegError ORegKey::getKeyNames(const OUString& keyName,
                               rtl_uString*** pSubKeyNames,
                               sal_uInt32* pnSubKeys)
@@ -198,27 +198,27 @@ RegError ORegKey::getKeyNames(const OUString& keyName,
 }
 
 
-//*********************************************************************
+
 //  closeKey
-//
+
 RegError ORegKey::closeKey(RegKeyHandle hKey)
 {
     return (m_pRegistry->closeKey(hKey));
 }
 
 
-//*********************************************************************
+
 //  deleteKey
-//
+
 RegError ORegKey::deleteKey(const OUString& keyName)
 {
     return (m_pRegistry->deleteKey(this, keyName));
 }
 
 
-//*********************************************************************
+
 //  getValueType
-//
+
 RegError ORegKey::getValueInfo(const OUString& valueName, RegValueType* pValueType, sal_uInt32* pValueSize) const
 {
     OStoreStream    rValue;
@@ -283,9 +283,9 @@ RegError ORegKey::getValueInfo(const OUString& valueName, RegValueType* pValueTy
 }
 
 
-//*********************************************************************
+
 //  setValue
-//
+
 RegError ORegKey::setValue(const OUString& valueName, RegValueType vType, RegValue value, sal_uInt32 vSize)
 {
     OStoreStream    rValue;
@@ -358,9 +358,9 @@ RegError ORegKey::setValue(const OUString& valueName, RegValueType vType, RegVal
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
+
 //  setLongListValue
-//
+
 RegError ORegKey::setLongListValue(const OUString& valueName, sal_Int32* pValueList, sal_uInt32 len)
 {
     OStoreStream    rValue;
@@ -417,9 +417,9 @@ RegError ORegKey::setLongListValue(const OUString& valueName, sal_Int32* pValueL
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
+
 //  setStringListValue
-//
+
 RegError ORegKey::setStringListValue(const OUString& valueName, sal_Char** pValueList, sal_uInt32 len)
 {
     OStoreStream    rValue;
@@ -485,9 +485,9 @@ RegError ORegKey::setStringListValue(const OUString& valueName, sal_Char** pValu
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
+
 //  setUnicodeListValue
-//
+
 RegError ORegKey::setUnicodeListValue(const OUString& valueName, sal_Unicode** pValueList, sal_uInt32 len)
 {
     OStoreStream    rValue;
@@ -553,9 +553,9 @@ RegError ORegKey::setUnicodeListValue(const OUString& valueName, sal_Unicode** p
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
+
 //  getValue
-//
+
 RegError ORegKey::getValue(const OUString& valueName, RegValue value) const
 {
     OStoreStream    rValue;
@@ -646,9 +646,9 @@ RegError ORegKey::getValue(const OUString& valueName, RegValue value) const
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
+
 //  getLongListValue
-//
+
 RegError ORegKey::getLongListValue(const OUString& valueName, sal_Int32** pValueList, sal_uInt32* pLen) const
 {
     OStoreStream    rValue;
@@ -743,9 +743,9 @@ RegError ORegKey::getLongListValue(const OUString& valueName, sal_Int32** pValue
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
+
 //  getStringListValue
-//
+
 RegError ORegKey::getStringListValue(const OUString& valueName, sal_Char*** pValueList, sal_uInt32* pLen) const
 {
     OStoreStream    rValue;
@@ -849,9 +849,9 @@ RegError ORegKey::getStringListValue(const OUString& valueName, sal_Char*** pVal
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
+
 //  getUnicodeListValue
-//
+
 RegError ORegKey::getUnicodeListValue(const OUString& valueName, sal_Unicode*** pValueList, sal_uInt32* pLen) const
 {
     OStoreStream    rValue;
@@ -955,9 +955,9 @@ RegError ORegKey::getUnicodeListValue(const OUString& valueName, sal_Unicode*** 
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
+
 //  getKeyType()
-//
+
 RegError ORegKey::getKeyType(const OUString& name, RegKeyType* pKeyType) const
 {
     *pKeyType = RG_KEYTYPE;
@@ -988,9 +988,9 @@ RegError ORegKey::getResolvedKeyName(const OUString& keyName,
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
+
 //  countSubKeys()
-//
+
 sal_uInt32 ORegKey::countSubKeys()
 {
     REG_GUARD(m_pRegistry->m_mutex);
