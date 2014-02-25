@@ -722,7 +722,7 @@ int mscx_filterCppException(
             reinterpret_cast< char * >( __pxcptinfoptrs() ) +
             // As long as we don't demand MSVCR source as build prerequisite,
             // we have to code those offsets here.
-            //
+
             // MSVS9/crt/src/mtdll.h:
             // offsetof (_tiddata, _curexception) -
             // offsetof (_tiddata, _tpxcptinfoptrs):

@@ -21,7 +21,7 @@
 // This is an implementation of the x86-64 ABI as described in 'System V
 // Application Binary Interface, AMD64 Architecture Processor Supplement'
 // (http://www.x86-64.org/documentation/abi-0.95.pdf)
-//
+
 // The code in this file is a modification of src/x86/ffi64.c from libffi
 // (http://sources.redhat.com/libffi/) which is under the following license:
 

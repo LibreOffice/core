@@ -44,7 +44,7 @@ import com.sun.star.uno.XInterface;
 // notifyAccepting) has a remote bridge to the Java client and a local JNI
 // bridge to a C++ com.sun.star.test.bridges.testequals.impl service.  The C++
 // service and the Java client are also connected via a remote bridge.
-//
+
 // The Java server gets two objects (INSTANCE1, INSTANCE2), once directly from
 // the Java client via the remote bridge (proxies test1A, test2A), and once
 // through the C++ service via the JNI bridge (proxies test1B, test2B).

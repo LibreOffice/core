@@ -41,7 +41,7 @@ namespace jni_uno
 
 class JNI_info;
 
-//==============================================================================
+
 struct BridgeRuntimeError
 {
     OUString m_message;
@@ -52,7 +52,7 @@ struct BridgeRuntimeError
 };
 
 
-//==============================================================================
+
 class JNI_context
 {
     JNI_info const * m_jni_info;
@@ -95,7 +95,7 @@ public:
     OUString get_stack_trace( jobject jo_exc = 0 ) const;
 };
 
-//______________________________________________________________________________
+
 inline void JNI_context::ensure_no_exception() const
 {
     if (JNI_FALSE != m_env->ExceptionCheck())
@@ -104,7 +104,7 @@ inline void JNI_context::ensure_no_exception() const
     }
 }
 
-//______________________________________________________________________________
+
 inline bool JNI_context::assert_no_exception() const
 {
     if (JNI_FALSE != m_env->ExceptionCheck())
@@ -120,7 +120,7 @@ inline bool JNI_context::assert_no_exception() const
 }
 
 
-//==============================================================================
+
 class JNI_guarded_context
     : private ::jvmaccess::VirtualMachine::AttachGuard,
       public JNI_context
@@ -139,7 +139,7 @@ public:
 };
 
 
-//==============================================================================
+
 class JLocalAutoRef
 {
     JNI_context const & m_jni;
@@ -167,14 +167,14 @@ public:
     inline JLocalAutoRef & operator = ( JLocalAutoRef & auto_ref );
 };
 
-//______________________________________________________________________________
+
 inline JLocalAutoRef::~JLocalAutoRef() SAL_THROW(())
 {
     if (0 != m_jo)
         m_jni->DeleteLocalRef( m_jo );
 }
 
-//______________________________________________________________________________
+
 inline JLocalAutoRef::JLocalAutoRef( JLocalAutoRef & auto_ref )
     : m_jni( auto_ref.m_jni ),
       m_jo( auto_ref.m_jo )
@@ -182,7 +182,7 @@ inline JLocalAutoRef::JLocalAutoRef( JLocalAutoRef & auto_ref )
     auto_ref.m_jo = 0;
 }
 
-//______________________________________________________________________________
+
 inline jobject JLocalAutoRef::release()
 {
     jobject jo = m_jo;
@@ -190,7 +190,7 @@ inline jobject JLocalAutoRef::release()
     return jo;
 }
 
-//______________________________________________________________________________
+
 inline void JLocalAutoRef::reset()
 {
     if (0 != m_jo)
@@ -198,7 +198,7 @@ inline void JLocalAutoRef::reset()
     m_jo = 0;
 }
 
-//______________________________________________________________________________
+
 inline void JLocalAutoRef::reset( jobject jo )
 {
     if (jo != m_jo)
@@ -209,7 +209,7 @@ inline void JLocalAutoRef::reset( jobject jo )
     }
 }
 
-//______________________________________________________________________________
+
 inline JLocalAutoRef & JLocalAutoRef::operator = ( JLocalAutoRef & auto_ref )
 {
     assert( m_jni.get_jni_env() == auto_ref.m_jni.get_jni_env() );
@@ -219,7 +219,7 @@ inline JLocalAutoRef & JLocalAutoRef::operator = ( JLocalAutoRef & auto_ref )
 }
 
 
-//==============================================================================
+
 struct rtl_mem
 {
     inline static void * operator new ( size_t nSize )
@@ -234,7 +234,7 @@ struct rtl_mem
     static inline rtl_mem * allocate( ::std::size_t bytes );
 };
 
-//______________________________________________________________________________
+
 inline rtl_mem * rtl_mem::allocate( ::std::size_t bytes )
 {
     void * p = rtl_allocateMemory( bytes );
@@ -244,7 +244,7 @@ inline rtl_mem * rtl_mem::allocate( ::std::size_t bytes )
 }
 
 
-//==============================================================================
+
 class TypeDescr
 {
     typelib_TypeDescription * m_td;
@@ -261,7 +261,7 @@ public:
         { return m_td; }
 };
 
-//______________________________________________________________________________
+
 inline TypeDescr::TypeDescr( typelib_TypeDescriptionReference * td_ref )
     : m_td( 0 )
 {

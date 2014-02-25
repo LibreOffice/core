@@ -42,17 +42,17 @@ using namespace ::osl;
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 
-//==================================================================================================
+
 
 // Perform the UNO call
-//
+
 // We must convert the parameters stored in gpreg, fpreg and ovrflw to UNO
 // arguments and call pThis->getUnoI()->pDispatcher.
-//
+
 // gpreg:  [ret *], this, [gpr params]
 // fpreg:  [fpr params]
 // ovrflw: [gpr or fpr params (properly aligned)]
-//
+
 // [ret *] is present when we are returning a structure bigger than 16 bytes
 // Simple types are returned in rax, rdx (int), or xmm0, xmm1 (fp).
 // Similarly structures <= 16 bytes are in rax, rdx, xmm0, xmm1 as necessary.
@@ -252,7 +252,7 @@ static typelib_TypeClass cpp2uno_call(
 }
 
 
-//==================================================================================================
+
 extern "C" typelib_TypeClass cpp_vtable_call(
     sal_Int32 nFunctionIndex, sal_Int32 nVtableOffset,
     void ** gpreg, void ** fpreg, void ** ovrflw,
@@ -386,18 +386,18 @@ extern "C" typelib_TypeClass cpp_vtable_call(
     return eRet;
 }
 
-//==================================================================================================
+
 extern "C" void privateSnippetExecutor( ... );
 
 const int codeSnippetSize = 24;
 
 // Generate a trampoline that redirects method calls to
 // privateSnippetExecutor().
-//
+
 // privateSnippetExecutor() saves all the registers that are used for
 // parameter passing on x86_64, and calls the cpp_vtable_call().
 // When it returns, privateSnippetExecutor() sets the return value.
-//
+
 // Note: The code snippet we build here must not create a stack frame,
 // otherwise the UNO exceptions stop working thanks to non-existing
 // unwinding info.
@@ -430,7 +430,7 @@ unsigned char * codeSnippet( unsigned char * code,
     return code + codeSnippetSize;
 }
 
-//==================================================================================================
+
 struct bridges::cpp_uno::shared::VtableFactory::Slot { void * fn; };
 
 bridges::cpp_uno::shared::VtableFactory::Slot *
@@ -439,14 +439,14 @@ bridges::cpp_uno::shared::VtableFactory::mapBlockToVtable(void * block)
     return static_cast< Slot * >(block) + 2;
 }
 
-//==================================================================================================
+
 sal_Size bridges::cpp_uno::shared::VtableFactory::getBlockSize(
     sal_Int32 slotCount)
 {
     return (slotCount + 2) * sizeof (Slot) + slotCount * codeSnippetSize;
 }
 
-//==================================================================================================
+
 bridges::cpp_uno::shared::VtableFactory::Slot *
 bridges::cpp_uno::shared::VtableFactory::initializeBlock(
     void * block, sal_Int32 slotCount)
@@ -457,7 +457,7 @@ bridges::cpp_uno::shared::VtableFactory::initializeBlock(
     return slots + slotCount;
 }
 
-//==================================================================================================
+
 
 unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
     Slot ** slots, unsigned char * code, typelib_InterfaceTypeDescription const * type,
@@ -506,7 +506,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
     return code;
 }
 
-//==================================================================================================
+
 void bridges::cpp_uno::shared::VtableFactory::flushCode(
     SAL_UNUSED_PARAMETER unsigned char const *,
     SAL_UNUSED_PARAMETER unsigned char const * )

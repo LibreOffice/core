@@ -38,7 +38,7 @@
 // only calls nothrow-functions (so GCC 4.7.0 with -O0 happens to not create a
 // .gcc_exception_table section at all for this function).  For some reason,
 // this also needs to be in a source file of its own.
-//
+
 // Also, this file should be compiled with -fnon-call-exceptions, and ideally
 // there would be a way to tell the compiler that the asm block contains calls
 // to functions that can potentially throw; see the mail thread starting at

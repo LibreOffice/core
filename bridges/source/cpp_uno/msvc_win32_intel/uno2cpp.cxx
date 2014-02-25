@@ -36,7 +36,7 @@ using namespace ::com::sun::star::uno;
 namespace
 {
 
-//==================================================================================================
+
 inline static void callVirtualMethod(
     void * pAdjustedThisPtr, sal_Int32 nVtableIndex,
     void * pRegisterReturn, typelib_TypeClass eReturnTypeClass,
@@ -136,7 +136,7 @@ Lcleanup:
     }
 }
 
-//==================================================================================================
+
 static void cpp_call(
     bridges::cpp_uno::shared::UnoInterfaceProxy * pThis,
     bridges::cpp_uno::shared::VtableSlot aVtableSlot,
