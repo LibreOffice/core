@@ -12,7 +12,7 @@
 // --with-system-poppler builds it can be advantageous though to package this
 // module as an individual, optional part, so that the core installation does
 // not feature a dependency on a poppler package.
-//
+
 // The
 // /org.openoffice.TypeDetection.Types/Types/pdf_Portable_Document_Format
 // configuration node contained in pdfimport.xcd needs to override a
