@@ -44,9 +44,9 @@ $(eval $(call gb_Module_add_targets,odk,\
 	$(if $(filter YESGCC,$(BUILD_UNOWINREG)$(COM)),CustomTarget_unowinreg) \
 	CustomTarget_classes \
 	CustomTarget_javadoc \
+	GeneratedPackage_odk_javadoc \
 	GeneratedPackage_uno_loader_classes \
 	$(if $(filter WNT,$(OS)),Library_unowinreg) \
-	Package_javadoc \
 	Package_unowinreg \
 ))
 endif
