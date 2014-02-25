@@ -5074,7 +5074,8 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
 }
 
 ///@see SwXTableRows::removeByIndex (TODO: seems to be C&P programming here)
-void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno::RuntimeException )
+void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (nCount == 0)
