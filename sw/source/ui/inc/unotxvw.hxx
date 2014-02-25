@@ -205,7 +205,9 @@ public:
     virtual sal_Bool SAL_CALL goRight( sal_Int16 nCount, sal_Bool bExpand )
         throw (::com::sun::star::uno::RuntimeException,
                std::exception);
-    virtual void SAL_CALL gotoStart( sal_Bool bExpand ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL gotoStart( sal_Bool bExpand )
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
     virtual void SAL_CALL gotoEnd( sal_Bool bExpand )
         throw (::com::sun::star::uno::RuntimeException,
                std::exception);
