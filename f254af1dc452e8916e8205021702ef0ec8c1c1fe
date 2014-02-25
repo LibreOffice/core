@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a890539_330a30d3",
+        "filename": "include/vcl/settings.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-02-25T19:58:12Z",
+      "side": 1,
+      "message": "IMHO it is a good idea to define both copy ctor and assignment operator or neither of them. So, if you removed operator\u003d, copy ctor should go as well.",
+      "revId": "f254af1dc452e8916e8205021702ef0ec8c1c1fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a890539_b36e2095",
+        "filename": "vcl/source/app/settings.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-02-25T19:58:12Z",
+      "side": 1,
+      "message": "Since the Impl classes are only visible in this source file now, they can be structs and there is no need to hide the data members behind private decl.",
+      "revId": "f254af1dc452e8916e8205021702ef0ec8c1c1fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a890539_7314b8f5",
+        "filename": "vcl/source/app/settings.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-02-25T19:58:12Z",
+      "side": 1,
+      "message": "Please split unrelated stylistic changes like this into a separate patch in the future. gerrit allows to push a series of patches.",
+      "revId": "f254af1dc452e8916e8205021702ef0ec8c1c1fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
