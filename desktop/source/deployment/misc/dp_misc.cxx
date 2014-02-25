@@ -18,6 +18,7 @@
  */
 
 #include <config_folders.h>
+#include <config_features.h>
 
 #include "dp_misc.h"
 #include "dp_version.hxx"
@@ -559,7 +560,7 @@ void syncRepositories(
                 Reference<task::XAbortChannel>(), xCmdEnv);
         }
     }
-
+#if !HAVE_FEATURE_MACOSX_SANDBOX
     if (bModified)
     {
         Reference<task::XRestartManager> restarter(task::OfficeRestartManager::get(comphelper::getProcessComponentContext()));
@@ -570,6 +571,7 @@ void syncRepositories(
                                       Reference<task::XInteractionHandler>());
         }
      }
+#endif
 }
 
 void disposeBridges(Reference<css::uno::XComponentContext> const & ctx)
