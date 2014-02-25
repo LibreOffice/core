@@ -1566,7 +1566,7 @@ sal_Bool SfxDocTplService_Impl::removeGroup( const OUString& rGroupName )
         if ( !maTemplateDirs.getLength() )
             return sal_False;
 
-        // check that the fs location is in writeble folder and this is not a "My templates" folder
+        // check that the fs location is in writable folder and this is not a "My templates" folder
         INetURLObject aGroupParentFolder( aGroupTargetURL );
         if (!aGroupParentFolder.removeSegment())
             return sal_False;
@@ -1683,7 +1683,7 @@ sal_Bool SfxDocTplService_Impl::renameGroup( const OUString& rOldName,
     if ( !maTemplateDirs.getLength() )
         return sal_False;
 
-    // check that the fs location is in writeble folder and this is not a "My templates" folder
+    // check that the fs location is in writable folder and this is not a "My templates" folder
     INetURLObject aGroupParentFolder( aGroupTargetURL );
     if (!aGroupParentFolder.removeSegment() ||
         isInternalTemplateDir(aGroupParentFolder.GetMainURL(INetURLObject::NO_DECODE)))
