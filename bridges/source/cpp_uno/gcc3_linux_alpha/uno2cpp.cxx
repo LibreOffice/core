@@ -121,7 +121,7 @@ void MapReturn(long r0, typelib_TypeClass eTypeClass, sal_uInt64* pRegisterRetur
 
 namespace
 {
-//==================================================================================================
+
 void callVirtualMethod(
     void * pThis, sal_Int32 nVtableIndex,
     void * pRegisterReturn, typelib_TypeDescription * pReturnTypeDescr,
@@ -192,7 +192,6 @@ void callVirtualMethod(
 }
 
 
-//============================================================================
 static void cpp_call(
         bridges::cpp_uno::shared::UnoInterfaceProxy * pThis,
         bridges::cpp_uno::shared::VtableSlot  aVtableSlot,

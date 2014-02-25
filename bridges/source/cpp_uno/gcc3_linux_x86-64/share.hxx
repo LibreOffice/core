@@ -105,10 +105,9 @@ extern "C" void __cxa_throw(
 namespace CPPU_CURRENT_NAMESPACE
 {
 
-//==================================================================================================
 void raiseException(
     uno_Any * pUnoExc, uno_Mapping * pUno2Cpp );
-//==================================================================================================
+
 void fillUnoException(
     __cxa_exception * header, uno_Any *, uno_Mapping * pCpp2Uno );
 }

@@ -34,14 +34,11 @@ namespace CPPU_CURRENT_NAMESPACE
 const DWORD MSVC_ExceptionCode = 0xe06d7363;
 const long MSVC_magic_number = 0x19930520L;
 
-//==============================================================================
 type_info * msci_getRTTI( OUString const & rUNOname );
 
-//==============================================================================
 int msci_filterCppException(
     EXCEPTION_POINTERS * pPointers, uno_Any * pUnoExc, uno_Mapping * pCpp2Uno );
 
-//==============================================================================
 void msci_raiseException(
     uno_Any * pUnoExc, uno_Mapping * pUno2Cpp );
 

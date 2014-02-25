@@ -42,7 +42,7 @@ using namespace ::osl;
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 
-//==================================================================================================
+
 
 // Perform the UNO call
 //
@@ -252,7 +252,6 @@ static typelib_TypeClass cpp2uno_call(
 }
 
 
-//==================================================================================================
 extern "C" typelib_TypeClass cpp_vtable_call(
     sal_Int32 nFunctionIndex, sal_Int32 nVtableOffset,
     void ** gpreg, void ** fpreg, void ** ovrflw,
@@ -386,7 +385,6 @@ extern "C" typelib_TypeClass cpp_vtable_call(
     return eRet;
 }
 
-//==================================================================================================
 extern "C" void privateSnippetExecutor( ... );
 
 const int codeSnippetSize = 24;
@@ -430,7 +428,6 @@ unsigned char * codeSnippet( unsigned char * code,
     return code + codeSnippetSize;
 }
 
-//==================================================================================================
 struct bridges::cpp_uno::shared::VtableFactory::Slot { void * fn; };
 
 bridges::cpp_uno::shared::VtableFactory::Slot *
@@ -439,14 +436,12 @@ bridges::cpp_uno::shared::VtableFactory::mapBlockToVtable(void * block)
     return static_cast< Slot * >(block) + 2;
 }
 
-//==================================================================================================
 sal_Size bridges::cpp_uno::shared::VtableFactory::getBlockSize(
     sal_Int32 slotCount)
 {
     return (slotCount + 2) * sizeof (Slot) + slotCount * codeSnippetSize;
 }
 
-//==================================================================================================
 bridges::cpp_uno::shared::VtableFactory::Slot *
 bridges::cpp_uno::shared::VtableFactory::initializeBlock(
     void * block, sal_Int32 slotCount)
@@ -457,7 +452,7 @@ bridges::cpp_uno::shared::VtableFactory::initializeBlock(
     return slots + slotCount;
 }
 
-//==================================================================================================
+
 
 unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
     Slot ** slots, unsigned char * code, sal_PtrDiff writetoexecdiff,
@@ -507,7 +502,6 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
     return code;
 }
 
-//==================================================================================================
 void bridges::cpp_uno::shared::VtableFactory::flushCode(
     SAL_UNUSED_PARAMETER unsigned char const *,
     SAL_UNUSED_PARAMETER unsigned char const * )

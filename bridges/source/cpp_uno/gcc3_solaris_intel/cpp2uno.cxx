@@ -38,7 +38,6 @@ using namespace ::com::sun::star::uno;
 namespace
 {
 
-//==================================================================================================
 static typelib_TypeClass cpp2uno_call(
     bridges::cpp_uno::shared::CppInterfaceProxy * pThis,
     const typelib_TypeDescription * pMemberTypeDescr,
@@ -219,7 +218,6 @@ static typelib_TypeClass cpp2uno_call(
 }
 
 
-//==================================================================================================
 static typelib_TypeClass cpp_mediate(
     sal_Int32 nFunctionIndex,
     sal_Int32 nVtableOffset,
@@ -351,7 +349,6 @@ static typelib_TypeClass cpp_mediate(
     return eRet;
 }
 
-//==================================================================================================
 /**
  * is called on incoming vtable calls
  * (called by asm snippets)
@@ -399,7 +396,6 @@ void cpp_vtable_call( int nFunctionIndex, int nVtableOffset, void** pCallStack )
 }
 
 
-//==================================================================================================
 int const codeSnippetSize = 20;
 
 unsigned char * codeSnippet(
