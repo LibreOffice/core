@@ -54,9 +54,9 @@
 #define PAGE_POS_Y      8
 #define PAGE_WIDTH      OD_DIALOG_WIDTH - PAGE_POS_X
 
-// -------------------
+
 // - OPTIMIZERDIALOG -
-// -------------------
+
 class OptimizerDialog : public UnoDialog, public ConfigurationAccess
 {
 public :
@@ -127,7 +127,7 @@ public :
     const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& GetComponentContext() { return mxContext; };
 };
 
-// -----------------------------------------------------------------------------
+
 
 class ItemListener : public ::cppu::WeakImplHelper1< com::sun::star::awt::XItemListener >
 {
@@ -141,7 +141,7 @@ private:
     OptimizerDialog& mrOptimizerDialog;
 };
 
-// -----------------------------------------------------------------------------
+
 
 class ActionListener : public ::cppu::WeakImplHelper1< com::sun::star::awt::XActionListener >
 {
@@ -155,7 +155,7 @@ private:
     OptimizerDialog& mrOptimizerDialog;
 };
 
-// -----------------------------------------------------------------------------
+
 
 class ActionListenerListBox0Pg0 : public ::cppu::WeakImplHelper1< com::sun::star::awt::XActionListener >
 {
@@ -169,7 +169,7 @@ private:
     OptimizerDialog& mrOptimizerDialog;
 };
 
-// -----------------------------------------------------------------------------
+
 
 class TextListenerFormattedField0Pg1 : public ::cppu::WeakImplHelper1< com::sun::star::awt::XTextListener >
 {
@@ -183,7 +183,7 @@ private:
     OptimizerDialog& mrOptimizerDialog;
 };
 
-// -----------------------------------------------------------------------------
+
 
 class TextListenerComboBox0Pg1 : public ::cppu::WeakImplHelper1< com::sun::star::awt::XTextListener >
 {
@@ -197,7 +197,7 @@ private:
     OptimizerDialog& mrOptimizerDialog;
 };
 
-// -----------------------------------------------------------------------------
+
 
 class SpinListenerFormattedField0Pg1 : public ::cppu::WeakImplHelper1< com::sun::star::awt::XSpinListener >
 {
@@ -214,7 +214,7 @@ private:
     OptimizerDialog& mrOptimizerDialog;
 };
 
-// -----------------------------------------------------------------------------
+
 
 class HelpCloseListener : public ::cppu::WeakImplHelper1< com::sun::star::util::XCloseListener >
 {

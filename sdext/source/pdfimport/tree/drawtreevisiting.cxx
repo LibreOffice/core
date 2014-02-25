@@ -390,7 +390,7 @@ void DrawXmlEmitter::visit( DocumentElement& elem, const std::list< Element* >::
     m_rEmitContext.rEmitter.endTag( "office:body" );
 }
 
-/////////////////////////////////////////////////////////////////
+
 
 void DrawXmlOptimizer::visit( HyperlinkElement&, const std::list< Element* >::const_iterator& )
 {
@@ -765,7 +765,7 @@ void DrawXmlOptimizer::visit( DocumentElement& elem, const std::list< Element* >
     elem.applyToChildren(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////////
+
 
 
 void DrawXmlFinalizer::visit( PolyPolyElement& elem, const std::list< Element* >::const_iterator& )
