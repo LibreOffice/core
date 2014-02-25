@@ -22,7 +22,7 @@
 
 #include "defs.hxx"
 
-//---------------------------------
+
 /** Simple command line abstraction
 */
 

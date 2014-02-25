@@ -24,7 +24,7 @@
 
 #include <stdexcept>
 
-//------------------------------------------
+
 /**
 */
 class RuntimeException : public std::exception
@@ -39,7 +39,7 @@ private:
     int m_Error;
 };
 
-//------------------------------------------
+
 /**
 */
 class ZipException : public RuntimeException
@@ -50,7 +50,7 @@ public:
     virtual const char* what() const throw();
 };
 
-//------------------------------------------
+
 /**
 */
 class Win32Exception : public RuntimeException
@@ -65,7 +65,7 @@ private:
     void* m_MsgBuff;
 };
 
-//------------------------------------------
+
 /**
 */
 class ZipContentMissException : public ZipException
@@ -74,7 +74,7 @@ public:
     ZipContentMissException(int Error);
 };
 
-//------------------------------------------
+
 /**
 */
 class AccessViolationException : public Win32Exception
@@ -83,7 +83,7 @@ public:
     AccessViolationException(int Error);
 };
 
-//------------------------------------------
+
 /**
 */
 class IOException : public Win32Exception

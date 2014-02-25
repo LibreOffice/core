@@ -23,7 +23,7 @@
 #include <expat.h>
 #include <stdexcept>
 
-//-----------------------------------------------------
+
 class xml_parser_exception : public std::runtime_error
 {
 public:
@@ -48,10 +48,10 @@ public:
 };
 
 
-//-----------------------------------------------------
+
 //  Simple wrapper around expat, the xml parser library
 //  created by James Clark
-//-----------------------------------------------------
+
 class i_xml_parser_event_handler;
 
 class xml_parser

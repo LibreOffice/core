@@ -39,9 +39,9 @@ public:
 
     virtual ~CPropertySheet();
 
-    //-----------------------------
+
     // IUnknown methods
-    //-----------------------------
+
 
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(
             REFIID riid,
@@ -51,16 +51,16 @@ public:
 
     virtual ULONG STDMETHODCALLTYPE Release( void);
 
-    //-----------------------------
+
     // IShellExtInit
-    //-----------------------------
+
 
     virtual HRESULT STDMETHODCALLTYPE Initialize(
         LPCITEMIDLIST pidlFolder, LPDATAOBJECT lpdobj, HKEY hkeyProgID);
 
-    //-----------------------------
+
     // IShellPropSheetExt
-    //-----------------------------
+
 
     virtual HRESULT STDMETHODCALLTYPE AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam);
 

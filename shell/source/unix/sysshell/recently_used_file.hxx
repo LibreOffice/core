@@ -28,28 +28,28 @@
 class recently_used_file
 {
 public:
-    //----------------------------
+
     recently_used_file();
 
-    //----------------------------
+
     ~recently_used_file();
 
-    //----------------------------
+
     // set file pointer to the start of file
     void reset() const;
 
-    //----------------------------
+
     void truncate(off_t length = 0);
 
-    //----------------------------
+
     size_t read(
         char* buffer,
         size_t size) const;
 
-    //----------------------------
+
     void write(const char* buffer, size_t size) const;
 
-    //----------------------------
+
     bool eof() const;
 
 private:

@@ -60,37 +60,37 @@ extern "C" {
 
 #endif
 
-//---------------------------------
+
 /** Convert a string to a wstring
     using CP_ACP
 */
 std::wstring StringToWString(const std::string& String);
 
-//---------------------------------
+
 /** Convert a wstring to a string
     using CP_ACP
 */
 std::string WStringToString(const std::wstring& String);
 
-//---------------------------------
+
 /** Convert a string to a wstring
     using CP_UTF8
 */
 std::wstring UTF8ToWString(const std::string& String);
 
-//---------------------------------
+
 /** Retrieve a string from the
     resources of this module
 */
 std::wstring GetResString(int ResId);
 
-//---------------------------------
+
 /** Returns whether we are running
     on Windows XP or not
 */
 bool is_windows_xp_or_above();
 
-//---------------------------------
+
 /** helper function to judge if the string is only has spaces.
     @returns
         <TRUE>if the provided string contains only but at least one space
@@ -103,7 +103,7 @@ bool HasOnlySpaces(const std::wstring& String);
         Windows Locale Identifier corresponding to input LocaleSet.
 */
 
-//---------------------------------
+
 /** Convert a long path name using Windows api call GetShortPathName
 */
 std::wstring getShortPathName( const std::wstring& aLongName );
@@ -111,7 +111,7 @@ std::wstring getShortPathName( const std::wstring& aLongName );
 
 LCID LocaleSetToLCID( const LocaleSet_t & Locale );
 
-//----------------------------------------------------------
+
 #ifdef DEBUG
 inline void OutputDebugStringFormat( LPCSTR pFormat, ... )
 {
@@ -127,7 +127,7 @@ static inline void OutputDebugStringFormat( LPCSTR, ... )
 {
 }
 #endif
-//----------------------------------------------------------
+
 
 
 #endif
