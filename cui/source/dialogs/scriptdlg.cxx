@@ -1467,7 +1467,7 @@ SvxScriptErrorDialog::~SvxScriptErrorDialog()
 short SvxScriptErrorDialog::Execute()
 {
     // Show Error dialog asynchronously
-    //
+
     // Pass a copy of the message to the ShowDialog method as the
     // SvxScriptErrorDialog may be deleted before ShowDialog is called
     Application::PostUserEvent(

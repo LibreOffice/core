@@ -58,6 +58,6 @@ String RID_SVXSTR_PAGEDIR_LTR_VERT
     Text [ en-US ] = "Left-to-right (vertical)";
 };
 
-// ----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

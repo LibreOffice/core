@@ -21,14 +21,14 @@
 #define INCLUDED_CUI_SOURCE_OPTIONS_CONNPOOLCONFIG_HXX
 
 class SfxItemSet;
-//........................................................................
+
 namespace offapp
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= ConnectionPoolConfig
-    //====================================================================
+
     class ConnectionPoolConfig
     {
 
@@ -37,9 +37,9 @@ namespace offapp
         static void SetOptions(const SfxItemSet& _rSourceItems);
     };
 
-//........................................................................
+
 }   // namespace offapp
-//........................................................................
+
 
 #endif // INCLUDED_CUI_SOURCE_OPTIONS_CONNPOOLCONFIG_HXX
 

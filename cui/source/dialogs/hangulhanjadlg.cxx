@@ -43,10 +43,10 @@
 #define HHC editeng::HangulHanjaConversion
 #define LINE_CNT        static_cast< sal_uInt16 >(2)
 
-//.............................................................................
+
 namespace svx
 {
-//.............................................................................
+
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::linguistic2;
@@ -75,9 +75,9 @@ namespace svx
         };
     }
 
-    //=========================================================================
+
     //= PseudoRubyText
-    //=========================================================================
+
     /** a class which allows to draw two texts in a pseudo-ruby way (which basically
         means one text above or below the other, and a little bit smaller)
     */
@@ -201,9 +201,9 @@ namespace svx
             *_pSecondaryLocation = aSecondaryRect;
     }
 
-    //=========================================================================
+
     //= RubyRadioButton
-    //=========================================================================
+
     class RubyRadioButton   :public RadioButton
                             ,protected PseudoRubyText
     {
@@ -297,9 +297,9 @@ namespace svx
             ShowFocus( aTextRect );
     }
 
-    //=========================================================================
+
     //= SuggestionSet
-    //=========================================================================
+
 
 
     SuggestionSet::SuggestionSet( Window* pParent )
@@ -331,9 +331,9 @@ namespace svx
         Clear();
     }
 
-    //=========================================================================
+
     //= SuggestionDisplay
-    //=========================================================================
+
 
 
     SuggestionDisplay::SuggestionDisplay( Window* pParent, const ResId& rResId )
@@ -495,9 +495,9 @@ namespace svx
         m_aListBox.SetHelpId( HID_HANGULDLG_SUGGESTIONS_LIST );
     }
 
-    //=========================================================================
+
     //= HangulHanjaConversionDialog
-    //=========================================================================
+
 
     HangulHanjaConversionDialog::HangulHanjaConversionDialog( Window* _pParent, HHC::ConversionDirection _ePrimaryDirection )
         :ModalDialog( _pParent, CUI_RES( RID_SVX_MDLG_HANGULHANJA ) )
@@ -921,9 +921,9 @@ namespace svx
     }
 
 
-    //=========================================================================
+
     //= HangulHanjaOptionsDialog
-    //=========================================================================
+
 
 
     void HangulHanjaOptionsDialog::Init( void )
@@ -1171,9 +1171,9 @@ namespace svx
         pEntry->SetUserData( new OUString( _rName ) );
     }
 
-    //=========================================================================
+
     //= HangulHanjaNewDictDialog
-    //=========================================================================
+
 
 
     IMPL_LINK_NOARG(HangulHanjaNewDictDialog, OKHdl)
@@ -1216,9 +1216,9 @@ namespace svx
         return m_bEntered;
     }
 
-    //=========================================================================
+
     //= HangulHanjaEditDictDialog
-    //=========================================================================
+
 
 
     class SuggestionList
@@ -1802,8 +1802,8 @@ namespace svx
         SetEditText( m_aEdit4, nPos );
     }
 
-//.............................................................................
+
 }   // namespace svx
-//.............................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

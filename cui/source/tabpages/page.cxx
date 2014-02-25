@@ -716,7 +716,7 @@ sal_Bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
     }
 
     // set top and bottom margins
-    //
+
     if ( bMod )
     {
         pOld = GetOldItem( rSet, SID_ATTR_ULSPACE );
@@ -1472,7 +1472,7 @@ IMPL_LINK_NOARG(SvxPageDescPage, RangeHdl_Impl)
 
     // limits paper
     // maximum is 54 cm
-    //
+
     long nMin = nHHeight + nHDist + nFDist + nFHeight + nBT + nBB +
                 MINBODY + aBorder.Height();
     m_pPaperHeightEdit->SetMin(m_pPaperHeightEdit->Normalize(nMin), FUNIT_TWIP);

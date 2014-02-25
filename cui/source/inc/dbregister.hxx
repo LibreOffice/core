@@ -32,14 +32,14 @@ namespace svx
 {
     class OptHeaderTabListBox;
 }
-//........................................................................
+
 namespace svx
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= DbRegistrationOptionsPage
-    //====================================================================
+
     class DbRegistrationOptionsPage : public SfxTabPage
     {
     private:
@@ -100,9 +100,9 @@ namespace svx
         virtual void        FillUserData();
     };
 
-    //====================================================================
+
     //= RegistrationItemSetHolder
-    //====================================================================
+
     /** helper for DatabaseRegistrationDialog
 
         Necessary so that DatabaseRegistrationDialog is self-contained, i.e. always reflects
@@ -121,9 +121,9 @@ namespace svx
         const SfxItemSet& getRegistrationItems() const { return m_aRegistrationItems; }
     };
 
-    //====================================================================
+
     //= DatabaseRegistrationDialog
-    //====================================================================
+
     class DatabaseRegistrationDialog    :public RegistrationItemSetHolder
                                         ,public SfxSingleTabDialog
     {
@@ -134,9 +134,9 @@ namespace svx
         virtual short   Execute();
     };
 
-//........................................................................
+
 }   // namespace svx
-//........................................................................
+
 
 #endif // INCLUDED_CUI_SOURCE_INC_DBREGISTER_HXX
 

@@ -485,9 +485,9 @@ void SvxTransparenceTabPage::PointChanged(Window* , RECT_POINT eRcPt)
     eRP = eRcPt;
 }
 
-//
+
 // Preview-Methods
-//
+
 sal_Bool SvxTransparenceTabPage::InitPreview ( const SfxItemSet& rSet )
 {
     // set transparencetyp for preview

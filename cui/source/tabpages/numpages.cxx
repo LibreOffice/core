@@ -1163,7 +1163,7 @@ void    SvxNumOptionsTabPage::ActivatePage(const SfxItemSet& rSet)
         delete pSaveNum;
         pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
     }
-    //
+
     bModified = (!pActNum->Get( 0 ) || bPreset);
     if(*pActNum != *pSaveNum ||
         nActNumLvl != nTmpNumLvl)

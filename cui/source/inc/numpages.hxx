@@ -32,7 +32,7 @@
 #include <editeng/numdef.hxx>
 #include <svtools/ctrlbox.hxx>
 
-// -----------------------------------------------------------------------
+
 class SvxNumRule;
 class SvxBmpNumValueSet;
 class SvxNumValueSet;
@@ -65,7 +65,7 @@ class SvxNumberingPreview : public Window
 
 };
 
-//------------------------------------------------
+
 
 struct SvxNumSettings_Impl
 {
@@ -84,7 +84,7 @@ struct SvxNumSettings_Impl
 typedef boost::ptr_vector<SvxNumSettings_Impl> SvxNumSettingsArr_Impl;
 
 
-//------------------------------------------------
+
 class SvxSingleNumPickTabPage : public SfxTabPage
 {
     using TabPage::ActivatePage;
@@ -122,7 +122,7 @@ class SvxSingleNumPickTabPage : public SfxTabPage
 };
 
 
-//------------------------------------------------
+
 
 class SvxBulletPickTabPage : public SfxTabPage
 {
@@ -204,7 +204,7 @@ class SvxNumPickTabPage : public SfxTabPage
 };
 
 
-//------------------------------------------------
+
 class SvxBitmapPickTabPage : public SfxTabPage
 {
     using TabPage::ActivatePage;
@@ -245,7 +245,7 @@ class SvxBitmapPickTabPage : public SfxTabPage
     void                SetNumCharFmtName(const OUString& rName){sNumCharFmtName = rName;}
 };
 
-//------------------------------------------------
+
 class SvxNumOptionsTabPage : public SfxTabPage
 {
     using TabPage::ActivatePage;
@@ -379,7 +379,7 @@ class SvxNumOptionsTabPage : public SfxTabPage
     static void         GetI18nNumbering( ListBox& rFmtLB, sal_uInt16 nDoNotRemove );
 };
 
-//------------------------------------------------
+
 class SvxNumPositionTabPage : public SfxTabPage
 {
     using TabPage::ActivatePage;

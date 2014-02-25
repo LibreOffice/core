@@ -300,7 +300,7 @@ void _SvxMacroTabPage::InitResources()
     aDisplayNames.push_back( EventDisplayName( "OnChange",              RID_SVXSTR_EVENT_CONTENTCHANGED ) );
 
     // the event name to UI string mappings for forms & dialogs
-    //
+
     aDisplayNames.push_back( EventDisplayName( "approveAction",         RID_SVXSTR_EVENT_APPROVEACTIONPERFORMED ) );
     aDisplayNames.push_back( EventDisplayName( "actionPerformed",       RID_SVXSTR_EVENT_ACTIONPERFORMED ) );
     aDisplayNames.push_back( EventDisplayName( "changed",               RID_SVXSTR_EVENT_CHANGED ) );
@@ -470,7 +470,7 @@ IconLBoxString::IconLBoxString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, cons
     m_nxImageOffset = 20;
 }
 
-//===============================================
+
 void IconLBoxString::Paint(
     const Point& aPos, SvTreeListBox& aDevice, const SvViewDataEntry* /*pView*/,
     const SvTreeListEntry* /*pEntry*/)
@@ -867,7 +867,7 @@ SvxMacroAssignDlg::SvxMacroAssignDlg( Window* pParent, const Reference< frame::X
     SetTabPage(new SvxMacroTabPage(get_content_area(), _rxDocumentFrame, rSet, xNameReplace, nSelectedIndex));
 }
 
-//===============================================
+
 
 IMPL_LINK_NOARG(AssignComponentDialog, ButtonHandler)
 {

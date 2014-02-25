@@ -46,7 +46,7 @@ typedef set< OUString, ltstr > StrSet;
 typedef map< OUString, StrSet, ltstr > FilterMap;
 
 
-//==================================================================================================
+
 void fillNetscapePluginFilters( Sequence< OUString >& rPluginNames, Sequence< OUString >& rPluginTypes )
 {
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();

@@ -203,11 +203,11 @@ IMPL_LINK_NOARG_INLINE_START(SvxNewDictionaryDialog, ModifyHdl_Impl)
 }
 IMPL_LINK_NOARG_INLINE_END(SvxNewDictionaryDialog, ModifyHdl_Impl)
 
-//==========================================================================
-//
+
+
 // class SvxEditDictionaryDialog -------------------------------------------
-//
-//==========================================================================
+
+
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxDictEdit(Window *pParent, VclBuilder::stringmap&)
 {
@@ -774,9 +774,9 @@ IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, Edit*, pEdt)
     return 0;
 }
 
-//=========================================================
+
 //SvxDictEdit
-//=========================================================
+
 void SvxDictEdit::KeyInput( const KeyEvent& rKEvt )
 {
     const KeyCode aKeyCode = rKEvt.GetKeyCode();

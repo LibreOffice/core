@@ -148,9 +148,9 @@ IMPL_ABSTDLG_BASE(AbstractSpellDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxPostItDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractPasswordToOpenModifyDialog_Impl);
 
-//////////////////////////////////////////////////////////////////////////
+
 // VclAbstractDialog2_Impl
-//////////////////////////////////////////////////////////////////////////
+
 
 // virtual
 VclAbstractDialog2_Impl::~VclAbstractDialog2_Impl()
@@ -185,7 +185,7 @@ IMPL_LINK( VclAbstractDialog2_Impl, EndDialogHdl, Dialog*, pDlg )
     return 0L;
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 
 void CuiAbstractTabDialog_Impl::SetCurPageId( sal_uInt16 nId )
 {
@@ -628,12 +628,12 @@ const SfxItemSet* AbstractSvxTransformTabDialog_Impl::GetOutputItemSet() const
 {
     return pDlg->GetOutputItemSet();
 }
-//
+
 const sal_uInt16* AbstractSvxTransformTabDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
 {
     return pDlg->GetInputRanges( pItem );
 }
-//
+
 void AbstractSvxTransformTabDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
 {
      pDlg->SetInputSet( pInSet );
@@ -667,12 +667,12 @@ const SfxItemSet* AbstractSvxCaptionDialog_Impl::GetOutputItemSet() const
 {
     return pDlg->GetOutputItemSet();
 }
-//
+
 const sal_uInt16* AbstractSvxCaptionDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
 {
     return pDlg->GetInputRanges( pItem );
 }
-//
+
 void AbstractSvxCaptionDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
 {
      pDlg->SetInputSet( pInSet );

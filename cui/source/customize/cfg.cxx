@@ -1598,7 +1598,7 @@ void SvxConfigPage::Reset( const SfxItemSet& )
 {
     // If we haven't initialised our XMultiServiceFactory reference
     // then Reset is being called at the opening of the dialog.
-    //
+
     // Load menu configuration data for the module of the currently
     // selected document, for the currently selected document, and for
     // all other open documents of the same module type
