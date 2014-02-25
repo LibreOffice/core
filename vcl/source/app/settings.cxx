@@ -54,6 +54,211 @@ using namespace ::com::sun::star;
 
 #include <boost/make_shared.hpp>
 
+struct ImplMouseData
+{
+                                    ImplMouseData();
+                                    ImplMouseData( const ImplMouseData& rData );
+
+    sal_uLong                           mnOptions;
+    sal_uLong                           mnDoubleClkTime;
+    long                            mnDoubleClkWidth;
+    long                            mnDoubleClkHeight;
+    long                            mnStartDragWidth;
+    long                            mnStartDragHeight;
+    sal_uInt16                          mnStartDragCode;
+    sal_uInt16                          mnDragMoveCode;
+    sal_uInt16                          mnDragCopyCode;
+    sal_uInt16                          mnDragLinkCode;
+    sal_uInt16                          mnContextMenuCode;
+    sal_uInt16                          mnContextMenuClicks;
+    bool                                mbContextMenuDown;
+    sal_uLong                           mnScrollRepeat;
+    sal_uLong                           mnButtonStartRepeat;
+    sal_uLong                           mnButtonRepeat;
+    sal_uLong                           mnActionDelay;
+    sal_uLong                           mnMenuDelay;
+    sal_uLong                           mnFollow;
+    sal_uInt16                          mnMiddleButtonAction;
+    sal_uInt16                          mnWheelBehavior;
+};
+
+
+struct ImplStyleData
+{
+                                    ImplStyleData();
+                                    ImplStyleData( const ImplStyleData& rData );
+
+    void                            SetStandardStyles();
+
+    Color                           maActiveBorderColor;
+    Color                           maActiveColor;
+    Color                           maActiveColor2;
+    Color                           maActiveTextColor;
+    Color                           maButtonTextColor;
+    Color                           maButtonRolloverTextColor;
+    Color                           maCheckedColor;
+    Color                           maDarkShadowColor;
+    Color                           maDeactiveBorderColor;
+    Color                           maDeactiveColor;
+    Color                           maDeactiveColor2;
+    Color                           maDeactiveTextColor;
+    Color                           maDialogColor;
+    Color                           maDialogTextColor;
+    Color                           maDisableColor;
+    Color                           maFaceColor;
+    Color                           maFieldColor;
+    Color                           maFieldTextColor;
+    Color                           maFieldRolloverTextColor;
+    Color                           maFontColor;
+    Color                           maGroupTextColor;
+    Color                           maHelpColor;
+    Color                           maHelpTextColor;
+    Color                           maHighlightColor;
+    Color                           maHighlightLinkColor;
+    Color                           maHighlightTextColor;
+    Color                           maInfoTextColor;
+    Color                           maLabelTextColor;
+    Color                           maLightBorderColor;
+    Color                           maLightColor;
+    Color                           maLinkColor;
+    Color                           maMenuBarColor;
+    Color                           maMenuBarRolloverColor;
+    Color                           maMenuBorderColor;
+    Color                           maMenuColor;
+    Color                           maMenuHighlightColor;
+    Color                           maMenuHighlightTextColor;
+    Color                           maMenuTextColor;
+    Color                           maMenuBarTextColor;
+    Color                           maMenuBarRolloverTextColor;
+    Color                           maMonoColor;
+    Color                           maRadioCheckTextColor;
+    Color                           maShadowColor;
+    Color                           maVisitedLinkColor;
+    Color                           maWindowColor;
+    Color                           maWindowTextColor;
+    Color                           maWorkspaceColor;
+    Color                           maActiveTabColor;
+    Color                           maInactiveTabColor;
+    Font                            maAppFont;
+    Font                            maHelpFont;
+    Font                            maTitleFont;
+    Font                            maFloatTitleFont;
+    Font                            maMenuFont;
+    Font                            maToolFont;
+    Font                            maLabelFont;
+    Font                            maInfoFont;
+    Font                            maRadioCheckFont;
+    Font                            maPushButtonFont;
+    Font                            maFieldFont;
+    Font                            maIconFont;
+    Font                            maGroupFont;
+    long                            mnBorderSize;
+    long                            mnTitleHeight;
+    long                            mnFloatTitleHeight;
+    long                            mnTearOffTitleHeight;
+    long                            mnScrollBarSize;
+    long                            mnSplitSize;
+    long                            mnSpinSize;
+    long                            mnCursorSize;
+    long                            mnMenuBarHeight;
+    long                            mnIconHorzSpace;
+    long                            mnIconVertSpace;
+    long                            mnAntialiasedMin;
+    sal_uLong                       mnCursorBlinkTime;
+    sal_uLong                       mnDragFullOptions;
+    sal_uLong                       mnAnimationOptions;
+    sal_uLong                       mnSelectionOptions;
+    sal_uLong                       mnLogoDisplayTime;
+    sal_uLong                       mnDisplayOptions;
+    sal_uLong                       mnToolbarIconSize;
+    sal_uLong                       mnUseFlatMenus;
+    sal_uLong                       mnOptions;
+    sal_uInt16                      mnScreenZoom;
+    sal_uInt16                      mnScreenFontZoom;
+    bool                            mbHighContrast;
+    bool                            mbUseSystemUIFonts;
+    bool                            mbAutoMnemonic;
+    TriState                        meUseImagesInMenus;
+    sal_uLong                       mnUseFlatBorders;
+    bool                            mbPreferredUseImagesInMenus;
+    long                            mnMinThumbSize;
+    boost::shared_ptr<vcl::IconThemeScanner>
+                                    mIconThemeScanner;
+    boost::shared_ptr<vcl::IconThemeSelector>
+                                    mIconThemeSelector;
+
+    rtl::OUString                   mIconTheme;
+    bool                            mbSkipDisabledInMenus;
+    bool                            mbHideDisabledMenuItems;
+    bool                            mbAcceleratorsInContextMenus;
+    //mbPrimaryButtonWarpsSlider == true for "jump to here" behavior for primary button, otherwise
+    //primary means scroll by single page. Secondary button takes the alternative behaviour
+    bool                            mbPrimaryButtonWarpsSlider;
+    Wallpaper                       maWorkspaceGradient;
+    DialogStyle                     maDialogStyle;
+    FrameStyle                      maFrameStyle;
+    const void*                     mpFontOptions;
+
+    sal_uInt16                      mnEdgeBlending;
+    Color                           maEdgeBlendingTopLeftColor;
+    Color                           maEdgeBlendingBottomRightColor;
+    sal_uInt16                      mnListBoxMaximumLineCount;
+    sal_uInt16                      mnColorValueSetColumnCount;
+    sal_uInt16                      mnColorValueSetMaximumRowCount;
+    Size                            maListBoxPreviewDefaultLogicSize;
+    Size                            maListBoxPreviewDefaultPixelSize;
+    sal_uInt16                      mnListBoxPreviewDefaultLineWidth;
+    bool                            mbPreviewUsesCheckeredBackground;
+
+    OUString                        maPersonaHeaderFooter; ///< Cache the settings to detect changes.
+
+    BitmapEx                        maPersonaHeaderBitmap; ///< Cache the header bitmap.
+    BitmapEx                        maPersonaFooterBitmap; ///< Cache the footer bitmap.
+};
+
+
+struct ImplMiscData
+{
+                                    ImplMiscData();
+                                    ImplMiscData( const ImplMiscData& rData );
+    TriState                        mnEnableATT;
+    bool                            mbEnableLocalizedDecimalSep;
+    TriState                        mnDisablePrinting;
+};
+
+
+struct ImplHelpData
+{
+                                    ImplHelpData();
+                                    ImplHelpData( const ImplHelpData& rData );
+
+    sal_uLong                           mnOptions;
+    sal_uLong                           mnTipDelay;
+    sal_uLong                           mnTipTimeout;
+    sal_uLong                           mnBalloonDelay;
+};
+
+struct ImplAllSettingsData
+{
+    ImplAllSettingsData();
+    ImplAllSettingsData( const ImplAllSettingsData& rData );
+    ~ImplAllSettingsData();
+
+    MouseSettings                           maMouseSettings;
+    StyleSettings                           maStyleSettings;
+    MiscSettings                            maMiscSettings;
+    HelpSettings                            maHelpSettings;
+    LanguageTag                             maLocale;
+    sal_uLong                               mnSystemUpdate;
+    sal_uLong                               mnWindowUpdate;
+    LanguageTag                             maUILocale;
+    LocaleDataWrapper*                      mpLocaleDataWrapper;
+    LocaleDataWrapper*                      mpUILocaleDataWrapper;
+    vcl::I18nHelper*                        mpI18nHelper;
+    vcl::I18nHelper*                        mpUII18nHelper;
+    SvtSysLocale                            maSysLocale;
+};
+
 // =======================================================================
 
 ImplMouseData::ImplMouseData()
@@ -108,6 +313,290 @@ ImplMouseData::ImplMouseData( const ImplMouseData& rData )
     mnWheelBehavior             = rData.mnWheelBehavior;
 }
 
+void
+MouseSettings::SetOptions(sal_uLong nOptions)
+{
+    CopyData();
+    mpData->mnOptions = nOptions;
+}
+
+sal_uLong
+MouseSettings::GetOptions() const
+{
+    return mpData->mnOptions;
+}
+
+void
+MouseSettings::SetDoubleClickTime( sal_uLong nDoubleClkTime )
+{
+    CopyData();
+    mpData->mnDoubleClkTime = nDoubleClkTime;
+}
+
+sal_uLong
+MouseSettings::GetDoubleClickTime() const
+{
+    return mpData->mnDoubleClkTime;
+}
+
+void
+MouseSettings::SetDoubleClickWidth( long nDoubleClkWidth )
+{
+    CopyData();
+    mpData->mnDoubleClkWidth = nDoubleClkWidth;
+}
+
+long
+MouseSettings::GetDoubleClickWidth() const
+{
+    return mpData->mnDoubleClkWidth;
+}
+
+void
+MouseSettings::SetDoubleClickHeight( long nDoubleClkHeight )
+{
+    CopyData();
+    mpData->mnDoubleClkHeight = nDoubleClkHeight;
+}
+
+long
+MouseSettings::GetDoubleClickHeight() const
+{
+    return mpData->mnDoubleClkHeight;
+}
+
+void
+MouseSettings::SetStartDragWidth( long nDragWidth )
+{
+    CopyData();
+    mpData->mnStartDragWidth = nDragWidth;
+}
+
+long
+MouseSettings::GetStartDragWidth() const
+{
+    return mpData->mnStartDragWidth;
+}
+
+void
+MouseSettings::SetStartDragHeight( long nDragHeight )
+{
+    CopyData();
+    mpData->mnStartDragHeight = nDragHeight;
+}
+
+long
+MouseSettings::GetStartDragHeight() const
+{
+    return mpData->mnStartDragHeight;
+}
+
+
+void
+MouseSettings::SetStartDragCode( sal_uInt16 nCode )
+{
+    CopyData(); mpData->mnStartDragCode = nCode;
+}
+
+sal_uInt16
+MouseSettings::GetStartDragCode() const
+{
+    return mpData->mnStartDragCode;
+}
+
+void
+MouseSettings::SetDragMoveCode( sal_uInt16 nCode )
+{
+    CopyData();
+    mpData->mnDragMoveCode = nCode;
+}
+
+sal_uInt16
+MouseSettings::GetDragMoveCode() const
+{
+    return mpData->mnDragMoveCode;
+}
+
+void
+MouseSettings::SetDragCopyCode( sal_uInt16 nCode )
+{
+    CopyData();
+    mpData->mnDragCopyCode = nCode;
+}
+
+sal_uInt16
+MouseSettings::GetDragCopyCode() const
+{
+    return mpData->mnDragCopyCode;
+}
+
+void
+MouseSettings::SetDragLinkCode( sal_uInt16 nCode )
+{
+    CopyData();
+    mpData->mnDragLinkCode = nCode;
+}
+
+sal_uInt16
+MouseSettings::GetDragLinkCode() const
+{
+    return mpData->mnDragLinkCode;
+}
+
+void
+MouseSettings::SetContextMenuCode( sal_uInt16 nCode )
+{
+    CopyData();
+    mpData->mnContextMenuCode = nCode;
+}
+
+sal_uInt16
+MouseSettings::GetContextMenuCode() const
+{
+    return mpData->mnContextMenuCode;
+}
+
+void
+MouseSettings::SetContextMenuClicks( sal_uInt16 nClicks )
+{
+    CopyData();
+    mpData->mnContextMenuClicks = nClicks;
+}
+
+sal_uInt16
+MouseSettings::GetContextMenuClicks() const
+{
+    return mpData->mnContextMenuClicks;
+}
+
+void
+MouseSettings::SetContextMenuDown( bool bDown )
+{
+    CopyData();
+    mpData->mbContextMenuDown = bDown;
+}
+
+bool
+MouseSettings::GetContextMenuDown() const
+{
+    return mpData->mbContextMenuDown;
+}
+
+void
+MouseSettings::SetScrollRepeat( sal_uLong nRepeat )
+{
+    CopyData();
+    mpData->mnScrollRepeat = nRepeat;
+}
+
+sal_uLong
+MouseSettings::GetScrollRepeat() const
+{
+    return mpData->mnScrollRepeat;
+}
+
+void
+MouseSettings::SetButtonStartRepeat( sal_uLong nRepeat )
+{
+    CopyData();
+    mpData->mnButtonStartRepeat = nRepeat;
+}
+
+sal_uLong
+MouseSettings::GetButtonStartRepeat() const
+{
+    return mpData->mnButtonStartRepeat;
+}
+
+void
+MouseSettings::SetButtonRepeat( sal_uLong nRepeat )
+{
+    CopyData();
+    mpData->mnButtonRepeat = nRepeat;
+}
+
+sal_uLong
+MouseSettings::GetButtonRepeat() const
+{
+    return mpData->mnButtonRepeat;
+}
+
+void
+MouseSettings::SetActionDelay( sal_uLong nDelay )
+{
+    CopyData();
+    mpData->mnActionDelay = nDelay;
+}
+
+sal_uLong
+MouseSettings::GetActionDelay() const
+{
+    return mpData->mnActionDelay;
+}
+
+void
+MouseSettings::SetMenuDelay( sal_uLong nDelay )
+{
+    CopyData();
+    mpData->mnMenuDelay = nDelay;
+}
+
+sal_uLong
+MouseSettings::GetMenuDelay() const
+{
+    return mpData->mnMenuDelay;
+}
+
+
+void
+MouseSettings::SetFollow( sal_uLong nFollow )
+{
+    CopyData();
+    mpData->mnFollow = nFollow;
+}
+
+sal_uLong
+MouseSettings::GetFollow() const
+{
+    return mpData->mnFollow;
+}
+
+
+void
+MouseSettings::SetMiddleButtonAction( sal_uInt16 nAction )
+{
+    CopyData();
+    mpData->mnMiddleButtonAction = nAction;
+}
+
+sal_uInt16
+MouseSettings::GetMiddleButtonAction() const
+{
+    return mpData->mnMiddleButtonAction;
+}
+
+
+void
+MouseSettings::SetWheelBehavior( sal_uInt16 nBehavior )
+{
+    CopyData();
+    mpData->mnWheelBehavior = nBehavior;
+}
+
+sal_uInt16
+MouseSettings::GetWheelBehavior() const
+{
+    return mpData->mnWheelBehavior;
+}
+
+
+bool
+MouseSettings::operator !=( const MouseSettings& rSet ) const
+{
+    return !(*this == rSet);
+}
+
+
 // -----------------------------------------------------------------------
 
 MouseSettings::MouseSettings()
@@ -117,23 +606,8 @@ MouseSettings::MouseSettings()
 
 // -----------------------------------------------------------------------
 
-MouseSettings::MouseSettings( const MouseSettings& rSet )
-{
-    mpData = rSet.mpData;
-}
-
-// -----------------------------------------------------------------------
-
 MouseSettings::~MouseSettings()
 {
-}
-
-// -----------------------------------------------------------------------
-
-const MouseSettings& MouseSettings::operator =( const MouseSettings& rSet )
-{
-    mpData = rSet.mpData;
-    return *this;
 }
 
 // -----------------------------------------------------------------------
@@ -205,7 +679,7 @@ ImplStyleData::ImplStyleData() :
     mnSelectionOptions          = 0;
     mnDisplayOptions            = 0;
     mnOptions                   = 0;
-    mnAutoMnemonic              = 1;
+    mbAutoMnemonic              = true;
     mnToolbarIconSize           = STYLE_TOOLBAR_ICONSIZE_UNKNOWN;
     meUseImagesInMenus          = TRISTATE_INDET;
     mpFontOptions              = NULL;
@@ -322,7 +796,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mbUseSystemUIFonts          = rData.mbUseSystemUIFonts;
     mnUseFlatBorders            = rData.mnUseFlatBorders;
     mnUseFlatMenus              = rData.mnUseFlatMenus;
-    mnAutoMnemonic              = rData.mnAutoMnemonic;
+    mbAutoMnemonic              = rData.mbAutoMnemonic;
     meUseImagesInMenus          = rData.meUseImagesInMenus;
     mbPreferredUseImagesInMenus = rData.mbPreferredUseImagesInMenus;
     mbSkipDisabledInMenus       = rData.mbSkipDisabledInMenus;
@@ -424,9 +898,9 @@ void ImplStyleData::SetStandardStyles()
     mnTearOffTitleHeight        = 8;
     mnMenuBarHeight             = 14;
     mbHighContrast              = false;
-    mbUseSystemUIFonts          = true;
-    mnUseFlatBorders            = false;
-    mnUseFlatMenus              = false;
+    mbUseSystemUIFonts          = 1;
+    mnUseFlatBorders            = 0;
+    mnUseFlatMenus              = 0;
     mbPreferredUseImagesInMenus = true;
     mbSkipDisabledInMenus       = false;
     mbHideDisabledMenuItems     = false;
@@ -446,15 +920,1424 @@ StyleSettings::StyleSettings()
 
 // -----------------------------------------------------------------------
 
-StyleSettings::StyleSettings( const StyleSettings& rSet )
-{
-    mpData = rSet.mpData;
-}
-
-// -----------------------------------------------------------------------
-
 StyleSettings::~StyleSettings()
 {
+}
+
+void
+StyleSettings::SetFaceColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maFaceColor = rColor;
+}
+
+const Color&
+StyleSettings::GetFaceColor() const
+{
+    return mpData->maFaceColor;
+}
+
+void
+StyleSettings::SetCheckedColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maCheckedColor = rColor;
+}
+
+const Color&
+StyleSettings::GetCheckedColor() const
+{
+    return mpData->maCheckedColor;
+}
+
+void
+StyleSettings::SetLightColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maLightColor = rColor;
+}
+
+const Color&
+StyleSettings::GetLightColor() const
+{
+    return mpData->maLightColor;
+}
+
+void
+StyleSettings::SetLightBorderColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maLightBorderColor = rColor;
+}
+
+const Color&
+StyleSettings::GetLightBorderColor() const
+{
+    return mpData->maLightBorderColor;
+}
+
+void
+StyleSettings::SetShadowColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maShadowColor = rColor;
+}
+
+const Color&
+StyleSettings::GetShadowColor() const
+{
+    return mpData->maShadowColor;
+}
+
+void
+StyleSettings::SetDarkShadowColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maDarkShadowColor = rColor;
+}
+
+const Color&
+StyleSettings::GetDarkShadowColor() const
+{
+    return mpData->maDarkShadowColor;
+}
+
+void
+StyleSettings::SetButtonTextColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maButtonTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetButtonTextColor() const
+{
+    return mpData->maButtonTextColor;
+}
+
+void
+StyleSettings::SetButtonRolloverTextColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maButtonRolloverTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetButtonRolloverTextColor() const
+{
+    return mpData->maButtonRolloverTextColor;
+}
+
+void
+StyleSettings::SetRadioCheckTextColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maRadioCheckTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetRadioCheckTextColor() const
+{
+    return mpData->maRadioCheckTextColor;
+}
+
+void
+StyleSettings::SetGroupTextColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maGroupTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetGroupTextColor() const
+{
+    return mpData->maGroupTextColor;
+}
+
+void
+StyleSettings::SetLabelTextColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maLabelTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetLabelTextColor() const
+{
+    return mpData->maLabelTextColor;
+}
+
+void
+StyleSettings::SetInfoTextColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maInfoTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetInfoTextColor() const
+{
+    return mpData->maInfoTextColor;
+}
+
+void
+StyleSettings::SetWindowColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maWindowColor = rColor;
+}
+
+const Color&
+StyleSettings::GetWindowColor() const
+{
+    return mpData->maWindowColor;
+}
+
+void
+StyleSettings::SetWindowTextColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maWindowTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetWindowTextColor() const
+{
+    return mpData->maWindowTextColor;
+}
+
+void
+StyleSettings::SetDialogColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maDialogColor = rColor;
+}
+
+const Color&
+StyleSettings::GetDialogColor() const
+{
+    return mpData->maDialogColor;
+}
+
+void
+StyleSettings::SetDialogTextColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maDialogTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetDialogTextColor() const
+{
+    return mpData->maDialogTextColor;
+}
+
+void
+StyleSettings::SetWorkspaceColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maWorkspaceColor = rColor;
+}
+
+const Color&
+StyleSettings::GetWorkspaceColor() const
+{
+    return mpData->maWorkspaceColor;
+}
+
+void
+StyleSettings::SetFieldColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maFieldColor = rColor;
+}
+
+const Color&
+StyleSettings::GetFieldColor() const
+{
+    return mpData->maFieldColor;
+}
+
+void
+StyleSettings::SetFieldTextColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maFieldTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetFieldTextColor() const
+{
+    return mpData->maFieldTextColor;
+}
+
+void
+StyleSettings::SetFieldRolloverTextColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maFieldRolloverTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetFieldRolloverTextColor() const
+{
+    return mpData->maFieldRolloverTextColor;
+}
+
+void
+StyleSettings::SetActiveColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maActiveColor = rColor;
+}
+
+const Color&
+StyleSettings::GetActiveColor() const
+{
+    return mpData->maActiveColor;
+}
+
+void
+StyleSettings::SetActiveColor2( const Color& rColor )
+{
+    CopyData();
+    mpData->maActiveColor2 = rColor;
+}
+
+const Color&
+StyleSettings::GetActiveColor2() const
+{
+    return mpData->maActiveColor2;
+}
+
+void
+StyleSettings::SetActiveTextColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maActiveTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetActiveTextColor() const
+{
+    return mpData->maActiveTextColor;
+}
+
+void
+StyleSettings::SetActiveBorderColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maActiveBorderColor = rColor;
+}
+
+const Color&
+StyleSettings::GetActiveBorderColor() const
+{
+    return mpData->maActiveBorderColor;
+}
+
+void
+StyleSettings::SetDeactiveColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maDeactiveColor = rColor;
+}
+
+const Color&
+StyleSettings::GetDeactiveColor() const
+{
+    return mpData->maDeactiveColor;
+}
+
+void
+StyleSettings::SetDeactiveColor2( const Color& rColor )
+{
+    CopyData();
+    mpData->maDeactiveColor2 = rColor;
+}
+
+const Color&
+StyleSettings::GetDeactiveColor2() const
+{
+    return mpData->maDeactiveColor2;
+}
+
+void
+StyleSettings::SetDeactiveTextColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maDeactiveTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetDeactiveTextColor() const
+{
+    return mpData->maDeactiveTextColor;
+}
+
+void
+StyleSettings::SetDeactiveBorderColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maDeactiveBorderColor = rColor;
+}
+
+const Color&
+StyleSettings::GetDeactiveBorderColor() const
+{
+    return mpData->maDeactiveBorderColor;
+}
+
+void
+StyleSettings::SetHighlightColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maHighlightColor = rColor;
+}
+
+const Color&
+StyleSettings::GetHighlightColor() const
+{
+    return mpData->maHighlightColor;
+}
+
+void
+StyleSettings::SetHighlightTextColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maHighlightTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetHighlightTextColor() const
+{
+    return mpData->maHighlightTextColor;
+}
+
+void
+StyleSettings::SetDisableColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maDisableColor = rColor;
+}
+
+const Color&
+StyleSettings::GetDisableColor() const
+{
+    return mpData->maDisableColor;
+}
+
+void
+StyleSettings::SetHelpColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maHelpColor = rColor;
+}
+
+const Color&
+StyleSettings::GetHelpColor() const
+{
+    return mpData->maHelpColor;
+}
+
+void
+StyleSettings::SetHelpTextColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maHelpTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetHelpTextColor() const
+{
+    return mpData->maHelpTextColor;
+}
+
+void
+StyleSettings::SetMenuColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maMenuColor = rColor;
+}
+
+const Color&
+StyleSettings::GetMenuColor() const
+{
+    return mpData->maMenuColor;
+}
+
+void
+StyleSettings::SetMenuBarColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maMenuBarColor = rColor;
+}
+
+const Color&
+StyleSettings::GetMenuBarColor() const
+{
+    return mpData->maMenuBarColor;
+}
+
+void
+StyleSettings::SetMenuBarRolloverColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maMenuBarRolloverColor = rColor;
+}
+
+const Color&
+StyleSettings::GetMenuBarRolloverColor() const
+{
+    return mpData->maMenuBarRolloverColor;
+}
+
+void
+StyleSettings::SetMenuBorderColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maMenuBorderColor = rColor;
+}
+
+const Color&
+StyleSettings::GetMenuBorderColor() const
+{
+    return mpData->maMenuBorderColor;
+}
+
+void
+StyleSettings::SetMenuTextColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maMenuTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetMenuTextColor() const
+{
+    return mpData->maMenuTextColor;
+}
+
+void
+StyleSettings::SetMenuBarTextColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maMenuBarTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetMenuBarTextColor() const
+{
+    return mpData->maMenuBarTextColor;
+}
+
+void
+StyleSettings::SetMenuBarRolloverTextColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maMenuBarRolloverTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetMenuBarRolloverTextColor() const
+{
+    return mpData->maMenuBarRolloverTextColor;
+}
+
+void
+StyleSettings::SetMenuHighlightColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maMenuHighlightColor = rColor;
+}
+
+const Color&
+StyleSettings::GetMenuHighlightColor() const
+{
+    return mpData->maMenuHighlightColor;
+}
+
+void
+StyleSettings::SetMenuHighlightTextColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maMenuHighlightTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetMenuHighlightTextColor() const
+{
+    return mpData->maMenuHighlightTextColor;
+}
+
+void
+StyleSettings::SetLinkColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maLinkColor = rColor;
+}
+
+const Color&
+StyleSettings::GetLinkColor() const
+{
+    return mpData->maLinkColor;
+}
+
+void
+StyleSettings::SetVisitedLinkColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maVisitedLinkColor = rColor;
+}
+
+const Color&
+StyleSettings::GetVisitedLinkColor() const
+{
+    return mpData->maVisitedLinkColor;
+}
+
+void
+StyleSettings::SetHighlightLinkColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maHighlightLinkColor = rColor;
+}
+
+const Color&
+StyleSettings::GetHighlightLinkColor() const
+{
+    return mpData->maHighlightLinkColor;
+}
+
+
+void
+StyleSettings::SetMonoColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maMonoColor = rColor;
+}
+
+const Color&
+StyleSettings::GetMonoColor() const
+{
+    return mpData->maMonoColor;
+}
+
+
+void
+StyleSettings::SetActiveTabColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maActiveTabColor = rColor;
+}
+
+const Color&
+StyleSettings::GetActiveTabColor() const
+{
+    return mpData->maActiveTabColor;
+}
+
+void
+StyleSettings::SetInactiveTabColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maInactiveTabColor = rColor;
+}
+
+const Color&
+StyleSettings::GetInactiveTabColor() const
+{
+    return mpData->maInactiveTabColor;
+}
+
+void
+StyleSettings::SetUseSystemUIFonts( bool bUseSystemUIFonts )
+{
+    CopyData();
+    mpData->mbUseSystemUIFonts = bUseSystemUIFonts;
+}
+
+bool
+StyleSettings::GetUseSystemUIFonts() const
+{
+    return mpData->mbUseSystemUIFonts;
+}
+
+void
+StyleSettings::SetUseFlatBorders( bool bUseFlatBorders )
+{
+    CopyData();
+    mpData->mnUseFlatBorders = bUseFlatBorders;
+}
+
+bool
+StyleSettings::GetUseFlatBorders() const
+{
+    return (bool) mpData->mnUseFlatBorders;
+}
+
+void
+StyleSettings::SetUseFlatMenus( bool bUseFlatMenus )
+{
+    CopyData();
+    mpData->mnUseFlatMenus = bUseFlatMenus;
+}
+
+bool
+StyleSettings::GetUseFlatMenus() const
+{
+    return (bool) mpData->mnUseFlatMenus;
+}
+
+void
+StyleSettings::SetUseImagesInMenus( TriState eUseImagesInMenus )
+{
+    CopyData();
+    mpData->meUseImagesInMenus = eUseImagesInMenus;
+}
+
+void
+StyleSettings::SetPreferredUseImagesInMenus( bool bPreferredUseImagesInMenus )
+{
+    CopyData();
+    mpData->mbPreferredUseImagesInMenus = bPreferredUseImagesInMenus;
+}
+
+bool
+StyleSettings::GetPreferredUseImagesInMenus() const
+{
+    return mpData->mbPreferredUseImagesInMenus;
+}
+
+void
+StyleSettings::SetSkipDisabledInMenus( bool bSkipDisabledInMenus )
+{
+    CopyData();
+    mpData->mbSkipDisabledInMenus = bSkipDisabledInMenus;
+}
+
+bool
+StyleSettings::GetSkipDisabledInMenus() const
+{
+    return mpData->mbSkipDisabledInMenus;
+}
+
+void
+StyleSettings::SetHideDisabledMenuItems( bool bHideDisabledMenuItems )
+{
+    CopyData();
+    mpData->mbHideDisabledMenuItems = bHideDisabledMenuItems;
+}
+
+bool
+StyleSettings::GetHideDisabledMenuItems() const
+{
+    return mpData->mbHideDisabledMenuItems;
+}
+
+void
+StyleSettings::SetAcceleratorsInContextMenus( bool bAcceleratorsInContextMenus )
+{
+    CopyData();
+    mpData->mbAcceleratorsInContextMenus = bAcceleratorsInContextMenus;
+}
+
+bool
+StyleSettings::GetAcceleratorsInContextMenus() const
+{
+    return mpData->mbAcceleratorsInContextMenus;
+}
+
+void
+StyleSettings::SetPrimaryButtonWarpsSlider( bool bPrimaryButtonWarpsSlider )
+{
+    CopyData();
+    mpData->mbPrimaryButtonWarpsSlider = bPrimaryButtonWarpsSlider;
+}
+
+bool
+StyleSettings::GetPrimaryButtonWarpsSlider() const
+{
+    return mpData->mbPrimaryButtonWarpsSlider;
+}
+
+
+void
+StyleSettings::SetCairoFontOptions( const void *pOptions )
+{
+    CopyData();
+    mpData->mpFontOptions = pOptions;
+}
+
+const void*
+StyleSettings::GetCairoFontOptions() const
+{
+    return mpData->mpFontOptions;
+}
+
+
+void
+StyleSettings::SetAppFont( const Font& rFont )
+{
+    CopyData();
+    mpData->maAppFont = rFont;
+}
+
+const Font&
+StyleSettings::GetAppFont() const
+{
+    return mpData->maAppFont;
+}
+
+void
+StyleSettings::SetHelpFont( const Font& rFont )
+{
+    CopyData();
+    mpData->maHelpFont = rFont;
+}
+
+const Font&
+StyleSettings::GetHelpFont() const
+{
+    return mpData->maHelpFont;
+}
+
+void
+StyleSettings::SetTitleFont( const Font& rFont )
+{
+    CopyData();
+    mpData->maTitleFont = rFont;
+}
+
+const Font&
+StyleSettings::GetTitleFont() const
+{
+    return mpData->maTitleFont;
+}
+
+void
+StyleSettings::SetFloatTitleFont( const Font& rFont )
+{
+    CopyData();
+    mpData->maFloatTitleFont = rFont;
+}
+
+const Font&
+StyleSettings::GetFloatTitleFont() const
+{
+    return mpData->maFloatTitleFont;
+}
+
+void
+StyleSettings::SetMenuFont( const Font& rFont )
+{
+    CopyData();
+    mpData->maMenuFont = rFont;
+}
+
+const Font&
+StyleSettings::GetMenuFont() const
+{
+    return mpData->maMenuFont;
+}
+
+void
+StyleSettings::SetToolFont( const Font& rFont )
+{
+    CopyData();
+    mpData->maToolFont = rFont;
+}
+
+const Font&
+StyleSettings::GetToolFont() const
+{
+    return mpData->maToolFont;
+}
+
+void
+StyleSettings::SetGroupFont( const Font& rFont )
+{
+    CopyData();
+    mpData->maGroupFont = rFont;
+}
+
+const Font&
+StyleSettings::GetGroupFont() const
+{
+    return mpData->maGroupFont;
+}
+
+void
+StyleSettings::SetLabelFont( const Font& rFont )
+{
+    CopyData();
+    mpData->maLabelFont = rFont;
+}
+
+const Font&
+StyleSettings::GetLabelFont() const
+{
+    return mpData->maLabelFont;
+}
+
+void
+StyleSettings::SetInfoFont( const Font& rFont )
+{
+    CopyData();
+    mpData->maInfoFont = rFont;
+}
+
+const Font&
+StyleSettings::GetInfoFont() const
+{
+    return mpData->maInfoFont;
+}
+
+void
+StyleSettings::SetRadioCheckFont( const Font& rFont )
+{
+    CopyData();
+    mpData->maRadioCheckFont = rFont;
+}
+
+const Font&
+StyleSettings::GetRadioCheckFont() const
+{
+    return mpData->maRadioCheckFont;
+}
+
+void
+StyleSettings::SetPushButtonFont( const Font& rFont )
+{
+    CopyData();
+    mpData->maPushButtonFont = rFont;
+}
+
+const Font&
+StyleSettings::GetPushButtonFont() const
+{
+    return mpData->maPushButtonFont;
+}
+
+void
+StyleSettings::SetFieldFont( const Font& rFont )
+{
+    CopyData();
+    mpData->maFieldFont = rFont;
+}
+
+const Font&
+StyleSettings::GetFieldFont() const
+{
+    return mpData->maFieldFont;
+}
+
+void
+StyleSettings::SetIconFont( const Font& rFont )
+{
+    CopyData();
+    mpData->maIconFont = rFont;
+}
+
+const Font&
+StyleSettings::GetIconFont() const
+{
+    return mpData->maIconFont;
+}
+
+
+void
+StyleSettings::SetBorderSize( long nSize )
+{
+    CopyData();
+    mpData->mnBorderSize = nSize;
+}
+
+long
+StyleSettings::GetBorderSize() const
+{
+    return mpData->mnBorderSize;
+}
+
+void
+StyleSettings::SetTitleHeight( long nSize )
+{
+    CopyData();
+    mpData->mnTitleHeight = nSize;
+}
+
+long
+StyleSettings::GetTitleHeight() const
+{
+    return mpData->mnTitleHeight;
+}
+
+void
+StyleSettings::SetFloatTitleHeight( long nSize )
+{
+    CopyData();
+    mpData->mnFloatTitleHeight = nSize;
+}
+
+long
+StyleSettings::GetFloatTitleHeight() const
+{
+    return mpData->mnFloatTitleHeight;
+}
+
+void
+StyleSettings::SetTearOffTitleHeight( long nSize )
+{
+    CopyData();
+    mpData->mnTearOffTitleHeight = nSize;
+}
+
+long
+StyleSettings::GetTearOffTitleHeight() const
+{
+    return mpData->mnTearOffTitleHeight;
+}
+
+void
+StyleSettings::SetMenuBarHeight( long nSize )
+{
+    CopyData();
+    mpData->mnMenuBarHeight = nSize;
+}
+
+long
+StyleSettings::GetMenuBarHeight() const
+{
+    return mpData->mnMenuBarHeight;
+}
+
+void
+StyleSettings::SetScrollBarSize( long nSize )
+{
+    CopyData();
+    mpData->mnScrollBarSize = nSize;
+}
+
+long
+StyleSettings::GetScrollBarSize() const
+{
+    return mpData->mnScrollBarSize;
+}
+
+void
+StyleSettings::SetMinThumbSize( long nSize )
+{
+    CopyData();
+    mpData->mnMinThumbSize = nSize;
+}
+
+long
+StyleSettings::GetMinThumbSize() const
+{
+    return mpData->mnMinThumbSize;
+}
+
+void
+StyleSettings::SetSpinSize( long nSize )
+{
+    CopyData();
+    mpData->mnSpinSize = nSize;
+}
+
+long
+StyleSettings::GetSpinSize() const
+{
+    return mpData->mnSpinSize;
+}
+
+void
+StyleSettings::SetSplitSize( long nSize )
+{
+    CopyData();
+    mpData->mnSplitSize = nSize;
+}
+
+long
+StyleSettings::GetSplitSize() const
+{
+    return mpData->mnSplitSize;
+}
+
+
+void
+StyleSettings::SetIconHorzSpace( long nSpace )
+{
+    CopyData();
+    mpData->mnIconHorzSpace = nSpace;
+}
+
+long
+StyleSettings::GetIconHorzSpace() const
+{
+    return mpData->mnIconHorzSpace;
+}
+
+void
+StyleSettings::SetIconVertSpace( long nSpace )
+{
+    CopyData();
+    mpData->mnIconVertSpace = nSpace;
+}
+
+long
+StyleSettings::GetIconVertSpace() const
+{
+    return mpData->mnIconVertSpace;
+}
+
+
+void
+StyleSettings::SetCursorSize( long nSize )
+{
+    CopyData();
+    mpData->mnCursorSize = nSize;
+}
+
+long
+StyleSettings::GetCursorSize() const
+{
+    return mpData->mnCursorSize;
+}
+
+void
+StyleSettings::SetCursorBlinkTime( long nBlinkTime )
+{
+    CopyData();
+    mpData->mnCursorBlinkTime = nBlinkTime;
+}
+
+long
+StyleSettings::GetCursorBlinkTime() const
+{
+    return (long) mpData->mnCursorBlinkTime;
+}
+
+
+void
+StyleSettings::SetScreenZoom( sal_uInt16 nPercent )
+{
+    CopyData();
+    mpData->mnScreenZoom = nPercent;
+}
+
+sal_uInt16
+StyleSettings::GetScreenZoom() const
+{
+    return mpData->mnScreenZoom;
+}
+
+void
+StyleSettings::SetScreenFontZoom( sal_uInt16 nPercent )
+{
+    CopyData();
+    mpData->mnScreenFontZoom = nPercent;
+}
+
+sal_uInt16
+StyleSettings::GetScreenFontZoom() const
+{
+    return mpData->mnScreenFontZoom;
+}
+
+
+void
+StyleSettings::SetLogoDisplayTime( sal_uLong nDisplayTime )
+{
+    CopyData();
+    mpData->mnLogoDisplayTime = nDisplayTime;
+}
+
+sal_uLong
+StyleSettings::GetLogoDisplayTime() const
+{
+    return mpData->mnLogoDisplayTime;
+}
+
+
+void
+StyleSettings::SetDragFullOptions( sal_uLong nOptions )
+{
+    CopyData();
+    mpData->mnDragFullOptions = nOptions;
+}
+
+sal_uLong
+StyleSettings::GetDragFullOptions() const
+{
+    return mpData->mnDragFullOptions;
+}
+
+
+void
+StyleSettings::SetAnimationOptions( sal_uLong nOptions )
+{
+    CopyData();
+    mpData->mnAnimationOptions = nOptions;
+}
+
+sal_uLong
+StyleSettings::GetAnimationOptions() const
+{
+    return mpData->mnAnimationOptions;
+}
+
+
+void
+StyleSettings::SetSelectionOptions( sal_uLong nOptions )
+{
+    CopyData();
+    mpData->mnSelectionOptions = nOptions;
+}
+
+sal_uLong
+StyleSettings::GetSelectionOptions() const
+{
+    return mpData->mnSelectionOptions;
+}
+
+
+void
+StyleSettings::SetDisplayOptions( sal_uLong nOptions )
+{
+    CopyData();
+    mpData->mnDisplayOptions = nOptions;
+}
+
+sal_uLong
+StyleSettings::GetDisplayOptions() const
+{
+    return mpData->mnDisplayOptions;
+}
+
+void
+StyleSettings::SetAntialiasingMinPixelHeight( long nMinPixel )
+{
+    CopyData();
+    mpData->mnAntialiasedMin = nMinPixel;
+}
+
+sal_uLong
+StyleSettings::GetAntialiasingMinPixelHeight() const
+{
+    return mpData->mnAntialiasedMin;
+}
+
+
+void
+StyleSettings::SetOptions( sal_uLong nOptions )
+{
+    CopyData();
+    mpData->mnOptions = nOptions;
+}
+
+void
+StyleSettings::SetAutoMnemonic( bool bAutoMnemonic )
+{
+    CopyData();
+    mpData->mbAutoMnemonic = bAutoMnemonic;
+}
+
+bool
+StyleSettings::GetAutoMnemonic() const
+{
+    return mpData->mbAutoMnemonic;
+}
+
+
+void
+StyleSettings::SetFontColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maFontColor = rColor;
+}
+
+const Color&
+StyleSettings::GetFontColor() const
+{
+    return mpData->maFontColor;
+}
+
+
+void
+StyleSettings::SetToolbarIconSize( sal_uLong nSize )
+{
+    CopyData();
+    mpData->mnToolbarIconSize = nSize;
+}
+
+sal_uLong
+StyleSettings::GetToolbarIconSize() const
+{
+    return mpData->mnToolbarIconSize;
+}
+
+const Wallpaper&
+StyleSettings::GetWorkspaceGradient() const
+{
+    return mpData->maWorkspaceGradient;
+}
+
+void
+StyleSettings::SetWorkspaceGradient( const Wallpaper& rWall )
+{
+    CopyData();
+    mpData->maWorkspaceGradient = rWall;
+}
+
+
+const DialogStyle&
+StyleSettings::GetDialogStyle() const
+{
+    return mpData->maDialogStyle;
+}
+
+void
+StyleSettings::SetDialogStyle( const DialogStyle& rStyle )
+{
+    CopyData();
+    mpData->maDialogStyle = rStyle;
+}
+
+
+const FrameStyle&
+StyleSettings::GetFrameStyle() const
+{
+    return mpData->maFrameStyle;
+}
+
+void
+StyleSettings::SetFrameStyle( const FrameStyle& rStyle )
+{
+    CopyData();
+    mpData->maFrameStyle = rStyle;
+}
+
+void
+StyleSettings::SetEdgeBlending(sal_uInt16 nCount)
+{
+    CopyData();
+    mpData->mnEdgeBlending = nCount;
+}
+
+sal_uInt16
+StyleSettings::GetEdgeBlending() const
+{
+    return mpData->mnEdgeBlending;
+}
+
+void
+StyleSettings::SetEdgeBlendingTopLeftColor(const Color& rTopLeft)
+{
+    CopyData();
+    mpData->maEdgeBlendingTopLeftColor = rTopLeft;
+}
+
+const Color&
+StyleSettings::GetEdgeBlendingTopLeftColor() const
+{
+    return mpData->maEdgeBlendingTopLeftColor;
+}
+
+void
+StyleSettings::SetEdgeBlendingBottomRightColor(const Color& rBottomRight)
+{
+    CopyData();
+    mpData->maEdgeBlendingBottomRightColor = rBottomRight;
+}
+
+const Color&
+StyleSettings::GetEdgeBlendingBottomRightColor() const
+{
+    return mpData->maEdgeBlendingBottomRightColor;
+}
+
+void
+StyleSettings::SetListBoxMaximumLineCount(sal_uInt16 nCount)
+{
+    CopyData();
+    mpData->mnListBoxMaximumLineCount = nCount;
+}
+
+sal_uInt16
+StyleSettings::GetListBoxMaximumLineCount() const
+{
+    return mpData->mnListBoxMaximumLineCount;
+}
+
+void
+StyleSettings::SetColorValueSetColumnCount(sal_uInt16 nCount)
+{
+    CopyData();
+    mpData->mnColorValueSetColumnCount = nCount;
+}
+
+sal_uInt16
+StyleSettings::GetColorValueSetColumnCount() const
+{
+    return mpData->mnColorValueSetColumnCount;
+}
+
+void
+StyleSettings::SetColorValueSetMaximumRowCount(sal_uInt16 nCount)
+{
+    CopyData();
+    mpData->mnColorValueSetMaximumRowCount = nCount;
+}
+
+sal_uInt16
+StyleSettings::GetColorValueSetMaximumRowCount() const
+{
+    return mpData->mnColorValueSetMaximumRowCount;
+}
+
+void
+StyleSettings::SetListBoxPreviewDefaultLogicSize(const Size& rSize)
+{
+    CopyData();
+    mpData->maListBoxPreviewDefaultLogicSize = rSize; mpData->maListBoxPreviewDefaultPixelSize = Size(0, 0);
+}
+
+const Size&
+StyleSettings::GetListBoxPreviewDefaultLogicSize() const
+{
+    return mpData->maListBoxPreviewDefaultLogicSize;
+}
+
+void
+StyleSettings::SetListBoxPreviewDefaultLineWidth(sal_uInt16 nWidth)
+{
+    CopyData();
+    mpData->mnListBoxPreviewDefaultLineWidth = nWidth;
+}
+
+sal_uInt16
+StyleSettings::GetListBoxPreviewDefaultLineWidth() const
+{
+    return mpData->mnListBoxPreviewDefaultLineWidth;
+}
+
+void
+StyleSettings::SetPreviewUsesCheckeredBackground(bool bNew)
+{
+    CopyData();
+    mpData->mbPreviewUsesCheckeredBackground = bNew;
+}
+
+bool
+StyleSettings::GetPreviewUsesCheckeredBackground() const
+{
+    return mpData->mbPreviewUsesCheckeredBackground;
+}
+
+bool
+StyleSettings::operator !=( const StyleSettings& rSet ) const
+{
+    return !(*this == rSet);
 }
 
 const Size& StyleSettings::GetListBoxPreviewDefaultPixelSize() const
@@ -657,14 +2540,6 @@ Color StyleSettings::GetSeparatorColor() const
 
 // -----------------------------------------------------------------------
 
-const StyleSettings& StyleSettings::operator =( const StyleSettings& rSet )
-{
-    mpData = rSet.mpData;
-    return *this;
-}
-
-// -----------------------------------------------------------------------
-
 void StyleSettings::CopyData()
 {
     // copy if other references exist
@@ -689,7 +2564,7 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
     }
 
     if ( (mpData->mnOptions                 == rSet.mpData->mnOptions)                  &&
-         (mpData->mnAutoMnemonic            == rSet.mpData->mnAutoMnemonic)             &&
+         (mpData->mbAutoMnemonic            == rSet.mpData->mbAutoMnemonic)             &&
          (mpData->mnLogoDisplayTime         == rSet.mpData->mnLogoDisplayTime)          &&
          (mpData->mnDragFullOptions         == rSet.mpData->mnDragFullOptions)          &&
          (mpData->mnAnimationOptions        == rSet.mpData->mnAnimationOptions)         &&
@@ -803,7 +2678,7 @@ ImplMiscData::ImplMiscData()
     mnEnableATT                 = TRISTATE_INDET;
     mnDisablePrinting           = TRISTATE_INDET;
     static const char* pEnv = getenv("SAL_DECIMALSEP_ENABLED" ); // set default without UI
-    mbEnableLocalizedDecimalSep = (pEnv != NULL) ? sal_True : sal_False;
+    mbEnableLocalizedDecimalSep = (pEnv != NULL) ? true : false;
 }
 
 // -----------------------------------------------------------------------
@@ -824,23 +2699,8 @@ MiscSettings::MiscSettings()
 
 // -----------------------------------------------------------------------
 
-MiscSettings::MiscSettings( const MiscSettings& rSet )
-{
-    mpData = rSet.mpData;
-}
-
-// -----------------------------------------------------------------------
-
 MiscSettings::~MiscSettings()
 {
-}
-
-// -----------------------------------------------------------------------
-
-const MiscSettings& MiscSettings::operator =( const MiscSettings& rSet )
-{
-    mpData = rSet.mpData;
-    return *this;
 }
 
 // -----------------------------------------------------------------------
@@ -866,6 +2726,12 @@ bool MiscSettings::operator ==( const MiscSettings& rSet ) const
         return true;
     else
         return false;
+}
+
+bool
+MiscSettings::operator !=( const MiscSettings& rSet ) const
+{
+    return !(*this == rSet);
 }
 
 // -----------------------------------------------------------------------
@@ -957,7 +2823,7 @@ bool MiscSettings::GetEnableATToolSupport() const
 }
 
 #ifdef WNT
-void MiscSettings::SetEnableATToolSupport( sal_Bool bEnable )
+void MiscSettings::SetEnableATToolSupport( bool bEnable )
 {
     if ( (bEnable ? TRISTATE_TRUE : TRISTATE_FALSE) != mpData->mnEnableATT )
     {
@@ -1049,23 +2915,8 @@ HelpSettings::HelpSettings()
 
 // -----------------------------------------------------------------------
 
-HelpSettings::HelpSettings( const HelpSettings& rSet )
-{
-    mpData = rSet.mpData;
-}
-
-// -----------------------------------------------------------------------
-
 HelpSettings::~HelpSettings()
 {
-}
-
-// -----------------------------------------------------------------------
-
-const HelpSettings& HelpSettings::operator =( const HelpSettings& rSet )
-{
-    mpData = rSet.mpData;
-    return *this;
 }
 
 // -----------------------------------------------------------------------
@@ -1093,6 +2944,65 @@ bool HelpSettings::operator ==( const HelpSettings& rSet ) const
     else
         return false;
 }
+
+void
+HelpSettings::SetOptions( sal_uLong nOptions )
+{
+    CopyData();
+    mpData->mnOptions = nOptions;
+}
+
+sal_uLong
+HelpSettings::GetOptions() const
+{
+    return mpData->mnOptions;
+}
+
+void
+HelpSettings::SetTipDelay( sal_uLong nTipDelay )
+{
+    CopyData();
+    mpData->mnTipDelay = nTipDelay;
+}
+
+sal_uLong
+HelpSettings::GetTipDelay() const
+{
+    return mpData->mnTipDelay;
+}
+
+void
+HelpSettings::SetTipTimeout( sal_uLong nTipTimeout )
+{
+    CopyData();
+    mpData->mnTipTimeout = nTipTimeout;
+}
+
+sal_uLong
+HelpSettings::GetTipTimeout() const
+{
+    return mpData->mnTipTimeout;
+}
+
+void
+HelpSettings::SetBalloonDelay( sal_uLong nBalloonDelay )
+{
+    CopyData();
+    mpData->mnBalloonDelay = nBalloonDelay;
+}
+
+sal_uLong
+HelpSettings::GetBalloonDelay() const
+{
+    return mpData->mnBalloonDelay;
+}
+
+bool
+HelpSettings::operator !=( const HelpSettings& rSet ) const
+{
+    return !(*this == rSet);
+}
+
 
 // =======================================================================
 
@@ -1161,14 +3071,6 @@ AllSettings::AllSettings( const AllSettings& rSet )
 
 AllSettings::~AllSettings()
 {
-}
-
-// -----------------------------------------------------------------------
-
-const AllSettings& AllSettings::operator =( const AllSettings& rSet )
-{
-    mpData = rSet.mpData;
-    return *this;
 }
 
 // -----------------------------------------------------------------------
@@ -1536,6 +3438,89 @@ void
 StyleSettings::SetPreferredIconTheme(const OUString& theme)
 {
     mpData->mIconThemeSelector->SetPreferredIconTheme(theme);
+}
+
+void
+AllSettings::SetMouseSettings( const MouseSettings& rSet )
+{
+    CopyData();
+    mpData->maMouseSettings = rSet;
+}
+
+const MouseSettings&
+AllSettings::GetMouseSettings() const
+{
+    return mpData->maMouseSettings;
+}
+
+void
+AllSettings::SetStyleSettings( const StyleSettings& rSet )
+{
+    CopyData();
+    mpData->maStyleSettings = rSet;
+}
+
+void
+AllSettings::SetMiscSettings( const MiscSettings& rSet )
+{
+    CopyData();
+    mpData->maMiscSettings = rSet;
+}
+
+const MiscSettings&
+AllSettings::GetMiscSettings() const
+{
+    return mpData->maMiscSettings;
+}
+
+void
+AllSettings::SetHelpSettings( const HelpSettings& rSet )
+{
+    CopyData();
+    mpData->maHelpSettings = rSet;
+}
+
+const HelpSettings&
+AllSettings::GetHelpSettings() const
+{
+    return mpData->maHelpSettings;
+}
+
+void
+AllSettings::SetSystemUpdate( sal_uLong nUpdate )
+{
+    CopyData();
+    mpData->mnSystemUpdate = nUpdate;
+}
+
+sal_uLong
+AllSettings::GetSystemUpdate() const
+{
+    return mpData->mnSystemUpdate;
+}
+
+void
+AllSettings::SetWindowUpdate( sal_uLong nUpdate )
+{
+    CopyData();
+    mpData->mnWindowUpdate = nUpdate;
+}
+sal_uLong
+AllSettings::GetWindowUpdate() const
+{
+    return mpData->mnWindowUpdate;
+}
+
+bool
+AllSettings::operator !=( const AllSettings& rSet ) const
+{
+    return !(*this == rSet);
+}
+
+SvtSysLocale&
+AllSettings::GetSysLocale()
+{
+    return mpData->maSysLocale;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
