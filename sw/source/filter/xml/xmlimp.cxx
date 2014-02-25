@@ -239,7 +239,6 @@ SvXMLImportContext *SwXMLDocContext_Impl::CreateChildContext(
     if( !pContext )
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 
-
     return pContext;
 }
 
@@ -506,7 +505,6 @@ void SwXMLImport::startDocument( void )
     // this method will modify the document directly -> lock SolarMutex
     SolarMutexGuard aGuard;
 
-
     Reference< XPropertySet > xImportInfo( getImportInfo() );
     Reference< XPropertySetInfo > xPropertySetInfo;
        if( xImportInfo.is() )
@@ -721,7 +719,6 @@ void SwXMLImport::endDocument( void )
     // for Java filters.
     if( HasShapeImport() )
         ClearShapeImport();
-
 
     SwDoc *pDoc = 0;
     if( (getImportFlags() & IMPORT_CONTENT) != 0 && !IsStylesOnlyMode() )
@@ -1443,7 +1440,6 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
         pDoc->SetOLEPrtNotifyPending( !pPrinter->IsKnown() );
     }
 }
-
 
 void SwXMLImport::SetDocumentSpecificSettings(
     const OUString& _rSettingsGroupName,

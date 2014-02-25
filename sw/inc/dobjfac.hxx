@@ -21,9 +21,8 @@
 
 #include <tools/link.hxx>
 
-//-----------------------
 // class SwObjectFactory
-//-----------------------
+
 class SdrObjFactory;
 
 class SwObjectFactory
@@ -33,7 +32,6 @@ public:
 };
 
 extern SwObjectFactory aSwObjectFactory;
-
 
 #endif // INCLUDED_SW_INC_DOBJFAC_HXX
 

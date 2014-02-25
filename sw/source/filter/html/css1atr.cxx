@@ -110,8 +110,6 @@ using ::editeng::SvxBorderLine;
 #define CSS1_FRMSIZE_ANYHEIGHT  0x0e
 #define CSS1_FRMSIZE_PIXEL      0x10
 
-
-
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_rule_end, " }" );
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_span_tag_end, "\">" );
 const sal_Char cCSS1_style_opt_end = '\"';
@@ -203,8 +201,6 @@ public:
     }
 };
 
-
-
 void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
                                      const sal_Char *pVal,
                                      const OUString *pSVal )
@@ -257,7 +253,6 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
     {
         sOut.append("; ");
     }
-
 
     sOut.append(OString(pProp) + ": ");
     if( nCSS1OutMode & CSS1_OUTMODE_ENCODE )
@@ -582,7 +577,6 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, sal_Bool bUsed )
     }
 // /Feature: PrintExt
 
-
     // The text body style has to be exported always (if it is changed compared
     // to the template), because it is used as reference for any style
     // that maps to <P>, and that's especially the standard style
@@ -642,8 +636,6 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, sal_Bool bUsed )
     nDfltTopMargin = 0;
     nDfltBottomMargin = 0;
 }
-
-
 
 // wenn pPseudo gesetzt ist werden Styles-Sheets ausgegeben,
 // sonst wird nur nach Token und Class fuer ein Format gesucht
@@ -1676,7 +1668,6 @@ static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
          RES_POOLCHR_INET_VISIT==nRefPoolId) )
         bCheckForPseudo = true;
 
-
     // jetzt die Attribute (inkl. Selektor) ausgeben
     bool bHasScriptDependencies = false;
     if( OutCSS1Rule( rHTMLWrt, aSelector, aItemSet, CSS1_FMT_ISTAG != nDeep,
@@ -1873,7 +1864,6 @@ Writer& OutCSS1_BodyTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet )
     SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_STYLE_OPT_ON |
                                    CSS1_OUTMODE_ENCODE|CSS1_OUTMODE_BODY );
 
-
     // Es werden nur die Attribute der Seiten-Vorlage ausgegeben.
     // Die Attribute der Standard-Absatz-Vorlage werden schon beim
     // Export der Absatz-Vorlagen beruecksichtigt.
@@ -1959,7 +1949,6 @@ Writer& OutCSS1_TableBGStyleOpt( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
-
 Writer& OutCSS1_NumBulListStyleOpt( Writer& rWrt, const SwNumRule& rNumRule,
                                     sal_uInt8 nLevel )
 {
@@ -1993,8 +1982,6 @@ Writer& OutCSS1_NumBulListStyleOpt( Writer& rWrt, const SwNumRule& rNumRule,
 
     return rWrt;
 }
-
-
 
 void SwHTMLWriter::OutCSS1_FrmFmtOptions( const SwFrmFmt& rFrmFmt,
                                           sal_uInt32 nFrmOpts,
@@ -2354,8 +2341,6 @@ void SwHTMLWriter::OutCSS1_FrmFmtBackground( const SwFrmFmt& rFrmFmt )
     }
 }
 
-
-
 static Writer& OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( Writer& rWrt,
                     const SvxUnderlineItem *pUItem,
                     const SvxOverlineItem *pOItem,
@@ -2484,7 +2469,6 @@ static Writer& OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( Writer& rWrt,
     return rWrt;
 }
 
-
 static Writer& OutCSS1_SvxCaseMap( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
@@ -2513,7 +2497,6 @@ static Writer& OutCSS1_SvxCaseMap( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
-
 static Writer& OutCSS1_SvxColor( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
@@ -2533,7 +2516,6 @@ static Writer& OutCSS1_SvxColor( Writer& rWrt, const SfxPoolItem& rHt )
 
     return rWrt;
 }
-
 
 static Writer& OutCSS1_SvxCrossedOut( Writer& rWrt, const SfxPoolItem& rHt )
 {
@@ -2720,7 +2702,6 @@ static Writer& OutCSS1_SvxUnderline( Writer& rWrt, const SfxPoolItem& rHt )
 
     return rWrt;
 }
-
 
 static Writer& OutCSS1_SvxOverline( Writer& rWrt, const SfxPoolItem& rHt )
 {
@@ -3595,7 +3576,6 @@ static Writer& OutCSS1_SvxFrameDirection( Writer& rWrt, const SfxPoolItem& rHt )
  * Es sind lokale Strukturen, die nur innerhalb der HTML-DLL
  * bekannt sein muessen.
  */
-
 
 SwAttrFnTab aCSS1AttrFnTab = {
 /* RES_CHRATR_CASEMAP   */          OutCSS1_SvxCaseMap,

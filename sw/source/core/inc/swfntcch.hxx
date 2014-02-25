@@ -76,7 +76,6 @@ public:
  *                      class SwFontAccess
  *************************************************************************/
 
-
 class SwFontAccess : public SwCacheAccess
 {
     SwViewShell *pShell;

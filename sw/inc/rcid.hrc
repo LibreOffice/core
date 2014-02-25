@@ -22,9 +22,9 @@
 #include <sfx2/sfxsids.hrc>
 
 #define IMAGE_MASK_COLOR Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; }
-// ----------------------------------------------------------------
+
 // Areas for the UI-Directories
-// ----------------------------------------------------------------
+
 
 #define RC_BASE                     RID_SW_START    // From solar.hrc
 
@@ -121,7 +121,7 @@
 #define RC_INDEX_BEGIN              RC_INDEX
 //      RC_INDEX_END                (RC_INDEX + 99)
 
-//
+
 #define RC_RIBBAR_BEGIN             RC_RIBBAR
 #define RC_RIBBAR_END               (RC_RIBBAR_BEGIN + 79)
 

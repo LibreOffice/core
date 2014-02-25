@@ -73,5 +73,4 @@ SwCacheObj *SwFontAccess::NewObj( )
     return new SwFontObj( pOwner, pShell );
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -30,7 +30,6 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-
 SwVbaStyle::SwVbaStyle( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< frame::XModel>& xModel, const uno::Reference< beans::XPropertySet >& _xPropertySet ) throw ( script::BasicErrorException, uno::RuntimeException ) : SwVbaStyle_BASE( xParent, xContext ) , mxModel( xModel ), mxStyleProps( _xPropertySet )
 {
     mxStyle.set( _xPropertySet, uno::UNO_QUERY_THROW );

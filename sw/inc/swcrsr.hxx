@@ -25,13 +25,11 @@
 #include <tblsel.hxx>
 #include <cshtyp.hxx>
 
-
 struct _SwCursor_SavePos;
 
 namespace com { namespace sun { namespace star { namespace util {
     struct SearchOptions;
 } } } }
-
 
 // Base structure for parameters of the find-methods.
 // Returns values of found-call.
@@ -101,7 +99,6 @@ public:
     void FillFindPos( SwDocPositions ePos, SwPosition& rPos ) const;
     SwMoveFnCollection* MakeFindRange( SwDocPositions, SwDocPositions,
                                         SwPaM* ) const;
-
 
     sal_uLong Find( const com::sun::star::util::SearchOptions& rSearchOpt,
                 sal_Bool bSearchInNotes,
@@ -220,7 +217,6 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL( SwCursor )
 };
 
-
 /**
  A helper class to save cursor state (position). Create SwCrsrSaveState
  object to save current state, use SwCursor::RestoreSavePos() to actually
@@ -252,8 +248,6 @@ struct _SwCursor_SavePos
 
     DECL_FIXEDMEMPOOL_NEWDEL( _SwCursor_SavePos )
 };
-
-
 
 class SwTableCursor : public virtual SwCursor
 {

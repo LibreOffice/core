@@ -112,7 +112,6 @@ interface BaseTextDocument
         StateMethod = StateStyleSheet ;
     ]
 
-
     SID_ATTR_YEAR2000
     [
         ExecMethod = Execute ;
@@ -130,5 +129,4 @@ interface BaseTextDocument
         StateMethod = GetState;
     ]
 }
-
 

@@ -31,7 +31,6 @@
 #include <fmtfollowtextflow.hxx>
 #include <svx/swframevalidation.hxx>
 
-
 #include "cmdid.h"
 #include "uitool.hxx"
 #include "wrtsh.hxx"
@@ -493,7 +492,6 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         m_pWrapAnchorOnlyCB->Enable( bAllHtmlModes && nSur != SURROUND_NONE );
         m_pWrapOutsideCB->Hide();
         m_pIdealWrapRB->Enable( false );
-
 
         m_pWrapTransparentCB->Enable( false );
         m_pNoWrapRB->Enable( FLY_AT_PARA == nAnchorId );

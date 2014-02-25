@@ -295,6 +295,4 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
     }
 }
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

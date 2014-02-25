@@ -260,7 +260,6 @@ const wwSprmSearcher *wwSprmParser::GetWW2SprmSearcher()
     return &aSprmSrch;
 };
 
-
 const wwSprmSearcher *wwSprmParser::GetWW6SprmSearcher()
 {
     //double lock me
@@ -1034,10 +1033,10 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
             if( nSprmListIdx )
             {
                 // process Sprm Id Matching as explained in MS Documentation
-                //
+
                 // ''Property Modifier(variant 1) (PRM)''
                 // see file: s62f39.htm
-                //
+
                 // Since isprm is 7 bits, rgsprmPrm can hold 0x80 entries.
                 static const sal_uInt16 aSprmId[0x80] =
                 {
@@ -1218,7 +1217,6 @@ WW8_FC WW8PLCFx_PCD::AktPieceStartCp2Fc( WW8_CP nCp )
 
     return nFC + (nCp - nCpStart) * (bIsUnicode ? 2 : 1);
 }
-
 
 void WW8PLCFx_PCD::AktPieceFc2Cp( WW8_CP& rStartPos, WW8_CP& rEndPos,
     const WW8ScannerBase *pSBase )
@@ -1785,7 +1783,6 @@ static bool WW8SkipField(WW8PLCFspecial& rPLCF)
 
     if( !rPLCF.Get( nP, pData ) )
         return false;
-
 
     while((((sal_uInt8*)pData)[0] & 0x1f ) == 0x13 )
     {
@@ -2373,7 +2370,6 @@ sal_Int32 WW8PLCFpcd_Iter::Where() const
     return rPLCF.pPLCF_PosArray[nIdx];
 }
 
-
 bool WW8PLCFx_Fc_FKP::WW8Fkp::Entry::operator<
     (const WW8PLCFx_Fc_FKP::WW8Fkp::Entry& rSecond) const
 {
@@ -2756,7 +2752,6 @@ bool WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm(sal_uInt16 nId,
     return !rResult.empty();
 }
 
-
 void WW8PLCFx::GetSprms( WW8PLCFxDesc* p )
 {
     OSL_ENSURE( !this, "Called wrong GetSprms" );
@@ -2795,7 +2790,6 @@ public:
     bool operator()(const WW8PLCFx_Fc_FKP::WW8Fkp *pFkp)
         {return mnPo == pFkp->GetFilePos();}
 };
-
 
 bool WW8PLCFx_Fc_FKP::NewFkp()
 {
@@ -3533,7 +3527,6 @@ const sal_uInt8* WW8PLCFx_SEPX::HasSprm( sal_uInt16 nId, sal_uInt8 n2nd ) const
 
     return 0;   // Sprm not found
 }
-
 
 WW8PLCFx_SubDoc::WW8PLCFx_SubDoc(SvStream* pSt, ww::WordVersion eVersion,
     WW8_CP nStartCp, long nFcRef, long nLenRef, long nFcTxt, long nLenTxt,
@@ -5020,8 +5013,6 @@ void WW8PLCFxDesc::Restore( const WW8PLCFxSave1& rSave )
     }
 }
 
-
-
 namespace
 {
     sal_uInt32 Readcb(SvStream& rSt, ww::WordVersion eVer)
@@ -5193,7 +5184,7 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
     rSt.ReadUChar( envr );
     rSt.ReadUChar( aVer8Bits1 );      // unter Ver67  nur leeres Reservefeld
                             // Inhalt von aVer8Bits1
-                            //
+
                             // sal_uInt8 fMac              :1;
                             // sal_uInt8 fEmptySpecial     :1;
                             // sal_uInt8 fLoadOverridePage :1;
@@ -5511,7 +5502,6 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
         nFibError = ERR_SWG_READ_ERROR;     // Error melden
     }
 }
-
 
 WW8Fib::WW8Fib(sal_uInt8 nVer, bool bDot)
 {
@@ -6121,10 +6111,6 @@ WW8_STD* WW8Style::Read1Style( short& rSkip, OUString* pString, short* pcbStd )
     return pStd;
 }
 
-
-
-
-
 struct WW8_FFN_Ver6 : public WW8_FFN_BASE
 {
     // ab Ver6
@@ -6421,13 +6407,8 @@ const WW8_FFN* WW8Fonts::GetFont( sal_uInt16 nNum ) const
     return &pFontA[ nNum ];
 }
 
-
-
-
-
-
 // Suche zu einem Header / Footer den Index in der WW-Liste von Headern / Footern
-//
+
 // Pferdefuesse bei WinWord6 und -7:
 // 1) Am Anfang des Einlesens muss WWPLCF_HdFt mit Fib und Dop konstruiert werden
 // 2) Der Haupttext muss sequentiell ueber alle Sections gelesen werden
@@ -6510,9 +6491,7 @@ void WW8PLCF_HdFt::UpdateIndex( sal_uInt8 grpfIhdt )
             nIdxOffset++;
 }
 
-
 //          WW8Dop
-
 
 WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize) : bUseThaiLineBreakingRules(false)
 {
@@ -6581,7 +6560,6 @@ WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize) 
         fWriteReservation      = 0 != ( a8Bit  &  0x20   );
         fLockRev               = 0 != ( a8Bit  &  0x40   );
         fEmbedFonts            = 0 != ( a8Bit  &  0x80   );
-
 
         a8Bit = Get_Byte( pData );           // 8 0x08
         copts_fNoTabForInd           = 0 != ( a8Bit  &  0x01   );
@@ -7013,7 +6991,6 @@ bool WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
     if( fEmbedFonts )               a8Bit |= 0x80;
     Set_UInt8( pData, a8Bit );
 
-
     a8Bit = 0;                          // 8 0x08
     if( copts_fNoTabForInd )            a8Bit |= 0x01;
     if( copts_fNoSpaceRaiseLower )      a8Bit |= 0x02;
@@ -7237,7 +7214,6 @@ sal_uInt16 WW8DopTypography::GetConvertedLang() const
     }
     return nLang;
 }
-
 
 //              Sprms
 

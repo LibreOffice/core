@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <swtypes.hxx>
 #include <cmdid.h>
 #include <hintids.hxx>
@@ -86,7 +85,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-
 
 #ifndef DISABLE_SCRIPTING
 
@@ -2026,7 +2024,6 @@ SwXReferenceMark* SwXReferenceMarks::GetObject( SwDoc* pDoc, const SwFmtRefMark*
 
     return SwXReferenceMark::CreateXReferenceMark(*pDoc, *pMark);
 }
-
 
 void SwUnoCollection::Invalidate()
 {

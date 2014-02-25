@@ -45,5 +45,4 @@ public:
 
 #endif // INCLUDED_SW_SOURCE_FILTER_INC_RTF_HXX
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

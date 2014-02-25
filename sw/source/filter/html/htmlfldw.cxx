@@ -431,7 +431,6 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
     return rWrt;
 }
 
-
 Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwFmtFld & rFld = (SwFmtFld&)rHt;
@@ -541,6 +540,5 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
     }
     return rWrt;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

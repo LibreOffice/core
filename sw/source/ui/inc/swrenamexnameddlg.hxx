@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_UI_INC_SWRENAMEXNAMEDDLG_HXX
 #define INCLUDED_SW_SOURCE_UI_INC_SWRENAMEXNAMEDDLG_HXX
 
-
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <editeng/boxitem.hxx>
 #include <editeng/protitem.hxx>
 
@@ -88,9 +87,7 @@ struct _CmpLPt
     long Y() const { return aPos.Y(); }
 };
 
-
 typedef o3tl::sorted_vector<_CmpLPt> _MergePos;
-
 
 struct _Sort_CellFrm
 {
@@ -419,8 +416,6 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
     OSL_ENSURE( nLoopMax, "Table layout is still invalid!" );
 }
 
-
-
 sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
 {
     const SwTableNode* pTNd = rSttNd.FindTableNode();
@@ -458,7 +453,6 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
 
     const SwLayoutFrm *pEnd = pCNd ? pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aNullPos )->GetUpper() : 0;
     OSL_ENSURE( pEnd, "without frame nothing works" );
-
 
     bool bTblIsValid, bValidChartSel;
     // #i55421# Reduced value 10
@@ -654,7 +648,6 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
     return bValidChartSel ? sal_True : sal_False;
 }
 
-
 sal_Bool IsFrmInTblSel( const SwRect& rUnion, const SwFrm* pCell )
 {
     OSL_ENSURE( pCell->IsCellFrm(), "Frame without Gazelle" );
@@ -763,7 +756,6 @@ sal_Bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
         }
     }
 
-
     // 2. check if box on left contains value/formula
     if( bTstRow )
     {
@@ -849,7 +841,6 @@ sal_Bool HasProtectedCells( const SwSelBoxes& rBoxes )
     }
     return bRet;
 }
-
 
 _CmpLPt::_CmpLPt( const Point& rPt, const SwTableBox* pBox, bool bVertical )
     : aPos( rPt ), pSelBox( pBox ), bVert( bVertical )
@@ -1404,7 +1395,6 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
         pUndo->AddNewBox( (*ppMergeBox)->GetSttIdx() );
 }
 
-
 static bool lcl_CheckCol(_FndBox const&, bool* pPara);
 
 static bool lcl_CheckRow( const _FndLine& rFndLine, bool* pPara )
@@ -1437,7 +1427,6 @@ static bool lcl_CheckCol( _FndBox const& rFndBox, bool* pPara )
         *pPara = false;
     return *pPara;
 }
-
 
 sal_uInt16 CheckMergeSel( const SwPaM& rPam )
 {
@@ -1595,14 +1584,12 @@ static void lcl_FindStartEndRow( const SwLayoutFrm *&rpStart,
     if( !bChkProtected )    // protected cell ?
         return;
 
-
     // Beginning and end should not be in protected cells
     while ( rpStart->GetFmt()->GetProtect().IsCntntProtected() )
         rpStart = (SwLayoutFrm*)rpStart->GetNext();
     while ( rpEnd->GetFmt()->GetProtect().IsCntntProtected() )
         rpEnd = (SwLayoutFrm*)rpEnd->GetPrev();
 }
-
 
 static void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
                              const SwLayoutFrm *&rpEnd,
@@ -1662,11 +1649,11 @@ static void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
     const SwTabFrm* pLastValidTab = pTab;
     while ( pTab->GetFollow() )
     {
-        //
+
         // Check if pTab->GetFollow() is a valid follow table:
         // Only follow tables with at least on non-FollowFlowLine
         // should be considered.
-        //
+
         if ( pTab->HasFollowFlowLine() )
         {
             pTab = pTab->GetFollow();
@@ -1758,7 +1745,6 @@ static void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
             rpEnd = pTmpLeaf;
     }
 }
-
 
 void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
                     const SwLayoutFrm *pEnd, const SwTblSearchType eSearchType )
@@ -2035,7 +2021,6 @@ sal_Bool CheckSplitCells( const SwCursor& rCrsr, sal_uInt16 nDiv,
     return sal_True;
 }
 
-
 // These Classes copy the current table selections (rBoxes),
 // into a new structure, retaining the table structure
 // new: SS for targeted erasing/restoring of the layout
@@ -2057,7 +2042,6 @@ static void lcl_InsertRow( SwTableLine &rLine, SwLayoutFrm *pUpper, SwFrm *pSibl
     pRow->Paste( pUpper, pSibling );
     pRow->RegistFlys();
 }
-
 
 static void _FndBoxCopyCol( SwTableBox* pBox, _FndPara* pFndPara )
 {
@@ -2609,6 +2593,5 @@ sal_Bool _FndBox::AreLinesToRestore( const SwTable &rTable ) const
     // A call of MakeFrms() is necessary.
     return sal_True;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

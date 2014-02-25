@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "unosrch.hxx"
 #include <doc.hxx>
 #include <hints.hxx>
@@ -39,7 +38,7 @@ using namespace ::com::sun::star;
 
 class SwSearchProperties_Impl
 {
-    beans::PropertyValue**          pValueArr; //
+    beans::PropertyValue**          pValueArr;
     sal_uInt32                      nArrLen;
     const PropertyEntryVector_t     aPropertyEntries;
 public:

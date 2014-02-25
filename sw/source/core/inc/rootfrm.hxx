@@ -322,7 +322,6 @@ public:
     bool IsInDelList( SwSectionFrm* pSct ) const;
 #endif
 
-
     void SetCallbackActionEnabled( sal_Bool b ) { bCallbackActionEnabled = b; }
     sal_Bool IsCallbackActionEnabled() const    { return bCallbackActionEnabled; }
 

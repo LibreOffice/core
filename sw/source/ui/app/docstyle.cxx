@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svl/smplhint.hxx>
 #include <hintids.hxx>
 #include <svl/itemiter.hxx>
@@ -287,7 +286,6 @@ static const SwNumRule* lcl_FindNumRule(   SwDoc&  rDoc,
     return pRule;
 }
 
-
 static sal_uInt16 lcl_FindName(const SwPoolFmtList& rLst, SfxStyleFamily eFam,
     const OUString& rName)
 {
@@ -399,7 +397,6 @@ SwDocStyleSheet::SwDocStyleSheet(   SwDoc&          rDocument,
     nHelpId = UCHAR_MAX;
 }
 
-
 SwDocStyleSheet::SwDocStyleSheet( const SwDocStyleSheet& rOrg) :
     SfxStyleSheetBase(rOrg),
     pCharFmt(rOrg.pCharFmt),
@@ -412,7 +409,6 @@ SwDocStyleSheet::SwDocStyleSheet( const SwDocStyleSheet& rOrg) :
     bPhysical(rOrg.bPhysical)
 {
 }
-
 
  SwDocStyleSheet::~SwDocStyleSheet()
 {
@@ -703,7 +699,6 @@ bool  SwDocStyleSheet::HasParentSupport() const
     return bRet;
 }
 
-
 bool  SwDocStyleSheet::HasClearParentSupport() const
 {
     bool bRet = false;
@@ -879,7 +874,6 @@ OUString  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
 
     return SfxStyleSheetBase::GetDescription(eUnit);
 }
-
 
 OUString  SwDocStyleSheet::GetDescription()
 {
@@ -1609,7 +1603,6 @@ static void lcl_DeleteInfoStyles( sal_uInt16 nFamily, std::vector<void*>& rArr, 
         }
         break;
 
-
     case SFX_STYLE_FAMILY_PSEUDO:
         {
             std::deque<SwNumRule*> aDelArr;
@@ -1977,7 +1970,6 @@ bool  SwDocStyleSheet::IsUsed() const
     return rDoc.IsUsed( *pMod );
 }
 
-
 sal_uLong  SwDocStyleSheet::GetHelpId( OUString& rFile )
 {
     sal_uInt16 nId = 0;
@@ -2077,7 +2069,6 @@ sal_uLong  SwDocStyleSheet::GetHelpId( OUString& rFile )
     return nId;
 }
 
-
 void  SwDocStyleSheet::SetHelpId( const OUString& r, sal_uLong nId )
 {
     sal_uInt8 nFileId = static_cast< sal_uInt8 >(rDoc.SetDocPattern( r ));
@@ -2148,13 +2139,11 @@ SfxStyleSheetBase&   SwDocStyleSheetPool::Make( const OUString&   rName,
     return *mxStyleSheet.get();
 }
 
-
 SfxStyleSheetBase*   SwDocStyleSheetPool::Create( const SfxStyleSheetBase& /*rOrg*/)
 {
     OSL_ENSURE(!this , "Create im SW-Stylesheet-Pool geht nicht" );
     return NULL;
 }
-
 
 SfxStyleSheetBase*   SwDocStyleSheetPool::Create( const OUString &,
                                                   SfxStyleFamily, sal_uInt16 )
@@ -2326,7 +2315,6 @@ void SwDocStyleSheetPool::Remove( SfxStyleSheetBase* pStyle)
     if( bBroadcast )
         Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_ERASED, *pStyle ) );
 }
-
 
 bool  SwDocStyleSheetPool::SetParent( SfxStyleFamily eFam,
                                       const OUString &rStyle, const OUString &rParent )

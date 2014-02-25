@@ -47,7 +47,6 @@ class SwCondCollPage : public SfxTabPage
 
     sal_Bool                bNewTemplate;
 
-
     SwCondCollPage(Window *pParent, const SfxItemSet &rSet);
     virtual ~SwCondCollPage();
 
@@ -70,8 +69,6 @@ public:
 
     void SetCollection( SwFmt* pFormat, sal_Bool bNew );
 };
-
-
 
 #endif
 

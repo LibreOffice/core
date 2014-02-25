@@ -35,7 +35,6 @@ class SW_DLLPUBLIC SwCharFmt : public SwFmt
           : SwFmt( rPool, rFmtName, aCharFmtSetRange, pDerivedFrom, RES_CHRFMT )
     {}
 
-
 public:
     TYPEINFO();    // already in base class Client
 };
@@ -48,7 +47,5 @@ namespace CharFmt
 }
 
 #endif
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

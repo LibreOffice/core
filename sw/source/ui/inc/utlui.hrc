@@ -26,7 +26,7 @@
 #define RID_SW_SHELLRES             (RC_UTLUI_BEGIN + 1)
 #define RID_STR_SYSTEM              (RC_UTLUI_BEGIN + 2)
 
-// ------------------------------------------------------------------------
+
 
 // Strings in NumberFormatter-Listbox
 #define STR_DEFINE_NUMBERFORMAT                 (RC_UTLUI_BEGIN + 4)

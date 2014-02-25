@@ -41,7 +41,6 @@
 #include <helpid.h>
 #include <unomid.h>
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
 

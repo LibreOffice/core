@@ -225,7 +225,7 @@ static bool lcl_ChgHyperLinkColor( const SwTxtAttr& rAttr,
     // 1. case:
     // We do not want to show visited links:
     // (printing, pdf export, page preview)
-    //
+
     if ( pShell->GetOut()->GetOutDevType() == OUTDEV_PRINTER ||
          pShell->GetViewOptions()->IsPDFExport() ||
          pShell->GetViewOptions()->IsPagePreview() )
@@ -250,11 +250,10 @@ static bool lcl_ChgHyperLinkColor( const SwTxtAttr& rAttr,
         return false;
     }
 
-    //
     // 2. case:
     // We do not want to apply the color set in the hyperlink
     // attribute, instead we take the colors from the view options:
-    //
+
     if ( pShell->GetWin() &&
         (
           (((SwTxtINetFmt&)rAttr).IsVisited() && SwViewOption::IsVisitedLinks()) ||

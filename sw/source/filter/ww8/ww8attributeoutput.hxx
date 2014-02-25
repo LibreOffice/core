@@ -48,13 +48,13 @@ public:
     virtual void EmptyParagraph();
 
     /// Start of the text run.
-    ///
+    /
     virtual void StartRun( const SwRedlineData* pRedlineData, bool bSingleEmptyRun = false );
 
     virtual void OnTOXEnding();
 
     /// End of the text run.
-    ///
+    /
     /// No-op for binary filters.
     virtual void EndRun() {}
 
@@ -152,7 +152,7 @@ public:
     virtual void StartSection();
 
     /// End of the section properties.
-    ///
+    /
     /// No-op for binary filters.
     virtual void EndSection() {}
 
@@ -172,7 +172,7 @@ public:
     virtual void SectionBiDi( bool bBiDi );
 
     /// The style of the page numbers.
-    ///
+    /
     virtual void SectionPageNumbering( sal_uInt16 nNumType, ::boost::optional<sal_uInt16> oPageRestartNumber );
 
     /// The type of breaking.
@@ -426,24 +426,24 @@ protected:
     WW8Export &m_rWW8Export;
 
     /// For output of styles.
-    ///
+    /
     /// We have to remember these positions between the StartStyle() and
     /// EndStyle().
     sal_uInt16 nPOPosStdLen1, nPOPosStdLen2;
 
     /// For output of styles.
-    ///
+    /
     /// We have to remember this position between StartStyleProperties() and
     /// EndStyleProperties().
     sal_uInt16 m_nStyleStartSize, m_nStyleLenPos;
 
     /// For output of styles.
-    ///
+    /
     /// Used between StartStyles() and EndStyles().
     sal_uLong m_nStyAnzPos;
 
     /// For output of run properties.
-    ///
+    /
     /// We have to remember the number of field results, and do not export end
     /// of the field results if we were forced to split text.
     sal_uInt16 m_nFieldResults;

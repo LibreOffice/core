@@ -62,7 +62,6 @@ void SwCommentRuler::Paint( const Rectangle& rRect )
         DrawCommentControl();
 }
 
-
 void SwCommentRuler::DrawCommentControl()
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();

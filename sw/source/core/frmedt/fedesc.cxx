@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <hintids.hxx>
 #include <fesh.hxx>
 #include <doc.hxx>
@@ -226,7 +225,6 @@ const SwPageDesc* SwFEShell::GetSelectedPageDescs() const
         else
             pMkFrm = pPtFrm;
 
-
         if( !pMkFrm || !pPtFrm )
             pFnd = 0;
         else if( pMkFrm == pPtFrm )
@@ -262,7 +260,5 @@ const SwPageDesc* SwFEShell::GetSelectedPageDescs() const
 
     return pRetDesc;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

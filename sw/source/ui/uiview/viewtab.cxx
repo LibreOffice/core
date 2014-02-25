@@ -1839,7 +1839,6 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         // Right is only the margin now.
                         aRectangle.Right() = 0;
 
-
                 }
             }
             else if ( ((nFrmType & FRMTYPE_TABLE) || IsTabColFromDoc()) &&

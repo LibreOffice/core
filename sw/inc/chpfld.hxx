@@ -21,11 +21,9 @@
 
 #include "fldbas.hxx"
 
-
 class SwFrm;
 class SwCntntNode;
 class SwTxtNode;
-
 
 enum SwChapterFormat
 {

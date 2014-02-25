@@ -34,7 +34,6 @@ namespace com{namespace sun{namespace star{namespace util{
     struct SearchOptions;
 }}}}
 
-
 class SwXTextSearch : public cppu::WeakImplHelper3
 <
     ::com::sun::star::util::XPropertyReplace,
@@ -49,7 +48,6 @@ class SwXTextSearch : public cppu::WeakImplHelper3
 
     SwSearchProperties_Impl*    pSearchProperties;
     SwSearchProperties_Impl*    pReplaceProperties;
-
 
     const SfxItemPropertySet*   m_pPropSet;
     sal_Bool                    bAll  : 1;
@@ -69,8 +67,6 @@ protected:
     virtual ~SwXTextSearch();
 public:
     SwXTextSearch();
-
-
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 

@@ -93,7 +93,6 @@ const sal_uInt32 HTML_FRMOPT_S_PIXSIZE  = 1<<18;
 const sal_uInt32 HTML_FRMOPT_ID             = 1<<19;
 const sal_uInt32 HTML_FRMOPT_DIR            = 1<<20;
 
-
 const sal_uInt32 HTML_FRMOPTS_GENIMG_ALL    =
     HTML_FRMOPT_ALT     |
     HTML_FRMOPT_SIZE    |
@@ -210,7 +209,6 @@ public:
     ~HTMLControls() { DeleteAndDestroyAll(); }
 };
 
-
 typedef std::vector<SwFmtINetFmt*> INetFmts;
 
 struct SwHTMLFmtInfo
@@ -236,7 +234,6 @@ struct SwHTMLFmtInfo
     SwHTMLFmtInfo( const SwFmt *pF ) :
         pFmt( pF ), pRefFmt(0), pItemSet( 0 ), nFirstLineIndent(0), bScriptDependent(false)
     {}
-
 
     // Konstruktor zum Erstellen der Format-Info
     SwHTMLFmtInfo( const SwFmt *pFmt, SwDoc *pDoc, SwDoc *pTemlate,
@@ -603,7 +600,6 @@ struct HTMLSaveData
                      const SwFrmFmt *pFrmFmt=0  );
     ~HTMLSaveData();
 };
-
 
 // einige Funktions-Deklarationen
 Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFmt,

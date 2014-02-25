@@ -23,7 +23,6 @@
 #include <hintids.hxx>
 #include <format.hxx>
 
-
 enum SwFillOrder
 {
     SW_FILL_ORDER_BEGIN,

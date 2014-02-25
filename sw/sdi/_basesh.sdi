@@ -494,8 +494,6 @@ interface BaseTextSelection
         Export = FALSE;
     ]
 
-
-
     SID_GALLERY_BG_BRUSH
     [
         ExecMethod = ExecuteGallery;

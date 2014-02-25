@@ -82,18 +82,15 @@ SwFlyFrm *SwFEShell::FindFlyFrm( const uno::Reference < embed::XEmbeddedObject >
     return pFly;
 }
 
-
 OUString SwFEShell::GetUniqueOLEName() const
 {
     return GetDoc()->GetUniqueOLEName();
 }
 
-
 OUString SwFEShell::GetUniqueFrameName() const
 {
     return GetDoc()->GetUniqueFrameName();
 }
-
 
 void SwFEShell::MakeObjVisible( const uno::Reference < embed::XEmbeddedObject >& xObj ) const
 {
@@ -133,8 +130,5 @@ sal_Bool SwFEShell::FinishOLEObj()                      // Server is terminated
     }
     return bRet;
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

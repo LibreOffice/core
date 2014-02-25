@@ -112,7 +112,6 @@ interface BaseTextFrame
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
-
     SID_FRAME_TO_TOP // status(final|play)
     [
         ExecMethod = Execute ;
@@ -126,7 +125,6 @@ interface BaseTextFrame
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-
 
     FN_FRAME_UP  // status(final|play)
     [
@@ -274,14 +272,12 @@ interface BaseTextFrame
                 DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
         ]
 
-
     /*****************************************************
 
  Abfragefunktionen fuer ImageMaps
 
  ****************************************************/
 
-//
 // Slots ohne Export
 
     FN_INSERT_FRAME
@@ -318,5 +314,4 @@ interface BaseTextFrame
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 }
-
 

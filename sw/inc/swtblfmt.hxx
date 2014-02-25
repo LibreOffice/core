@@ -37,7 +37,6 @@ protected:
         : SwFrmFmt( rPool, rFmtNm, pDrvdFrm, RES_FRMFMT, aTableSetRange )
     {}
 
-
 public:
     TYPEINFO();     // Already in base class Content.
 
@@ -86,7 +85,6 @@ public:
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTableBoxFmt)
 };
-
 
 #endif
 

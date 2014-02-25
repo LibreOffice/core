@@ -137,7 +137,6 @@ bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
         SwPosition const & rStart, SwPosition const & rEnd,
         DelCntntType const nDelCntntType = nsDelCntntType::DELCNT_ALL);
 
-
 // This class has to be inherited into an Undo-object if it saves content
 // for Redo/Undo...
 class SwUndoSaveCntnt
@@ -200,7 +199,6 @@ public:
           SwHistory* GetHistory()       { return pHistory; }
 };
 
-
 // This class saves the PaM as sal_uInt16's and is able to restore it
 // into a PaM.
 class SwUndRng
@@ -217,7 +215,6 @@ public:
     SwPaM & AddUndoRedoPaM(
         ::sw::UndoRedoContext &, bool const bCorrToCntnt = false) const;
 };
-
 
 class SwUndoInsLayFmt;
 
@@ -259,8 +256,6 @@ class SwUndoCpyDoc : public SwUndoInserts
 public:
     SwUndoCpyDoc( const SwPaM& );
 };
-
-//--------------------------------------------------------------------
 
 class SwUndoFlyBase : public SwUndo, private SwUndoSaveSection
 {

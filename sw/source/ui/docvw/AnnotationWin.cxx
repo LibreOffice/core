@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <AnnotationWin.hxx>
 
 #include <AnnotationMenuButton.hxx>
@@ -53,7 +52,6 @@
 #include <SwUndoField.hxx>
 
 #include <boost/scoped_ptr.hpp>
-
 
 namespace sw { namespace annotation {
 

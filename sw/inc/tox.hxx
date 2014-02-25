@@ -248,7 +248,6 @@ struct SwFormTokenEqualToFormTokenType
     }
 };
 
-
 /// Vector of tokens.
 typedef std::vector<SwFormToken> SwFormTokens;
 
@@ -454,7 +453,7 @@ class SW_DLLPUBLIC SwTOXBase : public SwClient
 
     sal_uInt16      nCreateType;        // sources to create the index from
     sal_uInt16      nOLEOptions;        // OLE sources
-    SwCaptionDisplay eCaptionDisplay;   //
+    SwCaptionDisplay eCaptionDisplay;
     sal_Bool        bProtected : 1;         // index protected ?
     sal_Bool        bFromChapter : 1;       // create from chapter or document
     sal_Bool        bFromObjectNames : 1;   // create a table or object index
@@ -479,7 +478,7 @@ public:
     // If not, so create it an copy all other used things. The return is this
     SwTOXBase& CopyTOXBase( SwDoc*, const SwTOXBase& );
 
-    const SwTOXType*    GetTOXType() const; //
+    const SwTOXType*    GetTOXType() const;
 
     sal_uInt16              GetCreateType() const;      // creation types
 
@@ -568,14 +567,12 @@ public:
     void RegisterToTOXType( SwTOXType& rMark );
 };
 
-
 /*--------------------------------------------------------------------
      Description:  Inlines
  --------------------------------------------------------------------*/
 
-//
 //SwTOXMark
-//
+
 inline OUString SwTOXMark::GetAlternativeText() const
     {   return aAltText;    }
 
@@ -670,9 +667,8 @@ inline OUString SwTOXMark::GetSecondaryKeyReading() const
     return aSecondaryKeyReading;
 }
 
-//
 //SwForm
-//
+
 inline void SwForm::SetTemplate(sal_uInt16 nLevel, const OUString& rTemplate)
 {
     SAL_WARN_IF(nLevel >= GetFormMax(), "sw", "Index >= GetFormMax()");
@@ -695,19 +691,16 @@ inline sal_uInt16 SwForm::GetFormMax() const
     return nFormMaxLevel;
 }
 
-
-//
 //SwTOXType
-//
+
 inline OUString SwTOXType::GetTypeName() const
     {   return aName;   }
 
 inline TOXTypes SwTOXType::GetType() const
     {   return eType;   }
 
-//
 // SwTOXBase
-//
+
 inline const SwTOXType* SwTOXBase::GetTOXType() const
     { return (SwTOXType*)GetRegisteredIn(); }
 
@@ -769,7 +762,6 @@ inline void SwTOXBase::SetOptions(sal_uInt16 nOpt)
     SAL_WARN_IF(GetTOXType()->GetType() != TOX_INDEX, "sw", "Wrong type");
     aData.nOptions = nOpt;
 }
-
 
 #endif // INCLUDED_SW_INC_TOX_HXX
 

@@ -167,7 +167,6 @@ public:
     // organise RefMark with names
     bool            CanInsertRefMark( const OUString& rStr );
 
-
     // access to field types via ResId
     sal_uInt16          GetFldTypeCount(sal_uInt16 nResId = USHRT_MAX) const;
     SwFieldType*    GetFldType(sal_uInt16 nResId, sal_uInt16 nId = 0) const;
@@ -202,7 +201,7 @@ public:
 
     // turn off evaluation of expression fields for insertation
     // of many expressino fields (see labels)
-    //
+
     inline void     SetEvalExpFlds(sal_Bool bEval);
     void            EvalExpFlds(SwWrtShell* pSh = NULL);
 };

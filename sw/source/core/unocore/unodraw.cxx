@@ -899,7 +899,6 @@ namespace
     }
 }
 
-
 SwXShape::SwXShape(uno::Reference< uno::XInterface > & xShape) :
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_SHAPE)),
     m_pPropertyMapEntries(aSwMapProvider.GetPropertyMapEntries(PROPERTY_MAP_TEXT_SHAPE)),

@@ -19,13 +19,11 @@
 #ifndef INCLUDED_SW_SOURCE_UI_VBA_VBADOCUMENTS_HXX
 #define INCLUDED_SW_SOURCE_UI_VBA_VBADOCUMENTS_HXX
 
-
 #include <vbahelper/vbacollectionimpl.hxx>
 #include <ooo/vba/word/XDocuments.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <vbahelper/vbadocumentsbase.hxx>
 #include "wordvbahelper.hxx"
-
 
 typedef cppu::ImplInheritanceHelper1< VbaDocumentsBase, ov::word::XDocuments > SwVbaDocuments_BASE;
 

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "hintids.hxx"
 #include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
@@ -73,14 +72,12 @@
 
 using namespace ::com::sun::star;
 
-
 HTMLOptionEnum aHTMLImgHAlignTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_AL_left,    text::HoriOrientation::LEFT       },
     { OOO_STRING_SVTOOLS_HTML_AL_right,   text::HoriOrientation::RIGHT      },
     { 0,                0               }
 };
-
 
 HTMLOptionEnum aHTMLImgVAlignTable[] =
 {
@@ -153,7 +150,6 @@ void SwHTMLParser::ConnectImageMaps()
         nIdx = rNds[nIdx]->EndOfSectionIndex() + 1;
     }
 }
-
 
 /*  */
 
@@ -507,7 +503,6 @@ IMAGE_SETEVENT:
             aHBorderLine.SetColor( rColorItem.GetValue() );
             aVBorderLine.SetColor( aHBorderLine.GetColor() );
         }
-
 
         SvxBoxItem aBoxItem( RES_BOX );
         aBoxItem.SetLine( &aHBorderLine, BOX_LINE_TOP );
@@ -918,7 +913,6 @@ void SwHTMLParser::InsertBodyOptions()
             ->SetFmtAttr( SvxColorItem(aTextColor, RES_CHRATR_COLOR) );
         pCSS1Parser->SetBodyTextSet();
     }
-
 
     // Die Item fuer die Seitenvorlage vorbereiten (Hintergrund, Umrandung)
     // Beim BrushItem muessen schon gesetzte werte erhalten bleiben!

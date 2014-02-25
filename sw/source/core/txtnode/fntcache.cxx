@@ -79,8 +79,6 @@ sal_uInt16 GetDefaultFontHeight( SwDrawTextInfo &rInf )
     return (sal_uInt16)aDefaultFontItem.GetHeight();
 }
 
-
-
 /*************************************************************************
 |*
 |*  SwFntCache::Flush()
@@ -415,7 +413,6 @@ sal_uInt16 SwFntObj::GetFontLeading( const SwViewShell *pSh, const OutputDevice&
     return nRet;
 }
 
-
 /*************************************************************************
  *
  *  SwFntObj::CreateScrFont( const SwViewShell& rSh, const OutputDevice& rOut )
@@ -516,7 +513,6 @@ void SwFntObj::CreateScrFont( const SwViewShell& rSh, const OutputDevice& rOut )
     // reset original output device font
     pOut->SetFont( aOldOutFont );
 }
-
 
 void SwFntObj::GuessLeading( const SwViewShell&
 #if defined(WNT)
@@ -751,7 +747,6 @@ static void lcl_DrawLineForWrongListData(
             Point aEnd;
             lcl_calcLinePos( rCalcLinePosData, aStart, aEnd, nNextStart, nNextEnd - nNextStart );
 
-
             sal_uInt16 wrongPos = pWList->GetWrongPos(nNextStart + rInf.GetIdx());
 
             const SwWrongArea* wrongArea = pWList->GetElement(wrongPos);
@@ -816,7 +811,6 @@ static void lcl_DrawLineForWrongListData(
         rInf.GetOut().Pop();
 }
 
-
 void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 {
     OSL_ENSURE( rInf.GetShell(), "SwFntObj::DrawText without shell" );
@@ -847,9 +841,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
     Font* pTmpFont = bUseScrFont ? pScrFont : pPrtFont;
 
-    //
     //  bDirectPrint and bUseScrFont should have these values:
-    //
+
     //  Outdev / RefDef  | Printer | VirtPrinter | Window
 
     //  Printer          | 1 - 0   | 0 - 1       | -
@@ -857,10 +850,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     //  VirtPrinter/PDF  | 0 - 1   | 0 - 1       | -
 
     //  Window/VirtWindow| 0 - 1   | 0 - 1       | 1 - 0
-    //
+
     // Exception: During painting of a Writer OLE object, we do not have
     // a window. Therefore bUseSrcFont is always 0 in this case.
-    //
 
 #if OSL_DEBUG_LEVEL > 0
 
@@ -975,10 +967,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     if ( COMPLETE_STRING == rInf.GetLen() )
         rInf.SetLen( rInf.GetText().getLength() );
 
-
-    //
     // ASIAN LINE AND CHARACTER GRID MODE START: snap to characters
-    //
 
     if ( rInf.GetFrm() && rInf.SnapToGrid() && rInf.GetFont() &&
          SW_CJK == rInf.GetFont()->GetActual() )
@@ -1069,7 +1058,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
     // For text grid refactor
     // ASIAN LINE AND CHARACTER GRID MODE START: not snap to characters
-    //
+
     if ( rInf.GetFrm() && rInf.SnapToGrid() && rInf.GetFont() &&
          SW_CJK == rInf.GetFont()->GetActual() )
     {
@@ -1211,9 +1200,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         }
     }
 
-    //
     // DIRECT PAINTING WITHOUT SCREEN ADJUSTMENT
-    //
 
     if ( bDirectPrint )
     {
@@ -1266,9 +1253,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 }
             }
 
-            //
             // Modify Array for special justifications
-            //
+
             long nSpaceAdd = rInf.GetSpace() / SPACING_PRECISION_FACTOR;
             bool bSpecialJust = false;
 
@@ -1435,9 +1421,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                                     rInf.GetIdx(), rInf.GetLen() );
     }
 
-    //
     // PAINTING WITH FORMATTING DEVICE/SCREEN ADJUSTMENT
-    //
 
     else
     {
@@ -1475,9 +1459,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                                         rInf.GetIdx(), rInf.GetLen() );
         }
 
-        //
         // Modify Printer and ScreenArrays for special justifications
-        //
+
         long nSpaceAdd = rInf.GetSpace() / SPACING_PRECISION_FACTOR;
         bool bNoHalfSpace = false;
 
@@ -2057,7 +2040,6 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
     return aTxtSize;
 }
 
-
 sal_Int32 SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 {
     long nSpaceAdd =       rInf.GetSpace() / SPACING_PRECISION_FACTOR;
@@ -2265,7 +2247,6 @@ sal_Int32 SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
     return nCnt;
 }
 
-
 /*************************************************************************
 |*
 |*  SwFntAccess::SwFntAccess()
@@ -2291,7 +2272,6 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
     {   // Font not known, must be searched
         bCheck = sal_False;
     }
-
 
     {
         OutputDevice* pOut = 0;

@@ -746,7 +746,6 @@ OUString SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
                 if (nListLevel >= MAXLEVEL)
                     nListLevel = MAXLEVEL - 1;
 
-
                 SwNumFmt aFmt( Get( static_cast<sal_uInt16>(nListLevel) ) );
                 bMakeNumStringForPhantom = aFmt.IsEnumeration() &&
                                            SVX_NUM_NUMBER_NONE != aFmt.GetNumberingType();
@@ -1000,7 +999,6 @@ void SwNumRule::Validate()
     }
     std::for_each( aLists.begin(), aLists.end(),
                    std::mem_fun( &SwList::ValidateListTree ) );
-
 
     SetInvalidRule(sal_False);
 }

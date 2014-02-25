@@ -55,7 +55,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::i18n;
 
-//////////////////////////////////////////////////////////////////////
 //     Description: Turn off frame/object shell if applicable
 
 static void lcl_ActivateTextShell( SwWrtShell & rWrtSh )
@@ -63,8 +62,6 @@ static void lcl_ActivateTextShell( SwWrtShell & rWrtSh )
     if( rWrtSh.IsSelFrmMode() || rWrtSh.IsObjSelected() )
         rWrtSh.EnterStdMode();
 }
-
-//////////////////////////////////////////////////////////////////////
 
 class SwKeepConversionDirectionStateContext
 {
@@ -82,8 +79,6 @@ public:
         editeng::HangulHanjaConversion::SetUseSavedConversionDirectionState( false );
     }
 };
-
-//////////////////////////////////////////////////////////////////////
 
 SwHHCWrapper::SwHHCWrapper(
         SwView* pSwView,
@@ -116,7 +111,6 @@ SwHHCWrapper::SwHHCWrapper(
     , m_bEndDone( false )
 {
 }
-
 
 SwHHCWrapper::~SwHHCWrapper()
 {
@@ -153,7 +147,7 @@ SwHHCWrapper::~SwHHCWrapper()
 
         //!! Note: This also effects the default language of text boxes (EditEngine/EditView) !!
         pDoc->SetDefault( SvxLanguageItem( nTargetLang, RES_CHRATR_CJK_LANGUAGE ) );
-        //
+
         const Font *pFont = GetTargetFont();
         if (pFont)
         {
@@ -165,7 +159,6 @@ SwHHCWrapper::~SwHHCWrapper()
 
     }
 }
-
 
 void SwHHCWrapper::GetNextPortion(
         OUString&           rNextPortion,
@@ -185,7 +178,6 @@ void SwHHCWrapper::GetNextPortion(
     m_nLastPos =  pCrsr->Start()->nContent.GetIndex();
 }
 
-
 void SwHHCWrapper::SelectNewUnit_impl( sal_Int32 nUnitStart, sal_Int32 nUnitEnd )
 {
     SwPaM *pCrsr = m_rWrtShell.GetCrsr();
@@ -203,7 +195,6 @@ void SwHHCWrapper::SelectNewUnit_impl( sal_Int32 nUnitStart, sal_Int32 nUnitEnd 
     m_rWrtShell.EndSelect();
 }
 
-
 void SwHHCWrapper::HandleNewUnit(
         const sal_Int32 nUnitStart, const sal_Int32 nUnitEnd )
 {
@@ -220,7 +211,6 @@ void SwHHCWrapper::HandleNewUnit(
 
     m_rWrtShell.EndAllAction();
 }
-
 
 void SwHHCWrapper::ChangeText( const OUString &rNewText,
         const OUString& rOrigText,
@@ -331,7 +321,6 @@ void SwHHCWrapper::ChangeText( const OUString &rNewText,
     }
 }
 
-
 void SwHHCWrapper::ChangeText_impl( const OUString &rNewText, bool bKeepAttributes )
 {
     if (bKeepAttributes)
@@ -375,7 +364,6 @@ void SwHHCWrapper::ChangeText_impl( const OUString &rNewText, bool bKeepAttribut
         m_rWrtShell.Insert( rNewText );
     }
 }
-
 
 void SwHHCWrapper::ReplaceUnit(
          const sal_Int32 nUnitStart, const sal_Int32 nUnitEnd,
@@ -535,12 +523,10 @@ void SwHHCWrapper::ReplaceUnit(
     m_rWrtShell.EndAllAction();
 }
 
-
 bool SwHHCWrapper::HasRubySupport() const
 {
     return true;
 }
-
 
 void SwHHCWrapper::Convert()
 {
@@ -549,7 +535,6 @@ void SwHHCWrapper::Convert()
         SwPaM *pCrsr = m_pView->GetWrtShell().GetCrsr();
         SwPosition* pSttPos = pCrsr->Start();
         SwPosition* pEndPos = pCrsr->End();
-
 
         if (pSttPos->nNode.GetNode().IsTxtNode() &&
             pEndPos->nNode.GetNode().IsTxtNode())
@@ -640,7 +625,6 @@ void SwHHCWrapper::Convert()
     ConvEnd_impl( m_pConvArgs );
 }
 
-
 bool SwHHCWrapper::ConvNext_impl( )
 {
     //! modified version of SvxSpellWrapper::SpellNext
@@ -682,7 +666,6 @@ bool SwHHCWrapper::ConvNext_impl( )
     return bGoOn;
 }
 
-
 bool SwHHCWrapper::FindConvText_impl()
 {
     //! modified version of SvxSpellWrapper::FindSpellError
@@ -709,12 +692,10 @@ bool SwHHCWrapper::FindConvText_impl()
     return bFound;
 }
 
-
 bool SwHHCWrapper::HasOtherCnt_impl()
 {
     return m_bIsSelection ? false : m_rWrtShell.HasOtherCnt();
 }
-
 
 void SwHHCWrapper::ConvStart_impl( SwConversionArgs /* [out] */ *pConversionArgs, SvxSpellArea eArea )
 {
@@ -722,12 +703,10 @@ void SwHHCWrapper::ConvStart_impl( SwConversionArgs /* [out] */ *pConversionArgs
     m_pView->SpellStart( eArea, m_bStartDone, m_bEndDone, /* [out] */ pConversionArgs );
 }
 
-
 void SwHHCWrapper::ConvEnd_impl( SwConversionArgs *pConversionArgs )
 {
     m_pView->SpellEnd( pConversionArgs );
 }
-
 
 bool SwHHCWrapper::ConvContinue_impl( SwConversionArgs *pConversionArgs )
 {
@@ -737,7 +716,5 @@ bool SwHHCWrapper::ConvContinue_impl( SwConversionArgs *pConversionArgs )
     m_pView->GetWrtShell().SpellContinue( &m_nPageCount, bProgress ? &m_nPageStart : NULL, pConversionArgs );
     return !pConversionArgs->aConvText.isEmpty();
 }
-
-//////////////////////////////////////////////////////////////////////
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

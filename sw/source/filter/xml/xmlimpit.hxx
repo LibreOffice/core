@@ -22,10 +22,8 @@
 #include <limits.h>
 #include <tools/solar.h>
 
-
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include "xmlitmap.hxx"
-
 
 class SvXMLUnitConverter;
 class SfxPoolItem;
@@ -75,7 +73,6 @@ public:
     virtual void setMapEntries( SvXMLItemMapEntriesRef rMapEntries );
     inline SvXMLItemMapEntriesRef getMapEntries() const;
 
-
     /** This method is called for every item that should be set based
         upon an XML attribute value. */
     static bool PutXMLValue(
@@ -90,7 +87,6 @@ SvXMLImportItemMapper::getMapEntries() const
 {
     return mrMapEntries;
 }
-
 
 #endif // INCLUDED_SW_SOURCE_FILTER_XML_XMLIMPIT_HXX
 

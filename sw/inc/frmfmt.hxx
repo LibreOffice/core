@@ -78,7 +78,6 @@ public:
     IMapObject* GetIMapObject( const Point& rPoint,
                                 const SwFlyFrm *pFly = 0 ) const;
 
-
     /** @return the real size of the frame - or an empty rectangle
        if no layout exists.
        If pPoint is given, look for the frame closest to it. */
@@ -289,7 +288,6 @@ public:
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwDrawFrmFmt);
 };
-
 
 #endif
 

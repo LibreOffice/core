@@ -46,11 +46,9 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
-
 /*--------------------------------------------------------------------
     Description:    carrier of the dialog
  --------------------------------------------------------------------*/
-
 
 SwFldDlg::SwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent)
     : SfxTabDialog(pParent, "FieldDialog", "modules/swriter/ui/fielddialog.ui")
@@ -207,7 +205,6 @@ IMPL_LINK_NOARG(SwFldDlg, CancelHdl)
     return 0;
 }
 
-
 /*--------------------------------------------------------------------
     Description: newly initialise dialog after Doc-Switch
  --------------------------------------------------------------------*/
@@ -341,6 +338,5 @@ void SwFldDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
         }
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

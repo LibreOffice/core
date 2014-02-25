@@ -110,7 +110,6 @@ public:
     static FlyMode  GetFrmMode()                 { return eFrameMode;  }
 };
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

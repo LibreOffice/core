@@ -63,6 +63,4 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL swd_component_getFactory(
 }
 } // extern "C"
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

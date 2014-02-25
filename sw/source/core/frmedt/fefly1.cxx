@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <hintids.hxx>
 #include <svl/itemiter.hxx>
 #include <svtools/imapobj.hxx>
@@ -200,9 +199,8 @@ static sal_Bool lcl_FindAnchorPos(
     return bRet;
 }
 
-//
 //! also used in unoframe.cxx
-//
+
 sal_Bool sw_ChkAndSetNewAnchor(
     SwEditShell& rEditShell,
     const SwFlyFrm& rFly,
@@ -896,7 +894,6 @@ SwFlyFrmFmt* SwFEShell::InsertObject( const svt::EmbeddedObjectRef&  xObj,
     return pFmt;
 }
 
-
 void SwFEShell::InsertDrawObj( SdrObject& rDrawObj,
                                const Point& rInsertPosition )
 {
@@ -1161,7 +1158,6 @@ sal_Bool SwFEShell::SetDrawingAttr( SfxItemSet& rSet )
     return bRet;
 }
 
-
 /***********************************************************************
 #*  Class       :  SwFEShell
 #*  Methode     :  ResetFlyFrmAttr
@@ -1389,7 +1385,7 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
          Size aSz( rRect.SSize() );
 
         //JP 28.02.2001: Task 74707 - ask for fly in fly with automatic size
-        //
+
         const SwFrm* pAnchor;
         const SwTxtNode* pTNd;
         const SwpHints* pHts;
@@ -1486,7 +1482,6 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
     return aResult;
 }
 
-
 /***********************************************************************
 #*  Class       :  SwFEShell
 #*  Methode     :  WizzardFindCurFrmFmt
@@ -1543,7 +1538,6 @@ OUString SwFEShell::GetFlyName() const
     return OUString();
 }
 
-
 const uno::Reference < embed::XEmbeddedObject > SwFEShell::GetOleRef() const
 {
     uno::Reference < embed::XEmbeddedObject > xObj;
@@ -1556,7 +1550,6 @@ const uno::Reference < embed::XEmbeddedObject > SwFEShell::GetOleRef() const
     }
     return xObj;
 }
-
 
 OUString SwFEShell::GetUniqueGrfName() const
 {
@@ -1673,7 +1666,6 @@ const Graphic *SwFEShell::GetGrfAtPos( const Point &rPt,
     }
     return 0;
 }
-
 
 const SwFrmFmt* SwFEShell::GetFmtFromObj( const Point& rPt, SwRect** pRectToFill ) const
 {
@@ -1850,7 +1842,6 @@ ObjCntType SwFEShell::GetObjCntTypeOfSelection( SdrObject** ppObj ) const
     }
     return eType;
 }
-
 
 sal_Bool SwFEShell::ReplaceSdrObj( const OUString& rGrfName, const OUString& rFltName,
                                 const Graphic* pGrf )
@@ -2110,7 +2101,6 @@ void SwFEShell::SetObjDescription( const OUString& rDescription )
     }
 }
 
-
 void SwFEShell::AlignFormulaToBaseline( const uno::Reference < embed::XEmbeddedObject >& xObj, SwFlyFrm * pFly )
 {
 #if OSL_DEBUG_LEVEL > 0
@@ -2171,7 +2161,6 @@ void SwFEShell::AlignFormulaToBaseline( const uno::Reference < embed::XEmbeddedO
         pFly->InvalidatePos();
     }
 }
-
 
 void SwFEShell::AlignAllFormulasToBaseline()
 {

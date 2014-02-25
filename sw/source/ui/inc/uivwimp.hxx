@@ -159,7 +159,6 @@ public:
                                 return m_bEditingPositionSet;
                             }
 
-
     void                    StartDocumentInserter( const OUString& rFactory, const Link& rEndDialogHdl );
     SfxMedium*              CreateMedium();
     void                    InitRequest( const SfxRequest& rRequest );

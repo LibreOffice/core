@@ -355,5 +355,4 @@ void SwLabelConfig::SaveLabel( const OUString& rManufacturer,
     m_aLabels[rManufacturer][rType].m_bPredefined = false;
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

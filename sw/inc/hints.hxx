@@ -44,10 +44,7 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 };
 
-
-// ---------------------------------------
 // SwPtrMsgPoolItem (old SwObjectDying!)
-// ---------------------------------------
 
 class SwPtrMsgPoolItem : public SwMsgPoolItem
 {
@@ -59,8 +56,6 @@ public:
     {}
 };
 
-
-
 /*
  * SwFmtChg is sent when a format has changed to another format. 2 Hints are always sent
  * the old and the new format
@@ -71,7 +66,6 @@ public:
     SwFmt *pChangedFmt;
     SwFmtChg( SwFmt *pFmt );
 };
-
 
 class SwInsTxt: public SwMsgPoolItem
 {
@@ -107,7 +101,6 @@ public:
     sal_uInt16 nWhichAttr;
     SwUpdateAttr( sal_Int32 nS, sal_Int32 nE, sal_uInt16 nW );
 };
-
 
 /** SwRefMarkFldUpdate is sent when the referencemarks should be updated.
      To determine Page- / chapternumbers the current frame has to be asked.
@@ -152,7 +145,6 @@ public:
 
     SwTableFmlUpdate( const SwTable* );
 };
-
 
 class SwAutoFmtGetDocNode: public SwMsgPoolItem
 {

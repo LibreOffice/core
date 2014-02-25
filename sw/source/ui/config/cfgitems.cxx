@@ -22,7 +22,6 @@
 #include <svx/svxids.hrc>
 #include <editeng/svxenum.hxx>
 
-
 #include "viewopt.hxx"
 #include "swtypes.hxx"
 #include "cmdid.h"
@@ -309,7 +308,6 @@ void SwShadowCursorItem::operator=( const SwShadowCursorItem& rCpy )
     SetMode( rCpy.GetMode() );
 }
 
-
 void SwShadowCursorItem::FillViewOptions( SwViewOption& rVOpt ) const
 {
     rVOpt.SetShadowCursor( bOn );
@@ -356,7 +354,5 @@ bool SwTestItem::operator==( const SfxPoolItem& rAttr ) const
 }
 
 #endif
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

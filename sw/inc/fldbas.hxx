@@ -210,7 +210,6 @@ enum SwInputFieldSubType
     INP_VAR     = 0x03
 };
 
-
 enum SwUserType
 {
     UF_STRING   = 0x01,
@@ -223,7 +222,6 @@ enum SwDateTimeSubType
     DATEFLD  = 2,
     TIMEFLD  = 4
 };
-
 
 /// General tools.
 OUString  GetResult(double nVal, sal_uInt32 nNumFmt, sal_uInt16 nLang = LANGUAGE_SYSTEM);
@@ -377,7 +375,6 @@ inline sal_uInt32 SwField::GetFormat() const
 
 inline sal_uInt16 SwField::GetLanguage() const
     { return nLang;     }
-
 
  /// Fields containing values that have to be formated via number formatter.
 class SwValueFieldType : public SwFieldType

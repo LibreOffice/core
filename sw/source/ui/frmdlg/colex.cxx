@@ -21,7 +21,6 @@
 #include "hintids.hxx"
 #include <algorithm>
 
-
 #include <svl/eitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
@@ -93,7 +92,6 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
         SetTop( 0 );
         SetBottom( 0 );
     }
-
 
     // evaluate header-attributes
     const SfxPoolItem* pItem;

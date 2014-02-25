@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_INC_HFSPACINGITEM_HXX
 #define INCLUDED_SW_INC_HFSPACINGITEM_HXX
 
-
 #include <svl/eitem.hxx>
 #include <hintids.hxx>
 #include <format.hxx>

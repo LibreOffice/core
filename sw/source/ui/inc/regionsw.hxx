@@ -102,7 +102,6 @@ class SwEditRegionDlg : public SfxModalDialog
     sal_Bool            bDontCheckPasswd :1;
     sal_Bool            bWeb            :1;
 
-
     Image  BuildBitmap(sal_Bool bProtect,sal_Bool bHidden);
 
     void    RecurseList( const SwSectionFmt* pFmt, SvTreeListEntry* pEntry);
@@ -226,7 +225,6 @@ class SwSectionFtnEndTabPage : public SfxTabPage
     SwNumberingTypeListBox*   pEndNumViewBox;
     FixedText*       pEndSuffixFT;
     Edit*            pEndSuffixED;
-
 
     DECL_LINK( FootEndHdl, CheckBox * );
     void ResetState( sal_Bool bFtn, const SwFmtFtnEndAtTxtEnd& );

@@ -22,7 +22,6 @@
 #include <fmtrfmrk.hxx>
 #include <swfont.hxx>
 
-
 /****************************************************************************
  *
  *  class SwFmtRefMark

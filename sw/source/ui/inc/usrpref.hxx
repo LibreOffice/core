@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_UI_INC_USRPREF_HXX
 #define INCLUDED_SW_SOURCE_UI_INC_USRPREF_HXX
 
-
-
 #include <unotools/configitem.hxx>
 #include <fldupde.hxx>
 #include "viewopt.hxx"

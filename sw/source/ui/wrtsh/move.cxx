@@ -421,7 +421,6 @@ sal_Bool SwWrtShell::PushCrsr(SwTwips lOffset, sal_Bool bSelect)
     // and we have to remember the position on the stack to return to it later.
     sal_Bool bIsFrmSel = sal_False;
 
-
     //Target position is now within the viewable region -->
     //Place the cursor at the target position; remember that no target
     //position is longer on the stack.
@@ -472,8 +471,6 @@ sal_Bool SwWrtShell::PushCrsr(SwTwips lOffset, sal_Bool bSelect)
                                 lOffset, pCrsrStack );
     return !bDestOnStack && bDiff;
 }
-
-
 
 sal_Bool SwWrtShell::PopCrsr(sal_Bool bUpdate, sal_Bool bSelect)
 {
@@ -545,8 +542,6 @@ void SwWrtShell::_ResetCursorStack()
         --> push cursor
             transpose cursor
 */
-
-
 
 sal_Bool SwWrtShell::PageCrsr(SwTwips lOffset, sal_Bool bSelect)
 {

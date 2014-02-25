@@ -58,5 +58,4 @@ IMPL_LINK_NOARG(SwMailMergeOutputTypePage, TypeHdl_Impl)
     return 0;
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

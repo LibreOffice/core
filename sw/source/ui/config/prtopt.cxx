@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <unotools/configmgr.hxx>
 #include <prtopt.hxx>
 #include <osl/diagnose.h>
@@ -25,7 +24,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <unomid.h>
-
 
 using namespace utl;
 using namespace com::sun::star::uno;
@@ -130,7 +128,6 @@ SwPrintOptions::~SwPrintOptions()
 {
 }
 
-
 void SwPrintOptions::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
 
 void    SwPrintOptions::Commit()
@@ -174,8 +171,5 @@ void    SwPrintOptions::Commit()
 
     PutProperties(aNames, aValues);
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

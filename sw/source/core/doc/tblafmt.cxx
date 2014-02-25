@@ -1084,7 +1084,6 @@ SwTableAutoFmtTbl::SwTableAutoFmtTbl()
     for( i = 9; i <= 10; ++i )
         pNew->SetBoxFmt( aNew, i );
 
-
     SvxBoxItem aBox( RES_BOX );
     aBox.SetDistance( 55 );
     SvxBorderLine aLn( &aColor, DEF_LINE_WIDTH_0 );

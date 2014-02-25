@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <UndoBookmark.hxx>
 
 #include "doc.hxx"
@@ -30,7 +29,6 @@
 #include "rolbck.hxx"
 
 #include "SwRewriter.hxx"
-
 
 SwUndoBookmark::SwUndoBookmark( SwUndoId nUndoId,
             const ::sw::mark::IMark& rBkmk )
@@ -72,14 +70,10 @@ SwRewriter SwUndoBookmark::GetRewriter() const
     return aResult;
 }
 
-
-
-
 SwUndoInsBookmark::SwUndoInsBookmark( const ::sw::mark::IMark& rBkmk )
     : SwUndoBookmark( UNDO_INSBOOKMARK, rBkmk )
 {
 }
-
 
 void SwUndoInsBookmark::UndoImpl(::sw::UndoRedoContext & rContext)
 {
@@ -90,6 +84,5 @@ void SwUndoInsBookmark::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SetInDoc( &rContext.GetDoc() );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

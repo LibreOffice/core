@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <string>
 
 #include <boost/scoped_ptr.hpp>
@@ -438,7 +437,6 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
     }
 }
 
-
 sal_Bool SwView::SearchAndWrap(sal_Bool bApi)
 {
     SwSearchOptions aOpts( m_pWrtShell, m_pSrchItem->GetBackward() );
@@ -533,7 +531,6 @@ sal_Bool SwView::SearchAndWrap(sal_Bool bApi)
     return m_bFound;
 }
 
-
 sal_Bool SwView::SearchAll(sal_uInt16* pFound)
 {
     SwWait aWait( *GetDocShell(), true );
@@ -560,7 +557,6 @@ sal_Bool SwView::SearchAll(sal_uInt16* pFound)
     m_pWrtShell->EndAllAction();
     return m_bFound;
 }
-
 
 void SwView::Replace()
 {
@@ -716,9 +712,8 @@ sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
             DELETEZ( pReplSet );        // the attributes
     }
 
-    //
     // build SearchOptions to be used
-    //
+
     SearchOptions aSearchOpt( m_pSrchItem->GetSearchOptions() );
     aSearchOpt.Locale = GetAppLanguageTag().getLocale();
     if( !bDoReplace )

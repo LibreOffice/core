@@ -190,7 +190,6 @@ const SvxBrushItem *SwWriteTable::GetLineBrush( const SwTableBox *pBox,
     return 0;
 }
 
-
 void SwWriteTable::MergeBorders( const SvxBorderLine* pBorderLine,
                                    bool bTable )
 {
@@ -221,7 +220,6 @@ void SwWriteTable::MergeBorders( const SvxBorderLine* pBorderLine,
     if( nDist && (!nCellSpacing || nDist < nCellSpacing) )
         nCellSpacing = nDist;
 }
-
 
 sal_uInt16 SwWriteTable::MergeBoxBorders( const SwTableBox *pBox,
                                         size_t const nRow, size_t const nCol,
@@ -281,7 +279,6 @@ sal_uInt16 SwWriteTable::MergeBoxBorders( const SwTableBox *pBox,
 
     return nBorderMask;
 }
-
 
 sal_uInt32  SwWriteTable::GetRawWidth( sal_uInt16 nCol, sal_uInt16 nColSpan ) const
 {
@@ -524,7 +521,6 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
     }
 }
 
-
 void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
                                         sal_uInt32 nStartCPos, sal_uInt16 nStartCol,
                                         long nParentLineHeight,
@@ -581,7 +577,6 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
                 --nOldRow;
         }
 
-
         SwWriteTableRow *pRow = aRows[nOldRow];
         SwWriteTableRow *pEndRow = aRows[nRow];
         if( nLine+1==nNumOfHeaderRows && nParentLineHeight==0 )
@@ -596,7 +591,6 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
         long nHeight = 0;
         if( SFX_ITEM_SET == rItemSet.GetItemState( RES_FRM_SIZE, true, &pItem ))
             nHeight = ((SwFmtFrmSize*)pItem)->GetHeight();
-
 
         const SvxBrushItem *pBrushItem, *pLineBrush = pParentBrush;
         if( SFX_ITEM_SET == rItemSet.GetItemState( RES_BACKGROUND, false,

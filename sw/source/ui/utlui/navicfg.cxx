@@ -116,5 +116,4 @@ void SwNavigationConfig::Commit()
 
 void SwNavigationConfig::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -242,7 +242,7 @@ public:
 
 // SwBorderAttrs encapsulates the calculation for margin attributes including
 // border. The whole class is cached.
-//
+
 // WARNING! If more attributes should be cached also adjust the method
 //          Modify::Modify!
 class SwBorderAttrs : public SwCacheObj
@@ -532,7 +532,6 @@ void GetSpacingValuesOfFrm( const SwFrm& rFrm,
 */
 
 const SwCntntFrm* GetCellCntnt( const SwLayoutFrm& rCell_ );
-
 
 /** helper class to check if a frame has been deleted during an operation
  *  WARNING! This should only be used as a last and desperate means to make the

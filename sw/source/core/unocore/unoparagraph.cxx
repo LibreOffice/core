@@ -38,7 +38,6 @@
 #include <vcl/svapp.hxx>
 #include <docsh.hxx>
 
-
 #include <com/sun/star/beans/SetPropertyTolerantFailed.hpp>
 #include <com/sun/star/beans/GetPropertyTolerantResult.hpp>
 #include <com/sun/star/beans/TolerantPropertySetResultType.hpp>
@@ -46,7 +45,6 @@
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <comphelper/servicehelper.hxx>
-
 
 using namespace ::com::sun::star;
 

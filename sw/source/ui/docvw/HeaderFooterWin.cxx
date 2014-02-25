@@ -123,7 +123,6 @@ namespace
     }
 }
 
-
 SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm, bool bHeader ) :
     MenuButton( pEditWin, WB_DIALOGCONTROL ),
     SwFrameControl( pEditWin, pPageFrm ),
@@ -414,7 +413,6 @@ void SwHeaderFooterWin::ExecuteCommand( sal_uInt16 nSlot )
                 SwFrmFmt* pHFFmt = const_cast< SwFrmFmt* >( rMaster.GetFooter().GetFooterFmt() );
                 if ( m_bIsHeader )
                     pHFFmt = const_cast< SwFrmFmt* >( rMaster.GetHeader().GetHeaderFmt() );
-
 
                 SfxItemPool* pPool = pHFFmt->GetAttrSet().GetPool();
                 SfxItemSet aSet( *pPool,

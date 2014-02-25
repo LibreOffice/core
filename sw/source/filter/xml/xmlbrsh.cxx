@@ -197,7 +197,6 @@ SwXMLBrushItemExport::~SwXMLBrushItemExport()
 {
 }
 
-
 void SwXMLBrushItemExport::exportXML( const SvxBrushItem& rItem )
 {
     GetExport().CheckAttrList();

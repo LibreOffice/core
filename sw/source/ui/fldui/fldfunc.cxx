@@ -37,7 +37,6 @@
 
 using namespace ::com::sun::star;
 
-
 SwFldFuncPage::SwFldFuncPage(Window* pParent, const SfxItemSet& rCoreSet)
     : SwFldPage(pParent, "FldFuncPage",
         "modules/swriter/ui/fldfuncpage.ui", rCoreSet)

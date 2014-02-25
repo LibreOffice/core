@@ -73,7 +73,6 @@ public:
     bool GetWordsMatching(OUString aMatch, std::vector<OUString>& aWords) const;
 };
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

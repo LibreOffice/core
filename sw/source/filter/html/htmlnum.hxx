@@ -117,8 +117,6 @@ inline void SwHTMLNumRuleInfo::SetNodeStartValue( sal_uInt8 nLvl, sal_uInt16 nVa
     aNumStarts[nLvl] = nVal;
 }
 
-
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

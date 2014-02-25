@@ -313,7 +313,6 @@ struct W1_FIB
     sal_uInt16 cbDopGet() {
         return SVBT16ToShort(cbDop); }
 
-
     SVBT32 fcSttbfAssoc;// 0x10c offset to STTBF of associated strings. See STTBFASSOC.
     sal_uLong fcSttbfAssocGet() {
         return SVBT32ToUInt32(fcSttbfAssoc); }
@@ -422,7 +421,7 @@ struct W1_DOP //Document Properties
     // SVBT16 fExactCWords : 1;
     sal_Bool fExactCWordsGet() {
         return 0 != ((fSveFlagsGet() >> 1) & 1); }
-    // SVBT16 fPagHidden : 1;//
+    // SVBT16 fPagHidden : 1;
     sal_Bool fPagHiddenGet() {
         return 0 != ((fSveFlagsGet() >> 2) & 1); }
     // SVBT16 fPagResults : 1;
@@ -462,7 +461,7 @@ struct W1_DOP //Document Properties
     SVBT16  dxaTab;// 720 twips default tab width
     sal_uInt16 dxaTabGet() {
         return SVBT16ToShort(dxaTab); }
-    SVBT16  wSpare;//
+    SVBT16  wSpare;
     sal_uInt16 wSpareGet() {
         return SVBT16ToShort(wSpare); }
     SVBT16  dxaHotZ;// width of hyphenation hot zone measured in twips

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <hintids.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
@@ -234,7 +233,6 @@ void SwTextShell::GetIdxState(SfxItemSet &rSet)
         else
             rSet.Put(SfxBoolItem(FN_INSERT_IDX_ENTRY_DLG,
                                     0 != pIdxMrk));
-
 
         SwField* pField = rSh.GetCurFld();
 

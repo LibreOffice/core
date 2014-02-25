@@ -43,12 +43,10 @@ protected:
 };
 typedef BigPtrEntry* ElementPtr;
 
-
 typedef bool (*FnForEach)( const ElementPtr&, void* pArgs );
 
 // 1000 entries per Block = a bit less then 4K
 #define MAXENTRY 1000
-
 
 // number of entries that may remain free during compression
 // this value is for the worst case; because we defined MAXBLOCK with ca 25%
@@ -102,8 +100,6 @@ public:
     void ForEach( sal_uLong nStart, sal_uLong nEnd, FnForEach fn, void* pArgs = NULL );
 };
 
-
-
 inline sal_uLong BigPtrEntry::GetPos() const
 {
     assert(this == pBlock->pData[ nOffset ]); // element not in the block
@@ -114,7 +110,6 @@ inline BigPtrArray& BigPtrEntry::GetArray() const
 {
     return *pBlock->pBigArr;
 }
-
 
 #endif
 

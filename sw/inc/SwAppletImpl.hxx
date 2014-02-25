@@ -29,7 +29,6 @@
 
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 
-
 #include <sfx2/frmhtml.hxx>
 #include <sfx2/frmhtmlw.hxx>
 #include <vcl/wrkwin.hxx>

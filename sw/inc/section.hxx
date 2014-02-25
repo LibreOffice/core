@@ -31,11 +31,9 @@
 #include <frmfmt.hxx>
 #include <vector>
 
-
 namespace com { namespace sun { namespace star {
     namespace text { class XTextSection; }
 } } }
-
 
 class SwSectionFmt;
 class SwDoc;
@@ -203,7 +201,6 @@ public:
     // Query (also for parents) if this section is to be hidden.
     sal_Bool CalcHiddenFlag() const;
 
-
     inline SwSection* GetParent() const;
 
     OUString GetCondition() const           { return m_Data.GetCondition(); }
@@ -325,7 +322,6 @@ public:
                             SectionSort eSort = SORTSECT_NOT,
                             sal_Bool bAllSections = sal_True ) const;
 
-
     // Query whether section is in Nodes-array or in UndoNodes-array.
     sal_Bool IsInNodesArr() const;
 
@@ -383,7 +379,6 @@ inline SwSection* SwSectionFmt::GetParentSection() const
     }
     return pRet;
 }
-
 
 #endif /* _ INCLUDED_SW_INC_SECTION_HXX */
 

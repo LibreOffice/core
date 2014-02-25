@@ -31,7 +31,6 @@ public:
     SwColMgr(const SfxItemSet &rSet, sal_uInt16 nActWidth = USHRT_MAX);
     ~SwColMgr();
 
-
     inline sal_uInt16       GetCount() const;
     void                SetCount(sal_uInt16 nCount, sal_uInt16 nGutterWidth);
     sal_uInt16              GetGutterWidth(sal_uInt16 nPos = USHRT_MAX) const;
@@ -64,7 +63,6 @@ public:
 
     void                SetActualWidth(sal_uInt16 nW);
     sal_uInt16              GetActualSize() const { return nWidth; }
-
 
 private:
 

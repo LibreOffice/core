@@ -33,18 +33,15 @@
 #include <popup.hrc>
 #include <shells.hrc>
 
-
 #define SwOleShell
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
-
 
 SFX_IMPL_INTERFACE(SwOleShell, SwFrameShell, SW_RES(STR_SHELLNAME_OBJECT))
 {
     SFX_POPUPMENU_REGISTRATION(SW_RES(MN_OLE_POPUPMENU));
     SFX_OBJECTBAR_REGISTRATION(SFX_OBJECTBAR_OBJECT, SW_RES(RID_OLE_TOOLBOX));
 }
-
 
 SwOleShell::SwOleShell(SwView &_rView) :
     SwFrameShell(_rView)

@@ -30,7 +30,6 @@ class SwTable;
 class SwChartDataProvider;
 class SwChartLockController_Helper;
 
-
  /** Give access to the data-provider for chart
  */
  class IDocumentChartDataProviderAccess

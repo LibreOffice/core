@@ -24,12 +24,8 @@ interface WebFrame : BaseTextFrame
     import BaseTextSelection;
 }
 
-
- //=========================================================================
-
 shell SwWebFrameShell : SwBaseShell
 {
         import WebFrame[Automation];
 }
-
 

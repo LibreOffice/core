@@ -39,7 +39,6 @@ struct SwInsertTableOptions
         mnInsMode( nInsMode ), mnRowsToRepeat( nRowsToRepeat ) {};
 };
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

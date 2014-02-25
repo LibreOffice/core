@@ -80,7 +80,6 @@ void SwReadOnlyPopup::Check( sal_uInt16 nMID, sal_uInt16 nSID, SfxDispatcher &rD
     delete _pItem;
 }
 
-
 SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     PopupMenu( SW_RES(MN_READONLY_POPUP) ),
     rView  ( rV ),

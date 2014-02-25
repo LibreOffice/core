@@ -187,7 +187,6 @@ sal_Bool SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
                         sTxt = SwViewShell::GetShellRes()->aLinkClick + ": " + sTxt;
                 }
 
-
                 if( rEvt.GetMode() & HELPMODE_BALLOON )
                 {
                     Help::ShowBalloon( pWindow, rEvt.GetMousePosPixel(), sTxt );

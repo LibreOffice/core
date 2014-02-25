@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_INC_FMTPDSC_HXX
 #define INCLUDED_SW_INC_FMTPDSC_HXX
 
-
 #include <svl/poolitem.hxx>
 #include "swdllapi.h"
 #include <hintids.hxx>
@@ -82,7 +81,6 @@ public:
     void RegisterToPageDesc( SwPageDesc& );
     bool KnowsPageDesc() const;
 };
-
 
 inline const SwFmtPageDesc &SwAttrSet::GetPageDesc(sal_Bool bInP) const
     { return (const SwFmtPageDesc&)Get( RES_PAGEDESC,bInP); }

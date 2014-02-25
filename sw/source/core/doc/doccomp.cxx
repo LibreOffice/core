@@ -173,7 +173,6 @@ private:
         ~CompareSequence();
     };
 
-
     static void CountDifference( const CompareData& rData, sal_uLong* pCounts );
     static void SetDiscard( const CompareData& rData,
                             sal_Char* pDiscard, sal_uLong* pCounts );

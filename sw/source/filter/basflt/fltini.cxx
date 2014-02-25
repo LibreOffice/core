@@ -200,30 +200,21 @@ SwRead GetReader( const OUString& rFltName )
 
 void Writer::SetVersion( const OUString&, long ) {}
 
-
 sal_Bool Writer::IsStgWriter() const { return sal_False; }
 
 sal_Bool StgWriter::IsStgWriter() const { return sal_True; }
-
-
-
 
 sal_Bool SwReader::NeedsPasswd( const Reader& /*rOptions*/ )
 {
     return sal_False;
 }
 
-
 sal_Bool SwReader::CheckPasswd( const OUString& /*rPasswd*/, const Reader& /*rOptions*/ )
 {
     return sal_True;
 }
 
-
-
-
 // Filter Flags lesen, wird von WW8 / W4W / EXCEL / LOTUS benutzt.
-
 
 /*
 <FilterFlags>
@@ -296,15 +287,11 @@ void SwFilterOptions::GetValues( sal_uInt16 nCnt, const sal_Char** ppNames,
 void SwFilterOptions::Commit() {}
 void SwFilterOptions::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
 
-
-
 void StgReader::SetFltName( const OUString& rFltNm )
 {
         if( SW_STORAGE_READER & GetReaderType() )
                 aFltName = rFltNm;
 }
-
-
 
 SwRelNumRuleSpaces::SwRelNumRuleSpaces( SwDoc& rDoc, sal_Bool bNDoc )
 {
@@ -601,7 +588,6 @@ OUString NameFromCharSet(rtl_TextEncoding nChrSet)
 //      3. Fontname
 //      4. Language
 // the delimiter character is ","
-//
 
 void SwAsciiOptions::ReadUserData( const OUString& rStr )
 {

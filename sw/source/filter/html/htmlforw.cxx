@@ -78,8 +78,6 @@ const sal_uInt32 HTML_FRMOPTS_IMG_CONTROL_CSS1 =
     HTML_FRMOPT_S_ALIGN |
     HTML_FRMOPT_S_SPACE;
 
-
-
 static void lcl_html_outEvents( SvStream& rStrm,
                          const uno::Reference< form::XFormComponent > rFormComp,
                          sal_Bool bCfgStarBasic,
@@ -649,7 +647,6 @@ void SwHTMLWriter::OutHiddenControls(
     }
 }
 
-
 // hier folgen die Ausgabe-Routinen, dadurch sind die form::Forms gebuendelt:
 
 const SdrObject *SwHTMLWriter::GetHTMLControl( const SwDrawFrmFmt& rFmt )
@@ -951,7 +948,6 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             // VALUE vim form aus Sicherheitsgruenden nicht exportieren
         }
         break;
-
 
     case form::FormComponentType::IMAGEBUTTON:
         eType = TYPE_IMAGE;
@@ -1335,7 +1331,6 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
     return rWrt;
 }
 
-
 // Ermitteln, ob eine Format zu einem Control gehoert und wenn ja
 // dessen Form zurueckgeben
 static void AddControl( HTMLControls& rControls,
@@ -1369,7 +1364,6 @@ static void AddControl( HTMLControls& rControls,
         }
     }
 }
-
 
 void SwHTMLWriter::GetControls()
 {
@@ -1420,13 +1414,11 @@ void SwHTMLWriter::GetControls()
     }
 }
 
-
 HTMLControl::HTMLControl(
         const uno::Reference< container::XIndexContainer > & rFormComps,
         sal_uInt32 nIdx ) :
     xFormComps( rFormComps ), nNdIdx( nIdx ), nCount( 1 )
 {}
-
 
 HTMLControl::~HTMLControl()
 {}

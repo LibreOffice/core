@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_INC_NDHINTS_HXX
 #define INCLUDED_SW_INC_NDHINTS_HXX
 
-
 #include <tools/mempool.hxx>
 #include <o3tl/sorted_vector.hxx>
 
@@ -59,7 +58,6 @@ SwTxtAttr* MakeRedlineTxtAttr(
     SwDoc & rDoc,
     SfxPoolItem& rAttr );
 
-
 /** Class SwpHints is derived indirectly via SwpHts, because only the
    class SwTxtNode should be allowed to insert and remove attributes.
    Other classes like the Frames are given only reading access via
@@ -84,7 +82,6 @@ class SwpHtEnd : public o3tl::sorted_vector<SwTxtAttr*, CompareSwpHtEnd,
     o3tl::find_partialorder_ptrequals> {};
 
 /// Class SwpHintsArr
-
 
 /// the Hints array
 class SwpHintsArray
@@ -127,9 +124,7 @@ public:
 #endif
 };
 
-
 // Class SwpHints
-
 
 /// public interface
 class SwpHints : public SwpHintsArray
@@ -203,9 +198,7 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwpHints)
 };
 
-
 /// Inline Implementations
-
 
 inline sal_uInt16 SwpHintsArray::GetStartOf( const SwTxtAttr *pHt ) const
 {
@@ -224,7 +217,6 @@ inline SwTxtAttr *SwpHintsArray::Cut( const sal_uInt16 nPosInStart )
     DeleteAtPos( nPosInStart );
     return pHt;
 }
-
 
 #endif
 

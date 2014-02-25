@@ -24,7 +24,6 @@
 #include <sfx2/dispatch.hxx>
 #include <vcl/window.hxx>
 
-
 SwWait::SwWait(
     SwDocShell &rDocShell,
     const bool bLockUnlockDispatcher )

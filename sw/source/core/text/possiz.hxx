@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_TEXT_POSSIZ_HXX
 #define INCLUDED_SW_SOURCE_CORE_TEXT_POSSIZ_HXX
 
-
 #include <tools/gen.hxx>
 #include "txttypes.hxx"
 
@@ -70,7 +69,6 @@ inline SwPosSize &SwPosSize::operator=( const Size &rSize )
     nHeight = KSHORT(rSize.Height());
     return *this;
 }
-
 
 #endif
 

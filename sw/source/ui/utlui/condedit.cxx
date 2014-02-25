@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <sot/formats.hxx>
 
 #include <condedit.hxx>
@@ -87,6 +86,5 @@ sal_Int8 ConditionEdit::ExecuteDrop( const ExecuteDropEvent& rEvt )
     }
     return nRet;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

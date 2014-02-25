@@ -156,7 +156,6 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
                 pSet->GetItemState(FN_PARAM_3, true, &pItem))
             aSub = ((const SfxStringItem *)pItem)->GetValue();
 
-
         if(!aFile.isEmpty() || !aSub.isEmpty())
         {
             OUString sLinkFileName = OUString(sfx2::cTokenSeparator);

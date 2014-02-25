@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <tools/resid.hxx>
 
 #include <poolfmt.hxx>
@@ -155,7 +154,6 @@ SwUndoRenameFmt::SwUndoRenameFmt(SwUndoId nUndoId,
       sNewName(_sNewName), pDoc(_pDoc)
 {
 }
-
 
 SwUndoRenameFmt::~SwUndoRenameFmt()
 {

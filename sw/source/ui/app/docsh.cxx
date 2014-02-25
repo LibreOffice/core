@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <hintids.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
@@ -115,7 +114,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::container;
-
 
 SFX_IMPL_INTERFACE( SwDocShell, SfxObjectShell, SW_RES(0) )
 {
@@ -753,7 +751,6 @@ sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
     return !IsError( nErrno );
 }
 
-
 // Hands off
 // do not yet activate, must deliver TRUE
 sal_Bool SwDocShell::SaveCompleted( const uno::Reference < embed::XStorage >& xStor  )
@@ -833,7 +830,6 @@ void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
         EnableSetModified( sal_True );
 }
 
-
 void SwDocShell::SetVisArea( const Rectangle &rRect )
 {
     Rectangle aRect( rRect );
@@ -857,7 +853,6 @@ void SwDocShell::SetVisArea( const Rectangle &rRect )
     else
         SfxObjectShell::SetVisArea( aRect );
 }
-
 
 Rectangle SwDocShell::GetVisArea( sal_uInt16 nAspect ) const
 {
@@ -929,7 +924,6 @@ sal_uInt16 SwDocShell::GetHiddenInformationState( sal_uInt16 nStates )
 
     return nState;
 }
-
 
 void SwDocShell::GetState(SfxItemSet& rSet)
 {
@@ -1079,7 +1073,6 @@ SfxStyleSheetBasePool*  SwDocShell::GetStyleSheetPool()
     return mxBasePool.get();
 }
 
-
 void SwDocShell::SetView(SwView* pVw)
 {
     if ( 0 != (pView = pVw) )
@@ -1087,7 +1080,6 @@ void SwDocShell::SetView(SwView* pVw)
     else
         pWrtShell = 0;
 }
-
 
 void SwDocShell::PrepareReload()
 {
@@ -1181,7 +1173,6 @@ void SwDocShell::CalcLayoutForOLEObjects()
     }
 }
 
-
 // #i42634# Overwrites SfxObjectShell::UpdateLinks
 // This new function is necessary to trigger update of links in docs
 // read by the binary filter:
@@ -1264,18 +1255,15 @@ const ::sfx2::IXmlIdRegistry* SwDocShell::GetXmlIdRegistry() const
     return pDoc ? &pDoc->GetXmlIdRegistry() : 0;
 }
 
-
 bool SwDocShell::IsChangeRecording() const
 {
     return (pWrtShell->GetRedlineMode() & nsRedlineMode_t::REDLINE_ON) != 0;
 }
 
-
 bool SwDocShell::HasChangeRecordProtection() const
 {
     return pWrtShell->getIDocumentRedlineAccess()->GetRedlinePassword().getLength() > 0;
 }
-
 
 void SwDocShell::SetChangeRecording( bool bActivate )
 {
@@ -1283,7 +1271,6 @@ void SwDocShell::SetChangeRecording( bool bActivate )
     sal_uInt16 nMode = pWrtShell->GetRedlineMode();
     pWrtShell->SetRedlineModeAndCheckInsMode( (nMode & ~nsRedlineMode_t::REDLINE_ON) | nOn);
 }
-
 
 bool SwDocShell::SetProtectionPassword( const OUString &rNewPassword )
 {
@@ -1317,7 +1304,6 @@ bool SwDocShell::SetProtectionPassword( const OUString &rNewPassword )
 
     return bRes;
 }
-
 
 bool SwDocShell::GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > &rPasswordHash )
 {

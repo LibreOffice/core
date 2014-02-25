@@ -58,9 +58,6 @@
 const sal_uInt32 nFontInc = 40;      // 2pt
 const sal_uInt32 nFontMaxSz = 19998; // 999.9pt
 
-
-
-
 void SwTextShell::ExecCharAttr(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
@@ -75,7 +72,6 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
         eState =  ((const SfxBoolItem &) pArgs->
                                 Get( nWhich )).GetValue() ? STATE_ON : STATE_OFF;
     }
-
 
     SfxItemSet aSet( GetPool(), RES_CHRATR_BEGIN, RES_CHRATR_END-1 );
     if (STATE_TOGGLE == eState)
@@ -167,7 +163,6 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
             return;
     }
 }
-
 
 void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
 {
@@ -491,8 +486,6 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
             return;
     }
 }
-
-
 
 void SwTextShell::GetAttrState(SfxItemSet &rSet)
 {

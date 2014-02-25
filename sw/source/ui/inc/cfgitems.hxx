@@ -60,7 +60,6 @@ class SW_DLLPUBLIC SwDocDisplayItem : public SfxPoolItem
 
     Color aIndexBackgrndCol;
 
-
 public:
                                 TYPEINFO();
                                 SwDocDisplayItem( sal_uInt16 nWhich = FN_PARAM_DOCDISP );
@@ -68,7 +67,6 @@ public:
                                     const SwDocDisplayItem& rSwDocDisplayItem );
                                 SwDocDisplayItem( const SwViewOption& rVOpt,
                                                                 sal_uInt16 nWhich );
-
 
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
     virtual bool                operator==( const SfxPoolItem& ) const;
@@ -106,7 +104,6 @@ public:
                             SwElemItem(const SwElemItem& rElemItem);
                             SwElemItem(const SwViewOption& rVOpt, sal_uInt16 nWhich);
 
-
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual bool            operator==( const SfxPoolItem& ) const;
     void                    operator=( const SwElemItem& );
@@ -136,7 +133,6 @@ public:
 
     const OUString &GetFax() const              { return sFaxName; }
     void          SetFax( const OUString& rFax) { sFaxName = rFax; }
-
 
     sal_Bool   IsPrintProspect() const      { return bPrintProspect; }
     sal_Bool   IsPrintProspectRTL() const      { return bPrintProspectRTL; }
@@ -174,7 +170,6 @@ public:
     SwShadowCursorItem( sal_uInt16 nWhich = FN_PARAM_SHADOWCURSOR );
     SwShadowCursorItem( const SwShadowCursorItem& rElemItem );
     SwShadowCursorItem( const SwViewOption& rVOpt, sal_uInt16 nWhich );
-
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual bool            operator==( const SfxPoolItem& ) const;

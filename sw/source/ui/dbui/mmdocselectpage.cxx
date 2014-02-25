@@ -145,7 +145,6 @@ IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, PushButton*, pButton)
                     xFltMgr->setCurrentFilter( pFlt->GetUIName() ) ;
             }
 
-
             pFlt = aIter.Next();
         }
 

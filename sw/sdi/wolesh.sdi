@@ -23,12 +23,8 @@ interface WebOLEObject : BaseTextOLEObject
     import WebFrame;
 }
 
-
- //=========================================================================
-
 shell SwWebOleShell : SwWebFrameShell
 {
         import WebOLEObject[Automation];
 }
-
 

@@ -416,7 +416,6 @@ IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
             }
             xStore->storeAsURL(sTmpName, Sequence< PropertyValue >());
 
-
             uno::Reference<XNamingService> xNaming(m_xDBContext, UNO_QUERY);
             xNaming->registerObject( sFind, xNewInstance );
             //now insert the new source into the ListBox

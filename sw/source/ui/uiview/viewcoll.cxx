@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "cmdid.h"
 #include "uiitems.hxx"
 #include <vcl/window.hxx>
@@ -77,7 +76,5 @@ void SwView::ExecColl(SfxRequest &rReq)
             return;
     }
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

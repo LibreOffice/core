@@ -760,7 +760,6 @@ SwPageDesc *SwPageFrm::FindPageDesc()
     if ( !pRet )
         pRet = &GetFmt()->GetDoc()->GetPageDesc( 0 );
 
-
     OSL_ENSURE( pRet, "could not find page descriptor." );
     return pRet;
 }

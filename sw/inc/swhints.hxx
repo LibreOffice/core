@@ -24,7 +24,6 @@
 #define SW_BROADCASTID_START            SFX_HINT_USER00
 #define SW_BROADCAST_DRAWVIEWS_CREATED  SW_BROADCASTID_START
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

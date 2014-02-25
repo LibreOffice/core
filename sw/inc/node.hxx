@@ -34,9 +34,7 @@
 #include <index.hxx>
 #include <fmtcol.hxx>
 
-// ---------------------
 // forward declarations
-// ---------------------
 
 class SwCntntFrm;
 class SwCntntNode;
@@ -327,7 +325,6 @@ private:
     SwStartNode & operator= ( const SwStartNode & rNode );
 };
 
-
 /// Ends a section of nodes in the document model.
 class SwEndNode : public SwNode
 {
@@ -349,10 +346,8 @@ private:
     SwEndNode & operator= ( const SwEndNode & rNode );
 };
 
-
-// --------------------
 // SwCntntNode
-// --------------------
+
 class SW_DLLPUBLIC SwCntntNode: public SwModify, public SwNode, public SwIndexReg
 {
 
@@ -428,7 +423,6 @@ public:
     */
     void DelFrms( sal_Bool bNeedDel = sal_False, sal_Bool bIsAccTableDispose = sal_True );
 
-
     /** @return count of elements of node content. Default is 1.
        There are differences between text node and formula node. */
     virtual sal_Int32 Len() const;
@@ -491,11 +485,8 @@ private:
     SwCntntNode & operator= ( const SwCntntNode & rNode );
 };
 
-
-
-//---------
 // SwTableNode
-//---------
+
 class SW_DLLPUBLIC SwTableNode : public SwStartNode, public SwModify
 {
     friend class SwNodes;
@@ -530,10 +521,8 @@ private:
     SwTableNode & operator= ( const SwTableNode & rNode );
 };
 
-
-//---------
 // SwSectionNode
-//---------
+
 class SwSectionNode
     : public SwStartNode
     , private ::boost::noncopyable
@@ -578,13 +567,9 @@ public:
        a hidden sub-area. */
     sal_Bool IsCntntHidden() const;
 
-
 };
 
-
-//----------------
 // SwDummySectionNode
-//----------------
 
 /** This class is internal. And quite frankly I don't know what ND_SECTIONDUMMY is for,
    the class has been merely created to replace "SwNode( ND_SECTIONDUMMY )", the only case
@@ -596,7 +581,6 @@ private:
     friend class SwNodes;
     SwDummySectionNode( const SwNodeIndex &rWhere );
 };
-
 
 inline       SwEndNode   *SwNode::GetEndNode()
 {
@@ -638,7 +622,6 @@ inline const SwCntntNode *SwNode::GetCntntNode() const
 {
      return ND_CONTENTNODE & nNodeType ? (const SwCntntNode*)this : 0;
 }
-
 
 inline sal_Bool SwNode::IsStartNode() const
 {
@@ -731,7 +714,6 @@ inline SwFmtColl* SwCntntNode::GetCondFmtColl() const
 {
     return pCondColl ? (SwFmtColl*)pCondColl->GetRegisteredIn() : 0;
 }
-
 
 inline SwFmtColl& SwCntntNode::GetAnyFmtColl() const
 {

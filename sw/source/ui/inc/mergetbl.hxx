@@ -24,7 +24,6 @@
 #include <vcl/fixed.hxx>
 #include <svx/stddlg.hxx>
 
-
 class SwMergeTblDlg : public SvxStandardDialog
 {
     RadioButton* m_pMergePrevRB;
@@ -38,6 +37,5 @@ public:
 };
 
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

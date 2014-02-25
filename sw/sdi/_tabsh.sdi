@@ -57,7 +57,6 @@ interface BaseTextTable
         StateMethod = NoState ;
     ]
 
-
     SID_TABLE_VERT_NONE
     [
         ExecMethod = Execute ;

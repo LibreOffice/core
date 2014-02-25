@@ -71,7 +71,6 @@ public:
     OUString GetViewNumStr( const SwDoc& rDoc, sal_Bool bInclStrs = sal_False ) const;
 };
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

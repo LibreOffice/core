@@ -52,7 +52,6 @@ bool ChkChain( SwLinePortion *pStart )
 }
 #endif
 
-
 SwLinePortion::~SwLinePortion()
 {
     if( pBlink )

@@ -31,7 +31,6 @@ typedef std::map< const SwTxtNode*, const sal_uInt32 > NodeMap;
 typedef std::map< const SwTxtNode*, const sal_uInt32 >::const_iterator NodeMapIter;
 typedef NodeMap::value_type NodeMapEntry;
 
-
 class SwMovedFwdFrmsByObjPos
 {
     private:

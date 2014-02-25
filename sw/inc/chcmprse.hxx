@@ -24,6 +24,5 @@ enum SwCharCompressType{    CHARCOMPRESS_NONE,
                             CHARCOMPRESS_PUNCTUATION,
                             CHARCOMPRESS_PUNCTUATION_KANA };
 
-
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

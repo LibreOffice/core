@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "hintids.hxx"
 #include <vcl/graph.hxx>
 #include <svx/galbrws.hxx>
@@ -435,7 +434,6 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
 
         pOpt->SetSmoothScroll( bFlag );
         break;
-
 
     case FN_VLINEAL:
         if( STATE_TOGGLE == eState )

@@ -74,8 +74,6 @@ public:
     virtual bool doConstructOrthogonal() const;
 };
 
-
-
 #endif // INCLUDED_SW_SOURCE_UI_INC_DRAWBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

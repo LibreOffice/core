@@ -44,7 +44,6 @@ private:
     SfxItemSet aChrSet,aParSet;
 };
 
-
 struct WW8SwFlyPara
 {
     SwFlyFrmFmt* pFlyFmt;

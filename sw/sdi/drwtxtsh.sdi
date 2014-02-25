@@ -353,7 +353,6 @@ interface TextDrawText
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
-
     SID_FORMTEXT_STYLE // api:
     [
         ExecMethod = ExecFormText ;
@@ -382,14 +381,12 @@ interface TextDrawText
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
-
     SID_FORMTEXT_MIRROR // api:
     [
         ExecMethod = ExecFormText ;
         StateMethod = GetFormTextState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-
 
     SID_FORMTEXT_HIDEFORM   // api:
     [
@@ -690,8 +687,6 @@ interface TextDrawFont
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 }
-
-
 
 shell SwDrawTextShell
 {

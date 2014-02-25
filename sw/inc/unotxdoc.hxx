@@ -413,8 +413,6 @@ public:
     // ::com::sun::star::util::XCloneable
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw (::com::sun::star::uno::RuntimeException);
 
-
-    //
     void                        Invalidate();
     void                        Reactivate(SwDocShell* pNewDocShell);
     SwXDocumentPropertyHelper * GetPropertyHelper ();
@@ -430,7 +428,6 @@ public:
 
     SwXDrawPage*                GetDrawPage();
     SwDocShell*                 GetDocShell() {return pDocShell;}
-
 
     void * SAL_CALL operator new( size_t ) throw();
     void SAL_CALL operator delete( void * ) throw();
@@ -470,7 +467,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( css::uno::RuntimeException );
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw( css::uno::RuntimeException );
 
-    //
     void    Invalidate() {pxDoc = 0;}
 };
 
@@ -488,7 +484,6 @@ class SwXLinkNameAccessWrapper : public cppu::WeakImplHelper4
     const OUString                                                                    sLinkDisplayName;
     css::uno::Reference< css::text::XTextDocument >         xDoc;
     SwXTextDocument*                                                                pxDoc;
-
 
 public:
     SwXLinkNameAccessWrapper(css::uno::Reference< css::container::XNameAccess >  xAccess,
@@ -572,7 +567,6 @@ public:
 
     virtual void onChange();
 };
-
 
 /*  The class SwViewOptionAdjust_Impl is used to adjust the SwViewOption of
     the current SwViewShell so that fields are not printed as commands and

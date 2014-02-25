@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <rtl/ustring.hxx>
@@ -42,7 +41,6 @@
 #include <swerror.h>
 
 using namespace ::com::sun::star;
-
 
 void SwXMLTextBlocks::InitBlockMode ( const uno::Reference < embed::XStorage >& rStorage )
 {
@@ -302,7 +300,6 @@ sal_uLong SwXMLTextBlocks::CopyBlock( SwImpBlocks& rDestImp, OUString& rShort,
     return nError;
 }
 
-
 sal_uLong SwXMLTextBlocks::StartPutBlock( const OUString& rShort, const OUString& rPackageName )
 {
     OSL_ENSURE( xBlkRoot.is(), "No storage set" );
@@ -431,7 +428,6 @@ sal_uLong SwXMLTextBlocks::GetText( const OUString& rShort, OUString& rText )
     return GetBlockText( rShort, rText );
 }
 
-
 sal_uLong SwXMLTextBlocks::MakeBlockList()
 {
     WriteInfo();
@@ -555,8 +551,6 @@ sal_Bool SwXMLTextBlocks::IsFileUCBStorage( const OUString & rFileName)
     delete pStm;
     return bRet;
 }
-
-
 
 short SwXMLTextBlocks::GetFileType ( void ) const
 {

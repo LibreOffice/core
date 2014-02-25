@@ -293,7 +293,6 @@ void SwTextShell::ExecSetNumber(SfxRequest &rReq)
         }
     }
 
-
     switch(rReq.GetSlot())
     {
     case FN_SVX_SET_NUMBER:

@@ -3960,7 +3960,6 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::An
                     }
                     aBoxInfo.SetValid(nValid, true);
 
-
                     aSet.Put(aBoxInfo);
                     pDoc->GetTabBorders(*pCrsr, aSet);
 
@@ -4137,7 +4136,7 @@ void SwXCellRange::GetDataSequence(
 
     sal_Int16 nRowCount = getRowCount();
     sal_Int16 nColCount = getColumnCount();
-    //
+
     if(!nRowCount || !nColCount)
     {
         uno::RuntimeException aRuntime;
@@ -4273,7 +4272,7 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXCellRange::getDataArray()
     SolarMutexGuard aGuard;
     sal_Int16 nRowCount = getRowCount();
     sal_Int16 nColCount = getColumnCount();
-    //
+
     if(!nRowCount || !nColCount)
     {
         uno::RuntimeException aRuntime;
@@ -4390,7 +4389,7 @@ uno::Sequence< uno::Sequence< double > > SwXCellRange::getData(void) throw( uno:
     SolarMutexGuard aGuard;
     sal_Int16 nRowCount = getRowCount();
     sal_Int16 nColCount = getColumnCount();
-    //
+
     if(!nRowCount || !nColCount)
     {
         uno::RuntimeException aRuntime;

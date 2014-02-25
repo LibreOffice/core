@@ -24,7 +24,6 @@
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/text/XTextDocument.hpp>
 
-
 typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XListGallery > SwVbaListGallery_BASE;
 
 class SwVbaListGallery : public SwVbaListGallery_BASE

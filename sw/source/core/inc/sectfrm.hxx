@@ -160,7 +160,6 @@ inline const SwCntntFrm *SwSectionFrm::FindLastCntnt( sal_uInt8 nMode ) const
     return ((SwSectionFrm*)this)->FindLastCntnt( nMode );
 }
 
-
 #endif // INCLUDED_SW_SOURCE_CORE_INC_SECTFRM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

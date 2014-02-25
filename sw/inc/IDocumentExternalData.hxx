@@ -41,7 +41,6 @@ public:
 typedef ::boost::shared_ptr<ExternalData> tExternalDataPointer;
 }
 
-
 class IDocumentExternalData
 {
 protected:

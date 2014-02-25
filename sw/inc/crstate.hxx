@@ -24,7 +24,6 @@
 #include <swtypes.hxx>
 #include <swrect.hxx>
 
-
 enum SwFillMode
 {
     FILL_TAB,       ///< default, fill with tabs
@@ -202,8 +201,6 @@ struct SwCrsrMoveState
     {}
 };
 
-
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -115,7 +115,6 @@ class SwMailMergeDlg : public SvxStandardDialog
     Size            m_aDialogSize;
     OUString m_sSaveFilter;
 
-
     DECL_LINK( ButtonHdl, Button* pBtn );
     DECL_LINK(InsertPathHdl, void *);
     DECL_LINK(AttachFileHdl, void *);

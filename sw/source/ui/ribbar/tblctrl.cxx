@@ -26,7 +26,6 @@
 #include "swtypes.hxx"
 #include "tblctrl.hxx"
 
-
 SFX_IMPL_TOOLBOX_CONTROL( SwTableOptimizeCtrl, SfxUInt16Item );
 
 SwTableOptimizeCtrl::SwTableOptimizeCtrl(

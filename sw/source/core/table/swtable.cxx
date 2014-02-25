@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <ctype.h>
 #include <float.h>
 #include <hintids.hxx>
@@ -79,7 +78,6 @@ SV_IMPL_REF( SwServerObject )
 
 void ChgTextToNum( SwTableBox& rBox, const OUString& rTxt, const Color* pCol,
                     sal_Bool bChgAlign,sal_uLong nNdPos );
-
 
 class SwTableBox_Impl
 {
@@ -1332,7 +1330,6 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
     CHECK_TABLE( *this )
 }
 
-
 /*************************************************************************
 |*
 |*  const SwTableBox* SwTable::GetTblBox( const Strn?ng& rName ) const
@@ -1524,8 +1521,6 @@ bool SwTable::IsTblComplex() const
     }
     return false;
 }
-
-
 
 /*************************************************************************
 |*
@@ -2005,7 +2000,6 @@ void SwTable::SetRefObject( SwServerObject* pObj )
     refObj = pObj;
 }
 
-
 void SwTable::SetHTMLTableLayout( SwHTMLTableLayout *p )
 {
     delete pHTMLLayout;
@@ -2205,7 +2199,6 @@ void ChgNumToText( SwTableBox& rBox, sal_uLong nFmt )
 
         }
         rBox.SetSaveNumFmtColor( pCol );
-
 
         // assign vertical orientation
         if( bChgAlign &&

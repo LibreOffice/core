@@ -31,7 +31,6 @@ class SAL_WARN_UNUSED SwRect
     Point m_Point;
     Size m_Size;
 
-
 public:
     inline SwRect();
     inline SwRect( const SwRect &rRect );
@@ -286,7 +285,6 @@ inline SwRect &SwRect::operator-=( const Size &rSz )
     m_Size.Height() -= rSz.Height();
     return *this;
 }
-
 
 // other
 inline Rectangle SwRect::SVRect() const

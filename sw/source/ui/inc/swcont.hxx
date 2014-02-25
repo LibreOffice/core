@@ -51,9 +51,6 @@ class SwContentType;
 #define REGION_MODE_LINK        1
 #define REGION_MODE_EMBEDDED    2
 
-//----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
-
 //mini rtti
 class SwTypeNumber
 {
@@ -65,7 +62,6 @@ class SwTypeNumber
 
         sal_uInt8 GetTypeId() const;
 };
-//----------------------------------------------------------------------------
 
 class SwContent : public SwTypeNumber
 {

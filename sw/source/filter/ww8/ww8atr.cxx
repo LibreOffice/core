@@ -218,9 +218,7 @@ bool WW8Export::CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich 
     return bRet;
 }
 
-
 //  Hilfsroutinen fuer Styles
-
 
 void MSWordExportBase::ExportPoolItemsToCHP( sw::PoolItems &rItems, sal_uInt16 nScript )
 {
@@ -911,7 +909,6 @@ OUString MSWordExportBase::GetBookmarkName( sal_uInt16 nTyp, const OUString* pNa
     return BookmarkToWord( sRet ); // #i43956# - encode bookmark accordingly
 }
 
-
 /* File CHRATR.HXX: */
 void WW8AttributeOutput::RTLAndCJKState( bool bIsRTL, sal_uInt16 nScript )
 {
@@ -959,7 +956,6 @@ void WW8AttributeOutput::StartRunProperties()
     WW8_WrPlcFld* pCurrentFields = m_rWW8Export.CurrentFieldPlc();
     m_nFieldResults = pCurrentFields ? pCurrentFields->ResultCount() : 0;
 }
-
 
 void WW8AttributeOutput::StartRun( const SwRedlineData* pRedlineData, bool /*bSingleEmptyRun*/ )
 {
@@ -2161,7 +2157,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                         // contents from paragraphs formatted with built-in heading
                         // styles". And afterward fill in any outline styles left
                         // uncovered by that range to the \t flag
-                        //
+
                         // i.e. for
                         // Heading 1
                         // Heading 2
@@ -4529,7 +4525,6 @@ void WW8AttributeOutput::FormatLineNumbering( const SwFmtLineNumber& rNumbering 
     m_rWW8Export.pO->push_back( rNumbering.IsCount() ? 0 : 1 );
 }
 
-
 /* File PARATR.HXX  */
 
 void WW8AttributeOutput::ParaLineSpacing_Impl( short nSpace, short nMulti )
@@ -4783,7 +4778,6 @@ void WW8AttributeOutput::ParaWidows( const SvxWidowsItem& rWidows )
         m_rWW8Export.pO->push_back( 51 );
     m_rWW8Export.pO->push_back( rWidows.GetValue() ? 1 : 0 );
 }
-
 
 class SwWW8WrTabu
 {
@@ -5076,8 +5070,6 @@ void WW8AttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStops )
                            rTabStops, nCurrentLeft);
     }
 }
-
-
 
 void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
 {

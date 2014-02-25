@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <iterator>
 #include <hintids.hxx>
 #include <svl/urihelper.hxx>
@@ -379,7 +378,6 @@ SwFlyFrmFmt* SwWW8ImplReader::MakeGrafNotInCntnt(const WW8PicDesc& rPD,
     return pFlyFmt;
 }
 
-
 // MakeGrafInCntnt fuegt zeichengebundene Grafiken ein
 SwFrmFmt* SwWW8ImplReader::MakeGrafInCntnt(const WW8_PIC& rPic,
     const WW8PicDesc& rPD, const Graphic* pGraph, const OUString& rFileName,
@@ -491,7 +489,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
         {
             // Soeben haben wir einen Grafik-Link ins Doc inserted.
             // Wir muessen ihn jetzt noch Positioniern und Skalieren.
-            //
+
             WW8PicDesc aPD( aPic );
 
             WW8FlySet aFlySet( *this, pPaM, aPic, aPD.nWidth, aPD.nHeight );

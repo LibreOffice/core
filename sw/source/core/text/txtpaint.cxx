@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "txtpaint.hxx"
 #include "swrect.hxx"
 #include "rootfrm.hxx"
@@ -116,6 +115,5 @@ void SwSaveClip::_ChgClip( const SwRect &rRect, const SwTxtFrm* pFrm,
 
     (SwRect&)rRect = aOldRect;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

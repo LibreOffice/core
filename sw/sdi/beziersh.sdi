@@ -123,4 +123,3 @@ shell SwBezierShell: SwBaseShell
     import TextBezier[Automation];
 }
 
-

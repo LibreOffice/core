@@ -27,7 +27,6 @@ enum SwFldUpdateFlags
     AUTOUPD_GLOBALSETTING
 };
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

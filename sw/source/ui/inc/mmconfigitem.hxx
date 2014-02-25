@@ -255,7 +255,6 @@ public:
     void                    SetSelectedPrinter(const OUString& rSet )
                                     {m_sSelectedPrinter = rSet;}
 
-
     SwView*             GetTargetView();
     void                SetTargetView(SwView* pView);
 

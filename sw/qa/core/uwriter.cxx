@@ -890,7 +890,6 @@ void SwDocTest::testTransliterate()
                 i18n::TransliterationModules_HIRAGANA_KATAKANA));
 }
 
-
 void SwDocTest::setUp()
 {
     BootstrapFixture::setUp();

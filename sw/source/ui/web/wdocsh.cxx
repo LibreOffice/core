@@ -39,7 +39,6 @@
 
 #include <unomid.h>
 
-
 SFX_IMPL_INTERFACE( SwWebDocShell, SfxObjectShell, SW_RES(0) )
 {
 }
@@ -57,8 +56,6 @@ SwWebDocShell::SwWebDocShell(SfxObjectCreateMode eMode ) :
 SwWebDocShell::~SwWebDocShell()
 {
 }
-
-
 
 void SwWebDocShell::FillClass( SvGlobalName * pClassName,
                                    sal_uInt32 * pClipFormat,
@@ -85,7 +82,5 @@ void SwWebDocShell::FillClass( SvGlobalName * pClassName,
     }
     *pUserName = SW_RESSTR(STR_HUMAN_SWWEBDOC_NAME);
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

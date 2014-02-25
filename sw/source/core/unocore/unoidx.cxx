@@ -1509,7 +1509,6 @@ uno::Reference<frame::XModel> SwXDocumentIndex::GetModel()
     return 0;
 }
 
-
 /******************************************************************
  * SwXDocumentIndexMark
  ******************************************************************/

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
 
 #include <comphelper/processfactory.hxx>
@@ -993,7 +992,6 @@ void SwDrawTextShell::StateClpbrd(SfxItemSet &rSet)
     ESelection aSel(pOLV->GetSelection());
     const bool bCopy = (aSel.nStartPara != aSel.nEndPara) ||
         (aSel.nStartPos != aSel.nEndPos);
-
 
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();

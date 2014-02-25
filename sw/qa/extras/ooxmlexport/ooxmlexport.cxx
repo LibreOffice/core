@@ -1003,12 +1003,12 @@ DECLARE_OOXMLEXPORT_TEST(testFdo66929, "fdo66929.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testPageBorderSpacingExportCase2, "page-borders-export-case-2.docx")
 {
-     // The problem was that the exporter didn't mirror the workaround of the
-     // importer, regarding the page border's spacing : the <w:pgBorders w:offsetFrom="page">
-     // and the inner nodes like <w:top w:space="24" .... />
-     //
-     // The exporter ALWAYS exported 'w:offsetFrom="text"' even when the spacing values where too large
-     // for Word to handle (larger than 31 points)
+    // The problem was that the exporter didn't mirror the workaround of the
+    // importer, regarding the page border's spacing : the <w:pgBorders w:offsetFrom="page">
+    // and the inner nodes like <w:top w:space="24" .... />
+    //
+    // The exporter ALWAYS exported 'w:offsetFrom="text"' even when the spacing values where too large
+    // for Word to handle (larger than 31 points)
 
     xmlDocPtr pXmlDoc = parseExport();
     if (!pXmlDoc)
@@ -3211,8 +3211,6 @@ DECLARE_OOXMLEXPORT_TEST(testCaption1, "EquationAsScientificNumbering.docx")
     CPPUNIT_ASSERT(contents.match(" SEQ scientific \\* ROMAN"));
 }
 
-
-
 DECLARE_OOXMLEXPORT_TEST(testCaption2, "EquationWithAboveAndBelowCaption.docx")
 {
     // fdo#72563 : There was a problem that in case of TOC,PAGEREF field tag was not preserved during Roundtrip
@@ -3225,7 +3223,6 @@ DECLARE_OOXMLEXPORT_TEST(testCaption2, "EquationWithAboveAndBelowCaption.docx")
     OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
     CPPUNIT_ASSERT(contents.match(" SEQ Equation \\* ARABIC"));
 }
-
 
 DECLARE_OOXMLEXPORT_TEST(testCaption3, "FigureAsLabelPicture.docx")
 {
@@ -3632,6 +3629,5 @@ DECLARE_OOXMLEXPORT_TEST(testW14TextEffects_TextOutline, "TextEffects_TextOutlin
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

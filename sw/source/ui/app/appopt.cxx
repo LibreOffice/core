@@ -19,7 +19,6 @@
 
 #include <cmdid.h>
 
-
 #include <com/sun/star/i18n/ScriptType.hpp>
 
 #include <hintids.hxx>
@@ -257,7 +256,6 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     SfxBindings *pBindings = pAppView ? &pAppView->GetViewFrame()->GetBindings()
                                  : NULL;
 
-
     // Interpret the page Documentview
     if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_DOCDISP, false, &pItem ))
     {
@@ -409,7 +407,6 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     {
         aViewOpt.SetCursorInProtectedArea(((const SfxBoolItem*)pItem)->GetValue());
     }
-
 
         // set elements for the current view and shell
     ApplyUsrPref( aViewOpt, pAppView, bTextDialog? VIEWOPT_DEST_TEXT : VIEWOPT_DEST_WEB);

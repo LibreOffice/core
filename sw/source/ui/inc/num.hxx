@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_UI_INC_NUM_HXX
 #define INCLUDED_SW_SOURCE_UI_INC_NUM_HXX
 
-
 #include <sfx2/tabdlg.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/field.hxx>

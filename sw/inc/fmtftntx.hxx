@@ -34,7 +34,6 @@ enum SwFtnEndPosEnum
     FTNEND_ATTXTEND_END
 };
 
-
 class SW_DLLPUBLIC SwFmtFtnEndAtTxtEnd : public SfxEnumItem
 {
     OUString sPrefix;
@@ -111,7 +110,6 @@ inline const SwFmtFtnAtTxtEnd &SwAttrSet::GetFtnAtTxtEnd(sal_Bool bInP) const
     { return (const SwFmtFtnAtTxtEnd&)Get( RES_FTN_AT_TXTEND, bInP); }
 inline const SwFmtEndAtTxtEnd &SwAttrSet::GetEndAtTxtEnd(sal_Bool bInP) const
     { return (const SwFmtEndAtTxtEnd&)Get( RES_END_AT_TXTEND, bInP); }
-
 
 inline const SwFmtFtnAtTxtEnd &SwFmt::GetFtnAtTxtEnd(sal_Bool bInP) const
     { return aSet.GetFtnAtTxtEnd(bInP); }

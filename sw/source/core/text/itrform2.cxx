@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "hintids.hxx"
 
 #include <boost/scoped_ptr.hpp>
@@ -154,7 +153,7 @@ KSHORT SwTxtFormatter::GetFrmRstHeight() const
 {
     // We want the rest height relative to the page.
     // If we're in a table, then pFrm->GetUpper() is not the page.
-    //
+
     // GetFrmRstHeight() is being called with Ftn.
     // Wrong: const SwFrm *pUpper = pFrm->GetUpper();
     const SwFrm *pPage = (const SwFrm*)pFrm->FindPageFrm();
@@ -874,7 +873,6 @@ void SwMetaPortion::Paint( const SwTxtPaintInfo &rInf ) const
     }
 }
 
-
 /*************************************************************************
  *                      SwTxtFormatter::WhichTxtPor()
  *************************************************************************/
@@ -962,10 +960,10 @@ SwTxtPortion *SwTxtFormatter::NewTxtPortion( SwTxtFormatInfo &rInf )
     // We assume that a font's characters are not larger than twice
     // as wide as heigh.
     // Very crazy: We need to take the ascent into account.
-    //
+
     // Mind the trap! GetSize() contains the wished-for height, the real height
     // is only known in CalcAscent!
-    //
+
     // The ratio is even crazier: a blank in Times New Roman has an ascent of
     // 182, a height of 200 and a width of 53!
     // It follows that a line with a lot of blanks is processed incorrectly.
@@ -1003,7 +1001,6 @@ SwTxtPortion *SwTxtFormatter::NewTxtPortion( SwTxtFormatInfo &rInf )
     rInf.SetLen( pPor->GetLen() );
     return pPor;
 }
-
 
 /*************************************************************************
  *                 SwTxtFormatter::WhichFirstPortion()
@@ -2053,7 +2050,6 @@ void SwTxtFormatter::CalcUnclipped( SwTwips& rTop, SwTwips& rBottom )
     rTop -= nFlyAsc;
 }
 
-
 void SwTxtFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
     sal_Int32 nStartIdx, bool bAlways ) const
 {
@@ -2176,7 +2172,6 @@ void SwTxtFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
     }
 }
 
-
 void SwTxtFormatter::AlignFlyInCntBase( long nBaseLine ) const
 {
     OSL_ENSURE( ! pFrm->IsVertical() || pFrm->IsSwapped(),
@@ -2223,7 +2218,6 @@ void SwTxtFormatter::AlignFlyInCntBase( long nBaseLine ) const
         pPos = pPos->GetPortion();
     }
 }
-
 
 bool SwTxtFormatter::ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const
 {
@@ -2518,7 +2512,6 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
         }
     }
 }
-
 
 SwFlyCntPortion *SwTxtFormatter::NewFlyCntPortion( SwTxtFormatInfo &rInf,
                                                    SwTxtAttr *pHint ) const

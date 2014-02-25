@@ -33,7 +33,6 @@
 #include <view.hxx>
 #include <swmodule.hxx>
 
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -42,12 +41,9 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 
-
-
 // This file contains all routines of the fldui directory, which must compile
 // with exceptions. So we can reduce the code of the other files, which don't
 // need any exception handling.
-
 
 /*--------------------------------------------------------------------
      Description: Is the database field numeric?
@@ -168,6 +164,5 @@ sal_Bool SwFldMgr::IsDBNumeric( const OUString& rDBName, const OUString& rTblQry
     }
     return bNumeric;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

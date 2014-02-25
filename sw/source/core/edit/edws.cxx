@@ -193,18 +193,14 @@ void SwEditShell::InsertTOXType(const SwTOXType& rTyp)
 void SwEditShell::DoUndo( sal_Bool bOn )
 { GetDoc()->GetIDocumentUndoRedo().DoUndo( bOn ); }
 
-
 sal_Bool SwEditShell::DoesUndo() const
 { return GetDoc()->GetIDocumentUndoRedo().DoesUndo(); }
-
 
 void SwEditShell::DoGroupUndo( sal_Bool bOn )
 { GetDoc()->GetIDocumentUndoRedo().DoGroupUndo( bOn ); }
 
-
 sal_Bool SwEditShell::DoesGroupUndo() const
 { return GetDoc()->GetIDocumentUndoRedo().DoesGroupUndo(); }
-
 
 void SwEditShell::DelAllUndoObj()
 {

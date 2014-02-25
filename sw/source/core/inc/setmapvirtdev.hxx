@@ -56,7 +56,6 @@ void SetMappingForVirtDev(  const Point&    _rNewOrigin,
                             const OutputDevice* _pOrgOutDev,
                             VirtualDevice*  _pVirDev );
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -130,7 +130,6 @@ public:
     std::vector<OUString> const& GetPathArray() const { return m_PathArr; }
 };
 
-
 #endif // INCLUDED_SW_SOURCE_UI_INC_GLOSDOC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

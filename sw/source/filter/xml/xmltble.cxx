@@ -69,7 +69,6 @@ class SwXMLTableColumn_Impl : public SwWriteTableCol
 
 public:
 
-
     SwXMLTableColumn_Impl( sal_uInt32 nPosition ) :
         SwWriteTableCol( nPosition ),
         nRelWidth( 0UL )
@@ -267,7 +266,6 @@ bool SwXMLTableFrmFmtsSort_Impl::AddRow( SwFrmFmt& rFrmFmt,
             if( pRowSplit )
                 continue;
         }
-
 
         if( pFrmSize &&
             ( pFrmSize->GetHeightSizeType() != pTestFrmSize->GetHeightSizeType() ||
@@ -472,7 +470,6 @@ bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
     return bInsert;
 }
 
-
 class SwXMLTableInfo_Impl
 {
     const SwTable *pTable;
@@ -503,9 +500,6 @@ inline void SwXMLTableInfo_Impl::SetBaseSection(
     xBaseSection = rBaseSection;
     bBaseSectionValid = true;
 }
-
-
-
 
 void SwXMLExport::ExportTableColumnStyle( const SwXMLTableColumn_Impl& rCol )
 {
@@ -655,7 +649,6 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
                 nCPos = nCPos + SwWriteTable::GetBoxWidth( pBox );
             else
                 nCPos = pLines->GetWidth();
-
 
             // Und ihren Index
             sal_uInt16 nOldCol = nCol;

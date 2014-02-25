@@ -241,7 +241,6 @@ public:
             GetLanguageGuesser();
 };
 
-
 inline ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XLinguServiceEventListener >
         SwModule::GetLngSvcEvtListener()
@@ -255,7 +254,6 @@ inline void SwModule::SetLngSvcEvtListener(
 {
     xLngSvcEvtListener = xLstnr;
 }
-
 
 //    Access to SwModule, the ::com::sun::star::sdbcx::View and the shell.
 

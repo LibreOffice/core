@@ -1367,7 +1367,6 @@ void AddressMultiLineEdit::SetText( const OUString& rStr )
     }
 }
 
-
 // Insert the new entry in front of the entry at the beginning of the selection
 void AddressMultiLineEdit::InsertNewEntry( const OUString& rStr )
 {

@@ -26,7 +26,6 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include "vbalisthelper.hxx"
 
-
 typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XListFormat > SwVbaListFormat_BASE;
 
 class SwVbaListFormat : public SwVbaListFormat_BASE
