@@ -224,7 +224,7 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
         sprintf( filename, "%s.new.%d", modifyFile.c_str(), getpid());
         string error;
         bool ok = false;
-        raw_fd_ostream ostream( filename, error );
+        raw_fd_ostream ostream( filename, error, sys::fs::F_None );
         if( error.empty())
             {
             it->second.write( ostream );
