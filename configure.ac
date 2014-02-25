@@ -1500,11 +1500,6 @@ AC_ARG_WITH(system-expat,
         [Use expat already on system.]),,
     [with_system_expat="$with_system_libs"])
 
-AC_ARG_WITH(system-libeot,
-    AS_HELP_STRING([--with-system-libeot],
-        [Use libeot already on system.]),,
-    [with_system_libeot="$with_system_libs"])
-
 AC_ARG_WITH(system-libxml,
     AS_HELP_STRING([--with-system-libxml],
         [Use libxml/libxslt already on system.]),,
