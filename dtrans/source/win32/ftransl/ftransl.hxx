@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifndef _FTRANSL_HXX_
 #define _FTRANSL_HXX_
 
@@ -57,9 +56,7 @@ struct FormatEntry
     sal_Int32                                aStandardFormatId;
 };
 
-//------------------------------------------------
 // CDataFormatTranslator
-//------------------------------------------------
 
 class CDataFormatTranslator : public
     cppu::WeakImplHelper2< com::sun::star::datatransfer::XDataFormatTranslator, \
@@ -69,9 +66,7 @@ class CDataFormatTranslator : public
 public:
     CDataFormatTranslator( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
 
-    //------------------------------------------------
     // XDataFormatTranslator
-    //------------------------------------------------
 
     virtual ::com::sun::star::uno::Any SAL_CALL getSystemDataTypeFromDataFlavor( const ::com::sun::star::datatransfer::DataFlavor& aDataFlavor )
         throw(::com::sun::star::uno::RuntimeException);
@@ -79,9 +74,7 @@ public:
     virtual ::com::sun::star::datatransfer::DataFlavor SAL_CALL getDataFlavorFromSystemDataType( const ::com::sun::star::uno::Any& aSysDataType )
         throw(::com::sun::star::uno::RuntimeException);
 
-    //------------------------------------------------
     // XServiceInfo
-    //------------------------------------------------
 
     virtual OUString SAL_CALL getImplementationName(  )
         throw(::com::sun::star::uno::RuntimeException);
@@ -111,7 +104,6 @@ private:
     std::vector< FormatEntry >  m_TranslTable;
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >  m_xContext;
 };
-
 
 #endif
 

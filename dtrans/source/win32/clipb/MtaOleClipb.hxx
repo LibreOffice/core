@@ -31,14 +31,12 @@
 #pragma warning(pop)
 #endif
 
-//--------------------------------------------------------
 // the Mta-Ole clipboard class is for internal use only!
 // only one instance of this class should be created, the
 // user has to ensure this!
 // the class is not thread-safe because it will be used
 // only from within the clipboard service and the methods
 // of the clipboard service are already synchronized
-//--------------------------------------------------------
 
 class CMtaOleClipboard
 {
@@ -72,10 +70,8 @@ private:
     bool     postMessage( UINT msg, WPARAM wParam = 0, LPARAM lParam = 0 );
     LRESULT  sendMessage( UINT msg, WPARAM wParam = 0, LPARAM lParam = 0 );
 
-    //---------------------------------------------------------------
     // message handler functions; remember these functions are called
     // from a different thread context!
-    //---------------------------------------------------------------
 
     LRESULT  onSetClipboard( IDataObject* pIDataObject );
     LRESULT  onGetClipboard( LPSTREAM* ppStream );

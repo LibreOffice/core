@@ -45,19 +45,14 @@
 #define __uuidof(I) IID_##I
 #endif
 
-
 // namespace directives
-
 
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::clipboard;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 
-
-
 // a helper class that will be thrown by the function validateFormatEtc
-
 
 class CInvalidFormatEtcException
 {
@@ -66,9 +61,7 @@ public:
     CInvalidFormatEtcException( HRESULT hr ) : m_hr( hr ) {};
 };
 
-
 // ctor
-
 
 CXTDataObject::CXTDataObject( const Reference< XComponentContext >& rxContext,
                               const Reference< XTransferable >& aXTransferable )
@@ -80,9 +73,7 @@ CXTDataObject::CXTDataObject( const Reference< XComponentContext >& rxContext,
 {
 }
 
-
 // IUnknown->QueryInterface
-
 
 STDMETHODIMP CXTDataObject::QueryInterface( REFIID iid, LPVOID* ppvObject )
 {
@@ -103,18 +94,14 @@ STDMETHODIMP CXTDataObject::QueryInterface( REFIID iid, LPVOID* ppvObject )
     return hr;
 }
 
-
 // IUnknown->AddRef
-
 
 STDMETHODIMP_(ULONG) CXTDataObject::AddRef( )
 {
     return static_cast< ULONG >( InterlockedIncrement( &m_nRefCnt ) );
 }
 
-
 // IUnknown->Release
-
 
 STDMETHODIMP_(ULONG) CXTDataObject::Release( )
 {
@@ -126,10 +113,6 @@ STDMETHODIMP_(ULONG) CXTDataObject::Release( )
 
     return nRefCnt;
 }
-
-
-//
-
 
 STDMETHODIMP CXTDataObject::GetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium )
 {
@@ -175,10 +158,6 @@ STDMETHODIMP CXTDataObject::GetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium
     return S_OK;
 }
 
-
-//
-
-
 // inline
 void SAL_CALL CXTDataObject::renderDataAndSetupStgMedium(
     const sal_Int8* lpStorage, const FORMATETC& fetc, sal_uInt32 nInitStgSize,
@@ -204,10 +183,6 @@ void SAL_CALL CXTDataObject::renderDataAndSetupStgMedium(
     setupStgMedium( fetc, stgTransfHelper, stgmedium );
 }
 
-
-//
-
-
 //inline
 void SAL_CALL CXTDataObject::renderLocaleAndSetupStgMedium(
     FORMATETC& fetc, STGMEDIUM& stgmedium )
@@ -225,10 +200,6 @@ void SAL_CALL CXTDataObject::renderLocaleAndSetupStgMedium(
     else
         throw CInvalidFormatEtcException( DV_E_FORMATETC );
 }
-
-
-//
-
 
 //inline
 void SAL_CALL CXTDataObject::renderUnicodeAndSetupStgMedium(
@@ -262,10 +233,6 @@ void SAL_CALL CXTDataObject::renderUnicodeAndSetupStgMedium(
         nBytesToTransfer,
         stgmedium );
 }
-
-
-//
-
 
 //inline
 void SAL_CALL CXTDataObject::renderAnyDataAndSetupStgMedium(
@@ -337,10 +304,6 @@ void SAL_CALL CXTDataObject::renderAnyDataAndSetupStgMedium(
             stgmedium );
 }
 
-
-//
-
-
 HRESULT SAL_CALL CXTDataObject::renderSynthesizedFormatAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium )
 {
     HRESULT hr = S_OK;
@@ -377,9 +340,7 @@ HRESULT SAL_CALL CXTDataObject::renderSynthesizedFormatAndSetupStgMedium( FORMAT
     return hr;
 }
 
-
 // the transferable must have only text, so we will synthesize unicode text
-
 
 void SAL_CALL CXTDataObject::renderSynthesizedUnicodeAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium )
 {
@@ -410,9 +371,7 @@ void SAL_CALL CXTDataObject::renderSynthesizedUnicodeAndSetupStgMedium( FORMATET
     setupStgMedium( fetc, stgTransfHelper, stgmedium );
 }
 
-
 // the transferable must have only unicode text so we will sythesize text
-
 
 void SAL_CALL CXTDataObject::renderSynthesizedTextAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium )
 {
@@ -445,10 +404,6 @@ void SAL_CALL CXTDataObject::renderSynthesizedTextAndSetupStgMedium( FORMATETC& 
 
     setupStgMedium( fetc, stgTransfHelper, stgmedium );
 }
-
-
-//
-
 
 void SAL_CALL CXTDataObject::renderSynthesizedHtmlAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium )
 {
@@ -486,9 +441,7 @@ void SAL_CALL CXTDataObject::renderSynthesizedHtmlAndSetupStgMedium( FORMATETC& 
         stgmedium );
 }
 
-
 // IDataObject->EnumFormatEtc
-
 
 STDMETHODIMP CXTDataObject::EnumFormatEtc(
     DWORD dwDirection, IEnumFORMATETC** ppenumFormatetc )
@@ -517,9 +470,7 @@ STDMETHODIMP CXTDataObject::EnumFormatEtc(
     return hr;
 }
 
-
 // IDataObject->QueryGetData
-
 
 STDMETHODIMP CXTDataObject::QueryGetData( LPFORMATETC pFormatetc )
 {
@@ -531,72 +482,54 @@ STDMETHODIMP CXTDataObject::QueryGetData( LPFORMATETC pFormatetc )
     return m_FormatEtcContainer.hasFormatEtc( *pFormatetc ) ? S_OK : S_FALSE;
 }
 
-
 // IDataObject->GetDataHere
-
 
 STDMETHODIMP CXTDataObject::GetDataHere( LPFORMATETC, LPSTGMEDIUM )
 {
     return E_NOTIMPL;
 }
 
-
 // IDataObject->GetCanonicalFormatEtc
-
 
 STDMETHODIMP CXTDataObject::GetCanonicalFormatEtc( LPFORMATETC, LPFORMATETC )
 {
     return E_NOTIMPL;
 }
 
-
 // IDataObject->SetData
-
 
 STDMETHODIMP CXTDataObject::SetData( LPFORMATETC, LPSTGMEDIUM, BOOL )
 {
     return E_NOTIMPL;
 }
 
-
 // IDataObject->DAdvise
-
 
 STDMETHODIMP CXTDataObject::DAdvise( LPFORMATETC, DWORD, LPADVISESINK, DWORD * )
 {
     return E_NOTIMPL;
 }
 
-
 // IDataObject->DUnadvise
-
 
 STDMETHODIMP CXTDataObject::DUnadvise( DWORD )
 {
     return E_NOTIMPL;
 }
 
-
 // IDataObject->EnumDAdvise
-
 
 STDMETHODIMP CXTDataObject::EnumDAdvise( LPENUMSTATDATA * )
 {
     return E_NOTIMPL;
 }
 
-
 // for our convenience
-
 
 CXTDataObject::operator IDataObject*( )
 {
     return static_cast< IDataObject* >( this );
 }
-
-
-//
-
 
 inline
 DataFlavor SAL_CALL CXTDataObject::formatEtcToDataFlavor( const FORMATETC& aFormatEtc ) const
@@ -614,10 +547,6 @@ DataFlavor SAL_CALL CXTDataObject::formatEtcToDataFlavor( const FORMATETC& aForm
 
     return aFlavor;
 }
-
-
-//
-
 
 inline
 void CXTDataObject::validateFormatEtc( LPFORMATETC lpFormatEtc ) const
@@ -645,10 +574,6 @@ void CXTDataObject::validateFormatEtc( LPFORMATETC lpFormatEtc ) const
          !(lpFormatEtc->tymed & TYMED_ENHMF) )
         throw CInvalidFormatEtcException( DV_E_TYMED );
 }
-
-
-//
-
 
 //inline
 void SAL_CALL CXTDataObject::setupStgMedium( const FORMATETC& fetc,
@@ -681,19 +606,11 @@ void SAL_CALL CXTDataObject::setupStgMedium( const FORMATETC& fetc,
         OSL_ASSERT( sal_False );
 }
 
-
-//
-
-
 inline
 void SAL_CALL CXTDataObject::invalidateStgMedium( STGMEDIUM& stgmedium ) const
 {
     stgmedium.tymed = TYMED_NULL;
 }
-
-
-//
-
 
 inline
 HRESULT SAL_CALL CXTDataObject::translateStgExceptionCode( HRESULT hr ) const
@@ -714,10 +631,6 @@ HRESULT SAL_CALL CXTDataObject::translateStgExceptionCode( HRESULT hr ) const
     return hrTransl;
 }
 
-
-//
-
-
 inline void SAL_CALL CXTDataObject::InitializeFormatEtcContainer( )
 {
     if ( !m_bFormatEtcContainerInitialized )
@@ -727,13 +640,9 @@ inline void SAL_CALL CXTDataObject::InitializeFormatEtcContainer( )
     }
 }
 
-//============================================================================
 // CEnumFormatEtc
-//============================================================================
-
 
 // ctor
-
 
 CEnumFormatEtc::CEnumFormatEtc( LPUNKNOWN lpUnkOuter, const CFormatEtcContainer& aFormatEtcContainer ) :
     m_nRefCnt( 0 ),
@@ -743,9 +652,7 @@ CEnumFormatEtc::CEnumFormatEtc( LPUNKNOWN lpUnkOuter, const CFormatEtcContainer&
     Reset( );
 }
 
-
 // IUnknown->QueryInterface
-
 
 STDMETHODIMP CEnumFormatEtc::QueryInterface( REFIID iid, LPVOID* ppvObject )
 {
@@ -767,9 +674,7 @@ STDMETHODIMP CEnumFormatEtc::QueryInterface( REFIID iid, LPVOID* ppvObject )
     return hr;
 }
 
-
 // IUnknown->AddRef
-
 
 STDMETHODIMP_(ULONG) CEnumFormatEtc::AddRef( )
 {
@@ -778,9 +683,7 @@ STDMETHODIMP_(ULONG) CEnumFormatEtc::AddRef( )
     return InterlockedIncrement( &m_nRefCnt );
 }
 
-
 // IUnknown->Release
-
 
 STDMETHODIMP_(ULONG) CEnumFormatEtc::Release( )
 {
@@ -794,9 +697,7 @@ STDMETHODIMP_(ULONG) CEnumFormatEtc::Release( )
     return nRefCnt;
 }
 
-
 // IEnumFORMATETC->Next
-
 
 STDMETHODIMP CEnumFormatEtc::Next( ULONG nRequested, LPFORMATETC lpDest, ULONG* lpFetched )
 {
@@ -813,18 +714,14 @@ STDMETHODIMP CEnumFormatEtc::Next( ULONG nRequested, LPFORMATETC lpDest, ULONG* 
     return (nFetched == nRequested) ? S_OK : S_FALSE;
 }
 
-
 // IEnumFORMATETC->Skip
-
 
 STDMETHODIMP CEnumFormatEtc::Skip( ULONG celt )
 {
     return m_FormatEtcContainer.skipFormatEtc( celt ) ? S_OK : S_FALSE;
 }
 
-
 // IEnumFORMATETC->Reset
-
 
 STDMETHODIMP CEnumFormatEtc::Reset( )
 {
@@ -832,9 +729,7 @@ STDMETHODIMP CEnumFormatEtc::Reset( )
     return S_OK;
 }
 
-
 // IEnumFORMATETC->Clone
-
 
 STDMETHODIMP CEnumFormatEtc::Clone( IEnumFORMATETC** ppenum )
 {

@@ -38,9 +38,7 @@ using namespace com::sun::star::datatransfer::dnd::DNDConstants;
 using namespace cppu;
 using namespace std;
 
-
 LRESULT APIENTRY EditSubclassProc( HWND hwnd, UINT uMsg,WPARAM wParam, LPARAM lParam) ;
-
 
 extern Reference< XMultiServiceFactory > MultiServiceFactory;
 DWORD WINAPI MTAFunc(LPVOID pParams);
@@ -60,10 +58,8 @@ LRESULT AWindow::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled
 
     PostQuitMessage(0);
 
-
     m_xDropTarget=0;
     m_xDragSource=0;
-
 
      // Remove the subclass from the edit control.
     ::SetWindowLong(m_hwndEdit, GWL_WNDPROC,
@@ -71,7 +67,6 @@ LRESULT AWindow::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled
 
     return 0;
 }
-
 
 LRESULT AWindow::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -94,13 +89,11 @@ LRESULT AWindow::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
     wpOrigEditProc = (WNDPROC) ::SetWindowLongA(m_hwndEdit,
                 GWL_WNDPROC, (LONG) EditSubclassProc);
 
-
     // Add text to the window.
     if( m_isMTA)
         ::SendMessageA(m_hwndEdit, WM_SETTEXT, 0, (LPARAM) szMTAWin);
     else
         ::SendMessageA(m_hwndEdit, WM_SETTEXT, 0, (LPARAM) szSTAWin);
-
 
     // create the DragSource
     Reference< XInterface> xint= MultiServiceFactory->createInstance(OUString(L"com.sun.star.datatransfer.dnd.OleDragSource"));
@@ -119,7 +112,6 @@ LRESULT AWindow::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
     Any any;
     any <<= (sal_uInt32)m_hWnd;
     xInitTarget->initialize( Sequence<Any>( &any, 1) );
-
 
     m_xDropTarget->addDropTargetListener( static_cast<XDropTargetListener*>
         ( new DropTargetListener( m_hwndEdit)) );
@@ -195,7 +187,6 @@ LRESULT AWindow::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled
                 WaitForSingleObject( data.evtThreadReady, INFINITE);
                 CloseHandle( data.evtThreadReady);
 
-
             }
             else
             {
@@ -232,8 +223,6 @@ LRESULT AWindow::OnFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled
     return 0;
 }
 
-
-
 // Subclass procedure for EDIT window
 LRESULT APIENTRY EditSubclassProc( HWND hwnd, UINT uMsg,WPARAM wParam, LPARAM lParam)
 {
@@ -247,6 +236,5 @@ LRESULT APIENTRY EditSubclassProc( HWND hwnd, UINT uMsg,WPARAM wParam, LPARAM lP
     return CallWindowProc( wpOrigEditProc, hwnd, uMsg,
         wParam, lParam);
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

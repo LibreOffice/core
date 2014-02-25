@@ -34,7 +34,6 @@ using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::dnd;
 using namespace com::sun::star::datatransfer::dnd::DNDConstants;
 
-
 #define WM_REGISTERDRAGDROP WM_USER + 1
 #define WM_REVOKEDRAGDROP WM_USER + 2
 extern Reference< XTransferable > g_XTransferable;
@@ -134,7 +133,6 @@ void SAL_CALL DropTarget::initialize( const Sequence< Any >& aArguments )
             // create the IDropTargetImplementation
             m_pDropTarget= new IDropTargetImpl( *static_cast<DropTarget*>( this) );
             m_pDropTarget->AddRef();
-
 
             // Obtain the id of the thread that created the window
             m_threadIdWindow= GetWindowThreadProcessId( m_hWnd, NULL);
@@ -273,7 +271,6 @@ sal_Bool SAL_CALL DropTarget::isActive(  ) throw(RuntimeException)
 {
     return m_bActive; //m_bDropTargetRegistered;
 }
-
 
 void SAL_CALL DropTarget::setActive( sal_Bool _b ) throw(RuntimeException)
 {

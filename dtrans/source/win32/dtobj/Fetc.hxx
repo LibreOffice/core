@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifndef _FETC_HXX_
 #define _FETC_HXX_
 
@@ -76,7 +75,6 @@ private:
 
 sal_Int32 operator==( const CFormatEtc& lhs, const CFormatEtc& rhs );
 sal_Int32 operator!=( const CFormatEtc& lhs, const CFormatEtc& rhs );
-
 
 #endif
 

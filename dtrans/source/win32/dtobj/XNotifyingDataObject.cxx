@@ -35,7 +35,6 @@ using namespace com::sun::star::datatransfer::clipboard;
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::Reference;
 
-
 CXNotifyingDataObject::CXNotifyingDataObject(
     const IDataObjectPtr& aIDataObject,
     const Reference< XTransferable >& aXTransferable,

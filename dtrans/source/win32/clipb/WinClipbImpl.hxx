@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifndef _WINCLIPBIMPL_HXX_
 #define _WINCLIPBIMPL_HXX_
 
@@ -39,10 +38,8 @@
 class CWinClipboard;
 class CXNotifyingDataObject;
 
-//---------------------------------------------------
 // impl class to avoid deadlocks between XTDataObject
 // and the clipboard implementation
-//---------------------------------------------------
 
 class CWinClipbImpl
 {
@@ -62,27 +59,19 @@ protected:
 
     OUString SAL_CALL getName(  ) throw( ::com::sun::star::uno::RuntimeException );
 
-    //------------------------------------------------
     // XClipboardEx
-    //------------------------------------------------
 
     sal_Int8 SAL_CALL getRenderingCapabilities(  ) throw( ::com::sun::star::uno::RuntimeException );
 
-    //------------------------------------------------
     // XFlushableClipboard
-    //------------------------------------------------
 
     void SAL_CALL flushClipboard( ) throw( com::sun::star::uno::RuntimeException );
 
-    //------------------------------------------------
     // XComponent
-    //------------------------------------------------
 
     void SAL_CALL dispose( ) throw( ::com::sun::star::uno::RuntimeException );
 
-    //------------------------------------------------
     // member functions
-    //------------------------------------------------
 
     void SAL_CALL registerClipboardViewer( );
     void SAL_CALL unregisterClipboardViewer( );

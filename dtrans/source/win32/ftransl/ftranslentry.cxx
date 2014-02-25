@@ -25,9 +25,7 @@
 #include <com/sun/star/datatransfer/XDataFormatTranslator.hpp>
 #include "ftransl.hxx"
 
-
 // some defines
-
 
 // the service names
 #define SERVICE_NAME  "com.sun.star.datatransfer.DataFormatTranslator"
@@ -35,9 +33,7 @@
 // the implementation names
 #define IMPL_NAME  "com.sun.star.datatransfer.DataFormatTranslator"
 
-
 // namespace directives
-
 
 using namespace ::rtl                       ;
 using namespace ::cppu                      ;
@@ -46,18 +42,14 @@ using namespace ::com::sun::star::registry  ;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::datatransfer;
 
-
 // create a static object to initialize the shell9x library
-
 
 namespace
 {
 
-
     // functions to create a new Clipboad instance; is needed by factory helper implementation
     // @param rServiceManager - service manager, useful if the component needs other uno services
     // so we should give it to every UNO-Implementation component
-
 
     Reference< XInterface > SAL_CALL createInstance( const Reference< XMultiServiceFactory >& rServiceManager )
     {
@@ -70,7 +62,6 @@ extern "C"
 
 // component_getFactory
 // returns a factory to create XFilePicker-Services
-
 
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL ftransl_component_getFactory( const sal_Char* pImplName, uno_Interface* pSrvManager, uno_Interface* /*pRegistryKey*/ )
 {

@@ -61,7 +61,6 @@ public:
             /* [in] */ POINTL pt,
             /* [out][in] */ DWORD __RPC_FAR *pdwEffect);
 
-
 };
 #endif
 

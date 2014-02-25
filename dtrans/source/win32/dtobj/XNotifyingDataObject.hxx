@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifndef _XNOTIFYINGDATAOBJECT_HXX_
 #define _XNOTIFYINGDATAOBJECT_HXX_
 
@@ -54,9 +53,7 @@ public:
 
     virtual ~CXNotifyingDataObject() {}
 
-    //-----------------------------------------------------------------
     // ole interface implementation
-    //-----------------------------------------------------------------
 
     //IUnknown interface methods
     STDMETHODIMP           QueryInterface(REFIID iid, LPVOID* ppvObject);

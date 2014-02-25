@@ -82,7 +82,6 @@ sal_Int8 dndOleKeysToAction( DWORD grfKeyState, sal_Int8 nSourceActions)
     return ret;
 }
 
-
 sal_Int8 dndOleDropEffectsToActions( DWORD dwEffect)
 {
     sal_Int8 ret= ACTION_NONE;

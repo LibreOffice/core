@@ -48,9 +48,7 @@ const OUString Windows_FormatName ("windows_formatname");
 const com::sun::star::uno::Type CppuType_ByteSequence = ::getCppuType((const com::sun::star::uno::Sequence<sal_Int8>*)0);
 const com::sun::star::uno::Type CppuType_String       = ::getCppuType((const OUString*)0);
 
-
 // namespace directives
-
 
 using namespace osl;
 using namespace cppu;
@@ -60,9 +58,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::container;
 
-
 // helper functions
-
 
 namespace MODULE_PRIVATE
 {
@@ -74,17 +70,9 @@ namespace MODULE_PRIVATE
     }
 }
 
-
-//
-
-
 FormatEntry::FormatEntry()
 {
 }
-
-
-//
-
 
 FormatEntry::FormatEntry(
     const char* mime_content_type,
@@ -105,19 +93,13 @@ FormatEntry::FormatEntry(
     aStandardFormatId = std_clipboard_format_id;
 }
 
-
 // ctor
-
 
 CDataFormatTranslator::CDataFormatTranslator( const Reference< XComponentContext >& rxContext ) :
     m_xContext( rxContext )
 {
     initTranslationTable( );
 }
-
-
-//
-
 
 Any SAL_CALL CDataFormatTranslator::getSystemDataTypeFromDataFlavor( const DataFlavor& aDataFlavor )
     throw( RuntimeException )
@@ -174,10 +156,6 @@ Any SAL_CALL CDataFormatTranslator::getSystemDataTypeFromDataFlavor( const DataF
     return aAny;
 }
 
-
-//
-
-
 DataFlavor SAL_CALL CDataFormatTranslator::getDataFlavorFromSystemDataType( const Any& aSysDataType )
     throw( RuntimeException )
 {
@@ -205,9 +183,7 @@ DataFlavor SAL_CALL CDataFormatTranslator::getDataFlavorFromSystemDataType( cons
     return aFlavor;
 }
 
-
 // XServiceInfo
-
 
 OUString SAL_CALL CDataFormatTranslator::getImplementationName(  )
     throw( RuntimeException )
@@ -222,9 +198,7 @@ sal_Bool SAL_CALL CDataFormatTranslator::supportsService( const OUString& Servic
     return cppu::supportsService(this, ServiceName);
 }
 
-
 //  XServiceInfo
-
 
 Sequence< OUString > SAL_CALL CDataFormatTranslator::getSupportedServiceNames( )
     throw( RuntimeException )
@@ -232,14 +206,12 @@ Sequence< OUString > SAL_CALL CDataFormatTranslator::getSupportedServiceNames( )
     return DataFormatTranslator_getSupportedServiceNames( );
 }
 
-
 // to optimize searching we add all entries with a
 // standard clipboard format number first, in the
 // table before the entries with CF_INVALID
 // if we are searching for a standard clipboard
 // format number we can stop if we find the first
 // CF_INVALID
-
 
 void SAL_CALL CDataFormatTranslator::initTranslationTable()
 {
@@ -492,10 +464,6 @@ void SAL_CALL CDataFormatTranslator::initTranslationTable()
     m_TranslTable.push_back(FormatEntry("application/x-openoffice-dummy4;windows_formatname=\"SO_DUMMYFORMAT_4\"", "SO_DUMMYFORMAT_4", NULL, CF_INVALID, CPPUTYPE_DEFAULT));
 }
 
-
-//
-
-
 void SAL_CALL CDataFormatTranslator::findDataFlavorForStandardFormatId( sal_Int32 aStandardFormatId, DataFlavor& aDataFlavor ) const
 {
     /*
@@ -518,10 +486,6 @@ void SAL_CALL CDataFormatTranslator::findDataFlavorForStandardFormatId( sal_Int3
     }
 }
 
-
-//
-
-
 void SAL_CALL CDataFormatTranslator::findDataFlavorForNativeFormatName( const OUString& aNativeFormatName, DataFlavor& aDataFlavor ) const
 {
     vector< FormatEntry >::const_iterator citer_end = m_TranslTable.end( );
@@ -537,10 +501,6 @@ void SAL_CALL CDataFormatTranslator::findDataFlavorForNativeFormatName( const OU
     }
 }
 
-
-//
-
-
 void SAL_CALL CDataFormatTranslator::findStandardFormatIdForCharset( const OUString& aCharset, Any& aAny ) const
 {
     if ( aCharset.equalsIgnoreAsciiCase( "utf-16" ) )
@@ -552,10 +512,6 @@ void SAL_CALL CDataFormatTranslator::findStandardFormatIdForCharset( const OUStr
             aAny <<= static_cast< sal_Int32 >( CF_OEMTEXT );
     }
 }
-
-
-//
-
 
 void SAL_CALL CDataFormatTranslator::setStandardFormatIdForNativeFormatName( const OUString& aNativeFormatName, Any& aAny ) const
 {
@@ -570,10 +526,6 @@ void SAL_CALL CDataFormatTranslator::setStandardFormatIdForNativeFormatName( con
         }
     }
 }
-
-
-//
-
 
 void SAL_CALL CDataFormatTranslator::findStdFormatIdOrNativeFormatNameForFullMediaType(
     const Reference< XMimeContentTypeFactory >& aRefXMimeFactory,
@@ -601,18 +553,10 @@ void SAL_CALL CDataFormatTranslator::findStdFormatIdOrNativeFormatNameForFullMed
     }
 }
 
-
-//
-
-
 inline sal_Bool CDataFormatTranslator::isTextPlainMediaType( const OUString& fullMediaType ) const
 {
     return fullMediaType.equalsIgnoreAsciiCase("text/plain");
 }
-
-
-//
-
 
 DataFlavor SAL_CALL CDataFormatTranslator::mkDataFlv(const OUString& cnttype, const OUString& hpname, Type dtype)
 {
