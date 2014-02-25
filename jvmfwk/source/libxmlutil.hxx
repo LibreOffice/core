@@ -43,7 +43,7 @@ public:
     operator xmlXPathObject* () const;
 };
 
-//===========================================================
+
 class CXPathContextPtr
 {
     xmlXPathContext* _object;
@@ -59,7 +59,7 @@ public:
     operator xmlXPathContext* () const;
 };
 
-//===========================================================
+
 class CXmlDocPtr
 {
     xmlDoc* _object;
@@ -78,7 +78,7 @@ public:
     operator xmlDoc* () const;
 };
 
-//===========================================================
+
 class CXmlCharPtr
 {
     xmlChar* _object;
