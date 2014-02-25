@@ -22,7 +22,7 @@
 #include "ConnectionPage.hrc"
 #include "AutoControls.hrc"
 
-//.........................................................................
+
 TabPage PAGE_CONNECTION
 {
     HelpID = "dbaccess:TabPage:PAGE_CONNECTION";

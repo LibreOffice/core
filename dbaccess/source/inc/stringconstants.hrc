@@ -24,9 +24,9 @@
 #error "don't include this file directly! use dbastrings.hrc or dbustrings.hrc instead!"
 #endif
 
-//============================================================
+
 //= property ids
-//============================================================
+
 #define PROPERTY_ID_TITLE                   1
 #define PROPERTY_ID_URL                     2
 #define PROPERTY_ID_INFO                    4

@@ -32,7 +32,7 @@ namespace dbaui
     class ORowUpdateHelper : public IUpdateHelper
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowUpdate >          m_xRowUpdate;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >    m_xResultSetUpdate; //
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >    m_xResultSetUpdate;
     public:
         ORowUpdateHelper(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _xRowSet)
             :m_xRowUpdate(_xRowSet,::com::sun::star::uno::UNO_QUERY)

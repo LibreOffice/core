@@ -40,7 +40,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-// ------------------------------------------
+
 
 /** complex test case for Base's application UI
  */
@@ -56,13 +56,13 @@ public class ApplicationController extends TestCase
         super();
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     public String getTestObjectName()
     {
         return getClass().getName();
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     private void impl_closeDocument()
     {
         if (m_database != null)
@@ -74,7 +74,7 @@ public class ApplicationController extends TestCase
         }
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     private void impl_switchToDocument(String _documentURL) throws java.lang.Exception
     {
         // close previous database document
@@ -101,7 +101,7 @@ public class ApplicationController extends TestCase
                 docModel.getCurrentController());
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     @Before
     @Override
     public void before() throws java.lang.Exception
@@ -110,7 +110,7 @@ public class ApplicationController extends TestCase
         impl_switchToDocument(null);
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     @After
     @Override
     public void after() throws java.lang.Exception
@@ -118,7 +118,7 @@ public class ApplicationController extends TestCase
         impl_closeDocument();
         super.after();
     }
-    // --------------------------------------------------------------------------------------------------------
+
 
     @Test
     public void checkSaveAs() throws Exception, IOException, java.lang.Exception

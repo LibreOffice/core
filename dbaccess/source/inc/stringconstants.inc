@@ -18,9 +18,9 @@
 
 // be included itself
 
-//============================================================
+
 //= property names
-//============================================================
+
 #define PROPERTY_URL "URL"
 #define PROPERTY_INFO "Info"
 #define PROPERTY_SETTINGS "Settings"
@@ -175,9 +175,9 @@
 #define PROPERTY_SINGLESELECTQUERYCOMPOSER "SingleSelectQueryComposer"
 #define PROPERTY_CHANGE_NOTIFICATION_ENABLED "PropertyChangeNotificationEnabled"
 
-//============================================================
+
 //= service names
-//============================================================
+
 #define SERVICE_SDBC_RESULTSET "com.sun.star.sdbc.ResultSet"
 #define SERVICE_SDBC_ROWSET "com.sun.star.sdbc.RowSet"
 #define SERVICE_SDBC_STATEMENT "com.sun.star.sdbc.Statement"

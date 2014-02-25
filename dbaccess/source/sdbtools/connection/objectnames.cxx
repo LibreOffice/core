@@ -172,9 +172,9 @@ namespace sdbtools
         {
             if  (   ( _rName.indexOf( (sal_Unicode)34  ) >= 0 )  // "
                 ||  ( _rName.indexOf( (sal_Unicode)39  ) >= 0 )  // '
-                ||  ( _rName.indexOf( (sal_Unicode)96  ) >= 0 )  //
-                ||  ( _rName.indexOf( (sal_Unicode)145 ) >= 0 )  //
-                ||  ( _rName.indexOf( (sal_Unicode)146 ) >= 0 )  //
+                ||  ( _rName.indexOf( (sal_Unicode)96  ) >= 0 )
+                ||  ( _rName.indexOf( (sal_Unicode)145 ) >= 0 )
+                ||  ( _rName.indexOf( (sal_Unicode)146 ) >= 0 )
                 ||  ( _rName.indexOf( (sal_Unicode)180 ) >= 0 )  // removed unparsable chars
                 )
                 return ErrorCondition::DB_QUERY_NAME_WITH_QUOTES;

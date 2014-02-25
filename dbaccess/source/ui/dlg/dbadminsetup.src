@@ -28,7 +28,7 @@
 #define EDIT_X              101
 
 
-// -----------------------------------------------------------------------------
+
 ModalDialog DLG_DATABASE_WIZARD
 {
     OutputSize = TRUE ;

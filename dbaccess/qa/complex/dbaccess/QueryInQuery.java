@@ -31,13 +31,13 @@ import com.sun.star.sdbc.XResultSet;
 // ---------- junit imports -----------------
 import org.junit.Test;
 import static org.junit.Assert.*;
-// ------------------------------------------
+
 
 public class QueryInQuery extends CRMBasedTestCase
 {
     private static final String QUERY_PRODUCTS = "query products";
 
-    // --------------------------------------------------------------------------------------------------------
+
     @Override
     protected void createTestCase()
     {
@@ -53,7 +53,7 @@ public class QueryInQuery extends CRMBasedTestCase
         }
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     private void verifyEqualRowSetContent( int _outerCommandType, String _outerCommand, int _innerCommandType, String _innerCommand ) throws SQLException
     {
         final RowSet outerRowSet = m_database.getDatabase().createRowSet( _outerCommandType, _outerCommand );
@@ -80,7 +80,7 @@ public class QueryInQuery extends CRMBasedTestCase
         }
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     /** executes a SQL statement simply selecting all columns from a query
      */
     @Test
@@ -91,7 +91,7 @@ public class QueryInQuery extends CRMBasedTestCase
             CommandType.QUERY,QUERY_PRODUCTS);
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     /** verifies that aliases for inner queries work as expected
      */
     @Test
@@ -105,7 +105,7 @@ public class QueryInQuery extends CRMBasedTestCase
             CommandType.QUERY,QUERY_PRODUCTS);
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     /** verifies that aliases for inner queries work as expected
      */
     @Test
@@ -140,7 +140,7 @@ public class QueryInQuery extends CRMBasedTestCase
             caughtExpected );
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     @Test
     public void checkCyclicReferences() throws ElementExistException, WrappedTargetException, IllegalArgumentException
     {
@@ -159,7 +159,7 @@ public class QueryInQuery extends CRMBasedTestCase
         assertTrue( "executing a query with cyclic nested sub queries should fail!", caughtExpected );
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     @Test
     public void checkStatementQiQSupport()
     {

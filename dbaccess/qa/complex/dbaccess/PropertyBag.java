@@ -34,7 +34,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-// ------------------------------------------
+
 
 public class PropertyBag extends TestCase
 {
@@ -152,7 +152,7 @@ public class PropertyBag extends TestCase
         System.out.println( "checking PropertySetAccess via sequences" );
         createStandardBag( false );
 
-        // ---------------------------------
+
         // XPropertyAccess.setPropertyValues
         final PropertyValue expectedValues[] =
         {
@@ -175,7 +175,7 @@ public class PropertyBag extends TestCase
             }
         }
 
-        // ---------------------------------
+
         // XPropertyAccess.getPropertyValues
         final PropertyValue currentValues[] = m_access.getPropertyValues();
         for ( int i=0; i<currentValues.length; ++i )

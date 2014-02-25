@@ -26,13 +26,13 @@ import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.Before;
 import static org.junit.Assert.*;
-// ------------------------------------------
+
 
 public abstract class CRMBasedTestCase extends TestCase
 {
     protected   CRMDatabase m_database;
 
-    // --------------------------------------------------------------------------------------------------------
+
     protected void createTestCase()
     {
         try
@@ -46,7 +46,7 @@ public abstract class CRMBasedTestCase extends TestCase
         }
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     @Before
     @Override
     public void before()
@@ -54,7 +54,7 @@ public abstract class CRMBasedTestCase extends TestCase
         createTestCase();
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     @After
     @Override
     public void after()
@@ -72,7 +72,7 @@ public abstract class CRMBasedTestCase extends TestCase
         }
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     /** creates a SingleSelectQueryComposer for our connection
      */
     protected final XSingleSelectQueryComposer createQueryComposer() throws com.sun.star.uno.Exception
