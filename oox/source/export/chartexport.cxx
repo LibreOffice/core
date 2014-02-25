@@ -2553,6 +2553,7 @@ void ChartExport::exportDataLabels(
         {
             if (GetProperty( xPropSet, "Label"))
                mAny >>= aTempLabel;
+        }
 
 
 
@@ -2660,7 +2661,6 @@ void ChartExport::exportDataLabels(
         pFS->singleElement( FSNS( XML_c, XML_showPercent), XML_val, showNumberInPercent ? "1": "0", FSEND);
 
         pFS->endElement( FSNS( XML_c, XML_dLbls ) );
-    }
     }
 }
 
