@@ -82,6 +82,8 @@
 #include "textapi.hxx"
 #include "optsitem.hxx"
 
+#include <boost/scoped_ptr.hpp>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
@@ -454,7 +456,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
     TextApiObject* pTextApi = getTextApiObject( xAnnotation );
     if( pTextApi )
     {
-        std::auto_ptr< ::Outliner > pOutliner( new ::Outliner(GetAnnotationPool(),OUTLINERMODE_TEXTOBJECT) );
+        boost::scoped_ptr< ::Outliner > pOutliner( new ::Outliner(GetAnnotationPool(),OUTLINERMODE_TEXTOBJECT) );
 
         mpDoc->SetCalcFieldValueHdl( pOutliner.get() );
         pOutliner->SetUpdateMode( sal_True );
@@ -490,7 +492,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
             pOutliner->QuickSetAttribs( aAnswerSet, aSel );
         }
 
-        std::auto_ptr< OutlinerParaObject > pOPO( pOutliner->CreateParaObject() );
+        boost::scoped_ptr< OutlinerParaObject > pOPO( pOutliner->CreateParaObject() );
         pTextApi->SetText( *pOPO.get() );
 
         SvtUserOptions aUserOptions;
@@ -968,7 +970,7 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( Reference< XAnnotation
     if( bReadOnly && !pAnnotationWindow )
         return;
 
-    std::auto_ptr< PopupMenu > pMenu( new PopupMenu( SdResId( pAnnotationWindow ? RID_ANNOTATION_CONTEXTMENU : RID_ANNOTATION_TAG_CONTEXTMENU ) ) );
+    boost::scoped_ptr< PopupMenu > pMenu( new PopupMenu( SdResId( pAnnotationWindow ? RID_ANNOTATION_CONTEXTMENU : RID_ANNOTATION_TAG_CONTEXTMENU ) ) );
 
     SvtUserOptions aUserOptions;
     OUString sCurrentAuthor( aUserOptions.GetFullName() );

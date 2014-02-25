@@ -131,6 +131,8 @@ using namespace ::com::sun::star::container;
 #include "appbaslib.hxx"
 #include <openflag.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 // class SfxHeaderAttributes_Impl ----------------------------------------
 
 class SfxHeaderAttributes_Impl : public SvKeyValueIterator
@@ -1561,7 +1563,7 @@ ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptCon
 
     if ( bCaughtException && bRaiseError )
     {
-        ::std::auto_ptr< VclAbstractDialog > pScriptErrDlg;
+        boost::scoped_ptr< VclAbstractDialog > pScriptErrDlg;
         SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
         if ( pFact )
             pScriptErrDlg.reset( pFact->CreateScriptErrorDialog( NULL, aException ) );

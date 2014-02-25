@@ -86,6 +86,8 @@
 #include "textapi.hxx"
 #include "sdresid.hxx"
 
+#include <boost/scoped_ptr.hpp>
+
 using namespace ::sd;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -548,7 +550,7 @@ void AnnotationWindow::setAnnotation( const Reference< XAnnotation >& xAnnotatio
 
         if( pTextApi )
         {
-            std::auto_ptr< OutlinerParaObject > pOPO( pTextApi->CreateText() );
+            boost::scoped_ptr< OutlinerParaObject > pOPO( pTextApi->CreateText() );
             Engine()->SetText( *pOPO.get() );
         }
 

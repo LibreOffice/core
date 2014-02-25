@@ -52,6 +52,7 @@
 #include "tools/TimerBasedTaskExecution.hxx"
 #include "pres.hxx"
 #include <osl/mutex.hxx>
+#include <boost/scoped_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 
 using namespace ::com::sun::star;
@@ -800,7 +801,7 @@ MasterPageContainer::Token MasterPageContainer::Implementation::PutMasterPage (
     {
         // Update an existing MasterPageDescriptor.
         aResult = (*aEntry)->maToken;
-        ::std::auto_ptr<std::vector<MasterPageContainerChangeEvent::EventType> > pEventTypes(
+        boost::scoped_ptr<std::vector<MasterPageContainerChangeEvent::EventType> > pEventTypes(
             (*aEntry)->Update(*rpDescriptor));
         if (pEventTypes.get()!=NULL && pEventTypes->size()>0)
         {
