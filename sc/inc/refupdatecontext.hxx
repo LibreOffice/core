@@ -55,7 +55,8 @@ struct RefUpdateContext
     /**
      * Range of cells that are about to be moved for insert/delete/move modes.
      * For copy mode, it's the destination range of cells that are about to be
-     * pasted.
+     * pasted.  When moving a range of cells, it's the destination range, not
+     * the source range.
      */
     ScRange maRange;
 
@@ -77,8 +78,23 @@ struct RefUpdateContext
 
 struct RefUpdateResult
 {
+    /**
+     * When this flag is true, the result of the formula needs to be
+     * re-calculated either because it contains a reference that's been
+     * deleted, or the size of a range reference has changed.
+     */
     bool mbValueChanged;
+
+    /**
+     * This flag indicates whether any reference in the token array has been
+     * modified.
+     */
     bool mbReferenceModified;
+
+    /**
+     * When this flag is true, it indicates that the token array contains a
+     * range name that's been updated.
+     */
     bool mbNameModified;
 
     RefUpdateResult();

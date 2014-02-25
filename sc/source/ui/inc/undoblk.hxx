@@ -241,6 +241,9 @@ public:
     virtual OUString GetComment() const;
 
 private:
+    sal_uInt16 mnPaintExtFlags;
+    ScRangeList maPaintRanges;
+
     ScRange         aSrcRange;
     ScRange         aDestRange;
     sal_uLong       nStartChangeAction;
@@ -249,7 +252,7 @@ private:
     bool            bKeepScenarioFlags;
 
     void            PaintArea( ScRange aRange, sal_uInt16 nExtFlags ) const;
-    void            DoUndo( ScRange aRange ) const;
+    void DoUndo( ScRange aRange );
 
     void            SetChangeTrack();
 };

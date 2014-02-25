@@ -1214,7 +1214,7 @@ void ScUndoDragDrop::PaintArea( ScRange aRange, sal_uInt16 nExtFlags ) const
     pDocShell->PostPaint( aRange, nPaint, nExtFlags );
 }
 
-void ScUndoDragDrop::DoUndo( ScRange aRange ) const
+void ScUndoDragDrop::DoUndo( ScRange aRange )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
 
@@ -1227,8 +1227,7 @@ void ScUndoDragDrop::DoUndo( ScRange aRange ) const
     ScRange aPaintRange = aRange;
     pDoc->ExtendMerge( aPaintRange );           // before deleting
 
-    sal_uInt16 nExtFlags = 0;
-    pDocShell->UpdatePaintExt( nExtFlags, aPaintRange );
+    pDocShell->UpdatePaintExt(mnPaintExtFlags, aPaintRange);
 
     // do not undo objects and note captions, they are handled via drawing undo
     sal_uInt16 nUndoFlags = (IDF_ALL & ~IDF_OBJECTS) | IDF_NOCAPTIONS;
@@ -1241,16 +1240,26 @@ void ScUndoDragDrop::DoUndo( ScRange aRange ) const
     aPaintRange.aEnd.SetCol( std::max( aPaintRange.aEnd.Col(), aRange.aEnd.Col() ) );
     aPaintRange.aEnd.SetRow( std::max( aPaintRange.aEnd.Row(), aRange.aEnd.Row() ) );
 
-    pDocShell->UpdatePaintExt( nExtFlags, aPaintRange );
-    PaintArea( aPaintRange, nExtFlags );
+    pDocShell->UpdatePaintExt(mnPaintExtFlags, aPaintRange);
+    maPaintRanges.Join(aPaintRange);
 }
 
 void ScUndoDragDrop::Undo()
 {
+    mnPaintExtFlags = 0;
+    maPaintRanges.RemoveAll();
+
     BeginUndo();
     DoUndo(aDestRange);
     if (bCut)
         DoUndo(aSrcRange);
+
+    for (size_t i = 0; i < maPaintRanges.size(); ++i)
+    {
+        const ScRange* p = maPaintRanges[i];
+        PaintArea(*p, mnPaintExtFlags);
+    }
+
     EndUndo();
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 }

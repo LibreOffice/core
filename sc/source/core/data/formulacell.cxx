@@ -3932,7 +3932,7 @@ void ScFormulaCell::EndListeningTo( ScDocument* pDoc, ScTokenArray* pArr,
         {
             case svSingleRef:
             {
-                ScAddress aCell = t->GetSingleRef().toAbs(aPos);
+                ScAddress aCell = t->GetSingleRef().toAbs(aCellPos);
                 if (aCell.IsValid())
                     pDoc->EndListeningCell(aCell, this);
             }
@@ -3954,27 +3954,32 @@ void ScFormulaCell::EndListeningTo( sc::EndListeningContext& rCxt )
     ScDocument& rDoc = rCxt.getDoc();
     rDoc.SetDetectiveDirty(true);  // It has changed something
 
-    if (pCode->IsRecalcModeAlways())
+    ScTokenArray* pArr = rCxt.getOldCode();
+    ScAddress aCellPos = rCxt.getOldPosition(aPos);
+    if (!pArr)
+        pArr = pCode;
+
+    if (pArr->IsRecalcModeAlways())
     {
         rDoc.EndListeningArea(BCA_LISTEN_ALWAYS, this);
         return;
     }
 
-    pCode->Reset();
+    pArr->Reset();
     ScToken* t;
-    while ( ( t = static_cast<ScToken*>(pCode->GetNextReferenceRPN()) ) != NULL )
+    while ( ( t = static_cast<ScToken*>(pArr->GetNextReferenceRPN()) ) != NULL )
     {
         switch (t->GetType())
         {
             case svSingleRef:
             {
-                ScAddress aCell = t->GetSingleRef().toAbs(aPos);
+                ScAddress aCell = t->GetSingleRef().toAbs(aCellPos);
                 if (aCell.IsValid())
                     rDoc.EndListeningCell(rCxt, aCell, *this);
             }
             break;
             case svDoubleRef:
-                endListeningArea(this, rDoc, aPos, *t);
+                endListeningArea(this, rDoc, aCellPos, *t);
             break;
             default:
                 ;   // nothing
