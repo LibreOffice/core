@@ -37,9 +37,9 @@ using namespace ::com::sun::star;
     if( rType == ::getCppuType((const uno::Reference< xint >*)0) ) \
         return uno::makeAny(uno::Reference< xint >(this))
 
-// ====================================================================
+
 // SvxUnoTextContentEnumeration
-// ====================================================================
+
 
 SvxUnoTextContentEnumeration::SvxUnoTextContentEnumeration( const SvxUnoTextBase& _rText ) throw()
 : mrText( _rText )
@@ -95,9 +95,9 @@ uno::Any SvxUnoTextContentEnumeration::nextElement(void) throw( container::NoSuc
     return uno::makeAny( xRef );
 }
 
-// ====================================================================
+
 // class SvxUnoTextContent
-// ====================================================================
+
 
 SvxUnoTextContent::SvxUnoTextContent( const SvxUnoTextBase& rText, sal_Int32 nPara ) throw()
 :   SvxUnoTextRangeBase(rText)
@@ -381,9 +381,9 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextContent::getSupportedServiceNames()
     return aSeq;
 }
 
-// ====================================================================
+
 //  class SvxUnoTextRangeEnumeration
-// ====================================================================
+
 
 SvxUnoTextRangeEnumeration::SvxUnoTextRangeEnumeration( const SvxUnoTextBase& rText, sal_Int32 nPara ) throw()
 :   mxParentText(  const_cast<SvxUnoTextBase*>(&rText) ),
@@ -461,9 +461,9 @@ uno::Any SAL_CALL SvxUnoTextRangeEnumeration::nextElement()
     return uno::makeAny( xRange );
 }
 
-// ====================================================================
+
 // class SvxUnoTextCursor
-// ====================================================================
+
 
 uno::Reference< uno::XInterface > SvxUnoTextCursor_NewInstance()
 {

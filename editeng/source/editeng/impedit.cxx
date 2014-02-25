@@ -66,7 +66,7 @@ static inline void lcl_AllignToPixel( Point& rPoint, OutputDevice* pOutDev, shor
 
 
 //  class ImpEditView
-//  ----------------------------------------------------------------------
+
 ImpEditView::ImpEditView( EditView* pView, EditEngine* pEng, Window* pWindow ) :
     aOutArea( Point(), pEng->GetPaperSize() )
 {

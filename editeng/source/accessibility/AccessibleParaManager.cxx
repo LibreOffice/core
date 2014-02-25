@@ -19,9 +19,9 @@
 
 
 
-//
+
 // Global header
-//
+
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -30,9 +30,9 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 
 
-//
+
 // Project-local header
-//
+
 
 
 #include <editeng/unoedhlp.hxx>

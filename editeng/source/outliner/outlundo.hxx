@@ -110,7 +110,7 @@ public:
 
 
 
-// -------------------------------------
+
 
 
 class OLUndoExpand : public EditUndo

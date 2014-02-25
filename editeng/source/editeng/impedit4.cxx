@@ -1551,7 +1551,7 @@ void ImpEditEngine::Convert( EditView* pEditView,
     pConvInfo = new ConvInfo;
     pConvInfo->bMultipleDoc = bMultipleDoc;
     pConvInfo->aConvStart = CreateEPaM( aCurSel.Min() );
-    //
+
     // if it is not just a selection and we are about to begin
     // with the current conversion for the very first time
     // we need to find the start of the current (initial)
@@ -1571,7 +1571,7 @@ void ImpEditEngine::Convert( EditView* pEditView,
         pConvInfo->aConvStart.nIndex = editeng::HangulHanjaConversion::IsChinese( nSrcLang )
             ? 0 : aWordStartPaM.GetIndex();
     }
-    //
+
     pConvInfo->aConvContinue = pConvInfo->aConvStart;
 
     bool bIsStart = false;
@@ -1590,13 +1590,13 @@ void ImpEditEngine::Convert( EditView* pEditView,
                           nOptions, bIsInteractive,
                           bIsStart, pEditView );
 
-    //
+
     //!! optimization does not work since when update mode is false
     //!! the object is 'lying' about it portions, paragraphs,
     //!! EndPaM... later on.
     //!! Should not be a great problem since text boxes or cells in
     //!! Calc usually have only a rather short text.
-    //
+
     // disallow formatting, updating the view, ... while
     // non-interactively converting the document. (saves time)
     //if (!bIsInteractive)

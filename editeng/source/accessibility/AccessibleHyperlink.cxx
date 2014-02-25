@@ -31,9 +31,9 @@ using namespace ::com::sun::star;
 
 
 
-//
+
 // AccessibleHyperlink implementation
-//
+
 
 
 namespace accessibility

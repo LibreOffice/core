@@ -44,10 +44,10 @@
 
 #define HHC HangulHanjaConversion
 
-//.............................................................................
+
 namespace editeng
 {
-//.............................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::i18n;
@@ -753,7 +753,7 @@ namespace editeng
         }
 
         // according to FT we should not (yet) bother about Hangul/Hanja conversion here
-        //
+
         // aOffsets is needed in ReplaceUnit below in order to to find out
         // exactly which characters are really changed in order to keep as much
         // from attributation for the text as possible.

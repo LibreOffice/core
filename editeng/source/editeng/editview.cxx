@@ -111,9 +111,9 @@ LanguageType EditView::CheckLanguage(
             if (!xSpell.is())
             return nLang;
 
-        //
+
         // build list of languages to check
-        //
+
         LanguageType aLangList[4];
         const AllSettings& rSettings  = Application::GetSettings();
         SvtLinguOptions aLinguOpt;
@@ -154,9 +154,9 @@ LanguageType EditView::CheckLanguage(
 }
 
 
-// ----------------------------------------------------------------------
+
 // class EditView
-// ----------------------------------------------------------------------
+
 EditView::EditView( EditEngine* pEng, Window* pWindow )
 {
     pImpEditView = new ImpEditView( this, pEng, pWindow );
@@ -761,7 +761,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
 
         // Are there any replace suggestions?
         OUString aSelected( GetSelected() );
-        //
+
         // restrict the maximal number of suggestions displayed
         // in the context menu.
         // Note: That could of course be done by clipping the
@@ -776,7 +776,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         PropertyValue &rVal = aPropVals.getArray()[0];
         rVal.Name = OUString( UPN_MAX_NUMBER_OF_SUGGESTIONS );
         rVal.Value <<= (sal_Int16) 7;
-        //
+
         // Are there any replace suggestions?
         Reference< linguistic2::XSpellAlternatives >  xSpellAlt =
                 xSpeller->spell( aSelected, PIMPEE->GetLanguage( aPaM2 ), aPropVals );
