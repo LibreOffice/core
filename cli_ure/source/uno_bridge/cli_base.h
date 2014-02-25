@@ -112,7 +112,7 @@ struct BridgeRuntimeError
         {}
 };
 
-//==================================================================================================
+
 struct rtl_mem
 {
     inline static void * operator new ( size_t nSize )
@@ -126,7 +126,7 @@ struct rtl_mem
 
     static inline ::std::auto_ptr< rtl_mem > allocate( ::std::size_t bytes );
 };
-//--------------------------------------------------------------------------------------------------
+
 inline ::std::auto_ptr< rtl_mem > rtl_mem::allocate( ::std::size_t bytes )
 {
     void * p = rtl_allocateMemory( bytes );
@@ -135,7 +135,7 @@ inline ::std::auto_ptr< rtl_mem > rtl_mem::allocate( ::std::size_t bytes )
     return ::std::auto_ptr< rtl_mem >( (rtl_mem *)p );
 }
 
-//==================================================================================================
+
 class TypeDescr
 {
     typelib_TypeDescription * m_td;
