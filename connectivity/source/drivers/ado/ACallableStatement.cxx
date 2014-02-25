@@ -34,9 +34,9 @@ IMPLEMENT_SERVICE_INFO(OCallableStatement,"com.sun.star.sdbcx.ACallableStatement
     m_pParameters->get_Item(OLEVariant(sal_Int32(columnIndex-1)),&pParam);      \
     if(pParam)                                                      \
         pParam->get_Value(&m_aValue);
-//**************************************************************
+
 //************ Class: java.sql.CallableStatement
-//**************************************************************
+
 OCallableStatement::OCallableStatement( OConnection* _pConnection,const OTypeInfoMap& _TypeInfo,const OUString& sql )
                 : OPreparedStatement( _pConnection, _TypeInfo, sql )
 {

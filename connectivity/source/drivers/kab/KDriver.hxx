@@ -41,9 +41,9 @@ namespace connectivity
 
         typedef std::vector< ::com::sun::star::uno::WeakReferenceHelper > OWeakRefArray;
 
-        // ===============================================================
+
         // = KabImplModule
-        // ===============================================================
+
         class KabImplModule
         {
         private:
@@ -139,9 +139,9 @@ namespace connectivity
             bool    impl_doAllowNewKDEVersion();
         };
 
-        // ===============================================================
+
         // = KabDriver
-        // ===============================================================
+
         typedef ::cppu::WeakComponentImplHelper3<   ::com::sun::star::sdbc::XDriver,
                                                     ::com::sun::star::lang::XServiceInfo,
                                                     ::com::sun::star::frame::XTerminateListener > KDriver_BASE;

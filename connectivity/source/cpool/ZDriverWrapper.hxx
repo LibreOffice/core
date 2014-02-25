@@ -25,15 +25,15 @@
 #include <osl/mutex.hxx>
 #include <com/sun/star/uno/XAggregation.hpp>
 
-//........................................................................
+
 namespace connectivity
 {
-//........................................................................
+
 
     class OConnectionPool;
-    //====================================================================
+
     //= ODriverWrapper
-    //====================================================================
+
     typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::sdbc::XDriver
                                     >   ODriverWrapper_BASE;
 
@@ -72,9 +72,9 @@ namespace connectivity
         virtual sal_Int32 SAL_CALL getMinorVersion(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
     };
 
-//........................................................................
+
 }   // namespace connectivity
-//........................................................................
+
 
 #endif // _CONNECTIVITY_CPOOL_ZDRIVERWRAPPER_HXX_
 

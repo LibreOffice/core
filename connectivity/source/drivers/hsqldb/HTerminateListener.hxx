@@ -22,10 +22,10 @@
 #include <cppuhelper/compbase1.hxx>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 
-//........................................................................
+
 namespace connectivity
 {
-//........................................................................
+
 
     namespace hsqldb
     {
@@ -50,9 +50,9 @@ namespace connectivity
                     throw( ::com::sun::star::uno::RuntimeException, std::exception );
         };
     }
-//........................................................................
+
 }   // namespace connectivity
-//........................................................................
+
 #endif // CONNECTIVITY_HSQLDB_TERMINATELISTENER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

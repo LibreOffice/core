@@ -30,9 +30,9 @@ namespace connectivity
 {
     namespace mork
     {
-        //**************************************************************
+
         //************ Class: ResultSetMetaData
-        //**************************************************************
+
         typedef ::cppu::WeakImplHelper1<        ::com::sun::star::sdbc::XResultSetMetaData>   OResultSetMetaData_BASE;
 
         class OResultSetMetaData :  public  OResultSetMetaData_BASE

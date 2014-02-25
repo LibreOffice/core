@@ -42,9 +42,9 @@ namespace connectivity
 
         {
         protected:
-            //====================================================================
+
             // Data attributes
-            //====================================================================
+
             OUString                                     m_aSql;
             OValueRefRow                                        m_aParameterRow;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>   m_xMetaData;

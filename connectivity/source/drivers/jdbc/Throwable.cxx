@@ -20,9 +20,9 @@
 #include "java/lang/Throwable.hxx"
 #include "java/tools.hxx"
 using namespace connectivity;
-//**************************************************************
+
 //************ Class: java.lang.Throwable
-//**************************************************************
+
 
 jclass java_lang_Throwable::theClass = 0;
 

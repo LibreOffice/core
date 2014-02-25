@@ -28,9 +28,9 @@ namespace connectivity
 {
     namespace file
     {
-        //**************************************************************
+
         //************ Class: ODatabaseMetaData
-        //**************************************************************
+
 
         class OOO_DLLPUBLIC_FILE SAL_NO_VTABLE ODatabaseMetaData :
             public  ODatabaseMetaDataBase

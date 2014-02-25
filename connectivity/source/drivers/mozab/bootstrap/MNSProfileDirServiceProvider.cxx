@@ -42,9 +42,9 @@ nsIAtom*   nsProfileDirServiceProvider::sApp_PreferencesFile50;
 nsIAtom*   nsProfileDirServiceProvider::sApp_UserProfileDirectory50;
 
 
-//*****************************************************************************
+
 // nsProfileDirServiceProvider::nsProfileDirServiceProvider
-//*****************************************************************************
+
 
 nsProfileDirServiceProvider::nsProfileDirServiceProvider()
 {
@@ -143,9 +143,9 @@ nsProfileDirServiceProvider::GetFile(const char *prop, PRBool *persistent, nsIFi
   return rv;
 }
 
-//*****************************************************************************
+
 // Protected methods
-//*****************************************************************************
+
 
 nsresult
 nsProfileDirServiceProvider::Initialize()
@@ -208,9 +208,9 @@ nsProfileDirServiceProvider::UndefineFileLocations()
   return NS_OK;
 }
 
-//*****************************************************************************
+
 // Global creation function
-//*****************************************************************************
+
 
 nsresult NS_NewProfileDirServiceProvider(nsProfileDirServiceProvider** aProvider)
 {

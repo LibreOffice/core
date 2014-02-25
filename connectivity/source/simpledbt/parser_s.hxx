@@ -24,14 +24,14 @@
 #include "refbase.hxx"
 #include <connectivity/sqlparse.hxx>
 
-//........................................................................
+
 namespace connectivity
 {
-//........................................................................
 
-    //================================================================
+
+
     //= OSimpleSQLParser
-    //================================================================
+
     class OSimpleSQLParser
             :public simple::ISQLParser
             ,public ORefBase
@@ -57,9 +57,9 @@ namespace connectivity
         virtual oslInterlockedCount SAL_CALL release();
     };
 
-//........................................................................
+
 }   // namespace connectivity
-//........................................................................
+
 
 #endif // CONNECTIVITY_DBTOOLS_PARSER_SIMPLE_HXX
 

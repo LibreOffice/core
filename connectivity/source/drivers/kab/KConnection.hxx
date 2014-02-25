@@ -60,9 +60,9 @@ namespace connectivity
             friend class OSubComponent<KabConnection, KabConnection_BASE>;
 
         protected:
-            //====================================================================
+
             // Data attributes
-            //====================================================================
+
             ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData > m_xMetaData;
 
             OWeakRefArray                           m_aStatements;  // vector containing a list of all the Statement objects

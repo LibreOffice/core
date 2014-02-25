@@ -23,9 +23,9 @@
 #include "resource/conn_shared_res.hrc"
 #include "resource/common_res.hrc"
 
-// ============================================================================
+
 // = the calc driver's resource strings
-// ============================================================================
+
 
 #define STR_COULD_NOT_DELETE_INDEX              ( STR_DBASE_BASE +    0 )
 #define STR_COULD_NOT_CREATE_INDEX_NOT_UNIQUE   ( STR_DBASE_BASE +    1 )

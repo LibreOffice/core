@@ -19,9 +19,9 @@
 #ifndef _CONNECTIVITY_MAB_NS_INCLUDE_HXX_
 #define _CONNECTIVITY_MAB_NS_INCLUDE_HXX_
 
-//
+
 // Only include Mozilla include files once and using this file...
-//
+
 
 // moved this here and in first position due to "long l;" unxsoli4 warning
 #include <rtl/ustrbuf.hxx>

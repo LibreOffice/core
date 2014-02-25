@@ -21,10 +21,10 @@
 #include "HTerminateListener.hxx"
 #include "hsqldb/HDriver.hxx"
 
-//........................................................................
+
 namespace connectivity
 {
-//........................................................................
+
     using namespace hsqldb;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::frame;
@@ -50,8 +50,8 @@ throw( RuntimeException, std::exception )
     m_pDriver->shutdownConnections();
 }
 
-//........................................................................
+
 }   // namespace connectivity
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

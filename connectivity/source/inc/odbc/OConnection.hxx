@@ -51,9 +51,9 @@ namespace connectivity
             friend class connectivity::OSubComponent<OConnection, OConnection_BASE>;
 
         protected:
-            //====================================================================
+
             // Data attributes
-            //====================================================================
+
             ::std::map< SQLHANDLE,OConnection*> m_aConnections; // holds all connectionas which are need for serveral statements
             TTypeInfoVector                     m_aTypeInfo;    //  vector containing an entry
                                                         //  for each row returned by
@@ -123,7 +123,7 @@ namespace connectivity
             // XWarningsSupplier
             virtual ::com::sun::star::uno::Any SAL_CALL getWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception);
             virtual void SAL_CALL clearWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception);
-            //
+
             SQLHANDLE       getConnection() { return m_aConnectionHandle; }
 
             // should we use the catalog on filebased databases

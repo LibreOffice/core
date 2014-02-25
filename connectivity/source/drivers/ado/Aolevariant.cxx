@@ -188,7 +188,7 @@ OLEVariant::OLEVariant(const ::com::sun::star::uno::Sequence< sal_Int8 >& x)
         OSL_UNUSED(rs);
     }
 }
-//
+
 OLEVariant& OLEVariant::operator=(const OLEVariant& varSrc)
 {
     HRESULT eRet = ::VariantCopy(this, const_cast<VARIANT*>(static_cast<const VARIANT*>(&varSrc)));
@@ -197,7 +197,7 @@ OLEVariant& OLEVariant::operator=(const OLEVariant& varSrc)
     return *this;
 }
 // Assign a const VARIANT& (::VariantCopy handles everything)
-//
+
 OLEVariant& OLEVariant::operator=(const tagVARIANT& varSrc)
 {
     HRESULT eRet = ::VariantCopy(this, const_cast<VARIANT*>(&varSrc));
@@ -208,7 +208,7 @@ OLEVariant& OLEVariant::operator=(const tagVARIANT& varSrc)
 }
 
 // Assign a const VARIANT* (::VariantCopy handles everything)
-//
+
 OLEVariant& OLEVariant::operator=(const VARIANT* pSrc)
 {
     HRESULT eRet = ::VariantCopy(this, const_cast<VARIANT*>(pSrc));
@@ -415,9 +415,9 @@ OLEVariant::operator OUString() const
 
 void OLEVariant::ChangeType(VARTYPE vartype, const OLEVariant* pSrc)
 {
-    //
+
     // If pDest is NULL, convert type in place
-    //
+
     if (pSrc == NULL)
         pSrc = this;
 

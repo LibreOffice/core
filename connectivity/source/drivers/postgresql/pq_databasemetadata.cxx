@@ -1786,7 +1786,7 @@ static void columnMetaData2DatabaseTypeDescription(
     {
         Sequence< Any > row( 6 );
         row[0] <<= m_pSettings->catalog;
-        row[1] <<= xRow->getString(1);  //
+        row[1] <<= xRow->getString(1);
         row[2] <<= xRow->getString(2);
         OUString array = xRow->getString(3);
         row[4] <<= xRow->getString(5); // the relid
@@ -2299,7 +2299,7 @@ static void pgTypeInfo2ResultSet(
         row[NULLABLE] <<= OUString::number(nullable);
         row[CASE_SENSITIVE] <<= OUString::number(1);
         row[SEARCHABLE] <<= OUString::number( calcSearchable( dataType ) );
-        row[UNSIGNED_ATTRIBUTE] <<= OUString("0"); //
+        row[UNSIGNED_ATTRIBUTE] <<= OUString("0");
         if( com::sun::star::sdbc::DataType::INTEGER == dataType ||
             com::sun::star::sdbc::DataType::BIGINT == dataType )
             row[AUTO_INCREMENT] <<= OUString("1");     // TODO

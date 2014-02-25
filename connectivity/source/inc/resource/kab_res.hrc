@@ -22,9 +22,9 @@
 
 #include "resource/conn_shared_res.hrc"
 #include "resource/common_res.hrc"
-// ============================================================================
+
 // = the kab driver's resource strings
-// ============================================================================
+
 
 #define STR_NO_KDE_INST                 ( STR_KAB_BASE +    0 )
 #define STR_KDE_VERSION_TOO_OLD         ( STR_KAB_BASE +    1 )

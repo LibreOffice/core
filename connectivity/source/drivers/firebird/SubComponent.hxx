@@ -107,7 +107,7 @@ namespace connectivity
         template<class TYPE>
         ::osl::Mutex                    OPropertyArrayUsageHelper< TYPE >::s_aMutex;
 
-        //------------------------------------------------------------------
+
         template <class TYPE>
         OPropertyArrayUsageHelper<TYPE>::OPropertyArrayUsageHelper()
         {
@@ -115,7 +115,7 @@ namespace connectivity
             ++s_nRefCount;
         }
 
-        //------------------------------------------------------------------
+
         template <class TYPE>
         ::cppu::IPropertyArrayHelper* OPropertyArrayUsageHelper<TYPE>::getArrayHelper()
         {

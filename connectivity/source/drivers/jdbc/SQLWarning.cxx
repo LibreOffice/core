@@ -19,9 +19,9 @@
 
 #include "java/sql/SQLWarning.hxx"
 using namespace connectivity;
-//**************************************************************
+
 //************ Class: java.sql.SQLWarning
-//**************************************************************
+
 
 jclass java_sql_SQLWarning_BASE::theClass = 0;
 

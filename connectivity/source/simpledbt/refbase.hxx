@@ -22,14 +22,14 @@
 
 #include <rtl/ref.hxx>
 
-//........................................................................
+
 namespace connectivity
 {
-//........................................................................
 
-    //================================================================
+
+
     //= ORefBase
-    //================================================================
+
     /// base class for all objects implementing the ::rtl::IReference interface
     class ORefBase : public ::rtl::IReference
     {
@@ -44,9 +44,9 @@ namespace connectivity
         virtual oslInterlockedCount SAL_CALL release();
     };
 
-//........................................................................
+
 }   // namespace connectivity
-//........................................................................
+
 
 #endif // CONNECTIVITY_DBTOOLS_REFBASE_HXX
 

@@ -64,9 +64,9 @@ using namespace com::sun::star::sdbcx;
 
 namespace connectivity { namespace mozab {
 
-// =====================================================================
+
 // = ConnectionImplData
-// =====================================================================
+
 struct ConnectionImplData
 {
     ::boost::shared_ptr< ::comphelper::OfficeResourceBundle >   pResourceBundle;
@@ -144,9 +144,9 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
     OSL_TRACE("IN OConnection::construct()" );
     //  open file
     setURL(url);
-    //
+
     // Skip 'sdbc:mozab: part of URL
-    //
+
     sal_Int32 nLen = url.indexOf(':');
     nLen = url.indexOf(':',nLen+1);
     OSL_ENSURE( url.copy( 0, nLen ) == "sdbc:address", "OConnection::construct: invalid start of the URI - should never have survived XDriver::acceptsURL!" );

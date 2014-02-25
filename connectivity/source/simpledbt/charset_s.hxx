@@ -24,14 +24,14 @@
 #include "refbase.hxx"
 #include <connectivity/dbcharset.hxx>
 
-//........................................................................
+
 namespace connectivity
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= ODataAccessCharSet
-    //====================================================================
+
     class ODataAccessCharSet
             :public simple::IDataAccessCharSet
             ,public ORefBase
@@ -52,9 +52,9 @@ namespace connectivity
         virtual oslInterlockedCount SAL_CALL release();
     };
 
-//........................................................................
+
 }   // namespace connectivity
-//........................................................................
+
 
 #endif // CONNECTIVITY_DBTOOLS_CHARSET_S_HXX
 

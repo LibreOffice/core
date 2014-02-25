@@ -4280,20 +4280,20 @@ connectivity::OSQLInternalNode* newNode(const OUString& _NewValue,
     return new connectivity::OSQLInternalNode(_NewValue, eNodeType, nNodeID);
 }
 
-//==========================================================================
+
 //= OParseContext
-//==========================================================================
-//-----------------------------------------------------------------------------
+
+
 OParseContext::OParseContext()
 {
 }
 
-//-----------------------------------------------------------------------------
+
 OParseContext::~OParseContext()
 {
 }
 
-//-----------------------------------------------------------------------------
+
 OUString OParseContext::getErrorMessage(ErrorCode _eCode) const
 {
 	OUString aMsg;
@@ -4318,7 +4318,7 @@ OUString OParseContext::getErrorMessage(ErrorCode _eCode) const
 	return aMsg;
 }
 
-//-----------------------------------------------------------------------------
+
 OString OParseContext::getIntlKeywordAscii(InternationalKeyCode _eKey) const
 {
 	OString aKeyword;
@@ -4356,7 +4356,7 @@ OString OParseContext::getIntlKeywordAscii(InternationalKeyCode _eKey) const
 	return aKeyword;
 }
 
-//-----------------------------------------------------------------------------
+
 IParseContext::InternationalKeyCode OParseContext::getIntlKeyCode(const OString& rToken) const
 {
 	static IParseContext::InternationalKeyCode Intl_TokenID[] =
@@ -4380,35 +4380,35 @@ IParseContext::InternationalKeyCode OParseContext::getIntlKeyCode(const OString&
 	return KEY_NONE;
 }
 
-//------------------------------------------------------------------------------
+
 static Locale& impl_getLocaleInstance( )
 {
 	static Locale s_aLocale( "en", "US", "" );
 	return s_aLocale;
 }
 
-//------------------------------------------------------------------------------
+
 Locale OParseContext::getPreferredLocale( ) const
 {
 	return getDefaultLocale();
 }
 
-//------------------------------------------------------------------------------
+
 const Locale& OParseContext::getDefaultLocale()
 {
 	return impl_getLocaleInstance();
 }
 
-//==========================================================================
+
 //= misc
-//==========================================================================
+
 // Der (leider globale) yylval fuer die Uebergabe von
 // Werten vom Scanner an den Parser. Die globale Variable
 // wird nur kurzzeitig verwendet, der Parser liest die Variable
 // sofort nach dem Scanner-Aufruf in eine gleichnamige eigene
 // Member-Variable.
 
-//------------------------------------------------------------------
+
 OUString ConvertLikeToken(const OSQLParseNode* pTokenNode, const OSQLParseNode* pEscapeNode, sal_Bool bInternational)
 {
 	OUStringBuffer aMatchStr(0);
@@ -4467,9 +4467,9 @@ OUString ConvertLikeToken(const OSQLParseNode* pTokenNode, const OSQLParseNode* 
 	return aMatchStr.makeStringAndClear();
 }
 
-//==========================================================================
+
 //= OSQLParser
-//==========================================================================
+
 
 sal_uInt32			    OSQLParser::s_nRuleIDs[OSQLParseNode::rule_count + 1];
 OSQLParser::RuleIDMap   OSQLParser::s_aReverseRuleIDLookup;
@@ -4480,18 +4480,18 @@ sal_Int32			OSQLParser::s_nRefCount	= 0;
 OSQLScanner*		OSQLParser::s_pScanner = 0;
 OSQLParseNodesGarbageCollector*		OSQLParser::s_pGarbageCollector = 0;
 ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData4>		OSQLParser::s_xLocaleData = NULL;
-//-----------------------------------------------------------------------------
+
 void setParser(OSQLParser* _pParser)
 {
 	xxx_pGLOBAL_SQLPARSER = _pParser;
 }
-// -------------------------------------------------------------------------
+
 void OSQLParser::setParseTree(OSQLParseNode * pNewParseTree)
 {
 	::osl::MutexGuard aGuard(getMutex());
 	m_pParseTree = pNewParseTree;
 }
-//-----------------------------------------------------------------------------
+
 
 /** Delete all comments in a query.
 
@@ -4552,7 +4552,7 @@ static OUString delComment( const OUString& rQuery )
     }
     return aBuf.makeStringAndClear();
 }
-//-----------------------------------------------------------------------------
+
 OSQLParseNode* OSQLParser::parseTree(OUString& rErrorMessage,
 									 const OUString& rStatement,
 								     sal_Bool bInternational)
@@ -4604,7 +4604,7 @@ OSQLParseNode* OSQLParser::parseTree(OUString& rErrorMessage,
 		return m_pParseTree;
 	}
 }
-//-----------------------------------------------------------------------------
+
 OString OSQLParser::TokenIDToStr(sal_uInt32 nTokenID, const IParseContext* pContext)
 {
 	OString aStr;
@@ -4649,7 +4649,7 @@ OUString OSQLParser::RuleIDToStr(sal_uInt32 nRuleID)
 }
 #endif
 
-//-----------------------------------------------------------------------------
+
 sal_uInt32 OSQLParser::StrToRuleID(const OString & rValue)
 {
 	// Search for the given name in yytname and return the index
@@ -4665,7 +4665,7 @@ sal_uInt32 OSQLParser::StrToRuleID(const OString & rValue)
 	return OSQLParseNode::UNKNOWN_RULE;
 }
 
-//-----------------------------------------------------------------------------
+
 OSQLParseNode::Rule OSQLParser::RuleIDToRule( sal_uInt32 _nRule )
 {
     OSQLParser::RuleIDMap::const_iterator i (s_aReverseRuleIDLookup.find(_nRule));
@@ -4682,12 +4682,12 @@ OSQLParseNode::Rule OSQLParser::RuleIDToRule( sal_uInt32 _nRule )
         return i->second;
 }
 
-//-----------------------------------------------------------------------------
+
 sal_uInt32 OSQLParser::RuleID(OSQLParseNode::Rule eRule)
 {
 	return s_nRuleIDs[(sal_uInt16)eRule];
 }
-// -------------------------------------------------------------------------
+
 sal_Int16 OSQLParser::buildNode(OSQLParseNode*& pAppend,OSQLParseNode* pCompare,OSQLParseNode* pLiteral,OSQLParseNode* pLiteral2)
 {
 	OSQLParseNode* pColumnRef = new OSQLInternalNode("", SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::column_ref));
@@ -4709,7 +4709,7 @@ sal_Int16 OSQLParser::buildNode(OSQLParseNode*& pAppend,OSQLParseNode* pCompare,
 	pAppend->append(pComp);
 	return 1;
 }
-//-----------------------------------------------------------------------------
+
 sal_Int16 OSQLParser::buildStringNodes(OSQLParseNode*& pLiteral)
 {
 	if(!pLiteral)
@@ -4742,7 +4742,7 @@ sal_Int16 OSQLParser::buildStringNodes(OSQLParseNode*& pLiteral)
 	}
 	return 1;
 }
-//-----------------------------------------------------------------------------
+
 sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode* pLiteral)
 {
 	OSQLParseNode* pComp = new OSQLInternalNode("=", SQL_NODE_EQUAL);
@@ -4750,7 +4750,7 @@ sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode*
 }
 
 
-//-----------------------------------------------------------------------------
+
 void OSQLParser::reduceLiteral(OSQLParseNode*& pLiteral, sal_Bool bAppendBlank)
 {
 	OSL_ENSURE(pLiteral->isRule(), "This is no ::com::sun::star::chaos::Rule");
@@ -4768,7 +4768,7 @@ void OSQLParser::reduceLiteral(OSQLParseNode*& pLiteral, sal_Bool bAppendBlank)
 	delete pTemp;
 }
 
-// -------------------------------------------------------------------------
+
 void OSQLParser::error(const sal_Char *fmt)
 {
 	if(m_sErrorMessage.isEmpty())
@@ -4803,7 +4803,7 @@ void OSQLParser::error(const sal_Char *fmt)
 		}
 	}
 }
-// -------------------------------------------------------------------------
+
 int OSQLParser::SQLlex()
 {
 	return s_pScanner->SQLlex();

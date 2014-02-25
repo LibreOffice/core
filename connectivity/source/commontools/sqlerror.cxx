@@ -28,10 +28,10 @@
 
 #include <string.h>
 
-//........................................................................
+
 namespace connectivity
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -51,9 +51,9 @@ namespace connectivity
         typedef SQLError::ParamValue ParamValue;
     }
 
-    //====================================================================
+
     //= SQLError_Impl - declaration
-    //====================================================================
+
     class SQLError_Impl
     {
     public:
@@ -94,9 +94,9 @@ namespace connectivity
         bool                                                    m_bAttemptedInit;
     };
 
-    //====================================================================
+
     //= SQLError_Impl - implementation
-    //====================================================================
+
 
     SQLError_Impl::SQLError_Impl( const Reference<XComponentContext> & _rxContext )
         :m_aContext( _rxContext )
@@ -120,7 +120,7 @@ namespace connectivity
 
     namespace
     {
-        //................................................................
+
         /** substitutes a given placeholder in the given message with the given value
         */
         void    lcl_substitutePlaceholder( OUString& _rMessage, const sal_Char* _pPlaceholder, ParamValue _rParamValue )
@@ -136,7 +136,7 @@ namespace connectivity
                 _rMessage = _rMessage.replaceAt( nIndex, nPlaceholderLen, *_rParamValue );
         }
 
-        //................................................................
+
         sal_Int32   lcl_getResourceID( const ErrorCondition _eCondition, bool _bSQLState )
         {
             return  256
@@ -281,9 +281,9 @@ namespace connectivity
         return m_pResources.get() != NULL;
     }
 
-    //====================================================================
+
     //= SQLError
-    //====================================================================
+
 
     SQLError::SQLError( const Reference<XComponentContext> & _rxContext )
         :m_pImpl( new SQLError_Impl( _rxContext ) )
@@ -339,8 +339,8 @@ namespace connectivity
         return m_pImpl->getSQLException( _eCondition, _rxContext, _rParamValue1, _rParamValue2, _rParamValue3 );
     }
 
-//........................................................................
+
 } // namespace connectivity
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

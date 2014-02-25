@@ -56,9 +56,9 @@ namespace connectivity
             };
 
             ::std::vector< Parameter>       m_aParameters;
-            //====================================================================
+
             // Data attributes
-            //====================================================================
+
             sal_Int32                       m_nNumParams; // Number of parameter markers for the prepared statement
 
             OUString                             m_sSqlStatement;

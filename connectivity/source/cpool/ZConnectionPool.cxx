@@ -41,9 +41,9 @@ using namespace connectivity;
 
 #include <algorithm>
 
-//==========================================================================
+
 //= OPoolTimer
-//==========================================================================
+
 void SAL_CALL OPoolTimer::onShot()
 {
     m_pPool->invalidatePooledConnections();
@@ -58,9 +58,9 @@ namespace
     }
 
 }
-//==========================================================================
+
 //= OConnectionPool
-//==========================================================================
+
 
 OConnectionPool::OConnectionPool(const Reference< XDriver >& _xDriver,
                                  const Reference< XInterface >& _xDriverNode,

@@ -21,9 +21,9 @@
 #include "java/tools.hxx"
 #include "resource/jdbc_log.hrc"
 using namespace connectivity;
-//**************************************************************
+
 //************ Class: java.lang.Boolean
-//**************************************************************
+
 
 jclass java_math_BigDecimal::theClass = 0;
 

@@ -55,8 +55,7 @@ namespace connectivity
             operator IDispatch*();
 
         };
-        //////////////////////////////////////////////////////////////////////////
-        //
+
         // Template class WpOLEBase<class T>
         // ==================================
         //
@@ -68,7 +67,7 @@ namespace connectivity
         //
         // In order to do efficient pass-by-value, this class (as all derived classes)
         // is a thin wrapper class, avoiding virtual methods and inlining.
-        //------------------------------------------------------------------------
+
         template<class T> class WpOLEBase : public WpBase
         {
         protected:
@@ -112,8 +111,6 @@ namespace connectivity
         };
 
 
-        //////////////////////////////////////////////////////////////////////////
-        //
         // Template class WpOLECollection<class Ts, class T, class WrapT>
         // ===============================================================
         //
@@ -127,8 +124,7 @@ namespace connectivity
         // This wrapper class does not expose an interface T, however,
         // it exposes an object of the class WrapT. This must allow a construction
         // by T, preferably it is derived from WpOLEBase<T>.
-        //
-        //------------------------------------------------------------------------
+
         template<class Ts, class T, class WrapT> class WpOLECollection : public WpOLEBase<Ts>
         {
         public:
@@ -141,7 +137,7 @@ namespace connectivity
             inline WpOLECollection& operator=(const WpOLECollection& rhs)
                 {WpOLEBase<Ts>::operator=(rhs); return *this;};
 
-            //////////////////////////////////////////////////////////////////////
+
 
             inline void Refresh(){pInterface->Refresh();}
 
@@ -215,7 +211,7 @@ namespace connectivity
             WpOLEAppendCollection(const WpOLEAppendCollection& rhs) : WpOLECollection<Ts, T, WrapT>(rhs) {}
             inline WpOLEAppendCollection& operator=(const WpOLEAppendCollection& rhs)
                 {WpOLEBase<Ts>::operator=(rhs); return *this;};
-            //////////////////////////////////////////////////////////////////////
+
 
             inline sal_Bool Append(const WrapT& aWrapT)
             {

@@ -56,9 +56,9 @@ namespace connectivity
             friend class OSubComponent<MacabConnection, MacabConnection_BASE>;
 
         protected:
-            //====================================================================
+
             // Data attributes
-            //====================================================================
+
             MacabAddressBook*                   m_pAddressBook; // the address book
             MacabDriver*                                m_pDriver;      // pointer to the owning driver object
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier>

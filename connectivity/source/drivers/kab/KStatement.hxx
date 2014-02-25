@@ -39,10 +39,10 @@ namespace connectivity
                                                     ::com::sun::star::util::XCancellable,
                                                     ::com::sun::star::sdbc::XCloseable> KabCommonStatement_BASE;
 
-        //**************************************************************
+
         // Class KabCommonStatement
         // is a base class for the normal statement and for the prepared statement
-        //**************************************************************
+
         class KabCommonStatement :  public comphelper::OBaseMutex,
                         public  KabCommonStatement_BASE,
                         public  ::cppu::OPropertySetHelper,
@@ -139,9 +139,9 @@ namespace connectivity
                     ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception);
         };
 
-        //**************************************************************
+
         // Class KabStatement
-        //**************************************************************
+
         typedef ::cppu::ImplInheritanceHelper1<
                 KabCommonStatement, ::com::sun::star::lang::XServiceInfo > KabStatement_BASE;
 

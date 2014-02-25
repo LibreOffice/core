@@ -47,11 +47,11 @@ using namespace com::sun::star;
 
 namespace
 {
-//////////////////////
-//////////////////////
+
+
 // EXPRESSION NODES
-//////////////////////
-//////////////////////
+
+
 class ConstantValueExpression : public ExpressionNode
 {
     ORowSetValueDecoratorRef maValue;
@@ -140,11 +140,11 @@ public:
 };
 
 
-////////////////////////
-////////////////////////
+
+
 // FUNCTION PARSER
-////////////////////////
-////////////////////////
+
+
 
 typedef const sal_Char* StringIteratorT;
 
