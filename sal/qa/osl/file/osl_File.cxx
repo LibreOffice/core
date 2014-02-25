@@ -258,7 +258,7 @@ inline bool t_compareTime( TimeValue *m_aEndTime,  TimeValue *m_aStartTime, sal_
 {
     // sal_uInt64 uTimeValue;
     // sal_Int64 iTimeValue;
-    //
+
     // iTimeValue = t_abs64(( tv1->Seconds - tv2->Seconds) * 1000000000 + tv1->Nanosec - tv2->Nanosec);
     // uTimeValue = ( iTimeValue / 1000000 );
 
@@ -6022,9 +6022,9 @@ namespace osl_Directory
         CPPUNIT_TEST_SUITE_END();
     };// class remove
 
-    //########################################
+
     // TEST Directory::createPath
-    //########################################
+
 
     #ifdef WNT
     #   define PATH_BUFFER_SIZE MAX_PATH
@@ -6034,7 +6034,7 @@ namespace osl_Directory
 
 #define TEST_PATH_POSTFIX "hello/world"
 
-    //########################################
+
     OUString get_test_path()
     {
         static OUString test_path;
@@ -6088,7 +6088,7 @@ namespace osl_Directory
         return test_path;
     }
 
-    //########################################
+
     void rm_test_path(const OUString& path)
     {
         sal_Unicode buffer[PATH_BUFFER_SIZE];
@@ -6109,7 +6109,7 @@ namespace osl_Directory
         }
     }
 
-    //########################################
+
     class DirCreatedObserver : public DirectoryCreationObserver
     {
     public:
@@ -6132,15 +6132,15 @@ namespace osl_Directory
     };
 
 
-    //########################################
+
     class createPath : public CppUnit::TestFixture
     {
     public:
-        //##########################################
+
         createPath()
         {}
 
-        //##########################################
+
         void with_relative_path()
         {
             FileBase::RC rc = Directory::createPath( OUString(TEST_PATH_POSTFIX));
@@ -6153,7 +6153,7 @@ namespace osl_Directory
             );
         }
 
-        //##########################################
+
         void without_callback()
         {
             OUString tp_url = get_test_path();
@@ -6171,7 +6171,7 @@ namespace osl_Directory
             );
         }
 
-        //##########################################
+
         void with_callback()
         {
             OUString tp_url = get_test_path();
@@ -6195,7 +6195,7 @@ namespace osl_Directory
 
 #ifdef WNT
 
-        //##########################################
+
         const char* get_unused_drive_letter()
         {
             static const char m_aBuff[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -6213,7 +6213,7 @@ namespace osl_Directory
             return NULL;
         }
 
-        //##########################################
+
         void at_invalid_logical_drive()
         {
             const char* drv = get_unused_drive_letter();

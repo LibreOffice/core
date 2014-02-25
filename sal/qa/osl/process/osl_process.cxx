@@ -70,7 +70,7 @@
     const rtl::OUString EXECUTABLE_NAME ("osl_process_child");
 #endif
 
-//########################################
+
 using namespace osl;
 
 using ::rtl::OUString;
@@ -102,7 +102,7 @@ inline ::rtl::OUString getExecutablePath( void )
 
 //rtl::OUString CWD = getExecutablePath();
 
-//########################################
+
 class Test_osl_joinProcess : public CppUnit::TestFixture
 {
     const OUString join_param_;
@@ -308,13 +308,13 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-//#########################################################
+
 
 typedef std::vector<std::string, rtl::Allocator<std::string> >  string_container_t;
 typedef string_container_t::const_iterator string_container_const_iter_t;
 typedef string_container_t::iterator       string_container_iter_t;
 
-//#########################################################
+
 class exclude : public std::unary_function<std::string, bool>
 {
 public:
@@ -405,7 +405,7 @@ namespace
     }
 #endif
 
-//#########################################################
+
 class Test_osl_executeProcess : public CppUnit::TestFixture
 {
     const OUString env_param_;
@@ -748,7 +748,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-//#####################################
+
 // register test suites
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test_osl_joinProcess,    "Test_osl_joinProcess");
 CPPUNIT_TEST_SUITE_REGISTRATION(Test_osl_executeProcess);

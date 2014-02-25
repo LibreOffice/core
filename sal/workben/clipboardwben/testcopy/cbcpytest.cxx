@@ -19,7 +19,7 @@
 
 
 // TestWin32.cpp : Defines the entry point for the application.
-//
+
 
 #define _WIN32_DCOM
 #undef _UNICODE
