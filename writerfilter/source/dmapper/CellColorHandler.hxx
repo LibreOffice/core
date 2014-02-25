@@ -64,6 +64,6 @@ public:
 typedef boost::shared_ptr< CellColorHandler >          CellColorHandlerPtr;
 }}
 
-#endif //
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

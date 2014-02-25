@@ -275,7 +275,7 @@ namespace dmapper {
             }
             break;
             case NS_ooxml::LN_CT_TcPrBase_tcMar:
-            //
+
                 {
                     writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                     if (pProperties.get())

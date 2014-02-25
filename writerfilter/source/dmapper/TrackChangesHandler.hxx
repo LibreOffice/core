@@ -43,6 +43,6 @@ typedef boost::shared_ptr
     < TrackChangesHandler >  TrackChangesHandlerPtr;
 }}
 
-#endif //
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

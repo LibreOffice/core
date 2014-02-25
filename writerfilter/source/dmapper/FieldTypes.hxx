@@ -176,7 +176,7 @@ enum FieldId
         \w paragraph number in full context
         \* Upper/Lower...
      */
-    ,FIELD_REF          //
+    ,FIELD_REF
     /* REVNUM \* Numberingswitch \* MERGEFORMAT ->
      DocInfo-revision number
      */

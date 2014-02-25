@@ -63,6 +63,6 @@ public:
 typedef boost::shared_ptr< SectionColumnHandler >          SectionColumnHandlerPtr;
 }}
 
-#endif //
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

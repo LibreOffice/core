@@ -174,6 +174,6 @@ private:
 
 } // namespace dmapper
 } // namespace writerfilter
-#endif //
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

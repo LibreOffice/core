@@ -1035,10 +1035,10 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                 }
 
             }
-            else //
+            else
             {
                 // (1) doesn't need handling
-                //
+
                 if( !bIsDropCap && pParaContext->IsFrameMode() )
                 {
                     pToBeSavedProperties.reset( new ParagraphProperties(*pParaContext) );
@@ -1255,7 +1255,7 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, OLEHandlerPtr pO
         RemoveLastParagraph();
         m_aTextAppendStack.pop();
 
-        //
+
         appendTextContent( xOLE, uno::Sequence< beans::PropertyValue >() );
 
     }
@@ -3671,9 +3671,9 @@ void DomainMapper_Impl::PopFieldContext()
                 OSL_FAIL( "exception in PopFieldContext()" );
             }
         }
-        //
+
         //TOCs have to include all the imported content
-        //...
+
     }
     //remove the field context
     m_aFieldStack.pop();
