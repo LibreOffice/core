@@ -1383,6 +1383,38 @@ DECLARE_RTFIMPORT_TEST(testNestedTable, "rhbz1065629.rtf")
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Nom: John Doe"), xPara->getString());
+
+    // outer table: background color, borders for B1/B2 cell
+    xTable.set(xTables->getByIndex(2), uno::UNO_QUERY);
+    xCell.set(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xCell.is());
+    table::BorderLine2 fullPtSolid(
+            1, 0, 35, 0, table::BorderLineStyle::SOLID, 35);
+    CPPUNIT_ASSERT_BORDER_EQUAL(fullPtSolid,
+        getProperty<table::BorderLine2>(xCell, "LeftBorder"));
+    CPPUNIT_ASSERT_BORDER_EQUAL(fullPtSolid,
+        getProperty<table::BorderLine2>(xCell, "RightBorder"));
+    CPPUNIT_ASSERT_BORDER_EQUAL(fullPtSolid,
+        getProperty<table::BorderLine2>(xCell, "TopBorder"));
+    CPPUNIT_ASSERT_BORDER_EQUAL(fullPtSolid,
+        getProperty<table::BorderLine2>(xCell, "BottomBorder"));
+    CPPUNIT_ASSERT_EQUAL(0xCC0000, getProperty<sal_Int32>(xCell, "BackColor"));
+    xCell.set(xTable->getCellByName("A2"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xCell.is());
+    table::BorderLine2 halfPtSolid(
+            /*0*/1, 0, 18, 0, table::BorderLineStyle::SOLID, 18);
+    CPPUNIT_ASSERT_BORDER_EQUAL(halfPtSolid,
+        getProperty<table::BorderLine2>(xCell, "LeftBorder"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xffffffff),
+            getProperty<sal_Int32>(xCell, "BackColor"));
+    xCell.set(xTable->getCellByName("B2"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xCell.is());
+    CPPUNIT_ASSERT_BORDER_EQUAL(halfPtSolid,
+        getProperty<table::BorderLine2>(xCell, "LeftBorder"));
+    CPPUNIT_ASSERT_BORDER_EQUAL(halfPtSolid,
+        getProperty<table::BorderLine2>(xCell, "RightBorder"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xffffffff),
+            getProperty<sal_Int32>(xCell, "BackColor"));
 }
 
 DECLARE_RTFIMPORT_TEST(testCp1000016, "hello.rtf")

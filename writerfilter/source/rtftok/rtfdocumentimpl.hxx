@@ -13,6 +13,7 @@
 #include <stack>
 #include <queue>
 #include <boost/optional.hpp>
+#include <boost/tuple/tuple.hpp>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -44,6 +45,7 @@ namespace writerfilter {
         enum RTFBufferTypes
         {
             BUFFER_PROPS,
+            BUFFER_NESTROW,
             BUFFER_CELLEND,
             BUFFER_STARTRUN,
             BUFFER_TEXT,
@@ -77,8 +79,33 @@ namespace writerfilter {
             FIELD_RESULT
         };
 
+        struct TableRowBuffer;
+
         /// A buffer storing dmapper calls.
-        typedef std::deque< std::pair<RTFBufferTypes, RTFValue::Pointer_t> > RTFBuffer_t;
+        typedef ::boost::tuple<RTFBufferTypes, RTFValue::Pointer_t,
+                    ::boost::shared_ptr<TableRowBuffer> > Buf_t;
+        typedef std::deque< Buf_t > RTFBuffer_t;
+
+        /// holds one nested table row
+        struct TableRowBuffer
+        {
+            RTFBuffer_t buffer;
+            ::std::deque<RTFSprms> cellsSprms;
+            ::std::deque<RTFSprms> cellsAttributes;
+            int nCells;
+            writerfilter::Reference<Properties>::Pointer_t pParaProperties;
+            writerfilter::Reference<Properties>::Pointer_t pFrameProperties;
+            writerfilter::Reference<Properties>::Pointer_t pRowProperties;
+
+            TableRowBuffer(RTFBuffer_t const& rBuffer,
+                    ::std::deque<RTFSprms> const& rSprms,
+                    ::std::deque<RTFSprms> const& rAttributes,
+                    int const i_nCells)
+                : buffer(rBuffer)
+                , cellsSprms(rSprms), cellsAttributes(rAttributes)
+                , nCells(i_nCells)
+            {}
+        };
 
         /// An entry in the color table.
         class RTFColorTableEntry
@@ -199,12 +226,6 @@ namespace writerfilter {
                 // reset by cellx
                 RTFSprms aTableCellSprms;
                 RTFSprms aTableCellAttributes;
-                // reset by row/nestrow
-                std::deque<RTFSprms> aTableCellsSprms;
-                std::deque<RTFSprms> aTableCellsAttributes;
-                // backup of the above two, to support inheriting cell props
-                std::deque<RTFSprms> aTableInheritingCellsSprms;
-                std::deque<RTFSprms> aTableInheritingCellsAttributes;
                 // reset by tx
                 RTFSprms aTabAttributes;
 
@@ -231,12 +252,6 @@ namespace writerfilter {
                 RTFShape aShape;
                 RTFDrawingObject aDrawingObject;
                 RTFFrame aFrame;
-
-                /// Current cellx value.
-                int nCellX;
-                int nCells;
-                int nInheritingCells;
-                int nCellEnds;
 
                 /// CJK or CTL?
                 bool bIsCjk;
@@ -271,6 +286,14 @@ namespace writerfilter {
                 bool bInShape; ///< If we're inside a \shp group.
                 bool bCreatedShapeGroup; ///< A GroupShape was created and pushed to the parent stack.
                 bool bStartedTrackchange; ///< Track change is started, need to end it before popping.
+        };
+
+        // if std::stack had an operator[] this would be unnecessary...
+        struct RTFStack : public std::deque<RTFParserState>
+        {
+            RTFParserState & top() { return back(); }
+            void pop() { return pop_back(); }
+            void push(RTFParserState const& rState) {return push_back(rState);}
         };
 
         class RTFTokenizer;
@@ -362,7 +385,23 @@ namespace writerfilter {
                 writerfilter::Reference<Properties>::Pointer_t getProperties(RTFSprms& rAttributes, RTFSprms& rSprms);
                 void checkNeedPap();
                 void sectBreak(bool bFinal);
-                void replayBuffer(RTFBuffer_t& rBuffer);
+                void prepareProperties(
+                    RTFParserState & rState,
+                    writerfilter::Reference<Properties>::Pointer_t &,
+                    writerfilter::Reference<Properties>::Pointer_t &,
+                    writerfilter::Reference<Properties>::Pointer_t &,
+                    int const nCells, int const nCurrentCellX);
+                void pushProperties(
+                    writerfilter::Reference<Properties>::Pointer_t const&,
+                    writerfilter::Reference<Properties>::Pointer_t const&,
+                    writerfilter::Reference<Properties>::Pointer_t const&);
+                void replayRowBuffer(RTFBuffer_t & rBuffer,
+                        ::std::deque<RTFSprms> & rCellsSrpms,
+                        ::std::deque<RTFSprms> & rCellsAttributes,
+                        int const nCells);
+                void replayBuffer(RTFBuffer_t& rBuffer,
+                        RTFSprms      *const pSprms,
+                        RTFSprms const*const pAttributes);
                 /// If we have some unicode or hex characters to send.
                 void checkUnicode(bool bUnicode, bool bHex);
                 /// If we need a final section break at the end of the document.
@@ -379,7 +418,7 @@ namespace writerfilter {
                 Stream* m_pMapperStream;
                 boost::shared_ptr<RTFSdrImport> m_pSdrImport;
                 boost::shared_ptr<RTFTokenizer> m_pTokenizer;
-                std::stack<RTFParserState> m_aStates;
+                RTFStack m_aStates;
                 /// Read by RTF_PARD.
                 RTFParserState m_aDefaultState;
                 bool m_bSkipUnknown;
@@ -411,8 +450,30 @@ namespace writerfilter {
                 oox::StorageRef m_xStorage;
                 boost::shared_ptr<oox::GraphicHelper> m_pGraphicHelper;
 
+                /// cell props buffer for nested tables, reset by \nestrow
+                /// the \nesttableprops is a destination and must follow the
+                /// nested cells, so it should be sufficient to store the
+                /// currently active one, no need for a stack of them
+                int m_nNestedCells;
+                std::deque<RTFSprms> m_aNestedTableCellsSprms;
+                std::deque<RTFSprms> m_aNestedTableCellsAttributes;
+                /// cell props buffer for top-level table, reset by \row
+                int m_nTopLevelCells;
+                std::deque<RTFSprms> m_aTopLevelTableCellsSprms;
+                std::deque<RTFSprms> m_aTopLevelTableCellsAttributes;
+                /// backup of top-level props, to support inheriting cell props
+                int m_nInheritingCells;
+                std::deque<RTFSprms> m_aTableInheritingCellsSprms;
+                std::deque<RTFSprms> m_aTableInheritingCellsAttributes;
+
+                /// Current cellx value (nested table)
+                int m_nNestedCurrentCellX;
+                /// Current cellx value (top-level table)
+                int m_nTopLevelCurrentCellX;
+
                 /// Buffered table cells, till cell definitions are not reached.
-                RTFBuffer_t m_aTableBuffer;
+                /// for nested table, one buffer per table level
+                std::deque< RTFBuffer_t > m_aTableBufferStack;
                 /// Buffered superscript, till footnote is reached (or not).
                 RTFBuffer_t m_aSuperBuffer;
 
