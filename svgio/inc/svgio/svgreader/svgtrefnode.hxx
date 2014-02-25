@@ -24,7 +24,7 @@
 #include <svgio/svgreader/svgstyleattributes.hxx>
 #include <svgio/svgreader/svgtextnode.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace svgio
 {
@@ -55,7 +55,7 @@ namespace svgio
     } // end of namespace svgreader
 } // end of namespace svgio
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 #endif //INCLUDED_SVGIO_SVGREADER_SVGTREFNODE_HXX
 

@@ -27,7 +27,7 @@
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace svgio
 {
@@ -256,7 +256,7 @@ namespace svgio
                     // #i122594# if width/height is not given, it's 100% (see 5.1.2 The 'svg' element in SVG1.1 spec).
                     // If it is relative, the question is to what. The previous implementatin assumed relative to the
                     // local ViewBox which is implied by (4.2 Basic data types):
-                    //
+
                     // "Note that the non-property <length> definition also allows a percentage unit identifier.
                     // The meaning of a percentage length value depends on the attribute for which the percentage
                     // length value has been specified. Two common cases are: (a) when a percentage length value
@@ -706,7 +706,7 @@ namespace svgio
     } // end of namespace svgreader
 } // end of namespace svgio
 
-//////////////////////////////////////////////////////////////////////////////
+
 // eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
