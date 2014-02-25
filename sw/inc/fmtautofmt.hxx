@@ -19,13 +19,11 @@
 #ifndef INCLUDED_SW_INC_FMTAUTOFMT_HXX
 #define INCLUDED_SW_INC_FMTAUTOFMT_HXX
 
-
 #include <svl/poolitem.hxx>
 #include <format.hxx>
 #include <boost/shared_ptr.hpp>
 
 // ATT_AUTOFMT *********************************************
-
 
 class SwFmtAutoFmt: public SfxPoolItem
 {

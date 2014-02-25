@@ -1568,7 +1568,6 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             }
             break;
 
-
         case FN_INSERT_BREAK:
             if ( rSh.HasReadonlySel()
                  && !rSh.CrsrInsideInputFld() )
@@ -1576,7 +1575,6 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 rSet.DisableItem( nWhich );
             }
             break;
-
 
         case FN_INSERT_BREAK_DLG:
         case FN_INSERT_COLUMN_BREAK:

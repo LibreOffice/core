@@ -39,7 +39,6 @@ using namespace utl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
-
 #define ROUND(x) ((sal_uInt16) ((x) + .5))
 
 SwLabPreview::SwLabPreview(Window* pParent)

@@ -57,7 +57,6 @@ namespace svx
     class ISdrObjectFilter;
 }
 
-
 // return values for GetFrmType() und GetSelFrmType().
 //! values can be combined via logival or
 #define FRMTYPE_NONE            (sal_uInt16)     0
@@ -234,7 +233,6 @@ public:
     /// Is selected frame within another frame?
     const SwFrmFmt* IsFlyInFly();
 
-
     /** If an object as been given, exactly this object is selected
      (instead of searching over position). */
     sal_Bool SelectObj( const Point& rSelPt, sal_uInt8 nFlag = 0, SdrObject *pObj = 0 );
@@ -343,7 +341,6 @@ public:
     void SetObjTitle( const OUString& rTitle );
     OUString GetObjDescription() const;
     void SetObjDescription( const OUString& rDescription );
-
 
     sal_Bool IsFrmSelected() const;
     sal_Bool GetFlyFrmAttr( SfxItemSet &rSet ) const;
@@ -540,8 +537,6 @@ public:
     /// aligns all formulas with anchor 'as char' to baseline
     void AlignAllFormulasToBaseline();
 
-
-
     /// Provide information about content situated closes to given Point.
     Point GetCntntPos( const Point& rPoint, sal_Bool bNext ) const;
 
@@ -571,7 +566,6 @@ public:
                                  const Point* pPt = 0,
                                  const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& =
                                  ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >() ) const;
-
 
     /// Page number of the page containing Point, O if no page.
     sal_uInt16 GetPageNumber( const Point &rPoint ) const;

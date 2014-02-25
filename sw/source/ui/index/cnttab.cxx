@@ -163,7 +163,6 @@ class SwEntryBrowseBox : public SwEntryBrowseBox_Base
     long    nCurrentRow;
     bool    bModified;
 
-
     void                            SetModified() {bModified = true;}
 
 protected:
@@ -566,7 +565,6 @@ public:
     void setColSizes();
 };
 
-
 SwIndexTreeLB::SwIndexTreeLB(SvSimpleTableContainer& rParent, WinBits nBits)
     : SvSimpleTable(rParent, nBits)
 {
@@ -711,7 +709,7 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
         }
     }
     // now the other styles
-    //
+
     const SwTxtFmtColl *pColl   = 0;
     const sal_uInt16 nSz = rWrtSh.GetTxtFmtCollCount();
 
@@ -2265,7 +2263,7 @@ IMPL_LINK_NOARG(SwTOXEntryTabPage, AllLevelsHdl)
         OUString sNewToken = m_pTokenWIN->GetPattern();
         for(sal_uInt16 i = 1; i < m_pCurrentForm->GetFormMax(); i++)
             m_pCurrentForm->SetPattern(i, sNewToken);
-        //
+
         ModifyHdl(this);
     }
     return 0;
@@ -4101,7 +4099,6 @@ sal_Bool SwEntryBrowseBox::IsModified()const
 {
     if(bModified)
         return sal_True;
-
 
     //check if the current controller is modified
     sal_uInt16 nCol = GetCurColumnId();

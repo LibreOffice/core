@@ -17,14 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "doc.hxx"
 #include "swundo.hxx"
 #include "pam.hxx"
 #include "ndtxt.hxx"
 
 #include <UndoCore.hxx>
-
 
 SwUndoOutlineLeftRight::SwUndoOutlineLeftRight( const SwPaM& rPam,
                                                 short nOff )
@@ -48,6 +46,5 @@ void SwUndoOutlineLeftRight::RepeatImpl(::sw::RepeatContext & rContext)
 {
     rContext.GetDoc().OutlineUpDown(rContext.GetRepeatPaM(), nOffset);
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

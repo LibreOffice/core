@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <editeng/unolingu.hxx>
 
 #include <unobaseclass.hxx>
@@ -293,7 +292,6 @@ SwXFlatParagraph::getSomething(
     return sw::UnoTunnelImpl(rId, this);
 }
 
-
 /******************************************************************************
  * SwXFlatParagraphIterator
  ******************************************************************************/
@@ -317,7 +315,6 @@ SwXFlatParagraphIterator::~SwXFlatParagraphIterator()
 {
 }
 
-
 void SwXFlatParagraphIterator::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
     ClientModify( this, pOld, pNew );
@@ -328,7 +325,6 @@ void SwXFlatParagraphIterator::Modify( const SfxPoolItem* pOld, const SfxPoolIte
         mpDoc = 0;
     }
 }
-
 
 uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getFirstPara()
     throw( uno::RuntimeException, std::exception )

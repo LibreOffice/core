@@ -62,7 +62,6 @@ CellRange getCellRangeFromXMLString( const OUString & rXMLString );
 
 OUString getXMLStringFromCellRange( const CellRange & rRange );
 
-
 } //  namespace XMLRangeHelper
 //} //  namespace chart
 

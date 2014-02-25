@@ -30,13 +30,11 @@
 
 #include <vector>
 
-
 namespace com { namespace sun { namespace star {
     namespace text {
         class XTextField;
     }
 }}}
-
 
 /**
  * The classes that make up a meta entity are:
@@ -117,7 +115,6 @@ public:
     static SwFmtMeta * CreatePoolDefault( const sal_uInt16 i_nWhich );
     ::sw::Meta * GetMeta() { return m_pMeta.get(); }
 };
-
 
 namespace sw {
 

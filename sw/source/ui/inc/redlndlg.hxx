@@ -58,10 +58,8 @@ typedef boost::ptr_vector<SwRedlineDataParent> SwRedlineDataParentArr;
 
 class SwRedlineDataParentSortArr : public o3tl::sorted_vector<SwRedlineDataParent*, o3tl::less_ptr_to<SwRedlineDataParent> > {};
 
-
 typedef SwRedlineDataChild* SwRedlineDataChildPtr;
 typedef boost::ptr_vector<SwRedlineDataChild> SwRedlineDataChildArr;
-
 
 typedef SvTreeListEntry* SvLBoxEntryPtr;
 typedef std::vector<SvLBoxEntryPtr> SvLBoxEntryArr;
@@ -159,8 +157,6 @@ public:
     virtual sal_Bool    ReInitDlg(SwDocShell *pDocSh);
 };
 
-
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

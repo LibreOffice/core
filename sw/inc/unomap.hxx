@@ -154,7 +154,6 @@
 #define WID_SECT_CURRENTLY_VISIBLE 8012
 #define WID_SECT_EDIT_IN_READONLY 8013
 
-
 // Indices/Tables of content
 #define WID_PRIMARY_KEY                         1000
 #define WID_SECONDARY_KEY                       1001
@@ -287,7 +286,6 @@
 #define WID_LAYOUT_SIZE                         1104
 #define WID_DOC_DIALOG_LIBRARIES                1105
 #define WID_DOC_VBA_DOCOBJ                      1106
-
 
 // AutoText
 #define WID_GROUP_PATH                          0

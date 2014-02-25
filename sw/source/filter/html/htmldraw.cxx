@@ -38,7 +38,6 @@
 #include <svtools/htmlkywd.hxx>
 #include <svx/svdpool.hxx>
 
-
 #include "charatr.hxx"
 #include <frmfmt.hxx>
 #include <fmtanchr.hxx>
@@ -53,7 +52,6 @@
 #include <rtl/strbuf.hxx>
 
 using namespace ::com::sun::star;
-
 
 const sal_uInt32 HTML_FRMOPTS_MARQUEE   =
     HTML_FRMOPT_ALIGN |
@@ -210,7 +208,6 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
 
     pDoc->InsertDrawObj( *pPam, *pNewDrawObj, aFrmSet );
 }
-
 
 static void PutEEPoolItem( SfxItemSet &rEEItemSet,
                            const SfxPoolItem& rSwItem )
@@ -599,7 +596,6 @@ void SwHTMLParser::ResizeDrawObject( SdrObject* pObj, SwTwips nWidth )
     pObj->SetLogicRect( Rectangle( rOldRect.TopLeft(), aNewSz ) );
 }
 
-
 const SdrObject *SwHTMLWriter::GetMarqueeTextObj( const SwDrawFrmFmt& rFmt )
 {
     const SdrObject* pObj = rFmt.FindSdrObject();
@@ -665,7 +661,6 @@ void SwHTMLWriter::GetEEAttrsFromDrwObj( SfxItemSet& rItemSet,
         nEEWhich = aIter.NextWhich();
     }
 }
-
 
 Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
                                      const SwDrawFrmFmt& rFmt,
@@ -827,7 +822,6 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_DRAW ) )
         rHTMLWrt.OutCSS1_FrmFmtOptions( rFmt, nFrmFlags, &rSdrObject );
 
-
     rWrt.Strm().WriteChar( '>' );
 
     // Was jetzt kommt ist das Gegenstueck zu SdrTextObjectt::SetText()
@@ -846,6 +840,5 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
 
     return rWrt;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

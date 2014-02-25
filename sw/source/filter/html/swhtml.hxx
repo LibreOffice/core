@@ -60,7 +60,6 @@ extern HTMLOptionEnum aHTMLPAlignTable[];
 extern HTMLOptionEnum aHTMLImgHAlignTable[];
 extern HTMLOptionEnum aHTMLImgVAlignTable[];
 
-
 // der Attribut Stack:
 
 class _HTMLAttr;
@@ -409,9 +408,9 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     sal_uInt32  nScriptStartLineNr; // Zeilennummer eines Script-Blocks
     sal_uLong       nEventId;
 
-    sal_uInt16  nBaseFontStMin;     //
-    sal_uInt16  nFontStMin;         //
-    sal_uInt16  nDefListDeep;       //
+    sal_uInt16  nBaseFontStMin;
+    sal_uInt16  nFontStMin;
+    sal_uInt16  nDefListDeep;
     sal_uInt16  nFontStHeadStart;   // Elemente im Font-Stack bei <Hn>
     sal_uInt16  nSBModuleCnt;       // Zaehler fuer Basic-Module
     sal_uInt16  nMissingImgMaps;    // Wie viele Image-Maps fehlen noch?
@@ -572,7 +571,6 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
                                           short& nIndent ) const;
     void GetULSpaceFromContext( sal_uInt16 &rUpper, sal_uInt16 &rLower ) const;
 
-
     void MovePageDescAttrs( SwNode *pSrcNd, sal_uLong nDestIdx, sal_Bool bFmtBreak );
 
     // Behandlung von Tags auf Absatz-Ebene
@@ -626,7 +624,6 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     void NewDefListItem( int nToken );
     void EndDefListItem( int nToken=0, sal_Bool bSetColl=sal_True,
                          sal_Bool bLastPara=sal_False );
-
 
     // Behandlung von Tags auf Zeichen-Ebene
 
@@ -724,7 +721,6 @@ private:
     // <BODY>-Tag auswerten: Hintergrund-Grafiken und -Farben setzen (htmlgrin.cxx)
     void InsertBodyOptions();
 
-
     // Einfuegen von Links und ::com::sun::star::text::Bookmarks (htmlgrin.cxx)
 
     // <A>-Tag auswerten: einen Link bzw. eine ::com::sun::star::text::Bookmark einfuegen
@@ -734,13 +730,11 @@ private:
     // eine ::com::sun::star::text::Bookmark einfuegen
     void InsertBookmark( const OUString& rName );
 
-
     void InsertCommentText( const sal_Char *pTag = 0 );
     void InsertComment( const OUString& rName, const sal_Char *pTag = 0 );
 
     // sind im aktuellen Absatz ::com::sun::star::text::Bookmarks vorhanden?
     sal_Bool HasCurrentParaBookmarks( sal_Bool bIgnoreStack=sal_False ) const;
-
 
     // Einfuegen von Script/Basic-Elementen
 
@@ -770,7 +764,6 @@ private:
                             const OUString &rClass, SfxItemSet &rItemSet,
                             SvxCSS1PropertyInfo &rPropInfo,
                              const OUString *pLang=0, const OUString *pDir=0 );
-
 
     // Inserting Controls and ::com::sun::star::form::Forms (htmlform.cxx)
 
@@ -847,7 +840,6 @@ private:
                            sal_Bool bIsInMulticol = sal_False,
                            sal_Bool bHasToFlow = sal_False );
 
-
     // misc ...
 
     void ParseMoreMetaOptions();
@@ -906,7 +898,6 @@ public:
 
     virtual SvParserState CallParser();
 
-
     sal_uInt16 ToTwips( sal_uInt16 nPixel ) const;
 
     // for reading asynchronously from SvStream
@@ -916,7 +907,6 @@ public:
                 ::com::sun::star::document::XDocumentProperties>&,
             SvKeyValueIterator* );
 };
-
 
 struct SwPendingStackData
 {
@@ -1001,8 +991,6 @@ inline void SwHTMLParser::PushContext( _HTMLAttrContext *pCntxt )
     aContexts.push_back( pCntxt );
 }
 
-
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

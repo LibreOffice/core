@@ -95,7 +95,6 @@ public:
     SwFtnPos  ePos;
     SwFtnNum  eNum;
 
-
     SwFtnInfo& operator=(const SwFtnInfo&);
 
     bool operator==( const SwFtnInfo &rInf ) const;
@@ -103,7 +102,6 @@ public:
     SwFtnInfo(SwTxtFmtColl* pTxtColl = 0);
     SwFtnInfo(const SwFtnInfo&);
 };
-
 
 #endif
 

@@ -43,7 +43,6 @@ using namespace ::com::sun::star::accessibility;
 using utl::AccessibleRelationSetHelper;
 using ::com::sun::star::accessibility::XAccessibleContext;
 
-
 SwAccessibleTextFrame::SwAccessibleTextFrame(
         SwAccessibleMap* pInitMap,
         const SwFlyFrm& rFlyFrm  ) :
@@ -151,9 +150,6 @@ com::sun::star::uno::Any SAL_CALL
     return aReturn;
 }
 
-
-
-
 void SAL_CALL
     SwAccessibleTextFrame::acquire (void)
     throw ()
@@ -168,17 +164,13 @@ void SAL_CALL
     SwAccessibleContext::release ();
 }
 
-//
 //=====  XAccessibleSelection  ============================================
-//
-
 
 void SAL_CALL SwAccessibleTextFrame::selectAccessibleChild( sal_Int32 )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception )
 {
     DBG_ASSERT( false, "<SwAccessibleTextFrame::selectAccessibleChild( sal_Int32 )> - missing implementation" );
 }
-
 
 sal_Bool SAL_CALL SwAccessibleTextFrame::isAccessibleChildSelected( sal_Int32 nChildIndex )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception )
@@ -206,20 +198,17 @@ sal_Bool SAL_CALL SwAccessibleTextFrame::isAccessibleChildSelected( sal_Int32 nC
     return sal_False;
 }
 
-
 void SAL_CALL SwAccessibleTextFrame::clearAccessibleSelection(  )
     throw ( uno::RuntimeException, std::exception )
 {
     DBG_ASSERT( false, "<SwAccessibleTextFrame::clearAccessibleSelection(  )> - missing implementation" );
 }
 
-
 void SAL_CALL SwAccessibleTextFrame::selectAllAccessibleChildren(  )
     throw ( uno::RuntimeException, std::exception )
 {
     DBG_ASSERT( false, "<SwAccessibleTextFrame::selectAllAccessibleChildren(  )> - missing implementation" );
 }
-
 
 sal_Int32 SAL_CALL SwAccessibleTextFrame::getSelectedAccessibleChildCount()
     throw ( uno::RuntimeException, std::exception )
@@ -231,7 +220,6 @@ sal_Int32 SAL_CALL SwAccessibleTextFrame::getSelectedAccessibleChildCount()
 
     return nCount;
 }
-
 
 uno::Reference<XAccessible> SAL_CALL SwAccessibleTextFrame::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
@@ -250,7 +238,6 @@ uno::Reference<XAccessible> SAL_CALL SwAccessibleTextFrame::getSelectedAccessibl
         }
     return uno::Reference<XAccessible>();
 }
-
 
 void SAL_CALL SwAccessibleTextFrame::deselectAccessibleChild( sal_Int32 )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception )

@@ -48,7 +48,7 @@
 #include <flyfrm.hxx>
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
-//
+
 #include <pam.hxx>
 #include <docsh.hxx>
 #include <poolfmt.hxx>
@@ -80,8 +80,6 @@ void SwLayoutCache::Read( SvStream &rStream )
         }
     }
 }
-
-
 
 void SwLayCacheImpl::Insert( sal_uInt16 nType, sal_uLong nIndex, sal_Int32 nOffset )
 {
@@ -448,7 +446,6 @@ void SwLayoutCache::ClearImpl()
         pImpl = 0;
     }
 }
-
 
 SwLayoutCache::~SwLayoutCache()
 {
@@ -1068,8 +1065,6 @@ bool SwLayHelper::CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly )
     }
     return bRet;
 }
-
-// -----------------------------------------------------------------------------
 
 SwLayCacheIoImpl::SwLayCacheIoImpl( SvStream& rStrm, bool bWrtMd ) :
     pStream( &rStrm ),

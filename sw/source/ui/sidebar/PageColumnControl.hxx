@@ -34,7 +34,6 @@ namespace sw { namespace sidebar {
 
 class PagePropertyPanel;
 
-
 class PageColumnControl
     : public ::svx::sidebar::PopupControl
 {

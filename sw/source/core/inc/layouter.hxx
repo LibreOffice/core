@@ -138,10 +138,8 @@ public:
     static void ClearMoveBwdLayoutInfo( const SwDoc& p_rDoc );
 };
 
-
 extern void LOOPING_LOUIE_LIGHT( bool bCondition, const SwTxtFrm& rTxtFrm );
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_LAYOUTER_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

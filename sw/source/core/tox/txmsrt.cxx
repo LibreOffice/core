@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <tools/resid.hxx>
 #include <unotools/charclass.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
@@ -133,7 +132,6 @@ OUString SwTOXInternational::GetFollowingText( sal_Bool bMorePages ) const
 /*--------------------------------------------------------------------
   SortElement for TOX entries
  --------------------------------------------------------------------*/
-
 
 SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwCntntNode* pNd,
                                     const SwTxtTOXMark* pMark,
@@ -275,7 +273,6 @@ bool SwTOXSortTabBase::operator<( const SwTOXSortTabBase& rCmp )
    Sorted keyword entry
  --------------------------------------------------------------------*/
 
-
 SwTOXIndex::SwTOXIndex( const SwTxtNode& rNd,
                         const SwTxtTOXMark* pMark, sal_uInt16 nOptions,
                         sal_uInt8 nKyLevel,
@@ -288,10 +285,7 @@ SwTOXIndex::SwTOXIndex( const SwTxtNode& rNd,
     nOpt = nOptions;
 }
 
-//
 // Compare keywords. Only relates to the text.
-//
-
 
 bool SwTOXIndex::operator==( const SwTOXSortTabBase& rCmpBase )
 {
@@ -313,7 +307,6 @@ bool SwTOXIndex::operator==( const SwTOXSortTabBase& rCmpBase )
     return bRet;
 }
 
-//
 // operator, only depends on the text
 
 bool SwTOXIndex::operator<( const SwTOXSortTabBase& rCmpBase )
@@ -340,7 +333,6 @@ bool SwTOXIndex::operator<( const SwTOXSortTabBase& rCmpBase )
     return bRet;
 }
 
-//
 // The keyword itself
 
 TextAndReading SwTOXIndex::GetText_Impl() const
@@ -401,8 +393,6 @@ void SwTOXIndex::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 ) 
     rNd.InsertText( aRet.sText, rInsPos );
 }
 
-
-
 sal_uInt16 SwTOXIndex::GetLevel() const
 {
     OSL_ENSURE(pTxtMark, "pTxtMark == 0, No keyword");
@@ -423,7 +413,6 @@ sal_uInt16 SwTOXIndex::GetLevel() const
   Key and separator
  --------------------------------------------------------------------*/
 
-
 SwTOXCustom::SwTOXCustom(const TextAndReading& rKey,
                          sal_uInt16 nLevel,
                          const SwTOXInternational& rIntl,
@@ -433,14 +422,12 @@ SwTOXCustom::SwTOXCustom(const TextAndReading& rKey,
 {
 }
 
-
 bool SwTOXCustom::operator==(const SwTOXSortTabBase& rCmpBase)
 {
     return GetLevel() == rCmpBase.GetLevel() &&
            pTOXIntl->IsEqual( GetTxt(), GetLocale(),
                               rCmpBase.GetTxt(), rCmpBase.GetLocale() );
 }
-
 
 bool SwTOXCustom::operator < (const SwTOXSortTabBase& rCmpBase)
 {
@@ -449,30 +436,25 @@ bool SwTOXCustom::operator < (const SwTOXSortTabBase& rCmpBase)
                               rCmpBase.GetTxt(), rCmpBase.GetLocale() );
 }
 
-
 sal_uInt16 SwTOXCustom::GetLevel() const
 {
     return nLev;
 }
-
 
 TextAndReading SwTOXCustom::GetText_Impl() const
 {
     return m_aKey;
 }
 
-
 /*--------------------------------------------------------------------
    Sorts the TOX entries
  --------------------------------------------------------------------*/
-
 
 SwTOXContent::SwTOXContent( const SwTxtNode& rNd, const SwTxtTOXMark* pMark,
                         const SwTOXInternational& rIntl)
     : SwTOXSortTabBase( TOX_SORT_CONTENT, &rNd, pMark, &rIntl )
 {
 }
-
 
 // The content's text
 
@@ -504,10 +486,7 @@ void SwTOXContent::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 
     }
 }
 
-//
 // The level for displaying it
-//
-
 
 sal_uInt16 SwTOXContent::GetLevel() const
 {
@@ -529,7 +508,6 @@ SwTOXPara::SwTOXPara( const SwCntntNode& rNd, SwTOXElement eT, sal_uInt16 nLevel
     m_sSequenceName( sSeqName )
 {
 }
-
 
 TextAndReading SwTOXPara::GetText_Impl() const
 {
@@ -585,7 +563,6 @@ void SwTOXPara::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 ) c
     }
 }
 
-
 sal_uInt16 SwTOXPara::GetLevel() const
 {
     sal_uInt16 nRet = m_nLevel;
@@ -599,7 +576,6 @@ sal_uInt16 SwTOXPara::GetLevel() const
     }
     return nRet;
 }
-
 
 OUString SwTOXPara::GetURL() const
 {
@@ -653,18 +629,15 @@ OUString SwTOXPara::GetURL() const
     return aTxt;
 }
 
-
 /*--------------------------------------------------------------------
   Table
  --------------------------------------------------------------------*/
-
 
 SwTOXTable::SwTOXTable( const SwCntntNode& rNd )
     : SwTOXSortTabBase( TOX_SORT_TABLE, &rNd, 0, 0 ),
     nLevel(FORM_ALPHA_DELIMITTER)
 {
 }
-
 
 TextAndReading SwTOXTable::GetText_Impl() const
 {
@@ -687,7 +660,6 @@ sal_uInt16 SwTOXTable::GetLevel() const
 {
     return nLevel;
 }
-
 
 OUString SwTOXTable::GetURL() const
 {
@@ -787,7 +759,6 @@ bool    SwTOXAuthority::operator<( const SwTOXSortTabBase& rBase)
     {
         SwAuthorityField* pCmpField =
             (SwAuthorityField*)((SwTOXAuthority&)rBase).m_rField.GetField();
-
 
         for(sal_uInt16 i = 0; i < pType->GetSortKeyCount(); i++)
         {

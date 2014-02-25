@@ -155,7 +155,6 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS )
     m_pPageNumBox->SetClickHdl(LINK(this,SwBreakDlg,PageNumHdl));
     m_pPageNumEdit->SetModifyHdl(LINK(this,SwBreakDlg,PageNumModifyHdl));
 
-
     // Insert page description to Listbox
     const sal_uInt16 nCount = rSh.GetPageDescCnt();
     sal_uInt16 i;

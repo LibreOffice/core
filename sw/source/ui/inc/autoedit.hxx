@@ -21,7 +21,6 @@
 
 #include <vcl/edit.hxx>
 
-
 class AutoEdit : public Edit
 {
 public:
@@ -33,9 +32,6 @@ protected:
 
 // Implementation in autocorr.cxx
 
-
-
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

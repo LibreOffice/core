@@ -85,7 +85,6 @@ public:
     SwXFrame(SwFrmFmt& rFrmFmt, FlyCntType eSet,
                 const SfxItemPropertySet*    pPropSet);
 
-
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
     //XUnoTunnel
@@ -242,7 +241,6 @@ public:
     SwXTextGraphicObject( SwDoc *pDoc );
     SwXTextGraphicObject(SwFrmFmt& rFmt);
 
-
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL acquire(  ) throw();
     virtual void SAL_CALL release(  ) throw();
@@ -289,7 +287,6 @@ public:
     SwXTextEmbeddedObject( SwDoc *pDoc );
     SwXTextEmbeddedObject(SwFrmFmt& rFmt);
 
-
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL acquire(  ) throw();
     virtual void SAL_CALL release(  ) throw();
@@ -325,8 +322,6 @@ public:
     void SAL_CALL operator delete( void * ) throw();
 };
 
-
-
 class SwXOLEListener : public cppu::WeakImplHelper1
 <
     ::com::sun::star::util::XModifyListener
@@ -350,8 +345,6 @@ public:
 protected:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 };
-
-
 
 #endif
 

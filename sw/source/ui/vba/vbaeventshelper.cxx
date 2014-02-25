@@ -26,8 +26,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::script::vba::VBAEventId;
 using namespace ::ooo::vba;
 
-// ============================================================================
-
 SwVbaEventsHelper::SwVbaEventsHelper( uno::Sequence< css::uno::Any > const& aArgs, uno::Reference< uno::XComponentContext > const& xContext ) :
     VbaEventsHelperBase( aArgs, xContext )
 {
@@ -82,8 +80,6 @@ OUString SwVbaEventsHelper::implGetDocumentModuleName( const EventHandlerInfo& /
     return OUString( "ThisDocument" );
 }
 
-// ============================================================================
-
 namespace vbaeventshelper
 {
 namespace sdecl = comphelper::service_decl;
@@ -93,7 +89,5 @@ extern sdecl::ServiceDecl const serviceDecl(
     "SwVbaEventsHelper",
     "com.sun.star.document.vba.VBATextEventProcessor" );
 }
-
-// ============================================================================
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

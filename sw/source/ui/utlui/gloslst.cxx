@@ -42,7 +42,6 @@
 #define GLOS_TIMEOUT 30000   // update every 30 seconds
 #define FIND_MAX_GLOS 20
 
-
 struct TripleString
 {
     OUString sGroup;
@@ -415,6 +414,5 @@ void    SwGlossaryList::ClearGroups()
     aGroupArr.clear();
     bFilled = false;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

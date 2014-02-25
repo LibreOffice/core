@@ -221,7 +221,6 @@ SwFtnInfo& SwFtnInfo::operator=(const SwFtnInfo& rInfo)
     return *this;
 }
 
-
 bool SwFtnInfo::operator==( const SwFtnInfo& rInfo ) const
 {
     return  ePos == rInfo.ePos &&
@@ -230,7 +229,6 @@ bool SwFtnInfo::operator==( const SwFtnInfo& rInfo ) const
             aQuoVadis == rInfo.aQuoVadis &&
             aErgoSum == rInfo.aErgoSum;
 }
-
 
 SwFtnInfo::SwFtnInfo(const SwFtnInfo& rInfo) :
     SwEndNoteInfo( rInfo ),

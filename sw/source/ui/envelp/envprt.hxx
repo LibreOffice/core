@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SW_SOURCE_UI_ENVELP_ENVPRT_HXX
 #define INCLUDED_SW_SOURCE_UI_ENVELP_ENVPRT_HXX
 
-
 #include <sfx2/tabdlg.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/field.hxx>
@@ -28,8 +27,6 @@
 #include <vcl/group.hxx>
 #include <vcl/button.hxx>
 #include <svtools/stdctrl.hxx>
-
-
 
 #include "envimg.hxx"
 

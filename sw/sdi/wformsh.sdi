@@ -28,4 +28,3 @@ shell SwWebDrawFormShell : SwWebDrawBaseShell
     import WebDrawForm[Automation];
 }
 
-

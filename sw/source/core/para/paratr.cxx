@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "hintids.hxx"
 #include <swtypes.hxx>
 #include "unomid.h"
@@ -60,8 +59,6 @@ SwFmtDrop::SwFmtDrop()
 {
 }
 
-
-
 SwFmtDrop::SwFmtDrop( const SwFmtDrop &rCpy )
     : SfxPoolItem( RES_PARATR_DROP ),
     SwClient( rCpy.GetRegisteredInNonConst() ),
@@ -74,13 +71,9 @@ SwFmtDrop::SwFmtDrop( const SwFmtDrop &rCpy )
 {
 }
 
-
-
 SwFmtDrop::~SwFmtDrop()
 {
 }
-
-
 
 void SwFmtDrop::SetCharFmt( SwCharFmt *pNew )
 {
@@ -91,8 +84,6 @@ void SwFmtDrop::SetCharFmt( SwCharFmt *pNew )
         pNew->Add( this );
     nReadFmt = USHRT_MAX;
 }
-
-
 
 void SwFmtDrop::Modify( const SfxPoolItem*, const SfxPoolItem * )
 {

@@ -34,7 +34,7 @@
 #define RID_WEBOLE_TOOLBOX                      (RC_WEB_BEGIN + 11)
 #define STR_WRITER_WEBDOC_FULLTYPE              (RC_WEB_BEGIN + 12)
 
-// ------------------------------------------------------------------------
+
 
 #define WEB_ACT_END                                     STR_WRITER_WEBDOC_FULLTYPE
 

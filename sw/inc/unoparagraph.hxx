@@ -39,7 +39,6 @@
 
 #include <unobaseclass.hxx>
 
-
 struct SwPosition;
 class SwPaM;
 class SwUnoCrsr;
@@ -47,7 +46,6 @@ class SwStartNode;
 class SwTxtNode;
 class SwTable;
 class SwXText;
-
 
 typedef ::cppu::ImplInheritanceHelper10
 <   ::sfx2::MetadatableMixin
@@ -303,7 +301,6 @@ public:
         throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 };
-
 
 class SwXParagraphEnumeration
     : public SwSimpleEnumeration_Base

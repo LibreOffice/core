@@ -165,7 +165,6 @@ static bool SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
 
     rWMF.SetPrefMapMode( MapMode( MAP_100TH_MM ) );
 
-
     // MetaFile auf neue Groesse skalieren und
     // neue Groesse am MetaFile setzen
     Size        aOldSiz( rWMF.GetPrefSize() );
@@ -353,7 +352,6 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
     SvStorageRef xSrc1 = xSrc0->OpenSotStorage( aSrcStgName,
             STREAM_READWRITE| STREAM_SHARE_DENYALL );
 
-
     if (pGrf)
     {
         rGraph = *pGrf;
@@ -379,7 +377,6 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
             bOleOk = false;
         }
     }       // StorageStreams wieder zu
-
 
     Rectangle aRect(0, 0, nX, nY);
 

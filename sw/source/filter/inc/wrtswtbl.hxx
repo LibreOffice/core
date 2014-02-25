@@ -34,17 +34,12 @@ class SvxBrushItem;
 
 namespace editeng { class SvxBorderLine; }
 
-//---------------------------------------------------------------------------
 //       Code aus dem HTML-Filter fuers schreiben von Tabellen
-//---------------------------------------------------------------------------
 
 #define COLFUZZY 20
 #define ROWFUZZY 20
 #define COL_DFLT_WIDTH ((2*COLFUZZY)+1)
 #define ROW_DFLT_HEIGHT (2*ROWFUZZY)+1
-
-
-//-----------------------------------------------------------------------
 
 class SW_DLLPUBLIC SwWriteTableCell
 {
@@ -60,7 +55,6 @@ class SW_DLLPUBLIC SwWriteTableCell
 
     sal_uInt16 nRowSpan;            // ueberspannte Zeilen
     sal_uInt16 nColSpan;            // ueberspannte Spalten
-
 
     bool bPrcWidthOpt;
 
@@ -96,9 +90,6 @@ public:
 };
 
 typedef boost::ptr_vector<SwWriteTableCell> SwWriteTableCells;
-
-
-//-----------------------------------------------------------------------
 
 class SW_DLLPUBLIC SwWriteTableRow
 {
@@ -168,9 +159,6 @@ public:
     ~SwWriteTableRows() { DeleteAndDestroyAll(); }
 };
 
-
-//-----------------------------------------------------------------------
-
 class SW_DLLPUBLIC SwWriteTableCol
 {
     sal_uInt32 nPos;                        // End Position der Spalte
@@ -229,8 +217,6 @@ class SwWriteTableCols : public o3tl::sorted_vector<SwWriteTableCol*, SwWriteTab
 public:
     ~SwWriteTableCols() { DeleteAndDestroyAll(); }
 };
-
-//-----------------------------------------------------------------------
 
 class SW_DLLPUBLIC SwWriteTable
 {
@@ -312,7 +298,6 @@ protected:
     sal_uInt16 GetLeftSpace( sal_uInt16 nCol ) const;
     sal_uInt16 GetRightSpace(size_t nCol, sal_uInt16 nColSpan) const;
 
-
 public:
     SwWriteTable( const SwTableLines& rLines, long nWidth, sal_uInt32 nBWidth,
                     bool bRel, sal_uInt16 nMaxDepth = USHRT_MAX,
@@ -323,9 +308,6 @@ public:
     const SwWriteTableCols& GetCols() const { return aCols; }
     const SwWriteTableRows& GetRows() const { return aRows; }
 };
-
-
-
 
 #endif
 

@@ -107,7 +107,6 @@ class SW_DLLPUBLIC SwViewShell : public Ring
     // For setting visible area for page preview paint.
     friend class SwPagePreviewLayout;
 
-
     // Set SwVisArea in order to enable clean formatting before printing.
     friend void SetSwVisArea( SwViewShell *pSh, const SwRect & );
 
@@ -137,7 +136,6 @@ class SW_DLLPUBLIC SwViewShell : public Ring
 
     SwViewOption *mpOpt;
     SwAccessibilityOptions* mpAccOptions;
-
 
     sal_Bool  mbDocSizeChgd     :1;  // For DocChgNotify(): Announce new DocSize
                                     // at EndAction to DocMDI.
@@ -232,7 +230,6 @@ public:
 
     void InvalidateWindows( const SwRect &rRect );
 
-    //////////////////////////////////////////////////////////////////////////////
     // #i72754# set of Pre/PostPaints with lock counter and initial target OutDev
 protected:
     std::stack<Region>          mPrePostPaintRegions; // acts also as a lock counter (empty == not locked)
@@ -243,7 +240,6 @@ public:
     void DLPrePaint2(const Region& rRegion);
     void DLPostPaint2(bool bPaintFormLayer);
     const MapMode& getPrePostMapMode() const { return maPrePostMapMode; }
-    //////////////////////////////////////////////////////////////////////////////
 
     virtual void Paint(const Rectangle &rRect);
 
@@ -621,8 +617,6 @@ inline const SfxItemPool& SwViewShell::GetAttrPool() const
 {
     return ((SwViewShell*)this)->GetAttrPool();
 }
-
-
 
 #endif // INCLUDED_SW_INC_VIEWSH_HXX
 

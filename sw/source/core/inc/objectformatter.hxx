@@ -31,11 +31,10 @@ class SwLayAction;
 // OD 2004-10-04 #i26945#
 class SwPageNumAndTypeOfAnchors;
 
-// -----------------------------------------------------------------------------
 // #i28701#
 // Format floating screen objects, which are anchored at the given anchor frame
 // and registered at the given page frame.
-// -----------------------------------------------------------------------------
+
 class SwObjectFormatter
 {
     private:

@@ -220,7 +220,6 @@ private:
         pDoc->GetCurrentViewShell()->CalcLayout();
     }
 
-
 protected:
     /// Get the length of the whole document.
     int getLength()

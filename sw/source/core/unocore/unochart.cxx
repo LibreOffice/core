@@ -737,9 +737,8 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
                 }
             }
 
-            //
             // find label and data sequences to use
-            //
+
             sal_Int32 oi;  // outer index (slower changing index)
             sal_Int32 ii;  // inner index (faster changing index)
             sal_Int32 oiEnd = bDtaSrcIsColumns ? nCols : nRows;
@@ -753,7 +752,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
                 aDataStartIdx[oi]   = -1;
                 aDataLen[oi]        = 0;
             }
-            //
+
             for (oi = 0;  oi < oiEnd;  ++oi)
             {
                 ii = 0;
@@ -852,7 +851,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
                     continue;
 
                 // get cell ranges for label and data
-                //
+
                 SwRangeDescriptor aLabelDesc;
                 SwRangeDescriptor aDataDesc;
                 if (bDtaSrcIsColumns)   // use columns
@@ -880,7 +879,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
                     aDataDesc.nRight    = aDataDesc.nLeft + aDataLen[oi] - 1;
                 }
                 OUString aBaseName =  pTblFmt->GetName() + ".";
-                //
+
                 OUString aLabelRange;
                 if (aLabelIdx[oi] != -1)
                 {
@@ -889,7 +888,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
                     aLabelRange += ":";
                     aLabelRange += sw_GetCellName( aLabelDesc.nRight, aLabelDesc.nBottom );
                 }
-                //
+
                 OUString aDataRange;
                 if (aDataStartIdx[oi] != -1)
                 {
@@ -997,9 +996,8 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL SwChartDataProvider::create
     return Impl_createDataSource( rArguments );
 }
 
-////////////////////////////////////////////////////////////
 // SwChartDataProvider::GetBrokenCellRangeForExport
-//
+
 // fix for #i79009
 // we need to return a property that has the same value as the property
 // 'CellRangeRepresentation' but for all rows which are increased by one.
@@ -1130,16 +1128,15 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
             return aResult; // failed -> return empty property sequence
         }
 
-
         // try to get 'DataRowSource' value (ROWS or COLUMNS) from inspecting
         // first and last cell used in both sequences
-        //
+
         sal_Int32 nFirstCol = -1, nFirstRow = -1, nLastCol = -1, nLastRow = -1;
         OUString aCell( !aLabelStartCell.isEmpty() ? aLabelStartCell : aValuesStartCell );
         OSL_ENSURE( !aCell.isEmpty() , "start cell missing?" );
         sw_GetCellPosition( aCell, nFirstCol, nFirstRow);
         sw_GetCellPosition( aValuesEndCell, nLastCol, nLastRow);
-        //
+
         sal_Int16 nDirection = -1;  // -1: not yet set,  0: columns,  1: rows, -2: failed
         if (nFirstCol == nLastCol && nFirstRow == nLastRow) // a single cell...
         {
@@ -1168,19 +1165,17 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
             nDtaSrcIsColumns = -2;  // failed
         }
 
-
         if (nDtaSrcIsColumns == 0 || nDtaSrcIsColumns == 1)
         {
             // build data to obtain 'SequenceMapping' later on
-            //
+
             OSL_ENSURE( nDtaSrcIsColumns == 0  ||   /* rows */
                         nDtaSrcIsColumns == 1,      /* columns */
                     "unexpected value for 'nDtaSrcIsColumns'" );
             pSequenceMapping[nDS1] = nDtaSrcIsColumns ? nFirstCol : nFirstRow;
 
-
             // build data used to determine 'CellRangeRepresentation' later on
-            //
+
             GetTableByName( *pDoc, aTableName, &pTableFmt, &pTable );
             if (!pTable || pTable->IsTblComplex())
                 return aResult; // failed -> return empty property sequence
@@ -1189,7 +1184,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
             aMap.resize( nTableRows );
             for (sal_Int32 i = 0;  i < nTableRows;  ++i)
                 aMap[i].resize( nTableCols );
-            //
+
             if (!aLabelStartCell.isEmpty() && !aLabelEndCell.isEmpty())
             {
                 sal_Int32 nStartCol = -1, nStartRow = -1, nEndCol = -1, nEndRow = -1;
@@ -1261,9 +1256,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
 #endif
     } // for
 
-
     // build value for 'CellRangeRepresentation'
-    //
+
     OUString aCellRangeBase = aTableName + ".";
     OUString aCurRange;
     for (sal_Int32 i = 0;  i < nTableRows;  ++i)
@@ -1319,9 +1313,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
         aSortedCellRanges += pSortedRanges[i];
     }
 
-
     // build value for 'SequenceMapping'
-    //
+
     uno::Sequence< sal_Int32 > aSortedMapping( aSequenceMapping );
     sal_Int32 *pSortedMapping = aSortedMapping.getArray();
     std::sort( pSortedMapping, pSortedMapping + aSortedMapping.getLength() );
@@ -1345,18 +1338,17 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
     if (!bNeedSequenceMapping)
         aSequenceMapping.realloc(0);
 
-    //
     // build resulting properties
-    //
+
     OSL_ENSURE(nLabelSeqLen >= 0 || nLabelSeqLen == -2 /*not used*/,
             "unexpected value for 'nLabelSeqLen'" );
     sal_Bool bFirstCellIsLabel = sal_False;     // default value if 'nLabelSeqLen' could not properly determined
     if (nLabelSeqLen > 0) // == 0 means no label sequence in use
         bFirstCellIsLabel = sal_True;
-    //
+
     OSL_ENSURE( !aSortedCellRanges.isEmpty(), "CellRangeRepresentation missing" );
     OUString aBrokenCellRangeForExport( GetBrokenCellRangeForExport( aSortedCellRanges ) );
-    //
+
     aResult.realloc(5);
     sal_Int32 nProps = 0;
     aResult[nProps  ].Name = "FirstCellAsLabel";
@@ -1643,13 +1635,12 @@ void SwChartDataProvider::DisposeAllDataSequences( const SwTable *pTable )
     }
 }
 
-////////////////////////////////////////
 // SwChartDataProvider::AddRowCols tries to notify charts of added columns
 // or rows and extends the value sequence respectively (if possible).
 // If those can be added to the end of existing value data-sequences those
 // sequences get mofdified accordingly and will send a modification
 // notification (calling 'setModified').
-//
+
 // Since this function is a work-around for non existent Writer core functionality
 // (no arbitrary multi-selection in tables that can be used to define a
 // data-sequence) this function will be somewhat unreliable.
@@ -1663,7 +1654,7 @@ void SwChartDataProvider::DisposeAllDataSequences( const SwTable *pTable )
 // between those.
 // New rows/cols need to be added already to the table before calling
 // this function.
-//
+
 void SwChartDataProvider::AddRowCols(
         const SwTable &rTable,
         const SwSelBoxes& rBoxes,
@@ -2135,7 +2126,7 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
             }
 
             // build label sequence
-            //
+
             sal_Int32 nSeqLen = bUseCol ? nColSpan : nRowSpan;
             aLabels.realloc( nSeqLen );
             OUString *pLabels = aLabels.getArray();
@@ -2459,15 +2450,15 @@ void SAL_CALL SwChartDataSequence::dispose(  )
             //#i119653# The bug is crashed for an exception thrown by
             //SwCharDataSequence::setModified() because
             //the SwCharDataSequence object has been disposed.
-            //
+
             //Actually, the former design of SwClient will disconnect itself
             //from the notification list in its destructor.
-            //
+
             //But the SwCharDataSeqence won't be destructed but disposed in code
             //(the data member SwChartDataSequence::bDisposed will be set to
             //TRUE), the relationship between client and modification is not
             //released.
-            //
+
             //So any notification from modify object will lead to said
             //exception threw out.  Recorrect the logic of code in
             //SwChartDataSequence::Dispose(), release the relationship
@@ -2519,10 +2510,10 @@ sal_Bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
 
     // if the implementation cursor gets affected (i.e. thew box where it is located
     // in gets removed) we need to move it before that... (otherwise it does not need to change)
-    //
+
     const SwStartNode* pPointStartNode = pTblCrsr->GetPoint()->nNode.GetNode().FindTableBoxStartNode();
     const SwStartNode* pMarkStartNode  = pTblCrsr->GetMark()->nNode.GetNode().FindTableBoxStartNode();
-    //
+
     if (!pTblCrsr->HasMark() || (pPointStartNode == rBox.GetSttNd()  &&  pMarkStartNode == rBox.GetSttNd()))
     {
         bNowEmpty = sal_True;
@@ -2665,17 +2656,16 @@ bool SwChartDataSequence::ExtendTo( bool bExtendCol,
     if (nCount < 1 || nFirstNew < 0 || pTable->IsTblComplex())
         return false;
 
-    //
     // get range descriptor (cell range) for current data-sequence
-    //
+
     pStartNd = pUnoTblCrsr->GetPoint()->nNode.GetNode().FindTableBoxStartNode();
     pEndBox = pTable->GetTblBox( pStartNd->GetIndex() );
     const OUString aEndBox( pEndBox->GetName() );
-    //
+
     pStartNd = pUnoTblCrsr->GetMark()->nNode.GetNode().FindTableBoxStartNode();
     pStartBox = pTable->GetTblBox( pStartNd->GetIndex() );
     const OUString aStartBox( pStartBox->GetName() );
-    //
+
     OUString aCellRange( aStartBox );     // note that cell range here takes the newly added rows/cols already into account
     aCellRange += ":";
     aCellRange += aEndBox;

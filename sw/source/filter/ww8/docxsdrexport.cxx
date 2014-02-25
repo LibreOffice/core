@@ -731,7 +731,6 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrmFmt& rFr
     sax_fastparser::XFastAttributeListRef xDocPrAttrListRef(pDocPrAttrList);
     pFS->singleElementNS(XML_wp, XML_docPr, xDocPrAttrListRef);
 
-
     sal_Int32 diagramCount;
     diagramCount = nAnchorId;
 

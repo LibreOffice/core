@@ -19,7 +19,6 @@ class   SwWrtShell;
 struct  SwPosition;
 class SwUnoCrsr;
 
-
 class SwNavigationMgr
 {
 private:

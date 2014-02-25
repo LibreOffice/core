@@ -73,7 +73,7 @@
 #include <charfmt.hxx>
 #include <SwStyleNameMapper.hxx>
 // 50 cm 28350
-//
+
 #define MAXHEIGHT 28350
 #define MAXWIDTH  28350
 
@@ -195,7 +195,6 @@ void ConvertAttrGenToChar(SfxItemSet& rSet, const sal_uInt8 nMode)
         rSet.ClearItem( RES_SHADOW );
     }
 }
-
 
 // Fill header footer
 
@@ -358,7 +357,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
     }
 
     // Footnotes
-    //
+
     if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_FTN_INFO,
             false, &pItem ) )
         rPageDesc.SetFtnInfo( ((SwPageFtnInfoItem*)pItem)->GetPageFtnInfo() );
@@ -434,7 +433,6 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
         // Single lines can have only in tables DontCare-Status
     aBoxInfo.SetValid( VALID_DISABLE );
     rSet.Put( aBoxInfo );
-
 
     SfxStringItem aFollow(SID_ATTR_PAGE_EXT1, OUString());
     if(rPageDesc.GetFollow())
@@ -567,7 +565,6 @@ sal_uInt16 GetTabDist(const SvxTabStopItem& rTabs)
         nDefDist = 1134;     // 2cm
     return nDefDist;
 }
-
 
 // Inquire if in the set is a Sfx-PageDesc combination present and return it.
 void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet )

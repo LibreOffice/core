@@ -59,7 +59,6 @@ struct Writer_Impl;
 // is forced to wrap. It has to be always greater than 200!!!
 #define MAX_ASCII_PARA 10000
 
-
 class SW_DLLPUBLIC SwAsciiOptions
 {
     OUString sFont;
@@ -185,8 +184,6 @@ protected:
     void                SetBaseURL( const OUString& rURL ) { sBaseURL = rURL; }
 };
 
-
-
 /****************  Special Readers ************************/
 
 // Special Readers can be both!! (Excel, W4W, .. ).
@@ -293,7 +290,6 @@ public:
     virtual void SetFltName( const OUString& r );
 };
 
-
 // The given stream has to be created dynamically and must
 // be requested via Stream() before the instance is deleted!
 
@@ -362,12 +358,7 @@ SW_DLLPUBLIC SwRead SwGetReaderXML();
 
 // END source/filter/basflt/fltini.cxx
 
-
 extern sal_Bool SetHTMLTemplate( SwDoc &rDoc ); //For templates from HTML before loading shellio.cxx.
-
-
-
-
 
 // Base-class of all writers.
 
@@ -503,7 +494,6 @@ public:
     SotStorage& GetStorage() const       { return *pStg; }
 };
 
-
 // Interface class for general access on special writers.
 
 class SW_DLLPUBLIC SwWriter
@@ -531,8 +521,6 @@ public:
     SwWriter( SfxMedium&, SwCrsrShell &,sal_Bool bWriteAll = sal_False );
     SwWriter( SfxMedium&, SwDoc & );
 };
-
-
 
 typedef Reader* (*FnGetReader)();
 typedef void (*FnGetWriter)(const OUString&, const OUString& rBaseURL, WriterRef&);

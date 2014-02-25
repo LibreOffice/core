@@ -187,7 +187,6 @@ sal_Int32 ModelToViewHelper::ConvertToViewPosition( sal_Int32 nModelPos ) const
     return nModelPos;
 }
 
-
 /** Converts a view position into a model position
 */
 ModelToViewHelper::ModelPosition ModelToViewHelper::ConvertToModelPosition( sal_Int32 nViewPos ) const

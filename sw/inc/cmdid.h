@@ -935,17 +935,17 @@ included in c-context files, so c++ style stuff will cause problems.
 #define         MID_13          0xfa
 
 // defines for Event-assignments per Macro
-#define MAC_EVENT_MOUSEOVER         0x01            //
-#define MAC_EVENT_MOUSECLICK        0x02            //
-#define MAC_EVENT_MOUSEOUT          0x03            //
-#define MAC_EVENT_OBJECT_SELECT     0x04            //
-#define MAC_EVENT_KEYINPUT_ALPHA    0x05            //
-#define MAC_EVENT_KEYINPUT_NOALPHA  0x06            //
-#define MAC_EVENT_FRM_RESIZE        0x07            //
-#define MAC_EVENT_FRM_MOVE          0x08            //
-#define MAC_EVENT_IMAGE_LOAD        0x09            //
-#define MAC_EVENT_IMAGE_ABORT       0x0a            //
-#define MAC_EVENT_IMAGE_ERROR       0x0b            //
+#define MAC_EVENT_MOUSEOVER         0x01
+#define MAC_EVENT_MOUSECLICK        0x02
+#define MAC_EVENT_MOUSEOUT          0x03
+#define MAC_EVENT_OBJECT_SELECT     0x04
+#define MAC_EVENT_KEYINPUT_ALPHA    0x05
+#define MAC_EVENT_KEYINPUT_NOALPHA  0x06
+#define MAC_EVENT_FRM_RESIZE        0x07
+#define MAC_EVENT_FRM_MOVE          0x08
+#define MAC_EVENT_IMAGE_LOAD        0x09
+#define MAC_EVENT_IMAGE_ABORT       0x0a
+#define MAC_EVENT_IMAGE_ERROR       0x0b
 
 #endif // INCLUDED_SW_INC_CMDID_H
 

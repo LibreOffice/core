@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <cmdid.h>
 #include <hintids.hxx>
 #include <svl/stritem.hxx>
@@ -236,7 +235,6 @@ SwFldMgr::SwFldMgr(SwWrtShell* pSh ) :
     GetCurFld();
 }
 
-
 SwFldMgr::~SwFldMgr()
 {
 }
@@ -282,7 +280,6 @@ sal_uInt16 SwFldMgr::GetFldTypeCount(sal_uInt16 nResId) const
     return pSh ? pSh->GetFldTypeCount(nResId) : 0;
 }
 
-
 SwFieldType* SwFldMgr::GetFldType(sal_uInt16 nResId, sal_uInt16 nId) const
 {
     SwWrtShell * pSh = pWrtShell ? pWrtShell : lcl_GetShell();
@@ -290,14 +287,12 @@ SwFieldType* SwFldMgr::GetFldType(sal_uInt16 nResId, sal_uInt16 nId) const
     return pSh ? pSh->GetFldType(nId, nResId) : 0;
 }
 
-
 SwFieldType* SwFldMgr::GetFldType(sal_uInt16 nResId, const OUString& rName) const
 {
     SwWrtShell * pSh = pWrtShell ? pWrtShell : lcl_GetShell();
     OSL_ENSURE(pSh, "no SwWrtShell found");
     return pSh ? pSh->GetFldType(nResId, rName) : 0;
 }
-
 
 /*--------------------------------------------------------------------
     Description: determine current field
@@ -343,7 +338,6 @@ SwField* SwFldMgr::GetCurFld()
 /*--------------------------------------------------------------------
     Description: provide group range
  --------------------------------------------------------------------*/
-
 
 const SwFldGroupRgn& SwFldMgr::GetGroupRange(sal_Bool bHtmlMode, sal_uInt16 nGrpId) const
 {
@@ -407,13 +401,11 @@ sal_uInt16 SwFldMgr::GetGroup(sal_Bool bHtmlMode, sal_uInt16 nTypeId, sal_uInt16
                   ACCESS over TYP_....
  --------------------------------------------------------------------*/
 
-
 sal_uInt16 SwFldMgr::GetTypeId(sal_uInt16 nPos)
 {
     OSL_ENSURE(nPos < ::GetPackCount(), "forbidden Pos");
     return aSwFlds[ nPos ].nTypeId;
 }
-
 
 OUString SwFldMgr::GetTypeStr(sal_uInt16 nPos)
 {
@@ -439,7 +431,6 @@ OUString SwFldMgr::GetTypeStr(sal_uInt16 nPos)
 /*--------------------------------------------------------------------
     Description: determine Pos in the list
  --------------------------------------------------------------------*/
-
 
 sal_uInt16 SwFldMgr::GetPos(sal_uInt16 nTypeId)
 {
@@ -571,7 +562,6 @@ bool SwFldMgr::GetSubTypes(sal_uInt16 nTypeId, std::vector<OUString>& rToFill)
                   ACCESS over TYP_....
  --------------------------------------------------------------------*/
 
-
 sal_uInt16 SwFldMgr::GetFormatCount(sal_uInt16 nTypeId, bool bIsText, sal_Bool bHtmlMode) const
 {
     OSL_ENSURE(nTypeId < TYP_END, "forbidden TypeId");
@@ -627,7 +617,6 @@ sal_uInt16 SwFldMgr::GetFormatCount(sal_uInt16 nTypeId, bool bIsText, sal_Bool b
 /*--------------------------------------------------------------------
     Description:    determine FormatString to a type
  --------------------------------------------------------------------*/
-
 
 OUString SwFldMgr::GetFormatStr(sal_uInt16 nTypeId, sal_uLong nFormatId) const
 {
@@ -771,7 +760,6 @@ sal_uInt16 SwFldMgr::GetFormatId(sal_uInt16 nTypeId, sal_uLong nFormatId) const
     Description: Traveling
  --------------------------------------------------------------------*/
 
-
 sal_Bool SwFldMgr::GoNextPrev( sal_Bool bNext, SwFieldType* pTyp )
 {
     SwWrtShell* pSh = pWrtShell ? pWrtShell : ::lcl_GetShell();
@@ -802,7 +790,6 @@ sal_Bool SwFldMgr::GoNextPrev( sal_Bool bNext, SwFieldType* pTyp )
     Description: insert field types
  --------------------------------------------------------------------*/
 
-
 void SwFldMgr::InsertFldType(SwFieldType& rType)
 {
     SwWrtShell* pSh = pWrtShell ? pWrtShell : ::lcl_GetShell();
@@ -815,7 +802,6 @@ void SwFldMgr::InsertFldType(SwFieldType& rType)
     Description: determine current TypeId
  --------------------------------------------------------------------*/
 
-
 sal_uInt16 SwFldMgr::GetCurTypeId() const
 {
     return pCurFld ? pCurFld->GetTypeId() : USHRT_MAX;
@@ -824,7 +810,6 @@ sal_uInt16 SwFldMgr::GetCurTypeId() const
 /*--------------------------------------------------------------------
     Description: Over string  insert field or update
  --------------------------------------------------------------------*/
-
 
 sal_Bool SwFldMgr::InsertFld(
     const SwInsertFld_Data& rData)
@@ -1395,7 +1380,6 @@ sal_Bool SwFldMgr::InsertFld(
     }
     OSL_ENSURE(pFld, "field not available");
 
-
     //the auto language flag has to be set prior to the language!
     pFld->SetAutomaticLanguage(rData.bIsAutomaticLanguage);
     sal_uInt16 nLang = GetCurrLanguage();
@@ -1430,7 +1414,6 @@ sal_Bool SwFldMgr::InsertFld(
 /*--------------------------------------------------------------------
     Description: fields update
  --------------------------------------------------------------------*/
-
 
 void SwFldMgr::UpdateCurFld(sal_uLong nFormat,
                             const OUString& rPar1,

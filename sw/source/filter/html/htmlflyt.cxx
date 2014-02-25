@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "htmlfly.hxx"
-
 
 #define TE(t,p,c) (sal_uInt8)( HTML_OUT_##t | HTML_POS_##p | HTML_CNTNR_##c )
 

@@ -1141,7 +1141,6 @@ inline const SwFrm *SwFrm::FindPrev() const
         return ((SwFrm*)this)->_FindPrev();
 }
 
-
 inline bool SwFrm::IsLayoutFrm() const
 {
     return GetType() & FRM_LAYOUT;

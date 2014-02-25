@@ -38,7 +38,6 @@
 //impl in envimg.cxx
 extern SW_DLLPUBLIC OUString MakeSender();
 
-
 void SwLabRec::SetFromItem( const SwLabItem& rItem )
 {
     lHDist  = rItem.lHDist;
@@ -877,7 +876,5 @@ void SwBusinessDataPage::Reset(const SfxItemSet& rSet)
     m_pHomePageED->SetText(aItem.aCompWWW);
     m_pMailED->SetText(aItem.aCompMail);
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

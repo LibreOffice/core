@@ -62,14 +62,12 @@
 
 using namespace ::com::sun::star;
 
-
 // Wie viele Zeilen/Zeichen sind fuer DropCaps erlaubt?
 // (Gibt es vielleicht woanders entsprechende Werte?)
 #define MAX_DROPCAP_LINES 9
 #define MAX_DROPCAP_CHARS 9
 
 static void lcl_swcss1_setEncoding( SwFmt& rFmt, rtl_TextEncoding eEnc );
-
 
 // Implementierung des SwCSS1Parsers (eigentlich swcss1.cxx)
 static struct SwCSS1ItemIds
@@ -130,8 +128,6 @@ SwCSS1Parser::SwCSS1Parser( SwDoc *pD, sal_uInt32 aFHeights[7], const OUString& 
 SwCSS1Parser::~SwCSS1Parser()
 {
 }
-
-
 
 // Feature: PrintExt
 sal_Bool SwCSS1Parser::SetFmtBreak( SfxItemSet& rItemSet,
@@ -1149,7 +1145,6 @@ const FontList *SwCSS1Parser::GetFontList() const
     return pFList;
 }
 
-
 SwCharFmt* SwCSS1Parser::GetChrFmt( sal_uInt16 nToken2, const OUString& rClass ) const
 {
     // die entsprechende Vorlage suchen
@@ -1228,8 +1223,6 @@ SwCharFmt* SwCSS1Parser::GetChrFmt( sal_uInt16 nToken2, const OUString& rClass )
 
     return pCFmt;
 }
-
-
 
 SwTxtFmtColl *SwCSS1Parser::GetTxtCollFromPool( sal_uInt16 nPoolId ) const
 {
@@ -1448,18 +1441,17 @@ const SwPageDesc *SwCSS1Parser::GetPageDesc( sal_uInt16 nPoolId, sal_Bool bCreat
     return pPageDesc;
 }
 
-
 sal_Bool SwCSS1Parser::MayBePositioned( const SvxCSS1PropertyInfo& rPropInfo,
                                     sal_Bool bAutoWidth )
 {
     // abs-pos
     // left/top none    auto    twip    perc
-    //
+
     // none     Z       Z       -       -
     // auto     Z       Z       -       -
     // twip     Z       Z       S/R     -
     // perc     -       -       -       -
-    //
+
     // - das Tag wird absolut positioniert und left/top sind beide
     //   gegeben und enthalten auch keine %-Angabe, oder
     // - das Tag soll fliessen, und
@@ -1475,15 +1467,12 @@ sal_Bool SwCSS1Parser::MayBePositioned( const SvxCSS1PropertyInfo& rPropInfo,
              SVX_CSS1_LTYPE_PERCENTAGE   == rPropInfo.eWidthType );
 }
 
-
-
 void SwCSS1Parser::AddClassName( OUString& rFmtName, const OUString& rClass )
 {
     OSL_ENSURE( !rClass.isEmpty(), "Style-Klasse ohne Laenge?" );
 
     rFmtName += "." + rClass;
 }
-
 
 void SwCSS1Parser::FillDropCap( SwFmtDrop& rDrop,
                                 SfxItemSet& rItemSet,
@@ -1560,7 +1549,6 @@ void SwCSS1Parser::FillDropCap( SwFmtDrop& rDrop,
             rDrop.SetCharFmt( pCFmt );
     }
 }
-
 
 // CSS1-sezifisches des SwHTMLParsers
 
@@ -1736,7 +1724,6 @@ sal_Bool SwHTMLParser::FileDownload( const OUString& rURL,
         rStr = OUString((const sal_Char *)aStream.GetData(), aStream.Tell(),
             GetSrcEncoding());
     }
-
 
     // wurde abgebrochen?
     if( ( pDoc->GetDocShell() && pDoc->GetDocShell()->IsAbortingImport() )
@@ -2148,8 +2135,6 @@ void SwHTMLParser::SetFrmFmtAttrs( SfxItemSet &rItemSet,
         rItemSet.ClearItem( RES_FRAMEDIR );
     }
 }
-
-
 
 _HTMLAttrContext *SwHTMLParser::PopContext( sal_uInt16 nToken, sal_uInt16 nLimit,
                                             sal_Bool bRemove )

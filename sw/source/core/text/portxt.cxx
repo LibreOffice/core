@@ -385,7 +385,7 @@ bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
         //   (work around different definition of tab stop character - breaking or
         //   non breaking character - in compatibility mode)
         else if ( ( IsFtnPortion() && rInf.IsFakeLineStart() &&
-                    //
+
                     rInf.IsOtherThanFtnInside() ) ||
                   ( rInf.GetLast() &&
                     rInf.GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT) &&
@@ -457,8 +457,6 @@ bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
  *                 virtual SwTxtPortion::Format()
  *************************************************************************/
 
-
-
 bool SwTxtPortion::Format( SwTxtFormatInfo &rInf )
 {
     if( rInf.X() > rInf.Width() || (!GetLen() && !InExpGrp()) )
@@ -488,7 +486,7 @@ bool SwTxtPortion::Format( SwTxtFormatInfo &rInf )
 // Santa wraps, "from " turns into "from" and " " in a justified
 // paragraph, in which the glue gets expanded instead of merged
 // with the MarginPortion.
-//
+
 // rInf.nIdx points to the next word, nIdx-1 is the portion's last char
 
 void SwTxtPortion::FormatEOL( SwTxtFormatInfo &rInf )
@@ -597,8 +595,6 @@ void SwTxtPortion::Paint( const SwTxtPaintInfo &rInf ) const
  *              virtual SwTxtPortion::GetExpTxt()
  *************************************************************************/
 
-
-
 bool SwTxtPortion::GetExpTxt( const SwTxtSizeInfo &, OUString & ) const
 {
     return false;
@@ -701,7 +697,6 @@ void SwTxtPortion::HandlePortion( SwPortionHandler& rPH ) const
     rPH.Text( GetLen(), GetWhichPor(), Height(), Width() );
 }
 
-
 SwTxtInputFldPortion::SwTxtInputFldPortion()
     : SwTxtPortion()
     , mbContainsInputFieldStart( false )
@@ -709,7 +704,6 @@ SwTxtInputFldPortion::SwTxtInputFldPortion()
 {
     SetWhichPor( POR_INPUTFLD );
 }
-
 
 bool SwTxtInputFldPortion::Format( SwTxtFormatInfo &rInf )
 {
@@ -795,7 +789,6 @@ bool SwTxtInputFldPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt 
     return true;
 }
 
-
 SwPosSize SwTxtInputFldPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
 {
     SwTxtSlot aFormatTxt( &rInf, this, true, false, 0 );
@@ -806,7 +799,6 @@ SwPosSize SwTxtInputFldPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
 
     return rInf.GetTxtSize();
 }
-
 
 KSHORT SwTxtInputFldPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
 {
@@ -833,8 +825,6 @@ bool SwTxtInputFldPortion::ContainsOnlyDummyChars() const
  *                      class SwHolePortion
  *************************************************************************/
 
-
-
 SwHolePortion::SwHolePortion( const SwTxtPortion &rPor )
     : nBlankWidth( 0 )
 {
@@ -849,8 +839,6 @@ SwLinePortion *SwHolePortion::Compress() { return this; }
 /*************************************************************************
  *               virtual SwHolePortion::Paint()
  *************************************************************************/
-
-
 
 void SwHolePortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
@@ -886,8 +874,6 @@ void SwHolePortion::Paint( const SwTxtPaintInfo &rInf ) const
 /*************************************************************************
  *                 virtual SwHolePortion::Format()
  *************************************************************************/
-
-
 
 bool SwHolePortion::Format( SwTxtFormatInfo &rInf )
 {
@@ -1007,6 +993,5 @@ bool SwFieldFormPortion::Format( SwTxtFormatInfo & rInf )
     }
     return false;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -116,7 +116,6 @@ SwVbaReadFieldParams::~SwVbaReadFieldParams()
 {
 }
 
-
 OUString SwVbaReadFieldParams::GetResult() const
 {
     return    (-1 == nFnd)
@@ -161,9 +160,9 @@ long SwVbaReadFieldParams::SkipToNextToken()
 // FindNextPara is searching for the next Backslash-Parameter or the next string
 // until blank or the next "\" or until the closing quotation mark
 // or until the string end of pStr.
-//
+
 // Output ppNext (if ppNext != 0) beginning of the search for the next parameter or 0
-//
+
 // Return value: 0 if String-End reached, otherwise begin of the paramater or the string
 
 sal_Int32 SwVbaReadFieldParams::FindNextStringPiece(const sal_Int32 nStart)

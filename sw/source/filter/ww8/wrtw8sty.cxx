@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <algorithm>
 #include <functional>
 
@@ -114,9 +113,7 @@ public:
     void Write( SvStream& rStrm );
 };
 
-
 //  Styles
-
 
 #define WW8_RESERVED_SLOTS 15
 
@@ -135,8 +132,6 @@ sal_uInt16 MSWordExportBase::GetId( const SwTxtFmtColl& rColl ) const
     sal_uInt16 nRet = pStyles->GetSlot( rColl );
     return ( nRet != 0xfff ) ? nRet : 0;        // Default TxtFmtColl
 }
-
-
 
 //typedef pFmtT
 MSWordStyles::MSWordStyles( MSWordExportBase& rExport, bool bListStyles )
@@ -422,7 +417,6 @@ void WW8AttributeOutput::StartStyle( const OUString& rName, StyleType eType, sal
         //sal_uInt16    fHidden : 1;       /* hidden from UI? */
         //sal_uInt16    : 14;              /* unused bits */
     }
-
 
     sal_uInt16 nLen = static_cast< sal_uInt16 >( ( pData - aWW8_STD ) + 1 +
                 ((m_rWW8Export.bWrtWW8 ? 2 : 1 ) * (rName.getLength() + 1)) );  // temporary
@@ -725,7 +719,6 @@ const SwNumRule* MSWordStyles::GetSwNumRule(sal_uInt16 nId) const
     return it->second;
 }
 
-
 //          Fonts
 
 wwFont::wwFont(const OUString &rFamilyName, FontPitch ePitch, FontFamily eFamily,
@@ -794,7 +787,7 @@ wwFont::wwFont(const OUString &rFamilyName, FontPitch ePitch, FontFamily eFamily
 
     ShortToSVBT16( 400, &maWW8_FFN[2] );        // don't know any better
                                                 // 400 == FW_NORMAL (windows.h)
-                                                //
+
     //#i61927# For unicode fonts like Arial Unicode, Word 97+ sets the chs
     //to SHIFTJIS presumably to capture that it's a multi-byte encoding font
     //but Word95 doesn't do this, and sets it to 0 (ANSI), so we should do the
@@ -875,7 +868,6 @@ bool operator<(const wwFont &r1, const wwFont &r2)
     }
     return nRet < 0;
 }
-
 
 sal_uInt16 wwFontHelper::GetId(const wwFont &rFont)
 {
@@ -1013,7 +1005,6 @@ void wwFontHelper::WriteFontTable( const RtfAttributeOutput& rAttrOutput )
         ::std::bind2nd( ::std::mem_fun( &wwFont::WriteRtf ), &rAttrOutput ) );
 }
 
-
 WW8_WrPlc0::WW8_WrPlc0( sal_uLong nOffset )
     : nOfs( nOffset )
 {
@@ -1035,12 +1026,8 @@ void WW8_WrPlc0::Write( SvStream& rStrm )
     }
 }
 
-
-
-
 // class MSWordSections : translate PageDescs into Sections
 //      also deals with header and footer
-
 
 MSWordSections::MSWordSections( MSWordExportBase& rExport )
     : mbDocumentIsProtected( false )
@@ -1343,7 +1330,6 @@ bool WW8_SepInfo::IsProtected() const
     }
     return bRet;
 }
-
 
 void MSWordSections::CheckForFacinPg( WW8Export& rWrt ) const
 {
@@ -1703,7 +1689,6 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
             else
                 aSet.Put(rSepInfo.pSectionFmt->GetFmtAttr(RES_COL));
 
-
             aSet.Put( aResultLR );
 
             // und raus damit ins WW-File
@@ -1980,7 +1965,6 @@ void WW8_WrPlcSepx::WritePlcSed( WW8Export& rWrt ) const
     rWrt.pFib->lcbPlcfsed = rWrt.pTableStrm->Tell() - nFcStart;
 }
 
-
 void WW8_WrPlcSepx::WritePlcHdd( WW8Export& rWrt ) const
 {
     // Don't write out the PlcfHdd if ccpHdd is 0: it's a validation failure case.
@@ -2039,7 +2023,6 @@ void MSWordExportBase::WriteHeaderFooterText( const SwFmt& rFmt, bool bHeader )
         AttrOutput().EmptyParagraph(); // CR ans Ende ( sonst mault WW )
     }
 }
-
 
 // class WW8_WrPlcFtnEdn : Collect the Footnotes and Endnotes and output their text
 // and Plcs at the end of the document.
@@ -2546,7 +2529,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                 }
 
                 // documents layout of WriteShort's below:
-                //
+
                 // SVBT16 ibst;      // index into GrpXstAtnOwners
                 // SVBT16 ak;        // not used
                 // SVBT16 grfbmc;    // not used

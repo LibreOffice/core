@@ -28,7 +28,6 @@
 
 using namespace ::com::sun::star;
 
-
 SwScriptIterator::SwScriptIterator(
             const OUString& rStr, sal_Int32 nStt, bool const bFrwrd)
     : m_rText(rStr)
@@ -93,8 +92,6 @@ bool SwScriptIterator::Next()
         m_nChgPos = m_rText.getLength();
     return bRet;
 }
-
-
 
 SwTxtAttrIterator::SwTxtAttrIterator( const SwTxtNode& rTNd, sal_uInt16 nWhchId,
                                         sal_Int32 nStt,
@@ -230,6 +227,5 @@ void SwTxtAttrIterator::SearchNextChg()
         }
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SW_SOURCE_UI_INC_DBINSDLG_HXX
 #define INCLUDED_SW_SOURCE_UI_INC_DBINSDLG_HXX
 
-
 #include <vcl/button.hxx>
 #include <vcl/group.hxx>
 #include <vcl/fixed.hxx>
@@ -85,7 +84,6 @@ class SwInsDBColumns : public o3tl::sorted_vector<SwInsDBColumn*, o3tl::less_ptr
 public:
     ~SwInsDBColumns() { DeleteAndDestroyAll(); }
 };
-
 
 class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
 {

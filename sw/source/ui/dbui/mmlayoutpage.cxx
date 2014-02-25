@@ -334,7 +334,7 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
         const OUString* pAssignment = aAssignment.getConstArray();
         if(aAssignment.getLength() > MM_PART_COUNTRY && !aAssignment[MM_PART_COUNTRY].isEmpty())
             sCountryColumn = aAssignment[MM_PART_COUNTRY];
-        //
+
         OUString sHideParagraphsExpression;
         SwAddressIterator aIter(aBlocks[0]);
         while(aIter.HasMore())

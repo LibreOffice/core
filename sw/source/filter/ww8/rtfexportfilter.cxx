@@ -94,7 +94,6 @@ sal_Bool RtfExportFilter::filter( const uno::Sequence< beans::PropertyValue >& a
     return sal_True;
 }
 
-
 void RtfExportFilter::cancel(  ) throw (uno::RuntimeException, std::exception)
 {
 }
@@ -105,9 +104,7 @@ void RtfExportFilter::setSourceDocument( const uno::Reference< lang::XComponent 
     m_xSrcDoc = xDoc;
 }
 
-//////////////////////////////////////////////////////////////////////////
 // UNO helpers
-//////////////////////////////////////////////////////////////////////////
 
 OUString RtfExport_getImplementationName()
 {

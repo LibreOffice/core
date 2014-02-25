@@ -61,7 +61,6 @@
 
 using namespace ::com::sun::star;
 
-
 class SwHTMLWrtTable : public SwWriteTable
 {
     void Pixelize( sal_uInt16& rValue );
@@ -93,7 +92,6 @@ public:
                 const OUString *pCaption=0, sal_Bool bTopCaption=sal_False,
                 sal_uInt16 nHSpace=0, sal_uInt16 nVSpace=0 ) const;
 };
-
 
 SwHTMLWrtTable::SwHTMLWrtTable( const SwTableLines& rLines, long nWidth,
                                 sal_uInt32 nBWidth, sal_Bool bRel,
@@ -237,7 +235,6 @@ static sal_Bool lcl_TableLine_HasTabBorders( const SwTableLine* pLine, sal_Bool 
     return !*pBorders;
 }
 
-
 sal_Bool SwHTMLWrtTable::ShouldExpandSub( const SwTableBox *pBox,
                                       sal_Bool bExpandedBefore,
                                       sal_uInt16 nDepth ) const
@@ -256,7 +253,6 @@ sal_Bool SwHTMLWrtTable::ShouldExpandSub( const SwTableBox *pBox,
 
     return bExpand;
 }
-
 
 // Eine Box als einzelne Zelle schreiben
 void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
@@ -505,7 +501,6 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     rWrt.bLFPossible = sal_True;
 }
 
-
 // Eine Line als Zeilen ausgeben
 void SwHTMLWrtTable::OutTableCells( SwHTMLWriter& rWrt,
                                     const SwWriteTableCells& rCells,
@@ -566,8 +561,6 @@ void SwHTMLWrtTable::OutTableCells( SwHTMLWriter& rWrt,
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_tablerow, sal_False );
 }
 
-
-
 void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
                             sal_Bool bTHead, const SwFrmFmt *pFrmFmt,
                             const OUString *pCaption, sal_Bool bTopCaption,
@@ -624,7 +617,6 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         pNextCol->bLeftBorder = bBorder;
         pCol = pNextCol;
     }
-
 
     // vorhergende Aufzaehlung etc. beenden
     rWrt.ChangeParaToken( 0 );
@@ -1184,6 +1176,5 @@ Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
     }
     return rWrt;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

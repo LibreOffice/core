@@ -240,7 +240,6 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
         bRet = sal_True;
     FOREACHPAM_END()
 
-
     // Maybe nothing has been moved?
     if( !bFirstMove )
     {

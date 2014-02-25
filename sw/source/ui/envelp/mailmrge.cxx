@@ -77,7 +77,6 @@ using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::ui::dialogs;
 
-
 struct SwMailMergeDlg_Impl
 {
     uno::Reference<runtime::XFormController> xFController;

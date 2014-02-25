@@ -36,7 +36,6 @@
 #include <pam.hxx>
 #include <unobaseclass.hxx>
 
-
 class SwDoc;
 class SwUnoCrsr;
 class SwFrmFmt;
@@ -55,7 +54,6 @@ public:
     SwUnoInternalPaM& operator=(const SwPaM& rPaM);
 };
 
-
 namespace sw {
 
     void DeepCopyPaM(SwPaM const & rSource, SwPaM & rTarget);
@@ -71,7 +69,6 @@ namespace sw {
         const OUString& rPropertyName, sal_uInt16 nWID = 0);
 
 } // namespace sw
-
 
 typedef ::cppu::WeakImplHelper8
 <   ::com::sun::star::lang::XUnoTunnel

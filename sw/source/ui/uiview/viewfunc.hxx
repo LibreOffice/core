@@ -48,7 +48,6 @@ void ViewResizePixel( const Window &rRef,
                     SvxRuler* pHRuler = 0,
                     sal_Bool bVRulerRight = sal_False );
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

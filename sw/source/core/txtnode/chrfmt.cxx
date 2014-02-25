@@ -19,9 +19,6 @@
 
 #include <charfmt.hxx>
 
-
 TYPEINIT1( SwCharFmt, SwFmt );  //rtti fuer SwCharFmt
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

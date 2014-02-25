@@ -130,7 +130,7 @@
 #define FLD_BOTTOM_MARGIN       116
 
 #define IMG_CUSTOM_DIS          121
-//
+
 #define STR_MARGIN_TOOLTIP_LEFT             122
 #define STR_MARGIN_TOOLTIP_RIGHT                123
 #define STR_MARGIN_TOOLTIP_INNER                124

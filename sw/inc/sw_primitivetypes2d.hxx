@@ -22,13 +22,9 @@
 
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
-
 #define PRIMITIVE2D_ID_SWVIRTFLYDRAWOBJPRIMITIVE2D  (PRIMITIVE2D_ID_RANGE_SW| 0)
 #define PRIMITIVE2D_ID_SWSIDEBARANCHORPRIMITIVE     (PRIMITIVE2D_ID_RANGE_SW| 1)
 #define PRIMITIVE2D_ID_SWSIDEBARSHADOWPRIMITIVE     (PRIMITIVE2D_ID_RANGE_SW| 2)
-
-//////////////////////////////////////////////////////////////////////////////
 
 #endif // INCLUDED_SW_INC_SW_PRIMITIVETYPES2D_HXX
 

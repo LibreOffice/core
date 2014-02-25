@@ -19,13 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UI_INC_TBLCTRL_HXX
 #define INCLUDED_SW_SOURCE_UI_INC_TBLCTRL_HXX
 
-
 #include <sfx2/tbxctrl.hxx>
-
-
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
 
 class SwTableOptimizeCtrl : public SfxToolBoxControl
 {
@@ -41,10 +35,6 @@ public:
 
 };
 
-//
-//----------------------------------------------------------------------------
-
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

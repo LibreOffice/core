@@ -1141,7 +1141,7 @@ void SwTOXBaseSection::UpdateMarks( const SwTOXInternational& rIntl,
             const SwTxtNode* pTOXSrc = pTxtMark->GetpTxtNd();
             // Only insert TOXMarks from the Doc, not from the
             // UNDO.
-            //
+
             // If selected use marks from the same chapter only
             if( pTOXSrc->GetNodes().IsDocNodes() &&
                 pTOXSrc->GetTxt().getLength() && pTOXSrc->GetDepends() &&

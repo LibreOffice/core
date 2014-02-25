@@ -82,7 +82,6 @@ public:
     sal_Bool IsNoDataFlag() const           { return bNoDataFlag; }
 };
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

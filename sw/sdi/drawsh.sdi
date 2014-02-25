@@ -419,7 +419,6 @@ shell SwDrawShell : SwDrawBaseShell
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
-
     SID_FORMTEXT_ADJUST
     [
         ExecMethod = ExecFormText ;
@@ -427,14 +426,12 @@ shell SwDrawShell : SwDrawBaseShell
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
-
     SID_FORMTEXT_DISTANCE
     [
         ExecMethod = ExecFormText ;
         StateMethod = GetFormTextState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-
 
     SID_FORMTEXT_START
     [
@@ -449,7 +446,6 @@ shell SwDrawShell : SwDrawBaseShell
         StateMethod = GetFormTextState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-
 
     SID_FORMTEXT_HIDEFORM
     [
@@ -513,5 +509,4 @@ shell SwDrawShell : SwDrawBaseShell
         ExecMethod = Execute ;
     ]
 }
-
 

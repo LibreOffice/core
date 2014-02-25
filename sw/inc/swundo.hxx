@@ -23,9 +23,7 @@
 
 #include <rtl/ustring.hxx>
 
-
 typedef ::std::vector< OUString > SwUndoComments_t;
-
 
 // The IDs for StdActions.
 enum SwUndoId
@@ -171,7 +169,6 @@ enum SwUndoId
     UNDO_UI_DELETE_PAGE_BREAK,
     UNDO_UI_TEXT_CORRECTION
 };
-
 
 #endif
 

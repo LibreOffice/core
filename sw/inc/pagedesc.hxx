@@ -338,7 +338,6 @@ public:
     operator SwPageDesc() const; // #i7983#
 };
 
-
 #endif // INCLUDED_SW_INC_PAGEDESC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

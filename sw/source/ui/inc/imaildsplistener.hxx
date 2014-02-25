@@ -23,7 +23,6 @@
 #include "com/sun/star/mail/XMailMessage.hpp"
 #include <salhelper/refobj.hxx>
 
-
 class MailDispatcher;
 
 /**

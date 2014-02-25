@@ -825,7 +825,6 @@ IMPL_LINK_NOARG(SwFldVarPage, ModifyHdl)
         break;
     }
 
-
     // check buttons
     switch (nTypeId)
     {

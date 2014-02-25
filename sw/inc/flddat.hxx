@@ -26,7 +26,6 @@ class DateTime;
 class Date;
 class Time;
 
-
 enum SwDateFormat
 {
     DF_BEGIN,
@@ -81,7 +80,6 @@ enum SwDateSubFormat
     DATE_VAR
 };
 
-
 class SwDateTimeFieldType : public SwValueFieldType
 {
 public:
@@ -89,7 +87,6 @@ public:
 
         virtual SwFieldType*    Copy() const;
 };
-
 
 class SW_DLLPUBLIC SwDateTimeField : public SwValueField
 {

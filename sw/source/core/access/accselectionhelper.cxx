@@ -80,7 +80,6 @@ void SwAccessibleSelectionHelper::throwIndexOutOfBoundsException()
     throw aExcept;
 }
 
-
 // XAccessibleSelection
 void SwAccessibleSelectionHelper::selectAccessibleChild(
     sal_Int32 nChildIndex )

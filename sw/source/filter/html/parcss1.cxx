@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <ctype.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -28,7 +27,6 @@
 #include <comphelper/string.hxx>
 #include "css1kywd.hxx"
 #include "parcss1.hxx"
-
 
 // Loop-Check: Um Endlos-Schleifen zu vermeiden, wird in jeder
 // Schalife geprueft, ob ein Fortschritt in der Eingabe-Position
@@ -56,9 +54,7 @@
 
 #endif
 
-
 const sal_Int32 MAX_LEN = 1024;
-
 
 void CSS1Parser::InitRead( const OUString& rIn )
 {
@@ -99,13 +95,13 @@ sal_Unicode CSS1Parser::GetNextChar()
 }
 
 // Diese Funktion realisiert den in
-//
+
 //      http://www.w3.orh/pub/WWW/TR/WD-css1.html
 // bzw. http://www.w3.orh/pub/WWW/TR/WD-css1-960220.html
-//
+
 // beschriebenen Scanner fuer CSS1. Es handelt sich um eine direkte
 // Umsetzung der dort beschriebenen Lex-Grammatik
-//
+
 CSS1Token CSS1Parser::GetNextToken()
 {
     CSS1Token nRet = CSS1_NULL;
@@ -659,24 +655,23 @@ CSS1Token CSS1Parser::GetNextToken()
     return nRet;
 }
 
-
 // Dies folegenden Funktionen realisieren den in
-//
+
 //      http://www.w3.orh/pub/WWW/TR/WD-css1.html
 // bzw. http://www.w3.orh/pub/WWW/TR/WD-css1-960220.html
-//
+
 // beschriebenen Parser fuer CSS1. Es handelt sich um eine direkte
 // Umsetzung der dort beschriebenen Grammatik
 
 // stylesheet
 //  : import* rule*
-//
+
 // import
 //  : IMPORT_SYM url
-//
+
 // url
 //  : STRING
-//
+
 void CSS1Parser::ParseStyleSheet()
 {
     LOOP_CHECK_DECL
@@ -741,7 +736,7 @@ void CSS1Parser::ParseStyleSheet()
 // rule
 //  : selector [ ',' selector ]*
 //    '{' declaration [ ';' declaration ]* '}'
-//
+
 void CSS1Parser::ParseRule()
 {
     // selector
@@ -818,24 +813,24 @@ void CSS1Parser::ParseRule()
 
 // selector
 //  : simple_selector+ [ ':' pseudo_element ]?
-//
+
 // simple_selector
 //  : element_name [ DOT_WO_WS class ]?
 //  | DOT_W_WS class
 //  | id_selector
-//
+
 // element_name
 //  : IDENT
-//
+
 // class
 //  : IDENT
-//
+
 // id_selector
 //  : '#' IDENT
-//
+
 // pseude_element
 //  : IDENT
-//
+
 CSS1Selector *CSS1Parser::ParseSelector()
 {
     CSS1Selector *pRoot = 0, *pLast = 0;
@@ -985,24 +980,24 @@ CSS1Selector *CSS1Parser::ParseSelector()
 // declaration
 //  : property ':' expr prio?
 //  | /* empty */
-//
+
 // expression
 //  : term [ operator term ]*
-//
+
 // term
 //  : unary_operator?
 //     [ NUMBER | STRING | PERCENTAGE | LENGTH | EMS | EXS | IDENT |
 //       HEXCOLOR | URL | RGB ]
-//
+
 // operator
 //  : '/' | ',' | /* empty */
-//
+
 // unary_operator
 //  : '-' | '+'
-//
+
 // property
 //  : ident
-//
+
 // das Vorzeichen wird nur fuer numerische Werte (ausser PERCENTAGE)
 // beruecksichtigt und wird auf nValue angewendet!
 CSS1Expression *CSS1Parser::ParseDeclaration( OUString& rProperty )
@@ -1018,7 +1013,6 @@ CSS1Expression *CSS1Parser::ParseDeclaration( OUString& rProperty )
     rProperty = aToken;
 
     nToken = GetNextToken();
-
 
     // ':'
     if( CSS1_COLON != nToken )
@@ -1119,7 +1113,6 @@ CSS1Expression *CSS1Parser::ParseDeclaration( OUString& rProperty )
     return pRoot;
 }
 
-
 CSS1Parser::CSS1Parser()
     : nValue(0)
     , eState(CSS1_PAR_ACCEPTED)
@@ -1130,7 +1123,6 @@ CSS1Parser::CSS1Parser()
 CSS1Parser::~CSS1Parser()
 {
 }
-
 
 sal_Bool CSS1Parser::ParseStyleSheet( const OUString& rIn )
 {
@@ -1163,7 +1155,6 @@ sal_Bool CSS1Parser::ParseStyleSheet( const OUString& rIn )
 
     return sal_True;
 }
-
 
 sal_Bool CSS1Parser::ParseStyleOption( const OUString& rIn )
 {
@@ -1224,7 +1215,6 @@ sal_Bool CSS1Parser::DeclarationParsed( const OUString& /*rProperty*/,
     // Deklaration loeschen
     return sal_True;
 }
-
 
 CSS1Selector::~CSS1Selector()
 {
@@ -1376,7 +1366,6 @@ sal_Bool CSS1Expression::GetColor( Color &rColor ) const
     default:
         ;
     }
-
 
     if( bRet && nColor!=SAL_MAX_UINT32 )
     {

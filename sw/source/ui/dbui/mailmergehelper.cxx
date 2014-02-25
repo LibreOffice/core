@@ -49,7 +49,6 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 
-
 namespace SwMailMergeHelper
 {
 
@@ -166,7 +165,6 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
     }
     return xSmtpServer;
 }
-
 
 } //namespace
 

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <cmdid.h>
 #include "globals.hrc"
 
@@ -302,6 +301,5 @@ void SwClipboardChangeListener::AddRemoveListener( sal_Bool bAdd )
 {
     pView->AddRemoveClipboardListener( Reference< XClipboardListener >( this ), bAdd );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

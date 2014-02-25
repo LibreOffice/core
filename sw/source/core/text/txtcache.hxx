@@ -42,7 +42,6 @@ public:
     inline void SetPara( SwParaPortion *pNew ) { pLine = pNew; }
 };
 
-
 class SwTxtLineAccess : public SwCacheAccess
 {
 
@@ -58,7 +57,6 @@ public:
 
     virtual bool IsAvailable() const;
 };
-
 
 inline SwTxtLine &SwTxtLineAccess::GetTxtLine()
 {

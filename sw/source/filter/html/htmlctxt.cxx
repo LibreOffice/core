@@ -38,9 +38,6 @@
 
 using namespace ::com::sun::star;
 
-
-
-
 class _HTMLAttrContext_SaveDoc
 {
     SwHTMLNumRuleInfo aNumRuleInfo; // In Umgebung gueltige Numerierung
@@ -112,7 +109,6 @@ _HTMLAttrTable *_HTMLAttrContext_SaveDoc::GetAttrTab( sal_Bool bCreate )
     return pAttrTab;
 }
 
-
 _HTMLAttrContext_SaveDoc *_HTMLAttrContext::GetSaveDocContext( sal_Bool bCreate )
 {
     if( !pSaveDocContext && bCreate )
@@ -126,7 +122,6 @@ void _HTMLAttrContext::ClearSaveDocContext()
     delete pSaveDocContext;
     pSaveDocContext = 0;
 }
-
 
 void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
 {
@@ -263,7 +258,6 @@ void SwHTMLParser::SaveDocContext( _HTMLAttrContext *pCntxt,
             SaveAttrTab( *pSaveAttrTab );
         }
 
-
         pSave->SetPos( *pPam->GetPoint() );
         *pPam->GetPoint() = *pNewPos;
     }
@@ -331,7 +325,6 @@ void SwHTMLParser::RestoreDocContext( _HTMLAttrContext *pCntxt )
 
     pCntxt->ClearSaveDocContext();
 }
-
 
 void SwHTMLParser::EndContext( _HTMLAttrContext *pContext )
 {
@@ -418,7 +411,6 @@ void SwHTMLParser::ClearContext( _HTMLAttrContext *pContext )
         StartListing();
 }
 
-
 sal_Bool SwHTMLParser::DoPositioning( SfxItemSet &rItemSet,
                                   SvxCSS1PropertyInfo &rPropInfo,
                                   _HTMLAttrContext *pContext )
@@ -491,7 +483,6 @@ sal_Bool SwHTMLParser::CreateContainer( const OUString& rClass,
     return bRet;
 }
 
-
 void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                                 SvxCSS1PropertyInfo &rPropInfo,
                                 _HTMLAttrContext *pContext,
@@ -555,7 +546,6 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                                   aContexts.back() == pContext;
                 GetMarginsFromContext( nOldLeft, nOldRight, nOldIndent,
                                        bIgnoreTop  );
-
 
                 // und noch die aktuell gueltigen
                 sal_uInt16 nLeft = nOldLeft, nRight = nOldRight;

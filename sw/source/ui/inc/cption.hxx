@@ -32,7 +32,6 @@
 #include <vcl/button.hxx>
 #include <actctrl.hxx>
 
-
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -58,7 +57,6 @@ public:
 
     virtual bool PreNotify( NotifyEvent& rNEvt );
 };
-
 
 class SwCaptionDialog : public SvxStandardDialog
 {
@@ -111,6 +109,5 @@ public:
 };
 
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

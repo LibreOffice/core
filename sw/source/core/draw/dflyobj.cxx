@@ -105,7 +105,6 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-
 sdr::properties::BaseProperties* SwFlyDrawObj::CreateObjectSpecificProperties()
 {
     // create default properties
@@ -385,7 +384,6 @@ SwVirtFlyDrawObj::SwVirtFlyDrawObj(SdrObject& rNew, SwFlyFrm* pFly) :
     bMovProt = rP.IsPosProtected();
     bSizProt = rP.IsSizeProtected();
 }
-
 
 SwVirtFlyDrawObj::~SwVirtFlyDrawObj()
 {

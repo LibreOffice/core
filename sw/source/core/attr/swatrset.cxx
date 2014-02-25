@@ -36,9 +36,7 @@
 #include <svl/whiter.hxx>
 #include <svx/xtable.hxx>
 
-
 // SwAttrPool
-
 
 SwAttrPool::SwAttrPool( SwDoc* pD )
     : SfxItemPool( OUString("SWG"),
@@ -60,9 +58,7 @@ SwAttrPool::~SwAttrPool()
 {
 }
 
-
 // SwAttrSet
-
 
 SwAttrSet::SwAttrSet( SwAttrPool& rPool, sal_uInt16 nWh1, sal_uInt16 nWh2 )
     : SfxItemSet( rPool, nWh1, nWh2 ), pOldSet( 0 ), pNewSet( 0 )
@@ -120,7 +116,6 @@ bool SwAttrSet::Put_BC( const SfxPoolItem& rAttr,
     pOldSet = pNewSet = 0;
     return nRet;
 }
-
 
 bool SwAttrSet::Put_BC( const SfxItemSet& rSet,
                        SwAttrSet* pOld, SwAttrSet* pNew )

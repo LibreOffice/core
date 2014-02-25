@@ -21,7 +21,6 @@
 #include <svl/itemiter.hxx>
 #include <rtl/tencinfo.h>
 
-
 #include <hintids.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/wrlmitem.hxx>
@@ -105,17 +104,13 @@ using namespace sw::types;
 using namespace ::com::sun::star;
 using namespace nsHdFtFlags;
 
-
 //              diverses
-
 
 #define MM_250 1417             // WW-Default fuer Hor. Seitenraender: 2.5 cm
 #define MM_200 1134             // WW-Default fuer u.Seitenrand: 2.0 cm
 
-
 static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRC* brc, WW8PLCFx_Cp_FKP* pPap,
     const WW8RStyle* pSty = 0, const WW8PLCFx_SEPX* pSep = 0);
-
 
 ColorData SwWW8ImplReader::GetCol(sal_uInt8 nIco)
 {
@@ -1194,9 +1189,7 @@ void SwWW8ImplReader::CopyPageDescHdFt(const SwPageDesc* pOrgPageDesc,
     }
 }
 
-
 //   Hilfsroutinen fuer Grafiken und Apos und Tabellen
-
 
 static bool _SetWW8_BRC(bool bVer67, WW8_BRC& rVar, const sal_uInt8* pS)
 {
@@ -1387,7 +1380,6 @@ bool SwWW8ImplReader::SetBorder(SvxBoxItem& rBox, const WW8_BRC* pbrc,
     return bChange;
 }
 
-
 bool SwWW8ImplReader::SetShadow(SvxShadowItem& rShadow, const short *pSizeArray,
     const WW8_BRC& aRightBrc) const
 {
@@ -1431,7 +1423,6 @@ void SwWW8ImplReader::GetBorderDistance(const WW8_BRC* pbrc,
     }
 }
 
-
 bool SwWW8ImplReader::SetFlyBordersShadow(SfxItemSet& rFlySet,
     const WW8_BRC *pbrc, short *pSizeArray) const
 {
@@ -1453,7 +1444,6 @@ bool SwWW8ImplReader::SetFlyBordersShadow(SfxItemSet& rFlySet,
     }
     return bShadowed;
 }
-
 
 //              APOs
 
@@ -1656,7 +1646,6 @@ void WW8FlyPara::ReadFull(sal_uInt8 nOrigSp29, SwWW8ImplReader* pIo)
         pIoStrm->Seek( nPos );
     }while( false );                                    // Block zum rausspringen
 }
-
 
 // Read fuer Apo-Defs in Styledefs
 void WW8FlyPara::Read(sal_uInt8 nOrigSp29, WW8RStyle* pStyle)
@@ -2203,7 +2192,7 @@ SwTwips SwWW8ImplReader::MoveOutsideFly(SwFrmFmt *pFlyFmt,
                         if (aIdx == aEnd && pNd && pNd->GetTxt().isEmpty())
                         {
                             //An extra pre-created by writer unused paragraph
-                            //
+
                             //delete after import is complete rather than now
                             //to avoid the complication of managing uncommitted
                             //ctrlstack properties that refer to it.
@@ -3197,7 +3186,6 @@ void SwWW8ImplReader::Read_Underline( sal_uInt16, const sal_uInt8* pData, short 
                     // 6 = thick,   7 = dash,    8 = dot(not used)
                     // 9 = dotdash 10 = dotdotdash 11 = wave
 
-
         // pruefe auf Sonderfall "fett+unterstrichen"
         bool bAlsoBold = /*( 6 == b )*/ false;
         // erst mal ggfs. *bold* einschalten!
@@ -3672,8 +3660,6 @@ void SwWW8ImplReader::Read_FontSize( sal_uInt16 nId, const sal_uInt8* pData, sho
     }
 }
 
-
-
 void SwWW8ImplReader::Read_CharSet(sal_uInt16 , const sal_uInt8* pData, short nLen)
 {
     if( nLen < 0 )
@@ -3748,7 +3734,6 @@ void SwWW8ImplReader::Read_CColl( sal_uInt16, const sal_uInt8* pData, short nLen
     NewAttr( SwFmtCharFmt( (SwCharFmt*)vColl[nId].pFmt ) );
     nCharFmt = (short) nId;
 }
-
 
 /*
     enger oder weiter als normal:
@@ -3841,7 +3826,6 @@ void SwWW8ImplReader::Read_CharHighlight(sal_uInt16, const sal_uInt8* pData, sho
         NewAttr( SvxBrushItem( aCol , RES_CHRATR_BACKGROUND ));
     }
 }
-
 
 /***************************************************************************
 #  Absatz - Attribute
@@ -4056,7 +4040,7 @@ void SwWW8ImplReader::Read_LineSpace( sal_uInt16, const sal_uInt8* pData, short 
 // 0.2*Zeilenabstand "nach".
 // Bei "Mindestens" sind es 1*Zeilenabstand "vor" und 0*Zeilenabstand "nach".
 // Bei Mehrfach sind es 0 "vor" und min( 0cm, FontSize*(nFach-1) ) "nach".
-//
+
 // SW hat auch einen impliziten Zeilenabstand. er betraegt bei "mindestens"
 // 1*Zeilenabstand "vor" und 0 "nach"
 // bei proportional betraegt er min( 0cm, FontSize*(nFach-1) ) sowohl "vor"
@@ -4572,7 +4556,6 @@ void SwWW8Shade::SetShade(ColorData nFore, ColorData nBack, sal_uInt16 nIndex)
          975    // 61   [available in DOC, not available in DOCX]
     };// 62
 
-
     //NO auto for shading so Foreground: Auto = Black
     if (nFore == COL_AUTO)
         nFore = COL_BLACK;
@@ -4581,7 +4564,6 @@ void SwWW8Shade::SetShade(ColorData nFore, ColorData nBack, sal_uInt16 nIndex)
     ColorData nUseBack = nBack;
     if (nUseBack == COL_AUTO)
         nUseBack = COL_WHITE;
-
 
     if( nIndex >= sizeof( eMSGrayScale ) / sizeof ( eMSGrayScale[ 0 ] ) )
         nIndex = 0;
@@ -4789,7 +4771,6 @@ void SwWW8ImplReader::Read_CharBorder(sal_uInt16 /*nId*/, const sal_uInt8* pData
         }
     }
 
-
 }
 
 void SwWW8ImplReader::Read_Hyphenation( sal_uInt16, const sal_uInt8* pData, short nLen )
@@ -4960,7 +4941,6 @@ bool SwWW8ImplReader::ParseTabPos(WW8_TablePos *pTabPos, WW8PLCFx_Cp_FKP* pPap)
 #  Seiten - Attribute werden nicht mehr als Attribute gehandhabt
 #   ( ausser OLST )
 #**************************************************************************/
-
 
 long SwWW8ImplReader::ImportExtSprm(WW8PLCFManResult* pRes)
 {
@@ -6143,9 +6123,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
     return &aSprmSrch;
 }
 
-
 //      Hilfsroutinen : SPRM finden
-
 
 const SprmReadInfo& SwWW8ImplReader::GetSprmReadInfo(sal_uInt16 nId) const
 {
@@ -6170,7 +6148,6 @@ const SprmReadInfo& SwWW8ImplReader::GetSprmReadInfo(sal_uInt16 nId) const
 
     return *pFound;
 }
-
 
 //      Hilfsroutinen : SPRMs
 

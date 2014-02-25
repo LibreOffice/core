@@ -1275,9 +1275,6 @@ public:
     }
 };
 
-
-
-
 typedef boost::ptr_vector<SwXMLTableRow_Impl> SwXMLTableRows_Impl;
 
 const SwXMLTableCell_Impl *SwXMLTableContext::GetCell( sal_uInt32 nRow,
@@ -2806,7 +2803,6 @@ void SwXMLTableContext::MakeTable()
     aSize.SetWidthPercent( (sal_Int8)nPrcWidth );
     pFrmFmt->SetFmtAttr( aSize );
     pFrmFmt->UnlockModify();
-
 
     for( sal_uInt16 i=0; i<pRows->size(); i++ )
         (*pRows)[i].Dispose();

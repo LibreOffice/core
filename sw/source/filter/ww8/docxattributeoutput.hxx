@@ -822,7 +822,6 @@ private:
         OString fontKey;
     };
 
-
     boost::scoped_ptr<TableReference> m_tableReference;
     boost::scoped_ptr<TableReference> m_oldTableReference;
 

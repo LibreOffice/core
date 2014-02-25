@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <UndoDraw.hxx>
 
 #include <rtl/string.h>
@@ -46,14 +45,12 @@
 #include <rootfrm.hxx>
 #include <viewsh.hxx>
 
-
 struct SwUndoGroupObjImpl
 {
     SwDrawFrmFmt* pFmt;
     SdrObject* pObj;
     sal_uLong nNodeIdx;
 };
-
 
 // Draw-Objecte
 
@@ -111,8 +108,6 @@ OUString SwSdrUndo::GetComment() const
 {
     return pSdrUndo->GetComment();
 }
-
-
 
 static void lcl_SendRemoveToUno( SwFmt& rFmt )
 {
@@ -326,9 +321,6 @@ void SwUndoDrawGroup::SetGroupFmt( SwDrawFrmFmt* pFmt )
     pObjArr->pFmt = pFmt;
 }
 
-
-
-
 SwUndoDrawUnGroup::SwUndoDrawUnGroup( SdrObjGroup* pObj )
     : SwUndo( UNDO_DRAWUNGROUP ), bDelFmt( sal_False )
 {
@@ -502,8 +494,6 @@ void SwUndoDrawUnGroupConnectToLayout::AddFmtAndObj( SwDrawFrmFmt* pDrawFrmFmt,
     aDrawFmtsAndObjs.push_back(
             std::pair< SwDrawFrmFmt*, SdrObject* >( pDrawFrmFmt, pDrawObject ) );
 }
-
-
 
 SwUndoDrawDelete::SwUndoDrawDelete( sal_uInt16 nCnt )
     : SwUndo( UNDO_DRAWDELETE ), nSize( nCnt ), bDelFmt( sal_True )

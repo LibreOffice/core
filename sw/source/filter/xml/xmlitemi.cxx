@@ -174,7 +174,6 @@ bool SwXMLImportTableItemMapper_Impl::handleSpecialItem(
     return bRet;
 }
 
-
 bool SwXMLImportTableItemMapper_Impl::handleNoItem(
      SvXMLItemMapEntry const& rEntry,
      SfxItemSet & rSet,

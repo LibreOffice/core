@@ -470,7 +470,6 @@ void RtfExport::WriteInfo()
         OutUnicode(OOO_STRING_SVTOOLS_RTF_AUTHOR,xDocProps->getModifiedBy());
         OutDateTime(OOO_STRING_SVTOOLS_RTF_REVTIM, xDocProps->getModificationDate());
 
-
         OutDateTime(OOO_STRING_SVTOOLS_RTF_PRINTIM, xDocProps->getPrintDate());
     }
 
@@ -712,7 +711,6 @@ void RtfExport::ExportDocument_Impl()
             default:                    pOut = OOO_STRING_SVTOOLS_RTF_FTNNAR;       break;
         }
         Strm().WriteCharPtr( pOut );
-
 
         const SwEndNoteInfo& rEndNoteInfo = pDoc->GetEndNoteInfo();
 

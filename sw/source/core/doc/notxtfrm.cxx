@@ -735,7 +735,6 @@ bool paintUsingPrimitivesHelper(
     return false;
 }
 
-
 void paintGraphicUsingPrimitivesHelper(OutputDevice & rOutputDevice,
          Graphic const& rGraphic, GraphicAttr const& rGraphicAttr,
          SwRect const& rAlignedGrfArea)

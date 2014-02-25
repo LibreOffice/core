@@ -26,7 +26,6 @@
 enum SwSortOrder        { SRT_ASCENDING, SRT_DESCENDING };
 enum SwSortDirection    { SRT_COLUMNS, SRT_ROWS         };
 
-
 struct SW_DLLPUBLIC SwSortKey
 {
     SwSortKey();

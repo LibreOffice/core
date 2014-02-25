@@ -23,7 +23,6 @@
 #include <calbck.hxx>
 class SwViewShell;
 
-
 class SwHTMLViewShellClient : public SwClient
 {
 protected:
@@ -41,9 +40,6 @@ public:
     SwViewShell *GetViewShell();
 };
 
-
-
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

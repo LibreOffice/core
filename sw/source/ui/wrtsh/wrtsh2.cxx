@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <hintids.hxx>
 #include <svl/macitem.hxx>
 #include <sfx2/frame.hxx>
@@ -276,7 +275,6 @@ sal_Bool SwWrtShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet
 // handler for click on the field given as parameter.
 // the cursor is positioned on the field.
 
-
 void SwWrtShell::ClickToField( const SwField& rFld )
 {
     // cross reference field must not be selected because it moves the cursor
@@ -422,7 +420,6 @@ bool SwWrtShell::ClickToINetGrf( const Point& rDocPt, sal_uInt16 nFilter )
     return bRet;
 }
 
-
 void LoadURL( SwViewShell& rVSh, const OUString& rURL, sal_uInt16 nFilter,
               const OUString& rTargetFrameName )
 {
@@ -541,6 +538,5 @@ void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
         }
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

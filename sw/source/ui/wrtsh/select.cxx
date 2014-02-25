@@ -40,13 +40,11 @@
 #include <doc.hxx>
 #include <wordcountdialog.hxx>
 
-
 namespace com { namespace sun { namespace star { namespace util {
     struct SearchOptions;
 } } } }
 
 using namespace ::com::sun::star::util;
-
 
 static long nStartDragX = 0, nStartDragY = 0;
 static bool  bStartDrag = false;
@@ -70,8 +68,6 @@ sal_Bool SwWrtShell::SelNearestWrd()
         Left(CRSR_SKIP_CELLS, sal_False, 1, sal_False );
     return SelWrd();
 }
-
-
 
 sal_Bool SwWrtShell::SelWrd(const Point *pPt, sal_Bool )
 {
@@ -122,7 +118,6 @@ void SwWrtShell::SelPara(const Point *pPt, sal_Bool )
     bSelLn = sal_False;
     bSelWrd = sal_False;  // disable SelWord, otherwise no SelLine goes on
 }
-
 
 long SwWrtShell::SelAll()
 {
@@ -474,7 +469,6 @@ long SwWrtShell::ExtSelWrd(const Point *pPt, sal_Bool )
         bRet = sal_True;
     return bRet;
 }
-
 
 long SwWrtShell::ExtSelLn(const Point *pPt, sal_Bool )
 {

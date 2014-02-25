@@ -172,7 +172,6 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     static SearchAttrItemList* m_pSrchList;
     static SearchAttrItemList* m_pReplList;
 
-
     SvxHtmlOptions      m_aHTMLOpt;
     Timer               m_aTimer;         // for delayed ChgLnks during an action
     OUString            m_aPageStr;       // status view, current page
@@ -198,7 +197,6 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     FmFormShell         *m_pFormShell;    // DB-FormShell
 
     SwView_Impl         *m_pViewImpl;     // Impl-data for UNO + Basic
-
 
     SwScrollbar         *m_pHScrollbar,   // MDI control elements
                         *m_pVScrollbar;
@@ -548,7 +546,6 @@ public:
     void            StateSearch(SfxItemSet &);
     void            GetState(SfxItemSet&);
     void            StateStatusLine(SfxItemSet&);
-
 
     // functions for drawing
     void            SetDrawFuncPtr(SwDrawBase* pFuncPtr);

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <osl/mutex.hxx>
 #include <sfx2/sfxbasecontroller.hxx>
 #include <SwXDocumentSettings.hxx>
@@ -44,7 +43,6 @@
 #include "swmodule.hxx"
 #include "cfgitems.hxx"
 #include "prtopt.hxx"
-
 
 using namespace comphelper;
 using namespace ::com::sun::star;
@@ -278,7 +276,7 @@ uno::Sequence< uno::Type > SAL_CALL SwXDocumentSettings::getTypes(  )
     pBaseTypes[0] = ::getCppuType((Reference< XPropertySet >*)0);
     pBaseTypes[1] = ::getCppuType((Reference< XPropertyState >*)0);
     pBaseTypes[2] = ::getCppuType((Reference< XMultiPropertySet >*)0);
-    //
+
     pBaseTypes[3] = ::getCppuType((Reference< XServiceInfo >*)0);
     pBaseTypes[4] = ::getCppuType((Reference< XTypeProvider >*)0);
 
@@ -305,7 +303,6 @@ void SwXDocumentSettings::_preSetValues ()
     if( NULL == mpDoc || NULL == mpDocSh )
         throw UnknownPropertyException();
 }
-
 
 void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, const uno::Any &rValue )
         throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException )
@@ -1253,6 +1250,5 @@ Sequence< OUString > SAL_CALL SwXDocumentSettings::getSupportedServiceNames(  )
     aSeq[2] = "com.sun.star.text.PrintSettings";
     return aSeq;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

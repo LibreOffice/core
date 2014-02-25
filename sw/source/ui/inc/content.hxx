@@ -31,9 +31,7 @@ class SwTxtINetFmt;
 class SwTOXBase;
 class SwRangeRedline;
 
-//----------------------------------------------------------------------------
 //  helper classes
-//----------------------------------------------------------------------------
 
 class SwPopup : public PopupMenu
 {
@@ -48,8 +46,6 @@ public:
     sal_uInt16          GetCurId() const { return nCurId; }
 
 };
-
-//----------------------------------------------------------------------------
 
 class SwOutlineContent : public SwContent
 {
@@ -71,7 +67,6 @@ class SwOutlineContent : public SwContent
     bool    IsMoveable(){return bIsMoveable;};
 };
 
-//----------------------------------------------------------------------------
 class SwRegionContent : public SwContent
 {
 
@@ -86,7 +81,6 @@ class SwRegionContent : public SwContent
                         nRegionLevel(nLevel){}
     sal_uInt8   GetRegionLevel() const {return nRegionLevel;}
 };
-//----------------------------------------------------------------------------
 
 class SwURLFieldContent : public SwContent
 {
@@ -107,7 +101,6 @@ public:
     const SwTxtINetFmt* GetINetAttr()       { return pINetAttr; }
 };
 
-//----------------------------------------------------------------------------
 class SwPostItContent : public SwContent
 {
     const SwFmtFld*     pFld;
@@ -139,8 +132,6 @@ public:
     bool            IsPostIt()      {return mbPostIt; }
 };
 
-//----------------------------------------------------------------------------
-
 class SwGraphicContent : public SwContent
 {
     OUString      sLink;
@@ -153,7 +144,6 @@ public:
     const OUString&   GetLink() const {return sLink;}
 };
 
-//----------------------------------------------------------------------------
 class SwTOXBaseContent : public SwContent
 {
     const SwTOXBase* pBase;
@@ -171,7 +161,6 @@ public:
     GetMember. It is reloaded after Invalidate() only if the content
     should be read again.
 */
-//----------------------------------------------------------------------------
 
 class SwContentType : public SwTypeNumber
 {
@@ -183,7 +172,7 @@ class SwContentType : public SwTypeNumber
     sal_uInt16          nMemberCount;       // content count
     sal_uInt16          nContentType;       // content type's Id
     sal_uInt8           nOutlineLevel;
-    bool                bDataValid :    1;  //
+    bool                bDataValid :    1;
     bool                bEdit:          1;  // can this type be edited?
     bool                bDelete:        1;  // can this type be deleted?
 protected:

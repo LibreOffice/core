@@ -29,7 +29,6 @@ namespace sw {
     class MetaFieldManager;
 }
 
-
 // ATT_CHARFMT *********************************************
 
 class SwTxtCharFmt : public SwTxtAttrEnd
@@ -51,7 +50,6 @@ public:
     void SetSortNumber( sal_uInt16 nSortNumber ) { m_nSortNumber = nSortNumber; }
     sal_uInt16 GetSortNumber() const { return m_nSortNumber; }
 };
-
 
 // ******************************
 
@@ -82,7 +80,6 @@ public:
     void ChgTxtNode(SwTxtNode * const pNode);
 };
 
-
 // ******************************
 
 class SW_DLLPUBLIC SwTxtRuby : public SwTxtAttrNesting, public SwClient
@@ -108,7 +105,6 @@ public:
     const SwCharFmt* GetCharFmt() const
             { return (const_cast<SwTxtRuby*>(this))->GetCharFmt(); }
 };
-
 
 inline const SwTxtNode& SwTxtRuby::GetTxtNode() const
 {

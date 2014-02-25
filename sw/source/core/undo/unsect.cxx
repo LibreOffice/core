@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <UndoSection.hxx>
 
 #include <sfx2/linkmgr.hxx>
@@ -37,7 +36,6 @@
 /// OD 04.10.2002 #102894#
 /// class Calc needed for calculation of the hidden condition of a section.
 #include <calc.hxx>
-
 
 static SfxItemSet* lcl_GetAttrSet( const SwSection& rSect )
 {
@@ -63,9 +61,6 @@ static SfxItemSet* lcl_GetAttrSet( const SwSection& rSect )
     return pAttr;
 }
 
-
-////////////////////////////////////////////////////////////////////////////
-
 SwUndoInsSection::SwUndoInsSection(
         SwPaM const& rPam, SwSectionData const& rNewData,
         SfxItemSet const*const pSet, SwTOXBase const*const pTOXBase)
@@ -87,7 +82,6 @@ SwUndoInsSection::SwUndoInsSection(
                                         rDoc.GetRedlineAuthor() ));
         SetRedlineMode( rDoc.GetRedlineMode() );
     }
-
 
     if( !rPam.HasMark() )
     {
@@ -246,7 +240,6 @@ void SwUndoInsSection::Join( SwDoc& rDoc, sal_uLong nNode )
     }
 }
 
-
 void
 SwUndoInsSection::SaveSplitNode(SwTxtNode *const pTxtNd, bool const bAtStart)
 {
@@ -269,9 +262,6 @@ SwUndoInsSection::SaveSplitNode(SwTxtNode *const pTxtNd, bool const bAtStart)
         m_bSplitAtEnd = true;
     }
 }
-
-
-////////////////////////////////////////////////////////////////////////////
 
 class SwUndoDelSection
     : public SwUndo
@@ -384,9 +374,6 @@ void SwUndoDelSection::RedoImpl(::sw::UndoRedoContext & rContext)
     // just delete format, rest happens automatically
     rDoc.DelSectionFmt( pNd->GetSection().GetFmt() );
 }
-
-
-////////////////////////////////////////////////////////////////////////////
 
 class SwUndoUpdateSection
     : public SwUndo

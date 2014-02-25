@@ -42,7 +42,6 @@ public:
     inline void         SetOldDocShell(SwDocShell *pDcSh)   { m_pDocSh = pDcSh; }
 };
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -165,7 +165,6 @@ SwVirtPageNumInfo::SwVirtPageNumInfo( const SwPageFrm *pPg ) :
 {
 }
 
-
 SwFindNearestNode::SwFindNearestNode( const SwNode& rNd )
     : SwMsgPoolItem( RES_FINDNEARESTNODE ), pNd( &rNd ), pFnd( 0 )
 {

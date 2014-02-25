@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "viscrs.hxx"
 #include <sfx2/frame.hxx>
 #include <sfx2/printer.hxx>
@@ -86,7 +85,6 @@ using namespace ::com::sun::star::frame;
 
 using ::com::sun::star::util::URL;
 using comphelper::HelperBaseNoState;
-
 
 SwXTextView::SwXTextView(SwView* pSwView) :
     SfxBaseController(pSwView),

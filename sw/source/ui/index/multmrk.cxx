@@ -24,7 +24,6 @@
 
 #include "index.hrc"
 
-
 SwMultiTOXMarkDlg::SwMultiTOXMarkDlg(Window* pParent, SwTOXMgr& rTOXMgr)
     : SvxStandardDialog(pParent, "SelectIndexDialog",
         "modules/swriter/ui/selectindexdialog.ui")
@@ -57,7 +56,6 @@ IMPL_LINK_INLINE_START( SwMultiTOXMarkDlg, SelectHdl, ListBox *, pBox )
 }
 IMPL_LINK_INLINE_END( SwMultiTOXMarkDlg, SelectHdl, ListBox *, pBox )
 
-
 void SwMultiTOXMarkDlg::Apply()
 {
     rMgr.SetCurTOXMark(nPos);
@@ -67,9 +65,6 @@ void SwMultiTOXMarkDlg::Apply()
  overload dtor
 --------------------------------------------------*/
 
-
 SwMultiTOXMarkDlg::~SwMultiTOXMarkDlg() {}
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

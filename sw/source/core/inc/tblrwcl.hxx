@@ -41,7 +41,6 @@ struct _InsULPara;
 
 void sw_LineSetHeadCondColl( const SwTableLine* pLine );
 
-
 #ifdef DBG_UTIL
 void _CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize );
 #endif
@@ -146,7 +145,6 @@ public:
 
 void sw_GC_Line_Border( const SwTableLine* pLine, _SwGCLineBorder* pGCPara );
 
-
 class SwShareBoxFmt
 {
     const SwFrmFmt* pOldFmt;
@@ -165,7 +163,6 @@ public:
     // returnt sal_True, wenn geloescht werden kann
     bool RemoveFormat( const SwFrmFmt& rFmt );
 };
-
 
 typedef boost::ptr_vector<SwShareBoxFmt> _SwShareBoxFmts;
 
@@ -191,8 +188,6 @@ public:
 
     void RemoveFormat( const SwFrmFmt& rFmt );
 };
-
-
 
 #endif
 

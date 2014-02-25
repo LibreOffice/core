@@ -364,9 +364,8 @@ const SwLineLayout *SwTxtIter::TwipsToLine( const SwTwips y)
     return pCurr;
 }
 
-//
 // Local helper function to check, if pCurr needs a field rest portion:
-//
+
 static bool lcl_NeedsFieldRest( const SwLineLayout* pCurr )
 {
     const SwLinePortion *pPor = pCurr->GetPortion();

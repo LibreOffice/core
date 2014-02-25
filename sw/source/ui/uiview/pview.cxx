@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <sfx2/objface.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/field.hxx>
@@ -1104,7 +1103,6 @@ void SwPagePreview::Init(const SwViewOption * pPrefs)
     //            At the methodes the current shell will be queried!
     SwEditShell* pESh = (SwEditShell*)GetViewShell();
     sal_Bool bIsModified = pESh->IsModified();
-
 
     SwViewOption aOpt( *pPrefs );
     aOpt.SetPagePreview(sal_True);

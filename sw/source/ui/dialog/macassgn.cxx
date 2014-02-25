@@ -106,7 +106,6 @@ SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
     return aItem;
 }
 
-
 bool SwMacroAssignDlg::INetFmtDlg( Window* pParent, SwWrtShell& rSh,
                                     SvxMacroItem*& rpINetItem )
 {

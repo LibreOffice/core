@@ -66,7 +66,6 @@ class Window;
 typedef std::list<SwSidebarItem*> SwSidebarItem_list;
 typedef std::list<SwSidebarItem*>::iterator SwSidebarItem_iterator;
 
-
 struct SwPostItPageItem
 {
     bool bScrollbar;
@@ -256,7 +255,6 @@ class SwPostItMgr: public SfxListener
             static Color           GetColorDark(sal_uInt16 aAuthorIndex);
             static Color           GetColorLight(sal_uInt16 aAuthorIndex);
             static Color           GetColorAnchor(sal_uInt16 aAuthorIndex);
-
 
             void                RegisterAnswer(OutlinerParaObject* pAnswer) { mpAnswer = pAnswer;}
             OutlinerParaObject* IsAnswer() {return mpAnswer;}

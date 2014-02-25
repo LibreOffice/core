@@ -83,7 +83,6 @@ public:
     void                SetWrtShell(SwWrtShell& rSh);
 };
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

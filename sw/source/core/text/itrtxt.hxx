@@ -229,7 +229,6 @@ public:
 
 };
 
-
 /*************************************************************************
  *                      class SwTxtAdjuster
  *************************************************************************/
@@ -363,8 +362,6 @@ inline SwTwips SwTxtMargin::Left() const
 {
     return (nDropLines >= nLineNr && 1 != nLineNr) ? nFirst + nDropLeft : nLeft;
 }
-
-
 
 #endif
 

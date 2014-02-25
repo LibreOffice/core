@@ -118,7 +118,6 @@ class SwAccessibleParagraph :
     //  be selected)
     SwXTextPortion* CreateUnoPortion( sal_Int32 nStart, sal_Int32 nEnd );
 
-
     // methods for checking the parameter range:
 
     // does nPos point to a char?
@@ -297,7 +296,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames (void)
         throw (::com::sun::star::uno::RuntimeException, std::exception);
-
 
     // XInterface
 

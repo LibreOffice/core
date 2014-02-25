@@ -1167,7 +1167,6 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
     return pFlyFmt;
 }
 
-
 bool SwWW8ImplReader::TxbxChainContainsRealText(sal_uInt16 nTxBxS, long& rStartCp,
     long&  rEndCp)
 {
@@ -1176,7 +1175,6 @@ bool SwWW8ImplReader::TxbxChainContainsRealText(sal_uInt16 nTxBxS, long& rStartC
         &rStartCp, &rEndCp );
     return bContainsText;
 }
-
 
 // TextBoxes only for Ver67 !!
 SdrObject* SwWW8ImplReader::ReadTxtBox( WW8_DPHEAD* pHd, const WW8_DO* pDo,
@@ -1275,7 +1273,6 @@ SdrObject* SwWW8ImplReader::ReadCaptionBox( WW8_DPHEAD* pHd, const WW8_DO* pDo,
 
     return pObj;
 }
-
 
 SdrObject *SwWW8ImplReader::ReadGroup( WW8_DPHEAD* pHd, const WW8_DO* pDo,
     SfxAllItemSet &rSet)
@@ -1600,7 +1597,6 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
             rFlySet.Put( *pPoolItem );
         }
 
-
     // jetzt die Umrandung berechnen und die Box bauen: Das Mass wird fuer die
     // Rahmen-GROESSE benoetigt!
     SvxBoxItem aBox(sw::util::ItemGet<SvxBoxItem>(rFlySet, RES_BOX));
@@ -1852,7 +1848,6 @@ void SwWW8ImplReader::AdjustLRWrapForWordMargins(
         rLR.SetRight((sal_uInt16)0);
     }
 }
-
 
 void SwWW8ImplReader::AdjustULWrapForWordMargins(
     const SvxMSDffImportRec &rRecord, SvxULSpaceItem &rUL)
@@ -2188,7 +2183,6 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
             text::HoriOrientation::RIGHT   // outside
         };
 
-
         // generic vertical Adjustment
         static const sal_Int16 aVertOriTab[ nCntYAlign ] =
         {
@@ -2279,7 +2273,6 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
         {
             eHoriRel = text::RelOrientation::PAGE_PRINT_AREA;
         }
-
 
         // Writer honours this wrap distance when aligned as "left" or "right",
         // Word doesn't. Writer doesn't honour it when its "from left".
@@ -2428,7 +2421,6 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     if (!pMSDffManager->GetModel())
          pMSDffManager->SetModel(pDrawModel, 1440);
 
-
     Rectangle aRect(pF->nXaLeft,  pF->nYaTop, pF->nXaRight, pF->nYaBottom);
     SvxMSDffImportData aData( aRect );
 
@@ -2561,7 +2553,6 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
         SwFmtFollowTextFlow aFollowTextFlow( sal_True );
         aFlySet.Put( aFollowTextFlow );
     }
-
 
     // #i21847#
     // Some shapes are set to *hidden*, don't import those ones.
@@ -2829,7 +2820,7 @@ SwFlyFrmFmt* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
     {
         // The Text is not read into SdrTextObj!  Rather insert a frame and
         // insert the text from nStartCp to nEndCp.
-        //
+
         // More attributes can be used in a frame compared to the
         // Edit-Engine, and it can contain field, OLEs or graphics...
         Rectangle aInnerDist(pRecord->nDxTextLeft, pRecord->nDyTextTop,
@@ -2841,7 +2832,6 @@ SwFlyFrmFmt* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
 
         MatchSdrItemsIntoFlySet( rpObject, rFlySet, pRecord->eLineStyle,
             pRecord->eLineDashing, pRecord->eShapeType, aInnerDist );
-
 
         SdrTextObj *pSdrTextObj = PTR_CAST(SdrTextObj, rpObject);
         if (pSdrTextObj && pSdrTextObj->IsVerticalWriting())

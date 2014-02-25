@@ -481,7 +481,6 @@ static void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SwDoc& _rDoc )
     }
 }
 
-
 sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, const OUString & rName )
 {
     // Get service factory

@@ -55,7 +55,6 @@ public:
                sal_uInt16 nWordType,
                sal_Int32 nStart, sal_Int32 nEnde, sal_Bool bClip = sal_False );
 
-
     // This next word function tries to find the language for the next word
     // It should currently _not_ be used for spell checking, and works only for
     // ! bReverse

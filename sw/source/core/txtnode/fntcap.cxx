@@ -316,7 +316,6 @@ void SwDoDrawCapital::DrawSpace( Point &rPos )
     const bool bSwitchL2R = rInf.GetFrm()->IsRightToLeft() &&
                           ! rInf.IsIgnoreFrmRTL();
 
-
     if ( bSwitchL2R )
        rInf.GetFrm()->SwitchLTRtoRTL( aPos );
 

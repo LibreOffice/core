@@ -53,7 +53,6 @@ protected:
 public:
     SwXModule();
 
-
     //XViewSettings
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  SAL_CALL getViewSettings(void)
         throw( ::com::sun::star::uno::RuntimeException, std::exception );
@@ -105,7 +104,6 @@ protected:
 public:
     SwXPrintSettings( SwXPrintSettingsType eType, SwDoc * pDoc = NULL );
 
-
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName(void)
         throw( ::com::sun::star::uno::RuntimeException, std::exception );
@@ -148,7 +146,6 @@ protected:
         throw();
 public:
     SwXViewSettings(sal_Bool bWeb, SwView*  pView);
-
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException, std::exception );

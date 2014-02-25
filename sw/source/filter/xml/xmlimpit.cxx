@@ -248,8 +248,6 @@ struct BoxHolder : private boost::noncopyable
     }
 };
 
-
-
 // put an XML-string value into an item
 bool SvXMLImportItemMapper::PutXMLValue(
     SfxPoolItem& rItem,

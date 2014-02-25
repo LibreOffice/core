@@ -48,7 +48,6 @@ static SwProgress *lcl_SwFindProgress( SwDocShell *pDocShell )
     return 0;
 }
 
-
 void StartProgress( sal_uInt16 nMessResId, long nStartValue, long nEndValue,
                     SwDocShell *pDocShell )
 {
@@ -79,7 +78,6 @@ void StartProgress( sal_uInt16 nMessResId, long nStartValue, long nEndValue,
     }
 }
 
-
 void SetProgressState( long nPosition, SwDocShell *pDocShell )
 {
     if( pProgressContainer && !SW_MOD()->IsEmbeddedLoadSave() )
@@ -89,7 +87,6 @@ void SetProgressState( long nPosition, SwDocShell *pDocShell )
             pProgress->pProgress->SetState(nPosition - pProgress->nStartValue);
     }
 }
-
 
 void EndProgress( SwDocShell *pDocShell )
 {
@@ -121,7 +118,6 @@ void EndProgress( SwDocShell *pDocShell )
     }
 }
 
-
 void SetProgressText( sal_uInt16 nId, SwDocShell *pDocShell )
 {
     if( pProgressContainer && !SW_MOD()->IsEmbeddedLoadSave() )
@@ -131,7 +127,6 @@ void SetProgressText( sal_uInt16 nId, SwDocShell *pDocShell )
             pProgress->pProgress->SetStateText( 0, SW_RESSTR(nId) );
     }
 }
-
 
 void RescheduleProgress( SwDocShell *pDocShell )
 {

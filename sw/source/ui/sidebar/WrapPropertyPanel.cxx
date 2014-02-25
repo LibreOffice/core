@@ -60,7 +60,6 @@ WrapPropertyPanel* WrapPropertyPanel::Create (
         pBindings);
 }
 
-
 WrapPropertyPanel::WrapPropertyPanel(
     Window* pParent,
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
@@ -88,11 +87,9 @@ WrapPropertyPanel::WrapPropertyPanel(
     Initialize();
 }
 
-
 WrapPropertyPanel::~WrapPropertyPanel()
 {
 }
-
 
 void WrapPropertyPanel::Initialize()
 {
@@ -147,7 +144,6 @@ void WrapPropertyPanel::Initialize()
     mpBindings->Update( FN_FRAME_WRAP_IDEAL );
 }
 
-
 IMPL_LINK(WrapPropertyPanel, WrapTypeHdl, void *, EMPTYARG)
 {
     sal_uInt16 nSlot = 0;
@@ -180,7 +176,6 @@ IMPL_LINK(WrapPropertyPanel, WrapTypeHdl, void *, EMPTYARG)
 
     return 0;
 }
-
 
 void WrapPropertyPanel::NotifyItemUpdate(
     const sal_uInt16 nSId,

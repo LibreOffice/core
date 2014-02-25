@@ -58,8 +58,6 @@ enum SwStartNodeType
 const sal_uInt8 ND_HAS_PREV_LAYNODE = 0x01;
 const sal_uInt8 ND_HAS_NEXT_LAYNODE = 0x02;
 
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -48,7 +48,6 @@ public:
     SFX_DECL_CHILDWINDOW( SwSyncChildWin );
 };
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -68,10 +68,6 @@ IMPL_LINK( SwFootNoteOptionDlg, OkHdl, Button *, pBtn )
     return 0;
 }
 
-
-
-
-
 SwEndNoteOptionPage::SwEndNoteOptionPage(Window *pParent, bool bEN,
     const SfxItemSet &rSet)
     : SfxTabPage(pParent,
@@ -255,8 +251,6 @@ void SwEndNoteOptionPage::SelectNumbering(int eNum)
     NumCountHdl(m_pNumCountBox);
 }
 
-
-
 int SwEndNoteOptionPage::GetNumbering() const
 {
     const sal_uInt16 nPos = m_pNumCountBox->GetSelectEntryPos();
@@ -280,7 +274,6 @@ void SwEndNoteOptionPage::SetShell( SwWrtShell &rShell )
  Description:  Handler behind the button to collect the footnote at the
                page. In this case all kinds of numbering can be used.
 ------------------------------------------------------------------------*/
-
 
 IMPL_LINK_NOARG(SwEndNoteOptionPage, PosPageHdl)
 {
@@ -316,7 +309,6 @@ IMPL_LINK_NOARG(SwEndNoteOptionPage, NumCountHdl)
                chapter or end of the document. In this case no pagewise
                numbering can be used.
 ------------------------------------------------------------------------*/
-
 
 IMPL_LINK_NOARG_INLINE_START(SwEndNoteOptionPage, PosChapterHdl)
 {
@@ -417,11 +409,5 @@ SfxTabPage *SwFootNoteOptionPage::Create(Window *pParent, const SfxItemSet &rSet
 {
     return new SwFootNoteOptionPage( pParent, rSet );
 }
-
-
-
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

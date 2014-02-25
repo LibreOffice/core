@@ -250,7 +250,6 @@ SwViewOption::SwViewOption(const SwViewOption& rVOpt)
 #endif
 }
 
-
 SwViewOption& SwViewOption::operator=( const SwViewOption &rVOpt )
 {
     // #114856# Formular view
@@ -291,7 +290,6 @@ SwViewOption& SwViewOption::operator=( const SwViewOption &rVOpt )
 #endif
     return *this;
 }
-
 
 SwViewOption::~SwViewOption()
 {

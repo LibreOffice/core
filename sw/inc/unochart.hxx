@@ -53,7 +53,6 @@
 
 #include <calbck.hxx>
 
-
 class SfxItemPropertySet;
 class SwDoc;
 class SwTable;
@@ -63,19 +62,13 @@ struct SwRangeDescriptor;
 class SwSelBoxes;
 class SwFrmFmt;
 
-//////////////////////////////////////////////////////////////////////
-
 bool FillRangeDescriptor( SwRangeDescriptor &rDesc, const OUString &rCellRangeName );
-
-//////////////////////////////////////////////////////////////////////
 
 class SwChartHelper
 {
 public:
     static void DoUpdateAllCharts( SwDoc* pDoc );
 };
-
-//////////////////////////////////////////////////////////////////////
 
 class SwChartLockController_Helper
 {
@@ -84,7 +77,6 @@ class SwChartLockController_Helper
     DECL_LINK( DoUnlockAllCharts, Timer * );
     Timer   aUnlockTimer;   // timer to unlock chart controllers
     bool    bIsLocked;
-
 
     // disallow use of d-tor, copy c-tor and assignment operator
     SwChartLockController_Helper( const SwChartLockController_Helper & );
@@ -101,8 +93,6 @@ public:
     void StartOrContinueLocking();
     void Disconnect();
 };
-
-//////////////////////////////////////////////////////////////////////
 
 typedef cppu::WeakImplHelper4
 <
@@ -141,7 +131,6 @@ class SwChartDataProvider :
     };
     typedef std::map< const SwTable *, Set_DataSequenceRef_t, lt_SwTable_Ptr > Map_Set_DataSequenceRef_t;
 
-
     // map of all data-sequences provided directly or indirectly (e.g. via
     // data-source) by this object. Since there is only one object of this type
     // for each document it should hold references to all used data-sequences for
@@ -151,7 +140,6 @@ class SwChartDataProvider :
     ::cppu::OInterfaceContainerHelper       aEvtListeners;
     const SwDoc *                           pDoc;
     sal_Bool                                bDisposed;
-
 
     // disallow use of c-tor and assignment operator
     SwChartDataProvider( const SwChartDataProvider & );
@@ -215,8 +203,6 @@ public:
     void        AddRowCols( const SwTable &rTable, const SwSelBoxes& rBoxes, sal_uInt16 nLines, sal_Bool bBehind );
 };
 
-//////////////////////////////////////////////////////////////////////
-
 typedef cppu::WeakImplHelper2
 <
     ::com::sun::star::chart2::data::XDataSource,
@@ -247,8 +233,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 };
-
-//////////////////////////////////////////////////////////////////////
 
 typedef cppu::WeakImplHelper10
 <
@@ -369,8 +353,6 @@ public:
     bool        ExtendTo( bool bExtendCol, sal_Int32 nFirstNew, sal_Int32 nCount );
 };
 
-//////////////////////////////////////////////////////////////////////
-
 typedef cppu::WeakImplHelper4
 <
     ::com::sun::star::chart2::data::XLabeledDataSequence2,
@@ -398,7 +380,6 @@ class SwChartLabeledDataSequence :
     SwChartLabeledDataSequence & operator = ( const SwChartLabeledDataSequence & );
 
     void    SetDataSequence( ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >& rxDest, const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >& rxSource );
-
 
 public:
     SwChartLabeledDataSequence();
@@ -433,8 +414,6 @@ public:
     virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 };
-
-//////////////////////////////////////////////////////////////////////
 
 #endif
 

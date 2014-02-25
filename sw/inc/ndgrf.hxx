@@ -205,7 +205,6 @@ public:
     bool IsAsyncRetrieveInputStreamPossible() const;
 };
 
-
 // Inline methods from Node.hxx - it is only now that we know TxtNode!!
 inline       SwGrfNode   *SwNode::GetGrfNode()
 {

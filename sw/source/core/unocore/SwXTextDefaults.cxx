@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <osl/mutex.hxx>
@@ -38,12 +37,10 @@
 #include <unocrsrhelper.hxx>
 #include <hintids.hxx>
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
-
 
 SwXTextDefaults::SwXTextDefaults ( SwDoc * pNewDoc ) :
     m_pPropSet( aSwMapProvider.GetPropertySet( PROPERTY_MAP_TEXT_DEFAULT ) ),
@@ -51,11 +48,9 @@ SwXTextDefaults::SwXTextDefaults ( SwDoc * pNewDoc ) :
 {
 }
 
-
 SwXTextDefaults::~SwXTextDefaults ()
 {
 }
-
 
 uno::Reference< XPropertySetInfo > SAL_CALL SwXTextDefaults::getPropertySetInfo(  )
         throw(RuntimeException, std::exception)
@@ -63,7 +58,6 @@ uno::Reference< XPropertySetInfo > SAL_CALL SwXTextDefaults::getPropertySetInfo(
     static uno::Reference < XPropertySetInfo > xRef = m_pPropSet->getPropertySetInfo();
     return xRef;
 }
-
 
 void SAL_CALL SwXTextDefaults::setPropertyValue( const OUString& rPropertyName, const Any& aValue )
         throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
@@ -130,7 +124,6 @@ void SAL_CALL SwXTextDefaults::setPropertyValue( const OUString& rPropertyName, 
     }
 }
 
-
 Any SAL_CALL SwXTextDefaults::getPropertyValue( const OUString& rPropertyName )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
@@ -146,13 +139,11 @@ Any SAL_CALL SwXTextDefaults::getPropertyValue( const OUString& rPropertyName )
     return aRet;
 }
 
-
 void SAL_CALL SwXTextDefaults::addPropertyChangeListener( const OUString& /*rPropertyName*/, const uno::Reference< XPropertyChangeListener >& /*xListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
     OSL_FAIL ( "not implemented" );
 }
-
 
 void SAL_CALL SwXTextDefaults::removePropertyChangeListener( const OUString& /*rPropertyName*/, const uno::Reference< XPropertyChangeListener >& /*xListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
@@ -160,20 +151,17 @@ void SAL_CALL SwXTextDefaults::removePropertyChangeListener( const OUString& /*r
     OSL_FAIL ( "not implemented" );
 }
 
-
 void SAL_CALL SwXTextDefaults::addVetoableChangeListener( const OUString& /*rPropertyName*/, const uno::Reference< XVetoableChangeListener >& /*xListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
     OSL_FAIL ( "not implemented" );
 }
 
-
 void SAL_CALL SwXTextDefaults::removeVetoableChangeListener( const OUString& /*rPropertyName*/, const uno::Reference< XVetoableChangeListener >& /*xListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
     OSL_FAIL ( "not implemented" );
 }
-
 
 // XPropertyState
 PropertyState SAL_CALL SwXTextDefaults::getPropertyState( const OUString& rPropertyName )
@@ -193,7 +181,6 @@ PropertyState SAL_CALL SwXTextDefaults::getPropertyState( const OUString& rPrope
     return eRet;
 }
 
-
 Sequence< PropertyState > SAL_CALL SwXTextDefaults::getPropertyStates( const Sequence< OUString >& rPropertyNames )
         throw(UnknownPropertyException, RuntimeException, std::exception)
 {
@@ -208,7 +195,6 @@ Sequence< PropertyState > SAL_CALL SwXTextDefaults::getPropertyStates( const Seq
     return aRet;
 }
 
-
 void SAL_CALL SwXTextDefaults::setPropertyToDefault( const OUString& rPropertyName )
         throw(UnknownPropertyException, RuntimeException, std::exception)
 {
@@ -222,7 +208,6 @@ void SAL_CALL SwXTextDefaults::setPropertyToDefault( const OUString& rPropertyNa
     SfxItemPool& rSet (m_pDoc->GetAttrPool());
     rSet.ResetPoolDefaultItem ( pMap->nWID );
 }
-
 
 Any SAL_CALL SwXTextDefaults::getPropertyDefault( const OUString& rPropertyName )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)

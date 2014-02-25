@@ -1403,7 +1403,6 @@ void SwAccessibleMap::DoInvalidateShapeSelection(sal_Bool bInvalidateFocusMode /
                             static_cast< const SwFEShell * >( pVSh ) : 0;
     sal_uInt16 nSelShapes = pFESh ? pFESh->IsObjSelected() : 0;
 
-
     //when InvalidateFocus Call this function ,and the current selected shape count is not 1 ,
     //return
     if (bInvalidateFocusMode && nSelShapes != 1)
@@ -2092,7 +2091,6 @@ void SwAccessibleMap::RemoveGroupContext(const SdrObject *pParentObj, ::com::sun
 }
 //End
 
-
 void SwAccessibleMap::AddGroupContext(const SdrObject *pParentObj, uno::Reference < XAccessible > xAccParent)
 {
     osl::MutexGuard aGuard( maMutex );
@@ -2611,7 +2609,6 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
                 {
                     InvalidatePosOrSize(aFrmOrObj.GetSwFrm(),0,0,rcEmpty);
                 }
-
 
                 aIter =
                     mpFrmMap->find( aFrmOrObj.GetSwFrm() );

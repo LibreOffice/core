@@ -29,7 +29,6 @@ namespace ww
 {
     /** simple template that manages a hash
 
-
         @author
         <a href="mailto:mikeleib@openoffice.org">Michael Leibowitz</a>
     */

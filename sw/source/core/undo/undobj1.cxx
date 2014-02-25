@@ -213,7 +213,6 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
 
     pFrmFmt->ResetFmtAttr( RES_ANCHOR );        // delete anchor
 
-
     // delete from array
     SwFrmFmts& rFlyFmts = *(SwFrmFmts*)pDoc->GetSpzFrmFmts();
     rFlyFmts.erase( std::find( rFlyFmts.begin(), rFlyFmts.end(), pFrmFmt ));

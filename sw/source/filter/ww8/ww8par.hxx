@@ -134,9 +134,7 @@ using namespace msfilter::util;
 // Zusatz-Filter-Flags, gueltig ab Winword 8
 #define WW8FL_NO_FLY_FOR_TXBX         1
 
-//-----------------------------------------
 //            Listen-Manager (ab Ver8)
-//-----------------------------------------
 
 struct WW8LFOInfo;
 
@@ -320,9 +318,8 @@ public:
     rtl_TextEncoding GetCJKCharSet() const;
 };
 
-//-----------------------------------------
 //            Stack
-//-----------------------------------------
+
 class SwWW8FltControlStack : public SwFltControlStack
 {
 private:
@@ -470,7 +467,6 @@ template< typename ReturnType, typename Type >
 inline ReturnType ulimit_cast( Type nValue, ReturnType nMax )
 { return static_cast< ReturnType >( ::std::min< Type >( nValue, nMax ) ); }
 
-
 template< typename ReturnType, typename Type >
 inline ReturnType ulimit_cast( Type nValue )
 { return ulimit_cast( nValue, ::std::numeric_limits< ReturnType >::max() ); }
@@ -552,10 +548,8 @@ class WW8FieldEntry
         ::sw::mark::IFieldmark::parameter_map_t& getParameters();
 };
 
-
-//-----------------------------------------
 //    Mini-Merker fuer einige Flags
-//-----------------------------------------
+
 class WW8ReaderSave
 {
 private:
@@ -606,10 +600,8 @@ private:
     void SetShade(ColorData nFore, ColorData nBack, sal_uInt16 nIndex);
 };
 
-
-//-----------------------------------------
 //    Formulas
-//-----------------------------------------
+
 enum SwWw8ControlType
 {
     WW8_CT_EDIT,
@@ -761,7 +753,6 @@ protected:
     virtual SdrObject* ProcessObj( SvStream& rSt, DffObjData& rObjData, void* pData, Rectangle& rTextRect, SdrObject* pObj );
 };
 
-
 class wwSection
 {
 public:
@@ -881,12 +872,12 @@ public:
 //Various writer elements like frames start off containing a blank paragraph,
 //sometimes this paragraph turns out to be extraneous, e.g. the frame should
 //only contain a table with no trailing paragraph.
-//
+
 //We want to remove these extra paragraphs, but removing them during the parse
 //is problematic, because we don't want to remove any paragraphs that are still
 //addressed by property entries in a SwFltControlStack which have not yet been
 //committed to the document.
-//
+
 //Safest thing is to not delete SwTxtNodes from a document during import, and
 //remove these extraneous paragraphs at the end after all SwFltControlStack are
 //destroyed.
@@ -1037,9 +1028,8 @@ struct WW8TabBandDesc
     enum wwDIR {wwTOP = 0, wwLEFT = 1, wwBOTTOM = 2, wwRIGHT = 3};
 };
 
-//-----------------------------------------
 //            Storage-Reader
-//-----------------------------------------
+
 typedef std::set<WW8_CP> cp_set;
 typedef std::vector<WW8_CP> cp_vector;
 
@@ -1272,10 +1262,8 @@ private:
 
     sal_Unicode cSymbol;        // aktuell einzulesendes Symbolzeichen
 
-
     sal_uInt8 nWantedVersion;        // urspruenglich vom Writer
                                 // angeforderte WW-Doc-Version
-
 
     sal_uInt8 nSwNumLevel;           // LevelNummer fuer Outline / Nummerierung
     sal_uInt8 nWwNumType;            // Gliederung / Nummerg / Aufzaehlg
@@ -1357,7 +1345,6 @@ private:
     cp_vector maEndParaPos;
     WW8_CP maCurrAttrCP;
     bool mbOnLoadingMain:1;
-//---------------------------------------------
 
     const SprmReadInfo& GetSprmReadInfo(sal_uInt16 nId) const;
 
@@ -1535,7 +1522,7 @@ private:
 // Nummerierungen / Aufzaehlungen ( Autonumbered List Data Descriptor )
 // Liste:        ANLD ( Autonumbered List Data Descriptor )
 //   eine Ebene: ANLV ( Autonumber Level Descriptor )
-//
+
 // Chg7-8:
 // Listen sind in WW8 eigene Strukturen, die ueber folgende drei Tabellen
 // verwaltet werden: rglst, hpllfo und hsttbListNames
@@ -1769,7 +1756,6 @@ public:     // eigentlich private, geht aber leider nur public
     // change properties of content (e.g. char formatting)
     void Read_CPropRMark(sal_uInt16 , const sal_uInt8* pData, short nLen); // complex!
 
-
     void Read_TabRowEnd(        sal_uInt16, const sal_uInt8* pData, short nLen );
     void Read_TabCellEnd(        sal_uInt16, const sal_uInt8* pData, short nLen );
     bool ParseTabPos(WW8_TablePos *aTabPos, WW8PLCFx_Cp_FKP* pPap);
@@ -1859,7 +1845,6 @@ public:     // eigentlich private, geht aber leider nur public
     eF_ResT Read_F_Hyperlink(WW8FieldDesc*, OUString& rStr);
         eF_ResT Read_F_Shape(WW8FieldDesc* pF, OUString& rStr);
     eF_ResT Read_F_HTMLControl( WW8FieldDesc* pF, OUString& rStr);
-
 
     void DeleteFormImpl();
 

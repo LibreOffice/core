@@ -79,5 +79,4 @@ IMPL_LINK_NOARG(SwSyncBtnDlg, BtnHdl)
     return 0;
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

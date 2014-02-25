@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <tools/resid.hxx>
 #include <hintids.hxx>
 #include <swtypes.hxx>
@@ -131,7 +130,6 @@ TYPEINIT2( SwTOXMark, SfxPoolItem, SwClient );    // fuers rtti
      TOX dtor and ctor
  --------------------------------------------------------------------*/
 
-
 /// pool default constructor
 SwTOXMark::SwTOXMark()
     : SfxPoolItem( RES_TXTATR_TOXMARK )
@@ -143,7 +141,6 @@ SwTOXMark::SwTOXMark()
 {
 }
 
-
 SwTOXMark::SwTOXMark( const SwTOXType* pTyp )
     : SfxPoolItem( RES_TXTATR_TOXMARK )
     , SwModify( const_cast<SwTOXType*>(pTyp) )
@@ -153,7 +150,6 @@ SwTOXMark::SwTOXMark( const SwTOXType* pTyp )
     bMainEntry(sal_False)
 {
 }
-
 
 SwTOXMark::SwTOXMark( const SwTOXMark& rCopy )
     : SfxPoolItem( RES_TXTATR_TOXMARK )
@@ -171,11 +167,9 @@ SwTOXMark::SwTOXMark( const SwTOXMark& rCopy )
     aAltText = rCopy.aAltText;
 }
 
-
 SwTOXMark::~SwTOXMark()
 {
 }
-
 
 void SwTOXMark::RegisterToTOXType( SwTOXType& rMark )
 {
@@ -187,7 +181,6 @@ bool SwTOXMark::operator==( const SfxPoolItem& rAttr ) const
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "Attributes are not the same" );
     return GetRegisteredIn() == ((SwTOXMark&)rAttr).GetRegisteredIn();
 }
-
 
 SfxPoolItem* SwTOXMark::Clone( SfxItemPool* ) const
 {
@@ -252,7 +245,6 @@ SwTOXType::SwTOXType( TOXTypes eTyp, const OUString& rName )
     eType(eTyp)
 {
 }
-
 
 SwTOXType::SwTOXType(const SwTOXType& rCopy)
     : SwModify( (SwModify*)rCopy.GetRegisteredIn() ),
@@ -366,13 +358,11 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
         }
 }
 
-
 SwForm::SwForm(const SwForm& rForm)
     : eType( rForm.eType )
 {
     *this = rForm;
 }
-
 
 SwForm& SwForm::operator=(const SwForm& rForm)
 {
@@ -413,7 +403,6 @@ bool operator == (const SwFormToken & rToken, FormTokenType eType)
 {
     return rToken.eTokenType == eType;
 }
-
 
 void SwForm::AdjustTabStops(SwDoc& rDoc, sal_Bool bInsertNewTapStops) // #i21237#
 {
@@ -504,7 +493,6 @@ OUString SwForm::GetFormAuth()        {return OUString("<A>");}
   Ctor TOXBase
  --------------------------------------------------------------------*/
 
-
 SwTOXBase::SwTOXBase(const SwTOXType* pTyp, const SwForm& rForm,
                      sal_uInt16 nCreaType, const OUString& rTitle )
     : SwClient((SwModify*)pTyp)
@@ -523,7 +511,6 @@ SwTOXBase::SwTOXBase(const SwTOXType* pTyp, const SwForm& rForm,
 {
     aData.nOptions = 0;
 }
-
 
 SwTOXBase::SwTOXBase( const SwTOXBase& rSource, SwDoc* pDoc )
     : SwClient( rSource.GetRegisteredInNonConst() )
@@ -609,7 +596,6 @@ void SwTOXBase::SetBookmarkName(const OUString& bName)
 {
      m_aBookmarkName = bName;
 }
-
 
 SwTOXBase & SwTOXBase::operator = (const SwTOXBase & rSource)
 {

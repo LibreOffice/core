@@ -41,7 +41,6 @@
 #include <globals.hrc>
 #include <misc.hrc>
 
-
 using namespace ::com::sun::star;
 
 static sal_uInt16 aPageRg[] = {
@@ -59,7 +58,6 @@ IMPL_LINK_NOARG_INLINE_START(SwFootNotePage, HeightPage)
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(SwFootNotePage, HeightPage)
-
 
 IMPL_LINK_NOARG_INLINE_START(SwFootNotePage, HeightMetric)
 {
@@ -241,7 +239,6 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
     m_pLineColorBox->SetSelectHdl( LINK( this, SwFootNotePage, LineColorSelected_Impl ) );
     m_pLineColorBox->SelectEntryPos( nSelPos );
     m_pLineTypeBox->SetColor( pFtnInfo->GetLineColor() );
-
 
     // position
     m_pLinePosBox->SelectEntryPos( static_cast< sal_uInt16 >(pFtnInfo->GetAdj()) );

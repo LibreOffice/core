@@ -59,7 +59,6 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwTxtPortion)
 };
 
-
 class SwTxtInputFldPortion : public SwTxtPortion
 {
 public:

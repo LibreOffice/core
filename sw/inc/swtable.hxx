@@ -94,7 +94,6 @@ class SwTableSortBoxes : public o3tl::sorted_vector<SwTableBox*> {};
 class SW_DLLPUBLIC SwTable: public SwClient          //Client of FrmFmt.
 {
 
-
 protected:
     SwTableLines aLines;
     SwTableSortBoxes m_TabSortContentBoxes;
@@ -210,7 +209,6 @@ public:
     void RestoreRowSpan( const SwSaveRowSpan& );
     // CleanUpBottomRowSpan corrects the overhanging row spans at the end of the first table
     void CleanUpBottomRowSpan( sal_uInt16 nDelLines );
-
 
 // The following functions are "pseudo-virtual", i.e. they are different for old and new table model
 // It's not allowed to change the table model after the first call of one of these functions.
@@ -357,7 +355,6 @@ public:
           SwTableBox *GetUpper() { return pUpper; }
     const SwTableBox *GetUpper() const { return pUpper; }
     void SetUpper( SwTableBox *pNew ) { pUpper = pNew; }
-
 
     SwFrmFmt* GetFrmFmt()       { return (SwFrmFmt*)GetRegisteredIn(); }
     SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }

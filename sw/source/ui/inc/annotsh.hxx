@@ -65,7 +65,6 @@ public:
     void        ExecSearch(SfxRequest&, sal_Bool bNoMessage = sal_False);
     void            StateSearch(SfxItemSet &);
 
-
     virtual ::svl::IUndoManager*
                 GetUndoManager();
 };

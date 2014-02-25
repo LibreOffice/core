@@ -224,7 +224,6 @@ protected:
 public:
     SwXShape(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & xShape);
 
-
     TYPEINFO();
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException, std::exception);
@@ -233,7 +232,6 @@ public:
 
     //XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception);
-
 
     //XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
@@ -287,7 +285,6 @@ protected:
 public:
     SwXGroupShape(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & xShape);
 
-
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL acquire(  ) throw();
     virtual void SAL_CALL release(  ) throw();
@@ -305,6 +302,5 @@ public:
     virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
 };
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

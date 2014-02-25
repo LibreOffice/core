@@ -159,7 +159,6 @@ SwVbaTables::SwVbaTables( const uno::Reference< XHelperInterface >& xParent, con
 {
 }
 
-
 uno::Reference< word::XTable > SAL_CALL
 SwVbaTables::Add( const uno::Reference< word::XRange >& Range, const uno::Any& NumRows, const uno::Any& NumColumns, const uno::Any& /*DefaultTableBehavior*/, const uno::Any& /*AutoFitBehavior*/ ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {

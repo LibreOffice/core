@@ -112,7 +112,6 @@ private:
     Edit*           m_pEdInput;   // Edit obtains the focus.
 };
 
-
 SwStringInputDlg::SwStringInputDlg(Window* pParent, const OUString& rTitle,
     const OUString& rEditTitle, const OUString& rDefault)
     : ModalDialog(pParent, "StringInputDialog", "modules/swriter/ui/stringinput.ui")
@@ -128,7 +127,6 @@ OUString SwStringInputDlg::GetInputString() const
 {
     return m_pEdInput->GetText();
 }
-
 
 SwStringInputDlg::~SwStringInputDlg()
 {
@@ -250,7 +248,6 @@ void SwAutoFormatDlg::FillAutoFmtOfIndex( SwTableAutoFmt*& rToFill ) const
     else
         delete rToFill, rToFill = 0;
 }
-
 
 // Handler:
 

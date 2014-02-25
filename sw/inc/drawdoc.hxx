@@ -24,8 +24,6 @@
 class SwDoc;
 class SwDocShell;
 
-//==================================================================
-
 class SwDrawDocument : public FmFormModel
 {
     SwDoc* pDoc;
@@ -48,7 +46,6 @@ protected:
     /// overload of <SdrModel::createUnoModel()> is needed to provide corresponding uno model.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel();
 };
-
 
 #endif
 

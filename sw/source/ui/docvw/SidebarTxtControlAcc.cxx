@@ -34,7 +34,6 @@
 
 namespace sw { namespace sidebarwindows {
 
-
 // declaration and implementation of <SvxEditSource>
 // for <::accessibiliy::AccessibleTextHelper> instance
 class SidebarTextEditSource : public SvxEditSource,

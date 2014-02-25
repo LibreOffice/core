@@ -83,7 +83,6 @@
 #include <fmtmeta.hxx>
 #include <txtfld.hxx>
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -855,7 +854,6 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                     pDoc->SetNumRule( rPam, aRule, false );
                 }
 
-
             }
             else if(!pSwNum->GetCreatedNumRuleName().isEmpty())
             {
@@ -1097,7 +1095,6 @@ void InsertFile(SwUnoCrsr* pUnoCrsr,
             }
 
             delete pRdr;
-
 
         }
     }

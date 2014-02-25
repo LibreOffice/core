@@ -66,8 +66,6 @@ public:
     //wenn die Direction nicht der Hoehe entspricht.
     void AdjustCells( const SwTwips nHeight, const sal_Bool bHeight );
 
-    //
-    //
     SwRowFrm* GetFollowRow() const { return pFollowRow; }
     void SetFollowRow( SwRowFrm* pNew ) { pFollowRow = pNew; }
 

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <UndoManager.hxx>
 
 #include <vcl/wrkwin.hxx>
@@ -39,12 +38,10 @@
 
 using namespace ::com::sun::star;
 
-
 // the undo array should never grow beyond this limit:
 #define UNDO_ACTION_LIMIT (USHRT_MAX - 1000)
 
-
-// UndoManager ///////////////////////////////////////////////////////////
+// UndoManager
 
 namespace sw {
 
@@ -128,7 +125,6 @@ bool UndoManager::DoesDrawUndo() const
     return m_bDrawUndo;
 }
 
-
 bool UndoManager::IsUndoNoResetModified() const
 {
     return MARK_INVALID == m_UndoSaveMark;
@@ -161,7 +157,6 @@ void UndoManager::UnLockUndoNoModifiedPosition()
     m_bLockUndoNoModifiedPosition = false;
 }
 
-
 SwUndo* UndoManager::GetLastUndo()
 {
     if (!SdrUndoManager::GetUndoActionCount(CurrentLevel))
@@ -191,7 +186,6 @@ void UndoManager::DelAllUndoObj()
     m_UndoSaveMark = MARK_INVALID;
 }
 
-
 /**************** UNDO ******************/
 
 SwUndoId
@@ -219,7 +213,6 @@ UndoManager::StartUndo(SwUndoId const i_eUndoId,
 
     return eUndoId;
 }
-
 
 SwUndoId
 UndoManager::EndUndo(SwUndoId const i_eUndoId, SwRewriter const*const pRewriter)
@@ -328,7 +321,6 @@ SwUndoComments_t UndoManager::GetUndoComments() const
     return ret;
 }
 
-
 /**************** REDO ******************/
 
 bool UndoManager::GetFirstRedoInfo(OUString *const o_pStr,
@@ -357,7 +349,6 @@ bool UndoManager::GetFirstRedoInfo(OUString *const o_pStr,
 
     return true;
 }
-
 
 SwUndoComments_t UndoManager::GetRedoComments() const
 {
@@ -411,7 +402,7 @@ SwUndo * UndoManager::RemoveLastUndo()
     return dynamic_cast<SwUndo *>(pLastUndo);
 }
 
-// svl::IUndoManager /////////////////////////////////////////////////////
+// svl::IUndoManager
 
 void UndoManager::EnableUndo(bool bEnable)
 {

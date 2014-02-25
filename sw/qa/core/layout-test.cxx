@@ -72,7 +72,6 @@ void SwLayoutTest::test()
     CPPUNIT_ASSERT(xComponent.is());
 }
 
-
 SwLayoutTest::SwLayoutTest()
       : m_aBaseString("/sw/qa/core/data")
 {

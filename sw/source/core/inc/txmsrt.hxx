@@ -24,7 +24,6 @@
 
 #include <com/sun/star/lang/Locale.hpp>
 
-
 class CharClass;
 class SwCntntNode;
 class SwTxtNode;
@@ -57,7 +56,6 @@ struct SwTOXSource
 
 typedef std::vector<SwTOXSource> SwTOXSources;
 
-
 struct TextAndReading
 {
     OUString sText;
@@ -70,7 +68,6 @@ struct TextAndReading
     , sReading(sRdng)
     {}
 };
-
 
 class SwTOXInternational
 {
@@ -188,7 +185,6 @@ struct SwTOXIndex : public SwTOXSortTabBase
                 const ::com::sun::star::lang::Locale& rLocale );
     virtual ~SwTOXIndex() {}
 
-
     virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 nAuthField = 0 ) const;
     virtual sal_uInt16  GetLevel() const;
     virtual bool    operator==( const SwTOXSortTabBase& );
@@ -290,7 +286,6 @@ public:
     virtual bool    operator<( const SwTOXSortTabBase& );
     virtual sal_uInt16  GetLevel() const;
 };
-
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_TXMSRT_HXX
 

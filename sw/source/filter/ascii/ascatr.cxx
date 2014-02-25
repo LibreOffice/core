@@ -66,7 +66,6 @@ public:
     bool OutAttr( sal_Int32 nSwPos );
 };
 
-
 SwASC_AttrIter::SwASC_AttrIter(
     SwASCWriter& rWr,
     const SwTxtNode& rTxtNd,
@@ -77,7 +76,6 @@ SwASC_AttrIter::SwASC_AttrIter(
 {
     nAktSwPos = SearchNext( nStt + 1 );
 }
-
 
 sal_Int32 SwASC_AttrIter::SearchNext( sal_Int32 nStartPos )
 {
@@ -118,7 +116,6 @@ sal_Int32 SwASC_AttrIter::SearchNext( sal_Int32 nStartPos )
     }
     return nMinPos;
 }
-
 
 bool SwASC_AttrIter::OutAttr( sal_Int32 nSwPos )
 {
@@ -168,10 +165,7 @@ bool SwASC_AttrIter::OutAttr( sal_Int32 nSwPos )
     return bRet;
 }
 
-
-
 // Output of the node
-
 
 static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 {

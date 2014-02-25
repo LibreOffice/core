@@ -38,7 +38,6 @@ class SvXMLAttributeList;
 class SvXMLNamespaceMap;
 class SvXMLExport;
 
-
 class SvXMLExportItemMapper
 {
 protected:
@@ -61,7 +60,6 @@ protected:
                     const SvXMLNamespaceMap& rNamespaceMap,
                     sal_uInt16 nFlags,
                     const SfxItemSet *pSet ) const;
-
 
     void exportElementItems(  SvXMLExport& rExport,
                               const SvXMLUnitConverter& rUnitConverter,
@@ -91,7 +89,6 @@ public:
                                     const SvXMLUnitConverter& rUnitConverter,
                                     const SvXMLNamespaceMap& rNamespaceMap,
                                     const SfxItemSet *pSet = NULL ) const;
-
 
     /** this method is called for every item that has the
         MID_SW_FLAG_NO_ITEM_EXPORT flag set */

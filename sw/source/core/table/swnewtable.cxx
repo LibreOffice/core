@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <swtable.hxx>
 #include <tblsel.hxx>
 #include <tblrwcl.hxx>
@@ -45,8 +44,6 @@
 #else
 #define CHECK_TABLE(t)
 #endif
-
-
 
 /** SwBoxSelection is a small helperclass (structure) to handle selections
     of cells (boxes) between table functions
@@ -625,7 +622,6 @@ static long lcl_InsertPosition( SwTable &rTable, std::vector<sal_uInt16>& rInsPo
 }
 
 /** SwTable::NewInsertCol(..) insert new column(s) into a table
-
 
 @param pDoc
 the document
@@ -1877,8 +1873,6 @@ void SwTable::PrepareDeleteCol( long nMin, long nMax )
         }
     }
 }
-
-
 
 /** SwTable::ExpandSelection(..) adds all boxes to the box selections which are
     overlapped by it.

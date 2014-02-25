@@ -30,7 +30,6 @@
 #include <unomid.h>
 #include <unoprnms.hxx>
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
@@ -234,7 +233,7 @@ void SwLabDlg::UpdateFieldInformation(uno::Reference< frame::XModel > & xModel, 
     }
     catch (const uno::RuntimeException&)
     {
-        //
+
     }
 
     uno::Reference< container::XEnumerationAccess >  xFldAcc = xFlds->getTextFields();

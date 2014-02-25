@@ -16,7 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 interface TextGraphic : BaseTextGraphic
 [
     uuid = "1885FE00-111C-101D-9757-6E74207A7520"
@@ -24,12 +23,9 @@ interface TextGraphic : BaseTextGraphic
 {
 }
 
- //=========================================================================
-
 shell SwGrfShell : SwBaseShell
 
 {
     import TextGraphic[Automation];
 }
-
 

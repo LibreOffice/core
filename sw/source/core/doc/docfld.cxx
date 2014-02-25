@@ -2658,7 +2658,6 @@ bool SwDoc::PutValueToField(const SwPosition & rPos,
     Any aOldVal;
     SwField * pField = GetFieldAtPos(rPos);
 
-
     if (GetIDocumentUndoRedo().DoesUndo() &&
         pField->QueryValue(aOldVal, nWhich))
     {

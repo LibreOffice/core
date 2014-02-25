@@ -24,7 +24,6 @@
 #include "swfont.hxx"
 #include "porlay.hxx"
 
-
 class OutputDevice;
 class SwFont;
 class SwpHints;

@@ -39,9 +39,7 @@ public:
     void LoadDefaultCalendar( sal_uInt16 nLang );
 };
 
-
 salhelper::SingletonRef<SwCalendarWrapper>* s_getCalendarWrapper();
-
 
 #endif
 

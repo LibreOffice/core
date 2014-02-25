@@ -35,11 +35,7 @@ class AutoFmtPreview;
 class SwTableAutoFmtTbl;
 class SwWrtShell;
 
-//------------------------------------------------------------------------
-
 enum AutoFmtLine { TOP_LINE, BOTTOM_LINE, LEFT_LINE, RIGHT_LINE };
-
-//========================================================================
 
 class SwAutoFormatDlg : public SfxModalDialog
 {
@@ -64,7 +60,6 @@ class SwAutoFormatDlg : public SfxModalDialog
     OUString        aStrInvalidFmt;
     AutoFmtPreview* m_pWndPreview;
 
-    //------------------------
     SwWrtShell*             pShell;
     SwTableAutoFmtTbl*      pTableTbl;
     sal_uInt8                   nIndex;
@@ -72,10 +67,9 @@ class SwAutoFormatDlg : public SfxModalDialog
     sal_Bool                    bCoreDataChanged : 1;
     sal_Bool                    bSetAutoFmt : 1;
 
-
     void Init( const SwTableAutoFmt* pSelFmt );
     void UpdateChecks( const SwTableAutoFmt&, sal_Bool bEnableBtn );
-    //------------------------
+
     DECL_LINK( CheckHdl, Button * );
     DECL_LINK(OkHdl, void *);
     DECL_LINK( AddHdl, void * );
@@ -91,7 +85,6 @@ public:
 
     void FillAutoFmtOfIndex( SwTableAutoFmt*& rToFill ) const;
 };
-
 
 #endif // SW_AUTOFMT_HXX
 

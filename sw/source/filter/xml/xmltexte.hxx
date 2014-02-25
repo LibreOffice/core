@@ -76,7 +76,6 @@ public:
         OUString& rStreamName ) const;
 };
 
-
 #endif // INCLUDED_SW_SOURCE_FILTER_XML_XMLTEXTE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

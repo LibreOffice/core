@@ -133,7 +133,6 @@ protected:
     virtual         void Resize();
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
-
     // release ObjectShellLock early enough for app end
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 

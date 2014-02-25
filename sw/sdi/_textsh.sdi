@@ -186,7 +186,6 @@ interface BaseText
         Export = FALSE;
     ]
 
-     //--------------------------------------------------------------------------
     FN_INSERT_STRING // status(final|play|rec)
     [
         ExecMethod = ExecInsert ;
@@ -453,9 +452,9 @@ interface BaseText
         ExecMethod = ExecMove ;
         StateMethod = NoState ;
     ]
-     //
+
      // Goto - Methoden
-     //
+
     SID_FM_TOGGLECONTROLFOCUS
     [
         ExecMethod = ExecMoveMisc ;
@@ -657,9 +656,8 @@ interface BaseText
         StateMethod = NoState ;
     ]
 
-     //
      // Get - Properties
-     //
+
     FN_AUTOFORMAT_AUTO // status(final|play)
     [
         ExecMethod = Execute ;
@@ -846,7 +844,7 @@ interface BaseText
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
         Export = FALSE ;
     ]
-     //--------------------------------------------------------------------------
+
     FN_INSERT_FLD_PGNUMBER
     [
         ExecMethod = ExecField ;
@@ -875,14 +873,14 @@ interface BaseText
         StateMethod = StateField ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-     //--------------------------------------------------------------------------
+
     FN_INSERT_FLD_TIME
     [
         ExecMethod = ExecField ;
         StateMethod = StateField ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-     //--------------------------------------------------------------------------
+
     FN_INSERT_FLD_AUTHOR
     [
         ExecMethod = ExecField ;
@@ -1635,6 +1633,4 @@ interface BaseText
     ]
 
 }  //ende interface text
-
-
 

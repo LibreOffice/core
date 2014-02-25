@@ -38,8 +38,6 @@ class SwNodeIndex;
         } while( (_pStartCrsr=(SwPaM *)_pStartCrsr->GetNext()) != __pStartCrsr ); \
     }
 
-
-
 struct SwPamRange
 {
     sal_uLong nStart, nEnd;
@@ -68,7 +66,6 @@ public:
     SwPamRange operator[]( sal_uInt16 nPos ) const
                 { return _SwPamRanges::operator[](nPos); }
 };
-
 
 #endif
 

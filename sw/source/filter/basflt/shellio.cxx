@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <hintids.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
@@ -56,8 +55,6 @@
 #include <pausethreadstarting.hxx>
 
 using namespace ::com::sun::star;
-
-//////////////////////////////////////////////////////////////////////////
 
 sal_uLong SwReader::Read( const Reader& rOptions )
 {
@@ -399,7 +396,6 @@ sal_uLong SwReader::Read( const Reader& rOptions )
     return nError;
 }
 
-
 /*
  * Konstruktoren, Destruktor
  */
@@ -616,17 +612,14 @@ int Reader::SetStrmStgPtr()
     return sal_False;
 }
 
-
 int Reader::GetReaderType()
 {
     return SW_STREAM_READER;
 }
 
-
 void Reader::SetFltName( const OUString& )
 {
 }
-
 
 void Reader::ResetFrmFmtAttrs( SfxItemSet &rFrmSet )
 {
@@ -634,7 +627,6 @@ void Reader::ResetFrmFmtAttrs( SfxItemSet &rFrmSet )
     rFrmSet.Put( SvxULSpaceItem(RES_UL_SPACE) );
     rFrmSet.Put( SvxBoxItem(RES_BOX) );
 }
-
 
 void Reader::ResetFrmFmts( SwDoc& rDoc )
 {
@@ -671,7 +663,6 @@ size_t Reader::GetSectionList( SfxMedium&, std::vector<OUString*>& ) const
 {
     return 0;
 }
-
 
 sal_Bool SwReader::HasGlossaries( const Reader& rOptions )
 {
@@ -714,15 +705,10 @@ sal_Bool Reader::ReadGlossaries( SwTextBlocks&, sal_Bool ) const
     return sal_False;
 }
 
-
-
 int StgReader::GetReaderType()
 {
     return SW_STORAGE_READER;
 }
-
-
-
 
 /*
  * Writer
@@ -944,11 +930,6 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
     return nError;
 }
 
-
-
-
-
-
 sal_Bool SetHTMLTemplate( SwDoc & rDoc )
 {
     // Vorlagennamen von den Sfx-HTML-Filter besorgen!!!
@@ -969,6 +950,5 @@ sal_Bool SetHTMLTemplate( SwDoc & rDoc )
 
     return bRet;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

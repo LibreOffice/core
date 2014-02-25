@@ -42,11 +42,9 @@
 #include "wrthtml.hxx"
 #include "swhtml.hxx"
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
-
 
 static HTMLOutEvent aBodyEventTable[] =
 {
@@ -56,7 +54,6 @@ static HTMLOutEvent aBodyEventTable[] =
     { OOO_STRING_SVTOOLS_HTML_O_SDonblur,       OOO_STRING_SVTOOLS_HTML_O_onblur,       SFX_EVENT_DEACTIVATEDOC },
     { 0,                    0,                  0                   }
 };
-
 
 void SwHTMLParser::NewScript()
 {
@@ -340,6 +337,5 @@ void SwHTMLWriter::OutBasicBodyEvents()
         HTMLOutFuncs::Out_Events( Strm(), aDocTable, aBodyEventTable,
                                   bCfgStarBasic, eDestEnc, &aNonConvertableCharacters );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

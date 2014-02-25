@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_INC_FMTCLBL_HXX
 #define INCLUDED_SW_INC_FMTCLBL_HXX
 
-
 #include <svl/eitem.hxx>
 #include <hintids.hxx>
 #include <format.hxx>
@@ -34,7 +33,6 @@ public:
     /// "pure virtual methods" of SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 };
-
 
 inline const SwFmtNoBalancedColumns &SwAttrSet::GetBalancedColumns(sal_Bool bInP) const
     { return (const SwFmtNoBalancedColumns&)Get( RES_COLUMNBALANCE, bInP ); }

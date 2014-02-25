@@ -51,8 +51,6 @@ public:
     void SetLastTblBox( const SwTableBox* pBox )    { pLastTblBox = pBox; }
 };
 
-
-
 class SwTableFormula
 {
 typedef void (SwTableFormula:: *FnScanFormula)( const SwTable&, OUString&,
@@ -146,8 +144,6 @@ public:
     // are all boxes valid which this formula relies on?
     bool HasValidBoxes() const;
 };
-
-
 
 #endif
 
