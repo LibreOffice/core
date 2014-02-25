@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #define _T_STORE_CXX
 #include <sal/types.h>
 #include <osl/diagnose.h>
@@ -36,7 +35,6 @@ extern "C"
     void DumpCAP  (void);
 }
 #endif /* PROFILE */
-
 
 /*========================================================================
  *

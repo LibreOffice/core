@@ -45,7 +45,6 @@ protected:
     ~IStoreHandle() {}
 };
 
-
 /** Template helper function as dynamic_cast replacement.
  */
 template<class store_handle_type>

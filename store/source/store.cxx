@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "store/store.h"
 
 #include <sal/types.h>
@@ -54,7 +53,6 @@ public:
     }
 };
 }
-
 
 using namespace store;
 
