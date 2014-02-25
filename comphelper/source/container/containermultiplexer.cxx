@@ -50,22 +50,26 @@ namespace comphelper
     }
 
 
-    void OContainerListener::_elementInserted( const ContainerEvent& /*_rEvent*/ ) throw(RuntimeException)
+    void OContainerListener::_elementInserted( const ContainerEvent& /*_rEvent*/ )
+        throw (RuntimeException, std::exception)
     {
     }
 
 
-    void OContainerListener::_elementRemoved( const ContainerEvent& ) throw(RuntimeException)
+    void OContainerListener::_elementRemoved( const ContainerEvent& )
+        throw (RuntimeException, std::exception)
     {
     }
 
 
-    void OContainerListener::_elementReplaced( const ContainerEvent& /*_rEvent*/ ) throw(RuntimeException)
+    void OContainerListener::_elementReplaced( const ContainerEvent& /*_rEvent*/ )
+        throw (RuntimeException, std::exception)
     {
     }
 
 
-    void OContainerListener::_disposing(const EventObject& ) throw( RuntimeException)
+    void OContainerListener::_disposing(const EventObject& )
+        throw (RuntimeException, std::exception)
     {
     }
 

@@ -40,7 +40,8 @@ OPropertyChangeListener::~OPropertyChangeListener()
 }
 
 
-void OPropertyChangeListener::_disposing(const EventObject&) throw( RuntimeException)
+void OPropertyChangeListener::_disposing(const EventObject&)
+    throw (RuntimeException, std::exception)
 {
     // nothing to do here
 }

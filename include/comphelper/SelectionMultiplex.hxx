@@ -53,7 +53,8 @@ namespace comphelper
         virtual ~OSelectionChangeListener();
 
         virtual void _selectionChanged( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException) = 0;
-        virtual void _disposing(const ::com::sun::star::lang::EventObject& _rSource) throw( ::com::sun::star::uno::RuntimeException);
+        virtual void _disposing(const ::com::sun::star::lang::EventObject& _rSource)
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     protected:
         // pseudo-private. Making it private now could break compatibility

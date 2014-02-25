@@ -133,7 +133,8 @@ class NavigatorTree :   public ::cppu::BaseMutex
 
         // OContainerListener
         virtual void _elementInserted( const container::ContainerEvent& _rEvent ) throw(uno::RuntimeException);
-        virtual void _elementRemoved( const container::ContainerEvent& _Event ) throw(uno::RuntimeException);
+        virtual void _elementRemoved( const container::ContainerEvent& _Event )
+            throw (uno::RuntimeException, std::exception);
         virtual void _elementReplaced( const container::ContainerEvent& _rEvent ) throw(uno::RuntimeException);
         virtual void _disposing(const lang::EventObject& _rSource)
             throw (uno::RuntimeException, std::exception);
@@ -167,7 +168,8 @@ protected:
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& _rEvt );
 
     // OSelectionChangeListener
-    virtual void _disposing(const lang::EventObject& _rSource) throw( uno::RuntimeException);
+    virtual void _disposing(const lang::EventObject& _rSource)
+        throw (uno::RuntimeException, std::exception);
 
     // OPropertyChangeListener
     virtual void _propertyChanged(const beans::PropertyChangeEvent& _rEvent) throw( uno::RuntimeException);
@@ -843,7 +845,8 @@ void NavigatorTree::UserData::_elementInserted( const container::ContainerEvent&
     m_pTree->_elementInserted( _rEvent );
 }
 
-void NavigatorTree::UserData::_elementRemoved( const container::ContainerEvent& _rEvent ) throw(uno::RuntimeException)
+void NavigatorTree::UserData::_elementRemoved( const container::ContainerEvent& _rEvent )
+    throw (uno::RuntimeException, std::exception)
 {
     m_pTree->_elementRemoved( _rEvent );
 }
@@ -853,7 +856,8 @@ void NavigatorTree::UserData::_elementReplaced( const container::ContainerEvent&
     m_pTree->_elementReplaced( _rEvent );
 }
 
-void NavigatorTree::UserData::_disposing(const lang::EventObject& _rSource) throw( uno::RuntimeException)
+void NavigatorTree::UserData::_disposing(const lang::EventObject& _rSource)
+    throw (uno::RuntimeException, std::exception)
 {
     m_pTree->_disposing( _rSource );
 }

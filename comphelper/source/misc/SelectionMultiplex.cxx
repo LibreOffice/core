@@ -41,7 +41,8 @@ OSelectionChangeListener::~OSelectionChangeListener()
 }
 
 
-void OSelectionChangeListener::_disposing(const EventObject&) throw( RuntimeException)
+void OSelectionChangeListener::_disposing(const EventObject&)
+    throw (RuntimeException, std::exception)
 {
     // nothing to do here
 }

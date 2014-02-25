@@ -58,7 +58,8 @@ public:
                             {}
 
     // XnotifyingDispatch
-    virtual void SAL_CALL dispatchWithNotification( const css::util::URL& URL, const css::uno::Sequence< css::beans::PropertyValue >& Arguments, const css::uno::Reference< css::frame::XDispatchResultListener >& Listener ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL dispatchWithNotification( const css::util::URL& URL, const css::uno::Sequence< css::beans::PropertyValue >& Arguments, const css::uno::Reference< css::frame::XDispatchResultListener >& Listener )
+        throw (css::uno::RuntimeException, std::exception);
 
     // XDispatch
     virtual void SAL_CALL dispatch( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs ) throw( css::uno::RuntimeException );

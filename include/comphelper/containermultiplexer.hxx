@@ -50,10 +50,18 @@ namespace comphelper
         OContainerListener(::osl::Mutex& _rMutex);
         virtual ~OContainerListener();
 
-        virtual void _elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);
-        virtual void _elementRemoved( const ::com::sun::star::container::ContainerEvent& _Event ) throw(::com::sun::star::uno::RuntimeException);
-        virtual void _elementReplaced( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);
-        virtual void _disposing(const ::com::sun::star::lang::EventObject& _rSource) throw( ::com::sun::star::uno::RuntimeException);
+        virtual void _elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent )
+            throw (::com::sun::star::uno::RuntimeException,
+                   std::exception);
+        virtual void _elementRemoved( const ::com::sun::star::container::ContainerEvent& _Event )
+            throw (::com::sun::star::uno::RuntimeException,
+                   std::exception);
+        virtual void _elementReplaced( const ::com::sun::star::container::ContainerEvent& _rEvent )
+            throw (::com::sun::star::uno::RuntimeException,
+                   std::exception);
+        virtual void _disposing(const ::com::sun::star::lang::EventObject& _rSource)
+            throw (::com::sun::star::uno::RuntimeException,
+                   std::exception);
 
     protected:
         void setAdapter(OContainerListenerAdapter* _pAdapter);
