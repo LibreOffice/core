@@ -848,5 +848,5 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         }
         return bhastoinsert;
     }
-}   
-    
+}
+

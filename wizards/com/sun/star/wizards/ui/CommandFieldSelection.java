@@ -269,7 +269,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
     }
 
     /** returns the selected entry index in the commandListbox
-     * 
+     *
      * @return
      * @throws com.sun.star.wizards.common.TerminateWizardException
      */

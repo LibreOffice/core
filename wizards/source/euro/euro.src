@@ -24,7 +24,7 @@
 #define MESSAGES 1400
 #define CURRENCIES 1500
 #define STEP_LASTPAGE 1600
-// --------------------------------------------------------------------
+
 String STEP_ZERO
 {
 Text [ en-US ] = "~Cancel";

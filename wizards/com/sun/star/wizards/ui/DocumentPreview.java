@@ -53,7 +53,7 @@ public class DocumentPreview
 
     /*********************************************************************
     main
-    
+
     - create new frame with window inside
     - load a component as preview into this frame
      */
@@ -120,7 +120,7 @@ public class DocumentPreview
     /*********************************************************************
     create a new frame with a new container window inside,
     which isnt part of the global frame tree.
-    
+
     Attention:
     a) This frame wont be destroyed by the office. It must be closed by you!
     Do so - please call XCloseable::close().

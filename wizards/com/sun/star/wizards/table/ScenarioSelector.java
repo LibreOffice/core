@@ -47,7 +47,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
 {
     final static int PRIVATE = 0;
     final static int BUSINESS = 1;
-    
+
     private XFixedText lblExplanation;
     private XFixedText lblCategories;
     private XRadioButton optBusiness;
@@ -315,7 +315,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
             {
                 int selindex = JavaTools.FieldInList(NewItems, SelItems[i]);
                 super.xSelectedFieldsListBox.removeItems((short) selindex, (short) 1);
-                /**TODO In this context the items should be better placed at their original position. 
+                /**TODO In this context the items should be better placed at their original position.
                  * but how is this position retrieved?
                  */
                 super.xFieldsListBox.addItem(SelItems[i], xFieldsListBox.getItemCount());

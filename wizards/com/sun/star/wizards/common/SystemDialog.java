@@ -132,10 +132,10 @@ public class SystemDialog
     }
 
     /**
-     * 
+     *
      * @param displayDir
      * @param defaultName
-     * given url to a local path. 
+     * given url to a local path.
      * @return
      */
     public String callStoreDialog(String displayDir, String defaultName)
@@ -319,11 +319,11 @@ public class SystemDialog
      */
     /**
      * @param windowServiceName one of the following strings:
-     * "ErrorBox", "WarningBox", "MessBox", "InfoBox", "QueryBox". 
+     * "ErrorBox", "WarningBox", "MessBox", "InfoBox", "QueryBox".
      * There are other values possible, look
      * under src/toolkit/source/awt/vcltoolkit.cxx
      * @param windowAttribute see com.sun.star.awt.VclWindowPeerAttribute
-     * @return 0 = cancel, 1 = ok, 2 = yes,  3 = no(I'm not sure here) 
+     * @return 0 = cancel, 1 = ok, 2 = yes,  3 = no(I'm not sure here)
      * other values check for yourself ;-)
      */
     public static int showMessageBox(XMultiServiceFactory xMSF, String windowServiceName, int windowAttribute, String MessageText)

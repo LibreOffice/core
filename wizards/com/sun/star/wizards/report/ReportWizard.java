@@ -717,11 +717,11 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
 
 //    public void tests()
 //    {
-//
+
 //        Calendar aCalendar = new GregorianCalendar();
 //        aCalendar.setTimeInMillis(1202382900000L);
 //        String aCalStr = aCalendar.toString();
-//
+
 //        Date aDate = new Date();
 //        aDate.setSeconds(0);
 //        aDate.setMinutes(15);
@@ -732,12 +732,12 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
 //        long nTime = aDate.getTime();
 //        Long aLong = new Long(nTime);
 //        String aStr = aLong.toString();
-//
+
 //        Date aNewDate = new Date(1202382900000L);
 ////         aNewDate.
 //        String aDateStr = aNewDate.toString();
 ////         Datetime aNewTime = new Time(1202382900);
 ////         String aTimeStr = aNewTime.toString();
-//
+
 //    }
 }

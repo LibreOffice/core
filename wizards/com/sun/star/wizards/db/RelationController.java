@@ -130,7 +130,7 @@ public class RelationController extends CommandName
                         {
                             aSlaveFieldNamesVector.add(sForeignColumnName);
                             aMasterFieldNamesVector.add(sPrimaryColumnName);
-                            bleaveLoop = true;                  //Only one relation may exist between two tables...                     
+                            bleaveLoop = true;                  //Only one relation may exist between two tables...
                         }
                     }
 

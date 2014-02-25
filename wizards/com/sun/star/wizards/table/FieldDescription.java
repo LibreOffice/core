@@ -124,7 +124,7 @@ public class FieldDescription
         try
         {
             xPropertySet = UnoRuntime.queryInterface(XPropertySet.class, _xNameAccessFieldNode);
-//      Integer Index = (Integer) xPropertySet.getPropertyValue("Index");       
+//      Integer Index = (Integer) xPropertySet.getPropertyValue("Index");
             if (propertyexists(PropertyNames.PROPERTY_NAME))
             {
                 aPropertyValues.add(Properties.createProperty(PropertyNames.PROPERTY_NAME, Name));
@@ -136,12 +136,12 @@ public class FieldDescription
             if (propertyexists("Scale"))
             {
                 aPropertyValues.add(Properties.createProperty("Scale", xPropertySet.getPropertyValue("Scale")));
-//          Scale =         
+//          Scale =
             }
             if (propertyexists("Precision"))
             {
                 aPropertyValues.add(Properties.createProperty("Precision", xPropertySet.getPropertyValue("Precision")));
-//          Precision = (Integer) xPropertySet.getPropertyValue("Precision");       
+//          Precision = (Integer) xPropertySet.getPropertyValue("Precision");
             }
             if (propertyexists("DefaultValue"))
             {

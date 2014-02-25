@@ -63,7 +63,7 @@ public class SimpleDataAware extends DataAware
     else if (value.equals(PropertyNames.EMPTY_STRING)) return Boolean.FALSE;
     else return Boolean.TRUE;
     }
-    
+
     public void disableControls(Object[] controls) {
     disableObjects = controls;
     }
