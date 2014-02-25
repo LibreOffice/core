@@ -30,7 +30,7 @@
 
 // TEMP!!!
 // Awaiting corresponding functionality in OSL
-//
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <winbase.h>
@@ -54,7 +54,7 @@ double ElapsedTime::getSystemTime()
 {
     // TEMP!!!
     // Awaiting corresponding functionality in OSL
-    //
+
 
     // is there a performance counter available?
     static bool bTimeSetupDone( false );

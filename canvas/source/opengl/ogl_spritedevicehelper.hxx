@@ -113,7 +113,7 @@ namespace oglcanvas
         /// Get instance of internal texture cache
         TextureCache& getTextureCache() const;
 
-        ////////////////////////////////////////////////////////
+
 
         // nobody except IBufferContext implementations are supposed
         // to use this

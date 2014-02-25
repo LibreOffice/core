@@ -141,7 +141,7 @@ namespace dxcanvas
                                                                     // is complex
 
             // setup and apply clip (if any)
-            // =================================
+
 
             if( xClip.is() )
             {
@@ -173,7 +173,7 @@ namespace dxcanvas
             else if( bIsClipRectangular )
             {
                 // apply a simple rect clip
-                // ========================
+
 
                 ::basegfx::B2DRectangle aClipBounds(
                     ::basegfx::tools::getRange( aClipPath ) );
@@ -184,7 +184,7 @@ namespace dxcanvas
             else
             {
                 // apply clip the hard way
-                // =======================
+
 
                 mpBitmap->draw(fAlpha,rPos,aClipPath,rTransform);
             }

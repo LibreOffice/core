@@ -84,7 +84,7 @@ namespace vclcanvas
                                bool&    io_bSurfaceDirty );
 
         // SpriteRedrawManager functor calls
-        // -------------------------------------------------
+
 
         /** Gets called for simple background repaints
          */

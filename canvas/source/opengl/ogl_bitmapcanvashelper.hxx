@@ -53,7 +53,7 @@ namespace oglcanvas
                    const ::com::sun::star::geometry::IntegerSize2D& rSize );
 
         // BitmapCanvasHelper functionality
-        // ================================
+
 
         void copyRect( const ::com::sun::star::rendering::XCanvas*          rCanvas,
                        const ::com::sun::star::uno::Reference<

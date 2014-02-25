@@ -380,7 +380,7 @@ class DemoRenderer
             //called CanvasHelper::getScaledBitmap, we return NULL, TODO
             //Exception 'BitmapEx vclcanvas::tools::bitmapExFromXBitmap(const com::sun::star::uno::Reference<com::sun::star::rendering::XBitmap>&),
             //bitmapExFromXBitmap(): could not extract BitmapEx' thrown
-            //
+
             //vcl-canvas says:
             //Exception 'BitmapEx vclcanvas::tools::bitmapExFromXBitmap(const com::sun::star::uno::Reference<com::sun::star::rendering::XBitmap>&),
             //bitmapExFromXBitmap(): could not extract bitmap' thrown

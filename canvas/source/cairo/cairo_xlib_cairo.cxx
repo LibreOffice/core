@@ -37,7 +37,7 @@ namespace
     {
         // The X protocol request CreatePixmap puts an upper bound
         // of 16 bit to the size.
-        //
+
         // see, e.g. moz#424333, fdo#48961
         // we've a duplicate of this in vcl :-(
         if (width > SAL_MAX_INT16 || height > SAL_MAX_INT16)

@@ -433,7 +433,7 @@ namespace canvas
     {
         // check whether SpriteInfo::needsUpdate returns false for
         // all elements of this area's contained sprites
-        //
+
         // if not a single changed sprite found - just ignore this
         // component (return false)
         const SpriteConnectedRanges::ComponentListType::const_iterator aEnd(

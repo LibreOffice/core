@@ -97,7 +97,7 @@ namespace vclcanvas
 
 
         // CanvasHelper functionality
-        // ==========================
+
 
         // XCanvas (only providing, not implementing the
         // interface. Also note subtle method parameter differences)
@@ -226,7 +226,7 @@ namespace vclcanvas
             getDevice();
 
         // BitmapCanvasHelper functionality
-        // ================================
+
 
         void copyRect( const ::com::sun::star::rendering::XCanvas*          rCanvas,
                        const ::com::sun::star::uno::Reference<
