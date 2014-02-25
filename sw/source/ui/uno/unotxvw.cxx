@@ -1052,7 +1052,7 @@ sal_Bool SwXTextViewCursor::goRight(sal_Int16 nCount, sal_Bool bExpand)
 void SwXTextViewCursor::gotoRange(
     const uno::Reference< text::XTextRange > & xRange,
     sal_Bool bExpand)
-        throw(RuntimeException)
+        throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if(m_pView && xRange.is())
