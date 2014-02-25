@@ -133,7 +133,7 @@ TYPEINIT1_FACTORY(SvxCaseMapItem, SfxEnumItem, new SvxCaseMapItem(SVX_CASEMAP_NO
 TYPEINIT1_FACTORY(SvxEscapementItem, SfxPoolItem, new SvxEscapementItem(0));
 TYPEINIT1_FACTORY(SvxLanguageItem, SfxEnumItem, new SvxLanguageItem(LANGUAGE_GERMAN, 0));
 TYPEINIT1_FACTORY(SvxNoLinebreakItem, SfxBoolItem, new SvxNoLinebreakItem(sal_True, 0));
-TYPEINIT1_FACTORY(SvxNoHyphenItem, SfxBoolItem, new SvxNoHyphenItem(sal_True, 0));
+TYPEINIT1_FACTORY(SvxNoHyphenItem, SfxBoolItem, new SvxNoHyphenItem(true, 0));
 TYPEINIT1_FACTORY(SvxLineColorItem, SvxColorItem, new SvxLineColorItem(0));
 TYPEINIT1_FACTORY(SvxBlinkItem, SfxBoolItem, new SvxBlinkItem(false, 0));
 TYPEINIT1_FACTORY(SvxEmphasisMarkItem, SfxUInt16Item, new SvxEmphasisMarkItem(EMPHASISMARK_NONE, 0));
@@ -2686,7 +2686,7 @@ SfxItemPresentation SvxNoLinebreakItem::GetPresentation
 
 // class SvxNoHyphenItem -------------------------------------------------
 
-SvxNoHyphenItem::SvxNoHyphenItem( const sal_Bool bHyphen, const sal_uInt16 nId ) :
+SvxNoHyphenItem::SvxNoHyphenItem( const bool bHyphen, const sal_uInt16 nId ) :
     SfxBoolItem( nId , bHyphen )
 {
 }
