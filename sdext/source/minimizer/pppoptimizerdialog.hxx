@@ -34,9 +34,9 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <cppuhelper/implbase4.hxx>
 
-// ----------------------
+
 // - PPPOptimizerDialog -
-// ----------------------
+
 
 class OptimizerDialog;
 class PPPOptimizerDialog : public   ::cppu::WeakImplHelper4<
@@ -96,7 +96,7 @@ com::sun::star::uno::Sequence< OUString > PPPOptimizerDialog_getSupportedService
 com::sun::star::uno::Reference< com::sun::star::uno::XInterface > PPPOptimizerDialog_createInstance( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > & rSMgr )
     throw( com::sun::star::uno::Exception );
 
-// -----------------------------------------------------------------------------
+
 
 #endif // INCLUDED_SDEXT_SOURCE_MINIMIZER_PPPOPTIMIZERDIALOG_HXX
 

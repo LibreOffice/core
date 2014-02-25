@@ -29,9 +29,9 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 
-// ----------------
+
 // - PPPOptimizer -
-// ----------------
+
 
 PPPOptimizer::PPPOptimizer(
     css::uno::Reference<css::uno::XComponentContext> const & xContext,
@@ -41,15 +41,15 @@ PPPOptimizer::PPPOptimizer(
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 PPPOptimizer::~PPPOptimizer()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 // XDispatchProvider
-// -----------------------------------------------------------------------------
+
 
 Reference< com::sun::star::frame::XDispatch > SAL_CALL PPPOptimizer::queryDispatch(
     const URL& aURL, const OUString& /* aTargetFrameName */, sal_Int32 /* nSearchFlags */ ) throw( RuntimeException )
@@ -78,9 +78,9 @@ Sequence< Reference< com::sun::star::frame::XDispatch > > SAL_CALL PPPOptimizer:
     return aReturn;
 }
 
-// -----------------------------------------------------------------------------
+
 // XDispatch
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL PPPOptimizer::dispatch( const URL& rURL, const Sequence< PropertyValue >& lArguments )
     throw( RuntimeException )
@@ -105,7 +105,7 @@ void SAL_CALL PPPOptimizer::dispatch( const URL& rURL, const Sequence< PropertyV
     }
 }
 
-//===============================================
+
 void SAL_CALL PPPOptimizer::addStatusListener( const Reference< XStatusListener >&, const URL& )
     throw( RuntimeException )
 {
@@ -113,7 +113,7 @@ void SAL_CALL PPPOptimizer::addStatusListener( const Reference< XStatusListener 
     OSL_FAIL( "PPPOptimizer::addStatusListener()\nNot implemented yet!" );
 }
 
-//===============================================
+
 void SAL_CALL PPPOptimizer::removeStatusListener( const Reference< XStatusListener >&, const URL& )
     throw( RuntimeException )
 {
@@ -121,7 +121,7 @@ void SAL_CALL PPPOptimizer::removeStatusListener( const Reference< XStatusListen
     OSL_FAIL( "PPPOptimizer::removeStatusListener()\nNot implemented yet!" );
 }
 
-// -----------------------------------------------------------------------------
+
 // returning filesize, on error zero is returned
 sal_Int64 PPPOptimizer::GetFileSize( const OUString& rURL )
 {

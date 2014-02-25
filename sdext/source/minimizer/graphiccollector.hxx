@@ -69,7 +69,7 @@ class GraphicCollector
     struct GraphicEntity
     {
         com::sun::star::awt::Size                       maLogicalSize;                          // the biggest logical size the graphic will be displayed
-        sal_Bool                                        mbRemoveCropArea;                       //
+        sal_Bool                                        mbRemoveCropArea;
         com::sun::star::text::GraphicCrop               maGraphicCropLogic;
         std::vector< GraphicUser >                      maUser;
 
@@ -89,9 +89,9 @@ class GraphicCollector
         const GraphicSettings& rGraphicSettings, sal_Int32& rGraphics );
 };
 
-// --------------------
+
 // - GRAPHICCOLLECTOR -
-// --------------------
+
 
 
 #endif // INCLUDED_SDEXT_SOURCE_MINIMIZER_GRAPHICCOLLECTOR_HXX
