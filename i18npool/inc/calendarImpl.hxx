@@ -28,9 +28,9 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <vector>
 
-//  ----------------------------------------------------
+
 //  class CalendarImpl
-//  ----------------------------------------------------
+
 
 namespace com { namespace sun { namespace star { namespace i18n {
 

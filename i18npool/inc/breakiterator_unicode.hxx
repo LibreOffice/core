@@ -30,9 +30,9 @@ namespace com { namespace sun { namespace star { namespace i18n {
 #define LOAD_SENTENCE_BREAKITERATOR     2
 #define LOAD_LINE_BREAKITERATOR         3
 
-//  ----------------------------------------------------
+
 //  class BreakIterator_Unicode
-//  ----------------------------------------------------
+
 class BreakIterator_Unicode : public BreakIteratorImpl
 {
 public:

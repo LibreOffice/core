@@ -21,9 +21,9 @@
 
 #include "calendar_gregorian.hxx"
 
-//  ----------------------------------------------------
+
 //  class Calendar_jewish
-//  ----------------------------------------------------
+
 
 namespace com { namespace sun { namespace star { namespace i18n {
 

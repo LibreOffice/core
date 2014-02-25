@@ -494,7 +494,7 @@ void Calendar_gregorian::setValue() throw(RuntimeException)
 {
     // Correct DST glitch, see also localtime/gmtime conversion pitfalls at
     // http://www.erack.de/download/timetest.c
-    //
+
     // #i24082# in order to make the DST correction work in all
     // circumstances, the time values have to be always resubmitted,
     // regardless whether specified by the caller or not. It is not

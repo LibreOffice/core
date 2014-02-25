@@ -24,9 +24,9 @@
 #include <com/sun/star/i18n/XScriptTypeDetector.hpp>
 #include <cppuhelper/implbase2.hxx>
 
-//  ----------------------------------------------------
+
 //  class UnoScriptTypeDetector
-//  ----------------------------------------------------
+
 class UnoScriptTypeDetector : public cppu::WeakImplHelper2
 <
     ::com::sun::star::i18n::XScriptTypeDetector,
