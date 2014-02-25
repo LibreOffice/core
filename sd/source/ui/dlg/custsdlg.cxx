@@ -30,12 +30,7 @@
 #include <vcl/msgbox.hxx>
 #include "svtools/treelistentry.hxx"
 
-
-/////////////////////
-// SdCustomShowDlg //
-/////////////////////
-
-
+// SdCustomShowDlg
 SdCustomShowDlg::SdCustomShowDlg( Window* pWindow,
                             SdDrawDocument& rDrawDoc ) :
     ModalDialog     ( pWindow, "CustomSlideShows", "modules/simpress/ui/customslideshows.ui" ),
@@ -252,9 +247,7 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
     return( 0L );
 }
 
-/**
- * StartShow-Hdl
- */
+// StartShow-Hdl
 IMPL_LINK_NOARG(SdCustomShowDlg, StartShowHdl)
 {
     EndDialog( RET_YES );
@@ -262,21 +255,13 @@ IMPL_LINK_NOARG(SdCustomShowDlg, StartShowHdl)
     return 0;
 }
 
-/**
- * CheckState
- */
+// CheckState
 sal_Bool SdCustomShowDlg::IsCustomShow() const
 {
     return( m_pCbxUseCustomShow->IsEnabled() && m_pCbxUseCustomShow->IsChecked() );
 }
 
-
-
-///////////////////////////
-// SdDefineCustomShowDlg //
-///////////////////////////
-
-
+// SdDefineCustomShowDlg
 SdDefineCustomShowDlg::SdDefineCustomShowDlg( Window* pWindow,
                         SdDrawDocument& rDrawDoc, SdCustomShow*& rpCS ) :
     ModalDialog     ( pWindow, "DefineCustomSlideShow", "modules/simpress/ui/definecustomslideshow.ui" ),
@@ -321,7 +306,7 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg( Window* pWindow,
         OUString aStr( pPage->GetName() );
         m_pLbPages->InsertEntry( aStr );
     }
-    //aLbPages.SelectEntryPos( 0 );
+    // aLbPages.SelectEntryPos( 0 );
 
     if( rpCustomShow )
     {
@@ -355,9 +340,7 @@ SdDefineCustomShowDlg::~SdDefineCustomShowDlg()
 {
 }
 
-/**
- * CheckState
- */
+// CheckState
 void SdDefineCustomShowDlg::CheckState()
 {
     sal_Bool bPages = m_pLbPages->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND;
@@ -370,9 +353,7 @@ void SdDefineCustomShowDlg::CheckState()
     m_pBtnRemove->Enable( bCSPages );
 }
 
-/**
- * ButtonHdl()
- */
+// ButtonHdl()
 IMPL_LINK( SdDefineCustomShowDlg, ClickButtonHdl, void *, p )
 {
     if( p == m_pBtnAdd )
@@ -404,13 +385,13 @@ IMPL_LINK( SdDefineCustomShowDlg, ClickButtonHdl, void *, p )
     }
     else if( p == m_pBtnRemove )
     {
-        //sal_uInt16 nPos = aLbCustomPages.GetSelectEntryPos();
+        // sal_uInt16 nPos = aLbCustomPages.GetSelectEntryPos();
         SvTreeListEntry* pEntry = m_pLbCustomPages->FirstSelected();
         if( pEntry )
         {
             sal_uLong nPos = m_pLbCustomPages->GetModel()->GetAbsPos( pEntry );
-            //rpCustomShow->Remove( nPos );
-            //aLbCustomPages.RemoveEntry( nPos );
+            // rpCustomShow->Remove( nPos );
+            // aLbCustomPages.RemoveEntry( nPos );
             m_pLbCustomPages->GetModel()->Remove( m_pLbCustomPages->GetModel()->GetEntryAtAbsPos( nPos ) );
 
             bModified = sal_True;
@@ -418,7 +399,7 @@ IMPL_LINK( SdDefineCustomShowDlg, ClickButtonHdl, void *, p )
     }
     else if( p == m_pEdtName )
     {
-        //rpCustomShow->SetName( aEdtName.GetText() );
+        // rpCustomShow->SetName( aEdtName.GetText() );
 
         bModified = sal_True;
     }
@@ -483,9 +464,7 @@ void SdDefineCustomShowDlg::CheckCustomShow()
     }
 }
 
-/**
- * OK-Hdl
- */
+// OK-Hdl
 IMPL_LINK_NOARG(SdDefineCustomShowDlg, OKHdl)
 {
     // check name...

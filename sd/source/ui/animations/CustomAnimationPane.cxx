@@ -2274,7 +2274,7 @@ void CustomAnimationPane::updatePathFromMotionPathTag( const rtl::Reference< Mot
     }
 }
 
-// ====================================================================
+
 
 
 ::Window * createCustomAnimationPanel( ::Window* pParent, ViewShellBase& rBase, const cssu::Reference<css::frame::XFrame>& rxFrame )

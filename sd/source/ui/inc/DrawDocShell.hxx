@@ -44,10 +44,8 @@ namespace sd {
 class FrameView;
 class ViewShell;
 
-// ------------------
-// - DrawDocShell -
-// ------------------
 
+// DrawDocShell
 class SD_DLLPUBLIC DrawDocShell : public SfxObjectShell
 {
 public:

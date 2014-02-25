@@ -23,9 +23,8 @@
 #include <svx/svxids.hrc>
 #include <svx/globlmn.hrc>
 #endif
- //
+
  // toolbox bar
- //
 ToolBox SD_TOOLBOX
 {
     HelpId = HID_SD_DRAW_TOOLBOX ;
@@ -127,9 +126,8 @@ ToolBox SD_TOOLBOX
         };
     };
 };
- //
+
  // object bar
- //
 #if SD_TOOLBOX == RID_DRAW_TOOLBOX
 ToolBox RID_DRAW_OBJ_TOOLBOX
 #elif SD_TOOLBOX == RID_GRAPHIC_TOOLBOX
@@ -171,9 +169,8 @@ ToolBox RID_GRAPHIC_OBJ_TOOLBOX
         TBI_IMAGEMAP
     };
 };
- //
- // option bar
- //
+
+// option bar
 #if SD_TOOLBOX == RID_DRAW_TOOLBOX
 ToolBox RID_DRAW_OPTIONS_TOOLBOX
 #elif SD_TOOLBOX == RID_GRAPHIC_TOOLBOX

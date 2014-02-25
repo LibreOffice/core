@@ -80,7 +80,6 @@ private:
 void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc, SdPage* pBMMPage, bool bRenameDuplicates, SdDrawDocument* pBookmarkDoc )
 {
     // now check for duplicate masterpage and layout names
-    // ===================================================
 
     OUString aFullNameLayout( pBMMPage->GetLayoutName() );
     sal_Int32 nIndex = aFullNameLayout.indexOf( SD_LT_SEPARATOR );
@@ -129,9 +128,9 @@ static void lcl_IterateBookmarkPages( SdDrawDocument &rDoc, SdDrawDocument* pBoo
                                const std::vector<OUString> &rBookmarkList, sal_uInt16 nBMSdPageCount,
                                InsertBookmarkAsPage_FindDuplicateLayouts& rPageIterator, bool bRenameDuplicates = false )
 {
-    //
+
     // Refactored copy'n'pasted layout name collection from InsertBookmarkAsPage
-    //
+
     int nPos, nEndPos;
 
     if( rBookmarkList.empty() )
@@ -471,7 +470,6 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
         }
     }
 
-
     // Get the necessary presentation stylesheets and transfer them before
     // the pages, else, the text objects won't reference their styles anymore.
     ::svl::IUndoManager* pUndoMgr = NULL;
@@ -481,13 +479,11 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
         pUndoMgr->EnterListAction(SD_RESSTR(STR_UNDO_INSERTPAGES), "");
     }
 
-    //
     // Refactored copy'n'pasted layout name collection into IterateBookmarkPages
-    //
+
     std::vector<OUString> aLayoutsToTransfer;
     InsertBookmarkAsPage_FindDuplicateLayouts aSearchFunctor( aLayoutsToTransfer );
     lcl_IterateBookmarkPages( *this, pBookmarkDoc, rBookmarkList, nBMSdPageCount, aSearchFunctor, ( rBookmarkList.empty() && pBookmarkDoc != this ) );
-
 
     // Copy the style that we actually need.
     SdStyleSheetPool* pBookmarkStyleSheetPool = dynamic_cast<SdStyleSheetPool*>(pBookmarkDoc->GetStyleSheetPool());
@@ -765,7 +761,6 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
             }
         }
     }
-
 
     // We might have duplicate master pages now, as the drawing engine does not
     // recognize duplicates. Remove these now.
@@ -1152,7 +1147,6 @@ bool SdDrawDocument::IsReadOnly() const
     return false;
 }
 
-
 // In the subsequent AllocModel() a DocShell (xAllocedDocShRef) is created.
 // Any pre-existing DocShell is deleted
 void SdDrawDocument::SetAllocDocSh(bool bAlloc)
@@ -1321,7 +1315,6 @@ void SdDrawDocument::RemoveUnnecessaryMasterPages(SdPage* pMasterPage, sal_Bool 
             break;                      // Just this one master page!
     }
 }
-
 
 /** Exchange master page
   *
@@ -1899,8 +1892,6 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
     if( mpDocSh )
         mpDocSh->SetWaitCursor( sal_False );
 }
-
-
 
 void SdDrawDocument::Merge(SdrModel& rSourceModel,
                sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,

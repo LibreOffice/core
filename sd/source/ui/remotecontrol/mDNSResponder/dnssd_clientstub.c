@@ -130,7 +130,7 @@ typedef void (*ProcessReplyFn)(DNSServiceOp *const sdr, const CallbackHeader *co
 // When using kDNSServiceFlagsShareConnection, there is one primary _DNSServiceOp_t, and zero or more subordinates
 // For the primary, the 'next' field points to the first subordinate, and its 'next' field points to the next, and so on.
 // For the primary, the 'primary' field is NULL; for subordinates the 'primary' field points back to the associated primary
-//
+
 // _DNS_SD_LIBDISPATCH is defined where libdispatch/GCD is available. This does not mean that the application will use the
 // DNSServiceSetDispatchQueue API. Hence any new code guarded with _DNS_SD_LIBDISPATCH should still be backwards compatible.
 struct _DNSServiceRef_t
@@ -870,7 +870,7 @@ static void CallbackWithError(DNSServiceRef sdRef, DNSServiceErrorType error)
         // call the callback with a subordinate sdRef the application can call DNSServiceRefDeallocate
         // on the main sdRef and DNSServiceRefDeallocate handles this case by walking all the sdRefs and
         // clears the moreptr so that we can terminate here.
-        //
+
         // If DNSServiceRefDeallocate was not called in the callback, then set moreptr to NULL so that
         // we don't access the stack variable after we return from this function.
         if (!morebytes) {syslog(LOG_WARNING, "dnssdclientstub:sdRef: CallbackwithError morebytes zero sdr %p", sdr); return;}

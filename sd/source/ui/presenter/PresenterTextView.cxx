@@ -50,8 +50,7 @@ using namespace ::com::sun::star::lang;
 
 namespace sd { namespace presenter {
 
-//===== Service ===============================================================
-
+// Service
 Reference<XInterface> SAL_CALL PresenterTextViewService_createInstance (
     const Reference<XComponentContext>& rxContext)
 {
@@ -78,8 +77,7 @@ Sequence<OUString> SAL_CALL PresenterTextViewService_getSupportedServiceNames (v
 
 
 
-//===== PresenterTextView::Implementation =====================================
-
+// PresenterTextView::Implementation
 class PresenterTextView::Implementation
 {
 public:
@@ -129,8 +127,7 @@ private:
 
 
 
-//===== PresenterTextView =====================================================
-
+// PresenterTextView
 PresenterTextView::PresenterTextView (const Reference<XComponentContext>& rxContext)
     : PresenterTextViewInterfaceBase(),
       mpImplementation(new Implementation())
@@ -156,8 +153,7 @@ void SAL_CALL PresenterTextView::disposing (void)
 
 
 
-//----- XInitialization -------------------------------------------------------
-
+// XInitialization
 void SAL_CALL PresenterTextView::initialize (const Sequence<Any>& rArguments)
     throw (Exception, RuntimeException)
 {
@@ -286,8 +282,7 @@ void PresenterTextView::ThrowIfDisposed (void)
 
 
 
-//===== PresenterTextView::Implementation =====================================
-
+// PresenterTextView::Implementation
 PresenterTextView::Implementation::Implementation (void)
     : msTextPropertyName("Text"),
       msBitmapPropertyName("Bitmap"),
@@ -343,9 +338,9 @@ EditEngine* PresenterTextView::Implementation::CreateEditEngine (void)
     EditEngine* pEditEngine = mpEditEngine;
     if (pEditEngine == NULL)
     {
-        //
+
         // set fonts to be used
-        //
+
         SvtLinguOptions aOpt;
         SvtLinguConfig().GetOptions( aOpt );
 

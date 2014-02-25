@@ -23,10 +23,8 @@
 #pragma mark == Includes ==
 #endif
 
-//===========================================================================================================================
-//    Includes
-//===========================================================================================================================
 
+// Includes
 #if ( !KERNEL )
     #include    <ctype.h>
     #include    <stdio.h>
@@ -57,7 +55,6 @@
 #endif
 
 // If MDNS_DEBUGMSGS is defined (even if defined 0), it is aware of mDNS and it is probably safe to include mDNSEmbeddedAPI.h.
-
 #if ( defined( MDNS_DEBUGMSGS ) )
     #include    "mDNSEmbeddedAPI.h"
 #endif
@@ -66,70 +63,58 @@
 #pragma mark == Macros ==
 #endif
 
-//===========================================================================================================================
-//    Macros
-//===========================================================================================================================
 
+// Macros
 #define DebugIsPrint( C )       ( ( ( C ) >= 0x20 ) && ( ( C ) <= 0x7E ) )
 
 #if 0
 #pragma mark == Prototypes ==
 #endif
 
-//===========================================================================================================================
-//    Prototypes
-//===========================================================================================================================
 
+// Prototypes
 static OSStatus DebugPrint( DebugLevel inLevel, char *inData, size_t inSize );
 
 // fprintf
-
 #if ( DEBUG_FPRINTF_ENABLED )
 static OSStatus DebugFPrintFInit( DebugOutputTypeFlags inFlags, const char *inFilename );
 static void     DebugFPrintFPrint( char *inData, size_t inSize );
 #endif
 
 // iDebug (Mac OS X user and kernel)
-
 #if ( DEBUG_IDEBUG_ENABLED )
 static OSStatus DebugiDebugInit( void );
 static void     DebugiDebugPrint( char *inData, size_t inSize );
 #endif
 
 // kprintf (Mac OS X Kernel)
-
 #if ( DEBUG_KPRINTF_ENABLED )
 static void DebugKPrintFPrint( char *inData, size_t inSize );
 #endif
 
 // Mac OS X IOLog (Mac OS X Kernel)
-
 #if ( DEBUG_MAC_OS_X_IOLOG_ENABLED )
 static void DebugMacOSXIOLogPrint( char *inData, size_t inSize );
 #endif
 
 // Mac OS X Log
-
 #if ( TARGET_OS_MAC )
 static OSStatus DebugMacOSXLogInit( void );
 static void     DebugMacOSXLogPrint( char *inData, size_t inSize );
 #endif
 
 // Windows Debugger
-
 #if ( TARGET_OS_WIN32 )
 static void DebugWindowsDebuggerPrint( char *inData, size_t inSize );
 #endif
 
 // Windows Event Log
-
 #if ( TARGET_OS_WIN32 && !TARGET_OS_WINDOWS_CE )
 static OSStatus DebugWindowsEventLogInit( const char *inName, HMODULE inModule );
 static void DebugWindowsEventLogPrint( DebugLevel inLevel, char *inData, size_t inSize );
 #endif
 
 // DebugLib support
-
 #if ( DEBUG_CORE_SERVICE_ASSERTS_ENABLED )
 static pascal void
 DebugAssertOutputHandler(
@@ -145,7 +130,6 @@ DebugAssertOutputHandler(
 #endif
 
 // Utilities
-
 static char *   DebugNumVersionToString( uint32_t inVersion, char *inString );
 
 #if ( TARGET_OS_WIN32 && !TARGET_OS_WINDOWS_CE )
@@ -166,10 +150,8 @@ DebugWinCharToTCharString(
 #pragma mark == Globals ==
 #endif
 
-//===========================================================================================================================
-//    Private Globals
-//===========================================================================================================================
 
+// Private Globals
 #if ( TARGET_OS_VXWORKS )
 // TCP States for inetstatShow.
 
@@ -192,7 +174,6 @@ const char *        kDebugTCPStates[] =
 #endif
 
 // General
-
 static bool gDebugInitialized               = false;
 static DebugOutputType gDebugOutputType                = kDebugOutputTypeNone;
 static DebugLevel gDebugPrintLevelMin             = kDebugLevelInfo;
@@ -203,7 +184,6 @@ static DebugAssertOutputHandlerUPP gDebugAssertOutputHandlerUPP    = NULL;
 #endif
 
 // Custom
-
 static DebugOutputFunctionPtr gDebugCustomOutputFunction      = NULL;
 static void *                               gDebugCustomOutputContext       = NULL;
 
@@ -214,7 +194,6 @@ static FILE *                           gDebugFPrintFFile               = NULL;
 #endif
 
 // MacOSXLog
-
 #if ( TARGET_OS_MAC )
 typedef int ( *DebugMacOSXLogFunctionPtr )( const char *inFormat, ... );
 
@@ -222,8 +201,6 @@ static DebugMacOSXLogFunctionPtr gDebugMacOSXLogFunction         = NULL;
 #endif
 
 // WindowsEventLog
-
-
 #if ( TARGET_OS_WIN32 && !TARGET_OS_WINDOWS_CE )
 static HANDLE gDebugWindowsEventLogEventSource = NULL;
 #endif
@@ -233,10 +210,8 @@ static HANDLE gDebugWindowsEventLogEventSource = NULL;
 #pragma mark == General ==
 #endif
 
-//===========================================================================================================================
-//    DebugInitialize
-//===========================================================================================================================
 
+// DebugInitialize
 DEBUG_EXPORT OSStatus   DebugInitialize( DebugOutputType inType, ... )
 {
     OSStatus err;
@@ -302,8 +277,7 @@ DEBUG_EXPORT OSStatus   DebugInitialize( DebugOutputType inType, ... )
         #endif
     }
 
-    // Process output kind.
-
+    // Process output kind
     gDebugOutputType = type;
     switch( type )
     {
@@ -396,10 +370,8 @@ exit:
     return( err );
 }
 
-//===========================================================================================================================
-//    DebugFinalize
-//===========================================================================================================================
 
+// DebugFinalize
 DEBUG_EXPORT void       DebugFinalize( void )
 {
 #if ( DEBUG_CORE_SERVICE_ASSERTS_ENABLED )
@@ -413,10 +385,8 @@ DEBUG_EXPORT void       DebugFinalize( void )
 #endif
 }
 
-//===========================================================================================================================
-//    DebugGetProperty
-//===========================================================================================================================
 
+// DebugGetProperty
 DEBUG_EXPORT OSStatus   DebugGetProperty( DebugPropertyTag inTag, ... )
 {
     OSStatus err;
@@ -452,10 +422,8 @@ DEBUG_EXPORT OSStatus   DebugGetProperty( DebugPropertyTag inTag, ... )
     return( err );
 }
 
-//===========================================================================================================================
-//    DebugSetProperty
-//===========================================================================================================================
 
+// DebugSetProperty
 DEBUG_EXPORT OSStatus   DebugSetProperty( DebugPropertyTag inTag, ... )
 {
     OSStatus err;
@@ -496,10 +464,8 @@ DEBUG_EXPORT OSStatus   DebugSetProperty( DebugPropertyTag inTag, ... )
 #pragma mark == Output ==
 #endif
 
-//===========================================================================================================================
-//    DebugPrintF
-//===========================================================================================================================
 
+// DebugPrintF
 DEBUG_EXPORT size_t DebugPrintF( DebugLevel inLevel, const char *inFormat, ... )
 {
     va_list args;
@@ -521,10 +487,8 @@ exit:
     return( n );
 }
 
-//===========================================================================================================================
-//    DebugPrintFVAList
-//===========================================================================================================================
 
+// DebugPrintFVAList
 DEBUG_EXPORT size_t DebugPrintFVAList( DebugLevel inLevel, const char *inFormat, va_list inArgs )
 {
     size_t n;
@@ -545,10 +509,8 @@ exit:
     return( n );
 }
 
-//===========================================================================================================================
-//    DebugPrint
-//===========================================================================================================================
 
+// DebugPrint
 static OSStatus DebugPrint( DebugLevel inLevel, char *inData, size_t inSize )
 {
     OSStatus err;
@@ -645,15 +607,13 @@ exit:
     return( err );
 }
 
-//===========================================================================================================================
-//    DebugPrintAssert
-//
-//    Warning: This routine relies on several of the strings being string constants that will exist forever because the
-//           underlying logMsg API that does the printing is asynchronous so it cannot use temporary/stack-based
-//           pointer variables (e.g. local strings). The debug macros that invoke this function only use constant
-//           constant strings, but if this function is invoked directly from other places, it must use constant strings.
-//===========================================================================================================================
 
+// DebugPrintAssert
+
+// Warning: This routine relies on several of the strings being string constants that will exist forever because the
+//        underlying logMsg API that does the printing is asynchronous so it cannot use temporary/stack-based
+//        pointer variables (e.g. local strings). The debug macros that invoke this function only use constant
+//        constant strings, but if this function is invoked directly from other places, it must use constant strings.
 DEBUG_EXPORT void
 DebugPrintAssert(
     int_least32_t inErrorCode,
@@ -664,7 +624,6 @@ DebugPrintAssert(
     const char *    inFunction )
 {
     // Skip if the level is not in the enabled range..
-
     if( ( kDebugLevelAssert < gDebugPrintLevelMin ) || ( kDebugLevelAssert > gDebugPrintLevelMax ) )
     {
         return;
@@ -698,8 +657,7 @@ DebugPrintAssert(
             inFunction ? inFunction : "" );
     }
 
-    // Break into the debugger if enabled.
-
+    // Break into the debugger if enabled
     #if ( TARGET_OS_WIN32 )
     if( gDebugBreakLevel <= kDebugLevelAssert )
     {
@@ -716,10 +674,8 @@ DebugPrintAssert(
 #endif
 
 #if ( DEBUG_FPRINTF_ENABLED )
-//===========================================================================================================================
-//    DebugFPrintFInit
-//===========================================================================================================================
 
+// DebugFPrintFInit
 static OSStatus DebugFPrintFInit( DebugOutputTypeFlags inFlags, const char *inFilename )
 {
     OSStatus err;
@@ -760,17 +716,14 @@ exit:
     return( err );
 }
 
-//===========================================================================================================================
-//    DebugFPrintFPrint
-//===========================================================================================================================
 
+// DebugFPrintFPrint
 static void DebugFPrintFPrint( char *inData, size_t inSize )
 {
     char *      p;
     char *      q;
 
     // Convert \r to \n. fprintf will interpret \n and convert to whatever is appropriate for the platform.
-
     p = inData;
     q = p + inSize;
     while( p < q )
@@ -783,7 +736,6 @@ static void DebugFPrintFPrint( char *inData, size_t inSize )
     }
 
     // Write the data and flush.
-
     if( gDebugFPrintFFile )
     {
         fprintf( gDebugFPrintFFile, "%.*s", (int) inSize, inData );
@@ -793,10 +745,8 @@ static void DebugFPrintFPrint( char *inData, size_t inSize )
 #endif  // DEBUG_FPRINTF_ENABLED
 
 #if ( DEBUG_IDEBUG_ENABLED )
-//===========================================================================================================================
-//    DebugiDebugInit
-//===========================================================================================================================
 
+// DebugiDebugInit
 static OSStatus DebugiDebugInit( void )
 {
     OSStatus err;
@@ -807,7 +757,6 @@ static OSStatus DebugiDebugInit( void )
 
     // Emulate the iDebugSetOutputType macro in iDebugServices.h.
     // Note: This is not thread safe, but neither is iDebugServices.h nor iDebugKext.
-
     if( !_giDebugReserved1 )
     {
         _giDebugReserved1 = (uint32_t *) IOMalloc( sizeof( uint32_t ) );
@@ -828,10 +777,8 @@ exit:
     return( err );
 }
 
-//===========================================================================================================================
-//    DebugiDebugPrint
-//===========================================================================================================================
 
+// DebugiDebugPrint
 static void DebugiDebugPrint( char *inData, size_t inSize )
 {
     #if ( TARGET_API_MAC_OSX_KERNEL )
@@ -861,10 +808,8 @@ static void DebugiDebugPrint( char *inData, size_t inSize )
 #endif
 
 #if ( DEBUG_KPRINTF_ENABLED )
-//===========================================================================================================================
-//    DebugKPrintFPrint
-//===========================================================================================================================
 
+// DebugKPrintFPrint
 static void DebugKPrintFPrint( char *inData, size_t inSize )
 {
     extern void kprintf( const char *inFormat, ... );
@@ -874,10 +819,8 @@ static void DebugKPrintFPrint( char *inData, size_t inSize )
 #endif
 
 #if ( DEBUG_MAC_OS_X_IOLOG_ENABLED )
-//===========================================================================================================================
-//    DebugMacOSXIOLogPrint
-//===========================================================================================================================
 
+// DebugMacOSXIOLogPrint
 static void DebugMacOSXIOLogPrint( char *inData, size_t inSize )
 {
     extern void IOLog( const char *inFormat, ... );
@@ -887,10 +830,8 @@ static void DebugMacOSXIOLogPrint( char *inData, size_t inSize )
 #endif
 
 #if ( TARGET_OS_MAC )
-//===========================================================================================================================
-//    DebugMacOSXLogInit
-//===========================================================================================================================
 
+// DebugMacOSXLogInit
 static OSStatus DebugMacOSXLogInit( void )
 {
     OSStatus err;
@@ -932,10 +873,7 @@ exit:
     return( err );
 }
 
-//===========================================================================================================================
-//    DebugMacOSXLogPrint
-//===========================================================================================================================
-
+// DebugMacOSXLogPrint
 static void DebugMacOSXLogPrint( char *inData, size_t inSize )
 {
     if( gDebugMacOSXLogFunction )
@@ -946,10 +884,8 @@ static void DebugMacOSXLogPrint( char *inData, size_t inSize )
 #endif
 
 #if ( TARGET_OS_WIN32 )
-//===========================================================================================================================
-//    DebugWindowsDebuggerPrint
-//===========================================================================================================================
 
+// DebugWindowsDebuggerPrint
 void    DebugWindowsDebuggerPrint( char *inData, size_t inSize )
 {
     TCHAR buffer[ 512 ];
@@ -960,7 +896,6 @@ void    DebugWindowsDebuggerPrint( char *inData, size_t inSize )
 
     // Copy locally and null terminate the string. This also converts from char to TCHAR in case we are
     // building with UNICODE enabled since the input is always char. Also convert \r to \n in the process.
-
     src = inData;
     if( inSize >= sizeof_array( buffer ) )
     {
@@ -980,16 +915,13 @@ void    DebugWindowsDebuggerPrint( char *inData, size_t inSize )
     *dst = 0;
 
     // Print out the string to the debugger.
-
     OutputDebugString( buffer );
 }
 #endif
 
 #if ( TARGET_OS_WIN32 && !TARGET_OS_WINDOWS_CE )
-//===========================================================================================================================
-//    DebugWindowsEventLogInit
-//===========================================================================================================================
 
+// DebugWindowsEventLogInit
 static OSStatus DebugWindowsEventLogInit( const char *inName, HMODULE inModule )
 {
     OSStatus err;
@@ -1004,7 +936,6 @@ static OSStatus DebugWindowsEventLogInit( const char *inName, HMODULE inModule )
     key = NULL;
 
     // Use a default name if needed then convert the name to TCHARs so it works on ANSI or Unicode builds.
-
     if( !inName || ( *inName == '\0' ) )
     {
         inName = "DefaultApp";
@@ -1012,18 +943,15 @@ static OSStatus DebugWindowsEventLogInit( const char *inName, HMODULE inModule )
     DebugWinCharToTCharString( inName, kSizeCString, name, sizeof( name ), NULL );
 
     // Build the path string using the fixed registry path and app name.
-
     src = "SYSTEM\\CurrentControlSet\\Services\\EventLog\\Application\\";
     DebugWinCharToTCharString( src, kSizeCString, path, sizeof_array( path ), &size );
     DebugWinCharToTCharString( inName, kSizeCString, path + size, sizeof_array( path ) - size, NULL );
 
     // Add/Open the source name as a sub-key under the Application key in the EventLog registry key.
-
     err = RegCreateKeyEx( HKEY_LOCAL_MACHINE, path, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &key, NULL );
     require_noerr_quiet( err, exit );
 
     // Set the path in the EventMessageFile subkey. Add 1 to the TCHAR count to include the null terminator.
-
     n = GetModuleFileName( inModule, path, sizeof_array( path ) );
     err = translate_errno( n > 0, (OSStatus) GetLastError(), kParamErr );
     require_noerr_quiet( err, exit );
@@ -1034,14 +962,12 @@ static OSStatus DebugWindowsEventLogInit( const char *inName, HMODULE inModule )
     require_noerr_quiet( err, exit );
 
     // Set the supported event types in the TypesSupported subkey.
-
     typesSupported = EVENTLOG_SUCCESS | EVENTLOG_ERROR_TYPE | EVENTLOG_WARNING_TYPE | EVENTLOG_INFORMATION_TYPE |
                      EVENTLOG_AUDIT_SUCCESS | EVENTLOG_AUDIT_FAILURE;
     err = RegSetValueEx( key, TEXT( "TypesSupported" ), 0, REG_DWORD, (const LPBYTE) &typesSupported, sizeof( DWORD ) );
     require_noerr_quiet( err, exit );
 
     // Set up the event source.
-
     gDebugWindowsEventLogEventSource = RegisterEventSource( NULL, name );
     err = translate_errno( gDebugWindowsEventLogEventSource, (OSStatus) GetLastError(), kParamErr );
     require_noerr_quiet( err, exit );
@@ -1054,10 +980,8 @@ exit:
     return( err );
 }
 
-//===========================================================================================================================
-//    DebugWindowsEventLogPrint
-//===========================================================================================================================
 
+// DebugWindowsEventLogPrint
 static void DebugWindowsEventLogPrint( DebugLevel inLevel, char *inData, size_t inSize )
 {
     WORD type;
@@ -1068,8 +992,7 @@ static void DebugWindowsEventLogPrint( DebugLevel inLevel, char *inData, size_t 
     char c;
     const TCHAR *       array[ 1 ];
 
-    // Map the debug level to a Windows EventLog type.
-
+    // Map the debug level to a Windows EventLog type
     if( inLevel <= kDebugLevelNotice )
     {
         type = EVENTLOG_INFORMATION_TYPE;
@@ -1085,7 +1008,6 @@ static void DebugWindowsEventLogPrint( DebugLevel inLevel, char *inData, size_t 
 
     // Copy locally and null terminate the string. This also converts from char to TCHAR in case we are
     // building with UNICODE enabled since the input is always char. Also convert \r to \n in the process.
-
     src = inData;
     if( inSize >= sizeof_array( buffer ) )
     {
@@ -1105,7 +1027,6 @@ static void DebugWindowsEventLogPrint( DebugLevel inLevel, char *inData, size_t 
     *dst = 0;
 
     // Add the the string to the event log.
-
     array[ 0 ] = buffer;
     if( gDebugWindowsEventLogEventSource )
     {
@@ -1115,10 +1036,8 @@ static void DebugWindowsEventLogPrint( DebugLevel inLevel, char *inData, size_t 
 #endif  // TARGET_OS_WIN32 && !TARGET_OS_WINDOWS_CE
 
 #if ( DEBUG_CORE_SERVICE_ASSERTS_ENABLED )
-//===========================================================================================================================
-//    DebugAssertOutputHandler
-//===========================================================================================================================
 
+// DebugAssertOutputHandler
 static pascal void
 DebugAssertOutputHandler(
     OSType inComponentSignature,
@@ -1146,28 +1065,28 @@ DebugAssertOutputHandler(
 #pragma mark == Utilities ==
 #endif
 
-//===========================================================================================================================
-//    DebugSNPrintF
-//
-//    Stolen from mDNS.c's mDNS_snprintf/mDNS_vsnprintf with the following changes:
-//
-//    Changed names to avoid name collisions with the mDNS versions.
-//    Changed types to standard C types since mDNSEmbeddedAPI.h may not be available.
-//    Conditionalized mDNS stuff so it can be used with or with mDNSEmbeddedAPI.h.
-//    Added 64-bit support for %d (%lld), %i (%lli), %u (%llu), %o (%llo), %x (%llx), and %b (%llb).
-//    Added %@   - Cocoa/CoreFoundation object. Param is the object. Strings are used directly. Others use CFCopyDescription.
-//    Added %.8a - FIbre Channel address. Arg=ptr to address.
-//    Added %##a - IPv4 (if AF_INET defined) or IPv6 (if AF_INET6 defined) sockaddr. Arg=ptr to sockaddr.
-//    Added %b   - Binary representation of integer (e.g. 01101011). Modifiers and arg=the same as %d, %x, etc.
-//    Added %C   - Mac-style FourCharCode (e.g. 'APPL'). Arg=32-bit value to print as a Mac-style FourCharCode.
-//    Added %H   - Hex Dump (e.g. "\x6b\xa7" -> "6B A7"). 1st arg=ptr, 2nd arg=size, 3rd arg=max size.
-//    Added %#H  - Hex Dump & ASCII (e.g. "\x41\x62" -> "6B A7 'Ab'"). 1st arg=ptr, 2nd arg=size, 3rd arg=max size.
-//    Added %m   - Error Message (e.g. 0 -> "kNoErr"). Modifiers and error code args are the same as %d, %x, etc.
-//    Added %S   - UTF-16 string. Host order if no BOM. Precision is UTF-16 char count. BOM counts in any precision. Arg=ptr.
-//    Added %#S  - Big Endian UTF-16 string (unless BOM overrides). Otherwise the same as %S.
-//    Added %##S - Little Endian UTF-16 string (unless BOM overrides). Otherwise the same as %S.
-//    Added %U   - Universally Unique Identifier (UUID) (e.g. 6ba7b810-9dad-11d1-80b4-00c04fd430c8). Arg=ptr to 16-byte UUID.
-//===========================================================================================================================
+
+// DebugSNPrintF
+
+// Stolen from mDNS.c's mDNS_snprintf/mDNS_vsnprintf with the following changes:
+
+// Changed names to avoid name collisions with the mDNS versions.
+// Changed types to standard C types since mDNSEmbeddedAPI.h may not be available.
+// Conditionalized mDNS stuff so it can be used with or with mDNSEmbeddedAPI.h.
+// Added 64-bit support for %d (%lld), %i (%lli), %u (%llu), %o (%llo), %x (%llx), and %b (%llb).
+// Added %@   - Cocoa/CoreFoundation object. Param is the object. Strings are used directly. Others use CFCopyDescription.
+// Added %.8a - FIbre Channel address. Arg=ptr to address.
+// Added %##a - IPv4 (if AF_INET defined) or IPv6 (if AF_INET6 defined) sockaddr. Arg=ptr to sockaddr.
+// Added %b   - Binary representation of integer (e.g. 01101011). Modifiers and arg=the same as %d, %x, etc.
+// Added %C   - Mac-style FourCharCode (e.g. 'APPL'). Arg=32-bit value to print as a Mac-style FourCharCode.
+// Added %H   - Hex Dump (e.g. "\x6b\xa7" -> "6B A7"). 1st arg=ptr, 2nd arg=size, 3rd arg=max size.
+// Added %#H  - Hex Dump & ASCII (e.g. "\x41\x62" -> "6B A7 'Ab'"). 1st arg=ptr, 2nd arg=size, 3rd arg=max size.
+// Added %m   - Error Message (e.g. 0 -> "kNoErr"). Modifiers and error code args are the same as %d, %x, etc.
+// Added %S   - UTF-16 string. Host order if no BOM. Precision is UTF-16 char count. BOM counts in any precision. Arg=ptr.
+// Added %#S  - Big Endian UTF-16 string (unless BOM overrides). Otherwise the same as %S.
+// Added %##S - Little Endian UTF-16 string (unless BOM overrides). Otherwise the same as %S.
+// Added %U   - Universally Unique Identifier (UUID) (e.g. 6ba7b810-9dad-11d1-80b4-00c04fd430c8). Arg=ptr to 16-byte UUID.
+
 
 DEBUG_EXPORT size_t DebugSNPrintF(char *sbuffer, size_t buflen, const char *fmt, ...)
 {
@@ -1181,9 +1100,9 @@ DEBUG_EXPORT size_t DebugSNPrintF(char *sbuffer, size_t buflen, const char *fmt,
     return(length);
 }
 
-//===========================================================================================================================
-//    DebugSNPrintFVAList    - va_list version of DebugSNPrintF. See DebugSNPrintF for more info.
-//===========================================================================================================================
+
+// DebugSNPrintFVAList    - va_list version of DebugSNPrintF. See DebugSNPrintF for more info.
+
 
 DEBUG_EXPORT size_t DebugSNPrintFVAList(char *sbuffer, size_t buflen, const char *fmt, va_list arg)
 {
@@ -1607,9 +1526,9 @@ exit:
     return(nwritten);
 }
 
-//===========================================================================================================================
-//    DebugGetErrorString
-//===========================================================================================================================
+
+// DebugGetErrorString
+
 
 DEBUG_EXPORT const char *   DebugGetErrorString( int_least32_t inErrorCode, char *inBuffer, size_t inBufferSize )
 {
@@ -2014,9 +1933,9 @@ DEBUG_EXPORT const char *   DebugGetErrorString( int_least32_t inErrorCode, char
     return( s );
 }
 
-//===========================================================================================================================
-//    DebugHexDump
-//===========================================================================================================================
+
+// DebugHexDump
+
 
 DEBUG_EXPORT size_t
 DebugHexDump(
@@ -2139,12 +2058,12 @@ DebugHexDump(
         }
 
         // Build the prefix string. It will be in one of the following formats:
-        //
+
         // 1) "00000000+0000[0000]"    (address and offset)
         // 2) "00000000"            (address only)
         // 3) "0000[0000]"            (offset only)
         // 4) ""                    (no address or offset)
-        //
+
         // Note: If we're printing multiple "lines", but not printing newlines, a space is used to separate.
 
         s = prefixString;
@@ -2375,9 +2294,9 @@ DebugHexDump(
     return( (size_t)( dst - outBuffer ) );
 }
 
-//===========================================================================================================================
-//    DebugNumVersionToString
-//===========================================================================================================================
+
+// DebugNumVersionToString
+
 
 static char *   DebugNumVersionToString( uint32_t inVersion, char *inString )
 {
@@ -2440,9 +2359,9 @@ static char *   DebugNumVersionToString( uint32_t inVersion, char *inString )
     return( inString );
 }
 
-//===========================================================================================================================
-//    DebugTaskLevel
-//===========================================================================================================================
+
+// DebugTaskLevel
+
 
 DEBUG_EXPORT uint32_t   DebugTaskLevel( void )
 {
@@ -2461,9 +2380,9 @@ DEBUG_EXPORT uint32_t   DebugTaskLevel( void )
 }
 
 #if ( TARGET_OS_WIN32 && !TARGET_OS_WINDOWS_CE )
-//===========================================================================================================================
-//    DebugWinEnableConsole
-//===========================================================================================================================
+
+// DebugWinEnableConsole
+
 
 #pragma warning( disable:4311 )
 
@@ -2547,9 +2466,9 @@ exit:
 #endif  // TARGET_OS_WIN32 && !TARGET_OS_WINDOWS_CE
 
 #if ( TARGET_OS_WIN32 )
-//===========================================================================================================================
-//    DebugWinCharToTCharString
-//===========================================================================================================================
+
+// DebugWinCharToTCharString
+
 
 static TCHAR *
 DebugWinCharToTCharString(
@@ -2597,9 +2516,9 @@ DebugWinCharToTCharString(
 #pragma mark == Debugging ==
 #endif
 
-//===========================================================================================================================
-//    DebugServicesTest
-//===========================================================================================================================
+
+// DebugServicesTest
+
 
 DEBUG_EXPORT OSStatus   DebugServicesTest( void )
 {

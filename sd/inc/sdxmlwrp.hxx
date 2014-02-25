@@ -22,10 +22,7 @@
 #include <tools/errcode.hxx>
 #include "sdfilter.hxx"
 
-// ---------------
-// - SdXMLFilter -
-// ---------------
-
+// SdXMLFilter
 enum SdXMLFilterMode
 {
     SDXMLMODE_Normal,   ///< standard load and save of the complete document

@@ -833,7 +833,7 @@ void TableDesignWidget::FillDesignPreviewControl()
     m_pValueSet->SelectItem(nSelectedItem);
 }
 
-// ====================================================================
+
 
 short TableDesignDialog::Execute()
 {
@@ -849,14 +849,14 @@ short TableDesignDialog::Execute()
     return RET_CANCEL;
 }
 
-// ====================================================================
+
 
 ::Window * createTableDesignPanel( ::Window* pParent, ViewShellBase& rBase )
 {
     return new TableDesignPane( pParent, rBase );
 }
 
-// ====================================================================
+
 
 void showTableDesignDialog( ::Window* pParent, ViewShellBase& rBase )
 {

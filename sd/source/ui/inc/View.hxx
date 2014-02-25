@@ -55,10 +55,8 @@ class ViewShell;
 class Window;
 class ViewClipboard;
 
-// -------------------
-// - SdViewRedrawRec -
-// -------------------
 
+// SdViewRedrawRec
 struct SdViewRedrawRec
 {
     OutputDevice* mpOut;

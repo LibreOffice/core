@@ -32,10 +32,10 @@
 
 #include <tools/diagnose_ex.h>
 
-//......................................................................................................................
+
 namespace sd { namespace colortoolpanel
 {
-//......................................................................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -70,9 +70,9 @@ namespace sd { namespace colortoolpanel
     namespace WindowAttribute = ::com::sun::star::awt::WindowAttribute;
     namespace PosSize = ::com::sun::star::awt::PosSize;
 
-    //==================================================================================================================
+
     //= helpers
-    //==================================================================================================================
+
     namespace
     {
         Reference< XWindow > lcl_createPlainWindow_nothrow( const Reference< XComponentContext >& i_rContext,
@@ -100,9 +100,9 @@ namespace sd { namespace colortoolpanel
             return NULL;
         }
     }
-    //==================================================================================================================
+
     //= class SingleColorPanel
-    //==================================================================================================================
+
 
     SingleColorPanel::SingleColorPanel( const Reference< XComponentContext >& i_rContext,
             const Reference< XConfigurationController >& i_rConfigController, const Reference< XResourceId >& i_rResourceId )
@@ -230,8 +230,8 @@ namespace sd { namespace colortoolpanel
         m_xWindow.clear();
     }
 
-//......................................................................................................................
+
 } } // namespace sd::colortoolpanel
-//......................................................................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

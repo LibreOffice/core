@@ -60,11 +60,9 @@ using ::com::sun::star::uno::RuntimeException;
 
 using ::sd::framework::FrameworkHelper;
 
-// ____________________________
-//
-// ::sd::impl::TransitionEffect
-// ____________________________
 
+
+// ::sd::impl::TransitionEffect
 namespace sd
 {
 namespace impl
@@ -232,11 +230,9 @@ struct TransitionEffect
 } // namespace impl
 } // namespace sd
 
-// ______________________
-//
-// Local Helper Functions
-// ______________________
 
+
+// Local Helper Functions
 namespace
 {
 
@@ -421,11 +417,9 @@ void lcl_FillSoundListBox(
 namespace sd
 {
 
-// ___________________
-//
-// SlideTransitionPane
-// ___________________
 
+
+// SlideTransitionPane
 SlideTransitionPane::SlideTransitionPane(
     ::Window * pParent,
     ViewShellBase & rBase,
@@ -520,8 +514,6 @@ void SlideTransitionPane::UpdateLook (void)
     mpFT_SPEED->SetBackground(Wallpaper());
     mpFT_SOUND->SetBackground(Wallpaper());
 }
-
-
 
 
 void SlideTransitionPane::onSelectionChanged()
@@ -1046,7 +1038,7 @@ IMPL_LINK_NOARG(SlideTransitionPane, SoundListBoxSelected)
         sal_uInt16 nPos = mpLB_SOUND->GetSelectEntryPos();
         if( nPos == 2 )
         {
-            // other sound ...
+            // other sound...
             openSoundFileDialog();
         }
     }

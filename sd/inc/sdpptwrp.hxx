@@ -22,10 +22,7 @@
 
 #include "sdfilter.hxx"
 
-// ---------------
-// - SdPPTFilter -
-// ---------------
-
+// SdPPTFilter
 class SdPPTFilter : public SdFilter
 {
 public:

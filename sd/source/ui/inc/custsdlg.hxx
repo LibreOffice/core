@@ -32,7 +32,7 @@ class SdDrawDocument;
 class SdCustomShow;
 class SdCustomShowList;
 
-//------------------------------------------------------------------------
+
 
 class SdCustomShowDlg : public ModalDialog
 {
@@ -66,7 +66,7 @@ public:
 };
 
 
-//------------------------------------------------------------------------
+
 
 class SdDefineCustomShowDlg : public ModalDialog
 {

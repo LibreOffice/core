@@ -289,7 +289,7 @@ Pointer AnnotationHdl::GetSdrDragPointer() const
     return Pointer( eStyle );
 }
 
-// ====================================================================
+
 
 AnnotationTag::AnnotationTag( AnnotationManagerImpl& rManager, ::sd::View& rView, const Reference< XAnnotation >& xAnnotation, Color& rColor, int nIndex, const Font& rFont )
 : SmartTag( rView )

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "eppt.hxx"
 #include "epptdef.hxx"
 
@@ -164,8 +163,6 @@ PPTWriterBase::PPTWriterBase( const Reference< XModel > & rXModel,
 {
 }
 
-
-
 PPTWriterBase::~PPTWriterBase()
 {
     // Possibly unnecessary sanity check for mXStatusIndicator.is().
@@ -175,8 +172,6 @@ PPTWriterBase::~PPTWriterBase()
     if ( mbStatusIndicator && mXStatusIndicator.is() )
         mXStatusIndicator->end();
 }
-
-
 
 void PPTWriterBase::exportPPT( const std::vector< com::sun::star::beans::PropertyValue >& rMediaData )
 {
@@ -257,8 +252,6 @@ void PPTWriterBase::exportPPT( const std::vector< com::sun::star::beans::Propert
     exportPPTPost();
 }
 
-
-
 sal_Bool PPTWriterBase::InitSOIface()
 {
     while( true )
@@ -285,8 +278,6 @@ sal_Bool PPTWriterBase::InitSOIface()
     }
     return sal_False;
 }
-
-
 
 sal_Bool PPTWriterBase::GetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
 {
@@ -371,8 +362,6 @@ sal_Bool PPTWriterBase::GetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
     return sal_False;
 }
 
-
-
 sal_Bool PPTWriterBase::CreateSlide( sal_uInt32 nPageNum )
 {
     Any aAny;
@@ -418,8 +407,6 @@ sal_Bool PPTWriterBase::CreateSlide( sal_uInt32 nPageNum )
     return sal_True;
 };
 
-
-
 sal_Bool PPTWriterBase::CreateNotes( sal_uInt32 nPageNum )
 {
     if ( !GetPageByIndex( nPageNum, NOTICE ) )
@@ -430,8 +417,6 @@ sal_Bool PPTWriterBase::CreateNotes( sal_uInt32 nPageNum )
 
     return sal_True;
 };
-
-
 
 sal_Bool PPTWriterBase::CreateSlideMaster( sal_uInt32 nPageNum )
 {
@@ -449,8 +434,6 @@ sal_Bool PPTWriterBase::CreateSlideMaster( sal_uInt32 nPageNum )
 
     return sal_True;
 };
-
-
 
 sal_Int32 PPTWriterBase::GetLayoutOffset( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet ) const
 {
@@ -483,8 +466,6 @@ PHLayout& PPTWriterBase::GetLayout(  const ::com::sun::star::uno::Reference< ::c
     return pPHLayout[ GetLayoutOffsetFixed( rXPropSet ) ];
 }
 
-
-
 PHLayout& PPTWriterBase::GetLayout( sal_Int32 nOffset ) const
 {
     if( nOffset >= 0 && nOffset < EPP_LAYOUT_SIZE )
@@ -494,8 +475,6 @@ PHLayout& PPTWriterBase::GetLayout( sal_Int32 nOffset ) const
 
     return pPHLayout[ 0 ];
 }
-
-
 
 sal_uInt32 PPTWriterBase::GetMasterIndex( PageType ePageType )
 {
@@ -526,8 +505,6 @@ sal_uInt32 PPTWriterBase::GetMasterIndex( PageType ePageType )
     return nRetValue;
 }
 
-//  -----------------------------------------------------------------------
-
 sal_Bool PPTWriterBase::SetCurrentStyleSheet( sal_uInt32 nPageNum )
 {
     sal_Bool bRet = sal_False;
@@ -538,8 +515,6 @@ sal_Bool PPTWriterBase::SetCurrentStyleSheet( sal_uInt32 nPageNum )
     mpStyleSheet = maStyleSheetList[ nPageNum ];
     return bRet;
 }
-
-
 
 sal_Bool PPTWriterBase::GetStyleSheets()
 {
@@ -665,7 +640,7 @@ sal_Bool PPTWriterBase::GetStyleSheets()
                     }
                     catch( Exception& )
                     {
-                    //
+
                     }
                 }
             }
@@ -677,8 +652,6 @@ sal_Bool PPTWriterBase::GetStyleSheets()
     }
     return bRetValue;
 }
-
-//  -----------------------------------------------------------------------
 
 sal_Bool PPTWriterBase::CreateMainNotes()
 {
@@ -711,8 +684,6 @@ sal_Bool PPTWriterBase::CreateMainNotes()
     return ImplCreateMainNotes();
 }
 
-//  -----------------------------------------------------------------------
-
 awt::Size PPTWriterBase::MapSize( const awt::Size& rSize )
 {
     Size aRetSize( OutputDevice::LogicToLogic( Size( rSize.Width, rSize.Height ), maMapModeSrc, maMapModeDest ) );
@@ -724,15 +695,11 @@ awt::Size PPTWriterBase::MapSize( const awt::Size& rSize )
     return awt::Size( aRetSize.Width(), aRetSize.Height() );
 }
 
-//  -----------------------------------------------------------------------
-
 awt::Point PPTWriterBase::MapPoint( const awt::Point& rPoint )
 {
     Point aRet( OutputDevice::LogicToLogic( Point( rPoint.X, rPoint.Y ), maMapModeSrc, maMapModeDest ) );
     return awt::Point( aRet.X(), aRet.Y() );
 }
-
-//  -----------------------------------------------------------------------
 
 Rectangle PPTWriterBase::MapRectangle( const awt::Rectangle& rRect )
 {
@@ -742,8 +709,6 @@ Rectangle PPTWriterBase::MapRectangle( const awt::Rectangle& rRect )
     ::com::sun::star::awt::Size     aS( MapSize( aSize ) );
     return Rectangle( Point( aP.X, aP.Y ), Size( aS.Width, aS.Height ) );
 }
-
-//  -----------------------------------------------------------------------
 
 sal_Bool PPTWriterBase::GetShapeByIndex( sal_uInt32 nIndex, sal_Bool bGroup )
 {
@@ -796,8 +761,6 @@ sal_Bool PPTWriterBase::GetShapeByIndex( sal_uInt32 nIndex, sal_Bool bGroup )
     }
     return sal_False;
 }
-
-//  -----------------------------------------------------------------------
 
 sal_Int8 PPTWriterBase::GetTransition( sal_Int16 nTransitionType, sal_Int16 nTransitionSubtype, FadeEffect eEffect, sal_uInt8& nDirection )
 {
@@ -1002,8 +965,6 @@ sal_Int8 PPTWriterBase::GetTransition( FadeEffect eEffect, sal_uInt8& nDirection
 
     return nPPTTransitionType;
 }
-
-//  -----------------------------------------------------------------------
 
 sal_Bool PPTWriterBase::ContainsOtherShapeThanPlaceholders( sal_Bool bForOOMLX )
 {

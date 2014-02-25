@@ -1322,7 +1322,7 @@ interface DrawView
         StateMethod = GetMenuState ;
         Export = FALSE ;
     ]
-     //////////////////////////////////////////////////////////////////////
+
      // Begin FormSlots
     SID_FM_CREATE_CONTROL
     [
@@ -1339,7 +1339,7 @@ interface DrawView
         StateMethod = GetCtrlState ;
     ]
      // End FormSlots
-     //////////////////////////////////////////////////////////////////////
+
     SID_ATTR_FILL_STYLE // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
@@ -2382,7 +2382,7 @@ interface DrawView
         StateMethod = GetMenuState ;
     ]
 
-    SID_FORMATPAINTBRUSH //
+    SID_FORMATPAINTBRUSH
     [
         ExecMethod = FuPermanent ;
         StateMethod = GetMenuState ;

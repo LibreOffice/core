@@ -302,7 +302,7 @@ Pointer ImageButtonHdl::GetPointer() const
     return Pointer( POINTER_ARROW );
 }
 
-// ====================================================================
+
 
 ChangePlaceholderTag::ChangePlaceholderTag( ::sd::View& rView, SdrObject& rPlaceholderObj )
 : SmartTag( rView )

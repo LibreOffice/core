@@ -522,25 +522,25 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
     return aTypeName;
 }
 
-/* XServiceInfo */
+// XServiceInfo
 OUString SAL_CALL SdFilterDetect::getImplementationName() throw( RuntimeException )
 {
     return impl_getStaticImplementationName();
 }
                                                                                                                                 \
-/* XServiceInfo */
+// XServiceInfo
 sal_Bool SAL_CALL SdFilterDetect::supportsService( const OUString& sServiceName ) throw( RuntimeException )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-/* XServiceInfo */
+// XServiceInfo
 Sequence< OUString > SAL_CALL SdFilterDetect::getSupportedServiceNames() throw( RuntimeException )
 {
     return impl_getStaticSupportedServiceNames();
 }
 
-/* Helper for XServiceInfo */
+// Helper for XServiceInfo
 Sequence< OUString > SdFilterDetect::impl_getStaticSupportedServiceNames()
 {
     Sequence< OUString > seqServiceNames( 1 );
@@ -548,13 +548,13 @@ Sequence< OUString > SdFilterDetect::impl_getStaticSupportedServiceNames()
     return seqServiceNames ;
 }
 
-/* Helper for XServiceInfo */
+// Helper for XServiceInfo
 OUString SdFilterDetect::impl_getStaticImplementationName()
 {
     return OUString( "com.sun.star.comp.draw.FormatDetector" );
 }
 
-/* Helper for registry */
+// Helper for registry
 Reference< XInterface > SAL_CALL SdFilterDetect::impl_createInstance( const Reference< XMultiServiceFactory >& xServiceManager ) throw( Exception )
 {
     return static_cast< cppu::OWeakObject * >(

@@ -362,10 +362,10 @@ void ClientBox::DrawRow( const Rectangle& rRect, const TClientBoxEntry pEntry )
 
 
 //         long nExtraHeight = 0;
-//
+
 //         if ( pEntry->m_bHasButtons )
 //             nExtraHeight = m_nExtraHeight;
-//
+
 //         DrawText( Rectangle( aPos.X(), aPos.Y(), rRect.Right(), rRect.Bottom() - nExtraHeight ),
 //                   sDescription, TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
     }

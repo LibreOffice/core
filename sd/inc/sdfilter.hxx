@@ -26,10 +26,7 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
 
-// ------------
-// - SdFilter -
-// ------------
-
+// SdFilter
 class SfxMedium;
 namespace sd {
 class DrawDocShell;

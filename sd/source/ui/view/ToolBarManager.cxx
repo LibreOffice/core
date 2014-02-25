@@ -941,7 +941,7 @@ void ToolBarManager::Implementation::Update (
             // updated (under the assumption that our lock to the
             // ViewShellManager was the only one open.  If that is not the
             // case then all should still be well but not as fast.)
-            //
+
             // Note that the lock count may have been increased since
             // entering this method.  In that case one of the next
             // UnlockUpdate() calls will post the UpdateCallback.
