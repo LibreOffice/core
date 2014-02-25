@@ -1549,7 +1549,8 @@ void  SwXTextViewCursor::removeVetoableChangeListener(
 }
 
 PropertyState  SwXTextViewCursor::getPropertyState( const OUString& rPropertyName )
-    throw(UnknownPropertyException, RuntimeException)
+    throw (UnknownPropertyException, RuntimeException,
+           std::exception)
 {
     SolarMutexGuard aGuard;
     PropertyState eState;
