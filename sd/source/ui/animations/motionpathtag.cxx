@@ -354,7 +354,7 @@ Pointer SdPathHdl::GetSdrDragPointer() const
     return Pointer( eStyle );
 }
 
-// ====================================================================
+
 
 MotionPathTag::MotionPathTag( CustomAnimationPane& rPane, ::sd::View& rView, const CustomAnimationEffectPtr& pEffect )
 : SmartTag( rView )

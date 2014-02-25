@@ -484,7 +484,7 @@ sal_Bool PPTWriter::ImplCreateCurrentUserStream()
 
     sal_uInt32 nEditPos = mpCurUserStrm->Tell();
     mpCurUserStrm->WriteUInt32( (sal_uInt32)0x0 )                   // OffsetToCurrentEdit;
-                  .WriteUInt16( (sal_uInt16)nLenOfUserName )        //
+                  .WriteUInt16( (sal_uInt16)nLenOfUserName )
                   .WriteUInt16( (sal_uInt16)0x3f4 )                 // DocFileVersion
                   .WriteUChar( (sal_uInt8)3 )                      // MajorVersion
                   .WriteUChar( (sal_uInt8)0 )                      // MinorVersion
@@ -1204,7 +1204,7 @@ void PPTWriter::ImplWriteBackground( ::com::sun::star::uno::Reference< ::com::su
 {
     //************************ ******
     //** DEFAULT BACKGROUND SHAPE **
-    //******************************
+
 
     sal_uInt32 nFillColor = 0xffffff;
     sal_uInt32 nFillBackColor = 0;

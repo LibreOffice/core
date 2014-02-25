@@ -22,9 +22,9 @@
 
 #include "sdfilter.hxx"
 
-// ---------------
+
 // - SdCGMFilter -
-// ---------------
+
 
 class SdCGMFilter : public SdFilter
 {

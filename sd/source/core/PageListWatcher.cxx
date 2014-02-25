@@ -24,7 +24,7 @@
 #include <tools/debug.hxx>
 #include <svx/svdmodel.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void ImpPageListWatcher::ImpRecreateSortedPageListOnDemand()
 {
@@ -186,7 +186,7 @@ sal_uInt32 ImpPageListWatcher::GetVisibleSdPageCount()
     return nVisiblePageCount;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 sal_uInt32 ImpDrawPageListWatcher::ImpGetPageCount() const
 {
@@ -207,7 +207,7 @@ ImpDrawPageListWatcher::~ImpDrawPageListWatcher()
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 sal_uInt32 ImpMasterPageListWatcher::ImpGetPageCount() const
 {

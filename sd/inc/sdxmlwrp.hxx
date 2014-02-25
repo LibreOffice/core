@@ -22,9 +22,9 @@
 #include <tools/errcode.hxx>
 #include "sdfilter.hxx"
 
-// ---------------
+
 // - SdXMLFilter -
-// ---------------
+
 
 enum SdXMLFilterMode
 {

@@ -64,7 +64,7 @@ public:
     sal_uInt32 GetVisibleSdPageCount();
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class ImpDrawPageListWatcher : public ImpPageListWatcher
 {
@@ -77,7 +77,7 @@ public:
     virtual ~ImpDrawPageListWatcher();
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class ImpMasterPageListWatcher : public ImpPageListWatcher
 {

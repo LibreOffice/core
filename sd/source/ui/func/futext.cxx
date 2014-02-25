@@ -807,7 +807,7 @@ sal_Bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
                     // is used, then ImpSetAttributesForNewTextObject is called and then the object is
                     // deleted again since not the minimum drag distance was travelled. Then, a new
                     // klick text object is created and thus all that stuff needs to be set again here.
-                    //
+
                     // Before using the new object the vertical writing mode
                     // needs to be set. This is done here at the OutlinerParaObject
                     // directly to not mirror the layout text items involved. These items will be set

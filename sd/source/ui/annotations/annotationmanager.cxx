@@ -1088,7 +1088,7 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( Reference< XAnnotation
     }
 }
 
-// ====================================================================
+
 
 Color AnnotationManagerImpl::GetColor(sal_uInt16 aAuthorIndex)
 {
@@ -1203,7 +1203,7 @@ SdPage* AnnotationManagerImpl::GetCurrentPage()
     return mrBase.GetMainViewShell()->getCurrentPage();
 }
 
-// ====================================================================
+
 
 AnnotationManager::AnnotationManager( ViewShellBase& rViewShellBase )
 : mxImpl( new AnnotationManagerImpl( rViewShellBase ) )
