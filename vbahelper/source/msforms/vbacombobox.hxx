@@ -87,6 +87,6 @@ public:
     virtual css::uno::Sequence<OUString> getServiceNames();
 };
 
-#endif //
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
