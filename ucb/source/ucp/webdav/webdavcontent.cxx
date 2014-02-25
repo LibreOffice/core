@@ -285,7 +285,7 @@ void SAL_CALL Content::release()
 
 // virtual
 uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     // Note: isFolder may require network activities! So call it only
     //       if it is really necessary!!!
@@ -341,7 +341,7 @@ XTYPEPROVIDER_COMMON_IMPL( Content );
 
 // virtual
 uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     sal_Bool bFolder = sal_False;
     try
