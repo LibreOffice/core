@@ -36,7 +36,7 @@ using namespace com::sun::star;
 
 namespace {
 
-//=========================================================================
+
 bool fillContinuation(
     bool bUseSystemCredentials,
     const ucb::AuthenticationRequest & rRequest,
@@ -109,13 +109,13 @@ bool fillContinuation(
 
 namespace uui {
 
-//=========================================================================
+
 PasswordContainerHelper::PasswordContainerHelper(
     uno::Reference< uno::XComponentContext > const & xContext ):
     m_xPasswordContainer(task::PasswordContainer::create(xContext))
 {}
 
-//=========================================================================
+
 bool PasswordContainerHelper::handleAuthenticationRequest(
     ucb::AuthenticationRequest const & rRequest,
     uno::Reference< ucb::XInteractionSupplyAuthentication > const &
@@ -221,7 +221,7 @@ bool PasswordContainerHelper::handleAuthenticationRequest(
     return false;
 }
 
-//=========================================================================
+
 bool PasswordContainerHelper::addRecord(
     OUString const & rURL,
     OUString const & rUsername,
@@ -272,9 +272,9 @@ bool PasswordContainerHelper::addRecord(
     return true;
 }
 
-//=========================================================================
-//=========================================================================
-//=========================================================================
+
+
+
 
 PasswordContainerInteractionHandler::PasswordContainerInteractionHandler(
     const uno::Reference< uno::XComponentContext >& xContext )
@@ -282,17 +282,17 @@ PasswordContainerInteractionHandler::PasswordContainerInteractionHandler(
 {
 }
 
-//=========================================================================
+
 // virtual
 PasswordContainerInteractionHandler::~PasswordContainerInteractionHandler()
 {
 }
 
-//=========================================================================
-//
+
+
 // XServiceInfo methods.
-//
-//=========================================================================
+
+
 
 // virtual
 OUString SAL_CALL
@@ -302,7 +302,7 @@ PasswordContainerInteractionHandler::getImplementationName()
     return getImplementationName_Static();
 }
 
-//=========================================================================
+
 // virtual
 sal_Bool SAL_CALL
 PasswordContainerInteractionHandler::supportsService(
@@ -312,7 +312,7 @@ PasswordContainerInteractionHandler::supportsService(
     return cppu::supportsService(this, ServiceName);
 }
 
-//=========================================================================
+
 // virtual
 uno::Sequence< OUString > SAL_CALL
 PasswordContainerInteractionHandler::getSupportedServiceNames()
@@ -321,7 +321,7 @@ PasswordContainerInteractionHandler::getSupportedServiceNames()
     return getSupportedServiceNames_Static();
 }
 
-//=========================================================================
+
 // static
 OUString
 PasswordContainerInteractionHandler::getImplementationName_Static()
@@ -329,7 +329,7 @@ PasswordContainerInteractionHandler::getImplementationName_Static()
     return OUString( "com.sun.star.comp.uui.PasswordContainerInteractionHandler" );
 }
 
-//=========================================================================
+
 // static
 uno::Sequence< OUString >
 PasswordContainerInteractionHandler::getSupportedServiceNames_Static()
@@ -340,11 +340,11 @@ PasswordContainerInteractionHandler::getSupportedServiceNames_Static()
     return aSNS;
 }
 
-//=========================================================================
-//
+
+
 // XInteractionHandler2 methods.
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL
@@ -411,11 +411,11 @@ PasswordContainerInteractionHandler::handleInteractionRequest(
     return false;
 }
 
-//=========================================================================
-//
+
+
 // Service factory implementation.
-//
-//=========================================================================
+
+
 
 static uno::Reference< uno::XInterface > SAL_CALL
 PasswordContainerInteractionHandler_CreateInstance(
@@ -427,7 +427,7 @@ PasswordContainerInteractionHandler_CreateInstance(
     return uno::Reference< uno::XInterface >::query( pX );
 }
 
-//=========================================================================
+
 // static
 uno::Reference< lang::XSingleServiceFactory >
 PasswordContainerInteractionHandler::createServiceFactory(

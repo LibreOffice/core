@@ -26,9 +26,9 @@
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-//=====================================================================
+
 //= Https_WarnDialog
-//=====================================================================
+
 class SSLWarnDialog : public MessageDialog
 {
 private:

@@ -28,7 +28,7 @@
 #include <vcl/group.hxx>
 #include <vcl/fixed.hxx>
 
-//============================================================================
+
 
 class PasswordDialog : public ModalDialog
 {

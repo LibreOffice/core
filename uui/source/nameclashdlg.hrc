@@ -20,7 +20,7 @@
 #ifndef UUI_NAMECLASHDLG_HRC
 #define UUI_NAMECLASHDLG_HRC
 
-//============================================================================
+
 
 #define FT_FILE_EXISTS_WARNING  20
 #define EDIT_NEW_NAME           21

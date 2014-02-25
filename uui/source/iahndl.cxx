@@ -337,7 +337,7 @@ UUIInteractionHelper::tryOtherInteractionHandler(
 
 namespace
 {
-    // .................................................................................................................
+
     static bool lcl_matchesRequest( const Any& i_rRequest, const OUString& i_rTypeName, const OUString& i_rPropagation )
     {
         const ::com::sun::star::uno::TypeDescription aTypeDesc( i_rTypeName );
@@ -834,9 +834,9 @@ UUIInteractionHelper::handleRequest_impl(
         }
 
 
-        ///////////////////////////////////////////////////////////////////
+
         // Handle requests which do not have a plain string representation.
-        ///////////////////////////////////////////////////////////////////
+
         if (!bObtainErrorStringOnly)
         {
             if ( handleAuthenticationRequest( rRequest ) )
@@ -899,9 +899,9 @@ UUIInteractionHelper::handleRequest_impl(
                 return true;
             }
 
-            ///////////////////////////////////////////////////////////////
+
             // Last chance: interaction handlers registered in the configuration
-            ///////////////////////////////////////////////////////////////
+
 
             // typed InteractionHandlers (ooo.Interactions)
             if ( handleTypedHandlerImplementations( rRequest ) )
@@ -1301,7 +1301,7 @@ UUIInteractionHelper::handleFutureDocumentVersionUpdateRequest(
     // TODO: this static variable is somewhat hacky. Formerly (before the dialog was moved from SFX2 to the
     // interaction handler implementation), this was stored in SFX_APP()'s impl structure, in member
     // bODFVersionWarningLater. Of course, we do not have access to it here.
-    //
+
     // A proper solution which I would envision would be:
     // - There's a central implementation (this one here) of css.task.InteractionHandler
     // - There's a configuration which maps UNO names to service names
@@ -1314,7 +1314,7 @@ UUIInteractionHelper::handleFutureDocumentVersionUpdateRequest(
     // This way, the FutureDocumentVersionProductUpdateRequest could be handled in SFX (or any other
     // suitable place), again, and we would only have one place where we remember the s_bDeferredToNextSession
     // flag.
-    //
+
     // Note: The above pattern has been implemented in CWS autorecovery. Now the remaining task is to move the
     // handling of this interaction to SFX, again.
 
@@ -1447,9 +1447,9 @@ UUIInteractionHelper::handleBrokenPackageRequest(
     }
 }
 
-//=========================================================================
+
 // ErrorResource Implementation
-//=========================================================================
+
 
 bool
 ErrorResource::getString(ErrCode nErrorCode, OUString &rString)

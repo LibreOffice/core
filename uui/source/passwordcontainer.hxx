@@ -40,7 +40,7 @@ namespace com {
 
 namespace uui {
 
-// ============================================================================
+
 
 /** Passwordcontainer UNO service (com.sun.star.task.PasswordContainer) helper.
  */
@@ -52,7 +52,7 @@ public:
             com::sun::star::uno::XComponentContext > const &
                 xContext );
 
-    // ------------------------------------------------------------------------
+
 
     /** This member function tries to handle an authentication interaction
         request by looking up credentials for the given URL in the password
@@ -129,14 +129,14 @@ public:
                     bool bPersist )
         SAL_THROW( (com::sun::star::uno::RuntimeException) );
 
-    // ------------------------------------------------------------------------
+
 
 private:
     com::sun::star::uno::Reference<
         com::sun::star::task::XPasswordContainer2 > m_xPasswordContainer;
 };
 
-// ============================================================================
+
 
 class PasswordContainerInteractionHandler :
         public cppu::WeakImplHelper2< com::sun::star::lang::XServiceInfo,
