@@ -322,7 +322,8 @@ void SAL_CALL ScNamedRangeObj::setType( sal_Int32 nUnoType )
 
 // XFormulaTokens
 
-uno::Sequence<sheet::FormulaToken> SAL_CALL ScNamedRangeObj::getTokens() throw(uno::RuntimeException)
+uno::Sequence<sheet::FormulaToken> SAL_CALL ScNamedRangeObj::getTokens()
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Sequence<sheet::FormulaToken> aSequence;

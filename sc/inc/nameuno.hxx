@@ -97,7 +97,8 @@ public:
 
                             /// XFormulaTokens
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken > SAL_CALL getTokens()
-                                throw (::com::sun::star::uno::RuntimeException);
+                                throw (::com::sun::star::uno::RuntimeException,
+                                       std::exception);
     virtual void SAL_CALL   setTokens( const ::com::sun::star::uno::Sequence<
                                     ::com::sun::star::sheet::FormulaToken >& aTokens )
                                 throw (::com::sun::star::uno::RuntimeException);
