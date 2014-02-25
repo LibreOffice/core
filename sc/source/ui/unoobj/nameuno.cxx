@@ -505,8 +505,9 @@ bool ScNamedRangesObj::IsModifyAndBroadcast() const
 // sheet::XNamedRanges
 
 void SAL_CALL ScNamedRangesObj::addNewByName( const OUString& aName,
-        const OUString& aContent, const table::CellAddress& aPosition,
-        sal_Int32 nUnoType ) throw(uno::RuntimeException)
+    const OUString& aContent, const table::CellAddress& aPosition,
+    sal_Int32 nUnoType )
+        throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScAddress aPos( (SCCOL)aPosition.Column, (SCROW)aPosition.Row, aPosition.Sheet );

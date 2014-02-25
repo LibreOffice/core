@@ -214,7 +214,8 @@ public:
                             /// XNamedRanges
     virtual void SAL_CALL   addNewByName( const OUString& aName, const OUString& aContent,
                                 const ::com::sun::star::table::CellAddress& aPosition, sal_Int32 nType )
-                                    throw(::com::sun::star::uno::RuntimeException);
+                                    throw (::com::sun::star::uno::RuntimeException,
+                                           std::exception);
     virtual void SAL_CALL   addNewFromTitles( const ::com::sun::star::table::CellRangeAddress& aSource,
                                 ::com::sun::star::sheet::Border aBorder )
                                     throw(::com::sun::star::uno::RuntimeException);
