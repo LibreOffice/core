@@ -1487,8 +1487,9 @@ uno::Reference< XPropertySetInfo >  SwXTextViewCursor::getPropertySetInfo(  ) th
 }
 
 void  SwXTextViewCursor::setPropertyValue( const OUString& rPropertyName, const Any& aValue )
-                            throw(UnknownPropertyException, PropertyVetoException,
-                                IllegalArgumentException, WrappedTargetException, RuntimeException)
+    throw (UnknownPropertyException, PropertyVetoException,
+           IllegalArgumentException, WrappedTargetException,
+           RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if(m_pView)
