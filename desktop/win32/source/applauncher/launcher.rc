@@ -19,9 +19,9 @@
 #include <windows.h>
 #include "version.hrc"
 
-// -----------------------------------------------------------------------
+
 //                 version information
-// -----------------------------------------------------------------------
+
 
 VS_VERSION_INFO VERSIONINFO
     FILEVERSION    VERSION, SUBVERSION, MICROVERSION, VERVARIANT

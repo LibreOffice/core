@@ -43,7 +43,7 @@ inline void progressUpdate(
     }
 }
 
-//==============================================================================
+
 class ProgressLevel
 {
     css::uno::Reference<css::ucb::XProgressHandler> m_xProgressHandler;
@@ -58,7 +58,7 @@ public:
     inline void update( css::uno::Any const & status ) const;
 };
 
-//______________________________________________________________________________
+
 inline ProgressLevel::ProgressLevel(
     css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv,
     OUString const & status )
@@ -69,28 +69,28 @@ inline ProgressLevel::ProgressLevel(
         m_xProgressHandler->push( css::uno::makeAny(status) );
 }
 
-//______________________________________________________________________________
+
 inline ProgressLevel::~ProgressLevel()
 {
     if (m_xProgressHandler.is())
         m_xProgressHandler->pop();
 }
 
-//______________________________________________________________________________
+
 inline void ProgressLevel::update( OUString const & status ) const
 {
     if (m_xProgressHandler.is())
         m_xProgressHandler->update( css::uno::makeAny(status) );
 }
 
-//______________________________________________________________________________
+
 inline void ProgressLevel::update( css::uno::Any const & status ) const
 {
     if (m_xProgressHandler.is())
         m_xProgressHandler->update( status );
 }
 
-//##############################################################################
+
 
 /** @return true if ia handler is present and any selection has been chosen
  */
@@ -100,9 +100,9 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC bool interactContinuation(
     css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
     bool * pcont, bool * pabort );
 
-//##############################################################################
 
-//==============================================================================
+
+
 class DESKTOP_DEPLOYMENTMISC_DLLPUBLIC AbortChannel :
     public ::cppu::WeakImplHelper1<css::task::XAbortChannel>
 {

@@ -454,7 +454,7 @@ OUString MakeStartupConfigAccessErrorMessage( OUString const & aInternalErrMsg )
     return aDiagnosticMessage.makeStringAndClear();
 }
 
-//=============================================================================
+
 // shows a simple error box with the given message ... but exits from these process !
 // Fatal errors cant be solved by the process ... nor any recovery can help.
 // Mostly the installation was damaged and must be repaired manually .. or by calling
@@ -463,7 +463,7 @@ OUString MakeStartupConfigAccessErrorMessage( OUString const & aInternalErrMsg )
 // the current office process ! No pipe requests, no menu/toolbar/shortuct actions
 // are allowed. Otherwise we will force a "crash inside a crash".
 // Thats why we have to use a special native message box here which does not use yield :-)
-//=============================================================================
+
 void FatalError(const OUString& sMessage)
 {
     OUString sProductKey = ::utl::Bootstrap::getProductKey();
@@ -1939,14 +1939,14 @@ void Desktop::OverrideSystemSettings( AllSettings& rSettings )
     rSettings.SetStyleSettings ( hStyleSettings );
 }
 
-// ========================================================================
+
 IMPL_LINK_NOARG(Desktop, AsyncInitFirstRun)
 {
     DoFirstRunInitializations();
     return 0L;
 }
 
-// ========================================================================
+
 
 class ExitTimer : public Timer
 {
@@ -2805,7 +2805,7 @@ void Desktop::CloseSplashScreen()
     }
 }
 
-// ========================================================================
+
 void Desktop::DoFirstRunInitializations()
 {
     try
@@ -2867,7 +2867,7 @@ void Desktop::ShowBackingComponent(Desktop * progress)
     }
 }
 
-// ========================================================================
+
 void Desktop::CheckFirstRun( )
 {
     if (officecfg::Office::Common::Misc::FirstRun::get())

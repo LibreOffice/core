@@ -58,14 +58,14 @@ struct DESKTOP_DEPLOYMENTMISC_DLLPUBLIC StrTitle
     }
 };
 
-//==============================================================================
+
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC bool create_ucb_content(
     ::ucbhelper::Content * ucb_content,
     OUString const & url,
     css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
     bool throw_exc = true );
 
-//==============================================================================
+
 /** @return true if previously non-existing folder has been created
  */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC bool create_folder(
@@ -74,17 +74,17 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC bool create_folder(
     css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
     bool throw_exc = true );
 
-//==============================================================================
+
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC bool erase_path(
     OUString const & url,
     css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
     bool throw_exc = true );
 
-//==============================================================================
+
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 ::rtl::ByteSequence readFile( ::ucbhelper::Content & ucb_content );
 
-//==============================================================================
+
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 bool readLine( OUString * res, OUString const & startingWith,
                ::ucbhelper::Content & ucb_content, rtl_TextEncoding textenc );

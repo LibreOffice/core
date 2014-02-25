@@ -121,9 +121,9 @@ DWORD WINAPI OutputThread( LPVOID pParam )
     return 0;
 }
 #endif
-//---------------------------------------------------------------------------
+
 // Thread that reads from child process standard error pipe
-//---------------------------------------------------------------------------
+
 
 #ifdef UNOPKG
 DWORD WINAPI ErrorThread( LPVOID pParam )
@@ -148,9 +148,9 @@ DWORD WINAPI ErrorThread( LPVOID pParam )
     return 0;
 }
 #endif
-//---------------------------------------------------------------------------
+
 // Thread that writes to child process standard input pipe
-//---------------------------------------------------------------------------
+
 #ifdef UNOPKG
 
 DWORD WINAPI InputThread( LPVOID pParam )
@@ -241,9 +241,9 @@ DWORD WINAPI InputThread( LPVOID pParam )
 }
 #endif
 
-//---------------------------------------------------------------------------
+
 // Thread that waits until child process reached input idle
-//---------------------------------------------------------------------------
+
 
 DWORD WINAPI WaitForUIThread( LPVOID pParam )
 {
@@ -260,9 +260,9 @@ DWORD WINAPI WaitForUIThread( LPVOID pParam )
 }
 
 
-//---------------------------------------------------------------------------
+
 // Ctrl-Break handler that terminates the child process if Ctrl-C was pressed
-//---------------------------------------------------------------------------
+
 
 HANDLE  hTargetProcess = INVALID_HANDLE_VALUE;
 
@@ -275,9 +275,9 @@ BOOL WINAPI CtrlBreakHandler(
 }
 
 
-//---------------------------------------------------------------------------
 
-//---------------------------------------------------------------------------
+
+
 
 #ifdef __MINGW32__
 int main( int, char ** )

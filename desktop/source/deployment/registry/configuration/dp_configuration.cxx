@@ -61,7 +61,7 @@ namespace {
 
 typedef ::std::list<OUString> t_stringlist;
 
-//==============================================================================
+
 class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 {
     class PackageImpl : public ::dp_registry::backend::Package

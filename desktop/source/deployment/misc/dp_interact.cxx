@@ -31,7 +31,7 @@ using namespace ::com::sun::star::ucb;
 namespace dp_misc {
 namespace {
 
-//==============================================================================
+
 class InteractionContinuationImpl : public ::cppu::OWeakObject,
                                     public task::XInteractionContinuation
 {
@@ -89,7 +89,7 @@ void InteractionContinuationImpl::select() throw (RuntimeException, std::excepti
     *m_pselect = true;
 }
 
-//==============================================================================
+
 class InteractionRequest :
     public ::cppu::WeakImplHelper1<task::XInteractionRequest>
 {
@@ -127,7 +127,7 @@ InteractionRequest::getContinuations() throw (RuntimeException, std::exception)
 
 } // anon namespace
 
-//==============================================================================
+
 bool interactContinuation( Any const & request,
                            Type const & continuation,
                            Reference<XCommandEnvironment> const & xCmdEnv,

@@ -80,7 +80,7 @@ namespace {
 typedef cppu::ImplInheritanceHelper1<PackageRegistryBackend,
                                      lang::XServiceInfo> ImplBaseT;
 
-//==============================================================================
+
 class BackendImpl : public ImplBaseT
 {
     class PackageImpl : public ::dp_registry::backend::Package
@@ -1646,7 +1646,7 @@ BackendImpl::PackageImpl::getPackagesFromDb(
 
 } // anon namespace
 
-//==============================================================================
+
 Reference<deployment::XPackageRegistry> create(
     Reference<deployment::XPackageRegistry> const & xRootRegistry,
     OUString const & context, OUString const & cachePath, bool readOnly,

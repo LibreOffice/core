@@ -49,7 +49,7 @@ class PackageRegistryBackend;
 typedef ::cppu::WeakComponentImplHelper1<
     css::deployment::XPackage > t_PackageBase;
 
-//==============================================================================
+
 class Package : protected ::dp_misc::MutexHolder, public t_PackageBase
 {
     PackageRegistryBackend * getMyBackend() const;
@@ -264,7 +264,7 @@ typedef ::cppu::WeakComponentImplHelper2<
     css::lang::XEventListener,
     css::deployment::XPackageRegistry > t_BackendBase;
 
-//==============================================================================
+
 class PackageRegistryBackend
     : protected ::dp_misc::MutexHolder, public t_BackendBase
 {

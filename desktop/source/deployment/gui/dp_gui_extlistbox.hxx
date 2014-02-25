@@ -47,9 +47,9 @@ class TheExtensionManager;
 
 typedef ::boost::shared_ptr< FixedHyperlink > TFixedHyperlink;
 
-//------------------------------------------------------------------------------
+
 //                          struct Entry_Impl
-//------------------------------------------------------------------------------
+
 struct Entry_Impl;
 
 typedef ::boost::shared_ptr< Entry_Impl > TEntry_Impl;
@@ -88,13 +88,13 @@ struct Entry_Impl
     void          checkDependencies();
 };
 
-//------------------------------------------------------------------------------
+
 //                          class ExtensionBox_Impl
-//------------------------------------------------------------------------------
+
 
 class ExtensionBox_Impl;
 
-//------------------------------------------------------------------------------
+
 class ExtensionRemovedListener : public ::cppu::WeakImplHelper1< ::com::sun::star::lang::XEventListener >
 {
     ExtensionBox_Impl   *m_pParent;
@@ -104,13 +104,13 @@ public:
     ExtensionRemovedListener( ExtensionBox_Impl *pParent ) { m_pParent = pParent; }
    ~ExtensionRemovedListener();
 
-    //===================================================================================
+
     // XEventListener
     virtual void SAL_CALL disposing( ::com::sun::star::lang::EventObject const & evt )
         throw (::com::sun::star::uno::RuntimeException, std::exception);
 };
 
-//------------------------------------------------------------------------------
+
 class ExtensionBox_Impl : public ::svt::IExtensionListBox
 {
     bool            m_bHasScrollBar;
@@ -169,7 +169,7 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
     bool            FindEntryPos( const TEntry_Impl pEntry, long nStart, long nEnd, long &nFound );
     void            DeleteRemoved();
 
-    //-----------------
+
     DECL_DLLPRIVATE_LINK( ScrollHdl, ScrollBar * );
 
     //Index starts with 1.
@@ -201,7 +201,7 @@ public:
     virtual void    RecalcAll();
     void            RemoveUnlocked();
 
-    //-----------------
+
     virtual void    selectEntry( const long nPos );
     long            addEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage,
                               bool bLicenseMissing = false );
@@ -214,7 +214,7 @@ public:
     TheExtensionManager*    getExtensionManager() const { return m_pManager; }
     void setExtensionManager(TheExtensionManager* pManager) { m_pManager = pManager; }
 
-    //===================================================================================
+
     //These functions are used for automatic testing
 
     /** @return  The count of the entries in the list box. */

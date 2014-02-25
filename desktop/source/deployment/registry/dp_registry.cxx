@@ -65,7 +65,7 @@ namespace {
 typedef ::cppu::WeakComponentImplHelper2<
     deployment::XPackageRegistry, util::XUpdatable > t_helper;
 
-//==============================================================================
+
 class PackageRegistryImpl : private MutexHolder, public t_helper
 {
     struct ci_string_hash {
@@ -541,7 +541,7 @@ PackageRegistryImpl::getSupportedPackageTypes() throw (RuntimeException, std::ex
 }
 } // anon namespace
 
-//==============================================================================
+
 Reference<deployment::XPackageRegistry> SAL_CALL create(
     OUString const & context,
     OUString const & cachePath, bool readOnly,
