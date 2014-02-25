@@ -165,9 +165,9 @@ public:
 #endif
 
 
-    //
+
     // MIP (model item property) management
-    //
+
 
     // register MIPs which apply to a given node; only to be called by bindings
     // (The pTag parameter serves only to be able to remove the MIPs
@@ -201,10 +201,10 @@ public:
 
 
 
-    //
+
     // XModel
     //    implement the xforms::XModel implementation
-    //
+
 
 
     virtual OUString SAL_CALL getID()
@@ -310,10 +310,10 @@ public:
         throw( css::uno::RuntimeException, std::exception )
         { PropertySetBase::setPropertyValue(p1, p2); }
 
-    //
+
     // XFormsUIHelper1 & friends:
     //   (implementation in model_ui.cxx)
-    //
+
 
     /// determine a reasonable control service for a given node
     /// (based on data type MIP assigned to the node)
@@ -415,25 +415,25 @@ public:
         throw( RuntimeException_t, std::exception );
 
 
-    //
+
     // XUpdatable
-    //
+
 
 public:
     virtual void SAL_CALL update()
         throw( RuntimeException_t, std::exception );
 
-    //
+
     // XUnoTunnel
-    //
+
 
 public:
     virtual sal_Int64 SAL_CALL getSomething( const IntSequence_t& )
         throw( RuntimeException_t, std::exception );
 
-    //
+
     // XTypeProvider::getImplementationId
-    //
+
 
 public:
     virtual IntSequence_t SAL_CALL getImplementationId()

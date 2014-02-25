@@ -22,14 +22,14 @@
 #include "FormComponent.hxx"
 #include "frm_module.hxx"
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= OSpinButtonModel
-    //====================================================================
+
     class OSpinButtonModel   :public OBoundControlModel
     {
     private:
@@ -86,9 +86,9 @@ namespace frm
         using OBoundControlModel::getFastPropertyValue;
 
     };
-//........................................................................
+
 } // namespacefrm
-//........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_SPINBUTTON_HXX
 

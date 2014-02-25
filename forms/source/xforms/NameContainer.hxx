@@ -92,9 +92,9 @@ public:
     NameContainer() {}
     virtual ~NameContainer() {}
 
-    //
+
     // methods for XElementAccess
-    //
+
 
     virtual com::sun::star::uno::Type SAL_CALL getElementType()
         throw( com::sun::star::uno::RuntimeException, std::exception )
@@ -109,9 +109,9 @@ public:
     }
 
 
-    //
+
     // methods for XNameAccess (inherits XElementAccess)
-    //
+
 
     virtual com::sun::star::uno::Any SAL_CALL getByName(
         const OUString& rName )
@@ -151,9 +151,9 @@ public:
     }
 
 
-    //
+
     // methods for XNameReplace (inherits XNameAccess)
-    //
+
 
     virtual void SAL_CALL replaceByName(
         const OUString& rName,
@@ -174,9 +174,9 @@ public:
     }
 
 
-    //
+
     // methods for XNameContainer (inherits XNameReplace)
-    //
+
 
     virtual void SAL_CALL insertByName(
         const OUString& rName,

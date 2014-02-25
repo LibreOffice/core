@@ -33,16 +33,16 @@
 
 #include <map>
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 
     class ORichTextFeatureDispatcher;
 
-    //==================================================================
+
     // ORichTextControl
-    //==================================================================
+
     typedef ::cppu::ImplHelper1 <   ::com::sun::star::frame::XDispatchProvider
                                 >   ORichTextControl_Base;
     class ORichTextControl  :public UnoEditControl
@@ -83,9 +83,9 @@ namespace frm
         virtual bool   requiresNewPeer( const OUString& _rPropertyName ) const;
     };
 
-    //==================================================================
+
     // ORichTextPeer
-    //==================================================================
+
     typedef ::cppu::ImplHelper1 <   ::com::sun::star::frame::XDispatchProvider
                                 >   ORichTextPeer_Base;
     class ORichTextPeer :public VCLXWindow
@@ -140,9 +140,9 @@ namespace frm
         SingleAttributeDispatcher implCreateDispatcher( SfxSlotId _nSlotId, const ::com::sun::star::util::URL& _rURL );
     };
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_RICHTEXT_RICHTEXTCONTROL_HXX
 

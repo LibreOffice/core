@@ -35,10 +35,10 @@
 #include <rtl/string.hxx>
 #include <comphelper/processfactory.hxx>
 
-//.........................................................................
+
 namespace FORMS_MODULE_NAMESPACE
 {
-//.........................................................................
+
 
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > (SAL_CALL *FactoryInstantiation)
         (
@@ -49,9 +49,9 @@ namespace FORMS_MODULE_NAMESPACE
             rtl_ModuleCount*
         );
 
-    //=========================================================================
+
     //= OFormsModule
-    //=========================================================================
+
     class OFormsModule
     {
     private:
@@ -115,9 +115,9 @@ namespace FORMS_MODULE_NAMESPACE
         static void ensureImpl();
     };
 
-    //==========================================================================
+
     //= OMultiInstanceAutoRegistration
-    //==========================================================================
+
     template <class TYPE>
     class OMultiInstanceAutoRegistration
     {
@@ -158,9 +158,9 @@ namespace FORMS_MODULE_NAMESPACE
         OFormsModule::revokeComponent(TYPE::getImplementationName_Static());
     }
 
-    //==========================================================================
+
     //= OOneInstanceAutoRegistration
-    //==========================================================================
+
     template <class TYPE>
     class OOneInstanceAutoRegistration
     {
@@ -200,10 +200,10 @@ namespace FORMS_MODULE_NAMESPACE
         OFormsModule::revokeComponent(TYPE::getImplementationName_Static());
     }
 
-    //==========================================================================
+
     //= helper for classes implementing the service handling via
     //= OMultiInstanceAutoRegistration or OOneInstanceAutoRegistration
-    //==========================================================================
+
     #define DECLARE_SERVICE_REGISTRATION( classname ) \
         virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception); \
         virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception); \
@@ -305,8 +305,8 @@ namespace FORMS_MODULE_NAMESPACE
             ); \
            } \
 
-//.........................................................................
+
 }   // namespace FORMS_MODULE_NAMESPACE
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

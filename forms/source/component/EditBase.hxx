@@ -45,13 +45,13 @@
 
 #define PF_SPECIAL_FLAGS        0xFF00
 
-//.........................................................................
+
 namespace frm
 {
 
-//==================================================================
+
 //= OEditBaseModel
-//==================================================================
+
 class OEditBaseModel :  public OBoundControlModel
 {
     sal_Int16                   m_nLastReadVersion;
@@ -95,9 +95,9 @@ protected:
         // (one of the PF_.... constants). After ::read they may ask for that flags with getLastReadVersion
 };
 
-//.........................................................................
+
 }
-//.........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_EDITBASE_HXX
 

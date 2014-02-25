@@ -23,14 +23,14 @@
 #include "EditBase.hxx"
 #include "limitedformats.hxx"
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
 
-//==================================================================
+
+
 //= ODateModel
-//==================================================================
+
 class ODateModel
                 :public OEditBaseModel
                 ,public OLimitedFormats
@@ -100,9 +100,9 @@ private:
                                 ::com::sun::star::uno::Any& _rUNOValue ) const;
 };
 
-//==================================================================
+
 //= ODateControl
-//==================================================================
+
 class ODateControl: public OBoundControl
 {
 protected:
@@ -117,9 +117,9 @@ public:
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw(std::exception);
 };
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_DATE_HXX
 

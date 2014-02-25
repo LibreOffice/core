@@ -38,14 +38,14 @@
 
 #include <boost/unordered_map.hpp>
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
 
-    //=====================================================================
+
+
     // OFilterControl
-    //=====================================================================
+
     typedef ::cppu::ImplHelper5 <   ::com::sun::star::awt::XTextComponent
                                 ,   ::com::sun::star::awt::XFocusListener
                                 ,   ::com::sun::star::awt::XItemListener
@@ -142,9 +142,9 @@ namespace frm
 
         void displayException( const ::com::sun::star::sdb::SQLContext& _rExcept );
     };
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_FILTER_HXX
 

@@ -82,9 +82,9 @@ using namespace xforms;
 
 
 
-//
+
 // The Model
-//
+
 
 void Model::ensureAtLeastOneInstance()
 {
@@ -232,9 +232,9 @@ void Model::dbg_assertInvariant() const
 #endif
 
 
-//
+
 // MIP management
-//
+
 
 void Model::addMIP( void* pTag, const XNode_t& xNode, const MIP& rMIP )
 {
@@ -448,9 +448,9 @@ bool Model::isValid() const
 
 
 
-//
+
 // implement xforms::XModel
-//
+
 
 OUString Model::getID()
     throw( RuntimeException, std::exception )
@@ -544,9 +544,9 @@ Model::XDataTypeRepository_t SAL_CALL Model::getDataTypeRepository(  )
     return mxDataTypes;
 }
 
-//
+
 // instance management
-//
+
 
 Model::XSet_t Model::getInstances()
     throw( RuntimeException, std::exception )
@@ -578,9 +578,9 @@ Model::XDocument_t SAL_CALL Model::getDefaultInstance()
 
 
 
-//
+
 // bindings management
-//
+
 
 Model::XPropertySet_t SAL_CALL Model::createBinding()
     throw( RuntimeException, std::exception )
@@ -614,9 +614,9 @@ Model::XSet_t Model::getBindings()
 
 
 
-//
+
 // submission management
-//
+
 
 Model::XSubmission_t Model::createSubmission()
     throw( RuntimeException, std::exception )
@@ -652,9 +652,9 @@ Model::XSet_t Model::getSubmissions()
     return mxSubmissions;
 }
 
-//
+
 // implement XPropertySet & friends
-//
+
 
 #define HANDLE_ID 0
 #define HANDLE_ForeignSchema 3

@@ -20,10 +20,10 @@
 #include "Pattern.hxx"
 #include "comphelper/processfactory.hxx"
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::lang::XMultiServiceFactory;
@@ -40,9 +40,9 @@ namespace frm
 
     namespace FormComponentType = ::com::sun::star::form::FormComponentType;
 
-//==================================================================
+
 // OPatternControl
-//==================================================================
+
 
 OPatternControl::OPatternControl(const Reference<XComponentContext>& _rxFactory)
     :OBoundControl(_rxFactory, VCL_CONTROL_PATTERNFIELD)
@@ -72,9 +72,9 @@ StringSequence OPatternControl::getSupportedServiceNames() throw(std::exception)
     return aSupported;
 }
 
-//==================================================================
+
 // OPatternModel
-//==================================================================
+
 
 InterfaceRef SAL_CALL OPatternModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
@@ -239,8 +239,8 @@ void OPatternModel::resetNoBroadcast()
     m_aLastKnownValue.clear();
 }
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

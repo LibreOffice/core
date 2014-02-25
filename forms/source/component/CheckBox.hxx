@@ -22,13 +22,13 @@
 
 #include "refvaluecomponent.hxx"
 
-//.........................................................................
+
 namespace frm
 {
 
-//==================================================================
+
 //= OCheckBoxModel
-//==================================================================
+
 class OCheckBoxModel    :public OReferenceValueComponent
 {
 protected:
@@ -63,9 +63,9 @@ protected:
     virtual sal_Bool        commitControlValueToDbColumn( bool _bPostReset );
 };
 
-//==================================================================
+
 //= OCheckBoxControl
-//==================================================================
+
 class OCheckBoxControl : public OBoundControl
 {
 public:
@@ -76,9 +76,9 @@ public:
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception);
 };
 
-//.........................................................................
+
 }
-//.........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_CHECKBOX_HXX
 

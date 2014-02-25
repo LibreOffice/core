@@ -19,10 +19,10 @@
 #ifndef INCLUDED_FORMS_SOURCE_XFORMS_MODEL_HELPER_HXX
 #define INCLUDED_FORMS_SOURCE_XFORMS_MODEL_HELPER_HXX
 
-//
+
 // some helper definitions that must be available for model.cxx and
 // model_ui.cxx
-//
+
 
 #include "namedcollection.hxx"
 #include "binding.hxx"
@@ -40,9 +40,9 @@ namespace xforms
     class Model;
 }
 
-//
+
 // BindingCollection
-//
+
 
 namespace xforms
 {
@@ -76,9 +76,9 @@ protected:
 
 
 
-//
+
 // SubmissionCollection
-//
+
 
 class SubmissionCollection : public NamedCollection<com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> >
 {
@@ -109,9 +109,9 @@ protected:
 };
 
 
-//
+
 // InstanceCollection
-//
+
 
 class InstanceCollection : public Collection<com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> >
 {
@@ -130,9 +130,9 @@ public:
 };
 
 
-//
+
 // helper functions
-//
+
 
 sal_Int32 lcl_findInstance( const InstanceCollection*,
                             const OUString& );

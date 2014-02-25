@@ -32,17 +32,17 @@
 #include <memory>
 
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 
     class UrlTransformer;
     class ControlFeatureInterception;
 
-    //==================================================================
+
     //= OFormNavigationHelper
-    //==================================================================
+
     typedef ::cppu::ImplHelper2 <   ::com::sun::star::frame::XDispatchProviderInterception
                                 ,   ::com::sun::star::frame::XStatusListener
                                 >   OFormNavigationHelper_Base;
@@ -176,9 +176,9 @@ namespace frm
         void    initializeSupportedFeatures();
     };
 
-    //==================================================================
+
     //= OFormNavigationMapper
-    //==================================================================
+
     /** helper class mapping between feature ids and feature URLs
     */
     class OFormNavigationMapper
@@ -225,9 +225,9 @@ namespace frm
         OFormNavigationMapper& operator=( const OFormNavigationMapper& );   // never implemented
     };
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_INC_FORMNAVIGATION_HXX
 

@@ -25,10 +25,10 @@
 #include <cppuhelper/implbase1.hxx>
 #include <tools/diagnose_ex.h>
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     using ::com::sun::star::awt::XWindowListener2;
     using ::com::sun::star::uno::Reference;
@@ -41,9 +41,9 @@ namespace frm
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::Exception;
 
-    //====================================================================
+
     //= WindowStateGuard_Impl
-    //====================================================================
+
     typedef ::cppu::WeakImplHelper1 <   XWindowListener2
                                     >   WindowStateGuard_Impl_Base;
     class WindowStateGuard_Impl : public WindowStateGuard_Impl_Base
@@ -186,9 +186,9 @@ namespace frm
         dispose();
     }
 
-    //====================================================================
+
     //= WindowStateGuard
-    //====================================================================
+
 
     WindowStateGuard::WindowStateGuard()
     {
@@ -214,8 +214,8 @@ namespace frm
             m_pImpl = new WindowStateGuard_Impl( _rxWindow, xModelProps );
     }
 
-//........................................................................
+
 } // namespace frm
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,10 +26,10 @@
 #include <tools/datetime.hxx>
 #include <rtl/math.hxx>
 
-//........................................................................
+
 namespace xforms
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::RuntimeException;
@@ -56,9 +56,9 @@ namespace xforms
     using namespace ::frm;
     U_NAMESPACE_USE
 
-    //====================================================================
+
     //= OXSDDataType
-    //====================================================================
+
 
     OXSDDataType::OXSDDataType( const OUString& _rName, sal_Int16 _nTypeClass )
         :OXSDDataType_PBase( m_aBHelper )
@@ -329,9 +329,9 @@ namespace xforms
         OXSDDataType_PBase::removeVetoableChangeListener( PropertyName, aListener );
     }
 
-    //====================================================================
+
     //= OValueLimitedType_Base
-    //====================================================================
+
     OValueLimitedType_Base::OValueLimitedType_Base( const OUString& _rName, sal_Int16 _nTypeClass )
         :OXSDDataType( _rName, _nTypeClass )
         ,m_fCachedMaxInclusive( 0 )
@@ -497,9 +497,9 @@ namespace xforms
         return sInfo.makeStringAndClear();
     }
 
-    //====================================================================
+
     //= OStringType
-    //====================================================================
+
 
     OStringType::OStringType( const OUString& _rName, sal_Int16 _nTypeClass )
         :OStringType_Base( _rName, _nTypeClass )
@@ -613,9 +613,9 @@ namespace xforms
         return sInfo.makeStringAndClear();
     }
 
-    //====================================================================
+
     //= OBooleanType
-    //====================================================================
+
 
     OBooleanType::OBooleanType( const OUString& _rName )
         :OBooleanType_Base( _rName, DataTypeClass::BOOLEAN )
@@ -647,9 +647,9 @@ namespace xforms
         return ( nReason == 0 ) ? OUString() : getName();
     }
 
-    //====================================================================
+
     //= ODecimalType
-    //====================================================================
+
 
     ODecimalType::ODecimalType( const OUString& _rName, sal_Int16 _nTypeClass )
         :ODecimalType_Base( _rName, _nTypeClass )
@@ -750,9 +750,9 @@ namespace xforms
         OSL_VERIFY( _rValue >>= _rDoubleValue );
     }
 
-    //====================================================================
+
     //=
-    //====================================================================
+
 #define DEFAULT_IMPLEMNENT_SUBTYPE( classname, typeclass )      \
     classname::classname( const OUString& _rName )       \
         :classname##_Base( _rName, DataTypeClass::typeclass )   \
@@ -766,9 +766,9 @@ namespace xforms
     }                                                           \
 
 
-    //====================================================================
+
     //= ODateType
-    //====================================================================
+
 
     DEFAULT_IMPLEMNENT_SUBTYPE( ODateType, DATE )
 
@@ -808,9 +808,9 @@ namespace xforms
         _rDoubleValue = aToolsDate.GetDate();
     }
 
-    //====================================================================
+
     //= OTimeType
-    //====================================================================
+
 
     DEFAULT_IMPLEMNENT_SUBTYPE( OTimeType, TIME )
 
@@ -857,9 +857,9 @@ namespace xforms
         _rDoubleValue = aToolsTime.GetTime();
     }
 
-    //====================================================================
+
     //= ODateTimeType
-    //====================================================================
+
 
     DEFAULT_IMPLEMNENT_SUBTYPE( ODateTimeType, DATETIME )
 
@@ -921,9 +921,9 @@ namespace xforms
         _rDoubleValue = lcl_normalizeDateTime( aValue );
     }
 
-    //====================================================================
+
     //= OShortIntegerType
-    //====================================================================
+
 
     OShortIntegerType::OShortIntegerType( const OUString& _rName, sal_Int16 _nTypeClass )
         :OShortIntegerType_Base( _rName, _nTypeClass )
@@ -949,7 +949,7 @@ namespace xforms
         // Else, we may have a situation where the UI claims an input to be valid
         // (say "12345678"), while internally, and at submission time, this is cut to
         // some smaller value.
-        //
+
         // Additionally, this of course does not care for strings which are no numers ...
         return true;
     }
@@ -969,15 +969,15 @@ namespace xforms
         OSL_VERIFY( _rValue >>= nValue );
         _rDoubleValue = nValue;
     }
-    //====================================================================
-    //====================================================================
+
+
 
 #define DATATYPES_INCLUDED_BY_MASTER_HEADER
 #include "datatypes_impl.hxx"
 #undef DATATYPES_INCLUDED_BY_MASTER_HEADER
 
-//........................................................................
+
 } // namespace xforms
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

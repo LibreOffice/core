@@ -22,14 +22,14 @@
 
 #include "EditBase.hxx"
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
 
-//==================================================================
+
+
 //= ONumericModel
-//==================================================================
+
 class ONumericModel
                 :public OEditBaseModel
 {
@@ -67,9 +67,9 @@ protected:
     DECLARE_XCLONEABLE();
 };
 
-//==================================================================
+
 //= ONumericControl
-//==================================================================
+
 class ONumericControl: public OBoundControl
 {
 protected:
@@ -83,9 +83,9 @@ public:
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw(std::exception);
 };
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_NUMERIC_HXX
 

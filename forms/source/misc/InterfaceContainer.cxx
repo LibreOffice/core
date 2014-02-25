@@ -47,7 +47,7 @@
 #include <algorithm>
 #include <boost/scoped_ptr.hpp>
 
-//.........................................................................
+
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/document/XCodeNameQuery.hpp>
 #include <ooo/vba/XVBAToOOEventDescGen.hpp>
@@ -55,7 +55,7 @@
 
 namespace frm
 {
-//.........................................................................
+
 
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
@@ -165,9 +165,9 @@ void OInterfaceContainer::impl_addVbEvents_nolck_nothrow(  const sal_Int32 i_nIn
     }
 
 }
-//==================================================================
+
 //= ElementDescription
-//==================================================================
+
 
 ElementDescription::ElementDescription( )
 {
@@ -178,9 +178,9 @@ ElementDescription::~ElementDescription()
 {
 }
 
-//==================================================================
+
 //= OInterfaceContainer
-//==================================================================
+
 
 OInterfaceContainer::OInterfaceContainer(
                 const Reference<XComponentContext>& _rxContext,
@@ -280,7 +280,7 @@ void OInterfaceContainer::disposing()
 
 namespace
 {
-    //..........................................................................
+
     void lcl_saveEvents( ::std::vector< Sequence< ScriptEventDescriptor > >& _rSave,
         const Reference< XEventAttacherManager >& _rxManager, const sal_Int32 _nItemCount )
     {
@@ -296,7 +296,7 @@ namespace
             _rSave.push_back(_rxManager->getScriptEvents( i ));
     }
 
-    //..........................................................................
+
     void lcl_restoreEvents( const ::std::vector< Sequence< ScriptEventDescriptor > >& _rSave,
         const Reference< XEventAttacherManager >& _rxManager )
     {
@@ -1269,9 +1269,9 @@ void SAL_CALL OInterfaceContainer::removeScriptListener( const Reference< XScrip
         m_xEventAttacher->removeScriptListener( xListener );
 }
 
-//==================================================================
+
 //= OFormComponents
-//==================================================================
+
 
 Any SAL_CALL OFormComponents::queryAggregation(const Type& _rType) throw(RuntimeException, std::exception)
 {
@@ -1342,8 +1342,8 @@ InterfaceRef OFormComponents::getParent() throw( RuntimeException, std::exceptio
     return m_xParent;
 }
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

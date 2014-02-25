@@ -69,9 +69,9 @@ using namespace com::sun::star::xml::xpath;
 
 
 
-//
+
 // implement XFormsUIHelper1
-//
+
 
 OUString Model::getDefaultServiceNameForNode( const XNode_t& xNode )
     throw( RuntimeException, std::exception )
@@ -956,9 +956,9 @@ void Model::setNodeValue(
 }
 
 
-//
+
 // helper functions from model_helper.hxx
-//
+
 
 void xforms::getInstanceData(
     const Sequence<PropertyValue>& aValues,

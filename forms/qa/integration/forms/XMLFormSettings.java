@@ -184,7 +184,7 @@ public class XMLFormSettings extends complexlib.ComplexTestCase
         assure( "model data changed, but document is modified",
             !m_document.isModified() );
 
-        // .................................................................
+
         // finally, check whether the flag survives loading and saving
         Model internalDataModel = m_document.addXFormModel( "internalData" );
         internalDataModel.setIsDocumentInternalData( true );

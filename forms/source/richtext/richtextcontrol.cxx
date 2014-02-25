@@ -46,10 +46,10 @@ extern "C" void SAL_CALL createRegistryInfo_ORichTextControl()
     static ::frm::OMultiInstanceAutoRegistration< ::frm::ORichTextControl > aAutoRegistration;
 }
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
@@ -75,9 +75,9 @@ namespace frm
     }   \
     return aReturn;
 
-    //==================================================================
+
     // ORichTextControl
-    //==================================================================
+
 
     ORichTextControl::ORichTextControl()
         :UnoEditControl()
@@ -106,7 +106,7 @@ namespace frm
 
     namespace
     {
-        //..............................................................
+
         static void implAdjustTriStateFlag( const Reference< XPropertySet >& _rxProps, const OUString& _rPropertyName,
             WinBits& _rAllBits, WinBits _nPositiveFlag, WinBits nNegativeFlag )
         {
@@ -115,7 +115,7 @@ namespace frm
                 _rAllBits |= ( bFlagValue ? _nPositiveFlag : nNegativeFlag );
         }
 
-        //..............................................................
+
         static void implAdjustTwoStateFlag( const Any& _rValue, WinBits& _rAllBits, WinBits _nFlag, bool _bInvert = false )
         {
             sal_Bool bFlagValue = sal_False;
@@ -130,14 +130,14 @@ namespace frm
             }
         }
 
-        //..............................................................
+
         static void implAdjustTwoStateFlag( const Reference< XPropertySet >& _rxProps, const OUString& _rPropertyName,
             WinBits& _rAllBits, WinBits _nFlag, bool _bInvert = false )
         {
             implAdjustTwoStateFlag( _rxProps->getPropertyValue( _rPropertyName ), _rAllBits, _nFlag, _bInvert );
         }
 
-        //..............................................................
+
         static void adjustTwoStateWinBit( Window* _pWindow, const Any& _rValue, WinBits _nFlag, bool _bInvert = false )
         {
             WinBits nBits = _pWindow->GetStyle();
@@ -145,7 +145,7 @@ namespace frm
             _pWindow->SetStyle( nBits );
         }
 
-        //..............................................................
+
         static WinBits getWinBits( const Reference< XControlModel >& _rxModel, WinBits nBaseBits = 0 )
         {
             WinBits nBits = nBaseBits;
@@ -300,9 +300,9 @@ namespace frm
         return UnoControl::requiresNewPeer( _rPropertyName ) || _rPropertyName.equals( PROPERTY_RICH_TEXT );
     }
 
-    //==================================================================
+
     // ORichTextPeer
-    //==================================================================
+
 
     ORichTextPeer* ORichTextPeer::Create( const Reference< XControlModel >& _rxModel, Window* _pParentWindow, WinBits _nStyle )
     {
@@ -476,7 +476,7 @@ namespace frm
             // the id belonging to "SuperScript", it gets the FN_SET_SUPER_SCRIPT - which
             // is completely unknown to the EditEngine.
             // So, we need to translate such conflicting ids.
-            //
+
             // Note that the real solution would be to fix the applications to
             // *not* define conflicting slots. Alternatively, if SFX would provide a slot pool
             // which is *static* (i.e. independent on the active application), then we
@@ -728,8 +728,8 @@ namespace frm
             aDispatcherPos->second.get()->invalidate();
     }
 
-//........................................................................
+
 }   // namespace frm
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

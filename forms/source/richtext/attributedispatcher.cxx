@@ -21,10 +21,10 @@
 
 #include <editeng/editview.hxx>
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::frame;
@@ -32,9 +32,9 @@ namespace frm
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::beans;
 
-    //====================================================================
+
     //= OAttributeDispatcher
-    //====================================================================
+
 
     OAttributeDispatcher::OAttributeDispatcher( EditView& _rView, AttributeId _nAttributeId, const URL& _rURL,
             IMultiAttributeDispatcher* _pMasterDispatcher )
@@ -121,8 +121,8 @@ namespace frm
             doNotify( static_cast< XStatusListener* >( aIter.next() ), aEvent );
     }
 
-//........................................................................
+
 }   // namespace frm
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

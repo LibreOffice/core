@@ -26,10 +26,10 @@
 
 using namespace dbtools;
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -44,13 +44,13 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 
-//==================================================================
-//=
-//==================================================================
 
-//==================================================================
+//=
+
+
+
 //= OTimeControl
-//==================================================================
+
 
 OTimeControl::OTimeControl(const Reference<XComponentContext>& _rxFactory)
                :OBoundControl(_rxFactory, VCL_CONTROL_TIMEFIELD)
@@ -80,9 +80,9 @@ StringSequence SAL_CALL OTimeControl::getSupportedServiceNames() throw(std::exce
     return aSupported;
 }
 
-//==================================================================
+
 //= OTimeModel
-//==================================================================
+
 
 InterfaceRef SAL_CALL OTimeModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
@@ -319,8 +319,8 @@ Sequence< Type > OTimeModel::getSupportedBindingTypes()
     return Sequence< Type >( &::getCppuType( static_cast< util::Time* >( NULL ) ), 1 );
 }
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

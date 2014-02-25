@@ -34,23 +34,23 @@
 
 using namespace comphelper;
 
-//=========================================================================
+
 //= property helper classes
-//=========================================================================
+
 
 //... namespace frm .......................................................
 namespace frm
 {
-//.........................................................................
 
-//==================================================================
+
+
 //= assigment property handle <-> property name
 //= used by the PropertySetAggregationHelper
-//==================================================================
+
 
 class PropertyInfoService
 {
-    //..................................................................
+
     struct PropertyAssignment
     {
         OUString     sName;
@@ -67,7 +67,7 @@ class PropertyInfoService
     typedef std::vector<PropertyAssignment> PropertyMap;
     static PropertyMap      s_AllKnownProperties;
 
-    //..................................................................
+
     // comparing two PropertyAssignment's
 public:
     typedef PropertyAssignment PUBLIC_SOLARIS_COMPILER_HACK;
@@ -95,7 +95,7 @@ private:
     static void initialize();
 };
 
-//..................................................................
+
 // a class implementing the comphelper::IPropertyInfoService
 class ConcreteInfoService : public ::comphelper::IPropertyInfoService
 {
@@ -105,31 +105,31 @@ public:
     virtual sal_Int32 getPreferredPropertyId(const OUString& _rName);
 };
 
-//------------------------------------------------------------------------------
+
 #define DECL_PROP_IMPL(varname, type) \
     *pProperties++ = com::sun::star::beans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, ::getCppuType(static_cast< type* >(0)),
 
-//------------------------------------------------------------------------------
+
 #define DECL_BOOL_PROP_IMPL(varname) \
     *pProperties++ = com::sun::star::beans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, ::getBooleanCppuType(),
 
-//------------------------------------------------------------------------------
+
 #define DECL_IFACE_PROP_IMPL(varname, type) \
     *pProperties++ = com::sun::star::beans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, ::getCppuType(static_cast< com::sun::star::uno::Reference< type >* >(0)),
 
-//------------------------------------------------------------------------------
+
 #define BEGIN_DESCRIBE_PROPERTIES( count, baseclass )   \
     baseclass::describeFixedProperties( _rProps ); \
     sal_Int32 nOldCount = _rProps.getLength(); \
     _rProps.realloc( nOldCount + ( count ) );   \
     ::com::sun::star::beans::Property* pProperties = _rProps.getArray() + nOldCount;       \
 
-//------------------------------------------------------------------------------
+
 #define BEGIN_DESCRIBE_BASE_PROPERTIES( count ) \
     _rProps.realloc( count );   \
     ::com::sun::star::beans::Property* pProperties = _rProps.getArray();       \
 
-//------------------------------------------------------------------------------
+
 #define BEGIN_DESCRIBE_AGGREGATION_PROPERTIES( count, aggregate )   \
     _rProps.realloc( count );   \
     ::com::sun::star::beans::Property* pProperties = _rProps.getArray();       \
@@ -137,73 +137,73 @@ public:
     if (aggregate.is()) \
         _rAggregateProps = aggregate->getPropertySetInfo()->getProperties();    \
 
-// ===
-//------------------------------------------------------------------------------
+
+
 #define DECL_PROP0(varname, type)   \
     DECL_PROP_IMPL(varname, type) 0)
 
-//------------------------------------------------------------------------------
+
 #define DECL_PROP1(varname, type, attrib1)  \
         DECL_PROP_IMPL(varname, type) com::sun::star::beans::PropertyAttribute::attrib1)
 
-//------------------------------------------------------------------------------
+
 #define DECL_PROP2(varname, type, attrib1, attrib2) \
         DECL_PROP_IMPL(varname, type) com::sun::star::beans::PropertyAttribute::attrib1 | com::sun::star::beans::PropertyAttribute::attrib2)
 
-//------------------------------------------------------------------------------
+
 #define DECL_PROP3(varname, type, attrib1, attrib2, attrib3)    \
         DECL_PROP_IMPL(varname, type) com::sun::star::beans::PropertyAttribute::attrib1 | com::sun::star::beans::PropertyAttribute::attrib2 | com::sun::star::beans::PropertyAttribute::attrib3)
 
-//------------------------------------------------------------------------------
+
 #define DECL_PROP4(varname, type, attrib1, attrib2, attrib3, attrib4)   \
         DECL_PROP_IMPL(varname, type) com::sun::star::beans::PropertyAttribute::attrib1 | com::sun::star::beans::PropertyAttribute::attrib2 | com::sun::star::beans::PropertyAttribute::attrib3 | com::sun::star::beans::PropertyAttribute::attrib4)
 
 // === some property types require special handling
 // === such as interfaces
-//------------------------------------------------------------------------------
+
 #define DECL_IFACE_PROP0(varname, type) \
     DECL_IFACE_PROP_IMPL(varname, type) 0)
 
-//------------------------------------------------------------------------------
+
 #define DECL_IFACE_PROP1(varname, type, attrib1)    \
     DECL_IFACE_PROP_IMPL(varname, type) starbeans::PropertyAttribute::attrib1)
 
-//------------------------------------------------------------------------------
+
 #define DECL_IFACE_PROP2(varname, type, attrib1, attrib2)   \
         DECL_IFACE_PROP_IMPL(varname, type) com::sun::star::beans::PropertyAttribute::attrib1 | com::sun::star::beans::PropertyAttribute::attrib2)
 
-//------------------------------------------------------------------------------
+
 #define DECL_IFACE_PROP3(varname, type, attrib1, attrib2, attrib3)  \
     DECL_IFACE_PROP_IMPL(varname, type) starbeans::PropertyAttribute::attrib1 | starbeans::PropertyAttribute::attrib2 | starbeans::PropertyAttribute::attrib3)
 
-//------------------------------------------------------------------------------
+
 #define DECL_IFACE_PROP4(varname, type, attrib1, attrib2, attrib3, attrib4) \
     DECL_IFACE_PROP_IMPL(varname, type) starbeans::PropertyAttribute::attrib1 | starbeans::PropertyAttribute::attrib2 | starbeans::PropertyAttribute::attrib3 | PropertyAttribute::attrib4)
 
 // === or Boolean properties
-//------------------------------------------------------------------------------
+
 #define DECL_BOOL_PROP0(varname)    \
     DECL_BOOL_PROP_IMPL(varname) 0)
 
-//------------------------------------------------------------------------------
+
 #define DECL_BOOL_PROP1(varname, attrib1)   \
         DECL_BOOL_PROP_IMPL(varname) com::sun::star::beans::PropertyAttribute::attrib1)
 
-//------------------------------------------------------------------------------
+
 #define DECL_BOOL_PROP2(varname, attrib1, attrib2)  \
         DECL_BOOL_PROP_IMPL(varname) com::sun::star::beans::PropertyAttribute::attrib1 | com::sun::star::beans::PropertyAttribute::attrib2)
 
-//------------------------------------------------------------------------------
+
 #define DECL_BOOL_PROP3( varname, attrib1, attrib2, attrib3 )   \
         DECL_BOOL_PROP_IMPL(varname) com::sun::star::beans::PropertyAttribute::attrib1 | com::sun::star::beans::PropertyAttribute::attrib2 | com::sun::star::beans::PropertyAttribute::attrib3 )
 
-// ===
-//------------------------------------------------------------------------------
+
+
 #define END_DESCRIBE_PROPERTIES()   \
     DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?"); \
 
-//==============================================================================
-//------------------------------------------------------------------------------
+
+
 #define REGISTER_PROP_1( prop, member, attrib1 ) \
     registerProperty( PROPERTY_##prop, PROPERTY_ID_##prop, PropertyAttribute::attrib1, \
         &member, ::getCppuType( &member ) );
@@ -216,7 +216,7 @@ public:
     registerProperty( PROPERTY_##prop, PROPERTY_ID_##prop, PropertyAttribute::attrib1 | PropertyAttribute::attrib2 | PropertyAttribute::attrib3, \
         &member, ::getCppuType( &member ) );
 
-//------------------------------------------------------------------------------
+
 #define REGISTER_VOID_PROP_1( prop, memberAny, type, attrib1 ) \
     registerMayBeVoidProperty( PROPERTY_##prop, PROPERTY_ID_##prop, PropertyAttribute::MAYBEVOID | PropertyAttribute::attrib1, \
         &memberAny, ::getCppuType( static_cast< type* >( NULL ) ) );
@@ -225,7 +225,7 @@ public:
     registerMayBeVoidProperty( PROPERTY_##prop, PROPERTY_ID_##prop, PropertyAttribute::MAYBEVOID | PropertyAttribute::attrib1 | PropertyAttribute::attrib2, \
         &memberAny, ::getCppuType( static_cast< type* >( NULL ) ) );
 
-//.........................................................................
+
 }
 //... namespace frm .......................................................
 

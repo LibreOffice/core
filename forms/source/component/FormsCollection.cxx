@@ -26,10 +26,10 @@
 #include <tools/debug.hxx>
 #include <com/sun/star/form/XForm.hpp>
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::form;
@@ -158,8 +158,8 @@ InterfaceRef  OFormsCollection::getParent() throw( RuntimeException, std::except
     return m_xParent;
 }
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

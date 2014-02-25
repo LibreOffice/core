@@ -31,10 +31,10 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
@@ -49,9 +49,9 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using ::com::sun::star::frame::XDispatchProviderInterceptor;
 
-//==================================================================
+
 //= OButtonModel
-//==================================================================
+
 
 InterfaceRef SAL_CALL OButtonModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
@@ -330,9 +330,9 @@ void OButtonModel::impl_resetNoBroadcast_nothrow()
     }
 }
 
-//==================================================================
+
 // OButtonControl
-//==================================================================
+
 
 InterfaceRef SAL_CALL OButtonControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
@@ -566,7 +566,7 @@ public:
     void    handleListening( const OUString& _rPropertyName );
 };
 
-//..............................................................................
+
 DoPropertyListening::DoPropertyListening(
         const Reference< XInterface >& _rxComponent, const Reference< XPropertyChangeListener >& _rxListener,
         bool _bStart )
@@ -578,7 +578,7 @@ DoPropertyListening::DoPropertyListening(
     DBG_ASSERT( m_xListener.is(), "DoPropertyListening::DoPropertyListening: invalid listener!" );
 }
 
-//..............................................................................
+
 void DoPropertyListening::handleListening( const OUString& _rPropertyName )
 {
     if ( m_xProps.is() )
@@ -759,8 +759,8 @@ void SAL_CALL OButtonControl::releaseDispatchProviderInterceptor( const Referenc
     OFormNavigationHelper::releaseDispatchProviderInterceptor( _rxInterceptor );
 }
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

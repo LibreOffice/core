@@ -37,13 +37,13 @@
 
 #include <vcl/timer.hxx>
 
-//.........................................................................
+
 namespace frm
 {
 
-//==================================================================
+
 // OComboBoxModel
-//==================================================================
+
 class OComboBoxModel
             :public OBoundControlModel
             ,public OEntryListHelper
@@ -51,7 +51,7 @@ class OComboBoxModel
 {
     CachedRowSet                            m_aListRowSet;          // the row set to fill the list
     ::com::sun::star::uno::Any              m_aBoundColumn;         // obsolet
-    OUString                         m_aListSource;          //
+    OUString                         m_aListSource;
     OUString                         m_aDefaultText;         // DefaultText
     ::com::sun::star::uno::Any              m_aLastKnownValue;
 
@@ -144,9 +144,9 @@ protected:
     DECLARE_XCLONEABLE();
 };
 
-//==================================================================
+
 // OComboBoxControl
-//==================================================================
+
 
 class OComboBoxControl : public OBoundControl
 {
@@ -158,9 +158,9 @@ public:
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception);
 };
 
-//.........................................................................
+
 }
-//.........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_COMBOBOX_HXX
 
