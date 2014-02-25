@@ -81,9 +81,10 @@ public:
                                     const OUString& aName,
                                     const ::com::sun::star::uno::Sequence<
                                         ::com::sun::star::uno::Any >& aArguments )
-                                throw(::com::sun::star::container::NoSuchElementException,
-                                    ::com::sun::star::lang::IllegalArgumentException,
-                                    ::com::sun::star::uno::RuntimeException);
+                                throw (::com::sun::star::container::NoSuchElementException,
+                                       ::com::sun::star::lang::IllegalArgumentException,
+                                       ::com::sun::star::uno::RuntimeException,
+                                       std::exception);
 
                             // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >

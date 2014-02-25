@@ -487,8 +487,8 @@ static void processSequences( ScDocument* pDoc, const uno::Any& rArg, ScTokenArr
 
 uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
                             const uno::Sequence<uno::Any>& aArguments )
-                throw(container::NoSuchElementException, lang::IllegalArgumentException,
-                        uno::RuntimeException)
+                throw (container::NoSuchElementException, lang::IllegalArgumentException,
+                       uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
