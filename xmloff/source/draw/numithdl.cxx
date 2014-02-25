@@ -21,9 +21,9 @@
 
 using namespace ::com::sun::star;
 
-//
+
 // class XMLNumRulePropHdl
-//
+
 
 XMLNumRulePropHdl::XMLNumRulePropHdl( ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XAnyCompare > xNumRuleCompare )
 : mxNumRuleCompare( xNumRuleCompare )

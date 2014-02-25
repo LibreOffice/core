@@ -3524,12 +3524,12 @@ OUString XMLTextFieldExport::MakeSequenceRefName(
     return aBuf.makeStringAndClear();
 }
 
-//
+
 // Property accessor helper functions
-//
+
 
 // to be relegated (does that word exist?) to a more appropriate place
-//
+
 
 
 inline sal_Bool GetBoolProperty(

@@ -19,10 +19,10 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_XFORMS_XFORMSAPI_HXX
 #define INCLUDED_XMLOFF_SOURCE_XFORMS_XFORMSAPI_HXX
 
-//
+
 // this is a collection of several functions to make dealing with the XForms
 // API a little easier
-//
+
 
 #include <com/sun/star/uno/Any.hxx>
 

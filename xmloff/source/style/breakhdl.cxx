@@ -37,9 +37,9 @@ SvXMLEnumMapEntry pXML_BreakTypes[] =
     { XML_TOKEN_INVALID, 0}
 };
 
-//
+
 // class XMLFmtBreakBeforePropHdl
-//
+
 
 XMLFmtBreakBeforePropHdl::~XMLFmtBreakBeforePropHdl()
 {
@@ -107,9 +107,9 @@ bool XMLFmtBreakBeforePropHdl::exportXML( OUString& rStrExpValue, const uno::Any
     return true;
 }
 
-//
+
 // class XMLFmtBreakBeforePropHdl
-//
+
 
 XMLFmtBreakAfterPropHdl::~XMLFmtBreakAfterPropHdl()
 {

@@ -49,9 +49,9 @@ SvXMLEnumMapEntry const pXML_Para_Align_Last_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-//
+
 // class XMLParaAdjustPropHdl
-//
+
 
 XMLParaAdjustPropHdl::~XMLParaAdjustPropHdl()
 {
@@ -84,9 +84,9 @@ bool XMLParaAdjustPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rV
     return bRet;
 }
 
-//
+
 // class XMLLastLineAdjustPropHdl
-//
+
 
 XMLLastLineAdjustPropHdl::~XMLLastLineAdjustPropHdl()
 {

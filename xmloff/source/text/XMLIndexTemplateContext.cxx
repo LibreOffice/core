@@ -332,9 +332,9 @@ SvXMLImportContext *XMLIndexTemplateContext::CreateChildContext(
 
 
 
-//
+
 // maps for the XMLIndexTemplateContext constructor
-//
+
 
 
 // table of content and user defined index:

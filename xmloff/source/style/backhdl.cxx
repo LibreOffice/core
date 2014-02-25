@@ -42,9 +42,9 @@ SvXMLEnumMapEntry pXML_BrushVerticalPos[] =
     { XML_TOKEN_INVALID,    0       }
 };
 
-//
+
 // class XMLBackGraphicPositionPropHdl
-//
+
 
 XMLBackGraphicPositionPropHdl::~XMLBackGraphicPositionPropHdl()
 {

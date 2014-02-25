@@ -68,7 +68,7 @@ using namespace com::sun::star;
 using namespace ::xmloff::token;
 
 // the following class implementations are in this file:
-//
+
 // * XMLChartPropHdlFactory
 // * XMLChartPropertySetMapper
 // * XMLChartExportPropertyMapper

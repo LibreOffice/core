@@ -26,9 +26,9 @@
 
 using namespace ::com::sun::star::uno;
 
-//
+
 // class XMLEnumPropertyHdl
-//
+
 
 XMLEnumPropertyHdl::~XMLEnumPropertyHdl()
 {

@@ -25,9 +25,9 @@
 #include <com/sun/star/xforms/XModel2.hpp>
 
 
-//
+
 // forward declarations
-//
+
 
 namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XAttributeList; } }
@@ -50,9 +50,9 @@ public:
 
     com::sun::star::uno::Reference<com::sun::star::xforms::XModel2> getModel();
 
-    //
+
     // implement SvXMLImportContext & TokenContext methods:
-    //
+
 
     virtual void EndElement();
 

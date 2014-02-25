@@ -1140,7 +1140,7 @@ UniReference< SvXMLImportPropertyMapper > SdXMLStylesContext::GetImportPropertyM
 }
 
 // Process all style and object info
-//
+
 void SdXMLStylesContext::EndElement()
 {
     if(mbIsAutoStyle)
@@ -1203,7 +1203,7 @@ void SdXMLStylesContext::EndElement()
 
 // set master-page styles (all with family="presentation" and a special
 // prefix) on given master-page.
-//
+
 void SdXMLStylesContext::SetMasterPageStyles(SdXMLMasterPageContext& rMaster) const
 {
     const uno::Reference<container::XNameAccess>& rStyleFamilies =
@@ -1230,7 +1230,7 @@ void SdXMLStylesContext::SetMasterPageStyles(SdXMLMasterPageContext& rMaster) co
 
 // Process styles list:
 // set graphic styles (all with family="graphics"). Remember xStyle at list element.
-//
+
 void SdXMLStylesContext::ImpSetGraphicStyles() const
 {
     if(GetSdImport().GetLocalDocStyleFamilies().is()) try
@@ -1299,7 +1299,7 @@ static bool canSkipReset(const OUString &rName, const XMLPropStyleContext* pProp
 }
 
 // help function used by ImpSetGraphicStyles() and ImpSetMasterPageStyles()
-//
+
 void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAccess >& xPageStyles,  sal_uInt16 nFamily,  const OUString& rPrefix) const
 {
     sal_Int32 nPrefLen(rPrefix.getLength());
@@ -1476,7 +1476,7 @@ uno::Reference< container::XNameAccess > SdXMLStylesContext::getPageLayouts() co
     return uno::Reference< container::XNameAccess >::query( xLayouts );
 }
 
-//
+
 TYPEINIT1( SdXMLMasterStylesContext, SvXMLImportContext );
 
 SdXMLMasterStylesContext::SdXMLMasterStylesContext(

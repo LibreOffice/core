@@ -82,7 +82,7 @@ namespace xmloff
         // such form or no such data source, they work with an own formatter.
         // Even more, time and date fields do not work with a central formatter at all, they have their own one
         // (which is shared internally, but this is a (hidden) implementation detail.)
-        //
+
         // To not contaminate the global (document) number formats supplier (which could be obtained from the context),
         // we have an own one.
         // (Contaminate means: If a user adds a user-defined format to a formatted field, this format is stored in

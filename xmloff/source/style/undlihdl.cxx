@@ -100,9 +100,9 @@ SvXMLEnumMapEntry const pXML_UnderlineWidth_Enum[] =
     { XML_TOKEN_INVALID,                0 }
 };
 
-//
+
 // class XMLUnderlineTypePropHdl
-//
+
 
 XMLUnderlineTypePropHdl::~XMLUnderlineTypePropHdl()
 {
@@ -182,9 +182,9 @@ bool XMLUnderlineTypePropHdl::exportXML( OUString& rStrExpValue, const uno::Any&
     return bRet;
 }
 
-//
+
 // class XMLUnderlineStylePropHdl
-//
+
 
 XMLUnderlineStylePropHdl::~XMLUnderlineStylePropHdl()
 {
@@ -269,9 +269,9 @@ bool XMLUnderlineStylePropHdl::exportXML( OUString& rStrExpValue, const uno::Any
     return bRet;
 }
 
-//
+
 // class XMLUnderlineWidthPropHdl
-//
+
 
 XMLUnderlineWidthPropHdl::~XMLUnderlineWidthPropHdl()
 {

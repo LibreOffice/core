@@ -24,7 +24,7 @@
 
 struct SvXMLEnumMapEntry;
 
-//
+
 /** Abstract base-class for different XML-types. Derivations of this class
     knows how to compare, im/export a special XML-type
 */

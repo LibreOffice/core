@@ -299,11 +299,11 @@ sal_Bool XMLAutoStylePoolParent::Add( XMLAutoStyleFamily& rFamilyData, const vec
     return bAdded;
 }
 
-//
+
 // Adds a array of XMLPropertyState ( vector< XMLPropertyState > ) with a given name.
 // If the name exists already, nothing is done. If a style with a different name and
 // the same properties exists, a new one is added (like with bDontSeek).
-//
+
 
 sal_Bool XMLAutoStylePoolParent::AddNamed( XMLAutoStyleFamily& rFamilyData, const vector< XMLPropertyState >& rProperties, const OUString& rName )
 {
@@ -338,9 +338,9 @@ sal_Bool XMLAutoStylePoolParent::AddNamed( XMLAutoStyleFamily& rFamilyData, cons
     return bAdded;
 }
 
-//
+
 // Search for a array of XMLPropertyState ( vector< XMLPropertyState > ) in list
-//
+
 
 OUString XMLAutoStylePoolParent::Find( const XMLAutoStyleFamily& rFamilyData, const vector< XMLPropertyState >& rProperties ) const
 {
@@ -448,9 +448,9 @@ void SvXMLAutoStylePoolP_Impl::RegisterName( sal_Int32 nFamily, const OUString& 
     }
 }
 
-//
+
 // Retrieve the list of registered names
-//
+
 
 void SvXMLAutoStylePoolP_Impl::GetRegisteredNames(
     uno::Sequence<sal_Int32>& rFamilies,
@@ -556,9 +556,9 @@ bool SvXMLAutoStylePoolP_Impl::AddNamed(
     return bRet;
 }
 
-//
+
 // Search for a array of XMLPropertyState ( vector< XMLPropertyState > ) in list
-//
+
 
 OUString SvXMLAutoStylePoolP_Impl::Find( sal_Int32 nFamily,
                                          const OUString& rParent,
@@ -669,9 +669,9 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
         }
     }
 
-    //
+
     // create string to export for each XML-style. That means for each property-list
-    //
+
     OUString aStrFamilyName = rFamily.maStrFamilyName;
 
     for( size_t i = 0; i < nCount; i++ )

@@ -288,9 +288,9 @@ enum SvXMLStyleElemAttrTokens
     XML_TOK_ELEM_ATTR_CALENDAR
 };
 
-//
+
 //  standard colors
-//
+
 
 #define XML_NUMF_COLORCOUNT     10
 
@@ -308,9 +308,9 @@ static const ColorData aNumFmtStdColors[XML_NUMF_COLORCOUNT] =
     COL_WHITE
 };
 
-//
+
 //  token maps
-//
+
 
 // maps for SvXMLUnitConverter::convertEnum
 
@@ -361,9 +361,9 @@ static const SvXMLDefaultDateFormat aDefaultDateFormats[] =
     { NF_DATETIME_SYS_DDMMYYYY_HHMMSS,  XML_DEA_NONE,   XML_DEA_ANY,    XML_DEA_ANY,        XML_DEA_ANY,    XML_DEA_ANY,    XML_DEA_ANY,    XML_DEA_ANY,    sal_False }
 };
 
-//
+
 //  SvXMLNumImpData
-//
+
 
 SvXMLNumImpData::SvXMLNumImpData(
     SvNumberFormatter* pFmt,
@@ -599,9 +599,9 @@ const LocaleDataWrapper& SvXMLNumImpData::GetLocaleData( LanguageType nLang )
     return *pLocaleData;
 }
 
-//
+
 //  SvXMLNumFmtMapContext
-//
+
 
 SvXMLNumFmtMapContext::SvXMLNumFmtMapContext( SvXMLImport& rImport,
                                     sal_uInt16 nPrfx, const OUString& rLName,
@@ -648,9 +648,9 @@ void SvXMLNumFmtMapContext::EndElement()
     rParent.AddCondition( sCondition, sName );
 }
 
-//
+
 //  SvXMLNumFmtPropContext
-//
+
 
 SvXMLNumFmtPropContext::SvXMLNumFmtPropContext( SvXMLImport& rImport,
                                     sal_uInt16 nPrfx, const OUString& rLName,
@@ -696,9 +696,9 @@ void SvXMLNumFmtPropContext::EndElement()
         rParent.AddColor( m_nColor );
 }
 
-//
+
 //  SvXMLNumFmtEmbeddedTextContext
-//
+
 
 SvXMLNumFmtEmbeddedTextContext::SvXMLNumFmtEmbeddedTextContext( SvXMLImport& rImport,
                                     sal_uInt16 nPrfx, const OUString& rLName,
@@ -895,9 +895,9 @@ static void lcl_EnquoteIfNecessary( OUStringBuffer& rContent, const SvXMLNumForm
     }
 }
 
-//
+
 //  SvXMLNumFmtElementContext
-//
+
 
 const sal_Int32 MAX_SECOND_DIGITS = 20; // fdo#58539 & gnome#627420: limit number of digits during import
 
@@ -1259,9 +1259,9 @@ sal_uInt16 SvXMLNumFmtDefaults::GetDefaultDateFormat( SvXMLDateElementAttributes
     return NF_INDEX_TABLE_ENTRIES;  // invalid
 }
 
-//
+
 //  SvXMLNumFormatContext
-//
+
 
 SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
                                     sal_uInt16 nPrfx, const OUString& rLName,
@@ -2138,9 +2138,9 @@ sal_Bool SvXMLNumFormatContext::IsSystemLanguage()
     return nFormatLang == LANGUAGE_SYSTEM;
 }
 
-//
+
 //  SvXMLNumFmtHelper
-//
+
 
 SvXMLNumFmtHelper::SvXMLNumFmtHelper(
     const uno::Reference<util::XNumberFormatsSupplier>& rSupp,

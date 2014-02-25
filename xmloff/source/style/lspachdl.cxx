@@ -30,9 +30,9 @@ using namespace ::com::sun::star;
 using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_CASEMAP_NORMAL;
 
-//
+
 // class XMLEscapementPropHdl
-//
+
 
 XMLLineHeightHdl::~XMLLineHeightHdl()
 {
@@ -93,9 +93,9 @@ bool XMLLineHeightHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue
     return !rStrExpValue.isEmpty();
 }
 
-//
+
 // class XMLLineHeightAtLeastHdl
-//
+
 
 XMLLineHeightAtLeastHdl::~XMLLineHeightAtLeastHdl()
 {
@@ -133,9 +133,9 @@ bool XMLLineHeightAtLeastHdl::exportXML( OUString& rStrExpValue, const uno::Any&
     return !rStrExpValue.isEmpty();
 }
 
-//
+
 // class XMLLineSpacingHdl
-//
+
 
 XMLLineSpacingHdl::~XMLLineSpacingHdl()
 {

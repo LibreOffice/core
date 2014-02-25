@@ -254,7 +254,7 @@ namespace {
 //of its parent (try typing 100% vs 200% into the edit style dialog and revisit
 //your style). So on xml load that ends up meaning 200%, 0 lower. This is a
 //crock.
-//
+
 //On import clear 100% all-margins relative sizes.
 static bool
 isNotDefaultRelSize(const XMLPropertyState* pRelState, const UniReference<XMLPropertySetMapper>& rPrMap)
