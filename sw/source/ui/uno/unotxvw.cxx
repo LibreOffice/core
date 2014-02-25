@@ -1030,7 +1030,8 @@ sal_Bool SwXTextViewCursor::goLeft(sal_Int16 nCount, sal_Bool bExpand)
     return bRet;
 }
 
-sal_Bool SwXTextViewCursor::goRight(sal_Int16 nCount, sal_Bool bExpand) throw( uno::RuntimeException )
+sal_Bool SwXTextViewCursor::goRight(sal_Int16 nCount, sal_Bool bExpand)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     sal_Bool bRet = sal_False;
