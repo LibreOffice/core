@@ -39,9 +39,9 @@ enum SdrFitToSizeType {
 // No automatic line breaks for AutoGrowingWidth as well (only if
 // TextMaxFrameWidth is reached).
 
-//--------------------------------
+
 // class SdrTextFitToSizeTypeItem
-//--------------------------------
+
 class SVX_DLLPUBLIC SdrTextFitToSizeTypeItem: public SfxEnumItem {
 public:
     TYPEINFO();

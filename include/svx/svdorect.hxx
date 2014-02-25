@@ -23,9 +23,9 @@
 #include <svx/svdotext.hxx>
 #include <svx/svxdllapi.h>
 
-//************************************************************
+
 //   Vorausdeklarationen
-//************************************************************
+
 
 class XPolygon;
 
@@ -33,12 +33,12 @@ namespace sdr { namespace properties {
     class RectangleProperties;
 }}
 
-//************************************************************
+
 //   SdrRectObj
-//
+
 // Rechteck-Objekte (Rechteck,Kreis,...)
-//
-//************************************************************
+
+
 
 class SVX_DLLPUBLIC SdrRectObj : public SdrTextObj
 {

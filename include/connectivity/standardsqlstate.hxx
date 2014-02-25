@@ -20,12 +20,12 @@
 #ifndef INCLUDED_CONNECTIVITY_STANDARDSQLSTATE_HXX
 #define INCLUDED_CONNECTIVITY_STANDARDSQLSTATE_HXX
 
-//.........................................................................
+
 namespace dbtools
 {
-//.........................................................................
 
-    //----------------------------------------------------------------------------------
+
+
     /** standard SQLStates to be used with an SQLException
 
         Extend this list whenever you need a new state ...
@@ -59,9 +59,9 @@ namespace dbtools
         SQL_ERROR_UNSPECIFIED = SAL_MAX_ENUM    // special value indicating that an SQLState is not to be specified
     };
 
-//.........................................................................
+
 }   // namespace dbtools
-//.........................................................................
+
 
 #endif // INCLUDED_CONNECTIVITY_STANDARDSQLSTATE_HXX
 

@@ -22,15 +22,15 @@
 #define INCLUDED_UNOTOOLS_EVENTLISTENERADAPTER_HXX
 #include <com/sun/star/lang/XComponent.hpp>
 
-//.........................................................................
+
 namespace utl
 {
-//.........................................................................
+
 
     struct OEventListenerAdapterImpl;
-    //=====================================================================
+
     //= OEventListenerAdapter
-    //=====================================================================
+
     /** base class for non-UNO dispose listeners
     */
     class UNOTOOLS_DLLPUBLIC OEventListenerAdapter
@@ -55,9 +55,9 @@ namespace utl
         virtual void _disposing( const ::com::sun::star::lang::EventObject& _rSource ) = 0;
     };
 
-//.........................................................................
+
 }   // namespace utl
-//.........................................................................
+
 
 #endif // INCLUDED_UNOTOOLS_EVENTLISTENERADAPTER_HXX
 

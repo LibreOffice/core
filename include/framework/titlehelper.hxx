@@ -58,21 +58,21 @@ class FWE_DLLPUBLIC TitleHelper : private ::cppu::BaseMutex
                                                      css::frame::XFrameActionListener   ,
                                                      css::document::XEventListener      >
 {
-    //-------------------------------------------
+
     // interface
     public:
 
-        //---------------------------------------
+
         /** @short  lightweight constructor.
          */
         TitleHelper(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
 
-        //---------------------------------------
+
         /** @short  free all internally used resources.
          */
         virtual ~TitleHelper();
 
-        //---------------------------------------
+
         /** set an outside component which uses this container and must be set
             as source of all broadcasted messages, exceptions.
 
@@ -86,7 +86,7 @@ class FWE_DLLPUBLIC TitleHelper : private ::cppu::BaseMutex
          */
         void setOwner (const css::uno::Reference< css::uno::XInterface >& xOwner);
 
-        //---------------------------------------
+
         /** set an outside component which provides the righht string and number for
             an untitled component.
 
@@ -100,47 +100,47 @@ class FWE_DLLPUBLIC TitleHelper : private ::cppu::BaseMutex
          */
         void connectWithUntitledNumbers (const css::uno::Reference< css::frame::XUntitledNumbers >& xNumbers);
 
-        //---------------------------------------
+
         /** @see XTitle */
         virtual OUString SAL_CALL getTitle()
             throw (css::uno::RuntimeException, std::exception);
 
-        //---------------------------------------
+
         /** @see XTitle */
         virtual void SAL_CALL setTitle(const OUString& sTitle)
             throw (css::uno::RuntimeException, std::exception);
 
-        //---------------------------------------
+
         /** @see XTitleChangeBroadcaster */
         virtual void SAL_CALL addTitleChangeListener(const css::uno::Reference< css::frame::XTitleChangeListener >& xListener)
             throw (css::uno::RuntimeException, std::exception);
 
-        //---------------------------------------
+
         /** @see XTitleChangeBroadcaster */
         virtual void SAL_CALL removeTitleChangeListener(const css::uno::Reference< css::frame::XTitleChangeListener >& xListener)
             throw (css::uno::RuntimeException, std::exception);
 
-        //---------------------------------------
+
         /** @see XTitleChangeListener */
         virtual void SAL_CALL titleChanged(const css::frame::TitleChangedEvent& aEvent)
             throw (css::uno::RuntimeException, std::exception);
 
-        //---------------------------------------
+
         /** @see css.document.XEventListener */
         virtual void SAL_CALL notifyEvent(const css::document::EventObject& aEvent)
             throw (css::uno::RuntimeException, std::exception);
 
-        //---------------------------------------
+
         /** @see css.lang.XEventListener */
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
             throw (css::uno::RuntimeException, std::exception);
 
-        //---------------------------------------
+
         /** @see css.frame.XFrameActionListener */
         virtual void SAL_CALL frameAction(const css::frame::FrameActionEvent& aEvent)
             throw(css::uno::RuntimeException, std::exception);
 
-    //-------------------------------------------
+
     // internal
     private:
 
@@ -167,7 +167,7 @@ class FWE_DLLPUBLIC TitleHelper : private ::cppu::BaseMutex
 
         OUString impl_convertURL2Title(const OUString& sURL);
 
-    //-------------------------------------------
+
     // member
     private:
 

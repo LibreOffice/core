@@ -103,10 +103,10 @@ class ToolBox;
 class VclSimpleEvent;
 class VclMenuEvent;
 
-//  ----------------------------------------------------
+
 //  class VCLXGraphicControl
 //    deriving from VCLXWindow, drawing the graphic which exists as "Graphic" at the model
-//  ----------------------------------------------------
+
 
 
 class TOOLKIT_DLLPUBLIC VCLXGraphicControl : public VCLXWindow
@@ -142,9 +142,9 @@ public:
 
 };
 
-//  ----------------------------------------------------
+
 //  class VCLXButton
-//  ----------------------------------------------------
+
 typedef ::cppu::ImplInheritanceHelper2  <   VCLXGraphicControl
                                         ,   ::com::sun::star::awt::XButton
                                         ,   ::com::sun::star::awt::XToggleButton
@@ -191,9 +191,9 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
+
 //  class VCLXImageControl
-//  ----------------------------------------------------
+
 class VCLXImageControl : public VCLXGraphicControl
 {
 public:
@@ -216,9 +216,9 @@ protected:
     virtual void    ImplSetNewImage();
 };
 
-//  ----------------------------------------------------
+
 //  class VCLXCheckBox
-//  ----------------------------------------------------
+
 class VCLXCheckBox :    public ::com::sun::star::awt::XCheckBox,
                         public ::com::sun::star::awt::XButton,
                         public VCLXGraphicControl
@@ -274,9 +274,9 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
+
 //  class VCLXRadioButton
-//  ----------------------------------------------------
+
 class VCLXRadioButton : public ::com::sun::star::awt::XRadioButton,
                         public ::com::sun::star::awt::XButton,
                         public VCLXGraphicControl
@@ -332,9 +332,9 @@ public:
 
 };
 
-//  ----------------------------------------------------
+
 //  class VCLXMessageBox
-//  ----------------------------------------------------
+
 class VCLXMessageBox :  public ::com::sun::star::awt::XMessageBox,
                         public VCLXTopWindow
 {
@@ -366,9 +366,9 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
+
 //  class VCLXFrame
-//  ----------------------------------------------------
+
 class VCLXFrame :   public VCLXContainer
 {
 protected:
@@ -402,9 +402,9 @@ public:
 
 
 
-//  ----------------------------------------------------
+
 //  class VCLXDialog
-//  ----------------------------------------------------
+
 class TOOLKIT_DLLPUBLIC VCLXDialog :    public ::com::sun::star::awt::XDialog2,
                     public VCLXTopWindow
 {
@@ -445,9 +445,9 @@ public:
 
 };
 
-//  ----------------------------------------------------
+
 //  class VCLXTabPage
-//  ----------------------------------------------------
+
 class VCLXTabPage : public VCLXContainer
 {
 public:
@@ -527,9 +527,9 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
+
 //  class VCLXFixedHyperlink
-//  ----------------------------------------------------
+
 class TOOLKIT_DLLPUBLIC VCLXFixedHyperlink :
     public ::com::sun::star::awt::XFixedHyperlink,
     public VCLXWindow
@@ -582,9 +582,9 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
+
 //  class VCLXFixedText
-//  ----------------------------------------------------
+
 class VCLXFixedText :   public ::com::sun::star::awt::XFixedText,
                         public VCLXWindow
 {
@@ -619,9 +619,9 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
+
 //  class VCLXScrollBar
-//  ----------------------------------------------------
+
 class VCLXScrollBar :   public ::com::sun::star::awt::XScrollBar,
                         public VCLXWindow
 {
@@ -680,9 +680,9 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
+
 //  class VCLXEdit
-//  ----------------------------------------------------
+
 class TOOLKIT_DLLPUBLIC VCLXEdit :  public ::com::sun::star::awt::XTextComponent,
                     public ::com::sun::star::awt::XTextEditField,
                     public ::com::sun::star::awt::XTextLayoutConstrains,
@@ -748,9 +748,9 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
+
 //  class VCLXListBox
-//  ----------------------------------------------------
+
 typedef ::cppu::ImplInheritanceHelper3  <   VCLXWindow
                                         ,   ::com::sun::star::awt::XListBox
                                         ,   ::com::sun::star::awt::XTextLayoutConstrains
@@ -825,9 +825,9 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
+
 //  class VCLXComboBox
-//  ----------------------------------------------------
+
 typedef ::cppu::ImplInheritanceHelper2  <   VCLXEdit
                                         ,   ::com::sun::star::awt::XComboBox
                                         ,   ::com::sun::star::awt::XItemListListener > VCLXComboBox_Base;
@@ -889,9 +889,9 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
+
 //  class VCLXSpinField
-//  ----------------------------------------------------
+
 class TOOLKIT_DLLPUBLIC VCLXSpinField : public ::com::sun::star::awt::XSpinField,
                         public VCLXEdit
 {
@@ -927,9 +927,9 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
+
 //  class VCLXFormattedSpinField
-//  ----------------------------------------------------
+
 class VCLXFormattedSpinField : public VCLXSpinField
 {
 private:
@@ -955,9 +955,9 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
+
 //  class VCLXDateField
-//  ----------------------------------------------------
+
 class TOOLKIT_DLLPUBLIC VCLXDateField : public ::com::sun::star::awt::XDateField,
                         public VCLXFormattedSpinField
 {
@@ -1003,9 +1003,9 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
+
 //  class VCLXTimeField
-//  ----------------------------------------------------
+
 class VCLXTimeField :   public ::com::sun::star::awt::XTimeField,
                         public VCLXFormattedSpinField
 {
@@ -1048,9 +1048,9 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
+
 //  class VCLXNumericField
-//  ----------------------------------------------------
+
 class VCLXNumericField :    public ::com::sun::star::awt::XNumericField,
                             public VCLXFormattedSpinField
 {
@@ -1093,9 +1093,9 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
+
 //  class VCLXMetricField
-//  ----------------------------------------------------
+
 class MetricFormatter;
 class MetricField;
 class VCLXMetricField : public ::com::sun::star::awt::XMetricField,
@@ -1145,9 +1145,9 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
+
 //  class VCLXCurrencyField
-//  ----------------------------------------------------
+
 class VCLXCurrencyField :   public ::com::sun::star::awt::XCurrencyField,
                             public VCLXFormattedSpinField
 {
@@ -1191,9 +1191,9 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
+
 //  class VCLXPatternField
-//  ----------------------------------------------------
+
 class VCLXPatternField :    public ::com::sun::star::awt::XPatternField,
                             public VCLXFormattedSpinField
 {
@@ -1227,9 +1227,9 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
+
 //  class VCLXToolBox
-//  ----------------------------------------------------
+
 class VCLXToolBox : public VCLXWindow
 {
 private:

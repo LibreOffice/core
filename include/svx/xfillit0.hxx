@@ -26,9 +26,9 @@
 #include <svx/xenum.hxx>
 #include <svx/svxdllapi.h>
 
-//---------------------
+
 // class XFillStyleItem
-//---------------------
+
 
 class SVX_DLLPUBLIC XFillStyleItem : public SfxEnumItem
 {

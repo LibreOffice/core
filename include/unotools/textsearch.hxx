@@ -39,10 +39,10 @@ namespace com {
     }
 }
 
-// ............................................................................
+
 namespace utl
 {
-// ............................................................................
+
 
 // Utility class for searching
 class UNOTOOLS_DLLPUBLIC SearchParam
@@ -58,7 +58,7 @@ private:
 
     bool m_bWordOnly   : 1;        // used by normal search
     bool m_bSrchInSel  : 1;        // search only in the selection
-    bool m_bCaseSense  : 1;        //
+    bool m_bCaseSense  : 1;
 
     // values for the "weight Levenshtein-Distance"
     bool bLEV_Relaxed : 1;
@@ -116,7 +116,7 @@ public:
 //      - ordinary text (Bayer/Moore)
 //      - regular expressions
 //      - weighted Levenshtein distance
-//
+
 //  This class allows forward and backward searching!
 
 class UNOTOOLS_DLLPUBLIC TextSearch
@@ -173,9 +173,9 @@ public:
 
 };
 
-// ............................................................................
+
 }   // namespace utl
-// ............................................................................
+
 
 #endif
 

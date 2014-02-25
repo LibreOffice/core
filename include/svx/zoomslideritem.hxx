@@ -24,7 +24,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <svx/svxdllapi.h>
 
-//-------------------------------------------------------------------------
+
 
 class SVX_DLLPUBLIC SvxZoomSliderItem: public SfxUInt16Item
 {
@@ -53,7 +53,7 @@ public:
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 };
 
-//------------------------------------------------------------------------
+
 
 #endif
 

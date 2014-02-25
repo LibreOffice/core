@@ -21,14 +21,14 @@
 #ifndef INCLUDED_UNOTOOLS_DESKTOPTERMINATIONOBSERVER_HXX
 #define INCLUDED_UNOTOOLS_DESKTOPTERMINATIONOBSERVER_HXX
 
-//........................................................................
+
 namespace utl
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= ITerminationListener
-    //====================================================================
+
     /** non-UNO version of the com.sun.star.frame::XTerminateListener
     */
     class ITerminationListener
@@ -41,9 +41,9 @@ namespace utl
         ~ITerminationListener() {}
     };
 
-    //====================================================================
+
     //= DesktopTerminationObserver
-    //====================================================================
+
     /** a class which allows non-UNO components to observe the desktop (aka application)
         for it's shutdown
     */
@@ -63,9 +63,9 @@ namespace utl
         DesktopTerminationObserver();   // never implemented, only static methods
     };
 
-//........................................................................
+
 } // namespace utl
-//........................................................................
+
 
 #endif // INCLUDED_UNOTOOLS_DESKTOPTERMINATIONOBSERVER_HXX
 

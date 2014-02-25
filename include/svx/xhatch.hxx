@@ -24,9 +24,9 @@
 #include <tools/color.hxx>
 #include <svx/svxdllapi.h>
 
-//--------------
+
 // class XHatch
-//--------------
+
 
 class SVX_DLLPUBLIC XHatch
 {

@@ -27,7 +27,7 @@
 
 /// @cond INTERNAL
 
-//######################################################
+
 // This is no general purpose STL allocator but one
 // necessary to use STL for some implementation but
 // avoid linking sal against the STLPort library!!!
@@ -51,49 +51,49 @@ public:
     typedef ::std::size_t size_type;
     typedef ::std::ptrdiff_t difference_type;
 
-    //-----------------------------------------
+
     template<class U>
     struct rebind
     {
         typedef Allocator<U> other;
     };
 
-    //-----------------------------------------
+
     pointer address (reference value) const
     {
         return &value;
     }
 
-    //-----------------------------------------
+
     const_pointer address (const_reference value) const
     {
         return &value;
     }
 
-    //-----------------------------------------
+
     Allocator() SAL_THROW(())
     {}
 
-    //-----------------------------------------
+
     template<class U>
     Allocator (SAL_UNUSED_PARAMETER const Allocator<U>&) SAL_THROW(())
     {}
 
-    //-----------------------------------------
+
     Allocator(const Allocator&) SAL_THROW(())
     {}
 
-    //-----------------------------------------
+
     ~Allocator() SAL_THROW(())
     {}
 
-    //-----------------------------------------
+
     size_type max_size() const SAL_THROW(())
     {
         return size_type(-1)/sizeof(T);
     }
 
-    //-----------------------------------------
+
     /* Normally the code for allocate should
        throw a std::bad_alloc exception if the
        requested memory could not be allocated:
@@ -120,13 +120,13 @@ public:
             rtl_allocateMemory(sal_uInt32(n * sizeof(T))));
     }
 
-    //-----------------------------------------
+
     void deallocate (pointer p, SAL_UNUSED_PARAMETER size_type /* n */)
     {
         rtl_freeMemory(p);
     }
 
-    //-----------------------------------------
+
 #if HAVE_CXX11_PERFECT_FORWARDING && !defined(_LIBCPP_VERSION)
     template< typename... Args >
     void construct (pointer p, Args &&... value)
@@ -140,7 +140,7 @@ public:
     }
 #endif
 
-    //-----------------------------------------
+
     void destroy (pointer p)
     {
         p->~T();
@@ -148,7 +148,7 @@ public:
     }
 };
 
-//######################################################
+
 // Custom STL allocators must be stateless (see
 // references above) that's why the operators below
 // return always true or false

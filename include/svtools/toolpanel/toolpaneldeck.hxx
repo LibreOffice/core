@@ -29,17 +29,17 @@
 #include <boost/optional.hpp>
 #include <memory>
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
+
 
     class ToolPanelCollection;
     class ToolPanelDeck_Impl;
 
-    //====================================================================
+
     //= IToolPanelDeckListener
-    //====================================================================
+
     class SAL_NO_VTABLE IToolPanelDeckListener
     {
     public:
@@ -71,9 +71,9 @@ namespace svt
         ~IToolPanelDeckListener() {}
     };
 
-    //====================================================================
+
     //= IToolPanelDeck
-    //====================================================================
+
     class SVT_DLLPUBLIC IToolPanelDeck
     {
     public:
@@ -129,9 +129,9 @@ namespace svt
         ~IToolPanelDeck() {}
     };
 
-    //====================================================================
+
     //= ToolPanelDeck
-    //====================================================================
+
     class SVT_DLLPUBLIC ToolPanelDeck   :public Control
                                         ,public IToolPanelDeck
     {
@@ -175,9 +175,9 @@ namespace svt
         ::std::auto_ptr< ToolPanelDeck_Impl >   m_pImpl;
     };
 
-//........................................................................
+
 } // namespace svt
-//........................................................................
+
 
 #endif // INCLUDED_SVTOOLS_TOOLPANEL_TOOLPANELDECK_HXX
 

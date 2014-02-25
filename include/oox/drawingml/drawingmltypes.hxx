@@ -35,7 +35,7 @@
 namespace oox {
 namespace drawingml {
 
-// ============================================================================
+
 
 const sal_Int32 PER_PERCENT     = 1000;
 const sal_Int32 MAX_PERCENT     = 100 * PER_PERCENT;
@@ -43,7 +43,7 @@ const sal_Int32 MAX_PERCENT     = 100 * PER_PERCENT;
 const sal_Int32 PER_DEGREE      = 60000;
 const sal_Int32 MAX_DEGREE      = 360 * PER_DEGREE;
 
-// ============================================================================
+
 
 struct LineProperties;
 typedef ::boost::shared_ptr< LineProperties > LinePropertiesPtr;
@@ -75,7 +75,7 @@ typedef ::boost::shared_ptr< Shape > ShapePtr;
 class Theme;
 typedef ::boost::shared_ptr< Theme > ThemePtr;
 
-// ---------------------------------------------------------------------------
+
 
 namespace table {
 
@@ -84,7 +84,7 @@ typedef ::boost::shared_ptr< TableProperties > TablePropertiesPtr;
 
 } // namespace table
 
-// ============================================================================
+
 
 /** converts the attributes from an CT_TLPoint into an awt Point with 1/1000% */
 com::sun::star::awt::Point GetPointPercent( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs );
@@ -138,7 +138,7 @@ OOX_DLLPUBLIC const char* GetTextVerticalAdjust( ::com::sun::star::drawing::Text
 // Converts a Hatch object to an ooxml pattern.
 const char* GetHatchPattern( const ::com::sun::star::drawing::Hatch& rHatch );
 
-// ============================================================================
+
 
 // CT_IndexRange
 struct IndexRange {
@@ -149,7 +149,7 @@ struct IndexRange {
 /** retrieve the content of CT_IndexRange */
 IndexRange GetIndexRange( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes );
 
-// ============================================================================
+
 
 const sal_Int32 EMU_PER_HMM = 360;      /// 360 EMUs per 1/100 mm.
 
@@ -166,7 +166,7 @@ inline sal_Int32 convertEmuToHmm( sal_Int64 nValue )
     return getLimitedValue< sal_Int32, sal_Int64 >( (nValue + nCorrection) / EMU_PER_HMM, SAL_MIN_INT32, SAL_MAX_INT32 );
 }
 
-// ============================================================================
+
 
 /** A structure for a point with 64-bit interger components. */
 struct EmuPoint
@@ -178,7 +178,7 @@ struct EmuPoint
     explicit     EmuPoint( sal_Int64 nX, sal_Int64 nY ) : X( nX ), Y( nY ) {}
 };
 
-// ============================================================================
+
 
 /** A structure for a size with 64-bit interger components. */
 struct EmuSize
@@ -190,7 +190,7 @@ struct EmuSize
     explicit     EmuSize( sal_Int64 nWidth, sal_Int64 nHeight ) : Width( nWidth ), Height( nHeight ) {}
 };
 
-// ============================================================================
+
 
 /** A structure for a rectangle with 64-bit interger components. */
 struct EmuRectangle : public EmuPoint, public EmuSize
@@ -203,7 +203,7 @@ struct EmuRectangle : public EmuPoint, public EmuSize
     void         setSize( const EmuSize& rSize ) { static_cast< EmuSize& >( *this ) = rSize; }
 };
 
-// ============================================================================
+
 
 } // namespace drawingml
 } // namespace oox

@@ -50,7 +50,7 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
 {
     public:
 
-        //---------------------------------------
+
         /** @short  these methods can be used to get the different property names
                     as static const OUString values.
 
@@ -100,10 +100,10 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
         static const OUString& PROP_VIEWONLY();
         static const OUString& PROP_DOCUMENTBASEURL();
 
-    //-------------------------------------------
+
     // interface
     public:
-        //---------------------------------------
+
         /** @short  these ctors do nothing - excepting that they forward
                     the given parameters to the base class ctors.
 
@@ -113,7 +113,7 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
         MediaDescriptor();
         MediaDescriptor(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lSource);
 
-        //---------------------------------------
+
         /** @short  it checks if the descriptor already has a valid
                     InputStream item and creates a new one, if not.
 
@@ -131,7 +131,7 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
          */
         bool addInputStream();
 
-        //---------------------------------------
+
         /** @short  it checks if the descriptor already has a valid
                     InputStream item and creates a new one, if not.
 
@@ -150,7 +150,7 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
          */
         bool addInputStreamOwnLock();
 
-        //---------------------------------------
+
         /** @short  it checks if the descriptor describes a readonly stream.
 
             @descr  The descriptor itself isnt changed doing so.
@@ -170,7 +170,7 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
          */
         bool isStreamReadOnly() const;
 
-        //---------------------------------------
+
         /** Returns a value from the sequence contained in the property
             'ComponentData' of this media descriptor.
 
@@ -185,7 +185,7 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
         ::com::sun::star::uno::Any getComponentDataEntry(
             const OUString& rName ) const;
 
-        //---------------------------------------
+
         /** Inserts a value into the sequence contained in the property
             'ComponentData' of the media descriptor.
 
@@ -205,7 +205,7 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
             const OUString& rName,
             const ::com::sun::star::uno::Any& rValue );
 
-        //---------------------------------------
+
         /** Removes a value from the sequence contained in the property
             'ComponentData' of the media descriptor.
 
@@ -265,11 +265,11 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
             comphelper::DocPasswordRequestType eRequestType,
             const ::std::vector< OUString >* pDefaultPasswords = 0 );
 
-    //-------------------------------------------
+
     // helper
     private:
 
-        //---------------------------------------
+
         /** @short  tries to open a stream by using the given PostData stream.
 
             @descr  The stream is used directly ...
@@ -293,7 +293,7 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& _rxPostData
             )   throw(::com::sun::star::uno::RuntimeException);
 
-        //---------------------------------------
+
         /** @short  tries to open a stream by using the given URL.
 
             @descr  First it tries to open the content in r/w mode (if its
@@ -320,7 +320,7 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
             bool bLockFile
             ) throw(::com::sun::star::uno::RuntimeException);
 
-        //---------------------------------------
+
         /** @short  it checks if the descriptor already has a valid
                     InputStream item and creates a new one, if not.
 

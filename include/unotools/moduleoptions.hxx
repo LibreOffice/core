@@ -38,7 +38,7 @@
 #define FEATUREFLAG_IMPRESS                 0x00008000
 #define FEATUREFLAG_INSIGHT                 0x00010000
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          forward declaration to our private date container implementation
     @descr          We use these class as internal member to support small memory requirements.
                     You can create the container if it is necessary. The class which use these mechanism
@@ -46,7 +46,7 @@
 *//*-*************************************************************************************************************/
 class SvtModuleOptions_Impl;
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          collect information about installation state of modules
     @descr          Use these class to get installation state of different office modules like writer, calc etc
                     Further you can ask for additional information; e.g. name of standard template file, which
@@ -118,21 +118,21 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtModuleOptions : public utl::detail::
         void            SetFactoryDefaultFilter   (       EFactory         eFactory   ,
                                                     const OUString& sFilter    );
 
-        //_______________________________________
+
 
         /** @short  return the corresponding application ID for the given
                     document service name.
          */
         static EFactory ClassifyFactoryByServiceName(const OUString& sName);
 
-        //_______________________________________
+
 
         /** @short  return the corresponding application ID for the given
                     short name.
          */
         static EFactory ClassifyFactoryByShortName(const OUString& sName);
 
-        //_______________________________________
+
 
         /** @short  return the corresponding application ID for the given properties.
 
@@ -155,7 +155,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtModuleOptions : public utl::detail::
         static EFactory ClassifyFactoryByURL(const OUString&                                                           sURL            ,
                                              const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lMediaDescriptor);
 
-        //_______________________________________
+
 
         /** @short  return the corresponding application ID for the given properties.
 

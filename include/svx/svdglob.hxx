@@ -24,9 +24,9 @@
 #include <sal/config.h>
 #include <svx/svxdllapi.h>
 
-//************************************************************
+
 //   forward declaration
-//************************************************************
+
 
 class ResMgr;
 
@@ -40,7 +40,7 @@ ResMgr* ImpGetResMgr();
 // See also SvdStr.Hrc
 SVX_DLLPUBLIC OUString ImpGetResStr(sal_uInt16 nResID);
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 #endif // INCLUDED_SVX_SVDGLOB_HXX
 

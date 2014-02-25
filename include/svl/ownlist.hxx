@@ -30,7 +30,7 @@ namespace com { namespace sun { namespace star {
     }
 }}}
 
-//=========================================================================
+
 class SvCommand
 /*  [Beschreibung]
 
@@ -55,7 +55,7 @@ public:
 
 typedef ::std::vector< SvCommand > SvCommandList_impl;
 
-//=========================================================================
+
 class SVL_DLLPUBLIC SvCommandList
 /*  [Beschreibung]
 

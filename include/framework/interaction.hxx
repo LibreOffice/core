@@ -39,7 +39,7 @@
 
 namespace framework{
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          special request for interaction to ask user for right filter
     @descr          These helper can be used to ask user for right filter, if filter detection failed.
                     It capsulate communication with any interaction handler and supports an easy
@@ -74,7 +74,7 @@ class FWE_DLLPUBLIC RequestFilterSelect
     com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionRequest > GetRequest();
 };
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          special request for interaction
     @descr          User must decide between a preselected and another detected filter.
                     It capsulate communication with any interaction handler and supports an easy

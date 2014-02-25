@@ -35,7 +35,7 @@ template<typename ValueType> class StandardAccessor
 public:
     typedef ValueType value_type;
 
-    // -------------------------------------------------------
+
 
     template< class Iterator >
     value_type operator()(Iterator const& i) const
@@ -49,7 +49,7 @@ public:
         return i[diff];
     }
 
-    // -------------------------------------------------------
+
 
     template< typename V, class Iterator >
     void set(V const& value, Iterator const& i) const
@@ -64,7 +64,7 @@ public:
     }
 };
 
-//-----------------------------------------------------------------------------
+
 
 /** Non-standard accessor type
 
@@ -76,7 +76,7 @@ template<typename ValueType> class NonStandardAccessor
 public:
     typedef ValueType value_type;
 
-    // -------------------------------------------------------
+
 
     template< class Iterator >
     value_type operator()(Iterator const& i) const
@@ -90,7 +90,7 @@ public:
         return i.get(diff);
     }
 
-    // -------------------------------------------------------
+
 
     template< typename V, class Iterator >
     void set(V const& value, Iterator const& i) const

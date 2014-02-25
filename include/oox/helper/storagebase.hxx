@@ -34,7 +34,7 @@ namespace com { namespace sun { namespace star {
 
 namespace oox {
 
-// ============================================================================
+
 
 class StorageBase;
 typedef ::boost::shared_ptr< StorageBase > StorageRef;
@@ -182,7 +182,7 @@ private:
     bool                mbReadOnly;         ///< True = storage opened read-only (based on input stream).
 };
 
-// ============================================================================
+
 
 } // namespace oox
 

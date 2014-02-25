@@ -28,16 +28,16 @@
 #include <editeng/editengdllapi.h>
 #include <i18nlangtag/mslangid.hxx>
 
-//.............................................................................
+
 namespace editeng
 {
-//.............................................................................
+
 
     class HangulHanjaConversion_Impl;
 
-    //=========================================================================
+
     //= HangulHanjaConversion
-    //=========================================================================
+
     /** encapsulates Hangul-Hanja conversion functionality
 
         <p>terminology:
@@ -280,9 +280,9 @@ namespace editeng
     {
         return MsLangId::isChinese(nLang);
     }
-//.............................................................................
+
 }   // namespace svx
-//.............................................................................
+
 
 #endif // INCLUDED_EDITENG_HANGULHANJA_HXX
 

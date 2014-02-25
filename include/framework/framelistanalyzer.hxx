@@ -35,7 +35,7 @@ namespace framework{
  */
 class FWE_DLLPUBLIC FrameListAnalyzer
 {
-    //_______________________________________
+
     // types
 
     public:
@@ -55,7 +55,7 @@ class FWE_DLLPUBLIC FrameListAnalyzer
             E_ZOMBIE            = 32768 // use it for special test scenarios only!!!
         };
 
-    //_______________________________________
+
     // member
 
     public:
@@ -152,7 +152,7 @@ class FWE_DLLPUBLIC FrameListAnalyzer
             This value is undefined if m_eDetectMode doesn't have set the flag E_BACKINGCOMPONENT! */
         sal_Bool m_bReferenceIsBacking;
 
-    //_______________________________________
+
     // interface
 
     public:
@@ -178,7 +178,7 @@ class FWE_DLLPUBLIC FrameListAnalyzer
                                           sal_uInt32                                          eDetectMode     );
         virtual ~FrameListAnalyzer();
 
-    //_______________________________________
+
     // helper
 
     private:

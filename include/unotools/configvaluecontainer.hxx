@@ -23,10 +23,10 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <osl/mutex.hxx>
 
-//.........................................................................
+
 namespace utl
 {
-//.........................................................................
+
 
 #define CVC_READONLY_ACCESS     0x0000
 #define CVC_UPDATE_ACCESS       0x0001
@@ -36,9 +36,9 @@ namespace utl
 
     struct OConfigurationValueContainerImpl;
     struct NodeValueAccessor;
-    //=====================================================================
+
     //= OConfigurationValueContainer
-    //=====================================================================
+
     /** allows simple access to static configuration structures.
 
         <p>The basic idea of this class is that it's clients (usually derived classes) simply register an
@@ -64,7 +64,7 @@ namespace utl
                     m_pImpl;
 
     protected:
-        //-----------------------------------------------------------------
+
         // construction/destruction
 
         /** constructs the object
@@ -94,7 +94,7 @@ namespace utl
         /// dtor
         ~OConfigurationValueContainer();
 
-        //-----------------------------------------------------------------
+
         // registering data containers
 
         /** registers a data accessor of an arbitrary type.
@@ -174,9 +174,9 @@ namespace utl
         void    implRegisterExchangeLocation( const NodeValueAccessor& _rAccessor );
     };
 
-//.........................................................................
+
 }   // namespace utl
-//.........................................................................
+
 
 #endif // INCLUDED_UNOTOOLS_CONFIGVALUECONTAINER_HXX
 

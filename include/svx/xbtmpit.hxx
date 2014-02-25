@@ -27,13 +27,13 @@
 class SdrModel;
 class BitmapColor;
 
-//////////////////////////////////////////////////////////////////////////////
+
 // helper to construct historical 8x8 bitmaps with two colors
 
 Bitmap SVX_DLLPUBLIC createHistorical8x8FromArray(const sal_uInt16* pArray, Color aColorPix, Color aColorBack);
 bool SVX_DLLPUBLIC isHistorical8x8(const BitmapEx& rBitmapEx, BitmapColor& o_rBack, BitmapColor& o_rFront);
 
-//////////////////////////////////////////////////////////////////////////////
+
 // class XFillBitmapItem
 
 class SVX_DLLPUBLIC XFillBitmapItem : public NameOrIndex

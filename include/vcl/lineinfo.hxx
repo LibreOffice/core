@@ -26,9 +26,9 @@
 #include <basegfx/vector/b2enums.hxx>
 #include <com/sun/star/drawing/LineCap.hpp>
 
-// ----------------
+
 // - ImplLineInfo -
-// ----------------
+
 
 class SvStream;
 namespace basegfx { class B2DPolyPolygon; }
@@ -56,9 +56,9 @@ struct ImplLineInfo
     friend SvStream&    WriteImplLineInfo( SvStream& rOStm, const ImplLineInfo& rImplLineInfo );
 };
 
-// ------------
+
 // - LineInfo -
-// ------------
+
 
 class VCL_DLLPUBLIC LineInfo
 {

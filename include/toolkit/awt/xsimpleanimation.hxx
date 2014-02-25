@@ -27,14 +27,14 @@
 
 #include <boost/scoped_ptr.hpp>
 
-//........................................................................
+
 namespace toolkit
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= XSimpleAnimation
-    //====================================================================
+
     typedef ::cppu::ImplInheritanceHelper1  <   VCLXWindow
                                             ,   ::com::sun::star::awt::XSimpleAnimation
                                             >   XSimpleAnimation_Base;
@@ -61,9 +61,9 @@ namespace toolkit
         XSimpleAnimation& operator=( const XSimpleAnimation& ); // never implemented
     };
 
-//........................................................................
+
 } // namespacetoolkit
-//........................................................................
+
 
 #endif // TOOLKIT_INC_ INCLUDED_TOOLKIT_AWT_XSIMPLEANIMATION_HXX
 

@@ -25,14 +25,14 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <comphelper/comphelperdllapi.h>
 
-//=========================================================================
+
 //= property helper classes
-//=========================================================================
+
 
 //... namespace comphelper ................................................
 namespace comphelper
 {
-//.........................................................................
+
 
 class PropertySetInfo;
 struct PropertyMapEntry;
@@ -82,7 +82,7 @@ public:
     virtual ::com::sun::star::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception);
 };
 
-//.........................................................................
+
 }
 //... namespace comphelper..................................................
 

@@ -45,9 +45,9 @@ typedef ::std::vector<
     css::uno::Reference< css::awt::XPopupMenu >*
 > PopupMenuRefList;
 
-//  ----------------------------------------------------
+
 //  class VCLXMenu
-//  ----------------------------------------------------
+
 
 class TOOLKIT_DLLPUBLIC VCLXMenu :  public css::awt::XMenuBar,
                                     public css::awt::XPopupMenu,

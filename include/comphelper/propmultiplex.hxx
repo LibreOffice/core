@@ -24,20 +24,20 @@
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/comphelperdllapi.h>
 
-//=========================================================================
-//= property helper classes
-//=========================================================================
 
-//.........................................................................
+//= property helper classes
+
+
+
 namespace comphelper
 {
-//.........................................................................
+
 
     class OPropertyChangeMultiplexer;
 
-    //==================================================================
+
     //= OPropertyChangeListener
-    //==================================================================
+
     /// simple listener adapter for property sets
     class COMPHELPER_DLLPUBLIC OPropertyChangeListener
     {
@@ -65,9 +65,9 @@ namespace comphelper
         void    setAdapter( OPropertyChangeMultiplexer* _pAdapter );
     };
 
-    //==================================================================
+
     //= OPropertyChangeMultiplexer
-    //==================================================================
+
     /// multiplexer for property changes
     class COMPHELPER_DLLPUBLIC OPropertyChangeMultiplexer   :public cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListener>
     {
@@ -101,9 +101,9 @@ namespace comphelper
         void dispose();
     };
 
-//.........................................................................
+
 }   // namespace comphelper
-//.........................................................................
+
 
 #endif // INCLUDED_COMPHELPER_PROPMULTIPLEX_HXX
 

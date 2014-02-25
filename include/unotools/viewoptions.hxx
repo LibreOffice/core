@@ -29,13 +29,13 @@
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
 
-//_________________________________________________________________________________________________________________
+
 //  forward declarations
-//_________________________________________________________________________________________________________________
+
 
 class SvtViewOptionsBase_Impl;
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @descr          Use these enum values to specify right list in configuration in which your view data are saved.
 *//*-*************************************************************************************************************/
 
@@ -47,7 +47,7 @@ enum EViewType
     E_WINDOW    =   3
 };
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          collect information about view features
     @descr          We support different basetypes of views like dialogs, tab-dialogs, tab-pages and normal windows.
                     You must specify your basetype by using right enum value and must give us a valid name for your
@@ -105,17 +105,17 @@ enum EViewType
 
 class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Options
 {
-    //-------------------------------------------------------------------------------------------------------------
+
     //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+
 
     public:
 
-        //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
 
-        /*-****************************************************************************************************//**
+        //  constructor / destructor
+
+
+        /*-****************************************************************************************************
             @short      standard constructor and destructor
             @descr      This will de-/initialize an instance with default values.
                         You must give us the basic type of your view and a name which specify right entry
@@ -134,7 +134,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
                          const OUString& sViewName );
         virtual ~SvtViewOptions();
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      support preload of these config item
             @descr      Sometimes we need preloading of these configuration data without real using of it.
 
@@ -149,11 +149,11 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
         static void AcquireOptions();
         static void ReleaseOptions();
 
-        //---------------------------------------------------------------------------------------------------------
-        //  interface
-        //---------------------------------------------------------------------------------------------------------
 
-        /*-****************************************************************************************************//**
+        //  interface
+
+
+        /*-****************************************************************************************************
             @short      use it to get information about existing entries in configuration
             @descr      The methods to set/get the position or size will create a new entry automaticly if
                         it not already exist and work with default values!
@@ -167,7 +167,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
 
         bool Exists() const;
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      use it to delete an entry of dynamic view set
             @descr      You can use this method to delete anexisting node in configuration.
                         But if you call a Set- or Get- method again on this instance
@@ -183,7 +183,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
 
         bool Delete();
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      use it to set/get the window state of your view
             @descr      These value describe position/size and some other states of a window.
                         Use it with right vcl methods directly. Normaly it's not necessary to
@@ -197,7 +197,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
         OUString GetWindowState(                               ) const;
         void            SetWindowState( const OUString& sState );
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      use it to set/get the page number which was the last active one
             @descr      It's only supported for:    - tab-dialogs
                         If you call it for other ones you will get an assertion in debug version.
@@ -211,7 +211,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
         sal_Int32 GetPageID(               ) const;
         void      SetPageID( sal_Int32 nID );
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      use it to set/get the visual state of a window
             @descr      It's only supported for:    - windows
                         If you call it for other ones you will get an assertion in debug version.
@@ -232,7 +232,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
         */
         bool HasVisible() const;
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      use it to set/get the extended user data (consisting of a set of named scalar values)
             @descr      It's supported for ALL types!
                         Every view can handle its own user defined data set.
@@ -244,7 +244,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > GetUserData(                                                                                     ) const;
         void                                                                   SetUserData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& lData );
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      use it to set/get ONE special user data item directly
             @descr      Normaly you can work on full user data list by using "Set/GetUserData()".
                         With this function you have an access on special list entries directly without any
@@ -258,13 +258,13 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
         void                       SetUserItem( const OUString&            sName  ,
                                                 const ::com::sun::star::uno::Any& aValue );
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private methods
-    //-------------------------------------------------------------------------------------------------------------
+
 
     private:
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      return a reference to a static mutex
             @descr      These class is threadsafe.
                         We create a static mutex only for one time and use it to protect our refcount and container
@@ -280,9 +280,9 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
 
         UNOTOOLS_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();
 
-    //-------------------------------------------------------------------------------------------------------------
+
     //  private member
-    //-------------------------------------------------------------------------------------------------------------
+
 
     private:
 

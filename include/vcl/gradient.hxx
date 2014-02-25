@@ -26,9 +26,9 @@
 
 #include <vcl/vclenum.hxx>
 
-// ----------------
+
 // - Impl_Gradient -
-// ----------------
+
 
 class Rectangle;
 class Point;
@@ -56,9 +56,9 @@ public:
                     Impl_Gradient( const Impl_Gradient& rImplGradient );
 };
 
-// ------------
+
 // - Gradient -
-// ------------
+
 
 class VCL_DLLPUBLIC Gradient
 {

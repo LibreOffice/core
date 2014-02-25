@@ -169,7 +169,7 @@ namespace canvas
 
 
         // High-level drawing operations (from the XCanvas interface)
-        // ==========================================================
+
 
         /// See XCanvas interface
         void drawPoint( const ::com::sun::star::geometry::RealPoint2D&      aPoint,

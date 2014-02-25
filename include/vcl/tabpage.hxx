@@ -25,9 +25,9 @@
 #include <vcl/builder.hxx>
 #include <vcl/window.hxx>
 
-// -----------
+
 // - TabPage -
-// -----------
+
 
 class VCL_DLLPUBLIC TabPage
     : public Window

@@ -23,7 +23,7 @@
 #include <svl/svldllapi.h>
 #include <svl/custritm.hxx>
 
-//============================================================================
+
 class SVL_DLLPUBLIC SfxStringItem: public CntUnencodedStringItem
 {
 public:

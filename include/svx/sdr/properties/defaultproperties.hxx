@@ -23,7 +23,7 @@
 #include <svx/sdr/properties/properties.hxx>
 #include <svx/svxdllapi.h>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {

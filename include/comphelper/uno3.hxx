@@ -27,18 +27,18 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
 
-//=========================================================================
+
+
 
     /// manipulate ref counts without calling acquire/release
     inline oslInterlockedCount increment(oslInterlockedCount& _counter) { return osl_atomic_increment(&_counter); }
     inline oslInterlockedCount decrement(oslInterlockedCount& _counter) { return osl_atomic_decrement(&_counter); }
 
-//=========================================================================
+
 
     /** used for declaring UNO3-Defaults, i.e. acquire/release
     */
@@ -143,11 +143,11 @@ namespace comphelper
         void         SAL_CALL PUT_SEMICOLON_AT_THE_END()
 
 
-    //=====================================================================
+
     //= deriving from multiple XInterface-derived classes
-    //=====================================================================
+
     //= forwarding/merging XInterface funtionality
-    //=====================================================================
+
     #define DECLARE_XINTERFACE( )   \
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException, std::exception); \
         virtual void SAL_CALL acquire() throw(); \
@@ -181,9 +181,9 @@ namespace comphelper
             return aReturn; \
         }
 
-    //=====================================================================
+
     //= forwarding/merging XTypeProvider funtionality
-    //=====================================================================
+
     #define DECLARE_XTYPEPROVIDER( )    \
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException, std::exception); \
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
@@ -221,7 +221,7 @@ namespace comphelper
         \
         IMPLEMENT_GET_IMPLEMENTATION_ID( classname )
 
-//=========================================================================
+
 
     /** ask for an iface of an aggregated object
         usage:<br/>
@@ -266,9 +266,9 @@ namespace comphelper
         return false;
     }
 
-//.........................................................................
+
 }   // namespace comphelper
-//.........................................................................
+
 
 #endif // INCLUDED_COMPHELPER_UNO3_HXX
 

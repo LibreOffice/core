@@ -25,9 +25,9 @@
 #include <vcl/salbtype.hxx>
 #include <vcl/bitmap.hxx>
 
-// --------------------
+
 // - Access defines -
-// --------------------
+
 
 #define DECL_FORMAT_GETPIXEL( Format ) \
 static BitmapColor GetPixelFor##Format( ConstScanline pScanline, long nX, const ColorMask& rMask );
@@ -60,16 +60,16 @@ case( BMP_FORMAT##Format ):            \
 break;
 
 
-// --------------------
+
 // - Access functions -
-// --------------------
+
 
 typedef BitmapColor (*FncGetPixel)( ConstScanline pScanline, long nX, const ColorMask& rMask );
 typedef void (*FncSetPixel)( Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask );
 
-// --------------------
+
 // - BitmapReadAccess -
-// --------------------
+
 
 class VCL_DLLPUBLIC BitmapReadAccess
 {
@@ -167,9 +167,9 @@ public:
     BitmapColor GetColorWithFallback( double fY, double fX, const BitmapColor& rFallback ) const;
 };
 
-// ---------------------
+
 // - BitmapWriteAccess -
-// ---------------------
+
 
 class VCL_DLLPUBLIC BitmapWriteAccess : public BitmapReadAccess
 {
@@ -212,44 +212,44 @@ private:
     BitmapWriteAccess&          operator=( const BitmapWriteAccess& ) { return *this; }
 };
 
-// -----------
+
 // - Inlines -
-// -----------
+
 
 inline bool BitmapReadAccess::operator!() const
 {
     return( mpBuffer == NULL );
 }
 
-// ------------------------------------------------------------------
+
 
 inline long BitmapReadAccess::Width() const
 {
     return( mpBuffer ? mpBuffer->mnWidth : 0L );
 }
 
-// ------------------------------------------------------------------
+
 
 inline long BitmapReadAccess::Height() const
 {
     return( mpBuffer ? mpBuffer->mnHeight : 0L );
 }
 
-// ------------------------------------------------------------------
+
 
 inline Point BitmapReadAccess::TopLeft() const
 {
     return Point();
 }
 
-// ------------------------------------------------------------------
+
 
 inline Point BitmapReadAccess::BottomRight() const
 {
     return Point( Width() - 1L, Height() - 1L );
 }
 
-// ------------------------------------------------------------------
+
 
 inline bool BitmapReadAccess::IsTopDown() const
 {
@@ -257,14 +257,14 @@ inline bool BitmapReadAccess::IsTopDown() const
     return( mpBuffer ? sal::static_int_cast<bool>( BMP_SCANLINE_ADJUSTMENT( mpBuffer->mnFormat ) == BMP_FORMAT_TOP_DOWN ) : false );
 }
 
-// ------------------------------------------------------------------
+
 
 inline bool BitmapReadAccess::IsBottomUp() const
 {
     return !IsTopDown();
 }
 
-// ------------------------------------------------------------------
+
 
 inline sal_uLong BitmapReadAccess::GetScanlineFormat() const
 {
@@ -272,7 +272,7 @@ inline sal_uLong BitmapReadAccess::GetScanlineFormat() const
     return( mpBuffer ? BMP_SCANLINE_FORMAT( mpBuffer->mnFormat ) : 0UL );
 }
 
-// ------------------------------------------------------------------
+
 
 inline sal_uLong BitmapReadAccess::GetScanlineSize() const
 {
@@ -280,7 +280,7 @@ inline sal_uLong BitmapReadAccess::GetScanlineSize() const
     return( mpBuffer ? mpBuffer->mnScanlineSize : 0UL );
 }
 
-// ------------------------------------------------------------------
+
 
 inline sal_uInt16  BitmapReadAccess::GetBitCount() const
 {
@@ -288,7 +288,7 @@ inline sal_uInt16  BitmapReadAccess::GetBitCount() const
     return( mpBuffer ? mpBuffer->mnBitCount : 0 );
 }
 
-// ------------------------------------------------------------------
+
 
 inline BitmapColor BitmapReadAccess::GetBestMatchingColor( const BitmapColor& rBitmapColor )
 {
@@ -298,7 +298,7 @@ inline BitmapColor BitmapReadAccess::GetBestMatchingColor( const BitmapColor& rB
         return rBitmapColor;
 }
 
-// ------------------------------------------------------------------
+
 
 inline Scanline BitmapReadAccess::GetBuffer() const
 {
@@ -306,7 +306,7 @@ inline Scanline BitmapReadAccess::GetBuffer() const
     return( mpBuffer ? mpBuffer->mpBits : NULL );
 }
 
-// ------------------------------------------------------------------
+
 
 inline Scanline BitmapReadAccess::GetScanline( long nY ) const
 {
@@ -315,7 +315,7 @@ inline Scanline BitmapReadAccess::GetScanline( long nY ) const
     return( mpBuffer ? mpScanBuf[ nY ] : NULL );
 }
 
-// ------------------------------------------------------------------
+
 
 inline bool BitmapReadAccess::HasPalette() const
 {
@@ -323,7 +323,7 @@ inline bool BitmapReadAccess::HasPalette() const
     return( mpBuffer && !!mpBuffer->maPalette );
 }
 
-// ------------------------------------------------------------------
+
 
 inline const BitmapPalette& BitmapReadAccess::GetPalette() const
 {
@@ -331,7 +331,7 @@ inline const BitmapPalette& BitmapReadAccess::GetPalette() const
     return mpBuffer->maPalette;
 }
 
-// ------------------------------------------------------------------
+
 
 inline sal_uInt16 BitmapReadAccess::GetPaletteEntryCount() const
 {
@@ -339,7 +339,7 @@ inline sal_uInt16 BitmapReadAccess::GetPaletteEntryCount() const
     return( HasPalette() ? mpBuffer->maPalette.GetEntryCount() : 0 );
 }
 
-// ------------------------------------------------------------------
+
 
 inline const BitmapColor& BitmapReadAccess::GetPaletteColor( sal_uInt16 nColor ) const
 {
@@ -348,14 +348,14 @@ inline const BitmapColor& BitmapReadAccess::GetPaletteColor( sal_uInt16 nColor )
     return mpBuffer->maPalette[ nColor ];
 }
 
-// ------------------------------------------------------------------
+
 
 inline const BitmapColor& BitmapReadAccess::GetBestPaletteColor( const BitmapColor& rBitmapColor ) const
 {
     return GetPaletteColor( GetBestPaletteIndex( rBitmapColor ) );
 }
 
-// ------------------------------------------------------------------
+
 
 inline bool BitmapReadAccess::HasColorMask() const
 {
@@ -369,7 +369,7 @@ inline bool BitmapReadAccess::HasColorMask() const
             nFormat == BMP_FORMAT_32BIT_TC_MASK );
 }
 
-// ------------------------------------------------------------------
+
 
 inline ColorMask& BitmapReadAccess::GetColorMask() const
 {
@@ -377,7 +377,7 @@ inline ColorMask& BitmapReadAccess::GetColorMask() const
     return mpBuffer->maColorMask;
 }
 
-// ------------------------------------------------------------------
+
 
 inline BitmapColor BitmapReadAccess::GetPixel( long nY, long nX ) const
 {
@@ -392,7 +392,7 @@ inline sal_uInt8 BitmapReadAccess::GetPixelIndex( long nY, long nX ) const
     return GetPixel( nY, nX ).GetBlueOrIndex();
 }
 
-// ------------------------------------------------------------------
+
 
 inline BitmapColor BitmapReadAccess::GetPixelFromData( const sal_uInt8* pData, long nX ) const
 {
@@ -400,7 +400,7 @@ inline BitmapColor BitmapReadAccess::GetPixelFromData( const sal_uInt8* pData, l
     return mFncGetPixel( pData, nX, maColorMask );
 }
 
-// ------------------------------------------------------------------
+
 
 inline void BitmapReadAccess::SetPixelOnData( sal_uInt8* pData, long nX, const BitmapColor& rBitmapColor )
 {
@@ -408,7 +408,7 @@ inline void BitmapReadAccess::SetPixelOnData( sal_uInt8* pData, long nX, const B
     mFncSetPixel( pData, nX, rBitmapColor, maColorMask );
 }
 
-// ------------------------------------------------------------------
+
 
 inline BitmapColor BitmapReadAccess::GetColor( long nY, long nX ) const
 {
@@ -418,14 +418,14 @@ inline BitmapColor BitmapReadAccess::GetColor( long nY, long nX ) const
         return GetPixel( nY, nX );
 }
 
-// ------------------------------------------------------------------
+
 
 inline sal_uInt8 BitmapReadAccess::GetLuminance( long nY, long nX ) const
 {
     return GetColor( nY, nX ).GetLuminance();
 }
 
-// ------------------------------------------------------------------
+
 
 inline void BitmapWriteAccess::SetPalette( const BitmapPalette& rPalette )
 {
@@ -433,7 +433,7 @@ inline void BitmapWriteAccess::SetPalette( const BitmapPalette& rPalette )
     mpBuffer->maPalette = rPalette;
 }
 
-// ------------------------------------------------------------------
+
 
 inline void BitmapWriteAccess::SetPaletteEntryCount( sal_uInt16 nCount )
 {
@@ -441,7 +441,7 @@ inline void BitmapWriteAccess::SetPaletteEntryCount( sal_uInt16 nCount )
     mpBuffer->maPalette.SetEntryCount( nCount );
 }
 
-// ------------------------------------------------------------------
+
 
 inline void BitmapWriteAccess::SetPaletteColor( sal_uInt16 nColor, const BitmapColor& rBitmapColor )
 {
@@ -450,7 +450,7 @@ inline void BitmapWriteAccess::SetPaletteColor( sal_uInt16 nColor, const BitmapC
     mpBuffer->maPalette[ nColor ] = rBitmapColor;
 }
 
-// ------------------------------------------------------------------
+
 
 inline void BitmapWriteAccess::SetPixel( long nY, long nX, const BitmapColor& rBitmapColor )
 {
@@ -465,7 +465,7 @@ inline void BitmapWriteAccess::SetPixelIndex( long nY, long nX, sal_uInt8 cIndex
     SetPixel( nY, nX, BitmapColor( cIndex ));
 }
 
-// ------------------------------------------------------------------
+
 
 #endif // INCLUDED_VCL_BMPACC_HXX
 

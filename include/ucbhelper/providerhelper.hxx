@@ -32,7 +32,7 @@
 #include <ucbhelper/macros.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
 
-//=========================================================================
+
 
 namespace com { namespace sun { namespace star { namespace ucb {
     class XPropertySetRegistry;
@@ -43,7 +43,7 @@ namespace ucbhelper_impl { struct ContentProviderImplHelper_Impl; }
 
 namespace ucbhelper {
 
-//=========================================================================
+
 
 class ContentImplHelper;
 typedef rtl::Reference< ContentImplHelper > ContentImplHelperRef;
@@ -131,30 +131,30 @@ protected:
 
 public:
 
-    //////////////////////////////////////////////////////////////////////
+
     // Contsruction/Destruction
-    //////////////////////////////////////////////////////////////////////
+
 
     ContentProviderImplHelper(
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::uno::XComponentContext >& rxContext );
     virtual ~ContentProviderImplHelper();
 
-    //////////////////////////////////////////////////////////////////////
+
     // XInterface
-    //////////////////////////////////////////////////////////////////////
+
 
     XINTERFACE_DECL()
 
-    //////////////////////////////////////////////////////////////////////
+
     // XTypeProvider
-    //////////////////////////////////////////////////////////////////////
+
 
     XTYPEPROVIDER_DECL()
 
-    //////////////////////////////////////////////////////////////////////
+
     // XServiceInfo
-    //////////////////////////////////////////////////////////////////////
+
 
     virtual OUString SAL_CALL
     getImplementationName()
@@ -166,9 +166,9 @@ public:
     getSupportedServiceNames()
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) = 0;
 
-    //////////////////////////////////////////////////////////////////////
+
     // XContentProvider
-    //////////////////////////////////////////////////////////////////////
+
 
     /**
       * This method returns a content with the requested id.
@@ -194,9 +194,9 @@ public:
                                ::com::sun::star::ucb::XContentIdentifier >& Id2 )
         throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
-    //////////////////////////////////////////////////////////////////////
+
     // Non-interface methods.
-    //////////////////////////////////////////////////////////////////////
+
 
     /**
       * This method returns a mutex, which protects the content list of the

@@ -107,7 +107,7 @@ struct EPaM;
 class DeletedNodeInfo;
 class ParaPortionList;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 /** values for GetAttribs
 */

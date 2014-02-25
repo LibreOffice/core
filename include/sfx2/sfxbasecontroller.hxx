@@ -56,9 +56,9 @@ class SfxViewFrame;
 
 sal_Int16 MapGroupIDToCommandGroup( sal_Int16 nGroupID );
 
-//________________________________________________________________________________________________________
+
 //  class declarations
-//________________________________________________________________________________________________________
+
 
 typedef ::cppu::WeakImplHelper9 <   css::frame::XController2
                                 ,   css::frame::XControllerBorder
@@ -74,15 +74,15 @@ typedef ::cppu::WeakImplHelper9 <   css::frame::XController2
 class SFX2_DLLPUBLIC SfxBaseController  :public SfxBaseController_Base
                                         ,public ::cppu::BaseMutex
 {
-//________________________________________________________________________________________________________
+
 //  public methods
-//________________________________________________________________________________________________________
+
 
 public:
 
-    //____________________________________________________________________________________________________
+
     //  constructor/destructor
-    //____________________________________________________________________________________________________
+
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -119,16 +119,15 @@ public:
 
     css::uno::Reference< css::task::XStatusIndicator > SAL_CALL getStatusIndicator(  ) throw (css::uno::RuntimeException, std::exception);
 
-    //____________________________________________________________________________________________________
+
     //  XController2
-    //____________________________________________________________________________________________________
     virtual css::uno::Reference< css::awt::XWindow > SAL_CALL getComponentWindow() throw (css::uno::RuntimeException, std::exception);
     virtual OUString SAL_CALL getViewControllerName() throw (css::uno::RuntimeException, std::exception);
     virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getCreationArguments() throw (css::uno::RuntimeException, std::exception);
 
-    //____________________________________________________________________________________________________
+
     //  XController
-    //____________________________________________________________________________________________________
+
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -235,9 +234,9 @@ public:
 
     css::uno::Reference< css::frame::XModel > SAL_CALL getModel() throw( css::uno::RuntimeException, std::exception ) ;
 
-    //____________________________________________________________________________________________________
+
     //  XDispatchProvider
-    //____________________________________________________________________________________________________
+
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -271,18 +270,18 @@ public:
 
     virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& seqDescriptor ) throw( css::uno::RuntimeException, std::exception ) ;
 
-    //____________________________________________________________________________________________________
+
     //  XControllerBorder
-    //____________________________________________________________________________________________________
+
 
     virtual css::frame::BorderWidths SAL_CALL getBorder() throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL addBorderResizeListener( const css::uno::Reference< css::frame::XBorderResizeListener >& xListener ) throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL removeBorderResizeListener( const css::uno::Reference< css::frame::XBorderResizeListener >& xListener ) throw (css::uno::RuntimeException, std::exception);
     virtual css::awt::Rectangle SAL_CALL queryBorderedArea( const css::awt::Rectangle& aPreliminaryRectangle ) throw (css::uno::RuntimeException, std::exception);
 
-    //____________________________________________________________________________________________________
+
     //  XComponent
-    //____________________________________________________________________________________________________
+
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -336,9 +335,8 @@ public:
     virtual void SAL_CALL addMouseClickHandler( const css::uno::Reference< css::awt::XMouseClickHandler >& xHandler ) throw (css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL removeMouseClickHandler( const css::uno::Reference< css::awt::XMouseClickHandler >& xHandler ) throw (css::uno::RuntimeException, std::exception);
 
-    //____________________________________________________________________________________________________
+
     //  XDispatchInformationProvider
-    //____________________________________________________________________________________________________
     virtual css::uno::Sequence< sal_Int16 > SAL_CALL getSupportedCommandGroups() throw (css::uno::RuntimeException, std::exception);
     virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( sal_Int16 nCommandGroup ) throw (css::uno::RuntimeException, std::exception);
 
@@ -371,9 +369,9 @@ private:
 
     DECL_LINK( CheckOutHandler, void * );
 
-//________________________________________________________________________________________________________
+
 //  private variables
-//________________________________________________________________________________________________________
+
 
 private:
 

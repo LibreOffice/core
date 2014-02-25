@@ -33,7 +33,7 @@ namespace oox { class PropertyMap; }
 namespace oox {
 namespace ole {
 
-// ============================================================================
+
 
 /** Contains generic information about an OLE object. */
 struct OleObjectInfo
@@ -48,7 +48,7 @@ struct OleObjectInfo
     explicit            OleObjectInfo();
 };
 
-// ============================================================================
+
 
 /** Helper for OLE object handling. */
 class OleObjectHelper
@@ -69,7 +69,7 @@ private:
     sal_Int32           mnObjectId;
 };
 
-// ============================================================================
+
 
 } // namespace ole
 } // namespace oox

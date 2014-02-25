@@ -29,14 +29,14 @@
 #include <comphelper/comphelperdllapi.h>
 
 
-//..............................................................................
+
 namespace comphelper
 {
-//..............................................................................
 
-    //==============================================================================
+
+
     // OCommonAccessibleText
-    //==============================================================================
+
     /** base class encapsulating common functionality for the helper classes implementing
         the XAccessibleText
     */
@@ -97,9 +97,9 @@ namespace comphelper
     };
 
 
-    //==============================================================================
+
     // OAccessibleTextHelper
-    //==============================================================================
+
 
     typedef ::cppu::ImplHelper1 <   ::com::sun::star::accessibility::XAccessibleText
                                 >   OAccessibleTextHelper_Base;
@@ -135,20 +135,20 @@ namespace comphelper
         virtual ::com::sun::star::accessibility::TextSegment SAL_CALL getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception);
     };
 
-//..............................................................................
+
 }   // namespace comphelper
-//..............................................................................
+
 
 #endif // INCLUDED_COMPHELPER_ACCESSIBLETEXTHELPER_HXX
 
 
-// -----------------------------------------------------------------------------
-//
+
+
 //  OAccessibleTextHelper is a helper class for implementing the
 //  XAccessibleText interface.
-//
+
 //  The following methods have a default implementation:
-//
+
 //      getCharacter
 //      getCharacterCount
 //      getSelectedText
@@ -159,9 +159,9 @@ namespace comphelper
 //      getTextAtIndex
 //      getTextBeforeIndex
 //      getTextBehindIndex
-//
+
 //  The following methods must be overridden by derived classes:
-//
+
 //      implGetText
 //      implGetLocale
 //      implGetSelection
@@ -172,7 +172,7 @@ namespace comphelper
 //      getIndexAtPoint
 //      setSelection
 //      copyText
-//
-// -----------------------------------------------------------------------------
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

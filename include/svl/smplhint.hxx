@@ -67,7 +67,7 @@ public:
     sal_uLong GetId() const { return mnId; }
 };
 
-//--------------------------------------------------------------------
+
 
 #define DECL_OBJHINT(Name, Type) \
         class Name: public SfxSimpleHint \

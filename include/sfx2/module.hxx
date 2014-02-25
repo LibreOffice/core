@@ -54,7 +54,7 @@ class Window;
 namespace com { namespace sun { namespace star { namespace frame {
     class XFrame;
 } } } }
-//====================================================================
+
 
 class SFX2_DLLPUBLIC SfxModule : public SfxShell
 {

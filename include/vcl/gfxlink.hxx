@@ -26,9 +26,9 @@
 #include <vcl/dllapi.h>
 #include <vcl/mapmod.hxx>
 
-// -------------
+
 // - ImpBuffer -
-// -------------
+
 
 struct ImpBuffer
 {
@@ -46,9 +46,9 @@ struct ImpBuffer
                 ~ImpBuffer() { delete[] mpBuffer; }
 };
 
-// -----------
+
 // - ImpSwap -
-// -----------
+
 
 struct ImpSwap
 {
@@ -66,9 +66,9 @@ struct ImpSwap
     void            WriteTo( SvStream& rOStm ) const;
 };
 
-// --------------
+
 // - ImpGfxLink -
-// --------------
+
 
 struct ImpGfxLink
 {
@@ -87,9 +87,9 @@ struct ImpGfxLink
 
 //#endif // __PRIVATE
 
-// ---------------
+
 // - GfxLinkType -
-// ---------------
+
 
 enum GfxLinkType
 {
@@ -112,9 +112,9 @@ enum GfxLinkType
 #define GFX_LINK_FIRST_NATIVE_ID    GFX_LINK_TYPE_NATIVE_GIF
 #define GFX_LINK_LAST_NATIVE_ID     GFX_LINK_TYPE_NATIVE_BMP
 
-// -----------
+
 // - GfxLink -
-// -----------
+
 
 struct ImpBuffer;
 struct ImpSwap;

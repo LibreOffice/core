@@ -35,9 +35,9 @@
 #include <svtools/optionsdrawinglayer.hxx>
 #include <unotools/options.hxx>
 
-//************************************************************
+
 //   Pre-Defines
-//************************************************************
+
 
 class SdrPageWindow;
 
@@ -61,9 +61,9 @@ namespace sdr { namespace contact {
     class ViewObjectContactRedirector;
 }}
 
-//************************************************************
+
 //   Defines for AnimationMode
-//************************************************************
+
 
 enum SdrAnimationMode
 {
@@ -72,9 +72,9 @@ enum SdrAnimationMode
     SDR_ANIMATION_DISABLE
 };
 
-//************************************************************
+
 //   Typedef's und defines
-//************************************************************
+
 
 typedef unsigned char TRISTATE;
 #define FUZZY                   (2)
@@ -83,7 +83,7 @@ typedef unsigned char TRISTATE;
 #define SDRVIEWWIN_NOTFOUND     (0xFFFF)
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 class SdrPaintView;
 
 namespace sdr
@@ -94,7 +94,7 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 
 class SVX_DLLPUBLIC SvxViewHint : public SfxHint
@@ -113,7 +113,7 @@ private:
 class SdrPaintWindow;
 typedef ::std::vector< SdrPaintWindow* > SdrPaintWindowVector;
 
-//////////////////////////////////////////////////////////////////////////////
+
 // helper to convert any GDIMetaFile to a good quality BitmapEx,
 // using default parameters and graphic::XPrimitive2DRenderer
 
@@ -122,7 +122,7 @@ BitmapEx SVX_DLLPUBLIC convertMetafileToBitmapEx(
     const basegfx::B2DRange& rTargetRange,
     const sal_uInt32 nMaximumQuadraticPixels = 500000);
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 class SVX_DLLPUBLIC SdrPaintView : public SfxListener, public SfxRepeatTarget, public SfxBroadcaster, public ::utl::ConfigurationListener
 {
@@ -365,12 +365,12 @@ public:
     // PrePaint call forwarded from app windows
     void PrePaint();
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
     // used internally for Draw/Impress/sch/chart2
     virtual void CompleteRedraw(OutputDevice* pOut, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0);
 
     // #i72889# used from CompleteRedraw() implementation internally, added to be able to do a complete redraw in single steps
-    //
+
     // BeginCompleteRedraw returns (or even creates) a SdrPaintWindow which shall then be used as
     // target for paints. Since paints may be buffered, use it's GetTargetOutputDevice() method which will
     // return the buffer in case of bufered.
@@ -381,7 +381,7 @@ public:
     virtual void DoCompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0);
     virtual void EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer);
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
     // used for the other applications basctl/sc/sw which call DrawLayer at PageViews
     // #i74769# Interface change to use common BeginCompleteRedraw/EndCompleteRedraw
     // #i76114# bDisableIntersect disables intersecting rReg with the Window's paint region
@@ -391,7 +391,7 @@ public:
     void EndDrawLayers(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer);
 
 protected:
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
     // used to paint the form layer after the PreRender device is flushed (painted) to the window.
     void ImpFormLayerDrawing(SdrPaintWindow& rPaintWindow) const;
 

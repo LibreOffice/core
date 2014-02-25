@@ -262,24 +262,24 @@ public:
     long GetEliminatePolyPointLimitAngle() const { return nEliminatePolyPointLimitAngle; }
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
+
+
 // Begriffsdefinition:
 //   - Etwas fangen=Gefangen werden kann z.B. der Mauszeiger oder die z.Zt. im
 //     Drag befindlichen markierten Objekte.
 //   - Auf etwas fangen=Man kann z.B. auf das Grid oder auf Hilfslinien fangen.
-//
+
 // Grundsaetzlich wird nur gefangen auf sichtbare Elemente (-> Border,
 // Hilfslinien, Konnektoren; Ausnahme: Grid). Ebenso koennen nur sichtbare
 // Elemente gefangen werden (->Konnektoren).
-//
+
 // Auf's Grid wird immer erst dann gefangen, wenn nix Anderes in der Naehe
 // (->Magnetic) ist.
-//
+
 // Der "Cursor" (also der Mauszeiger) beim Erzeugen von Objekten, beim Draggen
 // von Polygonpunkten, ... wird immer auf allen eingeschalteten Fangalternativen
 // gefangen (max 6).
-//
+
 // Beim Verschieben markierter Objekte ist das etwas anders. Statt des einen
 // Mauscursors gibt es hier 4 Alternativen an den markierten Objekten, die
 // gefangen werden koennen:
@@ -303,11 +303,11 @@ public:
 // Beim MouseMove-Event im DragMove werden also diese bis zu max. 11 moeglichen
 // Alternativen durchgetestet und die mit dem gerigsten Korrekturaufwand
 // vollzogen.
-//
+
 // Beim Resize, ... wird immer nur der logisch-umschliessende Rahmen der
 // markierten Objekte gefangen.
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 #endif // INCLUDED_SVX_SVDSNPV_HXX
 

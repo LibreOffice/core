@@ -22,7 +22,7 @@
 #include <svl/eitem.hxx>
 #include <svx/svxdllapi.h>
 
-//------------------------------------------------------------------------
+
 
 enum SvxChartStyle
 {
@@ -162,7 +162,7 @@ enum SvxChartRegress
 
 #define CHREGRESS_COUNT (CHREGRESS_MOVING_AVERAGE + 1)
 
-//------------------------------------------------------------------
+
 
 class SVX_DLLPUBLIC SvxChartStyleItem : public SfxEnumItem
 {
@@ -180,7 +180,7 @@ public:
         { return (SvxChartStyle)SfxEnumItem::GetValue(); }
 };
 
-//------------------------------------------------------------------
+
 
 class SVX_DLLPUBLIC SvxChartRegressItem : public SfxEnumItem
 {
@@ -199,7 +199,7 @@ public:
     sal_uInt16 GetVersion (sal_uInt16 nFileFormatVersion) const;
 };
 
-//------------------------------------------------------------------
+
 
 class SVX_DLLPUBLIC SvxChartDataDescrItem : public SfxEnumItem
 {
@@ -216,7 +216,7 @@ public:
         { return (SvxChartDataDescr)SfxEnumItem::GetValue(); }
 };
 
-//------------------------------------------------------------------
+
 
 class SVX_DLLPUBLIC SvxChartTextOrderItem : public SfxEnumItem
 {
@@ -238,7 +238,7 @@ public:
         { return (SvxChartTextOrder)SfxEnumItem::GetValue(); }
 };
 
-//------------------------------------------------------------------
+
 
 class SVX_DLLPUBLIC SvxChartTextOrientItem : public SfxEnumItem
 {
@@ -255,7 +255,7 @@ public:
         { return (SvxChartTextOrient)SfxEnumItem::GetValue(); }
 };
 
-//------------------------------------------------------------------
+
 
 class SVX_DLLPUBLIC SvxChartKindErrorItem : public SfxEnumItem
 {
@@ -276,7 +276,7 @@ public:
     sal_uInt16 GetVersion (sal_uInt16 nFileFormatVersion) const;
 };
 
-//------------------------------------------------------------------
+
 
 class SVX_DLLPUBLIC SvxChartIndicateItem : public SfxEnumItem
 {
@@ -297,7 +297,7 @@ public:
     sal_uInt16 GetVersion (sal_uInt16 nFileFormatVersion) const;
 };
 
-//------------------------------------------------------------------
+
 
 class SVX_DLLPUBLIC SvxDoubleItem : public SfxPoolItem
 {

@@ -29,14 +29,14 @@
 #define ACCESSIBLE_SELECTION_CHILD_ALL  ((sal_Int32)-1)
 #define ACCESSIBLE_SELECTION_CHILD_SELF ((sal_Int32)-2)
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
 
-    //=====================================================================
+
+
     //= OCommonAccessibleSelection
-    //=====================================================================
+
     /** base class encapsulating common functionality for the helper classes implementing
         the XAccessibleSelection
     */
@@ -78,9 +78,9 @@ namespace comphelper
         void SAL_CALL deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     };
 
-    //=====================================================================
+
     //= OAccessibleSelectionHelper
-    //=====================================================================
+
 
     typedef ::cppu::ImplHelper1< ::com::sun::star::accessibility::XAccessibleSelection > OAccessibleSelectionHelper_Base;
 
@@ -115,9 +115,9 @@ namespace comphelper
         virtual void SAL_CALL deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception);
     };
 
-//.........................................................................
+
 }   // namespace comphelper
-//.........................................................................
+
 
 #endif // INCLUDED_COMPHELPER_ACCESSIBLESELECTIONHELPER_HXX
 

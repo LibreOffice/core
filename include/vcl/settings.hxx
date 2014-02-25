@@ -47,9 +47,7 @@ namespace vcl {
     class IconThemeInfo;
 }
 
-// -----------------
 // - MouseSettings -
-// -----------------
 
 #define MOUSE_OPTION_AUTOFOCUS      ((sal_uLong)0x00000001)
 #define MOUSE_OPTION_AUTOCENTERPOS  ((sal_uLong)0x00000002)
@@ -157,9 +155,9 @@ struct FrameStyle
 #define DEFAULT_WORKSPACE_GRADIENT_START_COLOR Color( 0xa3, 0xae, 0xb8 )
 #define DEFAULT_WORKSPACE_GRADIENT_END_COLOR Color( 0x73, 0x7e, 0x88 )
 
-// -----------------
+
 // - StyleSettings -
-// -----------------
+
 
 #define STYLE_OPTION_MONO           ((sal_uLong)0x00000001)
 #define STYLE_OPTION_COLOR          ((sal_uLong)0x00000002)
@@ -565,9 +563,9 @@ public:
     bool                            operator !=( const StyleSettings& rSet ) const;
 };
 
-// ----------------
+
 // - MiscSettings -
-// ----------------
+
 
 class VCL_DLLPUBLIC MiscSettings
 {
@@ -593,9 +591,7 @@ public:
 };
 
 
-// ----------------
 // - HelpSettings -
-// ----------------
 
 class VCL_DLLPUBLIC HelpSettings
 {
@@ -616,9 +612,7 @@ public:
 };
 
 
-// ---------------
 // - AllSettings -
-// ---------------
 
 const int SETTINGS_MOUSE = 0x00000001;
 const int SETTINGS_STYLE = 0x00000002;

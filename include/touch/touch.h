@@ -44,9 +44,9 @@ extern "C" {
 // LibreOffice-based app on a touch platform app and the lower "core"
 // layers, used in cases where the core parts need to call
 // functionality in the upper parts or vice versa.
-//
+
 // Thus there are two classes of functions here:
-//
+
 // 1) Those to be implemented in the upper layer and called by the
 // lower layer. Prefixed by touch_ui_. The same API is used on each
 // such platform. There are called from low level LibreOffice

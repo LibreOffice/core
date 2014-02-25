@@ -25,7 +25,7 @@
 #include <svl/poolitem.hxx>
 #include <com/sun/star/frame/status/Visibility.hpp>
 
-//============================================================================
+
 DBG_NAMEEX_VISIBILITY(SfxVisibilityItem, SVL_DLLPUBLIC)
 
 class SVL_DLLPUBLIC SfxVisibilityItem: public SfxPoolItem

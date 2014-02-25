@@ -24,9 +24,9 @@
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
 
-// ------------
+
 // - GroupBox -
-// ------------
+
 
 class VCL_DLLPUBLIC GroupBox : public Control
 {

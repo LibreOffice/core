@@ -46,32 +46,32 @@ namespace comphelper {
         static ::com::sun::star::uno::Sequence< OUString > SAL_CALL impl_staticGetSupportedServiceNames();
 
 
-        //____________________________________________________________________________________________________
+
         // XInteractionHandler
-        //____________________________________________________________________________________________________
+
 
         virtual void SAL_CALL handle( const com::sun::star::uno::Reference< com::sun::star::task::XInteractionRequest >& xRequest)
             throw( com::sun::star::uno::RuntimeException, std::exception );
 
-        //____________________________________________________________________________________________________
+
         // XInteractionHandler2
-        //____________________________________________________________________________________________________
+
 
         virtual sal_Bool SAL_CALL handleInteractionRequest( const com::sun::star::uno::Reference< com::sun::star::task::XInteractionRequest >& xRequest)
             throw( com::sun::star::uno::RuntimeException, std::exception );
 
-        //____________________________________________________________________________________________________
+
         // XInitialization
-        //____________________________________________________________________________________________________
+
 
         virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
             throw ( ::com::sun::star::uno::Exception,
             ::com::sun::star::uno::RuntimeException,
             ::com::sun::star::frame::DoubleInitializationException ) ;
 
-        //____________________________________________________________________________________________________
+
         // XServiceInfo
-        //____________________________________________________________________________________________________
+
 
         virtual OUString SAL_CALL getImplementationName()
             throw ( ::com::sun::star::uno::RuntimeException, std::exception );

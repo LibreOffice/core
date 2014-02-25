@@ -42,13 +42,13 @@ namespace star
 namespace uno
 {
 
-//__________________________________________________________________________________________________
+
 inline Any::Any() SAL_THROW(())
 {
     ::uno_any_construct( this, 0, 0, (uno_AcquireFunc)cpp_acquire );
 }
 
-//______________________________________________________________________________
+
 template <typename T>
 inline Any::Any( T const & value )
 {
@@ -57,7 +57,7 @@ inline Any::Any( T const & value )
         ::cppu::getTypeFavourUnsigned(&value).getTypeLibType(),
         (uno_AcquireFunc) cpp_acquire );
 }
-//______________________________________________________________________________
+
 inline Any::Any( bool value )
 {
     sal_Bool b = value;
@@ -66,37 +66,37 @@ inline Any::Any( bool value )
         (uno_AcquireFunc) cpp_acquire );
 }
 
-//__________________________________________________________________________________________________
+
 inline Any::Any( const Any & rAny ) SAL_THROW(())
 {
     ::uno_type_any_construct( this, rAny.pData, rAny.pType, (uno_AcquireFunc)cpp_acquire );
 }
-//__________________________________________________________________________________________________
+
 inline Any::Any( const void * pData_, const Type & rType ) SAL_THROW(())
 {
     ::uno_type_any_construct(
         this, const_cast< void * >( pData_ ), rType.getTypeLibType(),
         (uno_AcquireFunc)cpp_acquire );
 }
-//__________________________________________________________________________________________________
+
 inline Any::Any( const void * pData_, typelib_TypeDescription * pTypeDescr ) SAL_THROW(())
 {
     ::uno_any_construct(
         this, const_cast< void * >( pData_ ), pTypeDescr, (uno_AcquireFunc)cpp_acquire );
 }
-//__________________________________________________________________________________________________
+
 inline Any::Any( const void * pData_, typelib_TypeDescriptionReference * pType_ ) SAL_THROW(())
 {
     ::uno_type_any_construct(
         this, const_cast< void * >( pData_ ), pType_, (uno_AcquireFunc)cpp_acquire );
 }
-//__________________________________________________________________________________________________
+
 inline Any::~Any() SAL_THROW(())
 {
     ::uno_any_destruct(
         this, (uno_ReleaseFunc)cpp_release );
 }
-//__________________________________________________________________________________________________
+
 inline Any & Any::operator = ( const Any & rAny ) SAL_THROW(())
 {
     if (this != &rAny)
@@ -107,39 +107,39 @@ inline Any & Any::operator = ( const Any & rAny ) SAL_THROW(())
     }
     return *this;
 }
-//__________________________________________________________________________________________________
+
 inline ::rtl::OUString Any::getValueTypeName() const SAL_THROW(())
 {
     return ::rtl::OUString( pType->pTypeName );
 }
-//__________________________________________________________________________________________________
+
 inline void Any::setValue( const void * pData_, const Type & rType ) SAL_THROW(())
 {
     ::uno_type_any_assign(
         this, const_cast< void * >( pData_ ), rType.getTypeLibType(),
         (uno_AcquireFunc)cpp_acquire, (uno_ReleaseFunc)cpp_release );
 }
-//__________________________________________________________________________________________________
+
 inline void Any::setValue( const void * pData_, typelib_TypeDescriptionReference * pType_ ) SAL_THROW(())
 {
     ::uno_type_any_assign(
         this, const_cast< void * >( pData_ ), pType_,
         (uno_AcquireFunc)cpp_acquire, (uno_ReleaseFunc)cpp_release );
 }
-//__________________________________________________________________________________________________
+
 inline void Any::setValue( const void * pData_, typelib_TypeDescription * pTypeDescr ) SAL_THROW(())
 {
     ::uno_any_assign(
         this, const_cast< void * >( pData_ ), pTypeDescr,
         (uno_AcquireFunc)cpp_acquire, (uno_ReleaseFunc)cpp_release );
 }
-//__________________________________________________________________________________________________
+
 inline void Any::clear() SAL_THROW(())
 {
     ::uno_any_clear(
         this, (uno_ReleaseFunc)cpp_release );
 }
-//__________________________________________________________________________________________________
+
 inline bool Any::isExtractableTo( const Type & rType ) const SAL_THROW(())
 {
     return ::uno_type_isAssignableFromData(
@@ -147,7 +147,7 @@ inline bool Any::isExtractableTo( const Type & rType ) const SAL_THROW(())
         (uno_QueryInterfaceFunc)cpp_queryInterface, (uno_ReleaseFunc)cpp_release );
 }
 
-//______________________________________________________________________________
+
 template <typename T>
 inline bool Any::has() const
 {
@@ -162,14 +162,14 @@ inline bool Any::has() const
 template <>
 bool Any::has<sal_uInt16>() const;
 
-//__________________________________________________________________________________________________
+
 inline bool Any::operator == ( const Any & rAny ) const SAL_THROW(())
 {
     return ::uno_type_equalData(
         pData, pType, rAny.pData, rAny.pType,
         (uno_QueryInterfaceFunc)cpp_queryInterface, (uno_ReleaseFunc)cpp_release );
 }
-//__________________________________________________________________________________________________
+
 inline bool Any::operator != ( const Any & rAny ) const SAL_THROW(())
 {
     return (! ::uno_type_equalData(
@@ -177,7 +177,7 @@ inline bool Any::operator != ( const Any & rAny ) const SAL_THROW(())
         (uno_QueryInterfaceFunc)cpp_queryInterface, (uno_ReleaseFunc)cpp_release ));
 }
 
-//__________________________________________________________________________________________________
+
 template< class C >
 inline Any SAL_CALL makeAny( const C & value ) SAL_THROW(())
 {
@@ -185,7 +185,7 @@ inline Any SAL_CALL makeAny( const C & value ) SAL_THROW(())
 }
 
 // additionally specialized for C++ bool
-//______________________________________________________________________________
+
 template<>
 inline Any SAL_CALL makeAny( bool const & value ) SAL_THROW(())
 {
@@ -193,7 +193,7 @@ inline Any SAL_CALL makeAny( bool const & value ) SAL_THROW(())
     return Any( &b, ::getCppuBooleanType() );
 }
 
-//__________________________________________________________________________________________________
+
 #ifdef RTL_FAST_STRING
 template< class C1, class C2 >
 inline Any SAL_CALL makeAny( const rtl::OUStringConcat< C1, C2 >& value ) SAL_THROW(())
@@ -202,7 +202,7 @@ inline Any SAL_CALL makeAny( const rtl::OUStringConcat< C1, C2 >& value ) SAL_TH
     return Any( &str, ::cppu::getTypeFavourUnsigned(&str) );
 }
 #endif
-//__________________________________________________________________________________________________
+
 template< class C >
 inline void SAL_CALL operator <<= ( Any & rAny, const C & value ) SAL_THROW(())
 {
@@ -213,7 +213,7 @@ inline void SAL_CALL operator <<= ( Any & rAny, const C & value ) SAL_THROW(())
 }
 
 // additionally for C++ bool:
-//______________________________________________________________________________
+
 template<>
 inline void SAL_CALL operator <<= ( Any & rAny, bool const & value )
     SAL_THROW(())
@@ -224,7 +224,7 @@ inline void SAL_CALL operator <<= ( Any & rAny, bool const & value )
         (uno_AcquireFunc) cpp_acquire, (uno_ReleaseFunc) cpp_release );
 }
 
-//______________________________________________________________________________
+
 #ifdef RTL_FAST_STRING
 template< class C1, class C2 >
 inline void SAL_CALL operator <<= ( Any & rAny, const rtl::OUStringConcat< C1, C2 >& value )
@@ -237,7 +237,7 @@ inline void SAL_CALL operator <<= ( Any & rAny, const rtl::OUStringConcat< C1, C
         (uno_AcquireFunc)cpp_acquire, (uno_ReleaseFunc)cpp_release );
 }
 #endif
-//__________________________________________________________________________________________________
+
 template< class C >
 inline bool SAL_CALL operator >>= ( const Any & rAny, C & value ) SAL_THROW(())
 {
@@ -250,7 +250,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, C & value ) SAL_THROW(())
 }
 
 // bool
-//__________________________________________________________________________________________________
+
 template<>
 inline bool SAL_CALL operator >>= ( const ::com::sun::star::uno::Any & rAny, sal_Bool & value ) SAL_THROW(())
 {
@@ -261,7 +261,7 @@ inline bool SAL_CALL operator >>= ( const ::com::sun::star::uno::Any & rAny, sal
     }
     return false;
 }
-//__________________________________________________________________________________________________
+
 template<>
 inline bool SAL_CALL operator == ( const Any & rAny, const sal_Bool & value ) SAL_THROW(())
 {
@@ -269,7 +269,7 @@ inline bool SAL_CALL operator == ( const Any & rAny, const sal_Bool & value ) SA
             (value != sal_False) == (* reinterpret_cast< const sal_Bool * >( rAny.pData ) != sal_False));
 }
 
-//______________________________________________________________________________
+
 template<>
 inline bool SAL_CALL operator >>= ( Any const & rAny, bool & value )
     SAL_THROW(())
@@ -283,7 +283,7 @@ inline bool SAL_CALL operator >>= ( Any const & rAny, bool & value )
     return false;
 }
 
-//______________________________________________________________________________
+
 template<>
 inline bool SAL_CALL operator == ( Any const & rAny, bool const & value )
     SAL_THROW(())
@@ -295,7 +295,7 @@ inline bool SAL_CALL operator == ( Any const & rAny, bool const & value )
 }
 
 // byte
-//__________________________________________________________________________________________________
+
 template<>
 inline bool SAL_CALL operator >>= ( const ::com::sun::star::uno::Any & rAny, sal_Int8 & value ) SAL_THROW(())
 {
@@ -307,7 +307,7 @@ inline bool SAL_CALL operator >>= ( const ::com::sun::star::uno::Any & rAny, sal
     return false;
 }
 // short
-//__________________________________________________________________________________________________
+
 template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, sal_Int16 & value ) SAL_THROW(())
 {
@@ -324,7 +324,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, sal_Int16 & value ) SAL_TH
         return false;
     }
 }
-//__________________________________________________________________________________________________
+
 template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt16 & value ) SAL_THROW(())
 {
@@ -342,7 +342,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt16 & value ) SAL_T
     }
 }
 // long
-//__________________________________________________________________________________________________
+
 template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, sal_Int32 & value ) SAL_THROW(())
 {
@@ -365,7 +365,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, sal_Int32 & value ) SAL_TH
         return false;
     }
 }
-//__________________________________________________________________________________________________
+
 template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt32 & value ) SAL_THROW(())
 {
@@ -389,7 +389,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt32 & value ) SAL_T
     }
 }
 // hyper
-//__________________________________________________________________________________________________
+
 template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, sal_Int64 & value ) SAL_THROW(())
 {
@@ -418,7 +418,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, sal_Int64 & value ) SAL_TH
         return false;
     }
 }
-//__________________________________________________________________________________________________
+
 template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt64 & value ) SAL_THROW(())
 {
@@ -448,7 +448,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt64 & value ) SAL_T
     }
 }
 // float
-//__________________________________________________________________________________________________
+
 template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, float & value ) SAL_THROW(())
 {
@@ -471,7 +471,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, float & value ) SAL_THROW(
     }
 }
 // double
-//__________________________________________________________________________________________________
+
 template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, double & value ) SAL_THROW(())
 {
@@ -503,7 +503,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, double & value ) SAL_THROW
     }
 }
 // string
-//__________________________________________________________________________________________________
+
 template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, ::rtl::OUString & value ) SAL_THROW(())
 {
@@ -514,7 +514,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, ::rtl::OUString & value ) 
     }
     return false;
 }
-//__________________________________________________________________________________________________
+
 template<>
 inline bool SAL_CALL operator == ( const Any & rAny, const ::rtl::OUString & value ) SAL_THROW(())
 {
@@ -522,7 +522,7 @@ inline bool SAL_CALL operator == ( const Any & rAny, const ::rtl::OUString & val
             value.equals( * reinterpret_cast< const ::rtl::OUString * >( rAny.pData ) ));
 }
 // type
-//__________________________________________________________________________________________________
+
 template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, Type & value ) SAL_THROW(())
 {
@@ -533,7 +533,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, Type & value ) SAL_THROW((
     }
     return false;
 }
-//__________________________________________________________________________________________________
+
 template<>
 inline bool SAL_CALL operator == ( const Any & rAny, const Type & value ) SAL_THROW(())
 {
@@ -541,7 +541,7 @@ inline bool SAL_CALL operator == ( const Any & rAny, const Type & value ) SAL_TH
             value.equals( * reinterpret_cast< const Type * >( rAny.pData ) ));
 }
 // any
-//__________________________________________________________________________________________________
+
 template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, Any & value ) SAL_THROW(())
 {
@@ -554,7 +554,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, Any & value ) SAL_THROW(()
     return true;
 }
 // interface
-//__________________________________________________________________________________________________
+
 template<>
 inline bool SAL_CALL operator == ( const Any & rAny, const BaseReference & value ) SAL_THROW(())
 {
@@ -566,7 +566,7 @@ inline bool SAL_CALL operator == ( const Any & rAny, const BaseReference & value
 }
 
 // operator to compare to an any.
-//__________________________________________________________________________________________________
+
 template< class C >
 inline bool SAL_CALL operator == ( const Any & rAny, const C & value ) SAL_THROW(())
 {
@@ -577,7 +577,7 @@ inline bool SAL_CALL operator == ( const Any & rAny, const C & value ) SAL_THROW
         (uno_QueryInterfaceFunc)cpp_queryInterface, (uno_ReleaseFunc)cpp_release );
 }
 // operator to compare to an any.  may use specialized operators ==.
-//__________________________________________________________________________________________________
+
 template< class C >
 inline bool SAL_CALL operator != ( const Any & rAny, const C & value ) SAL_THROW(())
 {
@@ -588,7 +588,7 @@ extern "C" rtl_uString * SAL_CALL cppu_Any_extraction_failure_msg(
     uno_Any const * pAny, typelib_TypeDescriptionReference * pType )
     SAL_THROW_EXTERN_C();
 
-//______________________________________________________________________________
+
 template <typename T>
 T Any::get() const
 {

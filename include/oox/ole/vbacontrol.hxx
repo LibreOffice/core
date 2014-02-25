@@ -33,7 +33,7 @@ namespace oox { class StorageBase; }
 namespace oox {
 namespace ole {
 
-// ============================================================================
+
 
 /** Common properties for all controls that are part of a VBA user form or of
     another container control in a VBA user form. */
@@ -94,7 +94,7 @@ protected:
 
 typedef ::boost::shared_ptr< VbaSiteModel > VbaSiteModelRef;
 
-// ============================================================================
+
 
 /** A control that is embedded in a VBA user form or in another container
     control in a VBA user form.
@@ -171,7 +171,7 @@ private:
     AxClassTable         maClassTable;      ///< Class identifiers for exotic embedded controls.
 };
 
-// ============================================================================
+
 
 class VbaUserForm : public VbaFormControl
 {
@@ -196,7 +196,7 @@ private:
     ControlConverter    maConverter;
 };
 
-// ============================================================================
+
 
 } // namespace ole
 } // namespace oox

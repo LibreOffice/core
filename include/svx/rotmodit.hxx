@@ -23,7 +23,7 @@
 #include <svl/eitem.hxx>
 #include <svx/svxdllapi.h>
 
-//----------------------------------------------------------------------------
+
 //  Alignment with rotated text
 
 enum SvxRotateMode
