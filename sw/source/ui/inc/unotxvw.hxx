@@ -237,7 +237,9 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > SAL_CALL   getEnd()
         throw (::com::sun::star::uno::RuntimeException,
                std::exception);
-    virtual OUString SAL_CALL  getString(void) throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL  getString()
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
     virtual void SAL_CALL  setString(const OUString& aString) throw( ::com::sun::star::uno::RuntimeException );
 
     //XScreenCursor

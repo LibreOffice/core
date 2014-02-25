@@ -1428,7 +1428,8 @@ uno::Reference< text::XTextRange >  SwXTextViewCursor::getEnd()
     return xRet;
 }
 
-OUString SwXTextViewCursor::getString(void) throw( uno::RuntimeException )
+OUString SwXTextViewCursor::getString()
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     OUString uRet;
