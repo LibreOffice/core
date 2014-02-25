@@ -39,7 +39,7 @@ published service MediaProperties
         #InputStream or #OutputStream
         property</p>
 
-        <p>In addition to the normal protocols like file:// or http://
+        <p>In addition to the normal protocols like file:// or http:
         you can use private URLs as follows to get access to graphics
         lying inside the resource system within an Office context:
 
