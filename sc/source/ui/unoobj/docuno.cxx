@@ -1513,8 +1513,8 @@ uno::Reference<sheet::XConsolidationDescriptor> SAL_CALL ScModelObj::createConso
 }
 
 void SAL_CALL ScModelObj::consolidate(
-        const uno::Reference<sheet::XConsolidationDescriptor>& xDescriptor )
-                                                throw(uno::RuntimeException)
+    const uno::Reference<sheet::XConsolidationDescriptor>& xDescriptor )
+        throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     //  das koennte theoretisch ein fremdes Objekt sein, also nur das

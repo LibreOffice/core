@@ -227,7 +227,8 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL consolidate( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::sheet::XConsolidationDescriptor >& xDescriptor )
-                                    throw(::com::sun::star::uno::RuntimeException);
+                                    throw (::com::sun::star::uno::RuntimeException,
+                                          std::exception);
 
                             /// XDocumentAuditing
     virtual void SAL_CALL   refreshArrows() throw(::com::sun::star::uno::RuntimeException);
