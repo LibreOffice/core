@@ -50,11 +50,11 @@ using namespace webdav_ucp;
 namespace webdav_ucp
 {
 
-//=========================================================================
-//
+
+
 // struct ResultListEntry.
-//
-//=========================================================================
+
+
 
 struct ResultListEntry
 {
@@ -69,19 +69,19 @@ struct ResultListEntry
     {}
 };
 
-//=========================================================================
-//
+
+
 // ResultList.
-//
-//=========================================================================
+
+
 
 typedef boost::ptr_vector<ResultListEntry> ResultList;
 
-//=========================================================================
-//
+
+
 // struct DataSupplier_Impl.
-//
-//=========================================================================
+
+
 
 struct DataSupplier_Impl
 {
@@ -103,13 +103,13 @@ struct DataSupplier_Impl
 
 }
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // DataSupplier Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 DataSupplier::DataSupplier(
             const uno::Reference< uno::XComponentContext >& rxContext,
@@ -119,13 +119,13 @@ DataSupplier::DataSupplier(
 {
 }
 
-//=========================================================================
+
 // virtual
 DataSupplier::~DataSupplier()
 {
 }
 
-//=========================================================================
+
 // virtual
 OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
 {
@@ -162,7 +162,7 @@ OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
     return OUString();
 }
 
-//=========================================================================
+
 // virtual
 uno::Reference< ucb::XContentIdentifier >
 DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
@@ -191,7 +191,7 @@ DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
     return uno::Reference< ucb::XContentIdentifier >();
 }
 
-//=========================================================================
+
 // virtual
 uno::Reference< ucb::XContent >
 DataSupplier::queryContent( sal_uInt32 nIndex )
@@ -228,7 +228,7 @@ DataSupplier::queryContent( sal_uInt32 nIndex )
     return uno::Reference< ucb::XContent >();
 }
 
-//=========================================================================
+
 // virtual
 bool DataSupplier::getResult( sal_uInt32 nIndex )
 {
@@ -253,7 +253,7 @@ bool DataSupplier::getResult( sal_uInt32 nIndex )
     return false;
 }
 
-//=========================================================================
+
 // virtual
 sal_uInt32 DataSupplier::totalCount()
 {
@@ -263,21 +263,21 @@ sal_uInt32 DataSupplier::totalCount()
   return m_pImpl->m_aResults.size();
 }
 
-//=========================================================================
+
 // virtual
 sal_uInt32 DataSupplier::currentCount()
 {
     return m_pImpl->m_aResults.size();
 }
 
-//=========================================================================
+
 // virtual
 bool DataSupplier::isCountFinal()
 {
     return m_pImpl->m_bCountFinal;
 }
 
-//=========================================================================
+
 // virtual
 uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues(
                                                     sal_uInt32 nIndex  )
@@ -311,7 +311,7 @@ uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues(
     return uno::Reference< sdbc::XRow >();
 }
 
-//=========================================================================
+
 // virtual
 void DataSupplier::releasePropertyValues( sal_uInt32 nIndex )
 {
@@ -321,13 +321,13 @@ void DataSupplier::releasePropertyValues( sal_uInt32 nIndex )
         m_pImpl->m_aResults[ nIndex ].xRow = uno::Reference< sdbc::XRow >();
 }
 
-//=========================================================================
+
 // virtual
 void DataSupplier::close()
 {
 }
 
-//=========================================================================
+
 // virtual
 void DataSupplier::validate()
     throw( ucb::ResultSetException )
@@ -336,7 +336,7 @@ void DataSupplier::validate()
         throw ucb::ResultSetException();
 }
 
-//=========================================================================
+
 sal_Bool DataSupplier::getData()
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_pImpl->m_aMutex );

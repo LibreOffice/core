@@ -27,7 +27,7 @@
 
 namespace http_dav_ucp {
 
-//=========================================================================
+
 
 struct equalPropertyName
 {

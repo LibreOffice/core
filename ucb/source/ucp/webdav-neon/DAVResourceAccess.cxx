@@ -42,15 +42,15 @@
 using namespace webdav_ucp;
 using namespace com::sun::star;
 
-//=========================================================================
-//=========================================================================
-//
-// DAVAuthListener_Impl Implementation.
-//
-//=========================================================================
-//=========================================================================
 
-//=========================================================================
+
+
+// DAVAuthListener_Impl Implementation.
+
+
+
+
+
 // virtual
 int DAVAuthListener_Impl::authenticate(
     const OUString & inRealm,
@@ -129,15 +129,15 @@ int DAVAuthListener_Impl::authenticate(
     return -1;
 }
 
-//=========================================================================
-//=========================================================================
-//
-// DAVResourceAccess Implementation.
-//
-//=========================================================================
-//=========================================================================
 
-//=========================================================================
+
+
+// DAVResourceAccess Implementation.
+
+
+
+
+
 DAVResourceAccess::DAVResourceAccess(
     const uno::Reference< uno::XComponentContext > & rxContext,
     rtl::Reference< DAVSessionFactory > const & rSessionFactory,
@@ -148,7 +148,7 @@ DAVResourceAccess::DAVResourceAccess(
 {
 }
 
-//=========================================================================
+
 DAVResourceAccess::DAVResourceAccess( const DAVResourceAccess & rOther )
 : m_aURL( rOther.m_aURL ),
   m_aPath( rOther.m_aPath ),
@@ -160,7 +160,7 @@ DAVResourceAccess::DAVResourceAccess( const DAVResourceAccess & rOther )
 {
 }
 
-//=========================================================================
+
 DAVResourceAccess & DAVResourceAccess::operator=(
     const DAVResourceAccess & rOther )
 {
@@ -176,7 +176,7 @@ DAVResourceAccess & DAVResourceAccess::operator=(
 }
 
 #if 0 // currently not used, but please don't remove code
-//=========================================================================
+
 void DAVResourceAccess::OPTIONS(
     DAVCapabilities & rCapabilities,
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
@@ -216,7 +216,7 @@ void DAVResourceAccess::OPTIONS(
 }
 #endif
 
-//=========================================================================
+
 void DAVResourceAccess::PROPFIND(
     const Depth nDepth,
     const std::vector< OUString > & rPropertyNames,
@@ -260,7 +260,7 @@ void DAVResourceAccess::PROPFIND(
     while ( bRetry );
 }
 
-//=========================================================================
+
 void DAVResourceAccess::PROPFIND(
     const Depth nDepth,
     std::vector< DAVResourceInfo > & rResInfo,
@@ -301,7 +301,7 @@ void DAVResourceAccess::PROPFIND(
     while ( bRetry );
 }
 
-//=========================================================================
+
 void DAVResourceAccess::PROPPATCH(
     const std::vector< ProppatchValue >& rValues,
     const uno::Reference< ucb::XCommandEnvironment >& xEnv )
@@ -340,7 +340,7 @@ void DAVResourceAccess::PROPPATCH(
     while ( bRetry );
 }
 
-//=========================================================================
+
 void DAVResourceAccess::HEAD(
     const std::vector< OUString > & rHeaderNames,
     DAVResource & rResource,
@@ -381,7 +381,7 @@ void DAVResourceAccess::HEAD(
     while ( bRetry );
 }
 
-//=========================================================================
+
 uno::Reference< io::XInputStream > DAVResourceAccess::GET(
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
   throw( DAVException )
@@ -422,7 +422,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
     return xStream;
 }
 
-//=========================================================================
+
 void DAVResourceAccess::GET(
     uno::Reference< io::XOutputStream > & rStream,
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
@@ -461,7 +461,7 @@ void DAVResourceAccess::GET(
     while ( bRetry );
 }
 
-//=========================================================================
+
 uno::Reference< io::XInputStream > DAVResourceAccess::GET(
     const std::vector< OUString > & rHeaderNames,
     DAVResource & rResource,
@@ -506,7 +506,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
     return xStream;
 }
 
-//=========================================================================
+
 void DAVResourceAccess::GET(
     uno::Reference< io::XOutputStream > & rStream,
     const std::vector< OUString > & rHeaderNames,
@@ -549,7 +549,7 @@ void DAVResourceAccess::GET(
     while ( bRetry );
 }
 
-//=========================================================================
+
 void DAVResourceAccess::abort()
   throw( DAVException )
 {
@@ -557,7 +557,7 @@ void DAVResourceAccess::abort()
     m_xSession->abort();
 }
 
-//=========================================================================
+
 namespace {
 
     void resetInputStream( const uno::Reference< io::XInputStream > & rStream )
@@ -585,7 +585,7 @@ namespace {
 
 } // namespace
 
-//=========================================================================
+
 void DAVResourceAccess::PUT(
     const uno::Reference< io::XInputStream > & rStream,
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
@@ -632,7 +632,7 @@ void DAVResourceAccess::PUT(
     while ( bRetry );
 }
 
-//=========================================================================
+
 uno::Reference< io::XInputStream > DAVResourceAccess::POST(
     const OUString & rContentType,
     const OUString & rReferer,
@@ -695,7 +695,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::POST(
     return xStream;
 }
 
-//=========================================================================
+
 void DAVResourceAccess::POST(
     const OUString & rContentType,
     const OUString & rReferer,
@@ -757,7 +757,7 @@ void DAVResourceAccess::POST(
     while ( bRetry );
 }
 
-//=========================================================================
+
 void DAVResourceAccess::MKCOL(
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
   throw( DAVException )
@@ -794,7 +794,7 @@ void DAVResourceAccess::MKCOL(
     while ( bRetry );
 }
 
-//=========================================================================
+
 void DAVResourceAccess::COPY(
     const OUString & rSourcePath,
     const OUString & rDestinationURI,
@@ -836,7 +836,7 @@ void DAVResourceAccess::COPY(
     while ( bRetry );
 }
 
-//=========================================================================
+
 void DAVResourceAccess::MOVE(
     const OUString & rSourcePath,
     const OUString & rDestinationURI,
@@ -878,7 +878,7 @@ void DAVResourceAccess::MOVE(
     while ( bRetry );
 }
 
-//=========================================================================
+
 void DAVResourceAccess::DESTROY(
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
   throw( DAVException )
@@ -915,7 +915,7 @@ void DAVResourceAccess::DESTROY(
     while ( bRetry );
 }
 
-//=========================================================================
+
 // set new lock.
 void DAVResourceAccess::LOCK(
     ucb::Lock & inLock,
@@ -956,7 +956,7 @@ void DAVResourceAccess::LOCK(
 }
 
 #if 0 // currently not used, but please don't remove code
-//=========================================================================
+
 // refresh existing lock.
 sal_Int64 DAVResourceAccess::LOCK(
     sal_Int64 nTimeout,
@@ -1001,7 +1001,7 @@ sal_Int64 DAVResourceAccess::LOCK(
 }
 #endif
 
-//=========================================================================
+
 void DAVResourceAccess::UNLOCK(
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
   throw ( DAVException )
@@ -1038,7 +1038,7 @@ void DAVResourceAccess::UNLOCK(
     while ( bRetry );
 }
 
-//=========================================================================
+
 void DAVResourceAccess::setFlags( const uno::Sequence< beans::NamedValue >& rFlags )
     throw ( DAVException )
 {
@@ -1046,7 +1046,7 @@ void DAVResourceAccess::setFlags( const uno::Sequence< beans::NamedValue >& rFla
     m_aFlags = rFlags;
 }
 
-//=========================================================================
+
 void DAVResourceAccess::setURL( const OUString & rNewURL )
     throw( DAVException )
 {
@@ -1055,7 +1055,7 @@ void DAVResourceAccess::setURL( const OUString & rNewURL )
     m_aPath = OUString(); // Next initialize() will create new session.
 }
 
-//=========================================================================
+
 // init dav session and path
 void DAVResourceAccess::initialize()
     throw ( DAVException )
@@ -1097,7 +1097,7 @@ void DAVResourceAccess::initialize()
     }
 }
 
-//=========================================================================
+
 const OUString & DAVResourceAccess::getRequestURI() const
 {
     OSL_ENSURE( m_xSession.is(),
@@ -1110,7 +1110,7 @@ const OUString & DAVResourceAccess::getRequestURI() const
     return m_aPath;
 }
 
-//=========================================================================
+
 // static
 void DAVResourceAccess::getUserRequestHeaders(
     const uno::Reference< ucb::XCommandEnvironment > & xEnv,
@@ -1154,7 +1154,7 @@ void DAVResourceAccess::getUserRequestHeaders(
         DAVRequestHeader( "User-Agent", "LibreOffice" ) );
 }
 
-//=========================================================================
+
 sal_Bool DAVResourceAccess::detectRedirectCycle(
                                 const OUString& rRedirectURL )
     throw ( DAVException )
@@ -1177,7 +1177,7 @@ sal_Bool DAVResourceAccess::detectRedirectCycle(
     return sal_False;
 }
 
-//=========================================================================
+
 void DAVResourceAccess::resetUri()
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -1192,7 +1192,7 @@ void DAVResourceAccess::resetUri()
     }
 }
 
-//=========================================================================
+
 sal_Bool DAVResourceAccess::handleException( const DAVException & e, int errorCount )
     throw ( DAVException )
 {

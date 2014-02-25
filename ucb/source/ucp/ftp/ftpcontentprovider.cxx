@@ -41,13 +41,13 @@ using namespace com::sun::star::beans;
 
 
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // ContentProvider Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 FTPContentProvider::FTPContentProvider(
     const Reference< XComponentContext >& rxContext)
@@ -57,7 +57,7 @@ FTPContentProvider::FTPContentProvider(
 {
 }
 
-//=========================================================================
+
 // virtual
 FTPContentProvider::~FTPContentProvider()
 {
@@ -65,53 +65,53 @@ FTPContentProvider::~FTPContentProvider()
     delete m_pProxyDecider;
 }
 
-//=========================================================================
-//
+
+
 // XInterface methods.
-//
-//=========================================================================
+
+
 
 XINTERFACE_IMPL_3(FTPContentProvider,
                   XTypeProvider,
                   XServiceInfo,
                   XContentProvider)
 
-//=========================================================================
-//
+
+
 // XTypeProvider methods.
-//
-//=========================================================================
+
+
 
 XTYPEPROVIDER_IMPL_3(FTPContentProvider,
                      XTypeProvider,
                      XServiceInfo,
                      XContentProvider)
 
-//=========================================================================
-//
+
+
 // XServiceInfo methods.
-//
-//=========================================================================
+
+
 
 XSERVICEINFO_IMPL_1_CTX(
     FTPContentProvider,
     OUString("com.sun.star.comp.FTPContentProvider"),
     OUString(FTP_CONTENT_PROVIDER_SERVICE_NAME));
 
-//=========================================================================
-//
+
+
 // Service factory implementation.
-//
-//=========================================================================
+
+
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL(FTPContentProvider);
 
 
-//=========================================================================
-//
+
+
 // XContentProvider methods.
-//
-//=========================================================================
+
+
 
 // virtual
 Reference<XContent> SAL_CALL

@@ -29,7 +29,7 @@ namespace com { namespace sun { namespace star { namespace container {
 
 namespace package_ucp {
 
-//=========================================================================
+
 
 // UNO service name for the provider. This name will be used by the UCB to
 // create instances of the provider.
@@ -47,7 +47,7 @@ namespace package_ucp {
 #define PACKAGE_ZIP_STREAM_CONTENT_TYPE \
                 "application/" PACKAGE_ZIP_URL_SCHEME "-stream"
 
-//=========================================================================
+
 
 class Packages;
 
@@ -77,13 +77,13 @@ public:
         throw( ::com::sun::star::ucb::IllegalIdentifierException,
                ::com::sun::star::uno::RuntimeException );
 
-    //////////////////////////////////////////////////////////////////////
-    // Additional interfaces
-    //////////////////////////////////////////////////////////////////////
 
-    //////////////////////////////////////////////////////////////////////
+    // Additional interfaces
+
+
+
     // Non-interface methods.
-    //////////////////////////////////////////////////////////////////////
+
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::container::XHierarchicalNameAccess >

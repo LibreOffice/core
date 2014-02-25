@@ -156,11 +156,11 @@ void MessagePrinter::print( const OUString& rText )
     }
 }
 
-//============================================================================
-//
+
+
 //  TestOutputStream
-//
-//============================================================================
+
+
 
 class TestOutputStream:
     public cppu::OWeakObject,
@@ -190,7 +190,7 @@ public:
     OUString getStart() const;
 };
 
-//============================================================================
+
 // virtual
 uno::Any SAL_CALL
 TestOutputStream::queryInterface(const uno::Type & rType)
@@ -201,7 +201,7 @@ TestOutputStream::queryInterface(const uno::Type & rType)
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface(rType);
 }
 
-//============================================================================
+
 // virtual
 void SAL_CALL TestOutputStream::writeBytes(
                                     const uno::Sequence< sal_Int8 > & rData)
@@ -218,7 +218,7 @@ void SAL_CALL TestOutputStream::writeBytes(
                          nLen, RTL_TEXTENCODING_ISO_8859_1);
 }
 
-//============================================================================
+
 OUString TestOutputStream::getStart() const
 {
     OUString sResult = m_sStart;
@@ -295,7 +295,7 @@ OUString ProgressHandler::toString(const uno::Any & rStatus)
     return OUString("(Unknown object)");
 }
 
-//============================================================================
+
 // virtual
 uno::Any SAL_CALL
 ProgressHandler::queryInterface( const uno::Type & rType )
@@ -307,7 +307,7 @@ ProgressHandler::queryInterface( const uno::Type & rType )
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
-//============================================================================
+
 // virtual
 void SAL_CALL ProgressHandler::push(const uno::Any & rStatus)
     throw (uno::RuntimeException)
@@ -317,7 +317,7 @@ void SAL_CALL ProgressHandler::push(const uno::Any & rStatus)
     m_rPrinter.print(sMessage);
 }
 
-//============================================================================
+
 // virtual
 void SAL_CALL ProgressHandler::update(const uno::Any & rStatus)
     throw (uno::RuntimeException)
@@ -327,7 +327,7 @@ void SAL_CALL ProgressHandler::update(const uno::Any & rStatus)
     m_rPrinter.print(sMessage);
 }
 
-//============================================================================
+
 // virtual
 void SAL_CALL ProgressHandler::pop() throw (uno::RuntimeException)
 {
@@ -535,9 +535,9 @@ UcbTaskEnvironment::~UcbTaskEnvironment()
 }
 
 
-//
+
 // XInterface methods
-//
+
 
 
 // virtual
@@ -809,10 +809,10 @@ UcbContent* UcbContent::create(
     if ( !rURL.Len() )
         return NULL;
 
-    //////////////////////////////////////////////////////////////////////
+
     // Get XContentIdentifier interface from UCB and let it create an
     // identifer for the given URL.
-    //////////////////////////////////////////////////////////////////////
+
 
     uno::Reference< ucb::XContentIdentifierFactory > xIdFac =
                                         rUCB.getContentIdentifierFactory();
@@ -824,10 +824,10 @@ UcbContent* UcbContent::create(
     if ( !xId.is() )
         return NULL;
 
-    //////////////////////////////////////////////////////////////////////
+
     // Get XContentProvider interface from UCB and let it create a
     // content for the given identifier.
-    //////////////////////////////////////////////////////////////////////
+
 
     uno::Reference< ucb::XContentProvider > xProv
         = rUCB.getContentProvider();
@@ -1502,9 +1502,9 @@ void UcbContent::removeProperty( const OUString& rName )
 }
 
 
-//
+
 // XInterface methods
-//
+
 
 
 // virtual
@@ -1537,9 +1537,9 @@ void SAL_CALL UcbContent::release()
 }
 
 
-//
+
 // XEventListener methods.
-//
+
 
 
 // virtual
@@ -1550,9 +1550,9 @@ void SAL_CALL UcbContent::disposing( const lang::EventObject& /*Source*/ )
 }
 
 
-//
+
 // XContentEventListener methods,
-//
+
 
 
 // virtual
@@ -1612,9 +1612,9 @@ void SAL_CALL UcbContent::contentEvent( const ucb::ContentEvent& evt )
 }
 
 
-//
+
 // XPropertiesChangeListener methods.
-//
+
 
 
 // virtual
@@ -2244,9 +2244,9 @@ MyApp aMyApp;
 // virtual
 void MyApp::Main()
 {
-    //////////////////////////////////////////////////////////////////////
+
     // Read command line params.
-    //////////////////////////////////////////////////////////////////////
+
 
     OUString aConfigurationKey1( UCB_CONFIGURATION_KEY1_LOCAL);
     OUString aConfigurationKey2( UCB_CONFIGURATION_KEY2_OFFICE);
@@ -2277,9 +2277,9 @@ void MyApp::Main()
         }
     }
 
-    //////////////////////////////////////////////////////////////////////
+
     // Initialize local Service Manager and basic services.
-    //////////////////////////////////////////////////////////////////////
+
 
     uno::Reference< lang::XMultiServiceFactory > xFac;
     try
@@ -2311,9 +2311,9 @@ void MyApp::Main()
 
     uno::Reference< lang::XComponent > xComponent( xFac, uno::UNO_QUERY );
 
-    //////////////////////////////////////////////////////////////////////
+
     // Create Application Window...
-    //////////////////////////////////////////////////////////////////////
+
 
     Help::EnableBalloonHelp();
 
@@ -2326,21 +2326,21 @@ void MyApp::Main()
 
     pMyWin->Show();
 
-    //////////////////////////////////////////////////////////////////////
+
     // Go...
-    //////////////////////////////////////////////////////////////////////
+
 
     Execute();
 
-    //////////////////////////////////////////////////////////////////////
+
     // Destroy Application Window...
-    //////////////////////////////////////////////////////////////////////
+
 
     delete pMyWin;
 
-    //////////////////////////////////////////////////////////////////////
+
     // Cleanup.
-    //////////////////////////////////////////////////////////////////////
+
 
     ::ucbhelper::ContentBroker::deinitialize();
 

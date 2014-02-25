@@ -40,11 +40,11 @@ using namespace com::sun::star;
 namespace package_ucp
 {
 
-//=========================================================================
-//
+
+
 // class Package.
-//
-//=========================================================================
+
+
 
 class Package : public cppu::OWeakObject,
                 public container::XHierarchicalNameAccess
@@ -85,11 +85,11 @@ public:
     { return m_xNA->hasByHierarchicalName( aName ); }
 };
 
-//=========================================================================
-//
+
+
 // Packages.
-//
-//=========================================================================
+
+
 
 struct equalString
 {
@@ -123,13 +123,13 @@ class Packages : public PackageMap {};
 
 using namespace package_ucp;
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // ContentProvider Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 ContentProvider::ContentProvider(
             const uno::Reference< uno::XComponentContext >& rxContext )
@@ -138,58 +138,58 @@ ContentProvider::ContentProvider(
 {
 }
 
-//=========================================================================
+
 // virtual
 ContentProvider::~ContentProvider()
 {
     delete m_pPackages;
 }
 
-//=========================================================================
-//
+
+
 // XInterface methods.
-//
-//=========================================================================
+
+
 
 XINTERFACE_IMPL_3( ContentProvider,
                    lang::XTypeProvider,
                    lang::XServiceInfo,
                    ucb::XContentProvider );
 
-//=========================================================================
-//
+
+
 // XTypeProvider methods.
-//
-//=========================================================================
+
+
 
 XTYPEPROVIDER_IMPL_3( ContentProvider,
                       lang::XTypeProvider,
                       lang::XServiceInfo,
                       ucb::XContentProvider );
 
-//=========================================================================
-//
+
+
 // XServiceInfo methods.
-//
-//=========================================================================
+
+
 
 XSERVICEINFO_IMPL_1_CTX( ContentProvider,
                      OUString( "com.sun.star.comp.ucb.PackageContentProvider" ),
                      OUString( PACKAGE_CONTENT_PROVIDER_SERVICE_NAME ) );
 
-//=========================================================================
-//
+
+
 // Service factory implementation.
-//
-//=========================================================================
+
+
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 
-//=========================================================================
-//
+
+
 // XContentProvider methods.
-//
-//=========================================================================
+
+
 
 // virtual
 uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
@@ -226,11 +226,11 @@ uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
     return xContent;
 }
 
-//=========================================================================
-//
+
+
 // Other methods.
-//
-//=========================================================================
+
+
 
 uno::Reference< container::XHierarchicalNameAccess >
 ContentProvider::createPackage( const PackageUri & rURI )
@@ -278,7 +278,7 @@ ContentProvider::createPackage( const PackageUri & rURI )
     return xPackage.get();
 }
 
-//=========================================================================
+
 sal_Bool ContentProvider::removePackage( const OUString & rName )
 {
     osl::MutexGuard aGuard( m_aMutex );

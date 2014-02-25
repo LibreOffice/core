@@ -115,7 +115,7 @@ shell::UnqPathData::~UnqPathData()
 
 
 
-////////////////////////////////////////////////////////////////////////////////////////
+
 
 
 
@@ -413,10 +413,10 @@ shell::~shell()
 /*                                                                               */
 /*********************************************************************************/
 
-//
+
 //  This two methods register and deregister a change listener for the content belonging
 //  to URL aUnqPath
-//
+
 
 void SAL_CALL
 shell::registerNotifier( const OUString& aUnqPath, Notifier* pNotifier )
@@ -464,11 +464,11 @@ shell::deregisterNotifier( const OUString& aUnqPath,Notifier* pNotifier )
 /*                     de/associate-Implementation                               */
 /*                                                                               */
 /*********************************************************************************/
-//
+
 //  Used to associate and deassociate a new property with
 //  the content belonging to URL UnqPath.
 //  The default value and the attributes are input
-//
+
 
 void SAL_CALL
 shell::associate( const OUString& aUnqPath,
@@ -568,10 +568,10 @@ shell::deassociate( const OUString& aUnqPath,
 /*                     page-Implementation                                       */
 /*                                                                               */
 /*********************************************************************************/
-//
+
 //  Given an xOutputStream, this method writes the content of the file belonging to
 //  URL aUnqPath into the XOutputStream
-//
+
 
 
 void SAL_CALL shell::page( sal_Int32 CommandId,
@@ -659,9 +659,9 @@ void SAL_CALL shell::page( sal_Int32 CommandId,
 /*                     open-Implementation                                       */
 /*                                                                               */
 /*********************************************************************************/
-//
+
 //  Given a file URL aUnqPath, this methods returns a XInputStream which reads from the open file.
-//
+
 
 
 uno::Reference< io::XInputStream > SAL_CALL
@@ -695,10 +695,10 @@ shell::open( sal_Int32 CommandId,
 /*                     open for read/write access-Implementation                 */
 /*                                                                               */
 /*********************************************************************************/
-//
+
 //  Given a file URL aUnqPath, this methods returns a XStream which can be used
 //  to read and write from/to the file.
-//
+
 
 
 uno::Reference< io::XStream > SAL_CALL
@@ -730,10 +730,10 @@ shell::open_rw( sal_Int32 CommandId,
 /*                       ls-Implementation                                       */
 /*                                                                               */
 /*********************************************************************************/
-//
+
 //  This method returns the result set containing the children of the directory belonging
 //  to file URL aUnqPath
-//
+
 
 
 uno::Reference< XDynamicResultSet > SAL_CALL
@@ -806,9 +806,9 @@ shell::info_p( const OUString& aUnqPath )
 /*                     setv-Implementation                                       */
 /*                                                                               */
 /*********************************************************************************/
-//
+
 //  Sets the values of the properties belonging to fileURL aUnqPath
-//
+
 
 
 uno::Sequence< uno::Any > SAL_CALL
@@ -1041,10 +1041,10 @@ shell::setv( const OUString& aUnqPath,
 /*                     getv-Implementation                                       */
 /*                                                                               */
 /*********************************************************************************/
-//
+
 //  Reads the values of the properties belonging to fileURL aUnqPath;
 //  Returns an XRow object containing the values in the requested order.
-//
+
 
 
 uno::Reference< sdbc::XRow > SAL_CALL
@@ -1110,9 +1110,9 @@ shell::getv( sal_Int32 CommandId,
 /*                         move-implementation                                  */
 /*                                                                              */
 /********************************************************************************/
-//
+
 //  Moves the content belonging to fileURL srcUnqPath to fileURL dstUnqPath.
-//
+
 
 void SAL_CALL
 shell::move( sal_Int32 CommandId,
@@ -1125,7 +1125,7 @@ shell::move( sal_Int32 CommandId,
     // srcUnqPath and dstUnqPathIn are equal
     if( srcUnqPath == dstUnqPathIn )
         return;
-    //
+
     osl::FileBase::RC nError;
     OUString dstUnqPath( dstUnqPathIn );
 
@@ -1296,9 +1296,9 @@ shell::move( sal_Int32 CommandId,
 /*                         copy-implementation                                  */
 /*                                                                              */
 /********************************************************************************/
-//
+
 //  Copies the content belonging to fileURL srcUnqPath to fileURL dstUnqPath ( files and directories )
-//
+
 
 namespace {
 
@@ -1493,10 +1493,10 @@ shell::copy(
 /*                         remove-implementation                                */
 /*                                                                              */
 /********************************************************************************/
-//
+
 //  Deletes the content belonging to fileURL aUnqPath( recursively in case of directory )
 //  Return: success of operation
-//
+
 
 
 sal_Bool SAL_CALL
@@ -1658,10 +1658,10 @@ shell::remove( sal_Int32 CommandId,
 /*                         mkdir-implementation                                 */
 /*                                                                              */
 /********************************************************************************/
-//
+
 //  Creates new directory with given URL, recursively if necessary
 //  Return:: success of operation
-//
+
 
 sal_Bool SAL_CALL
 shell::mkdir( sal_Int32 CommandId,
@@ -1718,11 +1718,11 @@ shell::mkdir( sal_Int32 CommandId,
 /*                         mkfil-implementation                                 */
 /*                                                                              */
 /********************************************************************************/
-//
+
 //  Creates new file with given URL.
 //  The content of aInputStream becomes the content of the file
 //  Return:: success of operation
-//
+
 
 sal_Bool SAL_CALL
 shell::mkfil( sal_Int32 CommandId,
@@ -1750,11 +1750,11 @@ shell::mkfil( sal_Int32 CommandId,
 /*                         write-implementation                                 */
 /*                                                                              */
 /********************************************************************************/
-//
+
 //  writes to the file with given URL.
 //  The content of aInputStream becomes the content of the file
 //  Return:: success of operation
-//
+
 
 sal_Bool SAL_CALL
 shell::write( sal_Int32 CommandId,
@@ -2149,11 +2149,11 @@ sal_Bool SAL_CALL shell::ensuredir( sal_Int32 CommandId,
 
 
 
-//
+
 //  Given a sequence of properties seq, this method determines the mask
 //  used to instantiate a osl::FileStatus, so that a call to
 //  osl::DirectoryItem::getFileStatus fills the required fields.
-//
+
 
 
 void SAL_CALL
@@ -2195,10 +2195,10 @@ shell::getMaskFromProperties(
 /*                     load-Implementation                                       */
 /*                                                                               */
 /*********************************************************************************/
-//
+
 //  Load the properties from configuration, if create == true create them.
 //  The Properties are stored under the url belonging to it->first.
-//
+
 
 void SAL_CALL
 shell::load( const ContentMap::iterator& it, sal_Bool create )

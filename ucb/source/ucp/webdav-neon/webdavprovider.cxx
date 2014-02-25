@@ -42,13 +42,13 @@
 using namespace com::sun::star;
 using namespace webdav_ucp;
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // ContentProvider Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 ContentProvider::ContentProvider(
                 const uno::Reference< uno::XComponentContext >& rxContext )
@@ -58,58 +58,58 @@ ContentProvider::ContentProvider(
 {
 }
 
-//=========================================================================
+
 // virtual
 ContentProvider::~ContentProvider()
 {
     delete m_pProps;
 }
 
-//=========================================================================
-//
+
+
 // XInterface methods.
-//
-//=========================================================================
+
+
 
 XINTERFACE_IMPL_3( ContentProvider,
                    lang::XTypeProvider,
                    lang::XServiceInfo,
                    ucb::XContentProvider );
 
-//=========================================================================
-//
+
+
 // XTypeProvider methods.
-//
-//=========================================================================
+
+
 
 XTYPEPROVIDER_IMPL_3( ContentProvider,
                       lang::XTypeProvider,
                       lang::XServiceInfo,
                       ucb::XContentProvider );
 
-//=========================================================================
-//
+
+
 // XServiceInfo methods.
-//
-//=========================================================================
+
+
 
 XSERVICEINFO_IMPL_1_CTX( ContentProvider,
                      OUString( "com.sun.star.comp.WebDAVContentProvider" ),
                      OUString( WEBDAV_CONTENT_PROVIDER_SERVICE_NAME ) );
 
-//=========================================================================
-//
+
+
 // Service factory implementation.
-//
-//=========================================================================
+
+
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 
-//=========================================================================
-//
+
+
 // XContentProvider methods.
-//
-//=========================================================================
+
+
 
 // virtual
 uno::Reference< ucb::XContent > SAL_CALL

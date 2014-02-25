@@ -34,13 +34,13 @@ using namespace com::sun::star;
 using namespace tdoc_ucp;
 
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // StorageElementFactory Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 StorageElementFactory::StorageElementFactory(
     const uno::Reference< uno::XComponentContext > & rxContext,
@@ -50,14 +50,14 @@ StorageElementFactory::StorageElementFactory(
 {
 }
 
-//=========================================================================
+
 StorageElementFactory::~StorageElementFactory()
 {
     OSL_ENSURE( m_aMap.empty(),
         "StorageElementFactory::~StorageElementFactory - Dangling storages!" );
 }
 
-//=========================================================================
+
 uno::Reference< embed::XStorage >
 StorageElementFactory::createTemporaryStorage()
     throw ( uno::Exception,
@@ -82,7 +82,7 @@ StorageElementFactory::createTemporaryStorage()
     return xStorage;
 }
 
-//=========================================================================
+
 uno::Reference< embed::XStorage >
 StorageElementFactory::createStorage( const OUString & rUri,
                                       StorageAccessMode eMode )
@@ -236,7 +236,7 @@ StorageElementFactory::createStorage( const OUString & rUri,
     }
 }
 
-//=========================================================================
+
 uno::Reference< io::XInputStream >
 StorageElementFactory::createInputStream( const OUString & rUri,
                                           const OUString & rPassword )
@@ -265,7 +265,7 @@ StorageElementFactory::createInputStream( const OUString & rUri,
     return xStream->getInputStream();
 }
 
-//=========================================================================
+
 uno::Reference< io::XOutputStream >
 StorageElementFactory::createOutputStream( const OUString & rUri,
                                            const OUString & rPassword,
@@ -310,7 +310,7 @@ StorageElementFactory::createOutputStream( const OUString & rUri,
         new OutputStream( m_xContext, rUri, xParentStorage, xStream->getOutputStream() ) );
 }
 
-//=========================================================================
+
 uno::Reference< io::XStream >
 StorageElementFactory::createStream( const OUString & rUri,
                                      const OUString & rPassword,
@@ -350,7 +350,7 @@ StorageElementFactory::createStream( const OUString & rUri,
         new Stream( m_xContext, rUri, xParentStorage, xStream ) );
 }
 
-//=========================================================================
+
 void StorageElementFactory::releaseElement( Storage * pElement ) SAL_THROW(())
 {
     OSL_ASSERT( pElement );
@@ -359,11 +359,11 @@ void StorageElementFactory::releaseElement( Storage * pElement ) SAL_THROW(())
         m_aMap.erase( pElement->m_aContainerIt );
 }
 
-//=========================================================================
-//
+
+
 // Non-UNO interface
-//
-//=========================================================================
+
+
 
 uno::Reference< embed::XStorage > StorageElementFactory::queryParentStorage(
         const OUString & rUri, StorageAccessMode eMode )
@@ -388,7 +388,7 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryParentStorage(
     return xParentStorage;
 }
 
-//=========================================================================
+
 uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
         const uno::Reference< embed::XStorage > & xParentStorage,
         const OUString & rUri,
@@ -537,7 +537,7 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
     return xStorage;
 }
 
-//=========================================================================
+
 uno::Reference< io::XStream >
 StorageElementFactory::queryStream(
                 const uno::Reference< embed::XStorage > & xParentStorage,

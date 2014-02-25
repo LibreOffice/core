@@ -68,11 +68,11 @@ using namespace com::sun::star;
 namespace
 {
 
-//=========================================================================
-//
+
+
 // struct TransferCommandContext.
-//
-//=========================================================================
+
+
 
 struct TransferCommandContext
 {
@@ -92,11 +92,11 @@ struct TransferCommandContext
       xOrigEnv( rxOrigEnv ), aArg( rArg ) {}
 };
 
-//=========================================================================
-//
+
+
 // class InteractionHandlerProxy.
-//
-//=========================================================================
+
+
 
 class InteractionHandlerProxy :
     public cppu::WeakImplHelper1< task::XInteractionHandler >
@@ -114,7 +114,7 @@ public:
         throw ( uno::RuntimeException );
 };
 
-//=========================================================================
+
 // virtual
 void SAL_CALL InteractionHandlerProxy::handle(
             const uno::Reference< task::XInteractionRequest >& Request )
@@ -166,11 +166,11 @@ void SAL_CALL InteractionHandlerProxy::handle(
     m_xOrig->handle( Request );
 }
 
-//=========================================================================
-//
+
+
 // class ActiveDataSink.
-//
-//=========================================================================
+
+
 
 class ActiveDataSink : public cppu::WeakImplHelper1< io::XActiveDataSink >
 {
@@ -185,7 +185,7 @@ public:
         throw( uno::RuntimeException );
 };
 
-//=========================================================================
+
 // virtual
 void SAL_CALL ActiveDataSink::setInputStream(
                         const uno::Reference< io::XInputStream >& aStream )
@@ -194,7 +194,7 @@ void SAL_CALL ActiveDataSink::setInputStream(
     m_xStream = aStream;
 }
 
-//=========================================================================
+
 // virtual
 uno::Reference< io::XInputStream > SAL_CALL ActiveDataSink::getInputStream()
     throw( uno::RuntimeException )
@@ -202,11 +202,11 @@ uno::Reference< io::XInputStream > SAL_CALL ActiveDataSink::getInputStream()
     return m_xStream;
 }
 
-//=========================================================================
-//
+
+
 // class CommandProcessorInfo.
-//
-//=========================================================================
+
+
 
 class CommandProcessorInfo :
     public cppu::WeakImplHelper1< ucb::XCommandInfo >
@@ -232,7 +232,7 @@ public:
         throw( uno::RuntimeException );
 };
 
-//=========================================================================
+
 CommandProcessorInfo::CommandProcessorInfo()
 {
     m_pInfo = new uno::Sequence< ucb::CommandInfo >( 2 );
@@ -258,14 +258,14 @@ CommandProcessorInfo::CommandProcessorInfo()
                     ucb::GlobalTransferCommandArgument * >( 0 ) ) ); // ArgType
 }
 
-//=========================================================================
+
 // virtual
 CommandProcessorInfo::~CommandProcessorInfo()
 {
     delete m_pInfo;
 }
 
-//=========================================================================
+
 // virtual
 uno::Sequence< ucb::CommandInfo > SAL_CALL
 CommandProcessorInfo::getCommands()
@@ -274,7 +274,7 @@ CommandProcessorInfo::getCommands()
     return uno::Sequence< ucb::CommandInfo >( *m_pInfo );
 }
 
-//=========================================================================
+
 // virtual
 ucb::CommandInfo SAL_CALL
 CommandProcessorInfo::getCommandInfoByName( const OUString& Name )
@@ -289,7 +289,7 @@ CommandProcessorInfo::getCommandInfoByName( const OUString& Name )
     throw ucb::UnsupportedCommandException();
 }
 
-//=========================================================================
+
 // virtual
 ucb::CommandInfo SAL_CALL
 CommandProcessorInfo::getCommandInfoByHandle( sal_Int32 Handle )
@@ -304,7 +304,7 @@ CommandProcessorInfo::getCommandInfoByHandle( sal_Int32 Handle )
     throw ucb::UnsupportedCommandException();
 }
 
-//=========================================================================
+
 // virtual
 sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByName(
                                                 const OUString& Name )
@@ -319,7 +319,7 @@ sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByName(
     return sal_False;
 }
 
-//=========================================================================
+
 // virtual
 sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByHandle( sal_Int32 Handle )
     throw( uno::RuntimeException )
@@ -333,9 +333,9 @@ sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByHandle( sal_Int32 Handle )
     return sal_False;
 }
 
-//=========================================================================
-//=========================================================================
-//=========================================================================
+
+
+
 
 OUString createDesiredName(
     const OUString & rSourceURL, const OUString & rNewTitle )
@@ -398,7 +398,7 @@ OUString createDesiredName(
     return createDesiredName( rArg.SourceURL, rArg.NewTitle );
 }
 
-//=========================================================================
+
 enum NameClashContinuation { NOT_HANDLED, ABORT, OVERWRITE, NEW_NAME, UNKNOWN };
 
 NameClashContinuation interactiveNameClashResolve(
@@ -474,7 +474,7 @@ NameClashContinuation interactiveNameClashResolve(
     return NOT_HANDLED;
 }
 
-//=========================================================================
+
 bool setTitle(
         const uno::Reference< ucb::XCommandProcessor > & xCommandProcessor,
         const uno::Reference< ucb::XCommandEnvironment > & xEnv,
@@ -521,7 +521,7 @@ bool setTitle(
     return true;
 }
 
-//=========================================================================
+
 uno::Reference< ucb::XContent > createNew(
                     const TransferCommandContext & rContext,
                     const uno::Reference< ucb::XContent > & xTarget,
@@ -530,11 +530,11 @@ uno::Reference< ucb::XContent > createNew(
                     sal_Bool bSourceIsLink )
     throw( uno::Exception )
 {
-    //////////////////////////////////////////////////////////////////////
-    //
+
+
     // (1) Obtain creatable types from target.
-    //
-    //////////////////////////////////////////////////////////////////////
+
+
 
     // First, try it using "CreatabeleContentsInfo" property and
     // "createNewContent" command -> the "new" way.
@@ -630,11 +630,11 @@ uno::Reference< ucb::XContent > createNew(
         // Unreachable
     }
 
-    //////////////////////////////////////////////////////////////////////
-    //
+
+
     // (2) Try to find a matching target type for the source object.
-    //
-    //////////////////////////////////////////////////////////////////////
+
+
 
     uno::Reference< ucb::XContent > xNew;
     for ( sal_Int32 n = 0; n < nCount; ++n )
@@ -672,7 +672,7 @@ uno::Reference< ucb::XContent > createNew(
             {
                 // (not a and not b) or (a and b)
                 // not( a or b) or (a and b)
-                //
+
                 if ( ( !!bSourceIsFolder ==
                         !!( nAttribs
                             & ucb::ContentInfoAttribute::KIND_FOLDER ) )
@@ -700,11 +700,11 @@ uno::Reference< ucb::XContent > createNew(
 
         if ( bMatch )
         {
-            //////////////////////////////////////////////////////////////
-            //
+
+
             // (3) Create a new, empty object of matched type.
-            //
-            //////////////////////////////////////////////////////////////
+
+
 
             if ( !xCreator.is() )
             {
@@ -750,7 +750,7 @@ uno::Reference< ucb::XContent > createNew(
     return xNew;
 }
 
-//=========================================================================
+
 void transferProperties(
     const TransferCommandContext & rContext,
     const uno::Reference< ucb::XCommandProcessor > & xCommandProcessorS,
@@ -909,7 +909,7 @@ void transferProperties(
     //     new object? addProperty ???
 }
 
-//=========================================================================
+
 uno::Reference< io::XInputStream > getInputStream(
     const TransferCommandContext & rContext,
     const uno::Reference< ucb::XCommandProcessor > & xCommandProcessorS )
@@ -917,11 +917,11 @@ uno::Reference< io::XInputStream > getInputStream(
 {
     uno::Reference< io::XInputStream > xInputStream;
 
-    //////////////////////////////////////////////////////////////////////
-    //
+
+
     // (1) Try to get data as XInputStream via XActiveDataSink.
-    //
-    //////////////////////////////////////////////////////////////////////
+
+
 
     try
     {
@@ -952,11 +952,11 @@ uno::Reference< io::XInputStream > getInputStream(
 
     if ( !xInputStream.is() )
     {
-        //////////////////////////////////////////////////////////////////
-        //
+
+
         // (2) Try to get data via XOutputStream.
-        //
-        //////////////////////////////////////////////////////////////////
+
+
 
         try
         {
@@ -991,7 +991,7 @@ uno::Reference< io::XInputStream > getInputStream(
     return xInputStream;
 }
 
-//=========================================================================
+
 uno::Reference< sdbc::XResultSet > getResultSet(
     const TransferCommandContext & rContext,
     const uno::Reference< ucb::XCommandProcessor > & xCommandProcessorS )
@@ -1037,7 +1037,7 @@ uno::Reference< sdbc::XResultSet > getResultSet(
     return xResultSet;
 }
 
-//=========================================================================
+
 void handleNameClashRename(
         const TransferCommandContext & rContext,
         const uno::Reference< ucb::XContent > & xNew,
@@ -1210,7 +1210,7 @@ void handleNameClashRename(
     }
 }
 
-//=========================================================================
+
 void globalTransfer_(
         const TransferCommandContext & rContext,
         const uno::Reference< ucb::XContent > & xSource,
@@ -1247,12 +1247,12 @@ void globalTransfer_(
     // TargetURL: property is optional.
     sal_Bool bSourceIsLink = !xSourceProps->getString( 3 ).isEmpty();
 
-    //////////////////////////////////////////////////////////////////////
-    //
+
+
     // (1) Try to find a matching target type for the source object and
     //     create a new, empty object of that type.
-    //
-    //////////////////////////////////////////////////////////////////////
+
+
 
     uno::Reference< ucb::XContent > xNew = createNew( rContext,
                                                       xTarget,
@@ -1276,11 +1276,11 @@ void globalTransfer_(
         // Unreachable
     }
 
-    //////////////////////////////////////////////////////////////////////
-    //
+
+
     // (2) Transfer property values from source to new object.
-    //
-    //////////////////////////////////////////////////////////////////////
+
+
 
     uno::Reference< ucb::XCommandProcessor > xCommandProcessorN(
                                                     xNew, uno::UNO_QUERY );
@@ -1326,11 +1326,11 @@ void globalTransfer_(
 
     transferProperties( rContext, xCommandProcessorS, xCommandProcessorN );
 
-    //////////////////////////////////////////////////////////////////////
-    //
+
+
     // (3) Try to obtain a data stream from source.
-    //
-    //////////////////////////////////////////////////////////////////////
+
+
 
     uno::Reference< io::XInputStream > xInputStream;
 
@@ -1338,11 +1338,11 @@ void globalTransfer_(
                                 != ucb::TransferCommandOperation_LINK ) )
         xInputStream = getInputStream( rContext, xCommandProcessorS );
 
-    //////////////////////////////////////////////////////////////////////
-    //
+
+
     // (4) Try to obtain a resultset (children) from source.
-    //
-    //////////////////////////////////////////////////////////////////////
+
+
 
     uno::Reference< sdbc::XResultSet > xResultSet;
 
@@ -1350,11 +1350,11 @@ void globalTransfer_(
                                 != ucb::TransferCommandOperation_LINK ) )
         xResultSet = getResultSet( rContext, xCommandProcessorS );
 
-    //////////////////////////////////////////////////////////////////////
-    //
+
+
     // (5) Insert (store) new content.
-    //
-    //////////////////////////////////////////////////////////////////////
+
+
 
     ucb::InsertCommandArgument2 aArg;
     aArg.Data = xInputStream;
@@ -1547,11 +1547,11 @@ void globalTransfer_(
     }
     while ( bRetry );
 
-    //////////////////////////////////////////////////////////////////////
-    //
+
+
     // (6) Process children of source.
-    //
-    //////////////////////////////////////////////////////////////////////
+
+
 
     if ( xResultSet.is() )
     {
@@ -1677,11 +1677,11 @@ void globalTransfer_(
 
 } /* namescpace */
 
-//=========================================================================
-//
+
+
 // UniversalContentBroker implementation ( XCommandProcessor commands ).
-//
-//=========================================================================
+
+
 
 uno::Reference< ucb::XCommandInfo >
 UniversalContentBroker::getCommandInfo()
@@ -1689,7 +1689,7 @@ UniversalContentBroker::getCommandInfo()
     return uno::Reference< ucb::XCommandInfo >( new CommandProcessorInfo() );
 }
 
-//=========================================================================
+
 void UniversalContentBroker::globalTransfer(
             const ucb::GlobalTransferCommandArgument2 & rArg,
             const uno::Reference< ucb::XCommandEnvironment > & xEnv )
@@ -1707,11 +1707,11 @@ void UniversalContentBroker::globalTransfer(
                xEnv->getProgressHandler() ) );
     }
 
-    //////////////////////////////////////////////////////////////////////
-    //
+
+
     // (1) Try to transfer the content using 'transfer' command.
-    //
-    //////////////////////////////////////////////////////////////////////
+
+
 
     uno::Reference< ucb::XContent > xTarget;
     uno::Reference< ucb::XContentIdentifier > xId
@@ -1894,11 +1894,11 @@ void UniversalContentBroker::globalTransfer(
         while ( bRetry );
     }
 
-    //////////////////////////////////////////////////////////////////////
-    //
+
+
     // (2) Try to transfer the content "manually".
-    //
-    //////////////////////////////////////////////////////////////////////
+
+
 
     uno::Reference< ucb::XContent > xSource;
     try
@@ -2004,11 +2004,11 @@ void UniversalContentBroker::globalTransfer(
     // Do it!
     globalTransfer_( aTransferCtx, xSource, xTarget, xRow );
 
-    //////////////////////////////////////////////////////////////////////
-    //
+
+
     // (3) Delete source, if operation is MOVE.
-    //
-    //////////////////////////////////////////////////////////////////////
+
+
 
     if ( rArg.Operation == ucb::TransferCommandOperation_MOVE )
     {

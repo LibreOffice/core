@@ -45,7 +45,7 @@ using namespace com::sun::star::container;
 #define THROW_WHERE ""
 #endif
 
-//=========================================================================
+
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpfile_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * )
 {
@@ -55,9 +55,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpfile_component_getFactory(
             reinterpret_cast< XMultiServiceFactory * >( pServiceManager ) );
     Reference< XSingleServiceFactory > xFactory;
 
-    //////////////////////////////////////////////////////////////////////
+
     // File Content Provider.
-    //////////////////////////////////////////////////////////////////////
+
 
     if ( fileaccess::shell::getImplementationName_static().
             equalsAscii( pImplName ) )
@@ -65,7 +65,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpfile_component_getFactory(
         xFactory = FileProvider::createServiceFactory( xSMgr );
     }
 
-    //////////////////////////////////////////////////////////////////////
+
 
     if ( xFactory.is() )
     {
@@ -100,9 +100,9 @@ FileProvider::~FileProvider()
 }
 
 
-//////////////////////////////////////////////////////////////////////////
+
 // XInterface
-//////////////////////////////////////////////////////////////////////////
+
 
 void SAL_CALL
 FileProvider::acquire(
@@ -139,7 +139,7 @@ FileProvider::queryInterface(
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
-///////////////////////////////////////////////////////////////////////////////
+
 // XInitialization
 
 void SAL_CALL FileProvider::init()
@@ -166,8 +166,8 @@ FileProvider::initialize(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
+
+
 // XTypeProvider methods.
 
 
@@ -181,7 +181,7 @@ XTYPEPROVIDER_IMPL_7( FileProvider,
                            XContentProvider )
 
 
-////////////////////////////////////////////////////////////////////////////////
+
 // XServiceInfo methods.
 
 OUString SAL_CALL
@@ -256,9 +256,9 @@ FileProvider::CreateInstance(
 
 
 
-////////////////////////////////////////////////////////////////////////////////
+
 // XContent
-////////////////////////////////////////////////////////////////////////////////
+
 
 
 Reference< XContent > SAL_CALL

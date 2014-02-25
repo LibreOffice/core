@@ -31,18 +31,18 @@
 
 using namespace hierarchy_ucp;
 
-//=========================================================================
+
 
 #define DEFAULT_DATA_SOURCE_SERVICE \
                     "com.sun.star.ucb.DefaultHierarchyDataSource"
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // HierarchyUri Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 void HierarchyUri::init() const
 {
@@ -110,7 +110,7 @@ void HierarchyUri::init() const
                 sal_Int32 nStart = HIERARCHY_URL_SCHEME_LENGTH + 3;
 
                 // Here: - m_aUri has at least the form "<scheme>://"
-                //       - nStart points to char after <scheme>://
+                //       - nStart points to char after <scheme>:
 
                 // Only <scheme>:// ?
                 if ( nStart == m_aUri.getLength() )

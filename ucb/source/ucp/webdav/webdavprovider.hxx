@@ -30,7 +30,7 @@
 
 namespace http_dav_ucp {
 
-//=========================================================================
+
 
 // UNO service name for the provider. This name will be used by the UCB to
 // create instances of the provider.
@@ -64,7 +64,7 @@ namespace http_dav_ucp {
 #define WEBDAV_COLLECTION_TYPE \
                 "application/" WEBDAV_URL_SCHEME "-collection"
 
-//=========================================================================
+
 
 class ContentProvider : public ::ucbhelper::ContentProviderImplHelper
 {
@@ -93,13 +93,13 @@ public:
         throw( ::com::sun::star::ucb::IllegalIdentifierException,
                ::com::sun::star::uno::RuntimeException );
 
-    //////////////////////////////////////////////////////////////////////
-    // Additional interfaces
-    //////////////////////////////////////////////////////////////////////
 
-    //////////////////////////////////////////////////////////////////////
+    // Additional interfaces
+
+
+
     // Non-interface methods.
-    //////////////////////////////////////////////////////////////////////
+
 
     rtl::Reference< DAVSessionFactory > getDAVSessionFactory()
     { return m_xDAVSessionFactory; }

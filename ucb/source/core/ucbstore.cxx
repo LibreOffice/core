@@ -49,7 +49,7 @@ using namespace com::sun::star::util;
 using namespace cppu;
 
 
-//=========================================================================
+
 OUString makeHierarchalNameSegment( const OUString & rIn  )
 {
     OUStringBuffer aBuffer;
@@ -91,7 +91,7 @@ OUString makeHierarchalNameSegment( const OUString & rIn  )
     return OUString( aBuffer.makeStringAndClear() );
 }
 
-//=========================================================================
+
 
 #define STORE_CONTENTPROPERTIES_KEY "/org.openoffice.ucb.Store/ContentProperties"
 
@@ -100,11 +100,11 @@ OUString makeHierarchalNameSegment( const OUString & rIn  )
 // true->async. update; false->sync. update
 #define CFGPROPERTY_LAZYWRITE       "lazywrite"
 
-//=========================================================================
-//
+
+
 // PropertySetMap_Impl.
-//
-//=========================================================================
+
+
 
 typedef boost::unordered_map
 <
@@ -114,11 +114,11 @@ typedef boost::unordered_map
 >
 PropertySetMap_Impl;
 
-//=========================================================================
-//
+
+
 // class PropertySetInfo_Impl
-//
-//=========================================================================
+
+
 
 class PropertySetInfo_Impl :
         public OWeakObject, public XTypeProvider, public XPropertySetInfo
@@ -150,11 +150,11 @@ public:
     void reset() { delete m_pProps; m_pProps = 0; }
 };
 
-//=========================================================================
-//
+
+
 // UcbStore_Impl.
-//
-//=========================================================================
+
+
 
 struct UcbStore_Impl
 {
@@ -163,15 +163,15 @@ struct UcbStore_Impl
     Reference< XPropertySetRegistry > m_xTheRegistry;
 };
 
-//=========================================================================
-//=========================================================================
-//=========================================================================
-//
+
+
+
+
 // UcbStore Implementation.
-//
-//=========================================================================
-//=========================================================================
-//=========================================================================
+
+
+
+
 
 UcbStore::UcbStore( const Reference< XComponentContext >& xContext )
 : m_xContext( xContext ),
@@ -179,18 +179,18 @@ UcbStore::UcbStore( const Reference< XComponentContext >& xContext )
 {
 }
 
-//=========================================================================
+
 // virtual
 UcbStore::~UcbStore()
 {
     delete m_pImpl;
 }
 
-//=========================================================================
-//
+
+
 // XInterface methods.
-//
-//=========================================================================
+
+
 
 XINTERFACE_IMPL_4( UcbStore,
                    XTypeProvider,
@@ -198,11 +198,11 @@ XINTERFACE_IMPL_4( UcbStore,
                    XPropertySetRegistryFactory,
                    XInitialization );
 
-//=========================================================================
-//
+
+
 // XTypeProvider methods.
-//
-//=========================================================================
+
+
 
 XTYPEPROVIDER_IMPL_4( UcbStore,
                          XTypeProvider,
@@ -210,29 +210,29 @@ XTYPEPROVIDER_IMPL_4( UcbStore,
                       XPropertySetRegistryFactory,
                       XInitialization );
 
-//=========================================================================
-//
+
+
 // XServiceInfo methods.
-//
-//=========================================================================
+
+
 
 XSERVICEINFO_IMPL_1_CTX( UcbStore,
                      OUString( "com.sun.star.comp.ucb.UcbStore" ),
                      OUString( STORE_SERVICE_NAME ) );
 
-//=========================================================================
-//
+
+
 // Service factory implementation.
-//
-//=========================================================================
+
+
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( UcbStore );
 
-//=========================================================================
-//
+
+
 // XPropertySetRegistryFactory methods.
-//
-//=========================================================================
+
+
 
 // virtual
 Reference< XPropertySetRegistry > SAL_CALL
@@ -252,11 +252,11 @@ UcbStore::createPropertySetRegistry( const OUString& )
     return m_pImpl->m_xTheRegistry;
 }
 
-//=========================================================================
-//
+
+
 // XInitialization methods.
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL UcbStore::initialize( const Sequence< Any >& aArguments )
@@ -266,17 +266,17 @@ void SAL_CALL UcbStore::initialize( const Sequence< Any >& aArguments )
     m_pImpl->m_aInitArgs = aArguments;
 }
 
-//=========================================================================
+
 const Sequence< Any >& UcbStore::getInitArgs() const
 {
     return m_pImpl->m_aInitArgs;
 }
 
-//=========================================================================
-//
+
+
 // PropertySetRegistry_Impl.
-//
-//=========================================================================
+
+
 
 struct PropertySetRegistry_Impl
 {
@@ -297,15 +297,15 @@ struct PropertySetRegistry_Impl
     }
 };
 
-//=========================================================================
-//=========================================================================
-//=========================================================================
-//
+
+
+
+
 // PropertySetRegistry Implementation.
-//
-//=========================================================================
-//=========================================================================
-//=========================================================================
+
+
+
+
 
 PropertySetRegistry::PropertySetRegistry(
                         const Reference< XComponentContext >& xContext,
@@ -315,18 +315,18 @@ PropertySetRegistry::PropertySetRegistry(
 {
 }
 
-//=========================================================================
+
 // virtual
 PropertySetRegistry::~PropertySetRegistry()
 {
     delete m_pImpl;
 }
 
-//=========================================================================
-//
+
+
 // XInterface methods.
-//
-//=========================================================================
+
+
 
 XINTERFACE_IMPL_5( PropertySetRegistry,
                    XTypeProvider,
@@ -335,11 +335,11 @@ XINTERFACE_IMPL_5( PropertySetRegistry,
                    XElementAccess, /* base of XNameAccess */
                    XNameAccess );
 
-//=========================================================================
-//
+
+
 // XTypeProvider methods.
-//
-//=========================================================================
+
+
 
 XTYPEPROVIDER_IMPL_4( PropertySetRegistry,
                          XTypeProvider,
@@ -347,21 +347,21 @@ XTYPEPROVIDER_IMPL_4( PropertySetRegistry,
                       XPropertySetRegistry,
                       XNameAccess );
 
-//=========================================================================
-//
+
+
 // XServiceInfo methods.
-//
-//=========================================================================
+
+
 
 XSERVICEINFO_NOFACTORY_IMPL_1( PropertySetRegistry,
                                 OUString( "com.sun.star.comp.ucb.PropertySetRegistry" ),
                                 OUString( PROPSET_REG_SERVICE_NAME ) );
 
-//=========================================================================
-//
+
+
 // XPropertySetRegistry methods.
-//
-//=========================================================================
+
+
 
 // virtual
 Reference< XPersistentPropertySet > SAL_CALL
@@ -493,7 +493,7 @@ PropertySetRegistry::openPropertySet( const OUString& key, sal_Bool create )
     return Reference< XPersistentPropertySet >();
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL PropertySetRegistry::removePropertySet( const OUString& key )
     throw( RuntimeException )
@@ -550,11 +550,11 @@ void SAL_CALL PropertySetRegistry::removePropertySet( const OUString& key )
     OSL_TRACE( "PropertySetRegistry::removePropertySet - no root access" );
 }
 
-//=========================================================================
-//
+
+
 // XElementAccess methods.
-//
-//=========================================================================
+
+
 
 // virtual
 com::sun::star::uno::Type SAL_CALL PropertySetRegistry::getElementType()
@@ -563,7 +563,7 @@ com::sun::star::uno::Type SAL_CALL PropertySetRegistry::getElementType()
     return getCppuType( ( Reference< XPersistentPropertySet > * ) 0 );
 }
 
-//=========================================================================
+
 // virtual
 sal_Bool SAL_CALL PropertySetRegistry::hasElements()
     throw( RuntimeException )
@@ -578,11 +578,11 @@ sal_Bool SAL_CALL PropertySetRegistry::hasElements()
     return sal_False;
 }
 
-//=========================================================================
-//
+
+
 // XNameAccess methods.
-//
-//=========================================================================
+
+
 
 // virtual
 Any SAL_CALL PropertySetRegistry::getByName( const OUString& aName )
@@ -612,7 +612,7 @@ Any SAL_CALL PropertySetRegistry::getByName( const OUString& aName )
     return Any();
 }
 
-//=========================================================================
+
 // virtual
 Sequence< OUString > SAL_CALL PropertySetRegistry::getElementNames()
     throw( RuntimeException )
@@ -628,7 +628,7 @@ Sequence< OUString > SAL_CALL PropertySetRegistry::getElementNames()
     return Sequence< OUString >( 0 );
 }
 
-//=========================================================================
+
 // virtual
 sal_Bool SAL_CALL PropertySetRegistry::hasByName( const OUString& aName )
     throw( RuntimeException )
@@ -645,7 +645,7 @@ sal_Bool SAL_CALL PropertySetRegistry::hasByName( const OUString& aName )
     return sal_False;
 }
 
-//=========================================================================
+
 void PropertySetRegistry::add( PersistentPropertySet* pSet )
 {
     OUString key( pSet->getKey() );
@@ -657,7 +657,7 @@ void PropertySetRegistry::add( PersistentPropertySet* pSet )
     }
 }
 
-//=========================================================================
+
 void PropertySetRegistry::remove( PersistentPropertySet* pSet )
 {
     OUString key( pSet->getKey() );
@@ -677,7 +677,7 @@ void PropertySetRegistry::remove( PersistentPropertySet* pSet )
     }
 }
 
-//=========================================================================
+
 void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                                              const OUString& rNewKey )
 {
@@ -717,9 +717,9 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
 
             if ( xFac.is() && xBatch.is() && xContainer.is() )
             {
-                //////////////////////////////////////////////////////
+
                 // Create new "Properties" config item.
-                //////////////////////////////////////////////////////
+
 
                 try
                 {
@@ -774,9 +774,9 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                     return;
                 }
 
-                //////////////////////////////////////////////////////
+
                 // Copy data...
-                //////////////////////////////////////////////////////
+
 
                 Reference< XHierarchicalNameAccess > xRootHierNameAccess(
                                                 xRootNameAccess, UNO_QUERY );
@@ -958,9 +958,9 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                     return;
                 }
 
-                //////////////////////////////////////////////////////
+
                 // Remove old entry...
-                //////////////////////////////////////////////////////
+
 
                 try
                 {
@@ -995,7 +995,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
     OSL_FAIL( "PropertySetRegistry::renamePropertySet - Error!" );
 }
 
-//=========================================================================
+
 Reference< XMultiServiceFactory > PropertySetRegistry::getConfigProvider()
 {
     if ( !m_pImpl->m_xConfigProvider.is() )
@@ -1032,7 +1032,7 @@ Reference< XMultiServiceFactory > PropertySetRegistry::getConfigProvider()
     return m_pImpl->m_xConfigProvider;
 }
 
-//=========================================================================
+
 Reference< XInterface > PropertySetRegistry::getRootConfigReadAccess()
 {
     try
@@ -1090,7 +1090,7 @@ Reference< XInterface > PropertySetRegistry::getRootConfigReadAccess()
     return Reference< XInterface >();
 }
 
-//=========================================================================
+
 Reference< XInterface > PropertySetRegistry::getConfigWriteAccess(
                                                     const OUString& rPath )
 {
@@ -1179,11 +1179,11 @@ Reference< XInterface > PropertySetRegistry::getConfigWriteAccess(
     return Reference< XInterface >();
 }
 
-//=========================================================================
-//
+
+
 // PropertyListeners_Impl.
-//
-//=========================================================================
+
+
 
 typedef OMultiTypeInterfaceContainerHelperVar
 <
@@ -1191,11 +1191,11 @@ typedef OMultiTypeInterfaceContainerHelperVar
     OUStringHash
 > PropertyListeners_Impl;
 
-//=========================================================================
-//
+
+
 // PersistentPropertySet_Impl.
-//
-//=========================================================================
+
+
 
 struct PersistentPropertySet_Impl
 {
@@ -1230,15 +1230,15 @@ struct PersistentPropertySet_Impl
     }
 };
 
-//=========================================================================
-//=========================================================================
-//=========================================================================
-//
+
+
+
+
 // PersistentPropertySet Implementation.
-//
-//=========================================================================
-//=========================================================================
-//=========================================================================
+
+
+
+
 
 PersistentPropertySet::PersistentPropertySet(
                         const Reference< XComponentContext >& xContext,
@@ -1251,7 +1251,7 @@ PersistentPropertySet::PersistentPropertySet(
     rCreator.add( this );
 }
 
-//=========================================================================
+
 // virtual
 PersistentPropertySet::~PersistentPropertySet()
 {
@@ -1261,11 +1261,11 @@ PersistentPropertySet::~PersistentPropertySet()
     delete m_pImpl;
 }
 
-//=========================================================================
-//
+
+
 // XInterface methods.
-//
-//=========================================================================
+
+
 
 XINTERFACE_IMPL_9( PersistentPropertySet,
                    XTypeProvider,
@@ -1278,11 +1278,11 @@ XINTERFACE_IMPL_9( PersistentPropertySet,
                    XPropertySetInfoChangeNotifier,
                    XPropertyAccess );
 
-//=========================================================================
-//
+
+
 // XTypeProvider methods.
-//
-//=========================================================================
+
+
 
 XTYPEPROVIDER_IMPL_8( PersistentPropertySet,
                          XTypeProvider,
@@ -1294,21 +1294,21 @@ XTYPEPROVIDER_IMPL_8( PersistentPropertySet,
                       XPropertySetInfoChangeNotifier,
                       XPropertyAccess );
 
-//=========================================================================
-//
+
+
 // XServiceInfo methods.
-//
-//=========================================================================
+
+
 
 XSERVICEINFO_NOFACTORY_IMPL_1( PersistentPropertySet,
                                 OUString( "com.sun.star.comp.ucb.PersistentPropertySet" ),
                                 OUString( PERS_PROPSET_SERVICE_NAME ) );
 
-//=========================================================================
-//
+
+
 // XComponent methods.
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL PersistentPropertySet::dispose()
@@ -1338,7 +1338,7 @@ void SAL_CALL PersistentPropertySet::dispose()
     }
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL PersistentPropertySet::addEventListener(
                             const Reference< XEventListener >& Listener )
@@ -1351,7 +1351,7 @@ void SAL_CALL PersistentPropertySet::addEventListener(
     m_pImpl->m_pDisposeEventListeners->addInterface( Listener );
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL PersistentPropertySet::removeEventListener(
                             const Reference< XEventListener >& Listener )
@@ -1363,11 +1363,11 @@ void SAL_CALL PersistentPropertySet::removeEventListener(
     // Note: Don't want to delete empty container here -> performance.
 }
 
-//=========================================================================
-//
+
+
 // XPropertySet methods.
-//
-//=========================================================================
+
+
 
 // virtual
 Reference< XPropertySetInfo > SAL_CALL
@@ -1385,7 +1385,7 @@ Reference< XPropertySetInfo > SAL_CALL
     return Reference< XPropertySetInfo >( rpInfo );
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL PersistentPropertySet::setPropertyValue(
                         const OUString& aPropertyName, const Any& aValue )
@@ -1493,7 +1493,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValue(
     throw UnknownPropertyException();
 }
 
-//=========================================================================
+
 // virtual
 Any SAL_CALL PersistentPropertySet::getPropertyValue(
                                             const OUString& PropertyName )
@@ -1527,7 +1527,7 @@ Any SAL_CALL PersistentPropertySet::getPropertyValue(
     throw UnknownPropertyException();
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL PersistentPropertySet::addPropertyChangeListener(
                     const OUString& aPropertyName,
@@ -1546,7 +1546,7 @@ void SAL_CALL PersistentPropertySet::addPropertyChangeListener(
                                                 aPropertyName, xListener );
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL PersistentPropertySet::removePropertyChangeListener(
                     const OUString& aPropertyName,
@@ -1564,7 +1564,7 @@ void SAL_CALL PersistentPropertySet::removePropertyChangeListener(
     // Note: Don't want to delete empty container here -> performance.
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL PersistentPropertySet::addVetoableChangeListener(
                     const OUString&,
@@ -1577,7 +1577,7 @@ void SAL_CALL PersistentPropertySet::addVetoableChangeListener(
 //  OSL_FAIL( //                "PersistentPropertySet::addVetoableChangeListener - N.Y.I." );
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL PersistentPropertySet::removeVetoableChangeListener(
                     const OUString&,
@@ -1590,11 +1590,11 @@ void SAL_CALL PersistentPropertySet::removeVetoableChangeListener(
 //  OSL_FAIL( //                "PersistentPropertySet::removeVetoableChangeListener - N.Y.I." );
 }
 
-//=========================================================================
-//
+
+
 // XPersistentPropertySet methods.
-//
-//=========================================================================
+
+
 
 // virtual
 Reference< XPropertySetRegistry > SAL_CALL PersistentPropertySet::getRegistry()
@@ -1603,7 +1603,7 @@ Reference< XPropertySetRegistry > SAL_CALL PersistentPropertySet::getRegistry()
     return Reference< XPropertySetRegistry >( m_pImpl->m_pCreator );
 }
 
-//=========================================================================
+
 // virtual
 OUString SAL_CALL PersistentPropertySet::getKey()
     throw( RuntimeException )
@@ -1611,11 +1611,11 @@ OUString SAL_CALL PersistentPropertySet::getKey()
     return m_pImpl->m_aKey;
 }
 
-//=========================================================================
-//
+
+
 // XNamed methods.
-//
-//=========================================================================
+
+
 
 // virtual
 OUString SAL_CALL PersistentPropertySet::getName()
@@ -1625,7 +1625,7 @@ OUString SAL_CALL PersistentPropertySet::getName()
     return m_pImpl->m_aKey;
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL PersistentPropertySet::setName( const OUString& aName )
     throw( RuntimeException )
@@ -1634,11 +1634,11 @@ void SAL_CALL PersistentPropertySet::setName( const OUString& aName )
         m_pImpl->m_pCreator->renamePropertySet( m_pImpl->m_aKey, aName );
 }
 
-//=========================================================================
-//
+
+
 // XPropertyContainer methods.
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL PersistentPropertySet::addProperty(
@@ -1803,7 +1803,7 @@ void SAL_CALL PersistentPropertySet::addProperty(
     OSL_FAIL( "PersistentPropertySet::addProperty - Error!" );
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL PersistentPropertySet::removeProperty( const OUString& Name )
     throw( UnknownPropertyException,
@@ -1951,11 +1951,11 @@ void SAL_CALL PersistentPropertySet::removeProperty( const OUString& Name )
     OSL_FAIL( "PersistentPropertySet::removeProperty - Error!" );
 }
 
-//=========================================================================
-//
+
+
 // XPropertySetInfoChangeNotifier methods.
-//
-//=========================================================================
+
+
 
 // virtual
 void SAL_CALL PersistentPropertySet::addPropertySetInfoChangeListener(
@@ -1969,7 +1969,7 @@ void SAL_CALL PersistentPropertySet::addPropertySetInfoChangeListener(
     m_pImpl->m_pPropSetChangeListeners->addInterface( Listener );
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL PersistentPropertySet::removePropertySetInfoChangeListener(
                 const Reference< XPropertySetInfoChangeListener >& Listener )
@@ -1979,11 +1979,11 @@ void SAL_CALL PersistentPropertySet::removePropertySetInfoChangeListener(
         m_pImpl->m_pPropSetChangeListeners->removeInterface( Listener );
 }
 
-//=========================================================================
-//
+
+
 // XPropertyAccess methods.
-//
-//=========================================================================
+
+
 
 // virtual
 Sequence< PropertyValue > SAL_CALL PersistentPropertySet::getPropertyValues()
@@ -2116,7 +2116,7 @@ Sequence< PropertyValue > SAL_CALL PersistentPropertySet::getPropertyValues()
     return Sequence< PropertyValue >( 0 );
 }
 
-//=========================================================================
+
 // virtual
 void SAL_CALL PersistentPropertySet::setPropertyValues(
                                  const Sequence< PropertyValue >& aProps )
@@ -2244,11 +2244,11 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
     OSL_FAIL( "PersistentPropertySet::setPropertyValues - Nothing set!" );
 }
 
-//=========================================================================
-//
+
+
 // Non-interface methods
-//
-//=========================================================================
+
+
 
 void PersistentPropertySet::notifyPropertyChangeEvent(
                                     const PropertyChangeEvent& rEvent ) const
@@ -2287,7 +2287,7 @@ void PersistentPropertySet::notifyPropertyChangeEvent(
     }
 }
 
-//=========================================================================
+
 void PersistentPropertySet::notifyPropertySetInfoChange(
                                 const PropertySetInfoChangeEvent& evt ) const
 {
@@ -2306,7 +2306,7 @@ void PersistentPropertySet::notifyPropertySetInfoChange(
     }
 }
 
-//=========================================================================
+
 const OUString& PersistentPropertySet::getFullKey()
 {
     if ( m_pImpl->m_aFullKey.isEmpty() )
@@ -2324,19 +2324,19 @@ const OUString& PersistentPropertySet::getFullKey()
     return m_pImpl->m_aFullKey;
 }
 
-//=========================================================================
+
 PropertySetRegistry& PersistentPropertySet::getPropertySetRegistry()
 {
     return *m_pImpl->m_pCreator;
 }
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // PropertySetInfo_Impl Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 PropertySetInfo_Impl::PropertySetInfo_Impl(
                         const Reference< XComponentContext >& xContext,
@@ -2347,7 +2347,7 @@ PropertySetInfo_Impl::PropertySetInfo_Impl(
 {
 }
 
-//=========================================================================
+
 // virtual
 PropertySetInfo_Impl::~PropertySetInfo_Impl()
 {
@@ -2356,31 +2356,31 @@ PropertySetInfo_Impl::~PropertySetInfo_Impl()
     // !!! Do not delete m_pOwner !!!
 }
 
-//=========================================================================
-//
+
+
 // XInterface methods.
-//
-//=========================================================================
+
+
 
 XINTERFACE_IMPL_2( PropertySetInfo_Impl,
                    XTypeProvider,
                    XPropertySetInfo );
 
-//=========================================================================
-//
+
+
 // XTypeProvider methods.
-//
-//=========================================================================
+
+
 
 XTYPEPROVIDER_IMPL_2( PropertySetInfo_Impl,
                          XTypeProvider,
                          XPropertySetInfo );
 
-//=========================================================================
-//
+
+
 // XPropertySetInfo methods.
-//
-//=========================================================================
+
+
 
 // virtual
 Sequence< Property > SAL_CALL PropertySetInfo_Impl::getProperties()
@@ -2528,7 +2528,7 @@ Sequence< Property > SAL_CALL PropertySetInfo_Impl::getProperties()
     return *m_pProps;
 }
 
-//=========================================================================
+
 // virtual
 Property SAL_CALL PropertySetInfo_Impl::getPropertyByName(
                                                     const OUString& aName )
@@ -2612,7 +2612,7 @@ Property SAL_CALL PropertySetInfo_Impl::getPropertyByName(
     return Property();
 }
 
-//=========================================================================
+
 // virtual
 sal_Bool SAL_CALL PropertySetInfo_Impl::hasPropertyByName(
                                                     const OUString& Name )

@@ -64,7 +64,7 @@ public:
     virtual sal_Bool UsesProxy() = 0;
 
     // DAV methods
-    //
+
 
     // NOT USED
     /*

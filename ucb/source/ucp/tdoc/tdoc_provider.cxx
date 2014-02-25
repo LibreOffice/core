@@ -41,13 +41,13 @@
 using namespace com::sun::star;
 using namespace tdoc_ucp;
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // ContentProvider Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 ContentProvider::ContentProvider(
             const uno::Reference< uno::XComponentContext >& rxContext )
@@ -57,7 +57,7 @@ ContentProvider::ContentProvider(
 {
 }
 
-//=========================================================================
+
 // virtual
 ContentProvider::~ContentProvider()
 {
@@ -65,11 +65,11 @@ ContentProvider::~ContentProvider()
         m_xDocsMgr->destroy();
 }
 
-//=========================================================================
-//
+
+
 // XInterface methods.
-//
-//=========================================================================
+
+
 
 XINTERFACE_IMPL_4( ContentProvider,
                    lang::XTypeProvider,
@@ -77,11 +77,11 @@ XINTERFACE_IMPL_4( ContentProvider,
                    ucb::XContentProvider,
                    frame::XTransientDocumentsDocumentContentFactory );
 
-//=========================================================================
-//
+
+
 // XTypeProvider methods.
-//
-//=========================================================================
+
+
 
 XTYPEPROVIDER_IMPL_4( ContentProvider,
                       lang::XTypeProvider,
@@ -89,30 +89,30 @@ XTYPEPROVIDER_IMPL_4( ContentProvider,
                       ucb::XContentProvider,
                       frame::XTransientDocumentsDocumentContentFactory );
 
-//=========================================================================
-//
+
+
 // XServiceInfo methods.
-//
-//=========================================================================
+
+
 
 XSERVICEINFO_IMPL_1_CTX(
     ContentProvider,
     OUString( "com.sun.star.comp.ucb.TransientDocumentsContentProvider" ),
     OUString( TDOC_CONTENT_PROVIDER_SERVICE_NAME ) );
 
-//=========================================================================
-//
+
+
 // Service factory implementation.
-//
-//=========================================================================
+
+
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 
-//=========================================================================
-//
+
+
 // XContentProvider methods.
-//
-//=========================================================================
+
+
 
 // virtual
 uno::Reference< ucb::XContent > SAL_CALL
@@ -146,11 +146,11 @@ ContentProvider::queryContent(
     return xContent;
 }
 
-//=========================================================================
-//
+
+
 // XTransientDocumentsDocumentContentFactory methods.
-//
-//=========================================================================
+
+
 
 // virtual
 uno::Reference< ucb::XContent > SAL_CALL
@@ -212,11 +212,11 @@ ContentProvider::createDocumentContent(
      }
 }
 
-//=========================================================================
-//
+
+
 // interface OfficeDocumentsEventListener
-//
-//=========================================================================
+
+
 
 // virtual
 void ContentProvider::notifyDocumentClosed( const OUString & rDocId )
@@ -280,7 +280,7 @@ void ContentProvider::notifyDocumentClosed( const OUString & rDocId )
     }
 }
 
-//=========================================================================
+
 // virtual
 void ContentProvider::notifyDocumentOpened( const OUString & rDocId )
 {
@@ -314,11 +314,11 @@ void ContentProvider::notifyDocumentOpened( const OUString & rDocId )
     }
 }
 
-//=========================================================================
-//
+
+
 // Non-UNO
-//
-//=========================================================================
+
+
 
 uno::Reference< embed::XStorage >
 ContentProvider::queryStorage( const OUString & rUri,
@@ -351,7 +351,7 @@ ContentProvider::queryStorage( const OUString & rUri,
     return uno::Reference< embed::XStorage >();
 }
 
-//=========================================================================
+
 uno::Reference< embed::XStorage >
 ContentProvider::queryStorageClone( const OUString & rUri ) const
 {
@@ -391,7 +391,7 @@ ContentProvider::queryStorageClone( const OUString & rUri ) const
     return uno::Reference< embed::XStorage >();
 }
 
-//=========================================================================
+
 uno::Reference< io::XInputStream >
 ContentProvider::queryInputStream( const OUString & rUri,
                                    const OUString & rPassword ) const
@@ -428,7 +428,7 @@ ContentProvider::queryInputStream( const OUString & rUri,
     return uno::Reference< io::XInputStream >();
 }
 
-//=========================================================================
+
 uno::Reference< io::XOutputStream >
 ContentProvider::queryOutputStream( const OUString & rUri,
                                     const OUString & rPassword,
@@ -468,7 +468,7 @@ ContentProvider::queryOutputStream( const OUString & rUri,
     return uno::Reference< io::XOutputStream >();
 }
 
-//=========================================================================
+
 uno::Reference< io::XStream >
 ContentProvider::queryStream( const OUString & rUri,
                               const OUString & rPassword,
@@ -507,7 +507,7 @@ ContentProvider::queryStream( const OUString & rUri,
     return uno::Reference< io::XStream >();
 }
 
-//=========================================================================
+
 bool ContentProvider::queryNamesOfChildren(
     const OUString & rUri, uno::Sequence< OUString > & rNames ) const
 {
@@ -567,7 +567,7 @@ bool ContentProvider::queryNamesOfChildren(
     return false;
 }
 
-//=========================================================================
+
 OUString
 ContentProvider::queryStorageTitle( const OUString & rUri ) const
 {
@@ -597,7 +597,7 @@ ContentProvider::queryStorageTitle( const OUString & rUri ) const
     return aTitle;
 }
 
-//=========================================================================
+
 uno::Reference< frame::XModel >
 ContentProvider::queryDocumentModel( const OUString & rUri ) const
 {

@@ -76,7 +76,7 @@ public:
     { return m_xSessionFactory; }
 
     // DAV methods
-    //
+
 
     // allprop & named
     void

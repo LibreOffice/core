@@ -151,7 +151,7 @@ int main()
 // unxsols3.pro: Version 1: 9137 ms.
 //               Version 2: 8634 ms.
 //               Version 3: 3166 ms.
-//
+
 // wntmsci7.pro: Version 1: 3846 ms.
 //               Version 2: 5598 ms.
 //               Version 3: 2704 ms.

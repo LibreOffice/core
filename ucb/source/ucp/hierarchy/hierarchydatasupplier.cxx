@@ -36,11 +36,11 @@ using namespace hierarchy_ucp;
 namespace hierarchy_ucp
 {
 
-//=========================================================================
-//
+
+
 // struct ResultListEntry.
-//
-//=========================================================================
+
+
 
 struct ResultListEntry
 {
@@ -53,19 +53,19 @@ struct ResultListEntry
     ResultListEntry( const HierarchyEntryData& rEntry ) : aData( rEntry ) {}
 };
 
-//=========================================================================
-//
+
+
 // ResultList.
-//
-//=========================================================================
+
+
 
 typedef std::vector< ResultListEntry* > ResultList;
 
-//=========================================================================
-//
+
+
 // struct DataSupplier_Impl.
-//
-//=========================================================================
+
+
 
 struct DataSupplier_Impl
 {
@@ -91,7 +91,7 @@ struct DataSupplier_Impl
     ~DataSupplier_Impl();
 };
 
-//=========================================================================
+
 DataSupplier_Impl::~DataSupplier_Impl()
 {
     ResultList::const_iterator it  = m_aResults.begin();
@@ -106,13 +106,13 @@ DataSupplier_Impl::~DataSupplier_Impl()
 
 }
 
-//=========================================================================
-//=========================================================================
-//
+
+
+
 // HierarchyResultSetDataSupplier Implementation.
-//
-//=========================================================================
-//=========================================================================
+
+
+
 
 HierarchyResultSetDataSupplier::HierarchyResultSetDataSupplier(
                 const uno::Reference< uno::XComponentContext >& rxContext,
@@ -122,14 +122,14 @@ HierarchyResultSetDataSupplier::HierarchyResultSetDataSupplier(
 {
 }
 
-//=========================================================================
+
 // virtual
 HierarchyResultSetDataSupplier::~HierarchyResultSetDataSupplier()
 {
     delete m_pImpl;
 }
 
-//=========================================================================
+
 // virtual
 OUString HierarchyResultSetDataSupplier::queryContentIdentifierString(
                                                         sal_uInt32 nIndex )
@@ -162,7 +162,7 @@ OUString HierarchyResultSetDataSupplier::queryContentIdentifierString(
     return OUString();
 }
 
-//=========================================================================
+
 // virtual
 uno::Reference< ucb::XContentIdentifier >
 HierarchyResultSetDataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
@@ -191,7 +191,7 @@ HierarchyResultSetDataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
     return uno::Reference< ucb::XContentIdentifier >();
 }
 
-//=========================================================================
+
 // virtual
 uno::Reference< ucb::XContent >
 HierarchyResultSetDataSupplier::queryContent( sal_uInt32 nIndex )
@@ -228,7 +228,7 @@ HierarchyResultSetDataSupplier::queryContent( sal_uInt32 nIndex )
     return uno::Reference< ucb::XContent >();
 }
 
-//=========================================================================
+
 // virtual
 bool HierarchyResultSetDataSupplier::getResult( sal_uInt32 nIndex )
 {
@@ -288,7 +288,7 @@ bool HierarchyResultSetDataSupplier::getResult( sal_uInt32 nIndex )
     return bFound;
 }
 
-//=========================================================================
+
 // virtual
 sal_uInt32 HierarchyResultSetDataSupplier::totalCount()
 {
@@ -324,21 +324,21 @@ sal_uInt32 HierarchyResultSetDataSupplier::totalCount()
     return m_pImpl->m_aResults.size();
 }
 
-//=========================================================================
+
 // virtual
 sal_uInt32 HierarchyResultSetDataSupplier::currentCount()
 {
     return m_pImpl->m_aResults.size();
 }
 
-//=========================================================================
+
 // virtual
 bool HierarchyResultSetDataSupplier::isCountFinal()
 {
     return m_pImpl->m_bCountFinal;
 }
 
-//=========================================================================
+
 // virtual
 uno::Reference< sdbc::XRow >
 HierarchyResultSetDataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
@@ -376,7 +376,7 @@ HierarchyResultSetDataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
     return uno::Reference< sdbc::XRow >();
 }
 
-//=========================================================================
+
 // virtual
 void HierarchyResultSetDataSupplier::releasePropertyValues( sal_uInt32 nIndex )
 {
@@ -386,20 +386,20 @@ void HierarchyResultSetDataSupplier::releasePropertyValues( sal_uInt32 nIndex )
         m_pImpl->m_aResults[ nIndex ]->xRow = uno::Reference< sdbc::XRow >();
 }
 
-//=========================================================================
+
 // virtual
 void HierarchyResultSetDataSupplier::close()
 {
 }
 
-//=========================================================================
+
 // virtual
 void HierarchyResultSetDataSupplier::validate()
     throw( ucb::ResultSetException )
 {
 }
 
-//=========================================================================
+
 sal_Bool HierarchyResultSetDataSupplier::checkResult(
                                     const HierarchyEntryData& rResult )
 {
