@@ -1144,8 +1144,8 @@ void SAL_CALL ScDDELinkObj::refresh() throw(uno::RuntimeException)
 }
 
 void SAL_CALL ScDDELinkObj::addRefreshListener(
-                                const uno::Reference<util::XRefreshListener >& xListener )
-                                                throw(uno::RuntimeException)
+    const uno::Reference<util::XRefreshListener >& xListener )
+        throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Reference<util::XRefreshListener>* pObj =
