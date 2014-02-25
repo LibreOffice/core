@@ -20,7 +20,7 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
 // Used by soreport.rc
-//
+
 #define IDD_DIALOG_FRAME                101
 #define IDS_WELCOME_CAPTION             102
 #define IDS_WELCOME_HEADER              103
@@ -101,7 +101,7 @@
 #define IDC_PROXY_DESCRIPTION           1033
 #define IDC_SENDING_REPORT_STATUS       1034
 // Next default values for new objects
-//
+
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1
