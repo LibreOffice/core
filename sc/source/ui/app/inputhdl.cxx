@@ -724,37 +724,17 @@ void ScInputHandler::GetFormulaData()
         else
             pFormulaDataPara = new ScTypedCaseStrSet;
 
-        //      MRU-Funktionen aus dem Funktions-Autopiloten
-        //      wie in ScPosWnd::FillFunctions (inputwin.cxx)
-
-        const ScAppOptions& rOpt = SC_MOD()->GetAppOptions();
-        sal_uInt16 nMRUCount = rOpt.GetLRUFuncListCount();
-        const sal_uInt16* pMRUList = rOpt.GetLRUFuncList();
         const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
         sal_uLong nListCount = pFuncList->GetCount();
-        if (pMRUList)
-        {
-            for (sal_uInt16 i=0; i<nMRUCount; i++)
-            {
-                sal_uInt16 nId = pMRUList[i];
-                for (sal_uLong j=0; j<nListCount; j++)
-                {
-                    const ScFuncDesc* pDesc = pFuncList->GetFunction( j );
-                    if ( pDesc->nFIndex == nId && pDesc->pFuncName )
-                    {
-                        OUString aEntry = *pDesc->pFuncName;
-                        aEntry += "()";
-                        pFormulaData->insert(ScTypedStrData(aEntry, 0.0, ScTypedStrData::Standard));
-                        break;                  // nicht weitersuchen
-                    }
-                }
-            }
-        }
         for(sal_uLong i=0;i<nListCount;i++)
         {
             const ScFuncDesc* pDesc = pFuncList->GetFunction( i );
             if ( pDesc->pFuncName )
             {
+                pFormulaData->insert(ScTypedStrData(*pDesc->pFuncName, 0.0, ScTypedStrData::Standard));
+                // fdo75264 fill mbFormulaChar with all characters used in formula names
+                for ( sal_Int32 j = 0; j < pDesc->pFuncName->getLength(); j++ )
+                    mbFormulaChar[ pDesc->pFuncName->getStr()[ j ] ] = true;
                 pDesc->initArgumentInfo();
                 OUString aEntry = pDesc->getSignature();
                 pFormulaDataPara->insert(ScTypedStrData(aEntry, 0.0, ScTypedStrData::Standard));
@@ -1031,6 +1011,27 @@ void ScInputHandler::ShowTipBelow( const OUString& rText )
     }
 }
 
+sal_Int32 ScInputHandler::GetFuncName( OUString& aStart, OUString& aResult )
+{
+    sal_Int32 nSize = 0;
+    sal_Int32 nPos = aStart.getLength() - 1;
+    sal_Unicode c = aStart[ nPos ];
+    sal_Unicode aTemp[ nPos ];
+
+    while ( nPos >= 0 && mbFormulaChar[ toupper( c ) ] )
+    {
+        aTemp[ nSize++ ] = c;
+        c = aStart[ --nPos ];
+    }
+
+    nPos = nSize - 1;
+    aResult = OUString( aTemp[ nPos-- ] );
+    while ( nPos >= 0 )
+        aResult += OUString( aTemp[ nPos-- ] );
+
+    return nSize;
+}
+
 void ScInputHandler::UseFormulaData()
 {
     EditView* pActiveView = pTopView ? pTopView : pTableView;
@@ -1066,20 +1067,26 @@ void ScInputHandler::UseFormulaData()
             sal_uInt16      nArgs;
             bool bFound = false;
 
-            OUString aText = pEngine->GetWord( 0, aSel.nEndPos-1 );
-            if (!aText.isEmpty())
+            OUString aText;
+            if ( GetFuncName( aFormula, aText ) )
             {
+                // function name is incomplete:
+                // show first matching function name as tip above cell
                 OUString aNew;
                 miAutoPosFormula = pFormulaData->end();
                 miAutoPosFormula = findText(*pFormulaData, miAutoPosFormula, aText, aNew, false);
                 if (miAutoPosFormula != pFormulaData->end())
                 {
+                    aNew += "()";
                     ShowTip( aNew );
                     aAutoSearch = aText;
                 }
+                return;
             }
             FormulaHelper aHelper(ScGlobal::GetStarCalcFunctionMgr());
 
+            // function name is complete:
+            // show tip below the cell with function name and arguments of function
             while( !bFound )
             {
                 aFormula += ")";
@@ -1087,10 +1094,6 @@ void ScInputHandler::UseFormulaData()
                 if( nLeftParentPos == -1 )
                     break;
 
-                // nLeftParentPos can be 0 if a parenthesis is inserted before the formula
-                sal_Unicode c = ( nLeftParentPos > 0 ) ? aFormula[ nLeftParentPos-1 ] : 0;
-                if( !(comphelper::string::isalphaAscii(c)) )
-                    continue;
                 nNextFStart = aHelper.GetFunctionStart( aFormula, nLeftParentPos, true);
                 if( aHelper.GetNextFunc( aFormula, false, nNextFStart, NULL, &ppFDesc, &aArgs ) )
                 {
