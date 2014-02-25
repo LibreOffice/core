@@ -394,7 +394,10 @@ public:
     virtual void SAL_CALL updateLinks(  ) throw(css::uno::RuntimeException);
 
     // css::view::XRenderable
-    virtual sal_Int32 SAL_CALL getRendererCount( const css::uno::Any& aSelection, const css::uno::Sequence< css::beans::PropertyValue >& xOptions ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getRendererCount( const css::uno::Any& aSelection, const css::uno::Sequence< css::beans::PropertyValue >& xOptions )
+        throw (css::lang::IllegalArgumentException,
+               css::uno::RuntimeException,
+               std::exception);
     virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getRenderer( sal_Int32 nRenderer, const css::uno::Any& aSelection, const css::uno::Sequence< css::beans::PropertyValue >& xOptions )
         throw (css::lang::IllegalArgumentException,
                css::uno::RuntimeException,

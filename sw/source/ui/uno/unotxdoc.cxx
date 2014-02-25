@@ -2479,7 +2479,8 @@ static void lcl_SavePrintUIOptionsToDocumentPrintData(
 sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
         const uno::Any& rSelection,
         const uno::Sequence< beans::PropertyValue >& rxOptions )
-    throw (IllegalArgumentException, RuntimeException)
+    throw (IllegalArgumentException, RuntimeException,
+           std::exception)
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
