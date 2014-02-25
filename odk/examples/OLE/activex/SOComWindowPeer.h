@@ -34,8 +34,8 @@
  *************************************************************************/
 
 // SOComWindowPeer.h: Definition of the SOComWindowPeer class
-//
-//////////////////////////////////////////////////////////////////////
+
+
 
 #ifndef __SOCOMWINDOWPEER_H_
 #define __SOCOMWINDOWPEER_H_
@@ -52,7 +52,7 @@
 
 #include "so_activex.h"
 
-/////////////////////////////////////////////////////////////////////////////
+
 // SOComWindowPeer
 
 class SOComWindowPeer :

@@ -37,10 +37,10 @@ import com.sun.star.datatransfer.UnsupportedFlavorException;
 import com.sun.star.datatransfer.XTransferable;
 import com.sun.star.uno.Type;
 
-//---------------------------------------
+
 // A simple transferable containing only
 // one format, unicode text
-//---------------------------------------
+
 
 public class TextTransferable implements XTransferable
 {

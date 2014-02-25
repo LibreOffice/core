@@ -77,9 +77,9 @@ namespace connectivity
         protected:
 
             rtl_TextEncoding                        m_nTextEncoding; // the encoding which is used for all text conversions
-            //====================================================================
+
             // Data attributes
-            //====================================================================
+
             TTypeInfoVector                         m_aTypeInfo;    //  vector containing an entry
                                                                     //  for each row returned by
                                                                     //  DatabaseMetaData.getTypeInfo.
@@ -142,7 +142,7 @@ namespace connectivity
             // XWarningsSupplier
             virtual ::com::sun::star::uno::Any SAL_CALL getWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL clearWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            //
+
 
             // should we use the catalog on filebased databases
             inline sal_Bool         isCatalogUsed()     const { return m_bUseCatalog; }

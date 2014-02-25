@@ -67,7 +67,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
                                 IShutdownListener,
                                 IOnewayLink
 {
-    //_____________________
+
 
     /**
      * @member m_rControl           reference to the UI control, which should be updated
@@ -90,7 +90,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
     private boolean                      m_bIsStatusListener;
     private boolean                      m_bDead            ;
 
-    //_____________________
+
 
     /**
      * ctor
@@ -115,7 +115,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
         m_aURL = FunctionHelper.parseURL(sURL);
     }
 
-    //_____________________
+
 
     /**
      * start working as frame action listener really.
@@ -146,7 +146,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
         }
     }
 
-    //_____________________
+
 
     /**
      * In case we got an oneway listener callback - we had to use the office
@@ -180,7 +180,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
         }
     }
 
-    //_____________________
+
 
     /**
      * This is the callback method for such frame action events, we listen for.
@@ -222,7 +222,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
         aExecutor.start();
     }
 
-    //_____________________
+
 
     /**
      * This is the callback method for the status we listen for an wish to show it
@@ -252,7 +252,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
                 // look for the right type ofthe UI control
                 // Following actions depend on it.
 
-                //.............................................................
+
                 // it's a check box
                 if (m_rControl instanceof JCheckBox)
                 {
@@ -271,7 +271,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
                         aBox.setText(m_sFalseText);
                 }
                 else
-                //.............................................................
+
                 // it's a label
                 if (m_rControl instanceof JLabel)
                 {
@@ -305,7 +305,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
         }
     }
 
-    //_____________________
+
 
     /**
      * Internal call back for frame action events, triggered by the used
@@ -377,7 +377,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
         }
     }
 
-    // ____________________
+
 
     /**
      * callback for disposing events
@@ -414,7 +414,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
         shutdown();
     }
 
-    // ____________________
+
 
     /**
      * If this java application shutdown - we must cancel all current existing

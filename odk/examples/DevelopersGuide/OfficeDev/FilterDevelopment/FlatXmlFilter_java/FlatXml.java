@@ -244,7 +244,7 @@ public class FlatXml implements XImportFilter, XExportFilter, XServiceName,
         m_xHandler.setDocumentLocator(xLocator);
     }
 
-    // ------------------------------------------------------------
+
     // component management
 
     public static XSingleServiceFactory __getServiceFactory(String implName,

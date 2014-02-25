@@ -61,7 +61,7 @@ public class DocumentView extends    JFrame
                           implements com.sun.star.lang.XEventListener, // react for Frame::disposing()
                                      IShutdownListener                 // react for System.exit()
 {
-    // ____________________
+
 
     /**
      * const
@@ -73,7 +73,7 @@ public class DocumentView extends    JFrame
     public static final String COMMAND_EXPORT = "export" ;
     public static final String COMMAND_EXIT   = "exit"   ;
 
-    // ____________________
+
 
     /**
      * @member  mxFrame             office frame which contains the document of this view
@@ -108,7 +108,7 @@ public class DocumentView extends    JFrame
 
     private boolean                         mbDead              ;
 
-    // ____________________
+
 
     /**
      * ctor
@@ -195,7 +195,7 @@ public class DocumentView extends    JFrame
         this.enableEvents(AWTEvent.WINDOW_EVENT_MASK);
     }
 
-    // ____________________
+
 
     /**
      * Create the view frame for showing the office documents on demand.
@@ -241,7 +241,7 @@ public class DocumentView extends    JFrame
         }
     }
 
-    // ____________________
+
 
     /**
      * Different ways to load any URL from outside (may be by the command line)
@@ -252,7 +252,7 @@ public class DocumentView extends    JFrame
         load(sURL,new com.sun.star.beans.PropertyValue[0]);
     }
 
-    // ____________________
+
 
     public void load(String sURL, com.sun.star.beans.PropertyValue[] lArguments)
     {
@@ -269,7 +269,7 @@ public class DocumentView extends    JFrame
         }
     }
 
-    // ____________________
+
 
     public void save()
     {
@@ -282,7 +282,7 @@ public class DocumentView extends    JFrame
         FunctionHelper.saveDocument(xDocument);
     }
 
-    // ____________________
+
 
     public void exportHTML(String sURL)
     {
@@ -295,7 +295,7 @@ public class DocumentView extends    JFrame
         FunctionHelper.saveAsHTML(xDocument,sURL);
     }
 
-    // ____________________
+
 
     /**
      * Overridden so we can react for window closing of this view.
@@ -315,7 +315,7 @@ public class DocumentView extends    JFrame
         }
     }
 
-    // ____________________
+
 
     /**
      * Here we can react for System.exit() normaly.
@@ -355,7 +355,7 @@ public class DocumentView extends    JFrame
         ViewContainer.getGlobalContainer().removeView(this);
     }
 
-    // ____________________
+
 
     /**
      * callback from our internal saved frame
@@ -372,7 +372,7 @@ public class DocumentView extends    JFrame
         mxFrame = null;
     }
 
-    // ____________________
+
 
     /**
      * This inner class is used to react for events of our own UI controls.
@@ -380,7 +380,7 @@ public class DocumentView extends    JFrame
      */
     private class Reactor implements ActionListener
     {
-        // ____________________
+
 
         /**
         * This method react for pressed buttons or selected check boxes.
@@ -388,7 +388,7 @@ public class DocumentView extends    JFrame
         public void actionPerformed(ActionEvent aEvent)
         {
             String sCommand = aEvent.getActionCommand();
-            //-----------------------------
+
             // open any file from disk
             if( sCommand.compareTo(COMMAND_OPEN) == 0 )
             {
@@ -397,14 +397,14 @@ public class DocumentView extends    JFrame
                     DocumentView.this.load(sURL);
             }
             else
-            //-----------------------------
+
             // save current document
             if( sCommand.compareTo(COMMAND_SAVE) == 0 )
             {
                 DocumentView.this.save();
             }
             else
-            //-----------------------------
+
             // export current document to html
             if( sCommand.compareTo(COMMAND_EXPORT) == 0 )
             {
@@ -413,7 +413,7 @@ public class DocumentView extends    JFrame
                     DocumentView.this.exportHTML(sURL);
             }
             else
-            //-----------------------------
+
             // exit application
             if( sCommand.compareTo(COMMAND_EXIT) == 0 )
             {

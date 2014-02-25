@@ -32,13 +32,13 @@
  *
  *************************************************************************/
 
-//***************************************************************************
+
 // comment: Step 1: get the Desktop object from the office
 //          Step 2: open an empty text document
 //          Step 3: enter a example text
 //          Step 4: use the paragraph collection
 //          Step 5: apply a different paragraph style on the paragraphs
-//***************************************************************************
+
 
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.AnyConverter;

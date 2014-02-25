@@ -70,7 +70,7 @@ public class CalcHelper
         initSpreadSheet();
     }
 
-    // ____________________
+
 
     public XSpreadsheet getChartSheet() throws RuntimeException
     {
@@ -93,7 +93,7 @@ public class CalcHelper
         return aSheet;
     }
 
-    // ____________________
+
 
     public XSpreadsheet getDataSheet() throws RuntimeException
     {
@@ -119,7 +119,7 @@ public class CalcHelper
         return aSheet;
     }
 
-    // ____________________
+
 
     /** Insert a chart using the given name as name of the OLE object and the range as correspoding
         range of data to be used for rendering.  The chart is placed in the sheet for charts at
@@ -197,7 +197,7 @@ public class CalcHelper
         return aResult;
     }
 
-    // ____________________
+
 
     /** Fill a rectangular range with random numbers.
         The first column has increasing values
@@ -263,7 +263,7 @@ public class CalcHelper
         return aRange;
     }
 
-    // ____________________
+
 
     public XCellRange insertFormulaRange( int nColumnCount, int nRowCount )
     {
@@ -323,7 +323,7 @@ public class CalcHelper
         return aRange;
     }
 
-    // ____________________
+
 
     /** Bring the sheet containing charts visually to the foreground
      */
@@ -345,7 +345,7 @@ public class CalcHelper
     private XSpreadsheetDocument   maSpreadSheetDoc;
 
 
-    // ____________________
+
 
     /** create two sheets, one for data and one for charts in the document
      */

@@ -43,7 +43,7 @@ import com.sun.star.uno.AnyConverter;
 public class SpreadsheetSample extends SpreadsheetDocHelper
 {
 
-// ________________________________________________________________
+
 
     public static void main( String args[] )
     {
@@ -63,14 +63,14 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         System.exit( 0 );
     }
 
-// ________________________________________________________________
+
 
     public SpreadsheetSample( String[] args )
     {
         super( args );
     }
 
-// ________________________________________________________________
+
 
     /** This sample function performs all changes on the document. */
     public void doSampleFunction()
@@ -197,7 +197,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         }
     }
 
-// ________________________________________________________________
+
 
     /** All samples regarding the service com.sun.star.sheet.SheetCell. */
     private void doCellSamples() throws RuntimeException, Exception
@@ -292,7 +292,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         xAnnotation.setIsVisible( true );
     }
 
-// ________________________________________________________________
+
 
     /** All samples regarding the service com.sun.star.sheet.SheetCellRange. */
     private void doCellRangeSamples() throws RuntimeException, Exception
@@ -527,7 +527,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
             com.sun.star.sheet.XCellSeries.class, xSheet.getCellRangeByName( aRange ) );
     }
 
-// ________________________________________________________________
+
 
     /** All samples regarding cell range collections. */
     private void doCellRangesSamples() throws RuntimeException, Exception
@@ -591,7 +591,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
             + " resulting list: " + xContainer.getRangeAddressesAsString() );
     }
 
-// ________________________________________________________________
+
 
     /** All samples regarding cell cursors. */
     private void doCellCursorSamples() throws RuntimeException, Exception
@@ -621,7 +621,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         System.out.println( "The used area is: " + getCellRangeAddressString( xCursor, true ) );
     }
 
-// ________________________________________________________________
+
 
     /** All samples regarding the formatting of cells and ranges. */
     private void doFormattingSamples() throws RuntimeException, Exception
@@ -790,7 +790,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         xPropSet.setPropertyValue( "ConditionalFormat", xEntries );
     }
 
-// ________________________________________________________________
+
 
     /** All samples regarding the spreadsheet document. */
     private void doDocumentSamples() throws RuntimeException, Exception
@@ -938,7 +938,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         xScenario.apply();
     }
 
-// ________________________________________________________________
+
 
     private void doNamedRangesSamples() throws RuntimeException, Exception
     {
@@ -1003,7 +1003,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         xSheet.getCellByPosition( 8, 49 ).setFormula( "=Apples+Oranges" );
     }
 
-// ________________________________________________________________
+
 
     /** Helper for doDatabaseSamples: get name of first database. */
     private String getFirstDatabaseName()
@@ -1221,7 +1221,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
             System.out.println("can't get database");
     }
 
-// ________________________________________________________________
+
 
     private void doDataPilotSamples() throws Exception
     {
@@ -1270,7 +1270,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         xFieldProp.setPropertyValue( "Function", com.sun.star.sheet.GeneralFunction.AVERAGE );
     }
 
-// ________________________________________________________________
+
 
     private void doFunctionAccessSamples() throws RuntimeException, Exception
     {
@@ -1322,7 +1322,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         System.out.println();
     }
 
-// ________________________________________________________________
+
 
     private void doApplicationSettingsSamples() throws RuntimeException, Exception
     {
@@ -1345,6 +1345,6 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
             System.out.println( aEntries[i] );
     }
 
-// ________________________________________________________________
+
 
 }

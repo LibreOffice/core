@@ -32,13 +32,13 @@
  *
  *************************************************************************/
 
-//***************************************************************************
+
 // comment: Step 1: get the Desktop object from the office
 //          Step 2: open an empty Calc document
 //          Step 3: enter a example text, set the numberformat to DM
 //          Step 4: change the numberformat to EUR (Euro)
 //          Step 5: use the DM/EUR factor on each cell with a content
-//***************************************************************************
+
 
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;

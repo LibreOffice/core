@@ -48,9 +48,9 @@ namespace sd { namespace colortoolpanel
     using ::com::sun::star::container::NoSuchElementException;
     using ::com::sun::star::awt::XWindow;
 
-    //==================================================================================================================
+
     //= ToolPanelFactory
-    //==================================================================================================================
+
 
     ToolPanelFactory::ToolPanelFactory( const Reference< XComponentContext >& i_rContext )
         :m_xContext( i_rContext )
@@ -133,8 +133,8 @@ namespace sd { namespace colortoolpanel
         return *( new ToolPanelFactory( i_rContext ) );
     }
 
-//......................................................................................................................
+
 } } // namespace sd::colortoolpanel
-//......................................................................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

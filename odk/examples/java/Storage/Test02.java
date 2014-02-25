@@ -104,9 +104,9 @@ public class Test02 implements StorageTest {
                 return false;
 
 
-            // ================================================
+
             // now check all the written information
-            // ================================================
+
 
             // close the output part of the temporary stream
             // the output part must present since we already wrote to the stream

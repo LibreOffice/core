@@ -93,7 +93,7 @@ public class Helper {
     /**
      * Returned created identifier object for given URL.
      *
-     *@param      String         Connect URL. Example : -url=file:///
+     *@param      String         Connect URL. Example : -url=file:/
      *@return     XContent       Created identifier object for given URL
      *@exception  java.lang.Exception
      */
@@ -147,17 +147,17 @@ public class Helper {
     Object executeCommand( XInterface ifc, String commandName, Object argument )
         throws com.sun.star.ucb.CommandAbortedException, com.sun.star.uno.Exception  {
 
-        /////////////////////////////////////////////////////////////////////
+
         // Obtain command processor interface from given content.
-        /////////////////////////////////////////////////////////////////////
+
 
         XCommandProcessor cmdProcessor
             = UnoRuntime.queryInterface(
             XCommandProcessor.class, ifc );
 
-        /////////////////////////////////////////////////////////////////////
+
         // Assemble command to execute.
-        /////////////////////////////////////////////////////////////////////
+
 
         Command command = new Command();
         command.Name     = commandName;

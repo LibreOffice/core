@@ -208,7 +208,7 @@ public class JavaSampleChartAddIn extends WeakBase implements
         }
 
         // position lines
-        // --------------
+
 
         // get data
         XChartDataArray aDataArray = UnoRuntime.queryInterface(

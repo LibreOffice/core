@@ -36,9 +36,9 @@ import com.sun.star.lang.EventObject;
 import com.sun.star.datatransfer.clipboard.ClipboardEvent;
 import com.sun.star.datatransfer.clipboard.XClipboardListener;
 
-//-----------------------------
+
 // A simple clipboard listener
-//-----------------------------
+
 
 public class ClipboardListener implements XClipboardListener
 {

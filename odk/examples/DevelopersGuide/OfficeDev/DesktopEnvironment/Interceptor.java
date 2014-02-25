@@ -63,7 +63,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
                                     IShutdownListener,
                                     IOnewayLink
 {
-    // ____________________
+
 
     /**
      * const
@@ -74,7 +74,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
                                                        "slot:5300"         ,
                                                        ".uno:Quit"         };
 
-    // ____________________
+
 
     /**
      * @member m_xMaster     use this interceptor if he doesn't handle queried dispatch request
@@ -89,7 +89,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
     private boolean                              m_bIsRegistered      ;
     private boolean                              m_bDead              ;
 
-    // ____________________
+
 
     /**
      * ctor
@@ -111,7 +111,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
         m_bDead             = false  ;
     }
 
-    //_____________________
+
 
     /**
      * start working as frame action listener really.
@@ -140,7 +140,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
         }
     }
 
-    //_____________________
+
 
     /**
      * In case we got an oneway listener callback - we had to use the office
@@ -188,7 +188,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
         }
     }
 
-    // ____________________
+
 
     /**
      * call back for frame action events
@@ -243,7 +243,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
         aExecutor.start();
     }
 
-    // ____________________
+
 
     /**
      * Indicates using of us as an interceptor.
@@ -282,7 +282,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
     }
 
 
-    //_____________________
+
 
     /**
      * Internal call back for frame action events, triggered by the used
@@ -342,7 +342,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
         }
     }
 
-    // ____________________
+
 
     /**
      * Implementation of interface XDispatchProviderInterceptor
@@ -361,7 +361,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
         }
     }
 
-    // ____________________
+
 
     public void setSlaveDispatchProvider(com.sun.star.frame.XDispatchProvider xSlave)
     {
@@ -371,7 +371,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
         }
     }
 
-    // ____________________
+
 
     public com.sun.star.frame.XDispatchProvider getMasterDispatchProvider()
     {
@@ -381,7 +381,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
         }
     }
 
-    // ____________________
+
 
     public void setMasterDispatchProvider(com.sun.star.frame.XDispatchProvider xMaster)
     {
@@ -391,7 +391,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
         }
     }
 
-    // ____________________
+
 
     /**
      * Implementation of interface XDispatchProvider
@@ -457,7 +457,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
         return null;
     }
 
-    // ____________________
+
 
     public com.sun.star.frame.XDispatch[] queryDispatches(/*IN*/ com.sun.star.frame.DispatchDescriptor[] lDescriptor)
     {
@@ -479,7 +479,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
         return lDispatcher;
     }
 
-    // ____________________
+
 
     /**
      * This method is called if this interceptor "wins the request".
@@ -520,7 +520,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
         }
     }
 
-    // ____________________
+
 
     /**
      * Notification of status listener isn't guaranteed (instead of listener on XNotifyingDispatch interface).
@@ -545,13 +545,13 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
         }*/
     }
 
-    // ____________________
+
 
     public /*ONEWAY*/ void removeStatusListener(/*IN*/ com.sun.star.frame.XStatusListener xListener,/*IN*/ com.sun.star.util.URL aURL)
     {
     }
 
-    // ____________________
+
 
     /**
      * Implements (optional!) optimization for interceptor mechanism.
@@ -568,7 +568,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
         return INTERCEPTED_URLS;
     }
 
-    // ____________________
+
 
     /**
      * This class listen on the intercepted frame to free all used resources on closing.
@@ -593,7 +593,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
         shutdown();
     }
 
-    // ____________________
+
 
     /**
      * If this java application shutdown - we must cancel all current existing

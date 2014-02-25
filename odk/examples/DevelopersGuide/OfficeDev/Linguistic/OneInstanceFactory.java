@@ -42,11 +42,11 @@ import com.sun.star.uno.UnoRuntime;
 
 import java.lang.reflect.Constructor;
 
-//
+
 // purpose of this class is to provide a service factory that instantiates
 // the services only once (as long as this factory itself exists)
 // and returns only reference to that instance.
-//
+
 
 public class OneInstanceFactory implements
         XSingleServiceFactory,
@@ -71,9 +71,9 @@ public class OneInstanceFactory implements
         xInstantiatedService = null;
     }
 
-    //**********************
+
     // XSingleServiceFactory
-    //**********************
+
     public Object createInstance()
         throws com.sun.star.uno.Exception,
                com.sun.star.uno.RuntimeException
@@ -123,9 +123,9 @@ public class OneInstanceFactory implements
     }
 
 
-    //*************
+
     // XServiceInfo
-    //*************
+
     public boolean supportsService( String aServiceName )
         throws com.sun.star.uno.RuntimeException
     {

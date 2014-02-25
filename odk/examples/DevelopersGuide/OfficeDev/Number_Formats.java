@@ -56,7 +56,7 @@ public class Number_Formats
     // __________ public members and methods __________
 
 
-    // ____________________
+
 
     public static void main( String args[] )
     {
@@ -76,7 +76,7 @@ public class Number_Formats
         System.exit(0);
     }
 
-    // ____________________
+
 
     public void doFunction() throws RuntimeException, Exception
     {
@@ -178,7 +178,7 @@ public class Number_Formats
         xColPropSet.setPropertyValue( "OptimalWidth", new Boolean(true) );
     }
 
-    // ____________________
+
 
     public Number_Formats( String[] args ) throws java.lang.Exception
     {
@@ -214,7 +214,7 @@ public class Number_Formats
     private XSpreadsheet           maSheet;  // the first sheet
 
 
-    // ____________________
+
 
     /** init the first sheet
      */

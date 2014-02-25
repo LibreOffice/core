@@ -46,7 +46,7 @@
 
 #include "so_activex.h"
 
-/////////////////////////////////////////////////////////////////////////////
+
 // CSOActiveX
 class ATL_NO_VTABLE CSOActiveX :
     public CComObjectRootEx<CComSingleThreadModel>,

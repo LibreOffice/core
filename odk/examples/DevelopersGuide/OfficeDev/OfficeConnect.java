@@ -51,7 +51,7 @@ import java.lang.String;
  */
 public class OfficeConnect
 {
-    // ____________________
+
 
     /**
      * At first call we create static connection object and get the remote office
@@ -69,14 +69,14 @@ public class OfficeConnect
         return maConnection;
     }
 
-    // ____________________
+
 
     public static synchronized OfficeConnect getConnection()
     {
         return maConnection;
     }
 
-    // ____________________
+
 
     /**
      * ctor
@@ -93,7 +93,7 @@ public class OfficeConnect
         mxServiceManager = mxOfficeContext.getServiceManager();
     }
 
-    // ____________________
+
 
     /**
      * create uno components inside remote office process
@@ -125,7 +125,7 @@ public class OfficeConnect
         return aResult;
     }
 
-    // ____________________
+
 
     /**
      * same as "createRemoteInstance()" but supports additional parameter for initializing created object
@@ -154,7 +154,7 @@ public class OfficeConnect
         return aResult;
     }
 
-    // ____________________
+
 
     /**
      * member

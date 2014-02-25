@@ -116,7 +116,7 @@ OUString SAL_CALL FilterDetect::detect(Sequence< PropertyValue >& aArguments )
     // flatxml starts with an office:document element. this element
     // conatains a clas="..." attribut by which we can deduct the
     // type of document that is to be loaded
-    //
+
     // WARNING:
     // parsing the plain text of the document is an easy way to do this
     // but not the purest solution, since namespaces and other xml details

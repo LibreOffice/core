@@ -160,9 +160,9 @@ public class ResourceCreator {
 
             if ( newContent != null ) {
 
-                /////////////////////////////////////////////////////////////////////
+
                 // Set mandatory properties...
-                /////////////////////////////////////////////////////////////////////
+
 
                 // Define property value sequence.
                 PropertyValue[] props = new PropertyValue[ 1 ];
@@ -175,9 +175,9 @@ public class ResourceCreator {
                 // Execute command "setPropertyValues".
                 m_helper.executeCommand( newContent, "setPropertyValues", props );
 
-                /////////////////////////////////////////////////////////////////////
+
                 // Write the new file to disk...
-                /////////////////////////////////////////////////////////////////////
+
 
                 // Obtain document data for the new file.
                 XInputStream data = stream;

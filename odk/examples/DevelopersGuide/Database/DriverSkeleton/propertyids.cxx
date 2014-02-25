@@ -90,9 +90,9 @@ namespace skeleton
 
         const sal_Char* getPROPERTY_AUTOINCREMENTCREATION() { return    "AutoIncrementCreation"; }
         const sal_Char* getPROPERTY_PRIVILEGES()            { return    "Privileges"; }
-    //============================================================
+
     //= error messages
-    //============================================================
+
         const sal_Char* getERRORMSG_SEQUENCE()              { return    "Function sequence error"; }
         const sal_Char* getSQLSTATE_SEQUENCE()              { return    "HY010"; }
         const sal_Char* getSQLSTATE_GENERAL()               { return    "HY0000"; }

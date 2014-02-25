@@ -71,7 +71,7 @@ public class Helper
         }
     }
 
-    // ____________________
+
 
     public XSpreadsheetDocument createSpreadsheetDocument()
     {
@@ -79,28 +79,28 @@ public class Helper
             XSpreadsheetDocument.class, createDocument( "scalc" ));
     }
 
-    // ____________________
+
 
     public XModel createPresentationDocument()
     {
         return createDocument( "simpress" );
     }
 
-    // ____________________
+
 
     public XModel createDrawingDocument()
     {
         return createDocument( "sdraw" );
     }
 
-    // ____________________
+
 
     public XModel createTextDocument()
     {
         return createDocument( "swriter" );
     }
 
-    // ____________________
+
 
     public XModel createDocument( String sDocType )
     {

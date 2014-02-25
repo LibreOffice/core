@@ -80,9 +80,9 @@ public class ResourceRemover {
         boolean result = false;
         if ( m_content != null ) {
 
-            /////////////////////////////////////////////////////////////////////
+
             // Destroy a resource physically...
-            /////////////////////////////////////////////////////////////////////
+
 
             Boolean deletePhysically = new Boolean( true );
 

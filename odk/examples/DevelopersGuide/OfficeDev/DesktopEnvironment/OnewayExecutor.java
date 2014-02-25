@@ -48,7 +48,7 @@ import java.util.ArrayList;
  */
 class OnewayExecutor extends Thread
 {
-    // _______________________________
+
 
     /**
      * const
@@ -66,7 +66,7 @@ class OnewayExecutor extends Thread
     public static final boolean ENCODE_PARAMS                   = true  ;
     public static final boolean DECODE_PARAMS                   = false ;
 
-    // _______________________________
+
 
     /**
      * @member  m_rLink     the object, which wish to be called back by this thread
@@ -78,7 +78,7 @@ class OnewayExecutor extends Thread
     private int         m_nRequest  ;
     private ArrayList<Object>      m_lParams   ;
 
-    // _______________________________
+
 
     /**
      * ctor
@@ -114,7 +114,7 @@ class OnewayExecutor extends Thread
             System.out.println("ctor ... m_lParams == null");
     }
 
-    // _______________________________
+
 
     /**
      * implements the thread function
@@ -133,7 +133,7 @@ class OnewayExecutor extends Thread
             m_rLink.execOneway( m_nRequest, m_lParams );
     }
 
-    // _______________________________
+
 
     /**
      * static helper!
@@ -142,7 +142,7 @@ class OnewayExecutor extends Thread
      * must be coded. It's not a must to use it - but you can ...
      */
 
-    // _______________________________
+
 
     public static ArrayList<Object> encodeDispatch(
         com.sun.star.util.URL[] aURL,

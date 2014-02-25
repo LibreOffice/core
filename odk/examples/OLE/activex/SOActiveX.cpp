@@ -59,7 +59,7 @@ OLECHAR* pSlotName[BARS_NUMBER] =
 
 
 
-/////////////////////////////////////////////////////////////////////////////
+
 
 HRESULT ExecuteFunc( IDispatch* idispUnoObject,
                      OLECHAR* sFuncName,
@@ -121,7 +121,7 @@ HRESULT PutPropertiesToIDisp( IDispatch* pdispObject,
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+
 // CSOActiveX
 
 CSOActiveX::CSOActiveX()
@@ -640,6 +640,6 @@ STDMETHODIMP CSOActiveX::Invoke(DISPID dispidMember,
     return S_OK;
 }
 
-// ---------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

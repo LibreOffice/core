@@ -61,7 +61,7 @@ import java.lang.String;
 public class StatusView extends    JPanel
                         implements IShutdownListener
 {
-    // ____________________
+
 
     /**
      * const
@@ -73,7 +73,7 @@ public class StatusView extends    JPanel
     public static final String FEATUREURL_ITALIC    = "slot:10008";
     public static final String FEATUREURL_UNDERLINE = "slot:10014";
 
-    // ____________________
+
 
     /**
      * const
@@ -91,7 +91,7 @@ public class StatusView extends    JPanel
     public static final String ITALIC_ON        = "X"       ;
     public static final String UNDERLINE_ON     = "X"       ;
 
-    // ____________________
+
 
     /**
      * @member  mlaFontValue            shows status of font name
@@ -118,7 +118,7 @@ public class StatusView extends    JPanel
     private StatusListener      m_aUnderlineListener     ;
     private StatusListener      m_aItalicListener        ;
 
-    // ____________________
+
 
     /**
      * ctor
@@ -201,7 +201,7 @@ public class StatusView extends    JPanel
         m_laUnderlineValue.setText(UNDERLINE_OFF);
     }
 
-    // ____________________
+
 
     /**
      * Set new frame for this view and start listening for events imedatly.
@@ -235,7 +235,7 @@ public class StatusView extends    JPanel
         m_aUnderlineListener.startListening();
     }
 
-    // ____________________
+
 
     /**
      * If this java application shutdown - we must cancel all current existing

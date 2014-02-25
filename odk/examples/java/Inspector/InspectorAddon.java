@@ -221,6 +221,6 @@ public class InspectorAddon {
     }
 
 //    __create( XComponentContext ){
-//
+
 //    }
 }

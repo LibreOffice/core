@@ -69,7 +69,7 @@ public class CustomizeView extends    JPanel
     private static final String TOOLBAR_OFF             = "toolbar off"       ;
     private static final String OBJECTBAR_OFF           = "objectbar off"     ;
 
-    // ____________________
+
     // member
 
     /**
@@ -89,7 +89,7 @@ public class CustomizeView extends    JPanel
     private StatusListener      m_aToolBarListener  ;
     private StatusListener      m_aObjectBarListener;
 
-    // ____________________
+
 
     /**
      * ctor
@@ -117,7 +117,7 @@ public class CustomizeView extends    JPanel
         this.add(m_cbObjectBar);
     }
 
-    // ____________________
+
 
     /**
      * set new frame for this view
@@ -160,7 +160,7 @@ public class CustomizeView extends    JPanel
         m_aObjectBarListener.startListening();
     }
 
-    // ____________________
+
 
     /**
      * react for click events of the used check boxes
@@ -186,7 +186,7 @@ public class CustomizeView extends    JPanel
         /// we must use this frame to dispatch a request
         com.sun.star.frame.XFrame m_xFrame;
 
-        //_____________________
+
 
         /**
          * ctor
@@ -201,7 +201,7 @@ public class CustomizeView extends    JPanel
             m_xFrame = xFrame;
         }
 
-        //_____________________
+
 
         /**
          * callback for action events
@@ -242,7 +242,7 @@ public class CustomizeView extends    JPanel
             FunctionHelper.execute(m_xFrame,aURL,lProperties,null);
         }
 
-        // ____________________
+
 
         /**
          * callback for disposing events
@@ -264,7 +264,7 @@ public class CustomizeView extends    JPanel
         }
     }
 
-    // ____________________
+
 
     /**
      * If this java application shutdown - we must cancel all current existing
