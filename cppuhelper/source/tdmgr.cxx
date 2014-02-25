@@ -64,7 +64,7 @@ static typelib_TypeDescription * createCTD(
     Reference< container::XHierarchicalNameAccess > const & access,
     const Reference< XTypeDescription > & xType );
 
-//==================================================================================================
+
 inline static typelib_TypeDescription * createCTD(
     const Reference< XCompoundTypeDescription > & xType )
 {
@@ -121,7 +121,7 @@ inline static typelib_TypeDescription * createCTD(
     }
     return pRet;
 }
-//==================================================================================================
+
 inline static typelib_TypeDescription * createCTD(
     Reference< container::XHierarchicalNameAccess > const & access,
     const Reference< XStructTypeDescription > & xType )
@@ -197,7 +197,7 @@ inline static typelib_TypeDescription * createCTD(
     }
     return pRet;
 }
-//==================================================================================================
+
 inline static typelib_TypeDescription * createCTD(
     const Reference< XInterfaceAttributeTypeDescription2 > & xAttribute )
 {
@@ -235,7 +235,7 @@ inline static typelib_TypeDescription * createCTD(
     }
     return pRet;
 }
-//==================================================================================================
+
 static typelib_TypeDescription * createCTD(
     const Reference< XInterfaceMethodTypeDescription > & xMethod )
 {
@@ -306,7 +306,7 @@ static typelib_TypeDescription * createCTD(
     }
     return pRet;
 }
-//==================================================================================================
+
 inline static typelib_TypeDescription * createCTD(
     Reference< container::XHierarchicalNameAccess > const & access,
     const Reference< XInterfaceTypeDescription2 > & xType )
@@ -372,7 +372,7 @@ inline static typelib_TypeDescription * createCTD(
     }
     return pRet;
 }
-//==================================================================================================
+
 inline static typelib_TypeDescription * createCTD( const Reference< XEnumTypeDescription > & xType )
 {
     typelib_TypeDescription * pRet = 0;
@@ -391,7 +391,7 @@ inline static typelib_TypeDescription * createCTD( const Reference< XEnumTypeDes
     }
     return pRet;
 }
-//==================================================================================================
+
 inline static typelib_TypeDescription * createCTD(
     Reference< container::XHierarchicalNameAccess > const & access,
     const Reference< XIndirectTypeDescription > & xType )
@@ -418,7 +418,7 @@ inline static typelib_TypeDescription * createCTD(
     return pRet;
 }
 
-//==================================================================================================
+
 static typelib_TypeDescription * createCTD(
     Reference< container::XHierarchicalNameAccess > const & access,
     const Reference< XTypeDescription > & xType )
@@ -562,7 +562,7 @@ static typelib_TypeDescription * createCTD(
 }
 
 
-//==================================================================================================
+
 extern "C"
 {
 static void SAL_CALL typelib_callback(
@@ -611,7 +611,7 @@ static void SAL_CALL typelib_callback(
 }
 }
 
-//==================================================================================================
+
 class EventListenerImpl
     : public WeakImplHelper1< lang::XEventListener >
 {
@@ -639,7 +639,7 @@ void EventListenerImpl::disposing( lang::EventObject const & rEvt )
     ::typelib_typedescription_revokeCallback( m_xTDMgr.get(), typelib_callback );
 }
 
-//==================================================================================================
+
 sal_Bool SAL_CALL installTypeDescriptionManager(
     Reference< container::XHierarchicalNameAccess > const & xTDMgr_c )
     SAL_THROW(())

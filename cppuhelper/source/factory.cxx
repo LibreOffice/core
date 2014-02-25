@@ -1033,7 +1033,7 @@ Reference<XSingleServiceFactory > SAL_CALL createOneInstanceRegistryFactory(
         rServiceManager, rImplementationName, rImplementationKey, true );
 }
 
-//##################################################################################################
+
 Reference< lang::XSingleComponentFactory > SAL_CALL createSingleComponentFactory(
     ComponentFactoryFunc fptr,
     OUString const & rImplementationName,
