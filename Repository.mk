@@ -505,6 +505,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,OOO, \
 	sofficeapp \
 	ucb1 \
 	ucbhelper \
+	$(if $(WITH_WEBDAV),ucpdav1) \
 	ucpfile1 \
 	xstor \
 ))
@@ -541,7 +542,6 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     srtrs1 \
     textconv_dict \
     tvhlp1 \
-    ucpdav1 \
     ucpftp1 \
     ucpchelp1 \
     ucphier1 \

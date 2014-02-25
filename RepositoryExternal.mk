@@ -827,7 +827,9 @@ gb_LinkTarget__use_liblangtag :=
 
 endif # ENABLE_LIBLANGTAG
 
-ifneq ($(DISABLE_NEON),)
+gb_ExternalProject__use_apr :=
+
+ifeq ($(WITH_WEBDAV),serf)
 
 define gb_LinkTarget__use_apr
 $(call gb_LinkTarget_set_include,$(1),\
@@ -875,9 +877,7 @@ endif
 
 endef
 
-else
-
-gb_ExternalProject__use_apr :=
+else ifeq ($(WITH_WEBDAV),neon)
 
 ifeq ($(SYSTEM_NEON),YES)
 
@@ -915,7 +915,7 @@ endef
 
 endif # SYSTEM_NEON
 
-endif # DISABLE_NEON
+endif # WITH_WEBDAV
 
 ifeq ($(SYSTEM_REDLAND),YES)
 

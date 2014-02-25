@@ -24,7 +24,7 @@
 
 #include <memory>
 #include <vector>
-#include <unordered_map>
+#include <boost/unordered_map.hpp>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -82,7 +82,7 @@ public:
 
 };
 
-typedef std::unordered_map
+typedef boost::unordered_map
 <
     OUString,
     PropertyValue,

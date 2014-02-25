@@ -325,7 +325,7 @@ postprocess_FILES_main += \
 		# Inet-wnt.xcu must come after Inet.xcu
 postprocess_DRIVERS += ado
 endif
-ifeq ($(DISABLE_NEON),$(false))
+ifneq ($(WITH_WEBDAV),)
 postprocess_FILES_main += $(postprocess_MOD)/org/openoffice/ucb/Configuration-neon.xcu
 endif
 ifeq ($(ENABLE_EVOAB2),TRUE)

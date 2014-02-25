@@ -570,7 +570,6 @@ linux-android*)
     build_gstreamer=no
     build_gstreamer_0_10=no
     enable_lotuswordpro=no
-    enable_neon=no
     enable_mpl_subset=yes
     enable_opengl=no
     enable_coinmp=no
@@ -1645,6 +1644,14 @@ AC_ARG_WITH(system-npapi-headers,
          extensions/source/plugin (ENABLE_NPAPI_FROM_BROWSER=YES)]),,
     [with_system_npapi_headers="$with_system_headers"]
 )
+
+AC_ARG_WITH(webdav,
+    AS_HELP_STRING([--with-webdav],
+        [Specify which library to use for webdav implementation.
+         Possible values: "neon", "serf", "no". The default value is "neon".
+         Example: --with-webdav="serf"]),
+    WITH_WEBDAV=$withval,
+    WITH_WEBDAV="neon")
 
 AC_ARG_WITH(linker-hash-style,
     AS_HELP_STRING([--with-linker-hash-style],
@@ -7038,7 +7045,6 @@ if test $_os = iOS; then
     enable_lpsolve=no
     enable_postgresql_sdbc=no
     enable_lotuswordpro=no
-    enable_neon=no
     enable_extension_integration=no
     with_theme="tango"
     with_ppds=no
@@ -8641,15 +8647,16 @@ AC_SUBST(XRANDR_CFLAGS)
 AC_SUBST(XRANDR_LIBS)
 AC_SUBST(ENABLE_RANDR)
 
-dnl ===================================================================
-dnl Check for building neon
-dnl ===================================================================
-AC_MSG_CHECKING([whether to use neon])
-if test "$enable_neon" = "no"; then
-    AC_MSG_RESULT([no])
-    DISABLE_NEON=TRUE
-    AC_SUBST(DISABLE_NEON)
-
+if test "$enable_neon" = "no" -o "$enable_mpl_subset" = "yes"; then
+    WITH_WEBDAV="serf"
+fi
+if test $_os = iOS -o $_os = Android; then
+    WITH_WEBDAV="no"
+fi
+AC_MSG_CHECKING([for webdav library])
+case "$WITH_WEBDAV" in
+serf)
+    AC_MSG_RESULT([serf])
     # Check for system apr-util
     libo_CHECK_SYSTEM_MODULE([apr],[APR],[apr-util-1],
                              ["-I${WORKDIR}/UnpackedTarball/apr/include -I${WORKDIR}/UnpackedTarball/apr_util/include"],
@@ -8664,11 +8671,10 @@ if test "$enable_neon" = "no"; then
     if test "$COM" = "MSC"; then
         SERF_LIBS="${WORKDIR}/UnpackedTarball/serf/Release/serf-1.lib"
     fi
-else
-    AC_MSG_RESULT([yes])
-    dnl ===================================================================
-    dnl Check for system neon
-    dnl ===================================================================
+    ;;
+neon)
+    AC_MSG_RESULT([neon])
+    # Check for system neon
     libo_CHECK_SYSTEM_MODULE([neon],[NEON],[neon >= 0.26.0])
     if test "$with_system_neon" = "yes"; then
         NEON_VERSION="`$PKG_CONFIG --modversion neon | $SED 's/\.//g'`"
@@ -8676,10 +8682,17 @@ else
         libo_MINGW_TRY_DLL([libtasn1])
         libo_MINGW_TRY_DLL([libgnutls])
     else
+        SCPDEFS="$SCPDEFS -DNEED_NEON"
         NEON_VERSION=0295
     fi
     AC_SUBST(NEON_VERSION)
-fi
+    ;;
+*)
+    AC_MSG_RESULT([none, disabled])
+    WITH_WEBDAV=""
+    ;;
+esac
+AC_SUBST(WITH_WEBDAV)
 
 dnl ===================================================================
 dnl Check for disabling cve_tests
@@ -8744,7 +8757,7 @@ dnl ===================================================================
 dnl Check for building gnutls
 dnl ===================================================================
 AC_MSG_CHECKING([whether to use gnutls])
-if test "$enable_neon" != "no" && test "$enable_openssl" = "no"; then
+if test "$WITH_WEBDAV" = "neon" && test "$enable_openssl" = "no"; then
     AC_MSG_RESULT([yes])
     AM_PATH_LIBGCRYPT()
     PKG_CHECK_MODULES(GNUTLS, [gnutls],,
@@ -11884,8 +11897,8 @@ if test "$enable_mpl_subset" = "yes"; then
    if test "$enable_lotuswordpro" = "yes"; then
         AC_MSG_ERROR([need to --disable-lotuswordpro - a Lotus Word Pro file format import filter.])
    fi
-   if test "$enable_neon" != "no" -o "x$DISABLE_NEON" != "xTRUE"; then
-        AC_MSG_ERROR([need to --disable-neon - webdav support.])
+   if test "$WITH_WEBDAV" = "neon"; then
+        AC_MSG_ERROR([need --with-webdav=serf or --without-webdav - webdav support.])
    fi
    if test "x$enable_ext_mariadb_connector" = "xyes"; then
         AC_MSG_ERROR([need to --disable-ext-mariadb-connector - mariadb/mysql support.])

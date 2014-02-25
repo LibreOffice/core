@@ -829,11 +829,8 @@ File gid_File_Lib_Ucpchelp1
     Styles = (PACKED);
 End
 
-#ifndef DISABLE_NEON
-SPECIAL_LIB_FILE(gid_File_Lib_Ucpdav1,ucpdav1)
- #ifndef SYSTEM_NEON
-   SPECIAL_LIB_FILE(gid_File_Lib_Neon,neon)
- #endif
+#ifdef NEED_NEON
+SPECIAL_LIB_FILE(gid_File_Lib_Neon,neon)
 #endif
 
 #if !defined(ANDROID) && !defined(IOS) //FIXME: get nss&xmlsec building
