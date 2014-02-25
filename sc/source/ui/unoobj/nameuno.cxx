@@ -220,7 +220,7 @@ OUString SAL_CALL ScNamedRangeObj::getName() throw(uno::RuntimeException)
 }
 
 void SAL_CALL ScNamedRangeObj::setName( const OUString& aNewName )
-                                                throw(uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     //! adapt formulas ?????

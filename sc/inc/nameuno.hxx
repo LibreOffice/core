@@ -103,7 +103,8 @@ public:
                             /// XNamed
     virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setName( const OUString& aName )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw (::com::sun::star::uno::RuntimeException,
+                                       std::exception);
 
                             /// XCellRangeReferrer
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange > SAL_CALL
