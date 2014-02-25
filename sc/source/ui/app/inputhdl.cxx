@@ -728,37 +728,17 @@ void ScInputHandler::GetFormulaData()
         else
             pFormulaDataPara = new ScTypedCaseStrSet;
 
-        //      MRU-Funktionen aus dem Funktions-Autopiloten
-        //      wie in ScPosWnd::FillFunctions (inputwin.cxx)
-
-        const ScAppOptions& rOpt = SC_MOD()->GetAppOptions();
-        sal_uInt16 nMRUCount = rOpt.GetLRUFuncListCount();
-        const sal_uInt16* pMRUList = rOpt.GetLRUFuncList();
         const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
         sal_uLong nListCount = pFuncList->GetCount();
-        if (pMRUList)
-        {
-            for (sal_uInt16 i=0; i<nMRUCount; i++)
-            {
-                sal_uInt16 nId = pMRUList[i];
-                for (sal_uLong j=0; j<nListCount; j++)
-                {
-                    const ScFuncDesc* pDesc = pFuncList->GetFunction( j );
-                    if ( pDesc->nFIndex == nId && pDesc->pFuncName )
-                    {
-                        OUString aEntry = *pDesc->pFuncName;
-                        aEntry += "()";
-                        pFormulaData->insert(ScTypedStrData(aEntry, 0.0, ScTypedStrData::Standard));
-                        break;                  // nicht weitersuchen
-                    }
-                }
-            }
-        }
         for(sal_uLong i=0;i<nListCount;i++)
         {
             const ScFuncDesc* pDesc = pFuncList->GetFunction( i );
             if ( pDesc->pFuncName )
             {
+/* fdo75264
+ * pFormulaData is filled with all function names, without parentheses and arguments
+ */
+                pFormulaData->insert(ScTypedStrData(*pDesc->pFuncName, 0.0, ScTypedStrData::Standard));
                 pDesc->initArgumentInfo();
                 OUString aEntry = pDesc->getSignature();
                 pFormulaDataPara->insert(ScTypedStrData(aEntry, 0.0, ScTypedStrData::Standard));
@@ -1035,6 +1015,27 @@ void ScInputHandler::ShowTipBelow( const OUString& rText )
     }
 }
 
+sal_Int32 lcl_getFuncName( OUString& aStart, OUString& aResult )
+{
+    sal_Int32 nSize = 0;
+    sal_Int32 nPos = aStart.getLength() - 1;
+    sal_Unicode c = aStart[ nPos ];
+    sal_Unicode aTemp[ nPos ];
+
+    while ( nPos >= 0 && c != '(' && c != ')' && c!= ' ' && c != '=' )
+    {
+        aTemp[ nSize++ ] = c;
+        c = aStart[ --nPos ];
+    }
+
+    nPos = nSize - 1;
+    aResult = OUString( aTemp[ nPos-- ] );
+    while ( nPos >= 0 )
+        aResult += OUString( aTemp[ nPos-- ] );
+
+    return nSize;
+}
+
 void ScInputHandler::UseFormulaData()
 {
     EditView* pActiveView = pTopView ? pTopView : pTableView;
@@ -1070,20 +1071,45 @@ void ScInputHandler::UseFormulaData()
             sal_uInt16      nArgs;
             bool bFound = false;
 
-            OUString aText = pEngine->GetWord( 0, aSel.nEndPos-1 );
-            if (!aText.isEmpty())
+/* fdo75264
+ * part 1: if function name is still incomplete, show first matching function name as tip above cell
+ *
+ * problems:
+ * 1  only base function names of functions that have extented names are in list
+ *     solved by filling pFormulaData with all function names (without parentheses to keep
+ *     expected order (e.g. GCD comes before GCD_ADD, where GCD_ADD() comes before GCD())
+ * 2  GetWord breaks function names containing _ or ., resulting in incorrect tips
+ *     solved by using a dirty fix -probably incomplete too and NOT tested for other locale
+ *     settings- in the form of lcl_getFunctionName()
+ */
+            OUString aText;
+            if ( lcl_getFuncName( aFormula, aText ) )
             {
                 OUString aNew;
                 miAutoPosFormula = pFormulaData->end();
                 miAutoPosFormula = findText(*pFormulaData, miAutoPosFormula, aText, aNew, false);
                 if (miAutoPosFormula != pFormulaData->end())
                 {
+                    aNew += "()";
                     ShowTip( aNew );
                     aAutoSearch = aText;
                 }
+/* fdo75264
+ * lcl_getFuncName() returns 0 when a function name is fully entered (i.e. followed by a '(')
+ * so being in this block means that the function name was not fully entered and that
+ * we can exit UseFormulaData()
+ */
+                return;
             }
             FormulaHelper aHelper(ScGlobal::GetStarCalcFunctionMgr());
 
+/* fdo75264
+ * part 2: once '(' is added to the function name a tip is to be shown below the cell with function name and arguments of function
+ *
+ * problems:
+ * 1  some functions don't show, eg DAYS360(), though DAYS360() is in the list; comphelper::string::isalphaAscii(c)) prevents the list being searched, c being the last character before (.
+ *      solved by removing check for isalpha; only effect seems to be that possibly list is searched unnecessarily in random cases of invalid entries
+ */
             while( !bFound )
             {
                 aFormula += ")";
@@ -1091,10 +1117,6 @@ void ScInputHandler::UseFormulaData()
                 if( nLeftParentPos == -1 )
                     break;
 
-                // nLeftParentPos can be 0 if a parenthesis is inserted before the formula
-                sal_Unicode c = ( nLeftParentPos > 0 ) ? aFormula[ nLeftParentPos-1 ] : 0;
-                if( !(comphelper::string::isalphaAscii(c)) )
-                    continue;
                 nNextFStart = aHelper.GetFunctionStart( aFormula, nLeftParentPos, true);
                 if( aHelper.GetNextFunc( aFormula, false, nNextFStart, NULL, &ppFDesc, &aArgs ) )
                 {
