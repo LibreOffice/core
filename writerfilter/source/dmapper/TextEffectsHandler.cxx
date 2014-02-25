@@ -116,18 +116,31 @@ OUString getNameForElementId(sal_uInt32 aId)
     static std::map<sal_uInt32, OUString> aIdMap;
     if(aIdMap.empty())
     {
-        aIdMap[NS_ooxml::LN_EG_ColorChoice_srgbClr]   = "srgbClr";
-        aIdMap[NS_ooxml::LN_EG_ColorChoice_schemeClr] = "schemeClr";
-        aIdMap[NS_ooxml::LN_EG_ColorTransform_tint]   = "tint";
-        aIdMap[NS_ooxml::LN_EG_ColorTransform_shade]  = "shade";
-        aIdMap[NS_ooxml::LN_EG_ColorTransform_alpha]  = "alpha";
-        aIdMap[NS_ooxml::LN_EG_ColorTransform_hueMod] = "hueMod";
-        aIdMap[NS_ooxml::LN_EG_ColorTransform_sat]    = "sat";
-        aIdMap[NS_ooxml::LN_EG_ColorTransform_satOff] = "satOff";
-        aIdMap[NS_ooxml::LN_EG_ColorTransform_satMod] = "satMod";
-        aIdMap[NS_ooxml::LN_EG_ColorTransform_lum]    = "lum";
-        aIdMap[NS_ooxml::LN_EG_ColorTransform_lumOff] = "lumOff";
-        aIdMap[NS_ooxml::LN_EG_ColorTransform_lumMod] = "lumMod";
+        aIdMap[NS_ooxml::LN_EG_ColorChoice_srgbClr]             = "srgbClr";
+        aIdMap[NS_ooxml::LN_EG_ColorChoice_schemeClr]           = "schemeClr";
+        aIdMap[NS_ooxml::LN_EG_ColorTransform_tint]             = "tint";
+        aIdMap[NS_ooxml::LN_EG_ColorTransform_shade]            = "shade";
+        aIdMap[NS_ooxml::LN_EG_ColorTransform_alpha]            = "alpha";
+        aIdMap[NS_ooxml::LN_EG_ColorTransform_hueMod]           = "hueMod";
+        aIdMap[NS_ooxml::LN_EG_ColorTransform_sat]              = "sat";
+        aIdMap[NS_ooxml::LN_EG_ColorTransform_satOff]           = "satOff";
+        aIdMap[NS_ooxml::LN_EG_ColorTransform_satMod]           = "satMod";
+        aIdMap[NS_ooxml::LN_EG_ColorTransform_lum]              = "lum";
+        aIdMap[NS_ooxml::LN_EG_ColorTransform_lumOff]           = "lumOff";
+        aIdMap[NS_ooxml::LN_EG_ColorTransform_lumMod]           = "lumMod";
+        aIdMap[NS_ooxml::LN_EG_FillProperties_noFill]           = "noFill";
+        aIdMap[NS_ooxml::LN_EG_FillProperties_solidFill]        = "solidFill";
+        aIdMap[NS_ooxml::LN_EG_FillProperties_gradFill]         = "gradFill";
+        aIdMap[NS_ooxml::LN_CT_GradientFillProperties_gsLst]    = "gsLst";
+        aIdMap[NS_ooxml::LN_CT_GradientStopList_gs]             = "gs";
+        aIdMap[NS_ooxml::LN_CT_GradientStop_pos]                = "pos";
+        aIdMap[NS_ooxml::LN_EG_ShadeProperties_lin]             = "lin";
+        aIdMap[NS_ooxml::LN_EG_ShadeProperties_path]            = "path";
+        aIdMap[NS_ooxml::LN_CT_PathShadeProperties_fillToRect]  = "fillToRect";
+        aIdMap[NS_ooxml::LN_EG_LineDashProperties_prstDash]     = "prstDash";
+        aIdMap[NS_ooxml::LN_EG_LineJoinProperties_round]        = "round";
+        aIdMap[NS_ooxml::LN_EG_LineJoinProperties_bevel]        = "bevel";
+        aIdMap[NS_ooxml::LN_EG_LineJoinProperties_miter]        = "miter";
     }
     return aIdMap[aId];
 }
@@ -174,6 +187,88 @@ OUString TextEffectsHandler::getRectAlignmentString(sal_Int32 nType)
     return OUString();
 }
 
+OUString TextEffectsHandler::getLineCapString(sal_Int32 nType)
+{
+    switch (nType)
+    {
+        case NS_ooxml::LN_ST_LineCap_rnd: return OUString("rnd");
+        case NS_ooxml::LN_ST_LineCap_sq: return OUString("sq");
+        case NS_ooxml::LN_ST_LineCap_flat: return OUString("flat");
+        default: break;
+    }
+    return OUString();
+}
+
+OUString TextEffectsHandler::getCompoundLineString(sal_Int32 nType)
+{
+    switch (nType)
+    {
+        case NS_ooxml::LN_ST_CompoundLine_sng: return OUString("sng");
+        case NS_ooxml::LN_ST_CompoundLine_dbl: return OUString("dbl");
+        case NS_ooxml::LN_ST_CompoundLine_thickThin: return OUString("thickThin");
+        case NS_ooxml::LN_ST_CompoundLine_thinThick: return OUString("thinThick");
+        case NS_ooxml::LN_ST_CompoundLine_tri: return OUString("tri");
+        default: break;
+    }
+    return OUString();
+}
+
+OUString TextEffectsHandler::getPenAlignmentString(sal_Int32 nType)
+{
+    switch (nType)
+    {
+        case NS_ooxml::LN_ST_PenAlignment_ctr: return OUString("ctr");
+        case NS_ooxml::LN_ST_PenAlignment_in: return OUString("in");
+        default: break;
+    }
+    return OUString();
+}
+
+OUString TextEffectsHandler::getOnOffString(sal_Int32 nType)
+{
+    switch (nType)
+    {
+        case NS_ooxml::LN_ST_OnOff_true: return OUString("true");
+        case NS_ooxml::LN_ST_OnOff_false: return OUString("false");
+        case NS_ooxml::LN_ST_OnOff_1: return OUString("1");
+        case NS_ooxml::LN_ST_OnOff_0: return OUString("0");
+        default: break;
+    }
+    return OUString();
+}
+
+OUString TextEffectsHandler::getPathShadeTypeString(sal_Int32 nType)
+{
+    switch (nType)
+    {
+        case NS_ooxml::LN_ST_PathShadeType_shape: return OUString("shape");
+        case NS_ooxml::LN_ST_PathShadeType_circle: return OUString("circle");
+        case NS_ooxml::LN_ST_PathShadeType_rect: return OUString("rect");
+        default: break;
+    }
+    return OUString();
+}
+
+OUString TextEffectsHandler::getPresetLineDashValString(sal_Int32 nType)
+{
+    switch (nType)
+    {
+        case NS_ooxml::LN_ST_PresetLineDashVal_solid: return OUString("solid");
+        case NS_ooxml::LN_ST_PresetLineDashVal_dot: return OUString("dot");
+        case NS_ooxml::LN_ST_PresetLineDashVal_sysDot: return OUString("sysDot");
+        case NS_ooxml::LN_ST_PresetLineDashVal_dash: return OUString("dash");
+        case NS_ooxml::LN_ST_PresetLineDashVal_sysDash: return OUString("sysDash");
+        case NS_ooxml::LN_ST_PresetLineDashVal_lgDash: return OUString("lgDash");
+        case NS_ooxml::LN_ST_PresetLineDashVal_dashDot: return OUString("dashDot");
+        case NS_ooxml::LN_ST_PresetLineDashVal_sysDashDot: return OUString("sysDashDot");
+        case NS_ooxml::LN_ST_PresetLineDashVal_lgDashDot: return OUString("lgDashDot");
+        case NS_ooxml::LN_ST_PresetLineDashVal_lgDashDotDot: return OUString("lgDashDotDot");
+        case NS_ooxml::LN_ST_PresetLineDashVal_sysDashDotDot: return OUString("sysDashDotDot");
+        default: break;
+    }
+    return OUString();
+}
+
 void TextEffectsHandler::convertElementIdToPropertyId(sal_Int32 aElementId)
 {
     switch(aElementId)
@@ -191,6 +286,9 @@ void TextEffectsHandler::convertElementIdToPropertyId(sal_Int32 aElementId)
             maElementName = "reflection";
             break;
         case NS_ooxml::LN_textOutline_textOutline:
+            maPropertyId = PROP_CHAR_TEXTOUTLINE_TEXT_EFFECT;
+            maElementName = "textOutline";
+            break;
         case NS_ooxml::LN_textFill_textFill:
         case NS_ooxml::LN_scene3d_scene3d:
         case NS_ooxml::LN_props3d_props3d:
@@ -223,7 +321,6 @@ boost::optional<PropertyIds> TextEffectsHandler::getGrabBagPropertyId()
 
 void TextEffectsHandler::lcl_attribute(Id aName, Value& aValue)
 {
-
     if (mpGrabBagStack->getCurrentName() != "attributes")
         mpGrabBagStack->push("attributes");
 
@@ -302,6 +399,66 @@ void TextEffectsHandler::lcl_attribute(Id aName, Value& aValue)
                 mpGrabBagStack->appendElement("algn", aAny);
             }
             break;
+        case NS_ooxml::LN_CT_TextOutlineEffect_w:
+            mpGrabBagStack->addInt32("w", sal_Int32(aValue.getInt()));
+            break;
+        case NS_ooxml::LN_CT_TextOutlineEffect_cap:
+            {
+                uno::Any aAny = makeAny(getLineCapString(sal_Int32(aValue.getInt())));
+                mpGrabBagStack->appendElement("cap", aAny);
+            }
+            break;
+        case NS_ooxml::LN_CT_TextOutlineEffect_cmpd:
+            {
+                uno::Any aAny = makeAny(getCompoundLineString(sal_Int32(aValue.getInt())));
+                mpGrabBagStack->appendElement("cmpd", aAny);
+            }
+            break;
+        case NS_ooxml::LN_CT_TextOutlineEffect_algn:
+            {
+                uno::Any aAny = makeAny(getPenAlignmentString(sal_Int32(aValue.getInt())));
+                mpGrabBagStack->appendElement("algn", aAny);
+            }
+            break;
+        case NS_ooxml::LN_CT_GradientStop_pos:
+            mpGrabBagStack->addInt32("pos", sal_Int32(aValue.getInt()));
+            break;
+        case NS_ooxml::LN_CT_LinearShadeProperties_ang:
+            mpGrabBagStack->addInt32("ang", sal_Int32(aValue.getInt()));
+            break;
+        case NS_ooxml::LN_CT_LinearShadeProperties_scaled:
+            {
+                uno::Any aAny = makeAny(getOnOffString(sal_Int32(aValue.getInt())));
+                mpGrabBagStack->appendElement("scaled", aAny);
+            }
+            break;
+        case NS_ooxml::LN_CT_PathShadeProperties_path:
+            {
+                uno::Any aAny = makeAny(getPathShadeTypeString(sal_Int32(aValue.getInt())));
+                mpGrabBagStack->appendElement("path", aAny);
+            }
+            break;
+        case NS_ooxml::LN_CT_RelativeRect_l:
+            mpGrabBagStack->addInt32("l", sal_Int32(aValue.getInt()));
+            break;
+        case NS_ooxml::LN_CT_RelativeRect_t:
+            mpGrabBagStack->addInt32("t", sal_Int32(aValue.getInt()));
+            break;
+        case NS_ooxml::LN_CT_RelativeRect_r:
+            mpGrabBagStack->addInt32("r", sal_Int32(aValue.getInt()));
+            break;
+        case NS_ooxml::LN_CT_RelativeRect_b:
+            mpGrabBagStack->addInt32("b", sal_Int32(aValue.getInt()));
+            break;
+        case NS_ooxml::LN_CT_PresetLineDashProperties_val:
+            {
+                uno::Any aAny = makeAny(getPresetLineDashValString(sal_Int32(aValue.getInt())));
+                mpGrabBagStack->appendElement("val", aAny);
+            }
+            break;
+        case NS_ooxml::LN_CT_LineJoinMiterProperties_lim:
+            mpGrabBagStack->addInt32("lim", sal_Int32(aValue.getInt()));
+            break;
         default:
             break;
     }
@@ -316,10 +473,10 @@ void TextEffectsHandler::lcl_sprm(Sprm& rSprm)
     OUString aElementName = getNameForElementId(nSprmId);
     if(aElementName.isEmpty())
     {
-        printf("Unknown element: %d\n", nSprmId);
-        // Element is unknown - leave the method.
+        // Element is unknown -> leave.
         return;
     }
+
     mpGrabBagStack->push(aElementName);
 
     writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();

@@ -53,6 +53,12 @@ public:
 
     static OUString getSchemeColorValTypeString(sal_Int32 nType);
     static OUString getRectAlignmentString(sal_Int32 nType);
+    static OUString getLineCapString(sal_Int32 nType);
+    static OUString getCompoundLineString(sal_Int32 nType);
+    static OUString getPenAlignmentString(sal_Int32 nType);
+    static OUString getOnOffString(sal_Int32 nType);
+    static OUString getPathShadeTypeString(sal_Int32 nType);
+    static OUString getPresetLineDashValString(sal_Int32 nType);
 };
 
 typedef boost::shared_ptr<TextEffectsHandler> TextEffectsHandlerPtr;
