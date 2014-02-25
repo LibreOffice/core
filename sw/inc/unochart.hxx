@@ -179,7 +179,10 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XRangeSelection > SAL_CALL getRangeSelection(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XRangeXMLConversion
-    virtual OUString SAL_CALL convertRangeToXML( const OUString& aRangeRepresentation ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL convertRangeToXML( const OUString& aRangeRepresentation )
+        throw (::com::sun::star::lang::IllegalArgumentException,
+               ::com::sun::star::uno::RuntimeException,
+               std::exception);
     virtual OUString SAL_CALL convertRangeFromXML( const OUString& aXMLRange ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
     // XComponent

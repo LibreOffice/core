@@ -1749,7 +1749,8 @@ void SwChartDataProvider::AddRowCols(
 
 // XRangeXMLConversion ---------------------------------------------------
 OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const OUString& rRangeRepresentation )
-    throw ( uno::RuntimeException, lang::IllegalArgumentException )
+    throw (uno::RuntimeException, lang::IllegalArgumentException,
+           std::exception)
 {
     SolarMutexGuard aGuard;
     if (bDisposed)
