@@ -184,16 +184,16 @@ namespace dxcanvas
 
                     // By convention, the access buffer always has
                     // one of the following formats:
-                    //
+
                     //    BMP_FORMAT_1BIT_MSB_PAL
                     //    BMP_FORMAT_4BIT_MSN_PAL
                     //    BMP_FORMAT_8BIT_PAL
                     //    BMP_FORMAT_16BIT_TC_LSB_MASK
                     //    BMP_FORMAT_24BIT_TC_BGR
                     //    BMP_FORMAT_32BIT_TC_MASK
-                    //
+
                     // and is always BMP_FORMAT_BOTTOM_UP
-                    //
+
                     // This is the way
                     // WinSalBitmap::AcquireBuffer() sets up the
                     // buffer
@@ -326,16 +326,16 @@ namespace dxcanvas
 
                     // By convention, the access buffer always has
                     // one of the following formats:
-                    //
+
                     //    BMP_FORMAT_1BIT_MSB_PAL
                     //    BMP_FORMAT_4BIT_MSN_PAL
                     //    BMP_FORMAT_8BIT_PAL
                     //    BMP_FORMAT_16BIT_TC_LSB_MASK
                     //    BMP_FORMAT_24BIT_TC_BGR
                     //    BMP_FORMAT_32BIT_TC_MASK
-                    //
+
                     // and is always BMP_FORMAT_BOTTOM_UP
-                    //
+
                     // This is the way
                     // WinSalBitmap::AcquireBuffer() sets up the
                     // buffer

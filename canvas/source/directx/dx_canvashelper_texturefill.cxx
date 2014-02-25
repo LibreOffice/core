@@ -226,7 +226,7 @@ namespace dxcanvas
                                           1.0) )
             {
                 // KLUDGE 1:
-                //
+
                 // And here comes the greatest shortcoming of the GDI+
                 // gradients ever: SetFocusScales completely ignores
                 // transformations, both when set at the PathGradientBrush
@@ -362,7 +362,7 @@ namespace dxcanvas
             else
             {
                 // KLUDGE 2:
-                //
+
                 // We're generating a PathGradientBrush from scratch here,
                 // and put in a transformed GraphicsPath (transformed with
                 // the texture transform). This is because the

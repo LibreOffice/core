@@ -347,12 +347,12 @@ namespace vclcanvas
             // innermost in rColor1. The innermost polygon will never
             // have zero area, thus, we must divide the interval into
             // nStepCount+1 steps. For example, to create 3 steps:
-            //
+
             // |                       |
             // |-------|-------|-------|
             // |                       |
             // 3       2       1       0
-            //
+
             // This yields 4 tick marks, where 0 is never attained (since
             // zero-area polygons typically don't display perceivable
             // color).
