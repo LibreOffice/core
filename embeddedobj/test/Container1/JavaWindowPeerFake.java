@@ -39,7 +39,7 @@ class JavaWindowPeerFake implements XSystemDependentWindowPeer,
         maView = aNative;
     }
 
-    // ____________________
+
     /**
      * Implementation of XSystemDependentWindowPeer ( that's all we really need ).
      * This method is called back from the Office toolkit to retrieve the system data.

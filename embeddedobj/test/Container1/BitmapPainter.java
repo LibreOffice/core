@@ -69,7 +69,7 @@ class BitmapPainter implements XPaintListener, XMouseListener, XMouseMotionListe
     private boolean m_bProceedWithPainting = true;
 
 // Methods
-    //------------------------------------------------------
+
     public BitmapPainter( XJob xJob, XWindow xWindow, XBitmap xBitmap, com.sun.star.awt.Rectangle aDrawRect )
     {
         if ( xJob == null )
@@ -103,7 +103,7 @@ class BitmapPainter implements XPaintListener, XMouseListener, XMouseMotionListe
         m_xWindow.addMouseMotionListener( this );
     }
 
-    //------------------------------------------------------
+
     public void disconnectListener()
     {
         m_aPaintThread.disposeThread();
@@ -112,7 +112,7 @@ class BitmapPainter implements XPaintListener, XMouseListener, XMouseMotionListe
         m_xWindow.removeMouseMotionListener( this );
     }
 
-    //------------------------------------------------------
+
     public void setBitmap( XBitmap xBitmap )
     {
         synchronized( m_oImageLock )
@@ -121,7 +121,7 @@ class BitmapPainter implements XPaintListener, XMouseListener, XMouseMotionListe
         }
     }
 
-    //------------------------------------------------------
+
     public void setPos( com.sun.star.awt.Point aPoint )
     {
         synchronized( m_oImageLock )
@@ -131,7 +131,7 @@ class BitmapPainter implements XPaintListener, XMouseListener, XMouseMotionListe
         }
     }
 
-    //------------------------------------------------------
+
     public void setRect( com.sun.star.awt.Rectangle aRect )
     {
         synchronized( m_oImageLock )
@@ -140,7 +140,7 @@ class BitmapPainter implements XPaintListener, XMouseListener, XMouseMotionListe
         }
     }
 
-    //------------------------------------------------------
+
     public void setSize( com.sun.star.awt.Size aSize )
     {
         synchronized( m_oImageLock )
@@ -150,20 +150,20 @@ class BitmapPainter implements XPaintListener, XMouseListener, XMouseMotionListe
         }
     }
 
-    //------------------------------------------------------
+
     public void stopPainting()
     {
         m_bProceedWithPainting = false;
     }
 
-    //------------------------------------------------------
+
     public void startPainting()
     {
         m_bProceedWithPainting = true;
     }
 
     // XPaintListener
-    //------------------------------------------------------
+
     public void windowPaint( PaintEvent e )
     {
         if ( !m_bProceedWithPainting )
@@ -199,49 +199,49 @@ class BitmapPainter implements XPaintListener, XMouseListener, XMouseMotionListe
     }
 
     // XMouseListener
-    //------------------------------------------------------
+
     public void mousePressed( MouseEvent e )
     {
     }
 
-    //------------------------------------------------------
+
     public void mouseReleased( MouseEvent e )
     {
     }
 
-    //------------------------------------------------------
+
     public void mouseEntered( MouseEvent e )
     {
     }
 
-    //------------------------------------------------------
+
     public void mouseExited( MouseEvent e )
     {
     }
 
     // XMouseMotionListener
-    //------------------------------------------------------
+
     public void mouseDragged( MouseEvent e )
     {
         // TODO: react to resizing of object bitmap
         // if the object is inplace active the object must control resizing
     }
 
-    //------------------------------------------------------
+
     public void mouseMoved( MouseEvent e )
     {
 
     }
 
     // XEventListener
-    //------------------------------------------------------
+
     public void disposing( com.sun.star.lang.EventObject e )
     {
         // do nothing, the window can die only when the application is closed
     }
 
     // XJob
-    //------------------------------------------------------
+
     public Object execute( NamedValue[] pValues )
     {
 /*

@@ -72,7 +72,7 @@ JNIEXPORT jlong JNICALL Java_embeddedobj_test_NativeView_getNativeWindow
 #else
     // FIXME: Where is dsi_x11 defined?
     // Added below because I'm guessing this test breaks
-    //
+
     // JAWT_X11DrawingSurfaceInfo*dsi_x11 ;
 #endif
     jlong                         drawable;

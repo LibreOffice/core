@@ -799,7 +799,7 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
 
             // ==== the STAMPIT related solution =============================
             m_aVerbExecutionController.StartControlExecution();
-            // ===============================================================
+
 
             m_pOleComponent->ExecuteVerb( nVerbID );
 
@@ -810,13 +810,13 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
             // if object was modified during verb execution it is saved here
             if ( bModifiedOnExecution && m_pOleComponent->IsDirty() )
                 SaveObject_Impl();
-            // ===============================================================
+
         }
         catch( uno::Exception& )
         {
             // ==== the STAMPIT related solution =============================
             m_aVerbExecutionController.EndControlExecution_WasModified();
-            // ===============================================================
+
 
             aGuard.clear();
             StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState );

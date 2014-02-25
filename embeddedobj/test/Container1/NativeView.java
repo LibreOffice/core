@@ -37,7 +37,7 @@ import java.awt.event.*;
 
 public class NativeView extends java.awt.Canvas
 {
-    // ____________________
+
 
     /**
      * ctor
@@ -54,7 +54,7 @@ public class NativeView extends java.awt.Canvas
         this.setBackground( Color.white );
     }
 
-    // ____________________
+
 
     /**
      * Overload this method to make necessary initializations here.
@@ -71,7 +71,7 @@ public class NativeView extends java.awt.Canvas
         getHWND();
     }
 
-    // ____________________
+
 
     /**
      * to guarantee right resize handling inside a swing container
@@ -93,7 +93,7 @@ public class NativeView extends java.awt.Canvas
         return new Dimension( 300, 300 );
     }
 
-    // ____________________
+
 
     /**
      * overload paint routine to show provide against
@@ -112,7 +112,7 @@ public class NativeView extends java.awt.Canvas
         }
     }
 
-    // ____________________
+
 
     /**
      * JNI interface of this class
@@ -143,7 +143,7 @@ public class NativeView extends java.awt.Canvas
         return maHandle;
     }
 
-    // ____________________
+
 
     /**
      * for using of the JNI methods it's necessary to load
@@ -154,7 +154,7 @@ public class NativeView extends java.awt.Canvas
         System.loadLibrary( "nativeview" );
     }
 
-    // ____________________
+
 
     /**
      * @member  maHandle    system window handle
