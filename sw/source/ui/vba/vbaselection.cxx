@@ -1116,7 +1116,8 @@ void SAL_CALL SwVbaSelection::WholeStory(  ) throw (uno::RuntimeException)
     return getRange()->InRange( Range );
 }
 
-void SAL_CALL SwVbaSelection::SplitTable(  ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaSelection::SplitTable()
+    throw (uno::RuntimeException, std::exception)
 {
     if( !IsInTable() )
         throw uno::RuntimeException();

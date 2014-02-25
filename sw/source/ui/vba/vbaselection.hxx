@@ -100,7 +100,9 @@ public:
     virtual void SAL_CALL Collapse( const css::uno::Any& Direction ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL WholeStory(  ) throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL InRange( const css::uno::Reference< ::ooo::vba::word::XRange >& Range ) throw (css::uno::RuntimeException);
-    virtual void SAL_CALL SplitTable(  ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL SplitTable()
+        throw (css::uno::RuntimeException,
+               std::exception);
     virtual css::uno::Any SAL_CALL Paragraphs( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
 
     // XHelperInterface
