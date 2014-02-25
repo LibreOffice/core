@@ -317,7 +317,6 @@ sc::CLBuildKernelThread::produce()
 sc::CellTextAttr::CellTextAttr(unsigned short, unsigned char)
 sc::ColumnSet::has(short, short) const
 sc::CompareFunc(double, sc::Compare::Cell const&, sc::CompareOptions*)
-sc::DataStream::ToMoveType(rtl::OUString const&)
 sc::OpenCLDevice::selectedDeviceIsNativeCPU(ds_device)
 sc::OpenCLDevice::selectedDeviceIsOpenCL(ds_device)
 sc::opencl::OpenclDevice::getOpenclState()

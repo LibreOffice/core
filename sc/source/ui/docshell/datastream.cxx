@@ -312,18 +312,6 @@ DataStream* DataStream::Set(
     return pLink;
 }
 
-DataStream::MoveType DataStream::ToMoveType( const OUString& rMoveStr )
-{
-    if (rMoveStr == "RANGE_DOWN")
-        return RANGE_DOWN;
-    if (rMoveStr == "MOVE_DOWN")
-        return MOVE_DOWN;
-    if (rMoveStr == "MOVE_UP")
-        return MOVE_UP;
-
-    return NO_MOVE; // default
-}
-
 DataStream::DataStream(ScDocShell *pShell, const OUString& rURL, const ScRange& rRange,
         sal_Int32 nLimit, MoveType eMove, sal_uInt32 nSettings) :
     mpDocShell(pShell),

@@ -72,8 +72,6 @@ public:
     static DataStream* Set(ScDocShell *pShell, const OUString& rURL, const ScRange& rRange,
             sal_Int32 nLimit, MoveType eMove, sal_uInt32 nSettings);
 
-    static MoveType ToMoveType( const OUString& rMoveStr );
-
     DataStream(
         ScDocShell *pShell, const OUString& rURL, const ScRange& rRange,
         sal_Int32 nLimit, MoveType eMove, sal_uInt32 nSettings);
