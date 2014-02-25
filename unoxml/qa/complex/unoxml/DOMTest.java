@@ -386,7 +386,7 @@ public class DOMTest
             }
         }
 
-        // XNode ////////////////////////////////////////////////////
+        // XNode
 
         {
             XNode xDocCloneN = xDoc.cloneNode(false);
@@ -579,7 +579,7 @@ public class DOMTest
 
         xDF.appendChild(xElemFoo);
 
-        // XNode ////////////////////////////////////////////////////
+        // XNode
 
         XText xText = xDoc.createTextNode("foo");
         XComment xComment = xDoc.createComment("foo");
@@ -933,7 +933,7 @@ public class DOMTest
         assertNull("XElement.removeAttributeNS",
                 xElemFooNs.getAttributeNodeNS(ns, "foo"));
 
-        // XNode ////////////////////////////////////////////////////
+        // XNode
 
         XText xText = xDoc.createTextNode("foo");
         XComment xComment = xDoc.createComment("foo");
@@ -1182,7 +1182,7 @@ public class DOMTest
         xAttr.setValue("bar");
         assertEquals("XAttr.setValue()", "bar", xAttr.getValue());
 
-        // XNode ////////////////////////////////////////////////////
+        // XNode
 
         {
             XNode xAttrCloneN = xAttr.cloneNode(false);
@@ -1438,7 +1438,7 @@ public class DOMTest
         }
         assertEquals("XText.subStringData", "x", xText.subStringData(3, 1));
 
-        // XNode ////////////////////////////////////////////////////
+        // XNode
 
         {
             XNode xTextCloneN = xText.cloneNode(false);
@@ -1622,7 +1622,7 @@ public class DOMTest
         assertEquals("XCDATASection.subStringData", "x",
                 xCDS.subStringData(3, 1));
 
-        // XNode ////////////////////////////////////////////////////
+        // XNode
 
         {
             XNode xCDSCloneN = xCDS.cloneNode(false);
@@ -1796,7 +1796,7 @@ public class DOMTest
         assertEquals("XComment.subStringData", "x",
                 xComment.subStringData(3, 1));
 
-        // XNode ////////////////////////////////////////////////////
+        // XNode
 
         {
             XNode xCommentCloneN = xComment.cloneNode(false);
@@ -1923,7 +1923,7 @@ public class DOMTest
 
         xER.appendChild(xERChild);
 
-        // XNode ////////////////////////////////////////////////////
+        // XNode
 
         XText xText = xDoc.createTextNode("foo");
         XComment xComment = xDoc.createComment("foo");
@@ -2130,7 +2130,7 @@ public class DOMTest
         xPI.setData("baz");
         assertEquals("XProcessingInstruction.setData", "baz", xPI.getData());
 
-        // XNode ////////////////////////////////////////////////////
+        // XNode
 
         {
             XNode xPICloneN = xPI.cloneNode(false);
