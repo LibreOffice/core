@@ -31,14 +31,14 @@
 #include <cppuhelper/implbase1.hxx>
 #include <tools/wintypes.hxx>
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
 
-    //==================================================================
+
+
     // ONavigationBarControl
-    //==================================================================
+
     typedef ::cppu::ImplHelper1 <   ::com::sun::star::frame::XDispatchProviderInterception
                                 >   ONavigationBarControl_Base;
 
@@ -84,9 +84,9 @@ namespace frm
         virtual void SAL_CALL releaseDispatchProviderInterceptor( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >& Interceptor ) throw (::com::sun::star::uno::RuntimeException, std::exception);
     };
 
-    //==================================================================
+
     // ONavigationBarPeer
-    //==================================================================
+
     class ONavigationBarPeer
                         :public VCLXWindow
                         ,public OFormNavigationHelper
@@ -142,9 +142,9 @@ namespace frm
         virtual bool    isEnabled( sal_Int16 _nFeatureId ) const;
     };
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_SOLAR_COMPONENT_NAVBARCONTROL_HXX
 

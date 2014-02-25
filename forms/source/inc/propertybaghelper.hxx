@@ -27,14 +27,14 @@
 
 #include <boost/noncopyable.hpp>
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= class IPropertyBagHelperContext
-    //====================================================================
+
     class SAL_NO_VTABLE IPropertyBagHelperContext
     {
     public:
@@ -52,9 +52,9 @@ namespace frm
         ~IPropertyBagHelperContext() {}
     };
 
-    //====================================================================
+
     //= class PropertyBagHelper
-    //====================================================================
+
     class PropertyBagHelper : public ::boost::noncopyable
     {
     private:
@@ -109,51 +109,51 @@ namespace frm
         sal_Int32   impl_findFreeHandle( const OUString& _rPropertyName );
     };
 
-    //--------------------------------------------------------------------
+
     inline ::comphelper::OPropertyArrayAggregationHelper& PropertyBagHelper::getInfoHelper() const
     {
         return impl_ts_getArrayHelper();
     }
 
-    //--------------------------------------------------------------------
+
     inline void PropertyBagHelper::getDynamicFastPropertyValue( sal_Int32 _nHandle, ::com::sun::star::uno::Any& _out_rValue ) const
     {
         m_aDynamicProperties.getFastPropertyValue( _nHandle, _out_rValue );
     }
 
-    //--------------------------------------------------------------------
+
     inline bool PropertyBagHelper::convertDynamicFastPropertyValue( sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rNewValue, ::com::sun::star::uno::Any& _out_rConvertedValue, ::com::sun::star::uno::Any& _out_rCurrentValue ) const
     {
         return m_aDynamicProperties.convertFastPropertyValue( _nHandle, _rNewValue, _out_rConvertedValue, _out_rCurrentValue );
     }
 
-    //--------------------------------------------------------------------
+
     inline void PropertyBagHelper::setDynamicFastPropertyValue( sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue )
     {
         m_aDynamicProperties.setFastPropertyValue( _nHandle, _rValue );
     }
 
-    //--------------------------------------------------------------------
+
     inline void PropertyBagHelper::getDynamicPropertyDefaultByHandle( sal_Int32 _nHandle, ::com::sun::star::uno::Any& _out_rValue ) const
     {
         m_aDynamicProperties.getPropertyDefaultByHandle( _nHandle, _out_rValue );
     }
 
-    //--------------------------------------------------------------------
+
     inline bool PropertyBagHelper::hasDynamicPropertyByName( const OUString& _rName ) const
     {
         return m_aDynamicProperties.hasPropertyByName( _rName );
     }
 
-    //--------------------------------------------------------------------
+
     inline bool PropertyBagHelper::hasDynamicPropertyByHandle( sal_Int32 _nHandle ) const
     {
         return m_aDynamicProperties.hasPropertyByHandle( _nHandle );
     }
 
-//........................................................................
+
 } // namespace frm
-//........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_INC_PROPERTYBAGHELPER_HXX
 

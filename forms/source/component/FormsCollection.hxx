@@ -25,18 +25,18 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/form/XForms.hpp>
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
 
-//==================================================================
+
+
 // OFormsCollection
 // Implementiert den UNO-Container fuer Formulare
 // enthaelt alle zugeordneten Forms
 // dieses Container kann selbst den Context fuer Formulare darstellen
 // oder aussen einen Context uebergeben bekommen
-//==================================================================
+
 typedef ::cppu::OComponentHelper FormsCollectionComponentBase;
 typedef ::cppu::ImplHelper2<    ::com::sun::star::form::XForms
                                 ,::com::sun::star::lang::XServiceInfo > OFormsCollection_BASE;
@@ -182,8 +182,8 @@ public:
         { OInterfaceContainer::removeContainerListener(p1); }
 };
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

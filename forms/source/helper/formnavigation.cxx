@@ -27,10 +27,10 @@
 #include <tools/debug.hxx>
 
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
@@ -39,9 +39,9 @@ namespace frm
     using namespace ::com::sun::star::frame;
     namespace FormFeature = ::com::sun::star::form::runtime::FormFeature;
 
-    //==================================================================
+
     //= OFormNavigationHelper
-    //==================================================================
+
 
     OFormNavigationHelper::OFormNavigationHelper( const Reference< XComponentContext >& _rxORB )
         :m_xORB( _rxORB )
@@ -372,9 +372,9 @@ namespace frm
         m_aSupportedFeatures.swap( aEmpty );
     }
 
-    //==================================================================
+
     //= OFormNavigationMapper
-    //==================================================================
+
 
     OFormNavigationMapper::OFormNavigationMapper( const Reference< XComponentContext >& _rxORB )
     {
@@ -466,8 +466,8 @@ namespace frm
         return -1;
     }
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

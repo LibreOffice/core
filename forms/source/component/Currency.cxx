@@ -24,10 +24,10 @@
 #include <unotools/syslocale.hxx>
 #include <comphelper/processfactory.hxx>
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
@@ -40,9 +40,9 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
-//==================================================================
+
 // OCurrencyControl
-//==================================================================
+
 
 OCurrencyControl::OCurrencyControl(const Reference<XComponentContext>& _rxFactory)
     :OBoundControl(_rxFactory, VCL_CONTROL_CURRENCYFIELD)
@@ -72,9 +72,9 @@ StringSequence SAL_CALL OCurrencyControl::getSupportedServiceNames() throw(std::
     return aSupported;
 }
 
-//==================================================================
+
 // OCurrencyModel
-//==================================================================
+
 
 InterfaceRef SAL_CALL OCurrencyModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
@@ -249,8 +249,8 @@ void OCurrencyModel::resetNoBroadcast()
     m_aSaveValue.clear();
 }
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

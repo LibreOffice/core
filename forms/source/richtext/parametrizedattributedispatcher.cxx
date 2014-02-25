@@ -27,10 +27,10 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::frame;
@@ -38,9 +38,9 @@ namespace frm
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::beans;
 
-    //====================================================================
+
     //= OParametrizedAttributeDispatcher
-    //====================================================================
+
 
     OParametrizedAttributeDispatcher::OParametrizedAttributeDispatcher( EditView& _rView, AttributeId _nAttributeId, const URL& _rURL, IMultiAttributeDispatcher* _pMasterDispatcher )
         :OAttributeDispatcher( _rView, _nAttributeId, _rURL, _pMasterDispatcher )
@@ -126,8 +126,8 @@ namespace frm
         }
     }
 
-//........................................................................
+
 }   // namespace frm
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

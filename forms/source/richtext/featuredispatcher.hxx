@@ -27,14 +27,14 @@
 #include <comphelper/broadcasthelper.hxx>
 
 class EditView;
-//........................................................................
+
 namespace frm
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= ORichTextFeatureDispatcher
-    //====================================================================
+
     typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::frame::XDispatch
                                     >   ORichTextFeatureDispatcher_Base;
 
@@ -89,9 +89,9 @@ namespace frm
         virtual void SAL_CALL removeStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& _rxControl, const ::com::sun::star::util::URL& _rURL ) throw (::com::sun::star::uno::RuntimeException, std::exception);
     };
 
-//........................................................................
+
 } // namespace frm
-//........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_RICHTEXT_FEATUREDISPATCHER_HXX
 

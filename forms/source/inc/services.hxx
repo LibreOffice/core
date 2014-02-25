@@ -23,10 +23,10 @@
 #include <rtl/ustring.hxx>
 #include "frm_strings.hxx"
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 
     #define AWT_CONTROL_TEXTFIELD "com.sun.star.awt.TextField"
 
@@ -71,9 +71,9 @@ namespace frm
     #define VCL_CONTROLMODEL_SPINBUTTON       "com.sun.star.awt.UnoControlSpinButtonModel"
     #define VCL_CONTROL_SPINBUTTON            "com.sun.star.awt.UnoControlSpinButton"
 
-    // -----------------------
+
     // service names for compatibility
-    // -----------------------
+
     #define FRM_COMPONENT_FORM "stardiv.one.form.component.Form"
     #define FRM_COMPONENT_EDIT "stardiv.one.form.component.Edit"           // compatibility
     #define FRM_COMPONENT_TEXTFIELD "stardiv.one.form.component.TextField"
@@ -118,9 +118,9 @@ namespace frm
     #define STARDIV_ONE_FORM_CONTROL_FORMATTEDFIELD  "stardiv.one.form.control.FormattedField"
     // </compatibility_I>
 
-    // -----------------------
+
     // new (sun) service names
-    // -----------------------
+
     #define FRM_SUN_COMPONENT_FORM            "com.sun.star.form.component.Form"
     #define FRM_SUN_COMPONENT_HTMLFORM        "com.sun.star.form.component.HTMLForm"
     #define FRM_SUN_COMPONENT_DATAFORM        "com.sun.star.form.component.DataForm"
@@ -198,23 +198,23 @@ namespace frm
     #define VALIDATABLE_CONTROL_MODEL         "com.sun.star.form.binding.ValidatableControlModel"
     #define VALIDATABLE_BINDABLE_CONTROL_MODEL "com.sun.star.form.binding.ValidatableBindableControlModel"
 
-    // -----------------------
+
     // common
-    // -----------------------
+
     #define FRM_SUN_FORMCOMPONENT "com.sun.star.form.FormComponent"
 
-    // -----------------------
+
     // misc
-    // -----------------------
+
     #define SRV_AWT_IMAGEPRODUCER "com.sun.star.awt.ImageProducer"
 
     #define SRV_SDB_ROWSET "com.sun.star.sdb.RowSet"
     #define SRV_SDB_CONNECTION "com.sun.star.sdb.Connection"
 
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_INC_SERVICES_HXX
 

@@ -106,7 +106,7 @@ public class SingleControlValidation implements XFormComponentValidityListener
             }
             m_inputField = controls[ 0 ];
 
-            // ----------------------------------
+
             controlPos += 4;
             XPropertySet xLabel = m_formLayer.createControlAndShape( "FixedText", columnPos, controlPos, 70, 4, null );
             xLabel.setPropertyValue( "Label", new String( "Status:" ) );
@@ -114,7 +114,7 @@ public class SingleControlValidation implements XFormComponentValidityListener
             m_statusField = m_formLayer.createControlAndShape( "FixedText", columnPos, controlPos, 70, 4, null );
             m_statusField.setPropertyValue( "Label", new String( "" ) );
 
-            // ----------------------------------
+
             controlPos += 6;
             xLabel = m_formLayer.createControlAndShape( "FixedText", columnPos, controlPos, 70, 4, null );
             xLabel.setPropertyValue( "Label", new String( "Explanation for invalidity:" ) );

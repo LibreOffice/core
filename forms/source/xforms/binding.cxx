@@ -1033,9 +1033,9 @@ void Binding::_checkBindingID()
 
 
 
-//
+
 // XValueBinding
-//
+
 
 Binding::Sequence_Type_t Binding::getSupportedValueTypes()
     throw( RuntimeException, std::exception )
@@ -1102,9 +1102,9 @@ void Binding::setValue( const Any_t& aValue )
 }
 
 
-//
+
 // XListEntry Source
-//
+
 
 sal_Int32 Binding::getListEntryCount()
     throw( RuntimeException, std::exception )
@@ -1197,9 +1197,9 @@ void Binding::removeListEntryListener( const XListEntryListener_t& xListener )
 }
 
 
-//
+
 // XValidator
-//
+
 
 sal_Bool Binding::isValid( const Any_t& )
     throw( RuntimeException, std::exception )
@@ -1247,9 +1247,9 @@ void Binding::removeValidityConstraintListener(
 
 
 
-//
+
 // xml::dom::event::XEventListener
-//
+
 
 void Binding::handleEvent( const XEvent_t& xEvent )
     throw( RuntimeException, std::exception )
@@ -1280,9 +1280,9 @@ void Binding::handleEvent( const XEvent_t& xEvent )
 }
 
 
-//
+
 // lang::XUnoTunnel
-//
+
 
 sal_Int64 Binding::getSomething( const IntSequence_t& xId )
     throw( RuntimeException, std::exception )
@@ -1290,9 +1290,9 @@ sal_Int64 Binding::getSomething( const IntSequence_t& xId )
     return reinterpret_cast<sal_Int64>( ( xId == getUnoTunnelID() ) ? this : NULL );
 }
 
-//
+
 // XCloneable
-//
+
 
 Binding::XCloneable_t SAL_CALL Binding::createClone()
     throw( RuntimeException, std::exception )
@@ -1310,9 +1310,9 @@ Binding::XCloneable_t SAL_CALL Binding::createClone()
     return XCloneable_t( xClone, UNO_QUERY );
 }
 
-//
+
 // property set implementations
-//
+
 
 #define REGISTER_PROPERTY( property, type )   \
     registerProperty( PROPERTY( property, type ), \

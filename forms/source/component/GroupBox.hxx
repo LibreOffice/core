@@ -22,13 +22,13 @@
 
 #include "FormComponent.hxx"
 
-//.........................................................................
+
 namespace frm
 {
 
-//==================================================================
+
 // OGroupBoxModel
-//==================================================================
+
 class OGroupBoxModel
         :public OControlModel
 {
@@ -55,9 +55,9 @@ protected:
     DECLARE_XCLONEABLE();
 };
 
-//==================================================================
+
 // OGroupBoxControl (nur aus Kompatibilitaet zur 5.0)
-//==================================================================
+
 class OGroupBoxControl : public OControl
 {
 public:
@@ -68,9 +68,9 @@ public:
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception);
 };
 
-//.........................................................................
+
 }
-//.........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_GROUPBOX_HXX
 

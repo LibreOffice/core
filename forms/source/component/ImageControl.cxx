@@ -60,10 +60,10 @@
 #define ID_OPEN_GRAPHICS            1
 #define ID_CLEAR_GRAPHICS           2
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
@@ -80,9 +80,9 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::graphic;
 using namespace ::com::sun::star::frame;
 
-//==============================================================================
+
 //= OImageControlModel
-//==============================================================================
+
 namespace
 {
     enum ImageStoreType
@@ -117,9 +117,9 @@ namespace
     }
 }
 
-//==============================================================================
+
 // OImageControlModel
-//==============================================================================
+
 
 
 InterfaceRef SAL_CALL OImageControlModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
@@ -690,9 +690,9 @@ IMPL_LINK( OImageControlModel, OnImageImportDone, ::Graphic*, i_pGraphic )
     return 1L;
 }
 
-//==================================================================
+
 // OImageControlControl
-//==================================================================
+
 
 
 InterfaceRef SAL_CALL OImageControlControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
@@ -946,7 +946,7 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
     }
     else
     {
-        //////////////////////////////////////////////////////////////////////
+
         // Double click
         if (e.ClickCount == 2)
         {
@@ -1001,8 +1001,8 @@ void SAL_CALL OImageControlControl::mouseExited(const awt::MouseEvent& /*e*/) th
 {
 }
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

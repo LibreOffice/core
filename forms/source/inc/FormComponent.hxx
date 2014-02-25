@@ -73,10 +73,10 @@
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 
     // default tab index for components
     const sal_Int16 FRM_DEFAULT_TABINDEX = 0;
@@ -94,9 +94,9 @@ namespace frm
 
     class OControlModel;
 
-    //=========================================================================
+
     //= ControlModelLock
-    //=========================================================================
+
     /** class whose instances lock a OControlModel
 
         Locking here merely means locking the OControlModel's mutex.
@@ -150,10 +150,10 @@ namespace frm
         ControlModelLock& operator=( const ControlModelLock& ); // never implemented
     };
 
-//=========================================================================
+
 //= OControl
 //= base class for form layer controls
-//=========================================================================
+
 typedef ::cppu::ImplHelper3 <   ::com::sun::star::awt::XControl
                             ,   ::com::sun::star::lang::XEventListener
                             ,   ::com::sun::star::lang::XServiceInfo
@@ -274,10 +274,10 @@ private:
     void    impl_resetStateGuard_nothrow();
 };
 
-//==================================================================
+
 //= OBoundControl
 //= a form control implementing the XBoundControl interface
-//==================================================================
+
 typedef ::cppu::ImplHelper1 <   ::com::sun::star::form::XBoundControl
                             >  OBoundControl_BASE;
 class OBoundControl :public OControl
@@ -323,10 +323,10 @@ protected:
     virtual void         _setLock(sal_Bool _bLock);
 };
 
-//==================================================================
+
 //= OControlModel
 //= model of a form layer control
-//==================================================================
+
 //added for exporting OCX control
 #define INVALID_OBJ_ID_IN_MSO     0xFFFF
 
@@ -529,7 +529,7 @@ public:
                         getInstanceMutex() { return m_aMutex; }
 };
 
-//==================================================================
+
 // simple destructor
 #define DECLARE_DEFAULT_DTOR( classname )   \
     ~classname() \
@@ -574,7 +574,7 @@ public:
     ); \
     DECLARE_DEFAULT_DTOR( classname )   \
 
-//==================================================================
+
 // XCloneable
 #define DECLARE_XCLONEABLE( ) \
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
@@ -587,10 +587,10 @@ public:
         return pClone; \
     }
 
-//==================================================================
+
 //= OBoundControlModel
 //= model of a form layer control which is bound to a data source field
-//==================================================================
+
 typedef ::cppu::ImplHelper4 <   ::com::sun::star::form::XLoadListener
                             ,   ::com::sun::star::form::XReset
                             ,   ::com::sun::star::beans::XPropertyChangeListener
@@ -1289,9 +1289,9 @@ private:
                 );
 };
 
-    //=========================================================================
+
     //= inlines
-    //=========================================================================
+
     inline void ControlModelLock::acquire()
     {
         m_rModel.lockInstance( OControlModel::LockAccess() );
@@ -1306,9 +1306,9 @@ private:
             impl_notifyAll_nothrow();
     }
 
-//.........................................................................
+
 }
-//.........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_INC_FORMCOMPONENT_HXX
 

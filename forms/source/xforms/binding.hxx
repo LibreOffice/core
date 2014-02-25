@@ -174,9 +174,9 @@ public:
     Binding();
     virtual ~Binding() throw();
 
-    //
+
     // property methods: get/set value
-    //
+
 
     Model_t getModel() const;   /// get XForms model
     void _setModel( const Model_t& ); /// set XForms model (only called by Model)
@@ -277,9 +277,9 @@ public:
     static IntSequence_t getUnoTunnelID();
     static Binding* getBinding( const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& );
 
-    //
+
     // class-scoped typedef for easy-to-read UNO interfaces
-    //
+
 
     // basic types
     typedef com::sun::star::uno::Any Any_t;
@@ -379,9 +379,9 @@ public:
 
 
 
-    //
+
     // XValueBinding:
-    //
+
 
 public:
 
@@ -403,9 +403,9 @@ public:
 
 
 
-    //
+
     // XListEntry Source
-    //
+
 
     virtual sal_Int32 SAL_CALL getListEntryCount()
         throw( RuntimeException_t, std::exception );
@@ -427,9 +427,9 @@ public:
 
 
 
-    //
+
     // XValidator:
-    //
+
 
     virtual sal_Bool SAL_CALL isValid(
         const Any_t& )
@@ -450,10 +450,10 @@ public:
                RuntimeException_t, std::exception );
 
 
-    //
+
     // XModifyBroadcaster & friends:
     //   inform listeners about changes in our values
-    //
+
 
 public:
 
@@ -468,10 +468,10 @@ public:
 
 
 
-    //
+
     // XNamed:
     //   get/set name
-    //
+
 
 public:
 
@@ -483,10 +483,10 @@ public:
 
 
 
-    //
+
     // xml::dom::event::XEventListener
     //   receive an event if our node changed
-    //
+
 
     virtual void SAL_CALL handleEvent(
         const XEvent_t& xEvent )
@@ -494,17 +494,17 @@ public:
 
 
 
-    //
+
     // XUnoTunnel
-    //
+
 
     virtual sal_Int64 SAL_CALL getSomething( const IntSequence_t& )
         throw( RuntimeException_t, std::exception );
 
 
-    //
+
     // XCloneable
-    //
+
 
     virtual XCloneable_t SAL_CALL createClone()
         throw( RuntimeException_t, std::exception );

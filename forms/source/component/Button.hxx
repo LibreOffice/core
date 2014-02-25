@@ -35,14 +35,14 @@
 
 #include <cppuhelper/implbase1.hxx>
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
 
-//==================================================================
+
+
 // OButtonModel
-//==================================================================
+
 typedef ::cppu::ImplHelper1 <   ::com::sun::star::form::XReset
                             >   OButtonModel_Base;
 class OButtonModel  :public OClickableImageBaseModel
@@ -106,9 +106,9 @@ protected:
     using OClickableImageBaseModel::disposing;
 };
 
-//==================================================================
+
 // OButtonControl
-//==================================================================
+
 typedef ::cppu::ImplHelper3 <   ::com::sun::star::awt::XButton
                             ,   ::com::sun::star::awt::XActionListener
                             ,   ::com::sun::star::beans::XPropertyChangeListener
@@ -194,9 +194,9 @@ private:
     void        startOrStopModelPropertyListening( bool _bStart );
 };
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_BUTTON_HXX
 

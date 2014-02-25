@@ -26,14 +26,14 @@
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdb/SQLErrorEvent.hpp>
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
 
-    //=====================================================================
+
+
     //= OErrorBroadcaster
-    //=====================================================================
+
     typedef ::cppu::ImplHelper1 <   ::com::sun::star::sdb::XSQLErrorBroadcaster
                                 >   OErrorBroadcaster_BASE;
 
@@ -58,9 +58,9 @@ namespace frm
         virtual void SAL_CALL removeSQLErrorListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLErrorListener >& _rListener ) throw (::com::sun::star::uno::RuntimeException, std::exception);
     };
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_ERRORBROADCASTER_HXX
 

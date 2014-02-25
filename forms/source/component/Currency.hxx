@@ -22,14 +22,14 @@
 
 #include "EditBase.hxx"
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
 
-//==================================================================
+
+
 //= OCurrencyModel
-//==================================================================
+
 class OCurrencyModel
                 :public OEditBaseModel
 {
@@ -70,9 +70,9 @@ protected:
     void implConstruct();
 };
 
-//==================================================================
+
 //= OCurrencyControl
-//==================================================================
+
 class OCurrencyControl: public OBoundControl
 {
 protected:
@@ -85,9 +85,9 @@ public:
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw(std::exception);
 };
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_CURRENCY_HXX
 

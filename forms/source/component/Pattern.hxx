@@ -26,14 +26,14 @@
 
 #include <memory>
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
 
-//==================================================================
+
+
 //= OPatternModel
-//==================================================================
+
 class OPatternModel
                 :public OEditBaseModel
 {
@@ -76,9 +76,9 @@ protected:
     DECLARE_XCLONEABLE();
 };
 
-//==================================================================
+
 //= OPatternControl
-//==================================================================
+
 class OPatternControl: public OBoundControl
 {
 protected:
@@ -92,9 +92,9 @@ public:
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw(std::exception);
 };
 
-//.........................................................................
+
 }   // namespace frm
-//.........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_PATTERN_HXX
 

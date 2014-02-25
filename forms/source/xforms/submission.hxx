@@ -96,9 +96,9 @@ public:
     Submission();
     virtual ~Submission() throw();
 
-    //
+
     // property methods: get/set value
-    //
+
 
     /// get XForms model
     com::sun::star::uno::Reference<com::sun::star::xforms::XModel>
@@ -184,10 +184,10 @@ private:
 
 protected:
 
-    //
+
     // XPropertySet & friends:
     //   implement abstract methods from PropertySetHelper
-    //
+
 
     virtual sal_Bool SAL_CALL convertFastPropertyValue(
         com::sun::star::uno::Any& rConvertedValue,
@@ -202,10 +202,10 @@ private:
 
 public:
 
-    //
+
     // XNamed:
     //   get/set name
-    //
+
 
     virtual OUString SAL_CALL getName()
         throw( com::sun::star::uno::RuntimeException, std::exception );
@@ -215,18 +215,18 @@ public:
 
 
 
-    //
+
     // XUnoTunnel
-    //
+
 
     virtual sal_Int64 SAL_CALL getSomething(
         const com::sun::star::uno::Sequence<sal_Int8>& )
         throw( com::sun::star::uno::RuntimeException, std::exception );
 
 
-    //
+
     // XSubmission
-    //
+
 
     virtual void SAL_CALL submit(  )
         throw ( com::sun::star::util::VetoException,
@@ -244,7 +244,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::form::submission::XSubmissionVetoListener >& listener )
         throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception);
 
-    //
+
     // XPropertySet
     // (need to disambiguate this)
 

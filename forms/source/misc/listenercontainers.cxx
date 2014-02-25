@@ -19,18 +19,18 @@
 
 #include "listenercontainers.hxx"
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::form;
 
-    //====================================================================
+
     //= ResetListeners
-    //====================================================================
+
 
     bool ResetListeners::implTypedNotify( const Reference< XResetListener >& _rxListener,
         const EventObject& _rEvent )   SAL_THROW( ( Exception ) )
@@ -50,8 +50,8 @@ namespace frm
         return true;
     }
 
-//........................................................................
+
 } // namespace frm
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

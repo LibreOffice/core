@@ -22,13 +22,13 @@
 
 #include "refvaluecomponent.hxx"
 
-//.........................................................................
+
 namespace frm
 {
 
-//==================================================================
+
 // ORadioButtonModel
-//==================================================================
+
 class ORadioButtonModel     :public OReferenceValueComponent
 {
 public:
@@ -80,9 +80,9 @@ private:
     void setControlSource();
 };
 
-//==================================================================
+
 // ORadioButtonControl
-//==================================================================
+
 class ORadioButtonControl: public OBoundControl
 {
 public:
@@ -97,9 +97,9 @@ protected:
     virtual void SAL_CALL createPeer(const ::com::sun::star::uno::Reference<starawt::XToolkit>& Toolkit, const ::com::sun::star::uno::Reference<starawt::XWindowPeer>& Parent) throw (::com::sun::star::uno::RuntimeException, std::exception);
 };
 
-//.........................................................................
+
 }
-//.........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_RADIOBUTTON_HXX
 

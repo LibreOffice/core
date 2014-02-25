@@ -20,14 +20,14 @@
 #include "richtextviewport.hxx"
 #include <editeng/editview.hxx>
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
 
-    //====================================================================
+
+
     //= RichTextViewPort
-    //====================================================================
+
 
     RichTextViewPort::RichTextViewPort( Window* _pParent )
         :Control ( _pParent )
@@ -113,8 +113,8 @@ namespace frm
         return m_bHideInactiveSelection;
     }
 
-//........................................................................
+
 }   // namespace frm
-//........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

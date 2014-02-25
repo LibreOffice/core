@@ -20,16 +20,16 @@
 #ifndef INCLUDED_FORMS_SOURCE_COMPONENT_BASELISTBOX_HXX
 #define INCLUDED_FORMS_SOURCE_COMPONENT_BASELISTBOX_HXX
 
-//.........................................................................
+
 namespace frm
 {
 
 const sal_uInt16 ENTRY_NOT_FOUND =  0xFFFF;
 const sal_uInt16 BOUNDCOLUMN     =  0x0001;
 
-//.........................................................................
+
 }
-//.........................................................................
+
 
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_BASELISTBOX_HXX
 
