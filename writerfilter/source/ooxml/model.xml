@@ -5379,6 +5379,36 @@
           <value>in</value>
         </choice>
       </define>
+      <define name="ST_OnOff">
+        <choice>
+          <value>true</value>
+          <value>false</value>
+          <value>0</value>
+          <value>1</value>
+        </choice>
+      </define>
+      <define name="ST_PathShadeType">
+        <choice>
+          <value>shape</value>
+          <value>circle</value>
+          <value>rect</value>
+        </choice>
+      </define>
+      <define name="ST_PresetLineDashVal">
+        <choice>
+          <value>solid</value>
+          <value>dot</value>
+          <value>sysDot</value>
+          <value>dash</value>
+          <value>sysDash</value>
+          <value>lgDash</value>
+          <value>dashDot</value>
+          <value>sysDashDot</value>
+          <value>lgDashDot</value>
+          <value>lgDashDotDot</value>
+          <value>sysDashDotDot</value>
+        </choice>
+      </define>
 
       <define name="ST_PositiveCoordinate">
         <data type="long">
@@ -5513,6 +5543,71 @@
         </choice>
       </define>
 
+      <define name="EG_FillProperties">
+        <choice>
+          <optional>
+            <element name="noFill">
+              <ref name="CT_Empty"/>
+            </element>
+          </optional>
+          <optional>
+            <element name="solidFill">
+              <ref name="CT_SolidColorFillProperties"/>
+            </element>
+          </optional>
+          <optional>
+            <element name="gradFill">
+              <ref name="CT_GradientFillProperties"/>
+            </element>
+          </optional>
+        </choice>
+      </define>
+
+      <define name="EG_ShadeProperties">
+        <choice>
+          <optional>
+            <element name="lin">
+              <ref name="CT_LinearShadeProperties"/>
+            </element>
+          </optional>
+          <optional>
+            <element name="path">
+              <ref name="CT_PathShadeProperties"/>
+            </element>
+          </optional>
+        </choice>
+      </define>
+
+      <define name="EG_LineDashProperties">
+        <choice>
+          <optional>
+            <element name="prstDash">
+              <ref name="CT_PresetLineDashProperties"/>
+            </element>
+          </optional>
+        </choice>
+      </define>
+
+      <define name="EG_LineJoinProperties">
+        <choice>
+          <optional>
+            <element name="round">
+              <ref name="CT_Empty"/>
+            </element>
+          </optional>
+          <optional>
+            <element name="bevel">
+              <ref name="CT_Empty"/>
+            </element>
+          </optional>
+          <optional>
+            <element name="miter">
+              <ref name="CT_LineJoinMiterProperties"/>
+            </element>
+          </optional>
+        </choice>
+      </define>
+
       <define name="CT_SRgbColor">
         <ref name="EG_ColorTransform"/>
         <attribute name="val">
@@ -5540,7 +5635,97 @@
           <ref name="ST_Percentage"/>
         </attribute>
       </define>
+      <define name="CT_Empty">
+        <empty/>
+      </define>
+      <define name="CT_SolidColorFillProperties">
+        <ref name="EG_ColorChoice"/>
+      </define>
+      <define name="CT_GradientFillProperties">
+        <optional>
+          <element name="gsLst">
+            <ref name="CT_GradientStopList"/>
+          </element>
+        </optional>
+        <optional>
+          <ref name="EG_ShadeProperties"/>
+        </optional>
+      </define>
+      <define name="CT_LinearShadeProperties">
+        <optional>
+          <attribute name="ang">
+            <ref name="ST_PositiveFixedAngle"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="scaled">
+            <ref name="ST_OnOff"/>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_PathShadeProperties">
+        <optional>
+          <element name="fillToRect">
+            <ref name="CT_RelativeRect"/>
+          </element>
+        </optional>
+        <optional>
+          <attribute name="path">
+            <ref name="ST_PathShadeType"/>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_GradientStopList">
+        <oneOrMore>
+          <element name="gs">
+            <ref name="CT_GradientStop"/>
+          </element>
+        </oneOrMore>
+      </define>
+      <define name="CT_GradientStop">
+        <ref name="EG_ColorChoice"/>
+        <attribute name="pos">
+          <ref name="ST_PositiveFixedPercentage"/>
+        </attribute>
+      </define>
+      <define name="CT_RelativeRect">
+        <optional>
+          <attribute name="l">
+            <ref name="ST_Percentage"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="t">
+            <ref name="ST_Percentage"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="r">
+            <ref name="ST_Percentage"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="b">
+            <ref name="ST_Percentage"/>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_PresetLineDashProperties">
+        <optional>
+          <attribute name="val">
+            <ref name="ST_PresetLineDashVal"/>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_LineJoinMiterProperties">
+        <optional>
+          <attribute name="lim">
+            <ref name="ST_PositivePercentage"/>
+          </attribute>
+        </optional>
+      </define>
 
+      <!-- Main Elements-->
       <define name="CT_Glow">
         <optional>
             <ref name="EG_ColorChoice"/>
@@ -5549,7 +5734,6 @@
           <ref name="ST_PositiveCoordinate"/>
         </attribute>
       </define>
-
       <define name="CT_Shadow">
         <optional>
             <ref name="EG_ColorChoice"/>
@@ -5595,7 +5779,6 @@
           </attribute>
         </optional>
       </define>
-
       <define name="CT_Reflection">
         <optional>
           <attribute name="blurRad">
@@ -5663,8 +5846,16 @@
           </attribute>
         </optional>
       </define>
-
       <define name="CT_TextOutlineEffect">
+        <optional>
+            <ref name="EG_FillProperties"/>
+        </optional>
+        <optional>
+            <ref name="EG_LineDashProperties"/>
+        </optional>
+        <optional>
+            <ref name="EG_LineJoinProperties"/>
+        </optional>
         <optional>
           <attribute name="w">
             <ref name="ST_LineWidth"/>
@@ -5692,67 +5883,56 @@
           <ref name="CT_Glow"/>
         </element>
       </define>
-
       <define name="shadow">
         <element name="shadow">
           <ref name="CT_Shadow"/>
         </element>
       </define>
-
       <define name="reflection">
         <element name="reflection">
           <ref name="CT_Reflection"/>
         </element>
       </define>
-
       <define name="textOutline">
         <element name="textOutline">
           <ref name="CT_TextOutlineEffect"/>
         </element>
       </define>
-
       <define name="textFill">
         <element name="textFill">
           <empty/>
         </element>
       </define>
-
       <define name="scene3d">
         <element name="scene3d">
           <empty/>
         </element>
       </define>
-
       <define name="props3d">
         <element name="props3d">
           <empty/>
         </element>
       </define>
-
       <define name="ligatures">
         <element name="ligatures">
           <empty/>
         </element>
       </define>
-
       <define name="numForm">
         <element name="numForm">
           <empty/>
         </element>
       </define>
-
       <define name="numSpacing">
         <element name="numSpacing">
           <empty/>
         </element>
       </define>
-
       <define name="stylisticSets">
         <element name="stylisticSets">
           <empty/>
         </element>
       </define>
-
       <define name="cntxtAlts">
         <element name="cntxtAlts">
           <empty/>
@@ -5774,7 +5954,6 @@
       <value name="accent5" tokenid="ooxml:ST_SchemeColorVal_accent5">accent5</value>
       <value name="accent6" tokenid="ooxml:ST_SchemeColorVal_accent6">accent6</value>
     </resource>
-
     <resource name="ST_RectAlignment" resource="List" generated="yes">
       <value name="none" tokenid="ooxml:ST_RectAlignment_none">none</value>
       <value name="tl" tokenid="ooxml:ST_RectAlignment_tl">tl</value>
@@ -5787,13 +5966,11 @@
       <value name="b" tokenid="ooxml:ST_RectAlignment_b">b</value>
       <value name="br" tokenid="ooxml:ST_RectAlignment_br">br</value>
     </resource>
-
     <resource name="ST_LineCap" resource="List" generated="yes">
       <value name="rnd" tokenid="ooxml:ST_LineCap_rnd">rnd</value>
       <value name="sq" tokenid="ooxml:ST_LineCap_sq">sq</value>
       <value name="flat" tokenid="ooxml:ST_LineCap_flat">flat</value>
     </resource>
-
     <resource name="ST_CompoundLine" resource="List" generated="yes">
       <value name="sng" tokenid="ooxml:ST_CompoundLine_sng">sng</value>
       <value name="dbl" tokenid="ooxml:ST_CompoundLine_dbl">dbl</value>
@@ -5801,11 +5978,33 @@
       <value name="thinThick" tokenid="ooxml:ST_CompoundLine_thinThick">thinThick</value>
       <value name="tri" tokenid="ooxml:ST_CompoundLine_tri">tri</value>
     </resource>
-
     <resource name="ST_PenAlignment" resource="List" generated="yes">
       <value name="ctr" tokenid="ooxml:ST_PenAlignment_ctr">ctr</value>
       <value name="in" tokenid="ooxml:ST_PenAlignment_in">in</value>
-      <value name="flat" tokenid="ooxml:ST_PenAlignment_flat">flat</value>
+    </resource>
+    <resource name="ST_OnOff" resource="List" generated="yes">
+      <value name="true" tokenid="ooxml:ST_OnOff_true">true</value>
+      <value name="false" tokenid="ooxml:ST_OnOff_false">false</value>
+      <value name="0" tokenid="ooxml:ST_OnOff_0">0</value>
+      <value name="1" tokenid="ooxml:ST_OnOff_1">1</value>
+    </resource>
+    <resource name="ST_PathShadeType" resource="List" generated="yes">
+      <value name="shape" tokenid="ooxml:ST_PathShadeType_shape">shape</value>
+      <value name="circle" tokenid="ooxml:ST_PathShadeType_circle">circle</value>
+      <value name="rect" tokenid="ooxml:ST_PathShadeType_rect">rect</value>
+    </resource>
+    <resource name="ST_PresetLineDashVal" resource="List" generated="yes">
+      <value name="solid" tokenid="ooxml:ST_PresetLineDashVal_solid">solid</value>
+      <value name="dot" tokenid="ooxml:ST_PresetLineDashVal_dot">dot</value>
+      <value name="sysDot" tokenid="ooxml:ST_PresetLineDashVal_sysDot">sysDot</value>
+      <value name="dash" tokenid="ooxml:ST_PresetLineDashVal_dash">dash</value>
+      <value name="sysDash" tokenid="ooxml:ST_PresetLineDashVal_sysDash">sysDash</value>
+      <value name="lgDash" tokenid="ooxml:ST_PresetLineDashVal_lgDash">lgDash</value>
+      <value name="dashDot" tokenid="ooxml:ST_PresetLineDashVal_dashDot">dashDot</value>
+      <value name="sysDashDot" tokenid="ooxml:ST_PresetLineDashVal_sysDashDot">sysDashDot</value>
+      <value name="lgDashDot" tokenid="ooxml:ST_PresetLineDashVal_lgDashDot">lgDashDot</value>
+      <value name="lgDashDotDot" tokenid="ooxml:ST_PresetLineDashVal_lgDashDotDot">lgDashDotDot</value>
+      <value name="sysDashDotDot" tokenid="ooxml:ST_PresetLineDashVal_sysDashDotDot">sysDashDotDot</value>
     </resource>
 
     <resource name="ST_PositiveCoordinate" resource="Integer" generated="yes"/>
@@ -5834,6 +6033,23 @@
       <element name="srgbClr" tokenid="ooxml:EG_ColorChoice_srgbClr"/>
       <element name="schemeClr" tokenid="ooxml:EG_ColorChoice_schemeClr"/>
     </resource>
+    <resource name="EG_FillProperties" resource="Properties" tag="character">
+      <element name="noFill" tokenid="ooxml:EG_FillProperties_noFill"/>
+      <element name="solidFill" tokenid="ooxml:EG_FillProperties_solidFill"/>
+      <element name="gradFill" tokenid="ooxml:EG_FillProperties_gradFill"/>
+    </resource>
+    <resource name="EG_ShadeProperties" resource="Properties" tag="character">
+      <element name="lin" tokenid="ooxml:EG_ShadeProperties_lin"/>
+      <element name="path" tokenid="ooxml:EG_ShadeProperties_path"/>
+    </resource>
+    <resource name="EG_LineDashProperties" resource="Properties" tag="character">
+      <element name="prstDash" tokenid="ooxml:EG_LineDashProperties_prstDash"/>
+    </resource>
+    <resource name="EG_LineJoinProperties" resource="Properties" tag="character">
+      <element name="round" tokenid="ooxml:EG_LineJoinProperties_round"/>
+      <element name="bevel" tokenid="ooxml:EG_LineJoinProperties_bevel"/>
+      <element name="miter" tokenid="ooxml:EG_LineJoinProperties_miter"/>
+    </resource>
 
     <!-- Complex Types Resource Definitions -->
     <resource name="CT_Glow" resource="Properties" tag="character">
@@ -5854,6 +6070,38 @@
     <resource name="CT_Percentage" resource="Properties" tag="character">
       <attribute name="val" tokenid="ooxml:CT_Percentage_val"/>
     </resource>
+    <resource name="CT_Empty" resource="Properties" tag="character"/>
+    <resource name="CT_SolidColorFillProperties" resource="Properties" tag="character"/>
+    <resource name="CT_GradientFillProperties" resource="Properties" tag="character">
+      <element name="gsLst" tokenid="ooxml:CT_GradientFillProperties_gsLst"/>
+    </resource>
+    <resource name="CT_GradientStopList" resource="Properties" tag="character">
+      <element name="gs" tokenid="ooxml:CT_GradientStopList_gs"/>
+    </resource>
+    <resource name="CT_GradientStop" resource="Properties" tag="character">
+      <attribute name="pos" tokenid="ooxml:CT_GradientStop_pos"/>
+    </resource>
+    <resource name="CT_LinearShadeProperties" resource="Properties" tag="character">
+      <attribute name="ang" tokenid="ooxml:CT_LinearShadeProperties_ang"/>
+      <attribute name="scaled" tokenid="ooxml:CT_LinearShadeProperties_scaled"/>
+    </resource>
+    <resource name="CT_PathShadeProperties" resource="Properties" tag="character">
+      <element name="fillToRect" tokenid="ooxml:CT_PathShadeProperties_fillToRect"/>
+      <attribute name="path" tokenid="ooxml:CT_PathShadeProperties_path"/>
+    </resource>
+    <resource name="CT_RelativeRect" resource="Properties" tag="character">
+      <attribute name="l" tokenid="ooxml:CT_RelativeRect_l"/>
+      <attribute name="t" tokenid="ooxml:CT_RelativeRect_t"/>
+      <attribute name="r" tokenid="ooxml:CT_RelativeRect_r"/>
+      <attribute name="b" tokenid="ooxml:CT_RelativeRect_b"/>
+    </resource>
+    <resource name="CT_PresetLineDashProperties" resource="Properties" tag="character">
+      <attribute name="val" tokenid="ooxml:CT_PresetLineDashProperties_val"/>
+    </resource>
+    <resource name="CT_LineJoinMiterProperties" resource="Properties" tag="character">
+      <attribute name="lim" tokenid="ooxml:CT_LineJoinMiterProperties_lim"/>
+    </resource>
+
     <resource name="CT_Shadow" resource="Properties" tag="character">
       <attribute name="blurRad" tokenid="ooxml:CT_Shadow_blurRad"/>
       <attribute name="dist" tokenid="ooxml:CT_Shadow_dist"/>
@@ -17570,12 +17818,12 @@
             <ref name="BUILT_IN_ANY_TYPE"/>
           </element>
         </optional>
-        <!--<optional>
+        <optional>
           <element name="w14:textOutline">
             <ref name="BUILT_IN_ANY_TYPE"/>
           </element>
         </optional>
-        <optional>
+        <!--<optional>
           <element name="w14:textFill">
             <ref name="BUILT_IN_ANY_TYPE"/>
           </element>
@@ -23585,8 +23833,8 @@
       <element name="w14:glow" tokenid="ooxml:EG_RPrBase_w14_glow"/>
       <element name="w14:shadow" tokenid="ooxml:EG_RPrBase_w14_shadow"/>
       <element name="w14:reflection" tokenid="ooxml:EG_RPrBase_w14_reflection"/>
-      <!--<element name="w14:textOutline" tokenid="ooxml:EG_RPrBase_w14_textOutline"/>
-      <element name="w14:textFill" tokenid="ooxml:EG_RPrBase_w14_textFill"/>
+      <element name="w14:textOutline" tokenid="ooxml:EG_RPrBase_w14_textOutline"/>
+      <!--<element name="w14:textFill" tokenid="ooxml:EG_RPrBase_w14_textFill"/>
       <element name="w14:scene3d" tokenid="ooxml:EG_RPrBase_w14_scene3d"/>
       <element name="w14:props3d" tokenid="ooxml:EG_RPrBase_w14_props3d"/>
       <element name="w14:ligatures" tokenid="ooxml:EG_RPrBase_w14_ligatures"/>
