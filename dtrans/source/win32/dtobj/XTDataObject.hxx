@@ -52,7 +52,7 @@
       appropriate clipboard formats
     - if the transferable contains text data always text and unicodetext
       will be offered or vice versa
-    - text data will be automaticaly converted between text und unicode text
+    - text data will be automatically converted between text und unicode text
     - although the transferable may support text in different charsets
       (codepages) only text in one codepage can be offered by the clipboard
 

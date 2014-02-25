@@ -44,7 +44,7 @@
 
     The interface is very simple but necessary for our
     needs.
-    The window automaticaly calculates the necessary
+    The window automatically calculates the necessary
     dimensions of the window and a appropriate show
     position based on the position the client provides.
     When the user click any mouse button or hits any key

@@ -368,7 +368,7 @@ public:
 #endif
 };
 
-// declare the static variables as some gcc versions have problems declaring them automaticaly
+// declare the static variables as some gcc versions have problems declaring them automatically
 bool OGLTransitionerImpl::cbBrokenTexturesATI;
 float OGLTransitionerImpl::cnGLVersion;
 bool OGLTransitionerImpl::cbMesa;
