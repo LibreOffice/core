@@ -308,7 +308,9 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
     // XDataSequence
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL getData(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL getData()
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
     virtual OUString SAL_CALL getSourceRangeRepresentation()
         throw (::com::sun::star::uno::RuntimeException,
                std::exception);

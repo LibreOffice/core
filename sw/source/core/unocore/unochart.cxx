@@ -2032,8 +2032,8 @@ sal_Int64 SAL_CALL SwChartDataSequence::getSomething( const uno::Sequence< sal_I
     return 0;
 }
 
-uno::Sequence< uno::Any > SAL_CALL SwChartDataSequence::getData(  )
-    throw (uno::RuntimeException)
+uno::Sequence< uno::Any > SAL_CALL SwChartDataSequence::getData()
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (bDisposed)
