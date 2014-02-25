@@ -11923,24 +11923,17 @@ if test "$ENABLE_JAVA" != "" -a "$with_junit" != "no"; then
     if test "$_os" = "WINNT"; then
         OOO_JUNIT_JAR=`cygpath -m "$OOO_JUNIT_JAR"`
     fi
-    "$JAVA_HOME/bin/jar" tf "$OOO_JUNIT_JAR" 2>&5 | \
-        grep org/junit/Before.class > /dev/null 2>&5
-    if test $? -eq 0; then
-        # check if either class-path entry is available for hamcrest or
-        # it's bundled
-        if "$JAVA_HOME/bin/jar" tf "$OOO_JUNIT_JAR" |$GREP -q hamcrest || \
-            "$UNZIP" -c "$OOO_JUNIT_JAR" META-INF/MANIFEST.MF |$GREP 'Class-Path:' | $GREP -q 'hamcrest'; then
-            AC_MSG_RESULT([$OOO_JUNIT_JAR])
-        else
-            AC_MSG_ERROR([your junit jar neither sets a classpath nor includes hamcrest; please
-provide a full junit jar or use --without-junit])
-        fi
+    printf 'import org.junit.Before; import org.hamcrest.BaseDescription;' \
+        > conftest.java
+    if "$JAVACOMPILER" -classpath "$OOO_JUNIT_JAR" conftest.java >&5 2>&5; then
+        AC_MSG_RESULT([$OOO_JUNIT_JAR])
     else
-        AC_MSG_RESULT([no])
-        AC_MSG_ERROR([cannot find JUnit 4 jar; please install one in the default
-location (/usr/share/java), specify its pathname via
+        AC_MSG_ERROR(
+[cannot find JUnit 4 jar, or JUnit 4 jar does not provide Hamcrest; please
+install one in the default location (/usr/share/java), specify its pathname via
 --with-junit=..., or disable it via --without-junit])
     fi
+    rm -f conftestj.class conftestj.java
     if test $OOO_JUNIT_JAR != ""; then
     BUILD_TYPE="$BUILD_TYPE QADEVOOO"
     fi
