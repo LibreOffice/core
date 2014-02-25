@@ -381,17 +381,17 @@ static OUString sPictures( "Pictures" );
 // try to load the dialog which will try and access the embed images, if those images are not cached in
 //  memory it will try to read them from the Picture directory which is now gone, so... we have to use this
 // inglorious hack below which basically will
-//
+
 // a) create a temp storage
-//
+
 // b) introspect any dialogs for any embed graphics and grab the associate URL(s)
-//
+
 // c) populate the temp storage with the associated embed images ( will be stored in a 'Pictures' folder )
-//
+
 // d) delete the 'Picture' element from the root storage
-//
+
 // e) copy the Pictures element of the temp storage to the root storage
-//
+
 // this assumes that we don't use the Pictures folder in the root of the base
 // document for anything, I believe this is a valid assumption ( as much as
 // I could check anyway )

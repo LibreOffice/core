@@ -20,7 +20,7 @@
 #ifndef DBAUI_CONNECTIONPAGE_HRC
 #define DBAUI_CONNECTIONPAGE_HRC
 
-//========================================================================
+
 // control ids
 
 #define FT_USERNAME                 1

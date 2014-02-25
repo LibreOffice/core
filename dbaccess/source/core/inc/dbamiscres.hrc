@@ -20,7 +20,7 @@
 #ifndef _DBA_MISCRES_HRC_
 #define _DBA_MISCRES_HRC_
 
-//========================================================================
+
 // string ids (relative to other resources, that's why not unique)
 #define STR_MYSQL_ODBC          1
 #define STR_MYSQL_JDBC          2

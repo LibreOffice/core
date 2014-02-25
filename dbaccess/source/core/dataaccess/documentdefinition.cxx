@@ -854,12 +854,12 @@ Any ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, cons
         // 2. Neither the DB doc nor the sub docs contained macros, thus macro
         //    execution was silently enabled, assuming that any macro will be a
         //    user-created macro
-        //
+
         // The problem with this: If the to-be-opened sub document has macros embedded in
         // the content.xml (which is valid ODF, but normally not produced by OOo itself),
         // then this has not been detected while loading the database document - it would
         // be too expensive, as it effectively would require loading all forms/reports.
-        //
+
         // So, in such a case, and with 2. above, we would silently execute those macros,
         // regardless of the global security settings - which would be a security issue, of
         // course.

@@ -27,12 +27,12 @@
 
 namespace dbaui
 {
-    //===========================================//
-    // ConnData     ---------->*    ConnLineData //
-    //    ^1                            ^1       //
-    //    |                             |        //
-    //  Conn        ---------->*    ConnLine     //
-    //===========================================//
+
+    // ConnData     ---------->*    ConnLineData
+    //    ^1                            ^1
+    //    |                             |
+    //  Conn        ---------->*    ConnLine
+
 
     /** Contains all connection data which exists between two windows */
     class OTableConnectionData

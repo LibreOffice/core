@@ -40,7 +40,7 @@ import java.lang.reflect.Method;
 // ---------- junit imports -----------------
 import org.junit.Test;
 import static org.junit.Assert.*;
-// ------------------------------------------
+
 
 public class SingleSelectQueryComposer extends CRMBasedTestCase
 {
@@ -54,13 +54,13 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
             + " OR ( NOW( ) = {D '2010-01-01' } )";
     private final static String INNERPRODUCTSQUERY = "products (inner)";
 
-    // --------------------------------------------------------------------------------------------------------
+
     private void createQueries() throws Exception
     {
         m_database.getDatabase().getDataSource().createQuery(INNERPRODUCTSQUERY, "SELECT * FROM \"products\"");
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     @Override
     protected void createTestCase()
     {
@@ -79,7 +79,7 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
         }
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     private void checkAttributeAccess(String _attributeName, String _attributeValue)
     {
         System.out.println("setting " + _attributeName + " to " + _attributeValue);

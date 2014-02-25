@@ -1311,7 +1311,7 @@ void SAL_CALL ODatabaseSource::flushed( const EventObject& /*rEvent*/ ) throw (R
     ModelMethodGuard aGuard( *this );
 
     // Okay, this is some hack.
-    //
+
     // In general, we have the problem that embedded databases write into their underlying storage, which
     // logically is one of our sub storage, and practically is a temporary file maintained by the
     // package implementation. As long as we did not commit this storage and our main storage,
@@ -1319,17 +1319,17 @@ void SAL_CALL ODatabaseSource::flushed( const EventObject& /*rEvent*/ ) throw (R
     // file. This is Bad (TM) for a "real" database application - imagine somebody entering some
     // data, and then crashing: For a database application, you would expect that the data still is present
     // when you connect to the database next time.
-    //
+
     // Since this is a conceptual problem as long as we do use those ZIP packages (in fact, we *cannot*
     // provide the desired functionality as long as we do not have a package format which allows O(1) writes),
     // we cannot completely fix this. However, we can relax the problem by commiting more often - often
     // enough so that data loss is more seldom, and seldom enough so that there's no noticable performance
     // decrease.
-    //
+
     // For this, we introduced a few places which XFlushable::flush their connections, and register as
     // XFlushListener at the embedded connection (which needs to provide the XFlushable functionality).
     // Then, when the connection is flushed, we commit both the database storage and our main storage.
-    //
+
     // #i55274#
 
     OSL_ENSURE( m_pImpl->isEmbeddedDatabase(), "ODatabaseSource::flushed: no embedded database?!" );

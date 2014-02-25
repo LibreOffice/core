@@ -26,9 +26,9 @@
 #undef STRINGCONSTANTS_INCLUDED_INDIRECT
 #include "stringconstants.inc"
 
-    //============================================================
+
     //= URLs
-    //============================================================
+
     #define URL_COMPONENT_QUERYDESIGN         ".component:DB/QueryDesign"
     #define URL_COMPONENT_VIEWDESIGN          ".component:DB/ViewDesign"
     #define URL_COMPONENT_TABLEDESIGN         ".component:DB/TableDesign"
@@ -38,23 +38,23 @@
     #define URL_COMPONENT_APPLICATION         ".component:DB/Application"
     #define URL_COMPONENT_REPORTDESIGN        ".component:DB/ReportDesign"
 
-    //============================================================
+
     //= service names
-    //============================================================
+
     #define SERVICE_SDB_DIRECTSQLDIALOG       "org.openoffice.comp.dbu.DirectSqlDialog"
 
-    //============================================================
+
     //= other DBU relevant strings
-    //============================================================
+
     #define FRAME_NAME_QUERY_PREVIEW          "QueryPreview"
     #define SERVICE_CONTROLDEFAULT            "com.sun.star.comp.dbu.OColumnControl"
     #define PROPERTY_QUERYDESIGNVIEW          "QueryDesignView"
     #define PROPERTY_GRAPHICAL_DESIGN         "GraphicalDesign"
     #define PROPERTY_HELP_URL                 "HelpURL"
 
-    //============================================================
+
     //= other DBU properties
-    //============================================================
+
     #define PROPERTY_TRISTATE         "TriState"
     #define PROPERTY_ENABLEOUTERJOIN  "EnableOuterJoinEscape"
     #define PROPERTY_TABSTOP "TabStop"

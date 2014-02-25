@@ -27,7 +27,7 @@ import connectivity.tools.HsqlDatabase;
 // ---------- junit imports -----------------
 import org.junit.Test;
 import static org.junit.Assert.*;
-// ------------------------------------------
+
 
 
 public class DataSource extends TestCase
@@ -36,7 +36,7 @@ public class DataSource extends TestCase
     HsqlDatabase m_database;
     connectivity.tools.DataSource m_dataSource;
 
-    // --------------------------------------------------------------------------------------------------------
+
     private void createTestCase()
     {
         try
@@ -58,7 +58,7 @@ public class DataSource extends TestCase
         }
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     @Test
     public void testRegistrationName()
     {

@@ -21,7 +21,7 @@
 #include "dbu_dlg.hrc"
 #include "sqlmessage.hrc"
 
-//-------------------------------------------------------------------------
+
 Image BMP_EXCEPTION_ERROR
 {
     ImageBitmap = Bitmap { File = "exerror.png"; };

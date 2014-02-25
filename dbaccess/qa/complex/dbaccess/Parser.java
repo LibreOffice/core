@@ -30,11 +30,11 @@ import com.sun.star.uno.UnoRuntime;
 // ---------- junit imports -----------------
 import org.junit.Test;
 import static org.junit.Assert.*;
-// ------------------------------------------
+
 
 public class Parser extends CRMBasedTestCase
 {
-    // --------------------------------------------------------------------------------------------------------
+
     @Override
     protected void createTestCase()
     {
@@ -50,7 +50,7 @@ public class Parser extends CRMBasedTestCase
         }
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     @Test
     public void checkWhere() throws Exception
     {
@@ -88,7 +88,7 @@ public class Parser extends CRMBasedTestCase
             composer.setQuery( SELECT + queries[i]);
         }
     }
-    // --------------------------------------------------------------------------------------------------------
+
     /** verifies that aliases for inner queries work as expected
      */
     @Test
@@ -133,7 +133,7 @@ public class Parser extends CRMBasedTestCase
             "test is bogus!", caughtExpected );
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     private void impl_checkParameters( final String _statement, final String[] _expectedParameterNames, final int[] _expectedParameterTypes,final String _context ) throws Exception
     {
         final XSingleSelectQueryComposer composer = createQueryComposer();
@@ -157,7 +157,7 @@ public class Parser extends CRMBasedTestCase
         }
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     /** verifies that the parser properly recognizes the types of parameters
      */
     @Test

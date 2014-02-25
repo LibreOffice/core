@@ -29,9 +29,9 @@
 
 namespace dbaccess
 {
-    //************************************************************
+
     //  OPreparedStatement
-    //************************************************************
+
     class OPreparedStatement : public OStatementBase,
                                public ::com::sun::star::sdbc::XPreparedStatement,
                                public ::com::sun::star::sdbc::XParameters,

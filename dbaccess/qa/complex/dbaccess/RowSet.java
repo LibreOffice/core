@@ -50,7 +50,7 @@ import java.util.Random;
 // ---------- junit imports -----------------
 import org.junit.Test;
 import static org.junit.Assert.*;
-// ------------------------------------------
+
 
 public class RowSet extends TestCase
 {
@@ -69,7 +69,7 @@ public class RowSet extends TestCase
     XPropertySet m_rowSetProperties;
     XParametersSupplier m_paramsSupplier;
 
-    // --------------------------------------------------------------------------------------------------------
+
     class ResultSetMovementStress implements Runnable
     {
 
@@ -103,7 +103,7 @@ public class RowSet extends TestCase
             }
         }
     }
-    // --------------------------------------------------------------------------------------------------------
+
     private void createTestCase(boolean _defaultRowSet)
     {
         if (m_database == null)
@@ -135,7 +135,7 @@ public class RowSet extends TestCase
         }
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     /** creates a com.sun.star.sdb.RowSet to use during the test
      *  @param command
      *      the command to use for the RowSet
@@ -149,7 +149,7 @@ public class RowSet extends TestCase
         createRowSet(command, commandType, execute, false);
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     /** creates a com.sun.star.sdb.RowSet to use during the test
      *  @param command
      *      the command to use for the RowSet
@@ -192,7 +192,7 @@ public class RowSet extends TestCase
         }
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     @Test
     public void testRowSet() throws java.lang.Exception
     {
@@ -216,14 +216,14 @@ public class RowSet extends TestCase
         testConcurrentAccess(m_resultSet);
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     XResultSet createClone() throws SQLException
     {
         final XResultSetAccess rowAcc = UnoRuntime.queryInterface( XResultSetAccess.class, m_rowSet );
         return rowAcc.createResultSet();
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     void createStruture() throws SQLException
     {
         m_database.executeSQL("DROP TABLE \"TEST1\" IF EXISTS");
@@ -242,7 +242,7 @@ public class RowSet extends TestCase
         connection.refreshTables();
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     void testPosition(XResultSet m_resultSet, XRow m_row, int expectedValue, String location) throws SQLException
     {
         final int val = m_row.getInt(1);
@@ -251,7 +251,7 @@ public class RowSet extends TestCase
         assertTrue(location + ": value/position are not as expected: " + val + " (val) != " + expectedValue + " (expected)", val == expectedValue);
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     void testSequentialPositining(XResultSet _resultSet, XRow _row)
     {
         try
@@ -270,7 +270,7 @@ public class RowSet extends TestCase
         }
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     void testAbsolutePositioning(XResultSet _resultSet, XRow _row)
     {
         try
@@ -288,7 +288,7 @@ public class RowSet extends TestCase
         }
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     void test3(XResultSet clone, XResultSet _resultSet)
     {
         try
@@ -312,7 +312,7 @@ public class RowSet extends TestCase
         }
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     void test4(XResultSet _resultSet)
     {
         try
@@ -339,7 +339,7 @@ public class RowSet extends TestCase
         }
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     void testConcurrentAccess(XResultSet _resultSet)
     {
         System.out.println("testing Thread");
@@ -367,7 +367,7 @@ public class RowSet extends TestCase
             fail("testConcurrentAccess failed: " + e);
         }
     }
-    // --------------------------------------------------------------------------------------------------------
+
 
     @Test
     public void testRowSetEvents() throws java.lang.Exception
@@ -515,7 +515,7 @@ public class RowSet extends TestCase
         xComp.dispose();
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     private void testCursorMove(Object res, Method _method, RowSetEventListener _evt, boolean _must[], Object args[]) throws java.lang.Exception
     {
         _evt.clearCalling();
@@ -546,7 +546,7 @@ public class RowSet extends TestCase
         _evt.clearCalling();
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     /** returns the current row count of the RowSet
      */
     private int currentRowCount() throws UnknownPropertyException, WrappedTargetException
@@ -555,7 +555,7 @@ public class RowSet extends TestCase
         return rowCount.intValue();
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     /** positions the row set at an arbitrary position between 2 and (current row count - 1)
      */
     private int positionRandom() throws SQLException, UnknownPropertyException, WrappedTargetException
@@ -566,7 +566,7 @@ public class RowSet extends TestCase
         return m_resultSet.getRow();
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     /** moves the result set to a random record between 2 and (current row count - 1), and deletes this record
      *
      *  After returning from this method, the row set is still positioned at the deleted record
@@ -590,7 +590,7 @@ public class RowSet extends TestCase
         return positionBefore;
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     @Test
     public void testDeleteBehavior() throws Exception
     {
@@ -603,7 +603,7 @@ public class RowSet extends TestCase
         // delete a random row
         int deletedRow = deleteRandom();
 
-        // .....................................................................................................
+
         // asking for the bookmark of a deleted row should fail
         boolean caughtException = false;
         try
@@ -616,13 +616,13 @@ public class RowSet extends TestCase
         }
         assertTrue("asking for the bookmark of a deleted row should throw an exception", caughtException);
 
-        // .....................................................................................................
+
         // isXXX methods should return |false| on a deleted row
         assertTrue("one of the isFoo failed after |deleteRow|", !m_resultSet.isBeforeFirst() && !m_resultSet.isAfterLast() && !m_resultSet.isFirst() && !m_resultSet.isLast());
         // note that we can assume that isFirst / isLast also return |false|, since deleteRandom did
         // not position on the first or last record, but inbetween
 
-        // .....................................................................................................
+
         // check if moving away from this row in either direction yields the expected results
         assertTrue("|previous| after |deleteRow| failed", m_resultSet.previous());
         final int positionPrevious = m_resultSet.getRow();
@@ -635,11 +635,11 @@ public class RowSet extends TestCase
         // since the deleted record "vanishs" as soon as the cursor is moved away from it, the absolute position does
         // not change with a |next| call here
 
-        // .....................................................................................................
+
         // check if the deleted rows really vanished after moving away from them
         assertTrue("row count did not change as expected after two deletions", initialRowCount - 2 == currentRowCount());
 
-        // .....................................................................................................
+
         // check if the deleted row vanishes after moving to the insertion row
         final int rowCountBefore = currentRowCount();
         final int deletedPos = deleteRandom();
@@ -657,7 +657,7 @@ public class RowSet extends TestCase
         m_resultSetUpdate.moveToCurrentRow();
         assertTrue("|last| + |deleteRow| + |moveToInsertRow| + |moveToCurrentRow| results in wrong state", m_resultSet.isAfterLast());
 
-        // .....................................................................................................
+
         // check if deleting a deleted row fails as expected
         deleteRandom();
         caughtException = false;
@@ -671,7 +671,7 @@ public class RowSet extends TestCase
         }
         assertTrue("deleting a deleted row succeeded - it shouldn't", caughtException);
 
-        // .....................................................................................................
+
         // check if deleteRows fails if it contains the bookmark of a previously-deleted row
         m_resultSet.first();
         final Object firstBookmark = m_rowLocate.getBookmark();
@@ -686,7 +686,7 @@ public class RowSet extends TestCase
         assertTrue("XDeleteRows::deleteRows with the bookmark of an already-deleted row failed",
                 (deleteSuccess.length == 2) && (deleteSuccess[0] != 0) && (deleteSuccess[1] == 0));
 
-        // .....................................................................................................
+
         // check if refreshing a deleted row fails as expected
         deleteRandom();
         caughtException = false;
@@ -700,12 +700,12 @@ public class RowSet extends TestCase
         }
         assertTrue("refreshing a deleted row succeeded - it shouldn't", caughtException);
 
-        // .....................................................................................................
+
         // rowUpdated/rowDeleted
         deleteRandom();
         assertTrue("rowDeleted and/or rowUpdated are wrong on a deleted row", !m_resultSet.rowUpdated() && !m_resultSet.rowInserted());
 
-        // .....................................................................................................
+
         // updating values in a deleted row should fail
         deleteRandom();
         final XRowUpdate rowUpdated = UnoRuntime.queryInterface( XRowUpdate.class, m_resultSet );
@@ -721,7 +721,7 @@ public class RowSet extends TestCase
         assertTrue("updating values in a deleted row should not succeed", caughtException);
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     /** checks whether deletions on the main RowSet properly interfere (or don't interfere) with the movement
      *  on a clone of the RowSet
      */
@@ -737,7 +737,7 @@ public class RowSet extends TestCase
 
         positionRandom();
 
-        // .....................................................................................................
+
         // move the clone to the same record as the RowSet, and delete this record
         cloneRowLocate.moveToBookmark(m_rowLocate.getBookmark());
         final int clonePosition = clone.getRow();
@@ -746,19 +746,19 @@ public class RowSet extends TestCase
         assertTrue("clone doesn't know that its current row has been deleted via the RowSet", clone.rowDeleted());
         assertTrue("clone's position changed somehow during deletion", clonePosition == clone.getRow());
 
-        // .....................................................................................................
+
         // move the row set away from the deleted record. This should still not touch the state of the clone
         m_resultSet.previous();
 
         assertTrue("clone doesn't know (anymore) that its current row has been deleted via the RowSet", clone.rowDeleted());
         assertTrue("clone's position changed somehow during deletion and RowSet-movement", clonePosition == clone.getRow());
 
-        // .....................................................................................................
+
         // move the clone away from the deleted record
         clone.next();
         assertTrue("clone still assumes that its row is deleted - but we already moved it", !clone.rowDeleted());
 
-        // .....................................................................................................
+
         // check whether deleting the extremes (first / last) work
         m_resultSet.first();
         cloneRowLocate.moveToBookmark(m_rowLocate.getBookmark());
@@ -776,7 +776,7 @@ public class RowSet extends TestCase
         clone.previous();
         assertTrue("deleting the first record left the clone in a strange state (after |next| + |previous|)", clone.isLast());
 
-        // .....................................................................................................
+
         // check whether movements of the clone interfere with movements of the RowSet, if the latter is on a deleted row
         final int positionBefore = positionRandom();
         m_resultSetUpdate.deleteRow();
@@ -790,7 +790,7 @@ public class RowSet extends TestCase
         assertTrue("wrong absolute position after |deleteRow| and clone movement", m_resultSet.getRow() == positionBefore);
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     /** checks whether insertions on the main RowSet properly interfere (or don't interfere) with the movement
      *  on a clone of the RowSet
      */
@@ -804,7 +804,7 @@ public class RowSet extends TestCase
         final XResultSet clone = createClone();
         final XRow cloneRow = UnoRuntime.queryInterface( XRow.class, clone );
 
-        // .....................................................................................................
+
         // first check the basic scenario without the |moveToInsertRow| |moveToCurrentRow|, to ensure that
         // really those are broken, if at all
         m_resultSet.last();
@@ -821,7 +821,7 @@ public class RowSet extends TestCase
         testPosition(clone, cloneRow, 1, "mixed clone/rowset move: clone check");
         testPosition(m_resultSet, m_row, MAX_TABLE_ROWS, "mixed clone/rowset move: rowset check");
 
-        // .....................................................................................................
+
         // now the complete scenario
         m_resultSet.last();
         m_resultSetUpdate.moveToInsertRow();
@@ -834,7 +834,7 @@ public class RowSet extends TestCase
         testPosition(m_resultSet, m_row, 100, "mixed clone/rowset move/insertion: rowset check");
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     private void testTableParameters()
     {
         // for a row set simply based on a table, there should be not parameters at all
@@ -850,7 +850,7 @@ public class RowSet extends TestCase
             fail("testing the parameters of a table failed" + e.getMessage());
         }
     }
-    // --------------------------------------------------------------------------------------------------------
+
 
     private void testParametersAfterNormalExecute()
     {
@@ -868,7 +868,7 @@ public class RowSet extends TestCase
         }
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     private void verifyParameters(String[] _paramNames, String _context) throws com.sun.star.uno.Exception
     {
         final XIndexAccess params = m_paramsSupplier.getParameters();
@@ -894,7 +894,7 @@ public class RowSet extends TestCase
         }
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     private void testParametrizedQuery()
     {
         try
@@ -914,7 +914,7 @@ public class RowSet extends TestCase
         }
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     private void testParametersInteraction()
     {
         try
@@ -952,7 +952,7 @@ public class RowSet extends TestCase
         }
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     private void testParametersInFilter()
     {
         try
@@ -977,7 +977,7 @@ public class RowSet extends TestCase
         }
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     /** checks the XParametersSupplier functionality of a RowSet
      */
     @Test

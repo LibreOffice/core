@@ -22,37 +22,37 @@
 
 #include <svl/solar.hrc>
 
-//=====================================================================
+
 //= bases
-//=====================================================================
+
 #define RID_DBMM_DIALOG_START       RID_DBACCESS_START + 0
 #define RID_DBMM_TAPPAGE_START      RID_DBACCESS_START + 0
 #define RID_DBMM_STRING_START       RID_DBACCESS_START + 0
 
-//=====================================================================
+
 //= dialogs
-//=====================================================================
+
 
 #define DLG_MACRO_MIGRATION     RID_DBMM_DIALOG_START + 0
 
-//=====================================================================
+
 //= error boxes
-//=====================================================================
+
 
 #define ERR_INVALID_BACKUP_LOCATION     RID_DBMM_DIALOG_START + 0
 
-//=====================================================================
+
 //= tab pages
-//=====================================================================
+
 
 #define TP_PREPARE          ( RID_DBMM_TAPPAGE_START + 0 )
 #define TP_SAVE_DBDOC_AS    ( RID_DBMM_TAPPAGE_START + 1 )
 #define TP_MIGRATE          ( RID_DBMM_TAPPAGE_START + 2 )
 #define TP_SUMMARY          ( RID_DBMM_TAPPAGE_START + 3 )
 
-//=====================================================================
+
 //= strings
-//=====================================================================
+
 
 #define STR_FORM                    ( RID_DBMM_STRING_START +  0 )
 #define STR_REPORT                  ( RID_DBMM_STRING_START +  1 )
