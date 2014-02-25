@@ -185,11 +185,11 @@ OUString SAL_CALL cptostr( sal_uInt32 codepage )
 
 
 // OleStdDeleteTargetDevice()
-//
+
 // Purpose:
-//
+
 // Parameters:
-//
+
 // Return Value:
 //    SCODE  -  S_OK if successful
 
@@ -225,16 +225,16 @@ void SAL_CALL DeleteTargetDevice( DVTARGETDEVICE* ptd )
 
 
 // OleStdCopyTargetDevice()
-//
+
 // Purpose:
 //  duplicate a TARGETDEVICE struct. this function allocates memory for
 //  the copy. the caller MUST free the allocated copy when done with it
 //  using the standard allocator returned from CoGetMalloc.
 //  (OleStdFree can be used to free the copy).
-//
+
 // Parameters:
 //  ptdSrc      pointer to source TARGETDEVICE
-//
+
 // Return Value:
 //    pointer to allocated copy of ptdSrc
 //    if ptdSrc==NULL then retuns NULL is returned.
@@ -275,7 +275,7 @@ DVTARGETDEVICE* SAL_CALL CopyTargetDevice( DVTARGETDEVICE* ptdSrc )
 
 
 // OleStdCopyFormatEtc()
-//
+
 // Purpose:
 //  Copies the contents of a FORMATETC structure. this function takes
 //  special care to copy correctly copying the pointer to the TARGETDEVICE
@@ -283,16 +283,16 @@ DVTARGETDEVICE* SAL_CALL CopyTargetDevice( DVTARGETDEVICE* ptdSrc )
 //  if the source FORMATETC has a non-NULL TARGETDEVICE, then a copy
 //  of the TARGETDEVICE will be allocated for the destination of the
 //  FORMATETC (petcDest).
-//
+
 //  NOTE: the caller MUST free the allocated copy of the TARGETDEVICE
 //  within the destination FORMATETC when done with it
 //  using the standard allocator returned from CoGetMalloc.
 //  (OleStdFree can be used to free the copy).
-//
+
 // Parameters:
 //  petcDest      pointer to destination FORMATETC
 //  petcSrc       pointer to source FORMATETC
-//
+
 // Return Value:
 //  returns TRUE if copy was successful;
 //  retuns FALSE if not successful, e.g. one or both of the pointers
@@ -421,7 +421,7 @@ sal_Int32 SAL_CALL CompareFormatEtc( const FORMATETC* pFetcLhs, const FORMATETC*
 
 
 
-//
+
 
 
 sal_Bool SAL_CALL CompareTargetDevice( DVTARGETDEVICE* ptdLeft, DVTARGETDEVICE* ptdRight )

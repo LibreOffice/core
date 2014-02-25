@@ -66,9 +66,9 @@ CWinClipboard::CWinClipboard( const Reference< XComponentContext >& rxContext, c
     m_pImpl.reset( new CWinClipbImpl( aClipboardName, this ) );
 }
 
-//========================================================================
+
 // XClipboard
-//========================================================================
+
 
 
 // getContent
@@ -127,9 +127,9 @@ OUString SAL_CALL CWinClipboard::getName(  ) throw( RuntimeException )
     return OUString("");
 }
 
-//========================================================================
+
 // XFlushableClipboard
-//========================================================================
+
 
 void SAL_CALL CWinClipboard::flushClipboard( ) throw( RuntimeException )
 {
@@ -143,9 +143,9 @@ void SAL_CALL CWinClipboard::flushClipboard( ) throw( RuntimeException )
         m_pImpl->flushClipboard( );
 }
 
-//========================================================================
+
 // XClipboardEx
-//========================================================================
+
 
 sal_Int8 SAL_CALL CWinClipboard::getRenderingCapabilities(  ) throw( RuntimeException )
 {
@@ -159,9 +159,9 @@ sal_Int8 SAL_CALL CWinClipboard::getRenderingCapabilities(  ) throw( RuntimeExce
     return 0;
 }
 
-//========================================================================
+
 // XClipboardNotifier
-//========================================================================
+
 
 
 // getName

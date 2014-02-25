@@ -46,7 +46,7 @@ using namespace com::sun::star::container;
 
 
 
-//
+
 
 
 namespace
@@ -80,7 +80,7 @@ CDOTransferable::CDOTransferable(
 }
 
 
-//
+
 
 
 Any SAL_CALL CDOTransferable::getTransferData( const DataFlavor& aFlavor )
@@ -232,7 +232,7 @@ void SAL_CALL CDOTransferable::initFlavorList( )
 }
 
 
-//
+
 
 
 inline
@@ -378,7 +378,7 @@ CDOTransferable::ByteSequence_t SAL_CALL CDOTransferable::getClipboardData( CFor
 }
 
 
-//
+
 
 
 OUString SAL_CALL CDOTransferable::synthesizeUnicodeText( )
@@ -423,7 +423,7 @@ OUString SAL_CALL CDOTransferable::synthesizeUnicodeText( )
 }
 
 
-//
+
 
 
 void CDOTransferable::clipDataToByteStream( CLIPFORMAT cf, STGMEDIUM stgmedium, ByteSequence_t& aByteSequence )
@@ -459,7 +459,7 @@ void CDOTransferable::clipDataToByteStream( CLIPFORMAT cf, STGMEDIUM stgmedium, 
 }
 
 
-//
+
 
 
 inline
@@ -479,7 +479,7 @@ Any CDOTransferable::byteStreamToAny( ByteSequence_t& aByteStream, const Type& a
 }
 
 
-//
+
 
 
 inline
@@ -499,7 +499,7 @@ OUString CDOTransferable::byteStreamToOUString( ByteSequence_t& aByteStream )
 }
 
 
-//
+
 
 
 sal_Bool SAL_CALL CDOTransferable::compareDataFlavors(
@@ -532,7 +532,7 @@ sal_Bool SAL_CALL CDOTransferable::compareDataFlavors(
 }
 
 
-//
+
 
 
 sal_Bool SAL_CALL CDOTransferable::cmpFullMediaType(
@@ -542,7 +542,7 @@ sal_Bool SAL_CALL CDOTransferable::cmpFullMediaType(
 }
 
 
-//
+
 
 
 sal_Bool SAL_CALL CDOTransferable::cmpAllContentTypeParameter(

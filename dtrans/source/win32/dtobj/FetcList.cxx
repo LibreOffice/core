@@ -43,14 +43,14 @@ using namespace std;
 
 
 
-//
+
 
 
 LCID       CFormatRegistrar::m_TxtLocale   = 0;
 sal_uInt32 CFormatRegistrar::m_TxtCodePage = GetACP( );
 
 
-//
+
 
 
 CFormatEtcContainer::CFormatEtcContainer( )
@@ -59,7 +59,7 @@ CFormatEtcContainer::CFormatEtcContainer( )
 }
 
 
-//
+
 
 
 void CFormatEtcContainer::addFormatEtc( const CFormatEtc& fetc )
@@ -68,7 +68,7 @@ void CFormatEtcContainer::addFormatEtc( const CFormatEtc& fetc )
 }
 
 
-//
+
 
 
 void SAL_CALL CFormatEtcContainer::removeFormatEtc( const CFormatEtc& fetc )
@@ -81,7 +81,7 @@ void SAL_CALL CFormatEtcContainer::removeFormatEtc( const CFormatEtc& fetc )
 }
 
 
-//
+
 
 
 void SAL_CALL CFormatEtcContainer::removeAllFormatEtc( )
@@ -90,7 +90,7 @@ void SAL_CALL CFormatEtcContainer::removeAllFormatEtc( )
 }
 
 
-//
+
 
 
 sal_Bool CFormatEtcContainer::hasFormatEtc( const CFormatEtc& fetc ) const
@@ -102,7 +102,7 @@ sal_Bool CFormatEtcContainer::hasFormatEtc( const CFormatEtc& fetc ) const
 }
 
 
-//
+
 
 
 sal_Bool CFormatEtcContainer::hasElements( ) const
@@ -111,7 +111,7 @@ sal_Bool CFormatEtcContainer::hasElements( ) const
 }
 
 
-//
+
 
 
 void CFormatEtcContainer::beginEnumFormatEtc( )
@@ -120,7 +120,7 @@ void CFormatEtcContainer::beginEnumFormatEtc( )
 }
 
 
-//
+
 
 
 sal_uInt32 SAL_CALL CFormatEtcContainer::nextFormatEtc( LPFORMATETC lpFetc,
@@ -143,7 +143,7 @@ sal_uInt32 SAL_CALL CFormatEtcContainer::nextFormatEtc( LPFORMATETC lpFetc,
 
 
 
-//
+
 
 
 sal_Bool SAL_CALL CFormatEtcContainer::skipFormatEtc( sal_uInt32 aNum )
@@ -158,11 +158,11 @@ sal_Bool SAL_CALL CFormatEtcContainer::skipFormatEtc( sal_uInt32 aNum )
 }
 
 
-//#########################################################################
 
 
 
-//
+
+
 
 
 CFormatRegistrar::CFormatRegistrar( const Reference< XComponentContext >& rxContext,
@@ -177,7 +177,7 @@ CFormatRegistrar::CFormatRegistrar( const Reference< XComponentContext >& rxCont
 // this function converts all DataFlavors of the given FlavorList into
 // an appropriate FORMATETC structure, for some formats like unicodetext,
 // text and text/html we will offer an accompany format e.g.:
-//
+
 // DataFlavor               | Registered Clipformat     |   Registered accompany clipformat
 // -------------------------|---------------------------|-----------------------------------
 // text/plain;charset=ansi  | CF_TEXT                   |   CF_UNICODETEXT
@@ -190,7 +190,7 @@ CFormatRegistrar::CFormatRegistrar( const Reference< XComponentContext >& rxCont
 //                          |                           |
 // text/html                | HTML (Hypertext ...)      |   HTML Format
 //                          |                           |
-//
+
 // if some tries to register different text formats with different charsets the last
 // registered wins and the others are ignored
 
@@ -278,7 +278,7 @@ void SAL_CALL CFormatRegistrar::RegisterFormats(
 }
 
 
-//
+
 
 
 sal_Bool SAL_CALL CFormatRegistrar::hasSynthesizedLocale( ) const
@@ -287,7 +287,7 @@ sal_Bool SAL_CALL CFormatRegistrar::hasSynthesizedLocale( ) const
 }
 
 
-//
+
 
 
 LCID SAL_CALL CFormatRegistrar::getSynthesizedLocale( ) const
@@ -296,7 +296,7 @@ LCID SAL_CALL CFormatRegistrar::getSynthesizedLocale( ) const
 }
 
 
-//
+
 
 
 sal_uInt32 SAL_CALL CFormatRegistrar::getRegisteredTextCodePage( ) const
@@ -305,7 +305,7 @@ sal_uInt32 SAL_CALL CFormatRegistrar::getRegisteredTextCodePage( ) const
 }
 
 
-//
+
 
 
 DataFlavor SAL_CALL CFormatRegistrar::getRegisteredTextFlavor( ) const
@@ -314,7 +314,7 @@ DataFlavor SAL_CALL CFormatRegistrar::getRegisteredTextFlavor( ) const
 }
 
 
-//
+
 
 
 sal_Bool SAL_CALL CFormatRegistrar::isSynthesizeableFormat( const CFormatEtc& aFormatEtc ) const
@@ -325,7 +325,7 @@ sal_Bool SAL_CALL CFormatRegistrar::isSynthesizeableFormat( const CFormatEtc& aF
 }
 
 
-//
+
 
 
 inline
@@ -337,7 +337,7 @@ sal_Bool SAL_CALL CFormatRegistrar::needsToSynthesizeAccompanyFormats( const CFo
 }
 
 
-//
+
 
 
 OUString SAL_CALL CFormatRegistrar::getCharsetFromDataFlavor( const DataFlavor& aFlavor )
@@ -368,7 +368,7 @@ OUString SAL_CALL CFormatRegistrar::getCharsetFromDataFlavor( const DataFlavor& 
 }
 
 
-//
+
 
 
 sal_Bool SAL_CALL CFormatRegistrar::hasUnicodeFlavor( const Reference< XTransferable >& aXTransferable ) const
@@ -382,7 +382,7 @@ sal_Bool SAL_CALL CFormatRegistrar::hasUnicodeFlavor( const Reference< XTransfer
 }
 
 
-//
+
 
 
 inline
@@ -392,7 +392,7 @@ sal_Bool CFormatRegistrar::isEqualCurrentSystemCodePage( sal_uInt32 aCodePage ) 
 }
 
 
-//
+
 
 
 sal_Bool SAL_CALL CFormatRegistrar::findLocaleForTextCodePage( )
@@ -403,7 +403,7 @@ sal_Bool SAL_CALL CFormatRegistrar::findLocaleForTextCodePage( )
 }
 
 
-//
+
 
 
 sal_Bool SAL_CALL CFormatRegistrar::isLocaleCodePage( LCID lcid, LCTYPE lctype, sal_uInt32 codepage )
@@ -421,7 +421,7 @@ sal_Bool SAL_CALL CFormatRegistrar::isLocaleCodePage( LCID lcid, LCTYPE lctype, 
 }
 
 
-//
+
 
 
 inline
@@ -431,7 +431,7 @@ sal_Bool SAL_CALL CFormatRegistrar::isLocaleOemCodePage( LCID lcid, sal_uInt32 c
 }
 
 
-//
+
 
 
 inline
@@ -441,7 +441,7 @@ sal_Bool SAL_CALL CFormatRegistrar::isLocaleAnsiCodePage( LCID lcid, sal_uInt32 
 }
 
 
-//
+
 
 
 BOOL CALLBACK CFormatRegistrar::EnumLocalesProc( LPSTR lpLocaleStr )

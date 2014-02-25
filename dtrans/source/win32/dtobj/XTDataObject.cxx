@@ -128,7 +128,7 @@ STDMETHODIMP_(ULONG) CXTDataObject::Release( )
 }
 
 
-//
+
 
 
 STDMETHODIMP CXTDataObject::GetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium )
@@ -176,7 +176,7 @@ STDMETHODIMP CXTDataObject::GetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium
 }
 
 
-//
+
 
 
 // inline
@@ -205,7 +205,7 @@ void SAL_CALL CXTDataObject::renderDataAndSetupStgMedium(
 }
 
 
-//
+
 
 
 //inline
@@ -227,7 +227,7 @@ void SAL_CALL CXTDataObject::renderLocaleAndSetupStgMedium(
 }
 
 
-//
+
 
 
 //inline
@@ -264,7 +264,7 @@ void SAL_CALL CXTDataObject::renderUnicodeAndSetupStgMedium(
 }
 
 
-//
+
 
 
 //inline
@@ -338,7 +338,7 @@ void SAL_CALL CXTDataObject::renderAnyDataAndSetupStgMedium(
 }
 
 
-//
+
 
 
 HRESULT SAL_CALL CXTDataObject::renderSynthesizedFormatAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium )
@@ -447,7 +447,7 @@ void SAL_CALL CXTDataObject::renderSynthesizedTextAndSetupStgMedium( FORMATETC& 
 }
 
 
-//
+
 
 
 void SAL_CALL CXTDataObject::renderSynthesizedHtmlAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium )
@@ -595,7 +595,7 @@ CXTDataObject::operator IDataObject*( )
 }
 
 
-//
+
 
 
 inline
@@ -616,7 +616,7 @@ DataFlavor SAL_CALL CXTDataObject::formatEtcToDataFlavor( const FORMATETC& aForm
 }
 
 
-//
+
 
 
 inline
@@ -647,7 +647,7 @@ void CXTDataObject::validateFormatEtc( LPFORMATETC lpFormatEtc ) const
 }
 
 
-//
+
 
 
 //inline
@@ -682,7 +682,7 @@ void SAL_CALL CXTDataObject::setupStgMedium( const FORMATETC& fetc,
 }
 
 
-//
+
 
 
 inline
@@ -692,7 +692,7 @@ void SAL_CALL CXTDataObject::invalidateStgMedium( STGMEDIUM& stgmedium ) const
 }
 
 
-//
+
 
 
 inline
@@ -715,7 +715,7 @@ HRESULT SAL_CALL CXTDataObject::translateStgExceptionCode( HRESULT hr ) const
 }
 
 
-//
+
 
 
 inline void SAL_CALL CXTDataObject::InitializeFormatEtcContainer( )
@@ -727,9 +727,9 @@ inline void SAL_CALL CXTDataObject::InitializeFormatEtcContainer( )
     }
 }
 
-//============================================================================
+
 // CEnumFormatEtc
-//============================================================================
+
 
 
 // ctor

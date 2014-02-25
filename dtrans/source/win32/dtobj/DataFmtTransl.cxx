@@ -64,7 +64,7 @@ const OUString HTML_FORMAT_NAME_WINDOWS ("HTML Format");
 const OUString HTML_FORMAT_NAME_SOFFICE ("HTML (HyperText Markup Language)");
 
 
-//
+
 
 
 CDataFormatTranslator::CDataFormatTranslator( const Reference< XComponentContext >& rxContext )
@@ -73,7 +73,7 @@ CDataFormatTranslator::CDataFormatTranslator( const Reference< XComponentContext
 }
 
 
-//
+
 
 
 CFormatEtc CDataFormatTranslator::getFormatEtcFromDataFlavor( const DataFlavor& aDataFlavor ) const
@@ -117,7 +117,7 @@ CFormatEtc CDataFormatTranslator::getFormatEtcFromDataFlavor( const DataFlavor& 
 }
 
 
-//
+
 
 
 DataFlavor CDataFormatTranslator::getDataFlavorFromFormatEtc( const FORMATETC& aFormatEtc, LCID lcid ) const
@@ -174,7 +174,7 @@ DataFlavor CDataFormatTranslator::getDataFlavorFromFormatEtc( const FORMATETC& a
 }
 
 
-//
+
 
 
 CFormatEtc SAL_CALL CDataFormatTranslator::getFormatEtcForClipformatName( const OUString& aClipFmtName ) const
@@ -188,7 +188,7 @@ CFormatEtc SAL_CALL CDataFormatTranslator::getFormatEtcForClipformatName( const 
 }
 
 
-//
+
 
 
 OUString CDataFormatTranslator::getClipboardFormatName( CLIPFORMAT aClipformat ) const
@@ -202,7 +202,7 @@ OUString CDataFormatTranslator::getClipboardFormatName( CLIPFORMAT aClipformat )
 }
 
 
-//
+
 
 
 CFormatEtc SAL_CALL CDataFormatTranslator::getFormatEtcForClipformat( CLIPFORMAT cf ) const
@@ -239,7 +239,7 @@ CFormatEtc SAL_CALL CDataFormatTranslator::getFormatEtcForClipformat( CLIPFORMAT
 }
 
 
-//
+
 
 
 sal_Bool SAL_CALL CDataFormatTranslator::isOemOrAnsiTextFormat( CLIPFORMAT cf ) const
@@ -248,7 +248,7 @@ sal_Bool SAL_CALL CDataFormatTranslator::isOemOrAnsiTextFormat( CLIPFORMAT cf ) 
 }
 
 
-//
+
 
 
 sal_Bool SAL_CALL CDataFormatTranslator::isUnicodeTextFormat( CLIPFORMAT cf ) const
@@ -257,7 +257,7 @@ sal_Bool SAL_CALL CDataFormatTranslator::isUnicodeTextFormat( CLIPFORMAT cf ) co
 }
 
 
-//
+
 
 
 sal_Bool SAL_CALL CDataFormatTranslator::isTextFormat( CLIPFORMAT cf ) const
@@ -266,7 +266,7 @@ sal_Bool SAL_CALL CDataFormatTranslator::isTextFormat( CLIPFORMAT cf ) const
 }
 
 
-//
+
 
 
 sal_Bool SAL_CALL CDataFormatTranslator::isHTMLFormat( CLIPFORMAT cf ) const
@@ -276,7 +276,7 @@ sal_Bool SAL_CALL CDataFormatTranslator::isHTMLFormat( CLIPFORMAT cf ) const
 }
 
 
-//
+
 
 
 sal_Bool SAL_CALL CDataFormatTranslator::isTextHtmlFormat( CLIPFORMAT cf ) const
@@ -286,7 +286,7 @@ sal_Bool SAL_CALL CDataFormatTranslator::isTextHtmlFormat( CLIPFORMAT cf ) const
 }
 
 
-//
+
 
 
 OUString SAL_CALL CDataFormatTranslator::getTextCharsetFromLCID( LCID lcid, CLIPFORMAT aClipformat ) const

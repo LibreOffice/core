@@ -75,7 +75,7 @@ namespace MODULE_PRIVATE
 }
 
 
-//
+
 
 
 FormatEntry::FormatEntry()
@@ -83,7 +83,7 @@ FormatEntry::FormatEntry()
 }
 
 
-//
+
 
 
 FormatEntry::FormatEntry(
@@ -116,7 +116,7 @@ CDataFormatTranslator::CDataFormatTranslator( const Reference< XComponentContext
 }
 
 
-//
+
 
 
 Any SAL_CALL CDataFormatTranslator::getSystemDataTypeFromDataFlavor( const DataFlavor& aDataFlavor )
@@ -175,7 +175,7 @@ Any SAL_CALL CDataFormatTranslator::getSystemDataTypeFromDataFlavor( const DataF
 }
 
 
-//
+
 
 
 DataFlavor SAL_CALL CDataFormatTranslator::getDataFlavorFromSystemDataType( const Any& aSysDataType )
@@ -493,7 +493,7 @@ void SAL_CALL CDataFormatTranslator::initTranslationTable()
 }
 
 
-//
+
 
 
 void SAL_CALL CDataFormatTranslator::findDataFlavorForStandardFormatId( sal_Int32 aStandardFormatId, DataFlavor& aDataFlavor ) const
@@ -519,7 +519,7 @@ void SAL_CALL CDataFormatTranslator::findDataFlavorForStandardFormatId( sal_Int3
 }
 
 
-//
+
 
 
 void SAL_CALL CDataFormatTranslator::findDataFlavorForNativeFormatName( const OUString& aNativeFormatName, DataFlavor& aDataFlavor ) const
@@ -538,7 +538,7 @@ void SAL_CALL CDataFormatTranslator::findDataFlavorForNativeFormatName( const OU
 }
 
 
-//
+
 
 
 void SAL_CALL CDataFormatTranslator::findStandardFormatIdForCharset( const OUString& aCharset, Any& aAny ) const
@@ -554,7 +554,7 @@ void SAL_CALL CDataFormatTranslator::findStandardFormatIdForCharset( const OUStr
 }
 
 
-//
+
 
 
 void SAL_CALL CDataFormatTranslator::setStandardFormatIdForNativeFormatName( const OUString& aNativeFormatName, Any& aAny ) const
@@ -572,7 +572,7 @@ void SAL_CALL CDataFormatTranslator::setStandardFormatIdForNativeFormatName( con
 }
 
 
-//
+
 
 
 void SAL_CALL CDataFormatTranslator::findStdFormatIdOrNativeFormatNameForFullMediaType(
@@ -602,7 +602,7 @@ void SAL_CALL CDataFormatTranslator::findStdFormatIdOrNativeFormatNameForFullMed
 }
 
 
-//
+
 
 
 inline sal_Bool CDataFormatTranslator::isTextPlainMediaType( const OUString& fullMediaType ) const
@@ -611,7 +611,7 @@ inline sal_Bool CDataFormatTranslator::isTextPlainMediaType( const OUString& ful
 }
 
 
-//
+
 
 
 DataFlavor SAL_CALL CDataFormatTranslator::mkDataFlv(const OUString& cnttype, const OUString& hpname, Type dtype)

@@ -52,7 +52,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 
 
-//
+
 
 
 void ShutdownServiceMgr( Reference< XMultiServiceFactory >& SrvMgr )
@@ -69,7 +69,7 @@ void ShutdownServiceMgr( Reference< XMultiServiceFactory >& SrvMgr )
 }
 
 
-//
+
 
 
 sal_Bool readCntTypesFromFileIntoVector( char* fname, vector< string >& vecData )
@@ -96,7 +96,7 @@ sal_Bool readCntTypesFromFileIntoVector( char* fname, vector< string >& vecData 
 }
 
 
-//
+
 
 
 sal_Bool processCntTypesAndWriteResultIntoFile( char* fname, vector< string >& vecData, Reference< XMimeContentTypeFactory > cnttypeFactory )

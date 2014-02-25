@@ -56,7 +56,7 @@ CWinClipbImpl* CWinClipbImpl::s_pCWinClipbImpl = NULL;
 osl::Mutex     CWinClipbImpl::s_aMutex;
 
 
-//
+
 
 
 CWinClipbImpl::CWinClipbImpl( const OUString& aClipboardName, CWinClipboard* theWinClipboard ) :
@@ -73,7 +73,7 @@ CWinClipbImpl::CWinClipbImpl( const OUString& aClipboardName, CWinClipboard* the
 }
 
 
-//
+
 
 
 CWinClipbImpl::~CWinClipbImpl( )
@@ -156,7 +156,7 @@ void SAL_CALL CWinClipbImpl::setContents(
 }
 
 
-//
+
 
 
 OUString SAL_CALL CWinClipbImpl::getName(  ) throw( RuntimeException )
@@ -165,7 +165,7 @@ OUString SAL_CALL CWinClipbImpl::getName(  ) throw( RuntimeException )
 }
 
 
-//
+
 
 
 sal_Int8 SAL_CALL CWinClipbImpl::getRenderingCapabilities(  ) throw( RuntimeException )
@@ -174,7 +174,7 @@ sal_Int8 SAL_CALL CWinClipbImpl::getRenderingCapabilities(  ) throw( RuntimeExce
 }
 
 
-//
+
 
 
 void SAL_CALL CWinClipbImpl::flushClipboard( ) throw( RuntimeException )
@@ -194,7 +194,7 @@ void SAL_CALL CWinClipbImpl::flushClipboard( ) throw( RuntimeException )
 }
 
 
-//
+
 
 
 void SAL_CALL CWinClipbImpl::registerClipboardViewer( )
@@ -203,7 +203,7 @@ void SAL_CALL CWinClipbImpl::registerClipboardViewer( )
 }
 
 
-//
+
 
 
 void SAL_CALL CWinClipbImpl::unregisterClipboardViewer( )
@@ -212,7 +212,7 @@ void SAL_CALL CWinClipbImpl::unregisterClipboardViewer( )
 }
 
 
-//
+
 
 
 void SAL_CALL CWinClipbImpl::dispose() throw( RuntimeException )
@@ -221,7 +221,7 @@ void SAL_CALL CWinClipbImpl::dispose() throw( RuntimeException )
 }
 
 
-//
+
 
 
 void WINAPI CWinClipbImpl::onClipboardContentChanged( void )
@@ -234,7 +234,7 @@ void WINAPI CWinClipbImpl::onClipboardContentChanged( void )
 }
 
 
-//
+
 
 
 void SAL_CALL CWinClipbImpl::onReleaseDataObject( CXNotifyingDataObject* theCaller )

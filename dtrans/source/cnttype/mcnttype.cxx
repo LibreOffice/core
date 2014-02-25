@@ -49,7 +49,7 @@ CMimeContentType::CMimeContentType( const OUString& aCntType )
 }
 
 
-//
+
 
 
 OUString SAL_CALL CMimeContentType::getMediaType( ) throw(RuntimeException)
@@ -58,7 +58,7 @@ OUString SAL_CALL CMimeContentType::getMediaType( ) throw(RuntimeException)
 }
 
 
-//
+
 
 
 OUString SAL_CALL CMimeContentType::getMediaSubtype( ) throw(RuntimeException)
@@ -67,7 +67,7 @@ OUString SAL_CALL CMimeContentType::getMediaSubtype( ) throw(RuntimeException)
 }
 
 
-//
+
 
 
 OUString SAL_CALL CMimeContentType::getFullMediaType( ) throw(RuntimeException)
@@ -76,7 +76,7 @@ OUString SAL_CALL CMimeContentType::getFullMediaType( ) throw(RuntimeException)
 }
 
 
-//
+
 
 
 Sequence< OUString > SAL_CALL CMimeContentType::getParameters( ) throw(RuntimeException)
@@ -98,7 +98,7 @@ Sequence< OUString > SAL_CALL CMimeContentType::getParameters( ) throw(RuntimeEx
 }
 
 
-//
+
 
 
 sal_Bool SAL_CALL CMimeContentType::hasParameter( const OUString& aName ) throw(RuntimeException)
@@ -108,7 +108,7 @@ sal_Bool SAL_CALL CMimeContentType::hasParameter( const OUString& aName ) throw(
 }
 
 
-//
+
 
 
 OUString SAL_CALL CMimeContentType::getParameterValue( const OUString& aName ) throw(NoSuchElementException, RuntimeException)
@@ -122,7 +122,7 @@ OUString SAL_CALL CMimeContentType::getParameterValue( const OUString& aName ) t
 }
 
 
-//
+
 
 
 void SAL_CALL CMimeContentType::init( const OUString& aCntType ) throw( IllegalArgumentException )
@@ -137,7 +137,7 @@ void SAL_CALL CMimeContentType::init( const OUString& aCntType ) throw( IllegalA
 }
 
 
-//
+
 
 
 void SAL_CALL CMimeContentType::getSym( void )
@@ -153,7 +153,7 @@ void SAL_CALL CMimeContentType::getSym( void )
 }
 
 
-//
+
 
 
 void SAL_CALL CMimeContentType::acceptSym( const OUString& pSymTlb )
@@ -165,7 +165,7 @@ void SAL_CALL CMimeContentType::acceptSym( const OUString& pSymTlb )
 }
 
 
-//
+
 
 
 void SAL_CALL CMimeContentType::skipSpaces( void )
@@ -175,7 +175,7 @@ void SAL_CALL CMimeContentType::skipSpaces( void )
 }
 
 
-//
+
 
 
 void SAL_CALL CMimeContentType::type( void )
@@ -208,7 +208,7 @@ void SAL_CALL CMimeContentType::type( void )
 }
 
 
-//
+
 
 
 void SAL_CALL CMimeContentType::subtype( void )
@@ -238,7 +238,7 @@ void SAL_CALL CMimeContentType::subtype( void )
 }
 
 
-//
+
 
 
 void SAL_CALL CMimeContentType::trailer( void )
@@ -283,7 +283,7 @@ void SAL_CALL CMimeContentType::trailer( void )
 }
 
 
-//
+
 
 
 OUString SAL_CALL CMimeContentType::pName( )
@@ -306,7 +306,7 @@ OUString SAL_CALL CMimeContentType::pName( )
 }
 
 
-//
+
 
 
 OUString SAL_CALL CMimeContentType::pValue( )
@@ -376,7 +376,7 @@ OUString SAL_CALL CMimeContentType::quotedPValue( )
 }
 
 
-//
+
 
 
 OUString SAL_CALL CMimeContentType::nonquotedPValue( )
@@ -399,7 +399,7 @@ OUString SAL_CALL CMimeContentType::nonquotedPValue( )
 }
 
 
-//
+
 
 
 void SAL_CALL CMimeContentType::comment( void )
@@ -416,7 +416,7 @@ void SAL_CALL CMimeContentType::comment( void )
 }
 
 
-//
+
 
 
 sal_Bool SAL_CALL CMimeContentType::isInRange( const OUString& aChr, const OUString& aRange )

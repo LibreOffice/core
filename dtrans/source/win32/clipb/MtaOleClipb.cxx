@@ -356,7 +356,7 @@ CMtaOleClipboard::~CMtaOleClipboard( )
 
 
 
-//
+
 
 
 HRESULT CMtaOleClipboard::flushClipboard( )
@@ -382,7 +382,7 @@ HRESULT CMtaOleClipboard::flushClipboard( )
 }
 
 
-//
+
 
 
 HRESULT CMtaOleClipboard::getClipboard( IDataObject** ppIDataObject )
@@ -529,7 +529,7 @@ bool CMtaOleClipboard::onRegisterClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncCli
 }
 
 
-//
+
 
 
 LRESULT CMtaOleClipboard::onSetClipboard( IDataObject* pIDataObject )
@@ -538,7 +538,7 @@ LRESULT CMtaOleClipboard::onSetClipboard( IDataObject* pIDataObject )
 }
 
 
-//
+
 
 
 LRESULT CMtaOleClipboard::onGetClipboard( LPSTREAM* ppStream )
@@ -735,7 +735,7 @@ LRESULT CALLBACK CMtaOleClipboard::mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARA
 }
 
 
-//
+
 
 
 void CMtaOleClipboard::createMtaOleReqWnd( )
@@ -768,7 +768,7 @@ void CMtaOleClipboard::createMtaOleReqWnd( )
 }
 
 
-//
+
 
 
 unsigned int CMtaOleClipboard::run( )
@@ -804,7 +804,7 @@ unsigned int CMtaOleClipboard::run( )
 }
 
 
-//
+
 
 
 unsigned int WINAPI CMtaOleClipboard::oleThreadProc( LPVOID pParam )
@@ -817,7 +817,7 @@ unsigned int WINAPI CMtaOleClipboard::oleThreadProc( LPVOID pParam )
 }
 
 
-//
+
 
 
 unsigned int WINAPI CMtaOleClipboard::clipboardChangedNotifierThreadProc( LPVOID pParam )
@@ -861,7 +861,7 @@ unsigned int WINAPI CMtaOleClipboard::clipboardChangedNotifierThreadProc( LPVOID
 }
 
 
-//
+
 
 
 bool CMtaOleClipboard::WaitForThreadReady( ) const

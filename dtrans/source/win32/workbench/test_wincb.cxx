@@ -79,7 +79,7 @@ Reference< XTransferable > rXTransfRead;
 HANDLE  g_hEvtThreadWakeup;
 
 
-//
+
 
 
 class CClipboardListener : public WeakImplHelper1 < XClipboardListener >
@@ -110,7 +110,7 @@ void SAL_CALL CClipboardListener::changedContents( const ClipboardEvent& event )
 }
 
 
-//
+
 
 
 class CTransferable : public WeakImplHelper2< XClipboardOwner, XTransferable >
