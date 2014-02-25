@@ -1509,7 +1509,8 @@ void  SwXTextViewCursor::setPropertyValue( const OUString& rPropertyName, const 
 }
 
 Any  SwXTextViewCursor::getPropertyValue( const OUString& rPropertyName )
-                throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+    throw (UnknownPropertyException, WrappedTargetException,
+           RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     Any aRet;
