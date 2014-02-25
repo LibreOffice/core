@@ -345,14 +345,14 @@ void RTFDocumentImpl::setIgnoreFirst(OUString& rIgnoreFirst)
     m_aIgnoreFirst = rIgnoreFirst;
 }
 
-void RTFDocumentImpl::resolveSubstream(sal_uInt32 nPos, Id nId)
+void RTFDocumentImpl::resolveSubstream(sal_Size nPos, Id nId)
 {
     OUString aStr;
     resolveSubstream(nPos, nId, aStr);
 }
-void RTFDocumentImpl::resolveSubstream(sal_uInt32 nPos, Id nId, OUString& rIgnoreFirst)
+void RTFDocumentImpl::resolveSubstream(sal_Size nPos, Id nId, OUString& rIgnoreFirst)
 {
-    sal_uInt32 nCurrent = Strm().Tell();
+    sal_Size nCurrent = Strm().Tell();
     // Seek to header position, parse, then seek back.
     RTFDocumentImpl::Pointer_t pImpl(new RTFDocumentImpl(m_xContext, m_xInputStream, m_xDstDoc, m_xFrame, m_xStatusIndicator));
     pImpl->setSuperstream(this);
@@ -539,7 +539,7 @@ void RTFDocumentImpl::sectBreak(bool bFinal = false)
     }
     while (!m_nHeaderFooterPositions.empty())
     {
-        std::pair<Id, sal_uInt32> aPair = m_nHeaderFooterPositions.front();
+        std::pair<Id, sal_Size> aPair = m_nHeaderFooterPositions.front();
         m_nHeaderFooterPositions.pop();
         resolveSubstream(aPair.second, aPair.first);
     }
@@ -575,7 +575,7 @@ void RTFDocumentImpl::sectBreak(bool bFinal = false)
     m_bNeedSect = false;
 }
 
-void RTFDocumentImpl::seek(sal_uInt32 nPos)
+void RTFDocumentImpl::seek(sal_Size nPos)
 {
     Strm().Seek(nPos);
 }
@@ -1278,7 +1278,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_FLDINST:
             {
                 // Look for the field type
-                sal_Int32 nPos = Strm().Tell();
+                sal_Size nPos = Strm().Tell();
                 OStringBuffer aBuf;
                 char ch = 0;
                 bool bFoundCode = false;
@@ -1385,7 +1385,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             if (!m_pSuperstream)
             {
                 Id nId = 0;
-                sal_uInt32 nPos = m_nGroupStartPos - 1;
+                sal_Size nPos = m_nGroupStartPos - 1;
                 switch (nKeyword)
                 {
                     case RTF_HEADER: nId = NS_ooxml::LN_headerr; break;

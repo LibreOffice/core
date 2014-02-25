@@ -1076,8 +1076,8 @@ void PluginInputStream::writeBytes( const Sequence<sal_Int8>& Buffer ) throw()
     if( m_nMode == -1 || !m_pPlugin->getPluginComm() )
         return;
 
-    sal_uInt32 nPos = m_aFileStream.Tell();
-    sal_uInt32 nBytes = 0;
+    sal_Size nPos = m_aFileStream.Tell();
+    sal_Size nBytes = 0;
     while( m_nMode != NP_ASFILEONLY &&
            m_nWritePos < nPos &&
            (nBytes = m_pPlugin->getPluginComm()-> NPP_WriteReady(

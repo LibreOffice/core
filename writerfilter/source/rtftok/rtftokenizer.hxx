@@ -48,7 +48,7 @@ namespace writerfilter {
                 /// Same as the size of the importer's states, except that this can be negative for invalid input.
                 int m_nGroup;
                 sal_Int32 m_nLineNumber;
-                sal_Int32 m_nLineStartPos;
+                sal_Size m_nLineStartPos;
                 sal_Size m_nGroupStart;
         };
     } // namespace rtftok

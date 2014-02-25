@@ -863,7 +863,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
 
                 if (aLine.indexOf(';') == -1)
                 {
-                    const sal_uInt32 nImgListStartPos = aIStm.Tell();
+                    const sal_Size nImgListStartPos = aIStm.Tell();
 
                     do
                     {
@@ -909,7 +909,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
                         }
                     }
 
-                    const sal_uInt32 nImgListEndPos = aIStm.Tell();
+                    const sal_Size nImgListEndPos = aIStm.Tell();
                     aIStm.Seek( nImgListStartPos );
                     while( aIStm.Tell() < nImgListEndPos )
                     {

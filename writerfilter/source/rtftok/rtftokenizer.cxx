@@ -67,9 +67,9 @@ int RTFTokenizer::resolveParse()
         static ResMgr* pResMgr = ResMgr::CreateResMgr("svx", Application::GetSettings().GetUILanguageTag());
         OUString sDocLoad(ResId(RID_SVXSTR_DOC_LOAD, *pResMgr).toString());
 
-        sal_uInt32 nCurrentPos = Strm().Tell();
+        sal_Size nCurrentPos = Strm().Tell();
         Strm().Seek(STREAM_SEEK_TO_END);
-        sal_uInt32 nEndPos = Strm().Tell();
+        sal_Size nEndPos = Strm().Tell();
         Strm().Seek(nCurrentPos);
         m_xStatusIndicator->start(sDocLoad, nEndPos);
         nPercentSize = nEndPos / 100;
@@ -81,7 +81,7 @@ int RTFTokenizer::resolveParse()
     {
         //SAL_INFO("writerfilter", OSL_THIS_FUNC << ": parsing character '" << ch << "'");
 
-        sal_uInt32 nCurrentPos = Strm().Tell();
+        sal_Size nCurrentPos = Strm().Tell();
         if (m_xStatusIndicator.is() && nCurrentPos > (nLastPos + nPercentSize))
             m_xStatusIndicator->setValue(nLastPos = nCurrentPos);
 

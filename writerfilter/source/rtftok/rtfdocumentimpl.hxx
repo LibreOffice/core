@@ -318,7 +318,7 @@ namespace writerfilter {
                 void setAuthor(OUString& rAuthor);
                 void setAuthorInitials(OUString& rAuthorInitials);
                 void setIgnoreFirst(OUString& rIgnoreFirst);
-                void seek(sal_uInt32 nPos);
+                void seek(sal_Size nPos);
                 uno::Reference<lang::XMultiServiceFactory> getModelFactory();
                 bool isInBackground();
                 void setDestinationText(OUString& rString);
@@ -348,8 +348,8 @@ namespace writerfilter {
                 RTFSprms mergeAttributes();
                 void resetSprms();
                 void resetAttributes();
-                void resolveSubstream(sal_uInt32 nPos, Id nId);
-                void resolveSubstream(sal_uInt32 nPos, Id nId, OUString& rIgnoreFirst);
+                void resolveSubstream(sal_Size nPos, Id nId);
+                void resolveSubstream(sal_Size nPos, Id nId, OUString& rIgnoreFirst);
 
                 void text(OUString& rString);
                 // Sends a single character to dmapper, taking care of buffering.
@@ -421,8 +421,8 @@ namespace writerfilter {
                 RTFDocumentImpl *m_pSuperstream;
                 /// Type of the stream: header, footer, footnote, etc.
                 Id m_nStreamType;
-                std::queue< std::pair<Id, sal_uInt32> > m_nHeaderFooterPositions;
-                sal_uInt32 m_nGroupStartPos;
+                std::queue< std::pair<Id, sal_Size> > m_nHeaderFooterPositions;
+                sal_Size m_nGroupStartPos;
                 /// Ignore the first occurrence of this text.
                 OUString m_aIgnoreFirst;
                 /// Bookmark name <-> index map.

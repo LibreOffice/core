@@ -155,7 +155,7 @@ void OHTMLReader::NextToken( int nToken )
             case HTML_THEAD_ON:
             case HTML_TBODY_ON:
                 {
-                    sal_uInt32 nTell = rInput.Tell(); // perhaps alters position of the stream
+                    sal_Size nTell = rInput.Tell(); // perhaps alters position of the stream
                     if ( !m_xTable.is() )
                     {// use first line as header
                         m_bError = !CreateTable(nToken);

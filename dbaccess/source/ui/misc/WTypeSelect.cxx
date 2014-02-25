@@ -433,7 +433,7 @@ void OWizTypeSelect::fillColumnList(sal_uInt32 nRows)
 {
     if(m_pParserStream)
     {
-        sal_uInt32 nTell = m_pParserStream->Tell(); // might change seek position of stream
+        sal_Size nTell = m_pParserStream->Tell(); // might change seek position of stream
 
         SvParser *pReader = createReader(nRows);
         if(pReader)
