@@ -2652,7 +2652,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
         sal_Int32 nRenderer,
         const uno::Any& rSelection,
         const uno::Sequence< beans::PropertyValue >& rxOptions )
-    throw (IllegalArgumentException, RuntimeException)
+    throw (IllegalArgumentException, RuntimeException,
+           std::exception)
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
