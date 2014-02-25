@@ -735,9 +735,9 @@ void LngSvcMgr::UpdateAll()
         OUString aLastFoundList( OUString::createFromAscii( apLastFoundLists[k] ) );
         sal_Int32 i;
 
-        //
+
         // remove configured but not available language/services entries
-        //
+
         Sequence< OUString > aNodeNames( aCfg.GetNodeNames( aActiveList ) );   // list of configured locales
         sal_Int32 nNodeNames = aNodeNames.getLength();
         const OUString *pNodeName = aNodeNames.getConstArray();
@@ -752,11 +752,11 @@ void LngSvcMgr::UpdateAll()
             aCurSvcs[k][ pNodeName[i] ] = aCfgSvcs;
         }
 
-        //
+
         // add new available language/service entries
         // and
         // set last found services to currently available ones
-        //
+
         Sequence< Locale > aAvailLocales( getAvailableLocales(aService) );
         sal_Int32 nAvailLocales = aAvailLocales.getLength();
         const Locale *pAvailLocale = aAvailLocales.getConstArray();
@@ -782,9 +782,9 @@ void LngSvcMgr::UpdateAll()
         }
     }
 
-    //
+
     // write new data back to configuration
-    //
+
     for (int k = 0;  k < nNumServices;  ++k)
     {
         for (int i = 0;  i < 2;  ++i)
