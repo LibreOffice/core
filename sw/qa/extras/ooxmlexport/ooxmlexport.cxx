@@ -3570,6 +3570,7 @@ DECLARE_OOXMLEXPORT_TEST(testNumberedLists_StartingWithZero, "FDO74105.docx")
 
     // Check that we do _not_ export w:start for <w:lvl w:ilvl="0">.
     assertXPath(pXmlDoc, "w:numbering/w:abstractNum[1]/w:lvl[1]/w:start", 0);
+}
 
 DECLARE_OOXMLEXPORT_TEST(testW14TextEffects_TextOutline, "TextEffects_TextOutline.docx")
 {
