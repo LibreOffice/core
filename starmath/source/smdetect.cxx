@@ -326,12 +326,12 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
                         // 200 should be enough for the XML
                         // version, encoding and !DOCTYPE
                         // stuff I hope?
-                        const sal_uInt16 nSize = 200;
-                        sal_Char aBuffer[nSize+1];
-                        aBuffer[nSize] = 0;
+                        const sal_uInt16 nBufferSize = 200;
+                        sal_Char aBuffer[nBufferSize+1];
+                        aBuffer[nBufferSize] = 0;
                         pStrm->Seek( STREAM_SEEK_TO_BEGIN );
                         pStrm->StartReadingUnicodeText(RTL_TEXTENCODING_DONTKNOW); // avoid BOM marker
-                        sal_uLong nBytesRead = pStrm->Read( aBuffer, nSize );
+                        sal_uLong nBytesRead = pStrm->Read( aBuffer, nBufferSize );
                         if (nBytesRead >= 6)
                         {
                             bool bIsMathType = false;
