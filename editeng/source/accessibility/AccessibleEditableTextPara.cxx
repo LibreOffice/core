@@ -19,9 +19,9 @@
 
 
 
-//
+
 // Global header
-//
+
 
 
 #include <limits.h>
@@ -56,9 +56,9 @@
 #include <svl/intitem.hxx>
 
 
-//
+
 // Project-local header
-//
+
 
 
 #include <com/sun/star/beans/PropertyState.hpp>
@@ -79,9 +79,9 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::accessibility;
 
 
-//
+
 // AccessibleEditableTextPara implementation
-//
+
 
 
 namespace accessibility
@@ -1346,7 +1346,7 @@ namespace accessibility
             pNewValues[i] = pPairs[pIndices[i]];
         }
         delete[] pIndices;
-        //
+
         return aNewValues;
         }
         return aRes;

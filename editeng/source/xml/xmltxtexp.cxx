@@ -58,11 +58,11 @@ using namespace com::sun::star::xml::sax;
 using namespace ::rtl;
 using namespace cppu;
 
-///////////////////////////////////////////////////////////////////////
+
 
 class SvxEditEngineSourceImpl;
 
-///////////////////////////////////////////////////////////////////////
+
 
 class SvxEditEngineSourceImpl
 {
@@ -83,7 +83,7 @@ public:
     SvxTextForwarder*       GetTextForwarder();
 };
 
-///////////////////////////////////////////////////////////////////////
+
 
 
 
@@ -340,7 +340,7 @@ void SAL_CALL SvxSimpleUnoModel::removeEventListener( const ::com::sun::star::un
 {
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 class SvxXMLTextExportComponent : public SvXMLExport
 {
@@ -364,7 +364,7 @@ private:
     ESelection maSelection;
 };
 
-///////////////////////////////////////////////////////////////////////
+
 
 SvxXMLTextExportComponent::SvxXMLTextExportComponent(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,

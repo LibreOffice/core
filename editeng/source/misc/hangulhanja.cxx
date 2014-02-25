@@ -44,10 +44,10 @@
 
 #define HHC HangulHanjaConversion
 
-//.............................................................................
+
 namespace editeng
 {
-//.............................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::i18n;

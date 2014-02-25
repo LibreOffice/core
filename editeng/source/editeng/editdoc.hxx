@@ -128,9 +128,9 @@ public:
     void AppendCharAttrib(EditCharAttrib* pNew);
 };
 
-//  ----------------------------------------------------------------------
+
 //  class SvxColorList
-//  ----------------------------------------------------------------------
+
 
 class SvxColorList
 {
@@ -148,9 +148,9 @@ public:
     SvxColorItem* GetObject( sal_Int32 nIndex );
 };
 
-//  ----------------------------------------------------------------------
+
 //  class ItemList
-//  ----------------------------------------------------------------------
+
 
 class ItemList
 {
@@ -168,9 +168,9 @@ public:
     void                Clear() { aItemPool.clear(); };
 };
 
-// -------------------------------------------------------------------------
+
 // class ContentAttribs
-// -------------------------------------------------------------------------
+
 class ContentAttribs
 {
 private:
@@ -193,9 +193,9 @@ public:
     bool HasItem( sal_uInt16 nWhich ) const;
 };
 
-// -------------------------------------------------------------------------
+
 // class CharAttribList
-// -------------------------------------------------------------------------
+
 class CharAttribList
 {
 public:
@@ -250,9 +250,9 @@ public:
 #endif
 };
 
-// -------------------------------------------------------------------------
+
 // class ContentNode
-// -------------------------------------------------------------------------
+
 class ContentNode : boost::noncopyable
 {
 private:
@@ -306,9 +306,9 @@ public:
     sal_Unicode GetChar(sal_Int32 nPos) const;
 };
 
-// -------------------------------------------------------------------------
+
 // class EditPaM
-// -------------------------------------------------------------------------
+
 class EditPaM
 {
 private:
@@ -349,9 +349,9 @@ public:
 #define CHAR_PUNCTUATIONLEFT   0x02
 #define CHAR_PUNCTUATIONRIGHT  0x04
 
-// -------------------------------------------------------------------------
+
 // struct ExtraPortionInfos
-// -------------------------------------------------------------------------
+
 struct ExtraPortionInfo
 {
     long    nOrgWidth;
@@ -376,9 +376,9 @@ struct ExtraPortionInfo
 };
 
 
-// -------------------------------------------------------------------------
+
 // class TextPortion
-// -------------------------------------------------------------------------
+
 class TextPortion
 {
 private:
@@ -444,9 +444,9 @@ public:
     void                SetExtraInfos( ExtraPortionInfo* p ) { delete pExtraInfos; pExtraInfos = p; }
 };
 
-// -------------------------------------------------------------------------
+
 // class TextPortionList
-// -------------------------------------------------------------------------
+
 class TextPortionList
 {
     typedef boost::ptr_vector<TextPortion> PortionsType;
@@ -473,9 +473,9 @@ public:
 
 class ParaPortion;
 
-// ------------------------------------------------------------------------
+
 // class EditLine
-// -------------------------------------------------------------------------
+
 class EditLine
 {
 public:
@@ -561,9 +561,9 @@ public:
 };
 
 
-// -------------------------------------------------------------------------
+
 // class LineList
-// -------------------------------------------------------------------------
+
 class EditLineList
 {
     typedef boost::ptr_vector<EditLine> LinesType;
@@ -584,9 +584,9 @@ public:
     void Insert(sal_Int32 nPos, EditLine* p);
 };
 
-// -------------------------------------------------------------------------
+
 // class ParaPortion
-// -------------------------------------------------------------------------
+
 class ParaPortion
 {
     friend class ImpEditEngine; // to adjust the height
@@ -655,9 +655,9 @@ public:
 #endif
 };
 
-// -------------------------------------------------------------------------
+
 // class ParaPortionList
-// -------------------------------------------------------------------------
+
 class ParaPortionList
 {
     mutable sal_Int32 nLastCache;
@@ -689,9 +689,9 @@ public:
 #endif
 };
 
-// -------------------------------------------------------------------------
+
 // class EditSelection
-// -------------------------------------------------------------------------
+
 class EditSelection
 {
 private:
@@ -723,9 +723,9 @@ public:
     sal_Bool            operator != ( const EditSelection& r ) const { return !( r == *this ); }
 };
 
-// -------------------------------------------------------------------------
+
 // class DeletedNodeInfo
-// -------------------------------------------------------------------------
+
 class DeletedNodeInfo
 {
 private:
@@ -743,9 +743,9 @@ public:
     sal_Int32   GetPosition() const { return nInvalidParagraph; }
 };
 
-// -------------------------------------------------------------------------
+
 // class EditDoc
-// -------------------------------------------------------------------------
+
 class EditDoc
 {
 private:
@@ -841,9 +841,9 @@ inline EditCharAttrib* GetAttrib(CharAttribList::AttribsType& rAttribs, sal_Int3
 
 bool CheckOrderedList(const CharAttribList::AttribsType& rAttribs, bool bStart);
 
-// -------------------------------------------------------------------------
+
 // class EditEngineItemPool
-// -------------------------------------------------------------------------
+
 class EditEngineItemPool : public SfxItemPool
 {
 public:
