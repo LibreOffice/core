@@ -530,7 +530,8 @@ ScInputHandler::ScInputHandler()
         pEditDefaults( NULL ),
         pLastState( NULL ),
         pDelayTimer( NULL ),
-        pRangeFindList( NULL )
+        pRangeFindList( NULL ),
+        maFormulaChar()
 {
     //  The InputHandler is constructed with the view, so SfxViewShell::Current
     //  doesn't have the right view yet. pActiveViewSh is updated in NotifyChange.
@@ -719,36 +720,20 @@ void ScInputHandler::GetFormulaData()
         else
             pFormulaDataPara = new ScTypedCaseStrSet;
 
-        // MRU functions from the functions autopilot
-        // Just like in ScPosWnd::FillFunctions (inputwin.cxx)
-        const ScAppOptions& rOpt = SC_MOD()->GetAppOptions();
-        sal_uInt16 nMRUCount = rOpt.GetLRUFuncListCount();
-        const sal_uInt16* pMRUList = rOpt.GetLRUFuncList();
         const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
         sal_uLong nListCount = pFuncList->GetCount();
-        if (pMRUList)
-        {
-            for (sal_uInt16 i=0; i<nMRUCount; i++)
-            {
-                sal_uInt16 nId = pMRUList[i];
-                for (sal_uLong j=0; j<nListCount; j++)
-                {
-                    const ScFuncDesc* pDesc = pFuncList->GetFunction( j );
-                    if ( pDesc->nFIndex == nId && pDesc->pFuncName )
-                    {
-                        OUString aEntry = *pDesc->pFuncName;
-                        aEntry += "()";
-                        pFormulaData->insert(ScTypedStrData(aEntry, 0.0, ScTypedStrData::Standard));
-                        break; // Stop searching
-                    }
-                }
-            }
-        }
         for(sal_uLong i=0;i<nListCount;i++)
         {
             const ScFuncDesc* pDesc = pFuncList->GetFunction( i );
             if ( pDesc->pFuncName )
             {
+                pFormulaData->insert(ScTypedStrData(*pDesc->pFuncName, 0.0, ScTypedStrData::Standard));
+                // fdo75264 fill maFormulaChar with all characters used in formula names
+                for ( sal_Int32 j = 0; j < pDesc->pFuncName->getLength(); j++ )
+                {
+                    sal_Unicode c = pDesc->pFuncName->getStr()[ j ];
+                    maFormulaChar.insert( c );
+                }
                 pDesc->initArgumentInfo();
                 OUString aEntry = pDesc->getSignature();
                 pFormulaDataPara->insert(ScTypedStrData(aEntry, 0.0, ScTypedStrData::Standard));
@@ -1025,6 +1010,35 @@ void ScInputHandler::ShowTipBelow( const OUString& rText )
     }
 }
 
+bool ScInputHandler::GetFuncName( OUString& aStart, OUString& aResult )
+{
+    if ( aStart.isEmpty() )
+        return false;
+
+    aStart = ScGlobal::pCharClass->uppercase( aStart );
+    sal_Int32 nPos = aStart.getLength() - 1;
+    sal_Unicode c = aStart[ nPos ];
+    // fdo75264 use maFormulaChar to check if characters are used in function names
+    ::std::set< sal_Unicode >::const_iterator p = maFormulaChar.find( c );
+    if ( p == maFormulaChar.end() )
+        return false; // last character is not part of any function name, quit
+
+    ::std::vector<sal_Unicode> aTemp;
+    while ( nPos >= 0 && p != maFormulaChar.end() )
+    {
+        aTemp.push_back( c );
+        c = aStart[ --nPos ];
+        p = maFormulaChar.find( c );
+    }
+
+    ::std::vector<sal_Unicode>::reverse_iterator rIt = aTemp.rbegin();
+    aResult = OUString( *rIt++ );
+    while ( rIt != aTemp.rend() )
+        aResult += OUString( *rIt++ );
+
+    return true;
+}
+
 void ScInputHandler::UseFormulaData()
 {
     EditView* pActiveView = pTopView ? pTopView : pTableView;
@@ -1058,20 +1072,26 @@ void ScInputHandler::UseFormulaData()
             sal_uInt16      nArgs;
             bool bFound = false;
 
-            OUString aText = pEngine->GetWord( 0, aSel.nEndPos-1 );
-            if (!aText.isEmpty())
+            OUString aText;
+            if ( GetFuncName( aFormula, aText ) )
             {
+                // function name is incomplete:
+                // show first matching function name as tip above cell
                 OUString aNew;
                 miAutoPosFormula = pFormulaData->end();
                 miAutoPosFormula = findText(*pFormulaData, miAutoPosFormula, aText, aNew, false);
                 if (miAutoPosFormula != pFormulaData->end())
                 {
+                    aNew += "()";
                     ShowTip( aNew );
                     aAutoSearch = aText;
                 }
+                return;
             }
             FormulaHelper aHelper(ScGlobal::GetStarCalcFunctionMgr());
 
+            // function name is complete:
+            // show tip below the cell with function name and arguments of function
             while( !bFound )
             {
                 aFormula += ")";
@@ -1079,10 +1099,6 @@ void ScInputHandler::UseFormulaData()
                 if( nLeftParentPos == -1 )
                     break;
 
-                // nLeftParentPos can be 0 if a parenthesis is inserted before the formula
-                sal_Unicode c = ( nLeftParentPos > 0 ) ? aFormula[ nLeftParentPos-1 ] : 0;
-                if( !(comphelper::string::isalphaAscii(c)) )
-                    continue;
                 nNextFStart = aHelper.GetFunctionStart( aFormula, nLeftParentPos, true);
                 if( aHelper.GetNextFunc( aFormula, false, nNextFStart, NULL, &ppFDesc, &aArgs ) )
                 {
