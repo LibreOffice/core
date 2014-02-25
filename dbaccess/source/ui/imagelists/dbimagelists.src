@@ -22,7 +22,7 @@
 
 #define MASKCOLOR MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; }
 
-//-------------------------------------------------------------------------
+
 #define IL_TOOL_2 \
 \
     IdList = {\
@@ -75,10 +75,10 @@ Image IMG_TABLEFOLDER_TREE_L
     MASKCOLOR;
 };
 
-//========================================================================
+
 //= database object icons
 
-//------------------------------------------------------------------------
+
 // the whole database
 
 Image DATABASE_TREE_ICON
@@ -87,7 +87,7 @@ Image DATABASE_TREE_ICON
     MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
 };
 
-//------------------------------------------------------------------------
+
 // tables and table folders
 
 Image TABLE_TREE_ICON
@@ -102,7 +102,7 @@ Image TABLEFOLDER_TREE_ICON
     MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
 };
 
-//------------------------------------------------------------------------
+
 // views
 
 Image VIEW_TREE_ICON
@@ -111,7 +111,7 @@ Image VIEW_TREE_ICON
     MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
 };
 
-//------------------------------------------------------------------------
+
 // queries and query folders
 
 Image QUERY_TREE_ICON
@@ -126,7 +126,7 @@ Image QUERYFOLDER_TREE_ICON
     MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
 };
 
-//------------------------------------------------------------------------
+
 // forms and form folders
 
 Image FORM_TREE_ICON
@@ -141,7 +141,7 @@ Image FORMFOLDER_TREE_ICON
     MASKCOLOR;
 };
 
-//------------------------------------------------------------------------
+
 // reports and report folders
 
 Image REPORT_TREE_ICON

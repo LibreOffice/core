@@ -430,9 +430,9 @@ Reference< XResultSet > SAL_CALL OStatementBase::getGeneratedValues(  ) throw (S
     return Reference< XResultSet >();
 }
 
-//************************************************************
+
 //  OStatement
-//************************************************************
+
 OStatement::OStatement( const Reference< XConnection >& _xConn, const Reference< XInterface > & _xStatement )
     :OStatementBase( _xConn, _xStatement )
     ,m_bAttemptedComposerCreation( false )

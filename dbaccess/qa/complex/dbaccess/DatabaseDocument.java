@@ -82,7 +82,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-// ------------------------------------------
+
 
 public class DatabaseDocument extends TestCase implements com.sun.star.document.XDocumentEventListener
 {
@@ -98,7 +98,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
     private static short STATE_ON_LOAD_RECEIVED = 3;
     private short m_loadDocState = STATE_NOT_STARTED;
 
-    // ========================================================================================================
+
     /** a helper class which can be used by the Basic scripts in our test documents
      *  to notify us of events in this document
      */
@@ -132,13 +132,13 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         }
     };
 
-    // ========================================================================================================
+
     private static String getCallbackComponentServiceName()
     {
         return "org.openoffice.complex.dbaccess.EventCallback";
     }
 
-    // ========================================================================================================
+
     /** a factory for a CallbackComponent
      */
     private class CallbackComponentFactory implements XSingleComponentFactory, XServiceInfo, XComponent
@@ -200,7 +200,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         }
     };
 
-    // ========================================================================================================
+
     private class MacroExecutionApprove implements XInteractionHandler
     {
 
@@ -244,8 +244,8 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         }
     };
 
-    // ========================================================================================================
-    // --------------------------------------------------------------------------------------------------------
+
+
     @Before
     public void before() throws java.lang.Exception
     {
@@ -273,7 +273,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         }
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     @After
     public void after() throws java.lang.Exception
     {
@@ -298,7 +298,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         super.after();
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     private static class UnoMethodDescriptor
     {
 
@@ -312,7 +312,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         }
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     private void impl_checkDocumentInitState(Object _document, boolean _isInitialized)
     {
         // things you cannot do with an uninitialized document:
@@ -335,7 +335,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         }
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     private XModel impl_createDocument() throws Exception
     {
         final XModel databaseDoc = UnoRuntime.queryInterface(XModel.class, getMSF().createInstance("com.sun.star.sdb.OfficeDatabaseDocument"));
@@ -346,14 +346,14 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         return databaseDoc;
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     private void impl_closeDocument(XModel _databaseDoc) throws CloseVetoException, IOException, Exception
     {
         final XCloseable closeDoc = UnoRuntime.queryInterface(XCloseable.class, _databaseDoc);
         closeDoc.close(true);
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     private XModel impl_createEmptyEmbeddedHSQLDocument() throws Exception, IOException
     {
         final XModel databaseDoc = UnoRuntime.queryInterface(XModel.class, getMSF().createInstance("com.sun.star.sdb.OfficeDatabaseDocument"));
@@ -388,7 +388,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         return databaseDoc;
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     @Test
     public void testLoadable() throws Exception, IOException
     {
@@ -397,12 +397,12 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
 
         // there's three methods how you can initialize a database document:
 
-        // ....................................................................
+
         // 1. XStorable::storeAsURL
         //      (this is for compatibility reasons, to not break existing code)
         // this test is already made in impl_createEmptyEmbeddedHSQLDocument
 
-        // ....................................................................
+
         // 2. XLoadable::load
         databaseDoc = UnoRuntime.queryInterface(XModel.class, getMSF().createInstance("com.sun.star.sdb.OfficeDatabaseDocument"));
         documentURL = copyToTempFile(documentURL);
@@ -423,7 +423,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         assureException( databaseDoc, XLoadable.class, "load", new Object[] { new PropertyValue[0] },
             DoubleInitializationException.class );
 
-        // ....................................................................
+
         // 3. XLoadable::initNew
         impl_closeDocument(databaseDoc);
         databaseDoc = impl_createDocument();
@@ -439,7 +439,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
             DoubleInitializationException.class );
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     private PropertyValue[] impl_getMarkerLoadArgs()
     {
         return new PropertyValue[]
@@ -449,7 +449,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
                 };
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     private boolean impl_hasMarker( final PropertyValue[] _args )
     {
         for ( int i=0; i<_args.length; ++i )
@@ -462,7 +462,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         return false;
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     private PropertyValue[] impl_getDefaultLoadArgs()
     {
         return new PropertyValue[]
@@ -471,7 +471,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
                 };
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     private PropertyValue[] impl_getMacroExecLoadArgs()
     {
         return new PropertyValue[]
@@ -482,7 +482,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
                 };
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     private int impl_setMacroSecurityLevel(int _level) throws Exception
     {
         final XMultiServiceFactory configProvider = theDefaultProvider.get(
@@ -503,14 +503,14 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         return oldValue;
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     private XModel impl_loadDocument( final String _documentURL, final PropertyValue[] _loadArgs ) throws Exception
     {
         final XComponentLoader loader = UnoRuntime.queryInterface(XComponentLoader.class, getMSF().createInstance("com.sun.star.frame.Desktop"));
         return UnoRuntime.queryInterface(XModel.class, loader.loadComponentFromURL(_documentURL, _BLANK, 0, _loadArgs));
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     private void impl_storeDocument( final XModel _document ) throws Exception, IOException
     {
         // store the document
@@ -520,7 +520,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
 
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     private XModel impl_createDocWithMacro( final String _libName, final String _moduleName, final String _code ) throws Exception, IOException
     {
         // create an empty document
@@ -535,7 +535,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         return databaseDoc;
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     /** tests various aspects of database document "revenants"
      *
      *  Well, I do not really have a good term for this ... The point is, database documents are in real
@@ -604,7 +604,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         impl_closeDocument( databaseDoc );
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     @Test
     public void testDocumentEvents() throws Exception, IOException
     {
@@ -673,7 +673,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         impl_closeDocument(databaseDoc);
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     @Test
     public void testGlobalEvents() throws Exception, IOException
     {
@@ -817,7 +817,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         impl_closeDocument(otherDoc);
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     private URL impl_getURL(String _completeURL) throws Exception
     {
         final URL[] url =
@@ -830,7 +830,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         return url[0];
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     private void impl_raise(XModel _document)
     {
         final XFrame frame = _document.getCurrentController().getFrame();
@@ -838,7 +838,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         topWindow.toFront();
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     private void impl_startObservingEvents(String _context)
     {
         System.out.println(" " + _context + " {");
@@ -852,7 +852,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         }
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     private void impl_stopObservingEvents(ArrayList<String> _actualEvents, String[] _expectedEvents, String _context)
     {
         try
@@ -898,13 +898,13 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         }
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     int impl_waitForEvent(ArrayList<String> _eventQueue, String _expectedEvent, int _maxMilliseconds)
     {
         return impl_waitForEvent(_eventQueue, _expectedEvent, _maxMilliseconds, 0);
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     int impl_waitForEvent(ArrayList<String> _eventQueue, String _expectedEvent, int _maxMilliseconds, int _firstQueueElementToCheck)
     {
         synchronized (_eventQueue)
@@ -938,7 +938,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         return -1;
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     void onDocumentEvent(DocumentEvent _Event)
     {
         if ("OnTitleChanged".equals(_Event.EventName))
@@ -967,7 +967,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         System.out.println("  document event: " + _Event.EventName);
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     public void documentEventOccured(DocumentEvent _Event)
     {
         if ("OnTitleChanged".equals(_Event.EventName))
@@ -985,7 +985,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         System.out.println("  global event: " + _Event.EventName);
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     public void disposing(EventObject _Event)
     {
         // not interested in

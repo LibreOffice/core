@@ -22,10 +22,10 @@
 
 #include <svl/solar.hrc>
 
-//------------------------------------------------------------------------------
+
 #define RID_SDBT_STRINGS_START                  RID_DBACCESS_START
 
-//------------------------------------------------------------------------------
+
 //- String-IDs
 #define STR_QUERY_AND_TABLE_DISTINCT_NAMES  RID_SDBT_STRINGS_START +  0
 #define STR_BASENAME_TABLE                  RID_SDBT_STRINGS_START +  1

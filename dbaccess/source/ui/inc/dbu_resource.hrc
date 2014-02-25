@@ -73,7 +73,7 @@
 #error Resource-Id Ueberlauf in #file, #line
 #endif
 
-//========================================================================
+
 // dialog ids
 
 #define DLG_SQLEXCEPTIONCHAIN           RID_DIALOG_START +  3
@@ -93,7 +93,7 @@
 #define DLG_DATABASE_TYPE_CHANGE        RID_DIALOG_START + 28
 #define DLG_DATABASE_WIZARD             RID_DIALOG_START + 29
 #define DLG_TEXT_CONNECTION_SETTINGS    RID_DIALOG_START + 31
-//========================================================================
+
 // tab pages
 
     // FREE
@@ -136,14 +136,14 @@
 #define PAGE_DBWIZARD_USERDEFINED               RID_PAGE_START + 56
 #define PAGE_DBWIZARD_MYSQL_NATIVE              RID_PAGE_START + 57
 
-//========================================================================
+
 // error boxes
 
 #define ERR_QRY_CRITERIA_ON_ASTERISK    RID_ERRORBOX_START +  2
 #define ERR_QRY_ORDERBY_ON_ASTERISK     RID_ERRORBOX_START +  3
 #define ERR_NEED_INDEX_FIELDS           RID_ERRORBOX_START +  8
 
-//========================================================================
+
 // query boxes
 
 #define QUERY_BRW_DELETE_ROWS           RID_QUERYBOX_START +  0
@@ -161,7 +161,7 @@
 #define QUERY_USERADMIN_DELETE_USER     RID_QUERYBOX_START + 12
 #define TABLE_DESIGN_ALL_ROWS_DELETED   RID_QUERYBOX_START + 13
 
-//========================================================================
+
 // images
 
 #define TABLE_TREE_ICON                 RID_IMAGE_START +  0
@@ -189,13 +189,13 @@
 #define FORMFOLDER_TREE_ICON            RID_IMAGE_START + 55
 
 
-//========================================================================
+
 // image lists
 #define IMG_JOINS                       RID_IMAGELIST_START +  0
 #define IMG_INDEX_DLG_SC                RID_IMAGELIST_START +  1
 #define IMG_INDEX_DLG_LC                RID_IMAGELIST_START +  3
 
-//========================================================================
+
 // menus
 
 #define RID_SBA_GRID_COLCTXMENU         RID_MENU_START +  2
@@ -214,13 +214,13 @@
 
 
 
-//========================================================================
+
 // controls
 
 #define RID_DB_TAB_EDITOR               RID_CONTROL_START +  0
 #define RID_MYSQL_NATIVE_SETTINGS       RID_CONTROL_START +  1
 
-//========================================================================
+
 // strings
 #define STR_TBL_TITLE                       RID_STR_GEN_START
 #define STR_ERROR_DURING_CREATION           RID_STR_GEN_START + 1
@@ -270,13 +270,13 @@
 #define STR_TITLE_RENAME                    RID_STR_GEN_START + 45
 #define STR_TITLE_PASTE_AS                  RID_STR_GEN_START + 46
 
-//========================================================================
+
 // untyped resources
 
 #define RSC_CHARSETS                    RID_UNTYPED_START +  2
 #define RSC_QUERY_OBJECT_TYPE           RID_UNTYPED_START +  4
 
-//========================================================================
+
 // various
 
 #define PB_FORMAT                       RID_MISC_START +  0

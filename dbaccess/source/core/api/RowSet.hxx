@@ -454,9 +454,9 @@ namespace dbaccess
     };
 
 
-    //************************************************************
+
     //  ORowSetClone
-    //************************************************************
+
     class ORowSetClone : public comphelper::OBaseMutex
                          ,public OSubComponent
                          ,public ORowSetBase

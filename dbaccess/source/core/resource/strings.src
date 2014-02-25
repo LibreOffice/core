@@ -300,7 +300,7 @@ String RID_STR_UPDATE_FAILED
     Text [ en-US ] = "Current row could not be updated.";
 };
 
-//-------------------------------------------------------------------------
+
 
 String RID_STR_NO_INSERT_PRIVILEGE
 {

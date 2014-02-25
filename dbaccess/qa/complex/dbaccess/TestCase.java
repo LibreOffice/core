@@ -37,28 +37,28 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.openoffice.test.OfficeConnection;
 import static org.junit.Assert.*;
-// ------------------------------------------
+
 
 
 public abstract class TestCase
 {
-    // --------------------------------------------------------------------------------------------------------
+
     protected final XComponentContext getComponentContext()
     {
         return connection.getComponentContext();
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     public void before() throws java.lang.Exception
     {
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     public void after() throws java.lang.Exception
     {
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     /** returns the URL of a temporary file which can be used during the test.
      *
      *  The file will be deleted when the process exits
@@ -74,7 +74,7 @@ public abstract class TestCase
         return FileHelper.getOOoCompatibleFileURL( documentFile.toURI().toURL().toString() );
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     /**
      * copies the file given by URL to a temporary file
      * @return
@@ -92,7 +92,7 @@ public abstract class TestCase
         return FileHelper.getOOoCompatibleFileURL( targetURL );
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     protected final XModel loadDocument( final String _docURL ) throws Exception
     {
         final XComponentLoader loader = UnoRuntime.queryInterface( XComponentLoader.class,
@@ -101,7 +101,7 @@ public abstract class TestCase
             loader.loadComponentFromURL( _docURL, "_blank", 0, new PropertyValue[] {} ) );
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     /** invokes a given method on a given object, and assures a certain exception is caught
      * @param _message
      *          is the message to print when the check fails
@@ -198,7 +198,7 @@ public abstract class TestCase
             _object, _methodName, _argClasses, _methodArgs, _expectedExceptionClass );
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     @SuppressWarnings("unchecked")
     protected void assureException( Object _object, Class _unoInterfaceClass, String _methodName, Object[] _methodArgs,
         Class _expectedExceptionClass )
@@ -207,14 +207,14 @@ public abstract class TestCase
             _methodArgs, _expectedExceptionClass );
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     protected XMultiServiceFactory getMSF()
     {
         final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
         return xMSF1;
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     // setup and close connections
     @BeforeClass
     public static void setUpConnection() throws Exception
@@ -222,7 +222,7 @@ public abstract class TestCase
         connection.setUp();
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
     @AfterClass
     public static void tearDownConnection() throws InterruptedException, com.sun.star.uno.Exception
     {

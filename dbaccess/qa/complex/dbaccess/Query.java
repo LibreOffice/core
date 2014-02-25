@@ -29,14 +29,14 @@ import connectivity.tools.CRMDatabase;
 // ---------- junit imports -----------------
 import org.junit.Test;
 import static org.junit.Assert.*;
-// ------------------------------------------
+
 
 public class Query extends TestCase
 {
 
     connectivity.tools.HsqlDatabase m_database;
 
-    // --------------------------------------------------------------------------------------------------------
+
     private void createTestCase()
     {
         try
@@ -55,12 +55,12 @@ public class Query extends TestCase
         }
     }
 
-    // --------------------------------------------------------------------------------------------------------
+
 //    private XMultiServiceFactory getFactory()
 //    {
 //        return (XMultiServiceFactory)param.getMSF();
 //    }
-    // --------------------------------------------------------------------------------------------------------
+
     @Test
     public void testQueryColumns()
     {
