@@ -71,7 +71,7 @@ String STR_LINES_3D
 {
     Text [ en-US ] = "3D Lines" ;
 };
-//-----------------------------------------------------------------------------
+
 String STR_TYPE_COMBI_COLUMN_LINE
 {
     Text [ en-US ] = "Column and Line" ;
@@ -84,12 +84,12 @@ String STR_LINE_STACKEDCOLUMN
 {
     Text [ en-US ] = "Stacked Columns and Lines" ;
 };
-//-----------------------------------------------------------------------------
+
 String STR_TYPE_NET
 {
     Text [ en-US ] = "Net" ;
 };
-//-----------------------------------------------------------------------------
+
 String STR_TYPE_STOCK
 {
     Text [ en-US ] = "Stock";
@@ -110,7 +110,7 @@ String STR_STOCK_4
 {
     Text [ en-US ] = "Stock Chart 4";
 };
-//-----------------------------------------------------------------------------
+
 String STR_NORMAL
 {
     Text [ en-US ] = "Normal" ;
@@ -132,7 +132,7 @@ String STR_FILLED
 {
     Text [ en-US ] = "Filled" ;
 };
-//-----------------------------------------------------------------------------
+
 String STR_TYPE_BUBBLE
 {
     Text [ en-US ] = "Bubble" ;
@@ -141,7 +141,7 @@ String STR_BUBBLE_1
 {
     Text [ en-US ] = "Bubble Chart" ;
 };
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

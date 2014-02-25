@@ -901,7 +901,7 @@ void ChartTypeTemplate::copyPropertiesFromOldToNewCoordianteSystem(
         comphelper::copyProperties( xSource, xDestination );
 }
 
-// ________
+
 
 Sequence< OUString > ChartTypeTemplate::getSupportedServiceNames_Static()
 {

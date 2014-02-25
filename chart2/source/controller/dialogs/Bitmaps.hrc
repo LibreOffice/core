@@ -25,7 +25,7 @@
 #define STD_MASKCOLOR Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; }
 #endif
 
-//-----------------------------------------------------------------------------
+
 // chart types
 // Images:
 
@@ -44,11 +44,11 @@
 #define IMG_STEP_CENTER_X (RID_APP_START + 13)
 #define IMG_STEP_CENTER_Y (RID_APP_START + 14)
 
-//-----------------------------------------------------------------------------
+
 //Chart Subtypes
 // Bitmaps:
 
-//----------------------
+
 // Column Chart Subtypes
 #define BMP_COLUMNS_2D_1 (RID_APP_START + 1)
 #define BMP_COLUMNS_2D_2 (RID_APP_START + 2)
@@ -74,7 +74,7 @@
 #define BMP_PYRAMID_3D_3 (RID_APP_START + 18)
 #define BMP_PYRAMID_3D_4 (RID_APP_START + 19)
 
-//----------------------
+
 // Bar Chart Subtypes
 
 #define BMP_BARS_2D_1 (RID_APP_START + 20)
@@ -101,7 +101,7 @@
 #define BMP_PYRAMIDQ_3D_3 (RID_APP_START + 37)
 #define BMP_PYRAMIDQ_3D_4 (RID_APP_START + 38)
 
-//----------------------
+
 // Pie and Donut Chart Subtypes
 
 #define BMP_CIRCLES_2D (RID_APP_START + 39)
@@ -113,7 +113,7 @@
 #define BMP_DONUT_3D (RID_APP_START + 45)
 #define BMP_DONUT_3D_EXPLODED (RID_APP_START + 46)
 
-//----------------------
+
 // Points and Lines Chart Subtypes
 
 #define BMP_POINTS_XVALUES (RID_APP_START + 47)
@@ -158,7 +158,7 @@
 #define BMP_LINE_O_STACKED_STEPPED (RID_APP_START + 104)
 #define BMP_LINE3D_STACKED_STEPPED (RID_APP_START + 105)
 
-//----------------------
+
 // Area Chart Subtypes
 
 #define BMP_AREAS_2D (RID_APP_START + 68)
@@ -168,7 +168,7 @@
 #define BMP_AREAS_3D_1 (RID_APP_START + 72)
 #define BMP_AREAS_3D_2 (RID_APP_START + 73)
 
-//----------------------
+
 // Net Chart Subtypes
 
 #define BMP_NET (RID_APP_START + 74)
@@ -180,7 +180,7 @@
 #define BMP_NET_FILL (RID_APP_START + 80)
 #define BMP_NET_FILL_STACK (RID_APP_START + 81)
 
-//----------------------
+
 // Stock Chart Subtypes
 
 #define BMP_STOCK_1 (RID_APP_START + 82)
@@ -188,17 +188,17 @@
 #define BMP_STOCK_3 (RID_APP_START + 84)
 #define BMP_STOCK_4 (RID_APP_START + 85)
 
-//----------------------
+
 // Column + Line Chart Subtypes
 
 #define BMP_COLUMN_LINE         (RID_APP_START + 86)
 #define BMP_COLUMN_LINE_STACKED (RID_APP_START + 87)
 
-//----------------------
+
 // Bubble Chart Subtypes
 #define BMP_BUBBLE_1            (RID_APP_START + 88)
 
-//-----------------------------------------------------------------------------
+
 //further Images:
 
 //SchStatisticTabPage and SchDataStatisticsDlg part 1

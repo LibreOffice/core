@@ -116,7 +116,7 @@ Bitmap BMP_AREAS_3D_2
 {
     File = "areasfull3d_52x60.png" ;
 };
-//---------------------
+
 Bitmap BMP_BARS_2D_1
 {
     File = "bar_52x60.png" ;
@@ -145,7 +145,7 @@ Bitmap BMP_BARS_3D_3
 {
     File = "barpercent3d_52x60.png" ;
 };
-//---------------------
+
 Bitmap BMP_CIRCLES_2D
 {
     File = "pie_52x60.png" ;
@@ -162,7 +162,7 @@ Bitmap BMP_CIRCLES_3D_EXPLODED
 {
     File = "pie3dexploded_52x60.png" ;
 };
-//---------------------
+
 Bitmap BMP_DONUT_2D
 {
     File = "donut_52x60.png" ;
@@ -179,7 +179,7 @@ Bitmap BMP_DONUT_3D_EXPLODED
 {
     File = "donut3dexploded_52x60.png" ;
 };
-//---------------------
+
 Bitmap BMP_COLUMNS_2D_1
 {
     File = "columns_52x60.png" ;
@@ -200,7 +200,7 @@ Bitmap BMP_COLUMN_LINE_STACKED
 {
     File = "columnstackline_52x60.png" ;
 };
-//---------------------
+
 Bitmap BMP_COLUMNS_3D
 {
     File = "columns3ddeep_52x60.png" ;
@@ -217,7 +217,7 @@ Bitmap BMP_COLUMNS_3D_3
 {
     File = "columnpercent3d_52x60.png" ;
 };
-//---------------------
+
 Bitmap BMP_KEGELQ_3D_1
 {
     File = "conehori_52x60.png" ;
@@ -250,7 +250,7 @@ Bitmap BMP_KEGEL_3D_4
 {
     File = "conedeep_52x60.png" ;
 };
-//---------------------
+
 Bitmap BMP_POINTS_XVALUES
 {
     File = "valueaxisdirectpoints_52x60.png" ;
@@ -263,7 +263,7 @@ Bitmap BMP_POINTS_STACKED
 {
     File = "stackdirectpoints_52x60.png" ;
 };
-//---------------------
+
 
 Bitmap BMP_LINE_P_XVALUES
 {
@@ -306,7 +306,7 @@ Bitmap BMP_LINE3D_STACKED
     File = "stackdirect3d_52x60.png" ;
 };
 
-//---------------------
+
 Bitmap BMP_LINE_P_XVALUES_SMOOTH
 {
     File = "valueaxissmoothboth_52x60.png" ;
@@ -343,7 +343,7 @@ Bitmap BMP_LINE3D_STACKED_SMOOTH
 {
     File = "stacksmooth3d_52x60.png" ;
 };
-//---------------------
+
 Bitmap BMP_LINE_P_XVALUES_STEPPED
 {
     File = "valueaxissteppedboth_52x60.png" ;
@@ -380,7 +380,7 @@ Bitmap BMP_LINE3D_STACKED_STEPPED
 {
     File = "stackstepped3d_52x60.png" ;
 };
-//---------------------
+
 Bitmap BMP_NET
 {
     File = "net_52x60.png" ;
@@ -413,7 +413,7 @@ Bitmap BMP_NET_FILL_STACK
 {
     File = "netstackfill_52x60.png" ;
 };
-//---------------------
+
 Bitmap BMP_PYRAMIDQ_3D_1
 {
     File = "pyramindhori_52x60.png" ;
@@ -446,7 +446,7 @@ Bitmap BMP_PYRAMID_3D_4
 {
     File = "pyraminddeep_52x60.png" ;
 };
-//---------------------
+
 Bitmap BMP_ROEHRE_3D_1
 {
     File = "cylinderhori_52x60.png" ;
@@ -463,7 +463,7 @@ Bitmap BMP_ROEHRE_3D_4
 {
     File = "cylinderhorideep_52x60.png" ;
 };
-//---------------------
+
 Bitmap BMP_SAEULE_3D_1
 {
     File = "cylinder_52x60.png" ;
@@ -480,7 +480,7 @@ Bitmap BMP_SAEULE_3D_4
 {
     File = "cylinderdeep_52x60.png" ;
 };
-//---------------------
+
 Bitmap BMP_STOCK_1
 {
     File = "stock_52x60.png" ;
@@ -497,9 +497,9 @@ Bitmap BMP_STOCK_4
 {
     File = "stockcolumnsattach_52x60.png" ;
 };
-//---------------------
-//---------------------
-//---------------------
+
+
+
 //error indicator
 Image BMP_INDICATE_BOTH_VERTI
 {
@@ -544,7 +544,7 @@ Image BMP_INDICATE_LEFT
     };
 };
 
-//---------------------
+
 //regression curves
 Image BMP_REGRESSION_NONE
 {

@@ -492,7 +492,7 @@ void ChartController::execute_Paint( const Rectangle& rRect )
             }
             xProp->setPropertyValue( "Resolution", uno::makeAny( aResolution ));
         }
-        //
+
 
         uno::Reference< util::XUpdatable > xUpdatable( m_xChartView, uno::UNO_QUERY );
         if( xUpdatable.is() )

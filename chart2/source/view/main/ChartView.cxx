@@ -1490,7 +1490,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
             Sequence<sal_Int32> aCoordinateSystemResolution = pVCooSys->getCoordinateSystemResolution( rPageSize, m_aPageResolution );
             pSeriesPlotter->setCoordinateSystemResolution( aCoordinateSystemResolution );
         }
-        //
+
         pSeriesPlotter->createShapes();
         m_bPointsWereSkipped = m_bPointsWereSkipped || pSeriesPlotter->PointsWereSkipped();
     }

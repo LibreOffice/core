@@ -681,7 +681,7 @@ void AreaChart::createShapes()
     m_bPointsWereSkipped = false;
     sal_Int32 nSkippedPoints = 0;
     sal_Int32 nCreatedPoints = 0;
-    //
+
 
     bool bDateCategory = (m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->isDateAxis());
 
@@ -847,7 +847,7 @@ void AreaChart::createShapes()
                         continue;
                     }
                     aSeriesFormerPointMap[pSeries] = FormerPoint(aScaledLogicPosition.PositionX, aScaledLogicPosition.PositionY, aScaledLogicPosition.PositionZ);
-                    //
+
 
                     //store point information for series polygon
                     //for area and/or line (symbols only do not need this)

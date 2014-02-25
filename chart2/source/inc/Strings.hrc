@@ -24,7 +24,7 @@
 
 //next free is 303
 
-//-----------------------------------------------------------------------------
+
 //chart types
 //see Strings_ChartTypes.src
 
@@ -65,7 +65,7 @@
 #define STR_TYPE_BUBBLE                     (RID_APP_START + 282)
 #define STR_BUBBLE_1                        (RID_APP_START + 283)
 
-//-----------------------------------------------------------------------------
+
 //additional controls for wizard:
 
 #define STR_BAR_GEOMETRY                     (RID_APP_START + 127)
@@ -82,7 +82,7 @@
 //additional strings
 #define STR_TEXT_SEPARATOR                   (RID_APP_START + 20)
 
-//-----------------------------------------------------------------------------
+
 //SchStatisticTabPage and SchDataStatisticsDlg
 //see Strings_Statistic.src
 
@@ -98,7 +98,7 @@
 #define STR_REGRESSION_POLYNOMIAL           (RID_APP_START + 300)
 #define STR_REGRESSION_MOVING_AVERAGE       (RID_APP_START + 301)
 
-//-----------------------------------------------------------------------------
+
 //for scale tab page
 //see Strings_Scale.src
 
@@ -109,7 +109,7 @@
 #define STR_INVALID_INTERVALS               (RID_APP_START + 291)
 #define STR_INVALID_TIME_UNIT               (RID_APP_START + 292)
 
-//-----------------------------------------------------------------------------
+
 //for range didalog
 #define STR_DATA_ROLE_LABEL                 (RID_APP_START + 241)
 #define STR_DATA_ROLE_X                     (RID_APP_START + 242)
@@ -134,7 +134,7 @@
 #define STR_DATA_SELECT_RANGE_FOR_CATEGORIES (RID_APP_START + 253)
 #define STR_DATA_SELECT_RANGE_FOR_DATALABELS (RID_APP_START + 195)
 
-//-----------------------------------------------------------------------------
+
 //chart objects
 //e.g. used as titles for insert dialogs and object properties dialog
 //also used in tip help, in status descriptions e.g. '%object% marked' or in undo action e.g. 'moved %object%'
@@ -208,7 +208,7 @@
 #define STR_OBJECT_CURVE_EQUATION           (RID_APP_START + 268)
 #define STR_OBJECT_SHAPE                    (RID_APP_START + 290)
 
-//-----------------------------------------------------------------------------
+
 //Titles for tabpages and dialogs
 
 #define STR_PAGE_LINE                        (RID_APP_START + 216)
@@ -244,7 +244,7 @@
 #define STR_PAGE_POSITIONING  (RID_APP_START + 277)
 #define STR_PAGE_ASIAN                       (RID_APP_START + 281)
 
-//-----------------------------------------------------------------------------
+
 //strings used as description for actions on toolbar icons, as tip help or for undo
 
 #define STR_ACTION_EDIT_CHARTTYPE           (RID_APP_START + 78)
@@ -257,7 +257,7 @@
 #define STR_ACTION_REARRANGE_CHART          (RID_APP_START + 94)
 #define STR_ACTION_EDIT_TEXT                (RID_APP_START + 95)
 
-//-----------------------------------------------------------------------------
+
 //statusbar strings and balloon help
 
 #define STR_STATUS_PIE_SEGMENT_EXPLODED     (RID_APP_START + 179)
@@ -268,7 +268,7 @@
 #define STR_TIP_DATAPOINT_INDEX             (RID_APP_START + 141)
 #define STR_TIP_DATAPOINT_VALUES            (RID_APP_START + 142)
 
-//-----------------------------------------------------------------------------
+
 //warning and info boxes
 #define STR_ACTION_NOTPOSSIBLE              (RID_APP_START + 107)
 
@@ -285,7 +285,7 @@
 
 #define STR_BUTTON_UP                       (RID_APP_START + 500)
 #define STR_BUTTON_DOWN                     (RID_APP_START + 501)
-//-----------------------------------------------------------------------------
+
 
 // ids must not exceed RID_APP_START + 499
 // ids >= RID_APP_START + 500 are defined in glob.hrc

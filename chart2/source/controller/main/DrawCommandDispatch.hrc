@@ -19,7 +19,7 @@
 #ifndef CHART_DRAWCOMMANDDISPATCH_HRC
 #define CHART_DRAWCOMMANDDISPATCH_HRC
 
-//-----------------------------------------------------------------------------
+
 //Command Ids:
 #define COMMAND_ID_OBJECT_SELECT                1
 #define COMMAND_ID_DRAW_LINE                    2

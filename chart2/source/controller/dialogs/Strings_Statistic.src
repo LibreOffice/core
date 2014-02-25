@@ -39,8 +39,8 @@ String STR_CONTROLTEXT_ERROR_BARS_FROM_DATA
     Text [ en-US ] = "From Data Table" ;
 };
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
+
+
 
 String STR_REGRESSION_LINEAR
 {

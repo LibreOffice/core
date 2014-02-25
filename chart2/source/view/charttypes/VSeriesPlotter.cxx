@@ -51,7 +51,7 @@
 #include "CandleStickChart.hxx"
 #include "BubbleChart.hxx"
 #include "NetChart.hxx"
-//
+
 
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart/TimeUnit.hpp>
