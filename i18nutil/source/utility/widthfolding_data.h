@@ -36,10 +36,10 @@ typedef struct {
 
 // bluedwarf:   0x3099 (COMBINING KATAKANA-HIRAGANA VOICED SOUND MARK)
 //           => 0x309b (KATAKANA-HIRAGANA VOICED SOUND MARK)
-//
+
 //              0x309a (COMBINING KATAKANA-HIRAGANA SEMI-VOICED SOUND MARK)
 //           => 0x309c (KATAKANA-HIRAGANA SEMI-VOICED SOUND MARK)
-//
+
 // the combining characters shouldn't be used
 const decomposition_table_entry_t decomposition_table[] = {
     { 0x0000, 0x0000 }, // 0x3040

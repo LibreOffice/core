@@ -122,7 +122,7 @@ OUString widthfolding::compose_ja_voiced_sound_marks (const OUString& inStr, sal
   //       previousChar   currentChar
   //       ^
   //       position
-  //
+
   // will be converted to
   // .. .. GA       .. ..
 
@@ -135,7 +135,7 @@ OUString widthfolding::compose_ja_voiced_sound_marks (const OUString& inStr, sal
       position = startPos;
   }
 
-  //
+
   sal_Unicode previousChar = *src ++;
   sal_Unicode currentChar;
 
@@ -219,7 +219,7 @@ oneToOneMapping& widthfolding::getfull2halfTableForASC()
     // bluedwarf: dirty hack!
     // There is an exception. Additional conversion is required following:
     //  0xFFE5 (FULLWIDTH YEN SIGN)  --> 0x005C (REVERSE SOLIDUS)
-    //
+
     //  See the following page for detail:
     // http://wiki.openoffice.org/wiki/Calc/Features/JIS_and_ASC_functions
     int i, j, high, low;
@@ -253,7 +253,7 @@ oneToOneMapping& widthfolding::gethalf2fullTableForJIS()
     //  0x0027 (APOSTROPHE)      --> 0x2019 (RIGHT SINGLE QUOTATION MARK)
     //  0x005C (REVERSE SOLIDUS) --> 0xFFE5 (FULLWIDTH YEN SIGN)
     //  0x0060 (GRAVE ACCENT)    --> 0x2018 (LEFT SINGLE QUOTATION MARK)
-    //
+
     //  See the following page for detail:
     // http://wiki.openoffice.org/wiki/Calc/Features/JIS_and_ASC_functions
     int i, j, high, low;
