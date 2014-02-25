@@ -44,7 +44,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
 
 
-///////////////////////////////////////////////////////////////////////////
+
 
 
 class SpellChecker :
@@ -125,7 +125,7 @@ inline OUString SpellChecker::getImplementationName_Static() throw()
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+
 
 #endif
 

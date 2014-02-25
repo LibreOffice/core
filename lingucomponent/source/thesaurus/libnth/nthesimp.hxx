@@ -58,7 +58,7 @@ namespace com { namespace sun { namespace star { namespace beans {
 
 
 
-///////////////////////////////////////////////////////////////////////////
+
 
 
 class Thesaurus :
@@ -152,7 +152,7 @@ inline OUString Thesaurus::getImplementationName_Static() throw()
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+
 
 #endif
 

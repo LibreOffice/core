@@ -70,7 +70,7 @@ OString Win_GetShortPathName( const OUString &rLongPathName )
 }
 #endif //defined(WNT)
 
-//////////////////////////////////////////////////////////////////////
+
 
 // build list of old style diuctionaries (not as extensions) to use.
 // User installed dictionaries (the ones residing in the user paths)
@@ -261,6 +261,6 @@ rtl_TextEncoding getTextEncodingFromCharset(const sal_Char* pCharset)
     return eRet;
 }
 
-//////////////////////////////////////////////////////////////////////
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

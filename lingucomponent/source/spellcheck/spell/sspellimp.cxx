@@ -60,7 +60,7 @@ using namespace linguistic;
 // XML-header of SPELLML queries
 #define SPELLML_HEADER "<?xml?>"
 
-///////////////////////////////////////////////////////////////////////////
+
 
 SpellChecker::SpellChecker() :
     aDicts(NULL),
@@ -684,6 +684,6 @@ void * SAL_CALL SpellChecker_getFactory( const sal_Char * pImplName,
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
