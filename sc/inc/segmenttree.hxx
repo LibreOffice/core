@@ -68,7 +68,6 @@ public:
 
     bool setTrue(SCROW nRow1, SCROW nRow2);
     bool setFalse(SCROW nRow1, SCROW nRow2);
-    bool getValue(SCROW nRow);
     bool getRangeData(SCROW nRow, RangeData& rData);
     bool getRangeDataLeaf(SCROW nRow, RangeData& rData);
     void removeSegment(SCROW nRow1, SCROW nRow2);
