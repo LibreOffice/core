@@ -25,33 +25,6 @@ namespace basegfx
     // init static member of class fTools
     double ::basegfx::fTools::mfSmallValue = 0.000000001;
 
-    double snapToZeroRange(double v, double fWidth)
-    {
-        if(fTools::equalZero(fWidth))
-        {
-            // with no range all snaps to range bound
-            return 0.0;
-        }
-        else
-        {
-            if(v < 0.0 || v > fWidth)
-            {
-                double fRetval(fmod(v, fWidth));
-
-                if(fRetval < 0.0)
-                {
-                    fRetval += fWidth;
-                }
-
-                return fRetval;
-            }
-            else
-            {
-                return v;
-            }
-        }
-    }
-
 } // end of namespace basegfx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

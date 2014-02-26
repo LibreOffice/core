@@ -565,16 +565,6 @@ ds_device getDeviceSelection(const char* sProfilePath, bool bForceSelection)
     return selectedDevice;
 }
 
-bool selectedDeviceIsOpenCL(ds_device device)
-{
-    return (DS_DEVICE_OPENCL_DEVICE == device.type);
-}
-
-bool selectedDeviceIsNativeCPU(ds_device device)
-{
-    return (DS_DEVICE_NATIVE_CPU == device.type);
-}
-
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

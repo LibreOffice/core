@@ -379,22 +379,6 @@ void SvxPixelCtlAccessible::ensureIsAlive() const
         throw lang::DisposedException();
 }
 
-void SvxPixelCtlAccessible::ensureIsValidRow( sal_Int32 nRow )
-    throw ( lang::IndexOutOfBoundsException )
-{
-    if( nRow >= mrPixelCtl.GetHeight() || nRow <0)
-        throw lang::IndexOutOfBoundsException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "row index is invalid" ) ), *this );
-}
-
-void SvxPixelCtlAccessible::ensureIsValidColumn( sal_Int32 nColumn )
-    throw ( lang::IndexOutOfBoundsException )
-{
-    if( nColumn >= mrPixelCtl.GetWidth() || nColumn <0 )
-        throw lang::IndexOutOfBoundsException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("column index is invalid") ), *this );
-}
-
 //XAccessibleEventBroadcaster
 void SAL_CALL SvxPixelCtlAccessible::addAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )  throw( RuntimeException )
 {

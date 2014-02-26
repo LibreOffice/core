@@ -249,17 +249,6 @@ public:
     inline sal_Bool IsNotAlive( void ) const;
 
 protected:
-    /** @attention  This method requires locked mutex's and a living object.
-        @throws <type>IndexOutOfBoundsException</type>
-        If the specified row index is invalid. */
-    void ensureIsValidRow( sal_Int32 nRow )
-        throw ( ::com::sun::star::lang::IndexOutOfBoundsException );
-    /** @attention  This method requires locked mutex's and a living object.
-        @throws <type>IndexOutOfBoundsException</type>
-        If the specified column index is invalid. */
-    void ensureIsValidColumn( sal_Int32 nColumn )
-        throw ( ::com::sun::star::lang::IndexOutOfBoundsException );
-
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> m_xCurChild;
 public:
     void NotifyChild(long nIndex,sal_Bool bSelect ,sal_Bool bCheck);

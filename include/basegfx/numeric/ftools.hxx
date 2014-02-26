@@ -136,10 +136,6 @@ namespace basegfx
         return v / M_PI_2 * 90.0;
     }
 
-    /** Snap v to the range [0.0 .. fWidth] using modulo
-     */
-    double snapToZeroRange(double v, double fWidth);
-
     /** return fValue with the sign of fSignCarrier, thus evtl. changed
     */
     inline double copySign(double fValue, double fSignCarrier)
