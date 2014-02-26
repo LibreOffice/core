@@ -397,15 +397,6 @@ protected:
     ~Sprm() {}
 };
 
-/**
-   Creates handler for a stream.
-*/
-    void WRITERFILTER_RESOURCEMODEL_DLLPUBLIC dump(OutputWithDepth<string> & o, const char * name, writerfilter::Reference<Properties>::Pointer_t props);
-    void WRITERFILTER_RESOURCEMODEL_DLLPUBLIC dump(OutputWithDepth<string> & o, const char * name, sal_uInt32 n);
-    void WRITERFILTER_RESOURCEMODEL_DLLPUBLIC dump(OutputWithDepth<string> & /*o*/, const char * /*name*/,
-                                     const OUString & /*str*/);
-    void WRITERFILTER_RESOURCEMODEL_DLLPUBLIC dump(OutputWithDepth<string> & o, const char * name, writerfilter::Reference<BinaryObj>::Pointer_t binary);
-
 }
 
 #endif // INCLUDED_WW8RESOURCEMODEL_HXX

@@ -41,32 +41,6 @@ public:
 
 ResourceModelOutputWithDepth output;
 
-void dump(OutputWithDepth<string> & /*o*/, const char * /*name*/,
-          writerfilter::Reference<Properties>::Pointer_t /*props*/)
-{
-}
-
-void dump(OutputWithDepth<string> & o, const char * name, sal_uInt32 n)
-{
-    char sBuffer[256];
-    snprintf(sBuffer, sizeof(sBuffer), "%" SAL_PRIuUINT32, n);
-    string tmpStr = name;
-    tmpStr += "=";
-    tmpStr += sBuffer;
-
-    o.addItem(tmpStr);
-}
-
-void dump(OutputWithDepth<string> & /*o*/, const char * /*name*/,
-          const OUString & /*str*/)
-{
-}
-
-void dump(OutputWithDepth<string> & /*o*/, const char * /*name*/,
-          writerfilter::Reference<BinaryObj>::Pointer_t /*binary*/)
-{
-}
-
 string gInfo = "";
 // ------- WW8TableDataHandler ---------
 
