@@ -1510,14 +1510,12 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, (nSprmId == NS_sprm::LN_CHps ? OUString("sz") : OUString("szCs")), OUString::number(nIntValue));
         }
         break;
-    case NS_sprm::LN_CHpsPos:
+    case NS_ooxml::LN_EG_RPrBase_position:
         // The spec says 0 is the same as the lack of the value, so don't parse that.
         if (nIntValue)
             m_pImpl->deferCharacterProperty( nSprmId, uno::makeAny( nIntValue ));
-        break;  // sprmCHpsPos
-    case 71 : //"sprmCDxaSpace"
-    case 96 : //"sprmCDxaSpace"
-    case NS_sprm::LN_CDxaSpace:  // sprmCDxaSpace
+        break;
+    case NS_ooxml::LN_EG_RPrBase_spacing:
         {
             //Kerning half point values
             //TODO: there are two kerning values -
@@ -1531,7 +1529,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "spacing", OUString::number(nIntValue));
         }
         break;
-    case NS_sprm::LN_CHpsKern:  // sprmCHpsKern    auto kerning is bound to a minimum font size in Word - but not in Writer :-(
+    case NS_ooxml::LN_EG_RPrBase_kern: // auto kerning is bound to a minimum font size in Word - but not in Writer :-(
         rContext->Insert(PROP_CHAR_AUTO_KERNING, uno::makeAny( sal_Bool(nIntValue) ) );
         break;
     case NS_sprm::LN_CRgFtc0:  // sprmCRgFtc0     //ascii font index
@@ -1575,7 +1573,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             }
         }
         break;
-    case NS_sprm::LN_CCharScale:  // sprmCCharScale
+    case NS_ooxml::LN_EG_RPrBase_w:
         rContext->Insert(PROP_CHAR_SCALE_WIDTH,
                          uno::makeAny( sal_Int16(nIntValue) ));
         break;
@@ -2403,7 +2401,7 @@ void DomainMapper::processDeferredCharacterProperties( const std::map< sal_Int32
         case NS_sprm::LN_CHps:
         case NS_sprm::LN_CHpsBi:
         break; // only for use by other properties, ignore here
-        case NS_sprm::LN_CHpsPos:
+        case NS_ooxml::LN_EG_RPrBase_position:
         {
             sal_Int16 nEscapement = 0;
             sal_Int8 nProp  = 100;
@@ -2438,7 +2436,7 @@ void DomainMapper::processDeferredCharacterProperties( const std::map< sal_Int32
             rContext->Insert(PROP_CHAR_ESCAPEMENT,         uno::makeAny( nEscapement ) );
             rContext->Insert(PROP_CHAR_ESCAPEMENT_HEIGHT,  uno::makeAny( nProp ) );
         }
-        break;  // sprmCHpsPos
+        break;
         default:
             SAL_WARN( "writerfilter", "Unhandled property in processDeferredCharacterProperty()" );
             break;

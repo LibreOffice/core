@@ -23810,10 +23810,10 @@
       <element name="vanish" tokenid="ooxml:EG_RPrBase_vanish"/>
       <element name="webHidden" tokenid="ooxml:EG_RPrBase_webHidden"/>
       <element name="color" tokenid="ooxml:EG_RPrBase_color"/>
-      <element name="spacing" tokenid="sprm:CDxaSpace"/>
-      <element name="w" tokenid="sprm:CCharScale"/>
-      <element name="kern" tokenid="sprm:CHpsKern"/>
-      <element name="position" tokenid="sprm:CHpsPos"/>
+      <element name="spacing" tokenid="ooxml:EG_RPrBase_spacing"/>
+      <element name="w" tokenid="ooxml:EG_RPrBase_w"/>
+      <element name="kern" tokenid="ooxml:EG_RPrBase_kern"/>
+      <element name="position" tokenid="ooxml:EG_RPrBase_position"/>
       <element name="sz" tokenid="sprm:CHps"/>
       <element name="szCs" tokenid="sprm:CHpsBi"/>
       <element name="highlight" tokenid="sprm:CHighlight"/>

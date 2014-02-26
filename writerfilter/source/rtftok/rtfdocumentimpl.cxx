@@ -2957,9 +2957,9 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_FS: nSprm = NS_sprm::LN_CHps; break;
         case RTF_AFS: nSprm = NS_sprm::LN_CHpsBi; break;
         case RTF_ANIMTEXT: nSprm = NS_sprm::LN_CSfxText; break;
-        case RTF_EXPNDTW: nSprm = NS_sprm::LN_CDxaSpace; break;
-        case RTF_KERNING: nSprm = NS_sprm::LN_CHpsKern; break;
-        case RTF_CHARSCALEX: nSprm = NS_sprm::LN_CCharScale; break;
+        case RTF_EXPNDTW: nSprm = NS_ooxml::LN_EG_RPrBase_spacing; break;
+        case RTF_KERNING: nSprm = NS_ooxml::LN_EG_RPrBase_kern; break;
+        case RTF_CHARSCALEX: nSprm = NS_ooxml::LN_EG_RPrBase_w; break;
         case RTF_LANG: nSprm = NS_sprm::LN_CRgLid0; break;
         case RTF_LANGFE: nSprm = NS_sprm::LN_CRgLid1; break;
         case RTF_ALANG: nSprm = NS_sprm::LN_CLidBi; break;
@@ -3234,7 +3234,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_DN:
             {
                 RTFValue::Pointer_t pValue(new RTFValue(nParam * (nKeyword == RTF_UP ? 1 : -1)));
-                m_aStates.top().aCharacterSprms.set(NS_sprm::LN_CHpsPos, pValue);
+                m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_RPrBase_position, pValue);
             }
             break;
         case RTF_HORZVERT:
@@ -3249,7 +3249,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_EXPND:
             {
                 RTFValue::Pointer_t pValue(new RTFValue(nParam/5));
-                m_aStates.top().aCharacterSprms.set(NS_sprm::LN_CDxaSpace, pValue);
+                m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_RPrBase_spacing, pValue);
             }
             break;
         case RTF_TWOINONE:
