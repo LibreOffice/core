@@ -385,13 +385,10 @@ IMPL_LINK( SdDefineCustomShowDlg, ClickButtonHdl, void *, p )
     }
     else if( p == m_pBtnRemove )
     {
-        // sal_uInt16 nPos = aLbCustomPages.GetSelectEntryPos();
         SvTreeListEntry* pEntry = m_pLbCustomPages->FirstSelected();
         if( pEntry )
         {
             sal_uLong nPos = m_pLbCustomPages->GetModel()->GetAbsPos( pEntry );
-            // rpCustomShow->Remove( nPos );
-            // aLbCustomPages.RemoveEntry( nPos );
             m_pLbCustomPages->GetModel()->Remove( m_pLbCustomPages->GetModel()->GetEntryAtAbsPos( nPos ) );
 
             bModified = sal_True;
@@ -399,8 +396,6 @@ IMPL_LINK( SdDefineCustomShowDlg, ClickButtonHdl, void *, p )
     }
     else if( p == m_pEdtName )
     {
-        // rpCustomShow->SetName( aEdtName.GetText() );
-
         bModified = sal_True;
     }
 

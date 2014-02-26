@@ -1102,8 +1102,6 @@ DEBUG_EXPORT size_t DebugSNPrintF(char *sbuffer, size_t buflen, const char *fmt,
 
 
 // DebugSNPrintFVAList    - va_list version of DebugSNPrintF. See DebugSNPrintF for more info.
-
-
 DEBUG_EXPORT size_t DebugSNPrintFVAList(char *sbuffer, size_t buflen, const char *fmt, va_list arg)
 {
     static const struct DebugSNPrintF_format
@@ -1528,8 +1526,6 @@ exit:
 
 
 // DebugGetErrorString
-
-
 DEBUG_EXPORT const char *   DebugGetErrorString( int_least32_t inErrorCode, char *inBuffer, size_t inBufferSize )
 {
     const char *        s;
@@ -1935,8 +1931,6 @@ DEBUG_EXPORT const char *   DebugGetErrorString( int_least32_t inErrorCode, char
 
 
 // DebugHexDump
-
-
 DEBUG_EXPORT size_t
 DebugHexDump(
     DebugLevel inLevel,
@@ -2296,8 +2290,6 @@ DebugHexDump(
 
 
 // DebugNumVersionToString
-
-
 static char *   DebugNumVersionToString( uint32_t inVersion, char *inString )
 {
     char *      s;
@@ -2361,8 +2353,6 @@ static char *   DebugNumVersionToString( uint32_t inVersion, char *inString )
 
 
 // DebugTaskLevel
-
-
 DEBUG_EXPORT uint32_t   DebugTaskLevel( void )
 {
     uint32_t level;
@@ -2382,8 +2372,6 @@ DEBUG_EXPORT uint32_t   DebugTaskLevel( void )
 #if ( TARGET_OS_WIN32 && !TARGET_OS_WINDOWS_CE )
 
 // DebugWinEnableConsole
-
-
 #pragma warning( disable:4311 )
 
 static void DebugWinEnableConsole( void )
@@ -2468,8 +2456,6 @@ exit:
 #if ( TARGET_OS_WIN32 )
 
 // DebugWinCharToTCharString
-
-
 static TCHAR *
 DebugWinCharToTCharString(
     const char *    inCharString,
@@ -2518,8 +2504,6 @@ DebugWinCharToTCharString(
 
 
 // DebugServicesTest
-
-
 DEBUG_EXPORT OSStatus   DebugServicesTest( void )
 {
     OSStatus err;

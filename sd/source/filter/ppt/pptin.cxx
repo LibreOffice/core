@@ -571,9 +571,7 @@ sal_Bool ImplSdPPTImport::Import()
                     SfxStyleSheet* pSheet;
                     if ( nMasterNum == 1 )
                     {
-
                         // standardsheet
-
                         pSheet = (SfxStyleSheet*)mpDoc->GetStyleSheetPool()->Find(SD_RESSTR(STR_STANDARD_STYLESHEET_NAME), SD_STYLE_FAMILY_GRAPHICS );
                         if ( pSheet )
                         {
@@ -621,7 +619,6 @@ sal_Bool ImplSdPPTImport::Import()
 
 
                     // set stylesheets
-
                     if ( pPage->GetPageKind() == PK_STANDARD )
                     {
                         sal_uInt32 nTitleInstance = TSS_TYPE_PAGETITLE;
@@ -635,7 +632,6 @@ sal_Bool ImplSdPPTImport::Import()
                         }
 
                         // titelstylesheet
-
                         pSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_TITLE );
                         if ( pSheet )
                         {
@@ -648,7 +644,6 @@ sal_Bool ImplSdPPTImport::Import()
                         }
 
                         // outlinerstylesheet
-
                         sal_uInt16 nLevel;
                         PPTParagraphObj* pParagraphs[ 9 ];
                         PPTParagraphObj* pPreviousPara = NULL;
@@ -676,7 +671,6 @@ sal_Bool ImplSdPPTImport::Import()
                         for ( nLevel = 0; nLevel < 9; delete pParagraphs[ nLevel++ ] ) ;
 
                         // subtitle stylesheet
-
                         pSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_TEXT );
                         if ( pSheet )
                         {
@@ -712,7 +706,6 @@ sal_Bool ImplSdPPTImport::Import()
         SetPageNum( i, PPT_MASTERPAGE );
 
         // importing master page objects
-
         PptSlidePersistList* pList = GetPageList( eAktPageKind );
         PptSlidePersistEntry* pPersist = ( pList && ( nAktPageNum < pList->size() ) )
                                                     ? (*pList)[ nAktPageNum ] : NULL;
@@ -831,7 +824,6 @@ sal_Bool ImplSdPPTImport::Import()
 
 
                 // background object
-
                 pObj = pMPage->GetObj( 0 );
                 if ( pObj && pObj->GetObjIdentifier() == OBJ_RECT )
                 {
@@ -869,7 +861,6 @@ sal_Bool ImplSdPPTImport::Import()
     }
 
     // importing slide pages
-
     {
         sal_uInt32          nFPosMerk = rStCtrl.Tell();
         PptPageKind     ePageKind = eAktPageKind;
@@ -1040,7 +1031,6 @@ sal_Bool ImplSdPPTImport::Import()
     }
 
     // create handout and note pages
-
     bOk = mpDoc->CreateMissingNotesAndHandoutPages();
     if ( bOk )
     {
@@ -1048,7 +1038,6 @@ sal_Bool ImplSdPPTImport::Import()
         {
 
             // set AutoLayout
-
             SetPageNum( i, PPT_SLIDEPAGE );
             SdPage* pPage = mpDoc->GetSdPage( i, PK_STANDARD );
             AutoLayout eAutoLayout = AUTOLAYOUT_NONE;
@@ -1167,7 +1156,6 @@ sal_Bool ImplSdPPTImport::Import()
         }
 
         // handout master page: auto layout
-
         SdPage* pHandoutMPage = mpDoc->GetMasterSdPage( 0, PK_HANDOUT );
         pHandoutMPage->SetAutoLayout( AUTOLAYOUT_HANDOUT6, sal_True, sal_True );
     }

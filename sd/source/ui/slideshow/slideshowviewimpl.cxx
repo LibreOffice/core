@@ -184,8 +184,6 @@ bool SlideShowViewMouseMotionListeners::implTypedNotify( const Reference< awt::X
 
 
 // SlideShowView
-
-
 SlideShowView::SlideShowView( ShowWindow&     rOutputWindow,
                               SdDrawDocument* pDoc,
                               AnimationMode   eAnimationMode,
