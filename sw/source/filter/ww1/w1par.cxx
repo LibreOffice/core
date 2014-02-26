@@ -54,7 +54,7 @@ static sal_uLong WW1_Read_FieldIniFlags()
 sal_uLong WW1Reader::Read(SwDoc& rDoc, const OUString& rBaseURL, SwPaM& rPam, const OUString& /*cName*/)
 {
     sal_uLong nRet = ERR_SWG_READ_ERROR;
-    OSL_ENSURE(pStrm!=NULL, "W1-Read ohne Stream");
+    OSL_ENSURE(pStrm!=NULL, "W1-Read without Stream");
     if (pStrm != NULL)
     {
         sal_Bool bNew = !bInsertMode;           // New Doc ( no insert )
