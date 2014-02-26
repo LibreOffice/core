@@ -181,9 +181,6 @@ void ScPrintFunc::Construct( const ScPrintOptions* pOptions )
     //  else, EditEngine outputs different text heights
     pDev->SetMapMode(MAP_PIXEL);
 
-    pPageEndX = NULL;
-    pPageEndY = NULL;
-    pPageRows = NULL;
     pBorderItem = NULL;
     pBackgroundItem = NULL;
     pShadowItem = NULL;
@@ -331,8 +328,25 @@ void ScPrintFunc::FillPageData()
 
         rData.SetPrintRange( ScRange( nStartCol, nStartRow, nPrintTab,
                                         nEndCol, nEndRow, nPrintTab ) );
-        rData.SetPagesX( nPagesX, pPageEndX );
-        rData.SetPagesY( nTotalY, pPageEndY );
+        // #i123672#
+        if(maPageEndX.empty())
+        {
+            OSL_ENSURE(false, "vector access error for maPageEndX (!)");
+        }
+        else
+        {
+            rData.SetPagesX( nPagesX, &maPageEndX[0]);
+        }
+
+        // #i123672#
+        if(maPageEndY.empty())
+        {
+            OSL_ENSURE(false, "vector access error for maPageEndY (!)");
+        }
+        else
+        {
+            rData.SetPagesY( nTotalY, &maPageEndY[0]);
+        }
 
         //  Settings
         rData.SetTopDown( aTableParam.bTopDown );
@@ -342,9 +356,6 @@ void ScPrintFunc::FillPageData()
 
 ScPrintFunc::~ScPrintFunc()
 {
-    delete[] pPageEndX;
-    delete[] pPageEndY;
-    delete[] pPageRows;
     delete pEditDefaults;
     delete pEditEngine;
 
@@ -2439,7 +2450,10 @@ long ScPrintFunc::CountPages()                          // sets also nPagesX, nP
                 CalcZoom(i);
                 if ( aTableParam.bSkipEmpty )
                     for (nY=0; nY<nPagesY; nY++)
-                        nPages += pPageRows[nY].CountVisible();
+                    {
+                        OSL_ENSURE(nY < maPageRows.size(), "vector access error for maPageRows (!)");
+                        nPages += maPageRows[nY].CountVisible();
+                    }
                 else
                     nPages += ((long) nPagesX) * nPagesY;
                 if ( pPageData )
@@ -2451,7 +2465,10 @@ long ScPrintFunc::CountPages()                          // sets also nPagesX, nP
             CalcZoom(RANGENO_NORANGE);                      // calculate Zoom
             if ( aTableParam.bSkipEmpty )
                 for (nY=0; nY<nPagesY; nY++)
-                    nPages += pPageRows[nY].CountVisible();
+                {
+                    OSL_ENSURE(nY < maPageRows.size(), "vector access error for maPageRows (!)");
+                    nPages += maPageRows[nY].CountVisible();
+                }
             else
                 nPages += ((long) nPagesX) * nPagesY;
             if ( pPageData )
@@ -2651,12 +2668,14 @@ long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
             nX1 = nStartCol;
             for (nCountX=0; nCountX<nPagesX; nCountX++)
             {
-                nX2 = pPageEndX[nCountX];
+                OSL_ENSURE(nCountX < maPageEndX.size(), "vector access error for maPageEndX (!)");
+                nX2 = maPageEndX[nCountX];
                 for (nCountY=0; nCountY<nPagesY; nCountY++)
                 {
-                    nY1 = pPageRows[nCountY].GetStartRow();
-                    nY2 = pPageRows[nCountY].GetEndRow();
-                    if ( !aTableParam.bSkipEmpty || !pPageRows[nCountY].IsHidden(nCountX) )
+                    OSL_ENSURE(nCountY < maPageRows.size(), "vector access error for maPageRows (!)");
+                    nY1 = maPageRows[nCountY].GetStartRow();
+                    nY2 = maPageRows[nCountY].GetEndRow();
+                    if ( !aTableParam.bSkipEmpty || !maPageRows[nCountY].IsHidden(nCountX) )
                     {
                         if ( rPageRanges.IsSelected( nPageNo+nStartPage+1 ) )
                         {
@@ -2674,13 +2693,15 @@ long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
         {
             for (nCountY=0; nCountY<nPagesY; nCountY++)
             {
-                nY1 = pPageRows[nCountY].GetStartRow();
-                nY2 = pPageRows[nCountY].GetEndRow();
+                OSL_ENSURE(nCountY < maPageRows.size(), "vector access error for maPageRows (!)");
+                nY1 = maPageRows[nCountY].GetStartRow();
+                nY2 = maPageRows[nCountY].GetEndRow();
                 nX1 = nStartCol;
                 for (nCountX=0; nCountX<nPagesX; nCountX++)
                 {
-                    nX2 = pPageEndX[nCountX];
-                    if ( !aTableParam.bSkipEmpty || !pPageRows[nCountY].IsHidden(nCountX) )
+                    OSL_ENSURE(nCountX < maPageEndX.size(), "vector access error for maPageEndX (!)");
+                    nX2 = maPageEndX[nCountX];
+                    if ( !aTableParam.bSkipEmpty || !maPageRows[nCountY].IsHidden(nCountX) )
                     {
                         if ( rPageRanges.IsSelected( nPageNo+nStartPage+1 ) )
                         {
@@ -2934,7 +2955,7 @@ void ScPrintFunc::ResetBreaks( SCTAB nTab )         // Set Breaks correctly for 
 }
 
 static void lcl_SetHidden( ScDocument* pDoc, SCTAB nPrintTab, ScPageRowEntry& rPageRowEntry,
-                    SCCOL nStartCol, const SCCOL* pPageEndX )
+                    SCCOL nStartCol, const std::vector< SCCOL >& rPageEndX )
 {
     size_t nPagesX   = rPageRowEntry.GetPagesX();
     SCROW nStartRow = rPageRowEntry.GetStartRow();
@@ -2946,7 +2967,8 @@ static void lcl_SetHidden( ScDocument* pDoc, SCTAB nPrintTab, ScPageRowEntry& rP
 
     for (size_t i=0; i<nPagesX; i++)
     {
-        SCCOL nEndCol = pPageEndX[i];
+        OSL_ENSURE(i < rPageEndX.size(), "vector access error for maPageEndX (!)");
+        SCCOL nEndCol = rPageEndX[i];
         if ( pDoc->IsPrintEmpty( nPrintTab, nStartCol, nStartRow, nEndCol, nEndRow,
                                     bLeftIsEmpty, &aTempRange, &aTempRect ) )
         {
@@ -2962,9 +2984,11 @@ static void lcl_SetHidden( ScDocument* pDoc, SCTAB nPrintTab, ScPageRowEntry& rP
 
 void ScPrintFunc::CalcPages()               // calculates aPageRect and pages from nZoom
 {
-    if (!pPageEndX) pPageEndX = new SCCOL[MAXCOL+1];
-    if (!pPageEndY) pPageEndY = new SCROW[MAXROW+1];
-    if (!pPageRows) pPageRows = new ScPageRowEntry[MAXROW+1];   //! count before !!!!
+    // #i123672# use dynamic mem to react on size changes
+    if (maPageEndX.size() < MAXCOL+1)
+    {
+        maPageEndX.resize(MAXCOL+1, SCCOL());
+    }
 
     pDoc->SetPageSize( nPrintTab, GetDocPageSize() );
     if (aAreaParam.bPrintArea)
@@ -2973,7 +2997,23 @@ void ScPrintFunc::CalcPages()               // calculates aPageRect and pages fr
         pDoc->UpdatePageBreaks( nPrintTab, &aRange );
     }
     else
+    {
         pDoc->UpdatePageBreaks( nPrintTab, NULL );      // else, end is marked
+    }
+
+    const size_t nRealCnt = nEndRow-nStartRow+1;
+
+    // #i123672# use dynamic mem to react on size changes
+    if (maPageEndY.size() < nRealCnt+1)
+    {
+        maPageEndY.resize(nRealCnt+1, SCROW());
+    }
+
+    // #i123672# use dynamic mem to react on size changes
+    if (maPageRows.size() < nRealCnt+1)
+    {
+        maPageRows.resize(nRealCnt+1, ScPageRowEntry());
+    }
 
     //
     //  Page alignment/splitting after breaks in Col/RowFlags
@@ -2991,7 +3031,8 @@ void ScPrintFunc::CalcPages()               // calculates aPageRect and pages fr
         bool bPageBreak = (pDoc->HasColBreak(i, nPrintTab) & BREAK_PAGE);
         if ( i>nStartCol && bVisCol && bPageBreak )
         {
-            pPageEndX[nPagesX] = i-1;
+            OSL_ENSURE(nPagesX < maPageEndX.size(), "vector access error for maPageEndX (!)");
+            maPageEndX[nPagesX] = i-1;
             ++nPagesX;
             bVisCol = false;
         }
@@ -3000,7 +3041,8 @@ void ScPrintFunc::CalcPages()               // calculates aPageRect and pages fr
     }
     if (bVisCol)    // also at the end, no empty pages
     {
-        pPageEndX[nPagesX] = nEndCol;
+        OSL_ENSURE(nPagesX < maPageEndX.size(), "vector access error for maPageEndX (!)");
+        maPageEndX[nPagesX] = nEndCol;
         ++nPagesX;
     }
 
@@ -3022,17 +3064,19 @@ void ScPrintFunc::CalcPages()               // calculates aPageRect and pages fr
 
         if (nRow > nStartRow && bVisRow && bPageBreak )
         {
-            pPageEndY[nTotalY] = nRow-1;
+            OSL_ENSURE(nTotalY < maPageEndY.size(), "vector access error for maPageEndY (!)");
+            maPageEndY[nTotalY] = nRow-1;
             ++nTotalY;
 
             if ( !aTableParam.bSkipEmpty ||
                     !pDoc->IsPrintEmpty( nPrintTab, nStartCol, nPageStartRow, nEndCol, nRow-1 ) )
             {
-                pPageRows[nPagesY].SetStartRow( nPageStartRow );
-                pPageRows[nPagesY].SetEndRow( nRow-1 );
-                pPageRows[nPagesY].SetPagesX( nPagesX );
+                OSL_ENSURE(nPagesY < maPageRows.size(), "vector access error for maPageRows (!)");
+                maPageRows[nPagesY].SetStartRow( nPageStartRow );
+                maPageRows[nPagesY].SetEndRow( nRow-1 );
+                maPageRows[nPagesY].SetPagesX( nPagesX );
                 if (aTableParam.bSkipEmpty)
-                    lcl_SetHidden( pDoc, nPrintTab, pPageRows[nPagesY], nStartCol, pPageEndX );
+                    lcl_SetHidden( pDoc, nPrintTab, maPageRows[nPagesY], nStartCol, maPageEndX );
                 ++nPagesY;
             }
 
@@ -3061,17 +3105,19 @@ void ScPrintFunc::CalcPages()               // calculates aPageRect and pages fr
 
     if (bVisRow)
     {
-        pPageEndY[nTotalY] = nEndRow;
+        OSL_ENSURE(nTotalY < maPageEndY.size(), "vector access error for maPageEndY (!)");
+        maPageEndY[nTotalY] = nEndRow;
         ++nTotalY;
 
         if ( !aTableParam.bSkipEmpty ||
                 !pDoc->IsPrintEmpty( nPrintTab, nStartCol, nPageStartRow, nEndCol, nEndRow ) )
         {
-            pPageRows[nPagesY].SetStartRow( nPageStartRow );
-            pPageRows[nPagesY].SetEndRow( nEndRow );
-            pPageRows[nPagesY].SetPagesX( nPagesX );
+            OSL_ENSURE(nPagesY < maPageRows.size(), "vector access error for maPageRows (!)");
+            maPageRows[nPagesY].SetStartRow( nPageStartRow );
+            maPageRows[nPagesY].SetEndRow( nEndRow );
+            maPageRows[nPagesY].SetPagesX( nPagesX );
             if (aTableParam.bSkipEmpty)
-                lcl_SetHidden( pDoc, nPrintTab, pPageRows[nPagesY], nStartCol, pPageEndX );
+                lcl_SetHidden( pDoc, nPrintTab, maPageRows[nPagesY], nStartCol, maPageEndX );
             ++nPagesY;
         }
     }

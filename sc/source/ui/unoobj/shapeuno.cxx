@@ -842,7 +842,8 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const OUString& aPropertyName )
     }
     else
     {
-        GetShapePropertySet();
+        if(!pShapePropertySet) //performance consideration
+            GetShapePropertySet();
         if (pShapePropertySet)
             aAny = pShapePropertySet->getPropertyValue( aPropertyName );
     }

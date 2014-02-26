@@ -188,9 +188,10 @@ private:
     SCCOL               nEndCol;
     SCROW               nEndRow;
 
-    SCCOL*              pPageEndX;          // page layout
-    SCROW*              pPageEndY;
-    ScPageRowEntry*     pPageRows;
+    std::vector< SCCOL >            maPageEndX;
+    std::vector< SCROW >            maPageEndY;
+    std::vector< ScPageRowEntry>    maPageRows;
+
     size_t              nPagesX;
     size_t              nPagesY;
     size_t              nTotalY;
