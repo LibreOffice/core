@@ -5524,6 +5524,46 @@
           </choice>
         </list>
       </define>
+      <define name="ST_BevelPresetType">
+        <list>
+          <choice>
+            <value>relaxedInset</value>
+            <value>circle</value>
+            <value>slope</value>
+            <value>cross</value>
+            <value>angle</value>
+            <value>softRound</value>
+            <value>convex</value>
+            <value>coolSlant</value>
+            <value>divot</value>
+            <value>riblet</value>
+            <value>hardEdge</value>
+            <value>artDeco</value>
+          </choice>
+        </list>
+      </define>
+      <define name="ST_PresetMaterialType">
+        <list>
+          <choice>
+            <value>legacyMatte</value>
+            <value>legacyPlastic</value>
+            <value>legacyMetal</value>
+            <value>legacyWireframe</value>
+            <value>matte</value>
+            <value>plastic</value>
+            <value>metal</value>
+            <value>warmMatte</value>
+            <value>translucentPowder</value>
+            <value>powder</value>
+            <value>dkEdge</value>
+            <value>softEdge</value>
+            <value>clear</value>
+            <value>flat</value>
+            <value>softmetal</value>
+            <value>none</value>
+          </choice>
+        </list>
+      </define>
 
       <define name="ST_PositiveCoordinate">
         <data type="long">
@@ -5861,6 +5901,26 @@
           <ref name="ST_PositiveFixedAngle"/>
         </attribute>
       </define>
+      <define name="CT_Bevel">
+        <optional>
+          <attribute name="w">
+            <ref name="ST_PositiveCoordinate"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="h">
+            <ref name="ST_PositiveCoordinate"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="prst">
+            <ref name="ST_BevelPresetType"/>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_Color">
+        <ref name="EG_ColorChoice"/>
+      </define>
 
       <!-- Main Elements-->
       <define name="CT_Glow">
@@ -6027,6 +6087,35 @@
           <ref name="CT_LightRig"/>
         </element>
       </define>
+      <define name="CT_Props3D">
+        <element name="bevelT">
+          <ref name="CT_Bevel"/>
+        </element>
+        <element name="bevelB">
+          <ref name="CT_Bevel"/>
+        </element>
+        <element name="extrusionClr">
+          <ref name="CT_Color"/>
+        </element>
+        <element name="contourClr">
+          <ref name="CT_Color"/>
+        </element>
+        <optional>
+          <attribute name="extrusionH">
+            <ref name="ST_PositiveCoordinate"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="contourW">
+            <ref name="ST_PositiveCoordinate"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="prstMaterial">
+            <ref name="ST_PresetMaterialType"/>
+          </attribute>
+        </optional>
+      </define>
 
       <define name="glow">
         <element name="glow">
@@ -6060,7 +6149,7 @@
       </define>
       <define name="props3d">
         <element name="props3d">
-          <empty/>
+          <ref name="CT_Props3D"/>
         </element>
       </define>
       <define name="ligatures">
@@ -6259,6 +6348,38 @@
       <value name="b" tokenid="ooxml:ST_LightRigDirection_b">b</value>
       <value name="br" tokenid="ooxml:ST_LightRigDirection_br">br</value>
     </resource>
+    <resource name="ST_BevelPresetType" resource="List" generated="yes">
+      <value name="relaxedInset" tokenid="ooxml:ST_BevelPresetType_relaxedInset">relaxedInset</value>
+      <value name="circle" tokenid="ooxml:ST_BevelPresetType_circle">circle</value>
+      <value name="slope" tokenid="ooxml:ST_BevelPresetType_slope">slope</value>
+      <value name="cross" tokenid="ooxml:ST_BevelPresetType_cross">cross</value>
+      <value name="angle" tokenid="ooxml:ST_BevelPresetType_angle">angle</value>
+      <value name="softRound" tokenid="ooxml:ST_BevelPresetType_softRound">softRound</value>
+      <value name="convex" tokenid="ooxml:ST_BevelPresetType_convex">convex</value>
+      <value name="coolSlant" tokenid="ooxml:ST_BevelPresetType_coolSlant">coolSlant</value>
+      <value name="divot" tokenid="ooxml:ST_BevelPresetType_divot">divot</value>
+      <value name="riblet" tokenid="ooxml:ST_BevelPresetType_riblet">riblet</value>
+      <value name="hardEdge" tokenid="ooxml:ST_BevelPresetType_hardEdge">hardEdge</value>
+      <value name="artDeco" tokenid="ooxml:ST_BevelPresetType_artDeco">artDeco</value>
+    </resource>
+    <resource name="ST_PresetMaterialType" resource="List" generated="yes">
+      <value name="legacyMatte" tokenid="ooxml:ST_PresetMaterialType_legacyMatte">legacyMatte</value>
+      <value name="legacyPlastic" tokenid="ooxml:ST_PresetMaterialType_legacyPlastic">legacyPlastic</value>
+      <value name="legacyMetal" tokenid="ooxml:ST_PresetMaterialType_legacyMetal">legacyMetal</value>
+      <value name="legacyWireframe" tokenid="ooxml:ST_PresetMaterialType_legacyWireframe">legacyWireframe</value>
+      <value name="matte" tokenid="ooxml:ST_PresetMaterialType_matte">matte</value>
+      <value name="plastic" tokenid="ooxml:ST_PresetMaterialType_plastic">plastic</value>
+      <value name="metal" tokenid="ooxml:ST_PresetMaterialType_metal">metal</value>
+      <value name="warmMatte" tokenid="ooxml:ST_PresetMaterialType_warmMatte">warmMatte</value>
+      <value name="translucentPowder" tokenid="ooxml:ST_PresetMaterialType_translucentPowder">translucentPowder</value>
+      <value name="powder" tokenid="ooxml:ST_PresetMaterialType_powder">powder</value>
+      <value name="dkEdge" tokenid="ooxml:ST_PresetMaterialType_dkEdge">dkEdge</value>
+      <value name="softEdge" tokenid="ooxml:ST_PresetMaterialType_softEdge">softEdge</value>
+      <value name="clear" tokenid="ooxml:ST_PresetMaterialType_clear">clear</value>
+      <value name="flat" tokenid="ooxml:ST_PresetMaterialType_flat">flat</value>
+      <value name="softmetal" tokenid="ooxml:ST_PresetMaterialType_softmetal">softmetal</value>
+      <value name="none" tokenid="ooxml:ST_PresetMaterialType_none">none</value>
+    </resource>
 
     <resource name="ST_PositiveCoordinate" resource="Integer" generated="yes"/>
     <resource name="ST_HexColorRGB" resource="Hex"/>
@@ -6367,7 +6488,14 @@
       <attribute name="lon" tokenid="ooxml:CT_SphereCoords_lon"/>
       <attribute name="rev" tokenid="ooxml:CT_SphereCoords_rev"/>
     </resource>
+    <resource name="CT_Bevel" resource="Properties" tag="character">
+      <attribute name="w" tokenid="ooxml:CT_Bevel_w"/>
+      <attribute name="h" tokenid="ooxml:CT_Bevel_h"/>
+      <attribute name="prst" tokenid="ooxml:CT_Bevel_prst"/>
+    </resource>
+    <resource name="CT_Color" resource="Properties" tag="character"/>
 
+    <!-- Main element content -->
     <resource name="CT_Shadow" resource="Properties" tag="character">
       <attribute name="blurRad" tokenid="ooxml:CT_Shadow_blurRad"/>
       <attribute name="dist" tokenid="ooxml:CT_Shadow_dist"/>
@@ -6403,6 +6531,15 @@
     <resource name="CT_Scene3D" resource="Properties" tag="character">
       <element name="camera" tokenid="ooxml:CT_Scene3D_camera"/>
       <element name="lightRig" tokenid="ooxml:CT_Scene3D_lightRig"/>
+    </resource>
+    <resource name="CT_Props3D" resource="Properties" tag="character">
+      <element name="bevelT" tokenid="ooxml:CT_Props3D_bevelT"/>
+      <element name="bevelB" tokenid="ooxml:CT_Props3D_bevelB"/>
+      <element name="extrusionClr" tokenid="ooxml:CT_Props3D_extrusionClr"/>
+      <element name="contourClr" tokenid="ooxml:CT_Props3D_contourClr"/>
+      <attribute name="extrusionH" tokenid="ooxml:CT_Props3D_extrusionH"/>
+      <attribute name="contourW" tokenid="ooxml:CT_Props3D_contourW"/>
+      <attribute name="prstMaterial" tokenid="ooxml:CT_Props3D_prstMaterial"/>
     </resource>
 
     <resource name="glow" resource="Properties" tag="character">
@@ -18104,12 +18241,12 @@
             <ref name="BUILT_IN_ANY_TYPE"/>
           </element>
         </optional>
-        <!--<optional>
+        <optional>
           <element name="w14:props3d">
             <ref name="BUILT_IN_ANY_TYPE"/>
           </element>
         </optional>
-        <optional>
+        <!--<optional>
           <element name="w14:ligatures">
             <ref name="BUILT_IN_ANY_TYPE"/>
           </element>
@@ -24107,8 +24244,8 @@
       <element name="w14:textOutline" tokenid="ooxml:EG_RPrBase_w14_textOutline"/>
       <element name="w14:textFill" tokenid="ooxml:EG_RPrBase_w14_textFill"/>
       <element name="w14:scene3d" tokenid="ooxml:EG_RPrBase_w14_scene3d"/>
-      <!--<element name="w14:props3d" tokenid="ooxml:EG_RPrBase_w14_props3d"/>
-      <element name="w14:ligatures" tokenid="ooxml:EG_RPrBase_w14_ligatures"/>
+      <element name="w14:props3d" tokenid="ooxml:EG_RPrBase_w14_props3d"/>
+      <!--<element name="w14:ligatures" tokenid="ooxml:EG_RPrBase_w14_ligatures"/>
       <element name="w14:numForm" tokenid="ooxml:EG_RPrBase_w14_numForm"/>
       <element name="w14:numSpacing" tokenid="ooxml:EG_RPrBase_w14_numSpacing"/>
       <element name="w14:stylisticSets" tokenid="ooxml:EG_RPrBase_w14_stylisticSets"/>
