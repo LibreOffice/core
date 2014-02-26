@@ -177,9 +177,8 @@ ScCellValue::ScCellValue( const ScRefCellValue& rCell ) : meType(rCell.meType), 
 }
 
 ScCellValue::ScCellValue( double fValue ) : meType(CELLTYPE_VALUE), mfValue(fValue) {}
+
 ScCellValue::ScCellValue( const svl::SharedString& rString ) : meType(CELLTYPE_STRING), mpString(new svl::SharedString(rString)) {}
-ScCellValue::ScCellValue( const EditTextObject& rEditText ) : meType(CELLTYPE_EDIT), mpEditText(rEditText.Clone()) {}
-ScCellValue::ScCellValue( const ScFormulaCell& rFormula ) : meType(CELLTYPE_FORMULA), mpFormula(rFormula.Clone()) {}
 
 ScCellValue::ScCellValue( const ScCellValue& r ) : meType(r.meType), mfValue(r.mfValue)
 {
@@ -269,13 +268,6 @@ void ScCellValue::set( const EditTextObject& rEditText )
     clear();
     meType = CELLTYPE_EDIT;
     mpEditText = rEditText.Clone();
-}
-
-void ScCellValue::set( const ScFormulaCell& rFormula )
-{
-    clear();
-    meType = CELLTYPE_FORMULA;
-    mpFormula = rFormula.Clone();
 }
 
 void ScCellValue::set( ScFormulaCell* pFormula )
@@ -448,16 +440,6 @@ void ScCellValue::release( ScColumn& rColumn, SCROW nRow )
 
     meType = CELLTYPE_NONE;
     mfValue = 0.0;
-}
-
-bool ScCellValue::hasString() const
-{
-    return hasStringImpl(meType, mpFormula);
-}
-
-bool ScCellValue::hasNumeric() const
-{
-    return hasNumericImpl(meType, mpFormula);
 }
 
 bool ScCellValue::isEmpty() const

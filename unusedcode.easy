@@ -61,11 +61,6 @@ SalDisplay::PrintInfo() const
 SalGraphics::drawTransformedBitmap(basegfx::B2DPoint const&, basegfx::B2DPoint const&, basegfx::B2DPoint const&, SalBitmap const&, SalBitmap const*)
 ScCellIterator::getValue()
 ScCellIterator::hasNumeric() const
-ScCellValue::ScCellValue(EditTextObject const&)
-ScCellValue::ScCellValue(ScFormulaCell const&)
-ScCellValue::hasNumeric() const
-ScCellValue::hasString() const
-ScCellValue::set(ScFormulaCell const&)
 ScDocument::CreateFormatTable() const
 ScExtIButton::GetSelected() const
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()

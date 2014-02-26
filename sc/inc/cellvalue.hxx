@@ -43,8 +43,6 @@ struct SC_DLLPUBLIC ScCellValue
     ScCellValue( const ScRefCellValue& rCell );
     ScCellValue( double fValue );
     ScCellValue( const svl::SharedString& rString );
-    ScCellValue( const EditTextObject& rEditText );
-    ScCellValue( const ScFormulaCell& rFormula );
     ScCellValue( const ScCellValue& r );
     ~ScCellValue();
 
@@ -54,7 +52,6 @@ struct SC_DLLPUBLIC ScCellValue
     void set( double fValue );
     void set( const svl::SharedString& rStr );
     void set( const EditTextObject& rEditText );
-    void set( const ScFormulaCell& rFormula );
     void set( ScFormulaCell* pFormula );
 
     /**
@@ -79,10 +76,6 @@ struct SC_DLLPUBLIC ScCellValue
     void release( ScDocument& rDoc, const ScAddress& rPos );
 
     void release( ScColumn& rColumn, SCROW nRow );
-
-    bool hasString() const;
-
-    bool hasNumeric() const;
 
     bool isEmpty() const;
 
