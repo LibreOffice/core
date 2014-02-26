@@ -185,16 +185,6 @@ void ScSimpleRefDlgWrapper::SetDefaultPosSize(Point aPos, Size aSize, bool bSet)
 }
 
 
-OUString ScSimpleRefDlgWrapper::GetRefString()
-{
-    OUString aResult;
-    if(pWindow!=NULL)
-    {
-        aResult=((ScSimpleRefDlg*)pWindow)->GetRefString();
-    }
-    return aResult;
-}
-
 void ScSimpleRefDlgWrapper::SetAutoReOpen(bool bFlag)
 {
     bAutoReOpen=bFlag;

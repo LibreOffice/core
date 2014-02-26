@@ -84,7 +84,6 @@ ScMyNotEmptyCellsIterator::GetCell() const
 ScRangeStringConverter::GetRangeListFromString(com::sun::star::uno::Sequence<com::sun::star::table::CellRangeAddress>&, rtl::OUString const&, ScDocument const*, formula::FormulaGrammar::AddressConvention, unsigned short, unsigned short)
 ScRefCellValue::commit(ScColumn&, int) const
 ScRefreshTimer::StartRefreshTimer()
-ScSimpleRefDlgWrapper::GetRefString()
 ScTabViewShell::GetForms() const
 ScTable::GetNote(short, int)
 ScTable::SetRawString(short, int, rtl::OUString const&)
