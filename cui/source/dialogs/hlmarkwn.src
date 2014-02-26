@@ -33,14 +33,14 @@ ModalDialog RID_SVXFLOAT_HYPERLINK_MARKWND
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 109 , 185 ) ;
     Text [ en-US ] = "Target in Document" ;
-    PushButton BT_OK
+    PushButton BT_APPLY
     {
         HelpId = HID_HYPERLINK_MARKWND_APPLY;
         Pos = MAP_APPFONT ( 3 , 168 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
-        Text [ en-US ] = "Ok" ;
+        Text [ en-US ] = "Apply" ;
     };
     PushButton BT_CLOSE
     {
