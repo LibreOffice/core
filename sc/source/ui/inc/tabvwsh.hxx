@@ -413,7 +413,6 @@ public:
 
     bool IsActive() const { return bIsActive; }
     OUString GetFormula(ScAddress& rAddress);
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & GetForms() const;
 
     // ugly hack to call Define Names from Manage Names
     void    SwitchBetweenRefDialogs(SfxModelessDialog* pDialog);

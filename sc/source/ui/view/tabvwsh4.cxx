@@ -1924,14 +1924,4 @@ void ScTabViewShell::GetTbxState( SfxItemSet& rSet )
     rSet.Put( SfxUInt16Item( SID_TBXCTL_INSOBJ,   nInsObjCtrlState ) );
 }
 
-const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & ScTabViewShell::GetForms() const
-{
-    if( !pFormShell || !pFormShell->GetCurPage() )
-    {
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > aRef;
-        return aRef;
-    }
-    return pFormShell->GetCurPage()->GetForms();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
