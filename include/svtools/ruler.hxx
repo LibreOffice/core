@@ -739,7 +739,6 @@ public:
     long            GetWinWidth() const { return mnWinWidth; }
     void            SetPagePos( long nOff = 0, long nWidth = 0 );
     long            GetPageOffset() const;
-    long            GetPageWidth() const;
     void            SetBorderPos( long nOff = 0 );
     long            GetBorderOffset() const { return mnBorderOff; }
     Rectangle       GetExtraRect() const { return maExtraRect; }

@@ -2763,11 +2763,6 @@ long Ruler::GetPageOffset() const
     return mpData->nPageOff;
 }
 
-long Ruler::GetPageWidth() const
-{
-    return mpData->nPageWidth;
-}
-
 long Ruler::GetNullOffset() const
 {
     return mpData->nNullOff;
