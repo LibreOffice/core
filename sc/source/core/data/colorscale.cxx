@@ -235,16 +235,6 @@ void ScColorScaleEntry::SetValue(double nValue)
     mpCell.reset();
 }
 
-void ScColorScaleEntry::UpdateMoveTab( SCTAB nOldTab, SCTAB nNewTab, SCTAB nTabNo )
-{
-    if(mpCell)
-    {
-        sc::RefUpdateMoveTabContext aCxt(nOldTab, nNewTab);
-        mpCell->UpdateMoveTab(aCxt, nTabNo);
-        mpListener.reset(new ScFormulaListener(mpCell.get()));
-    }
-}
-
 void ScColorScaleEntry::UpdateReference( sc::RefUpdateContext& rCxt )
 {
     if (!mpCell)

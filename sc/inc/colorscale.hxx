@@ -68,7 +68,6 @@ public:
     void SetFormula(const OUString& rFormula, ScDocument* pDoc, const ScAddress& rAddr,
             formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT);
 
-    void UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab, SCTAB nTabNo);
     void UpdateReference( sc::RefUpdateContext& rCxt );
     void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt );
     void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt );
