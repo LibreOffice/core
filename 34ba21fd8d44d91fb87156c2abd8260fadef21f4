@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a961159_0c2b57ec",
+        "filename": "sw/source/filter/ww8/docxsdrexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-02-26T12:22:32Z",
+      "side": 1,
+      "message": "Here and later: please always be consistent with surrounding code, in general we use 4 spaces for indentation, please don\u0027t indent with 2 or 3 spaces instead.",
+      "range": {
+        "startLine": 215,
+        "startChar": 4,
+        "endLine": 215,
+        "endChar": 7
+      },
+      "revId": "34ba21fd8d44d91fb87156c2abd8260fadef21f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
