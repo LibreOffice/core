@@ -52,6 +52,7 @@ class KDEXLib : public QObject, public SalXLib
         QTimer timeoutTimer;
         QTimer userEventTimer;
         enum { LibreOfficeEventLoop, GlibEventLoop, QtUnixEventLoop } eventLoopType;
+        bool m_bYieldFrozen;
 
     private:
         void setupEventLoop();
@@ -84,6 +85,7 @@ class KDEXLib : public QObject, public SalXLib
         virtual void Wakeup();
         virtual void PostUserEvent();
 
+        void freezeYield(bool freeze) { m_bYieldFrozen = freeze; }
         void doStartup();
 
     public Q_SLOTS:
