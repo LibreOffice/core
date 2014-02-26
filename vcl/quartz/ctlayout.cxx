@@ -28,25 +28,24 @@ public:
     explicit        CTLayout( const CoreTextStyle* );
     virtual         ~CTLayout( void );
 
-    virtual bool    LayoutText( ImplLayoutArgs& );
-    virtual void    AdjustLayout( ImplLayoutArgs& );
-    virtual void    DrawText( SalGraphics& ) const;
+    virtual bool    LayoutText( ImplLayoutArgs& ) SAL_OVERRIDE;
+    virtual void    AdjustLayout( ImplLayoutArgs& ) SAL_OVERRIDE;
+    virtual void    DrawText( SalGraphics& ) const SAL_OVERRIDE;
 
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, int&,
                         sal_Int32* pGlyphAdvances, int* pCharIndexes,
-                        const PhysicalFontFace** pFallbackFonts ) const;
+                        const PhysicalFontFace** pFallbackFonts ) const SAL_OVERRIDE;
 
-    virtual long    GetTextWidth() const;
-    virtual long    FillDXArray( sal_Int32* pDXArray ) const;
+    virtual long    GetTextWidth() const SAL_OVERRIDE;
+    virtual long    FillDXArray( sal_Int32* pDXArray ) const SAL_OVERRIDE;
     virtual sal_Int32 GetTextBreak(long nMaxWidth, long nCharExtra, int nFactor) const SAL_OVERRIDE;
-    virtual void    GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const;
-    virtual bool    GetGlyphOutlines( SalGraphics&, PolyPolyVector& ) const;
-    virtual bool    GetBoundRect( SalGraphics&, Rectangle& ) const;
+    virtual void    GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const SAL_OVERRIDE;
+    virtual bool    GetBoundRect( SalGraphics&, Rectangle& ) const SAL_OVERRIDE;
 
-    virtual void    InitFont( void) const;
-    virtual void    MoveGlyph( int nStart, long nNewXPos );
-    virtual void    DropGlyph( int nStart );
-    virtual void    Simplify( bool bIsBase );
+    virtual void    InitFont( void) const SAL_OVERRIDE;
+    virtual void    MoveGlyph( int nStart, long nNewXPos ) SAL_OVERRIDE;
+    virtual void    DropGlyph( int nStart ) SAL_OVERRIDE;
+    virtual void    Simplify( bool bIsBase ) SAL_OVERRIDE;
 
 private:
     CGPoint         GetTextDrawPosition(void) const;
@@ -487,7 +486,6 @@ bool CTLayout::GetBoundRect( SalGraphics& rGraphics, Rectangle& rVCLRect ) const
 
 // glyph fallback is supported directly by Aqua
 // so methods used only by MultiSalLayout can be dummy implementated
-bool CTLayout::GetGlyphOutlines( SalGraphics&, PolyPolyVector& ) const { return false; }
 void CTLayout::InitFont() const {}
 void CTLayout::MoveGlyph( int /*nStart*/, long /*nNewXPos*/ ) {}
 void CTLayout::DropGlyph( int /*nStart*/ ) {}
