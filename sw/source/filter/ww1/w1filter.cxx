@@ -921,7 +921,7 @@ oncemore:
 
             pField = new SwMacroField( (SwMacroFieldType*)
                             rOut.GetSysFldType( RES_MACROFLD ),
-                            "StarOffice.Standard.Modul1." + aName, aStr );
+                            "StarOffice.Standard.Module1." + aName, aStr );
         }
         break;
         case 55: // read tiff / or better: import anything
@@ -1219,7 +1219,7 @@ void Ww1Chp::Stop(Ww1Shell& rOut, Ww1Manager& rMan, sal_Unicode&)
             if (aChpx.fsFtcGet())
                 rOut.EndItem(RES_CHRATR_FONT);
         }else{
-            OSL_ENSURE( !nPlcIndex, "Chp-Attribut-Stop verloren" );
+            OSL_ENSURE( !nPlcIndex, "Lost Chp-Attribut-Stop" );
         }
     }
 }
@@ -1391,7 +1391,7 @@ SvxFontItem Ww1Fonts::GetFont(sal_uInt16 nFCode)
         }
         else
         {
-            OSL_ENSURE(false, "WW1Fonts::GetFont: Nicht existenter Font !");
+            OSL_ENSURE(false, "WW1Fonts::GetFont: Non-existent font !");
             eFamily = FAMILY_SWISS;
             aName = "Helv";
             ePitch = PITCH_VARIABLE;
