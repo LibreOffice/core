@@ -112,7 +112,7 @@ void SwAutoCorrDoc::DeleteSel( SwPaM& rDelPam )
     }
 }
 
-sal_Bool SwAutoCorrDoc::Delete( sal_Int32 nStt, sal_Int32 nEnd )
+bool SwAutoCorrDoc::Delete( sal_Int32 nStt, sal_Int32 nEnd )
 {
     const SwNodeIndex& rNd = rCrsr.GetPoint()->nNode;
     SwPaM aSel( rNd, nStt, rNd, nEnd );
@@ -120,10 +120,10 @@ sal_Bool SwAutoCorrDoc::Delete( sal_Int32 nStt, sal_Int32 nEnd )
 
     if( bUndoIdInitialized )
         bUndoIdInitialized = true;
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwAutoCorrDoc::Insert( sal_Int32 nPos, const OUString& rTxt )
+bool SwAutoCorrDoc::Insert( sal_Int32 nPos, const OUString& rTxt )
 {
     SwPaM aPam( rCrsr.GetPoint()->nNode.GetNode(), nPos );
     rEditSh.GetDoc()->InsertString( aPam, rTxt );
@@ -136,15 +136,15 @@ sal_Bool SwAutoCorrDoc::Insert( sal_Int32 nPos, const OUString& rTxt )
             ++m_nEndUndoCounter;
         }
     }
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwAutoCorrDoc::Replace( sal_Int32 nPos, const OUString& rTxt )
+bool SwAutoCorrDoc::Replace( sal_Int32 nPos, const OUString& rTxt )
 {
     return ReplaceRange( nPos, rTxt.getLength(), rTxt );
 }
 
-sal_Bool SwAutoCorrDoc::ReplaceRange( sal_Int32 nPos, sal_Int32 nSourceLength, const OUString& rTxt )
+bool SwAutoCorrDoc::ReplaceRange( sal_Int32 nPos, sal_Int32 nSourceLength, const OUString& rTxt )
 {
     SwPaM* pPam = &rCrsr;
     if( pPam->GetPoint()->nContent.GetIndex() != nPos )
@@ -156,7 +156,7 @@ sal_Bool SwAutoCorrDoc::ReplaceRange( sal_Int32 nPos, sal_Int32 nSourceLength, c
     SwTxtNode * const pNd = pPam->GetNode()->GetTxtNode();
     if ( !pNd )
     {
-        return sal_False;
+        return false;
     }
 
     // text attributes with dummy characters must not be replaced!
@@ -224,10 +224,10 @@ sal_Bool SwAutoCorrDoc::ReplaceRange( sal_Int32 nPos, sal_Int32 nSourceLength, c
     if( pPam != &rCrsr )
         delete pPam;
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwAutoCorrDoc::SetAttr( sal_Int32 nStt, sal_Int32 nEnd, sal_uInt16 nSlotId,
+bool SwAutoCorrDoc::SetAttr( sal_Int32 nStt, sal_Int32 nEnd, sal_uInt16 nSlotId,
                                         SfxPoolItem& rItem )
 {
     const SwNodeIndex& rNd = rCrsr.GetPoint()->nNode;
@@ -250,7 +250,7 @@ sal_Bool SwAutoCorrDoc::SetAttr( sal_Int32 nStt, sal_Int32 nEnd, sal_uInt16 nSlo
     return 0 != nWhich;
 }
 
-sal_Bool SwAutoCorrDoc::SetINetAttr( sal_Int32 nStt, sal_Int32 nEnd, const OUString& rURL )
+bool SwAutoCorrDoc::SetINetAttr( sal_Int32 nStt, sal_Int32 nEnd, const OUString& rURL )
 {
     const SwNodeIndex& rNd = rCrsr.GetPoint()->nNode;
     SwPaM aPam( rNd, nStt, rNd, nEnd );
@@ -261,7 +261,7 @@ sal_Bool SwAutoCorrDoc::SetINetAttr( sal_Int32 nStt, sal_Int32 nEnd, const OUStr
     rEditSh.GetDoc()->SetFmtItemByAutoFmt( aPam, aSet );
     if( bUndoIdInitialized )
         bUndoIdInitialized = true;
-    return sal_True;
+    return true;
 }
 
 /** Return the text of a previous paragraph
@@ -310,7 +310,7 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
     if( nEndPos == rSttPos )
         return bRet;
 
-    LanguageType eLang = GetLanguage(nEndPos, sal_False);
+    LanguageType eLang = GetLanguage(nEndPos, false);
     if(LANGUAGE_SYSTEM == eLang)
         eLang = GetAppLanguage();
     LanguageTag aLanguageTag( eLang);
@@ -340,7 +340,7 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
         }
         else
         {
-            SwTextBlocks aTBlks( rACorrect.GetAutoCorrFileName( aLanguageTag, sal_False, sal_True ));
+            SwTextBlocks aTBlks( rACorrect.GetAutoCorrFileName( aLanguageTag, false, true ));
             sal_uInt16 nPos = aTBlks.GetIndex( pFnd->GetShort() );
             if( USHRT_MAX != nPos && aTBlks.BeginGetDoc( nPos ) )
             {
@@ -406,12 +406,12 @@ void SwAutoCorrDoc::SaveCpltSttWord( sal_uLong nFlag, sal_Int32 nPos,
                                             sal_Unicode cChar )
 {
     sal_uLong nNode = pIdx ? pIdx->GetIndex() : rCrsr.GetPoint()->nNode.GetIndex();
-    LanguageType eLang = GetLanguage(nPos, sal_False);
+    LanguageType eLang = GetLanguage(nPos, false);
     rEditSh.GetDoc()->SetAutoCorrExceptWord( new SwAutoCorrExceptWord( nFlag,
                                         nNode, nPos, rExceptWord, cChar, eLang ));
 }
 
-LanguageType SwAutoCorrDoc::GetLanguage( sal_Int32 nPos, sal_Bool bPrevPara ) const
+LanguageType SwAutoCorrDoc::GetLanguage( sal_Int32 nPos, bool bPrevPara ) const
 {
     LanguageType eRet = LANGUAGE_SYSTEM;
 

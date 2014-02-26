@@ -57,15 +57,15 @@ public:
     SwAutoCorrDoc( SwEditShell& rEditShell, SwPaM& rPam, sal_Unicode cIns = 0 );
     ~SwAutoCorrDoc();
 
-    virtual sal_Bool Delete( sal_Int32 nStt, sal_Int32 nEnd );
-    virtual sal_Bool Insert( sal_Int32 nPos, const OUString& rTxt );
-    virtual sal_Bool Replace( sal_Int32 nPos, const OUString& rTxt );
-    virtual sal_Bool ReplaceRange( sal_Int32 nPos, sal_Int32 nLen, const OUString& rTxt );
+    virtual bool Delete( sal_Int32 nStt, sal_Int32 nEnd );
+    virtual bool Insert( sal_Int32 nPos, const OUString& rTxt );
+    virtual bool Replace( sal_Int32 nPos, const OUString& rTxt );
+    virtual bool ReplaceRange( sal_Int32 nPos, sal_Int32 nLen, const OUString& rTxt );
 
-    virtual sal_Bool SetAttr( sal_Int32 nStt, sal_Int32 nEnd, sal_uInt16 nSlotId,
+    virtual bool SetAttr( sal_Int32 nStt, sal_Int32 nEnd, sal_uInt16 nSlotId,
                             SfxPoolItem& );
 
-    virtual sal_Bool SetINetAttr( sal_Int32 nStt, sal_Int32 nEnd, const OUString& rURL );
+    virtual bool SetINetAttr( sal_Int32 nStt, sal_Int32 nEnd, const OUString& rURL );
 
     // return text of a previous paragraph
     // If it does not exist or if there is nothing before, return blank.
@@ -84,7 +84,7 @@ public:
     // Afterwards the words can be added into exception list if needed.
     virtual void SaveCpltSttWord( sal_uLong nFlag, sal_Int32 nPos,
                                     const OUString& rExceptWord, sal_Unicode cChar );
-    virtual LanguageType GetLanguage( sal_Int32 nPos, sal_Bool bPrevPara ) const;
+    virtual LanguageType GetLanguage( sal_Int32 nPos, bool bPrevPara ) const;
 };
 
 class SwAutoCorrExceptWord

@@ -234,35 +234,35 @@ public:
 private:
     OUString & m_rText;
     LanguageType m_eLang;
-    virtual sal_Bool Delete( sal_Int32 nStt, sal_Int32 nEnd )
+    virtual bool Delete( sal_Int32 nStt, sal_Int32 nEnd )
     {
         //fprintf(stderr, "TestAutoCorrDoc::Delete\n");
         m_rText = m_rText.replaceAt(nStt, nEnd-nStt, "");
         return true;
     }
-    virtual sal_Bool Insert( sal_Int32 nPos, const OUString& rTxt )
+    virtual bool Insert( sal_Int32 nPos, const OUString& rTxt )
     {
         //fprintf(stderr, "TestAutoCorrDoc::Insert\n");
         m_rText = m_rText.replaceAt(nPos, 0, rTxt);
         return true;
     }
-    virtual sal_Bool Replace( sal_Int32 nPos, const OUString& rTxt )
+    virtual bool Replace( sal_Int32 nPos, const OUString& rTxt )
     {
         //fprintf(stderr, "TestAutoCorrDoc::Replace\n");
         return ReplaceRange( nPos, rTxt.getLength(), rTxt );
     }
-    virtual sal_Bool ReplaceRange( sal_Int32 nPos, sal_Int32 nLen, const OUString& rTxt )
+    virtual bool ReplaceRange( sal_Int32 nPos, sal_Int32 nLen, const OUString& rTxt )
     {
         //fprintf(stderr, "TestAutoCorrDoc::ReplaceRange %d %d %s\n", nPos, nLen, OUStringToOString(rTxt, RTL_TEXTENCODING_UTF8).getStr());
         m_rText = m_rText.replaceAt(nPos, nLen, rTxt);
         return true;
     }
-    virtual sal_Bool SetAttr( sal_Int32, sal_Int32, sal_uInt16, SfxPoolItem& )
+    virtual bool SetAttr( sal_Int32, sal_Int32, sal_uInt16, SfxPoolItem& )
     {
         //fprintf(stderr, "TestAutoCorrDoc::SetAttr\n");
         return true;
     }
-    virtual sal_Bool SetINetAttr( sal_Int32, sal_Int32, const OUString& )
+    virtual bool SetINetAttr( sal_Int32, sal_Int32, const OUString& )
     {
         //fprintf(stderr, "TestAutoCorrDoc::SetINetAttr\n");
         return true;

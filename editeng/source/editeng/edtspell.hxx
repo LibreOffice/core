@@ -139,20 +139,20 @@ public:
     EdtAutoCorrDoc(EditEngine* pE, ContentNode* pCurNode, sal_uInt16 nCrsr, sal_Unicode cIns);
     ~EdtAutoCorrDoc();
 
-    virtual sal_Bool    Delete( sal_Int32 nStt, sal_Int32 nEnd );
-    virtual sal_Bool    Insert( sal_Int32 nPos, const OUString& rTxt );
-    virtual sal_Bool    Replace( sal_Int32 nPos, const OUString& rTxt );
-    virtual sal_Bool    ReplaceRange( sal_Int32 nPos, sal_Int32 nLen, const OUString& rTxt );
+    virtual bool    Delete( sal_Int32 nStt, sal_Int32 nEnd );
+    virtual bool    Insert( sal_Int32 nPos, const OUString& rTxt );
+    virtual bool    Replace( sal_Int32 nPos, const OUString& rTxt );
+    virtual bool    ReplaceRange( sal_Int32 nPos, sal_Int32 nLen, const OUString& rTxt );
 
-    virtual sal_Bool    SetAttr( sal_Int32 nStt, sal_Int32 nEnd, sal_uInt16 nSlotId, SfxPoolItem& );
-    virtual sal_Bool    SetINetAttr( sal_Int32 nStt, sal_Int32 nEnd, const OUString& rURL );
+    virtual bool    SetAttr( sal_Int32 nStt, sal_Int32 nEnd, sal_uInt16 nSlotId, SfxPoolItem& );
+    virtual bool    SetINetAttr( sal_Int32 nStt, sal_Int32 nEnd, const OUString& rURL );
 
     virtual OUString const* GetPrevPara(bool bAtNormalPos) SAL_OVERRIDE;
 
     virtual bool        ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
                                   SvxAutoCorrect& rACorrect, OUString* pPara );
 
-    virtual LanguageType GetLanguage( sal_Int32 nPos, sal_Bool bPrevPara = sal_False ) const;
+    virtual LanguageType GetLanguage( sal_Int32 nPos, bool bPrevPara = false ) const;
 
     sal_uInt16          GetCursor() const { return nCursor; }
 

@@ -1850,7 +1850,7 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
                 bool bSetHardBlank = false;
 
                 OUString sReplace( pATst->GetQuote( aACorrDoc,
-                                    nPos, cChar, sal_True ));
+                                    nPos, cChar, true ));
 
                 m_aDelPam.SetMark();
                 m_aDelPam.GetPoint()->nContent = nPos+1;
@@ -1900,7 +1900,7 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
                         bool bSetHardBlank = false;
                         m_aDelPam.GetPoint()->nContent = nPos;
                         OUString sReplace( pATst->GetQuote( aACorrDoc,
-                                                    nPos, cChar, sal_False ));
+                                                    nPos, cChar, false ));
 
                         if( 2 == sReplace.getLength() && ' ' == sReplace[ 0 ])
                         {
@@ -2065,7 +2065,7 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
                 if( m_aFlags.bCptlSttSntnc && bFirst )
                 {
                     SetRedlineTxt( STR_AUTOFMTREDL_CPTL_STT_SENT );
-                    pATst->FnCptlSttSntnc( aACorrDoc, *pTxt, sal_True, nSttPos, nPos, eLang);
+                    pATst->FnCptlSttSntnc( aACorrDoc, *pTxt, true, nSttPos, nPos, eLang);
                     bFirst = sal_False;
                 }
 

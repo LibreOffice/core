@@ -1982,22 +1982,22 @@ IMPL_LINK( OfaQuoteTabPage, QuoteHdl, PushButton*, pBtn )
         case SGL_START:
             cDlg = cSglStartQuote;
             if(cDlg == 0)
-                cDlg = pAutoCorrect->GetQuote('\'', sal_True, eLang);
+                cDlg = pAutoCorrect->GetQuote('\'', true, eLang);
         break;
         case SGL_END:
             cDlg = cSglEndQuote;
             if(cDlg == 0)
-                cDlg = pAutoCorrect->GetQuote('\'', sal_False, eLang);
+                cDlg = pAutoCorrect->GetQuote('\'', false, eLang);
         break;
         case DBL_START:
             cDlg = cStartQuote;
             if(cDlg == 0)
-                cDlg = pAutoCorrect->GetQuote('\"', sal_True, eLang);
+                cDlg = pAutoCorrect->GetQuote('\"', true, eLang);
         break;
         case DBL_END:
             cDlg = cEndQuote;
             if(cDlg == 0)
-                cDlg = pAutoCorrect->GetQuote('\"', sal_False, eLang);
+                cDlg = pAutoCorrect->GetQuote('\"', false, eLang);
         break;
         default:
             OSL_FAIL("svx::OfaQuoteTabPage::QuoteHdl(), how to initialize cDlg?" );
