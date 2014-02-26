@@ -911,7 +911,7 @@ long Ww1Bookmarks::Len() const
 {
     if( nIsEnd )
     {
-        OSL_ENSURE( false, "Falscher Aufruf (1) von Ww1Bookmarks::Len()" );
+        OSL_ENSURE( false, "Invalid usage (1) of Ww1Bookmarks::Len()" );
         return 0;
     }
     sal_uInt16 nEndIdx = SVBT16ToShort(pPos[0]->GetData(nPlcIdx[0]));
@@ -1013,7 +1013,7 @@ Ww1Assoc::Ww1Assoc(Ww1Fib& _rFib)
      && rFib.GetStream().Read(pBuffer, cb) == cb)
     {
         sal_uInt16 j;
-        OSL_ENSURE( cb == SVBT16ToShort( *(SVBT16*)pBuffer ), "size missmatch");
+        OSL_ENSURE( cb == SVBT16ToShort( *(SVBT16*)pBuffer ), "size mismatch");
         for (i=0,j=sizeof(SVBT16);j<cb && i<Criteria1;i++)
         {
             pStrTbl[i] = pBuffer+j;
@@ -1102,7 +1102,7 @@ sal_Bool Ww1Pap::HasId0(sal_uInt16 nId)
     UpdateIdx();
 
     if( !pPap ){
-        OSL_ENSURE( false, "Ww1Pap::HasId():: kann kein pPap erzeugen" );
+        OSL_ENSURE( false, "Ww1Pap::HasId():: cannot create a pPap" );
         return sal_False;
     }
 
