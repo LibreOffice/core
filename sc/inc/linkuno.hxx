@@ -502,7 +502,7 @@ public:
 class ScExternalSheetCacheObj : public cppu::WeakImplHelper1< ::com::sun::star::sheet::XExternalSheetCache >
 {
 public:
-    explicit ScExternalSheetCacheObj(ScExternalRefCache::TableTypeRef pTable, size_t nIndex);
+    explicit ScExternalSheetCacheObj(ScDocShell* pDocShell, ScExternalRefCache::TableTypeRef pTable, size_t nIndex);
     ~ScExternalSheetCacheObj();
 
                             // XExternalSheetCache
@@ -528,6 +528,7 @@ private:
     ScExternalSheetCacheObj(const ScExternalSheetCacheObj&);
 
 private:
+    ScDocShell* mpDocShell;
     ScExternalRefCache::TableTypeRef mpTable;
     size_t mnIndex;
 };
@@ -535,7 +536,7 @@ private:
 class ScExternalDocLinkObj : public cppu::WeakImplHelper1< ::com::sun::star::sheet::XExternalDocLink >
 {
 public:
-    ScExternalDocLinkObj(ScExternalRefManager* pRefMgr, sal_uInt16 nFileId);
+    ScExternalDocLinkObj(ScDocShell* pDocShell, ScExternalRefManager* pRefMgr, sal_uInt16 nFileId);
     ~ScExternalDocLinkObj();
 
                             // XExternalDocLink
@@ -574,6 +575,7 @@ public:
             throw (::com::sun::star::uno::RuntimeException);
 
 private:
+    ScDocShell* mpDocShell;
     ScExternalRefManager*   mpRefMgr;
     sal_uInt16              mnFileId;
 };
