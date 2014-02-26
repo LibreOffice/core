@@ -17,7 +17,6 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/style/TabStop.hpp>
-#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
@@ -42,8 +41,6 @@
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/style/BreakType.hpp>
 #include <unotools/tempfile.hxx>
-#include <unotools/ucbstreamhelper.hxx>
-#include <rtl/strbuf.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
@@ -52,61 +49,12 @@
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
 
-#include <libxml/xpathInternals.h>
-#include <libxml/parserInternals.h>
-
-#define EMU_TO_MM100(EMU) (EMU / 360)
-
 class Test : public SwModelTestBase
 {
 public:
     Test() : SwModelTestBase("/sw/qa/extras/ooxmlexport/data/", "Office Open XML Text") {}
 
 protected:
-
-    /**
-     * Given that some problem doesn't affect the result in the importer, we
-     * test the resulting file directly, by opening the zip file, parsing an
-     * xml stream, and asserting an XPath expression. This method returns the
-     * xml stream, so that you can do the asserting.
-     */
-    xmlDocPtr parseExport(const OUString& rStreamName = OUString("word/document.xml"));
-
-    /**
-     * Helper method to return nodes represented by rXPath.
-     */
-    xmlNodeSetPtr getXPathNode(xmlDocPtr pXmlDoc, const OString& rXPath);
-
-    /**
-     * Assert that rXPath exists, and returns exactly one node.
-     * In case rAttribute is provided, the rXPath's attribute's value must
-     * equal to the rExpected value.
-     */
-    void assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute = OString(), const OUString& rExpectedValue = OUString());
-
-    /**
-     * Assert that rXPath exists, and returns exactly nNumberOfNodes nodes.
-     * Useful for checking that we do _not_ export some node (nNumberOfNodes == 0).
-     */
-    void assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, int nNumberOfNodes);
-
-    /**
-     * Assert that rXPath exists, and has exactly nNumberOfChildNodes child nodes.
-     * Useful for checking that we do have a no child nodes to a specific node (nNumberOfChildNodes == 0).
-     */
-    void assertXPathChildren(xmlDocPtr pXmlDoc, const OString& rXPath, int nNumberOfChildNodes);
-
-    /**
-     * Get the position of the child named rName of the parent node specified by rXPath.
-     * Useful for checking relative order of elements.
-     */
-    int getXPathPosition(xmlDocPtr pXmlDoc, const OString& rXPath, const OUString& rName);
-
-    /**
-     * Same as the assertXPath(), but don't assert: return the string instead.
-     */
-    OUString getXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute);
-
     /**
      * Blacklist handling
      */
@@ -124,105 +72,6 @@ protected:
         return (OString(filename).endsWith(".docx") && std::find(vBlacklist.begin(), vBlacklist.end(), filename) == vBlacklist.end());
     }
 };
-
-xmlDocPtr Test::parseExport(const OUString& rStreamName)
-{
-    if (!m_bExported)
-        return 0;
-
-    // Read the XML stream we're interested in.
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), m_aTempFile.GetURL());
-    uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName(rStreamName), uno::UNO_QUERY);
-    boost::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
-    pStream->Seek(STREAM_SEEK_TO_END);
-    sal_Size nSize = pStream->Tell();
-    pStream->Seek(0);
-    OStringBuffer aDocument(nSize);
-    char ch;
-    for (sal_Size i = 0; i < nSize; ++i)
-    {
-        pStream->ReadChar( ch );
-        aDocument.append(ch);
-    }
-
-    // Parse the XML.
-    return xmlParseMemory((const char*)aDocument.getStr(), aDocument.getLength());
-}
-
-xmlNodeSetPtr Test::getXPathNode(xmlDocPtr pXmlDoc, const OString& rXPath)
-{
-    xmlXPathContextPtr pXmlXpathCtx = xmlXPathNewContext(pXmlDoc);
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("w"), BAD_CAST("http://schemas.openxmlformats.org/wordprocessingml/2006/main"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("v"), BAD_CAST("urn:schemas-microsoft-com:vml"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("mc"), BAD_CAST("http://schemas.openxmlformats.org/markup-compatibility/2006"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("wps"), BAD_CAST("http://schemas.microsoft.com/office/word/2010/wordprocessingShape"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("wpg"), BAD_CAST("http://schemas.microsoft.com/office/word/2010/wordprocessingGroup"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("wp"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("wp14"), BAD_CAST("http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("a"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/main"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("pic"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/picture"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("rels"), BAD_CAST("http://schemas.openxmlformats.org/package/2006/relationships"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("w14"), BAD_CAST("http://schemas.microsoft.com/office/word/2010/wordml"));
-    xmlXPathObjectPtr pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(rXPath.getStr()), pXmlXpathCtx);
-    return pXmlXpathObj->nodesetval;
-}
-
-void Test::assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute, const OUString& rExpectedValue)
-{
-    OUString aValue = getXPath(pXmlDoc, rXPath, rAttribute);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        OString("Attribute '" + rAttribute + "' of '" + rXPath + "' incorrect value.").getStr(),
-        rExpectedValue, aValue);
-}
-
-void Test::assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, int nNumberOfNodes)
-{
-    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, rXPath);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        OString("XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
-        nNumberOfNodes, xmlXPathNodeSetGetLength(pXmlNodes));
-}
-
-void Test::assertXPathChildren(xmlDocPtr pXmlDoc, const OString& rXPath, int nNumberOfChildNodes)
-{
-    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, rXPath);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        OString("XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
-        1, xmlXPathNodeSetGetLength(pXmlNodes));
-    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        OString("XPath '" + rXPath + "' number of child-nodes is incorrect").getStr(),
-        nNumberOfChildNodes, (int)xmlChildElementCount(pXmlNode));
-}
-
-int Test::getXPathPosition(xmlDocPtr pXmlDoc, const OString& rXPath, const OUString& rChildName)
-{
-    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, rXPath);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
-                                 1,
-                                 xmlXPathNodeSetGetLength(pXmlNodes));
-    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    int nRet = 0;
-    for (xmlNodePtr pChild = pXmlNode->children; pChild; pChild = pChild->next)
-    {
-        if (OUString::createFromAscii((const char*)pChild->name) == rChildName)
-            break;
-        ++nRet;
-    }
-    return nRet;
-}
-
-OUString Test::getXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute)
-{
-    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, rXPath);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        OString("XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
-        1, xmlXPathNodeSetGetLength(pXmlNodes));
-    if (rAttribute.isEmpty())
-        return OUString();
-    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    return OUString::createFromAscii((const char*)xmlGetProp(pXmlNode, BAD_CAST(rAttribute.getStr())));
-}
 
 #if 1
 #define DECLARE_OOXMLEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, Test)
@@ -2298,12 +2147,6 @@ DECLARE_OOXMLEXPORT_TEST(testAutofit, "autofit.docx")
     CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<sal_Bool>(getShape(2), "FrameIsAutomaticHeight")));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testDmlShapeTitle, "dml-shape-title.docx")
-{
-    CPPUNIT_ASSERT_EQUAL(OUString("Title"), getProperty<OUString>(getShape(1), "Title"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Description"), getProperty<OUString>(getShape(1), "Description"));
-}
-
 DECLARE_OOXMLEXPORT_TEST(testFormControl, "form-control.docx")
 {
     if (!m_bExported)
@@ -2319,44 +2162,6 @@ DECLARE_OOXMLEXPORT_TEST(testBehinddoc, "behinddoc.docx")
         return;
     // This was "0", shape was in the foreground.
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor", "behindDoc", "1");
-}
-
-DECLARE_OOXMLEXPORT_TEST(testDmlZorder, "dml-zorder.odt")
-{
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
-    // This was "0": causing that in Word, the second shape was on top, while in the original odt the first shape is on top.
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor", "relativeHeight", "2");
-}
-
-DECLARE_OOXMLEXPORT_TEST(testDmlShapeRelsize, "dml-shape-relsize.docx")
-{
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
-    // Relative size wasn't exported all, then relativeFrom was "page", not "margin".
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp14:sizeRelH", "relativeFrom", "margin");
-}
-
-DECLARE_OOXMLEXPORT_TEST(testDmlPictureInTextframe, "dml-picture-in-textframe.docx")
-{
-    if (!m_bExported)
-        return;
-
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), m_aTempFile.GetURL());
-    CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName("word/media/image1.gif")));
-    // This was also true, image was written twice.
-    CPPUNIT_ASSERT_EQUAL(false, bool(xNameAccess->hasByName("word/media/image2.gif")));
-}
-
-DECLARE_OOXMLEXPORT_TEST(testDmlGroupshapeRelsize, "dml-groupshape-relsize.docx")
-{
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
-    // Relative size wasn't imported.
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp14:sizeRelH", "relativeFrom", "margin");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTrackChangesDeletedParagraphMark, "testTrackChangesDeletedParagraphMark.docx")
@@ -2605,33 +2410,6 @@ DECLARE_OOXMLEXPORT_TEST(testFdo73550, "fdo73550.docx")
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:pPr/w:rPr/w:rFonts");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testDmlTextshape, "dml-textshape.docx")
-{
-    uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> xShape(xGroup->getByIndex(1), uno::UNO_QUERY);
-    // This was drawing::FillStyle_NONE.
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xShape, "FillStyle"));
-    // This was drawing::LineStyle_NONE.
-    CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_SOLID, getProperty<drawing::LineStyle>(xShape, "LineStyle"));
-
-    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
-    if (!pXmlDocument)
-        return;
-    // This was wrap="none".
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/wpg:wgp/wps:wsp[2]/wps:bodyPr", "wrap", "square");
-
-    xShape.set(xGroup->getByIndex(3), uno::UNO_QUERY);
-    OUString aType = comphelper::SequenceAsHashMap(getProperty<beans::PropertyValues>(xShape, "CustomShapeGeometry"))["Type"].get<OUString>();
-    CPPUNIT_ASSERT_EQUAL(OUString("ooxml-bentConnector3"), aType);
-    // Connector was incorrectly shifted towards the top left corner, X was 552, Y was 0.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4018), xShape->getPosition().X);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1256), xShape->getPosition().Y);
-
-    xShape.set(xGroup->getByIndex(5), uno::UNO_QUERY);
-    // This was incorrectly shifted towards the top of the page, Y was 106.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1016), xShape->getPosition().Y);
-}
-
 DECLARE_OOXMLEXPORT_TEST(testDrawinglayerPicPos, "drawinglayer-pic-pos.docx")
 {
     // The problem was that the position of the picture was incorrect, it was shifted towards the bottom right corner.
@@ -2866,89 +2644,6 @@ DECLARE_OOXMLEXPORT_TEST(testLineStyle_DashType, "LineStyle_DashType.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:prstDash", "val", "dash");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testDMLSolidfillAlpha, "dml-solidfill-alpha.docx")
-{
-    // Problem was that the transparency was not exported (a:alpha).
-    // RGB color (a:srgbClr)
-    uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);;
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(70), getProperty<sal_Int16>(xShape, "FillTransparence"));
-
-    // Theme color (a:schemeClr)
-    xShape.set(getShape(2), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(20), getProperty<sal_Int16>(xShape, "FillTransparence"));
-}
-
-DECLARE_OOXMLEXPORT_TEST(testDMLCustomGeometry, "dml-customgeometry-cubicbezier.docx")
-{
-
-    // The problem was that a custom shape was not exported.
-    uno::Sequence<beans::PropertyValue> aProps = getProperty< uno::Sequence<beans::PropertyValue> >(getShape(1), "CustomShapeGeometry");
-    uno::Sequence<beans::PropertyValue> aPathProps;
-    for (int i = 0; i < aProps.getLength(); ++i)
-    {
-        const beans::PropertyValue& rProp = aProps[i];
-        if (rProp.Name == "Path")
-            rProp.Value >>= aPathProps;
-    }
-    uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aPairs;
-    uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
-    for (int i = 0; i < aPathProps.getLength(); ++i)
-    {
-        const beans::PropertyValue& rProp = aPathProps[i];
-        if (rProp.Name == "Coordinates")
-            rProp.Value >>= aPairs;
-        else if (rProp.Name == "Segments")
-            rProp.Value >>= aSegments;
-    }
-
-    // (a:moveTo)
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), aSegments[0].Count);
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(drawing::EnhancedCustomShapeSegmentCommand::MOVETO), aSegments[0].Command );
-
-    // (a:cubicBezTo)
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(5), aSegments[1].Count);
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(drawing::EnhancedCustomShapeSegmentCommand::CURVETO), aSegments[1].Command );
-
-    // Coordinates
-    sal_Int32 nLength = 16;
-    CPPUNIT_ASSERT_EQUAL(nLength, aPairs.getLength());
-    std::pair<sal_Int32,sal_Int32> aCoordinates[] =
-    {
-        std::pair<sal_Int32,sal_Int32>(607, 0),
-        std::pair<sal_Int32,sal_Int32>(450, 44),
-        std::pair<sal_Int32,sal_Int32>(300, 57),
-        std::pair<sal_Int32,sal_Int32>(176, 57),
-        std::pair<sal_Int32,sal_Int32>(109, 57),
-        std::pair<sal_Int32,sal_Int32>(49, 53),
-        std::pair<sal_Int32,sal_Int32>(0, 48),
-        std::pair<sal_Int32,sal_Int32>(66, 58),
-        std::pair<sal_Int32,sal_Int32>(152, 66),
-        std::pair<sal_Int32,sal_Int32>(251, 66),
-        std::pair<sal_Int32,sal_Int32>(358, 66),
-        std::pair<sal_Int32,sal_Int32>(480, 56),
-        std::pair<sal_Int32,sal_Int32>(607, 27),
-        std::pair<sal_Int32,sal_Int32>(607, 0),
-        std::pair<sal_Int32,sal_Int32>(607, 0),
-        std::pair<sal_Int32,sal_Int32>(607, 0)
-    };
-
-    for( int i = 0; i < nLength; ++i )
-    {
-        CPPUNIT_ASSERT_EQUAL(aCoordinates[i].first, aPairs[i].First.Value.get<sal_Int32>());
-        CPPUNIT_ASSERT_EQUAL(aCoordinates[i].second, aPairs[i].Second.Value.get<sal_Int32>());
-    }
-}
-
-DECLARE_OOXMLEXPORT_TEST(testDmlRectangleRelsize, "dml-rectangle-relsize.docx")
-{
-    // This was around 19560, as we did not read wp14:pctHeight for
-    // drawinglayer shapes and the fallback data was invalid.
-    CPPUNIT_ASSERT(getShape(1)->getSize().Height > 21000);
-
-    // This was around 0: relative size of 0% was imported as 0, not "fall back to absolute size".
-    CPPUNIT_ASSERT(getShape(2)->getSize().Height > 300);
-}
-
 DECLARE_OOXMLEXPORT_TEST(testGradientFillPreservation, "gradient-fill-preservation.docx")
 {
     xmlDocPtr pXmlDocument = parseExport("word/document.xml");
@@ -2997,43 +2692,6 @@ DECLARE_OOXMLEXPORT_TEST(testSegFaultWhileSave, "test_segfault_while_save.docx")
         return;
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblGrid/w:gridCol[2]", "w").match("6138"));
 }*/
-
-DECLARE_OOXMLEXPORT_TEST(testDMLTextFrameVertAdjust, "dml-textframe-vertadjust.docx")
-{
-    // DOCX textboxes with text are imported as text frames but in Writer text frames did not have
-    // TextVerticalAdjust attribute so far.
-
-    // 1st frame's context is adjusted to the top
-    uno::Reference<beans::XPropertySet> xFrame(getTextFrameByName("Rectangle 1"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_TOP, getProperty<drawing::TextVerticalAdjust>(xFrame, "TextVerticalAdjust"));
-    // 2nd frame's context is adjusted to the center
-    xFrame.set(getTextFrameByName("Rectangle 2"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_CENTER, getProperty<drawing::TextVerticalAdjust>(xFrame, "TextVerticalAdjust"));
-    // 3rd frame's context is adjusted to the bottom
-    xFrame.set(getTextFrameByName("Rectangle 3"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_BOTTOM, getProperty<drawing::TextVerticalAdjust>(xFrame, "TextVerticalAdjust"));
-}
-
-DECLARE_OOXMLEXPORT_TEST(testDMLShapeFillBitmapCrop, "dml-shape-fillbitmapcrop.docx")
-{
-    // Test the new GraphicCrop property which is introduced to define
-    // cropping of shapes filled with a picture in stretch mode.
-
-    // 1st shape has some cropping
-    text::GraphicCrop aGraphicCropStruct = getProperty<text::GraphicCrop>(getShape(1), "GraphicCrop");
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(m_bExported ? 454 : 455 ), aGraphicCropStruct.Left );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(m_bExported ? 367 : 368 ), aGraphicCropStruct.Right );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(m_bExported ? -454 : -455 ), aGraphicCropStruct.Top );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(m_bExported ? -367 : -368 ), aGraphicCropStruct.Bottom );
-
-    // 2nd shape has no cropping
-    aGraphicCropStruct = getProperty<text::GraphicCrop>(getShape(2), "GraphicCrop");
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 0 ), aGraphicCropStruct.Left );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 0 ), aGraphicCropStruct.Right );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 0 ), aGraphicCropStruct.Top );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 0 ), aGraphicCropStruct.Bottom );
-
-}
 
 DECLARE_OOXMLEXPORT_TEST(fdo69656, "Table_cell_auto_width_fdo69656.docx")
 {
@@ -3106,84 +2764,6 @@ DECLARE_OOXMLEXPORT_TEST(testColumnBreak_ColumnCountIsZero,"fdo74153.docx")
     if (!pXmlDoc)
         return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:br","type","column");
-}
-
-DECLARE_OOXMLEXPORT_TEST(testDMLShapeFillPattern, "dml-shape-fillpattern.docx")
-{
-    // Hatching was ignored by the export.
-
-    // 1st shape: light horizontal pattern (ltHorz)
-    drawing::Hatch aHatch = getProperty<drawing::Hatch>(getShape(1), "FillHatch");
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aHatch.Angle);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(50), aHatch.Distance);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x99FF66), aHatch.Color);
-    CPPUNIT_ASSERT_EQUAL(drawing::HatchStyle_SINGLE, aHatch.Style);
-
-    // 2nd shape: horizontal pattern (horz)
-    aHatch = getProperty<drawing::Hatch>(getShape(2), "FillHatch");
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aHatch.Angle);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(100), aHatch.Distance);
-    CPPUNIT_ASSERT_EQUAL(drawing::HatchStyle_SINGLE, aHatch.Style);
-
-    // 3rd shape: light vertical pattern (ltVert)
-    aHatch = getProperty<drawing::Hatch>(getShape(3), "FillHatch");
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(900), aHatch.Angle);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(50), aHatch.Distance);
-    CPPUNIT_ASSERT_EQUAL(drawing::HatchStyle_SINGLE, aHatch.Style);
-
-    // 4th shape: vertical pattern (vert)
-    aHatch = getProperty<drawing::Hatch>(getShape(4), "FillHatch");
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(900), aHatch.Angle);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(100), aHatch.Distance);
-    CPPUNIT_ASSERT_EQUAL(drawing::HatchStyle_SINGLE, aHatch.Style);
-
-    // 5th shape: light upward diagonal pattern (ltUpDiag)
-    aHatch = getProperty<drawing::Hatch>(getShape(5), "FillHatch");
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(450), aHatch.Angle);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(50), aHatch.Distance);
-    CPPUNIT_ASSERT_EQUAL(drawing::HatchStyle_SINGLE, aHatch.Style);
-
-    // 6th shape: wide upward diagonal pattern (wdUpDiag)
-    aHatch = getProperty<drawing::Hatch>(getShape(6), "FillHatch");
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(450), aHatch.Angle);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(100), aHatch.Distance);
-    CPPUNIT_ASSERT_EQUAL(drawing::HatchStyle_SINGLE, aHatch.Style);
-
-    // 7th shape: light downward diagonal pattern (ltDnDiag)
-    aHatch = getProperty<drawing::Hatch>(getShape(7), "FillHatch");
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1350), aHatch.Angle);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(50), aHatch.Distance);
-    CPPUNIT_ASSERT_EQUAL(drawing::HatchStyle_SINGLE, aHatch.Style);
-
-    // 8th shape: wide downward diagonal pattern (wdDnDiag)
-    aHatch = getProperty<drawing::Hatch>(getShape(8), "FillHatch");
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1350), aHatch.Angle);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(100), aHatch.Distance);
-    CPPUNIT_ASSERT_EQUAL(drawing::HatchStyle_SINGLE, aHatch.Style);
-
-    // 9th shape: small grid pattern (smGrid)
-    aHatch = getProperty<drawing::Hatch>(getShape(9), "FillHatch");
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aHatch.Angle);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(50), aHatch.Distance);
-    CPPUNIT_ASSERT_EQUAL(drawing::HatchStyle_DOUBLE, aHatch.Style);
-
-    // 10th shape: large grid pattern (lgGrid)
-    aHatch = getProperty<drawing::Hatch>(getShape(10), "FillHatch");
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aHatch.Angle);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(100), aHatch.Distance);
-    CPPUNIT_ASSERT_EQUAL(drawing::HatchStyle_DOUBLE, aHatch.Style);
-
-    // 11th shape: small checker board pattern (smCheck)
-    aHatch = getProperty<drawing::Hatch>(getShape(11), "FillHatch");
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(450), aHatch.Angle);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(50), aHatch.Distance);
-    CPPUNIT_ASSERT_EQUAL(drawing::HatchStyle_DOUBLE, aHatch.Style);
-
-    // 12th shape: outlined diamond pattern (openDmnd)
-    aHatch = getProperty<drawing::Hatch>(getShape(12), "FillHatch");
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(450), aHatch.Angle);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(100), aHatch.Distance);
-    CPPUNIT_ASSERT_EQUAL(drawing::HatchStyle_DOUBLE, aHatch.Style);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testIndentation, "test_indentation.docx")
@@ -3338,110 +2918,6 @@ DECLARE_OOXMLEXPORT_TEST(testFloatingTablePosition, "floating-table-position.doc
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5964), getProperty<sal_Int32>(xFrame, "HoriOrientPosition"));
     // This was 4611.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8133), getProperty<sal_Int32>(xFrame, "VertOrientPosition"));
-}
-
-DECLARE_OOXMLEXPORT_TEST(testDMLGroupShapeChildPosition, "dml-groupshape-childposition.docx")
-{
-    // Problem was parent transformation was ingnored fully, but translate component
-    // which specify the position must be also applied for children of the group.
-
-    uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> xChildGroup(xGroup->getByIndex(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(m_bExported ? -2119 : -2121), xChildGroup->getPosition().X);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(m_bExported ? 11338 : 11335), xChildGroup->getPosition().Y);
-
-    xGroup.set(xChildGroup, uno::UNO_QUERY);
-    xChildGroup.set(xGroup->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(m_bExported ? -1856 : -1858), xChildGroup->getPosition().X);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(m_bExported ? 11338 : 11335), xChildGroup->getPosition().Y);
-
-    xChildGroup.set(xGroup->getByIndex(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(m_bExported ? -2119 : -2121), xChildGroup->getPosition().X);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(m_bExported ? 14028 : 14025), xChildGroup->getPosition().Y);
-}
-
-DECLARE_OOXMLEXPORT_TEST(testDMLGradientFillTheme, "dml-gradientfill-theme.docx")
-{
-    // Problem was when a fill gradient was imported from a theme, (fillRef in ooxml)
-    // not just the theme was written out but the explicit values too
-    // Besides the duplication of values it causes problems with writing out
-    // <a:schemeClr val="phClr"> into document.xml, while phClr can be used just for theme definitions.
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
-
-    // check no explicit gradFill has been exported
-    assertXPath(pXmlDoc,
-            "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:gradFill",
-            0);
-
-    // check shape style has been exported
-    assertXPath(pXmlDoc,
-            "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:fillRef",
-            "idx", "2");
-    assertXPath(pXmlDoc,
-            "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:fillRef/a:schemeClr",
-            "val", "accent1");
-}
-
-DECLARE_OOXMLEXPORT_TEST(testDMLGroupShapeParaSpacing, "dml-groupshape-paraspacing.docx")
-{
-    // Paragraph spacing (top/bottom margin and line spacing) inside a group shape was not imported
-    uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
-    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xGroup->getByIndex(1), uno::UNO_QUERY)->getText();
-
-    // 1st paragraph has 1.5x line spacing but it has no spacing before/after.
-    uno::Reference<text::XTextRange> xRun = getRun(getParagraphOfText(1, xText),1);
-    style::LineSpacing aLineSpacing = getProperty<style::LineSpacing>(xRun, "ParaLineSpacing");
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::LineSpacingMode::PROP), aLineSpacing.Mode);
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(150), aLineSpacing.Height);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun, "ParaTopMargin"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun, "ParaBottomMargin"));
-
-    // 2nd paragraph has double line spacing but it has no spacing before/after.
-    xRun.set(getRun(getParagraphOfText(2, xText),1));
-    aLineSpacing = getProperty<style::LineSpacing>(xRun, "ParaLineSpacing");
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::LineSpacingMode::PROP), aLineSpacing.Mode);
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(200), aLineSpacing.Height);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun, "ParaTopMargin"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun, "ParaBottomMargin"));
-
-    // 3rd paragraph has 24 pt line spacing but it has no spacing before/after.
-    xRun.set(getRun(getParagraphOfText(3, xText),1));
-    aLineSpacing = getProperty<style::LineSpacing>(xRun, "ParaLineSpacing");
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::LineSpacingMode::MINIMUM), aLineSpacing.Mode);
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(847), aLineSpacing.Height);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun, "ParaTopMargin"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun, "ParaBottomMargin"));
-
-    // 4th paragraph has 1.75x line spacing but it has no spacing before/after.
-    xRun.set(getRun(getParagraphOfText(4, xText),1));
-    aLineSpacing = getProperty<style::LineSpacing>(xRun, "ParaLineSpacing");
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::LineSpacingMode::PROP), aLineSpacing.Mode);
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(175), aLineSpacing.Height);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun, "ParaTopMargin"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun, "ParaBottomMargin"));
-
-    // 5th paragraph has margins which are defined by w:beforeLines and w:afterLines.
-    xRun.set(getRun(getParagraphOfText(5, xText),1));
-    aLineSpacing = getProperty<style::LineSpacing>(xRun, "ParaLineSpacing");
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::LineSpacingMode::PROP), aLineSpacing.Mode);
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), aLineSpacing.Height);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(635), getProperty<sal_Int32>(xRun, "ParaTopMargin"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(741), getProperty<sal_Int32>(xRun, "ParaBottomMargin"));
-
-    // 6th paragraph has margins which are defined by w:before and w:after.
-    xRun.set(getRun(getParagraphOfText(6, xText),1));
-    aLineSpacing = getProperty<style::LineSpacing>(xRun, "ParaLineSpacing");
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::LineSpacingMode::PROP), aLineSpacing.Mode);
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), aLineSpacing.Height);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(423), getProperty<sal_Int32>(xRun, "ParaTopMargin"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(635), getProperty<sal_Int32>(xRun, "ParaBottomMargin"));
-
-    // 7th paragraph has auto paragraph margins a:afterAutospacing and a:beforeAutospacing, which means margins must be ignored.
-    xRun.set(getRun(getParagraphOfText(7, xText),1));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun, "ParaTopMargin"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun, "ParaBottomMargin"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testW14TextEffects_GlowShadowReflection, "TextEffects_Glow_Shadow_Reflection.docx")

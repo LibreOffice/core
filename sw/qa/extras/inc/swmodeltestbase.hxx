@@ -9,6 +9,7 @@
 
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/XAutoStylesSupplier.hpp>
 #include <com/sun/star/style/XAutoStyleFamily.hpp>
@@ -22,6 +23,8 @@
 
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
+#include <unotools/ucbstreamhelper.hxx>
+#include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/tempfile.hxx>
@@ -33,10 +36,13 @@
 
 #include <libxml/xmlwriter.h>
 #include <libxml/xpath.h>
+#include <libxml/xpathInternals.h>
+#include <libxml/parserInternals.h>
 
 using namespace com::sun::star;
 
 #define DEFAULT_STYLE "Default Style"
+#define EMU_TO_MM100(EMU) (EMU / 360)
 
 /**
  * Macro to declare a new test (with full round-trip. To test
@@ -485,6 +491,129 @@ protected:
         uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
         xCursor->jumpToLastPage();
         return xCursor->getPage();
+    }
+
+    /**
+     * Given that some problem doesn't affect the result in the importer, we
+     * test the resulting file directly, by opening the zip file, parsing an
+     * xml stream, and asserting an XPath expression. This method returns the
+     * xml stream, so that you can do the asserting.
+     */
+    xmlDocPtr parseExport(const OUString& rStreamName = OUString("word/document.xml"))
+    {
+        if (!m_bExported)
+            return 0;
+
+        // Read the XML stream we're interested in.
+        uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), m_aTempFile.GetURL());
+        uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName(rStreamName), uno::UNO_QUERY);
+        boost::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
+        pStream->Seek(STREAM_SEEK_TO_END);
+        sal_Size nSize = pStream->Tell();
+        pStream->Seek(0);
+        OStringBuffer aDocument(nSize);
+        char ch;
+        for (sal_Size i = 0; i < nSize; ++i)
+        {
+            pStream->ReadChar( ch );
+            aDocument.append(ch);
+        }
+
+        // Parse the XML.
+        return xmlParseMemory((const char*)aDocument.getStr(), aDocument.getLength());
+    }
+
+    /**
+     * Helper method to return nodes represented by rXPath.
+     */
+    xmlNodeSetPtr getXPathNode(xmlDocPtr pXmlDoc, const OString& rXPath)
+    {
+        xmlXPathContextPtr pXmlXpathCtx = xmlXPathNewContext(pXmlDoc);
+        xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("w"), BAD_CAST("http://schemas.openxmlformats.org/wordprocessingml/2006/main"));
+        xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("v"), BAD_CAST("urn:schemas-microsoft-com:vml"));
+        xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("mc"), BAD_CAST("http://schemas.openxmlformats.org/markup-compatibility/2006"));
+        xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("wps"), BAD_CAST("http://schemas.microsoft.com/office/word/2010/wordprocessingShape"));
+        xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("wpg"), BAD_CAST("http://schemas.microsoft.com/office/word/2010/wordprocessingGroup"));
+        xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("wp"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"));
+        xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("wp14"), BAD_CAST("http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing"));
+        xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("a"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/main"));
+        xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("pic"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/picture"));
+        xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("rels"), BAD_CAST("http://schemas.openxmlformats.org/package/2006/relationships"));
+        xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("w14"), BAD_CAST("http://schemas.microsoft.com/office/word/2010/wordml"));
+        xmlXPathObjectPtr pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(rXPath.getStr()), pXmlXpathCtx);
+        return pXmlXpathObj->nodesetval;
+    }
+
+    /**
+     * Same as the assertXPath(), but don't assert: return the string instead.
+     */
+    OUString getXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute)
+    {
+        xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, rXPath);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
+                                     1, xmlXPathNodeSetGetLength(pXmlNodes));
+        if (rAttribute.isEmpty())
+            return OUString();
+        xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+        return OUString::createFromAscii((const char*)xmlGetProp(pXmlNode, BAD_CAST(rAttribute.getStr())));
+    }
+
+    /**
+     * Assert that rXPath exists, and returns exactly one node.
+     * In case rAttribute is provided, the rXPath's attribute's value must
+     * equal to the rExpected value.
+     */
+    void assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute = OString(), const OUString& rExpectedValue = OUString())
+    {
+        OUString aValue = getXPath(pXmlDoc, rXPath, rAttribute);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("Attribute '" + rAttribute + "' of '" + rXPath + "' incorrect value.").getStr(),
+                                     rExpectedValue, aValue);
+    }
+
+    /**
+     * Assert that rXPath exists, and returns exactly nNumberOfNodes nodes.
+     * Useful for checking that we do _not_ export some node (nNumberOfNodes == 0).
+     */
+    void assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, int nNumberOfNodes)
+    {
+        xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, rXPath);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
+                                     nNumberOfNodes, xmlXPathNodeSetGetLength(pXmlNodes));
+    }
+
+    /**
+     * Assert that rXPath exists, and has exactly nNumberOfChildNodes child nodes.
+     * Useful for checking that we do have a no child nodes to a specific node (nNumberOfChildNodes == 0).
+     */
+    void assertXPathChildren(xmlDocPtr pXmlDoc, const OString& rXPath, int nNumberOfChildNodes)
+    {
+        xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, rXPath);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
+                                     1, xmlXPathNodeSetGetLength(pXmlNodes));
+        xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("XPath '" + rXPath + "' number of child-nodes is incorrect").getStr(),
+                                     nNumberOfChildNodes, (int)xmlChildElementCount(pXmlNode));
+    }
+
+    /**
+     * Get the position of the child named rName of the parent node specified by rXPath.
+     * Useful for checking relative order of elements.
+     */
+    int getXPathPosition(xmlDocPtr pXmlDoc, const OString& rXPath, const OUString& rChildName)
+    {
+        xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, rXPath);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
+                                     1,
+                                     xmlXPathNodeSetGetLength(pXmlNodes));
+        xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+        int nRet = 0;
+        for (xmlNodePtr pChild = pXmlNode->children; pChild; pChild = pChild->next)
+        {
+            if (OUString::createFromAscii((const char*)pChild->name) == rChildName)
+                break;
+            ++nRet;
+        }
+        return nRet;
     }
 
     uno::Reference<lang::XComponent> mxComponent;

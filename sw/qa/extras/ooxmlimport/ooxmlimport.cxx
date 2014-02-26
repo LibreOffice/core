@@ -56,11 +56,9 @@
 #include <unotools/fltrcfg.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <com/sun/star/text/GraphicCrop.hpp>
+#include <swtypes.hxx>
 
 #include <bordertest.hxx>
-
-#define TWIP_TO_MM100(TWIP) ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
-#define EMU_TO_MM100(EMU) (EMU / 360)
 
 class Test : public SwModelTestBase
 {
