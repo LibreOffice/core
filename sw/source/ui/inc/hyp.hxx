@@ -40,9 +40,9 @@ private:
 
 protected:
     virtual void SpellStart( SvxSpellArea eSpell );
-    virtual sal_Bool SpellContinue();
+    virtual bool SpellContinue();
     virtual void SpellEnd( );
-    virtual sal_Bool SpellMore();
+    virtual bool SpellMore();
     virtual void InsertHyphen( const sal_uInt16 nPos ); // insert hyphen
 
 public:

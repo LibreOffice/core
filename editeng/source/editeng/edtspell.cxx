@@ -106,7 +106,7 @@ void EditSpellWrapper::SpellStart( SvxSpellArea eArea )
     }
 }
 
-sal_Bool EditSpellWrapper::SpellContinue()
+bool EditSpellWrapper::SpellContinue()
 {
     SetLast( pEditView->GetImpEditEngine()->ImpSpell( pEditView ) );
     return GetLast().is();
@@ -118,12 +118,12 @@ void EditSpellWrapper::SpellEnd()
     SvxSpellWrapper::SpellEnd();
 }
 
-sal_Bool EditSpellWrapper::HasOtherCnt()
+bool EditSpellWrapper::HasOtherCnt()
 {
     return false;
 }
 
-sal_Bool EditSpellWrapper::SpellMore()
+bool EditSpellWrapper::SpellMore()
 {
     EditEngine* pEE = pEditView->GetEditEngine();
     ImpEditEngine* pImpEE = pEditView->GetImpEditEngine();

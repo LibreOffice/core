@@ -56,31 +56,31 @@ private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XHyphenator >    xHyph;
     SdrObject*  mpTextObj;
-    sal_Bool    bOtherCntnt : 1; // set => Check special sections initially
-    sal_Bool    bDialog     : 1; // Is pWin the Svx...Dialog?
-    sal_Bool    bHyphen     : 1; // Split instead of spell checking
-    sal_Bool    bAuto       : 1; // AutoCorrect available?
-    sal_Bool    bReverse    : 1; // Reverse spell check
-    sal_Bool    bStartDone  : 1; // Beginning already corrected
-    sal_Bool    bEndDone    : 1; // End part already corrected
-    sal_Bool    bStartChk   : 1; // Examine the beginning
-    sal_Bool    bRevAllowed : 1; // Reverse spell check prohibited
-    sal_Bool    bAllRight   : 1; // Record wrong words in the dedicated
+    bool        bOtherCntnt : 1; // set => Check special sections initially
+    bool        bDialog     : 1; // Is pWin the Svx...Dialog?
+    bool        bHyphen     : 1; // Split instead of spell checking
+    bool        bAuto       : 1; // AutoCorrect available?
+    bool        bReverse    : 1; // Reverse spell check
+    bool        bStartDone  : 1; // Beginning already corrected
+    bool        bEndDone    : 1; // End part already corrected
+    bool        bStartChk   : 1; // Examine the beginning
+    bool        bRevAllowed : 1; // Reverse spell check prohibited
+    bool        bAllRight   : 1; // Record wrong words in the dedicated
                                  // dictionary and do not start the dialog.
 
-    EDITENG_DLLPRIVATE sal_Bool     SpellNext();        // select next area
-    sal_Bool    FindSpellError();   // Check for errors (over areas)
+    EDITENG_DLLPRIVATE bool     SpellNext();        // select next area
+    bool    FindSpellError();   // Check for errors (over areas)
 
 public:
     SvxSpellWrapper( Window* pWn,
                      ::com::sun::star::uno::Reference<
                          ::com::sun::star::linguistic2::XSpellChecker1 >  &xSpellChecker,
-                     const sal_Bool bStart = sal_False, const sal_Bool bIsAllRight = sal_False,
-                     const sal_Bool bOther = sal_False, const sal_Bool bRevAllow = sal_True );
+                     const bool bStart = false, const bool bIsAllRight = false,
+                     const bool bOther = false, const bool bRevAllow = true );
     SvxSpellWrapper( Window* pWn,
                      ::com::sun::star::uno::Reference<
                          ::com::sun::star::linguistic2::XHyphenator >  &xHyphenator,
-                     const sal_Bool bStart = sal_False, const sal_Bool bOther = sal_False );
+                     const bool bStart = false, const bool bOther = false );
 
     virtual ~SvxSpellWrapper();
 
@@ -96,21 +96,21 @@ public:
     static void         ShowLanguageErrors();
 
     void            SpellDocument();        // Perform Spell Checking
-    inline sal_Bool IsStartDone(){ return bStartDone; }
-    inline sal_Bool IsEndDone(){ return bEndDone; }
-    inline sal_Bool IsReverse(){ return bReverse; }
-    inline sal_Bool IsDialog(){ return bDialog; } // SvxSpellCheckDialog OnScreen
-    inline sal_Bool IsHyphen(){ return bHyphen; } // Split instead of Spell check
-    inline void     SetHyphen( const sal_Bool bNew = sal_True ){ bHyphen = bNew; }
+    inline bool     IsStartDone(){ return bStartDone; }
+    inline bool     IsEndDone(){ return bEndDone; }
+    inline bool     IsReverse(){ return bReverse; }
+    inline bool     IsDialog(){ return bDialog; } // SvxSpellCheckDialog OnScreen
+    inline bool     IsHyphen(){ return bHyphen; } // Split instead of Spell check
+    inline void     SetHyphen( const bool bNew = true ){ bHyphen = bNew; }
     inline ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellChecker1 >
                     GetXSpellChecker() { return xSpell; }
     inline ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XHyphenator >
                     GetXHyphenator()    { return xHyph; }
-    inline sal_Bool             IsAllRight()        { return bAllRight; }
+    inline bool     IsAllRight()        { return bAllRight; }
     inline Window*  GetWin() { return pWin; }
-    inline void     EnableAutoCorrect() { bAuto = sal_True; }
+    inline void     EnableAutoCorrect() { bAuto = true; }
 
 protected:
     ::com::sun::star::uno::Reference<
@@ -119,10 +119,10 @@ protected:
     void             SetLast(const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::uno::XInterface >  &xNewLast)
                             { xLast = xNewLast; }
-    virtual sal_Bool SpellMore();               // examine further documents?
-    virtual sal_Bool HasOtherCnt();             // Are there any special areas?
-    virtual void     SpellStart( SvxSpellArea eSpell ); // Preparing the area
-    virtual sal_Bool SpellContinue();     // Check Areas
+    virtual bool SpellMore();               // examine further documents?
+    virtual bool HasOtherCnt();             // Are there any special areas?
+    virtual void SpellStart( SvxSpellArea eSpell ); // Preparing the area
+    virtual bool SpellContinue();     // Check Areas
                                           // Result available through GetLast
     virtual void ReplaceAll( const OUString &rNewText, sal_Int16 nLanguage ); //Replace word from the replace list
     virtual void StartThesaurus( const OUString &rWord, sal_uInt16 nLang );

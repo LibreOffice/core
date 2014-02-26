@@ -46,11 +46,11 @@ private:
 
 protected:
     virtual void            SpellStart( SvxSpellArea eArea );
-    virtual sal_Bool        SpellContinue();    // Check area
+    virtual bool            SpellContinue();    // Check area
     virtual void            ReplaceAll( const OUString &rNewText, sal_Int16 nLanguage );
     virtual void            SpellEnd();
-    virtual sal_Bool        SpellMore();
-    virtual sal_Bool        HasOtherCnt();
+    virtual bool            SpellMore();
+    virtual bool            HasOtherCnt();
     virtual void            ScrollArea();
     virtual void            ChangeWord( const OUString& rNewWord, const sal_uInt16 nLang );
     virtual void            ChangeThesWord( const OUString& rNewWord );

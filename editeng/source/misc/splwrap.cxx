@@ -147,22 +147,22 @@ SvxSpellWrapper::~SvxSpellWrapper()
 
 SvxSpellWrapper::SvxSpellWrapper( Window* pWn,
     Reference< XSpellChecker1 >  &xSpellChecker,
-    const sal_Bool bStart, const sal_Bool bIsAllRight,
-    const sal_Bool bOther, const sal_Bool bRevAllow ) :
+    const bool bStart, const bool bIsAllRight,
+    const bool bOther, const bool bRevAllow ) :
 
     pWin        ( pWn ),
     xSpell      ( xSpellChecker ),
     mpTextObj( NULL),
     bOtherCntnt ( bOther ),
-    bDialog     ( sal_False ),
-    bHyphen     ( sal_False ),
-    bAuto       ( sal_False ),
+    bDialog     ( false ),
+    bHyphen     ( false ),
+    bAuto       ( false ),
     bStartChk   ( bOther ),
     bRevAllowed ( bRevAllow ),
     bAllRight   ( bIsAllRight )
 {
     Reference< linguistic2::XLinguProperties >  xProp( SvxGetLinguPropertySet() );
-    sal_Bool bWrapReverse = xProp.is() ? xProp->getIsWrapReverse() : sal_False;
+    bool bWrapReverse = xProp.is() && xProp->getIsWrapReverse();
     bReverse = bRevAllow && bWrapReverse;
     bStartDone = bOther || ( !bReverse && bStart );
     bEndDone   = bReverse && bStart && !bOther;
@@ -172,20 +172,20 @@ SvxSpellWrapper::SvxSpellWrapper( Window* pWn,
 
 SvxSpellWrapper::SvxSpellWrapper( Window* pWn,
         Reference< XHyphenator >  &xHyphenator,
-        const sal_Bool bStart, const sal_Bool bOther ) :
+        const bool bStart, const bool bOther ) :
     pWin        ( pWn ),
     xHyph       ( xHyphenator ),
     mpTextObj( NULL),
     bOtherCntnt ( bOther ),
-    bDialog     ( sal_False ),
-    bHyphen     ( sal_False ),
-    bAuto       ( sal_False ),
-    bReverse    ( sal_False ),
+    bDialog     ( false ),
+    bHyphen     ( false ),
+    bAuto       ( false ),
+    bReverse    ( false ),
     bStartDone  ( bOther || ( !bReverse && bStart ) ),
     bEndDone    ( bReverse && bStart && !bOther ),
     bStartChk   ( bOther ),
-    bRevAllowed ( sal_False ),
-    bAllRight   ( sal_True )
+    bRevAllowed ( false ),
+    bAllRight   ( true )
 {
 }
 
@@ -251,17 +251,17 @@ void SvxSpellWrapper::SpellStart( SvxSpellArea /*eSpell*/ )
 
 
 
-sal_Bool SvxSpellWrapper::HasOtherCnt()
+bool SvxSpellWrapper::HasOtherCnt()
 {
-    return sal_False; // Is there a special area?
+    return false; // Is there a special area?
 }
 
 
 
 
-sal_Bool SvxSpellWrapper::SpellMore()
+bool SvxSpellWrapper::SpellMore()
 {
-    return sal_False; // Should additional documents be examined?
+    return false; // Should additional documents be examined?
 }
 
 
@@ -277,9 +277,9 @@ void SvxSpellWrapper::SpellEnd()
 
 
 
-sal_Bool SvxSpellWrapper::SpellContinue()
+bool SvxSpellWrapper::SpellContinue()
 {
-    return sal_False;
+    return false;
 }
 
 
@@ -360,7 +360,7 @@ void SvxSpellWrapper::SpellDocument( )
 {
     if ( bOtherCntnt )
     {
-        bReverse = sal_False;
+        bReverse = false;
         SpellStart( SVX_SPELL_OTHER );
     }
     else
@@ -375,7 +375,7 @@ void SvxSpellWrapper::SpellDocument( )
         Reference< XHyphenatedWord >        xHyphWord( GetLast(), UNO_QUERY );
 
         Window *pOld = pWin;
-        bDialog = sal_True;
+        bDialog = true;
         if (xHyphWord.is())
         {
             EditAbstractDialogFactory* pFact = EditAbstractDialogFactory::Create();
@@ -387,7 +387,7 @@ void SvxSpellWrapper::SpellDocument( )
             pDlg->Execute();
             delete pDlg;
         }
-        bDialog = sal_False;
+        bDialog = false;
         pWin = pOld;
     };
 }
@@ -396,27 +396,27 @@ void SvxSpellWrapper::SpellDocument( )
 // Select the next area
 
 
-sal_Bool SvxSpellWrapper::SpellNext( )
+bool SvxSpellWrapper::SpellNext( )
 {
     Reference< linguistic2::XLinguProperties >  xProp( SvxGetLinguPropertySet() );
-    sal_Bool bWrapReverse = xProp.is() ? xProp->getIsWrapReverse() : sal_False;
-    sal_Bool bActRev = bRevAllowed && bWrapReverse;
+    bool bWrapReverse = xProp.is() && xProp->getIsWrapReverse();
+    bool bActRev = bRevAllowed && bWrapReverse;
 
     // bActRev is the direction after Spell checking, bReverse is the one
     // at the beginning.
     if( bActRev == bReverse )
     {                           // No change of direction, thus is the
         if( bStartChk )         // desired area ( bStartChk )
-            bStartDone = sal_True;  // completely processed.
+            bStartDone = true;  // completely processed.
         else
-            bEndDone = sal_True;
+            bEndDone = true;
     }
     else if( bReverse == bStartChk ) //For a change of direction, an area can
     {                          // be processed during certain circumstances
         if( bStartChk )        // If the firdt part is spell checked in backwards
-            bEndDone = sal_True;   // and this is reversed in the process, then
+            bEndDone = true;   // and this is reversed in the process, then
         else                   // then the end part is processed (and vice-versa).
-            bStartDone = sal_True;
+            bStartDone = true;
     }
 
     bReverse = bActRev;
@@ -424,39 +424,39 @@ sal_Bool SvxSpellWrapper::SpellNext( )
     {
         if ( SpellMore() )  // spell check another document?
         {
-            bOtherCntnt = sal_False;
+            bOtherCntnt = false;
             bStartDone = !bReverse;
             bEndDone  = bReverse;
             SpellStart( SVX_SPELL_BODY );
-            return sal_True;
+            return true;
         }
-        return sal_False;
+        return false;
     }
 
-    sal_Bool bGoOn = sal_False;
+    bool bGoOn = false;
 
     if ( bOtherCntnt )
     {
-        bStartChk = sal_False;
+        bStartChk = false;
         SpellStart( SVX_SPELL_BODY );
-        bGoOn = sal_True;
+        bGoOn = true;
     }
     else if ( bStartDone && bEndDone )
     {
-        sal_Bool bIsSpellSpecial = xProp.is() ? xProp->getIsSpellSpecial() : sal_False;
+        bool bIsSpellSpecial = xProp.is() && xProp->getIsSpellSpecial();
         // Body area done, ask for special area
         if( !IsHyphen() && bIsSpellSpecial && HasOtherCnt() )
         {
             SpellStart( SVX_SPELL_OTHER );
-            bOtherCntnt = bGoOn = sal_True;
+            bOtherCntnt = bGoOn = true;
         }
         else if ( SpellMore() )  // check another document?
         {
-            bOtherCntnt = sal_False;
+            bOtherCntnt = false;
             bStartDone = !bReverse;
             bEndDone  = bReverse;
             SpellStart( SVX_SPELL_BODY );
-            return sal_True;
+            return true;
         }
     }
     else
@@ -470,14 +470,14 @@ sal_Bool SvxSpellWrapper::SpellNext( )
         {
             // sacrifice the other area if necessary ask for special area
             WAIT_ON();
-            bStartDone = bEndDone = sal_True;
+            bStartDone = bEndDone = true;
             return SpellNext();
         }
         else
         {
             bStartChk = !bStartDone;
             SpellStart( bStartChk ? SVX_SPELL_BODY_START : SVX_SPELL_BODY_END );
-            bGoOn = sal_True;
+            bGoOn = true;
         }
         WAIT_ON();
     }
@@ -530,14 +530,14 @@ Reference< XDictionary >  SvxSpellWrapper::GetAllRightDic() const
 
 
 
-sal_Bool SvxSpellWrapper::FindSpellError()
+bool SvxSpellWrapper::FindSpellError()
 {
     ShowLanguageErrors();
 
      Reference< XInterface >    xRef;
 
     WAIT_ON();
-    sal_Bool bSpell = sal_True;
+    bool bSpell = true;
 
     Reference< XDictionary >  xAllRightDic;
     if (IsAllRight())
@@ -572,11 +572,11 @@ sal_Bool SvxSpellWrapper::FindSpellError()
                                 LanguageTag( xAlt->getLocale() ).getLanguageType() );
                 }
                 else
-                    bSpell = sal_False;
+                    bSpell = false;
             }
         }
         else if (xHyphWord.is())
-            bSpell = sal_False;
+            bSpell = false;
         else
         {
             SpellEnd();

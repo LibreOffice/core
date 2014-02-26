@@ -76,7 +76,7 @@ void SwHyphWrapper::SpellStart( SvxSpellArea eSpell )
 
 
 
-sal_Bool SwHyphWrapper::SpellContinue()
+bool SwHyphWrapper::SpellContinue()
 {
     // for automatic separation, make actions visible only at the end
     boost::scoped_ptr<SwWait> pWait;
@@ -109,12 +109,12 @@ void SwHyphWrapper::SpellEnd()
 }
 
 
-sal_Bool SwHyphWrapper::SpellMore()
+bool SwHyphWrapper::SpellMore()
 {
     PSH->Push();
     bInfoBox = sal_True;
     PSH->Combine();
-    return sal_False;
+    return false;
 }
 
 
