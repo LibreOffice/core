@@ -25,6 +25,97 @@ struct ScDeleteObjectByPtr : public ::std::unary_function<T*, void>
     }
 };
 
+namespace sc {
+
+/**
+ * Custom allocator for STL container to ensure that the base address of
+ * allocated storage is aligned to a specified boundary.
+ */
+template<typename T, std::size_t N>
+class AlignedAllocator
+{
+public:
+    typedef T value_type;
+    typedef std::size_t size_type;
+    typedef std::ptrdiff_t difference_type;
+
+    typedef T* pointer;
+    typedef const T* const_pointer;
+    typedef T* void_pointer;
+
+    typedef T& reference;
+    typedef const T& const_reference;
+
+public:
+    AlignedAllocator() throw() {}
+
+    template<typename T2>
+    AlignedAllocator(const AlignedAllocator<T2, N>&) throw() {}
+
+    ~AlignedAllocator() throw() {}
+
+    pointer adress(reference r)
+    {
+        return &r;
+    }
+
+    const_pointer adress(const_reference r) const
+    {
+        return &r;
+    }
+
+    pointer allocate(size_type n)
+    {
+#ifdef WNT
+        return (pointer)_aligned_malloc(n * sizeof(value_type), N);
+#else
+        return (pointer)aligned_alloc(N, n * sizeof(value_type));
+#endif
+    }
+
+    void deallocate(pointer p, size_type)
+    {
+#ifdef WNT
+        _aligned_free(p);
+#else
+        free(p);
+#endif
+    }
+
+    void construct(pointer p, const value_type& wert)
+    {
+        new(p) value_type(wert);
+    }
+
+    void destroy(pointer p)
+    {
+        p->~value_type();
+    }
+
+    size_type max_size() const throw()
+    {
+        return size_type(-1) / sizeof(value_type);
+    }
+
+    template<typename T2>
+    struct rebind
+    {
+        typedef AlignedAllocator<T2, N> other;
+    };
+
+    bool operator==(const AlignedAllocator<T, N>& other) const
+    {
+        return true;
+    }
+
+    bool operator!=(const AlignedAllocator<T, N>& other) const
+    {
+        return !(*this == other);
+    }
+};
+
+}
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
