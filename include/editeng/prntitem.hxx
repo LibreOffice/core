@@ -38,7 +38,7 @@ class EDITENG_DLLPUBLIC SvxPrintItem : public SfxBoolItem
 public:
     TYPEINFO();
 
-    explicit SvxPrintItem( const sal_uInt16 nId , const sal_Bool bPrt = sal_True );
+    explicit SvxPrintItem( const sal_uInt16 nId , const bool bPrt = true );
     inline SvxPrintItem &operator=( const SvxPrintItem &rCpy );
 
     // "pure virtual Methods" from SfxPoolItem
@@ -52,7 +52,7 @@ public:
                                     OUString &rText, const IntlWrapper * = 0 ) const;
 };
 
-inline SvxPrintItem::SvxPrintItem( const sal_uInt16 nId, const sal_Bool bPrt )
+inline SvxPrintItem::SvxPrintItem( const sal_uInt16 nId, const bool bPrt )
     : SfxBoolItem( nId, bPrt )
 {}
 

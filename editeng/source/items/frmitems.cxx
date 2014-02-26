@@ -1107,7 +1107,7 @@ SfxPoolItem* SvxPrintItem::Create( SvStream& rStrm, sal_uInt16 ) const
 {
     sal_Int8 bIsPrint;
     rStrm.ReadSChar( bIsPrint );
-    return new SvxPrintItem( Which(), sal_Bool( bIsPrint != 0 ) );
+    return new SvxPrintItem( Which(), bIsPrint != 0 );
 }
 
 
