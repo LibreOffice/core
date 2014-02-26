@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a961159_4c447f74",
+        "filename": "hwpfilter/source/cspline.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-02-26T14:46:46Z",
+      "side": 0,
+      "message": "Please do not remove this. The // on otherwise empty line suggest that what follows is a part of the same comment. An empty line suggests separate comments.",
+      "revId": "9d5047943b4350479a8ce597c2dd674e250ddaaf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
