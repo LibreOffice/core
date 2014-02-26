@@ -311,11 +311,6 @@ ScComplexRefData& ScComplexRefData::Extend( const ScComplexRefData & rRef, const
     return Extend( rRef.Ref1, rPos).Extend( rRef.Ref2, rPos);
 }
 
-bool ScComplexRefData::IsDeleted() const
-{
-    return Ref1.IsDeleted() || Ref2.IsDeleted();
-}
-
 bool ScComplexRefData::Valid() const
 {
     return Ref1.Valid() && Ref2.Valid();

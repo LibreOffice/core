@@ -135,7 +135,6 @@ struct ScComplexRefData
             Ref2.InitAddress( nCol2, nRow2, nTab2 );
         }
 
-    bool IsDeleted() const;
     bool Valid() const;
 
     /** In external references nTab is -1 for the start tab and -1 for the end
