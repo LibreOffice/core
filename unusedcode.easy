@@ -78,7 +78,6 @@ ScDocument::CreateFormatTable() const
 ScDocument::GetCellCount(short, short) const
 ScExtIButton::GetSelected() const
 ScFlatBoolRowSegments::getValue(int)
-ScGlobal::GetStandardFormat(double, SvNumberFormatter&, unsigned long, short)
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
 SdrItemBrowser::ForceParent()
