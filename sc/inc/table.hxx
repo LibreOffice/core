@@ -384,8 +384,6 @@ public:
     void        GetFirstDataPos(SCCOL& rCol, SCROW& rRow) const;
     void        GetLastDataPos(SCCOL& rCol, SCROW& rRow) const;
 
-    ScPostIt*   GetNote(const SCCOL nCol, const SCROW nRow);
-
     ScPostIt* ReleaseNote( SCCOL nCol, SCROW nRow );
 
     size_t GetNoteCount( SCCOL nCol ) const;

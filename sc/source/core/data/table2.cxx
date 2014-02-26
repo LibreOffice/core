@@ -1502,11 +1502,6 @@ ScFormulaCell* ScTable::GetFormulaCell( SCCOL nCol, SCROW nRow )
     return aCol[nCol].GetFormulaCell(nRow);
 }
 
-ScPostIt* ScTable::GetNote(const SCCOL nCol, const SCROW nRow)
-{
-    return pDocument->GetNote(nCol, nRow, nTab);
-}
-
 ScPostIt* ScTable::ReleaseNote( SCCOL nCol, SCROW nRow )
 {
     if (!ValidCol(nCol))
