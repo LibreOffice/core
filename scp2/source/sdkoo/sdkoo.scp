@@ -59,6 +59,11 @@ Directory gid_Dir_Sdkoo_Bin
     DosName = "bin";
 End
 
+Directory gid_Dir_Lib_Sdk
+    ParentID = gid_Dir_Sdkoo_Sdk;
+    DosName = "lib";
+End
+
 Module gid_Module_Root_SDK
     Name = "sdkoo";
     Description = "sdkoo";
