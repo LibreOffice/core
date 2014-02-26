@@ -382,6 +382,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Avar" ; LANGUAGE_USER_AVAR ; > ;
         < "Cree, Plains, Latin" ; LANGUAGE_USER_CREE_PLAINS_LATIN ; > ;
         < "Cree, Plains, Syllabics" ; LANGUAGE_USER_CREE_PLAINS_SYLLABICS ; > ;
+        < "Lengo" ; LANGUAGE_USER_LENGO ; > ;
     };
 };
 
