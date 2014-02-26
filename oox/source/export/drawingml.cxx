@@ -813,8 +813,8 @@ OUString DrawingML::WriteBlip( Reference< XPropertySet > rXPropSet, OUString& rU
     GET( nBright, AdjustLuminance );
     GET( nContrast, AdjustContrast );
 
-        mpFS->startElementNS( XML_a, XML_blip,
-                  FSNS( XML_r, XML_embed), OUStringToOString( sRelId, RTL_TEXTENCODING_UTF8 ).getStr(),
+    mpFS->startElementNS( XML_a, XML_blip,
+            FSNS( XML_r, XML_embed), OUStringToOString( sRelId, RTL_TEXTENCODING_UTF8 ).getStr(),
                   FSEND );
     if( nBright || nContrast )
         mpFS->singleElementNS( XML_a, XML_lum,
