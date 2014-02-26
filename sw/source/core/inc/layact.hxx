@@ -30,8 +30,6 @@ class SwTabFrm;
 class SwViewImp;
 class SwCntntNode;
 class SwWait;
-// #i28701#
-class SfxProgress;
 
 // The usage of LayAction is always the same:
 
@@ -56,8 +54,6 @@ class SwLayAction
     const SwTabFrm *pOptTab;
 
     SwWait *pWait;
-
-    SfxProgress * pProgress;
 
     //Wenn ein Absatz - oder was auch immer - bei der Formatierung mehr
     //als eine Seite rueckwaerts floss traegt er seine neue Seitennummer
@@ -159,8 +155,6 @@ public:
 
     void SetAgain()         { bAgain = sal_True; }
     void SetUpdateExpFlds() {bUpdateExpFlds = sal_True; }
-    void SetProgress(SfxProgress * _pProgress = NULL)
-    { pProgress = _pProgress; }
 
     inline void SetCheckPageNum( sal_uInt16 nNew );
     inline void SetCheckPageNumDirect( sal_uInt16 nNew ) { nCheckPageNum = nNew; }

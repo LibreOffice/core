@@ -60,7 +60,6 @@
 #include <fmtsrnd.hxx>
 #include <fmtanchr.hxx>
 #include <tools/shl.hxx>
-#include <sfx2/progress.hxx>
 #include <docsh.hxx>
 
 #include "swmodule.hxx"
@@ -117,7 +116,6 @@ static void BreakPoint()
     { \
         if ( IsReschedule() )  \
         { \
-            if (pProgress) pProgress->Reschedule(); \
             ::RescheduleProgress( pImp->GetShell()->GetDoc()->GetDocShell() ); \
         } \
     }
@@ -311,7 +309,6 @@ SwLayAction::SwLayAction( SwRootFrm *pRt, SwViewImp *pI ) :
     pImp( pI ),
     pOptTab( 0 ),
     pWait( 0 ),
-    pProgress(NULL),
     nPreInvaPage( USHRT_MAX ),
     nStartTicks( Ticks() ),
     nInputType( 0 ),
