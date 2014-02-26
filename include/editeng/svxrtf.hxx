@@ -91,9 +91,9 @@ struct SvxRTFStyleType
     SfxItemSet aAttrSet;        // the attributes of Style (+ derivate!)
     OUString sName;
     sal_uInt16 nBasedOn, nNext;
-    sal_Bool bBasedOnIsSet;
+    bool bBasedOnIsSet;
     sal_uInt8 nOutlineNo;
-    sal_Bool bIsCharFmt;
+    bool bIsCharFmt;
 
     SvxRTFStyleType( SfxItemPool& rPool, const sal_uInt16* pWhichRange );
 };
@@ -198,16 +198,16 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
     long    nVersionNo;
     int     nDfltFont;
 
-    sal_Bool    bNewDoc : 1;            // sal_False - Reading in an existing
-    sal_Bool    bNewGroup : 1;          // sal_True - there was an opening parenthesis
-    sal_Bool    bIsSetDfltTab : 1;      // sal_True - DefTab was loaded
-    sal_Bool    bChkStyleAttr : 1;      // sal_True - StyleSheets are evaluated
-    sal_Bool    bCalcValue : 1;         // sal_True - Twip values adapt to App
-    sal_Bool    bPardTokenRead : 1;     // sal_True - Token \pard was detected
-    sal_Bool    bReadDocInfo : 1;       // sal_True - DocInfo to read
-    sal_Bool    bIsLeftToRightDef : 1;  // sal_True - in LeftToRight char run def.
+    bool    bNewDoc : 1;            // sal_False - Reading in an existing
+    bool    bNewGroup : 1;          // sal_True - there was an opening parenthesis
+    bool    bIsSetDfltTab : 1;      // sal_True - DefTab was loaded
+    bool    bChkStyleAttr : 1;      // sal_True - StyleSheets are evaluated
+    bool    bCalcValue : 1;         // sal_True - Twip values adapt to App
+    bool    bPardTokenRead : 1;     // sal_True - Token \pard was detected
+    bool    bReadDocInfo : 1;       // sal_True - DocInfo to read
+    bool    bIsLeftToRightDef : 1;  // sal_True - in LeftToRight char run def.
                                         // sal_False - in RightToLeft char run def.
-    sal_Bool    bIsInReadStyleTab : 1;  // sal_True - in ReadStyleTable
+    bool    bIsInReadStyleTab : 1;  // sal_True - in ReadStyleTable
 
     void ClearColorTbl();
     void ClearFontTbl();

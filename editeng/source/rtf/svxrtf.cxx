@@ -70,14 +70,14 @@ SvxRTFParser::SvxRTFParser( SfxItemPool& rPool, SvStream& rIn,
     , nVersionNo( 0 )
     , nDfltFont( 0)
     , bNewDoc( bReadNewDoc )
-    , bNewGroup( sal_False)
-    , bIsSetDfltTab( sal_False)
-    , bChkStyleAttr( sal_False )
-    , bCalcValue( sal_False )
-    , bPardTokenRead( sal_False)
-    , bReadDocInfo( sal_False )
-    , bIsLeftToRightDef( sal_True)
-    , bIsInReadStyleTab( sal_False)
+    , bNewGroup( false)
+    , bIsSetDfltTab( false)
+    , bChkStyleAttr( false )
+    , bCalcValue( false )
+    , bPardTokenRead( false)
+    , bReadDocInfo( false )
+    , bIsLeftToRightDef( true)
+    , bIsInReadStyleTab( false)
 {
 
     {
@@ -143,8 +143,8 @@ SvParserState SvxRTFParser::CallParser()
     if( !aAttrStack.empty() )
         ClearAttrStack();
 
-    bIsSetDfltTab = sal_False;
-    bNewGroup = sal_False;
+    bIsSetDfltTab = false;
+    bNewGroup = false;
     nDfltFont = 0;
 
     sBaseURL = "";
@@ -321,14 +321,14 @@ INSINGLECHAR:
 
 void SvxRTFParser::ReadStyleTable()
 {
-    int nToken, bSaveChkStyleAttr = bChkStyleAttr;
+    int nToken, bSaveChkStyleAttr = bChkStyleAttr ? 1 : 0;
     sal_uInt16 nStyleNo = 0;
     int _nOpenBrakets = 1;      // the first was already detected earlier!!
     SvxRTFStyleType* pStyle = new SvxRTFStyleType( *pAttrPool, &aWhichMap[0] );
     pStyle->aAttrSet.Put( GetRTFDefaults() );
 
-    bIsInReadStyleTab = sal_True;
-    bChkStyleAttr = sal_False;      // Do not check Attribute against the Styles
+    bIsInReadStyleTab = true;
+    bChkStyleAttr = false;      // Do not check Attribute against the Styles
 
     while( _nOpenBrakets && IsParserWorking() )
     {
@@ -359,13 +359,13 @@ void SvxRTFParser::ReadStyleTable()
             }
             break;
 
-        case RTF_SBASEDON:  pStyle->nBasedOn = sal_uInt16(nTokenValue); pStyle->bBasedOnIsSet=sal_True; break;
+        case RTF_SBASEDON:  pStyle->nBasedOn = sal_uInt16(nTokenValue); pStyle->bBasedOnIsSet=true; break;
         case RTF_SNEXT:     pStyle->nNext = sal_uInt16(nTokenValue);    break;
         case RTF_OUTLINELEVEL:
         case RTF_SOUTLVL:   pStyle->nOutlineNo = sal_uInt8(nTokenValue);    break;
         case RTF_S:         nStyleNo = (short)nTokenValue;          break;
         case RTF_CS:        nStyleNo = (short)nTokenValue;
-                            pStyle->bIsCharFmt = sal_True;
+                            pStyle->bIsCharFmt = true;
                             break;
 
         case RTF_TEXTTOKEN:
@@ -415,7 +415,7 @@ void SvxRTFParser::ReadStyleTable()
 
     // Flag back to old state
     bChkStyleAttr = bSaveChkStyleAttr;
-    bIsInReadStyleTab = sal_False;
+    bIsInReadStyleTab = false;
 }
 
 void SvxRTFParser::ReadColorTable()
@@ -468,7 +468,7 @@ void SvxRTFParser::ReadFontTable()
     Font* pFont = new Font();
     short nFontNo(0), nInsFontNo (0);
     OUString sAltNm, sFntNm;
-    sal_Bool bIsAltFntNm = sal_False, bCheckNewFont;
+    bool bIsAltFntNm = false, bCheckNewFont;
 
     rtl_TextEncoding nSystemChar = lcl_GetDefaultTextEncodingForRTF();
     pFont->SetCharSet( nSystemChar );
@@ -476,16 +476,16 @@ void SvxRTFParser::ReadFontTable()
 
     while( _nOpenBrakets && IsParserWorking() )
     {
-        bCheckNewFont = sal_False;
+        bCheckNewFont = false;
         switch( ( nToken = GetNextToken() ))
         {
             case '}':
-                bIsAltFntNm = sal_False;
+                bIsAltFntNm = false;
                 // Style has been completely read,
                 // so this is still a stable status
                 if( --_nOpenBrakets <= 1 && IsParserWorking() )
                     SaveState( RTF_FONTTBL );
-                bCheckNewFont = sal_True;
+                bCheckNewFont = true;
                 nInsFontNo = nFontNo;
                 break;
             case '{':
@@ -555,12 +555,12 @@ void SvxRTFParser::ReadFontTable()
                 }
                 break;
             case RTF_F:
-                bCheckNewFont = sal_True;
+                bCheckNewFont = true;
                 nInsFontNo = nFontNo;
                 nFontNo = (short)nTokenValue;
                 break;
             case RTF_FALT:
-                bIsAltFntNm = sal_True;
+                bIsAltFntNm = true;
                 break;
             case RTF_TEXTTOKEN:
                 DelCharAtEnd( aToken, ';' );
@@ -648,7 +648,7 @@ OUString& SvxRTFParser::GetTextToEndGroup( OUString& rStr )
 util::DateTime SvxRTFParser::GetDateTimeStamp( )
 {
     util::DateTime aDT;
-    sal_Bool bContinue = sal_True;
+    bool bContinue = true;
 
     while( bContinue && IsParserWorking() )
     {
@@ -661,7 +661,7 @@ util::DateTime SvxRTFParser::GetDateTimeStamp( )
         case RTF_HR:    aDT.Hours = (sal_uInt16)nTokenValue;    break;
         case RTF_MIN:   aDT.Minutes = (sal_uInt16)nTokenValue;  break;
         default:
-            bContinue = sal_False;
+            bContinue = false;
         }
     }
     SkipToken( -1 );        // the closing brace is evaluated "above"
@@ -844,7 +844,7 @@ SvxRTFItemStackType* SvxRTFParser::_GetAttrSet( int bCopyAttr )
     pNew->SetRTFDefaults( GetRTFDefaults() );
 
     aAttrStack.push_back( pNew );
-    bNewGroup = sal_False;
+    bNewGroup = false;
     return pNew;
 }
 
@@ -1064,7 +1064,7 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
         if( pOld )
             delete pOld;
 
-        bNewGroup = sal_False;
+        bNewGroup = false;
     }
 }
 
@@ -1149,9 +1149,9 @@ SvxRTFStyleType::SvxRTFStyleType( SfxItemPool& rPool, const sal_uInt16* pWhichRa
 {
     nOutlineNo = sal_uInt8(-1);         // not set
     nBasedOn = 0;
-    bBasedOnIsSet = sal_False;          //$flr #117411#
+    bBasedOnIsSet = false;          //$flr #117411#
     nNext = 0;
-    bIsCharFmt = sal_False;
+    bIsCharFmt = false;
 }
 
 

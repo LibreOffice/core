@@ -213,7 +213,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
     FontUnderline eUnderline;
     FontUnderline eOverline;
     FontEmphasisMark eEmphasis;
-    bPardTokenRead = sal_False;
+    bPardTokenRead = false;
     RTF_CharTypeDef eCharType = NOTDEF_CHARTYPE;
     sal_uInt16 nFontAlign;
 
@@ -227,7 +227,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
             RTFPardPlain( sal_True, &pSet );
             ResetPard();
             nStyleNo = 0;
-            bPardTokenRead = sal_True;
+            bPardTokenRead = true;
             break;
 
         case RTF_PLAIN:
@@ -987,10 +987,10 @@ ATTR_SETOVERLINE:
                 break;
 
             case RTF_RTLCH:
-                bIsLeftToRightDef = sal_False;
+                bIsLeftToRightDef = false;
                 break;
             case RTF_LTRCH:
-                bIsLeftToRightDef = sal_True;
+                bIsLeftToRightDef = true;
                 break;
             case RTF_RTLPAR:
                 if (PARDID->nDirection)
@@ -1821,10 +1821,10 @@ void SvxRTFParser::SetDefault( int nToken, int nValue )
 
     SfxItemSet aTmp( *pAttrPool, &aWhichMap[0] );
     sal_Bool bOldFlag = bIsLeftToRightDef;
-    bIsLeftToRightDef = sal_True;
+    bIsLeftToRightDef = true;
     switch( nToken )
     {
-    case RTF_ADEFF: bIsLeftToRightDef = sal_False;  // no break!
+    case RTF_ADEFF: bIsLeftToRightDef = false;  // no break!
     case RTF_DEFF:
         {
             if( -1 == nValue )
@@ -1838,7 +1838,7 @@ void SvxRTFParser::SetDefault( int nToken, int nValue )
         }
         break;
 
-    case RTF_ADEFLANG:  bIsLeftToRightDef = sal_False;  // no break!
+    case RTF_ADEFLANG:  bIsLeftToRightDef = false;  // no break!
     case RTF_DEFLANG:
         // store default Language
         if( -1 != nValue )
@@ -1853,7 +1853,7 @@ void SvxRTFParser::SetDefault( int nToken, int nValue )
         if( PARDID->nTabStop )
         {
             // RTF defines 720 twips as default
-            bIsSetDfltTab = sal_True;
+            bIsSetDfltTab = true;
             if( -1 == nValue || !nValue )
                 nValue = 720;
 
