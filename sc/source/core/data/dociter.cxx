@@ -960,11 +960,6 @@ const ScFormulaCell* ScCellIterator::getFormulaCell() const
     return maCurCell.mpFormula;
 }
 
-double ScCellIterator::getValue()
-{
-    return maCurCell.getValue();
-}
-
 ScCellValue ScCellIterator::getCellValue() const
 {
     ScCellValue aRet;
@@ -999,11 +994,6 @@ const ScRefCellValue& ScCellIterator::getRefCellValue() const
 bool ScCellIterator::hasString() const
 {
     return maCurCell.hasString();
-}
-
-bool ScCellIterator::hasNumeric() const
-{
-    return maCurCell.hasNumeric();
 }
 
 bool ScCellIterator::hasEmptyData() const

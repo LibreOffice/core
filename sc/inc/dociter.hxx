@@ -220,12 +220,10 @@ public:
     const EditTextObject* getEditText() const;
     ScFormulaCell* getFormulaCell();
     const ScFormulaCell* getFormulaCell() const;
-    double getValue();
     ScCellValue getCellValue() const;
     const ScRefCellValue& getRefCellValue() const;
 
     bool hasString() const;
-    bool hasNumeric() const;
     bool hasEmptyData() const;
     bool isEmpty() const;
     bool equalsWithoutFormat( const ScAddress& rPos ) const;

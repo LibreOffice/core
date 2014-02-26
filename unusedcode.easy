@@ -59,8 +59,6 @@ Resource::TestRes()
 Ruler::GetPageWidth() const
 SalDisplay::PrintInfo() const
 SalGraphics::drawTransformedBitmap(basegfx::B2DPoint const&, basegfx::B2DPoint const&, basegfx::B2DPoint const&, SalBitmap const&, SalBitmap const*)
-ScCellIterator::getValue()
-ScCellIterator::hasNumeric() const
 ScDocument::CreateFormatTable() const
 ScExtIButton::GetSelected() const
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
