@@ -110,17 +110,16 @@ bool ScGroupTokenConverter::convert(ScTokenArray& rCode)
                         return false;
 
                     // Trim data array length to actual data range.
-                    nLen = trimLength(aRefPos.Tab(), aRefPos.Col(), aRefPos.Col(), aRefPos.Row(), nLen);
-
+                    SCROW nTrimLen = trimLength(aRefPos.Tab(), aRefPos.Col(), aRefPos.Col(), aRefPos.Row(), nLen);
                     // Fetch double array guarantees that the length of the
                     // returned array equals or greater than the requested
                     // length.
 
                     formula::VectorRefArray aArray;
-                    if (nLen)
-                        aArray = mrDoc.FetchVectorRefArray(aRefPos, nLen);
+                    if (nTrimLen)
+                        aArray = mrDoc.FetchVectorRefArray(aRefPos, nTrimLen);
 
-                    formula::SingleVectorRefToken aTok(aArray, nLen);
+                    formula::SingleVectorRefToken aTok(aArray, nLen, nTrimLen);
                     mrGroupTokens.AddToken(aTok);
                 }
                 else
@@ -179,6 +178,7 @@ bool ScGroupTokenConverter::convert(ScTokenArray& rCode)
                 }
 
                 // Trim trailing empty rows.
+                SCROW nRequestedLength = nArrayLength; // keep the original length.
                 nArrayLength = trimLength(aRefPos.Tab(), aAbs.aStart.Col(), aAbs.aEnd.Col(), aRefPos.Row(), nArrayLength);
 
                 for (SCCOL i = aAbs.aStart.Col(); i <= aAbs.aEnd.Col(); ++i)
@@ -191,7 +191,7 @@ bool ScGroupTokenConverter::convert(ScTokenArray& rCode)
                     aArrays.push_back(aArray);
                 }
 
-                formula::DoubleVectorRefToken aTok(aArrays, nArrayLength, nRefRowSize, bAbsFirst, bAbsLast);
+                formula::DoubleVectorRefToken aTok(aArrays, nRequestedLength, nArrayLength, nRefRowSize, bAbsFirst, bAbsLast);
                 mrGroupTokens.AddToken(aTok);
             }
             break;
