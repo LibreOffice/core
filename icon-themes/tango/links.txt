@@ -1,5 +1,4 @@
 res/sx03129.png dbaccess/res/db.png
-dbaccess/res/sc09.png dbaccess/res/docopen_sc.png
 dbaccess/res/sc021.png dbaccess/res/queryeditdesign_sc.png
 dbaccess/res/sc023.png dbaccess/res/queryeditsql_sc.png
 sd/imglst/sc27058.png sd/imglst/sc27028.png
