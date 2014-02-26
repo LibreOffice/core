@@ -181,7 +181,7 @@ End
         TXT_FILE_BODY; \
         Styles = (PACKED); \
         Dir = gid_Dir_Lib_Sdk; \
-        Name = name \
+        Name = name; \
     End
 #else
 #define SDK_LIBRARY_LINK(id,name,target) \
