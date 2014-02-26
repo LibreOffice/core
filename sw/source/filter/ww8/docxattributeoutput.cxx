@@ -1176,6 +1176,8 @@ void DocxAttributeOutput::InitCollectedRunProperties()
         FSNS( XML_w14, XML_reflection ),
         FSNS( XML_w14, XML_textOutline ),
         FSNS( XML_w14, XML_textFill ),
+        FSNS( XML_w14, XML_scene3d ),
+        FSNS( XML_w14, XML_props3d ),
     };
 
     // postpone the output so that we can later [in EndParagraphProperties()]
@@ -1205,6 +1207,8 @@ const NameToId constNameToIdMapping[] =
     { OUString("reflection"),   FSNS( XML_w14, XML_reflection ) },
     { OUString("textOutline"),  FSNS( XML_w14, XML_textOutline ) },
     { OUString("textFill"),     FSNS( XML_w14, XML_textFill ) },
+    { OUString("scene3d"),      FSNS( XML_w14, XML_scene3d ) },
+    { OUString("props3d"),      FSNS( XML_w14, XML_props3d ) },
 
     { OUString("val"),          FSNS( XML_w14, XML_val ) },
     { OUString("rad"),          FSNS( XML_w14, XML_rad ) },
@@ -1238,6 +1242,10 @@ const NameToId constNameToIdMapping[] =
     { OUString("lat"),          FSNS( XML_w14, XML_lat ) },
     { OUString("lon"),          FSNS( XML_w14, XML_lon ) },
     { OUString("rev"),          FSNS( XML_w14, XML_rev ) },
+    { OUString("h"),            FSNS( XML_w14, XML_h ) },
+    { OUString("extrusionH"),   FSNS( XML_w14, XML_extrusionH ) },
+    { OUString("contourW"),     FSNS( XML_w14, XML_contourW ) },
+    { OUString("prstMaterial"), FSNS( XML_w14, XML_prstMaterial ) },
 
     { OUString("schemeClr"),    FSNS( XML_w14, XML_schemeClr ) },
     { OUString("srgbClr"),      FSNS( XML_w14, XML_srgbClr ) },
@@ -1267,6 +1275,11 @@ const NameToId constNameToIdMapping[] =
     { OUString("camera"),       FSNS( XML_w14, XML_camera ) },
     { OUString("lightRig"),     FSNS( XML_w14, XML_lightRig ) },
     { OUString("rot"),          FSNS( XML_w14, XML_rot ) },
+    { OUString("bevelT"),       FSNS( XML_w14, XML_bevelT ) },
+    { OUString("bevelB"),       FSNS( XML_w14, XML_bevelB ) },
+    { OUString("extrusionClr"), FSNS( XML_w14, XML_extrusionClr ) },
+    { OUString("contourClr"),   FSNS( XML_w14, XML_contourClr ) },
+
 };
 
 boost::optional<sal_Int32> lclGetElementIdForName(const OUString& rName)
@@ -6698,11 +6711,18 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
         {
             // just skip these, they were processed before
         }
-        else if (i->first == "CharGlowTextEffect" ||
-                 i->first == "CharShadowTextEffect" ||
-                 i->first == "CharReflectionTextEffect" ||
-                 i->first == "CharTextOutlineTextEffect" ||
-                 i->first == "CharTextFillTextEffect")
+        else if(i->first == "CharGlowTextEffect" ||
+                i->first == "CharShadowTextEffect" ||
+                i->first == "CharReflectionTextEffect" ||
+                i->first == "CharTextOutlineTextEffect" ||
+                i->first == "CharTextFillTextEffect" ||
+                i->first == "CharScene3DTextEffect" ||
+                i->first == "CharProps3DTextEffect" ||
+                i->first == "CharLigaturesTextEffect" ||
+                i->first == "CharNumFormTextEffect" ||
+                i->first == "CharNumSpacingTextEffect" ||
+                i->first == "CharStylisticSetsTextEffect" ||
+                i->first == "CharCntxtAltsTextEffect")
         {
             beans::PropertyValue aPropertyValue;
             i->second >>= aPropertyValue;
