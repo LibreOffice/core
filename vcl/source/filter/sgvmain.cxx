@@ -83,8 +83,6 @@
 
 #endif
 
-
-
 //  Restrictions:
 
 //  - area patterns are matched to the available ones in Starview.
@@ -93,16 +91,10 @@
 //    transparency/opacity is not taken into account
 //  - no rotated ellipses
 
-
-
-
 // for font translation
-
 SgfFontLst* pSgfFonts = 0;
 
-
 // for circle kinds, text and rotated rectangles
-
 void RotatePoint(PointType& P, sal_Int16 cx, sal_Int16 cy, double sn, double cs)
 {
     sal_Int16  dx,dy;
@@ -140,9 +132,7 @@ sal_uInt16 MulDiv(sal_uInt16 a, sal_uInt16 Mul, sal_uInt16 Div)
     return sal_uInt16(Temp);
 }
 
-
 // SgfFilterSDrw
-
 
 SvStream& ReadDtHdType(SvStream& rIStream, DtHdType& rDtHd)
 {
@@ -305,13 +295,6 @@ SvStream& ReadGrupType(SvStream& rInp, GrupType& rGrup)
     return rInp;
 }
 
-
-
-/*************************************************************************
-|*
-|*    Sgv2SvFarbe()
-|*
-*************************************************************************/
 Color Sgv2SvFarbe(sal_uInt8 nFrb1, sal_uInt8 nFrb2, sal_uInt8 nInts)
 {
     sal_uInt16 r1=0,g1=0,b1=0,r2=0,g2=0,b2=0;
@@ -359,33 +342,18 @@ void SetArea(ObjAreaType& rArea, OutputDevice& rOut)
         rOut.SetFillColor( Sgv2SvFarbe( rArea.FFarbe,rArea.FBFarbe,rArea.FIntens ) );
 }
 
-/*************************************************************************
-|*
-|*    ObjkType::DrawObjekt()
-|*
-*************************************************************************/
 void ObjkType::Draw(OutputDevice&)
 {
 }
 
 void Obj0Type::Draw(OutputDevice&) {}
 
-/*************************************************************************
-|*
-|*    StrkType::DrawObjekt()
-|*
-*************************************************************************/
 void StrkType::Draw(OutputDevice& rOut)
 {
     SetLine(L,rOut);
     rOut.DrawLine(Point(Pos1.x,Pos1.y),Point(Pos2.x,Pos2.y)); // !!!
 }
 
-/*************************************************************************
-|*
-|*    RectType::DrawObjekt()
-|*
-*************************************************************************/
 void SgfAreaColorIntens(sal_uInt16 Muster, sal_uInt8 Col1, sal_uInt8 Col2, sal_uInt8 Int, OutputDevice& rOut)
 {
     ObjAreaType F;
@@ -479,7 +447,6 @@ void DrawSlideRect(sal_Int16 x1, sal_Int16 y1, sal_Int16 x2, sal_Int16 y2, ObjAr
     }
 }
 
-
 void RectType::Draw(OutputDevice& rOut)
 {
     if (L.LMuster!=0) L.LMuster=1; // no line separator here, only on or off
@@ -515,11 +482,6 @@ void RectType::Draw(OutputDevice& rOut)
     }
 }
 
-/*************************************************************************
-|*
-|*    PolyType::Draw()
-|*
-*************************************************************************/
 void PolyType::Draw(OutputDevice& rOut)
 {
     if ((Flags & PolyClosBit) !=0) SetArea(F,rOut);
@@ -534,11 +496,6 @@ void PolyType::Draw(OutputDevice& rOut)
     }
 }
 
-/*************************************************************************
-|*
-|*    SplnType::Draw()
-|*
-*************************************************************************/
 void SplnType::Draw(OutputDevice& rOut)
 {
     if ((Flags & PolyClosBit) !=0) SetArea(F,rOut);
@@ -556,11 +513,6 @@ void SplnType::Draw(OutputDevice& rOut)
     }
 }
 
-/*************************************************************************
-|*
-|*    CircType::Draw()
-|*
-*************************************************************************/
 void DrawSlideCirc(sal_Int16 cx, sal_Int16 cy, sal_Int16 rx, sal_Int16 ry, ObjAreaType& F, OutputDevice& rOut)
 {
     sal_Int16 x1=cx-rx;
@@ -699,12 +651,6 @@ void CircType::Draw(OutputDevice& rOut)
     }
 }
 
-/*************************************************************************
-|*
-|*    BmapType::Draw()
-|*
-*************************************************************************/
-
 void BmapType::Draw(OutputDevice& rOut)
 {
     //ifstream aInp;
@@ -751,21 +697,11 @@ void BmapType::Draw(OutputDevice& rOut)
 }
 
 
-/*************************************************************************
-|*
-|*    GrupType::...
-|*
-*************************************************************************/
 sal_uInt32 GrupType::GetSubPtr()
 {
     return sal_uInt32(SbLo)+0x00010000*sal_uInt32(SbHi);
 }
 
-/*************************************************************************
-|*
-|*    DrawObjkList()
-|*
-*************************************************************************/
 void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
 {
     ObjkType aObjk;
@@ -846,11 +782,6 @@ void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
     } while (!bEnd);
 }
 
-/*************************************************************************
-|*
-|*    SkipObjkList()
-|*
-*************************************************************************/
 void SkipObjkList(SvStream& rInp)
 {
     ObjkType aObjk;
@@ -868,11 +799,6 @@ void SkipObjkList(SvStream& rInp)
     } while (aObjk.Next!=0L && !rInp.GetError());
 }
 
-/*************************************************************************
-|*
-|*    SgfFilterSDrw()
-|*
-*************************************************************************/
 bool SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf )
 {
     bool          bRet = false;
@@ -922,13 +848,6 @@ bool SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf )
     return bRet;
 }
 
-
-
-/*************************************************************************
-|*
-|*    SgfSDrwFilter()
-|*
-*************************************************************************/
 bool SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath )
 {
 #if OSL_DEBUG_LEVEL > 1 // check record size. New compiler possibly aligns different!

@@ -36,19 +36,8 @@ extern SgfFontLst* pSgfFonts;
 #endif
 
 
-
-
 //  Limitations:  only grey shadows, 2D and with fixed distance.
-
-
-
-
-
-
-
-
-
-// AbsBase.Pas
+// Start of AbsBase.Pas
 
 // vvv special characters in text buffer vvv
 #define  TextEnd        0 /* ^@ end of character sequence                       */
@@ -61,7 +50,6 @@ extern SgfFontLst* pSgfFonts;
 #define  SoftTrenn     31 /* ^_ soft separator, '-' only end of line            */
 #define  MaxEscValLen  8
 #define  MaxEscLen     (MaxEscValLen+3)
-
 
 // Escape sequences: [Esc]<Ident><Value>[Esc]  at least 4 characters
 // Max length of value should be: 8 chars (7+sign). Therefore max. length
@@ -136,23 +124,13 @@ extern SgfFontLst* pSgfFonts;
 #define  MaxChar 255
 
 
-
-
 #define  CharTopToBase     100 /* due to quotes more as 75%         */
 #define  CharTopToBtm      120 /* line height larger as text angle  */
                                // for Avanti-Bold 'ue' actually even 130%
 
 // end of AbsBase.Pas
 
-
-
-
-
-
-
-
-
-// DefBase.Pas
+// Start of DefBase.Pas
 
 #define  TextBoldBit  0x0001   /* bold                   */
 #define  TextRSlnBit  0x0002   /* italic                 */
@@ -180,10 +158,6 @@ extern SgfFontLst* pSgfFonts;
 
 // end of DefBase.Pas
 
-
-
-
-
 bool CheckTextOutl(ObjAreaType& F, ObjLineType& L)
 {
     return (F.FIntens!=L.LIntens) ||
@@ -191,11 +165,7 @@ bool CheckTextOutl(ObjAreaType& F, ObjLineType& L)
            ((F.FBFarbe!=L.LBFarbe) && (F.FIntens<100));
 }
 
-
-
-
-
-// Misc.Pas
+// Start of Misc.Pas
 
 short hPoint2Sgf(short a)
 {
@@ -205,14 +175,13 @@ short hPoint2Sgf(short a)
 }
 
 // End of Misc.Pas
-// AbsRead.Pas
 
+// Start of AbsRead.Pas
 
 // Function GetTopToBaseLine()  Function GetBaseLineToBtm()
 
 // Calculate distance from ascender of line to baseline or from baseline to
 // descender. All in SGF-units.
-
 
 sal_uInt16 GetTopToBaseLine(sal_uInt16 MaxGrad)
 {
@@ -220,7 +189,6 @@ sal_uInt16 GetTopToBaseLine(sal_uInt16 MaxGrad)
     ret=long(MaxGrad)*long(CharTopToBase) /long(100);
     return sal_uInt16(ret);
 }
-
 
 // Function GetTextChar()   Function GetTextCharConv()
 
@@ -237,9 +205,6 @@ sal_uInt16 GetTopToBaseLine(sal_uInt16 MaxGrad)
 // On top GetTextCharConv() converts HardSpace and AbsatzEnde
 // in spaces, including HardTrenner in minus signs. TextEnde is
 // always returned as Char(0).
-
-
-
 
 UCHAR ConvertTextChar(UCHAR c)
 {
@@ -273,8 +238,6 @@ long ChgValue(long Def, long Min, long Max, UCHAR FlgVal, long NumVal)
     return r;
 }
 
-
-
 void ChgSchnittBit(sal_uInt16 Bit, sal_uInt16 Radio1, sal_uInt16 Radio2, sal_uInt16 Radio3,
                    UCHAR FlgVal, sal_uInt16 Schnitt0, sal_uInt16& Schnitt)
 {
@@ -291,8 +254,6 @@ void ChgSchnittBit(sal_uInt16 Bit, sal_uInt16 Radio1, sal_uInt16 Radio2, sal_uIn
     }
 }
 
-
-
 UCHAR GetNextChar(UCHAR* TBuf, sal_uInt16 Index)
 {
     sal_uInt16 Cnt;
@@ -305,8 +266,6 @@ UCHAR GetNextChar(UCHAR* TBuf, sal_uInt16 Index)
     }
     return TBuf[Index];
 }
-
-
 
 UCHAR ProcessOne(UCHAR* TBuf, sal_uInt16& Index,
                  ObjTextType& Atr0, ObjTextType& AktAtr,
@@ -429,7 +388,6 @@ UCHAR GetTextChar(UCHAR* TBuf, sal_uInt16& Index,
   // is 3x present in TextBuf, e.g.: "schiff-fahrt".   }
   // If not separated then, "-f" is removed.        }
 
-
 UCHAR GetTextCharConv(UCHAR* TBuf, sal_uInt16& Index,
                       ObjTextType& Atr0, ObjTextType& AktAtr,
                       sal_uInt16 Rest, bool ScanEsc)
@@ -446,7 +404,6 @@ UCHAR GetTextCharConv(UCHAR* TBuf, sal_uInt16& Index,
     }
     return c;
 }
-
 
 
 // Function GetLineFeed()
@@ -497,15 +454,7 @@ sal_uInt16 GetLineFeed(UCHAR* TBuf, sal_uInt16 Index, ObjTextType Atr0, ObjTextT
 
 // End of AbsRead.Pas
 
-
-
-
-
-
-
-
-
-// iFont.Pas
+// Start of iFont.Pas
 
 #define SuperSubFact 60     /* superscript/subscript: 60% of text angle */
 #define DefaultSpace 40     /* Default: space is 40% of text angle      */
@@ -614,14 +563,7 @@ sal_uInt16 SetTextContext(OutputDevice& rOut, ObjTextType& Atr, bool Kapt, sal_u
 
 // iFont.Pas
 
-
-
-
-
-
-
-
-// Absatz.Pas
+// Start of Absatz.Pas
 
 struct ProcChrSta {
     sal_uInt16 Index;
@@ -926,18 +868,9 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
     delete TRrec;
 }
 
-
-
 // End of Absatz.Pas
 
-
-
-
-
-
-
-
-// DrawText.Pas
+// Start of DrawText.Pas
 
 void DrawChar(OutputDevice& rOut, UCHAR c, ObjTextType T, PointType Pos, sal_uInt16 DrehWink,
               sal_uInt16 FitXMul, sal_uInt16 FitXDiv, sal_uInt16 FitYMul, sal_uInt16 FitYDiv)
@@ -949,11 +882,6 @@ void DrawChar(OutputDevice& rOut, UCHAR c, ObjTextType T, PointType Pos, sal_uIn
     rOut.DrawText( Point( Pos.x, Pos.y ), s );
 }
 
-/*************************************************************************
-|*
-|*    TextType::Draw()
-|*
-*************************************************************************/
 void TextType::Draw(OutputDevice& rOut)
 {
     if ((Flags & TextOutlBit)!=0) return;   // source text for Outliner !!
@@ -1073,9 +1001,6 @@ void TextType::Draw(OutputDevice& rOut)
 
 // End of DrawText.Pas
 
-
-
-
 sal_uInt32 ObjTextType::GetFont()
 {
     return sal_uLong(FontLo)+0x00010000*sal_uLong(FontHi);
@@ -1088,9 +1013,7 @@ void ObjTextType::SetFont(sal_uInt32 FontID)
 }
 
 
-
 // SGF.Ini lesen
-
 SgfFontOne::SgfFontOne()
 {
     Next=NULL;
@@ -1153,8 +1076,6 @@ void SgfFontOne::ReadOne( const OString& rID, OString& Dsc )
         }
     }
 }
-
-
 
 SgfFontLst::SgfFontLst()
 {

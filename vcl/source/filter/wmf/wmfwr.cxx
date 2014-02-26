@@ -35,7 +35,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
-//====================== MS-Windows-defines ===============================
+// MS Windows defines
 
 #define W_META_SETBKMODE            0x0102
 #define W_META_SETROP2              0x0104
@@ -129,8 +129,6 @@
 #define W_MFCOMMENT         15
 
 #define PRIVATE_ESCAPE_UNICODE          2
-
-//========================== methods of WMFWriter ==========================
 
 void WMFWriter::MayCallback()
 {
@@ -284,7 +282,6 @@ void WMFWriter::WMFRecord_CreateBrushIndirect(const Color& rColor)
     WriteColor( rColor );
     pWMF->WriteUInt16( (sal_uInt16) 0 );
 }
-
 
 void WMFWriter::WMFRecord_CreateFontIndirect(const Font & rFont)
 {
@@ -578,13 +575,11 @@ void WMFWriter::WMFRecord_LineTo(const Point & rPoint)
     WritePointYX(rPoint);
 }
 
-
 void WMFWriter::WMFRecord_MoveTo(const Point & rPoint)
 {
     WriteRecordHeader(0x00000005,W_META_MOVETO);
     WritePointYX(rPoint);
 }
-
 
 void WMFWriter::WMFRecord_Pie(const Rectangle & rRect, const Point & rStartPt, const Point & rEndPt)
 {
@@ -593,7 +588,6 @@ void WMFWriter::WMFRecord_Pie(const Rectangle & rRect, const Point & rStartPt, c
     WritePointYX(rStartPt);
     WriteRectangle(rRect);
 }
-
 
 void WMFWriter::WMFRecord_Polygon(const Polygon & rPoly)
 {
@@ -609,7 +603,6 @@ void WMFWriter::WMFRecord_Polygon(const Polygon & rPoly)
     pWMF->WriteUInt16( nSize );
     for (i=0; i<nSize; i++) WritePointXY(aSimplePoly.GetPoint(i));
 }
-
 
 void WMFWriter::WMFRecord_PolyLine(const Polygon & rPoly)
 {
@@ -709,7 +702,6 @@ void WMFWriter::WMFRecord_SetPixel(const Point & rPoint, const Color & rColor)
     WritePointYX(rPoint);
 }
 
-
 void WMFWriter::WMFRecord_SetROP2(RasterOp eROP)
 {
     sal_uInt16 nROP2;
@@ -722,7 +714,6 @@ void WMFWriter::WMFRecord_SetROP2(RasterOp eROP)
     WriteRecordHeader(0x00000004,W_META_SETROP2);
     pWMF->WriteUInt16( nROP2 );
 }
-
 
 void WMFWriter::WMFRecord_SetTextAlign(FontAlign eFontAlign, sal_uInt32 eHorTextAlign)
 {
@@ -740,13 +731,11 @@ void WMFWriter::WMFRecord_SetTextAlign(FontAlign eFontAlign, sal_uInt32 eHorText
     pWMF->WriteUInt16( nAlign );
 }
 
-
 void WMFWriter::WMFRecord_SetTextColor(const Color & rColor)
 {
     WriteRecordHeader(0x00000005,W_META_SETTEXTCOLOR);
     WriteColor(rColor);
 }
-
 
 void WMFWriter::WMFRecord_SetWindowExt(const Size & rSize)
 {
@@ -760,7 +749,6 @@ void WMFWriter::WMFRecord_SetWindowOrg(const Point & rPoint)
     WriteRecordHeader(0x00000005,W_META_SETWINDOWORG);
     WritePointYX(rPoint);
 }
-
 
 void WMFWriter::WMFRecord_StretchDIB( const Point & rPoint, const Size & rSize,
                                       const Bitmap & rBitmap, sal_uInt32 nROP )
@@ -812,7 +800,6 @@ void WMFWriter::WMFRecord_StretchDIB( const Point & rPoint, const Size & rSize,
     nWrittenBitmaps++;
     nActBitmapPercent=0;
 }
-
 
 void WMFWriter::WMFRecord_TextOut(const Point & rPoint, const OUString & rStr)
 {
@@ -1651,8 +1638,6 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
     }
 }
 
-
-
 void WMFWriter::WriteHeader( const GDIMetaFile &, bool bPlaceable )
 {
     if( bPlaceable )
@@ -1686,7 +1671,6 @@ void WMFWriter::WriteHeader( const GDIMetaFile &, bool bPlaceable )
 }
 
 
-
 void WMFWriter::UpdateHeader()
 {
     sal_uLong nPos;
@@ -1706,7 +1690,6 @@ void WMFWriter::UpdateHeader()
     pWMF->WriteUInt32( nMaxRecordSize );          // and rectify
     pWMF->Seek(nPos);
 }
-
 
 
 bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
@@ -1834,7 +1817,6 @@ bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
 }
 
 
-
 sal_uInt16 WMFWriter::CalcSaveTargetMapMode(MapMode& rMapMode,
                                         const Size& rPrefSize)
 {
@@ -1858,8 +1840,6 @@ sal_uInt16 WMFWriter::CalcSaveTargetMapMode(MapMode& rMapMode,
 
     return nDivisor;
 }
-
-
 
 void WMFWriter::WriteEmbeddedEMF( const GDIMetaFile& rMTF )
 {
@@ -1911,8 +1891,6 @@ void WMFWriter::WriteEmbeddedEMF( const GDIMetaFile& rMTF )
         }
     }
 }
-
-
 
 void WMFWriter::WriteEMFRecord( SvMemoryStream& rStream, sal_uInt32 nCurSize, sal_uInt32 nRemainingSize,
                 sal_uInt32 nTotalSize, sal_uInt32 nRecCounts, sal_uInt16 nCheckSum )

@@ -25,8 +25,6 @@
 #include <svdata.hxx>
 
 
-
-
 OUString GetStandardText( sal_uInt16 nStdText )
 {
     ResMgr* pResMgr = ImplGetResMgr();
@@ -37,8 +35,6 @@ OUString GetStandardText( sal_uInt16 nStdText )
     }
     return OUString();
 }
-
-
 
 void ShowServiceNotAvailableError(Window* pParent,
     const OUString& rServiceName, bool bError)

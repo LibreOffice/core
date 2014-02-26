@@ -28,7 +28,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/dibtools.hxx>
 
-//====================== MS-Windows-defines ===============================
+// MS Windows defines
 
 #define W_META_SETBKCOLOR           0x0201
 #define W_META_SETBKMODE            0x0102
@@ -130,8 +130,6 @@ static void GetWinExtMax( const Rectangle& rSource, Rectangle& rPlaceableBound, 
     GetWinExtMax( rSource.BottomRight(), rPlaceableBound, nMapMode );
 }
 
-//=================== Methods of WMFReader ==============================
-
 inline Point WMFReader::ReadPoint()
 {
     short nX = 0, nY = 0;
@@ -139,16 +137,12 @@ inline Point WMFReader::ReadPoint()
     return Point( nX, nY );
 }
 
-
-
 inline Point WMFReader::ReadYX()
 {
     short nX = 0, nY = 0;
     pWMF->ReadInt16( nY ).ReadInt16( nX );
     return Point( nX, nY );
 }
-
-
 
 Rectangle WMFReader::ReadRectangle()
 {
@@ -160,16 +154,12 @@ Rectangle WMFReader::ReadRectangle()
     return Rectangle( aTL, aBR );
 }
 
-
-
 Size WMFReader::ReadYXExt()
 {
     short nW=0, nH=0;
     pWMF->ReadInt16( nH ).ReadInt16( nW );
     return Size( nW, nH );
 }
-
-
 
 void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
 {
@@ -1089,8 +1079,6 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
     }
 }
 
-
-
 bool WMFReader::ReadHeader()
 {
     sal_Size nStrmPos = pWMF->Tell();
@@ -1303,8 +1291,6 @@ void WMFReader::ReadWMF()
     if ( pWMF->GetError() )
         pWMF->Seek( nStartPos );
 }
-
-
 
 bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
 {

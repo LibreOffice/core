@@ -24,10 +24,6 @@
 #define _XPMPRIVATE
 #include "xpmread.hxx"
 
-
-// - XPMReader -
-
-
 XPMReader::XPMReader( SvStream& rStm ) :
             mrIStm          ( rStm ),
             mpAcc           ( NULL ),
@@ -48,8 +44,6 @@ XPMReader::XPMReader( SvStream& rStm ) :
 {
 
 }
-
-
 
 XPMReader::~XPMReader()
 {

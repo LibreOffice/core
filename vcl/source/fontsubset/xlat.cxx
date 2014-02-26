@@ -20,9 +20,7 @@
 #include "rtl/textcvt.h"
 #include <tools/debug.hxx>
 
-namespace { // anonymous namespace
-
-
+namespace {
 
 #define MAX_CVT_SELECT 6
 
@@ -40,8 +38,6 @@ private:
     rtl_UnicodeToTextContext maContexts[ MAX_CVT_SELECT+1 ];
 };
 
-
-
 ConverterCache::ConverterCache( void)
 {
     for( int i = 0; i <= MAX_CVT_SELECT; ++i)
@@ -50,8 +46,6 @@ ConverterCache::ConverterCache( void)
         maContexts[i] = NULL;
     }
 }
-
-
 
 ConverterCache::~ConverterCache( void)
 {
@@ -63,8 +57,6 @@ ConverterCache::~ConverterCache( void)
         rtl_destroyUnicodeToTextConverter( maConverterCache[i] );
     }
 }
-
-
 
 void ConverterCache::ensureConverter( int nSelect )
 {
@@ -93,8 +85,6 @@ void ConverterCache::ensureConverter( int nSelect )
     rtl_resetUnicodeToTextContext( maConverterCache[ nSelect ], aContext );
 }
 
-
-
 sal_uInt16 ConverterCache::convertOne( int nSelect, sal_Unicode aChar )
 {
     ensureConverter( nSelect );
@@ -117,8 +107,6 @@ sal_uInt16 ConverterCache::convertOne( int nSelect, sal_Unicode aChar )
         aCode = (aCode << 8) + (aTempArray[i] & 0xFF);
     return aCode;
 }
-
-
 
 void ConverterCache::convertStr( int nSelect, const sal_Unicode* pSrc, sal_uInt16* pDst, int nCount )
 {
@@ -149,8 +137,6 @@ void ConverterCache::convertStr( int nSelect, const sal_Unicode* pSrc, sal_uInt1
 }
 
 } // anonymous namespace
-
-
 
 #include "xlat.hxx"
 

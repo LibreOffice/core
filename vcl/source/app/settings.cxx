@@ -284,8 +284,6 @@ ImplMouseData::ImplMouseData()
     mnWheelBehavior             = MOUSE_WHEEL_ALWAYS;
 }
 
-
-
 ImplMouseData::ImplMouseData( const ImplMouseData& rData )
 {
     mnOptions                   = rData.mnOptions;
@@ -323,7 +321,6 @@ MouseSettings::GetOptions() const
 {
     return mpData->mnOptions;
 }
-
 
 void
 MouseSettings::SetDoubleClickTime( sal_uLong nDoubleClkTime )
@@ -604,8 +601,6 @@ MouseSettings::~MouseSettings()
 {
 }
 
-
-
 void MouseSettings::CopyData()
 {
     // copy if other references exist
@@ -613,8 +608,6 @@ void MouseSettings::CopyData()
         mpData = boost::make_shared<ImplMouseData>(*mpData);
     }
 }
-
-
 
 bool MouseSettings::operator ==( const MouseSettings& rSet ) const
 {
@@ -646,8 +639,6 @@ bool MouseSettings::operator ==( const MouseSettings& rSet ) const
     else
         return false;
 }
-
-
 
 ImplStyleData::ImplStyleData() :
     mIconThemeScanner(vcl::IconThemeScanner::Create(vcl::IconThemeScanner::GetStandardIconThemePath())),
@@ -690,8 +681,6 @@ ImplStyleData::ImplStyleData() :
 
     SetStandardStyles();
 }
-
-
 
 ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maActiveBorderColor( rData.maActiveBorderColor ),
@@ -2343,8 +2332,6 @@ const Size& StyleSettings::GetListBoxPreviewDefaultPixelSize() const
     return mpData->maListBoxPreviewDefaultPixelSize;
 }
 
-
-
 void StyleSettings::Set3DColors( const Color& rColor )
 {
     CopyData();
@@ -2403,8 +2390,6 @@ bool StyleSettings::GetUseImagesInMenus() const
         return GetPreferredUseImagesInMenus();
     }
 }
-
-
 
 static BitmapEx readBitmapEx( const OUString& rPath )
 {
@@ -2496,15 +2481,11 @@ const BitmapEx StyleSettings::GetPersonaHeader() const
     return mpData->maPersonaHeaderBitmap;
 }
 
-
-
 void StyleSettings::SetStandardStyles()
 {
     CopyData();
     mpData->SetStandardStyles();
 }
-
-
 
 Color StyleSettings::GetFaceGradientColor() const
 {
@@ -2517,8 +2498,6 @@ Color StyleSettings::GetFaceGradientColor() const
     if( b < 98) b=98;
     return Color( Color::HSBtoRGB( h, s, b ) );
 }
-
-
 
 Color StyleSettings::GetSeparatorColor() const
 {
@@ -2537,8 +2516,6 @@ void StyleSettings::CopyData()
         mpData = boost::make_shared<ImplStyleData>(*mpData);
     }
 }
-
-
 
 bool StyleSettings::operator ==( const StyleSettings& rSet ) const
 {
@@ -2661,8 +2638,6 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
         return false;
 }
 
-
-
 ImplMiscData::ImplMiscData()
 {
     mnEnableATT                 = TRISTATE_INDET;
@@ -2671,16 +2646,12 @@ ImplMiscData::ImplMiscData()
     mbEnableLocalizedDecimalSep = (pEnv != NULL) ? true : false;
 }
 
-
-
 ImplMiscData::ImplMiscData( const ImplMiscData& rData )
 {
     mnEnableATT                 = rData.mnEnableATT;
     mnDisablePrinting           = rData.mnDisablePrinting;
     mbEnableLocalizedDecimalSep = rData.mbEnableLocalizedDecimalSep;
 }
-
-
 
 MiscSettings::MiscSettings()
 : mpData(boost::make_shared<ImplMiscData>())
@@ -2698,8 +2669,6 @@ void MiscSettings::CopyData()
         mpData = boost::make_shared<ImplMiscData>(*mpData);
     }
 }
-
-
 
 bool MiscSettings::operator ==( const MiscSettings& rSet ) const
 {
@@ -2733,7 +2702,6 @@ bool MiscSettings::GetDisablePrinting() const
 
     return mpData->mnDisablePrinting != TRISTATE_FALSE;
 }
-
 
 bool MiscSettings::GetEnableATToolSupport() const
 {
@@ -2870,8 +2838,6 @@ bool MiscSettings::GetEnableLocalizedDecimalSep() const
     return mpData->mbEnableLocalizedDecimalSep;
 }
 
-
-
 ImplHelpData::ImplHelpData()
 {
     mnOptions                   = 0;
@@ -2880,8 +2846,6 @@ ImplHelpData::ImplHelpData()
     mnBalloonDelay              = 1500;
 }
 
-
-
 ImplHelpData::ImplHelpData( const ImplHelpData& rData )
 {
     mnOptions                   = rData.mnOptions;
@@ -2889,8 +2853,6 @@ ImplHelpData::ImplHelpData( const ImplHelpData& rData )
     mnTipTimeout                = rData.mnTipTimeout;
     mnBalloonDelay              = rData.mnBalloonDelay;
 }
-
-
 
 HelpSettings::HelpSettings()
 : mpData(boost::make_shared<ImplHelpData>())
@@ -2908,8 +2870,6 @@ void HelpSettings::CopyData()
         mpData = boost::make_shared<ImplHelpData>(*mpData);
     }
 }
-
-
 
 bool HelpSettings::operator ==( const HelpSettings& rSet ) const
 {
@@ -2997,8 +2957,6 @@ ImplAllSettingsData::ImplAllSettingsData()
     maMiscSettings.SetEnableLocalizedDecimalSep( maSysLocale.GetOptions().IsDecimalSeparatorAsLocale() );
 }
 
-
-
 ImplAllSettingsData::ImplAllSettingsData( const ImplAllSettingsData& rData ) :
     maMouseSettings( rData.maMouseSettings ),
     maStyleSettings( rData.maStyleSettings ),
@@ -3018,8 +2976,6 @@ ImplAllSettingsData::ImplAllSettingsData( const ImplAllSettingsData& rData ) :
     mpUII18nHelper              = NULL;
 }
 
-
-
 ImplAllSettingsData::~ImplAllSettingsData()
 {
     delete mpLocaleDataWrapper;
@@ -3030,21 +2986,15 @@ ImplAllSettingsData::~ImplAllSettingsData()
         delete mpUII18nHelper;
 }
 
-
-
 AllSettings::AllSettings()
 : mpData(boost::make_shared<ImplAllSettingsData>())
 {
 }
 
-
-
 AllSettings::AllSettings( const AllSettings& rSet )
 {
     mpData = rSet.mpData;
 }
-
-
 
 AllSettings::~AllSettings()
 {
@@ -3058,8 +3008,6 @@ void AllSettings::CopyData()
     }
 
 }
-
-
 
 sal_uLong AllSettings::Update( sal_uLong nFlags, const AllSettings& rSet )
 {
@@ -3123,8 +3071,6 @@ sal_uLong AllSettings::Update( sal_uLong nFlags, const AllSettings& rSet )
     return nChangeFlags;
 }
 
-
-
 sal_uLong AllSettings::GetChangeFlags( const AllSettings& rSet ) const
 {
 
@@ -3148,8 +3094,6 @@ sal_uLong AllSettings::GetChangeFlags( const AllSettings& rSet ) const
     return nChangeFlags;
 }
 
-
-
 bool AllSettings::operator ==( const AllSettings& rSet ) const
 {
 
@@ -3169,8 +3113,6 @@ bool AllSettings::operator ==( const AllSettings& rSet ) const
     else
         return false;
 }
-
-
 
 void AllSettings::SetLanguageTag( const LanguageTag& rLanguageTag )
 {
@@ -3193,14 +3135,10 @@ void AllSettings::SetLanguageTag( const LanguageTag& rLanguageTag )
     }
 }
 
-
-
 void AllSettings::SetUILanguageTag( const LanguageTag& )
 {
     // there is only one UILocale per process
 }
-
-
 
 namespace
 {
@@ -3261,8 +3199,6 @@ bool AllSettings::GetMathLayoutRTL() const
     return GetConfigLayoutRTL(true);
 }
 
-
-
 const LanguageTag& AllSettings::GetLanguageTag() const
 {
     // SYSTEM locale means: use settings from SvtSysLocale that is resolved
@@ -3271,8 +3207,6 @@ const LanguageTag& AllSettings::GetLanguageTag() const
 
     return mpData->maLocale;
 }
-
-
 
 const LanguageTag& AllSettings::GetUILanguageTag() const
 {
@@ -3283,8 +3217,6 @@ const LanguageTag& AllSettings::GetUILanguageTag() const
     return mpData->maUILocale;
 }
 
-
-
 const LocaleDataWrapper& AllSettings::GetLocaleDataWrapper() const
 {
     if ( !mpData->mpLocaleDataWrapper )
@@ -3292,8 +3224,6 @@ const LocaleDataWrapper& AllSettings::GetLocaleDataWrapper() const
             comphelper::getProcessComponentContext(), GetLanguageTag() );
     return *mpData->mpLocaleDataWrapper;
 }
-
-
 
 const LocaleDataWrapper& AllSettings::GetUILocaleDataWrapper() const
 {
@@ -3303,8 +3233,6 @@ const LocaleDataWrapper& AllSettings::GetUILocaleDataWrapper() const
     return *mpData->mpUILocaleDataWrapper;
 }
 
-
-
 const vcl::I18nHelper& AllSettings::GetLocaleI18nHelper() const
 {
     if ( !mpData->mpI18nHelper ) {
@@ -3313,8 +3241,6 @@ const vcl::I18nHelper& AllSettings::GetLocaleI18nHelper() const
     }
     return *mpData->mpI18nHelper;
 }
-
-
 
 const vcl::I18nHelper& AllSettings::GetUILocaleI18nHelper() const
 {

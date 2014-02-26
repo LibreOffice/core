@@ -380,10 +380,6 @@ void* SvpSalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturn
     return const_cast<char*>("");
 }
 
-
-// - SalTimer -
-
-
 void SvpSalInstance::StopTimer()
 {
     m_aTimeout.tv_sec   = 0;

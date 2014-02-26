@@ -26,10 +26,6 @@
 #include <vcl/virdev.hxx>
 #include <vcl/fltcall.hxx>
 
-
-// - EMFWriter -
-
-
 class LineInfo;
 namespace basegfx { class B2DPolygon; }
 

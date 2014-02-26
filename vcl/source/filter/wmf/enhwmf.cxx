@@ -179,9 +179,10 @@ struct BLENDFUNCTION{
 
 SvStream& operator>>( SvStream& rIn, BLENDFUNCTION& rBlendFun )
 {
-    rIn.ReadUChar( rBlendFun.aBlendOperation ).ReadUChar( rBlendFun.aBlendFlags ).             ReadUChar( rBlendFun.aSrcConstantAlpha ).ReadUChar( rBlendFun.aAlphaFormat );
+    rIn.ReadUChar( rBlendFun.aBlendOperation ).ReadUChar( rBlendFun.aBlendFlags ).ReadUChar( rBlendFun.aSrcConstantAlpha ).ReadUChar( rBlendFun.aAlphaFormat );
     return rIn;
 }
+
 SvStream& operator>>( SvStream& rIn, XForm& rXForm )
 {
     if ( sizeof( float ) != 4 )

@@ -60,7 +60,6 @@ rDevice
     #endif
 }
 
-
 #ifndef IOS
 
 bool SvpSalGraphics::drawAlphaBitmap( const SalTwoRect&, const SalBitmap& /*rSourceBitmap*/, const SalBitmap& /*rAlphaBitmap*/ )

@@ -81,8 +81,6 @@
 
 using namespace ::com::sun::star;
 
-
-
 oslSignalAction SAL_CALL VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo* pInfo)
 {
     static bool bIn = false;
@@ -138,7 +136,6 @@ oslSignalAction SAL_CALL VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo
     return osl_Signal_ActCallNextHdl;
 
 }
-
 
 int ImplSVMain()
 {
