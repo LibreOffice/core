@@ -5532,14 +5532,12 @@
           <param name="maxInclusive">27273042316900</param>
         </data>
       </define>
-
       <define name="ST_HexColorRGB">
         <data type="hexBinary">
           <xs:documentation>Hexadecimal Color Value</xs:documentation>
           <param name="length">3</param>
         </data>
       </define>
-
       <define name="ST_PositiveFixedPercentage">
         <data type="long">
           <xs:documentation>Positive fixed precentage</xs:documentation>
@@ -5547,7 +5545,6 @@
           <param name="maxInclusive">27273042316900</param>
         </data>
       </define>
-
       <define name="ST_PositivePercentage">
         <data type="long">
           <xs:documentation>Positive precentage</xs:documentation>
@@ -5555,7 +5552,6 @@
           <param name="maxInclusive">27273042316900</param>
         </data>
       </define>
-
       <define name="ST_Percentage">
         <data type="long">
           <xs:documentation>Precentage</xs:documentation>
@@ -5563,7 +5559,6 @@
           <param name="maxInclusive">27273042316900</param>
         </data>
       </define>
-
       <define name="ST_PositiveFixedAngle">
         <data type="int">
           <xs:documentation>Positive fixed angle</xs:documentation>
@@ -5571,7 +5566,6 @@
           <param name="maxInclusive">21600000</param>
         </data>
       </define>
-
       <define name="ST_FixedAngle">
         <data type="int">
           <xs:documentation>Fixed angle</xs:documentation>
@@ -5579,7 +5573,6 @@
           <param name="maxInclusive">5400000</param>
         </data>
       </define>
-
       <define name="ST_LineWidth">
         <data type="int">
           <xs:documentation>Line width</xs:documentation>
@@ -6407,6 +6400,10 @@
       <attribute name="algn" tokenid="ooxml:CT_TextOutlineEffect_algn"/>
     </resource>
     <resource name="CT_FillTextEffect" resource="Properties" tag="character"/>
+    <resource name="CT_Scene3D" resource="Properties" tag="character">
+      <element name="camera" tokenid="ooxml:CT_Scene3D_camera"/>
+      <element name="lightRig" tokenid="ooxml:CT_Scene3D_lightRig"/>
+    </resource>
 
     <resource name="glow" resource="Properties" tag="character">
       <element name="glow" tokenid="ooxml:glow_glow"/>
