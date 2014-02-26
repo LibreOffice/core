@@ -144,6 +144,10 @@ OUString getNameForElementId(sal_uInt32 aId)
         aIdMap[NS_ooxml::LN_CT_Scene3D_camera]                  = "camera";
         aIdMap[NS_ooxml::LN_CT_Scene3D_lightRig]                = "lightRig";
         aIdMap[NS_ooxml::LN_CT_LightRig_rot]                    = "rot";
+        aIdMap[NS_ooxml::LN_CT_Props3D_bevelT]                  = "bevelT";
+        aIdMap[NS_ooxml::LN_CT_Props3D_bevelB]                  = "bevelB";
+        aIdMap[NS_ooxml::LN_CT_Props3D_extrusionClr]            = "extrusionClr";
+        aIdMap[NS_ooxml::LN_CT_Props3D_contourClr]              = "contourClr";
     }
     return aIdMap[aId];
 }
@@ -398,6 +402,52 @@ OUString TextEffectsHandler::getLightRigDirectionString(sal_Int32 nType)
     return OUString();
 }
 
+OUString TextEffectsHandler::getBevelPresetTypeString(sal_Int32 nType)
+{
+    switch (nType)
+    {
+        case NS_ooxml::LN_ST_BevelPresetType_relaxedInset: return OUString("relaxedInset");
+        case NS_ooxml::LN_ST_BevelPresetType_circle: return OUString("circle");
+        case NS_ooxml::LN_ST_BevelPresetType_slope: return OUString("slope");
+        case NS_ooxml::LN_ST_BevelPresetType_cross: return OUString("cross");
+        case NS_ooxml::LN_ST_BevelPresetType_angle: return OUString("angle");
+        case NS_ooxml::LN_ST_BevelPresetType_softRound: return OUString("softRound");
+        case NS_ooxml::LN_ST_BevelPresetType_convex: return OUString("convex");
+        case NS_ooxml::LN_ST_BevelPresetType_coolSlant: return OUString("coolSlant");
+        case NS_ooxml::LN_ST_BevelPresetType_divot: return OUString("divot");
+        case NS_ooxml::LN_ST_BevelPresetType_riblet: return OUString("riblet");
+        case NS_ooxml::LN_ST_BevelPresetType_hardEdge: return OUString("hardEdge");
+        case NS_ooxml::LN_ST_BevelPresetType_artDeco: return OUString("artDeco");
+        default: break;
+    }
+    return OUString();
+}
+
+OUString TextEffectsHandler::getPresetMaterialTypeString(sal_Int32 nType)
+{
+    switch (nType)
+    {
+        case NS_ooxml::LN_ST_PresetMaterialType_legacyMatte: return OUString("legacyMatte");
+        case NS_ooxml::LN_ST_PresetMaterialType_legacyPlastic: return OUString("legacyPlastic");
+        case NS_ooxml::LN_ST_PresetMaterialType_legacyMetal: return OUString("legacyMetal");
+        case NS_ooxml::LN_ST_PresetMaterialType_legacyWireframe: return OUString("legacyWireframe");
+        case NS_ooxml::LN_ST_PresetMaterialType_matte: return OUString("matte");
+        case NS_ooxml::LN_ST_PresetMaterialType_plastic: return OUString("plastic");
+        case NS_ooxml::LN_ST_PresetMaterialType_metal: return OUString("metal");
+        case NS_ooxml::LN_ST_PresetMaterialType_warmMatte: return OUString("warmMatte");
+        case NS_ooxml::LN_ST_PresetMaterialType_translucentPowder: return OUString("translucentPowder");
+        case NS_ooxml::LN_ST_PresetMaterialType_powder: return OUString("powder");
+        case NS_ooxml::LN_ST_PresetMaterialType_dkEdge: return OUString("dkEdge");
+        case NS_ooxml::LN_ST_PresetMaterialType_softEdge: return OUString("softEdge");
+        case NS_ooxml::LN_ST_PresetMaterialType_clear: return OUString("clear");
+        case NS_ooxml::LN_ST_PresetMaterialType_flat: return OUString("flat");
+        case NS_ooxml::LN_ST_PresetMaterialType_softmetal: return OUString("softmetal");
+        case NS_ooxml::LN_ST_PresetMaterialType_none: return OUString("none");
+        default: break;
+    }
+    return OUString();
+}
+
 void TextEffectsHandler::convertElementIdToPropertyId(sal_Int32 aElementId)
 {
     switch(aElementId)
@@ -427,6 +477,9 @@ void TextEffectsHandler::convertElementIdToPropertyId(sal_Int32 aElementId)
             maElementName = "scene3d";
             break;
         case NS_ooxml::LN_props3d_props3d:
+            maPropertyId = PROP_CHAR_PROPS3D_TEXT_EFFECT;
+            maElementName = "props3d";
+            break;
         case NS_ooxml::LN_ligatures_ligatures:
         case NS_ooxml::LN_numForm_numForm:
         case NS_ooxml::LN_numSpacing_numSpacing:
@@ -621,7 +674,30 @@ void TextEffectsHandler::lcl_attribute(Id aName, Value& aValue)
         case NS_ooxml::LN_CT_SphereCoords_rev:
             mpGrabBagStack->addInt32("rev", sal_Int32(aValue.getInt()));
             break;
-
+        case NS_ooxml::LN_CT_Props3D_extrusionH:
+            mpGrabBagStack->addInt32("extrusionH", sal_Int32(aValue.getInt()));
+            break;
+        case NS_ooxml::LN_CT_Props3D_contourW:
+            mpGrabBagStack->addInt32("contourW", sal_Int32(aValue.getInt()));
+            break;
+        case NS_ooxml::LN_CT_Props3D_prstMaterial:
+            {
+                uno::Any aAny = makeAny(getPresetMaterialTypeString(sal_Int32(aValue.getInt())));
+                mpGrabBagStack->appendElement("prstMaterial", aAny);
+            }
+            break;
+        case NS_ooxml::LN_CT_Bevel_w:
+            mpGrabBagStack->addInt32("w", sal_Int32(aValue.getInt()));
+            break;
+        case NS_ooxml::LN_CT_Bevel_h:
+            mpGrabBagStack->addInt32("h", sal_Int32(aValue.getInt()));
+            break;
+        case NS_ooxml::LN_CT_Bevel_prst:
+            {
+                uno::Any aAny = makeAny(getBevelPresetTypeString(sal_Int32(aValue.getInt())));
+                mpGrabBagStack->appendElement("prst", aAny);
+            }
+            break;
         default:
             break;
     }

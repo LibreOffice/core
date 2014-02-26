@@ -62,6 +62,9 @@ public:
     static OUString getPresetCameraTypeString(sal_Int32 nType);
     static OUString getLightRigTypeString(sal_Int32 nType);
     static OUString getLightRigDirectionString(sal_Int32 nType);
+    static OUString getBevelPresetTypeString(sal_Int32 nType);
+    static OUString getPresetMaterialTypeString(sal_Int32 nType);
+
 };
 
 typedef boost::shared_ptr<TextEffectsHandler> TextEffectsHandlerPtr;
