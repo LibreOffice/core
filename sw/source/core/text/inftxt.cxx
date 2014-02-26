@@ -586,7 +586,7 @@ void SwTxtPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPor
     if ( ! IsMulti() )
         nComp = GetKanaComp();
 
-    sal_Bool bCfgIsAutoGrammar = sal_False;
+    bool bCfgIsAutoGrammar = false;
     SvtLinguConfig().GetProperty( UPN_IS_GRAMMAR_AUTO ) >>= bCfgIsAutoGrammar;
     const bool bBullet = OnWin() && GetOpt().IsBlank() && IsNoSymbol();
     const bool bTmpWrong = bWrong && OnWin() && GetOpt().IsOnlineSpell();
