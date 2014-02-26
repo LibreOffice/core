@@ -48,7 +48,17 @@ public final class NativeLibraryLoader {
         library name is system dependent
      */
     public static void loadLibrary(ClassLoader loader, String libname) {
+        String syslibname = System.mapLibraryName(libname);
+
         File path = getResource(loader, System.mapLibraryName(libname));
+        if (path == null) {
+            // check special jni lib extension on Mac
+            if (syslibname.contains("dylib")) {
+                syslibname = syslibname.replace("dylib", "jnilib");
+            }
+            path = getResource(loader, syslibname);
+        }
+
         if (path == null) {
             // If the library cannot be found as a class loader resource, try
             // the global System.loadLibrary as a last resort:
