@@ -1345,9 +1345,13 @@ void SAL_CALL SalGtkFilePicker::setValue( sal_Int16 nControlId, sal_Int16 nContr
         OSL_TRACE("enable unknown control %d", nControlId);
     else if( tType == GTK_TYPE_TOGGLE_BUTTON )
     {
-        bool bChecked = false;
-        rValue >>= bChecked;
-        gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( pWidget ), bChecked );
+        // fdo#74064, not activating the auto_extension checkbox so that proper filename is highlighted.
+        if(nControlId != ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION)
+        {
+            bool bChecked = false;
+            rValue >>= bChecked;
+            gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( pWidget ), bChecked );
+        }
     }
     else if( tType == GTK_TYPE_COMBO_BOX )
         HandleSetListValue(GTK_COMBO_BOX(pWidget), nControlAction, rValue);
