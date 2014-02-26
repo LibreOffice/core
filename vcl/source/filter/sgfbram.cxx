@@ -171,11 +171,6 @@ SvStream& WriteRGBQuad(SvStream& rOStream, const RGBQuad& rQuad)
     return rOStream;
 }
 
-
-
-// PcxExpand
-
-
 class PcxExpand
 {
 private:
@@ -202,10 +197,6 @@ sal_uInt8 PcxExpand::GetByte(SvStream& rInp)
     }
     return Data;
 }
-
-
-// SgfBMapFilter
-
 
 bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntry&)
 {
@@ -370,11 +361,6 @@ bool SgfBMapFilter(SvStream& rInp, SvStream& rOut)
     return(bRet);
 }
 
-
-
-// SgfVectFilter
-
-
 // for StarDraw embedded SGF vector
 long SgfVectXofs=0;
 long SgfVectYofs=0;
@@ -383,10 +369,6 @@ long SgfVectYmul=0;
 long SgfVectXdiv=0;
 long SgfVectYdiv=0;
 bool SgfVectScal=false;
-
-
-// Hpgl2SvFarbe
-
 
 Color Hpgl2SvFarbe( sal_uInt8 nFarb )
 {

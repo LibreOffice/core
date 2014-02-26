@@ -21,8 +21,6 @@
 
 #include <idlemgr.hxx>
 
-
-
 struct ImplIdleData
 {
     Link        maIdleHdl;
@@ -32,8 +30,6 @@ struct ImplIdleData
 
 #define IMPL_IDLETIMEOUT         350
 
-
-
 ImplIdleMgr::ImplIdleMgr()
 {
     mpIdleList  = new ImplIdleList();
@@ -41,8 +37,6 @@ ImplIdleMgr::ImplIdleMgr()
     maTimer.SetTimeout( IMPL_IDLETIMEOUT );
     maTimer.SetTimeoutHdl( LINK( this, ImplIdleMgr, TimeoutHdl ) );
 }
-
-
 
 ImplIdleMgr::~ImplIdleMgr()
 {
@@ -53,8 +47,6 @@ ImplIdleMgr::~ImplIdleMgr()
     mpIdleList->clear();
     delete mpIdleList;
 }
-
-
 
 bool ImplIdleMgr::InsertIdleHdl( const Link& rLink, sal_uInt16 nPriority )
 {
@@ -90,8 +82,6 @@ bool ImplIdleMgr::InsertIdleHdl( const Link& rLink, sal_uInt16 nPriority )
     return true;
 }
 
-
-
 void ImplIdleMgr::RemoveIdleHdl( const Link& rLink )
 {
     for ( ImplIdleList::iterator it = mpIdleList->begin(); it != mpIdleList->end(); ++it ) {
@@ -106,8 +96,6 @@ void ImplIdleMgr::RemoveIdleHdl( const Link& rLink )
     if ( mpIdleList->empty() )
         maTimer.Stop();
 }
-
-
 
 IMPL_LINK_NOARG(ImplIdleMgr, TimeoutHdl)
 {

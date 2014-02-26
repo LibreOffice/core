@@ -250,5 +250,4 @@ bool JPEGWriter::Write( const Graphic& rGraphic )
     return bRet;
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -23,8 +23,6 @@
 #include <fontsubset.hxx>
 #include <sft.hxx>
 
-
-
 FontSubsetInfo::FontSubsetInfo()
 :   m_nAscent( 0)
 ,   m_nDescent( 0)
@@ -36,12 +34,8 @@ FontSubsetInfo::FontSubsetInfo()
 ,   mpSftTTFont( NULL)
 {}
 
-
-
 FontSubsetInfo::~FontSubsetInfo()
 {}
-
-
 
 // prepare subsetting for fonts where the input font file is mapped
 bool FontSubsetInfo::LoadFont(
@@ -55,8 +49,6 @@ bool FontSubsetInfo::LoadFont(
     return (mnInByteLength > 0);
 }
 
-
-
 // prepare subsetting for fonts that are known to the SFT-parser
 bool FontSubsetInfo::LoadFont( vcl::_TrueTypeFont* pSftTTFont )
 {
@@ -65,8 +57,6 @@ bool FontSubsetInfo::LoadFont( vcl::_TrueTypeFont* pSftTTFont )
     meInFontType = ANY_SFNT;
     return (mpSftTTFont == NULL);
 }
-
-
 
 bool FontSubsetInfo::CreateFontSubset(
     int nReqFontTypeMask,
@@ -113,8 +103,6 @@ bool FontSubsetInfo::CreateFontSubset(
     return bOK;
 }
 
-
-
 // TODO: move function to sft.cxx to replace dummy implementation
 bool FontSubsetInfo::CreateFontSubsetFromSfnt( sal_Int32* pOutGlyphWidths )
 {
@@ -158,8 +146,6 @@ bool FontSubsetInfo::CreateFontSubsetFromSfnt( sal_Int32* pOutGlyphWidths )
     return (nSFTErr != vcl::SF_OK);
 }
 
-
-
 // TODO: replace dummy implementation
 bool FontSubsetInfo::CreateFontSubsetFromType1( sal_Int32* pOutGlyphWidths)
 {
@@ -167,7 +153,5 @@ bool FontSubsetInfo::CreateFontSubsetFromType1( sal_Int32* pOutGlyphWidths)
     fprintf(stderr,"CreateFontSubsetFromType1: replace dummy implementation\n");
     return false;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -55,8 +55,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::awt;
 
-
-
 namespace
 {
     struct private_aImplSVData :
@@ -74,8 +72,6 @@ SalSystem* ImplGetSalSystem()
     return pSVData->mpSalSystem;
 }
 
-
-
 void ImplInitSVData()
 {
     pImplSVData = &private_aImplSVData::get();
@@ -88,8 +84,6 @@ void ImplInitSVData()
     // mark default layout border as unitialized
     pImplSVData->maAppData.mnDefaultLayoutBorder = -1;
 }
-
-
 
 void ImplDeInitSVData()
 {
@@ -110,14 +104,10 @@ void ImplDeInitSVData()
         delete pSVData->mpPaperNames, pSVData->mpPaperNames = NULL;
 }
 
-
-
 void ImplDestroySVData()
 {
     pImplSVData = NULL;
 }
-
-
 
 Window* ImplGetDefaultWindow()
 {
@@ -148,8 +138,6 @@ Window* ImplGetDefaultWindow()
 
     return pSVData->mpDefaultWin;
 }
-
-
 
 ResMgr* ImplGetResMgr()
 {

@@ -61,8 +61,6 @@
 
 using namespace ::com::sun::star;
 
-
-
 static const sal_Char* pDbgHelpText[] =
 {
 "Object Test\n",
@@ -275,18 +273,14 @@ static const sal_Char* pDbgHelpText[] =
 NULL
 };
 
-
-
 namespace
 {
-
     typedef ::std::map< OUString, DbgChannelId > UserDefinedChannels;
     UserDefinedChannels& ImplDbgGetUserDefinedChannels()
     {
         static UserDefinedChannels s_aChannels;
         return s_aChannels;
     }
-
 
     void ImplAppendUserDefinedChannels( ListBox& rList )
     {
@@ -300,7 +294,6 @@ namespace
             rList.SetEntryData( nEntryPos, reinterpret_cast< void* >( channel->second ) );
         }
     }
-
 
     void ImplSelectChannel( ListBox& rList, sal_uLong nChannelToSelect, sal_uInt16 nPositionOffset )
     {
@@ -330,12 +323,6 @@ namespace
     }
 }
 
-
-
-
-// - DbgWindow -
-
-
 #define DBGWIN_MAXLINES     100
 
 class DbgWindow : public WorkWindow
@@ -356,10 +343,6 @@ private:
     void            GetAssertionEntryRange( sal_uInt16 nInbetweenEntry, sal_uInt16& nFirst, sal_uInt16& nLast );
 };
 
-
-// - DbgInfoDialog -
-
-
 class DbgInfoDialog : public ModalDialog
 {
 private:
@@ -372,10 +355,6 @@ public:
 
     void            SetInfoText( const OUString& rStr );
 };
-
-
-// - DbgDialog -
-
 
 class DbgDialog : public ModalDialog
 {
@@ -425,12 +404,8 @@ public:
     void            RequestHelp( const HelpEvent& rHEvt );
 };
 
-
-
 static sal_Char aDbgInfoBuf[12288];
 static sal_Char aDbgOutBuf[DBG_BUF_MAXLEN];
-
-
 
 DbgWindow::DbgWindow() :
     WorkWindow( NULL, WB_STDWORK ),
@@ -453,8 +428,6 @@ DbgWindow::DbgWindow() :
     Update();
 }
 
-
-
 bool DbgWindow::Close()
 {
     // remember window position
@@ -472,14 +445,10 @@ bool DbgWindow::Close()
     return true;
 }
 
-
-
 void DbgWindow::Resize()
 {
     maLstBox.SetSizePixel( GetOutputSizePixel() );
 }
-
-
 
 void DbgWindow::GetAssertionEntryRange( sal_uInt16 nInbetweenEntry, sal_uInt16& nFirst, sal_uInt16& nLast )
 {
@@ -499,8 +468,6 @@ void DbgWindow::GetAssertionEntryRange( sal_uInt16 nInbetweenEntry, sal_uInt16& 
         ++nLast;
     }
 }
-
-
 
 bool DbgWindow::PreNotify( NotifyEvent& rNEvt )
 {
@@ -551,8 +518,6 @@ bool DbgWindow::PreNotify( NotifyEvent& rNEvt )
     return WorkWindow::PreNotify( rNEvt );
 }
 
-
-
 void DbgWindow::InsertLine( const OUString& rLine )
 {
     OUString   aStr = convertLineEnd(rLine, LINEEND_LF);
@@ -579,8 +544,6 @@ void DbgWindow::InsertLine( const OUString& rLine )
     maLstBox.SetTopEntry( DBGWIN_MAXLINES-1 );
     maLstBox.Update();
 }
-
-
 
 DbgDialog::DbgDialog() :
     ModalDialog( NULL, WB_STDMODAL | WB_SYSTEMWINDOW ),
@@ -916,8 +879,6 @@ DbgDialog::DbgDialog() :
     }
 }
 
-
-
 IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
 {
     if ( pButton == &maOKButton )
@@ -1026,8 +987,6 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
     return 0;
 }
 
-
-
 void DbgDialog::RequestHelp( const HelpEvent& rHEvt )
 {
     if ( rHEvt.GetMode() & HELPMODE_CONTEXT )
@@ -1045,8 +1004,6 @@ void DbgDialog::RequestHelp( const HelpEvent& rHEvt )
         aInfoDialog.Execute();
     }
 }
-
-
 
 DbgInfoDialog::DbgInfoDialog( Window* pParent, bool bHelpText ) :
     ModalDialog( pParent, WB_STDMODAL ),
@@ -1070,8 +1027,6 @@ DbgInfoDialog::DbgInfoDialog( Window* pParent, bool bHelpText ) :
 
     SetOutputSizePixel( Size( 640, 420 ) );
 }
-
-
 
 void DbgInfoDialog::SetInfoText( const OUString& rStr )
 {
@@ -1120,8 +1075,6 @@ void DbgInfoDialog::SetInfoText( const OUString& rStr )
     while ( nFoundIndex != -1 );
     maListBox.SetUpdateMode( true );
 }
-
-
 
 void DbgDialogTest( Window* pWindow )
 {
@@ -1481,7 +1434,6 @@ void DbgDialogTest( Window* pWindow )
     delete [] pRectAry;
 }
 
-
 #ifndef WNT
 #define USE_VCL_MSGBOX
 #define COPY_BUTTON_ID 25
@@ -1612,8 +1564,6 @@ void DbgPrintMsgBox( const char* pLine )
         DbgCoreDump();
 }
 
-
-
 class SolarWindowPrinter : public ::vcl::SolarThreadExecutor
 {
 private:
@@ -1642,8 +1592,6 @@ long SolarWindowPrinter::doIt()
     return 0L;
 }
 
-
-
 void DbgPrintWindow( const char* pLine )
 {
     static bool bIn = false;
@@ -1663,22 +1611,16 @@ void DbgPrintWindow( const char* pLine )
     bIn = false;
 }
 
-
-
 void DbgAbort( char const * i_message )
 {
     OUString const message( i_message, strlen( i_message ), osl_getThreadTextEncoding() );
     Application::Abort( message );
 }
 
-
-
 void ImplDbgTestSolarMutex()
 {
     assert(ImplGetSVData()->mpDefInst->CheckYieldMutex());
 }
-
-
 
 void DbgGUIInit()
 {
@@ -1687,8 +1629,6 @@ void DbgGUIInit()
     DbgSetTestSolarMutex( ImplDbgTestSolarMutex );
     DbgSetAbort( DbgAbort );
 }
-
-
 
 void DbgGUIDeInit()
 {
@@ -1700,8 +1640,6 @@ void DbgGUIDeInit()
     DbgWindow* pDbgWindow = ImplGetSVData()->maWinData.mpDbgWin;
     delete pDbgWindow;
 }
-
-
 
 void DbgGUIStart()
 {

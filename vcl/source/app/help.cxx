@@ -33,8 +33,6 @@
 #include "helpwin.hxx"
 #include "svdata.hxx"
 
-
-
 #define HELPWINSTYLE_QUICK      0
 #define HELPWINSTYLE_BALLOON    1
 
@@ -47,8 +45,6 @@
 
 #define HELPTEXTMAXLEN        150
 
-
-
 Help::Help()
 {
 }
@@ -56,10 +52,6 @@ Help::Help()
 Help::~Help()
 {
 }
-
-
-
-
 
 bool Help::Start( const OUString&, const Window* )
 {
@@ -71,56 +63,40 @@ bool Help::SearchKeyword( const OUString& )
     return false;
 }
 
-
-
 OUString Help::GetHelpText( const OUString&, const Window* )
 {
     return OUString();
 }
-
-
 
 void Help::EnableContextHelp()
 {
     ImplGetSVData()->maHelpData.mbContextHelp = true;
 }
 
-
-
 void Help::DisableContextHelp()
 {
     ImplGetSVData()->maHelpData.mbContextHelp = false;
 }
-
-
 
 bool Help::IsContextHelpEnabled()
 {
     return ImplGetSVData()->maHelpData.mbContextHelp;
 }
 
-
-
 void Help::EnableExtHelp()
 {
     ImplGetSVData()->maHelpData.mbExtHelp = true;
 }
-
-
 
 void Help::DisableExtHelp()
 {
     ImplGetSVData()->maHelpData.mbExtHelp = false;
 }
 
-
-
 bool Help::IsExtHelpEnabled()
 {
     return ImplGetSVData()->maHelpData.mbExtHelp;
 }
-
-
 
 bool Help::StartExtHelp()
 {
@@ -139,8 +115,6 @@ bool Help::StartExtHelp()
     return false;
 }
 
-
-
 bool Help::EndExtHelp()
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -157,28 +131,20 @@ bool Help::EndExtHelp()
     return false;
 }
 
-
-
 void Help::EnableBalloonHelp()
 {
     ImplGetSVData()->maHelpData.mbBalloonHelp = true;
 }
-
-
 
 void Help::DisableBalloonHelp()
 {
     ImplGetSVData()->maHelpData.mbBalloonHelp = false;
 }
 
-
-
 bool Help::IsBalloonHelpEnabled()
 {
     return ImplGetSVData()->maHelpData.mbBalloonHelp;
 }
-
-
 
 bool Help::ShowBalloon( Window* pParent,
                         const Point& rScreenPos,
@@ -190,8 +156,6 @@ bool Help::ShowBalloon( Window* pParent,
     return true;
 }
 
-
-
 bool Help::ShowBalloon( Window* pParent,
                         const Point& rScreenPos, const Rectangle& rRect,
                         const OUString& rHelpText )
@@ -202,28 +166,20 @@ bool Help::ShowBalloon( Window* pParent,
     return true;
 }
 
-
-
 void Help::EnableQuickHelp()
 {
     ImplGetSVData()->maHelpData.mbQuickHelp = true;
 }
-
-
 
 void Help::DisableQuickHelp()
 {
     ImplGetSVData()->maHelpData.mbQuickHelp = false;
 }
 
-
-
 bool Help::IsQuickHelpEnabled()
 {
     return ImplGetSVData()->maHelpData.mbQuickHelp;
 }
-
-
 
 bool Help::ShowQuickHelp( Window* pParent,
                           const Rectangle& rScreenRect,
@@ -237,16 +193,12 @@ bool Help::ShowQuickHelp( Window* pParent,
     return true;
 }
 
-
-
 void Help::HideBalloonAndQuickHelp()
 {
     HelpTextWindow const * pHelpWin = ImplGetSVData()->maHelpData.mpHelpWin;
     bool const bIsVisible = ( pHelpWin != NULL ) && pHelpWin->IsVisible();
     ImplDestroyHelpWindow( bIsVisible );
 }
-
-
 
 sal_uIntPtr Help::ShowTip( Window* pParent, const Rectangle& rScreenRect,
                      const OUString& rText, sal_uInt16 nStyle )
@@ -260,8 +212,6 @@ sal_uIntPtr Help::ShowTip( Window* pParent, const Rectangle& rScreenRect,
     pHelpWin->ShowHelp( HELPDELAY_NONE );
     return nId;
 }
-
-
 
 void Help::UpdateTip( sal_uIntPtr nId, Window* pParent, const Rectangle& rScreenRect, const OUString& rText )
 {
@@ -277,8 +227,6 @@ void Help::UpdateTip( sal_uIntPtr nId, Window* pParent, const Rectangle& rScreen
     pHelpWin->Invalidate();
 }
 
-
-
 void Help::HideTip( sal_uLong nId )
 {
     HelpTextWindow* pHelpWin = (HelpTextWindow*)nId;
@@ -289,8 +237,6 @@ void Help::HideTip( sal_uLong nId )
     delete pHelpWin;
     ImplGetSVData()->maHelpData.mnLastHelpHideTime = Time::GetSystemTicks();
 }
-
-
 
 HelpTextWindow::HelpTextWindow( Window* pParent, const OUString& rText, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle ) :
     FloatingWindow( pParent, WB_SYSTEMWINDOW|WB_TOOLTIPWIN ), // #105827# if we change the parent, mirroring will not work correctly when positioning this window
@@ -342,8 +288,6 @@ HelpTextWindow::HelpTextWindow( Window* pParent, const OUString& rText, sal_uInt
     maHideTimer.SetTimeout( rHelpSettings.GetTipTimeout() );
 }
 
-
-
 HelpTextWindow::~HelpTextWindow()
 {
     maShowTimer.Stop();
@@ -352,8 +296,6 @@ HelpTextWindow::~HelpTextWindow()
     if( this == ImplGetSVData()->maHelpData.mpHelpWin )
         ImplGetSVData()->maHelpData.mpHelpWin = NULL;
 }
-
-
 
 void HelpTextWindow::SetHelpText( const OUString& rHelpText )
 {
@@ -396,8 +338,6 @@ void HelpTextWindow::SetHelpText( const OUString& rHelpText )
     SetOutputSizePixel( aSize );
 }
 
-
-
 void HelpTextWindow::ImplShow()
 {
     ImplDelData aDogTag( this );
@@ -405,8 +345,6 @@ void HelpTextWindow::ImplShow()
     if( !aDogTag.IsDead() )
     Update();
 }
-
-
 
 void HelpTextWindow::Paint( const Rectangle& )
 {
@@ -455,8 +393,6 @@ void HelpTextWindow::Paint( const Rectangle& )
     }
 }
 
-
-
 void HelpTextWindow::ShowHelp( sal_uInt16 nDelayMode )
 {
     sal_uLong nTimeout = 0;
@@ -482,8 +418,6 @@ void HelpTextWindow::ShowHelp( sal_uInt16 nDelayMode )
     maShowTimer.Start();
 }
 
-
-
 IMPL_LINK( HelpTextWindow, TimerHdl, Timer*, pTimer)
 {
     if ( pTimer == &maShowTimer )
@@ -506,8 +440,6 @@ IMPL_LINK( HelpTextWindow, TimerHdl, Timer*, pTimer)
     return 1;
 }
 
-
-
 Size HelpTextWindow::CalcOutSize() const
 {
     Size aSz = maTextRect.GetSize();
@@ -516,30 +448,21 @@ Size HelpTextWindow::CalcOutSize() const
     return aSz;
 }
 
-
-
 void HelpTextWindow::RequestHelp( const HelpEvent& /*rHEvt*/ )
 {
     // Just to assure that Window::RequestHelp() is not called by
     // ShowQuickHelp/ShowBalloonHelp in the HelpTextWindow.
 }
 
-
-
 OUString HelpTextWindow::GetText() const
 {
     return maHelpText;
 }
 
-
-
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > HelpTextWindow::CreateAccessible()
 {
     return FloatingWindow::CreateAccessible();
 }
-
-
-
 
 void ImplShowHelpWindow( Window* pParent, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle,
                          const OUString& rHelpText, const OUString& rStatusText,
@@ -618,8 +541,6 @@ void ImplShowHelpWindow( Window* pParent, sal_uInt16 nHelpWinStyle, sal_uInt16 n
     }
 }
 
-
-
 void ImplDestroyHelpWindow( bool bUpdateHideTime )
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -639,8 +560,6 @@ void ImplDestroyHelpWindow( bool bUpdateHideTime )
             pSVData->maHelpData.mnLastHelpHideTime = Time::GetSystemTicks();
     }
 }
-
-
 
 void ImplSetHelpWindowPos( Window* pHelpWin, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle,
                            const Point& rPos, const Rectangle* pHelpArea )

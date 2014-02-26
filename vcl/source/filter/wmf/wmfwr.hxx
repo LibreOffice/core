@@ -26,11 +26,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/fltcall.hxx>
 
-
-
 #define MAXOBJECTHANDLES 16
-
-
 
 struct WMFWriterAttrStackMember
 {
@@ -46,10 +42,6 @@ struct WMFWriterAttrStackMember
     Region aClipRegion;
     sal_uInt16 nFlags;
 };
-
-
-// - WMFWriter -
-
 
 class StarSymbolToMSMultiFont;
 class LineInfo;
