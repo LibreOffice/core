@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <iostream>
 #include <string.h>
 
@@ -52,7 +51,6 @@ Guess::Guess()
 * a string like those is made as : [language-country-encoding]...
 *
 */
-
 Guess::Guess(const char * guess_str)
 {
     Guess();
@@ -62,10 +60,10 @@ Guess::Guess(const char * guess_str)
     string enc;
 
     //if the guess is not like "UNKNOWN" or "SHORT", go into the brackets
-        if(strcmp((const char*)(guess_str + 1), TEXTCAT_RESULT_UNKNOWN_STR) != 0
-           &&
-           strcmp((const char*)(guess_str + 1), TEXTCAT_RESULT_SHORT_STR) != 0)
-        {
+    if(strcmp((const char*)(guess_str + 1), TEXTCAT_RESULT_UNKNOWN_STR) != 0
+       &&
+       strcmp((const char*)(guess_str + 1), TEXTCAT_RESULT_SHORT_STR) != 0)
+    {
 
         int current_pointer = 0;
 

@@ -20,10 +20,8 @@
 #ifndef _LINGUISTIC_THESDTA_HXX_
 #define _LINGUISTIC_THESDTA_HXX_
 
-
 #include <com/sun/star/linguistic2/XMeaning.hpp>
 #include <cppuhelper/implbase1.hxx>
-
 
 namespace linguistic
 {
@@ -63,6 +61,5 @@ public:
 }   // namespace linguistic
 
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

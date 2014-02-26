@@ -49,9 +49,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
 
-///////////////////////////////////////////////////////////////////////////
-
-
 class MacSpellChecker :
     public cppu::WeakImplHelper6
     <
@@ -69,7 +66,7 @@ class MacSpellChecker :
     OUString *              aDNames;
     sal_Int32               numdict;
     NSSpellChecker *        macSpell;
-    int                     macTag;   //unique tag for this doc
+    int                     macTag;   // unique tag for this doc
 
     ::cppu::OInterfaceContainerHelper       aEvtListeners;
     Reference< XPropertyChangeListener >    xPropHelper;
@@ -121,7 +118,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) throw(RuntimeException);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException);
 
-
     static inline OUString  getImplementationName_Static() throw();
     static Sequence< OUString > getSupportedServiceNames_Static() throw();
 };
@@ -130,10 +126,6 @@ inline OUString MacSpellChecker::getImplementationName_Static() throw()
 {
     return OUString( "org.openoffice.lingu.MacOSXSpellChecker" );
 }
-
-
-
-///////////////////////////////////////////////////////////////////////////
 
 #endif
 

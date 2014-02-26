@@ -27,7 +27,6 @@
   * - Not init h when implicit constructor is launched
   */
 
-
 #include <string.h>
 #include <sstream>
 #include <iostream>
@@ -53,11 +52,9 @@
 
 using namespace std;
 
-
 /**
  * This 3 following structures are from fingerprint.c and textcat.c
  */
-
 typedef struct ngram_t {
 
     sint2 rank;
@@ -83,7 +80,7 @@ typedef struct textcat_t{
     char output[MAXOUTPUTSIZE];
 
 } textcat_t;
-/** end of the 3 structs */
+// end of the 3 structs
 
 SimpleGuesser::SimpleGuesser()
 {
@@ -93,7 +90,7 @@ SimpleGuesser::SimpleGuesser()
 SimpleGuesser& SimpleGuesser::operator=(const SimpleGuesser& sg){
     // Check for self-assignment!
     if (this == &sg)      // Same object?
-      return *this;        // Yes, so skip assignment, and just return *this.
+      return *this;       // Yes, so skip assignment, and just return *this.
 
     if(h){textcat_Done(h);}
     h = sg.h;
@@ -104,7 +101,6 @@ SimpleGuesser::~SimpleGuesser()
 {
     if(h){textcat_Done(h);}
 }
-
 
 /*!
     \fn SimpleGuesser::GuessLanguage(char* text)
@@ -221,9 +217,6 @@ void SimpleGuesser::DisableLanguage(string lang)
     XableLanguage(lang,  sal::static_int_cast< char >( 0x0F ));
 }
 
-/**
-*
-*/
 void SimpleGuesser::SetDBPath(const char* path, const char* prefix)
 {
     if (h)
