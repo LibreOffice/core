@@ -1859,10 +1859,7 @@ void ScColumn::SetCellNote(SCROW nRow, ScPostIt* pNote)
     //pNote->UpdateCaptionPos(ScAddress(nCol, nRow, nTab)); // TODO notes usefull ? slow import with many notes
     maCellNotes.set(nRow, pNote);
 }
-void ScColumn::DeleteCellNote(SCROW nRow)
-{
-    maCellNotes.set_empty(nRow, nRow);
-}
+
 void ScColumn::DeleteCellNotes( sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2 )
 {
     rBlockPos.miCellNotePos =
@@ -2944,31 +2941,6 @@ void ScColumn::StartListening( SvtListener& rLst, SCROW nRow )
 {
     std::pair<sc::BroadcasterStoreType::iterator,size_t> aPos = maBroadcasters.position(nRow);
     startListening(maBroadcasters, aPos.first, aPos.second, nRow, rLst);
-}
-
-void ScColumn::MoveListeners( SvtBroadcaster& rSource, SCROW nDestRow )
-{
-    // Move listeners from the source position to the destination position.
-    if (!rSource.HasListeners())
-        // No listeners to relocate. Bail out.
-        return;
-
-    // See if the destination position already has a broadcaster, if not, create one.
-    SvtBroadcaster* pBC = GetBroadcaster(nDestRow);
-    if (!pBC)
-    {
-        pBC = new SvtBroadcaster;
-        maBroadcasters.set(nDestRow, pBC);
-    }
-
-    SvtBroadcaster::ListenersType& rListeners = rSource.GetAllListeners();
-    SvtBroadcaster::ListenersType::iterator it = rListeners.begin(), itEnd = rListeners.end();
-    for (; it != itEnd; ++it)
-    {
-        SvtListener& rLst = **it;
-        rLst.StartListening(*pBC);
-        rLst.EndListening(rSource);
-    }
 }
 
 void ScColumn::EndListening( SvtListener& rLst, SCROW nRow )

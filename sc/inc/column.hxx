@@ -303,7 +303,6 @@ public:
 
     void SetRawString( SCROW nRow, const OUString& rStr, bool bBroadcast = true );
     void SetRawString( SCROW nRow, const svl::SharedString& rStr, bool bBroadcast = true );
-    void SetRawString( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, const OUString& rStr, bool bBroadcast = true );
     void SetRawString( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, const svl::SharedString& rStr, bool bBroadcast = true );
     void SetValue( SCROW nRow, double fVal );
     void SetValues( SCROW nRow, const std::vector<double>& rVals );
@@ -458,7 +457,6 @@ public:
     void        EndListening( SvtListener& rLst, SCROW nRow );
     void StartListening( sc::StartListeningContext& rCxt, SCROW nRow, SvtListener& rListener );
     void EndListening( sc::EndListeningContext& rCxt, SCROW nRow, SvtListener& rListener );
-    void        MoveListeners( SvtBroadcaster& rSource, SCROW nDestRow );
     void        StartAllListeners();
     void        StartNeededListeners(); // only for cells where NeedsListening()==true
     void        SetDirtyIfPostponed();
@@ -512,7 +510,6 @@ public:
     ScPostIt* GetCellNote( SCROW nRow );
     const ScPostIt* GetCellNote( SCROW nRow ) const;
     void DeleteCellNotes( sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2 );
-    void DeleteCellNote( SCROW nRow );
     bool HasCellNotes() const;
     void SetCellNote( SCROW nRow, ScPostIt* pNote);
     bool IsNotesEmptyBlock(SCROW nStartRow, SCROW nEndRow) const;

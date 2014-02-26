@@ -2250,16 +2250,6 @@ void ScColumn::SetRawString( SCROW nRow, const svl::SharedString& rStr, bool bBr
 }
 
 void ScColumn::SetRawString(
-    sc::ColumnBlockPosition& rBlockPos, SCROW nRow, const OUString& rStr, bool bBroadcast )
-{
-    svl::SharedString aSS = pDocument->GetSharedStringPool().intern(rStr);
-    if (!aSS.getData())
-        return;
-
-    SetRawString(rBlockPos, nRow, aSS, bBroadcast);
-}
-
-void ScColumn::SetRawString(
     sc::ColumnBlockPosition& rBlockPos, SCROW nRow, const svl::SharedString& rStr, bool bBroadcast )
 {
     if (!ValidRow(nRow))

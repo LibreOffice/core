@@ -68,9 +68,6 @@ ScCellValue::hasString() const
 ScCellValue::set(ScFormulaCell const&)
 ScCollection::IndexOf(ScDataObject*) const
 ScColorScaleEntry::UpdateMoveTab(short, short, short)
-ScColumn::DeleteCellNote(int)
-ScColumn::MoveListeners(SvtBroadcaster&, int)
-ScColumn::SetRawString(sc::ColumnBlockPosition&, int, rtl::OUString const&, bool)
 ScDocument::CreateFormatTable() const
 ScExtIButton::GetSelected() const
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
