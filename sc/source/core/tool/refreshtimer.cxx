@@ -84,11 +84,6 @@ bool ScRefreshTimer::operator!=( const ScRefreshTimer& r ) const
     return !ScRefreshTimer::operator==( r );
 }
 
-void ScRefreshTimer::StartRefreshTimer()
-{
-    Start();
-}
-
 void ScRefreshTimer::SetRefreshControl( ScRefreshTimerControl * const * pp )
 {
     ppControl = pp;
