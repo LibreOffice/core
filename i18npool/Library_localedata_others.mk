@@ -70,6 +70,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,localedata_others,\
 	CustomTarget/i18npool/localedata/localedata_ky_KG \
 	CustomTarget/i18npool/localedata/localedata_ldi_CG \
 	CustomTarget/i18npool/localedata/localedata_lg_UG \
+	CustomTarget/i18npool/localedata/localedata_lgr_SB \
 	CustomTarget/i18npool/localedata/localedata_lif_NP \
 	CustomTarget/i18npool/localedata/localedata_ln_CD \
 	CustomTarget/i18npool/localedata/localedata_lo_LA \
