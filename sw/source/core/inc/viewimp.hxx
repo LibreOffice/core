@@ -85,26 +85,11 @@ class SwViewImp
     bool bResetHdlHiddenPaint : 1;//  -- "" --
     bool bSmoothUpdate : 1; //Meber fuer SmoothScroll
     bool bStopSmooth : 1;
-    bool bStopPrt : 1; // Stop Printing
 
     sal_uInt16 nRestoreActions  ; //Die Anzahl der zu restaurierenden Actions (UNO)
     SwRect aSmoothRect;
 
     SwPagePreviewLayout* mpPgPreviewLayout;
-
-    /**
-       Returns if printer shall be stopped.
-
-       @retval true The printer shall be stopped.
-       @retval false else
-    */
-    bool IsStopPrt() { return bStopPrt; }
-
-    /**
-       Resets signal for stopping printing.
-
-    */
-    void ResetStopPrt() { bStopPrt = false; }
 
     void SetFirstVisPage();     //Neue Ermittlung der ersten sichtbaren Seite
 

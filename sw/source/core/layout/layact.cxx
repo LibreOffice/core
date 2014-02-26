@@ -741,7 +741,7 @@ void SwLayAction::InternalAction()
             pPg = pPg ? (SwPageFrm*)pPg->GetPrev() : pPage;
 
         // set flag for interrupt content formatting
-        mbFormatCntntOnInterrupt = IsInput() && !IsStopPrt();
+        mbFormatCntntOnInterrupt = IsInput();
         long nBottom = rVis.Bottom();
         // #i42586# - format current page, if idle action is active
         // This is an optimization for the case that the interrupt is created by
@@ -1919,16 +1919,6 @@ sal_Bool SwLayAction::_FormatFlyCntnt( const SwFlyFrm *pFly )
     CheckWaitCrsr();
     // OD 14.04.2003 #106346# - consider interrupt formatting.
     return !(IsInterrupt() && !mbFormatCntntOnInterrupt);
-}
-
-sal_Bool SwLayAction::IsStopPrt() const
-{
-    sal_Bool bResult = sal_False;
-
-    if (pImp != NULL && pProgress != NULL)
-        bResult = pImp->IsStopPrt();
-
-    return bResult;
 }
 
 sal_Bool SwLayIdle::_DoIdleJob( const SwCntntFrm *pCnt, IdleJobType eJob )

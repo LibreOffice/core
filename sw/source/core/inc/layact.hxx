@@ -143,8 +143,7 @@ public:
     sal_Bool IsIdle()               const       { return bIdle;  }
     sal_Bool IsReschedule()         const       { return bReschedule;  }
     bool IsPaintExtraData()     const       { return bPaintExtraData;}
-    sal_Bool IsStopPrt()          const;
-    sal_Bool IsInterrupt()        const { return IsInput() || IsStopPrt(); }
+    sal_Bool IsInterrupt()        const { return IsInput(); }
 
     sal_uInt16 GetInputType()    const { return nInputType; }
 #endif

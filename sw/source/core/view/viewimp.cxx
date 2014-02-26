@@ -102,7 +102,6 @@ SwViewImp::SwViewImp( SwViewShell *pParent ) :
     bResetHdlHiddenPaint( false ),
     bSmoothUpdate( false ),
     bStopSmooth( false ),
-    bStopPrt( false ),
     nRestoreActions( 0 ),
     // OD 12.12.2002 #103492#
     mpPgPreviewLayout( 0 )
