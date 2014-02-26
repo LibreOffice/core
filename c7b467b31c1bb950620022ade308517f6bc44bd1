@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a961159_ccacef8f",
+        "filename": "sw/source/filter/ww8/ww8atr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2109,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-02-26T11:42:37Z",
+      "side": 1,
+      "message": "Why removing this? It\u0027s useful to see what default is expected to cover.",
+      "revId": "c7b467b31c1bb950620022ade308517f6bc44bd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a961159_2cbbb3c5",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2862,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-02-26T11:42:37Z",
+      "side": 1,
+      "message": "If these parameters are unused, just don\u0027t pass them.",
+      "revId": "c7b467b31c1bb950620022ade308517f6bc44bd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a961159_0cb6f7dc",
+        "filename": "writerfilter/source/dmapper/FieldTypes.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-02-26T11:42:37Z",
+      "side": 1,
+      "message": "Why changing this?",
+      "revId": "c7b467b31c1bb950620022ade308517f6bc44bd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a961159_eca9ab7c",
+        "filename": "writerfilter/source/dmapper/FieldTypes.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-02-26T11:42:37Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "c7b467b31c1bb950620022ade308517f6bc44bd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
