@@ -358,25 +358,23 @@ OString DocxExport::OutputChart( uno::Reference< frame::XModel >& xModel, sal_In
     return OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );
 }
 
-OString DocxExport::WriteOLENode( const SwOLENode& rNode )
+OString DocxExport::WriteOLEObject( SwOLEObj& rObject, OUString sMediaType, OUString sRelationType )
 {
-    uno::Reference <embed::XEmbeddedObject> xObj( const_cast<SwOLENode&>(rNode).GetOLEObj().GetOleRef() );
-    OUString sId, sMediaType;
-    comphelper::EmbeddedObjectContainer* aContainer = const_cast<SwOLENode&>(rNode).GetOLEObj().GetObject().GetContainer();
-    uno::Reference< io::XInputStream > xInStream = aContainer->GetObjectStream( xObj, &sMediaType );
+    uno::Reference <embed::XEmbeddedObject> xObj( rObject.GetOleRef() );
+    comphelper::EmbeddedObjectContainer* aContainer = rObject.GetObject().GetContainer();
+    uno::Reference< io::XInputStream > xInStream = aContainer->GetObjectStream( xObj, NULL );
 
-    OUString sFileName = "embeddings/Microsoft_Excel_Worksheet" + OUString::number( ++m_nOLEObjects ) + ".xlsx";
+    OUString sFileName = "embeddings/oleObject" + OUString::number( ++m_nOLEObjects ) + ".bin";
     uno::Reference< io::XOutputStream > xOutStream = GetFilter().openFragmentStream( OUStringBuffer()
                                                                       .appendAscii( "word/" )
                                                                       .append( sFileName )
                                                                       .makeStringAndClear(),
                                                                       sMediaType );
-
+    OUString sId;
     if( lcl_CopyStream( xInStream, xOutStream ) )
 
         sId = m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
-                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package",
-                sFileName, false );
+                sRelationType, sFileName, false );
 
     return OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );
 }

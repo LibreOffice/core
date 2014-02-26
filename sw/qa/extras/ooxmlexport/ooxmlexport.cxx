@@ -2579,7 +2579,7 @@ DECLARE_OOXMLEXPORT_TEST(testEmbeddedXlsx, "embedded-xlsx.docx")
     int nImageFiles = 0;
     for (int i=0; i<names.getLength(); i++)
     {
-        if(names[i].startsWith("word/embeddings/Microsoft_Excel_Worksheet"))
+        if(names[i].startsWith("word/embeddings/oleObject"))
             nSheetFiles++;
         if(names[i].startsWith("word/media/image"))
             nImageFiles++;

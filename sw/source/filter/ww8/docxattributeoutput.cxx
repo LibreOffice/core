@@ -3568,12 +3568,53 @@ void DocxAttributeOutput::WritePostponedOLE()
 
     SAL_INFO( "sw.ww8", OSL_THIS_FUNC );
 
+    // get interoperability information about embedded objects
+    uno::Reference< beans::XPropertySet > xPropSet( m_rExport.pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
+    OUString pName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
+    uno::Sequence< beans::PropertyValue > aGrabBag, aObjectsInteropList;
+    xPropSet->getPropertyValue( pName ) >>= aGrabBag;
+    for( sal_Int32 i=0; i < aGrabBag.getLength(); ++i )
+        if ( aGrabBag[i].Name == "EmbeddedObjects" )
+        {
+            aGrabBag[i].Value >>= aObjectsInteropList;
+            break;
+        }
+
     for( std::list< PostponedOLE >::iterator it = m_postponedOLE->begin();
          it != m_postponedOLE->end();
          ++it )
     {
+        SwOLEObj& aObject = it->object->GetOLEObj();
+        uno::Reference < embed::XEmbeddedObject > xObj( aObject.GetOleRef() );
+        comphelper::EmbeddedObjectContainer* aContainer = aObject.GetObject().GetContainer();
+        OUString sObjectName = aContainer->GetEmbeddedObjectName( xObj );
+
+        // set some attributes according to the type of the embedded object
+        OUString sProgID, sMediaType, sRelationType;
+        for( sal_Int32 i=0; i < aObjectsInteropList.getLength(); ++i )
+            if ( aObjectsInteropList[i].Name == sObjectName )
+            {
+                aObjectsInteropList[i].Value >>= sProgID;
+                break;
+            }
+        if( sProgID.startsWith("Excel.Sheet") )
+        {
+            sMediaType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+        }
+        else if( sProgID.startsWith("PowerPoint.Show") )
+        {
+            sMediaType = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+            sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+        }
+        else
+        {
+            sMediaType = "application/vnd.openxmlformats-officedocument.oleObject";
+            sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
+        }
+
         // write embedded file
-        OString sId = m_rExport.WriteOLENode( *it->object );
+        OString sId = m_rExport.WriteOLEObject( aObject, sMediaType, sRelationType );
 
         if( sId.isEmpty() )
         {
@@ -3612,7 +3653,7 @@ void DocxAttributeOutput::WritePostponedOLE()
         // OLE object definition
         m_pSerializer->singleElementNS( XML_o, XML_OLEObject,
                                         XML_Type, "Embed",
-                                        XML_ProgID,"Excel.Sheet.12", //TODO: should be auto-detected somehow
+                                        XML_ProgID, OUStringToOString( sProgID, RTL_TEXTENCODING_UTF8 ).getStr(),
                                         XML_ShapeID, sShapeId.getStr(),
                                         XML_DrawAspect, "Content",
                                         XML_ObjectID, "_" + OString::number( rand() ),

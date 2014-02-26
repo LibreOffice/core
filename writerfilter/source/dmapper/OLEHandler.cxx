@@ -20,6 +20,7 @@
 #include <PropertyMap.hxx>
 #include "GraphicHelpers.hxx"
 
+#include <editeng/unoprnms.hxx>
 #include <ooxml/resourceids.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -170,6 +171,48 @@ void OLEHandler::lcl_sprm(Sprm & rSprm)
 }
 
 
+void OLEHandler::saveInteropProperties( uno::Reference< text::XTextDocument > xTextDocument, OUString sObjectName )
+{
+    const OUString sGrabBagPropName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
+    const OUString sEmbeddingsPropName = "EmbeddedObjects";
+
+    // get interop grab bag from document
+    uno::Reference< beans::XPropertySet > xDocProps( xTextDocument, uno::UNO_QUERY );
+    uno::Sequence< beans::PropertyValue > aGrabBag;
+    xDocProps->getPropertyValue( sGrabBagPropName ) >>= aGrabBag;
+
+    // get EmbeddedObjects property inside grab bag
+    sal_Int32 i = 0;
+    sal_Int32 nBagLength = aGrabBag.getLength();
+    uno::Sequence< beans::PropertyValue > objectsList;
+    for( ; i < nBagLength; ++i )
+        if ( aGrabBag[i].Name == sEmbeddingsPropName )
+        {
+            aGrabBag[i].Value >>= objectsList;
+            break;
+        }
+
+    // save ProgID of current object
+    sal_Int32 length = objectsList.getLength();
+    objectsList.realloc( length + 1 );
+    objectsList[length].Name = sObjectName;
+    objectsList[length].Value = uno::Any( m_sProgId );
+
+    // put objects list back into the grab bag
+    if( i == nBagLength )
+    {
+        aGrabBag.realloc( nBagLength + 1 );
+        aGrabBag[nBagLength].Name = sEmbeddingsPropName;
+        aGrabBag[nBagLength].Value = uno::Any( objectsList );
+    }
+    else
+        aGrabBag[i].Value = uno::Any( objectsList );
+
+    // put grab bag back into the document
+    xDocProps->setPropertyValue( sGrabBagPropName, uno::Any( aGrabBag ) );
+}
+
+
 OUString OLEHandler::copyOLEOStream( uno::Reference< text::XTextDocument > xTextDocument )
 {
     OUString sRet;
@@ -201,6 +244,8 @@ OUString OLEHandler::copyOLEOStream( uno::Reference< text::XTextDocument > xText
                     break;
                 }
             }
+
+            saveInteropProperties( xTextDocument, aURL );
 
             static const OUString sProtocol("vnd.sun.star.EmbeddedObject:");
             OUString aPersistName( xEmbeddedResolver->resolveEmbeddedObjectURL( aURL ) );

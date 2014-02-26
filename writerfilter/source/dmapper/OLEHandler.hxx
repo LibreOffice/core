@@ -69,6 +69,10 @@ class OLEHandler : public LoggedProperties
     virtual void lcl_attribute(Id Name, Value & val);
     virtual void lcl_sprm(Sprm & sprm);
 
+    // Interoperability
+    virtual void saveInteropProperties( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument > xTextDocument,
+                                        OUString sObjectName );
+
 public:
     OLEHandler();
     virtual ~OLEHandler();
