@@ -614,31 +614,6 @@ bool ScRangeStringConverter::GetRangeFromString(
     return bResult;
 }
 
-bool ScRangeStringConverter::GetRangeListFromString(
-        uno::Sequence< table::CellRangeAddress >& rRangeSeq,
-        const OUString& rRangeListStr,
-        const ScDocument* pDocument,
-        FormulaGrammar::AddressConvention eConv,
-        sal_Unicode cSeparator,
-        sal_Unicode cQuote )
-{
-    bool bRet = true;
-    OSL_ENSURE( !rRangeListStr.isEmpty(), "ScXMLConverter::GetRangeListFromString - empty string!" );
-    table::CellRangeAddress aRange;
-    sal_Int32 nOffset = 0;
-    while( nOffset >= 0 )
-    {
-        if( GetRangeFromString( aRange, rRangeListStr, pDocument, eConv, nOffset, cSeparator, cQuote ) && (nOffset >= 0) )
-        {
-            rRangeSeq.realloc( rRangeSeq.getLength() + 1 );
-            rRangeSeq[ rRangeSeq.getLength() - 1 ] = aRange;
-        }
-        else
-            bRet = false;
-    }
-    return bRet;
-}
-
 void ScRangeStringConverter::GetStringFromAddress(
         OUString& rString,
         const ScAddress& rAddress,

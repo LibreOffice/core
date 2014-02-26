@@ -180,13 +180,6 @@ public:
                             sal_Int32& nOffset,
                             sal_Unicode cSeparator = ' ',
                             sal_Unicode cQuote = '\'');
-    static bool     GetRangeListFromString(
-                            ::com::sun::star::uno::Sequence< ::com::sun::star::table::CellRangeAddress >& rRangeSeq,
-                            const OUString& rRangeListStr,
-                            const ScDocument* pDocument,
-                            formula::FormulaGrammar::AddressConvention eConv,
-                            sal_Unicode cSeparator = ' ',
-                            sal_Unicode cQuote = '\'');
 
 /// Range to String core
     static void         GetStringFromAddress(
