@@ -5409,6 +5409,121 @@
           <value>sysDashDotDot</value>
         </choice>
       </define>
+      <define name="ST_PresetCameraType">
+        <list>
+          <choice>
+            <value>legacyObliqueTopLeft</value>
+            <value>legacyObliqueTop</value>
+            <value>legacyObliqueTopRight</value>
+            <value>legacyObliqueLeft</value>
+            <value>legacyObliqueFront</value>
+            <value>legacyObliqueRight</value>
+            <value>legacyObliqueBottomLeft</value>
+            <value>legacyObliqueBottom</value>
+            <value>legacyObliqueBottomRight</value>
+            <value>legacyPerspectiveTopLeft</value>
+            <value>legacyPerspectiveTop</value>
+            <value>legacyPerspectiveTopRight</value>
+            <value>legacyPerspectiveLeft</value>
+            <value>legacyPerspectiveFront</value>
+            <value>legacyPerspectiveRight</value>
+            <value>legacyPerspectiveBottomLeft</value>
+            <value>legacyPerspectiveBottom</value>
+            <value>legacyPerspectiveBottomRight</value>
+            <value>orthographicFront</value>
+            <value>isometricTopUp</value>
+            <value>isometricTopDown</value>
+            <value>isometricBottomUp</value>
+            <value>isometricBottomDown</value>
+            <value>isometricLeftUp</value>
+            <value>isometricLeftDown</value>
+            <value>isometricRightUp</value>
+            <value>isometricRightDown</value>
+            <value>isometricOffAxis1Left</value>
+            <value>isometricOffAxis1Right</value>
+            <value>isometricOffAxis1Top</value>
+            <value>isometricOffAxis2Left</value>
+            <value>isometricOffAxis2Right</value>
+            <value>isometricOffAxis2Top</value>
+            <value>isometricOffAxis3Left</value>
+            <value>isometricOffAxis3Right</value>
+            <value>isometricOffAxis3Bottom</value>
+            <value>isometricOffAxis4Left</value>
+            <value>isometricOffAxis4Right</value>
+            <value>isometricOffAxis4Bottom</value>
+            <value>obliqueTopLeft</value>
+            <value>obliqueTop</value>
+            <value>obliqueTopRight</value>
+            <value>obliqueLeft</value>
+            <value>obliqueRight</value>
+            <value>obliqueBottomLeft</value>
+            <value>obliqueBottom</value>
+            <value>obliqueBottomRight</value>
+            <value>perspectiveFront</value>
+            <value>perspectiveLeft</value>
+            <value>perspectiveRight</value>
+            <value>perspectiveAbove</value>
+            <value>perspectiveBelow</value>
+            <value>perspectiveAboveLeftFacing</value>
+            <value>perspectiveAboveRightFacing</value>
+            <value>perspectiveContrastingLeftFacing</value>
+            <value>perspectiveContrastingRightFacing</value>
+            <value>perspectiveHeroicLeftFacing</value>
+            <value>perspectiveHeroicRightFacing</value>
+            <value>perspectiveHeroicExtremeLeftFacing</value>
+            <value>perspectiveHeroicExtremeRightFacing</value>
+            <value>perspectiveRelaxed</value>
+            <value>perspectiveRelaxedModerately</value>
+          </choice>
+        </list>
+      </define>
+      <define name="ST_LightRigType">
+        <list>
+          <choice>
+            <value>legacyFlat1</value>
+            <value>legacyFlat2</value>
+            <value>legacyFlat3</value>
+            <value>legacyFlat4</value>
+            <value>legacyNormal1</value>
+            <value>legacyNormal2</value>
+            <value>legacyNormal3</value>
+            <value>legacyNormal4</value>
+            <value>legacyHarsh1</value>
+            <value>legacyHarsh2</value>
+            <value>legacyHarsh3</value>
+            <value>legacyHarsh4</value>
+            <value>threePt</value>
+            <value>balanced</value>
+            <value>soft</value>
+            <value>harsh</value>
+            <value>flood</value>
+            <value>contrasting</value>
+            <value>morning</value>
+            <value>sunrise</value>
+            <value>sunset</value>
+            <value>chilly</value>
+            <value>freezing</value>
+            <value>flat</value>
+            <value>twoPt</value>
+            <value>glow</value>
+            <value>brightRoom</value>
+          </choice>
+        </list>
+      </define>
+       <define name="ST_LightRigDirection">
+        <list>
+          <choice>
+            <value>tl</value>
+            <value>t</value>
+            <value>tr</value>
+            <value>l</value>
+            <value>r</value>
+            <value>bl</value>
+            <value>b</value>
+            <value>br</value>
+          </choice>
+        </list>
+      </define>
 
       <define name="ST_PositiveCoordinate">
         <data type="long">
@@ -5724,6 +5839,35 @@
           </attribute>
         </optional>
       </define>
+      <define name="CT_Camera">
+        <optional>
+          <attribute name="prst">
+            <ref name="ST_PresetCameraType"/>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_LightRig">
+        <element name="rot">
+          <ref name="CT_SphereCoords"/>
+        </element>
+        <attribute name="rig">
+          <ref name="ST_LightRigType"/>
+        </attribute>
+        <attribute name="dir">
+          <ref name="ST_LightRigDirection"/>
+        </attribute>
+      </define>
+      <define name="CT_SphereCoords">
+        <attribute name="lat">
+          <ref name="ST_PositiveFixedAngle"/>
+        </attribute>
+        <attribute name="lon">
+          <ref name="ST_PositiveFixedAngle"/>
+        </attribute>
+        <attribute name="rev">
+          <ref name="ST_PositiveFixedAngle"/>
+        </attribute>
+      </define>
 
       <!-- Main Elements-->
       <define name="CT_Glow">
@@ -5877,6 +6021,19 @@
           </attribute>
         </optional>
       </define>
+      <define name="CT_FillTextEffect">
+        <optional>
+            <ref name="EG_FillProperties"/>
+        </optional>
+      </define>
+      <define name="CT_Scene3D">
+        <element name="camera">
+          <ref name="CT_Camera"/>
+        </element>
+        <element name="lightRig">
+          <ref name="CT_LightRig"/>
+        </element>
+      </define>
 
       <define name="glow">
         <element name="glow">
@@ -5900,12 +6057,12 @@
       </define>
       <define name="textFill">
         <element name="textFill">
-          <empty/>
+          <ref name="CT_FillTextEffect"/>
         </element>
       </define>
       <define name="scene3d">
         <element name="scene3d">
-          <empty/>
+          <ref name="CT_Scene3D"/>
         </element>
       </define>
       <define name="props3d">
@@ -6006,6 +6163,109 @@
       <value name="lgDashDotDot" tokenid="ooxml:ST_PresetLineDashVal_lgDashDotDot">lgDashDotDot</value>
       <value name="sysDashDotDot" tokenid="ooxml:ST_PresetLineDashVal_sysDashDotDot">sysDashDotDot</value>
     </resource>
+    <resource name="ST_PresetCameraType" resource="List" generated="yes">
+      <value name="legacyObliqueTopLeft" tokenid="ooxml:ST_PresetCameraType_legacyObliqueTopLeft">legacyObliqueTopLeft</value>
+      <value name="legacyObliqueTop" tokenid="ooxml:ST_PresetCameraType_legacyObliqueTop">legacyObliqueTop</value>
+      <value name="legacyObliqueTopRight" tokenid="ooxml:ST_PresetCameraType_legacyObliqueTopRight">legacyObliqueTopRight</value>
+      <value name="legacyObliqueLeft" tokenid="ooxml:ST_PresetCameraType_legacyObliqueLeft">legacyObliqueLeft</value>
+      <value name="legacyObliqueFront" tokenid="ooxml:ST_PresetCameraType_legacyObliqueFront">legacyObliqueFront</value>
+      <value name="legacyObliqueRight" tokenid="ooxml:ST_PresetCameraType_legacyObliqueRight">legacyObliqueRight</value>
+      <value name="legacyObliqueBottomLeft" tokenid="ooxml:ST_PresetCameraType_legacyObliqueBottomLeft">legacyObliqueBottomLeft</value>
+      <value name="legacyObliqueBottom" tokenid="ooxml:ST_PresetCameraType_legacyObliqueBottom">legacyObliqueBottom</value>
+      <value name="legacyObliqueBottomRight" tokenid="ooxml:ST_PresetCameraType_legacyObliqueBottomRight">legacyObliqueBottomRight</value>
+      <value name="legacyPerspectiveTopLeft" tokenid="ooxml:ST_PresetCameraType_legacyPerspectiveTopLeft">legacyPerspectiveTopLeft</value>
+      <value name="legacyPerspectiveTop" tokenid="ooxml:ST_PresetCameraType_legacyPerspectiveTop">legacyPerspectiveTop</value>
+      <value name="legacyPerspectiveTopRight" tokenid="ooxml:ST_PresetCameraType_legacyPerspectiveTopRight">legacyPerspectiveTopRight</value>
+      <value name="legacyPerspectiveLeft" tokenid="ooxml:ST_PresetCameraType_legacyPerspectiveLeft">legacyPerspectiveLeft</value>
+      <value name="legacyPerspectiveFront" tokenid="ooxml:ST_PresetCameraType_legacyPerspectiveFront">legacyPerspectiveFront</value>
+      <value name="legacyPerspectiveRight" tokenid="ooxml:ST_PresetCameraType_legacyPerspectiveRight">legacyPerspectiveRight</value>
+      <value name="legacyPerspectiveBottomLeft" tokenid="ooxml:ST_PresetCameraType_legacyPerspectiveBottomLeft">legacyPerspectiveBottomLeft</value>
+      <value name="legacyPerspectiveBottom" tokenid="ooxml:ST_PresetCameraType_legacyPerspectiveBottom">legacyPerspectiveBottom</value>
+      <value name="legacyPerspectiveBottomRight" tokenid="ooxml:ST_PresetCameraType_legacyPerspectiveBottomRight">legacyPerspectiveBottomRight</value>
+      <value name="orthographicFront" tokenid="ooxml:ST_PresetCameraType_orthographicFront">orthographicFront</value>
+      <value name="isometricTopUp" tokenid="ooxml:ST_PresetCameraType_isometricTopUp">isometricTopUp</value>
+      <value name="isometricTopDown" tokenid="ooxml:ST_PresetCameraType_isometricTopDown">isometricTopDown</value>
+      <value name="isometricBottomUp" tokenid="ooxml:ST_PresetCameraType_isometricBottomUp">isometricBottomUp</value>
+      <value name="isometricBottomDown" tokenid="ooxml:ST_PresetCameraType_isometricBottomDown">isometricBottomDown</value>
+      <value name="isometricLeftUp" tokenid="ooxml:ST_PresetCameraType_isometricLeftUp">isometricLeftUp</value>
+      <value name="isometricLeftDown" tokenid="ooxml:ST_PresetCameraType_isometricLeftDown">isometricLeftDown</value>
+      <value name="isometricRightUp" tokenid="ooxml:ST_PresetCameraType_isometricRightUp">isometricRightUp</value>
+      <value name="isometricRightDown" tokenid="ooxml:ST_PresetCameraType_isometricRightDown">isometricRightDown</value>
+      <value name="isometricOffAxis1Left" tokenid="ooxml:ST_PresetCameraType_isometricOffAxis1Left">isometricOffAxis1Left</value>
+      <value name="isometricOffAxis1Right" tokenid="ooxml:ST_PresetCameraType_isometricOffAxis1Right">isometricOffAxis1Right</value>
+      <value name="isometricOffAxis1Top" tokenid="ooxml:ST_PresetCameraType_isometricOffAxis1Top">isometricOffAxis1Top</value>
+      <value name="isometricOffAxis2Left" tokenid="ooxml:ST_PresetCameraType_isometricOffAxis2Left">isometricOffAxis2Left</value>
+      <value name="isometricOffAxis2Right" tokenid="ooxml:ST_PresetCameraType_isometricOffAxis2Right">isometricOffAxis2Right</value>
+      <value name="isometricOffAxis2Top" tokenid="ooxml:ST_PresetCameraType_isometricOffAxis2Top">isometricOffAxis2Top</value>
+      <value name="isometricOffAxis3Left" tokenid="ooxml:ST_PresetCameraType_isometricOffAxis3Left">isometricOffAxis3Left</value>
+      <value name="isometricOffAxis3Right" tokenid="ooxml:ST_PresetCameraType_isometricOffAxis3Right">isometricOffAxis3Right</value>
+      <value name="isometricOffAxis3Bottom" tokenid="ooxml:ST_PresetCameraType_isometricOffAxis3Bottom">isometricOffAxis3Bottom</value>
+      <value name="isometricOffAxis4Left" tokenid="ooxml:ST_PresetCameraType_isometricOffAxis4Left">isometricOffAxis4Left</value>
+      <value name="isometricOffAxis4Right" tokenid="ooxml:ST_PresetCameraType_isometricOffAxis4Right">isometricOffAxis4Right</value>
+      <value name="isometricOffAxis4Bottom" tokenid="ooxml:ST_PresetCameraType_isometricOffAxis4Bottom">isometricOffAxis4Bottom</value>
+      <value name="obliqueTopLeft" tokenid="ooxml:ST_PresetCameraType_obliqueTopLeft">obliqueTopLeft</value>
+      <value name="obliqueTop" tokenid="ooxml:ST_PresetCameraType_obliqueTop">obliqueTop</value>
+      <value name="obliqueTopRight" tokenid="ooxml:ST_PresetCameraType_obliqueTopRight">obliqueTopRight</value>
+      <value name="obliqueLeft" tokenid="ooxml:ST_PresetCameraType_obliqueLeft">obliqueLeft</value>
+      <value name="obliqueRight" tokenid="ooxml:ST_PresetCameraType_obliqueRight">obliqueRight</value>
+      <value name="obliqueBottomLeft" tokenid="ooxml:ST_PresetCameraType_obliqueBottomLeft">obliqueBottomLeft</value>
+      <value name="obliqueBottom" tokenid="ooxml:ST_PresetCameraType_obliqueBottom">obliqueBottom</value>
+      <value name="obliqueBottomRight" tokenid="ooxml:ST_PresetCameraType_obliqueBottomRight">obliqueBottomRight</value>
+      <value name="perspectiveFront" tokenid="ooxml:ST_PresetCameraType_perspectiveFront">perspectiveFront</value>
+      <value name="perspectiveLeft" tokenid="ooxml:ST_PresetCameraType_perspectiveLeft">perspectiveLeft</value>
+      <value name="perspectiveRight" tokenid="ooxml:ST_PresetCameraType_perspectiveRight">perspectiveRight</value>
+      <value name="perspectiveAbove" tokenid="ooxml:ST_PresetCameraType_perspectiveAbove">perspectiveAbove</value>
+      <value name="perspectiveBelow" tokenid="ooxml:ST_PresetCameraType_perspectiveBelow">perspectiveBelow</value>
+      <value name="perspectiveAboveLeftFacing" tokenid="ooxml:ST_PresetCameraType_perspectiveAboveLeftFacing">perspectiveAboveLeftFacing</value>
+      <value name="perspectiveAboveRightFacing" tokenid="ooxml:ST_PresetCameraType_perspectiveAboveRightFacing">perspectiveAboveRightFacing</value>
+      <value name="perspectiveContrastingLeftFacing" tokenid="ooxml:ST_PresetCameraType_perspectiveContrastingLeftFacing">perspectiveContrastingLeftFacing</value>
+      <value name="perspectiveContrastingRightFacing" tokenid="ooxml:ST_PresetCameraType_perspectiveContrastingRightFacing">perspectiveContrastingRightFacing</value>
+      <value name="perspectiveHeroicLeftFacing" tokenid="ooxml:ST_PresetCameraType_perspectiveHeroicLeftFacing">perspectiveHeroicLeftFacing</value>
+      <value name="perspectiveHeroicRightFacing" tokenid="ooxml:ST_PresetCameraType_perspectiveHeroicRightFacing">perspectiveHeroicRightFacing</value>
+      <value name="perspectiveHeroicExtremeLeftFacing" tokenid="ooxml:ST_PresetCameraType_perspectiveHeroicExtremeLeftFacing">perspectiveHeroicExtremeLeftFacing</value>
+      <value name="perspectiveHeroicExtremeRightFacing" tokenid="ooxml:ST_PresetCameraType_perspectiveHeroicExtremeRightFacing">perspectiveHeroicExtremeRightFacing</value>
+      <value name="perspectiveRelaxed" tokenid="ooxml:ST_PresetCameraType_perspectiveRelaxed">perspectiveRelaxed</value>
+      <value name="perspectiveRelaxedModerately" tokenid="ooxml:ST_PresetCameraType_perspectiveRelaxedModerately">perspectiveRelaxedModerately</value>
+    </resource>
+    <resource name="ST_LightRigType" resource="List" generated="yes">
+      <value name="legacyFlat1" tokenid="ooxml:ST_LightRigType_legacyFlat1">legacyFlat1</value>
+      <value name="legacyFlat2" tokenid="ooxml:ST_LightRigType_legacyFlat2">legacyFlat2</value>
+      <value name="legacyFlat3" tokenid="ooxml:ST_LightRigType_legacyFlat3">legacyFlat3</value>
+      <value name="legacyFlat4" tokenid="ooxml:ST_LightRigType_legacyFlat4">legacyFlat4</value>
+      <value name="legacyNormal1" tokenid="ooxml:ST_LightRigType_legacyNormal1">legacyNormal1</value>
+      <value name="legacyNormal2" tokenid="ooxml:ST_LightRigType_legacyNormal2">legacyNormal2</value>
+      <value name="legacyNormal3" tokenid="ooxml:ST_LightRigType_legacyNormal3">legacyNormal3</value>
+      <value name="legacyNormal4" tokenid="ooxml:ST_LightRigType_legacyNormal4">legacyNormal4</value>
+      <value name="legacyHarsh1" tokenid="ooxml:ST_LightRigType_legacyHarsh1">legacyHarsh1</value>
+      <value name="legacyHarsh2" tokenid="ooxml:ST_LightRigType_legacyHarsh2">legacyHarsh2</value>
+      <value name="legacyHarsh3" tokenid="ooxml:ST_LightRigType_legacyHarsh3">legacyHarsh3</value>
+      <value name="legacyHarsh4" tokenid="ooxml:ST_LightRigType_legacyHarsh4">legacyHarsh4</value>
+      <value name="threePt" tokenid="ooxml:ST_LightRigType_threePt">threePt</value>
+      <value name="balanced" tokenid="ooxml:ST_LightRigType_balanced">balanced</value>
+      <value name="soft" tokenid="ooxml:ST_LightRigType_soft">soft</value>
+      <value name="harsh" tokenid="ooxml:ST_LightRigType_harsh">harsh</value>
+      <value name="flood" tokenid="ooxml:ST_LightRigType_flood">flood</value>
+      <value name="contrasting" tokenid="ooxml:ST_LightRigType_contrasting">contrasting</value>
+      <value name="morning" tokenid="ooxml:ST_LightRigType_morning">morning</value>
+      <value name="sunrise" tokenid="ooxml:ST_LightRigType_sunrise">sunrise</value>
+      <value name="sunset" tokenid="ooxml:ST_LightRigType_sunset">sunset</value>
+      <value name="chilly" tokenid="ooxml:ST_LightRigType_chilly">chilly</value>
+      <value name="freezing" tokenid="ooxml:ST_LightRigType_freezing">freezing</value>
+      <value name="flat" tokenid="ooxml:ST_LightRigType_flat">flat</value>
+      <value name="twoPt" tokenid="ooxml:ST_LightRigType_twoPt">twoPt</value>
+      <value name="glow" tokenid="ooxml:ST_LightRigType_glow">glow</value>
+      <value name="brightRoom" tokenid="ooxml:ST_LightRigType_brightRoom">brightRoom</value>
+    </resource>
+    <resource name="ST_LightRigDirection" resource="List" generated="yes">
+      <value name="tl" tokenid="ooxml:ST_LightRigDirection_tl">tl</value>
+      <value name="t" tokenid="ooxml:ST_LightRigDirection_t">t</value>
+      <value name="tr" tokenid="ooxml:ST_LightRigDirection_tr">tr</value>
+      <value name="l" tokenid="ooxml:ST_LightRigDirection_l">l</value>
+      <value name="r" tokenid="ooxml:ST_LightRigDirection_r">r</value>
+      <value name="bl" tokenid="ooxml:ST_LightRigDirection_bl">bl</value>
+      <value name="b" tokenid="ooxml:ST_LightRigDirection_b">b</value>
+      <value name="br" tokenid="ooxml:ST_LightRigDirection_br">br</value>
+    </resource>
 
     <resource name="ST_PositiveCoordinate" resource="Integer" generated="yes"/>
     <resource name="ST_HexColorRGB" resource="Hex"/>
@@ -6101,6 +6361,19 @@
     <resource name="CT_LineJoinMiterProperties" resource="Properties" tag="character">
       <attribute name="lim" tokenid="ooxml:CT_LineJoinMiterProperties_lim"/>
     </resource>
+    <resource name="CT_Camera" resource="Properties" tag="character">
+      <attribute name="prst" tokenid="ooxml:CT_Camera_prst"/>
+    </resource>
+    <resource name="CT_LightRig" resource="Properties" tag="character">
+      <element name="rot" tokenid="ooxml:CT_LightRig_rot"/>
+      <attribute name="rig" tokenid="ooxml:CT_LightRig_rig"/>
+      <attribute name="dir" tokenid="ooxml:CT_LightRig_dir"/>
+    </resource>
+    <resource name="CT_SphereCoords" resource="Properties" tag="character">
+      <attribute name="lat" tokenid="ooxml:CT_SphereCoords_lat"/>
+      <attribute name="lon" tokenid="ooxml:CT_SphereCoords_lon"/>
+      <attribute name="rev" tokenid="ooxml:CT_SphereCoords_rev"/>
+    </resource>
 
     <resource name="CT_Shadow" resource="Properties" tag="character">
       <attribute name="blurRad" tokenid="ooxml:CT_Shadow_blurRad"/>
@@ -6133,6 +6406,7 @@
       <attribute name="cmpd" tokenid="ooxml:CT_TextOutlineEffect_cmpd"/>
       <attribute name="algn" tokenid="ooxml:CT_TextOutlineEffect_algn"/>
     </resource>
+    <resource name="CT_FillTextEffect" resource="Properties" tag="character"/>
 
     <resource name="glow" resource="Properties" tag="character">
       <element name="glow" tokenid="ooxml:glow_glow"/>
@@ -17823,7 +18097,7 @@
             <ref name="BUILT_IN_ANY_TYPE"/>
           </element>
         </optional>
-        <!--<optional>
+        <optional>
           <element name="w14:textFill">
             <ref name="BUILT_IN_ANY_TYPE"/>
           </element>
@@ -17833,7 +18107,7 @@
             <ref name="BUILT_IN_ANY_TYPE"/>
           </element>
         </optional>
-        <optional>
+        <!--<optional>
           <element name="w14:props3d">
             <ref name="BUILT_IN_ANY_TYPE"/>
           </element>
@@ -23834,9 +24108,9 @@
       <element name="w14:shadow" tokenid="ooxml:EG_RPrBase_w14_shadow"/>
       <element name="w14:reflection" tokenid="ooxml:EG_RPrBase_w14_reflection"/>
       <element name="w14:textOutline" tokenid="ooxml:EG_RPrBase_w14_textOutline"/>
-      <!--<element name="w14:textFill" tokenid="ooxml:EG_RPrBase_w14_textFill"/>
+      <element name="w14:textFill" tokenid="ooxml:EG_RPrBase_w14_textFill"/>
       <element name="w14:scene3d" tokenid="ooxml:EG_RPrBase_w14_scene3d"/>
-      <element name="w14:props3d" tokenid="ooxml:EG_RPrBase_w14_props3d"/>
+      <!--<element name="w14:props3d" tokenid="ooxml:EG_RPrBase_w14_props3d"/>
       <element name="w14:ligatures" tokenid="ooxml:EG_RPrBase_w14_ligatures"/>
       <element name="w14:numForm" tokenid="ooxml:EG_RPrBase_w14_numForm"/>
       <element name="w14:numSpacing" tokenid="ooxml:EG_RPrBase_w14_numSpacing"/>
