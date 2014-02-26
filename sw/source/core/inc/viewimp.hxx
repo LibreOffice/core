@@ -81,13 +81,11 @@ class SwViewImp
     mutable const SdrObject * pSdrObjCached;
     mutable OUString sSdrObjCachedComment;
 
-    sal_Bool bFirstPageInvalid  :1; //Pointer auf erste Seite ungueltig?
-
-    sal_Bool bResetHdlHiddenPaint:1;//  -- "" --
-
-    sal_Bool bSmoothUpdate      :1; //Meber fuer SmoothScroll
-    sal_Bool bStopSmooth        :1;
-    sal_Bool bStopPrt           :1; // Stop Printing
+    bool bFirstPageInvalid : 1; //Pointer auf erste Seite ungueltig?
+    bool bResetHdlHiddenPaint : 1;//  -- "" --
+    bool bSmoothUpdate : 1; //Meber fuer SmoothScroll
+    bool bStopSmooth : 1;
+    bool bStopPrt : 1; // Stop Printing
 
     sal_uInt16 nRestoreActions  ; //Die Anzahl der zu restaurierenden Actions (UNO)
     SwRect aSmoothRect;
@@ -97,16 +95,16 @@ class SwViewImp
     /**
        Returns if printer shall be stopped.
 
-       @retval sal_True The printer shall be stopped.
-       @retval sal_False else
+       @retval true The printer shall be stopped.
+       @retval false else
     */
-    sal_Bool IsStopPrt() { return bStopPrt; }
+    bool IsStopPrt() { return bStopPrt; }
 
     /**
        Resets signal for stopping printing.
 
     */
-    void ResetStopPrt() { bStopPrt = sal_False; }
+    void ResetStopPrt() { bStopPrt = false; }
 
     void SetFirstVisPage();     //Neue Ermittlung der ersten sichtbaren Seite
 
@@ -167,14 +165,14 @@ public:
     //Verwaltung zur ersten sichtbaren Seite
     inline const SwPageFrm *GetFirstVisPage() const;
     inline       SwPageFrm *GetFirstVisPage();
-    void SetFirstVisPageInvalid() { bFirstPageInvalid = sal_True; }
+    void SetFirstVisPageInvalid() { bFirstPageInvalid = true; }
 
-    sal_Bool AddPaintRect( const SwRect &rRect );
+    bool AddPaintRect( const SwRect &rRect );
     SwRegionRects *GetRegion()      { return pRegion; }
     void DelRegion();
 
     // neues Interface fuer StarView Drawing
-    inline sal_Bool HasDrawView()       const { return 0 != pDrawView; }
+    bool  HasDrawView()             const { return 0 != pDrawView; }
           SwDrawView* GetDrawView()       { return pDrawView; }
     const SwDrawView* GetDrawView() const { return pDrawView; }
           SdrPageView*GetPageView()       { return pSdrPageView; }
@@ -202,12 +200,12 @@ public:
     //gepaintet wird oder nicht.
 
     // Interface Drawing
-    sal_Bool IsDragPossible( const Point &rPoint );
+    bool IsDragPossible( const Point &rPoint );
     void NotifySizeChg( const Size &rNewSz );
 
     //SS Fuer die Lay- bzw. IdleAction und verwandtes
-    sal_Bool  IsAction() const                   { return pLayAct  != 0; }
-    sal_Bool  IsIdleAction() const               { return pIdleAct != 0; }
+    bool  IsAction() const                   { return pLayAct  != 0; }
+    bool  IsIdleAction() const               { return pIdleAct != 0; }
           SwLayAction &GetLayAction()        { return *pLayAct; }
     const SwLayAction &GetLayAction() const  { return *pLayAct; }
           SwLayIdle   &GetIdleAction()       { return *pIdleAct;}
@@ -216,10 +214,10 @@ public:
     //Wenn eine Aktion laueft wird diese gebeten zu pruefen ob es
     //an der zeit ist den WaitCrsr einzuschalten.
     void CheckWaitCrsr();
-    sal_Bool IsCalcLayoutProgress() const;  //Fragt die LayAction wenn vorhanden.
-    //sal_True wenn eine LayAction laeuft, dort wird dann auch das Flag fuer
+    bool IsCalcLayoutProgress() const;  //Fragt die LayAction wenn vorhanden.
+    //true wenn eine LayAction laeuft, dort wird dann auch das Flag fuer
     //ExpressionFields gesetzt.
-    sal_Bool IsUpdateExpFlds();
+    bool IsUpdateExpFlds();
 
     void    SetRestoreActions(sal_uInt16 nSet){nRestoreActions = nSet;}
     sal_uInt16  GetRestoreActions() const{return nRestoreActions;}
@@ -232,7 +230,7 @@ public:
     }
 
     // Is this view accessible?
-    sal_Bool IsAccessible() const { return pAccMap != 0; }
+    bool IsAccessible() const { return pAccMap != 0; }
 
     inline SwAccessibleMap& GetAccessibleMap();
 
@@ -241,9 +239,9 @@ public:
 
     // Remove a frame from the accessible view
     void DisposeAccessible( const SwFrm *pFrm, const SdrObject *pObj,
-                            sal_Bool bRecursive );
+                            bool bRecursive );
     inline void DisposeAccessibleFrm( const SwFrm *pFrm,
-                               sal_Bool bRecursive=sal_False );
+                               bool bRecursive = false );
     inline void DisposeAccessibleObj( const SdrObject *pObj );
 
     // Move a frame's position in the accessible view
@@ -267,7 +265,7 @@ public:
     void InvalidateAccessibleCursorPosition( const SwFrm *pFrm );
 
     // Invalidate editable state for all accessible frames
-    void InvalidateAccessibleEditableState( sal_Bool bAllShells=sal_True,
+    void InvalidateAccessibleEditableState( bool bAllShells = true,
                                                const SwFrm *pFrm=0 );
 
     // Invalidate frame's relation set (for chained frames)
@@ -310,14 +308,14 @@ inline SwAccessibleMap& SwViewImp::GetAccessibleMap()
 }
 
 inline void SwViewImp::DisposeAccessibleFrm( const SwFrm *pFrm,
-                               sal_Bool bRecursive )
+                               bool bRecursive )
 {
     DisposeAccessible( pFrm, 0, bRecursive );
 }
 
 inline void SwViewImp::DisposeAccessibleObj( const SdrObject *pObj )
 {
-    DisposeAccessible( 0, pObj, sal_False );
+    DisposeAccessible( 0, pObj, false );
 }
 
 inline void SwViewImp::MoveAccessibleFrm( const SwFrm *pFrm,

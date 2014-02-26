@@ -1046,7 +1046,7 @@ bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
     // prepare paint
     if ( maPreviewPages.size() > 0 )
     {
-        mrParentViewShell.Imp()->bFirstPageInvalid = sal_False;
+        mrParentViewShell.Imp()->bFirstPageInvalid = false;
         mrParentViewShell.Imp()->pFirstVisPage =
                 const_cast<SwPageFrm*>(maPreviewPages[0]->pPage);
     }
@@ -1195,7 +1195,7 @@ void SwPagePreviewLayout::Repaint( const Rectangle _aInvalidCoreRect ) const
     // prepare paint
     if ( maPreviewPages.size() > 0 )
     {
-        mrParentViewShell.Imp()->bFirstPageInvalid = sal_False;
+        mrParentViewShell.Imp()->bFirstPageInvalid = false;
         mrParentViewShell.Imp()->pFirstVisPage =
                 const_cast<SwPageFrm*>(maPreviewPages[0]->pPage);
     }

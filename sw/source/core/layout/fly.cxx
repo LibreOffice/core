@@ -245,7 +245,7 @@ SwFlyFrm::~SwFlyFrm()
             {
                 // Lowers aren't disposed already, so we have to do a recursive
                 // dispose
-                pVSh->Imp()->DisposeAccessibleFrm( this, sal_True );
+                pVSh->Imp()->DisposeAccessibleFrm( this, true );
             }
         }
     }
@@ -798,7 +798,7 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             {
                 SwRootFrm* pLayout = getRootFrm();
                 if( pLayout && pLayout->IsAnyShellAccessible() )
-                pSh->Imp()->InvalidateAccessibleEditableState( sal_True, this );
+                pSh->Imp()->InvalidateAccessibleEditableState( true, this );
             }
             break;
             }

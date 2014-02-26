@@ -2403,7 +2403,7 @@ void SwSectionFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew
             {
                 SwViewShell *pSh = getRootFrm()->GetCurrShell();
                 if( pSh && pSh->GetLayout()->IsAnyShellAccessible() )
-                    pSh->Imp()->InvalidateAccessibleEditableState( sal_True, this );
+                    pSh->Imp()->InvalidateAccessibleEditableState( true, this );
             }
             break;
 

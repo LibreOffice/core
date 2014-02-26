@@ -670,7 +670,7 @@ void SwPageFrm::RemoveFlyFromPage( SwFlyFrm *pToRemove )
         static_cast< SwRootFrm * >( GetUpper() )->GetCurrShell() )
     {
         static_cast< SwRootFrm * >( GetUpper() )->GetCurrShell()->Imp()
-                                  ->DisposeAccessibleFrm( pToRemove, sal_True );
+                                  ->DisposeAccessibleFrm( pToRemove, true );
     }
 
     // #i28701# - use new method <SetPageFrm(..)>
@@ -706,7 +706,7 @@ void SwPageFrm::MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest )
         static_cast< SwRootFrm * >( GetUpper() )->GetCurrShell() )
     {
         static_cast< SwRootFrm * >( GetUpper() )->GetCurrShell()->Imp()
-                                  ->DisposeAccessibleFrm( pToMove, sal_True );
+                                  ->DisposeAccessibleFrm( pToMove, true );
     }
 
     // The FlyColl might be gone already, because the page's dtor is being executed.

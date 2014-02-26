@@ -1176,7 +1176,7 @@ sal_Bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *p
 
     if(bSmoothScrollAllowed)
     {
-        Imp()->bStopSmooth = sal_False;
+        Imp()->bStopSmooth = false;
 
         const SwRect aOldVis( VisArea() );
 
@@ -1320,9 +1320,9 @@ sal_Bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *p
                         Imp()->aSmoothRect.Top( VisArea().Bottom() + lScroll - aPixSz.Height());
                     }
 
-                    Imp()->bSmoothUpdate = sal_True;
+                    Imp()->bSmoothUpdate = true;
                     GetWin()->Update();
-                    Imp()->bSmoothUpdate = sal_False;
+                    Imp()->bSmoothUpdate = false;
 
                     if(!Imp()->bStopSmooth)
                     {
@@ -1621,7 +1621,7 @@ void SwViewShell::Paint(const Rectangle &rRect)
         {
             SwRect aTmp( rRect );
             if ( !Imp()->aSmoothRect.IsInside( aTmp ) )
-                Imp()->bStopSmooth = sal_True;
+                Imp()->bStopSmooth = true;
             else
             {
                 Imp()->aSmoothRect = aTmp;
@@ -2226,7 +2226,7 @@ void SwViewShell::SetReadonlyOption(sal_Bool bSet)
         else if ( GetWin() )
             GetWin()->Invalidate();
         if( Imp()->IsAccessible() )
-            Imp()->InvalidateAccessibleEditableState( sal_False );
+            Imp()->InvalidateAccessibleEditableState( false );
     }
 }
 

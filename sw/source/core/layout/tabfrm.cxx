@@ -4450,7 +4450,7 @@ SwCellFrm::~SwCellFrm()
         if( pRootFrm && pRootFrm->IsAnyShellAccessible() &&
             pRootFrm->GetCurrShell() )
         {
-            pRootFrm->GetCurrShell()->Imp()->DisposeAccessibleFrm( this, sal_True );
+            pRootFrm->GetCurrShell()->Imp()->DisposeAccessibleFrm( this, true );
         }
 
         pMod->Remove( this );           // remove,
@@ -4966,7 +4966,7 @@ void SwCellFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
     {
         SwViewShell *pSh = getRootFrm()->GetCurrShell();
         if( pSh && pSh->GetLayout()->IsAnyShellAccessible() )
-            pSh->Imp()->InvalidateAccessibleEditableState( sal_True, this );
+            pSh->Imp()->InvalidateAccessibleEditableState( true, this );
     }
 
     if ( bAttrSetChg &&

@@ -98,13 +98,15 @@ SwViewImp::SwViewImp( SwViewShell *pParent ) :
     pIdleAct( 0 ),
     pAccMap( 0 ),
     pSdrObjCached(NULL),
+    bFirstPageInvalid( true ),
+    bResetHdlHiddenPaint( false ),
+    bSmoothUpdate( false ),
+    bStopSmooth( false ),
+    bStopPrt( false ),
     nRestoreActions( 0 ),
     // OD 12.12.2002 #103492#
     mpPgPreviewLayout( 0 )
 {
-    bResetHdlHiddenPaint =
-    bSmoothUpdate = bStopSmooth = bStopPrt = sal_False;
-    bFirstPageInvalid = sal_True;
 }
 
 SwViewImp::~SwViewImp()
@@ -131,16 +133,16 @@ void SwViewImp::DelRegion()
     DELETEZ(pRegion);
 }
 
-sal_Bool SwViewImp::AddPaintRect( const SwRect &rRect )
+bool SwViewImp::AddPaintRect( const SwRect &rRect )
 {
     if ( rRect.IsOver( pSh->VisArea() ) )
     {
         if ( !pRegion )
             pRegion = new SwRegionRects( pSh->VisArea() );
         (*pRegion) -= rRect;
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 void SwViewImp::CheckWaitCrsr()
@@ -149,21 +151,19 @@ void SwViewImp::CheckWaitCrsr()
         pLayAct->CheckWaitCrsr();
 }
 
-sal_Bool SwViewImp::IsCalcLayoutProgress() const
+bool SwViewImp::IsCalcLayoutProgress() const
 {
-    if ( pLayAct )
-        return pLayAct->IsCalcLayout();
-    return sal_False;
+    return pLayAct && pLayAct->IsCalcLayout();
 }
 
-sal_Bool SwViewImp::IsUpdateExpFlds()
+bool SwViewImp::IsUpdateExpFlds()
 {
     if ( pLayAct && pLayAct->IsCalcLayout() )
     {
         pLayAct->SetUpdateExpFlds();
-        return sal_True;
+        return true;
     }
-     return sal_False;
+    return false;
 }
 
 void SwViewImp::SetFirstVisPage()
@@ -199,7 +199,7 @@ void SwViewImp::SetFirstVisPage()
         }
         pFirstVisPage = pPage ? pPage : (SwPageFrm*)pSh->GetLayout()->Lower();
     }
-    bFirstPageInvalid = sal_False;
+    bFirstPageInvalid = false;
 }
 
 void SwViewImp::MakeDrawView()
@@ -288,7 +288,7 @@ void SwViewImp::UpdateAccessible()
 
 void SwViewImp::DisposeAccessible( const SwFrm *pFrm,
                                    const SdrObject *pObj,
-                                   sal_Bool bRecursive )
+                                   bool bRecursive )
 {
     OSL_ENSURE( !pFrm || pFrm->IsAccessibleFrm(), "frame is not accessible" );
     SwViewShell *pVSh = GetShell();
@@ -353,7 +353,7 @@ void SwViewImp::InvalidateAccessibleCursorPosition( const SwFrm *pFrm )
         GetAccessibleMap().InvalidateCursorPosition( pFrm );
 }
 
-void SwViewImp::InvalidateAccessibleEditableState( sal_Bool bAllShells,
+void SwViewImp::InvalidateAccessibleEditableState( bool bAllShells,
                                                       const SwFrm *pFrm )
 {
     if( bAllShells )

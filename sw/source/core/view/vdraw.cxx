@@ -72,7 +72,7 @@ void SwViewImp::LockPaint()
     }
     else
     {
-        bResetHdlHiddenPaint = sal_False;
+        bResetHdlHiddenPaint = false;
     }
 }
 
@@ -154,15 +154,15 @@ void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
 
 #define FUZZY_EDGE 400
 
-sal_Bool SwViewImp::IsDragPossible( const Point &rPoint )
+bool SwViewImp::IsDragPossible( const Point &rPoint )
 {
     if ( !HasDrawView() )
-        return sal_False;
+        return false;
 
     const SdrMarkList &rMrkList = GetDrawView()->GetMarkedObjectList();
 
     if( !rMrkList.GetMarkCount() )
-        return sal_False;
+        return false;
 
     SdrObject *pO = rMrkList.GetMark(rMrkList.GetMarkCount()-1)->GetMarkedSdrObj();
 
