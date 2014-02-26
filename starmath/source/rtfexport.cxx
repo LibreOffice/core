@@ -197,6 +197,7 @@ void SmRtfExport::HandleOperator(const SmOperNode* pNode, int nLevel)
     switch (pNode->GetToken().eType)
     {
     case TINT:
+    case TINTD:
     case TIINT:
     case TIIINT:
     case TLINT:
