@@ -692,7 +692,8 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, OString& rToken,
                 rRefPoolId = RES_POOLCHR_HTML_DEFINSTANCE;
                 rToken = OString(OOO_STRING_SVTOOLS_HTML_definstance);
             }
-            else if (!bChrFmt && (aNm == OOO_STRING_SVTOOLS_HTML_dd || OOO_STRING_SVTOOLS_HTML_dt))
+            else if (!bChrFmt && (aNm == OOO_STRING_SVTOOLS_HTML_dd ||
+                                  aNm == OOO_STRING_SVTOOLS_HTML_dt))
             {
                 sal_uInt16 nDefListLvl = GetDefListLvl(aNm, nPoolId);
                 // Die Vorlagen DD 1/DT 1 werden ausgegeben,
