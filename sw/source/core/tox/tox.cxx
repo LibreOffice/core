@@ -281,6 +281,7 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
     case TOX_OBJECTS      : nPoolId = STR_POOLCOLL_TOX_OBJECTH; break;
     case TOX_TABLES       : nPoolId = STR_POOLCOLL_TOX_TABLESH; break;
     case TOX_AUTHORITIES  : nPoolId = STR_POOLCOLL_TOX_AUTHORITIESH;    break;
+    case TOX_CITATION  : nPoolId = STR_POOLCOLL_TOX_CITATION; break;
     default:
         OSL_ENSURE( !this, "invalid TOXTyp");
         return ;
@@ -393,6 +394,7 @@ sal_uInt16 SwForm::GetFormMaxLevel( TOXTypes eTOXType )
         case TOX_OBJECTS      :
         case TOX_TABLES       : nRet = 2; break;
         case TOX_BIBLIOGRAPHY :
+        case TOX_CITATION:
         case TOX_AUTHORITIES  : nRet = AUTH_TYPE_END + 1;       break;
     }
     return nRet;

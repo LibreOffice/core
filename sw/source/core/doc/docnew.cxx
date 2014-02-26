@@ -1062,6 +1062,8 @@ void SwDoc::InitTOXTypes()
    mpTOXTypes->push_back( pNew );
    pNew = new SwTOXType(TOX_AUTHORITIES,           pShellRes->aTOXAuthoritiesName   );
    mpTOXTypes->push_back( pNew );
+   pNew = new SwTOXType(TOX_CITATION,           pShellRes->aTOXCitationName   );
+   mpTOXTypes->push_back( pNew );
 }
 
 void SwDoc::ReplaceDefaults(const SwDoc& rSource)

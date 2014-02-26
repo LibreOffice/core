@@ -204,6 +204,7 @@ ShellResource::ShellResource()
     aTOXObjectsName(        SW_RES(STR_TOX_OBJ)),
     aTOXTablesName(         SW_RES(STR_TOX_TBL)),
     aTOXAuthoritiesName(    SW_RES(STR_TOX_AUTH)),
+    aTOXCitationName(    SW_RES(STR_TOX_CITATION)),
     aLinkCtrlClick(SW_RESSTR(STR_LINK_CTRL_CLICK)),
     aLinkClick(SW_RESSTR(STR_LINK_CLICK)),
     pAutoFmtNameLst(0),

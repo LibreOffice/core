@@ -121,6 +121,12 @@ Resource RID_SW_SHELLRES
     {
         Text [ en-US ] = "Bibliography";
     };
+
+    String STR_TOX_CITATION
+    {
+        Text [ en-US ] = "Citation";
+    };
+
     String STR_TOX_TBL
     {
         Text [ en-US ] = "Index of Tables";

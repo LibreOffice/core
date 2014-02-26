@@ -259,7 +259,7 @@ enum FieldId
     \f Builds a table of contents using TC entries instead of outline levels
     \h Hyperlinks the entries and page numbers within the table of contents
     \l Defines the TC entries field level used to build a table of contents
-    \n Builds a table of contents or a range of entries, sucah as “1-9”, in a table of contents without page numbers
+    \n Builds a table of contents or a range of entries, sucah as ï¿½1-9ï¿½, in a table of contents without page numbers
     \o  Builds a table of contents by using outline levels instead of TC entries
     \p Defines the separator between the table entry and its page number
     \s  Builds a table of contents by using a sequence type
@@ -271,7 +271,7 @@ enum FieldId
      */
     ,FIELD_TOC
     /*
-     TOC entry: “text”
+     TOC entry: ï¿½textï¿½
         \f TC entry in doc with multiple tables
         \l Outline Level
         \n Suppress page numbers
@@ -297,6 +297,9 @@ enum FieldId
      * Bibliography
      */
     ,FILED_BIBLIOGRAPHY
+    /* Citation
+     */
+    ,FIELD_CITATION
 };
 
 }}

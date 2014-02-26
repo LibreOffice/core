@@ -116,6 +116,7 @@
 #include <flddropdown.hxx>
 #include <chpfld.hxx>
 #include <fmthdft.hxx>
+#include <authfld.hxx>
 
 #include <filter/msfilter/sprmids.hxx>
 
@@ -1769,7 +1770,7 @@ static void InsertSpecialChar( WW8Export& rWrt, sal_uInt8 c,
 
 static OUString lcl_GetExpandedField(const SwField &rFld)
 {
-    OUString sRet(rFld.ExpandField(true));
+    OUString sRet(rFld.ExpandField(false));
 
     //replace LF 0x0A with VT 0x0B
     return sRet.replace(0x0A, 0x0B);
@@ -2851,7 +2852,6 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
                     eFld = ww::eUSERADDRESS;
                     break;
             }
-
             if (eFld != ww::eNONE)
             {
                 GetExport().OutputField(pFld, eFld, FieldString(eFld));
@@ -2860,6 +2860,14 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
                 bWriteExpand = true;
         }
         break;
+    case RES_AUTHORITY:
+    {
+        const SwAuthorityField& rRFld = *(SwAuthorityField*)pFld;
+        const OUString sStr = " CITATION "
+                + lcl_GetExpandedField(*pFld);
+        GetExport().OutputField( pFld, ww::eCITATION, sStr );
+    }
+    break;
     case RES_POSTITFLD:
         //Sadly only possible for word in main document text
         if (GetExport().nTxtTyp == TXT_MAINTEXT)

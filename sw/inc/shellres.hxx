@@ -63,6 +63,7 @@ struct SW_DLLPUBLIC ShellResource : public Resource
     OUString        aTOXObjectsName;
     OUString        aTOXTablesName;
     OUString        aTOXAuthoritiesName;
+    OUString        aTOXCitationName;
 
     OUString        aLinkCtrlClick;
     OUString        aLinkClick;

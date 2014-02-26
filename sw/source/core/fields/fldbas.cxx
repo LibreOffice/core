@@ -161,6 +161,7 @@ SwField::SwField(
     , nLang( nLng )
     , bIsAutomaticLanguage( sal_True )
     , nFormat( nFmt )
+    , m_bCitation( sal_False )
     , pType( pTyp )
 {
     OSL_ENSURE( pTyp, "SwField: no SwFieldType" );

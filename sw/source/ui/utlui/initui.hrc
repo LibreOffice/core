@@ -52,6 +52,7 @@
 #define STR_LINK_CLICK              29
 #define STR_GETREFFLD_REFITEMNOTFOUND   30
 #define STR_DURATION_FORMAT         31
+#define STR_TOX_CITATION            32
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

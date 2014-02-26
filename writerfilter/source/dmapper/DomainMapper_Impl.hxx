@@ -313,6 +313,7 @@ private:
 
     FieldStack                                                                      m_aFieldStack;
     bool                                                                            m_bSetUserFieldContent;
+    bool                                                                            m_bSetCitation;
     bool                                                                            m_bIsFirstSection;
     bool                                                                            m_bIsColumnBreakDeferred;
     bool                                                                            m_bIsPageBreakDeferred;
