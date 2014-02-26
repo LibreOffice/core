@@ -290,6 +290,9 @@ void TextEffectsHandler::convertElementIdToPropertyId(sal_Int32 aElementId)
             maElementName = "textOutline";
             break;
         case NS_ooxml::LN_textFill_textFill:
+            maPropertyId = PROP_CHAR_TEXTFILL_TEXT_EFFECT;
+            maElementName = "textFill";
+            break;
         case NS_ooxml::LN_scene3d_scene3d:
         case NS_ooxml::LN_props3d_props3d:
         case NS_ooxml::LN_ligatures_ligatures:
