@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a961159_2c365304",
+        "filename": "lingucomponent/source/hyphenator/hyphen/hyphenimp.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-02-26T14:54:15Z",
+      "side": 1,
+      "message": "Again, excessive empty lines are just as much \"visual noise\" as empty comments.",
+      "revId": "aeb6f06c74c81b34f620f95d3ca5c1b36f80a266",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
