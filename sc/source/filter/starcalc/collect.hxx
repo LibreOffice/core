@@ -48,7 +48,6 @@ public:
     bool                    Insert(ScDataObject* pScDataObject);
 
     ScDataObject*           At(sal_uInt16 nIndex) const;
-    sal_uInt16              IndexOf(ScDataObject* pScDataObject) const;
     sal_uInt16              GetCount() const;
 
     ScDataObject*  operator[]( const sal_uInt16 nIndex) const { return At(nIndex); }

@@ -124,19 +124,6 @@ ScDataObject* ScCollection::At(sal_uInt16 nIndex) const
 }
 
 
-
-sal_uInt16 ScCollection::IndexOf(ScDataObject* pScDataObject) const
-{
-    sal_uInt16 nIndex = 0xffff;
-    for (sal_uInt16 i = 0; ((i < nCount) && (nIndex == 0xffff)); i++)
-    {
-        if (pItems[i] == pScDataObject) nIndex = i;
-    }
-    return nIndex;
-}
-
-
-
 ScCollection& ScCollection::operator=( const ScCollection& r )
 {
     // Check for self-assignment

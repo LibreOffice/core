@@ -66,7 +66,6 @@ ScCellValue::ScCellValue(ScFormulaCell const&)
 ScCellValue::hasNumeric() const
 ScCellValue::hasString() const
 ScCellValue::set(ScFormulaCell const&)
-ScCollection::IndexOf(ScDataObject*) const
 ScDocument::CreateFormatTable() const
 ScExtIButton::GetSelected() const
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
