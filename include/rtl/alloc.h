@@ -96,6 +96,30 @@ SAL_DLLPUBLIC void SAL_CALL rtl_freeZeroMemory (
 ) SAL_THROW_EXTERN_C();
 
 
+/** Allocate memory.
+
+    A call to this function will return NULL upon the requested
+    memory size being either zero or larger than currently allocatable.
+
+    @param Alignment alignment in bytes.
+    @param  Bytes [in] memory size.
+    @return pointer to allocated memory.
+ */
+SAL_DLLPUBLIC void* SAL_CALL rtl_allocateAlinedMemory (
+    sal_Size Alignment,
+    sal_Size Bytes
+) SAL_THROW_EXTERN_C();
+
+
+/** Free memory allocated with rtl_allocateAlinedMemory.
+    @param  Ptr   [in] pointer to previously allocated memory.
+    @return none. Memory is released. Ptr is invalid.
+ */
+SAL_DLLPUBLIC void SAL_CALL rtl_freeAlignedMemory (
+    void *   Ptr
+) SAL_THROW_EXTERN_C();
+
+
 /** Opaque rtl_arena_type.
  */
 typedef struct rtl_arena_st rtl_arena_type;

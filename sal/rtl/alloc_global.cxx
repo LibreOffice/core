@@ -27,6 +27,7 @@
 #include <stdio.h>
 
 #include "internal/rtllifecycle.h"
+#include <internal/oslmemory.h>
 
 AllocMode alloc_mode = AMode_UNSET;
 
@@ -376,6 +377,16 @@ void SAL_CALL rtl_freeZeroMemory (void * p, sal_Size n) SAL_THROW_EXTERN_C()
         memset (p, 0, n);
         rtl_freeMemory (p);
     }
+}
+
+void* SAL_CALL rtl_allocateAlinedMemory (sal_Size Alignment, sal_Size Bytes) SAL_THROW_EXTERN_C()
+{
+    return osl_aligned_alloc(Alignment, Bytes);
+}
+
+void SAL_CALL rtl_freeAlignedMemory (void* Ptr) SAL_THROW_EXTERN_C()
+{
+    osl_aligned_free(Ptr);
 }
 
 /* ================================================================= */

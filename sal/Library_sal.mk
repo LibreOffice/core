@@ -168,6 +168,7 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
         $(if $(filter DESKTOP,$(BUILD_TYPE)), sal/osl/unx/salinit) \
 ))
 $(eval $(call gb_Library_add_cobjects,sal,\
+	sal/osl/unx/memory \
 	sal/osl/unx/mutex \
 	sal/osl/unx/nlsupport \
 	sal/osl/unx/pipe \
@@ -253,6 +254,7 @@ $(eval $(call gb_Library_add_cobjects,sal,\
 	sal/osl/w32/dllentry \
 	sal/osl/w32/file_error \
 	sal/osl/w32/interlck \
+	sal/osl/w32/memory \
 	sal/osl/w32/mutex \
 	sal/osl/w32/nlsupport \
 	sal/osl/w32/pipe \
