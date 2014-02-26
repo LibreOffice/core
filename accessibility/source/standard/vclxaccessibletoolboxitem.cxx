@@ -88,12 +88,14 @@ VCLXAccessibleToolBoxItem::VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_In
                  (( nBits & TIB_DROPDOWNONLY ) == TIB_DROPDOWNONLY)
                )
                 m_nRole = AccessibleRole::BUTTON_DROPDOWN;
-            else if (
-                ( ( nBits & TIB_CHECKABLE ) == TIB_CHECKABLE ) ||
+            else if (( nBits & TIB_CHECKABLE ) == TIB_CHECKABLE )
+                m_nRole = AccessibleRole::CHECK_BUTTON;
+            else if
+                (
                 ( ( nBits & TIB_RADIOCHECK ) == TIB_RADIOCHECK ) ||
                 ( ( nBits & TIB_AUTOCHECK ) == TIB_AUTOCHECK )
-               )
-                m_nRole = AccessibleRole::TOGGLE_BUTTON;
+                )
+                m_nRole = AccessibleRole::RADIO_BUTTON;
             else if ( m_pToolBox->GetItemWindow( m_nItemId ) )
                 m_nRole = AccessibleRole::PANEL;
             break;
