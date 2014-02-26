@@ -27,6 +27,7 @@ gb_PackageInfo_InstallModules := \
 define gb_PackageInfo_emit_binaries_command
 @touch $(foreach suf,executables libraries files,$(gb_PackageInfo_get_target)/$(1).$(suf))
 @$(foreach executable,$(gb_Executable_MODULE_$(1)),echo "$(patsubst $(INSTDIR)/%,%,$(call gb_Executable_get_target,$(executable)))" >> $(gb_PackageInfo_get_target)/$(1).executables &&) true
+@$(foreach library,$(gb_SdkLinkLibrary_MODULE_$(1)),echo "sdk/lib/$(call gb_Library_get_linktarget,$(library))" >> $(gb_PackageInfo_get_target)/$(1).sdklinklibraries &&) true
 @$(foreach library,$(gb_Library_MODULE_$(1)),echo "$(patsubst $(INSTDIR)/%,%,$(call gb_Library_get_target,$(library)))" >> $(gb_PackageInfo_get_target)/$(1).libraries &&) true
 
 endef
@@ -88,6 +89,10 @@ install-package-%: $(foreach filelist,files executables libraries,$(gb_PackageIn
 	for executable in `cat $(gb_PackageInfo_get_target)/$*.executables`; \
 	do \
 		install -D $(INSTDIR)/$${executable} $(INSTALLDIR)/$${executable} ;\
+	done
+	for library in `cat $(gb_PackageInfo_get_target)/$*.sdklinklibraries`; \
+	do \
+		install -D -m644 $(INSTDIR)/$${library} $(INSTALLDIR)/$${library}; \
 	done
 	for library in `cat $(gb_PackageInfo_get_target)/$*.libraries`; \
 	do \
