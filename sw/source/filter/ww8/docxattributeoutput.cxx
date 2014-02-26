@@ -1174,6 +1174,8 @@ void DocxAttributeOutput::InitCollectedRunProperties()
         FSNS( XML_w14, XML_glow ),
         FSNS( XML_w14, XML_shadow ),
         FSNS( XML_w14, XML_reflection ),
+        FSNS( XML_w14, XML_textOutline ),
+        FSNS( XML_w14, XML_textFill ),
     };
 
     // postpone the output so that we can later [in EndParagraphProperties()]
@@ -1202,6 +1204,7 @@ const NameToId constNameToIdMapping[] =
     { OUString("shadow"),       FSNS( XML_w14, XML_shadow ) },
     { OUString("reflection"),   FSNS( XML_w14, XML_reflection ) },
     { OUString("textOutline"),  FSNS( XML_w14, XML_textOutline ) },
+    { OUString("textFill"),     FSNS( XML_w14, XML_textFill ) },
 
     { OUString("val"),          FSNS( XML_w14, XML_val ) },
     { OUString("rad"),          FSNS( XML_w14, XML_rad ) },
@@ -6690,7 +6693,8 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
         else if (i->first == "CharGlowTextEffect" ||
                  i->first == "CharShadowTextEffect" ||
                  i->first == "CharReflectionTextEffect" ||
-                 i->first == "CharTextOutlineTextEffect")
+                 i->first == "CharTextOutlineTextEffect" ||
+                 i->first == "CharTextFillTextEffect")
         {
             beans::PropertyValue aPropertyValue;
             i->second >>= aPropertyValue;
