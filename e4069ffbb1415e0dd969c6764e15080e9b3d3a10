@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a961159_ecb52b32",
+        "filename": "configmgr/source/winreg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-02-26T07:41:45Z",
+      "side": 1,
+      "message": "this is one long comment, split into multiple paragraphs; I see no advantage into splitting it into multiple \"logical\" comments this way",
+      "revId": "e4069ffbb1415e0dd969c6764e15080e9b3d3a10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
