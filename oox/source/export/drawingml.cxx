@@ -869,10 +869,6 @@ void DrawingML::WriteBlipFill( Reference< XPropertySet > rXPropSet, OUString sBi
     if ( !sBitmapURL.isEmpty() ) {
         DBG(fprintf (stderr, "URL: %s\n", OUStringToOString( sBitmapURL, RTL_TEXTENCODING_UTF8 ).getStr() ));
 
-
-        if( sBitmapURL.isEmpty() )
-            return;
-
         mpFS->startElementNS( nXmlNamespace , XML_blipFill, FSEND );
 
         WriteBlip( rXPropSet, sBitmapURL, bRelPathToMedia );
