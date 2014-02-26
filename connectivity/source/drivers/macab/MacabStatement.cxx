@@ -362,7 +362,7 @@ void MacabCommonStatement::sortRecords(MacabResultSet *pResult) const throw(SQLE
     }
 }
 
-Any SAL_CALL MacabCommonStatement::queryInterface( const Type & rType ) throw(RuntimeException)
+Any SAL_CALL MacabCommonStatement::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
 {
     Any aRet = MacabCommonStatement_BASE::queryInterface(rType);
     if (!aRet.hasValue())
@@ -370,7 +370,7 @@ Any SAL_CALL MacabCommonStatement::queryInterface( const Type & rType ) throw(Ru
     return aRet;
 }
 
-Sequence< Type > SAL_CALL MacabCommonStatement::getTypes(  ) throw(RuntimeException)
+Sequence< Type > SAL_CALL MacabCommonStatement::getTypes(  ) throw(RuntimeException, std::exception)
 {
     ::cppu::OTypeCollection aTypes( ::getCppuType( (const Reference< XMultiPropertySet > *)0 ),
                                     ::getCppuType( (const Reference< XFastPropertySet > *)0 ),
