@@ -175,7 +175,6 @@ void VMLExport::AddShape( sal_uInt32 nShapeType, sal_uInt32 nShapeFlags, sal_uIn
 {
     m_nShapeType = nShapeType;
     m_nShapeFlags = nShapeFlags;
-    m_pShapeAttrList->add( XML_name, ShapeIdString( nShapeId ) );
     m_pShapeAttrList->add( XML_id, ShapeIdString( nShapeId ) );
 }
 
