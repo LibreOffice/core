@@ -3891,9 +3891,6 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_WrapType_wrapNone, RTFValue::Pointer_t(new RTFValue()));
             }
             break;
-        case RTF_TS:
-            m_aStates.top().bHasTableStyle = true;
-            break;
         case RTF_CLPADB:
         case RTF_CLPADL:
         case RTF_CLPADR:
@@ -5143,7 +5140,6 @@ RTFParserState::RTFParserState(RTFDocumentImpl *pDocumentImpl)
     nMinute(0),
     nCurrentStyleIndex(-1),
     pCurrentBuffer(0),
-    bHasTableStyle(false),
     bInListpicture(false),
     bInBackground(false),
     bHadShapeText(false),

@@ -272,9 +272,6 @@ namespace writerfilter {
                 /// Points to the active buffer, if there is one.
                 RTFBuffer_t* pCurrentBuffer;
 
-                /// If a table style was requested to be used.
-                bool bHasTableStyle;
-
                 /// If we're inside a \listpicture group.
                 bool bInListpicture;
 
