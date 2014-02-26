@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a961159_ec2b6b92",
+        "filename": "external/apache-commons/patches/httpclient_no_javadoc.patch",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-02-26T15:00:41Z",
+      "side": 1,
+      "message": "This is _wrong_! the space at the beginning of the line here (and in many other places in the other patches) is mandatory!",
+      "revId": "6c67e5beab646b4b8e02f3b7f4d4d76bc419ae55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a961159_0c18b783",
+        "filename": "external/apache-commons/patches/httpclient_no_javadoc.patch",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-02-26T15:00:41Z",
+      "side": 1,
+      "message": "Btw, I do not see much reason in \"fixing\" patches anyway.",
+      "revId": "6c67e5beab646b4b8e02f3b7f4d4d76bc419ae55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
