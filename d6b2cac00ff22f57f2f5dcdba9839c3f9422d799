@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a961159_6caa1bd6",
+        "filename": "ure/source/THIRDPARTYLICENSEREADME.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-02-26T07:36:38Z",
+      "side": 1,
+      "message": "...which means we do /not/ want to modify it",
+      "revId": "d6b2cac00ff22f57f2f5dcdba9839c3f9422d799",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
