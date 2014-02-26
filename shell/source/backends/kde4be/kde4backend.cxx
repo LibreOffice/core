@@ -172,7 +172,7 @@ css::uno::Any Service::getPropertyValue(OUString const & PropertyName)
      || PropertyName == "SourceViewFontName" || PropertyName == "WorkPathVariable" || PropertyName == "ooInetFTPProxyName"
      || PropertyName == "ooInetFTPProxyPort" || PropertyName == "ooInetHTTPProxyName" || PropertyName == "ooInetHTTPProxyPort"
      || PropertyName == "ooInetHTTPSProxyName" || PropertyName == "ooInetHTTPSProxyPort" || PropertyName == "ooInetNoProxy"
-     || PropertyName == "ooInetProxyType" )
+     || PropertyName == "ooInetProxyType" || PropertyName == "TemplatePathVariable" )
     {
         return css::uno::makeAny(
             enabled_
