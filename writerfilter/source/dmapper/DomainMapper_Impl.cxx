@@ -175,7 +175,6 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_aAnnotationPositions(),
         m_xInsertTextRange(xInsertTextRange),
         m_bIsNewDoc(bIsNewDoc),
-        m_bBibliographyMarkerAdded(false),
         m_bInTableStyleRunProps(false),
         m_pSdtHelper(0),
         m_nTableDepth(0),

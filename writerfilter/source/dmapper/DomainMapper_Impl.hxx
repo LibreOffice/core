@@ -403,7 +403,6 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > m_xInsertTextRange;
 private:
     bool m_bIsNewDoc;
-    bool m_bBibliographyMarkerAdded;
 public:
     DomainMapper_Impl(
             DomainMapper& rDMapper,
