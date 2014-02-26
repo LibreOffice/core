@@ -160,6 +160,7 @@ public:
 
     void testSharedFormulaHorizontalXLS();
     void testExternalRefCacheXLSX();
+    void testExternalRefCacheODS();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBasicCellContentODS);
@@ -236,6 +237,7 @@ public:
     CPPUNIT_TEST(testColumnStyleXLSX);
     CPPUNIT_TEST(testSharedFormulaHorizontalXLS);
     CPPUNIT_TEST(testExternalRefCacheXLSX);
+    CPPUNIT_TEST(testExternalRefCacheODS);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2484,6 +2486,21 @@ void ScFiltersTest::testExternalRefCacheXLSX()
     CPPUNIT_ASSERT_EQUAL(OUString("Andy"), pDoc->GetString(ScAddress(0,1,0)));
     CPPUNIT_ASSERT_EQUAL(OUString("Bruce"), pDoc->GetString(ScAddress(0,2,0)));
     CPPUNIT_ASSERT_EQUAL(OUString("Charlie"), pDoc->GetString(ScAddress(0,3,0)));
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testExternalRefCacheODS()
+{
+    ScDocShellRef xDocSh = loadDoc("external-ref-cache.", ODS);
+
+    CPPUNIT_ASSERT(xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    // Cells B2:B4 have VLOOKUP with external references which should all show "text".
+    CPPUNIT_ASSERT_EQUAL(OUString("text"), pDoc->GetString(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("text"), pDoc->GetString(ScAddress(1,2,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("text"), pDoc->GetString(ScAddress(1,3,0)));
 
     xDocSh->DoClose();
 }
