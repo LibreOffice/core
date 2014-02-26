@@ -37,7 +37,7 @@ public:
     TYPEINFO();
     ~SvxFmtSplitItem();
 
-    inline SvxFmtSplitItem( const sal_Bool bSplit /*= sal_True*/,
+    inline SvxFmtSplitItem( const bool bSplit /*= true*/,
                             const sal_uInt16 nWh  );
     inline SvxFmtSplitItem& operator=( const SvxFmtSplitItem& rSplit );
 
@@ -52,7 +52,7 @@ public:
                                     OUString &rText, const IntlWrapper * = 0 ) const;
 };
 
-inline SvxFmtSplitItem::SvxFmtSplitItem( const sal_Bool bSplit, const sal_uInt16 nWh ) :
+inline SvxFmtSplitItem::SvxFmtSplitItem( const bool bSplit, const sal_uInt16 nWh ) :
     SfxBoolItem( nWh, bSplit )
 {}
 

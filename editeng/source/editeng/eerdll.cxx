@@ -107,7 +107,7 @@ SfxPoolItem** GlobalEditData::GetDefItems()
         ppDefItems[1]  = new SvXMLAttrContainerItem( EE_PARA_XMLATTRIBS );
         ppDefItems[2]  = new SfxBoolItem( EE_PARA_HANGINGPUNCTUATION, false );
         ppDefItems[3]  = new SfxBoolItem( EE_PARA_FORBIDDENRULES, true );
-        ppDefItems[4]  = new SvxScriptSpaceItem( sal_True, EE_PARA_ASIANCJKSPACING );
+        ppDefItems[4]  = new SvxScriptSpaceItem( true, EE_PARA_ASIANCJKSPACING );
         ppDefItems[5]  = new SvxNumBulletItem( aDefaultNumRule, EE_PARA_NUMBULLET );
         ppDefItems[6]  = new SfxBoolItem( EE_PARA_HYPHENATE, false );
         ppDefItems[7]  = new SfxBoolItem( EE_PARA_BULLETSTATE, true );
@@ -132,7 +132,7 @@ SfxPoolItem** GlobalEditData::GetDefItems()
         ppDefItems[24] = new SvxCrossedOutItem( STRIKEOUT_NONE, EE_CHAR_STRIKEOUT );
         ppDefItems[25] = new SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC );
         ppDefItems[26] = new SvxContourItem( false, EE_CHAR_OUTLINE );
-        ppDefItems[27] = new SvxShadowedItem( sal_False, EE_CHAR_SHADOW );
+        ppDefItems[27] = new SvxShadowedItem( false, EE_CHAR_SHADOW );
         ppDefItems[28] = new SvxEscapementItem( 0, 100, EE_CHAR_ESCAPEMENT );
         ppDefItems[29] = new SvxAutoKernItem( false, EE_CHAR_PAIRKERNING );
         ppDefItems[30] = new SvxKerningItem( 0, EE_CHAR_KERNING );

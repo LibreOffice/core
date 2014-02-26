@@ -277,7 +277,7 @@ SwBoxAutoFmt::SwBoxAutoFmt()
     aOverline( UNDERLINE_NONE, RES_CHRATR_OVERLINE ),
     aCrossedOut( STRIKEOUT_NONE, RES_CHRATR_CROSSEDOUT ),
     aContour( false, RES_CHRATR_CONTOUR ),
-    aShadowed( sal_False, RES_CHRATR_SHADOWED ),
+    aShadowed( false, RES_CHRATR_SHADOWED ),
     aColor( RES_CHRATR_COLOR ),
     aBox( RES_BOX ),
     aTLBR( 0 ),

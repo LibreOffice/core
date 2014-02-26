@@ -121,7 +121,7 @@ TYPEINIT1_FACTORY(SvxTextLineItem, SfxEnumItem, new SvxTextLineItem(UNDERLINE_NO
 TYPEINIT1_FACTORY(SvxUnderlineItem, SfxEnumItem, new SvxUnderlineItem(UNDERLINE_NONE, 0));
 TYPEINIT1_FACTORY(SvxOverlineItem, SfxEnumItem, new SvxOverlineItem(UNDERLINE_NONE, 0));
 TYPEINIT1_FACTORY(SvxCrossedOutItem, SfxEnumItem, new SvxCrossedOutItem(STRIKEOUT_NONE, 0));
-TYPEINIT1_FACTORY(SvxShadowedItem, SfxBoolItem, new SvxShadowedItem(sal_False, 0));
+TYPEINIT1_FACTORY(SvxShadowedItem, SfxBoolItem, new SvxShadowedItem(false, 0));
 TYPEINIT1_FACTORY(SvxAutoKernItem, SfxBoolItem, new SvxAutoKernItem(false, 0));
 TYPEINIT1_FACTORY(SvxWordLineModeItem, SfxBoolItem, new SvxWordLineModeItem(sal_False, 0));
 TYPEINIT1_FACTORY(SvxContourItem, SfxBoolItem, new SvxContourItem(false, 0));
@@ -1626,7 +1626,7 @@ bool SvxCrossedOutItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 }
 // class SvxShadowedItem -------------------------------------------------
 
-SvxShadowedItem::SvxShadowedItem( const sal_Bool bShadowed, const sal_uInt16 nId ) :
+SvxShadowedItem::SvxShadowedItem( const bool bShadowed, const sal_uInt16 nId ) :
     SfxBoolItem( nId, bShadowed )
 {
 }

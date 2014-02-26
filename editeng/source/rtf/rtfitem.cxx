@@ -307,7 +307,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
             case RTF_KEEP:
                 if( PARDID->nSplit )
                 {
-                    pSet->Put( SvxFmtSplitItem( sal_False, PARDID->nSplit ));
+                    pSet->Put( SvxFmtSplitItem( false, PARDID->nSplit ));
                 }
                 break;
 
@@ -518,7 +518,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
             case RTF_ASPALPHA:
                 if( PARDID->nScriptSpace )
                 {
-                    pSet->Put( SvxScriptSpaceItem( sal_True,
+                    pSet->Put( SvxScriptSpaceItem( true,
                                                 PARDID->nScriptSpace ));
                 }
                 break;

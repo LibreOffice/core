@@ -513,7 +513,7 @@ namespace pcr
 
         *pCounter++ = new SvxCaseMapItem(SVX_CASEMAP_NOT_MAPPED, CFID_CASEMAP);
         *pCounter++ = new SvxContourItem(false, CFID_CONTOUR);
-        *pCounter++ = new SvxShadowedItem(sal_False, CFID_SHADOWED);
+        *pCounter++ = new SvxShadowedItem(false, CFID_SHADOWED);
 
         *pCounter++ = new SvxFontListItem (new FontList(Application::GetDefaultDevice()), CFID_FONTLIST);
 

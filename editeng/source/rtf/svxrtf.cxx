@@ -1133,7 +1133,7 @@ const SfxItemSet& SvxRTFParser::GetRTFDefaults()
         sal_uInt16 nId;
         if( 0 != ( nId = ((RTFPardAttrMapIds*)&aPardMap[0])->nScriptSpace ))
         {
-            SvxScriptSpaceItem aItem( sal_False, nId );
+            SvxScriptSpaceItem aItem( false, nId );
             if( bNewDoc )
                 pAttrPool->SetPoolDefaultItem( aItem );
             else

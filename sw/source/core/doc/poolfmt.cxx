@@ -374,7 +374,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
                 }
                 if (nAppLanguage == LANGUAGE_KOREAN)
                 {
-                    SvxScriptSpaceItem aScriptSpace(sal_False, RES_PARATR_SCRIPTSPACE);
+                    SvxScriptSpaceItem aScriptSpace(false, RES_PARATR_SCRIPTSPACE);
                     aSet.Put(aScriptSpace);
                 }
             }
