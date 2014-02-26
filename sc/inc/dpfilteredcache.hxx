@@ -69,7 +69,6 @@ public:
 
         virtual bool match(const ScDPItemData& rCellData) const;
         virtual std::vector<ScDPItemData> getMatchValues() const;
-        const ScDPItemData& getMatchValue() const;
 
     private:
         explicit SingleFilter();

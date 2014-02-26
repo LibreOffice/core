@@ -66,11 +66,6 @@ std::vector<ScDPItemData> ScDPFilteredCache::SingleFilter::getMatchValues() cons
     return aValues;
 }
 
-const ScDPItemData& ScDPFilteredCache::SingleFilter::getMatchValue() const
-{
-    return maItem;
-}
-
 ScDPFilteredCache::GroupFilter::GroupFilter()
 {
 }

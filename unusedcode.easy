@@ -73,7 +73,6 @@ ScColumn::MoveListeners(SvtBroadcaster&, int)
 ScColumn::SetRawString(sc::ColumnBlockPosition&, int, rtl::OUString const&, bool)
 ScComplexRefData::IsDeleted() const
 ScDBQueryDataIterator::DataAccessInternal::setPos(unsigned long)
-ScDPFilteredCache::SingleFilter::getMatchValue() const
 ScDocument::CreateFormatTable() const
 ScExtIButton::GetSelected() const
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
