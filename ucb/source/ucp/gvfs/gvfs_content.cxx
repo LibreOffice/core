@@ -163,7 +163,7 @@ void SAL_CALL Content::release()
     ContentImplHelper::release();
 }
 uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
-    throw ( uno::RuntimeException )
+    throw ( uno::RuntimeException, std::exception )
 {
     // Note: isFolder may require network activities! So call it only
     //       if it is really necessary!!!
@@ -183,7 +183,7 @@ uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
 XTYPEPROVIDER_COMMON_IMPL( Content );
 
 uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, std::exception )
 {
     static cppu::OTypeCollection *pFolderCollection = NULL;
     static cppu::OTypeCollection *pFileCollection = NULL;
