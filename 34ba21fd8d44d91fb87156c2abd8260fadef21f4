@@ -22,6 +22,30 @@
       "revId": "34ba21fd8d44d91fb87156c2abd8260fadef21f4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a961159_8c3e6728",
+        "filename": "sw/source/filter/ww8/docxsdrexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000530
+      },
+      "writtenOn": "2014-02-26T12:38:53Z",
+      "side": 1,
+      "message": "Yes sure.thanks for information,I will take care in future.",
+      "parentUuid": "3a961159_0c2b57ec",
+      "range": {
+        "startLine": 215,
+        "startChar": 4,
+        "endLine": 215,
+        "endChar": 7
+      },
+      "revId": "34ba21fd8d44d91fb87156c2abd8260fadef21f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
