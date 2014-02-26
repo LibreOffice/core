@@ -59,7 +59,7 @@ SvxFont::SvxFont( const SvxFont &rFont )
 }
 
 void SvxFont::DrawArrow( OutputDevice &rOut, const Rectangle& rRect,
-    const Size& rSize, const Color& rCol, sal_Bool bLeft )
+    const Size& rSize, const Color& rCol, bool bLeft )
 {
     long nLeft = ( rRect.Left() + rRect.Right() - rSize.Width() )/ 2;
     long nRight = nLeft + rSize.Width();

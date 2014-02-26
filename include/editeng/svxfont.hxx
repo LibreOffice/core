@@ -65,10 +65,10 @@ public:
     inline void    SetCaseMap( const SvxCaseMap eNew ) { eCaseMap = eNew; }
 
     // Is-Methods:
-    inline sal_Bool IsCaseMap() const { return SVX_CASEMAP_NOT_MAPPED != eCaseMap; }
-    inline sal_Bool IsCapital() const { return SVX_CASEMAP_KAPITAELCHEN == eCaseMap; }
-    inline sal_Bool IsKern() const { return 0 != nKern; }
-    inline sal_Bool IsEsc() const { return 0 != nEsc; }
+    inline bool IsCaseMap() const { return SVX_CASEMAP_NOT_MAPPED != eCaseMap; }
+    inline bool IsCapital() const { return SVX_CASEMAP_KAPITAELCHEN == eCaseMap; }
+    inline bool IsKern() const { return 0 != nKern; }
+    inline bool IsEsc() const { return 0 != nEsc; }
 
     // Consider Upper case, Lower case letters etc.
     OUString CalcCaseMap(const OUString &rTxt) const;
@@ -103,7 +103,7 @@ public:
                    const sal_Int32 nIdx = 0, const sal_Int32 nLen = SAL_MAX_INT32 ) const;
 
     static void DrawArrow( OutputDevice &rOut, const Rectangle& rRect,
-        const Size& rSize, const Color& rCol, sal_Bool bLeft );
+        const Size& rSize, const Color& rCol, bool bLeft );
     SvxFont&    operator=( const SvxFont& rFont );
     SvxFont&    operator=( const Font& rFont );
 };
