@@ -131,7 +131,7 @@ SvxHpLinkDlg::SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings)
     GetOKButton().SetText ( CUI_RESSTR(RID_SVXSTR_HYPDLG_APPLYBUT) );
     GetCancelButton().SetText ( CUI_RESSTR(RID_SVXSTR_HYPDLG_CLOSEBUT) );
 
-    GetOKButton().SetClickHdl    ( LINK ( this, SvxHpLinkDlg, ClickOkHdl_Impl ) );
+    GetOKButton().SetClickHdl    ( LINK ( this, SvxHpLinkDlg, ClickApplyHdl_Impl ) );
     GetCancelButton().SetClickHdl( LINK ( this, SvxHpLinkDlg, ClickCloseHdl_Impl ) );
 }
 
@@ -213,11 +213,11 @@ void SvxHpLinkDlg::Move()
 
 /*************************************************************************
 |*
-|* Click on Ok-button
+|* Click on Apply-button
 |*
 |************************************************************************/
 
-IMPL_LINK_NOARG(SvxHpLinkDlg, ClickOkHdl_Impl)
+IMPL_LINK_NOARG(SvxHpLinkDlg, ClickApplyHdl_Impl)
 {
     SfxItemSet aItemSet( SFX_APP()->GetPool(), SID_HYPERLINK_GETLINK,
                          SID_HYPERLINK_SETLINK );
@@ -231,15 +231,13 @@ IMPL_LINK_NOARG(SvxHpLinkDlg, ClickOkHdl_Impl)
 
         SvxHyperlinkItem *aItem = (SvxHyperlinkItem *)
                                   aItemSet.GetItem (SID_HYPERLINK_SETLINK);
-
-        if ( !aItem->GetURL().isEmpty() )
+        OUString aStrEmpty;
+        if ( aItem->GetURL() != aStrEmpty )
             GetDispatcher()->Execute( SID_HYPERLINK_SETLINK, SFX_CALLMODE_ASYNCHRON |
                                       SFX_CALLMODE_RECORD, aItem, 0L);
 
         ( (SvxHyperlinkTabPageBase*)GetTabPage ( GetCurPageId() ) )->DoApply();
     }
-
-    Close();
 
     return( 0L );
 }
