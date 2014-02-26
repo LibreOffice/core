@@ -46,7 +46,7 @@
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <comphelper/servicehelper.hxx>
-
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 
@@ -1025,7 +1025,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
             // to paragraph boundaries
             SwPosition aStart( *aCursor.Start() );
             SwPosition aEnd  ( *aCursor.End()   );
-            ::std::auto_ptr<SwUnoCrsr> pTemp(
+            boost::scoped_ptr<SwUnoCrsr> pTemp(
                 aCursor.GetDoc()->CreateUnoCrsr(aStart, false) );
             if(!SwUnoCursorHelper::IsStartOfPara(*pTemp))
             {

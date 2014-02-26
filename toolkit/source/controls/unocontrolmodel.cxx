@@ -49,8 +49,8 @@
 #include <vcl/svapp.hxx>
 #include <uno/data.h>
 
-#include <memory>
 #include <set>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1326,7 +1326,7 @@ void UnoControlModel::setPropertyValues( const ::com::sun::star::uno::Sequence< 
     {
         // if somebody sets properties which are single aspects of a font descriptor,
         // remove them, and build a font descriptor instead
-        ::std::auto_ptr< awt::FontDescriptor > pFD;
+        boost::scoped_ptr< awt::FontDescriptor > pFD;
         for ( sal_uInt16 n = 0; n < nProps; ++n )
         {
             if ( ( pHandles[n] >= BASEPROPERTY_FONTDESCRIPTORPART_START ) && ( pHandles[n] <= BASEPROPERTY_FONTDESCRIPTORPART_END ) )

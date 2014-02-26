@@ -54,6 +54,7 @@
 #include <comcore.hrc>
 #include <undo.hrc>
 #include <bookmrk.hxx>
+#include <boost/scoped_ptr.hpp>
 
 OUString SwHistoryHint::GetDescription() const
 {
@@ -599,7 +600,7 @@ void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
 
     SwNodes& rNds = pDoc->GetNodes();
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
-    ::std::auto_ptr<SwPaM> pPam;
+    boost::scoped_ptr<SwPaM> pPam;
     ::sw::mark::IMark* pMark = NULL;
 
     if(m_bSavePos)

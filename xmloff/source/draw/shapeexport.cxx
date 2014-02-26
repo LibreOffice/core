@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
-
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
@@ -112,6 +110,7 @@
 #include "xexptran.hxx"
 #include "XMLBase64Export.hxx"
 #include "XMLImageMapExport.hxx"
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::EnhancedCustomShapeToken;
@@ -562,7 +561,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     sal_Int32 nZIndex = 0;
     uno::Reference< beans::XPropertySet > xSet( xShape, uno::UNO_QUERY );
 
-    ::std::auto_ptr< SvXMLElementExport >  mpHyperlinkElement;
+    boost::scoped_ptr< SvXMLElementExport >  mpHyperlinkElement;
 
     // export hyperlinks with <a><shape/></a>. Currently only in draw since draw
     // does not support document events

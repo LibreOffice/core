@@ -39,6 +39,7 @@
 #include "fltdlg.hxx"
 
 #include "iahndl.hxx"
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 
@@ -56,9 +57,9 @@ executeFilterDialog(
     {
         SolarMutexGuard aGuard;
 
-        std::auto_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
+        boost::scoped_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
 
-        std::auto_ptr< uui::FilterDialog > xDialog(
+        boost::scoped_ptr< uui::FilterDialog > xDialog(
             new uui::FilterDialog(pParent, xManager.get()));
 
         xDialog->SetURL(rURL);

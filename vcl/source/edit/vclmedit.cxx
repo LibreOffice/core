@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
-
 #include <tools/rc.h>
 #include <vcl/builder.hxx>
 #include <vcl/decoview.hxx>
@@ -34,6 +32,7 @@
 #include <svids.hrc>
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
+#include <boost/scoped_ptr.hpp>
 
 
 class TextWindow : public Window
@@ -981,7 +980,7 @@ VclMultiLineEdit::VclMultiLineEdit( Window* pParent, const ResId& rResId )
 VclMultiLineEdit::~VclMultiLineEdit()
 {
     {
-        ::std::auto_ptr< ImpVclMEdit > pDelete( pImpVclMEdit );
+        boost::scoped_ptr< ImpVclMEdit > pDelete( pImpVclMEdit );
         pImpVclMEdit = NULL;
     }
     delete pUpdateDataTimer;

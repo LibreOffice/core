@@ -70,6 +70,7 @@
 #include <svl/smplhint.hxx>
 #include <algorithm>
 #include <map>
+#include <boost/scoped_ptr.hpp>
 
 #ifdef DBG_UTIL
 #define CHECK           Check(true);
@@ -1004,7 +1005,7 @@ SwTxtAttr* MakeTxtAttr(
         // If the attribute is an auto-style which refers to a pool that is
         // different from rDoc's pool, we have to correct this:
         const StylePool::SfxItemSet_Pointer_t pAutoStyle = static_cast<const SwFmtAutoFmt&>(rAttr).GetStyleHandle();
-        ::std::auto_ptr<const SfxItemSet> pNewSet(
+        boost::scoped_ptr<const SfxItemSet> pNewSet(
                 pAutoStyle->SfxItemSet::Clone( sal_True, &rDoc.GetAttrPool() ));
         SwTxtAttr* pNew = MakeTxtAttr( rDoc, *pNewSet, nStt, nEnd );
         return pNew;
@@ -2138,7 +2139,7 @@ bool SwTxtNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
         else                            // es ist ein Bereich definiert
         {
             // #i75299#
-            ::std::auto_ptr< std::vector< SwPoolItemEndPair > > pAttrArr;
+            boost::scoped_ptr< std::vector< SwPoolItemEndPair > > pAttrArr;
 
             const sal_uInt16 coArrSz = static_cast<sal_uInt16>(RES_TXTATR_WITHEND_END) -
                                    static_cast<sal_uInt16>(RES_CHRATR_BEGIN);
@@ -2174,7 +2175,7 @@ bool SwTxtNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
                 if( bChkInvalid )
                 {
                     // uneindeutig ?
-                    ::std::auto_ptr< SfxItemIter > pItemIter;
+                    boost::scoped_ptr< SfxItemIter > pItemIter;
                     const SfxPoolItem* pItem = 0;
 
                     if ( RES_TXTATR_AUTOFMT == pHt->Which() )

@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
-
 #include "osl/mutex.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/msgbox.hxx"
@@ -35,6 +33,7 @@
 #include "getcontinuations.hxx"
 
 #include "iahndl.hxx"
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 
@@ -57,7 +56,7 @@ executeErrorDialog(
             //TODO! must be internationalized
     aText.append(rMessage);
 
-    std::auto_ptr< MessBox > xBox;
+    boost::scoped_ptr< MessBox > xBox;
     try
     {
         switch (eClassification)
@@ -170,7 +169,7 @@ UUIInteractionHelper::handleErrorHandlerRequest(
             SOURCE_UUI;
 
         SolarMutexGuard aGuard;
-        std::auto_ptr< ResMgr > xManager;
+        boost::scoped_ptr< ResMgr > xManager;
         xManager.reset(ResMgr::CreateResMgr(aManager[eSource]));
         if (!xManager.get())
             return;
