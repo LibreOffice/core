@@ -68,7 +68,7 @@ private:
     sal_Bool            mbReadOnly  : 1;
     sal_Bool            mbIsHTMLDoc : 1;
 
-    DECL_LINK (ClickOkHdl_Impl, void * );
+    DECL_LINK (ClickApplyHdl_Impl, void * );
     DECL_LINK (ClickCloseHdl_Impl, void * );
 
 protected:

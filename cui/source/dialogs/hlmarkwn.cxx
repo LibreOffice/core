@@ -121,7 +121,7 @@ void SvxHlmarkTreeLBox::Paint( const Rectangle& rRect )
 
 SvxHlinkDlgMarkWnd::SvxHlinkDlgMarkWnd( SvxHyperlinkTabPageBase *pParent )
 :   ModalDialog( (Window*)pParent, CUI_RES ( RID_SVXFLOAT_HYPERLINK_MARKWND ) ),
-    maBtOk( this, CUI_RES (BT_OK) ),
+    maBtApply( this, CUI_RES (BT_APPLY) ),
     maBtClose( this, CUI_RES (BT_CLOSE) ),
     maLbTree ( this, CUI_RES (TLB_MARK) ),
     mbUserMoved ( sal_False ),
@@ -130,9 +130,9 @@ SvxHlinkDlgMarkWnd::SvxHlinkDlgMarkWnd( SvxHyperlinkTabPageBase *pParent )
 {
     FreeResource();
 
-    maBtOk.SetClickHdl          ( LINK ( this, SvxHlinkDlgMarkWnd, ClickOkHdl_Impl ) );
+    maBtApply.SetClickHdl          ( LINK ( this, SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl ) );
     maBtClose.SetClickHdl       ( LINK ( this, SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl ) );
-    maLbTree.SetDoubleClickHdl  ( LINK ( this, SvxHlinkDlgMarkWnd, ClickOkHdl_Impl ) );
+    maLbTree.SetDoubleClickHdl  ( LINK ( this, SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl ) );
 
     // add lines to the Tree-ListBox
     maLbTree.SetStyle( maLbTree.GetStyle() | WB_TABSTOP | WB_BORDER | WB_HASLINES |
@@ -532,11 +532,11 @@ bool SvxHlinkDlgMarkWnd::SelectEntry(OUString aStrMark)
 
 /*************************************************************************
 |*
-|* Click on Ok-Button / Doubleclick on item in tree
+|* Click on Apply-Button / Doubleclick on item in tree
 |*
 |************************************************************************/
 
-IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickOkHdl_Impl)
+IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl)
 {
     SvTreeListEntry* pEntry = maLbTree.GetCurEntry();
 
