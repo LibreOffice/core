@@ -171,7 +171,7 @@ struct ImplStyleData
     sal_uLong                       mnLogoDisplayTime;
     sal_uLong                       mnDisplayOptions;
     sal_uLong                       mnToolbarIconSize;
-    sal_uLong                       mnUseFlatMenus;
+    bool                            mnUseFlatMenus;
     sal_uLong                       mnOptions;
     sal_uInt16                      mnScreenZoom;
     sal_uInt16                      mnScreenFontZoom;
@@ -179,7 +179,7 @@ struct ImplStyleData
     bool                            mbUseSystemUIFonts;
     bool                            mbAutoMnemonic;
     TriState                        meUseImagesInMenus;
-    sal_uLong                       mnUseFlatBorders;
+    bool                            mnUseFlatBorders;
     bool                            mbPreferredUseImagesInMenus;
     long                            mnMinThumbSize;
     boost::shared_ptr<vcl::IconThemeScanner>
@@ -879,9 +879,9 @@ void ImplStyleData::SetStandardStyles()
     mnTearOffTitleHeight        = 8;
     mnMenuBarHeight             = 14;
     mbHighContrast              = false;
-    mbUseSystemUIFonts          = 1;
-    mnUseFlatBorders            = 0;
-    mnUseFlatMenus              = 0;
+    mbUseSystemUIFonts          = true;
+    mnUseFlatBorders            = false;
+    mnUseFlatMenus              = false;
     mbPreferredUseImagesInMenus = true;
     mbSkipDisabledInMenus       = false;
     mbHideDisabledMenuItems     = false;
