@@ -43,10 +43,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
 
-
-///////////////////////////////////////////////////////////////////////////
-
-
 class SpellChecker :
     public cppu::WeakImplHelper6
     <
@@ -114,7 +110,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) throw(RuntimeException);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException);
 
-
     static inline OUString  getImplementationName_Static() throw();
     static Sequence< OUString > getSupportedServiceNames_Static() throw();
 };
@@ -123,9 +118,6 @@ inline OUString SpellChecker::getImplementationName_Static() throw()
 {
     return OUString( "org.openoffice.lingu.MySpellSpellChecker" );
 }
-
-
-///////////////////////////////////////////////////////////////////////////
 
 #endif
 

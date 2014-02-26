@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 
@@ -56,11 +55,8 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
-
 // XML-header of SPELLML queries
 #define SPELLML_HEADER "<?xml?>"
-
-///////////////////////////////////////////////////////////////////////////
 
 SpellChecker::SpellChecker() :
     aDicts(NULL),
@@ -106,7 +102,6 @@ PropertyHelper_Spelling & SpellChecker::GetPropHelper_Impl()
     return *pPropHelper;
 }
 
-
 Sequence< Locale > SAL_CALL SpellChecker::getLocales()
         throw(RuntimeException)
 {
@@ -114,7 +109,6 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
 
     // this routine should return the locales supported by the installed
     // dictionaries.
-
     if (!numdict)
     {
         SvtLinguConfig aLinguCfg;
@@ -217,7 +211,7 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
         }
         else
         {
-            /* no dictionary found so register no dictionaries */
+            // no dictionary found so register no dictionaries
             numdict = 0;
             delete[] aDicts;
             aDicts  = NULL;
@@ -233,7 +227,6 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
 
     return aSuppLocales;
 }
-
 
 sal_Bool SAL_CALL SpellChecker::hasLocale(const Locale& rLocale)
         throw(RuntimeException)
@@ -256,7 +249,6 @@ sal_Bool SAL_CALL SpellChecker::hasLocale(const Locale& rLocale)
     }
     return bRes;
 }
-
 
 sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rLocale )
 {
@@ -282,10 +274,9 @@ sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rL
         else if ((c == 0x2018) || (c == 0x2019))
             rBuf[ix] = (sal_Unicode)0x0027;
 
-// recognize words with Unicode ligatures and ZWNJ/ZWJ characters (only
-// with 8-bit encoded dictionaries. For UTF-8 encoded dictionaries
-// set ICONV and IGNORE aff file options, if needed.)
-
+        // recognize words with Unicode ligatures and ZWNJ/ZWJ characters (only
+        // with 8-bit encoded dictionaries. For UTF-8 encoded dictionaries
+        // set ICONV and IGNORE aff file options, if needed.)
         else if ((c == 0x200C) || (c == 0x200D) ||
             ((c >= 0xFB00) && (c <= 0xFB04)))
                 extrachar = 1;
@@ -375,7 +366,6 @@ sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rL
     return nRes;
 }
 
-
 sal_Bool SAL_CALL SpellChecker::isValid( const OUString& rWord, const Locale& rLocale,
             const PropertyValues& rProperties )
         throw(IllegalArgumentException, RuntimeException)
@@ -397,7 +387,6 @@ sal_Bool SAL_CALL SpellChecker::isValid( const OUString& rWord, const Locale& rL
     // last argument.
     // You'll probably like to use a simplier solution than the provided
     // one using the PropertyHelper_Spell.
-
     PropertyHelper_Spelling& rHelper = GetPropHelper();
     rHelper.SetTmpPropVals( rProperties );
 
@@ -417,14 +406,12 @@ sal_Bool SAL_CALL SpellChecker::isValid( const OUString& rWord, const Locale& rL
     return (nFailure == -1);
 }
 
-
 Reference< XSpellAlternatives >
     SpellChecker::GetProposals( const OUString &rWord, const Locale &rLocale )
 {
     // Retrieves the return values for the 'spell' function call in case
     // of a misspelled word.
     // Especially it may give a list of suggested (correct) words:
-
     Reference< XSpellAlternatives > xRes;
     // note: mutex is held by higher up by spell which covers both
 
@@ -492,7 +479,6 @@ Reference< XSpellAlternatives >
     return xRes;
 }
 
-
 Reference< XSpellAlternatives > SAL_CALL SpellChecker::spell(
         const OUString& rWord, const Locale& rLocale,
         const PropertyValues& rProperties )
@@ -514,7 +500,6 @@ Reference< XSpellAlternatives > SAL_CALL SpellChecker::spell(
     return xAlt;
 }
 
-
 Reference< XInterface > SAL_CALL SpellChecker_CreateInstance(
         const Reference< XMultiServiceFactory > & /*rSMgr*/ )
         throw(Exception)
@@ -523,7 +508,6 @@ Reference< XInterface > SAL_CALL SpellChecker_CreateInstance(
     Reference< XInterface > xService = (cppu::OWeakObject*) new SpellChecker;
     return xService;
 }
-
 
 sal_Bool SAL_CALL SpellChecker::addLinguServiceEventListener(
         const Reference< XLinguServiceEventListener >& rxLstnr )
@@ -539,7 +523,6 @@ sal_Bool SAL_CALL SpellChecker::addLinguServiceEventListener(
     return bRes;
 }
 
-
 sal_Bool SAL_CALL SpellChecker::removeLinguServiceEventListener(
         const Reference< XLinguServiceEventListener >& rxLstnr )
         throw(RuntimeException)
@@ -554,14 +537,12 @@ sal_Bool SAL_CALL SpellChecker::removeLinguServiceEventListener(
     return bRes;
 }
 
-
 OUString SAL_CALL SpellChecker::getServiceDisplayName( const Locale& /*rLocale*/ )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return OUString( "Hunspell SpellChecker" );
 }
-
 
 void SAL_CALL SpellChecker::initialize( const Sequence< Any >& rArguments )
         throw(Exception, RuntimeException)
@@ -575,7 +556,7 @@ void SAL_CALL SpellChecker::initialize( const Sequence< Any >& rArguments )
         {
             Reference< XLinguProperties >   xPropSet;
             rArguments.getConstArray()[0] >>= xPropSet;
-            //rArguments.getConstArray()[1] >>= xDicList;
+            // rArguments.getConstArray()[1] >>= xDicList;
 
             //! Pointer allows for access of the non-UNO functions.
             //! And the reference to the UNO-functions while increasing
@@ -589,7 +570,6 @@ void SAL_CALL SpellChecker::initialize( const Sequence< Any >& rArguments )
         }
     }
 }
-
 
 void SAL_CALL SpellChecker::dispose()
         throw(RuntimeException)
@@ -610,7 +590,6 @@ void SAL_CALL SpellChecker::dispose()
     }
 }
 
-
 void SAL_CALL SpellChecker::addEventListener( const Reference< XEventListener >& rxListener )
         throw(RuntimeException)
 {
@@ -620,7 +599,6 @@ void SAL_CALL SpellChecker::addEventListener( const Reference< XEventListener >&
         aEvtListeners.addInterface( rxListener );
 }
 
-
 void SAL_CALL SpellChecker::removeEventListener( const Reference< XEventListener >& rxListener )
         throw(RuntimeException)
 {
@@ -629,7 +607,6 @@ void SAL_CALL SpellChecker::removeEventListener( const Reference< XEventListener
     if (!bDisposing && rxListener.is())
         aEvtListeners.removeInterface( rxListener );
 }
-
 
 // Service specific part
 OUString SAL_CALL SpellChecker::getImplementationName()
@@ -659,7 +636,7 @@ Sequence< OUString > SpellChecker::getSupportedServiceNames_Static()
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    Sequence< OUString > aSNS( 1 ); // auch mehr als 1 Service moeglich
+    Sequence< OUString > aSNS( 1 ); // more than 1 service is possible, too
     aSNS.getArray()[0] = SN_SPELLCHECKER;
     return aSNS;
 }
@@ -682,8 +659,5 @@ void * SAL_CALL SpellChecker_getFactory( const sal_Char * pImplName,
     }
     return pRet;
 }
-
-
-///////////////////////////////////////////////////////////////////////////
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

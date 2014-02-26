@@ -25,19 +25,13 @@
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 
-////////////////////////////////////////
 // declaration of external RegEntry-functions defined by the service objects
-//
-
 extern void * SAL_CALL Thesaurus_getFactory(
     const sal_Char * pImplName,
     XMultiServiceFactory * pServiceManager,
     void * /*pRegistryKey*/ );
 
-////////////////////////////////////////
 // definition of the two functions that are used to provide the services
-//
-
 extern "C"
 {
 
@@ -53,7 +47,5 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL lnth_component_getFactory(
 }
 
 }
-
-///////////////////////////////////////////////////////////////////////////
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
