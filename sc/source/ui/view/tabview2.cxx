@@ -1429,24 +1429,6 @@ void ScTabView::ErrorMessage( sal_uInt16 nGlobStrId )
         pParent->GrabFocus();
 }
 
-Window* ScTabView::GetParentOrChild( sal_uInt16 nChildId )
-{
-    SfxViewFrame* pViewFrm = aViewData.GetViewShell()->GetViewFrame();
-
-    if ( pViewFrm->HasChildWindow(nChildId) )
-    {
-        SfxChildWindow* pChild = pViewFrm->GetChildWindow(nChildId);
-        if (pChild)
-        {
-            Window* pWin = pChild->GetWindow();
-            if (pWin && pWin->IsVisible())
-                return pWin;
-        }
-    }
-
-    return aViewData.GetDialogParent();
-}
-
 void ScTabView::UpdatePageBreakData( bool bForcePaint )
 {
     ScPageBreakData* pNewData = NULL;

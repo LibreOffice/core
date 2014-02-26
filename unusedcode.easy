@@ -85,7 +85,6 @@ ScRangeStringConverter::GetRangeListFromString(com::sun::star::uno::Sequence<com
 ScRefCellValue::commit(ScColumn&, int) const
 ScRefreshTimer::StartRefreshTimer()
 ScSimpleRefDlgWrapper::GetRefString()
-ScTabView::GetParentOrChild(unsigned short)
 ScTabViewShell::GetForms() const
 ScTable::GetNote(short, int)
 ScTable::SetRawString(short, int, rtl::OUString const&)

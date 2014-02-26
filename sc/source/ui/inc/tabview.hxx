@@ -516,7 +516,6 @@ public:
     void            InvalidateSplit();
 
     void            ErrorMessage( sal_uInt16 nGlobStrId );
-    Window*         GetParentOrChild( sal_uInt16 nChildId );
 
     void            EnableRefInput(bool bFlag = true);
 
