@@ -2862,12 +2862,12 @@ void SwWW8ImplReader::Read_Bidi(sal_uInt16, const sal_uInt8* pData, short nLen)
 {
     if( nLen < 0 )  //Property end
     {
-        bBidi = sal_False;
+        bBidi = false;
         pCtrlStck->SetAttr(*pPaM->GetPoint(),RES_CHRATR_BIDIRTL);
     }
     else    //Property start
     {
-        bBidi = sal_True;
+        bBidi = true;
         sal_uInt8 nBidi = *pData;
         NewAttr( SfxInt16Item( RES_CHRATR_BIDIRTL, (nBidi!=0)? 1 : 0 ) );
     }
