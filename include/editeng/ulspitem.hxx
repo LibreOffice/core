@@ -36,7 +36,7 @@ class EDITENG_DLLPUBLIC SvxULSpaceItem : public SfxPoolItem
 {
     sal_uInt16 nUpper;  // Upper space
     sal_uInt16 nLower;  // Lower space
-    sal_Bool bContext; // Contextual spacing?
+    bool       bContext; // Contextual spacing?
     sal_uInt16 nPropUpper, nPropLower;      // relative or absolute (=100%)
 public:
     TYPEINFO();
@@ -69,13 +69,13 @@ public:
 
     void SetUpperValue( const sal_uInt16 nU ) { nUpper = nU; }
     void SetLowerValue( const sal_uInt16 nL ) { nLower = nL; }
-    void SetContextValue( const sal_Bool bC ) { bContext = bC; }
-    void SetPropUpper( const sal_uInt16 nU ) { nPropUpper = nU; }
-    void SetPropLower( const sal_uInt16 nL ) { nPropLower = nL; }
+    void SetContextValue( const bool bC )     { bContext = bC; }
+    void SetPropUpper( const sal_uInt16 nU )  { nPropUpper = nU; }
+    void SetPropLower( const sal_uInt16 nL )  { nPropLower = nL; }
 
     sal_uInt16 GetUpper() const { return nUpper; }
     sal_uInt16 GetLower() const { return nLower; }
-    sal_Bool GetContext() const { return bContext; }
+    bool GetContext() const { return bContext; }
     sal_uInt16 GetPropUpper() const { return nPropUpper; }
     sal_uInt16 GetPropLower() const { return nPropLower; }
 };
