@@ -13,6 +13,7 @@
 #include "address.hxx"
 #include "types.hxx"
 #include "platforminfo.hxx"
+#include <stlalgorithm.hxx>
 
 #include "svl/sharedstringpool.hxx"
 
@@ -28,7 +29,8 @@ namespace sc {
 
 struct FormulaGroupContext : boost::noncopyable
 {
-    typedef std::vector<double> NumArrayType;
+    typedef AlignedAllocator<double,256> DoubleAllocType;
+    typedef std::vector<double, DoubleAllocType> NumArrayType;
     typedef std::vector<rtl_uString*> StrArrayType;
     typedef boost::ptr_vector<NumArrayType> NumArrayStoreType;
     typedef boost::ptr_vector<StrArrayType> StrArrayStoreType;
