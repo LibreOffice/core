@@ -1233,6 +1233,11 @@ const NameToId constNameToIdMapping[] =
     { OUString("r"),            FSNS( XML_w14, XML_r ) },
     { OUString("b"),            FSNS( XML_w14, XML_b ) },
     { OUString("lim"),          FSNS( XML_w14, XML_lim ) },
+    { OUString("prst"),         FSNS( XML_w14, XML_prst ) },
+    { OUString("rig"),          FSNS( XML_w14, XML_rig ) },
+    { OUString("lat"),          FSNS( XML_w14, XML_lat ) },
+    { OUString("lon"),          FSNS( XML_w14, XML_lon ) },
+    { OUString("rev"),          FSNS( XML_w14, XML_rev ) },
 
     { OUString("schemeClr"),    FSNS( XML_w14, XML_schemeClr ) },
     { OUString("srgbClr"),      FSNS( XML_w14, XML_srgbClr ) },
@@ -1259,6 +1264,9 @@ const NameToId constNameToIdMapping[] =
     { OUString("round"),        FSNS( XML_w14, XML_round ) },
     { OUString("bevel"),        FSNS( XML_w14, XML_bevel ) },
     { OUString("miter"),        FSNS( XML_w14, XML_miter ) },
+    { OUString("camera"),       FSNS( XML_w14, XML_camera ) },
+    { OUString("lightRig"),     FSNS( XML_w14, XML_lightRig ) },
+    { OUString("rot"),          FSNS( XML_w14, XML_rot ) },
 };
 
 boost::optional<sal_Int32> lclGetElementIdForName(const OUString& rName)
