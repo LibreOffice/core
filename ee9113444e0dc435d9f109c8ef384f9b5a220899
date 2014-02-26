@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a961159_ec544b23",
+        "filename": "dtrans/source/cnttype/mcnttfactory.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-02-26T14:52:47Z",
+      "side": 1,
+      "message": "There is not much gain in replacing an empty comment by an empty line. Please remove these too.",
+      "revId": "ee9113444e0dc435d9f109c8ef384f9b5a220899",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
