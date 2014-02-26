@@ -348,7 +348,6 @@ class ScMyNotEmptyCellsIterator : boost::noncopyable
 
     ScXMLExport&                rExport;
     boost::scoped_ptr<ScHorizontalCellIterator> mpCellItr;
-    const ScRefCellValue* mpCell;
 
     SCCOL                       nCellCol;
     SCROW                       nCellRow;
@@ -384,8 +383,6 @@ public:
     void                        SkipTable(SCTAB nSkip);
 
     bool                        GetNext(ScMyCell& aCell, ScFormatRangeStyles* pCellStyles);
-
-    const ScRefCellValue* GetCell() const;
 };
 
 #endif

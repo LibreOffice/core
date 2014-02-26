@@ -80,7 +80,6 @@ ScExtIButton::GetSelected() const
 ScFlatBoolRowSegments::getValue(int)
 ScGlobal::GetStandardFormat(double, SvNumberFormatter&, unsigned long, short)
 ScGridWindow::HasScenarioRange(unsigned short, int, ScRange&)
-ScMyNotEmptyCellsIterator::GetCell() const
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
 SdrItemBrowser::ForceParent()

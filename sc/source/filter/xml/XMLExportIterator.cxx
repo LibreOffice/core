@@ -625,7 +625,6 @@ ScMyNotEmptyCellsIterator::ScMyNotEmptyCellsIterator(ScXMLExport& rTempXMLExport
     pDetectiveObj(NULL),
     pDetectiveOp(NULL),
     rExport(rTempXMLExport),
-    mpCell(NULL),
     nCurrentTable(SCTAB_MAX)
 {
 }
@@ -664,9 +663,9 @@ void ScMyNotEmptyCellsIterator::SetCellData( ScMyCell& rMyCell, table::CellAddre
 
     if( (nCellCol == rAddress.Column) && (nCellRow == rAddress.Row) )
     {
-        mpCell = mpCellItr->GetNext(nCellCol, nCellRow);
-        if (mpCell)
-            rMyCell.maBaseCell = *mpCell;
+        const ScRefCellValue* pCell = mpCellItr->GetNext(nCellCol, nCellRow);
+        if (pCell)
+            rMyCell.maBaseCell = *pCell;
     }
 
     rMyCell.bIsMatrixCovered = false;
@@ -813,11 +812,6 @@ bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell, ScFormatRangeStyles* pC
             aCell.nType = table::CellContentType_EMPTY;
     }
     return bFoundCell;
-}
-
-const ScRefCellValue* ScMyNotEmptyCellsIterator::GetCell() const
-{
-    return mpCell;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
