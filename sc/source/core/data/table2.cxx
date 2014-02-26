@@ -1424,12 +1424,6 @@ void ScTable::SetValue( SCCOL nCol, SCROW nRow, const double& rVal )
         aCol[nCol].SetValue( nRow, rVal );
 }
 
-void ScTable::SetRawString( SCCOL nCol, SCROW nRow, const OUString& rStr )
-{
-    if (ValidColRow(nCol, nRow))
-        aCol[nCol].SetRawString(nRow, rStr);
-}
-
 void ScTable::SetRawString( SCCOL nCol, SCROW nRow, const svl::SharedString& rStr )
 {
     if (ValidColRow(nCol, nRow))

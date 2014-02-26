@@ -355,7 +355,6 @@ public:
     SCSIZE      GetPatternCount( SCCOL nCol, SCROW nRow1, SCROW nRow2 ) const;
     bool        ReservePatternCount( SCCOL nCol, SCSIZE nReserve );
 
-    void SetRawString( SCCOL nCol, SCROW nRow, const OUString& rStr );
     void SetRawString( SCCOL nCol, SCROW nRow, const svl::SharedString& rStr );
     void        GetString( SCCOL nCol, SCROW nRow, OUString& rString ) const;
     double* GetValueCell( SCCOL nCol, SCROW nRow );
