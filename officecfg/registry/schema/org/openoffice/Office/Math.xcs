@@ -409,7 +409,7 @@
         <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Format - Spacing - Category - Brackets - Scale all brackets -->
         <info>
-          <desc>Attempts to scale non-scaleable brackets to fit the size of the arguments.</desc>
+          <desc>Attempts to scale non-scalable brackets to fit the size of the arguments.</desc>
           <label>Scale normal brackets</label>
         </info>
         <value>false</value>

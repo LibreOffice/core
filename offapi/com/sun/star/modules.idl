@@ -350,7 +350,7 @@ module smarttags {};
 /// Formatting and layout style and style sheet interfaces.
 module style {};
 
-/// Interfaces for import/export of Scaleable Vector Format.
+/// Interfaces for import/export of Scalable Vector Format.
 module svg {};
 
 /// Host operating system integration interfaces.
