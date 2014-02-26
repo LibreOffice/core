@@ -28,10 +28,10 @@ class SvXMLUnitConverter;
 class EDITENG_DLLPUBLIC SvxTwoLinesItem : public SfxPoolItem
 {
     sal_Unicode cStartBracket, cEndBracket;
-    sal_Bool bOn;
+    bool bOn;
 public:
     TYPEINFO();
-    SvxTwoLinesItem( sal_Bool bOn /*= sal_True*/,
+    SvxTwoLinesItem( bool bOn /*= true*/,
                      sal_Unicode nStartBracket /*= 0*/,
                      sal_Unicode nEndBracket /*= 0*/,
                      sal_uInt16 nId  );
@@ -62,8 +62,8 @@ public:
         return *this;
     }
 
-    sal_Bool GetValue() const                   { return bOn; }
-    void SetValue( sal_Bool bFlag )             { bOn = bFlag; }
+    bool GetValue() const                       { return bOn; }
+    void SetValue( bool bFlag )                 { bOn = bFlag; }
 
     sal_Unicode GetStartBracket() const         { return cStartBracket; }
     void SetStartBracket( sal_Unicode c )       { cStartBracket = c; }

@@ -3471,7 +3471,7 @@ sal_Bool SvxCharTwoLinesPage::FillItemSet( SfxItemSet& rSet )
     sal_Bool bModified = sal_False, bChanged = sal_True;
     sal_uInt16 nWhich = GetWhich( SID_ATTR_CHAR_TWO_LINES );
     const SfxPoolItem* pOld = GetOldItem( rSet, SID_ATTR_CHAR_TWO_LINES );
-    sal_Bool bOn = m_pTwoLinesBtn->IsChecked();
+    bool bOn = m_pTwoLinesBtn->IsChecked();
     sal_Unicode cStart = ( bOn && m_pStartBracketLB->GetSelectEntryPos() > 0 )
         ? m_pStartBracketLB->GetSelectEntry()[0] : 0;
     sal_Unicode cEnd = ( bOn && m_pEndBracketLB->GetSelectEntryPos() > 0 )

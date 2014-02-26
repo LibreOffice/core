@@ -524,7 +524,7 @@ void EditEngine::SetPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon, const b
         }
     }
 
-    TextRanger* pRanger = new TextRanger( rPolyPolygon, pLinePolyPolygon, 30, 2, 2, bSimple, sal_True );
+    TextRanger* pRanger = new TextRanger( rPolyPolygon, pLinePolyPolygon, 30, 2, 2, bSimple, true );
     pImpEditEngine->SetTextRanger( pRanger );
     pImpEditEngine->SetPaperSize( pRanger->GetBoundRect().GetSize() );
 }

@@ -3276,7 +3276,7 @@ void SwWW8ImplReader::Read_DoubleLine_Rotate( sal_uInt16, const sal_uInt8* pData
                 case 3: cStt = '<', cEnd = '>'; break;
                 case 4: cStt = '{', cEnd = '}'; break;
                 }
-                NewAttr( SvxTwoLinesItem( sal_True, cStt, cEnd, RES_CHRATR_TWO_LINES ));
+                NewAttr( SvxTwoLinesItem( true, cStt, cEnd, RES_CHRATR_TWO_LINES ));
             }
             break;
 

@@ -53,7 +53,7 @@ public:
                 const sal_Unicode cFil = cDfltFillChar );
 
     sal_Int32& GetTabPos() { return nTabPos; }
-    sal_Int32 GetTabPos() const { return nTabPos; }
+    sal_Int32  GetTabPos() const { return nTabPos; }
 
     SvxTabAdjust&   GetAdjustment() { return eAdjustment; }
     SvxTabAdjust    GetAdjustment() const { return eAdjustment; }
@@ -67,7 +67,7 @@ public:
     OUString      GetValueString() const;
 
     // the "old" operator==()
-    sal_Bool            IsEqual( const SvxTabStop& rTS ) const
+    bool          IsEqual( const SvxTabStop& rTS ) const
                         {
                             return ( nTabPos     == rTS.nTabPos     &&
                                      eAdjustment == rTS.eAdjustment &&
@@ -76,9 +76,9 @@ public:
                         }
 
     // For the SortedArray:
-    sal_Bool            operator==( const SvxTabStop& rTS ) const
+    bool            operator==( const SvxTabStop& rTS ) const
                         { return nTabPos == rTS.nTabPos; }
-    sal_Bool            operator <( const SvxTabStop& rTS ) const
+    bool            operator <( const SvxTabStop& rTS ) const
                         { return nTabPos < rTS.nTabPos; }
 
     SvxTabStop&     operator=( const SvxTabStop& rTS )

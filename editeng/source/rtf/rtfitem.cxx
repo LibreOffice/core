@@ -1041,7 +1041,7 @@ ATTR_SETEMPHASIS:
                     default: cStt = 0, cEnd = 0; break;
                     }
 
-                    pSet->Put( SvxTwoLinesItem( sal_True, cStt, cEnd,
+                    pSet->Put( SvxTwoLinesItem( true, cStt, cEnd,
                                                        PLAINID->nTwoLines ));
                 }
                 break;

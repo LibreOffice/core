@@ -674,7 +674,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         new SvxColorListItem(pColorList.get(),ITEMID_COLOR_TABLE),
         new SvxBlinkItem(false,ITEMID_BLINK),
         new SvxEmphasisMarkItem(EMPHASISMARK_NONE,ITEMID_EMPHASISMARK),
-        new SvxTwoLinesItem(sal_True,0,0,ITEMID_TWOLINES),
+        new SvxTwoLinesItem(true,0,0,ITEMID_TWOLINES),
         new SvxCharRotateItem(0,false,ITEMID_CHARROTATE),
         new SvxCharScaleWidthItem(100,ITEMID_CHARSCALE_W),
         new SvxCharReliefItem(RELIEF_NONE,ITEMID_CHARRELIEF),

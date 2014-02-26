@@ -52,10 +52,10 @@ class EDITENG_DLLPUBLIC TextRanger
     sal_uInt16 nUpper;      // Distance Contour-Text
     sal_uInt16 nLower;      // Distance Text-Contour
     sal_uInt32 nPointCount; // Number of polygon points
-    sal_Bool bSimple : 1;   // Just outside edge
-    sal_Bool bInner  : 1;   // TRUE: Objekt inline (EditEngine);
-                        // FALSE: Objekt flow (StarWriter);
-    sal_Bool bVertical :1;  // for vertical writing mode
+    bool       bSimple : 1; // Just outside edge
+    bool       bInner  : 1; // TRUE: Objekt inline (EditEngine);
+                            // FALSE: Objekt flow (StarWriter);
+    bool       bVertical :1;// for vertical writing mode
 
     TextRanger( const TextRanger& ); // not implemented
     const Rectangle& _GetBoundRect();
@@ -63,7 +63,7 @@ public:
     TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon,
                 const basegfx::B2DPolyPolygon* pLinePolyPolygon,
                 sal_uInt16 nCacheSize, sal_uInt16 nLeft, sal_uInt16 nRight,
-                sal_Bool bSimple, sal_Bool bInner, sal_Bool bVert = sal_False );
+                bool bSimple, bool bInner, bool bVert = false );
     ~TextRanger();
     LongDqPtr GetTextRanges( const Range& rRange );
     sal_uInt16 GetRight() const { return nRight; }
@@ -71,17 +71,17 @@ public:
     sal_uInt16 GetUpper() const { return nUpper; }
     sal_uInt16 GetLower() const { return nLower; }
     sal_uInt32 GetPointCount() const { return nPointCount; }
-    sal_Bool IsSimple() const { return bSimple; }
-    sal_Bool IsInner() const { return bInner; }
-    sal_Bool IsVertical() const { return bVertical; }
-    sal_Bool HasBorder() const { return nRight || nLeft; }
+    bool IsSimple() const { return bSimple; }
+    bool IsInner() const { return bInner; }
+    bool IsVertical() const { return bVertical; }
+    bool HasBorder() const { return nRight || nLeft; }
     const PolyPolygon& GetPolyPolygon() const { return *mpPolyPolygon; }
     const PolyPolygon* GetLinePolygon() const { return mpLinePolyPolygon; }
     const Rectangle& GetBoundRect()
         { return pBound ? static_cast< const Rectangle& >(*pBound) : _GetBoundRect(); }
     void SetUpper( sal_uInt16 nNew ){ nUpper = nNew; }
     void SetLower( sal_uInt16 nNew ){ nLower = nNew; }
-    void SetVertical( sal_Bool bNew );
+    void SetVertical( bool bNew );
 };
 
 #endif      // _TXTRANGE_HXX

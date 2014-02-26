@@ -30,7 +30,7 @@
 TextRanger::TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon,
                         const basegfx::B2DPolyPolygon* pLinePolyPolygon,
                         sal_uInt16 nCacheSz, sal_uInt16 nLft, sal_uInt16 nRght,
-                        sal_Bool bSimpl, sal_Bool bInnr, sal_Bool bVert ) :
+                        bool bSimpl, bool bInnr, bool bVert ) :
     pBound( NULL ),
     nCacheSize( nCacheSz ),
     nRight( nRght ),
@@ -81,7 +81,7 @@ TextRanger::~TextRanger()
    If there's is a change in the writing direction,
    the cache has to be cleared.
 */
-void TextRanger::SetVertical( sal_Bool bNew )
+void TextRanger::SetVertical( bool bNew )
 {
     if( IsVertical() != bNew )
     {
