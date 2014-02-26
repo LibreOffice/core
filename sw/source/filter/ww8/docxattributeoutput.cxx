@@ -3506,9 +3506,7 @@ void DocxAttributeOutput::WritePostponedChart()
 bool DocxAttributeOutput::WriteOLEMath( const SdrObject*, const SwOLENode& rOLENode, const Size& )
 {
     uno::Reference < embed::XEmbeddedObject > xObj(const_cast<SwOLENode&>(rOLENode).GetOLEObj().GetOleRef());
-    sal_Int64 nAspect = rOLENode.GetAspect();
-    svt::EmbeddedObjectRef aObjRef( xObj, nAspect );
-    SvGlobalName aObjName(aObjRef->getClassID());
+    SvGlobalName aObjName(xObj->getClassID());
 
     if( !SotExchange::IsMath(aObjName) )
         return false;
