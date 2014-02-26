@@ -75,7 +75,6 @@ ScComplexRefData::IsDeleted() const
 ScDBQueryDataIterator::DataAccessInternal::setPos(unsigned long)
 ScDPFilteredCache::SingleFilter::getMatchValue() const
 ScDocument::CreateFormatTable() const
-ScDocument::GetCellCount(short, short) const
 ScExtIButton::GetSelected() const
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)

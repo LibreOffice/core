@@ -5760,14 +5760,6 @@ sal_uLong ScDocument::GetCellCount() const
     return nCellCount;
 }
 
-SCSIZE ScDocument::GetCellCount(SCTAB nTab, SCCOL nCol) const
-{
-    if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab])
-        return 0;
-
-    return maTabs[nTab]->GetCellCount(nCol);
-}
-
 sal_uLong ScDocument::GetCodeCount() const
 {
     sal_uLong nCodeCount = 0;
