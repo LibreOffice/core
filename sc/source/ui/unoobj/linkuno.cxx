@@ -20,6 +20,7 @@
 #include <svl/smplhint.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <vcl/svapp.hxx>
+#include <svl/sharedstringpool.hxx>
 
 #include "linkuno.hxx"
 #include "miscuno.hxx"
@@ -1469,7 +1470,8 @@ uno::Reference< sheet::XDDELink > ScDDELinksObj::addDDELink(
 
 // ============================================================================
 
-ScExternalSheetCacheObj::ScExternalSheetCacheObj(ScExternalRefCache::TableTypeRef pTable, size_t nIndex) :
+ScExternalSheetCacheObj::ScExternalSheetCacheObj(ScDocShell* pDocShell, ScExternalRefCache::TableTypeRef pTable, size_t nIndex) :
+    mpDocShell(pDocShell),
     mpTable(pTable),
     mnIndex(nIndex)
 {
@@ -1492,7 +1494,11 @@ void SAL_CALL ScExternalSheetCacheObj::setCellValue(sal_Int32 nCol, sal_Int32 nR
     if (rValue >>= fVal)
         pToken.reset(new FormulaDoubleToken(fVal));
     else if (rValue >>= aVal)
-        pToken.reset(new FormulaStringToken(aVal));
+    {
+        svl::SharedStringPool& rPool = mpDocShell->GetDocument()->GetSharedStringPool();
+        svl::SharedString aSS = rPool.intern(aVal);
+        pToken.reset(new FormulaStringToken(aSS));
+    }
     else
         // unidentified value type.
         return;
@@ -1571,8 +1577,8 @@ sal_Int32 SAL_CALL ScExternalSheetCacheObj::getTokenIndex()
 
 // ============================================================================
 
-ScExternalDocLinkObj::ScExternalDocLinkObj(ScExternalRefManager* pRefMgr, sal_uInt16 nFileId) :
-    mpRefMgr(pRefMgr), mnFileId(nFileId)
+ScExternalDocLinkObj::ScExternalDocLinkObj(ScDocShell* pDocShell, ScExternalRefManager* pRefMgr, sal_uInt16 nFileId) :
+    mpDocShell(pDocShell), mpRefMgr(pRefMgr), mnFileId(nFileId)
 {
 }
 
@@ -1591,7 +1597,7 @@ Reference< sheet::XExternalSheetCache > SAL_CALL ScExternalDocLinkObj::addSheetC
         // Set the whole table cached to prevent access to the source document.
         pTable->setWholeTableCached();
 
-    Reference< sheet::XExternalSheetCache > aSheetCache(new ScExternalSheetCacheObj(pTable, nIndex));
+    Reference< sheet::XExternalSheetCache > aSheetCache(new ScExternalSheetCacheObj(mpDocShell, pTable, nIndex));
     return aSheetCache;
 }
 
@@ -1604,7 +1610,7 @@ Any SAL_CALL ScExternalDocLinkObj::getByName(const OUString &aName)
     if (!pTable)
         throw container::NoSuchElementException();
 
-    Reference< sheet::XExternalSheetCache > aSheetCache(new ScExternalSheetCacheObj(pTable, nIndex));
+    Reference< sheet::XExternalSheetCache > aSheetCache(new ScExternalSheetCacheObj(mpDocShell, pTable, nIndex));
 
     Any aAny;
     aAny <<= aSheetCache;
@@ -1666,7 +1672,7 @@ Any SAL_CALL ScExternalDocLinkObj::getByIndex(sal_Int32 nApiIndex)
     if (!pTable)
         throw lang::IndexOutOfBoundsException();
 
-    Reference< sheet::XExternalSheetCache > aSheetCache(new ScExternalSheetCacheObj(pTable, nIndex));
+    Reference< sheet::XExternalSheetCache > aSheetCache(new ScExternalSheetCacheObj(mpDocShell, pTable, nIndex));
 
     Any aAny;
     aAny <<= aSheetCache;
@@ -1723,7 +1729,7 @@ Reference< sheet::XExternalDocLink > SAL_CALL ScExternalDocLinksObj::addDocLink(
 {
     SolarMutexGuard aGuard;
     sal_uInt16 nFileId = mpRefMgr->getExternalFileId(aDocName);
-    Reference< sheet::XExternalDocLink > aDocLink(new ScExternalDocLinkObj(mpRefMgr, nFileId));
+    Reference< sheet::XExternalDocLink > aDocLink(new ScExternalDocLinkObj(mpDocShell, mpRefMgr, nFileId));
     return aDocLink;
 }
 
@@ -1735,7 +1741,7 @@ Any SAL_CALL ScExternalDocLinksObj::getByName(const OUString &aName)
         throw container::NoSuchElementException();
 
     sal_uInt16 nFileId = mpRefMgr->getExternalFileId(aName);
-    Reference< sheet::XExternalDocLink > aDocLink(new ScExternalDocLinkObj(mpRefMgr, nFileId));
+    Reference< sheet::XExternalDocLink > aDocLink(new ScExternalDocLinkObj(mpDocShell, mpRefMgr, nFileId));
 
     Any aAny;
     aAny <<= aDocLink;
@@ -1783,7 +1789,7 @@ Any SAL_CALL ScExternalDocLinksObj::getByIndex(sal_Int32 nIndex)
     if (!mpRefMgr->hasExternalFile(nFileId))
         throw lang::IndexOutOfBoundsException();
 
-    Reference< sheet::XExternalDocLink > aDocLink(new ScExternalDocLinkObj(mpRefMgr, nFileId));
+    Reference< sheet::XExternalDocLink > aDocLink(new ScExternalDocLinkObj(mpDocShell, mpRefMgr, nFileId));
     Any aAny;
     aAny <<= aDocLink;
     return aAny;

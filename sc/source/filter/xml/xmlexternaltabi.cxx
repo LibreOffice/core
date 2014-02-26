@@ -24,7 +24,9 @@
 
 #include "token.hxx"
 #include "document.hxx"
+#include <documentimport.hxx>
 
+#include <svl/sharedstringpool.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -376,7 +378,11 @@ void ScXMLExternalRefCellContext::EndElement()
         if (mbIsNumeric)
             aToken.reset(new formula::FormulaDoubleToken(mfCellValue));
         else
-            aToken.reset(new formula::FormulaStringToken(maCellString));
+        {
+            ScDocument& rDoc = mrScImport.GetDoc().getDoc();
+            svl::SharedString aSS = rDoc.GetSharedStringPool().intern(maCellString);
+            aToken.reset(new formula::FormulaStringToken(aSS));
+        }
 
         sal_uInt32 nNumFmt = mnNumberFormat >= 0 ? static_cast<sal_uInt32>(mnNumberFormat) : 0;
         mrExternalRefInfo.mpCacheTable->setCell(
