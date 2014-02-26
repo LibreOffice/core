@@ -52,15 +52,17 @@ struct FORMULA_DLLPUBLIC VectorRefArray
 class FORMULA_DLLPUBLIC SingleVectorRefToken : public FormulaToken
 {
     VectorRefArray maArray;
+    size_t mnRequestedLength;
     size_t mnArrayLength;
 
 public:
-    SingleVectorRefToken( const double* pArray, size_t nLength );
-    SingleVectorRefToken( const VectorRefArray& rArray, size_t nLength );
+    SingleVectorRefToken( const double* pArray, size_t nReqLength, size_t nArrayLength );
+    SingleVectorRefToken( const VectorRefArray& rArray, size_t nReqLength, size_t nArrayLength );
 
     virtual FormulaToken* Clone() const;
 
     const VectorRefArray& GetArray() const;
+    size_t GetRequestedArrayLength() const;
     size_t GetArrayLength() const;
 };
 
@@ -72,7 +74,8 @@ class FORMULA_DLLPUBLIC DoubleVectorRefToken : public FormulaToken
 {
     std::vector<VectorRefArray> maArrays;
 
-    size_t mnArrayLength; /// length of all arrays.
+    size_t mnRequestedLength; /// requested length of all arrays which include trailing empty region.
+    size_t mnArrayLength; /// length of all arrays which does not include trailing empty region.
     size_t mnRefRowSize; /// original reference row size. The row size may
                          /// change as it goes down the array if either the
                          /// stard or end position is fixed.
@@ -82,11 +85,13 @@ class FORMULA_DLLPUBLIC DoubleVectorRefToken : public FormulaToken
 
 public:
     DoubleVectorRefToken(
-        const std::vector<VectorRefArray>& rArrays, size_t nArrayLength, size_t nRefRowSize, bool bStartFixed, bool bEndFixed );
+        const std::vector<VectorRefArray>& rArrays, size_t nReqLength, size_t nArrayLength,
+        size_t nRefRowSize, bool bStartFixed, bool bEndFixed );
 
     virtual FormulaToken* Clone() const;
 
     const std::vector<VectorRefArray>& GetArrays() const;
+    size_t GetRequestedArrayLength() const;
     size_t GetArrayLength() const;
     size_t GetRefRowSize() const;
     bool IsStartFixed() const;
