@@ -2572,9 +2572,9 @@ sal_Bool SvxDummyTextSource::GetWordIndices( sal_Int32, sal_Int32, sal_Int32&, s
     return sal_False;
 }
 
-sal_Bool SvxDummyTextSource::GetAttributeRun( sal_Int32&, sal_Int32&, sal_Int32, sal_Int32, sal_Bool ) const
+bool SvxDummyTextSource::GetAttributeRun( sal_Int32&, sal_Int32&, sal_Int32, sal_Int32, bool ) const
 {
-    return sal_False;
+    return false;
 }
 
 sal_Int32 SvxDummyTextSource::GetLineCount( sal_Int32 ) const

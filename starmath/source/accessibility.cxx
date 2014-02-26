@@ -1343,12 +1343,11 @@ sal_Bool SmTextForwarder::GetWordIndices( sal_Int32 nPara, sal_Int32 nIndex, sal
     return bRes;
 }
 
-sal_Bool SmTextForwarder::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, sal_Int32 nPara, sal_Int32 nIndex, sal_Bool bInCell ) const
+bool SmTextForwarder::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, sal_Int32 nPara, sal_Int32 nIndex, bool bInCell ) const
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
-    return pEditEngine ?
-                SvxEditSourceHelper::GetAttributeRun( nStartIndex, nEndIndex, *pEditEngine, nPara, nIndex, bInCell )
-                : sal_False;
+    return pEditEngine &&
+           SvxEditSourceHelper::GetAttributeRun( nStartIndex, nEndIndex, *pEditEngine, nPara, nIndex, bInCell );
 }
 
 sal_Int32 SmTextForwarder::GetLineCount( sal_Int32 nPara ) const

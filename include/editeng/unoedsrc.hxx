@@ -322,9 +322,9 @@ public:
         @param nIndex
         The character index from which the range of similar attributed characters is requested
 
-        @return sal_True, if the range has been successfully determined
+        @return true, if the range has been successfully determined
      */
-    virtual sal_Bool        GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, sal_Int32 nPara, sal_Int32 nIndex, sal_Bool bInCell = sal_False ) const = 0;
+    virtual bool               GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, sal_Int32 nPara, sal_Int32 nIndex, bool bInCell = false ) const = 0;
 
     /** Query number of lines in the formatted paragraph
 

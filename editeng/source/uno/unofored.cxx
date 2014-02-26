@@ -406,7 +406,7 @@ sal_Bool SvxEditEngineForwarder::GetWordIndices( sal_Int32 nPara, sal_Int32 nInd
     return sal_False;
 }
 
-sal_Bool SvxEditEngineForwarder::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, sal_Int32 nPara, sal_Int32 nIndex, sal_Bool bInCell ) const
+bool SvxEditEngineForwarder::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, sal_Int32 nPara, sal_Int32 nIndex, bool bInCell ) const
 {
     return SvxEditSourceHelper::GetAttributeRun( nStartIndex, nEndIndex, rEditEngine, nPara, nIndex, bInCell );
 }

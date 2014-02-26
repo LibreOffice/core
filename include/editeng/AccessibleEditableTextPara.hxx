@@ -302,7 +302,7 @@ namespace accessibility
             @param nIndex
             The character index at where to look for similar character attributes
 
-            @return sal_False, if the method was not able to determine the range
+            @return false, if the method was not able to determine the range
          */
         bool GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, sal_Int32 nIndex );
 

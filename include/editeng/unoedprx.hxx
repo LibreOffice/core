@@ -69,7 +69,7 @@ public:
     virtual OutputDevice*   GetRefDevice() const;
     virtual sal_Bool        GetIndexAtPoint( const Point&, sal_Int32& nPara, sal_Int32& nIndex ) const;
     virtual sal_Bool        GetWordIndices( sal_Int32 nPara, sal_Int32 nIndex, sal_Int32& nStart, sal_Int32& nEnd ) const;
-    virtual sal_Bool        GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, sal_Int32 nPara, sal_Int32 nIndex, sal_Bool bInCell = sal_False ) const;
+    virtual bool            GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, sal_Int32 nPara, sal_Int32 nIndex, bool bInCell = false ) const;
     virtual sal_Int32       GetLineCount( sal_Int32 nPara ) const;
     virtual sal_Int32       GetLineLen( sal_Int32 nPara, sal_Int32 nLine ) const;
     virtual void            SetUpdateModeForAcc( sal_Bool bUp);

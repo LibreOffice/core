@@ -98,9 +98,9 @@ public:
         @param nIndex
         The character index from which the range of similar attributed characters is requested
 
-        @return sal_True, if the range has been successfully determined
+        @return true, if the range has been successfully determined
      */
-     static sal_Bool GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, const EditEngine& rEE, sal_Int32 nPara, sal_Int32 nIndex, sal_Bool bInCell = sal_False);
+     static bool GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, const EditEngine& rEE, sal_Int32 nPara, sal_Int32 nIndex, bool bInCell = false);
 
     /** Convert point from edit engine to user coordinate space
 

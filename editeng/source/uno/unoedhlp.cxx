@@ -108,7 +108,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
 }
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
-sal_Bool SvxEditSourceHelper::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, const EditEngine& rEE, sal_Int32 nPara, sal_Int32 nIndex, sal_Bool bInCell )
+bool SvxEditSourceHelper::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, const EditEngine& rEE, sal_Int32 nPara, sal_Int32 nIndex, bool bInCell )
 {
     // IA2 CWS introduced bInCell, but also did many other changes here.
     // Need to verify implementation with AT (IA2 and ATK)
@@ -202,7 +202,7 @@ sal_Bool SvxEditSourceHelper::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32
                 if ( nLen )
                 {
                     sal_Int32 nStartIdx, nEndIdx;
-                    GetAttributeRun( nStartIdx, nEndIdx, rEE, nParaIdx, nLen, sal_False );
+                    GetAttributeRun( nStartIdx, nEndIdx, rEE, nParaIdx, nLen, false );
                     SfxItemSet aSet = rEE.GetAttribs( nParaIdx, nLen-1, nLen, GETATTRIBS_CHARATTRIBS );
                     if ( aSet == aCrrntSet )
                     {
@@ -226,7 +226,7 @@ sal_Bool SvxEditSourceHelper::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32
                 if ( nLen )
                 {
                     sal_Int32 nStartIdx, nEndIdx;
-                    GetAttributeRun( nStartIdx, nEndIdx, rEE, nParaIdx, 0, sal_False );
+                    GetAttributeRun( nStartIdx, nEndIdx, rEE, nParaIdx, 0, false );
                     SfxItemSet aSet = rEE.GetAttribs( nParaIdx, 0, 1, GETATTRIBS_CHARATTRIBS );
                     if ( aSet == aCrrntSet )
                     {
@@ -260,7 +260,7 @@ sal_Bool SvxEditSourceHelper::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32
         nEndIndex += aEndPos.nIndex;
     }
 
-    return sal_True;
+    return true;
 }
 
 Point SvxEditSourceHelper::EEToUserSpace( const Point& rPoint, const Size& rEESize, bool bIsVertical )

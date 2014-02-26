@@ -947,7 +947,7 @@ sal_Bool SvxAccessibleTextAdapter::GetWordIndices( sal_Int32 nPara, sal_Int32 nI
     return sal_True;
 }
 
-sal_Bool SvxAccessibleTextAdapter::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, sal_Int32 nPara, sal_Int32 nIndex, sal_Bool /* bInCell */ ) const
+bool SvxAccessibleTextAdapter::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, sal_Int32 nPara, sal_Int32 nIndex, bool /* bInCell */ ) const
 {
     DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
@@ -965,7 +965,7 @@ sal_Bool SvxAccessibleTextAdapter::GetAttributeRun( sal_Int32& nStartIndex, sal_
         nStartIndex = 0;
         nEndIndex = aIndex.GetBulletLen();
 
-        return sal_True;
+        return true;
     }
 
     if( aIndex.InField() )
@@ -978,11 +978,11 @@ sal_Bool SvxAccessibleTextAdapter::GetAttributeRun( sal_Int32& nStartIndex, sal_
         nStartIndex = aIndex.GetIndex() - aIndex.GetFieldOffset();
         nEndIndex = nStartIndex + aIndex.GetFieldLen();
 
-        return sal_True;
+        return true;
     }
 
     if( !mpTextForwarder->GetAttributeRun( nStartIndex, nEndIndex, nPara, nIndex ) )
-        return sal_False;
+        return false;
 
     aIndex.SetEEIndex( nPara, nStartIndex, *this );
     DBG_ASSERT(aIndex.GetIndex() >= 0 &&
@@ -996,7 +996,7 @@ sal_Bool SvxAccessibleTextAdapter::GetAttributeRun( sal_Int32& nStartIndex, sal_
                "SvxAccessibleTextIndex::SetIndex: index value overflow");
     nEndIndex = aIndex.GetIndex();
 
-    return sal_True;
+    return true;
 }
 
 sal_Int32 SvxAccessibleTextAdapter::GetLineCount( sal_Int32 nPara ) const
