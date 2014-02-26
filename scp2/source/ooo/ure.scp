@@ -94,13 +94,6 @@ End
 
 // Public Dynamic Libraries:
 
-File gid_File_Dl_Cppu
-    LIB_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_UNO_VER("cppu", "3");
-    Styles = (PACKED);
-End
-
 #ifdef AIX
 Unixlink gid_Unixlink_File_Dl_Cppu
     BIN_FILE_BODY;
@@ -110,13 +103,6 @@ Unixlink gid_Unixlink_File_Dl_Cppu
     Target = SCP2_URE_DL_UNO_VER("cppu", "3");
 End
 #endif
-
-File gid_File_Dl_Cppuhelper
-    LIB_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_UNO_COMID_VER("cppuhelper", "3");
-    Styles = (PACKED);
-End
 
 #ifdef AIX
 Unixlink gid_Unixlink_File_Dl_Cppuhelper
@@ -128,13 +114,6 @@ Unixlink gid_Unixlink_File_Dl_Cppuhelper
 End
 #endif
 
-File gid_File_Dl_PurpEnvHelper
-    LIB_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_UNO_COMID_VER("purpenvhelper", "3");
-    Styles = (PACKED);
-End
-
 #ifdef AIX
 Unixlink gid_Unixlink_File_Dl_PurpEnvHelper
     BIN_FILE_BODY;
@@ -145,13 +124,6 @@ Unixlink gid_Unixlink_File_Dl_PurpEnvHelper
 End
 #endif
 
-File gid_File_Dl_Sal
-    LIB_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_UNO_VER("sal", "3");
-    Styles = (PACKED);
-End
-
 #ifdef AIX
 Unixlink gid_Unixlink_File_Dl_Sal
     BIN_FILE_BODY;
@@ -161,13 +133,6 @@ Unixlink gid_Unixlink_File_Dl_Sal
     Target = SCP2_URE_DL_UNO_VER("sal", "3");
 End
 #endif
-
-File gid_File_Dl_Salhelper
-    LIB_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_UNO_COMID_VER("salhelper", "3");
-    Styles = (PACKED);
-End
 
 #ifdef AIX
 Unixlink gid_Unixlink_File_Dl_Salhelper
