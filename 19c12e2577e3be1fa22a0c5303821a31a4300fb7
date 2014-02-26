@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a961159_2c873363",
+        "filename": "compilerplugins/clang/implicitboolconversion.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-02-26T07:48:29Z",
+      "side": 1,
+      "message": "this is one logical comment, containing displayed code snippets; don\u0027t mess it up",
+      "revId": "19c12e2577e3be1fa22a0c5303821a31a4300fb7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a961159_4c7c7f73",
+        "filename": "compilerplugins/clang/literaltoboolconversion.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-02-26T07:48:29Z",
+      "side": 1,
+      "message": "this is one logical comment, containing displayed code snippets; don\u0027t mess it up",
+      "revId": "19c12e2577e3be1fa22a0c5303821a31a4300fb7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a961159_6c813b4a",
+        "filename": "compilerplugins/clang/plugin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-02-26T07:48:29Z",
+      "side": 1,
+      "message": "please also remove excessive empty lines (i.e., if there was an empty line preceding/following the removed comment already, that\u0027s a strong indication /not/ to leave an empty line in replacement for the comment",
+      "revId": "19c12e2577e3be1fa22a0c5303821a31a4300fb7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a961159_8c95878a",
+        "filename": "compilerplugins/clang/plugin.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-02-26T07:48:29Z",
+      "side": 1,
+      "message": "please also remove excessive empty lines (i.e., if there was an empty line preceding/following the removed comment already, that\u0027s a strong indication /not/ to leave an empty line in replacement for the comment",
+      "revId": "19c12e2577e3be1fa22a0c5303821a31a4300fb7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a961159_cc8f8f74",
+        "filename": "compilerplugins/clang/store/referencecasting.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-02-26T07:48:29Z",
+      "side": 1,
+      "message": "this is one logical comment, containing a displayed code snippet; don\u0027t mess it up",
+      "revId": "19c12e2577e3be1fa22a0c5303821a31a4300fb7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a961159_ac92439d",
+        "filename": "compilerplugins/clang/store/salbool.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-02-26T07:48:29Z",
+      "side": 1,
+      "message": "this is one logical comment, containing a displayed code snippet; don\u0027t mess it up",
+      "revId": "19c12e2577e3be1fa22a0c5303821a31a4300fb7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
