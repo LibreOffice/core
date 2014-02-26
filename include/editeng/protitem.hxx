@@ -34,9 +34,9 @@ class SvXMLUnitConverter;
 
 class EDITENG_DLLPUBLIC SvxProtectItem : public SfxPoolItem
 {
-    sal_Bool bCntnt :1;     // Content protected
-    sal_Bool bSize  :1;     // Size protected
-    sal_Bool bPos   :1;     // Position protected
+    bool bCntnt :1;     // Content protected
+    bool bSize  :1;     // Size protected
+    bool bPos   :1;     // Position protected
 
 public:
     TYPEINFO();
@@ -57,12 +57,12 @@ public:
     virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
     virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const;
 
-    sal_Bool IsCntntProtected() const { return bCntnt; }
-    sal_Bool IsSizeProtected()  const { return bSize;  }
-    sal_Bool IsPosProtected()   const { return bPos;   }
-    void SetCntntProtect( sal_Bool bNew ) { bCntnt = bNew; }
-    void SetSizeProtect ( sal_Bool bNew ) { bSize  = bNew; }
-    void SetPosProtect  ( sal_Bool bNew ) { bPos   = bNew; }
+    bool IsCntntProtected() const { return bCntnt; }
+    bool IsSizeProtected()  const { return bSize;  }
+    bool IsPosProtected()   const { return bPos;   }
+    void SetCntntProtect( bool bNew ) { bCntnt = bNew; }
+    void SetSizeProtect ( bool bNew ) { bSize  = bNew; }
+    void SetPosProtect  ( bool bNew ) { bPos   = bNew; }
 
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
@@ -71,7 +71,7 @@ public:
 inline SvxProtectItem::SvxProtectItem( const sal_uInt16 nId )
     : SfxPoolItem( nId )
 {
-    bCntnt = bSize = bPos = sal_False;
+    bCntnt = bSize = bPos = false;
 }
 
 inline SvxProtectItem &SvxProtectItem::operator=( const SvxProtectItem &rCpy )

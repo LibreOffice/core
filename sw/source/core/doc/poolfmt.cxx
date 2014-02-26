@@ -1359,8 +1359,8 @@ SwFmt* SwDoc::GetFmtFromPool( sal_uInt16 nId )
             aSet.Put( SvxLRSpaceItem( 114, 114, 0, 0, RES_LR_SPACE ) );
 
             SvxProtectItem aProtect( RES_PROTECT );
-            aProtect.SetSizeProtect( sal_True );
-            aProtect.SetPosProtect( sal_True );
+            aProtect.SetSizeProtect( true );
+            aProtect.SetPosProtect( true );
             aSet.Put( aProtect );
 
             pNewFmt->SetAutoUpdateFmt( sal_True );

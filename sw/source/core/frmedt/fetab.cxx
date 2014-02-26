@@ -979,7 +979,7 @@ sal_Bool SwFEShell::HasBoxSelection() const
 void SwFEShell::ProtectCells()
 {
     SvxProtectItem aProt( RES_PROTECT );
-    aProt.SetCntntProtect( sal_True );
+    aProt.SetCntntProtect( true );
 
     SET_CURR_SHELL( this );
     StartAllAction();

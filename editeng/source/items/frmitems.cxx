@@ -1308,9 +1308,9 @@ SfxPoolItem* SvxProtectItem::Create( SvStream& rStrm, sal_uInt16 ) const
     sal_Int8 cFlags;
     rStrm.ReadSChar( cFlags );
     SvxProtectItem* pAttr = new SvxProtectItem( Which() );
-    pAttr->SetPosProtect( sal_Bool( ( cFlags & 0x01 ) != 0 ) );
-    pAttr->SetSizeProtect( sal_Bool(  ( cFlags & 0x02 ) != 0 ) );
-    pAttr->SetCntntProtect( sal_Bool(  ( cFlags & 0x04 ) != 0 ) );
+    pAttr->SetPosProtect( ( cFlags & 0x01 ) != 0 );
+    pAttr->SetSizeProtect( ( cFlags & 0x02 ) != 0 );
+    pAttr->SetCntntProtect( ( cFlags & 0x04 ) != 0 );
     return pAttr;
 }
 

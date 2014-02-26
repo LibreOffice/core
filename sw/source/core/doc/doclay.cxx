@@ -1546,7 +1546,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     if ( rSdrObj.IsMoveProtect() || rSdrObj.IsResizeProtect() )
     {
         SvxProtectItem aProtect(RES_PROTECT);
-        aProtect.SetCntntProtect( sal_False );
+        aProtect.SetCntntProtect( false );
         aProtect.SetPosProtect( rSdrObj.IsMoveProtect() );
         aProtect.SetSizeProtect( rSdrObj.IsResizeProtect() );
         pNewSet->Put( aProtect );

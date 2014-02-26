@@ -4923,7 +4923,7 @@ void SwHTMLParser::InsertSpacer()
 
             // den Inhalt schuetzen
             SvxProtectItem aProtectItem( RES_PROTECT) ;
-            aProtectItem.SetCntntProtect( sal_True );
+            aProtectItem.SetCntntProtect( true );
             aFrmSet.Put( aProtectItem );
 
             // der Rahmen anlegen

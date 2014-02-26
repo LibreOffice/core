@@ -944,8 +944,8 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
                     rSet.DisableItem( SID_RULER_OBJECT );
 
                     // lock page margins
-                    aProtect.SetSizeProtect( sal_True );
-                    aProtect.SetPosProtect( sal_True );
+                    aProtect.SetSizeProtect( true );
+                    aProtect.SetPosProtect( true );
                 }
 
                 if( aEditAttr.GetItemState( EE_PARA_WRITINGDIR ) >= SFX_ITEM_AVAILABLE )

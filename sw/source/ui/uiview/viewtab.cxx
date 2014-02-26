@@ -1990,8 +1990,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 SvxProtectItem aProtect(SID_RULER_PROTECT);
                 if(bBrowse && !(nFrmType & (FRMTYPE_DRAWOBJ|FRMTYPE_COLUMN)) && !rSh.GetTableFmt())
                 {
-                    aProtect.SetSizeProtect(sal_True);
-                    aProtect.SetPosProtect(sal_True);
+                    aProtect.SetSizeProtect(true);
+                    aProtect.SetPosProtect(true);
                 }
                 rSet.Put(aProtect);
             }
@@ -2003,7 +2003,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
     if(bPutContentProtection)
     {
         SvxProtectItem aProtect(SID_RULER_PROTECT);
-        aProtect.SetCntntProtect(sal_True);
+        aProtect.SetCntntProtect(true);
         rSet.Put(aProtect);
     }
 }
