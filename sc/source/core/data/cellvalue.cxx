@@ -103,8 +103,7 @@ bool equalsWithoutFormatImpl( const _T& left, const _T& right )
     return false;
 }
 
-template<typename _T>
-void commitToColumn( const _T& rCell, ScColumn& rColumn, SCROW nRow )
+static void commitToColumn( const ScCellValue& rCell, ScColumn& rColumn, SCROW nRow )
 {
     switch (rCell.meType)
     {
@@ -544,11 +543,6 @@ void ScRefCellValue::commit( ScDocument& rDoc, const ScAddress& rPos ) const
         default:
             rDoc.SetEmptyCell(rPos);
     }
-}
-
-void ScRefCellValue::commit( ScColumn& rColumn, SCROW nRow ) const
-{
-    commitToColumn(*this, rColumn, nRow);
 }
 
 bool ScRefCellValue::hasString() const

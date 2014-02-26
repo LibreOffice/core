@@ -130,8 +130,6 @@ struct SC_DLLPUBLIC ScRefCellValue
      */
     void commit( ScDocument& rDoc, const ScAddress& rPos ) const;
 
-    void commit( ScColumn& rColumn, SCROW nRow ) const;
-
     bool hasString() const;
 
     bool hasNumeric() const;
