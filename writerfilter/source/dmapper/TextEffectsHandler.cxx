@@ -141,6 +141,9 @@ OUString getNameForElementId(sal_uInt32 aId)
         aIdMap[NS_ooxml::LN_EG_LineJoinProperties_round]        = "round";
         aIdMap[NS_ooxml::LN_EG_LineJoinProperties_bevel]        = "bevel";
         aIdMap[NS_ooxml::LN_EG_LineJoinProperties_miter]        = "miter";
+        aIdMap[NS_ooxml::LN_CT_Scene3D_camera]                  = "camera";
+        aIdMap[NS_ooxml::LN_CT_Scene3D_lightRig]                = "lightRig";
+        aIdMap[NS_ooxml::LN_CT_LightRig_rot]                    = "rot";
     }
     return aIdMap[aId];
 }
@@ -269,6 +272,132 @@ OUString TextEffectsHandler::getPresetLineDashValString(sal_Int32 nType)
     return OUString();
 }
 
+OUString TextEffectsHandler::getPresetCameraTypeString(sal_Int32 nType)
+{
+    switch (nType)
+    {
+        case NS_ooxml::LN_ST_PresetCameraType_legacyObliqueTopLeft: return OUString("legacyObliqueTopLeft");
+        case NS_ooxml::LN_ST_PresetCameraType_legacyObliqueTop: return OUString("legacyObliqueTop");
+        case NS_ooxml::LN_ST_PresetCameraType_legacyObliqueTopRight: return OUString("legacyObliqueTopRight");
+        case NS_ooxml::LN_ST_PresetCameraType_legacyObliqueLeft: return OUString("legacyObliqueLeft");
+        case NS_ooxml::LN_ST_PresetCameraType_legacyObliqueFront: return OUString("legacyObliqueFront");
+        case NS_ooxml::LN_ST_PresetCameraType_legacyObliqueRight: return OUString("legacyObliqueRight");
+        case NS_ooxml::LN_ST_PresetCameraType_legacyObliqueBottomLeft: return OUString("legacyObliqueBottomLeft");
+        case NS_ooxml::LN_ST_PresetCameraType_legacyObliqueBottom: return OUString("legacyObliqueBottom");
+        case NS_ooxml::LN_ST_PresetCameraType_legacyObliqueBottomRight: return OUString("legacyObliqueBottomRight");
+        case NS_ooxml::LN_ST_PresetCameraType_legacyPerspectiveTopLeft: return OUString("legacyPerspectiveTopLeft");
+        case NS_ooxml::LN_ST_PresetCameraType_legacyPerspectiveTop: return OUString("legacyPerspectiveTop");
+        case NS_ooxml::LN_ST_PresetCameraType_legacyPerspectiveTopRight: return OUString("legacyPerspectiveTopRight");
+        case NS_ooxml::LN_ST_PresetCameraType_legacyPerspectiveLeft: return OUString("legacyPerspectiveLeft");
+        case NS_ooxml::LN_ST_PresetCameraType_legacyPerspectiveFront: return OUString("legacyPerspectiveFront");
+        case NS_ooxml::LN_ST_PresetCameraType_legacyPerspectiveRight: return OUString("legacyPerspectiveRight");
+        case NS_ooxml::LN_ST_PresetCameraType_legacyPerspectiveBottomLeft: return OUString("legacyPerspectiveBottomLeft");
+        case NS_ooxml::LN_ST_PresetCameraType_legacyPerspectiveBottom: return OUString("legacyPerspectiveBottom");
+        case NS_ooxml::LN_ST_PresetCameraType_legacyPerspectiveBottomRight: return OUString("legacyPerspectiveBottomRight");
+        case NS_ooxml::LN_ST_PresetCameraType_orthographicFront: return OUString("orthographicFront");
+        case NS_ooxml::LN_ST_PresetCameraType_isometricTopUp: return OUString("isometricTopUp");
+        case NS_ooxml::LN_ST_PresetCameraType_isometricTopDown: return OUString("isometricTopDown");
+        case NS_ooxml::LN_ST_PresetCameraType_isometricBottomUp: return OUString("isometricBottomUp");
+        case NS_ooxml::LN_ST_PresetCameraType_isometricBottomDown: return OUString("isometricBottomDown");
+        case NS_ooxml::LN_ST_PresetCameraType_isometricLeftUp: return OUString("isometricLeftUp");
+        case NS_ooxml::LN_ST_PresetCameraType_isometricLeftDown: return OUString("isometricLeftDown");
+        case NS_ooxml::LN_ST_PresetCameraType_isometricRightUp: return OUString("isometricRightUp");
+        case NS_ooxml::LN_ST_PresetCameraType_isometricRightDown: return OUString("isometricRightDown");
+        case NS_ooxml::LN_ST_PresetCameraType_isometricOffAxis1Left: return OUString("isometricOffAxis1Left");
+        case NS_ooxml::LN_ST_PresetCameraType_isometricOffAxis1Right: return OUString("isometricOffAxis1Right");
+        case NS_ooxml::LN_ST_PresetCameraType_isometricOffAxis1Top: return OUString("isometricOffAxis1Top");
+        case NS_ooxml::LN_ST_PresetCameraType_isometricOffAxis2Left: return OUString("isometricOffAxis2Left");
+        case NS_ooxml::LN_ST_PresetCameraType_isometricOffAxis2Right: return OUString("isometricOffAxis2Right");
+        case NS_ooxml::LN_ST_PresetCameraType_isometricOffAxis2Top: return OUString("isometricOffAxis2Top");
+        case NS_ooxml::LN_ST_PresetCameraType_isometricOffAxis3Left: return OUString("isometricOffAxis3Left");
+        case NS_ooxml::LN_ST_PresetCameraType_isometricOffAxis3Right: return OUString("isometricOffAxis3Right");
+        case NS_ooxml::LN_ST_PresetCameraType_isometricOffAxis3Bottom: return OUString("isometricOffAxis3Bottom");
+        case NS_ooxml::LN_ST_PresetCameraType_isometricOffAxis4Left: return OUString("isometricOffAxis4Left");
+        case NS_ooxml::LN_ST_PresetCameraType_isometricOffAxis4Right: return OUString("isometricOffAxis4Right");
+        case NS_ooxml::LN_ST_PresetCameraType_isometricOffAxis4Bottom: return OUString("isometricOffAxis4Bottom");
+        case NS_ooxml::LN_ST_PresetCameraType_obliqueTopLeft: return OUString("obliqueTopLeft");
+        case NS_ooxml::LN_ST_PresetCameraType_obliqueTop: return OUString("obliqueTop");
+        case NS_ooxml::LN_ST_PresetCameraType_obliqueTopRight: return OUString("obliqueTopRight");
+        case NS_ooxml::LN_ST_PresetCameraType_obliqueLeft: return OUString("obliqueLeft");
+        case NS_ooxml::LN_ST_PresetCameraType_obliqueRight: return OUString("obliqueRight");
+        case NS_ooxml::LN_ST_PresetCameraType_obliqueBottomLeft: return OUString("obliqueBottomLeft");
+        case NS_ooxml::LN_ST_PresetCameraType_obliqueBottom: return OUString("obliqueBottom");
+        case NS_ooxml::LN_ST_PresetCameraType_obliqueBottomRight: return OUString("obliqueBottomRight");
+        case NS_ooxml::LN_ST_PresetCameraType_perspectiveFront: return OUString("perspectiveFront");
+        case NS_ooxml::LN_ST_PresetCameraType_perspectiveLeft: return OUString("perspectiveLeft");
+        case NS_ooxml::LN_ST_PresetCameraType_perspectiveRight: return OUString("perspectiveRight");
+        case NS_ooxml::LN_ST_PresetCameraType_perspectiveAbove: return OUString("perspectiveAbove");
+        case NS_ooxml::LN_ST_PresetCameraType_perspectiveBelow: return OUString("perspectiveBelow");
+        case NS_ooxml::LN_ST_PresetCameraType_perspectiveAboveLeftFacing: return OUString("perspectiveAboveLeftFacing");
+        case NS_ooxml::LN_ST_PresetCameraType_perspectiveAboveRightFacing: return OUString("perspectiveAboveRightFacing");
+        case NS_ooxml::LN_ST_PresetCameraType_perspectiveContrastingLeftFacing: return OUString("perspectiveContrastingLeftFacing");
+        case NS_ooxml::LN_ST_PresetCameraType_perspectiveContrastingRightFacing: return OUString("perspectiveContrastingRightFacing");
+        case NS_ooxml::LN_ST_PresetCameraType_perspectiveHeroicLeftFacing: return OUString("perspectiveHeroicLeftFacing");
+        case NS_ooxml::LN_ST_PresetCameraType_perspectiveHeroicRightFacing: return OUString("perspectiveHeroicRightFacing");
+        case NS_ooxml::LN_ST_PresetCameraType_perspectiveHeroicExtremeLeftFacing: return OUString("perspectiveHeroicExtremeLeftFacing");
+        case NS_ooxml::LN_ST_PresetCameraType_perspectiveHeroicExtremeRightFacing: return OUString("perspectiveHeroicExtremeRightFacing");
+        case NS_ooxml::LN_ST_PresetCameraType_perspectiveRelaxed: return OUString("perspectiveRelaxed");
+        case NS_ooxml::LN_ST_PresetCameraType_perspectiveRelaxedModerately: return OUString("perspectiveRelaxedModerately");
+        default: break;
+    }
+    return OUString();
+}
+
+
+OUString TextEffectsHandler::getLightRigTypeString(sal_Int32 nType)
+{
+    switch (nType)
+    {
+        case NS_ooxml::LN_ST_LightRigType_legacyFlat1: return OUString("legacyFlat1");
+        case NS_ooxml::LN_ST_LightRigType_legacyFlat2: return OUString("legacyFlat2");
+        case NS_ooxml::LN_ST_LightRigType_legacyFlat3: return OUString("legacyFlat3");
+        case NS_ooxml::LN_ST_LightRigType_legacyFlat4: return OUString("legacyFlat4");
+        case NS_ooxml::LN_ST_LightRigType_legacyNormal1: return OUString("legacyNormal1");
+        case NS_ooxml::LN_ST_LightRigType_legacyNormal2: return OUString("legacyNormal2");
+        case NS_ooxml::LN_ST_LightRigType_legacyNormal3: return OUString("legacyNormal3");
+        case NS_ooxml::LN_ST_LightRigType_legacyNormal4: return OUString("legacyNormal4");
+        case NS_ooxml::LN_ST_LightRigType_legacyHarsh1: return OUString("legacyHarsh1");
+        case NS_ooxml::LN_ST_LightRigType_legacyHarsh2: return OUString("legacyHarsh2");
+        case NS_ooxml::LN_ST_LightRigType_legacyHarsh3: return OUString("legacyHarsh3");
+        case NS_ooxml::LN_ST_LightRigType_legacyHarsh4: return OUString("legacyHarsh4");
+        case NS_ooxml::LN_ST_LightRigType_threePt: return OUString("threePt");
+        case NS_ooxml::LN_ST_LightRigType_balanced: return OUString("balanced");
+        case NS_ooxml::LN_ST_LightRigType_soft: return OUString("soft");
+        case NS_ooxml::LN_ST_LightRigType_harsh: return OUString("harsh");
+        case NS_ooxml::LN_ST_LightRigType_flood: return OUString("flood");
+        case NS_ooxml::LN_ST_LightRigType_contrasting: return OUString("contrasting");
+        case NS_ooxml::LN_ST_LightRigType_morning: return OUString("morning");
+        case NS_ooxml::LN_ST_LightRigType_sunrise: return OUString("sunrise");
+        case NS_ooxml::LN_ST_LightRigType_sunset: return OUString("sunset");
+        case NS_ooxml::LN_ST_LightRigType_chilly: return OUString("chilly");
+        case NS_ooxml::LN_ST_LightRigType_freezing: return OUString("freezing");
+        case NS_ooxml::LN_ST_LightRigType_flat: return OUString("flat");
+        case NS_ooxml::LN_ST_LightRigType_twoPt: return OUString("twoPt");
+        case NS_ooxml::LN_ST_LightRigType_glow: return OUString("glow");
+        case NS_ooxml::LN_ST_LightRigType_brightRoom: return OUString("brightRoom");
+        default: break;
+    }
+    return OUString();
+}
+
+OUString TextEffectsHandler::getLightRigDirectionString(sal_Int32 nType)
+{
+    switch (nType)
+    {
+        case NS_ooxml::LN_ST_LightRigDirection_tl: return OUString("tl");
+        case NS_ooxml::LN_ST_LightRigDirection_t: return OUString("t");
+        case NS_ooxml::LN_ST_LightRigDirection_tr: return OUString("tr");
+        case NS_ooxml::LN_ST_LightRigDirection_l: return OUString("l");
+        case NS_ooxml::LN_ST_LightRigDirection_r: return OUString("r");
+        case NS_ooxml::LN_ST_LightRigDirection_bl: return OUString("bl");
+        case NS_ooxml::LN_ST_LightRigDirection_b: return OUString("b");
+        case NS_ooxml::LN_ST_LightRigDirection_br: return OUString("br");
+
+        default: break;
+    }
+    return OUString();
+}
+
 void TextEffectsHandler::convertElementIdToPropertyId(sal_Int32 aElementId)
 {
     switch(aElementId)
@@ -294,6 +423,9 @@ void TextEffectsHandler::convertElementIdToPropertyId(sal_Int32 aElementId)
             maElementName = "textFill";
             break;
         case NS_ooxml::LN_scene3d_scene3d:
+            maPropertyId = PROP_CHAR_SCENE3D_TEXT_EFFECT;
+            maElementName = "scene3d";
+            break;
         case NS_ooxml::LN_props3d_props3d:
         case NS_ooxml::LN_ligatures_ligatures:
         case NS_ooxml::LN_numForm_numForm:
@@ -462,6 +594,34 @@ void TextEffectsHandler::lcl_attribute(Id aName, Value& aValue)
         case NS_ooxml::LN_CT_LineJoinMiterProperties_lim:
             mpGrabBagStack->addInt32("lim", sal_Int32(aValue.getInt()));
             break;
+        case NS_ooxml::LN_CT_Camera_prst:
+            {
+                uno::Any aAny = makeAny(getPresetCameraTypeString(sal_Int32(aValue.getInt())));
+                mpGrabBagStack->appendElement("prst", aAny);
+            }
+            break;
+        case NS_ooxml::LN_CT_LightRig_rig:
+            {
+                uno::Any aAny = makeAny(getLightRigTypeString(sal_Int32(aValue.getInt())));
+                mpGrabBagStack->appendElement("rig", aAny);
+            }
+            break;
+        case NS_ooxml::LN_CT_LightRig_dir:
+            {
+                uno::Any aAny = makeAny(getLightRigDirectionString(sal_Int32(aValue.getInt())));
+                mpGrabBagStack->appendElement("dir", aAny);
+            }
+            break;
+        case NS_ooxml::LN_CT_SphereCoords_lat:
+            mpGrabBagStack->addInt32("lat", sal_Int32(aValue.getInt()));
+            break;
+        case NS_ooxml::LN_CT_SphereCoords_lon:
+            mpGrabBagStack->addInt32("lon", sal_Int32(aValue.getInt()));
+            break;
+        case NS_ooxml::LN_CT_SphereCoords_rev:
+            mpGrabBagStack->addInt32("rev", sal_Int32(aValue.getInt()));
+            break;
+
         default:
             break;
     }

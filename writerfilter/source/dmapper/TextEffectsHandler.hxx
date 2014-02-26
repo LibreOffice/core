@@ -59,6 +59,9 @@ public:
     static OUString getOnOffString(sal_Int32 nType);
     static OUString getPathShadeTypeString(sal_Int32 nType);
     static OUString getPresetLineDashValString(sal_Int32 nType);
+    static OUString getPresetCameraTypeString(sal_Int32 nType);
+    static OUString getLightRigTypeString(sal_Int32 nType);
+    static OUString getLightRigDirectionString(sal_Int32 nType);
 };
 
 typedef boost::shared_ptr<TextEffectsHandler> TextEffectsHandlerPtr;
