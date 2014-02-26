@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <iostream>
 
 #include <tools/debug.hxx>
@@ -54,8 +53,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
 
-//==================================================================================================
-
 #define SERVICENAME     "com.sun.star.linguistic2.LanguageGuessing"
 #define IMPLNAME        "com.sun.star.lingu2.LanguageGuessing"
 
@@ -76,7 +73,6 @@ static osl::Mutex &  GetLangGuessMutex()
     static osl::Mutex aMutex;
     return aMutex;
 }
-
 
 class LangGuess_Impl :
     public ::cppu::WeakImplHelper2<
@@ -117,15 +113,11 @@ public:
 
 };
 
-//*************************************************************************
-
 LangGuess_Impl::LangGuess_Impl(css::uno::Reference< css::uno::XComponentContext > const & rxContext) :
     m_bInitialized( false ),
     m_xContext( rxContext )
 {
 }
-
-//*************************************************************************
 
 void LangGuess_Impl::EnsureInitialized()
 {
@@ -148,9 +140,9 @@ void LangGuess_Impl::EnsureInitialized()
         SetFingerPrintsDB( aPhysPath );
 
 #if !defined(EXTTEXTCAT_VERSION_MAJOR)
-        //
+
         // disable currently not functional languages...
-        //
+
         struct LangCountry
         {
             const char *pLang;
@@ -181,8 +173,6 @@ void LangGuess_Impl::EnsureInitialized()
     }
 }
 
-//*************************************************************************
-
 Locale SAL_CALL LangGuess_Impl::guessPrimaryLanguage(
         const OUString& rText,
         ::sal_Int32 nStartPos,
@@ -207,7 +197,6 @@ Locale SAL_CALL LangGuess_Impl::guessPrimaryLanguage(
     return aRes;
 }
 
-//*************************************************************************
 #define DEFAULT_CONF_FILE_NAME "fpdb.conf"
 
 void LangGuess_Impl::SetFingerPrintsDB(
@@ -223,7 +212,6 @@ void LangGuess_Impl::SetFingerPrintsDB(
     m_aGuesser.SetDBPath((const char*)conf_file_path.getStr(), (const char*)path.getStr());
 }
 
-//*************************************************************************
 uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getAvailableLanguages(  )
         throw (uno::RuntimeException)
 {
@@ -247,7 +235,6 @@ uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getAvailableLanguages(  )
     return aRes;
 }
 
-//*************************************************************************
 uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getEnabledLanguages(  )
         throw (uno::RuntimeException)
 {
@@ -271,7 +258,6 @@ uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getEnabledLanguages(  )
     return aRes;
 }
 
-//*************************************************************************
 uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getDisabledLanguages(  )
         throw (uno::RuntimeException)
 {
@@ -295,7 +281,6 @@ uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getDisabledLanguages(  )
     return aRes;
 }
 
-//*************************************************************************
 void SAL_CALL LangGuess_Impl::disableLanguages(
         const uno::Sequence< Locale >& rLanguages )
     throw (lang::IllegalArgumentException, uno::RuntimeException)
@@ -321,7 +306,6 @@ void SAL_CALL LangGuess_Impl::disableLanguages(
     }
 }
 
-//*************************************************************************
 void SAL_CALL LangGuess_Impl::enableLanguages(
         const uno::Sequence< Locale >& rLanguages )
     throw (lang::IllegalArgumentException, uno::RuntimeException)
@@ -384,9 +368,7 @@ Reference< XInterface > SAL_CALL LangGuess_Impl_create(
     return static_cast< ::cppu::OWeakObject * >( new LangGuess_Impl(xContext) );
 }
 
-//##################################################################################################
 //#### EXPORTED ### functions to allow for registration and creation of the UNO component
-//##################################################################################################
 
 static const struct ::cppu::ImplementationEntry s_component_entries [] =
 {

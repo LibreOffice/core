@@ -27,7 +27,6 @@
   * - Not init h when implicit constructor is launched
   */
 
-
 #include <string.h>
 #include <sstream>
 #include <iostream>
@@ -52,7 +51,6 @@
 #include "simpleguesser.hxx"
 
 using namespace std;
-
 
 /**
  * This 3 following structures are from fingerprint.c and textcat.c
@@ -104,7 +102,6 @@ SimpleGuesser::~SimpleGuesser()
 {
     if(h){textcat_Done(h);}
 }
-
 
 /*!
     \fn SimpleGuesser::GuessLanguage(char* text)

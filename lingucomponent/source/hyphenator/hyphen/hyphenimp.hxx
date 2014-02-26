@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifndef _LINGU2_HYPHENIMP_HXX_
 #define _LINGU2_HYPHENIMP_HXX_
 
@@ -47,10 +46,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
 
-
-///////////////////////////////////////////////////////////////////////////
-
-
 struct HDInfo {
   HyphenDict *     aPtr;
   OUString         aName;
@@ -58,8 +53,6 @@ struct HDInfo {
   rtl_TextEncoding eEnc;
   CharClass *      apCC;
 };
-
-
 
 class Hyphenator :
     public cppu::WeakImplHelper6
@@ -125,10 +118,8 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) throw(RuntimeException);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException);
 
-
     static inline OUString  getImplementationName_Static() throw();
     static Sequence< OUString > getSupportedServiceNames_Static() throw();
-
 
 private:
         OUString SAL_CALL makeLowerCase(const OUString&, CharClass *);
@@ -140,9 +131,6 @@ inline OUString Hyphenator::getImplementationName_Static() throw()
 {
     return OUString( "org.openoffice.lingu.LibHnjHyphenator" );
 }
-
-
-///////////////////////////////////////////////////////////////////////////
 
 #endif
 

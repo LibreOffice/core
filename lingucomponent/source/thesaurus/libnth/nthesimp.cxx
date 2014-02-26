@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/uno/Reference.h>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -55,9 +54,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
-
-///////////////////////////////////////////////////////////////////////////
-
 static uno::Reference< XLinguServiceManager2 > GetLngSvcMgr_Impl()
 {
     uno::Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
@@ -78,7 +74,6 @@ Thesaurus::Thesaurus() :
     numthes = 0;
     prevLocale = LANGUAGE_DONTKNOW;
 }
-
 
 Thesaurus::~Thesaurus()
 {
@@ -117,7 +112,6 @@ Thesaurus::~Thesaurus()
     }
 }
 
-
 PropertyHelper_Thesaurus& Thesaurus::GetPropHelper_Impl()
 {
     if (!pPropHelper)
@@ -129,7 +123,6 @@ PropertyHelper_Thesaurus& Thesaurus::GetPropHelper_Impl()
     }
     return *pPropHelper;
 }
-
 
 Sequence< Locale > SAL_CALL Thesaurus::getLocales()
         throw(RuntimeException)
@@ -258,8 +251,6 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
     return aSuppLocales;
 }
 
-
-
 sal_Bool SAL_CALL Thesaurus::hasLocale(const Locale& rLocale)
         throw(RuntimeException)
 {
@@ -280,7 +271,6 @@ sal_Bool SAL_CALL Thesaurus::hasLocale(const Locale& rLocale)
     }
     return bRes;
 }
-
 
 Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryMeanings(
     const OUString& qTerm, const Locale& rLocale,
@@ -528,7 +518,6 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL Thes
     return noMeanings;
 }
 
-
 Reference< XInterface > SAL_CALL Thesaurus_CreateInstance(
             const Reference< XMultiServiceFactory > & /*rSMgr*/ )
         throw(Exception)
@@ -537,14 +526,12 @@ Reference< XInterface > SAL_CALL Thesaurus_CreateInstance(
     return xService;
 }
 
-
 OUString SAL_CALL Thesaurus::getServiceDisplayName( const Locale& /*rLocale*/ )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return OUString( "OpenOffice.org New Thesaurus" );
 }
-
 
 void SAL_CALL Thesaurus::initialize( const Sequence< Any >& rArguments )
         throw(Exception, RuntimeException)
@@ -571,8 +558,6 @@ void SAL_CALL Thesaurus::initialize( const Sequence< Any >& rArguments )
     }
 }
 
-
-
 OUString SAL_CALL Thesaurus::makeLowerCase(const OUString& aTerm, CharClass * pCC)
 {
     if (pCC)
@@ -580,14 +565,12 @@ OUString SAL_CALL Thesaurus::makeLowerCase(const OUString& aTerm, CharClass * pC
     return aTerm;
 }
 
-
 OUString SAL_CALL Thesaurus::makeUpperCase(const OUString& aTerm, CharClass * pCC)
 {
     if (pCC)
         return pCC->uppercase(aTerm);
     return aTerm;
 }
-
 
 OUString SAL_CALL Thesaurus::makeInitCap(const OUString& aTerm, CharClass * pCC)
 {
@@ -605,8 +588,6 @@ OUString SAL_CALL Thesaurus::makeInitCap(const OUString& aTerm, CharClass * pCC)
     }
     return aTerm;
 }
-
-
 
 void SAL_CALL Thesaurus::dispose()
         throw(RuntimeException)
@@ -627,7 +608,6 @@ void SAL_CALL Thesaurus::dispose()
     }
 }
 
-
 void SAL_CALL Thesaurus::addEventListener( const Reference< XEventListener >& rxListener )
         throw(RuntimeException)
 {
@@ -636,7 +616,6 @@ void SAL_CALL Thesaurus::addEventListener( const Reference< XEventListener >& rx
     if (!bDisposing && rxListener.is())
         aEvtListeners.addInterface( rxListener );
 }
-
 
 void SAL_CALL Thesaurus::removeEventListener( const Reference< XEventListener >& rxListener )
         throw(RuntimeException)
@@ -654,7 +633,6 @@ OUString SAL_CALL Thesaurus::getImplementationName()
     MutexGuard  aGuard( GetLinguMutex() );
     return getImplementationName_Static();
 }
-
 
 sal_Bool SAL_CALL Thesaurus::supportsService( const OUString& ServiceName )
         throw(RuntimeException)
@@ -698,8 +676,5 @@ void * SAL_CALL Thesaurus_getFactory( const sal_Char * pImplName,
     }
     return pRet;
 }
-
-
-///////////////////////////////////////////////////////////////////////////
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

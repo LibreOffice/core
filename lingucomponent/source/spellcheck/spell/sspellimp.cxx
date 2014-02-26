@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 
@@ -56,11 +55,8 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
-
 // XML-header of SPELLML queries
 #define SPELLML_HEADER "<?xml?>"
-
-///////////////////////////////////////////////////////////////////////////
 
 SpellChecker::SpellChecker() :
     aDicts(NULL),
@@ -105,7 +101,6 @@ PropertyHelper_Spelling & SpellChecker::GetPropHelper_Impl()
     }
     return *pPropHelper;
 }
-
 
 Sequence< Locale > SAL_CALL SpellChecker::getLocales()
         throw(RuntimeException)
@@ -234,7 +229,6 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
     return aSuppLocales;
 }
 
-
 sal_Bool SAL_CALL SpellChecker::hasLocale(const Locale& rLocale)
         throw(RuntimeException)
 {
@@ -256,7 +250,6 @@ sal_Bool SAL_CALL SpellChecker::hasLocale(const Locale& rLocale)
     }
     return bRes;
 }
-
 
 sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rLocale )
 {
@@ -375,7 +368,6 @@ sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rL
     return nRes;
 }
 
-
 sal_Bool SAL_CALL SpellChecker::isValid( const OUString& rWord, const Locale& rLocale,
             const PropertyValues& rProperties )
         throw(IllegalArgumentException, RuntimeException)
@@ -416,7 +408,6 @@ sal_Bool SAL_CALL SpellChecker::isValid( const OUString& rWord, const Locale& rL
 
     return (nFailure == -1);
 }
-
 
 Reference< XSpellAlternatives >
     SpellChecker::GetProposals( const OUString &rWord, const Locale &rLocale )
@@ -492,7 +483,6 @@ Reference< XSpellAlternatives >
     return xRes;
 }
 
-
 Reference< XSpellAlternatives > SAL_CALL SpellChecker::spell(
         const OUString& rWord, const Locale& rLocale,
         const PropertyValues& rProperties )
@@ -514,7 +504,6 @@ Reference< XSpellAlternatives > SAL_CALL SpellChecker::spell(
     return xAlt;
 }
 
-
 Reference< XInterface > SAL_CALL SpellChecker_CreateInstance(
         const Reference< XMultiServiceFactory > & /*rSMgr*/ )
         throw(Exception)
@@ -523,7 +512,6 @@ Reference< XInterface > SAL_CALL SpellChecker_CreateInstance(
     Reference< XInterface > xService = (cppu::OWeakObject*) new SpellChecker;
     return xService;
 }
-
 
 sal_Bool SAL_CALL SpellChecker::addLinguServiceEventListener(
         const Reference< XLinguServiceEventListener >& rxLstnr )
@@ -539,7 +527,6 @@ sal_Bool SAL_CALL SpellChecker::addLinguServiceEventListener(
     return bRes;
 }
 
-
 sal_Bool SAL_CALL SpellChecker::removeLinguServiceEventListener(
         const Reference< XLinguServiceEventListener >& rxLstnr )
         throw(RuntimeException)
@@ -554,14 +541,12 @@ sal_Bool SAL_CALL SpellChecker::removeLinguServiceEventListener(
     return bRes;
 }
 
-
 OUString SAL_CALL SpellChecker::getServiceDisplayName( const Locale& /*rLocale*/ )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return OUString( "Hunspell SpellChecker" );
 }
-
 
 void SAL_CALL SpellChecker::initialize( const Sequence< Any >& rArguments )
         throw(Exception, RuntimeException)
@@ -590,7 +575,6 @@ void SAL_CALL SpellChecker::initialize( const Sequence< Any >& rArguments )
     }
 }
 
-
 void SAL_CALL SpellChecker::dispose()
         throw(RuntimeException)
 {
@@ -610,7 +594,6 @@ void SAL_CALL SpellChecker::dispose()
     }
 }
 
-
 void SAL_CALL SpellChecker::addEventListener( const Reference< XEventListener >& rxListener )
         throw(RuntimeException)
 {
@@ -620,7 +603,6 @@ void SAL_CALL SpellChecker::addEventListener( const Reference< XEventListener >&
         aEvtListeners.addInterface( rxListener );
 }
 
-
 void SAL_CALL SpellChecker::removeEventListener( const Reference< XEventListener >& rxListener )
         throw(RuntimeException)
 {
@@ -629,7 +611,6 @@ void SAL_CALL SpellChecker::removeEventListener( const Reference< XEventListener
     if (!bDisposing && rxListener.is())
         aEvtListeners.removeInterface( rxListener );
 }
-
 
 // Service specific part
 OUString SAL_CALL SpellChecker::getImplementationName()
@@ -682,8 +663,5 @@ void * SAL_CALL SpellChecker_getFactory( const sal_Char * pImplName,
     }
     return pRet;
 }
-
-
-///////////////////////////////////////////////////////////////////////////
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

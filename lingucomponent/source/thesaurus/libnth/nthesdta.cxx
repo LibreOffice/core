@@ -31,11 +31,8 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 
-
 namespace linguistic
 {
-
-///////////////////////////////////////////////////////////////////////////
 
 Meaning::Meaning(
             const OUString &rTerm, sal_Int16 nLang) :
@@ -51,11 +48,9 @@ Meaning::Meaning(
 #endif
 }
 
-
 Meaning::~Meaning()
 {
 }
-
 
 OUString SAL_CALL Meaning::getMeaning()
         throw(RuntimeException)
@@ -64,14 +59,12 @@ OUString SAL_CALL Meaning::getMeaning()
     return aTerm;
 }
 
-
 Sequence< OUString > SAL_CALL Meaning::querySynonyms()
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
         return aSyn;
 }
-
 
 void Meaning::SetSynonyms( const Sequence< OUString > &rSyn )
 {

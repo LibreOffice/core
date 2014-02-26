@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #if defined(WNT)
 #include <windows.h>
 #endif
@@ -42,7 +41,6 @@
 #include <lingutil.hxx>
 
 #include <sal/macros.h>
-
 
 using ::com::sun::star::lang::Locale;
 using namespace ::com::sun::star;
@@ -69,8 +67,6 @@ OString Win_GetShortPathName( const OUString &rLongPathName )
     return aRes;
 }
 #endif //defined(WNT)
-
-//////////////////////////////////////////////////////////////////////
 
 // build list of old style diuctionaries (not as extensions) to use.
 // User installed dictionaries (the ones residing in the user paths)
@@ -118,7 +114,6 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
         aSystemSuffix   = "_v2.dat";
 #endif
     }
-
 
     if (aFormatName.isEmpty() || aDicExtension.isEmpty())
         return aRes;
@@ -195,7 +190,6 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
     return aRes;
 }
 
-
 void MergeNewStyleDicsAndOldStyleDics(
     std::list< SvtLinguConfigDictionaryEntry > &rNewStyleDics,
     const std::vector< SvtLinguConfigDictionaryEntry > &rOldStyleDics )
@@ -241,7 +235,6 @@ void MergeNewStyleDicsAndOldStyleDics(
     }
 }
 
-
 rtl_TextEncoding getTextEncodingFromCharset(const sal_Char* pCharset)
 {
     // default result: used to indicate that we failed to get the proper encoding
@@ -260,7 +253,5 @@ rtl_TextEncoding getTextEncodingFromCharset(const sal_Char* pCharset)
     }
     return eRet;
 }
-
-//////////////////////////////////////////////////////////////////////
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

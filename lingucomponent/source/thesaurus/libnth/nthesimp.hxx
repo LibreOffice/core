@@ -56,11 +56,6 @@ namespace com { namespace sun { namespace star { namespace beans {
         class XPropertySet;
 }}}}
 
-
-
-///////////////////////////////////////////////////////////////////////////
-
-
 class Thesaurus :
     public cppu::WeakImplHelper5
     <
@@ -98,7 +93,6 @@ class Thesaurus :
         return pPropHelper ? *pPropHelper : GetPropHelper_Impl();
     }
 
-
 public:
     Thesaurus();
     virtual ~Thesaurus();
@@ -126,7 +120,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) throw(RuntimeException);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException);
 
-
     static inline OUString
         getImplementationName_Static() throw();
         static Sequence< OUString >
@@ -150,9 +143,6 @@ inline OUString Thesaurus::getImplementationName_Static() throw()
 {
     return OUString( "org.openoffice.lingu.new.Thesaurus" );
 }
-
-
-///////////////////////////////////////////////////////////////////////////
 
 #endif
 

@@ -57,12 +57,8 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
-
 // min, max
 #define Max(a,b) (a > b ? a : b)
-
-///////////////////////////////////////////////////////////////////////////
-
 
 Hyphenator::Hyphenator() :
     aEvtListeners   ( GetLinguMutex() )
@@ -104,7 +100,6 @@ PropertyHelper_Hyphenation& Hyphenator::GetPropHelper_Impl()
     }
     return *pPropHelper;
 }
-
 
 Sequence< Locale > SAL_CALL Hyphenator::getLocales()
         throw(RuntimeException)
@@ -227,8 +222,6 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
     return aSuppLocales;
 }
 
-
-
 sal_Bool SAL_CALL Hyphenator::hasLocale(const Locale& rLocale)
         throw(RuntimeException)
 {
@@ -250,7 +243,6 @@ sal_Bool SAL_CALL Hyphenator::hasLocale(const Locale& rLocale)
     }
     return bRes;
 }
-
 
 Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWord,
        const ::com::sun::star::lang::Locale& aLocale,
@@ -506,7 +498,6 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
     return NULL;
 }
 
-
 Reference < XHyphenatedWord > SAL_CALL Hyphenator::queryAlternativeSpelling(
         const OUString& aWord,
         const ::com::sun::star::lang::Locale& aLocale,
@@ -722,7 +713,6 @@ OUString SAL_CALL Hyphenator::makeUpperCase(const OUString& aTerm, CharClass * p
     return aTerm;
 }
 
-
 OUString SAL_CALL Hyphenator::makeInitCap(const OUString& aTerm, CharClass * pCC)
 {
     sal_Int32 tlen = aTerm.getLength();
@@ -737,7 +727,6 @@ OUString SAL_CALL Hyphenator::makeInitCap(const OUString& aTerm, CharClass * pCC
     return aTerm;
 }
 
-
 Reference< XInterface > SAL_CALL Hyphenator_CreateInstance(
         const Reference< XMultiServiceFactory > & /*rSMgr*/ )
         throw(Exception)
@@ -745,7 +734,6 @@ Reference< XInterface > SAL_CALL Hyphenator_CreateInstance(
     Reference< XInterface > xService = (cppu::OWeakObject*) new Hyphenator;
     return xService;
 }
-
 
 sal_Bool SAL_CALL Hyphenator::addLinguServiceEventListener(
         const Reference< XLinguServiceEventListener >& rxLstnr )
@@ -761,7 +749,6 @@ sal_Bool SAL_CALL Hyphenator::addLinguServiceEventListener(
     return bRes;
 }
 
-
 sal_Bool SAL_CALL Hyphenator::removeLinguServiceEventListener(
         const Reference< XLinguServiceEventListener >& rxLstnr )
         throw(RuntimeException)
@@ -776,14 +763,12 @@ sal_Bool SAL_CALL Hyphenator::removeLinguServiceEventListener(
     return bRes;
 }
 
-
 OUString SAL_CALL Hyphenator::getServiceDisplayName( const Locale& /*rLocale*/ )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return OUString( "Libhyphen Hyphenator" );
 }
-
 
 void SAL_CALL Hyphenator::initialize( const Sequence< Any >& rArguments )
         throw(Exception, RuntimeException)
@@ -812,7 +797,6 @@ void SAL_CALL Hyphenator::initialize( const Sequence< Any >& rArguments )
     }
 }
 
-
 void SAL_CALL Hyphenator::dispose()
         throw(RuntimeException)
 {
@@ -832,7 +816,6 @@ void SAL_CALL Hyphenator::dispose()
     }
 }
 
-
 void SAL_CALL Hyphenator::addEventListener( const Reference< XEventListener >& rxListener )
         throw(RuntimeException)
 {
@@ -841,7 +824,6 @@ void SAL_CALL Hyphenator::addEventListener( const Reference< XEventListener >& r
     if (!bDisposing && rxListener.is())
         aEvtListeners.addInterface( rxListener );
 }
-
 
 void SAL_CALL Hyphenator::removeEventListener( const Reference< XEventListener >& rxListener )
         throw(RuntimeException)
@@ -903,8 +885,5 @@ void * SAL_CALL Hyphenator_getFactory( const sal_Char * pImplName,
     }
     return pRet;
 }
-
-
-///////////////////////////////////////////////////////////////////////////
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

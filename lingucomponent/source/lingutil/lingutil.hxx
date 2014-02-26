@@ -20,7 +20,6 @@
 #ifndef _LINGUTIL_HXX_
 #define _LINGUTIL_HXX_
 
-
 #include <com/sun/star/lang/Locale.hpp>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
@@ -28,15 +27,11 @@
 #include <vector>
 #include <list>
 
-
 #define OU2ENC(rtlOUString, rtlEncoding) \
     OString((rtlOUString).getStr(), (rtlOUString).getLength(), \
     rtlEncoding, RTL_UNICODETOTEXT_FLAGS_UNDEFINED_QUESTIONMARK).getStr()
 
-
 struct SvtLinguConfigDictionaryEntry;
-
-///////////////////////////////////////////////////////////////////////////
 
 struct lt_rtl_OUString
 {
@@ -54,7 +49,7 @@ inline sal_Bool operator == ( const ::com::sun::star::lang::Locale &rL1, const :
 }
 
 #if defined(WNT)
-///////////////////////////////////////////////////////////////////////////
+
 // to be use to get a short path name under Windows that still can be used with
 // the 'fopen' call. This is necessary since under Windows there seems to be
 // a restriction of only about 110-130 characters length to a path name in order
@@ -63,15 +58,10 @@ inline sal_Bool operator == ( const ::com::sun::star::lang::Locale &rL1, const :
 OString Win_GetShortPathName( const OUString &rLongPathName );
 #endif
 
-///////////////////////////////////////////////////////////////////////////
-
 // temporary function, to be removed when new style dictionaries
 // using configuration entries are fully implemented and provided
 std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char * pDicType );
 void MergeNewStyleDicsAndOldStyleDics( std::list< SvtLinguConfigDictionaryEntry > &rNewStyleDics, const std::vector< SvtLinguConfigDictionaryEntry > &rOldStyleDics );
-
-///////////////////////////////////////////////////////////////////////////
-
 
 //Find an encoding from a charset string, using
 //rtl_getTextEncodingFromMimeCharset and falling back to
