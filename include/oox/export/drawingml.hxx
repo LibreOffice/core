@@ -136,11 +136,12 @@ public:
     void WriteGradientFill( ::com::sun::star::awt::Gradient rGradient );
     void WriteGrabBagGradientFill( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aGradientStops, ::com::sun::star::awt::Gradient rGradient);
     void WriteBlipFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet,
-                         OUString sBitmapURL, sal_Int32 nXmlNamespace,
+                         const OUString& sBitmapURL, sal_Int32 nXmlNamespace,
                          bool bWriteMode, bool bRelPathToMedia = false );
-    void WriteBlipFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, OUString sURLPropName );
     void WriteBlipFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet,
-                         OUString sURLPropName, sal_Int32 nXmlNamespace );
+            const OUString& sURLPropName );
+    void WriteBlipFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet,
+                         const OUString& sURLPropName, sal_Int32 nXmlNamespace );
     void WritePattFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
     void WriteSrcRect( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >, const OUString& );
     void WriteOutline( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
@@ -148,7 +149,7 @@ public:
     void WriteLinespacing( ::com::sun::star::style::LineSpacing& rLineSpacing );
 
     OUString WriteBlip( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet,
-                            OUString& rURL, bool bRelPathToMedia = false , const Graphic *pGraphic=NULL );
+            const OUString& rURL, bool bRelPathToMedia = false , const Graphic *pGraphic=NULL );
     void WriteBlipMode( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, const OUString& rURL );
 
     void WriteShapeTransformation( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > rXShape,

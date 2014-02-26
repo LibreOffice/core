@@ -804,7 +804,7 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
     return sRelId;
 }
 
-OUString DrawingML::WriteBlip( Reference< XPropertySet > rXPropSet, OUString& rURL, bool bRelPathToMedia, const Graphic *pGraphic )
+OUString DrawingML::WriteBlip( Reference< XPropertySet > rXPropSet, const OUString& rURL, bool bRelPathToMedia, const Graphic *pGraphic )
 {
     OUString sRelId = pGraphic ? WriteImage( *pGraphic, bRelPathToMedia ) : WriteImage( rURL, bRelPathToMedia );
     sal_Int16 nBright = 0;
@@ -847,12 +847,12 @@ void DrawingML::WriteBlipMode( Reference< XPropertySet > rXPropSet, const OUStri
     }
 }
 
-void DrawingML::WriteBlipFill( Reference< XPropertySet > rXPropSet, OUString sURLPropName )
+void DrawingML::WriteBlipFill( Reference< XPropertySet > rXPropSet, const OUString& sURLPropName )
 {
     WriteBlipFill( rXPropSet, sURLPropName, XML_a );
 }
 
-void DrawingML::WriteBlipFill( Reference< XPropertySet > rXPropSet, OUString sURLPropName, sal_Int32 nXmlNamespace )
+void DrawingML::WriteBlipFill( Reference< XPropertySet > rXPropSet, const OUString& sURLPropName, sal_Int32 nXmlNamespace )
 {
     if ( GetProperty( rXPropSet, sURLPropName ) ) {
         OUString aURL;
@@ -864,7 +864,7 @@ void DrawingML::WriteBlipFill( Reference< XPropertySet > rXPropSet, OUString sUR
     }
 }
 
-void DrawingML::WriteBlipFill( Reference< XPropertySet > rXPropSet, OUString sBitmapURL, sal_Int32 nXmlNamespace, bool bWriteMode, bool bRelPathToMedia )
+void DrawingML::WriteBlipFill( Reference< XPropertySet > rXPropSet, const OUString& sBitmapURL, sal_Int32 nXmlNamespace, bool bWriteMode, bool bRelPathToMedia )
 {
     if ( !sBitmapURL.isEmpty() ) {
         DBG(fprintf (stderr, "URL: %s\n", OUStringToOString( sBitmapURL, RTL_TEXTENCODING_UTF8 ).getStr() ));
