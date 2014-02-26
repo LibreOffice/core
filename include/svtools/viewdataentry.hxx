@@ -47,7 +47,6 @@ class SVT_DLLPUBLIC SvViewDataEntry
     std::vector<SvViewDataItem> maItems;
     sal_uLong nVisPos;
     bool mbSelected:1;
-    bool mbObjectSelected:1;
     bool mbHighlighted:1;
     bool mbExpanded:1;
     bool mbFocused:1;
@@ -70,7 +69,6 @@ public:
     void SetHighlighted( bool bHighlighted );
     void SetExpanded( bool bExpanded );
     void SetSelectable( bool bSelectable );
-    void SetObjectSelected( bool bSelected );
 
     void Init(size_t nSize);
 
