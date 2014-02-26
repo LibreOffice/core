@@ -530,13 +530,6 @@ void ScDBQueryDataIterator::DataAccessInternal::incPos()
         incBlock();
 }
 
-void ScDBQueryDataIterator::DataAccessInternal::setPos(size_t nPos)
-{
-    maCurPos = mpCells->position(maCurPos.first, nPos);
-    nRow = nPos;
-}
-
-
 
 ScDBQueryDataIterator::DataAccessMatrix::DataAccessMatrix(const ScDBQueryDataIterator* pParent, ScDBQueryParamMatrix* pParam) :
     DataAccess(pParent),

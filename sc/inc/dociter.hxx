@@ -138,7 +138,6 @@ private:
     private:
         void incBlock();
         void incPos();
-        void setPos(size_t nPos);
 
         const sc::CellStoreType* mpCells;
         PositionType maCurPos;
