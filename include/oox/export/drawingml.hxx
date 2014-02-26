@@ -135,6 +135,9 @@ public:
     void WriteGradientFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
     void WriteGradientFill( ::com::sun::star::awt::Gradient rGradient );
     void WriteGrabBagGradientFill( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aGradientStops, ::com::sun::star::awt::Gradient rGradient);
+
+    void WriteBlipOrNormalFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet,
+            const OUString& rURLPropName );
     void WriteBlipFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet,
                          const OUString& sBitmapURL, sal_Int32 nXmlNamespace,
                          bool bWriteMode, bool bRelPathToMedia = false );

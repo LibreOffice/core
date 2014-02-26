@@ -847,6 +847,17 @@ void DrawingML::WriteBlipMode( Reference< XPropertySet > rXPropSet, const OUStri
     }
 }
 
+void DrawingML::WriteBlipOrNormalFill( Reference< XPropertySet > xPropSet, const OUString& rURLPropName )
+{
+    // check for blip and otherwise fall back to normal fill
+    // we always store normal fill properties but OOXML
+    // uses a choice between our fill props and BlipFill
+    if (GetProperty ( xPropSet, rURLPropName ))
+        WriteBlipFill( xPropSet, rURLPropName );
+    else
+        WriteFill(xPropSet);
+}
+
 void DrawingML::WriteBlipFill( Reference< XPropertySet > rXPropSet, const OUString& sURLPropName )
 {
     WriteBlipFill( rXPropSet, sURLPropName, XML_a );
