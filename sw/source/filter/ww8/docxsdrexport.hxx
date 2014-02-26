@@ -64,6 +64,8 @@ public:
     /// Same, as DocxAttributeOutput::m_bBtLr, but for textframe rotation.
     bool getFrameBtLr();
     void setFrameBtLr(bool bFrameBtLr);
+    bool getFlyFrameGraphic();
+    void setFlyFrameGraphic(bool bFlyFrameGraphic);
     sax_fastparser::FastAttributeList*& getFlyFillAttrList();
     sax_fastparser::FastAttributeList* getFlyWrapAttrList();
     void setFlyWrapAttrList(sax_fastparser::FastAttributeList* pAttrList);

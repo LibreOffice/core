@@ -3726,6 +3726,15 @@ DECLARE_OOXMLEXPORT_TEST(testBibliography,"FDO75133.docx")
     CPPUNIT_ASSERT(contents.match(" BIBLIOGRAPHY "));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testMSwordHang,"test_msword_hang.docx")
+{
+    // fdo#74771:
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p/w:r[2]/w:drawing/wp:inline", "distT", "0");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

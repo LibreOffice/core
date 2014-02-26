@@ -71,6 +71,7 @@ struct DocxSdrExport::Impl
     sax_fastparser::FastAttributeList* m_pTextboxAttrList;
     OStringBuffer m_aTextFrameStyle;
     bool m_bFrameBtLr;
+    bool m_bFlyFrameGraphic;
     sax_fastparser::FastAttributeList* m_pFlyFillAttrList;
     sax_fastparser::FastAttributeList* m_pFlyWrapAttrList;
     sax_fastparser::FastAttributeList* m_pBodyPrAttrList;
@@ -87,6 +88,7 @@ struct DocxSdrExport::Impl
           m_pFlyAttrList(0),
           m_pTextboxAttrList(0),
           m_bFrameBtLr(false),
+          m_bFlyFrameGraphic(false),
           m_pFlyFillAttrList(0),
           m_pFlyWrapAttrList(0),
           m_pBodyPrAttrList(0),
@@ -165,6 +167,16 @@ void DocxSdrExport::setFrameBtLr(bool bFrameBtLr)
     m_pImpl->m_bFrameBtLr = bFrameBtLr;
 }
 
+bool DocxSdrExport::getFlyFrameGraphic()
+{
+    return m_pImpl->m_bFlyFrameGraphic;
+}
+
+void DocxSdrExport::setFlyFrameGraphic(bool bFlyFrameGraphic)
+{
+    m_pImpl->m_bFlyFrameGraphic = bFlyFrameGraphic;
+}
+
 sax_fastparser::FastAttributeList*& DocxSdrExport::getFlyFillAttrList()
 {
     return m_pImpl->m_pFlyFillAttrList;
@@ -197,7 +209,16 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
     const SvxLRSpaceItem pLRSpaceItem = pFrmFmt->GetLRSpace(false);
     const SvxULSpaceItem pULSpaceItem = pFrmFmt->GetULSpace(false);
 
-    bool isAnchor = pFrmFmt->GetAnchor().GetAnchorId() != FLY_AS_CHAR;
+    bool isAnchor;
+
+    if (m_pImpl->m_bFlyFrameGraphic)
+    {
+        isAnchor = false; // make Graphic object inside DMLTextFrame & VMLTextFrame as Inline
+    }
+    else
+    {
+        isAnchor = pFrmFmt->GetAnchor().GetAnchorId() != FLY_AS_CHAR;
+    }
     if (isAnchor)
     {
         ::sax_fastparser::FastAttributeList* attrList = m_pImpl->m_pSerializer->createAttrList();
@@ -415,7 +436,15 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
 
 void DocxSdrExport::endDMLAnchorInline(const SwFrmFmt* pFrmFmt)
 {
-    bool isAnchor = pFrmFmt->GetAnchor().GetAnchorId() != FLY_AS_CHAR;
+    bool isAnchor;
+    if (m_pImpl->m_bFlyFrameGraphic)
+    {
+        isAnchor = false; // end Inline Graphic object inside DMLTextFrame
+    }
+    else
+    {
+        isAnchor = pFrmFmt->GetAnchor().GetAnchorId() != FLY_AS_CHAR;
+    }
     m_pImpl->m_pSerializer->endElementNS(XML_wp, isAnchor ? XML_anchor : XML_inline);
 
     m_pImpl->m_pSerializer->endElementNS(XML_w, XML_drawing);
@@ -944,7 +973,9 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId)
     pFS->startElementNS(XML_w, XML_txbxContent, FSEND);
 
     m_pImpl->m_bFrameBtLr = checkFrameBtlr(m_pImpl->m_rExport.pDoc->GetNodes()[nStt], 0);
+    m_pImpl->m_bFlyFrameGraphic = true;
     m_pImpl->m_rExport.WriteText();
+    m_pImpl->m_bFlyFrameGraphic = false;
     m_pImpl->m_bFrameBtLr = false;
 
     pFS->endElementNS(XML_w, XML_txbxContent);
@@ -1035,7 +1066,9 @@ void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame)
     }
     pFS->startElementNS(XML_v, XML_textbox, xTextboxAttrList);
     pFS->startElementNS(XML_w, XML_txbxContent, FSEND);
+    m_pImpl->m_bFlyFrameGraphic = true;
     m_pImpl->m_rExport.WriteText();
+    m_pImpl->m_bFlyFrameGraphic = false;
     pFS->endElementNS(XML_w, XML_txbxContent);
     pFS->endElementNS(XML_v, XML_textbox);
 
