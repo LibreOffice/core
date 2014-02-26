@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a961159_ac5a434e",
+        "filename": "lotuswordpro/source/filter/localtime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-02-26T14:51:05Z",
+      "side": 1,
+      "message": "Please remove excessive empty lines too. They are just as much \"visual noise\" as empty comments.",
+      "revId": "05428e6040a1f64200ea1c4ce54c5c8a6865a45f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
