@@ -239,6 +239,8 @@ endef
 
 gb_Library__set_soversion_script_platform = $(gb_Library__set_soversion_script)
 
+gb_Library_get_sdk_link_lib = $(gb_Library_get_versionlink_target)
+
 # bundle is a special kind of library that exists only on Darwin/OSX
 # set the TARGETTYPE to Bundle, and clear install_name(RPATH)
 define gb_Library_Bundle

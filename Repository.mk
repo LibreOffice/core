@@ -611,7 +611,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 ))
 endif
 
-$(eval $(call gb_Helper_register_libraries,RTVERLIBS, \
+$(eval $(call gb_Helper_register_libraries_for_install,RTVERLIBS,ure, \
 	cppuhelper \
 	purpenvhelper \
 	salhelper \
@@ -625,7 +625,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	pythonloader \
 ))
 
-$(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
+$(eval $(call gb_Helper_register_libraries_for_install,UNOVERLIBS,ure, \
 	cppu \
 	sal \
 ))

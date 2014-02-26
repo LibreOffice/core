@@ -264,6 +264,8 @@ endef
 
 gb_Library__set_soversion_script_platform = $(gb_Library__set_soversion_script)
 
+gb_Library_get_sdk_link_lib = $(gb_Library_get_versionlink_target)
+
 # Executable class
 
 gb_Executable_EXT :=

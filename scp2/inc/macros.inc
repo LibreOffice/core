@@ -172,6 +172,28 @@ End
         ComponentCondition = cond; \
     End
 
+#ifdef MACOSX
+// links are craeted at configure time by odk/config/setsdkenv_unix.sh.in
+#define SDK_LIBRARY_LINK(id,name,target)
+#elif defined(WNT)
+#define SDK_LIBRARY_LINK(id,name,target) \
+    File id \
+        TXT_FILE_BODY; \
+        Styles = (PACKED); \
+        Dir = gid_Dir_Lib_Sdk; \
+        Name = name \
+    End
+#else
+#define SDK_LIBRARY_LINK(id,name,target) \
+    Unixlink id \
+     BIN_FILE_BODY; \
+     Styles = (); \
+     Dir = gid_Dir_Lib_Sdk; \
+     Name = name; \
+     Target = target; \
+    End
+#endif
+
 #define STD_LIB_FILE(id,name) \
     File id \
         Name   = LIBNAME(name); \

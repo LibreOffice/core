@@ -157,11 +157,15 @@ endef
 
 # the first argument is the group, which sets rpaths etc.
 # the second argument is the install module, which describes in which distro package/msi a lib should show up
+# UGLY: for versioned libraries "sdk" module is hard-coded for now
 define gb_Helper_register_libraries_for_install
 $(if $(3),,$(call gb_Output_error,gb_Helper_register_libraries_for_install: no libraries - need 3 parameters))
 $(call gb_Helper_register_libraries,$(1),$(3))
 
 gb_Library_MODULE_$(2) += $(filter-out $(gb_MERGEDLIBS) $(gb_URELIBS),$(3))
+
+$(if $(filter UNOVERLIBS RTVERLIBS,$(1)),\
+	gb_SdkLinkLibrary_MODULE_sdk += $(3))
 
 endef
 

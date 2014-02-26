@@ -264,6 +264,8 @@ define gb_Library_get_ilibfilename
 $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Library_ILIBFILENAMES)))
 endef
 
+gb_Library_get_sdk_link_lib = $(gb_Library_get_ilib_target)
+
 # Executable class
 
 gb_Executable_EXT := .exe
