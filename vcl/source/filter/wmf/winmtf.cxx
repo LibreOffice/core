@@ -263,7 +263,6 @@ WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
     aFont.SetSize( aFontSize );
 };
 
-
 WinMtf::WinMtf( WinMtfOutput* pWinMtfOutput, SvStream& rStreamWMF, FilterConfigItem* pConfigItem ) :
     pOut                ( pWinMtfOutput ),
     pWMF                ( &rStreamWMF ),
@@ -287,7 +286,6 @@ WinMtf::WinMtf( WinMtfOutput* pWinMtfOutput, SvStream& rStreamWMF, FilterConfigI
     }
 }
 
-
 WinMtf::~WinMtf()
 {
     delete pOut;
@@ -296,13 +294,11 @@ WinMtf::~WinMtf()
         xStatusIndicator->end();
 }
 
-
 void WinMtf::Callback( sal_uInt16 nPercent )
 {
     if ( xStatusIndicator.is() )
         xStatusIndicator->setValue( nPercent );
 }
-
 
 Color WinMtf::ReadColor()
 {
@@ -310,7 +306,6 @@ Color WinMtf::ReadColor()
     pWMF->ReadUInt32( nColor );
     return Color( (sal_uInt8)nColor, (sal_uInt8)( nColor >> 8 ), (sal_uInt8)( nColor >> 16 ) );
 };
-
 
 Point WinMtfOutput::ImplScale( const Point& rPt) // Hack to set varying defaults for incompletely defined files.
 {
@@ -323,7 +318,6 @@ Point WinMtfOutput::ImplScale( const Point& rPt) // Hack to set varying defaults
             return Point((rPt.X())*UNDOCUMENTED_WIN_RCL_RELATION-mrclFrame.Left(),(rPt.Y())*UNDOCUMENTED_WIN_RCL_RELATION-mrclFrame.Top());
         }
 }
-
 
 Point WinMtfOutput::ImplMap( const Point& rPt )
 {
@@ -700,8 +694,6 @@ void WinMtfOutput::ImplDrawClippedPolyPolygon( const PolyPolygon& rPolyPoly )
     }
 }
 
-
-
 void WinMtfOutput::CreateObject( GDIObjectType eType, void* pStyle )
 {
     if ( pStyle )
@@ -729,7 +721,6 @@ void WinMtfOutput::CreateObject( GDIObjectType eType, void* pStyle )
 
     vGDIObj[ nIndex ] = new GDIObj( eType, pStyle );
 }
-
 
 void WinMtfOutput::CreateObject( sal_Int32 nIndex, GDIObjectType eType, void* pStyle )
 {
@@ -775,7 +766,6 @@ void WinMtfOutput::CreateObject( sal_Int32 nIndex, GDIObjectType eType, void* pS
     }
 }
 
-
 void WinMtfOutput::DeleteObject( sal_Int32 nIndex )
 {
     if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
@@ -788,7 +778,6 @@ void WinMtfOutput::DeleteObject( sal_Int32 nIndex )
     }
 }
 
-
 void WinMtfOutput::IntersectClipRect( const Rectangle& rRect )
 {
     mbClipNeedsUpdate=true;
@@ -799,13 +788,11 @@ void WinMtfOutput::IntersectClipRect( const Rectangle& rRect )
     aClipPath.intersectClipRect( ImplMap( rRect ) );
 }
 
-
 void WinMtfOutput::ExcludeClipRect( const Rectangle& rRect )
 {
     mbClipNeedsUpdate=true;
     aClipPath.excludeClipRect( ImplMap( rRect ) );
 }
-
 
 void WinMtfOutput::MoveClipRegion( const Size& rSize )
 {
@@ -879,7 +866,6 @@ WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
     SetRasterOp( R2_BLACK );
 };
 
-
 WinMtfOutput::~WinMtfOutput()
 {
     mpGDIMetaFile->AddAction( new MetaPopAction() );
@@ -892,7 +878,6 @@ WinMtfOutput::~WinMtfOutput()
     for ( sal_uInt32 i = 0; i < vGDIObj.size(); i++ )
         delete vGDIObj[ i ];
 };
-
 
 void WinMtfOutput::UpdateClipRegion()
 {
@@ -919,7 +904,6 @@ void WinMtfOutput::UpdateClipRegion()
     }
 }
 
-
 void WinMtfOutput::ImplSetNonPersistentLineColorTransparenz()
 {
     Color aColor(  COL_TRANSPARENT);
@@ -931,7 +915,6 @@ void WinMtfOutput::ImplSetNonPersistentLineColorTransparenz()
     }
 }
 
-
 void WinMtfOutput::UpdateLineStyle()
 {
     if (!( maLatestLineStyle == maLineStyle ) )
@@ -940,7 +923,6 @@ void WinMtfOutput::UpdateLineStyle()
         mpGDIMetaFile->AddAction( new MetaLineColorAction( maLineStyle.aLineColor, !maLineStyle.bTransparent ) );
     }
 }
-
 
 void WinMtfOutput::UpdateFillStyle()
 {
@@ -953,7 +935,6 @@ void WinMtfOutput::UpdateFillStyle()
             mpGDIMetaFile->AddAction( new MetaFillColorAction( maFillStyle.aFillColor, !maFillStyle.bTransparent ) );
     }
 }
-
 
 sal_uInt32 WinMtfOutput::SetRasterOp( sal_uInt32 nRasterOp )
 {
@@ -1004,7 +985,6 @@ sal_uInt32 WinMtfOutput::SetRasterOp( sal_uInt32 nRasterOp )
     return nRetROP;
 };
 
-
 void WinMtfOutput::StrokeAndFillPath( bool bStroke, bool bFill )
 {
     if ( aPathObj.Count() )
@@ -1037,12 +1017,10 @@ void WinMtfOutput::StrokeAndFillPath( bool bStroke, bool bFill )
     }
 }
 
-
 void WinMtfOutput::DrawPixel( const Point& rSource, const Color& rColor )
 {
     mpGDIMetaFile->AddAction( new MetaPixelAction( ImplMap( rSource), rColor ) );
 }
-
 
 void WinMtfOutput::MoveTo( const Point& rPoint, bool bRecordPath )
 {
@@ -1058,7 +1036,6 @@ void WinMtfOutput::MoveTo( const Point& rPoint, bool bRecordPath )
     maActPos = aDest;
 }
 
-
 void WinMtfOutput::LineTo( const Point& rPoint, bool bRecordPath )
 {
     UpdateClipRegion();
@@ -1072,7 +1049,6 @@ void WinMtfOutput::LineTo( const Point& rPoint, bool bRecordPath )
     }
     maActPos = aDest;
 }
-
 
 void WinMtfOutput::DrawRect( const Rectangle& rRect, bool bEdge )
 {
@@ -1112,7 +1088,6 @@ void WinMtfOutput::DrawRect( const Rectangle& rRect, bool bEdge )
     }
 }
 
-
 void WinMtfOutput::DrawRoundRect( const Rectangle& rRect, const Size& rSize )
 {
     UpdateClipRegion();
@@ -1120,7 +1095,6 @@ void WinMtfOutput::DrawRoundRect( const Rectangle& rRect, const Size& rSize )
     UpdateFillStyle();
     mpGDIMetaFile->AddAction( new MetaRoundRectAction( ImplMap( rRect ), labs( ImplMap( rSize ).Width() ), labs( ImplMap( rSize ).Height() ) ) );
 }
-
 
 void WinMtfOutput::DrawEllipse( const Rectangle& rRect )
 {
@@ -1143,7 +1117,6 @@ void WinMtfOutput::DrawEllipse( const Rectangle& rRect )
         mpGDIMetaFile->AddAction( new MetaEllipseAction( ImplMap( rRect ) ) );
     }
 }
-
 
 void WinMtfOutput::DrawArc( const Rectangle& rRect, const Point& rStart, const Point& rEnd, bool bTo )
 {
@@ -1174,7 +1147,6 @@ void WinMtfOutput::DrawArc( const Rectangle& rRect, const Point& rStart, const P
         maActPos = aEnd;
 }
 
-
 void WinMtfOutput::DrawPie( const Rectangle& rRect, const Point& rStart, const Point& rEnd )
 {
     UpdateClipRegion();
@@ -1198,7 +1170,6 @@ void WinMtfOutput::DrawPie( const Rectangle& rRect, const Point& rStart, const P
     }
 }
 
-
 void WinMtfOutput::DrawChord( const Rectangle& rRect, const Point& rStart, const Point& rEnd )
 {
     UpdateClipRegion();
@@ -1221,7 +1192,6 @@ void WinMtfOutput::DrawChord( const Rectangle& rRect, const Point& rStart, const
         mpGDIMetaFile->AddAction( new MetaChordAction( aRect, aStart, aEnd ) );
     }
 }
-
 
 void WinMtfOutput::DrawPolygon( Polygon& rPolygon, bool bRecordPath )
 {
@@ -1295,7 +1265,6 @@ void WinMtfOutput::DrawPolygon( Polygon& rPolygon, bool bRecordPath )
     }
 }
 
-
 void WinMtfOutput::DrawPolyPolygon( PolyPolygon& rPolyPolygon, bool bRecordPath )
 {
     UpdateClipRegion();
@@ -1322,7 +1291,6 @@ void WinMtfOutput::DrawPolyPolygon( PolyPolygon& rPolyPolygon, bool bRecordPath 
     }
 }
 
-
 void WinMtfOutput::DrawPolyLine( Polygon& rPolygon, bool bTo, bool bRecordPath )
 {
     UpdateClipRegion();
@@ -1341,7 +1309,6 @@ void WinMtfOutput::DrawPolyLine( Polygon& rPolygon, bool bTo, bool bRecordPath )
         mpGDIMetaFile->AddAction( new MetaPolyLineAction( rPolygon, maLineStyle.aLineInfo ) );
     }
 }
-
 
 void WinMtfOutput::DrawPolyBezier( Polygon& rPolygon, bool bTo, bool bRecordPath )
 {
@@ -1372,7 +1339,6 @@ void WinMtfOutput::DrawPolyBezier( Polygon& rPolygon, bool bTo, bool bRecordPath
         }
     }
 }
-
 
 void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, sal_Int32* pDXArry, bool bRecordPath, sal_Int32 nGfxMode )
 {
@@ -1542,7 +1508,6 @@ void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, sal_Int32* pDXAr
     SetGfxMode( nOldGfxMode );
 }
 
-
 void WinMtfOutput::ImplDrawBitmap( const Point& rPos, const Size& rSize, const BitmapEx rBitmap )
 {
     BitmapEx aBmpEx( rBitmap );
@@ -1585,8 +1550,6 @@ void WinMtfOutput::ImplDrawBitmap( const Point& rPos, const Size& rSize, const B
     else
         mpGDIMetaFile->AddAction( new MetaBmpScaleAction( rPos, rSize, aBmpEx.GetBitmap() ) );
 }
-
-
 
 void WinMtfOutput::ResolveBitmapActions( BSaveStructList_impl& rSaveList )
 {
@@ -1812,23 +1775,17 @@ void WinMtfOutput::ResolveBitmapActions( BSaveStructList_impl& rSaveList )
     rSaveList.clear();
 }
 
-
-
 void WinMtfOutput::SetDevOrg( const Point& rPoint )
 {
     mnDevOrgX = rPoint.X();
     mnDevOrgY = rPoint.Y();
 }
 
-
-
 void WinMtfOutput::SetDevOrgOffset( sal_Int32 nXAdd, sal_Int32 nYAdd )
 {
     mnDevOrgX += nXAdd;
     mnDevOrgY += nYAdd;
 }
-
-
 
 void WinMtfOutput::SetDevExt( const Size& rSize ,bool regular)
 {
@@ -1850,15 +1807,11 @@ void WinMtfOutput::SetDevExt( const Size& rSize ,bool regular)
     }
 }
 
-
-
 void WinMtfOutput::ScaleDevExt( double fX, double fY )
 {
     mnDevWidth = FRound( mnDevWidth * fX );
     mnDevHeight = FRound( mnDevHeight * fY );
 }
-
-
 
 void WinMtfOutput::SetWinOrg( const Point& rPoint , bool bIsEMF)
 {
@@ -1871,15 +1824,11 @@ void WinMtfOutput::SetWinOrg( const Point& rPoint , bool bIsEMF)
     mbIsMapWinSet=true;
 }
 
-
-
 void WinMtfOutput::SetWinOrgOffset( sal_Int32 nXAdd, sal_Int32 nYAdd )
 {
     mnWinOrgX += nXAdd;
     mnWinOrgY += nYAdd;
 }
-
-
 
 void WinMtfOutput::SetDevByWin() //mnWinExt...-stuff has to be assigned before.
 {
@@ -1891,8 +1840,6 @@ void WinMtfOutput::SetDevByWin() //mnWinExt...-stuff has to be assigned before.
         }
     }
 }
-
-
 
 void WinMtfOutput::SetWinExt( const Size& rSize, bool bIsEMF )
 {
@@ -1915,29 +1862,21 @@ void WinMtfOutput::SetWinExt( const Size& rSize, bool bIsEMF )
     }
 }
 
-
-
 void WinMtfOutput::ScaleWinExt( double fX, double fY )
 {
     mnWinExtX = FRound( mnWinExtX * fX );
     mnWinExtY = FRound( mnWinExtY * fY );
 }
 
-
-
 void WinMtfOutput::SetrclBounds( const Rectangle& rRect )
 {
     mrclBounds = rRect;
 }
 
-
-
 void WinMtfOutput::SetrclFrame( const Rectangle& rRect )
 {
     mrclFrame = rRect;
 }
-
-
 
 void WinMtfOutput::SetRefPix( const Size& rSize )
 {
@@ -1945,15 +1884,11 @@ void WinMtfOutput::SetRefPix( const Size& rSize )
     mnPixY = rSize.Height();
 }
 
-
-
 void WinMtfOutput::SetRefMill( const Size& rSize )
 {
     mnMillX = rSize.Width();
     mnMillY = rSize.Height();
 }
-
-
 
 void WinMtfOutput::SetMapMode( sal_uInt32 nMapMode )
 {
@@ -1970,8 +1905,6 @@ void WinMtfOutput::SetMapMode( sal_uInt32 nMapMode )
     }
 }
 
-
-
 void WinMtfOutput::SetWorldTransform( const XForm& rXForm )
 {
     maXForm.eM11 = rXForm.eM11;
@@ -1981,8 +1914,6 @@ void WinMtfOutput::SetWorldTransform( const XForm& rXForm )
     maXForm.eDx = rXForm.eDx;
     maXForm.eDy = rXForm.eDy;
 }
-
-
 
 void WinMtfOutput::ModifyWorldTransform( const XForm& rXForm, sal_uInt32 nMode )
 {
@@ -2060,9 +1991,7 @@ void WinMtfOutput::ModifyWorldTransform( const XForm& rXForm, sal_uInt32 nMode )
             break;
         }
     }
- }
-
-
+}
 
 void WinMtfOutput::Push()                       // !! to be able to access the original ClipRegion it
 {                                               // is not allowed to use the MetaPushAction()
@@ -2100,8 +2029,6 @@ void WinMtfOutput::Push()                       // !! to be able to access the o
 
     vSaveStack.push_back( pSave );
 }
-
-
 
 void WinMtfOutput::Pop()
 {

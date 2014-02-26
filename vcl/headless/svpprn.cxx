@@ -156,9 +156,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
     }
 }
 
-/*
- *  SalInstance
- */
+// SalInstance
 
 SalInfoPrinter* SvpSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
                                                    ImplJobSetup*            pJobSetup )

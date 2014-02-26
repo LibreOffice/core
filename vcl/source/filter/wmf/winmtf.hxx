@@ -394,7 +394,6 @@ struct WinMtfFillStyle
         }
 };
 
-// -----------------------------------------------------------------------------
 
 struct WinMtfLineStyle
 {
@@ -446,7 +445,6 @@ struct WinMtfLineStyle
     }
 };
 
-// -----------------------------------------------------------------------------
 
 struct XForm
 {
@@ -463,7 +461,6 @@ struct XForm
     }
 };
 
-// -----------------------------------------------------------------------------
 
 struct SaveStruct
 {
@@ -491,7 +488,6 @@ struct SaveStruct
 
 typedef ::boost::shared_ptr< SaveStruct > SaveStructPtr;
 
-// -----------------------------------------------------------------------------
 
 struct BSaveStruct
 {
@@ -515,7 +511,6 @@ struct BSaveStruct
 
 typedef ::std::vector< BSaveStruct* > BSaveStructList_impl;
 
-// -----------------------------------------------------------------------------
 
 enum GDIObjectType {
     GDI_DUMMY = 0,
@@ -570,7 +565,6 @@ struct GDIObj
     }
 };
 
-// -----------------------------------------------------------------------------
 
 class WinMtfOutput
 {
@@ -758,7 +752,6 @@ public:
     virtual             ~WinMtfOutput();
 };
 
-// -----------------------------------------------------------------------------
 
 class WinMtf
 {
@@ -787,7 +780,6 @@ protected:
                         ~WinMtf();
 };
 
-//============================ EMFReader ==================================
 
 class EnhWMFReader : public WinMtf
 {
@@ -823,7 +815,6 @@ private:
     template <class T, class Drawer> void ReadAndDrawPolygon(Drawer drawer, const bool skipFirst);
 };
 
-//============================ WMFReader ==================================
 
 class WMFReader : public WinMtf
 {

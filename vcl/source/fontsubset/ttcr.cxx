@@ -36,7 +36,6 @@
 #include "string.h"
 
 
-
 namespace vcl
 {
 

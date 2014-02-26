@@ -26,23 +26,17 @@
 
 namespace ImageScaleMode = ::com::sun::star::awt::ImageScaleMode;
 
-
-
 ImageControl::ImageControl( Window* pParent, WinBits nStyle )
     :FixedImage( pParent, nStyle )
     ,mnScaleMode( ImageScaleMode::ANISOTROPIC )
 {
 }
 
-
-
 ImageControl::ImageControl( Window* pParent, const ResId& rResId )
     :FixedImage( pParent, rResId )
     ,mnScaleMode( ImageScaleMode::ANISOTROPIC )
 {
 }
-
-
 
 void ImageControl::SetScaleMode( const ::sal_Int16 _nMode )
 {
@@ -53,13 +47,10 @@ void ImageControl::SetScaleMode( const ::sal_Int16 _nMode )
     }
 }
 
-
-
 void ImageControl::Resize()
 {
     Invalidate();
 }
-
 
 namespace
 {
@@ -82,8 +73,6 @@ namespace
         return aPos;
     }
 }
-
-
 
 void ImageControl::ImplDraw( OutputDevice& rDev, sal_uLong nDrawFlags, const Point& rPos, const Size& rSize ) const
 {
@@ -149,8 +138,6 @@ void ImageControl::ImplDraw( OutputDevice& rDev, sal_uLong nDrawFlags, const Poi
     }   // switch ( mnScaleMode )
 }
 
-
-
 void ImageControl::Paint( const Rectangle& /*rRect*/ )
 {
     ImplDraw( *this, 0, Point(), GetOutputSizePixel() );
@@ -177,7 +164,6 @@ void ImageControl::Paint( const Rectangle& /*rRect*/ )
     }
 }
 
-
 void ImageControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
 {
     const Point     aPos  = pDev->LogicToPixel( rPos );
@@ -198,15 +184,11 @@ void ImageControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSiz
     pDev->Pop();
 }
 
-
-
 void ImageControl::GetFocus()
 {
     FixedImage::GetFocus();
     GetWindow( WINDOW_BORDER )->Invalidate();
 }
-
-
 
 void ImageControl::LoseFocus()
 {
