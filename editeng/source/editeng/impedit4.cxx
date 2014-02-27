@@ -78,6 +78,8 @@
 
 #include <vector>
 #include <boost/scoped_ptr.hpp>
+#include <boost/make_shared.hpp>
+#include <boost/unordered_map.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -307,19 +309,6 @@ sal_uInt32 ImpEditEngine::WriteXML( SvStream& rOutput, EditSelection aSel )
     return 0;
 }
 
-static sal_uInt16 getStylePos( const SfxStyles& rStyles, SfxStyleSheet* pSheet )
-{
-    sal_uInt16 nNumber = 0;
-    SfxStyles::const_iterator iter( rStyles.begin() );
-    while( iter != rStyles.end() )
-    {
-        if( (*iter++).get() == pSheet )
-            return nNumber;
-        ++nNumber;
-    }
-    return 0;
-}
-
 sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
 {
     DBG_ASSERT( GetUpdateMode(), "WriteRTF for UpdateMode = sal_False!" );
@@ -456,18 +445,30 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
     rOutput.WriteChar( '}' );
     rOutput << endl;
 
+    boost::unordered_map<SfxStyleSheetBase*, sal_uInt32> aStyleSheetToIdMap;
     // StyleSheets...
     if ( GetStyleSheetPool() )
     {
-        sal_uInt16 nStyles = (sal_uInt16)GetStyleSheetPool()->GetStyles().size();
-        if ( nStyles )
+        SfxStyleSheetIteratorPtr aSSSIterator = boost::make_shared<SfxStyleSheetIterator>(GetStyleSheetPool(),
+                SFX_STYLE_FAMILY_ALL);
+        // fill aStyleSheetToIdMap
+        sal_uInt32 nId = 1;
+        for ( SfxStyleSheetBase* pStyle = aSSSIterator->First(); pStyle;
+                                 pStyle = aSSSIterator->Next() )
         {
+            aStyleSheetToIdMap[pStyle] = nId;
+            nId++;
+        }
+
+        if ( aSSSIterator->Count() )
+        {
+
+            sal_uInt32 nStyle = 0;
             rOutput.WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_STYLESHEET );
 
-            for ( sal_uInt16 nStyle = 0; nStyle < nStyles; nStyle++ )
+            for ( SfxStyleSheetBase* pStyle = aSSSIterator->First(); pStyle;
+                                     pStyle = aSSSIterator->Next() )
             {
-
-                SfxStyleSheet* pStyle = (SfxStyleSheet*)GetStyleSheetPool()->GetStyles()[ nStyle ].get();
 
                 rOutput << endl;
                 rOutput.WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_S );
@@ -490,23 +491,25 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
                     SfxStyleSheet* pParent = (SfxStyleSheet*)GetStyleSheetPool()->Find( pStyle->GetParent(), pStyle->GetFamily() );
                     DBG_ASSERT( pParent, "Parent not found!" );
                     rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_SBASEDON );
-                    nNumber = getStylePos( GetStyleSheetPool()->GetStyles(), pParent ) + 1;
+                    nNumber = aStyleSheetToIdMap.find(pParent)->second;
                     rOutput.WriteNumber( nNumber );
                 }
 
                 // Next Style ... (more)
-                SfxStyleSheet* pNext = pStyle;
+                // we assume that we have only SfxStyleSheet in the pool
+                SfxStyleSheet* pNext = static_cast<SfxStyleSheet*>(pStyle);
                 if ( !pStyle->GetFollow().isEmpty() && ( pStyle->GetFollow() != pStyle->GetName() ) )
                     pNext = (SfxStyleSheet*)GetStyleSheetPool()->Find( pStyle->GetFollow(), pStyle->GetFamily() );
 
                 DBG_ASSERT( pNext, "Next ot found!" );
                 rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_SNEXT );
-                nNumber = getStylePos( GetStyleSheetPool()->GetStyles(), pNext ) + 1;
+                nNumber = aStyleSheetToIdMap.find(pNext)->second;
                 rOutput.WriteNumber( nNumber );
 
                 // Name of the template ...
                 rOutput.WriteCharPtr( " " ).WriteCharPtr( OUStringToOString(pStyle->GetName(), eDestEnc).getStr() );
                 rOutput.WriteCharPtr( ";}" );
+                nStyle++;
             }
             rOutput.WriteChar( '}' );
             rOutput << endl;
@@ -546,7 +549,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
         {
             // Number of template
             rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_S );
-            sal_uInt32 nNumber = getStylePos( GetStyleSheetPool()->GetStyles(), pNode->GetStyleSheet() ) + 1;
+            sal_uInt32 nNumber = aStyleSheetToIdMap.find(pNode->GetStyleSheet())->second;
             rOutput.WriteNumber( nNumber );
 
             // All Attribute
