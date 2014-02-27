@@ -41,7 +41,6 @@ public:
 
 ResourceModelOutputWithDepth output;
 
-string gInfo = "";
 // ------- WW8TableDataHandler ---------
 
 class TablePropsRef : public writerfilter::Reference<Properties>
