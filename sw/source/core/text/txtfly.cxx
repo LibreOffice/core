@@ -597,8 +597,12 @@ void SwTxtFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect,
         {
             // #i68520#
             const SwAnchoredObject* pAnchoredObjTmp = (*mpAnchoredObjList)[i];
-            if( mpCurrAnchoredObj != pAnchoredObjTmp &&
-                dynamic_cast<const SwFlyFrm*>(pAnchoredObjTmp) )
+            if (mpCurrAnchoredObj == pAnchoredObjTmp)
+                continue;
+
+            // #i68520#
+            const SwFlyFrm* pFly = dynamic_cast<const SwFlyFrm*>(pAnchoredObjTmp);
+            if (pFly)
             {
                 // #i68520#
                 const SwFmtSurround& rSur = pAnchoredObjTmp->GetFrmFmt().GetSurround();
@@ -606,8 +610,6 @@ void SwTxtFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect,
                 // OD 24.01.2003 #106593# - correct clipping of fly frame area.
                 // Consider that fly frame background/shadow can be transparent
                 // and <SwAlignRect(..)> fly frame area
-                // #i68520#
-                const SwFlyFrm* pFly = dynamic_cast<const SwFlyFrm*>(pAnchoredObjTmp);
                 // #i47804# - consider transparent graphics
                 // and OLE objects.
                 bool bClipFlyArea =
