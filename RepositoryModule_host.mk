@@ -35,6 +35,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	cli_ure \
 	$(call gb_Helper_optional,CLUCENE,clucene) \
 	$(call gb_Helper_optional,DESKTOP,codemaker) \
+	$(call gb_Helper_optional,COINMP,coinmp) \
 	comphelper \
 	configmgr \
 	$(call gb_Helper_optional,DBCONNECTIVITY,connectivity) \
