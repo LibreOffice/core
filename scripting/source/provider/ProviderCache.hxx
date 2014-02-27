@@ -33,8 +33,6 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
 
-#include "ScriptingContext.hxx"
-
 namespace func_provider
 {
 
