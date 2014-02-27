@@ -237,16 +237,15 @@ public:
     OString             GetCurItemIdent() const;
 
     void                SetHightlightItem(sal_uInt16 nHighlightedItem);
-    sal_uInt16          GetHighlightItem() const;
 
     void                SetDefaultItem( sal_uInt16 nItemId )    { nDefaultItem = nItemId; }
-    sal_uInt16              GetDefaultItem() const              { return nDefaultItem; }
+    sal_uInt16          GetDefaultItem() const              { return nDefaultItem; }
 
     void                SetItemBits( sal_uInt16 nItemId, MenuItemBits nBits );
     MenuItemBits        GetItemBits( sal_uInt16 nItemId ) const;
 
     void                SetUserValue( sal_uInt16 nItemId, sal_uLong nValue );
-    sal_uLong               GetUserValue( sal_uInt16 nItemId ) const;
+    sal_uLong           GetUserValue( sal_uInt16 nItemId ) const;
 
     void                SetPopupMenu( sal_uInt16 nItemId, PopupMenu* pMenu );
     PopupMenu*          GetPopupMenu( sal_uInt16 nItemId ) const;

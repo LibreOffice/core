@@ -1579,11 +1579,6 @@ void Menu::SetHightlightItem( sal_uInt16 nItem )
     nHighlightedItem = nItem;
 }
 
-sal_uInt16 Menu::GetHighlightItem() const
-{
-    return nHighlightedItem;
-}
-
 sal_uInt16 Menu::GetCurItemId() const
 {
     return nSelectedId;
