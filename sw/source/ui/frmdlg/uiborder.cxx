@@ -34,7 +34,7 @@
 
 SwBorderDlg::SwBorderDlg(Window* pParent, SfxItemSet& rSet, sal_uInt16 nType) :
 
-    SfxNoLayoutSingleTabDialog(pParent, rSet, 0)
+    SfxSingleTabDialog(pParent, rSet)
 
 {
     SetText(SW_RESSTR(STR_FRMUI_BORDER));
@@ -45,13 +45,13 @@ SwBorderDlg::SwBorderDlg(Window* pParent, SfxItemSet& rSet, sal_uInt16 nType) :
     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER );
     if ( fnCreatePage )
     {
-        SfxTabPage* pNewPage = (*fnCreatePage)( this, rSet );
+        SfxTabPage* pNewPage = (*fnCreatePage)( get_content_area(), rSet );
         SfxAllItemSet aSet(*(rSet.GetPool()));
         aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE,nType));
         if(SW_BORDER_MODE_TABLE == nType)
             aSet.Put (SfxUInt32Item(SID_FLAG_TYPE,SVX_HIDESHADOWCTL));
         pNewPage->PageCreated(aSet);
-        SetTabPage(pNewPage);
+        setTabPage(pNewPage);
     }
 }
 
