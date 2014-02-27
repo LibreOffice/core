@@ -1,0 +1,36 @@
+#!/bin/bash
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+# This will reorder icon-themes/*/links.txt to the right order
+
+for I in icon-themes/*/links.txt ; do
+    D="${I%/links.txt}"
+    cat "$I" | while read LINK ORIG
+    do
+        if [ -f "$D/$LINK" -a -f "$D/$ORIG" ] ; then
+            if diff "$D/$LINK" "$D/$ORIG" >/dev/null 2>&1 ; then
+                echo "$I: removing $LINK from git: both $LINK and $ORIG are the same files" 1>&2
+                git rm "$D/$LINK" 1>/dev/null
+                echo $LINK $ORIG
+            else
+                echo "$I: link and orig differs, check the images, and remove manually: $LINK $ORIG" 1>&2
+                echo $LINK $ORIG
+            fi
+        elif [ -f "$D/$LINK" ] ; then
+            echo "$I: swapping to right order: $ORIG $LINK" 1>&2
+            echo $ORIG $LINK
+        else
+            echo $LINK $ORIG
+        fi
+    done > "$I-fixed"
+
+    mv "$I-fixed" "$I"
+done
+
+# vim: set expandtab sw=4 ts=4:
