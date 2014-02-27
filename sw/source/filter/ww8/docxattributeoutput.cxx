@@ -6298,10 +6298,13 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
             if (m_oFillStyle && *m_oFillStyle == XFILL_BITMAP)
             {
                 const SdrObject* pSdrObj = m_rExport.mpParentFrame->GetFrmFmt().FindRealSdrObject();
-                uno::Reference< drawing::XShape > xShape( ((SdrObject*)pSdrObj)->getUnoShape(), uno::UNO_QUERY );
-                uno::Reference< beans::XPropertySet > xPropertySet( xShape, uno::UNO_QUERY );
-                m_rDrawingML.SetFS(m_pSerializer);
-                m_rDrawingML.WriteBlipFill( xPropertySet, "BackGraphicURL" );
+                if (pSdrObj)
+                {
+                    uno::Reference< drawing::XShape > xShape( ((SdrObject*)pSdrObj)->getUnoShape(), uno::UNO_QUERY );
+                    uno::Reference< beans::XPropertySet > xPropertySet( xShape, uno::UNO_QUERY );
+                    m_rDrawingML.SetFS(m_pSerializer);
+                    m_rDrawingML.WriteBlipFill( xPropertySet, "BackGraphicURL" );
+                }
             }
         }
 
