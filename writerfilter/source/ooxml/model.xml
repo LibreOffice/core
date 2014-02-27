@@ -5564,6 +5564,28 @@
           </choice>
         </list>
       </define>
+      <define name="ST_Ligatures">
+        <list>
+          <choice>
+            <value>none</value>
+            <value>standard</value>
+            <value>contextual</value>
+            <value>historical</value>
+            <value>discretional</value>
+            <value>standardContextual</value>
+            <value>standardHistorical</value>
+            <value>contextualHistorical</value>
+            <value>standardDiscretional</value>
+            <value>contextualDiscretional</value>
+            <value>historicalDiscretional</value>
+            <value>standardContextualHistorical</value>
+            <value>standardContextualDiscretional</value>
+            <value>standardHistoricalDiscretional</value>
+            <value>contextualHistoricalDiscretional</value>
+            <value>all</value>
+          </choice>
+        </list>
+      </define>
 
       <define name="ST_PositiveCoordinate">
         <data type="long">
@@ -6116,6 +6138,11 @@
           </attribute>
         </optional>
       </define>
+      <define name="CT_Ligatures">
+        <attribute name="val">
+          <ref name="ST_Ligatures"/>
+        </attribute>
+      </define>
 
       <define name="glow">
         <element name="glow">
@@ -6166,7 +6193,7 @@
         <element name="numSpacing">
           <empty/>
         </element>
-      </define>
+      </define>CT_Ligatures
       <define name="stylisticSets">
         <element name="stylisticSets">
           <empty/>
@@ -6177,7 +6204,6 @@
           <empty/>
         </element>
       </define>
-
     </grammar>
 
     <!-- Simple Types Resource Definitions -->
@@ -6380,6 +6406,24 @@
       <value name="softmetal" tokenid="ooxml:ST_PresetMaterialType_softmetal">softmetal</value>
       <value name="none" tokenid="ooxml:ST_PresetMaterialType_none">none</value>
     </resource>
+    <resource name="ST_Ligatures" resource="List" generated="yes">
+      <value name="none" tokenid="ooxml:ST_Ligatures_none">none</value>
+      <value name="standard" tokenid="ooxml:ST_Ligatures_standard">standard</value>
+      <value name="contextual" tokenid="ooxml:ST_Ligatures_contextual">contextual</value>
+      <value name="historical" tokenid="ooxml:ST_Ligatures_historical">historical</value>
+      <value name="discretional" tokenid="ooxml:ST_Ligatures_discretional">discretional</value>
+      <value name="standardContextual" tokenid="ooxml:ST_Ligatures_standardContextual">standardContextual</value>
+      <value name="standardHistorical" tokenid="ooxml:ST_Ligatures_standardHistorical">standardHistorical</value>
+      <value name="contextualHistorical" tokenid="ooxml:ST_Ligatures_contextualHistorical">contextualHistorical</value>
+      <value name="standardDiscretional" tokenid="ooxml:ST_Ligatures_standardDiscretional">standardDiscretional</value>
+      <value name="contextualDiscretional" tokenid="ooxml:ST_Ligatures_contextualDiscretional">contextualDiscretional</value>
+      <value name="historicalDiscretional" tokenid="ooxml:ST_Ligatures_historicalDiscretional">historicalDiscretional</value>
+      <value name="standardContextualHistorical" tokenid="ooxml:ST_Ligatures_standardContextualHistorical">standardContextualHistorical</value>
+      <value name="standardContextualDiscretional" tokenid="ooxml:ST_Ligatures_standardContextualDiscretional">standardContextualDiscretional</value>
+      <value name="standardHistoricalDiscretional" tokenid="ooxml:ST_Ligatures_standardHistoricalDiscretional">standardHistoricalDiscretional</value>
+      <value name="contextualHistoricalDiscretional" tokenid="ooxml:ST_Ligatures_contextualHistoricalDiscretional">contextualHistoricalDiscretional</value>
+      <value name="all" tokenid="ooxml:ST_Ligatures_all">all</value>
+    </resource>
 
     <resource name="ST_PositiveCoordinate" resource="Integer" generated="yes"/>
     <resource name="ST_HexColorRGB" resource="Hex"/>
@@ -6541,6 +6585,10 @@
       <attribute name="contourW" tokenid="ooxml:CT_Props3D_contourW"/>
       <attribute name="prstMaterial" tokenid="ooxml:CT_Props3D_prstMaterial"/>
     </resource>
+    <resource name="CT_Ligatures" resource="Properties" tag="character">
+      <attribute name="val" tokenid="ooxml:CT_Ligatures_val"/>
+    </resource>
+
 
     <resource name="glow" resource="Properties" tag="character">
       <element name="glow" tokenid="ooxml:glow_glow"/>
@@ -18246,12 +18294,12 @@
             <ref name="BUILT_IN_ANY_TYPE"/>
           </element>
         </optional>
-        <!--<optional>
+        <optional>
           <element name="w14:ligatures">
             <ref name="BUILT_IN_ANY_TYPE"/>
           </element>
         </optional>
-        <optional>
+        <!--<optional>
           <element name="w14:numForm">
             <ref name="BUILT_IN_ANY_TYPE"/>
           </element>
@@ -24245,8 +24293,8 @@
       <element name="w14:textFill" tokenid="ooxml:EG_RPrBase_w14_textFill"/>
       <element name="w14:scene3d" tokenid="ooxml:EG_RPrBase_w14_scene3d"/>
       <element name="w14:props3d" tokenid="ooxml:EG_RPrBase_w14_props3d"/>
-      <!--<element name="w14:ligatures" tokenid="ooxml:EG_RPrBase_w14_ligatures"/>
-      <element name="w14:numForm" tokenid="ooxml:EG_RPrBase_w14_numForm"/>
+      <element name="w14:ligatures" tokenid="ooxml:EG_RPrBase_w14_ligatures"/>
+      <!--<element name="w14:numForm" tokenid="ooxml:EG_RPrBase_w14_numForm"/>
       <element name="w14:numSpacing" tokenid="ooxml:EG_RPrBase_w14_numSpacing"/>
       <element name="w14:stylisticSets" tokenid="ooxml:EG_RPrBase_w14_stylisticSets"/>
       <element name="w14:cntxtAlts" tokenid="ooxml:EG_RPrBase_w14_cntxtAlts"/>-->
