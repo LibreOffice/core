@@ -384,29 +384,27 @@ bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
     // style for other objects
     if(pScDrawView)
     {
-        SdrObject* pPickObj = 0;
         SdrPageView* pPageView = pScDrawView->GetSdrPageView();
 
         if(pPageView)
         {
-            pScDrawView->PickObj(rPos, pScDrawView->getHitTolLog(), pPickObj, pPageView);
-        }
-
-        if(pPickObj)
-        {
-            const OUString aBeginUndo(ScGlobal::GetRscString(STR_UNDO_DRAGDROP));
-            SdrObject* pResult = pScDrawView->ApplyGraphicToObject(
-                *pPickObj,
-                rGraphic,
-                aBeginUndo,
-                rFile,
-                rFilter);
-
-            if(pResult)
+            SdrObject* pPickObj = 0;
+            if (pScDrawView->PickObj(rPos, pScDrawView->getHitTolLog(), pPickObj, pPageView))
             {
-                // we are done; mark the modified/new object
-                pScDrawView->MarkObj(pResult, pScDrawView->GetSdrPageView());
-                return true;
+                const OUString aBeginUndo(ScGlobal::GetRscString(STR_UNDO_DRAGDROP));
+                SdrObject* pResult = pScDrawView->ApplyGraphicToObject(
+                    *pPickObj,
+                    rGraphic,
+                    aBeginUndo,
+                    rFile,
+                    rFilter);
+
+                if (pResult)
+                {
+                    // we are done; mark the modified/new object
+                    pScDrawView->MarkObj(pResult, pScDrawView->GetSdrPageView());
+                    return true;
+                }
             }
         }
     }
