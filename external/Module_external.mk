@@ -62,7 +62,7 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,LPSOLVE,lpsolve) \
 	$(call gb_Helper_optional,MARIADB,libmariadb) \
 	$(call gb_Helper_optional,MDDS,mdds) \
-	$(if $(filter YES,$(WITH_EXTRA_EXTENSIONS)),misc_extensions) \
+	$(if $(WITH_EXTRA_EXTENSIONS),misc_extensions) \
 	$(call gb_Helper_optional,MORE_FONTS,more_fonts) \
 	$(call gb_Helper_optional,MOZ,moz) \
 	$(call gb_Helper_optional,MSPUB,libmspub) \

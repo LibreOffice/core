@@ -17,7 +17,7 @@ if test "x$enable_ext_$3" = "xyes" -a "x$enable_extension_integration" != "xno";
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_$2"
     $2_EXTENSION_PACK="$5"
     BUILD_TYPE="$BUILD_TYPE $2"
-    WITH_EXTRA_EXTENSIONS=YES
+    WITH_EXTRA_EXTENSIONS=TRUE
     AC_MSG_RESULT([yes])
 else
     AC_MSG_RESULT([no])
