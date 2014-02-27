@@ -399,6 +399,9 @@ bool ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, bool bScrol
             return false;
 
         ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
+        if (!pProtect)
+            return false;
+
         bool bSkipProtected   = !pProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
         bool bSkipUnprotected = !pProtect->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS);
 
