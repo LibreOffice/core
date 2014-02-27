@@ -849,38 +849,6 @@ bool ImplRegionBand::IsInside( long nX )
 
 
 
-bool ImplRegionBand::IsOver( long nLeft, long nRight )
-{
-    ImplRegionBandSep* pSep = mpFirstSep;
-    while ( pSep )
-    {
-        if ( (pSep->mnXLeft < nRight) && (pSep->mnXRight > nLeft) )
-            return true;
-
-        pSep = pSep->mpNextSep;
-    }
-
-    return false;
-}
-
-
-
-bool ImplRegionBand::IsInside( long nLeft, long nRight )
-{
-    ImplRegionBandSep* pSep = mpFirstSep;
-    while ( pSep )
-    {
-        if ( (pSep->mnXLeft >= nLeft) && (nRight <= pSep->mnXRight) )
-            return true;
-
-        pSep = pSep->mpNextSep;
-    }
-
-    return false;
-}
-
-
-
 long ImplRegionBand::GetXLeftBoundary() const
 {
     DBG_ASSERT( mpFirstSep != NULL, "ImplRegionBand::XLeftBoundary -> no separation in band!" );

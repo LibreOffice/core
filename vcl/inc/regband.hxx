@@ -33,9 +33,6 @@ separation after creation.
 The separations are modified with basic clipping functions like Union and
 Intersection - the Class will process the clipping for the actual band.
 
-The actual separations may be checked by functions like IsInside or
-IsOver.
-
 */
 
 // element for the list with x-separations
@@ -113,8 +110,6 @@ public:
     void                        ScaleX( double fHorzScale );
 
     bool                        IsInside( long nX );
-    bool                        IsInside( long nLeft, long nRight );
-    bool                        IsOver( long nLeft, long nRight );
 
 
     bool                        IsEmpty() const { return ((!mpFirstSep) && (!mpFirstBandPoint)); }
