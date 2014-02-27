@@ -464,6 +464,7 @@ OUString HelpTextWindow::GetText() const
     return FloatingWindow::CreateAccessible();
 }
 
+
 void ImplShowHelpWindow( Window* pParent, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle,
                          const OUString& rHelpText, const OUString& rStatusText,
                          const Point& rScreenPos, const Rectangle* pHelpArea )
