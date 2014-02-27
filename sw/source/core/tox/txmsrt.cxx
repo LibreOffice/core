@@ -104,7 +104,7 @@ OUString SwTOXInternational::ToUpper( const OUString& rStr, sal_Int32 nPos ) con
     return pCharClass->uppercase( rStr, nPos, 1 );
 }
 
-inline sal_Bool SwTOXInternational::IsNumeric( const OUString& rStr ) const
+inline bool SwTOXInternational::IsNumeric( const OUString& rStr ) const
 {
     return pCharClass->isNumeric( rStr );
 }
@@ -124,7 +124,7 @@ OUString SwTOXInternational::GetIndexKey( const TextAndReading& rTaR,
     return pIndexWrapper->GetIndexKey( rTaR.sText, rTaR.sReading, rLocale );
 }
 
-OUString SwTOXInternational::GetFollowingText( sal_Bool bMorePages ) const
+OUString SwTOXInternational::GetFollowingText( bool bMorePages ) const
 {
     return pIndexWrapper->GetFollowingText( bMorePages );
 }
@@ -138,7 +138,7 @@ SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwCntntNode* pNd,
                                     const SwTOXInternational* pInter,
                                     const lang::Locale* pLocale )
     : pTOXNd( 0 ), pTxtMark( pMark ), pTOXIntl( pInter ),
-    nPos( 0 ), nCntPos( 0 ), nType( static_cast<sal_uInt16>(nTyp) ), bValidTxt( sal_False )
+    nPos( 0 ), nCntPos( 0 ), nType( static_cast<sal_uInt16>(nTyp) ), bValidTxt( false )
 {
     if ( pLocale )
         aLocale = *pLocale;
@@ -148,8 +148,7 @@ SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwCntntNode* pNd,
         sal_Int32 n = 0;
         if( pTxtMark )
             n = *pTxtMark->GetStart();
-        SwTOXSource aTmp( pNd, n,
-                    pTxtMark ? pTxtMark->GetTOXMark().IsMainEntry() : sal_False );
+        SwTOXSource aTmp( pNd, n, pTxtMark && pTxtMark->GetTOXMark().IsMainEntry() );
         aTOXSources.push_back(aTmp);
 
         nPos = pNd->GetIndex();

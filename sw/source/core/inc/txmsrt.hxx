@@ -46,9 +46,9 @@ struct SwTOXSource
 {
     const SwCntntNode* pNd;
     sal_Int32 nPos;
-    sal_Bool bMainEntry;
+    bool bMainEntry;
 
-    SwTOXSource( const SwCntntNode* pNode, sal_Int32 n, sal_Bool bMain )
+    SwTOXSource( const SwCntntNode* pNode, sal_Int32 n, bool bMain )
         : pNd(pNode), nPos(n), bMainEntry(bMain)
     {
     }
@@ -109,10 +109,10 @@ public:
     OUString GetIndexKey( const TextAndReading& rTaR,
                         const ::com::sun::star::lang::Locale& rLcl ) const;
 
-    OUString GetFollowingText( sal_Bool bMorePages ) const;
+    OUString GetFollowingText( bool bMorePages ) const;
 
     OUString ToUpper( const OUString& rStr, sal_Int32 nPos ) const;
-    inline sal_Bool IsNumeric( const OUString& rStr ) const;
+    inline bool IsNumeric( const OUString& rStr ) const;
 };
 
 /*--------------------------------------------------------------------
@@ -152,7 +152,7 @@ struct SwTOXSortTabBase
     inline const ::com::sun::star::lang::Locale& GetLocale() const;
 
 private:
-    sal_Bool bValidTxt;
+    bool bValidTxt;
     TextAndReading m_aSort;
 
     virtual TextAndReading GetText_Impl() const = 0;
@@ -164,7 +164,7 @@ inline TextAndReading SwTOXSortTabBase::GetTxt() const
     {
         SwTOXSortTabBase* pThis = (SwTOXSortTabBase*)this;
         pThis->m_aSort = pThis->GetText_Impl();
-        pThis->bValidTxt = sal_True;
+        pThis->bValidTxt = true;
     }
     return m_aSort;
 }
