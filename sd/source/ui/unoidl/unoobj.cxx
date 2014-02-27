@@ -544,9 +544,9 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const :
                     if(bIsAnimation)
                     {
                         SdrObjGroup* pGroup = dynamic_cast< SdrObjGroup* >(pObj);
-                        SdPage* pPage = dynamic_cast< SdPage* >(pGroup->GetPage());
+                        SdPage* pPage = pGroup ? dynamic_cast< SdPage* >(pGroup->GetPage()) : NULL;
 
-                        if(pGroup && pPage)
+                        if (pPage)
                         {
                             // #i42894# Animated Group object, migrate that effect
                             EffectMigration::CreateAnimatedGroup(*pGroup, *pPage);
