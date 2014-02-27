@@ -1146,7 +1146,8 @@ void ScXMLTableRowCellContext::PutValueCell( const ScAddress& rCurrentPos )
         {
             ScFormulaCell* pFCell = rXMLImport.GetDocument()->GetFormulaCell(rCurrentPos);
             SetFormulaCell(pFCell);
-            pFCell->SetNeedNumberFormat( true );
+            if (pFCell)
+                pFCell->SetNeedNumberFormat( true );
         }
     }
     else  //regular value cell
