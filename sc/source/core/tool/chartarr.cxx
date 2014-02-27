@@ -130,7 +130,7 @@ double getCellValue( ScDocument& rDoc, const ScAddress& rPos, double fDefault, b
         case CELLTYPE_FORMULA:
         {
             ScFormulaCell* pFCell = rDoc.GetFormulaCell(rPos);
-            if (!pFCell->GetErrCode() && pFCell->IsValue())
+            if (pFCell && !pFCell->GetErrCode() && pFCell->IsValue())
                 fRet = pFCell->GetValue();
         }
         break;
