@@ -467,7 +467,7 @@ static sal_uInt32 checkConstValue(Options_Impl const & options,
 {
     switch (constValue1.m_type)
     {
-        case RT_TYPE_INVALID:
+        case RT_TYPE_NONE:
             break;
         case RT_TYPE_BOOL:
             if (constValue1.m_value.aBool != constValue2.m_value.aBool)
