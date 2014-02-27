@@ -1110,7 +1110,8 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
             {
                 pViewData->SetOptions( rNewOpt );   // veraendert rOldOpt
                 pViewData->GetDocument()->SetViewOptions( rNewOpt );
-                pDocSh->SetDocumentModified();
+                if (pDocSh)
+                    pDocSh->SetDocumentModified();
                 bRepaint = true;
             }
             if ( bAnchorList )
