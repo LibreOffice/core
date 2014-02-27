@@ -1522,7 +1522,11 @@ void ScCheckListMenuWindow::initMembers()
         maChecks.CheckEntry( maMembers[i].maName, maMembers[i].mpParent, maMembers[i].mbVisible);
         // Expand first node of checked dates
         if ( maMembers[ i ].mpParent == NULL && maChecks.IsChecked( maMembers[i].maName,  maMembers[i].mpParent ) )
-            maChecks.Expand( maChecks.FindEntry( NULL, maMembers[ i ].maName ) );
+        {
+            SvTreeListEntry* pEntry = maChecks.FindEntry( NULL, maMembers[ i ].maName );
+            if (pEntry)
+                maChecks.Expand( pEntry );
+        }
 
         if (maMembers[i].mbVisible)
             ++nVisMemCount;
