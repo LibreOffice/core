@@ -820,12 +820,26 @@ sal_Bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart p
             break;
         }
         case CTRL_MENU_POPUP:
-            if (part == PART_MENU_ITEM_CHECK_MARK || part == PART_MENU_ITEM_RADIO_MARK)
-            { // core uses this to detect radio/checkbox sizes, so just set a square
-                contentRect.setWidth(contentRect.height());
+        {
+            int h, w;
+            switch ( part ) {
+            case PART_MENU_ITEM_CHECK_MARK:
+                h = kapp->style()->pixelMetric(QStyle::PM_IndicatorHeight);
+                w = kapp->style()->pixelMetric(QStyle::PM_IndicatorWidth);
                 retVal = true;
+                break;
+            case PART_MENU_ITEM_RADIO_MARK:
+                h = kapp->style()->pixelMetric(QStyle::PM_ExclusiveIndicatorHeight);
+                w = kapp->style()->pixelMetric(QStyle::PM_ExclusiveIndicatorWidth);
+                retVal = true;
+                break;
+            }
+            if (retVal) {
+                contentRect = QRect(0, 0, w, h);
+                boundingRect = contentRect;
             }
             break;
+        }
         case CTRL_FRAME:
         {
             if( part == PART_BORDER )
