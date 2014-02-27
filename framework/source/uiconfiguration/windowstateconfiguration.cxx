@@ -169,13 +169,24 @@ class ConfigurationAccess_WindowState : public  ::cppu::WeakImplHelper2< XNameCo
         // provided to outside code!
         struct WindowStateInfo
         {
-            WindowStateInfo() : aDockingArea( ::com::sun::star::ui::DockingArea_DOCKINGAREA_TOP ),
-                                aDockPos( 0, 0 ),
-                                aPos( 0, 0 ),
-                                aSize( 0, 0 ),
-                                nInternalState( 0 ),
-                                nStyle( 0 ),
-                                nMask( 0 ) {}
+            WindowStateInfo()
+                : bLocked(false)
+                , bDocked(false)
+                , bVisible(false)
+                , bContext(false)
+                , bHideFromMenu(false)
+                , bNoClose(false)
+                , bSoftClose(false)
+                , bContextActive(false)
+                , aDockingArea(::com::sun::star::ui::DockingArea_DOCKINGAREA_TOP)
+                , aDockPos(0, 0)
+                , aPos(0, 0)
+                , aSize(0, 0)
+                , nInternalState(0)
+                , nStyle(0)
+                , nMask(0)
+            {
+            }
 
             bool                                    bLocked : 1,
                                                     bDocked : 1,
