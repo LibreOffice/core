@@ -1719,12 +1719,10 @@ const OUString& PrintFontManager::getPSName( fontID nFontID ) const
     return m_pAtoms->getString( ATOM_PSNAME, pFont ? pFont->m_nPSName : INVALID_ATOM );
 }
 
-
-
 int PrintFontManager::getFontAscend( fontID nFontID ) const
 {
     PrintFont* pFont = getFont( nFontID );
-    if( pFont->m_nAscend == 0 && pFont->m_nDescend == 0 )
+    if (pFont && pFont->m_nAscend == 0 && pFont->m_nDescend == 0)
     {
         // might be a truetype font not yet analyzed
         if( pFont->m_eType == fonttype::TrueType )
@@ -1732,15 +1730,13 @@ int PrintFontManager::getFontAscend( fontID nFontID ) const
         else if( pFont->m_eType == fonttype::Type1 )
             pFont->readAfmMetrics( m_pAtoms, false, true );
     }
-    return pFont->m_nAscend;
+    return pFont ? pFont->m_nAscend : 0;
 }
-
-
 
 int PrintFontManager::getFontDescend( fontID nFontID ) const
 {
     PrintFont* pFont = getFont( nFontID );
-    if( pFont->m_nAscend == 0 && pFont->m_nDescend == 0 )
+    if (pFont && pFont->m_nAscend == 0 && pFont->m_nDescend == 0)
     {
         // might be a truetype font not yet analyzed
         if( pFont->m_eType == fonttype::TrueType )
@@ -1748,10 +1744,8 @@ int PrintFontManager::getFontDescend( fontID nFontID ) const
         else if( pFont->m_eType == fonttype::Type1 )
             pFont->readAfmMetrics( m_pAtoms, false, true );
     }
-    return pFont->m_nDescend;
+    return pFont ? pFont->m_nDescend : 0;
 }
-
-
 
 void PrintFontManager::hasVerticalSubstitutions( fontID nFontID,
     const sal_Unicode* pCharacters, int nCharacters, bool* pHasSubst ) const
