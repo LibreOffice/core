@@ -1334,7 +1334,7 @@ void ScCheckListMenuWindow::addDateMember(const OUString& rsName, double nVal, b
     SvTreeListEntry* pDayEntry = maChecks.FindEntry(pMonthEntry, aDayName);
     if (!pDayEntry)
     {
-        pDayEntry = maChecks.InsertEntry(aDayName, pMonthEntry, false);
+        maChecks.InsertEntry(aDayName, pMonthEntry, false);
         Member aMemDay;
         aMemDay.maName = aDayName;
         aMemDay.maRealName = rsName;
