@@ -1,7 +1,6 @@
 # Duplicates
 cmd/lc_circle.png cmd/lc_basicshapes.circle.png
 cmd/lc_ellipse.png cmd/lc_basicshapes.ellipse.png
-cmd/lc_square.png cmd/lc_basicshapes.square.png
 cmd/lc_rect.png cmd/lc_basicshapes.rectangle.png
 cmd/lc_square_rounded.png cmd/lc_basicshapes.round-quadrat.png
 cmd/lc_rect_rounded.png cmd/lc_basicshapes.round-rectangle.png
@@ -26,11 +25,6 @@ cmd/lc_starshapes.png cmd/lc_starshapes.star5.png
 cmd/lc_symbolshapes.png cmd/lc_symbolshapes.smiley.png
 cmd/lc_ellipsetoolbox.png cmd/lc_basicshapes.ellipse.png
 cmd/lc_rectangletoolbox.png cmd/lc_basicshapes.rectangle.png
-cmd/lc_objects3dtoolbox.png cmd/lc_cube.png
-cmd/lc_connectortoolbox.png cmd/lc_connector.png
-cmd/lc_arrowstoolbox.png cmd/lc_linearrowend.png
 cmd/lc_texttoolbox.png cmd/lc_text.png
 cmd/lc_inserttoolbox.png cmd/lc_drawchart.png
-cmd/lc_insertformspin.png cmd/lc_spinbutton.png
-cmd/lc_insertformspin.png cmd/lc_filecontrol.png
 cmd/lc_spellingandgrammardialog.png cmd/lc_spelldialog.png

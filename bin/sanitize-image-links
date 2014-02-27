@@ -25,6 +25,8 @@ for I in icon-themes/*/links.txt ; do
         elif [ -f "$D/$LINK" ] ; then
             echo "$I: swapping to right order: $ORIG $LINK" 1>&2
             echo $ORIG $LINK
+        elif [ -n "$LINK" -a "${LINK:0:1}" != "#" -a ! -f "$D/$LINK" -a ! -f "$D/$ORIG" ] ; then
+            echo "$I: neither exists, removing the line: $LINK $ORIG" 1>&2
         else
             echo $LINK $ORIG
         fi
