@@ -24,6 +24,7 @@
 #include <swfntcch.hxx>         // mba: get rid of that dependency
 
 static SwClientIter* pClientIters = 0;
+static ::osl::Mutex m_IterMutex;
 
 TYPEINIT0( SwClient );
 
@@ -225,6 +226,7 @@ void SwModify::Add( SwClient* pDepend )
     if(pDepend->pRegisteredIn != this )
     {
 #if OSL_DEBUG_LEVEL > 0
+        osl::MutexGuard aLock( m_IterMutex );
         SwClientIter* pTmp = pClientIters;
         while( pTmp )
         {
@@ -280,6 +282,7 @@ SwClient* SwModify::Remove( SwClient* pDepend )
             pR->pLeft = pL;
 
         // update ClientIters
+        osl::MutexGuard aLock( m_IterMutex );
         SwClientIter* pTmp = pClientIters;
         while( pTmp )
         {
@@ -340,6 +343,7 @@ void SwModify::CheckCaching( const sal_uInt16 nWhich )
 void SwModify::CallSwClientNotify( const SfxHint& rHint ) const
 {
     SwClientIter aIter(*this);
+    osl::MutexGuard aLock( m_IterMutex );
     SwClient* pClient = aIter.GoStart();
     while( pClient )
     {
@@ -351,6 +355,7 @@ void SwModify::CallSwClientNotify( const SfxHint& rHint ) const
 void SwModify::ModifyBroadcast( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue, TypeId nType )
 {
     SwClientIter aIter( *this );
+    osl::MutexGuard aLock( m_IterMutex );
     SwClient* pClient = aIter.First( nType );
     while( pClient )
     {
@@ -396,6 +401,7 @@ SwClientIter::SwClientIter( const SwModify& rModify )
     : rRoot( rModify )
 {
     pNxtIter = 0;
+    osl::MutexGuard aLock( m_IterMutex );
     if( pClientIters )
     {
         // append to list of ClientIters
@@ -415,6 +421,7 @@ SwClientIter::SwClientIter( const SwModify& rModify )
 
 SwClientIter::~SwClientIter()
 {
+    osl::MutexGuard aLock( m_IterMutex );
     if( pClientIters )
     {
         // reorganize list of ClientIters
