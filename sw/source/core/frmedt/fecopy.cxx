@@ -1439,7 +1439,7 @@ void SwFEShell::Paste( SvStream& rStrm, sal_uInt16 nAction, const Point* pPt )
 
                     DelSelectedObj();
 
-                    pFmt = GetDoc()->InsertDrawObj( *GetCrsr(), *pNewObj, aFrmSet );
+                    GetDoc()->InsertDrawObj( *GetCrsr(), *pNewObj, aFrmSet );
                 }
                 else
                 {
