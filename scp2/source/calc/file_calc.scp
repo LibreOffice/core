@@ -54,11 +54,4 @@ End
 
 STD_RES_FILE( gid_File_Res_Solver, solver)
 
-#if ! defined (SYSTEM_LPSOLVE)
-File gid_File_Lib_Lpsolve
-    PACKED_LIB_FILE_BODY;
-    Name = SPECIAL_NAME(lpsolve55);
-End
-#endif
-
 #endif
