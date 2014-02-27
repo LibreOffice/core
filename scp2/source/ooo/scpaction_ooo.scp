@@ -319,6 +319,8 @@ End
 ScpAction scp_Copy_Dmg_Background_Image
     Copy = "osxdndinstall.png";
     LangPackCopy = "osxdndinstall_lang.png";
+    BetaCopy = "osxdndinstall_beta.png";
+    LangBetaCopy = "osxdndinstall_lang_beta.png";
 	Name = "background.png";
     UnixRights = 444;
     Styles = (FORCELANGUAGEPACK);
@@ -329,6 +331,8 @@ ScpAction scp_Copy_Ds_Store
     Copy = "DS_Store";
     DevCopy = "DS_Store_Dev";
     LangPackCopy = "DS_Store_Langpack";
+    BetaCopy = "DS_Store_Beta";
+    LangBetaCopy = "DS_Store_Langpack_Beta";
     PatchCopy = "DS_Store_Patch";
     Name = ".DS_Store";
     UnixRights = 444;

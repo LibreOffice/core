@@ -1493,6 +1493,8 @@ if ( $installer::globals::iswindowsbuild ) { installer::control::read_encodingli
 ####################################################################
 if (($installer::globals::ismacdmgbuild) && ($installer::globals::product =~ /OpenOffice_Dev/)) { $installer::globals::devsnapshotbuild = 1; }
 
+if (($installer::globals::ismacdmgbuild) && ($installer::globals::product =~ /Apache_OpenOffice_Beta/)) { $installer::globals::betabuild = 1; }
+
 #####################################################################
 # Including additional inc files for variable settings, if defined
 #####################################################################
@@ -1576,7 +1578,10 @@ if (( ! $allvariableshashref->{'XPDINSTALLER'} ) || ( ! $installer::globals::isx
 
 if ( $installer::globals::languagepack ) { installer::scriptitems::use_langpack_copy_scpaction($scpactionsinproductarrayref); }
 if ( $installer::globals::patch ) { installer::scriptitems::use_patch_copy_scpaction($scpactionsinproductarrayref); }
-if (($installer::globals::devsnapshotbuild)) { installer::scriptitems::use_dev_copy_scpaction($scpactionsinproductarrayref); }
+if ($installer::globals::devsnapshotbuild) { installer::scriptitems::use_dev_copy_scpaction($scpactionsinproductarrayref); }
+if ($installer::globals::betabuild) { installer::scriptitems::use_beta_copy_scpaction($scpactionsinproductarrayref); }
+
+if ($installer::globals::betabuild && $installer::globals::languagepack) { installer::scriptitems::use_langbeta_copy_scpaction($scpactionsinproductarrayref); }
 
 # $scpactionsinproductarrayref = installer::scriptitems::remove_scpactions_without_name($scpactionsinproductarrayref);
 

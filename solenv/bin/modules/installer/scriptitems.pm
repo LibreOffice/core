@@ -763,6 +763,36 @@ sub use_patch_hostname
 }
 
 ################################################################################
+# Using beta copy action for beta builds
+################################################################################
+
+sub use_beta_copy_scpaction
+{
+    my ($scpactionsref) = @_;
+
+    for ( my $i = 0; $i <= $#{$scpactionsref}; $i++ )
+    {
+        my $onescpaction = ${$scpactionsref}[$i];
+        if (( $onescpaction->{'BetaCopy'} ) && ( $onescpaction->{'BetaCopy'} ne "" )) { $onescpaction->{'Copy'} = $onescpaction->{'BetaCopy'}; }
+    }
+}
+
+################################################################################
+# Using langpack beta copy action for language packs
+################################################################################
+
+sub use_langbeta_copy_scpaction
+{
+    my ($scpactionsref) = @_;
+
+    for ( my $i = 0; $i <= $#{$scpactionsref}; $i++ )
+    {
+        my $onescpaction = ${$scpactionsref}[$i];
+        if (( $onescpaction->{'LangBetaCopy'} ) && ( $onescpaction->{'LangBetaCopy'} ne "" )) { $onescpaction->{'Copy'} = $onescpaction->{'LangBetaCopy'}; }
+    }
+}
+
+################################################################################
 # Using langpack copy action for language packs
 ################################################################################
 

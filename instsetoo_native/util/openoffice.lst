@@ -249,6 +249,7 @@ Apache_OpenOffice_SDK
         {
             FULLPRODUCTNAME Apache OpenOffice
             PRODUCTNAME OpenOffice
+			PRODUCTDIRNAME OpenOffice_SDK
             PRODUCTVERSION 4.1.0
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
@@ -274,6 +275,53 @@ Apache_OpenOffice_SDK
             DONTUSESTARTMENUFOLDER 1
             RELATIVE_PATHES_IN_DDF 1
             AOODOWNLOADNAMEPREFIX Apache_OpenOffice-SDK
+            STARTCENTER_ADDFEATURE_URL http://extensions.openoffice.org/
+            STARTCENTER_INFO_URL http://www.openoffice.org
+            STARTCENTER_TEMPLREP_URL http://templates.openoffice.org
+            STARTCENTER_LAYOUT_STYLE 0
+            DICT_REPO_URL http://extensions.openoffice.org/dictionaries
+        }
+        active 1
+        compression 5
+        script sdkoo
+        include {solarenvpath}/{os}/loader2,{solarpath}/bin.{minor}/sdkoo,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarenvpath}/{os}/MS
+    }
+}
+
+Apache_OpenOffice_Beta_SDK
+{
+    Settings
+    {
+        downloadname Apache_OpenOffice-Beta-SDK_{packageversion}_{os}_install_{languages}
+        variables
+        {
+            FULLPRODUCTNAME Apache OpenOffice Beta
+            PRODUCTNAME OpenOffice Beta
+            PRODUCTDIRNAME OpenOffice_SDK_Beta
+            PRODUCTVERSION 4.1.0
+            PRODUCTEXTENSION
+            SHORT_PRODUCTEXTENSION
+            POSTVERSIONEXTENSION SDK
+            POSTVERSIONEXTENSIONUNIX sdk
+            BRANDPACKAGEVERSION 4
+            PACKAGEVERSION 4.1.0
+            PACKAGEREVISION {milestone}
+            PACK_INSTALLED 1
+            POOLPRODUCT 0
+            DMG_VOLUMEEXTENSION SDK
+            DATABASENAME openofficeorg410betasdk
+            NO_README_IN_ROOTDIR 1
+            LICENSENAME ALv2
+            IGNOREDIRECTORYLAYER 1
+            NOSPACEINDIRECTORYNAME 1
+            NOLANGUAGESELECTIONPRODUCT 1
+            CHANGETARGETDIR 1
+            DOWNLOADBANNER ooosdkbanner.bmp
+            DOWNLOADBITMAP ooosdkbitmap.bmp
+            DOWNLOADSETUPICO ooosetup.ico
+            DONTUSESTARTMENUFOLDER 1
+            RELATIVE_PATHES_IN_DDF 1
+            AOODOWNLOADNAMEPREFIX Apache_OpenOffice-Beta-SDK
             STARTCENTER_ADDFEATURE_URL http://extensions.openoffice.org/
             STARTCENTER_INFO_URL http://www.openoffice.org
             STARTCENTER_TEMPLREP_URL http://templates.openoffice.org
