@@ -36,14 +36,19 @@ curl_CPPFLAGS += -I$(call gb_UnpackedTarball_get_dir,nss)/dist/public/nss
 endif
 
 # use --with-darwinssl on Mac to get a native UI for SSL certs for CMIS usage
+# (note that --with-darwinssl option is not very compatible)
 $(call gb_ExternalProject_get_state_target,curl,build):
 	$(call gb_ExternalProject_run,build,\
 		CPPFLAGS="$(curl_CPPFLAGS)" \
 		LDFLAGS=$(curl_LDFLAGS) \
 		./configure \
-			$(if $(filter MACOSX IOS,$(OS)),\
-				--with-darwinssl, \
+			$(if $(filter IOS,$(OS)),\
+				--with-darwinssl \
 				--with-nss$(if $(SYSTEM_NSS),,="$(call gb_UnpackedTarball_get_dir,nss)/dist/out")) \
+			$(if $(filter MACOSX,$(OS)),\
+				$(if $(filter 1050,$(MAC_OS_X_VERSION_MIN_REQUIRED)),--without-nss,\
+					--with-darwinssl \
+					--with-nss$(if $(SYSTEM_NSS),,="$(call gb_UnpackedTarball_get_dir,nss)/dist/out"))) \
 			--without-ssl \
 			--without-libidn --enable-ftp --enable-ipv6 --enable-http --disable-gopher \
 			--disable-file --disable-ldap --disable-telnet --disable-dict --without-libssh2 \
