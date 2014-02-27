@@ -1298,7 +1298,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         if (pSectionContext != NULL)
             pSectionContext->Insert(PROP_WRITING_MODE, uno::makeAny( text::WritingMode2::RL_TB));
         break;
-    case NS_sprm::LN_CHighlight:
+    case NS_ooxml::LN_EG_RPrBase_highlight:
         {
             sal_Int32 nColor = 0;
             if( (mbIsHighlightSet = getColorFromIndex(nIntValue, nColor)) )
@@ -1306,7 +1306,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             else if (mnBackgroundColor)
                 rContext->Insert(PROP_CHAR_BACK_COLOR, uno::makeAny( mnBackgroundColor ));
         }
-        break;  // sprmCHighlight
+        break;
     case NS_sprm::LN_CKcd:
         rContext->Insert(PROP_CHAR_EMPHASIS, uno::makeAny ( getEmphasisValue (nIntValue)));
         break;  // sprmCKcd
@@ -1473,13 +1473,13 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                 rContext->Insert(PROP_CHAR_COLOR, uno::makeAny( nColor ) );
         }
         break;  // sprmCIco
-    case NS_sprm::LN_CHpsBi:    // sprmCHpsBi
-    case NS_sprm::LN_CHps:    // sprmCHps
+    case NS_ooxml::LN_EG_RPrBase_sz:
+    case NS_ooxml::LN_EG_RPrBase_szCs:
         {
             //multiples of half points (12pt == 24)
             double fVal = double(nIntValue) / 2.;
             uno::Any aVal = uno::makeAny( fVal );
-            if( NS_sprm::LN_CHpsBi == nSprmId )
+            if( NS_ooxml::LN_EG_RPrBase_szCs == nSprmId )
             {
                 rContext->Insert( PROP_CHAR_HEIGHT_COMPLEX, aVal );
             }
@@ -1507,7 +1507,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             // Make sure char sizes defined in the stylesheets don't affect char props from direct formatting.
             if (!m_pImpl->IsStyleSheetImport())
                 m_pImpl->deferCharacterProperty( nSprmId, uno::makeAny( nIntValue ));
-            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, (nSprmId == NS_sprm::LN_CHps ? OUString("sz") : OUString("szCs")), OUString::number(nIntValue));
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, (nSprmId == NS_ooxml::LN_EG_RPrBase_sz ? OUString("sz") : OUString("szCs")), OUString::number(nIntValue));
         }
         break;
     case NS_ooxml::LN_EG_RPrBase_position:
@@ -1582,14 +1582,14 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         rContext->Insert(PROP_CHAR_RELIEF,
                          uno::makeAny( nIntValue ? awt::FontRelief::ENGRAVED : awt::FontRelief::NONE ));
         break;
-    case NS_sprm::LN_CSfxText:
+    case NS_ooxml::LN_EG_RPrBase_effect:
         // The file-format has many character animations. We have only
         // one, so we use it always. Suboptimal solution though.
         if (nIntValue)
             rContext->Insert(PROP_CHAR_FLASH, uno::makeAny( true ));
         else
             rContext->Insert(PROP_CHAR_FLASH, uno::makeAny( false ));
-        break;  // sprmCSfxText
+        break;
     case NS_sprm::LN_CFBiDi:
         break;  // sprmCFBiDi
     case NS_sprm::LN_CShd:
@@ -2397,8 +2397,8 @@ void DomainMapper::processDeferredCharacterProperties( const std::map< sal_Int32
         it->second >>= sStringValue;
         switch( Id )
         {
-        case NS_sprm::LN_CHps:
-        case NS_sprm::LN_CHpsBi:
+        case NS_ooxml::LN_EG_RPrBase_sz:
+        case NS_ooxml::LN_EG_RPrBase_szCs:
         break; // only for use by other properties, ignore here
         case NS_ooxml::LN_EG_RPrBase_position:
         {
@@ -2408,7 +2408,7 @@ void DomainMapper::processDeferredCharacterProperties( const std::map< sal_Int32
                 nProp = 0;
             else
             {
-                std::map< sal_Int32, uno::Any >::const_iterator font = deferredCharacterProperties.find( NS_sprm::LN_CHps );
+                std::map< sal_Int32, uno::Any >::const_iterator font = deferredCharacterProperties.find( NS_ooxml::LN_EG_RPrBase_sz );
                 PropertyMapPtr pDefaultCharProps = m_pImpl->GetStyleSheetTable()->GetDefaultCharProps();
                 PropertyMap::iterator aDefaultFont = pDefaultCharProps->find(PROP_CHAR_HEIGHT);
                 if( font != deferredCharacterProperties.end())

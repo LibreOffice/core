@@ -24349,11 +24349,11 @@
       <element name="w" tokenid="ooxml:EG_RPrBase_w"/>
       <element name="kern" tokenid="ooxml:EG_RPrBase_kern"/>
       <element name="position" tokenid="ooxml:EG_RPrBase_position"/>
-      <element name="sz" tokenid="sprm:CHps"/>
-      <element name="szCs" tokenid="sprm:CHpsBi"/>
-      <element name="highlight" tokenid="sprm:CHighlight"/>
+      <element name="sz" tokenid="ooxml:EG_RPrBase_sz"/>
+      <element name="szCs" tokenid="ooxml:EG_RPrBase_szCs"/>
+      <element name="highlight" tokenid="ooxml:EG_RPrBase_highlight"/>
       <element name="u" tokenid="ooxml:EG_RPrBase_u"/>
-      <element name="effect" tokenid="sprm:CSfxText"/>
+      <element name="effect" tokenid="ooxml:EG_RPrBase_effect"/>
       <element name="bdr" tokenid="ooxml:EG_RPrBase_bdr"/>
       <element name="shd" tokenid="sprm:CShd"/>
       <element name="fitText" tokenid="ooxml:EG_RPrBase_fitText"/>

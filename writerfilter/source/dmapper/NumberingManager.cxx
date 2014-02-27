@@ -1060,7 +1060,7 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
             case NS_ooxml::LN_EG_RPrBase_rFonts: //contains font properties
             case NS_ooxml::LN_EG_RPrBase_color:
             case NS_ooxml::LN_EG_RPrBase_u:
-            case NS_sprm::LN_CHps:    // sprmCHps
+            case NS_ooxml::LN_EG_RPrBase_sz:
             case NS_ooxml::LN_EG_RPrBase_lang:
             case NS_ooxml::LN_EG_RPrBase_eastAsianLayout:
                 //no break!

@@ -2954,9 +2954,9 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     // Trivial character sprms.
     switch (nKeyword)
     {
-        case RTF_FS: nSprm = NS_sprm::LN_CHps; break;
-        case RTF_AFS: nSprm = NS_sprm::LN_CHpsBi; break;
-        case RTF_ANIMTEXT: nSprm = NS_sprm::LN_CSfxText; break;
+    case RTF_FS: nSprm = NS_ooxml::LN_EG_RPrBase_sz; break;
+        case RTF_AFS: nSprm = NS_ooxml::LN_EG_RPrBase_szCs; break;
+        case RTF_ANIMTEXT: nSprm = NS_ooxml::LN_EG_RPrBase_effect; break;
         case RTF_EXPNDTW: nSprm = NS_ooxml::LN_EG_RPrBase_spacing; break;
         case RTF_KERNING: nSprm = NS_ooxml::LN_EG_RPrBase_kern; break;
         case RTF_CHARSCALEX: nSprm = NS_ooxml::LN_EG_RPrBase_w; break;
@@ -3227,7 +3227,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_HIGHLIGHT:
             {
                 RTFValue::Pointer_t pValue(new RTFValue(getColorTable(nParam)));
-                m_aStates.top().aCharacterSprms.set(NS_sprm::LN_CHighlight, pValue);
+                m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_RPrBase_highlight, pValue);
             }
             break;
         case RTF_UP:
