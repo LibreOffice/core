@@ -507,18 +507,6 @@ LanguageTag::LanguageTag( LanguageType nLanguage )
 }
 
 
-LanguageTag::LanguageTag()
-    :
-        mnLangID( LANGUAGE_DONTKNOW),
-        mbSystemLocale( false),
-        mbInitializedBcp47( false),
-        mbInitializedLocale( false),
-        mbInitializedLangID( true),
-        mbIsFallback( false)
-{
-}
-
-
 LanguageTag::LanguageTag( const OUString& rBcp47, const OUString& rLanguage,
                           const OUString& rScript, const OUString& rCountry )
     :
@@ -1063,14 +1051,6 @@ LanguageTag & LanguageTag::reset( LanguageType nLanguage )
     mnLangID            = nLanguage;
     mbSystemLocale      = nLanguage == LANGUAGE_SYSTEM;
     mbInitializedLangID = !mbSystemLocale;
-    return *this;
-}
-
-
-LanguageTag & LanguageTag::reset( const rtl_Locale & rLocale )
-{
-    reset( lang::Locale( rLocale.Language, rLocale.Country, rLocale.Variant));
-    convertFromRtlLocale();
     return *this;
 }
 
@@ -1886,14 +1866,6 @@ OUString LanguageTag::getCountry() const
 OUString LanguageTagImpl::getRegion() const
 {
     return const_cast<LanguageTagImpl*>(this)->getRegionFromLangtag();
-}
-
-
-OUString LanguageTag::getRegion() const
-{
-    OUString aRet( getImpl()->getRegion());
-    const_cast<LanguageTag*>(this)->syncFromImpl();
-    return aRet;
 }
 
 

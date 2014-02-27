@@ -76,12 +76,6 @@ public:
     /** Init LanguageTag with LanguageType MS-LangID. */
     explicit LanguageTag( LanguageType nLanguage );
 
-    /** Default ctor, init LanguageTag with LanguageType LANGUAGE_DONTKNOW.
-
-        To be able to use LanguageTag in maps etc., avoid otherwise.
-     */
-    explicit LanguageTag();
-
     /** Init LanguageTag with either BCP 47 language tag (precedence if not
         empty), or a combination of language, script and country.
 
@@ -181,13 +175,6 @@ public:
      */
     OUString                        getCountry() const;
 
-    /** Get BCP 47 region tag, which may be an ISO 3166 country alpha code or
-        any other BCP 47 region tag.
-
-        Always resolves an empty tag to the system locale.
-     */
-    OUString                        getRegion() const;
-
     /** Get BCP 47 variant subtags, of the IANA Language Subtag Registry.
 
         If there are multiple variant subtags they are separated by '-'.
@@ -257,9 +244,6 @@ public:
 
     /** Reset with LanguageType MS-LangID. */
     LanguageTag &                   reset( LanguageType nLanguage );
-
-    /** Reset with rtl_Locale. */
-    LanguageTag &                   reset( const rtl_Locale & rLocale );
 
 
     /** Fall back to a known locale.

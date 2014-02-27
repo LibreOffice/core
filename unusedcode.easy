@@ -30,9 +30,6 @@ ImportExcel::GetLastFormula(short)
 Json::Json(std::map<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, Json, std::less<std::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::basic_string<char, std::char_traits<char>, std::allocator<char> > const, Json> > > const&)
 Json::Json(std::map<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, boost::shared_ptr<libcmis::Property>, std::less<std::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::basic_string<char, std::char_traits<char>, std::allocator<char> > const, boost::shared_ptr<libcmis::Property> > > > const&)
 Json::swap(Json&)
-LanguageTag::LanguageTag()
-LanguageTag::getRegion() const
-LanguageTag::reset(_rtl_Locale const&)
 ListBox::GetMRUCount() const
 MenuBar::AddMenuBarButton(Image const&, Link const&, rtl::OUString const&, unsigned short)
 MenuBar::GetMenuBarButtonRectPixel(unsigned short)
