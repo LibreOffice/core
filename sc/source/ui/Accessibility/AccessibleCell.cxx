@@ -434,7 +434,10 @@ void ScAccessibleCell::FillPrecedents(utl::AccessibleRelationSetHelper* pRelatio
 {
     if (mpDoc && mpDoc->GetCellType(maCellAddress) == CELLTYPE_FORMULA)
     {
-        ScDetectiveRefIter aIter(mpDoc->GetFormulaCell(maCellAddress));
+        ScFormulaCell* pCell = mpDoc->GetFormulaCell(maCellAddress);
+        if (!pCell)
+            return;
+        ScDetectiveRefIter aIter(pCell);
         ScRange aRef;
         while ( aIter.GetNextRef( aRef ) )
         {
