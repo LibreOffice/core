@@ -62,18 +62,18 @@ static const sal_uInt16 nDatePartResIds[] =
 
 // ============================================================================
 
-ScDPGroupEditHelper::ScDPGroupEditHelper( RadioButton& rRbAuto, RadioButton& rRbMan, Edit& rEdValue ) :
-    mrRbAuto( rRbAuto ),
-    mrRbMan( rRbMan ),
-    mrEdValue( rEdValue )
+ScDPGroupEditHelper::ScDPGroupEditHelper( RadioButton* pRbAuto, RadioButton* pRbMan, Edit* pEdValue ) :
+    mpRbAuto( pRbAuto ),
+    mpRbMan( pRbMan ),
+    mpEdValue( pEdValue )
 {
-    mrRbAuto.SetClickHdl( LINK( this, ScDPGroupEditHelper, ClickHdl ) );
-    mrRbMan.SetClickHdl( LINK( this, ScDPGroupEditHelper, ClickHdl ) );
+    mpRbAuto->SetClickHdl( LINK( this, ScDPGroupEditHelper, ClickHdl ) );
+    mpRbMan->SetClickHdl( LINK( this, ScDPGroupEditHelper, ClickHdl ) );
 }
 
 bool ScDPGroupEditHelper::IsAuto() const
 {
-    return mrRbAuto.IsChecked();
+    return mpRbAuto->IsChecked();
 }
 
 double ScDPGroupEditHelper::GetValue() const
@@ -88,29 +88,29 @@ void ScDPGroupEditHelper::SetValue( bool bAuto, double fValue )
 {
     if( bAuto )
     {
-        mrRbAuto.Check();
-        ClickHdl( &mrRbAuto );
+        mpRbAuto->Check();
+        ClickHdl( mpRbAuto );
     }
     else
     {
-        mrRbMan.Check();
-        ClickHdl( &mrRbMan );
+        mpRbMan->Check();
+        ClickHdl( mpRbMan );
     }
     ImplSetValue( fValue );
 }
 
 IMPL_LINK( ScDPGroupEditHelper, ClickHdl, RadioButton*, pButton )
 {
-    if( pButton == &mrRbAuto )
+    if( pButton == mpRbAuto )
     {
         // disable edit field on clicking "automatic" radio button
-        mrEdValue.Disable();
+        mpEdValue->Disable();
     }
-    else if( pButton == &mrRbMan )
+    else if( pButton == mpRbMan )
     {
         // enable and set focus to edit field on clicking "manual" radio button
-        mrEdValue.Enable();
-        mrEdValue.GrabFocus();
+        mpEdValue->Enable();
+        mpEdValue->GrabFocus();
     }
     return 0;
 }
@@ -118,35 +118,35 @@ IMPL_LINK( ScDPGroupEditHelper, ClickHdl, RadioButton*, pButton )
 
 
 ScDPNumGroupEditHelper::ScDPNumGroupEditHelper(
-        RadioButton& rRbAuto, RadioButton& rRbMan, ScDoubleField& rEdValue ) :
-    ScDPGroupEditHelper( rRbAuto, rRbMan, rEdValue ),
-    mrEdValue( rEdValue )
+        RadioButton* pRbAuto, RadioButton* pRbMan, ScDoubleField* pEdValue ) :
+    ScDPGroupEditHelper( pRbAuto, pRbMan, pEdValue ),
+    mpEdValue( pEdValue )
 {
 }
 
 bool ScDPNumGroupEditHelper::ImplGetValue( double& rfValue ) const
 {
-    return mrEdValue.GetValue( rfValue );
+    return mpEdValue->GetValue( rfValue );
 }
 
 void ScDPNumGroupEditHelper::ImplSetValue( double fValue )
 {
-    mrEdValue.SetValue( fValue );
+    mpEdValue->SetValue( fValue );
 }
 
 
 
 ScDPDateGroupEditHelper::ScDPDateGroupEditHelper(
-        RadioButton& rRbAuto, RadioButton& rRbMan, DateField& rEdValue, const Date& rNullDate ) :
-    ScDPGroupEditHelper( rRbAuto, rRbMan, rEdValue ),
-    mrEdValue( rEdValue ),
+        RadioButton* pRbAuto, RadioButton* pRbMan, DateField* pEdValue, const Date& rNullDate ) :
+    ScDPGroupEditHelper( pRbAuto, pRbMan, pEdValue ),
+    mpEdValue( pEdValue ),
     maNullDate( rNullDate )
 {
 }
 
 bool ScDPDateGroupEditHelper::ImplGetValue( double& rfValue ) const
 {
-    rfValue = mrEdValue.GetDate() - maNullDate;
+    rfValue = mpEdValue->GetDate() - maNullDate;
     return true;
 }
 
@@ -154,44 +154,38 @@ void ScDPDateGroupEditHelper::ImplSetValue( double fValue )
 {
     Date aDate( maNullDate );
     aDate += static_cast< sal_Int32 >( fValue );
-    mrEdValue.SetDate( aDate );
+    mpEdValue->SetDate( aDate );
 }
 
 // ============================================================================
 // ============================================================================
 
 ScDPNumGroupDlg::ScDPNumGroupDlg( Window* pParent, const ScDPNumGroupInfo& rInfo ) :
-    ModalDialog     ( pParent, ScResId( RID_SCDLG_DPNUMGROUP ) ),
-    maFlStart       ( this, ScResId( FL_START ) ),
-    maRbAutoStart   ( this, ScResId( RB_AUTOSTART ) ),
-    maRbManStart    ( this, ScResId( RB_MANSTART ) ),
-    maEdStart       ( this, ScResId( ED_START ) ),
-    maFlEnd         ( this, ScResId( FL_END ) ),
-    maRbAutoEnd     ( this, ScResId( RB_AUTOEND ) ),
-    maRbManEnd      ( this, ScResId( RB_MANEND ) ),
-    maEdEnd         ( this, ScResId( ED_END ) ),
-    maFlBy          ( this, ScResId( FL_BY ) ),
-    maEdBy          ( this, ScResId( ED_BY ) ),
-    maBtnOk         ( this, ScResId( BTN_OK ) ),
-    maBtnCancel     ( this, ScResId( BTN_CANCEL ) ),
-    maBtnHelp       ( this, ScResId( BTN_HELP ) ),
-    maStartHelper   ( maRbAutoStart, maRbManStart, maEdStart ),
-    maEndHelper     ( maRbAutoEnd, maRbManEnd, maEdEnd )
+    ModalDialog     ( pParent, "PivotTableGroupByNumber", "modules/scalc/ui/groupbynumber.ui" ),
+    mpRbAutoStart( get<RadioButton>("auto_start") ),
+    mpRbManStart( get<RadioButton>("manual_start") ),
+    mpEdStart( get<ScDoubleField> ("edit_start" ) ),
+    mpRbAutoEnd(get<RadioButton> ( "auto_end" )),
+    mpRbManEnd(get<RadioButton> ("manual_end" )),
+    mpEdEnd(get<ScDoubleField>( "edit_end" )),
+    mpEdBy(get<ScDoubleField> ("edit_by" )),
+    mpBtnOk(get<OKButton> ("ok" )),
+    maStartHelper   ( mpRbAutoStart, mpRbManStart, mpEdStart ),
+    maEndHelper     ( mpRbAutoEnd, mpRbManEnd, mpEdEnd )
 {
-    FreeResource();
 
     maStartHelper.SetValue( rInfo.mbAutoStart, rInfo.mfStart );
     maEndHelper.SetValue( rInfo.mbAutoEnd, rInfo.mfEnd );
-    maEdBy.SetValue( (rInfo.mfStep <= 0.0) ? 1.0 : rInfo.mfStep );
+    mpEdBy->SetValue( (rInfo.mfStep <= 0.0) ? 1.0 : rInfo.mfStep );
 
     /*  Set the initial focus, currently it is somewhere after calling all the radio
         button click handlers. Now the first enabled editable control is focused. */
-    if( maEdStart.IsEnabled() )
-        maEdStart.GrabFocus();
-    else if( maEdEnd.IsEnabled() )
-        maEdEnd.GrabFocus();
+    if( mpEdStart->IsEnabled() )
+        mpEdStart->GrabFocus();
+    else if( mpEdEnd->IsEnabled() )
+        mpEdEnd->GrabFocus();
     else
-        maEdBy.GrabFocus();
+        mpEdBy->GrabFocus();
 }
 
 ScDPNumGroupInfo ScDPNumGroupDlg::GetGroupInfo() const
@@ -206,7 +200,7 @@ ScDPNumGroupInfo ScDPNumGroupDlg::GetGroupInfo() const
     // TODO: error messages in OK event?
     aInfo.mfStart = maStartHelper.GetValue();
     aInfo.mfEnd = maEndHelper.GetValue();
-    if( !maEdBy.GetValue( aInfo.mfStep ) || (aInfo.mfStep <= 0.0) )
+    if( !mpEdBy->GetValue( aInfo.mfStep ) || (aInfo.mfStep <= 0.0) )
         aInfo.mfStep = 1.0;
     if( aInfo.mfEnd <= aInfo.mfStart )
         aInfo.mfEnd = aInfo.mfStart + aInfo.mfStep;
@@ -235,8 +229,8 @@ ScDPDateGroupDlg::ScDPDateGroupDlg( Window* pParent,
     maBtnOk         ( this, ScResId( BTN_OK ) ),
     maBtnCancel     ( this, ScResId( BTN_CANCEL ) ),
     maBtnHelp       ( this, ScResId( BTN_HELP ) ),
-    maStartHelper   ( maRbAutoStart, maRbManStart, maEdStart, rNullDate ),
-    maEndHelper     ( maRbAutoEnd, maRbManEnd, maEdEnd, rNullDate )
+    maStartHelper   ( NULL, NULL, NULL, rNullDate ),
+    maEndHelper     ( NULL, NULL, NULL, rNullDate )
 {
     FreeResource();
 
@@ -249,8 +243,8 @@ ScDPDateGroupDlg::ScDPDateGroupDlg( Window* pParent,
     maEdStart.SetShowDateCentury( true );
     maEdEnd.SetShowDateCentury( true );
 
-    maStartHelper.SetValue( rInfo.mbAutoStart, rInfo.mfStart );
-    maEndHelper.SetValue( rInfo.mbAutoEnd, rInfo.mfEnd );
+    //maStartHelper.SetValue( rInfo.mbAutoStart, rInfo.mfStart );
+    //maEndHelper.SetValue( rInfo.mbAutoEnd, rInfo.mfEnd );
 
     if( nDatePart == 0 )
         nDatePart = com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS;
@@ -296,13 +290,13 @@ ScDPNumGroupInfo ScDPDateGroupDlg::GetGroupInfo() const
     ScDPNumGroupInfo aInfo;
     aInfo.mbEnable = true;
     aInfo.mbDateValues = maRbNumDays.IsChecked();
-    aInfo.mbAutoStart = maStartHelper.IsAuto();
-    aInfo.mbAutoEnd = maEndHelper.IsAuto();
+    //aInfo.mbAutoStart = maStartHelper.IsAuto();
+    //aInfo.mbAutoEnd = maEndHelper.IsAuto();
 
     // get values and silently auto-correct them, if they are not valid
     // TODO: error messages in OK event?
-    aInfo.mfStart = maStartHelper.GetValue();
-    aInfo.mfEnd = maEndHelper.GetValue();
+    //aInfo.mfStart = maStartHelper.GetValue();
+    //aInfo.mfEnd = maEndHelper.GetValue();
     sal_Int64 nNumDays = maEdNumDays.GetValue();
     aInfo.mfStep = static_cast<double>( aInfo.mbDateValues ? nNumDays : 0L );
     if( aInfo.mfEnd <= aInfo.mfStart )
