@@ -820,11 +820,7 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
                 if ( (nCode == rMSettings.GetContextMenuCode()) &&
                      (nClicks == rMSettings.GetContextMenuClicks()) )
                 {
-                    bool bContextMenu;
-                    if ( rMSettings.GetContextMenuDown() )
-                        bContextMenu = (nSVEvent == EVENT_MOUSEBUTTONDOWN);
-                    else
-                        bContextMenu = (nSVEvent == EVENT_MOUSEBUTTONUP);
+                    bool bContextMenu = (nSVEvent == EVENT_MOUSEBUTTONDOWN);
                     if ( bContextMenu )
                     {
                         if( pSVData->maAppData.mpActivePopupMenu )

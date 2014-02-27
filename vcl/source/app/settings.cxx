@@ -68,7 +68,6 @@ struct ImplMouseData
     sal_uInt16                          mnStartDragCode;
     sal_uInt16                          mnContextMenuCode;
     sal_uInt16                          mnContextMenuClicks;
-    bool                                mbContextMenuDown;
     sal_uLong                           mnScrollRepeat;
     sal_uLong                           mnButtonStartRepeat;
     sal_uLong                           mnButtonRepeat;
@@ -260,7 +259,6 @@ ImplMouseData::ImplMouseData()
     mnStartDragCode             = MOUSE_LEFT;
     mnContextMenuCode           = MOUSE_RIGHT;
     mnContextMenuClicks         = 1;
-    mbContextMenuDown           = true;
     mnMiddleButtonAction        = MOUSE_MIDDLE_AUTOSCROLL;
     mnScrollRepeat              = 100;
     mnButtonStartRepeat         = 370;
@@ -282,7 +280,6 @@ ImplMouseData::ImplMouseData( const ImplMouseData& rData )
     mnStartDragCode             = rData.mnStartDragCode;
     mnContextMenuCode           = rData.mnContextMenuCode;
     mnContextMenuClicks         = rData.mnContextMenuClicks;
-    mbContextMenuDown           = rData.mbContextMenuDown;
     mnMiddleButtonAction        = rData.mnMiddleButtonAction;
     mnScrollRepeat              = rData.mnScrollRepeat;
     mnButtonStartRepeat         = rData.mnButtonStartRepeat;
@@ -387,12 +384,6 @@ sal_uInt16
 MouseSettings::GetContextMenuClicks() const
 {
     return mpData->mnContextMenuClicks;
-}
-
-bool
-MouseSettings::GetContextMenuDown() const
-{
-    return mpData->mbContextMenuDown;
 }
 
 sal_uLong
@@ -519,7 +510,6 @@ bool MouseSettings::operator ==( const MouseSettings& rSet ) const
          (mpData->mnStartDragCode       == rSet.mpData->mnStartDragCode)        &&
          (mpData->mnContextMenuCode     == rSet.mpData->mnContextMenuCode)      &&
          (mpData->mnContextMenuClicks   == rSet.mpData->mnContextMenuClicks)    &&
-         (mpData->mbContextMenuDown     == rSet.mpData->mbContextMenuDown)      &&
          (mpData->mnMiddleButtonAction  == rSet.mpData->mnMiddleButtonAction)   &&
          (mpData->mnScrollRepeat        == rSet.mpData->mnScrollRepeat)         &&
          (mpData->mnButtonStartRepeat   == rSet.mpData->mnButtonStartRepeat)    &&

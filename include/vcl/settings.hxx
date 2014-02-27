@@ -101,8 +101,6 @@ public:
 
     sal_uInt16                      GetContextMenuClicks() const;
 
-    bool                            GetContextMenuDown() const;
-
     sal_uLong                       GetScrollRepeat() const;
 
     sal_uLong                       GetButtonStartRepeat() const;
