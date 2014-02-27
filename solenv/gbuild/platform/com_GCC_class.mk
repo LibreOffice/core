@@ -82,6 +82,22 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(INCLUDE) \
 		)
 endef
+define gb_ObjCObject__tool_command
+$(call gb_Output_announce,$(1).m,$(true),OCC,3)
+$(call gb_Helper_abbreviate_dirs,\
+        ICECC=no CCACHE_DISABLE=1 \
+	$(gb_CC) \
+		$(DEFS) \
+		$(gb_LTOFLAGS) \
+		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
+		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
+		$(gb_COMPILER_PLUGINS) \
+		$(T_OBJCFLAGS) $(T_OBJCFLAGS_APPEND) \
+		-c $(2) \
+		-I$(dir $(2)) \
+		$(INCLUDE) \
+		)
+endef
 
 # Used to run a compiler plugin tool.
 # $(call gb_CxxObject__tool_command,relative-source,source)
@@ -96,6 +112,22 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
 		$(gb_COMPILER_PLUGINS) \
 		$(T_CXXFLAGS) $(T_CXXFLAGS_APPEND) \
+		-c $(2) \
+		-I$(dir $(2)) \
+		$(INCLUDE) \
+		)
+endef
+define gb_ObjCxxObject__tool_command
+$(call gb_Output_announce,$(1).mm,$(true),OCX,3)
+$(call gb_Helper_abbreviate_dirs,\
+        ICECC=no CCACHE_DISABLE=1 \
+	$(gb_CXX) \
+		$(DEFS) \
+		$(gb_LTOFLAGS) \
+		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
+		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
+		$(gb_COMPILER_PLUGINS) \
+		$(T_OBJCXXFLAGS) $(T_OBJCXXFLAGS_APPEND) \
 		-c $(2) \
 		-I$(dir $(2)) \
 		$(INCLUDE) \
