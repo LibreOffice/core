@@ -74,7 +74,6 @@ using org::libreoffice::touch::ByteBufferWrapper;
 #include <toolkit/awt/vclxsystemdependentwindow.hxx>
 #include <toolkit/awt/vclxregion.hxx>
 #include <toolkit/awt/vclxtabpagecontainer.hxx>
-#include <toolkit/awt/vclxtabpagemodel.hxx>
 
 #include <toolkit/awt/animatedimagespeer.hxx>
 #include <toolkit/awt/vclxtopwindow.hxx>
