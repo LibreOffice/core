@@ -11246,10 +11246,10 @@ dnl Test whether to integrate helppacks into the product's installer
 dnl ===================================================================
 AC_MSG_CHECKING([for helppack integration])
 if test "$with_helppack_integration" = "no"; then
-    WITH_HELPPACK_INTEGRATION=NO
+    WITH_HELPPACK_INTEGRATION=
     AC_MSG_RESULT([no integration])
 else
-    WITH_HELPPACK_INTEGRATION=YES
+    WITH_HELPPACK_INTEGRATION=TRUE
     SCPDEFS="$SCPDEFS -DWITH_HELPPACK_INTEGRATION"
     AC_MSG_RESULT([integration])
 fi
@@ -11260,11 +11260,11 @@ AC_SUBST(WITH_HELPPACK_INTEGRATION)
 ###############################################################################
 AC_MSG_CHECKING([for extensions integration])
 if test "x$enable_extension_integration" != "xno"; then
-    WITH_EXTENSION_INTEGRATION=YES
+    WITH_EXTENSION_INTEGRATION=TRUE
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_INTEGRATION"
     AC_MSG_RESULT([yes, use integration])
 else
-    WITH_EXTENSION_INTEGRATION=NO
+    WITH_EXTENSION_INTEGRATION=
     AC_MSG_RESULT([no, do not integrate])
 fi
 AC_SUBST(WITH_EXTENSION_INTEGRATION)

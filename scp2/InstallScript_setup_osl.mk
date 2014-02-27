@@ -36,7 +36,7 @@ $(eval $(call gb_InstallScript_use_modules,setup_osl,\
 	$(if $(filter TRUE,$(ENABLE_CRASHDUMP)),\
 		scp2/crashrep \
 	) \
-	$(if $(filter YES,$(WITH_EXTENSION_INTEGRATION)),\
+	$(if $(WITH_EXTENSION_INTEGRATION),\
 		scp2/extensions \
 	) \
 	$(if $(filter TRUE,$(ENABLE_EVOAB2) $(ENABLE_GCONF) $(ENABLE_GNOMEVFS) $(ENABLE_GIO) $(ENABLE_GTK) $(ENABLE_GTK3)),\
