@@ -1739,7 +1739,7 @@ bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     }
 
     SeekAndChg( rInf );
-    SwFontSave *pFontSave;
+    boost::scoped_ptr<SwFontSave> xFontSave;
     if( rMulti.IsDouble() )
     {
         SwFont* pTmpFnt = new SwFont( *rInf.GetFont() );
@@ -1748,10 +1748,8 @@ bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
             SetPropFont( 50 );
             pTmpFnt->SetProportion( GetPropFont() );
         }
-        pFontSave = new SwFontSave( rInf, pTmpFnt, this );
+        xFontSave.reset(new SwFontSave(rInf, pTmpFnt, this));
     }
-    else
-        pFontSave = NULL;
 
     SwLayoutModeModifier aLayoutModeModifier( *GetInfo().GetOut() );
     if ( rMulti.IsBidi() )
@@ -2164,7 +2162,7 @@ bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     SeekAndChg( rInf );
     delete pFirstRest;
     delete pSecondRest;
-    delete pFontSave;
+    xFontSave.reset();
     return bRet;
 }
 
