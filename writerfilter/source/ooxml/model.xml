@@ -5595,6 +5595,15 @@
           </choice>
         </list>
       </define>
+      <define name="ST_NumSpacing">
+        <list>
+          <choice>
+            <value>default</value>
+            <value>proportional</value>
+            <value>tabular</value>
+          </choice>
+        </list>
+      </define>
 
       <define name="ST_PositiveCoordinate">
         <data type="long">
@@ -6152,6 +6161,11 @@
           <ref name="ST_NumForm"/>
         </attribute>
       </define>
+      <define name="CT_NumSpacing">
+        <attribute name="val">
+          <ref name="ST_NumSpacing"/>
+        </attribute>
+      </define>
 
       <define name="glow">
         <element name="glow">
@@ -6200,7 +6214,7 @@
       </define>
       <define name="numSpacing">
         <element name="numSpacing">
-          <empty/>
+          <ref name="CT_NumSpacing"/>
         </element>
       </define>
       <define name="stylisticSets">
@@ -6438,6 +6452,11 @@
       <value name="lining" tokenid="ooxml:ST_NumForm_lining">lining</value>
       <value name="oldStyle" tokenid="ooxml:ST_NumForm_oldStyle">oldStyle</value>
     </resource>
+    <resource name="ST_NumSpacing" resource="List" generated="yes">
+      <value name="default" tokenid="ooxml:ST_NumSpacing_default">default</value>
+      <value name="proportional" tokenid="ooxml:ST_NumSpacing_proportional">proportional</value>
+      <value name="tabular" tokenid="ooxml:ST_NumSpacing_tabular">tabular</value>
+    </resource>
 
     <resource name="ST_PositiveCoordinate" resource="Integer" generated="yes"/>
     <resource name="ST_HexColorRGB" resource="Hex"/>
@@ -6604,6 +6623,9 @@
     </resource>
     <resource name="CT_NumForm" resource="Properties" tag="character">
       <attribute name="val" tokenid="ooxml:CT_NumForm_val"/>
+    </resource>
+    <resource name="CT_NumSpacing" resource="Properties" tag="character">
+      <attribute name="val" tokenid="ooxml:CT_NumSpacing_val"/>
     </resource>
 
     <resource name="glow" resource="Properties" tag="character">
@@ -18320,12 +18342,12 @@
             <ref name="BUILT_IN_ANY_TYPE"/>
           </element>
         </optional>
-        <!--<optional>
+        <optional>
           <element name="w14:numSpacing">
             <ref name="BUILT_IN_ANY_TYPE"/>
           </element>
         </optional>
-        <optional>
+        <!--<optional>
           <element name="w14:stylisticSets">
             <ref name="BUILT_IN_ANY_TYPE"/>
           </element>
@@ -24311,8 +24333,8 @@
       <element name="w14:props3d" tokenid="ooxml:EG_RPrBase_w14_props3d"/>
       <element name="w14:ligatures" tokenid="ooxml:EG_RPrBase_w14_ligatures"/>
       <element name="w14:numForm" tokenid="ooxml:EG_RPrBase_w14_numForm"/>
-      <!--<element name="w14:numSpacing" tokenid="ooxml:EG_RPrBase_w14_numSpacing"/>
-      <element name="w14:stylisticSets" tokenid="ooxml:EG_RPrBase_w14_stylisticSets"/>
+      <element name="w14:numSpacing" tokenid="ooxml:EG_RPrBase_w14_numSpacing"/>
+      <!--<element name="w14:stylisticSets" tokenid="ooxml:EG_RPrBase_w14_stylisticSets"/>
       <element name="w14:cntxtAlts" tokenid="ooxml:EG_RPrBase_w14_cntxtAlts"/>-->
     </resource>
     <resource name="EG_RPrContent" resource="Properties" tag="character">
