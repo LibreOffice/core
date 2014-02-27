@@ -24,7 +24,6 @@
 
 
 #include "dpgroupdlg.hxx"
-#include "dpgroupdlg.hrc"
 #include "scresid.hxx"
 #include "sc.hrc"
 #include "globstr.hrc"
@@ -62,18 +61,18 @@ static const sal_uInt16 nDatePartResIds[] =
 
 
 
-ScDPGroupEditHelper::ScDPGroupEditHelper( RadioButton& rRbAuto, RadioButton& rRbMan, Edit& rEdValue ) :
-    mrRbAuto( rRbAuto ),
-    mrRbMan( rRbMan ),
-    mrEdValue( rEdValue )
+ScDPGroupEditHelper::ScDPGroupEditHelper( RadioButton* pRbAuto, RadioButton* pRbMan, Edit* pEdValue ) :
+    mpRbAuto( pRbAuto ),
+    mpRbMan( pRbMan ),
+    mpEdValue( pEdValue )
 {
-    mrRbAuto.SetClickHdl( LINK( this, ScDPGroupEditHelper, ClickHdl ) );
-    mrRbMan.SetClickHdl( LINK( this, ScDPGroupEditHelper, ClickHdl ) );
+    mpRbAuto->SetClickHdl( LINK( this, ScDPGroupEditHelper, ClickHdl ) );
+    mpRbMan->SetClickHdl( LINK( this, ScDPGroupEditHelper, ClickHdl ) );
 }
 
 bool ScDPGroupEditHelper::IsAuto() const
 {
-    return mrRbAuto.IsChecked();
+    return mpRbAuto->IsChecked();
 }
 
 double ScDPGroupEditHelper::GetValue() const
@@ -88,29 +87,29 @@ void ScDPGroupEditHelper::SetValue( bool bAuto, double fValue )
 {
     if( bAuto )
     {
-        mrRbAuto.Check();
-        ClickHdl( &mrRbAuto );
+        mpRbAuto->Check();
+        ClickHdl( mpRbAuto );
     }
     else
     {
-        mrRbMan.Check();
-        ClickHdl( &mrRbMan );
+        mpRbMan->Check();
+        ClickHdl( mpRbMan );
     }
     ImplSetValue( fValue );
 }
 
 IMPL_LINK( ScDPGroupEditHelper, ClickHdl, RadioButton*, pButton )
 {
-    if( pButton == &mrRbAuto )
+    if( pButton == mpRbAuto )
     {
         // disable edit field on clicking "automatic" radio button
-        mrEdValue.Disable();
+        mpEdValue->Disable();
     }
-    else if( pButton == &mrRbMan )
+    else if( pButton == mpRbMan )
     {
         // enable and set focus to edit field on clicking "manual" radio button
-        mrEdValue.Enable();
-        mrEdValue.GrabFocus();
+        mpEdValue->Enable();
+        mpEdValue->GrabFocus();
     }
     return 0;
 }
@@ -118,35 +117,35 @@ IMPL_LINK( ScDPGroupEditHelper, ClickHdl, RadioButton*, pButton )
 
 
 ScDPNumGroupEditHelper::ScDPNumGroupEditHelper(
-        RadioButton& rRbAuto, RadioButton& rRbMan, ScDoubleField& rEdValue ) :
-    ScDPGroupEditHelper( rRbAuto, rRbMan, rEdValue ),
-    mrEdValue( rEdValue )
+        RadioButton* pRbAuto, RadioButton* pRbMan, ScDoubleField* pEdValue ) :
+    ScDPGroupEditHelper( pRbAuto, pRbMan, pEdValue ),
+    mpEdValue( pEdValue )
 {
 }
 
 bool ScDPNumGroupEditHelper::ImplGetValue( double& rfValue ) const
 {
-    return mrEdValue.GetValue( rfValue );
+    return mpEdValue->GetValue( rfValue );
 }
 
 void ScDPNumGroupEditHelper::ImplSetValue( double fValue )
 {
-    mrEdValue.SetValue( fValue );
+    mpEdValue->SetValue( fValue );
 }
 
 
 
 ScDPDateGroupEditHelper::ScDPDateGroupEditHelper(
-        RadioButton& rRbAuto, RadioButton& rRbMan, DateField& rEdValue, const Date& rNullDate ) :
-    ScDPGroupEditHelper( rRbAuto, rRbMan, rEdValue ),
-    mrEdValue( rEdValue ),
+        RadioButton* pRbAuto, RadioButton* pRbMan, DateField* pEdValue, const Date& rNullDate ) :
+    ScDPGroupEditHelper( pRbAuto, pRbMan, pEdValue ),
+    mpEdValue( pEdValue ),
     maNullDate( rNullDate )
 {
 }
 
 bool ScDPDateGroupEditHelper::ImplGetValue( double& rfValue ) const
 {
-    rfValue = mrEdValue.GetDate() - maNullDate;
+    rfValue = mpEdValue->GetDate() - maNullDate;
     return true;
 }
 
@@ -154,44 +153,38 @@ void ScDPDateGroupEditHelper::ImplSetValue( double fValue )
 {
     Date aDate( maNullDate );
     aDate += static_cast< sal_Int32 >( fValue );
-    mrEdValue.SetDate( aDate );
+    mpEdValue->SetDate( aDate );
 }
 
 
 
 
 ScDPNumGroupDlg::ScDPNumGroupDlg( Window* pParent, const ScDPNumGroupInfo& rInfo ) :
-    ModalDialog     ( pParent, ScResId( RID_SCDLG_DPNUMGROUP ) ),
-    maFlStart       ( this, ScResId( FL_START ) ),
-    maRbAutoStart   ( this, ScResId( RB_AUTOSTART ) ),
-    maRbManStart    ( this, ScResId( RB_MANSTART ) ),
-    maEdStart       ( this, ScResId( ED_START ) ),
-    maFlEnd         ( this, ScResId( FL_END ) ),
-    maRbAutoEnd     ( this, ScResId( RB_AUTOEND ) ),
-    maRbManEnd      ( this, ScResId( RB_MANEND ) ),
-    maEdEnd         ( this, ScResId( ED_END ) ),
-    maFlBy          ( this, ScResId( FL_BY ) ),
-    maEdBy          ( this, ScResId( ED_BY ) ),
-    maBtnOk         ( this, ScResId( BTN_OK ) ),
-    maBtnCancel     ( this, ScResId( BTN_CANCEL ) ),
-    maBtnHelp       ( this, ScResId( BTN_HELP ) ),
-    maStartHelper   ( maRbAutoStart, maRbManStart, maEdStart ),
-    maEndHelper     ( maRbAutoEnd, maRbManEnd, maEdEnd )
+    ModalDialog     ( pParent, "PivotTableGroupByNumber", "modules/scalc/ui/groupbynumber.ui" ),
+    mpRbAutoStart   ( get<RadioButton>("auto_start") ),
+    mpRbManStart    ( get<RadioButton>("manual_start") ),
+    mpEdStart       ( get<ScDoubleField> ("edit_start") ),
+    mpRbAutoEnd     ( get<RadioButton> ( "auto_end" ) ),
+    mpRbManEnd      ( get<RadioButton> ("manual_end") ),
+    mpEdEnd         ( get<ScDoubleField>( "edit_end") ),
+    mpEdBy          ( get<ScDoubleField> ("edit_by") ),
+    mpBtnOk         ( get<OKButton> ("ok" ) ),
+    maStartHelper   ( mpRbAutoStart, mpRbManStart, mpEdStart ),
+    maEndHelper     ( mpRbAutoEnd, mpRbManEnd, mpEdEnd )
 {
-    FreeResource();
 
     maStartHelper.SetValue( rInfo.mbAutoStart, rInfo.mfStart );
     maEndHelper.SetValue( rInfo.mbAutoEnd, rInfo.mfEnd );
-    maEdBy.SetValue( (rInfo.mfStep <= 0.0) ? 1.0 : rInfo.mfStep );
+    mpEdBy->SetValue( (rInfo.mfStep <= 0.0) ? 1.0 : rInfo.mfStep );
 
     /*  Set the initial focus, currently it is somewhere after calling all the radio
         button click handlers. Now the first enabled editable control is focused. */
-    if( maEdStart.IsEnabled() )
-        maEdStart.GrabFocus();
-    else if( maEdEnd.IsEnabled() )
-        maEdEnd.GrabFocus();
+    if( mpEdStart->IsEnabled() )
+        mpEdStart->GrabFocus();
+    else if( mpEdEnd->IsEnabled() )
+        mpEdEnd->GrabFocus();
     else
-        maEdBy.GrabFocus();
+        mpEdBy->GrabFocus();
 }
 
 ScDPNumGroupInfo ScDPNumGroupDlg::GetGroupInfo() const
@@ -206,7 +199,7 @@ ScDPNumGroupInfo ScDPNumGroupDlg::GetGroupInfo() const
     // TODO: error messages in OK event?
     aInfo.mfStart = maStartHelper.GetValue();
     aInfo.mfEnd = maEndHelper.GetValue();
-    if( !maEdBy.GetValue( aInfo.mfStep ) || (aInfo.mfStep <= 0.0) )
+    if( !mpEdBy->GetValue( aInfo.mfStep ) || (aInfo.mfStep <= 0.0) )
         aInfo.mfStep = 1.0;
     if( aInfo.mfEnd <= aInfo.mfStart )
         aInfo.mfEnd = aInfo.mfStart + aInfo.mfStep;
@@ -218,36 +211,27 @@ ScDPNumGroupInfo ScDPNumGroupDlg::GetGroupInfo() const
 
 ScDPDateGroupDlg::ScDPDateGroupDlg( Window* pParent,
         const ScDPNumGroupInfo& rInfo, sal_Int32 nDatePart, const Date& rNullDate ) :
-    ModalDialog     ( pParent, ScResId( RID_SCDLG_DPDATEGROUP ) ),
-    maFlStart       ( this, ScResId( FL_START ) ),
-    maRbAutoStart   ( this, ScResId( RB_AUTOSTART ) ),
-    maRbManStart    ( this, ScResId( RB_MANSTART ) ),
-    maEdStart       ( this, ScResId( ED_START ) ),
-    maFlEnd         ( this, ScResId( FL_END ) ),
-    maRbAutoEnd     ( this, ScResId( RB_AUTOEND ) ),
-    maRbManEnd      ( this, ScResId( RB_MANEND ) ),
-    maEdEnd         ( this, ScResId( ED_END ) ),
-    maFlBy          ( this, ScResId( FL_BY ) ),
-    maRbNumDays     ( this, ScResId( RB_NUMDAYS ) ),
-    maRbUnits       ( this, ScResId( RB_UNITS ) ),
-    maEdNumDays     ( this, ScResId( ED_NUMDAYS ) ),
-    maLbUnits       ( this, ScResId( LB_UNITS ) ),
-    maBtnOk         ( this, ScResId( BTN_OK ) ),
-    maBtnCancel     ( this, ScResId( BTN_CANCEL ) ),
-    maBtnHelp       ( this, ScResId( BTN_HELP ) ),
-    maStartHelper   ( maRbAutoStart, maRbManStart, maEdStart, rNullDate ),
-    maEndHelper     ( maRbAutoEnd, maRbManEnd, maEdEnd, rNullDate )
+    ModalDialog( pParent, "PivotTableGroupByDate", "modules/scalc/ui/groupbydate.ui" ),
+    mpRbAutoStart   ( get<RadioButton>("auto_start") ),
+    mpRbManStart    ( get<RadioButton>("manual_start") ),
+    mpEdStart       ( get<DateField>("start_date") ),
+    mpRbAutoEnd     ( get<RadioButton>("auto_end") ),
+    mpRbManEnd      ( get<RadioButton>("manual_end") ),
+    mpEdEnd         ( get<DateField>("end_date") ),
+    mpRbNumDays     ( get<RadioButton>("days") ),
+    mpRbUnits       ( get<RadioButton>("intervals") ),
+    mpEdNumDays     ( get<NumericField>("days_value") ),
+    mpLbUnits       ( get<SvxCheckListBox>("interval_list") ),
+    mpBtnOk         ( get<OKButton>("ok") ),
+    maStartHelper   ( mpRbAutoStart, mpRbManStart, mpEdStart, rNullDate ),
+    maEndHelper     ( mpRbAutoEnd, mpRbManEnd, mpEdEnd, rNullDate )
 {
-    FreeResource();
-
-    maLbUnits.SetHelpId( HID_SC_DPDATEGROUP_LB );
-
     static const size_t nCount = sizeof( nDatePartResIds ) / sizeof( nDatePartResIds[0] );
     for( size_t nIdx = 0 ; nIdx < nCount; ++nIdx )
-        maLbUnits.InsertEntry( ScGlobal::GetRscString( nDatePartResIds[nIdx] ) );
+        mpLbUnits->InsertEntry( ScGlobal::GetRscString( nDatePartResIds[nIdx] ) );
 
-    maEdStart.SetShowDateCentury( true );
-    maEdEnd.SetShowDateCentury( true );
+    mpEdStart->SetShowDateCentury( sal_True );
+    mpEdEnd->SetShowDateCentury( sal_True );
 
     maStartHelper.SetValue( rInfo.mbAutoStart, rInfo.mfStart );
     maEndHelper.SetValue( rInfo.mbAutoEnd, rInfo.mfEnd );
@@ -255,47 +239,47 @@ ScDPDateGroupDlg::ScDPDateGroupDlg( Window* pParent,
     if( nDatePart == 0 )
         nDatePart = com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS;
     for( size_t nIdx = 0; nIdx < nCount; ++nIdx )
-        maLbUnits.CheckEntryPos( static_cast< sal_uInt16 >( nIdx ), (nDatePart & spnDateParts[ nIdx ]) != 0 );
+        mpLbUnits->CheckEntryPos( static_cast< sal_uInt16 >( nIdx ), (nDatePart & spnDateParts[ nIdx ]) != 0 );
 
     if( rInfo.mbDateValues )
     {
-        maRbNumDays.Check();
-        ClickHdl( &maRbNumDays );
+        mpRbNumDays->Check();
+        ClickHdl( mpRbNumDays );
 
         double fNumDays = rInfo.mfStep;
         if( fNumDays < 1.0 )
             fNumDays = 1.0;
         else if( fNumDays > 32767.0 )
             fNumDays = 32767.0;
-        maEdNumDays.SetValue( static_cast< long >( fNumDays ) );
+        mpEdNumDays->SetValue( static_cast< long >( fNumDays ) );
     }
     else
     {
-        maRbUnits.Check();
-        ClickHdl( &maRbUnits );
+        mpRbUnits->Check();
+        ClickHdl( mpRbUnits );
     }
 
     /*  Set the initial focus, currently it is somewhere after calling all the radio
         button click handlers. Now the first enabled editable control is focused. */
-    if( maEdStart.IsEnabled() )
-        maEdStart.GrabFocus();
-    else if( maEdEnd.IsEnabled() )
-        maEdEnd.GrabFocus();
-    else if( maEdNumDays.IsEnabled() )
-        maEdNumDays.GrabFocus();
-    else if( maLbUnits.IsEnabled() )
-        maLbUnits.GrabFocus();
+    if( mpEdStart->IsEnabled() )
+        mpEdStart->GrabFocus();
+    else if( mpEdEnd->IsEnabled() )
+        mpEdEnd->GrabFocus();
+    else if( mpEdNumDays->IsEnabled() )
+        mpEdNumDays->GrabFocus();
+    else if( mpLbUnits->IsEnabled() )
+        mpLbUnits->GrabFocus();
 
-    maRbNumDays.SetClickHdl( LINK( this, ScDPDateGroupDlg, ClickHdl ) );
-    maRbUnits.SetClickHdl( LINK( this, ScDPDateGroupDlg, ClickHdl ) );
-    maLbUnits.SetCheckButtonHdl( LINK( this, ScDPDateGroupDlg, CheckHdl ) );
+    mpRbNumDays->SetClickHdl( LINK( this, ScDPDateGroupDlg, ClickHdl ) );
+    mpRbUnits->SetClickHdl( LINK( this, ScDPDateGroupDlg, ClickHdl ) );
+    mpLbUnits->SetCheckButtonHdl( LINK( this, ScDPDateGroupDlg, CheckHdl ) );
 }
 
 ScDPNumGroupInfo ScDPDateGroupDlg::GetGroupInfo() const
 {
     ScDPNumGroupInfo aInfo;
-    aInfo.mbEnable = true;
-    aInfo.mbDateValues = maRbNumDays.IsChecked();
+    aInfo.mbEnable = sal_True;
+    aInfo.mbDateValues = mpRbNumDays->IsChecked();
     aInfo.mbAutoStart = maStartHelper.IsAuto();
     aInfo.mbAutoEnd = maEndHelper.IsAuto();
 
@@ -303,7 +287,7 @@ ScDPNumGroupInfo ScDPDateGroupDlg::GetGroupInfo() const
     // TODO: error messages in OK event?
     aInfo.mfStart = maStartHelper.GetValue();
     aInfo.mfEnd = maEndHelper.GetValue();
-    sal_Int64 nNumDays = maEdNumDays.GetValue();
+    sal_Int64 nNumDays = mpEdNumDays->GetValue();
     aInfo.mfStep = static_cast<double>( aInfo.mbDateValues ? nNumDays : 0L );
     if( aInfo.mfEnd <= aInfo.mfStart )
         aInfo.mfEnd = aInfo.mfStart + nNumDays;
@@ -314,35 +298,35 @@ ScDPNumGroupInfo ScDPDateGroupDlg::GetGroupInfo() const
 sal_Int32 ScDPDateGroupDlg::GetDatePart() const
 {
     // return DAYS for special "number of days" mode
-    if( maRbNumDays.IsChecked() )
+    if( mpRbNumDays->IsChecked() )
         return com::sun::star::sheet::DataPilotFieldGroupBy::DAYS;
 
     // return listbox contents for "units" mode
     sal_Int32 nDatePart = 0;
-    for( sal_uLong nIdx = 0, nCount = maLbUnits.GetEntryCount(); nIdx < nCount; ++nIdx )
-        if( maLbUnits.IsChecked( static_cast< sal_uInt16 >( nIdx ) ) )
+    for( sal_uLong nIdx = 0, nCount = mpLbUnits->GetEntryCount(); nIdx < nCount; ++nIdx )
+        if( mpLbUnits->IsChecked( static_cast< sal_uInt16 >( nIdx ) ) )
             nDatePart |= spnDateParts[ nIdx ];
     return nDatePart;
 }
 
 IMPL_LINK( ScDPDateGroupDlg, ClickHdl, RadioButton*, pButton )
 {
-    if( pButton == &maRbNumDays )
+    if( pButton == mpRbNumDays )
     {
-        maLbUnits.Disable();
+        mpLbUnits->Disable();
         // enable and set focus to edit field on clicking "num of days" radio button
-        maEdNumDays.Enable();
-        maEdNumDays.GrabFocus();
-        maBtnOk.Enable();
+        mpEdNumDays->Enable();
+        mpEdNumDays->GrabFocus();
+        mpBtnOk->Enable();
     }
-    else if( pButton == &maRbUnits )
+    else if( pButton == mpRbUnits )
     {
-        maEdNumDays.Disable();
+        mpEdNumDays->Disable();
         // enable and set focus to listbox on clicking "units" radio button
-        maLbUnits.Enable();
-        maLbUnits.GrabFocus();
+        mpLbUnits->Enable();
+        mpLbUnits->GrabFocus();
         // disable OK button if no date part selected
-        CheckHdl( &maLbUnits );
+        CheckHdl( mpLbUnits );
     }
     return 0;
 }
@@ -350,8 +334,8 @@ IMPL_LINK( ScDPDateGroupDlg, ClickHdl, RadioButton*, pButton )
 IMPL_LINK( ScDPDateGroupDlg, CheckHdl, SvxCheckListBox*, pListBox )
 {
     // enable/disable OK button on modifying check list box
-    if( pListBox == &maLbUnits )
-        maBtnOk.Enable( maLbUnits.GetCheckedEntryCount() > 0 );
+    if( pListBox == mpLbUnits )
+        mpBtnOk->Enable( mpLbUnits->GetCheckedEntryCount() > 0 );
     return 0;
 }
 

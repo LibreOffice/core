@@ -142,9 +142,6 @@
 
 #define HID_SC_DRAW_RENAME                                      "SC_HID_SC_DRAW_RENAME"
 
-#define HID_SC_DPNUMGROUP                                       "SC_HID_SC_DPNUMGROUP"
-#define HID_SC_DPDATEGROUP                                      "SC_HID_SC_DPDATEGROUP"
-#define HID_SC_DPDATEGROUP_LB                                   "SC_HID_SC_DPDATEGROUP_LB"
 #define HID_SC_DPSHOWDETAIL                                     "SC_HID_SC_DPSHOWDETAIL"
 
 #define HID_SCDLG_CONFLICTS                                     "SC_HID_SCDLG_CONFLICTS"
