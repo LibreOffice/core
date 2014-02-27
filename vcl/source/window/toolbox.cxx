@@ -2699,7 +2699,6 @@ void ToolBox::ImplFormat( bool bResize )
         while ( it != mpData->m_aItems.end() )
         {
             it->maRect = it->maCalcRect;
-            it->maRect.IsOver(aVisibleRect);
             ++it;
         }
     }
