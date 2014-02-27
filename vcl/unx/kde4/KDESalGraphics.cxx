@@ -80,7 +80,7 @@ QRect region2QRect( const Rectangle& rControlRegion )
 }
 
 KDESalGraphics::KDESalGraphics() :
-    m_image(0)
+    m_image(NULL)
 {
 }
 
@@ -132,13 +132,7 @@ sal_Bool KDESalGraphics::IsNativeControlSupported( ControlType type, ControlPart
     if (type == CTRL_SLIDER && (part == PART_TRACK_HORZ_AREA || part == PART_TRACK_VERT_AREA) )
         return true;
 
-    if ( (type == CTRL_PROGRESS)    && (part == PART_ENTIRE_CONTROL) ) return true;
-
-    return false;
-
-    if ( (type == CTRL_TAB_ITEM) && (part == PART_ENTIRE_CONTROL) ) return true;
-    if ( (type == CTRL_TAB_PANE) && (part == PART_ENTIRE_CONTROL) ) return true;
-    // no CTRL_TAB_BODY for KDE
+    if ( (type == CTRL_PROGRESS) && (part == PART_ENTIRE_CONTROL) ) return true;
 
     return false;
 }
@@ -365,8 +359,10 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         {
             QStyleOptionMenuItem option;
             draw( QStyle::PE_PanelMenu, &option, m_image, vclStateValue2StateFlag( nControlState, value ));
+            // Try hard to get any frame!
             QStyleOptionFrame frame;
             draw( QStyle::PE_FrameMenu, &frame, m_image, vclStateValue2StateFlag( nControlState, value ));
+            draw( QStyle::PE_FrameWindow, &frame, m_image, vclStateValue2StateFlag( nControlState, value ));
             lastPopupRect = widgetRect;
         }
         else
