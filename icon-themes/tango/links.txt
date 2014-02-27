@@ -201,13 +201,12 @@ svtools/res/up_large.png cmd/lc_upsearch.png
 svtools/res/up_small.png cmd/sc_upsearch.png
 cmd/lc_inserttimefield.png cmd/lc_timefield.png
 cmd/lc_datefield.png cmd/lc_adddatefield.png
-cmd/lc_insertdatefield.png cmd/lc_datefield.png
-cmd/lc_datefield.png cmd/lc_numberformatdate.png
+cmd/lc_insertdatefield.png cmd/lc_adddatefield.png
 cmd/lc_insertcurrencyfield.png cmd/lc_currencyfield.png
 cmd/lc_numberformatcurrency.png cmd/lc_currencyfield.png
 cmd/sc_timefield.png cmd/sc_inserttimefield.png
-cmd/sc_adddatefield.png cmd/sc_datefield.png
-cmd/sc_insertdatefield.png cmd/sc_datefield.png
+cmd/sc_adddatefield.png cmd/sc_numberformatdate.png
+cmd/sc_insertdatefield.png cmd/sc_numberformatdate.png
 cmd/sc_datefield.png cmd/sc_numberformatdate.png
 cmd/sc_insertcurrencyfield.png cmd/sc_currencyfield.png
 cmd/sc_numberformatcurrency.png cmd/sc_currencyfield.png
@@ -370,7 +369,7 @@ sw/imglst/sr20017.png cmd/sc_insertindexesentry.png
 sc/res/dropcopy.png cmd/sc_copy.png
 sc/res/dropurl.png cmd/sc_inserthyperlink.png
 sd/imglst/nv010.png cmd/sc_inserthyperlink.png
-sd/imglst/nv09.png sw/imglst/sc20238.png
+sd/imglst/nv09.png sc/res/droplink.png
 sw/imglst/sc20238.png sc/res/droplink.png
 starmath/res/at21717.png cmd/lc_bold.png
 starmath/res/at21718.png cmd/lc_italic.png
@@ -379,8 +378,6 @@ starmath/res/at21720.png cmd/lc_charfontname.png
 formula/res/fx.png cmd/sc_insertformula.png
 sc/res/fx.png cmd/sc_insertformula.png
 sc/res/file.png cmd/sc_open.png
-cmd/sc_datefield.png sc/res/date.png
-cmd/lc_timefield.png sc/res/time.png
 sc/res/page.png sd/res/page.png
 sc/res/text.png cmd/sc_text.png
 sfx2/res/deleterow.png cmd/sc_deleterows.png
