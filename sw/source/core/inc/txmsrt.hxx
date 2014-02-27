@@ -152,7 +152,7 @@ struct SwTOXSortTabBase
     inline const ::com::sun::star::lang::Locale& GetLocale() const;
 
 private:
-    bool bValidTxt;
+    mutable bool bValidTxt;
     TextAndReading m_aSort;
 
     virtual TextAndReading GetText_Impl() const = 0;
@@ -162,9 +162,10 @@ inline TextAndReading SwTOXSortTabBase::GetTxt() const
 {
     if( !bValidTxt )
     {
-        SwTOXSortTabBase* pThis = (SwTOXSortTabBase*)this;
-        pThis->m_aSort = pThis->GetText_Impl();
-        pThis->bValidTxt = true;
+        // 'this' is 'SwTOXSortTabBase const*', so the virtual
+        // mechanism will call the derived class' GetText_Impl
+        GetText_Impl();
+        bValidTxt = true;
     }
     return m_aSort;
 }
