@@ -2056,14 +2056,18 @@ OString read_uInt8s_ToOString(SvStream& rStrm, sal_Size nLen)
         //alloc a (ref-count 1) rtl_String of the desired length.
         //rtl_String's buffer is uninitialized, except for null termination
         pStr = rtl_string_alloc(sal::static_int_cast<sal_Int32>(nLen));
-        sal_Size nWasRead = rStrm.Read(pStr->buffer, nLen);
-        if (nWasRead != nLen)
+        SAL_WARN_IF(!pStr, "tools", "allocation failed");
+        if (pStr)
         {
-            //on (typically unlikely) short read set length to what we could
-            //read, and null terminate. Excess buffer capacity remains of
-            //course, could create a (true) replacement OString if it matters.
-            pStr->length = sal::static_int_cast<sal_Int32>(nWasRead);
-            pStr->buffer[pStr->length] = 0;
+            sal_Size nWasRead = rStrm.Read(pStr->buffer, nLen);
+            if (nWasRead != nLen)
+            {
+                //on (typically unlikely) short read set length to what we could
+                //read, and null terminate. Excess buffer capacity remains of
+                //course, could create a (true) replacement OString if it matters.
+                pStr->length = sal::static_int_cast<sal_Int32>(nWasRead);
+                pStr->buffer[pStr->length] = 0;
+            }
         }
     }
 
@@ -2081,19 +2085,23 @@ OUString read_uInt16s_ToOUString(SvStream& rStrm, sal_Size nLen)
         //alloc a (ref-count 1) rtl_uString of the desired length.
         //rtl_String's buffer is uninitialized, except for null termination
         pStr = rtl_uString_alloc(sal::static_int_cast<sal_Int32>(nLen));
-        sal_Size nWasRead = rStrm.Read(pStr->buffer, nLen*2)/2;
-        if (nWasRead != nLen)
+        SAL_WARN_IF(!pStr, "tools", "allocation failed");
+        if (pStr)
         {
-            //on (typically unlikely) short read set length to what we could
-            //read, and null terminate. Excess buffer capacity remains of
-            //course, could create a (true) replacement OUString if it matters.
-            pStr->length = sal::static_int_cast<sal_Int32>(nWasRead);
-            pStr->buffer[pStr->length] = 0;
-        }
-        if (rStrm.IsEndianSwap())
-        {
-            for (sal_Int32 i = 0; i < pStr->length; ++i)
-                pStr->buffer[i] = OSL_SWAPWORD(pStr->buffer[i]);
+            sal_Size nWasRead = rStrm.Read(pStr->buffer, nLen*2)/2;
+            if (nWasRead != nLen)
+            {
+                //on (typically unlikely) short read set length to what we could
+                //read, and null terminate. Excess buffer capacity remains of
+                //course, could create a (true) replacement OUString if it matters.
+                pStr->length = sal::static_int_cast<sal_Int32>(nWasRead);
+                pStr->buffer[pStr->length] = 0;
+            }
+            if (rStrm.IsEndianSwap())
+            {
+                for (sal_Int32 i = 0; i < pStr->length; ++i)
+                    pStr->buffer[i] = OSL_SWAPWORD(pStr->buffer[i]);
+            }
         }
     }
 
