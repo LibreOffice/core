@@ -1181,6 +1181,8 @@ void DocxAttributeOutput::InitCollectedRunProperties()
         FSNS( XML_w14, XML_ligatures ),
         FSNS( XML_w14, XML_numForm ),
         FSNS( XML_w14, XML_numSpacing ),
+        FSNS( XML_w14, XML_stylisticSets ),
+        FSNS( XML_w14, XML_cntxtAlts ),
     };
 
     // postpone the output so that we can later [in EndParagraphProperties()]
@@ -1215,6 +1217,8 @@ const NameToId constNameToIdMapping[] =
     { OUString("ligatures"),    FSNS( XML_w14, XML_ligatures ) },
     { OUString("numForm"),      FSNS( XML_w14, XML_numForm ) },
     { OUString("numSpacing"),   FSNS( XML_w14, XML_numSpacing ) },
+    { OUString("stylisticSets"),FSNS( XML_w14, XML_stylisticSets ) },
+    { OUString("cntxtAlts"),    FSNS( XML_w14, XML_cntxtAlts ) },
 
     { OUString("val"),          FSNS( XML_w14, XML_val ) },
     { OUString("rad"),          FSNS( XML_w14, XML_rad ) },
@@ -1252,6 +1256,7 @@ const NameToId constNameToIdMapping[] =
     { OUString("extrusionH"),   FSNS( XML_w14, XML_extrusionH ) },
     { OUString("contourW"),     FSNS( XML_w14, XML_contourW ) },
     { OUString("prstMaterial"), FSNS( XML_w14, XML_prstMaterial ) },
+    { OUString("id"),           FSNS( XML_w14, XML_id ) },
 
     { OUString("schemeClr"),    FSNS( XML_w14, XML_schemeClr ) },
     { OUString("srgbClr"),      FSNS( XML_w14, XML_srgbClr ) },
@@ -1285,6 +1290,7 @@ const NameToId constNameToIdMapping[] =
     { OUString("bevelB"),       FSNS( XML_w14, XML_bevelB ) },
     { OUString("extrusionClr"), FSNS( XML_w14, XML_extrusionClr ) },
     { OUString("contourClr"),   FSNS( XML_w14, XML_contourClr ) },
+    { OUString("styleSet"),     FSNS( XML_w14, XML_styleSet ) },
 
 };
 
