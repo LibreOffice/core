@@ -186,12 +186,6 @@ void ImportExcel::SetLastFormula( SCCOL nCol, SCROW nRow, double fVal, sal_uInt1
     mpLastFormula = &it->second;
 }
 
-ImportExcel::LastFormula* ImportExcel::GetLastFormula( SCCOL nCol )
-{
-    LastFormulaMapType::iterator it = maLastFormulaCells.find(nCol);
-    return it == maLastFormulaCells.end() ? NULL : &it->second;
-}
-
 void ImportExcel::ReadFileSharing()
 {
     sal_uInt16 nRecommendReadOnly, nPasswordHash;

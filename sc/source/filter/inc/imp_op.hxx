@@ -127,7 +127,6 @@ protected:
     bool mbBiff2HasXfsValid:1; /// False = mbBiff2HasXfs is undetermined yet.
 
     void SetLastFormula( SCCOL nCol, SCROW nRow, double fVal, sal_uInt16 nXF, ScFormulaCell* pCell );
-    LastFormula* GetLastFormula( SCCOL nCol );
 
     // Record-Funktionen
     void                    ReadFileSharing();
