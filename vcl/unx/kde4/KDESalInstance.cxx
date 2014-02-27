@@ -38,4 +38,9 @@ uno::Reference< ui::dialogs::XFilePicker2 > KDESalInstance::createFilePicker(
         static_cast<KDEXLib*>( mpXLib )->createFilePicker(xMSF) );
 }
 
+int KDESalInstance::getFrameWidth()
+{
+    return static_cast<KDEXLib*>( mpXLib )->getFrameWidth();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
