@@ -1423,24 +1423,25 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
                 // Set the value/text of the top-left matrix position in its
                 // cached result.  For import, we only need to set the correct
                 // matrix geometry and the value type of the top-left element.
-
                 ScFormulaCell* pFCell = rXMLImport.GetDocument()->GetFormulaCell(rCellPos);
-
-                ScMatrixRef pMat(new ScMatrix(nMatrixCols, nMatrixRows));
-                if (bFormulaTextResult && maStringValue)
+                if (pFCell)
                 {
-                    if (!IsPossibleErrorString())
+                    ScMatrixRef pMat(new ScMatrix(nMatrixCols, nMatrixRows));
+                    if (bFormulaTextResult && maStringValue)
+                    {
+                        if (!IsPossibleErrorString())
+                        {
+                            pFCell->SetResultMatrix(
+                                nMatrixCols, nMatrixRows, pMat, new formula::FormulaStringToken(*maStringValue));
+                            pFCell->ResetDirty();
+                        }
+                    }
+                    else if (!rtl::math::isNan(fValue))
                     {
                         pFCell->SetResultMatrix(
-                            nMatrixCols, nMatrixRows, pMat, new formula::FormulaStringToken(*maStringValue));
+                            nMatrixCols, nMatrixRows, pMat, new formula::FormulaDoubleToken(fValue));
                         pFCell->ResetDirty();
                     }
-                }
-                else if (!rtl::math::isNan(fValue))
-                {
-                    pFCell->SetResultMatrix(
-                        nMatrixCols, nMatrixRows, pMat, new formula::FormulaDoubleToken(fValue));
-                    pFCell->ResetDirty();
                 }
             }
         }
