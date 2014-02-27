@@ -34,8 +34,8 @@ class ScDPGroupEditHelper
 {
 public:
     explicit            ScDPGroupEditHelper(
-                            RadioButton& rRbAuto, RadioButton& rRbMan,
-                            Edit& rEdValue );
+                            RadioButton* rRbAuto, RadioButton* rRbMan,
+                            Edit* rEdValue );
 
     bool                IsAuto() const;
     double              GetValue() const;
@@ -44,6 +44,7 @@ public:
 protected:
     ~ScDPGroupEditHelper() {}
 
+
 private:
     virtual bool        ImplGetValue( double& rfValue ) const = 0;
     virtual void        ImplSetValue( double fValue ) = 0;
@@ -51,9 +52,9 @@ private:
     DECL_LINK( ClickHdl, RadioButton* );
 
 private:
-    RadioButton&        mrRbAuto;
-    RadioButton&        mrRbMan;
-    Edit&               mrEdValue;
+    RadioButton*        mpRbAuto;
+    RadioButton*        mpRbMan;
+    Edit*               mpEdValue;
 };
 
 
@@ -62,8 +63,8 @@ class ScDPNumGroupEditHelper : public ScDPGroupEditHelper
 {
 public:
     explicit            ScDPNumGroupEditHelper(
-                            RadioButton& rRbAuto, RadioButton& rRbMan,
-                            ScDoubleField& rEdValue );
+                            RadioButton* pRbAuto, RadioButton* pRbMan,
+                            ScDoubleField* pEdValue );
 
     virtual ~ScDPNumGroupEditHelper() {}
 
@@ -72,7 +73,7 @@ private:
     virtual void        ImplSetValue( double fValue );
 
 private:
-    ScDoubleField&      mrEdValue;
+    ScDoubleField*      mpEdValue;
 };
 
 
@@ -81,8 +82,8 @@ class ScDPDateGroupEditHelper : public ScDPGroupEditHelper
 {
 public:
     explicit            ScDPDateGroupEditHelper(
-                            RadioButton& rRbAuto, RadioButton& rRbMan,
-                            DateField& rEdValue, const Date& rNullDate );
+                            RadioButton* pRbAuto, RadioButton* pRbMan,
+                            DateField* pEdValue, const Date& rNullDate );
 
     virtual ~ScDPDateGroupEditHelper() {}
 
@@ -91,7 +92,7 @@ private:
     virtual void        ImplSetValue( double fValue );
 
 private:
-    DateField&          mrEdValue;
+    DateField*          mpEdValue;
     Date                maNullDate;
 };
 
@@ -106,19 +107,16 @@ public:
     ScDPNumGroupInfo    GetGroupInfo() const;
 
 private:
-    FixedLine           maFlStart;
-    RadioButton         maRbAutoStart;
-    RadioButton         maRbManStart;
-    ScDoubleField       maEdStart;
-    FixedLine           maFlEnd;
-    RadioButton         maRbAutoEnd;
-    RadioButton         maRbManEnd;
-    ScDoubleField       maEdEnd;
-    FixedLine           maFlBy;
-    ScDoubleField       maEdBy;
-    OKButton            maBtnOk;
-    CancelButton        maBtnCancel;
-    HelpButton          maBtnHelp;
+    RadioButton*         mpRbAutoStart;
+    RadioButton*         mpRbManStart;
+    ScDoubleField*       mpEdStart;
+    RadioButton*         mpRbAutoEnd;
+    RadioButton*         mpRbManEnd;
+    ScDoubleField*       mpEdEnd;
+    ScDoubleField*       mpEdBy;
+    OKButton*            mpBtnOk;
+    CancelButton*        mpBtnCancel;
+    HelpButton*          mpBtnHelp;
     ScDPNumGroupEditHelper maStartHelper;
     ScDPNumGroupEditHelper maEndHelper;
 };
@@ -139,22 +137,17 @@ private:
     DECL_LINK( CheckHdl, SvxCheckListBox* );
 
 private:
-    FixedLine           maFlStart;
-    RadioButton         maRbAutoStart;
-    RadioButton         maRbManStart;
-    DateField           maEdStart;
-    FixedLine           maFlEnd;
-    RadioButton         maRbAutoEnd;
-    RadioButton         maRbManEnd;
-    DateField           maEdEnd;
-    FixedLine           maFlBy;
-    RadioButton         maRbNumDays;
-    RadioButton         maRbUnits;
-    NumericField        maEdNumDays;
-    SvxCheckListBox     maLbUnits;
-    OKButton            maBtnOk;
-    CancelButton        maBtnCancel;
-    HelpButton          maBtnHelp;
+    RadioButton*         mpRbAutoStart;
+    RadioButton*         mpRbManStart;
+    DateField*           mpEdStart;
+    RadioButton*         mpRbAutoEnd;
+    RadioButton*         mpRbManEnd;
+    DateField*           mpEdEnd;
+    RadioButton*         mpRbNumDays;
+    RadioButton*         mpRbUnits;
+    NumericField*        mpEdNumDays;
+    SvxCheckListBox*     mpLbUnits;
+    OKButton*            mpBtnOk;
     ScDPDateGroupEditHelper maStartHelper;
     ScDPDateGroupEditHelper maEndHelper;
 };
