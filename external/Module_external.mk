@@ -26,6 +26,7 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,BOOST,boost) \
 	$(call gb_Helper_optional,BSH,beanshell) \
 	$(call gb_Helper_optional,CAIRO,cairo) \
+	$(call gb_Helper_optional,COINMP,coinmp) \
 	$(call gb_Helper_optional,CDR,libcdr) \
 	$(call gb_Helper_optional,CLUCENE,clucene) \
 	$(call gb_Helper_optional,CMIS,libcmis) \
