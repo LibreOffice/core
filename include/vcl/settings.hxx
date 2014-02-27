@@ -95,37 +95,21 @@ public:
     void                            SetStartDragHeight( long nDragHeight );
     long                            GetStartDragHeight() const;
 
-    void                            SetStartDragCode( sal_uInt16 nCode );
     sal_uInt16                      GetStartDragCode() const;
 
-    void                            SetDragMoveCode( sal_uInt16 nCode );
-    sal_uInt16                      GetDragMoveCode() const;
-
-    void                            SetDragCopyCode( sal_uInt16 nCode );
-    sal_uInt16                      GetDragCopyCode() const;
-
-    void                            SetDragLinkCode( sal_uInt16 nCode );
-    sal_uInt16                      GetDragLinkCode() const;
-
-    void                            SetContextMenuCode( sal_uInt16 nCode );
     sal_uInt16                      GetContextMenuCode() const;
 
-    void                            SetContextMenuClicks( sal_uInt16 nClicks );
     sal_uInt16                      GetContextMenuClicks() const;
 
-    void                            SetContextMenuDown( bool bDown );
     bool                            GetContextMenuDown() const;
 
-    void                            SetScrollRepeat( sal_uLong nRepeat );
     sal_uLong                       GetScrollRepeat() const;
 
-    void                            SetButtonStartRepeat( sal_uLong nRepeat );
     sal_uLong                       GetButtonStartRepeat() const;
 
     void                            SetButtonRepeat( sal_uLong nRepeat );
     sal_uLong                       GetButtonRepeat() const;
 
-    void                            SetActionDelay( sal_uLong nDelay );
     sal_uLong                       GetActionDelay() const;
 
     void                            SetMenuDelay( sal_uLong nDelay );
@@ -199,8 +183,6 @@ struct FrameStyle
     ( DRAGFULL_OPTION_WINDOWMOVE | DRAGFULL_OPTION_WINDOWSIZE  \
     | DRAGFULL_OPTION_DOCKING     | DRAGFULL_OPTION_SPLIT      \
     | DRAGFULL_OPTION_SCROLL )
-
-#define LOGO_DISPLAYTIME_STARTTIME  ((sal_uLong)0xFFFFFFFF)
 
 #define SELECTION_OPTION_WORD       ((sal_uLong)0x00000001)
 #define SELECTION_OPTION_FOCUS      ((sal_uLong)0x00000002)
@@ -368,7 +350,6 @@ public:
     void                            SetVisitedLinkColor( const Color& rColor );
     const Color&                    GetVisitedLinkColor() const;
 
-    void                            SetHighlightLinkColor( const Color& rColor );
     const Color&                    GetHighlightLinkColor() const;
 
     void                            SetMonoColor( const Color& rColor );
@@ -452,7 +433,6 @@ public:
     void                            SetIconFont( const Font& rFont );
     const Font&                     GetIconFont() const;
 
-    void                            SetBorderSize( long nSize );
     long                            GetBorderSize() const;
 
     void                            SetTitleHeight( long nSize );
@@ -461,11 +441,7 @@ public:
     void                            SetFloatTitleHeight( long nSize );
     long                            GetFloatTitleHeight() const;
 
-    void                            SetTearOffTitleHeight( long nSize );
     long                            GetTearOffTitleHeight() const;
-
-    void                            SetMenuBarHeight( long nSize );
-    long                            GetMenuBarHeight() const;
 
     void                            SetScrollBarSize( long nSize );
     long                            GetScrollBarSize() const;
@@ -476,14 +452,7 @@ public:
     void                            SetSpinSize( long nSize );
     long                            GetSpinSize() const;
 
-    void                            SetSplitSize( long nSize );
     long                            GetSplitSize() const;
-
-    void                            SetIconHorzSpace( long nSpace );
-    long                            GetIconHorzSpace() const;
-
-    void                            SetIconVertSpace( long nSpace );
-    long                            GetIconVertSpace() const;
 
     void                            SetCursorSize( long nSize );
     long                            GetCursorSize() const;
@@ -497,14 +466,8 @@ public:
     void                            SetScreenFontZoom( sal_uInt16 nPercent );
     sal_uInt16                      GetScreenFontZoom() const;
 
-    void                            SetLogoDisplayTime( sal_uLong nDisplayTime );
-    sal_uLong                       GetLogoDisplayTime() const;
-
     void                            SetDragFullOptions( sal_uLong nOptions );
     sal_uLong                       GetDragFullOptions() const;
-
-    void                            SetAnimationOptions( sal_uLong nOptions );
-    sal_uLong                       GetAnimationOptions() const;
 
     void                            SetSelectionOptions( sal_uLong nOptions );
     sal_uLong                       GetSelectionOptions() const;
@@ -554,9 +517,6 @@ public:
      */
     void                            SetPreferredIconTheme(const OUString&);
 
-    const Wallpaper&                GetWorkspaceGradient() const;
-    void                            SetWorkspaceGradient( const Wallpaper& rWall );
-
     const DialogStyle&              GetDialogStyle() const;
     void                            SetDialogStyle( const DialogStyle& rStyle );
 
@@ -572,9 +532,7 @@ public:
 
     // TopLeft (default RGB_COLORDATA(0xC0, 0xC0, 0xC0)) and BottomRight (default RGB_COLORDATA(0x40, 0x40, 0x40))
     // default colors for EdgeBlending
-    void                            SetEdgeBlendingTopLeftColor(const Color& rTopLeft);
     const Color&                    GetEdgeBlendingTopLeftColor() const;
-    void                            SetEdgeBlendingBottomRightColor(const Color& rBottomRight);
     const Color&                    GetEdgeBlendingBottomRightColor() const;
 
     // maximum line count for ListBox control; to use this, call AdaptDropDownLineCountToMaximum() at the
@@ -591,21 +549,11 @@ public:
 
     // maximum row/line count for the ColorValueSet control. If more lines would be needed, a scrollbar will
     // be used. Default is 40.
-    void                            SetColorValueSetMaximumRowCount(sal_uInt16 nCount);
     sal_uInt16                      GetColorValueSetMaximumRowCount() const;
 
-    // the logical size for preview graphics in the ListBoxes (e.g. FillColor, FillGradient, FillHatch, FillGraphic, ..). The
-    // default defines a UI-Scale independent setting which will be scaled using MAP_APPFONT. This ensures that the size will
-    // fit independent from the used SystemFont (as all the ressources for UI elements). The default is Size(15, 7) which gives
-    // the correct height and a decent width. Do not change the height, but you may adapt the width to change the preview width.
-    // GetListBoxPreviewDefaultPixelSize() is for convenience so that not everyone has to do the scaling itself and contains
-    // the logical size scaled by MAP_APPFONT.
-    void                            SetListBoxPreviewDefaultLogicSize(const Size& rSize);
-    const Size&                     GetListBoxPreviewDefaultLogicSize() const;
     const Size&                     GetListBoxPreviewDefaultPixelSize() const;
 
     // the default LineWidth for ListBox UI previews (LineStyle, LineDash, LineStartEnd). Default is 1.
-    void                            SetListBoxPreviewDefaultLineWidth(sal_uInt16 nWidth);
     sal_uInt16                      GetListBoxPreviewDefaultLineWidth() const;
 
     // defines if previews which containn potentially transparent objects (e.g. the dash/line/LineStartEnd previews and others)
@@ -660,13 +608,9 @@ public:
                                     HelpSettings();
                                     ~HelpSettings();
 
-    void                            SetOptions( sal_uLong nOptions );
-    sal_uLong                       GetOptions() const;
-    void                            SetTipDelay( sal_uLong nTipDelay );
     sal_uLong                       GetTipDelay() const;
     void                            SetTipTimeout( sal_uLong nTipTimeout );
     sal_uLong                       GetTipTimeout() const;
-    void                            SetBalloonDelay( sal_uLong nBalloonDelay );
     sal_uLong                       GetBalloonDelay() const;
 
     bool                            operator ==( const HelpSettings& rSet ) const;
@@ -729,9 +673,6 @@ public:
     const vcl::I18nHelper&                  GetLocaleI18nHelper() const;
     const vcl::I18nHelper&                  GetUILocaleI18nHelper() const;
 
-    void                                    SetSystemUpdate( sal_uLong nUpdate );
-    sal_uLong                               GetSystemUpdate() const;
-    void                                    SetWindowUpdate( sal_uLong nUpdate );
     sal_uLong                               GetWindowUpdate() const;
 
     sal_uLong                               Update( sal_uLong nFlags, const AllSettings& rSettings );

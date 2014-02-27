@@ -618,15 +618,6 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, bool bCallHdl )
     aFont.SetHeight( defFontheight );
     aStyleSettings.SetGroupFont( aFont );
 
-    // set workspace gradient to black in dark themes
-    if( aStyleSettings.GetWindowColor().IsDark() )
-        aStyleSettings.SetWorkspaceGradient( Wallpaper( Color( COL_BLACK ) ) );
-    else
-    {
-        Gradient aGrad( GradientStyle_LINEAR, DEFAULT_WORKSPACE_GRADIENT_START_COLOR, DEFAULT_WORKSPACE_GRADIENT_END_COLOR );
-        aStyleSettings.SetWorkspaceGradient( Wallpaper( aGrad ) );
-    }
-
     rSettings.SetStyleSettings( aStyleSettings );
 
     bool bForceHCMode = false;

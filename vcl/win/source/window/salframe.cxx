@@ -2938,8 +2938,6 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
         aStyleSettings.SetDragFullOptions( nDragFullOptions );
     }
 
-    aStyleSettings.SetIconHorzSpace( GetSystemMetrics( SM_CXICONSPACING ) );
-    aStyleSettings.SetIconVertSpace( GetSystemMetrics( SM_CYICONSPACING ) );
     if ( RegOpenKey( HKEY_CURRENT_USER,
                      "Control Panel\\International\\Calendars\\TwoDigitYearMax",
                      &hRegKey ) == ERROR_SUCCESS )

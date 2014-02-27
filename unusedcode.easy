@@ -8,6 +8,8 @@ CodeCompleteDataCache::SetVars(boost::unordered::unordered_map<rtl::OUString, bo
 CodeCompleteDataCache::print() const
 ComboBox::GetMRUCount() const
 ConfigurationAccess::getPath(rtl::OUString const&)
+DocxSdrExport::getFlyFrameGraphic()
+DocxSdrExport::setFlyFrameGraphic(bool)
 DocxSdrExport::setFrameBtLr(bool)
 EditEngine::IsIdleFormatterActive() const
 EditSelection::IsInvalid() const
@@ -75,6 +77,14 @@ SimpleErrorHandler::SimpleErrorHandler()
 SmFontPickList::Contains(Font const&) const
 SmParser::Insert(rtl::OUString const&, int)
 SotFactory::Find(SvGlobalName const&)
+StyleSettings::SetActiveColor2(Color const&)
+StyleSettings::SetDeactiveColor2(Color const&)
+StyleSettings::SetFloatTitleHeight(long)
+StyleSettings::SetHideDisabledMenuItems(bool)
+StyleSettings::SetSpinSize(long)
+StyleSettings::SetTitleHeight(long)
+StyleSettings::SetUseFlatBorders(bool)
+StyleSettings::SetUseFlatMenus(bool)
 SvdProgressInfo::ReportError()
 SvpSalInstance::PostedEventsInQueue()
 SvtAccessibilityOptions::GetColorValueSetColumnCount() const
@@ -286,6 +296,7 @@ sdr::table::Cell::getName()
 sdr::table::SdrTableObj::getRowCount() const
 sfx2::sidebar::ContextList::IsEmpty()
 sfx2::sidebar::Deck::PrintWindowTree(std::vector<sfx2::sidebar::Panel*, std::allocator<sfx2::sidebar::Panel*> > const&)
+sfx2::sidebar::EnumContext::EvaluateMatch(sfx2::sidebar::EnumContext const&) const
 sfx2::sidebar::EnumContext::GetContext() const
 sfx2::sidebar::Paint::Set(sfx2::sidebar::Paint const&)
 sfx2::sidebar::Panel::PrintWindowTree()

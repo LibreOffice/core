@@ -66,9 +66,6 @@ struct ImplMouseData
     long                            mnStartDragWidth;
     long                            mnStartDragHeight;
     sal_uInt16                          mnStartDragCode;
-    sal_uInt16                          mnDragMoveCode;
-    sal_uInt16                          mnDragCopyCode;
-    sal_uInt16                          mnDragLinkCode;
     sal_uInt16                          mnContextMenuCode;
     sal_uInt16                          mnContextMenuClicks;
     bool                                mbContextMenuDown;
@@ -160,15 +157,10 @@ struct ImplStyleData
     long                            mnSplitSize;
     long                            mnSpinSize;
     long                            mnCursorSize;
-    long                            mnMenuBarHeight;
-    long                            mnIconHorzSpace;
-    long                            mnIconVertSpace;
     long                            mnAntialiasedMin;
     sal_uLong                       mnCursorBlinkTime;
     sal_uLong                       mnDragFullOptions;
-    sal_uLong                       mnAnimationOptions;
     sal_uLong                       mnSelectionOptions;
-    sal_uLong                       mnLogoDisplayTime;
     sal_uLong                       mnDisplayOptions;
     sal_uLong                       mnToolbarIconSize;
     bool                            mnUseFlatMenus;
@@ -194,7 +186,6 @@ struct ImplStyleData
     //mbPrimaryButtonWarpsSlider == true for "jump to here" behavior for primary button, otherwise
     //primary means scroll by single page. Secondary button takes the alternative behaviour
     bool                            mbPrimaryButtonWarpsSlider;
-    Wallpaper                       maWorkspaceGradient;
     DialogStyle                     maDialogStyle;
     FrameStyle                      maFrameStyle;
     const void*                     mpFontOptions;
@@ -249,7 +240,6 @@ struct ImplAllSettingsData
     MiscSettings                            maMiscSettings;
     HelpSettings                            maHelpSettings;
     LanguageTag                             maLocale;
-    sal_uLong                               mnSystemUpdate;
     sal_uLong                               mnWindowUpdate;
     LanguageTag                             maUILocale;
     LocaleDataWrapper*                      mpLocaleDataWrapper;
@@ -268,9 +258,6 @@ ImplMouseData::ImplMouseData()
     mnStartDragWidth            = 2;
     mnStartDragHeight           = 2;
     mnStartDragCode             = MOUSE_LEFT;
-    mnDragMoveCode              = 0;
-    mnDragCopyCode              = KEY_MOD1;
-    mnDragLinkCode              = KEY_SHIFT | KEY_MOD1;
     mnContextMenuCode           = MOUSE_RIGHT;
     mnContextMenuClicks         = 1;
     mbContextMenuDown           = true;
@@ -293,9 +280,6 @@ ImplMouseData::ImplMouseData( const ImplMouseData& rData )
     mnStartDragWidth            = rData.mnStartDragWidth;
     mnStartDragHeight           = rData.mnStartDragHeight;
     mnStartDragCode             = rData.mnStartDragCode;
-    mnDragMoveCode              = rData.mnDragMoveCode;
-    mnDragCopyCode              = rData.mnDragCopyCode;
-    mnDragLinkCode              = rData.mnDragLinkCode;
     mnContextMenuCode           = rData.mnContextMenuCode;
     mnContextMenuClicks         = rData.mnContextMenuClicks;
     mbContextMenuDown           = rData.mbContextMenuDown;
@@ -387,63 +371,10 @@ MouseSettings::GetStartDragHeight() const
     return mpData->mnStartDragHeight;
 }
 
-
-void
-MouseSettings::SetStartDragCode( sal_uInt16 nCode )
-{
-    CopyData(); mpData->mnStartDragCode = nCode;
-}
-
 sal_uInt16
 MouseSettings::GetStartDragCode() const
 {
     return mpData->mnStartDragCode;
-}
-
-void
-MouseSettings::SetDragMoveCode( sal_uInt16 nCode )
-{
-    CopyData();
-    mpData->mnDragMoveCode = nCode;
-}
-
-sal_uInt16
-MouseSettings::GetDragMoveCode() const
-{
-    return mpData->mnDragMoveCode;
-}
-
-void
-MouseSettings::SetDragCopyCode( sal_uInt16 nCode )
-{
-    CopyData();
-    mpData->mnDragCopyCode = nCode;
-}
-
-sal_uInt16
-MouseSettings::GetDragCopyCode() const
-{
-    return mpData->mnDragCopyCode;
-}
-
-void
-MouseSettings::SetDragLinkCode( sal_uInt16 nCode )
-{
-    CopyData();
-    mpData->mnDragLinkCode = nCode;
-}
-
-sal_uInt16
-MouseSettings::GetDragLinkCode() const
-{
-    return mpData->mnDragLinkCode;
-}
-
-void
-MouseSettings::SetContextMenuCode( sal_uInt16 nCode )
-{
-    CopyData();
-    mpData->mnContextMenuCode = nCode;
 }
 
 sal_uInt16
@@ -452,24 +383,10 @@ MouseSettings::GetContextMenuCode() const
     return mpData->mnContextMenuCode;
 }
 
-void
-MouseSettings::SetContextMenuClicks( sal_uInt16 nClicks )
-{
-    CopyData();
-    mpData->mnContextMenuClicks = nClicks;
-}
-
 sal_uInt16
 MouseSettings::GetContextMenuClicks() const
 {
     return mpData->mnContextMenuClicks;
-}
-
-void
-MouseSettings::SetContextMenuDown( bool bDown )
-{
-    CopyData();
-    mpData->mbContextMenuDown = bDown;
 }
 
 bool
@@ -478,24 +395,10 @@ MouseSettings::GetContextMenuDown() const
     return mpData->mbContextMenuDown;
 }
 
-void
-MouseSettings::SetScrollRepeat( sal_uLong nRepeat )
-{
-    CopyData();
-    mpData->mnScrollRepeat = nRepeat;
-}
-
 sal_uLong
 MouseSettings::GetScrollRepeat() const
 {
     return mpData->mnScrollRepeat;
-}
-
-void
-MouseSettings::SetButtonStartRepeat( sal_uLong nRepeat )
-{
-    CopyData();
-    mpData->mnButtonStartRepeat = nRepeat;
 }
 
 sal_uLong
@@ -515,13 +418,6 @@ sal_uLong
 MouseSettings::GetButtonRepeat() const
 {
     return mpData->mnButtonRepeat;
-}
-
-void
-MouseSettings::SetActionDelay( sal_uLong nDelay )
-{
-    CopyData();
-    mpData->mnActionDelay = nDelay;
 }
 
 sal_uLong
@@ -621,9 +517,6 @@ bool MouseSettings::operator ==( const MouseSettings& rSet ) const
          (mpData->mnStartDragWidth      == rSet.mpData->mnStartDragWidth)       &&
          (mpData->mnStartDragHeight     == rSet.mpData->mnStartDragHeight)      &&
          (mpData->mnStartDragCode       == rSet.mpData->mnStartDragCode)        &&
-         (mpData->mnDragMoveCode        == rSet.mpData->mnDragMoveCode)         &&
-         (mpData->mnDragCopyCode        == rSet.mpData->mnDragCopyCode)         &&
-         (mpData->mnDragLinkCode        == rSet.mpData->mnDragLinkCode)         &&
          (mpData->mnContextMenuCode     == rSet.mpData->mnContextMenuCode)      &&
          (mpData->mnContextMenuClicks   == rSet.mpData->mnContextMenuClicks)    &&
          (mpData->mbContextMenuDown     == rSet.mpData->mbContextMenuDown)      &&
@@ -651,16 +544,12 @@ ImplStyleData::ImplStyleData() :
     mnMinThumbSize              = 16;
     mnSplitSize                 = 3;
     mnSpinSize                  = 16;
-    mnIconHorzSpace             = 50;
-    mnIconVertSpace             = 40;
     mnAntialiasedMin            = 0;
     mnCursorSize                = 2;
     mnCursorBlinkTime           = STYLE_CURSOR_NOBLINKTIME;
     mnScreenZoom                = 100;
     mnScreenFontZoom            = 100;
-    mnLogoDisplayTime           = LOGO_DISPLAYTIME_STARTTIME;
     mnDragFullOptions           = DRAGFULL_OPTION_ALL;
-    mnAnimationOptions          = 0;
     mnSelectionOptions          = 0;
     mnDisplayOptions            = 0;
     mnOptions                   = 0;
@@ -746,7 +635,6 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maIconFont( rData.maIconFont ),
     maGroupFont( rData.maGroupFont ),
     mIconTheme(rData.mIconTheme),
-    maWorkspaceGradient( rData.maWorkspaceGradient ),
     maDialogStyle( rData.maDialogStyle ),
     maFrameStyle( rData.maFrameStyle ),
     maPersonaHeaderFooter( rData.maPersonaHeaderFooter ),
@@ -757,21 +645,16 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mnTitleHeight               = rData.mnTitleHeight;
     mnFloatTitleHeight          = rData.mnFloatTitleHeight;
     mnTearOffTitleHeight        = rData.mnTearOffTitleHeight;
-    mnMenuBarHeight             = rData.mnMenuBarHeight;
     mnScrollBarSize             = rData.mnScrollBarSize;
     mnMinThumbSize              = rData.mnMinThumbSize;
     mnSplitSize                 = rData.mnSplitSize;
     mnSpinSize                  = rData.mnSpinSize;
-    mnIconHorzSpace             = rData.mnIconHorzSpace;
-    mnIconVertSpace             = rData.mnIconVertSpace;
     mnAntialiasedMin            = rData.mnAntialiasedMin;
     mnCursorSize                = rData.mnCursorSize;
     mnCursorBlinkTime           = rData.mnCursorBlinkTime;
     mnScreenZoom                = rData.mnScreenZoom;
     mnScreenFontZoom            = rData.mnScreenFontZoom;
-    mnLogoDisplayTime           = rData.mnLogoDisplayTime;
     mnDragFullOptions           = rData.mnDragFullOptions;
-    mnAnimationOptions          = rData.mnAnimationOptions;
     mnSelectionOptions          = rData.mnSelectionOptions;
     mnDisplayOptions            = rData.mnDisplayOptions;
     mnOptions                   = rData.mnOptions;
@@ -877,7 +760,6 @@ void ImplStyleData::SetStandardStyles()
     mnTitleHeight               = 18;
     mnFloatTitleHeight          = 13;
     mnTearOffTitleHeight        = 8;
-    mnMenuBarHeight             = 14;
     mbHighContrast              = false;
     mbUseSystemUIFonts          = true;
     mnUseFlatBorders            = false;
@@ -887,9 +769,6 @@ void ImplStyleData::SetStandardStyles()
     mbHideDisabledMenuItems     = false;
     mbAcceleratorsInContextMenus = true;
     mbPrimaryButtonWarpsSlider = false;
-
-    Gradient aGrad( GradientStyle_LINEAR, DEFAULT_WORKSPACE_GRADIENT_START_COLOR, DEFAULT_WORKSPACE_GRADIENT_END_COLOR );
-    maWorkspaceGradient = Wallpaper( aGrad );
 }
 
 StyleSettings::StyleSettings()
@@ -1473,19 +1352,11 @@ StyleSettings::GetVisitedLinkColor() const
     return mpData->maVisitedLinkColor;
 }
 
-void
-StyleSettings::SetHighlightLinkColor( const Color& rColor )
-{
-    CopyData();
-    mpData->maHighlightLinkColor = rColor;
-}
-
 const Color&
 StyleSettings::GetHighlightLinkColor() const
 {
     return mpData->maHighlightLinkColor;
 }
-
 
 void
 StyleSettings::SetMonoColor( const Color& rColor )
@@ -1822,14 +1693,6 @@ StyleSettings::GetIconFont() const
     return mpData->maIconFont;
 }
 
-
-void
-StyleSettings::SetBorderSize( long nSize )
-{
-    CopyData();
-    mpData->mnBorderSize = nSize;
-}
-
 long
 StyleSettings::GetBorderSize() const
 {
@@ -1862,30 +1725,10 @@ StyleSettings::GetFloatTitleHeight() const
     return mpData->mnFloatTitleHeight;
 }
 
-void
-StyleSettings::SetTearOffTitleHeight( long nSize )
-{
-    CopyData();
-    mpData->mnTearOffTitleHeight = nSize;
-}
-
 long
 StyleSettings::GetTearOffTitleHeight() const
 {
     return mpData->mnTearOffTitleHeight;
-}
-
-void
-StyleSettings::SetMenuBarHeight( long nSize )
-{
-    CopyData();
-    mpData->mnMenuBarHeight = nSize;
-}
-
-long
-StyleSettings::GetMenuBarHeight() const
-{
-    return mpData->mnMenuBarHeight;
 }
 
 void
@@ -1927,46 +1770,11 @@ StyleSettings::GetSpinSize() const
     return mpData->mnSpinSize;
 }
 
-void
-StyleSettings::SetSplitSize( long nSize )
-{
-    CopyData();
-    mpData->mnSplitSize = nSize;
-}
-
 long
 StyleSettings::GetSplitSize() const
 {
     return mpData->mnSplitSize;
 }
-
-
-void
-StyleSettings::SetIconHorzSpace( long nSpace )
-{
-    CopyData();
-    mpData->mnIconHorzSpace = nSpace;
-}
-
-long
-StyleSettings::GetIconHorzSpace() const
-{
-    return mpData->mnIconHorzSpace;
-}
-
-void
-StyleSettings::SetIconVertSpace( long nSpace )
-{
-    CopyData();
-    mpData->mnIconVertSpace = nSpace;
-}
-
-long
-StyleSettings::GetIconVertSpace() const
-{
-    return mpData->mnIconVertSpace;
-}
-
 
 void
 StyleSettings::SetCursorSize( long nSize )
@@ -2021,21 +1829,6 @@ StyleSettings::GetScreenFontZoom() const
     return mpData->mnScreenFontZoom;
 }
 
-
-void
-StyleSettings::SetLogoDisplayTime( sal_uLong nDisplayTime )
-{
-    CopyData();
-    mpData->mnLogoDisplayTime = nDisplayTime;
-}
-
-sal_uLong
-StyleSettings::GetLogoDisplayTime() const
-{
-    return mpData->mnLogoDisplayTime;
-}
-
-
 void
 StyleSettings::SetDragFullOptions( sal_uLong nOptions )
 {
@@ -2048,21 +1841,6 @@ StyleSettings::GetDragFullOptions() const
 {
     return mpData->mnDragFullOptions;
 }
-
-
-void
-StyleSettings::SetAnimationOptions( sal_uLong nOptions )
-{
-    CopyData();
-    mpData->mnAnimationOptions = nOptions;
-}
-
-sal_uLong
-StyleSettings::GetAnimationOptions() const
-{
-    return mpData->mnAnimationOptions;
-}
-
 
 void
 StyleSettings::SetSelectionOptions( sal_uLong nOptions )
@@ -2153,20 +1931,6 @@ StyleSettings::GetToolbarIconSize() const
     return mpData->mnToolbarIconSize;
 }
 
-const Wallpaper&
-StyleSettings::GetWorkspaceGradient() const
-{
-    return mpData->maWorkspaceGradient;
-}
-
-void
-StyleSettings::SetWorkspaceGradient( const Wallpaper& rWall )
-{
-    CopyData();
-    mpData->maWorkspaceGradient = rWall;
-}
-
-
 const DialogStyle&
 StyleSettings::GetDialogStyle() const
 {
@@ -2207,24 +1971,10 @@ StyleSettings::GetEdgeBlending() const
     return mpData->mnEdgeBlending;
 }
 
-void
-StyleSettings::SetEdgeBlendingTopLeftColor(const Color& rTopLeft)
-{
-    CopyData();
-    mpData->maEdgeBlendingTopLeftColor = rTopLeft;
-}
-
 const Color&
 StyleSettings::GetEdgeBlendingTopLeftColor() const
 {
     return mpData->maEdgeBlendingTopLeftColor;
-}
-
-void
-StyleSettings::SetEdgeBlendingBottomRightColor(const Color& rBottomRight)
-{
-    CopyData();
-    mpData->maEdgeBlendingBottomRightColor = rBottomRight;
 }
 
 const Color&
@@ -2259,37 +2009,10 @@ StyleSettings::GetColorValueSetColumnCount() const
     return mpData->mnColorValueSetColumnCount;
 }
 
-void
-StyleSettings::SetColorValueSetMaximumRowCount(sal_uInt16 nCount)
-{
-    CopyData();
-    mpData->mnColorValueSetMaximumRowCount = nCount;
-}
-
 sal_uInt16
 StyleSettings::GetColorValueSetMaximumRowCount() const
 {
     return mpData->mnColorValueSetMaximumRowCount;
-}
-
-void
-StyleSettings::SetListBoxPreviewDefaultLogicSize(const Size& rSize)
-{
-    CopyData();
-    mpData->maListBoxPreviewDefaultLogicSize = rSize; mpData->maListBoxPreviewDefaultPixelSize = Size(0, 0);
-}
-
-const Size&
-StyleSettings::GetListBoxPreviewDefaultLogicSize() const
-{
-    return mpData->maListBoxPreviewDefaultLogicSize;
-}
-
-void
-StyleSettings::SetListBoxPreviewDefaultLineWidth(sal_uInt16 nWidth)
-{
-    CopyData();
-    mpData->mnListBoxPreviewDefaultLineWidth = nWidth;
 }
 
 sal_uInt16
@@ -2528,9 +2251,7 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
 
     if ( (mpData->mnOptions                 == rSet.mpData->mnOptions)                  &&
          (mpData->mbAutoMnemonic            == rSet.mpData->mbAutoMnemonic)             &&
-         (mpData->mnLogoDisplayTime         == rSet.mpData->mnLogoDisplayTime)          &&
          (mpData->mnDragFullOptions         == rSet.mpData->mnDragFullOptions)          &&
-         (mpData->mnAnimationOptions        == rSet.mpData->mnAnimationOptions)         &&
          (mpData->mnSelectionOptions        == rSet.mpData->mnSelectionOptions)         &&
          (mpData->mnDisplayOptions          == rSet.mpData->mnDisplayOptions)           &&
          (mpData->mnCursorSize              == rSet.mpData->mnCursorSize)               &&
@@ -2539,13 +2260,10 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->mnTitleHeight             == rSet.mpData->mnTitleHeight)              &&
          (mpData->mnFloatTitleHeight        == rSet.mpData->mnFloatTitleHeight)         &&
          (mpData->mnTearOffTitleHeight      == rSet.mpData->mnTearOffTitleHeight)       &&
-         (mpData->mnMenuBarHeight           == rSet.mpData->mnMenuBarHeight)            &&
          (mpData->mnScrollBarSize           == rSet.mpData->mnScrollBarSize)            &&
          (mpData->mnMinThumbSize            == rSet.mpData->mnMinThumbSize)             &&
          (mpData->mnSplitSize               == rSet.mpData->mnSplitSize)                &&
          (mpData->mnSpinSize                == rSet.mpData->mnSpinSize)                 &&
-         (mpData->mnIconHorzSpace           == rSet.mpData->mnIconHorzSpace)            &&
-         (mpData->mnIconVertSpace           == rSet.mpData->mnIconVertSpace)            &&
          (mpData->mnAntialiasedMin          == rSet.mpData->mnAntialiasedMin)           &&
          (mpData->mnScreenZoom              == rSet.mpData->mnScreenZoom)               &&
          (mpData->mnScreenFontZoom          == rSet.mpData->mnScreenFontZoom)           &&
@@ -2836,7 +2554,6 @@ bool MiscSettings::GetEnableLocalizedDecimalSep() const
 
 ImplHelpData::ImplHelpData()
 {
-    mnOptions                   = 0;
     mnTipDelay                  = 500;
     mnTipTimeout                = 3000;
     mnBalloonDelay              = 1500;
@@ -2844,7 +2561,6 @@ ImplHelpData::ImplHelpData()
 
 ImplHelpData::ImplHelpData( const ImplHelpData& rData )
 {
-    mnOptions                   = rData.mnOptions;
     mnTipDelay                  = rData.mnTipDelay;
     mnTipTimeout                = rData.mnTipTimeout;
     mnBalloonDelay              = rData.mnBalloonDelay;
@@ -2881,26 +2597,6 @@ bool HelpSettings::operator ==( const HelpSettings& rSet ) const
         return false;
 }
 
-void
-HelpSettings::SetOptions( sal_uLong nOptions )
-{
-    CopyData();
-    mpData->mnOptions = nOptions;
-}
-
-sal_uLong
-HelpSettings::GetOptions() const
-{
-    return mpData->mnOptions;
-}
-
-void
-HelpSettings::SetTipDelay( sal_uLong nTipDelay )
-{
-    CopyData();
-    mpData->mnTipDelay = nTipDelay;
-}
-
 sal_uLong
 HelpSettings::GetTipDelay() const
 {
@@ -2920,13 +2616,6 @@ HelpSettings::GetTipTimeout() const
     return mpData->mnTipTimeout;
 }
 
-void
-HelpSettings::SetBalloonDelay( sal_uLong nBalloonDelay )
-{
-    CopyData();
-    mpData->mnBalloonDelay = nBalloonDelay;
-}
-
 sal_uLong
 HelpSettings::GetBalloonDelay() const
 {
@@ -2944,7 +2633,6 @@ ImplAllSettingsData::ImplAllSettingsData()
         maLocale( LANGUAGE_SYSTEM ),
         maUILocale( LANGUAGE_SYSTEM )
 {
-    mnSystemUpdate              = SETTINGS_ALLSETTINGS;
     mnWindowUpdate              = SETTINGS_ALLSETTINGS;
     mpLocaleDataWrapper         = NULL;
     mpUILocaleDataWrapper       = NULL;
@@ -2961,7 +2649,6 @@ ImplAllSettingsData::ImplAllSettingsData( const ImplAllSettingsData& rData ) :
     maLocale( rData.maLocale ),
     maUILocale( rData.maUILocale )
 {
-    mnSystemUpdate              = rData.mnSystemUpdate;
     mnWindowUpdate              = rData.mnWindowUpdate;
     // Pointer couldn't shared and objects haven't a copy ctor
     // So we create the cache objects new, if the GetFunction is
@@ -3100,7 +2787,6 @@ bool AllSettings::operator ==( const AllSettings& rSet ) const
          (mpData->maStyleSettings           == rSet.mpData->maStyleSettings)        &&
          (mpData->maMiscSettings            == rSet.mpData->maMiscSettings)         &&
          (mpData->maHelpSettings            == rSet.mpData->maHelpSettings)         &&
-         (mpData->mnSystemUpdate            == rSet.mpData->mnSystemUpdate)         &&
          (mpData->maLocale                  == rSet.mpData->maLocale)               &&
          (mpData->mnWindowUpdate            == rSet.mpData->mnWindowUpdate) )
     {
@@ -3383,25 +3069,6 @@ AllSettings::GetHelpSettings() const
     return mpData->maHelpSettings;
 }
 
-void
-AllSettings::SetSystemUpdate( sal_uLong nUpdate )
-{
-    CopyData();
-    mpData->mnSystemUpdate = nUpdate;
-}
-
-sal_uLong
-AllSettings::GetSystemUpdate() const
-{
-    return mpData->mnSystemUpdate;
-}
-
-void
-AllSettings::SetWindowUpdate( sal_uLong nUpdate )
-{
-    CopyData();
-    mpData->mnWindowUpdate = nUpdate;
-}
 sal_uLong
 AllSettings::GetWindowUpdate() const
 {
