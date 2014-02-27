@@ -3977,6 +3977,13 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
                 FSEND );
     }
 
+    if ( nNext != nId && eType != STYLE_TYPE_LIST)
+    {
+        m_pSerializer->singleElementNS( XML_w, XML_next,
+                FSNS( XML_w, XML_val ), m_rExport.pStyles->GetStyleId(nNext).getStr(),
+                FSEND );
+    }
+
     if (!aLink.isEmpty())
         m_pSerializer->singleElementNS(XML_w, XML_link,
                 FSNS(XML_w, XML_val), OUStringToOString(aLink, RTL_TEXTENCODING_UTF8).getStr(),
@@ -3998,13 +4005,6 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
         m_pSerializer->singleElementNS(XML_w, XML_rsid,
                 FSNS(XML_w, XML_val), OUStringToOString(aRsid, RTL_TEXTENCODING_UTF8).getStr(),
                 FSEND);
-
-    if ( nNext != nId && eType != STYLE_TYPE_LIST)
-    {
-        m_pSerializer->singleElementNS( XML_w, XML_next,
-                FSNS( XML_w, XML_val ), m_rExport.pStyles->GetStyleId(nNext).getStr(),
-                FSEND );
-    }
 
     if ( bAutoUpdate )
         m_pSerializer->singleElementNS( XML_w, XML_autoRedefine, FSEND );

@@ -94,6 +94,15 @@ DECLARE_OOXMLEXPORT_TEST(testZoom, "zoom.docx")
     sal_Int16 nValue = 0;
     xPropertySet->getPropertyValue("ZoomValue") >>= nValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(42), nValue);
+
+    // Validation test: order of elements were wrong.
+    xmlDocPtr pXmlDoc = parseExport("word/styles.xml");
+    if (!pXmlDoc)
+        return;
+    // Order was: rsid, next.
+    int nNext = getXPathPosition(pXmlDoc, "/w:styles/w:style[3]", "next");
+    int nRsid = getXPathPosition(pXmlDoc, "/w:styles/w:style[3]", "rsid");
+    CPPUNIT_ASSERT(nNext < nRsid);
 }
 
 DECLARE_OOXMLEXPORT_TEST(defaultTabStopNotInStyles, "empty.odt")
