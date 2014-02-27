@@ -236,7 +236,7 @@ public:
     sal_uInt16          GetCurItemId() const;
     OString             GetCurItemIdent() const;
 
-    void                SetHightlightItem(sal_uInt16 nHighlightedItem);
+    void                SetHighlightItem(sal_uInt16 nHighlightedItem);
 
     void                SetDefaultItem( sal_uInt16 nItemId )    { nDefaultItem = nItemId; }
     sal_uInt16          GetDefaultItem() const              { return nDefaultItem; }
