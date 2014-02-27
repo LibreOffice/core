@@ -394,11 +394,13 @@ void ResMgrContainer::freeResMgr( InternalResMgr* pResMgr )
     }
 }
 
+#ifdef DBG_UTIL
 void Resource::TestRes()
 {
     if( m_pResMgr )
         m_pResMgr->TestStack( this );
 }
+#endif
 
 struct ImpContent
 {

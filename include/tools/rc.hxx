@@ -36,7 +36,9 @@ protected:
     void                GetRes( const ResId& rResId );
 
     // check Resource state
+#ifdef DBG_UTIL
     void                TestRes();
+#endif
 
     // Get a pointer to the Resource's data
     void* GetClassRes()
