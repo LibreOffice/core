@@ -38,8 +38,6 @@ public:
     virtual void setPosSizePixel(long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags = WINDOW_POSSIZE_ALL);
     virtual void queue_resize();
 
-    void dispatch(const OUString& rCommand, const css::uno::Sequence<css::beans::PropertyValue>& rArgs =
-        css::uno::Sequence<css::beans::PropertyValue>());
 };
 
 #endif

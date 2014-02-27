@@ -91,21 +91,4 @@ void PanelLayout::setPosSizePixel(long nX, long nY, long nWidth, long nHeight, s
         VclContainer::setLayoutAllocation(*pChild, Point(0, 0), Size(nWidth, nHeight));
 }
 
-void PanelLayout::dispatch(const OUString& rCommand, const css::uno::Sequence<css::beans::PropertyValue>& rArgs)
-{
-    assert(getFrame().is());
-
-    css::util::URL aURL;
-    aURL.Complete = rCommand;
-
-    css::uno::Reference<css::util::XURLTransformer > xURLTransformer(
-        css::util::URLTransformer::create(comphelper::getProcessComponentContext()));
-
-    xURLTransformer->parseStrict(aURL);
-
-    css::uno::Reference<css::frame::XDispatchProvider> xProvider(getFrame(), css::uno::UNO_QUERY_THROW);
-    css::uno::Reference<css::frame::XDispatch > xDispatch(xProvider->queryDispatch(aURL, OUString(), 0));
-    xDispatch->dispatch(aURL, rArgs);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

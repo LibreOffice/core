@@ -55,7 +55,6 @@ OutputDevice::LogicToPixel(Region const&, MapMode const&) const
 OutputDevice::LogicToPixel(basegfx::B2DPolygon const&) const
 OutputDevice::LogicToPixel(basegfx::B2DPolygon const&, MapMode const&) const
 OutputDevice::PixelToLogic(Region const&, MapMode const&) const
-PanelLayout::dispatch(rtl::OUString const&, com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> const&)
 SalGraphics::drawTransformedBitmap(basegfx::B2DPoint const&, basegfx::B2DPoint const&, basegfx::B2DPoint const&, SalBitmap const&, SalBitmap const*)
 ScDocument::CreateFormatTable() const
 ScExtIButton::GetSelected() const
