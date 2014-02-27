@@ -3,9 +3,6 @@ BigInt::BigInt(unsigned int)
 BigInt::GetString() const
 CalcUnoApiTest::CalcUnoApiTest(rtl::OUString const&)
 Chart2ExportTest::testFdo74115WallGradientFill()
-CodeCompleteDataCache::GetVars() const
-CodeCompleteDataCache::SetVars(boost::unordered::unordered_map<rtl::OUString, boost::unordered::unordered_map<rtl::OUString, rtl::OUString, rtl::OUStringHash, std::equal_to<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, rtl::OUString> > >, rtl::OUStringHash, std::equal_to<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, boost::unordered::unordered_map<rtl::OUString, rtl::OUString, rtl::OUStringHash, std::equal_to<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, rtl::OUString> > > > > > const&)
-CodeCompleteDataCache::print() const
 ComboBox::GetMRUCount() const
 ConfigurationAccess::getPath(rtl::OUString const&)
 DocxSdrExport::getFlyFrameGraphic()
