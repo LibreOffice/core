@@ -2060,6 +2060,7 @@ FontSelectPattern::FontSelectPattern( const Font& rFont,
 }
 
 // NOTE: this ctor is still used on Windows. Do not remove.
+#ifdef WNT
 FontSelectPatternAttributes::FontSelectPatternAttributes( const PhysicalFontFace& rFontData,
     const Size& rSize, float fExactHeight, int nOrientation, bool bVertical )
     : ImplFontAttributes( rFontData )
@@ -2076,7 +2077,6 @@ FontSelectPatternAttributes::FontSelectPatternAttributes( const PhysicalFontFace
     // NOTE: no normalization for width/height/orientation
 }
 
-#ifdef WNT
 FontSelectPattern::FontSelectPattern( const PhysicalFontFace& rFontData,
     const Size& rSize, float fExactHeight, int nOrientation, bool bVertical )
     : FontSelectPatternAttributes(rFontData, rSize, fExactHeight, nOrientation, bVertical)

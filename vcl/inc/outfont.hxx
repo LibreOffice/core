@@ -160,8 +160,10 @@ class FontSelectPatternAttributes : public ImplFontAttributes
 public:
                         FontSelectPatternAttributes( const Font&, const OUString& rSearchName,
                             const Size&, float fExactHeight );
+#ifdef WNT
                         FontSelectPatternAttributes( const PhysicalFontFace&, const Size&,
                             float fExactHeight, int nOrientation, bool bVertical );
+#endif
 
     size_t              hashCode() const;
     bool operator==(const FontSelectPatternAttributes& rOther) const;
