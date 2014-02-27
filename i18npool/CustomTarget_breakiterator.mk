@@ -78,12 +78,12 @@ $(i18npool_BIDIR)/%.brk : $(i18npool_BIDIR)/%.txt $(call gb_ExternalExecutable_g
 $(i18npool_BIDIR)/%.txt : \
 	$(SRCDIR)/i18npool/source/breakiterator/data/%.txt | $(i18npool_BIDIR)/.dir
 	sed -e ': dummy' \
-		$(if $(filter YES,$(ICU_RECLASSIFIED_CLOSE_PARENTHESIS)),-e "s#\[:LineBreak =  Close_Punctuation:\]#\[& \[:LineBreak = Close_Parenthesis:\]\]#") \
-		$(if $(filter-out YES,$(ICU_RECLASSIFIED_CONDITIONAL_JAPANESE_STARTER)),\
+		$(if $(ICU_RECLASSIFIED_CLOSE_PARENTHESIS),-e "s#\[:LineBreak =  Close_Punctuation:\]#\[& \[:LineBreak = Close_Parenthesis:\]\]#") \
+		$(if $(ICU_RECLASSIFIED_CONDITIONAL_JAPANESE_STARTER),,\
 			-e '/\[:LineBreak =  Conditional_Japanese_Starter:\]/d' \
 			-e 's# $$CJ##' \
 		) \
-		$(if $(filter-out YES,$(ICU_RECLASSIFIED_HEBREW_LETTER)),\
+		$(if $(ICU_RECLASSIFIED_HEBREW_LETTER),,\
 			-e '/\[:LineBreak =  Hebrew_Letter:\]/d' \
 			-e '/^$$HLcm =/d' \
 			-e '/^$$HLcm $$NUcm;/d' \
@@ -93,7 +93,7 @@ $(i18npool_BIDIR)/%.txt : \
 			-e 's#$$HLcm ##g' \
 			-e 's# $$HL##g' \
 		) \
-		$(if $(filter YES,$(ICU_RECLASSIFIED_PREPEND_SET_EMPTY)),-e "/Prepend/d") \
+		$(if $(ICU_RECLASSIFIED_PREPEND_SET_EMPTY),-e "/Prepend/d") \
 		$< > $@
 
 # vim: set noet sw=4 ts=4:
