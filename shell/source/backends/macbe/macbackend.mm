@@ -205,7 +205,7 @@ void MacOSXBackend::setPropertyValue(
     throw (
         css::beans::UnknownPropertyException, css::beans::PropertyVetoException,
         css::lang::IllegalArgumentException, css::lang::WrappedTargetException,
-        css::uno::RuntimeException)
+        css::uno::RuntimeException, std::exception)
 {
     throw css::lang::IllegalArgumentException(
         rtl::OUString(
@@ -217,7 +217,7 @@ css::uno::Any MacOSXBackend::getPropertyValue(
     rtl::OUString const & PropertyName)
     throw (
         css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
-        css::uno::RuntimeException)
+        css::uno::RuntimeException, std::exception)
 {
     if ( PropertyName == "WorkPathVariable" )
     {
@@ -443,7 +443,7 @@ rtl::OUString SAL_CALL MacOSXBackend::getBackendName(void)
 
 
 rtl::OUString SAL_CALL MacOSXBackend::getImplementationName(void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return getBackendName();
 }
@@ -457,13 +457,13 @@ uno::Sequence<rtl::OUString> SAL_CALL MacOSXBackend::getBackendServiceNames(void
 }
 
 sal_Bool SAL_CALL MacOSXBackend::supportsService(const rtl::OUString& aServiceName)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, aServiceName);
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL MacOSXBackend::getSupportedServiceNames(void)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     return getBackendServiceNames();
 }
