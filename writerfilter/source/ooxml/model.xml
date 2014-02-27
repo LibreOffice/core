@@ -5586,6 +5586,15 @@
           </choice>
         </list>
       </define>
+      <define name="ST_NumForm">
+        <list>
+          <choice>
+            <value>default</value>
+            <value>lining</value>
+            <value>oldStyle</value>
+          </choice>
+        </list>
+      </define>
 
       <define name="ST_PositiveCoordinate">
         <data type="long">
@@ -5657,7 +5666,6 @@
           </optional>
         </choice>
       </define>
-
       <define name="EG_ColorTransform">
         <choice>
           <optional>
@@ -5712,7 +5720,6 @@
           </optional>
         </choice>
       </define>
-
       <define name="EG_FillProperties">
         <choice>
           <optional>
@@ -5732,7 +5739,6 @@
           </optional>
         </choice>
       </define>
-
       <define name="EG_ShadeProperties">
         <choice>
           <optional>
@@ -5747,7 +5753,6 @@
           </optional>
         </choice>
       </define>
-
       <define name="EG_LineDashProperties">
         <choice>
           <optional>
@@ -5757,7 +5762,6 @@
           </optional>
         </choice>
       </define>
-
       <define name="EG_LineJoinProperties">
         <choice>
           <optional>
@@ -6143,6 +6147,11 @@
           <ref name="ST_Ligatures"/>
         </attribute>
       </define>
+      <define name="CT_NumForm">
+        <attribute name="val">
+          <ref name="ST_NumForm"/>
+        </attribute>
+      </define>
 
       <define name="glow">
         <element name="glow">
@@ -6186,14 +6195,14 @@
       </define>
       <define name="numForm">
         <element name="numForm">
-          <empty/>
+          <ref name="CT_NumForm"/>
         </element>
       </define>
       <define name="numSpacing">
         <element name="numSpacing">
           <empty/>
         </element>
-      </define>CT_Ligatures
+      </define>
       <define name="stylisticSets">
         <element name="stylisticSets">
           <empty/>
@@ -6424,6 +6433,11 @@
       <value name="contextualHistoricalDiscretional" tokenid="ooxml:ST_Ligatures_contextualHistoricalDiscretional">contextualHistoricalDiscretional</value>
       <value name="all" tokenid="ooxml:ST_Ligatures_all">all</value>
     </resource>
+    <resource name="ST_NumForm" resource="List" generated="yes">
+      <value name="default" tokenid="ooxml:ST_NumForm_default">default</value>
+      <value name="lining" tokenid="ooxml:ST_NumForm_lining">lining</value>
+      <value name="oldStyle" tokenid="ooxml:ST_NumForm_oldStyle">oldStyle</value>
+    </resource>
 
     <resource name="ST_PositiveCoordinate" resource="Integer" generated="yes"/>
     <resource name="ST_HexColorRGB" resource="Hex"/>
@@ -6588,7 +6602,9 @@
     <resource name="CT_Ligatures" resource="Properties" tag="character">
       <attribute name="val" tokenid="ooxml:CT_Ligatures_val"/>
     </resource>
-
+    <resource name="CT_NumForm" resource="Properties" tag="character">
+      <attribute name="val" tokenid="ooxml:CT_NumForm_val"/>
+    </resource>
 
     <resource name="glow" resource="Properties" tag="character">
       <element name="glow" tokenid="ooxml:glow_glow"/>
@@ -18299,12 +18315,12 @@
             <ref name="BUILT_IN_ANY_TYPE"/>
           </element>
         </optional>
-        <!--<optional>
+        <optional>
           <element name="w14:numForm">
             <ref name="BUILT_IN_ANY_TYPE"/>
           </element>
         </optional>
-        <optional>
+        <!--<optional>
           <element name="w14:numSpacing">
             <ref name="BUILT_IN_ANY_TYPE"/>
           </element>
@@ -24294,8 +24310,8 @@
       <element name="w14:scene3d" tokenid="ooxml:EG_RPrBase_w14_scene3d"/>
       <element name="w14:props3d" tokenid="ooxml:EG_RPrBase_w14_props3d"/>
       <element name="w14:ligatures" tokenid="ooxml:EG_RPrBase_w14_ligatures"/>
-      <!--<element name="w14:numForm" tokenid="ooxml:EG_RPrBase_w14_numForm"/>
-      <element name="w14:numSpacing" tokenid="ooxml:EG_RPrBase_w14_numSpacing"/>
+      <element name="w14:numForm" tokenid="ooxml:EG_RPrBase_w14_numForm"/>
+      <!--<element name="w14:numSpacing" tokenid="ooxml:EG_RPrBase_w14_numSpacing"/>
       <element name="w14:stylisticSets" tokenid="ooxml:EG_RPrBase_w14_stylisticSets"/>
       <element name="w14:cntxtAlts" tokenid="ooxml:EG_RPrBase_w14_cntxtAlts"/>-->
     </resource>
