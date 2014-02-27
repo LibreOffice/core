@@ -420,7 +420,8 @@ std::vector<double>& ScColorFormat::getValues() const
                     }
                     else if(eType == CELLTYPE_FORMULA)
                     {
-                        if (mpDoc->GetFormulaCell(aAddr)->IsValue())
+                        ScFormulaCell *pCell = mpDoc->GetFormulaCell(aAddr);
+                        if (pCell && pCell->IsValue())
                         {
                             double aVal = mpDoc->GetValue(nCol, nRow, nTab);
                             rValues.push_back(aVal);
@@ -544,7 +545,8 @@ Color* ScColorScaleFormat::GetColor( const ScAddress& rAddr ) const
 
     if (eCellType == CELLTYPE_FORMULA)
     {
-        if (!mpDoc->GetFormulaCell(rAddr)->IsValue())
+        ScFormulaCell *pCell = mpDoc->GetFormulaCell(rAddr);
+        if (!pCell || !pCell->IsValue())
             return NULL;
     }
 
@@ -834,7 +836,8 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
 
     if (eCellType == CELLTYPE_FORMULA)
     {
-        if (!mpDoc->GetFormulaCell(rAddr)->IsValue())
+        ScFormulaCell *pCell = mpDoc->GetFormulaCell(rAddr);
+        if (!pCell || !pCell->IsValue())
             return NULL;
     }
 
@@ -972,7 +975,8 @@ ScIconSetInfo* ScIconSetFormat::GetIconSetInfo(const ScAddress& rAddr) const
 
     if (eCellType == CELLTYPE_FORMULA)
     {
-        if (!mpDoc->GetFormulaCell(rAddr)->IsValue())
+        ScFormulaCell *pCell = mpDoc->GetFormulaCell(rAddr);
+        if (!pCell || !pCell->IsValue())
             return NULL;
     }
 
