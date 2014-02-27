@@ -4917,6 +4917,7 @@ styleLockTheme
 styleName
 stylePaneFormatFilter
 stylePaneSortMethod
+styleSet
 styleSheet
 styles
 stylisticSets
