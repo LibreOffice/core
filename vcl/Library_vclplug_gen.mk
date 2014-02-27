@@ -116,7 +116,7 @@ $(eval $(call gb_Library_add_defs,vclplug_gen,\
 endif
 
 ## handle Xinerama
-ifneq ($(USE_XINERAMA),NO)
+ifneq ($(USE_XINERAMA),)
 ifneq ($(OS)$(USE_XINERAMA_VERSION),SOLARISXsun)
 # not Solaris/Xsun
 $(eval $(call gb_Library_add_defs,vclplug_gen,\

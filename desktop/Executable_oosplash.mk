@@ -23,7 +23,7 @@ $(eval $(call gb_Executable_add_cobjects,oosplash,\
     desktop/unx/source/start \
 ))
 
-ifeq ($(USE_XINERAMA),YES)
+ifneq ($(USE_XINERAMA),)
 
 $(eval $(call gb_Executable_add_defs,oosplash,\
     -DUSE_XINERAMA \

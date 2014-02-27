@@ -11530,7 +11530,7 @@ if test "$_os" = "Linux" -o "$_os" = "FreeBSD"; then
     if test -e "$XINERAMALIB/libXinerama.so" -a -e "$XINERAMALIB/libXinerama.a"; then
         # we have both versions, let the user decide but use the dynamic one
         # per default
-        USE_XINERAMA=YES
+        USE_XINERAMA=TRUE
         if test -z "$with_static_xinerama" -o -n "$with_system_libs"; then
             XINERAMA_LINK=dynamic
         else
@@ -11538,23 +11538,23 @@ if test "$_os" = "Linux" -o "$_os" = "FreeBSD"; then
         fi
     elif test -e "$XINERAMALIB/libXinerama.so" -a ! -e "$XINERAMALIB/libXinerama.a"; then
         # we have only the dynamic version
-        USE_XINERAMA=YES
+        USE_XINERAMA=TRUE
         XINERAMA_LINK=dynamic
     elif test -e "$XINERAMALIB/libXinerama.a"; then
         # static version
         if echo $host_cpu | $GREP -E 'i[[3456]]86' 2>/dev/null >/dev/null; then
-            USE_XINERAMA=YES
+            USE_XINERAMA=TRUE
             XINERAMA_LINK=static
         else
-            USE_XINERAMA=NO
+            USE_XINERAMA=
             XINERAMA_LINK=none
         fi
     else
         # no Xinerama
-        USE_XINERAMA=NO
+        USE_XINERAMA=
         XINERAMA_LINK=none
     fi
-    if test "$USE_XINERAMA" = "YES"; then
+    if test "$USE_XINERAMA" = "TRUE"; then
         AC_MSG_RESULT([yes, with $XINERAMA_LINK linking])
         AC_CHECK_HEADER(X11/extensions/Xinerama.h, [],
             [AC_MSG_ERROR(Xinerama header not found.)], [])
@@ -11575,7 +11575,7 @@ if test "$_os" = "Linux" -o "$_os" = "FreeBSD"; then
         AC_MSG_RESULT([no, libXinerama not found or wrong architecture.])
     fi
 else
-    USE_XINERAMA=NO
+    USE_XINERAMA=
     XINERAMA_LINK=none
     AC_MSG_RESULT([no])
 fi
