@@ -9384,6 +9384,8 @@ AC_SUBST(MYTHES_LIBS)
 dnl ===================================================================
 dnl How should we build the linear programming solver ?
 dnl ===================================================================
+BUILD_TYPE="$BUILD_TYPE COINMP"
+
 ENABLE_LPSOLVE=
 AC_MSG_CHECKING([whether to build with lpsolve])
 if test "$enable_lpsolve" != "no"; then
