@@ -3629,6 +3629,15 @@ DECLARE_OOXMLEXPORT_TEST(testW14TextEffects_TextOutline, "TextEffects_TextOutlin
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:rPr/w14:textOutline/w14:bevel", 1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTableCurruption, "tableCurrupt.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/header4.xml");
+    if (!pXmlDoc)
+        return;
+    CPPUNIT_ASSERT(pXmlDoc) ;
+    assertXPath(pXmlDoc, "/w:hdr/w:tbl[1]/w:tr[1]/w:tc[1]",1);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

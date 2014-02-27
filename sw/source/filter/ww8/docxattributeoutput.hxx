@@ -113,9 +113,14 @@ struct TableReference
     /// Remember the current table depth.
     sal_uInt32 m_nTableDepth;
 
+
+    ww8::WW8TableNodeInfoInner::Pointer_t m_pOldTablepInner;
+
+
     TableReference()
         : m_bTableCellOpen(false),
-        m_nTableDepth(0)
+        m_nTableDepth(0),
+        m_pOldTablepInner()
     {
     }
 
