@@ -50,9 +50,11 @@
 
 #include <targetstatecontrol.hxx>
 
-#include <olecomponent.hxx>
-
 #include "ownview.hxx"
+
+#if defined WNT
+#include <olecomponent.hxx>
+#endif
 
 using namespace ::com::sun::star;
 

@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cassert>
+
 #include <com/sun/star/embed/EmbedUpdateModes.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -25,9 +29,12 @@
 #include <cppuhelper/interfacecontainer.h>
 
 #include <oleembobj.hxx>
-#include <olecomponent.hxx>
 
 #include "ownview.hxx"
+
+#if defined WNT
+#include <olecomponent.hxx>
+#endif
 
 using namespace ::com::sun::star;
 
@@ -380,14 +387,17 @@ uno::Reference< util::XCloseable > SAL_CALL OleEmbeddedObject::getComponent()
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
-    if ( !m_pOleComponent )
+#if defined WNT
+    if (m_pOleComponent != 0)
     {
-        // TODO/LATER: Is it correct???
-        return uno::Reference< util::XCloseable >();
-        // throw uno::RuntimeException(); // TODO
+        return uno::Reference< util::XCloseable >( static_cast< ::cppu::OWeakObject* >( m_pOleComponent ), uno::UNO_QUERY );
     }
+#endif
 
-    return uno::Reference< util::XCloseable >( static_cast< ::cppu::OWeakObject* >( m_pOleComponent ), uno::UNO_QUERY );
+    assert(m_pOleComponent == 0);
+    // TODO/LATER: Is it correct???
+    return uno::Reference< util::XCloseable >();
+    // throw uno::RuntimeException(); // TODO
 }
 
 

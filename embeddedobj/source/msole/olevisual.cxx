@@ -26,9 +26,13 @@
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 
 #include <oleembobj.hxx>
-#include <olecomponent.hxx>
+//#include <olecomponent.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/seqstream.hxx>
+
+#if defined WNT
+#include <olecomponent.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::comphelper;

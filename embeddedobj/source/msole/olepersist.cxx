@@ -43,8 +43,11 @@
 #include <comphelper/classids.hxx>
 #include <osl/thread.hxx>
 
-#include <olecomponent.hxx>
 #include <closepreventer.hxx>
+
+#if defined WNT
+#include <olecomponent.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::comphelper;

@@ -22,7 +22,10 @@
 #include <cppuhelper/factory.hxx>
 
 #include "xolefactory.hxx"
+
+#if defined WNT
 #include "xdialogcreator.hxx"
+#endif
 
 using namespace ::com::sun::star;
 
