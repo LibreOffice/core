@@ -65,7 +65,7 @@ KDEXLib::KDEXLib() :
     SalXLib(),  m_bStartupDone(false), m_pApplication(0),
     m_pFreeCmdLineArgs(0), m_pAppCmdLineArgs(0), m_nFakeCmdLineArgs( 0 ),
     eventLoopType( LibreOfficeEventLoop ),
-    m_bYieldFrozen( false )
+    m_bYieldFrozen( false ), m_frameWidth( -1 )
 {
     // the timers created here means they belong to the main thread.
     // As the timeoutTimer runs the LO event queue, which may block on a dialog,
@@ -92,6 +92,9 @@ KDEXLib::KDEXLib() :
              this, SLOT( createFilePicker( const com::sun::star::uno::Reference<
                                                  com::sun::star::uno::XComponentContext >&) ),
              Qt::BlockingQueuedConnection );
+
+    connect( this, SIGNAL( getFrameWidthSignal() ),
+             this, SLOT( getFrameWidth() ), Qt::BlockingQueuedConnection );
 }
 
 KDEXLib::~KDEXLib()
@@ -443,6 +446,27 @@ uno::Reference< ui::dialogs::XFilePicker2 > KDEXLib::createFilePicker(
         return Q_EMIT createFilePickerSignal( xMSF );
     }
     return uno::Reference< ui::dialogs::XFilePicker2 >( new KDE4FilePicker( xMSF, this ) );
+}
+
+#define Region QtXRegion
+#include <qframe.h>
+#undef Region
+
+int KDEXLib::getFrameWidth()
+{
+    if( m_frameWidth >= 0 )
+        return m_frameWidth;
+    if( qApp->thread() != QThread::currentThread()) {
+        SalYieldMutexReleaser aReleaser;
+        return Q_EMIT getFrameWidthSignal();
+    }
+
+    // fill in a default
+    QFrame aFrame( NULL );
+    aFrame.setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
+    aFrame.ensurePolished();
+    m_frameWidth = aFrame.frameWidth();
+    return m_frameWidth;
 }
 
 #include "KDEXLib.moc"
