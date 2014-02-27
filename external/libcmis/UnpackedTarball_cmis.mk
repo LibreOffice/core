@@ -18,6 +18,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,cmis, \
 						external/libcmis/libcmis-0.4.1-empty-path.patch \
 						external/libcmis/libcmis-0.4.1-properties-fix.patch))
 
+$(eval $(call gb_UnpackedTarball_add_patches,cmis,external/libcmis/libcmis-libxml2_compatibility.patch))
+
 ifeq ($(OS)$(COM),WNTMSC)
 $(eval $(call gb_UnpackedTarball_add_patches,cmis,external/libcmis/boost-win.patch))
 endif
