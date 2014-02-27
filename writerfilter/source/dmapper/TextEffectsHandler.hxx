@@ -65,6 +65,7 @@ public:
     static OUString getBevelPresetTypeString(sal_Int32 nType);
     static OUString getPresetMaterialTypeString(sal_Int32 nType);
     static OUString getLigaturesString(sal_Int32 nType);
+    static OUString getNumFormString(sal_Int32 nType);
 
 };
 
