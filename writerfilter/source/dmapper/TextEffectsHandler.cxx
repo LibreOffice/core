@@ -150,6 +150,7 @@ OUString getNameForElementId(sal_uInt32 aId)
         aIdMap[NS_ooxml::LN_CT_Props3D_bevelB]                  = "bevelB";
         aIdMap[NS_ooxml::LN_CT_Props3D_extrusionClr]            = "extrusionClr";
         aIdMap[NS_ooxml::LN_CT_Props3D_contourClr]              = "contourClr";
+        aIdMap[NS_ooxml::LN_CT_StylisticSets_styleSet]          = "styleSet";
     }
     return aIdMap[aId];
 }
@@ -542,8 +543,15 @@ void TextEffectsHandler::convertElementIdToPropertyId(sal_Int32 aElementId)
         case NS_ooxml::LN_numSpacing_numSpacing:
             maPropertyId = PROP_CHAR_NUMSPACING_TEXT_EFFECT;
             maElementName = "numSpacing";
+            break;
         case NS_ooxml::LN_stylisticSets_stylisticSets:
+            maPropertyId = PROP_CHAR_STYLISTICSETS_TEXT_EFFECT;
+            maElementName = "stylisticSets";
+            break;
         case NS_ooxml::LN_cntxtAlts_cntxtAlts:
+            maPropertyId = PROP_CHAR_CNTXTALTS_TEXT_EFFECT;
+            maElementName = "cntxtAlts";
+            break;
         default:
             break;
     }
@@ -772,6 +780,16 @@ void TextEffectsHandler::lcl_attribute(Id aName, Value& aValue)
         case NS_ooxml::LN_CT_NumSpacing_val:
             {
                 uno::Any aAny = makeAny(getNumSpacingString(sal_Int32(aValue.getInt())));
+                mpGrabBagStack->appendElement("val", aAny);
+            }
+            break;
+        case NS_ooxml::LN_CT_StyleSet_id:
+            mpGrabBagStack->addInt32("id", sal_Int32(aValue.getInt()));
+            break;
+        case NS_ooxml::LN_CT_StyleSet_val:
+        case NS_ooxml::LN_CT_OnOff_val:
+            {
+                uno::Any aAny = makeAny(getOnOffString(sal_Int32(aValue.getInt())));
                 mpGrabBagStack->appendElement("val", aAny);
             }
             break;
