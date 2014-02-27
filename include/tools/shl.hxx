@@ -20,7 +20,6 @@
 #ifndef INCLUDED_TOOLS_SHL_HXX
 #define INCLUDED_TOOLS_SHL_HXX
 
-#include <tools/solar.h>
 #include <tools/toolsdllapi.h>
 
 // GetAppData()
