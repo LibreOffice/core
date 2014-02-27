@@ -2863,6 +2863,24 @@ DECLARE_OOXMLEXPORT_TEST(testW14TextEffects_Props3d_Ligatures_NumForm_NumSpacing
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[4]/w:rPr/w14:numSpacing", "val", "proportional");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testW14TextEffects_StylisticSets_CntxtAlts, "TextEffects_StylisticSets_CntxtAlts.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    // Paragraph 1 - w14:stylisticSets
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:stylisticSets/w14:styleSet", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:stylisticSets/w14:styleSet", "id", "4");
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[3]/w:rPr/w14:stylisticSets/w14:styleSet", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[3]/w:rPr/w14:stylisticSets/w14:styleSet", "id", "2");
+
+    // Paragraph 1 - w14:cntxtAlts
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w14:cntxtAlts", 1);
+
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
