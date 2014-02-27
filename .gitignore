@@ -95,3 +95,9 @@ xcuserdata
 *.v11*
 *.vcxproj*
 *.opensdf
+
+# doxygen output
+/docs
+
+# gdb config
+/.gdbinit
