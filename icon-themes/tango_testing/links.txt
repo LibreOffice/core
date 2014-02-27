@@ -29,7 +29,7 @@ cmd/lc_ellipsetoolbox.png cmd/lc_basicshapes.ellipse.png
 cmd/lc_rectangletoolbox.png cmd/lc_basicshapes.rectangle.png
 cmd/lc_objects3dtoolbox.png cmd/lc_cube.png
 cmd/lc_connectortoolbox.png cmd/lc_connector.png
-cmd/lc_linetoolbox.png cmd/lc_freeline.png
+cmd/lc_freeline.png cmd/lc_linetoolbox.png
 cmd/lc_arrowstoolbox.png cmd/lc_linearrowend.png
 cmd/lc_texttoolbox.png cmd/lc_text.png
 cmd/lc_inserttoolbox.png cmd/lc_drawchart.png
