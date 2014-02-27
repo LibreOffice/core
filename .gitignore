@@ -33,6 +33,8 @@
 /aclocal.m4
 /autom4te.cache
 /autogen.input
+/autogen.lastrun
+/autogen.lastrun.bak
 /ChangeLog
 /config.Build.log
 /config.guess
@@ -95,3 +97,9 @@ xcuserdata
 *.v11*
 *.vcxproj*
 *.opensdf
+
+# doxygen output
+/docs
+
+# gdb config
+/.gdbinit
