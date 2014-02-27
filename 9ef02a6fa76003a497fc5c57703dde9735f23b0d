@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a961159_af9f954f",
+        "filename": "store/source/storcach.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-02-27T09:51:39Z",
+      "side": 1,
+      "message": "btw, one neat trick is to end with a colon a comment that precedes the code it comments, as that gives a subtle clue to the reader what code the comment is about",
+      "revId": "9ef02a6fa76003a497fc5c57703dde9735f23b0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
