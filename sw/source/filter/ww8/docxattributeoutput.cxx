@@ -2119,6 +2119,8 @@ static void impl_borders( FSHelperPtr pSerializer, const SvxBoxItem& rBox, const
         bExportDistanceFromPageEdge = true;
     }
 
+    bool bWriteInsideH = false;
+    bool bWriteInsideV = false;
     for( int i = 0; i < 4; ++i, ++pBrd )
     {
         const SvxBorderLine* pLn = rBox.GetLine( *pBrd );
@@ -2186,11 +2188,15 @@ static void impl_borders( FSHelperPtr pSerializer, const SvxBoxItem& rBox, const
         // When exporting default borders, we need to export these 2 attr
         if ( rOptions.bWriteInsideHV) {
             if ( i == 2 )
-                impl_borderLine( pSerializer, XML_insideH, pLn, 0 );
+                bWriteInsideH = true;
             else if ( i == 3 )
-                impl_borderLine( pSerializer, XML_insideV, pLn, 0 );
+                bWriteInsideV = true;
         }
     }
+    if (bWriteInsideH)
+        impl_borderLine( pSerializer, XML_insideH, rBox.GetLine(BOX_LINE_BOTTOM), 0 );
+    if (bWriteInsideV)
+        impl_borderLine( pSerializer, XML_insideV, rBox.GetLine(BOX_LINE_RIGHT), 0 );
     if (tagWritten && rOptions.bWriteTag) {
         pSerializer->endElementNS( XML_w, rOptions.tag );
     }

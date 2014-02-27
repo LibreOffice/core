@@ -323,6 +323,20 @@ DECLARE_OOXMLEXPORT_TEST(testMathVerticalStacks, "math-vertical_stacks.docx")
 //    CHECK_FORMULA( "binom {a} {binom {b} {c}}", getFormula( getRun( getParagraph( 4 ), 1 )));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTable, "table.odt")
+{
+    // Validation test: order of elements were wrong.
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    // Order was: insideH, end, insideV.
+    int nEnd = getXPathPosition(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblBorders", "end");
+    int nInsideH = getXPathPosition(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblBorders", "insideH");
+    int nInsideV = getXPathPosition(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblBorders", "insideV");
+    CPPUNIT_ASSERT(nEnd < nInsideH);
+    CPPUNIT_ASSERT(nInsideH < nInsideV);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTablePosition, "table-position.docx")
 {
     sal_Int32 xCoordsFromOffice[] = { 2500, -1000, 0, 0 };
