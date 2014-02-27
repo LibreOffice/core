@@ -1178,6 +1178,7 @@ void DocxAttributeOutput::InitCollectedRunProperties()
         FSNS( XML_w14, XML_textFill ),
         FSNS( XML_w14, XML_scene3d ),
         FSNS( XML_w14, XML_props3d ),
+        FSNS( XML_w14, XML_ligatures ),
     };
 
     // postpone the output so that we can later [in EndParagraphProperties()]
@@ -1209,6 +1210,7 @@ const NameToId constNameToIdMapping[] =
     { OUString("textFill"),     FSNS( XML_w14, XML_textFill ) },
     { OUString("scene3d"),      FSNS( XML_w14, XML_scene3d ) },
     { OUString("props3d"),      FSNS( XML_w14, XML_props3d ) },
+    { OUString("ligatures"),    FSNS( XML_w14, XML_ligatures ) },
 
     { OUString("val"),          FSNS( XML_w14, XML_val ) },
     { OUString("rad"),          FSNS( XML_w14, XML_rad ) },
