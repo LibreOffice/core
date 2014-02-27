@@ -2633,6 +2633,8 @@ void ScChart2DataSequence::BuildDataCache()
                             case CELLTYPE_FORMULA:
                             {
                                 ScFormulaCell* pFCell = m_pDocument->GetFormulaCell(aAdr);
+                                if (!pFCell)
+                                    break;
                                 sal_uInt16 nErr = pFCell->GetErrCode();
                                 if (nErr)
                                     break;
