@@ -487,6 +487,18 @@ OUString TextEffectsHandler::getNumFormString(sal_Int32 nType)
     return OUString();
 }
 
+OUString TextEffectsHandler::getNumSpacingString(sal_Int32 nType)
+{
+    switch (nType)
+    {
+        case NS_ooxml::LN_ST_NumSpacing_default: return OUString("default");
+        case NS_ooxml::LN_ST_NumSpacing_proportional: return OUString("proportional");
+        case NS_ooxml::LN_ST_NumSpacing_tabular: return OUString("tabular");
+        default: break;
+    }
+    return OUString();
+}
+
 void TextEffectsHandler::convertElementIdToPropertyId(sal_Int32 aElementId)
 {
     switch(aElementId)
@@ -528,6 +540,8 @@ void TextEffectsHandler::convertElementIdToPropertyId(sal_Int32 aElementId)
             maElementName = "numForm";
             break;
         case NS_ooxml::LN_numSpacing_numSpacing:
+            maPropertyId = PROP_CHAR_NUMSPACING_TEXT_EFFECT;
+            maElementName = "numSpacing";
         case NS_ooxml::LN_stylisticSets_stylisticSets:
         case NS_ooxml::LN_cntxtAlts_cntxtAlts:
         default:
@@ -752,6 +766,12 @@ void TextEffectsHandler::lcl_attribute(Id aName, Value& aValue)
         case NS_ooxml::LN_CT_NumForm_val:
             {
                 uno::Any aAny = makeAny(getNumFormString(sal_Int32(aValue.getInt())));
+                mpGrabBagStack->appendElement("val", aAny);
+            }
+            break;
+        case NS_ooxml::LN_CT_NumSpacing_val:
+            {
+                uno::Any aAny = makeAny(getNumSpacingString(sal_Int32(aValue.getInt())));
                 mpGrabBagStack->appendElement("val", aAny);
             }
             break;
