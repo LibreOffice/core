@@ -852,16 +852,6 @@ const SfxItemSet& EditTextObjectImpl::GetParaAttribs(sal_Int32 nPara) const
     return rC.GetParaAttribs();
 }
 
-void EditTextObjectImpl::SetParaAttribs(sal_Int32 nPara, const SfxItemSet& rAttribs)
-{
-    if (nPara < 0 || static_cast<size_t>(nPara) >= aContents.size())
-        return;
-
-    ContentInfo& rC = aContents[nPara];
-    rC.GetParaAttribs().Set(rAttribs);
-    ClearPortionInfo();
-}
-
 bool EditTextObjectImpl::RemoveCharAttribs( sal_uInt16 _nWhich )
 {
     bool bChanged = false;

@@ -248,7 +248,6 @@ public:
     bool HasField( sal_Int32 nType = com::sun::star::text::textfield::Type::UNSPECIFIED ) const;
 
     const SfxItemSet& GetParaAttribs(sal_Int32 nPara) const;
-    void SetParaAttribs(sal_Int32 nPara, const SfxItemSet& rAttribs);
 
     void GetStyleSheet(sal_Int32 nPara, OUString& rName, SfxStyleFamily& eFamily) const;
     void SetStyleSheet(sal_Int32 nPara, const OUString& rName, const SfxStyleFamily& eFamily);

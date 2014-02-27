@@ -13,7 +13,6 @@ DocxSdrExport::setFlyFrameGraphic(bool)
 DocxSdrExport::setFrameBtLr(bool)
 EditEngine::IsIdleFormatterActive() const
 EditSelection::IsInvalid() const
-EditTextObjectImpl::SetParaAttribs(int, SfxItemSet const&)
 FileStream::FileStream()
 FileStream::close()
 FileStream::createTempFile(rtl::OString const&)
