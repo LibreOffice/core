@@ -19,9 +19,6 @@
  *
  *************************************************************/
 
-//#include "salgdi.hxx"
-#include "tools/debug.hxx"
-
 #include "ctfonts.hxx"
 
 // =======================================================================
@@ -62,7 +59,8 @@ private:
     CTLineRef mpCTLine;
 
     int mnCharCount;        // ==mnEndCharPos-mnMinCharPos
-    int mnTrailingSpaces;
+    int mnTrailingSpaceCount;
+    double mfTrailingSpaceWidth;    // preserves the width of stripped-off trailing space
 
     // to prevent overflows
     // font requests get size limited by downscaling huge fonts
@@ -85,7 +83,8 @@ CTLayout::CTLayout( const CTTextStyle* pTextStyle )
 ,   mpAttrString( NULL )
 ,   mpCTLine( NULL )
 ,   mnCharCount( 0 )
-,   mnTrailingSpaces( 0 )
+,   mnTrailingSpaceCount( 0 )
+,   mfTrailingSpaceWidth( 0.0 )
 ,   mfFontScale( pTextStyle->mfFontScale )
 ,   mfCachedWidth( -1 )
 ,   mnBaseAdv( 0 )
@@ -129,9 +128,10 @@ bool CTLayout::LayoutText( ImplLayoutArgs& rArgs )
     CFRelease( aCFText);
 
     // get info about trailing whitespace to prepare for text justification in AdjustLayout()
-    mnTrailingSpaces = 0;
-    for( int i = mnEndCharPos; --i >= mnMinCharPos; ++mnTrailingSpaces )
-        if( !IsSpacingGlyph( rArgs.mpStr[i] | GF_ISCHAR ))
+    mnTrailingSpaceCount = 0;
+    for( int i = mnEndCharPos; --i >= mnMinCharPos; ++mnTrailingSpaceCount )
+        if( !IsSpacingGlyph( rArgs.mpStr[i] | GF_ISCHAR )
+        &&  (rArgs.mpStr[i] != 0x00A0) )
             break;
     return true;
 }
@@ -143,8 +143,6 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     if( !mpCTLine)
         return;
 
-    const DynCoreTextSyms& rCT = DynCoreTextSyms::get();
-
     int nPixelWidth = rArgs.mnLayoutWidth;
     if( rArgs.mpDXArray )
     {
@@ -152,9 +150,11 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         // TODO: use all mpDXArray elements for layouting
         nPixelWidth = rArgs.mpDXArray[ mnCharCount-1 ];
     }
+    else if( !nPixelWidth ) // short-circuit if there is nothing to adjust
+        return;
 
     // short-circuit when justifying an all-whitespace string
-    if( mnTrailingSpaces >= mnCharCount)
+    if( mnTrailingSpaceCount >= mnCharCount)
     {
         mfCachedWidth = nPixelWidth / mfFontScale;
         return;
@@ -173,24 +173,26 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     // if the text to be justified has whitespace in it then
     // - Writer goes crazy with its HalfSpace magic
     // - CoreText handles spaces specially (in particular at the text end)
-    if( mnTrailingSpaces ) {
+    if( mnTrailingSpaceCount ) {
         int nTrailingSpaceWidth = 0;
         if( rArgs.mpDXArray) {
             const int nFullPixWidth = nPixelWidth;
-            nPixelWidth = rArgs.mpDXArray[ mnCharCount-1-mnTrailingSpaces ];
+            nPixelWidth = rArgs.mpDXArray[ mnCharCount-1-mnTrailingSpaceCount ];
             nTrailingSpaceWidth = nFullPixWidth - nPixelWidth;
+            mfTrailingSpaceWidth = nTrailingSpaceWidth;
         } else {
-            const double fTrailingSpaceWidth = rCT.LineGetTrailingWhitespaceWidth( mpCTLine );
-            nTrailingSpaceWidth = rint(fTrailingSpaceWidth);
+            if( mfTrailingSpaceWidth <= 0.0 )
+                mfTrailingSpaceWidth = CTLineGetTrailingWhitespaceWidth( mpCTLine );
+            nTrailingSpaceWidth = rint( mfTrailingSpaceWidth );
+            nPixelWidth -= nTrailingSpaceWidth;
         }
-        nPixelWidth -= nTrailingSpaceWidth;
         if( nPixelWidth <= 0 )
             return;
 
         // recreate the CoreText line layout without trailing spaces
         CFRelease( mpCTLine );
         CFStringRef aCFText = CFStringCreateWithCharactersNoCopy( NULL, rArgs.mpStr + mnMinCharPos,
-            mnCharCount - mnTrailingSpaces, kCFAllocatorNull );
+            mnCharCount - mnTrailingSpaceCount, kCFAllocatorNull );
         CFAttributedStringRef pAttrStr = CFAttributedStringCreate( NULL, aCFText, mpTextStyle->GetStyleDict() );
         mpCTLine = CTLineCreateWithAttributedString( pAttrStr );
         CFRelease( aCFText);
@@ -203,7 +205,7 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     }
 
     const double fAdjustedWidth = nPixelWidth / mfFontScale;
-    CTLineRef pNewCTLine = rCT.LineCreateJustifiedLine( mpCTLine, 1.0, fAdjustedWidth );
+    CTLineRef pNewCTLine = CTLineCreateJustifiedLine( mpCTLine, 1.0, fAdjustedWidth );
     if( !pNewCTLine ) { // CTLineCreateJustifiedLine can and does fail
         // handle failure by keeping the unjustified layout
         // TODO: a better solution such as
@@ -214,7 +216,7 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     }
     CFRelease( mpCTLine );
     mpCTLine = pNewCTLine;
-    mfCachedWidth = fAdjustedWidth;
+    mfCachedWidth = fAdjustedWidth + mfTrailingSpaceWidth;
 }
 
 // -----------------------------------------------------------------------
@@ -384,7 +386,12 @@ long CTLayout::FillDXArray( sal_Int32* pDXArray ) const
     if( pDXArray ) {
         // prepare the sub-pixel accurate logical-width array
         ::std::vector<float> aWidthVector( mnCharCount );
-        // handle each glyph run
+        if( mnTrailingSpaceCount && (mfTrailingSpaceWidth > 0.0) ) {
+            const double fOneWidth = mfTrailingSpaceWidth / mnTrailingSpaceCount;
+            for( int i = 1; i <= mnTrailingSpaceCount; ++i)
+                aWidthVector[ mnCharCount - i ] = fOneWidth;
+        }
+        // measure advances in each glyph run
         CFArrayRef aGlyphRuns = CTLineGetGlyphRuns( mpCTLine );
         const int nRunCount = CFArrayGetCount( aGlyphRuns );
         typedef std::vector<CGSize> CGSizeVector;
