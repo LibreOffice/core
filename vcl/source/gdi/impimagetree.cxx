@@ -318,19 +318,25 @@ void ImplImageTree::parseLinkFile(boost::shared_ptr< SvStream > pStream)
 {
     OString aLine;
     OUString aLink, aOriginal;
+    int nLineNo = 0;
     while ( pStream->ReadLine( aLine ) )
     {
-        sal_Int32 nIndex = 0;
+        ++nLineNo;
         if ( aLine.isEmpty() )
             continue;
+
+        sal_Int32 nIndex = 0;
         aLink = OStringToOUString( aLine.getToken(0, ' ', nIndex), RTL_TEXTENCODING_UTF8 );
         aOriginal = OStringToOUString( aLine.getToken(0, ' ', nIndex), RTL_TEXTENCODING_UTF8 );
-        if ( aLink.isEmpty() || aOriginal.isEmpty() )
+
+        // skip comments, or incomplete entries
+        if (aLink.isEmpty() || aLink[0] == '#' || aOriginal.isEmpty())
         {
-            SAL_INFO("vcl", "ImplImageTree::parseLinkFile: icon links.txt parse error. "
-                "Link is incomplete." );
+            if (aLink.isEmpty() || aOriginal.isEmpty())
+                SAL_WARN("vcl", "ImplImageTree::parseLinkFile: icon links.txt parse error, incomplete link at line " << nLineNo);
             continue;
         }
+
         m_linkHash[aLink] = aOriginal;
     }
 }
