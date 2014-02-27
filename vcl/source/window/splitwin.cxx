@@ -1758,7 +1758,7 @@ void SplitWindow::ImplDrawAutoHide( bool bInPaint )
                     pSVData->maCtrlData.mpSplitHPinImgList->InsertFromHorizontalBitmap
                         ( ResId( SV_RESID_BITMAP_SPLITHPIN, *pResMgr ), 4, &aNonAlphaMask );
                 }
-                }
+            }
             pImageList = pSVData->maCtrlData.mpSplitHPinImgList;
         }
         else
@@ -1775,7 +1775,10 @@ void SplitWindow::ImplDrawAutoHide( bool bInPaint )
                 }
             }
             pImageList = pSVData->maCtrlData.mpSplitVPinImgList;
-                }
+        }
+
+        if (!pImageList)
+            return;
 
         // Image ermitteln und zurueckgeben
         sal_uInt16 nId;
