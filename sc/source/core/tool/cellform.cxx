@@ -179,6 +179,8 @@ OUString ScCellFormat::GetString(
         case CELLTYPE_FORMULA:
         {
             ScFormulaCell* pFCell = rDoc.GetFormulaCell(rPos);
+            if (!pFCell)
+                return aString;
             if (bFormula)
             {
                 pFCell->GetFormula(aString);
