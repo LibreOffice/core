@@ -299,11 +299,9 @@ public:
 };
 
 /// Base object for 'Redlines' that are not of 'Ranged' type (like table row insert\delete)
-class SW_DLLPUBLIC SwExtraRedline
+class SW_DLLPUBLIC SwExtraRedline : private boost::noncopyable
 {
 public:
-    SwExtraRedline( );
-    SwExtraRedline( const SwExtraRedline& );
     virtual ~SwExtraRedline();
 };
 
@@ -311,48 +309,46 @@ public:
 class SW_DLLPUBLIC SwTableRowRedline : public SwExtraRedline
 {
 private:
-    SwRedlineData* pRedlineData;
-    const SwTableLine* pTableLine;
+    SwRedlineData m_aRedlineData;
+    const SwTableLine& m_rTableLine;
 
 public:
-    SwTableRowRedline( const SwRedlineData& rData, SwTableLine& aTableLine );
-    SwTableRowRedline( const SwTableRowRedline& );
+    SwTableRowRedline(const SwRedlineData& rData, const SwTableLine& rTableLine);
     virtual ~SwTableRowRedline();
 
     /** ExtraData gets copied, the pointer is therefor not taken over by
      *  the RedLineObject.*/
     void SetExtraData( const SwRedlineExtraData* pData )
-        { pRedlineData->SetExtraData( pData ); }
+        { m_aRedlineData.SetExtraData( pData ); }
     const SwRedlineExtraData* GetExtraData() const
-        { return pRedlineData->GetExtraData(); }
-    const SwTableLine* GetTableLine() const
-        { return pTableLine; }
+        { return m_aRedlineData.GetExtraData(); }
+    const SwTableLine& GetTableLine() const
+        { return m_rTableLine; }
     const SwRedlineData& GetRedlineData() const
-        { return *pRedlineData; }
+        { return m_aRedlineData; }
 };
 
 /// Redline that holds information about a table-cell that had some change
 class SW_DLLPUBLIC SwTableCellRedline : public SwExtraRedline
 {
 private:
-    SwRedlineData* pRedlineData;
-    const SwTableBox* pTableBox;
+    SwRedlineData m_aRedlineData;
+    const SwTableBox& m_rTableBox;
 
 public:
-    SwTableCellRedline( const SwRedlineData& rData, SwTableBox& aTableBox );
-    SwTableCellRedline( const SwTableCellRedline& );
+    SwTableCellRedline(const SwRedlineData& rData, const SwTableBox& rTableBox);
     virtual ~SwTableCellRedline();
 
     /** ExtraData gets copied, the pointer is therefor not taken over by
      *  the RedLineObject.*/
     void SetExtraData( const SwRedlineExtraData* pData )
-        { pRedlineData->SetExtraData( pData ); }
+        { m_aRedlineData.SetExtraData( pData ); }
     const SwRedlineExtraData* GetExtraData() const
-        { return pRedlineData->GetExtraData(); }
-    const SwTableBox* GetTableBox() const
-        { return pTableBox; }
+        { return m_aRedlineData.GetExtraData(); }
+    const SwTableBox& GetTableBox() const
+        { return m_rTableBox; }
     const SwRedlineData& GetRedlineData() const
-        { return *pRedlineData; }
+        { return m_aRedlineData; }
 };
 
 class SW_DLLPUBLIC SwRedlineHint : public SfxHint

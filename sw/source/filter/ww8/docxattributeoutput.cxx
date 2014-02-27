@@ -2642,7 +2642,8 @@ void DocxAttributeOutput::TableRowRedline( ww8::WW8TableNodeInfoInner::Pointer_t
     {
         SwExtraRedline* pExtraRedline = aExtraRedlineTbl.GetRedline(nCurRedlinePos);
         const SwTableRowRedline* pTableRowRedline = dynamic_cast<const SwTableRowRedline*>(pExtraRedline);
-        if (pTableRowRedline && pTableRowRedline->GetTableLine() == pTabLine)
+        const SwTableLine *pRedTabLine = pTableRowRedline ? &pTableRowRedline->GetTableLine() : NULL;
+        if (pRedTabLine == pTabLine)
         {
             // Redline for this table row
             const SwRedlineData& aRedlineData = pTableRowRedline->GetRedlineData();
@@ -2687,7 +2688,8 @@ void DocxAttributeOutput::TableCellRedline( ww8::WW8TableNodeInfoInner::Pointer_
     {
         SwExtraRedline* pExtraRedline = aExtraRedlineTbl.GetRedline(nCurRedlinePos);
         const SwTableCellRedline* pTableCellRedline = dynamic_cast<const SwTableCellRedline*>(pExtraRedline);
-        if (pTableCellRedline && pTableCellRedline->GetTableBox() == pTabBox)
+        const SwTableBox *pRedTabBox = pTableCellRedline ? &pTableCellRedline->GetTableBox() : NULL;
+        if (pRedTabBox == pTabBox)
         {
             // Redline for this table cell
             const SwRedlineData& aRedlineData = pTableCellRedline->GetRedlineData();

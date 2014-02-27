@@ -3981,29 +3981,14 @@ void SwExtraRedlineTbl::DeleteAndDestroyAll()
     DeleteAndDestroy(0, m_aExtraRedlines.size());
 }
 
-SwExtraRedline::SwExtraRedline( )
-{
-}
-
-SwExtraRedline::SwExtraRedline( const SwExtraRedline& rCpy )
-{
-    (void)rCpy;
-}
-
 SwExtraRedline::~SwExtraRedline()
 {
 }
 
-SwTableRowRedline::SwTableRowRedline( const SwRedlineData& rData, SwTableLine& aTableLine )
-: pRedlineData( new SwRedlineData( rData ))
+SwTableRowRedline::SwTableRowRedline(const SwRedlineData& rData, const SwTableLine& rTableLine)
+    : m_aRedlineData(rData)
+    , m_rTableLine(rTableLine)
 {
-    pTableLine = &aTableLine;
-}
-
-SwTableRowRedline::SwTableRowRedline( const SwTableRowRedline& rCpy )
-: SwExtraRedline( rCpy )
-{
-    pTableLine = rCpy.pTableLine;
 }
 
 SwTableRowRedline::~SwTableRowRedline()
@@ -4055,16 +4040,10 @@ bool SwDoc::AppendTableRowRedline( SwTableRowRedline* pNewRedl, bool bCallDelete
     return ( 0 != pNewRedl ) || bMerged;
 }
 
-SwTableCellRedline::SwTableCellRedline( const SwRedlineData& rData, SwTableBox& aTableBox )
-: pRedlineData( new SwRedlineData( rData ))
+SwTableCellRedline::SwTableCellRedline(const SwRedlineData& rData, const SwTableBox& rTableBox)
+    : m_aRedlineData(rData)
+    , m_rTableBox(rTableBox)
 {
-    pTableBox = &aTableBox;
-}
-
-SwTableCellRedline::SwTableCellRedline( const SwTableCellRedline& rCpy )
-: SwExtraRedline( rCpy )
-{
-    pTableBox = rCpy.pTableBox;
 }
 
 SwTableCellRedline::~SwTableCellRedline()
