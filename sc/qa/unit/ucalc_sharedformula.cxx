@@ -164,6 +164,7 @@ void Test::testSharedFormulas()
     CPPUNIT_ASSERT_EQUAL(aCell.mpString->getString(), m_pDoc->GetString(aPos));
     aPos.SetRow(16);
     pFC = m_pDoc->GetFormulaCell(aPos);
+    CPPUNIT_ASSERT(pFC);
     // B17:B18 should be shared.
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(16), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedLength());
