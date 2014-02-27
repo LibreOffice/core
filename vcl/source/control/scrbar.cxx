@@ -29,8 +29,6 @@
 #include "rtl/string.hxx"
 #include "tools/rc.h"
 
-
-
 /*  #i77549#
     HACK: for scrollbars in case of thumb rect, page up and page down rect we
     abuse the HitTestNativeControl interface. All theming engines but OS X
@@ -49,8 +47,6 @@
 */
 
 #include "thumbpos.hxx"
-
-
 
 #define SCRBAR_DRAW_BTN1            ((sal_uInt16)0x0001)
 #define SCRBAR_DRAW_BTN2            ((sal_uInt16)0x0002)
@@ -114,7 +110,6 @@ void ScrollBar::ImplInit( Window* pParent, WinBits nStyle )
     SetBackground();
 }
 
-
 void ScrollBar::ImplInitStyle( WinBits nStyle )
 {
     if ( nStyle & WB_DRAG )
@@ -123,13 +118,11 @@ void ScrollBar::ImplInitStyle( WinBits nStyle )
         mbFullDrag = (GetSettings().GetStyleSettings().GetDragFullOptions() & DRAGFULL_OPTION_SCROLL) != 0;
 }
 
-
 ScrollBar::ScrollBar( Window* pParent, WinBits nStyle ) :
     Control( WINDOW_SCROLLBAR )
 {
     ImplInit( pParent, nStyle );
 }
-
 
 ScrollBar::ScrollBar( Window* pParent, const ResId& rResId ) :
     Control( WINDOW_SCROLLBAR )
@@ -143,12 +136,10 @@ ScrollBar::ScrollBar( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
-
 ScrollBar::~ScrollBar()
 {
     delete mpData;
 }
-
 
 void ScrollBar::ImplLoadRes( const ResId& rResId )
 {
@@ -167,7 +158,6 @@ void ScrollBar::ImplLoadRes( const ResId& rResId )
     SetVisibleSize( nVisibleSize );
     SetThumbPos( nThumbPos );
 }
-
 
 void ScrollBar::ImplUpdateRects( bool bUpdate )
 {
@@ -270,7 +260,6 @@ void ScrollBar::ImplUpdateRects( bool bUpdate )
     }
 }
 
-
 long ScrollBar::ImplCalcThumbPos( long nPixPos )
 {
     // Calculate position
@@ -280,7 +269,6 @@ long ScrollBar::ImplCalcThumbPos( long nPixPos )
     nCalcThumbPos += mnMinRange;
     return nCalcThumbPos;
 }
-
 
 long ScrollBar::ImplCalcThumbPosPix( long nPos )
 {
@@ -300,7 +288,6 @@ long ScrollBar::ImplCalcThumbPosPix( long nPos )
 
     return nCalcThumbPos;
 }
-
 
 void ScrollBar::ImplCalc( bool bUpdate )
 {
@@ -491,7 +478,6 @@ void ScrollBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& /* rSiz
 
     mbCalcSize = true;
 }
-
 
 bool ScrollBar::ImplDrawNative( sal_uInt16 nDrawFlags )
 {
@@ -769,7 +755,6 @@ void ScrollBar::ImplDraw( sal_uInt16 nDrawFlags, OutputDevice* pOutDev )
     }
 }
 
-
 long ScrollBar::ImplScroll( long nNewPos, bool bCallEndScroll )
 {
     long nOldPos = mnThumbPos;
@@ -785,7 +770,6 @@ long ScrollBar::ImplScroll( long nNewPos, bool bCallEndScroll )
     }
     return nDelta;
 }
-
 
 long ScrollBar::ImplDoAction( bool bCallEndScroll )
 {
@@ -814,7 +798,6 @@ long ScrollBar::ImplDoAction( bool bCallEndScroll )
 
     return nDelta;
 }
-
 
 void ScrollBar::ImplDoMouseAction( const Point& rMousePos, bool bCallAction )
 {
@@ -1045,7 +1028,6 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
         }
     }
 }
-
 
 void ScrollBar::Tracking( const TrackingEvent& rTEvt )
 {
@@ -1346,18 +1328,15 @@ bool ScrollBar::PreNotify( NotifyEvent& rNEvt )
     return Control::PreNotify(rNEvt);
 }
 
-
 void ScrollBar::Scroll()
 {
     ImplCallEventListenersAndHandler( VCLEVENT_SCROLLBAR_SCROLL, maScrollHdl, this );
 }
 
-
 void ScrollBar::EndScroll()
 {
     ImplCallEventListenersAndHandler( VCLEVENT_SCROLLBAR_ENDSCROLL, maEndScrollHdl, this );
 }
-
 
 long ScrollBar::DoScroll( long nNewPos )
 {
@@ -1370,7 +1349,6 @@ long ScrollBar::DoScroll( long nNewPos )
     meScrollType = SCROLL_DONTKNOW;
     return nDelta;
 }
-
 
 long ScrollBar::DoScrollAction( ScrollType eScrollType )
 {

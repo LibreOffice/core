@@ -256,6 +256,7 @@ struct TYPE2OP
     };
 };
 
+
 struct CffGlobal
 {
     explicit CffGlobal();
@@ -283,6 +284,7 @@ struct CffGlobal
     int     mnFullNameSID;
     int     mnFamilyNameSID;
 };
+
 
 struct CffLocal
 {
@@ -315,6 +317,7 @@ struct CffLocal
     bool        mbForceBold;
 };
 
+
 class SubsetterContext
 {
 public:
@@ -328,6 +331,7 @@ public:
 
 SubsetterContext::~SubsetterContext( void)
 {}
+
 
 class CffSubsetterContext
 :   public SubsetterContext
@@ -519,7 +523,7 @@ void CffSubsetterContext::addHints( bool bVerticalHints)
 
     // copy the remaining values to the hint arrays
     // assert( (mnStackIdx & 1) == 0); // depends on called subrs
-    if( mnStackIdx & 1) --mnStackIdx;
+    if( mnStackIdx & 1) --mnStackIdx;//#######
     // TODO: if( !bSubr) assert( mnStackIdx >= 2);
 
     assert( (mnHintSize + mnStackIdx) <= 2*NMAXHINTS);
@@ -1278,7 +1282,7 @@ int CffSubsetterContext::convert2Type1Ops( CffLocal* pCffLocal, const U8* const 
 mbSawError = false;
 mbNeedClose = false;
 mbIgnoreHints = false;
-mnHintSize=mnHorzHintSize=mnStackIdx=0; maCharWidth=-1;
+mnHintSize=mnHorzHintSize=mnStackIdx=0; maCharWidth=-1;//#######
 mnCntrMask = 0;
     while( mpReadPtr < mpReadEnd)
         convertOneTypeOp();
@@ -1451,6 +1455,7 @@ void CffSubsetterContext::seekIndexEnd( int nIndexBase)
     assert( nEndOfs >= 0);
     assert( mpReadEnd <= mpBaseEnd);
 }
+
 
 // initialize FONTDICT specific values
 CffLocal::CffLocal( void)

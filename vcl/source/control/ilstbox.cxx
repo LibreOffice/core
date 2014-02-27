@@ -478,6 +478,7 @@ sal_uInt16 ImplEntryList::FindFirstSelectable( sal_uInt16 nPos, bool bForward /*
     return LISTBOX_ENTRY_NOTFOUND;
 }
 
+
 ImplListBoxWindow::ImplListBoxWindow( Window* pParent, WinBits nWinStyle ) :
     Control( pParent, 0 ),
     maQuickSelectionEngine( *this )

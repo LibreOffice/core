@@ -26,14 +26,10 @@
 
 #include <controldata.hxx>
 
-
-
 #define GROUP_BORDER            12
 #define GROUP_TEXT_BORDER       2
 
 #define GROUP_VIEW_STYLE        (WB_3DLOOK | WB_NOLABEL)
-
-
 
 void GroupBox::ImplInit( Window* pParent, WinBits nStyle )
 {
@@ -43,8 +39,6 @@ void GroupBox::ImplInit( Window* pParent, WinBits nStyle )
     ImplInitSettings( true, true, true );
 }
 
-
-
 WinBits GroupBox::ImplInitStyle( WinBits nStyle )
 {
     if ( !(nStyle & WB_NOGROUP) )
@@ -52,20 +46,15 @@ WinBits GroupBox::ImplInitStyle( WinBits nStyle )
     return nStyle;
 }
 
-
-
 const Font& GroupBox::GetCanonicalFont( const StyleSettings& _rStyle ) const
 {
     return _rStyle.GetGroupFont();
 }
 
-
 const Color& GroupBox::GetCanonicalTextColor( const StyleSettings& _rStyle ) const
 {
     return _rStyle.GetGroupTextColor();
 }
-
-
 
 void GroupBox::ImplInitSettings( bool bFont,
                                  bool bForeground, bool bBackground )
@@ -98,15 +87,11 @@ void GroupBox::ImplInitSettings( bool bFont,
     }
 }
 
-
-
 GroupBox::GroupBox( Window* pParent, WinBits nStyle ) :
     Control( WINDOW_GROUPBOX )
 {
     ImplInit( pParent, nStyle );
 }
-
-
 
 GroupBox::GroupBox( Window* pParent, const ResId& rResId ) :
     Control( WINDOW_GROUPBOX )
@@ -119,8 +104,6 @@ GroupBox::GroupBox( Window* pParent, const ResId& rResId ) :
     if ( !(nStyle & WB_HIDE) )
         Show();
 }
-
-
 
 void GroupBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                          const Point& rPos, const Size& rSize, bool bLayout )
@@ -212,22 +195,16 @@ void GroupBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
     DrawControlText( *pDev, aRect, aText, nTextStyle, pVector, pDisplayText );
 }
 
-
-
 void GroupBox::FillLayoutData() const
 {
     mpControlData->mpLayoutData = new vcl::ControlLayoutData();
     const_cast<GroupBox*>(this)->   ImplDraw( const_cast<GroupBox*>(this), 0, Point(), GetOutputSizePixel(), true );
 }
 
-
-
 void GroupBox::Paint( const Rectangle& )
 {
     ImplDraw( this, 0, Point(), GetOutputSizePixel() );
 }
-
-
 
 void GroupBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
                      sal_uLong nFlags )
@@ -249,15 +226,11 @@ void GroupBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     pDev->Pop();
 }
 
-
-
 void GroupBox::Resize()
 {
     Control::Resize();
     Invalidate();
 }
-
-
 
 void GroupBox::StateChanged( StateChangedType nType )
 {
@@ -294,8 +267,6 @@ void GroupBox::StateChanged( StateChangedType nType )
         Invalidate();
     }
 }
-
-
 
 void GroupBox::DataChanged( const DataChangedEvent& rDCEvt )
 {

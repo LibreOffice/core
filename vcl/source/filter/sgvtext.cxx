@@ -179,7 +179,7 @@ short hPoint2Sgf(short a)
 // Start of AbsRead.Pas
 
 // Function GetTopToBaseLine()  Function GetBaseLineToBtm()
-
+//
 // Calculate distance from ascender of line to baseline or from baseline to
 // descender. All in SGF-units.
 
@@ -191,7 +191,7 @@ sal_uInt16 GetTopToBaseLine(sal_uInt16 MaxGrad)
 }
 
 // Function GetTextChar()   Function GetTextCharConv()
-
+//
 // Reads a character from textbuffer, in doing so escape sequences
 // are evaluated and accordingly the input/output parameter AktAtr is set.
 // Index is incremented accordingly.
@@ -200,11 +200,12 @@ sal_uInt16 GetTopToBaseLine(sal_uInt16 MaxGrad)
 // Otherwise the hyphenation does not work. If the constand NoTrenn
 // is used instaed, no hyphenation is done. To the contrary then
 // constant DoTrenn triggers hyphenation where a soft-break is present.
-
+//
 // Soft separators are converted to a minus sign.
 // On top GetTextCharConv() converts HardSpace and AbsatzEnde
 // in spaces, including HardTrenner in minus signs. TextEnde is
 // always returned as Char(0).
+
 
 UCHAR ConvertTextChar(UCHAR c)
 {
@@ -407,9 +408,9 @@ UCHAR GetTextCharConv(UCHAR* TBuf, sal_uInt16& Index,
 
 
 // Function GetLineFeed()
-
+//
 // Required line spacing in SGF-Units. ChrVPos is taken into account.
-
+// ======================================================================
 sal_uInt16 GetLineFeed(UCHAR* TBuf, sal_uInt16 Index, ObjTextType Atr0, ObjTextType AktAtr,
                    sal_uInt16 nChar, sal_uInt16& LF, sal_uInt16& MaxGrad)
 {
