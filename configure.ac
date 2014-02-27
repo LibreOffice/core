@@ -11371,11 +11371,11 @@ dnl ===================================================================
 AC_MSG_CHECKING([whether to include third-party fonts])
 if test "$with_fonts" != "no"; then
     AC_MSG_RESULT([yes])
-    WITH_FONTS=YES
+    WITH_FONTS=TRUE
     BUILD_TYPE="$BUILD_TYPE MORE_FONTS"
 else
     AC_MSG_RESULT([no])
-    WITH_FONTS=NO
+    WITH_FONTS=
     SCPDEFS="$SCPDEFS -DWITHOUT_FONTS"
     if test "$test_fontconfig" = "yes"; then
         AC_PATH_PROG([FCMATCH], [fc-match])
@@ -11402,9 +11402,10 @@ dnl ===================================================================
 AC_MSG_CHECKING([whether to include PPDs])
 if test "$with_ppds" != "no"; then
     AC_MSG_RESULT([yes])
+    WITHOUT_PPDS=
 else
     AC_MSG_RESULT([no])
-    WITHOUT_PPDS=YES
+    WITHOUT_PPDS=TRUE
     SCPDEFS="$SCPDEFS -DWITHOUT_PPDS"
 fi
 AC_SUBST(WITHOUT_PPDS)
