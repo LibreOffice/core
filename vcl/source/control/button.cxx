@@ -605,7 +605,7 @@ void PushButton::ImplInitPushButtonData()
     mbInUserDraw    = false;
 }
 
-<<<namespace
+namespace
 {
     Window* getPreviousSibling(Window *pParent)
     {
