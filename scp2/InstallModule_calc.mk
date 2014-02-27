@@ -15,7 +15,6 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/calc,\
 	ENABLE_LPSOLVE \
 	ENABLE_MACOSX_MACLIKE_APP_STRUCTURE \
 	ENABLE_MACOSX_SANDBOX \
-	SYSTEM_LPSOLVE \
 ))
 
 $(eval $(call gb_InstallModule_add_templates,scp2/calc,\

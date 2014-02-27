@@ -1859,6 +1859,7 @@ endif # ANDROID
 endif # SYSTEM_LCMS2
 
 
+ifneq ($(ENABLE_LPSOLVE),)
 ifneq ($(SYSTEM_LPSOLVE),)
 
 define gb_LinkTarget__use_lpsolve
@@ -1889,7 +1890,12 @@ $(call gb_LinkTarget_set_include,$(1),\
 
 endef
 
+$(eval $(call gb_Helper_register_packages_for_install,ooo,\
+	lpsolve \
+))
+
 endif # SYSTEM_LPSOLVE
+endif # ENABLE_LPSOLVE
 
 ifeq ($(ENABLE_GIO),TRUE)
 
