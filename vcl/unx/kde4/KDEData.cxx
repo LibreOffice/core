@@ -17,9 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#define Region QtXRegion
+
+#include <QStyle>
+#include <kapplication.h>
+
+#undef Region
+
 #include "KDEData.hxx"
 
 #include "KDEXLib.hxx"
+
 
 KDEData::~KDEData()
 {
@@ -39,6 +47,15 @@ void KDEData::initNWF()
     pSVData->maNWFData.mbDockingAreaSeparateTB = true;
     // no borders for menu, theming does that
     pSVData->maNWFData.mbFlatMenu = true;
+
+    // Styled menus need additional space
+    QStyle *style = kapp->style();
+    pSVData->maNWFData.mnMenuFormatBorderX =
+       style->pixelMetric( QStyle::PM_MenuPanelWidth ) +
+       style->pixelMetric( QStyle::PM_MenuHMargin );
+    pSVData->maNWFData.mnMenuFormatBorderY =
+       style->pixelMetric( QStyle::PM_MenuPanelWidth ) +
+       style->pixelMetric( QStyle::PM_MenuVMargin );
 }
 
 void KDEData::deInitNWF()
