@@ -10109,13 +10109,13 @@ dnl ===================================================================
 
 SPLIT_APP_MODULES=""
 if test "$enable_split_app_modules" = "yes"; then
-    SPLIT_APP_MODULES="YES"
+    SPLIT_APP_MODULES="TRUE"
 fi
 AC_SUBST(SPLIT_APP_MODULES)
 
 SPLIT_OPT_FEATURES=""
 if test "$enable_split_opt_features" = "yes"; then
-    SPLIT_OPT_FEATURES="YES"
+    SPLIT_OPT_FEATURES="TRUE"
 fi
 AC_SUBST(SPLIT_OPT_FEATURES)
 
@@ -10286,7 +10286,7 @@ if test $_os != iOS -a $_os != Android -a "x$enable_opencl" != "xno"; then
         AC_MSG_RESULT([disabled on OS X 10.5])
     else
         AC_MSG_RESULT([yes])
-        ENABLE_OPENCL=YES
+        ENABLE_OPENCL=TRUE
         AC_DEFINE(HAVE_FEATURE_OPENCL)
     fi
 else

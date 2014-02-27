@@ -88,7 +88,7 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
     # it is not a real extension; it used to be in the main package...
     merge_flists gid_Module_Optional_Extensions_Script_Provider_For_JS $FILELISTSDIR/common_list.txt
 
-    if test "$SPLIT_APP_MODULES" = "YES" ; then
+    if test "$SPLIT_APP_MODULES" = "TRUE" ; then
         merge_flists gid_Module_Prg_Base_Bin      $FILELISTSDIR/base_list.txt
         merge_flists gid_Module_Prg_Calc_Bin      $FILELISTSDIR/calc_list.txt
         merge_flists gid_Module_Prg_Draw_Bin      $FILELISTSDIR/draw_list.txt
@@ -125,7 +125,7 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
         merge_flists gid_Module_Optional_OGLTrans $FILELISTSDIR/common_list.txt
     fi
 
-    if test "$SPLIT_APP_MODULES" = "YES" -a "$OOO_VENDOR" = "SUSE" ; then
+    if test "$SPLIT_APP_MODULES" = "TRUE" -a "$OOO_VENDOR" = "SUSE" ; then
         # move the prebuilt icons into a hacky temporary package
         # we want to repack them into a noarch package as soon as possible
         # without the build dependency on the huge devel package
@@ -134,7 +134,7 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
         merge_flists gid_Module_Root_Files_Images $FILELISTSDIR/common_list.txt
     fi
 
-    if test "$SPLIT_OPT_FEATURES" = "YES" ; then
+    if test "$SPLIT_OPT_FEATURES" = "TRUE" ; then
         if test "z$OOO_VENDOR" = "zMandriva" ; then
             merge_flists gid_Module_Optional_Grfflt            $FILELISTSDIR/draw_list.txt
             merge_flists gid_Module_Optional_Headless          $FILELISTSDIR/common_list.txt
@@ -165,7 +165,7 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
     # lang packs
     for lang in `echo $WITH_LANG_LIST | sed -e s/-/_/g`; do
         lang_lists=
-        if test "$OOO_VENDOR" = "Mandriva" -o \( "$OOO_VENDOR" = "SUSE" -a "$SPLIT_APP_MODULES" = "YES" \) ; then
+        if test "$OOO_VENDOR" = "Mandriva" -o \( "$OOO_VENDOR" = "SUSE" -a "$SPLIT_APP_MODULES" = "TRUE" \) ; then
             test -f gid_Module_Langpack_Basis_$lang     && lang_lists="$lang_lists gid_Module_Langpack_Basis_$lang" || :
             test -f gid_Module_Langpack_Brand_$lang     && lang_lists="$lang_lists gid_Module_Langpack_Brand_$lang" || :
             test -f gid_Module_Langpack_Resource_$lang  && lang_lists="$lang_lists gid_Module_Langpack_Resource_$lang" || :
@@ -196,7 +196,7 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
         fi
         # some help files are in _Langpack_{Writer,Impress,...}_<lang>
         # move them from -l10n to -help
-        if test "$OOO_VENDOR" = "Mandriva" -o \( "$OOO_VENDOR" = "SUSE" -a "$SPLIT_APP_MODULES" = "YES" \) ; then
+        if test "$OOO_VENDOR" = "Mandriva" -o \( "$OOO_VENDOR" = "SUSE" -a "$SPLIT_APP_MODULES" = "TRUE" \) ; then
             for lang in `echo $WITH_LANG_LIST | sed -e s/-/_/g`; do
                 test -f $FILELISTSDIR/help_${lang}_list.txt || continue;
                 mv_file_between_flists $FILELISTSDIR/help_${lang}_list.txt $FILELISTSDIR/lang_${lang}_list.txt $INSTALLDIR/help/.*
@@ -205,7 +205,7 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
         fi
     done
 
-    if test -f $FILELISTSDIR/lang_en_US_list.txt -a "$OOO_VENDOR" = "SUSE" -a "$SPLIT_APP_MODULES" != "YES" ; then
+    if test -f $FILELISTSDIR/lang_en_US_list.txt -a "$OOO_VENDOR" = "SUSE" -a "$SPLIT_APP_MODULES" != "TRUE" ; then
         cat $FILELISTSDIR/lang_en_US_list.txt >>$FILELISTSDIR/common_list.txt
         rm $FILELISTSDIR/lang_en_US_list.txt
     fi
@@ -263,7 +263,7 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
     test -f $DESTDIR/gid_Module_Optional_PostgresqlSdbc && cp $DESTDIR/gid_Module_Optional_PostgresqlSdbc postgresql_list.txt || :
 
     # mailmerge
-    if test "$SPLIT_OPT_FEATURES" = "YES" ; then
+    if test "$SPLIT_OPT_FEATURES" = "TRUE" ; then
         if test "z$OOO_VENDOR" = "zMandriva" ; then
             flist=pyuno_list.txt
         else
