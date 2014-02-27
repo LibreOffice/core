@@ -90,6 +90,7 @@
 #include <svx/dialogs.hrc>
 #include <mailmergewizard.hxx>
 #include <mailconfigpage.hxx>
+#include <uiborder.hxx>
 
 using namespace ::com::sun::star;
 
@@ -846,6 +847,23 @@ AbstractSwAutoFormatDlg * SwAbstractDialogFactory_Impl::CreateSwAutoFormatDlg(Wi
 {
     SwAutoFormatDlg* pDlg = new SwAutoFormatDlg(pParent, pShell, bSetAutoFmt, pSelFmt);
     return new AbstractSwAutoFormatDlg_Impl(pDlg);
+}
+
+SfxAbstractDialog * SwAbstractDialogFactory_Impl::CreateSwBorderDlg(Window* pParent, SfxItemSet& rSet, sal_uInt16 nType, int nResId )
+{
+    SfxModalDialog* pDlg=NULL;
+    switch ( nResId )
+    {
+        case RC_DLG_SWBORDERDLG :
+            pDlg = new SwBorderDlg( pParent, rSet, nType );
+            break;
+        default:
+            break;
+    }
+
+    if ( pDlg )
+        return new SwAbstractSfxDialog_Impl( pDlg );
+    return 0;
 }
 
 SfxAbstractDialog* SwAbstractDialogFactory_Impl::CreateSwWrapDlg ( Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, sal_Bool bDrawMode, int nResId )
