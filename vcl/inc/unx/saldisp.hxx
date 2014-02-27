@@ -299,9 +299,9 @@ public:
     virtual        ~SalDisplay();
 
     void            Init();
-    void            PrintInfo() const;
 
 #ifdef DBG_UTIL
+    void            PrintInfo() const;
     void            DbgPrintDisplayEvent(const char *pComment, XEvent *pEvent) const;
 #endif
 

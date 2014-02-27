@@ -2150,7 +2150,6 @@ void SalDisplay::DbgPrintDisplayEvent(const char *pComment, XEvent *pEvent) cons
                  pEvent->xany.send_event,
                  pEvent->xany.window );
 }
-#endif
 
 void SalDisplay::PrintInfo() const
 {
@@ -2193,6 +2192,7 @@ void SalDisplay::PrintInfo() const
             << " 0x" << GetVisual(m_nXDefaultScreen).green_mask
             << " 0x" << GetVisual(m_nXDefaultScreen).blue_mask);
 }
+#endif
 
 void SalDisplay::addXineramaScreenUnique( int i, long i_nX, long i_nY, long i_nWidth, long i_nHeight )
 {
