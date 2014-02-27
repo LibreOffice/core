@@ -1554,6 +1554,9 @@ void Test::testNestedTable()
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Nom: John Doe"), xPara->getString());
+
+    // \sect at the end resulted in spurious page break
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
