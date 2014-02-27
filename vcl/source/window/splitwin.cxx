@@ -2703,6 +2703,10 @@ void SplitWindow::RemoveItem( sal_uInt16 nId, bool bHide )
     // Set suchen
     sal_uInt16          nPos;
     ImplSplitSet*    pSet    = ImplFindItem( mpMainSet, nId, nPos );
+
+    if (!pSet)
+        return;
+
     ImplSplitItem*   pItem   = &(pSet->mpItems[nPos]);
     Window*         pWindow = pItem->mpWindow;
     Window*         pOrgParent = pItem->mpOrgParent;
@@ -2765,22 +2769,14 @@ void SplitWindow::Clear()
 void SplitWindow::SplitItem( sal_uInt16 nId, long nNewSize,
                              bool bPropSmall, bool bPropGreat )
 {
-    sal_uInt16          nItems;
-    sal_uInt16          nPos;
-    sal_uInt16          nMin;
-    sal_uInt16          nMax;
-    sal_uInt16          i;
-    sal_uInt16          n;
-    long            nDelta;
-    long            nTempDelta;
+    sal_uInt16      nPos;
     ImplSplitSet*   pSet = ImplFindItem( mpBaseSet, nId, nPos );
-    ImplSplitItem*  pItems;
 
-    if ( !pSet )
+    if (!pSet)
         return;
 
-    nItems = pSet->mnItems;
-    pItems = pSet->mpItems;
+    sal_uInt16 nItems = pSet->mnItems;
+    ImplSplitItem*  pItems = pSet->mpItems;
 
     // When there is an explicit minimum or maximum size then move nNewSize
     // into that range (when it is not yet already in it.)
@@ -2792,14 +2788,14 @@ void SplitWindow::SplitItem( sal_uInt16 nId, long nNewSize,
         return;
     }
 
-    nDelta = nNewSize-pItems[nPos].mnPixSize;
+    long nDelta = nNewSize-pItems[nPos].mnPixSize;
     if ( !nDelta )
         return;
 
     // Bereich berechnen, der beim Splitten betroffen sein kann
-    nMin = 0;
-    nMax = nItems;
-    for ( i = 0; i < nItems; i++ )
+    sal_uInt16 nMin = 0;
+    sal_uInt16 nMax = nItems;
+    for (sal_uInt16 i = 0; i < nItems; ++i)
     {
         if ( pItems[i].mbFixed )
         {
@@ -2849,6 +2845,7 @@ void SplitWindow::SplitItem( sal_uInt16 nId, long nNewSize,
         bPropGreat = bTemp;
     }
 
+    sal_uInt16          n;
     // Jetzt die Fenster splitten
     if ( nDelta < 0 )
     {
@@ -2856,7 +2853,7 @@ void SplitWindow::SplitItem( sal_uInt16 nId, long nNewSize,
         {
             if ( bPropGreat )
             {
-                nTempDelta = nDelta;
+                long nTempDelta = nDelta;
                 do
                 {
                     n = nPos+1;
@@ -2925,7 +2922,7 @@ void SplitWindow::SplitItem( sal_uInt16 nId, long nNewSize,
         {
             if ( bPropGreat )
             {
-                nTempDelta = nDelta;
+                long nTempDelta = nDelta;
                 do
                 {
                     n = nPos+1;
