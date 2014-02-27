@@ -950,7 +950,7 @@ bool ScConditionEntry::IsError( const ScAddress& rPos ) const
         case CELLTYPE_FORMULA:
         {
             ScFormulaCell* pFormulaCell = const_cast<ScFormulaCell*>(mpDoc->GetFormulaCell(rPos));
-            if(pFormulaCell->GetErrCode())
+            if (pFormulaCell && pFormulaCell->GetErrCode())
                 return true;
         }
         case CELLTYPE_STRING:
