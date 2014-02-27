@@ -6181,7 +6181,7 @@
       </define>
       <define name="ligatures">
         <element name="ligatures">
-          <empty/>
+          <ref name="CT_Ligatures"/>
         </element>
       </define>
       <define name="numForm">
