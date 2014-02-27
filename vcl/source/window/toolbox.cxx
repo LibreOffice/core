@@ -2694,7 +2694,6 @@ void ToolBox::ImplFormat( bool bResize )
 
         // store the new calculated item rects
         maPaintRect = aEmptyRect;
-        Rectangle aVisibleRect(Point(0, 0), GetOutputSizePixel());
         it = mpData->m_aItems.begin();
         while ( it != mpData->m_aItems.end() )
         {
