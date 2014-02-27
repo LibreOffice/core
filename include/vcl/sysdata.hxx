@@ -68,6 +68,30 @@ struct SystemEnvData
     long                aShellWindow;   // the window of the frame's shell
     void*               pShellWidget;   // the frame's shell widget
 #endif
+
+    SystemEnvData()
+        : nSize(0)
+#if defined( WNT )
+        , hWnd(0)
+#elif defined( MACOSX )
+        , mpNSView(NULL)
+#elif defined( ANDROID )
+#elif defined( IOS )
+#elif defined( UNX )
+        , pDisplay(NULL)
+        , aWindow(0)
+        , pSalFrame(NULL)
+        , pWidget(NULL)
+        , pVisual(NULL)
+        , nScreen(0)
+        , nDepth(0)
+        , aColormap(0)
+        , pAppContext(NULL)
+        , aShellWindow(0)
+        , pShellWidget(NULL)
+#endif
+    {
+    }
 };
 
 struct SystemParentData
