@@ -1757,14 +1757,14 @@ void PrintFontManager::hasVerticalSubstitutions( fontID nFontID,
     const sal_Unicode* pCharacters, int nCharacters, bool* pHasSubst ) const
 {
     PrintFont* pFont = getFont( nFontID );
-    if( pFont->m_nAscend == 0 && pFont->m_nDescend == 0 )
+    if (pFont && pFont->m_nAscend == 0 && pFont->m_nDescend == 0)
     {
         // might be a truetype font not yet analyzed
         if( pFont->m_eType == fonttype::TrueType )
             analyzeTrueTypeFile( pFont );
     }
 
-    if( ! pFont->m_bHaveVerticalSubstitutedGlyphs )
+    if (!pFont || !pFont->m_bHaveVerticalSubstitutedGlyphs)
         memset( pHasSubst, 0, sizeof(bool)*nCharacters );
     else
     {
