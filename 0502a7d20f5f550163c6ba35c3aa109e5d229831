@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a961159_cf80618e",
+        "filename": "include/comphelper/configuration.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2014-02-27T16:19:22Z",
+      "side": 1,
+      "message": "This breaks -- and needs fixing. see below: this seems to happen more often",
+      "range": {
+        "startLine": 174,
+        "startChar": 0,
+        "endLine": 174,
+        "endChar": 1
+      },
+      "revId": "0502a7d20f5f550163c6ba35c3aa109e5d229831",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
