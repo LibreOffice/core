@@ -38,10 +38,10 @@ class SwUndoDelete;
 class SwUndoRedline : public SwUndo, public SwUndRng
 {
 protected:
-    SwRedlineData* pRedlData;
-    SwRedlineSaveDatas* pRedlSaveData;
-    SwUndoId nUserId;
-    sal_Bool bHiddenRedlines;
+    SwRedlineData* mpRedlData;
+    SwRedlineSaveDatas* mpRedlSaveData;
+    SwUndoId mnUserId;
+    sal_Bool mbHiddenRedlines;
 
     virtual void UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam);
     virtual void RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam);
@@ -54,7 +54,7 @@ public:
     virtual void UndoImpl( ::sw::UndoRedoContext & );
     virtual void RedoImpl( ::sw::UndoRedoContext & );
 
-    SwUndoId GetUserId() const { return nUserId; }
+    SwUndoId GetUserId() const { return mnUserId; }
     sal_uInt16 GetRedlSaveCount() const;
 };
 
