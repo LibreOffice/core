@@ -624,7 +624,7 @@ Reference<XEventListener> EventAttacherImpl::attachListenerForTarget(
     else
         nIndex++;
 
-    OUString aListenerName = (aListenerType[nIndex] == 'X') ? aListenerType.copy(nIndex+1) : aListenerType;
+    OUString aListenerName = (!aListenerType.isEmpty() && aListenerType[nIndex] == 'X') ? aListenerType.copy(nIndex+1) : aListenerType;
     OUString aAddListenerName = "add" + aListenerName;
 
     // Send Methods to the correct addListener-Method
