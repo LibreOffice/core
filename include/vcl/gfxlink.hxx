@@ -129,7 +129,6 @@ private:
     sal_uInt32          mnBufSize;
     sal_uInt32          mnUserId;
     ImpGfxLink*         mpImpData;
-    sal_uLong               mnExtra2;
 
     SAL_DLLPRIVATE void ImplCopy( const GfxLink& rGfxLink );
 
