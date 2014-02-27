@@ -31,10 +31,12 @@
 #undef Region
 
 #include "KDESalGraphics.hxx"
+#include "KDESalInstance.hxx"
 
 #include <vcl/settings.hxx>
 #include <vcl/decoview.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <unx/saldata.hxx>
 
 using namespace ::rtl;
 
@@ -163,21 +165,6 @@ namespace
 
         QPainter painter(image);
         kapp->style()->drawComplexControl(element, option, &painter);
-    }
-
-    int getFrameWidth()
-    {
-        static int s_nFrameWidth = -1;
-        if( s_nFrameWidth < 0 )
-        {
-            // fill in a default
-            QFrame aFrame( NULL );
-            aFrame.setFrameRect( QRect(0, 0, 100, 30) );
-            aFrame.setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
-            aFrame.ensurePolished();
-            s_nFrameWidth = aFrame.frameWidth();
-        }
-        return s_nFrameWidth;
     }
 
     void lcl_drawFrame(QStyle::PrimitiveElement element, QImage* image, QStyle::State state)
@@ -554,7 +541,7 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
                        vclStateValue2StateFlag(nControlState, value) );
 
         // draw just the border, see http://qa.openoffice.org/issues/show_bug.cgi?id=107945
-        int fw = getFrameWidth();
+        int fw = static_cast< KDESalInstance* >(GetSalData()->m_pInstance)->getFrameWidth();
         clipRegion = new QRegion( QRegion( widgetRect ).subtracted( widgetRect.adjusted( fw, fw, -fw, -fw )));
     }
     else if (type == CTRL_WINDOW_BACKGROUND)
@@ -843,7 +830,7 @@ sal_Bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart p
         {
             if( part == PART_BORDER )
             {
-                int nFrameWidth = getFrameWidth();
+                int nFrameWidth = static_cast< KDESalInstance* >(GetSalData()->m_pInstance)->getFrameWidth();
                 sal_uInt16 nStyle = val.getNumericVal();
                 if( nStyle & FRAME_DRAW_NODRAW )
                 {
