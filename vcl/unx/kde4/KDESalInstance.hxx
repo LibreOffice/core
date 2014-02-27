@@ -36,6 +36,7 @@ class KDESalInstance : public X11SalInstance
         virtual com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFilePicker2 >
             createFilePicker( const com::sun::star::uno::Reference<
                                   com::sun::star::uno::XComponentContext >& );
+        int getFrameWidth();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

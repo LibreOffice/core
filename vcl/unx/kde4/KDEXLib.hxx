@@ -52,6 +52,7 @@ class KDEXLib : public QObject, public SalXLib
         QTimer timeoutTimer;
         QTimer userEventTimer;
         enum { LibreOfficeEventLoop, GlibEventLoop, QtUnixEventLoop } eventLoopType;
+        int m_frameWidth;
 
     private:
         void setupEventLoop();
@@ -70,6 +71,7 @@ class KDEXLib : public QObject, public SalXLib
         com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFilePicker2 >
             createFilePickerSignal( const com::sun::star::uno::Reference<
                                           com::sun::star::uno::XComponentContext >& );
+        int getFrameWidthSignal();
 
     public:
         KDEXLib();
@@ -87,9 +89,10 @@ class KDEXLib : public QObject, public SalXLib
         void doStartup();
 
     public Q_SLOTS:
-        virtual com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFilePicker2 >
+        com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFilePicker2 >
             createFilePicker( const com::sun::star::uno::Reference<
                                   com::sun::star::uno::XComponentContext >& );
+        int getFrameWidth();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
