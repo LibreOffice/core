@@ -222,7 +222,6 @@ private:
     sal_Bool    bPickThrough            : 1;    // Misc/TextObject/Selectable
     sal_Bool    bDoubleClickTextEdit    : 1;    // Misc/DclickTextedit
     sal_Bool    bClickChangeRotation    : 1;    // Misc/RotateClick
-    sal_Bool    bStartWithActualPage    : 1;    // Misc/Start/CurrentPage
     sal_Bool    bEnableSdremote         : 1;    // Misc/Start/EnableSdremote
     sal_Bool    bEnablePresenterScreen : 1;    // Misc/Start/EnablePresenterDisplay
     sal_Bool    bSolidDragging          : 1;    // Misc/ModifyWithAttributes
@@ -311,7 +310,6 @@ public:
     void    SetPickThrough( sal_Bool bOn = sal_True ) { if( bPickThrough != bOn ) { OptionsChanged(); bPickThrough = bOn; } }
     void    SetDoubleClickTextEdit( sal_Bool bOn = sal_True ) { if( bDoubleClickTextEdit != bOn ) { OptionsChanged(); bDoubleClickTextEdit = bOn; } }
     void    SetClickChangeRotation( sal_Bool bOn = sal_True ) { if( bClickChangeRotation != bOn ) { OptionsChanged(); bClickChangeRotation = bOn; } }
-    void    SetStartWithActualPage( sal_Bool bOn = sal_True ) { if( bStartWithActualPage != bOn ) { OptionsChanged(); bStartWithActualPage = bOn; } }
     void    SetEnableSdremote( sal_Bool bOn = sal_True ) { if( bEnableSdremote != bOn ) { OptionsChanged(); bEnableSdremote = bOn; } }
     void    SetEnablePresenterScreen( sal_Bool bOn = sal_True ) { if( bEnablePresenterScreen != bOn ) { OptionsChanged(); bEnablePresenterScreen = bOn; } }
     void    SetSummationOfParagraphs( sal_Bool bOn = sal_True ){ if ( bOn != bSummationOfParagraphs ) { OptionsChanged(); bSummationOfParagraphs = bOn; } }
