@@ -12168,7 +12168,7 @@ AC_SUBST(OOO_VENDOR)
 
 AC_MSG_CHECKING([whether to install the compat oo* wrappers])
 if test "$with_compat_oowrappers" = "yes"; then
-    WITH_COMPAT_OOWRAPPERS=YES
+    WITH_COMPAT_OOWRAPPERS=TRUE
     AC_MSG_RESULT(yes)
 else
     WITH_COMPAT_OOWRAPPERS=

@@ -69,7 +69,7 @@ add_wrapper()
 
     # do we want compat oowrapper?
     oowrapper_name=""
-    if test "$WITH_COMPAT_OOWRAPPERS" = 'YES' ; then
+    if test "$WITH_COMPAT_OOWRAPPERS" = 'TRUE' ; then
         oowrapper_name=`echo "$lowrapper_name" | sed -e "s/^lo/oo/"`
         # "oo" prefix only for wrappers stating with "lo" prefix
         test "$oowrapper_name" = "$lowrapper_name" && oowrapper_name=
@@ -181,7 +181,7 @@ test -f $DESTDIR/gid_Module_Root_Brand && echo "$PREFIXDIR/bin/soffice" >>$DESTD
 mkdir -p $DESTDIR/etc/bash_completion.d
 ./bin/generate-bash-completion bin/bash-completion.in $DESTDIR/etc/bash_completion.d/$INSTALLDIRNAME.sh
 test -f $DESTDIR/gid_Module_Root_Brand && echo "/etc/bash_completion.d/$INSTALLDIRNAME.sh" >>$DESTDIR/gid_Module_Root_Brand
-if test "$WITH_COMPAT_OOWRAPPERS" = "YES" ; then
+if test "$WITH_COMPAT_OOWRAPPERS" = "TRUE" ; then
     ./bin/generate-bash-completion --compat-oowrappers bin/bash-completion.in $DESTDIR/etc/bash_completion.d/ooffice.sh
     test -f $DESTDIR/gid_Module_Root_Brand && echo "/etc/bash_completion.d/ooffice.sh" >>$DESTDIR/gid_Module_Root_Brand
 fi
