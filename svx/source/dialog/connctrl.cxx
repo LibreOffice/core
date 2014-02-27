@@ -78,12 +78,10 @@ void SvxXConnectionPreview::AdaptSize()
     // Adapt size
     if( pObjList )
     {
-        Rectangle aRect = pObjList->GetAllObjBoundRect();
-        if (aRect.GetHeight() == 0 || aRect.GetHeight() == 0)
-            return;
-
         SetMapMode( MAP_100TH_MM );
+
         OutputDevice* pOD = pView->GetFirstOutputDevice(); // GetWin( 0 );
+        Rectangle aRect = pObjList->GetAllObjBoundRect();
 
         MapMode aMapMode = GetMapMode();
         aMapMode.SetMapUnit( pOD->GetMapMode().GetMapUnit() );
@@ -95,7 +93,11 @@ void SvxXConnectionPreview::AdaptSize()
         const Size      aWinSize = PixelToLogic( GetOutputSizePixel(), aDisplayMap );
         const long      nWidth = aWinSize.Width();
         const long      nHeight = aWinSize.Height();
+        if (aRect.GetHeight() == 0)
+            return;
         double          fRectWH = (double) aRect.GetWidth() / aRect.GetHeight();
+        if (nHeight == 0)
+            return;
         double          fWinWH = (double) nWidth / nHeight;
 
         // Adapt bitmap to Thumb size (not here!)
