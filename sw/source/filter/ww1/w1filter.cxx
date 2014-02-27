@@ -1236,23 +1236,19 @@ void Ww1Style::Out(Ww1Shell& rOut, Ww1Manager& rMan)
         pPapx->Start(rOut, rMan);
 }
 
-// die Out() methoden von plaintext fuer den filter geben eine anzahl
-// zeichen aus auf die shell, einen string oder einen char, wieviel
-// zeichen ausgegeben werden, bestimmt ulEnd, das das ende bestimmt,
-// bis zudem ausgegeben wird. ausserdem beenden die methoden die
-// ausgabe bei kontrollzeichen.
-// diese sind definiert durch MinChar. alle zeichen mit wert darunter
-// gelten als kontroll- zeichen. dafuer gibts die methode IsChar, die
-// zurueckgibt, ob es sich um ein standard zeichen handelt. kommt ein
-// solches zeichen, wird dieses zeichen zurueckgegeben und die methode
-// beendet, auch wenn ulEnd noch nicht erreicht wurde. bei nutzung
-// also beachten, dasz wenn !IsChar(Out(...)) gilt, ulEnd unter
-// umstaenden nicht erreicht wurde. dann wurde das kontrollzeichen
-// zwar (weg-)gelesen, jedoch noch nicht ausgegeben.
+// The Out() methods output a number of characters to the shell, a
+// string or a character. The amount of output is determined by ulEnd,
+// which specifies the position at which to stop. Control characters
+// also end the output.
+// They are defined by MinChar. All characters with a value lower than
+// that are treated as control characters. This classification is
+// handled by IsChar. If a control character is encountered, the
+// output method returns immediately and returns it. Pay attention to
+// this; ulEnd might not have been reached if !IsChar(Out(...)). In
+// this case, the control character has been consumed, but not been
+// output.
 sal_Unicode Ww1PlainText::Out( Ww1Shell& rOut, sal_uLong& ulEnd )
 {
-    // gibt die zeichen bis ulEnd aus, es sei den es kommen sonderzeichen
-    // die eine bedeutung haben wie absatzende oder seitenumbruch.
     if (ulEnd > Count())
         ulEnd = Count();
     while (ulSeek < ulEnd)
