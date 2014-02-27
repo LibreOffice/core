@@ -25,6 +25,7 @@ TARGET=util
 
 .INCLUDE:  settings.mk
 .INCLUDE: $(SOLARINCDIR)$/rtlbootstrap.mk
+.INCLUDE: $(SOLARENVINC)$/version.mk
 
 # watch for the path delimiter
 .IF "$(GUI)"=="WNT"
@@ -82,6 +83,7 @@ help .PHONY :
     @echo "    ooodevlanguagepack"
     @echo "    sdkoo"
     @echo "    sdkoodev"
+    @echo "    openofficebeta         like openoffice but with 'Beta' appended to product name"
     @echo 
     @echo "experimental targets:"
     @echo "    patch-create           create a patch for updating an installed office (Windows only)"
@@ -180,6 +182,7 @@ openoffice:
 # Add dependencies of basic targets on language specific targets.
 openoffice: $(foreach,i,$(alllangiso) openoffice_$i)
 openofficedev: $(foreach,i,$(alllangiso) openofficedev_$i)
+beta: $(foreach,i,$(alllangiso) beta_$i)
 openofficewithjre: $(foreach,i,$(alllangiso) openofficewithjre_$i)
 ooolanguagepack : $(foreach,i,$(alllangiso) ooolanguagepack_$i)
 ooodevlanguagepack: $(foreach,i,$(alllangiso) ooodevlanguagepack_$i)
@@ -193,6 +196,7 @@ MSISDKOOTEMPLATESOURCE=$(PRJ)$/inc_sdkoo$/windows$/msi_templates
 
 NOLOGOSPLASH:=$(BIN)$/intro.zip
 DEVNOLOGOSPLASH:=$(BIN)$/dev$/intro.zip
+BETA_LOGO_SPLASH:=$(BIN)$/beta$/intro.zip $(BIN)$/beta$/images.zip
 MSIOFFICETEMPLATEDIR=$(MISC)$/openoffice$/msi_templates
 MSILANGPACKTEMPLATEDIR=$(MISC)$/ooolangpack$/msi_templates
 MSISDKOOTEMPLATEDIR=$(MISC)$/sdkoo$/msi_templates
@@ -214,6 +218,7 @@ updatepack : local_python_files
 $(foreach,i,$(alllangiso) openoffice_$i) : adddeps
 openoffice_$(defaultlangiso).archive : adddeps
 $(foreach,i,$(alllangiso) openofficedev_$i) : adddeps
+$(foreach,i,$(alllangiso) beta_$i) : adddeps $(BETA_LOGO_SPLASH)
 $(foreach,i,$(alllangiso) openofficewithjre_$i) : adddeps
 $(foreach,i,$(alllangiso) ooolanguagepack_$i) : adddeps
 $(foreach,i,$(alllangiso) ooodevlanguagepack_$i) : adddeps
@@ -227,6 +232,7 @@ $(foreach,i,$(alllangiso) sdkoodev_$i) : adddeps
 $(foreach,i,$(alllangiso) openoffice_$i) : $$@{$(PKGFORMAT:^".")}
 $(foreach,i,$(alllangiso) openofficewithjre_$i) : $$@{$(PKGFORMAT:^".")}
 $(foreach,i,$(alllangiso) openofficedev_$i) : $$@{$(PKGFORMAT:^".")}
+$(foreach,i,$(alllangiso) beta_$i) : $$@{$(PKGFORMAT:^".")}
 $(foreach,i,$(alllangiso) ooolanguagepack_$i) : $$@{$(PKGFORMAT:^".")}
 $(foreach,i,$(alllangiso) ooodevlanguagepack_$i) : $$@{$(PKGFORMAT:^".")}
 $(foreach,i,$(alllangiso) sdkoo_$i) : $$@{$(PKGFORMAT:^".")}
@@ -281,6 +287,15 @@ $(foreach,P,$(PACKAGE_FORMATS) $(foreach,L,$(alllangiso) openofficedev_$L.$P)) .
         $(PRJ)$/util$/update.xml 		\
         > $(MISC)/$(@:b)_$(RTL_OS)_$(RTL_ARCH)$(@:e).update.xml
 
+$(foreach,P,$(PACKAGE_FORMATS) $(foreach,L,$(alllangiso) beta_$L.$P)) .PHONY :
+    $(MAKE_INSTALLER_COMMAND)		\
+        -p Apache_OpenOffice_Beta	\
+        -msitemplate $(MSIOFFICETEMPLATEDIR)
+    $(GEN_UPDATE_INFO_COMMAND)			\
+        --product Apache_OpenOffice_Beta 	\
+        $(PRJ)$/util$/update.xml 		\
+        > $(MISC)/$(@:b)_$(RTL_OS)_$(RTL_ARCH)$(@:e).update.xml
+
 #ooolanguagepack_%{$(PKGFORMAT:^".")} :
 $(foreach,P,$(PACKAGE_FORMATS) $(foreach,L,$(alllangiso) ooolanguagepack_$L.$P)) .PHONY :
     $(MAKE_INSTALLER_COMMAND)			\
@@ -312,6 +327,21 @@ $(BIN)$/dev$/intro.zip : $(SOLARCOMMONPCKDIR)$/openoffice_dev$/intro.zip
     @-$(MKDIR) $(@:d)
     $(COPY) $< $@
 
+$(BIN)$/beta$/intro.zip : $(SOLARCOMMONPCKDIR)$/openoffice_beta$/intro.zip
+    @-$(MKDIR) $(@:d)
+    $(COPY) $< $@
+
+# Replace framework/res/*.png with *-beta.png
+$(BIN)$/beta$/images.zip : $(SOLARSHAREDBIN)$/images.zip
+    $(COPY) $< $@
+    $(SOLARENV)$/bin/replace_in_zip.pl	\
+        $@				\
+        framework/res/			\
+        $(SRC_ROOT)/default_images/framework/res/beta/	\
+        backing.png			\
+        backing_hc.png			\
+        backing_rtl_left.png		\
+        backing_rtl_left_hc.png
 
 .IF "$(OS)" == "WNT"
 $(foreach,P,$(PACKAGE_FORMATS) $(foreach,L,$(alllangiso) patch-create_$L.$P)) .PHONY :
