@@ -48,7 +48,6 @@ public:
     void insertItem(const OUString &rURL, const OUString &rTitle, const BitmapEx &rThumbnail, sal_uInt16 nId);
     void loadRecentDocs();
 
-    void SetThumbnailSize(long thumbnailSize);
     long GetThumbnailSize() const;
 
     static bool typeMatchesExtension(ApplicationType type, const OUString &rExt);
