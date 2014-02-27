@@ -44,29 +44,6 @@ namespace com { namespace sun { namespace star { namespace text { class XTextRan
 
 #include "srchdlg.hxx"
 
-// class OpenStatusListener_Impl -----------------------------------------
-
-class OpenStatusListener_Impl : public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XDispatchResultListener >
-{
-private:
-    sal_Bool    m_bFinished;
-    sal_Bool    m_bSuccess;
-    Link        m_aOpenLink;
-    OUString    m_sURL;
-
-public:
-    OpenStatusListener_Impl() : m_bFinished( sal_False ), m_bSuccess( sal_False ) {}
-
-    virtual void SAL_CALL   dispatchFinished( const ::com::sun::star::frame::DispatchResultEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
-
-    inline sal_Bool         IsFinished() const { return m_bFinished; }
-    inline sal_Bool         IsSuccessful() const { return m_bSuccess; }
-    inline void             SetURL( const OUString& rURL ) { m_sURL = rURL; }
-    inline OUString         GetURL() const  { return m_sURL; }
-    inline void             SetOpenHdl( const Link& rLink ) { m_aOpenLink = rLink; }
-};
-
 // ContentListBox_Impl ---------------------------------------------------
 
 class ContentListBox_Impl : public SvTreeListBox
