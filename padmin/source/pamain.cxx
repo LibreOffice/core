@@ -52,6 +52,11 @@ public:
     virtual sal_uInt16  Exception( sal_uInt16 nError );
 
     static OUString ReadStringHook( const OUString& );
+
+private:
+    virtual void Init() SAL_OVERRIDE;
+
+    Reference< XComponentContext > xCtx_;
 };
 
 void vclmain::createApplication()
@@ -85,35 +90,13 @@ int MyApp::Main()
 
     EnableAutoHelpId();
 
-
-    // create the global service-manager
-
-    Reference< XComponentContext > xCtx;
-    Reference< XMultiServiceFactory > xFactory;
-    try
-    {
-        xCtx = defaultBootstrap_InitialComponentContext();
-        xFactory = Reference< XMultiServiceFactory >(  xCtx->getServiceManager(), UNO_QUERY );
-        if( xFactory.is() )
-            setProcessServiceFactory( xFactory );
-    }
-    catch( const com::sun::star::uno::Exception& )
-    {
-    }
-
-    if( ! xFactory.is() )
-    {
-        fprintf( stderr, "Could not bootstrap UNO, installation must be in disorder. Exiting.\n" );
-        exit( 1 );
-    }
-
     // Detect desktop environment - need to do this as early as possible
     com::sun::star::uno::setCurrentContext(
         new DesktopContext( com::sun::star::uno::getCurrentContext() ) );
 
     // Create UCB (for backwards compatibility, in case some code still uses
     // plain createInstance w/o args directly to obtain an instance):
-    com::sun::star::ucb::UniversalContentBroker::create(xCtx);
+    com::sun::star::ucb::UniversalContentBroker::create(xCtx_);
 
     /*
      * Initialize the MSAA UNO AccessBridge if accessibility is turned on
@@ -138,7 +121,7 @@ int MyApp::Main()
      */
     try
     {
-        Reference<XComponent> xComp(xCtx, UNO_QUERY_THROW);
+        Reference<XComponent> xComp(xCtx_, UNO_QUERY_THROW);
         xComp->dispose();
     }
     catch(...)
@@ -146,6 +129,29 @@ int MyApp::Main()
     }
 
     return EXIT_SUCCESS;
+}
+
+void MyApp::Init()
+{
+    // create the global service-manager
+
+    Reference< XMultiServiceFactory > xFactory;
+    try
+    {
+        xCtx_ = defaultBootstrap_InitialComponentContext();
+        xFactory = Reference< XMultiServiceFactory >(  xCtx_->getServiceManager(), UNO_QUERY );
+        if( xFactory.is() )
+            setProcessServiceFactory( xFactory );
+    }
+    catch( const com::sun::star::uno::Exception& )
+    {
+    }
+
+    if( ! xFactory.is() )
+    {
+        fprintf( stderr, "Could not bootstrap UNO, installation must be in disorder. Exiting.\n" );
+        exit( 1 );
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
