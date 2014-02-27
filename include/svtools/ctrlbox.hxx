@@ -524,7 +524,6 @@ public:
     virtual void    SetValue( sal_Int64 nNewValue  );
     virtual sal_Int64   GetValue( FieldUnit eOutUnit ) const;
     virtual sal_Int64   GetValue() const;
-    sal_Int64           GetValue( sal_uInt16 nPos, FieldUnit eOutUnit ) const;
 
 private:
     // declared as private because some compilers would generate the default functions

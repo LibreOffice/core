@@ -1974,25 +1974,6 @@ void FontSizeBox::SetValue( sal_Int64 nNewValue )
 
 
 
-sal_Int64 FontSizeBox::GetValue( sal_uInt16 nPos, FieldUnit eOutUnit ) const
-{
-    if ( !bRelative )
-    {
-        sal_Int64 nComboVal = static_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(ComboBox::GetEntryData( nPos )));
-        if ( nComboVal < 0 )     // marked as special?
-        {
-            return MetricField::ConvertValue( -nComboVal, mnBaseValue, GetDecimalDigits(),
-                                              meUnit, eOutUnit );
-        }
-    }
-
-    // do normal font size processing
-    sal_Int64 nRetValue = MetricBox::GetValue( nPos, eOutUnit );
-    return nRetValue;
-}
-
-
-
 sal_Int64 FontSizeBox::GetValue( FieldUnit eOutUnit ) const
 {
     if ( !bRelative )

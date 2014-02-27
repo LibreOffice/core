@@ -19,7 +19,6 @@ FileStream::close()
 FileStream::createTempFile(rtl::OString const&)
 FileStream::write(void const*, unsigned long)
 FontSelectPatternAttributes::FontSelectPatternAttributes(PhysicalFontFace const&, Size const&, float, int, bool)
-FontSizeBox::GetValue(unsigned short, FieldUnit) const
 GDriveDocument::GDriveDocument(GDriveSession*)
 GDriveFolder::GDriveFolder(GDriveSession*)
 GDriveProperty::GDriveProperty()
