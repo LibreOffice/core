@@ -29,7 +29,7 @@ $(call gb_ExternalProject_get_state_target,libwpg,build) :
 			--without-docs \
 			--disable-debug \
 			--disable-werror \
-			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& (cd $(EXTERNAL_WORKDIR)/src/lib && \
 		    $(if $(VERBOSE)$(verbose),V=1) \
 		    $(MAKE)) \

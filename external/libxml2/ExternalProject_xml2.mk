@@ -20,7 +20,7 @@ $(call gb_ExternalProject_get_state_target,xml2,build):
 		./configure --disable-ipv6 --without-python --without-zlib \
 			--without-lzma \
 			--disable-static --without-debug lt_cv_cc_dll_switch="-shared" \
-			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			CC="$(CC) -mthreads $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
 			LIBS="-lws2_32 $(if $(filter YES,$(MINGW_SHARED_GXXLIB)),$(MINGW_SHARED_LIBSTDCPP))" \
 			LDFLAGS="-Wl$(COMMA)--no-undefined -Wl$(COMMA)--enable-runtime-pseudo-reloc-v2" \
@@ -42,7 +42,7 @@ $(call gb_ExternalProject_get_state_target,xml2,build):
 		./configure --disable-ipv6 --without-python --without-zlib --with-sax1 \
 			--without-lzma \
 			$(if $(debug),--with-run-debug) \
-			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________URELIB) \
 			LDFLAGS="$(if $(SYSBASE),-L$(SYSBASE)/usr/lib)" \
 			CFLAGS="$(if $(SYSBASE),-I$(SYSBASE)/usr/include) $(if $(debug),-g)" \

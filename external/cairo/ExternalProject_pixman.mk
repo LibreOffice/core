@@ -34,7 +34,7 @@ $(call gb_ExternalProject_get_state_target,pixman,build) :
 		./configure \
 		$(if $(filter MACOSX IOS,$(OS)),--disable-shared,--disable-static) \
 		$(if $(filter ANDROID,$(OS)),--disable-arm-simd --disable-arm-neon --disable-arm-iwmmxt) \
-		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+		$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& $(MAKE) \
 	)
 

@@ -36,7 +36,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 		LDFLAGS="-L$(COMPATH)/lib -Wl$(COMMA)--enable-runtime-pseudo-reloc-v2 \
 				$(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
 		./configure \
-			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
+			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
 			--with-cross-build=$(WORKDIR_FOR_BUILD)/UnpackedTarball/icu/source) \
 			--disable-layout --disable-static --enable-shared --disable-samples \
 		&& $(MAKE) \
@@ -83,7 +83,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),\
 				--enable-static --disable-shared,\
 				--disable-static --enable-shared $(if $(filter ANDROID,$(OS)),--with-library-suffix=lo)) \
-			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)\
+			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)\
 				--with-cross-build=$(WORKDIR_FOR_BUILD)/UnpackedTarball/icu/source)\
 		&& $(MAKE) \
 		$(if $(filter MACOSX,$(OS)),&& $(PERL) \

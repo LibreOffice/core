@@ -54,7 +54,7 @@ $(call gb_ExternalProject_get_state_target,postgresql,build) :
 	$(call gb_ExternalProject_run,build,\
 		./configure \
 			--without-readline --disable-shared --with-ldap \
-			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(DISABLE_OPENSSL),,--with-openssl \
 				$(if $(filter YES,$(WITH_KRB5)), --with-krb5) \
 				$(if $(filter YES,$(WITH_GSSAPI)),--with-gssapi)) \

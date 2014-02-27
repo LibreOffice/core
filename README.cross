@@ -403,7 +403,7 @@ Then create pkg-config wrapper, something like:
 $ cat > pkg-config-wrapper-host << _EOF
 #!/bin/sh
 
-if [ "$CROSS_COMPILING" = YES ]; then
+if [ "$CROSS_COMPILING" = TRUE ]; then
    SYSROOT=$HOME/lo/raspbian-root
    export PKG_CONFIG_PATH=${SYSROOT}/usr/lib/arm-linux-gnueabihf/pkgconfig:${SYSROOT}/usr/share/pkgconfig
    export PKG_CONFIG_LIBDIR=${SYSROOT}/usr/lib/pkgconfig

@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-ifeq ($(CROSS_COMPILING),YES)
+ifneq ($(CROSS_COMPILING),)
 gb_Module_add_targets_for_build :=
 gb_Module_SKIPTARGETS := check slowcheck subsequentcheck
 endif

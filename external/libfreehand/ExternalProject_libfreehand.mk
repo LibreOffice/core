@@ -32,7 +32,7 @@ $(call gb_ExternalProject_get_state_target,libfreehand,build) :
 			--disable-debug \
 			--disable-werror \
 			--disable-weffc \
-			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& (cd $(EXTERNAL_WORKDIR)/src/lib && \
 		    $(if $(VERBOSE)$(verbose),V=1) \
 		    $(MAKE)) \

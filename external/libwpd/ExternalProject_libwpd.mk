@@ -26,7 +26,7 @@ $(call gb_ExternalProject_get_state_target,libwpd,build) :
 			--without-docs \
 			--disable-debug \
 			$(if $(filter MACOSX,$(OS)),--disable-werror) \
-			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& $(if $(VERBOSE)$(verbose),V=1) \
 		   $(MAKE) \
 	)

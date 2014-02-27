@@ -45,7 +45,7 @@ $(call gb_ExternalProject_get_state_target,raptor,build):
 			 --enable-parsers="rdfxml ntriples turtle trig guess rss-tag-soup" \
 			--with-www=xml \
 			--without-xslt-config \
-			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			$(if $(filter IOS ANDROID,$(OS)),--disable-shared,--disable-static) \
 			$(if $(SYSTEM_LIBXML),,--with-xml2-config=$(call gb_UnpackedTarball_get_dir,xml2)/xml2-config) \

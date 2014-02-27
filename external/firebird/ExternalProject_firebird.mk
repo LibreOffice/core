@@ -51,7 +51,7 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 			--disable-superserver \
 			--with-system-icu --without-fbsample --without-fbsample-db \
 			$(if $(filter TRUE,$(ENABLE_DEBUG)),--enable-debug) \
-			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter IOS ANDROID,$(OS)),--disable-shared,--disable-static) \
 		&& $(if $(filter WNT,$(OS)),\
 			   PATH="$(shell cygpath -u $(call gb_UnpackedTarball_get_dir,icu)/source/lib):$$PATH",\

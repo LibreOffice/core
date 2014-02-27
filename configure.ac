@@ -3263,7 +3263,7 @@ AC_SUBST(DISABLE_ACTIVEX)
 AC_SUBST(DISABLE_ATL)
 
 if test "$cross_compiling" = "yes"; then
-    export CROSS_COMPILING=YES
+    export CROSS_COMPILING=TRUE
     SCPDEFS="$SCPDEFS -DCROSS_COMPILING"
 else
     CROSS_COMPILING=
@@ -5748,7 +5748,7 @@ using namespace std;
             if test -n "$MINGW_GXXDLL"; then
                 mingw_gxxdll_root=${MINGW_GXXDLL%.dll}
                 mingw_gxxdll_root=${mingw_gxxdll_root#lib}
-                if test "$CROSS_COMPILING" = "YES"; then
+                if test "$CROSS_COMPILING" = "TRUE"; then
                     dnl m4 escaping!
                     mingw_gxxdll_root=${mingw_gxxdll_root%-[[0-9]]}
                 fi
@@ -7951,7 +7951,7 @@ case $enable_python in
 system)
     SYSTEM_PYTHON=TRUE
 
-    if test "$CROSS_COMPILING" != YES; then
+    if test "$CROSS_COMPILING" != TRUE; then
         dnl Check if the headers really work
         save_CPPFLAGS="$CPPFLAGS"
         CPPFLAGS="$CPPFLAGS $PYTHON_CFLAGS"
@@ -12623,7 +12623,7 @@ AC_CONFIG_HEADERS([config_host/config_version.h])
 AC_CONFIG_HEADERS([config_host/config_oauth2.h])
 AC_OUTPUT
 
-if test "$CROSS_COMPILING" = YES; then
+if test "$CROSS_COMPILING" = TRUE; then
     (echo; echo export BUILD_TYPE_FOR_HOST=$BUILD_TYPE) >>config_build.mk
 fi
 
@@ -12679,7 +12679,7 @@ $GNUMAKE help
 
 _EOF
 
-if test $_os != WINNT -a "$CROSS_COMPILING" != YES; then
+if test $_os != WINNT -a "$CROSS_COMPILING" != TRUE; then
     cat << _EOF
 After the build has finished, your can immediately run it using:
 instdir/program/soffice

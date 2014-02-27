@@ -19,7 +19,7 @@ $(call gb_ExternalProject_get_state_target,hyphen,build):
 	$(call gb_ExternalProject_run,build,\
 		./configure --disable-shared \
 			$(if $(filter-out IOS,$(OS)),--with-pic) \
-			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) gio_can_sniff=no) \
+			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) gio_can_sniff=no) \
 		&& $(MAKE) \
 	)
 

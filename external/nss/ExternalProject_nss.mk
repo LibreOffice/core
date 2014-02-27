@@ -18,7 +18,7 @@ $(call gb_ExternalProject_get_state_target,nss,configure):
 	$(call gb_ExternalProject_run,configure,\
 		$(if $(filter MSC,$(COM)),LIB="$(ILIB)") \
 		nspr/configure --includedir=$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/include \
-			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter MSC-X86_64,$(COM)-$(CPUNAME)),--enable-64bit) \
 	,,nss_configure.log)
 
@@ -62,7 +62,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 		$(if $(filter MACOSX,$(OS)),MACOS_SDK_DIR=$(MACOSX_SDK_PATH) \
 			$(if $(filter 1050,$(MAC_OS_X_VERSION_MIN_REQUIRED)),,NSS_USE_SYSTEM_SQLITE=1)) \
 		$(if $(filter SOLARIS,$(OS)),NS_USE_GCC=1) \
-		$(if $(filter YES,$(CROSS_COMPILING)),\
+		$(if $(CROSS_COMPILING),\
 		$(if $(filter MACOSXPOWERPC,$(OS)$(CPUNAME)),CPU_ARCH=ppc) \
 		NSINSTALL="$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py") \
 		NSDISTMODE=copy \

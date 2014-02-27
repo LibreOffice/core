@@ -19,7 +19,7 @@ ifeq ($(COM),GCC)
 $(call gb_ExternalProject_get_state_target,xslt,build):
 	$(call gb_ExternalProject_run,build,\
 		./configure --without-crypto --without-python --disable-static \
-			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			CC="$(CC) -mthreads $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
 			$(if $(filter YES,$(MINGW_SHARED_GXXLIB)),LIBS="$(MINGW_SHARED_LIBSTDCPP)") \
 			LDFLAGS="-Wl$(COMMA)--no-undefined -Wl$(COMMA)--enable-runtime-pseudo-reloc-v2" \
@@ -42,7 +42,7 @@ else # OS!=WNT
 $(call gb_ExternalProject_get_state_target,xslt,build):
 	$(call gb_ExternalProject_run,build,\
 		./configure --without-crypto --without-python \
-			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			LDFLAGS="$(if $(filter LINUX FREEBSD,$(OS)),-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath$(COMMA)\\"\$$\$$ORIGIN:'\'\$$\$$ORIGIN/../ure-link/lib" -Wl$(COMMA)-noinhibit-exec) \
 			$(if $(SYSBASE),$(if $(filter SOLARIS LINUX,$(OS)),-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -lpthread -ldl))" \

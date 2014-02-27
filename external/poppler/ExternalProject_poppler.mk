@@ -38,7 +38,7 @@ $(call gb_ExternalProject_get_state_target,poppler,build) :
 			--disable-utils \
 			--disable-cms \
 			$(if $(filter WNT MACOSX,$(OS)),--with-font-configuration=win32,--with-font-configuration=fontconfig) \
-			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& $(MAKE) \
 	)
 

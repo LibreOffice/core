@@ -95,7 +95,7 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 			$(if $(filter TRUE,$(ENABLE_DEBUG)),--enable-debug,--disable-debug) \
 			--disable-spreadsheet-model \
 			--disable-werror \
-			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(SYSTEM_BOOST),,--with-boost-system=boostsystem) \
 		&& $(if $(VERBOSE)$(verbose),V=1) \
 		   $(MAKE) \

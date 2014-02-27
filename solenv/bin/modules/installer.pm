@@ -189,7 +189,7 @@ sub run {
     # Checking version of makecab.exe
     ##############################################
 
-    if ( $installer::globals::iswindowsbuild && (!defined($ENV{'CROSS_COMPILING'}) || $ENV{'CROSS_COMPILING'} ne 'YES' || $installer::globals::packageformat eq 'msi')) { installer::control::check_makecab_version(); }
+    if ( $installer::globals::iswindowsbuild && (!defined($ENV{'CROSS_COMPILING'}) || $ENV{'CROSS_COMPILING'} ne 'TRUE' || $installer::globals::packageformat eq 'msi')) { installer::control::check_makecab_version(); }
 
     ##########################################################
     # Getting the include path from the settings in zip list

@@ -54,7 +54,7 @@ $(call gb_ExternalProject_get_state_target,rasqal,build):
 			--with-decimal=none \
 			--with-uuid-library=internal \
 			--with-digest-library=internal \
-			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			$(if $(filter IOS ANDROID,$(OS)),--disable-shared,--disable-static) \
 			$(if $(SYSTEM_LIBXML),,--with-xml2-config=$(call gb_UnpackedTarball_get_dir,xml2)/xml2-config) \

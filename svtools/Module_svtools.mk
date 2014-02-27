@@ -28,7 +28,7 @@ $(eval $(call gb_Module_add_l10n_targets,svtools,\
     UIConfig_svt \
 ))
 
-ifneq ($(CROSS_COMPILING),YES)
+ifeq ($(CROSS_COMPILING),)
 
 ifneq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,svtools,\

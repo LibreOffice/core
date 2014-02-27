@@ -16,7 +16,7 @@ $(eval $(call gb_ExternalProject_register_targets,exttextcat,\
 $(call gb_ExternalProject_get_state_target,exttextcat,build):
 	$(call gb_ExternalProject_run,build,\
 		./configure --disable-shared --with-pic \
-			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		CFLAGS="$(CFLAGS) $(gb_VISIBILITY_FLAGS) $(gb_DEBUG_CFLAGS) $(gb_COMPILEROPTFLAGS) \
 		$(if $(filter AIX,$(OS)),-D_LINUX_SOURCE_COMPAT)" \
 		&& $(MAKE) \

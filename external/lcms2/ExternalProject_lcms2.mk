@@ -26,7 +26,7 @@ else
 $(call gb_ExternalProject_get_state_target,lcms2,build):
 	$(call gb_ExternalProject_run,build,\
 		./configure --without-jpeg --without-tiff --with-pic \
-			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			CPPFLAGS=" $(SOLARINC)" \
 			$(if $(filter-out WNTGCC,$(OS)$(COM)),,CPPFLAGS=" -DCMS_DLL_BUILD") \
 			$(if $(filter IOS ANDROID,$(OS)), --disable-shared --enable-static, --enable-shared --disable-static) \

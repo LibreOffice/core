@@ -24,7 +24,7 @@ $(call gb_ExternalProject_get_state_target,openldap,build) :
 			--without-cyrus-sasl \
 			--disable-shared \
 			--enable-static \
-			$(if $(filter YES,$(CROSS_COMPILING)), \
+			$(if $(CROSS_COMPILING), \
 				--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
 				--with-yielding_select=yes \
 				ac_cv_func_memcmp_working=yes \

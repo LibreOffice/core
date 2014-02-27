@@ -136,7 +136,7 @@ clean-host:
 	rm -fr install
 
 clean-build:
-ifeq ($(CROSS_COMPILING),YES)
+ifneq ($(CROSS_COMPILING),)
 	rm -fr $(INSTDIR_FOR_BUILD)
 	rm -fr $(WORKDIR_FOR_BUILD)
 endif

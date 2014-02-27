@@ -60,7 +60,7 @@ $(call fetch__Download_item,$1,$($2),$($(subst _TARBALL,_MD5SUM,$(2))))
 endef
 
 fetch_BUILD_TYPE := $(sort $(BUILD_TYPE))
-ifeq ($(CROSS_COMPILING),YES)
+ifneq ($(CROSS_COMPILING),)
 fetch_BUILD_TYPE := $(sort $(fetch_BUILD_TYPE) $(shell . $(SRCDIR)/bin/get_config_variables --build BUILD_TYPE && echo $$BUILD_TYPE))
 endif
 

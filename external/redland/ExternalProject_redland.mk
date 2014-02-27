@@ -60,7 +60,7 @@ $(call gb_ExternalProject_get_state_target,redland,build):
 			--without-threads \
 			--without-bdb --without-sqlite --without-mysql \
 			--without-postgresql --without-threestone --without-virtuoso \
-			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			$(if $(filter IOS ANDROID,$(OS)),--disable-shared,--disable-static) \
 		&& $(MAKE) \

@@ -59,7 +59,7 @@ endif
 $(call gb_ExternalProject_get_state_target,python3,build) :
 	$(call gb_ExternalProject_run,build,\
 		./configure \
-		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+		$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		$(if $(ENABLE_VALGRIND),--with-valgrind) \
 		--prefix=/python-inst \
 		$(if $(filter MACOSX,$(OS)),,--with-system-expat) \

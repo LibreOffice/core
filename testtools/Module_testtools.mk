@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,testtools))
 
-ifneq ($(CROSS_COMPILING),YES)
+ifeq ($(CROSS_COMPILING),)
 
 $(eval $(call gb_Module_add_targets,testtools,\
 	CustomTarget_bridgetest \

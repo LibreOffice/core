@@ -70,7 +70,7 @@ sub check_system_path
     # All platforms: zip
     # Windows only: "msiinfo.exe", "msidb.exe", "uuidgen.exe", "makecab.exe", "msitran.exe", "expand.exe" for msi database and packaging
 
-    if ($ENV{'CROSS_COMPILING'} eq 'YES')
+    if ($ENV{'CROSS_COMPILING'} eq 'TRUE')
     {
         # we build our own msi* etc. tools when cross-compiling
         $ENV{'PATH'} .= $installer::globals::pathseparator . $ENV{'WORKDIR_FOR_BUILD'} . '/LinkTarget/Executable';

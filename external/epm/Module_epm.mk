@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,epm))
 
-ifneq ($(CROSS_COMPILING),YES)
+ifeq ($(CROSS_COMPILING),)
 
 $(eval $(call gb_Module_add_targets,epm,\
 	ExternalProject_epm \
