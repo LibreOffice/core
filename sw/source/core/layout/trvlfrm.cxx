@@ -884,7 +884,7 @@ static bool lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
                             nX += pTab->Frm().Left() - pTable->Frm().Left();
                         pTable = pTab;
                     }
-                    const SwLayoutFrm *pCell = pTable ? pCnt->GetUpper() : 0;
+                    const SwLayoutFrm *pCell = pCnt->GetUpper();
                     while ( pCell && !pCell->IsCellFrm() )
                         pCell = pCell->GetUpper();
 
