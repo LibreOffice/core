@@ -944,6 +944,10 @@ void PrintDialog::setupOptionalUI()
             TabPage *pPage = get<TabPage>(aID);
             if (!pPage && mpCustomOptionsUIBuilder)
                 pPage = mpCustomOptionsUIBuilder->get<TabPage>(aID);
+
+            if (!pPage)
+                continue;
+
             sal_uInt16 nPageId = mpTabCtrl->GetPageId(*pPage);
 
             mpTabCtrl->SetPageText(nPageId, aText);
@@ -963,6 +967,9 @@ void PrintDialog::setupOptionalUI()
             Window *pFrame = get<Window>(aID);
             if (!pFrame && mpCustomOptionsUIBuilder)
                 pFrame = mpCustomOptionsUIBuilder->get<Window>(aID);
+
+            if (!pFrame)
+                continue;
 
             pFrame->SetText(aText);
 
@@ -1002,6 +1009,9 @@ void PrintDialog::setupOptionalUI()
             if (!pNewBox && mpCustomOptionsUIBuilder)
                 pNewBox = mpCustomOptionsUIBuilder->get<CheckBox>(aID);
 
+            if (!pNewBox)
+                continue;
+
             pNewBox->SetText( aText );
             pNewBox->Show();
 
@@ -1036,6 +1046,9 @@ void PrintDialog::setupOptionalUI()
                 if (!pBtn && mpCustomOptionsUIBuilder)
                     pBtn = mpCustomOptionsUIBuilder->get<RadioButton>(aID);
 
+                if (!pBtn)
+                    continue;
+
                 pBtn->SetText( aChoices[m] );
                 pBtn->Check( m == nSelectVal );
                 pBtn->SetToggleHdl( LINK( this, PrintDialog, UIOption_RadioHdl ) );
@@ -1058,6 +1071,9 @@ void PrintDialog::setupOptionalUI()
             ListBox* pList = get<ListBox>(aID);
             if (!pList && mpCustomOptionsUIBuilder)
                 pList = mpCustomOptionsUIBuilder->get<ListBox>(aID);
+
+            if (!pList)
+                continue;
 
             // iterate options
             for( sal_Int32 m = 0; m < aChoices.getLength(); m++ )
@@ -1087,6 +1103,9 @@ void PrintDialog::setupOptionalUI()
             if (!pField && mpCustomOptionsUIBuilder)
                 pField = mpCustomOptionsUIBuilder->get<NumericField>(aID);
 
+            if (!pField)
+                continue;
+
             // set min/max and current value
             if( nMinValue != nMaxValue )
             {
@@ -1114,6 +1133,9 @@ void PrintDialog::setupOptionalUI()
             Edit *pField = get<Edit>(aID);
             if (!pField && mpCustomOptionsUIBuilder)
                 pField = mpCustomOptionsUIBuilder->get<Edit>(aID);
+
+            if (!pField)
+                continue;
 
             OUString aCurVal;
             PropertyValue* pVal = maPController->getValue( aPropertyName );
