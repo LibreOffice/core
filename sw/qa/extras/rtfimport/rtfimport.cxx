@@ -1415,6 +1415,9 @@ DECLARE_RTFIMPORT_TEST(testNestedTable, "rhbz1065629.rtf")
         getProperty<table::BorderLine2>(xCell, "RightBorder"));
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xffffffff),
             getProperty<sal_Int32>(xCell, "BackColor"));
+
+    // \sect at the end resulted in spurious page break
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
 DECLARE_RTFIMPORT_TEST(testCp1000016, "hello.rtf")

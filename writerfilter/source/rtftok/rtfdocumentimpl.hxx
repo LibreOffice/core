@@ -526,6 +526,9 @@ namespace writerfilter {
                 bool m_bMathNor;
                 /// If the next continuous section break should be ignored.
                 bool m_bIgnoreNextContSectBreak;
+                /// clean up a synthetic page break, see RTF_PAGE
+                /// if inactive value is -1, otherwise the RTF_SKB* to restore
+                RTFKeyword m_nResetBreakOnSectBreak;
                 /// If a section break is needed before the end of the doc (false right after a section break).
                 bool m_bNeedSect;
                 /// If aFrame.inFrame() was true in the previous state.

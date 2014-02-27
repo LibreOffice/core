@@ -280,7 +280,8 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_aHexBuffer(),
     m_bMathNor(false),
     m_bIgnoreNextContSectBreak(false),
-    m_bNeedSect(true),
+    m_nResetBreakOnSectBreak(static_cast<RTFKeyword>(-1)),
+    m_bNeedSect(false), // done by checkFirstRun
     m_bWasInFrame(false),
     m_bHadPicture(false),
     m_bHadSect(false),
@@ -393,16 +394,15 @@ void RTFDocumentImpl::checkFirstRun()
         writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(aSettingsTableEntries));
         Mapper().table(NS_ooxml::LN_settings_settings, pTable);
         // start initial paragraph
-        if (!m_pSuperstream)
-            Mapper().startSectionGroup();
-        Mapper().startParagraphGroup();
+        m_bFirstRun = false;
+        assert(!m_bNeedSect);
+        setNeedSect(); // first call that succeeds
 
         // set the requested default font, if there are none
         RTFValue::Pointer_t pFont = m_aDefaultState.aCharacterSprms.find(NS_sprm::LN_CRgFtc0);
         RTFValue::Pointer_t pCurrentFont = m_aStates.top().aCharacterSprms.find(NS_sprm::LN_CRgFtc0);
         if (pFont && !pCurrentFont)
             dispatchValue(RTF_F, pFont->getInt());
-        m_bFirstRun = false;
     }
 }
 
@@ -418,7 +418,21 @@ void RTFDocumentImpl::setNeedPar(bool bNeedPar)
 
 void RTFDocumentImpl::setNeedSect(bool bNeedSect)
 {
-    m_bNeedSect = bNeedSect;
+    // ignore setting before checkFirstRun - every keyword calls setNeedSect!
+    if (!m_bNeedSect && bNeedSect && !m_bFirstRun)
+    {
+        if (!m_pSuperstream) // no sections in header/footer!
+        {
+            Mapper().startSectionGroup();
+            m_bNeedSect = bNeedSect;
+        }
+        Mapper().startParagraphGroup();
+        setNeedPar(true);
+    }
+    else if (m_bNeedSect && !bNeedSect)
+    {
+        m_bNeedSect = bNeedSect;
+    }
 }
 
 writerfilter::Reference<Properties>::Pointer_t RTFDocumentImpl::getProperties(RTFSprms& rAttributes, RTFSprms& rSprms)
@@ -543,6 +557,7 @@ void RTFDocumentImpl::sectBreak(bool bFinal = false)
     {
         dispatchFlag(RTF_PARD);
         dispatchSymbol(RTF_PAR);
+        m_bNeedSect = bNeedSect;
     }
     while (!m_nHeaderFooterPositions.empty())
     {
@@ -573,12 +588,7 @@ void RTFDocumentImpl::sectBreak(bool bFinal = false)
     Mapper().endParagraphGroup();
     if (!m_pSuperstream)
         Mapper().endSectionGroup();
-    if (!bFinal)
-    {
-        Mapper().startSectionGroup();
-        Mapper().startParagraphGroup();
-    }
-    m_bNeedPar = true;
+    m_bNeedPar = false;
     m_bNeedSect = false;
 }
 
@@ -1368,8 +1378,8 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer,
 
 int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
 {
-    checkUnicode(/*bUnicode =*/ true, /*bHex =*/ true);
     setNeedSect();
+    checkUnicode(/*bUnicode =*/ true, /*bHex =*/ true);
     RTFSkipDestination aSkip(*this);
     switch (nKeyword)
     {
@@ -1885,11 +1895,11 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
 
 int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
 {
+    setNeedSect();
     if (nKeyword != RTF_HEXCHAR)
         checkUnicode(/*bUnicode =*/ true, /*bHex =*/ true);
     else
         checkUnicode(/*bUnicode =*/ true, /*bHex =*/ false);
-    setNeedSect();
     RTFSkipDestination aSkip(*this);
 
     if (RTF_LINE == nKeyword)
@@ -1968,7 +1978,15 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 if (m_bIgnoreNextContSectBreak)
                     m_bIgnoreNextContSectBreak = false;
                 else
+                {
                     sectBreak();
+                    if (m_nResetBreakOnSectBreak != -1)
+                    {   // this should run on _second_ \sect after \page
+                        dispatchSymbol(m_nResetBreakOnSectBreak); // lazy reset
+                        m_nResetBreakOnSectBreak = static_cast<RTFKeyword>(-1);
+                        m_bNeedSect = false; // dispatchSymbol set it
+                    }
+                }
             }
             break;
         case RTF_NOBREAK:
@@ -2140,19 +2158,24 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 RTFValue::Pointer_t pBreak = m_aStates.top().aSectionSprms.find(NS_ooxml::LN_EG_SectPrContents_type);
                 // Unless we're on a title page.
                 RTFValue::Pointer_t pTitlePg = m_aStates.top().aSectionSprms.find(NS_ooxml::LN_EG_SectPrContents_titlePg);
-                if ((pBreak.get() && !pBreak->getInt()) && !(pTitlePg.get() && pTitlePg->getInt()))
+                if (((pBreak.get() && !pBreak->getInt())
+                        || m_nResetBreakOnSectBreak == RTF_SBKNONE)
+                    && !(pTitlePg.get() && pTitlePg->getInt()))
                 {
                     if (m_bWasInFrame)
                     {
                         dispatchSymbol(RTF_PAR);
                         m_bWasInFrame = false;
                     }
-                    dispatchFlag(RTF_SBKPAGE);
                     sectBreak();
-                    dispatchFlag(RTF_SBKNONE);
+                    // note: this will not affect the following section break
+                    // but the one just pushed
+                    dispatchFlag(RTF_SBKPAGE);
                     if (m_bNeedPar)
                         dispatchSymbol(RTF_PAR);
                     m_bIgnoreNextContSectBreak = true;
+                    // arrange to clean up the syntetic RTF_SBKPAGE
+                    m_nResetBreakOnSectBreak = RTF_SBKNONE;
                 }
                 else
                 {
@@ -2192,8 +2215,8 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
 
 int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
 {
-    checkUnicode(/*bUnicode =*/ true, /*bHex =*/ true);
     setNeedSect();
+    checkUnicode(/*bUnicode =*/ true, /*bHex =*/ true);
     RTFSkipDestination aSkip(*this);
     int nParam = -1;
     int nSprm = -1;
@@ -2325,6 +2348,10 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     }
     if (nParam >= 0)
     {
+        if (m_nResetBreakOnSectBreak != -1)
+        {
+            m_nResetBreakOnSectBreak = nKeyword;
+        }
         RTFValue::Pointer_t pValue(new RTFValue(nParam));
         m_aStates.top().aSectionSprms.set(NS_ooxml::LN_EG_SectPrContents_type, pValue);
         return 0;
@@ -2932,8 +2959,8 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
 
 int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
 {
-    checkUnicode(/*bUnicode =*/ nKeyword != RTF_U, /*bHex =*/ true);
     setNeedSect();
+    checkUnicode(/*bUnicode =*/ nKeyword != RTF_U, /*bHex =*/ true);
     RTFSkipDestination aSkip(*this);
     int nSprm = 0;
     RTFValue::Pointer_t pIntValue(new RTFValue(nParam));
@@ -3931,8 +3958,8 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
 
 int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam)
 {
-    checkUnicode(/*bUnicode =*/ true, /*bHex =*/ true);
     setNeedSect();
+    checkUnicode(/*bUnicode =*/ true, /*bHex =*/ true);
     RTFSkipDestination aSkip(*this);
     int nSprm = -1;
     RTFValue::Pointer_t pBoolValue(new RTFValue(int(!bParam || nParam != 0)));
@@ -4805,7 +4832,8 @@ int RTFDocumentImpl::popState()
         // not in case of other substreams, like headers.
         if (m_bNeedCr && !(m_nStreamType == NS_ooxml::LN_footnote || m_nStreamType == NS_ooxml::LN_endnote))
             dispatchSymbol(RTF_PAR);
-        sectBreak(true);
+        if (m_bNeedSect) // may be set by dispatchSymbol above!
+            sectBreak(true);
     }
 
     m_aStates.pop();
