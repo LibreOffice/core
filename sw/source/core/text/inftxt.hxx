@@ -472,7 +472,7 @@ public:
     void DrawRect( const SwRect &rRect, bool bNoGraphic = false,
                    bool bRetouche = true ) const;
 
-    void DrawSpecial( const SwLinePortion &rPor, sal_Unicode cChar, Color* pColor ) const;
+    void DrawSpecial(const SwLinePortion &rPor, sal_Unicode cChar, const Color& rColor) const;
     void DrawTab( const SwLinePortion &rPor ) const;
     void DrawLineBreak( const SwLinePortion &rPor ) const;
     void DrawRedArrow( const SwLinePortion &rPor ) const;

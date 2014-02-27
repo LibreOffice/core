@@ -794,13 +794,13 @@ void SwTxtPaintInfo::CalcRect( const SwLinePortion& rPor,
  * Draws a special portion, e.g., line break portion, tab portion.
  * rPor     - The portion
  * rRect    - The rectangle surrounding the character
- * pCol     - Specify a color for the character
+ * rCol     - Specify a color for the character
  * bCenter  - Draw the character centered, otherwise left aligned
  * bRotate  - Rotate the character if character rotation is set
  *************************************************************************/
 
 static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rPor,
-                      SwRect& rRect, const Color* pCol, sal_Unicode cChar,
+                      SwRect& rRect, const Color& rCol, sal_Unicode cChar,
                       sal_uInt8 nOptions )
 {
     bool bCenter = 0 != ( nOptions & DRAW_SPECIAL_OPTIONS_CENTER );
@@ -831,10 +831,7 @@ static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rP
     else
         m_pFnt->SetVertical( pOldFnt->GetOrientation() );
 
-    if ( pCol )
-        m_pFnt->SetColor( *pCol );
-    else
-        m_pFnt->SetColor( pOldFnt->GetColor() );
+    m_pFnt->SetColor(rCol);
 
     Size aFontSize( 0, SPECIAL_FONT_HEIGHT );
     m_pFnt->SetSize( aFontSize, m_pFnt->GetActual() );
@@ -934,7 +931,7 @@ void SwTxtPaintInfo::DrawRect( const SwRect &rRect, bool bNoGraphic,
     }
 }
 
-void SwTxtPaintInfo::DrawSpecial( const SwLinePortion &rPor, sal_Unicode cChar, Color* pColor ) const
+void SwTxtPaintInfo::DrawSpecial(const SwLinePortion &rPor, sal_Unicode cChar, const Color& rColor) const
 {
     if( OnWin() )
     {
@@ -950,7 +947,7 @@ void SwTxtPaintInfo::DrawSpecial( const SwLinePortion &rPor, sal_Unicode cChar, 
         if( aRect.HasArea() )
         {
             const sal_uInt8 nOptions = 0;
-            lcl_DrawSpecial( *this, rPor, aRect, pColor, cChar, nOptions );
+            lcl_DrawSpecial( *this, rPor, aRect, rColor, cChar, nOptions );
         }
 
         ((SwLinePortion&)rPor).Width( nOldWidth );
@@ -970,7 +967,7 @@ void SwTxtPaintInfo::DrawTab( const SwLinePortion &rPor ) const
         const sal_Unicode cChar = GetTxtFrm()->IsRightToLeft() ? CHAR_TAB_RTL : CHAR_TAB;
         const sal_uInt8 nOptions = DRAW_SPECIAL_OPTIONS_CENTER | DRAW_SPECIAL_OPTIONS_ROTATE;
 
-        lcl_DrawSpecial( *this, rPor, aRect, new Color(0x6a, 0xbe, 0xd3), cChar, nOptions );
+        lcl_DrawSpecial( *this, rPor, aRect, Color(0x6a, 0xbe, 0xd3), cChar, nOptions );
     }
 }
 
@@ -990,7 +987,7 @@ void SwTxtPaintInfo::DrawLineBreak( const SwLinePortion &rPor ) const
                                       CHAR_LINEBREAK_RTL : CHAR_LINEBREAK;
             const sal_uInt8 nOptions = 0;
 
-            lcl_DrawSpecial( *this, rPor, aRect, new Color(NON_PRINTING_CHARACTER_COLOR), cChar, nOptions );
+            lcl_DrawSpecial( *this, rPor, aRect, Color(NON_PRINTING_CHARACTER_COLOR), cChar, nOptions );
         }
 
         ((SwLinePortion&)rPor).Width( nOldWidth );
@@ -1027,7 +1024,7 @@ void SwTxtPaintInfo::DrawRedArrow( const SwLinePortion &rPor ) const
     if( aRect.HasArea() )
     {
         const sal_uInt8 nOptions = 0;
-        lcl_DrawSpecial( *this, rPor, aRect, &aCol, cChar, nOptions );
+        lcl_DrawSpecial( *this, rPor, aRect, aCol, cChar, nOptions );
     }
 }
 
