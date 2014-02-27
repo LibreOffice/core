@@ -549,8 +549,7 @@ class SW_DLLPUBLIC SwAnchoredObject
         virtual const char* getElementName( ) { return "SwAnchoredObject"; }
 };
 
-// helper class for notify that positioning of an anchored object is in progress
-
+/// Helper class for notify that positioning of an anchored object is in progress.
 class SwObjPositioningInProgress
 {
     private:
