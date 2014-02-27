@@ -2962,6 +2962,15 @@ DECLARE_OOXMLEXPORT_TEST(testFdo74792, "fdo74792.docx")
     CPPUNIT_ASSERT( xInputStream.is() );
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTableCurruption, "tableCurrupt.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/header4.xml");
+    if (!pXmlDoc)
+        return;
+    CPPUNIT_ASSERT(pXmlDoc) ;
+    assertXPath(pXmlDoc, "/w:hdr/w:tbl[1]/w:tr[1]/w:tc[1]",1);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

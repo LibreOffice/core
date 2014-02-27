@@ -251,9 +251,18 @@ void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pText
                 {
                     ww8::WW8TableNodeInfoInner::Pointer_t pInner( pTextNodeInfo->getInnerForDepth( nDepth ) );
 
+                    if (m_tableReference->m_pOldTablepInner && m_tableReference->m_pOldTablepInner->getTable() == pInner->getTable() && nCurrentDepth > 1 &&  nDepth != 1)
+                    {
+                       m_tableReference->m_pOldTablepInner = pInner;
+                       break;
+                    }
+                    else
+                    {
                     StartTable( pInner );
                     StartTableRow( pInner );
                     StartTableCell( pInner );
+                    m_tableReference->m_pOldTablepInner = pInner;
+                    }
                 }
 
                 m_tableReference->m_nTableDepth = nCurrentDepth;
@@ -2366,8 +2375,10 @@ void DocxAttributeOutput::switchHeaderFooter(bool isHeaderFooter, sal_Int32 inde
     {
         m_oldTableReference->m_bTableCellOpen = m_tableReference->m_bTableCellOpen;
         m_oldTableReference->m_nTableDepth = m_tableReference->m_nTableDepth;
+        m_oldTableReference->m_pOldTablepInner = m_tableReference->m_pOldTablepInner;
         m_tableReference->m_bTableCellOpen = false;
         m_tableReference->m_nTableDepth = 0;
+        m_pSectionInfo.reset();
     }
     else if( index == -1)
     {
