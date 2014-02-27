@@ -13,7 +13,9 @@
 #include <comphelper/string.hxx>
 #include <ooxml/resourceids.hxx>
 #include "dmapperLoggers.hxx"
+#include <map>
 #include <stack>
+#include <vector>
 
 namespace writerfilter {
 namespace dmapper
