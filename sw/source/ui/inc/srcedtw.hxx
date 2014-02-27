@@ -121,10 +121,8 @@ public:
 
     void            SetScrollBarRanges();
     void            InitScrollBars();
-    sal_uLong           Read( SvStream& rInput)
-    {return pTextEngine->Read(rInput) ? 1 : 0;}
-    sal_uLong           Write( SvStream& rOutput)
-    {return pTextEngine->Write(rOutput) ? 1 : 0;}
+    void            Read(SvStream& rInput) { pTextEngine->Read(rInput); }
+    void            Write(SvStream& rOutput) { pTextEngine->Write(rOutput); }
 
     ExtTextView*    GetTextView()
                         {return pTextView;}
