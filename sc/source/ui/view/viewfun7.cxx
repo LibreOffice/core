@@ -379,32 +379,31 @@ bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
     MakeDrawLayer();
     ScDrawView* pScDrawView = GetScDrawView();
 
+    if (!pScDrawView)
+        return false;
+
     // #i123922# check if the drop was over an existing object; if yes, evtl. replace
     // the graphic for a SdrGraphObj (including link state updates) or adapt the fill
     // style for other objects
-    if(pScDrawView)
+    SdrPageView* pPageView = pScDrawView->GetSdrPageView();
+    if (pPageView)
     {
-        SdrPageView* pPageView = pScDrawView->GetSdrPageView();
-
-        if(pPageView)
+        SdrObject* pPickObj = 0;
+        if (pScDrawView->PickObj(rPos, pScDrawView->getHitTolLog(), pPickObj, pPageView))
         {
-            SdrObject* pPickObj = 0;
-            if (pScDrawView->PickObj(rPos, pScDrawView->getHitTolLog(), pPickObj, pPageView))
-            {
-                const OUString aBeginUndo(ScGlobal::GetRscString(STR_UNDO_DRAGDROP));
-                SdrObject* pResult = pScDrawView->ApplyGraphicToObject(
-                    *pPickObj,
-                    rGraphic,
-                    aBeginUndo,
-                    rFile,
-                    rFilter);
+            const OUString aBeginUndo(ScGlobal::GetRscString(STR_UNDO_DRAGDROP));
+            SdrObject* pResult = pScDrawView->ApplyGraphicToObject(
+                *pPickObj,
+                rGraphic,
+                aBeginUndo,
+                rFile,
+                rFilter);
 
-                if (pResult)
-                {
-                    // we are done; mark the modified/new object
-                    pScDrawView->MarkObj(pResult, pScDrawView->GetSdrPageView());
-                    return true;
-                }
+            if (pResult)
+            {
+                // we are done; mark the modified/new object
+                pScDrawView->MarkObj(pResult, pScDrawView->GetSdrPageView());
+                return true;
             }
         }
     }
