@@ -307,8 +307,6 @@ void RecoveryUI::impl_doRecovery()
     // and bind it to the used core service
     boost::scoped_ptr<svxdr::TabDialog4Recovery> xWizard(new svxdr::TabDialog4Recovery(m_pParentWindow));
     svxdr::IExtendedTabPage*   pPage1  = new svxdr::RecoveryDialog(xWizard.get(), pCore );
-    svxdr::IExtendedTabPage*   pPage2  = 0;
-    svxdr::IExtendedTabPage*   pPage3  = 0;
 
     xWizard->addTabPage(pPage1);
 
@@ -317,8 +315,6 @@ void RecoveryUI::impl_doRecovery()
 
     impl_showAllRecoveredDocs();
 
-    delete pPage3 ;
-    delete pPage2 ;
     delete pPage1 ;
 
     delete_pending_crash();
