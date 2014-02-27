@@ -41,9 +41,6 @@ MenuBar::RemoveMenuBarButton(unsigned short)
 MenuBar::SetMenuBarButtonHighlightHdl(unsigned short, Link const&)
 OAuth2Handler::OAuth2Handler()
 OAuth2Handler::getAccessToken()
-OFileWriter::flush() const
-OFileWriter::writeDefaultParameter(char const*, rtl::OUString const&) const
-OFileWriter::writeParameter(char const*, char const*, rtl::OUString const&) const
 Options::Options()
 Options::getInputFiles()
 Options::getOption(rtl::OString const&) const
