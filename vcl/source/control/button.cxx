@@ -605,9 +605,17 @@ void PushButton::ImplInitPushButtonData()
     mbInUserDraw    = false;
 }
 
+<<<namespace
+{
+    Window* getPreviousSibling(Window *pParent)
+    {
+        return pParent ? pParent->GetWindow(WINDOW_LASTCHILD) : NULL;
+    }
+}
+
 void PushButton::ImplInit( Window* pParent, WinBits nStyle )
 {
-    nStyle = ImplInitStyle( pParent->GetWindow( WINDOW_LASTCHILD ), nStyle );
+    nStyle = ImplInitStyle(getPreviousSibling(pParent), nStyle);
     Button::ImplInit( pParent, nStyle, NULL );
 
     if ( nStyle & WB_NOLIGHTBORDER )
@@ -1808,7 +1816,7 @@ void RadioButton::ImplInitRadioButtonData()
 
 void RadioButton::ImplInit( Window* pParent, WinBits nStyle )
 {
-    nStyle = ImplInitStyle( pParent->GetWindow( WINDOW_LASTCHILD ), nStyle );
+    nStyle = ImplInitStyle(getPreviousSibling(pParent), nStyle);
     Button::ImplInit( pParent, nStyle, NULL );
 
     ImplInitSettings( true, true, true );
@@ -2930,7 +2938,7 @@ void CheckBox::ImplInitCheckBoxData()
 
 void CheckBox::ImplInit( Window* pParent, WinBits nStyle )
 {
-    nStyle = ImplInitStyle( pParent->GetWindow( WINDOW_LASTCHILD ), nStyle );
+    nStyle = ImplInitStyle(getPreviousSibling(pParent), nStyle);
     Button::ImplInit( pParent, nStyle, NULL );
 
     ImplInitSettings( true, true, true );
