@@ -1073,7 +1073,8 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
                     if(pFCell->GetMatrixOrigin(aTopLeftMatrixCell))
                     {
                         ScFormulaCell* pMatrixCell = rXMLImport.GetDocument()->GetFormulaCell(aTopLeftMatrixCell);
-                        pMatrixCell->SetDirty();
+                        if (pMatrixCell)
+                            pMatrixCell->SetDirty();
                     }
                     else
                         SAL_WARN("sc", "matrix cell without matrix");
