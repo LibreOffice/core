@@ -36,18 +36,18 @@ extern void sw_GetJoinFlags( SwPaM& rPam, sal_Bool& rJoinTxt, sal_Bool& rJoinPre
 
 SwUndoRedline::SwUndoRedline( SwUndoId nUsrId, const SwPaM& rRange )
     : SwUndo( UNDO_REDLINE ), SwUndRng( rRange ),
-    pRedlData( 0 ), pRedlSaveData( 0 ), nUserId( nUsrId ),
-    bHiddenRedlines( sal_False )
+    mpRedlData( 0 ), mpRedlSaveData( 0 ), mnUserId( nUsrId ),
+    mbHiddenRedlines( sal_False )
 {
     // consider Redline
     SwDoc& rDoc = *rRange.GetDoc();
     if( rDoc.IsRedlineOn() )
     {
-        switch( nUserId )
+        switch( mnUserId )
         {
         case UNDO_DELETE:
         case UNDO_REPLACE:
-            pRedlData = new SwRedlineData( nsRedlineType_t::REDLINE_DELETE, rDoc.GetRedlineAuthor() );
+            mpRedlData = new SwRedlineData( nsRedlineType_t::REDLINE_DELETE, rDoc.GetRedlineAuthor() );
             break;
         default:
             ;
@@ -57,14 +57,14 @@ SwUndoRedline::SwUndoRedline( SwUndoId nUsrId, const SwPaM& rRange )
 
     sal_uLong nEndExtra = rDoc.GetNodes().GetEndOfExtras().GetIndex();
 
-    pRedlSaveData = new SwRedlineSaveDatas;
-    if( !FillSaveData( rRange, *pRedlSaveData, sal_False,
-                        UNDO_REJECT_REDLINE != nUserId ))
-        delete pRedlSaveData, pRedlSaveData = 0;
+    mpRedlSaveData = new SwRedlineSaveDatas;
+    if( !FillSaveData( rRange, *mpRedlSaveData, sal_False,
+                        UNDO_REJECT_REDLINE != mnUserId ))
+        delete mpRedlSaveData, mpRedlSaveData = 0;
     else
     {
-        bHiddenRedlines = HasHiddenRedlines( *pRedlSaveData );
-        if( bHiddenRedlines )           // then the NodeIndices of SwUndRng need to be corrected
+        mbHiddenRedlines = HasHiddenRedlines( *mpRedlSaveData );
+        if( mbHiddenRedlines )           // then the NodeIndices of SwUndRng need to be corrected
         {
             nEndExtra -= rDoc.GetNodes().GetEndOfExtras().GetIndex();
             nSttNode -= nEndExtra;
@@ -75,13 +75,13 @@ SwUndoRedline::SwUndoRedline( SwUndoId nUsrId, const SwPaM& rRange )
 
 SwUndoRedline::~SwUndoRedline()
 {
-    delete pRedlData;
-    delete pRedlSaveData;
+    delete mpRedlData;
+    delete mpRedlSaveData;
 }
 
 sal_uInt16 SwUndoRedline::GetRedlSaveCount() const
 {
-    return pRedlSaveData ? pRedlSaveData->size() : 0;
+    return mpRedlSaveData ? mpRedlSaveData->size() : 0;
 }
 
 void SwUndoRedline::UndoImpl(::sw::UndoRedoContext & rContext)
@@ -91,13 +91,13 @@ void SwUndoRedline::UndoImpl(::sw::UndoRedoContext & rContext)
 
     UndoRedlineImpl(*pDoc, rPam);
 
-    if( pRedlSaveData )
+    if( mpRedlSaveData )
     {
         sal_uLong nEndExtra = pDoc->GetNodes().GetEndOfExtras().GetIndex();
-        SetSaveData( *pDoc, *pRedlSaveData );
-        if( bHiddenRedlines )
+        SetSaveData( *pDoc, *mpRedlSaveData );
+        if( mbHiddenRedlines )
         {
-            pRedlSaveData->DeleteAndDestroyAll();
+            mpRedlSaveData->DeleteAndDestroyAll();
 
             nEndExtra = pDoc->GetNodes().GetEndOfExtras().GetIndex() - nEndExtra;
             nSttNode += nEndExtra;
@@ -114,11 +114,11 @@ void SwUndoRedline::RedoImpl(::sw::UndoRedoContext & rContext)
     pDoc->SetRedlineMode_intern((RedlineMode_t)(( eOld & ~nsRedlineMode_t::REDLINE_IGNORE) | nsRedlineMode_t::REDLINE_ON ));
 
     SwPaM & rPam( AddUndoRedoPaM(rContext) );
-    if( pRedlSaveData && bHiddenRedlines )
+    if( mpRedlSaveData && mbHiddenRedlines )
     {
         sal_uLong nEndExtra = pDoc->GetNodes().GetEndOfExtras().GetIndex();
-        FillSaveData(rPam, *pRedlSaveData, sal_False,
-                        UNDO_REJECT_REDLINE != nUserId );
+        FillSaveData(rPam, *mpRedlSaveData, sal_False,
+                        UNDO_REJECT_REDLINE != mnUserId );
 
         nEndExtra -= pDoc->GetNodes().GetEndOfExtras().GetIndex();
         nSttNode -= nEndExtra;
@@ -146,7 +146,7 @@ SwUndoRedlineDelete::SwUndoRedlineDelete( const SwPaM& rRange, SwUndoId nUsrId )
     bCanGroup( sal_False ), bIsDelim( sal_False ), bIsBackspace( sal_False )
 {
     const SwTxtNode* pTNd;
-    if( UNDO_DELETE == nUserId &&
+    if( UNDO_DELETE == mnUserId &&
         nSttNode == nEndNode && nSttCntnt + 1 == nEndCntnt &&
         0 != (pTNd = rRange.GetNode()->GetTxtNode()) )
     {
@@ -172,14 +172,14 @@ void SwUndoRedlineDelete::RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
 {
     if (rPam.GetPoint() != rPam.GetMark())
     {
-        rDoc.AppendRedline( new SwRangeRedline(*pRedlData, rPam), false );
+        rDoc.AppendRedline( new SwRangeRedline(*mpRedlData, rPam), false );
     }
 }
 
 sal_Bool SwUndoRedlineDelete::CanGrouping( const SwUndoRedlineDelete& rNext )
 {
     sal_Bool bRet = sal_False;
-    if( UNDO_DELETE == nUserId && nUserId == rNext.nUserId &&
+    if( UNDO_DELETE == mnUserId && mnUserId == rNext.mnUserId &&
         bCanGroup == rNext.bCanGroup &&
         bIsDelim == rNext.bIsDelim &&
         bIsBackspace == rNext.bIsBackspace &&
@@ -194,10 +194,10 @@ sal_Bool SwUndoRedlineDelete::CanGrouping( const SwUndoRedlineDelete& rNext )
             bIsEnd = -1;
 
         if( bIsEnd &&
-            (( !pRedlSaveData && !rNext.pRedlSaveData ) ||
-             ( pRedlSaveData && rNext.pRedlSaveData &&
-                SwUndo::CanRedlineGroup( *pRedlSaveData,
-                            *rNext.pRedlSaveData, 1 != bIsEnd )
+            (( !mpRedlSaveData && !rNext.mpRedlSaveData ) ||
+             ( mpRedlSaveData && rNext.mpRedlSaveData &&
+                SwUndo::CanRedlineGroup( *mpRedlSaveData,
+                            *rNext.mpRedlSaveData, 1 != bIsEnd )
              )))
         {
             if( 1 == bIsEnd )

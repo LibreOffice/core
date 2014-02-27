@@ -121,7 +121,7 @@ bool SwEditShell::Undo(sal_uInt16 const nCount)
         // Destroy stored TableBoxPtr. A dection is only permitted for the new "Box"!
         ClearTblBoxCntnt();
 
-        RedlineMode_t eOld = GetDoc()->GetRedlineMode();
+        const RedlineMode_t eOld = GetDoc()->GetRedlineMode();
 
         try {
             for (sal_uInt16 i = 0; i < nCount; ++i)

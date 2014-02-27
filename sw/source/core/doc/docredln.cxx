@@ -3079,12 +3079,16 @@ SwRedlineData::SwRedlineData( RedlineType_t eT, sal_uInt16 nAut )
     aStamp.SetNanoSec( 0 );
 }
 
-SwRedlineData::SwRedlineData( const SwRedlineData& rCpy, sal_Bool bCpyNext )
-    :
-    pNext( (bCpyNext && rCpy.pNext) ? new SwRedlineData( *rCpy.pNext ) : 0 ),
-    pExtraData( rCpy.pExtraData ? rCpy.pExtraData->CreateNew() : 0 ),
-    sComment( rCpy.sComment ), aStamp( rCpy.aStamp ), eType( rCpy.eType ),
-    nAuthor( rCpy.nAuthor ), nSeqNo( rCpy.nSeqNo )
+SwRedlineData::SwRedlineData(
+    const SwRedlineData& rCpy,
+    sal_Bool bCpyNext )
+    : pNext( ( bCpyNext && rCpy.pNext ) ? new SwRedlineData( *rCpy.pNext ) : 0 )
+    , pExtraData( rCpy.pExtraData ? rCpy.pExtraData->CreateNew() : 0 )
+    , sComment( rCpy.sComment )
+    , aStamp( rCpy.aStamp )
+    , eType( rCpy.eType )
+    , nAuthor( rCpy.nAuthor )
+    , nSeqNo( rCpy.nSeqNo )
 {
 }
 
