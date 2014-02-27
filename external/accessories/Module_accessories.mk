@@ -9,14 +9,14 @@
 
 $(eval $(call gb_Module_Module,accessories))
 
-ifeq ($(WITH_EXTRA_FONT),YES)
+ifneq ($(WITH_EXTRA_FONT),)
 $(eval $(call gb_Module_add_targets,accessories,\
 	ExternalPackage_extra_fonts \
 	UnpackedTarball_fonts_pack \
 ))
 endif
 
-ifeq ($(WITH_EXTRA_GALLERY),YES)
+ifneq ($(WITH_EXTRA_GALLERY),)
 $(eval $(call gb_Module_add_targets,accessories,\
 	UnpackedTarball_gallery_pack \
 	ExternalPackage_accessoriesgallery \
@@ -39,7 +39,7 @@ $(eval $(call gb_Module_add_targets,accessories,\
 ))
 endif
 
-ifeq ($(WITH_EXTRA_SAMPLE),YES)
+ifneq ($(WITH_EXTRA_SAMPLE),)
 $(eval $(call gb_Module_add_l10n_targets,accessories,\
 	AllLangPackage_accessoriessamples \
 	AllLangPackage_accessoriessamplesadvertisement \
@@ -54,7 +54,7 @@ $(eval $(call gb_Module_add_targets,accessories,\
 ))
 endif
 
-ifeq ($(WITH_EXTRA_TEMPLATE),YES)
+ifneq ($(WITH_EXTRA_TEMPLATE),)
 $(eval $(call gb_Module_add_l10n_targets,accessories,\
 	AllLangPackage_accessoriestemplates \
 	AllLangPackage_accessoriestemplateseducate \

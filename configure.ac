@@ -11415,11 +11415,11 @@ dnl ===================================================================
 AC_MSG_CHECKING([whether to include extra galleries])
 if test "$enable_extra_gallery" = "" -o "$enable_extra_gallery" = "no"; then
     AC_MSG_RESULT([no])
-    WITH_EXTRA_GALLERY=NO
+    WITH_EXTRA_GALLERY=
     OOOP_GALLERY_PACK=""
 else
     AC_MSG_RESULT([yes])
-    WITH_EXTRA_GALLERY=YES
+    WITH_EXTRA_GALLERY=TRUE
     BUILD_TYPE="$BUILD_TYPE EXTRA_GALLERY"
     SCPDEFS="$SCPDEFS -DWITH_EXTRA_GALLERY"
     OOOP_GALLERY_PACK="af9314c5972d95a5d6da23ffad818f68-OOOP-gallery-pack-2.8.0.0.zip"
@@ -11433,11 +11433,11 @@ dnl ===================================================================
 AC_MSG_CHECKING([whether to include extra templates])
 if test "$enable_extra_template" = "" -o "$enable_extra_template" = "no"; then
     AC_MSG_RESULT([no])
-    WITH_EXTRA_TEMPLATE=NO
+    WITH_EXTRA_TEMPLATE=
     OOOP_TEMPLATES_PACK=""
 else
     AC_MSG_RESULT([yes])
-    WITH_EXTRA_TEMPLATE=YES
+    WITH_EXTRA_TEMPLATE=TRUE
     BUILD_TYPE="$BUILD_TYPE EXTRA_TEMPLATE"
     SCPDEFS="$SCPDEFS -DWITH_EXTRA_TEMPLATE"
     OOOP_TEMPLATES_PACK="1be202fbbbc13f10592a98f70a4a87fb-OOOP-templates-pack-2.9.0.0.zip"
@@ -11451,11 +11451,11 @@ dnl ===================================================================
 AC_MSG_CHECKING([whether to include extra samples])
 if test "$enable_extra_sample" = "" -o "$enable_extra_sample" = "no"; then
     AC_MSG_RESULT([no])
-    WITH_EXTRA_SAMPLE=NO
+    WITH_EXTRA_SAMPLE=
     OOOP_SAMPLES_PACK=""
 else
     AC_MSG_RESULT([yes])
-    WITH_EXTRA_SAMPLE=YES
+    WITH_EXTRA_SAMPLE=TRUE
     BUILD_TYPE="$BUILD_TYPE EXTRA_SAMPLE"
     SCPDEFS="$SCPDEFS -DWITH_EXTRA_SAMPLE"
     OOOP_SAMPLES_PACK="a6bccacf44914969e6e7b2f8faf4132c-OOOP-samples-pack-2.7.0.0.zip"
@@ -11469,11 +11469,11 @@ dnl ===================================================================
 AC_MSG_CHECKING([whether to include extra fonts])
 if test "$enable_extra_font" = "" -o "$enable_extra_font" = "no"; then
     AC_MSG_RESULT([no])
-    WITH_EXTRA_FONT=NO
+    WITH_EXTRA_FONT=
     OOOP_FONTS_PACK=""
 else
     AC_MSG_RESULT([yes])
-    WITH_EXTRA_FONT=YES
+    WITH_EXTRA_FONT=TRUE
     BUILD_TYPE="$BUILD_TYPE EXTRA_FONT"
     SCPDEFS="$SCPDEFS -DWITH_EXTRA_FONT"
     OOOP_FONTS_PACK="a10aa597411643326e27d7fc128af12d-OOOP-fonts-pack-2.9.0.0.zip"
