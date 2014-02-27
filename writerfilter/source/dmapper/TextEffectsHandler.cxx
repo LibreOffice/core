@@ -450,6 +450,31 @@ OUString TextEffectsHandler::getPresetMaterialTypeString(sal_Int32 nType)
     return OUString();
 }
 
+OUString TextEffectsHandler::getLigaturesString(sal_Int32 nType)
+{
+    switch (nType)
+    {
+        case NS_ooxml::LN_ST_Ligatures_none: return OUString("none");
+        case NS_ooxml::LN_ST_Ligatures_standard: return OUString("standard");
+        case NS_ooxml::LN_ST_Ligatures_contextual: return OUString("contextual");
+        case NS_ooxml::LN_ST_Ligatures_historical: return OUString("historical");
+        case NS_ooxml::LN_ST_Ligatures_discretional: return OUString("discretional");
+        case NS_ooxml::LN_ST_Ligatures_standardContextual: return OUString("standardContextual");
+        case NS_ooxml::LN_ST_Ligatures_standardHistorical: return OUString("standardHistorical");
+        case NS_ooxml::LN_ST_Ligatures_contextualHistorical: return OUString("contextualHistorical");
+        case NS_ooxml::LN_ST_Ligatures_standardDiscretional: return OUString("standardDiscretional");
+        case NS_ooxml::LN_ST_Ligatures_contextualDiscretional: return OUString("contextualDiscretional");
+        case NS_ooxml::LN_ST_Ligatures_historicalDiscretional: return OUString("historicalDiscretional");
+        case NS_ooxml::LN_ST_Ligatures_standardContextualHistorical: return OUString("standardContextualHistorical");
+        case NS_ooxml::LN_ST_Ligatures_standardContextualDiscretional: return OUString("standardContextualDiscretional");
+        case NS_ooxml::LN_ST_Ligatures_standardHistoricalDiscretional: return OUString("standardHistoricalDiscretional");
+        case NS_ooxml::LN_ST_Ligatures_contextualHistoricalDiscretional: return OUString("contextualHistoricalDiscretional");
+        case NS_ooxml::LN_ST_Ligatures_all: return OUString("all");
+        default: break;
+    }
+    return OUString();
+}
+
 void TextEffectsHandler::convertElementIdToPropertyId(sal_Int32 aElementId)
 {
     switch(aElementId)
@@ -483,6 +508,9 @@ void TextEffectsHandler::convertElementIdToPropertyId(sal_Int32 aElementId)
             maElementName = "props3d";
             break;
         case NS_ooxml::LN_ligatures_ligatures:
+            maPropertyId = PROP_CHAR_LIGATURES_TEXT_EFFECT;
+            maElementName = "ligatures";
+            break;
         case NS_ooxml::LN_numForm_numForm:
         case NS_ooxml::LN_numSpacing_numSpacing:
         case NS_ooxml::LN_stylisticSets_stylisticSets:
@@ -698,6 +726,12 @@ void TextEffectsHandler::lcl_attribute(Id aName, Value& aValue)
             {
                 uno::Any aAny = makeAny(getBevelPresetTypeString(sal_Int32(aValue.getInt())));
                 mpGrabBagStack->appendElement("prst", aAny);
+            }
+            break;
+        case NS_ooxml::LN_CT_Ligatures_val:
+            {
+                uno::Any aAny = makeAny(getLigaturesString(sal_Int32(aValue.getInt())));
+                mpGrabBagStack->appendElement("val", aAny);
             }
             break;
         default:

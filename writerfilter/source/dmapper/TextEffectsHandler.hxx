@@ -64,6 +64,7 @@ public:
     static OUString getLightRigDirectionString(sal_Int32 nType);
     static OUString getBevelPresetTypeString(sal_Int32 nType);
     static OUString getPresetMaterialTypeString(sal_Int32 nType);
+    static OUString getLigaturesString(sal_Int32 nType);
 
 };
 
