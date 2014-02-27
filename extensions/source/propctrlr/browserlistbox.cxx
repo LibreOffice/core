@@ -1196,11 +1196,12 @@ namespace pcr
                 // So, we manually switch this to read-only.
                 if ( xControl.is() && ( xControl->getControlType() == PropertyControlType::Unknown ) )
                 {
-                    Edit* pControlWindowAsEdit = dynamic_cast< Edit* >( rLine.pLine->getControlWindow() );
-                    if ( pControlWindowAsEdit )
-                        pControlWindowAsEdit->SetReadOnly( sal_True );
+                    Window *pWindow = rLine.pLine->getControlWindow();
+                    Edit* pControlWindowAsEdit = dynamic_cast<Edit*>(pWindow);
+                    if (pControlWindowAsEdit)
+                        pControlWindowAsEdit->SetReadOnly(sal_True);
                     else
-                        pControlWindowAsEdit->Enable( false );
+                        pWindow->Enable(false);
                 }
             }
         }
