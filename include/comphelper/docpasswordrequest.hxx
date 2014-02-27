@@ -60,7 +60,6 @@ private:
 private:
     ::com::sun::star::uno::Any      maRequest;
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > maContinuations;
-    AbortContinuation *             mpAbort;
     PasswordContinuation *          mpPassword;
 };
 
@@ -95,7 +94,6 @@ private:
 private:
     ::com::sun::star::uno::Any      maRequest;
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > maContinuations;
-    AbortContinuation *             mpAbort;
     PasswordContinuation *          mpPassword;
 };
 

@@ -90,15 +90,14 @@ private:
 
 
 SimplePasswordRequest::SimplePasswordRequest( PasswordRequestMode eMode )
-: mpAbort( NULL )
-, mpPassword( NULL )
+    : mpPassword( NULL )
 {
     PasswordRequest aRequest( OUString(), Reference< XInterface >(),
         InteractionClassification_QUERY, eMode );
     maRequest <<= aRequest;
 
     maContinuations.realloc( 2 );
-    maContinuations[ 0 ].set( mpAbort = new AbortContinuation );
+    maContinuations[ 0 ].set( new AbortContinuation );
     maContinuations[ 1 ].set( mpPassword = new PasswordContinuation );
 }
 
@@ -130,8 +129,7 @@ Sequence< Reference< XInteractionContinuation > > SAL_CALL SimplePasswordRequest
 
 DocPasswordRequest::DocPasswordRequest( DocPasswordRequestType eType,
         PasswordRequestMode eMode, const OUString& rDocumentName, bool bPasswordToModify )
-: mpAbort( NULL )
-, mpPassword( NULL )
+    : mpPassword( NULL )
 {
     switch( eType )
     {
@@ -154,7 +152,7 @@ DocPasswordRequest::DocPasswordRequest( DocPasswordRequestType eType,
     }
 
     maContinuations.realloc( 2 );
-    maContinuations[ 0 ].set( mpAbort = new AbortContinuation );
+    maContinuations[ 0 ].set( new AbortContinuation );
     maContinuations[ 1 ].set( mpPassword = new PasswordContinuation );
 }
 
