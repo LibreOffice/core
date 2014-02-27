@@ -861,6 +861,11 @@ sal_Bool GalleryTheme::InsertGraphic( const Graphic& rGraphic, sal_uIntPtr nInse
             {
                 case( GFX_LINK_TYPE_EPS_BUFFER ): nExportFormat = CVT_SVM; break;
                 case( GFX_LINK_TYPE_NATIVE_GIF ): nExportFormat = CVT_GIF; break;
+
+                // #i15508# added BMP type
+                // could not find/trigger a call to this, but should do no harm
+                case( GFX_LINK_TYPE_NATIVE_BMP ): nExportFormat = CVT_BMP; break;
+
                 case( GFX_LINK_TYPE_NATIVE_JPG ): nExportFormat = CVT_JPG; break;
                 case( GFX_LINK_TYPE_NATIVE_PNG ): nExportFormat = CVT_PNG; break;
                 case( GFX_LINK_TYPE_NATIVE_TIF ): nExportFormat = CVT_TIF; break;

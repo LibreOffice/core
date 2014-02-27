@@ -1576,7 +1576,14 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
             // SV internal filters for import bitmaps and MetaFiles
             ReadGraphic( rIStream, rGraphic );
             if( rIStream.GetError() )
+            {
                 nStatus = GRFILTER_FORMATERROR;
+            }
+            else
+            {
+                // #i15508# added BMP type (checked, works)
+                eLinkType = GFX_LINK_TYPE_NATIVE_BMP;
+            }
         }
         else if( aFilterName.equalsIgnoreAsciiCase( IMP_MOV ) )
         {

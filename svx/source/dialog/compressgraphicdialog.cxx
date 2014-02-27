@@ -139,6 +139,9 @@ void CompressGraphicsDialog::Update()
         case GFX_LINK_TYPE_NATIVE_SVG:
             aGraphicTypeString = "SVG image";
             break;
+        case GFX_LINK_TYPE_NATIVE_BMP:
+            aGraphicTypeString = "BMP image";
+            break;
         default:
             aGraphicTypeString = "Unknown";
             break;

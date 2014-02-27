@@ -360,6 +360,10 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
                         switch( const_cast< Graphic* >( mpGraphic )->GetLink().GetType() )
                         {
                             case( GFX_LINK_TYPE_NATIVE_GIF ): pMimeType = MIMETYPE_GIF; break;
+
+                            // #i15508# added BMP type for better exports (checked, works)
+                            case( GFX_LINK_TYPE_NATIVE_BMP ): pMimeType = MIMETYPE_BMP; break;
+
                             case( GFX_LINK_TYPE_NATIVE_JPG ): pMimeType = MIMETYPE_JPG; break;
                             case( GFX_LINK_TYPE_NATIVE_PNG ): pMimeType = MIMETYPE_PNG; break;
                             case( GFX_LINK_TYPE_NATIVE_WMF ): pMimeType = MIMETYPE_WMF; break;

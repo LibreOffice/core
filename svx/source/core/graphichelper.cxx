@@ -81,6 +81,9 @@ void GraphicHelper::GetPreferredExtension( OUString& rExtension, const Graphic& 
         case GFX_LINK_TYPE_NATIVE_JPG:
             aExtension = "jpg";
             break;
+        case GFX_LINK_TYPE_NATIVE_BMP:
+            aExtension = "bmp";
+            break;
         default:
             break;
     }

@@ -4359,6 +4359,15 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
                 {
                     case GFX_LINK_TYPE_NATIVE_JPG : p_EscherBlibEntry->meBlibType = PEG; break;
                     case GFX_LINK_TYPE_NATIVE_PNG : p_EscherBlibEntry->meBlibType = PNG; break;
+
+                    // #i15508# added BMP type for better exports; need to check this
+                    // checked - does not work that way, so keep out for now. It may
+                    // work somehow with direct DIB data, but that would need to be checked
+                    // carefully
+                    // for more comments please check RtfAttributeOutput::FlyFrameGraphic
+                    //
+                    // case GFX_LINK_TYPE_NATIVE_BMP : p_EscherBlibEntry->meBlibType = DIB; break;
+
                     case GFX_LINK_TYPE_NATIVE_WMF :
                     {
                         if ( pGraphicAry && ( p_EscherBlibEntry->mnSize > 0x2c ) )
@@ -4456,13 +4465,34 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
                 else if ( eBlibType == PEG )
                     rPicOutStrm.WriteUInt16( (sal_uInt16)0x0505 );
             }
+
             // fdo#69607 do not compress WMF files if we are in OOXML export
-            if ( ( eBlibType == PEG ) || ( eBlibType == PNG ) ||
-                    ( ( ( eBlibType == WMF ) || ( eBlibType == EMF ) ) && bOOxmlExport ) )
+            if ( ( eBlibType == PEG ) || ( eBlibType == PNG ) // || ( eBlibType == DIB )) // #i15508#
+                || ( ( ( eBlibType == WMF ) || ( eBlibType == EMF ) ) && bOOxmlExport ) )
             {
                 nExtra = 17;
                 p_EscherBlibEntry->mnSizeExtra = nExtra + 8;
-                nInstance = ( eBlibType == PNG ) ? 0xf01e6e00 : 0xf01d46a0;
+
+                // #i15508# type see SvxMSDffManager::GetBLIPDirect (checked, does not work this way)
+                // see RtfAttributeOutput::FlyFrameGraphic for more comments
+                // maybe it would work with direct DIB data, but that would need thorough testing
+                if( eBlibType == PNG )
+                {
+                    nInstance = 0xf01e6e00;
+                }
+                else // if( eBlibType == PEG )
+                {
+                    nInstance = 0xf01d46a0;
+                }
+                //else // eBlibType == DIB
+                //{
+                //    nInstance = 0xf01d7A80;
+                //}
+
+                // #i15508#
+                //nInstance = ( eBlibType == PNG ) ? 0xf01e6e00 : 0xf01d46a0;
+
+
                 rPicOutStrm.WriteUInt32( nInstance ).WriteUInt32( (sal_uInt32)( p_EscherBlibEntry->mnSize + nExtra ) );
                 rPicOutStrm.Write( p_EscherBlibEntry->mnIdentifier, 16 );
                 rPicOutStrm.WriteUChar( (sal_uInt8)0xff );

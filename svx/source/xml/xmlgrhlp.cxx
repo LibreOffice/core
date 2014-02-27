@@ -647,6 +647,8 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt
                     {
                         case( GFX_LINK_TYPE_EPS_BUFFER ): aExtension = ".eps"; break;
                         case( GFX_LINK_TYPE_NATIVE_GIF ): aExtension = ".gif"; break;
+                        // #i15508# added BMP type for better exports (checked, works)
+                        case( GFX_LINK_TYPE_NATIVE_BMP ): aExtension = ".bmp"; break;
                         case( GFX_LINK_TYPE_NATIVE_JPG ): aExtension = ".jpg"; break;
                         case( GFX_LINK_TYPE_NATIVE_PNG ): aExtension = ".png"; break;
                         case( GFX_LINK_TYPE_NATIVE_TIF ): aExtension = ".tif"; break;

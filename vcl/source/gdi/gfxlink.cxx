@@ -203,6 +203,10 @@ bool GfxLink::LoadNative( Graphic& rGraphic )
             switch( meType )
             {
                 case( GFX_LINK_TYPE_NATIVE_GIF ): nCvtType = CVT_GIF; break;
+
+                // #i15508# added BMP type for better exports (reload when swapped - checked, works)
+                case( GFX_LINK_TYPE_NATIVE_BMP ): nCvtType = CVT_BMP; break;
+
                 case( GFX_LINK_TYPE_NATIVE_JPG ): nCvtType = CVT_JPG; break;
                 case( GFX_LINK_TYPE_NATIVE_PNG ): nCvtType = CVT_PNG; break;
                 case( GFX_LINK_TYPE_NATIVE_TIF ): nCvtType = CVT_TIF; break;
