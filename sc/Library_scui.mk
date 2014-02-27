@@ -56,7 +56,6 @@ $(eval $(call gb_Library_add_exception_objects,scui,\
     sc/source/ui/condformat/condformatmgr \
     sc/source/ui/dbgui/dapidata \
     sc/source/ui/dbgui/dapitype \
-    sc/source/ui/dbgui/dpgroupdlg \
     sc/source/ui/dbgui/pfiltdlg \
     sc/source/ui/dbgui/pvfundlg \
     sc/source/ui/dbgui/scendlg \
