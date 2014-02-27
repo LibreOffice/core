@@ -415,20 +415,22 @@ SwXMailMerge::~SwXMailMerge()
 // Guarantee object consistence in case of an exception
 class MailMergeExecuteFinalizer {
 public:
-    MailMergeExecuteFinalizer(SwXMailMerge *mailmerge) {
-        OSL_ENSURE( mailmerge, "mailmerge object missing" );
-        this->m_aMailMerge = mailmerge;
+    MailMergeExecuteFinalizer(SwXMailMerge *mailmerge)
+        : m_pMailMerge(mailmerge)
+    {
+        assert(m_pMailMerge); //mailmerge object missing
     }
-    ~MailMergeExecuteFinalizer() {
+    ~MailMergeExecuteFinalizer()
+    {
         osl::MutexGuard pMgrGuard( GetMailMergeMutex() );
-        m_aMailMerge->m_pMgr = 0;
+        m_pMailMerge->m_pMgr = 0;
     }
 
 private:
     // Disallow copy
     MailMergeExecuteFinalizer(const MailMergeExecuteFinalizer&) {}
 
-    SwXMailMerge *m_aMailMerge;
+    SwXMailMerge *m_pMailMerge;
 };
 
 uno::Any SAL_CALL SwXMailMerge::execute(
