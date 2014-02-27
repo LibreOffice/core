@@ -5660,6 +5660,11 @@
           <param name="maxInclusive">20116800</param>
         </data>
       </define>
+      <define name="ST_UnsignedDecimalNumber">
+        <data type="unsignedLong">
+          <xs:documentation>Unsigned Decimal Number Value</xs:documentation>
+        </data>
+      </define>
 
       <define name="EG_ColorChoice">
         <choice>
@@ -5956,6 +5961,24 @@
       <define name="CT_Color">
         <ref name="EG_ColorChoice"/>
       </define>
+      <define name="CT_StyleSet">
+        <attribute name="id">
+          <ref name="ST_UnsignedDecimalNumber"/>
+        </attribute>
+        <optional>
+          <attribute name="val">
+            <ref name="ST_OnOff"/>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_OnOff">
+        <optional>
+          <attribute name="val">
+            <ref name="ST_OnOff"/>
+          </attribute>
+        </optional>
+      </define>
+
 
       <!-- Main Elements-->
       <define name="CT_Glow">
@@ -6166,6 +6189,13 @@
           <ref name="ST_NumSpacing"/>
         </attribute>
       </define>
+      <define name="CT_StylisticSets">
+        <zeroOrMore>
+          <element name="styleSet">
+            <ref name="CT_StyleSet"/>
+          </element>
+        </zeroOrMore>
+      </define>
 
       <define name="glow">
         <element name="glow">
@@ -6219,12 +6249,12 @@
       </define>
       <define name="stylisticSets">
         <element name="stylisticSets">
-          <empty/>
+          <ref name="CT_StylisticSets"/>
         </element>
       </define>
       <define name="cntxtAlts">
         <element name="cntxtAlts">
-          <empty/>
+          <ref name="CT_OnOff"/>
         </element>
       </define>
     </grammar>
@@ -6466,6 +6496,7 @@
     <resource name="ST_PositiveFixedAngle" resource="Integer" generated="yes"/>
     <resource name="ST_FixedAngle" resource="Integer" generated="yes"/>
     <resource name="ST_LineWidth" resource="Integer" generated="yes"/>
+    <resource name="ST_UnsignedDecimalNumber" resource="Integer" generated="yes"/>
 
     <!-- Groups Resource Definitions -->
     <resource name="EG_ColorTransform" resource="Properties" tag="character">
@@ -6571,6 +6602,13 @@
       <attribute name="prst" tokenid="ooxml:CT_Bevel_prst"/>
     </resource>
     <resource name="CT_Color" resource="Properties" tag="character"/>
+    <resource name="CT_StyleSet" resource="Properties" tag="character">
+      <attribute name="id" tokenid="ooxml:CT_StyleSet_id"/>
+      <attribute name="val" tokenid="ooxml:CT_StyleSet_val"/>
+    </resource>
+    <resource name="CT_OnOff" resource="Properties" tag="character">
+      <attribute name="val" tokenid="ooxml:CT_OnOff_val"/>
+    </resource>
 
     <!-- Main element content -->
     <resource name="CT_Shadow" resource="Properties" tag="character">
@@ -6626,6 +6664,9 @@
     </resource>
     <resource name="CT_NumSpacing" resource="Properties" tag="character">
       <attribute name="val" tokenid="ooxml:CT_NumSpacing_val"/>
+    </resource>
+    <resource name="CT_StylisticSets" resource="Properties" tag="character">
+      <attribute name="styleSet" tokenid="ooxml:CT_StylisticSets_styleSet"/>
     </resource>
 
     <resource name="glow" resource="Properties" tag="character">
@@ -18347,7 +18388,7 @@
             <ref name="BUILT_IN_ANY_TYPE"/>
           </element>
         </optional>
-        <!--<optional>
+        <optional>
           <element name="w14:stylisticSets">
             <ref name="BUILT_IN_ANY_TYPE"/>
           </element>
@@ -18356,7 +18397,7 @@
           <element name="w14:cntxtAlts">
             <ref name="BUILT_IN_ANY_TYPE"/>
           </element>
-        </optional>-->
+        </optional>
       </define>
       <define name="EG_RPrContent">
         <optional>
@@ -24334,8 +24375,8 @@
       <element name="w14:ligatures" tokenid="ooxml:EG_RPrBase_w14_ligatures"/>
       <element name="w14:numForm" tokenid="ooxml:EG_RPrBase_w14_numForm"/>
       <element name="w14:numSpacing" tokenid="ooxml:EG_RPrBase_w14_numSpacing"/>
-      <!--<element name="w14:stylisticSets" tokenid="ooxml:EG_RPrBase_w14_stylisticSets"/>
-      <element name="w14:cntxtAlts" tokenid="ooxml:EG_RPrBase_w14_cntxtAlts"/>-->
+      <element name="w14:stylisticSets" tokenid="ooxml:EG_RPrBase_w14_stylisticSets"/>
+      <element name="w14:cntxtAlts" tokenid="ooxml:EG_RPrBase_w14_cntxtAlts"/>
     </resource>
     <resource name="EG_RPrContent" resource="Properties" tag="character">
       <element name="rPrChange" tokenid="ooxml:EG_RPrContent_rPrChange"/>
