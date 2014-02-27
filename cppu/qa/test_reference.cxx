@@ -48,7 +48,7 @@ public:
     }
 
     virtual Any SAL_CALL queryInterface(const Type & _type)
-        throw (RuntimeException)
+        throw (RuntimeException, std::exception)
     {
         Any aInterface;
         if (_type == getCppuType< Reference< XInterface > >())
