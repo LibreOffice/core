@@ -32,10 +32,7 @@
 #include <svdata.hxx>
 #include <controldata.hxx>
 
-
 using namespace vcl;
-
-
 
 void Control::ImplInitControlData()
 {
@@ -43,15 +40,11 @@ void Control::ImplInitControlData()
     mpControlData   = new ImplControlData;
 }
 
-
-
 Control::Control( WindowType nType ) :
     Window( nType )
 {
     ImplInitControlData();
 }
-
-
 
 Control::Control( Window* pParent, WinBits nStyle ) :
     Window( WINDOW_CONTROL )
@@ -73,28 +66,20 @@ Control::Control( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
-
-
 Control::~Control()
 {
     delete mpControlData, mpControlData = NULL;
 }
-
-
 
 void Control::GetFocus()
 {
     Window::GetFocus();
 }
 
-
-
 void Control::LoseFocus()
 {
     Window::LoseFocus();
 }
-
-
 
 void Control::Resize()
 {
@@ -102,13 +87,9 @@ void Control::Resize()
     Window::Resize();
 }
 
-
-
 void Control::FillLayoutData() const
 {
 }
-
-
 
 void Control::CreateLayoutData() const
 {
@@ -116,21 +97,15 @@ void Control::CreateLayoutData() const
     mpControlData->mpLayoutData = new ::vcl::ControlLayoutData();
 }
 
-
-
 bool Control::HasLayoutData() const
 {
     return mpControlData->mpLayoutData != NULL;
 }
 
-
-
 ::vcl::ControlLayoutData* Control::GetLayoutData() const
 {
     return mpControlData->mpLayoutData;
 }
-
-
 
 void Control::SetText( const OUString& rStr )
 {
@@ -138,15 +113,10 @@ void Control::SetText( const OUString& rStr )
     Window::SetText( rStr );
 }
 
-
-
 Rectangle ControlLayoutData::GetCharacterBounds( long nIndex ) const
 {
     return (nIndex >= 0 && nIndex < (long) m_aUnicodeBoundRects.size()) ? m_aUnicodeBoundRects[ nIndex ] : Rectangle();
 }
-
-
-
 
 Rectangle Control::GetCharacterBounds( long nIndex ) const
 {
@@ -154,8 +124,6 @@ Rectangle Control::GetCharacterBounds( long nIndex ) const
         FillLayoutData();
     return mpControlData->mpLayoutData ? mpControlData->mpLayoutData->GetCharacterBounds( nIndex ) : Rectangle();
 }
-
-
 
 long ControlLayoutData::GetIndexForPoint( const Point& rPoint ) const
 {
@@ -174,16 +142,12 @@ long ControlLayoutData::GetIndexForPoint( const Point& rPoint ) const
     return nIndex;
 }
 
-
-
 long Control::GetIndexForPoint( const Point& rPoint ) const
 {
     if( ! HasLayoutData() )
         FillLayoutData();
     return mpControlData->mpLayoutData ? mpControlData->mpLayoutData->GetIndexForPoint( rPoint ) : -1;
 }
-
-
 
 long ControlLayoutData::GetLineCount() const
 {
@@ -192,8 +156,6 @@ long ControlLayoutData::GetLineCount() const
         nLines = 1;
     return nLines;
 }
-
-
 
 Pair ControlLayoutData::GetLineStartEnd( long nLine ) const
 {
@@ -218,16 +180,12 @@ Pair ControlLayoutData::GetLineStartEnd( long nLine ) const
     return aPair;
 }
 
-
-
 Pair Control::GetLineStartEnd( long nLine ) const
 {
     if( !HasLayoutData() )
         FillLayoutData();
     return mpControlData->mpLayoutData ? mpControlData->mpLayoutData->GetLineStartEnd( nLine ) : Pair( -1, -1 );
 }
-
-
 
 long ControlLayoutData::ToRelativeLineIndex( long nIndex ) const
 {
@@ -261,8 +219,6 @@ long ControlLayoutData::ToRelativeLineIndex( long nIndex ) const
     return nIndex;
 }
 
-
-
 long Control::ToRelativeLineIndex( long nIndex ) const
 {
     if( !HasLayoutData() )
@@ -270,16 +226,12 @@ long Control::ToRelativeLineIndex( long nIndex ) const
     return mpControlData->mpLayoutData ? mpControlData->mpLayoutData->ToRelativeLineIndex( nIndex ) : -1;
 }
 
-
-
 OUString Control::GetDisplayText() const
 {
     if( !HasLayoutData() )
         FillLayoutData();
     return mpControlData->mpLayoutData ? OUString(mpControlData->mpLayoutData->m_aDisplayText) : GetText();
 }
-
-
 
 bool Control::Notify( NotifyEvent& rNEvt )
 {
@@ -313,8 +265,6 @@ bool Control::Notify( NotifyEvent& rNEvt )
     return Window::Notify( rNEvt );
 }
 
-
-
 void Control::StateChanged( StateChangedType nStateChange )
 {
     if( nStateChange == STATE_CHANGE_INITSHOW   ||
@@ -328,8 +278,6 @@ void Control::StateChanged( StateChangedType nStateChange )
     }
     Window::StateChanged( nStateChange );
 }
-
-
 
 void Control::AppendLayoutData( const Control& rSubControl ) const
 {
@@ -355,8 +303,6 @@ void Control::AppendLayoutData( const Control& rSubControl ) const
     }
 }
 
-
-
 bool Control::ImplCallEventListenersAndHandler(  sal_uLong nEvent, const Link& rHandler, void* pCaller )
 {
     ImplDelData aCheckDelete;
@@ -376,8 +322,6 @@ bool Control::ImplCallEventListenersAndHandler(  sal_uLong nEvent, const Link& r
     return true;
 }
 
-
-
 void Control::SetLayoutDataParent( const Control* pParent ) const
 {
     if( HasLayoutData() )
@@ -385,13 +329,10 @@ void Control::SetLayoutDataParent( const Control* pParent ) const
 }
 
 
-
 void Control::ImplClearLayoutData() const
 {
     delete mpControlData->mpLayoutData, mpControlData->mpLayoutData = NULL;
 }
-
-
 
 void Control::ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect )
 {
@@ -420,8 +361,6 @@ void Control::ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect )
     pDev->OutputDevice::SetSettings( aOriginalSettings );
 }
 
-
-
 void Control::DataChanged( const DataChangedEvent& rDCEvt)
 {
     // we don't want to loose some style settings for controls created with the
@@ -447,23 +386,17 @@ void Control::DataChanged( const DataChangedEvent& rDCEvt)
     }
 }
 
-
-
 ControlLayoutData::~ControlLayoutData()
 {
     if( m_pParent )
         m_pParent->ImplClearLayoutData();
 }
 
-
-
 Size Control::GetOptimalSize() const
 {
     return Size( GetTextWidth( GetText() ) + 2 * 12,
                  GetTextHeight() + 2 * 6 );
 }
-
-
 
 void Control::SetReferenceDevice( OutputDevice* _referenceDevice )
 {
@@ -474,26 +407,20 @@ void Control::SetReferenceDevice( OutputDevice* _referenceDevice )
     Invalidate();
 }
 
-
-
 OutputDevice* Control::GetReferenceDevice() const
 {
     return mpControlData->mpReferenceDevice;
 }
-
-
 
 const Font& Control::GetCanonicalFont( const StyleSettings& _rStyle ) const
 {
     return _rStyle.GetLabelFont();
 }
 
-
 const Color& Control::GetCanonicalTextColor( const StyleSettings& _rStyle ) const
 {
     return _rStyle.GetLabelTextColor();
 }
-
 
 void Control::ImplInitSettings( const bool _bFont, const bool _bForeground )
 {
@@ -518,8 +445,6 @@ void Control::ImplInitSettings( const bool _bFont, const bool _bForeground )
         SetTextFillColor();
     }
 }
-
-
 
 void Control::DrawControlText( OutputDevice& _rTargetDevice, Rectangle& _io_rRect, const OUString& _rStr,
     sal_uInt16 _nStyle, MetricVector* _pVector, OUString* _pDisplayText ) const

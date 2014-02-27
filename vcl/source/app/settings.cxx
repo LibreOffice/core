@@ -892,14 +892,10 @@ void ImplStyleData::SetStandardStyles()
     maWorkspaceGradient = Wallpaper( aGrad );
 }
 
-// -----------------------------------------------------------------------
-
 StyleSettings::StyleSettings()
 : mpData(boost::make_shared<ImplStyleData>())
 {
 }
-
-// -----------------------------------------------------------------------
 
 StyleSettings::~StyleSettings()
 {

@@ -85,12 +85,9 @@ mbSmallSymbol(false), maImage(), meImageAlign(IMAGEALIGN_TOP), meSymbolAlign(SYM
 {
 }
 
-
 ImplCommonButtonData::~ImplCommonButtonData()
 {
 }
-
-
 
 Button::Button( WindowType nType ) :
     Control( nType )
@@ -99,20 +96,15 @@ Button::Button( WindowType nType ) :
 }
 
 
-
 Button::~Button()
 {
     delete mpButtonData;
 }
 
-
-
 void Button::Click()
 {
     ImplCallEventListenersAndHandler( VCLEVENT_BUTTON_CLICK, maClickHdl, this );
 }
-
-
 
 OUString Button::GetStandardText( StandardButtonType eButton )
 {
@@ -181,7 +173,6 @@ bool Button::HasImage() const
     return !!(mpButtonData->maImage);
 }
 
-
 void Button::SetImageAlign( ImageAlign eAlign )
 {
     if ( mpButtonData->meImageAlign != eAlign )
@@ -191,20 +182,15 @@ void Button::SetImageAlign( ImageAlign eAlign )
     }
 }
 
-
 ImageAlign Button::GetImageAlign() const
 {
     return mpButtonData->meImageAlign;
 }
 
-
-
 void Button::SetFocusRect( const Rectangle& rFocusRect )
 {
     ImplSetFocusRect( rFocusRect );
 }
-
-
 
 long Button::ImplGetSeparatorX() const
 {
@@ -215,8 +201,6 @@ void Button::ImplSetSeparatorX( long nX )
 {
     mpButtonData->mnSeparatorX = nX;
 }
-
-
 
 sal_uInt16 Button::ImplGetTextStyle( OUString& rText, WinBits nWinStyle,
                                  sal_uLong nDrawFlags )
@@ -245,8 +229,6 @@ sal_uInt16 Button::ImplGetTextStyle( OUString& rText, WinBits nWinStyle,
 
     return nTextStyle;
 }
-
-
 
 void Button::ImplDrawAlignedImage( OutputDevice* pDev, Point& rPos,
                                    Size& rSize, bool bLayout,
@@ -520,7 +502,6 @@ void Button::ImplDrawAlignedImage( OutputDevice* pDev, Point& rPos,
     }
 }
 
-
 void Button::ImplSetFocusRect( const Rectangle &rFocusRect )
 {
     Rectangle aFocusRect = rFocusRect;
@@ -542,24 +523,20 @@ void Button::ImplSetFocusRect( const Rectangle &rFocusRect )
     mpButtonData->maFocusRect = aFocusRect;
 }
 
-
 const Rectangle& Button::ImplGetFocusRect() const
 {
     return mpButtonData->maFocusRect;
 }
-
 
 sal_uInt16& Button::ImplGetButtonState()
 {
     return mpButtonData->mnButtonState;
 }
 
-
 sal_uInt16 Button::ImplGetButtonState() const
 {
     return mpButtonData->mnButtonState;
 }
-
 
 void Button::ImplSetSymbolAlign( SymbolAlign eAlign )
 {
@@ -570,12 +547,10 @@ void Button::ImplSetSymbolAlign( SymbolAlign eAlign )
     }
 }
 
-
 void Button::SetSmallSymbol(bool bSmall)
 {
     mpButtonData->mbSmallSymbol = bSmall;
 }
-
 
 void Button::EnableImageDisplay( bool bEnable )
 {
@@ -584,7 +559,6 @@ void Button::EnableImageDisplay( bool bEnable )
     else
         mpButtonData->mnButtonState |= BUTTON_DRAW_NOIMAGE;
 }
-
 
 void Button::EnableTextDisplay( bool bEnable )
 {
@@ -619,8 +593,6 @@ bool Button::set_property(const OString &rKey, const OString &rValue)
     return true;
 }
 
-
-
 void PushButton::ImplInitPushButtonData()
 {
     mpWindowImpl->mbPushButton    = true;
@@ -633,8 +605,6 @@ void PushButton::ImplInitPushButtonData()
     mbInUserDraw    = false;
 }
 
-
-
 void PushButton::ImplInit( Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( pParent->GetWindow( WINDOW_LASTCHILD ), nStyle );
@@ -645,8 +615,6 @@ void PushButton::ImplInit( Window* pParent, WinBits nStyle )
 
     ImplInitSettings( true, true, true );
 }
-
-
 
 WinBits PushButton::ImplInitStyle( const Window* pPrevWindow, WinBits nStyle )
 {
@@ -669,20 +637,15 @@ WinBits PushButton::ImplInitStyle( const Window* pPrevWindow, WinBits nStyle )
     return nStyle;
 }
 
-
-
 const Font& PushButton::GetCanonicalFont( const StyleSettings& _rStyle ) const
 {
     return _rStyle.GetPushButtonFont();
 }
 
-
 const Color& PushButton::GetCanonicalTextColor( const StyleSettings& _rStyle ) const
 {
     return _rStyle.GetButtonTextColor();
 }
-
-
 
 void PushButton::ImplInitSettings( bool bFont,
                                    bool bForeground, bool bBackground )
@@ -714,8 +677,6 @@ void PushButton::ImplInitSettings( bool bFont,
     }
 }
 
-
-
 void PushButton::ImplDrawPushButtonFrame( Window* pDev,
                                           Rectangle& rRect, sal_uInt16 nStyle )
 {
@@ -742,8 +703,6 @@ void PushButton::ImplDrawPushButtonFrame( Window* pDev,
         rRect = aDecoView.DrawButton( rRect, nStyle );
 }
 
-
-
 bool PushButton::ImplHitTestPushButton( Window* pDev,
                                         const Point& rPos )
 {
@@ -752,8 +711,6 @@ bool PushButton::ImplHitTestPushButton( Window* pDev,
 
     return aTestRect.IsInside( rPos );
 }
-
-
 
 sal_uInt16 PushButton::ImplGetTextStyle( sal_uLong nDrawFlags ) const
 {
@@ -790,8 +747,6 @@ sal_uInt16 PushButton::ImplGetTextStyle( sal_uLong nDrawFlags ) const
     return nTextStyle;
 }
 
-
-
 static void ImplDrawBtnDropDownArrow( OutputDevice* pDev,
                                       long nX, long nY,
                                       Color& rColor, bool bBlack )
@@ -817,8 +772,6 @@ static void ImplDrawBtnDropDownArrow( OutputDevice* pDev,
     pDev->SetLineColor( aOldLineColor );
     pDev->SetFillColor( aOldFillColor );
 }
-
-
 
 void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, sal_uLong nDrawFlags,
                                             const Rectangle& rRect,
@@ -940,13 +893,9 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, sal_uLong nDrawF
     pDev->Pop();  // restore clipregion
 }
 
-
-
 void PushButton::UserDraw( const UserDrawEvent& )
 {
 }
-
-
 
 void PushButton::ImplDrawPushButton( bool bLayout )
 {
@@ -1183,14 +1132,10 @@ void PushButton::ImplSetDefButton( bool bSet )
     Invalidate();
 }
 
-
-
 bool PushButton::ImplIsDefButton() const
 {
     return (ImplGetButtonState() & BUTTON_DRAW_DEFAULT) != 0;
 }
-
-
 
 PushButton::PushButton( WindowType nType ) :
     Button( nType )
@@ -1198,16 +1143,12 @@ PushButton::PushButton( WindowType nType ) :
     ImplInitPushButtonData();
 }
 
-
-
 PushButton::PushButton( Window* pParent, WinBits nStyle ) :
     Button( WINDOW_PUSHBUTTON )
 {
     ImplInitPushButtonData();
     ImplInit( pParent, nStyle );
 }
-
-
 
 PushButton::PushButton( Window* pParent, const ResId& rResId ) :
     Button( WINDOW_PUSHBUTTON )
@@ -1222,13 +1163,9 @@ PushButton::PushButton( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
-
-
 PushButton::~PushButton()
 {
 }
-
-
 
 void PushButton::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -1249,8 +1186,6 @@ void PushButton::MouseButtonDown( const MouseEvent& rMEvt )
             Click();
     }
 }
-
-
 
 void PushButton::Tracking( const TrackingEvent& rTEvt )
 {
@@ -1316,8 +1251,6 @@ void PushButton::Tracking( const TrackingEvent& rTEvt )
     }
 }
 
-
-
 void PushButton::KeyInput( const KeyEvent& rKEvt )
 {
     KeyCode aKeyCode = rKEvt.GetKeyCode();
@@ -1343,8 +1276,6 @@ void PushButton::KeyInput( const KeyEvent& rKEvt )
     else
         Button::KeyInput( rKEvt );
 }
-
-
 
 void PushButton::KeyUp( const KeyEvent& rKEvt )
 {
@@ -1378,22 +1309,16 @@ void PushButton::KeyUp( const KeyEvent& rKEvt )
         Button::KeyUp( rKEvt );
 }
 
-
-
 void PushButton::FillLayoutData() const
 {
     mpControlData->mpLayoutData = new vcl::ControlLayoutData();
     const_cast<PushButton*>(this)->ImplDrawPushButton( true );
 }
 
-
-
 void PushButton::Paint( const Rectangle& )
 {
     ImplDrawPushButton();
 }
-
-
 
 void PushButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
                        sal_uLong nFlags )
@@ -1438,15 +1363,11 @@ void PushButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     pDev->Pop();
 }
 
-
-
 void PushButton::Resize()
 {
     Control::Resize();
     Invalidate();
 }
-
-
 
 void PushButton::GetFocus()
 {
@@ -1455,16 +1376,12 @@ void PushButton::GetFocus()
     Button::GetFocus();
 }
 
-
-
 void PushButton::LoseFocus()
 {
     EndSelection();
     HideFocus();
     Button::LoseFocus();
 }
-
-
 
 void PushButton::StateChanged( StateChangedType nType )
 {
@@ -1514,8 +1431,6 @@ void PushButton::StateChanged( StateChangedType nType )
     }
 }
 
-
-
 void PushButton::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Button::DataChanged( rDCEvt );
@@ -1529,8 +1444,6 @@ void PushButton::DataChanged( const DataChangedEvent& rDCEvt )
         Invalidate();
     }
 }
-
-
 
 bool PushButton::PreNotify( NotifyEvent& rNEvt )
 {
@@ -1597,14 +1510,10 @@ bool PushButton::PreNotify( NotifyEvent& rNEvt )
     return Button::PreNotify(rNEvt);
 }
 
-
-
 void PushButton::Toggle()
 {
     ImplCallEventListenersAndHandler( VCLEVENT_PUSHBUTTON_TOGGLE, maToggleHdl, this );
 }
-
-
 
 void PushButton::SetSymbol( SymbolType eSymbol )
 {
@@ -1615,13 +1524,10 @@ void PushButton::SetSymbol( SymbolType eSymbol )
     }
 }
 
-
 void PushButton::SetSymbolAlign( SymbolAlign eAlign )
 {
     ImplSetSymbolAlign( eAlign );
 }
-
-
 
 void PushButton::SetDropDown( sal_uInt16 nStyle )
 {
@@ -1631,8 +1537,6 @@ void PushButton::SetDropDown( sal_uInt16 nStyle )
         StateChanged( STATE_CHANGE_DATA );
     }
 }
-
-
 
 void PushButton::SetState( TriState eState )
 {
@@ -1657,8 +1561,6 @@ void PushButton::SetState( TriState eState )
     }
 }
 
-
-
 void PushButton::SetPressed( bool bPressed )
 {
     if ( mbPressed != bPressed )
@@ -1667,8 +1569,6 @@ void PushButton::SetPressed( bool bPressed )
         StateChanged( STATE_CHANGE_DATA );
     }
 }
-
-
 
 void PushButton::EndSelection()
 {
@@ -1680,8 +1580,6 @@ void PushButton::EndSelection()
             ImplDrawPushButton();
     }
 }
-
-
 
 Size PushButton::CalcMinimumSize( long nMaxWidth ) const
 {
@@ -1740,9 +1638,6 @@ bool PushButton::set_property(const OString &rKey, const OString &rValue)
     return true;
 }
 
-
-
-
 void OKButton::ImplInit( Window* pParent, WinBits nStyle )
 {
     PushButton::ImplInit( pParent, nStyle );
@@ -1750,15 +1645,11 @@ void OKButton::ImplInit( Window* pParent, WinBits nStyle )
     SetText( Button::GetStandardText( BUTTON_OK ) );
 }
 
-
-
 OKButton::OKButton( Window* pParent, WinBits nStyle ) :
     PushButton( WINDOW_OKBUTTON )
 {
     ImplInit( pParent, nStyle );
 }
-
-
 
 OKButton::OKButton( Window* pParent, const ResId& rResId ) :
     PushButton( WINDOW_OKBUTTON )
@@ -1771,8 +1662,6 @@ OKButton::OKButton( Window* pParent, const ResId& rResId ) :
     if ( !(nStyle & WB_HIDE) )
         Show();
 }
-
-
 
 void OKButton::Click()
 {
@@ -1806,8 +1695,6 @@ void OKButton::Click()
     }
 }
 
-
-
 void CancelButton::ImplInit( Window* pParent, WinBits nStyle )
 {
     PushButton::ImplInit( pParent, nStyle );
@@ -1815,15 +1702,11 @@ void CancelButton::ImplInit( Window* pParent, WinBits nStyle )
     SetText( Button::GetStandardText( BUTTON_CANCEL ) );
 }
 
-
-
 CancelButton::CancelButton( Window* pParent, WinBits nStyle ) :
     PushButton( WINDOW_CANCELBUTTON )
 {
     ImplInit( pParent, nStyle );
 }
-
-
 
 CancelButton::CancelButton( Window* pParent, const ResId& rResId ) :
     PushButton( WINDOW_CANCELBUTTON )
@@ -1836,8 +1719,6 @@ CancelButton::CancelButton( Window* pParent, const ResId& rResId ) :
     if ( !(nStyle & WB_HIDE) )
         Show();
 }
-
-
 
 void CancelButton::Click()
 {
@@ -1877,8 +1758,6 @@ CloseButton::CloseButton( Window* pParent, WinBits nStyle )
     SetText( Button::GetStandardText( BUTTON_CLOSE ) );
 }
 
-
-
 void HelpButton::ImplInit( Window* pParent, WinBits nStyle )
 {
     PushButton::ImplInit( pParent, nStyle | WB_NOPOINTERFOCUS );
@@ -1886,15 +1765,11 @@ void HelpButton::ImplInit( Window* pParent, WinBits nStyle )
     SetText( Button::GetStandardText( BUTTON_HELP ) );
 }
 
-
-
 HelpButton::HelpButton( Window* pParent, WinBits nStyle ) :
     PushButton( WINDOW_HELPBUTTON )
 {
     ImplInit( pParent, nStyle );
 }
-
-
 
 HelpButton::HelpButton( Window* pParent, const ResId& rResId ) :
     PushButton( WINDOW_HELPBUTTON )
@@ -1907,8 +1782,6 @@ HelpButton::HelpButton( Window* pParent, const ResId& rResId ) :
     if ( !(nStyle & WB_HIDE) )
         Show();
 }
-
-
 
 void HelpButton::Click()
 {
@@ -1925,8 +1798,6 @@ void HelpButton::Click()
     PushButton::Click();
 }
 
-
-
 void RadioButton::ImplInitRadioButtonData()
 {
     mbChecked       = false;
@@ -1935,8 +1806,6 @@ void RadioButton::ImplInitRadioButtonData()
     mbStateChanged  = false;
 }
 
-
-
 void RadioButton::ImplInit( Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( pParent->GetWindow( WINDOW_LASTCHILD ), nStyle );
@@ -1944,8 +1813,6 @@ void RadioButton::ImplInit( Window* pParent, WinBits nStyle )
 
     ImplInitSettings( true, true, true );
 }
-
-
 
 WinBits RadioButton::ImplInitStyle( const Window* pPrevWindow, WinBits nStyle )
 {
@@ -1962,20 +1829,15 @@ WinBits RadioButton::ImplInitStyle( const Window* pPrevWindow, WinBits nStyle )
     return nStyle;
 }
 
-
-
 const Font& RadioButton::GetCanonicalFont( const StyleSettings& _rStyle ) const
 {
     return _rStyle.GetRadioCheckFont();
 }
 
-
 const Color& RadioButton::GetCanonicalTextColor( const StyleSettings& _rStyle ) const
 {
     return _rStyle.GetRadioCheckTextColor();
 }
-
-
 
 void RadioButton::ImplInitSettings( bool bFont,
                                     bool bForeground, bool bBackground )
@@ -2013,8 +1875,6 @@ void RadioButton::DrawRadioButtonState( )
 {
     ImplDrawRadioButtonState( );
 }
-
-
 
 void RadioButton::ImplInvalidateOrDrawRadioButtonState()
 {
@@ -2139,8 +1999,6 @@ void RadioButton::ImplDrawRadioButtonState()
         }
     }
 }
-
-
 
 void RadioButton::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                             const Point& rPos, const Size& rSize,
@@ -2278,8 +2136,6 @@ void RadioButton::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
     pDev->Pop();
 }
 
-
-
 void RadioButton::ImplDrawRadioButton( bool bLayout )
 {
     if( !bLayout )
@@ -2348,8 +2204,6 @@ void RadioButton::group(RadioButton &rOther)
         ImplUncheckAllOther();
 }
 
-// .-----------------------------------------------------------------------
-
 std::vector< RadioButton* > RadioButton::GetRadioButtonGroup(bool bIncludeThis) const
 {
     if (m_xGroup)
@@ -2395,8 +2249,6 @@ std::vector< RadioButton* > RadioButton::GetRadioButtonGroup(bool bIncludeThis) 
     return aGroup;
 }
 
-
-
 void RadioButton::ImplUncheckAllOther()
 {
     mpWindowImpl->mnStyle |= WB_TABSTOP;
@@ -2420,8 +2272,6 @@ void RadioButton::ImplUncheckAllOther()
         pWindow->mpWindowImpl->mnStyle &= ~WB_TABSTOP;
     }
 }
-
-
 
 void RadioButton::ImplCallClick( bool bGrabFocus, sal_uInt16 nFocusFlags )
 {
@@ -2450,16 +2300,12 @@ void RadioButton::ImplCallClick( bool bGrabFocus, sal_uInt16 nFocusFlags )
     mbStateChanged = false;
 }
 
-
-
 RadioButton::RadioButton( Window* pParent, WinBits nStyle ) :
     Button( WINDOW_RADIOBUTTON ), mbLegacyNoTextAlign( false )
 {
     ImplInitRadioButtonData();
     ImplInit( pParent, nStyle );
 }
-
-
 
 RadioButton::RadioButton( Window* pParent, const ResId& rResId ) :
     Button( WINDOW_RADIOBUTTON ), mbLegacyNoTextAlign( false )
@@ -2474,8 +2320,6 @@ RadioButton::RadioButton( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
-
-
 void RadioButton::ImplLoadRes( const ResId& rResId )
 {
     Button::ImplLoadRes( rResId );
@@ -2486,8 +2330,6 @@ void RadioButton::ImplLoadRes( const ResId& rResId )
         SetState( true );
 }
 
-
-
 RadioButton::~RadioButton()
 {
     if (m_xGroup)
@@ -2496,8 +2338,6 @@ RadioButton::~RadioButton()
             m_xGroup->end());
     }
 }
-
-
 
 void RadioButton::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -2511,8 +2351,6 @@ void RadioButton::MouseButtonDown( const MouseEvent& rMEvt )
 
     Button::MouseButtonDown( rMEvt );
 }
-
-
 
 void RadioButton::Tracking( const TrackingEvent& rTEvt )
 {
@@ -2553,8 +2391,6 @@ void RadioButton::Tracking( const TrackingEvent& rTEvt )
     }
 }
 
-
-
 void RadioButton::KeyInput( const KeyEvent& rKEvt )
 {
     KeyCode aKeyCode = rKEvt.GetKeyCode();
@@ -2576,8 +2412,6 @@ void RadioButton::KeyInput( const KeyEvent& rKEvt )
         Button::KeyInput( rKEvt );
 }
 
-
-
 void RadioButton::KeyUp( const KeyEvent& rKEvt )
 {
     KeyCode aKeyCode = rKEvt.GetKeyCode();
@@ -2591,22 +2425,16 @@ void RadioButton::KeyUp( const KeyEvent& rKEvt )
         Button::KeyUp( rKEvt );
 }
 
-
-
 void RadioButton::FillLayoutData() const
 {
     mpControlData->mpLayoutData = new vcl::ControlLayoutData();
     const_cast<RadioButton*>(this)->ImplDrawRadioButton( true );
 }
 
-
-
 void RadioButton::Paint( const Rectangle& )
 {
     ImplDrawRadioButton();
 }
-
-
 
 void RadioButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
                         sal_uLong nFlags )
@@ -2682,15 +2510,11 @@ void RadioButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize
     }
 }
 
-
-
 void RadioButton::Resize()
 {
     Control::Resize();
     Invalidate();
 }
-
-
 
 void RadioButton::GetFocus()
 {
@@ -2698,8 +2522,6 @@ void RadioButton::GetFocus()
     SetInputContext( InputContext( GetFont() ) );
     Button::GetFocus();
 }
-
-
 
 void RadioButton::LoseFocus()
 {
@@ -2712,8 +2534,6 @@ void RadioButton::LoseFocus()
     HideFocus();
     Button::LoseFocus();
 }
-
-
 
 void RadioButton::StateChanged( StateChangedType nType )
 {
@@ -2762,8 +2582,6 @@ void RadioButton::StateChanged( StateChangedType nType )
     }
 }
 
-
-
 void RadioButton::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Button::DataChanged( rDCEvt );
@@ -2777,8 +2595,6 @@ void RadioButton::DataChanged( const DataChangedEvent& rDCEvt )
         Invalidate();
     }
 }
-
-
 
 bool RadioButton::PreNotify( NotifyEvent& rNEvt )
 {
@@ -2806,14 +2622,10 @@ bool RadioButton::PreNotify( NotifyEvent& rNEvt )
     return Button::PreNotify(rNEvt);
 }
 
-
-
 void RadioButton::Toggle()
 {
     ImplCallEventListenersAndHandler( VCLEVENT_RADIOBUTTON_TOGGLE, maToggleHdl, this );
 }
-
-
 
 bool RadioButton::SetModeRadioImage( const Image& rImage )
 {
@@ -2826,14 +2638,10 @@ bool RadioButton::SetModeRadioImage( const Image& rImage )
     return true;
 }
 
-
-
 const Image& RadioButton::GetModeRadioImage( ) const
 {
     return maImage;
 }
-
-
 
 void RadioButton::SetState( bool bCheck )
 {
@@ -2890,8 +2698,6 @@ bool RadioButton::set_property(const OString &rKey, const OString &rValue)
     return true;
 }
 
-
-
 void RadioButton::Check( bool bCheck )
 {
     // TabStop-Flag richtig mitfuehren
@@ -2917,16 +2723,12 @@ void RadioButton::Check( bool bCheck )
     }
 }
 
-
-
 long RadioButton::ImplGetImageToTextDistance() const
 {
     // 4 pixels, but take zoom into account, so the text doesn't "jump" relative to surrounding elements,
     // which might have been aligned with the text of the check box
     return CalcZoom( 4 );
 }
-
-
 
 Size RadioButton::ImplGetRadioImageSize() const
 {
@@ -3037,8 +2839,6 @@ Image RadioButton::GetRadioImage( const AllSettings& rSettings, sal_uInt16 nFlag
     return pSVData->maCtrlData.mpRadioImgList->GetImage( nId );
 }
 
-
-
 void RadioButton::ImplSetMinimumNWFSize()
 {
     Push( PUSH_MAPMODE );
@@ -3065,8 +2865,6 @@ void RadioButton::ImplSetMinimumNWFSize()
 
     Pop();
 }
-
-
 
 Size RadioButton::CalcMinimumSize( long nMaxWidth ) const
 {
@@ -3118,14 +2916,10 @@ Size RadioButton::CalcMinimumSize( long nMaxWidth ) const
     return CalcWindowSize( aSize );
 }
 
-
-
 Size RadioButton::GetOptimalSize() const
 {
     return CalcMinimumSize();
 }
-
-
 
 void CheckBox::ImplInitCheckBoxData()
 {
@@ -3134,8 +2928,6 @@ void CheckBox::ImplInitCheckBoxData()
     mbTriState      = false;
 }
 
-
-
 void CheckBox::ImplInit( Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( pParent->GetWindow( WINDOW_LASTCHILD ), nStyle );
@@ -3143,8 +2935,6 @@ void CheckBox::ImplInit( Window* pParent, WinBits nStyle )
 
     ImplInitSettings( true, true, true );
 }
-
-
 
 WinBits CheckBox::ImplInitStyle( const Window* pPrevWindow, WinBits nStyle )
 {
@@ -3156,20 +2946,15 @@ WinBits CheckBox::ImplInitStyle( const Window* pPrevWindow, WinBits nStyle )
     return nStyle;
 }
 
-
-
 const Font& CheckBox::GetCanonicalFont( const StyleSettings& _rStyle ) const
 {
     return _rStyle.GetRadioCheckFont();
 }
 
-
 const Color& CheckBox::GetCanonicalTextColor( const StyleSettings& _rStyle ) const
 {
     return _rStyle.GetRadioCheckTextColor();
 }
-
-
 
 void CheckBox::ImplInitSettings( bool bFont,
                                  bool bForeground, bool bBackground )
@@ -3203,8 +2988,6 @@ void CheckBox::ImplInitSettings( bool bFont,
     }
 }
 
-
-
 void CheckBox::ImplLoadRes( const ResId& rResId )
 {
     Button::ImplLoadRes( rResId );
@@ -3217,8 +3000,6 @@ void CheckBox::ImplLoadRes( const ResId& rResId )
             Check( true );
     }
 }
-
-
 
 void CheckBox::ImplInvalidateOrDrawCheckBoxState()
 {
@@ -3277,8 +3058,6 @@ void CheckBox::ImplDrawCheckBoxState()
             DrawImage( maStateRect.TopLeft(), aImage );
     }
 }
-
-
 
 void CheckBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                          const Point& rPos, const Size& rSize,
@@ -3383,8 +3162,6 @@ void CheckBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
     pDev->Pop();
 }
 
-
-
 void CheckBox::ImplDrawCheckBox( bool bLayout )
 {
     Size aImageSize = ImplGetCheckImageSize();
@@ -3404,8 +3181,6 @@ void CheckBox::ImplDrawCheckBox( bool bLayout )
             ShowFocus( ImplGetFocusRect() );
     }
 }
-
-
 
 void CheckBox::ImplCheck()
 {
@@ -3433,16 +3208,12 @@ void CheckBox::ImplCheck()
     Click();
 }
 
-
-
 CheckBox::CheckBox( Window* pParent, WinBits nStyle ) :
     Button( WINDOW_CHECKBOX ), mbLegacyNoTextAlign( false )
 {
     ImplInitCheckBoxData();
     ImplInit( pParent, nStyle );
 }
-
-
 
 CheckBox::CheckBox( Window* pParent, const ResId& rResId ) :
     Button( WINDOW_CHECKBOX ), mbLegacyNoTextAlign( false )
@@ -3457,8 +3228,6 @@ CheckBox::CheckBox( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
-
-
 void CheckBox::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( rMEvt.IsLeft() && maMouseRect.IsInside( rMEvt.GetPosPixel() ) )
@@ -3471,8 +3240,6 @@ void CheckBox::MouseButtonDown( const MouseEvent& rMEvt )
 
     Button::MouseButtonDown( rMEvt );
 }
-
-
 
 void CheckBox::Tracking( const TrackingEvent& rTEvt )
 {
@@ -3513,8 +3280,6 @@ void CheckBox::Tracking( const TrackingEvent& rTEvt )
     }
 }
 
-
-
 void CheckBox::KeyInput( const KeyEvent& rKEvt )
 {
     KeyCode aKeyCode = rKEvt.GetKeyCode();
@@ -3536,8 +3301,6 @@ void CheckBox::KeyInput( const KeyEvent& rKEvt )
         Button::KeyInput( rKEvt );
 }
 
-
-
 void CheckBox::KeyUp( const KeyEvent& rKEvt )
 {
     KeyCode aKeyCode = rKEvt.GetKeyCode();
@@ -3551,22 +3314,16 @@ void CheckBox::KeyUp( const KeyEvent& rKEvt )
         Button::KeyUp( rKEvt );
 }
 
-
-
 void CheckBox::FillLayoutData() const
 {
     mpControlData->mpLayoutData = new vcl::ControlLayoutData();
     const_cast<CheckBox*>(this)->ImplDrawCheckBox( true );
 }
 
-
-
 void CheckBox::Paint( const Rectangle& )
 {
     ImplDrawCheckBox();
 }
-
-
 
 void CheckBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
                      sal_uLong nFlags )
@@ -3666,15 +3423,11 @@ void CheckBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     pDev->Pop();
 }
 
-
-
 void CheckBox::Resize()
 {
     Control::Resize();
     Invalidate();
 }
-
-
 
 void CheckBox::GetFocus()
 {
@@ -3697,8 +3450,6 @@ void CheckBox::GetFocus()
     SetInputContext( InputContext( GetFont() ) );
     Button::GetFocus();
 }
-
-
 
 void CheckBox::LoseFocus()
 {
@@ -3724,8 +3475,6 @@ void CheckBox::LoseFocus()
         ImplDrawCheckBox();
     }
 }
-
-
 
 void CheckBox::StateChanged( StateChangedType nType )
 {
@@ -3774,8 +3523,6 @@ void CheckBox::StateChanged( StateChangedType nType )
     }
 }
 
-
-
 void CheckBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Button::DataChanged( rDCEvt );
@@ -3789,8 +3536,6 @@ void CheckBox::DataChanged( const DataChangedEvent& rDCEvt )
         Invalidate();
     }
 }
-
-
 
 bool CheckBox::PreNotify( NotifyEvent& rNEvt )
 {
@@ -3818,14 +3563,10 @@ bool CheckBox::PreNotify( NotifyEvent& rNEvt )
     return Button::PreNotify(rNEvt);
 }
 
-
-
 void CheckBox::Toggle()
 {
     ImplCallEventListenersAndHandler( VCLEVENT_CHECKBOX_TOGGLE, maToggleHdl, this );
 }
-
-
 
 void CheckBox::SetState( TriState eState )
 {
@@ -3849,8 +3590,6 @@ bool CheckBox::set_property(const OString &rKey, const OString &rValue)
     return true;
 }
 
-
-
 void CheckBox::EnableTriState( bool bTriState )
 {
     if ( mbTriState != bTriState )
@@ -3862,16 +3601,12 @@ void CheckBox::EnableTriState( bool bTriState )
     }
 }
 
-
-
 long CheckBox::ImplGetImageToTextDistance() const
 {
     // 4 pixels, but take zoom into account, so the text doesn't "jump" relative to surrounding elements,
     // which might have been aligned with the text of the check box
     return CalcZoom( 4 );
 }
-
-
 
 Size CheckBox::ImplGetCheckImageSize() const
 {
@@ -3961,8 +3696,6 @@ Image CheckBox::GetCheckImage( const AllSettings& rSettings, sal_uInt16 nFlags )
     return pSVData->maCtrlData.mpCheckImgList->GetImage( nId );
 }
 
-
-
 void CheckBox::ImplSetMinimumNWFSize()
 {
     Push( PUSH_MAPMODE );
@@ -3989,8 +3722,6 @@ void CheckBox::ImplSetMinimumNWFSize()
 
     Pop();
 }
-
-
 
 Size CheckBox::CalcMinimumSize( long nMaxWidth ) const
 {
@@ -4025,22 +3756,16 @@ Size CheckBox::CalcMinimumSize( long nMaxWidth ) const
     return CalcWindowSize( aSize );
 }
 
-
-
 Size CheckBox::GetOptimalSize() const
 {
     return CalcMinimumSize();
 }
-
-
 
 ImageButton::ImageButton( Window* pParent, WinBits nStyle ) :
     PushButton( pParent, nStyle )
 {
     ImplInitStyle();
 }
-
-
 
 ImageButton::ImageButton( Window* pParent, const ResId& rResId ) :
     PushButton( pParent, rResId.SetRT( RSC_IMAGEBUTTON ) )
@@ -4062,12 +3787,9 @@ ImageButton::ImageButton( Window* pParent, const ResId& rResId ) :
     ImplInitStyle();
 }
 
-
-
 ImageButton::~ImageButton()
 {
 }
-
 
 void ImageButton::ImplInitStyle()
 {
@@ -4082,20 +3804,14 @@ void ImageButton::ImplInitStyle()
     SetStyle( nStyle );
 }
 
-
-
 ImageRadioButton::ImageRadioButton( Window* pParent, WinBits nStyle ) :
     RadioButton( pParent, nStyle )
 {
 }
 
-
-
 ImageRadioButton::~ImageRadioButton()
 {
 }
-
-
 
 TriStateBox::TriStateBox( Window* pParent, WinBits nStyle ) :
     CheckBox( pParent, nStyle )
@@ -4103,20 +3819,14 @@ TriStateBox::TriStateBox( Window* pParent, WinBits nStyle ) :
     EnableTriState( true );
 }
 
-
-
 TriStateBox::~TriStateBox()
 {
 }
-
-
 
 DisclosureButton::DisclosureButton( Window* pParent, WinBits nStyle ) :
     CheckBox( pParent, nStyle )
 {
 }
-
-
 
 void DisclosureButton::ImplDrawCheckBoxState()
 {
@@ -4167,8 +3877,6 @@ void DisclosureButton::ImplDrawCheckBoxState()
         DrawImage( aOff, *pImg, nStyle );
     }
 }
-
-
 
 void DisclosureButton::KeyInput( const KeyEvent& rKEvt )
 {
