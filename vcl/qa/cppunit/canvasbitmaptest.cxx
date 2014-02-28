@@ -196,7 +196,7 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
                                 xPal->getNumberOfEntries() == 1L << nOriginalDepth);
         uno::Sequence<double> aIndex;
         CPPUNIT_ASSERT_MESSAGE( "Palette is not read-only",
-                                xPal->setIndex(aIndex,true,0) == false);
+                                xPal->setIndex(aIndex,true,0) == sal_False);
         CPPUNIT_ASSERT_MESSAGE( "Palette entry 0 is not opaque",
                                 xPal->getIndex(aIndex,0));
         CPPUNIT_ASSERT_MESSAGE( "Palette has no valid color space",
