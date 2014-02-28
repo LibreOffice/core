@@ -862,7 +862,7 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
         sValue += sName;
         sValue += OUString::number(pDrViewSh->GetPageTabControl()->GetPageCount()) ;
         sValue += ";";
-        if(pDrViewSh->IsLayerModeActive() )
+        if(pDrViewSh->IsLayerModeActive() && pDrViewSh->GetLayerTabControl()) // #i87182#
         {
             sName = "page-name:";
             sValue = sName;

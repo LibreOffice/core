@@ -199,17 +199,34 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         case SID_SWITCHLAYER:  // BASIC
         {
             const SfxItemSet *pArgs = rReq.GetArgs ();
-            sal_uInt16 nCurPage = GetLayerTabControl()->GetCurPageId ();
 
-            if( pArgs && pArgs->Count () == 1)
+            // #i87182#
+            bool bCurPageValid(false);
+            sal_uInt16 nCurPage(0);
+
+            if(GetLayerTabControl())
             {
-                SFX_REQUEST_ARG (rReq, pWhatLayer, SfxUInt32Item, ID_VAL_WHATLAYER, false);
-                if( pWhatLayer )
-                    nCurPage = (short) pWhatLayer->GetValue ();
+                nCurPage = GetLayerTabControl()->GetCurPageId();
+                bCurPageValid = true;
             }
 
-            mpDrawView->SetActiveLayer( GetLayerTabControl()->GetPageText(nCurPage) );
-            Invalidate();
+            if(pArgs && 1 == pArgs->Count())
+            {
+                SFX_REQUEST_ARG (rReq, pWhatLayer, SfxUInt32Item, ID_VAL_WHATLAYER, false);
+
+                if(pWhatLayer)
+                {
+                    nCurPage = (short)pWhatLayer->GetValue();
+                    bCurPageValid = true;
+                }
+            }
+
+            if(bCurPageValid)
+            {
+                mpDrawView->SetActiveLayer( GetLayerTabControl()->GetPageText(nCurPage) );
+                Invalidate();
+            }
+
             rReq.Done ();
 
             break;

@@ -894,20 +894,27 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     // is it allowed to delete the current layer?
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DELETE_LAYER ) )
     {
-        sal_uInt16        nCurrentLayer = GetLayerTabControl()->GetCurPageId();
-        const OUString& rName = GetLayerTabControl()->GetPageText(nCurrentLayer);
-
-        bool bDisableIt = !IsLayerModeActive();
-        bDisableIt |= (rName == SD_RESSTR(STR_LAYER_LAYOUT));
-        bDisableIt |= (rName == SD_RESSTR(STR_LAYER_BCKGRND));
-        bDisableIt |= (rName == SD_RESSTR(STR_LAYER_BCKGRNDOBJ));
-        bDisableIt |= (rName == SD_RESSTR(STR_LAYER_CONTROLS));
-        bDisableIt |= (rName == SD_RESSTR(STR_LAYER_MEASURELINES));
-
-        if (bDisableIt)
+        if(GetLayerTabControl()) // #i87182#
         {
-            rSet.DisableItem(SID_DELETE_LAYER);
-            rSet.DisableItem(SID_RENAMELAYER);
+            sal_uInt16 nCurrentLayer = GetLayerTabControl()->GetCurPageId();
+            const OUString& rName = GetLayerTabControl()->GetPageText(nCurrentLayer);
+
+            bool bDisableIt = !IsLayerModeActive();
+            bDisableIt |= (rName == SD_RESSTR(STR_LAYER_LAYOUT));
+            bDisableIt |= (rName == SD_RESSTR(STR_LAYER_BCKGRND));
+            bDisableIt |= (rName == SD_RESSTR(STR_LAYER_BCKGRNDOBJ));
+            bDisableIt |= (rName == SD_RESSTR(STR_LAYER_CONTROLS));
+            bDisableIt |= (rName == SD_RESSTR(STR_LAYER_MEASURELINES));
+
+            if (bDisableIt)
+            {
+                rSet.DisableItem(SID_DELETE_LAYER);
+                rSet.DisableItem(SID_RENAMELAYER);
+            }
+        }
+        else
+        {
+            OSL_ENSURE(false, "No LayerTabBar (!)");
         }
     }
 
