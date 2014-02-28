@@ -235,7 +235,19 @@ namespace svgio
                     else if(!maUrl.isEmpty())
                     {
                         const OUString& rPath = getDocument().getAbsolutePath();
-                        const OUString aAbsUrl(rtl::Uri::convertRelToAbs(rPath, maUrl));
+                        OUString aAbsUrl;
+                        try {
+                            aAbsUrl = rtl::Uri::convertRelToAbs(rPath, maUrl);
+                        } catch (rtl::MalformedUriException & e) {
+                            // Happens for the odd rPath =
+                            // "vnd.sun.star.Package:Pictures/..." scheme using
+                            // path components not starting with a slash by mis-
+                            // design:
+                            SAL_INFO(
+                                "svg",
+                                "caught rtl::MalformedUriException \""
+                                    << e.getMessage() << "\"");
+                        }
 
                         if(!aAbsUrl.isEmpty())
                         {
