@@ -1,0 +1,14 @@
+# -*- Mode: Diff -*-
+--- src/libcmis/oauth2-providers.cxx
++++ src/libcmis/oauth2-providers.cxx
+@@ -34,6 +34,10 @@
+ 
+ using namespace std;
+ 
++#if LIBXML_VERSION < 20621
++#define HTML_PARSE_RECOVER 0
++#endif
++
+ string OAuth2Providers::OAuth2Gdrive( BaseSession* session, const string& authUrl,
+                                       const string& username, const string& password )
+ {
