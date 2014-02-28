@@ -424,7 +424,7 @@ void AquaSalFrame::SendPaintEvent( const Rectangle* pRect )
 
 
 
-void AquaSalFrame::Show(sal_Bool bVisible, sal_Bool bNoActivate)
+void AquaSalFrame::Show(bool bVisible, bool bNoActivate)
 {
     if ( !mpNSWindow )
         return;
@@ -487,7 +487,7 @@ void AquaSalFrame::Show(sal_Bool bVisible, sal_Bool bNoActivate)
 
 
 
-void AquaSalFrame::Enable( sal_Bool )
+void AquaSalFrame::Enable( bool )
 {
 }
 
@@ -850,7 +850,7 @@ public:
 };
 #endif
 
-void AquaSalFrame::StartPresentation( sal_Bool bStart )
+void AquaSalFrame::StartPresentation( bool bStart )
 {
     if ( !mpNSWindow )
         return;
@@ -887,7 +887,7 @@ void AquaSalFrame::StartPresentation( sal_Bool bStart )
 
 
 
-void AquaSalFrame::SetAlwaysOnTop( sal_Bool )
+void AquaSalFrame::SetAlwaysOnTop( bool )
 {
 }
 
@@ -1684,7 +1684,7 @@ void AquaSalFrame::UpdateFrameGeometry()
 
 
 
-void AquaSalFrame::CaptureMouse( sal_Bool bCapture )
+void AquaSalFrame::CaptureMouse( bool bCapture )
 {
     /* Remark:
        we'll try to use a pidgin version of capture mouse

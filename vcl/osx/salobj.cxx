@@ -196,7 +196,7 @@ void AquaSalObject::setClippedPosSize()
 
 
 
-void AquaSalObject::Show( sal_Bool bVisible )
+void AquaSalObject::Show( bool bVisible )
 {
     if( mpClipView )
         [mpClipView setHidden: (bVisible ? NO : YES)];
