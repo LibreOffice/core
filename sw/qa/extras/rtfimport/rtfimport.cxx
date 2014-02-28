@@ -17,6 +17,7 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
@@ -1418,6 +1419,30 @@ DECLARE_RTFIMPORT_TEST(testNestedTable, "rhbz1065629.rtf")
 
     // \sect at the end resulted in spurious page break
     CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
+DECLARE_RTFIMPORT_TEST(testContSectionPageBreak, "cont-section-pagebreak.rtf")
+{
+    uno::Reference<text::XTextRange> xParaSecond = getParagraph(2);
+    CPPUNIT_ASSERT_EQUAL(OUString("SECOND"), xParaSecond->getString());
+    CPPUNIT_ASSERT_EQUAL(style::BreakType_NONE,
+            getProperty<style::BreakType>(xParaSecond, "BreakType"));
+    CPPUNIT_ASSERT_EQUAL(OUString(""),
+            getProperty<OUString>(xParaSecond, "PageDescName"));
+    // actually not sure how many paragraph there should be between
+    // SECOND and THIRD - important is that the page break is on there
+    uno::Reference<text::XTextRange> xParaNext = getParagraph(3);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), xParaNext->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Converted1"),
+            getProperty<OUString>(xParaNext, "PageDescName"));
+    uno::Reference<text::XTextRange> xParaThird = getParagraph(4);
+    CPPUNIT_ASSERT_EQUAL(OUString("THIRD"), xParaThird->getString());
+    CPPUNIT_ASSERT_EQUAL(style::BreakType_NONE,
+            getProperty<style::BreakType>(xParaThird, "BreakType"));
+    CPPUNIT_ASSERT_EQUAL(OUString(""),
+            getProperty<OUString>(xParaThird, "PageDescName"));
+
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
 DECLARE_RTFIMPORT_TEST(testCp1000016, "hello.rtf")
