@@ -2903,7 +2903,7 @@ void DbFilterField::Init( Window& rParent, const Reference< XRowSet >& xCursor )
     // filter cells are never readonly
     Edit* pAsEdit = dynamic_cast< Edit* >( m_pWindow );
     if ( pAsEdit )
-        pAsEdit->SetReadOnly( sal_False );
+        pAsEdit->SetReadOnly( false );
 }
 
 
