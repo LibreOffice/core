@@ -128,6 +128,7 @@ public:
     beans::PropertyValue getInteropGrabBag();
 
     uno::Sequence<beans::PropertyValue> GetThemeFontLangProperties() const;
+    css::uno::Sequence<css::beans::PropertyValue> GetCompatSettings() const;
 
     void HandleRedline( Sprm& rSprm );
 

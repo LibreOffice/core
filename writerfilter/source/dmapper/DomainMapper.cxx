@@ -3177,6 +3177,11 @@ uno::Sequence<beans::PropertyValue> DomainMapper::GetThemeFontLangProperties() c
     return m_pImpl->GetSettingsTable()->GetThemeFontLangProperties();
 }
 
+uno::Sequence<beans::PropertyValue> DomainMapper::GetCompatSettings() const
+{
+    return m_pImpl->GetSettingsTable()->GetCompatSettings();
+}
+
 void DomainMapper::HandleRedline( Sprm& rSprm )
 {
     sal_uInt32 nSprmId = rSprm.getId();

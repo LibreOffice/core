@@ -119,7 +119,7 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
         pDocument->resolve(*pStream);
 
         // Adding some properties to the document's grab bag for interoperability purposes:
-        uno::Sequence<beans::PropertyValue> aGrabBagProperties(9);
+        uno::Sequence<beans::PropertyValue> aGrabBagProperties(10);
 
         // Adding the saved Theme DOM
         aGrabBagProperties[0].Name = "OOXTheme";
@@ -150,6 +150,10 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
         // Adding the saved embedding document to document's grab bag
         aGrabBagProperties[8].Name = "OOXEmbeddings";
         aGrabBagProperties[8].Value = uno::makeAny( pDocument->getEmbeddingsList() );
+
+        // Adding the saved compat settings
+        aGrabBagProperties[9].Name = "CompatSettings";
+        aGrabBagProperties[9].Value = uno::makeAny( aDomainMapper->GetCompatSettings() );
 
         putPropertiesToDocumentGrabBag( aGrabBagProperties );
 

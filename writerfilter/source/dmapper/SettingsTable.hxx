@@ -77,6 +77,8 @@ class SettingsTable : public LoggedProperties, public LoggedTable
 
     uno::Sequence<beans::PropertyValue> GetThemeFontLangProperties() const;
 
+    uno::Sequence<beans::PropertyValue> GetCompatSettings() const;
+
     void ApplyProperties( uno::Reference< text::XTextDocument > xDoc );
 
  private:

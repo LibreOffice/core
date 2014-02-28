@@ -76,6 +76,9 @@ struct SettingsTable_Impl
     bool                m_bMirrorMargin;
     uno::Sequence<beans::PropertyValue> m_pThemeFontLangProps;
 
+    uno::Sequence<beans::PropertyValue> m_pCompatSettings;
+    uno::Sequence<beans::PropertyValue> m_pCurrentCompatSetting;
+
     SettingsTable_Impl( DomainMapper& rDMapper, const uno::Reference< lang::XMultiServiceFactory > xTextFactory ) :
     m_rDMapper( rDMapper )
     , m_xTextFactory( xTextFactory )
@@ -102,6 +105,8 @@ struct SettingsTable_Impl
     , m_bSplitPgBreakAndParaMark(false)
     , m_bMirrorMargin(false)
     , m_pThemeFontLangProps(3)
+    , m_pCompatSettings(0)
+    , m_pCurrentCompatSetting(3)
     {}
 
 };
@@ -144,6 +149,18 @@ void SettingsTable::lcl_attribute(Id nName, Value & val)
     case NS_ooxml::LN_CT_View_val:
         m_pImpl->m_nView = nIntValue;
         break;
+    case NS_ooxml::LN_CT_CompatSetting_name:
+        m_pImpl->m_pCurrentCompatSetting[0].Name = "name";
+        m_pImpl->m_pCurrentCompatSetting[0].Value <<= sStringValue;
+        break;
+    case NS_ooxml::LN_CT_CompatSetting_uri:
+        m_pImpl->m_pCurrentCompatSetting[1].Name = "uri";
+        m_pImpl->m_pCurrentCompatSetting[1].Value <<= sStringValue;
+        break;
+    case NS_ooxml::LN_CT_CompatSetting_val:
+        m_pImpl->m_pCurrentCompatSetting[2].Name = "val";
+        m_pImpl->m_pCurrentCompatSetting[2].Value <<= sStringValue;
+        break;
     default:
     {
 #ifdef DEBUG_DMAPPER_SETTINGS_TABLE
@@ -174,12 +191,11 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     case NS_ooxml::LN_CT_Settings_themeFontLang: //  92552;
     case NS_ooxml::LN_CT_Settings_shapeDefaults: //  92560;
     case NS_ooxml::LN_CT_Settings_view:
-
     //PropertySetValues - need to be resolved
     {
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
         if( pProperties.get())
-        pProperties->resolve(*this);
+            pProperties->resolve(*this);
     }
     break;
     case NS_ooxml::LN_CT_Settings_stylePaneFormatFilter: // 92493;
@@ -244,6 +260,20 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     case NS_ooxml::LN_CT_Settings_mirrorMargins:
         m_pImpl->m_bMirrorMargin = nIntValue;
         break;
+    case NS_ooxml::LN_CT_Compat_compatSetting:
+    {
+        writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+        if( pProperties.get())
+        {
+            pProperties->resolve(*this);
+
+            sal_Int32 aLength = m_pImpl->m_pCompatSettings.getLength();
+            m_pImpl->m_pCompatSettings.realloc(aLength + 1);
+            m_pImpl->m_pCompatSettings[aLength].Name = "compatSetting";
+            m_pImpl->m_pCompatSettings[aLength].Value = uno::makeAny(m_pImpl->m_pCurrentCompatSetting);
+        }
+    }
+    break;
     default:
     {
 #ifdef DEBUG_DMAPPER_SETTINGS_TABLE
@@ -319,6 +349,11 @@ bool SettingsTable::GetMirrorMarginSettings() const
 uno::Sequence<beans::PropertyValue> SettingsTable::GetThemeFontLangProperties() const
 {
     return m_pImpl->m_pThemeFontLangProps;
+}
+
+uno::Sequence<beans::PropertyValue> SettingsTable::GetCompatSettings() const
+{
+    return m_pImpl->m_pCompatSettings;
 }
 
 void SettingsTable::ApplyProperties( uno::Reference< text::XTextDocument > xDoc )
