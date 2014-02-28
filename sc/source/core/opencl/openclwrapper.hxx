@@ -151,7 +151,7 @@ class OpenclDevice
 {
 public:
     static GPUEnv gpuEnv;
-    static int isInited;
+    static bool bIsInited;
     static OString maCacheFolder;
 
     static void registOpenclKernel();

@@ -44,7 +44,7 @@ using namespace std;
 namespace sc { namespace opencl {
 
 GPUEnv OpenclDevice::gpuEnv;
-int OpenclDevice::isInited =0;
+bool OpenclDevice::bIsInited = false;
 
 namespace {
 
@@ -310,7 +310,7 @@ bool OpenclDevice::initOpenclAttr( OpenCLEnv * env )
 
 void OpenclDevice::releaseOpenclEnv( GPUEnv *gpuInfo )
 {
-    if ( !isInited )
+    if ( !bIsInited )
     {
         return;
     }
@@ -325,7 +325,7 @@ void OpenclDevice::releaseOpenclEnv( GPUEnv *gpuInfo )
         clReleaseContext( gpuEnv.mpContext );
         gpuEnv.mpContext = NULL;
     }
-    isInited = 0;
+    bIsInited = false;
     gpuInfo->mnIsUserCreated = 0;
     free( gpuInfo->mpArryDevsID );
 
@@ -479,7 +479,7 @@ bool OpenclDevice::initOpenclRunEnv( int argc )
     if ( ( argc > MAX_CLFILE_NUM ) || ( argc < 0 ) )
         return true;
 
-    if ( !isInited )
+    if ( !bIsInited )
     {
         registOpenclKernel();
         //initialize devices, context, command_queue
@@ -506,7 +506,7 @@ bool OpenclDevice::initOpenclRunEnv( int argc )
         {
             SAL_INFO("sc.opencl", "USE float type");
         }
-        isInited = 1;
+        bIsInited = true;
     }
     return false;
 }
