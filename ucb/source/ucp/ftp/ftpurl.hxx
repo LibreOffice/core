@@ -51,11 +51,9 @@ namespace ftp {
                      FOLDER_MIGHT_EXIST_DURING_INSERT,
                      FILE_MIGHT_EXIST_DURING_INSERT };
 
+    class malformed_exception : public std::exception { };
 
-    class malformed_exception { };
-
-
-    class curl_exception
+    class curl_exception : public std::exception
     {
     public:
 
