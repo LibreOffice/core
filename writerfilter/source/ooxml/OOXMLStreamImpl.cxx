@@ -115,56 +115,85 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
     static OUString sActiveXType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/control");
     static OUString sActiveXBinType("http://schemas.microsoft.com/office/2006/relationships/activeXControlBinary");
     static OUString sSettingsType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings");
+    // OOXML strict
+    static OUString sDocumentTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/officeDocument");
+    static OUString sStylesTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/styles");
+    static OUString sNumberingTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/numbering");
+    static OUString sFonttableTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/fontTable");
+    static OUString sFootnotesTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/footnotes");
+    static OUString sEndnotesTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/endnotes");
+    static OUString sCommentsTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/comments");
+    static OUString sThemeTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/theme");
+    static OUString sCustomTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/customXml");
+    static OUString sCustomPropsTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/customXmlProps");
+    static OUString sActiveXTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/control");
+    static OUString sGlossaryTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/glossaryDocument");
+    static OUString sSettingsTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/settings");
     static OUString sTarget("Target");
     static OUString sTargetMode("TargetMode");
     static OUString sExternal("External");
     static OUString sVBAProjectType("http://schemas.microsoft.com/office/2006/relationships/vbaProject");
 
     OUString sStreamType;
+    OUString sStreamTypeStrict;
 
     switch (nStreamType)
     {
         case VBAPROJECT:
             sStreamType = sVBAProjectType;
+            sStreamTypeStrict = sVBAProjectType;
             break;
         case DOCUMENT:
             sStreamType = sDocumentType;
+            sStreamTypeStrict = sDocumentTypeStrict;
             break;
         case STYLES:
             sStreamType = sStylesType;
+            sStreamTypeStrict = sStylesTypeStrict;
             break;
         case NUMBERING:
             sStreamType = sNumberingType;
+            sStreamTypeStrict = sNumberingTypeStrict;
             break;
         case FONTTABLE:
             sStreamType = sFonttableType;
+            sStreamTypeStrict = sFonttableTypeStrict;
             break;
         case FOOTNOTES:
             sStreamType = sFootnotesType;
+            sStreamTypeStrict = sFootnotesTypeStrict;
             break;
         case ENDNOTES:
             sStreamType = sEndnotesType;
+            sStreamTypeStrict = sEndnotesTypeStrict;
             break;
         case COMMENTS:
             sStreamType = sCommentsType;
+            sStreamTypeStrict = sCommentsTypeStrict;
             break;
         case THEME:
             sStreamType = sThemeType;
+            sStreamTypeStrict = sThemeTypeStrict;
             break;
         case CUSTOMXML:
             sStreamType = sCustomType;
+            sStreamTypeStrict = sCustomTypeStrict;
             break;
         case CUSTOMXMLPROPS:
             sStreamType = sCustomPropsType;
+            sStreamTypeStrict = sCustomPropsTypeStrict;
             break;
         case ACTIVEX:
             sStreamType = sActiveXType;
+            sStreamTypeStrict = sActiveXTypeStrict;
             break;
         case ACTIVEXBIN:
             sStreamType = sActiveXBinType;
+            sStreamTypeStrict = sActiveXBinType;
             break;
         case SETTINGS:
             sStreamType = sSettingsType;
+            sStreamTypeStrict = sSettingsTypeStrict;
             break;
         default:
             break;
@@ -186,7 +215,8 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
                 beans::StringPair aPair = aSeq[i];
 
                 if (aPair.First.compareTo(sType) == 0 &&
-                    aPair.Second.compareTo(sStreamType) == 0)
+                    ( aPair.Second.compareTo(sStreamType) == 0 ||
+                      aPair.Second.compareTo(sStreamTypeStrict) == 0))
                     bFound = true;
                 else if (aPair.First.compareTo(sId) == 0 &&
                          aPair.Second.compareTo(rId) == 0)

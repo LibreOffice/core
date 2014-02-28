@@ -223,6 +223,19 @@ void SheetDataBuffer::setErrorCell( const CellModel& rModel, sal_uInt8 nErrorCod
     setCellFormat( rModel );
 }
 
+void SheetDataBuffer::setDateCell( const CellModel& rModel, const OUString& rDateString )
+{
+    ScDocument& rDoc = getScDocument();
+    SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
+
+    double fValue = 0.0;
+    sal_uInt32 nFormatIndex;
+    bool bValid = pFormatter->IsNumberFormat( rDateString, nFormatIndex, fValue );
+
+    if(bValid)
+        setValueCell( rModel, fValue );
+}
+
 void SheetDataBuffer::setFormulaCell( const CellModel& rModel, const ApiTokenSequence& rTokens )
 {
     mbPendingSharedFmla = false;

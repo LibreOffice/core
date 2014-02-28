@@ -101,6 +101,8 @@ public:
         used for fragments referred by the root relations. */
     OUString     getFragmentPathFromFirstType( const OUString& rType );
 
+    OUString     getFragmentPathFromFirstTypeFromOfficeDoc( const OUString& rPart );
+
     /** Imports a fragment using the passed fragment handler, which contains
         the full path to the fragment stream.
 
