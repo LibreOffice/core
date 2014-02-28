@@ -59,9 +59,9 @@ public:
     virtual SfxPoolItem *Clone( SfxItemPool * = 0) const
     { return new SvXMLAttrContainerItem( *this ); }
 
-    sal_Bool AddAttr( const OUString& rLName,
+    bool AddAttr( const OUString& rLName,
                           const OUString& rValue );
-    sal_Bool AddAttr( const OUString& rPrefix,
+    bool AddAttr( const OUString& rPrefix,
                           const OUString& rNamespace,
                           const OUString& rLName,
                           const OUString& rValue );

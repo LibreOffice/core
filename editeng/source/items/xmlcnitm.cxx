@@ -170,13 +170,13 @@ bool SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, sal
 }
 
 
-sal_Bool SvXMLAttrContainerItem::AddAttr( const OUString& rLName,
+bool SvXMLAttrContainerItem::AddAttr( const OUString& rLName,
                                         const OUString& rValue )
 {
     return pImpl->AddAttr( rLName, rValue );
 }
 
-sal_Bool SvXMLAttrContainerItem::AddAttr( const OUString& rPrefix,
+bool SvXMLAttrContainerItem::AddAttr( const OUString& rPrefix,
           const OUString& rNamespace, const OUString& rLName,
           const OUString& rValue )
 {
