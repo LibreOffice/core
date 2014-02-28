@@ -1489,7 +1489,7 @@ void ToolBox::SetItemDown( sal_uInt16 nItemId, bool bDown, bool bRelease )
             if ( nPos != mnCurPos )
             {
                 mnCurPos = nPos;
-                ImplDrawItem( mnCurPos, true );
+                ImplDrawItem( mnCurPos, 1 );
                 Flush();
             }
         }
@@ -1497,7 +1497,7 @@ void ToolBox::SetItemDown( sal_uInt16 nItemId, bool bDown, bool bRelease )
         {
             if ( nPos == mnCurPos )
             {
-                ImplDrawItem( mnCurPos, false );
+                ImplDrawItem( mnCurPos, 0 );
                 Flush();
                 mnCurPos = TOOLBOX_ITEM_NOTFOUND;
             }
@@ -1799,7 +1799,7 @@ void ToolBox::ImplFillLayoutData() const
 
         // only draw, if the rectangle is within PaintRectangle
         if ( !pItem->maRect.IsEmpty() )
-            const_cast<ToolBox*>(this)->ImplDrawItem( i, false, false, true );
+            const_cast<ToolBox*>(this)->ImplDrawItem( i, 0, false, true );
     }
 }
 
