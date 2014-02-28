@@ -65,6 +65,7 @@ size_t VectorRef::Marshal(cl_kernel k, int argno, int, cl_program)
 {
     FormulaToken *ref = mFormulaTree->GetFormulaToken();
     double *pHostBuffer = NULL;
+    size_t requestedLength = 1;
     size_t szHostBuffer = 0;
     if (ref->GetType() == formula::svSingleVectorRef) {
         const formula::SingleVectorRefToken* pSVR =
@@ -72,6 +73,7 @@ size_t VectorRef::Marshal(cl_kernel k, int argno, int, cl_program)
         assert(pSVR);
         pHostBuffer = const_cast<double*>(pSVR->GetArray().mpNumericArray);
         szHostBuffer = pSVR->GetArrayLength() * sizeof(double);
+        requestedLength = pSVR->GetRequestedArrayLength();
 #if 0
         std::cerr << "Marshal a Single vector of size " << pSVR->GetArrayLength();
         std::cerr << " at argument "<< argno << "\n";
@@ -83,6 +85,7 @@ size_t VectorRef::Marshal(cl_kernel k, int argno, int, cl_program)
         pHostBuffer = const_cast<double*>(
                 pDVR->GetArrays()[mnIndex].mpNumericArray);
         szHostBuffer = pDVR->GetArrayLength() * sizeof(double);
+        requestedLength = pDVR->GetRequestedArrayLength();
     } else {
         throw Unhandled();
     }
@@ -102,7 +105,7 @@ size_t VectorRef::Marshal(cl_kernel k, int argno, int, cl_program)
     else
     {
         if (szHostBuffer == 0)
-            szHostBuffer = sizeof(double); // a dummy small value
+            szHostBuffer = requestedLength * sizeof(double);//vector length for NAN vector
         // Marshal as a buffer of NANs
         mpClmem = clCreateBuffer(kEnv.mpkContext,
                 (cl_mem_flags) CL_MEM_READ_ONLY|CL_MEM_ALLOC_HOST_PTR,
