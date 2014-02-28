@@ -1412,7 +1412,7 @@ IMPL_LINK( ImplTBDragMgr, SelectHdl, Accelerator*, pAccel )
     else
         EndDragging( true );
 
-    return true;
+    return (long) true;
 }
 
 
