@@ -168,7 +168,6 @@ void SAL_CALL PolynomialRegressionCurveCalculator::recalculateRegression(
     double aSumError = 0.0;
     double aSumTotal = 0.0;
     double aSumYpred2 = 0.0;
-    double aSumYactual2 = 0.0;
 
     for( sal_Int32 i = 0; i < aNoValues; i++ )
     {
@@ -177,15 +176,14 @@ void SAL_CALL PolynomialRegressionCurveCalculator::recalculateRegression(
         double yPredicted = getCurveValue( xValue );
         aSumTotal += (yActual - yAverage) * (yActual - yAverage);
         aSumError += (yActual - yPredicted) * (yActual - yPredicted);
-        aSumYpred2 += yPredicted * yPredicted;
-        aSumYactual2 += yActual * yActual;
+        if(mForceIntercept)
+            aSumYpred2 += (yPredicted - mInterceptValue) * (yPredicted - mInterceptValue);
     }
 
     double aRSquared = 0.0;
     if(mForceIntercept)
     {
-        if(aSumYactual2 != 0.0)
-            aRSquared = aSumYpred2 / aSumYactual2;
+        aRSquared = aSumYpred2 / (aSumError + aSumYpred2);
     }
     else
     {
