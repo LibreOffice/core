@@ -322,7 +322,8 @@ private:
     bool                                                                            m_bStartIndex;
     bool                                                                            m_bStartBibliography;
     bool                                                                            m_bTOCPageRef;
-
+    bool                                                                            m_bStartGenericField;
+    bool                                                                            m_bTextInserted;
     LineNumberSettings                                                              m_aLineNumberSettings;
 
     BookmarkMap_t                                                                   m_aBookmarkMap;

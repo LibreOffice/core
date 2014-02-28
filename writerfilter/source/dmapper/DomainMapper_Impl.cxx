@@ -151,6 +151,8 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bStartIndex(false),
         m_bStartBibliography(false),
         m_bTOCPageRef(false),
+        m_bStartGenericField(false),
+        m_bTextInserted(false),
         m_pLastSectionContext( ),
         m_pLastCharacterContext(),
         m_nCurrentTabStopIndex( 0 ),
@@ -1146,7 +1148,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, PropertyMapP
             }
             else
             {
-                if (m_bStartTOC || m_bStartIndex || m_bStartBibliography)
+                if (m_bStartTOC || m_bStartIndex || m_bStartBibliography || m_bStartGenericField)
                 {
                     m_bStartedTOC = true;
                     uno::Reference< text::XTextCursor > xTOCTextCursor;
@@ -1154,9 +1156,10 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, PropertyMapP
                     xTOCTextCursor->gotoEnd(false);
                     if (xTOCTextCursor.is())
                     {
-                        if (m_bStartIndex || m_bStartBibliography)
+                        if (m_bStartIndex || m_bStartBibliography || m_bStartGenericField)
                             xTOCTextCursor->goLeft(1, false);
                         xTextRange = xTextAppend->insertTextPortion(rString, pValues, xTOCTextCursor);
+                        m_bTextInserted = true;
                         xTOCTextCursor->gotoRange(xTextRange->getEnd(), true);
                         mxTOCTextCursor = xTOCTextCursor;
                     }
@@ -3587,6 +3590,28 @@ void DomainMapper_Impl::CloseFieldCommand()
                     break;
                 }
             }
+            else
+            {
+                /* Unsupported fields will be handled here for docx file.
+                 * To handle unsupported fields used fieldmark API.
+                 */
+                static const OUString sAPI_unsupportedfield( "com.sun.star.text.Fieldmark");
+                OUString aCode( pContext->GetCommand().trim() );
+                xFieldInterface = m_xTextFactory->createInstance(sAPI_unsupportedfield);
+                const uno::Reference<text::XTextContent> xTextContent(xFieldInterface, uno::UNO_QUERY_THROW);
+                uno::Reference< text::XTextAppend >  xTextAppend;
+                xTextAppend = m_aTextAppendStack.top().xTextAppend;
+                uno::Reference< text::XTextCursor > xCrsr = xTextAppend->createTextCursorByRange(pContext->GetStartRange());
+                if (xTextContent.is())
+                {
+                    xTextAppend->insertTextContent(xCrsr,xTextContent, sal_True);
+                }
+                const uno::Reference<uno::XInterface> xContent(xTextContent);
+                uno::Reference< text::XFormField> xFormField(xContent, uno::UNO_QUERY);
+                xFormField->setFieldType(aCode);
+                m_bStartGenericField = true;
+                pContext->SetFormField( xFormField );
+            }
             //set the text field if there is any
             pContext->SetTextField( uno::Reference< text::XTextField >( xFieldInterface, uno::UNO_QUERY ) );
         }
@@ -3817,6 +3842,15 @@ void DomainMapper_Impl::PopFieldContext()
                                 OUString sDisplayName("Index Link");
                                 xCrsrProperties->setPropertyValue("VisitedCharStyleName",uno::makeAny(sDisplayName));
                                 xCrsrProperties->setPropertyValue("UnvisitedCharStyleName",uno::makeAny(sDisplayName));
+                            }
+                        }
+                        else if(m_bStartGenericField)
+                        {
+                            m_bStartGenericField = false;
+                            if(m_bTextInserted)
+                            {
+                                m_aTextAppendStack.pop();
+                                m_bTextInserted = false;
                             }
                         }
                     }
