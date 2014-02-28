@@ -77,6 +77,11 @@ OUString ContextHandler::getFragmentPathFromFirstType( const OUString& rType ) c
     return mxBaseData->mxRelations->getFragmentPathFromFirstType( rType );
 }
 
+OUString ContextHandler::getFragmentPathFromFirstTypeFromOfficeDoc( const OUString& rType ) const
+{
+    return mxBaseData->mxRelations->getFragmentPathFromFirstTypeFromOfficeDoc( rType );
+}
+
 void ContextHandler::implSetLocator( const Reference< XLocator >& rxLocator )
 {
     mxBaseData->mxLocator = rxLocator;

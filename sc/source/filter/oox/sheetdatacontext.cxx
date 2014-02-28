@@ -215,6 +215,9 @@ void SheetDataContext::onEndElement()
                 case XML_s:
                     mrSheetData.setStringCell( maCellData, maCellValue.toInt32() );
                 break;
+                case XML_d:
+                    mrSheetData.setDateCell( maCellData, maCellValue );
+                break;
             }
             else if( (maCellData.mnCellType == XML_inlineStr) && mxInlineStr.get() )
             {

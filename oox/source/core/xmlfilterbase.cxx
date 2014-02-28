@@ -120,16 +120,16 @@ struct NamespaceIds: public rtl::StaticWithInit<
             NMSP_dmlDiagram,
             NMSP_dmlChart,
             NMSP_dmlChartDr,
-            NMSP_dmlSpreadDr,
             NMSP_vml,
             NMSP_vmlOffice,
             NMSP_vmlWord,
             NMSP_vmlExcel,
             NMSP_vmlPowerpoint,
-            NMSP_xls,
-            NMSP_ppt,
             NMSP_ax,
+            NMSP_xls,
             NMSP_xm,
+            NMSP_dmlSpreadDr,
+            NMSP_ppt,
             NMSP_mce,
             NMSP_mceTest,
             NMSP_dsp,
@@ -234,6 +234,36 @@ OUString XmlFilterBase::getFragmentPathFromFirstType( const OUString& rType )
 {
     // importRelations() caches the relations map for subsequence calls
     return importRelations( OUString() )->getFragmentPathFromFirstType( rType );
+}
+
+namespace {
+
+OUString getTransitionalRelationshipOfficeDocType(const OUString& rPart)
+{
+    static const OUString aBase("http://schemas.openxmlformats.org/officeDocument/2006/relationships/");
+    return aBase + rPart;
+}
+
+OUString getStrictRelationshipOfficeDocType(const OUString& rPart)
+{
+    static const OUString aBase("http://purl.oclc.org/ooxml/officeDocument/relationships/");
+    return aBase + rPart;
+}
+
+}
+
+OUString XmlFilterBase::getFragmentPathFromFirstTypeFromOfficeDoc( const OUString& rPart )
+{
+    // importRelations() caches the relations map for subsequence calls
+    const OUString aTransitionalRelationshipType = getTransitionalRelationshipOfficeDocType(rPart);
+    OUString aFragment = importRelations( OUString() )->getFragmentPathFromFirstType( aTransitionalRelationshipType );
+    if(aFragment.isEmpty())
+    {
+        const OUString aStrictRelationshipType = getStrictRelationshipOfficeDocType(rPart);
+        aFragment = importRelations( OUString() )->getFragmentPathFromFirstType( aStrictRelationshipType );
+    }
+
+    return aFragment;
 }
 
 bool XmlFilterBase::importFragment( const rtl::Reference<FragmentHandler>& rxHandler )
