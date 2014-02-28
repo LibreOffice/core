@@ -405,7 +405,7 @@ void SAL_CALL SvxUnoTextRangeBase::setString(const OUString& aString)
 
         sal_Int32 nLen = aConverted.getLength();
         if (nLen)
-            GoRight( nLen, sal_True );
+            GoRight( nLen, true );
     }
 }
 
@@ -501,7 +501,7 @@ void SvxUnoTextRangeBase::setPropertyValue( const SfxItemPropertySimpleEntry* pM
     }
 }
 
-sal_Bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemSet&, const SfxItemPropertySimpleEntry* pMap, const uno::Any& aValue, SfxItemSet& rNewSet, const ESelection* pSelection /* = NULL */, SvxEditSource* pEditSource /* = NULL*/ )
+bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemSet&, const SfxItemPropertySimpleEntry* pMap, const uno::Any& aValue, SfxItemSet& rNewSet, const ESelection* pSelection /* = NULL */, SvxEditSource* pEditSource /* = NULL*/ )
 {
     switch( pMap->nWID )
     {
@@ -511,7 +511,7 @@ sal_Bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemSet&, const S
             if(aValue >>= aDesc)
             {
                 SvxUnoFontDescriptor::FillItemSet( aDesc, rNewSet );
-                return sal_True;
+                return true;
             }
         }
         break;
@@ -520,9 +520,9 @@ sal_Bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemSet&, const S
         {
             uno::Reference< container::XIndexReplace > xRule;
             if( !aValue.hasValue() || ((aValue >>= xRule) && !xRule.is()) )
-                return sal_True;
+                return true;
 
-            return sal_False;
+            return false;
         }
 
     case WID_NUMLEVEL:
@@ -537,7 +537,7 @@ sal_Bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemSet&, const S
                     if(! pForwarder->SetDepth( pSelection->nStartPara, nLevel ) )
                         throw lang::IllegalArgumentException();
 
-                    return sal_True;
+                    return true;
                 }
             }
         }
@@ -551,7 +551,7 @@ sal_Bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemSet&, const S
                 if( aValue >>= nStartValue )
                 {
                     pForwarder->SetNumberingStartValue( pSelection->nStartPara, nStartValue );
-                    return sal_True;
+                    return true;
                 }
             }
         }
@@ -565,7 +565,7 @@ sal_Bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemSet&, const S
                 if( aValue >>= bParaIsNumberingRestart )
                 {
                     pForwarder->SetParaIsNumberingRestart( pSelection->nStartPara, bParaIsNumberingRestart );
-                    return sal_True;
+                    return true;
                 }
             }
         }
@@ -577,13 +577,13 @@ sal_Bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemSet&, const S
             {
                 SfxBoolItem aItem( EE_PARA_BULLETSTATE, bBullet );
                 rNewSet.Put(aItem);
-                return sal_True;
+                return true;
             }
         }
         break;
 
     default:
-        return sal_False;
+        return false;
     }
 
     throw lang::IllegalArgumentException();
@@ -683,7 +683,7 @@ void SvxUnoTextRangeBase::getPropertyValue( const SfxItemPropertySimpleEntry* pM
     }
 }
 
-sal_Bool SvxUnoTextRangeBase::GetPropertyValueHelper(  SfxItemSet& rSet, const SfxItemPropertySimpleEntry* pMap, uno::Any& aAny, const ESelection* pSelection /* = NULL */, SvxEditSource* pEditSource /* = NULL */ )
+bool SvxUnoTextRangeBase::GetPropertyValueHelper(  SfxItemSet& rSet, const SfxItemPropertySimpleEntry* pMap, uno::Any& aAny, const ESelection* pSelection /* = NULL */, SvxEditSource* pEditSource /* = NULL */ )
     throw( uno::RuntimeException )
 {
     switch( pMap->nWID )
@@ -750,10 +750,10 @@ sal_Bool SvxUnoTextRangeBase::GetPropertyValueHelper(  SfxItemSet& rSet, const S
         break;
     default:
 
-        return sal_False;
+        return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 // is not (yet) supported
@@ -1104,9 +1104,9 @@ uno::Sequence< beans::PropertyState > SvxUnoTextRangeBase::_getPropertyStates(co
     return aRet;
 }
 
-sal_Bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, const SfxItemPropertySimpleEntry* pMap, beans::PropertyState& rState)
+bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, const SfxItemPropertySimpleEntry* pMap, beans::PropertyState& rState)
 {
-    sal_Bool bUnknownPropertyFound = sal_False;
+    bool bUnknownPropertyFound = false;
     if(pSet && pMap)
     {
         SfxItemState eItemState = SFX_ITEM_UNKNOWN;
@@ -1146,7 +1146,7 @@ sal_Bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, cons
                             }
                             break;
                         default:
-                            bUnknownPropertyFound = sal_True;
+                            bUnknownPropertyFound = true;
                             break;
                         }
 
@@ -1365,7 +1365,7 @@ void SvxUnoTextRangeBase::CollapseToEnd(void) throw()
     maSelection.nStartPos  = maSelection.nEndPos;
 }
 
-sal_Bool SvxUnoTextRangeBase::IsCollapsed(void) throw()
+bool SvxUnoTextRangeBase::IsCollapsed(void) throw()
 {
     CheckSelection( maSelection, mpEditSource );
 
@@ -1373,7 +1373,7 @@ sal_Bool SvxUnoTextRangeBase::IsCollapsed(void) throw()
              maSelection.nStartPos  == maSelection.nEndPos );
 }
 
-sal_Bool SvxUnoTextRangeBase::GoLeft(sal_Int16 nCount, sal_Bool Expand) throw()
+bool SvxUnoTextRangeBase::GoLeft(sal_Int16 nCount, bool Expand) throw()
 {
     CheckSelection( maSelection, mpEditSource );
 
@@ -1381,12 +1381,12 @@ sal_Bool SvxUnoTextRangeBase::GoLeft(sal_Int16 nCount, sal_Bool Expand) throw()
     sal_uInt16 nNewPos = maSelection.nEndPos;
     sal_Int32  nNewPar = maSelection.nEndPara;
 
-    sal_Bool bOk = sal_True;
+    bool bOk = true;
     SvxTextForwarder* pForwarder = NULL;
     while ( nCount > nNewPos && bOk )
     {
         if ( nNewPar == 0 )
-            bOk = sal_False;
+            bOk = false;
         else
         {
             if ( !pForwarder )
@@ -1411,7 +1411,7 @@ sal_Bool SvxUnoTextRangeBase::GoLeft(sal_Int16 nCount, sal_Bool Expand) throw()
     return bOk;
 }
 
-sal_Bool SvxUnoTextRangeBase::GoRight(sal_Int16 nCount, sal_Bool Expand)  throw()
+bool SvxUnoTextRangeBase::GoRight(sal_Int16 nCount, bool Expand)  throw()
 {
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
     if( pForwarder )
@@ -1421,13 +1421,13 @@ sal_Bool SvxUnoTextRangeBase::GoRight(sal_Int16 nCount, sal_Bool Expand)  throw(
         sal_Int32 nNewPos = maSelection.nEndPos + nCount; //! Overflow???
         sal_Int32  nNewPar = maSelection.nEndPara;
 
-        sal_Bool bOk = sal_True;
+        bool bOk = true;
         sal_Int32 nParCount = pForwarder->GetParagraphCount();
         sal_Int32 nThisLen = pForwarder->GetTextLen( nNewPar );
         while ( nNewPos > nThisLen && bOk )
         {
             if ( nNewPar + 1 >= nParCount )
-                bOk = sal_False;
+                bOk = false;
             else
             {
                 nNewPos -= nThisLen+1;
@@ -1447,10 +1447,10 @@ sal_Bool SvxUnoTextRangeBase::GoRight(sal_Int16 nCount, sal_Bool Expand)  throw(
 
         return bOk;
     }
-    return sal_False;
+    return false;
 }
 
-void SvxUnoTextRangeBase::GotoStart(sal_Bool Expand) throw()
+void SvxUnoTextRangeBase::GotoStart(bool Expand) throw()
 {
     maSelection.nStartPara = 0;
     maSelection.nStartPos  = 0;
@@ -1459,7 +1459,7 @@ void SvxUnoTextRangeBase::GotoStart(sal_Bool Expand) throw()
         CollapseToStart();
 }
 
-void SvxUnoTextRangeBase::GotoEnd(sal_Bool Expand) throw()
+void SvxUnoTextRangeBase::GotoEnd(bool Expand) throw()
 {
     CheckSelection( maSelection, mpEditSource );
 
@@ -1566,7 +1566,7 @@ uno::Reference< uno::XInterface > SvxUnoTextRange_NewInstance()
 #endif
 }
 
-SvxUnoTextRange::SvxUnoTextRange( const SvxUnoTextBase& rParent, sal_Bool bPortion /* = sal_False */ ) throw()
+SvxUnoTextRange::SvxUnoTextRange( const SvxUnoTextBase& rParent, bool bPortion /* = false */ ) throw()
 :SvxUnoTextRangeBase( rParent.GetEditSource(), bPortion ? ImplGetSvxTextPortionSvxPropertySet() : rParent.getPropertySet() ),
  mbPortion( bPortion )
 {

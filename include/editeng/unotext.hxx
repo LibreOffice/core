@@ -262,7 +262,7 @@ protected:
     virtual ::com::sun::star::beans::PropertyState SAL_CALL _getPropertyState( const OUString& PropertyName, sal_Int32 nPara = -1 ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState > SAL_CALL _getPropertyStates( const ::com::sun::star::uno::Sequence< OUString >& aPropertyName, sal_Int32 nPara = -1  ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
     // returns true if property found or false if unknown property
-    virtual sal_Bool _getOnePropertyStates(const SfxItemSet* pSet, const SfxItemPropertySimpleEntry* pMap, ::com::sun::star::beans::PropertyState& rState);
+    virtual bool _getOnePropertyStates(const SfxItemSet* pSet, const SfxItemPropertySimpleEntry* pMap, ::com::sun::star::beans::PropertyState& rState);
 
     virtual void SAL_CALL _setPropertyToDefault( const OUString& PropertyName, sal_Int32 nPara = -1 ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
     virtual void _setPropertyToDefault( SvxTextForwarder* pForwarder, const SfxItemPropertySimpleEntry* pMap, sal_Int32 nPara ) throw( ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException );
@@ -283,18 +283,18 @@ public:
 
     virtual void            CollapseToStart(void) throw();
     virtual void            CollapseToEnd(void) throw();
-    virtual sal_Bool        IsCollapsed(void) throw();
-    virtual sal_Bool        GoLeft(sal_Int16 nCount, sal_Bool Expand) throw();
-    virtual sal_Bool        GoRight(sal_Int16 nCount, sal_Bool Expand) throw();
-    virtual void            GotoStart(sal_Bool Expand) throw();
-    virtual void            GotoEnd(sal_Bool Expand) throw();
+    virtual bool            IsCollapsed(void) throw();
+    virtual bool            GoLeft(sal_Int16 nCount, bool Expand) throw();
+    virtual bool            GoRight(sal_Int16 nCount, bool Expand) throw();
+    virtual void            GotoStart(bool Expand) throw();
+    virtual void            GotoEnd(bool Expand) throw();
 
     //const SfxItemPropertyMapEntry*   getPropertyMapEntries() const throw() { return maPropSet.getPropertyMapEntries(); }
     const SvxItemPropertySet*   getPropertySet() const throw() { return mpPropSet; }
     SvxEditSource*              GetEditSource() const throw() { return mpEditSource; }
 
-    static sal_Bool SetPropertyValueHelper( const SfxItemSet& rOldSet, const SfxItemPropertySimpleEntry* pMap, const ::com::sun::star::uno::Any& aValue, SfxItemSet& rNewSet, const ESelection* pSelection = NULL, SvxEditSource* pEditSource = NULL );
-    static sal_Bool GetPropertyValueHelper(  SfxItemSet& rSet, const SfxItemPropertySimpleEntry* pMap, ::com::sun::star::uno::Any& aAny, const ESelection* pSelection = NULL,  SvxEditSource* pEditSource = NULL  ) throw( ::com::sun::star::uno::RuntimeException );
+    static bool SetPropertyValueHelper( const SfxItemSet& rOldSet, const SfxItemPropertySimpleEntry* pMap, const ::com::sun::star::uno::Any& aValue, SfxItemSet& rNewSet, const ESelection* pSelection = NULL, SvxEditSource* pEditSource = NULL );
+    static bool GetPropertyValueHelper(  SfxItemSet& rSet, const SfxItemPropertySimpleEntry* pMap, ::com::sun::star::uno::Any& aAny, const ESelection* pSelection = NULL,  SvxEditSource* pEditSource = NULL  ) throw( ::com::sun::star::uno::RuntimeException );
 
     void attachField( const SvxFieldData* pData ) throw();
 
@@ -356,10 +356,10 @@ class EDITENG_DLLPUBLIC SvxUnoTextRange : public SvxUnoTextRangeBase,
     friend class SvxUnoTextRangeEnumeration;
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >   xParentText;
-    sal_Bool mbPortion;
+    bool mbPortion;
 
 public:
-    SvxUnoTextRange( const SvxUnoTextBase& rParent, sal_Bool bPortion = sal_False ) throw();
+    SvxUnoTextRange( const SvxUnoTextBase& rParent, bool bPortion = false ) throw();
     virtual ~SvxUnoTextRange() throw();
 
     // ::com::sun::star::uno::XInterface

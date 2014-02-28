@@ -450,7 +450,7 @@ uno::Any SAL_CALL SvxUnoTextRangeEnumeration::nextElement()
 
     if( pRange == 0 )
     {
-        pRange = new SvxUnoTextRange( mrParentText, sal_True );
+        pRange = new SvxUnoTextRange( mrParentText, true );
         pRange->SetSelection(aSel);
     }
 
