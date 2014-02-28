@@ -3639,85 +3639,83 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
             break;
         }
 
-        // wrong indentation ahead
+    SwOLEObj& aObject = rNode.GetOLEObj();
+    uno::Reference < embed::XEmbeddedObject > xObj( aObject.GetOleRef() );
+    comphelper::EmbeddedObjectContainer* aContainer = aObject.GetObject().GetContainer();
+    OUString sObjectName = aContainer->GetEmbeddedObjectName( xObj );
 
-        SwOLEObj& aObject = rNode.GetOLEObj();
-        uno::Reference < embed::XEmbeddedObject > xObj( aObject.GetOleRef() );
-        comphelper::EmbeddedObjectContainer* aContainer = aObject.GetObject().GetContainer();
-        OUString sObjectName = aContainer->GetEmbeddedObjectName( xObj );
-
-        // set some attributes according to the type of the embedded object
-        OUString sProgID, sMediaType, sRelationType;
-        for( sal_Int32 i=0; i < aObjectsInteropList.getLength(); ++i )
-            if ( aObjectsInteropList[i].Name == sObjectName )
-            {
-                aObjectsInteropList[i].Value >>= sProgID;
-                break;
-            }
-        if( sProgID.startsWith("Excel.Sheet") )
+    // set some attributes according to the type of the embedded object
+    OUString sProgID, sMediaType, sRelationType;
+    for( sal_Int32 i=0; i < aObjectsInteropList.getLength(); ++i )
+        if ( aObjectsInteropList[i].Name == sObjectName )
         {
-            sMediaType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+            aObjectsInteropList[i].Value >>= sProgID;
+            break;
         }
-        else if( sProgID.startsWith("PowerPoint.Show") )
-        {
-            sMediaType = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
-            sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
-        }
-        else
-        {
-            sMediaType = "application/vnd.openxmlformats-officedocument.oleObject";
-            sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
-        }
+    if( sProgID.startsWith("Excel.Sheet") )
+    {
+        sMediaType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+    }
+    else if( sProgID.startsWith("PowerPoint.Show") )
+    {
+        sMediaType = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+        sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+    }
+    else
+    {
+        sMediaType = "application/vnd.openxmlformats-officedocument.oleObject";
+        sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
+    }
 
-        // write embedded file
-        OString sId = m_rExport.WriteOLEObject( aObject, sMediaType, sRelationType );
+    // write embedded file
+    OString sId = m_rExport.WriteOLEObject( aObject, sMediaType, sRelationType );
 
-        if( sId.isEmpty() )
-        {
-            // the embedded file could not be saved
-            // fallback: save as an image
-            FlyFrameGraphic( 0, rSize, rFlyFrmFmt, &rNode );
-            return;
-        }
+    if( sId.isEmpty() )
+    {
+        // the embedded file could not be saved
+        // fallback: save as an image
+        FlyFrameGraphic( 0, rSize, rFlyFrmFmt, &rNode );
+        return;
+    }
 
-        // write preview image
-        const Graphic* pGraphic = rNode.GetGraphic();
-        OUString sImageId = m_rDrawingML.WriteImage( *pGraphic );
+    // write preview image
+    const Graphic* pGraphic = rNode.GetGraphic();
+    OUString sImageId = m_rDrawingML.WriteImage( *pGraphic );
 
-        m_pSerializer->startElementNS( XML_w, XML_object, FSEND );
+    m_pSerializer->startElementNS( XML_w, XML_object, FSEND );
 
-        OStringBuffer sShapeStyle, sShapeId;
-        sShapeStyle.append( "width:" ).append( double( rSize.Width() ) / 20 )
-                            .append( "pt;height:" ).append( double( rSize.Height() ) / 20 )
-                            .append( "pt" ); //from VMLExport::AddRectangleDimensions(), it does: value/20
-        sShapeId.append( "ole_" ).append( sId );
+    OStringBuffer sShapeStyle, sShapeId;
+    sShapeStyle.append( "width:" ).append( double( rSize.Width() ) / 20 )
+                        .append( "pt;height:" ).append( double( rSize.Height() ) / 20 )
+                        .append( "pt" ); //from VMLExport::AddRectangleDimensions(), it does: value/20
+    sShapeId.append( "ole_" ).append( sId );
 
-        // shape definition
-        m_pSerializer->startElementNS( XML_v, XML_shape,
-                                       XML_id, sShapeId.getStr(),
-                                       XML_style, sShapeStyle.getStr(),
-                                       FSNS( XML_o, XML_ole ), "", //compulsory, even if it's empty
-                                       FSEND );
+    // shape definition
+    m_pSerializer->startElementNS( XML_v, XML_shape,
+                                   XML_id, sShapeId.getStr(),
+                                   XML_style, sShapeStyle.getStr(),
+                                   FSNS( XML_o, XML_ole ), "", //compulsory, even if it's empty
+                                   FSEND );
 
-        // shape filled with the preview image
-        m_pSerializer->singleElementNS( XML_v, XML_imagedata,
-                                        FSNS( XML_r, XML_id ), OUStringToOString( sImageId, RTL_TEXTENCODING_UTF8 ).getStr(),
-                                        FSEND );
+    // shape filled with the preview image
+    m_pSerializer->singleElementNS( XML_v, XML_imagedata,
+                                    FSNS( XML_r, XML_id ), OUStringToOString( sImageId, RTL_TEXTENCODING_UTF8 ).getStr(),
+                                    FSEND );
 
-        m_pSerializer->endElementNS( XML_v, XML_shape );
+    m_pSerializer->endElementNS( XML_v, XML_shape );
 
-        // OLE object definition
-        m_pSerializer->singleElementNS( XML_o, XML_OLEObject,
-                                        XML_Type, "Embed",
-                                        XML_ProgID, OUStringToOString( sProgID, RTL_TEXTENCODING_UTF8 ).getStr(),
-                                        XML_ShapeID, sShapeId.getStr(),
-                                        XML_DrawAspect, "Content",
-                                        XML_ObjectID, "_" + OString::number( rand() ),
-                                        FSNS( XML_r, XML_id ), sId.getStr(),
-                                        FSEND );
+    // OLE object definition
+    m_pSerializer->singleElementNS( XML_o, XML_OLEObject,
+                                    XML_Type, "Embed",
+                                    XML_ProgID, OUStringToOString( sProgID, RTL_TEXTENCODING_UTF8 ).getStr(),
+                                    XML_ShapeID, sShapeId.getStr(),
+                                    XML_DrawAspect, "Content",
+                                    XML_ObjectID, "_" + OString::number( rand() ),
+                                    FSNS( XML_r, XML_id ), sId.getStr(),
+                                    FSEND );
 
-        m_pSerializer->endElementNS( XML_w, XML_object );
+    m_pSerializer->endElementNS( XML_w, XML_object );
 }
 
 /*
