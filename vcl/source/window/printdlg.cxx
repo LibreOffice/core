@@ -1052,7 +1052,7 @@ void PrintDialog::setupOptionalUI()
                 pBtn->SetText( aChoices[m] );
                 pBtn->Check( m == nSelectVal );
                 pBtn->SetToggleHdl( LINK( this, PrintDialog, UIOption_RadioHdl ) );
-                if( aChoicesDisabled.getLength() > m && aChoicesDisabled[m] == true )
+                if( aChoicesDisabled.getLength() > m && aChoicesDisabled[m] )
                     pBtn->Enable( false );
                 pBtn->Show();
                 maPropertyToWindowMap[ aPropertyName ].push_back( pBtn );
