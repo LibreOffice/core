@@ -76,11 +76,11 @@ uno::Reference<io::XInputStream> findStream(ucbhelper::Content &rContent, const 
             } while (xResultSet->next());
         }
     }
-    catch (uno::RuntimeException)
+    catch (const uno::RuntimeException &)
     {
         // ignore
     }
-    catch (uno::Exception)
+    catch (const uno::Exception &)
     {
         // ignore
     }
