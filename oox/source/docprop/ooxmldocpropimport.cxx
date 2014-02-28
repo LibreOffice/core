@@ -131,12 +131,21 @@ void SAL_CALL DocumentPropertiesImport::importProperties(
         throw IllegalArgumentException();
 
     Sequence< InputSource > aCoreStreams = lclGetRelatedStreams( rxSource, CREATE_OFFICEDOC_RELATION_TYPE( "metadata/core-properties" ) );
+    // OOXML strict
+    if( !aCoreStreams.hasElements() )
+        aCoreStreams = lclGetRelatedStreams( rxSource, CREATE_OFFICEDOC_RELATION_TYPE_STRICT( "metadata/core-properties" ) );
     // MS Office seems to have a bug, so we have to do similar handling
     if( !aCoreStreams.hasElements() )
         aCoreStreams = lclGetRelatedStreams( rxSource, CREATE_PACKAGE_RELATION_TYPE( "metadata/core-properties" ) );
 
     Sequence< InputSource > aExtStreams = lclGetRelatedStreams( rxSource, CREATE_OFFICEDOC_RELATION_TYPE( "extended-properties" ) );
+    // OOXML strict
+    if( !aExtStreams.hasElements() )
+        aExtStreams = lclGetRelatedStreams( rxSource, CREATE_OFFICEDOC_RELATION_TYPE_STRICT( "extended-properties" ) );
     Sequence< InputSource > aCustomStreams = lclGetRelatedStreams( rxSource, CREATE_OFFICEDOC_RELATION_TYPE( "custom-properties" ) );
+    // OOXML strict
+    if( !aCustomStreams.hasElements() )
+        aCustomStreams = lclGetRelatedStreams( rxSource, CREATE_OFFICEDOC_RELATION_TYPE_STRICT( "custom-properties" ) );
 
     if( aCoreStreams.hasElements() || aExtStreams.hasElements() || aCustomStreams.hasElements() )
     {

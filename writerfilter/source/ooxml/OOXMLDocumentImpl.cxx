@@ -475,7 +475,8 @@ void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream)
     mxRelationshipAccess.set((*dynamic_cast<OOXMLStreamImpl *>(mpStream.get())).accessDocumentStream(), uno::UNO_QUERY_THROW);
     if (mxRelationshipAccess.is())
     {
-        OUString sCustomType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXml");
+        static const OUString sCustomType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXml");
+        static const OUString sCustomTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/customXml");
         OUString sTarget("Target");
         bool bFound = false;
         sal_Int32 counter = 0;
@@ -491,7 +492,8 @@ void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream)
                 beans::StringPair aPair = aSeq[i];
                 // Need to resolve only customxml files from document relationships.
                 // Skipping other files.
-                if (aPair.Second.compareTo(sCustomType) == 0)
+                if (aPair.Second.compareTo(sCustomType) == 0 ||
+                        aPair.Second.compareTo(sCustomTypeStrict) == 0)
                     bFound = true;
                 else if(aPair.First.compareTo(sTarget) == 0 && bFound)
                 {
@@ -530,7 +532,8 @@ void OOXMLDocumentImpl::resolveActiveXStream(Stream & rStream)
     mxRelationshipAccess.set((*dynamic_cast<OOXMLStreamImpl *>(mpStream.get())).accessDocumentStream(), uno::UNO_QUERY_THROW);
     if (mxRelationshipAccess.is())
     {
-        OUString sCustomType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/control");
+        static const OUString sCustomType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/control");
+        static const OUString sCustomTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/control");
         OUString sTarget("Target");
         bool bFound = false;
         sal_Int32 counter = 0;
@@ -546,7 +549,8 @@ void OOXMLDocumentImpl::resolveActiveXStream(Stream & rStream)
                 beans::StringPair aPair = aSeq[i];
                 // Need to resolve only ActiveX files from document relationships.
                 // Skipping other files.
-                if (aPair.Second.compareTo(sCustomType) == 0)
+                if (aPair.Second.compareTo(sCustomType) == 0 ||
+                        aPair.Second.compareTo(sCustomTypeStrict) == 0)
                     bFound = true;
                 else if(aPair.First.compareTo(sTarget) == 0 && bFound)
                 {

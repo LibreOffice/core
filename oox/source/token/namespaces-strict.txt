@@ -1,0 +1,82 @@
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# This file incorporates work covered by the following license notice:
+#
+#   Licensed to the Apache Software Foundation (ASF) under one or more
+#   contributor license agreements. See the NOTICE file distributed
+#   with this work for additional information regarding copyright
+#   ownership. The ASF licenses this file to you under the Apache
+#   License, Version 2.0 (the "License"); you may not use this file
+#   except in compliance with the License. You may obtain a copy of
+#   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+#
+
+# generic XML -----------------------------------------------------------------
+
+xml                     http://www.w3.org/XML/1998/namespace
+schema                  http://purl.oclc.org/ooxml/schemaLibrary/main
+
+# package ---------------------------------------------------------------------
+
+packageContentTypes     http://schemas.openxmlformats.org/package/2006/content-types
+packageMetaCorePr       http://schemas.openxmlformats.org/package/2006/metadata/core-properties
+packageRel              http://schemas.openxmlformats.org/package/2006/relationships
+
+# office shared ---------------------------------------------------------------
+
+officeCustomPr          http://purl.oclc.org/ooxml/officeDocument/custom-properties
+officeDocPropsVT        http://purl.oclc.org/ooxml/officeDocument/docPropsVTypes
+officeExtPr             http://purl.oclc.org/ooxml/officeDocument/extended-properties
+officeMath              http://purl.oclc.org/ooxml/officeDocument/math
+officeRel               http://purl.oclc.org/ooxml/officeDocument/relationships
+officeRelTheme          http://purl.oclc.org/ooxml/officeDocument/relationships/theme
+
+# applications ----------------------------------------------------------------
+
+doc                     http://purl.oclc.org/ooxml/wordprocessingml/main
+xls                     http://purl.oclc.org/ooxml/spreadsheetml/main
+ppt                     http://purl.oclc.org/ooxml/presentationml/main
+
+# drawing ---------------------------------------------------------------------
+
+dml                     http://purl.oclc.org/ooxml/drawingml/main
+dsp                     http://schemas.microsoft.com/office/drawing/2008/diagram
+dmlChart                http://purl.oclc.org/ooxml/drawingml/chart
+dmlChartDr              http://purl.oclc.org/ooxml/drawingml/chartDrawing
+dmlDiagram              http://purl.oclc.org/ooxml/drawingml/diagram
+dmlLockedCanvas         http://purl.oclc.org/ooxml/drawingml/lockedCanvas
+dmlPicture              http://purl.oclc.org/ooxml/drawingml/picture
+dmlSpreadDr             http://purl.oclc.org/ooxml/drawingml/spreadsheetDrawing
+dmlWordDr               http://purl.oclc.org/ooxml/drawingml/wordprocessingDrawing
+
+# VML -------------------------------------------------------------------------
+
+vml                     urn:schemas-microsoft-com:vml
+vmlExcel                urn:schemas-microsoft-com:office:excel
+vmlOffice               urn:schemas-microsoft-com:office:office
+vmlPowerpoint           urn:schemas-microsoft-com:office:powerpoint
+vmlWord                 urn:schemas-microsoft-com:office:word
+
+# other -----------------------------------------------------------------------
+
+ax                      http://schemas.microsoft.com/office/2006/activeX
+dc                      http://purl.org/dc/elements/1.1/
+dcTerms                 http://purl.org/dc/terms/
+xm                      http://schemas.microsoft.com/office/excel/2006/main
+sprm                    http://sprm
+mce                     http://schemas.openxmlformats.org/markup-compatibility/2006
+mceTest                 http://schemas.openxmlformats.org/spreadsheetml/2006/main/v2
+wps                     http://schemas.microsoft.com/office/word/2010/wordprocessingShape
+wpg                     http://schemas.microsoft.com/office/word/2010/wordprocessingGroup
+wp14                    http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing
+w14                     http://schemas.microsoft.com/office/word/2010/wordml
+
+# extlst namespaces
+
+# xlsExtLst for features introduced by excel 2010
+xlsExtLst               http://schemas.microsoft.com/office/spreadsheetml/2009/9/main

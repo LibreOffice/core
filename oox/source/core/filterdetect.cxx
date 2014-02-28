@@ -155,7 +155,8 @@ void SAL_CALL FilterDetectDocHandler::processingInstruction(
 void FilterDetectDocHandler::parseRelationship( const AttributeList& rAttribs )
 {
     OUString aType = rAttribs.getString( XML_Type, OUString() );
-    if ( aType == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" )
+    if ( aType == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" // OOXML Transitional
+            || aType == "http://purl.oclc.org/ooxml/officeDocument/relationships/officeDocument" ) //OOXML strict
     {
         Reference<XUriReferenceFactory> xFactory = UriReferenceFactory::create( mxContext );
         try

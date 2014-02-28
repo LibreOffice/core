@@ -30,10 +30,15 @@ namespace core {
 
 // ============================================================================
 
-/** Expands to an OUString containing an 'officeDocument' relation type created
+/** Expands to an OUString containing an 'officeDocument' transitional relation type created
     from the passed literal(!) ASCII(!) character array. */
 #define CREATE_OFFICEDOC_RELATION_TYPE( ascii ) \
     ( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/" ascii )
+
+/** Expands to an OUString containing an 'officeDocument' strict relation type created
+    from the passed literal(!) ASCII(!) character array. */
+#define CREATE_OFFICEDOC_RELATION_TYPE_STRICT( ascii ) \
+    ( "http://purl.oclc.org/ooxml/officeDocument/relationships/" ascii )
 
 /** Expands to an OUString containing a 'package' relation type created from
     the passed literal(!) ASCII(!) character array. */
@@ -74,8 +79,11 @@ public:
     const Relation*     getRelationFromRelId( const OUString& rId ) const;
     /** Returns the first relation with the passed type. */
     const Relation*     getRelationFromFirstType( const OUString& rType ) const;
+    /** Returns the first relation with the passed type. */
+    const Relation*     getRelationFromFirstTypeFromOfficeDoc( const OUString& rType ) const;
     /** Finds all relations associated with the passed type. */
     RelationsRef        getRelationsFromType( const OUString& rType ) const;
+    RelationsRef        getRelationsFromTypeFromOfficeDoc( const OUString& rType ) const;
 
     /** Returns the external target of the relation with the passed relation identifier. */
     OUString     getExternalTargetFromRelId( const OUString& rRelId ) const;
@@ -88,6 +96,7 @@ public:
     OUString     getFragmentPathFromRelId( const OUString& rRelId ) const;
     /** Returns the full fragment path for the first relation of the passed type. */
     OUString     getFragmentPathFromFirstType( const OUString& rType ) const;
+    OUString     getFragmentPathFromFirstTypeFromOfficeDoc( const OUString& rType ) const;
 
 private:
     OUString     maFragmentPath;
