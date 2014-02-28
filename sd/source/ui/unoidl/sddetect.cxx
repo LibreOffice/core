@@ -395,7 +395,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
 
                             const OUString      aFileName( aMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
                             GraphicDescriptor   aDesc( *pStm, &aFileName );
-                            if( !aDesc.Detect( sal_False ) )
+                            if( !aDesc.Detect( false ) )
                             {
                                 pFilter = 0;
                                 if( SvtModuleOptions().IsImpress() )
