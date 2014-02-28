@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a961159_d29e4463",
+        "filename": "odk/docs/idl/idl_chapter_refs.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 3278,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-02-28T15:19:05Z",
+      "side": 1,
+      "message": "This file is describing that wiki pages under https://wiki.openoffice.org/wiki/Documentation/DevGuide describe what classes. I\u0027m sure you didn\u0027t change those wiki pages, so please don\u0027t modify this file, it\u0027s not necessary.",
+      "revId": "bb5e03946362db0c1e415f5cb99965f8604562c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
