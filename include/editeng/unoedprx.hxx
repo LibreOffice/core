@@ -39,7 +39,7 @@ public:
     virtual SfxItemSet      GetAttribs( const ESelection& rSel, sal_Bool bOnlyHardAttrib = 0 ) const;
     virtual SfxItemSet      GetParaAttribs( sal_Int32 nPara ) const;
     virtual void            SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet );
-    virtual void            RemoveAttribs( const ESelection& rSelection, sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich );
+    virtual void            RemoveAttribs( const ESelection& rSelection, bool bRemoveParaAttribs, sal_uInt16 nWhich );
     virtual void            GetPortions( sal_Int32 nPara, std::vector<sal_Int32>& rList ) const;
 
     virtual sal_uInt16          CalcEditEngineIndex( sal_Int32 nPara, sal_Int32 nLogicalIndex );
@@ -57,7 +57,7 @@ public:
     virtual OUString        CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, Color*& rpTxtColor, Color*& rpFldColor );
     virtual void            FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos );
 
-    virtual sal_Bool            IsValid() const;
+    virtual bool            IsValid() const;
 
     virtual LanguageType    GetLanguage( sal_Int32, sal_Int32 ) const;
     virtual sal_Int32       GetFieldCount( sal_Int32 nPara ) const;
@@ -67,21 +67,21 @@ public:
     virtual Rectangle       GetParaBounds( sal_Int32 nPara ) const;
     virtual MapMode         GetMapMode() const;
     virtual OutputDevice*   GetRefDevice() const;
-    virtual sal_Bool        GetIndexAtPoint( const Point&, sal_Int32& nPara, sal_Int32& nIndex ) const;
-    virtual sal_Bool        GetWordIndices( sal_Int32 nPara, sal_Int32 nIndex, sal_Int32& nStart, sal_Int32& nEnd ) const;
+    virtual bool            GetIndexAtPoint( const Point&, sal_Int32& nPara, sal_Int32& nIndex ) const;
+    virtual bool            GetWordIndices( sal_Int32 nPara, sal_Int32 nIndex, sal_Int32& nStart, sal_Int32& nEnd ) const;
     virtual bool            GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, sal_Int32 nPara, sal_Int32 nIndex, bool bInCell = false ) const;
     virtual sal_Int32       GetLineCount( sal_Int32 nPara ) const;
     virtual sal_Int32       GetLineLen( sal_Int32 nPara, sal_Int32 nLine ) const;
-    virtual void            SetUpdateModeForAcc( sal_Bool bUp);
-    virtual sal_Bool        GetUpdateModeForAcc() const;
+    virtual void            SetUpdateModeForAcc( bool bUp);
+    virtual bool            GetUpdateModeForAcc() const;
     virtual void            GetLineBoundaries( /*out*/sal_Int32 &rStart, /*out*/sal_Int32 &rEnd, sal_Int32 nParagraph, sal_Int32 nLine ) const;
     virtual sal_Int32       GetLineNumberAtIndex( sal_Int32 nPara, sal_Int32 nIndex ) const;
 
-    virtual sal_Bool        Delete( const ESelection& );
-    virtual sal_Bool        InsertText( const OUString&, const ESelection& );
-    virtual sal_Bool        QuickFormatDoc( sal_Bool bFull=sal_False );
+    virtual bool            Delete( const ESelection& );
+    virtual bool            InsertText( const OUString&, const ESelection& );
+    virtual bool            QuickFormatDoc( bool bFull = false );
     virtual sal_Int16       GetDepth( sal_Int32 nPara ) const;
-    virtual sal_Bool        SetDepth( sal_Int32 nPara, sal_Int16 nNewDepth );
+    virtual bool            SetDepth( sal_Int32 nPara, sal_Int16 nNewDepth );
 
     virtual const SfxItemSet*   GetEmptyItemSetPtr();
 
@@ -93,9 +93,9 @@ public:
     //XTextCopy
     virtual void        CopyText(const SvxTextForwarder& rSource);
 
-    void                    SetForwarder( SvxTextForwarder& );
-    sal_Bool                HaveImageBullet( sal_Int32 nPara ) const;
-    sal_Bool                HaveTextBullet( sal_Int32 nPara ) const;
+    void                SetForwarder( SvxTextForwarder& );
+    bool                HaveImageBullet( sal_Int32 nPara ) const;
+    bool                HaveTextBullet( sal_Int32 nPara ) const;
 
     /** Query whether all text in given selection is editable
 
@@ -103,7 +103,7 @@ public:
         be changed, and sal_False if e.g. a field or a bullet is
         contained therein.
      */
-    sal_Bool                IsEditable( const ESelection& rSelection );
+    bool                IsEditable( const ESelection& rSelection );
 
 private:
     SvxTextForwarder* mpTextForwarder;
@@ -117,7 +117,7 @@ public:
     virtual             ~SvxAccessibleTextEditViewAdapter();
 
     // SvxViewForwarder interface
-    virtual sal_Bool        IsValid() const;
+    virtual bool        IsValid() const;
     virtual Rectangle   GetVisArea() const;
     virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
     virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;

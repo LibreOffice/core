@@ -2216,7 +2216,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::appendTextPortion(
 
         // set properties for the new text portion
         ESelection aSel( nPara, nStart, nPara, nEnd );
-        pTextForwarder->RemoveAttribs( aSel, sal_False, 0 );
+        pTextForwarder->RemoveAttribs( aSel, false, 0 );
         pEditSource->UpdateData();
 
         SfxItemSet aItemSet( *pTextForwarder->GetEmptyItemSetPtr() );
@@ -2465,7 +2465,7 @@ void SvxDummyTextSource::SetParaAttribs( sal_Int32, const SfxItemSet& )
 {
 }
 
-void SvxDummyTextSource::RemoveAttribs( const ESelection& , sal_Bool , sal_uInt16 )
+void SvxDummyTextSource::RemoveAttribs( const ESelection& , bool , sal_uInt16 )
 {
 }
 
@@ -2513,9 +2513,9 @@ void SvxDummyTextSource::FieldClicked( const SvxFieldItem&, sal_Int32, sal_Int32
 {
 }
 
-sal_Bool SvxDummyTextSource::IsValid() const
+bool SvxDummyTextSource::IsValid() const
 {
-    return sal_False;
+    return false;
 }
 
 void SvxDummyTextSource::SetNotifyHdl( const Link& )
@@ -2562,14 +2562,14 @@ OutputDevice* SvxDummyTextSource::GetRefDevice() const
     return NULL;
 }
 
-sal_Bool SvxDummyTextSource::GetIndexAtPoint( const Point&, sal_Int32&, sal_Int32& ) const
+bool SvxDummyTextSource::GetIndexAtPoint( const Point&, sal_Int32&, sal_Int32& ) const
 {
-    return sal_False;
+    return false;
 }
 
-sal_Bool SvxDummyTextSource::GetWordIndices( sal_Int32, sal_Int32, sal_Int32&, sal_Int32& ) const
+bool SvxDummyTextSource::GetWordIndices( sal_Int32, sal_Int32, sal_Int32&, sal_Int32& ) const
 {
-    return sal_False;
+    return false;
 }
 
 bool SvxDummyTextSource::GetAttributeRun( sal_Int32&, sal_Int32&, sal_Int32, sal_Int32, bool ) const
@@ -2597,9 +2597,9 @@ sal_Int32 SvxDummyTextSource::GetLineNumberAtIndex( sal_Int32 /*nPara*/, sal_Int
     return 0;
 }
 
-sal_Bool SvxDummyTextSource::QuickFormatDoc( sal_Bool )
+bool SvxDummyTextSource::QuickFormatDoc( bool )
 {
-    return sal_False;
+    return false;
 }
 
 sal_Int16 SvxDummyTextSource::GetDepth( sal_Int32 ) const
@@ -2607,19 +2607,19 @@ sal_Int16 SvxDummyTextSource::GetDepth( sal_Int32 ) const
     return -1;
 }
 
-sal_Bool SvxDummyTextSource::SetDepth( sal_Int32, sal_Int16 nNewDepth )
+bool SvxDummyTextSource::SetDepth( sal_Int32, sal_Int16 nNewDepth )
 {
-    return nNewDepth == 0 ? sal_True : sal_False;
+    return nNewDepth == 0;
 }
 
-sal_Bool SvxDummyTextSource::Delete( const ESelection& )
+bool SvxDummyTextSource::Delete( const ESelection& )
 {
-    return sal_False;
+    return false;
 }
 
-sal_Bool SvxDummyTextSource::InsertText( const OUString&, const ESelection& )
+bool SvxDummyTextSource::InsertText( const OUString&, const ESelection& )
 {
-    return sal_False;
+    return false;
 }
 
 const SfxItemSet * SvxDummyTextSource::GetEmptyItemSetPtr()

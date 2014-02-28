@@ -56,7 +56,7 @@ public:
                         ScViewForwarder(ScTabViewShell* pViewShell, ScSplitPos eSplitPos, const ScAddress& rCell);
     virtual             ~ScViewForwarder();
 
-    virtual sal_Bool        IsValid() const;
+    virtual bool        IsValid() const;
     virtual Rectangle   GetVisArea() const;
     virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
     virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
@@ -76,7 +76,7 @@ ScViewForwarder::~ScViewForwarder()
 {
 }
 
-sal_Bool ScViewForwarder::IsValid() const
+bool ScViewForwarder::IsValid() const
 {
     return mpViewShell != NULL;
 }
@@ -156,7 +156,7 @@ public:
                                                    const EditView* _pEditView);
     virtual             ~ScEditObjectViewForwarder();
 
-    virtual sal_Bool        IsValid() const;
+    virtual bool        IsValid() const;
     virtual Rectangle   GetVisArea() const;
     virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
     virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
@@ -176,7 +176,7 @@ ScEditObjectViewForwarder::~ScEditObjectViewForwarder()
 {
 }
 
-sal_Bool ScEditObjectViewForwarder::IsValid() const
+bool ScEditObjectViewForwarder::IsValid() const
 {
     return (mpWindow != NULL);
 }
@@ -255,7 +255,7 @@ public:
                         ScPreviewViewForwarder(ScPreviewShell* pViewShell);
     virtual             ~ScPreviewViewForwarder();
 
-    virtual sal_Bool        IsValid() const;
+    virtual bool        IsValid() const;
     virtual Rectangle   GetVisArea() const;
     virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
     virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
@@ -280,7 +280,7 @@ ScPreviewViewForwarder::~ScPreviewViewForwarder()
     delete mpTableInfo;
 }
 
-sal_Bool ScPreviewViewForwarder::IsValid() const
+bool ScPreviewViewForwarder::IsValid() const
 {
     return mpViewShell != NULL;
 }
@@ -556,7 +556,7 @@ public:
                         ScEditViewForwarder(EditView* pEditView, Window* pWin);
     virtual             ~ScEditViewForwarder();
 
-    virtual sal_Bool        IsValid() const;
+    virtual bool        IsValid() const;
     virtual Rectangle   GetVisArea() const;
     virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
     virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
@@ -582,14 +582,9 @@ ScEditViewForwarder::~ScEditViewForwarder()
 {
 }
 
-sal_Bool ScEditViewForwarder::IsValid() const
+bool ScEditViewForwarder::IsValid() const
 {
-    sal_Bool bResult(false);
-    if (mpWindow && mpEditView)
-    {
-        bResult = sal_True;
-    }
-    return bResult;
+    return mpWindow && mpEditView;
 }
 
 Rectangle ScEditViewForwarder::GetVisArea() const
@@ -1670,7 +1665,7 @@ class ScCsvViewForwarder : public SvxViewForwarder
 public:
     explicit                    ScCsvViewForwarder( Window* pWindow, const Rectangle& rBoundBox );
 
-    virtual sal_Bool                IsValid() const;
+    virtual bool                IsValid() const;
     virtual Rectangle           GetVisArea() const;
     virtual Point               LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
     virtual Point               PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
@@ -1684,7 +1679,7 @@ ScCsvViewForwarder::ScCsvViewForwarder( Window* pWindow, const Rectangle& rBound
 {
 }
 
-sal_Bool ScCsvViewForwarder::IsValid() const
+bool ScCsvViewForwarder::IsValid() const
 {
     return mpWindow != NULL;
 }

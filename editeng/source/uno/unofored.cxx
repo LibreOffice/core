@@ -112,7 +112,7 @@ void SvxEditEngineForwarder::SetParaAttribs( sal_Int32 nPara, const SfxItemSet& 
     rEditEngine.SetParaAttribs( nPara, rSet );
 }
 
-void SvxEditEngineForwarder::RemoveAttribs( const ESelection& rSelection, sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich )
+void SvxEditEngineForwarder::RemoveAttribs( const ESelection& rSelection, bool bRemoveParaAttribs, sal_uInt16 nWhich )
 {
     rEditEngine.RemoveAttribs( rSelection, bRemoveParaAttribs, nWhich );
 }
@@ -147,7 +147,7 @@ void SvxEditEngineForwarder::QuickSetAttribs( const SfxItemSet& rSet, const ESel
     rEditEngine.QuickSetAttribs( rSet, rSel );
 }
 
-sal_Bool SvxEditEngineForwarder::IsValid() const
+bool SvxEditEngineForwarder::IsValid() const
 {
     // cannot reliably query EditEngine state
     // while in the middle of an update
@@ -374,7 +374,7 @@ OutputDevice* SvxEditEngineForwarder::GetRefDevice() const
     return rEditEngine.GetRefDevice();
 }
 
-sal_Bool SvxEditEngineForwarder::GetIndexAtPoint( const Point& rPos, sal_Int32& nPara, sal_Int32& nIndex ) const
+bool SvxEditEngineForwarder::GetIndexAtPoint( const Point& rPos, sal_Int32& nPara, sal_Int32& nIndex ) const
 {
     Size aSize( rEditEngine.CalcTextWidth(), rEditEngine.GetTextHeight() );
     ::std::swap( aSize.Width(), aSize.Height() );
@@ -387,10 +387,10 @@ sal_Bool SvxEditEngineForwarder::GetIndexAtPoint( const Point& rPos, sal_Int32& 
     nPara = aDocPos.nPara;
     nIndex = aDocPos.nIndex;
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvxEditEngineForwarder::GetWordIndices( sal_Int32 nPara, sal_Int32 nIndex, sal_Int32& nStart, sal_Int32& nEnd ) const
+bool SvxEditEngineForwarder::GetWordIndices( sal_Int32 nPara, sal_Int32 nIndex, sal_Int32& nStart, sal_Int32& nEnd ) const
 {
     ESelection aRes = rEditEngine.GetWord( ESelection(nPara, nIndex, nPara, nIndex), com::sun::star::i18n::WordType::DICTIONARY_WORD );
 
@@ -400,10 +400,10 @@ sal_Bool SvxEditEngineForwarder::GetWordIndices( sal_Int32 nPara, sal_Int32 nInd
         nStart = aRes.nStartPos;
         nEnd = aRes.nEndPos;
 
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 bool SvxEditEngineForwarder::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, sal_Int32 nPara, sal_Int32 nIndex, bool bInCell ) const
@@ -432,27 +432,27 @@ sal_Int32 SvxEditEngineForwarder::GetLineNumberAtIndex( sal_Int32 nPara, sal_Int
 }
 
 
-sal_Bool SvxEditEngineForwarder::QuickFormatDoc( sal_Bool )
+bool SvxEditEngineForwarder::QuickFormatDoc( bool )
 {
     rEditEngine.QuickFormatDoc();
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvxEditEngineForwarder::Delete( const ESelection& rSelection )
+bool SvxEditEngineForwarder::Delete( const ESelection& rSelection )
 {
     rEditEngine.QuickDelete( rSelection );
     rEditEngine.QuickFormatDoc();
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvxEditEngineForwarder::InsertText( const OUString& rStr, const ESelection& rSelection )
+bool SvxEditEngineForwarder::InsertText( const OUString& rStr, const ESelection& rSelection )
 {
     rEditEngine.QuickInsertText( rStr, rSelection );
     rEditEngine.QuickFormatDoc();
 
-    return sal_True;
+    return true;
 }
 
 sal_Int16 SvxEditEngineForwarder::GetDepth( sal_Int32 ) const
@@ -461,10 +461,10 @@ sal_Int16 SvxEditEngineForwarder::GetDepth( sal_Int32 ) const
     return -1;
 }
 
-sal_Bool SvxEditEngineForwarder::SetDepth( sal_Int32, sal_Int16 nNewDepth )
+bool SvxEditEngineForwarder::SetDepth( sal_Int32, sal_Int16 nNewDepth )
 {
     // EditEngine does not support outline depth
-    return nNewDepth == -1 ? sal_True : sal_False;
+    return nNewDepth == -1;
 }
 
 const SfxItemSet * SvxEditEngineForwarder::GetEmptyItemSetPtr()

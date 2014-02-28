@@ -144,7 +144,7 @@ public:
     virtual SfxItemSet  GetAttribs( const ESelection& rSel, sal_Bool bOnlyHardAttrib = 0 ) const = 0;
     virtual SfxItemSet  GetParaAttribs( sal_Int32 nPara ) const = 0;
     virtual void        SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet ) = 0;
-    virtual void        RemoveAttribs( const ESelection& rSelection, sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich ) = 0;
+    virtual void        RemoveAttribs( const ESelection& rSelection, bool bRemoveParaAttribs, sal_uInt16 nWhich ) = 0;
     virtual void        GetPortions( sal_Int32 nPara, std::vector<sal_Int32>& rList ) const = 0;
 
     virtual sal_uInt16      GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const = 0;
@@ -164,16 +164,16 @@ public:
 
     // implementation functions for XParagraphAppend and XTextPortionAppend
     virtual void        AppendParagraph() = 0;
-    virtual sal_Int32  AppendTextPortion( sal_Int32 nPara, const OUString &rText, const SfxItemSet &rSet ) = 0;
+    virtual sal_Int32   AppendTextPortion( sal_Int32 nPara, const OUString &rText, const SfxItemSet &rSet ) = 0;
 
     // XTextCopy
     virtual void        CopyText(const SvxTextForwarder& rSource) = 0;
 
     /** Query state of forwarder
 
-        @return sal_False, if no longer valid
+        @return false, if no longer valid
      */
-    virtual sal_Bool            IsValid() const = 0;
+    virtual bool       IsValid() const = 0;
 
     /** Query language of character at given position on the underlying edit engine
 
@@ -210,8 +210,8 @@ public:
     virtual EBulletInfo     GetBulletInfo( sal_Int32 nPara ) const = 0;
 
     virtual OUString        GetNumStr(sal_uInt16) const { return OUString(); }
-    virtual void            SetUpdateModeForAcc(sal_Bool) {}
-    virtual sal_Bool        GetUpdateModeForAcc() const { return sal_True; }
+    virtual void            SetUpdateModeForAcc(bool) {}
+    virtual bool            GetUpdateModeForAcc() const { return true; }
 
     /** Query the bounding rectangle of the given character
 
@@ -279,10 +279,10 @@ public:
         @param rIndex[0 .. m-1]
         Index of character the point is over
 
-        @return sal_True, if the point is over any text and both rPara and rIndex are valid
+        @return true, if the point is over any text and both rPara and rIndex are valid
 
      */
-    virtual sal_Bool        GetIndexAtPoint( const Point& rPoint, sal_Int32& rPara, sal_Int32& rIndex ) const = 0;
+    virtual bool            GetIndexAtPoint( const Point& rPoint, sal_Int32& rPara, sal_Int32& rIndex ) const = 0;
 
     /** Get the start and the end index of the word at the given index
 
@@ -305,9 +305,9 @@ public:
         End index (in the same paragraph), this point to the last
         character still contained in the query
 
-        @return sal_True, if the result is non-empty
+        @return true, if the result is non-empty
      */
-    virtual sal_Bool        GetWordIndices( sal_Int32 nPara, sal_Int32 nIndex, sal_Int32& rStart, sal_Int32& rEnd ) const = 0;
+    virtual bool             GetWordIndices( sal_Int32 nPara, sal_Int32 nIndex, sal_Int32& rStart, sal_Int32& rEnd ) const = 0;
 
     /** Query range of similar attributes
 
@@ -382,9 +382,9 @@ public:
         @param rSelection
         The text range to be deleted
 
-        @return sal_True if text has been successfully deleted
+        @return true if text has been successfully deleted
      */
-    virtual sal_Bool        Delete( const ESelection& rSelection ) = 0;
+    virtual bool            Delete( const ESelection& rSelection ) = 0;
 
      /** Insert/Replace given text in given range and reformat text
 
@@ -394,17 +394,17 @@ public:
          @param rSel
          Selection where text should be replaced. The empty selection inserts
 
-         @return sal_True if text has been successfully inserted
+         @return true if text has been successfully inserted
       */
-    virtual sal_Bool        InsertText( const OUString& rText, const ESelection& rSel ) = 0;
+    virtual bool            InsertText( const OUString& rText, const ESelection& rSel ) = 0;
 
      /** Updates the formatting
 
           @see EditEngine::QuickFormatDoc() for details
 
-         @return sal_True if text have been successfully reformatted
+         @return true if text have been successfully reformatted
       */
-    virtual sal_Bool        QuickFormatDoc( sal_Bool bFull=sal_False ) = 0;
+    virtual bool            QuickFormatDoc( bool bFull = false ) = 0;
 
     /** Get the outline depth of given paragraph
 
@@ -425,11 +425,11 @@ public:
         The depth to set on the given paragraph. The range is
         [0,n), where n is the maximal outline level.
 
-        @return sal_True, if depth could be successfully set. Reasons for
+        @return true, if depth could be successfully set. Reasons for
         failure are e.g. the text does not support outline level
         (EditEngine), or the depth range is exceeded.
      */
-    virtual sal_Bool        SetDepth( sal_Int32 nPara, sal_Int16 nNewDepth ) = 0;
+    virtual bool            SetDepth( sal_Int32 nPara, sal_Int16 nNewDepth ) = 0;
 
     virtual sal_Int32 GetNumberingStartValue( sal_Int32 nPara );
     virtual void SetNumberingStartValue( sal_Int32 nPara, sal_Int32 nNumberingStartValue );
@@ -453,7 +453,7 @@ public:
 
         @return sal_False, if no longer valid
      */
-    virtual sal_Bool        IsValid() const = 0;
+    virtual bool        IsValid() const = 0;
 
     /** Query visible area of the view containing the text
 

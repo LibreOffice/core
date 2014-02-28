@@ -103,7 +103,7 @@ namespace accessibility
         return *( const_cast< AccessibleOutlineEditSource* > (this) );
     }
 
-    sal_Bool AccessibleOutlineEditSource::IsValid() const
+    bool AccessibleOutlineEditSource::IsValid() const
     {
         if( mpOutliner && mpOutlinerView )
         {
@@ -113,11 +113,11 @@ namespace accessibility
             for( nCurrView=0, nViews=mpOutliner->GetViewCount(); nCurrView<nViews; ++nCurrView )
             {
                 if( mpOutliner->GetView(nCurrView) == mpOutlinerView )
-                    return sal_True;
+                    return true;
             }
         }
 
-        return sal_False;
+        return false;
     }
 
     Rectangle AccessibleOutlineEditSource::GetVisArea() const

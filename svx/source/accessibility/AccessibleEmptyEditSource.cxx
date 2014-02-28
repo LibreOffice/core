@@ -107,7 +107,7 @@ namespace accessibility
         }
         SfxItemSet      GetParaAttribs( sal_Int32 /*nPara*/ ) const { return GetAttribs(ESelection()); }
         void            SetParaAttribs( sal_Int32 /*nPara*/, const SfxItemSet& /*rSet*/ ) {}
-        void            RemoveAttribs( const ESelection& /*rSelection*/, sal_Bool /*bRemoveParaAttribs*/, sal_uInt16 /*nWhich*/ ){}
+        void            RemoveAttribs( const ESelection& /*rSelection*/, bool /*bRemoveParaAttribs*/, sal_uInt16 /*nWhich*/ ){}
         void            GetPortions( sal_Int32 /*nPara*/, std::vector<sal_Int32>& /*rList*/ ) const {}
 
         sal_uInt16          GetItemState( const ESelection& /*rSel*/, sal_uInt16 /*nWhich*/ ) const { return 0; }
@@ -134,7 +134,7 @@ namespace accessibility
         }
         void            FieldClicked( const SvxFieldItem&, sal_Int32, sal_Int32 ) {;}
 
-        sal_Bool            IsValid() const { return sal_True; }
+        bool            IsValid() const { return true; }
 
         void            SetNotifyHdl( const Link& ) {}
         LanguageType    GetLanguage( sal_Int32, sal_Int32 ) const { return LANGUAGE_DONTKNOW; }
@@ -145,8 +145,8 @@ namespace accessibility
         Rectangle       GetParaBounds( sal_Int32 ) const { return Rectangle(); }
         MapMode         GetMapMode() const { return MapMode(); }
         OutputDevice*   GetRefDevice() const { return NULL; }
-        sal_Bool        GetIndexAtPoint( const Point&, sal_Int32&, sal_Int32& ) const { return sal_False; }
-        sal_Bool        GetWordIndices( sal_Int32, sal_Int32, sal_Int32&, sal_Int32& ) const { return sal_False; }
+        bool            GetIndexAtPoint( const Point&, sal_Int32&, sal_Int32& ) const { return false; }
+        bool            GetWordIndices( sal_Int32, sal_Int32, sal_Int32&, sal_Int32& ) const { return false; }
         bool            GetAttributeRun( sal_Int32&, sal_Int32&, sal_Int32, sal_Int32, bool ) const { return false; }
         sal_Int32       GetLineCount( sal_Int32 nPara ) const { return nPara == 0 ? 1 : 0; }
         sal_Int32       GetLineLen( sal_Int32, sal_Int32 ) const { return 0; }
@@ -161,11 +161,11 @@ namespace accessibility
         // when that changes: via accessibility API, it would no
         // longer be possible to enter text in previously empty
         // shapes).
-        sal_Bool        Delete( const ESelection& ) { return sal_False; }
-        sal_Bool        InsertText( const OUString&, const ESelection& ) { return sal_False; }
-        sal_Bool        QuickFormatDoc( sal_Bool ) { return sal_True; }
+        bool            Delete( const ESelection& ) { return false; }
+        bool            InsertText( const OUString&, const ESelection& ) { return false; }
+        bool            QuickFormatDoc( bool ) { return true; }
         sal_Int16       GetDepth( sal_Int32 ) const { return -1; }
-        sal_Bool        SetDepth( sal_Int32, sal_Int16 ) { return sal_True; }
+        bool            SetDepth( sal_Int32, sal_Int16 ) { return true; }
 
         Rectangle       GetVisArea() const { return Rectangle(); }
         Point           LogicToPixel( const Point& rPoint, const MapMode& /*rMapMode*/ ) const { return rPoint; }

@@ -180,7 +180,7 @@ void SvxOutlinerForwarder::SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rS
         ((SfxItemSet*)&rSet)->SetParent( pOldParent );
 }
 
-void SvxOutlinerForwarder::RemoveAttribs( const ESelection& rSelection, sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich )
+void SvxOutlinerForwarder::RemoveAttribs( const ESelection& rSelection, bool bRemoveParaAttribs, sal_uInt16 nWhich )
 {
     rOutliner.RemoveAttribs( rSelection, bRemoveParaAttribs, nWhich );
 }
@@ -236,7 +236,7 @@ void SvxOutlinerForwarder::FieldClicked( const SvxFieldItem& rField, sal_Int32 n
     rOutliner.FieldClicked( rField, nPara, nPos );
 }
 
-sal_Bool SvxOutlinerForwarder::IsValid() const
+bool SvxOutlinerForwarder::IsValid() const
 {
     // cannot reliably query outliner state
     // while in the middle of an update
@@ -371,7 +371,7 @@ OutputDevice* SvxOutlinerForwarder::GetRefDevice() const
     return rOutliner.GetRefDevice();
 }
 
-sal_Bool SvxOutlinerForwarder::GetIndexAtPoint( const Point& rPos, sal_Int32& nPara, sal_Int32& nIndex ) const
+bool SvxOutlinerForwarder::GetIndexAtPoint( const Point& rPos, sal_Int32& nPara, sal_Int32& nIndex ) const
 {
     Size aSize( rOutliner.CalcTextSize() );
     ::std::swap( aSize.Width(), aSize.Height() );
@@ -384,10 +384,10 @@ sal_Bool SvxOutlinerForwarder::GetIndexAtPoint( const Point& rPos, sal_Int32& nP
     nPara = aDocPos.nPara;
     nIndex = aDocPos.nIndex;
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvxOutlinerForwarder::GetWordIndices( sal_Int32 nPara, sal_Int32 nIndex, sal_Int32& nStart, sal_Int32& nEnd ) const
+bool SvxOutlinerForwarder::GetWordIndices( sal_Int32 nPara, sal_Int32 nIndex, sal_Int32& nStart, sal_Int32& nEnd ) const
 {
     ESelection aRes = rOutliner.GetEditEngine().GetWord( ESelection(nPara, nIndex, nPara, nIndex), com::sun::star::i18n::WordType::DICTIONARY_WORD );
 
@@ -397,10 +397,10 @@ sal_Bool SvxOutlinerForwarder::GetWordIndices( sal_Int32 nPara, sal_Int32 nIndex
         nStart = aRes.nStartPos;
         nEnd = aRes.nEndPos;
 
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 bool SvxOutlinerForwarder::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, sal_Int32 nPara, sal_Int32 nIndex, bool bInCell ) const
@@ -428,29 +428,29 @@ sal_Int32 SvxOutlinerForwarder::GetLineNumberAtIndex( sal_Int32 nPara, sal_Int32
     return rOutliner.GetEditEngine().GetLineNumberAtIndex( nPara, nIndex );
 }
 
-sal_Bool SvxOutlinerForwarder::QuickFormatDoc( sal_Bool )
+bool SvxOutlinerForwarder::QuickFormatDoc( bool )
 {
     rOutliner.QuickFormatDoc();
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvxOutlinerForwarder::Delete( const ESelection& rSelection )
+bool SvxOutlinerForwarder::Delete( const ESelection& rSelection )
 {
     flushCache();
     rOutliner.QuickDelete( rSelection );
     rOutliner.QuickFormatDoc();
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvxOutlinerForwarder::InsertText( const OUString& rStr, const ESelection& rSelection )
+bool SvxOutlinerForwarder::InsertText( const OUString& rStr, const ESelection& rSelection )
 {
     flushCache();
     rOutliner.QuickInsertText( rStr, rSelection );
     rOutliner.QuickFormatDoc();
 
-    return sal_True;
+    return true;
 }
 
 sal_Int16 SvxOutlinerForwarder::GetDepth( sal_Int32 nPara ) const
@@ -467,7 +467,7 @@ sal_Int16 SvxOutlinerForwarder::GetDepth( sal_Int32 nPara ) const
     return nLevel;
 }
 
-sal_Bool SvxOutlinerForwarder::SetDepth( sal_Int32 nPara, sal_Int16 nNewDepth )
+bool SvxOutlinerForwarder::SetDepth( sal_Int32 nPara, sal_Int16 nNewDepth )
 {
     DBG_ASSERT( 0 <= nPara && nPara < GetParagraphCount(), "SvxOutlinerForwarder::SetDepth: Invalid paragraph index");
 
@@ -482,11 +482,11 @@ sal_Bool SvxOutlinerForwarder::SetDepth( sal_Int32 nPara, sal_Int16 nNewDepth )
             if( bOutlinerText )
                 rOutliner.SetLevelDependendStyleSheet( nPara );
 
-            return sal_True;
+            return true;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 sal_Int32 SvxOutlinerForwarder::GetNumberingStartValue( sal_Int32 nPara )

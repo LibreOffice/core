@@ -46,9 +46,9 @@ Point SvxDrawOutlinerViewForwarder::GetTextOffset() const
     return aOutputRect.TopLeft() - maTextShapeTopLeft;
 }
 
-sal_Bool SvxDrawOutlinerViewForwarder::IsValid() const
+bool SvxDrawOutlinerViewForwarder::IsValid() const
 {
-    return sal_True;
+    return true;
 }
 
 Rectangle SvxDrawOutlinerViewForwarder::GetVisArea() const

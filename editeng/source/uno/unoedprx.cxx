@@ -552,7 +552,7 @@ void SvxAccessibleTextAdapter::SetParaAttribs( sal_Int32 nPara, const SfxItemSet
     mpTextForwarder->SetParaAttribs( nPara, rSet );
 }
 
-void SvxAccessibleTextAdapter::RemoveAttribs( const ESelection& , sal_Bool , sal_uInt16 )
+void SvxAccessibleTextAdapter::RemoveAttribs( const ESelection& , bool , sal_uInt16 )
 {
     DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 }
@@ -672,14 +672,14 @@ sal_uInt16 SvxAccessibleTextAdapter::CalcEditEngineIndex( sal_Int32 nPara, sal_I
 
 
 
-sal_Bool SvxAccessibleTextAdapter::IsValid() const
+bool SvxAccessibleTextAdapter::IsValid() const
 {
     DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
     if( mpTextForwarder )
         return mpTextForwarder->IsValid();
     else
-        return sal_False;
+        return false;
 }
 
 LanguageType SvxAccessibleTextAdapter::GetLanguage( sal_Int32 nPara, sal_Int32 nPos ) const
@@ -714,12 +714,12 @@ EBulletInfo SvxAccessibleTextAdapter::GetBulletInfo( sal_Int32 nPara ) const
     return mpTextForwarder->GetBulletInfo( nPara );
 }
 
-void SvxAccessibleTextAdapter::SetUpdateModeForAcc(sal_Bool bUp)
+void SvxAccessibleTextAdapter::SetUpdateModeForAcc(bool bUp)
 {
     return mpTextForwarder->SetUpdateModeForAcc(bUp);
 }
 
-sal_Bool SvxAccessibleTextAdapter::GetUpdateModeForAcc( ) const
+bool SvxAccessibleTextAdapter::GetUpdateModeForAcc( ) const
 {
     return mpTextForwarder->GetUpdateModeForAcc();
 }
@@ -817,12 +817,12 @@ OutputDevice* SvxAccessibleTextAdapter::GetRefDevice() const
     return mpTextForwarder->GetRefDevice();
 }
 
-sal_Bool SvxAccessibleTextAdapter::GetIndexAtPoint( const Point& rPoint, sal_Int32& nPara, sal_Int32& nIndex ) const
+bool SvxAccessibleTextAdapter::GetIndexAtPoint( const Point& rPoint, sal_Int32& nPara, sal_Int32& nIndex ) const
 {
     DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
     if( !mpTextForwarder->GetIndexAtPoint( rPoint, nPara, nIndex ) )
-        return sal_False;
+        return false;
 
     SvxAccessibleTextIndex aIndex;
     aIndex.SetEEIndex(nPara, nIndex, *this);
@@ -846,7 +846,7 @@ sal_Bool SvxAccessibleTextAdapter::GetIndexAtPoint( const Point& rPoint, sal_Int
             DBG_ASSERT(pOutDev!=NULL, "SvxAccessibleTextAdapter::GetIndexAtPoint: No ref device");
 
             if( !pOutDev )
-                return sal_False;
+                return false;
 
             AccessibleStringWrap aStringWrap( *pOutDev, aBulletInfo.aFont, aBulletInfo.aText );
 
@@ -858,7 +858,7 @@ sal_Bool SvxAccessibleTextAdapter::GetIndexAtPoint( const Point& rPoint, sal_Int
                        "SvxAccessibleTextIndex::SetIndex: index value overflow");
 
             nIndex = aStringWrap.GetIndexAtPoint( aPoint );
-            return sal_True;
+            return true;
         }
     }
 
@@ -869,7 +869,7 @@ sal_Bool SvxAccessibleTextAdapter::GetIndexAtPoint( const Point& rPoint, sal_Int
         DBG_ASSERT(pOutDev!=NULL, "SvxAccessibleTextAdapter::GetIndexAtPoint: No ref device");
 
         if( !pOutDev )
-            return sal_False;
+            return false;
 
         ESelection aSelection = MakeEESelection( aIndex );
         SvxFont aFont = EditEngine::CreateSvxFontFromItemSet( mpTextForwarder->GetAttribs( aSelection ) );
@@ -886,13 +886,13 @@ sal_Bool SvxAccessibleTextAdapter::GetIndexAtPoint( const Point& rPoint, sal_Int
                    "SvxAccessibleTextIndex::SetIndex: index value overflow");
 
         nIndex = (aIndex.GetIndex() + aStringWrap.GetIndexAtPoint( aPoint ));
-        return sal_True;
+        return true;
     }
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvxAccessibleTextAdapter::GetWordIndices( sal_Int32 nPara, sal_Int32 nIndex, sal_Int32& nStart, sal_Int32& nEnd ) const
+bool SvxAccessibleTextAdapter::GetWordIndices( sal_Int32 nPara, sal_Int32 nIndex, sal_Int32& nStart, sal_Int32& nEnd ) const
 {
     DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
@@ -910,7 +910,7 @@ sal_Bool SvxAccessibleTextAdapter::GetWordIndices( sal_Int32 nPara, sal_Int32 nI
         nStart = 0;
         nEnd = aIndex.GetBulletLen();
 
-        return sal_True;
+        return true;
     }
 
     if( aIndex.InField() )
@@ -926,11 +926,11 @@ sal_Bool SvxAccessibleTextAdapter::GetWordIndices( sal_Int32 nPara, sal_Int32 nI
         nStart = aIndex.GetIndex() - aIndex.GetFieldOffset();
         nEnd = nStart + aIndex.GetFieldLen();
 
-        return sal_True;
+        return true;
     }
 
     if( !mpTextForwarder->GetWordIndices( nPara, nIndex, nStart, nEnd ) )
-        return sal_False;
+        return false;
 
     aIndex.SetEEIndex( nPara, nStart, *this );
     DBG_ASSERT(aIndex.GetIndex() >= 0 &&
@@ -944,7 +944,7 @@ sal_Bool SvxAccessibleTextAdapter::GetWordIndices( sal_Int32 nPara, sal_Int32 nI
                "SvxAccessibleTextIndex::SetIndex: index value overflow");
     nEnd = aIndex.GetIndex();
 
-    return sal_True;
+    return true;
 }
 
 bool SvxAccessibleTextAdapter::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, sal_Int32 nPara, sal_Int32 nIndex, bool /* bInCell */ ) const
@@ -1042,7 +1042,7 @@ sal_Int32 SvxAccessibleTextAdapter::GetLineNumberAtIndex( sal_Int32 nPara, sal_I
     return mpTextForwarder->GetLineNumberAtIndex( nPara, nIndex );
 }
 
-sal_Bool SvxAccessibleTextAdapter::Delete( const ESelection& rSel )
+bool SvxAccessibleTextAdapter::Delete( const ESelection& rSel )
 {
     DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
@@ -1055,7 +1055,7 @@ sal_Bool SvxAccessibleTextAdapter::Delete( const ESelection& rSel )
     return mpTextForwarder->Delete( MakeEESelection(aStartIndex, aEndIndex ) );
 }
 
-sal_Bool SvxAccessibleTextAdapter::InsertText( const OUString& rStr, const ESelection& rSel )
+bool SvxAccessibleTextAdapter::InsertText( const OUString& rStr, const ESelection& rSel )
 {
     DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
@@ -1068,7 +1068,7 @@ sal_Bool SvxAccessibleTextAdapter::InsertText( const OUString& rStr, const ESele
     return mpTextForwarder->InsertText( rStr, MakeEESelection(aStartIndex, aEndIndex) );
 }
 
-sal_Bool SvxAccessibleTextAdapter::QuickFormatDoc( sal_Bool bFull )
+bool SvxAccessibleTextAdapter::QuickFormatDoc( bool bFull )
 {
     DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
@@ -1082,7 +1082,7 @@ sal_Int16 SvxAccessibleTextAdapter::GetDepth( sal_Int32 nPara ) const
     return mpTextForwarder->GetDepth( nPara );
 }
 
-sal_Bool SvxAccessibleTextAdapter::SetDepth( sal_Int32 nPara, sal_Int16 nNewDepth )
+bool SvxAccessibleTextAdapter::SetDepth( sal_Int32 nPara, sal_Int16 nNewDepth )
 {
     DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
@@ -1094,43 +1094,29 @@ void SvxAccessibleTextAdapter::SetForwarder( SvxTextForwarder& rForwarder )
     mpTextForwarder = &rForwarder;
 }
 
-sal_Bool SvxAccessibleTextAdapter::HaveImageBullet( sal_Int32 nPara ) const
+bool SvxAccessibleTextAdapter::HaveImageBullet( sal_Int32 nPara ) const
 {
     DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
     EBulletInfo aBulletInfo = GetBulletInfo( nPara );
 
-    if( aBulletInfo.nParagraph != EE_PARA_NOT_FOUND &&
-        aBulletInfo.bVisible &&
-        aBulletInfo.nType == SVX_NUM_BITMAP )
-    {
-        return sal_True;
-    }
-    else
-    {
-        return sal_False;
-    }
+    return ( aBulletInfo.nParagraph != EE_PARA_NOT_FOUND &&
+            aBulletInfo.bVisible &&
+            aBulletInfo.nType == SVX_NUM_BITMAP );
 }
 
-sal_Bool SvxAccessibleTextAdapter::HaveTextBullet( sal_Int32 nPara ) const
+bool SvxAccessibleTextAdapter::HaveTextBullet( sal_Int32 nPara ) const
 {
     DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
     EBulletInfo aBulletInfo = GetBulletInfo( nPara );
 
-    if( aBulletInfo.nParagraph != EE_PARA_NOT_FOUND &&
-        aBulletInfo.bVisible &&
-        aBulletInfo.nType != SVX_NUM_BITMAP )
-    {
-        return sal_True;
-    }
-    else
-    {
-        return sal_False;
-    }
+    return ( aBulletInfo.nParagraph != EE_PARA_NOT_FOUND &&
+            aBulletInfo.bVisible &&
+            aBulletInfo.nType != SVX_NUM_BITMAP );
 }
 
-sal_Bool SvxAccessibleTextAdapter::IsEditable( const ESelection& rSel )
+bool SvxAccessibleTextAdapter::IsEditable( const ESelection& rSel )
 {
     DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
@@ -1185,14 +1171,14 @@ SvxAccessibleTextEditViewAdapter::~SvxAccessibleTextEditViewAdapter()
 {
 }
 
-sal_Bool SvxAccessibleTextEditViewAdapter::IsValid() const
+bool SvxAccessibleTextEditViewAdapter::IsValid() const
 {
     DBG_ASSERT(mpViewForwarder, "SvxAccessibleTextEditViewAdapter: no forwarder");
 
     if( mpViewForwarder )
         return mpViewForwarder->IsValid();
     else
-        return sal_False;
+        return false;
 }
 
 Rectangle SvxAccessibleTextEditViewAdapter::GetVisArea() const

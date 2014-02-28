@@ -1120,7 +1120,7 @@ void SvxTextEditSource::unlock()
     mpImpl->unlock();
 }
 
-sal_Bool SvxTextEditSource::IsValid() const
+bool SvxTextEditSource::IsValid() const
 {
     return mpImpl->IsValid();
 }

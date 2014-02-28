@@ -878,7 +878,7 @@ SmViewForwarder::~SmViewForwarder()
 {
 }
 
-sal_Bool SmViewForwarder::IsValid() const
+bool SmViewForwarder::IsValid() const
 {
     return rEditAcc.GetEditView() != 0;
 }
@@ -1060,7 +1060,7 @@ SfxItemPool* SmTextForwarder::GetPool() const
     return pEditEngine ? pEditEngine->GetEmptyItemSet().GetPool() : 0;
 }
 
-void SmTextForwarder::RemoveAttribs( const ESelection& rSelection, sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich )
+void SmTextForwarder::RemoveAttribs( const ESelection& rSelection, bool bRemoveParaAttribs, sal_uInt16 nWhich )
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     if (pEditEngine)
@@ -1102,12 +1102,12 @@ void SmTextForwarder::QuickSetAttribs( const SfxItemSet& rSet, const ESelection&
         pEditEngine->QuickSetAttribs( rSet, rSel );
 }
 
-sal_Bool SmTextForwarder::IsValid() const
+bool SmTextForwarder::IsValid() const
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     // cannot reliably query EditEngine state
     // while in the middle of an update
-    return pEditEngine ? pEditEngine->GetUpdateMode() : sal_False;
+    return pEditEngine && pEditEngine->GetUpdateMode();
 }
 
 OUString SmTextForwarder::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, Color*& rpTxtColor, Color*& rpFldColor )
@@ -1308,23 +1308,23 @@ OutputDevice* SmTextForwarder::GetRefDevice() const
     return pEditEngine ? pEditEngine->GetRefDevice() : 0;
 }
 
-sal_Bool SmTextForwarder::GetIndexAtPoint( const Point& rPos, sal_Int32& nPara, sal_Int32& nIndex ) const
+bool SmTextForwarder::GetIndexAtPoint( const Point& rPos, sal_Int32& nPara, sal_Int32& nIndex ) const
 {
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     if (pEditEngine)
     {
         EPosition aDocPos = pEditEngine->FindDocPosition( rPos );
         nPara   = aDocPos.nPara;
         nIndex  = aDocPos.nIndex;
-        bRes = sal_True;
+        bRes = true;
     }
     return bRes;
 }
 
-sal_Bool SmTextForwarder::GetWordIndices( sal_Int32 nPara, sal_Int32 nIndex, sal_Int32& nStart, sal_Int32& nEnd ) const
+bool SmTextForwarder::GetWordIndices( sal_Int32 nPara, sal_Int32 nIndex, sal_Int32& nStart, sal_Int32& nEnd ) const
 {
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     if (pEditEngine)
     {
@@ -1336,7 +1336,7 @@ sal_Bool SmTextForwarder::GetWordIndices( sal_Int32 nPara, sal_Int32 nIndex, sal
             nStart = aRes.nStartPos;
             nEnd = aRes.nEndPos;
 
-            bRes = sal_True;
+            bRes = true;
         }
     }
 
@@ -1377,14 +1377,14 @@ sal_Int32 SmTextForwarder::GetLineNumberAtIndex( sal_Int32 nPara, sal_Int32 nInd
     return pEditEngine ? pEditEngine->GetLineNumberAtIndex(nPara, nIndex) : 0;
 }
 
-sal_Bool SmTextForwarder::QuickFormatDoc( sal_Bool /*bFull*/ )
+bool SmTextForwarder::QuickFormatDoc( bool /*bFull*/ )
 {
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     if (pEditEngine)
     {
         pEditEngine->QuickFormatDoc();
-        bRes = sal_True;
+        bRes = true;
     }
     return bRes;
 }
@@ -1395,34 +1395,34 @@ sal_Int16 SmTextForwarder::GetDepth( sal_Int32 /*nPara*/ ) const
     return -1;
 }
 
-sal_Bool SmTextForwarder::SetDepth( sal_Int32 /*nPara*/, sal_Int16 nNewDepth )
+bool SmTextForwarder::SetDepth( sal_Int32 /*nPara*/, sal_Int16 nNewDepth )
 {
     // math has no outliner...
     return -1 == nNewDepth;  // is it the value from 'GetDepth' ?
 }
 
-sal_Bool SmTextForwarder::Delete( const ESelection& rSelection )
+bool SmTextForwarder::Delete( const ESelection& rSelection )
 {
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     if (pEditEngine)
     {
         pEditEngine->QuickDelete( rSelection );
         pEditEngine->QuickFormatDoc();
-        bRes = sal_True;
+        bRes = true;
     }
     return bRes;
 }
 
-sal_Bool SmTextForwarder::InsertText( const OUString& rStr, const ESelection& rSelection )
+bool SmTextForwarder::InsertText( const OUString& rStr, const ESelection& rSelection )
 {
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     if (pEditEngine)
     {
         pEditEngine->QuickInsertText( rStr, rSelection );
         pEditEngine->QuickFormatDoc();
-        bRes = sal_True;
+        bRes = true;
     }
     return bRes;
 }
@@ -1493,7 +1493,7 @@ SmEditViewForwarder::~SmEditViewForwarder()
 {
 }
 
-sal_Bool SmEditViewForwarder::IsValid() const
+bool SmEditViewForwarder::IsValid() const
 {
     return rEditAcc.GetEditView() != 0;
 }

@@ -59,7 +59,7 @@ public:
     virtual SfxItemSet  GetAttribs( const ESelection& rSel, sal_Bool bOnlyHardAttrib = 0 ) const;
     virtual SfxItemSet  GetParaAttribs( sal_Int32 nPara ) const;
     virtual void        SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet );
-    virtual void        RemoveAttribs( const ESelection& rSelection, sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich );
+    virtual void        RemoveAttribs( const ESelection& rSelection, bool bRemoveParaAttribs, sal_uInt16 nWhich );
     virtual void        GetPortions( sal_Int32 nPara, std::vector<sal_Int32>& rList ) const;
 
     virtual sal_uInt16      GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const;
@@ -73,9 +73,9 @@ public:
     virtual SfxItemPool* GetPool() const;
 
     virtual OUString    CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, Color*& rpTxtColor, Color*& rpFldColor );
-    virtual void         FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos );
+    virtual void        FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos );
 
-    virtual sal_Bool        IsValid() const;
+    virtual bool        IsValid() const;
 
     Outliner&           GetOutliner() const { return rOutliner; }
 
@@ -87,18 +87,18 @@ public:
     virtual Rectangle       GetParaBounds( sal_Int32 nPara ) const;
     virtual MapMode         GetMapMode() const;
     virtual OutputDevice*   GetRefDevice() const;
-    virtual sal_Bool        GetIndexAtPoint( const Point&, sal_Int32& nPara, sal_Int32& nIndex ) const;
-    virtual sal_Bool        GetWordIndices( sal_Int32 nPara, sal_Int32 nIndex, sal_Int32& nStart, sal_Int32& nEnd ) const;
+    virtual bool            GetIndexAtPoint( const Point&, sal_Int32& nPara, sal_Int32& nIndex ) const;
+    virtual bool            GetWordIndices( sal_Int32 nPara, sal_Int32 nIndex, sal_Int32& nStart, sal_Int32& nEnd ) const;
     virtual bool            GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, sal_Int32 nPara, sal_Int32 nIndex, bool bInCell = false ) const;
     virtual sal_Int32       GetLineCount( sal_Int32 nPara ) const;
     virtual sal_Int32       GetLineLen( sal_Int32 nPara, sal_Int32 nLine ) const;
     virtual void            GetLineBoundaries( /*out*/sal_Int32& rStart, /*out*/sal_Int32& rEnd, sal_Int32 nPara, sal_Int32 nLine ) const;
     virtual sal_Int32       GetLineNumberAtIndex( sal_Int32 nPara, sal_Int32 nIndex ) const;
-    virtual sal_Bool        Delete( const ESelection& );
-    virtual sal_Bool        InsertText( const OUString&, const ESelection& );
-    virtual sal_Bool        QuickFormatDoc( sal_Bool bFull=sal_False );
+    virtual bool            Delete( const ESelection& );
+    virtual bool            InsertText( const OUString&, const ESelection& );
+    virtual bool            QuickFormatDoc( bool bFull = false );
     virtual sal_Int16       GetDepth( sal_Int32 nPara ) const;
-    virtual sal_Bool        SetDepth( sal_Int32 nPara, sal_Int16 nNewDepth );
+    virtual bool            SetDepth( sal_Int32 nPara, sal_Int16 nNewDepth );
     virtual sal_Int32       GetNumberingStartValue( sal_Int32 nPara );
     virtual void            SetNumberingStartValue( sal_Int32 nPara, sal_Int32 nNumberingStartValue );
 

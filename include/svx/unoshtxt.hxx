@@ -71,7 +71,7 @@ public:
     void unlock();
 
     // the SvxViewForwarder interface
-    virtual sal_Bool        IsValid() const;
+    virtual bool        IsValid() const;
     virtual Rectangle   GetVisArea() const;
     virtual Point       LogicToPixel( const Point&, const MapMode& ) const;
     virtual Point       PixelToLogic( const Point&, const MapMode& ) const;
