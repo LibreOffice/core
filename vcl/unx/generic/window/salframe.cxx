@@ -4015,7 +4015,7 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
                     }
                     bMapped_   = true;
                     bViewable_ = true;
-                    nRet = true;
+                    nRet = 1;
                     if ( mpInputContext != NULL )
                         mpInputContext->Map( this );
                     CallCallback( SALEVENT_RESIZE, NULL );
@@ -4075,7 +4075,7 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
                 {
                     bMapped_   = false;
                     bViewable_ = false;
-                    nRet = true;
+                    nRet = 1;
                     if ( mpInputContext != NULL )
                         mpInputContext->Unmap( this );
                     CallCallback( SALEVENT_RESIZE, NULL );
@@ -4090,7 +4090,7 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
 
             case VisibilityNotify:
                 nVisibility_ = pEvent->xvisibility.state;
-                nRet = true;
+                nRet = 1;
                 if( bAlwaysOnTop_
                     && bMapped_
                     && ! GetDisplay()->getWMAdaptor()->isAlwaysOnTopOK()
