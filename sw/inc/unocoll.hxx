@@ -183,6 +183,7 @@ class SwUnoCollection
 #define SW_SERVICE_VBACODENAMEPROVIDER                  111
 #define SW_SERVICE_VBAPROJECTNAMEPROVIDER               112
 #define SW_SERVICE_VBAGLOBALS                           113
+#define SW_SERVICE_FIELDTYPE_GENERIC_TEXT_FIELD         114
 
 #define SW_SERVICE_LAST                 SW_SERVICE_VBAGLOBALS
 
@@ -242,6 +243,7 @@ class SwUnoCollection
 #define CSS_TEXT_TEXTFIELD_DROP_DOWN                    "com.sun.star.text.textfield.DropDown"
 #define CSS_TEXT_TEXTFIELD_INPUT_USER                   "com.sun.star.text.textfield.InputUser"
 #define CSS_TEXT_TEXTFIELD_HIDDEN_TEXT                  "com.sun.star.text.textfield.HiddenText"
+#define CSS_TEXT_TEXTFIELD_GENERIC_TEXT_FIELD           "com.sun.star.text.textfield.GenericTextField"
 #define CSS_TEXT_FIELDMASTER_USER                       "com.sun.star.text.fieldmaster.User"
 #define CSS_TEXT_FIELDMASTER_DDE                        "com.sun.star.text.fieldmaster.DDE"
 #define CSS_TEXT_FIELDMASTER_SET_EXPRESSION             "com.sun.star.text.fieldmaster.SetExpression"

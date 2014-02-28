@@ -55,6 +55,7 @@
 #include <txtinet.hxx>
 #include <fmtcntnt.hxx>
 #include <poolfmt.hrc>
+#include <generictextfld.hxx>
 
 #include <SwUndoField.hxx>
 #include "switerator.hxx"
@@ -1579,6 +1580,7 @@ void SwDoc::_InitFieldTypes()       // is being called by the CTOR
     mpFldTypes->push_back( new SwScriptFieldType( this ) );
     mpFldTypes->push_back( new SwCombinedCharFieldType );
     mpFldTypes->push_back( new SwDropDownFieldType );
+    mpFldTypes->push_back( new SwGenericTextFieldType );
 
     // Types have to be at the end!
     // We expect this in the InsertFldType!

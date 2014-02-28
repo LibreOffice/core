@@ -3275,6 +3275,7 @@ com.sun.star.text.textfield.HiddenText
 com.sun.star.text.textfield.docinfo.Description
 com.sun.star.text.textfield.DatabaseNextSet
 com.sun.star.text.textfield.docinfo.PrintDateTime
+com.sun.star.text.textfield.GenericTextField
 TOPIC:
 com.sun.star.text.fieldmaster
 com.sun.star.text.TextField

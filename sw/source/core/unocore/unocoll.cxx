@@ -363,6 +363,7 @@ const ProvNamesId_Type aProvNamesId[] =
     { "com.sun.star.text.TextField.CombinedCharacters",       SW_SERVICE_FIELDTYPE_COMBINED_CHARACTERS },
     { "com.sun.star.text.TextField.DropDown",                 SW_SERVICE_FIELDTYPE_DROPDOWN },
     { "com.sun.star.text.textfield.MetadataField",            SW_SERVICE_FIELDTYPE_METAFIELD },
+    { "com.sun.star.text.TextField.GenericTextField",         SW_SERVICE_FIELDTYPE_GENERIC_TEXT_FIELD },
     { "",                                                     SW_SERVICE_FIELDTYPE_DUMMY_4 },
     { "",                                                     SW_SERVICE_FIELDTYPE_DUMMY_5 },
     { "",                                                     SW_SERVICE_FIELDTYPE_DUMMY_6 },
@@ -454,6 +455,7 @@ const ProvNamesId_Type aProvNamesId[] =
     { CSS_TEXT_TEXTFIELD_DROP_DOWN,                   SW_SERVICE_FIELDTYPE_DROPDOWN },
     { CSS_TEXT_TEXTFIELD_INPUT_USER,                  SW_SERVICE_FIELDTYPE_INPUT_USER },
     { CSS_TEXT_TEXTFIELD_HIDDEN_TEXT,                 SW_SERVICE_FIELDTYPE_HIDDEN_TEXT },
+    { CSS_TEXT_TEXTFIELD_GENERIC_TEXT_FIELD,          SW_SERVICE_FIELDTYPE_GENERIC_TEXT_FIELD },
     { CSS_TEXT_FIELDMASTER_USER,                      SW_SERVICE_FIELDMASTER_USER },
     { CSS_TEXT_FIELDMASTER_DDE,                       SW_SERVICE_FIELDMASTER_DDE },
     { CSS_TEXT_FIELDMASTER_SET_EXPRESSION,            SW_SERVICE_FIELDMASTER_SET_EXP },
@@ -767,6 +769,7 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
         case SW_SERVICE_FIELDTYPE_COMBINED_CHARACTERS       :
         case SW_SERVICE_FIELDTYPE_DROPDOWN                  :
         case SW_SERVICE_FIELDTYPE_TABLE_FORMULA:
+        case SW_SERVICE_FIELDTYPE_GENERIC_TEXT_FIELD:
             xRet = (cppu::OWeakObject*)new SwXTextField(nObjectType);
             break;
         case SW_SERVICE_FIELDTYPE_ANNOTATION:

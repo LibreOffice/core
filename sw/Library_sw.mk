@@ -272,6 +272,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/fields/tblcalc \
     sw/source/core/fields/textapi \
     sw/source/core/fields/usrfld \
+    sw/source/core/fields/generictextfld \
     sw/source/core/frmedt/fecopy \
     sw/source/core/frmedt/fedesc \
     sw/source/core/frmedt/fefly1 \

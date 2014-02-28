@@ -121,7 +121,7 @@ const short lNumFirstLineOffset = -lNumIndent;
 const short lOutlineMinTextDistance = 216; // 0.15 inch = 0.38 cm
 
 // Count of SystemField-types of SwDoc.
-#define INIT_FLDTYPES   32
+#define INIT_FLDTYPES   33
 
 // Count of predefined Seq-field types. It is always the last
 // fields before INIT_FLDTYPES.
