@@ -6266,7 +6266,7 @@ void Window::Show( bool bVisible, sal_uInt16 nFlags )
         else if ( mpWindowImpl->mbFrame )
         {
             mpWindowImpl->mbSuppressAccessibilityEvents = true;
-            mpWindowImpl->mpFrame->Show( sal_False, sal_False );
+            mpWindowImpl->mpFrame->Show( false, false );
         }
 
         StateChanged( STATE_CHANGE_VISIBLE );
@@ -6419,7 +6419,7 @@ void Window::Show( bool bVisible, sal_uInt16 nFlags )
 
             mpWindowImpl->mbPaintFrame = true;
             bool bNoActivate = (nFlags & (SHOW_NOACTIVATE|SHOW_NOFOCUSCHANGE)) ? sal_True : sal_False;
-            mpWindowImpl->mpFrame->Show( sal_True, bNoActivate );
+            mpWindowImpl->mpFrame->Show( true, bNoActivate );
             if( aDogTag.IsDead() )
                 return;
 
@@ -7603,7 +7603,7 @@ void Window::CaptureMouse()
     if ( pSVData->maWinData.mpCaptureWin != this )
     {
         pSVData->maWinData.mpCaptureWin = this;
-        mpWindowImpl->mpFrame->CaptureMouse( sal_True );
+        mpWindowImpl->mpFrame->CaptureMouse( true );
     }
 }
 
@@ -7620,7 +7620,7 @@ void Window::ReleaseMouse()
     if ( pSVData->maWinData.mpCaptureWin == this )
     {
         pSVData->maWinData.mpCaptureWin = NULL;
-        mpWindowImpl->mpFrame->CaptureMouse( sal_False );
+        mpWindowImpl->mpFrame->CaptureMouse( false );
         ImplGenerateMouseMove();
     }
 }
