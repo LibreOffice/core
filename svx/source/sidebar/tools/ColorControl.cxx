@@ -136,7 +136,7 @@ void ColorControl::FillColors (void)
 
         const Size aNewSize(maVSColor.layoutAllVisible(nColorCount));
         maVSColor.SetOutputSizePixel(aNewSize);
-        static sal_Int32 nAdd = 4;
+        const sal_Int32 nAdd = 4;
 
         SetOutputSizePixel(Size(aNewSize.Width() + nAdd, aNewSize.Height() + nAdd));
         Link aLink = LINK(this, ColorControl, VSSelectHdl);
