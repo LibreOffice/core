@@ -234,44 +234,32 @@ namespace svgio
                     else if(!maUrl.isEmpty())
                     {
                         const OUString& rPath = getDocument().getAbsolutePath();
-
-                        if (!rPath.isEmpty())
-                        {
-                            OUString aAbsUrl;
-                            try {
-                                aAbsUrl = rtl::Uri::convertRelToAbs(
-                                    rPath, maUrl);
-                            } catch (rtl::MalformedUriException & e) {
-                                // Happens for the odd rPath =
-                                // "vnd.sun.star.Package:Pictures/..." scheme
-                                // using path components not starting with a
-                                // slash by mis-design:
-                                SAL_INFO(
-                                    "svg",
-                                    "caught rtl::MalformedUriException \""
-                                        << e.getMessage() << "\"");
-                            }
-
-                            if (!aAbsUrl.isEmpty())
-                            {
-                                SvFileStream aStream(aAbsUrl, STREAM_STD_READ);
-                                Graphic aGraphic;
-
-                                if(GRFILTER_OK == GraphicFilter::GetGraphicFilter().ImportGraphic(
-                                    aGraphic,
-                                    aAbsUrl,
-                                    aStream))
-                                {
-                                    extractFromGraphic(aGraphic, aNewTarget, aViewBox, aBitmapEx);
-                                }
-                            }
+                        OUString aAbsUrl;
+                        try {
+                            aAbsUrl = rtl::Uri::convertRelToAbs(rPath, maUrl);
+                        } catch (rtl::MalformedUriException & e) {
+                            // Happens for the odd rPath =
+                            // "vnd.sun.star.Package:Pictures/..." scheme using
+                            // path components not starting with a slash by mis-
+                            // design:
+                            SAL_INFO(
+                                "svg",
+                                "caught rtl::MalformedUriException \""
+                                    << e.getMessage() << "\"");
                         }
-                        else
+
+                        if (!aAbsUrl.isEmpty())
                         {
-                            // #i123042# detect missing path and assert - content will be missing. The
-                            // absolute path to itself needs to be set to correctly import linked
-                            // content in a SVG file
-                            OSL_ENSURE(false, "SVG graphic with internal links is interpreted, but local AbsolutePath is not set: linked content will be missing (!)");
+                            SvFileStream aStream(aAbsUrl, STREAM_STD_READ);
+                            Graphic aGraphic;
+
+                            if(GRFILTER_OK == GraphicFilter::GetGraphicFilter().ImportGraphic(
+                                   aGraphic,
+                                   aAbsUrl,
+                                   aStream))
+                            {
+                                extractFromGraphic(aGraphic, aNewTarget, aViewBox, aBitmapEx);
+                            }
                         }
                     }
                     else if(!maXLink.isEmpty())
