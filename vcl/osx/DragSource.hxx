@@ -84,13 +84,13 @@ public:
 
   // XInitialization
   virtual void SAL_CALL initialize( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArguments )
-    throw(com::sun::star::uno::Exception, std::exception/*, com::sun::star::uno::RuntimeException*/);
+    throw(com::sun::star::uno::Exception, std::exception/*, com::sun::star::uno::RuntimeException*/) SAL_OVERRIDE;
 
   // XDragSource
-  virtual sal_Bool SAL_CALL isDragImageSupported(  ) throw(com::sun::star::uno::RuntimeException, std::exception);
+  virtual sal_Bool SAL_CALL isDragImageSupported(  ) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
   virtual sal_Int32 SAL_CALL getDefaultCursor(sal_Int8 dragAction)
-    throw(com::sun::star::lang::IllegalArgumentException, com::sun::star::uno::RuntimeException, std::exception);
+    throw(com::sun::star::lang::IllegalArgumentException, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
   virtual void SAL_CALL startDrag( const com::sun::star::datatransfer::dnd::DragGestureEvent& trigger,
                                    sal_Int8 sourceActions,
@@ -98,15 +98,15 @@ public:
                                    sal_Int32 image,
                                    const com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable >& transferable,
                                    const com::sun::star::uno::Reference< com::sun::star::datatransfer::dnd::XDragSourceListener >& listener )
-    throw(com::sun::star::uno::RuntimeException, std::exception);
+    throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
   // XServiceInfo
-  virtual OUString SAL_CALL getImplementationName() throw (com::sun::star::uno::RuntimeException, std::exception);
-  virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw (com::sun::star::uno::RuntimeException, std::exception);
-  virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (com::sun::star::uno::RuntimeException, std::exception);
+  virtual OUString SAL_CALL getImplementationName() throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+  virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+  virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-  virtual void saveMouseEvent(NSEvent* theEvent);
-  virtual unsigned int getSupportedDragOperations(bool isLocal) const;
+  void saveMouseEvent(NSEvent* theEvent);
+  unsigned int getSupportedDragOperations(bool isLocal) const;
 
 public:
   // The context notifies the XDragSourceListeners

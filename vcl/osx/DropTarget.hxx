@@ -89,46 +89,46 @@ public:
   // Overrides WeakComponentImplHelper::disposing which is called by
   // WeakComponentImplHelper::dispose
   // Must be called.
-  virtual void SAL_CALL disposing();
+  virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
   // XInitialization
   virtual void SAL_CALL initialize( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArguments )
-    throw(com::sun::star::uno::Exception, std::exception);
+    throw(com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
 
   // XDropTarget
   virtual void SAL_CALL addDropTargetListener( const com::sun::star::uno::Reference< com::sun::star::datatransfer::dnd::XDropTargetListener >& dtl )
-    throw(com::sun::star::uno::RuntimeException, std::exception);
+    throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
   virtual void SAL_CALL removeDropTargetListener( const com::sun::star::uno::Reference<  com::sun::star::datatransfer::dnd::XDropTargetListener >& dtl )
-    throw(com::sun::star::uno::RuntimeException, std::exception);
+    throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
   // Default is not active
-  virtual sal_Bool SAL_CALL isActive() throw(com::sun::star::uno::RuntimeException, std::exception);
-  virtual void SAL_CALL setActive(sal_Bool isActive) throw(com::sun::star::uno::RuntimeException, std::exception);
-  virtual sal_Int8 SAL_CALL getDefaultActions() throw(com::sun::star::uno::RuntimeException, std::exception);
-  virtual void SAL_CALL setDefaultActions(sal_Int8 actions) throw(com::sun::star::uno::RuntimeException, std::exception);
+  virtual sal_Bool SAL_CALL isActive() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+  virtual void SAL_CALL setActive(sal_Bool isActive) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+  virtual sal_Int8 SAL_CALL getDefaultActions() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+  virtual void SAL_CALL setDefaultActions(sal_Int8 actions) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
   // XDropTargetDragContext
-  virtual void SAL_CALL acceptDrag(sal_Int8 dragOperation) throw(com::sun::star::uno::RuntimeException, std::exception);
-  virtual void SAL_CALL rejectDrag() throw(com::sun::star::uno::RuntimeException, std::exception);
+  virtual void SAL_CALL acceptDrag(sal_Int8 dragOperation) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+  virtual void SAL_CALL rejectDrag() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
   // XDropTargetDragContext
-  virtual void SAL_CALL acceptDrop(sal_Int8 dropOperation) throw (com::sun::star::uno::RuntimeException, std::exception);
-  virtual void SAL_CALL rejectDrop() throw (com::sun::star::uno::RuntimeException, std::exception);
-  virtual void SAL_CALL dropComplete(sal_Bool success) throw (com::sun::star::uno::RuntimeException, std::exception);
+  virtual void SAL_CALL acceptDrop(sal_Int8 dropOperation) throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+  virtual void SAL_CALL rejectDrop() throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+  virtual void SAL_CALL dropComplete(sal_Bool success) throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
   // XServiceInfo
-  virtual OUString SAL_CALL getImplementationName() throw (com::sun::star::uno::RuntimeException, std::exception);
-  virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw (com::sun::star::uno::RuntimeException, std::exception);
-  virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (com::sun::star::uno::RuntimeException, std::exception);
+  virtual OUString SAL_CALL getImplementationName() throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+  virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+  virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
   // NSDraggingDestination protocol functions
-  virtual NSDragOperation draggingEntered(id sender);
-  virtual NSDragOperation draggingUpdated(id sender);
-  virtual void draggingExited(id sender);
-  virtual BOOL prepareForDragOperation(id sender);
-  virtual BOOL performDragOperation(id sender);
-  virtual void concludeDragOperation(id sender);
+  NSDragOperation draggingEntered(id sender);
+  NSDragOperation draggingUpdated(id sender);
+  void draggingExited(id sender);
+  BOOL prepareForDragOperation(id sender);
+  BOOL performDragOperation(id sender);
+  void concludeDragOperation(id sender);
 
   /* If multiple actions are supported by the drag source and
      the user did not choose a specific action by pressing a

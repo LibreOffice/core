@@ -55,25 +55,25 @@ public:
 protected:
 
     // received a WINDOW_GETFOCUS event for this window
-    virtual void window_got_focus(Window *pWindow);
+    void window_got_focus(Window *pWindow);
 
     // received a TOOLBOX_HIGHLIGHT event for this window
-    virtual void toolbox_highlight_on(Window *pWindow);
+    void toolbox_highlight_on(Window *pWindow);
 
     // received a TOOLBOX_HIGHLIGHTOFF event for this window
-    virtual void toolbox_highlight_off(Window *pWindow);
+    void toolbox_highlight_off(Window *pWindow);
 
     // received a TABPAGE_ACTIVATE event for this window
-    virtual void tabpage_activated(Window *pWindow);
+    void tabpage_activated(Window *pWindow);
 
     // received a MENU_HIGHLIGHT event for this window
-    virtual void menu_highlighted(const ::VclMenuEvent *pEvent);
+    void menu_highlighted(const ::VclMenuEvent *pEvent);
 
     // toolbox items are widgets in gtk+ and Cocoa
-    virtual void notify_toolbox_item_focus(ToolBox *pToolBox);
+    void notify_toolbox_item_focus(ToolBox *pToolBox);
 
     // toolbox item opened a floating window (e.g. color chooser)
-    virtual void toolbox_open_floater(Window *pWindow);
+    void toolbox_open_floater(Window *pWindow);
 
     // callback function for Application::addEventListener
     static long WindowEventHandler(AquaA11yFocusTracker *pFocusTracker, ::VclSimpleEvent const *pEvent);

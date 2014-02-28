@@ -194,9 +194,9 @@ public:
 
   UniDataProvider(NSData* data);
 
-  virtual NSData* getSystemData();
+  virtual NSData* getSystemData() SAL_OVERRIDE;
 
-  virtual Any getOOoData();
+  virtual Any getOOoData() SAL_OVERRIDE;
 };
 
 UniDataProvider::UniDataProvider(const Any& data) :
@@ -247,9 +247,9 @@ public:
 
   ByteSequenceDataProvider(NSData* data);
 
-  virtual NSData* getSystemData();
+  virtual NSData* getSystemData() SAL_OVERRIDE;
 
-  virtual Any getOOoData();
+  virtual Any getOOoData() SAL_OVERRIDE;
 };
 
 ByteSequenceDataProvider::ByteSequenceDataProvider(const Any& data) :
@@ -301,9 +301,9 @@ public:
 
   HTMLFormatDataProvider(NSData* data);
 
-  virtual NSData* getSystemData();
+  virtual NSData* getSystemData() SAL_OVERRIDE;
 
-  virtual Any getOOoData();
+  virtual Any getOOoData() SAL_OVERRIDE;
 };
 
 HTMLFormatDataProvider::HTMLFormatDataProvider(const Any& data) :
@@ -367,9 +367,9 @@ public:
 
     PNGDataProvider( NSData*, NSBitmapImageFileType);
 
-    virtual NSData* getSystemData();
+    virtual NSData* getSystemData() SAL_OVERRIDE;
 
-    virtual Any getOOoData();
+    virtual Any getOOoData() SAL_OVERRIDE;
 };
 
 PNGDataProvider::PNGDataProvider( const Any& data, NSBitmapImageFileType eImageType) :
@@ -431,8 +431,8 @@ public:
   FileListDataProvider(const Any& data);
   FileListDataProvider(NSArray* data);
 
-  virtual NSData* getSystemData();
-  virtual Any getOOoData();
+  virtual NSData* getSystemData() SAL_OVERRIDE;
+  virtual Any getOOoData() SAL_OVERRIDE;
 };
 
 FileListDataProvider::FileListDataProvider(const Any& data) :

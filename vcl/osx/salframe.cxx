@@ -547,25 +547,6 @@ void AquaSalFrame::SetMaxClientSize( long nWidth, long nHeight )
 
 
 
-void AquaSalFrame::SetClientSize( long nWidth, long nHeight )
-{
-    // #i113170# may not be the main thread if called from UNO API
-    SalData::ensureThreadAutoreleasePool();
-
-    if( mpNSWindow )
-    {
-        NSSize aSize = { static_cast<CGFloat>(nWidth), static_cast<CGFloat>(nHeight) };
-
-        [mpNSWindow setContentSize: aSize];
-        UpdateFrameGeometry();
-        if( mbShown )
-            // trigger filling our backbuffer
-            SendPaintEvent();
-    }
-}
-
-
-
 void AquaSalFrame::GetClientSize( long& rWidth, long& rHeight )
 {
     if( mbShown || mbInitShow )
@@ -843,7 +824,7 @@ public:
     {
     }
 
-    virtual void Timeout()
+    virtual void Timeout() SAL_OVERRIDE
     {
         UpdateSystemActivity(OverallAct);
     }

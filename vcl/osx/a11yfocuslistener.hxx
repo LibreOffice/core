@@ -42,11 +42,11 @@ public:
     id getFocusedUIElement();
 
     // KeyboardFocusListener
-    virtual void SAL_CALL focusedObjectChanged(const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& xAccessible);
+    virtual void SAL_CALL focusedObjectChanged(const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& xAccessible) SAL_OVERRIDE;
 
     // rtl::IReference
-    virtual oslInterlockedCount SAL_CALL acquire() SAL_THROW(());
-    virtual oslInterlockedCount SAL_CALL release() SAL_THROW(());
+    virtual oslInterlockedCount SAL_CALL acquire() SAL_THROW(()) SAL_OVERRIDE;
+    virtual oslInterlockedCount SAL_CALL release() SAL_THROW(()) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_VCL_OSX_A11YFOCUSLISTENER_HXX

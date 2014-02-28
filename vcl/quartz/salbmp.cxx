@@ -402,17 +402,17 @@ class ImplPixelFormat32 : public ImplPixelFormat
 // currently ARGB-format for 32bit depth
 {
 public:
-    virtual void SkipPixel( sal_uInt32 nPixel )
+    virtual void SkipPixel( sal_uInt32 nPixel ) SAL_OVERRIDE
     {
         pData += nPixel << 2;
     }
-    virtual ColorData ReadPixel()
+    virtual ColorData ReadPixel() SAL_OVERRIDE
     {
         const ColorData c = RGB_COLORDATA( pData[1], pData[2], pData[3] );
         pData += 4;
         return c;
     }
-    virtual void WritePixel( ColorData nColor )
+    virtual void WritePixel( ColorData nColor ) SAL_OVERRIDE
     {
         *pData++ = 0;
         *pData++ = COLORDATA_RED( nColor );
@@ -425,17 +425,17 @@ class ImplPixelFormat24 : public ImplPixelFormat
 // currently BGR-format for 24bit depth
 {
 public:
-    virtual void SkipPixel( sal_uInt32 nPixel )
+    virtual void SkipPixel( sal_uInt32 nPixel ) SAL_OVERRIDE
     {
         pData += (nPixel << 1) + nPixel;
     }
-    virtual ColorData ReadPixel()
+    virtual ColorData ReadPixel() SAL_OVERRIDE
     {
         const ColorData c = RGB_COLORDATA( pData[2], pData[1], pData[0] );
         pData += 3;
         return c;
     }
-    virtual void WritePixel( ColorData nColor )
+    virtual void WritePixel( ColorData nColor ) SAL_OVERRIDE
     {
         *pData++ = COLORDATA_BLUE( nColor );
         *pData++ = COLORDATA_GREEN( nColor );
@@ -450,21 +450,21 @@ protected:
     sal_uInt16* pData16;
 public:
 
-    virtual void StartLine( sal_uInt8* pLine )
+    virtual void StartLine( sal_uInt8* pLine ) SAL_OVERRIDE
     {
         pData16 = (sal_uInt16*)pLine;
     }
-    virtual void SkipPixel( sal_uInt32 nPixel )
+    virtual void SkipPixel( sal_uInt32 nPixel ) SAL_OVERRIDE
     {
         pData += nPixel;
     }
-    virtual ColorData ReadPixel()
+    virtual ColorData ReadPixel() SAL_OVERRIDE
     {
         const ColorData c = RGB_COLORDATA( (*pData & 0x7c00) >> 7, (*pData & 0x03e0) >> 2 , (*pData & 0x001f) << 3 );
         pData++;
         return c;
     }
-    virtual void WritePixel( ColorData nColor )
+    virtual void WritePixel( ColorData nColor ) SAL_OVERRIDE
     {
         *pData++ =  ((COLORDATA_RED( nColor ) & 0xf8 ) << 7 ) ||
                     ((COLORDATA_GREEN( nColor ) & 0xf8 ) << 2 ) ||
@@ -482,15 +482,15 @@ public:
     : mrPalette( rPalette )
     {
     }
-    virtual void SkipPixel( sal_uInt32 nPixel )
+    virtual void SkipPixel( sal_uInt32 nPixel ) SAL_OVERRIDE
     {
         pData += nPixel;
     }
-    virtual ColorData ReadPixel()
+    virtual ColorData ReadPixel() SAL_OVERRIDE
     {
         return mrPalette[ *pData++ ].operator Color().GetColor();
     }
-    virtual void WritePixel( ColorData nColor )
+    virtual void WritePixel( ColorData nColor ) SAL_OVERRIDE
     {
         const BitmapColor aColor( COLORDATA_RED( nColor ), COLORDATA_GREEN( nColor ), COLORDATA_BLUE( nColor ) );
         *pData++ = static_cast< sal_uInt8 >( mrPalette.GetBestIndex( aColor ) );
@@ -509,26 +509,26 @@ public:
     : mrPalette( rPalette )
     {
     }
-    virtual void SkipPixel( sal_uInt32 nPixel )
+    virtual void SkipPixel( sal_uInt32 nPixel ) SAL_OVERRIDE
     {
         mnX += nPixel;
         if( (nPixel & 1) )
             mnShift ^= 4;
     }
-    virtual void StartLine( sal_uInt8* pLine )
+    virtual void StartLine( sal_uInt8* pLine ) SAL_OVERRIDE
     {
         pData = pLine;
         mnX = 0;
         mnShift = 4;
     }
-    virtual ColorData ReadPixel()
+    virtual ColorData ReadPixel() SAL_OVERRIDE
     {
         const BitmapColor& rColor = mrPalette[( pData[mnX >> 1] >> mnShift) & 0x0f];
         mnX++;
         mnShift ^= 4;
         return rColor.operator Color().GetColor();
     }
-    virtual void WritePixel( ColorData nColor )
+    virtual void WritePixel( ColorData nColor ) SAL_OVERRIDE
     {
         const BitmapColor aColor( COLORDATA_RED( nColor ), COLORDATA_GREEN( nColor ), COLORDATA_BLUE( nColor ) );
         pData[mnX>>1] &= (0xf0 >> mnShift);
@@ -549,22 +549,22 @@ public:
     : mrPalette( rPalette )
     {
     }
-    virtual void SkipPixel( sal_uInt32 nPixel )
+    virtual void SkipPixel( sal_uInt32 nPixel ) SAL_OVERRIDE
     {
         mnX += nPixel;
     }
-    virtual void StartLine( sal_uInt8* pLine )
+    virtual void StartLine( sal_uInt8* pLine ) SAL_OVERRIDE
     {
         pData = pLine;
         mnX = 0;
     }
-    virtual ColorData ReadPixel()
+    virtual ColorData ReadPixel() SAL_OVERRIDE
     {
         const BitmapColor& rColor = mrPalette[ (pData[mnX >> 3 ] >> ( 7 - ( mnX & 7 ) )) & 1];
         mnX++;
         return rColor.operator Color().GetColor();
     }
-    virtual void WritePixel( ColorData nColor )
+    virtual void WritePixel( ColorData nColor ) SAL_OVERRIDE
     {
         const BitmapColor aColor( COLORDATA_RED( nColor ), COLORDATA_GREEN( nColor ), COLORDATA_BLUE( nColor ) );
         if( mrPalette.GetBestIndex( aColor ) & 1 )

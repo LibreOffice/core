@@ -56,23 +56,24 @@ public:
     AquaSalMenu( bool bMenuBar );
     virtual ~AquaSalMenu();
 
-    virtual bool VisibleMenuBar();  // must return TRUE to actually DISPLAY native menu bars
-                                    // otherwise only menu messages are processed (eg, OLE on Windows)
+    virtual bool VisibleMenuBar() SAL_OVERRIDE;
+    // must return true to actually display native menu bars
+    // otherwise only menu messages are processed (eg, OLE on Windows)
 
-    virtual void InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos );
-    virtual void RemoveItem( unsigned nPos );
-    virtual void SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos );
-    virtual void SetFrame( const SalFrame* pFrame );
-    virtual void CheckItem( unsigned nPos, bool bCheck );
-    virtual void EnableItem( unsigned nPos, bool bEnable );
-    virtual void SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const OUString& rText );
-    virtual void SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage);
-    virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const OUString& rKeyName );
-    virtual void GetSystemMenuData( SystemMenuData* pData );
-    virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, sal_uLong nFlags);
-    virtual bool AddMenuBarButton( const SalMenuButtonItem& );
-    virtual void RemoveMenuBarButton( sal_uInt16 nId );
-    virtual Rectangle GetMenuBarButtonRectPixel( sal_uInt16 i_nItemId, SalFrame* i_pReferenceFrame );
+    virtual void InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos ) SAL_OVERRIDE;
+    virtual void RemoveItem( unsigned nPos ) SAL_OVERRIDE;
+    virtual void SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos ) SAL_OVERRIDE;
+    virtual void SetFrame( const SalFrame* pFrame ) SAL_OVERRIDE;
+    virtual void CheckItem( unsigned nPos, bool bCheck ) SAL_OVERRIDE;
+    virtual void EnableItem( unsigned nPos, bool bEnable ) SAL_OVERRIDE;
+    virtual void SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const OUString& rText ) SAL_OVERRIDE;
+    virtual void SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage) SAL_OVERRIDE;
+    virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const OUString& rKeyName ) SAL_OVERRIDE;
+    virtual void GetSystemMenuData( SystemMenuData* pData ) SAL_OVERRIDE;
+    virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, sal_uLong nFlags) SAL_OVERRIDE;
+    virtual bool AddMenuBarButton( const SalMenuButtonItem& ) SAL_OVERRIDE;
+    virtual void RemoveMenuBarButton( sal_uInt16 nId ) SAL_OVERRIDE;
+    virtual Rectangle GetMenuBarButtonRectPixel( sal_uInt16 i_nItemId, SalFrame* i_pReferenceFrame ) SAL_OVERRIDE;
 
     int getItemIndexByPos( sal_uInt16 nPos ) const;
     const AquaSalFrame* getFrame() const;

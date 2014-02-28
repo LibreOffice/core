@@ -54,13 +54,13 @@ public:
 
 
   virtual ::com::sun::star::uno::Any SAL_CALL getTransferData( const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
-    throw( ::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception );
+    throw( ::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
   virtual ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  )
-    throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
   virtual sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
-    throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
   // Helper functions not part of the XTransferable interface
 

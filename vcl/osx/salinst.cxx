@@ -81,7 +81,7 @@ class AquaDelayedSettingsChanged : public Timer
     {
     }
 
-    virtual void Timeout()
+    virtual void Timeout() SAL_OVERRIDE
     {
         SalData* pSalData = GetSalData();
         if( ! pSalData->maFrames.empty() )
@@ -949,32 +949,6 @@ void AquaSalInstance::DestroyInfoPrinter( SalInfoPrinter* pPrinter )
 
 
 
-SalSystem* AquaSalInstance::CreateSystem()
-{
-    return new AquaSalSystem();
-}
-
-
-
-void AquaSalInstance::DestroySystem( SalSystem* pSystem )
-{
-    delete pSystem;
-}
-
-
-
-void AquaSalInstance::SetEventCallback( void*, bool(*)(void*,void*,int) )
-{
-}
-
-
-
-void AquaSalInstance::SetErrorEventCallback( void*, bool(*)(void*,void*,int) )
-{
-}
-
-
-
 void* AquaSalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes )
 {
     rReturnedBytes  = 1;
@@ -1083,8 +1057,8 @@ public:
 
     // asks whether there is a status window available
     // to toggle into menubar
-    virtual bool canToggle() { return false; }
-    virtual void toggle() {}
+    virtual bool canToggle() SAL_OVERRIDE { return false; }
+    virtual void toggle() SAL_OVERRIDE {}
 };
 
 
