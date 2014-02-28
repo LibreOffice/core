@@ -23,34 +23,95 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <set>
+#include <vector>
 
-void PaintTransparentChildren(Window & rWindow, Rectangle const& rPixelRect)
+//rhbz#1007697 do this in two loops, one to collect the candidates
+//and another to update them because updating a candidate can
+//trigger the candidate to be deleted, so asking for its
+//sibling after that is going to fail hard
+class CandidateMgr
 {
-    if (rWindow.IsChildTransparentModeEnabled())
-    {
-        Window * pCandidate = rWindow.GetWindow( WINDOW_FIRSTCHILD );
-        while (pCandidate)
-        {
-            if (pCandidate->IsPaintTransparent())
-            {
-                const Rectangle aCandidatePosSizePixel(
-                                pCandidate->GetPosPixel(),
-                                pCandidate->GetSizePixel());
+    std::vector<Window*> m_aCandidates;
+    std::set<Window*> m_aDeletedCandidates;
+    DECL_LINK(WindowEventListener, VclSimpleEvent*);
+public:
+    void PaintTransparentChildren(Window & rWindow, Rectangle const& rPixelRect);
+    ~CandidateMgr();
+};
 
-                if (aCandidatePosSizePixel.IsOver(rPixelRect))
-                {
-                    pCandidate->Invalidate(
-                        INVALIDATE_NOTRANSPARENT|INVALIDATE_CHILDREN );
-                    // important: actually paint the child here!
-                    pCandidate->Update();
-                }
-            }
-            pCandidate = pCandidate->GetWindow( WINDOW_NEXT );
+IMPL_LINK(CandidateMgr, WindowEventListener, VclSimpleEvent*, pEvent)
+{
+    VclWindowEvent* pWinEvent = dynamic_cast< VclWindowEvent* >( pEvent );
+    if (pWinEvent)
+    {
+        Window* pWindow = pWinEvent->GetWindow();
+        if (pWinEvent->GetId() == VCLEVENT_OBJECT_DYING)
+        {
+            m_aDeletedCandidates.insert(pWindow);
         }
+    }
+
+    return 0;
+}
+
+CandidateMgr::~CandidateMgr()
+{
+    for (std::vector<Window*>::iterator aI = m_aCandidates.begin();
+         aI != m_aCandidates.end(); ++aI)
+    {
+        Window* pCandidate = *aI;
+        if (m_aDeletedCandidates.find(pCandidate) != m_aDeletedCandidates.end())
+            continue;
+        pCandidate->RemoveEventListener(LINK(this, CandidateMgr, WindowEventListener));
     }
 }
 
+void PaintTransparentChildren(Window & rWindow, Rectangle const& rPixelRect)
+{
+    if (!rWindow.IsChildTransparentModeEnabled())
+        return;
 
+    CandidateMgr aManager;
+    aManager.PaintTransparentChildren(rWindow, rPixelRect);
+}
+
+void CandidateMgr::PaintTransparentChildren(Window & rWindow, Rectangle const& rPixelRect)
+{
+    Window * pCandidate = rWindow.GetWindow( WINDOW_FIRSTCHILD );
+    while (pCandidate)
+    {
+        if (pCandidate->IsPaintTransparent())
+        {
+            const Rectangle aCandidatePosSizePixel(
+                            pCandidate->GetPosPixel(),
+                            pCandidate->GetSizePixel());
+
+            if (aCandidatePosSizePixel.IsOver(rPixelRect))
+            {
+                m_aCandidates.push_back(pCandidate);
+                pCandidate->AddEventListener(LINK(this, CandidateMgr, WindowEventListener));
+            }
+        }
+        pCandidate = pCandidate->GetWindow( WINDOW_NEXT );
+    }
+
+    for (std::vector<Window*>::iterator aI = m_aCandidates.begin();
+         aI != m_aCandidates.end(); ++aI)
+    {
+        pCandidate = *aI;
+        if (m_aDeletedCandidates.find(pCandidate) != m_aDeletedCandidates.end())
+            continue;
+        //rhbz#1007697 this can cause the window itself to be
+        //deleted. So we are listening to see if that happens
+        //and if so, then skip the update
+        pCandidate->Invalidate(INVALIDATE_NOTRANSPARENT|INVALIDATE_CHILDREN);
+        // important: actually paint the child here!
+        if (m_aDeletedCandidates.find(pCandidate) != m_aDeletedCandidates.end())
+            continue;
+        pCandidate->Update();
+    }
+}
 
 SdrPreRenderDevice::SdrPreRenderDevice(OutputDevice& rOriginal)
 :   mrOutputDevice(rOriginal)
