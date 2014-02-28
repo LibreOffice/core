@@ -94,11 +94,19 @@ void FastParser::registerNamespace( sal_Int32 nNamespaceId ) throw( IllegalArgum
     if( !mxParser.is() )
         throw RuntimeException();
 
-    const OUString* pNamespaceUrl = ContainerHelper::getMapElement( mrNamespaceMap, nNamespaceId );
+    // add handling for OOXML strict here
+    const OUString* pNamespaceUrl = ContainerHelper::getMapElement( mrNamespaceMap.maTransitionalNamespaceMap, nNamespaceId );
     if( !pNamespaceUrl )
         throw IllegalArgumentException();
 
     mxParser->registerNamespace( *pNamespaceUrl, nNamespaceId );
+
+    //also register the OOXML strict namespaces for the same id
+    const OUString* pNamespaceStrictUrl = ContainerHelper::getMapElement( mrNamespaceMap.maStrictNamespaceMap, nNamespaceId );
+    if(pNamespaceStrictUrl && (*pNamespaceUrl != *pNamespaceStrictUrl))
+    {
+        mxParser->registerNamespace( *pNamespaceStrictUrl, nNamespaceId );
+    }
 }
 
 void FastParser::setDocumentHandler( const Reference< XFastDocumentHandler >& rxDocHandler ) throw( RuntimeException )
@@ -150,9 +158,16 @@ bool FastParser::hasNamespaceURL( const OUString& rPrefix ) const
 
 sal_Int32 FastParser::getNamespaceId( const OUString& rUrl )
 {
-    for( NamespaceMap::const_iterator aIt = mrNamespaceMap.begin(), aEnd = mrNamespaceMap.end(); aIt != aEnd; ++aIt )
+    for( NamespaceMap::const_iterator aIt = mrNamespaceMap.maTransitionalNamespaceMap.begin(),
+            aEnd = mrNamespaceMap.maTransitionalNamespaceMap.end(); aIt != aEnd; ++aIt )
         if( rUrl  == aIt->second )
             return aIt->first;
+
+    for( NamespaceMap::const_iterator aIt = mrNamespaceMap.maStrictNamespaceMap.begin(),
+            aEnd = mrNamespaceMap.maStrictNamespaceMap.end(); aIt != aEnd; ++aIt )
+        if( rUrl  == aIt->second )
+            return aIt->first;
+
     return 0;
 }
 

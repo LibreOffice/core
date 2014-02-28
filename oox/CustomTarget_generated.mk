@@ -43,6 +43,7 @@ $(oox_GENHEADERPATH)/$(1).hxx : $(oox_SRC)/$(1).pl $(oox_SRC)/$(1).txt \
 endef
 
 $(eval $(call oox_GenTarget,namespaces,namespace,namespaces.txt))
+$(eval $(call oox_GenTarget,namespaces-strict,namespace-strict,namespaces-strict.txt))
 $(eval $(call oox_GenTarget,properties,property,))
 $(eval $(call oox_GenTarget,tokens,token,tokenhash.gperf))
 
@@ -54,6 +55,7 @@ $(call gb_CustomTarget_get_target,oox/generated) : \
 	$(oox_INC)/propertynames.inc \
 	$(oox_GENHEADERPATH)/tokens.hxx \
 	$(oox_GENHEADERPATH)/namespaces.hxx \
+	$(oox_GENHEADERPATH)/namespaces-strict.hxx \
 	$(oox_GENHEADERPATH)/properties.hxx \
 	$(oox_MISC)/namespaces.txt \
 

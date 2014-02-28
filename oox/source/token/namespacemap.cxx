@@ -32,8 +32,18 @@ NamespaceMap::NamespaceMap()
         { -1, "" }
     };
 
+    static const struct NamespaceStrictUrl { sal_Int32 mnId; const sal_Char* mpcUrl; } spNamespaceStrictUrls[] =
+    {
+// include auto-generated C array with namespace URLs as C strings
+#include "namespace-strictnames.inc"
+        { -1, "" }
+    };
+
     for( const NamespaceUrl* pNamespaceUrl = spNamespaceUrls; pNamespaceUrl->mnId != -1; ++pNamespaceUrl )
-        operator[]( pNamespaceUrl->mnId ) = OUString::createFromAscii( pNamespaceUrl->mpcUrl );
+        maTransitionalNamespaceMap[ pNamespaceUrl->mnId ] = OUString::createFromAscii( pNamespaceUrl->mpcUrl );
+
+    for( const NamespaceStrictUrl* pNamespaceUrl = spNamespaceStrictUrls; pNamespaceUrl->mnId != -1; ++pNamespaceUrl )
+        maStrictNamespaceMap[ pNamespaceUrl->mnId ] = OUString::createFromAscii( pNamespaceUrl->mpcUrl );
 }
 
 }
