@@ -32,7 +32,6 @@
 #include <com/sun/star/animations/AnimationNodeType.hpp>
 #include <com/sun/star/animations/XAnimate.hpp>
 
-#include <animations/animationnodehelper.hxx>
 #include <boost/unordered_map.hpp>
 #include <cppuhelper/compbase3.hxx>
 #include <cppuhelper/factory.hxx>
@@ -42,13 +41,14 @@
 #include <comphelper/sequence.hxx>
 #include <vector>
 
+#include "tools.hxx"
 
 using namespace ::com::sun::star;
 
 #define IMPLEMENTATION_NAME "animcore::TargetPropertiesCreator"
 #define SERVICE_NAME "com.sun.star.animations.TargetPropertiesCreator"
 
-namespace animcore
+namespace slideshow
 {
     typedef ::cppu::WeakComponentImplHelper3< ::com::sun::star::animations::XTargetPropertiesCreator,
                                               lang::XServiceInfo,
@@ -241,8 +241,7 @@ namespace animcore
                         NodeFunctor aFunctor( mrShapeHash,
                                               xTargetShape,
                                               nParagraphIndex );
-                        if( !::anim::for_each_childNode( xNode,
-                                                         aFunctor ) )
+                        if( !for_each_childNode( xNode, aFunctor ) )
                         {
                             OSL_FAIL( "AnimCore: NodeFunctor::operator(): child node iteration failed, "
                                         "or extraneous container nodes encountered" );
@@ -481,6 +480,6 @@ namespace animcore
         return OUString( SERVICE_NAME );
     }
 
-} // namespace animcore
+} // namespace slideshow
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
