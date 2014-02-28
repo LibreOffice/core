@@ -772,7 +772,7 @@ void SfxDockingWindow::EndDocking( const Rectangle& rRect, bool bFloatMode )
         return;
 
     SfxWorkWindow *pWorkWin = pBindings->GetWorkWindow_Impl();
-    bool bReArrange = sal_False;
+    bool bReArrange = false;
     if ( pImp->bSplitable )
     {
         // If the alignment changes and the window is in a docked state in a

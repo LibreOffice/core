@@ -720,10 +720,10 @@ void SfxDocumentDescPage::Reset(const SfxItemSet &rSet)
     SFX_ITEMSET_ARG( &rSet, pROItem, SfxBoolItem, SID_DOC_READONLY, false );
     if ( pROItem && pROItem->GetValue() )
     {
-        m_pTitleEd->SetReadOnly( sal_True );
-        m_pThemaEd->SetReadOnly( sal_True );
-        m_pKeywordsEd->SetReadOnly( sal_True );
-        m_pCommentEd->SetReadOnly( sal_True );
+        m_pTitleEd->SetReadOnly( true );
+        m_pThemaEd->SetReadOnly( true );
+        m_pKeywordsEd->SetReadOnly( true );
+        m_pCommentEd->SetReadOnly( true );
     }
 }
 
@@ -1034,7 +1034,7 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
         aName = aURL.GetName( INetURLObject::DECODE_WITH_CHARSET );
         if ( aName.isEmpty() || aURL.GetProtocol() == INET_PROT_PRIVATE )
             aName = SfxResId( STR_NONAME ).toString();
-        m_pNameED->SetReadOnly( sal_True );
+        m_pNameED->SetReadOnly( true );
     }
     else
     {
