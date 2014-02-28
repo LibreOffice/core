@@ -12,7 +12,6 @@
 
 namespace svl {
 
-SharedStringPool::SharedStringPool() : mpCharClass(NULL) {}
 SharedStringPool::SharedStringPool( const CharClass* pCharClass ) : mpCharClass(pCharClass) {}
 
 SharedString SharedStringPool::intern( const OUString& rStr )

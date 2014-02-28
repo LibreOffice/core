@@ -39,7 +39,6 @@ class SVL_DLLPUBLIC SharedStringPool
 
 public:
 
-    SharedStringPool();
     SharedStringPool( const CharClass* pCharClass );
 
     /**

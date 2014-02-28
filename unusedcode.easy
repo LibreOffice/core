@@ -288,5 +288,4 @@ std::_Rb_tree<rtl::OUString, std::pair<rtl::OUString const, (anonymous namespace
 std::auto_ptr<formula::FormulaTokenArray>::auto_ptr(std::auto_ptr<formula::FormulaTokenArray>&)
 std::auto_ptr<formula::FormulaTokenArray>::auto_ptr(std::auto_ptr_ref<formula::FormulaTokenArray>)
 std::vector<rtl::Reference<oox::xls::(anonymous namespace)::WorkerThread>, std::allocator<rtl::Reference<oox::xls::(anonymous namespace)::WorkerThread> > >::reserve(unsigned long)
-svl::SharedStringPool::SharedStringPool()
 vcl::MapChar(vcl::_TrueTypeFont*, unsigned short, bool)
