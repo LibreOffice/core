@@ -60,7 +60,7 @@ extern "C" void init_source (j_decompress_ptr cinfo)
      * but we don't clear the input buffer.
      * This is correct behavior for reading a series of images from one source.
      */
-    source->start_of_file = true;
+    source->start_of_file = 1;
 }
 
 long StreamRead( SvStream* pStream, void* pBuffer, long nBufferSize )
@@ -108,7 +108,7 @@ extern "C" boolean fill_input_buffer (j_decompress_ptr cinfo)
 
     source->pub.next_input_byte = source->buffer;
     source->pub.bytes_in_buffer = nbytes;
-    source->start_of_file = false;
+    source->start_of_file = 0;
 
     return true;
 }
