@@ -39,13 +39,11 @@ public:
     virtual ~IosSalInstance();
     static IosSalInstance *getInstance();
 
-    virtual SalSystem* CreateSalSystem();
+    virtual SalSystem* CreateSalSystem() SAL_OVERRIDE;
 
     void GetWorkArea( Rectangle& rRect );
     SalFrame* CreateFrame( SalFrame* pParent, sal_uLong nStyle );
     SalFrame* CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle );
-
-    // virtual bool AnyInput( sal_uInt16 nType );
 
     SalFrame *getFocusFrame() const;
 
