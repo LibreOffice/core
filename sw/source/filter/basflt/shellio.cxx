@@ -307,7 +307,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
         if( bSaveUndo )
         {
             pDoc->SetRedlineMode_intern( eOld );
-            pUndo->SetInsertRange( *pUndoPam, sal_False );
+            pUndo->SetInsertRange( *pUndoPam, false );
             // UGLY: temp. enable undo
             pDoc->GetIDocumentUndoRedo().DoUndo(true);
             pDoc->GetIDocumentUndoRedo().AppendUndo( pUndo );

@@ -47,7 +47,6 @@ public:
         const SwPosition& rSttPos,
         const SwPosition& rEndPos,
         SwRangeRedline& rRedl );
-
     ~SwRedlineSaveData();
 
     void RedlineToDoc( SwPaM& rPam );
@@ -92,7 +91,7 @@ void SwUndRng::SetValues( const SwPaM& rPam )
     nSttCntnt = pStt->nContent.GetIndex();
 }
 
-void SwUndRng::SetPaM( SwPaM & rPam, sal_Bool bCorrToCntnt ) const
+void SwUndRng::SetPaM( SwPaM & rPam, bool bCorrToCntnt ) const
 {
     rPam.DeleteMark();
     rPam.GetPoint()->nNode = nSttNode;
@@ -138,7 +137,7 @@ void SwUndo::RemoveIdxFromSection( SwDoc& rDoc, sal_uLong nSttIdx,
     rDoc.CorrAbs( aIdx, aEndIdx, aPos, sal_True );
 }
 
-void SwUndo::RemoveIdxFromRange( SwPaM& rPam, sal_Bool bMoveNext )
+void SwUndo::RemoveIdxFromRange( SwPaM& rPam, bool bMoveNext )
 {
     const SwPosition* pEnd = rPam.End();
     if( bMoveNext )
@@ -431,20 +430,20 @@ void SwUndoSaveCntnt::MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx,
 // can span an area for a Undo/Redo. (The Point is then positioned in front of
 // the area to manipulate!)
 // The flag indicates if there is still content in front of Point.
-sal_Bool SwUndoSaveCntnt::MovePtBackward( SwPaM& rPam )
+bool SwUndoSaveCntnt::MovePtBackward( SwPaM& rPam )
 {
     rPam.SetMark();
     if( rPam.Move( fnMoveBackward ))
-        return sal_True;
+        return true;
 
     // If there is no content onwards, set Point simply to the previous position
     // (Node and Content, so that Content will be detached!)
     rPam.GetPoint()->nNode--;
     rPam.GetPoint()->nContent.Assign( 0, 0 );
-    return sal_False;
+    return false;
 }
 
-void SwUndoSaveCntnt::MovePtForward( SwPaM& rPam, sal_Bool bMvBkwrd )
+void SwUndoSaveCntnt::MovePtForward( SwPaM& rPam, bool bMvBkwrd )
 {
     // Was there content before this position?
     if( bMvBkwrd )
@@ -848,7 +847,7 @@ void SwUndoSaveSection::SaveSection(
     }
 
     pRedlSaveData = new SwRedlineSaveDatas;
-    if( !SwUndo::FillSaveData( aPam, *pRedlSaveData, sal_True ))
+    if( !SwUndo::FillSaveData( aPam, *pRedlSaveData, true ))
         delete pRedlSaveData, pRedlSaveData = 0;
 
     nStartPos = rRange.aStart.GetIndex();
@@ -994,10 +993,10 @@ void SwRedlineSaveData::RedlineToDoc( SwPaM& rPam )
     rDoc.SetRedlineMode_intern( eOld );
 }
 
-sal_Bool SwUndo::FillSaveData(
+bool SwUndo::FillSaveData(
     const SwPaM& rRange,
     SwRedlineSaveDatas& rSData,
-    sal_Bool bDelRange )
+    bool bDelRange )
 {
     rSData.DeleteAndDestroyAll();
 
@@ -1026,7 +1025,7 @@ sal_Bool SwUndo::FillSaveData(
     return !rSData.empty();
 }
 
-sal_Bool SwUndo::FillSaveDataForFmt(
+bool SwUndo::FillSaveDataForFmt(
     const SwPaM& rRange,
     SwRedlineSaveDatas& rSData )
 {
@@ -1075,23 +1074,23 @@ void SwUndo::SetSaveData( SwDoc& rDoc, const SwRedlineSaveDatas& rSData )
     rDoc.SetRedlineMode_intern( eOld );
 }
 
-sal_Bool SwUndo::HasHiddenRedlines( const SwRedlineSaveDatas& rSData )
+bool SwUndo::HasHiddenRedlines( const SwRedlineSaveDatas& rSData )
 {
     for( sal_uInt16 n = rSData.size(); n; )
         if( rSData[ --n ]->GetMvSttIdx() )
-            return sal_True;
-    return sal_False;
+            return true;
+    return false;
 }
 
-sal_Bool SwUndo::CanRedlineGroup( SwRedlineSaveDatas& rCurr,
-                        const SwRedlineSaveDatas& rCheck, sal_Bool bCurrIsEnd )
+bool SwUndo::CanRedlineGroup( SwRedlineSaveDatas& rCurr,
+                        const SwRedlineSaveDatas& rCheck, bool bCurrIsEnd )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     sal_uInt16 n;
 
     if( rCurr.size() == rCheck.size() )
     {
-        bRet = sal_True;
+        bRet = true;
         for( n = 0; n < rCurr.size(); ++n )
         {
             const SwRedlineSaveData& rSet = *rCurr[ n ];
@@ -1102,7 +1101,7 @@ sal_Bool SwUndo::CanRedlineGroup( SwRedlineSaveDatas& rCurr,
                              : rSet.nEndCntnt != rGet.nSttCntnt ) ||
                 !rGet.CanCombine( rSet ) )
             {
-                bRet = sal_False;
+                bRet = false;
                 break;
             }
         }

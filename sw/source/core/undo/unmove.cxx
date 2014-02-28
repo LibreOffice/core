@@ -197,7 +197,7 @@ void SwUndoMove::UndoImpl(::sw::UndoRedoContext & rContext)
             // #i17764# if redlines are to be moved, we may not remove them
             // before pDoc->Move gets a chance to handle them
             if( ! bMoveRedlines )
-                RemoveIdxFromRange( aPam, sal_False );
+                RemoveIdxFromRange( aPam, false );
 
             SwPosition aPos( *pDoc->GetNodes()[ nInsPosNode] );
             SwCntntNode* pCNd = aPos.nNode.GetNode().GetCntntNode();
@@ -286,7 +286,7 @@ void SwUndoMove::RedoImpl(::sw::UndoRedoContext & rContext)
                                         nMvDestCntnt ));
 
         DelFtn( aPam );
-        RemoveIdxFromRange( aPam, sal_False );
+        RemoveIdxFromRange( aPam, false );
 
         aIdx = aPam.Start()->nNode;
         sal_Bool bJoinTxt = aIdx.GetNode().IsTxtNode();

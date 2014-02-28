@@ -2565,7 +2565,7 @@ void SwDoc::AppendUndoForInsertFromDB( const SwPaM& rPam, sal_Bool bIsTable )
     else if( rPam.HasMark() )
     {
         SwUndoCpyDoc* pUndo = new SwUndoCpyDoc( rPam );
-        pUndo->SetInsertRange( rPam, sal_False );
+        pUndo->SetInsertRange( rPam, false );
         GetIDocumentUndoRedo().AppendUndo( pUndo );
     }
 }

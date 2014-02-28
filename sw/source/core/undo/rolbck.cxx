@@ -543,7 +543,7 @@ SwHistoryTxtFlyCnt::SwHistoryTxtFlyCnt( SwFrmFmt* const pFlyFmt )
     , m_pUndo( new SwUndoDelLayFmt( pFlyFmt ) )
 {
     OSL_ENSURE( pFlyFmt, "SwHistoryTxtFlyCnt: no Format" );
-    m_pUndo->ChgShowSel( sal_False );
+    m_pUndo->ChgShowSel( false );
 }
 
 SwHistoryTxtFlyCnt::~SwHistoryTxtFlyCnt()

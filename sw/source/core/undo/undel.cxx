@@ -483,7 +483,7 @@ sal_Bool SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam )
 
     {
         SwRedlineSaveDatas* pTmpSav = new SwRedlineSaveDatas;
-        if( !FillSaveData( rDelPam, *pTmpSav, sal_False ))
+        if( !FillSaveData( rDelPam, *pTmpSav, false ))
             delete pTmpSav, pTmpSav = 0;
 
         bool bOk = ( !pRedlSaveData && !pTmpSav ) ||
@@ -956,7 +956,7 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
 
     if( pRedlSaveData )
     {
-        bool bSuccess = FillSaveData(rPam, *pRedlSaveData, sal_True);
+        const bool bSuccess = FillSaveData(rPam, *pRedlSaveData, true);
         OSL_ENSURE(bSuccess,
             "SwUndoDelete::Redo: used to have redline data, but now none?");
         if (!bSuccess)
@@ -968,7 +968,7 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
     if( !bDelFullPara )
     {
         SwUndRng aTmpRng( rPam );
-        RemoveIdxFromRange( rPam, sal_False );
+        RemoveIdxFromRange( rPam, false );
         aTmpRng.SetPaM( rPam );
 
         if( !bJoinNext )           // then restore selection from bottom to top

@@ -57,12 +57,12 @@ protected:
     mutable OUString * pComment;
 
     void RemoveIdxFromSection( SwDoc&, sal_uLong nSttIdx, sal_uLong* pEndIdx = 0 );
-    void RemoveIdxFromRange( SwPaM& rPam, sal_Bool bMoveNext );
+    void RemoveIdxFromRange( SwPaM& rPam, bool bMoveNext );
     void RemoveIdxRel( sal_uLong, const SwPosition& );
 
-    static sal_Bool CanRedlineGroup( SwRedlineSaveDatas& rCurr,
+    static bool CanRedlineGroup( SwRedlineSaveDatas& rCurr,
                                 const SwRedlineSaveDatas& rCheck,
-                                sal_Bool bCurrIsEnd );
+                                bool bCurrIsEnd );
 
     /**
        Returns the rewriter for this object.
@@ -114,11 +114,11 @@ public:
     bool IsDelBox() const;
 
     // Save and set Redline data.
-    static sal_Bool FillSaveData( const SwPaM& rRange, SwRedlineSaveDatas& rSData,
-                            sal_Bool bDelRange = sal_True );
-    static sal_Bool FillSaveDataForFmt( const SwPaM& , SwRedlineSaveDatas& );
+    static bool FillSaveData( const SwPaM& rRange, SwRedlineSaveDatas& rSData,
+                              bool bDelRange = true );
+    static bool FillSaveDataForFmt( const SwPaM& , SwRedlineSaveDatas& );
     static void SetSaveData( SwDoc& rDoc, const SwRedlineSaveDatas& rSData );
-    static sal_Bool HasHiddenRedlines( const SwRedlineSaveDatas& rSData );
+    static bool HasHiddenRedlines( const SwRedlineSaveDatas& rSData );
 };
 
 typedef sal_uInt16 DelCntntType;
@@ -161,8 +161,8 @@ protected:
     // a range can be spanned for Undo/Redo. (In this case the SPoint
     // is before the manipulated range!!)
     // The flag indicates if there is content before the SPoint.
-    sal_Bool MovePtBackward( SwPaM& rPam );
-    void MovePtForward( SwPaM& rPam, sal_Bool bMvBkwrd );
+    bool MovePtBackward( SwPaM& rPam );
+    void MovePtForward( SwPaM& rPam, bool bMvBkwrd );
 
     // Before moving stuff into UndoNodes-Array care has to be taken that
     // the content-bearing attributes are removed from the nodes-array.
@@ -211,7 +211,7 @@ public:
     SwUndRng( const SwPaM& );
 
     void SetValues( const SwPaM& rPam );
-    void SetPaM( SwPaM&, sal_Bool bCorrToCntnt = sal_False ) const;
+    void SetPaM( SwPaM&, bool bCorrToCntnt = false ) const;
     SwPaM & AddUndoRedoPaM(
         ::sw::UndoRedoContext &, bool const bCorrToCntnt = false) const;
 };
@@ -225,7 +225,7 @@ class SwUndoInserts : public SwUndo, public SwUndRng, private SwUndoSaveCntnt
     std::vector<SwFrmFmt*>* pFrmFmts;
     ::std::vector< ::boost::shared_ptr<SwUndoInsLayFmt> > m_FlyUndos;
     SwRedlineData* pRedlData;
-    sal_Bool bSttWasTxtNd;
+    bool bSttWasTxtNd;
 protected:
     sal_uLong nNdDiff;
     /// start of Content in UndoNodes for Redo
@@ -241,8 +241,8 @@ public:
     virtual void RepeatImpl( ::sw::RepeatContext & );
 
     // Set destination range after reading.
-    void SetInsertRange( const SwPaM&, sal_Bool bScanFlys = sal_True,
-                        sal_Bool bSttWasTxtNd = sal_True );
+    void SetInsertRange( const SwPaM&, bool bScanFlys = true,
+                         bool bSttWasTxtNd = true );
 };
 
 class SwUndoInsDoc : public SwUndoInserts
@@ -264,7 +264,7 @@ protected:
     sal_uLong nNdPgPos;
     sal_Int32 nCntPos;         // Page at/in paragraph.
     sal_uInt16 nRndId;
-    sal_Bool bDelFmt;           // Delete saved format.
+    bool bDelFmt;           // Delete saved format.
 
     void InsFly(::sw::UndoRedoContext & rContext, bool bShowSel = true);
     void DelFly( SwDoc* );
@@ -298,7 +298,7 @@ public:
 
 class SwUndoDelLayFmt : public SwUndoFlyBase
 {
-    sal_Bool bShowSelFrm;
+    bool bShowSelFrm;
 public:
     SwUndoDelLayFmt( SwFrmFmt* pFormat );
 
@@ -307,7 +307,7 @@ public:
 
     void RedoForRollback();
 
-    void ChgShowSel( sal_Bool bNew ) { bShowSelFrm = bNew; }
+    void ChgShowSel( bool bNew ) { bShowSelFrm = bNew; }
 
     virtual SwRewriter GetRewriter() const;
 

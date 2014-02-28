@@ -142,12 +142,12 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrm)
     case FLY_AT_PAGE:
         break;
     }
-    bDelFmt =  sal_False;
+    bDelFmt =  false;
 }
 
 void SwUndoFlyBase::DelFly( SwDoc* pDoc )
 {
-    bDelFmt = sal_True;                 // delete Format in DTOR
+    bDelFmt = true;                 // delete Format in DTOR
     pFrmFmt->DelFrms();                 // destroy Frms
 
     // all Uno objects should now log themselves off
@@ -225,7 +225,7 @@ SwUndoInsLayFmt::SwUndoInsLayFmt( SwFrmFmt* pFormat, sal_uLong nNodeIdx, sal_Int
 {
     const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
     nRndId = static_cast<sal_uInt16>(rAnchor.GetAnchorId());
-    bDelFmt = sal_False;
+    bDelFmt = false;
     switch( nRndId )
     {
     case FLY_AT_PAGE:
@@ -391,7 +391,7 @@ lcl_GetSwUndoId(SwFrmFmt *const pFrmFmt)
 
 SwUndoDelLayFmt::SwUndoDelLayFmt( SwFrmFmt* pFormat )
     : SwUndoFlyBase( pFormat, lcl_GetSwUndoId(pFormat) )
-    , bShowSelFrm( sal_True )
+    , bShowSelFrm( true )
 {
     SwDoc* pDoc = pFormat->GetDoc();
     DelFly( pDoc );
@@ -456,7 +456,7 @@ SwUndoSetFlyFmt::SwUndoSetFlyFmt( SwFrmFmt& rFlyFmt, SwFrmFmt& rNewFrmFmt )
                                 rFlyFmt.GetAttrSet().GetRanges() )),
     nOldNode( 0 ), nNewNode( 0 ),
     nOldCntnt( 0 ), nNewCntnt( 0 ),
-    nOldAnchorTyp( 0 ), nNewAnchorTyp( 0 ), bAnchorChgd( sal_False )
+    nOldAnchorTyp( 0 ), nNewAnchorTyp( 0 ), bAnchorChgd( false )
 {
 }
 
@@ -633,7 +633,7 @@ void SwUndoSetFlyFmt::PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem )
             // only keep the first change
             OSL_ENSURE( !bAnchorChgd, "multiple changes of an anchor are not allowed!" );
 
-            bAnchorChgd = sal_True;
+            bAnchorChgd = true;
 
             const SwFmtAnchor* pAnchor = (SwFmtAnchor*)pItem;
             switch( nOldAnchorTyp = static_cast<sal_uInt16>(pAnchor->GetAnchorId()) )

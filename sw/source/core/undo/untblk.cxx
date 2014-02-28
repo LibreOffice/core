@@ -34,7 +34,7 @@
 SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
     : SwUndo( nUndoId ), SwUndRng( rPam ),
     pTxtFmtColl( 0 ), pLastNdColl(0), pFrmFmts( 0 ), pRedlData( 0 ),
-    bSttWasTxtNd( sal_True ), nNdDiff( 0 ), nSetPos( 0 )
+    bSttWasTxtNd( true ), nNdDiff( 0 ), nSetPos( 0 )
 {
     pHistory = new SwHistory;
     SwDoc* pDoc = (SwDoc*)rPam.GetDoc();
@@ -76,8 +76,8 @@ SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
 }
 
 // set destination after reading input
-void SwUndoInserts::SetInsertRange( const SwPaM& rPam, sal_Bool bScanFlys,
-                                    sal_Bool bSttIsTxtNd )
+void SwUndoInserts::SetInsertRange( const SwPaM& rPam, bool bScanFlys,
+                                    bool bSttIsTxtNd )
 {
     const SwPosition* pTmpPos = rPam.End();
     nEndNode = pTmpPos->nNode.GetIndex();
@@ -95,7 +95,7 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, sal_Bool bScanFlys,
         if( !bSttIsTxtNd )      // if a table selection is added ...
         {
             ++nSttNode;         // ... than the CopyPam is not fully correct
-            bSttWasTxtNd = sal_False;
+            bSttWasTxtNd = false;
         }
     }
 
@@ -166,7 +166,7 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
                 pLastNdColl = pTxtNd->GetTxtColl();
         }
 
-        RemoveIdxFromRange( *pPam, sal_False );
+        RemoveIdxFromRange( *pPam, false );
         SetPaM(*pPam);
 
         // are there Footnotes or CntntFlyFrames in text?
@@ -256,7 +256,7 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
     // retrieve start position for rollback
     if( ( nSttNode != nEndNode || nSttCntnt != nEndCntnt ) && m_pUndoNodeIndex)
     {
-        sal_Bool bMvBkwrd = MovePtBackward( *pPam );
+        const bool bMvBkwrd = MovePtBackward( *pPam );
 
         // re-insert content again (first detach m_pUndoNodeIndex!)
         sal_uLong const nMvNd = m_pUndoNodeIndex->GetIndex();

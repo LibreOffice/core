@@ -912,7 +912,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                         ( (pDestTxtNd && !pDestTxtNd->GetTxt().getLength()) ||
                           ( !bOneNode && !rPos.nContent.GetIndex() ) );
     bool bCopyBookmarks = true;
-    sal_Bool bStartIsTxtNode = 0 != pSttTxtNd;
+    bool bStartIsTxtNode = 0 != pSttTxtNd;
 
     // #i104585# copy outline num rule to clipboard (for ASCII filter)
     if (pDoc->IsClipBoard() && GetOutlineNumRule())
@@ -1094,7 +1094,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
             else if( rPos.nContent.GetIndex() )
             {   // Insertion in the middle of a text node, it has to be split
                 // (and joined from undo)
-                bStartIsTxtNode = sal_True;
+                bStartIsTxtNode = true;
 
                 const sal_Int32 nCntntEnd = pEnd->nContent.GetIndex();
                 {
@@ -1151,7 +1151,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                 // will ensure that this node will be deleted during Undo
                 // using JoinNext.
                 OSL_ENSURE( !bStartIsTxtNode, "Oops, undo may be instable now." );
-                bStartIsTxtNode = sal_True;
+                bStartIsTxtNode = true;
             }
 
             // Save numrule at destination
@@ -1294,7 +1294,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     // If Undo is enabled, store the inserted area
     if (pDoc->GetIDocumentUndoRedo().DoesUndo())
     {
-        pUndo->SetInsertRange( *pCopyPam, sal_True, bStartIsTxtNode );
+        pUndo->SetInsertRange( *pCopyPam, true, bStartIsTxtNode );
     }
 
     if( pCpyRange )

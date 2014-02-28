@@ -256,7 +256,7 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
                         aPaM.GetPoint()->nContent.GetIndex(),
                         aPaM.GetMark()->nContent.GetIndex());
                 }
-                RemoveIdxFromRange( aPaM, sal_False );
+                RemoveIdxFromRange( aPaM, false );
                 pTxt = new OUString( pTxtNode->GetTxt().copy(nCntnt-nLen, nLen) );
                 pTxtNode->EraseText( aPaM.GetPoint()->nContent, nLen );
             }
@@ -265,7 +265,7 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
                 aPaM.Move(fnMoveBackward);
                 if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
                     pTmpDoc->DeleteRedline( aPaM, true, USHRT_MAX );
-                RemoveIdxFromRange( aPaM, sal_False );
+                RemoveIdxFromRange( aPaM, false );
             }
 
             nNd = aPaM.GetPoint()->nNode.GetIndex();
@@ -329,7 +329,7 @@ void SwUndoInsert::RedoImpl(::sw::UndoRedoContext & rContext)
 
         if( nLen )
         {
-            sal_Bool bMvBkwrd = MovePtBackward( *pPam );
+            const bool bMvBkwrd = MovePtBackward( *pPam );
 
             if( pTxt )
             {
