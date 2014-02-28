@@ -129,13 +129,13 @@ WPXInputStream *DirectoryStream::getDocumentOLEStream(const char *const pName)
     return input;
 }
 
-const unsigned char *DirectoryStream::read(const unsigned long, unsigned long &nNumBytesRead)
+const unsigned char *DirectoryStream::read(unsigned long, unsigned long &nNumBytesRead)
 {
     nNumBytesRead = 0;
     return 0;
 }
 
-int DirectoryStream::seek(const long, const WPX_SEEK_TYPE)
+int DirectoryStream::seek(long, WPX_SEEK_TYPE)
 {
     return -1;
 }
