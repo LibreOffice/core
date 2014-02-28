@@ -56,17 +56,17 @@ public:
     inline void  EventGuardAcquire() { osl_acquireMutex( m_aEventGuard ); }
     inline void  EventGuardRelease() { osl_releaseMutex( m_aEventGuard ); }
 
-    virtual void registerFrame( SalFrame* pFrame );
+    void registerFrame( SalFrame* pFrame );
     virtual void deregisterFrame( SalFrame* pFrame );
-            void emitDisplayChanged();
+    void emitDisplayChanged();
 
     // Event handling
     virtual void PostUserEvent() = 0;
 
-    virtual void SendInternalEvent( SalFrame* pFrame, void* pData, sal_uInt16 nEvent = SALEVENT_USEREVENT );
-    virtual void CancelInternalEvent( SalFrame* pFrame, void* pData, sal_uInt16 nEvent );
-    virtual bool DispatchInternalEvent();
-    bool         HasUserEvents() const;
+    void SendInternalEvent( SalFrame* pFrame, void* pData, sal_uInt16 nEvent = SALEVENT_USEREVENT );
+    void CancelInternalEvent( SalFrame* pFrame, void* pData, sal_uInt16 nEvent );
+    bool DispatchInternalEvent();
+    bool HasUserEvents() const;
 
     bool     MouseCaptured( const SalFrame *pFrameData ) const
                         { return m_pCapture == pFrameData; }
