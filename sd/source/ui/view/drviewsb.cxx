@@ -166,6 +166,12 @@ void DrawViewShell::ModifyLayer (
     bool bIsLocked,
     bool bIsPrintable)
 {
+    if(!GetLayerTabControl()) // #i87182#
+    {
+        OSL_ENSURE(false, "No LayerTabBar (!)");
+        return;
+    }
+
     if( pLayer )
     {
         const sal_uInt16 nPageCount = GetLayerTabControl()->GetPageCount();

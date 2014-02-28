@@ -1538,6 +1538,14 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_MODIFYLAYER:
         {
+            if(!GetLayerTabControl()) // #i87182#
+            {
+                OSL_ENSURE(false, "No LayerTabBar (!)");
+                Cancel();
+                rReq.Ignore();
+                break;
+            }
+
             if ( mpDrawView->IsTextEdit() )
             {
                 mpDrawView->SdrEndTextEdit();
@@ -1694,8 +1702,14 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 mpDrawView->SdrEndTextEdit();
             }
 
-            GetLayerTabControl()->StartEditMode(
-                GetLayerTabControl()->GetCurPageId() );
+            if(GetLayerTabControl()) // #i87182#
+            {
+                GetLayerTabControl()->StartEditMode(GetLayerTabControl()->GetCurPageId());
+            }
+            else
+            {
+                OSL_ENSURE(false, "No LayerTabBar (!)");
+            }
 
             Cancel();
             rReq.Ignore ();
