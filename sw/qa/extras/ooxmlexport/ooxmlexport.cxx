@@ -2881,6 +2881,44 @@ DECLARE_OOXMLEXPORT_TEST(testW14TextEffects_StylisticSets_CntxtAlts, "TextEffect
 
 }
 
+DECLARE_OOXMLEXPORT_TEST(testMcIgnorable, "TextEffects_StylisticSets_CntxtAlts.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+     assertXPath(pXmlDoc, "/w:document", "Ignorable", "w14 wp14");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testCompatSettingsForW14, "TextEffects_StylisticSets_CntxtAlts.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/settings.xml");
+    if (!pXmlDoc)
+        return;
+
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting", 5);
+
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[1]", "name", "compatibilityMode");
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[1]", "uri", "http://schemas.microsoft.com/office/word");
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[1]", "val", "15"); // document was made with Word2013 -> 15
+
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[2]", "name", "overrideTableStyleFontSizeAndJustification");
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[2]", "uri", "http://schemas.microsoft.com/office/word");
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[2]", "val", "1");
+
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[3]", "name", "enableOpenTypeFeatures");
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[3]", "uri", "http://schemas.microsoft.com/office/word");
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[3]", "val", "1");
+
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[4]", "name", "doNotFlipMirrorIndents");
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[4]", "uri", "http://schemas.microsoft.com/office/word");
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[4]", "val", "1");
+
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[5]", "name", "differentiateMultirowTableHeaders");
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[5]", "uri", "http://schemas.microsoft.com/office/word");
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[5]", "val", "1");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
