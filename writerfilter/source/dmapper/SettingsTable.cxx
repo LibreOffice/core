@@ -263,14 +263,14 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     case NS_ooxml::LN_CT_Compat_compatSetting:
     {
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-        if( pProperties.get())
+        if (pProperties.get())
         {
             pProperties->resolve(*this);
 
-            sal_Int32 aLength = m_pImpl->m_pCompatSettings.getLength();
-            m_pImpl->m_pCompatSettings.realloc(aLength + 1);
-            m_pImpl->m_pCompatSettings[aLength].Name = "compatSetting";
-            m_pImpl->m_pCompatSettings[aLength].Value = uno::makeAny(m_pImpl->m_pCurrentCompatSetting);
+            sal_Int32 nLength = m_pImpl->m_pCompatSettings.getLength();
+            m_pImpl->m_pCompatSettings.realloc(nLength + 1);
+            m_pImpl->m_pCompatSettings[nLength].Name = "compatSetting";
+            m_pImpl->m_pCompatSettings[nLength].Value = uno::makeAny(m_pImpl->m_pCurrentCompatSetting);
         }
     }
     break;
