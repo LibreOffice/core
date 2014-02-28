@@ -50,7 +50,7 @@ File gid_File_Exe_Scalc
 End
 #endif
 
-#if defined(ENABLE_LPSOLVE)
+#if defined(WITH_LPSOLVER)
 
 STD_RES_FILE( gid_File_Res_Solver, solver)
 
