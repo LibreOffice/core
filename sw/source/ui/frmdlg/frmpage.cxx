@@ -2420,7 +2420,7 @@ void SwGrfExtPage::Reset(const SfxItemSet &rSet)
         && ((const SfxBoolItem *)pItem)->GetValue() )
     {
         m_pBrowseBT->Enable();
-        m_pConnectED->SetReadOnly(sal_False);
+        m_pConnectED->SetReadOnly(false);
     }
 
     ActivatePage(rSet);
