@@ -49,15 +49,6 @@ namespace writerperfect
 namespace
 {
 
-struct NotADirectoryException
-{
-};
-
-}
-
-namespace
-{
-
 uno::Reference<io::XInputStream> findStream(ucbhelper::Content &rContent, const rtl::OUString &rName)
 {
     uno::Reference<io::XInputStream> xInputStream;
