@@ -144,7 +144,7 @@ static void ImplSkipDelimiters( const sal_Unicode*& rpBuf )
     }
 }
 
-static int ImplIsPatternChar( sal_Unicode cChar, sal_Char cEditMask )
+static bool ImplIsPatternChar( sal_Unicode cChar, sal_Char cEditMask )
 {
     sal_Int32 nType = 0;
 
@@ -209,7 +209,7 @@ static sal_Unicode ImplPatternChar( sal_Unicode cChar, sal_Char cEditMask )
         return 0;
 }
 
-static int ImplCommaPointCharEqual( sal_Unicode c1, sal_Unicode c2 )
+static bool ImplCommaPointCharEqual( sal_Unicode c1, sal_Unicode c2 )
 {
     if ( c1 == c2 )
         return true;
