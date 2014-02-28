@@ -75,7 +75,7 @@ public:
     virtual void    EnableUpdateData( sal_uLong nTimeout = EDIT_UPDATEDATA_TIMEOUT );
     virtual void    DisableUpdateData() { delete pUpdateDataTimer; pUpdateDataTimer = NULL; }
 
-    virtual void    SetReadOnly( bool bReadOnly = sal_True );
+    virtual void    SetReadOnly( bool bReadOnly = true );
     virtual bool    IsReadOnly() const;
 
     void            EnableFocusSelectionHide( bool bHide );
