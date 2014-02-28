@@ -87,7 +87,7 @@ public:
     virtual void                DrawMenuBar();
 
     virtual void                SetExtendedFrameStyle( SalExtStyle nExtStyle );
-    virtual void                Show( bool bVisible, bool bNoActivate = sal_False );
+    virtual void                Show( bool bVisible, bool bNoActivate = false );
     virtual void                Enable( bool bEnable );
     virtual void                SetMinClientSize( long nWidth, long nHeight );
     virtual void                SetMaxClientSize( long nWidth, long nHeight );
