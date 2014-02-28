@@ -708,20 +708,23 @@ sal_Bool SAL_CALL rtl_uriConvertRelToAbs(rtl_uString * pBaseUriRef,
     parseUriRef(pBaseUriRef, &aBaseComponents);
     if (!aBaseComponents.aScheme.isPresent())
     {
-        rtl::OUString aMessage(pBaseUriRef);
-        aMessage += rtl::OUString(
-                            " does not start with a scheme component");
-        rtl_uString_assign(pException,
-                           const_cast< rtl::OUString & >(aMessage).pData);
+        rtl_uString_assign(
+            pException,
+            (rtl::OUString(
+                "<" + rtl::OUString(pBaseUriRef)
+                + "> does not start with a scheme component")
+             .pData));
         return false;
     }
     if (aBaseComponents.aPath.pBegin != aBaseComponents.aPath.pEnd
         && *aBaseComponents.aPath.pBegin != '/')
     {
-        rtl::OUString aMessage(pBaseUriRef);
-        aMessage += rtl::OUString(
-                            "path component does not start with slash");
-        rtl_uString_assign(pException, aMessage.pData);
+        rtl_uString_assign(
+            pException,
+            (rtl::OUString(
+                "<" + rtl::OUString(pBaseUriRef)
+                + "> path component does not start with a slash")
+             .pData));
         return false;
     }
 
