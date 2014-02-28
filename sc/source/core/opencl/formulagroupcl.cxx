@@ -96,11 +96,15 @@ size_t VectorRef::Marshal(cl_kernel k, int argno, int, cl_program)
     if (pHostBuffer)
     {
         mpClmem = clCreateBuffer(kEnv.mpkContext,
-                (cl_mem_flags) CL_MEM_READ_ONLY|CL_MEM_USE_HOST_PTR,
+                (cl_mem_flags) CL_MEM_READ_ONLY,
                 szHostBuffer,
-                pHostBuffer, &err);
+                NULL, &err);
         if (CL_SUCCESS != err)
             throw OpenCLError(err);
+        err = clEnqueueWriteBuffer(kEnv.mpkCmdQueue, mpClmem,CL_TRUE, 0, szHostBuffer,
+                pHostBuffer, 0, NULL, NULL);
+        if (CL_SUCCESS != err)
+             throw OpenCLError(err);
     }
     else
     {
@@ -112,15 +116,15 @@ size_t VectorRef::Marshal(cl_kernel k, int argno, int, cl_program)
                 szHostBuffer, NULL, &err);
         if (CL_SUCCESS != err)
             throw OpenCLError(err);
-        double *pNanBuffer = (double*)clEnqueueMapBuffer(
-                kEnv.mpkCmdQueue, mpClmem, CL_TRUE, CL_MAP_WRITE, 0,
-                szHostBuffer, 0, NULL, NULL, &err);
-        if (CL_SUCCESS != err)
-            throw OpenCLError(err);
+        double *pNanBuffer = new double[szHostBuffer/sizeof(double)];
         for (size_t i = 0; i < szHostBuffer/sizeof(double); i++)
             pNanBuffer[i] = NAN;
-        err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, mpClmem,
-                pNanBuffer, 0, NULL, NULL);
+        err = clEnqueueWriteBuffer(kEnv.mpkCmdQueue, mpClmem,CL_TRUE, 0, szHostBuffer,
+              pNanBuffer, 0, NULL, NULL);
+        if (CL_SUCCESS != err)
+              throw OpenCLError(err);
+        delete[] pNanBuffer;
+
     }
 
     err = clSetKernelArg(k, argno, sizeof(cl_mem), (void*)&mpClmem);
@@ -799,9 +803,15 @@ public:
                 mpDVR->GetArrays()[Base::mnIndex].mpNumericArray);
         size_t szHostBuffer = nInput * sizeof(double);
         Base::mpClmem = clCreateBuffer(kEnv.mpkContext,
-                (cl_mem_flags) CL_MEM_READ_ONLY|CL_MEM_USE_HOST_PTR,
+                (cl_mem_flags) CL_MEM_READ_ONLY,
                 szHostBuffer,
-                pHostBuffer, &err);
+                NULL, &err);
+        if (CL_SUCCESS != err)
+              throw OpenCLError(err);
+        err = clEnqueueWriteBuffer(kEnv.mpkCmdQueue, Base::mpClmem,CL_TRUE, 0,
+              szHostBuffer, pHostBuffer, 0, NULL, NULL);
+        if (CL_SUCCESS != err)
+              throw OpenCLError(err);
         mpClmem2 = clCreateBuffer(kEnv.mpkContext, CL_MEM_WRITE_ONLY,
                 sizeof(double)*w, NULL, NULL);
         if (CL_SUCCESS != err)
@@ -2623,7 +2633,7 @@ public:
         cl_int err;
         // The results
         mpResClmem = clCreateBuffer(kEnv.mpkContext,
-                (cl_mem_flags) CL_MEM_READ_WRITE|CL_MEM_ALLOC_HOST_PTR,
+                (cl_mem_flags) CL_MEM_READ_WRITE,
                 nr*sizeof(double), NULL, &err);
         if (CL_SUCCESS != err)
             throw OpenCLError(err);
@@ -2905,17 +2915,14 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
         // Map results back
         cl_mem res = pKernel->GetResultBuffer();
         cl_int err;
-        double *resbuf = (double*)clEnqueueMapBuffer(kEnv.mpkCmdQueue,
-                res,
-                CL_TRUE, CL_MAP_READ, 0,
-                xGroup->mnLength*sizeof(double), 0, NULL, NULL,
-                &err);
+        double *resbuf = new double[xGroup->mnLength];
+        err = clEnqueueReadBuffer(kEnv.mpkCmdQueue,res,
+              CL_TRUE, 0, xGroup->mnLength*sizeof(double), resbuf, 0, NULL, NULL);
         if (err != CL_SUCCESS)
             throw OpenCLError(err);
+
         rDoc.SetFormulaResults(rTopPos, resbuf, xGroup->mnLength);
-        err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, res, resbuf, 0, NULL, NULL);
-        if (err != CL_SUCCESS)
-            throw OpenCLError(err);
+        delete[] resbuf;
         if (xGroup->meCalcState == sc::GroupCalcRunning)
             delete pKernel;
     }
