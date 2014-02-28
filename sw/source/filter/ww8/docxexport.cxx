@@ -1294,6 +1294,7 @@ XFastAttributeListRef DocxExport::MainXmlNamespaces( FSHelperPtr serializer )
     pAttr->add( FSNS( XML_xmlns, XML_mc ), "http://schemas.openxmlformats.org/markup-compatibility/2006" );
     pAttr->add( FSNS( XML_xmlns, XML_wp14 ), "http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" );
     pAttr->add( FSNS( XML_xmlns, XML_w14 ), "http://schemas.microsoft.com/office/word/2010/wordml" );
+    pAttr->add( FSNS( XML_mc, XML_Ignorable ), "w14 wp14" );
     return XFastAttributeListRef( pAttr );
 }
 
