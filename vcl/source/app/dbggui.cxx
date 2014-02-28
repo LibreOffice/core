@@ -973,7 +973,7 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
                 ) );
             aBox.Execute();
         }
-        EndDialog( true );
+        EndDialog( RET_OK );
     }
     else if ( pButton == &maInfoButton )
     {
