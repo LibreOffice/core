@@ -300,21 +300,6 @@ public:
         throw (css::uno::RuntimeException, std::exception);
 
 
-    // XBitmapCanvas
-
-    void SAL_CALL copyRect(
-        const css::uno::Reference< css::rendering::XBitmapCanvas >& sourceCanvas,
-        const css::geometry::RealRectangle2D& sourceRect,
-        const css::rendering::ViewState& sourceViewState,
-        const css::rendering::RenderState& sourceRenderState,
-        const css::geometry::RealRectangle2D& destRect,
-        const css::rendering::ViewState& destViewState,
-        const css::rendering::RenderState& destRenderState)
-        throw (css::lang::IllegalArgumentException,
-            css::rendering::VolatileContentDestroyedException,
-            css::uno::RuntimeException);
-
-
     // XSpriteCanvas
 
     css::uno::Reference< css::rendering::XAnimatedSprite > SAL_CALL

@@ -564,37 +564,6 @@ css::uno::Reference<css::rendering::XGraphicDevice> SAL_CALL
 
 
 
-//----- XBitmapCanvas ---------------------------------------------------------
-
-void SAL_CALL PresenterCanvas::copyRect(
-    const css::uno::Reference<css::rendering::XBitmapCanvas>& rxSourceCanvas,
-    const css::geometry::RealRectangle2D& rSourceRect,
-    const css::rendering::ViewState& rSourceViewState,
-    const css::rendering::RenderState& rSourceRenderState,
-    const css::geometry::RealRectangle2D& rDestRect,
-    const css::rendering::ViewState& rDestViewState,
-    const css::rendering::RenderState& rDestRenderState)
-    throw (css::lang::IllegalArgumentException,
-        css::rendering::VolatileContentDestroyedException,
-        css::uno::RuntimeException)
-{
-    ThrowIfDisposed();
-
-    Reference<rendering::XBitmapCanvas> xBitmapCanvas (mxSharedCanvas, UNO_QUERY);
-    if (xBitmapCanvas.is())
-    {
-        rendering::ViewState aSourceViewState (rSourceViewState);
-        if (rxSourceCanvas == Reference<rendering::XCanvas>(this))
-            aSourceViewState = MergeViewState(aSourceViewState);
-        xBitmapCanvas->copyRect(
-            rxSourceCanvas, rSourceRect, aSourceViewState, rSourceRenderState,
-            rDestRect, MergeViewState(rDestViewState), rDestRenderState);
-    }
-}
-
-
-
-
 //----- XSpriteCanvas ---------------------------------------------------------
 
 Reference<rendering::XAnimatedSprite> SAL_CALL
