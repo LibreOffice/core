@@ -250,11 +250,6 @@ public:
     /** Returns the XCellRange interface for a row. */
     Reference< XCellRange > getRow( sal_Int32 nRow ) const;
 
-    /** Returns the XTableColumns interface for a range of columns. */
-    Reference< XTableColumns > getColumns( const ValueRange& rColRange ) const;
-    /** Returns the XTableRows interface for a range of rows. */
-    Reference< XTableRows > getRows( const ValueRange& rRowRange ) const;
-
     /** Returns the XDrawPage interface of the draw page of the current sheet. */
     Reference< XDrawPage > getDrawPage() const;
     /** Returns the size of the entire drawing page in 1/100 mm. */
@@ -562,32 +557,6 @@ Reference< XCellRange > WorksheetGlobals::getRow( sal_Int32 nRow ) const
     {
     }
     return xRow;
-}
-
-Reference< XTableColumns > WorksheetGlobals::getColumns( const ValueRange& rColRange ) const
-{
-    Reference< XTableColumns > xColumns;
-    sal_Int32 nLastCol = ::std::min( rColRange.mnLast, mrMaxApiPos.Column );
-    if( (0 <= rColRange.mnFirst) && (rColRange.mnFirst <= nLastCol) )
-    {
-        Reference< XColumnRowRange > xRange( getCellRange( CellRangeAddress( getSheetIndex(), rColRange.mnFirst, 0, nLastCol, 0 ) ), UNO_QUERY );
-        if( xRange.is() )
-            xColumns = xRange->getColumns();
-    }
-    return xColumns;
-}
-
-Reference< XTableRows > WorksheetGlobals::getRows( const ValueRange& rRowRange ) const
-{
-    Reference< XTableRows > xRows;
-    sal_Int32 nLastRow = ::std::min( rRowRange.mnLast, mrMaxApiPos.Row );
-    if( (0 <= rRowRange.mnFirst) && (rRowRange.mnFirst <= nLastRow) )
-    {
-        Reference< XColumnRowRange > xRange( getCellRange( CellRangeAddress( getSheetIndex(), 0, rRowRange.mnFirst, 0, nLastRow ) ), UNO_QUERY );
-        if( xRange.is() )
-            xRows = xRange->getRows();
-    }
-    return xRows;
 }
 
 Reference< XDrawPage > WorksheetGlobals::getDrawPage() const

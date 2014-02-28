@@ -256,8 +256,6 @@ oglcanvas::TextLayout::draw(com::sun::star::rendering::ViewState const&, com::su
 oox::AttributeConversion::decodeDouble(rtl::OUString const&)
 oox::xls::BiffDrawingObjectBase::BiffDrawingObjectBase(oox::xls::WorksheetHelper const&)
 oox::xls::WorkbookHelper::getDocShell()
-oox::xls::WorksheetGlobals::getColumns(oox::ValueRange const&) const
-oox::xls::WorksheetGlobals::getRows(oox::ValueRange const&) const
 registry::tools::Options::Options(char const*)
 registry::tools::Options::badOption(char const*, char const*) const
 registry::tools::Options::initOptions(std::vector<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&)
