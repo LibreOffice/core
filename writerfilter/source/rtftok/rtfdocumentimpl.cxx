@@ -424,8 +424,9 @@ void RTFDocumentImpl::setNeedSect(bool bNeedSect)
         if (!m_pSuperstream) // no sections in header/footer!
         {
             Mapper().startSectionGroup();
-            m_bNeedSect = bNeedSect;
         }
+        // set flag in substream too - otherwise multiple startParagraphGroup
+        m_bNeedSect = bNeedSect;
         Mapper().startParagraphGroup();
         setNeedPar(true);
     }

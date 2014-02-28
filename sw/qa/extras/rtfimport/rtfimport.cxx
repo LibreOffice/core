@@ -1445,6 +1445,20 @@ DECLARE_RTFIMPORT_TEST(testContSectionPageBreak, "cont-section-pagebreak.rtf")
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+DECLARE_RTFIMPORT_TEST(testFooterPara, "footer-para.rtf")
+{
+    // check that paragraph properties in footer are imported
+    uno::Reference<text::XText> xFooterText =
+        getProperty< uno::Reference<text::XText> >(
+            getStyles("PageStyles")->getByName("First Page"), "FooterText");
+    uno::Reference<text::XTextContent> xParagraph =
+        getParagraphOrTable(1, xFooterText);
+    CPPUNIT_ASSERT_EQUAL(OUString("All Rights Reserved."),
+        uno::Reference<text::XTextRange>(xParagraph, uno::UNO_QUERY)->getString());
+    CPPUNIT_ASSERT_EQUAL((sal_Int16)style::ParagraphAdjust_CENTER,
+        getProperty</*style::ParagraphAdjust*/sal_Int16>(xParagraph, "ParaAdjust"));
+}
+
 DECLARE_RTFIMPORT_TEST(testCp1000016, "hello.rtf")
 {
     // The single-line document had a second fake empty para on Windows.
