@@ -16,6 +16,8 @@
 #include "undoblk.hxx"
 #include "scopetools.hxx"
 #include <docfunc.hxx>
+#include <tokenarray.hxx>
+#include <tokenstringcontext.hxx>
 #include "svl/sharedstring.hxx"
 
 #include "formula/grammar.hxx"
@@ -517,6 +519,94 @@ void Test::testSharedFormulasDeleteRows()
     CPPUNIT_ASSERT_MESSAGE("1,6 must be a shared formula cell.", pFC && pFC->IsShared());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(6), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(8), pFC->GetSharedLength());
+}
+
+void Test::testSharedFormulasDeleteColumns()
+{
+    using namespace formula;
+
+    m_pDoc->InsertTab(0, "Test");
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
+    FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
+
+    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+
+    // First, test a single cell case.  A value in B1 and formula in C1.
+    m_pDoc->SetValue(ScAddress(1,0,0), 11.0);
+    m_pDoc->SetString(ScAddress(2,0,0), "=RC[-1]");
+    CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(ScAddress(2,0,0)));
+
+    // Delete column B.
+    rFunc.DeleteCells(ScRange(1,0,0,1,MAXROW,0), &aMark, DEL_CELLSLEFT, true, true);
+    CPPUNIT_ASSERT_EQUAL(OUString("#REF!"), m_pDoc->GetString(ScAddress(1,0,0)));
+
+    // The reference should still point to row 1 but the column status should be set to 'deleted'.
+    const ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1,0,0));
+    CPPUNIT_ASSERT(pFC);
+    const ScTokenArray* pCode = pFC->GetCode();
+    CPPUNIT_ASSERT(pCode && pCode->GetLen() == 1);
+    const FormulaToken* pToken = pCode->GetArray()[0];
+    CPPUNIT_ASSERT(pToken->GetType() == svSingleRef);
+    const ScSingleRefData* pSRef = &static_cast<const ScToken*>(pToken)->GetSingleRef();
+    CPPUNIT_ASSERT(pSRef->IsColDeleted());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), pSRef->toAbs(ScAddress(1,0,0)).Row());
+
+    // The formula string should show #REF! in lieu of the column position (only for Calc A1 syntax).
+    sc::CompileFormulaContext aCFCxt(m_pDoc, FormulaGrammar::GRAM_ENGLISH);
+    CPPUNIT_ASSERT_EQUAL(OUString("=#REF!1"), pFC->GetFormula(aCFCxt));
+
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoMgr);
+
+    // Undo and make sure the deleted flag is gone.
+    pUndoMgr->Undo();
+    CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(ScAddress(2,0,0)));
+    pFC = m_pDoc->GetFormulaCell(ScAddress(2,0,0));
+    CPPUNIT_ASSERT_EQUAL(OUString("=B1"), pFC->GetFormula(aCFCxt));
+
+    // Clear row 1 and move over to a formula group case.
+    clearRange(m_pDoc, ScRange(0,0,0,MAXCOL,0,0));
+
+    // Fill A1:B2 with numbers, and C1:C2 with formula that reference those numbers.
+    for (SCROW i = 0; i <= 1; ++i)
+    {
+        m_pDoc->SetValue(ScAddress(0,i,0), (i+1));
+        m_pDoc->SetValue(ScAddress(1,i,0), (i+11));
+        m_pDoc->SetString(ScAddress(2,i,0), "=RC[-2]+RC[-1]");
+        double fCheck = m_pDoc->GetValue(ScAddress(0,i,0));
+        fCheck += m_pDoc->GetValue(ScAddress(1,i,0));
+        CPPUNIT_ASSERT_EQUAL(fCheck, m_pDoc->GetValue(ScAddress(2,i,0)));
+    }
+
+    // Delete column B.
+    rFunc.DeleteCells(ScRange(1,0,0,1,MAXROW,0), &aMark, DEL_CELLSLEFT, true, true);
+
+    for (SCROW i = 0; i <= 1; ++i)
+    {
+        ScAddress aPos(1,i,0);
+        CPPUNIT_ASSERT_EQUAL(OUString("#REF!"), m_pDoc->GetString(aPos));
+    }
+
+    pFC = m_pDoc->GetFormulaCell(ScAddress(1,0,0)); // B1
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL(OUString("=A1+#REF!1"), pFC->GetFormula(aCFCxt));
+    pFC = m_pDoc->GetFormulaCell(ScAddress(1,1,0)); // B2
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL(OUString("=A2+#REF!2"), pFC->GetFormula(aCFCxt));
+
+    // Undo deletion of column B and check the results of C1:C2.
+    pUndoMgr->Undo();
+    for (SCROW i = 0; i <= 1; ++i)
+    {
+        double fCheck = m_pDoc->GetValue(ScAddress(0,i,0));
+        fCheck += m_pDoc->GetValue(ScAddress(1,i,0));
+        CPPUNIT_ASSERT_EQUAL(fCheck, m_pDoc->GetValue(ScAddress(2,i,0)));
+    }
+
+    m_pDoc->DeleteTab(0);
 }
 
 void Test::testSharedFormulasRefUpdateMoveSheets()
