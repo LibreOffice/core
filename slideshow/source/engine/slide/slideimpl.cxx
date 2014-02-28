@@ -39,10 +39,7 @@
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
-#include <com/sun/star/animations/XTargetPropertiesCreator.hpp>
 #include <com/sun/star/drawing/TextAnimationKind.hpp>
-
-#include <animations/animationnodehelper.hxx>
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/anytostring.hxx>
@@ -62,6 +59,7 @@
 #include "usereventqueue.hxx"
 #include "userpaintoverlay.hxx"
 #include "event.hxx"
+#include "targetpropertiescreator.hxx"
 #include "tools.hxx"
 
 #include <o3tl/compat_functional.hxx>
@@ -849,7 +847,7 @@ bool SlideImpl::implPrefetchShow()
             // don't block nextEvent() from issuing the next
             // slide)
             MainSequenceSearcher aSearcher;
-            if( ::anim::for_each_childNode( mxRootNode, aSearcher ) )
+            if( for_each_childNode( mxRootNode, aSearcher ) )
                 mbMainSequenceFound = aSearcher.getMainSequence().is();
 
             // import successfully done
@@ -966,44 +964,8 @@ bool SlideImpl::applyInitialShapeAttributes(
                      // succeeded
     }
 
-    uno::Reference< animations::XTargetPropertiesCreator > xPropsCreator;
-
-    try
-    {
-        ENSURE_OR_RETURN_FALSE( maContext.mxComponentContext.is(),
-                           "SlideImpl::applyInitialShapeAttributes(): Invalid component context" );
-
-        uno::Reference<lang::XMultiComponentFactory> xFac(
-            maContext.mxComponentContext->getServiceManager() );
-
-        xPropsCreator.set(
-            xFac->createInstanceWithContext(
-                OUString(
-                                     "com.sun.star.animations.TargetPropertiesCreator"),
-                maContext.mxComponentContext ),
-            uno::UNO_QUERY_THROW );
-    }
-    catch( uno::RuntimeException& )
-    {
-        throw;
-    }
-    catch( uno::Exception& )
-    {
-        OSL_FAIL(
-            OUStringToOString(
-                comphelper::anyToString(cppu::getCaughtException()),
-                RTL_TEXTENCODING_UTF8).getStr() );
-
-        // could not determine initial shape attributes - this
-        // is an error, as some effects might then be plainly
-        // invisible
-        ENSURE_OR_RETURN_FALSE( false,
-                           "SlideImpl::applyInitialShapeAttributes(): "
-                           "couldn't create TargetPropertiesCreator." );
-    }
-
     uno::Sequence< animations::TargetProperties > aProps(
-        xPropsCreator->createInitialTargetProperties( xRootAnimationNode ) );
+        TargetPropertiesCreator::createInitialTargetProperties( xRootAnimationNode ) );
 
     // apply extracted values to our shapes
     const ::std::size_t nSize( aProps.getLength() );

@@ -22,6 +22,12 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/animations/XAnimationNode.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/container/XEnumeration.hpp>
+
+#include <vector>
 
 #include <cppcanvas/color.hxx>
 
@@ -37,8 +43,6 @@
 #include <cstdlib>
 #include <string.h>
 #include <algorithm>
-
-
 
 namespace com { namespace sun { namespace star { namespace beans {
     struct NamedValue;
@@ -387,6 +391,52 @@ namespace slideshow
 
         basegfx::B2IVector getSlideSizePixel( const basegfx::B2DVector&         rSize,
                                               const boost::shared_ptr<UnoView>& pView );
+    }
+
+    // TODO(Q1): this could possibly be implemented with a somewhat
+    // more lightweight template, by having the actual worker receive
+    // only a function pointer, and a thin templated wrapper around
+    // that which converts member functions into that.
+
+    /** Apply given functor to every animation node child.
+
+        @param xNode
+        Parent node
+
+        @param rFunctor
+        Functor to apply. The functor must have an appropriate
+        operator()( const ::com::sun::star::uno::Reference<
+        ::com::sun::star::animations::XAnimationNode >& ) member.
+
+        @return true, if the functor was successfully applied to
+        all children, false otherwise.
+    */
+    template< typename Functor > inline bool for_each_childNode( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >&    xNode,
+                                                                 Functor&                                                                                  rFunctor )
+    {
+        try
+        {
+            // get an XEnumerationAccess to the children
+            ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumerationAccess >
+                   xEnumerationAccess( xNode,
+                                       ::com::sun::star::uno::UNO_QUERY_THROW );
+            ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration >
+                   xEnumeration( xEnumerationAccess->createEnumeration(),
+                                 ::com::sun::star::uno::UNO_QUERY_THROW );
+
+            while( xEnumeration->hasMoreElements() )
+            {
+                ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >
+                           xChildNode( xEnumeration->nextElement(),
+                                      ::com::sun::star::uno::UNO_QUERY_THROW );
+                rFunctor( xChildNode );
+            }
+                                                                                                                                                                                                                           return true;
+        }
+        catch( ::com::sun::star::uno::Exception& )
+        {
+            return false;
+        }
     }
 }
 

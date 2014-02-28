@@ -18,93 +18,24 @@
  */
 
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/animations/XTargetPropertiesCreator.hpp>
 #include <com/sun/star/animations/XIterateContainer.hpp>
-#include <com/sun/star/animations/TargetProperties.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XServiceName.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
 #include <com/sun/star/animations/XAnimate.hpp>
 
-#include <animations/animationnodehelper.hxx>
 #include <boost/unordered_map.hpp>
-#include <cppuhelper/compbase3.hxx>
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/implementationentry.hxx>
-#include <cppuhelper/supportsservice.hxx>
-#include <comphelper/broadcasthelper.hxx>
-#include <comphelper/sequence.hxx>
 #include <vector>
 
+#include "targetpropertiescreator.hxx"
+#include "tools.hxx"
 
-using namespace ::com::sun::star;
-
-#define IMPLEMENTATION_NAME "animcore::TargetPropertiesCreator"
-#define SERVICE_NAME "com.sun.star.animations.TargetPropertiesCreator"
-
-namespace animcore
+namespace slideshow
 {
-    typedef ::cppu::WeakComponentImplHelper3< ::com::sun::star::animations::XTargetPropertiesCreator,
-                                              lang::XServiceInfo,
-                                              lang::XServiceName >  TargetPropertiesCreator_Base;
-
-    class TargetPropertiesCreator : public ::comphelper::OBaseMutex,
-                                    public TargetPropertiesCreator_Base
-    {
-    public:
-        static uno::Reference< uno::XInterface > SAL_CALL createInstance( const uno::Reference< uno::XComponentContext >& xContext ) throw ( uno::Exception )
-        {
-            return uno::Reference< uno::XInterface >( static_cast<cppu::OWeakObject*>(new TargetPropertiesCreator( xContext )) );
-        }
-
-        /// Dispose all internal references
-        virtual void SAL_CALL disposing();
-
-        // XTargetPropertiesCreator
-        virtual uno::Sequence< animations::TargetProperties > SAL_CALL createInitialTargetProperties( const uno::Reference< animations::XAnimationNode >& rootNode ) throw (uno::RuntimeException, std::exception);
-
-        // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw( uno::RuntimeException, std::exception );
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( uno::RuntimeException, std::exception );
-        virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()  throw( uno::RuntimeException, std::exception );
-
-        // XServiceName
-        virtual OUString SAL_CALL getServiceName(  ) throw (uno::RuntimeException, std::exception);
-
-    protected:
-        ~TargetPropertiesCreator(); // we're a ref-counted UNO class. _We_ destroy ourselves.
-
-    private:
-        // default: disabled copy/assignment
-        TargetPropertiesCreator(const TargetPropertiesCreator&);
-        TargetPropertiesCreator& operator=( const TargetPropertiesCreator& );
-
-        TargetPropertiesCreator( const uno::Reference< uno::XComponentContext >& rxContext );
-    };
-
-    uno::Reference< uno::XInterface > SAL_CALL createInstance_TargetPropertiesCreator( const uno::Reference< uno::XComponentContext > & rSMgr ) throw (uno::Exception)
-    {
-        return TargetPropertiesCreator::createInstance( rSMgr );
-    }
-
-    OUString getImplementationName_TargetPropertiesCreator()
-    {
-        return OUString( IMPLEMENTATION_NAME );
-    }
-
-    uno::Sequence< OUString > getSupportedServiceNames_TargetPropertiesCreator(void)
-    {
-        uno::Sequence< OUString > aRet(1);
-        aRet.getArray()[0] = SERVICE_NAME;
-        return aRet;
-    }
-
+namespace internal
+{
     namespace
     {
         // Vector containing all properties for a given shape
@@ -241,8 +172,7 @@ namespace animcore
                         NodeFunctor aFunctor( mrShapeHash,
                                               xTargetShape,
                                               nParagraphIndex );
-                        if( !::anim::for_each_childNode( xNode,
-                                                         aFunctor ) )
+                        if( !for_each_childNode( xNode, aFunctor ) )
                         {
                             OSL_FAIL( "AnimCore: NodeFunctor::operator(): child node iteration failed, "
                                         "or extraneous container nodes encountered" );
@@ -356,18 +286,10 @@ namespace animcore
                                     }
                                 }
                             }
-
-                            /*if( bVisible )
-                            {
-                                // target is set to 'visible' at the
-                                // first relevant effect. Thus, target
-                                // must be initially _hidden_, for the
-                                // effect to have visible impact.
-                                */
-                }
-                            // target is set the 'visible' value,
-                            // so we should record the opposite value
-                mrShapeHash.insert(
+                        }
+                        // target is set the 'visible' value,
+                        // so we should record the opposite value
+                        mrShapeHash.insert(
                                     XShapeHash::value_type(
                                         aTarget,
                                         VectorOfNamedValues(
@@ -376,10 +298,8 @@ namespace animcore
                                                 //xAnimateNode->getAttributeName(),
                                                 OUString("visibility"),
                                                 uno::makeAny( !bVisible ) ) ) ) );
-                            //}
-                        //}
-                    }
                     break;
+                    }
                 }
             }
 
@@ -390,28 +310,11 @@ namespace animcore
         };
     }
 
-    TargetPropertiesCreator::TargetPropertiesCreator( const uno::Reference< uno::XComponentContext >&  ) :
-        TargetPropertiesCreator_Base( m_aMutex )
-    {
-    }
-
-    TargetPropertiesCreator::~TargetPropertiesCreator()
-    {
-    }
-
-    void SAL_CALL TargetPropertiesCreator::disposing()
-    {
-        ::osl::MutexGuard aGuard( m_aMutex );
-    }
-
-    // XTargetPropertiesCreator
     uno::Sequence< animations::TargetProperties > SAL_CALL TargetPropertiesCreator::createInitialTargetProperties
         (
             const uno::Reference< animations::XAnimationNode >& xRootNode
-        ) throw (uno::RuntimeException, std::exception)
+        ) //throw (uno::RuntimeException, std::exception)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
         // scan all nodes for visibility changes, and record first
         // 'visibility=true' for each shape
         XShapeHash aShapeHash( 101 );
@@ -456,31 +359,7 @@ namespace animcore
         return aRes;
     }
 
-    // XServiceInfo
-    OUString SAL_CALL TargetPropertiesCreator::getImplementationName() throw( uno::RuntimeException, std::exception )
-    {
-        return OUString( IMPLEMENTATION_NAME );
-    }
-
-    sal_Bool SAL_CALL TargetPropertiesCreator::supportsService( const OUString& ServiceName ) throw( uno::RuntimeException, std::exception )
-    {
-        return cppu::supportsService(this, ServiceName);
-    }
-
-    uno::Sequence< OUString > SAL_CALL TargetPropertiesCreator::getSupportedServiceNames()  throw( uno::RuntimeException, std::exception )
-    {
-        uno::Sequence< OUString > aRet(1);
-        aRet[0] = SERVICE_NAME;
-
-        return aRet;
-    }
-
-    // XServiceName
-    OUString SAL_CALL TargetPropertiesCreator::getServiceName(  ) throw (uno::RuntimeException, std::exception)
-    {
-        return OUString( SERVICE_NAME );
-    }
-
-} // namespace animcore
+} // namespace internal
+} // namespace slideshow
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -35,7 +35,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/animations,\
 	IterateContainer \
 	ParallelTimeContainer \
 	SequenceTimeContainer \
-	TargetPropertiesCreator \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/auth,\
 	SSOManagerFactory \
@@ -1681,7 +1680,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/animations,\
 	XCommand \
 	XIterateContainer \
     XParallelTimeContainer \
-	XTargetPropertiesCreator \
 	XTimeContainer \
 	XTransitionFilter \
 ))
