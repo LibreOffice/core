@@ -105,13 +105,13 @@ SAL_DLLPUBLIC void SAL_CALL rtl_freeZeroMemory (
     @param  Bytes [in] memory size.
     @return pointer to allocated memory.
  */
-SAL_DLLPUBLIC void* SAL_CALL rtl_allocateAlinedMemory (
+SAL_DLLPUBLIC void* SAL_CALL rtl_allocateAlignedMemory (
     sal_Size Alignment,
     sal_Size Bytes
 ) SAL_THROW_EXTERN_C();
 
 
-/** Free memory allocated with rtl_allocateAlinedMemory.
+/** Free memory allocated with rtl_allocateAlignedMemory.
     @param  Ptr   [in] pointer to previously allocated memory.
     @return none. Memory is released. Ptr is invalid.
  */

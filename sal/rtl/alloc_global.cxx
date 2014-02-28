@@ -379,7 +379,7 @@ void SAL_CALL rtl_freeZeroMemory (void * p, sal_Size n) SAL_THROW_EXTERN_C()
     }
 }
 
-void* SAL_CALL rtl_allocateAlinedMemory (sal_Size Alignment, sal_Size Bytes) SAL_THROW_EXTERN_C()
+void* SAL_CALL rtl_allocateAlignedMemory (sal_Size Alignment, sal_Size Bytes) SAL_THROW_EXTERN_C()
 {
     return osl_aligned_alloc(Alignment, Bytes);
 }

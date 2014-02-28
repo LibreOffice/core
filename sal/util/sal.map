@@ -672,7 +672,7 @@ LIBO_UDK_4.2 { # symbols available in >= LibO 4.2
 
 LIBO_UDK_4.3 { # symbols available in >= LibO 4.3
     global:
-        rtl_allocateAlinedMemory;
+        rtl_allocateAlignedMemory;
         rtl_freeAlignedMemory;
 } LIBO_UDK_4.2;
 
