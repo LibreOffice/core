@@ -803,11 +803,6 @@ const ScDocument& WorkbookHelper::getScDocument() const
     return mrBookGlob.getScDocument();
 }
 
-ScDocShell& WorkbookHelper::getDocShell()
-{
-    return mrBookGlob.getDocShell();
-}
-
 ScDocumentImport& WorkbookHelper::getDocImport()
 {
     return mrBookGlob.getDocImport();
