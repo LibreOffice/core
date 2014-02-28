@@ -123,7 +123,7 @@ TYPEINIT1_FACTORY(SvxOverlineItem, SfxEnumItem, new SvxOverlineItem(UNDERLINE_NO
 TYPEINIT1_FACTORY(SvxCrossedOutItem, SfxEnumItem, new SvxCrossedOutItem(STRIKEOUT_NONE, 0));
 TYPEINIT1_FACTORY(SvxShadowedItem, SfxBoolItem, new SvxShadowedItem(false, 0));
 TYPEINIT1_FACTORY(SvxAutoKernItem, SfxBoolItem, new SvxAutoKernItem(false, 0));
-TYPEINIT1_FACTORY(SvxWordLineModeItem, SfxBoolItem, new SvxWordLineModeItem(sal_False, 0));
+TYPEINIT1_FACTORY(SvxWordLineModeItem, SfxBoolItem, new SvxWordLineModeItem(false, 0));
 TYPEINIT1_FACTORY(SvxContourItem, SfxBoolItem, new SvxContourItem(false, 0));
 TYPEINIT1_FACTORY(SvxPropSizeItem, SfxUInt16Item, new SvxPropSizeItem(100, 0));
 TYPEINIT1_FACTORY(SvxColorItem, SfxPoolItem, new SvxColorItem(0));
@@ -1748,7 +1748,7 @@ SfxItemPresentation SvxAutoKernItem::GetPresentation
 
 // class SvxWordLineModeItem ---------------------------------------------
 
-SvxWordLineModeItem::SvxWordLineModeItem( const sal_Bool bWordLineMode,
+SvxWordLineModeItem::SvxWordLineModeItem( const bool bWordLineMode,
                                           const sal_uInt16 nId ) :
     SfxBoolItem( nId, bWordLineMode )
 {

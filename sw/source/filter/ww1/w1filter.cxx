@@ -1107,24 +1107,19 @@ void W1_CHP::Out(Ww1Shell& rOut, Ww1Manager& rMan)
             rOut << SvxFontHeightItem(hpsGet() * 10, 100, RES_CHRATR_FONTSIZE);
     if (fsKulGet())
         switch (kulGet()) {
-        case 0: {
-                    rOut << SvxUnderlineItem(UNDERLINE_NONE, RES_CHRATR_UNDERLINE) <<
-                        SvxWordLineModeItem(sal_False, RES_CHRATR_WORDLINEMODE);
-                } break;
+        case 0: rOut << SvxUnderlineItem(UNDERLINE_NONE, RES_CHRATR_UNDERLINE)
+                     << SvxWordLineModeItem(false, RES_CHRATR_WORDLINEMODE);
+                break;
+        case 1: rOut << SvxUnderlineItem(UNDERLINE_SINGLE, RES_CHRATR_UNDERLINE);
+                break;
+        case 2: rOut << SvxUnderlineItem(UNDERLINE_SINGLE, RES_CHRATR_UNDERLINE)
+                     << SvxWordLineModeItem(true, RES_CHRATR_WORDLINEMODE);
+                break;
+        case 3: rOut << SvxUnderlineItem(UNDERLINE_DOUBLE, RES_CHRATR_UNDERLINE);
+                break;
+        case 4: rOut << SvxUnderlineItem(UNDERLINE_DOTTED, RES_CHRATR_UNDERLINE);
+                break;
         default: OSL_ENSURE(false, "Chpx");
-        case 1: {
-                    rOut << SvxUnderlineItem(UNDERLINE_SINGLE, RES_CHRATR_UNDERLINE);
-                } break;
-        case 2: {
-                    rOut << SvxUnderlineItem(UNDERLINE_SINGLE, RES_CHRATR_UNDERLINE) <<
-                    SvxWordLineModeItem(sal_True, RES_CHRATR_WORDLINEMODE);
-                } break;
-        case 3: {
-                    rOut << SvxUnderlineItem(UNDERLINE_DOUBLE, RES_CHRATR_UNDERLINE);
-                } break;
-        case 4: {
-                    rOut << SvxUnderlineItem(UNDERLINE_DOTTED, RES_CHRATR_UNDERLINE);
-                } break;
         }
 
     if (fsIcoGet())

@@ -788,7 +788,7 @@ SET_FONTALIGNMENT:
 
                 if( PLAINID->nWordlineMode )
                 {
-                    pSet->Put( SvxWordLineModeItem( sal_True, PLAINID->nWordlineMode ));
+                    pSet->Put( SvxWordLineModeItem( true, PLAINID->nWordlineMode ));
                 }
                 goto ATTR_SETUNDERLINE;
 
@@ -883,7 +883,7 @@ ATTR_SETUNDERLINE:
 
                 if( PLAINID->nWordlineMode )
                 {
-                    pSet->Put( SvxWordLineModeItem( sal_True, PLAINID->nWordlineMode ));
+                    pSet->Put( SvxWordLineModeItem( true, PLAINID->nWordlineMode ));
                 }
                 goto ATTR_SETOVERLINE;
 

@@ -136,7 +136,7 @@ SfxPoolItem** GlobalEditData::GetDefItems()
         ppDefItems[28] = new SvxEscapementItem( 0, 100, EE_CHAR_ESCAPEMENT );
         ppDefItems[29] = new SvxAutoKernItem( false, EE_CHAR_PAIRKERNING );
         ppDefItems[30] = new SvxKerningItem( 0, EE_CHAR_KERNING );
-        ppDefItems[31] = new SvxWordLineModeItem( sal_False, EE_CHAR_WLM );
+        ppDefItems[31] = new SvxWordLineModeItem( false, EE_CHAR_WLM );
         ppDefItems[32] = new SvxLanguageItem( LANGUAGE_DONTKNOW, EE_CHAR_LANGUAGE );
         ppDefItems[33] = new SvxLanguageItem( LANGUAGE_DONTKNOW, EE_CHAR_LANGUAGE_CJK );
         ppDefItems[34] = new SvxLanguageItem( LANGUAGE_DONTKNOW, EE_CHAR_LANGUAGE_CTL );
