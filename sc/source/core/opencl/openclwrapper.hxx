@@ -155,7 +155,6 @@ public:
     static OString maCacheFolder;
 
     static void registOpenclKernel();
-    static void releaseOpenclRunEnv();
     static bool initOpenclRunEnv( GPUEnv *gpu );
     static void releaseOpenclEnv( GPUEnv *gpuInfo );
     static bool initOpenclRunEnv( int argc );
@@ -166,9 +165,6 @@ public:
 
     static bool initOpenclAttr( OpenCLEnv * env );
     static void setKernelEnv( KernelEnv *envInfo );
-
-    static int getOpenclState();
-    static void setOpenclState( int state );
 };
 
 size_t getOpenCLPlatformCount();

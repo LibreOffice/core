@@ -119,11 +119,6 @@ void clearCache()
 
 OString OpenclDevice::maCacheFolder = getCacheFolder();
 
-void OpenclDevice::releaseOpenclRunEnv()
-{
-    releaseOpenclEnv( &gpuEnv );
-}
-
 void OpenclDevice::registOpenclKernel()
 {
     if ( !gpuEnv.mnIsUserCreated )
@@ -679,16 +674,6 @@ bool OpenclDevice::initOpenclRunEnv( GPUEnv *gpuInfo )
     gpuInfo->mnAmdFp64Flag = bAmdFp64;
 
     return false;
-}
-
-void OpenclDevice::setOpenclState( int state )
-{
-    isInited = state;
-}
-
-int OpenclDevice::getOpenclState()
-{
-    return isInited;
 }
 
 namespace {
