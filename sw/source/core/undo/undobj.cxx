@@ -848,7 +848,7 @@ void SwUndoSaveSection::SaveSection(
     }
 
     pRedlSaveData = new SwRedlineSaveDatas;
-    if( !SwUndo::FillSaveData( aPam, *pRedlSaveData, sal_True, sal_True ))
+    if( !SwUndo::FillSaveData( aPam, *pRedlSaveData, sal_True ))
         delete pRedlSaveData, pRedlSaveData = 0;
 
     nStartPos = rRange.aStart.GetIndex();
@@ -997,8 +997,7 @@ void SwRedlineSaveData::RedlineToDoc( SwPaM& rPam )
 sal_Bool SwUndo::FillSaveData(
     const SwPaM& rRange,
     SwRedlineSaveDatas& rSData,
-    sal_Bool bDelRange,
-    sal_Bool /* bCopyNext */ )
+    sal_Bool bDelRange )
 {
     rSData.DeleteAndDestroyAll();
 

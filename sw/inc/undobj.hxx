@@ -115,7 +115,7 @@ public:
 
     // Save and set Redline data.
     static sal_Bool FillSaveData( const SwPaM& rRange, SwRedlineSaveDatas& rSData,
-                            sal_Bool bDelRange = sal_True, sal_Bool bCopyNext = sal_True );
+                            sal_Bool bDelRange = sal_True );
     static sal_Bool FillSaveDataForFmt( const SwPaM& , SwRedlineSaveDatas& );
     static void SetSaveData( SwDoc& rDoc, const SwRedlineSaveDatas& rSData );
     static sal_Bool HasHiddenRedlines( const SwRedlineSaveDatas& rSData );
