@@ -394,6 +394,7 @@ private:
     bool WriteOLEChart( const SdrObject* pSdrObj, const Size& rSize );
     bool WriteOLEMath( const SdrObject* pSdrObj, const SwOLENode& rNode, const Size& rSize );
     bool PostponeOLE( const SdrObject* pSdrObj, SwOLENode& rNode, const Size& rSize, const SwFlyFrmFmt* pFlyFrmFmt );
+    void WriteOLE( SwOLENode& rNode, const Size& rSize, const SwFlyFrmFmt* rFlyFrmFmt );
 
     /// checks whether the current component is a diagram
     bool IsDiagram (const SdrObject* sdrObject);

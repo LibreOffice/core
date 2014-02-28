@@ -3596,8 +3596,10 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
 bool DocxAttributeOutput::PostponeOLE( const SdrObject*, SwOLENode& rNode, const Size& rSize, const SwFlyFrmFmt* pFlyFrmFmt )
 {
     if( m_postponedOLE == NULL )
-        return false;
-    m_postponedOLE->push_back( PostponedOLE( &rNode, rSize, pFlyFrmFmt ) );
+        //cannot be postponed, try to write now
+        WriteOLE( rNode, rSize, pFlyFrmFmt );
+    else
+        m_postponedOLE->push_back( PostponedOLE( &rNode, rSize, pFlyFrmFmt ) );
     return true;
 }
 
@@ -3611,6 +3613,20 @@ void DocxAttributeOutput::WritePostponedOLE()
 
     SAL_INFO( "sw.ww8", OSL_THIS_FUNC );
 
+    for( std::list< PostponedOLE >::iterator it = m_postponedOLE->begin();
+         it != m_postponedOLE->end();
+         ++it )
+    {
+        WriteOLE( *it->object, it->size, it->frame );
+    }
+
+    // clear list of postponed objects
+    delete m_postponedOLE;
+    m_postponedOLE = NULL;
+}
+
+void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const SwFlyFrmFmt* rFlyFrmFmt )
+{
     // get interoperability information about embedded objects
     uno::Reference< beans::XPropertySet > xPropSet( m_rExport.pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
     OUString pName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
@@ -3623,11 +3639,9 @@ void DocxAttributeOutput::WritePostponedOLE()
             break;
         }
 
-    for( std::list< PostponedOLE >::iterator it = m_postponedOLE->begin();
-         it != m_postponedOLE->end();
-         ++it )
-    {
-        SwOLEObj& aObject = it->object->GetOLEObj();
+        // wrong indentation ahead
+
+        SwOLEObj& aObject = rNode.GetOLEObj();
         uno::Reference < embed::XEmbeddedObject > xObj( aObject.GetOleRef() );
         comphelper::EmbeddedObjectContainer* aContainer = aObject.GetObject().GetContainer();
         OUString sObjectName = aContainer->GetEmbeddedObjectName( xObj );
@@ -3663,19 +3677,19 @@ void DocxAttributeOutput::WritePostponedOLE()
         {
             // the embedded file could not be saved
             // fallback: save as an image
-            FlyFrameGraphic( 0, it->size, it->frame, it->object );
-            continue;
+            FlyFrameGraphic( 0, rSize, rFlyFrmFmt, &rNode );
+            return;
         }
 
         // write preview image
-        const Graphic* pGraphic = const_cast< SwOLENode* >( it->object )->GetGraphic();
+        const Graphic* pGraphic = rNode.GetGraphic();
         OUString sImageId = m_rDrawingML.WriteImage( *pGraphic );
 
         m_pSerializer->startElementNS( XML_w, XML_object, FSEND );
 
         OStringBuffer sShapeStyle, sShapeId;
-        sShapeStyle.append( "width:" ).append( double( it->size.Width() ) / 20 )
-                            .append( "pt;height:" ).append( double( it->size.Height() ) / 20 )
+        sShapeStyle.append( "width:" ).append( double( rSize.Width() ) / 20 )
+                            .append( "pt;height:" ).append( double( rSize.Height() ) / 20 )
                             .append( "pt" ); //from VMLExport::AddRectangleDimensions(), it does: value/20
         sShapeId.append( "ole_" ).append( sId );
 
@@ -3704,11 +3718,6 @@ void DocxAttributeOutput::WritePostponedOLE()
                                         FSEND );
 
         m_pSerializer->endElementNS( XML_w, XML_object );
-    }
-
-    // clear list of postponed objects
-    delete m_postponedOLE;
-    m_postponedOLE = NULL;
 }
 
 /*
