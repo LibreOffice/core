@@ -114,8 +114,6 @@ public:
     /** Constructs a frame style with passed color and line widths. */
     explicit Style( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor,
                     double nP, double nD, double nS, editeng::SvxBorderStyle nType );
-    /** Constructs a frame style from the passed SvxBorderLine struct. */
-    explicit Style( const editeng::SvxBorderLine& rBorder, double fScale = 1.0, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 );
     /** Constructs a frame style from the passed SvxBorderLine struct. Clears the style, if pBorder is 0. */
     explicit Style( const editeng::SvxBorderLine* pBorder, double fScale = 1.0, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 );
 

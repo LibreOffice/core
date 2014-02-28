@@ -1150,13 +1150,6 @@ Style::Style( const Color& rColorPrim, const Color& rColorSecn, const Color& rCo
     Set( rColorPrim, rColorSecn, rColorGap, bUseGapColor, nP, nD, nS );
 }
 
-Style::Style( const editeng::SvxBorderLine& rBorder, double fScale, sal_uInt16 nMaxWidth ) :
-    meRefMode(REFMODE_CENTERED),
-    mfScale(fScale)
-{
-    Set( rBorder, fScale, nMaxWidth );
-}
-
 Style::Style( const editeng::SvxBorderLine* pBorder, double fScale, sal_uInt16 nMaxWidth ) :
     meRefMode(REFMODE_CENTERED),
     mfScale(fScale)
