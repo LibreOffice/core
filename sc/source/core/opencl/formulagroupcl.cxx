@@ -112,7 +112,7 @@ size_t VectorRef::Marshal(cl_kernel k, int argno, int, cl_program)
             szHostBuffer = requestedLength * sizeof(double);//vector length for NAN vector
         // Marshal as a buffer of NANs
         mpClmem = clCreateBuffer(kEnv.mpkContext,
-                (cl_mem_flags) CL_MEM_READ_ONLY|CL_MEM_ALLOC_HOST_PTR,
+                (cl_mem_flags) CL_MEM_READ_ONLY,
                 szHostBuffer, NULL, &err);
         if (CL_SUCCESS != err)
             throw OpenCLError(err);
