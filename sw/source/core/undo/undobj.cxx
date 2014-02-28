@@ -998,7 +998,7 @@ sal_Bool SwUndo::FillSaveData(
     const SwPaM& rRange,
     SwRedlineSaveDatas& rSData,
     sal_Bool bDelRange,
-    sal_Bool bCopyNext )
+    sal_Bool /* bCopyNext */ )
 {
     rSData.DeleteAndDestroyAll();
 
