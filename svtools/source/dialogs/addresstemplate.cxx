@@ -701,11 +701,11 @@ void AssignmentPersistentData::Commit()
             StyleSettings aSystemStyle = GetSettings().GetStyleSettings();
             const ::Color& rNewColor = aSystemStyle.GetDialogColor();
 
-            m_pDatasource->SetReadOnly( sal_True );
+            m_pDatasource->SetReadOnly( true );
             m_pDatasource->SetBackground( Wallpaper( rNewColor ) );
             m_pDatasource->SetControlBackground( rNewColor );
 
-            m_pTable->SetReadOnly( sal_True );
+            m_pTable->SetReadOnly( true );
             m_pTable->SetBackground( Wallpaper( rNewColor ) );
             m_pTable->SetControlBackground( rNewColor );
 
