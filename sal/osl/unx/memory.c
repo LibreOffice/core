@@ -10,12 +10,19 @@
 #include <internal/oslmemory.h>
 
 #include <stdlib.h>
+#ifdef __ANDROID__
+#include <malloc.h>
+#endif
 
 void* osl_aligned_alloc( sal_Size align, sal_Size size )
 {
+#ifdef __ANDROID__
+    return memalign(align, size);
+#else
     void* ptr;
     int err = posix_memalign(&ptr, align, size);
     return err ? NULL : ptr;
+#endif
 }
 
 void osl_aligned_free( void* p )
