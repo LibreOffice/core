@@ -146,12 +146,6 @@ void AddressWalker::push(SCCOL aRelativeCol, SCROW aRelativeRow, SCTAB aRelative
     mAddressStack.push_back(mCurrentAddress);
 }
 
-void AddressWalker::pop()
-{
-    mCurrentAddress = mAddressStack.back();
-    mAddressStack.pop_back();
-}
-
 AddressWalkerWriter::AddressWalkerWriter(ScAddress aInitialAddress, ScDocShell* pDocShell, ScDocument* pDocument,
         formula::FormulaGrammar::Grammar eGrammar ) :
     AddressWalker(aInitialAddress, true),

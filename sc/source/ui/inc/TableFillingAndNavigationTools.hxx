@@ -70,7 +70,6 @@ public:
     void      nextColumn();
     void      nextRow();
     void      push(SCCOL aRelativeCol = 0, SCROW aRelativeRow = 0, SCTAB aRelativeTab = 0);
-    void      pop();
 };
 
 class AddressWalkerWriter : public AddressWalker

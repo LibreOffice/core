@@ -1,4 +1,3 @@
-AddressWalker::pop()
 BigInt::BigInt(unsigned int)
 CalcUnoApiTest::CalcUnoApiTest(rtl::OUString const&)
 Chart2ExportTest::testFdo74115WallGradientFill()
