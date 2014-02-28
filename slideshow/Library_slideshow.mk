@@ -108,6 +108,7 @@ $(eval $(call gb_Library_add_exception_objects,slideshow,\
     slideshow/source/engine/slideshowimpl \
     slideshow/source/engine/slide/slideanimations \
     slideshow/source/engine/slide/slideimpl \
+    slideshow/source/engine/slide/targetpropertiescreator \
     slideshow/source/engine/slide/userpaintoverlay \
     slideshow/source/engine/slideview \
     slideshow/source/engine/smilfunctionparser \

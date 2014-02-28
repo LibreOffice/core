@@ -49,9 +49,6 @@
   <implementation name="animcore::SequenceTimeContainer">
     <service name="com.sun.star.animations.SequenceTimeContainer"/>
   </implementation>
-  <implementation name="animcore::TargetPropertiesCreator">
-    <service name="com.sun.star.animations.TargetPropertiesCreator"/>
-  </implementation>
   <implementation name="animcore::TransitionFilter">
     <service name="com.sun.star.animations.TransitionFilter"/>
   </implementation>
