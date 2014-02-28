@@ -97,7 +97,7 @@ class DocxExport : public MSWordExportBase
     /// Exporter of drawings.
     DocxSdrExport* m_pSdrExport;
 
-    DocxSettingsData settings;
+    DocxSettingsData m_aSettings;
 
 public:
 
@@ -271,7 +271,7 @@ public:
     DocxSdrExport& SdrExporter();
 
     /// Set the document default tab stop.
-    void setDefaultTabStop( int stop ) { settings.defaultTabStop = stop; }
+    void setDefaultTabStop( int stop ) { m_aSettings.defaultTabStop = stop; }
 
 private:
     /// No copying.

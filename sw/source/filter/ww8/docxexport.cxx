@@ -255,7 +255,7 @@ void DocxExport::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
         WriteHeaderFooter( rFirstPageFmt, false, "first" );
 
     if ( nHeadFootFlags & ( nsHdFtFlags::WW8_FOOTER_EVEN | nsHdFtFlags::WW8_HEADER_EVEN ))
-        settings.evenAndOddHeaders = true;
+        m_aSettings.evenAndOddHeaders = true;
 
     // Turn OFF flag for 'Writing Headers \ Footers'
     m_pAttrOutput->SetWritingHeaderFooter( false );
@@ -413,7 +413,7 @@ void DocxExport::OutputDML(uno::Reference<drawing::XShape>& xShape)
 void DocxExport::ExportDocument_Impl()
 {
     // Set the 'Track Revisions' flag in the settings structure
-    settings.trackRevisions = 0 != ( nsRedlineMode_t::REDLINE_ON & mnRedlineMode );
+    m_aSettings.trackRevisions = 0 != ( nsRedlineMode_t::REDLINE_ON & mnRedlineMode );
 
     InitStyles();
 
@@ -780,7 +780,7 @@ void DocxExport::WriteProperties( )
 void DocxExport::WriteSettings()
 {
     SwViewShell *pViewShell(pDoc->GetCurrentViewShell());
-    if( !pViewShell && !settings.hasData() && !m_pAttrOutput->HasFootnotes() && !m_pAttrOutput->HasEndnotes())
+    if( !pViewShell && !m_aSettings.hasData() && !m_pAttrOutput->HasFootnotes() && !m_pAttrOutput->HasEndnotes())
         return;
 
     m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
@@ -807,7 +807,7 @@ void DocxExport::WriteSettings()
     }
 
     // Track Changes
-    if ( settings.trackRevisions )
+    if ( m_aSettings.trackRevisions )
         pFS->singleElementNS( XML_w, XML_trackRevisions, FSEND );
 
     // Mirror Margins
@@ -823,12 +823,12 @@ void DocxExport::WriteSettings()
         pFS->singleElementNS( XML_w, XML_embedSystemFonts, FSEND );
 
     // Default Tab Stop
-    if( settings.defaultTabStop != 0 )
+    if( m_aSettings.defaultTabStop != 0 )
         pFS->singleElementNS( XML_w, XML_defaultTabStop, FSNS( XML_w, XML_val ),
-            OString::number( settings.defaultTabStop).getStr(), FSEND );
+            OString::number( m_aSettings.defaultTabStop).getStr(), FSEND );
 
     // Even and Odd Headers
-    if( settings.evenAndOddHeaders )
+    if( m_aSettings.evenAndOddHeaders )
         pFS->singleElementNS( XML_w, XML_evenAndOddHeaders, FSEND );
 
     // Has Footnotes
