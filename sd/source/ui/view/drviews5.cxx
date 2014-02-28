@@ -289,6 +289,17 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
 
     EditMode eNewEditMode = pView->GetViewShEditMode(mePageKind);
     sal_Bool bNewLayerMode = pView->IsLayerMode();
+
+    if(IsLayerModeActive() && bNewLayerMode)
+    {
+        // #i57936# Force mbIsLayerModeActive to false so that ChangeEditMode
+        // below does something regarding LayerTabBar content refresh. That refresh
+        // is only done when IsLayerModeActive changes. It needs to be done
+        // since e.g. Layer vsisibility was changed above and this may need
+        // a refresh to show the correct graphical representation
+        mbIsLayerModeActive = false;
+    }
+
     ChangeEditMode(eNewEditMode, bNewLayerMode);
     SwitchPage(nSelectedPage);
 
