@@ -1362,7 +1362,8 @@ void GtkSalFrame::Init( SalFrame* pParent, sal_uLong nStyle )
 
     if( bDecoHandling )
     {
-        gtk_window_set_resizable( GTK_WINDOW(m_pWindow), (nStyle & SAL_FRAME_STYLE_SIZEABLE) ? true : FALSE );
+        // Using true or TRUE below causes a false warning from loplugin with Clang 3.2
+        gtk_window_set_resizable( GTK_WINDOW(m_pWindow), (nStyle & SAL_FRAME_STYLE_SIZEABLE) ? 1 : FALSE );
         if( ( (nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION)) ) )
             lcl_set_accept_focus( GTK_WINDOW(m_pWindow), false, false );
     }
