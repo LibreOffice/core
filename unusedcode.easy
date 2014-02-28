@@ -275,8 +275,6 @@ sd::LeftDrawPaneShell::RegisterInterface(SfxModule*)
 sd::LeftImpressPaneShell::RegisterInterface(SfxModule*)
 sd::framework::Pane::SetWindow(Window*)
 sd::presenter::PresenterCanvas::copyRect(com::sun::star::uno::Reference<com::sun::star::rendering::XBitmapCanvas> const&, com::sun::star::geometry::RealRectangle2D const&, com::sun::star::rendering::ViewState const&, com::sun::star::rendering::RenderState const&, com::sun::star::geometry::RealRectangle2D const&, com::sun::star::rendering::ViewState const&, com::sun::star::rendering::RenderState const&)
-sdr::table::Cell::getName()
-sdr::table::SdrTableObj::getRowCount() const
 std::_Rb_tree<rtl::OUString, std::pair<rtl::OUString const, (anonymous namespace)::TemplateId>, std::_Select1st<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> >, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> > >::_Rb_tree(std::_Rb_tree<rtl::OUString, std::pair<rtl::OUString const, (anonymous namespace)::TemplateId>, std::_Select1st<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> >, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> > >&&)
 std::auto_ptr<formula::FormulaTokenArray>::auto_ptr(std::auto_ptr<formula::FormulaTokenArray>&)
 std::auto_ptr<formula::FormulaTokenArray>::auto_ptr(std::auto_ptr_ref<formula::FormulaTokenArray>)

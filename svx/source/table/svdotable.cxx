@@ -1505,13 +1505,6 @@ const CellRef& SdrTableObj::getActiveCell() const
 
 
 
-sal_Int32 SdrTableObj::getRowCount() const
-{
-    return mpImpl ? mpImpl->getRowCount() : 0;
-}
-
-
-
 sal_Int32 SdrTableObj::getColumnCount() const
 {
     return mpImpl ? mpImpl->getColumnCount() : 0;
