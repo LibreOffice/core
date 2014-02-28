@@ -869,7 +869,38 @@ void DocxExport::WriteSettings()
                                       FSNS( XML_w, XML_eastAsia ), OUStringToOString( aValues[1], RTL_TEXTENCODING_UTF8 ).getStr(),
                                       FSNS( XML_w, XML_bidi ), OUStringToOString( aValues[2], RTL_TEXTENCODING_UTF8 ).getStr(),
                                       FSEND );
-                break;
+            }
+            else if ( propList[i].Name == "CompatSettings" )
+            {
+                pFS->startElementNS( XML_w, XML_compat, FSEND );
+
+                uno::Sequence< beans::PropertyValue > aCompatSettingsSequence;
+                propList[i].Value >>= aCompatSettingsSequence;
+                for(sal_Int32 j=0; j < aCompatSettingsSequence.getLength(); ++j)
+                {
+                    uno::Sequence< beans::PropertyValue > aCompatSetting;
+                    aCompatSettingsSequence[j].Value >>= aCompatSetting;
+                    OUString aName;
+                    OUString aUri;
+                    OUString aValue;
+
+                    for(sal_Int32 k=0; k < aCompatSetting.getLength(); ++k)
+                    {
+                        if( aCompatSetting[k].Name == "name" )
+                            aCompatSetting[k].Value >>= aName;
+                        else if( aCompatSetting[k].Name == "uri" )
+                            aCompatSetting[k].Value >>= aUri;
+                        else if( aCompatSetting[k].Name == "val" )
+                            aCompatSetting[k].Value >>= aValue;
+                    }
+                    pFS->singleElementNS( XML_w, XML_compatSetting,
+                        FSNS( XML_w, XML_name ), OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr(),
+                        FSNS( XML_w, XML_uri ),  OUStringToOString(aUri, RTL_TEXTENCODING_UTF8).getStr(),
+                        FSNS( XML_w, XML_val ),  OUStringToOString(aValue, RTL_TEXTENCODING_UTF8).getStr(),
+                        FSEND);
+                }
+
+                pFS->endElementNS( XML_w, XML_compat );
             }
         }
     }
