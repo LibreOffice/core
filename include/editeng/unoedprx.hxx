@@ -147,14 +147,14 @@ public:
     SvxAccessibleTextAdapter*                   GetTextForwarderAdapter(); // covariant return types don't work on MSVC
     virtual SvxViewForwarder*                   GetViewForwarder();
     virtual SvxEditViewForwarder*               GetEditViewForwarder( bool bCreate = false ) SAL_OVERRIDE;
-    SvxAccessibleTextEditViewAdapter*           GetEditViewForwarderAdapter( sal_Bool bCreate = sal_False ); // covariant return types don't work on MSVC
+    SvxAccessibleTextEditViewAdapter*           GetEditViewForwarderAdapter( bool bCreate = false ); // covariant return types don't work on MSVC
     virtual void                                UpdateData();
     virtual SfxBroadcaster&                     GetBroadcaster() const;
 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     void        SetEditSource( ::std::auto_ptr< SvxEditSource > pAdaptee );
     SAL_WNODEPRECATED_DECLARATIONS_POP
-    sal_Bool    IsValid() const;
+    bool        IsValid() const;
 
 private:
     // declared, but not defined
@@ -170,7 +170,7 @@ private:
 
     mutable SfxBroadcaster              maDummyBroadcaster;
 
-    sal_Bool                            mbEditSourceValid;
+    bool                                mbEditSourceValid;
 };
 
 #endif

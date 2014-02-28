@@ -302,7 +302,7 @@ sal_Bool SvxAccessibleTextIndex::IsEditableRange( const SvxAccessibleTextIndex& 
 
 
 
-SvxEditSourceAdapter::SvxEditSourceAdapter() : mbEditSourceValid( sal_False )
+SvxEditSourceAdapter::SvxEditSourceAdapter() : mbEditSourceValid( false )
 {
 }
 
@@ -363,7 +363,7 @@ SvxViewForwarder* SvxEditSourceAdapter::GetViewForwarder()
     return NULL;
 }
 
-SvxAccessibleTextEditViewAdapter* SvxEditSourceAdapter::GetEditViewForwarderAdapter( sal_Bool bCreate )
+SvxAccessibleTextEditViewAdapter* SvxEditSourceAdapter::GetEditViewForwarderAdapter( bool bCreate )
 {
     if( mbEditSourceValid && mpAdaptee.get() )
     {
@@ -410,19 +410,19 @@ void SvxEditSourceAdapter::SetEditSource( ::std::auto_ptr< SvxEditSource > pAdap
     if( pAdaptee.get() )
     {
         mpAdaptee = pAdaptee;
-        mbEditSourceValid = sal_True;
+        mbEditSourceValid = true;
     }
     else
     {
         // do a lazy delete (prevents us from deleting the broadcaster
         // from within a broadcast in
         // AccessibleTextHelper_Impl::Notify)
-        mbEditSourceValid = sal_False;
+        mbEditSourceValid = false;
     }
 }
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
-sal_Bool SvxEditSourceAdapter::IsValid() const
+bool SvxEditSourceAdapter::IsValid() const
 {
     return mbEditSourceValid;
 }
