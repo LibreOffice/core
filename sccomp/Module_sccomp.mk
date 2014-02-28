@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Module_Module,sccomp))
 
-ifeq ($(ENABLE_LPSOLVE),TRUE)
+ifneq ($(WITH_LPSOLVER),)
 
 $(eval $(call gb_Module_add_targets,sccomp,\
 	Library_solver \

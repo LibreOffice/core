@@ -109,7 +109,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	xmlscript/util/xmlscript \
 	xmlsecurity/util/xmlsecurity \
 	xmlsecurity/util/xsec_fw \
-	$(if $(ENABLE_LPSOLVE), \
+	$(if $(WITH_LPSOLVER), \
 		sccomp/source/solver/solver \
 	) \
 	writerfilter/util/writerfilter \

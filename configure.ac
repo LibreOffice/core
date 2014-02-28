@@ -655,7 +655,6 @@ linux-android*)
     enable_neon=no
     enable_mpl_subset=yes
     enable_opengl=no
-    enable_lpsolve=no
     enable_report_builder=no
     with_theme="tango"
     test_cups=no
@@ -1769,6 +1768,14 @@ AC_ARG_WITH(system-npapi-headers,
          extensions/source/plugin (ENABLE_NPAPI_FROM_BROWSER=TRUE)]),,
     [with_system_npapi_headers="$with_system_headers"]
 )
+
+AC_ARG_WITH(lpsolver,
+    AS_HELP_STRING([--with-lpsolver],
+        [Specify which library to use for lpsolver implementation in sccomp.
+         Possible values: "lpsolve", "coinmp", "no". The default value is "lpsolve".
+         Example: --with-lpsolver="coinmp"]),
+    WITH_LPSOLVER=$withval,
+    WITH_LPSOLVER="lpsolve")
 
 AC_ARG_WITH(linker-hash-style,
     AS_HELP_STRING([--with-linker-hash-style],
@@ -7325,7 +7332,6 @@ if test $_os = iOS; then
     enable_mpl_subset=yes
     enable_opengl=no
     enable_lotuswordpro=no
-    enable_lpsolve=no
     enable_postgresql_sdbc=no
     enable_lotuswordpro=no
     enable_neon=no
@@ -9399,42 +9405,48 @@ AC_SUBST(MYTHES_LIBS)
 dnl ===================================================================
 dnl How should we build the linear programming solver ?
 dnl ===================================================================
-
-# Should we check for system CoinMP ? How to do that ?
-BUILD_TYPE="$BUILD_TYPE COINMP"
-
-ENABLE_LPSOLVE=
-AC_MSG_CHECKING([whether to build with lpsolve])
-if test "$enable_lpsolve" != "no"; then
-    ENABLE_LPSOLVE=TRUE
-    AC_MSG_RESULT([yes])
-else
-    AC_MSG_RESULT([no])
+if test "$enable_lpsolve" = "no" -o "$enable_mpl_subset" = "yes"; then
+    WITH_LPSOLVER="coinmp"
 fi
-AC_SUBST(ENABLE_LPSOLVE)
-
-AC_MSG_CHECKING([which lpsolve to use])
-if test "$with_system_lpsolve" = "yes"; then
-    AC_MSG_RESULT([external])
-    SYSTEM_LPSOLVE=TRUE
-    AC_CHECK_HEADER(lpsolve/lp_lib.h, [],
-       [ AC_MSG_ERROR(lpsolve headers not found.)], [])
-    save_LIBS=$LIBS
-    # some systems need this. Like Ubuntu....
-    AC_CHECK_LIB(m, floor)
-    AC_CHECK_LIB(dl, dlopen)
-    AC_CHECK_LIB([lpsolve55], [make_lp], [:],
-        [ AC_MSG_ERROR(lpsolve library not found or too old.)], [])
-    LIBS=$save_LIBS
-    libo_MINGW_CHECK_DLL([lpsolve55])
-else
-    AC_MSG_RESULT([internal])
-    SYSTEM_LPSOLVE=
-    BUILD_TYPE="$BUILD_TYPE LPSOLVE"
+if test $_os = iOS -o $_os = Android; then
+    WITH_LPSOLVER="no"
 fi
+AC_MSG_CHECKING([for lpsolver library])
+case "$WITH_LPSOLVER" in 
+coinmp)
+    AC_MSG_RESULT([CoinMP])
+    # Should we check for system CoinMP ? How to do that ?
+    BUILD_TYPE="$BUILD_TYPE COINMP"
+    ;;
+lpsolve)
+    AC_MSG_RESULT([lpsolve])
+    AC_MSG_CHECKING([which lpsolve to use])
+    if test "$with_system_lpsolve" = "yes"; then
+        AC_MSG_RESULT([external])
+        SYSTEM_LPSOLVE=TRUE
+        AC_CHECK_HEADER(lpsolve/lp_lib.h, [],
+           [ AC_MSG_ERROR(lpsolve headers not found.)], [])
+        save_LIBS=$LIBS
+        # some systems need this. Like Ubuntu....
+        AC_CHECK_LIB(m, floor)
+        AC_CHECK_LIB(dl, dlopen)
+        AC_CHECK_LIB([lpsolve55], [make_lp], [:],
+            [ AC_MSG_ERROR(lpsolve library not found or too old.)], [])
+        LIBS=$save_LIBS
+        libo_MINGW_CHECK_DLL([lpsolve55])
+    else
+        AC_MSG_RESULT([internal])
+        SYSTEM_LPSOLVE=
+        BUILD_TYPE="$BUILD_TYPE LPSOLVE"
+    fi
+    ;;
+*)
+    AC_MSG_RESULT([none, disabled])
+    WITH_LPSOLVER=""
+    ;;
+esac
 AC_SUBST(SYSTEM_LPSOLVE)
-
-
+AC_SUBST(WITH_LPSOLVER)
 
 dnl ===================================================================
 dnl Checking for libexttextcat
@@ -12494,8 +12506,8 @@ if test "$enable_mpl_subset" = "yes"; then
     if test "$enable_opengl" != "no" -o "x$ENABLE_OPENGL" = "xTRUE"; then
         AC_MSG_ERROR([need to --disable-opengl - GL transitions support.])
     fi
-    if test "$enable_lpsolve" != "no" -o "x$ENABLE_LPSOLVE" = "xTRUE"; then
-        AC_MSG_ERROR([need to --disable-lpsolve - calc linear programming solver.])
+    if test "$WITH_LPSOLVER" = "lpsolve"; then
+        AC_MSG_ERROR([need --with-lpsolver=coinmp or --without-lpsolver - calc linear programming solver.])
     fi
 
     MPL_SUBSET="TRUE"
