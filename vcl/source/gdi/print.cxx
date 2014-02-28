@@ -698,12 +698,12 @@ Printer::~Printer()
 sal_uLong Printer::GetCapabilities( sal_uInt16 nType ) const
 {
     if ( IsDisplayPrinter() )
-        return false;
+        return 0;
 
     if( mpInfoPrinter )
         return mpInfoPrinter->GetCapabilities( maJobSetup.ImplGetConstData(), nType );
     else
-        return false;
+        return 0;
 }
 
 
