@@ -49,7 +49,7 @@ inline bool isProtect( sal_Unicode cChar )
     return cChar == '`' || cChar == '\'' || cChar == '"';
 }
 
-inline void CopyUntil( char*& pTo, const char*& pFrom, char cUntil, int bIncludeUntil = 0 )
+inline void CopyUntil( char*& pTo, const char*& pFrom, char cUntil, bool bIncludeUntil = false )
 {
     do
     {
@@ -80,7 +80,7 @@ inline void CopyUntil( char*& pTo, const char*& pFrom, char cUntil, int bInclude
         pFrom++;
 }
 
-inline void CopyUntil( sal_Unicode*& pTo, const sal_Unicode*& pFrom, sal_Unicode cUntil, int bIncludeUntil = 0 )
+inline void CopyUntil( sal_Unicode*& pTo, const sal_Unicode*& pFrom, sal_Unicode cUntil, bool bIncludeUntil = false )
 {
     do
     {
