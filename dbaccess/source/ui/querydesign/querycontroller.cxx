@@ -65,7 +65,6 @@
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 
-#include <comphelper/basicio.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/seqstream.hxx>

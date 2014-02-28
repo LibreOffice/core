@@ -40,7 +40,6 @@
 #include <connectivity/dbexception.hxx>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <comphelper/streamsection.hxx>
-#include <comphelper/basicio.hxx>
 #include <comphelper/seqstream.hxx>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
