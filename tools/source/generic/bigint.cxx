@@ -607,49 +607,6 @@ BigInt::operator double() const
     }
 }
 
-OUString BigInt::GetString() const
-{
-
-    if ( !bIsBig )
-    {
-        return OUString::number( nVal );
-    }
-    else
-    {
-        BigInt aTmp( *this );
-        BigInt a1000000000( 1000000000L );
-        aTmp.Abs();
-        OUStringBuffer sBuff(30);
-        do
-        {
-            BigInt a = aTmp;
-            a    %= a1000000000;
-            aTmp /= a1000000000;
-            if ( a.nVal < 100000000L )
-            {
-                // to get leading 0s
-                OUString aStr(OUString::number( a.nVal + 1000000000L ));
-                sBuff.insert(0, aStr.getStr() + 1);
-            }
-            else
-            {
-                sBuff.insert(0, OUString::number( a.nVal ));
-            }
-        }
-        while( aTmp.bIsBig );
-
-        if ( bIsNeg )
-        {
-            sBuff.insert(0, OUString::number( -aTmp.nVal ));
-        }
-        else
-        {
-            sBuff.insert(0, OUString::number( aTmp.nVal ));
-        }
-        return sBuff.makeStringAndClear();
-    }
-}
-
 BigInt& BigInt::operator=( const BigInt& rBigInt )
 {
     if ( rBigInt.bIsBig )

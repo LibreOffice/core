@@ -80,7 +80,6 @@ public:
     operator        sal_uIntPtr() const;
 
     void            Set( bool bSet ) { bIsSet = bSet ? sal_True : sal_False; }
-    OUString        GetString() const;
 
     bool        IsSet() const { return (bool)bIsSet; }
     bool        IsNeg() const;

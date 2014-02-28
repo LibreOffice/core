@@ -1,6 +1,5 @@
 AddressWalker::pop()
 BigInt::BigInt(unsigned int)
-BigInt::GetString() const
 CalcUnoApiTest::CalcUnoApiTest(rtl::OUString const&)
 Chart2ExportTest::testFdo74115WallGradientFill()
 ComboBox::GetMRUCount() const
