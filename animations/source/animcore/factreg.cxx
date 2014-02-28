@@ -53,7 +53,6 @@ static const struct ImplementationEntry g_entries[] =
     IMPLEMENTATION_ENTRY( TRANSITIONFILTER ),
     IMPLEMENTATION_ENTRY( AUDIO ),
     IMPLEMENTATION_ENTRY( COMMAND ),
-    IMPLEMENTATION_ENTRY( TargetPropertiesCreator ),
     { 0, 0, 0, 0, 0, 0 }
 };
 

@@ -42,8 +42,6 @@
 #include <com/sun/star/animations/XTargetPropertiesCreator.hpp>
 #include <com/sun/star/drawing/TextAnimationKind.hpp>
 
-#include <animations/animationnodehelper.hxx>
-
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/anytostring.hxx>
 
@@ -849,7 +847,7 @@ bool SlideImpl::implPrefetchShow()
             // don't block nextEvent() from issuing the next
             // slide)
             MainSequenceSearcher aSearcher;
-            if( ::anim::for_each_childNode( mxRootNode, aSearcher ) )
+            if( for_each_childNode( mxRootNode, aSearcher ) )
                 mbMainSequenceFound = aSearcher.getMainSequence().is();
 
             // import successfully done
