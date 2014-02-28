@@ -154,6 +154,27 @@ bool hasNumericImpl( CellType eType, ScFormulaCell* pFormula )
     }
 }
 
+template<typename _CellT>
+OUString getStringImpl( const _CellT& rCell, const ScDocument* pDoc )
+{
+    switch (rCell.meType)
+    {
+        case CELLTYPE_VALUE:
+            return OUString::number(rCell.mfValue);
+        case CELLTYPE_STRING:
+            return rCell.mpString->getString();
+        case CELLTYPE_EDIT:
+            if (rCell.mpEditText)
+                return ScEditUtil::GetString(*rCell.mpEditText, pDoc);
+        break;
+        case CELLTYPE_FORMULA:
+            return rCell.mpFormula->GetString().getString();
+        default:
+            ;
+    }
+    return EMPTY_OUSTRING;
+}
+
 }
 
 ScCellValue::ScCellValue() : meType(CELLTYPE_NONE), mfValue(0.0) {}
@@ -442,6 +463,11 @@ void ScCellValue::release( ScColumn& rColumn, SCROW nRow )
     mfValue = 0.0;
 }
 
+OUString ScCellValue::getString( const ScDocument* pDoc )
+{
+    return getStringImpl(*this, pDoc);
+}
+
 bool ScCellValue::isEmpty() const
 {
     return meType == CELLTYPE_NONE;
@@ -553,22 +579,7 @@ double ScRefCellValue::getValue()
 
 OUString ScRefCellValue::getString( const ScDocument* pDoc )
 {
-    switch (meType)
-    {
-        case CELLTYPE_VALUE:
-            return OUString::number(mfValue);
-        case CELLTYPE_STRING:
-            return mpString->getString();
-        case CELLTYPE_EDIT:
-            if (mpEditText)
-                return ScEditUtil::GetString(*mpEditText, pDoc);
-        break;
-        case CELLTYPE_FORMULA:
-            return mpFormula->GetString().getString();
-        default:
-            ;
-    }
-    return EMPTY_OUSTRING;
+    return getStringImpl(*this, pDoc);
 }
 
 bool ScRefCellValue::isEmpty() const

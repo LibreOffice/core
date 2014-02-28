@@ -38,6 +38,7 @@
 #include <svl/stritem.hxx>
 #include <svtools/transfer.hxx>
 #include <svl/urlbmk.hxx>
+#include <svl/sharedstringpool.hxx>
 #include <vcl/msgbox.hxx>
 #include <avmedia/mediawindow.hxx>
 
@@ -311,12 +312,9 @@ void ScViewFunc::DoThesaurus( bool bRecord )
     ScMarkData& rMark = GetViewData()->GetMarkData();
     ScSplitPos eWhich = GetViewData()->GetActivePart();
     EESpellState eState;
-    OUString sOldText, sNewString;
-    EditTextObject* pOldTObj = NULL;
-    const EditTextObject* pTObject = NULL;
     EditView* pEditView = NULL;
     boost::scoped_ptr<ESelection> pEditSel;
-    ScEditEngineDefaulter* pThesaurusEngine;
+    boost::scoped_ptr<ScEditEngineDefaulter> pThesaurusEngine;
     bool bIsEditMode = GetViewData()->HasEditView(eWhich);
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = false;
@@ -342,8 +340,9 @@ void ScViewFunc::DoThesaurus( bool bRecord )
         return;
     }
 
-    CellType eCellType = pDoc->GetCellType(aPos);
-    if (eCellType != CELLTYPE_STRING && eCellType != CELLTYPE_EDIT)
+    ScCellValue aOldText;
+    aOldText.assign(*pDoc, aPos);
+    if (aOldText.meType != CELLTYPE_STRING && aOldText.meType != CELLTYPE_EDIT)
     {
         ErrorMessage(STR_THESAURUS_NO_STRING);
         return;
@@ -351,38 +350,26 @@ void ScViewFunc::DoThesaurus( bool bRecord )
 
     uno::Reference<linguistic2::XSpellChecker1> xSpeller = LinguMgr::GetSpellChecker();
 
-    pThesaurusEngine = new ScEditEngineDefaulter( pDoc->GetEnginePool() );
+    pThesaurusEngine.reset(new ScEditEngineDefaulter(pDoc->GetEnginePool()));
     pThesaurusEngine->SetEditTextObjectPool( pDoc->GetEditPool() );
     pThesaurusEngine->SetRefDevice(GetViewData()->GetActiveWin());
     pThesaurusEngine->SetSpeller(xSpeller);
-    MakeEditView(pThesaurusEngine, nCol, nRow );
+    MakeEditView(pThesaurusEngine.get(), nCol, nRow );
     const ScPatternAttr* pPattern = NULL;
-    SfxItemSet* pEditDefaults = new SfxItemSet(pThesaurusEngine->GetEmptyItemSet());
+    boost::scoped_ptr<SfxItemSet> pEditDefaults(
+        new SfxItemSet(pThesaurusEngine->GetEmptyItemSet()));
     pPattern = pDoc->GetPattern(nCol, nRow, nTab);
     if (pPattern)
     {
-        pPattern->FillEditItemSet( pEditDefaults );
+        pPattern->FillEditItemSet( pEditDefaults.get() );
         pThesaurusEngine->SetDefaults( *pEditDefaults );
     }
 
-    if (eCellType == CELLTYPE_STRING)
-    {
-        sOldText = pDoc->GetString(aPos);
-        pThesaurusEngine->SetText(sOldText);
-    }
-    else if (eCellType == CELLTYPE_EDIT)
-    {
-        pTObject = pDoc->GetEditText(aPos);
-        if (pTObject)
-        {
-            pOldTObj = pTObject->Clone();
-            pThesaurusEngine->SetText(*pTObject);
-        }
-    }
+    if (aOldText.meType == CELLTYPE_EDIT)
+        pThesaurusEngine->SetText(*aOldText.mpEditText);
     else
-    {
-        OSL_FAIL("DoThesaurus: Keine String oder Editzelle");
-    }
+        pThesaurusEngine->SetText(aOldText.getString(pDoc));
+
     pEditView = GetViewData()->GetEditView(GetViewData()->GetActivePart());
     if (pEditSel)
         pEditView->SetSelection(*pEditSel);
@@ -407,34 +394,32 @@ void ScViewFunc::DoThesaurus( bool bRecord )
     }
     if (pThesaurusEngine->IsModified())
     {
-        EditTextObject* pNewTObj = NULL;
-        if (pTObject)
+        ScCellValue aNewText;
+
+        if (aOldText.meType == CELLTYPE_EDIT)
         {
             // The cell will own the text object instance.
-            pDoc->SetEditText(
-                ScAddress(nCol,nRow,nTab), pThesaurusEngine->CreateTextObject());
+            EditTextObject* pText = pThesaurusEngine->CreateTextObject();
+            pDoc->SetEditText(ScAddress(nCol,nRow,nTab), pText);
+            aNewText.set(*pText);
         }
         else
         {
-            sNewString = pThesaurusEngine->GetText();
-            pDoc->SetString(nCol, nRow, nTab, sNewString);
+            OUString aStr = pThesaurusEngine->GetText();
+            aNewText.set(pDoc->GetSharedStringPool().intern(aStr));
+            pDoc->SetString(nCol, nRow, nTab, aStr);
         }
-// erack! it's broadcasted
-//      pDoc->SetDirty();
+
         pDocSh->SetDocumentModified();
         if (bRecord)
         {
             GetViewData()->GetDocShell()->GetUndoManager()->AddUndoAction(
-                new ScUndoThesaurus( GetViewData()->GetDocShell(),
-                                     nCol, nRow, nTab,
-                                     sOldText, pOldTObj, sNewString, pNewTObj));
+                new ScUndoThesaurus(
+                    GetViewData()->GetDocShell(), nCol, nRow, nTab, aOldText, aNewText));
         }
-        delete pNewTObj;
     }
+
     KillEditView(true);
-    delete pEditDefaults;
-    delete pThesaurusEngine;
-    delete pOldTObj;
     pDocSh->PostPaintGridAll();
 }
 

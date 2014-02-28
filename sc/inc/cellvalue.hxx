@@ -77,6 +77,8 @@ struct SC_DLLPUBLIC ScCellValue
 
     void release( ScColumn& rColumn, SCROW nRow );
 
+    OUString getString( const ScDocument* pDoc );
+
     bool isEmpty() const;
 
     bool equalsWithoutFormat( const ScCellValue& r ) const;

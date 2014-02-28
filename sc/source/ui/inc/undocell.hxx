@@ -229,10 +229,9 @@ class ScUndoThesaurus: public ScSimpleUndo
 {
 public:
                     TYPEINFO();
-                    ScUndoThesaurus( ScDocShell* pNewDocShell,
-                            SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
-                            const OUString& rNewUndoStr, const EditTextObject* pUndoTObj,
-                            const OUString& rNewRedoStr, const EditTextObject* pRedoTObj);
+    ScUndoThesaurus( ScDocShell* pNewDocShell,
+                     SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
+                     const ScCellValue& rOldText, const ScCellValue& rNewText );
     virtual         ~ScUndoThesaurus();
 
     virtual void    Undo();
@@ -246,14 +245,12 @@ private:
     SCCOL           nCol;
     SCROW           nRow;
     SCTAB           nTab;
-    OUString        aUndoStr;           // Data at String cell
-    EditTextObject* pUndoTObject;       //      at Edit cell
-    OUString        aRedoStr;
-    EditTextObject* pRedoTObject;
     sal_uLong       nEndChangeAction;
 
-    void            DoChange( bool bUndo, const OUString& rStr,
-                                const EditTextObject* pTObj );
+    ScCellValue maOldText;
+    ScCellValue maNewText;
+
+    void DoChange( bool bUndo, const ScCellValue& rText );
     void SetChangeTrack( const ScCellValue& rOldCell );
 };
 

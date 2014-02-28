@@ -646,39 +646,20 @@ bool ScUndoPrintZoom::CanRepeat(SfxRepeatTarget& rTarget) const
     return rTarget.ISA(ScTabViewTarget);
 }
 
-ScUndoThesaurus::ScUndoThesaurus( ScDocShell* pNewDocShell,
-                                  SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
-                                  const OUString& rNewUndoStr, const EditTextObject* pUndoTObj,
-                                  const OUString& rNewRedoStr, const EditTextObject* pRedoTObj) :
+ScUndoThesaurus::ScUndoThesaurus(
+    ScDocShell* pNewDocShell, SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
+    const ScCellValue& rOldText, const ScCellValue& rNewText ) :
     ScSimpleUndo( pNewDocShell ),
     nCol( nNewCol ),
     nRow( nNewRow ),
     nTab( nNewTab ),
-    aUndoStr( rNewUndoStr ),
-    aRedoStr( rNewRedoStr )
+    maOldText(rOldText),
+    maNewText(rNewText)
 {
-    pUndoTObject = (pUndoTObj) ? pUndoTObj->Clone() : NULL;
-    pRedoTObject = (pRedoTObj) ? pRedoTObj->Clone() : NULL;
-
-    ScCellValue aOldCell;
-    if ( pUndoTObject )
-    {
-        aOldCell.meType = CELLTYPE_EDIT;
-        aOldCell.mpEditText = pUndoTObject->Clone();
-    }
-    else
-    {
-        aOldCell.meType = CELLTYPE_STRING;
-        aOldCell.mpString = new svl::SharedString(pDocShell->GetDocument()->GetSharedStringPool().intern(aUndoStr));
-    }
-    SetChangeTrack(aOldCell);
+    SetChangeTrack(maOldText);
 }
 
-ScUndoThesaurus::~ScUndoThesaurus()
-{
-    delete pUndoTObject;
-    delete pRedoTObject;
-}
+ScUndoThesaurus::~ScUndoThesaurus() {}
 
 OUString ScUndoThesaurus::GetComment() const
 {
@@ -699,8 +680,7 @@ void ScUndoThesaurus::SetChangeTrack( const ScCellValue& rOldCell )
         nEndChangeAction = 0;
 }
 
-void ScUndoThesaurus::DoChange( bool bUndo, const OUString& rStr,
-            const EditTextObject* pTObj )
+void ScUndoThesaurus::DoChange( bool bUndo, const ScCellValue& rText )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
 
@@ -712,39 +692,9 @@ void ScUndoThesaurus::DoChange( bool bUndo, const OUString& rStr,
     }
 
     ScAddress aPos(nCol, nRow, nTab);
-
-    if (pTObj)
-    {
-        // This is edit text.
-        if (pDoc->GetCellType(aPos) == CELLTYPE_EDIT)
-        {
-            ScCellValue aOldCell;
-            if (!bUndo)
-                aOldCell.assign(*pDoc, aPos);
-
-            // A copy of pTObj will be stored in the cell.
-            pDoc->SetEditText(aPos, *pTObj, pDoc->GetEditPool());
-
-            if ( !bUndo )
-                SetChangeTrack(aOldCell);
-        }
-        else
-        {
-            OSL_FAIL("Not CELLTYPE_EDIT for Un/RedoThesaurus");
-        }
-    }
-    else
-    {
-        // This is simple unformatted string.
-        ScCellValue aOldCell;
-        if (!bUndo)
-            aOldCell.assign(*pDoc, aPos);
-
-        pDoc->SetString( nCol, nRow, nTab, rStr );
-
-        if (!bUndo)
-            SetChangeTrack(aOldCell);
-    }
+    rText.commit(*pDoc, aPos);
+    if (!bUndo)
+        SetChangeTrack(maOldText);
 
     pDocShell->PostPaintCell( nCol, nRow, nTab );
 }
@@ -752,7 +702,7 @@ void ScUndoThesaurus::DoChange( bool bUndo, const OUString& rStr,
 void ScUndoThesaurus::Undo()
 {
     BeginUndo();
-    DoChange( true, aUndoStr, pUndoTObject );
+    DoChange(true, maOldText);
     ScChangeTrack* pChangeTrack = pDocShell->GetDocument()->GetChangeTrack();
     if ( pChangeTrack )
         pChangeTrack->Undo( nEndChangeAction, nEndChangeAction );
@@ -762,7 +712,7 @@ void ScUndoThesaurus::Undo()
 void ScUndoThesaurus::Redo()
 {
     BeginRedo();
-    DoChange( false, aRedoStr, pRedoTObject );
+    DoChange(false, maNewText);
     EndRedo();
 }
 
