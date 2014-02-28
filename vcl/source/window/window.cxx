@@ -7512,6 +7512,8 @@ void Window::Update()
     // if there is something to paint, trigger a Paint
     if ( pUpdateWindow->mpWindowImpl->mnPaintFlags & (IMPL_PAINT_PAINT | IMPL_PAINT_PAINTCHILDREN) )
     {
+        ImplDelData aDogTag(this);
+
         // trigger an update also for system windows on top of us,
         // otherwise holes would remain
          Window* pUpdateOverlapWindow = ImplGetFirstOverlapWindow()->mpWindowImpl->mpFirstOverlap;
@@ -7522,6 +7524,9 @@ void Window::Update()
          }
 
         pUpdateWindow->ImplCallPaint( NULL, pUpdateWindow->mpWindowImpl->mnPaintFlags );
+
+        if (aDogTag.IsDead())
+           return;
     }
 
     if ( bFlush )
