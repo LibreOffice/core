@@ -112,6 +112,7 @@ $(eval $(call gb_Library_add_exception_objects,slideshow,\
     slideshow/source/engine/slideview \
     slideshow/source/engine/smilfunctionparser \
     slideshow/source/engine/soundplayer \
+	slideshow/source/engine/targetpropertiescreator \
     slideshow/source/engine/tools \
     slideshow/source/engine/transitions/barndoorwipe \
     slideshow/source/engine/transitions/barwipepolypolygon \
