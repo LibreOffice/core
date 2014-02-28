@@ -171,7 +171,13 @@ OUString TextEffectsHandler::getSchemeColorValTypeString(sal_Int32 nType)
         case NS_ooxml::LN_ST_SchemeColorVal_accent4: return OUString("accent4");
         case NS_ooxml::LN_ST_SchemeColorVal_accent5: return OUString("accent5");
         case NS_ooxml::LN_ST_SchemeColorVal_accent6: return OUString("accent6");
-
+        case NS_ooxml::LN_ST_SchemeColorVal_hlink: return OUString("hlink");
+        case NS_ooxml::LN_ST_SchemeColorVal_folHlink: return OUString("folHlink");
+        case NS_ooxml::LN_ST_SchemeColorVal_dk1: return OUString("dk1");
+        case NS_ooxml::LN_ST_SchemeColorVal_lt1: return OUString("lt1");
+        case NS_ooxml::LN_ST_SchemeColorVal_dk2: return OUString("dk2");
+        case NS_ooxml::LN_ST_SchemeColorVal_lt2: return OUString("lt2");
+        case NS_ooxml::LN_ST_SchemeColorVal_phClr: return OUString("phClr");
         default: break;
     }
     return OUString();

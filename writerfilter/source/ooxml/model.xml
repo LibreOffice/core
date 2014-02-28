@@ -5341,6 +5341,13 @@
           <value>accent4</value>
           <value>accent5</value>
           <value>accent6</value>
+          <value>hlink</value>
+          <value>folHlink</value>
+          <value>dk1</value>
+          <value>lt1</value>
+          <value>dk2</value>
+          <value>lt2</value>
+          <value>phClr</value>
         </choice>
       </define>
       <define name="ST_RectAlignment">
@@ -6271,6 +6278,13 @@
       <value name="accent4" tokenid="ooxml:ST_SchemeColorVal_accent4">accent4</value>
       <value name="accent5" tokenid="ooxml:ST_SchemeColorVal_accent5">accent5</value>
       <value name="accent6" tokenid="ooxml:ST_SchemeColorVal_accent6">accent6</value>
+      <value name="hlink" tokenid="ooxml:ST_SchemeColorVal_hlink">hlink</value>
+      <value name="folHlink" tokenid="ooxml:ST_SchemeColorVal_folHlink">folHlink</value>
+      <value name="dk1" tokenid="ooxml:ST_SchemeColorVal_dk1">dk1</value>
+      <value name="lt1" tokenid="ooxml:ST_SchemeColorVal_lt1">lt1</value>
+      <value name="dk2" tokenid="ooxml:ST_SchemeColorVal_dk2">dk2</value>
+      <value name="lt2" tokenid="ooxml:ST_SchemeColorVal_lt2">lt2</value>
+      <value name="phClr" tokenid="ooxml:ST_SchemeColorVal_phClr">phClr</value>
     </resource>
     <resource name="ST_RectAlignment" resource="List" generated="yes">
       <value name="none" tokenid="ooxml:ST_RectAlignment_none">none</value>
