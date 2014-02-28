@@ -486,7 +486,7 @@ void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrmFmt& rFr
 void DocxSdrExport::Impl::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrmFmt* pFrmFmt, int nAnchorId)
 {
     sax_fastparser::FSHelperPtr pFS = m_pSerializer;
-    Size aSize(pSdrObject->GetSnapRect().GetWidth(), pSdrObject->GetSnapRect().GetHeight());
+    Size aSize(pSdrObject->GetLogicRect().GetWidth(), pSdrObject->GetLogicRect().GetHeight());
     m_rSdrExport.startDMLAnchorInline(pFrmFmt, aSize);
 
     sax_fastparser::FastAttributeList* pDocPrAttrList = pFS->createAttrList();
