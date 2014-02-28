@@ -36,8 +36,11 @@ struct TextCharacterProperties
 {
     PropertyMap         maHyperlinkPropertyMap;
     TextFont            maLatinFont;
+    TextFont            maLatinThemeFont;
     TextFont            maAsianFont;
+    TextFont            maAsianThemeFont;
     TextFont            maComplexFont;
+    TextFont            maComplexThemeFont;
     TextFont            maSymbolFont;
     Color               maCharColor;
     Color               maUnderlineColor;

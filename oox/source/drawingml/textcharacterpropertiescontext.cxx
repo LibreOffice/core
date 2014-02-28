@@ -136,13 +136,25 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
             {
                 mrTextCharacterProperties.maLatinFont.setAttributes(rAttribs.getString(OOX_TOKEN(doc, ascii), OUString()));
             }
+            if (rAttribs.hasAttribute(OOX_TOKEN(doc, asciiTheme)))
+            {
+                mrTextCharacterProperties.maLatinThemeFont.setAttributes(rAttribs.getString(OOX_TOKEN(doc, asciiTheme), OUString()));
+            }
             if( rAttribs.hasAttribute(OOX_TOKEN(doc, cs)) )
             {
                 mrTextCharacterProperties.maComplexFont.setAttributes(rAttribs.getString(OOX_TOKEN(doc, cs), OUString()));
             }
+            if (rAttribs.hasAttribute(OOX_TOKEN(doc, cstheme)))
+            {
+                mrTextCharacterProperties.maComplexThemeFont.setAttributes(rAttribs.getString(OOX_TOKEN(doc, cstheme), OUString()));
+            }
             if( rAttribs.hasAttribute(OOX_TOKEN(doc, eastAsia)) )
             {
                 mrTextCharacterProperties.maAsianFont.setAttributes(rAttribs.getString(OOX_TOKEN(doc, eastAsia), OUString()));
+            }
+            if (rAttribs.hasAttribute(OOX_TOKEN(doc, eastAsiaTheme)))
+            {
+                mrTextCharacterProperties.maAsianThemeFont.setAttributes(rAttribs.getString(OOX_TOKEN(doc, eastAsiaTheme), OUString()));
             }
             break;
         case OOX_TOKEN( doc, b ):

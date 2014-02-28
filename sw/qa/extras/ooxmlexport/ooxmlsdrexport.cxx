@@ -879,6 +879,16 @@ DECLARE_OOXMLEXPORT_TEST(testMSwordHang,"test_msword_hang.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p/w:r[2]/w:drawing/wp:inline", "distT", "0");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testGroupshapeThemeFont, "groupshape-theme-font.docx")
+{
+    // Font was specified using a theme reference, which wasn't handled.
+    uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xGroup->getByIndex(0), uno::UNO_QUERY)->getText();
+    uno::Reference<text::XTextRange> xRun = getRun(getParagraphOfText(1, xText),1);
+    // This was Calibri.
+    CPPUNIT_ASSERT_EQUAL(OUString("Cambria"), getProperty<OUString>(xRun, "CharFontName"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

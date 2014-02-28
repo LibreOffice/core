@@ -67,13 +67,13 @@ const TextCharacterProperties* Theme::getFontStyle( sal_Int32 nSchemeType ) cons
 
 const TextFont* Theme::resolveFont( const OUString& rName ) const
 {
+    const TextCharacterProperties* pCharProps = 0;
     /*  Resolves the following names:
         +mj-lt, +mj-ea, +mj-cs  --  major Latin, Asian, Complex font
         +mn-lt, +mn-ea, +mn-cs  --  minor Latin, Asian, Complex font
      */
     if( (rName.getLength() == 6) && (rName[ 0 ] == '+') && (rName[ 3 ] == '-') )
     {
-        const TextCharacterProperties* pCharProps = 0;
         if( (rName[ 1 ] == 'm') && (rName[ 2 ] == 'j') )
             pCharProps = maFontScheme.get( XML_major ).get();
         else if( (rName[ 1 ] == 'm') && (rName[ 2 ] == 'n') )
@@ -87,6 +87,21 @@ const TextFont* Theme::resolveFont( const OUString& rName ) const
             if( (rName[ 4 ] == 'c') && (rName[ 5 ] == 's') )
                 return &pCharProps->maComplexFont;
         }
+    }
+
+    // See writerfilter::dmapper::ThemeTable::getFontNameForTheme().
+    if (rName == "majorHAnsi" || rName == "majorAscii" || rName == "majorBidi" || rName == "majorEastAsia")
+        pCharProps = maFontScheme.get(XML_major).get();
+    else if (rName == "minorHAnsi" || rName == "minorAscii" || rName == "minorBidi" || rName == "minorEastAsia")
+        pCharProps = maFontScheme.get(XML_minor).get();
+    if (pCharProps)
+    {
+        if (rName == "majorAscii" || rName == "majorHAnsi" || rName == "minorAscii" || rName == "minorHAnsi")
+            return &pCharProps->maLatinFont;
+        else if (rName == "minorBidi" || rName == "majorBidi")
+            return &pCharProps->maComplexFont;
+        else if (rName == "minorEastAsia" || rName == "majorEastAsia")
+            return &pCharProps->maAsianFont;
     }
     return 0;
 }

@@ -44,8 +44,11 @@ void TextCharacterProperties::assignUsed( const TextCharacterProperties& rSource
     // overwrite all properties exisiting in rSourceProps
     maHyperlinkPropertyMap.insert( rSourceProps.maHyperlinkPropertyMap.begin(), rSourceProps.maHyperlinkPropertyMap.end() );
     maLatinFont.assignIfUsed( rSourceProps.maLatinFont );
+    maLatinThemeFont.assignIfUsed( rSourceProps.maLatinThemeFont );
     maAsianFont.assignIfUsed( rSourceProps.maAsianFont );
+    maAsianThemeFont.assignIfUsed( rSourceProps.maAsianThemeFont );
     maComplexFont.assignIfUsed( rSourceProps.maComplexFont );
+    maComplexThemeFont.assignIfUsed( rSourceProps.maComplexThemeFont );
     maSymbolFont.assignIfUsed( rSourceProps.maSymbolFont );
     maCharColor.assignIfUsed( rSourceProps.maCharColor );
     maHighlightColor.assignIfUsed( rSourceProps.maHighlightColor );
@@ -68,21 +71,31 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
     sal_Int16 nFontPitch = 0;
     sal_Int16 nFontFamily = 0;
 
-    if( maLatinFont.getFontData( aFontName, nFontPitch, nFontFamily, rFilter ) )
+    bool bRet = maLatinFont.getFontData( aFontName, nFontPitch, nFontFamily, rFilter );
+    if (!bRet)
+        // In case there is no direct font, try to look it up as a theme reference.
+        bRet = maLatinThemeFont.getFontData( aFontName, nFontPitch, nFontFamily, rFilter );
+    if (bRet)
     {
         rPropMap[ PROP_CharFontName ] <<= aFontName;
         rPropMap[ PROP_CharFontPitch ] <<= nFontPitch;
         rPropMap[ PROP_CharFontFamily ] <<= nFontFamily;
     }
 
-    if( maAsianFont.getFontData( aFontName, nFontPitch, nFontFamily, rFilter ) )
+    bRet = maAsianFont.getFontData( aFontName, nFontPitch, nFontFamily, rFilter );
+    if (!bRet)
+        bRet = maAsianThemeFont.getFontData( aFontName, nFontPitch, nFontFamily, rFilter );
+    if (bRet)
     {
         rPropMap[ PROP_CharFontNameAsian ] <<= aFontName;
         rPropMap[ PROP_CharFontPitchAsian ] <<= nFontFamily;
         rPropMap[ PROP_CharFontFamilyAsian ] <<= nFontPitch;
     }
 
-    if( maComplexFont.getFontData( aFontName, nFontPitch, nFontFamily, rFilter ) )
+    bRet = maComplexFont.getFontData( aFontName, nFontPitch, nFontFamily, rFilter );
+    if (!bRet)
+        bRet = maComplexThemeFont.getFontData( aFontName, nFontPitch, nFontFamily, rFilter );
+    if (bRet)
     {
         rPropMap[ PROP_CharFontNameComplex ] <<= aFontName;
         rPropMap[ PROP_CharFontPitchComplex ] <<= nFontPitch;
