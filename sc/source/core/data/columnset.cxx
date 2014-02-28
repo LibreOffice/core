@@ -30,16 +30,6 @@ void ColumnSet::set(SCTAB nTab, SCCOL nCol)
     rCols.insert(nCol);
 }
 
-bool ColumnSet::has(SCTAB nTab, SCCOL nCol) const
-{
-    TabsType::const_iterator itTab = maTabs.find(nTab);
-    if (itTab == maTabs.end())
-        return false;
-
-    const ColsType& rCols = itTab->second;
-    return rCols.count(nCol) > 0;
-}
-
 void ColumnSet::getColumns(SCTAB nTab, std::vector<SCCOL>& rCols) const
 {
     std::vector<SCCOL> aCols;
