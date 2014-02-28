@@ -277,13 +277,6 @@ sd::framework::Pane::SetWindow(Window*)
 sd::presenter::PresenterCanvas::copyRect(com::sun::star::uno::Reference<com::sun::star::rendering::XBitmapCanvas> const&, com::sun::star::geometry::RealRectangle2D const&, com::sun::star::rendering::ViewState const&, com::sun::star::rendering::RenderState const&, com::sun::star::geometry::RealRectangle2D const&, com::sun::star::rendering::ViewState const&, com::sun::star::rendering::RenderState const&)
 sdr::table::Cell::getName()
 sdr::table::SdrTableObj::getRowCount() const
-sfx2::sidebar::ContextList::IsEmpty()
-sfx2::sidebar::Deck::PrintWindowTree(std::vector<sfx2::sidebar::Panel*, std::allocator<sfx2::sidebar::Panel*> > const&)
-sfx2::sidebar::EnumContext::EvaluateMatch(sfx2::sidebar::EnumContext const&) const
-sfx2::sidebar::EnumContext::GetContext() const
-sfx2::sidebar::Paint::Set(sfx2::sidebar::Paint const&)
-sfx2::sidebar::Panel::PrintWindowTree()
-sfx2::sidebar::SidebarDockingWindow::GetChildWindow()
 std::_Rb_tree<rtl::OUString, std::pair<rtl::OUString const, (anonymous namespace)::TemplateId>, std::_Select1st<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> >, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> > >::_Rb_tree(std::_Rb_tree<rtl::OUString, std::pair<rtl::OUString const, (anonymous namespace)::TemplateId>, std::_Select1st<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> >, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> > >&&)
 std::auto_ptr<formula::FormulaTokenArray>::auto_ptr(std::auto_ptr<formula::FormulaTokenArray>&)
 std::auto_ptr<formula::FormulaTokenArray>::auto_ptr(std::auto_ptr_ref<formula::FormulaTokenArray>)

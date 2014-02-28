@@ -123,7 +123,6 @@ public:
     Application GetApplication_DI (void) const;
 
     const ::rtl::OUString& GetContextName (void) const;
-    Context GetContext (void) const;
 
     bool operator == (const EnumContext aOther);
     bool operator != (const EnumContext aOther);
@@ -135,12 +134,6 @@ public:
     */
     const static sal_Int32 NoMatch;
     const static sal_Int32 OptimalMatch;
-
-    /** Return the numeric value that describes how good the match
-        between two contexts is.
-        Smaller values represent better matches.
-    */
-    sal_Int32 EvaluateMatch (const EnumContext& rOther) const;
 
     static Application GetApplicationEnum (const ::rtl::OUString& rsApplicationName);
     static const ::rtl::OUString& GetApplicationName (const Application eApplication);

@@ -79,14 +79,6 @@ void SidebarDockingWindow::GetFocus()
 
 
 
-SfxChildWindow* SidebarDockingWindow::GetChildWindow (void)
-{
-    return GetChildWindow_Impl();
-}
-
-
-
-
 bool SidebarDockingWindow::Close (void)
 {
     if (mpSidebarController.is())

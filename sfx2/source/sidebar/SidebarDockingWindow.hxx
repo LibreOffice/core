@@ -42,8 +42,6 @@ public:
 
     virtual bool Close (void);
 
-    SfxChildWindow* GetChildWindow (void);
-
 protected:
     // Window overridables
     virtual void GetFocus (void);

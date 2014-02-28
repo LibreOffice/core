@@ -56,11 +56,6 @@ public:
         const bool bIsInitiallyVisible,
         const ::rtl::OUString& rsMenuCommand);
 
-    /** Returns <TRUE/> when no call to AddContextDescription() was made before.
-    */
-    bool IsEmpty (void);
-
-
 private:
     ::std::vector<Entry> maEntries;
 

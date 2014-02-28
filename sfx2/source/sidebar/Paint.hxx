@@ -59,8 +59,6 @@ public:
     // Create a Paint object for the given gradient.
     explicit Paint (const Gradient& rGradient);
 
-    void Set (const ::sfx2::sidebar::Paint& rOther);
-
     Type GetType (void) const;
     const Color& GetColor (void) const;
     const Gradient& GetGradient (void) const;

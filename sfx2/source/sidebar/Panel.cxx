@@ -234,9 +234,9 @@ Reference<ui::XSidebarPanel> Panel::GetPanelComponent (void) const
 
 
 
+#ifdef DEBUG
 void Panel::PrintWindowTree (void)
 {
-#ifdef DEBUG
     Window* pElementWindow = VCLUnoHelper::GetWindow(GetElementWindow());
     if (pElementWindow != NULL)
     {
@@ -245,8 +245,8 @@ void Panel::PrintWindowTree (void)
     }
     else
         OSL_TRACE("    panel is empty");
-#endif
 }
+#endif
 
 
 

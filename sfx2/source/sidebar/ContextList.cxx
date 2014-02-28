@@ -104,12 +104,6 @@ void ContextList::AddContextDescription (
 
 
 
-bool ContextList::IsEmpty (void)
-{
-    return maEntries.empty();
-}
-
-
 } } // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

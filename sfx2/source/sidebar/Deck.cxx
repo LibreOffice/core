@@ -374,14 +374,14 @@ void Deck::PrintWindowTree (void)
 
 
 
-
+#ifdef DEBUG
 void Deck::PrintWindowTree (const ::std::vector<Panel*>& rPanels)
 {
     (void)rPanels;
 
     PrintWindowTree();
 }
-
+#endif
 
 
 

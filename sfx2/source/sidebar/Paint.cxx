@@ -67,15 +67,6 @@ Paint Paint::Create (const cssu::Any& rValue)
 
 
 
-void Paint::Set (const Paint& rOther)
-{
-    meType = rOther.meType;
-    maValue = rOther.maValue;
-}
-
-
-
-
 Paint::Type Paint::GetType (void) const
 {
     return meType;

@@ -119,14 +119,6 @@ const ::rtl::OUString& EnumContext::GetContextName (void) const
 
 
 
-EnumContext::Context EnumContext::GetContext (void) const
-{
-    return meContext;
-}
-
-
-
-
 bool EnumContext::operator== (const EnumContext aOther)
 {
     return meApplication==aOther.meApplication
@@ -286,27 +278,6 @@ const ::rtl::OUString& EnumContext::GetContextName (const Context eContext)
         return maContextVector[Context_Unknown];
     else
         return maContextVector[nIndex];
-}
-
-
-
-
-sal_Int32 EnumContext::EvaluateMatch (
-    const EnumContext& rOther) const
-{
-    const bool bApplicationNameIsAny (rOther.meApplication == Application_Any);
-    if (rOther.meApplication==meApplication || bApplicationNameIsAny)
-    {
-        // Application name matches.
-        const bool bContextNameIsAny (rOther.meContext == Context_Any);
-        if (rOther.meContext==meContext || bContextNameIsAny)
-        {
-            // Context name matches.
-            return (bApplicationNameIsAny ? 1 : 0)
-                + (bContextNameIsAny ? 2 : 0);
-        }
-    }
-    return NoMatch;
 }
 
 
