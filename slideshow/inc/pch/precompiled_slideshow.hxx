@@ -78,7 +78,6 @@
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/animations/XAudio.hpp>
 #include <com/sun/star/animations/XIterateContainer.hpp>
-#include <com/sun/star/animations/XTargetPropertiesCreator.hpp>
 #include <com/sun/star/animations/XTransitionFilter.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>

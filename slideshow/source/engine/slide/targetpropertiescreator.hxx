@@ -17,19 +17,31 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_animations_TargetPropertiesCreator_idl__
-#define __com_sun_star_animations_TargetPropertiesCreator_idl__
+#include <com/sun/star/animations/TargetProperties.hpp>
 
-#include <com/sun/star/animations/XTargetPropertiesCreator.idl>
+#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/factory.hxx>
+#include <cppuhelper/implementationentry.hxx>
+#include <comphelper/sequence.hxx>
 
+using namespace ::com::sun::star;
 
- module com {  module sun {  module star {  module animations {
+namespace slideshow
+{
+    namespace internal
+    {
+        class TargetPropertiesCreator : public ::comphelper::OBaseMutex
+        {
+            public:
+                static uno::Sequence< animations::TargetProperties > SAL_CALL createInitialTargetProperties( const uno::Reference< animations::XAnimationNode >& rootNode );
 
+            private:
+                // default: disabled copy/assignment
+                TargetPropertiesCreator(const TargetPropertiesCreator&);
+                TargetPropertiesCreator& operator=( const TargetPropertiesCreator& );
+        };
 
-service TargetPropertiesCreator: XTargetPropertiesCreator;
-
-}; }; }; };
-
-#endif
+    } // namespace internal
+} // namespace slideshow
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

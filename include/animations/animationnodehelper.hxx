@@ -36,50 +36,6 @@ namespace anim
     // only a function pointer, and a thin templated wrapper around
     // that which converts member functions into that.
 
-    /** Apply given functor to every animation node child.
-
-        @param xNode
-        Parent node
-
-        @param rFunctor
-        Functor to apply. The functor must have an appropriate
-        operator()( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAnimationNode >& ) member.
-
-        @return true, if the functor was successfully applied to
-        all children, false otherwise.
-    */
-    template< typename Functor > inline bool for_each_childNode( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >&    xNode,
-                                                          Functor&                                                                                  rFunctor )
-    {
-        try
-        {
-            // get an XEnumerationAccess to the children
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumerationAccess >
-                  xEnumerationAccess( xNode,
-                                      ::com::sun::star::uno::UNO_QUERY_THROW );
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration >
-                  xEnumeration( xEnumerationAccess->createEnumeration(),
-                                ::com::sun::star::uno::UNO_QUERY_THROW );
-
-            while( xEnumeration->hasMoreElements() )
-            {
-                ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >
-                      xChildNode( xEnumeration->nextElement(),
-                                  ::com::sun::star::uno::UNO_QUERY_THROW );
-
-                rFunctor( xChildNode );
-            }
-
-            return true;
-        }
-        catch( ::com::sun::star::uno::Exception& )
-        {
-            return false;
-        }
-    }
-
-
     /** pushes the given node to the given vector and recursivly calls itself for each child node.
     */
     inline void create_deep_vector( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode,
