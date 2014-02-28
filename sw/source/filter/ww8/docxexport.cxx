@@ -382,6 +382,9 @@ OString DocxExport::WriteOLEObject( SwOLEObj& rObject, OUString sMediaType, OUSt
 // function copied from embeddedobj/source/msole/oleembed.cxx
 bool DocxExport::lcl_CopyStream( uno::Reference<io::XInputStream> xIn, uno::Reference<io::XOutputStream> xOut )
 {
+    if( !xIn.is() || !xOut.is() )
+        return false;
+
     const sal_Int32 nChunkSize = 4096;
     uno::Sequence< sal_Int8 > aData(nChunkSize);
     sal_Int32 nTotalRead = 0;
