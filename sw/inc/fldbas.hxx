@@ -74,6 +74,7 @@ enum RES_FIELDS
     RES_AUTHORITY,  ///< Table of authorities
     RES_COMBINED_CHARS,
     RES_DROPDOWN,
+    RES_GENERICTEXTFLD, // Unsupported text field.
     RES_FIELDS_END
 };
 

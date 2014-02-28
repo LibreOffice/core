@@ -121,7 +121,8 @@ namespace ww
         eADDRESSBLOCK = 93,
         eGREETINGLINE = 94,
         eSHAPE = 95,
-        eBIBLIOGRPAHY=96
+        eBIBLIOGRPAHY=96,
+        eGENERICTEXTFIELD = 97
     };
 
     /** Find the English Field Name from a winword index

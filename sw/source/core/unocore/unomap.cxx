@@ -2595,7 +2595,19 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 aMapEntriesArr[nPropertyId] = aMetaFieldMap;
             }
             break;
-
+            case PROPERTY_MAP_FLDTYP_GENERICTEXTFIELD      :
+            {
+                // create property map for generic field.
+                static SfxItemPropertyMapEntry const aGenericTextFieldPropMap            [] =
+                {
+                    {OUString(UNO_NAME_GENERICFIELDTEXT), FIELD_PROP_PAR2, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0},
+                    {OUString(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, cppu::UnoType<OUString>::get(),  PROPERTY_NONE, 0},
+                    COMMON_FLDTYP_PROPERTIES
+                    { OUString(), 0, css::uno::Type(), 0, 0 }
+                };
+                aMapEntriesArr[nPropertyId] = aGenericTextFieldPropMap;
+            }
+            break;
             default:
                 OSL_FAIL( "unexpected property map ID" );
         }
@@ -3190,6 +3202,12 @@ const SfxItemPropertySet*  SwUnoPropertyMapProvider::GetPropertySet( sal_uInt16 
             {
                 static SfxItemPropertySet aPROPERTY_MAP_METAFIELD(pEntries);
                 aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_METAFIELD;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_GENERICTEXTFIELD:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_GENERICTEXTFIELD(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_GENERICTEXTFIELD;
             }
             break;
         }

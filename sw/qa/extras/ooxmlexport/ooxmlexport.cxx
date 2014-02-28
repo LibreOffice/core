@@ -2919,6 +2919,19 @@ DECLARE_OOXMLEXPORT_TEST(testCompatSettingsForW14, "TextEffects_StylisticSets_Cn
     assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[5]", "val", "1");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testGenericTextField, "Unsupportedtextfields.docx")
+{
+    // fdo#75158 : This test case is to verify the unsupported textfields are exported properly.
+
+    xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[2]/w:r[2]/w:instrText");
+    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
+    CPPUNIT_ASSERT(contents.match("PRINTDATE   \\* MERGEFORMAT"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

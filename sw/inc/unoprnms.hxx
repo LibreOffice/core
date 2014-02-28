@@ -734,6 +734,7 @@
 
 #define UNO_NAME_IS_FIELD_USED "IsFieldUsed"
 #define UNO_NAME_IS_FIELD_DISPLAYED "IsFieldDisplayed"
+#define UNO_NAME_GENERICFIELDTEXT "GenericTextFieldText"
 #define UNO_NAME_BUILDID "BuildId"
 #define UNO_NAME_PARA_STYLE_CONDITIONS "ParaStyleConditions"
 #define UNO_NAME_PRINT_EMPTY_PAGES "PrintEmptyPages"

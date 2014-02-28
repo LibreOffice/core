@@ -2914,10 +2914,10 @@ void DomainMapper_Impl::CloseFieldCommand()
                 sCommand = sCommand.copy(0, nSpaceIndex).toAsciiUpperCase();
 
             FieldConversionMap_t::iterator aIt = aFieldConversionMap.find(sCommand);
+            uno::Reference< beans::XPropertySet > xFieldProperties;
             if(aIt != aFieldConversionMap.end())
             {
                 bool bCreateEnhancedField = false;
-                uno::Reference< beans::XPropertySet > xFieldProperties;
                 bool bCreateField = true;
                 switch (aIt->second.eFieldId)
                 {
@@ -3484,6 +3484,25 @@ void DomainMapper_Impl::CloseFieldCommand()
                             rPropNameSupplier.GetName(PROP_NUMBERING_TYPE),
                             uno::makeAny( lcl_ParseNumberingType(pContext->GetCommand()) ));
                     break;
+                }
+            }
+            else
+            {
+                /** This part will handle unsupported fields. It will handle all unsupported fields
+                    as generic text field.
+                */
+                OUString aCode( pContext->GetCommand().trim() );
+                static const OUString sAPI_genericfield( "com.sun.star.text.TextField.GenericTextField");
+                if ( !aCode.isEmpty() )
+                {
+                    if (m_xTextFactory.is())
+                    {
+                        xFieldInterface = m_xTextFactory->createInstance(sAPI_genericfield);
+                        xFieldProperties = uno::Reference< beans::XPropertySet >( xFieldInterface, uno::UNO_QUERY_THROW);
+                        xFieldProperties->setPropertyValue(
+                                                    "GenericTextFieldText",
+                                                    uno::makeAny( aCode ));
+                    }
                 }
             }
             //set the text field if there is any

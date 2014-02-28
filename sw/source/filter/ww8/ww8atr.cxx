@@ -88,6 +88,7 @@
 #include <swtable.hxx>
 #include <fmtinfmt.hxx>
 #include <txtfld.hxx>
+#include <generictextfld.hxx>
 #include <txtftn.hxx>
 #include <poolfmt.hxx>
 #include <doc.hxx>
@@ -3045,6 +3046,13 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
                 + " "
                 + lcl_GetExpandedField(*pFld);
             GetExport().OutputField( pFld, ww::eMACROBUTTON, sStr );
+        }
+        break;
+    case RES_GENERICTEXTFLD:
+        {
+            const SwGenericTextField * pGenericTextField = static_cast<const SwGenericTextField *>(pFld);
+            const OUString sStr = pGenericTextField->GetPar2();
+            GetExport().OutputField(pFld, ww::eGENERICTEXTFIELD, sStr);
         }
         break;
     default:

@@ -73,6 +73,7 @@
 #include <docary.hxx>
 #include <reffld.hxx>
 #include <ddefld.hxx>
+#include <generictextfld.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <swunohelper.hxx>
 #include <unofldmid.h>
@@ -178,6 +179,7 @@ static const ServiceIdResId aServiceToRes[] =
     {RES_COMBINED_CHARS,    SW_SERVICE_FIELDTYPE_COMBINED_CHARACTERS     },
     {RES_DROPDOWN,  SW_SERVICE_FIELDTYPE_DROPDOWN                        },
     {RES_TABLEFLD,      SW_SERVICE_FIELDTYPE_TABLE_FORMULA              },
+    {RES_GENERICTEXTFLD,        SW_SERVICE_FIELDTYPE_GENERIC_TEXT_FIELD     },
     {USHRT_MAX,         USHRT_MAX                                        }
 };
 
@@ -375,6 +377,7 @@ static sal_uInt16 lcl_GetPropertyMapOfService( sal_uInt16 nServiceId )
     case SW_SERVICE_FIELDMASTER_DUMMY4:
     case SW_SERVICE_FIELDMASTER_DUMMY5: nRet = PROPERTY_MAP_FLDMSTR_DUMMY0; break;
     case SW_SERVICE_FIELDTYPE_HIDDEN_TEXT: nRet = PROPERTY_MAP_FLDTYP_HIDDEN_TEXT; break;
+    case SW_SERVICE_FIELDTYPE_GENERIC_TEXT_FIELD: nRet = PROPERTY_MAP_FLDTYP_GENERICTEXTFIELD; break;
     default:
         OSL_FAIL( "wrong service id" );
         nRet = USHRT_MAX;
@@ -1881,6 +1884,16 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
                 nType,
                 m_pImpl->m_pProps->nFormat);
            ((SwTblField*)pFld)->ChgExpStr(m_pImpl->m_pProps->sPar1);
+        }
+        break;
+        case SW_SERVICE_FIELDTYPE_GENERIC_TEXT_FIELD:
+        {
+            // create a generic field.
+            SwFieldType* pFldType =
+                pDoc->GetFldType(RES_GENERICTEXTFLD, m_pImpl->m_sTypeName, true);
+            if (!pFldType)
+                throw uno::RuntimeException();
+            pFld = new SwGenericTextField( (SwGenericTextFieldType*)pFldType, m_pImpl->m_pProps->sPar3, m_pImpl->m_pProps->sPar2 );
         }
         break;
         default: OSL_FAIL("was ist das fuer ein Typ?");
