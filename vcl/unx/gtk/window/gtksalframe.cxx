@@ -1362,8 +1362,7 @@ void GtkSalFrame::Init( SalFrame* pParent, sal_uLong nStyle )
 
     if( bDecoHandling )
     {
-        // Using true or TRUE below causes a false warning from loplugin with Clang 3.2
-        gtk_window_set_resizable( GTK_WINDOW(m_pWindow), (nStyle & SAL_FRAME_STYLE_SIZEABLE) ? 1 : FALSE );
+        gtk_window_set_resizable( GTK_WINDOW(m_pWindow), (nStyle & SAL_FRAME_STYLE_SIZEABLE) != 0 );
         if( ( (nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION)) ) )
             lcl_set_accept_focus( GTK_WINDOW(m_pWindow), false, false );
     }
@@ -3155,7 +3154,7 @@ bool GtkSalFrame::Dispatch( const XEvent* pEvent )
             GdkEventFocus aEvent;
             aEvent.type = GDK_FOCUS_CHANGE;
             aEvent.window = widget_get_window( m_pWindow );
-            aEvent.send_event = 1;
+            aEvent.send_event = gint8(TRUE);
             aEvent.in = gint16(pEvent->xclient.data.l[1] == 1);
             signalFocus( m_pWindow, &aEvent, this );
         }
