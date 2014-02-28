@@ -88,8 +88,6 @@ public:
     */
     virtual ::Window* GetWindow (void);
 
-    void SetWindow (::Window* pWindow);
-
     //----- XPane -------------------------------------------------------------
 
     /** For a UNO API based implementation of a view this may the most
