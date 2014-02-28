@@ -23,6 +23,7 @@
 #include <limits>
 #include <vector>
 
+#include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/unordered_map.hpp>
 
@@ -36,12 +37,8 @@ namespace packages = com::sun::star::packages;
 namespace
 {
 
-class PositionHolder
+class PositionHolder : boost::noncopyable
 {
-    // disable copying
-    PositionHolder(const PositionHolder &);
-    PositionHolder &operator=(const PositionHolder &);
-
 public:
     explicit PositionHolder(const Reference<XSeekable> &rxSeekable);
     ~PositionHolder();
