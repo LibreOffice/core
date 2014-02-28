@@ -161,7 +161,7 @@ sal_uLong SwASCWriter::WriteStream()
 #ifdef OSL_LITENDIAN
                                 Strm().WriteUChar( sal_uInt8(0xFF) ).WriteUChar( sal_uInt8(0xFE) );
 #else
-                                Strm() << sal_uInt8(0xFE) << sal_uInt8(0xFF);
+                                Strm().WriteUChar( sal_uInt8(0xFE) ).WriteUChar( sal_uInt8(0xFF) );
 #endif
                                 break;
 
