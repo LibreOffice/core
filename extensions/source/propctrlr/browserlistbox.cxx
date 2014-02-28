@@ -1199,7 +1199,7 @@ namespace pcr
                     Window *pWindow = rLine.pLine->getControlWindow();
                     Edit* pControlWindowAsEdit = dynamic_cast<Edit*>(pWindow);
                     if (pControlWindowAsEdit)
-                        pControlWindowAsEdit->SetReadOnly(sal_True);
+                        pControlWindowAsEdit->SetReadOnly(true);
                     else
                         pWindow->Enable(false);
                 }
