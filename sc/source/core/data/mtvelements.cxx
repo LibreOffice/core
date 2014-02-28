@@ -22,10 +22,6 @@ CellTextAttr::CellTextAttr(const CellTextAttr& r) :
     mnTextWidth(r.mnTextWidth),
     mnScriptType(r.mnScriptType) {}
 
-CellTextAttr::CellTextAttr(sal_uInt16 nTextWidth, sal_uInt8 nScriptType) :
-    mnTextWidth(nTextWidth),
-    mnScriptType(nScriptType) {}
-
 ColumnBlockPositionSet::ColumnBlockPositionSet(ScDocument& rDoc) : mrDoc(rDoc) {}
 
 ColumnBlockPosition* ColumnBlockPositionSet::getBlockPosition(SCTAB nTab, SCCOL nCol)

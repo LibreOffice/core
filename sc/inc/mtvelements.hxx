@@ -45,7 +45,6 @@ struct CellTextAttr
 
     CellTextAttr();
     CellTextAttr(const CellTextAttr& r);
-    CellTextAttr(sal_uInt16 nTextWidth, sal_uInt8 nScriptType);
 };
 
 /// Custom element type IDs for multi_type_vector.
