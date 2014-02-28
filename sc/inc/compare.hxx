@@ -66,7 +66,6 @@ private:
         NULL means case sensitivity document option is to be used!
  */
 double CompareFunc( const Compare::Cell& rCell1, const Compare::Cell& rCell2, bool bIgnoreCase, CompareOptions* pOptions = NULL );
-double CompareFunc( double fCell1, const Compare::Cell& rCell2, CompareOptions* pOptions = NULL );
 double CompareFunc( const Compare::Cell& rCell1, double fCell2, CompareOptions* pOptions = NULL );
 double CompareFunc( double fCell1, double fCell2 );
 
