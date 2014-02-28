@@ -19,9 +19,16 @@ void* osl_aligned_alloc( sal_Size align, sal_Size size )
 #ifdef __ANDROID__
     return memalign(align, size);
 #else
-    void* ptr;
-    int err = posix_memalign(&ptr, align, size);
-    return err ? NULL : ptr;
+    if (size == 0)
+    {
+        return NULL;
+    }
+    else
+    {
+        void* ptr;
+        int err = posix_memalign(&ptr, align, size);
+        return err ? NULL : ptr;
+    }
 #endif
 }
 

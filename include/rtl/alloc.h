@@ -96,14 +96,20 @@ SAL_DLLPUBLIC void SAL_CALL rtl_freeZeroMemory (
 ) SAL_THROW_EXTERN_C();
 
 
-/** Allocate memory.
+/** Allocate aligned memory.
 
     A call to this function will return NULL upon the requested
     memory size being either zero or larger than currently allocatable.
 
-    @param Alignment alignment in bytes.
+    Memory obtained through this function must be freed with
+    rtl_freeAlignedMemory.
+
+    @param Alignment [in] alignment in bytes, must be a power of two multiple of
+        sizeof(void*).
     @param  Bytes [in] memory size.
     @return pointer to allocated memory.
+
+    @since LibreOffice 4.3
  */
 SAL_DLLPUBLIC void* SAL_CALL rtl_allocateAlignedMemory (
     sal_Size Alignment,
@@ -112,8 +118,11 @@ SAL_DLLPUBLIC void* SAL_CALL rtl_allocateAlignedMemory (
 
 
 /** Free memory allocated with rtl_allocateAlignedMemory.
+
     @param  Ptr   [in] pointer to previously allocated memory.
     @return none. Memory is released. Ptr is invalid.
+
+    @since LibreOffice 4.3
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_freeAlignedMemory (
     void *   Ptr
