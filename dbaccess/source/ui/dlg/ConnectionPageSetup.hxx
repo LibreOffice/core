@@ -56,7 +56,7 @@ namespace dbaui
         virtual void        implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
         virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
 
-        inline void enableConnectionURL() { m_aConnectionURL.SetReadOnly(sal_False); }
+        inline void enableConnectionURL() { m_aConnectionURL.SetReadOnly(false); }
         inline void disableConnectionURL() { m_aConnectionURL.SetReadOnly(); }
 
         /** changes the connection URL.

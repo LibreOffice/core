@@ -336,7 +336,7 @@ OExceptionChainDialog::OExceptionChainDialog( Window* pParent, const ExceptionDi
 
     m_aExceptionList.SetSelectHdl(LINK(this, OExceptionChainDialog, OnExceptionSelected));
     m_aExceptionList.SetNodeDefaultImages( );
-    m_aExceptionText.SetReadOnly(sal_True);
+    m_aExceptionText.SetReadOnly(true);
 
     bool bHave22018 = false;
     size_t elementPos = 0;
