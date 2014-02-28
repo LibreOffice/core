@@ -38,7 +38,6 @@
 #include <com/sun/star/animations/XAudio.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <animations/animationnodehelper.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
 #include "animationnodefactory.hxx"
@@ -309,8 +308,7 @@ bool implCreateIteratedNodes(
         // ONLY_TEXT, if a paragraph is referenced as the
         // master of an iteration effect.
         NodeCreator aCreator( rParent, aContext );
-        if( !::anim::for_each_childNode( xNode,
-                                         aCreator ) )
+        if( !for_each_childNode( xNode, aCreator ) )
         {
             ENSURE_OR_RETURN_FALSE(
                 false,
@@ -431,8 +429,7 @@ bool implCreateIteratedNodes(
                 }
 
                 CloningNodeCreator aCreator( rParent, aContext );
-                if( !::anim::for_each_childNode( xNode,
-                                                 aCreator ) )
+                if( !for_each_childNode( xNode, aCreator ) )
                 {
                     ENSURE_OR_RETURN_FALSE(
                         false, "implCreateIteratedNodes(): "
@@ -565,7 +562,7 @@ BaseNodeSharedPtr implCreateAnimationNode(
         {
             // no iterate subset node, just plain child generation now
             NodeCreator aCreator( pCreatedContainer, rContext );
-            if( !::anim::for_each_childNode( xNode, aCreator ) )
+            if( !for_each_childNode( xNode, aCreator ) )
             {
                 OSL_FAIL( "implCreateAnimationNode(): "
                             "child node creation failed" );
