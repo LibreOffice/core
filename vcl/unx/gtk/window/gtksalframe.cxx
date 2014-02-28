@@ -3155,7 +3155,7 @@ bool GtkSalFrame::Dispatch( const XEvent* pEvent )
             GdkEventFocus aEvent;
             aEvent.type = GDK_FOCUS_CHANGE;
             aEvent.window = widget_get_window( m_pWindow );
-            aEvent.send_event = true;
+            aEvent.send_event = 1;
             aEvent.in = gint16(pEvent->xclient.data.l[1] == 1);
             signalFocus( m_pWindow, &aEvent, this );
         }
