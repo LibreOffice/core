@@ -1288,6 +1288,7 @@ compass
 compat
 compatLnSpc
 compatMode
+compatSetting
 complex
 composite
 compressPunctuation

@@ -20637,6 +20637,22 @@
             <ref name="CT_OnOff"/>
           </element>
         </optional>
+        <optional>
+          <element name="compatSetting">
+            <ref name="CT_CompatSetting"/>
+          </element>
+        </optional>
+      </define>
+      <define name="CT_CompatSetting">
+        <attribute name="name">
+          <ref name="ST_String"/>
+        </attribute>
+        <attribute name="uri">
+          <ref name="ST_String"/>
+        </attribute>
+        <attribute name="val">
+          <ref name="ST_String"/>
+        </attribute>
       </define>
       <define name="CT_DocVar">
         <attribute name="name">
@@ -24934,6 +24950,12 @@
       <element name="doNotVertAlignInTxbx" tokenid="ooxml:CT_Compat_doNotVertAlignInTxbx"/>
       <element name="useAnsiKerningPairs" tokenid="ooxml:CT_Compat_useAnsiKerningPairs"/>
       <element name="cachedColBalance" tokenid="ooxml:CT_Compat_cachedColBalance"/>
+      <element name="compatSetting" tokenid="ooxml:CT_Compat_compatSetting"/>
+    </resource>
+    <resource name="CT_CompatSetting" resource="Properties" tag="document">
+      <attribute name="name" tokenid="ooxml:CT_CompatSetting_name"/>
+      <attribute name="uri" tokenid="ooxml:CT_CompatSetting_uri"/>
+      <attribute name="val" tokenid="ooxml:CT_CompatSetting_val"/>
     </resource>
     <resource name="CT_DocVar" resource="Properties" tag="document">
       <attribute name="name" tokenid="ooxml:CT_DocVar_name"/>
