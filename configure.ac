@@ -2447,18 +2447,18 @@ if test "$CCACHE" != ""; then
         # we could not determine the size or it was less than 1GB -> disable auto-ccache
         if test $ccache_size -lt 1024; then
             CCACHE=""
-            AC_MSG_WARN([ccache's cache size is less than 1GB using it is counter-producive: Disabling auto-ccache detection])
-            add_warning "ccache's cache size is less than 1GB using it is counter-producive: auto-ccache detection disabled"
+            AC_MSG_WARN([ccache's cache size is less than 1GB using it is counter-productive: Disabling auto-ccache detection])
+            add_warning "ccache's cache size is less than 1GB using it is counter-productive: auto-ccache detection disabled"
         else
             # warn that ccache may be too small for debug build
-            AC_MSG_WARN([ccache's cache size is less than 5GB using it may be counter-producive for debug or symbol-enabled build])
-            add_warning "ccache's cache size is less than 5GB using it may be counter-producive for debug or symbol-enabled build"
+            AC_MSG_WARN([ccache's cache size is less than 5GB using it may be counter-productive for debug or symbol-enabled build])
+            add_warning "ccache's cache size is less than 5GB using it may be counter-productive for debug or symbol-enabled build"
         fi
     else
         if test $ccache_size -lt 5; then
             #warn that ccache may be too small for debug build
-            AC_MSG_WARN([ccache's cache size is less than 5GB using it may be counter-producive for debug or symbol-enabled build])
-            add_warning "ccache's cache size is less than 5GB using it may be counter-producive for debug or symbol-enabled build"
+            AC_MSG_WARN([ccache's cache size is less than 5GB using it may be counter-productive for debug or symbol-enabled build])
+            add_warning "ccache's cache size is less than 5GB using it may be counter-productive for debug or symbol-enabled build"
         fi
     fi
 fi
