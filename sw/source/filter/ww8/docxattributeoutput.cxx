@@ -3595,7 +3595,7 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
 
 bool DocxAttributeOutput::PostponeOLE( const SdrObject*, SwOLENode& rNode, const Size& rSize, const SwFlyFrmFmt* pFlyFrmFmt )
 {
-    if( m_postponedVMLDrawing == NULL )
+    if( m_postponedOLE == NULL )
         return false;
     m_postponedOLE->push_back( PostponedOLE( &rNode, rSize, pFlyFrmFmt ) );
     return true;
