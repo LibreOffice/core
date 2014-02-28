@@ -106,9 +106,6 @@ public:
 
     void        MarkFromRangeList( const ScRangeList& rList, bool bReset );
 
-    SCCOLROW    GetMarkColumnRanges( SCCOLROW* pRanges );
-    SCCOLROW    GetMarkRowRanges( SCCOLROW* pRanges );
-
     std::vector<sc::ColRowSpan> GetMarkedRowSpans() const;
     std::vector<sc::ColRowSpan> GetMarkedColSpans() const;
 

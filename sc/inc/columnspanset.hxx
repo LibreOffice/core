@@ -33,7 +33,7 @@ struct RowSpan
     RowSpan(SCROW nRow1, SCROW nRow2);
 };
 
-struct ColRowSpan
+struct SC_DLLPUBLIC ColRowSpan
 {
     SCCOLROW mnStart;
     SCCOLROW mnEnd;

@@ -48,6 +48,7 @@
 #include "dpsave.hxx"
 #include "dpshttab.hxx"
 #include <scopetools.hxx>
+#include <columnspanset.hxx>
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -2335,12 +2336,11 @@ void ScFiltersTest::testOptimalHeightReset()
     nHeight =  sc::TwipsToHMM( pDoc->GetRowHeight(nRow, nTab, false) );
 
     // set optimal height for empty row 2
-    SCCOLROW nRowArr[2];
-    nRowArr[0] = nRowArr[1] = 2;
-    rFunc.SetWidthOrHeight( false, 1, nRowArr, nTab, SC_SIZE_OPTIMAL, 0, true, true );
+    std::vector<sc::ColRowSpan> aRowArr(1, sc::ColRowSpan(2,2));
+    rFunc.SetWidthOrHeight(false, aRowArr, nTab, SC_SIZE_OPTIMAL, 0, true, true);
 
     // retrieve optimal height
-    int nOptimalHeight = sc::TwipsToHMM( pDoc->GetRowHeight( nRowArr[0], nTab, false) );
+    int nOptimalHeight = sc::TwipsToHMM( pDoc->GetRowHeight(aRowArr[0].mnStart, nTab, false) );
 
     // check if the new height of A1 ( after delete ) is now the optimal height of an empty cell
     CPPUNIT_ASSERT_EQUAL(nOptimalHeight, nHeight );

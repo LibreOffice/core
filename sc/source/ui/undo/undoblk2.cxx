@@ -36,7 +36,7 @@ TYPEINIT1(ScUndoWidthOrHeight,      SfxUndoAction);
 ScUndoWidthOrHeight::ScUndoWidthOrHeight( ScDocShell* pNewDocShell,
                 const ScMarkData& rMark,
                 SCCOLROW nNewStart, SCTAB nNewStartTab, SCCOLROW nNewEnd, SCTAB nNewEndTab,
-                ScDocument* pNewUndoDoc, SCCOLROW nNewCnt, SCCOLROW* pNewRanges,
+                ScDocument* pNewUndoDoc, const std::vector<sc::ColRowSpan>& rRanges,
                 ScOutlineTable* pNewUndoTab,
                 ScSizeMode eNewMode, sal_uInt16 nNewSizeTwips, bool bNewWidth ) :
     ScSimpleUndo( pNewDocShell ),
@@ -47,8 +47,7 @@ ScUndoWidthOrHeight::ScUndoWidthOrHeight( ScDocShell* pNewDocShell,
     nEndTab( nNewEndTab ),
     pUndoDoc( pNewUndoDoc ),
     pUndoTab( pNewUndoTab ),
-    nRangeCnt( nNewCnt ),
-    pRanges( pNewRanges ),
+    maRanges(rRanges),
     nNewSize( nNewSizeTwips ),
     bWidth( bNewWidth ),
     eMode( eNewMode ),
@@ -59,7 +58,6 @@ ScUndoWidthOrHeight::ScUndoWidthOrHeight( ScDocShell* pNewDocShell,
 
 ScUndoWidthOrHeight::~ScUndoWidthOrHeight()
 {
-    delete[] pRanges;
     delete pUndoDoc;
     delete pUndoTab;
     DeleteSdrUndoAction( pDrawUndo );
@@ -152,7 +150,8 @@ void ScUndoWidthOrHeight::Redo()
             pViewShell->SetTabNo( nStartTab );
 
         // SetWidthOrHeight changes current sheet!
-        pViewShell->SetWidthOrHeight( bWidth, nRangeCnt, pRanges, eMode, nNewSize, false, true, &aMarkData );
+        pViewShell->SetWidthOrHeight(
+            bWidth, maRanges, eMode, nNewSize, false, true, &aMarkData);
     }
 
     // paint grid if selection was changed directly at the MarkData

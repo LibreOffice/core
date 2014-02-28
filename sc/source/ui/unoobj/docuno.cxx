@@ -96,6 +96,7 @@
 #include "platforminfo.hxx"
 #include "interpre.hxx"
 #include "formulagroup.hxx"
+#include <columnspanset.hxx>
 
 using namespace com::sun::star;
 
@@ -3088,9 +3089,7 @@ void SAL_CALL ScTableColumnsObj::setPropertyValue(
     if (!pDocShell)
         throw uno::RuntimeException();
 
-    SCCOLROW nColArr[2];
-    nColArr[0] = nStartCol;
-    nColArr[1] = nEndCol;
+    std::vector<sc::ColRowSpan> aColArr(1, sc::ColRowSpan(nStartCol,nEndCol));
     OUString aNameString(aPropertyName);
     ScDocFunc& rFunc = pDocShell->GetDocFunc();
 
@@ -3098,22 +3097,22 @@ void SAL_CALL ScTableColumnsObj::setPropertyValue(
     {
         sal_Int32 nNewWidth = 0;
         if ( aValue >>= nNewWidth )
-            rFunc.SetWidthOrHeight( true, 1, nColArr, nTab, SC_SIZE_ORIGINAL,
-                                    (sal_uInt16)HMMToTwips(nNewWidth), true, true );
+            rFunc.SetWidthOrHeight(
+                true, aColArr, nTab, SC_SIZE_ORIGINAL, (sal_uInt16)HMMToTwips(nNewWidth), true, true);
     }
     else if ( aNameString.equalsAscii( SC_UNONAME_CELLVIS ) )
     {
         sal_Bool bVis = ScUnoHelpFunctions::GetBoolFromAny( aValue );
         ScSizeMode eMode = bVis ? SC_SIZE_SHOW : SC_SIZE_DIRECT;
-        rFunc.SetWidthOrHeight( true, 1, nColArr, nTab, eMode, 0, true, true );
+        rFunc.SetWidthOrHeight(true, aColArr, nTab, eMode, 0, true, true);
         //  SC_SIZE_DIRECT with size 0: hide
     }
     else if ( aNameString.equalsAscii( SC_UNONAME_OWIDTH ) )
     {
         sal_Bool bOpt = ScUnoHelpFunctions::GetBoolFromAny( aValue );
         if (bOpt)
-            rFunc.SetWidthOrHeight( true, 1, nColArr, nTab,
-                                    SC_SIZE_OPTIMAL, STD_EXTRA_WIDTH, true, true );
+            rFunc.SetWidthOrHeight(
+                true, aColArr, nTab, SC_SIZE_OPTIMAL, STD_EXTRA_WIDTH, true, true);
         // sal_False for columns currently has no effect
     }
     else if ( aNameString.equalsAscii( SC_UNONAME_NEWPAGE ) || aNameString.equalsAscii( SC_UNONAME_MANPAGE ) )
@@ -3311,9 +3310,7 @@ void SAL_CALL ScTableRowsObj::setPropertyValue(
 
     ScDocFunc& rFunc = pDocShell->GetDocFunc();
     ScDocument* pDoc = pDocShell->GetDocument();
-    SCCOLROW nRowArr[2];
-    nRowArr[0] = nStartRow;
-    nRowArr[1] = nEndRow;
+    std::vector<sc::ColRowSpan> aRowArr(1, sc::ColRowSpan(nStartRow,nEndRow));
     OUString aNameString(aPropertyName);
 
     if ( aNameString.equalsAscii( SC_UNONAME_OHEIGHT ) )
@@ -3331,7 +3328,7 @@ void SAL_CALL ScTableRowsObj::setPropertyValue(
         {
             sal_Bool bOpt = ScUnoHelpFunctions::GetBoolFromAny( aValue );
             if (bOpt)
-                rFunc.SetWidthOrHeight( false, 1, nRowArr, nTab, SC_SIZE_OPTIMAL, 0, true, true );
+                rFunc.SetWidthOrHeight(false, aRowArr, nTab, SC_SIZE_OPTIMAL, 0, true, true);
             else
             {
                 //! manually set old heights again?
@@ -3352,15 +3349,15 @@ void SAL_CALL ScTableRowsObj::setPropertyValue(
                 pDoc->SetManualHeight( nStartRow, nEndRow, nTab, true );
             }
             else
-                rFunc.SetWidthOrHeight( false, 1, nRowArr, nTab, SC_SIZE_ORIGINAL,
-                                        (sal_uInt16)HMMToTwips(nNewHeight), true, true );
+                rFunc.SetWidthOrHeight(
+                    false, aRowArr, nTab, SC_SIZE_ORIGINAL, (sal_uInt16)HMMToTwips(nNewHeight), true, true);
         }
     }
     else if ( aNameString.equalsAscii( SC_UNONAME_CELLVIS ) )
     {
         sal_Bool bVis = ScUnoHelpFunctions::GetBoolFromAny( aValue );
         ScSizeMode eMode = bVis ? SC_SIZE_SHOW : SC_SIZE_DIRECT;
-        rFunc.SetWidthOrHeight( false, 1, nRowArr, nTab, eMode, 0, true, true );
+        rFunc.SetWidthOrHeight(false, aRowArr, nTab, eMode, 0, true, true);
         //  SC_SIZE_DIRECT with size 0: hide
     }
     else if ( aNameString.equalsAscii( SC_UNONAME_VISFLAG ) )

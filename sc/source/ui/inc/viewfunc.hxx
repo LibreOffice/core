@@ -52,6 +52,12 @@ class ScTableProtection;
 
 namespace editeng { class SvxBorderLine; }
 
+namespace sc {
+
+struct ColRowSpan;
+
+}
+
 namespace com { namespace sun { namespace star { namespace datatransfer { class XTransferable; } } } }
 
 //==================================================================
@@ -196,10 +202,10 @@ public:
 
     void            DeleteContents( sal_uInt16 nFlags, bool bRecord = true );
 
-    void            SetWidthOrHeight( bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRanges,
-                                        ScSizeMode eMode, sal_uInt16 nSizeTwips,
-                                        bool bRecord = true, bool bPaint = true,
-                                        ScMarkData* pMarkData = NULL );
+    void SetWidthOrHeight(
+        bool bWidth, const std::vector<sc::ColRowSpan>& rRanges, ScSizeMode eMode,
+        sal_uInt16 nSizeTwips, bool bRecord = true, bool bPaint = true, ScMarkData* pMarkData = NULL );
+
     void            SetMarkedWidthOrHeight( bool bWidth, ScSizeMode eMode, sal_uInt16 nSizeTwips,
                                         bool bRecord = true, bool bPaint = true );
     void            ShowMarkedColumns( bool bShow, bool bRecord = true );

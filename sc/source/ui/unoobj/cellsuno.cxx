@@ -8848,8 +8848,7 @@ void ScTableColumnObj::SetOnePropertyValue(const SfxItemPropertySimpleEntry* pEn
         SCTAB nTab = rRange.aStart.Tab();
         ScDocFunc &rFunc = pDocSh->GetDocFunc();
 
-        SCCOLROW nColArr[2];
-        nColArr[0] = nColArr[1] = nCol;
+        std::vector<sc::ColRowSpan> aColArr(1, sc::ColRowSpan(nCol,nCol));
 
         if ( pEntry->nWID == SC_WID_UNO_CELLWID )
         {
@@ -8858,23 +8857,23 @@ void ScTableColumnObj::SetOnePropertyValue(const SfxItemPropertySimpleEntry* pEn
             {
                 //  property is 1/100mm, column width is twips
                 nNewWidth = HMMToTwips(nNewWidth);
-                rFunc.SetWidthOrHeight( true, 1, nColArr, nTab, SC_SIZE_ORIGINAL,
-                                        (sal_uInt16)nNewWidth, true, true );
+                rFunc.SetWidthOrHeight(
+                    true, aColArr, nTab, SC_SIZE_ORIGINAL, (sal_uInt16)nNewWidth, true, true);
             }
         }
         else if ( pEntry->nWID == SC_WID_UNO_CELLVIS )
         {
             sal_Bool bVis = ScUnoHelpFunctions::GetBoolFromAny( aValue );
             ScSizeMode eMode = bVis ? SC_SIZE_SHOW : SC_SIZE_DIRECT;
-            rFunc.SetWidthOrHeight( true, 1, nColArr, nTab, eMode, 0, true, true );
+            rFunc.SetWidthOrHeight(true, aColArr, nTab, eMode, 0, true, true);
             //  SC_SIZE_DIRECT mit Groesse 0 blendet aus
         }
         else if ( pEntry->nWID == SC_WID_UNO_OWIDTH )
         {
             sal_Bool bOpt = ScUnoHelpFunctions::GetBoolFromAny( aValue );
             if (bOpt)
-                rFunc.SetWidthOrHeight( true, 1, nColArr, nTab,
-                                        SC_SIZE_OPTIMAL, STD_EXTRA_WIDTH, true, true );
+                rFunc.SetWidthOrHeight(
+                    true, aColArr, nTab, SC_SIZE_OPTIMAL, STD_EXTRA_WIDTH, true, true);
             // sal_False bei Spalten momentan ohne Auswirkung
         }
         else if ( pEntry->nWID == SC_WID_UNO_NEWPAGE || pEntry->nWID == SC_WID_UNO_MANPAGE )
@@ -8991,8 +8990,7 @@ void ScTableRowObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntr
         SCTAB nTab = rRange.aStart.Tab();
         ScDocFunc &rFunc = pDocSh->GetDocFunc();
 
-        SCCOLROW nRowArr[2];
-        nRowArr[0] = nRowArr[1] = nRow;
+        std::vector<sc::ColRowSpan> aRowArr(1, sc::ColRowSpan(nRow,nRow));
 
         if ( pEntry->nWID == SC_WID_UNO_CELLHGT )
         {
@@ -9001,15 +8999,15 @@ void ScTableRowObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntr
             {
                 //  property is 1/100mm, row height is twips
                 nNewHeight = HMMToTwips(nNewHeight);
-                rFunc.SetWidthOrHeight( false, 1, nRowArr, nTab, SC_SIZE_ORIGINAL,
-                                        (sal_uInt16)nNewHeight, true, true );
+                rFunc.SetWidthOrHeight(
+                    false, aRowArr, nTab, SC_SIZE_ORIGINAL, (sal_uInt16)nNewHeight, true, true);
             }
         }
         else if ( pEntry->nWID == SC_WID_UNO_CELLVIS )
         {
             sal_Bool bVis = ScUnoHelpFunctions::GetBoolFromAny( aValue );
             ScSizeMode eMode = bVis ? SC_SIZE_SHOW : SC_SIZE_DIRECT;
-            rFunc.SetWidthOrHeight( false, 1, nRowArr, nTab, eMode, 0, true, true );
+            rFunc.SetWidthOrHeight(false, aRowArr, nTab, eMode, 0, true, true);
             //  SC_SIZE_DIRECT mit Groesse 0 blendet aus
         }
         else if ( pEntry->nWID == SC_WID_UNO_CELLFILT )
@@ -9022,12 +9020,12 @@ void ScTableRowObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntr
         {
             sal_Bool bOpt = ScUnoHelpFunctions::GetBoolFromAny( aValue );
             if (bOpt)
-                rFunc.SetWidthOrHeight( false, 1, nRowArr, nTab, SC_SIZE_OPTIMAL, 0, true, true );
+                rFunc.SetWidthOrHeight(false, aRowArr, nTab, SC_SIZE_OPTIMAL, 0, true, true);
             else
             {
                 //  set current height again manually
                 sal_uInt16 nHeight = pDoc->GetOriginalHeight( nRow, nTab );
-                rFunc.SetWidthOrHeight( false, 1, nRowArr, nTab, SC_SIZE_ORIGINAL, nHeight, true, true );
+                rFunc.SetWidthOrHeight(false, aRowArr, nTab, SC_SIZE_ORIGINAL, nHeight, true, true);
             }
         }
         else if ( pEntry->nWID == SC_WID_UNO_NEWPAGE || pEntry->nWID == SC_WID_UNO_MANPAGE )

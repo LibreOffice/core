@@ -374,7 +374,7 @@ public:
                                          SCCOLROW nNewStart, SCTAB nNewStartTab,
                                          SCCOLROW nNewEnd, SCTAB nNewEndTab,
                                          ScDocument* pNewUndoDoc,
-                                         SCCOLROW nNewCnt, SCCOLROW* pNewRanges,
+                                         const std::vector<sc::ColRowSpan>& rRanges,
                                          ScOutlineTable* pNewUndoTab,
                                          ScSizeMode eNewMode, sal_uInt16 nNewSizeTwips,
                                          bool bNewWidth );
@@ -395,8 +395,7 @@ private:
     SCTAB           nEndTab;
     ScDocument*     pUndoDoc;
     ScOutlineTable* pUndoTab;
-    SCCOLROW        nRangeCnt;
-    SCCOLROW*       pRanges;
+    std::vector<sc::ColRowSpan> maRanges;
     sal_uInt16      nNewSize;
     bool            bWidth;
     ScSizeMode      eMode;

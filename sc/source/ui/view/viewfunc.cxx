@@ -1938,11 +1938,11 @@ void ScViewFunc::DeleteContents( sal_uInt16 nFlags, bool bRecord )
 
 //  column width/row height (via header) - undo OK
 
-void ScViewFunc::SetWidthOrHeight( bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRanges,
-                                    ScSizeMode eMode, sal_uInt16 nSizeTwips,
-                                    bool bRecord, bool bPaint, ScMarkData* pMarkData )
+void ScViewFunc::SetWidthOrHeight(
+    bool bWidth, const std::vector<sc::ColRowSpan>& rRanges, ScSizeMode eMode,
+    sal_uInt16 nSizeTwips, bool bRecord, bool bPaint, ScMarkData* pMarkData )
 {
-    if (nRangeCnt == 0)
+    if (rRanges.empty())
         return;
 
     // use view's mark if none specified
@@ -1962,19 +1962,23 @@ void ScViewFunc::SetWidthOrHeight( bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pR
     bool bAllowed = true;
     ScMarkData::iterator itr = pMarkData->begin(), itrEnd = pMarkData->end();
     for (; itr != itrEnd && bAllowed; ++itr)
-        for ( SCCOLROW i=0; i<nRangeCnt && bAllowed; i++ )
+    {
+        for (size_t i = 0, n = rRanges.size(); i < n && bAllowed; ++i)
         {
             bool bOnlyMatrix;
             if (bWidth)
-                bAllowed = pDoc->IsBlockEditable( *itr,
-                        static_cast<SCCOL>(pRanges[2*i]),0,
-                        static_cast<SCCOL>(pRanges[2*i+1]),MAXROW,
+            {
+                bAllowed = pDoc->IsBlockEditable(
+                    *itr, rRanges[i].mnStart, 0, rRanges[i].mnEnd, MAXROW,
                         &bOnlyMatrix ) || bOnlyMatrix;
+            }
             else
-                bAllowed = pDoc->IsBlockEditable( *itr, 0,pRanges[2*i],
-                        MAXCOL,pRanges[2*i+1], &bOnlyMatrix ) ||
-                    bOnlyMatrix;
+            {
+                bAllowed = pDoc->IsBlockEditable(
+                    *itr, 0, rRanges[i].mnStart, MAXCOL,rRanges[i].mnEnd, &bOnlyMatrix) || bOnlyMatrix;
+            }
         }
+    }
 
     // Allow users to resize cols/rows in readonly docs despite the r/o state.
     // It is frustrating to be unable to see content in mis-sized cells.
@@ -1984,8 +1988,8 @@ void ScViewFunc::SetWidthOrHeight( bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pR
         return;
     }
 
-    SCCOLROW nStart = pRanges[0];
-    SCCOLROW nEnd = pRanges[2*nRangeCnt-1];
+    SCCOLROW nStart = rRanges[0].mnStart;
+    SCCOLROW nEnd = rRanges[0].mnEnd;
 
     bool bFormula = false;
     if ( eMode == SC_SIZE_OPTIMAL )
@@ -1996,7 +2000,7 @@ void ScViewFunc::SetWidthOrHeight( bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pR
 
     ScDocument*     pUndoDoc = NULL;
     ScOutlineTable* pUndoTab = NULL;
-    SCCOLROW*       pUndoRanges = NULL;
+    std::vector<sc::ColRowSpan> aUndoRanges;
 
     if ( bRecord )
     {
@@ -2026,8 +2030,7 @@ void ScViewFunc::SetWidthOrHeight( bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pR
             }
         }
 
-        pUndoRanges = new SCCOLROW[ 2*nRangeCnt ];
-        memcpy( pUndoRanges, pRanges, 2*nRangeCnt*sizeof(SCCOLROW) );
+        aUndoRanges = rRanges;
 
         //! outlines from all tab?
         ScOutlineTable* pTable = pDoc->GetOutlineTable( nCurTab );
@@ -2045,12 +2048,11 @@ void ScViewFunc::SetWidthOrHeight( bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pR
     for (; itr != itrEnd; ++itr)
     {
         nTab = *itr;
-        const SCCOLROW* pTabRanges = pRanges;
 
-        for (SCCOLROW nRangeNo=0; nRangeNo<nRangeCnt; nRangeNo++)
+        for (size_t i = 0, n = rRanges.size(); i < n; ++i)
         {
-            SCCOLROW nStartNo = *(pTabRanges++);
-            SCCOLROW nEndNo = *(pTabRanges++);
+            SCCOLROW nStartNo = rRanges[i].mnStart;
+            SCCOLROW nEndNo = rRanges[i].mnEnd;
 
             if ( !bWidth )                      // height always blockwise
             {
@@ -2155,10 +2157,9 @@ void ScViewFunc::SetWidthOrHeight( bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pR
     if (bRecord)
     {
         pDocSh->GetUndoManager()->AddUndoAction(
-            new ScUndoWidthOrHeight( pDocSh, *pMarkData,
-                                     nStart, nCurTab, nEnd, nCurTab,
-                                     pUndoDoc, nRangeCnt, pUndoRanges,
-                                     pUndoTab, eMode, nSizeTwips, bWidth ) );
+            new ScUndoWidthOrHeight(
+                pDocSh, *pMarkData, nStart, nCurTab, nEnd, nCurTab,
+                pUndoDoc, aUndoRanges, pUndoTab, eMode, nSizeTwips, bWidth));
     }
 
     // fdo#36247 Ensure that the drawing layer's map mode scaling factors match
@@ -2212,11 +2213,10 @@ void ScViewFunc::SetWidthOrHeight( bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pR
             for (; itr != itrEnd; ++itr)
             {
                 nTab = *itr;
-                const SCCOLROW* pTabRanges = pRanges;
-                for ( SCCOLROW nRange = 0; nRange < nRangeCnt; ++nRange )
+                for (size_t i = 0, n = rRanges.size(); i < n; ++i)
                 {
-                    SCCOL nStartCol = static_cast< SCCOL >( *(pTabRanges++) );
-                    SCCOL nEndCol = static_cast< SCCOL >( *(pTabRanges++) );
+                    SCCOL nStartCol = rRanges[i].mnStart;
+                    SCCOL nEndCol   = rRanges[i].mnEnd;
                     for ( SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol )
                     {
                         aChangeRanges.Append( ScRange( nCol, 0, nTab ) );
@@ -2247,17 +2247,11 @@ void ScViewFunc::SetMarkedWidthOrHeight( bool bWidth, ScSizeMode eMode, sal_uInt
         MarkDataChanged();
     }
 
-    SCCOLROW* pRanges = new SCCOLROW[MAXCOLROWCOUNT];
-    SCCOLROW nRangeCnt = 0;
+    std::vector<sc::ColRowSpan> aRanges =
+        bWidth ? rMark.GetMarkedColSpans() : rMark.GetMarkedRowSpans();
 
-    if ( bWidth )
-        nRangeCnt = rMark.GetMarkColumnRanges( pRanges );
-    else
-        nRangeCnt = rMark.GetMarkRowRanges( pRanges );
+    SetWidthOrHeight(bWidth, aRanges, eMode, nSizeTwips, bRecord, bPaint);
 
-    SetWidthOrHeight( bWidth, nRangeCnt, pRanges, eMode, nSizeTwips, bRecord, bPaint );
-
-    delete[] pRanges;
     rMark.MarkToSimple();
 }
 
@@ -2291,7 +2285,7 @@ void ScViewFunc::ModifyCellSize( ScDirection eDir, bool bOptimal )
 
     sal_uInt16 nWidth = pDoc->GetColWidth( nCol, nTab );
     sal_uInt16 nHeight = pDoc->GetRowHeight( nRow, nTab );
-    SCCOLROW nRange[2];
+    std::vector<sc::ColRowSpan> aRange(1, sc::ColRowSpan(0,0));
     if ( eDir == DIR_LEFT || eDir == DIR_RIGHT )
     {
         if (bOptimal)               // width of this single cell
@@ -2350,8 +2344,9 @@ void ScViewFunc::ModifyCellSize( ScDirection eDir, bool bOptimal )
             if ( nWidth < nStepX ) nWidth = nStepX;
             if ( nWidth > MAX_COL_WIDTH ) nWidth = MAX_COL_WIDTH;
         }
-        nRange[0] = nRange[1] = nCol;
-        SetWidthOrHeight( true, 1, nRange, SC_SIZE_DIRECT, nWidth );
+        aRange[0].mnStart = nCol;
+        aRange[0].mnEnd = nCol;
+        SetWidthOrHeight(true, aRange, SC_SIZE_DIRECT, nWidth);
 
         //  adjust height of this row if width demands/allows this
 
@@ -2384,8 +2379,9 @@ void ScViewFunc::ModifyCellSize( ScDirection eDir, bool bOptimal )
             if ( nHeight < nStepY ) nHeight = nStepY;
             if ( nHeight > MAX_ROW_HEIGHT ) nHeight = MAX_ROW_HEIGHT;
         }
-        nRange[0] = nRange[1] = nRow;
-        SetWidthOrHeight( false, 1, nRange, eMode, nHeight );
+        aRange[0].mnStart = nRow;
+        aRange[0].mnEnd = nRow;
+        SetWidthOrHeight(false, aRange, eMode, nHeight);
     }
 
     if ( bAnyEdit )

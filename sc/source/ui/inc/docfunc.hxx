@@ -46,6 +46,12 @@ struct ScCellMergeOption;
 class ScConditionalFormat;
 class ScConditionalFormatList;
 
+namespace sc {
+
+struct ColRowSpan;
+
+}
+
 // ---------------------------------------------------------------------------
 
 class ScDocFunc
@@ -137,10 +143,9 @@ public:
 
     bool            SetLayoutRTL( SCTAB nTab, bool bRTL, bool bApi );
 
-    SC_DLLPUBLIC bool
-                    SetWidthOrHeight( bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRanges,
-                                              SCTAB nTab, ScSizeMode eMode, sal_uInt16 nSizeTwips,
-                                              bool bRecord, bool bApi );
+    SC_DLLPUBLIC bool SetWidthOrHeight(
+        bool bWidth, const std::vector<sc::ColRowSpan>& rRanges, SCTAB nTab,
+        ScSizeMode eMode, sal_uInt16 nSizeTwips, bool bRecord, bool bApi );
 
     bool            InsertPageBreak( bool bColumn, const ScAddress& rPos,
                                              bool bRecord, bool bSetModified, bool bApi );

@@ -59,6 +59,7 @@
 #include "AccessibilityHints.hxx"
 #include <vcl/svapp.hxx>
 #include "viewutil.hxx"
+#include <columnspanset.hxx>
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -1217,7 +1218,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
             if( bMoveRulerAction )
             {
                 long  nNewColWidth = 0;
-                SCCOLROW nCols[2] = { nColNumberButttonDown, nColNumberButttonDown };
+                std::vector<sc::ColRowSpan> aCols(1, sc::ColRowSpan(nColNumberButttonDown,nColNumberButttonDown));
 
                 if( !bLayoutRTL )
                 {
@@ -1234,8 +1235,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                 if( nNewColWidth >= 0 )
                 {
                     pDocShell->GetDocFunc().SetWidthOrHeight(
-                                                true, 1,nCols, nTab, SC_SIZE_DIRECT,
-                                                (sal_uInt16)nNewColWidth, true, true);
+                        true, aCols, nTab, SC_SIZE_DIRECT, (sal_uInt16)nNewColWidth, true, true);
                     pDocShell->SetModified(true);
                 }
                 if ( ValidTab( nTab ) )

@@ -28,6 +28,7 @@
 #include "appoptio.hxx"
 #include "globstr.hrc"
 #include "markdata.hxx"
+#include <columnspanset.hxx>
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -112,8 +113,7 @@ void ScColBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
 
     ScMarkData& rMark = pViewData->GetMarkData();
 
-    SCCOLROW* pRanges = new SCCOLROW[MAXCOL+1];
-    SCCOL nRangeCnt = 0;
+    std::vector<sc::ColRowSpan> aRanges;
     if ( rMark.IsColumnMarked( static_cast<SCCOL>(nPos) ) )
     {
         SCCOL nStart = 0;
@@ -128,9 +128,7 @@ void ScColBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
                     ++nEnd;
                 if (!rMark.IsColumnMarked(nEnd))
                     --nEnd;
-                pRanges[static_cast<size_t>(2*nRangeCnt)  ] = nStart;
-                pRanges[static_cast<size_t>(2*nRangeCnt+1)] = nEnd;
-                ++nRangeCnt;
+                aRanges.push_back(sc::ColRowSpan(nStart,nEnd));
                 nStart = nEnd+1;
             }
             else
@@ -139,21 +137,16 @@ void ScColBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
     }
     else
     {
-        pRanges[0] = nPos;
-        pRanges[1] = nPos;
-        nRangeCnt = 1;
+        aRanges.push_back(sc::ColRowSpan(nPos,nPos));
     }
 
-    pViewData->GetView()->SetWidthOrHeight( true, nRangeCnt, pRanges, eMode, nSizeTwips );
-    delete[] pRanges;
+    pViewData->GetView()->SetWidthOrHeight(true, aRanges, eMode, nSizeTwips);
 }
 
 void ScColBar::HideEntries( SCCOLROW nStart, SCCOLROW nEnd )
 {
-    SCCOLROW nRange[2];
-    nRange[0] = nStart;
-    nRange[1] = nEnd;
-    pViewData->GetView()->SetWidthOrHeight( true, 1, nRange, SC_SIZE_DIRECT, 0 );
+    std::vector<sc::ColRowSpan> aRanges(1, sc::ColRowSpan(nStart,nEnd));
+    pViewData->GetView()->SetWidthOrHeight(true, aRanges, SC_SIZE_DIRECT, 0);
 }
 
 void ScColBar::SetMarking( bool bSet )
@@ -276,8 +269,7 @@ void ScRowBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
 
     ScMarkData& rMark = pViewData->GetMarkData();
 
-    SCCOLROW* pRanges = new SCCOLROW[MAXROW+1];
-    SCROW nRangeCnt = 0;
+    std::vector<sc::ColRowSpan> aRanges;
     if ( rMark.IsRowMarked( nPos ) )
     {
         SCROW nStart = 0;
@@ -292,9 +284,7 @@ void ScRowBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
                     ++nEnd;
                 if (!rMark.IsRowMarked(nEnd))
                     --nEnd;
-                pRanges[static_cast<size_t>(2*nRangeCnt)  ] = nStart;
-                pRanges[static_cast<size_t>(2*nRangeCnt+1)] = nEnd;
-                ++nRangeCnt;
+                aRanges.push_back(sc::ColRowSpan(nStart,nEnd));
                 nStart = nEnd+1;
             }
             else
@@ -303,21 +293,16 @@ void ScRowBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
     }
     else
     {
-        pRanges[0] = nPos;
-        pRanges[1] = nPos;
-        nRangeCnt = 1;
+        aRanges.push_back(sc::ColRowSpan(nPos,nPos));
     }
 
-    pViewData->GetView()->SetWidthOrHeight( false, nRangeCnt, pRanges, eMode, nSizeTwips );
-    delete[] pRanges;
+    pViewData->GetView()->SetWidthOrHeight(false, aRanges, eMode, nSizeTwips);
 }
 
 void ScRowBar::HideEntries( SCCOLROW nStart, SCCOLROW nEnd )
 {
-    SCCOLROW nRange[2];
-    nRange[0] = nStart;
-    nRange[1] = nEnd;
-    pViewData->GetView()->SetWidthOrHeight( false, 1, nRange, SC_SIZE_DIRECT, 0 );
+    std::vector<sc::ColRowSpan> aRange(1, sc::ColRowSpan(nStart,nEnd));
+    pViewData->GetView()->SetWidthOrHeight(false, aRange, SC_SIZE_DIRECT, 0);
 }
 
 void ScRowBar::SetMarking( bool bSet )

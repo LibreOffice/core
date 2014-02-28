@@ -172,6 +172,7 @@
 #include <com/sun/star/bridge/oleautomation/Date.hpp>
 #include "tokenarray.hxx"
 #include "tokenuno.hxx"
+#include <columnspanset.hxx>
 
 #include <boost/scoped_ptr.hpp>
 
@@ -3862,13 +3863,10 @@ ScVbaRange::setColumnWidth( const uno::Any& _columnwidth ) throw (uno::RuntimeEx
         table::CellRangeAddress thisAddress = thisRange.getCellRangeAddressable()->getRangeAddress();
         sal_uInt16 nTwips = lcl_pointsToTwips( nColWidth );
 
-        SCCOLROW nColArr[2];
-        nColArr[0] = thisAddress.StartColumn;
-        nColArr[1] = thisAddress.EndColumn;
+        std::vector<sc::ColRowSpan> aColArr(1, sc::ColRowSpan(thisAddress.StartColumn, thisAddress.EndColumn));
         // #163561# use mode SC_SIZE_DIRECT: hide for width 0, show for other values
-        pDocShell->GetDocFunc().SetWidthOrHeight( true, 1, nColArr, thisAddress.Sheet,
-                                                  SC_SIZE_DIRECT, nTwips, true, true );
-
+        pDocShell->GetDocFunc().SetWidthOrHeight(
+            true, aColArr, thisAddress.Sheet, SC_SIZE_DIRECT, nTwips, true, true);
     }
 }
 
@@ -4026,11 +4024,9 @@ ScVbaRange::setRowHeight( const uno::Any& _rowheight) throw (uno::RuntimeExcepti
     sal_uInt16 nTwips = lcl_pointsToTwips( nHeight );
 
     ScDocShell* pDocShell = getDocShellFromRange( mxRange );
-    SCCOLROW nRowArr[2];
-    nRowArr[0] = thisAddress.StartRow;
-    nRowArr[1] = thisAddress.EndRow;
-    pDocShell->GetDocFunc().SetWidthOrHeight( false, 1, nRowArr, thisAddress.Sheet, SC_SIZE_ORIGINAL,
-                                                                        nTwips, true, true );
+    std::vector<sc::ColRowSpan> aRowArr(1, sc::ColRowSpan(thisAddress.StartRow, thisAddress.EndRow));
+    pDocShell->GetDocFunc().SetWidthOrHeight(
+        false, aRowArr, thisAddress.Sheet, SC_SIZE_ORIGINAL, nTwips, true, true);
 }
 
 uno::Any SAL_CALL
@@ -4739,18 +4735,16 @@ ScVbaRange::Autofit() throw (uno::RuntimeException, std::exception)
             RangeHelper thisRange( mxRange );
             table::CellRangeAddress thisAddress = thisRange.getCellRangeAddressable()->getRangeAddress();
 
-            SCCOLROW nColArr[2];
-            nColArr[0] = thisAddress.StartColumn;
-            nColArr[1] = thisAddress.EndColumn;
-            sal_Bool bDirection = sal_True;
+            std::vector<sc::ColRowSpan> aColArr(1, sc::ColRowSpan(thisAddress.StartColumn,thisAddress.EndColumn));
+            bool bDirection = true;
             if ( mbIsRows )
             {
                 bDirection = false;
-                nColArr[0] = thisAddress.StartRow;
-                nColArr[1] = thisAddress.EndRow;
+                aColArr[0].mnStart = thisAddress.StartRow;
+                aColArr[0].mnEnd = thisAddress.EndRow;
             }
-            pDocShell->GetDocFunc().SetWidthOrHeight( bDirection, 1, nColArr, thisAddress.Sheet,
-                                                      SC_SIZE_OPTIMAL, 0, true, true );
+            pDocShell->GetDocFunc().SetWidthOrHeight(
+                bDirection, aColArr, thisAddress.Sheet, SC_SIZE_OPTIMAL, 0, true, true);
     }
 }
 

@@ -3385,13 +3385,13 @@ static sal_uInt16 lcl_GetOptimalColWidth( ScDocShell& rDocShell, SCCOL nCol, SCT
     return nTwips;
 }
 
-bool ScDocFunc::SetWidthOrHeight( bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRanges, SCTAB nTab,
-                                        ScSizeMode eMode, sal_uInt16 nSizeTwips,
-                                        bool bRecord, bool bApi )
+bool ScDocFunc::SetWidthOrHeight(
+    bool bWidth, const std::vector<sc::ColRowSpan>& rRanges, SCTAB nTab,
+    ScSizeMode eMode, sal_uInt16 nSizeTwips, bool bRecord, bool bApi )
 {
     ScDocShellModificator aModificator( rDocShell );
 
-    if (!nRangeCnt)
+    if (rRanges.empty())
         return true;
 
     ScDocument* pDoc = rDocShell.GetDocument();
@@ -3407,8 +3407,8 @@ bool ScDocFunc::SetWidthOrHeight( bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRa
     }
 
     bool bSuccess = false;
-    SCCOLROW nStart = pRanges[0];
-    SCCOLROW nEnd = pRanges[2*nRangeCnt-1];
+    SCCOLROW nStart = rRanges[0].mnStart;
+    SCCOLROW nEnd = rRanges[0].mnEnd;
 
     bool bFormula = false;
     if ( eMode == SC_SIZE_OPTIMAL )
@@ -3418,7 +3418,7 @@ bool ScDocFunc::SetWidthOrHeight( bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRa
 
     ScDocument*     pUndoDoc = NULL;
     ScOutlineTable* pUndoTab = NULL;
-    SCCOLROW*       pUndoRanges = NULL;
+    std::vector<sc::ColRowSpan> aUndoRanges;
 
     if ( bRecord )
     {
@@ -3436,8 +3436,7 @@ bool ScDocFunc::SetWidthOrHeight( bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRa
             pDoc->CopyToDocument( 0, static_cast<SCROW>(nStart), nTab, MAXCOL, static_cast<SCROW>(nEnd), nTab, IDF_NONE, false, pUndoDoc );
         }
 
-        pUndoRanges = new SCCOLROW[ 2*nRangeCnt ];
-        memcpy( pUndoRanges, pRanges, 2*nRangeCnt*sizeof(SCCOLROW) );
+        aUndoRanges = rRanges;
 
         ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
         if (pTable)
@@ -3447,10 +3446,10 @@ bool ScDocFunc::SetWidthOrHeight( bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRa
     bool bShow = nSizeTwips > 0 || eMode != SC_SIZE_DIRECT;
     bool bOutline = false;
 
-    for (SCCOLROW nRangeNo=0; nRangeNo<nRangeCnt; nRangeNo++)
+    for (size_t i = 0, n = rRanges.size(); i < n; ++i)
     {
-        SCCOLROW nStartNo = *(pRanges++);
-        SCCOLROW nEndNo = *(pRanges++);
+        SCCOLROW nStartNo = rRanges[i].mnStart;
+        SCCOLROW nEndNo   = rRanges[i].mnEnd;
 
         if ( !bWidth )                      // Hoehen immer blockweise
         {
@@ -3542,10 +3541,9 @@ bool ScDocFunc::SetWidthOrHeight( bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRa
         ScMarkData aMark;
         aMark.SelectOneTable( nTab );
         rDocShell.GetUndoManager()->AddUndoAction(
-            new ScUndoWidthOrHeight( &rDocShell, aMark,
-                                     nStart, nTab, nEnd, nTab,
-                                     pUndoDoc, nRangeCnt, pUndoRanges,
-                                     pUndoTab, eMode, nSizeTwips, bWidth ) );
+            new ScUndoWidthOrHeight(
+                &rDocShell, aMark, nStart, nTab, nEnd, nTab, pUndoDoc,
+                aUndoRanges, pUndoTab, eMode, nSizeTwips, bWidth));
     }
 
     pDoc->UpdatePageBreaks( nTab );
@@ -4026,14 +4024,14 @@ bool ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
 
         if (bSize)
         {
-            SCCOLROW nCols[2] = { nStartCol, nEndCol };
-            SCCOLROW nRows[2] = { nStartRow, nEndRow };
+            std::vector<sc::ColRowSpan> aCols(1, sc::ColRowSpan(nStartCol,nEndCol));
+            std::vector<sc::ColRowSpan> aRows(1, sc::ColRowSpan(nStartRow,nEndRow));
 
             ScMarkData::iterator itr = aMark.begin(), itrEnd = aMark.end();
             for (; itr != itrEnd && *itr < nTabCount; ++itr)
             {
-                SetWidthOrHeight( true, 1, nCols, *itr, SC_SIZE_VISOPT, STD_EXTRA_WIDTH, false, true);
-                SetWidthOrHeight( false, 1, nRows, *itr, SC_SIZE_VISOPT, 0, false, false);
+                SetWidthOrHeight(true, aCols, *itr, SC_SIZE_VISOPT, STD_EXTRA_WIDTH, false, true);
+                SetWidthOrHeight(false, aRows, *itr, SC_SIZE_VISOPT, 0, false, false);
                 rDocShell.PostPaint( 0,0,*itr, MAXCOL,MAXROW,*itr,
                                 PAINT_GRID | PAINT_LEFT | PAINT_TOP );
             }
