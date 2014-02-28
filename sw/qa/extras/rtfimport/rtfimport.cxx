@@ -1608,6 +1608,20 @@ DECLARE_RTFIMPORT_TEST(testDoDhgtOld, "do-dhgt-old.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("b"), xShape->getString());
 }
 
+DECLARE_RTFIMPORT_TEST(testFooterPara, "footer-para.rtf")
+{
+    // check that paragraph properties in footer are imported
+    uno::Reference<text::XText> xFooterText =
+        getProperty< uno::Reference<text::XText> >(
+            getStyles("PageStyles")->getByName("First Page"), "FooterText");
+    uno::Reference<text::XTextContent> xParagraph =
+        getParagraphOrTable(1, xFooterText);
+    CPPUNIT_ASSERT_EQUAL(OUString("All Rights Reserved."),
+        uno::Reference<text::XTextRange>(xParagraph, uno::UNO_QUERY)->getString());
+    CPPUNIT_ASSERT_EQUAL((sal_Int16)style::ParagraphAdjust_CENTER,
+        getProperty</*style::ParagraphAdjust*/sal_Int16>(xParagraph, "ParaAdjust"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
