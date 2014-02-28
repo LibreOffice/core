@@ -124,6 +124,12 @@ void DrawViewShell::DeleteActualPage()
 
 void DrawViewShell::DeleteActualLayer()
 {
+    if(!GetLayerTabControl()) // #87182#
+    {
+        OSL_ENSURE(false, "No LayerTabBar (!)");
+        return;
+    }
+
     SdrLayerAdmin& rAdmin = GetDoc()->GetLayerAdmin();
     const String&  rName  = GetLayerTabControl()->GetPageText(GetLayerTabControl()->GetCurPageId());
     String         aString(SdResId(STR_ASK_DELETE_LAYER));

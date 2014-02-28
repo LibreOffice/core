@@ -233,6 +233,14 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
 
         case SID_MODIFYLAYER:
         {
+            if(!GetLayerTabControl()) // #87182#
+            {
+                OSL_ENSURE(false, "No LayerTabBar (!)");
+                Cancel();
+                rReq.Ignore();
+                break;
+            }
+
             if ( mpDrawView->IsTextEdit() )
             {
                 mpDrawView->SdrEndTextEdit();
@@ -387,8 +395,14 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                 mpDrawView->SdrEndTextEdit();
             }
 
-            GetLayerTabControl()->StartEditMode(
-                GetLayerTabControl()->GetCurPageId() );
+            if(GetLayerTabControl()) // #87182#
+            {
+                GetLayerTabControl()->StartEditMode(GetLayerTabControl()->GetCurPageId());
+            }
+            else
+            {
+                OSL_ENSURE(false, "No LayerTabBar (!)");
+            }
 
             Cancel();
             rReq.Ignore ();
@@ -825,6 +839,12 @@ void DrawViewShell::ModifyLayer (
     bool bIsLocked,
     bool bIsPrintable)
 {
+    if(!GetLayerTabControl()) // #87182#
+    {
+        OSL_ENSURE(false, "No LayerTabBar (!)");
+        return;
+    }
+
     if( pLayer )
     {
         const sal_uInt16 nPageCount = GetLayerTabControl()->GetPageCount();

@@ -876,7 +876,8 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
             sValue += sName;
             sValue += String::CreateFromInt32(pDrViewSh->GetPageTabControl()->GetPageCount()) ;
             sValue +=  rtl::OUString::createFromAscii(";");
-        if(pDrViewSh->IsLayerModeActive() )
+
+        if(pDrViewSh->IsLayerModeActive() && pDrViewSh->GetLayerTabControl()) // #87182#
         {
             sName = rtl::OUString::createFromAscii("page-name:");
             sValue = sName;
