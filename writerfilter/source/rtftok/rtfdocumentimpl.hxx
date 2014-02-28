@@ -285,7 +285,7 @@ namespace writerfilter {
                 bool bStartedTrackchange; ///< Track change is started, need to end it before popping.
         };
 
-        // if std::stack had an operator[] this would be unnecessary...
+        /// An RTF stack is similar to std::stack, except that it has an operator[].
         struct RTFStack : public std::deque<RTFParserState>
         {
             RTFParserState & top() { return back(); }
