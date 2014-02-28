@@ -124,34 +124,34 @@ Point SvxDrawOutlinerViewForwarder::PixelToLogic( const Point& rPoint, const Map
     return Point();
 }
 
-sal_Bool SvxDrawOutlinerViewForwarder::GetSelection( ESelection& rSelection ) const
+bool SvxDrawOutlinerViewForwarder::GetSelection( ESelection& rSelection ) const
 {
     rSelection = mrOutlinerView.GetSelection();
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvxDrawOutlinerViewForwarder::SetSelection( const ESelection& rSelection )
+bool SvxDrawOutlinerViewForwarder::SetSelection( const ESelection& rSelection )
 {
     mrOutlinerView.SetSelection( rSelection );
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvxDrawOutlinerViewForwarder::Copy()
+bool SvxDrawOutlinerViewForwarder::Copy()
 {
     mrOutlinerView.Copy();
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvxDrawOutlinerViewForwarder::Cut()
+bool SvxDrawOutlinerViewForwarder::Cut()
 {
     mrOutlinerView.Cut();
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvxDrawOutlinerViewForwarder::Paste()
+bool SvxDrawOutlinerViewForwarder::Paste()
 {
     mrOutlinerView.Paste();
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

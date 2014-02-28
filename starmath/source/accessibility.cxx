@@ -1561,62 +1561,62 @@ Point SmEditViewForwarder::PixelToLogic( const Point& rPoint, const MapMode& rMa
     return Point();
 }
 
-sal_Bool SmEditViewForwarder::GetSelection( ESelection& rSelection ) const
+bool SmEditViewForwarder::GetSelection( ESelection& rSelection ) const
 {
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     EditView *pEditView = rEditAcc.GetEditView();
     if (pEditView)
     {
         rSelection = pEditView->GetSelection();
-        bRes = sal_True;
+        bRes = true;
     }
     return bRes;
 }
 
-sal_Bool SmEditViewForwarder::SetSelection( const ESelection& rSelection )
+bool SmEditViewForwarder::SetSelection( const ESelection& rSelection )
 {
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     EditView *pEditView = rEditAcc.GetEditView();
     if (pEditView)
     {
         pEditView->SetSelection( rSelection );
-        bRes = sal_True;
+        bRes = true;
     }
     return bRes;
 }
 
-sal_Bool SmEditViewForwarder::Copy()
+bool SmEditViewForwarder::Copy()
 {
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     EditView *pEditView = rEditAcc.GetEditView();
     if (pEditView)
     {
         pEditView->Copy();
-        bRes = sal_True;
+        bRes = true;
     }
     return bRes;
 }
 
-sal_Bool SmEditViewForwarder::Cut()
+bool SmEditViewForwarder::Cut()
 {
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     EditView *pEditView = rEditAcc.GetEditView();
     if (pEditView)
     {
         pEditView->Cut();
-        bRes = sal_True;
+        bRes = true;
     }
     return bRes;
 }
 
-sal_Bool SmEditViewForwarder::Paste()
+bool SmEditViewForwarder::Paste()
 {
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     EditView *pEditView = rEditAcc.GetEditView();
     if (pEditView)
     {
         pEditView->Paste();
-        bRes = sal_True;
+        bRes = true;
     }
     return bRes;
 }

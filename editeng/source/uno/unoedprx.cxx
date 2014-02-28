@@ -1202,14 +1202,14 @@ Point SvxAccessibleTextEditViewAdapter::PixelToLogic( const Point& rPoint, const
     return mpViewForwarder->PixelToLogic(rPoint, rMapMode);
 }
 
-sal_Bool SvxAccessibleTextEditViewAdapter::GetSelection( ESelection& rSel ) const
+bool SvxAccessibleTextEditViewAdapter::GetSelection( ESelection& rSel ) const
 {
     DBG_ASSERT(mpViewForwarder, "SvxAccessibleTextEditViewAdapter: no forwarder");
 
     ESelection aSelection;
 
     if( !mpViewForwarder->GetSelection( aSelection ) )
-        return sal_False;
+        return false;
 
     SvxAccessibleTextIndex aStartIndex;
     SvxAccessibleTextIndex aEndIndex;
@@ -1224,10 +1224,10 @@ sal_Bool SvxAccessibleTextEditViewAdapter::GetSelection( ESelection& rSel ) cons
     rSel = ESelection( aStartIndex.GetParagraph(), aStartIndex.GetIndex(),
                        aEndIndex.GetParagraph(), aEndIndex.GetIndex() );
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvxAccessibleTextEditViewAdapter::SetSelection( const ESelection& rSel )
+bool SvxAccessibleTextEditViewAdapter::SetSelection( const ESelection& rSel )
 {
     DBG_ASSERT(mpViewForwarder, "SvxAccessibleTextEditViewAdapter: no forwarder");
 
@@ -1240,21 +1240,21 @@ sal_Bool SvxAccessibleTextEditViewAdapter::SetSelection( const ESelection& rSel 
     return mpViewForwarder->SetSelection( MakeEESelection(aStartIndex, aEndIndex) );
 }
 
-sal_Bool SvxAccessibleTextEditViewAdapter::Copy()
+bool SvxAccessibleTextEditViewAdapter::Copy()
 {
     DBG_ASSERT(mpViewForwarder, "SvxAccessibleTextEditViewAdapter: no forwarder");
 
     return mpViewForwarder->Copy();
 }
 
-sal_Bool SvxAccessibleTextEditViewAdapter::Cut()
+bool SvxAccessibleTextEditViewAdapter::Cut()
 {
     DBG_ASSERT(mpViewForwarder, "SvxAccessibleTextEditViewAdapter: no forwarder");
 
     return mpViewForwarder->Cut();
 }
 
-sal_Bool SvxAccessibleTextEditViewAdapter::Paste()
+bool SvxAccessibleTextEditViewAdapter::Paste()
 {
     DBG_ASSERT(mpViewForwarder, "SvxAccessibleTextEditViewAdapter: no forwarder");
 

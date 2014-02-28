@@ -560,11 +560,11 @@ public:
     virtual Rectangle   GetVisArea() const;
     virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
     virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
-    virtual sal_Bool    GetSelection( ESelection& rSelection ) const;
-    virtual sal_Bool    SetSelection( const ESelection& rSelection );
-    virtual sal_Bool    Copy();
-    virtual sal_Bool    Cut();
-    virtual sal_Bool    Paste();
+    virtual bool        GetSelection( ESelection& rSelection ) const;
+    virtual bool        SetSelection( const ESelection& rSelection );
+    virtual bool        Copy();
+    virtual bool        Cut();
+    virtual bool        Paste();
 
     void                GrabFocus();
 
@@ -625,13 +625,13 @@ Point ScEditViewForwarder::PixelToLogic( const Point& rPoint, const MapMode& rMa
     return Point();
 }
 
-sal_Bool ScEditViewForwarder::GetSelection( ESelection& rSelection ) const
+bool ScEditViewForwarder::GetSelection( ESelection& rSelection ) const
 {
-    sal_Bool bResult(false);
+    bool bResult(false);
     if (IsValid())
     {
         rSelection = mpEditView->GetSelection();
-        bResult = sal_True;
+        bResult = true;
     }
     else
     {
@@ -640,13 +640,13 @@ sal_Bool ScEditViewForwarder::GetSelection( ESelection& rSelection ) const
     return bResult;
 }
 
-sal_Bool ScEditViewForwarder::SetSelection( const ESelection& rSelection )
+bool ScEditViewForwarder::SetSelection( const ESelection& rSelection )
 {
-    sal_Bool bResult(false);
+    bool bResult(false);
     if (IsValid())
     {
         mpEditView->SetSelection(rSelection);
-        bResult = sal_True;
+        bResult = true;
     }
     else
     {
@@ -655,13 +655,13 @@ sal_Bool ScEditViewForwarder::SetSelection( const ESelection& rSelection )
     return bResult;
 }
 
-sal_Bool ScEditViewForwarder::Copy()
+bool ScEditViewForwarder::Copy()
 {
-    sal_Bool bResult(false);
+    bool bResult(false);
     if (IsValid())
     {
         mpEditView->Copy();
-        bResult = sal_True;
+        bResult = true;
     }
     else
     {
@@ -670,13 +670,13 @@ sal_Bool ScEditViewForwarder::Copy()
     return bResult;
 }
 
-sal_Bool ScEditViewForwarder::Cut()
+bool ScEditViewForwarder::Cut()
 {
-    sal_Bool bResult(false);
+    bool bResult(false);
     if (IsValid())
     {
         mpEditView->Cut();
-        bResult = sal_True;
+        bResult = true;
     }
     else
     {
@@ -685,13 +685,13 @@ sal_Bool ScEditViewForwarder::Cut()
     return bResult;
 }
 
-sal_Bool ScEditViewForwarder::Paste()
+bool ScEditViewForwarder::Paste()
 {
-    sal_Bool bResult(false);
+    bool bResult(false);
     if (IsValid())
     {
         mpEditView->Paste();
-        bResult = sal_True;
+        bResult = true;
     }
     else
     {

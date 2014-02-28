@@ -123,11 +123,11 @@ public:
     virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
 
     // SvxEditViewForwarder interface
-    virtual sal_Bool    GetSelection( ESelection& rSelection ) const;
-    virtual sal_Bool    SetSelection( const ESelection& rSelection );
-    virtual sal_Bool    Copy();
-    virtual sal_Bool    Cut();
-    virtual sal_Bool    Paste();
+    virtual bool        GetSelection( ESelection& rSelection ) const;
+    virtual bool        SetSelection( const ESelection& rSelection );
+    virtual bool        Copy();
+    virtual bool        Cut();
+    virtual bool        Paste();
 
     void                SetForwarder( SvxEditViewForwarder&, SvxAccessibleTextAdapter& );
 

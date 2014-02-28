@@ -45,11 +45,11 @@ public:
     virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
     virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
 
-    virtual sal_Bool    GetSelection( ESelection& rSelection ) const;
-    virtual sal_Bool    SetSelection( const ESelection& rSelection );
-    virtual sal_Bool    Copy();
-    virtual sal_Bool    Cut();
-    virtual sal_Bool    Paste();
+    virtual bool        GetSelection( ESelection& rSelection ) const;
+    virtual bool        SetSelection( const ESelection& rSelection );
+    virtual bool        Copy();
+    virtual bool        Cut();
+    virtual bool        Paste();
 };
 
 #endif

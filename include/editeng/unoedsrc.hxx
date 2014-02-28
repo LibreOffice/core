@@ -503,37 +503,37 @@ public:
         @param rSelection
         Contains the current selection after method call
 
-        @return sal_False, if there is no view or no selection (the empty selection _is_ a selection)
+        @return false, if there is no view or no selection (the empty selection _is_ a selection)
 
      */
-    virtual sal_Bool GetSelection( ESelection& rSelection ) const = 0;
+    virtual bool GetSelection( ESelection& rSelection ) const = 0;
 
     /** Set selection in view.
 
         @param rSelection
         The selection to set
 
-        @return sal_False, if there is no view or selection is invalid
+        @return false, if there is no view or selection is invalid
      */
-    virtual sal_Bool SetSelection( const ESelection& rSelection ) = 0;
+    virtual bool SetSelection( const ESelection& rSelection ) = 0;
 
     /** Copy current selection to clipboard.
 
-        @return sal_False if no selection or no view (the empty selection _is_ a selection)
+        @return false if no selection or no view (the empty selection _is_ a selection)
      */
-    virtual sal_Bool Copy() = 0;
+    virtual bool Copy() = 0;
 
     /** Cut current selection to clipboard.
 
-        @eturn sal_False if no selection or no view (the empty selection _is_ a selection)
+        @eturn balse if no selection or no view (the empty selection _is_ a selection)
      */
-    virtual sal_Bool Cut() = 0;
+    virtual bool Cut() = 0;
 
     /** Paste clipboard into current selection.
 
-        @return sal_False if no view or no selection (the empty selection _is_ a selection)
+        @return false if no view or no selection (the empty selection _is_ a selection)
      */
-    virtual sal_Bool Paste() = 0;
+    virtual bool Paste() = 0;
 
     virtual sal_Bool IsWrongSpelledWordAtPos( sal_Int32, sal_Int32 ) { return sal_False; };
     virtual sal_Bool IsShapeParaFocusable( ) { return sal_True; };
