@@ -55,6 +55,8 @@
 #include <editeng/eerdll.hxx>
 #include <eerdll2.hxx>
 
+#include <rtl/ustrbuf.hxx>
+
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #include <tools/shl.hxx>
@@ -2082,33 +2084,26 @@ OUString EditDoc::GetSepStr( LineEnd eEnd )
 
 OUString EditDoc::GetText( LineEnd eEnd ) const
 {
-    sal_uLong nLen = GetTextLen();
-    sal_Int32 nNodes = Count();
+    const sal_Int32 nNodes = Count();
     if (nNodes == 0)
         return OUString();
 
-    OUString aSep = EditDoc::GetSepStr( eEnd );
-    sal_Int32 nSepSize = aSep.getLength();
+    const OUString aSep = EditDoc::GetSepStr( eEnd );
+    const sal_Int32 nSepSize = aSep.getLength();
+    const sal_uLong nLen = GetTextLen() + (nNodes - 1)*nSepSize;
 
-    if ( nSepSize )
-        nLen += (nNodes - 1) * nSepSize;
+    OUStringBuffer aBuffer(nLen + 16); // leave some slack
 
-    rtl_uString* newStr = rtl_uString_alloc(nLen);
-    sal_Unicode* pCur = newStr->buffer;
-    sal_Int32 nLastNode = nNodes-1;
     for ( sal_Int32 nNode = 0; nNode < nNodes; nNode++ )
     {
-        OUString aTmp( GetParaAsString( GetObject(nNode) ) );
-        memcpy( pCur, aTmp.getStr(), aTmp.getLength() * sizeof(sal_Unicode) );
-        pCur += aTmp.getLength();
-        if ( nSepSize && ( nNode != nLastNode ) )
+        if ( nSepSize && nNode>0 )
         {
-            memcpy( pCur, aSep.getStr(), nSepSize * sizeof(sal_Unicode ) );
-            pCur += nSepSize;
+            aBuffer.append(aSep);
         }
+        aBuffer.append(GetParaAsString( GetObject(nNode) ));
     }
-    assert(pCur - newStr->buffer == newStr->length);
-    return OUString(newStr, SAL_NO_ACQUIRE);
+
+    return aBuffer.makeStringAndClear();
 }
 
 OUString EditDoc::GetParaAsString( sal_Int32 nNode ) const
