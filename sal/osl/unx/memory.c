@@ -26,7 +26,16 @@ void* osl_aligned_alloc( sal_Size align, sal_Size size )
     else
     {
         void* ptr;
-        int err = posix_memalign(&ptr, align, size);
+        int err;
+#ifdef __APPLE__
+#ifdef TARGET_OS_MAC
+        /* Darwin/OSX lacks posix_memalign */
+        ptr = malloc(size);
+        err = (ptr != NULL);
+#endif
+#else
+        err = posix_memalign(&ptr, align, size);
+#endif
         return err ? NULL : ptr;
     }
 #endif
