@@ -1085,39 +1085,33 @@ bool SwUndo::HasHiddenRedlines( const SwRedlineSaveDatas& rSData )
 bool SwUndo::CanRedlineGroup( SwRedlineSaveDatas& rCurr,
                         const SwRedlineSaveDatas& rCheck, bool bCurrIsEnd )
 {
-    bool bRet = false;
-    size_t n;
+    if( rCurr.size() != rCheck.size() )
+        return false;
 
-    if( rCurr.size() == rCheck.size() )
+    for( size_t n = 0; n < rCurr.size(); ++n )
     {
-        bRet = true;
-        for( n = 0; n < rCurr.size(); ++n )
+        const SwRedlineSaveData& rSet = *rCurr[ n ];
+        const SwRedlineSaveData& rGet = *rCheck[ n ];
+        if( rSet.nSttNode != rGet.nSttNode ||
+            rSet.GetMvSttIdx() || rGet.GetMvSttIdx() ||
+            ( bCurrIsEnd ? rSet.nSttCntnt != rGet.nEndCntnt
+                            : rSet.nEndCntnt != rGet.nSttCntnt ) ||
+            !rGet.CanCombine( rSet ) )
         {
-            const SwRedlineSaveData& rSet = *rCurr[ n ];
-            const SwRedlineSaveData& rGet = *rCheck[ n ];
-            if( rSet.nSttNode != rGet.nSttNode ||
-                rSet.GetMvSttIdx() || rGet.GetMvSttIdx() ||
-                ( bCurrIsEnd ? rSet.nSttCntnt != rGet.nEndCntnt
-                             : rSet.nEndCntnt != rGet.nSttCntnt ) ||
-                !rGet.CanCombine( rSet ) )
-            {
-                bRet = false;
-                break;
-            }
+            return false;
         }
-
-        if( bRet )
-            for( n = 0; n < rCurr.size(); ++n )
-            {
-                SwRedlineSaveData& rSet = *rCurr[ n ];
-                const SwRedlineSaveData& rGet = *rCheck[ n ];
-                if( bCurrIsEnd )
-                    rSet.nSttCntnt = rGet.nSttCntnt;
-                else
-                    rSet.nEndCntnt = rGet.nEndCntnt;
-            }
     }
-    return bRet;
+
+    for( size_t n = 0; n < rCurr.size(); ++n )
+    {
+        SwRedlineSaveData& rSet = *rCurr[ n ];
+        const SwRedlineSaveData& rGet = *rCheck[ n ];
+        if( bCurrIsEnd )
+            rSet.nSttCntnt = rGet.nSttCntnt;
+        else
+            rSet.nEndCntnt = rGet.nEndCntnt;
+    }
+    return true;
 }
 
 // #111827#
@@ -1125,27 +1119,19 @@ OUString ShortenString(const OUString & rStr, sal_Int32 nLength, const OUString 
 {
     assert(nLength - rFillStr.getLength() >= 2);
 
-    OUString aResult;
-
     if (rStr.getLength() <= nLength)
-        aResult = rStr;
-    else
-    {
-        sal_Int32 nTmpLength = nLength - rFillStr.getLength();
-        if ( nTmpLength < 2 )
-            nTmpLength = 2;
+        return rStr;
 
-        nLength = nTmpLength;
+    nLength -= rFillStr.getLength();
+    if ( nLength < 2 )
+        nLength = 2;
 
-        const sal_Int32 nFrontLen = nLength - nLength / 2;
-        const sal_Int32 nBackLen = nLength - nFrontLen;
+    const sal_Int32 nFrontLen = nLength - nLength / 2;
+    const sal_Int32 nBackLen = nLength - nFrontLen;
 
-        aResult += rStr.copy(0, nFrontLen);
-        aResult += rFillStr;
-        aResult += rStr.copy(rStr.getLength() - nBackLen, nBackLen);
-    }
-
-    return aResult;
+    return rStr.copy(0, nFrontLen)
+           + rFillStr
+           + rStr.copy(rStr.getLength() - nBackLen);
 }
 
 bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
