@@ -1565,11 +1565,7 @@ void ContentNode::CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool,
             // Move all attributes in the current node (this)
             CharAttribList::AttribsType::iterator it = rPrevAttribs.begin() + nAttr;
             aCharAttribList.InsertAttrib(rPrevAttribs.release(it).release());
-
-            DBG_ASSERT( pAttrib->GetStart() >= nCut, "Start < nCut!" );
-            DBG_ASSERT( pAttrib->GetEnd() >= nCut, "End < nCut!" );
-            pAttrib->GetStart() = pAttrib->GetStart() - nCut;
-            pAttrib->GetEnd() = pAttrib->GetEnd() - nCut;
+            pAttrib->MoveBackward( nCut );
             nAttr--;
         }
         nAttr++;
