@@ -124,6 +124,7 @@ class FieldContext
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >          m_xStartRange;
 
     OUString                                                                 m_sCommand;
+    OUString m_sResult;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextField >          m_xTextField;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XFormField >          m_xFormField;
@@ -141,6 +142,9 @@ public:
 
     void                    AppendCommand(const OUString& rPart);
     const OUString&  GetCommand() const {return m_sCommand; }
+
+    void AppendResult(OUString const& rResult) { m_sResult += rResult; }
+    const OUString&  GetResult() const { return m_sResult; }
 
     void                    SetCommandCompleted() { m_bFieldCommandCompleted = true; }
     bool                    IsCommandCompleted() const { return m_bFieldCommandCompleted;    }
@@ -601,8 +605,9 @@ public:
     void CloseFieldCommand();
     //the _current_ fields require a string type result while TOCs accept richt results
     bool IsFieldResultAsString();
+    void AppendFieldResult(OUString const& rResult);
     //apply the result text to the related field
-    void SetFieldResult( OUString& rResult );
+    void SetFieldResult(OUString const& rResult);
     // set FFData of top field context
     void SetFieldFFData( FFDataHandler::Pointer_t pFFDataHandler );
     //the end of field is reached (0x15 appeared) - the command might still be open

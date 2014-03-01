@@ -3331,7 +3331,6 @@ void DomainMapper_Impl::CloseFieldCommand()
     //                             uno::makeAny( pContext->GetCommand().copy( nIndex + 1 )));
                         uno::Reference< text::XDependentTextField > xDependentField( xFieldInterface, uno::UNO_QUERY_THROW );
                         xDependentField->attachTextFieldMaster( xMaster );
-                        m_bSetUserFieldContent = true;
                     }
                     break;
                     case FIELD_MERGEREC     : break;
@@ -3599,8 +3598,18 @@ bool DomainMapper_Impl::IsFieldResultAsString()
     return bRet;
 }
 
+void DomainMapper_Impl::AppendFieldResult(OUString const& rString)
+{
+    assert(!m_aFieldStack.empty());
+    FieldContextPtr pContext = m_aFieldStack.top();
+    SAL_WARN_IF(!pContext.get(), "writerfilter.dmapper", "no field context");
+    if (pContext.get())
+    {
+        pContext->AppendResult(rString);
+    }
+}
 
-void DomainMapper_Impl::SetFieldResult( OUString& rResult )
+void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
 {
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("setFieldResult");
@@ -3656,9 +3665,10 @@ void DomainMapper_Impl::SetFieldResult( OUString& rResult )
                 }
             }
         }
-        catch( const uno::Exception& )
+        catch (const uno::Exception& e)
         {
-
+            SAL_WARN("writerfilter.dmapper",
+                "DomainMapper_Impl::SetFieldResult: exception: " << e.Message);
         }
     }
 }
@@ -3701,6 +3711,9 @@ void DomainMapper_Impl::PopFieldContext()
     {
         if( !pContext->IsCommandCompleted() )
             CloseFieldCommand();
+
+        if (!pContext->GetResult().isEmpty())
+            SetFieldResult(pContext->GetResult());
 
         //insert the field, TC or TOC
         uno::Reference< text::XTextAppend >  xTextAppend;
