@@ -233,6 +233,36 @@ OUString XmlFilterBase::getFragmentPathFromFirstType( const OUString& rType )
     return importRelations( OUString() )->getFragmentPathFromFirstType( rType );
 }
 
+namespace {
+
+OUString getTransitionalRelationshipOfficeDocType(const OUString& rPart)
+{
+    static const OUString aBase("http://schemas.openxmlformats.org/officeDocument/2006/relationships/");
+    return aBase + rPart;
+}
+
+OUString getStrictRelationshipOfficeDocType(const OUString& rPart)
+{
+    static const OUString aBase("http://purl.oclc.org/ooxml/officeDocument/relationships/");
+    return aBase + rPart;
+}
+
+}
+
+OUString XmlFilterBase::getFragmentPathFromFirstTypeFromOfficeDoc( const OUString& rPart )
+{
+    // importRelations() caches the relations map for subsequence calls
+    const OUString aTransitionalRelationshipType = getTransitionalRelationshipOfficeDocType(rPart);
+    OUString aFragment = importRelations( OUString() )->getFragmentPathFromFirstType( aTransitionalRelationshipType );
+    if(aFragment.isEmpty())
+    {
+        const OUString aStrictRelationshipType = getStrictRelationshipOfficeDocType(rPart);
+        aFragment = importRelations( OUString() )->getFragmentPathFromFirstType( aStrictRelationshipType );
+    }
+
+    return aFragment;
+}
+
 bool XmlFilterBase::importFragment( const rtl::Reference<FragmentHandler>& rxHandler )
 {
     return importFragment(rxHandler, mxImpl->maFastParser);

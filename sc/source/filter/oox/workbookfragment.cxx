@@ -360,26 +360,26 @@ void WorkbookFragment::finalizeImport()
     ISegmentProgressBarRef xGlobalSegment = getProgressBar().createSegment( PROGRESS_LENGTH_GLOBALS );
 
     // read the theme substream
-    OUString aThemeFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "theme" ) );
+    OUString aThemeFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( "theme" );
     if( !aThemeFragmentPath.isEmpty() )
         importOoxFragment( new ThemeFragmentHandler( getFilter(), aThemeFragmentPath, getTheme() ) );
     xGlobalSegment->setPosition( 0.25 );
 
     // read the styles substream (requires finalized theme buffer)
-    OUString aStylesFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "styles" ) );
+    OUString aStylesFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( "styles" );
     if( !aStylesFragmentPath.isEmpty() )
         importOoxFragment( new StylesFragment( *this, aStylesFragmentPath ) );
     xGlobalSegment->setPosition( 0.5 );
 
     // read the shared string table substream (requires finalized styles buffer)
-    OUString aSstFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "sharedStrings" ) );
+    OUString aSstFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( "sharedStrings" );
     if( !aSstFragmentPath.isEmpty() )
         if (!importOoxFragment( new SharedStringsFragment( *this, aSstFragmentPath ) ))
             importOoxFragment(new SharedStringsFragment(*this, aSstFragmentPath.replaceFirst("sharedStrings","SharedStrings")));
     xGlobalSegment->setPosition( 0.75 );
 
     // read the connections substream
-    OUString aConnFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "connections" ) );
+    OUString aConnFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( "connections" );
     if( !aConnFragmentPath.isEmpty() )
         importOoxFragment( new ConnectionsFragment( *this, aConnFragmentPath ) );
     xGlobalSegment->setPosition( 1.0 );
@@ -412,14 +412,17 @@ void WorkbookFragment::finalizeImport()
 
                 // get the sheet type according to the relations type
                 WorksheetType eSheetType = SHEETTYPE_EMPTYSHEET;
-                if( pRelation->maType == CREATE_OFFICEDOC_RELATION_TYPE( "worksheet" ) )
+                if( pRelation->maType == CREATE_OFFICEDOC_RELATION_TYPE( "worksheet" ) ||
+                        pRelation->maType == CREATE_OFFICEDOC_RELATION_TYPE_STRICT( "worksheet" ))
                     eSheetType = SHEETTYPE_WORKSHEET;
-                else if( pRelation->maType == CREATE_OFFICEDOC_RELATION_TYPE( "chartsheet" ) )
+                else if( pRelation->maType == CREATE_OFFICEDOC_RELATION_TYPE( "chartsheet" ) ||
+                        pRelation->maType == CREATE_OFFICEDOC_RELATION_TYPE_STRICT( "chartsheet" ))
                     eSheetType = SHEETTYPE_CHARTSHEET;
                 else if( (pRelation->maType == CREATE_MSOFFICE_RELATION_TYPE( "xlMacrosheet" )) ||
                          (pRelation->maType == CREATE_MSOFFICE_RELATION_TYPE( "xlIntlMacrosheet" )) )
                     eSheetType = SHEETTYPE_MACROSHEET;
-                else if( pRelation->maType == CREATE_OFFICEDOC_RELATION_TYPE( "dialogsheet" ) )
+                else if( pRelation->maType == CREATE_OFFICEDOC_RELATION_TYPE( "dialogsheet" ) ||
+                        pRelation->maType == CREATE_OFFICEDOC_RELATION_TYPE_STRICT(" dialogsheet" ))
                     eSheetType = SHEETTYPE_DIALOGSHEET;
                 OSL_ENSURE( eSheetType != SHEETTYPE_EMPTYSHEET, "WorkbookFragment::finalizeImport - unknown sheet type" );
                 if( eSheetType != SHEETTYPE_EMPTYSHEET )

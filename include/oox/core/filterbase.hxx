@@ -20,7 +20,6 @@
 #ifndef INCLUDED_OOX_CORE_FILTERBASE_HXX
 #define INCLUDED_OOX_CORE_FILTERBASE_HXX
 
-#include <memory>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
@@ -36,6 +35,8 @@
 #include <oox/helper/binarystreambase.hxx>
 #include <oox/helper/storagebase.hxx>
 #include <oox/dllapi.h>
+
+#include <boost/scoped_ptr.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace awt { struct DeviceInfo; }
@@ -283,7 +284,7 @@ private:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& rxOutStream ) const = 0;
 
 private:
-    ::std::auto_ptr< FilterBaseImpl > mxImpl;
+    boost::scoped_ptr< FilterBaseImpl > mxImpl;
 };
 
 // ============================================================================

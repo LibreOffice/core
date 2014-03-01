@@ -43,7 +43,20 @@ OUString lclAppendFileName( const OUString& rPath, const OUString& rFileName )
         OUStringBuffer( rPath ).append( '/' ).append( rFileName ).makeStringAndClear();
 }
 
-} // namespace
+OUString createOfficeDocRelationTypeTransitional(const OUString& rType)
+{
+    static const OUString aTransitionalBase("http://schemas.openxmlformats.org/officeDocument/2006/relationships/");
+    return aTransitionalBase + rType;
+}
+
+OUString createOfficeDocRelationTypeStrict(const OUString& rType)
+{
+    static const OUString aStrictBase("http://purl.oclc.org/ooxml/officeDocument/relationships/");
+    return aStrictBase + rType;
+}
+
+}
+
 
 
 
@@ -71,6 +84,16 @@ RelationsRef Relations::getRelationsFromType( const OUString& rType ) const
     RelationsRef xRelations( new Relations( maFragmentPath ) );
     for( const_iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
         if( aIt->second.maType.equalsIgnoreAsciiCase( rType ) )
+            (*xRelations)[ aIt->first ] = aIt->second;
+    return xRelations;
+}
+
+RelationsRef Relations::getRelationsFromTypeFromOfficeDoc( const OUString& rType ) const
+{
+    RelationsRef xRelations( new Relations( maFragmentPath ) );
+    for( const_iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
+        if( aIt->second.maType.equalsIgnoreAsciiCase( createOfficeDocRelationTypeTransitional(rType) ) ||
+                aIt->second.maType.equalsIgnoreAsciiCase( createOfficeDocRelationTypeStrict(rType) ))
             (*xRelations)[ aIt->first ] = aIt->second;
     return xRelations;
 }
@@ -132,7 +155,17 @@ OUString Relations::getFragmentPathFromFirstType( const OUString& rType ) const
     return pRelation ? getFragmentPathFromRelation( *pRelation ) : OUString();
 }
 
-
+OUString Relations::getFragmentPathFromFirstTypeFromOfficeDoc( const OUString& rType ) const
+{
+    OUString aTransitionalType(createOfficeDocRelationTypeTransitional(rType));
+    const Relation* pRelation = getRelationFromFirstType( aTransitionalType );
+    if(!pRelation)
+    {
+        OUString aStrictType = createOfficeDocRelationTypeStrict(rType);
+        pRelation = getRelationFromFirstType( aStrictType );
+    }
+    return pRelation ? getFragmentPathFromRelation( *pRelation ) : OUString();
+}
 
 } // namespace core
 } // namespace oox
