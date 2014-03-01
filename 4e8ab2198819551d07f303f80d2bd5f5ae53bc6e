@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a930d6b_6b14c1f5",
+        "filename": "external/curl/ExternalProject_curl.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000567
+      },
+      "writtenOn": "2014-03-01T17:47:17Z",
+      "side": 1,
+      "message": "ask curl developers, okay?",
+      "parentUuid": "1a930d6b_ab6ea994",
+      "revId": "4e8ab2198819551d07f303f80d2bd5f5ae53bc6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a930d6b_cb6bf583",
         "filename": "external/curl/ExternalProject_curl.mk",
         "patchSetId": 2
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "1a930d6b_4b0f05e2",
+        "filename": "external/curl/ExternalProject_curl.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000567
+      },
+      "writtenOn": "2014-03-01T17:47:17Z",
+      "side": 1,
+      "message": "--with-darwinssl and --with-nss does not depend on each other, dude, they are different\nthe problem is that cURL guys didn\u0027t provide appropriate solution for OSX if \"darwin ssl\" is not available, it fails on LD_LIBRARY_PATH (OSX ld uses DYLD_LIBRARY_PATH, but they don\u0027t know/don\u0027t want to know)",
+      "parentUuid": "1a930d6b_cb6bf583",
+      "revId": "4e8ab2198819551d07f303f80d2bd5f5ae53bc6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a930d6b_eb68b189",
         "filename": "external/curl/ExternalProject_curl.mk",
         "patchSetId": 2
@@ -47,6 +83,24 @@
       "writtenOn": "2014-03-01T17:05:22Z",
       "side": 1,
       "message": "same problem as above for Mac \u003e 10.5\n\nalso now for OS !\u003d Mac/IOS no --with-nss is used at all which will definitely break build with internal nss",
+      "revId": "4e8ab2198819551d07f303f80d2bd5f5ae53bc6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_8bf80dc6",
+        "filename": "external/curl/ExternalProject_curl.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000567
+      },
+      "writtenOn": "2014-03-01T17:47:17Z",
+      "side": 1,
+      "message": "buildbot confirmed that it doesn\u0027t break anything",
+      "parentUuid": "1a930d6b_eb68b189",
       "revId": "4e8ab2198819551d07f303f80d2bd5f5ae53bc6e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
