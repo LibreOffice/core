@@ -42,6 +42,8 @@ public:
     virtual void Visit( SmLineNode* pNode ) = 0;
     virtual void Visit( SmExpressionNode* pNode ) = 0;
     virtual void Visit( SmPolyLineNode* pNode ) = 0;
+    virtual void Visit( SmDynIntegralNode* pNode ) = 0;
+    virtual void Visit( SmDynIntegralSymbolNode* pNode ) = 0;
     virtual void Visit( SmRootNode* pNode ) = 0;
     virtual void Visit( SmRootSymbolNode* pNode ) = 0;
     virtual void Visit( SmRectangleNode* pNode ) = 0;
@@ -81,6 +83,8 @@ public:
     void Visit( SmPolyLineNode* pNode );
     void Visit( SmRootNode* pNode );
     void Visit( SmRootSymbolNode* pNode );
+    void Visit( SmDynIntegralNode* pNode );
+    void Visit( SmDynIntegralSymbolNode* pNode );
     void Visit( SmRectangleNode* pNode );
     void Visit( SmVerticalBraceNode* pNode );
 private:
@@ -124,6 +128,8 @@ public:
     void Visit( SmPolyLineNode* pNode );
     void Visit( SmRootNode* pNode );
     void Visit( SmRootSymbolNode* pNode );
+    void Visit( SmDynIntegralNode* pNode );
+    void Visit( SmDynIntegralSymbolNode* pNode );
     void Visit( SmRectangleNode* pNode );
     void Visit( SmVerticalBraceNode* pNode );
 protected:
@@ -227,6 +233,8 @@ public:
     void Visit( SmPolyLineNode* pNode );
     void Visit( SmRootNode* pNode );
     void Visit( SmRootSymbolNode* pNode );
+    void Visit( SmDynIntegralNode* pNode );
+    void Visit( SmDynIntegralSymbolNode* pNode );
     void Visit( SmRectangleNode* pNode );
     void Visit( SmVerticalBraceNode* pNode );
 private:
@@ -344,6 +352,8 @@ public:
     void Visit( SmPolyLineNode* pNode );
     void Visit( SmRootNode* pNode );
     void Visit( SmRootSymbolNode* pNode );
+    void Visit( SmDynIntegralNode* pNode );
+    void Visit( SmDynIntegralSymbolNode* pNode );
     void Visit( SmRectangleNode* pNode );
     void Visit( SmVerticalBraceNode* pNode );
     SmCaretPosGraph* takeGraph()
@@ -393,6 +403,8 @@ public:
     void Visit( SmPolyLineNode* pNode );
     void Visit( SmRootNode* pNode );
     void Visit( SmRootSymbolNode* pNode );
+    void Visit( SmDynIntegralNode* pNode );
+    void Visit( SmDynIntegralSymbolNode* pNode );
     void Visit( SmRectangleNode* pNode );
     void Visit( SmVerticalBraceNode* pNode );
     /** Clone a pNode */
@@ -465,6 +477,8 @@ public:
     void Visit( SmPolyLineNode* pNode );
     void Visit( SmRootNode* pNode );
     void Visit( SmRootSymbolNode* pNode );
+    void Visit( SmDynIntegralNode* pNode );
+    void Visit( SmDynIntegralSymbolNode* pNode );
     void Visit( SmRectangleNode* pNode );
     void Visit( SmVerticalBraceNode* pNode );
 private:

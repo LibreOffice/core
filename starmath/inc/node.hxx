@@ -73,7 +73,7 @@ enum SmNodeType
 /*10*/ NBINDIAGONAL,   NSUBSUP,        NMATRIX,        NPLACE,         NTEXT,
 /*15*/ NSPECIAL,       NGLYPH_SPECIAL, NMATH,          NBLANK,         NERROR,
 /*20*/ NLINE,          NEXPRESSION,    NPOLYLINE,      NROOT,          NROOTSYMBOL,
-/*25*/ NRECTANGLE,     NVERTICAL_BRACE, NMATHIDENT,    NDYNINT
+/*25*/ NRECTANGLE,  NVERTICAL_BRACE, NMATHIDENT,  NDYNINT, NDYNINTSYMBOL
 };
 
 
@@ -628,17 +628,15 @@ public:
         (for both dynamic integrals, roots and other dynamic symbols)
 
  */
-class SmDynIntegralNode : public SmMathSymbolNode
+class SmDynIntegralSymbolNode : public SmMathSymbolNode
 {
-    sal_uLong  nBodyWidth;  // width of body (argument) of integral sign
+
 
 public:
-    SmDynIntegralNode(const SmToken &rNodeToken)
-    :   SmMathSymbolNode(NDYNINT, rNodeToken)
+    SmDynIntegralSymbolNode(const SmToken &rNodeToken)
+    :   SmMathSymbolNode(NDYNINTSYMBOL, rNodeToken)
     {}
 
-    sal_uLong GetBodyWidth() const {return nBodyWidth;};
-    virtual void AdaptToX(const OutputDevice &rDev, sal_uLong nHeight);
     virtual void AdaptToY(const OutputDevice &rDev, sal_uLong nHeight);
 
     void Accept(SmVisitor* pVisitor);
@@ -827,6 +825,42 @@ public:
     const SmNode* Argument() const;
     SmRootSymbolNode* Symbol();
     const SmRootSymbolNode* Symbol() const;
+    SmNode* Body();
+    const SmNode* Body() const;
+};
+
+
+////////////////////////////////////////////////////////////////////////////////
+
+/** Dynamic Integral node
+ *
+ * Used for create Dynamically sized integrals
+ *
+ * Children:<BR>
+ * 0: Argument (optional)<BR>
+ * 1: Symbol (instance of DynIntegralSymbolNode)<BR>
+ * 2: Body<BR>
+ * Where argument is optional and may be NULL.
+ */
+class SmDynIntegralNode : public SmStructureNode
+{
+protected:
+    void   GetHeightVerOffset(const SmRect &rRect,
+                              long &rHeight, long &rVerOffset) const;
+
+public:
+    SmDynIntegralNode(const SmToken &rNodeToken)
+    :   SmStructureNode(NDYNINT, rNodeToken)
+    {
+        SetNumSubNodes(2);
+    }
+
+    virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
+    void CreateTextFromNode(OUString &rText);
+    void Accept(SmVisitor* pVisitor);
+
+    SmDynIntegralSymbolNode* Symbol();
+    const SmDynIntegralSymbolNode* Symbol() const;
     SmNode* Body();
     const SmNode* Body() const;
 };
@@ -1318,6 +1352,28 @@ inline const SmNode* SmRootNode::Body() const
 {
     return const_cast< SmRootNode* >( this )->Body();
 }
+
+
+
+inline SmDynIntegralSymbolNode* SmDynIntegralNode::Symbol()
+{
+    OSL_ASSERT( GetNumSubNodes() > 0 && GetSubNode( 0 )->GetType() == NDYNINTSYMBOL );
+    return static_cast< SmDynIntegralSymbolNode* >( GetSubNode( 0 ));
+}
+inline const SmDynIntegralSymbolNode* SmDynIntegralNode::Symbol() const
+{
+    return const_cast< SmDynIntegralNode* >( this )->Symbol();
+}
+inline SmNode* SmDynIntegralNode::Body()
+{
+    OSL_ASSERT( GetNumSubNodes() > 1 );
+    return GetSubNode( 1 );
+}
+inline const SmNode* SmDynIntegralNode::Body() const
+{
+    return const_cast< SmDynIntegralNode* >( this )->Body();
+}
+
 
 inline SmMathSymbolNode* SmBinHorNode::Symbol()
 {

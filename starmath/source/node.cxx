@@ -622,6 +622,7 @@ void SmNode::DumpAsDot(std::ostream &out, OUString* label, int number, int& id, 
         case NRECTANGLE:       out<<"SmRectangleNode"; break;
         case NVERTICAL_BRACE:  out<<"SmVerticalBraceNode"; break;
         case NMATHIDENT:       out<<"SmMathIdentifierNode"; break;
+        case NINTDYNSYMBOL:            out<<"SmDynIntegralSymbolNode"; break;
         case NINTDYN:            out<<"SmDynIntegralNode"; break;
         default:
             out<<"Unknown Node";
@@ -1115,6 +1116,74 @@ void SmRootNode::CreateTextFromNode(OUString &rText)
     if (!pExtra && GetSubNode(2)->GetNumSubNodes() > 1)
         rText += "} ";
 }
+
+/**************************************************************************/
+
+
+void SmDynIntegralNode::GetHeightVerOffset(const SmRect &rRect,
+                                    long &rHeight, long &rVerOffset) const
+    // calculate height and vertical offset of root sign suitable for 'rRect'
+    //! Code copied from SmRootNode
+{
+    rVerOffset = (rRect.GetBottom() - rRect.GetAlignB()) / 2;
+    rHeight    = rRect.GetHeight() - rVerOffset;
+
+    OSL_ENSURE(rHeight    >= 0, "Sm : Ooops...");
+    OSL_ENSURE(rVerOffset >= 0, "Sm : Ooops...");
+}
+
+
+void SmDynIntegralNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
+{
+
+    SmNode  *pDynIntegralSym = GetSubNode(0),
+           *pBody    = GetSubNode(1);
+    OSL_ENSURE(pDynIntegralSym, "Sm: NULL pointer");
+    OSL_ENSURE(pBody,    "Sm: NULL pointer");
+
+    pBody->Arrange(rDev, rFormat);
+
+    long  nHeight,
+          nVerOffset;
+    // XXX This is root-specific too
+    GetHeightVerOffset(*pBody, nHeight, nVerOffset);
+    //XXX I suppose I don't need the lines below which seem root-specific
+    //nHeight += rFormat.GetDistance(DIS_ROOT) // XXX
+               //* GetFont().GetSize().Height() / 100L;
+
+    pDynIntegralSym->AdaptToY(rDev, nHeight);
+
+    pDynIntegralSym->Arrange(rDev, rFormat);
+
+    Point  aPos = pDynIntegralSym->AlignTo(*pBody, RP_LEFT, RHA_CENTER, RVA_BASELINE);
+    //! override calculated vertical position
+    aPos.Y()  = pDynIntegralSym->GetTop() + pBody->GetBottom() - pDynIntegralSym->GetBottom();
+    aPos.Y() -= nVerOffset;
+    pDynIntegralSym->MoveTo(aPos);
+
+    // override its own rectangle with pBody's
+    SmRect::operator = (*pBody);
+    // extends this rectangle with the symbol's one
+    ExtendBy(*pDynIntegralSym, RCP_THIS);
+
+}
+
+
+void SmDynIntegralNode::CreateTextFromNode(OUString &rText)
+{
+
+    rText += "intd ";
+    SmNode *pBody = GetSubNode(1);
+
+    if (pBody->GetNumSubNodes() > 1)
+        rText += "{ ";
+
+    pBody->CreateTextFromNode(rText);
+
+    if (pBody->GetNumSubNodes() > 1)
+        rText += "} ";
+}
+
 
 
 /**************************************************************************/
@@ -2297,19 +2366,11 @@ void SmRootSymbolNode::AdaptToY(const OutputDevice &rDev, sal_uLong nHeight)
 
 /**************************************************************************/
 
-void SmDynIntegralNode::AdaptToX(const OutputDevice &/*rDev*/, sal_uLong nWidth)
-{
-    // XXX: copied from SmRootSymbol for now
-    //nBodyWidth = nWidth;
-}
 
-
-void SmDynIntegralNode::AdaptToY(const OutputDevice &rDev, sal_uLong nHeight)
+void SmDynIntegralSymbolNode::AdaptToY(const OutputDevice &rDev, sal_uLong nHeight)
 {
-    // XXX: copied from SmRootSymbol for now
-    // some additional length so that the horizontal
-    // bar will be positioned above the argument
-    //SmMathSymbolNode::AdaptToY(rDev, nHeight + nHeight / 10L);
+    // XXX: testing with a slightly higher height
+    SmMathSymbolNode::AdaptToY(rDev, nHeight + nHeight / 2L);
 }
 
 
@@ -3214,6 +3275,11 @@ void SmRootSymbolNode::Accept(SmVisitor* pVisitor) {
 }
 
 void SmDynIntegralNode::Accept(SmVisitor* pVisitor) {
+    pVisitor->Visit(this);
+}
+
+
+void SmDynIntegralSymbolNode::Accept(SmVisitor* pVisitor) {
     pVisitor->Visit(this);
 }
 

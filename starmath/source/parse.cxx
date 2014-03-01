@@ -160,6 +160,7 @@ static const SmTokenTableEntry aTokenTable[] =
     { "infinity" , TINFINITY, MS_INFINITY, TGSTANDALONE, 5},
     { "infty" , TINFINITY, MS_INFINITY, TGSTANDALONE, 5},
     { "int", TINT, MS_INT, TGOPER, 5},
+    { "intd", TINTD, MS_INT, TGOPER, 5},
     { "intersection", TINTERSECT, MS_INTERSECT, TGPRODUCT, 0},
     { "ital", TITALIC, '\0', TGFONTATTR, 5},
     { "italic", TITALIC, '\0', TGFONTATTR, 5},
@@ -1633,6 +1634,7 @@ void SmParser::Oper()
         case TPROD :
         case TCOPROD :
         case TINT :
+        case TINTD:
         case TIINT :
         case TIIINT :
         case TLINT :
@@ -1698,6 +1700,7 @@ void SmParser::UnOper()
     {
         case TABS :
         case TSQRT :
+        case TINTD:
             NextToken();
             break;
 
@@ -1752,9 +1755,14 @@ void SmParser::UnOper()
         pSNode->SetSubNodes(pLeft, pArg, pRight);
     }
     else if (eType == TSQRT  ||  eType == TNROOT)
-    {   pSNode = new SmRootNode(aNodeToken);
+    {  pSNode = new SmRootNode(aNodeToken);
         pOper = new SmRootSymbolNode(aNodeToken);
         pSNode->SetSubNodes(pExtra, pOper, pArg);
+    }
+    else if(eType == TINTD)
+    {  pSNode = new SmDynIntegralNode(aNodeToken);
+        pOper = new SmDynIntegralSymbolNode(aNodeToken);
+        pSNode->SetSubNodes(pOper, pArg);
     }
     else
     {   pSNode = new SmUnHorNode(aNodeToken);

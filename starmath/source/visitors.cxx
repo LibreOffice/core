@@ -161,6 +161,18 @@ void SmVisitorTest::Visit( SmRootSymbolNode* pNode )
     VisitChildren( pNode );
 }
 
+void SmVisitorTest::Visit( SmDynIntegralNode* pNode )
+{
+    assert( pNode->GetType( ) == NDYNINT );
+    VisitChildren( pNode );
+}
+
+void SmVisitorTest::Visit( SmDynIntegralSymbolNode* pNode )
+{
+    assert( pNode->GetType( ) == NDYNINTSYMBOL );
+    VisitChildren( pNode );
+}
+
 void SmVisitorTest::Visit( SmRectangleNode* pNode )
 {
     assert( pNode->GetType( ) == NRECTANGLE );
@@ -303,6 +315,16 @@ void SmDefaultingVisitor::Visit( SmRootNode* pNode )
 }
 
 void SmDefaultingVisitor::Visit( SmRootSymbolNode* pNode )
+{
+    DefaultVisit( pNode );
+}
+
+void SmDefaultingVisitor::Visit( SmDynIntegralNode* pNode )
+{
+    DefaultVisit( pNode );
+}
+
+void SmDefaultingVisitor::Visit( SmDynIntegralSymbolNode* pNode )
 {
     DefaultVisit( pNode );
 }
@@ -630,6 +652,11 @@ void SmDrawingVisitor::Visit( SmRootNode* pNode )
     DrawChildren( pNode );
 }
 
+void SmDrawingVisitor::Visit(SmDynIntegralNode* pNode)
+{
+    DrawChildren( pNode );
+}
+
 void SmDrawingVisitor::Visit( SmVerticalBraceNode* pNode )
 {
     DrawChildren( pNode );
@@ -666,6 +693,22 @@ void SmDrawingVisitor::Visit( SmRootSymbolNode* pNode )
     aBar.SetPos( aDrawPos );
 
     rDev.DrawRect( aBar );
+}
+
+void SmDrawingVisitor::Visit( SmDynIntegralSymbolNode* pNode )
+{
+    if ( pNode->IsPhantom( ) )
+        return;
+
+    // draw integral-sign itself
+    DrawSpecialNode( pNode );
+
+    //! the rest of this may not be needed at all
+
+    // this should be something like:
+    // instead of just drawing the node, take some information about the body.
+    // This is also how SmRootSymbol does it (probably by means of SmRootNode)
+    // NEXT: Check out SmRootNode
 }
 
 void SmDrawingVisitor::Visit( SmPolyLineNode* pNode )
@@ -1630,6 +1673,40 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmRootNode* pNode )
     pRightMost = right;
 }
 
+
+void SmCaretPosGraphBuildingVisitor::Visit( SmDynIntegralNode* pNode )
+{
+    //! To be changed: Integrals don't have args.
+    SmNode  *pBody  = pNode->Body(); //Body of the root
+    SAL_WARN_IF( !pBody, "starmath", "pBody cannot be NULL" );
+
+    SmCaretPosGraphEntry  *left,
+                        *right,
+                        *bodyLeft,
+                        *bodyRight;
+
+    //Get left and save it
+    SAL_WARN_IF( !pRightMost, "starmath", "There must be a position in front of this" );
+    left = pRightMost;
+
+    //Create body left
+    bodyLeft = pGraph->Add( SmCaretPos( pBody, 0 ), left );
+    left->SetRight( bodyLeft );
+
+    //Create right
+    right = pGraph->Add( SmCaretPos( pNode, 1 ) );
+
+    //Visit body
+    pRightMost = bodyLeft;
+    pBody->Accept( this );
+    bodyRight = pRightMost;
+    bodyRight->SetRight( right );
+    right->SetLeft( bodyRight );
+
+    pRightMost = right;
+}
+
+
 /** Build SmCaretPosGraph for SmPlaceNode
  * Consider this a single character.
  */
@@ -1772,6 +1849,13 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmRootSymbolNode* )
 {
     //Do nothing
 }
+
+void SmCaretPosGraphBuildingVisitor::Visit( SmDynIntegralSymbolNode* )
+{
+    //Do nothing
+}
+
+
 void SmCaretPosGraphBuildingVisitor::Visit( SmRectangleNode* )
 {
     //Do nothing
@@ -2013,6 +2097,20 @@ void SmCloningVisitor::Visit( SmRootNode* pNode )
 void SmCloningVisitor::Visit( SmRootSymbolNode* pNode )
 {
     pResult = new SmRootSymbolNode( pNode->GetToken( ) );
+    CloneNodeAttr( pNode, pResult );
+}
+
+void SmCloningVisitor::Visit( SmDynIntegralNode* pNode )
+{
+    SmDynIntegralNode* pClone = new SmDynIntegralNode( pNode->GetToken( ) );
+    CloneNodeAttr( pNode, pClone );
+    CloneKids( pNode, pClone );
+    pResult = pClone;
+}
+
+void SmCloningVisitor::Visit( SmDynIntegralSymbolNode* pNode )
+{
+    pResult = new SmDynIntegralSymbolNode( pNode->GetToken( ) );
     CloneNodeAttr( pNode, pResult );
 }
 
@@ -2536,6 +2634,17 @@ void SmNodeToTextVisitor::Visit( SmRootNode* pNode )
 }
 
 void SmNodeToTextVisitor::Visit( SmRootSymbolNode* )
+{
+}
+
+void SmNodeToTextVisitor::Visit( SmDynIntegralNode* pNode )
+{
+    SmNode *pBody    = pNode->Body();
+    Append( "intd" );
+    LineToText( pBody );
+}
+
+void SmNodeToTextVisitor::Visit( SmDynIntegralSymbolNode* )
 {
 }
 
