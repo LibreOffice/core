@@ -25,9 +25,13 @@ void* osl_aligned_alloc( sal_Size align, sal_Size size )
     }
     else
     {
+#ifdef HAVE_POSIX_MEMALIGN
         void* ptr;
         int err = posix_memalign(&ptr, align, size);
         return err ? NULL : ptr;
+#else
+        return malloc(size);
+#endif
     }
 #endif
 }
