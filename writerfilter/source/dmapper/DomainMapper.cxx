@@ -3827,7 +3827,7 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
         else if( m_pImpl->IsOpenField() && m_pImpl->IsFieldResultAsString())
              /*depending on the success of the field insert operation this result will be
               set at the field or directly inserted into the text*/
-            m_pImpl->SetFieldResult( sText );
+            m_pImpl->AppendFieldResult(sText);
         else
         {
             if (pContext == 0)
@@ -3930,7 +3930,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
             else if( m_pImpl->IsOpenField() && m_pImpl->IsFieldResultAsString())
                 /*depending on the success of the field insert operation this result will be
                   set at the field or directly inserted into the text*/
-                m_pImpl->SetFieldResult( sText );
+                m_pImpl->AppendFieldResult(sText);
             else
             {
                 if (pContext == 0)
