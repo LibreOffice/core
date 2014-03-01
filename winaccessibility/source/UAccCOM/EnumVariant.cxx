@@ -36,7 +36,7 @@ using namespace com::sun::star::accessibility;
    * enumarate method,get next element
    * @param  cElements The number of elements to be returned.
    * @param  pvar      An array of at least size celt in which the elements are to be returned.
-   * @param  pcElementFetched Pointer to the number of elements returned in rgVar, or Null¡£
+   * @param  pcElementFetched Pointer to the number of elements returned in rgVar, or Null
    * @return Result.
    */
 HRESULT STDMETHODCALLTYPE CEnumVariant::Next(ULONG cElements,VARIANT __RPC_FAR *pvar,ULONG __RPC_FAR *pcElementFetched)
@@ -125,7 +125,7 @@ HRESULT STDMETHODCALLTYPE CEnumVariant::Reset( void)
    *copy current enumaration container and its state to
    *the new object
    *AT will use the copy object to get elements
-   * @param ppenum On return, pointer to the location of the clone enumerator¡£
+   * @param ppenum On return, pointer to the location of the clone enumerator
    * @return Result.
    */
 HRESULT STDMETHODCALLTYPE CEnumVariant::Clone(IEnumVARIANT __RPC_FAR *__RPC_FAR *ppenum)
@@ -205,13 +205,10 @@ STDMETHODIMP CEnumVariant::ClearEnumeration()
    */
 static Reference<XAccessibleSelection> GetXAccessibleSelection(XAccessible* pXAcc)
 {
-    XAccessibleSelection* pSelection = NULL;
-    Reference< XAccessibleContext > pRContext;
-
     if( pXAcc == NULL)
         return NULL;
 
-    pRContext = pXAcc->getAccessibleContext();
+    Reference< XAccessibleContext > pRContext = pXAcc->getAccessibleContext();
     if( !pRContext.is() )
         return NULL;
 
