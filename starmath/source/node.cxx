@@ -1135,9 +1135,8 @@ void SmDynIntegralNode::GetHeightVerOffset(const SmRect &rRect,
 
 void SmDynIntegralNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 {
-
-    SmNode  *pDynIntegralSym = GetSubNode(0),
-           *pBody    = GetSubNode(1);
+    SmNode  *pDynIntegralSym = Symbol(),
+           *pBody    = Body();
     OSL_ENSURE(pDynIntegralSym, "Sm: NULL pointer");
     OSL_ENSURE(pBody,    "Sm: NULL pointer");
 
@@ -1158,8 +1157,9 @@ void SmDynIntegralNode::Arrange(const OutputDevice &rDev, const SmFormat &rForma
     Point  aPos = pDynIntegralSym->AlignTo(*pBody, RP_LEFT, RHA_CENTER, RVA_BASELINE);
     //! override calculated vertical position
     aPos.Y()  = pDynIntegralSym->GetTop() + pBody->GetBottom() - pDynIntegralSym->GetBottom();
-    aPos.Y() -= nVerOffset;
+    //aPos.Y() -= nVerOffset;
     pDynIntegralSym->MoveTo(aPos);
+
 
     // override its own rectangle with pBody's
     SmRect::operator = (*pBody);
@@ -2369,8 +2369,15 @@ void SmRootSymbolNode::AdaptToY(const OutputDevice &rDev, sal_uLong nHeight)
 
 void SmDynIntegralSymbolNode::AdaptToY(const OutputDevice &rDev, sal_uLong nHeight)
 {
+    long nFactor = 12L;
+
     // XXX: testing with a slightly higher height
-    SmMathSymbolNode::AdaptToY(rDev, nHeight + nHeight / 2L);
+    SmMathSymbolNode::AdaptToY(rDev, nHeight + nHeight / nFactor);
+
+    //XXX Assuming we can only increase the size?
+    // keep the ratio
+    long nCurWidth = GetSize().Width();
+    SmMathSymbolNode::AdaptToX(rDev, nCurWidth + nCurWidth / nFactor);
 }
 
 

@@ -160,7 +160,7 @@ static const SmTokenTableEntry aTokenTable[] =
     { "infinity" , TINFINITY, MS_INFINITY, TGSTANDALONE, 5},
     { "infty" , TINFINITY, MS_INFINITY, TGSTANDALONE, 5},
     { "int", TINT, MS_INT, TGOPER, 5},
-    { "intd", TINTD, MS_INT, TGOPER, 5},
+    { "intd", TINTD, MS_INT, TGUNOPER, 5},
     { "intersection", TINTERSECT, MS_INTERSECT, TGPRODUCT, 0},
     { "ital", TITALIC, '\0', TGFONTATTR, 5},
     { "italic", TITALIC, '\0', TGFONTATTR, 5},
@@ -1634,7 +1634,7 @@ void SmParser::Oper()
         case TPROD :
         case TCOPROD :
         case TINT :
-        case TINTD:
+        //case TINTD:
         case TIINT :
         case TIIINT :
         case TLINT :
