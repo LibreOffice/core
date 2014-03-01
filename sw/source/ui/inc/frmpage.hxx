@@ -155,20 +155,20 @@ class SwFrmPage: public SfxTabPage
     void            Init(const SfxItemSet& rSet, sal_Bool bReset = sal_False);
     // OD 12.11.2003 #i22341# - adjustment to handle maps, that are ambigous
     //                          in the alignment.
-    sal_uInt16          FillPosLB( const FrmMap* _pMap,
+    sal_Int32       FillPosLB( const FrmMap* _pMap,
                                const sal_uInt16 _nAlign,
                                const sal_uInt16 _nRel,
                                ListBox& _rLB );
     // OD 14.11.2003 #i22341# - adjustment to handle maps, that are ambigous
     //                          in their string entries.
-    sal_uLong           FillRelLB( const FrmMap* _pMap,
+    sal_uLong       FillRelLB( const FrmMap* _pMap,
                                const sal_uInt16 _nLBSelPos,
                                const sal_uInt16 _nAlign,
                                sal_uInt16 _nRel,
                                ListBox& _rLB,
                                FixedText& _rFT );
-    sal_uInt16          GetMapPos( const FrmMap *pMap, ListBox &rAlignLB );
-    short           GetAlignment(FrmMap *pMap, sal_uInt16 nMapPos, ListBox &rAlignLB, ListBox &rRelationLB);
+    sal_Int32       GetMapPos( const FrmMap *pMap, ListBox &rAlignLB );
+    short           GetAlignment(FrmMap *pMap, sal_Int32 nMapPos, ListBox &rAlignLB, ListBox &rRelationLB);
     short           GetRelation(FrmMap *pMap, ListBox &rRelationLB);
     RndStdIds       GetAnchor();
 

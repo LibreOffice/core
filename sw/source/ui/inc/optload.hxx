@@ -152,7 +152,7 @@ private:
     DECL_LINK(SaveEntryHdl, void *);
 
     void                DelUserData();
-    void                SetOptions( const sal_uInt16 nPos,
+    void                SetOptions( const sal_uLong nPos,
                                     const SwCapObjType eType,
                                     const SvGlobalName *pOleId = 0);
     void                SaveEntry( SvTreeListEntry* pEntry );

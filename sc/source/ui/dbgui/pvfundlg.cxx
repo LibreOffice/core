@@ -59,7 +59,7 @@ namespace {
     @return  true = The passed string list contains an empty string entry.
  */
 template< typename ListBoxType >
-bool lclFillListBox( ListBoxType& rLBox, const Sequence< OUString >& rStrings, sal_uInt16 nEmptyPos = LISTBOX_APPEND )
+bool lclFillListBox( ListBoxType& rLBox, const Sequence< OUString >& rStrings, sal_Int32 nEmptyPos = LISTBOX_APPEND )
 {
     bool bEmpty = false;
     const OUString* pStr = rStrings.getConstArray();
@@ -80,7 +80,7 @@ bool lclFillListBox( ListBoxType& rLBox, const Sequence< OUString >& rStrings, s
 }
 
 template< typename ListBoxType >
-bool lclFillListBox( ListBoxType& rLBox, const vector<ScDPLabelData::Member>& rMembers, sal_uInt16 nEmptyPos = LISTBOX_APPEND )
+bool lclFillListBox( ListBoxType& rLBox, const vector<ScDPLabelData::Member>& rMembers, sal_Int32 nEmptyPos = LISTBOX_APPEND )
 {
     bool bEmpty = false;
     vector<ScDPLabelData::Member>::const_iterator itr = rMembers.begin(), itrEnd = rMembers.end();
@@ -134,7 +134,7 @@ static const ScDPListBoxWrapper::MapEntryType spRefTypeMap[] =
     { 6,                        DataPilotFieldReferenceType::COLUMN_PERCENTAGE          },
     { 7,                        DataPilotFieldReferenceType::TOTAL_PERCENTAGE           },
     { 8,                        DataPilotFieldReferenceType::INDEX                      },
-    { LISTBOX_ENTRY_NOTFOUND,   DataPilotFieldReferenceType::NONE                       }
+    { WRAPPER_LISTBOX_ENTRY_NOTFOUND,   DataPilotFieldReferenceType::NONE               }
 };
 
 static const ScDPListBoxWrapper::MapEntryType spLayoutMap[] =
@@ -142,14 +142,14 @@ static const ScDPListBoxWrapper::MapEntryType spLayoutMap[] =
     { 0,                        DataPilotFieldLayoutMode::TABULAR_LAYOUT            },
     { 1,                        DataPilotFieldLayoutMode::OUTLINE_SUBTOTALS_TOP     },
     { 2,                        DataPilotFieldLayoutMode::OUTLINE_SUBTOTALS_BOTTOM  },
-    { LISTBOX_ENTRY_NOTFOUND,   DataPilotFieldLayoutMode::TABULAR_LAYOUT            }
+    { WRAPPER_LISTBOX_ENTRY_NOTFOUND,   DataPilotFieldLayoutMode::TABULAR_LAYOUT    }
 };
 
 static const ScDPListBoxWrapper::MapEntryType spShowFromMap[] =
 {
     { 0,                        DataPilotFieldShowItemsMode::FROM_TOP       },
     { 1,                        DataPilotFieldShowItemsMode::FROM_BOTTOM    },
-    { LISTBOX_ENTRY_NOTFOUND,   DataPilotFieldShowItemsMode::FROM_TOP       }
+    { WRAPPER_LISTBOX_ENTRY_NOTFOUND,   DataPilotFieldShowItemsMode::FROM_TOP }
 };
 
 } // namespace

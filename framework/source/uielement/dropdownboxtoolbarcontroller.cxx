@@ -243,7 +243,7 @@ void DropdownToolbarController::executeControlCommand( const ::com::sun::star::f
     }
     else if ( rControlCommand.Command == "AddEntry" )
     {
-        sal_uInt16      nPos( LISTBOX_APPEND );
+        sal_Int32      nPos( LISTBOX_APPEND );
         OUString   aText;
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
@@ -257,7 +257,7 @@ void DropdownToolbarController::executeControlCommand( const ::com::sun::star::f
     }
     else if ( rControlCommand.Command == "InsertEntry" )
     {
-        sal_uInt16      nPos( LISTBOX_APPEND );
+        sal_Int32      nPos( LISTBOX_APPEND );
         OUString   aText;
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
@@ -268,7 +268,7 @@ void DropdownToolbarController::executeControlCommand( const ::com::sun::star::f
                 {
                     if (( nTmpPos >= 0 ) &&
                         ( nTmpPos < sal_Int32( m_pListBoxControl->GetEntryCount() )))
-                        nPos = sal_uInt16( nTmpPos );
+                        nPos = nTmpPos;
                 }
             }
             else if ( rControlCommand.Arguments[i].Name == "Text" )
@@ -286,8 +286,8 @@ void DropdownToolbarController::executeControlCommand( const ::com::sun::star::f
                 sal_Int32 nPos( -1 );
                 if ( rControlCommand.Arguments[i].Value >>= nPos )
                 {
-                    if ( nPos < sal_Int32( m_pListBoxControl->GetEntryCount() ))
-                        m_pListBoxControl->RemoveEntry( sal_uInt16( nPos ));
+                    if ( 0 <= nPos && nPos < sal_Int32( m_pListBoxControl->GetEntryCount() ))
+                        m_pListBoxControl->RemoveEntry( nPos );
                 }
                 break;
             }

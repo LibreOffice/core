@@ -36,7 +36,7 @@ void RTSDialog::insertAllPPDValues( ListBox& rBox, const PPDParser* pParser, con
         return;
 
     const PPDValue* pValue = NULL;
-    sal_uInt16 nPos = 0;
+    sal_Int32 nPos = 0;
     OUString aOptionText;
 
     for( int i = 0; i < pKey->countValues(); i++ )
@@ -210,7 +210,7 @@ RTSPaperPage::RTSPaperPage(RTSDialog* pParent)
     m_pDuplexBox->SetSelectHdl( LINK( this, RTSPaperPage, SelectHdl ) );
     m_pSlotBox->SetSelectHdl( LINK( this, RTSPaperPage, SelectHdl ) );
 
-    sal_uInt16 nPos = 0;
+    sal_Int32 nPos = 0;
 
     // duplex
     nPos = m_pDuplexBox->InsertEntry( m_pParent->m_aInvalidString );

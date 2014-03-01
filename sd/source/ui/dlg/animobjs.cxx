@@ -916,9 +916,9 @@ void AnimationWindow::AddObj (::sd::View& rView )
                 // several objects
                 SdrObjList* pObjList = ((SdrObjGroup*)pObject)->GetSubList();
 
-                for( sal_uInt16 nObject = 0; nObject < pObjList->GetObjCount(); nObject++ )
+                for( sal_uLong nObject = 0; nObject < pObjList->GetObjCount(); nObject++ )
                 {
-                    SdrObject* pSnapShot = (SdrObject*) pObjList->GetObj( (sal_uLong) nObject );
+                    SdrObject* pSnapShot = (SdrObject*) pObjList->GetObj( nObject );
 
                     BitmapEx *const pBitmapEx = new BitmapEx(
                         SdrExchangeView::GetObjGraphic(
@@ -994,7 +994,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
                 SdrObjList*  pObjList    = pCloneGroup->GetSubList();
 
                 for (sal_uLong nObject= 0; nObject < nMarkCount; nObject++)
-                    pObjList->InsertObject(rMarkList.GetMark(nObject)->GetMarkedSdrObj()->Clone(), LIST_APPEND);
+                    pObjList->InsertObject(rMarkList.GetMark(nObject)->GetMarkedSdrObj()->Clone(), CONTAINER_APPEND);
 
                 pPage->InsertObject(pCloneGroup, m_nCurrentFrame + 1);
             }
@@ -1122,7 +1122,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
             // find LoopCount (number of passes)
             AnimationBitmap aAnimBmp;
             long            nLoopCount = 0L;
-            sal_uInt16          nPos = aLbLoopCount.GetSelectEntryPos();
+            sal_Int32          nPos = aLbLoopCount.GetSelectEntryPos();
 
             if( nPos != LISTBOX_ENTRY_NOTFOUND && nPos != aLbLoopCount.GetEntryCount() - 1 ) // endless
                 nLoopCount = (long) aLbLoopCount.GetSelectEntry().toInt32();
@@ -1222,7 +1222,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
                 pClone = pPage->GetObj(i);
                 SdrObject* pCloneOfClone = pClone->Clone();
                 //SdrObject* pCloneOfClone = pPage->GetObj(i)->Clone();
-                pObjList->InsertObject(pCloneOfClone, LIST_APPEND);
+                pObjList->InsertObject(pCloneOfClone, CONTAINER_APPEND);
             }
 
             // until now the top left corner of the group is in the window center;

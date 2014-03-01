@@ -201,7 +201,7 @@ static const ShadowPosWrapper::MapEntryType s_pShadowPosMap[] =
     { 3,                        SVX_SHADOW_TOPRIGHT     },
     { 4,                        SVX_SHADOW_BOTTOMLEFT   },
     { 5,                        SVX_SHADOW_TOPLEFT      },
-    { VALUESET_ITEM_NOTFOUND,   SVX_SHADOW_NONE         }
+    { WRAPPER_VALUESET_ITEM_NOTFOUND, SVX_SHADOW_NONE   }
 };
 
 class ShadowControlsWrapper : public sfx::MultiControlWrapper< SvxShadowItem >

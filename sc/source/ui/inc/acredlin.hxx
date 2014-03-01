@@ -170,12 +170,12 @@ protected:
     SvTreeListEntry* InsertChangeAction(
         const ScChangeAction* pScChangeAction,ScChangeActionState eState,
         SvTreeListEntry* pParent=NULL,bool bDelMaster = false,
-        bool bDisabled = false,sal_uLong nPos = LIST_APPEND);
+        bool bDisabled = false,sal_uLong nPos = TREELIST_APPEND);
 
     SvTreeListEntry* InsertFilteredAction(
         const ScChangeAction* pScChangeAction,ScChangeActionState eState,
         SvTreeListEntry* pParent = NULL,bool bDelMaster = false,
-        bool bDisabled = false, sal_uLong nPos = LIST_APPEND);
+        bool bDisabled = false, sal_uLong nPos = TREELIST_APPEND);
 
     SvTreeListEntry*    InsertChangeActionContent(const ScChangeActionContent* pScChangeAction,
                                               SvTreeListEntry* pParent,sal_uLong nSpecial);
@@ -194,7 +194,7 @@ protected:
     bool            InsertChildren( ScChangeActionMap* pActionMap, SvTreeListEntry* pParent );
 
     void            AppendChanges(ScChangeTrack* pChanges,sal_uLong nStartAction, sal_uLong nEndAction,
-                                    sal_uLong nPos=LIST_APPEND);
+                                    sal_uLong nPos=TREELIST_APPEND);
 
     void            RemoveEntrys(sal_uLong nStartAction,sal_uLong nEndAction);
     void            UpdateEntrys(ScChangeTrack* pChgTrack, sal_uLong nStartAction,sal_uLong nEndAction);

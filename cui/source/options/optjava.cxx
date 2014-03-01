@@ -829,7 +829,7 @@ IMPL_LINK_NOARG(SvxJavaParameterDlg, AssignHdl_Impl)
     OUString sParam = comphelper::string::strip(m_pParameterEdit->GetText(), ' ');
     if (!sParam.isEmpty())
     {
-        sal_uInt16 nPos = m_pAssignedList->GetEntryPos( sParam );
+        sal_Int32 nPos = m_pAssignedList->GetEntryPos( sParam );
         if ( LISTBOX_ENTRY_NOTFOUND == nPos )
             nPos = m_pAssignedList->InsertEntry( sParam );
         m_pAssignedList->SelectEntryPos( nPos );
@@ -853,7 +853,7 @@ IMPL_LINK_NOARG(SvxJavaParameterDlg, SelectHdl_Impl)
 
 IMPL_LINK_NOARG(SvxJavaParameterDlg, DblClickHdl_Impl)
 {
-    sal_uInt16 nPos = m_pAssignedList->GetSelectEntryPos();
+    sal_Int32 nPos = m_pAssignedList->GetSelectEntryPos();
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         m_pParameterEdit->SetText( m_pAssignedList->GetEntry( nPos ) );
     return 0;
@@ -863,11 +863,11 @@ IMPL_LINK_NOARG(SvxJavaParameterDlg, DblClickHdl_Impl)
 
 IMPL_LINK_NOARG(SvxJavaParameterDlg, RemoveHdl_Impl)
 {
-    sal_uInt16 nPos = m_pAssignedList->GetSelectEntryPos();
+    sal_Int32 nPos = m_pAssignedList->GetSelectEntryPos();
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         m_pAssignedList->RemoveEntry( nPos );
-        sal_uInt16 nCount = m_pAssignedList->GetEntryCount();
+        sal_Int32 nCount = m_pAssignedList->GetEntryCount();
         if ( nCount )
         {
             if ( nPos >= nCount )
@@ -893,10 +893,10 @@ short SvxJavaParameterDlg::Execute()
 
 Sequence< OUString > SvxJavaParameterDlg::GetParameters() const
 {
-    sal_uInt16 nCount = m_pAssignedList->GetEntryCount();
+    sal_Int32 nCount = m_pAssignedList->GetEntryCount();
     Sequence< OUString > aParamList( nCount );
     OUString* pArray = aParamList.getArray();
-     for ( sal_uInt16 i = 0; i < nCount; ++i )
+     for ( sal_Int32 i = 0; i < nCount; ++i )
          pArray[i] = OUString( m_pAssignedList->GetEntry(i) );
     return aParamList;
 }
@@ -940,7 +940,7 @@ SvxJavaClassPathDlg::SvxJavaClassPathDlg(Window* pParent)
 
 SvxJavaClassPathDlg::~SvxJavaClassPathDlg()
 {
-    sal_uInt16 i, nCount = m_pPathList->GetEntryCount();
+    sal_Int32 i, nCount = m_pPathList->GetEntryCount();
     for ( i = 0; i < nCount; ++i )
         delete static_cast< OUString* >( m_pPathList->GetEntryData(i) );
 }
@@ -968,7 +968,7 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddArchiveHdl_Impl)
         OUString sFile = aURL.getFSysPath( INetURLObject::FSYS_DETECT );
         if ( !IsPathDuplicate( sURL ) )
         {
-            sal_uInt16 nPos = m_pPathList->InsertEntry( sFile, SvFileInformationManager::GetImage( aURL, false ) );
+            sal_Int32 nPos = m_pPathList->InsertEntry( sFile, SvFileInformationManager::GetImage( aURL, false ) );
             m_pPathList->SelectEntryPos( nPos );
         }
         else
@@ -1005,7 +1005,7 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddPathHdl_Impl)
         OUString sNewFolder = aURL.getFSysPath( INetURLObject::FSYS_DETECT );
         if ( !IsPathDuplicate( sFolderURL ) )
         {
-            sal_uInt16 nPos = m_pPathList->InsertEntry( sNewFolder, SvFileInformationManager::GetImage( aURL, false ) );
+            sal_Int32 nPos = m_pPathList->InsertEntry( sNewFolder, SvFileInformationManager::GetImage( aURL, false ) );
             m_pPathList->SelectEntryPos( nPos );
         }
         else
@@ -1023,11 +1023,11 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddPathHdl_Impl)
 
 IMPL_LINK_NOARG(SvxJavaClassPathDlg, RemoveHdl_Impl)
 {
-    sal_uInt16 nPos = m_pPathList->GetSelectEntryPos();
+    sal_Int32 nPos = m_pPathList->GetSelectEntryPos();
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         m_pPathList->RemoveEntry( nPos );
-        sal_uInt16 nCount = m_pPathList->GetEntryCount();
+        sal_Int32 nCount = m_pPathList->GetEntryCount();
         if ( nCount )
         {
             if ( nPos >= nCount )
@@ -1054,8 +1054,8 @@ bool SvxJavaClassPathDlg::IsPathDuplicate( const OUString& _rPath )
 {
     bool bRet = false;
     INetURLObject aFileObj( _rPath );
-    sal_uInt16 nCount = m_pPathList->GetEntryCount();
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
+    sal_Int32 nCount = m_pPathList->GetEntryCount();
+    for ( sal_Int32 i = 0; i < nCount; ++i )
     {
         INetURLObject aOtherObj( m_pPathList->GetEntry(i), INetURLObject::FSYS_DETECT );
         if ( aOtherObj == aFileObj )
@@ -1073,8 +1073,8 @@ bool SvxJavaClassPathDlg::IsPathDuplicate( const OUString& _rPath )
 OUString SvxJavaClassPathDlg::GetClassPath() const
 {
     OUString sPath;
-    sal_uInt16 nCount = m_pPathList->GetEntryCount();
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
+    sal_Int32 nCount = m_pPathList->GetEntryCount();
+    for ( sal_Int32 i = 0; i < nCount; ++i )
     {
         if ( !sPath.isEmpty() )
             sPath += OUString(CLASSPATH_DELIMITER);

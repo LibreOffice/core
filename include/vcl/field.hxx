@@ -128,7 +128,7 @@ public:
     const OUString&        GetLiteralMask() const  { return maLiteralMask; }
 
     void                    SetFormatFlags( sal_uInt16 nFlags ) { mnFormatFlags = nFlags; }
-    sal_uInt16                  GetFormatFlags() const { return mnFormatFlags; }
+    sal_uInt16              GetFormatFlags() const { return mnFormatFlags; }
 
     void                    SetString( const OUString& rStr );
     OUString                GetString() const;
@@ -732,7 +732,7 @@ public:
 
     virtual void            ReformatAll();
 
-    void                    InsertValue( sal_Int64 nValue, sal_uInt16 nPos = COMBOBOX_APPEND );
+    void                    InsertValue( sal_Int64 nValue, sal_Int32  nPos = COMBOBOX_APPEND );
 };
 
 
@@ -758,9 +758,9 @@ public:
     virtual void            ReformatAll();
 
     void                    InsertValue( sal_Int64 nValue, FieldUnit eInUnit = FUNIT_NONE,
-                                         sal_uInt16 nPos = COMBOBOX_APPEND );
-    sal_Int64               GetValue( sal_uInt16 nPos, FieldUnit eOutUnit = FUNIT_NONE ) const;
-    sal_uInt16                  GetValuePos( sal_Int64 nValue,
+                                         sal_Int32  nPos = COMBOBOX_APPEND );
+    sal_Int64               GetValue( sal_Int32  nPos, FieldUnit eOutUnit = FUNIT_NONE ) const;
+    sal_Int32               GetValuePos( sal_Int64 nValue,
                                          FieldUnit eInUnit = FUNIT_NONE ) const;
 
     // Needed, because GetValue() with nPos hide these functions

@@ -646,7 +646,7 @@ void UpdateDialog::CheckListBox::handlePopupMenu( const Point &rPos )
 
     if ( pData )
     {
-        sal_uInt16 nEntryPos = GetSelectEntryPos();
+        sal_uLong nEntryPos = GetSelectEntryPos();
         UpdateDialog::Index * p = static_cast< UpdateDialog::Index * >( GetEntryData( nEntryPos ) );
 
         if ( ( p->m_eKind == ENABLED_UPDATE ) || ( p->m_eKind == DISABLED_UPDATE ) )
@@ -695,7 +695,7 @@ void UpdateDialog::CheckListBox::handlePopupMenu( const Point &rPos )
 
 sal_uInt16 UpdateDialog::insertItem( UpdateDialog::Index *pEntry, SvLBoxButtonKind kind )
 {
-    m_updates.InsertEntry( pEntry->m_aName, LISTBOX_APPEND, static_cast< void * >( pEntry ), kind );
+    m_updates.InsertEntry( pEntry->m_aName, TREELIST_APPEND, static_cast< void * >( pEntry ), kind );
 
     for ( sal_uInt16 i = m_updates.getItemCount(); i != 0 ; )
     {

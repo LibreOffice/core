@@ -131,10 +131,10 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl)
     if (xDicList.is())
         aDics = xDicList->getDictionaries();
     const Reference< XDictionary >  *pDic = aDics.getConstArray();
-    sal_Int32 nCount = (sal_uInt16) aDics.getLength();
+    sal_Int32 nCount = aDics.getLength();
 
     sal_Bool bFound = sal_False;
-    sal_uInt16 i;
+    sal_Int32 i;
     for (i = 0; !bFound && i < nCount; ++i )
         if ( sDict.equalsIgnoreAsciiCase( pDic[i]->getName()) )
             bFound = sal_True;
@@ -300,7 +300,7 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
     if ( nCount > 0 )
     {
         pAllDictsLB->SelectEntry( aLookUpEntry );
-        sal_uInt16 nPos = pAllDictsLB->GetSelectEntryPos();
+        sal_Int32 nPos = pAllDictsLB->GetSelectEntryPos();
 
         if ( nPos == LISTBOX_ENTRY_NOTFOUND )
         {
@@ -375,13 +375,13 @@ void SvxEditDictionaryDialog::SetLanguage_Impl( util::Language nLanguage )
     pLangLB->SelectLanguage( nLanguage );
 }
 
-sal_uInt16 SvxEditDictionaryDialog::GetLBInsertPos(const OUString &rDicWord)
+sal_uLong SvxEditDictionaryDialog::GetLBInsertPos(const OUString &rDicWord)
 {
-    sal_uInt16 nPos = USHRT_MAX;
+    sal_uLong nPos = TREELIST_ENTRY_NOTFOUND;
 
     IntlWrapper aIntlWrapper( Application::GetSettings().GetLanguageTag() );
     const CollatorWrapper* pCollator = aIntlWrapper.getCollator();
-    sal_uInt16 j;
+    sal_uLong j;
     for( j = 0; j < pWordsLB->GetEntryCount(); j++ )
     {
         SvTreeListEntry* pEntry = pWordsLB->GetEntry(j);
@@ -400,7 +400,7 @@ sal_uInt16 SvxEditDictionaryDialog::GetLBInsertPos(const OUString &rDicWord)
 
 void SvxEditDictionaryDialog::RemoveDictEntry(SvTreeListEntry* pEntry)
 {
-    sal_uInt16 nLBPos = pAllDictsLB->GetSelectEntryPos();
+    sal_Int32 nLBPos = pAllDictsLB->GetSelectEntryPos();
 
     if ( pEntry != NULL && nLBPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -418,7 +418,7 @@ void SvxEditDictionaryDialog::RemoveDictEntry(SvTreeListEntry* pEntry)
 
 IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectBookHdl_Impl)
 {
-    sal_uInt16 nPos = pAllDictsLB->GetSelectEntryPos();
+    sal_Int32 nPos = pAllDictsLB->GetSelectEntryPos();
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -443,8 +443,8 @@ IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectBookHdl_Impl)
 
 IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectLangHdl_Impl)
 {
-    sal_uInt16 nDicPos = pAllDictsLB->GetSelectEntryPos();
-    sal_uInt16 nLang = pLangLB->GetSelectLanguage();
+    sal_Int32 nDicPos = pAllDictsLB->GetSelectEntryPos();
+    sal_Int32 nLang = pLangLB->GetSelectLanguage();
     Reference< XDictionary >  xDic( aDics.getConstArray()[ nDicPos ], UNO_QUERY );
     sal_Int16 nOldLang = LanguageTag( xDic->getLocale() ).getLanguageType();
 
@@ -528,13 +528,13 @@ void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
     for (sal_Int32 i = 0;  i < nCount;  i++)
     {
         aStr = pEntry[i]->getDictionaryWord();
-        sal_uInt16 nPos = GetLBInsertPos( aStr );
+        sal_uLong nPos = GetLBInsertPos( aStr );
         if(pEntry[i]->isNegative())
         {
             aStr += "\t";
             aStr += pEntry[i]->getReplacementText();
         }
-        pWordsLB->InsertEntry(aStr, 0, sal_False, nPos == USHRT_MAX ?  LIST_APPEND : nPos);
+        pWordsLB->InsertEntry(aStr, 0, sal_False, nPos == TREELIST_ENTRY_NOTFOUND ?  TREELIST_APPEND : nPos);
     }
 
     if (pWordsLB->GetEntryCount())
@@ -598,7 +598,7 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
         OUString aReplaceStr(pReplaceED->GetText());
 
         sal_Int16 nAddRes = DIC_ERR_UNKNOWN;
-        sal_uInt16 nPos = pAllDictsLB->GetSelectEntryPos();
+        sal_Int32 nPos = pAllDictsLB->GetSelectEntryPos();
         if ( nPos != LISTBOX_ENTRY_NOTFOUND && !aNewWord.isEmpty())
         {
             DBG_ASSERT(nPos < aDics.getLength(), "invalid dictionary index");
@@ -632,7 +632,7 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
             // insert new entry in list-box etc...
 
             pWordsLB->SetUpdateMode(sal_False);
-            sal_uInt16 _nPos = USHRT_MAX;
+            sal_uLong _nPos = TREELIST_ENTRY_NOTFOUND;
 
             if(pReplaceFT->IsVisible())
             {
@@ -650,7 +650,7 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
             {
                 _nPos = GetLBInsertPos( aNewWord );
                 SvTreeListEntry* pInsEntry = pWordsLB->InsertEntry(sEntry, 0, sal_False,
-                            _nPos == USHRT_MAX ? LIST_APPEND : (sal_uInt32)_nPos);
+                            _nPos == TREELIST_ENTRY_NOTFOUND ? TREELIST_APPEND : _nPos);
                 pNewEntry = pInsEntry;
             }
 
@@ -693,7 +693,7 @@ IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, Edit*, pEdt)
             sal_Bool bTmpSelEntry=sal_False;
             CDE_RESULT eCmpRes = CDE_DIFFERENT;
 
-            for(sal_uInt16 i = 0; i < pWordsLB->GetEntryCount(); i++)
+            for(sal_uLong i = 0; i < pWordsLB->GetEntryCount(); i++)
             {
                 SvTreeListEntry*  pEntry = pWordsLB->GetEntry( i );
                 OUString aTestStr( pWordsLB->GetEntryText(pEntry, 0) );

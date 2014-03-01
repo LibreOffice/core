@@ -121,7 +121,7 @@ OutlineView::OutlineView( DrawDocShell& rDocSh, ::Window* pWindow, OutlineViewSh
     Rectangle aNullRect;
     mpOutlinerView[0]->SetOutputArea(aNullRect);
     mrOutliner.SetUpdateMode(false);
-    mrOutliner.InsertView(mpOutlinerView[0], LIST_APPEND);
+    mrOutliner.InsertView(mpOutlinerView[0], EE_APPEND);
 
     onUpdateStyleSettings( true );
 
@@ -254,7 +254,7 @@ void OutlineView::AddWindowToPaintView(OutputDevice* pWin)
         {
             mpOutlinerView[nView] = new OutlinerView(&mrOutliner, dynamic_cast< ::sd::Window* >(pWin));
             mpOutlinerView[nView]->SetBackgroundColor( aWhiteColor );
-            mrOutliner.InsertView(mpOutlinerView[nView], LIST_APPEND);
+            mrOutliner.InsertView(mpOutlinerView[nView], EE_APPEND);
             bAdded = sal_True;
 
             if (bValidArea)

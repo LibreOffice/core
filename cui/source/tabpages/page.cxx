@@ -521,7 +521,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     SetMetricValue( *m_pPaperWidthEdit, aPaperSize.Width(), SFX_MAPUNIT_100TH_MM );
     m_pPaperSizeBox->Clear();
 
-    sal_uInt16 nActPos = LISTBOX_ENTRY_NOTFOUND;
+    sal_Int32 nActPos = LISTBOX_ENTRY_NOTFOUND;
     sal_uInt16 nAryId = RID_SVXSTRARY_PAPERSIZE_STD;
 
     if ( ePaperStart != PAPER_A3 )
@@ -529,12 +529,12 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     ResStringArray aPaperAry( CUI_RES( nAryId ) );
     sal_uInt32 nCnt = aPaperAry.Count();
 
-    sal_uInt16 nUserPos = LISTBOX_ENTRY_NOTFOUND;
+    sal_Int32 nUserPos = LISTBOX_ENTRY_NOTFOUND;
     for ( sal_uInt32 i = 0; i < nCnt; ++i )
     {
         OUString aStr = aPaperAry.GetString(i);
         Paper eSize = (Paper)aPaperAry.GetValue(i);
-        sal_uInt16 nPos = m_pPaperSizeBox->InsertEntry( aStr );
+        sal_Int32 nPos = m_pPaperSizeBox->InsertEntry( aStr );
         m_pPaperSizeBox->SetEntryData( nPos, (void*)(sal_uLong)eSize );
 
         if ( eSize == ePaper )
@@ -730,7 +730,7 @@ sal_Bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
 
     // paper tray
     nWhich = GetWhich( SID_ATTR_PAGE_PAPERBIN );
-    sal_uInt16 nPos = m_pPaperTrayBox->GetSelectEntryPos();
+    sal_Int32 nPos = m_pPaperTrayBox->GetSelectEntryPos();
     sal_uInt16 nBin = (sal_uInt16)(sal_uLong)m_pPaperTrayBox->GetEntryData( nPos );
     pOld = GetOldItem( rSet, SID_ATTR_PAGE_PAPERBIN );
 
@@ -742,7 +742,7 @@ sal_Bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
 
     nPos = m_pPaperSizeBox->GetSelectEntryPos();
     Paper ePaper = (Paper)(sal_uLong)m_pPaperSizeBox->GetEntryData( nPos );
-    const sal_uInt16 nOld = m_pPaperSizeBox->GetSavedValue();
+    const sal_Int32 nOld = m_pPaperSizeBox->GetSavedValue();
     bool bChecked = m_pLandscapeBtn->IsChecked();
 
     if ( PAPER_USER == ePaper )
@@ -920,7 +920,7 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperBinHdl_Impl)
     OUString aOldName = m_pPaperTrayBox->GetSelectEntry();
     m_pPaperTrayBox->SetUpdateMode( false );
     m_pPaperTrayBox->Clear();
-    sal_uInt16 nEntryPos = m_pPaperTrayBox->InsertEntry(
+    sal_Int32 nEntryPos = m_pPaperTrayBox->InsertEntry(
         EE_RESSTR( RID_SVXSTR_PAPERBIN_SETTINGS ) );
     m_pPaperTrayBox->SetEntryData( nEntryPos,
         (void*)(sal_uLong)PAPERBIN_PRINTER_SETTINGS );
@@ -950,7 +950,7 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperBinHdl_Impl)
 
 IMPL_LINK( SvxPageDescPage, PaperSizeSelect_Impl, ListBox *, pBox )
 {
-    const sal_uInt16 nPos = pBox->GetSelectEntryPos();
+    const sal_Int32 nPos = pBox->GetSelectEntryPos();
     Paper ePaper = (Paper)(sal_uLong)m_pPaperSizeBox->GetEntryData( nPos );
 
     if ( ePaper != PAPER_USER )
@@ -1027,9 +1027,9 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperSizeModify_Impl)
     Size aSize( GetCoreValue( *m_pPaperWidthEdit, eUnit ),
                 GetCoreValue( *m_pPaperHeightEdit, eUnit ) );
     Paper ePaper = SvxPaperInfo::GetSvxPaper( aSize, (MapUnit)eUnit, true );
-    sal_uInt16 nEntryCount = m_pPaperSizeBox->GetEntryCount();
+    sal_Int32 nEntryCount = m_pPaperSizeBox->GetEntryCount();
 
-    for ( sal_uInt16 i = 0; i < nEntryCount; ++i )
+    for ( sal_Int32 i = 0; i < nEntryCount; ++i )
     {
         Paper eTmp = (Paper)(sal_uLong)m_pPaperSizeBox->GetEntryData(i);
 
@@ -1386,7 +1386,7 @@ int SvxPageDescPage::DeactivatePage( SfxItemSet* _pSet )
     // Inquiry whether the page margins are beyond the printing area.
     // If not, ask user whether they shall be taken.
     // If not, stay on the TabPage.
-    sal_uInt16 nPos = m_pPaperSizeBox->GetSelectEntryPos();
+    sal_Int32 nPos = m_pPaperSizeBox->GetSelectEntryPos();
     Paper ePaper = (Paper)(sal_uLong)m_pPaperSizeBox->GetEntryData( nPos );
 
     if ( ePaper != PAPER_SCREEN_4_3 && ePaper != PAPER_SCREEN_16_9 && ePaper != PAPER_SCREEN_16_10 && IsMarginOutOfRange() )
@@ -1567,7 +1567,7 @@ void SvxPageDescPage::SetCollectionList(const std::vector<OUString> &aList)
     OSL_ENSURE(!aList.empty(), "Empty string list");
 
     sStandardRegister = aList[0];
-    for( sal_uInt16 i = 1; i < aList.size(); i++   )
+    for( size_t i = 1; i < aList.size(); i++   )
         m_pRegisterLB->InsertEntry(aList[i]);
 
     m_pRegisterCB->Show();

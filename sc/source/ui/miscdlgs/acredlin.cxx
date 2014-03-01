@@ -1539,7 +1539,7 @@ void ScAcceptChgDlg::UpdateEntrys(ScChangeTrack* pChgTrack, sal_uLong nStartActi
 {
     pTheView->SetUpdateMode(false);
 
-    sal_uLong nPos=LIST_APPEND;
+    sal_uLong nPos=TREELIST_APPEND;
 
     bool bRemove = false;
 

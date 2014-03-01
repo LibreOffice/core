@@ -788,10 +788,11 @@ void FormulaDlg_Impl::FillListboxes()
     //  1. Page: select function
     if ( pFuncDesc && pFuncDesc->getCategory() )
     {
-        if( pFuncPage->GetCategory() != pFuncDesc->getCategory()->getNumber() + 1 )
-            pFuncPage->SetCategory(static_cast<sal_uInt16>(pFuncDesc->getCategory()->getNumber() + 1));
+        // We'll never have more than int32 max categories so this is safe ...
+        if( pFuncPage->GetCategory() != static_cast<sal_Int32>(pFuncDesc->getCategory()->getNumber() + 1) )
+            pFuncPage->SetCategory(pFuncDesc->getCategory()->getNumber() + 1);
 
-        sal_uInt16 nPos=pFuncPage->GetFuncPos(pFuncDesc);
+        sal_Int32 nPos=pFuncPage->GetFuncPos(pFuncDesc);
 
         pFuncPage->SetFunction(nPos);
     }
@@ -1026,7 +1027,7 @@ IMPL_LINK( FormulaDlg_Impl, BtnHdl, PushButton*, pBtn )
 
 IMPL_LINK_NOARG(FormulaDlg_Impl, DblClkHdl)
 {
-    sal_uInt16 nFunc = pFuncPage->GetFunction();
+    sal_Int32 nFunc = pFuncPage->GetFunction();
 
     //  ex-UpdateLRUList
     const IFunctionDescription* pDesc = pFuncPage->GetFuncDesc(nFunc);
@@ -1542,9 +1543,9 @@ IMPL_LINK_NOARG(FormulaDlg_Impl, MatrixHdl)
 
 IMPL_LINK_NOARG(FormulaDlg_Impl, FuncSelHdl)
 {
-    sal_uInt16 nCat = pFuncPage->GetCategory();
+    sal_Int32 nCat = pFuncPage->GetCategory();
     if ( nCat == LISTBOX_ENTRY_NOTFOUND ) nCat = 0;
-    sal_uInt16 nFunc = pFuncPage->GetFunction();
+    sal_Int32 nFunc = pFuncPage->GetFunction();
     if ( nFunc == LISTBOX_ENTRY_NOTFOUND ) nFunc = 0;
 
     if (   (pFuncPage->GetFunctionEntryCount() > 0)

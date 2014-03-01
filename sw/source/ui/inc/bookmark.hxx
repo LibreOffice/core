@@ -31,16 +31,16 @@ class SfxRequest;
 
 class BookmarkCombo : public SwComboBox
 {
-    sal_uInt16          GetFirstSelEntryPos() const;
-    sal_uInt16          GetNextSelEntryPos(sal_uInt16 nPos) const;
-    sal_uInt16          GetSelEntryPos(sal_uInt16 nPos) const;
+    sal_Int32           GetFirstSelEntryPos() const;
+    sal_Int32           GetNextSelEntryPos(sal_Int32  nPos) const;
+    sal_Int32           GetSelEntryPos(sal_Int32  nPos) const;
 
     virtual bool    PreNotify(NotifyEvent& rNEvt);
 public:
     BookmarkCombo(Window* pWin, WinBits nStyle);
 
-    sal_uInt16          GetSelectEntryCount() const;
-    sal_uInt16          GetSelectEntryPos( sal_uInt16 nSelIndex = 0 ) const;
+    sal_Int32           GetSelectEntryCount() const;
+    sal_Int32           GetSelectEntryPos( sal_Int32  nSelIndex = 0 ) const;
 
     static const OUString aForbiddenChars;
 };

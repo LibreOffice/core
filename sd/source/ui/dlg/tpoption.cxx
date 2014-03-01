@@ -254,7 +254,7 @@ SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  )
     {
         OUString sMetric = aMetricArr.GetStringByPos( i );
         sal_IntPtr nFieldUnit = aMetricArr.GetValue( i );
-        sal_uInt16 nPos = m_pLbMetric->InsertEntry( sMetric );
+        sal_Int32 nPos = m_pLbMetric->InsertEntry( sMetric );
         m_pLbMetric->SetEntryData( nPos, (void*)nFieldUnit );
     }
     m_pLbMetric->SetSelectHdl( LINK( this, SdTpOptionsMisc, SelectMetricHdl_Impl ) );
@@ -401,7 +401,7 @@ sal_Bool SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
     }
 
     // metric
-    const sal_uInt16 nMPos = m_pLbMetric->GetSelectEntryPos();
+    const sal_Int32 nMPos = m_pLbMetric->GetSelectEntryPos();
     if ( nMPos != m_pLbMetric->GetSavedValue() )
     {
         sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pLbMetric->GetEntryData( nMPos );
@@ -470,7 +470,7 @@ void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
         const SfxUInt16Item& rItem = (SfxUInt16Item&)rAttrs.Get( nWhich );
         long nFieldUnit = (long)rItem.GetValue();
 
-        for ( sal_uInt16 i = 0; i < m_pLbMetric->GetEntryCount(); ++i )
+        for ( sal_Int32 i = 0; i < m_pLbMetric->GetEntryCount(); ++i )
         {
             if ( (sal_IntPtr)m_pLbMetric->GetEntryData( i ) == nFieldUnit )
             {
@@ -523,7 +523,7 @@ SfxTabPage* SdTpOptionsMisc::Create( Window* pWindow,
 
 IMPL_LINK_NOARG(SdTpOptionsMisc, SelectMetricHdl_Impl)
 {
-    sal_uInt16 nPos = m_pLbMetric->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLbMetric->GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {

@@ -364,9 +364,10 @@ typedef MetricConnection< UInt32ItemWrapper > UInt32MetricConnection;
 /** Connection between an item and a VCL ListBox.
 
     Optionally a map can be passed that maps list box positions to item values.
-    This map MUST be terminated with an entry containing LISTBOX_ENTRY_NOTFOUND
-    as list box position. The item value contained in this last entry is used
-    as default item value in case of an error.
+    This map MUST be terminated with an entry containing
+    WRAPPER_LISTBOX_ENTRY_NOTFOUND as list box position. The item value
+    contained in this last entry is used as default item value in case of an
+    error.
  */
 template< typename ItemWrpT >
 class ListBoxConnection : public ItemControlConnection< ItemWrpT,
@@ -397,8 +398,9 @@ typedef ListBoxConnection< UInt32ItemWrapper > UInt32ListBoxConnection;
 
     Optionally a map can be passed that maps value set identifiers to item
     values. This map MUST be terminated with an entry containing
-    VALUESET_ITEM_NOTFOUND as value set identifier. The item value contained in
-    this last entry is used as default item value in case of an error.
+    WRAPPER_VALUESET_ITEM_NOTFOUND as value set identifier. The item value
+    contained in this last entry is used as default item value in case of an
+    error.
  */
 template< typename ItemWrpT >
 class ValueSetConnection : public ItemControlConnection< ItemWrpT,

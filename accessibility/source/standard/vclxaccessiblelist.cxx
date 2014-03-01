@@ -62,7 +62,7 @@ VCLXAccessibleList::VCLXAccessibleList (VCLXWindow* pVCLWindow, BoxType aBoxType
       m_nLastSelectedPos        ( LISTBOX_ENTRY_NOTFOUND ),
       m_bDisableProcessEvent    ( false ),
       m_bVisible                ( true ),
-    m_nCurSelectedPos       ( LISTBOX_ENTRY_NOTFOUND ),
+      m_nCurSelectedPos         ( LISTBOX_ENTRY_NOTFOUND ),
       m_xParent                 ( _xParent )
 {
     // Because combo boxes and list boxes don't have a common interface for
@@ -192,12 +192,14 @@ void VCLXAccessibleList::UpdateSelection_Acc (::rtl::OUString sTextOfSelectedIte
         ComboBox* pBox = static_cast<ComboBox*>(GetWindow());
         if ( pBox != NULL )
         {
-        // Find the index of the selected item inside the VCL control...
-        sal_uInt16 nIndex = pBox->GetEntryPos(sTextOfSelectedItem);
-        // ...and then find the associated accessibility object.
-        if ( nIndex == LISTBOX_ENTRY_NOTFOUND )
-            nIndex = 0;
-        UpdateSelection_Impl_Acc(b_IsDropDownList);
+            // Find the index of the selected item inside the VCL control...
+            sal_Int32 nIndex = pBox->GetEntryPos(sTextOfSelectedItem);
+            // ...and then find the associated accessibility object.
+            if ( nIndex == LISTBOX_ENTRY_NOTFOUND )
+                nIndex = 0;
+            /* FIXME: is there something missing here? nIndex is unused. Looks 
+             * like copy-paste from VCLXAccessibleList::UpdateSelection() */
+            UpdateSelection_Impl_Acc(b_IsDropDownList);
         }
     }
 }
@@ -213,7 +215,7 @@ void VCLXAccessibleList::UpdateSelection_Impl_Acc(bool b_IsDropDownList)
             Reference< XAccessible > xNewAcc;
         if ( m_pListBoxHelper )
         {
-            sal_uInt16 i=0;
+            sal_uInt32 i=0;
             m_nCurSelectedPos = LISTBOX_ENTRY_NOTFOUND;
             for ( ListItems::iterator aIter = m_aAccessibleChildren.begin();
                   aIter != m_aAccessibleChildren.end(); ++aIter,++i)
@@ -372,7 +374,7 @@ void VCLXAccessibleList::ProcessWindowEvent (const VclWindowEvent& rVclWindowEve
                     {
                         uno::Any    aOldValue,
                                     aNewValue;
-                        sal_uInt16 nPos = m_nCurSelectedPos; //m_pListBoxHelper->GetSelectEntryPos();
+                        sal_Int32 nPos = m_nCurSelectedPos; //m_pListBoxHelper->GetSelectEntryPos();
 
                         if ( nPos == LISTBOX_ENTRY_NOTFOUND )
                             nPos = m_pListBoxHelper->GetTopEntry();
@@ -447,7 +449,7 @@ void VCLXAccessibleList::ProcessWindowEvent (const VclWindowEvent& rVclWindowEve
                     {
                         uno::Any    aOldValue,
                                     aNewValue;
-                        sal_uInt16 nPos = m_nCurSelectedPos;
+                        sal_Int32 nPos = m_nCurSelectedPos;
 
                         if ( nPos == LISTBOX_ENTRY_NOTFOUND )
                             nPos = m_pListBoxHelper->GetTopEntry();
@@ -497,7 +499,7 @@ void VCLXAccessibleList::UpdateSelection (OUString sTextOfSelectedItem)
         if ( pBox != NULL )
         {
             // Find the index of the selected item inside the VCL control...
-            sal_uInt16 nIndex = pBox->GetEntryPos(sTextOfSelectedItem);
+            sal_Int32 nIndex = pBox->GetEntryPos(sTextOfSelectedItem);
             // ...and then find the associated accessibility object.
             if ( nIndex == LISTBOX_ENTRY_NOTFOUND )
                 nIndex = 0;

@@ -255,8 +255,8 @@ void SvxHyperlinkTabPageBase::ShowMarkWnd ()
 void SvxHyperlinkTabPageBase::FillStandardDlgFields ( SvxHyperlinkItem* pHyperlinkItem )
 {
     // Frame
-    sal_uInt16 nPos = mpCbbFrame->GetEntryPos ( pHyperlinkItem->GetTargetFrame() );
-    if ( nPos != LISTBOX_ENTRY_NOTFOUND)
+    sal_Int32 nPos = mpCbbFrame->GetEntryPos ( pHyperlinkItem->GetTargetFrame() );
+    if ( nPos != COMBOBOX_ENTRY_NOTFOUND)
         mpCbbFrame->SetText ( pHyperlinkItem->GetTargetFrame() );
 
     // Form

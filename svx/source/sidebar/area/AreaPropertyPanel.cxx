@@ -403,7 +403,7 @@ IMPL_LINK( AreaPropertyPanel, SelectFillAttrHdl, ListBox*, pToolBox )
             }
             case XFILL_GRADIENT:
             {
-                sal_uInt16 nPos = mpLbFillAttr->GetSelectEntryPos();
+                sal_Int32 nPos = mpLbFillAttr->GetSelectEntryPos();
 
                 if(LISTBOX_ENTRY_NOTFOUND == nPos)
                 {
@@ -434,7 +434,7 @@ IMPL_LINK( AreaPropertyPanel, SelectFillAttrHdl, ListBox*, pToolBox )
             }
             case XFILL_HATCH:
             {
-                sal_uInt16 nPos = mpLbFillAttr->GetSelectEntryPos();
+                sal_Int32 nPos = mpLbFillAttr->GetSelectEntryPos();
 
                 if(LISTBOX_ENTRY_NOTFOUND == nPos)
                 {
@@ -465,7 +465,7 @@ IMPL_LINK( AreaPropertyPanel, SelectFillAttrHdl, ListBox*, pToolBox )
             }
             case XFILL_BITMAP:
             {
-                sal_uInt16 nPos = mpLbFillAttr->GetSelectEntryPos();
+                sal_Int32 nPos = mpLbFillAttr->GetSelectEntryPos();
 
                 if(LISTBOX_ENTRY_NOTFOUND == nPos)
                 {
@@ -641,7 +641,7 @@ void AreaPropertyPanel::ImpUpdateTransparencies()
             if(mpFloatTransparenceItem->IsEnabled())
             {
                 const XGradient& rGradient = mpFloatTransparenceItem->GetGradientValue();
-                sal_uInt16 nEntryPos(0);
+                sal_Int32 nEntryPos(0);
                 Image* pImage = 0;
 
                 mpLBTransType->Enable();
@@ -821,7 +821,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
                     mpColorTextFT->Enable();
                     XFillStyle eXFS = (XFillStyle)mpStyleItem->GetValue();
                     meLastXFS = eXFS;
-                    mpLbFillType->SelectEntryPos(sal::static_int_cast< sal_uInt16 >(eXFS));
+                    mpLbFillType->SelectEntryPos(sal::static_int_cast< sal_Int32 >(eXFS));
 
                     if(XFILL_NONE == eXFS)
                     {
@@ -1213,7 +1213,7 @@ IMPL_LINK( AreaPropertyPanel, ClickTrGrHdl_Impl, ToolBox*, pToolBox )
 
 IMPL_LINK(AreaPropertyPanel, ChangeTrgrTypeHdl_Impl, void *, EMPTYARG)
 {
-    sal_uInt16 nSelectType = mpLBTransType->GetSelectEntryPos();
+    sal_Int32 nSelectType = mpLBTransType->GetSelectEntryPos();
     bool bGradient = false;
     sal_uInt16 nTrans = 0;
 
@@ -1310,7 +1310,7 @@ IMPL_LINK(AreaPropertyPanel, ModifyTransparentHdl_Impl, void*, EMPTYARG)
 {
     const sal_uInt16 nTrans = (sal_uInt16)mpMTRTransparent->GetValue();
     mnLastTransSolid = nTrans;
-    const sal_uInt16 nSelectType = mpLBTransType->GetSelectEntryPos();
+    const sal_Int32 nSelectType = mpLBTransType->GetSelectEntryPos();
 
     if(nTrans && !nSelectType)
     {

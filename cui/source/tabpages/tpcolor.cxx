@@ -279,12 +279,12 @@ void SvxColorTabPage::Update(bool bLoaded)
 struct SvxColorTabPageShadow
 {
     sal_uInt16 nUnknownType;
-    sal_uInt16 nUnknownPos;
+    sal_Int32  nUnknownPos;
     sal_Bool   bIsAreaTP;
     sal_uInt16 nChangeType;
     SvxColorTabPageShadow()
         : nUnknownType( COLORPAGE_UNKNOWN )
-        , nUnknownPos( COLORPAGE_UNKNOWN )
+        , nUnknownPos( LISTBOX_ENTRY_NOTFOUND )
         , bIsAreaTP( sal_False )
         , nChangeType( 0 )
     {
@@ -493,7 +493,7 @@ long SvxColorTabPage::CheckChanges_Impl()
     if (eCM != CM_RGB)
         ConvertColorValues (aTmpColor, CM_RGB);
 
-    sal_uInt16 nPos = m_pLbColor->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLbColor->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         Color aColor = pColorList->GetColor( nPos )->GetColor();
@@ -564,7 +564,7 @@ sal_Bool SvxColorTabPage::FillItemSet( SfxItemSet& rSet )
         OUString aString;
         Color  aColor;
 
-        sal_uInt16 nPos = m_pLbColor->GetSelectEntryPos();
+        sal_Int32 nPos = m_pLbColor->GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             aColor  = pColorList->GetColor( nPos )->GetColor();
@@ -608,7 +608,7 @@ void SvxColorTabPage::Reset( const SfxItemSet& rSet )
 
     // set color model
     OUString aStr = GetUserData();
-    m_pLbColorModel->SelectEntryPos( (sal_uInt16) aStr.toInt32() );
+    m_pLbColorModel->SelectEntryPos( aStr.toInt32() );
 
     ChangeColorHdl_Impl( this );
     SelectColorModelHdl_Impl( this );
@@ -742,7 +742,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl)
 
 IMPL_LINK_NOARG(SvxColorTabPage, ClickModifyHdl_Impl)
 {
-    sal_uInt16 nPos = m_pLbColor->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLbColor->GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -862,7 +862,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickWorkOnHdl_Impl)
 
 IMPL_LINK_NOARG(SvxColorTabPage, ClickDeleteHdl_Impl)
 {
-    sal_uInt16 nPos = m_pLbColor->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLbColor->GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -899,7 +899,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickDeleteHdl_Impl)
 
 IMPL_LINK_NOARG(SvxColorTabPage, SelectColorLBHdl_Impl)
 {
-    sal_uInt16 nPos = m_pLbColor->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLbColor->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         m_pValSetColorList->SelectItem( nPos + 1 );
@@ -922,7 +922,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, SelectColorLBHdl_Impl)
 
 IMPL_LINK_NOARG(SvxColorTabPage, SelectValSetHdl_Impl)
 {
-    sal_uInt16 nPos = m_pValSetColorList->GetSelectItemId();
+    sal_Int32 nPos = m_pValSetColorList->GetSelectItemId();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         m_pLbColor->SelectEntryPos( nPos - 1 );
@@ -1059,7 +1059,7 @@ long SvxColorTabPage::ChangeColorHdl_Impl( void* )
 //    for( long i = 0; i < nCount; i++ )
 //    {
 //        pColorEntry = pColorList->GetColor( i );
-//        rVs.InsertItem( (sal_uInt16) i + 1, pColorEntry->GetColor(), pColorEntry->GetName() );
+//        rVs.InsertItem( i + 1, pColorEntry->GetColor(), pColorEntry->GetName() );
 //    }
 //}
 

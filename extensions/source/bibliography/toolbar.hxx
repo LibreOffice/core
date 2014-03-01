@@ -156,7 +156,7 @@ class BibToolBar:   public ToolBox
         void    ClearSourceList();
         void    UpdateSourceList(sal_Bool bFlag=sal_True);
         void    EnableSourceList(sal_Bool bFlag=sal_True);
-        void    InsertSourceEntry(const OUString&,sal_uInt16 nPos=LISTBOX_APPEND );
+        void    InsertSourceEntry(const OUString&,sal_Int32  nPos=LISTBOX_APPEND );
         void    SelectSourceEntry(const OUString& );
 
         void    EnableQuery(sal_Bool bFlag=sal_True);

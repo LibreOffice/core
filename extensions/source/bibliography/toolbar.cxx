@@ -407,7 +407,7 @@ void BibToolBar::UpdateSourceList(sal_Bool bFlag)
     aLBSource.SetUpdateMode(bFlag);
 }
 
-void BibToolBar::InsertSourceEntry(const OUString& aEntry, sal_uInt16 nPos)
+void BibToolBar::InsertSourceEntry(const OUString& aEntry, sal_Int32 nPos)
 {
     aLBSource.InsertEntry(aEntry, nPos);
 }

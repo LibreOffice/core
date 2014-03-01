@@ -593,7 +593,7 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, SfxMedium* pInMedium,
     Image aImgDocClosed=Image( BitmapEx( SdResId( BMP_DOC_CLOSED ) ) );
 
     // insert document name
-    InsertEntry( maDocName, aImgDocOpen, aImgDocClosed, NULL, sal_True, LIST_APPEND,
+    InsertEntry( maDocName, aImgDocOpen, aImgDocClosed, NULL, sal_True, TREELIST_APPEND,
                  reinterpret_cast< void* >( 1 )
     );
 }
@@ -625,7 +625,7 @@ void SdPageObjsTLB::AddShapeList (
         aIcon,
         pParentEntry,
         sal_False,
-        LIST_APPEND,
+        TREELIST_APPEND,
         pUserData);
 
     SdrObjListIter aIter(
@@ -674,7 +674,7 @@ void SdPageObjsTLB::AddShapeList (
                     maImgOle,
                     pEntry,
                     sal_False,
-                    LIST_APPEND,
+                    TREELIST_APPEND,
                     pObj
                 );
 
@@ -708,7 +708,7 @@ void SdPageObjsTLB::AddShapeList (
                     maImgGraphic,
                     pEntry,
                     sal_False,
-                    LIST_APPEND,
+                    TREELIST_APPEND,
                     pObj
                 );
 
@@ -757,7 +757,7 @@ void SdPageObjsTLB::AddShapeList (
                     rIconProvider.maImgObjects,
                     pEntry,
                     sal_False,
-                    LIST_APPEND,
+                    TREELIST_APPEND,
                     pObj
                 );
 
@@ -973,7 +973,7 @@ void SdPageObjsTLB::RequestingChildren( SvTreeListEntry* pFileEntry )
                                               aImgPage,
                                               pFileEntry,
                                               sal_False,
-                                              LIST_APPEND,
+                                              TREELIST_APPEND,
                                               reinterpret_cast< void* >( 1 ) );
 
                     SdrObjListIter aIter( *pPage, IM_DEEPWITHGROUPS );
@@ -1445,8 +1445,8 @@ bool SdPageObjsTLB::PageBelongsToCurrentShow (const SdPage* pPage) const
         if (pCustomShow != NULL)
         {
             bBelongsToShow = false;
-            sal_uLong nPageCount = pCustomShow->PagesVector().size();
-            for (sal_uInt16 i=0; i<nPageCount && !bBelongsToShow; i++)
+            size_t nPageCount = pCustomShow->PagesVector().size();
+            for (size_t i=0; i<nPageCount && !bBelongsToShow; i++)
                 if (pPage == pCustomShow->PagesVector()[i])
                     bBelongsToShow = true;
         }

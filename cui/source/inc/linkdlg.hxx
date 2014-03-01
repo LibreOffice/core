@@ -83,10 +83,10 @@ class SvBaseLinksDlg : public ModalDialog
     DECL_LINK( BreakLinkClickHdl, PushButton * );
     DECL_LINK( UpdateWaitingHdl, Timer * );
     DECL_LINK( EndEditHdl, sfx2::SvBaseLink* );
-    sfx2::SvBaseLink* GetSelEntry( sal_uInt16* pPos );
+    sfx2::SvBaseLink* GetSelEntry( sal_uLong* pPos );
     OUString ImplGetStateStr( const sfx2::SvBaseLink& );
-    void SetType( sfx2::SvBaseLink& rLink, sal_uInt16 nPos, sal_uInt16 nType );
-    void InsertEntry( const sfx2::SvBaseLink& rLink, sal_uInt16 nPos = LISTBOX_APPEND, sal_Bool bSelect = sal_False);
+    void SetType( sfx2::SvBaseLink& rLink, sal_uLong nPos, sal_uInt16 nType );
+    void InsertEntry( const sfx2::SvBaseLink& rLink, sal_uLong nPos = TREELIST_APPEND, sal_Bool bSelect = sal_False);
 
     void StartUpdateTimer()         { aUpdateTimer.Start(); }
 

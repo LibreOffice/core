@@ -181,7 +181,7 @@ int SvxLineEndDefTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 void SvxLineEndDefTabPage::CheckChanges_Impl()
 {
-    sal_uInt16 nPos = m_pLbLineEnds->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLbLineEnds->GetSelectEntryPos();
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -308,7 +308,7 @@ long SvxLineEndDefTabPage::ChangePreviewHdl_Impl( void* )
 
 IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl)
 {
-    sal_uInt16 nPos = m_pLbLineEnds->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLbLineEnds->GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -506,7 +506,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl)
 
 IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickDeleteHdl_Impl)
 {
-    sal_uInt16 nPos = m_pLbLineEnds->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLbLineEnds->GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -660,7 +660,7 @@ void SvxLineEndDefTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        sal_uInt16 nOldSelect = m_pLbLineEnds->GetSelectEntryPos();
+        sal_Int32 nOldSelect = m_pLbLineEnds->GetSelectEntryPos();
         m_pLbLineEnds->Clear();
         m_pLbLineEnds->Fill( pLineEndList );
         m_pLbLineEnds->SelectEntryPos( nOldSelect );

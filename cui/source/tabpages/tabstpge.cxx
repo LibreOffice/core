@@ -494,9 +494,9 @@ IMPL_LINK( SvxTabulatorTabPage, NewHdl_Impl, Button *, pBtn )
         nOffset = OutputDevice::LogicToLogic( nOffset, eUnit, MAP_100TH_MM  );
     }
     const long nReal = nVal - nOffset;
-    sal_uInt16 nSize = m_pTabBox->GetEntryCount();
+    sal_Int32 nSize = m_pTabBox->GetEntryCount();
 
-    sal_uInt16 i;
+    sal_Int32 i;
     for( i = 0; i < nSize; i++ )
     {
         if ( nReal < aNewTabs[i].GetTabPos() )
@@ -533,7 +533,7 @@ IMPL_LINK( SvxTabulatorTabPage, NewHdl_Impl, Button *, pBtn )
 
 IMPL_LINK_NOARG(SvxTabulatorTabPage, DelHdl_Impl)
 {
-    sal_uInt16 nPos = m_pTabBox->GetValuePos( m_pTabBox->GetValue() );
+    sal_Int32 nPos = m_pTabBox->GetValuePos( m_pTabBox->GetValue() );
 
     if ( nPos == COMBOBOX_ENTRY_NOTFOUND )
         return 0;
@@ -612,7 +612,7 @@ IMPL_LINK( SvxTabulatorTabPage, TabTypeCheckHdl_Impl, RadioButton *, pBox )
     }
 
     aAktTab.GetAdjustment() = eAdj;
-    sal_uInt16 nPos = m_pTabBox->GetValuePos( m_pTabBox->GetValue( eDefUnit ), eDefUnit );
+    sal_Int32 nPos = m_pTabBox->GetValuePos( m_pTabBox->GetValue( eDefUnit ), eDefUnit );
 
     if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
     {
@@ -643,7 +643,7 @@ IMPL_LINK( SvxTabulatorTabPage, FillTypeCheckHdl_Impl, RadioButton *, pBox )
         cFill = '-';
 
     aAktTab.GetFill() = cFill;
-    sal_uInt16 nPos = m_pTabBox->GetValuePos( m_pTabBox->GetValue( eDefUnit ), eDefUnit );
+    sal_Int32 nPos = m_pTabBox->GetValuePos( m_pTabBox->GetValue( eDefUnit ), eDefUnit );
 
     if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
     {
@@ -662,7 +662,7 @@ IMPL_LINK( SvxTabulatorTabPage, GetFillCharHdl_Impl, Edit *, pEdit )
     if ( !aChar.isEmpty() )
         aAktTab.GetFill() = aChar[0];
 
-    const sal_uInt16 nPos = m_pTabBox->GetValuePos( m_pTabBox->GetValue( eDefUnit ), eDefUnit);
+    const sal_Int32 nPos = m_pTabBox->GetValuePos( m_pTabBox->GetValue( eDefUnit ), eDefUnit);
     if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
     {
         aNewTabs.Remove( nPos );
@@ -679,7 +679,7 @@ IMPL_LINK( SvxTabulatorTabPage, GetDezCharHdl_Impl, Edit *, pEdit )
     if ( !aChar.isEmpty() && ( aChar[0] >= ' '))
         aAktTab.GetDecimal() = aChar[0];
 
-    sal_uInt16 nPos = m_pTabBox->GetValuePos( m_pTabBox->GetValue( eDefUnit ), eDefUnit );
+    sal_Int32 nPos = m_pTabBox->GetValuePos( m_pTabBox->GetValue( eDefUnit ), eDefUnit );
     if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
     {
         aNewTabs.Remove( nPos );
@@ -692,7 +692,7 @@ IMPL_LINK( SvxTabulatorTabPage, GetDezCharHdl_Impl, Edit *, pEdit )
 
 IMPL_LINK_NOARG(SvxTabulatorTabPage, SelectHdl_Impl)
 {
-    sal_uInt16 nPos = m_pTabBox->GetValuePos( m_pTabBox->GetValue( eDefUnit ), eDefUnit );
+    sal_Int32 nPos = m_pTabBox->GetValuePos( m_pTabBox->GetValue( eDefUnit ), eDefUnit );
     if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
     {
         aAktTab = aNewTabs[nPos];
@@ -706,7 +706,7 @@ IMPL_LINK_NOARG(SvxTabulatorTabPage, SelectHdl_Impl)
 
 IMPL_LINK_NOARG(SvxTabulatorTabPage, ModifyHdl_Impl)
 {
-    sal_uInt16 nPos = m_pTabBox->GetValuePos( m_pTabBox->GetValue( eDefUnit ), eDefUnit );
+    sal_Int32 nPos = m_pTabBox->GetValuePos( m_pTabBox->GetValue( eDefUnit ), eDefUnit );
     if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
     {
         aAktTab = aNewTabs[nPos];

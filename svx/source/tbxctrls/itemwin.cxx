@@ -101,7 +101,7 @@ void SvxLineBox::Select()
     if ( !IsTravelSelect() )
     {
         XLineStyle eXLS;
-        sal_uInt16 nPos = GetSelectEntryPos();
+        sal_Int32 nPos = GetSelectEntryPos();
 
         switch ( nPos )
         {
@@ -313,7 +313,7 @@ void SvxColorBox::Update( const XLineColorItem* pItem )
         if( GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND ||
             GetSelectEntryColor() != aColor )
         {
-            sal_uInt16 nCount = GetEntryCount();
+            sal_Int32 nCount = GetEntryCount();
             OUString aTmpStr;
             if( nCount > 0 )
             {
@@ -327,7 +327,7 @@ void SvxColorBox::Update( const XLineColorItem* pItem )
             }
             aTmpStr = TMP_STR_BEGIN + aString + TMP_STR_END;
 
-            sal_uInt16 nPos = InsertEntry( aColor, aTmpStr );
+            sal_Int32 nPos = InsertEntry( aColor, aTmpStr );
             SelectEntryPos( nPos );
         }
     }

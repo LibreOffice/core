@@ -383,7 +383,7 @@ sal_uIntPtr INetRFC822Message::SetHeaderField (
     const sal_Char *pStop = pData + aName.getLength() + 1;
     const sal_Char *check = "";
 
-    sal_uIntPtr       nIdx     = LIST_APPEND;
+    sal_uIntPtr       nIdx     = CONTAINER_APPEND;
     int         eState   = INETMSG_RFC822_BEGIN;
     int         eOkState = INETMSG_RFC822_OK;
 
@@ -747,7 +747,7 @@ sal_uIntPtr INetMIMEMessage::SetHeaderField (
     const sal_Char *pStop = pData + aName.getLength() + 1;
     const sal_Char *check = "";
 
-    sal_uIntPtr      nIdx     = LIST_APPEND;
+    sal_uIntPtr      nIdx     = CONTAINER_APPEND;
     int        eState   = INETMSG_MIME_BEGIN;
     int        eOkState = INETMSG_MIME_OK;
 

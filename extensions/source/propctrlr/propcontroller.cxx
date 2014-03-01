@@ -1611,7 +1611,7 @@ namespace pcr
         if ( !impl_findObjectProperty_nothrow( _rPropertyName, &propertyPos ) )
             return;
 
-        if ( getPropertyBox().GetPropertyPos( _rPropertyName ) != LISTBOX_ENTRY_NOTFOUND )
+        if ( getPropertyBox().GetPropertyPos( _rPropertyName ) != EDITOR_LIST_ENTRY_NOTFOUND )
         {
             rebuildPropertyUI( _rPropertyName );
             return;
@@ -1629,16 +1629,16 @@ namespace pcr
 
         // by definition, the properties in m_aProperties are in the order in which they appear in the UI
         // So all we need is a predecessor of pProperty in m_aProperties
-        sal_uInt16 nUIPos = LISTBOX_ENTRY_NOTFOUND;
+        sal_uInt16 nUIPos = EDITOR_LIST_ENTRY_NOTFOUND;
         do
         {
             if ( propertyPos != m_aProperties.begin() )
                 --propertyPos;
             nUIPos = getPropertyBox().GetPropertyPos( propertyPos->second.Name );
         }
-        while ( ( nUIPos == LISTBOX_ENTRY_NOTFOUND ) && ( propertyPos != m_aProperties.begin() ) );
+        while ( ( nUIPos == EDITOR_LIST_ENTRY_NOTFOUND ) && ( propertyPos != m_aProperties.begin() ) );
 
-        if ( nUIPos == LISTBOX_ENTRY_NOTFOUND )
+        if ( nUIPos == EDITOR_LIST_ENTRY_NOTFOUND )
             // insert at the very top
             nUIPos = 0;
         else

@@ -78,7 +78,7 @@ public:
     bool hasTerm( const OUString& rTerm ) const;
 
     void addEntry( const OUString& rTerm, const OUString& rMapping
-            , sal_Int16 nConversionPropertyType /*linguistic2::ConversionPropertyType*/, sal_uIntPtr nPos = LIST_APPEND );
+            , sal_Int16 nConversionPropertyType /*linguistic2::ConversionPropertyType*/, sal_uIntPtr nPos = TREELIST_APPEND );
     sal_uIntPtr deleteEntries( const OUString& rTerm ); //return lowest position of deleted entries or LIST_APPEND if no entry was deleted
     void deleteEntryOnPos( sal_Int32 nPos  );
     DictionaryEntry* getEntryOnPos( sal_Int32 nPos ) const;

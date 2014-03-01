@@ -118,7 +118,7 @@ SwContentOptPage::SwContentOptPage( Window* pParent,
     m_pAnyRulerCB->SetClickHdl(LINK(this, SwContentOptPage, AnyRulerHdl));
 
     SvxStringArray aMetricArr( SW_RES( STR_ARR_METRIC ) );
-    for ( sal_uInt16 i = 0; i < aMetricArr.Count(); ++i )
+    for ( size_t i = 0; i < aMetricArr.Count(); ++i )
     {
         OUString sMetric = aMetricArr.GetStringByPos( i );
         FieldUnit eFUnit = (FieldUnit)aMetricArr.GetValue( i );
@@ -138,7 +138,7 @@ SwContentOptPage::SwContentOptPage( Window* pParent,
                 // there isn't 'line' unit in HTML format
                 if ( eFUnit != FUNIT_LINE )
                 {
-                   sal_uInt16 nPos = m_pMetricLB->InsertEntry( sMetric );
+                   sal_Int32 nPos = m_pMetricLB->InsertEntry( sMetric );
                    m_pMetricLB->SetEntryData( nPos, (void*)(sal_IntPtr)eFUnit );
                    m_pHMetric->InsertEntry( sMetric );
                    m_pHMetric->SetEntryData( nPos, (void*)(sal_IntPtr)eFUnit );
@@ -146,7 +146,7 @@ SwContentOptPage::SwContentOptPage( Window* pParent,
                 // a vertical ruler has not the 'character' unit
                 if ( eFUnit != FUNIT_CHAR )
                 {
-                   sal_uInt16 nPos = m_pVMetric->InsertEntry( sMetric );
+                   sal_Int32 nPos = m_pVMetric->InsertEntry( sMetric );
                    m_pVMetric->SetEntryData( nPos, (void*)(sal_IntPtr)eFUnit );
                 }
             }
@@ -171,7 +171,7 @@ static void lcl_SelectMetricLB(ListBox* rMetric, sal_uInt16 nSID, const SfxItemS
     if( rSet.GetItemState( nSID, false, &pItem ) >= SFX_ITEM_AVAILABLE )
     {
         FieldUnit eFieldUnit = (FieldUnit)((SfxUInt16Item*)pItem)->GetValue();
-        for ( sal_uInt16 i = 0; i < rMetric->GetEntryCount(); ++i )
+        for ( sal_Int32 i = 0; i < rMetric->GetEntryCount(); ++i )
         {
             if ( (int)(sal_IntPtr)rMetric->GetEntryData( i ) == (int)eFieldUnit )
             {
@@ -238,8 +238,8 @@ sal_Bool SwContentOptPage::FillItemSet(SfxItemSet& rSet)
     if(bRet)
         bRet = 0 != rSet.Put(aElem);
 
-    sal_uInt16 nMPos = m_pMetricLB->GetSelectEntryPos();
-    sal_uInt16 nGlobalMetricPos = nMPos;
+    sal_Int32 nMPos = m_pMetricLB->GetSelectEntryPos();
+    sal_Int32 nGlobalMetricPos = nMPos;
     if ( nMPos != m_pMetricLB->GetSavedValue() )
     {
         // Double-Cast for VA3.0
@@ -1695,7 +1695,7 @@ SwRedlineOptionsTabPage::SwRedlineOptionsTabPage( Window* pParent,
 
     sAuthor = get<Window>("byauthor")->GetText();
 
-    for (sal_uInt16 i = 0; i < pInsertLB->GetEntryCount(); ++i)
+    for (sal_Int32 i = 0; i < pInsertLB->GetEntryCount(); ++i)
     {
         OUString sEntry(pInsertLB->GetEntry(i));
         pDeletedLB->InsertEntry(sEntry);
@@ -1755,7 +1755,7 @@ sal_Bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet& )
     ColorData nOldMarkColor = pOpt->GetMarkAlignColor().GetColor();
     sal_uInt16 nOldMarkMode = pOpt->GetMarkAlignMode();
 
-    sal_uInt16 nPos = pInsertLB->GetSelectEntryPos();
+    sal_Int32 nPos = pInsertLB->GetSelectEntryPos();
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
     {
         pAttr = (CharAttr *)pInsertLB->GetEntryData(nPos);
@@ -1893,8 +1893,7 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet&  )
     pChangedColorLB->InsertEntry(sAuthor);
 
     XColorListRef pColorLst = XColorList::GetStdColorList();
-    sal_uInt16 i;
-    for( i = 0; i < pColorLst->Count(); ++i )
+    for( sal_Int32 i = 0; i < pColorLst->Count(); ++i )
     {
         XColorEntry* pEntry = pColorLst->GetColor( i );
         Color aColor = pEntry->GetColor();
@@ -1965,7 +1964,7 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet&  )
     lcl_FillRedlineAttrListBox(*pChangedLB, rChangedAttr, aChangedAttrMap,
             sizeof(aChangedAttrMap) / sizeof(sal_uInt16));
 
-    sal_uInt16 nPos = 0;
+    sal_Int32 nPos = 0;
     switch (pOpt->GetMarkAlignMode())
     {
         case text::HoriOrientation::NONE:     nPos = 0;   break;
@@ -2022,7 +2021,7 @@ IMPL_LINK( SwRedlineOptionsTabPage, AttribHdl, ListBox *, pLB )
     rFont.SetCaseMap(SVX_CASEMAP_NOT_MAPPED);
     rCJKFont.SetCaseMap(SVX_CASEMAP_NOT_MAPPED);
 
-    sal_uInt16      nPos = pColorLB->GetSelectEntryPos();
+    sal_Int32      nPos = pColorLB->GetSelectEntryPos();
 
     switch( nPos )
     {
@@ -2117,7 +2116,7 @@ IMPL_LINK( SwRedlineOptionsTabPage, ColorHdl, ColorListBox *, pColorLB )
 
     SvxFont&    rFont = pPrev->GetFont();
     SvxFont&    rCJKFont = pPrev->GetCJKFont();
-    sal_uInt16      nPos = pLB->GetSelectEntryPos();
+    sal_Int32      nPos = pLB->GetSelectEntryPos();
     if( nPos == LISTBOX_ENTRY_NOTFOUND )
         nPos = 0;
 

@@ -69,13 +69,13 @@ ScTpSubTotalGroup::ScTpSubTotalGroup( Window* pParent,
 
 ScTpSubTotalGroup::~ScTpSubTotalGroup()
 {
-    sal_uInt16  nCount = (sal_uInt16)mpLbColumns->GetEntryCount();
+    sal_uLong  nCount = mpLbColumns->GetEntryCount();
 
     if ( nCount > 0 )
     {
         sal_uInt16* pData = NULL;
 
-        for ( sal_uInt16 i=0; i<nCount; i++ )
+        for ( sal_uLong i=0; i<nCount; i++ )
         {
             pData = (sal_uInt16*)(mpLbColumns->GetEntryData( i ));
             OSL_ENSURE( pData, "EntryData not found" );
@@ -123,7 +123,7 @@ bool ScTpSubTotalGroup::DoReset( sal_uInt16             nGroupNo,
 
 
     // first we have to clear the listboxes...
-    for ( sal_uInt16 nLbEntry = 0; nLbEntry < mpLbColumns->GetEntryCount(); ++nLbEntry )
+    for ( sal_uLong nLbEntry = 0; nLbEntry < mpLbColumns->GetEntryCount(); ++nLbEntry )
     {
         mpLbColumns->CheckEntryPos( nLbEntry, false );
         *((sal_uInt16*)mpLbColumns->GetEntryData( nLbEntry )) = 0;

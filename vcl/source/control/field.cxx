@@ -273,8 +273,8 @@ static void ImplUpdateSeparators( const OUString& rOldDecSep, const OUString& rN
         if( pCombo )
         {
             // update box entries
-            sal_uInt16 nEntryCount = pCombo->GetEntryCount();
-            for ( sal_uInt16 i=0; i < nEntryCount; i++ )
+            sal_Int32 nEntryCount = pCombo->GetEntryCount();
+            for ( sal_Int32 i=0; i < nEntryCount; i++ )
             {
                 aText = pCombo->GetEntry( i );
                 void* pEntryData = pCombo->GetEntryData( i );
@@ -981,8 +981,8 @@ void NumericBox::ReformatAll()
     sal_Int64 nValue;
     OUString aStr;
     SetUpdateMode( false );
-    sal_uInt16 nEntryCount = GetEntryCount();
-    for ( sal_uInt16 i=0; i < nEntryCount; i++ )
+    sal_Int32 nEntryCount = GetEntryCount();
+    for ( sal_Int32 i=0; i < nEntryCount; i++ )
     {
         ImplNumericReformat( GetEntry( i ), nValue, aStr );
         RemoveEntryAt(i);
@@ -992,7 +992,7 @@ void NumericBox::ReformatAll()
     SetUpdateMode( true );
 }
 
-void NumericBox::InsertValue( sal_Int64 nValue, sal_uInt16 nPos )
+void NumericBox::InsertValue( sal_Int64 nValue, sal_Int32 nPos )
 {
     ComboBox::InsertEntry( CreateFieldText( nValue ), nPos );
 }
@@ -1828,8 +1828,8 @@ void MetricBox::ReformatAll()
     double nValue;
     OUString aStr;
     SetUpdateMode( false );
-    sal_uInt16 nEntryCount = GetEntryCount();
-    for ( sal_uInt16 i=0; i < nEntryCount; i++ )
+    sal_Int32 nEntryCount = GetEntryCount();
+    for ( sal_Int32 i=0; i < nEntryCount; i++ )
     {
         ImplMetricReformat( GetEntry( i ), nValue, aStr );
         RemoveEntryAt(i);
@@ -1844,7 +1844,7 @@ void MetricBox::CustomConvert()
     maCustomConvertLink.Call( this );
 }
 
-void MetricBox::InsertValue( sal_Int64 nValue, FieldUnit eInUnit, sal_uInt16 nPos )
+void MetricBox::InsertValue( sal_Int64 nValue, FieldUnit eInUnit, sal_Int32 nPos )
 {
     // convert to previously configured units
     nValue = MetricField::ConvertValue( nValue, mnBaseValue, GetDecimalDigits(),
@@ -1852,7 +1852,7 @@ void MetricBox::InsertValue( sal_Int64 nValue, FieldUnit eInUnit, sal_uInt16 nPo
     ComboBox::InsertEntry( CreateFieldText( nValue ), nPos );
 }
 
-sal_Int64 MetricBox::GetValue( sal_uInt16 nPos, FieldUnit eOutUnit ) const
+sal_Int64 MetricBox::GetValue( sal_Int32 nPos, FieldUnit eOutUnit ) const
 {
     double nValue = 0;
     ImplMetricGetValue( ComboBox::GetEntry( nPos ), nValue, mnBaseValue,
@@ -1865,7 +1865,7 @@ sal_Int64 MetricBox::GetValue( sal_uInt16 nPos, FieldUnit eOutUnit ) const
     return nRetValue;
 }
 
-sal_uInt16 MetricBox::GetValuePos( sal_Int64 nValue, FieldUnit eInUnit ) const
+sal_Int32 MetricBox::GetValuePos( sal_Int64 nValue, FieldUnit eInUnit ) const
 {
     // convert to previously configured units
     nValue = MetricField::ConvertValue( nValue, mnBaseValue, GetDecimalDigits(),
@@ -2143,8 +2143,8 @@ void CurrencyBox::ReformatAll()
 {
     OUString aStr;
     SetUpdateMode( false );
-    sal_uInt16 nEntryCount = GetEntryCount();
-    for ( sal_uInt16 i=0; i < nEntryCount; i++ )
+    sal_Int32 nEntryCount = GetEntryCount();
+    for ( sal_Int32 i=0; i < nEntryCount; i++ )
     {
         ImplCurrencyReformat( GetEntry( i ), aStr );
         RemoveEntryAt(i);

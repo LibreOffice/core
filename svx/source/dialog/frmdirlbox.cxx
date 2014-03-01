@@ -55,22 +55,22 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFrameDirectionListBox(Windo
 }
 
 
-void FrameDirectionListBox::InsertEntryValue( const OUString& rString, SvxFrameDirection eDirection, sal_uInt16 nPos )
+void FrameDirectionListBox::InsertEntryValue( const OUString& rString, SvxFrameDirection eDirection, sal_Int32 nPos )
 {
-    sal_uInt16 nRealPos = InsertEntry( rString, nPos );
+    sal_Int32 nRealPos = InsertEntry( rString, nPos );
     SetEntryData( nRealPos, lclEnumToVoid( eDirection ) );
 }
 
 void FrameDirectionListBox::RemoveEntryValue( SvxFrameDirection eDirection )
 {
-    sal_uInt16 nPos = GetEntryPos( lclEnumToVoid( eDirection ) );
+    sal_Int32 nPos = GetEntryPos( lclEnumToVoid( eDirection ) );
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
         RemoveEntry( nPos );
 }
 
 void FrameDirectionListBox::SelectEntryValue( SvxFrameDirection eDirection )
 {
-    sal_uInt16 nPos = GetEntryPos( lclEnumToVoid( eDirection ) );
+    sal_Int32 nPos = GetEntryPos( lclEnumToVoid( eDirection ) );
     if( nPos == LISTBOX_ENTRY_NOTFOUND )
         SetNoSelection();
     else
@@ -79,7 +79,7 @@ void FrameDirectionListBox::SelectEntryValue( SvxFrameDirection eDirection )
 
 SvxFrameDirection FrameDirectionListBox::GetSelectEntryValue() const
 {
-    sal_uInt16 nPos = GetSelectEntryPos();
+    sal_Int32 nPos = GetSelectEntryPos();
     if( nPos == LISTBOX_ENTRY_NOTFOUND )
         return static_cast< SvxFrameDirection >( 0xFFFF );
     return lclVoidToEnum( GetEntryData( nPos ) );

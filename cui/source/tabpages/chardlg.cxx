@@ -237,14 +237,14 @@ struct SvxCharNamePage_Impl
     Timer           m_aUpdateTimer;
     OUString        m_aNoStyleText;
     const FontList* m_pFontList;
-    sal_uInt16          m_nExtraEntryPos;
+    sal_Int32           m_nExtraEntryPos;
     sal_Bool            m_bMustDelete;
     sal_Bool            m_bInSearchMode;
 
     SvxCharNamePage_Impl() :
 
         m_pFontList     ( NULL ),
-        m_nExtraEntryPos( LISTBOX_ENTRY_NOTFOUND ),
+        m_nExtraEntryPos( COMBOBOX_ENTRY_NOTFOUND ),
         m_bMustDelete   ( sal_False ),
         m_bInSearchMode ( sal_False )
 
@@ -888,7 +888,7 @@ sal_Bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLan
     const OUString& rFontName  = pNameBox->GetText();
     const FontList* pFontList = GetFontList();
     OUString aStyleBoxText =pStyleBox->GetText();
-    sal_uInt16 nEntryPos = pStyleBox->GetEntryPos( aStyleBoxText );
+    sal_Int32 nEntryPos = pStyleBox->GetEntryPos( aStyleBoxText );
     if ( nEntryPos >= m_pImpl->m_nExtraEntryPos )
         aStyleBoxText = "";
     FontInfo aInfo( pFontList->Get( rFontName, aStyleBoxText ) );
@@ -1086,7 +1086,7 @@ sal_Bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLan
     }
     nWhich = GetWhich( nSlot );
     pOld = GetOldItem( rSet, nSlot );
-    sal_uInt16 nLangPos = pLangBox->GetSelectEntryPos();
+    sal_Int32 nLangPos = pLangBox->GetSelectEntryPos();
     LanguageType eLangType = (LanguageType)(sal_uLong)pLangBox->GetEntryData( nLangPos );
 
     if ( pOld )
@@ -1432,7 +1432,7 @@ void SvxCharEffectsPage::UpdatePreview_Impl()
     SvxFont& rCJKFont = GetPreviewCJKFont();
     SvxFont& rCTLFont = GetPreviewCTLFont();
 
-    sal_uInt16 nPos = m_pUnderlineLB->GetSelectEntryPos();
+    sal_Int32 nPos = m_pUnderlineLB->GetSelectEntryPos();
     FontUnderline eUnderline = (FontUnderline)(sal_uLong)m_pUnderlineLB->GetEntryData( nPos );
     nPos = m_pOverlineLB->GetSelectEntryPos();
     FontUnderline eOverline = (FontUnderline)(sal_uLong)m_pOverlineLB->GetEntryData( nPos );
@@ -1458,7 +1458,7 @@ void SvxCharEffectsPage::UpdatePreview_Impl()
     rCJKFont.SetEmphasisMark( eMark );
     rCTLFont.SetEmphasisMark( eMark );
 
-    sal_uInt16 nRelief = m_pReliefLB->GetSelectEntryPos();
+    sal_Int32 nRelief = m_pReliefLB->GetSelectEntryPos();
     if(LISTBOX_ENTRY_NOTFOUND != nRelief)
     {
         rFont.SetRelief( (FontRelief)nRelief );
@@ -1474,7 +1474,7 @@ void SvxCharEffectsPage::UpdatePreview_Impl()
     rCJKFont.SetShadow( rFont.IsShadow() );
     rCTLFont.SetShadow( rFont.IsShadow() );
 
-    sal_uInt16 nCapsPos = m_pEffectsLB->GetSelectEntryPos();
+    sal_Int32 nCapsPos = m_pEffectsLB->GetSelectEntryPos();
     if ( nCapsPos != LISTBOX_ENTRY_NOTFOUND )
     {
         rFont.SetCaseMap( (SvxCaseMap)nCapsPos );
@@ -1497,7 +1497,7 @@ void SvxCharEffectsPage::SetCaseMap_Impl( SvxCaseMap eCaseMap )
 {
     if ( SVX_CASEMAP_END > eCaseMap )
         m_pEffectsLB->SelectEntryPos(
-            sal::static_int_cast< sal_uInt16 >( eCaseMap ) );
+            sal::static_int_cast< sal_Int32 >( eCaseMap ) );
     else
     {
         m_pEffectsLB->SetNoSelection();
@@ -1545,7 +1545,7 @@ void SvxCharEffectsPage::ResetColor_Impl( const SfxItemSet& rSet )
             rCTLFont.SetColor( aColor.GetColor() == COL_AUTO ? Color(COL_BLACK) : aColor );
 
             m_pPreviewWin->Invalidate();
-            sal_uInt16 nSelPos = m_pFontColorLB->GetEntryPos( aColor );
+            sal_Int32 nSelPos = m_pFontColorLB->GetEntryPos( aColor );
             if ( nSelPos == LISTBOX_ENTRY_NOTFOUND && aColor == Color( COL_TRANSPARENT ) )
                 nSelPos = m_pFontColorLB->GetEntryPos( m_aTransparentColorName );
 
@@ -1612,7 +1612,7 @@ IMPL_LINK( SvxCharEffectsPage, SelectHdl_Impl, ListBox*, pBox )
 {
     if ( m_pEmphasisLB == pBox )
     {
-        sal_uInt16 nEPos = m_pEmphasisLB->GetSelectEntryPos();
+        sal_Int32 nEPos = m_pEmphasisLB->GetSelectEntryPos();
         sal_Bool bEnable = ( nEPos > 0 && nEPos != LISTBOX_ENTRY_NOTFOUND );
         m_pPositionFT->Enable( bEnable );
         m_pPositionLB->Enable( bEnable );
@@ -1625,7 +1625,7 @@ IMPL_LINK( SvxCharEffectsPage, SelectHdl_Impl, ListBox*, pBox )
     }
     else if ( m_pPositionLB != pBox )
     {
-        sal_uInt16 nUPos = m_pUnderlineLB->GetSelectEntryPos(),
+        sal_Int32 nUPos = m_pUnderlineLB->GetSelectEntryPos(),
                nOPos = m_pOverlineLB->GetSelectEntryPos(),
                nSPos = m_pStrikeoutLB->GetSelectEntryPos();
         sal_Bool bUEnable = ( nUPos > 0 && nUPos != LISTBOX_ENTRY_NOTFOUND );
@@ -1745,7 +1745,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
 
             if ( eUnderline != UNDERLINE_NONE )
             {
-                for ( sal_uInt16 i = 0; i < m_pUnderlineLB->GetEntryCount(); ++i )
+                for ( sal_Int32 i = 0; i < m_pUnderlineLB->GetEntryCount(); ++i )
                 {
                     if ( (FontUnderline)(sal_uLong)m_pUnderlineLB->GetEntryData(i) == eUnderline )
                     {
@@ -1756,7 +1756,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
                 }
 
                 Color aColor = rItem.GetColor();
-                sal_uInt16 nPos = m_pUnderlineColorLB->GetEntryPos( aColor );
+                sal_Int32 nPos = m_pUnderlineColorLB->GetEntryPos( aColor );
 
                 if ( LISTBOX_ENTRY_NOTFOUND != nPos )
                     m_pUnderlineColorLB->SelectEntryPos( nPos );
@@ -1802,7 +1802,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
 
             if ( eOverline != UNDERLINE_NONE )
             {
-                for ( sal_uInt16 i = 0; i < m_pOverlineLB->GetEntryCount(); ++i )
+                for ( sal_Int32 i = 0; i < m_pOverlineLB->GetEntryCount(); ++i )
                 {
                     if ( (FontUnderline)(sal_uLong)m_pOverlineLB->GetEntryData(i) == eOverline )
                     {
@@ -1813,7 +1813,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
                 }
 
                 Color aColor = rItem.GetColor();
-                sal_uInt16 nPos = m_pOverlineColorLB->GetEntryPos( aColor );
+                sal_Int32 nPos = m_pOverlineColorLB->GetEntryPos( aColor );
 
                 if ( LISTBOX_ENTRY_NOTFOUND != nPos )
                     m_pOverlineColorLB->SelectEntryPos( nPos );
@@ -1859,7 +1859,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
 
             if ( eStrikeout != STRIKEOUT_NONE )
             {
-                for ( sal_uInt16 i = 0; i < m_pStrikeoutLB->GetEntryCount(); ++i )
+                for ( sal_Int32 i = 0; i < m_pStrikeoutLB->GetEntryCount(); ++i )
                 {
                     if ( (FontStrikeout)(sal_uLong)m_pStrikeoutLB->GetEntryData(i) == eStrikeout )
                     {
@@ -1915,13 +1915,13 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
         rCJKFont.SetEmphasisMark( eMark );
         rCTLFont.SetEmphasisMark( eMark );
 
-        m_pEmphasisLB->SelectEntryPos( (sal_uInt16)( eMark & EMPHASISMARK_STYLE ) );
+        m_pEmphasisLB->SelectEntryPos( (sal_Int32)( eMark & EMPHASISMARK_STYLE ) );
         eMark &= ~EMPHASISMARK_STYLE;
         sal_uLong nEntryData = ( eMark == EMPHASISMARK_POS_ABOVE )
             ? CHRDLG_POSITION_OVER
             : ( eMark == EMPHASISMARK_POS_BELOW ) ? CHRDLG_POSITION_UNDER : 0;
 
-        for ( sal_uInt16 i = 0; i < m_pPositionLB->GetEntryCount(); i++ )
+        for ( sal_Int32 i = 0; i < m_pPositionLB->GetEntryCount(); i++ )
         {
             if ( nEntryData == (sal_uLong)m_pPositionLB->GetEntryData(i) )
             {
@@ -2171,7 +2171,7 @@ sal_Bool SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
     // Underline
     sal_uInt16 nWhich = GetWhich( SID_ATTR_CHAR_UNDERLINE );
     pOld = GetOldItem( rSet, SID_ATTR_CHAR_UNDERLINE );
-    sal_uInt16 nPos = m_pUnderlineLB->GetSelectEntryPos();
+    sal_Int32 nPos = m_pUnderlineLB->GetSelectEntryPos();
     FontUnderline eUnder = (FontUnderline)(sal_uLong)m_pUnderlineLB->GetEntryData( nPos );
 
     if ( pOld )
@@ -2295,8 +2295,8 @@ sal_Bool SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
     // Emphasis
     nWhich = GetWhich( SID_ATTR_CHAR_EMPHASISMARK );
     pOld = GetOldItem( rSet, SID_ATTR_CHAR_EMPHASISMARK );
-    sal_uInt16 nMarkPos = m_pEmphasisLB->GetSelectEntryPos();
-    sal_uInt16 nPosPos = m_pPositionLB->GetSelectEntryPos();
+    sal_Int32 nMarkPos = m_pEmphasisLB->GetSelectEntryPos();
+    sal_Int32 nPosPos = m_pPositionLB->GetSelectEntryPos();
     FontEmphasisMark eMark = (FontEmphasisMark)nMarkPos;
     if ( m_pPositionLB->IsEnabled() )
     {
@@ -2333,7 +2333,7 @@ sal_Bool SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
     pOld = GetOldItem( rSet, SID_ATTR_CHAR_CASEMAP );
     SvxCaseMap eCaseMap = SVX_CASEMAP_NOT_MAPPED;
     bool bChecked = false;
-    sal_uInt16 nCapsPos = m_pEffectsLB->GetSelectEntryPos();
+    sal_Int32 nCapsPos = m_pEffectsLB->GetSelectEntryPos();
     if ( nCapsPos != LISTBOX_ENTRY_NOTFOUND )
     {
         eCaseMap = (SvxCaseMap)nCapsPos;
@@ -3172,7 +3172,7 @@ sal_Bool SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
     // Kerning
     nWhich = GetWhich( SID_ATTR_CHAR_KERNING );
     pOld = GetOldItem( rSet, SID_ATTR_CHAR_KERNING );
-    sal_uInt16 nPos = m_pKerningLB->GetSelectEntryPos();
+    sal_Int32 nPos = m_pKerningLB->GetSelectEntryPos();
     short nKerning = 0;
     SfxMapUnit eUnit = rSet.GetPool()->GetMetric( nWhich );
 
@@ -3345,14 +3345,14 @@ void SvxCharTwoLinesPage::SelectCharacter( ListBox* pBox )
 
 void SvxCharTwoLinesPage::SetBracket( sal_Unicode cBracket, sal_Bool bStart )
 {
-    sal_uInt16 nEntryPos = 0;
+    sal_Int32 nEntryPos = 0;
     ListBox* pBox = bStart ? m_pStartBracketLB : m_pEndBracketLB;
     if ( 0 == cBracket )
         pBox->SelectEntryPos(0);
     else
     {
         bool bFound = false;
-        for ( sal_uInt16 i = 1; i < pBox->GetEntryCount(); ++i )
+        for ( sal_Int32 i = 1; i < pBox->GetEntryCount(); ++i )
         {
             if ( (sal_uLong)pBox->GetEntryData(i) != CHRDLG_ENCLOSE_SPECIAL_CHAR )
             {
@@ -3394,7 +3394,7 @@ IMPL_LINK_NOARG(SvxCharTwoLinesPage, TwoLinesHdl_Impl)
 
 IMPL_LINK( SvxCharTwoLinesPage, CharacterMapHdl_Impl, ListBox*, pBox )
 {
-    sal_uInt16 nPos = pBox->GetSelectEntryPos();
+    sal_Int32 nPos = pBox->GetSelectEntryPos();
     if ( CHRDLG_ENCLOSE_SPECIAL_CHAR == (sal_uLong)pBox->GetEntryData( nPos ) )
         SelectCharacter( pBox );
     else

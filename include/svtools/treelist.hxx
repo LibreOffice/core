@@ -27,6 +27,7 @@
 #include <tools/solar.h>
 #include <tools/link.hxx>
 #include <tools/debug.hxx>
+#include <tools/contnr.hxx>
 
 #include <limits.h>
 #include <vector>
@@ -160,8 +161,8 @@ public:
     SvTreeListEntry*        PrevSibling( SvTreeListEntry* pEntry ) const;
     SvTreeListEntry*        LastSibling( SvTreeListEntry* pEntry ) const;
 
-    sal_uLong           Insert( SvTreeListEntry* pEntry,SvTreeListEntry* pPar,sal_uLong nPos=ULONG_MAX);
-    sal_uLong           Insert( SvTreeListEntry* pEntry,sal_uLong nRootPos = ULONG_MAX )
+    sal_uLong           Insert( SvTreeListEntry* pEntry,SvTreeListEntry* pPar,sal_uLong nPos = TREELIST_APPEND);
+    sal_uLong           Insert( SvTreeListEntry* pEntry,sal_uLong nRootPos = TREELIST_APPEND )
     { return Insert(pEntry, pRootItem, nRootPos ); }
 
     void                InsertTree( SvTreeListEntry* pTree, SvTreeListEntry* pTargetParent, sal_uLong nListPos );

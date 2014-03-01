@@ -24,9 +24,11 @@
 
 #include <limits.h>
 
-#define CONTAINER_APPEND            ULONG_MAX
-#define CONTAINER_ENTRY_NOTFOUND    ULONG_MAX
-#define LIST_APPEND           CONTAINER_APPEND
+#define CONTAINER_APPEND            (ULONG_MAX)
+#define CONTAINER_ENTRY_NOTFOUND    (ULONG_MAX)
+
+#define TREELIST_APPEND             (ULONG_MAX)
+#define TREELIST_ENTRY_NOTFOUND     (ULONG_MAX)
 
 #endif
 

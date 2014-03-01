@@ -55,7 +55,7 @@ public:
                         const OUString& rText,
                         const Image& rEntryImg,
                         SvTreeListEntry* pParent = NULL,
-                        sal_uLong nPos = LIST_APPEND,
+                        sal_uLong nPos = TREELIST_APPEND,
                         IFormulaToken* pToken = NULL );
 
     void            SetActiveFlag(sal_Bool bFlag=sal_True);

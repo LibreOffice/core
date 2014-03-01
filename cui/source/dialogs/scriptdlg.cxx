@@ -359,7 +359,7 @@ SvTreeListEntry * SFTreeListBox::insertEntry(
     {
         Image aImage = SvFileInformationManager::GetFileImage( INetURLObject(factoryURL), false );
         p = InsertEntry(
-            rText, aImage, aImage, pParent, bChildrenOnDemand, LIST_APPEND,
+            rText, aImage, aImage, pParent, bChildrenOnDemand, TREELIST_APPEND,
             aUserData.release()); // XXX possible leak
     }
     else
@@ -393,7 +393,7 @@ SvTreeListEntry * SFTreeListBox::insertEntry(
         aImage = m_docImage;
     }
     SvTreeListEntry * p = InsertEntry(
-        rText, aImage, aImage, pParent, bChildrenOnDemand, LIST_APPEND,
+        rText, aImage, aImage, pParent, bChildrenOnDemand, TREELIST_APPEND,
         aUserData.release()); // XXX possible leak
    return p;
 }
@@ -840,7 +840,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
         //do we need L10N for this? ie somethng like:
         //String aNewStdName( ResId( STR_STDMODULENAME ) );
         sal_Bool bValid = sal_False;
-        sal_uInt16 i = 1;
+        sal_Int32 i = 1;
 
         Sequence< Reference< browse::XBrowseNode > > childNodes;
         // no children => ok to create Parcel1 or Script1 without checking

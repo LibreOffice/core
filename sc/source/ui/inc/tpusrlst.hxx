@@ -81,17 +81,17 @@ private:
     bool            bModifyMode;
     bool            bCancelMode;
     bool            bCopyDone;
-    sal_uInt16      nCancelPos;
+    sal_Int32       nCancelPos;
 
 #ifdef _TPUSRLST_CXX
 private:
     void    Init                ();
-    sal_uInt16  UpdateUserListBox   ();
+    size_t  UpdateUserListBox   ();
     void    UpdateEntries       ( size_t nList );
     void    MakeListStr         ( OUString& rListStr );
     void    AddNewList          ( const OUString& rEntriesStr );
     void    RemoveList          ( size_t nList );
-    void    ModifyList          ( sal_uInt16        nSelList,
+    void    ModifyList          ( size_t          nSelList,
                                   const OUString& rEntriesStr );
     void    CopyListFromArea    ( const ScRefAddress& rStartPos,
                                   const ScRefAddress& rEndPos );

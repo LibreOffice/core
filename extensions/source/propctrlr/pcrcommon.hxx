@@ -20,8 +20,9 @@
 #ifndef _EXTENSIONS_PROPCTRLR_PCRCOMMON_HXX_
 #define _EXTENSIONS_PROPCTRLR_PCRCOMMON_HXX_
 
-#define EDITOR_LIST_APPEND              (sal_uInt16)-1
-#define EDITOR_LIST_REPLACE_EXISTING    (sal_uInt16)-1
+#define EDITOR_LIST_APPEND              (SAL_MAX_UINT16)
+#define EDITOR_LIST_REPLACE_EXISTING    (SAL_MAX_UINT16)
+#define EDITOR_LIST_ENTRY_NOTFOUND      (SAL_MAX_UINT16)
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>

@@ -25,6 +25,7 @@
 #include <vcl/print.hxx>
 #include <vcl/gdimtf.hxx>
 #include <tools/weakbase.hxx>
+#include <tools/contnr.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <svx/svdtypes.hxx>
 #include <svx/svdlayer.hxx>
@@ -126,10 +127,10 @@ public:
     // Neuberechnung der Objekt-Ordnungsnummern
     void     RecalcObjOrdNums();
     bool IsObjOrdNumsDirty() const        { return bObjOrdNumsDirty; }
-    virtual void NbcInsertObject(SdrObject* pObj, sal_uIntPtr nPos=0xFFFF
+    virtual void NbcInsertObject(SdrObject* pObj, sal_uIntPtr nPos=CONTAINER_APPEND
                                  , const SdrInsertReason* pReason=NULL
                                                                       );
-    virtual void InsertObject(SdrObject* pObj, sal_uIntPtr nPos=0xFFFF
+    virtual void InsertObject(SdrObject* pObj, sal_uIntPtr nPos=CONTAINER_APPEND
                               , const SdrInsertReason* pReason=NULL
                                                                      );
     // aus Liste entfernen ohne delete

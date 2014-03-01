@@ -231,7 +231,7 @@ void SvxProxyTabPage::ReadConfigData_Impl()
 
         if( xNameAccess->getByName(aProxyModePN) >>= nIntValue )
         {
-            m_pProxyModeLB->SelectEntryPos( (sal_uInt16) nIntValue );
+            m_pProxyModeLB->SelectEntryPos( nIntValue );
         }
 
         if( xNameAccess->getByName(aHttpProxyPN) >>= aStringValue )
@@ -400,7 +400,7 @@ sal_Bool SvxProxyTabPage::FillItemSet(SfxItemSet& )
     try {
         Reference< beans::XPropertySet > xPropertySet(m_xConfigurationUpdateAccess, UNO_QUERY_THROW );
 
-        sal_uInt16 nSelPos = m_pProxyModeLB->GetSelectEntryPos();
+        sal_Int32 nSelPos = m_pProxyModeLB->GetSelectEntryPos();
         if(m_pProxyModeLB->GetSavedValue() != nSelPos)
         {
             if( nSelPos == 1 )
@@ -509,7 +509,7 @@ void SvxProxyTabPage::EnableControls_Impl(sal_Bool bEnable)
 
 IMPL_LINK( SvxProxyTabPage, ProxyHdl_Impl, ListBox *, pBox )
 {
-    sal_uInt16 nPos = pBox->GetSelectEntryPos();
+    sal_Int32 nPos = pBox->GetSelectEntryPos();
 
     // Restore original system values
     if( nPos == 1 )
@@ -537,8 +537,8 @@ IMPL_LINK( SvxProxyTabPage, LoseFocusHdl_Impl, Edit *, pEdit )
 //#98647#----------------------------------------------
 void SvxScriptExecListBox::RequestHelp( const HelpEvent& rHEvt )
 {   // try to show tips just like as on toolbars
-    sal_uInt16 nPos=LISTBOX_ENTRY_NOTFOUND;
-    sal_uInt16 nTop = GetTopEntry();
+    sal_Int32 nPos=LISTBOX_ENTRY_NOTFOUND;
+    sal_Int32 nTop = GetTopEntry();
     sal_uInt16 nCount = GetDisplayLineCount(); // Attention: Not GetLineCount()
     Point aPt = ScreenToOutputPixel( rHEvt.GetMousePosPixel() );
     Rectangle aItemRect;

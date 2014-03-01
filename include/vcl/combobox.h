@@ -22,9 +22,10 @@
 
 #include <vcl/lstbox.h>
 
-#define COMBOBOX_APPEND             ((sal_uInt16)0xFFFF)
-#define COMBOBOX_ENTRY_NOTFOUND     ((sal_uInt16)0xFFFF)
-#define COMBOBOX_ERROR              ((sal_uInt16)0xFFFF)
+#define COMBOBOX_APPEND             (SAL_MAX_INT32)
+#define COMBOBOX_ENTRY_NOTFOUND     (SAL_MAX_INT32)
+#define COMBOBOX_ERROR              (SAL_MAX_INT32)
+#define COMBOBOX_MAX_ENTRIES        (SAL_MAX_INT32 - 1)
 
 #endif // INCLUDED_VCL_COMBOBOX_H
 

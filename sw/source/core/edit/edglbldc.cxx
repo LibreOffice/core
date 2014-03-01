@@ -238,7 +238,7 @@ sal_Bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos )
 }
 
 sal_Bool SwEditShell::DeleteGlobalDocContent( const SwGlblDocContents& rArr ,
-                                            sal_uInt16 nDelPos )
+                                            size_t nDelPos )
 {
     if( !getIDocumentSettingAccess()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
         return sal_False;
@@ -303,8 +303,8 @@ sal_Bool SwEditShell::DeleteGlobalDocContent( const SwGlblDocContents& rArr ,
 }
 
 sal_Bool SwEditShell::MoveGlobalDocContent( const SwGlblDocContents& rArr ,
-                                        sal_uInt16 nFromPos, sal_uInt16 nToPos,
-                                        sal_uInt16 nInsPos )
+                                        size_t nFromPos, size_t nToPos,
+                                        size_t nInsPos )
 {
     if( !getIDocumentSettingAccess()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) ||
         nFromPos >= rArr.size() || nToPos > rArr.size() ||

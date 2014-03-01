@@ -904,9 +904,9 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
     // Insert all editable accelerators into list box. It is possible
     // that some accelerators are not mapped on the current system/keyboard
     // but we don't want to lose these mappings.
-    sal_uInt16 c1       = KEYCODE_ARRAY_SIZE;
-    sal_uInt16 i1       = 0;
-    sal_uInt16 nListPos = 0;
+    sal_Int32 c1       = KEYCODE_ARRAY_SIZE;
+    sal_Int32 i1       = 0;
+    sal_Int32 nListPos = 0;
     for (i1=0; i1<c1; ++i1)
     {
         KeyCode aKey = KEYCODE_ARRAY[i1];
@@ -914,7 +914,7 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
         if (sKey.isEmpty())
             continue;
         TAccInfo*    pEntry   = new TAccInfo(i1, nListPos, aKey);
-        SvTreeListEntry* pLBEntry = aEntriesBox.InsertEntryToColumn(sKey, 0L, LIST_APPEND, 0xFFFF);
+        SvTreeListEntry* pLBEntry = aEntriesBox.InsertEntryToColumn(sKey, 0L, TREELIST_APPEND, 0xFFFF);
         pLBEntry->SetUserData(pEntry);
     }
 
@@ -930,9 +930,9 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
               OUString     sCommand = xAccMgr->getCommandByKeyEvent(aAWTKey);
               OUString     sLabel   = GetLabel4Command(sCommand);
               KeyCode             aKeyCode = ::svt::AcceleratorExecute::st_AWTKey2VCLKey(aAWTKey);
-              sal_uInt16              nPos     = MapKeyCodeToPos(aKeyCode);
+              sal_uLong              nPos     = MapKeyCodeToPos(aKeyCode);
 
-        if (nPos == LISTBOX_ENTRY_NOTFOUND)
+        if (nPos == TREELIST_ENTRY_NOTFOUND)
             continue;
 
         aEntriesBox.SetEntryText(sLabel, nPos, nCol);
@@ -951,9 +951,9 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
     for (i3=0; i3<c3; ++i3)
     {
         const KeyCode* pKeyCode = Application::GetReservedKeyCode(i3);
-              sal_uInt16   nPos     = MapKeyCodeToPos(*pKeyCode);
+              sal_uLong   nPos     = MapKeyCodeToPos(*pKeyCode);
 
-        if (nPos == LISTBOX_ENTRY_NOTFOUND)
+        if (nPos == TREELIST_ENTRY_NOTFOUND)
             continue;
 
         // Hardcoded function mapped so no ID possible and mark entry as not changeable
@@ -1044,7 +1044,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Default)
 
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, ChangeHdl)
 {
-    sal_uInt16    nPos        = (sal_uInt16) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
+    sal_uLong    nPos        = aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
     TAccInfo* pEntry      = (TAccInfo*)aEntriesBox.GetEntry(0, nPos)->GetUserData();
     OUString    sNewCommand = pFunctionBox->GetCurCommand();
     OUString    sLabel      = pFunctionBox->GetCurLabel();
@@ -1063,7 +1063,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, ChangeHdl)
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RemoveHdl)
 {
     // get selected entry
-    sal_uInt16    nPos   = (sal_uInt16) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
+    sal_uLong    nPos   = aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
     TAccInfo* pEntry = (TAccInfo*)aEntriesBox.GetEntry(0, nPos)->GetUserData();
 
     // remove function name from selected entry
@@ -1082,7 +1082,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
     Help::ShowBalloon( this, Point(), OUString() );
     if ( pListBox == &aEntriesBox )
     {
-        sal_uInt16          nPos                = (sal_uInt16) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
+        sal_uLong          nPos                = aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
         TAccInfo*       pEntry              = (TAccInfo*)aEntriesBox.GetEntry(0, nPos)->GetUserData();
         OUString sPossibleNewCommand = pFunctionBox->GetCurCommand();
 
@@ -1111,7 +1111,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
         SvTreeListEntry*    pLBEntry = aEntriesBox.FirstSelected();
         if ( pLBEntry != 0 )
         {
-            sal_uInt16          nPos                = (sal_uInt16) aEntriesBox.GetModel()->GetRelPos( pLBEntry );
+            sal_uLong          nPos                = aEntriesBox.GetModel()->GetRelPos( pLBEntry );
             TAccInfo*       pEntry              = (TAccInfo*)aEntriesBox.GetEntry(0, nPos)->GetUserData();
             OUString sPossibleNewCommand = pFunctionBox->GetCurCommand();
 
@@ -1131,7 +1131,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
                 if ( pUserData && pUserData->m_sCommand == sPossibleNewCommand )
                 {
                     TAccInfo*    pU1 = new TAccInfo(-1, -1, pUserData->m_aKey);
-                    SvTreeListEntry* pE1 = aKeyBox.InsertEntry( pUserData->m_aKey.GetName(), 0L, sal_True, LIST_APPEND );
+                    SvTreeListEntry* pE1 = aKeyBox.InsertEntry( pUserData->m_aKey.GetName(), 0L, sal_True, TREELIST_APPEND );
                     pE1->SetUserData(pU1);
                     pE1->EnableChildrenOnDemand( false );
                 }
@@ -1144,7 +1144,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
         // goto selected "key" entry of the key box
         SvTreeListEntry* pE2 = 0;
         TAccInfo*    pU2 = 0;
-        sal_uInt16       nP2 = LISTBOX_ENTRY_NOTFOUND;
+        sal_uLong       nP2 = TREELIST_ENTRY_NOTFOUND;
         SvTreeListEntry* pE3 = 0;
 
         pE2 = aKeyBox.FirstSelected();
@@ -1152,7 +1152,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
             pU2 = (TAccInfo*)pE2->GetUserData();
         if (pU2)
             nP2 = MapKeyCodeToPos(pU2->m_aKey);
-        if (nP2 != LISTBOX_ENTRY_NOTFOUND)
+        if (nP2 != TREELIST_ENTRY_NOTFOUND)
             pE3 = aEntriesBox.GetEntry( 0, nP2 );
         if (pE3)
         {
@@ -1462,11 +1462,11 @@ void SfxAcceleratorConfigPage::Reset( const SfxItemSet& rSet )
 }
 
 
-sal_uInt16 SfxAcceleratorConfigPage::MapKeyCodeToPos(const KeyCode& aKey) const
+sal_uLong SfxAcceleratorConfigPage::MapKeyCodeToPos(const KeyCode& aKey) const
 {
     sal_uInt16       nCode1 = aKey.GetCode()+aKey.GetModifier();
     SvTreeListEntry* pEntry = aEntriesBox.First();
-    sal_uInt16       i      = 0;
+    sal_uLong       i      = 0;
 
     while (pEntry)
     {
@@ -1481,7 +1481,7 @@ sal_uInt16 SfxAcceleratorConfigPage::MapKeyCodeToPos(const KeyCode& aKey) const
         ++i;
     }
 
-    return LISTBOX_ENTRY_NOTFOUND;
+    return TREELIST_ENTRY_NOTFOUND;
 }
 
 

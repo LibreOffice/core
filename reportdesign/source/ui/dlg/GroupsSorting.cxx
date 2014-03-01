@@ -253,7 +253,7 @@ sal_Int8 OFieldExpressionControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt
     sal_Int8 nAction = DND_ACTION_NONE;
     if ( IsEditing() )
     {
-        sal_uInt16 nPos = m_pComboCell->GetSelectEntryPos();
+        sal_Int32 nPos = m_pComboCell->GetSelectEntryPos();
         if ( COMBOBOX_ENTRY_NOTFOUND != nPos || !m_pComboCell->GetText().isEmpty() )
             SaveModified();
         DeactivateCell();
@@ -447,7 +447,7 @@ sal_Bool OFieldExpressionControl::SaveModified(bool _bAppendRow)
                 xGroup = m_pParent->getGroup(m_aGroupPositions[nRow]);
             if ( xGroup.is() )
             {
-                sal_uInt16 nPos = m_pComboCell->GetSelectEntryPos();
+                sal_Int32 nPos = m_pComboCell->GetSelectEntryPos();
                 OUString sExpression;
                 if ( COMBOBOX_ENTRY_NOTFOUND == nPos )
                     sExpression = m_pComboCell->GetText();
@@ -1287,7 +1287,7 @@ void OGroupsSortingDialog::displayGroup(const uno::Reference<report::XGroup>& _x
             m_aGroupOnLst.SetEntryData(1,reinterpret_cast<void*>(report::GroupOn::INTERVAL));
             break;
     }
-    sal_uInt16 nPos = 0;
+    sal_Int32 nPos = 0;
     switch(_xGroup->getGroupOn())
     {
         case report::GroupOn::DEFAULT:

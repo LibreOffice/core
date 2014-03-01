@@ -1341,7 +1341,7 @@ size_t Outliner::InsertView( OutlinerView* pView, size_t nIndex )
         advance( it, nIndex );
         ActualIndex = nIndex;
     }
-    pEditEngine->InsertView(  pView->pEditView, (sal_uInt16)nIndex );
+    pEditEngine->InsertView(  pView->pEditView, nIndex );
     return ActualIndex;
 }
 
@@ -1364,10 +1364,10 @@ OutlinerView* Outliner::RemoveView( OutlinerView* pView )
 OutlinerView* Outliner::RemoveView( size_t nIndex )
 {
 
-    EditView* pEditView = pEditEngine->GetView( (sal_uInt16)nIndex );
+    EditView* pEditView = pEditEngine->GetView( nIndex );
     pEditView->HideCursor(); // HACK
 
-    pEditEngine->RemoveView( (sal_uInt16)nIndex );
+    pEditEngine->RemoveView( nIndex );
 
     {
         ViewList::iterator it = aViewList.begin();

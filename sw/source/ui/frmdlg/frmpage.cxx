@@ -447,7 +447,7 @@ static void lcl_InsertVectors(ListBox& rBox,
         nEntry = rBox.InsertEntry(*aIt);
     rBox.SetSeparatorPos(nEntry);
     //now insert all strings sorted
-    sal_uInt16 nStartPos = rBox.GetEntryCount();
+    sal_uInt16 nStartPos = static_cast<sal_uInt16>(rBox.GetEntryCount());
 
     for(aIt = rPrev.begin(); aIt != rPrev.end(); ++aIt)
         ::InsertStringSorted(*aIt, rBox, nStartPos );
@@ -1063,7 +1063,7 @@ sal_Bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
         SwFmtHoriOrient aHoriOrient( (const SwFmtHoriOrient&)
                                                 rOldSet.Get(RES_HORI_ORIENT) );
 
-        sal_uInt16 nMapPos = GetMapPos(pHMap, *m_pHorizontalDLB);
+        sal_uInt16 nMapPos = static_cast<sal_uInt16>(GetMapPos(pHMap, *m_pHorizontalDLB));
         short nAlign = GetAlignment(pHMap, nMapPos, *m_pHorizontalDLB, *m_pHoriRelationLB);
         short nRel = GetRelation(pHMap, *m_pHoriRelationLB);
 
@@ -1102,7 +1102,7 @@ sal_Bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
         SwFmtVertOrient aVertOrient( (const SwFmtVertOrient&)
                                                 rOldSet.Get(RES_VERT_ORIENT) );
 
-        sal_uInt16 nMapPos = GetMapPos(pVMap, *m_pVerticalDLB);
+        sal_uInt16 nMapPos = static_cast<sal_uInt16>(GetMapPos(pVMap, *m_pVerticalDLB));
         short nAlign = GetAlignment(pVMap, nMapPos, *m_pVerticalDLB, *m_pVertRelationLB);
         short nRel = GetRelation(pVMap, *m_pVertRelationLB);
 
@@ -1151,7 +1151,7 @@ sal_Bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
     const SwFmtFrmSize& rOldSize = (const SwFmtFrmSize& )rOldSet.Get(RES_FRM_SIZE);
     SwFmtFrmSize aSz( rOldSize );
 
-    sal_uInt16 nRelWidthRelation = m_pRelWidthRelationLB->GetSelectEntryPos();
+    sal_Int32 nRelWidthRelation = m_pRelWidthRelationLB->GetSelectEntryPos();
     if (nRelWidthRelation != LISTBOX_ENTRY_NOTFOUND)
     {
         if (nRelWidthRelation == 0)
@@ -1159,7 +1159,7 @@ sal_Bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
         else if (nRelWidthRelation == 1)
             aSz.SetWidthPercentRelation(text::RelOrientation::PAGE_FRAME);
     }
-    sal_uInt16 nRelHeightRelation = m_pRelHeightRelationLB->GetSelectEntryPos();
+    sal_Int32 nRelHeightRelation = m_pRelHeightRelationLB->GetSelectEntryPos();
     if (nRelHeightRelation != LISTBOX_ENTRY_NOTFOUND)
     {
         if (nRelHeightRelation == 0)
@@ -1250,7 +1250,7 @@ void SwFrmPage::InitPos(RndStdIds eId,
                                 long   nX,
                                 long   nY)
 {
-    sal_uInt16 nPos = m_pVerticalDLB->GetSelectEntryPos();
+    sal_Int32 nPos = m_pVerticalDLB->GetSelectEntryPos();
     if ( nPos != LISTBOX_ENTRY_NOTFOUND && pVMap )
     {
         nOldV    = pVMap[nPos].nAlign;
@@ -1325,7 +1325,7 @@ void SwFrmPage::InitPos(RndStdIds eId,
         nH    = nOldH;
         nHRel = nOldHRel;
     }
-    sal_uInt16 nMapPos = FillPosLB(pHMap, nH, nHRel, *m_pHorizontalDLB);
+    sal_Int32 nMapPos = FillPosLB(pHMap, nH, nHRel, *m_pHorizontalDLB);
     FillRelLB(pHMap, nMapPos, nH, nHRel, *m_pHoriRelationLB, *m_pHoriRelationFT);
 
     // vertical
@@ -1376,7 +1376,7 @@ void SwFrmPage::InitPos(RndStdIds eId,
     UpdateExample();
 }
 
-sal_uInt16 SwFrmPage::FillPosLB(const FrmMap* _pMap,
+sal_Int32 SwFrmPage::FillPosLB(const FrmMap* _pMap,
                             const sal_uInt16 _nAlign,
                             const sal_uInt16 _nRel,
                             ListBox& _rLB )
@@ -1471,7 +1471,7 @@ sal_uLong SwFrmPage::FillRelLB( const FrmMap* _pMap,
                                                                 bIsVerticalL2R,
                                                                 bIsInRightToLeft);
                             OUString sEntry = aFramePosString.GetString(sStrId1);
-                            sal_uInt16 nPos = _rLB.InsertEntry(sEntry);
+                            sal_Int32 nPos = _rLB.InsertEntry(sEntry);
                             _rLB.SetEntryData(nPos, &aAsCharRelationMap[nRelPos]);
                             if (_pMap[nMapPos].nAlign == _nAlign)
                                 sSelEntry = sEntry;
@@ -1488,7 +1488,7 @@ sal_uLong SwFrmPage::FillRelLB( const FrmMap* _pMap,
 
                 if (!_rLB.GetSelectEntryCount())
                 {
-                    for (sal_uInt16 i = 0; i < _rLB.GetEntryCount(); i++)
+                    for (sal_Int32 i = 0; i < _rLB.GetEntryCount(); i++)
                     {
                         RelationMap *pEntry = (RelationMap *)_rLB.GetEntryData(i);
                         if (pEntry->nLBRelation == LB_REL_CHAR) // default
@@ -1536,7 +1536,7 @@ sal_uLong SwFrmPage::FillRelLB( const FrmMap* _pMap,
                                                                 bIsVerticalL2R,
                                                                 bIsInRightToLeft);
                             OUString sEntry = aFramePosString.GetString(eStrId1);
-                            sal_uInt16 nPos = _rLB.InsertEntry(sEntry);
+                            sal_Int32 nPos = _rLB.InsertEntry(sEntry);
                             _rLB.SetEntryData(nPos, &aRelationMap[nRelPos]);
                             if (sSelEntry.isEmpty() && aRelationMap[nRelPos].nRelation == _nRel)
                                 sSelEntry = sEntry;
@@ -1569,7 +1569,7 @@ sal_uLong SwFrmPage::FillRelLB( const FrmMap* _pMap,
                         break;
                 }
 
-                for (sal_uInt16 i = 0; i < _rLB.GetEntryCount(); i++)
+                for (sal_Int32 i = 0; i < _rLB.GetEntryCount(); i++)
                 {
                     RelationMap *pEntry = (RelationMap *)_rLB.GetEntryData(i);
                     if (pEntry->nRelation == _nRel)
@@ -1598,7 +1598,7 @@ sal_uLong SwFrmPage::FillRelLB( const FrmMap* _pMap,
 short SwFrmPage::GetRelation(FrmMap * /*pMap*/, ListBox &rRelationLB)
 {
     short nRel = 0;
-    sal_uInt16 nPos = rRelationLB.GetSelectEntryPos();
+    sal_Int32 nPos = rRelationLB.GetSelectEntryPos();
 
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
     {
@@ -1609,10 +1609,18 @@ short SwFrmPage::GetRelation(FrmMap * /*pMap*/, ListBox &rRelationLB)
     return nRel;
 }
 
-short SwFrmPage::GetAlignment(FrmMap *pMap, sal_uInt16 nMapPos,
+short SwFrmPage::GetAlignment(FrmMap *pMap, sal_Int32 nMapPos,
         ListBox &/*rAlignLB*/, ListBox &rRelationLB)
 {
     short nAlign = 0;
+
+    if (!pMap || nMapPos < 0)
+        return nAlign;
+
+    size_t nMapCount = ::lcl_GetFrmMapCount(pMap);
+
+    if (static_cast<size_t>(nMapPos) >= nMapCount)
+        return nAlign;
 
     // i#22341 special handling also for map <aVCharMap>,
     // because it contains ambigous items for alignment
@@ -1622,7 +1630,6 @@ short SwFrmPage::GetAlignment(FrmMap *pMap, sal_uInt16 nMapPos,
         if (rRelationLB.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND)
         {
             sal_uLong  nRel = ((RelationMap *)rRelationLB.GetEntryData(rRelationLB.GetSelectEntryPos()))->nLBRelation;
-            size_t nMapCount = ::lcl_GetFrmMapCount(pMap);
             SvxSwFramePosString::StringId eStrId = pMap[nMapPos].eStrId;
 
             for (size_t i = 0; i < nMapCount; i++)
@@ -1645,10 +1652,10 @@ short SwFrmPage::GetAlignment(FrmMap *pMap, sal_uInt16 nMapPos,
     return nAlign;
 }
 
-sal_uInt16 SwFrmPage::GetMapPos( const FrmMap *pMap, ListBox &rAlignLB )
+sal_Int32 SwFrmPage::GetMapPos( const FrmMap *pMap, ListBox &rAlignLB )
 {
-    sal_uInt16 nMapPos = 0;
-    sal_uInt16 nLBSelPos = rAlignLB.GetSelectEntryPos();
+    sal_Int32 nMapPos = 0;
+    sal_Int32 nLBSelPos = rAlignLB.GetSelectEntryPos();
 
     if (nLBSelPos != LISTBOX_ENTRY_NOTFOUND)
     {
@@ -1666,7 +1673,7 @@ sal_uInt16 SwFrmPage::GetMapPos( const FrmMap *pMap, ListBox &rAlignLB )
 
                 if (sEntry == sSelEntry)
                 {
-                    nMapPos = static_cast< sal_uInt16 >(i);
+                    nMapPos = static_cast< sal_Int32 >(i);
                     break;
                 }
             }
@@ -1797,7 +1804,7 @@ IMPL_LINK_NOARG(SwFrmPage, RangeModifyHdl)
     if ( pHMap )
     {
         // alignment horizonal
-        sal_uInt16 nMapPos = GetMapPos(pHMap, *m_pHorizontalDLB);
+        sal_uInt16 nMapPos = static_cast<sal_uInt16>(GetMapPos(pHMap, *m_pHorizontalDLB));
         short nAlign = GetAlignment(pHMap, nMapPos, *m_pHorizontalDLB, *m_pHoriRelationLB);
         short nRel = GetRelation(pHMap, *m_pHoriRelationLB);
 
@@ -1810,7 +1817,7 @@ IMPL_LINK_NOARG(SwFrmPage, RangeModifyHdl)
     if ( pVMap )
     {
         // alignment vertical
-        sal_uInt16 nMapPos = GetMapPos(pVMap, *m_pVerticalDLB);
+        sal_uInt16 nMapPos = static_cast<sal_uInt16>(GetMapPos(pVMap, *m_pVerticalDLB));
         short nAlign = GetAlignment(pVMap, nMapPos, *m_pVerticalDLB, *m_pVertRelationLB);
         short nRel = GetRelation(pVMap, *m_pVertRelationLB);
 
@@ -1940,7 +1947,7 @@ IMPL_LINK( SwFrmPage, PosHdl, ListBox *, pLB )
     FixedText *pRelFT = bHori ? m_pHoriRelationFT : m_pVertRelationFT;
     FrmMap *pMap = bHori ? pHMap : pVMap;
 
-    sal_uInt16 nMapPos = GetMapPos(pMap, *pLB);
+    sal_uInt16 nMapPos = static_cast<sal_uInt16>(GetMapPos(pMap, *pLB));
     short nAlign = GetAlignment(pMap, nMapPos, *pLB, *pRelLB);
 
     if (bHori)
@@ -2118,10 +2125,10 @@ IMPL_LINK( SwFrmPage, ModifyHdl, Edit *, pEdit )
 
 void SwFrmPage::UpdateExample()
 {
-    sal_uInt16 nPos = m_pHorizontalDLB->GetSelectEntryPos();
+    sal_Int32 nPos = m_pHorizontalDLB->GetSelectEntryPos();
     if ( pHMap && nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        sal_uInt16 nMapPos = GetMapPos(pHMap, *m_pHorizontalDLB);
+        sal_uInt16 nMapPos = static_cast<sal_uInt16>(GetMapPos(pHMap, *m_pHorizontalDLB));
         short nAlign = GetAlignment(pHMap, nMapPos, *m_pHorizontalDLB, *m_pHoriRelationLB);
         short nRel = GetRelation(pHMap, *m_pHoriRelationLB);
 
@@ -2132,7 +2139,7 @@ void SwFrmPage::UpdateExample()
     nPos = m_pVerticalDLB->GetSelectEntryPos();
     if ( pVMap && nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        sal_uInt16 nMapPos = GetMapPos(pVMap, *m_pVerticalDLB);
+        sal_uInt16 nMapPos = static_cast<sal_uInt16>(GetMapPos(pVMap, *m_pVerticalDLB));
         short nAlign = GetAlignment(pVMap, nMapPos, *m_pVerticalDLB, *m_pVertRelationLB);
         short nRel = GetRelation(pVMap, *m_pVertRelationLB);
 
@@ -3044,7 +3051,8 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
             sal_uLong nData = FRMDIR_VERT_TOP_RIGHT;
             pTextFlowLB->RemoveEntry(pTextFlowLB->GetEntryPos((void*)nData));
         }
-        sal_uInt16 nPos, nVal = ((SvxFrameDirectionItem&)rSet.Get(RES_FRAMEDIR)).GetValue();
+        sal_uInt16 nVal = ((SvxFrameDirectionItem&)rSet.Get(RES_FRAMEDIR)).GetValue();
+        sal_Int32 nPos;
         for( nPos = pTextFlowLB->GetEntryCount(); nPos; )
             if( (sal_uInt16)(sal_IntPtr)pTextFlowLB->GetEntryData( --nPos ) == nVal )
                 break;
@@ -3085,12 +3093,12 @@ sal_Bool SwFrmAddPage::FillItemSet(SfxItemSet &rSet)
     // textflow
     if( pTextFlowLB->IsVisible() )
     {
-        sal_uInt16 nPos = pTextFlowLB->GetSelectEntryPos();
+        sal_Int32 nPos = pTextFlowLB->GetSelectEntryPos();
         if( nPos != pTextFlowLB->GetSavedValue() )
         {
-            nPos = (sal_uInt16)(sal_IntPtr)pTextFlowLB->GetEntryData( nPos );
+            sal_uInt16 nData = (sal_uInt16)(sal_IntPtr)pTextFlowLB->GetEntryData( nPos );
             bRet |= 0 != rSet.Put( SvxFrameDirectionItem(
-                                    (SvxFrameDirection)nPos, RES_FRAMEDIR ));
+                                    (SvxFrameDirection)nData, RES_FRAMEDIR ));
         }
     }
     if(pWrtSh)
@@ -3155,7 +3163,7 @@ IMPL_LINK(SwFrmAddPage, ChainModifyHdl, ListBox*, pBox)
     {
         bool bNextBox = pNextLB == pBox;
         ListBox& rChangeLB = bNextBox ? *pPrevLB : *pNextLB;
-        for(sal_uInt16 nEntry = rChangeLB.GetEntryCount(); nEntry > 1; nEntry--)
+        for(sal_Int32 nEntry = rChangeLB.GetEntryCount(); nEntry > 1; nEntry--)
             rChangeLB.RemoveEntry(nEntry - 1);
         //determine chainable frames
         ::std::vector< OUString > aPrevPageFrames;

@@ -86,9 +86,9 @@ private:
     sal_uInt16                                          meLastXFS;
     Color                                               maLastColor;
 
-    sal_uInt16                                          mnLastPosGradient;
-    sal_uInt16                                          mnLastPosHatch;
-    sal_uInt16                                          mnLastPosBitmap;
+    sal_Int32                                           mnLastPosGradient;
+    sal_Int32                                           mnLastPosHatch;
+    sal_Int32                                           mnLastPosBitmap;
     sal_uInt16                                          mnLastTransSolid;
 
     XGradient                                           maGradientLinear;

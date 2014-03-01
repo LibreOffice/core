@@ -74,7 +74,7 @@ SdCustomShowDlg::SdCustomShowDlg( Window* pWindow,
         {
             m_pLbCustomShows->InsertEntry( pCustomShow->GetName() );
         }
-        m_pLbCustomShows->SelectEntryPos( (sal_uInt16)nPosToSelect );
+        m_pLbCustomShows->SelectEntryPos( (sal_Int32)nPosToSelect );
         pCustomShowList->Seek( nPosToSelect );
     }
 
@@ -89,7 +89,7 @@ SdCustomShowDlg::~SdCustomShowDlg()
 
 void SdCustomShowDlg::CheckState()
 {
-    sal_uInt16 nPos = m_pLbCustomShows->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLbCustomShows->GetSelectEntryPos();
 
     sal_Bool bEnable = nPos != LISTBOX_ENTRY_NOTFOUND;
     m_pBtnEdit->Enable( bEnable );
@@ -134,7 +134,7 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
     // edit CustomShow
     else if( p == m_pBtnEdit )
     {
-        sal_uInt16 nPos = m_pLbCustomShows->GetSelectEntryPos();
+        sal_Int32 nPos = m_pLbCustomShows->GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             DBG_ASSERT( pCustomShowList, "pCustomShowList does not exist" );
@@ -159,7 +159,7 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
     // delete CustomShow
     else if( p == m_pBtnRemove )
     {
-        sal_uInt16 nPos = m_pLbCustomShows->GetSelectEntryPos();
+        sal_Int32 nPos = m_pLbCustomShows->GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             delete (*pCustomShowList)[nPos];
@@ -172,7 +172,7 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
     // copy CustomShow
     else if( p == m_pBtnCopy )
     {
-        sal_uInt16 nPos = m_pLbCustomShows->GetSelectEntryPos();
+        sal_Int32 nPos = m_pLbCustomShows->GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             SdCustomShow* pShow = new SdCustomShow( *(*pCustomShowList)[nPos] );
@@ -231,7 +231,7 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
     }
     else if( p == m_pLbCustomShows )
     {
-        sal_uInt16 nPos = m_pLbCustomShows->GetSelectEntryPos();
+        sal_Int32 nPos = m_pLbCustomShows->GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
             pCustomShowList->Seek( nPos );
 
@@ -358,15 +358,15 @@ IMPL_LINK( SdDefineCustomShowDlg, ClickButtonHdl, void *, p )
 {
     if( p == m_pBtnAdd )
     {
-        sal_uInt16 nCount = m_pLbPages->GetSelectEntryCount();
+        sal_Int32 nCount = m_pLbPages->GetSelectEntryCount();
         if( nCount > 0 )
         {
-            sal_uLong nPosCP = LIST_APPEND;
+            sal_uLong nPosCP = TREELIST_APPEND;
             SvTreeListEntry* pEntry = m_pLbCustomPages->FirstSelected();
             if( pEntry )
                 nPosCP = m_pLbCustomPages->GetModel()->GetAbsPos( pEntry ) + 1L;
 
-            for( sal_uInt16 i = 0; i < nCount; i++ )
+            for( sal_Int32 i = 0; i < nCount; i++ )
             {
                 OUString aStr = m_pLbPages->GetSelectEntry( i );
                 pEntry = m_pLbCustomPages->InsertEntry( aStr,
@@ -377,7 +377,7 @@ IMPL_LINK( SdDefineCustomShowDlg, ClickButtonHdl, void *, p )
                                     GetSelectEntryPos( i ), PK_STANDARD );
                 pEntry->SetUserData( pPage );
 
-                if( nPosCP != LIST_APPEND )
+                if( nPosCP != TREELIST_APPEND )
                     nPosCP++;
             }
             bModified = sal_True;

@@ -383,7 +383,7 @@ namespace pcr
         OBrowserPage* pPage = getPage( _nPageId );
         DBG_ASSERT( pPage, "OPropertyEditor::InsertEntry: don't have such a page!" );
         if ( !pPage )
-            return LISTBOX_ENTRY_NOTFOUND;
+            return EDITOR_LIST_ENTRY_NOTFOUND;
 
         sal_uInt16 nEntry = pPage->getListBox().InsertEntry( rData, nPos );
 
@@ -427,7 +427,7 @@ namespace pcr
 
     sal_uInt16 OPropertyEditor::GetPropertyPos( const OUString& rEntryName ) const
     {
-        sal_uInt16 nVal=LISTBOX_ENTRY_NOTFOUND;
+        sal_uInt16 nVal=EDITOR_LIST_ENTRY_NOTFOUND;
         const OBrowserPage* pPage = getPage( rEntryName );
         if ( pPage )
             nVal = pPage->getListBox().GetPropertyPos( rEntryName );
