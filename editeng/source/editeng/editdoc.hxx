@@ -710,8 +710,8 @@ public:
     const EditPaM&  Min() const         { return aStartPaM; }
     const EditPaM&  Max() const         { return aEndPaM; }
 
-    sal_Bool            HasRange() const    { return aStartPaM != aEndPaM; }
-    sal_Bool            IsInvalid() const;
+    bool            HasRange() const    { return aStartPaM != aEndPaM; }
+    bool            IsInvalid() const;
     bool            DbgIsBuggy( EditDoc& rDoc );
 
     void            Adjust( const EditDoc& rNodes );

@@ -1212,17 +1212,11 @@ EditSelection& EditSelection::operator = ( const EditPaM& rPaM )
     return *this;
 }
 
-sal_Bool EditSelection::IsInvalid() const
+bool EditSelection::IsInvalid() const
 {
     EditPaM aEmptyPaM;
 
-    if ( aStartPaM == aEmptyPaM )
-        return sal_True;
-
-    if ( aEndPaM == aEmptyPaM )
-        return sal_True;
-
-    return sal_False;
+    return ( aStartPaM == aEmptyPaM ) || ( aEndPaM == aEmptyPaM );
 }
 
 void EditSelection::Adjust( const EditDoc& rNodes )
