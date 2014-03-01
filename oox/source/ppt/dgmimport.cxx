@@ -60,7 +60,7 @@ bool QuickDiagrammingImport::importDocument() throw()
     OOX_DUMP_FILE( ::oox::dump::pptx::Dumper );
 
     OUString aEmpty;
-    OUString aFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "diagramLayout" ) );
+    OUString aFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( "diagramLayout" );
 
     Reference<drawing::XShapes> xParentShape(getParentShape(),
                                              UNO_QUERY_THROW);
