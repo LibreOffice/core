@@ -2480,6 +2480,25 @@ void setRefDeleted( ScSingleRefData& rRef, const sc::RefUpdateContext& rCxt )
         rRef.SetTabDeleted(true);
 }
 
+void restoreDeletedRef( ScSingleRefData& rRef, const sc::RefUpdateContext& rCxt )
+{
+    if (rCxt.mnColDelta)
+    {
+        if (rRef.IsColDeleted())
+            rRef.SetColDeleted(false);
+    }
+    else if (rCxt.mnRowDelta)
+    {
+        if (rRef.IsRowDeleted())
+            rRef.SetRowDeleted(false);
+    }
+    else if (rCxt.mnTabDelta)
+    {
+        if (rRef.IsTabDeleted())
+            rRef.SetTabDeleted(false);
+    }
+}
+
 void setRefDeleted( ScComplexRefData& rRef, const sc::RefUpdateContext& rCxt )
 {
     if (rCxt.mnColDelta < 0)
@@ -2645,6 +2664,18 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                     setRefDeleted(rRef, rCxt);
                     aRes.mbValueChanged = true;
                     break;
+                }
+
+                if (!rCxt.isDeleted() && rRef.IsDeleted())
+                {
+                    // Check if the token has reference to previously deleted region.
+                    ScAddress aCheckPos = rRef.toAbs(aNewPos);
+                    if (rCxt.maRange.In(aCheckPos))
+                    {
+                        restoreDeletedRef(rRef, rCxt);
+                        aRes.mbValueChanged = true;
+                        break;
+                    }
                 }
 
                 if (rCxt.maRange.In(aAbs))
