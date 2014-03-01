@@ -3201,7 +3201,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_CHCBPAT:
             {
                 RTFValue::Pointer_t pValue(new RTFValue(nParam ? getColorTable(nParam) : COL_AUTO));
-                lcl_putNestedAttribute(m_aStates.top().aCharacterSprms, NS_sprm::LN_CShd, NS_ooxml::LN_CT_Shd_fill, pValue);
+                lcl_putNestedAttribute(m_aStates.top().aCharacterSprms, NS_ooxml::LN_EG_RPrBase_shd, NS_ooxml::LN_CT_Shd_fill, pValue);
             }
             break;
         case RTF_CLCBPAT:
@@ -3977,7 +3977,7 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
     if (nSprm >= 0)
     {
         RTFValue::Pointer_t pValue(new RTFValue((!bParam || nParam != 0) ? nSprm : 0));
-        m_aStates.top().aCharacterSprms.set(NS_sprm::LN_CKcd, pValue);
+        m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_RPrBase_em, pValue);
         return 0;
     }
 

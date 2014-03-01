@@ -1307,9 +1307,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                 rContext->Insert(PROP_CHAR_BACK_COLOR, uno::makeAny( mnBackgroundColor ));
         }
         break;
-    case NS_sprm::LN_CKcd:
+    case NS_ooxml::LN_EG_RPrBase_em:
         rContext->Insert(PROP_CHAR_EMPHASIS, uno::makeAny ( getEmphasisValue (nIntValue)));
-        break;  // sprmCKcd
+        break;
     case NS_ooxml::LN_EG_RPrBase_emboss:
     case NS_ooxml::LN_EG_RPrBase_b:
     case NS_ooxml::LN_EG_RPrBase_bCs:
@@ -1590,9 +1590,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         else
             rContext->Insert(PROP_CHAR_FLASH, uno::makeAny( false ));
         break;
-    case NS_sprm::LN_CFBiDi:
-        break;  // sprmCFBiDi
-    case NS_sprm::LN_CShd:
+    case NS_ooxml::LN_EG_RPrBase_rtl:
+        break;
+    case NS_ooxml::LN_EG_RPrBase_shd:
         {
             //contains fore color, back color and shadow percentage, results in a brush
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
