@@ -65,7 +65,7 @@
 #define POS_CONTENT 0
 #define POS_INDEX   1
 
-static sal_uInt16 nTypePos = 1; // TOX_INDEX as standard
+static sal_Int32  nTypePos = 1; // TOX_INDEX as standard
 static sal_uInt16 nKey1Pos = USHRT_MAX;
 
 static sal_uInt16 nKey2Pos = USHRT_MAX;
@@ -455,7 +455,7 @@ static void lcl_SelectSameStrings(SwWrtShell& rSh, sal_Bool bWordOnly, sal_Bool 
 
 void SwIndexMarkPane::InsertMark()
 {
-    sal_uInt16 nPos = m_pTypeDCB->GetEntryPos(m_pTypeDCB->GetSelectEntry());
+    sal_Int32 nPos = m_pTypeDCB->GetEntryPos(m_pTypeDCB->GetSelectEntry());
     TOXTypes eType = nPos == POS_CONTENT ? TOX_CONTENT :
                         nPos == POS_INDEX ? TOX_INDEX : TOX_USER;
 
@@ -519,7 +519,7 @@ void SwIndexMarkPane::UpdateMark()
 
     UpdateKeyBoxes();
 
-    sal_uInt16 nPos = m_pTypeDCB->GetEntryPos(m_pTypeDCB->GetSelectEntry());
+    sal_Int32 nPos = m_pTypeDCB->GetEntryPos(m_pTypeDCB->GetSelectEntry());
     TOXTypes eType = TOX_USER;
     if(POS_CONTENT == nPos)
         eType = TOX_CONTENT;
@@ -554,9 +554,9 @@ void SwIndexMarkPane::UpdateMark()
 void SwIndexMarkPane::UpdateKeyBoxes()
 {
     OUString aKey(m_pKey1DCB->GetText());
-    sal_uInt16 nPos = m_pKey1DCB->GetEntryPos(aKey);
+    sal_Int32 nPos = m_pKey1DCB->GetEntryPos(aKey);
 
-    if(nPos == LISTBOX_ENTRY_NOTFOUND && !aKey.isEmpty())
+    if(nPos == COMBOBOX_ENTRY_NOTFOUND && !aKey.isEmpty())
     {   // create new key
         m_pKey1DCB->InsertEntry(aKey);
     }
@@ -564,7 +564,7 @@ void SwIndexMarkPane::UpdateKeyBoxes()
     aKey = m_pKey2DCB->GetText();
     nPos = m_pKey2DCB->GetEntryPos(aKey);
 
-    if(nPos == LISTBOX_ENTRY_NOTFOUND && !aKey.isEmpty())
+    if(nPos == COMBOBOX_ENTRY_NOTFOUND && !aKey.isEmpty())
     {   // create new key
         m_pKey2DCB->InsertEntry(aKey);
     }
@@ -658,7 +658,7 @@ IMPL_LINK( SwIndexMarkPane, ModifyHdl, ListBox *, pBox )
     if (m_pTypeDCB == pBox)
     {
         // set index type
-        sal_uInt16 nPos = m_pTypeDCB->GetEntryPos(m_pTypeDCB->GetSelectEntry());
+        sal_Int32 nPos = m_pTypeDCB->GetEntryPos(m_pTypeDCB->GetSelectEntry());
         sal_Bool bLevelEnable = sal_False,
              bKeyEnable   = sal_False,
              bSetKey2     = sal_False,

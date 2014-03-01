@@ -47,7 +47,7 @@ class SwFldDokPage : public SwFldPage
     NumFormatListBox*   m_pNumFormatLB;
     CheckBox*           m_pFixedCB;
 
-    sal_uInt16              nOldSel;
+    sal_Int32               nOldSel;
     sal_uLong               nOldFormat;
 
     DECL_LINK(TypeHdl, void *);
@@ -55,7 +55,7 @@ class SwFldDokPage : public SwFldPage
     DECL_LINK(SubTypeHdl, void *);
 
     void                AddSubType(sal_uInt16 nTypeId);
-    sal_uInt16              FillFormatLB(sal_uInt16 nTypeId);
+    sal_Int32           FillFormatLB(sal_uInt16 nTypeId);
 
 protected:
     virtual sal_uInt16      GetGroup();

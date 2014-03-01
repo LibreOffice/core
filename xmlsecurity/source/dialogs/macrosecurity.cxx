@@ -265,13 +265,13 @@ IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, AddLocPBHdl)
 
 IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, RemoveLocPBHdl)
 {
-    sal_uInt16  nSel = m_pTrustFileLocLB->GetSelectEntryPos();
+    sal_Int32  nSel = m_pTrustFileLocLB->GetSelectEntryPos();
     if( nSel != LISTBOX_ENTRY_NOTFOUND )
     {
         m_pTrustFileLocLB->RemoveEntry( nSel );
         // Trusted Path could not be removed (#i33584#)
         // after remove an entry, select another one if exists
-        sal_uInt16 nNewCount = m_pTrustFileLocLB->GetEntryCount();
+        sal_Int32 nNewCount = m_pTrustFileLocLB->GetEntryCount();
         if ( nNewCount > 0 )
         {
             if ( nSel >= nNewCount )
@@ -405,11 +405,11 @@ void MacroSecurityTrustedSourcesTP::ActivatePage()
 
 void MacroSecurityTrustedSourcesTP::ClosePage( void )
 {
-    sal_uInt16  nEntryCnt = m_pTrustFileLocLB->GetEntryCount();
+    sal_Int32  nEntryCnt = m_pTrustFileLocLB->GetEntryCount();
     if( nEntryCnt )
     {
         css::uno::Sequence< OUString > aSecureURLs( nEntryCnt );
-        for( sal_uInt16 i = 0 ; i < nEntryCnt ; ++i )
+        for( sal_Int32 i = 0 ; i < nEntryCnt ; ++i )
         {
             OUString aURL( m_pTrustFileLocLB->GetEntry( i ) );
             osl::FileBase::getFileURLFromSystemPath( aURL, aURL );

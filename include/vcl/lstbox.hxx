@@ -42,8 +42,8 @@ private:
     ImplWin*                    mpImplWin;
     ImplBtn*                    mpBtn;
     sal_uInt16                  mnDDHeight;
-    sal_uInt16                  mnSaveValue;
-    sal_Int32 m_nMaxWidthChars;
+    sal_Int32                   mnSaveValue;
+    sal_Int32                   m_nMaxWidthChars;
     Link                        maSelectHdl;
     Link                        maDoubleClickHdl;
     sal_uInt16                  mnLineCount;
@@ -115,32 +115,32 @@ public:
 
     void                EnableDDAutoWidth( bool b );
 
-    sal_uInt16          InsertEntry( const OUString& rStr, sal_uInt16 nPos = LISTBOX_APPEND );
-    sal_uInt16          InsertEntry( const OUString& rStr, const Image& rImage, sal_uInt16 nPos = LISTBOX_APPEND );
+    sal_Int32           InsertEntry( const OUString& rStr, sal_Int32  nPos = LISTBOX_APPEND );
+    sal_Int32           InsertEntry( const OUString& rStr, const Image& rImage, sal_Int32  nPos = LISTBOX_APPEND );
     void                RemoveEntry( const OUString& rStr );
-    void                RemoveEntry( sal_uInt16 nPos );
+    void                RemoveEntry( sal_Int32  nPos );
 
     void                Clear();
 
-    sal_uInt16          GetEntryPos( const OUString& rStr ) const;
-    sal_uInt16          GetEntryPos( const void* pData ) const;
-    Image               GetEntryImage( sal_uInt16 nPos ) const;
-    OUString            GetEntry( sal_uInt16 nPos ) const;
-    sal_uInt16          GetEntryCount() const;
+    sal_Int32           GetEntryPos( const OUString& rStr ) const;
+    sal_Int32           GetEntryPos( const void* pData ) const;
+    Image               GetEntryImage( sal_Int32  nPos ) const;
+    OUString            GetEntry( sal_Int32  nPos ) const;
+    sal_Int32           GetEntryCount() const;
 
     void                SelectEntry( const OUString& rStr, bool bSelect = true );
-    void                SelectEntryPos( sal_uInt16 nPos, bool bSelect = true );
+    void                SelectEntryPos( sal_Int32  nPos, bool bSelect = true );
 
-    sal_uInt16          GetSelectEntryCount() const;
-    OUString            GetSelectEntry( sal_uInt16 nSelIndex = 0 ) const;
-    sal_uInt16          GetSelectEntryPos( sal_uInt16 nSelIndex = 0 ) const;
+    sal_Int32           GetSelectEntryCount() const;
+    OUString            GetSelectEntry( sal_Int32  nSelIndex = 0 ) const;
+    sal_Int32           GetSelectEntryPos( sal_Int32  nSelIndex = 0 ) const;
 
     bool                IsEntrySelected(const OUString& rStr) const;
-    bool            IsEntryPosSelected( sal_uInt16 nPos ) const;
+    bool                IsEntryPosSelected( sal_Int32  nPos ) const;
     void                SetNoSelection();
 
-    void                SetEntryData( sal_uInt16 nPos, void* pNewData );
-    void*               GetEntryData( sal_uInt16 nPos ) const;
+    void                SetEntryData( sal_Int32  nPos, void* pNewData );
+    void*               GetEntryData( sal_Int32  nPos ) const;
 
     /** this methods stores a combination of flags from the
         LISTBOX_ENTRY_FLAG_* defines at the given entry.
@@ -150,36 +150,36 @@ public:
         to change the internal behaviour of the ListBox implementation
         for specific entries.
     */
-    void                SetEntryFlags( sal_uInt16 nPos, long nFlags );
+    void                SetEntryFlags( sal_Int32  nPos, long nFlags );
 
     /** this methods gets the current combination of flags from the
         LISTBOX_ENTRY_FLAG_* defines from the given entry.
         See description of the possible LISTBOX_ENTRY_FLAG_* flags
         for details.
     */
-    long                GetEntryFlags( sal_uInt16 nPos ) const;
+    long                GetEntryFlags( sal_Int32  nPos ) const;
 
-    void                SetTopEntry( sal_uInt16 nPos );
-    sal_uInt16          GetTopEntry() const;
+    void                SetTopEntry( sal_Int32  nPos );
+    sal_Int32           GetTopEntry() const;
 
     void                SaveValue() { mnSaveValue = GetSelectEntryPos(); }
-    sal_uInt16          GetSavedValue() const { return mnSaveValue; }
+    sal_Int32           GetSavedValue() const { return mnSaveValue; }
 
-    void                SetSeparatorPos( sal_uInt16 n = LISTBOX_ENTRY_NOTFOUND );
-    sal_uInt16          GetSeparatorPos() const;
+    void                SetSeparatorPos( sal_Int32  n = LISTBOX_ENTRY_NOTFOUND );
+    sal_Int32           GetSeparatorPos() const;
 
-    bool            IsTravelSelect() const;
-    bool            IsInDropDown() const;
+    bool                IsTravelSelect() const;
+    bool                IsInDropDown() const;
     void                ToggleDropDown();
 
     void                EnableMultiSelection( bool bMulti, bool bStackSelection );
     void                EnableMultiSelection( bool bMulti );
-    bool            IsMultiSelectionEnabled() const;
+    bool                IsMultiSelectionEnabled() const;
 
     void                SetReadOnly( bool bReadOnly = true );
-    bool            IsReadOnly() const;
+    bool                IsReadOnly() const;
 
-    Rectangle           GetBoundingRectangle( sal_uInt16 nItem ) const;
+    Rectangle           GetBoundingRectangle( sal_Int32  nItem ) const;
 
     void                SetUserItemSize( const Size& rSz );
 
@@ -199,7 +199,7 @@ public:
     Size                CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const;
     void                GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const;
 
-    sal_uInt16          GetMRUCount() const;
+    sal_Int32           GetMRUCount() const;
     sal_uInt16          GetDisplayLineCount() const;
 
     void                EnableMirroring();
@@ -226,7 +226,7 @@ public:
         if no item is at that point.
      */
     using Control::GetIndexForPoint;
-    long GetIndexForPoint( const Point& rPoint, sal_uInt16& rPos ) const;
+    long GetIndexForPoint( const Point& rPoint, sal_Int32 & rPos ) const;
 
     sal_Int32 getMaxWidthChars() const { return m_nMaxWidthChars; }
     void setMaxWidthChars(sal_Int32 nWidth);
@@ -248,7 +248,7 @@ public:
 private:
     // Bei MultiListBox nicht erlaubt...
     void            SaveValue();
-    sal_uInt16      GetSavedValue();
+    sal_Int32       GetSavedValue();
 
 public:
     explicit        MultiListBox( Window* pParent, WinBits nStyle = 0 );

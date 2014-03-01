@@ -380,7 +380,7 @@ void OColumnTreeBox::FillListBox( const ODatabaseExport::TColumnVector& _rList)
     ODatabaseExport::TColumnVector::const_iterator aEnd = _rList.end();
     for(;aIter != aEnd;++aIter)
     {
-        SvTreeListEntry* pEntry = InsertEntry((*aIter)->first,0,sal_False,LIST_APPEND,(*aIter)->second);
+        SvTreeListEntry* pEntry = InsertEntry((*aIter)->first,0,sal_False,TREELIST_APPEND,(*aIter)->second);
         SvButtonState eState = !(m_bReadOnly && (*aIter)->second->IsAutoIncrement()) ? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED;
         SetCheckButtonState( pEntry, eState );
     }

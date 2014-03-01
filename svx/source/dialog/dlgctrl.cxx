@@ -1184,7 +1184,7 @@ void ColorLB::Append( const XColorEntry& rEntry )
 
 /************************************************************************/
 
-void ColorLB::Modify( const XColorEntry& rEntry, sal_uInt16 nPos )
+void ColorLB::Modify( const XColorEntry& rEntry, sal_Int32 nPos )
 {
     RemoveEntry( nPos );
     InsertEntry( rEntry.GetColor(), rEntry.GetName(), nPos );
@@ -1271,7 +1271,7 @@ void HatchingLB::Append( const XHatchEntry& rEntry, const Bitmap& rBitmap )
 
 /************************************************************************/
 
-void HatchingLB::Modify( const XHatchEntry& rEntry, sal_uInt16 nPos, const Bitmap& rBitmap )
+void HatchingLB::Modify( const XHatchEntry& rEntry, sal_Int32 nPos, const Bitmap& rBitmap )
 {
     RemoveEntry( nPos );
 
@@ -1370,7 +1370,7 @@ void GradientLB::Append( const XGradientEntry& rEntry, const Bitmap& rBitmap )
 
 /************************************************************************/
 
-void GradientLB::Modify( const XGradientEntry& rEntry, sal_uInt16 nPos, const Bitmap& rBitmap )
+void GradientLB::Modify( const XGradientEntry& rEntry, sal_Int32 nPos, const Bitmap& rBitmap )
 {
     RemoveEntry( nPos );
 
@@ -1555,7 +1555,7 @@ void BitmapLB::Append(const Size& rSize, const XBitmapEntry& rEntry)
 
 /************************************************************************/
 
-void BitmapLB::Modify(const Size& rSize, const XBitmapEntry& rEntry, sal_uInt16 nPos)
+void BitmapLB::Modify(const Size& rSize, const XBitmapEntry& rEntry, sal_Int32 nPos)
 {
     RemoveEntry(nPos);
     maBitmapEx = rEntry.GetGraphicObject().GetGraphic().GetBitmapEx();
@@ -1705,7 +1705,7 @@ void LineLB::Append( const XDashEntry& rEntry, const Bitmap& rBitmap )
 
 /************************************************************************/
 
-void LineLB::Modify( const XDashEntry& rEntry, sal_uInt16 nPos, const Bitmap& rBitmap )
+void LineLB::Modify( const XDashEntry& rEntry, sal_Int32 nPos, const Bitmap& rBitmap )
 {
     RemoveEntry( nPos );
 
@@ -1805,7 +1805,7 @@ void LineEndLB::Append( const XLineEndEntry& rEntry, const Bitmap& rBitmap, bool
 
 /************************************************************************/
 
-void LineEndLB::Modify( const XLineEndEntry& rEntry, sal_uInt16 nPos, const Bitmap& rBitmap, bool bStart )
+void LineEndLB::Modify( const XLineEndEntry& rEntry, sal_Int32 nPos, const Bitmap& rBitmap, bool bStart )
 {
     RemoveEntry( nPos );
 

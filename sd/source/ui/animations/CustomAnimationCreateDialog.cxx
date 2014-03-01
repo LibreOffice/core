@@ -77,7 +77,7 @@ public:
 
     virtual void        MouseButtonUp( const MouseEvent& rMEvt );
 
-    sal_uInt16          InsertCategory( const OUString& rStr, sal_uInt16 nPos = LISTBOX_APPEND );
+    sal_Int32           InsertCategory( const OUString& rStr, sal_Int32  nPos = LISTBOX_APPEND );
 
     void            SetDoubleClickLink( const Link& rDoubleClickHdl ) { maDoubleClickHdl = rDoubleClickHdl; }
 
@@ -105,9 +105,9 @@ CategoryListBox::~CategoryListBox()
 {
 }
 
-sal_uInt16 CategoryListBox::InsertCategory( const OUString& rStr, sal_uInt16 nPos /* = LISTBOX_APPEND */ )
+sal_Int32  CategoryListBox::InsertCategory( const OUString& rStr, sal_Int32  nPos /* = LISTBOX_APPEND */ )
 {
-    sal_uInt16 n = ListBox::InsertEntry( rStr, nPos );
+    sal_Int32  n = ListBox::InsertEntry( rStr, nPos );
     if( n != LISTBOX_ENTRY_NOTFOUND )
         ListBox::SetEntryFlags( n, ListBox::GetEntryFlags(n) | LISTBOX_ENTRY_FLAG_DISABLE_SELECTION );
 
@@ -208,9 +208,9 @@ private:
 
     sal_uInt16 mnId;
 
-    sal_uInt16 mnCurvePathPos;
-    sal_uInt16 mnPolygonPathPos;
-    sal_uInt16 mnFreeformPathPos;
+    sal_Int32 mnCurvePathPos;
+    sal_Int32 mnPolygonPathPos;
+    sal_Int32 mnFreeformPathPos;
 
 };
 
@@ -255,7 +255,7 @@ CustomAnimationCreateTabPage::CustomAnimationCreateTabPage( Window* pParent, Cus
 
     OUString sMotionPathLabel( SD_RESSTR( STR_CUSTOMANIMATION_USERPATH ) );
 
-    sal_uInt16 nFirstEffect = LISTBOX_ENTRY_NOTFOUND;
+    sal_Int32  nFirstEffect = LISTBOX_ENTRY_NOTFOUND;
 
     if( nTabId == MOTIONPATH )
     {
@@ -287,7 +287,7 @@ CustomAnimationCreateTabPage::CustomAnimationCreateTabPage( Window* pParent, Cus
                 CustomAnimationPresetPtr pDescriptor = (*aIter++);
                 if( pDescriptor.get() && (bHasText || !pDescriptor->isTextOnly() ) )
                 {
-                    sal_uInt16 nPos = mpLBEffects->InsertEntry( pDescriptor->getLabel() );
+                    sal_Int32 nPos = mpLBEffects->InsertEntry( pDescriptor->getLabel() );
                     mpLBEffects->SetEntryData( nPos, static_cast<void*>( new CustomAnimationPresetPtr( pDescriptor ) ) );
 
                     if( nFirstEffect == LISTBOX_ENTRY_NOTFOUND )
@@ -338,7 +338,7 @@ void CustomAnimationCreateTabPage::onSelectEffect()
     CustomAnimationPresetPtr pPreset( *p );
 
     const double fDuration = pPreset->getDuration();
-    sal_uInt16 nPos = 0xffff;
+    sal_Int32 nPos = LISTBOX_ENTRY_NOTFOUND;
 
     if( fDuration == 5.0 )
         nPos = 0;
@@ -365,7 +365,7 @@ void CustomAnimationCreateTabPage::onSelectEffect()
 
 void CustomAnimationCreateTabPage::clearEffects()
 {
-    sal_uInt16 nPos = mpLBEffects->GetEntryCount();
+    sal_Int32 nPos = mpLBEffects->GetEntryCount();
     while( nPos-- )
         delete static_cast< CustomAnimationPresetPtr* >( mpLBEffects->GetEntryData( nPos ) );
 
@@ -392,7 +392,7 @@ PathKind CustomAnimationCreateTabPage::getCreatePathKind() const
 
     if( mpLBEffects->GetSelectEntryCount() == 1 )
     {
-        const sal_uInt16 nPos = mpLBEffects->GetSelectEntryPos();
+        const sal_Int32 nPos = mpLBEffects->GetSelectEntryPos();
         if( nPos == mnCurvePathPos )
         {
             eKind = CURVE;
@@ -414,8 +414,8 @@ PathKind CustomAnimationCreateTabPage::getCreatePathKind() const
 
 double CustomAnimationCreateTabPage::getDuration() const
 {
-    sal_uInt16 nPos = mpCBSpeed->GetSelectEntryPos();
-    if( (nPos == 0xffff) || !mpCBSpeed->IsEnabled() )
+    sal_Int32 nPos = mpCBSpeed->GetSelectEntryPos();
+    if( (nPos == LISTBOX_ENTRY_NOTFOUND) || !mpCBSpeed->IsEnabled() )
     {
         CustomAnimationPresetPtr pPreset = getSelectedPreset();
         if( pPreset.get() )
@@ -436,7 +436,7 @@ double CustomAnimationCreateTabPage::getDuration() const
 
 void CustomAnimationCreateTabPage::setDuration( double fDuration )
 {
-    sal_uInt16 nPos = 0;
+    sal_Int32 nPos = 0;
     if( fDuration < 2.0f )
     {
         if( fDuration < 1.0f )
@@ -480,7 +480,7 @@ sal_uInt16 CustomAnimationCreateTabPage::getId() const
 
 bool CustomAnimationCreateTabPage::select( const OUString& rsPresetId )
 {
-    sal_uInt16 nPos = mpLBEffects->GetEntryCount();
+    sal_Int32 nPos = mpLBEffects->GetEntryCount();
     while( nPos-- )
     {
         void* pEntryData = mpLBEffects->GetEntryData( nPos );

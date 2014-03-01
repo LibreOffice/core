@@ -152,7 +152,7 @@ namespace dbaui
         if (!m_pSQLHistory)
             return "invalid listbox!";
 
-        if (m_aStatementHistory.size() != m_pSQLHistory->GetEntryCount())
+        if (m_aStatementHistory.size() != static_cast<size_t>(m_pSQLHistory->GetEntryCount()))
             return "invalid listbox entry count!";
 
         if (!m_xConnection.is())
@@ -318,7 +318,7 @@ namespace dbaui
     {
         if (!m_pSQLHistory->IsTravelSelect())
         {
-            const sal_uInt16 nSelected = m_pSQLHistory->GetSelectEntryPos();
+            const sal_Int32 nSelected = m_pSQLHistory->GetSelectEntryPos();
             if (LISTBOX_ENTRY_NOTFOUND != nSelected)
                 switchToHistory(nSelected, sal_False);
         }

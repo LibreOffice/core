@@ -321,7 +321,7 @@ namespace svxform
         long                        m_nMinWidth;
         long                        m_nMinHeight;
         long                        m_nBorderHeight;
-        sal_uInt16                      m_nLastSelectedPos;
+        sal_Int32                   m_nLastSelectedPos;
         bool                        m_bShowDetails;
         bool                        m_bIsNotifyDisabled;
         Size                        m_a2Size;

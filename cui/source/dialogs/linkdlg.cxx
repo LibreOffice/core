@@ -151,8 +151,8 @@ SvBaseLinksDlg::~SvBaseLinksDlg()
 *************************************************************************/
 IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTabListBox *, pSvTabListBox )
 {
-    sal_uInt16 nSelectionCount = pSvTabListBox ?
-        (sal_uInt16)pSvTabListBox->GetSelectionCount() : 0;
+    sal_uLong nSelectionCount = pSvTabListBox ?
+        pSvTabListBox->GetSelectionCount() : 0;
     if(nSelectionCount > 1)
     {
         // possibly deselect old entries in case of multi-selection
@@ -169,7 +169,7 @@ IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTabListBox *, pSvTabListBox )
         }
         else
         {
-            for( sal_uInt16 i = 0; i < nSelectionCount; i++)
+            for( sal_uLong i = 0; i < nSelectionCount; i++)
             {
                 pEntry = i == 0 ? pSvTabListBox->FirstSelected() :
                                     pSvTabListBox->NextSelected(pEntry);
@@ -190,7 +190,7 @@ IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTabListBox *, pSvTabListBox )
     }
     else
     {
-        sal_uInt16 nPos;
+        sal_uLong nPos;
         SvBaseLink* pLink = GetSelEntry( &nPos );
         if( !pLink )
             return 0;
@@ -242,7 +242,7 @@ IMPL_LINK_INLINE_START( SvBaseLinksDlg, AutomaticClickHdl, RadioButton *, pRadio
 {
     (void)pRadioButton;
 
-    sal_uInt16 nPos;
+    sal_uLong nPos;
     SvBaseLink* pLink = GetSelEntry( &nPos );
     if( pLink && !( FILEOBJECT & pLink->GetObjType() ) &&
         LINKUPDATE_ALWAYS != pLink->GetUpdateMode() )
@@ -255,7 +255,7 @@ IMPL_LINK_INLINE_START( SvBaseLinksDlg, ManualClickHdl, RadioButton *, pRadioBut
 {
     (void)pRadioButton;
 
-    sal_uInt16 nPos;
+    sal_uLong nPos;
     SvBaseLink* pLink = GetSelEntry( &nPos );
     if( pLink && !( FILEOBJECT & pLink->GetObjType() ) &&
         LINKUPDATE_ONCALL != pLink->GetUpdateMode())
@@ -267,18 +267,18 @@ IMPL_LINK_INLINE_END( SvBaseLinksDlg, ManualClickHdl, RadioButton *, pRadioButto
 IMPL_LINK_NOARG(SvBaseLinksDlg, UpdateNowClickHdl)
 {
     SvTabListBox& rListBox = Links();
-    sal_uInt16 nSelCnt = (sal_uInt16)rListBox.GetSelectionCount();
+    sal_uLong nSelCnt = rListBox.GetSelectionCount();
     if( 255 < nSelCnt )
         nSelCnt = 255;
 
     std::vector< SvBaseLink* > aLnkArr;
-    std::vector< sal_uInt16 > aPosArr;
+    std::vector< sal_Int16 > aPosArr;
 
     SvTreeListEntry* pE = rListBox.FirstSelected();
     while( pE )
     {
-        sal_uInt16 nFndPos = (sal_uInt16)rListBox.GetModel()->GetAbsPos( pE );
-        if( LISTBOX_ENTRY_NOTFOUND != nFndPos )
+        sal_uLong nFndPos = rListBox.GetModel()->GetAbsPos( pE );
+        if( TREELIST_ENTRY_NOTFOUND != nFndPos )
         {
             aLnkArr.push_back( static_cast< SvBaseLink* >( pE->GetUserData() ) );
             aPosArr.push_back( nFndPos );
@@ -288,12 +288,12 @@ IMPL_LINK_NOARG(SvBaseLinksDlg, UpdateNowClickHdl)
 
     if( !aLnkArr.empty() )
     {
-        for( sal_uInt16 n = 0; n < aLnkArr.size(); ++n )
+        for( size_t n = 0; n < aLnkArr.size(); ++n )
         {
             SvBaseLinkRef xLink = aLnkArr[ n ];
 
             // first look for the entry in the array
-            for( sal_uInt16 i = 0; i < pLinkMgr->GetLinks().size(); ++i )
+            for( size_t i = 0; i < pLinkMgr->GetLinks().size(); ++i )
                 if( &xLink == *pLinkMgr->GetLinks()[ i ] )
                 {
                     xLink->SetUseCache( sal_False );
@@ -343,7 +343,7 @@ IMPL_LINK( SvBaseLinksDlg, ChangeSourceClickHdl, PushButton *, pPushButton )
 {
     (void)pPushButton;
 
-    sal_uInt16 nSelectionCount = (sal_uInt16)Links().GetSelectionCount();
+    sal_uLong nSelectionCount = Links().GetSelectionCount();
     if(nSelectionCount > 1)
     {
         try
@@ -367,7 +367,7 @@ IMPL_LINK( SvBaseLinksDlg, ChangeSourceClickHdl, PushButton *, pPushButton )
             {
                 OUString aPath = xFolderPicker->getDirectory();
 
-                for( sal_uInt16 i = 0; i < nSelectionCount; i++)
+                for( sal_uLong i = 0; i < nSelectionCount; i++)
                 {
                     pEntry = i==0 ?
                         Links().FirstSelected() :
@@ -399,7 +399,7 @@ IMPL_LINK( SvBaseLinksDlg, ChangeSourceClickHdl, PushButton *, pPushButton )
     }
     else
     {
-        sal_uInt16 nPos;
+        sal_uLong nPos;
         SvBaseLink* pLink = GetSelEntry( &nPos );
         if ( pLink && !pLink->GetLinkSourceName().isEmpty() )
             pLink->Edit( this, LINK( this, SvBaseLinksDlg, EndEditHdl ) );
@@ -414,7 +414,7 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
     sal_Bool bModified = sal_False;
     if(Links().GetSelectionCount() <= 1)
     {
-        sal_uInt16 nPos;
+        sal_uLong nPos;
         SvBaseLinkRef xLink = GetSelEntry( &nPos );
         if( !xLink.Is() )
             return 0;
@@ -521,7 +521,7 @@ IMPL_LINK( SvBaseLinksDlg, UpdateWaitingHdl, Timer*, pTimer )
 
 IMPL_LINK( SvBaseLinksDlg, EndEditHdl, sfx2::SvBaseLink*, _pLink )
 {
-    sal_uInt16 nPos;
+    sal_uLong nPos;
     GetSelEntry( &nPos );
 
     if( _pLink && _pLink->WasLastEditOK() )
@@ -531,7 +531,7 @@ IMPL_LINK( SvBaseLinksDlg, EndEditHdl, sfx2::SvBaseLink*, _pLink )
         // anymore, fill the list completely new. Otherwise only the
         // edited link needs to be refreshed.
         sal_Bool bLinkFnd = sal_False;
-        for( sal_uInt16 n = pLinkMgr->GetLinks().size(); n;  )
+        for( size_t n = pLinkMgr->GetLinks().size(); n;  )
             if( _pLink == &(*pLinkMgr->GetLinks()[ --n ]) )
             {
                 bLinkFnd = sal_True;
@@ -593,7 +593,7 @@ void SvBaseLinksDlg::SetManager( LinkManager* pNewMgr )
     if( pLinkMgr )
     {
         SvBaseLinks& rLnks = (SvBaseLinks&)pLinkMgr->GetLinks();
-        for( sal_uInt16 n = 0; n < rLnks.size(); ++n )
+        for( size_t n = 0; n < rLnks.size(); ++n )
         {
             SvBaseLinkRef* pLinkRef = rLnks[ n ];
             if( !pLinkRef->Is() )
@@ -619,7 +619,7 @@ void SvBaseLinksDlg::SetManager( LinkManager* pNewMgr )
 }
 
 
-void SvBaseLinksDlg::InsertEntry( const SvBaseLink& rLink, sal_uInt16 nPos, sal_Bool bSelect )
+void SvBaseLinksDlg::InsertEntry( const SvBaseLink& rLink, sal_uLong nPos, sal_Bool bSelect )
 {
     OUString aEntry, sFileNm, sLinkNm, sTypeNm, sFilter;
 
@@ -657,12 +657,12 @@ void SvBaseLinksDlg::InsertEntry( const SvBaseLink& rLink, sal_uInt16 nPos, sal_
         Links().Select(pE);
 }
 
-SvBaseLink* SvBaseLinksDlg::GetSelEntry( sal_uInt16* pPos )
+SvBaseLink* SvBaseLinksDlg::GetSelEntry( sal_uLong* pPos )
 {
     SvTreeListEntry* pE = Links().FirstSelected();
-    sal_uInt16 nPos;
-    if( pE && LISTBOX_ENTRY_NOTFOUND !=
-        ( nPos = (sal_uInt16)Links().GetModel()->GetAbsPos( pE ) ) )
+    sal_uLong nPos;
+    if( pE && TREELIST_ENTRY_NOTFOUND !=
+        ( nPos = Links().GetModel()->GetAbsPos( pE ) ) )
     {
         DBG_ASSERT( pE, "wo kommt der leere Eintrag her?" );
 
@@ -674,7 +674,7 @@ SvBaseLink* SvBaseLinksDlg::GetSelEntry( sal_uInt16* pPos )
 }
 
 void SvBaseLinksDlg::SetType( SvBaseLink& rLink,
-                                    sal_uInt16 nSelPos,
+                                    sal_uLong nSelPos,
                                     sal_uInt16 nType )
 {
     rLink.SetUpdateMode( nType );
@@ -690,8 +690,8 @@ void SvBaseLinksDlg::SetActLink( SvBaseLink * pLink )
     if( pLinkMgr )
     {
         const SvBaseLinks& rLnks = pLinkMgr->GetLinks();
-        sal_uInt16 nSelect = 0;
-        for( sal_uInt16 n = 0; n < rLnks.size(); ++n )
+        sal_uLong nSelect = 0;
+        for( size_t n = 0; n < rLnks.size(); ++n )
         {
             SvBaseLinkRef* pLinkRef = rLnks[ n ];
             // #109573# only visible links have been inserted into the TreeListBox,

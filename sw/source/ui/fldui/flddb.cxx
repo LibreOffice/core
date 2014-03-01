@@ -82,12 +82,13 @@ void SwFldDBPage::Reset(const SfxItemSet&)
     Init(); // Allgemeine initialisierung
 
     m_pTypeLB->SetUpdateMode(false);
-    sal_uInt16 nOldPos = m_pTypeLB->GetSelectEntryPos();
+    sal_Int32 nOldPos = m_pTypeLB->GetSelectEntryPos();
     m_sOldDBName = m_pDatabaseTLB->GetDBName(m_sOldTableName, m_sOldColumnName);
 
     m_pTypeLB->Clear();
 
-    sal_uInt16 nPos, nTypeId, i;
+    sal_Int32 nPos;
+    sal_uInt16 nTypeId, i;
 
     if (!IsFldEdit())
     {
@@ -117,7 +118,7 @@ void SwFldDBPage::Reset(const SfxItemSet&)
     sal_uInt16 nSize = GetFldMgr().GetFormatCount(TYP_DBSETNUMBERFLD, false, IsFldDlgHtmlMode());
     for( i = 0; i < nSize; ++i )
     {
-        sal_uInt16 nEntryPos = m_pFormatLB->InsertEntry(GetFldMgr().GetFormatStr(TYP_DBSETNUMBERFLD, i));
+        sal_Int32 nEntryPos = m_pFormatLB->InsertEntry(GetFldMgr().GetFormatStr(TYP_DBSETNUMBERFLD, i));
         sal_uInt16 nFmtId = GetFldMgr().GetFormatId( TYP_DBSETNUMBERFLD, i );
         m_pFormatLB->SetEntryData( nEntryPos, reinterpret_cast<void*>(nFmtId) );
         if( SVX_NUM_ARABIC == nFmtId )
@@ -262,7 +263,7 @@ sal_uInt16 SwFldDBPage::GetGroup()
 IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
 {
     // save old ListBoxPos
-    const sal_uInt16 nOld = GetTypeSel();
+    const sal_Int32 nOld = GetTypeSel();
 
     // current ListBoxPos
     SetTypeSel(m_pTypeLB->GetSelectEntryPos());
@@ -344,7 +345,7 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
                 m_pFormatLB->Show();
                 if( IsFldEdit() )
                 {
-                    for( sal_uInt16 nI = m_pFormatLB->GetEntryCount(); nI; )
+                    for( sal_Int32 nI = m_pFormatLB->GetEntryCount(); nI; )
                         if( GetCurField()->GetFormat() == (sal_uInt16)(sal_uLong)
                             m_pFormatLB->GetEntryData( --nI ))
                         {
@@ -483,7 +484,7 @@ void    SwFldDBPage::FillUserData()
 {
     OUString sData(USER_DATA_VERSION);
     sData += ";";
-    sal_uInt16 nTypeSel = m_pTypeLB->GetSelectEntryPos();
+    sal_Int32 nTypeSel = m_pTypeLB->GetSelectEntryPos();
 
     if( LISTBOX_ENTRY_NOTFOUND == nTypeSel )
         nTypeSel = USHRT_MAX;

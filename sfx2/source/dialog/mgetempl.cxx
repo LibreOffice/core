@@ -374,7 +374,7 @@ sal_Bool SfxManageStyleSheetPage::FillItemSet( SfxItemSet& rSet )
 */
 
 {
-    const sal_uInt16 nFilterIdx = m_pFilterLb->GetSelectEntryPos();
+    const sal_Int32 nFilterIdx = m_pFilterLb->GetSelectEntryPos();
 
     // Set Filter
 

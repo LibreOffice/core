@@ -23,6 +23,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <svx/checklbx.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/lstbox.hxx>
 #include "global.hxx"
 
 

@@ -947,7 +947,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                         if ( !m_bInUndoMode )
                             rController.GetUndoManager().EnterListAction(OUString(),OUString());
 
-                        sal_uInt16 nPos = m_pFieldCell->GetEntryPos(aFieldName);
+                        sal_Int32 nPos = m_pFieldCell->GetEntryPos(aFieldName);
                         OUString aAliasName = pEntry->GetAlias();
                         if ( nPos != COMBOBOX_ENTRY_NOTFOUND && aAliasName.isEmpty() && comphelper::string::getTokenCount(aFieldName, '.') > 1 )
                         { // special case, we have a table field so we must cut the table name
@@ -1019,8 +1019,8 @@ sal_Bool OSelectionBrowseBox::SaveModified()
             case BROW_ORDER_ROW:
             {
                 strOldCellContents = OUString::number((sal_uInt16)pEntry->GetOrderDir());
-                sal_uInt16 nIdx = m_pOrderCell->GetSelectEntryPos();
-                if (nIdx == sal_uInt16(-1))
+                sal_Int32 nIdx = m_pOrderCell->GetSelectEntryPos();
+                if (nIdx == LISTBOX_ENTRY_NOTFOUND)
                     nIdx = 0;
                 pEntry->SetOrderDir(EOrderDir(nIdx));
                 if(!m_bOrderByUnRelated)
@@ -1040,7 +1040,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
             case BROW_FUNCTION_ROW:
                 {
                     strOldCellContents = pEntry->GetFunction();
-                    sal_uInt16 nPos = m_pFunctionCell->GetSelectEntryPos();
+                    sal_Int32 nPos = m_pFunctionCell->GetSelectEntryPos();
                     // these functions are only available in CORE
                     OUString sFunctionName        = m_pFunctionCell->GetEntry(nPos);
                     OUString sGroupFunctionName   = m_aFunctionStrings.getToken(comphelper::string::getTokenCount(m_aFunctionStrings, ';')-1, ';');
@@ -1887,9 +1887,9 @@ void OSelectionBrowseBox::CellModified()
             {
                 OTableFieldDescRef  pEntry = getEntry(GetColumnPos(GetCurColumnId()) - 1);
 
-                sal_uInt16 nIdx = m_pOrderCell->GetSelectEntryPos();
+                sal_Int32 nIdx = m_pOrderCell->GetSelectEntryPos();
                 if(!m_bOrderByUnRelated && nIdx > 0 &&
-                    nIdx != sal_uInt16(-1)          &&
+                    nIdx != LISTBOX_ENTRY_NOTFOUND  &&
                     !pEntry->IsEmpty()              &&
                     pEntry->GetOrderDir() != ORDER_NONE)
                 {
@@ -2251,8 +2251,8 @@ OUString OSelectionBrowseBox::GetCellContents(sal_Int32 nCellIndex, sal_uInt16 n
             return pEntry->IsVisible() ? g_strOne : g_strZero;
         case BROW_ORDER_ROW:
         {
-            sal_uInt16 nIdx = m_pOrderCell->GetSelectEntryPos();
-            if (nIdx == sal_uInt16(-1))
+            sal_Int32 nIdx = m_pOrderCell->GetSelectEntryPos();
+            if (nIdx == LISTBOX_ENTRY_NOTFOUND)
                 nIdx = 0;
             return OUString(nIdx);
         }

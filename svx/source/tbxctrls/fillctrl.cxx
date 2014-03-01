@@ -169,7 +169,7 @@ void SvxFillToolBoxControl::StateChanged(
                 if(eLastXFS != eXFS)
                 {
                     bUpdate = sal_True;
-                    pFillTypeLB->SelectEntryPos( sal::static_int_cast< sal_uInt16 >( eXFS ) );
+                    pFillTypeLB->SelectEntryPos( eXFS );
                 }
 
                 pFillAttrLB->Enable();
@@ -253,7 +253,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                         LISTBOX_ENTRY_NOTFOUND ||
                         pFillAttrLB->GetSelectEntryColor() != aColor )
                     {
-                        sal_uInt16 nCount = pFillAttrLB->GetEntryCount();
+                        sal_Int32 nCount = pFillAttrLB->GetEntryCount();
                         OUString aTmpStr;
                         if( nCount > 0 )
                         {
@@ -268,7 +268,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                         aTmpStr = TMP_STR_BEGIN + aString + TMP_STR_END;
 
                         //pFillAttrLB->SetUpdateMode( sal_False );
-                        sal_uInt16 nPos = pFillAttrLB->InsertEntry( aColor, aTmpStr );
+                        sal_Int32 nPos = pFillAttrLB->InsertEntry( aColor, aTmpStr );
                         //pFillAttrLB->SetUpdateMode( sal_True );
                         pFillAttrLB->SelectEntryPos( nPos );
                     }
@@ -287,7 +287,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                     // Check if the entry is not in the list
                     if( pFillAttrLB->GetSelectEntry() != aString )
                     {
-                        sal_uInt16 nCount = pFillAttrLB->GetEntryCount();
+                        sal_Int32 nCount = pFillAttrLB->GetEntryCount();
                         OUString aTmpStr;
                         if( nCount > 0 )
                         {
@@ -332,7 +332,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                     // Check if the entry is not in the list
                     if( pFillAttrLB->GetSelectEntry() != aString )
                     {
-                        sal_uInt16 nCount = pFillAttrLB->GetEntryCount();
+                        sal_Int32 nCount = pFillAttrLB->GetEntryCount();
                         OUString aTmpStr;
                         if( nCount > 0 )
                         {
@@ -384,7 +384,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                     // Check if the entry is not in the list
                     if( pFillAttrLB->GetSelectEntry() != aString )
                     {
-                        sal_uInt16 nCount = pFillAttrLB->GetEntryCount();
+                        sal_Int32 nCount = pFillAttrLB->GetEntryCount();
                         OUString aTmpStr;
                         if( nCount > 0 )
                         {
@@ -689,7 +689,7 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
             break;
             case XFILL_GRADIENT:
             {
-                sal_uInt16 nPos = pLbFillAttr->GetSelectEntryPos();
+                sal_Int32 nPos = pLbFillAttr->GetSelectEntryPos();
 
                 if ( nPos != LISTBOX_ENTRY_NOTFOUND && pSh && pSh->GetItem( SID_GRADIENT_LIST ) )
                 {
@@ -713,7 +713,7 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
 
             case XFILL_HATCH:
             {
-                sal_uInt16 nPos = pLbFillAttr->GetSelectEntryPos();
+                sal_Int32 nPos = pLbFillAttr->GetSelectEntryPos();
 
                 if ( nPos != LISTBOX_ENTRY_NOTFOUND && pSh && pSh->GetItem( SID_HATCH_LIST ) )
                 {
@@ -736,7 +736,7 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
 
             case XFILL_BITMAP:
             {
-                sal_uInt16 nPos = pLbFillAttr->GetSelectEntryPos();
+                sal_Int32 nPos = pLbFillAttr->GetSelectEntryPos();
 
                 if ( nPos != LISTBOX_ENTRY_NOTFOUND && pSh && pSh->GetItem( SID_BITMAP_LIST ) )
                 {

@@ -162,7 +162,7 @@ private:
 
     OUString                    GetLabel4Command(const OUString& rCommand);
     void                        InitAccCfg();
-    sal_uInt16                  MapKeyCodeToPos( const KeyCode &rCode ) const;
+    sal_uLong                   MapKeyCodeToPos( const KeyCode &rCode ) const;
     css::uno::Reference< css::frame::XModel > SearchForAlreadyLoadedDoc(const OUString& sName);
     void                        StartFileDialog( WinBits nBits, const OUString& rTitle );
 

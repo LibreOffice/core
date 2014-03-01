@@ -193,8 +193,8 @@ to be set (before Show) with SetStyle().
 // - ValueSet -
 
 
-#define VALUESET_APPEND         ((sal_uInt16)-1)
-#define VALUESET_ITEM_NOTFOUND  ((sal_uInt16)-1)
+#define VALUESET_APPEND         ((size_t)-1)
+#define VALUESET_ITEM_NOTFOUND  ((size_t)-1)
 
 class SVT_DLLPUBLIC ValueSet : public Control
 {

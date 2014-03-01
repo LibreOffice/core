@@ -571,7 +571,7 @@ void LinePropertyPanel::NotifyItemUpdate(
 
                 if(pItem)
                 {
-                    sal_uInt16 nEntryPos(0);
+                    sal_Int32 nEntryPos(0);
 
                     switch(pItem->GetValue())
                     {
@@ -631,7 +631,7 @@ void LinePropertyPanel::NotifyItemUpdate(
 
                 if(pItem)
                 {
-                    sal_uInt16 nEntryPos(0);
+                    sal_Int32 nEntryPos(0);
 
                     switch(pItem->GetValue())
                     {
@@ -696,7 +696,7 @@ IMPL_LINK(LinePropertyPanel, ToolboxColorSelectHdl,ToolBox*, pToolBox)
 
 IMPL_LINK_NOARG(LinePropertyPanel, ChangeLineStyleHdl)
 {
-    const sal_uInt16 nPos(mpLBStyle->GetSelectEntryPos());
+    const sal_Int32 nPos(mpLBStyle->GetSelectEntryPos());
 
     if(LISTBOX_ENTRY_NOTFOUND != nPos && nPos != mpLBStyle->GetSavedValue())
     {
@@ -736,7 +736,7 @@ IMPL_LINK_NOARG(LinePropertyPanel, ChangeLineStyleHdl)
 
 IMPL_LINK(LinePropertyPanel, ChangeStartHdl, void*, EMPTYARG)
 {
-    sal_uInt16  nPos = mpLBStart->GetSelectEntryPos();
+    sal_Int32  nPos = mpLBStart->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND && nPos != mpLBStart->GetSavedValue() )
     {
         XLineStartItem* pItem = NULL;
@@ -755,7 +755,7 @@ IMPL_LINK(LinePropertyPanel, ChangeStartHdl, void*, EMPTYARG)
 
 IMPL_LINK(LinePropertyPanel, ChangeEndHdl, void*, EMPTYARG)
 {
-    sal_uInt16  nPos = mpLBEnd->GetSelectEntryPos();
+    sal_Int32  nPos = mpLBEnd->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND && nPos != mpLBEnd->GetSavedValue() )
     {
         XLineEndItem* pItem = NULL;
@@ -774,7 +774,7 @@ IMPL_LINK(LinePropertyPanel, ChangeEndHdl, void*, EMPTYARG)
 
 IMPL_LINK(LinePropertyPanel, ChangeEdgeStyleHdl, void*, EMPTYARG)
 {
-    const sal_uInt16 nPos(mpLBEdgeStyle->GetSelectEntryPos());
+    const sal_Int32 nPos(mpLBEdgeStyle->GetSelectEntryPos());
 
     if(LISTBOX_ENTRY_NOTFOUND != nPos && nPos != mpLBEdgeStyle->GetSavedValue())
     {
@@ -815,7 +815,7 @@ IMPL_LINK(LinePropertyPanel, ChangeEdgeStyleHdl, void*, EMPTYARG)
 
 IMPL_LINK(LinePropertyPanel, ChangeCapStyleHdl, void*, EMPTYARG)
 {
-    const sal_uInt16 nPos(mpLBCapStyle->GetSelectEntryPos());
+    const sal_Int32 nPos(mpLBCapStyle->GetSelectEntryPos());
 
     if(LISTBOX_ENTRY_NOTFOUND != nPos && nPos != mpLBCapStyle->GetSavedValue())
     {
@@ -1057,7 +1057,7 @@ void LinePropertyPanel::SelectLineStyle()
                     const XDash& rEntry = pEntry->GetDash();
                     if(rDash == rEntry)
                     {
-                        mpLBStyle->SelectEntryPos((sal_uInt16)a + 2);
+                        mpLBStyle->SelectEntryPos(a + 2);
                         bSelected = true;
                     }
                 }
@@ -1091,7 +1091,7 @@ void LinePropertyPanel::SelectEndStyle(bool bStart)
                 const basegfx::B2DPolyPolygon& rEntryPolygon = pEntry->GetLineEnd();
                 if(rItemPolygon == rEntryPolygon)
                 {
-                    mpLBStart->SelectEntryPos((sal_uInt16)a + 1);
+                    mpLBStart->SelectEntryPos(a + 1);
                     bSelected = true;
                 }
             }
@@ -1120,7 +1120,7 @@ void LinePropertyPanel::SelectEndStyle(bool bStart)
                 const basegfx::B2DPolyPolygon& rEntryPolygon = pEntry->GetLineEnd();
                 if(rItemPolygon == rEntryPolygon)
                 {
-                    mpLBEnd->SelectEntryPos((sal_uInt16)a + 1);
+                    mpLBEnd->SelectEntryPos(a + 1);
                     bSelected = true;
                 }
             }

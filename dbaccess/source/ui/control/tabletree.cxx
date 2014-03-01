@@ -108,8 +108,8 @@ void OTableTreeListBox::notifyHiContrastChanged()
     SvTreeListEntry* pEntryLoop = First();
     while (pEntryLoop)
     {
-        sal_uInt16 nCount = pEntryLoop->ItemCount();
-        for (sal_uInt16 i=0;i<nCount;++i)
+        size_t nCount = pEntryLoop->ItemCount();
+        for (size_t i=0;i<nCount;++i)
         {
             SvLBoxItem* pItem = pEntryLoop->GetItem(i);
             if (pItem && pItem->GetType() == SV_ITEM_ID_LBOXCONTEXTBMP)
@@ -271,7 +271,7 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
                 sRootEntryText  = ModuleRes(STR_ALL_VIEWS);
             else
                 sRootEntryText  = ModuleRes(STR_ALL_TABLES_AND_VIEWS);
-            InsertEntry( sRootEntryText, NULL, sal_False, LIST_APPEND, reinterpret_cast< void* >( DatabaseObjectContainer::TABLES ) );
+            InsertEntry( sRootEntryText, NULL, sal_False, TREELIST_APPEND, reinterpret_cast< void* >( DatabaseObjectContainer::TABLES ) );
         }
 
         if ( _rTables.empty() )
@@ -317,7 +317,7 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
                 {
                     SvTreeListEntry* pFolder = GetEntryPosByName( *folder, pRootEntry );
                     if ( !pFolder )
-                        pFolder = InsertEntry( *folder, pRootEntry, sal_False, LIST_APPEND, reinterpret_cast< void* >( nFolderType ) );
+                        pFolder = InsertEntry( *folder, pRootEntry, sal_False, TREELIST_APPEND, reinterpret_cast< void* >( nFolderType ) );
                 }
             }
         }
@@ -408,8 +408,8 @@ void OTableTreeListBox::InitEntry(SvTreeListEntry* _pEntry, const OUString& _rSt
     // replace the text item with our own one
     SvLBoxItem* pTextItem = _pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING);
     OSL_ENSURE(pTextItem, "OTableTreeListBox::InitEntry: no text item!?");
-    sal_uInt16 nTextPos = _pEntry->GetPos(pTextItem);
-    OSL_ENSURE(((sal_uInt16)-1) != nTextPos, "OTableTreeListBox::InitEntry: no text item pos!");
+    size_t nTextPos = _pEntry->GetPos(pTextItem);
+    OSL_ENSURE(SvTreeListEntry::ITEM_NOT_FOUND != nTextPos, "OTableTreeListBox::InitEntry: no text item pos!");
 
     _pEntry->ReplaceItem(new OBoldListboxString(_pEntry, 0, _rString), nTextPos);
 }
@@ -448,7 +448,7 @@ SvTreeListEntry* OTableTreeListBox::implAddEntry(
     {
         SvTreeListEntry* pFolder = GetEntryPosByName( rFirstName, pParentEntry );
         if ( !pFolder )
-            pFolder = InsertEntry( rFirstName, pParentEntry, sal_False, LIST_APPEND, reinterpret_cast< void* >( nFirstFolderType ) );
+            pFolder = InsertEntry( rFirstName, pParentEntry, sal_False, TREELIST_APPEND, reinterpret_cast< void* >( nFirstFolderType ) );
         pParentEntry = pFolder;
     }
 
@@ -456,14 +456,14 @@ SvTreeListEntry* OTableTreeListBox::implAddEntry(
     {
         SvTreeListEntry* pFolder = GetEntryPosByName( rSecondName, pParentEntry );
         if ( !pFolder )
-            pFolder = InsertEntry( rSecondName, pParentEntry, sal_False, LIST_APPEND, reinterpret_cast< void* >( nSecondFolderType ) );
+            pFolder = InsertEntry( rSecondName, pParentEntry, sal_False, TREELIST_APPEND, reinterpret_cast< void* >( nSecondFolderType ) );
         pParentEntry = pFolder;
     }
 
     SvTreeListEntry* pRet = NULL;
     if ( !_bCheckName || !GetEntryPosByName( sName, pParentEntry ) )
     {
-        pRet = InsertEntry( sName, pParentEntry, sal_False, LIST_APPEND );
+        pRet = InsertEntry( sName, pParentEntry, sal_False, TREELIST_APPEND );
 
         Image aImage;
         m_xImageProvider->getImages( _rTableName, DatabaseObject::TABLE, aImage );

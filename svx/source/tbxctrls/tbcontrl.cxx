@@ -2062,7 +2062,8 @@ void SvxStyleToolBoxControl::FillStyleBox()
             pBox->SetUpdateMode( true );
             pBox->SetFamily( eFamily );
 
-            sal_uInt16 nLines = std::min( pBox->GetEntryCount(), MAX_STYLES_ENTRIES );
+            sal_uInt16 nLines = static_cast<sal_uInt16>(
+                    std::min( pBox->GetEntryCount(), static_cast<sal_Int32>(MAX_STYLES_ENTRIES)));
             pBox->SetDropDownLineCount( nLines );
         }
     }

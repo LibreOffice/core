@@ -154,7 +154,7 @@ IMPL_LINK( BreakPointDialog, ComboBoxHighlightHdl, ComboBox *, pBox )
     m_pOKButton->Enable();
     m_pDelButton->Enable();
 
-    sal_uInt16 nEntry = pBox->GetEntryPos( pBox->GetText() );
+    sal_Int32 nEntry = pBox->GetEntryPos( pBox->GetText() );
     BreakPoint* pBrk = m_aModifiedBreakPointList.at( nEntry );
     DBG_ASSERT( pBrk, "Kein passender Breakpoint zur Liste ?" );
     UpdateFields( pBrk );
@@ -212,7 +212,7 @@ IMPL_LINK( BreakPointDialog, ButtonHdl, Button *, pButton )
     }
     else if (pButton == m_pDelButton)
     {
-        size_t nEntry = m_pComboBox->GetEntryPos( m_pComboBox->GetText() );
+        sal_Int32 nEntry = m_pComboBox->GetEntryPos( m_pComboBox->GetText() );
         BreakPoint* pBrk = m_aModifiedBreakPointList.at( nEntry );
         if ( pBrk )
         {

@@ -75,7 +75,7 @@ SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw)
     IDocumentStylePoolAccess* pIDSPA = pSh->getIDocumentStylePoolAccess();
 
     OUString sStyleName(rInf.GetCharFmt( *pIDSPA )->GetName());
-    const sal_uInt16 nPos = m_pCharStyleLB->GetEntryPos(sStyleName);
+    const sal_Int32 nPos = m_pCharStyleLB->GetEntryPos(sStyleName);
 
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
         m_pCharStyleLB->SelectEntryPos(nPos);
@@ -94,7 +94,7 @@ SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw)
     m_pFormatLB->SelectNumberingType(nSelFmt);
 
     // position
-    m_pPosLB->SelectEntryPos((sal_uInt16)rInf.GetPos());
+    m_pPosLB->SelectEntryPos((sal_Int32)rInf.GetPos());
 
     // offset
     sal_uInt16 nOffset = rInf.GetPosFromLeft();

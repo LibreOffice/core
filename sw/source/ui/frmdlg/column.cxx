@@ -846,7 +846,7 @@ void SwColumnPage::Init()
 bool SwColumnPage::isLineNotNone() const
 {
     // nothing is turned off
-    const sal_uInt16 nPos = m_pLineTypeDLB->GetSelectEntryPos();
+    const sal_Int32 nPos = m_pLineTypeDLB->GetSelectEntryPos();
     return nPos != LISTBOX_ENTRY_NOTFOUND && nPos != 0;
 }
 

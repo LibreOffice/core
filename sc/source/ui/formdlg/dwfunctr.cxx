@@ -195,7 +195,7 @@ void ScFunctionDockWin::InitLRUList()
     pFuncMgr->fillLastRecentlyUsedFunctions(aLRUList);
 
 
-    sal_uInt16  nSelPos   = aCatBox.GetSelectEntryPos();
+    sal_Int32  nSelPos   = aCatBox.GetSelectEntryPos();
 
     if(nSelPos == 0)
         UpdateFunctionList();
@@ -241,7 +241,7 @@ void ScFunctionDockWin::UpdateLRUList()
 
 void ScFunctionDockWin::SetSize()
 {
-    sal_uInt16 nSelEntry=0;
+    sal_Int32 nSelEntry=0;
     SfxChildAlignment  aChildAlign=eSfxOldAlignment;//GetAlignment();
     short nNewDockMode;
     switch(aChildAlign)
@@ -769,8 +769,8 @@ void ScFunctionDockWin::Resize()
 
 void ScFunctionDockWin::UpdateFunctionList()
 {
-    sal_uInt16  nSelPos   = aCatBox.GetSelectEntryPos();
-    sal_uInt16  nCategory = ( LISTBOX_ENTRY_NOTFOUND != nSelPos )
+    sal_Int32  nSelPos   = aCatBox.GetSelectEntryPos();
+    sal_Int32  nCategory = ( LISTBOX_ENTRY_NOTFOUND != nSelPos )
                             ? (nSelPos-1) : 0;
 
     pAllFuncList->Clear();
@@ -1088,7 +1088,7 @@ void ScFunctionDockWin::Initialize(SfxChildWinInfo *pInfo)
         aSplitterInitPos.Y() = (sal_uInt16) aStr.toInt32();
         sal_Int32 n1 = aStr.indexOf(';');
         aStr = aStr.copy( n1+1 );
-        sal_uInt16 nSelPos = sal::static_int_cast<sal_uInt16>( aStr.toInt32() );
+        sal_Int32 nSelPos = aStr.toInt32();
         aCatBox.SelectEntryPos(nSelPos);
         SelHdl(&aCatBox);
 

@@ -140,7 +140,7 @@ public:
     SVX_DLLPUBLIC SgaObject*    AcquireObject( size_t nPos );
     SVX_DLLPUBLIC void          ReleaseObject( SgaObject* pObj );
 
-    SVX_DLLPUBLIC bool          InsertObject( const SgaObject& rObj, sal_uIntPtr nPos = LIST_APPEND );
+    SVX_DLLPUBLIC bool          InsertObject( const SgaObject& rObj, sal_uIntPtr nPos = CONTAINER_APPEND );
     SVX_DLLPUBLIC bool          RemoveObject( size_t nPos );
     bool                        ChangeObjectPos( size_t nOldPos, size_t nNewPos );
 
@@ -202,17 +202,17 @@ public:
     sal_Bool                        GetThumb( sal_uIntPtr nPos, BitmapEx& rBmp, sal_Bool bProgress = sal_False );
 
     SVX_DLLPUBLIC sal_Bool                      GetGraphic( sal_uIntPtr nPos, Graphic& rGraphic, sal_Bool bProgress = sal_False );
-    SVX_DLLPUBLIC sal_Bool                      InsertGraphic( const Graphic& rGraphic, sal_uIntPtr nInsertPos = LIST_APPEND );
+    SVX_DLLPUBLIC sal_Bool                      InsertGraphic( const Graphic& rGraphic, sal_uIntPtr nInsertPos = CONTAINER_APPEND );
 
     SVX_DLLPUBLIC sal_Bool                      GetModel( sal_uIntPtr nPos, SdrModel& rModel, sal_Bool bProgress = sal_False );
-    SVX_DLLPUBLIC sal_Bool                      InsertModel( const FmFormModel& rModel, sal_uIntPtr nInsertPos = LIST_APPEND );
+    SVX_DLLPUBLIC sal_Bool                      InsertModel( const FmFormModel& rModel, sal_uIntPtr nInsertPos = CONTAINER_APPEND );
 
     sal_Bool                        GetModelStream( sal_uIntPtr nPos, SotStorageStreamRef& rModelStreamRef, sal_Bool bProgress = sal_False );
-    sal_Bool                        InsertModelStream( const SotStorageStreamRef& rModelStream, sal_uIntPtr nInsertPos = LIST_APPEND );
+    sal_Bool                        InsertModelStream( const SotStorageStreamRef& rModelStream, sal_uIntPtr nInsertPos = CONTAINER_APPEND );
 
     sal_Bool                        GetURL( sal_uIntPtr nPos, INetURLObject& rURL, sal_Bool bProgress = sal_False );
-    SVX_DLLPUBLIC sal_Bool                      InsertURL( const INetURLObject& rURL, sal_uIntPtr nInsertPos = LIST_APPEND );
-    sal_Bool                        InsertFileOrDirURL( const INetURLObject& rFileOrDirURL, sal_uIntPtr nInsertPos = LIST_APPEND );
+    SVX_DLLPUBLIC sal_Bool                      InsertURL( const INetURLObject& rURL, sal_uIntPtr nInsertPos = CONTAINER_APPEND );
+    sal_Bool                        InsertFileOrDirURL( const INetURLObject& rFileOrDirURL, sal_uIntPtr nInsertPos = CONTAINER_APPEND );
 
     sal_Bool                        InsertTransferable( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rxTransferable, sal_uIntPtr nInsertPos );
 

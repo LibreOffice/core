@@ -116,7 +116,7 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(Window* pParent, const SfxItemSet* _pSet )
         nLangList |= LANG_LIST_CTL;
     m_pLanguageLB->SetLanguageList( nLangList, sal_True, sal_True );
     m_pLanguageLB->SelectLanguage( LANGUAGE_NONE );
-    sal_uInt16 nPos = m_pLanguageLB->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLanguageLB->GetSelectEntryPos();
     DBG_ASSERT( LISTBOX_ENTRY_NOTFOUND != nPos, "listbox entry missing" );
     m_pLanguageLB->SetEntryData( nPos, (void*)(long) LANGUAGE_UNDETERMINED );
 
@@ -144,9 +144,9 @@ void OfaAutoCorrDlg::EnableLanguage(bool bEnable)
 static sal_Bool lcl_FindEntry( ListBox& rLB, const OUString& rEntry,
                     CollatorWrapper& rCmpClass )
 {
-    sal_uInt16 nCount = rLB.GetEntryCount();
-    sal_uInt16 nSelPos = rLB.GetSelectEntryPos();
-    sal_uInt16 i;
+    sal_Int32 nCount = rLB.GetEntryCount();
+    sal_Int32 nSelPos = rLB.GetSelectEntryPos();
+    sal_Int32 i;
     for(i = 0; i < nCount; i++)
     {
         if( 0 == rCmpClass.compareString(rEntry, rLB.GetEntry(i) ))
@@ -162,7 +162,7 @@ static sal_Bool lcl_FindEntry( ListBox& rLB, const OUString& rEntry,
 
 IMPL_LINK(OfaAutoCorrDlg, SelectLanguageHdl, ListBox*, pBox)
 {
-    sal_uInt16 nPos = pBox->GetSelectEntryPos();
+    sal_Int32 nPos = pBox->GetSelectEntryPos();
     void* pVoid = pBox->GetEntryData(nPos);
     LanguageType eNewLang = (LanguageType)(sal_IntPtr)pVoid;
     // save old settings and fill anew
@@ -202,7 +202,7 @@ sal_Bool OfaAutocorrOptionsPage::FillItemSet( SfxItemSet& )
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     long nFlags = pAutoCorrect->GetFlags();
 
-    sal_uInt16 nPos = 0;
+    sal_uLong nPos = 0;
     pAutoCorrect->SetAutoCorrFlag(Autocorrect,          m_pCheckLB->IsChecked(nPos++));
     pAutoCorrect->SetAutoCorrFlag(CptlSttWrd,           m_pCheckLB->IsChecked(nPos++));
     pAutoCorrect->SetAutoCorrFlag(CptlSttSntnc,         m_pCheckLB->IsChecked(nPos++));
@@ -244,7 +244,7 @@ void OfaAutocorrOptionsPage::Reset( const SfxItemSet& )
     m_pCheckLB->InsertEntry(m_sNoDblSpaces);
     m_pCheckLB->InsertEntry(m_sAccidentalCaps);
 
-    sal_uInt16 nPos = 0;
+    sal_uLong nPos = 0;
     m_pCheckLB->CheckEntryPos( nPos++, 0 != (nFlags & Autocorrect) );
     m_pCheckLB->CheckEntryPos( nPos++, 0 != (nFlags & CptlSttWrd) );
     m_pCheckLB->CheckEntryPos( nPos++, 0 != (nFlags & CptlSttSntnc) );
@@ -1213,17 +1213,17 @@ IMPL_LINK(OfaAutocorrReplacePage, NewDelHdl, PushButton*, pBtn)
 
             NewEntry(m_pShortED->GetText(), m_pReplaceED->GetText(), bKeepSourceFormatting);
             m_pReplaceTLB->SetUpdateMode(sal_False);
-            sal_uInt32 nPos = UINT_MAX;
+            sal_uLong nPos = TREELIST_ENTRY_NOTFOUND;
             sEntry += "\t";
             sEntry += m_pReplaceED->GetText();
             if(_pNewEntry)
             {
-                nPos = (sal_uInt32) m_pReplaceTLB->GetModel()->GetAbsPos(_pNewEntry);
+                nPos = m_pReplaceTLB->GetModel()->GetAbsPos(_pNewEntry);
                 m_pReplaceTLB->GetModel()->Remove(_pNewEntry);
             }
             else
             {
-                sal_uInt32 j;
+                sal_uLong j;
                 for( j = 0; j < m_pReplaceTLB->GetEntryCount(); j++ )
                 {
                     SvTreeListEntry* pReplaceEntry = m_pReplaceTLB->GetEntry(j);
@@ -1234,7 +1234,7 @@ IMPL_LINK(OfaAutocorrReplacePage, NewDelHdl, PushButton*, pBtn)
             }
             SvTreeListEntry* pInsEntry = m_pReplaceTLB->InsertEntry(
                                         sEntry, static_cast< SvTreeListEntry * >(NULL), false,
-                                        nPos == UINT_MAX ? LIST_APPEND : nPos);
+                                        nPos == TREELIST_ENTRY_NOTFOUND ? TREELIST_APPEND : nPos);
             if (bKeepSourceFormatting)
             {
                 pInsEntry->SetUserData(&bHasSelectionText); // new formatted text
@@ -1435,8 +1435,8 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
 
             if(pWrdList)
             {
-                sal_uInt16 nCount = pWrdList->size();
-                sal_uInt16 i;
+                size_t nCount = pWrdList->size();
+                size_t i;
                 for( i = nCount; i; )
                 {
                     OUString aString = (*pWrdList)[ --i ];
@@ -1458,8 +1458,8 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
 
             if(pCplList)
             {
-                sal_uInt16 nCount = pCplList->size();
-                sal_uInt16 i;
+                size_t nCount = pCplList->size();
+                size_t i;
                 for( i = nCount; i; )
                 {
                     OUString aString = (*pCplList)[ --i ];
@@ -1484,8 +1484,8 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
 
     if(pWrdList)
     {
-        sal_uInt16 nCount = pWrdList->size();
-        sal_uInt16 i;
+        size_t nCount = pWrdList->size();
+        size_t i;
         for( i = nCount; i; )
         {
             OUString aString = (*pWrdList)[ --i ];
@@ -1506,20 +1506,19 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
 
     if(pCplList)
     {
-        sal_uInt16 nCount = pCplList->size();
-        sal_uInt16 i;
-        for( i = nCount; i; )
+        size_t nCount = pCplList->size();
+        for( size_t i = nCount; i; )
         {
             OUString aString = (*pCplList)[ --i ];
-            if( USHRT_MAX == m_pAbbrevLB->GetEntryPos(aString) )
+            if( LISTBOX_ENTRY_NOTFOUND == m_pAbbrevLB->GetEntryPos(aString) )
             {
                 pCplList->erase(i);
             }
         }
-        nCount = m_pAbbrevLB->GetEntryCount();
-        for( i = 0; i < nCount; ++i )
+        sal_Int32 nAbbrevCount = m_pAbbrevLB->GetEntryCount();
+        for( sal_Int32 ia = 0; ia < nAbbrevCount; ++ia )
         {
-            pCplList->insert( m_pAbbrevLB->GetEntry( i ) );
+            pCplList->insert( m_pAbbrevLB->GetEntry( ia ) );
         }
         pAutoCorrect->SaveCplSttExceptList(eLang);
     }
@@ -1568,7 +1567,7 @@ void OfaAutocorrExceptPage::RefillReplaceBoxes(sal_Bool bFromReset,
             pArrays = &aStringsTable[eOldLanguage]; // create new array
         }
 
-        sal_uInt16 i;
+        sal_Int32 i;
         for(i = 0; i < m_pAbbrevLB->GetEntryCount(); i++)
             pArrays->aAbbrevStrings.push_back(OUString(m_pAbbrevLB->GetEntry(i)));
 
@@ -1595,7 +1594,7 @@ void OfaAutocorrExceptPage::RefillReplaceBoxes(sal_Bool bFromReset,
         SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
         const SvStringsISortDtor* pCplList = pAutoCorrect->GetCplSttExceptList(eLang);
         const SvStringsISortDtor* pWrdList = pAutoCorrect->GetWrdSttExceptList(eLang);
-        sal_uInt16 i;
+        size_t i;
         for( i = 0; i < pCplList->size(); i++ )
         {
             m_pAbbrevLB->InsertEntry((*pCplList)[i]);
@@ -1832,7 +1831,7 @@ sal_Bool OfaQuoteTabPage::FillItemSet( SfxItemSet&  )
 
     if (m_pCheckLB->IsVisible())
     {
-        sal_uInt16 nPos = 0;
+        sal_uLong nPos = 0;
         pAutoCorrect->SetAutoCorrFlag(AddNonBrkSpace, m_pCheckLB->IsChecked(nPos++));
         pAutoCorrect->SetAutoCorrFlag(ChgOrdinalNumber, m_pCheckLB->IsChecked(nPos++));
     }
@@ -1930,7 +1929,7 @@ void OfaQuoteTabPage::Reset( const SfxItemSet& )
         m_pCheckLB->InsertEntry( sNonBrkSpace );
         m_pCheckLB->InsertEntry( sOrdinal );
 
-        sal_uInt16 nPos = 0;
+        sal_uLong nPos = 0;
         m_pCheckLB->CheckEntryPos( nPos++, 0 != (nFlags & AddNonBrkSpace) );
         m_pCheckLB->CheckEntryPos( nPos++, 0 != (nFlags & ChgOrdinalNumber) );
 
@@ -2128,7 +2127,7 @@ OfaAutoCompleteTabPage::OfaAutoCompleteTabPage(Window* pParent,
     for( const sal_uInt16* pKeys = aKeyCodes; *pKeys; ++pKeys )
     {
         KeyCode aKCode( *pKeys );
-        sal_uInt16 nPos = m_pDCBExpandKey->InsertEntry( aKCode.GetName() );
+        sal_Int32 nPos = m_pDCBExpandKey->InsertEntry( aKCode.GetName() );
         m_pDCBExpandKey->SetEntryData( nPos, (void*)(sal_uLong)*pKeys );
         if( KEY_RETURN == *pKeys )      // default to RETURN
             m_pDCBExpandKey->SelectEntryPos( nPos );
@@ -2219,7 +2218,7 @@ void OfaAutoCompleteTabPage::Reset( const SfxItemSet&  )
     // select the specific KeyCode:
     {
         sal_uLong nKey = pOpt->nAutoCmpltExpandKey;
-        for( sal_uInt16 n = 0, nCnt = m_pDCBExpandKey->GetEntryCount(); n < nCnt; ++n )
+        for( sal_Int32 n = 0, nCnt = m_pDCBExpandKey->GetEntryCount(); n < nCnt; ++n )
             if( nKey == (sal_uLong)m_pDCBExpandKey->GetEntryData( n ))
             {
                 m_pDCBExpandKey->SelectEntryPos( n );
@@ -2237,7 +2236,7 @@ void OfaAutoCompleteTabPage::Reset( const SfxItemSet&  )
         {
             const OUString* pStr =
                 &(*m_pAutoCompleteList)[n]->GetAutoCompleteString();
-            sal_uInt16 nPos = m_pLBEntries->InsertEntry( *pStr );
+            sal_Int32 nPos = m_pLBEntries->InsertEntry( *pStr );
             m_pLBEntries->SetEntryData( nPos, (void*)pStr );
         }
     }
@@ -2258,11 +2257,11 @@ void OfaAutoCompleteTabPage::ActivatePage( const SfxItemSet& )
 
 IMPL_LINK_NOARG(OfaAutoCompleteTabPage, DeleteHdl)
 {
-    sal_uInt16 nSelCnt =
+    sal_Int32 nSelCnt =
         (m_pAutoCompleteList) ? m_pLBEntries->GetSelectEntryCount() : 0;
     while( nSelCnt )
     {
-        sal_uInt16 nPos = m_pLBEntries->GetSelectEntryPos( --nSelCnt );
+        sal_Int32 nPos = m_pLBEntries->GetSelectEntryPos( --nSelCnt );
         OUString* pStr = static_cast<OUString*>(m_pLBEntries->GetEntryData(nPos));
         m_pLBEntries->RemoveEntry( nPos );
         editeng::IAutoCompleteString hack(*pStr); // UGLY
@@ -2288,7 +2287,7 @@ IMPL_LINK( OfaAutoCompleteTabPage, CheckHdl, CheckBox*, pBox )
 
 void OfaAutoCompleteTabPage::CopyToClipboard() const
 {
-    sal_uInt16 nSelCnt = m_pLBEntries->GetSelectEntryCount();
+    sal_Int32 nSelCnt = m_pLBEntries->GetSelectEntryCount();
     if (m_pAutoCompleteList && nSelCnt)
     {
         TransferDataContainer* pCntnr = new TransferDataContainer;
@@ -2305,7 +2304,7 @@ void OfaAutoCompleteTabPage::CopyToClipboard() const
 
         rtl_TextEncoding nEncode = osl_getThreadTextEncoding();
 
-        for( sal_uInt16 n = 0; n < nSelCnt; ++n )
+        for( sal_Int32 n = 0; n < nSelCnt; ++n )
         {
             sData.append(OUStringToOString(m_pLBEntries->GetSelectEntry(n),
                 nEncode));
@@ -2407,7 +2406,7 @@ struct ImplSmartTagLBUserData
 void OfaSmartTagOptionsTabPage::ClearListBox()
 {
     const sal_uLong nCount = m_aSmartTagTypesLB.GetEntryCount();
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
+    for ( sal_uLong i = 0; i < nCount; ++i )
     {
         const SvTreeListEntry* pEntry = m_aSmartTagTypesLB.GetEntry(i);
         const ImplSmartTagLBUserData* pUserData = static_cast< ImplSmartTagLBUserData* >(pEntry->GetUserData());
@@ -2463,7 +2462,7 @@ void OfaSmartTagOptionsTabPage::FillListBox( const SmartTagMgr& rSmartTagMgr )
 */
 IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, ClickHdl)
 {
-    const sal_uInt16 nPos = m_aSmartTagTypesLB.GetSelectEntryPos();
+    const sal_uLong nPos = m_aSmartTagTypesLB.GetSelectEntryPos();
     const SvTreeListEntry* pEntry = m_aSmartTagTypesLB.GetEntry(nPos);
     const ImplSmartTagLBUserData* pUserData = static_cast< ImplSmartTagLBUserData* >(pEntry->GetUserData());
     uno::Reference< smarttags::XSmartTagRecognizer > xRec = pUserData->mxRec;
@@ -2502,7 +2501,7 @@ IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, SelectHdl)
     if ( m_aSmartTagTypesLB.GetEntryCount() < 1 )
         return 0;
 
-    const sal_uInt16 nPos = m_aSmartTagTypesLB.GetSelectEntryPos();
+    const sal_uLong nPos = m_aSmartTagTypesLB.GetSelectEntryPos();
     const SvTreeListEntry* pEntry = m_aSmartTagTypesLB.GetEntry(nPos);
     const ImplSmartTagLBUserData* pUserData = static_cast< ImplSmartTagLBUserData* >(pEntry->GetUserData());
     uno::Reference< smarttags::XSmartTagRecognizer > xRec = pUserData->mxRec;
@@ -2534,7 +2533,7 @@ sal_Bool OfaSmartTagOptionsTabPage::FillItemSet( SfxItemSet& )
 
     const sal_uLong nCount = m_aSmartTagTypesLB.GetEntryCount();
 
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
+    for ( sal_uLong i = 0; i < nCount; ++i )
     {
         const SvTreeListEntry* pEntry = m_aSmartTagTypesLB.GetEntry(i);
         const ImplSmartTagLBUserData* pUserData = static_cast< ImplSmartTagLBUserData* >(pEntry->GetUserData());

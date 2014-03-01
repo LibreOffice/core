@@ -1480,7 +1480,7 @@ IMPL_LINK( XMLFilterListBox, HeaderEndDrag_Impl, HeaderBar*, pBar )
 void XMLFilterListBox::addFilterEntry( const filter_info_impl* pInfo )
 {
     const OUString aEntryStr( getEntryString( pInfo ) );
-    InsertEntryToColumn( aEntryStr, LIST_APPEND, 0xffff, (void*)pInfo );
+    InsertEntryToColumn( aEntryStr, TREELIST_APPEND, 0xffff, (void*)pInfo );
 }
 
 

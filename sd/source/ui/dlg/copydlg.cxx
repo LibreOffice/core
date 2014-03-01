@@ -233,7 +233,7 @@ void CopyDlg::GetAttr( SfxItemSet& rOutAttrs )
  */
 IMPL_LINK_NOARG(CopyDlg, SelectColorHdl)
 {
-    sal_uInt16 nPos = m_pLbStartColor->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLbStartColor->GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND &&
         !m_pLbEndColor->IsEnabled() )

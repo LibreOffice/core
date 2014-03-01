@@ -169,26 +169,26 @@ public:
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
 
     using ListBox::InsertEntry;
-    virtual sal_uInt16  InsertEntry( const OUString& rStr,
-                                 sal_uInt16 nPos = LISTBOX_APPEND );
-    virtual sal_uInt16  InsertEntry( const Color& rColor, const OUString& rStr,
-                                 sal_uInt16 nPos = LISTBOX_APPEND );
+    virtual sal_Int32   InsertEntry( const OUString& rStr,
+                                 sal_Int32  nPos = LISTBOX_APPEND );
+    virtual sal_Int32   InsertEntry( const Color& rColor, const OUString& rStr,
+                                 sal_Int32  nPos = LISTBOX_APPEND );
     void            InsertAutomaticEntryColor(const Color &rAutoColorValue);
     bool            IsAutomaticSelected() { return !GetSelectEntryPos(); }
     using ListBox::RemoveEntry;
-    virtual void    RemoveEntry( sal_uInt16 nPos );
+    virtual void    RemoveEntry( sal_Int32  nPos );
     virtual void    Clear();
     void            CopyEntries( const ColorListBox& rBox );
 
     using ListBox::GetEntryPos;
-    virtual sal_uInt16  GetEntryPos( const Color& rColor ) const;
-    virtual Color   GetEntryColor( sal_uInt16 nPos ) const;
+    virtual sal_Int32   GetEntryPos( const Color& rColor ) const;
+    virtual Color   GetEntryColor( sal_Int32  nPos ) const;
     Size            GetImageSize() const { return aImageSize; }
 
     void            SelectEntry( const OUString& rStr, sal_Bool bSelect = sal_True )
                         { ListBox::SelectEntry( rStr, bSelect ); }
     void            SelectEntry( const Color& rColor, sal_Bool bSelect = sal_True );
-    Color           GetSelectEntryColor( sal_uInt16 nSelIndex = 0 ) const;
+    Color           GetSelectEntryColor( sal_Int32  nSelIndex = 0 ) const;
     bool            IsEntrySelected(const OUString& rStr ) const
     {
         return ListBox::IsEntrySelected(rStr);
@@ -196,7 +196,7 @@ public:
 
     bool            IsEntrySelected(const Color& rColor) const
     {
-        sal_uInt16 nPos = GetEntryPos( rColor );
+        sal_Int32  nPos = GetEntryPos( rColor );
         if ( nPos != LISTBOX_ENTRY_NOTFOUND )
             return IsEntryPosSelected( nPos );
         else
@@ -208,20 +208,20 @@ private:
                     ColorListBox( const ColorListBox& );
     ColorListBox&   operator =( const ColorListBox& );
 
-    void            SetEntryData( sal_uInt16 nPos, void* pNewData );
-    void*           GetEntryData( sal_uInt16 nPos ) const;
+    void            SetEntryData( sal_Int32  nPos, void* pNewData );
+    void*           GetEntryData( sal_Int32  nPos ) const;
 };
 
 inline void ColorListBox::SelectEntry( const Color& rColor, sal_Bool bSelect )
 {
-    sal_uInt16 nPos = GetEntryPos( rColor );
+    sal_Int32  nPos = GetEntryPos( rColor );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         ListBox::SelectEntryPos( nPos, bSelect );
 }
 
-inline Color ColorListBox::GetSelectEntryColor( sal_uInt16 nSelIndex ) const
+inline Color ColorListBox::GetSelectEntryColor( sal_Int32  nSelIndex ) const
 {
-    sal_uInt16 nPos = GetSelectEntryPos( nSelIndex );
+    sal_Int32  nPos = GetSelectEntryPos( nSelIndex );
     Color aColor;
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         aColor = GetEntryColor( nPos );
@@ -307,7 +307,7 @@ class SVT_DLLPUBLIC LineListBox : public ListBox
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
     void            UpdateEntries( long nOldWidth );
-    sal_uInt16           GetStylePos( sal_uInt16 nListPos, long nWidth );
+    sal_Int32       GetStylePos( sal_Int32  nListPos, long nWidth );
 
 public:
     typedef Color (*ColorFunc)(Color);
@@ -322,7 +322,7 @@ public:
     void            SetNone( const OUString& sNone );
 
     using ListBox::InsertEntry;
-    virtual sal_uInt16  InsertEntry( const OUString& rStr, sal_uInt16 nPos = LISTBOX_APPEND );
+    virtual sal_Int32   InsertEntry( const OUString& rStr, sal_Int32  nPos = LISTBOX_APPEND );
     /** Insert a listbox entry with all widths in Twips. */
     void            InsertEntry( BorderWidthImpl aWidthImpl,
                         sal_uInt16 nStyle, long nMinWidth = 0,
@@ -331,23 +331,23 @@ public:
                         ColorDistFunc pColorDistFn = &sameDistColor );
 
     using ListBox::RemoveEntry;
-    virtual void    RemoveEntry( sal_uInt16 nPos );
+    virtual void    RemoveEntry( sal_Int32  nPos );
     virtual void    Clear();
 
     using ListBox::GetEntryPos;
-    virtual sal_uInt16 GetEntryPos( sal_uInt16 nStyle = com::sun::star::table::BorderLineStyle::SOLID ) const;
-    sal_uInt16          GetEntryStyle( sal_uInt16 nPos ) const;
+    virtual sal_Int32  GetEntryPos( sal_uInt16 nStyle = com::sun::star::table::BorderLineStyle::SOLID ) const;
+    sal_uInt16          GetEntryStyle( sal_Int32  nPos ) const;
 
     void            SelectEntry( const OUString& rStr, sal_Bool bSelect = sal_True ) { ListBox::SelectEntry( rStr, bSelect ); }
     void SelectEntry( sal_uInt16 nStyle = com::sun::star::table::BorderLineStyle::SOLID, sal_Bool bSelect = sal_True );
-    sal_uInt16          GetSelectEntryStyle( sal_uInt16 nSelIndex = 0 ) const;
+    sal_uInt16          GetSelectEntryStyle( sal_Int32  nSelIndex = 0 ) const;
     bool            IsEntrySelected(const OUString& rStr) const
     {
         return ListBox::IsEntrySelected(rStr);
     }
     bool IsEntrySelected( sal_uInt16 nStyle = com::sun::star::table::BorderLineStyle::SOLID ) const
     {
-        sal_uInt16 nPos = GetEntryPos( nStyle );
+        sal_Int32  nPos = GetEntryPos( nStyle );
         if ( nPos != LISTBOX_ENTRY_NOTFOUND )
             return IsEntryPosSelected( nPos );
         else
@@ -365,16 +365,16 @@ public:
 protected:
 
     inline const Color&    GetPaintColor( void ) const;
-    Color   GetColorLine1( sal_uInt16 nPos = 0 );
-    Color   GetColorLine2( sal_uInt16 nPos = 0 );
-    Color   GetColorDist( sal_uInt16 nPos = 0 );
+    Color   GetColorLine1( sal_Int32  nPos = 0 );
+    Color   GetColorLine2( sal_Int32  nPos = 0 );
+    Color   GetColorDist( sal_Int32  nPos = 0 );
 
 private:
     // declared as private because some compilers would generate the default methods
                     LineListBox( const LineListBox& );
     LineListBox&    operator =( const LineListBox& );
-    void            SetEntryData( sal_uInt16 nPos, void* pNewData );
-    void*           GetEntryData( sal_uInt16 nPos ) const;
+    void            SetEntryData( sal_Int32  nPos, void* pNewData );
+    void*           GetEntryData( sal_Int32  nPos ) const;
 };
 
 inline void LineListBox::SetColor( const Color& rColor )

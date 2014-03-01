@@ -193,7 +193,7 @@ namespace pcr
                         aName = ::comphelper::getString( xControl->getPropertyValue( PROPERTY_NAME ) );
                             // TODO: do Basic controls have a name?
                         aImage = GetImage( xControl );
-                        m_pLB_Controls->InsertEntry( aName, aImage, aImage, 0, sal_False, LIST_APPEND, xControl.get() );
+                        m_pLB_Controls->InsertEntry( aName, aImage, aImage, 0, sal_False, TREELIST_APPEND, xControl.get() );
                     }
                 }
                 else

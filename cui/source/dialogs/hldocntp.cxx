@@ -84,7 +84,7 @@ sal_Bool SvxHyperlinkNewDocTp::ImplGetURLObject( const OUString& rPath, const OU
         }
         if ( bIsValidURL )
         {
-            sal_uInt16 nPos = maLbDocTypes.GetSelectEntryPos();
+            sal_Int32 nPos = maLbDocTypes.GetSelectEntryPos();
             if ( nPos != LISTBOX_ENTRY_NOTFOUND )
                 aURLObject.SetExtension( ((DocumentTypeData*)maLbDocTypes.GetEntryData( nPos ))->aStrExt );
         }
@@ -330,7 +330,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
                 if ( aStrNewName != aEmptyStr )
                 {
                     // get private-url
-                    sal_uInt16 nPos = maLbDocTypes.GetSelectEntryPos();
+                    sal_Int32 nPos = maLbDocTypes.GetSelectEntryPos();
                     if( nPos == LISTBOX_ENTRY_NOTFOUND )
                         nPos=0;
                     OUString aStrDocName ( ( ( DocumentTypeData* )

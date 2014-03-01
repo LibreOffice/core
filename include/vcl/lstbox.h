@@ -20,9 +20,12 @@
 #ifndef INCLUDED_VCL_LSTBOX_H
 #define INCLUDED_VCL_LSTBOX_H
 
-#define LISTBOX_APPEND              ((sal_uInt16)0xFFFF)
-#define LISTBOX_ENTRY_NOTFOUND      ((sal_uInt16)0xFFFF)
-#define LISTBOX_ERROR               ((sal_uInt16)0xFFFF)
+#include <sal/types.h>
+
+#define LISTBOX_APPEND              (SAL_MAX_INT32)
+#define LISTBOX_ENTRY_NOTFOUND      (SAL_MAX_INT32)
+#define LISTBOX_ERROR               (SAL_MAX_INT32)
+#define LISTBOX_MAX_ENTRIES         (SAL_MAX_INT32 - 1)
 
 
 

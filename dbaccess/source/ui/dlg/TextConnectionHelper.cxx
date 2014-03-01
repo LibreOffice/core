@@ -451,7 +451,7 @@ namespace dbaui
     OUString OTextConnectionHelper::GetSeparator( const ComboBox& rBox, const OUString& rList )
     {
         sal_Unicode nTok = '\t';
-        sal_uInt16 nPos(rBox.GetEntryPos( rBox.GetText() ));
+        sal_Int32 nPos(rBox.GetEntryPos( rBox.GetText() ));
 
         if( nPos == COMBOBOX_ENTRY_NOTFOUND )
             return rBox.GetText().copy(0);

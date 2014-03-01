@@ -413,7 +413,7 @@ void SvxTransparenceTabPage::Reset(const SfxItemSet& rAttrs)
     // transparence gradient
     const XGradient& rGradient = ((XFillFloatTransparenceItem*)pGradientItem)->GetGradientValue();
     XGradientStyle eXGS(rGradient.GetGradientStyle());
-    m_pLbTrgrGradientType->SelectEntryPos(sal::static_int_cast< sal_uInt16 >(eXGS));
+    m_pLbTrgrGradientType->SelectEntryPos(sal::static_int_cast< sal_Int32 >(eXGS));
     m_pMtrTrgrAngle->SetValue(rGradient.GetAngle() / 10);
     m_pMtrTrgrBorder->SetValue(rGradient.GetBorder());
     m_pMtrTrgrCenterX->SetValue(rGradient.GetXOffset());
@@ -769,7 +769,7 @@ void SvxAreaTabPage::Construct()
 
 void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
 {
-    sal_uInt16 nCount;
+    sal_Int32 nCount;
     SFX_ITEMSET_ARG (&rSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE,false);
     SFX_ITEMSET_ARG (&rSet,pPosItem,SfxUInt16Item,SID_TABPAGE_POS,false);
     if (pPageTypeItem)
@@ -782,7 +782,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
 
         if( pColorList.is() )
         {
-            sal_uInt16 _nPos = 0;
+            sal_Int32 _nPos = 0;
 
             if( *pnBitmapListState )
             {
@@ -918,7 +918,7 @@ int SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if( nDlgType == 0 ) // area dialog
     {
-        sal_uInt16 nPosOrig = nPos;
+        sal_Int32 nPosOrig = nPos;
         XFillStyle eStyle = (XFillStyle) m_pTypeLB->GetSelectEntryPos();
         switch( eStyle )
         {
@@ -968,7 +968,7 @@ int SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
 {
-    sal_uInt16  _nPos;
+    sal_Int32  _nPos;
     sal_Bool    bModified = sal_False;
 
     if( nDlgType != 0 || *pbAreaTP )
@@ -1413,7 +1413,7 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
     {
         eXFS = (XFillStyle) ( ( ( const XFillStyleItem& ) rAttrs.
                                 Get( GetWhich( XATTR_FILLSTYLE ) ) ).GetValue() );
-        m_pTypeLB->SelectEntryPos( sal::static_int_cast< sal_uInt16 >( eXFS ) );
+        m_pTypeLB->SelectEntryPos( sal::static_int_cast< sal_Int32 >( eXFS ) );
 
         if (SFX_ITEM_DONTCARE != rAttrs.GetItemState(XATTR_FILLCOLOR))
         {
@@ -1816,7 +1816,7 @@ void SvxAreaTabPage::ClickColorHdl_Impl()
 IMPL_LINK_NOARG(SvxAreaTabPage, ModifyColorHdl_Impl)
 {
     const SfxPoolItem* pPoolItem = NULL;
-    sal_uInt16 _nPos = m_pLbColor->GetSelectEntryPos();
+    sal_Int32 _nPos = m_pLbColor->GetSelectEntryPos();
     m_pLbHatchBckgrdColor->SelectEntryPos( _nPos );
     if( _nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -1887,7 +1887,7 @@ void SvxAreaTabPage::ClickGradientHdl_Impl()
 IMPL_LINK_NOARG(SvxAreaTabPage, ModifyGradientHdl_Impl)
 {
     const SfxPoolItem* pPoolItem = NULL;
-    sal_uInt16 _nPos = m_pLbGradient->GetSelectEntryPos();
+    sal_Int32 _nPos = m_pLbGradient->GetSelectEntryPos();
     if( _nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         // fill ItemSet and pass it on to aCtlXRectPreview
@@ -1958,7 +1958,7 @@ void SvxAreaTabPage::ClickHatchingHdl_Impl()
 IMPL_LINK_NOARG(SvxAreaTabPage, ModifyHatchingHdl_Impl)
 {
     const SfxPoolItem* pPoolItem = NULL;
-    sal_uInt16 _nPos = m_pLbHatching->GetSelectEntryPos();
+    sal_Int32 _nPos = m_pLbHatching->GetSelectEntryPos();
     if( _nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         // fill ItemSet and pass it on to aCtlXRectPreview
@@ -1986,7 +1986,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyHatchingHdl_Impl)
 IMPL_LINK_NOARG(SvxAreaTabPage, ModifyHatchBckgrdColorHdl_Impl)
 {
     const SfxPoolItem* pPoolItem = NULL;
-    sal_uInt16 _nPos = m_pLbHatchBckgrdColor->GetSelectEntryPos();
+    sal_Int32 _nPos = m_pLbHatchBckgrdColor->GetSelectEntryPos();
     m_pLbColor->SelectEntryPos( _nPos );
     if( _nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -2085,7 +2085,7 @@ void SvxAreaTabPage::ClickBitmapHdl_Impl()
 IMPL_LINK_NOARG(SvxAreaTabPage, ModifyBitmapHdl_Impl)
 {
     const SfxPoolItem* pPoolItem = NULL;
-    sal_uInt16 _nPos = m_pLbBitmap->GetSelectEntryPos();
+    sal_Int32 _nPos = m_pLbBitmap->GetSelectEntryPos();
     if( _nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         // fill ItemSet and pass it on to aCtlXRectPreview

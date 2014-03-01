@@ -377,8 +377,8 @@ sal_uInt16 ScPivotFilterDlg::GetFieldSelPos( SCCOL nField )
 const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
 {
     ScQueryParam    theParam( theQueryData );
-    sal_uInt16          nConnect1 = aLbConnect1.GetSelectEntryPos();
-    sal_uInt16          nConnect2 = aLbConnect2.GetSelectEntryPos();
+    sal_Int32          nConnect1 = aLbConnect1.GetSelectEntryPos();
+    sal_Int32          nConnect2 = aLbConnect2.GetSelectEntryPos();
 
     svl::SharedStringPool& rPool = pViewData->GetDocument()->GetSharedStringPool();
 

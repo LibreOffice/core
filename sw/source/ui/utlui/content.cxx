@@ -1334,13 +1334,13 @@ void  SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
                              sEntry = sSpace;
                          if(!pChild || (nLevel == 0))
                              pChild = InsertEntry(sEntry, pParent,
-                                         sal_False, LIST_APPEND,(void*)pCnt);
+                                         sal_False, TREELIST_APPEND,(void*)pCnt);
                          else
                          {
                              //back search parent.
                              if(((SwOutlineContent*)pCntType->GetMember(i-1))->GetOutlineLevel() < nLevel)
                                  pChild = InsertEntry(sEntry, pChild,
-                                         sal_False, LIST_APPEND, (void*)pCnt);
+                                         sal_False, TREELIST_APPEND, (void*)pCnt);
                              else
                              {
                                  pChild = Prev(pChild);
@@ -1353,7 +1353,7 @@ void  SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
                                  }
                                  if(pChild)
                                      pChild = InsertEntry(sEntry, pChild,
-                                                 sal_False, LIST_APPEND, (void*)pCnt);
+                                                 sal_False, TREELIST_APPEND, (void*)pCnt);
                              }
                         }
                      }
@@ -1370,7 +1370,7 @@ void  SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
                          if (sEntry.isEmpty())
                              sEntry = sSpace;
                          SvTreeListEntry* pChild = InsertEntry(sEntry, pParent,
-                             sal_False, LIST_APPEND, (void*)pCnt);
+                             sal_False, TREELIST_APPEND, (void*)pCnt);
 
                         //If object is marked , the corresponding entry is set true,
                         //else the corresponding entry is set false .
@@ -1639,7 +1639,7 @@ void SwContentTree::Display( bool bActive )
                 const Image& rImage = aEntryImages.GetImage(SID_SW_START + nCntType);
                 sal_Bool bChOnDemand = 0 != (*ppContentT)->GetMemberCount();
                 pEntry = InsertEntry(sEntry, rImage, rImage,
-                                0, bChOnDemand, LIST_APPEND, (*ppContentT));
+                                0, bChOnDemand, TREELIST_APPEND, (*ppContentT));
                 if(nCntType == nLastSelType)
                     pSelEntry = pEntry;
                 sal_Int32 nExpandOptions = bIsActive || bIsConstant ?
@@ -1690,7 +1690,7 @@ void SwContentTree::Display( bool bActive )
             const Image& rImage = aEntryImages.GetImage(20000 + nRootType);
             SvTreeListEntry* pParent = InsertEntry(
                     (*ppRootContentT)->GetName(), rImage, rImage,
-                        0, sal_False, LIST_APPEND, *ppRootContentT);
+                        0, sal_False, TREELIST_APPEND, *ppRootContentT);
 
             if(nRootType != CONTENT_TYPE_OUTLINE)
             {
@@ -1703,7 +1703,7 @@ void SwContentTree::Display( bool bActive )
                         if(sEntry.isEmpty())
                             sEntry = sSpace;
                         InsertEntry( sEntry, pParent,
-                            sal_False, LIST_APPEND, (void*)pCnt);
+                            sal_False, TREELIST_APPEND, (void*)pCnt);
                     }
                 }
              }

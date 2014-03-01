@@ -137,10 +137,10 @@ public:
     bool            IsValidComment(const OUString &rComment);
 
     SvTreeListEntry*    InsertEntry(const OUString& ,RedlinData *pUserData,
-                                SvTreeListEntry* pParent=NULL,sal_uIntPtr nPos=LIST_APPEND);
+                                SvTreeListEntry* pParent=NULL,sal_uIntPtr nPos=TREELIST_APPEND);
 
     SvTreeListEntry*    InsertEntry(const OUString& ,RedlinData *pUserData,const Color&,
-                                SvTreeListEntry* pParent=NULL,sal_uIntPtr nPos=LIST_APPEND);
+                                SvTreeListEntry* pParent=NULL,sal_uIntPtr nPos=TREELIST_APPEND);
 
 
     virtual SvTreeListEntry* CreateEntry() const;
@@ -221,10 +221,10 @@ public:
     sal_uInt16          GetDateMode();
 
     void            ClearAuthors();
-    void            InsertAuthor( const OUString& rString, sal_uInt16 nPos = LISTBOX_APPEND );
+    void            InsertAuthor( const OUString& rString, sal_Int32  nPos = LISTBOX_APPEND );
     OUString        GetSelectedAuthor()const;
-    void            SelectedAuthorPos(sal_uInt16 nPos);
-    sal_uInt16      SelectAuthor(const OUString& aString);
+    void            SelectedAuthorPos(sal_Int32  nPos);
+    sal_Int32       SelectAuthor(const OUString& aString);
     void            SetComment(const OUString& rComment);
     OUString        GetComment()const;
 

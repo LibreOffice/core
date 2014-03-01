@@ -109,7 +109,7 @@ void SvxFontListBox::InsertFontEntry( const OUString& rString, const Font& rFont
     mbUseFont = false;
 }
 
-void SvxFontListBox::SelectEntryPos( sal_uInt16 nPos, bool bSelect )
+void SvxFontListBox::SelectEntryPos( sal_uLong nPos, bool bSelect )
 {
     SvTreeListEntry* pEntry = GetEntry( nPos );
     if( pEntry )
@@ -127,7 +127,7 @@ void SvxFontListBox::SetNoSelection()
 sal_uLong SvxFontListBox::GetSelectEntryPos() const
 {
     SvTreeListEntry* pSvLBoxEntry = FirstSelected();
-    return pSvLBoxEntry ? GetModel()->GetAbsPos( pSvLBoxEntry ) : LIST_APPEND;
+    return pSvLBoxEntry ? GetModel()->GetAbsPos( pSvLBoxEntry ) : TREELIST_ENTRY_NOTFOUND;
 }
 
 OUString SvxFontListBox::GetSelectEntry() const

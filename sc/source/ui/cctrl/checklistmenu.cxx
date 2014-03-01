@@ -1515,7 +1515,7 @@ void ScCheckListMenuWindow::initMembers()
     {
         if ( !maMembers[ i ].mbDate )
         {
-            maChecks.InsertEntry(maMembers[i].maName, NULL, sal_False, LISTBOX_APPEND, NULL,
+            maChecks.InsertEntry(maMembers[i].maName, NULL, sal_False, TREELIST_APPEND, NULL,
                 SvLBoxButtonKind_enabledCheckbox );
         }
 

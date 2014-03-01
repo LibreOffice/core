@@ -52,7 +52,7 @@ SdAnimationInfo::SdAnimationInfo(SdrObject& rObject)
                  mbSecondSoundOn            (sal_False),
                  mbSecondPlayFull           (sal_False),
                  mnVerb                     (0),
-                 mnPresOrder                (LIST_APPEND),
+                 mnPresOrder                (TREELIST_APPEND),
                  mrObject                   (rObject)
 {
     maBlueScreen = RGB_Color(COL_LIGHTMAGENTA);
@@ -82,7 +82,7 @@ SdAnimationInfo::SdAnimationInfo(const SdAnimationInfo& rAnmInfo, SdrObject& rOb
                  mbSecondSoundOn            (rAnmInfo.mbSecondSoundOn),
                  mbSecondPlayFull           (rAnmInfo.mbSecondPlayFull),
                  mnVerb                     (rAnmInfo.mnVerb),
-                 mnPresOrder                (LIST_APPEND),
+                 mnPresOrder                (TREELIST_APPEND),
                  mrObject                   (rObject)
 {
     // can not be copied

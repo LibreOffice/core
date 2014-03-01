@@ -68,7 +68,7 @@ void ScCondFormatManagerWindow::Init()
 
     for(ScConditionalFormatList::iterator itr = mpFormatList->begin(); itr != mpFormatList->end(); ++itr)
     {
-        SvTreeListEntry* pEntry = InsertEntryToColumn( createEntryString(*itr), LIST_APPEND, 0xffff );
+        SvTreeListEntry* pEntry = InsertEntryToColumn( createEntryString(*itr), TREELIST_APPEND, 0xffff );
         maMapLBoxEntryToCondIndex.insert(std::pair<SvTreeListEntry*,sal_Int32>(pEntry,itr->GetKey()));
     }
     SetUpdateMode(true);

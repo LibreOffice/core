@@ -84,7 +84,7 @@ SwLoadOptPage::SwLoadOptPage(Window* pParent, const SfxItemSet& rSet)
     get(m_pWordCountED, "wordcount");
 
     SvxStringArray aMetricArr( SW_RES( STR_ARR_METRIC ) );
-    for ( sal_uInt16 i = 0; i < aMetricArr.Count(); ++i )
+    for ( sal_uInt32 i = 0; i < aMetricArr.Count(); ++i )
     {
         OUString sMetric = aMetricArr.GetStringByPos( i );
         FieldUnit eFUnit = (FieldUnit)aMetricArr.GetValue( i );
@@ -98,7 +98,7 @@ SwLoadOptPage::SwLoadOptPage(Window* pParent, const SfxItemSet& rSet)
             case FUNIT_INCH:
             {
                 // use only these metrics
-                sal_uInt16 nPos = m_pMetricLB->InsertEntry( sMetric );
+                sal_Int32 nPos = m_pMetricLB->InsertEntry( sMetric );
                 m_pMetricLB->SetEntryData( nPos, (void*)(sal_IntPtr)eFUnit );
             }
             default:; //prevent warning
@@ -165,7 +165,7 @@ sal_Bool SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
         bRet = sal_True;
     }
 
-    const sal_uInt16 nMPos = m_pMetricLB->GetSelectEntryPos();
+    const sal_Int32 nMPos = m_pMetricLB->GetSelectEntryPos();
     if ( nMPos != m_pMetricLB->GetSavedValue() )
     {
         // Double-Cast for VA3.0
@@ -253,7 +253,7 @@ void SwLoadOptPage::Reset( const SfxItemSet& rSet)
         const SfxUInt16Item& rItem = (SfxUInt16Item&)rSet.Get( SID_ATTR_METRIC );
         FieldUnit eFieldUnit = (FieldUnit)rItem.GetValue();
 
-        for ( sal_uInt16 i = 0; i < m_pMetricLB->GetEntryCount(); ++i )
+        for ( sal_Int32 i = 0; i < m_pMetricLB->GetEntryCount(); ++i )
         {
             if ( (int)(sal_IntPtr)m_pMetricLB->GetEntryData( i ) == (int)eFieldUnit )
             {
@@ -296,8 +296,8 @@ void SwLoadOptPage::Reset( const SfxItemSet& rSet)
 
 IMPL_LINK_NOARG(SwLoadOptPage, MetricHdl)
 {
-    const sal_uInt16 nMPos = m_pMetricLB->GetSelectEntryPos();
-    if(nMPos != USHRT_MAX)
+    const sal_Int32 nMPos = m_pMetricLB->GetSelectEntryPos();
+    if(nMPos != LISTBOX_ENTRY_NOTFOUND)
     {
         // Double-Cast for VA3.0
         FieldUnit eFieldUnit = (FieldUnit)(sal_IntPtr)m_pMetricLB->GetEntryData( nMPos );
@@ -510,7 +510,7 @@ sal_Bool SwCaptionOptPage::FillItemSet( SfxItemSet&  )
         pEntry = m_pCheckLB->Next(pEntry);
     }
 
-    sal_uInt16 nCheckCount = m_pCheckLB->GetCheckedEntryCount();
+    sal_uLong nCheckCount = m_pCheckLB->GetCheckedEntryCount();
     pModOpt->SetInsWithCaption( bHTMLMode, nCheckCount > 0 );
 
     sal_Int32 nPos = m_pLbCaptionOrder->GetSelectEntryPos();
@@ -531,7 +531,7 @@ void SwCaptionOptPage::Reset( const SfxItemSet& rSet)
     m_pCheckLB->GetModel()->Clear();   // remove all entries
 
     // Writer objects
-    sal_uInt16 nPos = 0;
+    sal_uLong nPos = 0;
     m_pCheckLB->InsertEntry(m_sSWTable);
     SetOptions(nPos++, TABLE_CAP);
     m_pCheckLB->InsertEntry(m_sSWFrame);
@@ -567,7 +567,7 @@ void SwCaptionOptPage::Reset( const SfxItemSet& rSet)
     ModifyHdl();
 }
 
-void SwCaptionOptPage::SetOptions(const sal_uInt16 nPos,
+void SwCaptionOptPage::SetOptions(const sal_uLong nPos,
         const SwCapObjType eObjType, const SvGlobalName *pOleId)
 {
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
@@ -600,7 +600,7 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl)
 
     if (pSelEntry)
     {
-        sal_Bool bChecked = m_pCheckLB->IsChecked((sal_uInt16)m_pCheckLB->GetModel()->GetAbsPos(pSelEntry));
+        sal_Bool bChecked = m_pCheckLB->IsChecked(m_pCheckLB->GetModel()->GetAbsPos(pSelEntry));
 
         m_pSettingsGroup->Enable(bChecked);
         bool bNumSep = bChecked && m_pLbCaptionOrder->GetSelectEntryPos() == 1;
@@ -646,7 +646,7 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl)
             m_pCategoryBox->InsertEntry(pOpt->GetCategory());
         if (m_pCategoryBox->GetText().isEmpty())
         {
-            sal_uInt16 nPos = 0;
+            sal_Int32 nPos = 0;
             switch(pOpt->GetObjType())
             {
                 case OLE_CAP:
@@ -657,7 +657,7 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl)
             m_pCategoryBox->SetText(m_pCategoryBox->GetSwEntry(nPos).GetName());
         }
 
-        for (sal_uInt16 i = 0; i < m_pFormatBox->GetEntryCount(); i++)
+        for (sal_Int32 i = 0; i < m_pFormatBox->GetEntryCount(); i++)
         {
             if (pOpt->GetNumType() == (sal_uInt16)(sal_uLong)m_pFormatBox->GetEntryData(i))
             {
@@ -687,7 +687,7 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl)
                 m_pPosBox->IsEnabled() );
         m_pPosBox->SelectEntryPos(pOpt->GetPos());
 
-        sal_uInt16 nLevelPos = ( pOpt->GetLevel() < MAXLEVEL ) ? pOpt->GetLevel() + 1 : 0;
+        sal_Int32 nLevelPos = ( pOpt->GetLevel() < MAXLEVEL ) ? pOpt->GetLevel() + 1 : 0;
         m_pLbLevel->SelectEntryPos( nLevelPos );
         m_pEdDelim->SetText(pOpt->GetSeparator());
         m_pNumberingSeparatorED->SetText( pOpt->GetNumSeparator() );
@@ -721,7 +721,7 @@ void SwCaptionOptPage::SaveEntry(SvTreeListEntry* pEntry)
     {
         InsCaptionOpt* pOpt = (InsCaptionOpt*)pEntry->GetUserData();
 
-        pOpt->UseCaption() = m_pCheckLB->IsChecked((sal_uInt16)m_pCheckLB->GetModel()->GetAbsPos(pEntry));
+        pOpt->UseCaption() = m_pCheckLB->IsChecked(m_pCheckLB->GetModel()->GetAbsPos(pEntry));
         OUString aName( m_pCategoryBox->GetText() );
         if (aName == m_sNone)
             pOpt->SetCategory(aEmptyOUStr);
@@ -730,8 +730,8 @@ void SwCaptionOptPage::SaveEntry(SvTreeListEntry* pEntry)
         pOpt->SetNumType((sal_uInt16)(sal_uLong)m_pFormatBox->GetEntryData(m_pFormatBox->GetSelectEntryPos()));
         pOpt->SetCaption(m_pTextEdit->IsEnabled() ? m_pTextEdit->GetText() : OUString(aEmptyOUStr) );
         pOpt->SetPos(m_pPosBox->GetSelectEntryPos());
-        sal_uInt16 nPos = m_pLbLevel->GetSelectEntryPos();
-        sal_uInt16 nLevel = ( nPos > 0 && nPos != LISTBOX_ENTRY_NOTFOUND ) ? nPos - 1 : MAXLEVEL;
+        sal_Int32 nPos = m_pLbLevel->GetSelectEntryPos();
+        sal_Int32 nLevel = ( nPos > 0 && nPos != LISTBOX_ENTRY_NOTFOUND ) ? nPos - 1 : MAXLEVEL;
         pOpt->SetLevel(nLevel);
         pOpt->SetSeparator(m_pEdDelim->GetText());
         pOpt->SetNumSeparator( m_pNumberingSeparatorED->GetText());
@@ -777,7 +777,7 @@ IMPL_LINK( SwCaptionOptPage, OrderHdl, ListBox*, pBox )
     sal_Bool bChecked = sal_False;
     if (pSelEntry)
     {
-        bChecked = m_pCheckLB->IsChecked((sal_uInt16)m_pCheckLB->GetModel()->GetAbsPos(pSelEntry));
+        bChecked = m_pCheckLB->IsChecked(m_pCheckLB->GetModel()->GetAbsPos(pSelEntry));
     }
 
     sal_Int32 nPos = pBox->GetSelectEntryPos();

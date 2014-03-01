@@ -258,7 +258,7 @@ int ScTpUserLists::DeactivatePage( SfxItemSet* pSetP )
 
 
 
-sal_uInt16 ScTpUserLists::UpdateUserListBox()
+size_t ScTpUserLists::UpdateUserListBox()
 {
     mpLbLists->Clear();
 
@@ -454,7 +454,7 @@ void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
 
 
 
-void ScTpUserLists::ModifyList( sal_uInt16          nSelList,
+void ScTpUserLists::ModifyList( size_t            nSelList,
                                 const OUString&   rEntriesStr )
 {
     if ( !pUserLists ) return;
@@ -488,7 +488,7 @@ IMPL_LINK( ScTpUserLists, LbSelectHdl, ListBox*, pLb )
 {
     if ( pLb == mpLbLists )
     {
-        sal_uInt16 nSelPos = mpLbLists->GetSelectEntryPos();
+        sal_Int32 nSelPos = mpLbLists->GetSelectEntryPos();
         if ( nSelPos != LISTBOX_ENTRY_NOTFOUND )
         {
             if ( !mpFtEntries->IsEnabled() )  mpFtEntries->Enable();
@@ -605,7 +605,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
         }
         else // if ( bModifyMode )
         {
-            sal_uInt16 nSelList = mpLbLists->GetSelectEntryPos();
+            sal_Int32 nSelList = mpLbLists->GetSelectEntryPos();
 
             OSL_ENSURE( nSelList != LISTBOX_ENTRY_NOTFOUND, "Modify without List :-/" );
 
@@ -645,7 +645,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
     {
         if ( mpLbLists->GetEntryCount() > 0 )
         {
-            sal_uInt16 nRemovePos   = mpLbLists->GetSelectEntryPos();
+            sal_Int32 nRemovePos   = mpLbLists->GetSelectEntryPos();
             OUString aMsg         ( aStrQueryRemove.getToken( 0, '#' ) );
 
             aMsg += mpLbLists->GetEntry( nRemovePos );

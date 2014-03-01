@@ -708,7 +708,7 @@ void OTableEditorCtrl::CellModified( long nRow, sal_uInt16 nColId )
 
 void OTableEditorCtrl::resetType()
 {
-    sal_uInt16 nPos = pTypeCell->GetSelectEntryPos();
+    sal_Int32 nPos = pTypeCell->GetSelectEntryPos();
     if(nPos != LISTBOX_ENTRY_NOTFOUND)
         SwitchType( GetView()->getController().getTypeInfo(nPos) );
     else
@@ -1643,13 +1643,13 @@ void OTableEditorCtrl::SwitchType( const TOTypeInfoSP& _pType )
     pRow->SetFieldType( _pType, sal_True );
     if ( _pType.get() )
     {
-        const sal_uInt16 nCurrentlySelected = pTypeCell->GetSelectEntryPos();
+        const sal_Int32 nCurrentlySelected = pTypeCell->GetSelectEntryPos();
 
         if  (   ( LISTBOX_ENTRY_NOTFOUND == nCurrentlySelected )
             ||  ( GetView()->getController().getTypeInfo( nCurrentlySelected ) != _pType )
             )
         {
-            sal_uInt16 nEntryPos = 0;
+            sal_Int32 nEntryPos = 0;
             const OTypeInfoMap* pTypeInfo = GetView()->getController().getTypeInfo();
             OTypeInfoMap::const_iterator aIter = pTypeInfo->begin();
             OTypeInfoMap::const_iterator aEnd = pTypeInfo->end();

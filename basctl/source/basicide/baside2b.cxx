@@ -1754,7 +1754,7 @@ void WatchWindow::AddWatch( const OUString& rVName )
 
     OUString aWatchStr_( aVar );
     aWatchStr_ += "\t\t";
-    SvTreeListEntry* pNewEntry = aTreeListBox.InsertEntry( aWatchStr_, 0, true, LIST_APPEND );
+    SvTreeListEntry* pNewEntry = aTreeListBox.InsertEntry( aWatchStr_, 0, true, TREELIST_APPEND );
     pNewEntry->SetUserData( pWatchItem );
 
     aTreeListBox.Select(pNewEntry, true);
@@ -1886,7 +1886,7 @@ StackWindow::StackWindow (Layout* pParent) :
     aTreeListBox.SetPosPixel( Point( DWBORDER, nVirtToolBoxHeight ) );
     aTreeListBox.SetHighlightRange();
     aTreeListBox.SetSelectionMode( NO_SELECTION );
-    aTreeListBox.InsertEntry( OUString(), 0, false, LIST_APPEND );
+    aTreeListBox.InsertEntry( OUString(), 0, false, TREELIST_APPEND );
     aTreeListBox.Show();
 
     SetText(IDEResId(RID_STR_STACKNAME).toString());
@@ -1986,7 +1986,7 @@ void StackWindow::UpdateCalls()
                 }
                 aEntry += ")";
             }
-            aTreeListBox.InsertEntry( aEntry, 0, false, LIST_APPEND );
+            aTreeListBox.InsertEntry( aEntry, 0, false, TREELIST_APPEND );
             nScope++;
             pMethod = StarBASIC::GetActiveMethod( nScope );
         }
@@ -1998,7 +1998,7 @@ void StackWindow::UpdateCalls()
     else
     {
         aTreeListBox.SetSelectionMode( NO_SELECTION );
-        aTreeListBox.InsertEntry( OUString(), 0, false, LIST_APPEND );
+        aTreeListBox.InsertEntry( OUString(), 0, false, TREELIST_APPEND );
     }
 
     aTreeListBox.SetUpdateMode(true);
@@ -2719,13 +2719,13 @@ void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
                 OUString sTypedText = pCodeCompleteWindow->pParent->GetEditEngine()->GetText(aTextSelection);
                 if( !aFuncBuffer.isEmpty() )
                 {
-                    sal_uInt16 nInd = GetSelectEntryPos();
+                    sal_Int32 nInd = GetSelectEntryPos();
                     if( nInd != LISTBOX_ENTRY_NOTFOUND )
                     {//if there is something selected
                         bool bFound = false;
                         if( nInd == GetEntryCount() )
                             nInd = 0;
-                        for( sal_uInt16 i = nInd; i != GetEntryCount(); ++i )
+                        for( sal_Int32 i = nInd; i != GetEntryCount(); ++i )
                         {
                             OUString sEntry = (OUString) GetEntry(i);
                             if( sEntry.startsWithIgnoreAsciiCase( aFuncBuffer.toString() )
@@ -2836,14 +2836,14 @@ void CodeCompleteWindow::ResizeAndPositionListBox()
         aPos.Y() = (aPos.Y() - nViewYOffset) + nBasePad;
 
         OUString aLongestEntry = pListBox->GetEntry( 0 );// grab the longest one: max search
-        for( sal_uInt16 i=1; i< pListBox->GetEntryCount(); ++i )
+        for( sal_Int32 i=1; i< pListBox->GetEntryCount(); ++i )
         {
             if( ((OUString) pListBox->GetEntry( i )).getLength() > aLongestEntry.getLength() )
                 aLongestEntry = pListBox->GetEntry( i );
         }
         // get column/line count
         const sal_uInt16& nColumns = aLongestEntry.getLength();
-        const sal_uInt16& nLines = std::min( (sal_uInt16) 6, pListBox->GetEntryCount() );
+        const sal_uInt16  nLines = static_cast<sal_uInt16>( std::min( (sal_Int32) 6, pListBox->GetEntryCount() ));
 
         Size aSize = pListBox->CalcBlockSize( nColumns, nLines );
         //set the size

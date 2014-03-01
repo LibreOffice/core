@@ -207,7 +207,7 @@ sal_Bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
 
     sal_Bool bModified = sal_False;
     sal_uInt16 nWhich;
-    sal_uInt16 nPos = m_pLineDist->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLineDist->GetSelectEntryPos();
 
     if ( LISTBOX_ENTRY_NOTFOUND != nPos &&
          ( nPos != m_pLineDist->GetSavedValue() ||
@@ -853,7 +853,7 @@ void SvxStdParagraphTabPage::UpdateExample_Impl( sal_Bool bAll )
     m_pExampleWin->SetUpper( (sal_uInt16)m_pTopDist->Denormalize( m_pTopDist->GetValue( FUNIT_TWIP ) ) );
     m_pExampleWin->SetLower( (sal_uInt16)m_pBottomDist->Denormalize( m_pBottomDist->GetValue( FUNIT_TWIP ) ) );
 
-    sal_uInt16 nPos = m_pLineDist->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLineDist->GetSelectEntryPos();
 
     switch ( nPos )
     {
@@ -1093,7 +1093,7 @@ sal_Bool SvxParaAlignTabPage::FillItemSet( SfxItemSet& rOutSet )
 
         SvxAdjust eOneWord = m_pExpandCB->IsChecked() ? SVX_ADJUST_BLOCK : SVX_ADJUST_LEFT;
 
-        sal_uInt16 nLBPos = m_pLastLineLB->GetSelectEntryPos();
+        sal_Int32 nLBPos = m_pLastLineLB->GetSelectEntryPos();
         SvxAdjust eLastBlock = SVX_ADJUST_LEFT;
 
         if ( 1 == nLBPos )
@@ -1148,7 +1148,7 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet& rSet )
     sal_uInt16 _nWhich = GetWhich( SID_ATTR_PARA_ADJUST );
     SfxItemState eItemState = rSet.GetItemState( _nWhich );
 
-    sal_uInt16 nLBSelect = 0;
+    sal_Int32 nLBSelect = 0;
     if ( eItemState >= SFX_ITEM_AVAILABLE )
     {
         const SvxAdjustItem& rAdj = (const SvxAdjustItem&)rSet.Get( _nWhich );
@@ -1286,7 +1286,7 @@ void SvxParaAlignTabPage::UpdateExample_Impl( sal_Bool bAll )
     {
         m_pExampleWin->SetAdjust( SVX_ADJUST_BLOCK );
         SvxAdjust eLastBlock = SVX_ADJUST_LEFT;
-        sal_uInt16 nLBPos = m_pLastLineLB->GetSelectEntryPos();
+        sal_Int32 nLBPos = m_pLastLineLB->GetSelectEntryPos();
         if(nLBPos == 1)
             eLastBlock = SVX_ADJUST_CENTER;
         else if(nLBPos == 2)
@@ -1659,8 +1659,8 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet& rSet )
                 if ( eBreak == SVX_BREAK_NONE )
                     m_pPageBreakBox->SetState( TRISTATE_FALSE );
 
-                sal_uInt16 nType = 0; // selection position in break type ListBox : Page
-                sal_uInt16 nPosition = 0; //  selection position in break position ListBox : Before
+                sal_Int32 nType = 0; // selection position in break type ListBox : Page
+                sal_Int32 nPosition = 0; //  selection position in break position ListBox : Before
                 switch ( eBreak )
                 {
                     case SVX_BREAK_PAGE_BEFORE:
@@ -2090,7 +2090,7 @@ IMPL_LINK( SvxExtParagraphTabPage, PageBreakPosHdl_Impl, ListBox *, pListBox )
 IMPL_LINK( SvxExtParagraphTabPage, PageBreakTypeHdl_Impl, ListBox *, pListBox )
 {
     //column break or break break after
-    sal_uInt16 nBreakPos = m_pBreakPositionLB->GetSelectEntryPos();
+    sal_Int32 nBreakPos = m_pBreakPositionLB->GetSelectEntryPos();
     if ( pListBox->GetSelectEntryPos() == 1 || 1 == nBreakPos)
     {
         m_pApplyCollBtn->SetState( TRISTATE_FALSE );

@@ -643,7 +643,7 @@ namespace svxform
         for( size_t i = 0; i < nChildCount; i++ )
         {
             pChildData = pChildList->at( i );
-            Insert( pChildData, LIST_APPEND );
+            Insert( pChildData, TREELIST_APPEND );
         }
 
         return pNewEntry;
@@ -1362,7 +1362,7 @@ namespace svxform
 
 
         // Form einfuegen
-        GetNavModel()->Insert( pNewFormData, LIST_APPEND, sal_True );
+        GetNavModel()->Insert( pNewFormData, TREELIST_APPEND, sal_True );
 
 
         // Neue Form als aktive Form setzen
@@ -1417,7 +1417,7 @@ namespace svxform
 
 
         // FormComponent einfuegen
-        GetNavModel()->Insert( pNewFormControlData, LIST_APPEND, sal_True );
+        GetNavModel()->Insert( pNewFormControlData, TREELIST_APPEND, sal_True );
         GetNavModel()->SetModified();
 
         if (bEditName)

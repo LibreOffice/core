@@ -781,8 +781,16 @@ void FmFilterModel::AppendFilterItems( FmFormItem& _rFormItem )
 void FmFilterModel::Insert(const ::std::vector<FmFilterData*>::iterator& rPos, FmFilterData* pData)
 {
     ::std::vector<FmFilterData*>& rItems = pData->GetParent()->GetChildren();
-    sal_uLong nPos = rPos == rItems.end() ? LIST_APPEND : rPos - rItems.begin();
-    rItems.insert(rPos, pData);
+    sal_uLong nPos = rPos == rItems.end() ? CONTAINER_APPEND : rPos - rItems.begin();
+    if (nPos == CONTAINER_APPEND)
+    {
+        rItems.push_back(pData);
+        nPos = rItems.size() - 1;
+    }
+    else
+    {
+        rItems.insert(rPos, pData);
+    }
 
     // UI benachrichtigen
     FmFilterInsertedHint aInsertedHint(pData, nPos);

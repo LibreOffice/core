@@ -1075,11 +1075,11 @@ static bool implCheckSubControlCursorMove( Control* pControl, bool bUp, int& nLa
     ValueSet* pValueSet = dynamic_cast< ValueSet* >( pControl );
     if( pValueSet )
     {
-        sal_uInt16 nItemPos = pValueSet->GetItemPos( pValueSet->GetSelectItemId() );
+        size_t nItemPos = pValueSet->GetItemPos( pValueSet->GetSelectItemId() );
         if( nItemPos != VALUESET_ITEM_NOTFOUND )
         {
             const sal_uInt16 nColCount = pValueSet->GetColCount();
-            const sal_uInt16 nLine = nItemPos / nColCount;
+            const size_t nLine = nItemPos / nColCount;
 
             nLastColumn = nItemPos - (nLine * nColCount);
 
@@ -1089,7 +1089,7 @@ static bool implCheckSubControlCursorMove( Control* pControl, bool bUp, int& nLa
             }
             else
             {
-                const sal_uInt16 nLineCount = (pValueSet->GetItemCount() + nColCount - 1) / nColCount;
+                const size_t nLineCount = (pValueSet->GetItemCount() + nColCount - 1) / nColCount;
                 return (nLine+1) < nLineCount;
             }
         }
@@ -1183,19 +1183,19 @@ void ToolbarMenu_Impl::implHighlightControl( sal_uInt16 nCode, Control* pControl
     ValueSet* pValueSet = dynamic_cast< ValueSet* >( pControl );
     if( pValueSet )
     {
-        const sal_uInt16 nItemCount = pValueSet->GetItemCount();
-        sal_uInt16 nItemPos = VALUESET_ITEM_NOTFOUND;
+        const size_t nItemCount = pValueSet->GetItemCount();
+        size_t nItemPos = VALUESET_ITEM_NOTFOUND;
         switch( nCode )
         {
         case KEY_UP:
         {
             const sal_uInt16 nColCount = pValueSet->GetColCount();
             const sal_uInt16 nLastLine = nItemCount / nColCount;
-            nItemPos = std::min( ((nLastLine-1) * nColCount) + mnLastColumn, nItemCount-1 );
+            nItemPos = std::min( static_cast<size_t>(((nLastLine-1) * nColCount) + mnLastColumn), nItemCount-1 );
             break;
         }
         case KEY_DOWN:
-            nItemPos = std::min( mnLastColumn, nItemCount-1 );
+            nItemPos = std::min( static_cast<size_t>(mnLastColumn), nItemCount-1 );
             break;
         case KEY_END:
             nItemPos = nItemCount -1;

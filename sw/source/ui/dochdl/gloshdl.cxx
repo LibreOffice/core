@@ -458,7 +458,7 @@ sal_Bool SwGlossaryHdl::Expand( const OUString& rShortName,
                     pDlg->InsertGlos(pData->sTitle, pData->sLongName);
                 }
                 pDlg->SelectEntryPos(0);
-                const sal_uInt16 nRet = RET_OK == pDlg->Execute()?
+                const sal_Int32 nRet = RET_OK == pDlg->Execute()?
                                         pDlg->GetSelectedIdx():
                                         LISTBOX_ENTRY_NOTFOUND;
                 delete pDlg;

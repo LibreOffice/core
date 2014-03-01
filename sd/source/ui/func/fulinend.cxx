@@ -134,7 +134,7 @@ void FuLineEnd::DoExecute( SfxRequest& )
                 if( bDifferent )
                 {
                     XLineEndEntry* pEntry = new XLineEndEntry( aPolyPolygon, aName );
-                    pLineEndList->Insert( pEntry, LIST_APPEND);
+                    pLineEndList->Insert( pEntry);
                 }
                 else
                 {

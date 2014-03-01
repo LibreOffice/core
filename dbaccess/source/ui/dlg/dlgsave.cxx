@@ -163,7 +163,7 @@ namespace
                     _rList.InsertEntry( sValue );
             }
 
-            sal_uInt16 nPos = _rList.GetEntryPos( OUString( _rCurrent ) );
+            sal_Int32 nPos = _rList.GetEntryPos( OUString( _rCurrent ) );
             if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
                 _rList.SelectEntryPos( nPos );
             else
@@ -232,7 +232,7 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                                                         sTable,
                                                         ::dbtools::eInDataManipulation);
 
-                    sal_uInt16 nPos = m_pImpl->m_pCatalog->GetEntryPos(OUString(sCatalog));
+                    sal_Int32 nPos = m_pImpl->m_pCatalog->GetEntryPos(OUString(sCatalog));
                     if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
                         m_pImpl->m_pCatalog->SelectEntryPos(nPos);
 

@@ -34,8 +34,8 @@ class SwFldPage : public SfxTabPage
     SwFldMgr            m_aMgr;
     SwField             *m_pCurFld;
     SwWrtShell*         m_pWrtShell;
-    sal_uInt16          m_nTypeSel;
-    sal_uInt16          m_nSelectionSel;
+    sal_Int32           m_nTypeSel;
+    sal_Int32           m_nSelectionSel;
     bool                m_bFldEdit;
     sal_Bool                m_bInsert;
     sal_Bool                m_bFldDlgHtmlMode;
@@ -44,10 +44,10 @@ class SwFldPage : public SfxTabPage
 
 protected:
 
-    sal_uInt16              GetTypeSel() const          { return m_nTypeSel;}
-    void                SetTypeSel(sal_uInt16 nSet)     { m_nTypeSel = nSet;}
-    sal_uInt16              GetSelectionSel() const     { return m_nSelectionSel;}
-    void                SetSelectionSel(sal_uInt16 nSet){ m_nSelectionSel = nSet;}
+    sal_Int32           GetTypeSel() const          { return m_nTypeSel;}
+    void                SetTypeSel(sal_Int32  nSet)     { m_nTypeSel = nSet;}
+    sal_Int32           GetSelectionSel() const     { return m_nSelectionSel;}
+    void                SetSelectionSel(sal_Int32  nSet){ m_nSelectionSel = nSet;}
     sal_Bool                IsFldDlgHtmlMode() const    { return m_bFldDlgHtmlMode;}
     sal_Bool                IsRefresh() const           { return m_bRefresh;}
     SwField*            GetCurField()               { return m_pCurFld;}

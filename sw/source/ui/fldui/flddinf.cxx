@@ -123,12 +123,12 @@ void SwFldDokInfPage::Reset(const SfxItemSet& )
         }
     }
 
-    sal_uInt16 nSelEntryData = USHRT_MAX;
+    sal_Int32 nSelEntryData = LISTBOX_ENTRY_NOTFOUND;
     OUString sUserData = GetUserData();
     if (sUserData.getToken(0, ';').equalsIgnoreAsciiCase(USER_DATA_VERSION_1))
     {
         OUString sVal = sUserData.getToken(1, ';');
-        nSelEntryData = static_cast< sal_uInt16 >(sVal.toInt32());
+        nSelEntryData = sVal.toInt32();
     }
 
     std::vector<OUString> aLst;
@@ -171,7 +171,7 @@ void SwFldDokInfPage::Reset(const SfxItemSet& )
                     pEntry->SetUserData(reinterpret_cast<void*>(i));
                 }
             }
-            if(nSelEntryData == i)
+            if(static_cast<size_t>(nSelEntryData) == i)
                 pSelEntry = pEntry;
         }
     }
@@ -231,7 +231,7 @@ IMPL_LINK_NOARG(SwFldDokInfPage, TypeHdl)
 IMPL_LINK_NOARG(SwFldDokInfPage, SubTypeHdl)
 {
     sal_uInt16 nSubType = (sal_uInt16)(sal_uLong)pSelEntry->GetUserData();
-    sal_uInt16 nPos = m_pSelectionLB->GetSelectEntryPos();
+    sal_Int32 nPos = m_pSelectionLB->GetSelectEntryPos();
     sal_uInt16 nExtSubType;
     sal_uInt16 nNewType = 0;
 
@@ -361,7 +361,7 @@ IMPL_LINK_NOARG(SwFldDokInfPage, SubTypeHdl)
     return 0;
 }
 
-sal_uInt16 SwFldDokInfPage::FillSelectionLB(sal_uInt16 nSubType)
+sal_Int32 SwFldDokInfPage::FillSelectionLB(sal_uInt16 nSubType)
 {
     // fill Format-Listbox
     sal_uInt16 nTypeId = TYP_DOCINFOFLD;
@@ -374,7 +374,7 @@ sal_uInt16 SwFldDokInfPage::FillSelectionLB(sal_uInt16 nSubType)
     m_pSelectionLB->Clear();
 
     sal_uInt16 nSize = 0;
-    sal_uInt16 nSelPos = USHRT_MAX;
+    sal_Int32 nSelPos = LISTBOX_ENTRY_NOTFOUND;
     sal_uInt16 nExtSubType = IsFldEdit() ? (((SwDocInfoField*)GetCurField())->GetSubType() & 0xff00) : 0;
 
     if (IsFldEdit())
@@ -392,7 +392,7 @@ sal_uInt16 SwFldDokInfPage::FillSelectionLB(sal_uInt16 nSubType)
         nSize = GetFldMgr().GetFormatCount(nTypeId, false, IsFldDlgHtmlMode());
         for (sal_uInt16 i = 0; i < nSize; i++)
         {
-            sal_uInt16 nPos = m_pSelectionLB->InsertEntry(GetFldMgr().GetFormatStr(nTypeId, i));
+            sal_Int32 nPos = m_pSelectionLB->InsertEntry(GetFldMgr().GetFormatStr(nTypeId, i));
             m_pSelectionLB->SetEntryData(nPos, reinterpret_cast<void*>(GetFldMgr().GetFormatId(nTypeId, i)));
             if (IsFldEdit() && i == nExtSubType)
                 nSelPos = nPos;
@@ -424,7 +424,7 @@ sal_Bool SwFldDokInfPage::FillItemSet(SfxItemSet& )
 
     sal_uLong nFormat = 0;
 
-    sal_uInt16 nPos = m_pSelectionLB->GetSelectEntryPos();
+    sal_Int32 nPos = m_pSelectionLB->GetSelectEntryPos();
 
     OUString aName;
     if (DI_CUSTOM == nSubType)

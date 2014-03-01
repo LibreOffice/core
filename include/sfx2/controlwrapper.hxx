@@ -334,10 +334,12 @@ typedef MetricFieldWrapper< sal_uIntPtr >  ULongMetricFieldWrapper;
 
 
 
+#define WRAPPER_LISTBOX_ENTRY_NOTFOUND  0xFFFF  /* XXX was value of LISTBOX_ENTRY_NOTFOUND */
+
 /** A wrapper for the VCL ListBox.
 
     If a position<->value map is passed to the constructor, it MUST be
-    terminated with an entry containing LISTBOX_ENTRY_NOTFOUND as list
+    terminated with an entry containing WRAPPER_LISTBOX_ENTRY_NOTFOUND as list
     position. See documentation of the PosValueMapper template for details.
  */
 template< typename ValueT >
@@ -353,7 +355,7 @@ public:
     /** @param pMap  Optional list position <-> value map.
         See PosValueMapper documentation for details. */
     inline explicit     ListBoxWrapper( ListBox& rListBox, const MapEntryType* pMap = 0 ) :
-                            SingleControlWrapper< ListBox, ValueT >( rListBox ), MapperType( LISTBOX_ENTRY_NOTFOUND, pMap ) {}
+                            SingleControlWrapper< ListBox, ValueT >( rListBox ), MapperType( WRAPPER_LISTBOX_ENTRY_NOTFOUND, pMap ) {}
 
     virtual bool        IsControlDontKnow() const
                             { return this->GetControl().GetSelectEntryCount() == 0; }
@@ -376,10 +378,12 @@ typedef ListBoxWrapper< sal_uIntPtr >  ULongListBoxWrapper;
 
 
 
+#define WRAPPER_VALUESET_ITEM_NOTFOUND  0xFFFF  /* XXX was value of VALUESET_ITEM_NOTFOUND */
+
 /** A wrapper for the SVTOOLS ValueSet.
 
     If a position<->value map is passed to the constructor, it MUST be
-    terminated with an entry containing VALUESET_ITEM_NOTFOUND as list
+    terminated with an entry containing WRAPPER_VALUESET_ITEM_NOTFOUND as list
     position. See documentation of the PosValueMapper template for details.
  */
 template< typename ValueT >
@@ -395,7 +399,7 @@ public:
     /** @param pMap  Optional position <-> value map.
         See PosValueMapper documentation for details. */
     inline explicit     ValueSetWrapper( ValueSet& rValueSet, const MapEntryType* pMap = 0 ) :
-                            SingleControlWrapper< ValueSet, ValueT >( rValueSet ), MapperType( VALUESET_ITEM_NOTFOUND, pMap ) {}
+                            SingleControlWrapper< ValueSet, ValueT >( rValueSet ), MapperType( WRAPPER_VALUESET_ITEM_NOTFOUND, pMap ) {}
 
     virtual bool        IsControlDontKnow() const
                             { return this->GetControl().IsNoSelection(); }

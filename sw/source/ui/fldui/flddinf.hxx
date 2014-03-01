@@ -46,14 +46,14 @@ class SwFldDokInfPage : public SwFldPage
     SvTreeListEntry*        pSelEntry;
     com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > xCustomPropertySet;
 
-    sal_uInt16              nOldSel;
+    sal_Int32               nOldSel;
     sal_uLong               nOldFormat;
     OUString     m_sOldCustomFieldName;
 
     DECL_LINK(TypeHdl, void * = 0);
     DECL_LINK(SubTypeHdl, void * = 0);
 
-    sal_uInt16              FillSelectionLB(sal_uInt16 nSubTypeId);
+    sal_Int32               FillSelectionLB(sal_uInt16 nSubTypeId);
 
 protected:
     virtual sal_uInt16      GetGroup();

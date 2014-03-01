@@ -160,7 +160,7 @@ public:
     OUString            GetFormat4Entry(short nEntry);
     void                SetComment4Entry(short nEntry, const OUString& aCommentString);
 
-    void                SetCurrencySymbol(sal_uInt16 nPos);
+    void                SetCurrencySymbol(sal_uInt32 nPos);
     sal_uInt32          GetCurrencySymbol();
     sal_uInt16          FindCurrencyFormat( const OUString& rFmtString );
     sal_uInt16          FindCurrencyFormat(const NfCurrencyEntry* pTmpCurrencyEntry,bool bTmpBanking);
@@ -195,7 +195,7 @@ private:
     std::vector<sal_uInt16> aCurCurrencyList;
     NfCurrencyEntry*        pCurCurrencyEntry;
     bool                    bBankingSymbol;
-    sal_uInt16              nCurCurrencyEntryPos;
+    sal_uInt32              nCurCurrencyEntryPos;
     std::vector<OUString>   aCurrencyFormatList;
     bool                    bUseStarFormat;
 

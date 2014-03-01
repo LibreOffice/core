@@ -296,8 +296,8 @@ protected:
     // Invalidate children on enable/disable
     virtual void StateChanged( StateChangedType eType );
 
-    virtual sal_uLong Insert( SvTreeListEntry* pEnt,SvTreeListEntry* pPar,sal_uLong nPos=LIST_APPEND);
-    virtual sal_uLong Insert( SvTreeListEntry* pEntry,sal_uLong nRootPos = LIST_APPEND );
+    virtual sal_uLong Insert( SvTreeListEntry* pEnt,SvTreeListEntry* pPar,sal_uLong nPos=TREELIST_APPEND);
+    virtual sal_uLong Insert( SvTreeListEntry* pEntry,sal_uLong nRootPos = TREELIST_APPEND );
 
     // In-place editing
     SvInplaceEdit2*  pEdCtrl;
@@ -629,7 +629,7 @@ public:
 
     virtual SvTreeListEntry*    InsertEntry( const OUString& rText, SvTreeListEntry* pParent = 0,
                                          sal_Bool bChildrenOnDemand = sal_False,
-                                         sal_uLong nPos=LIST_APPEND, void* pUserData = 0,
+                                         sal_uLong nPos=TREELIST_APPEND, void* pUserData = 0,
                                          SvLBoxButtonKind eButtonKind = SvLBoxButtonKind_enabledCheckbox );
 
     virtual SvTreeListEntry*    InsertEntry( const OUString& rText,
@@ -637,7 +637,7 @@ public:
                                          const Image& rCollapsedEntryBmp,
                                          SvTreeListEntry* pParent = 0,
                                          sal_Bool bChildrenOnDemand = sal_False,
-                                         sal_uLong nPos = LIST_APPEND, void* pUserData = 0,
+                                         sal_uLong nPos = TREELIST_APPEND, void* pUserData = 0,
                                          SvLBoxButtonKind eButtonKind = SvLBoxButtonKind_enabledCheckbox );
 
     const Image&    GetDefaultExpandedEntryBmp( ) const;

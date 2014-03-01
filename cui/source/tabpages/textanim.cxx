@@ -151,7 +151,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
     if( pItem )
     {
         eAniKind = ( ( const SdrTextAniKindItem* )pItem )->GetValue();
-        m_pLbEffect->SelectEntryPos( sal::static_int_cast< sal_uInt16 >(eAniKind) );
+        m_pLbEffect->SelectEntryPos( sal::static_int_cast< sal_Int32 >(eAniKind) );
     }
     else
         m_pLbEffect->SetNoSelection();
@@ -335,7 +335,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
 sal_Bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
 {
     sal_Bool bModified = sal_False;
-    sal_uInt16 nPos;
+    sal_Int32 nPos;
     TriState eState;
 
     // animation type
@@ -459,7 +459,7 @@ SfxTabPage* SvxTextAnimationPage::Create( Window* pWindow,
 
 IMPL_LINK_NOARG(SvxTextAnimationPage, SelectEffectHdl_Impl)
 {
-    sal_uInt16 nPos = m_pLbEffect->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLbEffect->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         eAniKind = (SdrTextAniKind) nPos;

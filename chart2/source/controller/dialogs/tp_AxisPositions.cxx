@@ -101,7 +101,7 @@ SfxTabPage* AxisPositionsTabPage::Create(Window* pWindow,const SfxItemSet& rOutA
 sal_Bool AxisPositionsTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 {
     // axis line
-    sal_uInt16 nPos = m_pLB_CrossesAt->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLB_CrossesAt->GetSelectEntryPos();
     rOutAttrs.Put( SfxInt32Item( SCHATTR_AXIS_POSITION, nPos+1 ));
     if( 2==nPos )
     {
@@ -112,7 +112,7 @@ sal_Bool AxisPositionsTabPage::FillItemSet(SfxItemSet& rOutAttrs)
     }
 
     // labels
-    sal_uInt16 nLabelPos = m_pLB_PlaceLabels->GetSelectEntryPos();
+    sal_Int32 nLabelPos = m_pLB_PlaceLabels->GetSelectEntryPos();
     if( nLabelPos != LISTBOX_ENTRY_NOTFOUND )
         rOutAttrs.Put( SfxInt32Item( SCHATTR_AXIS_LABEL_POSITION, nLabelPos ));
 
@@ -132,7 +132,7 @@ sal_Bool AxisPositionsTabPage::FillItemSet(SfxItemSet& rOutAttrs)
     rOutAttrs.Put(SfxInt32Item(SCHATTR_AXIS_TICKS,nTicks));
     rOutAttrs.Put(SfxInt32Item(SCHATTR_AXIS_HELPTICKS,nMinorTicks));
 
-    sal_uInt16 nMarkPos = m_pLB_PlaceTicks->GetSelectEntryPos();
+    sal_Int32 nMarkPos = m_pLB_PlaceTicks->GetSelectEntryPos();
     if( nMarkPos != LISTBOX_ENTRY_NOTFOUND )
         rOutAttrs.Put( SfxInt32Item( SCHATTR_AXIS_MARK_POSITION, nMarkPos ));
 
@@ -171,7 +171,7 @@ void AxisPositionsTabPage::Reset(const SfxItemSet& rInAttrs)
     if(rInAttrs.GetItemState(SCHATTR_AXIS_POSITION,true, &pPoolItem)== SFX_ITEM_SET)
     {
         bool bZero = false;
-        sal_uInt16 nPos = (sal_uInt16)static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
+        sal_Int32 nPos = static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
         if(nPos==0)
         {
             //switch to value
@@ -210,7 +210,7 @@ void AxisPositionsTabPage::Reset(const SfxItemSet& rInAttrs)
     // Labels
     if( rInAttrs.GetItemState( SCHATTR_AXIS_LABEL_POSITION, false, &pPoolItem ) == SFX_ITEM_SET )
     {
-        sal_uInt16 nPos = (sal_uInt16)static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
+        sal_Int32 nPos = static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
         if( nPos < m_pLB_PlaceLabels->GetEntryCount() )
             m_pLB_PlaceLabels->SelectEntryPos( nPos );
     }
@@ -233,7 +233,7 @@ void AxisPositionsTabPage::Reset(const SfxItemSet& rInAttrs)
     // Tick position
     if( rInAttrs.GetItemState( SCHATTR_AXIS_MARK_POSITION, false, &pPoolItem ) == SFX_ITEM_SET )
     {
-        sal_uInt16 nPos = (sal_uInt16)static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
+        sal_Int32 nPos = static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
         if( nPos < m_pLB_PlaceTicks->GetEntryCount() )
             m_pLB_PlaceTicks->SelectEntryPos( nPos );
     }
@@ -300,7 +300,7 @@ void AxisPositionsTabPage::SupportAxisPositioning( bool bSupportAxisPositioning 
 
 IMPL_LINK_NOARG(AxisPositionsTabPage, CrossesAtSelectHdl)
 {
-    sal_uInt16 nPos = m_pLB_CrossesAt->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLB_CrossesAt->GetSelectEntryPos();
     m_pED_CrossesAt->Show( (2==nPos) && !m_bCrossingAxisIsCategoryAxis );
     m_pED_CrossesAtCategory->Show( (2==nPos) && m_bCrossingAxisIsCategoryAxis );
 
@@ -315,12 +315,12 @@ IMPL_LINK_NOARG(AxisPositionsTabPage, CrossesAtSelectHdl)
 
 IMPL_LINK_NOARG(AxisPositionsTabPage, PlaceLabelsSelectHdl)
 {
-    sal_uInt16 nLabelPos = m_pLB_PlaceLabels->GetSelectEntryPos();
+    sal_Int32 nLabelPos = m_pLB_PlaceLabels->GetSelectEntryPos();
 
     bool bEnableTickmarkPlacement = (nLabelPos>1);
     if( bEnableTickmarkPlacement )
     {
-        sal_uInt16 nAxisPos = m_pLB_CrossesAt->GetSelectEntryPos();
+        sal_Int32 nAxisPos = m_pLB_CrossesAt->GetSelectEntryPos();
         if( nLabelPos-2 == nAxisPos )
             bEnableTickmarkPlacement=false;
     }

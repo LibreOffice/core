@@ -240,7 +240,7 @@ namespace dbaui
 
                     OUString sDecodedURL = aURL.GetMainURL( INetURLObject::NO_DECODE );
 
-                    sal_uInt16 nPos = InsertEntry( sTitle );
+                    sal_Int32 nPos = InsertEntry( sTitle );
                     m_aURLs.insert( MapIndexToStringPair::value_type( nPos, StringPair( sDecodedURL, sFilter ) ) );
                 }
             }
@@ -254,7 +254,7 @@ namespace dbaui
     OUString OpenDocumentListBox::GetSelectedDocumentURL() const
     {
         OUString sURL;
-        sal_uInt16 nSelected = GetSelectEntryPos();
+        sal_Int32 nSelected = GetSelectEntryPos();
         if ( LISTBOX_ENTRY_NOTFOUND != GetSelectEntryPos() )
             sURL = impl_getDocumentAtIndex( nSelected ).first;
         return sURL;
@@ -263,7 +263,7 @@ namespace dbaui
     OUString OpenDocumentListBox::GetSelectedDocumentFilter() const
     {
         OUString sFilter;
-        sal_uInt16 nSelected = GetSelectEntryPos();
+        sal_Int32 nSelected = GetSelectEntryPos();
         if ( LISTBOX_ENTRY_NOTFOUND != GetSelectEntryPos() )
             sFilter = impl_getDocumentAtIndex( nSelected ).second;
         return sFilter;
@@ -295,7 +295,7 @@ namespace dbaui
             return;
 
         Point aRequestPos( ScreenToOutputPixel( _rHEvt.GetMousePosPixel() ) );
-        sal_uInt16 nItemIndex = LISTBOX_ENTRY_NOTFOUND;
+        sal_Int32 nItemIndex = LISTBOX_ENTRY_NOTFOUND;
         if ( GetIndexForPoint( aRequestPos, nItemIndex ) != -1 )
         {
             Rectangle aItemRect( GetBoundingRectangle( nItemIndex ) );

@@ -141,7 +141,7 @@ private:
                             ::com::sun::star::linguistic2::XDictionary >  &xDic );
 
     void            RemoveDictEntry(SvTreeListEntry* pEntry);
-    sal_uInt16          GetLBInsertPos(const OUString &rDicWord);
+    sal_uLong       GetLBInsertPos(const OUString &rDicWord);
 
 protected:
 

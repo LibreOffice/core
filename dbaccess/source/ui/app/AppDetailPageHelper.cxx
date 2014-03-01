@@ -736,7 +736,7 @@ void OAppDetailPageHelper::fillNames( const Reference< XNameAccess >& _xContaine
             Reference<XNameAccess> xSubElements(_xContainer->getByName(*pIter),UNO_QUERY);
             if ( xSubElements.is() )
             {
-                pEntry = pList->InsertEntry( *pIter, _pParent, sal_False, LIST_APPEND, reinterpret_cast< void* >( nFolderIndicator ) );
+                pEntry = pList->InsertEntry( *pIter, _pParent, sal_False, TREELIST_APPEND, reinterpret_cast< void* >( nFolderIndicator ) );
                 getBorderWin().getView()->getAppController().containerFound( Reference< XContainer >( xSubElements, UNO_QUERY ) );
                 fillNames( xSubElements, _eType, _nImageId, pEntry );
             }
@@ -868,7 +868,7 @@ SvTreeListEntry* OAppDetailPageHelper::elementAdded(ElementType _eType,const OUS
         if ( xContainer.is() )
         {
             const sal_Int32 nFolderIndicator = lcl_getFolderIndicatorForType( _eType );
-            pRet = pTreeView->InsertEntry( _rName, pEntry, sal_False, LIST_APPEND, reinterpret_cast< void* >( nFolderIndicator ) );
+            pRet = pTreeView->InsertEntry( _rName, pEntry, sal_False, TREELIST_APPEND, reinterpret_cast< void* >( nFolderIndicator ) );
             fillNames( xContainer, _eType, nImageId, pRet );
         }
         else

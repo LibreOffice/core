@@ -62,7 +62,7 @@ static void lcl_StoreGreetingsBox(ListBox& rBox,
 {
     Sequence< OUString> aEntries(rBox.GetEntryCount());
     OUString* pEntries = aEntries.getArray();
-    for(sal_uInt16 nEntry = 0; nEntry < rBox.GetEntryCount(); ++nEntry)
+    for(sal_Int32 nEntry = 0; nEntry < rBox.GetEntryCount(); ++nEntry)
         pEntries[nEntry] = rBox.GetEntry(nEntry);
     rConfig.SetGreetings(eType, aEntries);
     rConfig.SetCurrentGreeting(eType, rBox.GetSelectEntryPos());
@@ -74,7 +74,7 @@ static void lcl_StoreGreetingsBox(ComboBox& rBox,
 {
     Sequence< OUString> aEntries(rBox.GetEntryCount());
     OUString* pEntries = aEntries.getArray();
-    for(sal_uInt16 nEntry = 0; nEntry < rBox.GetEntryCount(); ++nEntry)
+    for(sal_Int32 nEntry = 0; nEntry < rBox.GetEntryCount(); ++nEntry)
         pEntries[nEntry] = rBox.GetEntry(nEntry);
     rConfig.SetGreetings(eType, aEntries);
     rConfig.SetCurrentGreeting(eType, rBox.GetSelectEntryPos());
@@ -364,10 +364,10 @@ sal_Bool    SwMailMergeGreetingsPage::commitPage( ::svt::WizardTypes::CommitPage
     lcl_StoreGreetingsBox(m_aFemaleLB, rConfig, SwMailMergeConfigItem::FEMALE);
     lcl_StoreGreetingsBox(m_aMaleLB, rConfig, SwMailMergeConfigItem::MALE);
 
-    sal_uInt16 nCurrentTextPos = m_aNeutralCB.GetEntryPos( m_aNeutralCB.GetText() );
-    if(LISTBOX_ENTRY_NOTFOUND == nCurrentTextPos)
+    sal_Int32 nCurrentTextPos = m_aNeutralCB.GetEntryPos( m_aNeutralCB.GetText() );
+    if(COMBOBOX_ENTRY_NOTFOUND == nCurrentTextPos)
     {
-        sal_uInt16 nCount = m_aNeutralCB.GetEntryCount();
+        sal_Int32 nCount = m_aNeutralCB.GetEntryCount();
         m_aNeutralCB.InsertEntry( m_aNeutralCB.GetText(), nCount );
         m_aNeutralCB.SelectEntryPos(nCount);
     }

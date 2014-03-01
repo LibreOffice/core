@@ -100,7 +100,7 @@ void SearchDialog::SaveConfig()
     SvtViewOptions aViewOpt( E_DIALOG, m_sConfigName );
     aViewOpt.SetWindowState(OStringToOUString(m_sWinState, RTL_TEXTENCODING_ASCII_US));
     OUString sUserData;
-    sal_uInt16 i = 0, nCount = std::min( m_pSearchEdit->GetEntryCount(), MAX_SAVE_COUNT );
+    sal_Int32 i = 0, nCount = std::min( m_pSearchEdit->GetEntryCount(), static_cast<sal_Int32>(MAX_SAVE_COUNT) );
     for ( ; i < nCount; ++i )
     {
         sUserData += m_pSearchEdit->GetEntry(i);
@@ -123,7 +123,7 @@ void SearchDialog::SaveConfig()
 IMPL_LINK_NOARG(SearchDialog, FindHdl)
 {
     OUString sSrchTxt = m_pSearchEdit->GetText();
-    sal_uInt16 nPos = m_pSearchEdit->GetEntryPos( sSrchTxt );
+    sal_Int32 nPos = m_pSearchEdit->GetEntryPos( sSrchTxt );
     if ( nPos > 0 && nPos != COMBOBOX_ENTRY_NOTFOUND )
         m_pSearchEdit->RemoveEntryAt(nPos);
     if ( nPos > 0 )

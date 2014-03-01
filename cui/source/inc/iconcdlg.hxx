@@ -199,7 +199,7 @@ public :
     SvxIconChoiceCtrlEntry* AddTabPage(
         sal_uInt16 nId, const OUString& rIconText, const Image& rChoiceIcon,
         CreatePage pCreateFunc /* != NULL */, GetPageRanges pRangesFunc = NULL /* NULL allowed*/,
-        sal_Bool bItemsOnDemand = sal_False, sal_uLong nPos = LIST_APPEND );
+        sal_Bool bItemsOnDemand = sal_False, sal_uLong nPos = TREELIST_APPEND );
 
     void                SetCurPageId( sal_uInt16 nId ) { mnCurrentPageId = nId; FocusOnIcon( nId ); }
     sal_uInt16              GetCurPageId() const       { return mnCurrentPageId; }
