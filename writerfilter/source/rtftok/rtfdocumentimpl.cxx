@@ -2654,7 +2654,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_TRKEEP:
             {
                 RTFValue::Pointer_t pValue(new RTFValue(1));
-                m_aStates.top().aTableRowSprms.set(NS_sprm::LN_TCantSplit, pValue);
+                m_aStates.top().aTableRowSprms.set(NS_ooxml::LN_CT_TrPrBase_cantSplit, pValue);
             }
         case RTF_SECTUNLOCKED:
             {

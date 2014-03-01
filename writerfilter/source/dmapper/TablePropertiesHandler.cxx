@@ -169,8 +169,7 @@ namespace dmapper {
                 }
             }
             break;
-            case 0x3403: // sprmTFCantSplit
-            case NS_sprm::LN_TCantSplit: // 0x3644
+            case NS_ooxml::LN_CT_TrPrBase_cantSplit:
             {
                 //row can't break across pages if nIntValue == 1
                 TablePropertyMapPtr pPropMap( new TablePropertyMap );

@@ -24393,7 +24393,7 @@
       <element name="em" tokenid="ooxml:EG_RPrBase_em"/>
       <element name="lang" tokenid="ooxml:EG_RPrBase_lang"/>
       <element name="eastAsianLayout" tokenid="ooxml:EG_RPrBase_eastAsianLayout"/>
-      <element name="specVanish" tokenid="sprm:CFspecVanish"/>
+      <element name="specVanish" tokenid="ooxml:EG_RPrBase_specVanish"/>
       <element name="oMath" tokenid="ooxml:EG_RPrBase_oMath"/>
       <element name="w14:glow" tokenid="ooxml:EG_RPrBase_w14_glow"/>
       <element name="w14:shadow" tokenid="ooxml:EG_RPrBase_w14_shadow"/>
@@ -24693,7 +24693,7 @@
       <element name="gridAfter" tokenid="ooxml:CT_TrPrBase_gridAfter"/>
       <element name="wBefore" tokenid="ooxml:CT_TrPrBase_wBefore"/>
       <element name="wAfter" tokenid="ooxml:CT_TrPrBase_wAfter"/>
-      <element name="cantSplit" tokenid="sprm:TCantSplit"/>
+      <element name="cantSplit" tokenid="ooxml:CT_TrPrBase_cantSplit"/>
       <element name="trHeight" tokenid="ooxml:CT_TrPrBase_trHeight"/>
       <element name="tblHeader" tokenid="ooxml:CT_TrPrBase_tblHeader"/>
       <element name="tblCellSpacing" tokenid="ooxml:CT_TrPrBase_tblCellSpacing"/>
