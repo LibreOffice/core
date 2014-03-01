@@ -121,18 +121,17 @@ sal_Bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
         return sal_False;
 
     {
-        SwRedlineSaveDatas* pTmpSav = new SwRedlineSaveDatas;
+        SwRedlineSaveDatas aTmpSav;
         SwPaM aPam( rPos.nNode, rPos.nContent.GetIndex(),
                     rPos.nNode, rPos.nContent.GetIndex()+1 );
 
-        if( !FillSaveData( aPam, *pTmpSav, false ))
-            delete pTmpSav, pTmpSav = 0;
+        const bool bSaved = FillSaveData( aPam, aTmpSav, false );
 
-        bool bOk = ( !pRedlSaveData && !pTmpSav ) ||
-                   ( pRedlSaveData && pTmpSav &&
-                        SwUndo::CanRedlineGroup( *pRedlSaveData, *pTmpSav,
+        bool bOk = ( !pRedlSaveData && !bSaved ) ||
+                   ( pRedlSaveData && bSaved &&
+                        SwUndo::CanRedlineGroup( *pRedlSaveData, aTmpSav,
                             nSttCntnt > rPos.nContent.GetIndex() ));
-        delete pTmpSav;
+        // aTmpSav.DeleteAndDestroyAll();
         if( !bOk )
             return sal_False;
 

@@ -482,14 +482,13 @@ sal_Bool SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam )
         return sal_False;
 
     {
-        SwRedlineSaveDatas* pTmpSav = new SwRedlineSaveDatas;
-        if( !FillSaveData( rDelPam, *pTmpSav, false ))
-            delete pTmpSav, pTmpSav = 0;
+        SwRedlineSaveDatas aTmpSav;
+        const bool bSaved = FillSaveData( rDelPam, aTmpSav, false );
 
-        bool bOk = ( !pRedlSaveData && !pTmpSav ) ||
-                   ( pRedlSaveData && pTmpSav &&
-                SwUndo::CanRedlineGroup( *pRedlSaveData, *pTmpSav, bBackSp ));
-        delete pTmpSav;
+        bool bOk = ( !pRedlSaveData && !bSaved ) ||
+                   ( pRedlSaveData && bSaved &&
+                SwUndo::CanRedlineGroup( *pRedlSaveData, aTmpSav, bBackSp ));
+        // aTmpSav.DeleteAndDestroyAll();
         if( !bOk )
             return sal_False;
 
