@@ -68,6 +68,7 @@
 #include <ooxml/OOXMLFastTokens.hxx>
 
 #include <map>
+#include <boost/tuple/tuple.hpp>
 
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
@@ -1925,37 +1926,133 @@ OUString lcl_ParseFormat( const OUString& rCommand )
 /*-------------------------------------------------------------------------
 extract a parameter (with or without quotes) between the command and the following backslash
   -----------------------------------------------------------------------*/
-OUString lcl_ExtractParameter(const OUString& rCommand, sal_Int32 nCommandLength )
+static OUString lcl_ExtractToken(OUString const& rCommand,
+        sal_Int32 & rIndex, bool & rHaveToken, bool & rIsSwitch)
 {
-    sal_Int32 nStartIndex = nCommandLength;
-    sal_Int32 nEndIndex = 0;
-    sal_Int32 nQuoteIndex = rCommand.indexOf( '\"', nStartIndex);
-    if( nQuoteIndex >= 0)
+    rHaveToken = false;
+    rIsSwitch = false;
+
+    OUStringBuffer token;
+    bool bQuoted(false);
+    for (; rIndex < rCommand.getLength(); ++rIndex)
     {
-        nStartIndex = nQuoteIndex + 1;
-        nEndIndex = rCommand.indexOf( '\"', nStartIndex + 1) - 1;
+        sal_Unicode const currentChar(rCommand[rIndex]);
+        switch (currentChar)
+        {
+            case '\\':
+            {
+                if (rIndex == rCommand.getLength() - 1)
+                {
+                    SAL_INFO("writerfilter.dmapper", "field: trailing escape");
+                    ++rIndex;
+                    return OUString();
+                }
+                sal_Unicode const nextChar(rCommand[rIndex+1]);
+                if (bQuoted || '\\' == nextChar)
+                {
+                    ++rIndex; // read 2 chars
+                    token.append(nextChar);
+                }
+                else // field switch (case insensitive)
+                {
+                    rHaveToken = true;
+                    if (token.isEmpty())
+                    {
+                        rIsSwitch = true;
+                        rIndex += 2; // read 2 chars
+                        return rCommand.copy(rIndex - 2, 2).toAsciiUpperCase();
+                    }
+                    else
+                    {   // leave rIndex, read it again next time
+                        return token.makeStringAndClear();
+                    }
+                }
+            }
+            break;
+            case '\"':
+                if (bQuoted || !token.isEmpty())
+                {
+                    rHaveToken = true;
+                    if (bQuoted)
+                    {
+                        ++rIndex;
+                    }
+                    return token.makeStringAndClear();
+                }
+                else
+                {
+                    bQuoted = true;
+                }
+            break;
+            case ' ':
+                if (bQuoted)
+                {
+                    token.append(' ');
+                }
+                else
+                {
+                    if (!token.isEmpty())
+                    {
+                        rHaveToken = true;
+                        ++rIndex;
+                        return token.makeStringAndClear();
+                    }
+                }
+            break;
+            default:
+                token.append(currentChar);
+            break;
+        }
+    }
+    assert(rIndex == rCommand.getLength());
+    if (bQuoted)
+    {
+        SAL_INFO("writerfilter.dmapper",
+                    "field argument with unterminated quote");
+        return OUString();
     }
     else
     {
-        nEndIndex = rCommand.indexOf(" \\", nStartIndex);
+        rHaveToken = !token.isEmpty();
+        return token.makeStringAndClear();
     }
-    OUString sRet;
-    if( nEndIndex > nStartIndex + 1 )
-    {
-        //remove spaces at start and end of the result
-        if(nQuoteIndex <= 0)
-        {
-            const sal_Unicode* pCommandStr = rCommand.getStr();
-            while( nStartIndex < nEndIndex && pCommandStr[nStartIndex] == ' ')
-                    ++nStartIndex;
-            while( nEndIndex > nStartIndex && pCommandStr[nEndIndex] == ' ')
-                    --nEndIndex;
-        }
-        sRet = rCommand.copy( nStartIndex, nEndIndex - nStartIndex + 1);
-    }
-    return sRet;
 }
 
+SAL_DLLPUBLIC_EXPORT // export just for test
+boost::tuple<OUString, vector<OUString>, vector<OUString>>
+lcl_SplitFieldCommand(const OUString& rCommand)
+{
+    OUString sType;
+    vector<OUString> arguments;
+    vector<OUString> switches;
+    sal_Int32 nStartIndex(0);
+
+    do
+    {
+        bool bHaveToken;
+        bool bIsSwitch;
+        OUString const token =
+            lcl_ExtractToken(rCommand, nStartIndex, bHaveToken, bIsSwitch);
+        assert(nStartIndex <= rCommand.getLength());
+        if (bHaveToken)
+        {
+            if (sType.isEmpty())
+            {
+                sType = token.toAsciiUpperCase();
+            }
+            else if (bIsSwitch || !switches.empty())
+            {
+                switches.push_back(token);
+            }
+            else
+            {
+                arguments.push_back(token);
+            }
+        }
+    } while (nStartIndex < rCommand.getLength());
+
+    return boost::make_tuple(sType, arguments, switches);
+}
 
 
 OUString lcl_ExctractAskVariableAndHint( const OUString& rCommand, OUString& rHint )
@@ -2405,7 +2502,7 @@ void DomainMapper_Impl::handleAutoNum
 }
 
 void DomainMapper_Impl::handleAuthor
-    (FieldContextPtr pContext,
+    (OUString const& rFirstParam,
     PropertyNameSupplier& rPropNameSupplier,
      uno::Reference< uno::XInterface > & /*xFieldInterface*/,
      uno::Reference< beans::XPropertySet > xFieldProperties,
@@ -2415,19 +2512,7 @@ void DomainMapper_Impl::handleAuthor
         xFieldProperties->setPropertyValue
             ( rPropNameSupplier.GetName(PROP_FULL_NAME), uno::makeAny( true ));
 
-    sal_Int32 nLen = sizeof( " AUTHOR" );
-    if ( eFieldId != FIELD_AUTHOR )
-    {
-        if (  eFieldId == FIELD_USERINITIALS )
-            nLen = sizeof( " USERINITIALS" );
-        else if (  eFieldId == FIELD_USERNAME )
-            nLen = sizeof( " USERNAME" );
-    }
-
-    OUString sParam =
-        lcl_ExtractParameter(pContext->GetCommand(), nLen );
-
-    if(!sParam.isEmpty())
+    if (!rFirstParam.isEmpty())
     {
         xFieldProperties->setPropertyValue(
                 rPropNameSupplier.GetName( PROP_IS_FIXED ),
@@ -2438,16 +2523,14 @@ void DomainMapper_Impl::handleAuthor
 
     void DomainMapper_Impl::handleDocProperty
         (FieldContextPtr pContext,
+        OUString const& rFirstParam,
         PropertyNameSupplier& rPropNameSupplier,
         uno::Reference< uno::XInterface > & xFieldInterface,
         uno::Reference< beans::XPropertySet > xFieldProperties)
 {
     //some docproperties should be imported as document statistic fields, some as DocInfo fields
     //others should be user fields
-    OUString sParam =
-        lcl_ExtractParameter(pContext->GetCommand(), sizeof(" DOCPROPERTY") );
-
-    if(!sParam.isEmpty())
+    if (!rFirstParam.isEmpty())
     {
         #define SET_ARABIC      0x01
         #define SET_FULL_NAME   0x02
@@ -2487,7 +2570,7 @@ void DomainMapper_Impl::handleAuthor
         for( ; nMap < sizeof(aDocProperties) / sizeof(DocPropertyMap);
             ++nMap )
         {
-            if(sParam.equalsAscii(aDocProperties[nMap].pDocPropertyName))
+            if (rFirstParam.equalsAscii(aDocProperties[nMap].pDocPropertyName))
             {
                 sFieldServiceName =
                 OUString::createFromAscii
@@ -2514,7 +2597,7 @@ void DomainMapper_Impl::handleAuthor
                 uno::UNO_QUERY_THROW);
         if( bIsCustomField )
             xFieldProperties->setPropertyValue(
-                rPropNameSupplier.GetName(PROP_NAME), uno::makeAny( sParam ));
+                rPropNameSupplier.GetName(PROP_NAME), uno::makeAny(rFirstParam));
         else
         {
             if(0 != (aDocProperties[nMap].nFlags & SET_ARABIC))
@@ -2907,13 +2990,14 @@ void DomainMapper_Impl::CloseFieldCommand()
         try
         {
             uno::Reference< uno::XInterface > xFieldInterface;
-            //at first determine the field type - erase leading and trailing whitespaces
-            OUString sCommand( pContext->GetCommand().trim() );
-            sal_Int32 nSpaceIndex = sCommand.indexOf( ' ' );
-            if( 0 <= nSpaceIndex )
-                sCommand = sCommand.copy(0, nSpaceIndex).toAsciiUpperCase();
 
-            FieldConversionMap_t::iterator aIt = aFieldConversionMap.find(sCommand);
+            boost::tuple<OUString, vector<OUString>, vector<OUString> > const
+                field(lcl_SplitFieldCommand(pContext->GetCommand()));
+            OUString const sFirstParam(boost::get<1>(field).empty()
+                    ? OUString() : boost::get<1>(field).front());
+
+            FieldConversionMap_t::iterator const aIt =
+                aFieldConversionMap.find(boost::get<0>(field));
             if(aIt != aFieldConversionMap.end())
             {
                 bool bCreateEnhancedField = false;
@@ -2964,7 +3048,8 @@ void DomainMapper_Impl::CloseFieldCommand()
                     if ( bCreateEnhancedField )
                     {
                         FieldConversionMap_t aEnhancedFieldConversionMap = lcl_GetEnhancedFieldConversion();
-                        FieldConversionMap_t::iterator aEnhancedIt = aEnhancedFieldConversionMap.find(sCommand);
+                        FieldConversionMap_t::iterator aEnhancedIt =
+                            aEnhancedFieldConversionMap.find(boost::get<0>(field));
                         if ( aEnhancedIt != aEnhancedFieldConversionMap.end())
                             sServiceName += OUString::createFromAscii(aEnhancedIt->second.cFieldServiceName );
                     }
@@ -3002,7 +3087,9 @@ void DomainMapper_Impl::CloseFieldCommand()
                     case FIELD_AUTHOR       :
                     case FIELD_USERNAME     :
                     case FIELD_USERINITIALS :
-                        handleAuthor(pContext, rPropNameSupplier, xFieldInterface, xFieldProperties, aIt->second.eFieldId  );
+                        handleAuthor(sFirstParam, rPropNameSupplier,
+                            xFieldInterface, xFieldProperties,
+                            aIt->second.eFieldId);
                     break;
                     case FIELD_DATE:
                     if (xFieldProperties.is())
@@ -3041,14 +3128,14 @@ void DomainMapper_Impl::CloseFieldCommand()
                     }
                     break;
                     case FIELD_DOCPROPERTY :
-                        handleDocProperty(pContext, rPropNameSupplier, xFieldInterface, xFieldProperties);
+                        handleDocProperty(pContext, sFirstParam, rPropNameSupplier,
+                                xFieldInterface, xFieldProperties);
                     break;
                     case FIELD_DOCVARIABLE  :
                     {
-                        OUString sParam = lcl_ExtractParameter(pContext->GetCommand(), sizeof(" DOCVARIABLE") );
                         //create a user field and type
                         uno::Reference< beans::XPropertySet > xMaster =
-                            FindOrCreateFieldMaster( "com.sun.star.text.FieldMaster.User", sParam );
+                            FindOrCreateFieldMaster("com.sun.star.text.FieldMaster.User", sFirstParam);
                         uno::Reference< text::XDependentTextField > xDependentField( xFieldInterface, uno::UNO_QUERY_THROW );
                         xDependentField->attachTextFieldMaster( xMaster );
                         m_bSetUserFieldContent = true;
@@ -3074,7 +3161,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                         else
                         {
                             //merge Read_SubF_Ruby into filter/.../util.cxx and reuse that ?
-                            nSpaceIndex = aCommand.indexOf(' ');
+                            sal_Int32 nSpaceIndex = aCommand.indexOf(' ');
                             if(nSpaceIndex > 0)
                                 aCommand = aCommand.copy(nSpaceIndex).trim();
                             if (aCommand.startsWith("\\s"))
@@ -3205,8 +3292,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     case FIELD_INCLUDEPICTURE: break;
                     case FIELD_KEYWORDS     :
                     {
-                        OUString sParam = lcl_ExtractParameter(pContext->GetCommand(), sizeof(" KEYWORDS") );
-                        if(!sParam.isEmpty())
+                        if (!sFirstParam.isEmpty())
                         {
                             xFieldProperties->setPropertyValue(
                                     rPropNameSupplier.GetName( PROP_IS_FIXED ), uno::makeAny( true ));
@@ -3236,10 +3322,9 @@ void DomainMapper_Impl::CloseFieldCommand()
                     case FIELD_MERGEFIELD  :
                     {
                         //todo: create a database field and fieldmaster pointing to a column, only
-                        OUString sParam = lcl_ExtractParameter(pContext->GetCommand(), sizeof(" MERGEFIELD") );
                         //create a user field and type
                         uno::Reference< beans::XPropertySet > xMaster =
-                            FindOrCreateFieldMaster( "com.sun.star.text.FieldMaster.Database", sParam );
+                            FindOrCreateFieldMaster("com.sun.star.text.FieldMaster.Database", sFirstParam);
 
     //                    xFieldProperties->setPropertyValue(
     //                             "FieldCode",
@@ -3270,21 +3355,21 @@ void DomainMapper_Impl::CloseFieldCommand()
                     if (xFieldProperties.is() && !m_bStartTOC)
                     {
                         bool bPageRef = aIt->second.eFieldId == FIELD_PAGEREF;
-                        OUString sBookmark = lcl_ExtractParameter(pContext->GetCommand(),
-                                (bPageRef ? sizeof(" PAGEREF") : sizeof(" REF")));
 
                         // Do we need a GetReference (default) or a GetExpression field?
                         uno::Reference< text::XTextFieldsSupplier > xFieldsSupplier( GetTextDocument(), uno::UNO_QUERY );
                         uno::Reference< container::XNameAccess > xFieldMasterAccess = xFieldsSupplier->getTextFieldMasters();
 
-                        if (!xFieldMasterAccess->hasByName("com.sun.star.text.FieldMaster.SetExpression." + sBookmark))
+                        if (!xFieldMasterAccess->hasByName(
+                                "com.sun.star.text.FieldMaster.SetExpression."
+                                + sFirstParam))
                         {
                         xFieldProperties->setPropertyValue(
                             rPropNameSupplier.GetName(PROP_REFERENCE_FIELD_SOURCE),
                             uno::makeAny( sal_Int16(text::ReferenceFieldSource::BOOKMARK)) );
                         xFieldProperties->setPropertyValue(
                             rPropNameSupplier.GetName(PROP_SOURCE_NAME),
-                            uno::makeAny( sBookmark) );
+                            uno::makeAny(sFirstParam) );
                         sal_Int16 nFieldPart = (bPageRef ? text::ReferenceFieldPart::PAGE : text::ReferenceFieldPart::TEXT);
                         OUString sValue;
                         if( lcl_FindInCommand( pContext->GetCommand(), 'p', sValue ))
@@ -3314,7 +3399,9 @@ void DomainMapper_Impl::CloseFieldCommand()
                         {
                             xFieldInterface = m_xTextFactory->createInstance("com.sun.star.text.TextField.GetExpression");
                             xFieldProperties.set(xFieldInterface, uno::UNO_QUERY);
-                            xFieldProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_CONTENT), uno::makeAny(sBookmark));
+                            xFieldProperties->setPropertyValue(
+                                rPropNameSupplier.GetName(PROP_CONTENT),
+                                uno::makeAny(sFirstParam));
                             xFieldProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_SUB_TYPE), uno::makeAny(text::SetVariableType::STRING));
                         }
                     }
@@ -3381,8 +3468,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     case FIELD_STYLEREF     : break;
                     case FIELD_SUBJECT      :
                     {
-                        OUString sParam = lcl_ExtractParameter(pContext->GetCommand(), sizeof(" SUBJECT") );
-                        if(!sParam.isEmpty())
+                        if (!sFirstParam.isEmpty())
                         {
                             xFieldProperties->setPropertyValue(
                                     rPropNameSupplier.GetName( PROP_IS_FIXED ), uno::makeAny( true ));
@@ -3397,8 +3483,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     break;
                     case FIELD_TITLE        :
                     {
-                        OUString sParam = lcl_ExtractParameter(pContext->GetCommand(), sizeof(" TITLE") );
-                        if(!sParam.isEmpty())
+                        if (!sFirstParam.isEmpty())
                         {
                             xFieldProperties->setPropertyValue(
                                     rPropNameSupplier.GetName( PROP_IS_FIXED ), uno::makeAny( true ));
@@ -3426,10 +3511,11 @@ void DomainMapper_Impl::CloseFieldCommand()
                                 m_xTextFactory->createInstance(
                                         OUString::createFromAscii(aIt->second.cFieldServiceName)),
                                         uno::UNO_QUERY_THROW);
-                        OUString sTCText = lcl_ExtractParameter(pContext->GetCommand(), sizeof("XE ") );
-                        if( !sTCText.isEmpty())
+                        if (!sFirstParam.isEmpty())
+                        {
                             xTC->setPropertyValue("PrimaryKey",
-                                    uno::makeAny(sTCText));
+                                    uno::makeAny(sFirstParam));
+                        }
                         uno::Reference< text::XTextContent > xToInsert( xTC, uno::UNO_QUERY );
                         uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
                         if (xTextAppend.is())
@@ -3451,10 +3537,11 @@ void DomainMapper_Impl::CloseFieldCommand()
                             m_xTextFactory->createInstance(
                                 OUString::createFromAscii(aIt->second.cFieldServiceName)),
                                 uno::UNO_QUERY_THROW);
-                        OUString sTCText = lcl_ExtractParameter(pContext->GetCommand(), sizeof(" TC") );
-                        if( !sTCText.isEmpty())
+                        if (!sFirstParam.isEmpty())
+                        {
                             xTC->setPropertyValue(rPropNameSupplier.GetName(PROP_ALTERNATIVE_TEXT),
-                                uno::makeAny(sTCText));
+                                uno::makeAny(sFirstParam));
+                        }
                         OUString sValue;
                         // \f TC entry in doc with multiple tables
     //                    if( lcl_FindInCommand( pContext->GetCommand(), 'f', sValue ))

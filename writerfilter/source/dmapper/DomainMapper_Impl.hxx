@@ -569,13 +569,14 @@ public:
         uno::Reference< uno::XInterface > & xFieldInterface,
         uno::Reference< beans::XPropertySet > xFieldProperties);
     void handleAuthor
-        (FieldContextPtr pContext,
+        (OUString const& rFirstParam,
         PropertyNameSupplier& rPropNameSupplier,
         uno::Reference< uno::XInterface > & xFieldInterface,
         uno::Reference< beans::XPropertySet > xFieldProperties,
         FieldId eFieldId);
     void handleDocProperty
         (FieldContextPtr pContext,
+        OUString const& rFirstParam,
         PropertyNameSupplier& rPropNameSupplier,
         uno::Reference< uno::XInterface > & xFieldInterface,
         uno::Reference< beans::XPropertySet > xFieldProperties);
