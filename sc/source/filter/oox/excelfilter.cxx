@@ -108,7 +108,14 @@ bool ExcelFilter::importDocument() throw()
     /*  Construct the WorkbookGlobals object referred to by every instance of
         the class WorkbookHelper, and execute the import filter by constructing
         an instance of WorkbookFragment and loading the file. */
-    WorkbookGlobalsRef xBookGlob = WorkbookHelper::constructGlobals( *this );
+    WorkbookGlobalsRef xBookGlob;
+    try
+    {
+        xBookGlob = WorkbookHelper::constructGlobals( *this );
+    }
+    catch (...)
+    {
+    }
     if ( xBookGlob.get() && importFragment( new WorkbookFragment( *xBookGlob, aWorkbookPath ) ) )
     {
         try
