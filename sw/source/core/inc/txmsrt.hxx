@@ -153,7 +153,7 @@ struct SwTOXSortTabBase
 
 private:
     mutable bool bValidTxt;
-    TextAndReading m_aSort;
+    mutable TextAndReading m_aSort;
 
     virtual TextAndReading GetText_Impl() const = 0;
 };
@@ -164,7 +164,7 @@ inline TextAndReading SwTOXSortTabBase::GetTxt() const
     {
         // 'this' is 'SwTOXSortTabBase const*', so the virtual
         // mechanism will call the derived class' GetText_Impl
-        GetText_Impl();
+        m_aSort = GetText_Impl();
         bValidTxt = true;
     }
     return m_aSort;
