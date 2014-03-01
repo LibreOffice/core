@@ -1958,7 +1958,7 @@ bool ImpEditEngine::SpellSentence(EditView& rEditView,
     pSpellInfo->aLastSpellContentSelections.clear();
     rToFill.clear();
     //if no selection previously exists the range is extended to the end of the object
-    if(aCurSel.Min() == aCurSel.Max())
+    if (!aCurSel.HasRange())
     {
         ContentNode* pLastNode = aEditDoc.GetObject( aEditDoc.Count()-1);
         aCurSel.Max() = EditPaM(pLastNode, pLastNode->Len());
@@ -2034,7 +2034,7 @@ void ImpEditEngine::AddPortionIterated(
                             Reference< XSpellAlternatives > xAlt,
                                 ::svx::SpellPortions& rToFill)
 {
-    if(rSel.Min() != rSel.Max())
+    if (rSel.HasRange())
     {
         if(xAlt.is())
         {
