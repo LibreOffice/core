@@ -574,12 +574,9 @@ uno::Reference< io::XStream > OStorageHelper::GetStreamAtPackageURL(
         const OUString& rURL, sal_uInt32 const nOpenMode,
         LifecycleProxy & rNastiness)
 {
-    static char const s_PkgScheme[] = "vnd.sun.star.Package:";
-    if (0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength(
-                rURL.getStr(), rURL.getLength(),
-                s_PkgScheme, SAL_N_ELEMENTS(s_PkgScheme) - 1))
+    OUString path;
+    if (rURL.startsWithIgnoreAsciiCase("vnd.sun.star.Package:", &path))
     {
-        OUString const path(rURL.copy(SAL_N_ELEMENTS(s_PkgScheme)-1));
         return GetStreamAtPath(xParentStorage, path, nOpenMode, rNastiness);
     }
     return 0;

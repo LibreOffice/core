@@ -321,13 +321,11 @@ OUString extractTableFromInsert( const OUString & sql )
     int i = 0;
     while (i < sql.getLength() && isWhitespace(sql[i])) { i++; }
 
-    if( 0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength(
-            &sql.getStr()[i], sql.getLength() - i, "insert" , 6 ) )
+    if( sql.matchIgnoreAsciiCase("insert", i) )
     {
         i += 6;
         while (i < sql.getLength() && isWhitespace(sql[i])) { i++; }
-        if( 0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength(
-            &sql.getStr()[i], sql.getLength() - i, "into" , 4 ) )
+        if( sql.matchIgnoreAsciiCase("into", i) )
         {
             i +=4;
             while (i < sql.getLength() && isWhitespace(sql[i])) { i++; }

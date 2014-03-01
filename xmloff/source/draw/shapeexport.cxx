@@ -3126,16 +3126,13 @@ static void lcl_CopyStream(
     proxy.commitStorages();
 }
 
-static char const s_PkgScheme[] = "vnd.sun.star.Package:";
-
 static OUString
 lcl_StoreMediaAndGetURL(SvXMLExport & rExport,
     uno::Reference<beans::XPropertySet> const& xPropSet,
     OUString const& rURL)
 {
-    if (0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength(
-                rURL.getStr(), rURL.getLength(),
-                s_PkgScheme, SAL_N_ELEMENTS(s_PkgScheme) - 1))
+    OUString urlPath;
+    if (rURL.startsWithIgnoreAsciiCase("vnd.sun.star.Package:", &urlPath))
     {
         try // video is embedded
         {
@@ -3151,9 +3148,6 @@ lcl_StoreMediaAndGetURL(SvXMLExport & rExport,
                 SAL_WARN("xmloff", "no input stream");
                 return OUString();
             }
-
-            OUString const urlPath(
-                    rURL.copy(SAL_N_ELEMENTS(s_PkgScheme)-1));
 
             lcl_CopyStream(xInStream, xTarget, rURL);
 
