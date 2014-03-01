@@ -922,12 +922,6 @@ void ResMgr::TestStack( const Resource* pResObj )
     }
 }
 
-#else
-
-void ResMgr::TestStack( const Resource* )
-{
-}
-
 #endif
 
 bool ResMgr::IsAvailable( const ResId& rId, const Resource* pResObj ) const

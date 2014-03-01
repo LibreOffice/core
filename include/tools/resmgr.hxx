@@ -137,8 +137,10 @@ public:
      static ResMgr*     CreateResMgr( const sal_Char* pPrefixName,
                                       LanguageTag aLocale = LanguageTag( LANGUAGE_SYSTEM) );
 
+    #ifdef DBG_UTIL
     /// Test whether resource still exists
     void                TestStack( const Resource * );
+    #endif
 
     /// Check whether resource is available
     bool                IsAvailable( const ResId& rId,
