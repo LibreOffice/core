@@ -25,11 +25,6 @@
 namespace oox {
 namespace core {
 
-
-
-
-
-
 namespace {
 
 OUString lclRemoveFileName( const OUString& rPath )
@@ -56,9 +51,6 @@ OUString createOfficeDocRelationTypeStrict(const OUString& rType)
 }
 
 }
-
-
-
 
 Relations::Relations( const OUString& rFragmentPath ) :
     maFragmentPath( rFragmentPath )
