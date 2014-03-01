@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a930d6b_ab6ea994",
+        "filename": "external/curl/ExternalProject_curl.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-03-01T17:05:22Z",
+      "side": 1,
+      "message": "what the heck does that mean?",
+      "revId": "4e8ab2198819551d07f303f80d2bd5f5ae53bc6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_cb6bf583",
+        "filename": "external/curl/ExternalProject_curl.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-03-01T17:05:22Z",
+      "side": 1,
+      "message": "this is bogus: for IOS now both --with-darwinssl and --with-nss are set",
+      "revId": "4e8ab2198819551d07f303f80d2bd5f5ae53bc6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_eb68b189",
+        "filename": "external/curl/ExternalProject_curl.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-03-01T17:05:22Z",
+      "side": 1,
+      "message": "same problem as above for Mac \u003e 10.5\n\nalso now for OS !\u003d Mac/IOS no --with-nss is used at all which will definitely break build with internal nss",
+      "revId": "4e8ab2198819551d07f303f80d2bd5f5ae53bc6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
