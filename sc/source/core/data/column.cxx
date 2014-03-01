@@ -2428,6 +2428,68 @@ class UpdateRefOnNonCopy : std::unary_function<FormulaGroup, void>
     ScDocument* mpUndoDoc;
     bool mbUpdated;
 
+    void updateRefOnShift( FormulaGroup& rGroup )
+    {
+        if (!rGroup.mbShared)
+        {
+            ScAddress aUndoPos(mnCol, rGroup.mnRow, mnTab);
+            mbUpdated |= rGroup.mpCell->UpdateReferenceOnShift(*mpCxt, mpUndoDoc, &aUndoPos);
+            return;
+        }
+
+        // Update references of a formula group.
+        ScFormulaCell** pp = rGroup.mpCells;
+        ScFormulaCell** ppEnd = pp + rGroup.mnLength;
+        ScFormulaCell* pTop = *pp;
+        ScTokenArray* pCode = pTop->GetCode();
+        boost::scoped_ptr<ScTokenArray> pOldCode(pCode->Clone());
+        ScAddress aOldPos = pTop->aPos;
+
+        // Run this before the position gets updated.
+        sc::RefUpdateResult aRes = pCode->AdjustReferenceOnShift(*mpCxt, aOldPos);
+
+        if (pTop->UpdatePosOnShift(*mpCxt))
+        {
+            // Update the positions of all formula cells.
+            for (++pp; pp != ppEnd; ++pp) // skip the top cell.
+            {
+                ScFormulaCell* pFC = *pp;
+                pFC->aPos.Move(mpCxt->mnColDelta, mpCxt->mnRowDelta, mpCxt->mnTabDelta);
+            }
+
+            if (pCode->IsRecalcModeOnRefMove())
+                aRes.mbValueChanged = true;
+        }
+
+        if (aRes.mbReferenceModified)
+        {
+            sc::StartListeningContext aStartCxt(mpCxt->mrDoc);
+            sc::EndListeningContext aEndCxt(mpCxt->mrDoc, pOldCode.get());
+            aEndCxt.setPositionDelta(
+                ScAddress(-mpCxt->mnColDelta, -mpCxt->mnRowDelta, -mpCxt->mnTabDelta));
+
+            for (pp = rGroup.mpCells; pp != ppEnd; ++pp)
+            {
+                ScFormulaCell* p = *pp;
+                p->EndListeningTo(aEndCxt);
+                p->SetNeedsListening(true);
+            }
+
+            mbUpdated = true;
+
+            fillUndoDoc(aOldPos, rGroup.mnLength, *pOldCode);
+        }
+
+        if (aRes.mbValueChanged)
+        {
+            for (pp = rGroup.mpCells; pp != ppEnd; ++pp)
+            {
+                ScFormulaCell* p = *pp;
+                p->SetNeedsDirty(true);
+            }
+        }
+    }
+
     void updateRefOnMove( FormulaGroup& rGroup )
     {
         if (!rGroup.mbShared)
@@ -2484,21 +2546,26 @@ class UpdateRefOnNonCopy : std::unary_function<FormulaGroup, void>
                 p->SetDirty();
             }
 
-            if (mpUndoDoc)
-            {
-                // Insert the old formula group into the undo document.
-                ScAddress aUndoPos = aOldPos;
-                ScFormulaCell* pFC = new ScFormulaCell(mpUndoDoc, aUndoPos, pOldCode->Clone());
-                ScFormulaCellGroupRef xGroup = pFC->CreateCellGroup(rGroup.mnLength, false);
+            fillUndoDoc(aOldPos, rGroup.mnLength, *pOldCode);
+        }
+    }
 
-                mpUndoDoc->SetFormulaCell(aUndoPos, pFC);
-                aUndoPos.IncRow();
-                for (size_t i = 1; i < rGroup.mnLength; ++i, aUndoPos.IncRow())
-                {
-                    pFC = new ScFormulaCell(mpUndoDoc, aUndoPos, xGroup);
-                    mpUndoDoc->SetFormulaCell(aUndoPos, pFC);
-                }
-            }
+    void fillUndoDoc( const ScAddress& rOldPos, SCROW nLength, const ScTokenArray& rOldCode )
+    {
+        if (!mpUndoDoc)
+            return;
+
+        // Insert the old formula group into the undo document.
+        ScAddress aUndoPos = rOldPos;
+        ScFormulaCell* pFC = new ScFormulaCell(mpUndoDoc, aUndoPos, rOldCode.Clone());
+        ScFormulaCellGroupRef xGroup = pFC->CreateCellGroup(nLength, false);
+
+        mpUndoDoc->SetFormulaCell(aUndoPos, pFC);
+        aUndoPos.IncRow();
+        for (SCROW i = 1; i < nLength; ++i, aUndoPos.IncRow())
+        {
+            pFC = new ScFormulaCell(mpUndoDoc, aUndoPos, xGroup);
+            mpUndoDoc->SetFormulaCell(aUndoPos, pFC);
         }
     }
 
@@ -2511,10 +2578,16 @@ public:
 
     void operator() ( FormulaGroup& rGroup )
     {
-        if (mpCxt->meMode == URM_MOVE)
+        switch (mpCxt->meMode)
         {
-            updateRefOnMove(rGroup);
-            return;
+            case URM_INSDEL:
+                updateRefOnShift(rGroup);
+                return;
+            case URM_MOVE:
+                updateRefOnMove(rGroup);
+                return;
+            default:
+                ;
         }
 
         if (rGroup.mbShared)

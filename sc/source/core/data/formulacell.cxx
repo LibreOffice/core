@@ -957,6 +957,12 @@ bool ScFormulaCell::GetDirty() const { return bDirty; }
 void ScFormulaCell::ResetDirty() { bDirty = bTableOpDirty = mbPostponedDirty = false; }
 bool ScFormulaCell::NeedsListening() const { return bNeedListening; }
 void ScFormulaCell::SetNeedsListening( bool bVar ) { bNeedListening = bVar; }
+
+void ScFormulaCell::SetNeedsDirty( bool bVar )
+{
+    mbPostponedDirty = bVar;
+}
+
 void ScFormulaCell::SetNeedNumberFormat( bool bVal ) { mbNeedsNumberFormat = bVal; }
 short ScFormulaCell::GetFormatType() const { return nFormatType; }
 

@@ -769,13 +769,13 @@ struct ConventionOOO_A1 : public Convention_A1
             rBuffer.append('.');
         if (!rRef.IsColRel())
             rBuffer.append('$');
-        if (!ValidCol(rAbsRef.Col()))
+        if (!ValidCol(rAbsRef.Col()) || rRef.IsColDeleted())
             rBuffer.append(rErrRef);
         else
             MakeColStr(rBuffer, rAbsRef.Col());
         if (!rRef.IsRowRel())
             rBuffer.append('$');
-        if (!ValidRow(rAbsRef.Row()))
+        if (!ValidRow(rAbsRef.Row()) || rRef.IsRowDeleted())
             rBuffer.append(rErrRef);
         else
             MakeRowStr(rBuffer, rAbsRef.Row());

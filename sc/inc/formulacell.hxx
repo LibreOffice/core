@@ -132,14 +132,6 @@ private:
                     };
     void            InterpretTail( ScInterpretTailParameter );
 
-    bool UpdatePosOnShift( const sc::RefUpdateContext& rCxt );
-
-    /**
-     * Update reference in response to cell insertion or deletion.
-     */
-    bool UpdateReferenceOnShift(
-        const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc, const ScAddress* pUndoCellPos );
-
     /**
      * Update reference in response to cell copy-n-paste.
      */
@@ -213,6 +205,7 @@ public:
     void ResetDirty();
     bool NeedsListening() const;
     void SetNeedsListening( bool bVar );
+    void SetNeedsDirty( bool bVar );
     void SetNeedNumberFormat( bool bVal );
     short GetFormatType() const;
     void            Compile(const OUString& rFormula,
@@ -244,6 +237,19 @@ public:
 
     bool UpdateReference(
         const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc = NULL, const ScAddress* pUndoCellPos = NULL );
+
+    /**
+     * Shift the position of formula cell as part of reference update.
+     *
+     * @return true if the position has shifted, false otherwise.
+     */
+    bool UpdatePosOnShift( const sc::RefUpdateContext& rCxt );
+
+    /**
+     * Update reference in response to cell insertion or deletion.
+     */
+    bool UpdateReferenceOnShift(
+        const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc, const ScAddress* pUndoCellPos );
 
     /**
      * Update reference in response to cell move.
