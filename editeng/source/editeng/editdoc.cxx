@@ -2194,8 +2194,7 @@ EditPaM EditDoc::Clear()
 
     SetModified(false);
 
-    EditPaM aPaM( pNode, 0 );
-    return aPaM;
+    return EditPaM( pNode, 0 );
 }
 
 void EditDoc::ClearSpellErrors()
@@ -2231,8 +2230,7 @@ EditPaM EditDoc::RemoveText()
 
     SetModified(true);
 
-    EditPaM aPaM( pNode, 0 );
-    return aPaM;
+    return EditPaM( pNode, 0 );
 }
 
 EditPaM EditDoc::InsertText( EditPaM aPaM, const OUString& rStr )
