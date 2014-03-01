@@ -560,7 +560,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
             const bool bDelFwrd = rMark.nNode.GetIndex() <= rPoint.nNode.GetIndex();
             SwFlyFrmFmt* pFmt;
             const SwFmtAnchor* pAnchor;
-            sal_uInt16 n = rSpzArr.size();
+            size_t n = rSpzArr.size();
             const SwPosition* pAPos;
 
             while( n && !rSpzArr.empty() )
@@ -1061,7 +1061,7 @@ void SwUndo::SetSaveData( SwDoc& rDoc, const SwRedlineSaveDatas& rSData )
     rDoc.SetRedlineMode_intern( (RedlineMode_t)(( eOld & ~nsRedlineMode_t::REDLINE_IGNORE) | nsRedlineMode_t::REDLINE_ON ));
     SwPaM aPam( rDoc.GetNodes().GetEndOfContent() );
 
-    for( sal_uInt16 n = rSData.size(); n; )
+    for( size_t n = rSData.size(); n; )
         rSData[ --n ]->RedlineToDoc( aPam );
 
 #if OSL_DEBUG_LEVEL > 0
@@ -1076,7 +1076,7 @@ void SwUndo::SetSaveData( SwDoc& rDoc, const SwRedlineSaveDatas& rSData )
 
 bool SwUndo::HasHiddenRedlines( const SwRedlineSaveDatas& rSData )
 {
-    for( sal_uInt16 n = rSData.size(); n; )
+    for( size_t n = rSData.size(); n; )
         if( rSData[ --n ]->GetMvSttIdx() )
             return true;
     return false;
@@ -1086,7 +1086,7 @@ bool SwUndo::CanRedlineGroup( SwRedlineSaveDatas& rCurr,
                         const SwRedlineSaveDatas& rCheck, bool bCurrIsEnd )
 {
     bool bRet = false;
-    sal_uInt16 n;
+    size_t n;
 
     if( rCurr.size() == rCheck.size() )
     {
