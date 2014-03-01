@@ -1062,8 +1062,6 @@ Size EditLine::CalcTextSize( ParaPortion& rParaPortion )
     Size aTmpSz;
     TextPortion* pPortion;
 
-    sal_Int32 nIndex = GetStart();
-
     DBG_ASSERT( rParaPortion.GetTextPortions().Count(), "GetTextSize before CreatePortions !" );
 
     for ( sal_Int32 n = nStartPortion; n <= nEndPortion; n++ )
@@ -1087,7 +1085,6 @@ Size EditLine::CalcTextSize( ParaPortion& rParaPortion )
             }
             break;
         }
-        nIndex = nIndex + pPortion->GetLen();
     }
 
     SetHeight( (sal_uInt16)aSz.Height() );
