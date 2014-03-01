@@ -41,6 +41,7 @@
 #include <sfx2/request.hxx>
 #include <svl/intitem.hxx>
 #include <svl/ilstitem.hxx>
+#include <svl/int64item.hxx>
 #include <sfx2/itemconnect.hxx>
 #include <sal/macros.h>
 #include "borderconn.hxx"
@@ -165,6 +166,13 @@ SvxBorderTabPage::SvxBorderTabPage(Window* pParent, const SfxItemSet& rCoreAttrs
         p->GetList(aUsedStyles);
         for (size_t i = 0, n = aUsedStyles.size(); i < n; ++i)
             maUsedBorderStyles.insert(static_cast<sal_Int16>(aUsedStyles[i]));
+    }
+
+    if (rCoreAttrs.HasItem(SID_ATTR_BORDER_DEFAULT_WIDTH, &pItem))
+    {
+        // The caller specifies default line width.  Honor it.
+        const SfxInt64Item* p = static_cast<const SfxInt64Item*>(pItem);
+        m_pLineWidthMF->SetValue(p->GetValue());
     }
 
     // set metric

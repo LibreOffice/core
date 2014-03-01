@@ -958,10 +958,11 @@
 #define SID_SW_ATTR_FILL_GRADIENT                       ( SID_SVX_START + 1139 )
 
 #define SID_ATTR_BORDER_STYLES                          ( SID_SVX_START + 1140 )
+#define SID_ATTR_BORDER_DEFAULT_WIDTH                   ( SID_SVX_START + 1141 )
 
 
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               (SID_ATTR_BORDER_STYLES + 1)
+#define SID_SVX_FIRSTFREE                               (SID_ATTR_BORDER_DEFAULT_WIDTH + 1)
 
 
 // Overflow check for slot IDs

@@ -75,6 +75,7 @@ $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/source/items/ilstitem \
     svl/source/items/imageitm \
     svl/source/items/intitem \
+    svl/source/items/int64item \
     svl/source/items/itemiter \
     svl/source/items/itempool \
     svl/source/items/itemprop \

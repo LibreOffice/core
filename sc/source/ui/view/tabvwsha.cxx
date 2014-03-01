@@ -25,6 +25,7 @@
 #include <svx/numinf.hxx>
 #include <svl/srchitem.hxx>
 #include <svl/ilstitem.hxx>
+#include <svl/int64item.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -480,6 +481,8 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
     boost::scoped_ptr<SfxItemSet> pOldSet(new SfxItemSet(pOldAttrs->GetItemSet()));
     boost::scoped_ptr<SvxNumberInfoItem> pNumberInfoItem;
 
+    pOldSet->MergeRange(SID_ATTR_BORDER_STYLES, SID_ATTR_BORDER_DEFAULT_WIDTH);
+
     // We only allow these border line types.
     std::vector<sal_Int32> aBorderStyles;
     aBorderStyles.reserve(5);
@@ -490,8 +493,11 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
     aBorderStyles.push_back(table::BorderLineStyle::DOUBLE);
 
     SfxIntegerListItem aBorderStylesItem(SID_ATTR_BORDER_STYLES, aBorderStyles);
-    pOldSet->MergeRange(SID_ATTR_BORDER_STYLES, SID_ATTR_BORDER_STYLES);
     pOldSet->Put(aBorderStylesItem);
+
+    // Set the default border width to 0.75 points.
+    SfxInt64Item aBorderWidthItem(SID_ATTR_BORDER_DEFAULT_WIDTH, 75);
+    pOldSet->Put(aBorderWidthItem);
 
     // Get border items and put them in the set:
     GetSelectionFrame( aLineOuter, aLineInner );
