@@ -563,19 +563,16 @@ ExternalNameRef ExternalLink::getNameByIndex( sal_Int32 nIndex ) const
 
 // private --------------------------------------------------------------------
 
-#define OOX_TARGETTYPE_EXTLINK      CREATE_OFFICEDOC_RELATION_TYPE( "externalLinkPath" )
-#define OOX_TARGETTYPE_LIBRARY      CREATE_MSOFFICE_RELATION_TYPE( "xlExternalLinkPath/xlLibrary" )
-
 void ExternalLink::setExternalTargetUrl( const OUString& rTargetUrl, const OUString& rTargetType )
 {
     meLinkType = LINKTYPE_UNKNOWN;
-    if( rTargetType == OOX_TARGETTYPE_EXTLINK )
+    if( rTargetType == CREATE_OFFICEDOC_RELATION_TYPE( "externalLinkPath" ) )
     {
         maTargetUrl = getBaseFilter().getAbsoluteUrl( rTargetUrl );
         if( !maTargetUrl.isEmpty() )
             meLinkType = LINKTYPE_EXTERNAL;
     }
-    else if( rTargetType == OOX_TARGETTYPE_LIBRARY )
+    else if( rTargetType == CREATE_MSOFFICE_RELATION_TYPE( "xlExternalLinkPath/xlLibrary" ) )
     {
         meLinkType = LINKTYPE_LIBRARY;
         meFuncLibType = getFormulaParser().getFuncLibTypeFromLibraryName( rTargetUrl );
