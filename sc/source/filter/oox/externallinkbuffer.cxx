@@ -566,7 +566,8 @@ ExternalNameRef ExternalLink::getNameByIndex( sal_Int32 nIndex ) const
 void ExternalLink::setExternalTargetUrl( const OUString& rTargetUrl, const OUString& rTargetType )
 {
     meLinkType = LINKTYPE_UNKNOWN;
-    if( rTargetType == CREATE_OFFICEDOC_RELATION_TYPE( "externalLinkPath" ) )
+    if( rTargetType == CREATE_OFFICEDOC_RELATION_TYPE( "externalLinkPath" ) ||
+            rTargetType == CREATE_OFFICEDOC_RELATION_TYPE_STRICT( "externalLinkPath" ) )
     {
         maTargetUrl = getBaseFilter().getAbsoluteUrl( rTargetUrl );
         if( !maTargetUrl.isEmpty() )
