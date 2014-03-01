@@ -71,7 +71,7 @@ IMPL_LINK_NOARG(SwCustomizeAddressListDialog, ListBoxSelectHdl_Impl)
 IMPL_LINK(SwCustomizeAddressListDialog, AddRenameHdl_Impl, PushButton*, pButton)
 {
     bool bRename = pButton == m_pRenamePB;
-    sal_uInt16 nPos = m_pFieldsLB->GetSelectEntryPos();
+    sal_Int32 nPos = m_pFieldsLB->GetSelectEntryPos();
     if(nPos == LISTBOX_ENTRY_NOTFOUND)
         nPos = 0;
 
@@ -117,7 +117,7 @@ IMPL_LINK(SwCustomizeAddressListDialog, AddRenameHdl_Impl, PushButton*, pButton)
 
 IMPL_LINK_NOARG(SwCustomizeAddressListDialog, DeleteHdl_Impl)
 {
-    sal_uInt16 nPos = m_pFieldsLB->GetSelectEntryPos();
+    sal_Int32 nPos = m_pFieldsLB->GetSelectEntryPos();
     m_pFieldsLB->RemoveEntry(m_pFieldsLB->GetSelectEntryPos());
     m_pFieldsLB->SelectEntryPos(nPos > m_pFieldsLB->GetEntryCount() - 1 ? nPos - 1 : nPos);
 
@@ -134,8 +134,8 @@ IMPL_LINK_NOARG(SwCustomizeAddressListDialog, DeleteHdl_Impl)
 
 IMPL_LINK(SwCustomizeAddressListDialog, UpDownHdl_Impl, PushButton*, pButton)
 {
-    sal_uInt16 nPos;
-    sal_uInt16 nOldPos = nPos = m_pFieldsLB->GetSelectEntryPos();
+    sal_Int32 nPos;
+    sal_Int32 nOldPos = nPos = m_pFieldsLB->GetSelectEntryPos();
     OUString aTemp = m_pFieldsLB->GetEntry(nPos);
     m_pFieldsLB->RemoveEntry( nPos );
     if(pButton == m_pUpPB)
@@ -162,8 +162,8 @@ IMPL_LINK(SwCustomizeAddressListDialog, UpDownHdl_Impl, PushButton*, pButton)
 
 void SwCustomizeAddressListDialog::UpdateButtons()
 {
-    sal_uInt16 nPos = m_pFieldsLB->GetSelectEntryPos();
-    sal_uInt16 nEntries = m_pFieldsLB->GetEntryCount();
+    sal_Int32 nPos = m_pFieldsLB->GetSelectEntryPos();
+    sal_Int32 nEntries = m_pFieldsLB->GetEntryCount();
     m_pUpPB->Enable(nPos > 0 && nEntries > 0);
     m_pDownPB->Enable(nPos < nEntries -1);
     m_pDeletePB->Enable(nEntries > 0);

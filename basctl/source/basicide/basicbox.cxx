@@ -209,7 +209,7 @@ void LibBox::FillBox()
     ClearBox();
 
     // create list box entries
-    sal_uInt16 nPos = InsertEntry( OUString( IDEResId( RID_STR_ALL ) ), LISTBOX_APPEND );
+    sal_Int32 nPos = InsertEntry( OUString( IDEResId( RID_STR_ALL ) ), LISTBOX_APPEND );
     SetEntryData( nPos, new LibEntry( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_UNKNOWN, OUString() ) );
     InsertEntries( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_USER );
     InsertEntries( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_SHARE );
@@ -248,7 +248,7 @@ void LibBox::InsertEntries( const ScriptDocument& rDocument, LibraryLocation eLo
         {
             OUString aName( rDocument.getTitle( eLocation ) );
             OUString aEntryText( CreateMgrAndLibStr( aName, aLibName ) );
-            sal_uInt16 nPos = InsertEntry( aEntryText, LISTBOX_APPEND );
+            sal_Int32 nPos = InsertEntry( aEntryText, LISTBOX_APPEND );
             SetEntryData( nPos, new LibEntry( rDocument, eLocation, aLibName ) );
         }
     }
@@ -312,7 +312,7 @@ void LibBox::Select()
 
 void LibBox::NotifyIDE()
 {
-    sal_uInt16 nSelPos = GetSelectEntryPos();
+    sal_Int32 nSelPos = GetSelectEntryPos();
     if (LibEntry* pEntry = static_cast<LibEntry*>(GetEntryData(nSelPos)))
     {
         ScriptDocument aDocument( pEntry->GetDocument() );
@@ -330,8 +330,8 @@ void LibBox::NotifyIDE()
 
 void LibBox::ClearBox()
 {
-    sal_uInt16 nCount = GetEntryCount();
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
+    sal_Int32 nCount = GetEntryCount();
+    for ( sal_Int32 i = 0; i < nCount; ++i )
     {
         LibEntry* pEntry = static_cast<LibEntry*>(GetEntryData( i ));
         delete pEntry;
@@ -411,7 +411,7 @@ void LanguageBox::FillBox()
         Sequence< Locale > aLocaleSeq = pCurMgr->getStringResourceManager()->getLocales();
         const Locale* pLocale = aLocaleSeq.getConstArray();
         sal_Int32 i, nCount = aLocaleSeq.getLength();
-        sal_uInt16 nSelPos = LISTBOX_ENTRY_NOTFOUND;
+        sal_Int32 nSelPos = LISTBOX_ENTRY_NOTFOUND;
         for ( i = 0;  i < nCount;  ++i )
         {
             bool bIsDefault = localesAreEqual( aDefaultLocale, pLocale[i] );
@@ -423,7 +423,7 @@ void LanguageBox::FillBox()
                 sLanguage += " ";
                 sLanguage += m_sDefaultLanguageStr;
             }
-            sal_uInt16 nPos = InsertEntry( sLanguage );
+            sal_Int32 nPos = InsertEntry( sLanguage );
             SetEntryData( nPos, new LanguageEntry( sLanguage, pLocale[i], bIsDefault ) );
 
             if ( bIsCurrent )
@@ -449,8 +449,8 @@ void LanguageBox::FillBox()
 
 void LanguageBox::ClearBox()
 {
-    sal_uInt16 nCount = GetEntryCount();
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
+    sal_Int32 nCount = GetEntryCount();
+    for ( sal_Int32 i = 0; i < nCount; ++i )
     {
         LanguageEntry* pEntry = (LanguageEntry*)GetEntryData(i);
         delete pEntry;

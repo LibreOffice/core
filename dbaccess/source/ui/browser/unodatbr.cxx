@@ -2088,7 +2088,7 @@ void SbaTableQueryBrowser::implAddDatasource(const OUString& _rDbName, Image& _r
 
         m_pTreeView->getListBox().InsertEntry(
             _rQueryName, _rQueryImage, _rQueryImage, pDatasourceEntry,
-            sal_True /*ChildrenOnDemand*/, LIST_APPEND, pQueriesData );
+            sal_True /*ChildrenOnDemand*/, TREELIST_APPEND, pQueriesData );
     }
 
     // the child for the tables container
@@ -2098,7 +2098,7 @@ void SbaTableQueryBrowser::implAddDatasource(const OUString& _rDbName, Image& _r
 
         m_pTreeView->getListBox().InsertEntry(
             _rTableName, _rTableImage, _rTableImage, pDatasourceEntry,
-            sal_True /*ChildrenOnDemand*/, LIST_APPEND, pTablesData );
+            sal_True /*ChildrenOnDemand*/, TREELIST_APPEND, pTablesData );
     }
 
 }
@@ -2163,7 +2163,7 @@ SvTreeListEntry* SbaTableQueryBrowser::implAppendEntry( SvTreeListEntry* _pParen
     Image aImage;
     pImageProvider->getImages( _rName, getDatabaseObjectType( _eEntryType ), aImage );
 
-    SvTreeListEntry* pNewEntry = m_pTreeView->getListBox().InsertEntry( _rName, _pParent, _eEntryType == etQueryContainer , LIST_APPEND, _pUserData );
+    SvTreeListEntry* pNewEntry = m_pTreeView->getListBox().InsertEntry( _rName, _pParent, _eEntryType == etQueryContainer , TREELIST_APPEND, _pUserData );
 
     m_pTreeView->getListBox().SetExpandedEntryBmp(  pNewEntry, aImage );
     m_pTreeView->getListBox().SetCollapsedEntryBmp( pNewEntry, aImage );

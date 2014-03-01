@@ -431,7 +431,7 @@ protected:
                                         SvxConfigEntry* pParentData );
 
     SvTreeListEntry*    InsertEntryIntoUI ( SvxConfigEntry* pNewEntryData,
-                                        sal_uLong nPos = LIST_APPEND );
+                                        sal_uLong nPos = TREELIST_APPEND );
 
     SvxEntries*     FindParentForChild( SvxEntries* pParentEntries,
                                         SvxConfigEntry* pChildData );

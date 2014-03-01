@@ -195,12 +195,12 @@ void ListBox::ImplLoadRes( const ResId& rResId )
 {
     Control::ImplLoadRes( rResId );
 
-    sal_uInt16 nSelPos = ReadShortRes();
-    sal_uInt16 nNumber = sal::static_int_cast<sal_uInt16>(ReadLongRes());
+    sal_Int32 nSelPos = ReadShortRes();
+    sal_Int32 nNumber = sal::static_int_cast<sal_Int32>(ReadLongRes());
 
-    for( sal_uInt16 i = 0; i < nNumber; i++ )
+    for( sal_Int32 i = 0; i < nNumber; i++ )
     {
-        sal_uInt16 nPos = InsertEntry( ReadStringRes(), LISTBOX_APPEND );
+        sal_Int32 nPos = InsertEntry( ReadStringRes(), LISTBOX_APPEND );
 
         sal_IntPtr nId = ReadLongRes();
         if( nId )
@@ -271,7 +271,7 @@ IMPL_LINK( ListBox, ImplSelectionChangedHdl, void*, n )
 {
     if ( !mpImplLB->IsTrackingSelect() )
     {
-        sal_uInt16 nChanged = (sal_uInt16)(sal_uLong)n;
+        sal_Int32 nChanged = (sal_Int32)(sal_uLong)n;
         const ImplEntryList* pEntryList = mpImplLB->GetEntryList();
         if ( pEntryList->IsEntryPosSelected( nChanged ) )
         {
@@ -475,7 +475,7 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sa
 
         for ( sal_uInt16 n = 0; n < nLines; n++ )
         {
-            sal_uInt16 nEntry = n+mpImplLB->GetTopEntry();
+            sal_Int32 nEntry = n+mpImplLB->GetTopEntry();
             bool bSelected = mpImplLB->GetEntryList()->IsEntryPosSelected( nEntry );
             if ( bSelected )
             {
@@ -720,7 +720,7 @@ void ListBox::FillLayoutData() const
     }
 }
 
-long ListBox::GetIndexForPoint( const Point& rPoint, sal_uInt16& rPos ) const
+long ListBox::GetIndexForPoint( const Point& rPoint, sal_Int32& rPos ) const
 {
     if( !HasLayoutData() )
         FillLayoutData();
@@ -740,7 +740,7 @@ long ListBox::GetIndexForPoint( const Point& rPoint, sal_uInt16& rPos ) const
         aConvPoint = pMain->PixelToLogic( aConvPoint );
 
         // Try to find entry
-        sal_uInt16 nEntry = pMain->GetEntryPosForPoint( aConvPoint );
+        sal_Int32 nEntry = pMain->GetEntryPosForPoint( aConvPoint );
         if( nEntry == LISTBOX_ENTRY_NOTFOUND )
         {
             // Not found, maybe dropdown case
@@ -1006,18 +1006,18 @@ void ListBox::SetNoSelection()
     ImplCallEventListeners(VCLEVENT_LISTBOX_STATEUPDATE);
 }
 
-sal_uInt16 ListBox::InsertEntry( const OUString& rStr, sal_uInt16 nPos )
+sal_Int32 ListBox::InsertEntry( const OUString& rStr, sal_Int32 nPos )
 {
-    sal_uInt16 nRealPos = mpImplLB->InsertEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount(), rStr );
-    nRealPos = sal::static_int_cast<sal_uInt16>(nRealPos - mpImplLB->GetEntryList()->GetMRUCount());
+    sal_Int32 nRealPos = mpImplLB->InsertEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount(), rStr );
+    nRealPos = sal::static_int_cast<sal_Int32>(nRealPos - mpImplLB->GetEntryList()->GetMRUCount());
     CallEventListeners( VCLEVENT_LISTBOX_ITEMADDED, (void*) sal_IntPtr(nRealPos) );
     return nRealPos;
 }
 
-sal_uInt16 ListBox::InsertEntry( const OUString& rStr, const Image& rImage, sal_uInt16 nPos )
+sal_Int32 ListBox::InsertEntry( const OUString& rStr, const Image& rImage, sal_Int32 nPos )
 {
-    sal_uInt16 nRealPos = mpImplLB->InsertEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount(), rStr, rImage );
-    nRealPos = sal::static_int_cast<sal_uInt16>(nRealPos - mpImplLB->GetEntryList()->GetMRUCount());
+    sal_Int32 nRealPos = mpImplLB->InsertEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount(), rStr, rImage );
+    nRealPos = sal::static_int_cast<sal_Int32>(nRealPos - mpImplLB->GetEntryList()->GetMRUCount());
     CallEventListeners( VCLEVENT_LISTBOX_ITEMADDED, (void*) sal_IntPtr(nRealPos) );
     return nRealPos;
 }
@@ -1027,63 +1027,63 @@ void ListBox::RemoveEntry( const OUString& rStr )
     RemoveEntry( GetEntryPos( rStr ) );
 }
 
-void ListBox::RemoveEntry( sal_uInt16 nPos )
+void ListBox::RemoveEntry( sal_Int32 nPos )
 {
     mpImplLB->RemoveEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount() );
     CallEventListeners( VCLEVENT_LISTBOX_ITEMREMOVED, (void*) sal_IntPtr(nPos) );
 }
 
-Image ListBox::GetEntryImage( sal_uInt16 nPos ) const
+Image ListBox::GetEntryImage( sal_Int32 nPos ) const
 {
     if ( mpImplLB->GetEntryList()->HasEntryImage( nPos ) )
         return mpImplLB->GetEntryList()->GetEntryImage( nPos );
     return Image();
 }
 
-sal_uInt16 ListBox::GetEntryPos( const OUString& rStr ) const
+sal_Int32 ListBox::GetEntryPos( const OUString& rStr ) const
 {
-    sal_uInt16 nPos = mpImplLB->GetEntryList()->FindEntry( rStr );
+    sal_Int32 nPos = mpImplLB->GetEntryList()->FindEntry( rStr );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-        nPos = sal::static_int_cast<sal_uInt16>(nPos - mpImplLB->GetEntryList()->GetMRUCount());
+        nPos = sal::static_int_cast<sal_Int32>(nPos - mpImplLB->GetEntryList()->GetMRUCount());
     return nPos;
 }
 
-sal_uInt16 ListBox::GetEntryPos( const void* pData ) const
+sal_Int32 ListBox::GetEntryPos( const void* pData ) const
 {
-    sal_uInt16 nPos = mpImplLB->GetEntryList()->FindEntry( pData );
+    sal_Int32 nPos = mpImplLB->GetEntryList()->FindEntry( pData );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-        nPos = sal::static_int_cast<sal_uInt16>(nPos - mpImplLB->GetEntryList()->GetMRUCount());
+        nPos = sal::static_int_cast<sal_Int32>(nPos - mpImplLB->GetEntryList()->GetMRUCount());
     return nPos;
 }
 
-OUString ListBox::GetEntry( sal_uInt16 nPos ) const
+OUString ListBox::GetEntry( sal_Int32 nPos ) const
 {
     return mpImplLB->GetEntryList()->GetEntryText( nPos + mpImplLB->GetEntryList()->GetMRUCount() );
 }
 
-sal_uInt16 ListBox::GetEntryCount() const
+sal_Int32 ListBox::GetEntryCount() const
 {
     return mpImplLB->GetEntryList()->GetEntryCount() - mpImplLB->GetEntryList()->GetMRUCount();
 }
 
-OUString ListBox::GetSelectEntry(sal_uInt16 nIndex) const
+OUString ListBox::GetSelectEntry(sal_Int32 nIndex) const
 {
     return GetEntry( GetSelectEntryPos( nIndex ) );
 }
 
-sal_uInt16 ListBox::GetSelectEntryCount() const
+sal_Int32 ListBox::GetSelectEntryCount() const
 {
     return mpImplLB->GetEntryList()->GetSelectEntryCount();
 }
 
-sal_uInt16 ListBox::GetSelectEntryPos( sal_uInt16 nIndex ) const
+sal_Int32 ListBox::GetSelectEntryPos( sal_Int32 nIndex ) const
 {
-    sal_uInt16 nPos = mpImplLB->GetEntryList()->GetSelectEntryPos( nIndex );
+    sal_Int32 nPos = mpImplLB->GetEntryList()->GetSelectEntryPos( nIndex );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         if ( nPos < mpImplLB->GetEntryList()->GetMRUCount() )
             nPos = mpImplLB->GetEntryList()->FindEntry( mpImplLB->GetEntryList()->GetEntryText( nPos ) );
-        nPos = sal::static_int_cast<sal_uInt16>(nPos - mpImplLB->GetEntryList()->GetMRUCount());
+        nPos = sal::static_int_cast<sal_Int32>(nPos - mpImplLB->GetEntryList()->GetMRUCount());
     }
     return nPos;
 }
@@ -1093,7 +1093,7 @@ bool ListBox::IsEntrySelected(const OUString& rStr) const
     return IsEntryPosSelected( GetEntryPos( rStr ) );
 }
 
-bool ListBox::IsEntryPosSelected( sal_uInt16 nPos ) const
+bool ListBox::IsEntryPosSelected( sal_Int32 nPos ) const
 {
     return mpImplLB->GetEntryList()->IsEntryPosSelected( nPos + mpImplLB->GetEntryList()->GetMRUCount() );
 }
@@ -1103,11 +1103,11 @@ void ListBox::SelectEntry( const OUString& rStr, bool bSelect )
     SelectEntryPos( GetEntryPos( rStr ), bSelect );
 }
 
-void ListBox::SelectEntryPos( sal_uInt16 nPos, bool bSelect )
+void ListBox::SelectEntryPos( sal_Int32 nPos, bool bSelect )
 {
     if ( nPos < mpImplLB->GetEntryList()->GetEntryCount() )
     {
-        sal_uInt16 oldSelectCount = GetSelectEntryCount(), newSelectCount = 0, nCurrentPos = mpImplLB->GetCurrentPos();
+        sal_Int32 oldSelectCount = GetSelectEntryCount(), newSelectCount = 0, nCurrentPos = mpImplLB->GetCurrentPos();
         mpImplLB->SelectEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount(), bSelect );
         newSelectCount = GetSelectEntryCount();
         if (oldSelectCount == 0 && newSelectCount > 0)
@@ -1122,34 +1122,34 @@ void ListBox::SelectEntryPos( sal_uInt16 nPos, bool bSelect )
     }
 }
 
-void ListBox::SetEntryData( sal_uInt16 nPos, void* pNewData )
+void ListBox::SetEntryData( sal_Int32 nPos, void* pNewData )
 {
     mpImplLB->SetEntryData( nPos + mpImplLB->GetEntryList()->GetMRUCount(), pNewData );
 }
 
-void* ListBox::GetEntryData( sal_uInt16 nPos ) const
+void* ListBox::GetEntryData( sal_Int32 nPos ) const
 {
     return mpImplLB->GetEntryList()->GetEntryData( nPos + mpImplLB->GetEntryList()->GetMRUCount() );
 }
 
-void ListBox::SetEntryFlags( sal_uInt16 nPos, long nFlags )
+void ListBox::SetEntryFlags( sal_Int32 nPos, long nFlags )
 {
     mpImplLB->SetEntryFlags( nPos + mpImplLB->GetEntryList()->GetMRUCount(), nFlags );
 }
 
-long ListBox::GetEntryFlags( sal_uInt16 nPos ) const
+long ListBox::GetEntryFlags( sal_Int32 nPos ) const
 {
     return mpImplLB->GetEntryList()->GetEntryFlags( nPos + mpImplLB->GetEntryList()->GetMRUCount() );
 }
 
-void ListBox::SetTopEntry( sal_uInt16 nPos )
+void ListBox::SetTopEntry( sal_Int32 nPos )
 {
     mpImplLB->SetTopEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount() );
 }
 
-sal_uInt16 ListBox::GetTopEntry() const
+sal_Int32 ListBox::GetTopEntry() const
 {
-    sal_uInt16 nPos = GetEntryCount() ? mpImplLB->GetTopEntry() : LISTBOX_ENTRY_NOTFOUND;
+    sal_Int32 nPos = GetEntryCount() ? mpImplLB->GetTopEntry() : LISTBOX_ENTRY_NOTFOUND;
     if ( nPos < mpImplLB->GetEntryList()->GetMRUCount() )
         nPos = 0;
     return nPos;
@@ -1165,7 +1165,7 @@ bool ListBox::IsInDropDown() const
     return mpFloatWin && mpFloatWin->IsInPopupMode();
 }
 
-Rectangle ListBox::GetBoundingRectangle( sal_uInt16 nItem ) const
+Rectangle ListBox::GetBoundingRectangle( sal_Int32 nItem ) const
 {
     Rectangle aRect = mpImplLB->GetMainWindow()->GetBoundingRectangle( nItem );
     Rectangle aOffset = mpImplLB->GetMainWindow()->GetWindowExtentsRelative( (Window*)this );
@@ -1416,12 +1416,12 @@ bool ListBox::IsReadOnly() const
     return mpImplLB->IsReadOnly();
 }
 
-void ListBox::SetSeparatorPos( sal_uInt16 n )
+void ListBox::SetSeparatorPos( sal_Int32 n )
 {
     mpImplLB->SetSeparatorPos( n );
 }
 
-sal_uInt16 ListBox::GetSeparatorPos() const
+sal_Int32 ListBox::GetSeparatorPos() const
 {
     return mpImplLB->GetSeparatorPos();
 }
@@ -1497,7 +1497,7 @@ void ListBox::SetEdgeBlending(bool bNew)
     }
 }
 
-sal_uInt16 ListBox::GetMRUCount() const
+sal_Int32 ListBox::GetMRUCount() const
 {
     return mpImplLB->GetEntryList()->GetMRUCount();
 }

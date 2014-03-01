@@ -135,7 +135,7 @@ void SvxDefaultColorOptPage::FillColorBox()
     for( long i = 0; i < nCount; i++ )
     {
         pColorEntry = pColorList->GetColor( i );
-        m_pValSetColorBox->InsertItem( (sal_uInt16) i + 1, pColorEntry->GetColor(), pColorEntry->GetName() );
+        m_pValSetColorBox->InsertItem( i + 1, pColorEntry->GetColor(), pColorEntry->GetName() );
     }
 }
 
@@ -208,7 +208,7 @@ IMPL_LINK_NOARG(SvxDefaultColorOptPage, AddChartColor)
 
 IMPL_LINK( SvxDefaultColorOptPage, RemoveChartColor, PushButton*, pButton )
 {
-    size_t nIndex = m_pLbChartColors->GetSelectEntryPos();
+    sal_Int32 nIndex = m_pLbChartColors->GetSelectEntryPos();
 
     if (m_pLbChartColors->GetSelectEntryCount() == 0)
         return 0L;
@@ -248,14 +248,14 @@ IMPL_LINK( SvxDefaultColorOptPage, ListClickedHdl, ColorLB*, _pColorList )
     if( nIndex == -1 )      // not found
         m_pValSetColorBox->SetNoSelection();
     else
-        m_pValSetColorBox->SelectItem( (sal_uInt16)nIndex + 1 );       // ValueSet is 1-based
+        m_pValSetColorBox->SelectItem( nIndex + 1 );       // ValueSet is 1-based
 
     return 0L;
 }
 
 IMPL_LINK_NOARG(SvxDefaultColorOptPage, BoxClickedHdl)
 {
-    sal_uInt16 nIdx = m_pLbChartColors->GetSelectEntryPos();
+    sal_Int32 nIdx = m_pLbChartColors->GetSelectEntryPos();
     if( nIdx != LISTBOX_ENTRY_NOTFOUND )
     {
         const XColorEntry aEntry( m_pValSetColorBox->GetItemColor( m_pValSetColorBox->GetSelectItemId() ), m_pLbChartColors->GetSelectEntry() );

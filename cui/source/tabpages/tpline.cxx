@@ -494,7 +494,7 @@ void SvxLineTabPage::SymbolSelected(MenuButton* pButton)
 void SvxLineTabPage::FillListboxes()
 {
     // Line styles
-    sal_uInt16 nOldSelect = m_pLbLineStyle->GetSelectEntryPos();
+    sal_Int32 nOldSelect = m_pLbLineStyle->GetSelectEntryPos();
     // aLbLineStyle.FillStyles();
     m_pLbLineStyle->Fill( pDashList );
     m_pLbLineStyle->SelectEntryPos( nOldSelect );
@@ -522,8 +522,8 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
         SetPageType(pPageTypeItem->GetValue());
     if( nDlgType == 0 && pDashList.is() )
     {
-        sal_uInt16 nPos;
-        sal_uInt16 nCount;
+        sal_Int32 nPos;
+        sal_Int32 nCount;
 
         // Dash list
         if( ( *pnDashListState & CT_MODIFIED ) ||
@@ -617,7 +617,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
                 if( *pnColorListState & CT_CHANGED )
                     pColorList = ( (SvxLineTabDialog*) GetParentDialog() )->GetNewColorList();
                 // aLbColor
-                sal_uInt16 nColorPos = m_pLbColor->GetSelectEntryPos();
+                sal_Int32 nColorPos = m_pLbColor->GetSelectEntryPos();
                 m_pLbColor->Clear();
                 m_pLbColor->Fill( pColorList );
                 nCount = m_pLbColor->GetEntryCount();
@@ -652,7 +652,7 @@ int SvxLineTabPage::DeactivatePage( SfxItemSet* _pSet )
     {
         nPageType = 1; // possibly for extensions
         *pPosDashLb = m_pLbLineStyle->GetSelectEntryPos() - 2;// First entry SOLID!!!
-        sal_uInt16 nPos = m_pLbStartStyle->GetSelectEntryPos();
+        sal_Int32 nPos = m_pLbStartStyle->GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
             nPos--;
         *pPosLineEndLb = nPos;
@@ -669,7 +669,7 @@ int SvxLineTabPage::DeactivatePage( SfxItemSet* _pSet )
 sal_Bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
 {
     const SfxPoolItem* pOld = NULL;
-    sal_uInt16  nPos;
+    sal_Int32  nPos;
     sal_Bool    bModified = sal_False;
 
     // To prevent modifications to the list, we do not set other page's items.
@@ -961,7 +961,7 @@ sal_Bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
 
 sal_Bool SvxLineTabPage::FillXLSet_Impl()
 {
-    sal_uInt16 nPos;
+    sal_Int32 nPos;
 
     if( m_pLbLineStyle->GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND )
     {
@@ -1279,7 +1279,7 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
             if(rItemPolygon == rEntryPolygon)
             {
                 // select this entry
-                m_pLbStartStyle->SelectEntryPos((sal_uInt16)a + 1);
+                m_pLbStartStyle->SelectEntryPos(a + 1);
                 bSelected = sal_True;
             }
         }
@@ -1311,7 +1311,7 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
             if(rItemPolygon == rEntryPolygon)
             {
                 // select this entry
-                m_pLbEndStyle->SelectEntryPos((sal_uInt16)a + 1);
+                m_pLbEndStyle->SelectEntryPos(a + 1);
                 bSelected = sal_True;
             }
         }

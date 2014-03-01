@@ -188,7 +188,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
     else
     {
         OSL_ENSURE(!pColl->IsDefault(), "default style for footnotes is wrong");
-        const sal_uInt16 nPos = m_pParaTemplBox->GetEntryPos(pColl->GetName());
+        const sal_Int32 nPos = m_pParaTemplBox->GetEntryPos(pColl->GetName());
         if( LISTBOX_ENTRY_NOTFOUND != nPos )
             m_pParaTemplBox->SelectEntryPos( nPos );
         else
@@ -253,7 +253,7 @@ void SwEndNoteOptionPage::SelectNumbering(int eNum)
 
 int SwEndNoteOptionPage::GetNumbering() const
 {
-    const sal_uInt16 nPos = m_pNumCountBox->GetSelectEntryPos();
+    const sal_Int32 nPos = m_pNumCountBox->GetSelectEntryPos();
     return (int) bPosDoc? nPos + 1: nPos;
 }
 
@@ -364,7 +364,7 @@ sal_Bool SwEndNoteOptionPage::FillItemSet( SfxItemSet & )
                         m_pFtnCharAnchorTemplBox->GetSelectEntry() ) );
 
     // paragraph template
-    sal_uInt16 nPos = m_pParaTemplBox->GetSelectEntryPos();
+    sal_Int32 nPos = m_pParaTemplBox->GetSelectEntryPos();
     if(LISTBOX_ENTRY_NOTFOUND != nPos)
     {
         const OUString aFmtName( m_pParaTemplBox->GetSelectEntry() );

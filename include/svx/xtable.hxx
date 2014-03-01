@@ -40,6 +40,8 @@
 #include <svtools/grfmgr.hxx>
 #include <svx/XPropertyEntry.hxx>
 
+#include <limits>
+
 class Color;
 class Bitmap;
 class VirtualDevice;
@@ -218,7 +220,7 @@ public:
     XPropertyListType Type() const { return meType; }
     long Count() const;
 
-    void Insert(XPropertyEntry* pEntry, long nIndex = CONTAINER_APPEND);
+    void Insert(XPropertyEntry* pEntry, long nIndex = ::std::numeric_limits<long>::max());
     XPropertyEntry* Replace(XPropertyEntry* pEntry, long nIndex);
     XPropertyEntry* Remove(long nIndex);
 

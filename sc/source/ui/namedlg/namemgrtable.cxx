@@ -105,7 +105,7 @@ ScRangeManagerTable::~ScRangeManagerTable()
 
 void ScRangeManagerTable::addEntry(const ScRangeNameLine& rLine, bool bSetCurEntry)
 {
-    SvTreeListEntry* pEntry = InsertEntryToColumn( createEntryString(rLine), LIST_APPEND, 0xffff);
+    SvTreeListEntry* pEntry = InsertEntryToColumn( createEntryString(rLine), TREELIST_APPEND, 0xffff);
     if (bSetCurEntry)
         SetCurEntry(pEntry);
 }

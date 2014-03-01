@@ -87,7 +87,7 @@ public:
     UnoTreeListBoxImpl( TreeControlPeer* pPeer, Window* pParent, WinBits nWinStyle );
     ~UnoTreeListBoxImpl();
 
-    sal_uInt32 insert( SvTreeListEntry* pEntry,SvTreeListEntry* pParent,sal_uLong nPos=LIST_APPEND );
+    sal_uInt32 insert( SvTreeListEntry* pEntry,SvTreeListEntry* pParent,sal_uLong nPos=TREELIST_APPEND );
 
     virtual void    RequestingChildren( SvTreeListEntry* pParent );
 
@@ -230,7 +230,7 @@ void TreeControlPeer::SetWindow( Window* pWindow )
 
 
 
-UnoTreeListEntry* TreeControlPeer::createEntry( const Reference< XTreeNode >& xNode, UnoTreeListEntry* pParent, sal_uLong nPos /* = LIST_APPEND */ )
+UnoTreeListEntry* TreeControlPeer::createEntry( const Reference< XTreeNode >& xNode, UnoTreeListEntry* pParent, sal_uLong nPos /* = TREELIST_APPEND */ )
 {
     UnoTreeListEntry* pEntry = 0;
     if( mpTreeImpl )
@@ -437,7 +437,7 @@ void TreeControlPeer::addNode( UnoTreeListBoxImpl& rTree, const Reference< XTree
 {
     if( xNode.is() )
     {
-        UnoTreeListEntry* pEntry = createEntry( xNode, pParentEntry, LIST_APPEND );
+        UnoTreeListEntry* pEntry = createEntry( xNode, pParentEntry, TREELIST_APPEND );
         const sal_Int32 nChildCount = xNode->getChildCount();
         for( sal_Int32 nChild = 0; nChild < nChildCount; nChild++ )
             addNode( rTree, xNode->getChildAt( nChild ), pEntry );
@@ -1073,7 +1073,7 @@ void TreeControlPeer::updateNode( UnoTreeListBoxImpl& rTree, const Reference< XT
         {
             Reference< XTreeNode > xParentNode( xNode->getParent() );
             UnoTreeListEntry* pParentEntry = 0;
-            sal_uLong nChild = LIST_APPEND;
+            sal_uLong nChild = TREELIST_APPEND;
 
             if( xParentNode.is() )
             {

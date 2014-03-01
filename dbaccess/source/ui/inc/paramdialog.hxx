@@ -60,7 +60,7 @@ namespace dbaui
         OKButton        m_aOKBtn;
         CancelButton    m_aCancelBtn;
 
-        sal_uInt16          m_nCurrentlySelected;
+        sal_Int32       m_nCurrentlySelected;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >
                         m_xParams;

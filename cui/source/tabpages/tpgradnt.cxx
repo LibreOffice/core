@@ -151,8 +151,8 @@ void SvxGradientTabPage::Construct()
 
 void SvxGradientTabPage::ActivatePage( const SfxItemSet&  )
 {
-    sal_uInt16 nPos;
-    sal_uInt16 nCount;
+    sal_Int32 nPos;
+    sal_Int32 nCount;
 
     if( nDlgType == 0 ) // area dialog
     {
@@ -252,7 +252,7 @@ long SvxGradientTabPage::CheckChanges_Impl()
                           (sal_uInt16) m_pMtrColorFrom->GetValue(),
                           (sal_uInt16) m_pMtrColorTo->GetValue() );
 
-    sal_uInt16 nPos = m_pLbGradients->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLbGradients->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         XGradient aGradient = pGradientList->GetGradient( nPos )->GetGradient();
@@ -314,7 +314,7 @@ sal_Bool SvxGradientTabPage::FillItemSet( SfxItemSet& rSet )
 
         XGradient*  pXGradient = NULL;
         OUString      aString;
-        sal_uInt16      nPos = m_pLbGradients->GetSelectEntryPos();
+        sal_Int32      nPos = m_pLbGradients->GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             pXGradient = new XGradient( pGradientList->GetGradient( nPos )->GetGradient() );
@@ -509,7 +509,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl)
 
 IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl)
 {
-    sal_uInt16 nPos = m_pLbGradients->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLbGradients->GetSelectEntryPos();
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -579,7 +579,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl)
 
 IMPL_LINK_NOARG(SvxGradientTabPage, ClickDeleteHdl_Impl)
 {
-    sal_uInt16 nPos = m_pLbGradients->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLbGradients->GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -798,7 +798,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ChangeGradientHdl_Impl)
         XGradientStyle eXGS = pGradient->GetGradientStyle();
 
         m_pLbGradientType->SelectEntryPos(
-            sal::static_int_cast< sal_uInt16 >( eXGS ) );
+            sal::static_int_cast< sal_Int32 >( eXGS ) );
         // if the entry is not in the listbox,
         // colors are added temporarily
         m_pLbColorFrom->SetNoSelection();

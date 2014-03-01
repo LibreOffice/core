@@ -231,7 +231,7 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
     }
 
     // select color in the list or add it as a user color
-    sal_uInt16 nSelPos = m_pLineColorBox->GetEntryPos( pFtnInfo->GetLineColor() );
+    sal_Int32 nSelPos = m_pLineColorBox->GetEntryPos( pFtnInfo->GetLineColor() );
     if( nSelPos == LISTBOX_ENTRY_NOTFOUND )
         nSelPos = m_pLineColorBox->InsertEntry( pFtnInfo->GetLineColor(),
                 OUString( SW_RES( RID_SVXSTR_COLOR_USER ) ) );
@@ -241,7 +241,7 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
     m_pLineTypeBox->SetColor( pFtnInfo->GetLineColor() );
 
     // position
-    m_pLinePosBox->SelectEntryPos( static_cast< sal_uInt16 >(pFtnInfo->GetAdj()) );
+    m_pLinePosBox->SelectEntryPos( static_cast< sal_Int32 >(pFtnInfo->GetAdj()) );
 
         // width
     Fraction aTmp( 100, 1 );

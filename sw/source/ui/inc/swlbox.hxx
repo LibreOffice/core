@@ -40,10 +40,10 @@ class SW_DLLPUBLIC SwBoxEntry
     sal_Bool    bNew : 1;
 
     OUString    aName;
-    sal_uInt16  nId;
+    sal_Int32   nId;
 
 public:
-    SwBoxEntry(const OUString& aName, sal_uInt16 nId=0);
+    SwBoxEntry(const OUString& aName, sal_Int32 nId=0);
     SwBoxEntry(const SwBoxEntry& rOrg);
     SwBoxEntry();
 
@@ -70,15 +70,15 @@ public:
     ~SwComboBox();
 
     void                    InsertSwEntry(const SwBoxEntry&);
-    virtual sal_uInt16      InsertEntry(const OUString& rStr, sal_uInt16 = 0) SAL_OVERRIDE;
+    virtual sal_Int32       InsertEntry(const OUString& rStr, sal_Int32 = 0) SAL_OVERRIDE;
 
-    virtual void            RemoveEntryAt(sal_uInt16 nPos) SAL_OVERRIDE;
+    virtual void            RemoveEntryAt(sal_Int32 nPos) SAL_OVERRIDE;
 
-    sal_uInt16              GetSwEntryPos(const SwBoxEntry& rEntry) const;
-    const SwBoxEntry&       GetSwEntry(sal_uInt16) const;
+    sal_Int32               GetSwEntryPos(const SwBoxEntry& rEntry) const;
+    const SwBoxEntry&       GetSwEntry(sal_Int32) const;
 
-    sal_uInt16                  GetRemovedCount() const;
-    const SwBoxEntry&       GetRemovedEntry(sal_uInt16 nPos) const;
+    sal_Int32               GetRemovedCount() const;
+    const SwBoxEntry&       GetRemovedEntry(sal_Int32 nPos) const;
 };
 
 #endif // INCLUDED_SW_SOURCE_UI_INC_SWLBOX_HXX

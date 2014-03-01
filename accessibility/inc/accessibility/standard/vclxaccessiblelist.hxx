@@ -152,10 +152,10 @@ protected:
     /// Index in parent.  This is settable from the outside.
     sal_Int32   m_nIndexInParent;
     sal_Int32   m_nLastTopEntry;
-    sal_uInt16      m_nLastSelectedPos;
+    sal_Int32   m_nLastSelectedPos;
     bool        m_bDisableProcessEvent;
     bool        m_bVisible;
-    sal_uInt16  m_nCurSelectedPos;
+    sal_Int32   m_nCurSelectedPos;
 
 
     /// The currently selected item.

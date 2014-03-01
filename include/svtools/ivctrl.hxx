@@ -283,7 +283,7 @@ public:
 
     SvxIconChoiceCtrlEntry* InsertEntry( const OUString& rText,
                                          const Image& rImage,
-                                         sal_uLong nPos = LIST_APPEND,
+                                         sal_uLong nPos = CONTAINER_APPEND,
                                          const Point* pPos = 0,
                                          sal_uInt16 nFlags = 0
                                        );

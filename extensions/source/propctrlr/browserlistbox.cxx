@@ -674,7 +674,7 @@ namespace pcr
 
     sal_uInt16 OBrowserListBox::GetPropertyPos( const OUString& _rEntryName ) const
     {
-        sal_uInt16 nRet = LISTBOX_ENTRY_NOTFOUND;
+        sal_uInt16 nRet = EDITOR_LIST_ENTRY_NOTFOUND;
         for ( ListBoxLines::const_iterator linePos = m_aLines.begin();
               linePos != m_aLines.end();
               ++linePos

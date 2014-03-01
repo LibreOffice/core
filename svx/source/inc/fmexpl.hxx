@@ -386,7 +386,7 @@ namespace svxform
         void ClearBranch( FmFormData* pParentData );
         void UpdateContent( FmFormShell* pNewShell );
 
-        void Insert( FmEntryData* pEntryData, sal_uLong nRelPos = LIST_APPEND,
+        void Insert( FmEntryData* pEntryData, sal_uLong nRelPos = CONTAINER_APPEND,
                                               sal_Bool bAlterModel = sal_False );
         void Remove( FmEntryData* pEntryData, sal_Bool bAlterModel = sal_False );
 
@@ -455,7 +455,7 @@ namespace svxform
         void            UpdateContent();
         FmControlData*  NewControl( const OUString& rServiceName, SvTreeListEntry* pParentEntry, sal_Bool bEditName = sal_True );
         void            NewForm( SvTreeListEntry* pParentEntry );
-        SvTreeListEntry*    Insert( FmEntryData* pEntryData, sal_uLong nRelPos=LIST_APPEND );
+        SvTreeListEntry*    Insert( FmEntryData* pEntryData, sal_uLong nRelPos=TREELIST_APPEND );
         void            Remove( FmEntryData* pEntryData );
 
 

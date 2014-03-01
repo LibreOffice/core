@@ -679,7 +679,7 @@ bool SdNavigatorWin::InsertFile(const OUString& rFileName)
 
 void SdNavigatorWin::RefreshDocumentLB( const OUString* pDocName )
 {
-    sal_uInt16 nPos = 0;
+    sal_Int32 nPos = 0;
 
     if( pDocName )
     {

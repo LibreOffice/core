@@ -60,7 +60,7 @@ static const HorJustConnection::MapEntryType s_pHorJustMap[] =
     { ALIGNDLG_HORALIGN_BLOCK,  SVX_HOR_JUSTIFY_BLOCK       },
     { ALIGNDLG_HORALIGN_FILL,   SVX_HOR_JUSTIFY_REPEAT      },
     { ALIGNDLG_HORALIGN_DISTRIBUTED, SVX_HOR_JUSTIFY_BLOCK  },
-    { LISTBOX_ENTRY_NOTFOUND,   SVX_HOR_JUSTIFY_STANDARD    }
+    { WRAPPER_LISTBOX_ENTRY_NOTFOUND,   SVX_HOR_JUSTIFY_STANDARD    }
 };
 
 // vertical alignment ---------------------------------------------------------
@@ -76,7 +76,7 @@ static const VerJustConnection::MapEntryType s_pVerJustMap[] =
     { ALIGNDLG_VERALIGN_BOTTOM, SVX_VER_JUSTIFY_BOTTOM      },
     { ALIGNDLG_VERALIGN_BLOCK,  SVX_VER_JUSTIFY_BLOCK       },
     { ALIGNDLG_VERALIGN_DISTRIBUTED, SVX_VER_JUSTIFY_BLOCK  },
-    { LISTBOX_ENTRY_NOTFOUND,   SVX_VER_JUSTIFY_STANDARD    }
+    { WRAPPER_LISTBOX_ENTRY_NOTFOUND,   SVX_VER_JUSTIFY_STANDARD    }
 };
 
 // cell rotate mode -----------------------------------------------------------
@@ -89,7 +89,7 @@ static const RotateModeConnection::MapEntryType s_pRotateModeMap[] =
     { IID_BOTTOMLOCK,           SVX_ROTATE_MODE_BOTTOM      },
     { IID_TOPLOCK,              SVX_ROTATE_MODE_TOP         },
     { IID_CELLLOCK,             SVX_ROTATE_MODE_STANDARD    },
-    { VALUESET_ITEM_NOTFOUND,   SVX_ROTATE_MODE_STANDARD    }
+    { WRAPPER_VALUESET_ITEM_NOTFOUND,   SVX_ROTATE_MODE_STANDARD    }
 };
 
 

@@ -898,7 +898,7 @@ sal_uLong SvTreeList::Insert( SvTreeListEntry* pEntry,SvTreeListEntry* pParent,s
         rList.push_back(pEntry);
 
     nEntryCount++;
-    if (nPos != ULONG_MAX && (nPos != (rList.size()-1)))
+    if (nPos != TREELIST_APPEND && (nPos != (rList.size()-1)))
         SetListPositions(rList);
     else
         pEntry->nListPos = rList.size()-1;
@@ -1525,7 +1525,7 @@ void SvTreeList::ResortChildren( SvTreeListEntry* pParent )
     for (; it != itEnd; ++it)
     {
         SvTreeListEntry* p = *it;
-        sal_uLong nListPos = ULONG_MAX;
+        sal_uLong nListPos = TREELIST_APPEND;
         GetInsertionPos(p, pParent, nListPos);
         if (nListPos < pParent->maChildren.size())
         {
@@ -1550,7 +1550,7 @@ void SvTreeList::GetInsertionPos( SvTreeListEntry* pEntry, SvTreeListEntry* pPar
     if( eSortMode == SortNone )
         return;
 
-    rPos = ULONG_MAX;
+    rPos = TREELIST_ENTRY_NOTFOUND;
     const SvTreeListEntries& rChildList = GetChildList(pParent);
 
     if (!rChildList.empty())
@@ -1581,7 +1581,7 @@ void SvTreeList::GetInsertionPos( SvTreeListEntry* pEntry, SvTreeListEntry* pPar
         if( nCompare != 0 )
         {
             if (i > static_cast<long>(rChildList.size()-1)) // not found, end of list
-                rPos = ULONG_MAX;
+                rPos = TREELIST_ENTRY_NOTFOUND;
             else
                 rPos = i;              // not found, middle of list
         }

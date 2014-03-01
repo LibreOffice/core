@@ -22,7 +22,6 @@
 #include <svtools/treelistbox.hxx>
 #include <svtools/svlbitm.hxx>
 
-#include <vcl/lstbox.hxx>
 #include <svx/svxdllapi.h>
 
 // class SvxCheckListBox -------------------------------------------------
@@ -51,23 +50,23 @@ public:
     ~SvxCheckListBox();
 
     void            InsertEntry         ( const OUString& rStr,
-                                          sal_uInt16 nPos = LISTBOX_APPEND,
+                                          sal_uLong  nPos = TREELIST_APPEND,
                                           void* pUserData = NULL,
                                           SvLBoxButtonKind eButtonKind =
                                               SvLBoxButtonKind_enabledCheckbox );
-    void            RemoveEntry         ( sal_uInt16 nPos );
+    void            RemoveEntry         ( sal_uLong  nPos );
 
-    void            SelectEntryPos      ( sal_uInt16 nPos, sal_Bool bSelect = sal_True );
-    sal_uInt16      GetSelectEntryPos   () const;
+    void            SelectEntryPos      ( sal_uLong  nPos, sal_Bool bSelect = sal_True );
+    sal_uLong       GetSelectEntryPos   () const;
 
-    OUString        GetText             ( sal_uInt16 nPos ) const;
-    sal_uInt16      GetCheckedEntryCount() const;
-    void            CheckEntryPos       ( sal_uInt16 nPos, sal_Bool bCheck = sal_True );
-    sal_Bool        IsChecked           ( sal_uInt16 nPos ) const;
+    OUString        GetText             ( sal_uLong  nPos ) const;
+    sal_uLong       GetCheckedEntryCount() const;
+    void            CheckEntryPos       ( sal_uLong  nPos, sal_Bool bCheck = sal_True );
+    sal_Bool        IsChecked           ( sal_uLong  nPos ) const;
     void            ToggleCheckButton   ( SvTreeListEntry* pEntry );
 
-    void*           SetEntryData        ( sal_uInt16 nPos, void* pNewData );
-    void*           GetEntryData        ( sal_uInt16 nPos ) const;
+    void*           SetEntryData        ( sal_uLong  nPos, void* pNewData );
+    void*           GetEntryData        ( sal_uLong  nPos ) const;
 
     virtual void    MouseButtonDown     ( const MouseEvent& rMEvt );
     virtual void    KeyInput            ( const KeyEvent& rKEvt );

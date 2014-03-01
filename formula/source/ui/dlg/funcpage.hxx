@@ -89,15 +89,15 @@ public:
 
                     FuncPage( Window* pParent,const IFunctionManager* _pFunctionManager);
 
-    void            SetCategory(sal_uInt16 nCat);
-    void            SetFunction(sal_uInt16 nFunc);
+    void            SetCategory(sal_Int32  nCat);
+    void            SetFunction(sal_Int32  nFunc);
     void            SetFocus();
-    sal_uInt16          GetCategory();
-    sal_uInt16          GetFunction();
-    sal_uInt16          GetFunctionEntryCount();
+    sal_Int32       GetCategory();
+    sal_Int32       GetFunction();
+    sal_Int32       GetFunctionEntryCount();
 
-    sal_uInt16          GetFuncPos(const IFunctionDescription* _pDesc);
-    const IFunctionDescription* GetFuncDesc( sal_uInt16 nPos ) const;
+    sal_Int32       GetFuncPos(const IFunctionDescription* _pDesc);
+    const IFunctionDescription* GetFuncDesc( sal_Int32  nPos ) const;
     OUString        GetSelFunctionName() const;
 
     void            SetDoubleClickHdl( const Link& rLink ) { aDoubleClickLink = rLink; }

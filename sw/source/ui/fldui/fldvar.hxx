@@ -84,7 +84,7 @@ class SwFldVarPage : public SwFldPage
     DECL_LINK(SeparatorHdl, void * = 0);
 
     void                UpdateSubType();
-    sal_uInt16              FillFormatLB(sal_uInt16 nTypeId);
+    sal_Int32           FillFormatLB(sal_uInt16 nTypeId);
 
 protected:
     virtual sal_uInt16      GetGroup();

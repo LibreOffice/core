@@ -77,7 +77,7 @@ sal_Bool ScRedlineOptionsTabPage::FillItemSet( SfxItemSet& /* rSet */ )
     ScAppOptions aAppOptions=SC_MOD()->GetAppOptions();
 
     sal_uLong nNew=0;
-    sal_uInt16 nPos=0;
+    sal_Int32 nPos=0;
 
     nPos = m_pContentColorLB->GetSelectEntryPos();
     if (nPos != LISTBOX_ENTRY_NOTFOUND)

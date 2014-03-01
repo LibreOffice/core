@@ -385,7 +385,7 @@ namespace svxform
                     {
                         ItemNode* pNode = new ItemNode( xChild );
                         SvTreeListEntry* pEntry = m_aItemList.InsertEntry(
-                            sName, aExpImg, aCollImg, _pParent, sal_False, LIST_APPEND, pNode );
+                            sName, aExpImg, aCollImg, _pParent, sal_False, TREELIST_APPEND, pNode );
                         if ( xChild->hasAttributes() )
                         {
                             Reference< css::xml::dom::XNamedNodeMap > xMap = xChild->getAttributes();
@@ -401,7 +401,7 @@ namespace svxform
                                         m_xUIHelper->getNodeDisplayName( xAttr, bShowDetails );
                                     m_aItemList.InsertEntry(
                                         sAttrName, aExpImg, aCollImg,
-                                        pEntry, sal_False, LIST_APPEND, pNode );
+                                        pEntry, sal_False, TREELIST_APPEND, pNode );
                                 }
                             }
                         }
@@ -763,7 +763,7 @@ namespace svxform
             DBG_UNHANDLED_EXCEPTION();
         }
         return m_aItemList.InsertEntry(
-            sName, aImage, aImage, pParent, sal_False, LIST_APPEND, _pNewNode );
+            sName, aImage, aImage, pParent, sal_False, TREELIST_APPEND, _pNewNode );
     }
 
 
@@ -782,7 +782,7 @@ namespace svxform
             {
                 // ID
                 _rEntry->getPropertyValue( PN_SUBMISSION_ID ) >>= sTemp;
-                pEntry = m_aItemList.InsertEntry( sTemp, aImage, aImage, NULL, sal_False, LIST_APPEND, pNode );
+                pEntry = m_aItemList.InsertEntry( sTemp, aImage, aImage, NULL, sal_False, TREELIST_APPEND, pNode );
                 // Action
                 _rEntry->getPropertyValue( PN_SUBMISSION_ACTION ) >>= sTemp;
                 OUString sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_ACTION );
@@ -826,7 +826,7 @@ namespace svxform
                 _rEntry->getPropertyValue( PN_BINDING_EXPR ) >>= sTemp;
                 sName += sTemp;
                 pEntry = m_aItemList.InsertEntry(
-                    sName, aImage, aImage, NULL, sal_False, LIST_APPEND, pNode );
+                    sName, aImage, aImage, NULL, sal_False, TREELIST_APPEND, pNode );
             }
             catch ( Exception& )
             {
@@ -1140,7 +1140,7 @@ namespace svxform
 
                                     ItemNode* pNode = new ItemNode( xPropSet );
                                     m_aItemList.InsertEntry(
-                                        sEntry, aImage1, aImage2, NULL, sal_False, LIST_APPEND, pNode );
+                                        sEntry, aImage1, aImage2, NULL, sal_False, TREELIST_APPEND, pNode );
                                 }
                             }
                         }
@@ -1425,7 +1425,7 @@ namespace svxform
 
     IMPL_LINK( DataNavigatorWindow, ModelSelectHdl, ListBox *, pBox )
     {
-        sal_uInt16 nPos = m_aModelsBox.GetSelectEntryPos();
+        sal_Int32 nPos = m_aModelsBox.GetSelectEntryPos();
         // pBox == NULL, if you want to force a new fill.
         if ( nPos != m_nLastSelectedPos || !pBox )
         {
@@ -1442,7 +1442,7 @@ namespace svxform
     {
         bool bIsDocModified = false;
         Reference< css::xforms::XFormsUIHelper1 > xUIHelper;
-        sal_uInt16 nSelectedPos = m_aModelsBox.GetSelectEntryPos();
+        sal_Int32 nSelectedPos = m_aModelsBox.GetSelectEntryPos();
         OUString sSelectedModel( m_aModelsBox.GetEntry( nSelectedPos ) );
         Reference< css::xforms::XModel > xModel;
         try
@@ -1498,7 +1498,7 @@ namespace svxform
                                         OUString( "ExternalData" ),
                                         makeAny( sal_Bool( !bDocumentData ) ) );
 
-                                    sal_uInt16 nNewPos = m_aModelsBox.InsertEntry( sNewName );
+                                    sal_Int32 nNewPos = m_aModelsBox.InsertEntry( sNewName );
                                     m_aModelsBox.SelectEntryPos( nNewPos );
                                     ModelSelectHdl( &m_aModelsBox );
                                     bIsDocModified = true;
@@ -2713,7 +2713,7 @@ namespace svxform
                         OUString sTemp;
                         if ( m_xTempBinding->getPropertyValue( PN_BINDING_TYPE ) >>= sTemp )
                         {
-                            sal_uInt16 nPos = m_pDataTypeLB->GetEntryPos( sTemp );
+                            sal_Int32 nPos = m_pDataTypeLB->GetEntryPos( sTemp );
                             if ( LISTBOX_ENTRY_NOTFOUND == nPos )
                                 nPos = m_pDataTypeLB->InsertEntry( sTemp );
                             m_pDataTypeLB->SelectEntryPos( nPos );
@@ -3297,7 +3297,7 @@ namespace svxform
 
                 m_xSubmission->getPropertyValue( PN_SUBMISSION_METHOD ) >>= sTemp;
                 sTemp = m_aMethodString.toUI( sTemp );
-                sal_uInt16 nPos = m_pMethodLB->GetEntryPos( sTemp );
+                sal_Int32 nPos = m_pMethodLB->GetEntryPos( sTemp );
                 if ( LISTBOX_ENTRY_NOTFOUND == nPos )
                     nPos = m_pMethodLB->InsertEntry( sTemp );
                 m_pMethodLB->SelectEntryPos( nPos );

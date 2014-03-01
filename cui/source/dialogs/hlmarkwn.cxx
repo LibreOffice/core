@@ -433,7 +433,7 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
                         pEntry = maLbTree.InsertEntry ( aStrDisplayname,
                                                         aBmp, aBmp,
                                                         pParentEntry,
-                                                        sal_False, LIST_APPEND,
+                                                        sal_False, TREELIST_APPEND,
                                                         (void*)pData );
                         nEntries++;
                     }
@@ -442,7 +442,7 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
                         // insert Displayname into treelist without bitmaps
                         pEntry = maLbTree.InsertEntry ( aStrDisplayname,
                                                         pParentEntry,
-                                                        sal_False, LIST_APPEND,
+                                                        sal_False, TREELIST_APPEND,
                                                         (void*)pData );
                         nEntries++;
                     }
@@ -452,7 +452,7 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
                     // insert Displayname into treelist without bitmaps
                     pEntry = maLbTree.InsertEntry ( aStrDisplayname,
                                                     pParentEntry,
-                                                    sal_False, LIST_APPEND,
+                                                    sal_False, TREELIST_APPEND,
                                                     (void*)pData );
                     nEntries++;
                 }

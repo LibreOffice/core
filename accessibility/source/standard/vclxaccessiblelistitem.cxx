@@ -486,12 +486,12 @@ sal_Int32 SAL_CALL VCLXAccessibleListItem::getIndexAtPoint( const awt::Point& aP
     sal_Int32 nIndex = -1;
     if ( m_pListBoxHelper )
     {
-        sal_uInt16 nPos = LISTBOX_ENTRY_NOTFOUND;
+        sal_Int32 nPos = LISTBOX_ENTRY_NOTFOUND;
         Rectangle aItemRect = m_pListBoxHelper->GetBoundingRectangle( (sal_uInt16)m_nIndexInParent );
         Point aPnt( VCLPoint( aPoint ) );
         aPnt += aItemRect.TopLeft();
         sal_Int32 nI = m_pListBoxHelper->GetIndexForPoint( aPnt, nPos );
-        if ( nI != -1 && (sal_uInt16)m_nIndexInParent == nPos )
+        if ( nI != -1 && m_nIndexInParent == nPos )
             nIndex = nI;
     }
     return nIndex;

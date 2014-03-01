@@ -76,7 +76,7 @@ struct SvxBackgroundTable_Impl
     sal_uInt16      nCellWhich;
     sal_uInt16      nRowWhich;
     sal_uInt16      nTableWhich;
-    sal_uInt16      nActPos;
+    sal_Int32       nActPos;
 
     SvxBackgroundTable_Impl()
         : pCellBrush(NULL)
@@ -94,7 +94,7 @@ struct SvxBackgroundPara_Impl
     SvxBrushItem*   pParaBrush;
     SvxBrushItem*   pCharBrush;
 
-    sal_uInt16          nActPos;
+    sal_Int32           nActPos;
 
     SvxBackgroundPara_Impl()
         : pParaBrush(NULL)
@@ -534,7 +534,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
     {
         nDestValue = ((const SfxUInt16Item*)pItem)->GetValue();
         // character activated?
-        sal_uInt16 nParaSel  = m_pParaLBox->GetSelectEntryPos();
+        sal_Int32 nParaSel  = m_pParaLBox->GetSelectEntryPos();
         if(1 == nParaSel)
         {
             // then it was a "standard"-call
@@ -584,7 +584,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
     {
         if(m_pTblLBox->IsVisible())
         {
-            sal_uInt16 nValue = m_pTblLBox->GetSelectEntryPos();
+            sal_Int32 nValue = m_pTblLBox->GetSelectEntryPos();
 
             if ( pTableBck_Impl )
             {
@@ -624,7 +624,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
         }
         else
         {
-            sal_uInt16 nValue = m_pParaLBox->GetSelectEntryPos();
+            sal_Int32 nValue = m_pParaLBox->GetSelectEntryPos();
 
             if ( pParaBck_Impl )
             {
@@ -1490,7 +1490,7 @@ IMPL_LINK( SvxBackgroundTabPage, RadioClickHdl_Impl, RadioButton*, pBtn )
 
 IMPL_LINK_NOARG(SvxBackgroundTabPage, ModifyGradientHdl_Impl)
 {
-    sal_uInt16 nPos = m_pLbGradients->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLbGradients->GetSelectEntryPos();
 
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
     {
@@ -1635,7 +1635,7 @@ void SvxBackgroundTabPage::ShowParaControl(sal_Bool bCharOnly)
 
 IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox*, pBox )
 {
-    sal_uInt16 nSelPos = pBox->GetSelectEntryPos();
+    sal_Int32 nSelPos = pBox->GetSelectEntryPos();
     if( pTableBck_Impl && pTableBck_Impl->nActPos != nSelPos)
     {
         boost::scoped_ptr<SvxBrushItem> xItemHolder;
@@ -1727,7 +1727,7 @@ IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox*, pBox )
 
 IMPL_LINK( SvxBackgroundTabPage, ParaDestinationHdl_Impl, ListBox*, pBox )
 {
-    sal_uInt16 nSelPos = pBox->GetSelectEntryPos();
+    sal_Int32 nSelPos = pBox->GetSelectEntryPos();
     if( pParaBck_Impl && pParaBck_Impl->nActPos != nSelPos)
     {
         SvxBrushItem* pActItem = NULL;

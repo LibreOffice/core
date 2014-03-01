@@ -1589,7 +1589,7 @@ void SvxNumberFormatShell::GetCurrencySymbols(std::vector<OUString>& rList, bool
     delete pLanguageTable;
 }
 
-void SvxNumberFormatShell::SetCurrencySymbol(sal_uInt16 nPos)
+void SvxNumberFormatShell::SetCurrencySymbol(sal_uInt32 nPos)
 {
     const NfCurrencyTable& rCurrencyTable=SvNumberFormatter::GetTheCurrencyTable();
     sal_uInt16 nCount=rCurrencyTable.size();

@@ -518,7 +518,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
         if( !bColorEq )
             aColor.SetColor( COL_BLACK );
 
-        sal_uInt16 nSelPos = m_pLbLineColor->GetEntryPos( aColor );
+        sal_Int32 nSelPos = m_pLbLineColor->GetEntryPos( aColor );
         if( nSelPos == LISTBOX_ENTRY_NOTFOUND )
             nSelPos = m_pLbLineColor->InsertEntry( aColor, SVX_RESSTR( RID_SVXSTR_COLOR_USER ) );
 

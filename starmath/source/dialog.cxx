@@ -283,7 +283,7 @@ IMPL_LINK_INLINE_END( SmFontDialog, FontSelectHdl, ComboBox *, pComboBox )
 IMPL_LINK( SmFontDialog, FontModifyHdl, ComboBox *, pComboBox )
 {
     // if font is available in list then use it
-    sal_uInt16 nPos = pComboBox->GetEntryPos( pComboBox->GetText() );
+    sal_Int32 nPos = pComboBox->GetEntryPos( pComboBox->GetText() );
     if (COMBOBOX_ENTRY_NOTFOUND != nPos)
     {
         FontSelectHdl( pComboBox );
@@ -1516,7 +1516,7 @@ void SmSymbolDialog::DataChanged( const DataChangedEvent& rDCEvt )
 bool SmSymbolDialog::SelectSymbolSet(const OUString &rSymbolSetName)
 {
     bool    bRet = false;
-    sal_uInt16  nPos = m_pSymbolSets->GetEntryPos(rSymbolSetName);
+    sal_Int32  nPos = m_pSymbolSets->GetEntryPos(rSymbolSetName);
 
     aSymbolSetName = OUString();
     aSymbolSet.clear();
@@ -1762,7 +1762,7 @@ IMPL_LINK( SmSymDefineDialog, FontChangeHdl, ListBox *, EMPTYARG pListBox )
 IMPL_LINK( SmSymDefineDialog, SubsetChangeHdl, ListBox *, EMPTYARG pListBox )
 {
     (void) pListBox;
-    sal_uInt16 nPos = aFontsSubsetLB.GetSelectEntryPos();
+    sal_Int32 nPos = aFontsSubsetLB.GetSelectEntryPos();
     if (LISTBOX_ENTRY_NOTFOUND != nPos)
     {
         const Subset* pSubset = reinterpret_cast<const Subset*> (aFontsSubsetLB.GetEntryData( nPos ));
@@ -2144,7 +2144,7 @@ bool SmSymDefineDialog::SelectSymbolSet(ComboBox &rComboBox,
     rComboBox.SetText(aNormName);
 
     bool   bRet = false;
-    sal_uInt16 nPos = rComboBox.GetEntryPos(aNormName);
+    sal_Int32 nPos = rComboBox.GetEntryPos(aNormName);
 
     if (nPos != COMBOBOX_ENTRY_NOTFOUND)
     {
@@ -2221,7 +2221,7 @@ bool SmSymDefineDialog::SelectSymbol(ComboBox &rComboBox,
     rComboBox.SetText(aNormName);
 
     bool   bRet = false;
-    sal_uInt16 nPos = rComboBox.GetEntryPos(aNormName);
+    sal_Int32 nPos = rComboBox.GetEntryPos(aNormName);
 
     bool  bIsOld = &rComboBox == &aOldSymbols;
 
@@ -2319,7 +2319,7 @@ void SmSymDefineDialog::SetFont(const OUString &rFontName, const OUString &rStyl
 bool SmSymDefineDialog::SelectFont(const OUString &rFontName, bool bApplyFont)
 {
     bool   bRet = false;
-    sal_uInt16 nPos = aFonts.GetEntryPos(rFontName);
+    sal_Int32 nPos = aFonts.GetEntryPos(rFontName);
 
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
     {
@@ -2347,7 +2347,7 @@ bool SmSymDefineDialog::SelectFont(const OUString &rFontName, bool bApplyFont)
 bool SmSymDefineDialog::SelectStyle(const OUString &rStyleName, bool bApplyFont)
 {
     bool   bRet = false;
-    sal_uInt16 nPos = aStyles.GetEntryPos(rStyleName);
+    sal_Int32 nPos = aStyles.GetEntryPos(rStyleName);
 
     // if the style is not available take the first available one (if existent)
     if (nPos == COMBOBOX_ENTRY_NOTFOUND  &&  aStyles.GetEntryCount() > 0)

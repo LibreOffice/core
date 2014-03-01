@@ -263,12 +263,12 @@ namespace dbaui
         }
         else if (&m_aTravelNext == pButton)
         {
-            sal_uInt16 nCurrent = m_aAllParams.GetSelectEntryPos();
-            sal_uInt16 nCount = m_aAllParams.GetEntryCount();
-            OSL_ENSURE(nCount == m_aVisitedParams.size(), "OParameterDialog::OnButtonClicked : inconsistent lists !");
+            sal_Int32 nCurrent = m_aAllParams.GetSelectEntryPos();
+            sal_Int32 nCount = m_aAllParams.GetEntryCount();
+            OSL_ENSURE(static_cast<size_t>(nCount) == m_aVisitedParams.size(), "OParameterDialog::OnButtonClicked : inconsistent lists !");
 
             // search the next entry in list we haven't visited yet
-            sal_uInt16 nNext = (nCurrent + 1) % nCount;
+            sal_Int32 nNext = (nCurrent + 1) % nCount;
             while ((nNext != nCurrent) && ( m_aVisitedParams[nNext] & EF_VISITED ))
                 nNext = (nNext + 1) % nCount;
 
@@ -308,14 +308,14 @@ namespace dbaui
         }
 
         // initialize the controls with the new values
-        sal_uInt16 nSelected = m_aAllParams.GetSelectEntryPos();
+        sal_Int32 nSelected = m_aAllParams.GetSelectEntryPos();
         OSL_ENSURE(nSelected != LISTBOX_ENTRY_NOTFOUND, "OParameterDialog::OnEntrySelected : no current entry !");
 
         m_aParam.SetText(::comphelper::getString(m_aFinalValues[nSelected].Value));
         m_nCurrentlySelected = nSelected;
 
         // with this the value isn't dirty
-        OSL_ENSURE(m_nCurrentlySelected < m_aVisitedParams.size(), "OParameterDialog::OnEntrySelected : invalid current entry !");
+        OSL_ENSURE(static_cast<size_t>(m_nCurrentlySelected) < m_aVisitedParams.size(), "OParameterDialog::OnEntrySelected : invalid current entry !");
         m_aVisitedParams[m_nCurrentlySelected] &= ~EF_DIRTY;
 
         m_aResetVisitFlag.SetTimeout(1000);
@@ -329,7 +329,7 @@ namespace dbaui
         OSL_ENSURE(m_nCurrentlySelected != LISTBOX_ENTRY_NOTFOUND, "OParameterDialog::OnVisitedTimeout : invalid call !");
 
         // mark the currently selected entry as visited
-        OSL_ENSURE(m_nCurrentlySelected < m_aVisitedParams.size(), "OParameterDialog::OnVisitedTimeout : invalid entry !");
+        OSL_ENSURE(static_cast<size_t>(m_nCurrentlySelected) < m_aVisitedParams.size(), "OParameterDialog::OnVisitedTimeout : invalid entry !");
         m_aVisitedParams[m_nCurrentlySelected] |= EF_VISITED;
 
         // was it the last "not visited yet" entry ?
@@ -375,7 +375,7 @@ namespace dbaui
     IMPL_LINK(OParameterDialog, OnValueModified, Control*, /*pBox*/)
     {
         // mark the currently selected entry as dirty
-        OSL_ENSURE(m_nCurrentlySelected < m_aVisitedParams.size(), "OParameterDialog::OnValueModified : invalid entry !");
+        OSL_ENSURE(static_cast<size_t>(m_nCurrentlySelected) < m_aVisitedParams.size(), "OParameterDialog::OnValueModified : invalid entry !");
         m_aVisitedParams[m_nCurrentlySelected] |= EF_DIRTY;
 
         m_bNeedErrorOnCurrent = sal_True;

@@ -26,11 +26,11 @@
 SwBoxEntry::SwBoxEntry() :
     bModified(sal_False),
     bNew(sal_False),
-    nId(LISTBOX_APPEND)
+    nId(COMBOBOX_APPEND)
 {
 }
 
-SwBoxEntry::SwBoxEntry(const OUString& aNam, sal_uInt16 nIdx) :
+SwBoxEntry::SwBoxEntry(const OUString& aNam, sal_Int32 nIdx) :
     bModified(sal_False),
     bNew(sal_False),
     aName(aNam),
@@ -55,8 +55,8 @@ SwComboBox::SwComboBox(Window* pParent, WinBits nStyle)
 void SwComboBox::Init()
 {
     // create administration for the resource's Stringlist
-    sal_uInt16 nSize = GetEntryCount();
-    for( sal_uInt16 i=0; i < nSize; ++i )
+    sal_Int32 nSize = GetEntryCount();
+    for( sal_Int32 i=0; i < nSize; ++i )
     {
         SwBoxEntry* pTmp = new SwBoxEntry(ComboBox::GetEntry(i), i);
         aEntryLst.push_back(pTmp);
@@ -73,15 +73,15 @@ void SwComboBox::InsertSwEntry(const SwBoxEntry& rEntry)
     InsertSorted(new SwBoxEntry(rEntry));
 }
 
-sal_uInt16 SwComboBox::InsertEntry(const OUString& rStr, sal_uInt16)
+sal_Int32 SwComboBox::InsertEntry(const OUString& rStr, sal_Int32)
 {
     InsertSwEntry(SwBoxEntry(rStr));
     return 0;
 }
 
-void SwComboBox::RemoveEntryAt(sal_uInt16 const nPos)
+void SwComboBox::RemoveEntryAt(sal_Int32 const nPos)
 {
-    if(nPos >= aEntryLst.size())
+    if(nPos < 0 || static_cast<size_t>(nPos) >= aEntryLst.size())
         return;
 
     // Remove old element
@@ -101,27 +101,27 @@ void SwComboBox::RemoveEntryAt(sal_uInt16 const nPos)
     }
 }
 
-sal_uInt16 SwComboBox::GetSwEntryPos(const SwBoxEntry& rEntry) const
+sal_Int32 SwComboBox::GetSwEntryPos(const SwBoxEntry& rEntry) const
 {
     return ComboBox::GetEntryPos(rEntry.aName);
 }
 
-const SwBoxEntry& SwComboBox::GetSwEntry(sal_uInt16 const nPos) const
+const SwBoxEntry& SwComboBox::GetSwEntry(sal_Int32 const nPos) const
 {
-    if(nPos < aEntryLst.size())
+    if(0 <= nPos && static_cast<size_t>(nPos) < aEntryLst.size())
         return aEntryLst[nPos];
 
     return aDefault;
 }
 
-sal_uInt16 SwComboBox::GetRemovedCount() const
+sal_Int32 SwComboBox::GetRemovedCount() const
 {
-    return aDelEntryLst.size();
+    return static_cast<sal_Int32>(aDelEntryLst.size());
 }
 
-const SwBoxEntry& SwComboBox::GetRemovedEntry(sal_uInt16 nPos) const
+const SwBoxEntry& SwComboBox::GetRemovedEntry(sal_Int32 nPos) const
 {
-    if(nPos < aDelEntryLst.size())
+    if(0 <= nPos && static_cast<size_t>(nPos) < aDelEntryLst.size())
         return aDelEntryLst[nPos];
 
     return aDefault;
@@ -130,7 +130,7 @@ const SwBoxEntry& SwComboBox::GetRemovedEntry(sal_uInt16 nPos) const
 void SwComboBox::InsertSorted(SwBoxEntry* pEntry)
 {
     ComboBox::InsertEntry(pEntry->aName);
-    sal_uInt16 nPos = ComboBox::GetEntryPos(pEntry->aName);
+    sal_Int32 nPos = ComboBox::GetEntryPos(pEntry->aName);
     aEntryLst.insert( aEntryLst.begin() + nPos, pEntry );
 }
 

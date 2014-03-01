@@ -187,8 +187,8 @@ private:
 
 inline void FmSearchDialog::SetActiveField(const OUString& strField)
 {
-    sal_uInt16 nInitialField = m_lbField.GetEntryPos(strField);
-    if (nInitialField == COMBOBOX_ENTRY_NOTFOUND)
+    sal_Int32 nInitialField = m_lbField.GetEntryPos(strField);
+    if (nInitialField == LISTBOX_ENTRY_NOTFOUND)
         nInitialField = 0;
     m_lbField.SelectEntryPos(nInitialField);
     LINK(this, FmSearchDialog, OnFieldSelected).Call(&m_lbField);

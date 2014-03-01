@@ -877,10 +877,10 @@ public:
                                  const SwTOXBase& rTOX );
     sal_Bool InsertGlobalDocContent( const SwGlblDocContent& rPos );
     sal_Bool DeleteGlobalDocContent( const SwGlblDocContents& rArr,
-                                sal_uInt16 nPos );
+                                size_t nPos );
     sal_Bool MoveGlobalDocContent( const SwGlblDocContents& rArr ,
-                                sal_uInt16 nFromPos, sal_uInt16 nToPos,
-                                sal_uInt16 nNewPos );
+                                size_t nFromPos, size_t nToPos,
+                                size_t nNewPos );
     sal_Bool GotoGlobalDocContent( const SwGlblDocContent& rPos );
 
     /// For Redlining.

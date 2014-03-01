@@ -87,20 +87,20 @@ class ImplEntryList
 {
 private:
     Window*         mpWindow;   ///< For getting the current locale when matching strings
-    sal_uInt16          mnLastSelected;
-    sal_uInt16          mnSelectionAnchor;
-    sal_uInt16          mnImages;
+    sal_Int32       mnLastSelected;
+    sal_Int32       mnSelectionAnchor;
+    sal_Int32       mnImages;
 
-    sal_uInt16          mnMRUCount;
-    sal_uInt16          mnMaxMRUCount;
+    sal_Int32       mnMRUCount;
+    sal_Int32       mnMaxMRUCount;
 
     Link            maSelectionChangedHdl;
     bool            mbCallSelectionChangedHdl;
     boost::ptr_vector<ImplEntryType> maEntries;
 
-    ImplEntryType*  GetEntry( sal_uInt16 nPos ) const
+    ImplEntryType*  GetEntry( sal_Int32  nPos ) const
     {
-        if (nPos >= maEntries.size())
+        if (nPos < 0 || static_cast<size_t>(nPos) >= maEntries.size())
             return NULL;
         return const_cast<ImplEntryType*>(&maEntries[nPos]);
     }
@@ -109,70 +109,70 @@ public:
                     ImplEntryList( Window* pWindow );
                     ~ImplEntryList();
 
-    sal_uInt16                  InsertEntry( sal_uInt16 nPos, ImplEntryType* pNewEntry, bool bSort );
-    void                    RemoveEntry( sal_uInt16 nPos );
-    const ImplEntryType*    GetEntryPtr( sal_uInt16 nPos ) const { return (const ImplEntryType*) GetEntry( nPos ); }
-    ImplEntryType*          GetMutableEntryPtr( sal_uInt16 nPos ) const { return GetEntry( nPos ); }
+    sal_Int32               InsertEntry( sal_Int32  nPos, ImplEntryType* pNewEntry, bool bSort );
+    void                    RemoveEntry( sal_Int32  nPos );
+    const ImplEntryType*    GetEntryPtr( sal_Int32  nPos ) const { return (const ImplEntryType*) GetEntry( nPos ); }
+    ImplEntryType*          GetMutableEntryPtr( sal_Int32  nPos ) const { return GetEntry( nPos ); }
     void                    Clear();
 
-    sal_uInt16          FindMatchingEntry( const OUString& rStr, sal_uInt16 nStart = 0, bool bForward = true, bool bLazy = true ) const;
-    sal_uInt16          FindEntry( const OUString& rStr, bool bSearchMRUArea = false ) const;
-    sal_uInt16          FindEntry( const void* pData ) const;
+    sal_Int32           FindMatchingEntry( const OUString& rStr, sal_Int32  nStart = 0, bool bForward = true, bool bLazy = true ) const;
+    sal_Int32           FindEntry( const OUString& rStr, bool bSearchMRUArea = false ) const;
+    sal_Int32           FindEntry( const void* pData ) const;
 
     /// helper: add up heights up to index nEndIndex.
     /// GetAddedHeight( 0 ) @return 0
     /// GetAddedHeight( LISTBOX_ENTRY_NOTFOUND ) @return 0
     /// GetAddedHeight( i, k ) with k > i is equivalent -GetAddedHeight( k, i )
-    long            GetAddedHeight( sal_uInt16 nEndIndex, sal_uInt16 nBeginIndex = 0, long nBeginHeight = 0 ) const;
-    long            GetEntryHeight( sal_uInt16 nPos ) const;
+    long            GetAddedHeight( sal_Int32  nEndIndex, sal_Int32  nBeginIndex = 0, long nBeginHeight = 0 ) const;
+    long            GetEntryHeight( sal_Int32  nPos ) const;
 
-    sal_uInt16          GetEntryCount() const { return (sal_uInt16)maEntries.size(); }
+    sal_Int32       GetEntryCount() const { return (sal_Int32 )maEntries.size(); }
     bool            HasImages() const { return mnImages ? true : false; }
 
-    OUString        GetEntryText( sal_uInt16 nPos ) const;
+    OUString        GetEntryText( sal_Int32  nPos ) const;
 
-    bool            HasEntryImage( sal_uInt16 nPos ) const;
-    Image           GetEntryImage( sal_uInt16 nPos ) const;
+    bool            HasEntryImage( sal_Int32  nPos ) const;
+    Image           GetEntryImage( sal_Int32  nPos ) const;
 
-    void            SetEntryData( sal_uInt16 nPos, void* pNewData );
-    void*           GetEntryData( sal_uInt16 nPos ) const;
+    void            SetEntryData( sal_Int32  nPos, void* pNewData );
+    void*           GetEntryData( sal_Int32  nPos ) const;
 
-    void            SetEntryFlags( sal_uInt16 nPos, long nFlags );
-    long            GetEntryFlags( sal_uInt16 nPos ) const;
+    void            SetEntryFlags( sal_Int32  nPos, long nFlags );
+    long            GetEntryFlags( sal_Int32  nPos ) const;
 
-    void            SelectEntry( sal_uInt16 nPos, bool bSelect );
+    void            SelectEntry( sal_Int32  nPos, bool bSelect );
 
-    sal_uInt16          GetSelectEntryCount() const;
-    OUString        GetSelectEntry( sal_uInt16 nIndex ) const;
-    sal_uInt16          GetSelectEntryPos( sal_uInt16 nIndex ) const;
-    bool            IsEntryPosSelected( sal_uInt16 nIndex ) const;
+    sal_Int32       GetSelectEntryCount() const;
+    OUString        GetSelectEntry( sal_Int32  nIndex ) const;
+    sal_Int32       GetSelectEntryPos( sal_Int32  nIndex ) const;
+    bool            IsEntryPosSelected( sal_Int32  nIndex ) const;
 
-    void            SetLastSelected( sal_uInt16 nPos )  { mnLastSelected = nPos; }
-    sal_uInt16          GetLastSelected() const { return mnLastSelected; }
+    void            SetLastSelected( sal_Int32  nPos )  { mnLastSelected = nPos; }
+    sal_Int32       GetLastSelected() const { return mnLastSelected; }
 
-    void            SetSelectionAnchor( sal_uInt16 nPos )   { mnSelectionAnchor = nPos; }
-    sal_uInt16          GetSelectionAnchor() const { return mnSelectionAnchor; }
+    void            SetSelectionAnchor( sal_Int32  nPos )   { mnSelectionAnchor = nPos; }
+    sal_Int32       GetSelectionAnchor() const { return mnSelectionAnchor; }
 
 
     void            SetSelectionChangedHdl( const Link& rLnk )  { maSelectionChangedHdl = rLnk; }
     void            SetCallSelectionChangedHdl( bool bCall )    { mbCallSelectionChangedHdl = bCall; }
 
-    void            SetMRUCount( sal_uInt16 n ) { mnMRUCount = n; }
-    sal_uInt16          GetMRUCount() const     { return mnMRUCount; }
+    void            SetMRUCount( sal_Int32  n ) { mnMRUCount = n; }
+    sal_Int32       GetMRUCount() const     { return mnMRUCount; }
 
-    void            SetMaxMRUCount( sal_uInt16 n )  { mnMaxMRUCount = n; }
-    sal_uInt16          GetMaxMRUCount() const      { return mnMaxMRUCount; }
+    void            SetMaxMRUCount( sal_Int32  n )  { mnMaxMRUCount = n; }
+    sal_Int32       GetMaxMRUCount() const      { return mnMaxMRUCount; }
 
     /** An Entry is selectable if its mnFlags does not have the
         LISTBOX_ENTRY_FLAG_DISABLE_SELECTION flag set. */
-    bool            IsEntrySelectable( sal_uInt16 nPos ) const;
+    bool            IsEntrySelectable( sal_Int32  nPos ) const;
 
     /** @return the first entry found from the given position nPos that is selectable
         or LISTBOX_ENTRY_NOTFOUND if non is found. If the entry at nPos is not selectable,
         it returns the first selectable entry after nPos if bForward is true and the
         first selectable entry after nPos is bForward is false.
         */
-    sal_uInt16          FindFirstSelectable( sal_uInt16 nPos, bool bForward = true );
+    sal_Int32       FindFirstSelectable( sal_Int32  nPos, bool bForward = true );
 };
 
 class ImplListBoxWindow : public Control, public ::vcl::ISearchableStringList
@@ -193,20 +193,20 @@ private:
     long            mnMaxWidth;      ///< Maximum width of an entry
     long            mnMaxHeight;     ///< Maximum height of an entry
 
-    sal_uInt16          mnCurrentPos;    ///< Position (Focus)
-    sal_uInt16          mnTrackingSaveSelection; ///< Selection before Tracking();
+    sal_Int32       mnCurrentPos;    ///< Position (Focus)
+    sal_Int32       mnTrackingSaveSelection; ///< Selection before Tracking();
 
-    sal_uInt16          mnSeparatorPos; ///< Separator
+    sal_Int32       mnSeparatorPos; ///< Separator
 
-    sal_uInt16          mnUserDrawEntry;
+    sal_Int32       mnUserDrawEntry;
 
-    sal_uInt16      mnTop;           ///< output from line on
+    sal_Int32       mnTop;           ///< output from line on
     long            mnLeft;          ///< output from column on
     long            mnBorder;        ///< distance border - text
     long            mnTextHeight;    ///< text height
     ProminentEntry  meProminentType; ///< where is the "prominent" entry
 
-    sal_uInt16          mnSelectModifier;   ///< Modifiers
+    sal_uInt16      mnSelectModifier;   ///< Modifiers
 
     /// bitfield
     bool mbHasFocusRect : 1;
@@ -250,8 +250,8 @@ protected:
     virtual void    GetFocus();
     virtual void    LoseFocus();
 
-    bool        SelectEntries( sal_uInt16 nSelect, LB_EVENT_TYPE eLET, bool bShift = false, bool bCtrl = false, bool bSelectPosChange = false );
-    void            ImplPaint( sal_uInt16 nPos, bool bErase = false, bool bLayout = false );
+    bool            SelectEntries( sal_Int32  nSelect, LB_EVENT_TYPE eLET, bool bShift = false, bool bCtrl = false, bool bSelectPosChange = false );
+    void            ImplPaint( sal_Int32  nPos, bool bErase = false, bool bLayout = false );
     void            ImplDoPaint( const Rectangle& rRect, bool bLayout = false );
     void            ImplCalcMetrics();
     void            ImplUpdateEntryMetrics( ImplEntryType& rEntry );
@@ -272,32 +272,32 @@ public:
 
     ImplEntryList*  GetEntryList() const { return mpEntryList; }
 
-    sal_uInt16          InsertEntry( sal_uInt16 nPos, ImplEntryType* pNewEntry );
-    void            RemoveEntry( sal_uInt16 nPos );
+    sal_Int32       InsertEntry( sal_Int32  nPos, ImplEntryType* pNewEntry );
+    void            RemoveEntry( sal_Int32  nPos );
     void            Clear();
     void            ResetCurrentPos()               { mnCurrentPos = LISTBOX_ENTRY_NOTFOUND; }
-    sal_uInt16          GetCurrentPos() const           { return mnCurrentPos; }
-    sal_uInt16          GetDisplayLineCount() const;
-    void            SetEntryFlags( sal_uInt16 nPos, long nFlags );
+    sal_Int32       GetCurrentPos() const           { return mnCurrentPos; }
+    sal_uInt16      GetDisplayLineCount() const;
+    void            SetEntryFlags( sal_Int32  nPos, long nFlags );
 
-    void            DrawEntry( sal_uInt16 nPos, bool bDrawImage, bool bDrawText, bool bDrawTextAtImagePos = false, bool bLayout = false );
+    void            DrawEntry( sal_Int32  nPos, bool bDrawImage, bool bDrawText, bool bDrawTextAtImagePos = false, bool bLayout = false );
 
-    void            SelectEntry( sal_uInt16 nPos, bool bSelect );
+    void            SelectEntry( sal_Int32  nPos, bool bSelect );
     void            DeselectAll();
-    sal_uInt16          GetEntryPosForPoint( const Point& rPoint ) const;
-    sal_uInt16          GetLastVisibleEntry() const;
+    sal_Int32       GetEntryPosForPoint( const Point& rPoint ) const;
+    sal_Int32       GetLastVisibleEntry() const;
 
     bool            ProcessKeyInput( const KeyEvent& rKEvt );
 
-    void            SetTopEntry( sal_uInt16 nTop );
-    sal_uInt16          GetTopEntry() const             { return mnTop; }
+    void            SetTopEntry( sal_Int32  nTop );
+    sal_Int32       GetTopEntry() const             { return mnTop; }
     /** ShowProminentEntry will set the entry correspoding to nEntryPos
         either at top or in the middle depending on the chosen style*/
-    void            ShowProminentEntry( sal_uInt16 nEntryPos );
+    void            ShowProminentEntry( sal_Int32  nEntryPos );
     void            SetProminentEntryType( ProminentEntry eType ) { meProminentType = eType; }
     ProminentEntry  GetProminentEntryType() const { return meProminentType; }
     using Window::IsVisible;
-    bool            IsVisible( sal_uInt16 nEntry ) const;
+    bool            IsVisible( sal_Int32  nEntry ) const;
 
     long            GetLeftIndent() const           { return mnLeft; }
     void            SetLeftIndent( long n );
@@ -306,8 +306,8 @@ public:
     void            AllowGrabFocus( bool b )        { mbGrabFocus = b; }
     bool            IsGrabFocusAllowed() const      { return mbGrabFocus; }
 
-    void            SetSeparatorPos( sal_uInt16 n )     { mnSeparatorPos = n; }
-    sal_uInt16          GetSeparatorPos() const         { return mnSeparatorPos; }
+    void            SetSeparatorPos( sal_Int32  n )     { mnSeparatorPos = n; }
+    sal_Int32       GetSeparatorPos() const         { return mnSeparatorPos; }
 
     void            SetTravelSelect( bool bTravelSelect ) { mbTravelSelect = bTravelSelect; }
     bool            IsTravelSelect() const          { return mbTravelSelect; }
@@ -330,7 +330,7 @@ public:
     bool            IsMouseMoveSelect() const   { return mbMouseMoveSelect||mbStackMode; }
 
     Size            CalcSize(sal_Int32 nMaxLines) const;
-    Rectangle       GetBoundingRectangle( sal_uInt16 nItem ) const;
+    Rectangle       GetBoundingRectangle( sal_Int32  nItem ) const;
 
     long            GetEntryHeight() const              { return mnMaxHeight; }
     long            GetMaxEntryWidth() const            { return mnMaxWidth; }
@@ -362,7 +362,7 @@ public:
 
     using Control::ImplInitSettings;
     void            ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
-    sal_uInt16          ImplGetTextStyle() const;
+    sal_uInt16      ImplGetTextStyle() const;
 
     /// pb: #106948# explicit mirroring for calc
     inline void     EnableMirroring()       { mbMirroring = true; }
@@ -422,30 +422,30 @@ public:
     virtual const Wallpaper& GetDisplayBackground() const;
     virtual Window*     GetPreferredKeyInputWindow();
 
-    sal_uInt16          InsertEntry( sal_uInt16 nPos, const OUString& rStr );
-    sal_uInt16          InsertEntry( sal_uInt16 nPos, const OUString& rStr, const Image& rImage );
-    void            RemoveEntry( sal_uInt16 nPos );
-    void            SetEntryData( sal_uInt16 nPos, void* pNewData ) { maLBWindow.GetEntryList()->SetEntryData( nPos, pNewData ); }
+    sal_Int32       InsertEntry( sal_Int32  nPos, const OUString& rStr );
+    sal_Int32       InsertEntry( sal_Int32  nPos, const OUString& rStr, const Image& rImage );
+    void            RemoveEntry( sal_Int32  nPos );
+    void            SetEntryData( sal_Int32  nPos, void* pNewData ) { maLBWindow.GetEntryList()->SetEntryData( nPos, pNewData ); }
     void            Clear();
 
-    void            SetEntryFlags( sal_uInt16 nPos, long nFlags );
+    void            SetEntryFlags( sal_Int32  nPos, long nFlags );
 
-    void            SelectEntry( sal_uInt16 nPos, bool bSelect );
+    void            SelectEntry( sal_Int32  nPos, bool bSelect );
     void            SetNoSelection();
     void            ResetCurrentPos()               { maLBWindow.ResetCurrentPos(); }
-    sal_uInt16          GetCurrentPos() const           { return maLBWindow.GetCurrentPos(); }
+    sal_Int32       GetCurrentPos() const           { return maLBWindow.GetCurrentPos(); }
 
     bool            ProcessKeyInput( const KeyEvent& rKEvt )    { return maLBWindow.ProcessKeyInput( rKEvt ); }
     bool            HandleWheelAsCursorTravel( const CommandEvent& rCEvt );
 
-    void            SetSeparatorPos( sal_uInt16 n )     { maLBWindow.SetSeparatorPos( n ); }
-    sal_uInt16          GetSeparatorPos() const         { return maLBWindow.GetSeparatorPos(); }
+    void            SetSeparatorPos( sal_Int32  n )     { maLBWindow.SetSeparatorPos( n ); }
+    sal_Int32       GetSeparatorPos() const         { return maLBWindow.GetSeparatorPos(); }
 
-    void            SetTopEntry( sal_uInt16 nTop )      { maLBWindow.SetTopEntry( nTop ); }
-    sal_uInt16          GetTopEntry() const             { return maLBWindow.GetTopEntry(); }
-    void            ShowProminentEntry( sal_uInt16 nPos ) { maLBWindow.ShowProminentEntry( nPos ); }
+    void            SetTopEntry( sal_Int32  nTop )      { maLBWindow.SetTopEntry( nTop ); }
+    sal_Int32       GetTopEntry() const             { return maLBWindow.GetTopEntry(); }
+    void            ShowProminentEntry( sal_Int32  nPos ) { maLBWindow.ShowProminentEntry( nPos ); }
     using Window::IsVisible;
-    bool            IsVisible( sal_uInt16 nEntry ) const { return maLBWindow.IsVisible( nEntry ); }
+    bool            IsVisible( sal_Int32  nEntry ) const { return maLBWindow.IsVisible( nEntry ); }
 
     void            SetProminentEntryType( ProminentEntry eType ) { maLBWindow.SetProminentEntryType( eType ); }
     ProminentEntry  GetProminentEntryType() const { return maLBWindow.GetProminentEntryType(); }
@@ -468,7 +468,7 @@ public:
     bool            IsReadOnly() const              { return maLBWindow.IsReadOnly(); }
 
 
-    Size            CalcSize( sal_uInt16 nMaxLines ) const              { return maLBWindow.CalcSize( nMaxLines ); }
+    Size            CalcSize( sal_Int32  nMaxLines ) const              { return maLBWindow.CalcSize( nMaxLines ); }
     long            GetEntryHeight() const          { return maLBWindow.GetEntryHeight(); }
     long            GetMaxEntryWidth() const        { return maLBWindow.GetMaxEntryWidth(); }
 
@@ -490,13 +490,13 @@ public:
     void            SetSelectionChangedHdl( const Link& rLnk )  { maLBWindow.GetEntryList()->SetSelectionChangedHdl( rLnk ); }
     void            SetCallSelectionChangedHdl( bool bCall )    { maLBWindow.GetEntryList()->SetCallSelectionChangedHdl( bCall ); }
     bool            IsSelectionChanged() const                  { return maLBWindow.IsSelectionChanged(); }
-    sal_uInt16          GetSelectModifier() const                   { return maLBWindow.GetSelectModifier(); }
+    sal_uInt16      GetSelectModifier() const                   { return maLBWindow.GetSelectModifier(); }
 
     void            SetMRUEntries( const OUString& rEntries, sal_Unicode cSep );
     OUString   GetMRUEntries( sal_Unicode cSep ) const;
-    void            SetMaxMRUCount( sal_uInt16 n )                  { maLBWindow.GetEntryList()->SetMaxMRUCount( n ); }
-    sal_uInt16          GetMaxMRUCount() const                      { return maLBWindow.GetEntryList()->GetMaxMRUCount(); }
-    sal_uInt16          GetDisplayLineCount() const
+    void            SetMaxMRUCount( sal_Int32  n )                  { maLBWindow.GetEntryList()->SetMaxMRUCount( n ); }
+    sal_Int32       GetMaxMRUCount() const                      { return maLBWindow.GetEntryList()->GetMaxMRUCount(); }
+    sal_uInt16      GetDisplayLineCount() const
     { return maLBWindow.GetDisplayLineCount(); }
 
     bool GetEdgeBlending() const { return mbEdgeBlending; }
@@ -512,8 +512,8 @@ class ImplListBoxFloatingWindow : public FloatingWindow
 private:
     ImplListBox*    mpImplLB;
     Size            maPrefSz;
-    sal_uInt16          mnDDLineCount;
-    sal_uInt16          mnPopupModeStartSaveSelection;
+    sal_uInt16      mnDDLineCount;
+    sal_Int32       mnPopupModeStartSaveSelection;
     bool            mbAutoWidth;
 
 protected:
@@ -539,9 +539,9 @@ public:
                         { FloatingWindow::SetPosSizePixel( rNewPos, rNewSize ); }
 
     void            SetDropDownLineCount( sal_uInt16 n ) { mnDDLineCount = n; }
-    sal_uInt16          GetDropDownLineCount() const { return mnDDLineCount; }
+    sal_uInt16      GetDropDownLineCount() const { return mnDDLineCount; }
 
-    sal_uInt16          GetPopupModeStartSaveSelection() const { return mnPopupModeStartSaveSelection; }
+    sal_Int32       GetPopupModeStartSaveSelection() const { return mnPopupModeStartSaveSelection; }
 
     virtual void    Resize();
 };
@@ -550,7 +550,7 @@ class ImplWin : public Control
 {
 private:
 
-    sal_uInt16      mnItemPos;  ///< because of UserDraw I have to know which item I draw
+    sal_Int32       mnItemPos;  ///< because of UserDraw I have to know which item I draw
     OUString        maString;
     Image           maImage;
 
@@ -580,8 +580,8 @@ public:
     virtual void    LoseFocus();
     virtual bool    PreNotify( NotifyEvent& rNEvt );
 
-    sal_uInt16      GetItemPos() const { return mnItemPos; }
-    void            SetItemPos( sal_uInt16 n ) { mnItemPos = n; }
+    sal_Int32       GetItemPos() const { return mnItemPos; }
+    void            SetItemPos( sal_Int32  n ) { mnItemPos = n; }
 
     const OUString& GetString() const { return maString; }
     void            SetString( const OUString& rStr ) { maString = rStr; }

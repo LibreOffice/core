@@ -264,7 +264,7 @@ ScFilterListBox::~ScFilterListBox()
 
 void ScFilterListBox::EndInit()
 {
-    sal_uInt16 nPos = GetSelectEntryPos();
+    sal_Int32 nPos = GetSelectEntryPos();
     if ( LISTBOX_ENTRY_NOTFOUND == nPos )
         nSel = 0;
     else
@@ -318,7 +318,7 @@ void ScFilterListBox::SelectHdl()
 {
     if ( !IsTravelSelect() && !bInit && !bCancelled )
     {
-        sal_uInt16 nPos = GetSelectEntryPos();
+        sal_Int32 nPos = GetSelectEntryPos();
         if ( LISTBOX_ENTRY_NOTFOUND != nPos )
         {
             nSel = nPos;
@@ -1052,7 +1052,7 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
     pFilterBox->SetUpdateMode(true);
     pFilterBox->GrabFocus();
 
-    sal_uInt16 nPos = LISTBOX_ENTRY_NOTFOUND;
+    sal_Int32 nPos = LISTBOX_ENTRY_NOTFOUND;
     if (!aCurrent.isEmpty())
     {
         nPos = pFilterBox->GetEntryPos(aCurrent);
@@ -1212,7 +1212,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
         pFilterBox->SetUpdateMode(true);
     }
 
-    sal_uInt16 nSelPos = LISTBOX_ENTRY_NOTFOUND;
+    sal_Int32 nSelPos = LISTBOX_ENTRY_NOTFOUND;
 
     if (!bDataSelect)                       // AutoFilter: aktiven Eintrag selektieren
     {
@@ -1339,7 +1339,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
 
 void ScGridWindow::FilterSelect( sal_uLong nSel )
 {
-    OUString aString = pFilterBox->GetEntry( static_cast< sal_uInt16 >( nSel ) );
+    OUString aString = pFilterBox->GetEntry( static_cast< sal_Int32 >( nSel ) );
 
     SCCOL nCol = pFilterBox->GetCol();
     SCROW nRow = pFilterBox->GetRow();

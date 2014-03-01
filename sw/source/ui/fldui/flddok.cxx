@@ -91,7 +91,8 @@ void SwFldDokPage::Reset(const SfxItemSet& )
     m_pTypeLB->SetUpdateMode(false);
     m_pTypeLB->Clear();
 
-    sal_uInt16 nPos, nTypeId;
+    sal_Int32 nPos;
+    sal_uInt16 nTypeId;
 
     if (!IsFldEdit())
     {
@@ -160,7 +161,7 @@ void SwFldDokPage::Reset(const SfxItemSet& )
             sal_uInt16 nVal = static_cast< sal_uInt16 >(sVal.toInt32());
             if(nVal != USHRT_MAX)
             {
-                for(sal_uInt16 i = 0; i < m_pTypeLB->GetEntryCount(); i++)
+                for(sal_Int32 i = 0; i < m_pTypeLB->GetEntryCount(); i++)
                     if(nVal == (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(i))
                     {
                         m_pTypeLB->SelectEntryPos(i);
@@ -185,7 +186,7 @@ void SwFldDokPage::Reset(const SfxItemSet& )
 IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
 {
     // save old ListBoxPos
-    const sal_uInt16 nOld = GetTypeSel();
+    const sal_Int32 nOld = GetTypeSel();
 
     // current ListBoxPos
     SetTypeSel(m_pTypeLB->GetSelectEntryPos());
@@ -196,7 +197,7 @@ IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
         m_pTypeLB->SelectEntryPos(0);
     }
 
-    sal_uInt16 nCount;
+    size_t nCount;
 
     if (nOld != GetTypeSel())
     {
@@ -297,7 +298,7 @@ IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
         m_pSelection->Enable( bEnable );
 
         // fill Format-Listbox
-        sal_uInt16 nSize = FillFormatLB(nTypeId);
+        sal_Int32 nSize = FillFormatLB(nTypeId);
 
         sal_Bool bValue = sal_False, bLevel = sal_False, bNumFmt = sal_False, bOffset = sal_False;
         sal_Bool bFormat = nSize != 0;
@@ -433,13 +434,13 @@ IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
 
 void SwFldDokPage::AddSubType(sal_uInt16 nTypeId)
 {
-    sal_uInt16 nPos = m_pSelectionLB->InsertEntry(SwFieldType::GetTypeStr(nTypeId));
+    sal_Int32 nPos = m_pSelectionLB->InsertEntry(SwFieldType::GetTypeStr(nTypeId));
     m_pSelectionLB->SetEntryData(nPos, reinterpret_cast<void*>(nTypeId));
 }
 
 IMPL_LINK_NOARG(SwFldDokPage, SubTypeHdl)
 {
-    sal_uInt16 nPos = m_pSelectionLB->GetSelectEntryPos();
+    sal_Int32 nPos = m_pSelectionLB->GetSelectEntryPos();
     if(nPos == LISTBOX_ENTRY_NOTFOUND)
         nPos = 0;
 
@@ -471,7 +472,7 @@ IMPL_LINK_NOARG(SwFldDokPage, SubTypeHdl)
     return 0;
 }
 
-sal_uInt16 SwFldDokPage::FillFormatLB(sal_uInt16 nTypeId)
+sal_Int32 SwFldDokPage::FillFormatLB(sal_uInt16 nTypeId)
 {
     // fill Format-Listbox
     m_pFormatLB->Clear();
@@ -483,7 +484,7 @@ sal_uInt16 SwFldDokPage::FillFormatLB(sal_uInt16 nTypeId)
 
     for( sal_uInt16 i = 0; i < nSize; ++i )
     {
-        sal_uInt16 nPos = m_pFormatLB->InsertEntry(GetFldMgr().GetFormatStr(nTypeId, i));
+        sal_Int32 nPos = m_pFormatLB->InsertEntry(GetFldMgr().GetFormatStr(nTypeId, i));
         sal_uInt16 nFmtId = GetFldMgr().GetFormatId( nTypeId, i );
         m_pFormatLB->SetEntryData( nPos, reinterpret_cast<void*>( nFmtId ));
         if (IsFldEdit() && nFmtId == (GetCurField()->GetFormat() & ~AF_FIXED))
@@ -512,7 +513,7 @@ IMPL_LINK_NOARG(SwFldDokPage, FormatHdl)
 
     if (nTypeId == USHRT_MAX)
     {
-        sal_uInt16 nPos = m_pSelectionLB->GetSelectEntryPos();
+        sal_Int32 nPos = m_pSelectionLB->GetSelectEntryPos();
         if(nPos == LISTBOX_ENTRY_NOTFOUND)
             nPos = 0;
 
@@ -544,7 +545,7 @@ sal_Bool SwFldDokPage::FillItemSet(SfxItemSet& )
 
     if (nTypeId == USHRT_MAX)
     {
-        sal_uInt16 nPos = m_pSelectionLB->GetSelectEntryPos();
+        sal_Int32 nPos = m_pSelectionLB->GetSelectEntryPos();
         if(nPos == LISTBOX_ENTRY_NOTFOUND)
             nPos = 0;
         nTypeId = (sal_uInt16)(sal_uLong)m_pSelectionLB->GetEntryData(nPos);
@@ -556,14 +557,14 @@ sal_Bool SwFldDokPage::FillItemSet(SfxItemSet& )
 
     if (m_pFormatLB->IsEnabled())
     {
-        sal_uInt16 nPos = m_pFormatLB->GetSelectEntryPos();
+        sal_Int32 nPos = m_pFormatLB->GetSelectEntryPos();
         if(nPos != LISTBOX_ENTRY_NOTFOUND)
             nFormat = (sal_uInt16)(sal_uLong)m_pFormatLB->GetEntryData(nPos);
     }
 
     if (m_pSelectionLB->IsEnabled())
     {
-        sal_uInt16 nPos = m_pSelectionLB->GetSelectEntryPos();
+        sal_Int32 nPos = m_pSelectionLB->GetSelectEntryPos();
         if(nPos != LISTBOX_ENTRY_NOTFOUND)
             nSubType = (sal_uInt16)(sal_uLong)m_pSelectionLB->GetEntryData(nPos);
     }
@@ -645,7 +646,7 @@ void    SwFldDokPage::FillUserData()
 {
     OUString sData(USER_DATA_VERSION);
     sData += ";";
-    sal_uInt16 nTypeSel = m_pTypeLB->GetSelectEntryPos();
+    sal_Int32 nTypeSel = m_pTypeLB->GetSelectEntryPos();
     if( LISTBOX_ENTRY_NOTFOUND == nTypeSel )
         nTypeSel = USHRT_MAX;
     else

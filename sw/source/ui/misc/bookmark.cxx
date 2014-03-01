@@ -72,7 +72,7 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, DeleteHdl)
 {
     // remove text marks from the ComboBox
 
-    for (sal_uInt16 i = m_pBookmarkBox->GetSelectEntryCount(); i; i-- )
+    for (sal_Int32 i = m_pBookmarkBox->GetSelectEntryCount(); i; i-- )
         m_pBookmarkBox->RemoveEntryAt(m_pBookmarkBox->GetSelectEntryPos(i - 1));
 
     m_pBookmarkBox->SetText(OUString());
@@ -90,7 +90,7 @@ void SwInsertBookmarkDlg::Apply()
 {
     //at first remove deleted bookmarks to prevent multiple bookmarks with the same
     //name
-    for (sal_uInt16 nCount = m_pBookmarkBox->GetRemovedCount(); nCount > 0; nCount--)
+    for (sal_Int32 nCount = m_pBookmarkBox->GetRemovedCount(); nCount > 0; nCount--)
     {
         OUString sRemoved = m_pBookmarkBox->GetRemovedEntry( nCount -1 ).GetName();
         IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
@@ -160,21 +160,21 @@ BookmarkCombo::BookmarkCombo(Window* pWin, WinBits nStyle)
 {
 }
 
-sal_uInt16 BookmarkCombo::GetFirstSelEntryPos() const
+sal_Int32 BookmarkCombo::GetFirstSelEntryPos() const
 {
     return GetSelEntryPos(0);
 }
 
-sal_uInt16 BookmarkCombo::GetNextSelEntryPos(sal_uInt16 nPos) const
+sal_Int32 BookmarkCombo::GetNextSelEntryPos(sal_Int32 nPos) const
 {
     return GetSelEntryPos(nPos + 1);
 }
 
-sal_uInt16 BookmarkCombo::GetSelEntryPos(sal_uInt16 nPos) const
+sal_Int32 BookmarkCombo::GetSelEntryPos(sal_Int32 nPos) const
 {
     sal_Unicode cSep = GetMultiSelectionSeparator();
 
-    sal_uInt16 nCnt = comphelper::string::getTokenCount(GetText(), cSep);
+    sal_Int32 nCnt = comphelper::string::getTokenCount(GetText(), cSep);
 
     for (; nPos < nCnt; nPos++)
     {
@@ -186,11 +186,11 @@ sal_uInt16 BookmarkCombo::GetSelEntryPos(sal_uInt16 nPos) const
     return COMBOBOX_ENTRY_NOTFOUND;
 }
 
-sal_uInt16 BookmarkCombo::GetSelectEntryCount() const
+sal_Int32 BookmarkCombo::GetSelectEntryCount() const
 {
-    sal_uInt16 nCnt = 0;
+    sal_Int32 nCnt = 0;
 
-    sal_uInt16 nPos = GetFirstSelEntryPos();
+    sal_Int32 nPos = GetFirstSelEntryPos();
     while (nPos != COMBOBOX_ENTRY_NOTFOUND)
     {
         nPos = GetNextSelEntryPos(nPos);
@@ -203,10 +203,10 @@ sal_uInt16 BookmarkCombo::GetSelectEntryCount() const
 /*------------------------------------------------------------------------
      Description: position inside of the listbox (the ComboBox)
  -----------------------------------------------------------------------*/
-sal_uInt16 BookmarkCombo::GetSelectEntryPos( sal_uInt16 nSelIndex ) const
+sal_Int32 BookmarkCombo::GetSelectEntryPos( sal_Int32 nSelIndex ) const
 {
-    sal_uInt16 nCnt = 0;
-    sal_uInt16 nPos = GetFirstSelEntryPos();
+    sal_Int32 nCnt = 0;
+    sal_Int32 nPos = GetFirstSelEntryPos();
 
     while (nPos != COMBOBOX_ENTRY_NOTFOUND)
     {

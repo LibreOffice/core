@@ -64,8 +64,8 @@ private:
     sal_Bool                    m_bWithCheckmark;
 
     SVX_DLLPRIVATE void                    Init();
-    SVX_DLLPRIVATE sal_uInt16                  ImplInsertImgEntry( const OUString& rEntry, sal_uInt16 nPos, bool bChecked );
-    SVX_DLLPRIVATE sal_uInt16                  ImplInsertLanguage(LanguageType, sal_uInt16, sal_Int16 );
+    SVX_DLLPRIVATE sal_Int32                   ImplInsertImgEntry( const OUString& rEntry, sal_Int32  nPos, bool bChecked );
+    SVX_DLLPRIVATE sal_Int32                   ImplInsertLanguage(LanguageType, sal_Int32 nPos, sal_Int16 nType);
 
 public:
     SvxLanguageBox(Window* pParent, WinBits nBits, sal_Bool bCheck = sal_False);
@@ -75,11 +75,11 @@ public:
                             sal_Bool bHasLangNone, sal_Bool bLangNoneIsLangAll = sal_False,
                             sal_Bool bCheckSpellAvail = sal_False );
 
-    sal_uInt16          InsertLanguage( const LanguageType eLangType, sal_uInt16 nPos = LISTBOX_APPEND );
-    sal_uInt16          InsertDefaultLanguage( sal_Int16 nType, sal_uInt16 nPos = LISTBOX_APPEND );
-    sal_uInt16          InsertSystemLanguage( sal_uInt16 nPos = LISTBOX_APPEND );
-    sal_uInt16          InsertLanguage( const LanguageType eLangType,
-                            sal_Bool bCheckEntry, sal_uInt16 nPos = LISTBOX_APPEND );
+    sal_Int32           InsertLanguage( const LanguageType eLangType, sal_Int32  nPos = LISTBOX_APPEND );
+    sal_Int32           InsertDefaultLanguage( sal_Int16 nType, sal_Int32  nPos = LISTBOX_APPEND );
+    sal_Int32           InsertSystemLanguage( sal_Int32  nPos = LISTBOX_APPEND );
+    sal_Int32           InsertLanguage( const LanguageType eLangType,
+                            sal_Bool bCheckEntry, sal_Int32  nPos = LISTBOX_APPEND );
     void            RemoveLanguage( const LanguageType eLangType );
     void            SelectLanguage( const LanguageType eLangType, sal_Bool bSelect = sal_True );
     LanguageType    GetSelectLanguage() const;

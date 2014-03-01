@@ -182,8 +182,8 @@ void SvxShadowTabPage::Construct()
 
 void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
 {
-    sal_uInt16 nPos;
-    sal_uInt16 nCount;
+    sal_Int32 nPos;
+    sal_Int32 nCount;
 
     SFX_ITEMSET_ARG (&rSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE,false);
     if (pPageTypeItem)
@@ -319,7 +319,7 @@ sal_Bool SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
         }
 
         // ShadowColor
-        sal_uInt16 nPos = m_pLbShadowColor->GetSelectEntryPos();
+        sal_Int32 nPos = m_pLbShadowColor->GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND &&
             nPos != m_pLbShadowColor->GetSavedValue() )
         {
@@ -497,7 +497,7 @@ IMPL_LINK_NOARG(SvxShadowTabPage, ModifyShadowHdl_Impl)
     else
         rXFSet.Put( XFillStyleItem( XFILL_NONE ) );
 
-    sal_uInt16 nPos = m_pLbShadowColor->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLbShadowColor->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         rXFSet.Put( XFillColorItem( OUString(), m_pLbShadowColor->GetSelectEntryColor() ) );

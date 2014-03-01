@@ -923,7 +923,7 @@ void SwTOXSelectTabPage::SetWrtShell(SwWrtShell& rSh)
     if(nUserTypeCount > 1)
     {
         //insert all new user indexes names after the standard user index
-        sal_uInt16 nPos = m_pTypeLB->GetEntryPos((void*)(sal_uInt32)TO_USER);
+        sal_Int32 nPos = m_pTypeLB->GetEntryPos((void*)(sal_uInt32)TO_USER);
         nPos++;
         for(sal_uInt16 nUser = 1; nUser < nUserTypeCount; nUser++)
         {
@@ -1070,14 +1070,14 @@ void SwTOXSelectTabPage::ApplyTOXDescription()
         m_pFromObjectNamesRB->Check(rDesc.IsCreateFromObjectNames());
         m_pFromCaptionsRB->Check(!rDesc.IsCreateFromObjectNames());
         m_pCaptionSequenceLB->SelectEntry(rDesc.GetSequenceName());
-        m_pDisplayTypeLB->SelectEntryPos( static_cast< sal_uInt16 >(rDesc.GetCaptionDisplay()) );
+        m_pDisplayTypeLB->SelectEntryPos( static_cast< sal_Int32 >(rDesc.GetCaptionDisplay()) );
         RadioButtonHdl(m_pFromCaptionsRB);
 
     }
     else if(TOX_OBJECTS == aCurType.eType)
     {
         long nOLEData = rDesc.GetOLEOptions();
-        for(sal_uInt16 nFromObj = 0; nFromObj < m_pFromObjCLB->GetEntryCount(); nFromObj++)
+        for(sal_uLong nFromObj = 0; nFromObj < m_pFromObjCLB->GetEntryCount(); nFromObj++)
         {
             sal_IntPtr nData = (sal_IntPtr)m_pFromObjCLB->GetEntryData(nFromObj);
             m_pFromObjCLB->CheckEntryPos(nFromObj, 0 != (nData & nOLEData));
@@ -1099,13 +1099,13 @@ void SwTOXSelectTabPage::ApplyTOXDescription()
 
     m_pLanguageLB->SelectLanguage(rDesc.GetLanguage());
     LanguageHdl(0);
-    for( long nCnt = 0; nCnt < m_pSortAlgorithmLB->GetEntryCount(); ++nCnt )
+    for( sal_Int32 nCnt = 0; nCnt < m_pSortAlgorithmLB->GetEntryCount(); ++nCnt )
     {
-        const OUString* pEntryData = (const OUString*)m_pSortAlgorithmLB->GetEntryData( (sal_uInt16)nCnt );
+        const OUString* pEntryData = (const OUString*)m_pSortAlgorithmLB->GetEntryData( nCnt );
         OSL_ENSURE(pEntryData, "no entry data available");
         if( pEntryData && *pEntryData == rDesc.GetSortAlgorithm())
         {
-            m_pSortAlgorithmLB->SelectEntryPos( (sal_uInt16)nCnt );
+            m_pSortAlgorithmLB->SelectEntryPos( nCnt );
             break;
         }
     }
@@ -1174,7 +1174,7 @@ void SwTOXSelectTabPage::FillTOXDescription()
         case TOX_OBJECTS:
         {
             long nOLEData = 0;
-            for(sal_uInt16 i = 0; i < m_pFromObjCLB->GetEntryCount(); i++)
+            for(sal_uLong i = 0; i < m_pFromObjCLB->GetEntryCount(); i++)
             {
                 if(m_pFromObjCLB->IsChecked(i))
                 {
@@ -1414,19 +1414,18 @@ IMPL_LINK(SwTOXSelectTabPage, LanguageHdl, ListBox*, pBox)
     if( 0 != (pUserData = m_pSortAlgorithmLB->GetEntryData( m_pSortAlgorithmLB->GetSelectEntryPos())) )
         sOldString = *(OUString*)pUserData;
     void* pDel;
-    sal_uInt16 nEnd = m_pSortAlgorithmLB->GetEntryCount();
-    for( sal_uInt16 n = 0; n < nEnd; ++n )
+    sal_Int32 nEnd = m_pSortAlgorithmLB->GetEntryCount();
+    for( sal_Int32 n = 0; n < nEnd; ++n )
         if( 0 != ( pDel = m_pSortAlgorithmLB->GetEntryData( n )) )
             delete (OUString*)pDel;
     m_pSortAlgorithmLB->Clear();
 
-    sal_uInt16 nInsPos;
     OUString sAlg, sUINm;
-    nEnd = static_cast< sal_uInt16 >(aSeq.getLength());
-    for( sal_uInt16 nCnt = 0; nCnt < nEnd; ++nCnt )
+    nEnd = aSeq.getLength();
+    for( sal_Int32 nCnt = 0; nCnt < nEnd; ++nCnt )
     {
         sUINm = pIndexRes->GetTranslation( sAlg = aSeq[ nCnt ] );
-        nInsPos = m_pSortAlgorithmLB->InsertEntry( sUINm );
+        sal_Int32 nInsPos = m_pSortAlgorithmLB->InsertEntry( sUINm );
         m_pSortAlgorithmLB->SetEntryData( nInsPos, new OUString( sAlg ));
         if( sAlg == sOldString )
             m_pSortAlgorithmLB->SelectEntryPos( nInsPos );
@@ -1884,10 +1883,10 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
     for (sal_uInt16 i = 0; i < AUTH_FIELD_END; ++i)
     {
         OUString sTmp(SW_RES(STR_AUTH_FIELD_START + i));
-        sal_uInt16 nPos = m_pAuthFieldsLB->InsertEntry(sTmp);
+        sal_Int32 nPos = m_pAuthFieldsLB->InsertEntry(sTmp);
         m_pAuthFieldsLB->SetEntryData(nPos, reinterpret_cast< void * >(sal::static_int_cast< sal_uIntPtr >(i)));
     }
-    sal_uInt16 nPos = m_pFirstKeyLB->InsertEntry(sNoCharSortKey);
+    sal_Int32 nPos = m_pFirstKeyLB->InsertEntry(sNoCharSortKey);
     m_pFirstKeyLB->SetEntryData(nPos, reinterpret_cast< void * >(sal::static_int_cast< sal_uIntPtr >(USHRT_MAX)));
     nPos = m_pSecondKeyLB->InsertEntry(sNoCharSortKey);
     m_pSecondKeyLB->SetEntryData(nPos, reinterpret_cast< void * >(sal::static_int_cast< sal_uIntPtr >(USHRT_MAX)));
@@ -2140,7 +2139,7 @@ IMPL_LINK(SwTOXEntryTabPage, RemoveInsertAuthHdl, PushButton*, pButton)
     bool bInsert = pButton == m_pAuthInsertPB;
     if(bInsert)
     {
-        sal_uInt16 nSelPos = m_pAuthFieldsLB->GetSelectEntryPos();
+        sal_Int32 nSelPos = m_pAuthFieldsLB->GetSelectEntryPos();
         OUString sToInsert(m_pAuthFieldsLB->GetSelectEntry());
         SwFormToken aInsert(TOKEN_AUTHORITY);
         aInsert.nAuthorityField = (sal_uInt16)(sal_uIntPtr)m_pAuthFieldsLB->GetEntryData(nSelPos);
@@ -2169,7 +2168,7 @@ void SwTOXEntryTabPage::PreTokenButtonRemoved(const SwFormToken& rToken)
     //fill it into the ListBox
     sal_uInt32 nData = rToken.nAuthorityField;
     OUString sTemp(SW_RES(STR_AUTH_FIELD_START + nData));
-    sal_uInt16 nPos = m_pAuthFieldsLB->InsertEntry(sTemp);
+    sal_Int32 nPos = m_pAuthFieldsLB->InsertEntry(sTemp);
     m_pAuthFieldsLB->SetEntryData(nPos, (void*)(sal_uIntPtr)(nData));
 }
 
@@ -2296,7 +2295,7 @@ IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox)
         for( sal_uInt32 i = 0; i < AUTH_FIELD_END; i++)
         {
             OUString sTmp(SW_RES(STR_AUTH_FIELD_START + i));
-            sal_uInt16 nPos = m_pAuthFieldsLB->InsertEntry(sTmp);
+            sal_Int32 nPos = m_pAuthFieldsLB->InsertEntry(sTmp);
             m_pAuthFieldsLB->SetEntryData(nPos, (void*)(sal_uIntPtr)(i));
         }
 
@@ -2310,7 +2309,7 @@ IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox)
             if(TOKEN_AUTHORITY == aToken.eTokenType)
             {
                 sal_uInt32 nSearch = aToken.nAuthorityField;
-                sal_uInt16  nLstBoxPos = m_pAuthFieldsLB->GetEntryPos( (void*)(sal_uIntPtr)nSearch );
+                sal_Int32  nLstBoxPos = m_pAuthFieldsLB->GetEntryPos( (void*)(sal_uIntPtr)nSearch );
                 OSL_ENSURE(LISTBOX_ENTRY_NOTFOUND != nLstBoxPos, "Entry not found?");
                 m_pAuthFieldsLB->RemoveEntry(nLstBoxPos);
             }
@@ -2470,7 +2469,7 @@ IMPL_LINK(SwTOXEntryTabPage, StyleSelectHdl, ListBox*, pBox)
 
 IMPL_LINK(SwTOXEntryTabPage, ChapterInfoHdl, ListBox*, pBox)
 {
-    sal_uInt16 nPos = pBox->GetSelectEntryPos();
+    sal_Int32 nPos = pBox->GetSelectEntryPos();
     if(LISTBOX_ENTRY_NOTFOUND != nPos)
     {
         Control* pCtrl = m_pTokenWIN->GetActiveControl();
@@ -2498,7 +2497,7 @@ IMPL_LINK(SwTOXEntryTabPage, ChapterInfoOutlineHdl, NumericField*, pField)
 
 IMPL_LINK(SwTOXEntryTabPage, NumberFormatHdl, ListBox*, pBox)
 {
-    const sal_uInt16 nPos = pBox->GetSelectEntryPos();
+    const sal_Int32 nPos = pBox->GetSelectEntryPos();
 
     if(LISTBOX_ENTRY_NOTFOUND != nPos)
     {
@@ -2571,7 +2570,7 @@ void SwTOXEntryTabPage::SetWrtShell(SwWrtShell& rSh)
     SwDocShell* pDocSh = rSh.GetView().GetDocShell();
     ::FillCharStyleListBox(*m_pCharStyleLB, pDocSh, true, true);
     const OUString sDefault(SW_RES(STR_POOLCOLL_STANDARD));
-    for(sal_uInt16 i = 0; i < m_pCharStyleLB->GetEntryCount(); i++)
+    for(sal_Int32 i = 0; i < m_pCharStyleLB->GetEntryCount(); i++)
     {
         OUString sEntry = m_pCharStyleLB->GetEntry(i);
         if(sDefault != sEntry)
@@ -3700,8 +3699,8 @@ IMPL_LINK( SwTOXStylesTabPage, EditStyleHdl, Button *, pBtn )
 // allocate templates
 IMPL_LINK_NOARG(SwTOXStylesTabPage, AssignHdl)
 {
-    sal_uInt16 nLevPos   = m_pLevelLB->GetSelectEntryPos();
-    sal_uInt16 nTemplPos = m_pParaLayLB->GetSelectEntryPos();
+    sal_Int32 nLevPos   = m_pLevelLB->GetSelectEntryPos();
+    sal_Int32 nTemplPos = m_pParaLayLB->GetSelectEntryPos();
     if(nLevPos   != LISTBOX_ENTRY_NOTFOUND &&
        nTemplPos != LISTBOX_ENTRY_NOTFOUND)
     {
@@ -3727,7 +3726,7 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, AssignHdl)
 
 IMPL_LINK_NOARG(SwTOXStylesTabPage, StdHdl)
 {
-    sal_uInt16 nPos = m_pLevelLB->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLevelLB->GetSelectEntryPos();
     if(nPos != LISTBOX_ENTRY_NOTFOUND)
     {
         OUString aStr(m_pLevelLB->GetEntry(nPos));

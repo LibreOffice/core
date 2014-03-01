@@ -46,7 +46,7 @@ public:
     void                InsertEntryValue(
                             const OUString& rString,
                             SvxFrameDirection eDirection,
-                            sal_uInt16 nPos = LISTBOX_APPEND );
+                            sal_Int32 nPos = LISTBOX_APPEND );
     /** Removes the entry, that represents the specified frame direction. */
     void                RemoveEntryValue( SvxFrameDirection eDirection );
 

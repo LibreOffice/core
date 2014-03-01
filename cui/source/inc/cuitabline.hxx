@@ -49,8 +49,8 @@ private:
     ChangeType          mnColorListState;
 
     sal_uInt16          nPageType;
-    sal_uInt16          nPosDashLb;
-    sal_uInt16          nPosLineEndLb;
+    sal_Int32           nPosDashLb;
+    sal_Int32           nPosLineEndLb;
     sal_Bool            mbAreaTP;
 
     virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
@@ -164,8 +164,8 @@ private:
     ChangeType*         pnColorListState;
     sal_uInt16          nPageType;
     sal_uInt16          nDlgType;
-    sal_uInt16*         pPosDashLb;
-    sal_uInt16*         pPosLineEndLb;
+    sal_Int32*          pPosDashLb;
+    sal_Int32*          pPosLineEndLb;
 
     SfxMapUnit          ePoolUnit;
 
@@ -225,8 +225,8 @@ public:
 
     void    SetPageType( sal_uInt16 nInType ) { nPageType = nInType; }
     void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }
-    void    SetPosDashLb( sal_uInt16* pInPos ) { pPosDashLb = pInPos; }
-    void    SetPosLineEndLb( sal_uInt16* pInPos ) { pPosLineEndLb = pInPos; }
+    void    SetPosDashLb( sal_Int32* pInPos ) { pPosDashLb = pInPos; }
+    void    SetPosLineEndLb( sal_Int32* pInPos ) { pPosLineEndLb = pInPos; }
 
     void    SetLineEndChgd( ChangeType* pIn ) { pnLineEndListState = pIn; }
     void    SetDashChgd( ChangeType* pIn ) { pnDashListState = pIn; }
@@ -276,7 +276,7 @@ private:
     ChangeType*         pnDashListState;
     sal_uInt16*         pPageType;
     sal_uInt16          nDlgType;
-    sal_uInt16*         pPosDashLb;
+    sal_Int32*          pPosDashLb;
 
     SfxMapUnit          ePoolUnit;
     FieldUnit           eFUnit;
@@ -315,7 +315,7 @@ public:
 
     void    SetPageType( sal_uInt16* pInType ) { pPageType = pInType; }
     void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }
-    void    SetPosDashLb( sal_uInt16* pInPos ) { pPosDashLb = pInPos; }
+    void    SetPosDashLb( sal_Int32* pInPos ) { pPosDashLb = pInPos; }
 
     void    SetDashChgd( ChangeType* pIn ) { pnDashListState = pIn; }
 
@@ -355,7 +355,7 @@ private:
     ChangeType*         pnLineEndListState;
     sal_uInt16*         pPageType;
     sal_uInt16          nDlgType;
-    sal_uInt16*         pPosLineEndLb;
+    sal_Int32*          pPosLineEndLb;
 
     DECL_LINK( ClickAddHdl_Impl, void * );
     DECL_LINK( ClickModifyHdl_Impl, void * );
@@ -386,7 +386,7 @@ public:
 
     void    SetPageType( sal_uInt16* pInType ) { pPageType = pInType; }
     void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }
-    void    SetPosLineEndLb( sal_uInt16* pInPos ) { pPosLineEndLb = pInPos; }
+    void    SetPosLineEndLb( sal_Int32* pInPos ) { pPosLineEndLb = pInPos; }
 
     void    SetLineEndChgd( ChangeType* pIn ) { pnLineEndListState = pIn; }
 

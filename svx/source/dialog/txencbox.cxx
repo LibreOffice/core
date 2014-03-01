@@ -67,10 +67,10 @@ SvxTextEncodingBox::~SvxTextEncodingBox()
 
 
 
-sal_uInt16 SvxTextEncodingBox::EncodingToPos_Impl( rtl_TextEncoding nEnc ) const
+sal_Int32 SvxTextEncodingBox::EncodingToPos_Impl( rtl_TextEncoding nEnc ) const
 {
-    sal_uInt16 nCount = GetEntryCount();
-    for ( sal_uInt16 i=0; i<nCount; i++ )
+    sal_Int32 nCount = GetEntryCount();
+    for ( sal_Int32 i=0; i<nCount; i++ )
     {
         if ( nEnc == rtl_TextEncoding( (sal_uIntPtr)GetEntryData(i) ) )
             return i;
@@ -144,7 +144,7 @@ void SvxTextEncodingBox::FillFromDbTextEncodingMap(
     svxform::ODataAccessCharsetHelper aCSH;
     ::std::vector< rtl_TextEncoding > aEncs;
     sal_Int32 nCount = aCSH.getSupportedTextEncodings( aEncs );
-    for ( sal_uInt16 j=0; j<nCount; j++ )
+    for ( sal_Int32 j=0; j<nCount; j++ )
     {
         sal_Bool bInsert = sal_True;
         rtl_TextEncoding nEnc = rtl_TextEncoding( aEncs[j] );
@@ -201,15 +201,15 @@ void SvxTextEncodingBox::FillWithMimeAndSelectBest()
 
 
 void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc,
-            const OUString& rEntry, sal_uInt16 nPos )
+            const OUString& rEntry, sal_Int32 nPos )
 {
-    sal_uInt16 nAt = InsertEntry( rEntry, nPos );
+    sal_Int32 nAt = InsertEntry( rEntry, nPos );
     SetEntryData( nAt, (void*)(sal_uIntPtr)nEnc );
 }
 
 
 
-void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc, sal_uInt16 nPos )
+void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc, sal_Int32 nPos )
 {
     const OUString& rEntry = m_pEncTable->GetTextString( nEnc );
     if ( !rEntry.isEmpty() )
@@ -222,7 +222,7 @@ void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc, sal_uI
 
 rtl_TextEncoding SvxTextEncodingBox::GetSelectTextEncoding() const
 {
-    sal_uInt16 nPos = GetSelectEntryPos();
+    sal_Int32 nPos = GetSelectEntryPos();
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         return rtl_TextEncoding( (sal_uIntPtr)GetEntryData(nPos) );
@@ -234,7 +234,7 @@ rtl_TextEncoding SvxTextEncodingBox::GetSelectTextEncoding() const
 
 void SvxTextEncodingBox::SelectTextEncoding( const rtl_TextEncoding nEnc, sal_Bool bSelect )
 {
-    sal_uInt16 nAt = EncodingToPos_Impl( nEnc );
+    sal_Int32 nAt = EncodingToPos_Impl( nEnc );
 
     if ( nAt != LISTBOX_ENTRY_NOTFOUND )
         SelectEntryPos( nAt, bSelect );

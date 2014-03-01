@@ -64,13 +64,13 @@ namespace svt
                         (!pEvt->GetKeyCode().IsShift() && pEvt->GetKeyCode().IsMod1()))
                     {
                         // select next resp. previous entry
-                        int nPos = GetEntryPos(GetText());
-                        nPos = nPos + (rKey.GetCode() == KEY_DOWN ? 1 : -1);
-                        if (nPos < 0)
-                            nPos = 0;
-                        if (nPos >= GetEntryCount())
-                            nPos = GetEntryCount() - 1;
-                        SetText(GetEntry(sal::static_int_cast< sal_uInt16 >(nPos)));
+                        sal_Int32 nPos = GetEntryPos(GetText());
+                        int nDir = (rKey.GetCode() == KEY_DOWN ? 1 : -1);
+                        if (!((nPos == 0 && nDir == -1) || (nPos >= GetEntryCount() && nDir == 1)))
+                        {
+                            nPos += nDir;
+                            SetText(GetEntry(nPos));
+                        }
                         return true;
                     }
                 }
@@ -171,13 +171,13 @@ namespace svt
                         (!pEvt->GetKeyCode().IsShift() && pEvt->GetKeyCode().IsMod1()))
                     {
                         // select next resp. previous entry
-                        int nPos = GetSelectEntryPos();
-                        nPos = nPos + (rKey.GetCode() == KEY_DOWN ? 1 : -1);
-                        if (nPos < 0)
-                            nPos = 0;
-                        if (nPos >= GetEntryCount())
-                            nPos = GetEntryCount() - 1;
-                        SelectEntryPos(sal::static_int_cast< sal_uInt16 >(nPos));
+                        sal_Int32 nPos = GetSelectEntryPos();
+                        int nDir = (rKey.GetCode() == KEY_DOWN ? 1 : -1);
+                        if (!((nPos == 0 && nDir == -1) || (nPos >= GetEntryCount() && nDir == 1)))
+                        {
+                            nPos += nDir;
+                            SelectEntryPos(nPos);
+                        }
                         Select();   // for calling Modify
                         return true;
                     }

@@ -481,7 +481,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblToFromHdl, Button*, pButton )
     {
         bEnableTo = sal_False;
 
-        sal_uInt16 n, nInsPos = m_pLbTableCol->GetSelectEntryPos(),
+        sal_Int32 n, nInsPos = m_pLbTableCol->GetSelectEntryPos(),
                nCnt = m_pLbTblDbColumn->GetEntryCount();
         if( LISTBOX_APPEND == nInsPos )
             for( n = 0; n < nCnt; ++n )
@@ -497,7 +497,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblToFromHdl, Button*, pButton )
     else if( pButton == m_pIbDbcolOneTo &&
             LISTBOX_ENTRY_NOTFOUND != m_pLbTblDbColumn->GetSelectEntryPos() )
     {
-        sal_uInt16 nInsPos = m_pLbTableCol->GetSelectEntryPos(),
+        sal_Int32 nInsPos = m_pLbTableCol->GetSelectEntryPos(),
                nDelPos = m_pLbTblDbColumn->GetSelectEntryPos(),
                nTopPos = m_pLbTblDbColumn->GetTopEntry();
         m_pLbTableCol->InsertEntry( m_pLbTblDbColumn->GetEntry( nDelPos ), nInsPos );
@@ -515,7 +515,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblToFromHdl, Button*, pButton )
     {
         if( LISTBOX_ENTRY_NOTFOUND != m_pLbTableCol->GetSelectEntryPos() )
         {
-            sal_uInt16 nInsPos,
+            sal_Int32 nInsPos,
                     nDelPos = m_pLbTableCol->GetSelectEntryPos(),
                     nTopPos = m_pLbTableCol->GetTopEntry();
 
@@ -715,7 +715,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblFmtHdl, PushButton*, pButton )
     {
         // Number of columns has changed: then the TabCols have to be adjusted
         long nWidth = pRep->GetWidth();
-        sal_uInt16 nCols = m_pLbTableCol->GetEntryCount() - 1;
+        sal_Int32 nCols = m_pLbTableCol->GetEntryCount() - 1;
         SwTabCols aTabCols( nCols );
         aTabCols.SetRight( nWidth  );
         aTabCols.SetRightMax( nWidth );
@@ -975,7 +975,8 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
     {
         rSh.DoUndo( sal_False );
 
-        sal_uInt16 n, nRows = 0, nCols = m_pLbTableCol->GetEntryCount();
+        sal_Int32 nCols = m_pLbTableCol->GetEntryCount();
+        sal_uInt16 nRows = 0;
         if( m_pCbTableHeadon->IsChecked() )
             nRows++;
 
@@ -986,7 +987,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
 
         // prepare the array for the selected columns
         std::vector<SwInsDBColumn*> aColFlds;
-        for( n = 0; n < nCols; ++n )
+        for( sal_Int32 n = 0; n < nCols; ++n )
         {
             SwInsDBColumn aSrch( m_pLbTableCol->GetEntry( n ), 0 );
             SwInsDBColumns::const_iterator it = aDBColumns.find( &aSrch );
@@ -997,10 +998,10 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
             }
         }
 
-        if( nCols != aColFlds.size() )
+        if( static_cast<size_t>(nCols) != aColFlds.size() )
         {
             OSL_ENSURE( !this, "not all database columns found" );
-            nCols = aColFlds.size();
+            nCols = static_cast<sal_Int32>(aColFlds.size());
         }
 
         if(!nRows || !nCols)
@@ -1027,7 +1028,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
 
         if( m_pCbTableHeadon->IsChecked() )
         {
-            for( n = 0; n < nCols; ++n )
+            for( sal_Int32 n = 0; n < nCols; ++n )
             {
                 if( m_pRbHeadlColnms->IsChecked() )
                 {
@@ -1060,7 +1061,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
             if(bBreak)
                 break;
 
-            for( n = 0; n < nCols; ++n )
+            for( sal_Int32 n = 0; n < nCols; ++n )
             {
                 // at the very first time, NO GoNextCell, because we're
                 // already in it. Also no GoNextCell after the Insert,

@@ -136,8 +136,8 @@ void SvxBitmapTabPage::Construct()
 
 void SvxBitmapTabPage::ActivatePage( const SfxItemSet&  )
 {
-    sal_uInt16 nPos;
-    sal_uInt16 nCount;
+    sal_Int32 nPos;
+    sal_Int32 nCount;
 
     if( nDlgType == 0 ) // area dialog
     {
@@ -232,7 +232,7 @@ sal_Bool SvxBitmapTabPage::FillItemSet( SfxItemSet& _rOutAttrs )
         if(PT_BITMAP == *pPageType)
         {
             _rOutAttrs.Put(XFillStyleItem(XFILL_BITMAP));
-            sal_uInt16 nPos = m_pLbBitmaps->GetSelectEntryPos();
+            sal_Int32 nPos = m_pLbBitmaps->GetSelectEntryPos();
             if(LISTBOX_ENTRY_NOTFOUND != nPos)
             {
                 const XBitmapEntry* pXBitmapEntry = pBitmapList->GetBitmap(nPos);
@@ -419,7 +419,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBitmapHdl_Impl)
 
 long SvxBitmapTabPage::CheckChanges_Impl()
 {
-    sal_uInt16 nPos = m_pLbBitmaps->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLbBitmaps->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         if( bBmpChanged )
@@ -661,7 +661,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ClickModifyHdl_Impl)
 {
-    sal_uInt16 nPos = m_pLbBitmaps->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLbBitmaps->GetSelectEntryPos();
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -726,7 +726,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickModifyHdl_Impl)
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ClickDeleteHdl_Impl)
 {
-    sal_uInt16 nPos = m_pLbBitmaps->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLbBitmaps->GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {

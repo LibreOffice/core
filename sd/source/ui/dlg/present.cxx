@@ -250,7 +250,7 @@ void SdStartPresentationDlg::InitMonitorSettings()
                     nSelectedIndex = nDefaultExternalIndex;
             }
 
-            maLBMonitor->SelectEntryPos((sal_uInt16)nSelectedIndex);
+            maLBMonitor->SelectEntryPos(nSelectedIndex);
         }
     }
     catch( Exception& )
@@ -278,7 +278,7 @@ void SdStartPresentationDlg::GetAttr( SfxItemSet& rAttr )
     rAttr.Put( SfxUInt32Item ( ATTR_PRESENT_PAUSE_TIMEOUT, aTmfPause->GetTime().GetMSFromTime() / 1000 ) );
     rAttr.Put( SfxBoolItem ( ATTR_PRESENT_SHOW_PAUSELOGO, aCbxAutoLogo->IsChecked() ) );
 
-    sal_uInt16 nPos = maLBMonitor->GetSelectEntryPos();
+    sal_Int32 nPos = maLBMonitor->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
         rAttr.Put( SfxInt32Item ( ATTR_PRESENT_DISPLAY, (sal_Int32)(sal_IntPtr)maLBMonitor->GetEntryData(nPos)) );
 

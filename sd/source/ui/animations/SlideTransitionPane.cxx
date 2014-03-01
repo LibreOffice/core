@@ -274,16 +274,16 @@ void lcl_CreateUndoForPages(
     }
 }
 
-sal_uInt16 lcl_getTransitionEffectIndex(
+sal_Int32 lcl_getTransitionEffectIndex(
     SdDrawDocument * pDoc,
     const ::sd::impl::TransitionEffect & rTransition )
 {
     // first entry: "<none>"
-    sal_uInt16 nResultIndex = LISTBOX_ENTRY_NOTFOUND;
+    sal_Int32 nResultIndex = LISTBOX_ENTRY_NOTFOUND;
 
     if( pDoc )
     {
-        sal_uInt16 nCurrentIndex = 0;
+        sal_Int32 nCurrentIndex = 0;
         const ::sd::TransitionPresetList & rPresetList = ::sd::TransitionPreset::getTransitionPresetList();
         ::sd::TransitionPresetList::const_iterator aIt( rPresetList.begin());
         const ::sd::TransitionPresetList::const_iterator aEndIt( rPresetList.end());
@@ -367,14 +367,14 @@ OUString lcl_getSoundFileURL(
 {
     if( rListBox->GetSelectEntryCount() > 0 )
     {
-        sal_uInt16 nPos = rListBox->GetSelectEntryPos();
+        sal_Int32 nPos = rListBox->GetSelectEntryPos();
         // the first three entries are no actual sounds
         if( nPos >= 3 )
         {
             DBG_ASSERT( (sal_uInt32)(rListBox->GetEntryCount() - 3) == rSoundList.size(),
                         "Sound list-box is not synchronized to sound list" );
             nPos -= 3;
-            if( rSoundList.size() > nPos )
+            if( rSoundList.size() > static_cast<size_t>(nPos) )
                 return rSoundList[ nPos ];
         }
     }
@@ -402,10 +402,10 @@ void lcl_FillSoundListBox(
     const ::std::vector< OUString > & rSoundList,
     ListBox*  rOutListBox )
 {
-    sal_uInt16 nCount = rOutListBox->GetEntryCount();
+    sal_Int32 nCount = rOutListBox->GetEntryCount();
 
     // keep first three entries
-    for( sal_uInt16 i=nCount - 1; i>=3; --i )
+    for( sal_Int32 i=nCount - 1; i>=3; --i )
         rOutListBox->RemoveEntry( i );
 
     ::std::for_each( rSoundList.begin(), rSoundList.end(),
@@ -593,7 +593,7 @@ void SlideTransitionPane::updateControls()
             mpLB_SLIDE_TRANSITIONS->SelectEntryPos( 0 );
         else
         {
-            sal_uInt16 nEntry = lcl_getTransitionEffectIndex( mpDrawDoc, aEffect );
+            sal_Int32 nEntry = lcl_getTransitionEffectIndex( mpDrawDoc, aEffect );
             if( nEntry == LISTBOX_ENTRY_NOTFOUND )
                 mpLB_SLIDE_TRANSITIONS->SetNoSelection();
             else
@@ -633,7 +633,7 @@ void SlideTransitionPane::updateControls()
             if( lcl_findSoundInList( maSoundList, aEffect.maSound, nPos ))
             {
                 // skip first three entries
-                mpLB_SOUND->SelectEntryPos( (sal_uInt16)nPos + 3 );
+                mpLB_SOUND->SelectEntryPos( nPos + 3 );
                 maCurrentSoundFile = aEffect.maSound;
             }
         }
@@ -750,7 +750,7 @@ void SlideTransitionPane::openSoundFileDialog()
 
         if( bValidSoundFile )
             // skip first three entries in list
-            mpLB_SOUND->SelectEntryPos( (sal_uInt16)nPos + 3 );
+            mpLB_SOUND->SelectEntryPos( nPos + 3 );
     }
 
     if( ! bValidSoundFile )
@@ -759,7 +759,7 @@ void SlideTransitionPane::openSoundFileDialog()
         {
             tSoundListType::size_type nPos = 0;
             if( lcl_findSoundInList( maSoundList, maCurrentSoundFile, nPos ))
-                mpLB_SOUND->SelectEntryPos( (sal_uInt16)nPos + 3 );
+                mpLB_SOUND->SelectEntryPos( nPos + 3 );
             else
                 mpLB_SOUND->SelectEntryPos( 0 );  // NONE
         }
@@ -796,7 +796,7 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
     if( mpLB_SPEED->IsEnabled() &&
         mpLB_SPEED->GetSelectEntryCount() > 0 )
     {
-        sal_uInt16 nPos = mpLB_SPEED->GetSelectEntryPos();
+        sal_Int32 nPos = mpLB_SPEED->GetSelectEntryPos();
         aResult.mfDuration = (nPos == 0)
             ? 3.0
             : (nPos == 1)
@@ -832,7 +832,7 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
         maCurrentSoundFile = "";
         if( mpLB_SOUND->GetSelectEntryCount() > 0 )
         {
-            sal_uInt16 nPos = mpLB_SOUND->GetSelectEntryPos();
+            sal_Int32 nPos = mpLB_SOUND->GetSelectEntryPos();
             aResult.mbStopSound = nPos == 1;
             aResult.mbSoundOn = nPos > 1;
             if( aResult.mbStopSound )
@@ -1035,7 +1035,7 @@ IMPL_LINK_NOARG(SlideTransitionPane, SoundListBoxSelected)
 {
     if( mpLB_SOUND->GetSelectEntryCount() )
     {
-        sal_uInt16 nPos = mpLB_SOUND->GetSelectEntryPos();
+        sal_Int32 nPos = mpLB_SOUND->GetSelectEntryPos();
         if( nPos == 2 )
         {
             // other sound...

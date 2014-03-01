@@ -308,7 +308,7 @@ void SwFldPage::SavePos( const ListBox* pLst1, const ListBox* pLst2,
 
 void SwFldPage::RestorePos(ListBox* pLst1, ListBox* pLst2, ListBox* pLst3)
 {
-    sal_uInt16 nPos = 0;
+    sal_Int32 nPos = 0;
     ListBox* aLBArr [ coLBCount ] = { pLst1, pLst2, pLst3 };
     ListBox** ppLB = aLBArr;
     for( int i = 0; i < coLBCount; ++i, ++ppLB )

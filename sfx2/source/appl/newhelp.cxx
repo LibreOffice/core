@@ -506,13 +506,13 @@ bool IndexBox_Impl::Notify( NotifyEvent& rNEvt )
 
 void IndexBox_Impl::SelectExecutableEntry()
 {
-    sal_uInt16 nPos = GetEntryPos( GetText() );
+    sal_Int32 nPos = GetEntryPos( GetText() );
     if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
     {
-        sal_uInt16 nOldPos = nPos;
+        sal_Int32 nOldPos = nPos;
         OUString aEntryText;
         IndexEntry_Impl* pEntry = (IndexEntry_Impl*)(sal_uIntPtr)GetEntryData( nPos );
-        sal_uInt16 nCount = GetEntryCount();
+        sal_Int32 nCount = GetEntryCount();
         while ( nPos < nCount && ( !pEntry || pEntry->m_aURL.isEmpty() ) )
         {
             pEntry = (IndexEntry_Impl*)(sal_uIntPtr)GetEntryData( ++nPos );
@@ -809,7 +809,7 @@ sal_Bool IndexTabPage_Impl::HasKeyword() const
     sal_Bool bRet = sal_False;
     if ( !sKeyword.isEmpty() )
     {
-        sal_uInt16 nPos = m_pIndexCB->GetEntryPos( sKeyword );
+        sal_Int32 nPos = m_pIndexCB->GetEntryPos( sKeyword );
         bRet = ( nPos != LISTBOX_ENTRY_NOTFOUND );
     }
 
@@ -823,10 +823,10 @@ sal_Bool IndexTabPage_Impl::HasKeywordIgnoreCase()
     sal_Bool bRet = sal_False;
     if ( !sKeyword.isEmpty() )
     {
-        sal_uInt16 nEntries = m_pIndexCB->GetEntryCount();
+        sal_Int32 nEntries = m_pIndexCB->GetEntryCount();
         OUString sIndexItem;
         const vcl::I18nHelper& rI18nHelper = GetSettings().GetLocaleI18nHelper();
-        for ( sal_uInt16 n = 0; n < nEntries; n++)
+        for ( sal_Int32 n = 0; n < nEntries; n++)
         {
             sIndexItem = m_pIndexCB->GetEntry( n );
             if (rI18nHelper.MatchString( sIndexItem, sKeyword ))
@@ -972,9 +972,9 @@ SearchTabPage_Impl::~SearchTabPage_Impl()
     nChecked = m_pScopeCB->IsChecked() ? 1 : 0;
     aUserData += OUString::number( nChecked );
     aUserData += ";";
-    sal_uInt16 nCount = std::min( m_pSearchED->GetEntryCount(), (sal_uInt16)10 );  // save only 10 entries
+    sal_Int32 nCount = std::min( m_pSearchED->GetEntryCount(), (sal_Int32)10 );  // save only 10 entries
 
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
+    for ( sal_Int32 i = 0; i < nCount; ++i )
     {
         OUString aText = m_pSearchED->GetEntry(i);
         aUserData += INetURLObject::encode(
@@ -1187,7 +1187,7 @@ void BookmarksBox_Impl::DoAction( sal_uInt16 nAction )
 
         case MID_RENAME :
            {
-            sal_uInt16 nPos = GetSelectEntryPos();
+            sal_Int32 nPos = GetSelectEntryPos();
             if ( nPos != LISTBOX_ENTRY_NOTFOUND )
             {
                 SfxAddHelpBookmarkDialog_Impl aDlg( this, sal_True );
@@ -1209,7 +1209,7 @@ void BookmarksBox_Impl::DoAction( sal_uInt16 nAction )
 
         case MID_DELETE :
         {
-            sal_uInt16 nPos = GetSelectEntryPos();
+            sal_Int32 nPos = GetSelectEntryPos();
             if ( nPos != LISTBOX_ENTRY_NOTFOUND )
             {
                 RemoveEntry( nPos );

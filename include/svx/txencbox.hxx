@@ -30,7 +30,7 @@ class SVX_DLLPUBLIC SvxTextEncodingBox : public ListBox
 private:
     const SvxTextEncodingTable*     m_pEncTable;
 
-    SVX_DLLPRIVATE sal_uInt16               EncodingToPos_Impl( rtl_TextEncoding nEnc ) const;
+    SVX_DLLPRIVATE sal_Int32                EncodingToPos_Impl( rtl_TextEncoding nEnc ) const;
 
 public:
     SvxTextEncodingBox( Window* pParent, WinBits nBits );
@@ -87,11 +87,11 @@ public:
                             { return m_pEncTable; }
 
     void                InsertTextEncoding( const rtl_TextEncoding nEnc,
-                            sal_uInt16 nPos = LISTBOX_APPEND );
+                            sal_Int32  nPos = LISTBOX_APPEND );
 
     void                InsertTextEncoding( const rtl_TextEncoding nEnc,
                             const OUString& rEntry,
-                            sal_uInt16 nPos = LISTBOX_APPEND );
+                            sal_Int32  nPos = LISTBOX_APPEND );
 
     void                SelectTextEncoding( const rtl_TextEncoding nEnc,
                             sal_Bool bSelect = sal_True );

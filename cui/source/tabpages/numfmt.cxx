@@ -383,8 +383,8 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
     const SfxPoolItem*          pItem           = NULL;
     const SfxBoolItem*          pAutoEntryAttr = NULL;
 
-    sal_uInt16                      nCatLbSelPos    = 0;
-    sal_uInt16                      nFmtLbSelPos    = 0;
+    sal_uInt16                  nCatLbSelPos    = 0;
+    sal_uInt16                  nFmtLbSelPos    = 0;
     LanguageType                eLangType       = LANGUAGE_DONTKNOW;
     std::vector<OUString>       aFmtEntryList;
     SvxNumberValueType          eValType        = SVX_VALUE_TYPE_UNDEFINED;
@@ -530,7 +530,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
     pNumFmtShell->GetInitSettings( nCatLbSelPos, eLangType, nFmtLbSelPos,
                                    aFmtEntryList, aPrevString, pDummy );
 
-    m_pLbCurrency->SelectEntryPos((sal_uInt16)pNumFmtShell->GetCurrencySymbol());
+    m_pLbCurrency->SelectEntryPos((sal_Int32)pNumFmtShell->GetCurrencySymbol());
 
     nFixedCategory=nCatLbSelPos;
     if(bOneAreaFlag)
@@ -848,7 +848,7 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( std::vector<OUString>& rEnt
         for ( ; i < rEntries.size(); ++i )
         {
             aEntry = rEntries[i];
-            aPrivCat=pNumFmtShell->GetCategory4Entry( static_cast<sal_uInt16>(i) );
+            aPrivCat=pNumFmtShell->GetCategory4Entry( static_cast<short>(i) );
             if(aPrivCat!=CAT_TEXT)
             {
                 Color* pPreviewColor = NULL;
@@ -881,13 +881,13 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( std::vector<OUString>& rEnt
 void SvxNumberFormatTabPage::UpdateOptions_Impl( sal_Bool bCheckCatChange /*= sal_False*/ )
 {
     OUString  theFormat           = m_pEdFormat->GetText();
-    sal_uInt16  nCurCategory        = m_pLbCategory->GetSelectEntryPos();
-    sal_uInt16  nCategory           = nCurCategory;
+    sal_Int32   nCurCategory        = m_pLbCategory->GetSelectEntryPos();
+    sal_uInt16  nCategory           = static_cast<sal_uInt16>(nCurCategory);
     sal_uInt16  nDecimals           = 0;
     sal_uInt16  nZeroes             = 0;
     bool        bNegRed             = false;
     bool        bThousand           = false;
-    sal_uInt16  nCurrencyPos        =m_pLbCurrency->GetSelectEntryPos();
+    sal_Int32   nCurrencyPos        =m_pLbCurrency->GetSelectEntryPos();
 
     if(bOneAreaFlag)
         nCurCategory=nFixedCategory;
@@ -901,7 +901,7 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( sal_Bool bCheckCatChange /*= sa
     if(nCategory==CAT_CURRENCY)
     {
         sal_uInt16 nTstPos=pNumFmtShell->FindCurrencyFormat(theFormat);
-        if(nCurrencyPos!=nTstPos && nTstPos!=(sal_uInt16)-1)
+        if(nCurrencyPos!=static_cast<sal_Int32>(nTstPos) && nTstPos!=(sal_uInt16)-1)
         {
             m_pLbCurrency->SelectEntryPos(nTstPos);
             pNumFmtShell->SetCurrencySymbol(nTstPos);
@@ -1143,15 +1143,15 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
 
         // Current category may be UserDefined with no format entries defined.
         // And yes, m_pLbFormat is a SvxFontListBox with sal_uLong list positions,
-        // implementation returns a LIST_APPEND if empty, comparison with
-        // sal_uInt16 LISTBOX_ENTRY_NOTFOUND wouldn't match.
-        if ( m_pLbFormat->GetSelectEntryPos() == LIST_APPEND )
+        // implementation returns a TREELIST_ENTRY_NOTFOUND if empty,
+        // comparison with sal_Int32 LISTBOX_ENTRY_NOTFOUND wouldn't match.
+        if ( m_pLbFormat->GetSelectEntryPos() == TREELIST_ENTRY_NOTFOUND )
             pLb = m_pLbCategory; // continue with the current category selected
         else
             pLb = m_pLbFormat;   // continue with the current format selected
     }
 
-    short       nTmpCatPos;
+    sal_Int32 nTmpCatPos;
 
     if(bOneAreaFlag)
     {
@@ -1162,29 +1162,27 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
         nTmpCatPos=m_pLbCategory->GetSelectEntryPos();
     }
 
-    sal_uInt16 nCurrencyPos=LISTBOX_ENTRY_NOTFOUND ;
-
     if (nTmpCatPos==CAT_CURRENCY && pLb == m_pLbCurrency )
     {
-        nCurrencyPos = m_pLbCurrency->GetSelectEntryPos();
-        pNumFmtShell->SetCurrencySymbol(nCurrencyPos);
+        sal_Int32 nCurrencyPos = m_pLbCurrency->GetSelectEntryPos();
+        pNumFmtShell->SetCurrencySymbol(static_cast<sal_uInt32>(nCurrencyPos));
     }
 
 
     // Format-ListBox ----------------------------------------------------
     if (pLb == m_pLbFormat)
     {
-        sal_uInt16  nSelPos = (sal_uInt16) m_pLbFormat->GetSelectEntryPos();
+        sal_uLong nSelPos = m_pLbFormat->GetSelectEntryPos();
         OUString  aFormat = m_pLbFormat->GetSelectEntry();
         OUString  aComment;
 
-        short       nFmtLbSelPos = nSelPos;
+        short nFmtLbSelPos = static_cast<short>(nSelPos);
 
-        aFormat=pNumFmtShell->GetFormat4Entry(nSelPos);
-        aComment=pNumFmtShell->GetComment4Entry(nSelPos);
+        aFormat=pNumFmtShell->GetFormat4Entry(nFmtLbSelPos);
+        aComment=pNumFmtShell->GetComment4Entry(nFmtLbSelPos);
         if(pNumFmtShell->GetUserDefined4Entry(nFmtLbSelPos))
         {
-            if(pNumFmtShell->GetComment4Entry(nFmtLbSelPos).isEmpty())
+            if(aComment.isEmpty())
             {
                 aComment = m_pLbCategory->GetEntry(1);
             }
@@ -1194,7 +1192,7 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
         {
             if(!m_pEdFormat->HasFocus()) m_pEdFormat->SetText( aFormat );
             m_pFtComment->SetText(aComment);
-            ChangePreviewText( nSelPos );
+            ChangePreviewText( static_cast<sal_uInt16>(nSelPos) );
         }
 
         REMOVE_DONTKNOW() // possibly UI-Enable

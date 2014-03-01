@@ -45,7 +45,7 @@ void SwBreakDlg::Apply()
     else if(m_pPageBtn->IsChecked())
     {
         nKind = 3;
-        const sal_uInt16 nPos = m_pPageCollBox->GetSelectEntryPos();
+        const sal_Int32 nPos = m_pPageCollBox->GetSelectEntryPos();
         if(0 != nPos && LISTBOX_ENTRY_NOTFOUND != nPos)
         {
             aTemplate = m_pPageCollBox->GetSelectEntry();
@@ -99,7 +99,7 @@ IMPL_LINK_NOARG(SwBreakDlg, OkHdl)
 {
     if(m_pPageNumBox->IsChecked()) {
         // In case of differing page descriptions, test validity
-        const sal_uInt16 nPos = m_pPageCollBox->GetSelectEntryPos();
+        const sal_Int32 nPos = m_pPageCollBox->GetSelectEntryPos();
         // position 0 says 'Without'.
         const SwPageDesc *pPageDesc;
         if ( 0 != nPos && LISTBOX_ENTRY_NOTFOUND != nPos )
@@ -203,7 +203,7 @@ void SwBreakDlg::CheckEnable()
     if ( bEnable )
     {
         // position 0 says 'Without' page template.
-        const sal_uInt16 nPos = m_pPageCollBox->GetSelectEntryPos();
+        const sal_Int32 nPos = m_pPageCollBox->GetSelectEntryPos();
         if ( 0 == nPos || LISTBOX_ENTRY_NOTFOUND == nPos )
             bEnable = sal_False;
     }

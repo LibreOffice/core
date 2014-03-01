@@ -235,7 +235,7 @@ public:
     virtual void Fill( const XColorListRef &pTab );
 
     void Append( const XColorEntry& rEntry );
-    void Modify( const XColorEntry& rEntry, sal_uInt16 nPos );
+    void Modify( const XColorEntry& rEntry, sal_Int32 nPos );
 };
 
 /************************************************************************/
@@ -249,7 +249,7 @@ public:
     virtual void Fill( const XHatchListRef &pList );
 
     void    Append( const XHatchEntry& rEntry, const Bitmap& rBitmap );
-    void    Modify( const XHatchEntry& rEntry, sal_uInt16 nPos, const Bitmap& rBitmap );
+    void    Modify( const XHatchEntry& rEntry, sal_Int32 nPos, const Bitmap& rBitmap );
 };
 
 /************************************************************************/
@@ -263,7 +263,7 @@ public:
     virtual void Fill( const XGradientListRef &pList );
 
     void    Append( const XGradientEntry& rEntry, const Bitmap& rBitmap );
-    void    Modify( const XGradientEntry& rEntry, sal_uInt16 nPos, const Bitmap& rBitmap );
+    void    Modify( const XGradientEntry& rEntry, sal_Int32 nPos, const Bitmap& rBitmap );
     void    SelectEntryByList( const XGradientListRef &pList, const OUString& rStr,
                                const XGradient& rXGradient, sal_uInt16 nDist = 0 );
 };
@@ -278,7 +278,7 @@ public:
     virtual void Fill(const XBitmapListRef &pList);
 
     void Append(const Size& rSize, const XBitmapEntry& rEntry);
-    void Modify(const Size& rSize, const XBitmapEntry& rEntry, sal_uInt16 nPos);
+    void Modify(const Size& rSize, const XBitmapEntry& rEntry, sal_Int32 nPos);
     void SelectEntryByList(const XBitmapList* pList, const OUString& rStr);
 
 private:
@@ -333,7 +333,7 @@ public:
     void setAddStandardFields(bool bNew);
 
     void Append(const XDashEntry& rEntry, const Bitmap& rBitmap );
-    void Modify(const XDashEntry& rEntry, sal_uInt16 nPos, const Bitmap& rBitmap );
+    void Modify(const XDashEntry& rEntry, sal_Int32 nPos, const Bitmap& rBitmap );
     void SelectEntryByList(const XDashList* pList, const OUString& rStr, const XDash& rDash, sal_uInt16 nDist = 0);
 };
 
@@ -350,7 +350,7 @@ public:
     virtual void Fill( const XLineEndListRef &pList, bool bStart = true );
 
     void    Append( const XLineEndEntry& rEntry, const Bitmap& rBitmap, bool bStart = true );
-    void    Modify( const XLineEndEntry& rEntry, sal_uInt16 nPos, const Bitmap& rBitmap, bool bStart = true );
+    void    Modify( const XLineEndEntry& rEntry, sal_Int32 nPos, const Bitmap& rBitmap, bool bStart = true );
 };
 
 

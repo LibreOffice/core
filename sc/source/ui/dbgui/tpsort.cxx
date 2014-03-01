@@ -253,7 +253,7 @@ sal_Bool ScTabPageSortFields::FillItemSet( SfxItemSet& rArgSet )
             aNewSortData = aTempData;
         }
     }
-    std::vector<sal_uInt16>  nSortPos;
+    std::vector<sal_Int32>  nSortPos;
 
     for ( sal_uInt16 i=0; i<nSortKeyCount; i++ )
     {

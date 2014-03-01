@@ -78,11 +78,12 @@ public:
                                     const OUString& rString, const Font& rFont, const Color* pColor = NULL );
 
     /** Selects/deselects an entry specified by its position in the list box. */
-    void                        SelectEntryPos( sal_uInt16 nPos, bool bSelect = true );
+    void                        SelectEntryPos( sal_uLong nPos, bool bSelect = true );
     /** Removes a selection. */
     void                        SetNoSelection();
 
-    /** Returns the position of the entry currently selected or LIST_APPEND. */
+    /** Returns the position of the entry currently selected or TREELIST_APPEND. 
+    */
     sal_uLong                   GetSelectEntryPos() const;
     /** Returns the text of the selected entry or an empty string. */
     OUString                    GetSelectEntry() const;

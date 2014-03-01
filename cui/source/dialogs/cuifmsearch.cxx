@@ -807,8 +807,8 @@ void FmSearchDialog::LoadParams()
     // that way the data is handed on to the SearchEngine and all dependent settings are done
 
     // current field
-    sal_uInt16 nInitialField = m_lbField.GetEntryPos( OUString( aParams.sSingleSearchField ) );
-    if (nInitialField == COMBOBOX_ENTRY_NOTFOUND)
+    sal_Int32 nInitialField = m_lbField.GetEntryPos( OUString( aParams.sSingleSearchField ) );
+    if (nInitialField == LISTBOX_ENTRY_NOTFOUND)
         nInitialField = 0;
     m_lbField.SelectEntryPos(nInitialField);
     LINK(this, FmSearchDialog, OnFieldSelected).Call(&m_lbField);
@@ -894,7 +894,7 @@ void FmSearchDialog::SaveParams() const
 
     aCurrentSettings.aHistory.realloc( m_cmbSearchText.GetEntryCount() );
     OUString* pHistory = aCurrentSettings.aHistory.getArray();
-    for (sal_uInt16 i=0; i<m_cmbSearchText.GetEntryCount(); ++i, ++pHistory)
+    for (sal_Int32 i=0; i<m_cmbSearchText.GetEntryCount(); ++i, ++pHistory)
         *pHistory = m_cmbSearchText.GetEntry(i);
 
     aCurrentSettings.sSingleSearchField         = m_lbField.GetSelectEntry();

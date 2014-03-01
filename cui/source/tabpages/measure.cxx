@@ -307,7 +307,7 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
         long nFieldUnit = (long) ( ( const SdrMeasureUnitItem& )rAttrs.
                                     Get( SDRATTR_MEASUREUNIT ) ).GetValue();
 
-        for( sal_uInt16 i = 0; i < m_pLbUnit->GetEntryCount(); ++i )
+        for( sal_Int32 i = 0; i < m_pLbUnit->GetEntryCount(); ++i )
         {
             if ( (sal_IntPtr)m_pLbUnit->GetEntryData( i ) == nFieldUnit )
             {
@@ -489,7 +489,7 @@ sal_Bool SvxMeasurePage::FillItemSet( SfxItemSet& rAttrs)
         bModified = sal_True;
     }
 
-    sal_uInt16 nPos = m_pLbUnit->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLbUnit->GetSelectEntryPos();
     if( nPos != m_pLbUnit->GetSavedValue() )
     {
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -721,7 +721,7 @@ IMPL_LINK( SvxMeasurePage, ChangeAttrHdl_Impl, void *, p )
 
     if( p == m_pLbUnit )
     {
-        sal_uInt16 nPos = m_pLbUnit->GetSelectEntryPos();
+        sal_Int32 nPos = m_pLbUnit->GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pLbUnit->GetEntryData( nPos );
@@ -796,10 +796,10 @@ void SvxMeasurePage::FillUnitLB()
 
     sal_IntPtr nUnit = FUNIT_NONE;
     OUString aStrMetric( m_pFtAutomatic->GetText());
-    sal_uInt16 nPos = m_pLbUnit->InsertEntry( aStrMetric );
+    sal_Int32 nPos = m_pLbUnit->InsertEntry( aStrMetric );
     m_pLbUnit->SetEntryData( nPos, (void*)nUnit );
 
-    for( sal_uInt16 i = 0; i < aMetricArr.Count(); ++i )
+    for( sal_uInt32 i = 0; i < aMetricArr.Count(); ++i )
     {
         aStrMetric = aMetricArr.GetStringByPos( i );
         nUnit = aMetricArr.GetValue( i );

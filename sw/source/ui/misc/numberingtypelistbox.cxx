@@ -85,7 +85,7 @@ void SwNumberingTypeListBox::Reload(sal_uInt16 nTypeFlags)
     {
         sal_IntPtr nValue = rNames.GetValue(i);
         bool bInsert = true;
-        sal_uInt16 nPos = LISTBOX_APPEND;
+        sal_Int32 nPos = LISTBOX_APPEND;
         switch(nValue)
         {
             case  style::NumberingType::NUMBER_NONE:
@@ -115,7 +115,7 @@ void SwNumberingTypeListBox::Reload(sal_uInt16 nTypeFlags)
         }
         if(bInsert)
         {
-            sal_uInt16 nEntry = InsertEntry(rNames.GetString(i), nPos);
+            sal_Int32 nEntry = InsertEntry(rNames.GetString(i), nPos);
             SetEntryData( nEntry, (void*)nValue );
         }
     }
@@ -131,7 +131,7 @@ void SwNumberingTypeListBox::Reload(sal_uInt16 nTypeFlags)
                     if(LISTBOX_ENTRY_NOTFOUND == GetEntryPos((void*)(sal_uLong)nCurrent))
                     {
                         OUString aIdent = pImpl->xInfo->getNumberingIdentifier( nCurrent );
-                        sal_uInt16 nPos = InsertEntry(aIdent);
+                        sal_Int32 nPos = InsertEntry(aIdent);
                         SetEntryData(nPos,(void*)(sal_uLong)nCurrent);
                     }
                 }
@@ -144,7 +144,7 @@ void SwNumberingTypeListBox::Reload(sal_uInt16 nTypeFlags)
 sal_Int16   SwNumberingTypeListBox::GetSelectedNumberingType()
 {
     sal_Int16 nRet = 0;
-    sal_uInt16 nSelPos = GetSelectEntryPos();
+    sal_Int32 nSelPos = GetSelectEntryPos();
     if(LISTBOX_ENTRY_NOTFOUND != nSelPos)
         nRet = (sal_Int16)(sal_uLong)GetEntryData(nSelPos);
 #if OSL_DEBUG_LEVEL > 0
@@ -156,7 +156,7 @@ sal_Int16   SwNumberingTypeListBox::GetSelectedNumberingType()
 
 sal_Bool    SwNumberingTypeListBox::SelectNumberingType(sal_Int16 nType)
 {
-    sal_uInt16 nPos = GetEntryPos((void*)(sal_uLong)nType);
+    sal_Int32 nPos = GetEntryPos((void*)(sal_uLong)nType);
     SelectEntryPos( nPos );
     return LISTBOX_ENTRY_NOTFOUND != nPos;
 }

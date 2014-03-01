@@ -239,7 +239,7 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText( const SdrObjCustom
                     pRenderedShape = new SdrObjGroup();
                     ((SdrObjGroup*)pRenderedShape)->GetSubList()->NbcInsertObject( pTmp );
                 }
-                ((SdrObjGroup*)pRenderedShape)->GetSubList()->NbcInsertObject( pTextObj, LIST_APPEND );
+                ((SdrObjGroup*)pRenderedShape)->GetSubList()->NbcInsertObject( pTextObj, CONTAINER_APPEND );
             }
             else
                 pRenderedShape = pTextObj;

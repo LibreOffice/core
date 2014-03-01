@@ -1384,7 +1384,7 @@ IMPL_LINK_NOARG(SvxSwPosSizeTabPage, ProtectHdl)
 short SvxSwPosSizeTabPage::GetRelation(FrmMap *, ListBox &rRelationLB)
 {
     short nRel = 0;
-    sal_uInt16 nPos = rRelationLB.GetSelectEntryPos();
+    sal_Int32 nPos = rRelationLB.GetSelectEntryPos();
 
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
     {
@@ -1433,7 +1433,7 @@ short SvxSwPosSizeTabPage::GetAlignment(FrmMap *pMap, sal_uInt16 nMapPos, ListBo
 sal_uInt16 SvxSwPosSizeTabPage::GetMapPos(FrmMap *pMap, ListBox &rAlignLB)
 {
     sal_uInt16 nMapPos = 0;
-    sal_uInt16 nLBSelPos = rAlignLB.GetSelectEntryPos();
+    sal_Int32 nLBSelPos = rAlignLB.GetSelectEntryPos();
 
     if (nLBSelPos != LISTBOX_ENTRY_NOTFOUND)
     {
@@ -1470,7 +1470,7 @@ void SvxSwPosSizeTabPage::InitPos(short nAnchor,
                                 long   nX,
                                 long   nY)
 {
-    sal_uInt16 nPos = m_pVertLB->GetSelectEntryPos();
+    sal_Int32 nPos = m_pVertLB->GetSelectEntryPos();
     if ( nPos != LISTBOX_ENTRY_NOTFOUND && m_pVMap )
     {
         m_nOldV    = m_pVMap[nPos].nAlign;
@@ -1614,7 +1614,7 @@ void SvxSwPosSizeTabPage::InitPos(short nAnchor,
 
 void SvxSwPosSizeTabPage::UpdateExample()
 {
-    sal_uInt16 nPos = m_pHoriLB->GetSelectEntryPos();
+    sal_Int32 nPos = m_pHoriLB->GetSelectEntryPos();
     if ( m_pHMap && nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         sal_uInt16 nMapPos = GetMapPos(m_pHMap, *m_pHoriLB);
@@ -1675,7 +1675,7 @@ sal_uLong SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, sal_uInt16 nMapPos, sal_u
 
                             sStrId1 = lcl_ChangeResIdToVerticalOrRTL(sStrId1, m_bIsVerticalFrame, m_bIsInRightToLeft);
                             OUString sEntry = m_aFramePosString.GetString(sStrId1);
-                            sal_uInt16 nPos = rLB.InsertEntry(sEntry);
+                            sal_Int32 nPos = rLB.InsertEntry(sEntry);
                             rLB.SetEntryData(nPos, &aAsCharRelationMap[nRelPos]);
                             if (pMap[_nMapPos].nAlign == nAlign)
                                 sSelEntry = sEntry;
@@ -1692,7 +1692,7 @@ sal_uLong SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, sal_uInt16 nMapPos, sal_u
 
                 if (!rLB.GetSelectEntryCount())
                 {
-                    for (sal_uInt16 i = 0; i < rLB.GetEntryCount(); i++)
+                    for (sal_Int32 i = 0; i < rLB.GetEntryCount(); i++)
                     {
                         RelationMap *pEntry = (RelationMap *)rLB.GetEntryData(i);
                         if (pEntry->nLBRelation == LB_REL_CHAR) // Default
@@ -1734,7 +1734,7 @@ sal_uLong SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, sal_uInt16 nMapPos, sal_u
                             SvxSwFramePosString::StringId sStrId1 = m_pHoriMirrorCB->IsChecked() ? aRelationMap[nRelPos].eMirrorStrId : aRelationMap[nRelPos].eStrId;
                             sStrId1 = lcl_ChangeResIdToVerticalOrRTL(sStrId1, m_bIsVerticalFrame, m_bIsInRightToLeft);
                             OUString sEntry = m_aFramePosString.GetString(sStrId1);
-                            sal_uInt16 nPos = rLB.InsertEntry(sEntry);
+                            sal_Int32 nPos = rLB.InsertEntry(sEntry);
                             rLB.SetEntryData(nPos, &aRelationMap[nRelPos]);
                             if (sSelEntry.isEmpty() && aRelationMap[nRelPos].nRelation == nRel)
                                 sSelEntry = sEntry;
@@ -1767,7 +1767,7 @@ sal_uLong SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, sal_uInt16 nMapPos, sal_u
                         break;
                 }
 
-                for (sal_uInt16 i = 0; i < rLB.GetEntryCount(); i++)
+                for (sal_Int32 i = 0; i < rLB.GetEntryCount(); i++)
                 {
                     RelationMap *pEntry = (RelationMap *)rLB.GetEntryData(i);
                     if (pEntry->nRelation == nRel)
@@ -1869,7 +1869,7 @@ void SvxSwPosSizeTabPage::SetView( const SdrView* pSdrView )
 
         if( m_aAnchorPos != Point(0,0) ) // -> Writer
         {
-            for( sal_uInt16 i = 1; i < rMarkList.GetMarkCount(); i++ )
+            for( sal_uLong i = 1; i < rMarkList.GetMarkCount(); i++ )
             {
                 pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
                 if( m_aAnchorPos != pObj->GetAnchorPos() )

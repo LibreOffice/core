@@ -751,7 +751,7 @@ void SvxTPFilter::ClearAuthors()
     m_pLbAuthor->Clear();
 }
 
-void SvxTPFilter::InsertAuthor( const OUString& rString, sal_uInt16 nPos)
+void SvxTPFilter::InsertAuthor( const OUString& rString, sal_Int32 nPos)
 {
     m_pLbAuthor->InsertEntry(rString,nPos);
 }
@@ -761,12 +761,12 @@ OUString SvxTPFilter::GetSelectedAuthor() const
     return m_pLbAuthor->GetSelectEntry();
 }
 
-void SvxTPFilter::SelectedAuthorPos(sal_uInt16 nPos)
+void SvxTPFilter::SelectedAuthorPos(sal_Int32 nPos)
 {
     m_pLbAuthor->SelectEntryPos(nPos);
 }
 
-sal_uInt16 SvxTPFilter::SelectAuthor(const OUString& aString)
+sal_Int32 SvxTPFilter::SelectAuthor(const OUString& aString)
 {
     m_pLbAuthor->SelectEntry(aString);
     return m_pLbAuthor->GetSelectEntryPos();

@@ -46,7 +46,7 @@ public:
         m_aComboListBox( _pListBox ){}
 
 
-    virtual OUString        GetEntry( sal_uInt16 nPos ) const
+    virtual OUString        GetEntry( sal_Int32  nPos ) const
     {
         return m_aComboListBox.GetEntry( nPos );
     }
@@ -91,9 +91,9 @@ public:
         return m_aComboListBox.IsEnabled();
     }
 
-    virtual bool            IsEntryVisible( sal_uInt16 nPos ) const
+    virtual bool            IsEntryVisible( sal_Int32  nPos ) const
     {
-        sal_uInt16 nTopEntry = m_aComboListBox.GetTopEntry();
+        sal_Int32  nTopEntry = m_aComboListBox.GetTopEntry();
         sal_uInt16 nLines = m_aComboListBox.GetDisplayLineCount();
         return ( nPos >= nTopEntry && nPos < ( nTopEntry + nLines ) );
     }
@@ -118,17 +118,17 @@ public:
         return m_aComboListBox.IsMultiSelectionEnabled();
     }
 
-    virtual sal_uInt16      GetTopEntry() const
+    virtual sal_Int32       GetTopEntry() const
     {
         return m_aComboListBox.GetTopEntry();
     }
 
-    virtual bool            IsEntryPosSelected( sal_uInt16 nPos ) const
+    virtual bool            IsEntryPosSelected( sal_Int32  nPos ) const
     {
         return m_aComboListBox.IsEntryPosSelected(nPos);
     }
 
-    virtual sal_uInt16      GetEntryCount() const
+    virtual sal_Int32       GetEntryCount() const
     {
         return m_aComboListBox.GetEntryCount();
     }
@@ -138,12 +138,12 @@ public:
         m_aComboListBox.Select();
     }
 
-    virtual void            SelectEntryPos( sal_uInt16 nPos, bool bSelect = true )
+    virtual void            SelectEntryPos( sal_Int32  nPos, bool bSelect = true )
     {
         m_aComboListBox.SelectEntryPos(nPos,bSelect);
     }
 
-    virtual sal_uInt16      GetSelectEntryCount() const
+    virtual sal_Int32       GetSelectEntryCount() const
     {
         return m_aComboListBox.GetSelectEntryCount();
     }
@@ -153,7 +153,7 @@ public:
         m_aComboListBox.SetNoSelection();
     }
 
-    virtual sal_uInt16      GetSelectEntryPos( sal_uInt16 nSelIndex = 0 ) const
+    virtual sal_Int32       GetSelectEntryPos( sal_Int32  nSelIndex = 0 ) const
     {
         return m_aComboListBox.GetSelectEntryPos(nSelIndex);
     }
@@ -176,7 +176,7 @@ public:
         return aRect;
     }
 
-    long GetIndexForPoint( const Point& rPoint, sal_uInt16& nPos ) const
+    long GetIndexForPoint( const Point& rPoint, sal_Int32& nPos ) const
     {
         return m_aComboListBox.GetIndexForPoint( rPoint, nPos );
     }

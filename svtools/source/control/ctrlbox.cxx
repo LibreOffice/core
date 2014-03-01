@@ -141,13 +141,13 @@ ColorListBox::~ColorListBox()
 
 
 
-sal_uInt16 ColorListBox::InsertEntry( const OUString& rStr, sal_uInt16 nPos )
+sal_Int32 ColorListBox::InsertEntry( const OUString& rStr, sal_Int32 nPos )
 {
     nPos = ListBox::InsertEntry( rStr, nPos );
     if ( nPos != LISTBOX_ERROR )
     {
         ImplColorListData* pData = new ImplColorListData;
-        if ( nPos < pColorList->size() )
+        if ( static_cast<size_t>(nPos) < pColorList->size() )
         {
             ImpColorList::iterator it = pColorList->begin();
             ::std::advance( it, nPos );
@@ -164,14 +164,14 @@ sal_uInt16 ColorListBox::InsertEntry( const OUString& rStr, sal_uInt16 nPos )
 
 
 
-sal_uInt16 ColorListBox::InsertEntry( const Color& rColor, const OUString& rStr,
-                                sal_uInt16 nPos )
+sal_Int32 ColorListBox::InsertEntry( const Color& rColor, const OUString& rStr,
+                                sal_Int32 nPos )
 {
     nPos = ListBox::InsertEntry( rStr, nPos );
     if ( nPos != LISTBOX_ERROR )
     {
         ImplColorListData* pData = new ImplColorListData( rColor );
-        if ( nPos < pColorList->size() )
+        if ( static_cast<size_t>(nPos) < pColorList->size() )
         {
             ImpColorList::iterator it = pColorList->begin();
             ::std::advance( it, nPos );
@@ -196,10 +196,10 @@ void ColorListBox::InsertAutomaticEntryColor(const Color &rColor)
 
 
 
-void ColorListBox::RemoveEntry( sal_uInt16 nPos )
+void ColorListBox::RemoveEntry( sal_Int32 nPos )
 {
     ListBox::RemoveEntry( nPos );
-    if ( nPos < pColorList->size() )
+    if ( 0 <= nPos && static_cast<size_t>(nPos) < pColorList->size() )
     {
             ImpColorList::iterator it = pColorList->begin();
             ::std::advance( it, nPos );
@@ -228,10 +228,10 @@ void ColorListBox::CopyEntries( const ColorListBox& rBox )
     for ( size_t n = 0; n < nCount; n++ )
     {
         ImplColorListData* pData = (*rBox.pColorList)[ n ];
-        sal_uInt16 nPos = InsertEntry( rBox.GetEntry( n ), LISTBOX_APPEND );
+        sal_Int32 nPos = InsertEntry( rBox.GetEntry( n ), LISTBOX_APPEND );
         if ( nPos != LISTBOX_ERROR )
         {
-            if ( nPos < pColorList->size() )
+            if ( static_cast<size_t>(nPos) < pColorList->size() )
             {
                 ImpColorList::iterator it = pColorList->begin();
                 ::std::advance( it, nPos );
@@ -247,9 +247,9 @@ void ColorListBox::CopyEntries( const ColorListBox& rBox )
 
 
 
-sal_uInt16 ColorListBox::GetEntryPos( const Color& rColor ) const
+sal_Int32 ColorListBox::GetEntryPos( const Color& rColor ) const
 {
-    for( sal_uInt16 n = (sal_uInt16) pColorList->size(); n; )
+    for( sal_Int32 n = (sal_Int32) pColorList->size(); n; )
     {
         ImplColorListData* pData = (*pColorList)[ --n ];
         if ( pData->bColor && ( pData->aColor == rColor ) )
@@ -260,10 +260,11 @@ sal_uInt16 ColorListBox::GetEntryPos( const Color& rColor ) const
 
 
 
-Color ColorListBox::GetEntryColor( sal_uInt16 nPos ) const
+Color ColorListBox::GetEntryColor( sal_Int32 nPos ) const
 {
     Color aColor;
-    ImplColorListData* pData = ( nPos < pColorList->size() ) ? (*pColorList)[ nPos ] : NULL;
+    ImplColorListData* pData = ( 0 <= nPos && static_cast<size_t>(nPos) < pColorList->size() ) ?
+        (*pColorList)[ nPos ] : NULL;
     if ( pData && pData->bColor )
         aColor = pData->aColor;
     return aColor;
@@ -528,10 +529,10 @@ Color ImpLineListData::GetColorDist( const Color& rMain, const Color& rDefault )
     return ( *m_pColorDistFn )( rMain, rDefault );
 }
 
-sal_uInt16 LineListBox::GetSelectEntryStyle( sal_uInt16 nSelIndex ) const
+sal_uInt16 LineListBox::GetSelectEntryStyle( sal_Int32 nSelIndex ) const
 {
     sal_uInt16 nStyle = table::BorderLineStyle::SOLID;
-    sal_uInt16 nPos = GetSelectEntryPos( nSelIndex );
+    sal_Int32 nPos = GetSelectEntryPos( nSelIndex );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         if (!m_sNone.isEmpty())
@@ -788,22 +789,22 @@ LineListBox::~LineListBox()
     delete pLineList;
 }
 
-sal_uInt16 LineListBox::GetStylePos( sal_uInt16 nListPos, long nWidth )
+sal_Int32 LineListBox::GetStylePos( sal_Int32 nListPos, long nWidth )
 {
-    sal_uInt16 nPos = LISTBOX_ENTRY_NOTFOUND;
+    sal_Int32 nPos = LISTBOX_ENTRY_NOTFOUND;
     if (!m_sNone.isEmpty())
         nListPos--;
 
-    sal_uInt16 i = 0;
-    sal_uInt16 n = 0;
-    sal_uInt16 nCount = pLineList->size();
+    sal_Int32 n = 0;
+    size_t i = 0;
+    size_t nCount = pLineList->size();
     while ( nPos == LISTBOX_ENTRY_NOTFOUND && i < nCount )
     {
         ImpLineListData* pData = (*pLineList)[ i ];
         if ( pData && pData->GetMinWidth() <= nWidth )
         {
             if ( nListPos == n )
-                nPos = i;
+                nPos = static_cast<sal_Int32>(i);
             n++;
         }
         i++;
@@ -815,14 +816,14 @@ sal_uInt16 LineListBox::GetStylePos( sal_uInt16 nListPos, long nWidth )
 
 void LineListBox::SelectEntry( sal_uInt16 nStyle, sal_Bool bSelect )
 {
-    sal_uInt16 nPos = GetEntryPos( nStyle );
+    sal_Int32 nPos = GetEntryPos( nStyle );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         ListBox::SelectEntryPos( nPos, bSelect );
 }
 
 
 
-sal_uInt16 LineListBox::InsertEntry( const OUString& rStr, sal_uInt16 nPos )
+sal_Int32 LineListBox::InsertEntry( const OUString& rStr, sal_Int32 nPos )
 {
     nPos = ListBox::InsertEntry( rStr, nPos );
     if ( nPos != LISTBOX_ERROR ) {
@@ -850,11 +851,11 @@ void LineListBox::InsertEntry(
 
 
 
-void LineListBox::RemoveEntry( sal_uInt16 nPos )
+void LineListBox::RemoveEntry( sal_Int32 nPos )
 {
     ListBox::RemoveEntry( nPos );
 
-    if ( nPos < pLineList->size() ) {
+    if ( 0 <= nPos && nPos < pLineList->size() ) {
         ImpLineList::iterator it = pLineList->begin();
         ::std::advance( it, nPos );
         if ( *it ) delete *it;
@@ -878,7 +879,7 @@ void LineListBox::Clear()
 
 
 
-sal_uInt16 LineListBox::GetEntryPos( sal_uInt16 nStyle ) const
+sal_Int32 LineListBox::GetEntryPos( sal_uInt16 nStyle ) const
 {
     for ( size_t i = 0, n = pLineList->size(); i < n; ++i ) {
         ImpLineListData* pData = (*pLineList)[ i ];
@@ -889,7 +890,7 @@ sal_uInt16 LineListBox::GetEntryPos( sal_uInt16 nStyle ) const
                 size_t nPos = i;
                 if (!m_sNone.isEmpty())
                     nPos ++;
-                return (sal_uInt16)nPos;
+                return (sal_Int32)nPos;
             }
         }
     }
@@ -898,9 +899,9 @@ sal_uInt16 LineListBox::GetEntryPos( sal_uInt16 nStyle ) const
 
 
 
-sal_uInt16 LineListBox::GetEntryStyle( sal_uInt16 nPos ) const
+sal_uInt16 LineListBox::GetEntryStyle( sal_Int32 nPos ) const
 {
-    ImpLineListData* pData = (nPos < pLineList->size()) ? (*pLineList)[ nPos ] : NULL;
+    ImpLineListData* pData = (0 <= nPos && nPos < pLineList->size()) ? (*pLineList)[ nPos ] : NULL;
     return ( pData ) ? pData->GetStyle() : table::BorderLineStyle::NONE;
 }
 
@@ -925,8 +926,8 @@ void LineListBox::UpdateEntries( long nOldWidth )
 
     UpdatePaintLineColor( );
 
-    sal_uInt16      nSelEntry = GetSelectEntryPos();
-    sal_uInt16       nTypePos = GetStylePos( nSelEntry, nOldWidth );
+    sal_Int32      nSelEntry = GetSelectEntryPos();
+    sal_Int32       nTypePos = GetStylePos( nSelEntry, nOldWidth );
 
     // Remove the old entries
     while ( GetEntryCount( ) > 0 )
@@ -966,7 +967,7 @@ void LineListBox::UpdateEntries( long nOldWidth )
 
 
 
-Color LineListBox::GetColorLine1( sal_uInt16 nPos )
+Color LineListBox::GetColorLine1( sal_Int32 nPos )
 {
     Color rResult = GetPaintColor( );
 
@@ -978,7 +979,7 @@ Color LineListBox::GetColorLine1( sal_uInt16 nPos )
     return rResult;
 }
 
-Color LineListBox::GetColorLine2( sal_uInt16 nPos )
+Color LineListBox::GetColorLine2( sal_Int32 nPos )
 {
     Color rResult = GetPaintColor( );
 
@@ -990,7 +991,7 @@ Color LineListBox::GetColorLine2( sal_uInt16 nPos )
     return rResult;
 }
 
-Color LineListBox::GetColorDist( sal_uInt16 nPos )
+Color LineListBox::GetColorDist( sal_Int32 nPos )
 {
     Color rResult = GetSettings().GetStyleSettings().GetFieldColor();
 
@@ -1476,12 +1477,12 @@ void FontStyleBox::Modify()
     CharClass   aChrCls( ::comphelper::getProcessComponentContext(),
                         GetSettings().GetLanguageTag() );
     OUString   aStr = GetText();
-    sal_uInt16      nEntryCount = GetEntryCount();
+    sal_Int32      nEntryCount = GetEntryCount();
 
     if ( GetEntryPos( aStr ) == COMBOBOX_ENTRY_NOTFOUND )
     {
         aStr = aChrCls.uppercase(aStr);
-        for ( sal_uInt16 i = 0; i < nEntryCount; i++ )
+        for ( sal_Int32 i = 0; i < nEntryCount; i++ )
         {
             OUString aEntryText = aChrCls.uppercase(GetEntry(i));
 
@@ -1504,7 +1505,7 @@ void FontStyleBox::Fill( const OUString& rName, const FontList* pList )
     //   else aLastStyle will overwritten
     // store prior selection position and clear box
     OUString aOldText = GetText();
-    sal_uInt16 nPos = GetEntryPos( aOldText );
+    sal_Int32 nPos = GetEntryPos( aOldText );
     Clear();
 
     // does a font with this name already exist?
@@ -1797,7 +1798,7 @@ void FontSizeBox::Fill( const FontInfo* pInfo, const FontList* pList )
     OUString aStr = GetText();
 
     Clear();
-    sal_uInt16 nPos = 0;
+    sal_Int32 nPos = 0;
 
     if ( !aFontSizeNames.IsEmpty() )
     {

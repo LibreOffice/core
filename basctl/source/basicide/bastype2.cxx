@@ -746,7 +746,7 @@ SvTreeListEntry* TreeListBox::AddEntry(
 {
     assert(aUserData != 0);
     SvTreeListEntry* p = InsertEntry(
-        rText, rImage, rImage, pParent, bChildrenOnDemand, LIST_APPEND,
+        rText, rImage, rImage, pParent, bChildrenOnDemand, TREELIST_APPEND,
         aUserData->get()
     );
     aUserData->release();

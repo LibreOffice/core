@@ -272,7 +272,7 @@ void ScTpContentOptions::InitGridOpt()
 {
     sal_Bool    bGrid = pLocalOptions->GetOption( VOPT_GRID );
     sal_Bool    bGridOnTop = pLocalOptions->GetOption( VOPT_GRID_ONTOP );
-    sal_uInt16  nSelPos = 0;
+    sal_Int32   nSelPos = 0;
 
     if ( bGrid || bGridOnTop )
     {
@@ -348,7 +348,7 @@ void ScTpContentOptions::InitGridOpt()
 
 IMPL_LINK( ScTpContentOptions, GridHdl, ListBox*, pLb )
 {
-    sal_uInt16  nSelPos = pLb->GetSelectEntryPos();
+    sal_Int32   nSelPos = pLb->GetSelectEntryPos();
     sal_Bool    bGrid = ( nSelPos <= 1 );
     sal_Bool    bGridOnTop = ( nSelPos == 1 );
 
@@ -404,7 +404,7 @@ ScTpLayoutOptions::ScTpLayoutOptions(   Window* pParent,
             case FUNIT_INCH:
             {
                 // nur diese Metriken benutzen
-                sal_uInt16 nPos = m_pUnitLB->InsertEntry( sMetric );
+                sal_Int32 nPos = m_pUnitLB->InsertEntry( sMetric );
                 m_pUnitLB->SetEntryData( nPos, (void*)(sal_IntPtr)eFUnit );
             }
             break;
@@ -435,7 +435,7 @@ SfxTabPage* ScTpLayoutOptions::Create( Window*          pParent,
 sal_Bool    ScTpLayoutOptions::FillItemSet( SfxItemSet& rCoreSet )
 {
     sal_Bool bRet = sal_True;
-    const sal_uInt16 nMPos = m_pUnitLB->GetSelectEntryPos();
+    const sal_Int32 nMPos = m_pUnitLB->GetSelectEntryPos();
     if ( nMPos != m_pUnitLB->GetSavedValue() )
     {
         sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pUnitLB->GetEntryData( nMPos );
@@ -538,7 +538,7 @@ void    ScTpLayoutOptions::Reset( const SfxItemSet& rCoreSet )
         const SfxUInt16Item& rItem = (SfxUInt16Item&)rCoreSet.Get( SID_ATTR_METRIC );
         FieldUnit eFieldUnit = (FieldUnit)rItem.GetValue();
 
-        for ( sal_uInt16 i = 0; i < m_pUnitLB->GetEntryCount(); ++i )
+        for ( sal_Int32 i = 0; i < m_pUnitLB->GetEntryCount(); ++i )
         {
             if ( (FieldUnit)(sal_IntPtr)m_pUnitLB->GetEntryData( i ) == eFieldUnit )
             {
@@ -642,8 +642,8 @@ int ScTpLayoutOptions::DeactivatePage( SfxItemSet* pSetP )
 
 IMPL_LINK_NOARG(ScTpLayoutOptions, MetricHdl)
 {
-    const sal_uInt16 nMPos = m_pUnitLB->GetSelectEntryPos();
-    if(nMPos != USHRT_MAX)
+    const sal_Int32 nMPos = m_pUnitLB->GetSelectEntryPos();
+    if(nMPos != LISTBOX_ENTRY_NOTFOUND)
     {
         FieldUnit eFieldUnit = (FieldUnit)(sal_IntPtr)m_pUnitLB->GetEntryData( nMPos );
         sal_Int64 nVal =

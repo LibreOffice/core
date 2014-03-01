@@ -723,9 +723,9 @@ IMPL_LINK_NOARG(SdTPAction, CheckFileHdl)
 presentation::ClickAction SdTPAction::GetActualClickAction()
 {
     presentation::ClickAction eCA = presentation::ClickAction_NONE;
-    sal_uInt16 nPos = m_pLbAction->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLbAction->GetSelectEntryPos();
 
-    if (nPos != LISTBOX_ENTRY_NOTFOUND && nPos < maCurrentActions.size())
+    if (nPos != LISTBOX_ENTRY_NOTFOUND && static_cast<size_t>(nPos) < maCurrentActions.size())
         eCA = maCurrentActions[ nPos ];
     return( eCA );
 }
@@ -818,8 +818,8 @@ OUString SdTPAction::GetEditText( sal_Bool bFullDocDestination )
             break;
         case presentation::ClickAction_VERB:
             {
-                const sal_uInt16 nPos = m_pLbOLEAction->GetSelectEntryPos();
-                if( nPos < aVerbVector.size() )
+                const sal_Int32 nPos = m_pLbOLEAction->GetSelectEntryPos();
+                if( static_cast<size_t>(nPos) < aVerbVector.size() )
                     aStr = OUString::number( aVerbVector[ nPos ] );
                 return aStr;
             }

@@ -147,8 +147,8 @@ void SvxHatchTabPage::Construct()
 
 void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
 {
-    sal_uInt16 nPos;
-    sal_uInt16 nCount;
+    sal_Int32 nPos;
+    sal_Int32 nCount;
 
     if( nDlgType == 0 ) // area dialog
     {
@@ -270,7 +270,7 @@ long SvxHatchTabPage::CheckChanges_Impl()
         delete aMessDlg;
     }
 
-    sal_uInt16 nPos = m_pLbHatchings->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLbHatchings->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
         *pPos = nPos;
     return 0L;
@@ -288,7 +288,7 @@ sal_Bool SvxHatchTabPage::FillItemSet( SfxItemSet& rSet )
 
             XHatch* pXHatch = NULL;
             OUString  aString;
-            sal_uInt16  nPos = m_pLbHatchings->GetSelectEntryPos();
+            sal_Int32  nPos = m_pLbHatchings->GetSelectEntryPos();
             if( nPos != LISTBOX_ENTRY_NOTFOUND )
             {
                 pXHatch = new XHatch( pHatchingList->GetHatch( nPos )->GetHatch() );
@@ -410,7 +410,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ChangeHatchHdl_Impl)
     if( pHatch )
     {
         m_pLbLineType->SelectEntryPos(
-            sal::static_int_cast< sal_uInt16 >( pHatch->GetHatchStyle() ) );
+            sal::static_int_cast< sal_Int32 >( pHatch->GetHatchStyle() ) );
         // if the entry is not in the listbox
         // the color is added temporarily
         m_pLbLineColor->SetNoSelection();
@@ -553,7 +553,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl)
 
 IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl)
 {
-    sal_uInt16 nPos = m_pLbHatchings->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLbHatchings->GetSelectEntryPos();
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -623,7 +623,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl)
 
 IMPL_LINK_NOARG(SvxHatchTabPage, ClickDeleteHdl_Impl)
 {
-    sal_uInt16 nPos = m_pLbHatchings->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLbHatchings->GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {

@@ -42,7 +42,7 @@ private:
     ImplListBox*                mpImplLB;
     ImplBtn*                    mpBtn;
     ImplListBoxFloatingWindow*  mpFloatWin;
-    sal_uInt16                      mnDDHeight;
+    sal_uInt16                  mnDDHeight;
     sal_Unicode                 mcMultiSep;
     bool                        mbDDAutoSize        : 1;
     bool                        mbSyntheticModify   : 1;
@@ -129,21 +129,21 @@ public:
     virtual void    SetText( const OUString& rStr );
     virtual void    SetText( const OUString& rStr, const Selection& rNewSelection );
 
-    virtual sal_uInt16 InsertEntry(const OUString& rStr, sal_uInt16 nPos = COMBOBOX_APPEND);
-    void            InsertEntryWithImage( const OUString& rStr, const Image& rImage, sal_uInt16 nPos = COMBOBOX_APPEND );
+    virtual sal_Int32  InsertEntry(const OUString& rStr, sal_Int32  nPos = COMBOBOX_APPEND);
+    void            InsertEntryWithImage( const OUString& rStr, const Image& rImage, sal_Int32  nPos = COMBOBOX_APPEND );
 
     void            RemoveEntry( const OUString& rStr );
-    virtual void    RemoveEntryAt(sal_uInt16 nPos);
+    virtual void    RemoveEntryAt(sal_Int32  nPos);
 
     void            Clear();
 
-    sal_uInt16      GetEntryPos( const OUString& rStr ) const;
-    Image           GetEntryImage( sal_uInt16 nPos ) const;
-    OUString        GetEntry( sal_uInt16 nPos ) const;
-    sal_uInt16      GetEntryCount() const;
+    sal_Int32       GetEntryPos( const OUString& rStr ) const;
+    Image           GetEntryImage( sal_Int32  nPos ) const;
+    OUString        GetEntry( sal_Int32  nPos ) const;
+    sal_Int32       GetEntryCount() const;
 
-    bool        IsTravelSelect() const;
-    bool        IsInDropDown() const;
+    bool            IsTravelSelect() const;
+    bool            IsInDropDown() const;
     void            ToggleDropDown();
 
     long            CalcWindowSizePixel( sal_uInt16 nLines ) const;
@@ -154,13 +154,13 @@ public:
     void            DrawEntry( const UserDrawEvent& rEvt, bool bDrawImage, bool bDrawText, bool bDrawTextAtImagePos = false );
     void            SetBorderStyle( sal_uInt16 nBorderStyle );
 
-    void            SetSeparatorPos( sal_uInt16 n = LISTBOX_ENTRY_NOTFOUND );
+    void            SetSeparatorPos( sal_Int32  n = LISTBOX_ENTRY_NOTFOUND );
 
     void            EnableAutocomplete( bool bEnable, bool bMatchCase = false );
-    bool        IsAutocompleteEnabled() const;
+    bool            IsAutocompleteEnabled() const;
 
     void            EnableMultiSelection( bool bMulti );
-    bool        IsMultiSelectionEnabled() const;
+    bool            IsMultiSelectionEnabled() const;
     void            SetMultiSelectionSeparator( sal_Unicode cSep ) { mcMultiSep = cSep; }
     sal_Unicode     GetMultiSelectionSeparator() const { return mcMultiSep; }
 
@@ -177,24 +177,24 @@ public:
 
     void            SetMRUEntries( const OUString& rEntries, sal_Unicode cSep = ';' );
     OUString        GetMRUEntries( sal_Unicode cSep = ';' ) const;
-    void            SetMaxMRUCount( sal_uInt16 n );
-    sal_uInt16      GetMaxMRUCount() const;
-    sal_uInt16      GetMRUCount() const;
-    void            SetEntryData( sal_uInt16 nPos, void* pNewData );
-    void*           GetEntryData( sal_uInt16 nPos ) const;
+    void            SetMaxMRUCount( sal_Int32  n );
+    sal_Int32       GetMaxMRUCount() const;
+    sal_Int32       GetMRUCount() const;
+    void            SetEntryData( sal_Int32  nPos, void* pNewData );
+    void*           GetEntryData( sal_Int32  nPos ) const;
 
-    sal_uInt16          GetTopEntry() const;
+    sal_Int32       GetTopEntry() const;
 
     void            SetProminentEntryType( ProminentEntry eType );
 
-    sal_uInt16          GetDisplayLineCount() const;
+    sal_uInt16      GetDisplayLineCount() const;
 
-    sal_uInt16          GetSelectEntryCount() const;
-    sal_uInt16          GetSelectEntryPos( sal_uInt16 nSelIndex = 0 ) const;
-    bool            IsEntryPosSelected( sal_uInt16 nPos ) const;
-    void            SelectEntryPos( sal_uInt16 nPos, bool bSelect = true );
+    sal_Int32       GetSelectEntryCount() const;
+    sal_Int32       GetSelectEntryPos( sal_Int32  nSelIndex = 0 ) const;
+    bool            IsEntryPosSelected( sal_Int32  nPos ) const;
+    void            SelectEntryPos( sal_Int32  nPos, bool bSelect = true );
     void            SetNoSelection();
-    Rectangle       GetBoundingRectangle( sal_uInt16 nItem ) const;
+    Rectangle       GetBoundingRectangle( sal_Int32  nItem ) const;
 
     /** checks whether a certain point lies within the bounds of
         a list item and returns the item as well as the character position
@@ -215,7 +215,7 @@ public:
         if no item is at that point.
      */
     using Control::GetIndexForPoint;
-    long GetIndexForPoint( const Point& rPoint, sal_uInt16& rPos ) const;
+    long GetIndexForPoint( const Point& rPoint, sal_Int32 & rPos ) const;
 
     sal_Int32 getMaxWidthChars() const { return m_nMaxWidthChars; }
     void setMaxWidthChars(sal_Int32 nWidth);
