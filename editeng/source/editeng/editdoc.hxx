@@ -327,11 +327,11 @@ public:
     sal_Int32  GetIndex() const         { return nIndex; }
     void       SetIndex( sal_Int32 n )  { nIndex = n; }
 
-    sal_Bool            DbgIsBuggy( EditDoc& rDoc );
+    bool       DbgIsBuggy( EditDoc& rDoc );
 
     EditPaM&    operator = ( const EditPaM& rPaM );
-    friend sal_Bool operator == ( const EditPaM& r1,  const EditPaM& r2  );
-    friend sal_Bool operator != ( const EditPaM& r1,  const EditPaM& r2  );
+    friend bool operator == ( const EditPaM& r1, const EditPaM& r2 );
+    friend bool operator != ( const EditPaM& r1, const EditPaM& r2 );
 };
 
 #define PORTIONKIND_TEXT        0
@@ -712,15 +712,14 @@ public:
 
     sal_Bool            HasRange() const    { return aStartPaM != aEndPaM; }
     sal_Bool            IsInvalid() const;
-    sal_Bool            DbgIsBuggy( EditDoc& rDoc );
+    bool            DbgIsBuggy( EditDoc& rDoc );
 
     sal_Bool            Adjust( const EditDoc& rNodes );
 
     EditSelection&  operator = ( const EditPaM& r );
-    sal_Bool            operator == ( const EditSelection& r ) const
-                    { return ( ( aStartPaM == r.aStartPaM ) && ( aEndPaM == r.aEndPaM ) )
-                            ? sal_True : sal_False; }
-    sal_Bool            operator != ( const EditSelection& r ) const { return !( r == *this ); }
+    bool            operator == ( const EditSelection& r ) const
+                    { return ( aStartPaM == r.aStartPaM ) && ( aEndPaM == r.aEndPaM ); }
+    bool            operator != ( const EditSelection& r ) const { return !( r == *this ); }
 };
 
 

@@ -1174,26 +1174,16 @@ void EditPaM::SetNode(ContentNode* p)
     pNode = p;
 }
 
-sal_Bool EditPaM::DbgIsBuggy( EditDoc& rDoc )
+bool EditPaM::DbgIsBuggy( EditDoc& rDoc )
 {
-    if ( !pNode )
-        return sal_True;
-    if ( rDoc.GetPos( pNode ) >= rDoc.Count() )
-        return sal_True;
-    if ( nIndex > pNode->Len() )
-        return sal_True;
-
-    return sal_False;
+    return !pNode ||
+           rDoc.GetPos( pNode ) >= rDoc.Count() ||
+           nIndex > pNode->Len();
 }
 
-sal_Bool EditSelection::DbgIsBuggy( EditDoc& rDoc )
+bool EditSelection::DbgIsBuggy( EditDoc& rDoc )
 {
-    if ( aStartPaM.DbgIsBuggy( rDoc ) )
-        return sal_True;
-    if ( aEndPaM.DbgIsBuggy( rDoc ) )
-        return sal_True;
-
-    return sal_False;
+    return aStartPaM.DbgIsBuggy( rDoc ) || aEndPaM.DbgIsBuggy( rDoc );
 }
 
 EditSelection::EditSelection()
@@ -1265,15 +1255,10 @@ sal_Bool EditSelection::Adjust( const EditDoc& rNodes )
     return bSwap;
 }
 
-sal_Bool operator == ( const EditPaM& r1,  const EditPaM& r2  )
+bool operator == ( const EditPaM& r1, const EditPaM& r2 )
 {
-    if ( r1.GetNode() != r2.GetNode() )
-        return sal_False;
-
-    if ( r1.GetIndex() != r2.GetIndex() )
-        return sal_False;
-
-    return sal_True;
+    return ( r1.GetNode() == r2.GetNode() ) &&
+           ( r1.GetIndex() == r2.GetIndex() );
 }
 
 EditPaM& EditPaM::operator = ( const EditPaM& rPaM )
@@ -1283,7 +1268,7 @@ EditPaM& EditPaM::operator = ( const EditPaM& rPaM )
     return *this;
 }
 
-sal_Bool operator != ( const EditPaM& r1,  const EditPaM& r2  )
+bool operator != ( const EditPaM& r1, const EditPaM& r2 )
 {
     return !( r1 == r2 );
 }
