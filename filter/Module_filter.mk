@@ -34,7 +34,6 @@ $(eval $(call gb_Module_add_targets,filter,\
 	    Library_exp) \
 	Library_filterconfig \
 	Library_flash \
-	Library_htmlfd \
 	Library_icd \
 	Library_icg \
 	Library_idx \
