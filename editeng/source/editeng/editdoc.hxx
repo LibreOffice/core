@@ -714,7 +714,7 @@ public:
     sal_Bool            IsInvalid() const;
     bool            DbgIsBuggy( EditDoc& rDoc );
 
-    sal_Bool            Adjust( const EditDoc& rNodes );
+    void            Adjust( const EditDoc& rNodes );
 
     EditSelection&  operator = ( const EditPaM& r );
     bool            operator == ( const EditSelection& r ) const

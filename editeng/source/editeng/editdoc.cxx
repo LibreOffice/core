@@ -1225,7 +1225,7 @@ sal_Bool EditSelection::IsInvalid() const
     return sal_False;
 }
 
-sal_Bool EditSelection::Adjust( const EditDoc& rNodes )
+void EditSelection::Adjust( const EditDoc& rNodes )
 {
     DBG_ASSERT( aStartPaM.GetIndex() <= aStartPaM.GetNode()->Len(), "Index out of range in Adjust(1)" );
     DBG_ASSERT( aEndPaM.GetIndex() <= aEndPaM.GetNode()->Len(), "Index out of range in Adjust(2)" );
@@ -1239,11 +1239,9 @@ sal_Bool EditSelection::Adjust( const EditDoc& rNodes )
     DBG_ASSERT( nStartNode != SAL_MAX_INT32, "Node out of range in Adjust(1)" );
     DBG_ASSERT( nEndNode != SAL_MAX_INT32, "Node out of range in Adjust(2)" );
 
-    sal_Bool bSwap = sal_False;
-    if ( nStartNode > nEndNode )
-        bSwap = sal_True;
-    else if ( ( nStartNode == nEndNode ) && ( aStartPaM.GetIndex() > aEndPaM.GetIndex() ) )
-        bSwap = sal_True;
+    const bool bSwap = ( nStartNode > nEndNode ) ||
+                       ( ( nStartNode == nEndNode ) &&
+                         ( aStartPaM.GetIndex() > aEndPaM.GetIndex() ) );
 
     if ( bSwap )
     {
@@ -1251,8 +1249,6 @@ sal_Bool EditSelection::Adjust( const EditDoc& rNodes )
         aStartPaM = aEndPaM;
         aEndPaM = aTmpPaM;
     }
-
-    return bSwap;
 }
 
 bool operator == ( const EditPaM& r1, const EditPaM& r2 )
