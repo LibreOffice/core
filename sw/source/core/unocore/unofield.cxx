@@ -652,7 +652,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             case RES_DBFLD :
             {
                 rValue >>= m_pImpl->m_sParam3;
-                pType = GetFldType();
+                pType2 = GetFldType();
             }
             break;
         }
