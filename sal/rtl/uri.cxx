@@ -32,6 +32,7 @@
 #include "sal/types.h"
 #include "sal/macros.h"
 
+#include <algorithm>
 #include <cstddef>
 
 namespace {
@@ -412,81 +413,55 @@ void parseUriRef(rtl_uString const * pUriRef, Components * pComponents)
     }
 }
 
-rtl::OUString joinPaths(Component const & rBasePath, Component const & rRelPath)
+void appendPath(
+    rtl::OUStringBuffer & buffer, sal_Int32 bufferStart, bool precedingSlash,
+    sal_Unicode const * pathBegin, sal_Unicode const * pathEnd)
 {
-    assert(rBasePath.isPresent() && *rBasePath.pBegin == '/');
-    assert(rRelPath.isPresent());
-
-    // The invariant of aBuffer is that it always starts and ends with a slash
-    // (until probably right at the end of the algorithm, when the last segment
-    // of rRelPath is added, which does not necessarily end in a slash):
-    rtl::OUStringBuffer aBuffer(rBasePath.getLength() + rRelPath.getLength());
-        // XXX  numeric overflow
-
-    // Segments "." and ".." within rBasePath are not conisdered special (but
-    // are also not removed by ".." segments within rRelPath), RFC 2396 seems a
-    // bit unclear about this point:
-    sal_Int32 nFixed = 1;
-    sal_Unicode const * p = rBasePath.pBegin + 1;
-    for (sal_Unicode const * q = p; q != rBasePath.pEnd; ++q)
-        if (*q == '/')
-        {
-            if (
-                (q - p == 1 && p[0] == '.') ||
-                (q - p == 2 && p[0] == '.' && p[1] == '.')
-               )
-            {
-                nFixed = q + 1 - rBasePath.pBegin;
-            }
-            p = q + 1;
+    while (precedingSlash || pathBegin != pathEnd) {
+        sal_Unicode const * p = pathBegin;
+        while (p != pathEnd && *p != '/') {
+            ++p;
         }
-    aBuffer.append(rBasePath.pBegin, p - rBasePath.pBegin);
-
-    p = rRelPath.pBegin;
-    if (p != rRelPath.pEnd)
-        for (;;)
-        {
-            sal_Unicode const * q = p;
-            sal_Unicode const * r;
-            for (;;)
-            {
-                if (q == rRelPath.pEnd)
-                {
-                    r = q;
-                    break;
-                }
-                if (*q == '/')
-                {
-                    r = q + 1;
-                    break;
-                }
-                ++q;
+        std::size_t n = p - pathBegin;
+        if (n == 1 && pathBegin[0] == '.') {
+            // input begins with "." -> remove from input (and done):
+            //  i.e., !precedingSlash -> !precedingSlash
+            // input begins with "./" -> remove from input:
+            //  i.e., !precedingSlash -> !precedingSlash
+            // input begins with "/." -> replace with "/" in input (and not yet
+            // done):
+            //  i.e., precedingSlash -> precedingSlash
+            // input begins with "/./" -> replace with "/" in input:
+            //  i.e., precedingSlash -> precedingSlash
+        } else if (n == 2 && pathBegin[0] == '.' && pathBegin[1] == '.') {
+            // input begins with ".." -> remove from input (and done):
+            //  i.e., !precedingSlash -> !precedingSlash
+            // input begins with "../" -> remove from input
+            //  i.e., !precedingSlash -> !precedingSlash
+            // input begins with "/.." -> replace with "/" in input, and shrink
+            // output (not not yet done):
+            //  i.e., precedingSlash -> precedingSlash
+            // input begins with "/../" -> replace with "/" in input, and shrink
+            // output:
+            //  i.e., precedingSlash -> precedingSlash
+            if (precedingSlash) {
+                buffer.truncate(
+                    bufferStart
+                    + std::max<sal_Int32>(
+                        rtl_ustr_lastIndexOfChar_WithLength(
+                            buffer.getStr() + bufferStart,
+                            buffer.getLength() - bufferStart, '/'),
+                        0));
             }
-            if (q - p == 2 && p[0] == '.' && p[1] == '.')
-            {
-                // Erroneous excess segments ".." within rRelPath are left
-                // intact, as the examples in RFC 2396, section C.2, suggest:
-                sal_Int32 i = aBuffer.getLength() - 1;
-                if (i < nFixed)
-                {
-                    aBuffer.append(p, r - p);
-                    nFixed += 3;
-                }
-                else
-                {
-                    while (i > 0 && aBuffer[i - 1] != '/')
-                        --i;
-                    aBuffer.setLength(i);
-                }
+        } else {
+            if (precedingSlash) {
+                buffer.append('/');
             }
-            else if (q - p != 1 || *p != '.')
-                aBuffer.append(p, r - p);
-            if (q == rRelPath.pEnd)
-                break;
-            p = q + 1;
+            buffer.append(pathBegin, n);
+            precedingSlash = p != pathEnd;
         }
-
-    return aBuffer.makeStringAndClear();
+        pathBegin = p + (p == pathEnd ? 0 : 1);
+    }
 }
 
 }
@@ -689,86 +664,100 @@ sal_Bool SAL_CALL rtl_uriConvertRelToAbs(rtl_uString * pBaseUriRef,
                                          rtl_uString ** pException)
     SAL_THROW_EXTERN_C()
 {
-    // If pRelUriRef starts with a scheme component it is an absolute URI
-    // reference, and we are done (i.e., this algorithm does not support
-    // backwards-compatible relative URIs starting with a scheme component, see
-    // RFC 2396, section 5.2, step 3):
+    // Use the strict parser algorithm from RFC 3986, section 5.2, to turn the
+    // relative URI into an absolute one:
+    rtl::OUStringBuffer aBuffer;
     Components aRelComponents;
     parseUriRef(pRelUriRef, &aRelComponents);
     if (aRelComponents.aScheme.isPresent())
     {
-        rtl_uString_assign(pResult, pRelUriRef);
-        return true;
-    }
-
-    // Parse pBaseUriRef; if the scheme component is not present or not valid,
-    // or the path component is not empty and starts with anything but a slash,
-    // an exception is raised:
-    Components aBaseComponents;
-    parseUriRef(pBaseUriRef, &aBaseComponents);
-    if (!aBaseComponents.aScheme.isPresent())
-    {
-        rtl_uString_assign(
-            pException,
-            (rtl::OUString(
-                "<" + rtl::OUString(pBaseUriRef)
-                + "> does not start with a scheme component")
-             .pData));
-        return false;
-    }
-    if (aBaseComponents.aPath.pBegin != aBaseComponents.aPath.pEnd
-        && *aBaseComponents.aPath.pBegin != '/')
-    {
-        rtl_uString_assign(
-            pException,
-            (rtl::OUString(
-                "<" + rtl::OUString(pBaseUriRef)
-                + "> path component does not start with a slash")
-             .pData));
-        return false;
-    }
-
-    // Use the algorithm from RFC 2396, section 5.2, to turn the relative URI
-    // into an absolute one (if the relative URI is a reference to the "current
-    // document," the "current document" is here taken to be the base URI):
-    rtl::OUStringBuffer aBuffer;
-    aBuffer.append(aBaseComponents.aScheme.pBegin,
-                   aBaseComponents.aScheme.getLength());
-    if (aRelComponents.aAuthority.isPresent())
-    {
-        aBuffer.append(aRelComponents.aAuthority.pBegin,
-                       aRelComponents.aAuthority.getLength());
-        aBuffer.append(aRelComponents.aPath.pBegin,
-                       aRelComponents.aPath.getLength());
+        aBuffer.append(aRelComponents.aScheme.pBegin,
+                       aRelComponents.aScheme.getLength());
+        if (aRelComponents.aAuthority.isPresent())
+            aBuffer.append(aRelComponents.aAuthority.pBegin,
+                           aRelComponents.aAuthority.getLength());
+        appendPath(
+            aBuffer, aBuffer.getLength(), false, aRelComponents.aPath.pBegin,
+            aRelComponents.aPath.pEnd);
         if (aRelComponents.aQuery.isPresent())
             aBuffer.append(aRelComponents.aQuery.pBegin,
                            aRelComponents.aQuery.getLength());
     }
     else
     {
-        if (aBaseComponents.aAuthority.isPresent())
-            aBuffer.append(aBaseComponents.aAuthority.pBegin,
-                           aBaseComponents.aAuthority.getLength());
-        if (aRelComponents.aPath.pBegin == aRelComponents.aPath.pEnd
-            && !aRelComponents.aQuery.isPresent())
+        Components aBaseComponents;
+        parseUriRef(pBaseUriRef, &aBaseComponents);
+        if (!aBaseComponents.aScheme.isPresent())
         {
-            aBuffer.append(aBaseComponents.aPath.pBegin,
-                           aBaseComponents.aPath.getLength());
-            if (aBaseComponents.aQuery.isPresent())
-                aBuffer.append(aBaseComponents.aQuery.pBegin,
-                               aBaseComponents.aQuery.getLength());
+            rtl_uString_assign(
+                pException,
+                (rtl::OUString(
+                    "<" + rtl::OUString(pBaseUriRef)
+                    + "> does not start with a scheme component")
+                 .pData));
+            return false;
         }
-        else
+        aBuffer.append(aBaseComponents.aScheme.pBegin,
+                       aBaseComponents.aScheme.getLength());
+        if (aRelComponents.aAuthority.isPresent())
         {
-            if (*aRelComponents.aPath.pBegin == '/')
-                aBuffer.append(aRelComponents.aPath.pBegin,
-                               aRelComponents.aPath.getLength());
-            else
-                aBuffer.append(joinPaths(aBaseComponents.aPath,
-                                         aRelComponents.aPath));
+            aBuffer.append(aRelComponents.aAuthority.pBegin,
+                           aRelComponents.aAuthority.getLength());
+            appendPath(
+                aBuffer, aBuffer.getLength(), false,
+                aRelComponents.aPath.pBegin, aRelComponents.aPath.pEnd);
             if (aRelComponents.aQuery.isPresent())
                 aBuffer.append(aRelComponents.aQuery.pBegin,
                                aRelComponents.aQuery.getLength());
+        }
+        else
+        {
+            if (aBaseComponents.aAuthority.isPresent())
+                aBuffer.append(aBaseComponents.aAuthority.pBegin,
+                               aBaseComponents.aAuthority.getLength());
+            if (aRelComponents.aPath.pBegin == aRelComponents.aPath.pEnd)
+            {
+                aBuffer.append(aBaseComponents.aPath.pBegin,
+                               aBaseComponents.aPath.getLength());
+                if (aRelComponents.aQuery.isPresent())
+                    aBuffer.append(aRelComponents.aQuery.pBegin,
+                                   aRelComponents.aQuery.getLength());
+                else if (aBaseComponents.aQuery.isPresent())
+                    aBuffer.append(aBaseComponents.aQuery.pBegin,
+                                   aBaseComponents.aQuery.getLength());
+            }
+            else
+            {
+                if (aRelComponents.aPath.pBegin != aRelComponents.aPath.pEnd
+                    && *aRelComponents.aPath.pBegin == '/')
+                    appendPath(
+                        aBuffer, aBuffer.getLength(), false,
+                        aRelComponents.aPath.pBegin, aRelComponents.aPath.pEnd);
+                else if (aBaseComponents.aAuthority.isPresent()
+                         && aBaseComponents.aPath.pBegin
+                            == aBaseComponents.aPath.pEnd)
+                    appendPath(
+                        aBuffer, aBuffer.getLength(), true,
+                        aRelComponents.aPath.pBegin, aRelComponents.aPath.pEnd);
+                else
+                {
+                    sal_Int32 n = aBuffer.getLength();
+                    sal_Int32 i = rtl_ustr_lastIndexOfChar_WithLength(
+                        aBaseComponents.aPath.pBegin,
+                        aBaseComponents.aPath.getLength(), '/');
+                    if (i >= 0) {
+                        appendPath(
+                            aBuffer, n, false, aBaseComponents.aPath.pBegin,
+                            aBaseComponents.aPath.pBegin + i);
+                    }
+                    appendPath(
+                        aBuffer, n, i >= 0, aRelComponents.aPath.pBegin,
+                        aRelComponents.aPath.pEnd);
+                }
+                if (aRelComponents.aQuery.isPresent())
+                    aBuffer.append(aRelComponents.aQuery.pBegin,
+                                   aRelComponents.aQuery.getLength());
+            }
         }
     }
     if (aRelComponents.aFragment.isPresent())

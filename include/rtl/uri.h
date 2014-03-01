@@ -294,39 +294,27 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uriDecode(
                             rtl_uString ** pResult)
     SAL_THROW_EXTERN_C();
 
-/** Convert a relative URI reference into an absolute one.
+/** Convert a relative URI reference into an absolute URI.
 
-    A URI reference is a URI plus an optional @<"#" fragment> part.
-
-    This function uses the algorithm described in RFC 2396, section 5.2, with
-    the following clarifications:  (1) Backwards-compatible relative URIs
-    starting with a scheme component (see RFC 2396, section 5.2, step 3) are not
-    supported.  (2) Segments "." and ".." within the path of the base URI are
-    not considered special, RFC 2396 seems a bit unlcear about that point.
-    (3) Erroneous excess segments ".." within the path of the relative URI (if
-    it is indeed relative) are left intact, as the examples in RFC 2396,
-    section C.2, suggest.  (4) If the relative URI is a reference to the
-    "current document," the "current document" is taken to be the base URI.
+    This function uses the strict parser algorithm described in RFC 3986,
+    section 5.2.
 
     This function signals exceptions by returning false and letting pException
     point to a message explaining the exception.
 
     @param pBaseUriRef
-    An absolute, hierarchical URI reference that serves as the base URI.  If it
-    has to be inspected (i.e., pRelUriRef is not an absolute URI already), and
-    if it either is not an absolute URI (i.e., does not begin with a
-    @<scheme ":"> part) or has a path that is non-empty but does not start
-    with "/", an exception will be signaled.
+    An absolute URI that serves as the base URI.  If it has to be inspected
+    (i.e., pRelUriRef is not an absolute URI already), and it is not an absolute
+    URI (i.e., does not begin with a @<scheme ":"> part), an exception will be
+    signaled.
 
     @param pRelUriRef
     An URI reference that may be either absolute or relative.  If it is
-    absolute, it will be returned unmodified (and it need not be hierarchical
-    then).
+    absolute, it will be returned unmodified.
 
     @param pResult
-    Returns an absolute URI reference.  Must itself not be null, and must point
-    to either null or a valid string.  If an exception is signalled, it is left
-    unchanged.
+    Returns an absolute URI.  Must itself not be null, and must point to either
+    null or a valid string.  If an exception is signalled, it is left unchanged.
 
     @param pException
     Returns an explanatory message in case an exception is signalled.  Must

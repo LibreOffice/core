@@ -279,14 +279,14 @@ void Test::test_Uri() {
         char const * pAbs;
     };
     static RelToAbsTest const aRelToAbsTest[]
-        = { // The following tests are taken from RFC 2396:
+        = { // The following tests are taken from RFC 3986:
             { "http://a/b/c/d;p?q", "g:h", "g:h" },
             { "http://a/b/c/d;p?q", "g", "http://a/b/c/g" },
             { "http://a/b/c/d;p?q", "./g", "http://a/b/c/g" },
             { "http://a/b/c/d;p?q", "g/", "http://a/b/c/g/" },
             { "http://a/b/c/d;p?q", "/g", "http://a/g" },
             { "http://a/b/c/d;p?q", "//g", "http://g" },
-            { "http://a/b/c/d;p?q", "?y", "http://a/b/c/?y" },
+            { "http://a/b/c/d;p?q", "?y", "http://a/b/c/d;p?y" },
             { "http://a/b/c/d;p?q", "g?y", "http://a/b/c/g?y" },
             { "http://a/b/c/d;p?q", "#s", "http://a/b/c/d;p?q#s" },
             { "http://a/b/c/d;p?q", "g#s", "http://a/b/c/g#s" },
@@ -294,6 +294,7 @@ void Test::test_Uri() {
             { "http://a/b/c/d;p?q", ";x", "http://a/b/c/;x" },
             { "http://a/b/c/d;p?q", "g;x", "http://a/b/c/g;x" },
             { "http://a/b/c/d;p?q", "g;x?y#s", "http://a/b/c/g;x?y#s" },
+            { "http://a/b/c/d;p?q", "", "http://a/b/c/d;p?q" },
             { "http://a/b/c/d;p?q", ".", "http://a/b/c/" },
             { "http://a/b/c/d;p?q", "./", "http://a/b/c/" },
             { "http://a/b/c/d;p?q", "..", "http://a/b/" },
@@ -302,11 +303,10 @@ void Test::test_Uri() {
             { "http://a/b/c/d;p?q", "../..", "http://a/" },
             { "http://a/b/c/d;p?q", "../../", "http://a/" },
             { "http://a/b/c/d;p?q", "../../g", "http://a/g" },
-            { "http://a/b/c/d;p?q", "", "http://a/b/c/d;p?q" },
-            { "http://a/b/c/d;p?q", "../../../g", "http://a/../g" },
-            { "http://a/b/c/d;p?q", "../../../../g", "http://a/../../g" },
-            { "http://a/b/c/d;p?q", "/./g", "http://a/./g" },
-            { "http://a/b/c/d;p?q", "/../g", "http://a/../g" },
+            { "http://a/b/c/d;p?q", "../../../g", "http://a/g" },
+            { "http://a/b/c/d;p?q", "../../../../g", "http://a/g" },
+            { "http://a/b/c/d;p?q", "/./g", "http://a/g" },
+            { "http://a/b/c/d;p?q", "/../g", "http://a/g" },
             { "http://a/b/c/d;p?q", "g.", "http://a/b/c/g." },
             { "http://a/b/c/d;p?q", ".g", "http://a/b/c/.g" },
             { "http://a/b/c/d;p?q", "g..", "http://a/b/c/g.." },
@@ -322,13 +322,15 @@ void Test::test_Uri() {
             { "http://a/b/c/d;p?q", "g#s/./x", "http://a/b/c/g#s/./x" },
             { "http://a/b/c/d;p?q", "g#s/../x", "http://a/b/c/g#s/../x" },
             { "http://a/b/c/d;p?q", "http:g", "http:g" },
+
             { "http!://a/b/c/d;p?q", "g:h", "g:h" },
             { "http!://a/b/c/d;p?q", "g", 0 },
             { "http:b/c/d;p?q", "g:h", "g:h" },
-            { "http:b/c/d;p?q", "g", 0 },
-            { "http://a/b/../", "../c", "http://a/b/../../c" },
+            { "http:b/c/d;p?q", "g", "http:b/c/g" },
+            { "http://a/b/../", "../c", "http://a/c" },
             { "http://a/b/..", "../c", "http://a/c" },
-            { "http://a/./b/", ".././.././../c", "http://a/./../../c" } };
+            { "http://a/./b/", ".././.././../c", "http://a/c" },
+            { "http://a", "b", "http://a/b" } };
     for (std::size_t i = 0; i < sizeof aRelToAbsTest / sizeof (RelToAbsTest); ++i)
     {
         rtl::OUString aAbs;
