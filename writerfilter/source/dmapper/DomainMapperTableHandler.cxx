@@ -953,7 +953,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
             // SectionPropertyMap::CloseSectionGroup(), so we'll have no idea
             // about the text area width, nor can fix this by delaying the text
             // frame conversion: just do it here.
-            // Also, we the anchor is within a table, then do it here as well,
+            // Also, when the anchor is within a table, then do it here as well,
             // as xStart/xEnd would not point to the start/end at conversion
             // time anyway.
             sal_Int32 nTableWidth = 0;
