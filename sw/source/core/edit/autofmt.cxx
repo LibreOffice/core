@@ -96,9 +96,9 @@ class SwAutoFormat
     SwDoc* m_pDoc;
     SwTxtNode* m_pCurTxtNd;     // the current TextNode
     SwTxtFrm* m_pCurTxtFrm;     // frame of the current TextNode
-    boost::scoped_ptr<CharClass> m_pCharClass; // Character classification
     sal_uLong m_nEndNdIdx;      // for the percentage-display
-    LanguageType m_eCharClassLang;
+    mutable boost::scoped_ptr<CharClass> m_pCharClass; // Character classification
+    mutable LanguageType m_eCharClassLang;
 
     sal_uInt16 m_nLastHeadLvl, m_nLastCalcHeadLvl;
     sal_uInt16 m_nRedlAutoFmtSeqId;
@@ -136,13 +136,12 @@ class SwAutoFormat
     bool m_bMoreLines : 1;
 
     // ------------- private methods -----------------------------
-    void _GetCharClass( LanguageType eLang );
     CharClass& GetCharClass( LanguageType eLang ) const
     {
         if( !m_pCharClass || eLang != m_eCharClassLang )
         {
-            SwAutoFormat* pThis = (SwAutoFormat*)this;
-            pThis->_GetCharClass( eLang );
+            m_pCharClass.reset( new CharClass( LanguageTag( eLang ) ) );
+            m_eCharClassLang = eLang;
         }
         return *m_pCharClass;
     }
@@ -252,12 +251,6 @@ SwTxtFrm* SwAutoFormat::GetFrm( const SwTxtNode& rTxtNd ) const
             pFrm->SetCompletePaint();
     }
     return ((SwTxtFrm*)pFrm)->GetFormatted();
-}
-
-void SwAutoFormat::_GetCharClass( LanguageType eLang )
-{
-    m_pCharClass.reset( new CharClass( LanguageTag( eLang ) ) );
-    m_eCharClassLang = eLang;
 }
 
 void SwAutoFormat::_SetRedlineTxt( sal_uInt16 nActionId )
