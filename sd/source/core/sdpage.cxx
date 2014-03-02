@@ -372,7 +372,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
                 nDestPageNum -= 1;
             }
 
-            if(nDestPageNum < pModel->GetPageCount())
+            if (pModel && nDestPageNum < pModel->GetPageCount())
             {
                 pSdrObj = new SdrPageObj(pModel->GetPage(nDestPageNum));
             }
