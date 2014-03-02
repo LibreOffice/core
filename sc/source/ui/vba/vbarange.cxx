@@ -2885,7 +2885,10 @@ ScVbaRange::PasteSpecial( const uno::Any& Paste, const uno::Any& Operation, cons
         throw uno::RuntimeException("That command cannot be used on multiple selections", uno::Reference< uno::XInterface >() );
     ScDocShell* pShell = getScDocShell();
 
-        uno::Reference< frame::XModel > xModel( ( pShell ? pShell->GetModel() : NULL ), uno::UNO_QUERY_THROW );
+    if (!pShell)
+        throw uno::RuntimeException("That command cannot be used with no ScDocShell", uno::Reference< uno::XInterface >() );
+
+    uno::Reference< frame::XModel > xModel(pShell->GetModel(), uno::UNO_QUERY_THROW);
     uno::Reference< view::XSelectionSupplier > xSelection( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
     // select this range
     xSelection->select( uno::makeAny( mxRange ) );
