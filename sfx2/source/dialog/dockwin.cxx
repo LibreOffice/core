@@ -966,7 +966,7 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
         return;
     }
 
-    if ( pInfo->nFlags & SFX_CHILDWIN_FORCEDOCK )
+    if (pInfo && (pInfo->nFlags & SFX_CHILDWIN_FORCEDOCK))
         pImp->bDockingPrevented = sal_True;
 
     pImp->aSplitSize = GetOutputSizePixel();
@@ -981,7 +981,7 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
     }
 
     sal_Bool bVertHorzRead( sal_False );
-    if ( !pInfo->aExtraString.isEmpty() )
+    if (pInfo && !pInfo->aExtraString.isEmpty())
     {
         // get information about alignment, split size and position in SplitWindow
         OUString aStr;
