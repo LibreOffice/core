@@ -543,19 +543,16 @@ uno::Sequence< OUString > SAL_CALL SvxShapeConnector::getSupportedServiceNames()
 /***********************************************************************
 * class SvxShapeControl                                                *
 ***********************************************************************/
-DBG_NAME(SvxShapeControl)
 
 SvxShapeControl::SvxShapeControl( SdrObject* pObj )  throw() :
     SvxShapeText( pObj, getSvxMapProvider().GetMap(SVXMAP_CONTROL), getSvxMapProvider().GetPropertySet(SVXMAP_CONTROL, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
-    DBG_CTOR(SvxShapeControl,NULL);
     setShapeKind( OBJ_UNO );
 }
 
 
 SvxShapeControl::~SvxShapeControl() throw()
 {
-    DBG_DTOR(SvxShapeControl,NULL);
 }
 
 

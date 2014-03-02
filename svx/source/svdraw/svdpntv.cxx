@@ -163,7 +163,6 @@ BitmapEx convertMetafileToBitmapEx(
 
 TYPEINIT2(SdrPaintView,SfxListener,SfxRepeatTarget);
 
-DBG_NAME(SdrPaintView);
 
 void SdrPaintView::ImpClearVars()
 {
@@ -218,7 +217,6 @@ SdrPaintView::SdrPaintView(SdrModel* pModel1, OutputDevice* pOut)
     mbHideDraw(false),
     mbHideFormControl(false)
 {
-    DBG_CTOR(SdrPaintView,NULL);
     pMod=pModel1;
     ImpClearVars();
 
@@ -236,7 +234,6 @@ SdrPaintView::SdrPaintView(SdrModel* pModel1, OutputDevice* pOut)
 
 SdrPaintView::~SdrPaintView()
 {
-    DBG_DTOR(SdrPaintView,NULL);
     if (pDefaultStyleSheet)
         EndListening(*pDefaultStyleSheet);
 

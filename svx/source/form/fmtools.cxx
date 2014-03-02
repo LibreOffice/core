@@ -307,14 +307,12 @@ void FmXDisposeListener::setAdapter(FmXDisposeMultiplexer* pAdapter)
 }
 
 
-DBG_NAME(FmXDisposeMultiplexer);
 
 FmXDisposeMultiplexer::FmXDisposeMultiplexer(FmXDisposeListener* _pListener, const Reference< ::com::sun::star::lang::XComponent>& _rxObject, sal_Int16 _nId)
     :m_xObject(_rxObject)
     ,m_pListener(_pListener)
     ,m_nId(_nId)
 {
-    DBG_CTOR(FmXDisposeMultiplexer, NULL);
     m_pListener->setAdapter(this);
 
     if (m_xObject.is())
@@ -324,7 +322,6 @@ FmXDisposeMultiplexer::FmXDisposeMultiplexer(FmXDisposeListener* _pListener, con
 
 FmXDisposeMultiplexer::~FmXDisposeMultiplexer()
 {
-    DBG_DTOR(FmXDisposeMultiplexer, NULL);
 }
 
 // ::com::sun::star::lang::XEventListener

@@ -75,13 +75,11 @@ SvxRedlinEntry::~SvxRedlinEntry()
 
 // Functions in the inserts Items of SvxRedlinTable
 
-DBG_NAME(SvLBoxColorString);
 
 SvLBoxColorString::SvLBoxColorString(SvTreeListEntry*pEntry, sal_uInt16 nFlags, const OUString& rStr,
     const Color& rCol)
     : SvLBoxString(pEntry, nFlags, rStr)
 {
-    DBG_CTOR(SvLBoxColorString,0);
     aPrivColor=rCol;
     SetText( rStr );
 }
@@ -89,17 +87,14 @@ SvLBoxColorString::SvLBoxColorString(SvTreeListEntry*pEntry, sal_uInt16 nFlags, 
 SvLBoxColorString::SvLBoxColorString()
 : SvLBoxString()
 {
-    DBG_CTOR(SvLBoxColorString,0);
 }
 
 SvLBoxColorString::~SvLBoxColorString()
 {
-    DBG_DTOR(SvLBoxColorString,0);
 }
 
 SvLBoxItem* SvLBoxColorString::Create() const
 {
-    DBG_CHKTHIS(SvLBoxColorString,0);
     return new SvLBoxColorString;
 }
 

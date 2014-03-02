@@ -65,7 +65,6 @@ using ::com::sun::star::container::EnumerableMap;
 using ::com::sun::star::drawing::XControlShape;
 using namespace ::svxform;
 
-DBG_NAME(FmFormPageImpl)
 
 FmFormPageImpl::FmFormPageImpl( FmFormPage& _rPage )
                :m_rPage( _rPage )
@@ -73,7 +72,6 @@ FmFormPageImpl::FmFormPageImpl( FmFormPage& _rPage )
                ,m_bAttemptedFormCreation( false )
                ,m_bInFind( false )
 {
-    DBG_CTOR(FmFormPageImpl,NULL);
 }
 
 
@@ -352,7 +350,6 @@ FmFormPageImpl::~FmFormPageImpl()
     xCurrentForm = NULL;
 
     ::comphelper::disposeComponent( m_xForms );
-    DBG_DTOR(FmFormPageImpl,NULL);
 }
 
 

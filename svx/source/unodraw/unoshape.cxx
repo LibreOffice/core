@@ -183,7 +183,6 @@ protected:
 * class SvxShape                                                       *
 ***********************************************************************/
 
-DBG_NAME(SvxShape)
 
 SvxShape::SvxShape( SdrObject* pObject ) throw()
 :   maSize(100,100)
@@ -195,7 +194,6 @@ SvxShape::SvxShape( SdrObject* pObject ) throw()
 ,   mpModel(NULL)
 ,   mnLockCount(0)
 {
-    DBG_CTOR(SvxShape,NULL);
     impl_construct();
 }
 
@@ -210,7 +208,6 @@ SvxShape::SvxShape( SdrObject* pObject, const SfxItemPropertyMapEntry* pEntries,
 ,   mpModel(NULL)
 ,   mnLockCount(0)
 {
-    DBG_CTOR(SvxShape,NULL);
     impl_construct();
 }
 
@@ -225,7 +222,6 @@ SvxShape::SvxShape() throw()
 ,   mpModel(NULL)
 ,   mnLockCount(0)
 {
-    DBG_CTOR(SvxShape,NULL);
     impl_construct();
 }
 
@@ -254,7 +250,6 @@ SvxShape::~SvxShape() throw()
 
     delete mpImpl, mpImpl = NULL;
 
-    DBG_DTOR(SvxShape,NULL);
 }
 
 
@@ -4231,16 +4226,13 @@ bool SvxShapeText::setPropertyToDefaultImpl( const SfxItemPropertySimpleEntry* p
 /***********************************************************************
 * class SvxShapeRect                                                   *
 ***********************************************************************/
-DBG_NAME(SvxShapeRect)
 SvxShapeRect::SvxShapeRect( SdrObject* pObj ) throw()
 : SvxShapeText( pObj, getSvxMapProvider().GetMap(SVXMAP_SHAPE), getSvxMapProvider().GetPropertySet(SVXMAP_SHAPE, SdrObject::GetGlobalDrawObjectItemPool()))
 {
-    DBG_CTOR(SvxShapeRect,NULL);
 }
 
 SvxShapeRect::~SvxShapeRect() throw()
 {
-    DBG_DTOR(SvxShapeRect,NULL);
 }
 
 uno::Any SAL_CALL SvxShapeRect::queryInterface( const uno::Type & rType ) throw(uno::RuntimeException, std::exception)

@@ -25,20 +25,17 @@
 #include <editeng/eeitem.hxx>
 #include <svl/itempool.hxx>
 
-DBG_NAME(SdrOutliner)
 
 SdrOutliner::SdrOutliner( SfxItemPool* pItemPool, sal_uInt16 nMode )
 :   Outliner( pItemPool, nMode ),
     //mpPaintInfoRec( NULL )
     mpVisualizedPage(0)
 {
-    DBG_CTOR(SdrOutliner,NULL);
 }
 
 
 SdrOutliner::~SdrOutliner()
 {
-    DBG_DTOR(SdrOutliner,NULL);
 }
 
 

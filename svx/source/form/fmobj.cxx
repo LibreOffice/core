@@ -57,14 +57,12 @@ using namespace ::com::sun::star::container;
 using namespace ::svxform;
 
 TYPEINIT1(FmFormObj, SdrUnoObj);
-DBG_NAME(FmFormObj);
 
 FmFormObj::FmFormObj(const OUString& rModelName)
           :SdrUnoObj                ( rModelName    )
           ,m_nPos                   ( -1            )
           ,m_pLastKnownRefDevice    ( NULL          )
 {
-    DBG_CTOR(FmFormObj, NULL);
 
     // normally, this is done in SetUnoControlModel, but if the call happened in the base class ctor,
     // then our incarnation of it was not called (since we were not constructed at this time).
@@ -77,13 +75,11 @@ FmFormObj::FmFormObj()
           ,m_nPos                   ( -1        )
           ,m_pLastKnownRefDevice    ( NULL      )
 {
-    DBG_CTOR(FmFormObj, NULL);
 }
 
 
 FmFormObj::~FmFormObj()
 {
-    DBG_DTOR(FmFormObj, NULL);
 
     if (m_xEnvironmentHistory.is())
         m_xEnvironmentHistory->dispose();

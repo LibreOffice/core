@@ -354,12 +354,10 @@ sal_Bool KillFile( const INetURLObject& rURL )
     return bRet;
 }
 
-DBG_NAME(GalleryProgress)
 
 GalleryProgress::GalleryProgress( GraphicFilter* pFilter ) :
     mpFilter( pFilter )
 {
-    DBG_CTOR(GalleryProgress,NULL);
 
     uno::Reference< lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
 
@@ -393,7 +391,6 @@ GalleryProgress::GalleryProgress( GraphicFilter* pFilter ) :
 
 GalleryProgress::~GalleryProgress()
 {
-    DBG_DTOR(GalleryProgress,NULL);
 }
 
 void GalleryProgress::Update( sal_uIntPtr nVal, sal_uIntPtr nMaxVal )
@@ -402,7 +399,6 @@ void GalleryProgress::Update( sal_uIntPtr nVal, sal_uIntPtr nMaxVal )
         mxProgressBar->setValue( std::min( (sal_uIntPtr)( (double) nVal / nMaxVal * GALLERY_PROGRESS_RANGE ), (sal_uIntPtr) GALLERY_PROGRESS_RANGE ) );
 }
 
-DBG_NAME(GalleryTransferable)
 
 GalleryTransferable::GalleryTransferable( GalleryTheme* pTheme, sal_uIntPtr nObjectPos, bool bLazy ) :
     mpTheme( pTheme ),
@@ -412,14 +408,12 @@ GalleryTransferable::GalleryTransferable( GalleryTheme* pTheme, sal_uIntPtr nObj
     mpImageMap( NULL ),
     mpURL( NULL )
 {
-    DBG_CTOR(GalleryTransferable,NULL);
 
     InitData( bLazy );
 }
 
 GalleryTransferable::~GalleryTransferable()
 {
-    DBG_DTOR(GalleryTransferable,NULL);
 }
 
 void GalleryTransferable::InitData( bool bLazy )

@@ -48,7 +48,6 @@ using namespace ::com::sun::star;
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
 
-DBG_NAME(SdrPageView);
 
 
 // interface to SdrPageWindow
@@ -146,7 +145,6 @@ SdrPageView::SdrPageView(SdrPage* pPage1, SdrView& rNewView)
     maBackgroundColor(COL_AUTO ), // #i48367# also react on autocolor
     mpPreparedPageWindow(0) // #i72752#
 {
-    DBG_CTOR(SdrPageView,NULL);
     mpPage = pPage1;
 
     if(mpPage)
@@ -171,7 +169,6 @@ SdrPageView::SdrPageView(SdrPage* pPage1, SdrView& rNewView)
 
 SdrPageView::~SdrPageView()
 {
-    DBG_DTOR(SdrPageView,NULL);
 
     // cleanup window vector
     ClearPageWindows();

@@ -58,13 +58,11 @@ using namespace ::com::sun::star::drawing;
 // class SvxDrawPage                                                   *
 
 UNO3_GETIMPLEMENTATION_IMPL( SvxDrawPage );
-DBG_NAME(SvxDrawPage)
 SvxDrawPage::SvxDrawPage( SdrPage* pInPage ) throw()
 : mrBHelper( getMutex() )
 , mpPage( pInPage )
 , mpModel( 0 )
 {
-    DBG_CTOR(SvxDrawPage,NULL);
     // Am Broadcaster anmelden
     if( mpPage )
         mpModel = mpPage->GetModel();
@@ -86,7 +84,6 @@ SvxDrawPage::~SvxDrawPage() throw()
         acquire();
         dispose();
     }
-    DBG_DTOR(SvxDrawPage,NULL);
 }
 
 // XInterface

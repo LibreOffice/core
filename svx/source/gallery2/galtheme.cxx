@@ -59,7 +59,6 @@ using namespace ::com::sun::star;
 
 // - SgaTheme -
 
-DBG_NAME(GalleryTheme)
 
 GalleryTheme::GalleryTheme( Gallery* pGallery, GalleryThemeEntry* pThemeEntry ) :
         pParent               ( pGallery ),
@@ -69,7 +68,6 @@ GalleryTheme::GalleryTheme( Gallery* pGallery, GalleryThemeEntry* pThemeEntry ) 
         nDragPos              ( 0 ),
         bDragging             ( sal_False )
 {
-    DBG_CTOR(GalleryTheme,NULL);
 
     ImplCreateSvDrawStorage();
 }
@@ -87,7 +85,6 @@ GalleryTheme::~GalleryTheme()
     }
     aObjectList.clear();
 
-    DBG_DTOR(GalleryTheme,NULL);
 }
 
 void GalleryTheme::ImplCreateSvDrawStorage()

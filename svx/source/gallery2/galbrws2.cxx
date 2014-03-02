@@ -135,7 +135,6 @@ public:
     virtual void SAL_CALL disposing( const css::lang::EventObject &rSource) throw ( css::uno::RuntimeException, std::exception );
 };
 
-DBG_NAME(GalleryThemePopup)
 
 GalleryThemePopup::GalleryThemePopup(
     const GalleryTheme* pTheme,
@@ -149,7 +148,6 @@ GalleryThemePopup::GalleryThemePopup(
     , maBackgroundPopup()
     , mpBrowser( pBrowser )
 {
-    DBG_CTOR(GalleryThemePopup,NULL);
 
     // SID_GALLERY_ENABLE_ADDCOPY
     m_aCommandInfo.insert(
@@ -171,7 +169,6 @@ GalleryThemePopup::GalleryThemePopup(
 
 GalleryThemePopup::~GalleryThemePopup()
 {
-    DBG_DTOR(GalleryThemePopup,NULL);
 }
 
 void SAL_CALL GalleryThemePopup::statusChanged(
@@ -399,17 +396,14 @@ IMPL_LINK( GalleryThemePopup, BackgroundMenuSelectHdl, Menu*, pMenu )
 
 } // end anonymous namespace
 
-DBG_NAME(GalleryToolBox)
 
 GalleryToolBox::GalleryToolBox( GalleryBrowser2* pParent ) :
     ToolBox( pParent, WB_TABSTOP )
 {
-    DBG_CTOR(GalleryToolBox,NULL);
 }
 
 GalleryToolBox::~GalleryToolBox()
 {
-    DBG_DTOR(GalleryToolBox,NULL);
 }
 
 void GalleryToolBox::KeyInput( const KeyEvent& rKEvt )
@@ -418,7 +412,6 @@ void GalleryToolBox::KeyInput( const KeyEvent& rKEvt )
         ToolBox::KeyInput( rKEvt );
 }
 
-DBG_NAME(GalleryBrowser2)
 
 GalleryBrowser2::GalleryBrowser2( Window* pParent, const ResId& rResId, Gallery* pGallery ) :
     Control             ( pParent, rResId ),
@@ -434,7 +427,6 @@ GalleryBrowser2::GalleryBrowser2( Window* pParent, const ResId& rResId, Gallery*
     meMode              ( GALLERYBROWSERMODE_NONE ),
     meLastMode          ( GALLERYBROWSERMODE_NONE )
 {
-    DBG_CTOR(GalleryBrowser2,NULL);
 
     m_xContext.set( ::comphelper::getProcessComponentContext() );
 
@@ -494,7 +486,6 @@ GalleryBrowser2::~GalleryBrowser2()
     if( mpCurTheme )
         mpGallery->ReleaseTheme( mpCurTheme, *this );
 
-    DBG_DTOR(GalleryBrowser2,NULL);
 }
 
 void GalleryBrowser2::InitSettings()

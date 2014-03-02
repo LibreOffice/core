@@ -250,18 +250,15 @@ void SvxFmTbxCtlConfig::Select( sal_uInt16 /*nModifier*/ )
 
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxCtlAbsRec, SfxInt32Item );
-DBG_NAME(SvxFmTbxCtlAbsRec);
 
 SvxFmTbxCtlAbsRec::SvxFmTbxCtlAbsRec( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
     :SfxToolBoxControl( nSlotId, nId, rTbx )
 {
-    DBG_CTOR(SvxFmTbxCtlAbsRec,NULL);
 }
 
 
 SvxFmTbxCtlAbsRec::~SvxFmTbxCtlAbsRec()
 {
-    DBG_DTOR(SvxFmTbxCtlAbsRec,NULL);
 }
 
 
@@ -304,18 +301,15 @@ Window* SvxFmTbxCtlAbsRec::CreateItemWindow( Window* pParent )
 
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxCtlRecText, SfxBoolItem );
-DBG_NAME(SvxFmTbxCtlRecText);
 
 SvxFmTbxCtlRecText::SvxFmTbxCtlRecText( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
     :SfxToolBoxControl( nSlotId, nId, rTbx )
 {
-    DBG_CTOR(SvxFmTbxCtlRecText,NULL);
 }
 
 
 SvxFmTbxCtlRecText::~SvxFmTbxCtlRecText()
 {
-    DBG_DTOR(SvxFmTbxCtlRecText,NULL);
 }
 
 
@@ -338,18 +332,15 @@ Window* SvxFmTbxCtlRecText::CreateItemWindow( Window* pParent )
 
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxCtlRecFromText, SfxBoolItem );
-DBG_NAME(SvxFmTbxCtlRecFromText);
 
 SvxFmTbxCtlRecFromText::SvxFmTbxCtlRecFromText( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
     :SfxToolBoxControl( nSlotId, nId, rTbx )
 {
-    DBG_CTOR(SvxFmTbxCtlRecFromText,NULL);
 }
 
 
 SvxFmTbxCtlRecFromText::~SvxFmTbxCtlRecFromText()
 {
-    DBG_DTOR(SvxFmTbxCtlRecFromText,NULL);
 }
 
 
@@ -369,7 +360,6 @@ Window* SvxFmTbxCtlRecFromText::CreateItemWindow( Window* pParent )
 
 // SvxFmTbxCtlRecTotal
 
-DBG_NAME(SvxFmTbxCtlRecTotal);
 SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxCtlRecTotal, SfxStringItem );
 
 
@@ -377,13 +367,11 @@ SvxFmTbxCtlRecTotal::SvxFmTbxCtlRecTotal( sal_uInt16 nSlotId, sal_uInt16 nId, To
     :SfxToolBoxControl( nSlotId, nId, rTbx )
     ,pFixedText( NULL )
 {
-    DBG_CTOR(SvxFmTbxCtlRecTotal,NULL);
 }
 
 
 SvxFmTbxCtlRecTotal::~SvxFmTbxCtlRecTotal()
 {
-    DBG_DTOR(SvxFmTbxCtlRecTotal,NULL);
 }
 
 

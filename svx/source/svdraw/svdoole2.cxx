@@ -739,11 +739,9 @@ sdr::contact::ViewContact* SdrOle2Obj::CreateObjectSpecificViewContact()
 
 
 TYPEINIT1(SdrOle2Obj,SdrRectObj);
-DBG_NAME(SdrOle2Obj)
 SdrOle2Obj::SdrOle2Obj(bool bFrame_) : m_bTypeAsked(false)
 ,m_bChart(false)
 {
-    DBG_CTOR( SdrOle2Obj,NULL);
     bInDestruction = false;
     mbSuppressSetVisAreaSize = false;
     Init();
@@ -758,7 +756,6 @@ SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef&  rNewObjRef, const OUStrin
     , m_bTypeAsked(false)
     , m_bChart(false)
 {
-    DBG_CTOR( SdrOle2Obj,NULL);
     bInDestruction = false;
     mbSuppressSetVisAreaSize = false;
     Init();
@@ -802,7 +799,6 @@ OUString SdrOle2Obj::GetStyleString()
 
 SdrOle2Obj::~SdrOle2Obj()
 {
-    DBG_DTOR( SdrOle2Obj,NULL);
     bInDestruction = true;
 
     if ( mpImpl->mbConnected )

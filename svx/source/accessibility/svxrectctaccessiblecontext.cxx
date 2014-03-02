@@ -53,7 +53,6 @@ using namespace ::com::sun::star::lang;
 #define NOCHILDSELECTED     -1
 
 
-DBG_NAME( SvxRectCtlAccessibleContext )
 
 
 //=====  internal  ============================================================
@@ -150,7 +149,6 @@ SvxRectCtlAccessibleContext::SvxRectCtlAccessibleContext(
     mnSelectedChild( NOCHILDSELECTED ),
     mbAngleMode( rRepr.GetNumOfChildren() == 8 )
 {
-    DBG_CTOR( SvxRectCtlAccessibleContext, NULL );
 
     if( pName )
         msName = *pName;
@@ -178,7 +176,6 @@ SvxRectCtlAccessibleContext::SvxRectCtlAccessibleContext(
 
 SvxRectCtlAccessibleContext::~SvxRectCtlAccessibleContext()
 {
-    DBG_DTOR( SvxRectCtlAccessibleContext, NULL );
 
     if( IsAlive() )
     {
@@ -795,7 +792,6 @@ void SvxRectCtlAccessibleContext::ThrowExceptionIfNotAlive( void ) throw( lang::
 
 
 
-DBG_NAME( SvxRectCtlChildAccessibleContext )
 
 
 SvxRectCtlChildAccessibleContext::SvxRectCtlChildAccessibleContext(
@@ -816,13 +812,11 @@ SvxRectCtlChildAccessibleContext::SvxRectCtlChildAccessibleContext(
     mnIndexInParent( nIndexInParent ),
     mbIsChecked( false )
 {
-    DBG_CTOR( SvxRectCtlChildAccessibleContext, NULL );
 }
 
 
 SvxRectCtlChildAccessibleContext::~SvxRectCtlChildAccessibleContext()
 {
-    DBG_DTOR( SvxRectCtlChildAccessibleContext, NULL );
 
     if( IsAlive() )
     {

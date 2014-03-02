@@ -26,12 +26,10 @@
 
 
 
-DBG_NAME( SvLBoxFontString );
 
 SvLBoxFontString::SvLBoxFontString() :
     SvLBoxString()
 {
-    DBG_CTOR( SvLBoxFontString, 0 );
 }
 
 SvLBoxFontString::SvLBoxFontString(
@@ -41,7 +39,6 @@ SvLBoxFontString::SvLBoxFontString(
     maFont( rFont ),
     mbUseColor( pColor != NULL )
 {
-    DBG_CTOR( SvLBoxFontString, 0 );
     SetText( rString );
     if( pColor )
         maFont.SetColor( *pColor );
@@ -49,20 +46,17 @@ SvLBoxFontString::SvLBoxFontString(
 
 SvLBoxFontString::~SvLBoxFontString()
 {
-    DBG_DTOR( SvLBoxFontString, 0 );
 }
 
 
 SvLBoxItem* SvLBoxFontString::Create() const
 {
-    DBG_CHKTHIS( SvLBoxFontString, 0 );
     return new SvLBoxFontString;
 }
 
 void SvLBoxFontString::Paint(
     const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry)
 {
-    DBG_CHKTHIS( SvLBoxFontString, 0 );
     Font aOldFont( rDev.GetFont() );
     Font aNewFont( maFont );
     bool bSel = pView->IsSelected();
@@ -79,7 +73,6 @@ void SvLBoxFontString::Paint(
 
 void SvLBoxFontString::InitViewData( SvTreeListBox* pView, SvTreeListEntry* pEntry, SvViewDataItem* pViewData )
 {
-    DBG_CHKTHIS( SvLBoxFontString, 0 );
     Font aOldFont( pView->GetFont() );
     pView->Control::SetFont( maFont );
     SvLBoxString::InitViewData( pView, pEntry, pViewData);

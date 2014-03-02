@@ -38,7 +38,6 @@
 #define GALLERY_BRWBOX_TITLE    1
 #define GALLERY_BRWBOX_PATH     2
 
-DBG_NAME(GalleryPreview)
 
 GalleryPreview::GalleryPreview( GalleryBrowser2* pParent, GalleryTheme* pTheme ) :
     Window( pParent, WB_TABSTOP | WB_BORDER ),
@@ -46,7 +45,6 @@ GalleryPreview::GalleryPreview( GalleryBrowser2* pParent, GalleryTheme* pTheme )
     DragSourceHelper( this ),
     mpTheme( pTheme )
 {
-    DBG_CTOR(GalleryPreview,NULL);
 
     SetHelpId( HID_GALLERY_WINDOW );
     InitSettings();
@@ -58,7 +56,6 @@ GalleryPreview::GalleryPreview( Window* pParent, const ResId & rResId  ) :
     DragSourceHelper( this ),
     mpTheme( NULL )
 {
-    DBG_CTOR(GalleryPreview,NULL);
 
     SetHelpId( HID_GALLERY_PREVIEW );
     InitSettings();
@@ -66,7 +63,6 @@ GalleryPreview::GalleryPreview( Window* pParent, const ResId & rResId  ) :
 
 GalleryPreview::~GalleryPreview()
 {
-    DBG_DTOR(GalleryPreview,NULL);
 }
 
 
@@ -280,7 +276,6 @@ void drawTransparenceBackground(OutputDevice& rOut, const Point& rPos, const Siz
     }
 }
 
-DBG_NAME(GalleryIconView)
 
 GalleryIconView::GalleryIconView( GalleryBrowser2* pParent, GalleryTheme* pTheme ) :
         ValueSet( pParent, WB_TABSTOP | WB_3DLOOK | WB_BORDER | WB_ITEMBORDER | WB_DOUBLEBORDER | WB_VSCROLL | WB_FLATVALUESET ),
@@ -288,7 +283,6 @@ GalleryIconView::GalleryIconView( GalleryBrowser2* pParent, GalleryTheme* pTheme
         DragSourceHelper( this ),
         mpTheme ( pTheme )
 {
-    DBG_CTOR(GalleryIconView,NULL);
 
     EnableFullItemMode( false );
 
@@ -301,7 +295,6 @@ GalleryIconView::GalleryIconView( GalleryBrowser2* pParent, GalleryTheme* pTheme
 
 GalleryIconView::~GalleryIconView()
 {
-    DBG_DTOR(GalleryIconView,NULL);
 }
 
 void GalleryIconView::InitSettings()
@@ -526,14 +519,12 @@ void GalleryIconView::StartDrag( sal_Int8, const Point& )
     static_cast< GalleryBrowser2* >( GetParent() )->StartDrag( this );
 }
 
-DBG_NAME(GalleryListView)
 
 GalleryListView::GalleryListView( GalleryBrowser2* pParent, GalleryTheme* pTheme ) :
     BrowseBox( pParent, WB_TABSTOP | WB_3DLOOK | WB_BORDER ),
     mpTheme( pTheme ),
     mnCurRow( 0 )
 {
-    DBG_CTOR(GalleryListView,NULL);
 
     SetHelpId( HID_GALLERY_WINDOW );
 
@@ -547,7 +538,6 @@ GalleryListView::GalleryListView( GalleryBrowser2* pParent, GalleryTheme* pTheme
 
 GalleryListView::~GalleryListView()
 {
-    DBG_DTOR(GalleryListView,NULL);
 }
 
 void GalleryListView::InitSettings()

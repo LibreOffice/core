@@ -185,13 +185,11 @@ namespace svx
     };
 
 
-    DBG_NAME( FmFocusListenerAdapter )
 
     FmFocusListenerAdapter::FmFocusListenerAdapter( const Reference< XControl >& _rxControl, IFocusObserver* _pObserver )
         :m_pObserver( _pObserver )
         ,m_xWindow( _rxControl, UNO_QUERY )
     {
-        DBG_CTOR( FmFocusListenerAdapter, NULL );
 
         DBG_ASSERT( m_xWindow.is(), "FmFocusListenerAdapter::FmFocusListenerAdapter: invalid control!" );
         osl_atomic_increment( &m_refCount );
@@ -215,7 +213,6 @@ namespace svx
         acquire();
         dispose();
 
-        DBG_DTOR( FmFocusListenerAdapter, NULL );
     }
 
 
@@ -282,13 +279,11 @@ namespace svx
     //= FmMouseListenerAdapter
 
 
-    DBG_NAME( FmMouseListenerAdapter )
 
     FmMouseListenerAdapter::FmMouseListenerAdapter( const Reference< XControl >& _rxControl, IContextRequestObserver* _pObserver )
         :m_pObserver( _pObserver )
         ,m_xWindow( _rxControl, UNO_QUERY )
     {
-        DBG_CTOR( FmMouseListenerAdapter, NULL );
 
         DBG_ASSERT( m_xWindow.is(), "FmMouseListenerAdapter::FmMouseListenerAdapter: invalid control!" );
         osl_atomic_increment( &m_refCount );
@@ -312,7 +307,6 @@ namespace svx
         acquire();
         dispose();
 
-        DBG_DTOR( FmMouseListenerAdapter, NULL );
     }
 
 

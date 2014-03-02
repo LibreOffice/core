@@ -25,17 +25,14 @@
 
 // - GalleryCodec -
 
-DBG_NAME(GalleryCodec)
 
 GalleryCodec::GalleryCodec( SvStream& rIOStm ) :
     rStm( rIOStm )
 {
-    DBG_CTOR(GalleryCodec,NULL);
 }
 
 GalleryCodec::~GalleryCodec()
 {
-    DBG_DTOR(GalleryCodec,NULL);
 }
 
 sal_Bool GalleryCodec::IsCoded( SvStream& rStm, sal_uInt32& rVersion )

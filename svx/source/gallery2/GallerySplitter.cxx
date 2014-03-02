@@ -19,7 +19,6 @@
 #include "GallerySplitter.hxx"
 
 
-DBG_NAME(GallerySplitter)
 
 GallerySplitter::GallerySplitter(
     Window* pParent,
@@ -28,12 +27,10 @@ GallerySplitter::GallerySplitter(
     : Splitter( pParent, rResId ),
       maDataChangeFunctor(rDataChangeFunctor)
 {
-    DBG_CTOR(GallerySplitter,NULL);
 }
 
 GallerySplitter::~GallerySplitter()
 {
-    DBG_DTOR(GallerySplitter,NULL);
 }
 
 void GallerySplitter::DataChanged( const DataChangedEvent& rDCEvt )
