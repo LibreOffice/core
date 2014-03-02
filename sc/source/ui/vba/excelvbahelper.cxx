@@ -192,7 +192,6 @@ implnCut( const uno::Reference< frame::XModel>& xModel )
 void implnPasteSpecial( const uno::Reference< frame::XModel>& xModel, sal_uInt16 nFlags, sal_uInt16 nFunction, bool bSkipEmpty, bool bTranspose)
 {
     PasteCellsWarningReseter resetWarningBox;
-    sal_Bool bOtherDoc(false);
     InsCellCmd eMoveMode = INS_NONE;
 
     ScTabViewShell* pTabViewShell = getBestViewShell( xModel );
