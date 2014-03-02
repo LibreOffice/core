@@ -203,7 +203,13 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
             SwNumRule* pRule( pTxtNd->GetNumRule() );
             if ( pTxtNd->IsCountedInList() && pRule )
             {
-                const SwNumFmt& rNFmt = pRule->Get( static_cast<sal_uInt16>(pTxtNd->GetActualListLevel()) );
+                int nListLevel = pTxtNd->GetActualListLevel();
+                if (nListLevel < 0)
+                    nListLevel = 0;
+                if (nListLevel >= MAXLEVEL)
+                    nListLevel = MAXLEVEL - 1;
+
+                const SwNumFmt& rNFmt = pRule->Get(nListLevel);
                 sPost = rNFmt.GetSuffix();
                 sPre = rNFmt.GetPrefix();
             }
