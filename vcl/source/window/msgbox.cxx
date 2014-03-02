@@ -262,15 +262,15 @@ void MessBox::ImplPosControls()
 
     nMaxWidth -= mpWindowImpl->mnLeftBorder+mpWindowImpl->mnRightBorder+4;
 
-    // MessageBox sollte min. so breit sein, das auch Title sichtbar ist
+    // width of the MessageBox should be such that title is visible
     // Extra-Width for Closer, because Closer is set after this call
     nTitleWidth = CalcTitleWidth();
     nTitleWidth += mpWindowImpl->mnTopBorder;
 
     nMaxWidth -= (IMPL_DIALOG_OFFSET*2)+(IMPL_MSGBOX_OFFSET_EXTRA_X*2);
 
-    // Wenn wir ein Image haben, dann deren Groesse ermitteln und das
-    // entsprechende Control anlegen und positionieren
+    // if we have an image, get its size and create and position
+    // the right control
     aImageSize = maImage.GetSizePixel();
     if ( aImageSize.Width() )
     {
