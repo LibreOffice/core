@@ -35,20 +35,17 @@ ifeq ($(SYSTEM_NSS),)
 curl_CPPFLAGS += -I$(call gb_UnpackedTarball_get_dir,nss)/dist/public/nss
 endif
 
-# use --with-darwinssl on Mac to get a native UI for SSL certs for CMIS usage
-# (note that --with-darwinssl option is not very compatible)
+# use --with-darwinssl on Mac OS X >10.5 and iOS to get a native UI for SSL certs for CMIS usage
+# use --with-nss only on platforms other than Mac OS X and iOS
 $(call gb_ExternalProject_get_state_target,curl,build):
 	$(call gb_ExternalProject_run,build,\
 		CPPFLAGS="$(curl_CPPFLAGS)" \
 		LDFLAGS=$(curl_LDFLAGS) \
 		./configure \
-			$(if $(filter IOS,$(OS)),\
-				--with-darwinssl \
-				--with-nss$(if $(SYSTEM_NSS),,="$(call gb_UnpackedTarball_get_dir,nss)/dist/out")) \
+			$(if $(filter IOS MACOSX,$(OS)),,--with-nss$(if $(SYSTEM_NSS),,="$(call gb_UnpackedTarball_get_dir,nss)/dist/out")) \
+			$(if $(filter IOS,$(OS)),--with-darwinssl) \
 			$(if $(filter MACOSX,$(OS)),\
-				$(if $(filter 1050,$(MAC_OS_X_VERSION_MIN_REQUIRED)),--without-nss,\
-					--with-darwinssl \
-					--with-nss$(if $(SYSTEM_NSS),,="$(call gb_UnpackedTarball_get_dir,nss)/dist/out"))) \
+				$(if $(filter 1050,$(MAC_OS_X_VERSION_MIN_REQUIRED)),,--with-darwinssl)) \
 			--without-ssl \
 			--without-libidn --enable-ftp --enable-ipv6 --enable-http --disable-gopher \
 			--disable-file --disable-ldap --disable-telnet --disable-dict --without-libssh2 \
