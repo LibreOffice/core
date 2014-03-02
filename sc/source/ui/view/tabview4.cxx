@@ -247,40 +247,41 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
     }
 
     //  Tip-Hilfe fuer Auto-Fill
-
     if ( aViewData.GetRefType() == SC_REFTYPE_FILL && Help::IsQuickHelpEnabled() )
     {
-        OUString aHelpStr;
-        ScRange aMarkRange;
-        aViewData.GetSimpleArea( aMarkRange );
-        SCCOL nEndX = aViewData.GetRefEndX();
-        SCROW nEndY = aViewData.GetRefEndY();
-        ScRange aDelRange;
-        if ( aViewData.GetFillMode() == SC_FILL_MATRIX && !(nScFillModeMouseModifier & KEY_MOD1) )
-        {
-            aHelpStr = ScGlobal::GetRscString( STR_TIP_RESIZEMATRIX );
-            SCCOL nCols = nEndX + 1 - aViewData.GetRefStartX(); // Reihenfolge ist richtig
-            SCROW nRows = nEndY + 1 - aViewData.GetRefStartY();
-            aHelpStr = aHelpStr.replaceFirst("%1", OUString::number(nRows) );
-            aHelpStr = aHelpStr.replaceFirst("%2", OUString::number(nCols) );
-        }
-        else if ( aViewData.GetDelMark( aDelRange ) )
-            aHelpStr = ScGlobal::GetRscString( STR_QUICKHELP_DELETE );
-        else if ( nEndX != aMarkRange.aEnd.Col() || nEndY != aMarkRange.aEnd.Row() )
-            aHelpStr = pDoc->GetAutoFillPreview( aMarkRange, nEndX, nEndY );
-
-        //  je nach Richtung die obere oder untere Ecke:
-        SCCOL nAddX = ( nEndX >= aMarkRange.aEnd.Col() ) ? 1 : 0;
-        SCROW nAddY = ( nEndY >= aMarkRange.aEnd.Row() ) ? 1 : 0;
-        Point aPos = aViewData.GetScrPos( nEndX+nAddX, nEndY+nAddY, aViewData.GetActivePart() );
-        aPos.X() += 8;
-        aPos.Y() += 4;
         Window* pWin = GetActiveWin();
         if ( pWin )
+        {
+            OUString aHelpStr;
+            ScRange aMarkRange;
+            aViewData.GetSimpleArea( aMarkRange );
+            SCCOL nEndX = aViewData.GetRefEndX();
+            SCROW nEndY = aViewData.GetRefEndY();
+            ScRange aDelRange;
+            if ( aViewData.GetFillMode() == SC_FILL_MATRIX && !(nScFillModeMouseModifier & KEY_MOD1) )
+            {
+                aHelpStr = ScGlobal::GetRscString( STR_TIP_RESIZEMATRIX );
+                SCCOL nCols = nEndX + 1 - aViewData.GetRefStartX(); // Reihenfolge ist richtig
+                SCROW nRows = nEndY + 1 - aViewData.GetRefStartY();
+                aHelpStr = aHelpStr.replaceFirst("%1", OUString::number(nRows) );
+                aHelpStr = aHelpStr.replaceFirst("%2", OUString::number(nCols) );
+            }
+            else if ( aViewData.GetDelMark( aDelRange ) )
+                aHelpStr = ScGlobal::GetRscString( STR_QUICKHELP_DELETE );
+            else if ( nEndX != aMarkRange.aEnd.Col() || nEndY != aMarkRange.aEnd.Row() )
+                aHelpStr = pDoc->GetAutoFillPreview( aMarkRange, nEndX, nEndY );
+
+            //  je nach Richtung die obere oder untere Ecke:
+            SCCOL nAddX = ( nEndX >= aMarkRange.aEnd.Col() ) ? 1 : 0;
+            SCROW nAddY = ( nEndY >= aMarkRange.aEnd.Row() ) ? 1 : 0;
+            Point aPos = aViewData.GetScrPos( nEndX+nAddX, nEndY+nAddY, aViewData.GetActivePart() );
+            aPos.X() += 8;
+            aPos.Y() += 4;
             aPos = pWin->OutputToScreenPixel( aPos );
-        Rectangle aRect( aPos, aPos );
-        sal_uInt16 nAlign = QUICKHELP_LEFT|QUICKHELP_TOP;
-        Help::ShowQuickHelp(pWin, aRect, aHelpStr, nAlign);
+            Rectangle aRect( aPos, aPos );
+            sal_uInt16 nAlign = QUICKHELP_LEFT|QUICKHELP_TOP;
+            Help::ShowQuickHelp(pWin, aRect, aHelpStr, nAlign);
+        }
     }
 }
 
