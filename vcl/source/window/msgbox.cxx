@@ -262,15 +262,14 @@ void MessBox::ImplPosControls()
 
     nMaxWidth -= mpWindowImpl->mnLeftBorder+mpWindowImpl->mnRightBorder+4;
 
-    // MessageBox sollte min. so breit sein, das auch Title sichtbar ist
+    // MessagBox should be at least as wide as to see the title
     // Extra-Width for Closer, because Closer is set after this call
     nTitleWidth = CalcTitleWidth();
     nTitleWidth += mpWindowImpl->mnTopBorder;
 
     nMaxWidth -= (IMPL_DIALOG_OFFSET*2)+(IMPL_MSGBOX_OFFSET_EXTRA_X*2);
 
-    // Wenn wir ein Image haben, dann deren Groesse ermitteln und das
-    // entsprechende Control anlegen und positionieren
+    // for an image, get its size, create a suitable control and position it
     aImageSize = maImage.GetSizePixel();
     if ( aImageSize.Width() )
     {
@@ -317,7 +316,7 @@ void MessBox::ImplPosControls()
         aFormatRect = GetTextRect( aRect, aMessText, nTextStyle, &aTextInfo );
     }
 
-    // Style fuer VCLMultiLineEdit ermitteln
+    // get Style for VCLMultiLineEdit
     aMEditSize.Width()  = aTextInfo.GetMaxLineWidth()+1;
     aMEditSize.Height() = aFormatRect.GetHeight();
     aPageSize.Width()   = aImageSize.Width();
