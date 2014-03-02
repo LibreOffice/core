@@ -2984,6 +2984,9 @@ void WW8PLCFx_Fc_FKP::advance()
             return;
     }
 
+    if (!pFkp)
+        return;
+
     pFkp->advance();
     if( pFkp->Where() == WW8_FC_MAX )
         NewFkp();
