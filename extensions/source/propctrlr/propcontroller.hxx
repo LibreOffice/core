@@ -74,7 +74,6 @@ namespace pcr
     const char* CheckPropertyBrowserInvariants( const void* pVoid );
         // for dignostics with DBG_CHKTHIS
 #endif
-    DBG_NAMEEX( OPropertyBrowserController )
 
 
     //= OPropertyBrowserController

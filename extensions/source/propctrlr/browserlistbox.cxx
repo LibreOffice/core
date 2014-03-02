@@ -346,7 +346,6 @@ namespace pcr
 
     //= OBrowserListBox
 
-    DBG_NAME(OBrowserListBox)
 
     OBrowserListBox::OBrowserListBox( Window* pParent, WinBits nWinStyle)
             :Control(pParent, nWinStyle| WB_CLIPCHILDREN)
@@ -362,7 +361,6 @@ namespace pcr
             ,m_bUpdate(sal_True)
             ,m_pControlContextImpl( new PropertyControlContext_Impl( *this ) )
     {
-        DBG_CTOR(OBrowserListBox,NULL);
 
         ListBox aListBox(this,WB_DROPDOWN);
         aListBox.SetPosSizePixel(Point(0,0),Size(100,100));
@@ -391,7 +389,6 @@ namespace pcr
         Hide();
         Clear();
 
-        DBG_DTOR(OBrowserListBox,NULL);
     }
 
 

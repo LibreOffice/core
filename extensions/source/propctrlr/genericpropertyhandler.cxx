@@ -218,7 +218,6 @@ namespace pcr
         void impl_dispatch_throw( const OUString& _rURL );
     };
 
-    DBG_NAME( UrlClickHandler )
 
     UrlClickHandler::UrlClickHandler( const Reference<XComponentContext>& _rContext, const Reference< XHyperlinkControl >& _rxControl )
         :m_xContext( _rContext )
@@ -233,12 +232,10 @@ namespace pcr
         osl_atomic_decrement( &m_refCount );
         OSL_ENSURE( m_refCount > 0, "UrlClickHandler::UrlClickHandler: leaking!" );
 
-        DBG_CTOR( UrlClickHandler, NULL );
     }
 
     UrlClickHandler::~UrlClickHandler()
     {
-        DBG_DTOR( UrlClickHandler, NULL );
     }
 
     void SAL_CALL UrlClickHandler::actionPerformed( const ActionEvent& rEvent ) throw (RuntimeException, std::exception)
@@ -277,7 +274,6 @@ namespace pcr
         xDispatch->dispatch( aURL, aDispatchArgs );
     }
 
-    DBG_NAME( GenericPropertyHandler )
 
     GenericPropertyHandler::GenericPropertyHandler( const Reference< XComponentContext >& _rxContext )
         :GenericPropertyHandler_Base( m_aMutex )
@@ -285,14 +281,11 @@ namespace pcr
         ,m_aPropertyListeners( m_aMutex )
         ,m_bPropertyMapInitialized( false )
     {
-        DBG_CTOR( GenericPropertyHandler, NULL );
-
         m_xTypeConverter = Converter::create(_rxContext);
     }
 
     GenericPropertyHandler::~GenericPropertyHandler()
     {
-        DBG_DTOR( GenericPropertyHandler, NULL );
     }
 
     OUString SAL_CALL GenericPropertyHandler::getImplementationName(  ) throw (RuntimeException, std::exception)

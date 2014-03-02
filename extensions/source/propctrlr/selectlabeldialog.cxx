@@ -46,7 +46,6 @@ namespace pcr
 
     // OSelectLabelDialog
 
-    DBG_NAME(OSelectLabelDialog)
 
     OSelectLabelDialog::OSelectLabelDialog( Window* pParent, Reference< XPropertySet >  _xControlModel )
         :ModalDialog(pParent, PcrRes(RID_DLG_SELECTLABELCONTROL))
@@ -62,8 +61,6 @@ namespace pcr
         ,m_pLastSelected(NULL)
         ,m_bHaveAssignableControl(sal_False)
     {
-        DBG_CTOR(OSelectLabelDialog,NULL);
-
         // initialize the TreeListBox
         m_aControlTree.SetSelectionMode( SINGLE_SELECTION );
         m_aControlTree.SetDragDropMode( 0 );
@@ -163,7 +160,6 @@ namespace pcr
             pLoop = m_aControlTree.Next(pLoop);
         }
 
-        DBG_DTOR(OSelectLabelDialog,NULL);
     }
 
 

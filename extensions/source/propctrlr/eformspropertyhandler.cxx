@@ -56,19 +56,16 @@ namespace pcr
 
     //= EFormsPropertyHandler
 
-    DBG_NAME( EFormsPropertyHandler )
 
     EFormsPropertyHandler::EFormsPropertyHandler( const Reference< XComponentContext >& _rxContext )
         :EFormsPropertyHandler_Base( _rxContext )
         ,m_bSimulatingModelChange( false )
     {
-        DBG_CTOR( EFormsPropertyHandler, NULL );
     }
 
 
     EFormsPropertyHandler::~EFormsPropertyHandler( )
     {
-        DBG_DTOR( EFormsPropertyHandler, NULL );
     }
 
 

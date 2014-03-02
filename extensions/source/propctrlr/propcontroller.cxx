@@ -81,7 +81,6 @@ namespace pcr
 
     //= OPropertyBrowserController
 
-    DBG_NAME(OPropertyBrowserController)
 
     OPropertyBrowserController::OPropertyBrowserController( const Reference< XComponentContext >& _rxContext )
             :m_xContext(_rxContext)
@@ -93,7 +92,6 @@ namespace pcr
             ,m_bConstructed( false )
             ,m_bBindingIntrospectee( false )
     {
-        DBG_CTOR(OPropertyBrowserController,NULL);
     }
 
 
@@ -102,7 +100,6 @@ namespace pcr
         // stop listening for property changes
         acquire();
         stopInspection( true );
-        DBG_DTOR(OPropertyBrowserController,NULL);
     }
 
 

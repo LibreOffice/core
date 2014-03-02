@@ -253,12 +253,10 @@ namespace pcr
 
     //= FormGeometryHandler - implementation
 
-    DBG_NAME( FormGeometryHandler )
 
     FormGeometryHandler::FormGeometryHandler( const Reference< XComponentContext >& _rxContext )
         :FormGeometryHandler_Base( _rxContext )
     {
-        DBG_CTOR( FormGeometryHandler, NULL );
     }
 
 
@@ -270,7 +268,6 @@ namespace pcr
             dispose();
         }
 
-        DBG_DTOR( FormGeometryHandler, NULL );
     }
 
 

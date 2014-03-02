@@ -86,21 +86,18 @@ namespace pcr
 
     //= SubmissionPropertyHandler
 
-    DBG_NAME( SubmissionPropertyHandler )
 
     SubmissionPropertyHandler::SubmissionPropertyHandler( const Reference< XComponentContext >& _rxContext )
         :EditPropertyHandler_Base( _rxContext )
         ,OPropertyChangeListener( m_aMutex )
         ,m_pPropChangeMultiplexer( NULL )
     {
-        DBG_CTOR( SubmissionPropertyHandler, NULL );
     }
 
 
     SubmissionPropertyHandler::~SubmissionPropertyHandler( )
     {
         disposeAdapter();
-        DBG_DTOR( SubmissionPropertyHandler, NULL );
     }
 
 

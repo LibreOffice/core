@@ -355,18 +355,15 @@ namespace pcr
         ScriptEventDescriptor impl_getDescriptor_throw( const OUString& _rEventName ) const;
     };
 
-    DBG_NAME( EventHolder )
 
     EventHolder::EventHolder()
     {
-        DBG_CTOR( EventHolder, NULL );
     }
 
     EventHolder::~EventHolder()
     {
         m_aEventNameAccess.clear();
         m_aEventIndexAccess.clear();
-        DBG_DTOR( EventHolder, NULL );
     }
 
     void EventHolder::addEvent( EventId _nId, const OUString& _rEventName, const ScriptEventDescriptor& _rScriptEvent )
@@ -456,7 +453,6 @@ namespace pcr
         return !m_aEventNameAccess.empty();
     }
 
-    DBG_NAME( EventHandler )
 
     EventHandler::EventHandler( const Reference< XComponentContext >& _rxContext )
         :EventHandler_Base( m_aMutex )
@@ -466,12 +462,10 @@ namespace pcr
         ,m_bIsDialogElement( false )
         ,m_nGridColumnType( -1 )
     {
-        DBG_CTOR( EventHandler, NULL );
     }
 
     EventHandler::~EventHandler()
     {
-        DBG_DTOR( EventHandler, NULL );
     }
 
     OUString SAL_CALL EventHandler::getImplementationName(  ) throw (RuntimeException, std::exception)

@@ -70,7 +70,6 @@ namespace pcr
 
     //= TabOrderDialog
 
-    DBG_NAME(TabOrderDialog)
 
     TabOrderDialog::TabOrderDialog( Window* _pParent, const Reference< XTabControllerModel >& _rxTabModel,
                     const Reference< XControlContainer >& _rxControlCont, const Reference< XComponentContext >& _rxORB )
@@ -86,7 +85,6 @@ namespace pcr
         get(m_pPB_MoveDown, "downB");
         get(m_pPB_AutoOrder, "autoB");
 
-        DBG_CTOR(TabOrderDialog,NULL);
 
         m_pPB_MoveUp->SetClickHdl( LINK( this, TabOrderDialog, MoveUpClickHdl ) );
         m_pPB_MoveDown->SetClickHdl( LINK( this, TabOrderDialog, MoveDownClickHdl ) );
@@ -124,7 +122,6 @@ namespace pcr
         //  delete pLB_Controls;
         delete pImageList;
 
-        DBG_DTOR(TabOrderDialog,NULL);
     }
 
 
@@ -291,12 +288,10 @@ namespace pcr
 
     //= TabOrderListBox
 
-    DBG_NAME(TabOrderListBox);
 
     TabOrderListBox::TabOrderListBox( Window* pParent, WinBits nBits  )
         :SvTreeListBox( pParent, nBits  )
     {
-        DBG_CTOR(TabOrderListBox,NULL);
         SetDragDropMode(0xFFFF/*SV_DRAGDROP_CTRL_MOVE*/);
             // Hmm. The flag alone is not enough, so to be on the safe side ...
 
@@ -316,7 +311,6 @@ namespace pcr
 
     TabOrderListBox::~TabOrderListBox()
     {
-        DBG_DTOR(TabOrderListBox,NULL);
     }
 
 
