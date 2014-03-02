@@ -405,26 +405,22 @@ sal_Bool SwAutoFormat::IsEnumericChar( const SwTxtNode& rNd ) const
 
 sal_Bool SwAutoFormat::IsBlanksInString( const SwTxtNode& rNd ) const
 {
-    // Search more that 5 blanks/tabs in the string.
+    // Search more than 5 consecutive blanks/tabs in the string.
     OUString sTmp( DelLeadingBlanks(rNd.GetTxt()) );
-    const sal_Unicode* pTmp = sTmp.getStr();
-    while( *pTmp )
+    const sal_Int32 nLen = sTmp.getLength();
+    sal_Int32 nIdx = 0;
+    while (nIdx < nLen)
     {
-        if( IsSpace( *pTmp ) )
-        {
-            if( IsSpace( *++pTmp ))     // 2 spaces after each other
-            {
-                const sal_Unicode* pStt = pTmp;
-                while( *pTmp && IsSpace( *++pTmp ))
-                    ;
-                if( 5 <= pTmp - pStt )
-                    return sal_True;
-            }
-            else
-                ++pTmp;
-        }
-        else
-            ++pTmp;
+        // Skip non-blanks
+        while (nIdx < nLen && !IsSpace(sTmp[nIdx])) ++nIdx;
+        if (nIdx == nLen)
+            return sal_False;
+        // Then count consecutive blanks
+        const sal_Int32 nFirst = nIdx;
+        while (nIdx < nLen && IsSpace(sTmp[nIdx])) ++nIdx;
+        // And exit if enough consecutive blanks were found
+        if (nIdx-nFirst > 5)
+            return sal_True;
     }
     return sal_False;
 }
