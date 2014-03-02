@@ -1170,10 +1170,10 @@ static OUString lcl_GenerateFldTypeName(OUString sPrefix, SwTableNode* pTableNod
     do
     {
         // this is crazy, but just in case all names are taken: exit gracefully
-        if (nCount < 0)
+        if (nCount == SAL_MAX_INT32)
             return sName;
 
-        nCount++;
+        ++nCount;
         sName = sPrefixStr;
         sName += OUString::number(nCount);
 
