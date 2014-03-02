@@ -504,8 +504,12 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateRejectionAction(ScMyRejAc
 ScChangeAction* ScXMLChangeTrackingImportHelper::CreateContentAction(ScMyContentAction* pAction)
 {
     ScCellValue aCell;
+    OUString sInputString;
     if (pAction->pCellInfo)
-         aCell = pAction->pCellInfo->CreateCell(pDoc);
+    {
+        aCell = pAction->pCellInfo->CreateCell(pDoc);
+        sInputString = pAction->pCellInfo->sInputString;
+    }
 
     DateTime aDateTime( Date(0), Time(0) );
     OUString aUser;
@@ -514,7 +518,7 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateContentAction(ScMyContent
     OUString sComment (pAction->aInfo.sComment);
 
     ScChangeAction* pNewAction = new ScChangeActionContent(pAction->nActionNumber, pAction->nActionState, pAction->nRejectingNumber,
-        pAction->aBigRange, aUser, aDateTime, sComment, aCell, pDoc, pAction->pCellInfo->sInputString);
+        pAction->aBigRange, aUser, aDateTime, sComment, aCell, pDoc, sInputString);
     return pNewAction;
 }
 
