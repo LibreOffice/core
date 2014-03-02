@@ -86,11 +86,10 @@ static Window* ImplGetSubChildWindow( Window* pParent, sal_uInt16 n, sal_uInt16&
     {
         pWindow = pWindow->ImplGetWindow();
 
-        // Unsichtbare und disablte Fenster werden uebersprungen
+        // skip invisible and disabled windows
         if ( pTabPage || isVisibleInLayout(pWindow) )
         {
-            // Wenn das letzte Control ein TabControl war, wird von
-            // diesem die TabPage genommen
+            // if the last control was a TabControl, take its TabPage
             if ( pTabPage )
             {
                 pFoundWindow = ImplGetSubChildWindow( pTabPage, n, nIndex );
@@ -100,17 +99,13 @@ static Window* ImplGetSubChildWindow( Window* pParent, sal_uInt16 n, sal_uInt16&
             {
                 pFoundWindow = pWindow;
 
-                // Bei einem TabControl sich die aktuelle TabPage merken,
-                // damit diese dann genommen wird
+                // for a TabControl, remember the current TabPage for later use
                 if ( pWindow->GetType() == WINDOW_TABCONTROL )
                 {
                     TabControl* pTabControl = ((TabControl*)pWindow);
-                    // Feststellen, ob TabPage Child vom TabControl ist
-                    // und auch noch existiert (deshalb durch Vergleich,
-                    // indem alle ChildFenster getestet werden). Denn es
-                    // kann sein, das TabPages schon in einem Dialog-Dtor
-                    // zerstoert wurden, obwohl das TabControl noch
-                    // existiert.
+                    // Check if the TabPage is a Child of the TabControl and still exists (by
+                    // walking all child windows); because it could be that the TabPage has been
+                    // destroyed already by a Dialog-Dtor, event that the TabControl still exists.
                     TabPage* pTempTabPage = pTabControl->GetTabPage( pTabControl->GetCurPageId() );
                     if ( pTempTabPage )
                     {
@@ -249,7 +244,7 @@ Window* Window::ImplGetDlgWindow( sal_uInt16 nIndex, sal_uInt16 nType,
 
             if ( i <= nFormEnd )
             {
-                // 2ten Index mitfuehren, falls alle Controls disablte
+                // carry the 2nd index, in case all controls are disabled
                 sal_uInt16 nStartIndex2 = i;
                 sal_uInt16 nOldIndex = i+1;
 
@@ -316,7 +311,7 @@ static Window* ImplFindDlgCtrlWindow( Window* pParent, Window* pWindow, sal_uInt
     sal_uInt16  nSecondFormStart = 0;
     sal_uInt16  nFormEnd;
 
-    // Focus-Fenster in der Child-Liste suchen
+    // find focus window in the child list
     Window* pFirstChildWindow = pSWindow = ImplGetChildWindow( pParent, 0, i, false );
 
     if( pWindow == NULL )
@@ -329,8 +324,7 @@ static Window* ImplFindDlgCtrlWindow( Window* pParent, Window* pWindow, sal_uInt
           && pSWindow->ImplGetWindow()->IsDialogControlStart() )
             nFormStart = i;
 
-        // SecondWindow wegen zusammengesetzten Controls wie
-        // ComboBoxen und Feldern
+        // SecondWindow for composit controls like ComboBoxes and arrays
         if ( pSWindow->ImplIsWindowOrChild( pWindow ) )
         {
             pSecondWindow = pSWindow;
@@ -347,8 +341,7 @@ static Window* ImplFindDlgCtrlWindow( Window* pParent, Window* pWindow, sal_uInt
 
     if ( !pSWindow )
     {
-        // Fenster nicht gefunden, dann koennen wir auch keine
-        // Steuerung uebernehmen
+        // Window not found; we cannot handle it
         if ( !pSecondWindow )
             return NULL;
         else
@@ -359,11 +352,11 @@ static Window* ImplFindDlgCtrlWindow( Window* pParent, Window* pWindow, sal_uInt
         }
     }
 
-    // Start-Daten setzen
+    // initialize
     rIndex = i;
     rFormStart = nFormStart;
 
-    // Formularende suchen
+    // find end of template
     nFormEnd = nFormStart;
     pTempWindow = pSWindow;
     sal_Int32 nIteration = 0;
@@ -445,7 +438,7 @@ static Window* ImplFindAccelWindow( Window* pParent, sal_uInt16& rIndex, sal_Uni
                         return pMnemonicWidget;
                 }
 
-                // Bei Static-Controls auf das naechste Controlm weiterschalten
+                // skip Static-Controls
                 if ( (pWindow->GetType() == WINDOW_FIXEDTEXT)   ||
                      (pWindow->GetType() == WINDOW_FIXEDLINE)   ||
                      (pWindow->GetType() == WINDOW_GROUPBOX) )
@@ -617,11 +610,12 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
     sal_uInt16  nDlgCtrlFlags;
 
     // Ohne Focus-Window koennen wir auch keine Steuerung uebernehmen
+    // w/o a Focus-Window we cannot take control
     Window* pFocusWindow = Application::GetFocusWindow();
     if ( !pFocusWindow || !ImplIsWindowOrChild( pFocusWindow ) )
         return false;
 
-    // Focus-Fenster in der Child-Liste suchen
+    // find Focus-Window in the child list
     pSWindow = ::ImplFindDlgCtrlWindow( this, pFocusWindow,
                                         nIndex, nFormStart, nFormEnd );
     if ( !pSWindow )
@@ -643,7 +637,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
 
     if ( nKeyCode == KEY_RETURN )
     {
-        // Wir suchen zuerst nach einem DefPushButton/CancelButton
+        // search first for a DefPushButton/CancelButton
         pButtonWindow = ImplGetChildWindow( this, nFormStart, iButton, true );
         iButtonStart = iButton;
         while ( pButtonWindow )
@@ -679,7 +673,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
             {
                 if ( !pTempWindow->mpWindowImpl->mbPushButton )
                 {
-                    // Around-Flag ermitteln
+                    // get Around-Flag
                     if ( nType == DLGWINDOW_PREV )
                     {
                         if ( nNewIndex > iStart )
@@ -701,8 +695,8 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
                 if ( (i <= iStart) || (i > nFormEnd) )
                     pTempWindow = NULL;
             }
-            // Wenn es das gleiche Fenster ist, ein Get/LoseFocus
-            // simulieren, falls AROUND ausgewertet wird
+            // if this is the same window, simulate a Get/LoseFocus,
+            // in case AROUND is being processed
             if ( pTempWindow && (pTempWindow == pSWindow) )
             {
                 NotifyEvent aNEvt1( EVENT_LOSEFOCUS, pSWindow );
@@ -719,7 +713,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
     }
     else if ( nKeyCode == KEY_ESCAPE )
     {
-        // Wir suchen zuerst nach einem DefPushButton/CancelButton
+        // search first for a DefPushButton/CancelButton
         pButtonWindow = ImplGetChildWindow( this, nFormStart, iButton, true );
         iButtonStart = iButton;
         while ( pButtonWindow )
@@ -746,7 +740,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
     {
         if ( nKeyCode == KEY_TAB )
         {
-            // keine Alt-Taste abfangen, wegen Windows
+            // do not skip Alt key, for MS Windows
             if ( !aKeyCode.IsMod2() )
             {
                 sal_uInt16  nType;
@@ -754,11 +748,10 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
                 sal_uInt16  nNewIndex;
                 bool        bFormular = false;
 
-                // Bei Ctrl-Tab erstmal testen, ob zwischen Formularen
-                // gesprungen werden soll
+                // for Ctrl-Tab check if we want to jump to next template
                 if ( aKeyCode.IsMod1() )
                 {
-                    // Gruppe suchen
+                    // search group
                     Window* pFormularFirstWindow = NULL;
                     Window* pLastFormularFirstWindow = NULL;
                     pTempWindow = ImplGetChildWindow( this, 0, iTemp, false );
@@ -834,8 +827,8 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
                             nGetFocusFlags |= GETFOCUS_FORWARD;
                         }
                         Window* pWindow = ImplGetDlgWindow( i, nType, nFormStart, nFormEnd, &nNewIndex );
-                        // Wenn es das gleiche Fenster ist, ein Get/LoseFocus
-                        // simulieren, falls AROUND ausgewertet wird
+                        // if this is the same window, simulate a Get/LoseFocus,
+                        // in case AROUND is being processed
                         if ( pWindow == pSWindow )
                         {
                             NotifyEvent aNEvt1( EVENT_LOSEFOCUS, pSWindow );
@@ -850,7 +843,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
                         }
                         else if ( pWindow )
                         {
-                            // Around-Flag ermitteln
+                            // get Around-Flag
                             if ( nType == DLGWINDOW_PREV )
                             {
                                 if ( nNewIndex > i )
@@ -1032,7 +1025,7 @@ static void ImplDlgCtrlUpdateDefButton( Window* pParent, Window* pFocusWindow,
     sal_uInt16      nFormStart;
     sal_uInt16      nFormEnd;
 
-    // Formular suchen
+    // find template
     pSWindow = ::ImplFindDlgCtrlWindow( pParent, pFocusWindow, i, nFormStart, nFormEnd );
     if ( !pSWindow )
     {
@@ -1100,7 +1093,7 @@ Window* Window::ImplFindDlgCtrlWindow( Window* pWindow )
     sal_uInt16  nFormStart;
     sal_uInt16  nFormEnd;
 
-    // Focus-Fenster in der Child-Liste suchen und zurueckgeben
+    // find Focus-Window in the Child-List and return
     return ::ImplFindDlgCtrlWindow( this, pWindow, nIndex, nFormStart, nFormEnd );
 }
 
