@@ -2970,7 +2970,7 @@ sal_uInt8* WW8PLCFx_Fc_FKP::GetSprmsAndPos(WW8_FC& rStart, WW8_FC& rEnd, sal_Int
             return 0;
     }
 
-    sal_uInt8* pPos = pFkp->Get( rStart, rEnd, rLen );
+    sal_uInt8* pPos = pFkp ? pFkp->Get( rStart, rEnd, rLen ) : NULL;
     if( rStart == WW8_FC_MAX )    //Not found
         return 0;
     return pPos;
