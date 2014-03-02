@@ -1212,13 +1212,6 @@ EditSelection& EditSelection::operator = ( const EditPaM& rPaM )
     return *this;
 }
 
-bool EditSelection::IsInvalid() const
-{
-    EditPaM aEmptyPaM;
-
-    return ( aStartPaM == aEmptyPaM ) || ( aEndPaM == aEmptyPaM );
-}
-
 void EditSelection::Adjust( const EditDoc& rNodes )
 {
     DBG_ASSERT( aStartPaM.GetIndex() <= aStartPaM.GetNode()->Len(), "Index out of range in Adjust(1)" );

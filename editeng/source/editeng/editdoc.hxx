@@ -332,6 +332,7 @@ public:
     EditPaM&    operator = ( const EditPaM& rPaM );
     friend bool operator == ( const EditPaM& r1, const EditPaM& r2 );
     friend bool operator != ( const EditPaM& r1, const EditPaM& r2 );
+    bool operator !() const { return !pNode && !nIndex; }
 };
 
 #define PORTIONKIND_TEXT        0
@@ -711,7 +712,7 @@ public:
     const EditPaM&  Max() const         { return aEndPaM; }
 
     bool            HasRange() const    { return aStartPaM != aEndPaM; }
-    bool            IsInvalid() const;
+    bool            IsInvalid() const { return !aStartPaM || !aEndPaM; }
     bool            DbgIsBuggy( EditDoc& rDoc );
 
     void            Adjust( const EditDoc& rNodes );
