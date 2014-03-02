@@ -39,24 +39,49 @@
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
+#include <unotools/mediadescriptor.hxx>
+#include <tools/zcodec.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::svgi;
 
 sal_Bool SVGFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
     throw (RuntimeException)
 {
-    uno::Reference< io::XInputStream > xInputStream;
-    uno::Reference< task::XStatusIndicator > xStatus;
-    const sal_Int32 nLength = rDescriptor.getLength();
-    const beans::PropertyValue* pAttribs = rDescriptor.getConstArray();
-    for ( sal_Int32 i=0 ; i<nLength; ++i, ++pAttribs )
+    utl::MediaDescriptor aMediaDescriptor(rDescriptor);
+    uno::Reference<io::XInputStream> xInputStream;
+    uno::Reference<task::XStatusIndicator> xStatus;
+
+    xInputStream = uno::Reference<io::XInputStream>(aMediaDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM()], UNO_QUERY);
+    xStatus = uno::Reference<task::XStatusIndicator>(aMediaDescriptor[utl::MediaDescriptor::PROP_STATUSINDICATOR()], UNO_QUERY);
+
+    if (isStreamGZip(xInputStream))
     {
-        if ( pAttribs->Name == "InputStream" )
-        {
-            pAttribs->Value >>= xInputStream;
-        }
-        else if ( pAttribs->Name == "StatusIndicator" )
-            pAttribs->Value >>= xStatus;
+        uno::Reference<io::XSeekable> xSeek(xInputStream, uno::UNO_QUERY);
+        if (!xSeek.is())
+            return sal_False;
+        xSeek->seek(0);
+
+        boost::scoped_ptr<SvStream> aStream(utl::UcbStreamHelper::CreateStream(xInputStream, true ));
+        if(!aStream.get())
+            return sal_False;
+
+        SvStream* pMemoryStream = new SvMemoryStream;
+        GZCodec aCodec;
+        aCodec.BeginCompression();
+        aCodec.Decompress(*aStream.get(), *pMemoryStream);
+        aCodec.EndCompression();
+        pMemoryStream->Seek(STREAM_SEEK_TO_BEGIN);
+        uno::Reference<io::XInputStream> xDecompressedInput(new utl::OSeekableInputStreamWrapper(pMemoryStream, true));
+        if (!xDecompressedInput.is())
+            return sal_False;
+        xInputStream = xDecompressedInput;
+    }
+    else
+    {
+        uno::Reference<io::XSeekable> xSeek(xInputStream, uno::UNO_QUERY);
+        if (xSeek.is())
+            xSeek->seek(0);
     }
 
     OSL_ASSERT(xInputStream.is());

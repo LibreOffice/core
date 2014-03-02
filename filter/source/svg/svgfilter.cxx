@@ -40,6 +40,11 @@
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
 #include <comphelper/processfactory.hxx>
 
+#include <unotools/mediadescriptor.hxx>
+#include <unotools/ucbstreamhelper.hxx>
+#include <unotools/streamwrap.hxx>
+#include <tools/zcodec.hxx>
+
 #include <osl/mutex.hxx>
 
 #include "svgfilter.hxx"
@@ -47,9 +52,10 @@
 
 using namespace ::com::sun::star;
 
-
-// - SVGFilter -
-
+namespace
+{
+    static const char constFilterName[] = "svg_Scalable_Vector_Graphics";
+}
 
 SVGFilter::SVGFilter( const Reference< XComponentContext >& rxCtx ) :
     mxContext( rxCtx ),
@@ -62,11 +68,8 @@ SVGFilter::SVGFilter( const Reference< XComponentContext >& rxCtx ) :
     mbPresentation( sal_False ),
     mbExportAll( sal_False ),
     mpObjects( NULL )
-
 {
 }
-
-
 
 SVGFilter::~SVGFilter()
 {
@@ -76,8 +79,6 @@ SVGFilter::~SVGFilter()
     DBG_ASSERT( mpSVGWriter == NULL, "mpSVGWriter not destroyed" );
     DBG_ASSERT( mpObjects == NULL, "mpObjects not destroyed" );
 }
-
-
 
 sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescriptor )
     throw (RuntimeException, std::exception)
@@ -242,13 +243,9 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
     return bRet;
 }
 
-
-
 void SAL_CALL SVGFilter::cancel( ) throw (RuntimeException, std::exception)
 {
 }
-
-
 
 void SAL_CALL SVGFilter::setSourceDocument( const Reference< XComponent >& xDoc )
     throw (IllegalArgumentException, RuntimeException, std::exception)
@@ -256,56 +253,92 @@ void SAL_CALL SVGFilter::setSourceDocument( const Reference< XComponent >& xDoc 
     mxSrcDoc = xDoc;
 }
 
-
-
 void SAL_CALL SVGFilter::setTargetDocument( const Reference< XComponent >& xDoc )
     throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     mxDstDoc = xDoc;
 }
 
-
-
-OUString SAL_CALL SVGFilter::detect( Sequence< PropertyValue >& io_rDescriptor ) throw (RuntimeException, std::exception)
+bool SAL_CALL SVGFilter::isStreamGZip(uno::Reference<io::XInputStream> xInput)
 {
-    uno::Reference< io::XInputStream > xInput;
+    uno::Reference<io::XSeekable> xSeek(xInput, uno::UNO_QUERY);
+    if(xSeek.is())
+        xSeek->seek(0);
 
-    const beans::PropertyValue* pAttribs = io_rDescriptor.getConstArray();
-    const sal_Int32 nAttribs = io_rDescriptor.getLength();
-    for( sal_Int32 i = 0; i < nAttribs; i++ )
+    uno::Sequence<sal_Int8> aBuffer(2);
+    const sal_uInt64 nBytes = xInput->readBytes(aBuffer, 2);
+    if (nBytes == 2)
     {
-        if ( pAttribs[i].Name == "InputStream" )
-            pAttribs[i].Value >>= xInput;
+        const sal_Int8* pBuffer = aBuffer.getConstArray();
+        if (pBuffer[0] == (sal_Int8)0x1F && pBuffer[1] == (sal_Int8)0x8B)
+            return true;
     }
-
-    if( !xInput.is() )
-        return OUString();
-
-    uno::Reference< io::XSeekable > xSeek( xInput, uno::UNO_QUERY );
-    if( xSeek.is() )
-        xSeek->seek( 0 );
-
-    // read the first 1024 bytes & check a few magic string
-    // constants (heuristically)
-    const sal_Int32 nLookAhead = 1024;
-    uno::Sequence< sal_Int8 > aBuf( nLookAhead );
-    const sal_uInt64 nBytes=xInput->readBytes(aBuf, nLookAhead);
-    const sal_Int8* const pBuf=aBuf.getConstArray();
-
-    sal_Int8 aMagic1[] = {'<', 's', 'v', 'g'};
-    if( std::search(pBuf, pBuf+nBytes,
-                    aMagic1, aMagic1+sizeof(aMagic1)/sizeof(*aMagic1)) != pBuf+nBytes )
-        return OUString("svg_Scalable_Vector_Graphics");
-
-    sal_Int8 aMagic2[] = {'D', 'O', 'C', 'T', 'Y', 'P', 'E', ' ', 's', 'v', 'g'};
-    if( std::search(pBuf, pBuf+nBytes,
-                    aMagic2, aMagic2+sizeof(aMagic2)/sizeof(*aMagic2)) != pBuf+nBytes )
-        return OUString("svg_Scalable_Vector_Graphics");
-
-    return OUString();
+    return false;
 }
 
+bool SAL_CALL SVGFilter::isStreamSvg(uno::Reference<io::XInputStream> xInput)
+{
+    uno::Reference<io::XSeekable> xSeek(xInput, uno::UNO_QUERY);
+    if(xSeek.is())
+        xSeek->seek(0);
 
+    const sal_Int32 nLookAhead = 1024;
+    uno::Sequence<sal_Int8> aBuffer(nLookAhead);
+    const sal_uInt64 nBytes = xInput->readBytes(aBuffer, nLookAhead);
+    const sal_Int8* pBuffer = aBuffer.getConstArray();
+
+    sal_Int8 aMagic1[] = {'<', 's', 'v', 'g'};
+    sal_Int32 aMagic1Size = sizeof(aMagic1) / sizeof(*aMagic1);
+
+    if (std::search(pBuffer, pBuffer + nBytes, aMagic1, aMagic1 + aMagic1Size) != pBuffer + nBytes )
+        return true;
+
+    sal_Int8 aMagic2[] = {'D', 'O', 'C', 'T', 'Y', 'P', 'E', ' ', 's', 'v', 'g'};
+    sal_Int32 aMagic2Size = sizeof(aMagic2) / sizeof(*aMagic2);
+
+    if (std::search(pBuffer, pBuffer + nBytes, aMagic2, aMagic2 + aMagic2Size) != pBuffer + nBytes)
+        return true;
+
+    return false;
+}
+
+OUString SAL_CALL SVGFilter::detect(Sequence<PropertyValue>& rDescriptor) throw (RuntimeException, std::exception)
+{
+    utl::MediaDescriptor aMediaDescriptor(rDescriptor);
+    uno::Reference<io::XInputStream> xInput(aMediaDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM()], UNO_QUERY);
+
+    if (!xInput.is())
+        return OUString();
+
+    if (isStreamGZip(xInput))
+    {
+        boost::scoped_ptr<SvStream> aStream(utl::UcbStreamHelper::CreateStream(xInput, true ));
+        if(!aStream.get())
+            return OUString();
+
+        SvStream* pMemoryStream = new SvMemoryStream;
+        uno::Reference<io::XSeekable> xSeek(xInput, uno::UNO_QUERY);
+        if (!xSeek.is())
+            return OUString();
+        xSeek->seek(0);
+
+        GZCodec aCodec;
+        aCodec.BeginCompression();
+        aCodec.Decompress(*aStream.get(), *pMemoryStream);
+        aCodec.EndCompression();
+        pMemoryStream->Seek(STREAM_SEEK_TO_BEGIN);
+        uno::Reference<io::XInputStream> xDecompressedInput(new utl::OSeekableInputStreamWrapper(pMemoryStream, true));
+
+        if (xDecompressedInput.is() && isStreamSvg(xDecompressedInput))
+            return OUString(constFilterName);
+    }
+    else
+    {
+        if (isStreamSvg(xInput))
+            return OUString(constFilterName);
+    }
+    return OUString();
+}
 
 #define SVG_FILTER_IMPL_NAME "com.sun.star.comp.Draw.SVGFilter"
 #define SVG_WRITER_IMPL_NAME "com.sun.star.comp.Draw.SVGWriter"
