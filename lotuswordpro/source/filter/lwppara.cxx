@@ -203,11 +203,6 @@ void LwpPara::Read()
     if(!Simple)
     {
         m_Hint.Read(m_pObjStrm);
-        if (IsBadHintsInFile())
-        {
-            // This hint is no good, so throw it away -- SDC 9/28/95
-            m_Hint.Reset();
-        }
     }
 
     m_Story.ReadIndexed(m_pObjStrm);

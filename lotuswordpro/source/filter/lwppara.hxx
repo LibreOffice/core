@@ -284,7 +284,6 @@ private:
 
     void OverrideParaBullet(LwpParaProperty* pProps);
     void OverrideParaNumbering(LwpParaProperty* pProps);
-    sal_Bool IsBadHintsInFile();
 
     sal_Bool RegisterMasterPage(XFParaStyle* pBaseStyle);
     void RegisterNewSectionStyle(LwpPageLayout* pLayout);
@@ -392,10 +391,6 @@ inline void LwpPara::SetDropcapChars(sal_uInt32 chars)
 inline void LwpPara::SetDropcapLayout(LwpDropcapLayout* pLayout)
 {
     m_pDropcapLayout = pLayout;
-}
-inline sal_Bool LwpPara::IsBadHintsInFile()
-{
-    return (sal_Bool) ((m_nFlags & DOC_BADFILEPARAHINTS) != 0);
 }
 inline double LwpPara::GetBelowSpacing()
 {
