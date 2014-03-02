@@ -3053,6 +3053,9 @@ bool WW8PLCFx_Fc_FKP::HasSprm(sal_uInt16 nId, std::vector<const sal_uInt8 *> &rR
            return false;
     }
 
+    if (!pFkp)
+        return false;
+
     pFkp->HasSprm(nId, rResult);
 
     WW8PLCFxDesc aDesc;
