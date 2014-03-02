@@ -2238,7 +2238,13 @@ ScDocument* ScExternalRefManager::getSrcDocument(sal_uInt16 nFileId)
 
     OUString aFilter;
     SrcShell aSrcDoc;
-    aSrcDoc.maShell = loadSrcDocument(nFileId, aFilter);
+    try
+    {
+        aSrcDoc.maShell = loadSrcDocument(nFileId, aFilter);
+    }
+    catch (const css::uno::Exception&)
+    {
+    }
     if (!aSrcDoc.maShell.Is())
     {
         // source document could not be loaded.
