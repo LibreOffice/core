@@ -2951,7 +2951,7 @@ WW8_FC WW8PLCFx_Fc_FKP::Where()
         if( !NewFkp() )
             return WW8_FC_MAX;
     }
-    WW8_FC nP = pFkp->Where();
+    WW8_FC nP = pFkp ? pFkp->Where() : WW8_FC_MAX;
     if( nP != WW8_FC_MAX )
         return nP;
 
