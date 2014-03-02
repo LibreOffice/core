@@ -725,7 +725,7 @@ public:
      * getTableManager().isInTable(), unless we're in the first paragraph of a
      * table, or first paragraph after a table, as the table manager is only
      * updated once we ended the paragraph (and know if the para has the
-     * PFInTable SPRM or not).
+     * inTbl SPRM or not).
      */
     sal_Int32 m_nTableDepth;
 

@@ -1089,10 +1089,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                          eSprmType == SPRM_DEFAULT ? PROP_PARA_FIRST_LINE_INDENT : PROP_FIRST_LINE_OFFSET,
                          uno::makeAny( ConversionHelper::convertTwipToMM100(nIntValue ) ));
         break;
-    case 24: // "sprmPFInTable"
-    case NS_sprm::LN_PFInTable:
-        break;  // sprmPFInTable
-    case NS_sprm::LN_PTableDepth: //sprmPTableDepth
+    case NS_ooxml::LN_inTbl:
+        break;
+    case NS_ooxml::LN_tblDepth:
         //not handled via sprm but via text( 0x07 )
     break;
     case NS_ooxml::LN_CT_FramePr_w:

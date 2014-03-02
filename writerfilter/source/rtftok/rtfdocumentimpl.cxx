@@ -1239,7 +1239,7 @@ void RTFDocumentImpl::prepareProperties(
 
     RTFValue::Pointer_t const pRowValue(new RTFValue(1));
     if (nCells > 0)
-        rState.aTableRowSprms.set(NS_sprm::LN_PRow, pRowValue);
+        rState.aTableRowSprms.set(NS_ooxml::LN_tblRow, pRowValue);
 
     RTFValue::Pointer_t const pCellMar =
         rState.aTableRowSprms.find(NS_ooxml::LN_CT_TblPrBase_tblCellMar);
@@ -1333,7 +1333,7 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer,
         {
             assert(pSprms && pAttributes);
             RTFValue::Pointer_t pValue(new RTFValue(1));
-            pSprms->set(NS_sprm::LN_PCell, pValue);
+            pSprms->set(NS_ooxml::LN_tblCell, pValue);
             writerfilter::Reference<Properties>::Pointer_t const pTableCellProperties(
                     new RTFReferenceProperties(*pAttributes, *pSprms));
             Mapper().props(pTableCellProperties);
@@ -2411,7 +2411,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_INTBL:
             {
                 m_aStates.top().pCurrentBuffer = &m_aTableBufferStack.back();
-                nParam = NS_sprm::LN_PFInTable;
+                nParam = NS_ooxml::LN_inTbl;
             }
             break;
         case RTF_PAGEBB:
@@ -2423,7 +2423,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     if (nParam >= 0)
     {
         RTFValue::Pointer_t pValue(new RTFValue(1));
-        m_aStates.top().aParagraphSprms.erase(NS_sprm::LN_PFInTable);
+        m_aStates.top().aParagraphSprms.erase(NS_ooxml::LN_inTbl);
         m_aStates.top().aParagraphSprms.set(nParam, pValue);
         return 0;
     }
@@ -2466,7 +2466,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             else
             {
                 // We are still in a table.
-                m_aStates.top().aParagraphSprms.set(NS_sprm::LN_PFInTable, RTFValue::Pointer_t(new RTFValue(1)));
+                m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_inTbl, RTFValue::Pointer_t(new RTFValue(1)));
             }
             m_aStates.top().resetFrame();
             break;
@@ -2980,7 +2980,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_LIN: nSprm = 0x845e; break;
         case RTF_RI: nSprm = NS_sprm::LN_PDxaRight; break;
         case RTF_RIN: nSprm = 0x845d; break;
-        case RTF_ITAP: nSprm = NS_sprm::LN_PTableDepth; break;
+        case RTF_ITAP: nSprm = NS_ooxml::LN_tblDepth; break;
         case RTF_SBASEDON:
            nSprm = NS_ooxml::LN_CT_Style_basedOn;
            pIntValue.reset(new RTFValue(getStyleName(nParam)));

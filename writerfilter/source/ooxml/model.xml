@@ -45,6 +45,13 @@
   <token tokenid="ooxml:object"/>
   <token tokenid="ooxml:tblStart"/>
   <token tokenid="ooxml:tblEnd"/>
+
+  <!-- These are not directly generated from OOXML XML elements / attributes, need to clean them up in the future. -->
+  <token tokenid="ooxml:tblDepth"/>
+  <token tokenid="ooxml:inTbl"/>
+  <token tokenid="ooxml:tblCell"/>
+  <token tokenid="ooxml:tblRow"/>
+
   <token tokenid="ooxml:ffdata"/>
   <token tokenid="ooxml:starmath"/>
   <token tokenid="ooxml:blip"/>

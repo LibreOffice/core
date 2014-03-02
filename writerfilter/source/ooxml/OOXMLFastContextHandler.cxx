@@ -576,14 +576,14 @@ void OOXMLFastContextHandler::sendTableDepth() const
             OOXMLValue::Pointer_t pVal
                 (new OOXMLIntegerValue(mnTableDepth));
             OOXMLProperty::Pointer_t pProp
-                (new OOXMLPropertyImpl(NS_sprm::LN_PTableDepth, pVal, OOXMLPropertyImpl::SPRM));
+                (new OOXMLPropertyImpl(NS_ooxml::LN_tblDepth, pVal, OOXMLPropertyImpl::SPRM));
             pProps->add(pProp);
         }
         {
             OOXMLValue::Pointer_t pVal
                 (new OOXMLIntegerValue(1));
             OOXMLProperty::Pointer_t pProp
-                (new OOXMLPropertyImpl(NS_sprm::LN_PFInTable, pVal, OOXMLPropertyImpl::SPRM));
+                (new OOXMLPropertyImpl(NS_ooxml::LN_inTbl, pVal, OOXMLPropertyImpl::SPRM));
             pProps->add(pProp);
         }
 
@@ -1878,21 +1878,21 @@ void OOXMLFastContextHandlerTextTableCell::endCell()
             OOXMLValue::Pointer_t pVal
                 (new OOXMLIntegerValue(mnTableDepth));
             OOXMLProperty::Pointer_t pProp
-                (new OOXMLPropertyImpl(NS_sprm::LN_PTableDepth, pVal, OOXMLPropertyImpl::SPRM));
+                (new OOXMLPropertyImpl(NS_ooxml::LN_tblDepth, pVal, OOXMLPropertyImpl::SPRM));
             pProps->add(pProp);
         }
         {
             OOXMLValue::Pointer_t pVal
                 (new OOXMLIntegerValue(1));
             OOXMLProperty::Pointer_t pProp
-                (new OOXMLPropertyImpl(NS_sprm::LN_PFInTable, pVal, OOXMLPropertyImpl::SPRM));
+                (new OOXMLPropertyImpl(NS_ooxml::LN_inTbl, pVal, OOXMLPropertyImpl::SPRM));
             pProps->add(pProp);
         }
         {
             OOXMLValue::Pointer_t pVal
                 (new OOXMLBooleanValue(mnTableDepth > 0));
             OOXMLProperty::Pointer_t pProp
-                (new OOXMLPropertyImpl(NS_sprm::LN_PCell, pVal, OOXMLPropertyImpl::SPRM));
+                (new OOXMLPropertyImpl(NS_ooxml::LN_tblCell, pVal, OOXMLPropertyImpl::SPRM));
             pProps->add(pProp);
         }
 
@@ -1935,21 +1935,21 @@ void OOXMLFastContextHandlerTextTableRow::endRow()
             OOXMLValue::Pointer_t pVal
                 (new OOXMLIntegerValue(mnTableDepth));
             OOXMLProperty::Pointer_t pProp
-                (new OOXMLPropertyImpl(NS_sprm::LN_PTableDepth, pVal, OOXMLPropertyImpl::SPRM));
+                (new OOXMLPropertyImpl(NS_ooxml::LN_tblDepth, pVal, OOXMLPropertyImpl::SPRM));
             pProps->add(pProp);
         }
         {
             OOXMLValue::Pointer_t pVal
                 (new OOXMLIntegerValue(1));
             OOXMLProperty::Pointer_t pProp
-                (new OOXMLPropertyImpl(NS_sprm::LN_PFInTable, pVal, OOXMLPropertyImpl::SPRM));
+                (new OOXMLPropertyImpl(NS_ooxml::LN_inTbl, pVal, OOXMLPropertyImpl::SPRM));
             pProps->add(pProp);
         }
         {
             OOXMLValue::Pointer_t pVal
                 (new OOXMLIntegerValue(1));
             OOXMLProperty::Pointer_t pProp
-                (new OOXMLPropertyImpl(NS_sprm::LN_PRow, pVal, OOXMLPropertyImpl::SPRM));
+                (new OOXMLPropertyImpl(NS_ooxml::LN_tblRow, pVal, OOXMLPropertyImpl::SPRM));
             pProps->add(pProp);
         }
 

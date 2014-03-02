@@ -25,6 +25,7 @@
 #include <resourcemodel/WW8ResourceModel.hxx>
 
 #include <doctok/sprmids.hxx>
+#include <ooxml/resourceids.hxx>
 
 #include <boost/shared_ptr.hpp>
 #include <stack>
@@ -859,20 +860,20 @@ bool TableManager<T, PropertiesPointer>::sprm(Sprm & rSprm)
     bool bRet = true;
     switch (rSprm.getId())
     {
-    case NS_sprm::LN_PTableDepth:
+    case NS_ooxml::LN_tblDepth:
         {
             Value::Pointer_t pValue = rSprm.getValue();
 
             cellDepth(pValue->getInt());
         }
         break;
-    case NS_sprm::LN_PFInTable:
+    case NS_ooxml::LN_inTbl:
         inCell();
         break;
-    case NS_sprm::LN_PCell:
+    case NS_ooxml::LN_tblCell:
         endCell();
         break;
-    case NS_sprm::LN_PRow:
+    case NS_ooxml::LN_tblRow:
         endRow();
         break;
     default:
