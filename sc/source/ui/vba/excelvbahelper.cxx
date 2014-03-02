@@ -382,3 +382,5 @@ ScVbaCellRangeAccess::GetDataSet( ScCellRangesBase* pRangeObj )
 } // namespace excel
 } // namespace vba
 } // namespace ooo
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
