@@ -165,7 +165,8 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
 
                     if (nDiffX!=0 || nDiffY!=0)
                         pNeuObj->NbcMove(Size(nDiffX,nDiffY));
-                    pDestPage->InsertObject( pNeuObj );
+                    if (pDestPage)
+                        pDestPage->InsertObject( pNeuObj );
                     pScDrawView->AddUndo(new SdrUndoInsertObj( *pNeuObj ));
 
                     if (ScDrawLayer::IsCellAnchored(*pNeuObj))
