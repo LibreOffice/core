@@ -60,31 +60,32 @@
 #include "xffont.hxx"
 
 XFFont::XFFont()
+    : m_nFontSize(0)
+    , m_nFontSizeAsia(0)
+    , m_nFontSizeComplex(0)
+    , m_bItalic(sal_False)
+    , m_bItalicAsia(sal_False)
+    , m_bItalicComplex(sal_False)
+    , m_bBold(sal_False)
+    , m_bBoldAsia(sal_False)
+    , m_bBoldComplex(sal_False)
+    , m_eUnderline(enumXFUnderlineNone)
+    , m_eCrossout(enumXFCrossoutNone)
+    , m_eRelief(enumXFReliefNone)
+    , m_eTransform(enumXFTransformNone)
+    , m_eEmphasize(enumXFEmphasizeNone)
+    , m_bWordByWord(sal_False)
+    , m_bEmphasizeTop(sal_True)
+    , m_bOutline(sal_False)
+    , m_bShadow(sal_False)
+    , m_bBlink(sal_False)
+    , m_nPosition(33)
+    , m_nScale(58)
+    , m_fCharSpace(0)
+    , m_nWidthScale(100)
+    , m_nFlag(0)
+    , m_bTransparent(sal_False)
 {
-    m_nFontSize = 0;
-    m_nFontSizeAsia = 0;
-    m_nFontSizeComplex = 0;
-    m_bItalic = sal_False;
-    m_bItalicAsia = sal_False;
-    m_bItalicComplex = sal_False;
-    m_bBold = sal_False;
-    m_bBoldAsia = sal_False;
-    m_bBoldComplex = sal_False;
-    m_eUnderline = enumXFUnderlineNone;
-    m_eCrossout = enumXFCrossoutNone;
-    m_eRelief = enumXFReliefNone;
-    m_eTransform = enumXFTransformNone;
-    m_eEmphasize = enumXFEmphasizeNone;
-    m_bEmphasizeTop = sal_True;
-    m_bOutline = sal_False;
-    m_bShadow = sal_False;
-    m_bBlink = sal_False;
-    m_nPosition = 33;
-    m_nScale = 58;
-    m_fCharSpace = 0;
-    m_nWidthScale = 100;
-    m_bWordByWord = sal_False;
-    m_nFlag = 0;
 }
 /*
     The Following variable are to  be compared:
