@@ -562,7 +562,7 @@ text_wrapper_get_run_attributes( AtkText        *text,
         if( pTextMarkup )
         {
             // Get attribute run here if it hasn't been done before
-            if( !bOffsetsAreValid )
+            if (!bOffsetsAreValid && pText)
             {
                 accessibility::TextSegment aAttributeTextSegment =
                     pText->getTextAtIndex(offset, accessibility::AccessibleTextType::ATTRIBUTE_RUN);
