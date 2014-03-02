@@ -252,7 +252,8 @@ void SfxModelessDialog::Initialize(SfxChildWinInfo *pInfo)
 */
 
 {
-    pImp->aWinState = pInfo->aWinState;
+    if (pInfo)
+        pImp->aWinState = pInfo->aWinState;
 }
 
 void SfxModelessDialog::Resize()
@@ -606,7 +607,8 @@ void SfxFloatingWindow::Initialize(SfxChildWinInfo *pInfo)
     SfxChildWindows.
 */
 {
-    pImp->aWinState = pInfo->aWinState;
+    if (pInfo)
+        pImp->aWinState = pInfo->aWinState;
 }
 
 
