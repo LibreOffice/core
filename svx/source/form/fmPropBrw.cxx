@@ -189,7 +189,6 @@ OUString GetUIHeadlineName(sal_Int16 nClassId, const Any& aUnoObj)
 
 // class FmPropBrw
 
-DBG_NAME(FmPropBrw);
 
 FmPropBrw::FmPropBrw( const Reference< XComponentContext >& _xORB, SfxBindings* _pBindings,
             SfxChildWindow* _pMgr, Window* _pParent, const SfxChildWinInfo* _pInfo )
@@ -199,7 +198,6 @@ FmPropBrw::FmPropBrw( const Reference< XComponentContext >& _xORB, SfxBindings* 
     ,m_bInStateChange( false )
     ,m_xORB(_xORB)
 {
-    DBG_CTOR(FmPropBrw,NULL);
 
     ::Size aPropWinSize(STD_WIN_SIZE_X,STD_WIN_SIZE_Y);
     SetMinOutputSizePixel(::Size(STD_MIN_SIZE_X,STD_MIN_SIZE_Y));
@@ -284,7 +282,6 @@ FmPropBrw::~FmPropBrw()
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-    DBG_DTOR(FmPropBrw,NULL);
 }
 
 

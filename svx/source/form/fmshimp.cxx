@@ -635,7 +635,6 @@ void SAL_CALL FmXFormShell_Base_Disambiguation::disposing()
 
 // class FmXFormShell
 
-DBG_NAME(FmXFormShell);
 
 FmXFormShell::FmXFormShell( FmFormShell& _rShell, SfxViewFrame* _pViewFrame )
         :FmXFormShell_BASE(m_aMutex)
@@ -660,7 +659,6 @@ FmXFormShell::FmXFormShell( FmFormShell& _rShell, SfxViewFrame* _pViewFrame )
         ,m_bPreparedClose( sal_False )
         ,m_bFirstActivation( sal_True )
 {
-    DBG_CTOR(FmXFormShell,NULL);
     m_aMarkTimer.SetTimeout(100);
     m_aMarkTimer.SetTimeoutHdl(LINK(this,FmXFormShell,OnTimeOut));
 
@@ -684,7 +682,6 @@ FmXFormShell::FmXFormShell( FmFormShell& _rShell, SfxViewFrame* _pViewFrame )
 FmXFormShell::~FmXFormShell()
 {
     delete m_pTextShell;
-    DBG_DTOR(FmXFormShell,NULL);
 }
 
 

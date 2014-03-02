@@ -315,18 +315,15 @@ void SgaObjectBmp::ReadData( SvStream& rIn, sal_uInt16& rReadVersion )
         aTitle = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIn, RTL_TEXTENCODING_UTF8);
 }
 
-DBG_NAME(SgaObjectSound)
 
 SgaObjectSound::SgaObjectSound() :
     eSoundType( SOUND_STANDARD )
 {
-    DBG_CTOR(SgaObjectSound,NULL);
 }
 
 SgaObjectSound::SgaObjectSound( const INetURLObject& rURL ) :
     eSoundType( SOUND_STANDARD )
 {
-    DBG_CTOR(SgaObjectSound,NULL);
 
     if( FileExists( rURL ) )
     {
@@ -340,7 +337,6 @@ SgaObjectSound::SgaObjectSound( const INetURLObject& rURL ) :
 
 SgaObjectSound::~SgaObjectSound()
 {
-    DBG_DTOR(SgaObjectSound,NULL);
 }
 
 BitmapEx SgaObjectSound::GetThumbBmp() const
@@ -421,12 +417,10 @@ SgaObjectSvDraw::SgaObjectSvDraw( const FmFormModel& rModel, const INetURLObject
     bIsValid = CreateThumb( rModel );
 }
 
-DBG_NAME(SvxGalleryDrawModel)
 
 SvxGalleryDrawModel::SvxGalleryDrawModel()
 : mpFormModel( 0 )
 {
-    DBG_CTOR(SvxGalleryDrawModel,NULL);
 
     const OUString sFactoryURL("sdraw");
 
@@ -454,7 +448,6 @@ SvxGalleryDrawModel::~SvxGalleryDrawModel()
     if( mxDoc.Is() )
         mxDoc->DoClose();
 
-    DBG_DTOR(SvxGalleryDrawModel,NULL);
 }
 
 SgaObjectSvDraw::SgaObjectSvDraw( SvStream& rIStm, const INetURLObject& rURL )

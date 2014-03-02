@@ -258,7 +258,6 @@ void SdrObjUserDataList::DeleteUserData(size_t nNum)
 
 
 
-DBG_NAME(SdrObjGeoData);
 
 SdrObjGeoData::SdrObjGeoData():
     pGPL(NULL),
@@ -269,12 +268,10 @@ SdrObjGeoData::SdrObjGeoData():
     mbVisible(true),
     mnLayerID(0)
 {
-    DBG_CTOR(SdrObjGeoData,NULL);
 }
 
 SdrObjGeoData::~SdrObjGeoData()
 {
-    DBG_DTOR(SdrObjGeoData,NULL);
     delete pGPL;
 }
 
@@ -423,7 +420,6 @@ void SdrObject::SetBoundRectDirty()
 
 
 
-DBG_NAME(SdrObject);
 TYPEINIT1(SdrObject,SfxListener);
 
 SdrObject::SdrObject()
@@ -444,7 +440,6 @@ SdrObject::SdrObject()
     ,maWeakUnoShape()
     ,mbDoNotInsertIntoPageAutomatically(false)
 {
-    DBG_CTOR(SdrObject,NULL);
     bVirtObj         =false;
     bSnapRectDirty   =true;
     bNetLock         =false;
@@ -502,7 +497,6 @@ SdrObject::~SdrObject()
         DBG_UNHANDLED_EXCEPTION();
     }
 
-    DBG_DTOR(SdrObject,NULL);
     SendUserCall(SDRUSERCALL_DELETE, GetLastBoundRect());
     delete pPlusData;
 

@@ -35,11 +35,9 @@ using namespace ::connectivity;
 
 //= OSystemParseContext
 
-DBG_NAME(OSystemParseContext)
 
 OSystemParseContext::OSystemParseContext() : IParseContext()
 {
-    DBG_CTOR(OSystemParseContext,NULL);
     SolarMutexGuard aGuard;
 
     ::svx::StringListResource aKeywords( SVX_RES( RID_RSC_SQL_INTERNATIONAL ) );
@@ -49,7 +47,6 @@ OSystemParseContext::OSystemParseContext() : IParseContext()
 
 OSystemParseContext::~OSystemParseContext()
 {
-    DBG_DTOR(OSystemParseContext,NULL);
 }
 
 

@@ -75,19 +75,16 @@ namespace sdr { namespace contact {
 
     //= ViewContactOfUnoControl
 
-    DBG_NAME( ViewContactOfUnoControl )
 
     ViewContactOfUnoControl::ViewContactOfUnoControl( SdrUnoObj& _rUnoObject )
         :ViewContactOfSdrObj( _rUnoObject )
         ,m_pImpl( new ViewContactOfUnoControl_Impl )
     {
-        DBG_CTOR( ViewContactOfUnoControl, NULL );
     }
 
 
     ViewContactOfUnoControl::~ViewContactOfUnoControl()
     {
-        DBG_DTOR( ViewContactOfUnoControl, NULL );
     }
 
 

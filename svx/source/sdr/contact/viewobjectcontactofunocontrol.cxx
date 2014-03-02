@@ -922,7 +922,6 @@ namespace sdr { namespace contact {
 
     //= ViewObjectContactOfUnoControl_Impl
 
-    DBG_NAME( ViewObjectContactOfUnoControl_Impl )
 
     ViewObjectContactOfUnoControl_Impl::ViewObjectContactOfUnoControl_Impl( ViewObjectContactOfUnoControl* _pAntiImpl )
         :m_pAntiImpl( _pAntiImpl )
@@ -933,7 +932,6 @@ namespace sdr { namespace contact {
         ,m_eControlDesignMode( eUnknown )
         ,m_aZoomLevelNormalization()
     {
-        DBG_CTOR( ViewObjectContactOfUnoControl_Impl, NULL );
         DBG_ASSERT( m_pAntiImpl, "ViewObjectContactOfUnoControl_Impl::ViewObjectContactOfUnoControl_Impl: invalid AntiImpl!" );
 
         const OutputDevice& rPageViewDevice( impl_getOutputDevice_throw() );
@@ -965,7 +963,6 @@ namespace sdr { namespace contact {
             dispose();
         }
 
-        DBG_DTOR( ViewObjectContactOfUnoControl_Impl, NULL );
     }
 
 
@@ -1703,13 +1700,11 @@ namespace sdr { namespace contact {
 
     //= ViewObjectContactOfUnoControl
 
-    DBG_NAME( ViewObjectContactOfUnoControl )
 
     ViewObjectContactOfUnoControl::ViewObjectContactOfUnoControl( ObjectContact& _rObjectContact, ViewContactOfUnoControl& _rViewContact )
         :ViewObjectContactOfSdrObj( _rObjectContact, _rViewContact )
         ,m_pImpl( new ViewObjectContactOfUnoControl_Impl( this ) )
     {
-        DBG_CTOR( ViewObjectContactOfUnoControl, NULL );
     }
 
 
@@ -1718,7 +1713,6 @@ namespace sdr { namespace contact {
         m_pImpl->dispose();
         m_pImpl = NULL;
 
-        DBG_DTOR( ViewObjectContactOfUnoControl, NULL );
     }
 
 
@@ -1879,18 +1873,15 @@ namespace sdr { namespace contact {
 
     //= UnoControlPrintOrPreviewContact
 
-    DBG_NAME( UnoControlPrintOrPreviewContact )
 
     UnoControlPrintOrPreviewContact::UnoControlPrintOrPreviewContact( ObjectContactOfPageView& _rObjectContact, ViewContactOfUnoControl& _rViewContact )
         :ViewObjectContactOfUnoControl( _rObjectContact, _rViewContact )
     {
-        DBG_CTOR( UnoControlPrintOrPreviewContact, NULL );
     }
 
 
     UnoControlPrintOrPreviewContact::~UnoControlPrintOrPreviewContact()
     {
-        DBG_DTOR( UnoControlPrintOrPreviewContact, NULL );
     }
 
 

@@ -69,7 +69,6 @@ public:
 
 
 static const sal_Int32 InitialObjectContainerCapacity (64);
-DBG_NAME(SdrObjList)
 
 TYPEINIT0(SdrObjList);
 
@@ -78,7 +77,6 @@ SdrObjList::SdrObjList(SdrModel* pNewModel, SdrPage* pNewPage, SdrObjList* pNewU
     mpNavigationOrder(),
     mbIsNavigationOrderDirty(false)
 {
-    DBG_CTOR(SdrObjList,NULL);
     maList.reserve(InitialObjectContainerCapacity);
     pModel=pNewModel;
     pPage=pNewPage;
@@ -94,7 +92,6 @@ SdrObjList::SdrObjList(const SdrObjList& rSrcList):
     mpNavigationOrder(),
     mbIsNavigationOrderDirty(false)
 {
-    DBG_CTOR(SdrObjList,NULL);
     maList.reserve(InitialObjectContainerCapacity);
     pModel=NULL;
     pPage=NULL;
@@ -108,7 +105,6 @@ SdrObjList::SdrObjList(const SdrObjList& rSrcList):
 
 SdrObjList::~SdrObjList()
 {
-    DBG_DTOR(SdrObjList,NULL);
 
     // To avoid that the Clear() method will broadcast changes when in destruction
     // which would call virtual methos (not allowed in destructor), the model is set
@@ -1248,7 +1244,6 @@ SfxStyleSheet* SdrPageProperties::GetStyleSheet() const
 
 
 TYPEINIT1(SdrPage,SdrObjList);
-DBG_NAME(SdrPage)
 SdrPage::SdrPage(SdrModel& rNewModel, bool bMasterPage)
 :   SdrObjList(&rNewModel, this),
     mpViewContact(0L),
@@ -1268,7 +1263,6 @@ SdrPage::SdrPage(SdrModel& rNewModel, bool bMasterPage)
     mbSwappingLocked(false),
     mbPageBorderOnlyLeftRight(false)
 {
-    DBG_CTOR(SdrPage,NULL);
     aPrefVisiLayers.SetAll();
     eListKind = (bMasterPage) ? SDROBJLIST_MASTERPAGE : SDROBJLIST_DRAWPAGE;
 
@@ -1295,7 +1289,6 @@ SdrPage::SdrPage(const SdrPage& rSrcPage)
     mbSwappingLocked(rSrcPage.mbSwappingLocked),
     mbPageBorderOnlyLeftRight(rSrcPage.mbPageBorderOnlyLeftRight)
 {
-    DBG_CTOR(SdrPage,NULL);
     aPrefVisiLayers.SetAll();
     eListKind = (mbMaster) ? SDROBJLIST_MASTERPAGE : SDROBJLIST_DRAWPAGE;
 
@@ -1368,7 +1361,6 @@ SdrPage::~SdrPage()
         mpSdrPageProperties = 0;
     }
 
-    DBG_DTOR(SdrPage,NULL);
 }
 
 SdrPage& SdrPage::operator=(const SdrPage& rSrcPage)

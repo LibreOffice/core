@@ -33,12 +33,10 @@
 
 #include <boost/bind.hpp>
 
-DBG_NAME(GalleryChildWindow)
 
 GalleryChildWindow::GalleryChildWindow( Window* _pParent, sal_uInt16 nId, SfxBindings* pBindings, SfxChildWinInfo* pInfo ) :
     SfxChildWindow( _pParent, nId )
 {
-    DBG_CTOR(GalleryChildWindow,NULL);
 
     pWindow = new GalleryBrowser( pBindings, this, _pParent, GAL_RES( RID_SVXDLG_GALLERYBROWSER ) );
     eChildAlignment = SFX_ALIGN_TOP;
@@ -47,14 +45,12 @@ GalleryChildWindow::GalleryChildWindow( Window* _pParent, sal_uInt16 nId, SfxBin
 
 GalleryChildWindow::~GalleryChildWindow()
 {
-    DBG_DTOR(GalleryChildWindow,NULL);
 }
 
 SFX_IMPL_DOCKINGWINDOW_WITHID( GalleryChildWindow, SID_GALLERY )
 
 // - GalleryBrowser -
 
-DBG_NAME(GalleryBrowser)
 
 GalleryBrowser::GalleryBrowser(
     SfxBindings* _pBindings,
@@ -68,7 +64,6 @@ GalleryBrowser::GalleryBrowser(
     mpBrowser2(0),
     mpGallery(0)
 {
-    DBG_CTOR(GalleryBrowser,NULL);
 
     mpGallery = Gallery::GetGalleryInstance();
     mpBrowser1 = new GalleryBrowser1(
@@ -102,7 +97,6 @@ GalleryBrowser::~GalleryBrowser()
     delete mpSplitter;
     delete mpBrowser1;
 
-    DBG_DTOR(GalleryBrowser,NULL);
 }
 
 void GalleryBrowser::InitSettings()

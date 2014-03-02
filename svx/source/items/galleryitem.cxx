@@ -21,15 +21,12 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
-DBG_NAMEEX( SvxGalleryItem )
-DBG_NAME( SvxGalleryItem )
 
 TYPEINIT1_AUTOFACTORY( SvxGalleryItem, SfxPoolItem );
 
 SvxGalleryItem::SvxGalleryItem()
     : m_nType( css::gallery::GalleryItemType::EMPTY )
 {
-    DBG_CTOR(SvxGalleryItem, 0);
 }
 
 SvxGalleryItem::SvxGalleryItem( const SvxGalleryItem &rItem )
@@ -39,12 +36,10 @@ SvxGalleryItem::SvxGalleryItem( const SvxGalleryItem &rItem )
     , m_xDrawing( rItem.m_xDrawing )
     , m_xGraphic( rItem.m_xGraphic )
 {
-    DBG_CTOR(SvxGalleryItem, 0);
 }
 
 SvxGalleryItem::~SvxGalleryItem()
 {
-    DBG_DTOR(SvxGalleryItem, 0);
 }
 
 bool SvxGalleryItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /* nMemberId */ ) const

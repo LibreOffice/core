@@ -87,11 +87,9 @@ void FmSearchThread::onTerminated()
 
 //  SMART_UNO_IMPLEMENTATION(FmRecordCountListener, UsrObject);
 
-DBG_NAME(FmRecordCountListener);
 
 FmRecordCountListener::FmRecordCountListener(const Reference< ::com::sun::star::sdbc::XResultSet > & dbcCursor)
 {
-    DBG_CTOR(FmRecordCountListener,NULL);
 
     m_xListening = Reference< ::com::sun::star::beans::XPropertySet > (dbcCursor, UNO_QUERY);
     if (!m_xListening.is())
@@ -123,7 +121,6 @@ Link FmRecordCountListener::SetPropChangeHandler(const Link& lnk)
 FmRecordCountListener::~FmRecordCountListener()
 {
 
-    DBG_DTOR(FmRecordCountListener,NULL);
 }
 
 
@@ -666,7 +663,6 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const OUString
 }
 
 
-DBG_NAME(FmSearchEngine);
 
 FmSearchEngine::FmSearchEngine(const Reference< XComponentContext >& _rxContext,
             const Reference< XResultSet > & xCursor, const OUString& sVisibleFields,
@@ -696,7 +692,6 @@ FmSearchEngine::FmSearchEngine(const Reference< XComponentContext >& _rxContext,
     ,m_nPosition(MATCHING_ANYWHERE)
     ,m_nTransliterationFlags(0)
 {
-    DBG_CTOR(FmSearchEngine,NULL);
 
     m_xFormatter = Reference< ::com::sun::star::util::XNumberFormatter >(
                     ::com::sun::star::util::NumberFormatter::create( ::comphelper::getProcessComponentContext() ),
@@ -735,7 +730,6 @@ FmSearchEngine::FmSearchEngine(const Reference< XComponentContext >& _rxContext,
     ,m_nPosition(MATCHING_ANYWHERE)
     ,m_nTransliterationFlags(0)
 {
-    DBG_CTOR(FmSearchEngine,NULL);
 
     fillControlTexts(arrFields);
     Init(sVisibleFields);
@@ -746,7 +740,6 @@ FmSearchEngine::~FmSearchEngine()
 {
     clearControlTexts();
 
-    DBG_DTOR(FmSearchEngine,NULL);
 }
 
 

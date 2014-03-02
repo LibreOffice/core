@@ -83,7 +83,6 @@ namespace accessibility
 
 
 
-    DBG_NAME( AccessibleTextHelper_Impl )
 
     template < typename first_type, typename second_type >
         ::std::pair< first_type, second_type > makeSortedPair( first_type   first,
@@ -123,19 +122,16 @@ namespace accessibility
 
         void SetEventSource( const uno::Reference< XAccessible >& rInterface )
         {
-            DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
             mxFrontEnd = rInterface;
         }
         uno::Reference< XAccessible > GetEventSource() const
         {
-            DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
             return mxFrontEnd;
         }
 
         void SetOffset( const Point& );
         Point GetOffset() const
         {
-            DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
             ::osl::MutexGuard aGuard( maMutex ); Point aPoint( maOffset );
             return aPoint;
         }
@@ -143,7 +139,6 @@ namespace accessibility
         void SetStartIndex( sal_Int32 nOffset );
         sal_Int32 GetStartIndex() const
         {
-            DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
             // Strictly correct only with locked solar mutex, // but
             // here we rely on the fact that sal_Int32 access is
             // atomic
@@ -278,7 +273,6 @@ namespace accessibility
         // normally should employ RAII here...
         mnNotifierClientId(::comphelper::AccessibleEventNotifier::registerClient())
     {
-        DBG_CTOR( AccessibleTextHelper_Impl, NULL );
 
 #ifdef DBG_UTIL
         OSL_TRACE( "AccessibleTextHelper_Impl received ID: %d", mnNotifierClientId );
@@ -287,7 +281,6 @@ namespace accessibility
 
     AccessibleTextHelper_Impl::~AccessibleTextHelper_Impl()
     {
-        DBG_DTOR( AccessibleTextHelper_Impl, NULL );
 
         SolarMutexGuard aGuard;
 
@@ -302,7 +295,6 @@ namespace accessibility
 
     SvxTextForwarder& AccessibleTextHelper_Impl::GetTextForwarder() const SAL_THROW((uno::RuntimeException))
     {
-        DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
 
         if( !maEditSource.IsValid() )
             throw uno::RuntimeException("Unknown edit source", mxFrontEnd);
@@ -320,7 +312,6 @@ namespace accessibility
 
     SvxViewForwarder& AccessibleTextHelper_Impl::GetViewForwarder() const SAL_THROW((uno::RuntimeException))
     {
-        DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
 
         if( !maEditSource.IsValid() )
             throw uno::RuntimeException("Unknown edit source", mxFrontEnd);
@@ -338,7 +329,6 @@ namespace accessibility
 
     SvxEditViewForwarder& AccessibleTextHelper_Impl::GetEditViewForwarder( sal_Bool bCreate ) const SAL_THROW((uno::RuntimeException))
     {
-        DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
 
         if( !maEditSource.IsValid() )
             throw uno::RuntimeException("Unknown edit source", mxFrontEnd);
@@ -366,7 +356,6 @@ namespace accessibility
 
     SvxEditSourceAdapter& AccessibleTextHelper_Impl::GetEditSource() const SAL_THROW((uno::RuntimeException))
     {
-        DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
 
         if( maEditSource.IsValid() )
             return maEditSource;
@@ -376,7 +365,6 @@ namespace accessibility
 
     sal_Bool AccessibleTextHelper_Impl::IsSelected() const
     {
-        DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
 
         sal_Bool bRet = sal_False;
 
@@ -406,7 +394,6 @@ namespace accessibility
 
     void AccessibleTextHelper_Impl::SetStartIndex( sal_Int32 nOffset )
     {
-        DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
 
         sal_Int32 nOldOffset( mnStartIndex );
 
@@ -429,7 +416,6 @@ namespace accessibility
 
     void AccessibleTextHelper_Impl::SetChildFocus( sal_Int32 nChild, sal_Bool bHaveFocus ) SAL_THROW((::com::sun::star::uno::RuntimeException))
     {
-        DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
 
         if( bHaveFocus )
         {
@@ -456,7 +442,6 @@ namespace accessibility
 
     void AccessibleTextHelper_Impl::ChangeChildFocus( sal_Int32 nNewChild ) SAL_THROW((::com::sun::star::uno::RuntimeException))
     {
-        DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
 
         if( mbThisHasFocus )
             SetShapeFocus( sal_False );
@@ -469,7 +454,6 @@ namespace accessibility
 
     void AccessibleTextHelper_Impl::SetShapeFocus( sal_Bool bHaveFocus ) SAL_THROW((::com::sun::star::uno::RuntimeException))
     {
-        DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
 
         sal_Bool bOldFocus( mbThisHasFocus );
 
@@ -516,7 +500,6 @@ namespace accessibility
 
     void AccessibleTextHelper_Impl::SetFocus( sal_Bool bHaveFocus ) SAL_THROW((::com::sun::star::uno::RuntimeException))
     {
-        DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
 
         sal_Bool bOldFocus( mbGroupHasFocus );
 
@@ -543,7 +526,6 @@ namespace accessibility
 
     sal_Bool AccessibleTextHelper_Impl::HaveFocus() SAL_THROW((::com::sun::star::uno::RuntimeException))
     {
-        DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
 
         // No locking of solar mutex here, since we rely on the fact
         // that sal_Bool access is atomic
@@ -552,7 +534,6 @@ namespace accessibility
 
     sal_Bool AccessibleTextHelper_Impl::IsActive() const SAL_THROW((uno::RuntimeException))
     {
-        DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
 
         try
         {
@@ -585,7 +566,6 @@ namespace accessibility
 
     void AccessibleTextHelper_Impl::UpdateSelection()
     {
-        DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
 
         try
         {
@@ -770,7 +750,6 @@ namespace accessibility
 
     void AccessibleTextHelper_Impl::ShutdownEditSource() SAL_THROW((uno::RuntimeException))
     {
-        DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
 
         // This should only be called with solar mutex locked, i.e. from the main office thread
 
@@ -800,7 +779,6 @@ namespace accessibility
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     void AccessibleTextHelper_Impl::SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource ) SAL_THROW((uno::RuntimeException))
     {
-        DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
 
         // This should only be called with solar mutex locked, i.e. from the main office thread
 
@@ -825,7 +803,6 @@ namespace accessibility
 
     void AccessibleTextHelper_Impl::SetOffset( const Point& rPoint )
     {
-        DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
 
         // guard against non-atomic access to maOffset data structure
         {
@@ -842,7 +819,6 @@ namespace accessibility
 
     void AccessibleTextHelper_Impl::UpdateVisibleChildren( bool bBroadcastEvents )
     {
-        DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
 
         try
         {
@@ -954,7 +930,6 @@ namespace accessibility
 
     void AccessibleTextHelper_Impl::UpdateBoundRect()
     {
-        DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
 
         // send BOUNDRECT_CHANGED to affected children
         AccessibleTextHelper_UpdateChildBounds aFunctor( *this );
@@ -992,7 +967,6 @@ namespace accessibility
 
     void AccessibleTextHelper_Impl::ParagraphsMoved( sal_Int32 nFirst, sal_Int32 nMiddle, sal_Int32 nLast )
     {
-        DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
 
         const sal_Int32 nParas = GetTextForwarder().GetParagraphCount();
 
@@ -1150,7 +1124,6 @@ namespace accessibility
 
     void AccessibleTextHelper_Impl::ProcessQueue()
     {
-        DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
 
         // inspect queue for paragraph insert/remove events. If there
         // is exactly _one_ of those in the queue, and the number of
@@ -1439,7 +1412,6 @@ namespace accessibility
 
     void AccessibleTextHelper_Impl::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     {
-        DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
 
         // precondition: solar mutex locked
         DBG_TESTSOLARMUTEX();
@@ -1569,7 +1541,6 @@ namespace accessibility
 
     void AccessibleTextHelper_Impl::Dispose()
     {
-        DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
 
         if( getNotifierClientId() != -1 )
         {
@@ -1606,7 +1577,6 @@ namespace accessibility
 
     void AccessibleTextHelper_Impl::FireEvent( const sal_Int16 nEventId, const uno::Any& rNewValue, const uno::Any& rOldValue ) const
     {
-        DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
 
         // -- object locked --
         ::osl::ClearableMutexGuard aGuard( maMutex );
@@ -1632,7 +1602,6 @@ namespace accessibility
 
     void AccessibleTextHelper_Impl::FireEvent( const AccessibleEventObject& rEvent ) const
     {
-        DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
 
         // #102261# Call global queue for focus events
         if( rEvent.EventId == AccessibleStateType::FOCUSED )
@@ -1646,14 +1615,12 @@ namespace accessibility
     // XAccessibleContext
     sal_Int32 SAL_CALL AccessibleTextHelper_Impl::getAccessibleChildCount() SAL_THROW((uno::RuntimeException))
     {
-        DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
 
         return mnLastVisibleChild - mnFirstVisibleChild + 1;
     }
 
     uno::Reference< XAccessible > SAL_CALL AccessibleTextHelper_Impl::getAccessibleChild( sal_Int32 i ) SAL_THROW((lang::IndexOutOfBoundsException, uno::RuntimeException))
     {
-        DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
 
         i -= GetStartIndex();
 
@@ -1673,7 +1640,6 @@ namespace accessibility
 
     void SAL_CALL AccessibleTextHelper_Impl::addAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) SAL_THROW((uno::RuntimeException))
     {
-        DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
 
         if( getNotifierClientId() != -1 )
             ::comphelper::AccessibleEventNotifier::addEventListener( getNotifierClientId(), xListener );
@@ -1681,7 +1647,6 @@ namespace accessibility
 
     void SAL_CALL AccessibleTextHelper_Impl::removeAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) SAL_THROW((uno::RuntimeException))
     {
-        DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
 
         if( getNotifierClientId() != -1 )
             ::comphelper::AccessibleEventNotifier::removeEventListener( getNotifierClientId(), xListener );
@@ -1689,7 +1654,6 @@ namespace accessibility
 
     uno::Reference< XAccessible > SAL_CALL AccessibleTextHelper_Impl::getAccessibleAtPoint( const awt::Point& _aPoint ) SAL_THROW((uno::RuntimeException))
     {
-        DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
 
         // make given position relative
         if( !mxFrontEnd.is() )

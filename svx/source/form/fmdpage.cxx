@@ -29,16 +29,13 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::form::XFormsSupplier2;
 
-DBG_NAME(SvxFmDrawPage)
 SvxFmDrawPage::SvxFmDrawPage( SdrPage* pInPage ) :
     SvxDrawPage( pInPage )
 {
-    DBG_CTOR(SvxFmDrawPage,NULL);
 }
 
 SvxFmDrawPage::~SvxFmDrawPage() throw ()
 {
-    DBG_DTOR(SvxFmDrawPage,NULL);
 }
 
 ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL SvxFmDrawPage::getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception)

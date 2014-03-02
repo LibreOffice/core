@@ -50,7 +50,6 @@ namespace svxform
     //= DispatchInterceptionMultiplexer
 
 
-    DBG_NAME(DispatchInterceptionMultiplexer)
 
     DispatchInterceptionMultiplexer::DispatchInterceptionMultiplexer(
                 const Reference< XDispatchProviderInterception >& _rxToIntercept, DispatchInterceptor* _pMaster )
@@ -61,7 +60,6 @@ namespace svxform
         ,m_bListening(sal_False)
         ,m_pMaster(_pMaster)
     {
-        DBG_CTOR(DispatchInterceptionMultiplexer,NULL);
 
         ::osl::MutexGuard aGuard( *m_pMutex );
         ::comphelper::increment(m_refCount);
@@ -86,7 +84,6 @@ namespace svxform
         if (!rBHelper.bDisposed)
             dispose();
 
-        DBG_DTOR(DispatchInterceptionMultiplexer,NULL);
     }
 
 

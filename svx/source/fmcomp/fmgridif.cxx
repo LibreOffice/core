@@ -353,7 +353,6 @@ Reference< XInterface > SAL_CALL FmXGridControl_NewInstance_Impl(const Reference
 {
     return *(new FmXGridControl( comphelper::getComponentContext(_rxFactory) ));
 }
-DBG_NAME(FmXGridControl )
 
 FmXGridControl::FmXGridControl(const Reference< XComponentContext >& _rxContext)
                :UnoControl()
@@ -366,13 +365,11 @@ FmXGridControl::FmXGridControl(const Reference< XComponentContext >& _rxContext)
                ,m_bInDraw(sal_False)
                ,m_xContext(_rxContext)
 {
-    DBG_CTOR(FmXGridControl ,NULL);
 }
 
 
 FmXGridControl::~FmXGridControl()
 {
-    DBG_DTOR(FmXGridControl ,NULL);
 }
 
 

@@ -119,7 +119,6 @@ private:
 class GridFieldValueListener;
 typedef std::map<sal_uInt16, GridFieldValueListener*> ColumnFieldValueListeners;
 
-DBG_NAME(GridFieldValueListener)
 class GridFieldValueListener : protected ::comphelper::OPropertyChangeListener
 {
     osl::Mutex                          m_aMutex;
@@ -149,7 +148,6 @@ GridFieldValueListener::GridFieldValueListener(DbGridControl& _rParent, const Re
     ,m_nSuspended(0)
     ,m_bDisposed(false)
 {
-    DBG_CTOR(GridFieldValueListener, NULL);
     if (_rField.is())
     {
         m_pRealListener = new ::comphelper::OPropertyChangeMultiplexer(this, _rField);
@@ -160,7 +158,6 @@ GridFieldValueListener::GridFieldValueListener(DbGridControl& _rParent, const Re
 
 GridFieldValueListener::~GridFieldValueListener()
 {
-    DBG_DTOR(GridFieldValueListener, NULL);
     dispose();
 }
 
@@ -203,13 +200,11 @@ public:
     virtual void disposing(const EventObject& _rEvent, sal_Int16 _nId) throw( RuntimeException ) { m_rParent.disposing(_nId, _rEvent); }
 };
 
-DBG_NAME(DisposeListenerGridBridge)
 DisposeListenerGridBridge::DisposeListenerGridBridge(DbGridControl& _rParent, const Reference< XComponent >& _rxObject, sal_Int16 _rId)
     :FmXDisposeListener(m_aMutex)
     ,m_rParent(_rParent)
     ,m_pRealListener(NULL)
 {
-    DBG_CTOR(DisposeListenerGridBridge,NULL);
 
     if (_rxObject.is())
     {
@@ -227,7 +222,6 @@ DisposeListenerGridBridge::~DisposeListenerGridBridge()
         m_pRealListener = NULL;
     }
 
-    DBG_DTOR(DisposeListenerGridBridge,NULL);
 }
 
 static const sal_uInt16 ControlMap[] =
@@ -863,7 +857,6 @@ void DbGridRow::SetState(CursorWrapper* pCur, sal_Bool bPaintCursor)
     }
 }
 
-DBG_NAME(DbGridControl);
 DbGridControl::DbGridControl(
                 Reference< XComponentContext > _rxContext,
                 Window* pParent,
@@ -903,7 +896,6 @@ DbGridControl::DbGridControl(
             ,m_bHideScrollbars( sal_False )
             ,m_bUpdating(sal_False)
 {
-    DBG_CTOR(DbGridControl,NULL);
 
     OUString sName(SVX_RESSTR(RID_STR_NAVIGATIONBAR));
     m_aBar.SetAccessibleName(sName);
@@ -964,7 +956,6 @@ DbGridControl::~DbGridControl()
     delete m_pDataCursor;
     delete m_pSeekCursor;
 
-    DBG_DTOR(DbGridControl,NULL);
 }
 
 void DbGridControl::StateChanged( StateChangedType nType )
@@ -1780,7 +1771,6 @@ void DbGridControl::VisibleRowsChanged( long nNewTopRow, sal_uInt16 nLinesOnScre
 
 void DbGridControl::RecalcRows(long nNewTopRow, sal_uInt16 nLinesOnScreen, sal_Bool bUpdateCursor)
 {
-    DBG_CHKTHIS( DbGridControl, NULL );
     // Wenn kein Cursor -> keine Rows im Browser.
     if (!m_pSeekCursor)
     {
@@ -1987,7 +1977,6 @@ void DbGridControl::PaintCell(OutputDevice& rDev, const Rectangle& rRect, sal_uI
 
 sal_Bool DbGridControl::CursorMoving(long nNewRow, sal_uInt16 nNewCol)
 {
-    DBG_CHKTHIS( DbGridControl, NULL );
 
     DeactivateCell( sal_False );
 
@@ -2093,7 +2082,6 @@ sal_Bool DbGridControl::SetCurrent(long nNewRow)
 
 void DbGridControl::CursorMoved()
 {
-    DBG_CHKTHIS( DbGridControl, NULL );
 
     // cursor movement due to deletion or insertion of rows
     if (m_pDataCursor && m_nCurrentPos != GetCurRow())
@@ -2215,7 +2203,6 @@ void DbGridControl::AdjustDataSource(sal_Bool bFull)
 
 sal_Int32 DbGridControl::AlignSeekCursor()
 {
-    DBG_CHKTHIS( DbGridControl, NULL );
     // position SeekCursor onto the data cursor, no data transmission
 
     if (!m_pSeekCursor)
@@ -2267,7 +2254,6 @@ sal_Int32 DbGridControl::AlignSeekCursor()
 
 sal_Bool DbGridControl::SeekCursor(long nRow, sal_Bool bAbsolute)
 {
-    DBG_CHKTHIS( DbGridControl, NULL );
     // position SeekCursor onto the data cursor, no data transmission
 
     // additions for the filtermode
@@ -2826,7 +2812,6 @@ void DbGridControl::Command(const CommandEvent& rEvt)
 
 IMPL_LINK(DbGridControl, OnDelete, void*, /*EMPTYTAG*/ )
 {
-    DBG_CHKTHIS(DbGridControl, NULL );
     m_nDeleteEvent = 0;
     DeleteSelectedRows();
     return 0;

@@ -162,7 +162,6 @@ public:
 };
 
 
-DBG_NAME(FormViewPageWindowAdapter)
 
 FormViewPageWindowAdapter::FormViewPageWindowAdapter( const css::uno::Reference<css::uno::XComponentContext>& _rContext, const SdrPageWindow& _rWindow, FmXFormView* _pViewImpl )
 :   m_xControlContainer( _rWindow.GetControlContainer() ),
@@ -170,7 +169,6 @@ FormViewPageWindowAdapter::FormViewPageWindowAdapter( const css::uno::Reference<
     m_pViewImpl( _pViewImpl ),
     m_pWindow( dynamic_cast< Window* >( &_rWindow.GetPaintWindow().GetOutputDevice() ) )
 {
-    DBG_CTOR(FormViewPageWindowAdapter,NULL);
 
     // create an XFormController for every form
     FmFormPage* pFormPage = dynamic_cast< FmFormPage* >( _rWindow.GetPageView().GetPage() );
@@ -197,7 +195,6 @@ FormViewPageWindowAdapter::FormViewPageWindowAdapter( const css::uno::Reference<
 
 FormViewPageWindowAdapter::~FormViewPageWindowAdapter()
 {
-    DBG_DTOR(FormViewPageWindowAdapter,NULL);
 }
 
 

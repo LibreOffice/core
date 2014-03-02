@@ -561,11 +561,6 @@ void SvxPixelCtlAccessibleChild::FireAccessibleEvent (
     CommitChange( AccessibleEventObject( xSource, nEventId, rNew,rOld ) );
 }
 
-
-
-DBG_NAME( SvxPixelCtlAccessibleChild )
-
-
 SvxPixelCtlAccessibleChild::SvxPixelCtlAccessibleChild(
     SvxPixelCtl& rWindow,
     sal_Bool bPixelColorOrBG,
@@ -582,14 +577,11 @@ SvxPixelCtlAccessibleChild::SvxPixelCtlAccessibleChild(
     mnIndexInParent( nIndexInParent ),
     mnClientId( 0 )
 {
-    DBG_CTOR( SvxPixelCtlAccessibleChild, NULL );
 }
 
 
 SvxPixelCtlAccessibleChild::~SvxPixelCtlAccessibleChild()
 {
-    DBG_DTOR( SvxPixelCtlAccessibleChild, NULL );
-
     if( IsAlive() )
     {
         osl_atomic_increment( &m_refCount );
@@ -776,9 +768,6 @@ void SAL_CALL SvxPixelCtlAccessibleChild::addAccessibleEventListener( const uno:
         comphelper::AccessibleEventNotifier::addEventListener( mnClientId, xListener );
     }
 }
-
-
-
 
 void SAL_CALL SvxPixelCtlAccessibleChild::removeAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
     throw( RuntimeException, std::exception )

@@ -545,7 +545,6 @@ IMPL_LINK( FormController, OnInvalidateFeatures, void*, /*_pNotInterestedInThisP
 
 /*************************************************************************/
 
-DBG_NAME( FormController )
 
 FormController::FormController(const Reference< css::uno::XComponentContext > & _rxORB )
                   :FormController_BASE( m_aMutex )
@@ -583,7 +582,6 @@ FormController::FormController(const Reference< css::uno::XComponentContext > & 
                   ,m_bAttemptedHandlerCreation( false )
                   ,m_bSuspendFilterTextListening( false )
 {
-    DBG_CTOR( FormController, NULL );
 
     ::comphelper::increment(m_refCount);
     {
@@ -633,7 +631,6 @@ FormController::~FormController()
 
     DELETEZ( m_pControlBorderManager );
 
-    DBG_DTOR( FormController, NULL );
 }
 
 

@@ -100,7 +100,6 @@ struct SdrModelImpl
 
 
 
-DBG_NAME(SdrModel)
 TYPEINIT1(SdrModel,SfxBroadcaster);
 void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbeddedHelper,
     bool bUseExtColorTable, bool bLoadRefCounts)
@@ -218,7 +217,6 @@ SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, sal
     maMaPag(),
     maPages()
 {
-    DBG_CTOR(SdrModel,NULL);
     ImpCtor(pPool, pPers, false, (bool)bLoadRefCounts);
 }
 
@@ -228,7 +226,6 @@ SdrModel::SdrModel(const OUString& rPath, SfxItemPool* pPool, ::comphelper::IEmb
     maPages(),
     aTablePath(rPath)
 {
-    DBG_CTOR(SdrModel,NULL);
     ImpCtor(pPool, pPers, false, (bool)bLoadRefCounts);
 }
 
@@ -237,7 +234,6 @@ SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, boo
     maMaPag(),
     maPages()
 {
-    DBG_CTOR(SdrModel,NULL);
     ImpCtor(pPool,pPers,bUseExtColorTable, (bool)bLoadRefCounts);
 }
 
@@ -247,7 +243,6 @@ SdrModel::SdrModel(const OUString& rPath, SfxItemPool* pPool, ::comphelper::IEmb
     maPages(),
     aTablePath(rPath)
 {
-    DBG_CTOR(SdrModel,NULL);
     ImpCtor(pPool,pPers,bUseExtColorTable, (bool)bLoadRefCounts);
 }
 
@@ -264,7 +259,6 @@ SdrModel::SdrModel(const SdrModel& /*rSrcModel*/):
 
 SdrModel::~SdrModel()
 {
-    DBG_DTOR(SdrModel,NULL);
 
     mbInDestruction = true;
 

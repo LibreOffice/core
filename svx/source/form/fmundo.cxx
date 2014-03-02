@@ -172,7 +172,6 @@ typedef std::map<Reference< XPropertySet >, PropertySetInfo> PropertySetInfoCach
 
 OUString static_STR_UNDO_PROPERTY;
 
-DBG_NAME(FmXUndoEnvironment)
 
 FmXUndoEnvironment::FmXUndoEnvironment(FmFormModel& _rModel)
                    :rModel( _rModel )
@@ -182,7 +181,6 @@ FmXUndoEnvironment::FmXUndoEnvironment(FmFormModel& _rModel)
                    ,bReadOnly( false )
                    ,m_bDisposed( false )
 {
-    DBG_CTOR(FmXUndoEnvironment,NULL);
     try
     {
         m_vbaListener =  new ScriptEventListenerWrapper( _rModel );
@@ -195,7 +193,6 @@ FmXUndoEnvironment::FmXUndoEnvironment(FmFormModel& _rModel)
 
 FmXUndoEnvironment::~FmXUndoEnvironment()
 {
-    DBG_DTOR(FmXUndoEnvironment,NULL);
     if ( !m_bDisposed )   // i120746, call FormScriptingEnvironment::dispose to avoid memory leak
         m_pScriptingEnv->dispose();
 
@@ -1033,7 +1030,6 @@ OUString FmUndoPropertyAction::GetComment() const
 }
 
 
-DBG_NAME(FmUndoContainerAction);
 
 FmUndoContainerAction::FmUndoContainerAction(FmFormModel& _rMod,
                                              Action _eAction,
@@ -1049,7 +1045,6 @@ FmUndoContainerAction::FmUndoContainerAction(FmFormModel& _rMod,
         // some old code suggested this could be a valid argument. However, this code was
         // buggy, and it *seemed* that nobody used it - so it was removed.
 
-    DBG_CTOR(FmUndoContainerAction,NULL);
     if ( xCont.is() && xElem.is() )
     {
         // normalize
@@ -1076,7 +1071,6 @@ FmUndoContainerAction::~FmUndoContainerAction()
 {
     // if we own the object ....
     DisposeElement( m_xOwnElement );
-    DBG_DTOR(FmUndoContainerAction,NULL);
 }
 
 
