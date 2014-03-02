@@ -3021,6 +3021,9 @@ const sal_uInt8* WW8PLCFx_Fc_FKP::HasSprm( sal_uInt16 nId )
             return 0;
     }
 
+    if (!pFkp)
+        return 0;
+
     const sal_uInt8* pRes = pFkp->HasSprm( nId );
 
     if( !pRes )
