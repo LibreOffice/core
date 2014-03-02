@@ -118,7 +118,6 @@ namespace svt
     }
 
 
-    DBG_NAME(EditBrowseBox);
     void EditBrowseBox::impl_construct()
     {
         m_aImpl.reset(new EditBrowseBoxImpl());
@@ -149,7 +148,6 @@ namespace svt
                   ,bActiveBeforeTracking( sal_False )
                   ,m_nBrowserFlags(nBrowserFlags)
     {
-        DBG_CTOR(EditBrowseBox,NULL);
 
         impl_construct();
     }
@@ -171,7 +169,6 @@ namespace svt
                   ,m_nBrowserFlags(nBrowserFlags)
                   ,pHeader(NULL)
     {
-        DBG_CTOR(EditBrowseBox,NULL);
 
         impl_construct();
     }
@@ -194,7 +191,6 @@ namespace svt
 
         delete pCheckBoxPaint;
 
-        DBG_DTOR(EditBrowseBox,NULL);
     }
 
 
@@ -1336,13 +1332,11 @@ namespace svt
     }
 
 
-    DBG_NAME(CellController);
 
     CellController::CellController(Control* pW)
                    :pWindow( pW )
                    ,bSuspended( true )
     {
-        DBG_CTOR(CellController,NULL);
 
         DBG_ASSERT(pWindow, "CellController::CellController: missing the window!");
         DBG_ASSERT(!pWindow->IsVisible(), "CellController::CellController: window should not be visible!");
@@ -1352,7 +1346,6 @@ namespace svt
     CellController::~CellController()
     {
 
-        DBG_DTOR(CellController,NULL);
     }
 
 

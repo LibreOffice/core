@@ -42,7 +42,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 
-DBG_NAME( SvtRulerAccessible )
 
 
 //=====  internal  ============================================================
@@ -56,12 +55,10 @@ SvtRulerAccessible::SvtRulerAccessible(
     mpRepr( &rRepr ),
     mnClientId( 0 )
 {
-    DBG_CTOR( SvtRulerAccessible, NULL );
 }
 
 SvtRulerAccessible::~SvtRulerAccessible()
 {
-    DBG_DTOR( SvtRulerAccessible, NULL );
 
     if( IsAlive() )
     {

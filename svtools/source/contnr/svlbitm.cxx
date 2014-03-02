@@ -36,7 +36,6 @@ struct SvLBoxButtonData_Impl
 };
 
 
-DBG_NAME(SvLBoxButtonData)
 
 void SvLBoxButtonData::InitData( sal_Bool bImagesFromDefault, bool _bRadioBtn, const Control* pCtrl )
 {
@@ -53,21 +52,18 @@ void SvLBoxButtonData::InitData( sal_Bool bImagesFromDefault, bool _bRadioBtn, c
 
 SvLBoxButtonData::SvLBoxButtonData( const Control* pControlForSettings )
 {
-    DBG_CTOR(SvLBoxButtonData,0);
 
     InitData( sal_True, false, pControlForSettings );
 }
 
 SvLBoxButtonData::SvLBoxButtonData( const Control* pControlForSettings, bool _bRadioBtn )
 {
-    DBG_CTOR(SvLBoxButtonData,0);
 
     InitData( sal_True, _bRadioBtn, pControlForSettings );
 }
 
 SvLBoxButtonData::~SvLBoxButtonData()
 {
-    DBG_DTOR(SvLBoxButtonData,0);
 
     delete pImpl;
 #ifdef DBG_UTIL
@@ -77,13 +73,11 @@ SvLBoxButtonData::~SvLBoxButtonData()
 
 void SvLBoxButtonData::CallLink()
 {
-    DBG_CHKTHIS(SvLBoxButtonData,0);
     aLink.Call( this );
 }
 
 sal_uInt16 SvLBoxButtonData::GetIndex( sal_uInt16 nItemState )
 {
-    DBG_CHKTHIS(SvLBoxButtonData,0);
     nItemState &= 0x000F;
     sal_uInt16 nIdx;
     switch( nItemState )
@@ -108,7 +102,6 @@ sal_uInt16 SvLBoxButtonData::GetIndex( sal_uInt16 nItemState )
 
 void SvLBoxButtonData::SetWidthAndHeight()
 {
-    DBG_CHKTHIS(SvLBoxButtonData,0);
     Size aSize = aBmps[0].GetSizePixel();
     nWidth = aSize.Width();
     nHeight = aSize.Height();
@@ -118,14 +111,12 @@ void SvLBoxButtonData::SetWidthAndHeight()
 
 void SvLBoxButtonData::StoreButtonState( SvTreeListEntry* pActEntry, sal_uInt16 nItemFlags )
 {
-    DBG_CHKTHIS(SvLBoxButtonData,0);
     pImpl->pEntry = pActEntry;
     eState = ConvertToButtonState( nItemFlags );
 }
 
 SvButtonState SvLBoxButtonData::ConvertToButtonState( sal_uInt16 nItemFlags ) const
 {
-    DBG_CHKTHIS(SvLBoxButtonData,0);
     nItemFlags &= (SV_ITEMSTATE_UNCHECKED |
                    SV_ITEMSTATE_CHECKED |
                    SV_ITEMSTATE_TRISTATE);
@@ -187,28 +178,23 @@ sal_Bool SvLBoxButtonData::IsRadio() {
 // class SvLBoxString
 // ***************************************************************
 
-DBG_NAME(SvLBoxString);
 
 SvLBoxString::SvLBoxString(SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& rStr)
     : SvLBoxItem(pEntry, nFlags)
 {
-    DBG_CTOR(SvLBoxString,0);
     SetText(rStr);
 }
 
 SvLBoxString::SvLBoxString() : SvLBoxItem()
 {
-    DBG_CTOR(SvLBoxString,0);
 }
 
 SvLBoxString::~SvLBoxString()
 {
-    DBG_DTOR(SvLBoxString,0);
 }
 
 sal_uInt16 SvLBoxString::GetType() const
 {
-    DBG_CHKTHIS(SvLBoxString,0);
     return SV_ITEM_ID_LBOXSTRING;
 }
 
@@ -216,7 +202,6 @@ void SvLBoxString::Paint(
     const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/,
     const SvTreeListEntry* pEntry)
 {
-    DBG_CHKTHIS(SvLBoxString,0);
     if (pEntry)
     {
         sal_uInt16 nStyle = rDev.IsEnabled() ? 0 : TEXT_DRAW_DISABLE;
@@ -231,20 +216,17 @@ void SvLBoxString::Paint(
 
 SvLBoxItem* SvLBoxString::Create() const
 {
-    DBG_CHKTHIS(SvLBoxString,0);
     return new SvLBoxString;
 }
 
 void SvLBoxString::Clone( SvLBoxItem* pSource )
 {
-    DBG_CHKTHIS(SvLBoxString,0);
     maText = ((SvLBoxString*)pSource)->maText;
 }
 
 void SvLBoxString::InitViewData(
     SvTreeListBox* pView, SvTreeListEntry* pEntry, SvViewDataItem* pViewData)
 {
-    DBG_CHKTHIS(SvLBoxString,0);
     if( !pViewData )
         pViewData = pView->GetViewDataItem( pEntry, this );
 
@@ -272,28 +254,23 @@ void SvLBoxString::InitViewData(
 // class SvLBoxBmp
 // ***************************************************************
 
-DBG_NAME(SvLBoxBmp);
 
 SvLBoxBmp::SvLBoxBmp() : SvLBoxItem()
 {
-    DBG_CTOR(SvLBoxBmp,0);
 }
 
 SvLBoxBmp::~SvLBoxBmp()
 {
-    DBG_DTOR(SvLBoxBmp,0);
 }
 
 sal_uInt16 SvLBoxBmp::GetType() const
 {
-    DBG_CHKTHIS(SvLBoxBmp,0);
     return SV_ITEM_ID_LBOXBMP;
 }
 
 void SvLBoxBmp::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry,
     SvViewDataItem* pViewData)
 {
-    DBG_CHKTHIS(SvLBoxBmp,0);
     if( !pViewData )
         pViewData = pView->GetViewDataItem( pEntry, this );
     pViewData->maSize = aBmp.GetSizePixel();
@@ -303,20 +280,17 @@ void SvLBoxBmp::Paint(
     const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/,
     const SvTreeListEntry* /*pEntry*/)
 {
-    DBG_CHKTHIS(SvLBoxBmp,0);
     sal_uInt16 nStyle = rDev.IsEnabled() ? 0 : IMAGE_DRAW_DISABLE;
     rDev.DrawImage( rPos, aBmp ,nStyle);
 }
 
 SvLBoxItem* SvLBoxBmp::Create() const
 {
-    DBG_CHKTHIS(SvLBoxBmp,0);
     return new SvLBoxBmp;
 }
 
 void SvLBoxBmp::Clone( SvLBoxItem* pSource )
 {
-    DBG_CHKTHIS(SvLBoxBmp,0);
     aBmp = ((SvLBoxBmp*)pSource)->aBmp;
 }
 
@@ -324,13 +298,11 @@ void SvLBoxBmp::Clone( SvLBoxItem* pSource )
 // class SvLBoxButton
 // ***************************************************************
 
-DBG_NAME(SvLBoxButton);
 
 SvLBoxButton::SvLBoxButton( SvTreeListEntry* pEntry, SvLBoxButtonKind eTheKind,
                             sal_uInt16 nFlags, SvLBoxButtonData* pBData )
     : SvLBoxItem( pEntry, nFlags )
 {
-    DBG_CTOR(SvLBoxButton,0);
     eKind = eTheKind;
     nBaseOffs = 0;
     nItemFlags = 0;
@@ -341,7 +313,6 @@ SvLBoxButton::SvLBoxButton( SvTreeListEntry* pEntry, SvLBoxButtonKind eTheKind,
 
 SvLBoxButton::SvLBoxButton() : SvLBoxItem()
 {
-    DBG_CTOR(SvLBoxButton,0);
     eKind = SvLBoxButtonKind_enabledCheckbox;
     nItemFlags = 0;
     SetStateUnchecked();
@@ -349,18 +320,15 @@ SvLBoxButton::SvLBoxButton() : SvLBoxItem()
 
 SvLBoxButton::~SvLBoxButton()
 {
-    DBG_DTOR(SvLBoxButton,0);
 }
 
 sal_uInt16 SvLBoxButton::GetType() const
 {
-    DBG_CHKTHIS(SvLBoxButton,0);
     return SV_ITEM_ID_LBOXBUTTON;
 }
 
 sal_Bool SvLBoxButton::ClickHdl( SvTreeListBox*, SvTreeListEntry* pEntry )
 {
-    DBG_CHKTHIS(SvLBoxButton,0);
     if ( CheckModification() )
     {
         if ( IsStateChecked() )
@@ -377,7 +345,6 @@ void SvLBoxButton::Paint(
     const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/,
     const SvTreeListEntry* /*pEntry*/)
 {
-    DBG_CHKTHIS(SvLBoxButton,0);
     sal_uInt16 nIndex = eKind == SvLBoxButtonKind_staticImage
         ? SV_BMP_STATICIMAGE : pData->GetIndex( nItemFlags );
     sal_uInt16 nStyle = eKind != SvLBoxButtonKind_disabledCheckbox &&
@@ -417,13 +384,11 @@ void SvLBoxButton::Paint(
 
 SvLBoxItem* SvLBoxButton::Create() const
 {
-    DBG_CHKTHIS(SvLBoxButton,0);
     return new SvLBoxButton;
 }
 
 void SvLBoxButton::Clone( SvLBoxItem* pSource )
 {
-    DBG_CHKTHIS(SvLBoxButton,0);
     pData = ((SvLBoxButton*)pSource)->pData;
 }
 
@@ -461,7 +426,6 @@ void SvLBoxButton::ImplAdjustBoxSize( Size& io_rSize, ControlType i_eType, Windo
 void SvLBoxButton::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry,
     SvViewDataItem* pViewData )
 {
-    DBG_CHKTHIS(SvLBoxButton,0);
     if( !pViewData )
         pViewData = pView->GetViewDataItem( pEntry, this );
     Size aSize( pData->Width(), pData->Height() );
@@ -495,7 +459,6 @@ struct SvLBoxContextBmp_Impl
 };
 
 // ***************************************************************
-DBG_NAME(SvLBoxContextBmp)
 
 SvLBoxContextBmp::SvLBoxContextBmp(
     SvTreeListEntry* pEntry, sal_uInt16 nItemFlags, Image aBmp1, Image aBmp2,
@@ -503,7 +466,6 @@ SvLBoxContextBmp::SvLBoxContextBmp(
     :SvLBoxItem( pEntry, nItemFlags )
     ,m_pImpl( new SvLBoxContextBmp_Impl )
 {
-    DBG_CTOR(SvLBoxContextBmp,0);
 
     m_pImpl->m_bExpanded = bExpanded;
     SetModeImages( aBmp1, aBmp2 );
@@ -514,24 +476,20 @@ SvLBoxContextBmp::SvLBoxContextBmp()
     ,m_pImpl( new SvLBoxContextBmp_Impl )
 {
     m_pImpl->m_bExpanded = false;
-    DBG_CTOR(SvLBoxContextBmp,0);
 }
 
 SvLBoxContextBmp::~SvLBoxContextBmp()
 {
     delete m_pImpl;
-    DBG_DTOR(SvLBoxContextBmp,0);
 }
 
 sal_uInt16 SvLBoxContextBmp::GetType() const
 {
-    DBG_CHKTHIS(SvLBoxContextBmp,0);
     return SV_ITEM_ID_LBOXCONTEXTBMP;
 }
 
 sal_Bool SvLBoxContextBmp::SetModeImages( const Image& _rBitmap1, const Image& _rBitmap2 )
 {
-    DBG_CHKTHIS(SvLBoxContextBmp,0);
 
     sal_Bool bSuccess = sal_True;
     m_pImpl->m_aImage1 = _rBitmap1;
@@ -541,7 +499,6 @@ sal_Bool SvLBoxContextBmp::SetModeImages( const Image& _rBitmap1, const Image& _
 
 Image& SvLBoxContextBmp::implGetImageStore( sal_Bool _bFirst )
 {
-    DBG_CHKTHIS(SvLBoxContextBmp,0);
 
     // OJ: #i27071# wrong mode so we just return the normal images
     return _bFirst ? m_pImpl->m_aImage1 : m_pImpl->m_aImage2;
@@ -550,7 +507,6 @@ Image& SvLBoxContextBmp::implGetImageStore( sal_Bool _bFirst )
 void SvLBoxContextBmp::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry,
     SvViewDataItem* pViewData)
 {
-    DBG_CHKTHIS(SvLBoxContextBmp,0);
     if( !pViewData )
         pViewData = pView->GetViewDataItem( pEntry, this );
     pViewData->maSize = m_pImpl->m_aImage1.GetSizePixel();
@@ -560,7 +516,6 @@ void SvLBoxContextBmp::Paint(
     const Point& _rPos, SvTreeListBox& _rDev,
     const SvViewDataEntry* pView, const SvTreeListEntry* pEntry)
 {
-    DBG_CHKTHIS(SvLBoxContextBmp,0);
 
     // get the image.
     const Image& rImage = implGetImageStore(pView->IsExpanded() != m_pImpl->m_bExpanded);
@@ -575,13 +530,11 @@ void SvLBoxContextBmp::Paint(
 
 SvLBoxItem* SvLBoxContextBmp::Create() const
 {
-    DBG_CHKTHIS(SvLBoxContextBmp,0);
     return new SvLBoxContextBmp;
 }
 
 void SvLBoxContextBmp::Clone( SvLBoxItem* pSource )
 {
-    DBG_CHKTHIS(SvLBoxContextBmp,0);
     m_pImpl->m_aImage1 = static_cast< SvLBoxContextBmp* >( pSource )->m_pImpl->m_aImage1;
     m_pImpl->m_aImage2 = static_cast< SvLBoxContextBmp* >( pSource )->m_pImpl->m_aImage2;
     m_pImpl->m_bExpanded = static_cast<SvLBoxContextBmp*>(pSource)->m_pImpl->m_bExpanded;

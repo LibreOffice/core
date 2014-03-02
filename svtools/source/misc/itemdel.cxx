@@ -28,7 +28,6 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-DBG_NAME(SfxItemDesruptor_Impl);
 
 
 
@@ -52,7 +51,6 @@ SfxItemDesruptor_Impl::SfxItemDesruptor_Impl( SfxPoolItem *pItemToDesrupt ):
     pItem(pItemToDesrupt),
     aLink( LINK(this, SfxItemDesruptor_Impl, Delete) )
 {
-    DBG_CTOR(SfxItemDesruptor_Impl, 0);
 
     DBG_ASSERT( 0 == pItem->GetRefCount(), "disrupting pooled item" );
     pItem->SetKind( SFX_ITEMS_DELETEONIDLE );
@@ -67,7 +65,6 @@ void SfxItemDesruptor_Impl::LaunchDeleteOnIdle()
 
 SfxItemDesruptor_Impl::~SfxItemDesruptor_Impl()
 {
-    DBG_DTOR(SfxItemDesruptor_Impl, 0);
 
     // remove from Idle-Handler
     GetpApp()->RemoveIdleHdl( aLink );
@@ -81,7 +78,6 @@ SfxItemDesruptor_Impl::~SfxItemDesruptor_Impl()
 
 IMPL_LINK_NOARG(SfxItemDesruptor_Impl, Delete)
 {
-    {DBG_CHKTHIS(SfxItemDesruptor_Impl, 0);}
     delete this;
     return 0;
 }

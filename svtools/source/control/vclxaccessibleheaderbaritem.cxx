@@ -40,7 +40,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
-DBG_NAME( VCLXAccessibleHeaderBarItem )
 
 
 //  class AccessibleTabBar
@@ -52,7 +51,6 @@ VCLXAccessibleHeaderBarItem::VCLXAccessibleHeaderBarItem( HeaderBar*    pHeadBar
     ,m_nIndexInParent(_nIndexInParent + 1)
 
 {
-    DBG_CTOR( VCLXAccessibleHeaderBarItem, NULL );
     m_pExternalLock = static_cast< VCLExternalSolarLock* >( getExternalLock() );
 }
 

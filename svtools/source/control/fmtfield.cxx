@@ -296,7 +296,6 @@ FormattedField::StaticFormatter::~StaticFormatter()
     }
 }
 
-DBG_NAME(FormattedField);
 
 #define INIT_MEMBERS()              \
      m_aLastSelection(0,0)          \
@@ -324,7 +323,6 @@ FormattedField::FormattedField(Window* pParent, WinBits nStyle, SvNumberFormatte
     :SpinField(pParent, nStyle)
     ,INIT_MEMBERS()
 {
-    DBG_CTOR(FormattedField, NULL);
 
     if (pInitialFormatter)
     {
@@ -341,12 +339,10 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFormattedField(Window *pPar
 
 FormattedField::~FormattedField()
 {
-    DBG_DTOR(FormattedField, NULL);
 }
 
 void FormattedField::SetText(const OUString& rStr)
 {
-    DBG_CHKTHIS(FormattedField, NULL);
 
     SpinField::SetText(rStr);
     m_bValueDirty = sal_True;
@@ -354,7 +350,6 @@ void FormattedField::SetText(const OUString& rStr)
 
 void FormattedField::SetText( const OUString& rStr, const Selection& rNewSelection )
 {
-    DBG_CHKTHIS(FormattedField, NULL);
 
     SpinField::SetText( rStr, rNewSelection );
     m_bValueDirty = sal_True;
@@ -362,7 +357,6 @@ void FormattedField::SetText( const OUString& rStr, const Selection& rNewSelecti
 
 void FormattedField::SetTextFormatted(const OUString& rStr)
 {
-    DBG_CHKTHIS(FormattedField, NULL);
 
 #if defined DBG_UTIL
     if (ImplGetFormatter()->IsTextFormat(m_nFormatKey))
@@ -458,7 +452,6 @@ void FormattedField::SetAutoColor(sal_Bool _bAutomatic)
 
 void FormattedField::impl_Modify(bool makeValueDirty)
 {
-    DBG_CHKTHIS(FormattedField, NULL);
 
     if (!IsStrictFormat())
     {
@@ -486,14 +479,12 @@ void FormattedField::impl_Modify(bool makeValueDirty)
 
 void FormattedField::Modify()
 {
-    DBG_CHKTHIS(FormattedField, NULL);
 
     impl_Modify();
 }
 
 void FormattedField::ImplSetTextImpl(const OUString& rNew, Selection* pNewSel)
 {
-    DBG_CHKTHIS(FormattedField, NULL);
 
     if (m_bAutoColor)
     {
@@ -544,7 +535,6 @@ void FormattedField::ImplSetTextImpl(const OUString& rNew, Selection* pNewSel)
 
 bool FormattedField::PreNotify(NotifyEvent& rNEvt)
 {
-    DBG_CHKTHIS(FormattedField, NULL);
     if (rNEvt.GetType() == EVENT_KEYINPUT)
         m_aLastSelection = GetSelection();
     return SpinField::PreNotify(rNEvt);
@@ -552,7 +542,6 @@ bool FormattedField::PreNotify(NotifyEvent& rNEvt)
 
 void FormattedField::ImplSetFormatKey(sal_uLong nFormatKey)
 {
-    DBG_CHKTHIS(FormattedField, NULL);
 
     m_nFormatKey = nFormatKey;
     sal_Bool bNeedFormatter = (m_pFormatter == NULL) && (nFormatKey != 0);
@@ -572,7 +561,6 @@ void FormattedField::ImplSetFormatKey(sal_uLong nFormatKey)
 
 void FormattedField::SetFormatKey(sal_uLong nFormatKey)
 {
-    DBG_CHKTHIS(FormattedField, NULL);
     sal_Bool bNoFormatter = (m_pFormatter == NULL);
     ImplSetFormatKey(nFormatKey);
     FormatChanged((bNoFormatter && (m_pFormatter != NULL)) ? FCT_FORMATTER : FCT_KEYONLY);
@@ -580,7 +568,6 @@ void FormattedField::SetFormatKey(sal_uLong nFormatKey)
 
 void FormattedField::SetFormatter(SvNumberFormatter* pFormatter, sal_Bool bResetFormat)
 {
-    DBG_CHKTHIS(FormattedField, NULL);
 
     if (bResetFormat)
     {
@@ -623,7 +610,6 @@ void FormattedField::SetFormatter(SvNumberFormatter* pFormatter, sal_Bool bReset
 
 OUString FormattedField::GetFormat(LanguageType& eLang) const
 {
-    DBG_CHKTHIS(FormattedField, NULL);
     const SvNumberformat* pFormatEntry = ImplGetFormatter()->GetEntry(m_nFormatKey);
     DBG_ASSERT(pFormatEntry != NULL, "FormattedField::GetFormat: no number format for the given format key.");
     OUString sFormatString = pFormatEntry ? pFormatEntry->GetFormatstring() : OUString();
@@ -634,7 +620,6 @@ OUString FormattedField::GetFormat(LanguageType& eLang) const
 
 sal_Bool FormattedField::SetFormat(const OUString& rFormatString, LanguageType eLang)
 {
-    DBG_CHKTHIS(FormattedField, NULL);
     sal_uInt32 nNewKey = ImplGetFormatter()->TestNewString(rFormatString, eLang);
     if (nNewKey == NUMBERFORMAT_ENTRY_NOT_FOUND)
     {
@@ -735,7 +720,6 @@ void FormattedField::SetDecimalDigits(sal_uInt16 _nPrecision)
 
 void FormattedField::FormatChanged( FORMAT_CHANGE_TYPE _nWhat )
 {
-    DBG_CHKTHIS(FormattedField, NULL);
     m_pLastOutputColor = NULL;
 
     if ( ( 0 != ( _nWhat & FCT_FORMATTER ) ) && m_pFormatter )
@@ -781,7 +765,6 @@ void FormattedField::ReFormat()
 
 bool FormattedField::Notify(NotifyEvent& rNEvt)
 {
-    DBG_CHKTHIS(FormattedField, NULL);
 
     if ((rNEvt.GetType() == EVENT_KEYINPUT) && !IsReadOnly())
     {
@@ -852,7 +835,6 @@ bool FormattedField::Notify(NotifyEvent& rNEvt)
 
 void FormattedField::SetMinValue(double dMin)
 {
-    DBG_CHKTHIS(FormattedField, NULL);
     DBG_ASSERT(m_bTreatAsNumber, "FormattedField::SetMinValue : only to be used in numeric mode !");
 
     m_dMinValue = dMin;
@@ -863,7 +845,6 @@ void FormattedField::SetMinValue(double dMin)
 
 void FormattedField::SetMaxValue(double dMax)
 {
-    DBG_CHKTHIS(FormattedField, NULL);
     DBG_ASSERT(m_bTreatAsNumber, "FormattedField::SetMaxValue : only to be used in numeric mode !");
 
     m_dMaxValue = dMax;
@@ -874,14 +855,12 @@ void FormattedField::SetMaxValue(double dMax)
 
 void FormattedField::SetTextValue(const OUString& rText)
 {
-    DBG_CHKTHIS(FormattedField, NULL);
     SetText(rText);
     ReFormat();
 }
 
 void FormattedField::EnableEmptyField(sal_Bool bEnable)
 {
-    DBG_CHKTHIS(FormattedField, NULL);
     if (bEnable == m_bEnableEmptyField)
         return;
 
@@ -892,7 +871,6 @@ void FormattedField::EnableEmptyField(sal_Bool bEnable)
 
 void FormattedField::ImplSetValue(double dVal, sal_Bool bForce)
 {
-    DBG_CHKTHIS(FormattedField, NULL);
 
     if (m_bHasMin && (dVal<m_dMinValue))
         dVal = m_dMinValue;
@@ -934,7 +912,6 @@ void FormattedField::ImplSetValue(double dVal, sal_Bool bForce)
 
 sal_Bool FormattedField::ImplGetValue(double& dNewVal)
 {
-    DBG_CHKTHIS(FormattedField, NULL);
 
     dNewVal = m_dCurrentValue;
     if (!m_bValueDirty)
@@ -983,13 +960,11 @@ sal_Bool FormattedField::ImplGetValue(double& dNewVal)
 
 void FormattedField::SetValue(double dVal)
 {
-    DBG_CHKTHIS(FormattedField, NULL);
     ImplSetValue(dVal, m_bValueDirty);
 }
 
 double FormattedField::GetValue()
 {
-    DBG_CHKTHIS(FormattedField, NULL);
 
     if ( !ImplGetValue( m_dCurrentValue ) )
     {
@@ -1005,7 +980,6 @@ double FormattedField::GetValue()
 
 void FormattedField::Up()
 {
-    DBG_CHKTHIS(FormattedField, NULL);
     // setValue handles under- and overflows (min/max) automatically
     SetValue(GetValue() + m_dSpinSize);
     SetModifyFlag();
@@ -1016,7 +990,6 @@ void FormattedField::Up()
 
 void FormattedField::Down()
 {
-    DBG_CHKTHIS(FormattedField, NULL);
     SetValue(GetValue() - m_dSpinSize);
     SetModifyFlag();
     Modify();
@@ -1026,7 +999,6 @@ void FormattedField::Down()
 
 void FormattedField::First()
 {
-    DBG_CHKTHIS(FormattedField, NULL);
     if (m_bHasMin)
     {
         SetValue(m_dMinValue);
@@ -1039,7 +1011,6 @@ void FormattedField::First()
 
 void FormattedField::Last()
 {
-    DBG_CHKTHIS(FormattedField, NULL);
     if (m_bHasMax)
     {
         SetValue(m_dMaxValue);

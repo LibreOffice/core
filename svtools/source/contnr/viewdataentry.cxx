@@ -21,7 +21,6 @@
 
 #include "tools/debug.hxx"
 
-DBG_NAME(SvViewDataEntry);
 
 SvViewDataEntry::SvViewDataEntry() :
     nVisPos(0),
@@ -32,7 +31,6 @@ SvViewDataEntry::SvViewDataEntry() :
     mbCursored(false),
     mbSelectable(true)
 {
-    DBG_CTOR(SvViewDataEntry,0);
 }
 
 SvViewDataEntry::SvViewDataEntry( const SvViewDataEntry& rData ) :
@@ -44,12 +42,10 @@ SvViewDataEntry::SvViewDataEntry( const SvViewDataEntry& rData ) :
     mbCursored(rData.mbCursored),
     mbSelectable(rData.mbSelectable)
 {
-    DBG_CTOR(SvViewDataEntry,0);
 }
 
 SvViewDataEntry::~SvViewDataEntry()
 {
-    DBG_DTOR(SvViewDataEntry,0);
 #ifdef DBG_UTIL
     nVisPos = 0x12345678;
 #endif

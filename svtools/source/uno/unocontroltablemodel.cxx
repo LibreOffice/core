@@ -147,14 +147,11 @@ namespace svt { namespace table
 
 #define DBG_CHECK_ME() \
     DBG_TESTSOLARMUTEX(); \
-    DBG_CHKTHIS( UnoControlTableModel, UnoControlTableModel_checkInvariants )
 
 
-    DBG_NAME( UnoControlTableModel )
     UnoControlTableModel::UnoControlTableModel()
         :m_pImpl( new UnoControlTableModel_Impl )
     {
-        DBG_CTOR( UnoControlTableModel, UnoControlTableModel_checkInvariants );
         m_pImpl->bHasColumnHeaders = true;
         m_pImpl->bHasRowHeaders = false;
         m_pImpl->bEnabled = true;
@@ -165,7 +162,6 @@ namespace svt { namespace table
 
     UnoControlTableModel::~UnoControlTableModel()
     {
-        DBG_DTOR( UnoControlTableModel, UnoControlTableModel_checkInvariants );
         DELETEZ( m_pImpl );
     }
 
