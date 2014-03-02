@@ -46,12 +46,10 @@ namespace pcr
 
     //= ButtonNavigationHandler
 
-    DBG_NAME( ButtonNavigationHandler )
 
     ButtonNavigationHandler::ButtonNavigationHandler( const Reference< XComponentContext >& _rxContext )
         :ButtonNavigationHandler_Base( _rxContext )
     {
-        DBG_CTOR( ButtonNavigationHandler, NULL );
 
         m_xSlaveHandler = css::form::inspection::FormComponentPropertyHandler::create( m_xContext );
     }
@@ -59,7 +57,6 @@ namespace pcr
 
     ButtonNavigationHandler::~ButtonNavigationHandler( )
     {
-        DBG_DTOR( ButtonNavigationHandler, NULL );
     }
 
 

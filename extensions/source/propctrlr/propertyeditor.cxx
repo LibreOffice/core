@@ -40,7 +40,6 @@ namespace pcr
 
     // class OPropertyEditor
 
-    DBG_NAME(OPropertyEditor)
 
     OPropertyEditor::OPropertyEditor( Window* pParent, WinBits nWinStyle)
             :Control(pParent, nWinStyle)
@@ -50,7 +49,6 @@ namespace pcr
             ,m_nMinHelpLines( 0 )
             ,m_nMaxHelpLines( 0 )
     {
-        DBG_CTOR(OPropertyEditor,NULL);
 
         m_aTabControl.Show();
         m_aTabControl.SetDeactivatePageHdl(LINK(this, OPropertyEditor, OnPageDeactivate));
@@ -64,7 +62,6 @@ namespace pcr
     {
         Hide();
         ClearAll();
-        DBG_DTOR(OPropertyEditor,NULL);
     }
 
 

@@ -51,13 +51,11 @@ namespace pcr
 
     //= CellBindingPropertyHandler
 
-    DBG_NAME( CellBindingPropertyHandler )
 
     CellBindingPropertyHandler::CellBindingPropertyHandler( const Reference< XComponentContext >& _rxContext )
         :CellBindingPropertyHandler_Base( _rxContext )
         ,m_pCellExchangeConverter( new DefaultEnumRepresentation( *m_pInfoService, ::getCppuType( static_cast< sal_Int16* >( NULL ) ), PROPERTY_ID_CELL_EXCHANGE_TYPE ) )
     {
-        DBG_CTOR( CellBindingPropertyHandler, NULL );
     }
 
 
@@ -88,7 +86,6 @@ namespace pcr
 
     CellBindingPropertyHandler::~CellBindingPropertyHandler( )
     {
-        DBG_DTOR( CellBindingPropertyHandler, NULL );
     }
 
 

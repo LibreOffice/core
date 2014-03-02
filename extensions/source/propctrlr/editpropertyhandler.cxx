@@ -49,18 +49,15 @@ namespace pcr
 
     //= EditPropertyHandler
 
-    DBG_NAME( EditPropertyHandler )
 
     EditPropertyHandler::EditPropertyHandler( const Reference< XComponentContext >& _rxContext )
         :EditPropertyHandler_Base( _rxContext )
     {
-        DBG_CTOR( EditPropertyHandler, NULL );
     }
 
 
     EditPropertyHandler::~EditPropertyHandler( )
     {
-        DBG_DTOR( EditPropertyHandler, NULL );
     }
 
 

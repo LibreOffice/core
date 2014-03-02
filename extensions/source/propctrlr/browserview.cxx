@@ -35,14 +35,11 @@ namespace pcr
 
     //= class OPropertyBrowserView
 
-    DBG_NAME(OPropertyBrowserView)
 
     OPropertyBrowserView::OPropertyBrowserView(Window* _pParent, WinBits nBits)
                   :Window(_pParent, nBits | WB_3DLOOK)
                   ,m_nActivePage(0)
     {
-        DBG_CTOR(OPropertyBrowserView,NULL);
-
         m_pPropBox = new OPropertyEditor( this );
         m_pPropBox->SetHelpId(HID_FM_PROPDLG_TABCTR);
         m_pPropBox->setPageActivationHandler(LINK(this, OPropertyBrowserView, OnPageActivation));
@@ -71,7 +68,6 @@ namespace pcr
             m_pPropBox = NULL;
         }
 
-        DBG_DTOR(OPropertyBrowserView, NULL);
     }
 
 

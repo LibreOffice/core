@@ -50,7 +50,6 @@ namespace pcr
     using namespace ::com::sun::star::inspection;
     using namespace ::comphelper;
 
-    DBG_NAME( PropertyHandler )
 
     PropertyHandler::PropertyHandler( const Reference< XComponentContext >& _rxContext )
         :PropertyHandler_Base( m_aMutex )
@@ -59,14 +58,12 @@ namespace pcr
         ,m_xContext( _rxContext )
         ,m_pInfoService  ( new OPropertyInfoService )
     {
-        DBG_CTOR( PropertyHandler, NULL );
 
         m_xTypeConverter = Converter::create(_rxContext);
     }
 
     PropertyHandler::~PropertyHandler()
     {
-        DBG_DTOR( PropertyHandler, NULL );
     }
 
     void SAL_CALL PropertyHandler::inspect( const Reference< XInterface >& _rxIntrospectee ) throw (RuntimeException, NullPointerException, std::exception)

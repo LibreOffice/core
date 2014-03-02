@@ -71,18 +71,14 @@ namespace pcr
 
     //= XSDValidationPropertyHandler
 
-    DBG_NAME( XSDValidationPropertyHandler )
-
     XSDValidationPropertyHandler::XSDValidationPropertyHandler( const Reference< XComponentContext >& _rxContext )
         :XSDValidationPropertyHandler_Base( _rxContext )
     {
-        DBG_CTOR( XSDValidationPropertyHandler, NULL );
     }
 
 
     XSDValidationPropertyHandler::~XSDValidationPropertyHandler()
     {
-        DBG_DTOR( XSDValidationPropertyHandler, NULL );
     }
 
 

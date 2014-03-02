@@ -135,7 +135,6 @@ namespace pcr
 
     //= FormComponentPropertyHandler
 
-    DBG_NAME( FormComponentPropertyHandler )
 #define PROPERTY_ID_ROWSET 1
 
     FormComponentPropertyHandler::FormComponentPropertyHandler( const Reference< XComponentContext >& _rxContext )
@@ -148,14 +147,12 @@ namespace pcr
         ,m_bHaveCommand( false )
         ,m_nClassId( 0 )
     {
-        DBG_CTOR( FormComponentPropertyHandler, NULL );
         registerProperty(PROPERTY_ROWSET,PROPERTY_ID_ROWSET,0,&m_xRowSet,::getCppuType(&m_xRowSet));
     }
 
 
     FormComponentPropertyHandler::~FormComponentPropertyHandler()
     {
-        DBG_DTOR( FormComponentPropertyHandler, NULL );
     }
 
     IMPLEMENT_FORWARD_XINTERFACE2(FormComponentPropertyHandler,FormComponentPropertyHandler_Base,::comphelper::OPropertyContainer)

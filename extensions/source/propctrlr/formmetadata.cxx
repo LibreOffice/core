@@ -578,7 +578,6 @@ namespace pcr
 
     //= DefaultEnumRepresentation
 
-    DBG_NAME( DefaultEnumRepresentation )
 
     DefaultEnumRepresentation::DefaultEnumRepresentation( const IPropertyInfoService& _rInfo, const Type& _rType, sal_Int32 _nPropertyId )
         :m_refCount( 0 )
@@ -586,13 +585,11 @@ namespace pcr
         ,m_aType( _rType )
         ,m_nPropertyId( _nPropertyId )
     {
-        DBG_CTOR( DefaultEnumRepresentation, NULL );
     }
 
 
     DefaultEnumRepresentation::~DefaultEnumRepresentation()
     {
-        DBG_DTOR( DefaultEnumRepresentation, NULL );
     }
 
 

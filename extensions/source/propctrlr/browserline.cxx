@@ -51,11 +51,7 @@ namespace pcr
 
     namespace PropertyLineElement = ::com::sun::star::inspection::PropertyLineElement;
 
-
     //= OBrowserLine
-
-    DBG_NAME(OBrowserLine)
-
 
     OBrowserLine::OBrowserLine( const OUString& _rEntryName, Window* pParent )
             :m_sEntryName( _rEntryName )
@@ -70,7 +66,6 @@ namespace pcr
             ,m_bIndentTitle( false )
             ,m_bReadOnly( false )
     {
-        DBG_CTOR(OBrowserLine,NULL);
         m_aFtTitle.Show();
     }
 
@@ -79,8 +74,6 @@ namespace pcr
     {
         implHideBrowseButton( true, false );
         implHideBrowseButton( false, false );
-
-        DBG_DTOR(OBrowserLine,NULL);
     }
 
 

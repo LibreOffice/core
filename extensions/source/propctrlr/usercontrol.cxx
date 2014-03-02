@@ -168,13 +168,10 @@ namespace pcr
 
     // class OFormattedNumericControl
 
-    DBG_NAME(OFormattedNumericControl);
 
     OFormattedNumericControl::OFormattedNumericControl( Window* pParent, WinBits nWinStyle )
         :OFormattedNumericControl_Base( PropertyControlType::Unknown, pParent, nWinStyle )
     {
-        DBG_CTOR(OFormattedNumericControl,NULL);
-
         getTypedControlWindow()->TreatAsNumber(sal_True);
 
         m_nLastDecimalDigits = getTypedControlWindow()->GetDecimalDigits();
@@ -183,7 +180,6 @@ namespace pcr
 
     OFormattedNumericControl::~OFormattedNumericControl()
     {
-        DBG_DTOR(OFormattedNumericControl,NULL);
     }
 
 
