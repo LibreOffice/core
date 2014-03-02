@@ -96,15 +96,10 @@ GridWindow::GridWindow(double* pXValues, double* pYValues, int nValues, Window* 
     FreeResource();
 }
 
-
-
 GridWindow::~GridWindow()
 {
-    if( m_pNewYValues )
-        delete [] m_pNewYValues;
+    delete [] m_pNewYValues;
 }
-
-
 
 double GridWindow::findMinX()
 {
