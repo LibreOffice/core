@@ -383,6 +383,9 @@ const QueueInfo* Printer::GetQueueInfo( const OUString& rPrinterName, bool bStat
     if ( !pSVData->maGDIData.mpPrinterQueueList )
         ImplInitPrnQueueList();
 
+    if ( !pSVData->maGDIData.mpPrinterQueueList )
+        return NULL;
+
     ImplPrnQueueData* pInfo = pSVData->maGDIData.mpPrinterQueueList->Get( rPrinterName );
     if( pInfo )
     {
