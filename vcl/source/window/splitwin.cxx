@@ -170,23 +170,43 @@ void SplitWindow::ImplDrawBorder( SplitWindow* pWin )
         {
         case WINDOWALIGN_BOTTOM:
             pWin->SetLineColor( rStyleSettings.GetShadowColor() );
-            pWin->DrawLine( Point( 0, 6 ), Point( nDX-1, 6 ) );
             pWin->DrawLine( Point( 0, 0 ), Point( nDX-1, 0 ) );
+            pWin->DrawLine( Point( 0, nDY-2 ), Point( nDX-1, nDY-2 ) );
+
+            pWin->SetLineColor( rStyleSettings.GetLightColor() );
+            pWin->DrawLine( Point( 0, 1 ), Point( nDX-1, 1 ) );
+            pWin->DrawLine( Point( 0, nDY-1 ), Point( nDX-1, nDY-1 ) );
             break;
         case WINDOWALIGN_TOP:
             pWin->SetLineColor( rStyleSettings.GetShadowColor() );
+            pWin->DrawLine( Point( 0, nDY-2 ), Point( nDX-1, nDY-2 ) );
+            pWin->DrawLine( Point( 0, 0 ), Point( nDX-1, 0 ) );
+
+            pWin->SetLineColor( rStyleSettings.GetLightColor() );
             pWin->DrawLine( Point( 0, nDY-1 ), Point( nDX-1, nDY-1 ) );
-            pWin->DrawLine( Point( 0, nDY-7 ), Point( nDX-1, nDY-7 ) );
+            pWin->DrawLine( Point( 0, 1 ), Point( nDX-1, 1 ) );
             break;
         case WINDOWALIGN_LEFT:
             pWin->SetLineColor( rStyleSettings.GetShadowColor() );
-            pWin->DrawLine( Point( nDX-2, 0 ), Point( nDX-2, nDY-1 ) );
-            pWin->DrawLine( Point( nDX-8, 0 ), Point( nDX-8, nDY-1 ) );
+            pWin->DrawLine( Point( nDX-2, 0 ), Point( nDX-2, nDY-2 ) );
+            pWin->DrawLine( Point( 0, 0 ), Point( nDX-1, 0 ) );
+            pWin->DrawLine( Point( 0, nDY-2 ), Point( nDX-2, nDY-2 ) );
+
+            pWin->SetLineColor( rStyleSettings.GetLightColor() );
+            pWin->DrawLine( Point( nDX-1, 0 ), Point( nDX-1, nDY-1 ) );
+            pWin->DrawLine( Point( 0, 1 ), Point( nDX-3, 1 ) );
+            pWin->DrawLine( Point( 0, nDY-1 ), Point( nDX-2, nDY-1 ) );
             break;
         default:
             pWin->SetLineColor( rStyleSettings.GetShadowColor() );
-            pWin->DrawLine( Point( 0, 0 ), Point( 0, nDY-1 ) );
-            pWin->DrawLine( Point( 6, 0 ), Point( 6, nDY-1 ) );
+            pWin->DrawLine( Point( 0, 0 ), Point( 0, nDY-2 ) );
+            pWin->DrawLine( Point( 0, 0 ), Point( nDX-1, 0 ) );
+            pWin->DrawLine( Point( 0, nDY-2 ), Point( nDX-1, nDY-2 ) );
+
+            pWin->SetLineColor( rStyleSettings.GetLightColor() );
+            pWin->DrawLine( Point( 1, 1 ), Point( 1, nDY-3 ) );
+            pWin->DrawLine( Point( 1, 1 ), Point( nDX-1, 1 ) );
+            pWin->DrawLine( Point( 0, nDY-1 ), Point( nDX-1, nDY-1 ) );
         }
     }
 }
@@ -203,27 +223,31 @@ void SplitWindow::ImplDrawBorderLine( SplitWindow* pWin )
         {
         case WINDOWALIGN_LEFT:
             pWin->SetLineColor( rStyleSettings.GetShadowColor() );
-            pWin->DrawLine( Point( nDX-SPLITWIN_SPLITSIZEEXLN-1, 0 ), Point( nDX-SPLITWIN_SPLITSIZEEXLN-1, nDY-3 ) );
+            pWin->DrawLine( Point( nDX-SPLITWIN_SPLITSIZEEXLN-1, 1 ), Point( nDX-SPLITWIN_SPLITSIZEEXLN-1, nDY-2 ) );
+
             pWin->SetLineColor( rStyleSettings.GetLightColor() );
-            pWin->DrawLine( Point( nDX-SPLITWIN_SPLITSIZEEXLN, 1 ), Point( nDX-SPLITWIN_SPLITSIZEEXLN, nDY-4 ) );
+            pWin->DrawLine( Point( nDX-SPLITWIN_SPLITSIZEEXLN, 1 ), Point( nDX-SPLITWIN_SPLITSIZEEXLN, nDY-3 ) );
             break;
         case WINDOWALIGN_RIGHT:
             pWin->SetLineColor( rStyleSettings.GetShadowColor() );
-            pWin->DrawLine( Point( SPLITWIN_SPLITSIZEEXLN-1, 0 ), Point( SPLITWIN_SPLITSIZEEXLN-1, nDY-3 ) );
+            pWin->DrawLine( Point( SPLITWIN_SPLITSIZEEXLN-1, 0 ), Point( SPLITWIN_SPLITSIZEEXLN-1, nDY-2 ) );
+
             pWin->SetLineColor( rStyleSettings.GetLightColor() );
-            pWin->DrawLine( Point( SPLITWIN_SPLITSIZEEXLN, 1 ), Point( SPLITWIN_SPLITSIZEEXLN, nDY-4 ) );
+            pWin->DrawLine( Point( SPLITWIN_SPLITSIZEEXLN, 1 ), Point( SPLITWIN_SPLITSIZEEXLN, nDY-3 ) );
             break;
         case WINDOWALIGN_TOP:
             pWin->SetLineColor( rStyleSettings.GetShadowColor() );
-            pWin->DrawLine( Point( 0, nDY-SPLITWIN_SPLITSIZEEXLN-1 ), Point( nDX-3, nDY-SPLITWIN_SPLITSIZEEXLN-1 ) );
+            pWin->DrawLine( Point( 0, nDY-SPLITWIN_SPLITSIZEEXLN-1 ), Point( nDX-1, nDY-SPLITWIN_SPLITSIZEEXLN-1 ) );
+
             pWin->SetLineColor( rStyleSettings.GetLightColor() );
-            pWin->DrawLine( Point( 1, nDY-SPLITWIN_SPLITSIZEEXLN ), Point( nDX-4, nDY-SPLITWIN_SPLITSIZEEXLN ) );
+            pWin->DrawLine( Point( 0, nDY-SPLITWIN_SPLITSIZEEXLN ), Point( nDX-1, nDY-SPLITWIN_SPLITSIZEEXLN ) );
             break;
         case WINDOWALIGN_BOTTOM:
             pWin->SetLineColor( rStyleSettings.GetShadowColor() );
-            pWin->DrawLine( Point( 0, SPLITWIN_SPLITSIZEEXLN-1 ), Point( nDX-3, SPLITWIN_SPLITSIZEEXLN-1 ) );
+            pWin->DrawLine( Point( 0, 5 ), Point( nDX-1, 5 ) );
+
             pWin->SetLineColor( rStyleSettings.GetLightColor() );
-            pWin->DrawLine( Point( 1, SPLITWIN_SPLITSIZEEXLN ), Point( nDX-4, SPLITWIN_SPLITSIZEEXLN ) );
+            pWin->DrawLine( Point( 0, SPLITWIN_SPLITSIZEEXLN ), Point( nDX-1, SPLITWIN_SPLITSIZEEXLN ) );
             break;
         }
     }
