@@ -782,7 +782,6 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
 
 void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
 {
-    DBG_CHKTHIS(SfxViewShell, 0);
 
     SfxWhichIter aIter( rSet );
     for ( sal_uInt16 nSID = aIter.FirstWhich(); nSID; nSID = aIter.NextWhich() )
@@ -986,7 +985,6 @@ SfxInPlaceClient* SfxViewShell::GetUIActiveClient() const
 
 void SfxViewShell::Activate( sal_Bool bMDI )
 {
-    DBG_CHKTHIS(SfxViewShell, 0);
     if ( bMDI )
     {
         SfxObjectShell *pSh = GetViewFrame()->GetObjectShell();
@@ -1001,7 +999,6 @@ void SfxViewShell::Activate( sal_Bool bMDI )
 
 void SfxViewShell::Deactivate(sal_Bool /*bMDI*/)
 {
-    DBG_CHKTHIS(SfxViewShell, 0);
 }
 
 
@@ -1013,7 +1010,6 @@ void SfxViewShell::AdjustPosSizePixel
 )
 
 {
-    DBG_CHKTHIS(SfxViewShell, 0);
 }
 
 
@@ -1085,7 +1081,6 @@ void SfxViewShell::OuterResizePixel
 */
 
 {
-    DBG_CHKTHIS(SfxViewShell, 0);
     SetBorderPixel( SvBorder() );
 }
 
@@ -1136,7 +1131,6 @@ void SfxViewShell::InnerResizePixel
 */
 
 {
-    DBG_CHKTHIS(SfxViewShell, 0);
     SetBorderPixel( SvBorder() );
 }
 
@@ -1144,7 +1138,6 @@ void SfxViewShell::InnerResizePixel
 
 void SfxViewShell::InvalidateBorder()
 {
-    DBG_CHKTHIS(SfxViewShell, 0);
     DBG_ASSERT( GetViewFrame(), "SfxViewShell without SfxViewFrame" );
 
     GetViewFrame()->InvalidateBorderImpl( this );
@@ -1158,7 +1151,6 @@ void SfxViewShell::InvalidateBorder()
 
 void SfxViewShell::SetBorderPixel( const SvBorder &rBorder )
 {
-    DBG_CHKTHIS(SfxViewShell, 0);
     DBG_ASSERT( GetViewFrame(), "SfxViewShell without SfxViewFrame" );
 
     GetViewFrame()->SetBorderPixelImpl( this, rBorder );
@@ -1174,7 +1166,6 @@ void SfxViewShell::SetBorderPixel( const SvBorder &rBorder )
 
 const SvBorder& SfxViewShell::GetBorderPixel() const
 {
-    DBG_CHKTHIS(SfxViewShell, 0);
     DBG_ASSERT( GetViewFrame(), "SfxViewShell without SfxViewFrame" );
 
     return GetViewFrame()->GetBorderPixelImpl( this );
@@ -1239,7 +1230,6 @@ SfxViewShell::SfxViewShell
 ,   pWindow(0)
 ,   bNoNewWindow( 0 != (nFlags & SFX_VIEW_NO_NEWWINDOW) )
 {
-    DBG_CTOR(SfxViewShell, 0);
 
     if ( pViewFrame->GetParentViewFrame() )
     {
@@ -1260,7 +1250,6 @@ SfxViewShell::SfxViewShell
 
 SfxViewShell::~SfxViewShell()
 {
-    DBG_DTOR(SfxViewShell, 0);
 
     // Remove from list
     const SfxViewShell *pThis = this;

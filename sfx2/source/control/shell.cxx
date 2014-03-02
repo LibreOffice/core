@@ -130,7 +130,6 @@ SfxShell::SfxShell()
     pPool(0),
     pUndoMgr(0)
 {
-    DBG_CTOR(SfxShell, 0);
     pImp = new SfxShell_Impl;
     pImp->pViewSh = 0;
     pImp->pFrame = 0;
@@ -156,7 +155,6 @@ SfxShell::SfxShell( SfxViewShell *pViewSh )
     pPool(0),
     pUndoMgr(0)
 {
-    DBG_CTOR(SfxShell, 0);
     pImp = new SfxShell_Impl;
     pImp->pViewSh = pViewSh;
     pImp->pFrame = 0;
@@ -178,7 +176,6 @@ SfxShell::~SfxShell()
 */
 
 {
-    DBG_DTOR(SfxShell, 0);
 
 
     delete pImp;

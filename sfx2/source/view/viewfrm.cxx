@@ -1075,7 +1075,6 @@ void SfxViewFrame::ReleaseObjectShell_Impl()
     <SfxViewFrame::SetObjectShell(SfxObjectShell&)>
 */
 {
-    DBG_CHKTHIS(SfxViewFrame, 0);
     DBG_ASSERT( xObjSh.Is(), "no SfxObjectShell to release!" );
 
     GetFrame().ReleasingComponent_Impl( sal_True );
@@ -1130,7 +1129,6 @@ void SfxViewFrame::ReleaseObjectShell_Impl()
 
 sal_Bool SfxViewFrame::Close()
 {
-    DBG_CHKTHIS(SfxViewFrame, 0);
 
     DBG_ASSERT( GetFrame().IsClosing_Impl() || !GetFrame().GetFrameInterface().is(), "ViewFrame closed too early!" );
 
@@ -1155,7 +1153,6 @@ sal_Bool SfxViewFrame::Close()
 
 void SfxViewFrame::DoActivate( sal_Bool bUI, SfxViewFrame* pOldFrame )
 {
-    DBG_CHKTHIS(SfxViewFrame, 0);
     SFX_APP();
 
     pDispatcher->DoActivate_Impl( bUI, pOldFrame );
@@ -1177,7 +1174,6 @@ void SfxViewFrame::DoActivate( sal_Bool bUI, SfxViewFrame* pOldFrame )
 
 void SfxViewFrame::DoDeactivate(sal_Bool bUI, SfxViewFrame* pNewFrame )
 {
-    DBG_CHKTHIS(SfxViewFrame, 0);
     SFX_APP();
     pDispatcher->DoDeactivate_Impl( bUI, pNewFrame );
 
@@ -1269,7 +1265,6 @@ const SvBorder& SfxViewFrame::GetBorderPixelImpl
 
 void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-    {DBG_CHKTHIS(SfxViewFrame, 0);}
 
     if( IsDowning_Impl())
         return;
@@ -1464,7 +1459,6 @@ SfxViewFrame::SfxViewFrame
     , pBindings( new SfxBindings )
     , nAdjustPosPixelLock( 0 )
 {
-    DBG_CTOR( SfxViewFrame, NULL );
 
     rFrame.SetCurrentViewFrame_Impl( this );
     rFrame.SetFrameType_Impl( GetFrameType() | SFXFRAME_HASTITLE );
@@ -1479,7 +1473,6 @@ SfxViewFrame::SfxViewFrame
 
 SfxViewFrame::~SfxViewFrame()
 {
-    DBG_DTOR(SfxViewFrame, 0);
 
     SetDowning_Impl();
 
@@ -1515,7 +1508,6 @@ void SfxViewFrame::KillDispatcher_Impl()
 // Remove and delete the Dispatcher.
 
 {
-    DBG_CHKTHIS(SfxViewFrame, 0);
 
     SfxModule* pModule = xObjSh.Is() ? xObjSh->GetModule() : 0;
     if ( xObjSh.Is() )
@@ -1605,7 +1597,6 @@ void SfxViewFrame::DoAdjustPosSizePixel //! divide on Inner.../Outer...
     const Size&     rSize
 )
 {
-    DBG_CHKTHIS(SfxViewFrame, 0);
 
     // Components do not use this Method!
     if( pSh && pSh->GetWindow() && !nAdjustPosPixelLock )
@@ -2235,7 +2226,6 @@ void SfxViewFrame::ExecView_Impl
 */
 
 {
-    DBG_CHKTHIS(SfxViewFrame, 0);
 
     // If the Shells are just being replaced...
     if ( !GetObjectShell() || !GetViewShell() )
@@ -2394,7 +2384,6 @@ void SfxViewFrame::StateView_Impl
 */
 
 {
-    DBG_CHKTHIS(SfxViewFrame, 0);
 
     SfxObjectShell *pDocSh = GetObjectShell();
 

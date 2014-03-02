@@ -118,7 +118,6 @@ void SfxViewFrame::UpdateTitle()
 */
 
 {
-    DBG_CHKTHIS(SfxViewFrame, 0);
 
     const SfxObjectFactory &rFact = GetObjectShell()->GetFactory();
     pImp->aFactoryName = OUString::createFromAscii(rFact.GetShortName());

@@ -292,7 +292,6 @@ sal_Bool SfxObjectShell::APISaveAs_Impl
 {
     sal_Bool bOk = sal_False;
 
-    {DBG_CHKTHIS(SfxObjectShell, 0);}
 
     if ( GetMedium() )
     {
@@ -425,7 +424,6 @@ uno::Sequence< document::CmisVersion > SfxObjectShell::GetCmisVersions( )
 
 void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 {
-    {DBG_CHKTHIS(SfxObjectShell, 0);}
 
     sal_uInt16 nId = rReq.GetSlot();
 
@@ -930,7 +928,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
 void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
 {
-    DBG_CHKTHIS(SfxObjectShell, 0);
     SfxWhichIter aIter( rSet );
 
     for ( sal_uInt16 nWhich = aIter.FirstWhich(); nWhich; nWhich = aIter.NextWhich() )

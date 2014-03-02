@@ -104,7 +104,6 @@ SfxObjectFactory::SfxObjectFactory
        pImpl( new SfxObjectFactory_Impl ),
        nFlags( nFlagsP )
 {
-    DBG_CTOR(SfxObjectFactory, 0);
     pImpl->pFilterContainer = new SfxFilterContainer( OUString::createFromAscii( pName ) );
 
     OUString aShortName( OUString::createFromAscii( pShortName ) );
@@ -130,7 +129,6 @@ SfxObjectFactory::SfxObjectFactory
 
 SfxObjectFactory::~SfxObjectFactory()
 {
-    DBG_DTOR(SfxObjectFactory, 0);
 
     delete pImpl->pNameResId;
     delete pImpl->pFilterContainer;

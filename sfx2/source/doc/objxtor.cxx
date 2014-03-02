@@ -294,7 +294,6 @@ SfxObjectShell::SfxObjectShell( const sal_uInt64 i_nCreationFlags )
     ,   bHasName( sal_False )
     ,   bIsInGenerateThumbnail ( sal_False )
 {
-    DBG_CTOR(SfxObjectShell, 0);
 
     const bool bScriptSupport = ( i_nCreationFlags & SFXMODEL_DISABLE_EMBEDDED_SCRIPTS ) == 0;
     if ( !bScriptSupport )
@@ -342,7 +341,6 @@ SfxObjectShell::SfxObjectShell
     bHasName( sal_False ),
     bIsInGenerateThumbnail ( sal_False )
 {
-    DBG_CTOR(SfxObjectShell, 0);
 }
 
 
@@ -351,7 +349,6 @@ SfxObjectShell::SfxObjectShell
 
 SfxObjectShell::~SfxObjectShell()
 {
-    DBG_DTOR(SfxObjectShell, 0);
 
     if ( IsEnableSetModified() )
         EnableSetModified( sal_False );
@@ -441,7 +438,6 @@ void SfxObjectShell::ViewAssigned()
 
 bool SfxObjectShell::Close()
 {
-    {DBG_CHKTHIS(SfxObjectShell, 0);}
     SfxObjectShellRef aRef(this);
     if ( !pImp->bClosing )
     {
