@@ -122,9 +122,6 @@ namespace dmapper {
                         case NS_ooxml::LN_CT_TrPr_del:
                             nToken = OOXML_tableRowDelete;
                             break;
-                        default:
-                            throw ::com::sun::star::lang::IllegalArgumentException("illegal redline token type", NULL, 0);
-                            break;
                     };
                     TrackChangesHandlerPtr pTrackChangesHandler( new TrackChangesHandler( nToken ) );
                     pProperties->resolve(*pTrackChangesHandler);
