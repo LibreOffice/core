@@ -237,7 +237,7 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
             float rightBoundary = (clusterAfter)?
                 gr_slot_origin_X(clusterAfter) : gr_seg_advance_X(pSegment);
             if (
-                lastChar < iChar &&
+                lastChar < iChar && clusterAfter &&
                  (gr_cinfo_after(gr_seg_cinfo(pSegment, iChar)) >
                  static_cast<int>(gr_slot_index(clusterAfter)))
                )
