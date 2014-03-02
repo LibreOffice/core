@@ -60,6 +60,7 @@
 #include "xfcrossref.hxx"
 
 XFCrossRefStart::XFCrossRefStart()
+    : m_nType(CROSSREF_INVALID)
 {
 }
 
