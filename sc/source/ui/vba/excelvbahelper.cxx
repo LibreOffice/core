@@ -192,7 +192,7 @@ implnCut( const uno::Reference< frame::XModel>& xModel )
 void implnPasteSpecial( const uno::Reference< frame::XModel>& xModel, sal_uInt16 nFlags, sal_uInt16 nFunction, bool bSkipEmpty, bool bTranspose)
 {
     PasteCellsWarningReseter resetWarningBox;
-    sal_Bool bAsLink(false), bOtherDoc(false);
+    sal_Bool bOtherDoc(false);
     InsCellCmd eMoveMode = INS_NONE;
 
     ScTabViewShell* pTabViewShell = getBestViewShell( xModel );
@@ -200,21 +200,16 @@ void implnPasteSpecial( const uno::Reference< frame::XModel>& xModel, sal_uInt16
     {
         ScViewData* pView = pTabViewShell->GetViewData();
         Window* pWin = ( pView != NULL ) ? pView->GetActiveWin() : NULL;
-        if ( pView && pWin )
+        if (pWin)
         {
-            if ( bAsLink && bOtherDoc )
-                pTabViewShell->PasteFromSystem(0);//SOT_FORMATSTR_ID_LINK
-            else
-            {
-                ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
-                ScDocument* pDoc = NULL;
-                if ( pOwnClip )
-                    pDoc = pOwnClip->GetDocument();
-                pTabViewShell->PasteFromClip( nFlags, pDoc,
-                    nFunction, bSkipEmpty, bTranspose, bAsLink,
-                    eMoveMode, IDF_NONE, true );
-                pTabViewShell->CellContentChanged();
-            }
+            ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
+            ScDocument* pDoc = NULL;
+            if ( pOwnClip )
+                pDoc = pOwnClip->GetDocument();
+            pTabViewShell->PasteFromClip( nFlags, pDoc,
+                nFunction, bSkipEmpty, bTranspose, false,
+                eMoveMode, IDF_NONE, true );
+            pTabViewShell->CellContentChanged();
         }
     }
 
