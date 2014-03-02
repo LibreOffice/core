@@ -539,24 +539,23 @@ sal_Bool SdTransferable::GetData( const DataFlavor& rFlavor )
             {
                 nOldSwapMode = mpSdDrawDocumentIntern->GetSwapGraphicsMode();
                 mpSdDrawDocumentIntern->SetSwapGraphicsMode( SDR_SWAPGRAPHICSMODE_PURGE );
-            }
 
-            if( !maDocShellRef.Is() )
-            {
-                maDocShellRef = new ::sd::DrawDocShell(
-                    mpSdDrawDocumentIntern,
-                    SFX_CREATE_MODE_EMBEDDED,
-                    sal_True,
-                    mpSdDrawDocumentIntern->GetDocumentType());
-                mbOwnDocument = sal_False;
-                maDocShellRef->DoInitNew( NULL );
-            }
+                if( !maDocShellRef.Is() )
+                {
+                    maDocShellRef = new ::sd::DrawDocShell(
+                        mpSdDrawDocumentIntern,
+                        SFX_CREATE_MODE_EMBEDDED,
+                        sal_True,
+                        mpSdDrawDocumentIntern->GetDocumentType());
+                    mbOwnDocument = sal_False;
+                    maDocShellRef->DoInitNew( NULL );
+                }
 
-            maDocShellRef->SetVisArea( maVisArea );
-            bOK = SetObject( &maDocShellRef, SDTRANSFER_OBJECTTYPE_DRAWOLE, rFlavor );
+                maDocShellRef->SetVisArea( maVisArea );
+                bOK = SetObject( &maDocShellRef, SDTRANSFER_OBJECTTYPE_DRAWOLE, rFlavor );
 
-            if( mpSdDrawDocumentIntern )
                 mpSdDrawDocumentIntern->SetSwapGraphicsMode( nOldSwapMode );
+            }
         }
     }
 
