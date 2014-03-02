@@ -360,8 +360,7 @@ private:
     void                    ImplWritePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bool bLineOnly,
                                                   sal_Bool bApplyMapping = sal_True );
     void                    ImplWriteShape( const SVGShapeDescriptor& rShape, sal_Bool bApplyMapping = sal_True );
-    void                    ImplWriteGradientEx( const PolyPolygon& rPolyPoly, const Gradient& rGradient, sal_uInt32 nWriteFlags,
-                                                 sal_Bool bApplyMapping = sal_True );
+    void                    ImplWriteGradientEx( const PolyPolygon& rPolyPoly, const Gradient& rGradient, sal_uInt32 nWriteFlags);
     void                    ImplWriteGradientLinear( const PolyPolygon& rPolyPoly, const Gradient& rGradient );
     void                    ImplWriteGradientStop( const Color& rColor, double fOffset );
     Color                   ImplGetColorWithIntensity( const Color& rColor, sal_uInt16 nIntensity );

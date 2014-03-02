@@ -2083,23 +2083,16 @@ void SVGActionWriter::ImplWritePattern( const PolyPolygon& rPolyPoly,
 }
 
 void SVGActionWriter::ImplWriteGradientEx( const PolyPolygon& rPolyPoly, const Gradient& rGradient,
-                                           sal_uInt32 nWriteFlags, sal_Bool bApplyMapping )
+                                           sal_uInt32 nWriteFlags)
 {
-    PolyPolygon aPolyPoly;
-
-    if( bApplyMapping )
-        ImplMap( rPolyPoly, aPolyPoly );
-    else
-        aPolyPoly = rPolyPoly;
-
     if ( rGradient.GetStyle() == GradientStyle_LINEAR ||
          rGradient.GetStyle() == GradientStyle_AXIAL )
     {
-        ImplWriteGradientLinear( aPolyPoly, rGradient );
+        ImplWriteGradientLinear( rPolyPoly, rGradient );
     }
     else
     {
-        ImplWritePattern( aPolyPoly, NULL, &rGradient, nWriteFlags );
+        ImplWritePattern( rPolyPoly, NULL, &rGradient, nWriteFlags );
     }
 }
 
