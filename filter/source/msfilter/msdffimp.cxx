@@ -507,62 +507,65 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                             case OBJ_PATHPOLY :
                             case OBJ_PATHPLIN :
                             {
-                                if ( pList && ( pList->GetCount() > nC ) )
+                                if (pList)
                                 {
-                                    bValidGluePoint = sal_True;
-                                    nId = (sal_Int32)((*pList)[ (sal_uInt16)nC].GetId() + 3 );
-                                }
-                                else
-                                {
-                                    sal_Bool bNotFound = sal_True;
-
-                                    PolyPolygon aPolyPoly( EscherPropertyContainer::GetPolyPolygon( aXShape ) );
-                                    sal_uInt16 k, j, nPolySize = aPolyPoly.Count();
-                                    if ( nPolySize )
+                                    if (pList->GetCount() > nC )
                                     {
-                                        Rectangle aBoundRect( aPolyPoly.GetBoundRect() );
-                                        if ( aBoundRect.GetWidth() && aBoundRect.GetHeight() )
+                                        bValidGluePoint = sal_True;
+                                        nId = (sal_Int32)((*pList)[ (sal_uInt16)nC].GetId() + 3 );
+                                    }
+                                    else
+                                    {
+                                        sal_Bool bNotFound = sal_True;
+
+                                        PolyPolygon aPolyPoly( EscherPropertyContainer::GetPolyPolygon( aXShape ) );
+                                        sal_uInt16 k, j, nPolySize = aPolyPoly.Count();
+                                        if ( nPolySize )
                                         {
-                                            sal_uInt32  nPointCount = 0;
-                                            for ( k = 0; bNotFound && ( k < nPolySize ); k++ )
+                                            Rectangle aBoundRect( aPolyPoly.GetBoundRect() );
+                                            if ( aBoundRect.GetWidth() && aBoundRect.GetHeight() )
                                             {
-                                                const Polygon& rPolygon = aPolyPoly.GetObject( k );
-                                                for ( j = 0; bNotFound && ( j < rPolygon.GetSize() ); j++ )
+                                                sal_uInt32  nPointCount = 0;
+                                                for ( k = 0; bNotFound && ( k < nPolySize ); k++ )
                                                 {
-                                                    PolyFlags eFlags = rPolygon.GetFlags( j );
-                                                    if ( eFlags == POLY_NORMAL )
+                                                    const Polygon& rPolygon = aPolyPoly.GetObject( k );
+                                                    for ( j = 0; bNotFound && ( j < rPolygon.GetSize() ); j++ )
                                                     {
-                                                        if ( nC == nPointCount )
+                                                        PolyFlags eFlags = rPolygon.GetFlags( j );
+                                                        if ( eFlags == POLY_NORMAL )
                                                         {
-                                                            const Point& rPoint = rPolygon.GetPoint( j );
-                                                            double fXRel = rPoint.X() - aBoundRect.Left();
-                                                            double fYRel = rPoint.Y() - aBoundRect.Top();
-                                                            sal_Int32 nWidth = aBoundRect.GetWidth();
-                                                            if ( !nWidth )
-                                                                nWidth = 1;
-                                                            sal_Int32 nHeight= aBoundRect.GetHeight();
-                                                            if ( !nHeight )
-                                                                nHeight = 1;
-                                                            fXRel /= (double)nWidth;
-                                                            fXRel *= 10000;
-                                                            fYRel /= (double)nHeight;
-                                                            fYRel *= 10000;
-                                                            aGluePoint.SetPos( Point( (sal_Int32)fXRel, (sal_Int32)fYRel ) );
-                                                            aGluePoint.SetPercent( true );
-                                                            aGluePoint.SetAlign( SDRVERTALIGN_TOP | SDRHORZALIGN_LEFT );
-                                                            aGluePoint.SetEscDir( SDRESC_SMART );
-                                                            nId = (sal_Int32)((*pList)[ pList->Insert( aGluePoint ) ].GetId() + 3 );
-                                                            bNotFound = sal_False;
+                                                            if ( nC == nPointCount )
+                                                            {
+                                                                const Point& rPoint = rPolygon.GetPoint( j );
+                                                                double fXRel = rPoint.X() - aBoundRect.Left();
+                                                                double fYRel = rPoint.Y() - aBoundRect.Top();
+                                                                sal_Int32 nWidth = aBoundRect.GetWidth();
+                                                                if ( !nWidth )
+                                                                    nWidth = 1;
+                                                                sal_Int32 nHeight= aBoundRect.GetHeight();
+                                                                if ( !nHeight )
+                                                                    nHeight = 1;
+                                                                fXRel /= (double)nWidth;
+                                                                fXRel *= 10000;
+                                                                fYRel /= (double)nHeight;
+                                                                fYRel *= 10000;
+                                                                aGluePoint.SetPos( Point( (sal_Int32)fXRel, (sal_Int32)fYRel ) );
+                                                                aGluePoint.SetPercent( true );
+                                                                aGluePoint.SetAlign( SDRVERTALIGN_TOP | SDRHORZALIGN_LEFT );
+                                                                aGluePoint.SetEscDir( SDRESC_SMART );
+                                                                nId = (sal_Int32)((*pList)[ pList->Insert( aGluePoint ) ].GetId() + 3 );
+                                                                bNotFound = sal_False;
+                                                            }
+                                                            nPointCount++;
                                                         }
-                                                        nPointCount++;
                                                     }
                                                 }
                                             }
                                         }
-                                    }
-                                    if ( !bNotFound )
-                                    {
-                                        bValidGluePoint = sal_True;
+                                        if ( !bNotFound )
+                                        {
+                                            bValidGluePoint = sal_True;
+                                        }
                                     }
                                 }
                             }
