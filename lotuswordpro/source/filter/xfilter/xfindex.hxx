@@ -121,8 +121,8 @@ private:
 private:
     OUString   m_nLevel;
     OUString   m_strStyle;
-    enumXFTab   m_eTabType;
-    double      m_fTabLength;
+    enumXFTab  m_eTabType;
+    double     m_fTabLength;
     OUString   m_strTabDelimiter;
     OUString   m_strTabLeader;
     OUString   m_strTagName;
@@ -165,17 +165,17 @@ public:
      */
     void    SetSeparator(sal_Bool sep);
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void ToXml(IXFStream *pStrm);
 
     void AddTocSource(sal_uInt16 nLevel, const OUString sStyleName);
 
 private:
     enumXFIndex     m_eType;
-    OUString       m_strTitle;
-    OUString       m_strSectStyle;
-    bool                m_bProtect;
+    OUString        m_strTitle;
+    OUString        m_strSectStyle;
+    bool            m_bProtect;
     bool            m_bSeparator;
-    XFParagraph     *m_pTitle;
+    XFParagraph*    m_pTitle;
 
     std::vector<XFIndexTemplate *>  m_aTemplates; // template entry + style
 
@@ -186,6 +186,8 @@ private:
 };
 
 inline XFIndexTemplate::XFIndexTemplate()
+    : m_eTabType(enumXFTabNone)
+    , m_fTabLength(0.0)
 {
     m_nLevel = Int32ToOUString(0);
 }
