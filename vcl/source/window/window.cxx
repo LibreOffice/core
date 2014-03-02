@@ -6868,9 +6868,9 @@ void Window::SetZOrder( Window* pRefWindow, sal_uInt16 nFlags )
         nFlags |= WINDOW_ZORDER_BEHIND;
     }
 
-    while ( pRefWindow->mpWindowImpl->mpBorderWindow )
+    while ( pRefWindow && pRefWindow->mpWindowImpl->mpBorderWindow )
         pRefWindow = pRefWindow->mpWindowImpl->mpBorderWindow;
-    if ( (pRefWindow == this) || mpWindowImpl->mbFrame )
+    if (!pRefWindow || pRefWindow == this || mpWindowImpl->mbFrame)
         return;
 
     DBG_ASSERT( pRefWindow->mpWindowImpl->mpParent == mpWindowImpl->mpParent, "Window::SetZOrder() - pRefWindow has other parent" );
