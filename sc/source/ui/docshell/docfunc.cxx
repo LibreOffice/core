@@ -591,24 +591,17 @@ bool ScDocFunc::DeleteContents( const ScMarkData& rMark, sal_uInt16 nFlags,
     }
 
     ScRange aMarkRange;
-    bool bSimple = false;
 
     ScMarkData aMultiMark = rMark;
     aMultiMark.SetMarking(false);       // fuer MarkToMulti
 
     ScDocument* pUndoDoc = NULL;
-    bool bMulti = !bSimple && aMultiMark.IsMultiMarked();
-    if (!bSimple)
-    {
-        aMultiMark.MarkToMulti();
-        aMultiMark.GetMultiMarkArea( aMarkRange );
-    }
+    bool bMulti = aMultiMark.IsMultiMarked();
+    aMultiMark.MarkToMulti();
+    aMultiMark.GetMultiMarkArea( aMarkRange );
     ScRange aExtendedRange(aMarkRange);
-    if (!bSimple)
-    {
-        if ( pDoc->ExtendMerge( aExtendedRange, true ) )
-            bMulti = false;
-    }
+    if ( pDoc->ExtendMerge( aExtendedRange, true ) )
+        bMulti = false;
 
     // keine Objekte auf geschuetzten Tabellen
     bool bObjects = false;
@@ -666,14 +659,7 @@ bool ScDocFunc::DeleteContents( const ScMarkData& rMark, sal_uInt16 nFlags,
     }
 
 //! HideAllCursors();   // falls Zusammenfassung aufgehoben wird
-    if (bSimple)
-        pDoc->DeleteArea( aMarkRange.aStart.Col(), aMarkRange.aStart.Row(),
-                          aMarkRange.aEnd.Col(),   aMarkRange.aEnd.Row(),
-                          aMultiMark, nFlags );
-    else
-    {
-        pDoc->DeleteSelection( nFlags, aMultiMark );
-    }
+    pDoc->DeleteSelection( nFlags, aMultiMark );
 
     // add undo action after drawing undo is complete (objects and note captions)
     if( bRecord )
