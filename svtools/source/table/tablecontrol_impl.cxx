@@ -235,7 +235,6 @@ namespace svt { namespace table
 
     //= TableControl_Impl
 
-    DBG_NAME( TableControl_Impl )
 
 #ifdef DBG_UTIL
 
@@ -424,7 +423,6 @@ namespace svt { namespace table
 #endif
 
 #define DBG_CHECK_ME() \
-    DBG_CHKTHIS( TableControl_Impl, TableControl_Impl_checkInvariants )
 
 
     TableControl_Impl::TableControl_Impl( TableControl& _rAntiImpl )
@@ -455,7 +453,6 @@ namespace svt { namespace table
         ,m_nRequiredInvariants ( INV_SCROLL_POSITION )
 #endif
     {
-        DBG_CTOR( TableControl_Impl, TableControl_Impl_checkInvariants );
         m_pSelEngine = new SelectionEngine( m_pDataWindow.get(), m_pTableFunctionSet );
         m_pSelEngine->SetSelectionMode(SINGLE_SELECTION);
         m_pDataWindow->SetPosPixel( Point( 0, 0 ) );
@@ -465,7 +462,6 @@ namespace svt { namespace table
 
     TableControl_Impl::~TableControl_Impl()
     {
-        DBG_DTOR( TableControl_Impl, TableControl_Impl_checkInvariants );
 
         DELETEZ( m_pVScroll );
         DELETEZ( m_pHScroll );

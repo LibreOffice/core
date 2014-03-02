@@ -33,7 +33,6 @@
 #include <string.h>
 #include <math.h>
 
-DBG_NAME( ImageMap )
 
 
 #define SCALEPOINT(aPT,aFracX,aFracY) (aPT).X()=((aPT).X()*(aFracX).GetNumerator())/(aFracX).GetDenominator();  \
@@ -581,7 +580,6 @@ ImageMap::ImageMap( const OUString& rName )
 
 ImageMap::ImageMap( const ImageMap& rImageMap )
 {
-    DBG_CTOR( ImageMap, NULL );
 
     size_t nCount = rImageMap.GetIMapObjectCount();
 
@@ -620,7 +618,6 @@ ImageMap::ImageMap( const ImageMap& rImageMap )
 
 ImageMap::~ImageMap()
 {
-    DBG_DTOR( ImageMap, NULL );
 
     ClearImageMap();
 }

@@ -34,7 +34,6 @@ using namespace ::com::sun::star::datatransfer;
 
 
 
-DBG_NAMEEX(BrowseBox)
 
 
 
@@ -44,7 +43,6 @@ extern const char* BrowseBoxCheckInvariants( const void * pVoid );
 
 void BrowseBox::StartDrag( sal_Int8 /* _nAction */, const Point& /* _rPosPixel */ )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
     // not interested in this event
 }
 
@@ -72,7 +70,6 @@ sal_Int8 BrowseBox::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 
 sal_Int8 BrowseBox::AcceptDrop( const BrowserAcceptDropEvent& )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
     // not interested in this event
     return DND_ACTION_NONE;
 }
@@ -81,7 +78,6 @@ sal_Int8 BrowseBox::AcceptDrop( const BrowserAcceptDropEvent& )
 
 sal_Int8 BrowseBox::ExecuteDrop( const BrowserExecuteDropEvent& )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
     // not interested in this event
     return DND_ACTION_NONE;
 }
@@ -217,21 +213,18 @@ void BrowseBox::StateChanged( StateChangedType nStateChange )
 
 void BrowseBox::Select()
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 }
 
 
 
 void BrowseBox::DoubleClick( const BrowserMouseEvent & )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 }
 
 
 
 long BrowseBox::QueryMinimumRowHeight()
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
     return CalcZoom( 5 );
 }
 
@@ -239,35 +232,30 @@ long BrowseBox::QueryMinimumRowHeight()
 
 void BrowseBox::ImplStartTracking()
 {
-    DBG_CHKTHIS( BrowseBox, BrowseBoxCheckInvariants );
 }
 
 
 
 void BrowseBox::ImplTracking()
 {
-    DBG_CHKTHIS( BrowseBox, BrowseBoxCheckInvariants );
 }
 
 
 
 void BrowseBox::ImplEndTracking()
 {
-    DBG_CHKTHIS( BrowseBox, BrowseBoxCheckInvariants );
 }
 
 
 
 void BrowseBox::RowHeightChanged()
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 }
 
 
 
 long BrowseBox::QueryColumnResize( sal_uInt16, long nWidth )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
     return nWidth;
 }
 
@@ -275,21 +263,18 @@ long BrowseBox::QueryColumnResize( sal_uInt16, long nWidth )
 
 void BrowseBox::ColumnResized( sal_uInt16 )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 }
 
 
 
 void BrowseBox::ColumnMoved( sal_uInt16 )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 }
 
 
 
 void BrowseBox::StartScroll()
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
     DoHideCursor( "StartScroll" );
 }
 
@@ -297,7 +282,6 @@ void BrowseBox::StartScroll()
 
 void BrowseBox::EndScroll()
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
     UpdateScrollbars();
     AutoSizeLastColumn();
     DoShowCursor( "EndScroll" );
@@ -307,7 +291,6 @@ void BrowseBox::EndScroll()
 
 void BrowseBox::ToggleSelection( sal_Bool bForce )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     // selection highlight-toggling allowed?
     if ( bHideSelect )
@@ -452,7 +435,6 @@ void BrowseBox::DrawCursor()
 
 sal_uLong BrowseBox::GetColumnWidth( sal_uInt16 nId ) const
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     sal_uInt16 nItemPos = GetColumnPos( nId );
     if ( nItemPos >= pCols->size() )
@@ -464,7 +446,6 @@ sal_uLong BrowseBox::GetColumnWidth( sal_uInt16 nId ) const
 
 sal_uInt16 BrowseBox::GetColumnId( sal_uInt16 nPos ) const
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     if ( nPos >= pCols->size() )
         return BROWSER_INVALIDID;
@@ -475,7 +456,6 @@ sal_uInt16 BrowseBox::GetColumnId( sal_uInt16 nPos ) const
 
 sal_uInt16 BrowseBox::GetColumnPos( sal_uInt16 nId ) const
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     for ( sal_uInt16 nPos = 0; nPos < pCols->size(); ++nPos )
         if ( (*pCols)[ nPos ]->GetId() == nId )
@@ -487,7 +467,6 @@ sal_uInt16 BrowseBox::GetColumnPos( sal_uInt16 nId ) const
 
 sal_Bool BrowseBox::IsFrozen( sal_uInt16 nColumnId ) const
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     for ( size_t nPos = 0; nPos < pCols->size(); ++nPos )
         if ( (*pCols)[ nPos ]->GetId() == nColumnId )
@@ -499,7 +478,6 @@ sal_Bool BrowseBox::IsFrozen( sal_uInt16 nColumnId ) const
 
 void BrowseBox::ExpandRowSelection( const BrowserMouseEvent& rEvt )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     DoHideCursor( "ExpandRowSelection" );
 
@@ -565,7 +543,6 @@ void BrowseBox::ExpandRowSelection( const BrowserMouseEvent& rEvt )
 
 void BrowseBox::Resize()
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
     if ( !bBootstrapped && IsReallyVisible() )
         BrowseBox::StateChanged( STATE_CHANGE_INITSHOW );
     if ( pCols->empty() )
@@ -644,7 +621,6 @@ void BrowseBox::Resize()
 
 void BrowseBox::Paint( const Rectangle& rRect )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     // initializations
     if ( !bBootstrapped && IsReallyVisible() )
@@ -1135,7 +1111,6 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, sal_
 
 void BrowseBox::PaintData( Window& rWin, const Rectangle& rRect )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
     if ( !bBootstrapped && IsReallyVisible() )
         BrowseBox::StateChanged( STATE_CHANGE_INITSHOW );
 
@@ -1153,7 +1128,6 @@ void BrowseBox::PaintData( Window& rWin, const Rectangle& rRect )
 
 void BrowseBox::UpdateScrollbars()
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     if ( !bBootstrapped || !IsUpdateMode() )
         return;
@@ -1328,7 +1302,6 @@ void BrowseBox::UpdateScrollbars()
 
 void BrowseBox::SetUpdateMode( sal_Bool bUpdate )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     sal_Bool bWasUpdate = IsUpdateMode();
     if ( bWasUpdate == bUpdate )
@@ -1359,7 +1332,6 @@ void BrowseBox::SetUpdateMode( sal_Bool bUpdate )
 
 sal_Bool BrowseBox::GetUpdateMode() const
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     return getDataWindow()->IsUpdateMode();
 }
@@ -1368,7 +1340,6 @@ sal_Bool BrowseBox::GetUpdateMode() const
 
 long BrowseBox::GetFrozenWidth() const
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     long nWidth = 0;
     for ( size_t nCol = 0;
@@ -1382,7 +1353,6 @@ long BrowseBox::GetFrozenWidth() const
 
 void BrowseBox::ColumnInserted( sal_uInt16 nPos )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     if ( pColSel )
         pColSel->Insert( nPos );
@@ -1393,7 +1363,6 @@ void BrowseBox::ColumnInserted( sal_uInt16 nPos )
 
 sal_uInt16 BrowseBox::FrozenColCount() const
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
     sal_uInt16 nCol;
     for ( nCol = 0;
           nCol < pCols->size() && (*pCols)[ nCol ]->IsFrozen();
@@ -1406,7 +1375,6 @@ sal_uInt16 BrowseBox::FrozenColCount() const
 
 IMPL_LINK(BrowseBox,ScrollHdl,ScrollBar*,pBar)
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     if ( pBar->GetDelta() == 0 )
         return 0;
@@ -1429,7 +1397,6 @@ IMPL_LINK(BrowseBox,ScrollHdl,ScrollBar*,pBar)
 
 IMPL_LINK_NOARG(BrowseBox, EndScrollHdl)
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     if ( getDataWindow()->bNoScrollBack )
     {
@@ -1453,7 +1420,6 @@ IMPL_LINK( BrowseBox, StartDragHdl, HeaderBar*, pBar )
 
 void BrowseBox::MouseButtonDown( const MouseEvent& rEvt )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     GrabFocus();
 
@@ -1509,7 +1475,6 @@ void BrowseBox::MouseButtonDown( const MouseEvent& rEvt )
 
 void BrowseBox::MouseMove( const MouseEvent& rEvt )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
     OSL_TRACE( "BrowseBox::MouseMove( MouseEvent )" );
 
     Pointer aNewPointer;
@@ -1563,7 +1528,6 @@ void BrowseBox::MouseMove( const MouseEvent& rEvt )
 
 void BrowseBox::MouseButtonUp( const MouseEvent & rEvt )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     if ( bResizing )
     {
@@ -1603,7 +1567,6 @@ sal_Bool bFieldMode = sal_False;
 
 void BrowseBox::MouseButtonDown( const BrowserMouseEvent& rEvt )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     GrabFocus();
 
@@ -1752,14 +1715,12 @@ void BrowseBox::MouseButtonDown( const BrowserMouseEvent& rEvt )
 
 void BrowseBox::MouseMove( const BrowserMouseEvent& )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 }
 
 
 
 void BrowseBox::MouseButtonUp( const BrowserMouseEvent &rEvt )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     // D&D was possible, but did not occur
     if ( bHit )
@@ -1806,7 +1767,6 @@ void BrowseBox::KeyInput( const KeyEvent& rEvt )
 
 sal_Bool BrowseBox::ProcessKey( const KeyEvent& rEvt )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     sal_uInt16 nCode = rEvt.GetKeyCode().GetCode();
     sal_Bool   bShift = rEvt.GetKeyCode().IsShift();
@@ -1877,7 +1837,6 @@ sal_Bool BrowseBox::ProcessKey( const KeyEvent& rEvt )
 
 void BrowseBox::Dispatch( sal_uInt16 nId )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     long nRowsOnPage = pDataWin->GetSizePixel().Height() / GetDataRowHeight();
     sal_Bool bDone = sal_False;

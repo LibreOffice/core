@@ -159,13 +159,11 @@ namespace svt
     };
 
 
-    DBG_NAME( TemplateContent )
 
 
     TemplateContent::TemplateContent( const INetURLObject& _rURL )
         :m_aURL( _rURL )
     {
-        DBG_CTOR( TemplateContent, NULL );
         DBG_ASSERT( INET_PROT_NOT_VALID != m_aURL.GetProtocol(), "TemplateContent::TemplateContent: invalid URL!" );
         m_sLocalName = m_aURL.getName();
         implResetDate();
@@ -174,7 +172,6 @@ namespace svt
 
     TemplateContent::~TemplateContent()
     {
-        DBG_DTOR( TemplateContent, NULL );
     }
 
 
