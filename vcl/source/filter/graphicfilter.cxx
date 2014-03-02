@@ -25,6 +25,7 @@
 #include <ucbhelper/content.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/zcodec.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/salctype.hxx>
 #include <vcl/pngread.hxx>
@@ -255,7 +256,7 @@ bool isPCT(SvStream& rStream, sal_uLong nStreamPos, sal_uLong nStreamLen)
 static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension, bool bTest )
 {
     sal_uInt16  i;
-    sal_uInt8    sFirstBytes[ 256 ];
+    sal_uInt8   sFirstBytes[ 256 ];
     sal_uLong   nFirstLong,nSecondLong;
     sal_uLong   nStreamPos = rStream.Tell();
 
@@ -645,88 +646,79 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
     //--------------------------- SVG ------------------------------------
     if( !bTest )
     {
-        // check for Xml
-        if( ImplSearchEntry( sFirstBytes, (sal_uInt8*)"<?xml", 256, 5 ) // is it xml
-            && ImplSearchEntry( sFirstBytes, (sal_uInt8*)"version", 256, 7 )) // does it have a version (required for xml)
+        sal_uInt8* pCheckArray = sFirstBytes;
+        sal_uLong nCheckSize = nStreamLen < 256 ? nStreamLen : 256;
+
+        sal_uInt8 sExtendedOrDecompressedFirstBytes[2048];
+        sal_uLong nDecompressedSize = nCheckSize;
+
+        bool bIsGZip(false);
+
+        // check if it is gzipped -> svgz
+        if(sFirstBytes[0] == 0x1F && sFirstBytes[1] == 0x8B)
         {
-            bool bIsSvg(false);
+            GZCodec aCodec;
+            rStream.Seek(nStreamPos);
+            aCodec.BeginCompression();
+            nDecompressedSize = aCodec.Read(rStream, sExtendedOrDecompressedFirstBytes, 2048);
+            nCheckSize = nDecompressedSize < 256 ? nDecompressedSize : 256;
+            aCodec.EndCompression();
+            pCheckArray = sExtendedOrDecompressedFirstBytes;
+        }
+
+        bool bIsSvg(false);
+
+        // check for Xml
+        // #119176# SVG files which have no xml header at all have shown up this is optional
+        if( ImplSearchEntry(pCheckArray, (sal_uInt8*)"<?xml", nCheckSize, 5 ) // is it xml
+            && ImplSearchEntry(pCheckArray, (sal_uInt8*)"version", nCheckSize, 7 )) // does it have a version (required for xml)
+        {
 
             // check for DOCTYPE svg combination
-            if( ImplSearchEntry( sFirstBytes, (sal_uInt8*)"DOCTYPE", 256, 7 ) // 'DOCTYPE' is there
-                && ImplSearchEntry( sFirstBytes, (sal_uInt8*)"svg", 256, 3 )) // 'svg' is there
+            if( ImplSearchEntry(pCheckArray, (sal_uInt8*)"DOCTYPE", nCheckSize, 7 ) // 'DOCTYPE' is there
+                && ImplSearchEntry(pCheckArray, (sal_uInt8*)"svg", nCheckSize, 3 )) // 'svg' is there
             {
                 bIsSvg = true;
-            }
-
-            // check for svg element in 1st 256 bytes
-            if(!bIsSvg && ImplSearchEntry( sFirstBytes, (sal_uInt8*)"<svg", 256, 4 )) // '<svg'
-            {
-                bIsSvg = true;
-            }
-
-            if(!bIsSvg)
-            {
-                // it's a xml, look for '<svg' in full file. Should not happen too
-                // often since the tests above will handle most cases, but can happen
-                // with Svg files containing big comment headers or Svg as the host
-                // language
-                const sal_uLong nSize((nStreamLen > 2048) ? 2048 : nStreamLen);
-                sal_uInt8* pBuf = new sal_uInt8[nSize];
-
-                rStream.Seek(nStreamPos);
-                rStream.Read(pBuf, nSize);
-
-                if(ImplSearchEntry(pBuf, (sal_uInt8*)"<svg", nSize, 4)) // '<svg'
-                {
-                    bIsSvg = true;
-                }
-
-                delete[] pBuf;
-            }
-
-            if(bIsSvg)
-            {
-                rFormatExtension = "SVG";
-                return true;
             }
         }
-        else
-        {
-            // #119176# SVG files which have no xml header at all have shown up,
-            // detect those, too
-            bool bIsSvg(false);
 
-            // check for svg element in 1st 256 bytes
-            if(ImplSearchEntry( sFirstBytes, (sal_uInt8*)"<svg", 256, 4 )) // '<svg'
+        // check for svg element in 1st 256 bytes
+        if(!bIsSvg && ImplSearchEntry(pCheckArray, (sal_uInt8*)"<svg", nCheckSize, 4 )) // '<svg'
+        {
+            bIsSvg = true;
+        }
+
+        // extended search for svg element
+        if(!bIsSvg)
+        {
+            // it's a xml, look for '<svg' in full file. Should not happen too
+            // often since the tests above will handle most cases, but can happen
+            // with Svg files containing big comment headers or Svg as the host
+            // language
+
+            pCheckArray = sExtendedOrDecompressedFirstBytes;
+
+            if(!bIsGZip)
+            {
+                nCheckSize = nDecompressedSize < 2048 ? nDecompressedSize : 2048;
+            }
+            else
+            {
+                nCheckSize = nStreamLen < 2048 ? nStreamLen : 2048;
+                rStream.Seek(nStreamPos);
+                rStream.Read(sExtendedOrDecompressedFirstBytes, nCheckSize);
+            }
+
+            if(ImplSearchEntry(pCheckArray, (sal_uInt8*)"<svg", nCheckSize, 4)) // '<svg'
             {
                 bIsSvg = true;
             }
+        }
 
-            if(!bIsSvg)
-            {
-                // look for '<svg' in full file. Should not happen too
-                // often since the tests above will handle most cases, but can happen
-                // with SVG files containing big comment headers or SVG as the host
-                // language
-                const sal_uLong nSize((nStreamLen > 2048) ? 2048 : nStreamLen);
-                sal_uInt8* pBuf = new sal_uInt8[nSize];
-
-                rStream.Seek(nStreamPos);
-                rStream.Read(pBuf, nSize);
-
-                if(ImplSearchEntry(pBuf, (sal_uInt8*)"<svg", nSize, 4)) // '<svg'
-                {
-                    bIsSvg = true;
-                }
-
-                delete[] pBuf;
-            }
-
-            if(bIsSvg)
-            {
-                rFormatExtension = "SVG";
-                return true;
-            }
+        if(bIsSvg)
+        {
+            rFormatExtension = "SVG";
+            return true;
         }
     }
     else if( rFormatExtension.startsWith( "SVG" ) )
@@ -1521,27 +1513,53 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
             if( rGraphic.GetContext() == (GraphicReader*) 1 )
                 rGraphic.SetContext( NULL );
 
-            const sal_uInt32 nStmPos(rIStream.Tell());
-            const sal_uInt32 nStmLen(rIStream.Seek(STREAM_SEEK_TO_END) - nStmPos);
+            const sal_uInt32 nStreamPosition(rIStream.Tell());
+            const sal_uInt32 nStreamLength(rIStream.Seek(STREAM_SEEK_TO_END) - nStreamPosition);
+
             bool bOkay(false);
 
-            if(nStmLen)
+            if(nStreamLength > 0)
             {
-                SvgDataArray aNewData(new sal_uInt8[nStmLen]);
-
-                rIStream.Seek(nStmPos);
-                rIStream.Read(aNewData.get(), nStmLen);
-
-                if(!rIStream.GetError())
+                std::vector<sal_uInt8> aTwoBytes(2);
+                rIStream.Seek(nStreamPosition);
+                rIStream.Read(&aTwoBytes[0], 2);
+                rIStream.Seek(nStreamPosition);
+                if(aTwoBytes[0] == 0x1F && aTwoBytes[1] == 0x8B)
                 {
-                    SvgDataPtr aSvgDataPtr(
-                        new SvgData(
-                            aNewData,
-                            nStmLen,
-                            rPath));
+                    SvMemoryStream aMemStream;
+                    GZCodec aCodec;
+                    sal_uInt32 nMemoryLength;
 
-                    rGraphic = Graphic(aSvgDataPtr);
-                    bOkay = true;
+                    aCodec.BeginCompression();
+                    nMemoryLength = aCodec.Decompress(rIStream, aMemStream);
+                    aCodec.EndCompression();
+
+                    if(!rIStream.GetError() )
+                    {
+                        SvgDataArray aNewData(new sal_uInt8[nMemoryLength]);
+                        aMemStream.Seek(STREAM_SEEK_TO_BEGIN);
+                        aMemStream.Read(aNewData.get(), nMemoryLength);
+
+                        if(!aMemStream.GetError() )
+                        {
+                            SvgDataPtr aSvgDataPtr(new SvgData(aNewData, nMemoryLength, rPath));
+                            rGraphic = Graphic(aSvgDataPtr);
+                            bOkay = true;
+                        }
+                    }
+                }
+                else
+                {
+                    SvgDataArray aNewData(new sal_uInt8[nStreamLength]);
+                    rIStream.Seek(nStreamPosition);
+                    rIStream.Read(aNewData.get(), nStreamLength);
+
+                    if(!rIStream.GetError())
+                    {
+                        SvgDataPtr aSvgDataPtr(new SvgData(aNewData, nStreamLength, rPath));
+                        rGraphic = Graphic(aSvgDataPtr);
+                        bOkay = true;
+                    }
                 }
             }
 
