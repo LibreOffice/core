@@ -5001,7 +5001,7 @@
               <desc>Specifies if the resolution of each image is reduced to the
               resolution specified by the property MaxImageResolution.</desc>
             </info>
-            <value>false</value>
+            <value>true</value>
           </prop>
           <prop oor:name="MaxImageResolution" oor:type="xs:int" oor:nillable="false">
             <info>
