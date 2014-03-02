@@ -76,10 +76,10 @@ void TabDialog::ImplPosControls()
         pChild = pChild->GetWindow( WINDOW_NEXT );
     }
 
-    // Haben wir ueberhaupt ein TabControl
+    // do we have a TabControl ?
     if ( pTabControl )
     {
-        // Offset bei weiteren Controls um einen weiteren Abstand anpassen
+        // adapt offset for other controls by an extra distance
         if ( nOffY )
             nOffY += IMPL_DIALOG_BAR_OFFSET*2 + 2;
 
@@ -94,7 +94,7 @@ void TabDialog::ImplPosControls()
                           aTabSize.Height() + IMPL_DIALOG_OFFSET*2 + nOffY );
         long    nBtnEx = 0;
 
-        // Preview-Fenster beruecksichtigen und die Groessen/Offsets anpassen
+        // consider Preview-Fenster and adapt the sizes/offsets
         if ( mpViewWindow && mpViewWindow->IsVisible() )
         {
             long    nViewOffX = 0;
@@ -145,17 +145,17 @@ void TabDialog::ImplPosControls()
                                            nViewPosFlags );
         }
 
-        // Positionierung vornehmen
+        // adapt positioning
         pTabControl->SetPosPixel( aTabOffset );
 
-        // Alle anderen Children positionieren
+        // position all other Children
         bool bTabCtrl   = false;
         int  nLines     = 0;
         long nX;
         long nY         = aDlgSize.Height();
         long nTopX      = IMPL_DIALOG_OFFSET;
 
-        // Unter Windows 95 werden die Buttons rechtsbuendig angeordnet
+        // all buttons are right aligned under Windows 95
         nX = IMPL_DIALOG_OFFSET;
         long nCtrlBarWidth = ((aCtrlSize.Width()+IMPL_DIALOG_OFFSET)*nDownCtrl)-IMPL_DIALOG_OFFSET;
         if ( nCtrlBarWidth <= (aTabSize.Width()+nBtnEx) )
@@ -198,7 +198,7 @@ void TabDialog::ImplPosControls()
         SetOutputSizePixel( aDlgSize );
     }
 
-    // Offset merken
+    // store offset
     if ( nOffY )
     {
         Size aDlgSize = GetOutputSizePixel();

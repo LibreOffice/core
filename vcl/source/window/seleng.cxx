@@ -160,8 +160,8 @@ bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
     sal_uInt16 nModifier = rMEvt.GetModifier() | nLockedMods;
     if ( nModifier & KEY_MOD2 )
         return false;
-    // in SingleSelection: Control-Taste filtern (damit auch
-    // mit Ctrl-Click ein D&D gestartet werden kann)
+    // in SingleSelection: filter Control-key (to assure also
+    // with Ctrl-Click a D&D can be started)
     if ( nModifier == KEY_MOD1 && eSelMode == SINGLE_SELECTION )
         nModifier = 0;
 
@@ -189,7 +189,7 @@ bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
                 nFlags |= SELENG_WAIT_UPEVT;
                 nFlags &= ~(SELENG_IN_SEL);
                 pWin->ReleaseMouse();
-                return true;  //auf STARTDRAG-Command-Event warten
+                return true;  //wait for STARTDRAG-Command-Event
             }
             if ( eSelMode != SINGLE_SELECTION )
             {
@@ -200,8 +200,7 @@ bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
                    nFlags &= (~SELENG_HAS_ANCH); // bHasAnchor = false;
             }
             pFunctionSet->SetCursorAtPoint( aPos );
-            // Sonderbehandlung Single-Selection, damit Select+Drag
-            // in einem Zug moeglich ist
+            // exception for Single-Selection: to enable Select+Drag
             if (eSelMode == SINGLE_SELECTION && (nFlags & SELENG_DRG_ENAB))
                 nFlags |= SELENG_WAIT_UPEVT;
             return true;
@@ -230,12 +229,12 @@ bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
             return true;
 
         case KEY_MOD1:
-            // Control nur bei Mehrfachselektion erlaubt
+            // Control only allowed at multiple selection
             if ( eSelMode != MULTIPLE_SELECTION )
             {
                 nFlags &= (~SELENG_IN_SEL);
                 pWin->ReleaseMouse();
-                return true;  // Mausclick verschlucken
+                return true;  // eat mouse click
             }
             if ( nFlags & SELENG_HAS_ANCH )
             {
@@ -298,24 +297,24 @@ bool SelectionEngine::SelMouseButtonUp( const MouseEvent& rMEvt )
     if( (nFlags & SELENG_WAIT_UPEVT) && !(nFlags & SELENG_CMDEVT) &&
         eSelMode != SINGLE_SELECTION)
     {
-        // MouseButtonDown in Sel aber kein CommandEvent eingetrudelt
-        // ==> deselektieren
+        // MouseButtonDown in Sel but no CommandEvent activated
+        // ==> deselect
         sal_uInt16 nModifier = aLastMove.GetModifier() | nLockedMods;
         if( nModifier == KEY_MOD1 || IsAlwaysAdding() )
         {
             if( !(nModifier & KEY_SHIFT) )
             {
                 pFunctionSet->DestroyAnchor();
-                nFlags &= (~SELENG_HAS_ANCH); // nix Anker
+                nFlags &= (~SELENG_HAS_ANCH); // no anchor
             }
             pFunctionSet->DeselectAtPoint( aLastMove.GetPosPixel() );
-            nFlags &= (~SELENG_HAS_ANCH); // nix Anker
+            nFlags &= (~SELENG_HAS_ANCH); // no anchor
             pFunctionSet->SetCursorAtPoint( aLastMove.GetPosPixel(), true );
         }
         else
         {
             pFunctionSet->DeselectAll();
-            nFlags &= (~SELENG_HAS_ANCH); // nix Anker
+            nFlags &= (~SELENG_HAS_ANCH); // no anchor
             pFunctionSet->SetCursorAtPoint( aLastMove.GetPosPixel() );
         }
     }
@@ -338,11 +337,11 @@ bool SelectionEngine::SelMouseMove( const MouseEvent& rMEvt )
         return false;
 
     if( !(nFlags & SELENG_EXPANDONMOVE) )
-        return false; // auf DragEvent warten!
+        return false; // wait for DragEvent!
 
     aLastMove = rMEvt;
-    // wenn die Maus ausserhalb der Area steht, dann wird die
-    // Frequenz des SetCursorAtPoint() nur durch den Timer bestimmt
+    // if mouse is outside area, the frequency of SetCursorAtPoint()
+    // is only determined by the timer
     if( aWTimer.IsActive() && !aArea.IsInside( rMEvt.GetPosPixel() ))
         return true;
 
@@ -405,7 +404,7 @@ void SelectionEngine::Reset()
 
 void SelectionEngine::Command( const CommandEvent& rCEvt )
 {
-    // Timer aWTimer ist beim Aufspannen einer Selektion aktiv
+    // Timer aWTimer is active at initialisation of a selection
     if ( !pFunctionSet || !pWin || aWTimer.IsActive() )
         return;
     aWTimer.Stop();
