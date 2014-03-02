@@ -1420,11 +1420,8 @@ bool ScDocFunc::ApplyStyle( const ScMarkData& rMark, const OUString& rStyleName,
 
     pDoc->ApplySelectionStyle( (ScStyleSheet&)*pStyleSheet, rMark );
 
-    sal_uInt16 nExtFlags = 0;
     if (!AdjustRowHeight( aMultiRange ))
-        rDocShell.PostPaint( aMultiRange, PAINT_GRID, nExtFlags );
-    else if (nExtFlags & SC_PF_LINES)
-        lcl_PaintAbove( rDocShell, aMultiRange );   // fuer Linien ueber dem Bereich
+        rDocShell.PostPaint( aMultiRange, PAINT_GRID, 0 );
 
     aModificator.SetDocumentModified();
 
