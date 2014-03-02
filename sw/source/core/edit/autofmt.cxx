@@ -383,8 +383,7 @@ sal_Bool SwAutoFormat::IsFastFullLine( const SwTxtNode& rNd ) const
 sal_Bool SwAutoFormat::IsEnumericChar( const SwTxtNode& rNd ) const
 {
     const OUString& rTxt = rNd.GetTxt();
-    OUString sTmp( rTxt );
-    sal_Int32 nBlnks = GetLeadingBlanks( sTmp );
+    sal_Int32 nBlnks = GetLeadingBlanks( rTxt );
     const sal_Int32 nLen = rTxt.getLength() - nBlnks;
     if( !nLen )
         return sal_False;
@@ -939,8 +938,8 @@ CHECK_ROMAN_5:
             {
                 eScan |= CHG;
                 if( pPreFix )
-                    (*pPreFix += OUString((sal_Unicode)1))
-                              += OUString::number( nStart );
+                    *pPreFix += OUString((sal_Unicode)1)
+                              + OUString::number( nStart );
             }
             eScan &= ~NO_DELIM;     // remove Delim
             eScan |= DELIM;         // add Digit
@@ -957,7 +956,7 @@ CHECK_ROMAN_5:
         return USHRT_MAX;
 
     if( (NO_DELIM & eScan) && pPreFix )     // do not forget the last one
-        (*pPreFix += OUString((sal_Unicode)1)) += OUString::number( nStart );
+        *pPreFix += OUString((sal_Unicode)1) + OUString::number( nStart );
 
     rPos = nPos;
     return nDigitLvl;       // 0 .. 9 (MAXLEVEL - 1)
