@@ -727,7 +727,8 @@ void ScEditShell::GetState( SfxItemSet& rSet )
                 {
                     OUString        aStatusVal;
                     LanguageType    nLang = LANGUAGE_NONE;
-                    bool bIsLookUpWord = GetStatusValueForThesaurusFromContext( aStatusVal, nLang, *pActiveView );
+                    bool bIsLookUpWord = pActiveView ?
+                        GetStatusValueForThesaurusFromContext(aStatusVal, nLang, *pActiveView) : false;
                     rSet.Put( SfxStringItem( SID_THES, aStatusVal ) );
 
                     // disable thesaurus context menu entry if there is nothing to look up
