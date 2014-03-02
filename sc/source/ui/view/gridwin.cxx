@@ -378,9 +378,9 @@ static sal_Bool lcl_IsEditableMatrix( ScDocument* pDoc, const ScRange& rRange )
     return (aCell.meType == CELLTYPE_FORMULA && aCell.mpFormula->GetMatrixOrigin(aPos) && aPos == rRange.aStart);
 }
 
-static void lcl_UnLockComment( ScDrawView* pView, SdrPageView* pPV, SdrModel* pDrDoc, const Point& rPos, ScViewData* pViewData )
+static void lcl_UnLockComment( ScDrawView* pView, const Point& rPos, ScViewData* pViewData )
 {
-    if (!pView && !pPV && !pDrDoc && !pViewData)
+    if (!pView || !pViewData)
         return;
 
     ScDocument& rDoc = *pViewData->GetDocument();
@@ -3216,7 +3216,7 @@ void ScGridWindow::SelectForContextMenu( const Point& rPosPixel, SCsCOL nCellX, 
             pDrawView->UnmarkAllObj();
             // Unlock the Internal Layer in order to activate the context menu.
             // re-lock in ScDrawView::MarkListHasChanged()
-            lcl_UnLockComment( pDrawView, pDrawView->GetSdrPageView(), pDrawView->GetModel(), aLogicPos ,pViewData);
+            lcl_UnLockComment( pDrawView, aLogicPos ,pViewData);
             bHitDraw = pDrawView->MarkObj( aLogicPos );
             // draw shell is activated in MarkListHasChanged
         }
