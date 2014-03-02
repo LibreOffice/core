@@ -2814,14 +2814,14 @@ EditPaM ImpEditEngine::ImpInsertParaBreak( EditPaM& rPaM, bool bKeepEndingAttrib
         {
             // Correct only if really a word gets overlapped in the process of
             // Spell checking
-            if (i->mnStart > nEnd)
+            if (i->mnStart > (size_t)nEnd)
             {
                 pRWrongs->push_back(*i);
                 editeng::MisspellRange& rRWrong = pRWrongs->back();
                 rRWrong.mnStart = rRWrong.mnStart - nEnd;
                 rRWrong.mnEnd = rRWrong.mnEnd - nEnd;
             }
-            else if (i->mnStart < nEnd && i->mnEnd > nEnd)
+            else if (i->mnStart < (size_t)nEnd && i->mnEnd > (size_t)nEnd)
                 i->mnEnd = nEnd;
         }
         sal_Int32 nInv = nEnd ? nEnd-1 : nEnd;
