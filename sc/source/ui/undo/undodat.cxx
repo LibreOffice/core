@@ -667,7 +667,7 @@ void ScUndoSubTotals::Undo()
     pDoc->SetOutlineTable( nTab, pUndoTable );
 
     // Original column/row status
-    if (pUndoDoc && pUndoTable)
+    if (pUndoTable)
     {
         SCCOLROW nStartCol;
         SCCOLROW nStartRow;
