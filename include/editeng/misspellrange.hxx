@@ -18,11 +18,11 @@ namespace editeng {
 
 struct EDITENG_DLLPUBLIC MisspellRange
 {
-    sal_Int32 mnStart;
-    sal_Int32 mnEnd;
+    size_t mnStart;
+    size_t mnEnd;
 
     MisspellRange();
-    MisspellRange(sal_Int32 nStart, sal_Int32 nEnd);
+    MisspellRange(size_t nStart, size_t nEnd);
 };
 
 struct EDITENG_DLLPUBLIC MisspellRanges

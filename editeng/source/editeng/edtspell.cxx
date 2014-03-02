@@ -197,7 +197,7 @@ void EditSpellWrapper::CheckSpellTo()
     }
 }
 
-sal_Int32 WrongList::Valid = std::numeric_limits<sal_Int32>::max();
+size_t WrongList::Valid = std::numeric_limits<size_t>::max();
 
 WrongList::WrongList() : mnInvalidStart(0), mnInvalidEnd(Valid) {}
 
@@ -229,7 +229,7 @@ void WrongList::SetValid()
     mnInvalidEnd = 0;
 }
 
-void WrongList::SetInvalidRange( sal_Int32 nStart, sal_Int32 nEnd )
+void WrongList::SetInvalidRange( size_t nStart, size_t nEnd )
 {
     if (mnInvalidStart == Valid || nStart < mnInvalidStart)
         mnInvalidStart = nStart;
@@ -238,13 +238,13 @@ void WrongList::SetInvalidRange( sal_Int32 nStart, sal_Int32 nEnd )
         mnInvalidEnd = nEnd;
 }
 
-void WrongList::ResetInvalidRange( sal_Int32 nStart, sal_Int32 nEnd )
+void WrongList::ResetInvalidRange( size_t nStart, size_t nEnd )
 {
     mnInvalidStart = nStart;
     mnInvalidEnd = nEnd;
 }
 
-void WrongList::TextInserted( sal_Int32 nPos, sal_Int32 nLength, bool bPosIsSep )
+void WrongList::TextInserted( size_t nPos, size_t nLength, bool bPosIsSep )
 {
     if (IsValid())
     {
@@ -261,7 +261,7 @@ void WrongList::TextInserted( sal_Int32 nPos, sal_Int32 nLength, bool bPosIsSep 
             mnInvalidEnd = nPos + nLength;
     }
 
-    for (sal_Int32 i = 0, n = (sal_Int32)maRanges.size(); i < n; ++i)
+    for (size_t i = 0, n = maRanges.size(); i < n; ++i)
     {
         editeng::MisspellRange& rWrong = maRanges[i];
         bool bRefIsValid = true;
@@ -313,9 +313,9 @@ void WrongList::TextInserted( sal_Int32 nPos, sal_Int32 nLength, bool bPosIsSep 
     SAL_WARN_IF(DbgIsBuggy(), "editeng", "InsertWrong: WrongList broken!");
 }
 
-void WrongList::TextDeleted( sal_Int32 nPos, sal_Int32 nLength )
+void WrongList::TextDeleted( size_t nPos, size_t nLength )
 {
-    sal_Int32 nEndPos = nPos + nLength;
+    size_t nEndPos = nPos + nLength;
     if (IsValid())
     {
         sal_uInt16 nNewInvalidStart = nPos ? nPos - 1 : 0;
@@ -381,7 +381,7 @@ void WrongList::TextDeleted( sal_Int32 nPos, sal_Int32 nLength )
     SAL_WARN_IF(DbgIsBuggy(), "editeng", "TextDeleted: WrongList broken!");
 }
 
-bool WrongList::NextWrong( sal_Int32& rnStart, sal_Int32& rnEnd ) const
+bool WrongList::NextWrong( size_t& rnStart, size_t& rnEnd ) const
 {
     /*
         rnStart get the start position, is possibly adjusted wrt. Wrong start
@@ -399,7 +399,7 @@ bool WrongList::NextWrong( sal_Int32& rnStart, sal_Int32& rnEnd ) const
     return false;
 }
 
-bool WrongList::HasWrong( sal_Int32 nStart, sal_Int32 nEnd ) const
+bool WrongList::HasWrong( size_t nStart, size_t nEnd ) const
 {
     for (WrongList::const_iterator i = begin(); i != end(); ++i)
     {
@@ -411,7 +411,7 @@ bool WrongList::HasWrong( sal_Int32 nStart, sal_Int32 nEnd ) const
     return false;
 }
 
-bool WrongList::HasAnyWrong( sal_Int32 nStart, sal_Int32 nEnd ) const
+bool WrongList::HasAnyWrong( size_t nStart, size_t nEnd ) const
 {
     for (WrongList::const_iterator i = begin(); i != end(); ++i)
     {
@@ -423,22 +423,18 @@ bool WrongList::HasAnyWrong( sal_Int32 nStart, sal_Int32 nEnd ) const
     return false;
 }
 
-void WrongList::ClearWrongs( sal_Int32 nStart, sal_Int32 nEnd,
-                             const ContentNode* pNode )
+void WrongList::ClearWrongs( size_t nStart, size_t nEnd,
+            const ContentNode* pNode )
 {
-    if(nEnd < 0)
-    {
-        nEnd = SAL_MAX_INT32;
-    }
     for (WrongList::iterator i = begin(); i != end(); )
     {
-        if ((i->mnEnd > nStart) && (i->mnStart < nEnd))
+        if (i->mnEnd > nStart && i->mnStart < nEnd)
         {
             if (i->mnEnd > nEnd) // Runs out
             {
                 i->mnStart = nEnd;
                 // Blanks?
-                while (i->mnStart < pNode->Len() &&
+                while (i->mnStart < (size_t)pNode->Len() &&
                        (pNode->GetChar(i->mnStart) == ' ' ||
                         pNode->IsFeature(i->mnStart)))
                 {
@@ -461,7 +457,7 @@ void WrongList::ClearWrongs( sal_Int32 nStart, sal_Int32 nEnd,
     SAL_WARN_IF(DbgIsBuggy(), "editeng", "ClearWrongs: WrongList broken!");
 }
 
-void WrongList::InsertWrong( sal_Int32 nStart, sal_Int32 nEnd )
+void WrongList::InsertWrong( size_t nStart, size_t nEnd )
 {
     WrongList::iterator nPos = end();
     for (WrongList::iterator i = begin(); i != end(); ++i)

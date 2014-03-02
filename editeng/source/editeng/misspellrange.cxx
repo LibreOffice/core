@@ -12,7 +12,7 @@
 namespace editeng {
 
 MisspellRange::MisspellRange() : mnStart(0), mnEnd(0) {}
-MisspellRange::MisspellRange(sal_Int32 nStart, sal_Int32 nEnd) : mnStart(nStart), mnEnd(nEnd) {}
+MisspellRange::MisspellRange(size_t nStart, size_t nEnd) : mnStart(nStart), mnEnd(nEnd) {}
 
 MisspellRanges::MisspellRanges(sal_Int32 nParagraph, const std::vector<MisspellRange>& rRanges) :
     mnParagraph(nParagraph), maRanges(rRanges) {}

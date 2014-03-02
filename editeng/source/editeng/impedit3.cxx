@@ -156,8 +156,8 @@ static void lcl_DrawRedLines(
     OutputDevice* pOutDev,
     long nFontHeight,
     const Point& rPnt,
-    sal_Int32 nIndex,
-    sal_Int32 nMaxEnd,
+    size_t nIndex,
+    size_t nMaxEnd,
     const sal_Int32* pDXArray,
     WrongList* pWrongs,
     short nOrientation,
@@ -177,7 +177,7 @@ static void lcl_DrawRedLines(
         else
             nStyle = WAVE_FLAT;
 
-        sal_Int32 nEnd, nStart = nIndex;
+        size_t nEnd, nStart = nIndex;
         bool bWrong = pWrongs->NextWrong( nStart, nEnd );
         while ( bWrong )
         {
@@ -3241,9 +3241,9 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
 
                                         if(pWrongs && !pWrongs->empty())
                                         {
-                                            sal_Int32 nStart = nIndex, nEnd = 0;
+                                            size_t nStart = nIndex, nEnd = 0;
                                             bool bWrong = pWrongs->NextWrong(nStart, nEnd);
-                                            const sal_Int32 nMaxEnd(nIndex + pTextPortion->GetLen());
+                                            const size_t nMaxEnd(nIndex + pTextPortion->GetLen());
 
                                             while(bWrong)
                                             {
@@ -3252,7 +3252,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                                     break;
                                                 }
 
-                                                if(nStart < nIndex)
+                                                if(nStart < (size_t)nIndex)
                                                 {
                                                     nStart = nIndex;
                                                 }
@@ -3476,7 +3476,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                         }
                                         Color aOldColor( pOutDev->GetLineColor() );
                                         pOutDev->SetLineColor( Color( GetColorConfig().GetColorValue( svtools::SPELL ).nColor ) );
-                                        lcl_DrawRedLines( pOutDev, aTmpFont.GetSize().Height(), aRedLineTmpPos, nIndex, nIndex + pTextPortion->GetLen(), pDXArray, pPortion->GetNode()->GetWrongList(), nOrientation, aOrigin, IsVertical(), pTextPortion->IsRightToLeft() );
+                                        lcl_DrawRedLines( pOutDev, aTmpFont.GetSize().Height(), aRedLineTmpPos, (size_t)nIndex, (size_t)nIndex + pTextPortion->GetLen(), pDXArray, pPortion->GetNode()->GetWrongList(), nOrientation, aOrigin, IsVertical(), pTextPortion->IsRightToLeft() );
                                         pOutDev->SetLineColor( aOldColor );
                                     }
                                 }
