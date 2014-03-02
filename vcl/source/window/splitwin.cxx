@@ -430,7 +430,7 @@ static void ImplCalcSet( ImplSplitSet* pSet,
     ImplSplitItem*      pItems = pSet->mpItems;
     bool                bEmpty;
 
-    // Anzahl sichtbarer Items ermitteln
+    // get number of visible items
     nVisItems = 0;
     for ( i = 0; i < nItems; i++ )
     {
@@ -438,7 +438,7 @@ static void ImplCalcSet( ImplSplitSet* pSet,
             nVisItems++;
     }
 
-    // Groessen berechnen
+    // calculate sizes
     if ( bRows )
         nCalcSize = nSetHeight;
     else
@@ -464,7 +464,7 @@ static void ImplCalcSet( ImplSplitSet* pSet,
                     nAbsSize += pItems[i].mnSize;
             }
         }
-        // Relative-Werte auf prozentual mappen (Percent bei uns 10tel Prozent)
+        // map relative values to percentages (percentage here one tenth of a procent)
         nPercent *= nPercentFactor;
         if ( nRelCount )
         {
@@ -511,7 +511,7 @@ static void ImplCalcSet( ImplSplitSet* pSet,
         pSet->mbCalcPix  = false;
         pSet->mnLastSize = nCalcSize;
 
-        // Fenster einpassen
+        // adapt window
         nSizeDelta  = nCalcSize-nCurSize;
         if ( nSizeDelta )
         {
@@ -519,7 +519,7 @@ static void ImplCalcSet( ImplSplitSet* pSet,
             nSizeWinSize    = 0;
             nNewSizeWinSize = 0;
 
-            // Zuerst die absoluten Items relativ resizen
+            // first resize absolute items relative
             for ( i = 0; i < nItems; i++ )
             {
                 if ( !(pItems[i].mnBits & SWIB_INVISIBLE) )
@@ -531,7 +531,7 @@ static void ImplCalcSet( ImplSplitSet* pSet,
                     }
                 }
             }
-            // Rundungsfehler werden hier nicht ausgelichen
+            // do not compensate rounding errors here
             if ( (nAbsItems < (sal_uInt16)(std::abs( nSizeDelta ))) && nSizeWinSize )
             {
                 for ( i = 0; i < nItems; i++ )
@@ -548,12 +548,12 @@ static void ImplCalcSet( ImplSplitSet* pSet,
                 nSizeDelta -= nNewSizeWinSize-nSizeWinSize;
             }
 
-            // Jetzt die Rundunsfehler ausgleichen
+            // compensate rounding errors now
             j           = 0;
             nMins       = 0;
             while ( nSizeDelta && (nItems != nMins) )
             {
-                // Feststellen, welche Items berechnet werden duerfen
+                // determinne which items we can calculate
                 nCalcItems = 0;
                 while ( !nCalcItems )
                 {
@@ -587,7 +587,7 @@ static void ImplCalcSet( ImplSplitSet* pSet,
                     j++;
                 }
 
-                // Groessen von den einzelnen Items abziehen
+                // substract size of individual items
                 nErrorSum       = nSizeDelta % nCalcItems;
                 nCurSizeDelta   = nSizeDelta / nCalcItems;
                 nMins           = 0;
@@ -644,7 +644,7 @@ static void ImplCalcSet( ImplSplitSet* pSet,
         }
     }
 
-    // Maximale Groesse berechnen
+    // calculate maximum size
     if ( bRows )
     {
         nPos = nSetTop;
@@ -662,7 +662,7 @@ static void ImplCalcSet( ImplSplitSet* pSet,
             nMaxPos = nSetLeft+nSetWidth;
     }
 
-    // Fenster anordnen und Werte anpassen
+    // order windows and adept values
     for ( i = 0; i < nItems; i++ )
     {
         pItems[i].mnOldSplitPos    = pItems[i].mnSplitPos;
@@ -740,7 +740,7 @@ static void ImplCalcSet( ImplSplitSet* pSet,
         }
     }
 
-    // Sub-Set's berechnen
+    // calculate Sub-Set's
     for ( i = 0; i < nItems; i++ )
     {
         if ( pItems[i].mpSet && pItems[i].mnWidth && pItems[i].mnHeight )
@@ -752,7 +752,7 @@ static void ImplCalcSet( ImplSplitSet* pSet,
         }
     }
 
-    // Fixed setzen
+    // set fixed
     for ( i = 0; i < nItems; i++ )
     {
         pItems[i].mbFixed = false;
@@ -760,8 +760,8 @@ static void ImplCalcSet( ImplSplitSet* pSet,
             pItems[i].mbFixed = true;
         else
         {
-            // Wenn Child-Set vorhanden, ist dieses Item auch Fixed, wenn
-            // ein Child fixed ist
+            // this item is also fixed if Child-Set is available,
+            // if a child is fixed
             if ( pItems[i].mpSet )
             {
                 for ( j = 0; j < pItems[i].mpSet->mnItems; j++ )
@@ -790,7 +790,7 @@ void SplitWindow::ImplCalcSet2( SplitWindow* pWindow, ImplSplitSet* pSet, bool b
         {
             if ( pItems[i].mnSplitSize )
             {
-                // Evt. alles invalidieren oder nur einen kleinen Teil
+                // invalidate all, if applicable or only a small part
                 if ( (pItems[i].mnOldSplitPos  != pItems[i].mnSplitPos)  ||
                      (pItems[i].mnOldSplitSize != pItems[i].mnSplitSize) ||
                      (pItems[i].mnOldWidth     != pItems[i].mnWidth)     ||
@@ -798,7 +798,7 @@ void SplitWindow::ImplCalcSet2( SplitWindow* pWindow, ImplSplitSet* pSet, bool b
                 {
                     Rectangle aRect;
 
-                    // Old Rect invalidieren
+                    // invalidate old rectangle
                     if ( bRows )
                     {
                         aRect.Left()    = pItems[i].mnLeft;
@@ -814,7 +814,7 @@ void SplitWindow::ImplCalcSet2( SplitWindow* pWindow, ImplSplitSet* pSet, bool b
                         aRect.Right()   = aRect.Left() + pItems[i].mnOldSplitSize;
                     }
                     pWindow->Invalidate( aRect );
-                    // New Rect invalidieren
+                    // invalidate new rectangle
                     if ( bRows )
                     {
                         aRect.Left()    = pItems[i].mnLeft;
@@ -831,8 +831,8 @@ void SplitWindow::ImplCalcSet2( SplitWindow* pWindow, ImplSplitSet* pSet, bool b
                     }
                     pWindow->Invalidate( aRect );
 
-                    // Leere Sets komplett invalidieren, da diese Flaechen
-                    // nicht von Fenstern ueberladen werden
+                    // invalidate complete set, as these areas
+                    // are not cluttered by windows
                     if ( pItems[i].mpSet && !pItems[i].mpSet->mpItems )
                     {
                         aRect.Left()    = pItems[i].mnLeft;
@@ -846,7 +846,7 @@ void SplitWindow::ImplCalcSet2( SplitWindow* pWindow, ImplSplitSet* pSet, bool b
         }
     }
 
-    // Fenster positionieren
+    // position windows
     for ( i = 0; i < nItems; i++ )
     {
         if ( pItems[i].mpSet )
@@ -870,7 +870,7 @@ void SplitWindow::ImplCalcSet2( SplitWindow* pWindow, ImplSplitSet* pSet, bool b
         }
     }
 
-    // Fenster anzeigen und Flag zuruecksetzen
+    // show windows and reset flag
     for ( i = 0; i < nItems; i++ )
     {
         if ( pItems[i].mpWindow && pItems[i].mnWidth && pItems[i].mnHeight && !bHide )
@@ -880,7 +880,7 @@ void SplitWindow::ImplCalcSet2( SplitWindow* pWindow, ImplSplitSet* pSet, bool b
 
 static void ImplCalcLogSize( ImplSplitItem* pItems, sal_uInt16 nItems )
 {
-    // Original-Groessen updaten
+    // update original sizes
     sal_uInt16  i;
     long    nRelSize = 0;
     long    nPerSize = 0;
@@ -946,7 +946,7 @@ void SplitWindow::ImplDrawBack( SplitWindow* pWindow, ImplSplitSet* pSet )
     sal_uInt16          nItems = pSet->mnItems;
     ImplSplitItem*  pItems = pSet->mpItems;
 
-    // Beim Mainset auch den Hintergrund zeichnen
+    // also draw background for mainset
     if ( pSet->mnId == 0 )
     {
         if ( pSet->mpBitmap )
@@ -1155,7 +1155,7 @@ sal_uInt16 SplitWindow::ImplTestSplit( ImplSplitSet* pSet, const Point& rPos,
 sal_uInt16 SplitWindow::ImplTestSplit( SplitWindow* pWindow, const Point& rPos,
                                    long& rMouseOff, ImplSplitSet** ppFoundSet, sal_uInt16& rFoundPos )
 {
-    // Resizable SplitWindow muss anders behandelt werden
+    // Resizable SplitWindow should be treated different
     if ( pWindow->mnWinStyle & WB_SIZEABLE )
     {
         long    nTPos;
@@ -1327,10 +1327,9 @@ void SplitWindow::ImplInit( Window* pParent, WinBits nStyle )
 
 void SplitWindow::ImplInitSettings()
 {
-    // Wenn fuer das MainSet eine Bitmap gesetzt wird, dann
-    // brauchen wir nicht mehr den Hintergrund loeschen
-    // Wenn MainSet Wallpaper hat, dann ist das der Hintergrund, ansonsten
-    // sind es die Standard-Farben
+    // If a bitmap was set for MainSet, we should not delete the background.
+    // If MainSet has a Wallpaper, this is the background,
+    // otherwise it is the standard colour
     if ( mpMainSet->mpBitmap )
         SetBackground();
     else if ( mpMainSet->mpWallpaper )
@@ -1358,7 +1357,7 @@ SplitWindow::SplitWindow( Window* pParent, WinBits nStyle ) :
 
 SplitWindow::~SplitWindow()
 {
-    // Sets loeschen
+    // delete Sets
     ImplDeleteSet( mpMainSet );
     mpMainSet = NULL; //NULL for base-class callbacks during dtoring
 }
@@ -1411,9 +1410,8 @@ Size SplitWindow::CalcLayoutSizePixel( const Size& aNewSize )
     if ( mbAutoHide || mbFadeOut )
         nSplitSize += SPLITWIN_SPLITSIZEEXLN;
 
-    // Wenn Fenster sizeable ist, wird die groesse automatisch nach
-    // dem MainSet festgelegt, wenn kein relatives Fenster enthalten
-    // ist
+    // if the window is sizeable and if it does not contain a relative window,
+    // the size is determined according to MainSet
     if ( mnWinStyle & WB_SIZEABLE )
     {
         long    nCurSize;
@@ -1477,9 +1475,8 @@ void SplitWindow::ImplCalcLayout()
     if ( mbAutoHide || mbFadeOut )
         nSplitSize += SPLITWIN_SPLITSIZEEXLN;
 
-    // Wenn Fenster sizeable ist, wird die groesse automatisch nach
-    // dem MainSet festgelegt, wenn kein relatives Fenster enthalten
-    // ist
+    // if the window is sizeable and if it does not contain a relative window,
+    // the size is determined according to MainSet
     if ( mnWinStyle & WB_SIZEABLE )
     {
         long    nCurSize;
@@ -1512,7 +1509,7 @@ void SplitWindow::ImplCalcLayout()
     if ( (mnDX <= 0) || (mnDY <= 0) )
         return;
 
-    // Groessen/Position vorberechnen
+    // pre-calculate sizes/position
     long    nL;
     long    nT;
     long    nW;
@@ -1544,7 +1541,7 @@ void SplitWindow::ImplCalcLayout()
             nW -= nSplitSize;
     }
 
-    // Sets rekursiv berechnen
+    // calculate sets recursive
     ImplCalcSet( mpMainSet, nL, nT, nW, nH, mbHorz, !mbBottomRight );
     ImplCalcSet2( this, mpMainSet, false, mbHorz, !mbBottomRight );
     mbCalc = false;
@@ -1572,7 +1569,7 @@ void SplitWindow::ImplSplitMousePos( Point& rMousePos )
             rMousePos.X() = maDragRect.Left();
         else if ( rMousePos.X()+mpSplitSet->mnSplitSize+1 > maDragRect.Right() )
             rMousePos.X() = maDragRect.Right()-mpSplitSet->mnSplitSize+1;
-        // Wegen FullDrag in Screen-Koordinaaten merken
+        // store in screen coordinates due to FullDrag
         mnMSplitPos = OutputToScreenPixel( rMousePos ).X();
     }
     else
@@ -1767,7 +1764,7 @@ void SplitWindow::ImplDrawAutoHide( bool bInPaint )
         if ( !bInPaint )
             Erase( aTempRect );
 
-        // ImageListe laden, wenn noch nicht vorhanden
+        // load ImageListe, if not available
         ImplSVData* pSVData = ImplGetSVData();
         ImageList*  pImageList;
         if ( mbHorz )
@@ -1804,7 +1801,7 @@ void SplitWindow::ImplDrawAutoHide( bool bInPaint )
         if (!pImageList)
             return;
 
-        // Image ermitteln und zurueckgeben
+        // retrieve and return image
         sal_uInt16 nId;
         if ( mbAutoHidePressed )
         {
@@ -2024,7 +2021,7 @@ void SplitWindow::ImplStartSplit( const MouseEvent& rMEvt )
         else
             bPropSmaller = true;
 
-        // Hier kann noch die maximale Groesse gesetzt werden
+        // here we can set the maximum size
         StartSplit();
 
         if ( mnMaxSize )
@@ -2531,10 +2528,10 @@ void SplitWindow::Paint( const Rectangle& )
     ImplDrawFadeIn( true );
     ImplDrawAutoHide( true );
 
-    // FrameSet-Hintergruende zeichnen
+    // draw FrameSet-backgrounds
     ImplDrawBack( this, mpMainSet );
 
-    // Splitter zeichnen
+    // draw splitter
     if ( !(mnWinStyle & WB_NOSPLITDRAW) )
         ImplDrawSplit( this, mpMainSet, mbHorz, !mbBottomRight );
 }
@@ -2584,7 +2581,7 @@ void SplitWindow::RequestHelp( const HelpEvent& rHEvt )
             }
         }
 
-        // Rechteck ermitteln
+        // get rectangle
         if ( nHelpResId )
         {
             Point aPt = OutputToScreenPixel( aHelpRect.TopLeft() );
@@ -2594,7 +2591,7 @@ void SplitWindow::RequestHelp( const HelpEvent& rHEvt )
             aHelpRect.Right()  = aPt.X();
             aHelpRect.Bottom() = aPt.Y();
 
-            // Text ermitteln und anzeigen
+            // get and draw text
             OUString aStr;
             ResMgr* pResMgr = ImplGetResMgr();
             if( pResMgr )
@@ -2724,7 +2721,7 @@ void SplitWindow::RemoveItem( sal_uInt16 nId, bool bHide )
     DBG_ASSERT( ImplFindItem( mpMainSet, nId, nDbgDummy ), "SplitWindow::RemoveItem() - Id not found" );
 #endif
 
-    // Set suchen
+    // search set
     sal_uInt16          nPos;
     ImplSplitSet*    pSet    = ImplFindItem( mpMainSet, nId, nPos );
 
@@ -2735,11 +2732,11 @@ void SplitWindow::RemoveItem( sal_uInt16 nId, bool bHide )
     Window*         pWindow = pItem->mpWindow;
     Window*         pOrgParent = pItem->mpOrgParent;
 
-    // Evt. Set loeschen
+    // delete set if required
     if ( !pWindow )
         ImplDeleteSet( pItem->mpSet );
 
-    // Item entfernen
+    // remove item
     pSet->mnItems--;
     pSet->mbCalcPix = true;
     if ( pSet->mnItems )
@@ -2755,10 +2752,10 @@ void SplitWindow::RemoveItem( sal_uInt16 nId, bool bHide )
 
     ImplUpdate();
 
-    // Window erst hier loeschen, um weniger Paints zu haben
+    // to have the least amounts of paints delete window only here
     if ( pWindow )
     {
-        // Fenster wieder herstellen
+        // restore window
         if ( bHide || (pOrgParent != this) )
         {
             pWindow->Hide();
@@ -2769,10 +2766,10 @@ void SplitWindow::RemoveItem( sal_uInt16 nId, bool bHide )
 
 void SplitWindow::Clear()
 {
-    // Alle Sets loeschen
+    // delete all sets
     ImplDeleteSet( mpMainSet );
 
-    // Main-Set wieder anlegen
+    // create Main-Set again
     mpMainSet                   = new ImplSplitSet;
     mpMainSet->mpItems          = NULL;
     mpMainSet->mpWallpaper      = NULL;
@@ -2786,7 +2783,7 @@ void SplitWindow::Clear()
         mpMainSet->mnSplitSize -= 2;
     mpBaseSet                   = mpMainSet;
 
-    // Und neu invalidieren
+    // and invalidate again
     ImplUpdate();
 }
 
@@ -2816,7 +2813,7 @@ void SplitWindow::SplitItem( sal_uInt16 nId, long nNewSize,
     if ( !nDelta )
         return;
 
-    // Bereich berechnen, der beim Splitten betroffen sein kann
+    // calculate area, which could be affected by splitting
     sal_uInt16 nMin = 0;
     sal_uInt16 nMax = nItems;
     for (sal_uInt16 i = 0; i < nItems; ++i)
@@ -2830,7 +2827,7 @@ void SplitWindow::SplitItem( sal_uInt16 nId, long nNewSize,
         }
     }
 
-    // Wenn das Fenster sizeable ist, wird das TopSet anders behandelt
+    // treat TopSet different if the window is sizeable
     bool bSmall  = true;
     bool bGreat  = true;
     if ( (pSet == mpMainSet) && (mnWinStyle & WB_SIZEABLE) )
@@ -2870,7 +2867,7 @@ void SplitWindow::SplitItem( sal_uInt16 nId, long nNewSize,
     }
 
     sal_uInt16          n;
-    // Jetzt die Fenster splitten
+    // now splitt the windows
     if ( nDelta < 0 )
     {
         if ( bGreat )
@@ -3010,7 +3007,7 @@ void SplitWindow::SplitItem( sal_uInt16 nId, long nNewSize,
         }
     }
 
-    // Original-Groessen updaten
+    // update original sizes
     ImplCalcLogSize( pItems, nItems );
 
     ImplUpdate();
@@ -3025,11 +3022,11 @@ void SplitWindow::SetItemSize( sal_uInt16 nId, long nNewSize )
     if ( !pSet )
         return;
 
-    // Testen, ob sich Groesse aendert
+    // check if size is changed
     pItem = &(pSet->mpItems[nPos]);
     if ( pItem->mnSize != nNewSize )
     {
-        // Neue Groesse setzen und neu durchrechnen
+        // set new size and re-calculate
         pItem->mnSize = nNewSize;
         pSet->mbCalcPix = true;
         ImplUpdate();
