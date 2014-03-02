@@ -543,7 +543,7 @@ void ScDrawView::SetMarkedOriginalSize()
         }
     }
 
-    if (nDone)
+    if (nDone && pViewData)
     {
         pUndoGroup->SetComment(ScGlobal::GetRscString( STR_UNDO_ORIGINALSIZE ));
         ScDocShell* pDocSh = pViewData->GetDocShell();
