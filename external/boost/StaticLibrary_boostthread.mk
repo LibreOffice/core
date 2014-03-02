@@ -9,6 +9,8 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,boostthread))
 
+$(eval $(call gb_StaticLibrary_use_unpacked,boostthread,boost))
+
 $(eval $(call gb_StaticLibrary_set_warnings_not_errors,boostthread))
 
 $(eval $(call gb_StaticLibrary_add_defs,boostthread,\

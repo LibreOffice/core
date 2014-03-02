@@ -9,6 +9,8 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,boostdatetime))
 
+$(eval $(call gb_StaticLibrary_use_unpacked,boostdatetime,boost))
+
 $(eval $(call gb_StaticLibrary_set_warnings_not_errors,boostdatetime))
 
 # disable "auto link" "feature" on MSVC
