@@ -20,6 +20,8 @@ $ARGV0 = shift @ARGV;
 $ARGV1 = shift @ARGV;
 $ARGV2 = shift @ARGV;
 $ARGV3 = shift @ARGV;
+$ARGV4 = shift @ARGV;
+$ARGV5 = shift @ARGV;
 
 # parse input file
 
@@ -44,11 +46,35 @@ while( <INFILE> )
 }
 close( INFILE );
 
+# OOXML strict namespaces
+
+open( INFILE_STRICT, $ARGV4 ) or die "cannot open input file: $!";
+my %namespaces_strict;
+while( <INFILE_STRICT> )
+{
+    # trim newline
+    chomp( $_ );
+    # trim leading/trailing whitespace
+    $_ =~ s/^\s*//g;
+    $_ =~ s/\s*$//g;
+    # trim comments
+    $_ =~ s/^#.*//;
+    # skip empty lines
+    if( $_ )
+    {
+        # check for valid characters
+        $_ =~ /^([a-zA-Z][a-zA-Z0-9]*)\s+([a-zA-Z0-9-.:\/]+)\s*$/ or die "Error: invalid character in input data";
+        $namespaces_strict{$1} = $2;
+    }
+}
+close( INFILE_STRICT );
+
 # generate output files
 
 open( IDFILE, ">$ARGV1" ) or die "Error: cannot open output file: $!";
 open( NAMEFILE, ">$ARGV2" ) or die "Error: cannot open output file: $!";
 open( TXTFILE, ">$ARGV3" ) or die "Error: cannot open output file: $!";
+open( NAMEFILE_STRICT, ">$ARGV5" ) or die "Error: cannot open output file: $!";
 
 # number of bits to shift the namespace identifier
 $shift = 16;
@@ -61,10 +87,12 @@ foreach( keys( %namespaces ) )
     print( IDFILE "const sal_Int32 NMSP_$_ = $i << NMSP_SHIFT;\n" );
     $id = $i << $shift;
     print( NAMEFILE "{ $id, \"$namespaces{$_}\" },\n" );
+    print( NAMEFILE_STRICT "{ $id, \"$namespaces_strict{$_}\" },\n" );
     print( TXTFILE "$id $_ $namespaces{$_}\n" );
     ++$i;
 }
 
 close( IDFILE );
-close( nameFILE );
+close( NAMEFILE );
+close( NAMEFILE_STRICT );
 close( TXTFILE );

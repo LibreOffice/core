@@ -27,7 +27,7 @@ $(oox_INC)/tokenhash.inc : $(oox_MISC)/tokenhash.gperf
 	$(GPERF) --compare-strncmp $< | sed -e 's/(char\*)0/(char\*)0, 0/g' | grep -v '^#line' > $@
 
 define oox_GenTarget
-$(oox_MISC)/$(2)ids.inc $(oox_INC)/$(2)names.inc $(if $(3),$(oox_MISC)/$(3)) : \
+$(oox_MISC)/$(2)ids.inc $(oox_INC)/$(2)names.inc $(if $(3),$(oox_MISC)/$(3)) $(if $(4),$(oox_INC)/$(4)names.inc) : \
 		$(oox_GENHEADERPATH)/$(1).hxx
 	@touch $$@
 
@@ -37,13 +37,13 @@ $(oox_GENHEADERPATH)/$(1).hxx : $(oox_SRC)/$(1).pl $(oox_SRC)/$(1).txt \
 	mkdir -p $(oox_MISC) $(oox_INC) $(oox_GENHEADERPATH)
 	perl $(oox_SRC)/$(1).pl $(oox_SRC)/$(1).txt $(oox_MISC)/$(2)ids.inc \
 			$(oox_INC)/$(2)names.inc $(if $(3),$(oox_MISC)/$(3)) \
+			$(if $(4),$(oox_SRC)/$(4).txt $(oox_INC)/$(4)names.inc) \
 		&& cat $(oox_SRC)/$(1).hxx.head $(oox_MISC)/$(2)ids.inc \
 			   $(oox_SRC)/$(1).hxx.tail > $(oox_GENHEADERPATH)/$(1).hxx \
 		&& touch $$@
 endef
 
-$(eval $(call oox_GenTarget,namespaces,namespace,namespaces.txt))
-$(eval $(call oox_GenTarget,namespaces-strict,namespace-strict,namespaces-strict.txt))
+$(eval $(call oox_GenTarget,namespaces,namespace,namespaces.txt,namespaces-strict))
 $(eval $(call oox_GenTarget,properties,property,))
 $(eval $(call oox_GenTarget,tokens,token,tokenhash.gperf))
 
@@ -55,7 +55,6 @@ $(call gb_CustomTarget_get_target,oox/generated) : \
 	$(oox_INC)/propertynames.inc \
 	$(oox_GENHEADERPATH)/tokens.hxx \
 	$(oox_GENHEADERPATH)/namespaces.hxx \
-	$(oox_GENHEADERPATH)/namespaces-strict.hxx \
 	$(oox_GENHEADERPATH)/properties.hxx \
 	$(oox_MISC)/namespaces.txt \
 

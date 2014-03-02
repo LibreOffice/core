@@ -35,7 +35,7 @@ NamespaceMap::NamespaceMap()
     static const struct NamespaceStrictUrl { sal_Int32 mnId; const sal_Char* mpcUrl; } spNamespaceStrictUrls[] =
     {
 // include auto-generated C array with namespace URLs as C strings
-#include "namespace-strictnames.inc"
+#include "namespaces-strictnames.inc"
         { -1, "" }
     };
 
