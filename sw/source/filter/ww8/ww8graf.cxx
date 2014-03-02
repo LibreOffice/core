@@ -2110,12 +2110,12 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
     if (!(pRecord->pXRelTo) && pFSPA)
     {
         pRecord->pXRelTo = new sal_uInt32;
-    *(pRecord->pXRelTo) = pFSPA->nbx;
+        *(pRecord->pXRelTo) = pFSPA->nbx;
     }
     if (!(pRecord->pYRelTo) && pFSPA)
     {
         pRecord->pYRelTo = new sal_uInt32;
-    *(pRecord->pYRelTo) = pFSPA->nby;
+        *(pRecord->pYRelTo) = pFSPA->nby;
     }
 
     // nXAlign - abs. Position, Left,  Centered,  Right,  Inside, Outside
@@ -2155,8 +2155,8 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
         }
     }
 
-    sal_uInt32 nXRelTo = nCntRelTo > *(pRecord->pXRelTo) ? *(pRecord->pXRelTo) : 1;
-    sal_uInt32 nYRelTo = nCntRelTo > *(pRecord->pYRelTo) ? *(pRecord->pYRelTo) : 1;
+    sal_uInt32 nXRelTo = (pRecord->pXRelTo && nCntRelTo > *(pRecord->pXRelTo)) ? *(pRecord->pXRelTo) : 1;
+    sal_uInt32 nYRelTo = (pRecord->pYRelTo && nCntRelTo > *(pRecord->pYRelTo)) ? *(pRecord->pYRelTo) : 1;
 
     RndStdIds eAnchor = IsInlineEscherHack() ? FLY_AS_CHAR : FLY_AT_CHAR; // #i43718#
 
