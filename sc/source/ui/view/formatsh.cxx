@@ -197,8 +197,8 @@ void ScFormatShell::GetStyleState( SfxItemSet& rSet )
             {
                 SCTAB           nCurTab     = GetViewData()->GetTabNo();
                 OUString        aPageStyle  = pDoc->GetPageStyle( nCurTab );
-                SfxStyleSheet*  pStyleSheet = (SfxStyleSheet*)pStylePool->
-                                    Find( aPageStyle, SFX_STYLE_FAMILY_PAGE );
+                SfxStyleSheet*  pStyleSheet = pStylePool ? (SfxStyleSheet*)pStylePool->
+                                    Find( aPageStyle, SFX_STYLE_FAMILY_PAGE ) : NULL;
 
                 if ( pStyleSheet )
                     rSet.Put( SfxTemplateItem( nSlotId, aPageStyle ) );
