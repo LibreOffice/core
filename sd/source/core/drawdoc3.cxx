@@ -956,7 +956,9 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
 
     if( bUndo )
         EndUndo();
-    pUndoMgr->LeaveListAction();
+
+    if (pUndoMgr)
+        pUndoMgr->LeaveListAction();
 
     return bContinue;
 }
