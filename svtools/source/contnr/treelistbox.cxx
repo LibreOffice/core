@@ -3390,13 +3390,14 @@ Rectangle SvTreeListBox::GetFocusRect( SvTreeListEntry* pEntry, long nLine )
         // if SelTab != 0, we have to calculate also
         if( nFocusWidth == -1 || nFirstSelTab )
         {
+            SvLBoxTab* pLastTab = NULL; // default to select whole width
+
             sal_uInt16 nLastTab;
-            SvLBoxTab* pLastTab = GetLastTab(SV_LBOXTAB_SHOW_SELECTION,nLastTab);
+            GetLastTab(SV_LBOXTAB_SHOW_SELECTION,nLastTab);
             nLastTab++;
             if( nLastTab < aTabs.size() ) // is there another one?
                 pLastTab = aTabs[ nLastTab ];
-            else
-                pLastTab = 0;  // select whole width
+
             aSize.Width() = pLastTab ? pLastTab->GetPos() : 0x0fffffff;
             nFocusWidth = (short)aSize.Width();
             if( pTab )
