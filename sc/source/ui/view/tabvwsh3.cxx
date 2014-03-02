@@ -670,23 +670,24 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     }
                     if (pDlg)
                     {
-                       pDlg->SetLimits( MINZOOM, MAXZOOM );
+                        pDlg->SetLimits( MINZOOM, MAXZOOM );
 
-                       bCancel = ( RET_CANCEL == pDlg->Execute() );
+                        bCancel = ( RET_CANCEL == pDlg->Execute() );
+
+                        // bCancel is True only if we were in the previous if block,
+                        // so no need to check again pDlg
+                        if ( !bCancel )
+                        {
+                            const SvxZoomItem&  rZoomItem = (const SvxZoomItem&)
+                                                    pDlg->GetOutputItemSet()->
+                                                        Get( SID_ATTR_ZOOM );
+
+                            eNewZoomType = rZoomItem.GetType();
+                            nZoom     = rZoomItem.GetValue();
+                        }
+
+                        delete pDlg;
                     }
-                    // bCancel is True only if we were in the previous if block,
-                    // so no need to check again pDlg
-                    if ( !bCancel )
-                    {
-                        const SvxZoomItem&  rZoomItem = (const SvxZoomItem&)
-                                                pDlg->GetOutputItemSet()->
-                                                    Get( SID_ATTR_ZOOM );
-
-                        eNewZoomType = rZoomItem.GetType();
-                        nZoom     = rZoomItem.GetValue();
-                    }
-
-                    delete pDlg;
                 }
 
                 if ( !bCancel )
