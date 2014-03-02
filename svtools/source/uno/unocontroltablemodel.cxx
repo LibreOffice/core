@@ -147,7 +147,6 @@ namespace svt { namespace table
 
 #define DBG_CHECK_ME() \
     DBG_TESTSOLARMUTEX(); \
-    DBG_CHKTHIS( UnoControlTableModel, UnoControlTableModel_checkInvariants )
 
 
     DBG_NAME( UnoControlTableModel )

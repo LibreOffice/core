@@ -231,7 +231,6 @@ namespace svt
 
     void RoadmapWizard::declarePath( PathId _nPathId, const WizardPath& _lWizardStates)
     {
-        DBG_CHKTHIS( RoadmapWizard, CheckInvariants );
 
         m_pImpl->aPaths.insert( Paths::value_type( _nPathId, _lWizardStates ) );
 
@@ -245,7 +244,6 @@ namespace svt
 
     void RoadmapWizard::declarePath( PathId _nPathId, WizardState _nFirstState, ... )
     {
-        DBG_CHKTHIS( RoadmapWizard, CheckInvariants );
 
         DBG_ASSERT( _nFirstState != WZS_INVALID_STATE, "RoadmapWizard::declarePath: there should be at least one state in the path!" );
         if ( _nFirstState == WZS_INVALID_STATE )
@@ -283,7 +281,6 @@ namespace svt
 
     void RoadmapWizard::activatePath( PathId _nPathId, bool _bDecideForIt )
     {
-        DBG_CHKTHIS( RoadmapWizard, CheckInvariants );
 
         if ( ( _nPathId == m_pImpl->nActivePath ) && ( _bDecideForIt == m_pImpl->bActivePathIsDefinite ) )
             // nothing to do
@@ -328,7 +325,6 @@ namespace svt
 
     void RoadmapWizard::implUpdateRoadmap( )
     {
-        DBG_CHKTHIS( RoadmapWizard, CheckInvariants );
 
         DBG_ASSERT( m_pImpl->aPaths.find( m_pImpl->nActivePath ) != m_pImpl->aPaths.end(),
             "RoadmapWizard::implUpdateRoadmap: there is no such path!" );
@@ -435,7 +431,6 @@ namespace svt
 
     WizardTypes::WizardState RoadmapWizard::determineNextState( WizardState _nCurrentState ) const
     {
-        DBG_CHKTHIS( RoadmapWizard, CheckInvariants );
 
         sal_Int32 nCurrentStatePathIndex = -1;
 
@@ -526,7 +521,6 @@ namespace svt
 
     IMPL_LINK_NOARG(RoadmapWizard, OnRoadmapItemSelected)
     {
-        DBG_CHKTHIS( RoadmapWizard, CheckInvariants );
 
         RoadmapTypes::ItemId nCurItemId = m_pImpl->pRoadmap->GetCurrentRoadmapItemID();
         if ( nCurItemId == getCurrentState() )
@@ -571,7 +565,6 @@ namespace svt
 
     void RoadmapWizard::enterState( WizardState _nState )
     {
-        DBG_CHKTHIS( RoadmapWizard, CheckInvariants );
 
         OWizardMachine::enterState( _nState );
 
@@ -614,7 +607,6 @@ namespace svt
 
     void RoadmapWizard::enableState( WizardState _nState, bool _bEnable )
     {
-        DBG_CHKTHIS( RoadmapWizard, CheckInvariants );
 
         // remember this (in case the state appears in the roadmap later on)
         if ( _bEnable )

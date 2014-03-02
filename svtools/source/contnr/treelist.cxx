@@ -1159,7 +1159,6 @@ SvListView::~SvListView()
 
 void SvListView::InitTable()
 {
-    DBG_CHKTHIS(SvListView,0);
     DBG_ASSERT(pModel,"InitTable:No Model");
     DBG_ASSERT(!nSelectionCount&&!nVisibleCount&&!bVisPositionsValid,"InitTable: Not cleared!");
 
@@ -1194,7 +1193,6 @@ void SvListView::InitTable()
 
 SvViewDataEntry* SvListView::CreateViewData( SvTreeListEntry* )
 {
-    DBG_CHKTHIS(SvListView,0);
     return new SvViewDataEntry;
 }
 
@@ -1216,7 +1214,6 @@ void SvListView::Clear()
 
 void SvListView::SetModel( SvTreeList* pNewModel )
 {
-    DBG_CHKTHIS(SvListView,0);
     sal_Bool bBroadcastCleared = sal_False;
     if ( pModel )
     {
@@ -1236,34 +1233,28 @@ void SvListView::SetModel( SvTreeList* pNewModel )
 
 void SvListView::ModelHasCleared()
 {
-    DBG_CHKTHIS(SvListView,0);
 }
 
 void SvListView::ModelHasInserted( SvTreeListEntry* )
 {
-    DBG_CHKTHIS(SvListView,0);
 }
 
 void SvListView::ModelHasInsertedTree( SvTreeListEntry* )
 {
-    DBG_CHKTHIS(SvListView,0);
 }
 
 void SvListView::ModelIsMoving( SvTreeListEntry* /*  pSource */ ,
     SvTreeListEntry* /* pTargetParent */ ,  sal_uLong /* nPos */    )
 {
-    DBG_CHKTHIS(SvListView,0);
 }
 
 
 void SvListView::ModelHasMoved( SvTreeListEntry* )
 {
-    DBG_CHKTHIS(SvListView,0);
 }
 
 void SvListView::ModelIsRemoving( SvTreeListEntry* )
 {
-    DBG_CHKTHIS(SvListView,0);
 }
 
 void SvListView::ModelHasRemoved( SvTreeListEntry* )
@@ -1271,17 +1262,14 @@ void SvListView::ModelHasRemoved( SvTreeListEntry* )
     //WARNING WARNING WARNING
     //The supplied pointer should have been deleted
     //before this call. Be careful not to use it!!!
-    DBG_CHKTHIS(SvListView,0);
 }
 
 void SvListView::ModelHasEntryInvalidated( SvTreeListEntry*)
 {
-    DBG_CHKTHIS(SvListView,0);
 }
 
 void SvListView::ActionMoving( SvTreeListEntry* pEntry,SvTreeListEntry*,sal_uLong)
 {
-    DBG_CHKTHIS(SvListView,0);
     SvTreeListEntry* pParent = pEntry->pParent;
     DBG_ASSERT(pParent,"Model not consistent");
     if (pParent != pModel->pRootItem && pParent->maChildren.size() == 1)
@@ -1298,14 +1286,12 @@ void SvListView::ActionMoved( SvTreeListEntry* /* pEntry */ ,
                             SvTreeListEntry* /* pTargetPrnt */ ,
                             sal_uLong /* nChildPos */ )
 {
-    DBG_CHKTHIS(SvListView,0);
     nVisibleCount = 0;
     bVisPositionsValid = sal_False;
 }
 
 void SvListView::ActionInserted( SvTreeListEntry* pEntry )
 {
-    DBG_CHKTHIS(SvListView,0);
     DBG_ASSERT(pEntry,"Insert:No Entry");
     SvViewDataEntry* pData = CreateViewData( pEntry );
     InitViewData( pData, pEntry );
@@ -1323,7 +1309,6 @@ void SvListView::ActionInserted( SvTreeListEntry* pEntry )
 
 void SvListView::ActionInsertedTree( SvTreeListEntry* pEntry )
 {
-    DBG_CHKTHIS(SvListView,0);
     if ( pModel->IsEntryVisible( this, pEntry ))
     {
         nVisibleCount = 0;
@@ -1361,7 +1346,6 @@ void SvListView::RemoveViewData( SvTreeListEntry* pParent )
 
 void SvListView::ActionRemoving( SvTreeListEntry* pEntry )
 {
-    DBG_CHKTHIS(SvListView,0);
     DBG_ASSERT(pEntry,"Remove:No Entry");
 
     SvViewDataEntry* pViewData = maDataTable.find( pEntry )->second;
@@ -1397,19 +1381,16 @@ void SvListView::ActionRemoving( SvTreeListEntry* pEntry )
 
 void SvListView::ActionRemoved( SvTreeListEntry* /* pEntry  */ )
 {
-    DBG_CHKTHIS(SvListView,0);
 }
 
 void SvListView::ActionClear()
 {
-    DBG_CHKTHIS(SvListView,0);
     Clear();
 }
 
 void SvListView::ModelNotification( sal_uInt16 nActionId, SvTreeListEntry* pEntry1,
                         SvTreeListEntry* pEntry2, sal_uLong nPos )
 {
-    DBG_CHKTHIS(SvListView,0);
     switch( nActionId )
     {
         case LISTACTION_INSERTED:

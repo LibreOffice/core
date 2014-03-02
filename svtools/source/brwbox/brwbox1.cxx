@@ -221,7 +221,6 @@ void BrowseBox::SetRealRowCount( const OUString &rRealRowCount )
 
 void BrowseBox::SetFont( const Font& rNewFont )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
     pDataWin->SetFont( rNewFont );
     ImpGetDataRowHeight();
 }
@@ -237,7 +236,6 @@ sal_uLong BrowseBox::GetDefaultColumnWidth( const OUString& _rText ) const
 
 void BrowseBox::InsertHandleColumn( sal_uLong nWidth )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
 #if OSL_DEBUG_LEVEL > 0
     OSL_ENSURE( ColCount() == 0 || (*pCols)[0]->GetId() != HandleColumnId , "BrowseBox::InsertHandleColumn: there is already a handle column" );
@@ -270,7 +268,6 @@ void BrowseBox::InsertHandleColumn( sal_uLong nWidth )
 void BrowseBox::InsertDataColumn( sal_uInt16 nItemId, const OUString& rText,
         long nWidth, HeaderBarItemBits nBits, sal_uInt16 nPos )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     OSL_ENSURE( nItemId != HandleColumnId, "BrowseBox::InsertDataColumn: nItemId is HandleColumnId" );
     OSL_ENSURE( nItemId != BROWSER_INVALIDID, "BrowseBox::InsertDataColumn: nItemId is reserved value BROWSER_INVALIDID" );
@@ -335,7 +332,6 @@ void BrowseBox::SetToggledSelectedColumn(sal_uInt16 _nSelectedColumnId)
 
 void BrowseBox::FreezeColumn( sal_uInt16 nItemId, sal_Bool bFreeze )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     // never unfreeze the handle-column
     if ( nItemId == HandleColumnId && !bFreeze )
@@ -534,7 +530,6 @@ void BrowseBox::SetColumnPos( sal_uInt16 nColumnId, sal_uInt16 nPos )
 
 void BrowseBox::SetColumnTitle( sal_uInt16 nItemId, const OUString& rTitle )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     // never set title of the handle-column
     if ( nItemId == HandleColumnId )
@@ -580,7 +575,6 @@ void BrowseBox::SetColumnTitle( sal_uInt16 nItemId, const OUString& rTitle )
 
 void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uLong nWidth )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     // get the position in the current array
     size_t nItemPos = GetColumnPos( nItemId );
@@ -702,7 +696,6 @@ void BrowseBox::AutoSizeLastColumn()
 
 void BrowseBox::RemoveColumn( sal_uInt16 nItemId )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     // get column position
     sal_uInt16 nPos = GetColumnPos(nItemId);
@@ -786,7 +779,6 @@ void BrowseBox::RemoveColumn( sal_uInt16 nItemId )
 
 void BrowseBox::RemoveColumns()
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     size_t nOldCount = pCols->size();
 
@@ -858,7 +850,6 @@ void BrowseBox::RemoveColumns()
 
 OUString BrowseBox::GetColumnTitle( sal_uInt16 nId ) const
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     sal_uInt16 nItemPos = GetColumnPos( nId );
     if ( nItemPos >= pCols->size() )
@@ -877,7 +868,6 @@ long BrowseBox::GetRowCount() const
 
 sal_uInt16 BrowseBox::ColCount() const
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     return (sal_uInt16) pCols->size();
 }
@@ -886,7 +876,6 @@ sal_uInt16 BrowseBox::ColCount() const
 
 long BrowseBox::ImpGetDataRowHeight() const
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     BrowseBox *pThis = (BrowseBox*)this;
     pThis->nDataRowHeight = pThis->CalcReverseZoom(pDataWin->GetTextHeight() + 2);
@@ -899,7 +888,6 @@ long BrowseBox::ImpGetDataRowHeight() const
 
 void BrowseBox::SetDataRowHeight( long nPixel )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     nDataRowHeight = CalcReverseZoom(nPixel);
     Resize();
@@ -910,7 +898,6 @@ void BrowseBox::SetDataRowHeight( long nPixel )
 
 void BrowseBox::SetTitleLines( sal_uInt16 nLines )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     nTitleLines = nLines;
 }
@@ -919,7 +906,6 @@ void BrowseBox::SetTitleLines( sal_uInt16 nLines )
 
 long BrowseBox::ScrollColumns( long nCols )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     if ( nFirstCol + nCols < 0 ||
          nFirstCol + nCols >= (long)pCols->size() )
@@ -1063,7 +1049,6 @@ long BrowseBox::ScrollColumns( long nCols )
 
 long BrowseBox::ScrollRows( long nRows )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     // out of range?
     if ( getDataWindow()->bNoScrollBack && nRows < 0 )
@@ -1121,7 +1106,6 @@ long BrowseBox::ScrollRows( long nRows )
 
 void BrowseBox::RowModified( long nRow, sal_uInt16 nColId )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     if ( !GetUpdateMode() )
         return;
@@ -1143,7 +1127,6 @@ void BrowseBox::RowModified( long nRow, sal_uInt16 nColId )
 
 void BrowseBox::Clear()
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     // adjust the total number of rows
     DoHideCursor( "Clear" );
@@ -1208,7 +1191,6 @@ void BrowseBox::Clear()
 
 void BrowseBox::RowInserted( long nRow, long nNumRows, sal_Bool bDoPaint, sal_Bool bKeepSelection )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     if (nRow < 0)
         nRow = 0;
@@ -1314,7 +1296,6 @@ void BrowseBox::RowInserted( long nRow, long nNumRows, sal_Bool bDoPaint, sal_Bo
 
 void BrowseBox::RowRemoved( long nRow, long nNumRows, sal_Bool bDoPaint )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     if ( nRow < 0 )
         nRow = 0;
@@ -1494,7 +1475,6 @@ sal_Bool BrowseBox::GoToRow( long nRow)
 
 sal_Bool BrowseBox::GoToRow( long nRow, sal_Bool bRowColMove, sal_Bool bKeepSelection )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     long nOldCurRow = nCurRow;
 
@@ -1588,7 +1568,6 @@ sal_Bool BrowseBox::GoToColumnId( sal_uInt16 nColId)
 
 sal_Bool BrowseBox::GoToColumnId( sal_uInt16 nColId, sal_Bool bMakeVisible, sal_Bool bRowColMove)
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     if (!bColumnCursor)
         return sal_False;
@@ -1634,7 +1613,6 @@ sal_Bool BrowseBox::GoToColumnId( sal_uInt16 nColId, sal_Bool bMakeVisible, sal_
 
 sal_Bool BrowseBox::GoToRowColumnId( long nRow, sal_uInt16 nColId )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     // out of range?
     if ( nRow < 0 || nRow >= nRowCount )
@@ -1666,7 +1644,6 @@ sal_Bool BrowseBox::GoToRowColumnId( long nRow, sal_uInt16 nColId )
 
 void BrowseBox::SetNoSelection()
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     // is there no selection
     if ( ( !pColSel || !pColSel->GetSelectCount() ) &&
@@ -1707,7 +1684,6 @@ void BrowseBox::SetNoSelection()
 
 void BrowseBox::SelectAll()
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     if ( !bMultiSelection )
         return;
@@ -1774,7 +1750,6 @@ void BrowseBox::SelectAll()
 
 void BrowseBox::SelectRow( long nRow, sal_Bool _bSelect, sal_Bool bExpand )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     if ( !bMultiSelection )
     {
@@ -1848,7 +1823,6 @@ void BrowseBox::SelectRow( long nRow, sal_Bool _bSelect, sal_Bool bExpand )
 
 long BrowseBox::GetSelectRowCount() const
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     return bMultiSelection ? uRow.pSel->GetSelectCount() :
            uRow.nSel == BROWSER_ENDOFSELECTION ? 0 : 1;
@@ -1858,7 +1832,6 @@ long BrowseBox::GetSelectRowCount() const
 
 void BrowseBox::SelectColumnPos( sal_uInt16 nNewColPos, sal_Bool _bSelect, sal_Bool bMakeVisible )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     if ( !bColumnCursor || nNewColPos == BROWSER_INVALIDID )
         return;
@@ -1924,7 +1897,6 @@ void BrowseBox::SelectColumnPos( sal_uInt16 nNewColPos, sal_Bool _bSelect, sal_B
 
 sal_uInt16 BrowseBox::GetSelectColumnCount() const
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     // while bAutoSelect (==!pColSel), 1 if any rows (yes rows!) else none
     return pColSel ? (sal_uInt16) pColSel->GetSelectCount() :
@@ -1941,7 +1913,6 @@ long BrowseBox::FirstSelectedColumn( ) const
 
 long BrowseBox::FirstSelectedRow( sal_Bool bInverse )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     return bMultiSelection ? uRow.pSel->FirstSelected(bInverse) : uRow.nSel;
 }
@@ -1950,7 +1921,6 @@ long BrowseBox::FirstSelectedRow( sal_Bool bInverse )
 
 long BrowseBox::NextSelectedRow()
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     return bMultiSelection ? uRow.pSel->NextSelected() : BROWSER_ENDOFSELECTION;
 }
@@ -1959,7 +1929,6 @@ long BrowseBox::NextSelectedRow()
 
 long BrowseBox::LastSelectedRow()
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     return bMultiSelection ? uRow.pSel->LastSelected() : uRow.nSel;
 }
@@ -1968,7 +1937,6 @@ long BrowseBox::LastSelectedRow()
 
 bool BrowseBox::IsRowSelected( long nRow ) const
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     return bMultiSelection ? uRow.pSel->IsSelected(nRow) : nRow == uRow.nSel;
 }
@@ -1977,7 +1945,6 @@ bool BrowseBox::IsRowSelected( long nRow ) const
 
 bool BrowseBox::IsColumnSelected( sal_uInt16 nColumnId ) const
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     return pColSel ? pColSel->IsSelected( GetColumnPos(nColumnId) ) :
                      nCurColId == nColumnId;
@@ -2068,7 +2035,6 @@ sal_Bool BrowseBox::MakeFieldVisible
 sal_Bool BrowseBox::IsFieldVisible( long nRow, sal_uInt16 nColumnId,
                                 sal_Bool bCompletely ) const
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     // hidden by frozen column?
     sal_uInt16 nColPos = GetColumnPos( nColumnId );
@@ -2095,7 +2061,6 @@ sal_Bool BrowseBox::IsFieldVisible( long nRow, sal_uInt16 nColumnId,
 Rectangle BrowseBox::GetFieldRectPixel( long nRow, sal_uInt16 nColumnId,
                                         sal_Bool bRelToBrowser) const
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     // get the rectangle relative to DataWin
     Rectangle aRect( ImplFieldRectPixel( nRow, nColumnId ) );
@@ -2117,7 +2082,6 @@ Rectangle BrowseBox::GetFieldRectPixel( long nRow, sal_uInt16 nColumnId,
 
 Rectangle BrowseBox::GetRowRectPixel( long nRow, sal_Bool bRelToBrowser  ) const
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     // get the rectangle relative to DataWin
     Rectangle aRect;
@@ -2146,7 +2110,6 @@ Rectangle BrowseBox::GetRowRectPixel( long nRow, sal_Bool bRelToBrowser  ) const
 
 Rectangle BrowseBox::ImplFieldRectPixel( long nRow, sal_uInt16 nColumnId ) const
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     // compute the X-coordinate relative to DataWin by accumulation
     long nColX = 0;
@@ -2177,7 +2140,6 @@ Rectangle BrowseBox::ImplFieldRectPixel( long nRow, sal_uInt16 nColumnId ) const
 
 long BrowseBox::GetRowAtYPosPixel( long nY, sal_Bool bRelToBrowser ) const
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     // compute the Y-coordinate
     if ( bRelToBrowser )
@@ -2198,7 +2160,6 @@ long BrowseBox::GetRowAtYPosPixel( long nY, sal_Bool bRelToBrowser ) const
 
 Rectangle BrowseBox::GetFieldRect( sal_uInt16 nColumnId ) const
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     return GetFieldRectPixel( nCurRow, nColumnId );
 }
@@ -2207,7 +2168,6 @@ Rectangle BrowseBox::GetFieldRect( sal_uInt16 nColumnId ) const
 
 sal_uInt16 BrowseBox::GetColumnAtXPosPixel( long nX, sal_Bool ) const
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     // accumulate the widths of the visible columns
     long nColX = 0;
@@ -2228,7 +2188,6 @@ sal_uInt16 BrowseBox::GetColumnAtXPosPixel( long nX, sal_Bool ) const
 
 void BrowseBox::ReserveControlArea( sal_uInt16 nWidth )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     if ( nWidth != nControlAreaWidth )
     {
@@ -2242,7 +2201,6 @@ void BrowseBox::ReserveControlArea( sal_uInt16 nWidth )
 
 Rectangle BrowseBox::GetControlArea() const
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     return Rectangle(
         Point( 0, GetOutputSizePixel().Height() - aHScroll.GetSizePixel().Height() ),
@@ -2254,7 +2212,6 @@ Rectangle BrowseBox::GetControlArea() const
 
 void BrowseBox::SetMode( BrowserMode nMode )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     getDataWindow()->bAutoHScroll = BROWSER_AUTO_HSCROLL == ( nMode & BROWSER_AUTO_HSCROLL );
     getDataWindow()->bAutoVScroll = BROWSER_AUTO_VSCROLL == ( nMode & BROWSER_AUTO_VSCROLL );
@@ -2385,7 +2342,6 @@ void BrowseBox::SetMode( BrowserMode nMode )
 
 void BrowseBox::VisibleRowsChanged( long, sal_uInt16 )
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     // old behavior: automatically correct NumRows:
     if ( nRowCount < GetRowCount() )
@@ -2494,7 +2450,6 @@ long BrowseBox::CalcReverseZoom(long nVal)
 void BrowseBox::CursorMoved()
 {
     // before implementing more here, please adjust the EditBrowseBox
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     if ( isAccessibleAlive() && HasFocus() )
         commitTableEvent(
@@ -2508,7 +2463,6 @@ void BrowseBox::CursorMoved()
 
 void BrowseBox::LoseFocus()
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
     OSL_TRACE( "BrowseBox: %p->LoseFocus", this );
 
     if ( bHasFocus )
@@ -2531,7 +2485,6 @@ void BrowseBox::LoseFocus()
 
 void BrowseBox::GetFocus()
 {
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
     OSL_TRACE( "BrowseBox: %p->GetFocus", this );
 
     if ( !bHasFocus )

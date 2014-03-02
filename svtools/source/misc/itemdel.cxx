@@ -81,7 +81,6 @@ SfxItemDesruptor_Impl::~SfxItemDesruptor_Impl()
 
 IMPL_LINK_NOARG(SfxItemDesruptor_Impl, Delete)
 {
-    {DBG_CHKTHIS(SfxItemDesruptor_Impl, 0);}
     delete this;
     return 0;
 }

@@ -424,7 +424,6 @@ namespace svt { namespace table
 #endif
 
 #define DBG_CHECK_ME() \
-    DBG_CHKTHIS( TableControl_Impl, TableControl_Impl_checkInvariants )
 
 
     TableControl_Impl::TableControl_Impl( TableControl& _rAntiImpl )
