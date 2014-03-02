@@ -72,8 +72,6 @@
 
 #define FT_MAXIMUM      30
 
-#define DOC_BADFILEPARAHINTS 0x00800000UL
-
 /* Registration definitions */
 enum
 {
