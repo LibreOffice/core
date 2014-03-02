@@ -54,14 +54,12 @@ SfxFrameDescriptor::SfxFrameDescriptor() :
     bHasUI( sal_True ),
     bReadOnly( sal_False )
 {
-    DBG_CTOR(SfxFrameDescriptor, 0);
 
     pImp = new SfxFrameDescriptor_Impl;
 }
 
 SfxFrameDescriptor::~SfxFrameDescriptor()
 {
-    DBG_DTOR(SfxFrameDescriptor, 0);
     delete pImp;
 }
 

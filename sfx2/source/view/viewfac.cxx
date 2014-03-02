@@ -27,7 +27,6 @@ DBG_NAME(SfxViewFactory)
 
 SfxViewShell *SfxViewFactory::CreateInstance(SfxViewFrame *pFrame, SfxViewShell *pOldSh )
 {
-    DBG_CHKTHIS(SfxViewFactory, 0);
     return (*fnCreate)(pFrame, pOldSh);
 }
 
@@ -58,7 +57,6 @@ SfxViewFactory::SfxViewFactory( SfxViewCtor fnC,
     nOrd(nOrdinal),
     m_sViewName( OUString::createFromAscii( asciiViewName ) )
 {
-    DBG_CTOR(SfxViewFactory, 0);
 }
 
 

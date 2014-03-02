@@ -309,7 +309,6 @@ SfxInterface::~SfxInterface()
 
 const SfxSlot* SfxInterface::GetSlot( sal_uInt16 nFuncId ) const
 {
-    DBG_CHKTHIS(SfxInterface, 0);
 
     assert( pSlots );
     assert( nCount );
@@ -345,7 +344,6 @@ const SfxSlot* SfxInterface::GetSlot( const OUString& rCommand ) const
 
 const SfxSlot* SfxInterface::GetRealSlot( const SfxSlot *pSlot ) const
 {
-    DBG_CHKTHIS(SfxInterface, 0);
 
     assert( pSlots );
     assert( nCount );
@@ -365,7 +363,6 @@ const SfxSlot* SfxInterface::GetRealSlot( const SfxSlot *pSlot ) const
 
 const SfxSlot* SfxInterface::GetRealSlot( sal_uInt16 nSlotId ) const
 {
-    DBG_CHKTHIS(SfxInterface, 0);
 
     assert( pSlots );
     assert( nCount );
@@ -386,7 +383,6 @@ const SfxSlot* SfxInterface::GetRealSlot( sal_uInt16 nSlotId ) const
 
 void SfxInterface::RegisterPopupMenu( const ResId& rResId )
 {
-    DBG_CHKTHIS(SfxInterface, 0);
 
     pImpData->aPopupRes = rResId;
 }

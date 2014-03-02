@@ -161,7 +161,6 @@ SfxChildWindow::SfxChildWindow(Window *pParentWindow, sal_uInt16 nId)
     pImp->pWorkWin = NULL;
 
     pContext = 0L;
-    DBG_CTOR(SfxChildWindow,0);
 }
 
 void SfxChildWindow::Destroy()
@@ -188,7 +187,6 @@ void SfxChildWindow::Destroy()
 
 SfxChildWindow::~SfxChildWindow()
 {
-    DBG_DTOR(SfxChildWindow,0);
     delete pContext;
     delete pWindow;
     delete pImp;
@@ -311,7 +309,6 @@ void SfxChildWindow::SaveStatus(const SfxChildWinInfo& rInfo)
 
 void SfxChildWindow::SetAlignment(SfxChildAlignment eAlign)
 {
-    DBG_CHKTHIS(SfxChildWindow,0);
 
     eChildAlignment = eAlign;
 }
@@ -319,7 +316,6 @@ void SfxChildWindow::SetAlignment(SfxChildAlignment eAlign)
 
 SfxChildWinInfo SfxChildWindow::GetInfo() const
 {
-    DBG_CHKTHIS(SfxChildWindow,0);
 
     SfxChildWinInfo aInfo(pImp->pFact->aInfo);
     aInfo.aPos  = pWindow->GetPosPixel();

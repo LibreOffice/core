@@ -179,7 +179,6 @@ SfxVirtualMenu::SfxVirtualMenu( sal_uInt16 nOwnId,
     bHelpInitialized( bWithHelp ),
     bIsAddonPopupMenu( bIsAddonMenu )
 {
-    DBG_CTOR(SfxVirtualMenu, 0);
     pSVMenu = &rMenu;
 
     bResCtor = bRes;
@@ -212,7 +211,6 @@ SfxVirtualMenu::SfxVirtualMenu( Menu *pStarViewMenu, sal_Bool bWithHelp,
     bHelpInitialized( bWithHelp ),
     bIsAddonPopupMenu( bIsAddonMenu )
 {
-    DBG_CTOR(SfxVirtualMenu, 0);
 
     pSVMenu = pStarViewMenu;
 
@@ -241,7 +239,6 @@ SfxVirtualMenu::SfxVirtualMenu( Menu *pStarViewMenu, sal_Bool bWithHelp,
 
 SfxVirtualMenu::~SfxVirtualMenu()
 {
-    DBG_DTOR(SfxVirtualMenu, 0);
 
     DELETEZ( pImageControl );
     SvtMenuOptions().RemoveListenerLink( LINK( this, SfxVirtualMenu, SettingsChanged ) );
@@ -288,7 +285,6 @@ SfxVirtualMenu::~SfxVirtualMenu()
 
 void SfxVirtualMenu::CreateFromSVMenu()
 {
-    DBG_CHKTHIS(SfxVirtualMenu, 0);
 
     // Merge Addon popup menus into the SV Menu
     SfxViewFrame* pViewFrame = pBindings->GetDispatcher()->GetFrame();
@@ -495,7 +491,6 @@ void SfxVirtualMenu::CreateFromSVMenu()
 
 IMPL_LINK_NOARG( SfxVirtualMenu, Highlight )
 {
-    DBG_CHKTHIS(SfxVirtualMenu, 0);
 
     return sal_True;
 }
@@ -787,7 +782,6 @@ void SfxVirtualMenu::InsertAddOnsMenuItem( Menu* pMenu )
 
 IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
 {
-    DBG_CHKTHIS(SfxVirtualMenu, 0);
     DBG_OUTF( ("SfxVirtualMenu %lx activated %lx, own %lx", this, pMenu, pSVMenu));
 
     // MI: for what was it still good for?
@@ -986,7 +980,6 @@ IMPL_LINK( SfxVirtualMenu, Select, Menu *, pMenu )
 
 Menu* SfxVirtualMenu::GetSVMenu() const
 {
-    DBG_CHKTHIS(SfxVirtualMenu, 0);
 
     return pSVMenu;
 }
@@ -997,7 +990,6 @@ Menu* SfxVirtualMenu::GetSVMenu() const
 
 void SfxVirtualMenu::CheckItem( sal_uInt16 nItemId, sal_Bool bCheck )
 {
-    DBG_CHKTHIS(SfxVirtualMenu, 0);
     DBG_ASSERT( this != 0, "");
     DBG_ASSERT( pSVMenu != 0, "" );
     if (pSVMenu->GetItemPos( nItemId ) != MENU_ITEM_NOTFOUND )
@@ -1009,7 +1001,6 @@ void SfxVirtualMenu::CheckItem( sal_uInt16 nItemId, sal_Bool bCheck )
 
 void SfxVirtualMenu::EnableItem( sal_uInt16 nItemId, sal_Bool bEnable )
 {
-    DBG_CHKTHIS(SfxVirtualMenu, 0);
     DBG_ASSERT( this != 0, "");
     DBG_ASSERT( pSVMenu != 0, "" );
 
@@ -1022,7 +1013,6 @@ void SfxVirtualMenu::EnableItem( sal_uInt16 nItemId, sal_Bool bEnable )
 
 void SfxVirtualMenu::SetItemText( sal_uInt16 nItemId, const OUString& rText )
 {
-    DBG_CHKTHIS(SfxVirtualMenu, 0);
     DBG_ASSERT( this != 0, "");
     DBG_ASSERT( pSVMenu != 0, "" );
     if (pSVMenu->GetItemPos( nItemId ) != MENU_ITEM_NOTFOUND )
@@ -1034,7 +1024,6 @@ void SfxVirtualMenu::SetItemText( sal_uInt16 nItemId, const OUString& rText )
 
 void SfxVirtualMenu::SetPopupMenu( sal_uInt16 nItemId, PopupMenu *pMenu )
 {
-    DBG_CHKTHIS(SfxVirtualMenu, 0);
 
     if (pSVMenu->GetItemPos( nItemId ) != MENU_ITEM_NOTFOUND )
         GetSVMenu()->SetPopupMenu( nItemId, pMenu );
@@ -1052,7 +1041,6 @@ void SfxVirtualMenu::SetPopupMenu( sal_uInt16 nItemId, PopupMenu *pMenu )
 
 void SfxVirtualMenu::InitPopup( sal_uInt16 nPos, sal_Bool /*bOLE*/ )
 {
-    DBG_CHKTHIS(SfxVirtualMenu, 0);
 
     sal_uInt16 nSID = pSVMenu->GetItemId(nPos);
     PopupMenu *pMenu = pSVMenu->GetPopupMenu( nSID );

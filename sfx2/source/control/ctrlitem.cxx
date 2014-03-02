@@ -57,7 +57,6 @@ void SfxControllerItem::CheckConfigure_Impl( sal_uIntPtr nType )
 
 SfxControllerItem* SfxControllerItem::GetItemLink()
 {
-    DBG_CHKTHIS(SfxControllerItem, 0);
     return pNext == this ? 0 : pNext;
 }
 
@@ -66,7 +65,6 @@ SfxControllerItem* SfxControllerItem::GetItemLink()
 
 sal_Bool SfxControllerItem::IsBound() const
 {
-    DBG_CHKTHIS(SfxControllerItem, 0);
     return pNext != this;
 }
 
@@ -75,7 +73,6 @@ sal_Bool SfxControllerItem::IsBound() const
 
 void SfxControllerItem::Bind( sal_uInt16 nNewId, SfxBindings *pBindinx )
 {
-    DBG_CHKTHIS(SfxControllerItem, 0);
     DBG_ASSERT(pBindings || pBindinx, "No Bindings");
 
     if ( IsBound() ) {
@@ -93,7 +90,6 @@ void SfxControllerItem::Bind( sal_uInt16 nNewId, SfxBindings *pBindinx )
 
 void SfxControllerItem::BindInternal_Impl( sal_uInt16 nNewId, SfxBindings *pBindinx )
 {
-    DBG_CHKTHIS(SfxControllerItem, 0);
     DBG_ASSERT(pBindings || pBindinx, "No Bindings");
 
     if ( IsBound() ) {
@@ -127,7 +123,6 @@ void SfxControllerItem::UnBind()
     <SfxControllerItem::ClearCache()>
 */
 {
-    DBG_CHKTHIS(SfxControllerItem, 0);
     DBG_ASSERT(pBindings, "No Bindings");
     DBG_ASSERT( IsBound(), "unbindings unbound SfxControllerItem" );
 
@@ -152,7 +147,6 @@ void SfxControllerItem::ReBind()
 */
 
 {
-DBG_CHKTHIS(SfxControllerItem, 0);
     DBG_ASSERT(pBindings, "No Bindings");
     DBG_ASSERT( !IsBound(), "bindings rebound SfxControllerItem" );
 
@@ -184,7 +178,6 @@ void SfxControllerItem::ClearCache()
 
 
 {
-    DBG_CHKTHIS(SfxControllerItem, 0);
     DBG_ASSERT(pBindings, "No Bindings");
 
     pBindings->ClearCache_Impl( GetId() );
@@ -195,7 +188,6 @@ void SfxControllerItem::ClearCache()
 
 SfxControllerItem* SfxControllerItem::ChangeItemLink( SfxControllerItem* pNewLink )
 {
-    DBG_CHKTHIS(SfxControllerItem, 0);
     SfxControllerItem* pOldLink = pNext;
     pNext = pNewLink;
     return pOldLink == this ? 0 : pOldLink;
@@ -206,7 +198,6 @@ SfxControllerItem* SfxControllerItem::ChangeItemLink( SfxControllerItem* pNewLin
 
 void SfxControllerItem::SetId( sal_uInt16 nItemId )
 {
-    DBG_CHKTHIS(SfxControllerItem, 0);
     DBG_ASSERT( !IsBound(), "changing id of bound binding" );
     nId = nItemId;
 }
@@ -220,7 +211,6 @@ SfxControllerItem::SfxControllerItem():
     pNext(this),
     pBindings(0)
 {
-    DBG_CTOR(SfxControllerItem, 0);
 }
 
 
@@ -231,7 +221,6 @@ SfxControllerItem::SfxControllerItem( sal_uInt16 nID, SfxBindings &rBindings ):
     pNext(this),
     pBindings(&rBindings)
 {
-    DBG_CTOR(SfxControllerItem, 0);
     Bind(nId, &rBindings);
 }
 
@@ -242,7 +231,6 @@ SfxControllerItem::~SfxControllerItem()
 {
     if ( IsBound() )
         pBindings->Release(*this);
-    DBG_DTOR(SfxControllerItem, 0);
 }
 
 
@@ -275,14 +263,12 @@ void SfxControllerItem::StateChanged
 */
 
 {
-    DBG_CHKTHIS(SfxControllerItem, 0);
 }
 
 
 
 void SfxControllerItem::DeleteFloatingWindow()
 {
-    DBG_CHKTHIS(SfxControllerItem, 0);
 }
 
 

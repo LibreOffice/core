@@ -523,7 +523,6 @@ SfxBaseModel::SfxBaseModel( SfxObjectShell *pObjectShell )
 , m_bSupportEmbeddedScripts( pObjectShell && pObjectShell->Get_Impl() ? !pObjectShell->Get_Impl()->m_bNoBasicCapabilities : false )
 , m_bSupportDocRecovery( pObjectShell && pObjectShell->Get_Impl() ? pObjectShell->Get_Impl()->m_bDocRecoverySupport : false )
 {
-    DBG_CTOR(sfx2_SfxBaseModel,NULL);
     if ( pObjectShell != NULL )
     {
         StartListening( *pObjectShell ) ;
@@ -536,7 +535,6 @@ SfxBaseModel::SfxBaseModel( SfxObjectShell *pObjectShell )
 
 SfxBaseModel::~SfxBaseModel()
 {
-    DBG_DTOR(sfx2_SfxBaseModel,NULL);
 }
 
 

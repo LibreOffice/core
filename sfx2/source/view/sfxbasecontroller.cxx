@@ -475,7 +475,6 @@ DBG_NAME(sfx2_SfxBaseController)
 SfxBaseController::SfxBaseController( SfxViewShell* pViewShell )
     :   m_pData ( new IMPL_SfxBaseController_DataContainer( m_aMutex, pViewShell, this ))
 {
-    DBG_CTOR(sfx2_SfxBaseController,NULL);
     m_pData->m_pViewShell->SetController( this );
 }
 
@@ -485,7 +484,6 @@ SfxBaseController::SfxBaseController( SfxViewShell* pViewShell )
 
 SfxBaseController::~SfxBaseController()
 {
-    DBG_DTOR(sfx2_SfxBaseController,NULL);
     delete m_pData;
 }
 

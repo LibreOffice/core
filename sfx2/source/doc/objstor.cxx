@@ -2569,7 +2569,6 @@ sal_Bool SfxObjectShell::Save_Impl( const SfxItemSet* pSet )
         return sal_False;
     }
 
-    DBG_CHKTHIS(SfxObjectShell, 0);
 
     pImp->bIsSaving = sal_True;
     sal_Bool bSaved = sal_False;

@@ -607,7 +607,6 @@ SfxWorkWindow::SfxWorkWindow( Window *pWin, SfxBindings& rB, SfxWorkWindow* pPar
     m_aTbxTypeName( "private:resource/toolbar/" ),
     m_aProgressBarResName( "private:resource/progressbar/progressbar" )
 {
-    DBG_CTOR(SfxWorkWindow, 0);
     DBG_ASSERT (pBindings, "No Bindings!");
 
     pBindings->SetWorkWindow_Impl( this );
@@ -630,7 +629,6 @@ SfxWorkWindow::SfxWorkWindow( Window *pWin, SfxBindings& rB, SfxWorkWindow* pPar
 
 SfxWorkWindow::~SfxWorkWindow()
 {
-    DBG_DTOR(SfxWorkWindow, 0);
 
     // Delete SplitWindows
     for ( sal_uInt16 n=0; n<SFX_SPLITWINDOWS_MAX; n++ )
@@ -672,7 +670,6 @@ void SfxWorkWindow::Lock_Impl( sal_Bool bLock )
 
 void SfxWorkWindow::DeleteControllers_Impl()
 {
-    DBG_CHKTHIS(SfxWorkWindow, 0);
 
     // Lock SplitWindows (which means supressing the Resize-Reaction of the
     // DockingWindows)
@@ -813,7 +810,6 @@ SvBorder SfxWorkWindow::Arrange_Impl()
     ClientArea, it is set to "not visible".
 */
 {
-    DBG_CHKTHIS(SfxWorkWindow, 0);
 
     aClientArea = GetTopRect_Impl();
     aUpperClientArea = aClientArea;
@@ -972,7 +968,6 @@ sal_Bool SfxWorkWindow::PrepareClose_Impl()
 SfxChild_Impl* SfxWorkWindow::RegisterChild_Impl( Window& rWindow,
                     SfxChildAlignment eAlign, sal_Bool bCanGetFocus )
 {
-    DBG_CHKTHIS(SfxWorkWindow, 0);
     DBG_ASSERT( aChildren.size() < 255, "too many children" );
     DBG_ASSERT( SfxChildAlignValid(eAlign), "invalid align" );
     DBG_ASSERT( !FindChild_Impl(rWindow), "child registered more than once" );
@@ -995,7 +990,6 @@ SfxChild_Impl* SfxWorkWindow::RegisterChild_Impl( Window& rWindow,
 
 void SfxWorkWindow::ReleaseChild_Impl( Window& rWindow )
 {
-    DBG_CHKTHIS(SfxWorkWindow, 0);
 
     SfxChild_Impl *pChild = 0;
     sal_uInt16 nPos;
@@ -1022,7 +1016,6 @@ void SfxWorkWindow::ReleaseChild_Impl( Window& rWindow )
 
 SfxChild_Impl* SfxWorkWindow::FindChild_Impl( const Window& rWindow ) const
 {
-    DBG_CHKTHIS(SfxWorkWindow, 0);
 
     SfxChild_Impl *pChild = 0;
     sal_uInt16 nCount = aChildren.size();
@@ -1040,7 +1033,6 @@ SfxChild_Impl* SfxWorkWindow::FindChild_Impl( const Window& rWindow ) const
 
 void SfxWorkWindow::ShowChildren_Impl()
 {
-    DBG_CHKTHIS(SfxWorkWindow, 0);
 
     bool bInvisible = ( !IsVisible_Impl() || ( !pWorkWin->IsReallyVisible() && !pWorkWin->IsReallyShown() ));
 

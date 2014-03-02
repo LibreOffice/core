@@ -354,7 +354,6 @@ void SfxObjectShell::ModifyChanged()
         // SetModified dispose of the models!
         return;
 
-    {DBG_CHKTHIS(SfxObjectShell, 0);}
 
     SfxViewFrame* pViewFrame = SfxViewFrame::Current();
     if ( pViewFrame )
@@ -715,7 +714,6 @@ void SfxObjectShell::SetTitle
 */
 
 {
-    DBG_CHKTHIS(SfxObjectShell, 0);
 
     // Nothing to do?
     if ( ( ( HasName() && pImp->aTitle == rTitle )
