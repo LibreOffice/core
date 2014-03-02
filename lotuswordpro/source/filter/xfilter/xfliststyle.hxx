@@ -141,6 +141,7 @@ class XFListLevelBullet : public XFListLevel
 {
 public:
     XFListLevelBullet()
+        : m_chBullet(0)
     {
         m_eListType = enumXFListLevelBullet;
     }
