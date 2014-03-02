@@ -399,7 +399,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     ::std::vector< OUString > aExcludedChartNames;
     ScRangeListVector aProtectedChartRangesVector;
 
-    if ( rMEvt.IsLeft() )
+    if (pView && rMEvt.IsLeft())
     {
         if ( pView->IsDragObj() )
         {
@@ -504,7 +504,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     }
 
     sal_uInt16 nClicks = rMEvt.GetClicks();
-    if ( nClicks == 2 && rMEvt.IsLeft() )
+    if (pView && nClicks == 2 && rMEvt.IsLeft())
     {
         if ( pView->AreObjectsMarked() )
         {
