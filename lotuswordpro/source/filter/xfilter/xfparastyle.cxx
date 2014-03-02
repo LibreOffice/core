@@ -66,63 +66,62 @@
 #include "xfbgimage.hxx"
 
 XFParaStyle::XFParaStyle()
+    : m_eAlignType(enumXFAlignNone)
+    , m_eLastLineAlign(enumXFAlignNone)
+    , m_bJustSingleWord(sal_False)
+    , m_bKeepWithNext(sal_False)
+    , m_fTextIndent(0)
+    , m_pFont(NULL)
+    , m_pBorders(NULL)
+    , m_pBGImage(NULL)
+    , m_nPageNumber(0)
+    , m_bNumberLines(sal_True)
+    , m_nLineNumberRestart(0)
+    , m_nFlag(0)
+    , m_bNumberRight(sal_False)
 {
-    //init member variables:
-    m_nFlag = 0;
-    m_eAlignType = enumXFAlignNone;
-    m_eLastLineAlign = enumXFAlignNone;
-    m_bJustSingleWord = sal_False;
-    m_bKeepWithNext = sal_False;
-    m_nPageNumber = 0;
-    m_fTextIndent = 0;
-
-    m_pFont = NULL;
-    m_pBorders = NULL;
-    m_pBGImage = NULL;
-
-    m_nLineNumberRestart = 0;
-    m_bNumberLines = sal_True;
-    m_bNumberRight = sal_False;
 }
 
-XFParaStyle::XFParaStyle(const XFParaStyle& other) : XFStyle(other)
+
+XFParaStyle::XFParaStyle(const XFParaStyle& other)
+    : XFStyle(other)
+    , m_eAlignType(other.m_eAlignType)
+    , m_eLastLineAlign(other.m_eLastLineAlign)
+    , m_bJustSingleWord(other.m_bJustSingleWord)
+    , m_bKeepWithNext(other.m_bKeepWithNext)
+    , m_fTextIndent(other.m_fTextIndent)
+    , m_aBackColor(other.m_aBackColor)
+    , m_aMargin(other.m_aMargin)
+    , m_aPadding(other.m_aPadding)
+    , m_pFont(other.m_pFont)
+    , m_aShadow(other.m_aShadow)
+    , m_aDropcap(other.m_aDropcap)
+    , m_aLineHeight(other.m_aLineHeight)
+    , m_aBreaks(other.m_aBreaks)
+    , m_nPageNumber(other.m_nPageNumber)
+    , m_bNumberLines(other.m_bNumberLines)
+    , m_nLineNumberRestart(other.m_nLineNumberRestart)
+    , m_nFlag(other.m_nFlag)
+    , m_bNumberRight(other.m_bNumberRight)
 {
     m_strParentStyleName = other.m_strParentStyleName;
-    m_nFlag = other.m_nFlag;
-    m_eAlignType = other.m_eAlignType;
-    m_fTextIndent = other.m_fTextIndent;
-    m_bNumberLines = other.m_bNumberLines;
-    m_nLineNumberRestart = other.m_nLineNumberRestart;
-    m_bNumberRight = other.m_bNumberRight;
-
-    if( other.m_pFont )
-        m_pFont = other.m_pFont;
-    else
-        m_pFont = NULL;
 
     if( other.m_pBorders )
         m_pBorders = new XFBorders(*other.m_pBorders);
     else
         m_pBorders = NULL;
-    m_aBackColor = other.m_aBackColor;
+
     if( other.m_pBGImage )
         m_pBGImage = new XFBGImage(*other.m_pBGImage);
     else
         m_pBGImage = NULL;
 
-    m_aShadow = other.m_aShadow;
-    m_aMargin = other.m_aMargin;
-    m_aDropcap = other.m_aDropcap;
-    m_aLineHeight = other.m_aLineHeight;
-    m_aPadding = other.m_aPadding;
-    m_aBreaks = other.m_aBreaks;
-
-    for (size_t i=0; i<other.m_aTabs.GetCount(); ++i)
+    for (size_t i = 0; i < other.m_aTabs.GetCount(); ++i)
     {
-        const IXFStyle *pStyle = other.m_aTabs.Item(i);
+        const IXFStyle* pStyle = other.m_aTabs.Item(i);
         if( pStyle )
         {
-            const XFTabStyle *pTabStyle = dynamic_cast<const XFTabStyle*>(pStyle);
+            const XFTabStyle* pTabStyle = dynamic_cast<const XFTabStyle*>(pStyle);
             if( pTabStyle )
             {
                 XFTabStyle *pCopyStyle = new XFTabStyle(*pTabStyle);
