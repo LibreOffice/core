@@ -84,8 +84,7 @@ ScMyDeleted::ScMyDeleted()
 
 ScMyDeleted::~ScMyDeleted()
 {
-    if (pCellInfo)
-        delete pCellInfo;
+    delete pCellInfo;
 }
 
 ScMyGenerated::ScMyGenerated(ScMyCellInfo* pTempCellInfo, const ScBigRange& aTempBigRange)
@@ -97,8 +96,7 @@ ScMyGenerated::ScMyGenerated(ScMyCellInfo* pTempCellInfo, const ScBigRange& aTem
 
 ScMyGenerated::~ScMyGenerated()
 {
-    if (pCellInfo)
-        delete pCellInfo;
+    delete pCellInfo;
 }
 
 ScMyBaseAction::ScMyBaseAction(const ScChangeActionType nTempActionType)
@@ -162,8 +160,7 @@ ScMyContentAction::ScMyContentAction()
 
 ScMyContentAction::~ScMyContentAction()
 {
-    if (pCellInfo)
-        delete pCellInfo;
+    delete pCellInfo;
 }
 
 ScMyRejAction::ScMyRejAction()
