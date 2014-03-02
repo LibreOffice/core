@@ -981,7 +981,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range1DataModifyHdl)
 {
     OUString aNewArea( pEdAssign->GetText() );
     sal_Bool bValid = false;
-    if ( !aNewArea.isEmpty() )
+    if (!aNewArea.isEmpty() && pDoc)
     {
         ScRange aRange;
         if ( (aRange.ParseAny( aNewArea, pDoc, pDoc->GetAddressConvention() ) & SCA_VALID) == SCA_VALID )
