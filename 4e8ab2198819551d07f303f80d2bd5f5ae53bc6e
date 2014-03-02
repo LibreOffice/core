@@ -104,6 +104,24 @@
       "revId": "4e8ab2198819551d07f303f80d2bd5f5ae53bc6e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_ab78692c",
+        "filename": "external/curl/ExternalProject_curl.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-03-02T18:13:02Z",
+      "side": 1,
+      "message": "not really: the gerrit buildbot only does one particular configuration, and i don\u0027t know if it even builds the internal curl.  what could happen is that in a --without-system-libs configuration (such as TDF release build) the curl uses the system NSS because the path parameter to --with-nss is missing and then the library won\u0027t load on some random Linux distro because its system NSS is the wrong version...",
+      "parentUuid": "1a930d6b_8bf80dc6",
+      "revId": "4e8ab2198819551d07f303f80d2bd5f5ae53bc6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
