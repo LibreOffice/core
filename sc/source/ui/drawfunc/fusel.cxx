@@ -492,7 +492,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     /**************************************************************************
     * Ggf. OLE-Objekt beruecksichtigen
     **************************************************************************/
-    SfxInPlaceClient* pIPClient = pViewShell->GetIPClient();
+    SfxInPlaceClient* pIPClient = pViewShell ? pViewShell->GetIPClient() : NULL;
 
     if (pIPClient)
     {
