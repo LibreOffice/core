@@ -1052,19 +1052,18 @@ bool Bitmap::ImplScaleFast( const double& rScaleX, const double& rScaleY )
 
                 if( nNewWidth1 && nNewHeight1 )
                 {
-                    long nX, nY, nMapY, nActY = 0L;
-
-                    for( nX = 0L; nX < nNewWidth; nX++ )
+                    for( long nX = 0L; nX < nNewWidth; nX++ )
                         pLutX[ nX ] = nX * nWidth / nNewWidth;
 
-                    for( nY = 0L; nY < nNewHeight; nY++ )
+                    for( long nY = 0L; nY < nNewHeight; nY++ )
                         pLutY[ nY ] = nY * nHeight / nNewHeight;
 
+                    long nActY = 0L;
                     while( nActY < nNewHeight )
                     {
-                        nMapY = pLutY[ nActY ];
+                        long nMapY = pLutY[ nActY ];
 
-                        for( nX = 0L; nX < nNewWidth; nX++ )
+                        for( long nX = 0L; nX < nNewWidth; nX++ )
                             pWriteAcc->SetPixel( nActY, nX, pReadAcc->GetPixel( nMapY , pLutX[ nX ] ) );
 
                         while( ( nActY < nNewHeight1 ) && ( pLutY[ nActY + 1 ] == nMapY ) )
@@ -2552,8 +2551,6 @@ bool Bitmap::ImplDitherFloyd()
             long nW2 = nW - 3L;
             long nRErr, nGErr, nBErr;
             long nRC, nGC, nBC;
-            long nTemp;
-            long nZ;
             long* p1 = new long[ nW ];
             long* p2 = new long[ nW ];
             long* p1T = p1;
@@ -2565,7 +2562,7 @@ bool Bitmap::ImplDitherFloyd()
 
             if( bPal )
             {
-                for( nZ = 0; nZ < nWidth; nZ++ )
+                for( long nZ = 0; nZ < nWidth; nZ++ )
                 {
                     aColor = pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( 0, nZ ) );
 
@@ -2576,7 +2573,7 @@ bool Bitmap::ImplDitherFloyd()
             }
             else
             {
-                for( nZ = 0; nZ < nWidth; nZ++ )
+                for( long nZ = 0; nZ < nWidth; nZ++ )
                 {
                     aColor = pReadAcc->GetPixel( 0, nZ );
 
@@ -2596,7 +2593,7 @@ bool Bitmap::ImplDitherFloyd()
                 {
                     if( bPal )
                     {
-                        for( nZ = 0; nZ < nWidth; nZ++ )
+                        for( long nZ = 0; nZ < nWidth; nZ++ )
                         {
                             aColor = pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( nY, nZ ) );
 
@@ -2607,7 +2604,7 @@ bool Bitmap::ImplDitherFloyd()
                     }
                     else
                     {
-                        for( nZ = 0; nZ < nWidth; nZ++ )
+                        for( long nZ = 0; nZ < nWidth; nZ++ )
                         {
                             aColor = pReadAcc->GetPixel( nY, nZ );
 
@@ -2620,6 +2617,7 @@ bool Bitmap::ImplDitherFloyd()
 
                 // Examine first Pixel separately
                 nX = 0;
+                long nTemp;
                 CALC_ERRORS;
                 CALC_TABLES7;
                 nX -= 5;
