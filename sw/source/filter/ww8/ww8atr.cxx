@@ -2869,7 +2869,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
         {
             const SwInputField * pInputField = dynamic_cast<const SwInputField *>(pFld);
 
-            if (pInputField->isFormField())
+            if (pInputField && pInputField->isFormField())
                 GetExport().DoFormText(pInputField);
             else
             {
