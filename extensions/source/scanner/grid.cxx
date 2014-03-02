@@ -563,27 +563,30 @@ IMPL_LINK( GridWindow, ClickButtonHdl, Button*, pButton )
                 break;
         }
 
-        for(sal_uInt32 i(0L); i < m_aHandles.size(); i++)
+        if (m_pNewYValues)
         {
-            // find nearest xvalue
-            double x, y;
-            transform( m_aHandles[i].maPos, x, y );
-            int nIndex = 0;
-            double delta = std::fabs( x-m_pXValues[0] );
-            for( int n = 1; n < m_nValues; n++ )
+            for(sal_uInt32 i(0L); i < m_aHandles.size(); i++)
             {
-                if( delta > std::fabs( x - m_pXValues[ n ] ) )
+                // find nearest xvalue
+                double x, y;
+                transform( m_aHandles[i].maPos, x, y );
+                int nIndex = 0;
+                double delta = std::fabs( x-m_pXValues[0] );
+                for( int n = 1; n < m_nValues; n++ )
                 {
-                    delta = std::fabs( x - m_pXValues[ n ] );
-                    nIndex = n;
+                    if( delta > std::fabs( x - m_pXValues[ n ] ) )
+                    {
+                        delta = std::fabs( x - m_pXValues[ n ] );
+                        nIndex = n;
+                    }
                 }
+                if( 0 == i )
+                    m_aHandles[i].maPos = transform( m_fMinX, m_pNewYValues[ nIndex ] );
+                else if( m_aHandles.size() - 1L == i )
+                    m_aHandles[i].maPos = transform( m_fMaxX, m_pNewYValues[ nIndex ] );
+                else
+                    m_aHandles[i].maPos = transform( m_pXValues[ nIndex ], m_pNewYValues[ nIndex ] );
             }
-            if( 0 == i )
-                m_aHandles[i].maPos = transform( m_fMinX, m_pNewYValues[ nIndex ] );
-            else if( m_aHandles.size() - 1L == i )
-                m_aHandles[i].maPos = transform( m_fMaxX, m_pNewYValues[ nIndex ] );
-            else
-                m_aHandles[i].maPos = transform( m_pXValues[ nIndex ], m_pNewYValues[ nIndex ] );
         }
 
         Invalidate( m_aGridArea );
