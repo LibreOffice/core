@@ -64,9 +64,9 @@ long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
     switch ( nEvent )
     {
         case SALOBJ_EVENT_GETFOCUS:
-            // Focus holen und zwar so, das alle Handler gerufen
-            // werden, als ob dieses Fenster den Focus bekommt,
-            // ohne das der Frame den Focus wieder klaut
+            // get focus, such that all handlers are called,
+            // as if this window gets the focus assuring
+            // that the frame does not steal it
             pWindow->ImplGetFrameData()->mbSysObjFocus = true;
             pWindow->ImplGetFrameData()->mbInSysObjToTopHdl = true;
             pWindow->ToTop( TOTOP_NOGRABFOCUS );
@@ -81,9 +81,8 @@ long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
             break;
 
         case SALOBJ_EVENT_LOSEFOCUS:
-            // Hintenrum einen LoseFocus ausloesen, das der Status
-            // der Fenster dem entsprechenden Activate-Status
-            // entspricht
+            // trigger a LoseFocus which matches the status
+            // of the window with matching Activate-Status
             pWindow->ImplGetFrameData()->mbSysObjFocus = false;
             if ( !pWindow->ImplGetFrameData()->mnFocusId )
             {
@@ -118,7 +117,7 @@ void SystemChildWindow::ImplInitSysChild( Window* pParent, WinBits nStyle, Syste
 
     Window::ImplInit( pParent, nStyle, NULL );
 
-    // Wenn es ein richtiges SysChild ist, dann painten wir auch nicht
+    // we do not paint if it is the right SysChild
     if ( GetSystemData() )
     {
         mpWindowImpl->mpSysObj->SetCallback( this, ImplSysChildProc );
