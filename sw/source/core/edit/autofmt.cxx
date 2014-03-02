@@ -1391,7 +1391,6 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
     // replace bullet character with defined one
     const OUString& rStr = m_pCurTxtNd->GetTxt();
     sal_Int32 nTxtStt = 0;
-    const sal_Int32 nOrigTxtStt = 0;
     const sal_Unicode* pFndBulletChr;
     if( m_aFlags.bChgEnumNum &&
         2 < rStr.getLength() &&
@@ -1587,7 +1586,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
         }
         else
             m_aDelPam.GetPoint()->nContent.Assign( m_pCurTxtNd,
-                        bChgEnum ? (nTxtStt - nOrigTxtStt) : 0 );
+                        bChgEnum ? nTxtStt : 0 );
         m_aDelPam.SetMark();
 
         if( bChgBullet )
@@ -1596,7 +1595,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
         while( nTxtStt < rStr.getLength() && IsSpace( rStr[ nTxtStt ] ))
             nTxtStt++;
 
-        m_aDelPam.GetPoint()->nContent = nTxtStt - nOrigTxtStt;
+        m_aDelPam.GetPoint()->nContent = nTxtStt;
         DeleteSel( m_aDelPam );
 
         if( !m_aFlags.bSetNumRule )
