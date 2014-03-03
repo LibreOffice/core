@@ -210,7 +210,17 @@ RTFValue* RTFValue::Clone()
 
 bool RTFValue::equals(RTFValue& rOther)
 {
-    return m_nValue == rOther.m_nValue;
+    if (m_nValue != rOther.m_nValue)
+        return false;
+    if (m_pAttributes->size() != rOther.m_pAttributes->size())
+        return false;
+    else if (!m_pAttributes->equals(rOther))
+        return false;
+    if (m_pSprms->size() != rOther.m_pSprms->size())
+        return false;
+    else if (!m_pSprms->equals(rOther))
+        return false;
+    return true;
 }
 
 RTFSprms& RTFValue::getAttributes()
