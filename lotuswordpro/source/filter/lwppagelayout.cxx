@@ -895,6 +895,7 @@ void LwpHeaderLayout::RegisterStyle(XFMasterPage* mp1)
 
 LwpFooterLayout::LwpFooterLayout( LwpObjectHeader &objHdr, LwpSvStream* pStrm )
     : LwpPlacableLayout( objHdr, pStrm )
+    , m_nBorderOffset(0)
 {
 }
 
