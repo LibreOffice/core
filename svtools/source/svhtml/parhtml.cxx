@@ -355,14 +355,19 @@ int HTMLParser::FilterToken( int nToken )
         bIsInBody = true;
         bIsInHeader = false;
         break;
+
     case HTML_HEAD_ON:
         bIsInHeader = true;
         break;
 
     case HTML_BODY_ON:
+        bIsInHeader = false;
+        bIsInBody = true;
+        break;
+
     case HTML_FRAMESET_ON:
         bIsInHeader = false;
-        bIsInBody = HTML_BODY_ON == nToken;
+        bIsInBody = false;
         break;
 
     case HTML_BODY_OFF:
