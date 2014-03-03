@@ -761,7 +761,11 @@ void SalAquaFilePicker::updateSaveFileNameExtension() {
         rtl::OUString suffix = (*(aStringList.begin())).copy(1);
         NSString *requiredFileType = [NSString stringWithOUString:suffix];
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED < 1060
+        [m_pDialog setRequiredFileType:requiredFileType];
+#else
         [m_pDialog setAllowedFileTypes:[NSArray arrayWithObjects:requiredFileType, nil]];
+#endif
 
         OSL_TRACE("disallowing other file types");
         [m_pDialog setAllowsOtherFileTypes:NO];
