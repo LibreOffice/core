@@ -115,25 +115,6 @@ AccessibleShape::AccessibleShape (
     UpdateNameAndDescription();
 }
 
-AccessibleShape::AccessibleShape (
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::XShape>& rxShape,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible>& rxParent,
-        const AccessibleShapeTreeInfo& rShapeTreeInfo,
-        sal_Int32 nIndex)
-    : AccessibleContextBase (rxParent,AccessibleRole::SHAPE),
-      mpChildrenManager(NULL),
-      mxShape (rxShape),
-      maShapeTreeInfo (rShapeTreeInfo),
-      mnIndex (nIndex),
-      m_nIndexInParent(-1),
-      mpText (NULL),
-      mpParent (NULL)
-{
-    m_pShape = GetSdrObjectFromXShape(mxShape);
-}
-
 AccessibleShape::~AccessibleShape (void)
 {
     delete mpChildrenManager;

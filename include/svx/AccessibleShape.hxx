@@ -105,8 +105,6 @@ public:
     AccessibleShape (
         const AccessibleShapeInfo& rShapeInfo,
         const AccessibleShapeTreeInfo& rShapeTreeInfo);
-    AccessibleShape (
-        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape>& rxShape, const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible>& rxParent, const AccessibleShapeTreeInfo& rShapeTreeInfo, sal_Int32 nIndex = -1);
      //Solution: Overwrite the object's current name.
     virtual OUString SAL_CALL    getAccessibleName (void) throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual OUString SAL_CALL    getAccessibleDescription() throw (::com::sun::star::uno::RuntimeException, std::exception);

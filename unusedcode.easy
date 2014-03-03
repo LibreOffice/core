@@ -97,7 +97,6 @@ UnoApiTest::closeDocument(com::sun::star::uno::Reference<com::sun::star::lang::X
 VclMultiLineEdit::IsRightToLeft() const
 VclMultiLineEdit::SetTextSelectable(bool)
 accessibility::AccessibleParaManager::Release(int)
-accessibility::AccessibleShape::AccessibleShape(com::sun::star::uno::Reference<com::sun::star::drawing::XShape> const&, com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible> const&, accessibility::AccessibleShapeTreeInfo const&, int)
 apitest::CellProperties::testRotateReference()
 apitest::CellProperties::testVertJustify()
 apitest::DataPilotField::testAutoShowInfo()
