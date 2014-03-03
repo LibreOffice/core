@@ -404,10 +404,10 @@ void ScOrcusSharedStrings::set_segment_font_size(double /*point*/)
 {
 }
 
-void ScOrcusSharedStrings::set_segment_font_color(orcus::spreadsheet::color_elem_t alpha,
-            orcus::spreadsheet::color_elem_t red,
-            orcus::spreadsheet::color_elem_t green,
-            orcus::spreadsheet::color_elem_t blue)
+void ScOrcusSharedStrings::set_segment_font_color(orcus::spreadsheet::color_elem_t,
+            orcus::spreadsheet::color_elem_t,
+            orcus::spreadsheet::color_elem_t,
+            orcus::spreadsheet::color_elem_t)
 {
 }
 
@@ -447,10 +447,10 @@ void ScOrcusStyles::set_font_underline(orcus::spreadsheet::underline_t /*e*/)
 {
 }
 
-void ScOrcusStyles::set_font_color(orcus::spreadsheet::color_elem_t alpha,
-            orcus::spreadsheet::color_elem_t red,
-            orcus::spreadsheet::color_elem_t green,
-            orcus::spreadsheet::color_elem_t blue)
+void ScOrcusStyles::set_font_color(orcus::spreadsheet::color_elem_t,
+            orcus::spreadsheet::color_elem_t,
+            orcus::spreadsheet::color_elem_t,
+            orcus::spreadsheet::color_elem_t)
 {
 }
 
@@ -498,10 +498,10 @@ void ScOrcusStyles::set_border_style(orcus::spreadsheet::border_direction_t /*di
 }
 
 void ScOrcusStyles::set_border_color(orcus::spreadsheet::border_direction_t /*dir*/,
-            orcus::spreadsheet::color_elem_t alpha,
-            orcus::spreadsheet::color_elem_t red,
-            orcus::spreadsheet::color_elem_t green,
-            orcus::spreadsheet::color_elem_t blue)
+            orcus::spreadsheet::color_elem_t,
+            orcus::spreadsheet::color_elem_t,
+            orcus::spreadsheet::color_elem_t,
+            orcus::spreadsheet::color_elem_t)
 {
     // implement later
 }
