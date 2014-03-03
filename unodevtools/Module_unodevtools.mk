@@ -12,7 +12,7 @@ $(eval $(call gb_Module_Module,unodevtools))
 ifneq (,$(filter ODK,$(BUILD_TYPE)))
 
 $(eval $(call gb_Module_add_targets,unodevtools,\
-	Executable_skeletonmaker \
+	Executable_uno-skeletonmaker \
 ))
 
 endif
