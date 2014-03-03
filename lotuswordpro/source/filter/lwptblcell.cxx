@@ -128,11 +128,14 @@ void LwpNumericValue::Read()
     m_pObjStrm->SkipExtra();
 
 }
- void  LwpNumericValue::Parse(IXFStream* /*pOutputStream*/)
+
+void  LwpNumericValue::Parse(IXFStream* /*pOutputStream*/)
 {
 }
 
- LwpRowList::LwpRowList(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpDLVList(objHdr, pStrm)
+LwpRowList::LwpRowList(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+    : LwpDLVList(objHdr, pStrm)
+    , cRowID(0)
 {}
 
 LwpRowList::~LwpRowList()
