@@ -522,7 +522,7 @@ Reference< XAccessibleTable > SAL_CALL AccessibleTableShape::getAccessibleRowHea
     {
         if( pController->isRowHeader() )
         {
-            AccessibleTableHeaderShape* pTableHeader = new AccessibleTableHeaderShape( this, sal_True );
+            AccessibleTableHeaderShape* pTableHeader = new AccessibleTableHeaderShape( this, true );
             xRet.set( pTableHeader );
         }
     }
@@ -539,7 +539,7 @@ Reference< XAccessibleTable > SAL_CALL AccessibleTableShape::getAccessibleColumn
     {
         if( pController->isColumnHeader() )
         {
-            AccessibleTableHeaderShape* pTableHeader = new AccessibleTableHeaderShape( this, sal_False );
+            AccessibleTableHeaderShape* pTableHeader = new AccessibleTableHeaderShape( this, false );
             xRet.set( pTableHeader );
         }
     }
@@ -1024,12 +1024,12 @@ bool AccessibleTableShape::ResetState (sal_Int16 aState)
     return bStateHasChanged;
 }
 
-sal_Bool AccessibleTableShape::SetStateDirectly (sal_Int16 aState)
+bool AccessibleTableShape::SetStateDirectly (sal_Int16 aState)
 {
     return AccessibleContextBase::SetState (aState);
 }
 
-sal_Bool AccessibleTableShape::ResetStateDirectly (sal_Int16 aState)
+bool AccessibleTableShape::ResetStateDirectly (sal_Int16 aState)
 {
     return AccessibleContextBase::ResetState (aState);
 }
@@ -1042,7 +1042,7 @@ void AccessibleTableShape::checkCellPosition( sal_Int32 nCol, sal_Int32 nRow ) t
     throw IndexOutOfBoundsException();
 }
 
-AccessibleTableHeaderShape::AccessibleTableHeaderShape( AccessibleTableShape* pTable, sal_Bool bRow )
+AccessibleTableHeaderShape::AccessibleTableHeaderShape( AccessibleTableShape* pTable, bool bRow )
 {
     mpTable = pTable;
     mbRow = bRow;

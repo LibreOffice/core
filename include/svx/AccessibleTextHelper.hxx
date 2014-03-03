@@ -318,24 +318,24 @@ namespace accessibility
             from the main office thread.
 
             @param bHaveFocus
-            Whether we got or we lost the focus. Set to sal_True if
-            focus is gotten, sal_False otherwise.
+            Whether we got or we lost the focus. Set to true if
+            focus is gotten, false otherwise.
 
             @see HaveFocus()
          */
-        virtual void SetFocus( sal_Bool bHaveFocus = sal_True ) SAL_THROW((::com::sun::star::uno::RuntimeException));
+        virtual void SetFocus( bool bHaveFocus = true ) SAL_THROW((::com::sun::star::uno::RuntimeException));
 
         /** Query the focus state of the surrounding object
 
             If focus handling is delegated to this class, determine
             focus state with this method. Be prepared that even if you
-            set the focus with SetFocus(sal_True), this method might
-            return sal_False. This is the case if one of the children
+            set the focus with SetFocus(true), this method might
+            return false. This is the case if one of the children
             actually got the focus.
 
             @return the state of the focus ownership
          */
-        virtual sal_Bool HaveFocus() SAL_THROW((::com::sun::star::uno::RuntimeException));
+        virtual bool HaveFocus() SAL_THROW((::com::sun::star::uno::RuntimeException));
 
         /** Call this method to invoke all event listeners with the given event
 
@@ -372,7 +372,7 @@ namespace accessibility
 
             @return sal_True, if the text or parts of it are currently selected
         */
-        virtual sal_Bool IsSelected() const;
+        virtual bool IsSelected() const;
 
         // XAccessibleContext child handling methods
 

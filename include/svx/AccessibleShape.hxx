@@ -208,7 +208,7 @@ public:
             entity that manages the state set.
 
     */
-    sal_Bool GetState (sal_Int16 aState);
+    bool GetState (sal_Int16 aState);
 
 
     //=====  XAccessibleContext  ==============================================

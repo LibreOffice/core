@@ -134,8 +134,8 @@ public:
     virtual bool SetState (sal_Int16 aState);
     virtual bool ResetState (sal_Int16 aState);
     // The following two methods are used to set state directly on table object, instread of the internal cell or paragraph.
-    sal_Bool SetStateDirectly (sal_Int16 aState);
-    sal_Bool ResetStateDirectly (sal_Int16 aState);
+    bool SetStateDirectly (sal_Int16 aState);
+    bool ResetStateDirectly (sal_Int16 aState);
     // Get the currently active cell which is text editing
     AccessibleCell* GetActiveAccessibleCell();
 
@@ -164,8 +164,8 @@ class AccessibleTableHeaderShape : boost::noncopyable,
     public AccessibleTableHeaderShape_BASE
 {
 public:
-    // bRow, sal_True means rowheader, sal_False means columnheader
-    AccessibleTableHeaderShape( AccessibleTableShape* pTable, sal_Bool bRow );
+    // bRow, true means rowheader, false means columnheader
+    AccessibleTableHeaderShape( AccessibleTableShape* pTable, bool bRow );
     virtual ~AccessibleTableHeaderShape();
 
     // XAccessible
@@ -227,7 +227,7 @@ public:
 private:
     SVX_DLLPRIVATE explicit AccessibleTableHeaderShape( const ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessible>& rxParent );
-    sal_Bool mbRow;
+    bool mbRow;
     rtl::Reference< AccessibleTableShape > mpTable;
 };
 

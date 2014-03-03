@@ -138,7 +138,7 @@ protected:
     OUString getControlModelStringProperty( const OUString& _rPropertyName ) const SAL_THROW(( ));
 
     /// ensure that our control model exists(will be retrieved upon need only)
-    sal_Bool ensureControlModelAccess( ) SAL_THROW(( ));
+    bool ensureControlModelAccess( ) SAL_THROW(( ));
 
     /// ensures that we're listening for the given property if(and only if!) necessary
     bool ensureListeningState( const bool _bCurrentlyListening, const bool _bNeedNewListening,

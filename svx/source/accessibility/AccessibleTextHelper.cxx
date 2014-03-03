@@ -1777,7 +1777,7 @@ namespace accessibility
 #endif
     }
 
-    void AccessibleTextHelper::SetFocus( sal_Bool bHaveFocus ) SAL_THROW((::com::sun::star::uno::RuntimeException))
+    void AccessibleTextHelper::SetFocus( bool bHaveFocus ) SAL_THROW((::com::sun::star::uno::RuntimeException))
     {
 #ifdef DBG_UTIL
         // precondition: solar mutex locked
@@ -1793,12 +1793,12 @@ namespace accessibility
 #endif
     }
 
-    sal_Bool AccessibleTextHelper::HaveFocus() SAL_THROW((::com::sun::star::uno::RuntimeException))
+    bool AccessibleTextHelper::HaveFocus() SAL_THROW((::com::sun::star::uno::RuntimeException))
     {
 #ifdef DBG_UTIL
         mpImpl->CheckInvariants();
 
-        sal_Bool bRet( mpImpl->HaveFocus() );
+        bool bRet( mpImpl->HaveFocus() );
 
         mpImpl->CheckInvariants();
 
@@ -1938,14 +1938,14 @@ namespace accessibility
 #endif
     }
 
-    sal_Bool AccessibleTextHelper::IsSelected() const
+    bool AccessibleTextHelper::IsSelected() const
     {
         SolarMutexGuard aGuard;
 
 #ifdef DBG_UTIL
         mpImpl->CheckInvariants();
 
-        sal_Bool aRet = mpImpl->IsSelected();
+        bool aRet = mpImpl->IsSelected();
 
         mpImpl->CheckInvariants();
 

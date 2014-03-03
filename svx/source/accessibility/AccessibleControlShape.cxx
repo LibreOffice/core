@@ -697,10 +697,10 @@ void SAL_CALL AccessibleControlShape::disposing (void)
     AccessibleShape::disposing();
 }
 
-sal_Bool AccessibleControlShape::ensureControlModelAccess() SAL_THROW(())
+bool AccessibleControlShape::ensureControlModelAccess() SAL_THROW(())
 {
     if ( m_xControlModel.is() )
-        return sal_True;
+        return true;
 
     try
     {

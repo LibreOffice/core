@@ -117,7 +117,7 @@ void ScAccessibleEditObject::GotFocus()
     mbHasFocus = true;
     CommitFocusGained();
     if (mpTextHelper)
-        mpTextHelper->SetFocus(sal_True);
+        mpTextHelper->SetFocus(true);
 }
 
 //=====  XInterface  ==========================================================

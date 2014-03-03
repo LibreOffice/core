@@ -220,7 +220,7 @@ void AccessibleOutlineView::Activated (void)
     SolarMutexGuard aGuard;
 
     // delegate listener handling to children manager.
-    maTextHelper.SetFocus(sal_True);
+    maTextHelper.SetFocus(true);
 }
 
 void AccessibleOutlineView::Deactivated (void)
@@ -228,7 +228,7 @@ void AccessibleOutlineView::Deactivated (void)
     SolarMutexGuard aGuard;
 
     // delegate listener handling to children manager.
-    maTextHelper.SetFocus(sal_False);
+    maTextHelper.SetFocus(false);
 }
 
 void SAL_CALL AccessibleOutlineView::disposing (void)

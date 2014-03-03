@@ -271,8 +271,8 @@ bool AccessibleShape::SetState (sal_Int16 aState)
     {
         // Offer FOCUSED state to edit engine and detect whether the state
         // changes.
-        sal_Bool bIsFocused = mpText->HaveFocus ();
-        mpText->SetFocus (sal_True);
+        bool bIsFocused = mpText->HaveFocus ();
+        mpText->SetFocus (true);
         bStateHasChanged = (bIsFocused != mpText->HaveFocus ());
     }
     else
@@ -292,8 +292,8 @@ bool AccessibleShape::ResetState (sal_Int16 aState)
     {
         // Try to remove FOCUSED state from the edit engine and detect
         // whether the state changes.
-        sal_Bool bIsFocused = mpText->HaveFocus ();
-        mpText->SetFocus (sal_False);
+        bool bIsFocused = mpText->HaveFocus ();
+        mpText->SetFocus (false);
         bStateHasChanged = (bIsFocused != mpText->HaveFocus ());
     }
     else
@@ -305,7 +305,7 @@ bool AccessibleShape::ResetState (sal_Int16 aState)
 
 
 
-sal_Bool AccessibleShape::GetState (sal_Int16 aState)
+bool AccessibleShape::GetState (sal_Int16 aState)
 {
     if (aState == AccessibleStateType::FOCUSED && mpText != NULL)
     {
