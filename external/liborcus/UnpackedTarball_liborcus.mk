@@ -21,11 +21,6 @@ liborcus_patches :=
 # don't use dllimport
 liborcus_patches += liborcus_0.1.0-dllimport.patch
 
-ifeq ($(OS),MACOSX)
-# no "tac" command on OS X, but "tail -r"
-liborcus_patches += liborcus_0.1.0-tac.patch
-endif
-
 ifneq ($(HAVE_GCC_VISIBILITY_FEATURE),TRUE)
 liborcus_patches += visibility.patch
 endif
