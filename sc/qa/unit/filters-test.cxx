@@ -64,6 +64,7 @@ public:
     void testContentODS();
     void testContentXLS();
     void testContentXLSX();
+    void testContentXLSXStrict(); // strict OOXML
     void testContentLotus123();
     void testContentDIF();
     void testContentXLS_XML();
@@ -308,6 +309,16 @@ void ScFiltersTest::testContentXLS()
 void ScFiltersTest::testContentXLSX()
 {
     ScDocShellRef xDocSh = loadDoc("universal-content.", XLSX);
+    xDocSh->DoHardRecalc(true);
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+    testContentImpl(pDoc, XLSX);
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testContentXLSXStrict()
+{
+    ScDocShellRef xDocSh = loadDoc("universal-content-strict.", XLSX);
     xDocSh->DoHardRecalc(true);
 
     ScDocument* pDoc = xDocSh->GetDocument();
