@@ -101,16 +101,26 @@
 #include "lwptable.hxx"
 
 LwpPara::LwpPara(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
-    : LwpDLVList(objHdr, pStrm), m_pBreaks(NULL), m_pIndentOverride(NULL)
-    , m_bHasBullet(sal_False), m_pSilverBullet(NULL)
-    , /*m_pParaNumbering(NULL),*/ m_pBullOver(NULL)
+    : LwpDLVList(objHdr, pStrm)
+    , m_nOrdinal(0)
+    , m_nFlags(0)
+    , m_nLevel(0)
+    , m_pProps(NULL)
+    , m_pBreaks(NULL)
+    , m_pIndentOverride(NULL)
+    , m_AllText("")
+    , m_bHasBullet(sal_False)
+    , m_pSilverBullet(NULL)
+    , m_pBullOver(NULL)
     , m_bBullContinue(sal_False)
-    , m_bHasDropcap(sal_False), m_nLines(0), m_nChars(0)
-    , m_pDropcapLayout(NULL), m_BelowSpacing(0), m_pXFContainer(NULL)
+    , m_SectionStyleName("")
+    , m_bHasDropcap(sal_False)
+    , m_nLines(0)
+    , m_nChars(0)
+    , m_pDropcapLayout(NULL)
+    , m_BelowSpacing(0)
+    , m_pXFContainer(NULL)
 {
-    m_pProps = NULL;
-    m_SectionStyleName = A2OUSTR("");
-    m_AllText = A2OUSTR("");
 }
 
 LwpPara::~LwpPara()
