@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a930d6b_6beda18b",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-03-03T11:56:09Z",
+      "side": 1,
+      "message": "This should be boost_iostreams, i think .-)",
+      "revId": "be94684b2d0adad435c196d121a8aec3898e376d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
