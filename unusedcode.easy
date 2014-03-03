@@ -227,11 +227,8 @@ connectivity::sdbcx::OGroup::OGroup(unsigned char)
 drawinglayer::attribute::SdrFillGraphicAttribute::getLogSize() const
 editeng::MisspellRange::MisspellRange()
 editeng::Section::Section()
-formula::DoubleVectorRefToken::GetRequestedArrayLength() const
 formula::FormulaDlg::CheckMatrix()
 formula::FormulaTokenArray::AddString(unsigned short const*)
-formula::SingleVectorRefToken::GetRequestedArrayLength() const
-formula::SingleVectorRefToken::SingleVectorRefToken(double const*, unsigned long, unsigned long)
 oglcanvas::CanvasHelper::flush() const
 oglcanvas::TextLayout::draw(com::sun::star::rendering::ViewState const&, com::sun::star::rendering::RenderState const&, com::sun::star::uno::Reference<com::sun::star::rendering::XGraphicDevice> const&) const
 oox::core::Relations::getRelationsFromType(rtl::OUString const&) const

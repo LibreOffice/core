@@ -56,14 +56,12 @@ class FORMULA_DLLPUBLIC SingleVectorRefToken : public FormulaToken
     size_t mnArrayLength;
 
 public:
-    SingleVectorRefToken( const double* pArray, size_t nReqLength, size_t nArrayLength );
     SingleVectorRefToken( const VectorRefArray& rArray, size_t nReqLength, size_t nArrayLength );
 
     virtual FormulaToken* Clone() const;
 
-    const VectorRefArray& GetArray() const;
-    size_t GetRequestedArrayLength() const;
-    size_t GetArrayLength() const;
+    inline const VectorRefArray& GetArray() const { return maArray; }
+    inline size_t GetArrayLength() const { return mnArrayLength; }
 };
 
 /**
@@ -90,12 +88,11 @@ public:
 
     virtual FormulaToken* Clone() const;
 
-    const std::vector<VectorRefArray>& GetArrays() const;
-    size_t GetRequestedArrayLength() const;
-    size_t GetArrayLength() const;
-    size_t GetRefRowSize() const;
-    bool IsStartFixed() const;
-    bool IsEndFixed() const;
+    inline const std::vector<VectorRefArray>& GetArrays() const { return maArrays; }
+    inline size_t GetArrayLength() const { return mnArrayLength; }
+    inline size_t GetRefRowSize() const { return mnRefRowSize; }
+    inline bool IsStartFixed() const { return mbStartFixed; }
+    inline bool IsEndFixed() const { return mbEndFixed; }
 };
 
 }
