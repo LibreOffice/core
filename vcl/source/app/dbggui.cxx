@@ -419,7 +419,7 @@ DbgWindow::DbgWindow() :
     maLstBox.SetPosPixel( Point( 0, 0 ) );
 
     SetOutputSizePixel( Size( 600, 480 ) );
-    if ( pData->aDbgWinState )
+    if ( pData->aDbgWinState[0] )
     {
         OString aState( pData->aDbgWinState );
         SetWindowState( aState );
