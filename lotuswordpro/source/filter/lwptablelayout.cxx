@@ -1432,6 +1432,8 @@ void LwpColumnLayout::RegisterStyle(double dCalculatedWidth)
 
 LwpTableHeadingLayout::LwpTableHeadingLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpTableLayout(objHdr, pStrm)
+    , cStartRow(0)
+    , cEndRow(0)
 {}
 
 LwpTableHeadingLayout::~LwpTableHeadingLayout()
