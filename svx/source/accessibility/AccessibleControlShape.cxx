@@ -790,7 +790,7 @@ void AccessibleControlShape::adjustAccessibleRole( )
 
 #ifdef DBG_UTIL
 
-sal_Bool AccessibleControlShape::SetState( sal_Int16 _nState )
+bool AccessibleControlShape::SetState( sal_Int16 _nState )
 {
     OSL_ENSURE( !isAliveMode( m_xUnoControl ) || !isComposedState( _nState ),
         "AccessibleControlShape::SetState: a state which should be determined by the control context is set from outside!" );

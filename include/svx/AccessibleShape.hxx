@@ -181,7 +181,7 @@ public:
             The returned flag indicates whether the specified state has been
             changed (<TRUE/>), i.e. it has formerly not been set.
     */
-    virtual sal_Bool SetState (sal_Int16 aState);
+    virtual bool SetState (sal_Int16 aState);
 
     /** Reset the specified state.  If the state is <const>FOCUSED</const>
         then, additionally to the inherited functionality, the focus
@@ -195,7 +195,7 @@ public:
             The returned flag indicates whether the specified state has been
             changed (<TRUE/>), i.e. it has formerly been set.
     */
-    virtual sal_Bool ResetState (sal_Int16 aState);
+    virtual bool ResetState (sal_Int16 aState);
 
     /** Return the state of the specified state.  Take the
         <const>FOCUSED</const> state from the accessible edit engine.

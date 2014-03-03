@@ -131,8 +131,8 @@ public:
 
     void getColumnAndRow( sal_Int32 nChildIndex, sal_Int32& rnColumn, sal_Int32& rnRow ) throw (::com::sun::star::lang::IndexOutOfBoundsException );
     // overwrite the SetState & ResetState to do special operation for table cell's internal text
-    virtual sal_Bool SetState (sal_Int16 aState);
-    virtual sal_Bool ResetState (sal_Int16 aState);
+    virtual bool SetState (sal_Int16 aState);
+    virtual bool ResetState (sal_Int16 aState);
     // The following two methods are used to set state directly on table object, instread of the internal cell or paragraph.
     sal_Bool SetStateDirectly (sal_Int16 aState);
     sal_Bool ResetStateDirectly (sal_Int16 aState);

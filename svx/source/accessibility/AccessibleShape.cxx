@@ -263,9 +263,9 @@ bool AccessibleShape::operator== (const AccessibleShape& rShape)
 
 
 
-sal_Bool AccessibleShape::SetState (sal_Int16 aState)
+bool AccessibleShape::SetState (sal_Int16 aState)
 {
-    sal_Bool bStateHasChanged = sal_False;
+    bool bStateHasChanged = false;
 
     if (aState == AccessibleStateType::FOCUSED && mpText != NULL)
     {
@@ -284,9 +284,9 @@ sal_Bool AccessibleShape::SetState (sal_Int16 aState)
 
 
 
-sal_Bool AccessibleShape::ResetState (sal_Int16 aState)
+bool AccessibleShape::ResetState (sal_Int16 aState)
 {
-    sal_Bool bStateHasChanged = sal_False;
+    bool bStateHasChanged = false;
 
     if (aState == AccessibleStateType::FOCUSED && mpText != NULL)
     {

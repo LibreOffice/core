@@ -362,7 +362,7 @@ SwViewShell::~SwViewShell()
 
 sal_Bool SwViewShell::HasDrawView() const
 {
-    return Imp() && Imp()->HasDrawView();
+    return (Imp() && Imp()->HasDrawView()) ? 1 : 0;
 }
 
 void SwViewShell::MakeDrawView()

@@ -133,7 +133,7 @@ public:
             If the specified state changed its value due to this call
             <TRUE/> is returned, otherwise <FALSE/>.
     */
-    virtual sal_Bool SetState (sal_Int16 aState);
+    virtual bool SetState (sal_Int16 aState);
 
     /** Reset the specified state (turn it off) and send events to all
         listeners to inform them of the change.
@@ -145,7 +145,7 @@ public:
             If the specified state changed its value due to this call
             <TRUE/> is returned, otherwise <FALSE/>.
     */
-    virtual sal_Bool ResetState (sal_Int16 aState);
+    virtual bool ResetState (sal_Int16 aState);
 
     /** Return the state of the specified state.
 
@@ -156,7 +156,7 @@ public:
             A value of <TRUE/> indicates that the state is set.  A <FALSE/>
             value indicates an unset state.
     */
-    sal_Bool GetState (sal_Int16 aState);
+    bool GetState (sal_Int16 aState);
 
     /** Replace the current relation set with the specified one.  Send
         events for relations that are not in both sets.
@@ -334,7 +334,7 @@ protected:
         @return TRUE, if the object is disposed or in the course
         of being disposed. Otherwise, FALSE is returned.
     */
-    sal_Bool IsDisposed (void);
+    bool IsDisposed (void);
 
     /** sets the role as returned by XaccessibleContext::getAccessibleRole
 

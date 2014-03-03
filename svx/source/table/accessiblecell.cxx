@@ -97,9 +97,9 @@ void AccessibleCell::Init (void)
 
 
 
-sal_Bool AccessibleCell::SetState (sal_Int16 aState)
+bool AccessibleCell::SetState (sal_Int16 aState)
 {
-    sal_Bool bStateHasChanged = sal_False;
+    bool bStateHasChanged = false;
 
     if (aState == AccessibleStateType::FOCUSED && mpText != NULL)
     {
@@ -117,9 +117,9 @@ sal_Bool AccessibleCell::SetState (sal_Int16 aState)
 
 
 
-sal_Bool AccessibleCell::ResetState (sal_Int16 aState)
+bool AccessibleCell::ResetState (sal_Int16 aState)
 {
-    sal_Bool bStateHasChanged = sal_False;
+    bool bStateHasChanged = false;
 
     if (aState == AccessibleStateType::FOCUSED && mpText != NULL)
     {

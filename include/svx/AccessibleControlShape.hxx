@@ -131,7 +131,7 @@ protected:
 
 #ifdef DBG_UTIL
     /// Set the specified state
-    virtual sal_Bool SetState( sal_Int16 _nState );
+    virtual bool SetState( sal_Int16 _nState );
 #endif // DBG_UTIL
 
     /// (safely) reads the given property from the model of the UNO control

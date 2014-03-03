@@ -94,7 +94,7 @@ AccessibleContextBase::~AccessibleContextBase(void)
 
 
 
-sal_Bool AccessibleContextBase::SetState (sal_Int16 aState)
+bool AccessibleContextBase::SetState (sal_Int16 aState)
 {
     ::osl::ClearableMutexGuard aGuard (maMutex);
     ::utl::AccessibleStateSetHelper* pStateSet =
@@ -116,16 +116,16 @@ sal_Bool AccessibleContextBase::SetState (sal_Int16 aState)
                 aNewValue,
                 uno::Any());
         }
-        return sal_True;
+        return true;
     }
     else
-        return sal_False;
+        return false;
 }
 
 
 
 
-sal_Bool AccessibleContextBase::ResetState (sal_Int16 aState)
+bool AccessibleContextBase::ResetState (sal_Int16 aState)
 {
     ::osl::ClearableMutexGuard aGuard (maMutex);
     ::utl::AccessibleStateSetHelper* pStateSet =
@@ -142,16 +142,16 @@ sal_Bool AccessibleContextBase::ResetState (sal_Int16 aState)
             AccessibleEventId::STATE_CHANGED,
             uno::Any(),
             aOldValue);
-        return sal_True;
+        return true;
     }
     else
-        return sal_False;
+        return false;
 }
 
 
 
 
-sal_Bool AccessibleContextBase::GetState (sal_Int16 aState)
+bool AccessibleContextBase::GetState (sal_Int16 aState)
 {
     ::osl::MutexGuard aGuard (maMutex);
     ::utl::AccessibleStateSetHelper* pStateSet =
@@ -160,7 +160,7 @@ sal_Bool AccessibleContextBase::GetState (sal_Int16 aState)
         return pStateSet->contains(aState);
     else
         // If there is no state set then return false as a default value.
-        return sal_False;
+        return false;
 }
 
 
@@ -647,7 +647,7 @@ void AccessibleContextBase::ThrowIfDisposed (void)
 
 
 
-sal_Bool AccessibleContextBase::IsDisposed (void)
+bool AccessibleContextBase::IsDisposed (void)
 {
     return (rBHelper.bDisposed || rBHelper.bInDispose);
 }
