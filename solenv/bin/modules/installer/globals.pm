@@ -156,7 +156,7 @@ BEGIN
     $fontsfoldername = "Fonts";
     $fontsdirparent = "";
     $fontsdirhostname = "truetype";
-    $fontsdirname = $fontsdirhostname;
+    $fontsdirname = "";
     $officefolder = "OfficeFolder";
     $officemenufolder = "OfficeMenuFolder";
     $startupfolder = "StartupFolder";
