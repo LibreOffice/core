@@ -38,7 +38,6 @@ public:
     explicit ModifyListenerCallBack_impl( const Link& rCallBack );
     virtual ~ModifyListenerCallBack_impl();
 
-    void startListening( const Reference< util::XModifyBroadcaster >& xBroadcaster );
     void stopListening();
 
     //XModifyListener
@@ -77,16 +76,6 @@ void SAL_CALL ModifyListenerCallBack_impl::disposing( const lang::EventObject& /
     m_xBroadcaster.clear();
 }
 
-void ModifyListenerCallBack_impl::startListening( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyBroadcaster >& xBroadcaster )
-{
-    if( m_xBroadcaster == xBroadcaster )
-        return;
-
-    stopListening();
-    m_xBroadcaster = xBroadcaster;
-    if( m_xBroadcaster.is() )
-        m_xBroadcaster->addModifyListener( this );
-}
 void ModifyListenerCallBack_impl::stopListening()
 {
     if( m_xBroadcaster.is() )
@@ -107,10 +96,6 @@ ModifyListenerCallBack::~ModifyListenerCallBack()
     stopListening();
 }
 
-void ModifyListenerCallBack::startListening( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyBroadcaster >& xBroadcaster )
-{
-    pModifyListener_impl->startListening( xBroadcaster );
-}
 void ModifyListenerCallBack::stopListening()
 {
     pModifyListener_impl->stopListening();
