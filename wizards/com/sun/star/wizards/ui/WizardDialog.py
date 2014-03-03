@@ -23,6 +23,7 @@ from .UnoDialog2 import UnoDialog2, Desktop, PropertyNames, UIConsts, \
 from .event.CommonListener import TerminateListenerProcAdapter
 from ..common.Resource import Resource
 from ..common.HelpIds import HelpIds
+from ..common.FileAccess import FileAccess
 from ..document.OfficeDocument import OfficeDocument
 from ..text.TextDocument import TextDocument
 
@@ -114,10 +115,17 @@ class WizardDialog(UnoDialog2):
     def initializePaths(self):
         xPropertySet = \
             self.xMSF.createInstance("com.sun.star.util.PathSettings")
-        self.sTemplatePath = \
-            xPropertySet.getPropertyValue("Template_user")[0]
         self.sUserTemplatePath = \
             xPropertySet.getPropertyValue("Template_writable")
+        myFA = FileAccess(self.xMSF)
+        aInternalPaths = xPropertySet.getPropertyValue("Template_internal")
+        self.sTemplatePath = ""
+        for path in aInternalPaths:
+            if myFA.exists(path + "/wizard", False):
+                self.sTemplatePath = path
+                break
+        if self.sTemplatePath == "":
+            raise Exception("could not find wizard templates")
             
     def addRoadmap(self):
         try:
