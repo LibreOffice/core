@@ -39,6 +39,7 @@
 #include "com/sun/star/uno/Sequence.hxx"
 
 #include <algorithm>
+#include <cstdlib>
 
 using namespace vcl;
 using namespace com::sun::star;
@@ -725,8 +726,8 @@ const PaperInfo* AquaSalInfoPrinter::matchPaper( long i_nWidth, long i_nHeight, 
     {
         for( size_t i = 0; i < m_aPaperFormats.size(); i++ )
         {
-            if( abs( m_aPaperFormats[i].getWidth() - i_nWidth ) < 50 &&
-                abs( m_aPaperFormats[i].getHeight() - i_nHeight ) < 50 )
+            if( std::abs( m_aPaperFormats[i].getWidth() - i_nWidth ) < 50 &&
+                std::abs( m_aPaperFormats[i].getHeight() - i_nHeight ) < 50 )
             {
                 pMatch = &m_aPaperFormats[i];
                 return pMatch;
