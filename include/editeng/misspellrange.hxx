@@ -21,7 +21,6 @@ struct EDITENG_DLLPUBLIC MisspellRange
     size_t mnStart;
     size_t mnEnd;
 
-    MisspellRange();
     MisspellRange(size_t nStart, size_t nEnd);
 };
 
