@@ -23,6 +23,7 @@
 #include <stdlib.h>
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
+#include <sal/log.hxx>
 
 TYPEINIT0(SwIndexReg);
 
@@ -290,7 +291,8 @@ void SwIndexReg::MoveTo( SwIndexReg& rArr )
 
 sal_Int32 SwIndex::operator++(int)
 {
-    OSL_ASSERT( m_nIndex < SAL_MAX_INT32 );
+    SAL_WARN_IF( !(m_nIndex < SAL_MAX_INT32), "sw.core",
+                 "SwIndex::operator++(int) wraps around" );
 
     const sal_Int32 nOldIndex = m_nIndex;
     ChgValue( *this, m_nIndex+1 );
@@ -299,7 +301,8 @@ sal_Int32 SwIndex::operator++(int)
 
 sal_Int32 SwIndex::operator++()
 {
-    OSL_ASSERT( m_nIndex < SAL_MAX_INT32 );
+    SAL_WARN_IF( !(m_nIndex < SAL_MAX_INT32), "sw.core",
+                 "SwIndex::operator++() wraps around" );
 
     ChgValue( *this, m_nIndex+1 );
     return m_nIndex;
@@ -307,7 +310,8 @@ sal_Int32 SwIndex::operator++()
 
 sal_Int32 SwIndex::operator--(int)
 {
-    OSL_ASSERT( m_nIndex>0 );
+    SAL_WARN_IF( !(m_nIndex > 0), "sw.core",
+                 "SwIndex::operator--(int) wraps around" );
 
     const sal_Int32 nOldIndex = m_nIndex;
     ChgValue( *this, m_nIndex-1 );
@@ -316,31 +320,36 @@ sal_Int32 SwIndex::operator--(int)
 
 sal_Int32 SwIndex::operator--()
 {
-    OSL_ASSERT( m_nIndex>0 );
+    SAL_WARN_IF( !( m_nIndex > 0), "sw.core",
+                 "SwIndex::operator--() wraps around" );
     return ChgValue( *this, m_nIndex-1 ).m_nIndex;
 }
 
 sal_Int32 SwIndex::operator+=( sal_Int32 const nVal )
 {
-    OSL_ASSERT( m_nIndex <= SAL_MAX_INT32 - nVal );
+    SAL_WARN_IF( !(m_nIndex <= SAL_MAX_INT32 - nVal), "sw.core",
+                 "SwIndex SwIndex::operator+=(sal_Int32) wraps around" );
     return ChgValue( *this, m_nIndex + nVal ).m_nIndex;
 }
 
 sal_Int32 SwIndex::operator-=( sal_Int32 const nVal )
 {
-    OSL_ASSERT( m_nIndex >= nVal );
+    SAL_WARN_IF( !(m_nIndex >= nVal), "sw.core",
+                 "SwIndex::operator-=(sal_Int32) wraps around" );
     return ChgValue( *this, m_nIndex - nVal ).m_nIndex;
 }
 
 sal_Int32 SwIndex::operator+=( const SwIndex & rIndex )
 {
-    OSL_ASSERT( m_nIndex <= SAL_MAX_INT32 - rIndex.m_nIndex );
+    SAL_WARN_IF( !(m_nIndex <= SAL_MAX_INT32 - rIndex.m_nIndex), "sw.core",
+                 "SwIndex::operator+=(SwIndex) wraps around" );
     return ChgValue( *this, m_nIndex + rIndex.m_nIndex ).m_nIndex;
 }
 
 sal_Int32 SwIndex::operator-=( const SwIndex & rIndex )
 {
-    OSL_ASSERT( m_nIndex >= rIndex.m_nIndex );
+    SAL_WARN_IF( !(m_nIndex >= rIndex.m_nIndex), "sw.core",
+                 "SwIndex::operator-=(SwIndex) wraps around" );
     return ChgValue( *this, m_nIndex - rIndex.m_nIndex ).m_nIndex;
 }
 
