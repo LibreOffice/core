@@ -200,7 +200,6 @@ public:
     virtual void CheckToken( const FormulaToken& t );
 
     FormulaToken* AddToken( const FormulaToken& );
-    FormulaToken* AddString( const sal_Unicode* pStr );
     FormulaToken* AddString( const OUString& rStr );
     FormulaToken* AddDouble( double fVal );
     FormulaToken* AddExternal( const sal_Unicode* pStr );

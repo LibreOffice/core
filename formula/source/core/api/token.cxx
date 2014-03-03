@@ -777,11 +777,6 @@ FormulaToken* FormulaTokenArray::Add( FormulaToken* t )
     }
 }
 
-FormulaToken* FormulaTokenArray::AddString( const sal_Unicode* pStr )
-{
-    return AddString( OUString( pStr ) );
-}
-
 FormulaToken* FormulaTokenArray::AddString( const OUString& rStr )
 {
     return Add( new FormulaStringToken( rStr ) );
