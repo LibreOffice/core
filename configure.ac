@@ -8593,19 +8593,6 @@ dnl ===================================================================
 libo_CHECK_SYSTEM_MODULE([mdds], [MDDS], [mdds >= 0.10.2], ["-I${WORKDIR}/UnpackedTarball/mdds/include"])
 
 dnl ===================================================================
-dnl Determine which hash container mdds shall use
-dnl ===================================================================
-AC_MSG_CHECKING([which hash container mdds shall use])
-if test "x$HAVE_CXX11" = "xTRUE" -a "x$SYSTEM_MDDS" = "xTRUE"; then
-    MDDS_CPPFLAGS=$CXXFLAGS_CXX11
-    AC_MSG_RESULT([std::unordered_map])
-else
-    MDDS_CPPFLAGS="-DMDDS_HASH_CONTAINER_BOOST"
-    AC_MSG_RESULT([boost::unordered_map])
-fi
-AC_SUBST([MDDS_CPPFLAGS])
-
-dnl ===================================================================
 dnl Check for system glm
 dnl ===================================================================
 AC_MSG_CHECKING([which glm to use])
