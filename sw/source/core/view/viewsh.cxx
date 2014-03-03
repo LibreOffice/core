@@ -483,7 +483,7 @@ void SwViewShell::ImplUnlockPaint( sal_Bool bVirDev )
 
 sal_Bool SwViewShell::AddPaintRect( const SwRect & rRect )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SwViewShell *pSh = this;
     do
     {
