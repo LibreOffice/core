@@ -92,7 +92,9 @@ public:
 class LwpAutoRunMacroOptions
 {
 public:
-    LwpAutoRunMacroOptions(){}
+    LwpAutoRunMacroOptions()
+        : m_OptionFlag(0)
+        {}
     ~LwpAutoRunMacroOptions(){}
 private:
     LwpAtomHolder m_OpenName;
