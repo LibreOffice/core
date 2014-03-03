@@ -2275,6 +2275,11 @@ struct SwLineEntry
     SwTwips mnKey;
     SwTwips mnStartPos;
     SwTwips mnEndPos;
+    SwTwips mnOffset;
+
+    bool mbOffsetPerp;
+    bool mbOffsetStart;
+    bool mbOffsetEnd;
 
     svx::frame::Style maAttribute;
 
@@ -2296,6 +2301,10 @@ SwLineEntry::SwLineEntry( SwTwips nKey,
     :   mnKey( nKey ),
         mnStartPos( nStartPos ),
         mnEndPos( nEndPos ),
+        mnOffset( 0 ),
+        mbOffsetPerp(false),
+        mbOffsetStart(false),
+        mbOffsetEnd(false),
         maAttribute( rAttribute )
 {
 }
@@ -2378,6 +2387,8 @@ class SwTabFrmPainter
                             svx::frame::Style*,
                             bool bHori ) const;
 
+    void AdjustTopLeftFrames();
+
 public:
     SwTabFrmPainter( const SwTabFrm& rTabFrm );
 
@@ -2388,6 +2399,7 @@ SwTabFrmPainter::SwTabFrmPainter( const SwTabFrm& rTabFrm )
     : mrTabFrm( rTabFrm )
 {
     HandleFrame( rTabFrm );
+    AdjustTopLeftFrames();
 }
 
 void SwTabFrmPainter::HandleFrame( const SwLayoutFrm& rLayoutFrm )
@@ -2420,7 +2432,7 @@ void SwTabFrmPainter::HandleFrame( const SwLayoutFrm& rLayoutFrm )
     }
 }
 
-void SwTabFrmPainter::PaintLines( OutputDevice& rDev, const SwRect& rRect ) const
+void SwTabFrmPainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) const
 {
     // #i16816# tagged pdf support
     SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, rDev );
@@ -2452,7 +2464,7 @@ void SwTabFrmPainter::PaintLines( OutputDevice& rDev, const SwRect& rRect ) cons
     aSize.Width() += nPixelSzW; aSize.Height() += nPixelSzH;
     rDev.SetClipRegion(Region(Rectangle(rRect.Pos(), aSize)));
 
-    // The following stuff if necessary to have the new table borders fit
+    // The following stuff is necessary to have the new table borders fit
     // into a ::SwAlignRect adjusted world.
     const SwTwips nTwipXCorr =  bVert ? 0 : std::max( 0L, nHalfPixelSzW - 2 );    // 1 < 2 < 3 ;-)
     const SwTwips nTwipYCorr = !bVert ? 0 : std::max( 0L, nHalfPixelSzW - 2 );    // 1 < 2 < 3 ;-)
@@ -2496,6 +2508,45 @@ void SwTabFrmPainter::PaintLines( OutputDevice& rDev, const SwRect& rRect ) cons
                 aEnd.Y() = rEntry.mnEndPos;
             }
 
+            svx::frame::Style aStyles[ 7 ];
+            aStyles[ 0 ] = rEntryStyle;
+            FindStylesForLine( aStart, aEnd, aStyles, bHori );
+
+            // Account for double line thicknesses for the top- and left-most borders.
+            if (rEntry.mnOffset)
+            {
+                if (bHori)
+                {
+                    if (rEntry.mbOffsetPerp)
+                    {
+                        // Apply offset in perpendicular direction.
+                        aStart.Y() -= rEntry.mnOffset;
+                        aEnd.Y() -= rEntry.mnOffset;
+                    }
+                    if (rEntry.mbOffsetStart)
+                        // Apply offset at the start of a border.
+                        aStart.X() -= rEntry.mnOffset;
+                    if (rEntry.mbOffsetEnd)
+                        // Apply offset at the end of a border.
+                        aEnd.X() += rEntry.mnOffset;
+                }
+                else
+                {
+                    if (rEntry.mbOffsetPerp)
+                    {
+                        // Apply offset in perpendicular direction.
+                        aStart.X() -= rEntry.mnOffset;
+                        aEnd.X() -= rEntry.mnOffset;
+                    }
+                    if (rEntry.mbOffsetStart)
+                        // Apply offset at the start of a border.
+                        aStart.Y() -= rEntry.mnOffset;
+                    if (rEntry.mbOffsetEnd)
+                        // Apply offset at the end of a border.
+                        aEnd.Y() += rEntry.mnOffset;
+                }
+            }
+
             SwRect aRepaintRect( aStart, aEnd );
 
             // the repaint rectangle has to be moved a bit for the centered lines:
@@ -2511,142 +2562,138 @@ void SwTabFrmPainter::PaintLines( OutputDevice& rDev, const SwRect& rRect ) cons
                 aRepaintRect.Pos().X() -= nRepaintRectSize;
             }
 
-            if ( rRect.IsOver( aRepaintRect ) )
+            if (!rRect.IsOver(aRepaintRect))
             {
-                svx::frame::Style aStyles[ 7 ];
-                aStyles[ 0 ] = rEntryStyle;
-                FindStylesForLine( aStart, aEnd, aStyles, bHori );
+                continue;
+            }
 
-                // subsidiary lines
-                const Color* pTmpColor = 0;
-                if ( 0 == aStyles[ 0 ].GetWidth() )
-                {
-                    if ( IS_SUBS_TABLE && pGlobalShell->GetWin() )
-                        aStyles[ 0 ].Set( rCol, rCol, rCol, false, 1, 0, 0 );
-                }
-                else
-                    pTmpColor = pHCColor;
+            // subsidiary lines
+            const Color* pTmpColor = 0;
+            if (0 == aStyles[ 0 ].GetWidth())
+            {
+                if (IS_SUBS_TABLE && pGlobalShell->GetWin())
+                    aStyles[ 0 ].Set( rCol, rCol, rCol, false, 1, 0, 0 );
+            }
+            else
+                pTmpColor = pHCColor;
 
-                // The line sizes stored in the line style have to be adjusted as well.
-                // This will guarantee that lines with the same twip size will have the
-                // same pixel size.
-                for ( int i = 0; i < 7; ++i )
-                {
-                    sal_uInt16 nPrim = aStyles[ i ].Prim();
-                    sal_uInt16 nDist = aStyles[ i ].Dist();
-                    sal_uInt16 nSecn = aStyles[ i ].Secn();
+            // The line sizes stored in the line style have to be adjusted as
+            // well.  This will guarantee that lines with the same twip size
+            // will have the same pixel size.
+            for ( int i = 0; i < 7; ++i )
+            {
+                sal_uInt16 nPrim = aStyles[ i ].Prim();
+                sal_uInt16 nDist = aStyles[ i ].Dist();
+                sal_uInt16 nSecn = aStyles[ i ].Secn();
 
-                    if ( nPrim > 0 )
-                        nPrim = (sal_uInt16)( std::max( 1L, nPixelSzH * ( nPrim / nPixelSzH ) ) );
-                    if ( nDist > 0 )
-                        nDist = (sal_uInt16)( std::max( 1L, nPixelSzH * ( nDist / nPixelSzH ) ) );
-                    if ( nSecn > 0 )
-                        nSecn = (sal_uInt16)( std::max( 1L, nPixelSzH * ( nSecn / nPixelSzH ) ) );
+                if (nPrim > 0)
+                    nPrim = (sal_uInt16)( std::max( 1L, nPixelSzH * ( nPrim / nPixelSzH ) ) );
+                if (nDist > 0)
+                    nDist = (sal_uInt16)( std::max( 1L, nPixelSzH * ( nDist / nPixelSzH ) ) );
+                if (nSecn > 0)
+                    nSecn = (sal_uInt16)( std::max( 1L, nPixelSzH * ( nSecn / nPixelSzH ) ) );
 
-                    aStyles[ i ].Set( nPrim, nDist, nSecn );
-                }
+                aStyles[ i ].Set( nPrim, nDist, nSecn );
+            }
 
-                // The (twip) positions will be adjusted to meet these requirements:
-                // 1. The y coordinates are located in the middle of the pixel grid
-                // 2. The x coordinated are located at the beginning of the pixel grid
-                // This is done, because the horizontal lines are painted "at beginning",
-                // whereas the vertical lines are painted "centered". By making the line
-                // sizes a multiple of one pixel size, we can assure, that all lines having
-                // the same twip size have the same pixel size, independent of their position
-                // on the screen.
-                Point aPaintStart = rDev.PixelToLogic( rDev.LogicToPixel( aStart ) );
-                Point aPaintEnd = rDev.PixelToLogic( rDev.LogicToPixel( aEnd ) );
+            // The (twip) positions will be adjusted to meet these requirements:
+            // 1. The y coordinates are located in the middle of the pixel grid
+            // 2. The x coordinated are located at the beginning of the pixel grid
+            // This is done, because the horizontal lines are painted "at
+            // beginning", whereas the vertical lines are painted "centered".
+            // By making the line sizes a multiple of one pixel size, we can
+            // assure that all lines having the same twip size have the same
+            // pixel size, independent of their position on the screen.
+            Point aPaintStart = rDev.PixelToLogic( rDev.LogicToPixel(aStart) );
+            Point aPaintEnd = rDev.PixelToLogic( rDev.LogicToPixel(aEnd) );
 
-                if( pGlobalShell->GetWin() )
-                {
-                    // The table borders do not use SwAlignRect, but all the other frames do.
-                    // Therefore we tweak the outer borders a bit to achieve that the outer
-                    // borders match the subsidiary lines of the upper:
-                    if ( aStart.X() == aUpper.Left() )
-                        aPaintStart.X() = aUpperAligned.Left();
-                    else if ( aStart.X() == aUpper._Right() )
-                        aPaintStart.X() = aUpperAligned._Right();
-                    if ( aStart.Y() == aUpper.Top() )
-                        aPaintStart.Y() = aUpperAligned.Top();
-                    else if ( aStart.Y() == aUpper._Bottom() )
-                        aPaintStart.Y() = aUpperAligned._Bottom();
+            if (pGlobalShell->GetWin())
+            {
+                // The table borders do not use SwAlignRect, but all the other frames do.
+                // Therefore we tweak the outer borders a bit to achieve that the outer
+                // borders match the subsidiary lines of the upper:
+                if (aStart.X() == aUpper.Left())
+                    aPaintStart.X() = aUpperAligned.Left();
+                else if (aStart.X() == aUpper._Right())
+                    aPaintStart.X() = aUpperAligned._Right();
+                if (aStart.Y() == aUpper.Top())
+                    aPaintStart.Y() = aUpperAligned.Top();
+                else if (aStart.Y() == aUpper._Bottom())
+                    aPaintStart.Y() = aUpperAligned._Bottom();
 
-                    if ( aEnd.X() == aUpper.Left() )
-                        aPaintEnd.X() = aUpperAligned.Left();
-                    else if ( aEnd.X() == aUpper._Right() )
-                        aPaintEnd.X() = aUpperAligned._Right();
-                    if ( aEnd.Y() == aUpper.Top() )
-                        aPaintEnd.Y() = aUpperAligned.Top();
-                    else if ( aEnd.Y() == aUpper._Bottom() )
-                        aPaintEnd.Y() = aUpperAligned._Bottom();
-                }
+                if (aEnd.X() == aUpper.Left())
+                    aPaintEnd.X() = aUpperAligned.Left();
+                else if (aEnd.X() == aUpper._Right())
+                    aPaintEnd.X() = aUpperAligned._Right();
+                if (aEnd.Y() == aUpper.Top())
+                    aPaintEnd.Y() = aUpperAligned.Top();
+                else if (aEnd.Y() == aUpper._Bottom())
+                    aPaintEnd.Y() = aUpperAligned._Bottom();
+            }
 
-                // logically vertical lines are painted centered on the line,
-                // logically horizontal lines are painted "below" the line
-                bool const isBelow((mrTabFrm.IsVertical()) ? !bHori : bHori);
-                double const offsetStart = (isBelow)
-                    ?   aStyles[0].GetWidth() / 2.0
-                    :   std::max<double>(aStyles[1].GetWidth(),
-                            aStyles[3].GetWidth()) / 2.0;
-                double const offsetEnd = (isBelow)
-                    ?   aStyles[0].GetWidth() / 2.0
-                    :   std::max<double>(aStyles[4].GetWidth(),
-                            aStyles[6].GetWidth()) / 2.0;
-                if (mrTabFrm.IsVertical())
-                {
-                    aPaintStart.X() -= static_cast<long>(offsetStart + 0.5);
-                    aPaintEnd.X()   -= static_cast<long>(offsetEnd   + 0.5);
-                }
-                else
-                {
-                    aPaintStart.Y() += static_cast<long>(offsetStart + 0.5);
-                    aPaintEnd.Y()   += static_cast<long>(offsetEnd   + 0.5);
-                }
+            // logically vertical lines are painted centered on the line,
+            // logically horizontal lines are painted "below" the line
+            bool const isBelow((mrTabFrm.IsVertical()) ? !bHori : bHori);
+            double const offsetStart = (isBelow)
+                ?   aStyles[0].GetWidth() / 2.0
+                :   std::max<double>(aStyles[1].GetWidth(),
+                        aStyles[3].GetWidth()) / 2.0;
+            double const offsetEnd = (isBelow)
+                ?   aStyles[0].GetWidth() / 2.0
+                :   std::max<double>(aStyles[4].GetWidth(),
+                        aStyles[6].GetWidth()) / 2.0;
+            if (mrTabFrm.IsVertical())
+            {
+                aPaintStart.X() -= static_cast<long>(offsetStart + 0.5);
+                aPaintEnd.X()   -= static_cast<long>(offsetEnd   + 0.5);
+            }
+            else
+            {
+                aPaintStart.Y() += static_cast<long>(offsetStart + 0.5);
+                aPaintEnd.Y()   += static_cast<long>(offsetEnd   + 0.5);
+            }
 
-                aPaintStart.X() -= nTwipXCorr; // nHalfPixelSzW - 2 to assure that we do not leave the pixel
-                aPaintEnd.X()   -= nTwipXCorr;
-                aPaintStart.Y() -= nTwipYCorr;
-                aPaintEnd.Y()   -= nTwipYCorr;
+            aPaintStart.X() -= nTwipXCorr; // nHalfPixelSzW - 2 to assure that we do not leave the pixel
+            aPaintEnd.X()   -= nTwipXCorr;
+            aPaintStart.Y() -= nTwipYCorr;
+            aPaintEnd.Y()   -= nTwipYCorr;
 
-                if (::rtl::math::approxEqual(aStyles[0].Prim(), 0.0) &&
-                    ::rtl::math::approxEqual(aStyles[0].Secn(), 0.0))
-                {
-                    continue; // fdo#75118 do not paint zero-width lines
-                }
+            if (::rtl::math::approxEqual(aStyles[0].Prim(), 0.0) &&
+                ::rtl::math::approxEqual(aStyles[0].Secn(), 0.0))
+            {
+                continue; // fdo#75118 do not paint zero-width lines
+            }
 
-                // Here comes the painting stuff: Thank you, DR, great job!!!
-                if ( bHori )
-                {
-                    mrTabFrm.ProcessPrimitives( svx::frame::CreateBorderPrimitives(
-                        aPaintStart,
-                        aPaintEnd,
-                        aStyles[ 0 ],   // current style
-                        aStyles[ 1 ],   // aLFromT
-                        aStyles[ 2 ],   // aLFromL
-                        aStyles[ 3 ],   // aLFromB
-                        aStyles[ 4 ],   // aRFromT
-                        aStyles[ 5 ],   // aRFromR
-                        aStyles[ 6 ],   // aRFromB
-                        pTmpColor
-                        )
-                    );
-                }
-                else
-                {
-                    mrTabFrm.ProcessPrimitives( svx::frame::CreateBorderPrimitives(
-                        aPaintEnd,
-                        aPaintStart,
-                        aStyles[ 0 ],   // current style
-                        aStyles[ 4 ],   // aBFromL
-                        aStyles[ 5 ],   // aBFromB
-                        aStyles[ 6 ],   // aBFromR
-                        aStyles[ 1 ],   // aTFromL
-                        aStyles[ 2 ],   // aTFromT
-                        aStyles[ 3 ],   // aTFromR
-                        pTmpColor
-                        )
-                    );
-                }
+            // Here comes the painting stuff: Thank you, DR, great job!!!
+            if (bHori)
+            {
+                mrTabFrm.ProcessPrimitives( svx::frame::CreateBorderPrimitives(
+                    aPaintStart,
+                    aPaintEnd,
+                    aStyles[ 0 ],   // current style
+                    aStyles[ 1 ],   // aLFromT
+                    aStyles[ 2 ],   // aLFromL
+                    aStyles[ 3 ],   // aLFromB
+                    aStyles[ 4 ],   // aRFromT
+                    aStyles[ 5 ],   // aRFromR
+                    aStyles[ 6 ],   // aRFromB
+                    pTmpColor)
+                );
+            }
+            else
+            {
+                mrTabFrm.ProcessPrimitives( svx::frame::CreateBorderPrimitives(
+                    aPaintEnd,
+                    aPaintStart,
+                    aStyles[ 0 ],   // current style
+                    aStyles[ 4 ],   // aBFromL
+                    aStyles[ 5 ],   // aBFromB
+                    aStyles[ 6 ],   // aBFromR
+                    aStyles[ 1 ],   // aTFromL
+                    aStyles[ 2 ],   // aTFromT
+                    aStyles[ 3 ],   // aTFromR
+                    pTmpColor)
+                );
             }
         }
 
@@ -2759,6 +2806,54 @@ void SwTabFrmPainter::FindStylesForLine( const Point& rStartPoint,
     }
 }
 
+namespace {
+
+void calcOffsetForDoubleLine( SwLineEntryMap& rLines )
+{
+    SwLineEntryMap aNewLines;
+    SwLineEntryMap::iterator it = rLines.begin(), itEnd = rLines.end();
+    bool bFirst = true;
+    for (; it != itEnd; ++it)
+    {
+        if (bFirst)
+        {
+            // First line needs to be offset to account for double line thickness.
+            SwLineEntrySet aNewSet;
+            const SwLineEntrySet& rSet = it->second;
+            SwLineEntrySet::iterator itSet = rSet.begin(), itSetEnd = rSet.end();
+            size_t nEntryCount = rSet.size();
+            for (size_t i = 0; itSet != itSetEnd; ++itSet, ++i)
+            {
+                SwLineEntry aLine = *itSet;
+                aLine.mnOffset = static_cast<SwTwips>(aLine.maAttribute.Dist());
+                aLine.mbOffsetPerp = true;
+
+                if (i == 0)
+                    aLine.mbOffsetStart = true;
+                if (i == nEntryCount - 1)
+                    aLine.mbOffsetEnd = true;
+
+                aNewSet.insert(aLine);
+            }
+
+            aNewLines.insert(SwLineEntryMap::value_type(it->first, aNewSet));
+        }
+        else
+            aNewLines.insert(SwLineEntryMap::value_type(it->first, it->second));
+
+        bFirst = false;
+    }
+    rLines.swap(aNewLines);
+}
+
+}
+
+void SwTabFrmPainter::AdjustTopLeftFrames()
+{
+    calcOffsetForDoubleLine(maHoriLines);
+    calcOffsetForDoubleLine(maVertLines);
+}
+
 // special case: #i9860#
 // first line in follow table without repeated headlines
 static bool lcl_IsFirstRowInFollowTableWithoutRepeatedHeadlines(
@@ -2792,10 +2887,16 @@ void SwTabFrmPainter::Insert( const SwFrm& rFrm, const SvxBoxItem& rBoxItem )
     bool const bVert = mrTabFrm.IsVertical();
     bool const bR2L  = mrTabFrm.IsRightToLeft();
 
-    svx::frame::Style aL( rBoxItem.GetLeft() );
-    svx::frame::Style aR( rBoxItem.GetRight() );
-    svx::frame::Style aT( rBoxItem.GetTop() );
-    svx::frame::Style aB( rBoxItem.GetBottom() );
+    SwViewShell* pViewShell = mrTabFrm.getRootFrm()->GetCurrShell();
+    OutputDevice* pOutDev = pViewShell->GetOut();
+    const MapMode& rMapMode = pOutDev->GetMapMode();
+    const Fraction& rFracX = rMapMode.GetScaleX();
+    const Fraction& rFracY = rMapMode.GetScaleY();
+
+    svx::frame::Style aL(rBoxItem.GetLeft(), rFracX);
+    svx::frame::Style aR(rBoxItem.GetRight(), rFracY);
+    svx::frame::Style aT(rBoxItem.GetTop(), rFracX);
+    svx::frame::Style aB(rBoxItem.GetBottom(), rFracY);
 
     aR.MirrorSelf();
     aB.MirrorSelf();
