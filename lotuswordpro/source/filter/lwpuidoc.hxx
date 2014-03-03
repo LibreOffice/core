@@ -111,7 +111,10 @@ public:
 class LwpMergeOptions
 {
 public:
-    LwpMergeOptions(){}
+    LwpMergeOptions()
+        : m_nType(0)
+        , m_nLastActionFlag(0)
+        {}
     ~LwpMergeOptions(){}
 private:
     LwpAtomHolder m_RecordFile;
