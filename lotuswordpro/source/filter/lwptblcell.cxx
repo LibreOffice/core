@@ -216,7 +216,10 @@ void  LwpFolder::Parse(IXFStream* /*pOutputStream*/)
 {
 }
 
-LwpDependent::LwpDependent(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpDLVList(objHdr, pStrm)
+LwpDependent::LwpDependent(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+    : LwpDLVList(objHdr, pStrm)
+    , cReferenceOffset(0)
+    , cFlags(0)
 {}
 
 LwpDependent::~LwpDependent()
