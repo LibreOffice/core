@@ -321,7 +321,7 @@ Apache_OpenOffice_Beta_SDK
             DOWNLOADSETUPICO ooosetup.ico
             DONTUSESTARTMENUFOLDER 1
             RELATIVE_PATHES_IN_DDF 1
-            AOODOWNLOADNAMEPREFIX Apache_OpenOffice-Beta-SDK
+            AOODOWNLOADNAMEPREFIX Apache_OpenOffice_Beta-SDK
             STARTCENTER_ADDFEATURE_URL http://extensions.openoffice.org/
             STARTCENTER_INFO_URL http://www.openoffice.org
             STARTCENTER_TEMPLREP_URL http://templates.openoffice.org
