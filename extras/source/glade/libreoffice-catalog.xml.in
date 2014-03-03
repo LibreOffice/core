@@ -284,6 +284,9 @@
     <glade-widget-class title="MultiLine Edit" name="svtlo-MultiLineEditSyntaxHighlight"
                         generic-name="MultiLineEdit" parent="GtkTextView"
                         icon-name="widget-gtk-textview"/>
+    <glade-widget-class title="AutoComplete MultiLine Edit" name="cuilo-AutoCompleteMultiListBox"
+                        generic-name="MultiLineEdit" parent="GtkTextView"
+                        icon-name="widget-gtk-textview"/>
     <glade-widget-class title="SvtFormattedField" name="svtlo-FormattedField"
                         generic-name="Formatted Field" parent="GtkSpinButton"
                         icon-name="widget-gtk-textentry"/>

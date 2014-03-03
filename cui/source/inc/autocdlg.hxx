@@ -399,36 +399,36 @@ public:
 
 class OfaAutoCompleteTabPage : public SfxTabPage
 {
-    using TabPage::ActivatePage;
-
+public:
     class AutoCompleteMultiListBox : public MultiListBox
     {
-        OfaAutoCompleteTabPage& rPage;
+        OfaAutoCompleteTabPage* m_pPage;
     public:
-        AutoCompleteMultiListBox( OfaAutoCompleteTabPage& rPg,
-                                    const ResId& rResId )
-            : MultiListBox( &rPg, rResId ), rPage( rPg ) {}
-
+        AutoCompleteMultiListBox(Window *pParent, WinBits nBits)
+            : MultiListBox(pParent, nBits)
+            , m_pPage(NULL)
+        {
+        }
+        void SetPage(OfaAutoCompleteTabPage *pPage) { m_pPage = pPage; }
         virtual bool PreNotify( NotifyEvent& rNEvt );
     };
 
-    CheckBox        aCBActiv; ///<Enable word completion
-    CheckBox        aCBAppendSpace;///<Append space
-    CheckBox        aCBAsTip; ///<Show as tip
+private:
+    using TabPage::ActivatePage;
+    CheckBox*       m_pCBActiv; ///<Enable word completion
+    CheckBox*       m_pCBAppendSpace;///<Append space
+    CheckBox*       m_pCBAsTip; ///<Show as tip
 
-    CheckBox        aCBCollect;///<Collect words
-    CheckBox        aCBRemoveList;///<...save the list for later use...
+    CheckBox*       m_pCBCollect;///<Collect words
+    CheckBox*       m_pCBRemoveList;///<...save the list for later use...
 
-    FixedText       aFTExpandKey;
-    ListBox         aDCBExpandKey;
-    FixedText       aFTMinWordlen;
-    NumericField    aNFMinWordlen;
-    FixedText       aFTMaxEntries;
-    NumericField    aNFMaxEntries;
-    AutoCompleteMultiListBox    aLBEntries;
-    PushButton                  aPBEntries;
+    ListBox*        m_pDCBExpandKey;
+    NumericField*   m_pNFMinWordlen;
+    NumericField*   m_pNFMaxEntries;
+    AutoCompleteMultiListBox* m_pLBEntries;
+    PushButton*     m_pPBEntries;
     editeng::SortedAutoCompleteStrings* m_pAutoCompleteList;
-    sal_uInt16                      nAutoCmpltListCnt;
+    sal_uInt16      m_nAutoCmpltListCnt;
 
     DECL_LINK( CheckHdl, CheckBox* );
 
