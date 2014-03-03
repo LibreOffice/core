@@ -34,10 +34,9 @@
 
 #include <svtools/controldims.hrc>
 #include <svtools/valueset.hxx>
-// header for class Image
-#include <vcl/image.hxx>
-// header for class Bitmap
 #include <vcl/bitmap.hxx>
+#include <vcl/builder.hxx>
+#include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
@@ -348,10 +347,6 @@ void ChartTypeDialogController::fillSubTypeList( ValueSet& rSubTypeList, const C
 {
     rSubTypeList.Clear();
 }
-bool ChartTypeDialogController::shouldShow_XAxisTypeControl() const
-{
-    return false;
-}
 bool ChartTypeDialogController::shouldShow_3DLookControl() const
 {
     return false;
@@ -377,7 +372,7 @@ bool ChartTypeDialogController::shouldShow_SortByXValuesResourceGroup() const
     return false;
 }
 
-void ChartTypeDialogController::showExtraControls( Window* /*pParent*/, const Point& /*rPosition*/, const Size& /*rSize*/ )
+void ChartTypeDialogController::showExtraControls( VclBuilderContainer* /*pParent*/ )
 {
 }
 void ChartTypeDialogController::hideExtraControls() const
@@ -1073,6 +1068,7 @@ const tTemplateServiceChartTypeParameterMap& StockChartDialogController::getTemp
     ;
     return m_aTemplateMap;
 }
+
 void StockChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
 {
     rSubTypeList.Clear();
@@ -1086,24 +1082,18 @@ void StockChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const 
     rSubTypeList.SetItemText( 3, SCH_RESSTR(STR_STOCK_3) );
     rSubTypeList.SetItemText( 4, SCH_RESSTR(STR_STOCK_4) );
 }
+
 void StockChartDialogController::adjustParameterToSubType( ChartTypeParameter& rParameter )
 {
     rParameter.b3DLook = false;
     rParameter.eStackMode = GlobalStackMode_NONE;
 }
+
 CombiColumnLineChartDialogController::CombiColumnLineChartDialogController()
-                    : m_pFT_NumberOfLines(0)
-                    , m_pMF_NumberOfLines(0)
+    : m_pFT_NumberOfLines(0)
+    , m_pMF_NumberOfLines(0)
 {
     bSupports3D = false;
-}
-
-CombiColumnLineChartDialogController::~CombiColumnLineChartDialogController()
-{
-    if(m_pFT_NumberOfLines)
-        delete m_pFT_NumberOfLines;
-    if(m_pMF_NumberOfLines)
-        delete m_pMF_NumberOfLines;
 }
 
 OUString CombiColumnLineChartDialogController::getName()
@@ -1125,6 +1115,7 @@ const tTemplateServiceChartTypeParameterMap& CombiColumnLineChartDialogControlle
     ;
     return m_aTemplateMap;
 }
+
 void CombiColumnLineChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
 {
     rSubTypeList.Clear();
@@ -1134,43 +1125,30 @@ void CombiColumnLineChartDialogController::fillSubTypeList( ValueSet& rSubTypeLi
     rSubTypeList.SetItemText(1, SCH_RESSTR(STR_LINE_COLUMN));
     rSubTypeList.SetItemText(2, SCH_RESSTR(STR_LINE_STACKEDCOLUMN));
 }
-void CombiColumnLineChartDialogController::showExtraControls( Window* pParent, const Point& rPosition, const Size& rSize )
+
+void CombiColumnLineChartDialogController::showExtraControls( VclBuilderContainer* pParent )
 {
-    if(!m_pFT_NumberOfLines)
+    if (!m_pFT_NumberOfLines)
     {
-        m_pFT_NumberOfLines = new FixedText(pParent,pParent->GetStyle());
-        m_pFT_NumberOfLines->SetText(SCH_RESSTR(STR_NUMBER_OF_LINES));
+        pParent->get(m_pFT_NumberOfLines, "nolinesft");
     }
-    if(!m_pMF_NumberOfLines)
+    if (!m_pMF_NumberOfLines)
     {
-        m_pMF_NumberOfLines = new MetricField(pParent,pParent->GetStyle() | WB_SPIN | WB_REPEAT | WB_BORDER );
-        m_pMF_NumberOfLines->SetDefaultUnit( FUNIT_CUSTOM );
-        m_pMF_NumberOfLines->SetUnit( FUNIT_CUSTOM );
+        pParent->get(m_pMF_NumberOfLines, "nolines");
+
         m_pMF_NumberOfLines->SetSpinSize(1);
-        m_pMF_NumberOfLines->SetFirst( 1, FUNIT_CUSTOM );
-        m_pMF_NumberOfLines->SetLast( 100, FUNIT_CUSTOM );
-        m_pMF_NumberOfLines->SetMin( 1, FUNIT_CUSTOM );
-        m_pMF_NumberOfLines->SetMax( 100, FUNIT_CUSTOM );
-        m_pMF_NumberOfLines->SetHelpId( HID_SCH_NUM_OF_LINES );
+        m_pMF_NumberOfLines->SetFirst( 1 );
+        m_pMF_NumberOfLines->SetLast( 100 );
+        m_pMF_NumberOfLines->SetMin( 1 );
+        m_pMF_NumberOfLines->SetMax( 100 );
 
         m_pMF_NumberOfLines->SetModifyHdl( LINK( this, CombiColumnLineChartDialogController, ChangeLineCountHdl ) );
     }
 
-    Size aDistanceSize( pParent->LogicToPixel( Size(RSC_SP_CTRL_DESC_X,2), MapMode(MAP_APPFONT) ) );
-    Size aMFSize( pParent->LogicToPixel( Size(20,RSC_CD_TEXTBOX_HEIGHT), MapMode(MAP_APPFONT) ) );
-    m_pMF_NumberOfLines->SetSizePixel( aMFSize );
-
-    Size aFTSize(m_pFT_NumberOfLines->CalcMinimumSize(rSize.Width()-aMFSize.Width()-aDistanceSize.Width()));
-    m_pFT_NumberOfLines->SetSizePixel(aFTSize);
-
-    m_pFT_NumberOfLines->SetPosPixel( Point( rPosition.X(), rPosition.Y()+aDistanceSize.Height()) );
-    m_pMF_NumberOfLines->SetPosPixel( Point( rPosition.X()+aFTSize.Width()+aDistanceSize.Width(), rPosition.Y()) );
-
     m_pFT_NumberOfLines->Show();
     m_pMF_NumberOfLines->Show();
-    m_pMF_NumberOfLines->SetAccessibleName(m_pFT_NumberOfLines->GetText());
-    m_pMF_NumberOfLines->SetAccessibleRelationLabeledBy(m_pFT_NumberOfLines);
 }
+
 void CombiColumnLineChartDialogController::hideExtraControls() const
 {
     if(m_pFT_NumberOfLines)
@@ -1178,6 +1156,7 @@ void CombiColumnLineChartDialogController::hideExtraControls() const
     if(m_pMF_NumberOfLines)
         m_pMF_NumberOfLines->Hide();
 }
+
 void CombiColumnLineChartDialogController::fillExtraControls( const ChartTypeParameter& /*rParameter*/
                 , const uno::Reference< XChartDocument >& xChartModel
                 , const uno::Reference< beans::XPropertySet >& xTemplateProps ) const

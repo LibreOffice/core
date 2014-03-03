@@ -65,23 +65,8 @@
 #define STR_TYPE_BUBBLE                     (RID_APP_START + 282)
 #define STR_BUBBLE_1                        (RID_APP_START + 283)
 
-
-//additional controls for wizard:
-
-#define STR_BAR_GEOMETRY                     (RID_APP_START + 127)
-#define STR_NUMBER_OF_LINES                  (RID_APP_START + 128)
-
-#define STR_3DSCHEME_SIMPLE                  (RID_APP_START + 231)
-#define STR_3DSCHEME_REALISTIC               (RID_APP_START + 232)
-#define STR_3DSCHEME_CUSTOM                  (RID_APP_START + 259)
-
-#define STR_LINETYPE_STRAIGHT                (RID_APP_START + 297)
-#define STR_LINETYPE_SMOOTH                  (RID_APP_START + 298)
-#define STR_LINETYPE_STEPPED                 (RID_APP_START + 299)
-
 //additional strings
 #define STR_TEXT_SEPARATOR                   (RID_APP_START + 20)
-
 
 //SchStatisticTabPage and SchDataStatisticsDlg
 //see Strings_Statistic.src

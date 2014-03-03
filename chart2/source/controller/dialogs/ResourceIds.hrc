@@ -52,13 +52,6 @@
 #define TP_YERRORBAR    919
 #define TP_XERRORBAR    923
 
-
-//listbox Ids:
-#define LB_BAR_GEOMETRY 1000
-#define LB_TEXT_SEPARATOR 1001
-
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

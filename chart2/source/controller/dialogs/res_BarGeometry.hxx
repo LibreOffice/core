@@ -19,9 +19,8 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_RES_BARGEOMETRY_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_RES_BARGEOMETRY_HXX
 
-// header for class FixedText
+#include <vcl/builder.hxx>
 #include <vcl/fixed.hxx>
-// header for class ListBox
 #include <vcl/lstbox.hxx>
 
 namespace chart
@@ -30,11 +29,7 @@ namespace chart
 class BarGeometryResources
 {
 public:
-    BarGeometryResources( Window* pParent );
-    virtual ~BarGeometryResources();
-
-    void  SetPosPixel( const Point& rPosition );
-    Size  GetSizePixel() const;
+    BarGeometryResources(VclBuilderContainer* pParent);
 
     void Show( bool bShow );
     void Enable( bool bEnable );
@@ -46,8 +41,8 @@ public:
     void SetSelectHdl( const Link& rLink );
 
 private:
-    FixedText   m_aFT_Geometry;
-    ListBox     m_aLB_Geometry;
+    FixedText* m_pFT_Geometry;
+    ListBox*   m_pLB_Geometry;
 };
 
 } //namespace chart

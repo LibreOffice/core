@@ -21,14 +21,7 @@
 
 #define HID_SCH_WIN_DOCUMENT                                "CHART2_HID_SCH_WIN_DOCUMENT"
 
-//for chart type dialog:
-#define HID_SCH_CTL_TYPE                                    "CHART2_HID_SCH_CTL_TYPE"
-#define HID_SCH_CTL_VARIANT                                 "CHART2_HID_SCH_CTL_VARIANT"
-#define HID_SCH_NUM_OF_LINES                                "CHART2_HID_SCH_NUM_OF_LINES"
-
-
 #define HID_SCH_CHART_AUTO_FORMAT                           "CHART2_HID_SCH_CHART_AUTO_FORMAT"
-#define HID_SCH_LB_BAR_GEOMETRY                             "CHART2_HID_SCH_LB_BAR_GEOMETRY"
 
 #define HID_SCH_CB_SECONDARY_XAXIS                          "CHART2_HID_SCH_CB_SECONDARY_XAXIS"
 #define HID_SCH_CB_SECONDARY_YAXIS                          "CHART2_HID_SCH_CB_SECONDARY_YAXIS"

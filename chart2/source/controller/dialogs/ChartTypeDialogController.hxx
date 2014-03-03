@@ -27,12 +27,10 @@
 #include <com/sun/star/chart2/CurveStyle.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartTypeTemplate.hpp>
-// header for class CheckBox
+#include <vcl/builder.hxx>
 #include <vcl/button.hxx>
-// header for class FixedText
-#include <vcl/fixed.hxx>
-// header for class MetricField
 #include <vcl/field.hxx>
+#include <vcl/fixed.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 class ValueSet;
@@ -96,7 +94,6 @@ public:
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const = 0;
     virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter );
 
-    virtual bool    shouldShow_XAxisTypeControl() const;
     virtual bool    shouldShow_3DLookControl() const;
     virtual bool    shouldShow_StackingControl() const;
     virtual bool    shouldShow_DeepStackingControl() const;
@@ -104,7 +101,7 @@ public:
     virtual bool    shouldShow_GeometryControl() const;
     virtual bool    shouldShow_SortByXValuesResourceGroup() const;
 
-    virtual void    showExtraControls( Window* pParent, const Point& rPosition, const Size& rSize );
+    virtual void    showExtraControls(VclBuilderContainer* pParent);
     virtual void    hideExtraControls() const;
     virtual void    fillExtraControls( const ChartTypeParameter& rParameter
                                      , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartModel
@@ -262,7 +259,6 @@ class CombiColumnLineChartDialogController : public ChartTypeDialogController
 {
 public:
     CombiColumnLineChartDialogController();
-    virtual ~CombiColumnLineChartDialogController();
 
     virtual OUString  getName();
     virtual Image   getImage();
@@ -270,7 +266,7 @@ public:
     virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter );
     virtual void adjustParameterToSubType( ChartTypeParameter& rParameter );
 
-    virtual void    showExtraControls( Window* pParent, const Point& rPosition, const Size& rSize );
+    virtual void    showExtraControls(VclBuilderContainer* pParent);
     virtual void    hideExtraControls() const;
     virtual void    fillExtraControls( const ChartTypeParameter& rParameter
                                      , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartModel
@@ -282,8 +278,8 @@ private:
     DECL_LINK( ChangeLineCountHdl, void* );
 
 private:
-    FixedText*      m_pFT_NumberOfLines;
-    MetricField*    m_pMF_NumberOfLines;
+    FixedText*    m_pFT_NumberOfLines;
+    NumericField* m_pMF_NumberOfLines;
 };
 
 class BubbleChartDialogController : public ChartTypeDialogController

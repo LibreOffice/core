@@ -36,15 +36,12 @@ SchLayoutTabPage::SchLayoutTabPage(Window* pWindow,const SfxItemSet& rInAttrs)
                  : SfxTabPage(pWindow, SchResId(TP_LAYOUT), rInAttrs)
                  , m_pGeometryResources(0)
 {
-    Point aPos( this->LogicToPixel( Point(6,6), MapMode(MAP_APPFONT) ) );
     m_pGeometryResources = new BarGeometryResources( this );
-    m_pGeometryResources->SetPosPixel( aPos );
 }
 
 SchLayoutTabPage::~SchLayoutTabPage()
 {
-    if( m_pGeometryResources )
-        delete m_pGeometryResources;
+    delete m_pGeometryResources;
 }
 
 SfxTabPage* SchLayoutTabPage::Create(Window* pWindow,

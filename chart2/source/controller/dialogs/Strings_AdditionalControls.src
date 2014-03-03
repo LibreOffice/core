@@ -18,49 +18,9 @@
  */
 #include "Strings.hrc"
 
-String STR_3DSCHEME_SIMPLE
-{
-    Text [ en-US ] = "Simple";
-};
-String STR_3DSCHEME_REALISTIC
-{
-    Text [ en-US ] = "Realistic";
-};
-String STR_3DSCHEME_CUSTOM
-{
-    Text [ en-US ] = "Custom";
-};
-
-String STR_BAR_GEOMETRY
-{
-    Text [ en-US ] = "Shape";
-};
-
-String STR_NUMBER_OF_LINES
-{
-    Text [ en-US ] = "~Number of lines";
-};
-
 String STR_TEXT_SEPARATOR
 {
     Text [ en-US ] = "Separator";
 };
-
-String STR_LINETYPE_STRAIGHT
-{
-    Text [ en-US ] = "Straight";
-};
-
-String STR_LINETYPE_SMOOTH
-{
-    Text [ en-US ] = "Smooth";
-};
-
-String STR_LINETYPE_STEPPED
-{
-    Text [ en-US ] = "Stepped";
-};
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

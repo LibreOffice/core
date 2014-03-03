@@ -39,7 +39,6 @@
 namespace chart
 {
 
-class AxisTypeResourceGroup;
 class Dim3DLookResourceGroup;
 class StackingResourceGroup;
 class SplineResourceGroup;
@@ -78,18 +77,15 @@ protected:
     DECL_LINK( SelectSubTypeHdl, void* );
 
 protected:
-    FixedText   m_aFT_ChooseType;
-    ListBox     m_aMainTypeList;
-    ValueSet    m_aSubTypeList;
+    FixedText*  m_pFT_ChooseType;
+    ListBox*    m_pMainTypeList;
+    ValueSet*   m_pSubTypeList;
 
-    AxisTypeResourceGroup*      m_pAxisTypeResourceGroup;
     Dim3DLookResourceGroup*     m_pDim3DLookResourceGroup;
     StackingResourceGroup*      m_pStackingResourceGroup;
     SplineResourceGroup*        m_pSplineResourceGroup;
     GeometryResourceGroup*      m_pGeometryResourceGroup;
     SortByXValuesResourceGroup* m_pSortByXValuesResourceGroup;
-
-    long    m_nYTopPos;//top y position of the different ResourceGroups (AxisTypeResourceGroup, etc)
 
     ::com::sun::star::uno::Reference<
                        ::com::sun::star::chart2::XChartDocument >   m_xChartModel;
