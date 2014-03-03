@@ -20,8 +20,6 @@
 #include <sfx2/sfxmodelfactory.hxx>
 #include <svl/stritem.hxx>
 
-#define TEST_BUG_FILES 0
-
 #include "helper/qahelper.hxx"
 
 #include "docsh.hxx"
@@ -70,14 +68,6 @@ public:
     void testContentXLS_XML();
     void testSharedFormulaXLS();
     void testSharedFormulaXLSX();
-#if TEST_BUG_FILES
-    //goes recursively through all files in this dir and tries to open them
-    void testDir(osl::Directory& rDir, sal_Int32 nType);
-    //test Bug Files and search for files that crash LibO
-    void testBugFiles();
-    void testBugFilesXLS();
-    void testBugFilesXLSX();
-#endif
     void testLegacyCellAnchoredRotatedShape();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
@@ -93,11 +83,6 @@ public:
     CPPUNIT_TEST(testSharedFormulaXLSX);
     CPPUNIT_TEST(testLegacyCellAnchoredRotatedShape);
 
-#if TEST_BUG_FILES
-    CPPUNIT_TEST(testBugFiles);
-    CPPUNIT_TEST(testBugFilesXLS);
-    CPPUNIT_TEST(testBugFilesXLSX);
-#endif
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -133,64 +118,6 @@ void ScFiltersTest::testCVEs()
         getURLFromSrc("/sc/qa/unit/data/xls/"), OUString());
 #endif
 }
-
-#if TEST_BUG_FILES
-
-void ScFiltersTest::testDir(osl::Directory& rDir, sal_uInt32 nType)
-{
-    OUString aFilterName(getFileFormats()[nType].pFilterName, strlen(getFileFormats()[nType].pFilterName), RTL_TEXTENCODING_UTF8) ;
-    OUString aFilterType(getFileFormats()[nType].pTypeName, strlen(getFileFormats()[nType].pTypeName), RTL_TEXTENCODING_UTF8);
-
-    osl::DirectoryItem aItem;
-    osl::FileStatus aFileStatus(osl_FileStatus_Mask_FileURL|osl_FileStatus_Mask_Type);
-    while (rDir.getNextItem(aItem) == osl::FileBase::E_None)
-    {
-        aItem.getFileStatus(aFileStatus);
-        OUString sURL = aFileStatus.getFileURL();
-        std::cout << "File: " << OUStringToOString(sURL, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
-        //OStringBuffer aMessage("Failed loading: ");
-        //aMessage.append(OUStringToOString(sURL, RTL_TEXTENCODING_UTF8));
-
-        unsigned int nFormatType = getFileFormats()[nType].nFormatType;
-        unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
-        ScDocShellRef xDocSh = load(sURL, aFilterName, OUString(),
-            aFilterType, nFormatType, nClipboardId );
-        // use this only if you're sure that all files can be loaded
-        // pay attention to lock files
-        //CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), xDocSh.Is());
-        if (xDocSh.Is())
-            xDocSh->DoClose();
-    }
-}
-
-void ScFiltersTest::testBugFiles()
-{
-    OUString aDirName = getURLFromSrc("/sc/qa/unit/data/bugODS/");
-    osl::Directory aDir(aDirName);
-
-    CPPUNIT_ASSERT(osl::FileBase::E_None == aDir.open());
-    testDir(aDir, 0);
-}
-
-void ScFiltersTest::testBugFilesXLS()
-{
-    OUString aDirName = getURLFromSrc("/sc/qa/unit/data/bugXLS/");
-    osl::Directory aDir(aDirName);
-
-    CPPUNIT_ASSERT(osl::FileBase::E_None == aDir.open());
-    testDir(aDir, 1);
-}
-
-void ScFiltersTest::testBugFilesXLSX()
-{
-    OUString aDirName = getURLFromSrc("/sc/qa/unit/data/bugXLSX/");
-    osl::Directory aDir(aDirName);
-
-    CPPUNIT_ASSERT(osl::FileBase::E_None == aDir.open());
-    testDir(aDir, 2);
-}
-
-#endif
 
 namespace {
 
