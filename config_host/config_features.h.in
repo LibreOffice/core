@@ -120,4 +120,9 @@
  */
 #define HAVE_FT_FACE_GETCHARVARIANTINDEX 0
 
+/*
+ * Whether to use validation on files.
+ */
+#define HAVE_EXPORT_VALIDATION 0
+
 #endif

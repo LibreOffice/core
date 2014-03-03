@@ -1835,6 +1835,15 @@ AC_ARG_WITH(ant-home,
     ],
 ,)
 
+AC_ARG_WITH(export-validation,
+    AS_HELP_STRING([--with-export-validation],
+        [If you want the exported files to be validated. Right now limited to OOXML files in calc export tests.
+         Note: You need an executable script officeotron that takes the path to the file.])
+    [
+                            Usage: --with-export-validation
+    ],
+,)
+
 AC_ARG_WITH(junit,
     AS_HELP_STRING([--with-junit],
         [Specifies the JUnit 4 jar file to use for JUnit-based tests.
@@ -2556,6 +2565,17 @@ AC_SUBST(ENABLE_JAVA)
 dnl ENABLE_JAVA="TRUE" if we want there to be *run-time* (and build-time) support for Java
 
 dnl ENABLE_JAVA="" indicate no Java support at all
+
+dnl ===================================================================
+dnl Export file validation
+dnl ===================================================================
+AC_MSG_CHECKING([whether to enable export file validation])
+if test "with_export_validation" != "no"; then
+    AC_MSG_RESULT([yes])
+    AC_DEFINE(HAVE_EXPORT_VALIDATION)
+else
+    AC_MSG_RESULT([no])
+fi
 
 dnl ===================================================================
 dnl  Test the Solaris compiler version

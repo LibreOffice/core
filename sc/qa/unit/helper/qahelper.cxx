@@ -587,6 +587,66 @@ void ScBootstrapFixture::createCSVPath(const OUString& aFileBase, OUString& rCSV
     rCSVPath = aBuffer.makeStringAndClear();
 }
 
+namespace validation {
+
+enum ScValidationFormat
+{
+    OOXML
+};
+
+}
+
+#if HAVE_EXPORT_VALIDATION
+
+namespace {
+
+void validate(const utl::TempFile& rTempFile, validation::ScValidationFormat eFormat)
+{
+    OUString aValidator;
+    if( eFormat == validation::OOXML )
+    {
+        aValidator = "officeotron ";
+    }
+    else
+        return;
+
+    utl::TempFile aOutput;
+    aOutput.EnableKillingFile();
+    OUString aOutputFile = aOutput.GetFileName();
+    OUString aInputFile = rTempFile.GetFileName();
+    OUString aCommand = aValidator + aInputFile + " > " + aOutputFile;
+
+    system(OUStringToOString(aCommand, RTL_TEXTENCODING_UTF8).getStr());
+
+    std::string aContent;
+    loadFile(aOutputFile, aContent);
+    OString aContentString(aContent.c_str());
+    OUString aContentOUString = OStringToOUString(aContentString, RTL_TEXTENCODING_UTF8);
+
+    if( eFormat == validation::OOXML && !aContentOUString.isEmpty() )
+    {
+        // check for validation errors here
+        sal_Int32 nIndex = aContentOUString.lastIndexOf("Grand total of errors in submitted package: ");
+        if(nIndex == -1)
+        {
+            SAL_WARN("sc", "no summery line");
+        }
+        else
+        {
+            sal_Int32 nStartOfNumber = nIndex + std::strlen("Grand total of errors in submitted package: ");
+            OUString aNumber = aContentOUString.copy(nStartOfNumber);
+            sal_Int32 nErrors = aNumber.toInt32();
+            OString aMsg("validation error in OOXML export: Errors: ");
+            aMsg = aMsg + OString::number(nErrors);
+            CPPUNIT_ASSERT_MESSAGE(aMsg.getStr(), nErrors == 0);
+        }
+    }
+}
+
+}
+
+#endif
+
 ScDocShellRef ScBootstrapFixture::saveAndReload(
     ScDocShell* pShell, const OUString &rFilter,
     const OUString &rUserData, const OUString& rTypeName, sal_uLong nFormatType)
@@ -613,7 +673,12 @@ ScDocShellRef ScBootstrapFixture::saveAndReload(
     if (nFormatType == ODS_FORMAT_TYPE)
         nFormat = SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS;
 
-    return load(aTempFile.GetURL(), rFilter, rUserData, rTypeName, nFormatType, nFormat );
+    ScDocShellRef xDocSh = load(aTempFile.GetURL(), rFilter, rUserData, rTypeName, nFormatType, nFormat );
+#if HAVE_EXPORT_VALIDATION
+    if(nFormatType == XLSX_FORMAT_TYPE)
+        validate(aTempFile, validation::OOXML);
+#endif
+    return xDocSh;
 }
 
 ScDocShellRef ScBootstrapFixture::saveAndReload( ScDocShell* pShell, sal_Int32 nFormat )
