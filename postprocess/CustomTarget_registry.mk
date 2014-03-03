@@ -331,6 +331,10 @@ postprocess_FILES_main += \
 		# Inet-wnt.xcu must come after Inet.xcu
 postprocess_DRIVERS += ado
 endif
+ifneq (unx,$(GUIBASE))
+postprocess_FILES_main += \
+	$(postprocess_MOD)/org/openoffice/Office/Paths-notunixdesktop.xcu
+endif
 ifeq ($(DISABLE_NEON),$(false))
 postprocess_FILES_main += $(postprocess_MOD)/org/openoffice/ucb/Configuration-neon.xcu
 endif

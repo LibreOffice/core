@@ -162,7 +162,7 @@
         <node oor:name="$(insturl)/@LIBO_SHARE_FOLDER@/template/$(vlang)" oor:op="fuse"/>
       </node>
       <!--
-           On unix check of we have a ~/Templates and use that as the write path.
+           On unix check if we have a ~/Templates and use that as the write path.
            On other platforms, or if ~/Templates doesn't exist, use the traditional
            $(userurl)/template path.
 
@@ -171,11 +171,11 @@
            in that dir.
       -->
       <prop oor:name="WritePath">
-        <value>$(userurl)/template</value>
+        <value install:module="notunixdesktop">$(userurl)/template</value>
         <value install:module="unixdesktop" oor:external="com.sun.star.configuration.backend.DesktopBackend TemplatePathVariable"/>
       </prop>
-      <prop oor:name="UserPaths">
-        <value install:module="unixdesktop">$(userurl)/template</value>
+      <prop oor:name="UserPaths" install:module="unixdesktop">
+        <value>$(userurl)/template</value>
       </prop>
     </node>
     <node oor:name="UIConfig" oor:op="fuse" oor:mandatory="true">

@@ -101,6 +101,7 @@ $(eval $(call gb_Configuration_add_spool_modules,registry,officecfg/registry/dat
 	org/openoffice/Office/Paths-macosx.xcu \
 	org/openoffice/Office/Paths-unxwnt.xcu \
 	org/openoffice/Office/Paths-unixdesktop.xcu \
+	org/openoffice/Office/Paths-notunixdesktop.xcu \
 	org/openoffice/Office/Paths-internallibexttextcatdata.xcu \
 	org/openoffice/Office/Paths-externallibexttextcatdata.xcu \
 	org/openoffice/Office/Writer-cjk.xcu \
