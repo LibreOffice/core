@@ -15,6 +15,7 @@ namespace rtftok {
 
 enum RTFKeyword
 {
+    RTF_invalid = -1,
     RTF_HEXCHAR,
     RTF_OPTHYPH,
     RTF_IGNORE,

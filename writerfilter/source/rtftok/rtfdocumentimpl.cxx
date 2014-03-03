@@ -280,7 +280,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_aHexBuffer(),
     m_bMathNor(false),
     m_bIgnoreNextContSectBreak(false),
-    m_nResetBreakOnSectBreak(static_cast<RTFKeyword>(-1)),
+    m_nResetBreakOnSectBreak(RTF_invalid),
     m_bNeedSect(false), // done by checkFirstRun
     m_bWasInFrame(false),
     m_bHadPicture(false),
@@ -1981,10 +1981,10 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 else
                 {
                     sectBreak();
-                    if (m_nResetBreakOnSectBreak != -1)
+                    if (m_nResetBreakOnSectBreak != RTF_invalid)
                     {   // this should run on _second_ \sect after \page
                         dispatchSymbol(m_nResetBreakOnSectBreak); // lazy reset
-                        m_nResetBreakOnSectBreak = static_cast<RTFKeyword>(-1);
+                        m_nResetBreakOnSectBreak = RTF_invalid;
                         m_bNeedSect = false; // dispatchSymbol set it
                     }
                 }
@@ -2349,7 +2349,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     }
     if (nParam >= 0)
     {
-        if (m_nResetBreakOnSectBreak != -1)
+        if (m_nResetBreakOnSectBreak != RTF_invalid)
         {
             m_nResetBreakOnSectBreak = nKeyword;
         }
