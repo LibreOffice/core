@@ -1015,7 +1015,7 @@ namespace
             }
             else
             {
-                OSL_TRACE( "No chance to refresh lock before timeout!" );
+                SAL_INFO("ucb.ucp.webdav",  "No chance to refresh lock before timeout!" );
             }
         }
         return lastChanceToSendRefreshRequest;
@@ -1104,18 +1104,15 @@ void SerfSession::LOCK( const OUString & inPath,
         aTokens[ 0 ] = OUString::createFromAscii( theLock->token );
         rLock.LockTokens = aTokens;
 
-        OSL_TRACE( "SerfSession::LOCK: created lock for %s. token: %s",
-                   OUStringToOString( makeAbsoluteURL( inPath ),
-                                           RTL_TEXTENCODING_UTF8 ).getStr(),
-                   theLock->token );
+        SAL_INFO("ucb.ucp.webdav",  "SerfSession::LOCK: created lock for "
+                    << makeAbsoluteURL( inPath ) << ". token: " << theLock->token );
     }
     else
     {
         ne_lock_destroy( theLock );
 
-        OSL_TRACE( "SerfSession::LOCK: obtaining lock for %s failed!",
-                   OUStringToOString( makeAbsoluteURL( inPath ),
-                                           RTL_TEXTENCODING_UTF8 ).getStr() );
+        SAL_INFO("ucb.ucp.webdav",  "SerfSession::LOCK: obtaining lock for "
+                    << makeAbsoluteURL( inPath ) << " failed!");
     }
 
     HandleError( theRetVal, inPath, rEnv );
@@ -1183,12 +1180,12 @@ bool SerfSession::LOCK( SerfLock * /*pLock*/,
         rlastChanceToSendRefreshRequest
             = lastChanceToSendRefreshRequest( startCall, pLock->timeout );
 
-        OSL_TRACE( "Lock successfully refreshed." );
+        SAL_INFO("ucb.ucp.webdav",  "Lock successfully refreshed." );
         return true;
     }
     else
     {
-        OSL_TRACE( "Lock not refreshed!" );
+        SAL_INFO("ucb.ucp.webdav",  "Lock not refreshed!" );
         return false;
     }
     */
@@ -1221,9 +1218,8 @@ void SerfSession::UNLOCK( const OUString & /*inPath*/,
     }
     else
     {
-        OSL_TRACE( "SerfSession::UNLOCK: unlocking of %s failed.",
-                   OUStringToOString( makeAbsoluteURL( inPath ),
-                                           RTL_TEXTENCODING_UTF8 ).getStr() );
+        SAL_INFO("ucb.ucp.webdav",  "SerfSession::UNLOCK: unlocking of "
+                    << makeAbsoluteURL( inPath ) << " failed.");
     }
 
     HandleError( theRetVal, inPath, rEnv );
@@ -1241,12 +1237,12 @@ bool SerfSession::UNLOCK( SerfLock * /*pLock*/ )
     /*
     if ( ne_unlock( m_pHttpSession, pLock ) == NE_OK )
     {
-        OSL_TRACE( "UNLOCK succeeded." );
+        SAL_INFO("ucb.ucp.webdav",  "UNLOCK succeeded." );
         return true;
     }
     else
     {
-        OSL_TRACE( "UNLOCK failed!" );
+        SAL_INFO("ucb.ucp.webdav",  "UNLOCK failed!" );
         return false;
     }
     */
@@ -1356,11 +1352,8 @@ bool SerfSession::removeExpiredLocktoken( const OUString & /*inURL*/,
 
         // No lockdiscovery prop in propfind result / locktoken not found
         // in propfind result -> not locked
-        OSL_TRACE( "SerfSession::removeExpiredLocktoken: Removing "
-                   " expired lock token for %s. token: %s",
-                   OUStringToOString( inURL,
-                                           RTL_TEXTENCODING_UTF8 ).getStr(),
-                   theLock->token );
+        SAL_INFO("ucb.ucp.webdav",  "SerfSession::removeExpiredLocktoken: Removing "
+                   " expired lock token for " << inURL << ". token: " << theLock->token );
 
         m_aSerfLockStore.removeLock( theLock );
         ne_lock_destroy( theLock );
@@ -1484,7 +1477,7 @@ void SerfSession::HandleError( boost::shared_ptr<SerfRequestProcessor> rReqProc 
         }
         default:
         {
-            OSL_TRACE( "SerfSession::HandleError : Unknown Serf error code!" );
+            SAL_INFO("ucb.ucp.webdav",  "SerfSession::HandleError : Unknown Serf error code!" );
             throw DAVException( DAVException::DAV_HTTP_ERROR,
                                 OUString::createFromAscii(
                                     ne_get_error( m_pHttpSession ) ) );

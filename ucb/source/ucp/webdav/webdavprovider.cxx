@@ -108,8 +108,7 @@ ContentProvider::ContentProvider(
     }
     catch ( const uno::Exception &e )
     {
-        OSL_TRACE( "ContentProvider -caught exception! %s",
-                   OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+        SAL_INFO("ucb.ucp.webdav",  "ContentProvider -caught exception! : " << e.Message);
         (void) e;
     }
 }

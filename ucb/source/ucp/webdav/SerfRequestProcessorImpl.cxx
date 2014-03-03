@@ -92,7 +92,7 @@ void SerfRequestProcessorImpl::setRequestHeaders( serf_bucket_t* inoutSerfHeader
         const OString aValue = OUStringToOString( (*aHeaderIter).second,
                                                             RTL_TEXTENCODING_UTF8 );
 
-        OSL_TRACE( "Request Header - \"%s: %s\"", aHeader.getStr(), aValue.getStr() );
+        SAL_INFO("ucb.ucp.webdav",  "Request Header - \"" << aHeader << ": " << aValue << "\"");
         if ( !bHasUserAgent )
             bHasUserAgent = aHeaderIter->first == "User-Agent";
 

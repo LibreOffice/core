@@ -51,7 +51,7 @@ protected:
 
 void TickerThread::run()
 {
-    OSL_TRACE( "TickerThread: start." );
+    SAL_INFO("ucb.ucp.webdav",  "TickerThread: start." );
 
     // we have to go through the loop more often to be able to finish ~quickly
     const int nNth = 25;
@@ -71,7 +71,7 @@ void TickerThread::run()
         wait( aTV );
     }
 
-    OSL_TRACE( "TickerThread: stop." );
+    SAL_INFO("ucb.ucp.webdav",  "TickerThread: stop." );
 }
 
 
