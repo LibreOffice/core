@@ -2258,6 +2258,11 @@ struct SwLineEntry
     SwTwips mnKey;
     SwTwips mnStartPos;
     SwTwips mnEndPos;
+    SwTwips mnOffset;
+
+    bool mbOffsetPerp;
+    bool mbOffsetStart;
+    bool mbOffsetEnd;
 
     svx::frame::Style maAttribute;
 
@@ -2279,6 +2284,10 @@ SwLineEntry::SwLineEntry( SwTwips nKey,
     :   mnKey( nKey ),
         mnStartPos( nStartPos ),
         mnEndPos( nEndPos ),
+        mnOffset( 0 ),
+        mbOffsetPerp(false),
+        mbOffsetStart(false),
+        mbOffsetEnd(false),
         maAttribute( rAttribute )
 {
 }
@@ -2361,6 +2370,8 @@ class SwTabFrmPainter
                             svx::frame::Style*,
                             bool bHori ) const;
 
+    void AdjustTopLeftFrames();
+
 public:
     SwTabFrmPainter( const SwTabFrm& rTabFrm );
 
@@ -2371,6 +2382,7 @@ SwTabFrmPainter::SwTabFrmPainter( const SwTabFrm& rTabFrm )
     : mrTabFrm( rTabFrm )
 {
     HandleFrame( rTabFrm );
+    AdjustTopLeftFrames();
 }
 
 void SwTabFrmPainter::HandleFrame( const SwLayoutFrm& rLayoutFrm )
@@ -2479,6 +2491,45 @@ void SwTabFrmPainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) const
                 aEnd.Y() = rEntry.mnEndPos;
             }
 
+            svx::frame::Style aStyles[ 7 ];
+            aStyles[ 0 ] = rEntryStyle;
+            FindStylesForLine( aStart, aEnd, aStyles, bHori );
+
+            // Account for double line thicknesses for the top- and left-most borders.
+            if (rEntry.mnOffset)
+            {
+                if (bHori)
+                {
+                    if (rEntry.mbOffsetPerp)
+                    {
+                        // Apply offset in perpendicular direction.
+                        aStart.Y() -= rEntry.mnOffset;
+                        aEnd.Y() -= rEntry.mnOffset;
+                    }
+                    if (rEntry.mbOffsetStart)
+                        // Apply offset at the start of a border.
+                        aStart.X() -= rEntry.mnOffset;
+                    if (rEntry.mbOffsetEnd)
+                        // Apply offset at the end of a border.
+                        aEnd.X() += rEntry.mnOffset;
+                }
+                else
+                {
+                    if (rEntry.mbOffsetPerp)
+                    {
+                        // Apply offset in perpendicular direction.
+                        aStart.X() -= rEntry.mnOffset;
+                        aEnd.X() -= rEntry.mnOffset;
+                    }
+                    if (rEntry.mbOffsetStart)
+                        // Apply offset at the start of a border.
+                        aStart.Y() -= rEntry.mnOffset;
+                    if (rEntry.mbOffsetEnd)
+                        // Apply offset at the end of a border.
+                        aEnd.Y() += rEntry.mnOffset;
+                }
+            }
+
             SwRect aRepaintRect( aStart, aEnd );
 
             // the repaint rectangle has to be moved a bit for the centered lines:
@@ -2498,10 +2549,6 @@ void SwTabFrmPainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) const
             {
                 continue;
             }
-
-            svx::frame::Style aStyles[ 7 ];
-            aStyles[ 0 ] = rEntryStyle;
-            FindStylesForLine( aStart, aEnd, aStyles, bHori );
 
             // subsidiary lines
             const Color* pTmpColor = 0;
@@ -2742,6 +2789,54 @@ void SwTabFrmPainter::FindStylesForLine( const Point& rStartPoint,
     }
 }
 
+namespace {
+
+void calcOffsetForDoubleLine( SwLineEntryMap& rLines )
+{
+    SwLineEntryMap aNewLines;
+    SwLineEntryMap::iterator it = rLines.begin(), itEnd = rLines.end();
+    bool bFirst = true;
+    for (; it != itEnd; ++it)
+    {
+        if (bFirst)
+        {
+            // First line needs to be offset to account for double line thickness.
+            SwLineEntrySet aNewSet;
+            const SwLineEntrySet& rSet = it->second;
+            SwLineEntrySet::iterator itSet = rSet.begin(), itSetEnd = rSet.end();
+            size_t nEntryCount = rSet.size();
+            for (size_t i = 0; itSet != itSetEnd; ++itSet, ++i)
+            {
+                SwLineEntry aLine = *itSet;
+                aLine.mnOffset = static_cast<SwTwips>(aLine.maAttribute.Dist());
+                aLine.mbOffsetPerp = true;
+
+                if (i == 0)
+                    aLine.mbOffsetStart = true;
+                if (i == nEntryCount - 1)
+                    aLine.mbOffsetEnd = true;
+
+                aNewSet.insert(aLine);
+            }
+
+            aNewLines.insert(SwLineEntryMap::value_type(it->first, aNewSet));
+        }
+        else
+            aNewLines.insert(SwLineEntryMap::value_type(it->first, it->second));
+
+        bFirst = false;
+    }
+    rLines.swap(aNewLines);
+}
+
+}
+
+void SwTabFrmPainter::AdjustTopLeftFrames()
+{
+    calcOffsetForDoubleLine(maHoriLines);
+    calcOffsetForDoubleLine(maVertLines);
+}
+
 // special case: #i9860#
 // first line in follow table without repeated headlines
 static bool lcl_IsFirstRowInFollowTableWithoutRepeatedHeadlines(
@@ -2775,10 +2870,16 @@ void SwTabFrmPainter::Insert( const SwFrm& rFrm, const SvxBoxItem& rBoxItem )
     bool const bVert = mrTabFrm.IsVertical();
     bool const bR2L  = mrTabFrm.IsRightToLeft();
 
-    svx::frame::Style aL( rBoxItem.GetLeft() );
-    svx::frame::Style aR( rBoxItem.GetRight() );
-    svx::frame::Style aT( rBoxItem.GetTop() );
-    svx::frame::Style aB( rBoxItem.GetBottom() );
+    SwViewShell* pViewShell = mrTabFrm.getRootFrm()->GetCurrShell();
+    OutputDevice* pOutDev = pViewShell->GetOut();
+    const MapMode& rMapMode = pOutDev->GetMapMode();
+    const Fraction& rFracX = rMapMode.GetScaleX();
+    const Fraction& rFracY = rMapMode.GetScaleY();
+
+    svx::frame::Style aL(rBoxItem.GetLeft(), rFracX);
+    svx::frame::Style aR(rBoxItem.GetRight(), rFracY);
+    svx::frame::Style aT(rBoxItem.GetTop(), rFracX);
+    svx::frame::Style aB(rBoxItem.GetBottom(), rFracY);
 
     aR.MirrorSelf();
     aB.MirrorSelf();

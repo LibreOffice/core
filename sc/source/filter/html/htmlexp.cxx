@@ -513,6 +513,7 @@ OString ScHTMLExport::BorderToStyle(const char* pBorderName,
                 aOut.append("dashed");
                 break;
             case table::BorderLineStyle::DOUBLE:
+            case table::BorderLineStyle::DOUBLE_THIN:
             case table::BorderLineStyle::THINTHICK_SMALLGAP:
             case table::BorderLineStyle::THINTHICK_MEDIUMGAP:
             case table::BorderLineStyle::THINTHICK_LARGEGAP:

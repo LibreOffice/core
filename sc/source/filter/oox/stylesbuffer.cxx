@@ -1736,8 +1736,8 @@ bool Border::convertBorderLine( BorderLine2& rBorderLine, const BorderLineModel&
             rBorderLine.LineStyle = table::BorderLineStyle::DOTTED;
         break;
         case XML_double:
-            lclSetBorderLineWidth( rBorderLine, 5 ,5, 5 );
-            rBorderLine.LineStyle = table::BorderLineStyle::DOUBLE;
+            lclSetBorderLineWidth( rBorderLine, 10, 30, 10 );
+            rBorderLine.LineStyle = table::BorderLineStyle::DOUBLE_THIN;
         break;
         case XML_hair:              lclSetBorderLineWidth( rBorderLine, API_LINE_HAIR );    break;
         case XML_medium:            lclSetBorderLineWidth( rBorderLine, API_LINE_MEDIUM );  break;

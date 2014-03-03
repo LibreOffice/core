@@ -1045,6 +1045,7 @@ void SvxBorderTabPage::FillLineListBox_Impl()
 
         // Double lines
         { DOUBLE,              10, &sameColor, &sameColor, &sameDistColor },
+        { DOUBLE_THIN,         10, &sameColor, &sameColor, &sameDistColor },
         { THINTHICK_SMALLGAP,  20, &sameColor, &sameColor, &sameDistColor },
         { THINTHICK_MEDIUMGAP,  0, &sameColor, &sameColor, &sameDistColor },
         { THINTHICK_LARGEGAP,   0, &sameColor, &sameColor, &sameDistColor },

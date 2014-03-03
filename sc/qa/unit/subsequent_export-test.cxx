@@ -1015,7 +1015,7 @@ const char* toBorderName( sal_Int16 eStyle )
         case table::BorderLineStyle::SOLID: return "SOLID";
         case table::BorderLineStyle::DOTTED: return "DOTTED";
         case table::BorderLineStyle::DASHED: return "DASHED";
-        case table::BorderLineStyle::DOUBLE: return "DOUBLE";
+        case table::BorderLineStyle::DOUBLE_THIN: return "DOUBLE_THIN";
         case table::BorderLineStyle::FINE_DASHED: return "FINE_DASHED";
         default:
             ;
@@ -1046,7 +1046,7 @@ void ScExportTest::testExcelCellBorders( sal_uLong nFormatType )
         { 19, table::BorderLineStyle::DASHED,      35L }, // medium dashed
         { 21, table::BorderLineStyle::SOLID,       35L }, // medium
         { 23, table::BorderLineStyle::SOLID,       50L }, // thick
-        { 25, table::BorderLineStyle::DOUBLE,      -1L }, // double (don't check width)
+        { 25, table::BorderLineStyle::DOUBLE_THIN, -1L }, // double (don't check width)
     };
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)

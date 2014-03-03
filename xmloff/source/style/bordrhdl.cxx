@@ -43,6 +43,7 @@ SvXMLEnumMapEntry pXML_BorderStyles[] =
     { XML_HIDDEN,        table::BorderLineStyle::NONE   },
     { XML_SOLID,         table::BorderLineStyle::SOLID  },
     { XML_DOUBLE,        table::BorderLineStyle::DOUBLE },
+    { XML_DOUBLE_THIN,   table::BorderLineStyle::DOUBLE_THIN },
     { XML_DOTTED,        table::BorderLineStyle::DOTTED },
     { XML_DASHED,        table::BorderLineStyle::DASHED },
     { XML_GROOVE,        table::BorderLineStyle::ENGRAVED },
@@ -136,6 +137,7 @@ bool XMLBorderWidthHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValu
     switch ( aBorderLine.LineStyle )
     {
         case table::BorderLineStyle::DOUBLE:
+        case table::BorderLineStyle::DOUBLE_THIN:
         case table::BorderLineStyle::THINTHICK_SMALLGAP:
         case table::BorderLineStyle::THINTHICK_MEDIUMGAP:
         case table::BorderLineStyle::THINTHICK_LARGEGAP:
@@ -322,6 +324,9 @@ bool XMLBorderHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, co
                 break;
             case table::BorderLineStyle::FINE_DASHED:
                 eStyleToken = XML_FINE_DASHED;
+                break;
+            case table::BorderLineStyle::DOUBLE_THIN:
+                eStyleToken = XML_DOUBLE_THIN;
                 break;
             case table::BorderLineStyle::SOLID:
             default:
