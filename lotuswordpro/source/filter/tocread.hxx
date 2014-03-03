@@ -62,7 +62,12 @@ class CBenTOCReader
 {
 public: // Methods
     CBenTOCReader(pLtcBenContainer pContainer)
-      { cpContainer = pContainer; cpTOC = NULL; cCurr = 0; }
+        : cpContainer(pContainer)
+        , cpTOC(NULL)
+        , cBlockSize(0)
+        , cCurr(0)
+        , cTOCSize(0)
+        { }
     ~CBenTOCReader() { delete[] cpTOC; }
     BenError ReadLabelAndTOC();
 
