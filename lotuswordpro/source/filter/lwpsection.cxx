@@ -121,6 +121,8 @@ void LwpSection::Parse(IXFStream * /*pOutputStream*/)
 
 LwpIndexSection::LwpIndexSection(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
     : LwpSection(objHdr, pStrm)
+    , m_nForm(0)
+    , m_nFlags(0)
 {}
 
 LwpIndexSection::~LwpIndexSection()
