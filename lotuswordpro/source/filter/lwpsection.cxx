@@ -89,6 +89,7 @@ void LwpOrderedObject::Read()
 
 LwpSection::LwpSection(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
     : LwpOrderedObject(objHdr, pStrm)
+    , m_Flags(0)
 {}
 
 LwpSection::~LwpSection()
