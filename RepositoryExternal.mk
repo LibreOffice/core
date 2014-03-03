@@ -631,6 +631,8 @@ $(call gb_LinkTarget_add_libs,$(1),\
 
 endef
 
+gb_ExternalProject__use_boost_iostreams :=
+
 define gb_LinkTarget__use_boost_system
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
