@@ -48,9 +48,6 @@ public:
         '_xHHHH_' (H being a hexadecimal digit), will be decoded. */
     static OUString decodeXString( const OUString& rValue );
 
-    /** Returns the double value from the passed string. */
-    static double       decodeDouble( const OUString& rValue );
-
     /** Returns the 32-bit signed integer value from the passed string (decimal). */
     static sal_Int32    decodeInteger( const OUString& rValue );
 

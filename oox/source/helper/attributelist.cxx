@@ -87,11 +87,6 @@ OUString AttributeConversion::decodeXString( const OUString& rValue )
     return aBuffer.makeStringAndClear();
 }
 
-double AttributeConversion::decodeDouble( const OUString& rValue )
-{
-    return rValue.toDouble();
-}
-
 sal_Int32 AttributeConversion::decodeInteger( const OUString& rValue )
 {
     return rValue.toInt32();
