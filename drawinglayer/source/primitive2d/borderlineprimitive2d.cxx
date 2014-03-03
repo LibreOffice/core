@@ -28,6 +28,8 @@
 #include <numeric>
 #include <algorithm>
 
+namespace drawinglayer {
+
 namespace {
 
 void moveLine(basegfx::B2DPolygon& rPoly, double fGap, const basegfx::B2DVector& rVector)
@@ -44,10 +46,46 @@ void moveLine(basegfx::B2DPolygon& rPoly, double fGap, const basegfx::B2DVector&
     }
 }
 
+primitive2d::Primitive2DReference makeHairLinePrimitive(
+    const basegfx::B2DPoint& rStart, const basegfx::B2DPoint& rEnd, const basegfx::B2DVector& rVector,
+    const basegfx::BColor& rColor, double fGap)
+{
+    basegfx::B2DPolygon aPolygon;
+    aPolygon.append(rStart);
+    aPolygon.append(rEnd);
+    moveLine(aPolygon, fGap, rVector);
+
+    return primitive2d::Primitive2DReference(new primitive2d::PolygonHairlinePrimitive2D(aPolygon, rColor));
 }
 
-namespace drawinglayer
+primitive2d::Primitive2DReference makeSolidLinePrimitive(
+    const basegfx::B2DPolyPolygon& rClipRegion, const basegfx::B2DPoint& rStart, const basegfx::B2DPoint& rEnd,
+    const basegfx::B2DVector& rVector, const basegfx::BColor& rColor, double fLineWidth, double fGap)
 {
+    const basegfx::B2DVector aPerpendicular = basegfx::getPerpendicular(rVector);
+    const basegfx::B2DVector aLineWidthOffset = ((fLineWidth + 1.0) * 0.5) * aPerpendicular;
+
+    basegfx::B2DPolygon aPolygon;
+    aPolygon.append(rStart + aLineWidthOffset);
+    aPolygon.append(rEnd + aLineWidthOffset);
+    aPolygon.append(rEnd - aLineWidthOffset);
+    aPolygon.append(rStart - aLineWidthOffset);
+    aPolygon.setClosed(true);
+
+    moveLine(aPolygon, fGap, rVector);
+
+    basegfx::B2DPolyPolygon aClipped =
+        basegfx::tools::clipPolygonOnPolyPolygon(aPolygon, rClipRegion, true, false);
+
+    if (aClipped.count())
+        aPolygon = aClipped.getB2DPolygon(0);
+
+    return primitive2d::Primitive2DReference(
+        new primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPolygon), rColor));
+}
+
+}
+
     // fdo#49438: heuristic pseudo hack
     static bool lcl_UseHairline(double const fW,
             basegfx::B2DPoint const& rStart, basegfx::B2DPoint const& rEnd,
@@ -139,66 +177,42 @@ namespace drawinglayer
 
                 if(isOutsideUsed() && isInsideUsed())
                 {
-                    basegfx::B2DPolygon aPolygon;
                     const double fExt = getWidth(rViewInformation);  // Extend a lot: it'll be clipped later.
                     const basegfx::B2DPoint aTmpStart(getStart() - (fExt * aVector));
                     const basegfx::B2DPoint aTmpEnd(getEnd() + (fExt * aVector));
 
-                    // Get which is the line to show
-                    double nWidth = getLeftWidth();
-                    basegfx::BColor aColor = getRGBColorLeft();
+                    xRetval.realloc(2);
 
-                    bool const bIsHairline = lcl_UseHairline(
-                            nWidth, getStart(), getEnd(), rViewInformation);
-                    nWidth = lcl_GetCorrectedWidth(nWidth,
-                                getStart(), getEnd(), rViewInformation);
-
-                    // distance is already scaled.
-                    double fGap = mfDistance*8.0;
-
-                    if (bIsHairline)
                     {
-                        // create hairline primitive
-                        aPolygon.append( getStart() );
-                        aPolygon.append( getEnd() );
+                        // "inside" line
+                        double fWidth = getLeftWidth();
+                        basegfx::BColor aColor = getRGBColorLeft();
+                        bool bIsHairline = lcl_UseHairline(
+                                fWidth, getStart(), getEnd(), rViewInformation);
+                        fWidth = lcl_GetCorrectedWidth(fWidth,
+                                    getStart(), getEnd(), rViewInformation);
 
-                        basegfx::B2DPolygon aPolygon2 = aPolygon;
-                        moveLine(aPolygon2, fGap, aVector);
-
-                        xRetval.realloc(2);
-                        xRetval[0] = Primitive2DReference(new PolygonHairlinePrimitive2D(
-                            aPolygon,
-                            aColor));
-
-                        xRetval[1] = Primitive2DReference(new PolygonHairlinePrimitive2D(
-                            aPolygon2,
-                            aColor));
+                        if (bIsHairline)
+                            xRetval[0] = makeHairLinePrimitive(getStart(), getEnd(), aVector, aColor, 0.0);
+                        else
+                            xRetval[0] = makeSolidLinePrimitive(
+                                aClipRegion, aTmpStart, aTmpEnd, aVector, aColor, fWidth, 0.0);
                     }
-                    else
+
                     {
-                        // create filled polygon primitive
-                        const basegfx::B2DVector aLineWidthOffset(((nWidth + 1) * 0.5) * aPerpendicular);
+                        // "outside" line
+                        double fWidth = getRightWidth();
+                        basegfx::BColor aColor = getRGBColorRight();
+                        bool bIsHairline = lcl_UseHairline(
+                                fWidth, getStart(), getEnd(), rViewInformation);
+                        fWidth = lcl_GetCorrectedWidth(fWidth,
+                                    getStart(), getEnd(), rViewInformation);
 
-                        aPolygon.append( aTmpStart + aLineWidthOffset );
-                        aPolygon.append( aTmpEnd + aLineWidthOffset );
-                        aPolygon.append( aTmpEnd - aLineWidthOffset );
-                        aPolygon.append( aTmpStart - aLineWidthOffset );
-                        aPolygon.setClosed( true );
-
-                        basegfx::B2DPolyPolygon aClipped = basegfx::tools::clipPolygonOnPolyPolygon(
-                            aPolygon, aClipRegion, true, false );
-
-                        if ( aClipped.count() )
-                            aPolygon = aClipped.getB2DPolygon(0);
-
-                        basegfx::B2DPolygon aPolygon2 = aPolygon;
-                        moveLine(aPolygon2, fGap, aVector);
-
-                        xRetval.realloc(2);
-                        xRetval[0] = Primitive2DReference(
-                            new PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPolygon), aColor));
-                        xRetval[1] = Primitive2DReference(
-                            new PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPolygon2), aColor));
+                        if (bIsHairline)
+                            xRetval[1] = makeHairLinePrimitive(getStart(), getEnd(), aVector, aColor, mfDistance);
+                        else
+                            xRetval[1] = makeSolidLinePrimitive(
+                                aClipRegion, aTmpStart, aTmpEnd, aVector, aColor, fWidth, mfDistance);
                     }
                 }
                 else

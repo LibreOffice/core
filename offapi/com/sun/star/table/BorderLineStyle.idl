@@ -41,7 +41,8 @@ constants BorderLineStyle
      */
     const short DASHED = 2;
 
-    /** Double border line.
+    /** Double border line. Widths of the lines and the gap are all equal,
+        and vary equally with the total width.
      */
     const short DOUBLE = 3;
 
@@ -95,9 +96,14 @@ constants BorderLineStyle
      */
     const short FINE_DASHED = 14;
 
+    /** Double border line consisting of two fixed thin lines separated by a
+        variable gap.
+     */
+    const short DOUBLE_THIN = 15;
+
     /** Maximum valid border line style value.
      */
-    const short BORDER_LINE_STYLE_MAX = 14;
+    const short BORDER_LINE_STYLE_MAX = 15;
 };
 
 
