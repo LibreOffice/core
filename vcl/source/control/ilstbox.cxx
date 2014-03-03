@@ -2077,6 +2077,11 @@ void ImplListBoxWindow::StateChanged( StateChangedType nType )
         ImplInitSettings( false, false, true );
         Invalidate();
     }
+    else if( nType == STATE_CHANGE_ENABLE )
+    {
+        Invalidate();
+    }
+
     ImplClearLayoutData();
 }
 
@@ -2426,6 +2431,8 @@ void ImplListBox::StateChanged( StateChangedType nType )
         mpHScrollBar->Enable( IsEnabled() );
         mpVScrollBar->Enable( IsEnabled() );
         mpScrollBarBox->Enable( IsEnabled() );
+        maLBWindow.Enable( IsEnabled() );
+
         Invalidate();
     }
     else if ( nType == STATE_CHANGE_ZOOM )
