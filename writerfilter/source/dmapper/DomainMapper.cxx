@@ -57,6 +57,7 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
+#include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/types.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -1912,6 +1913,24 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                     pSectionContext->SetSeparatorLine( pSectHdl->IsSeparator() );
                 }
             }
+
+            else if ( pSectionContext )
+            {
+                FieldContextPtr pContext = m_pImpl->GetTopFieldContext();
+                uno::Reference< beans::XPropertySet > xTOC = pContext->GetTOC();
+                if( xTOC.is() )
+                {
+                    uno::Reference<text::XTextColumns> xTextColumns;
+                    xTOC->getPropertyValue(rPropNameSupplier.GetName( PROP_TEXT_COLUMNS )) >>= xTextColumns;
+                    if (xTextColumns.is())
+                    {
+                        uno::Reference< beans::XPropertySet > xColumnPropSet( xTextColumns, uno::UNO_QUERY_THROW );
+                        if ( xColumnPropSet.is() )
+                            xColumnPropSet->setPropertyValue( rPropNameSupplier.GetName( PROP_AUTOMATIC_DISTANCE ), uno::makeAny( pSectHdl->GetSpace() ));
+                        xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_TEXT_COLUMNS ), uno::makeAny( xTextColumns ) );
+                    }
+                }
+            }
         }
     }
     break;
@@ -2405,7 +2424,7 @@ void DomainMapper::data(const sal_uInt8* /*buf*/, size_t /*len*/,
 
 void DomainMapper::lcl_startSectionGroup()
 {
-    if (!m_pImpl->isInIndexContext() || !m_pImpl->isInBibliographyContext())
+    if (!m_pImpl->isInIndexContext() && !m_pImpl->isInBibliographyContext())
     {
         m_pImpl->PushProperties(CONTEXT_SECTION);
     }
@@ -2413,7 +2432,7 @@ void DomainMapper::lcl_startSectionGroup()
 
 void DomainMapper::lcl_endSectionGroup()
 {
-    if (!m_pImpl->isInIndexContext() || !m_pImpl->isInBibliographyContext())
+    if (!m_pImpl->isInIndexContext() && !m_pImpl->isInBibliographyContext())
     {
         m_pImpl->CheckUnregisteredFrameConversion();
         m_pImpl->ExecuteFrameConversion();

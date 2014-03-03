@@ -487,6 +487,7 @@ public:
     PropertyMapPtr GetTopContextOfType(ContextType eId);
 
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextAppend >  GetTopTextAppend();
+    FieldContextPtr GetTopFieldContext();
 
     FontTablePtr GetFontTable()
     {

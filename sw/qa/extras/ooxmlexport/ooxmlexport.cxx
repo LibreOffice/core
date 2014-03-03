@@ -2755,6 +2755,8 @@ DECLARE_OOXMLEXPORT_TEST(testAlphabeticalIndex_MultipleColumns,"alphabeticalInde
     // check for section breaks after and before the Index Section
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:sectPr/w:type","val","continuous");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[9]/w:pPr/w:sectPr/w:type","val","continuous");
+    // check for "w:space" attribute for the columns in Section Properties
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[9]/w:pPr/w:sectPr/w:cols/w:col[1]","space","720");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testPageref, "testPageref.docx")
