@@ -74,6 +74,11 @@
 
 LwpRowLayout::LwpRowLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpVirtualLayout(objHdr, pStrm)
+    , crowid(0)
+    , cheight(0)
+    , cLeaderDotCount(0)
+    , cLeaderDotY(0)
+    , cRowFlags(0)
 {
     m_ConnCellList.clear();
 }
