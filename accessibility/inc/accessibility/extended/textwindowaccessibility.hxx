@@ -623,11 +623,8 @@ private:
 
     void handleSelectionChangeNotification();
 
-    void notifySelectionChange( sal_Int32 nFirst, sal_Int32 nLast );
     ::sal_Int32 getSelectionType(::sal_Int32 nNewFirstPara, ::sal_Int32 nNewFirstPos, ::sal_Int32 nNewLastPara, ::sal_Int32 nNewLastPos);
     void sendEvent(::sal_Int32 start, ::sal_Int32 end, ::sal_Int16 nEventId);
-
-    void justifySelection( TextPaM& rTextStart, TextPaM& rTextEnd );
 
     void disposeParagraphs();
 

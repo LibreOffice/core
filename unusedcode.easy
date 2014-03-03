@@ -98,8 +98,6 @@ VclMultiLineEdit::IsRightToLeft() const
 VclMultiLineEdit::SetTextSelectable(bool)
 accessibility::AccessibleParaManager::Release(int)
 accessibility::AccessibleShape::AccessibleShape(com::sun::star::uno::Reference<com::sun::star::drawing::XShape> const&, com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible> const&, accessibility::AccessibleShapeTreeInfo const&, int)
-accessibility::Document::justifySelection(TextPaM&, TextPaM&)
-accessibility::Document::notifySelectionChange(int, int)
 apitest::CellProperties::testRotateReference()
 apitest::CellProperties::testVertJustify()
 apitest::DataPilotField::testAutoShowInfo()
