@@ -463,7 +463,11 @@ uno::Reference< text::XTextAppend >  DomainMapper_Impl::GetTopTextAppend()
     return m_aTextAppendStack.top().xTextAppend;
 }
 
-
+FieldContextPtr  DomainMapper_Impl::GetTopFieldContext()
+{
+    OSL_ENSURE(!m_aFieldStack.empty(), "Field stack is empty" );
+    return m_aFieldStack.top();
+}
 
 void DomainMapper_Impl::InitTabStopFromStyle( const uno::Sequence< style::TabStop >& rInitTabStops )
 {
