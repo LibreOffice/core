@@ -1760,11 +1760,6 @@ FormulaDlgMode FormulaDlg::SetMeText(const OUString& _sText, sal_Int32 PrivStart
     return m_pImpl->SetMeText(_sText,PrivStart, PrivEnd,bMatrix,_bSelect,_bUpdate);
 }
 
-void FormulaDlg::CheckMatrix()
-{
-    m_pImpl->aBtnMatrix.Check();
-}
-
 bool FormulaDlg::CheckMatrix(OUString& aFormula)
 {
     return m_pImpl->CheckMatrix(aFormula);

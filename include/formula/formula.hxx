@@ -121,7 +121,6 @@ protected:
     bool            CheckMatrix(OUString& aFormula /*IN/OUT*/);
     OUString        GetMeText() const;
     void            Update(const OUString& _sExp);
-    void            CheckMatrix();
     void            DoEnter(bool _bOk);
     const IFunctionDescription* getCurrentFunctionDescription() const;
     bool            UpdateParaWin(Selection& _rSelection);
