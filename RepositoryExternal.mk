@@ -111,9 +111,16 @@ endif
 
 ifneq ($(SYSTEM_MDDS),)
 
+gb_ExternalProject__use_mdds_headers :=
+
 gb_LinkTarget__use_mdds_headers :=
 
 else # !SYSTEM_MDDS
+
+define gb_ExternalProject__use_mdds_headers
+$(call gb_ExternalProject_use_external_project,$(1),mdds)
+
+endef
 
 define gb_LinkTarget__use_mdds_headers
 $(call gb_LinkTarget_use_unpacked,$(1),mdds)
