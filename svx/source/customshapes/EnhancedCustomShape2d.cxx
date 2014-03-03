@@ -727,16 +727,16 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
     nCoordTop           ( 0 ),
     nCoordWidthG        ( 21600 ),
     nCoordHeightG       ( 21600 ),
-    bOOXMLShape         ( sal_False ),
+    bOOXMLShape         ( false ),
     nXRef               ( 0x80000000 ),
     nYRef               ( 0x80000000 ),
     nFlags              ( 0 ),
     nColorData          ( 0 ),
-    bTextFlow           ( sal_False ),
+    bTextFlow           ( false ),
     bFilled             ( ((const XFillStyleItem&)pAObj->GetMergedItem( XATTR_FILLSTYLE )).GetValue() != XFILL_NONE ),
     bStroked            ( ((const XLineStyleItem&)pAObj->GetMergedItem( XATTR_LINESTYLE )).GetValue() != XLINE_NONE ),
-    bFlipH              ( sal_False ),
-    bFlipV              ( sal_False )
+    bFlipH              ( false ),
+    bFlipV              ( false )
 {
     // bTextFlow needs to be set before clearing the TextDirection Item
 
@@ -841,7 +841,7 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
         vEquationResults.resize( nLength );
         for ( i = 0; i < seqEquations.getLength(); i++ )
         {
-            vEquationResults[ i ].bReady = sal_False;
+            vEquationResults[ i ].bReady = false;
             try
             {
                 vNodesSharedPtr[ i ] = EnhancedCustomShape::FunctionParser::parseFunction( seqEquations[ i ], *this );
@@ -1456,8 +1456,8 @@ static basegfx::B2DPolygon CreateArc( const Rectangle& rRect, const Point& rStar
 }
 
 void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegmentInd, std::vector< SdrPathObj* >& rObjectList,
-                                           const sal_Bool bLineGeometryNeededOnly,
-                                           const sal_Bool bSortFilledObjectsToBack,
+                                           const bool bLineGeometryNeededOnly,
+                                           const bool bSortFilledObjectsToBack,
                                            sal_Int32 nIndex )
 {
     bool bNoFill = false;
@@ -2209,7 +2209,7 @@ void EnhancedCustomShape2d::AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rC
     }
 }
 
-SdrObject* EnhancedCustomShape2d::CreatePathObj( sal_Bool bLineGeometryNeededOnly )
+SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
 {
     sal_Int32 nCoordSize = seqCoordinates.getLength();
     if ( !nCoordSize )
@@ -2351,7 +2351,7 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( sal_Bool bLineGeometryNeededOnl
     return pRet;
 }
 
-SdrObject* EnhancedCustomShape2d::CreateObject( sal_Bool bLineGeometryNeededOnly )
+SdrObject* EnhancedCustomShape2d::CreateObject( bool bLineGeometryNeededOnly )
 {
     SdrObject* pRet = NULL;
 

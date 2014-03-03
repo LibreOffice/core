@@ -81,12 +81,12 @@ struct mso_CustomShape
 
 #define MSO_I | (sal_Int32)0x80000000
 
-sal_Bool            SortFilledObjectsToBackByDefault( MSO_SPT eSpType );
-SVX_DLLPUBLIC sal_Bool          IsCustomShapeFilledByDefault( MSO_SPT eSpType );
-SVX_DLLPUBLIC sal_Int16         GetCustomShapeConnectionTypeDefault( MSO_SPT eSpType );
+bool                        SortFilledObjectsToBackByDefault( MSO_SPT eSpType );
+SVX_DLLPUBLIC bool          IsCustomShapeFilledByDefault( MSO_SPT eSpType );
+SVX_DLLPUBLIC sal_Int16     GetCustomShapeConnectionTypeDefault( MSO_SPT eSpType );
 
 // #i28269#
-SVX_DLLPUBLIC sal_Bool          IsCustomShapeStrokedByDefault( MSO_SPT eSpType );
+SVX_DLLPUBLIC bool          IsCustomShapeStrokedByDefault( MSO_SPT eSpType );
 
 SVX_DLLPUBLIC const mso_CustomShape*    GetCustomShapeContent( MSO_SPT eSpType );
 

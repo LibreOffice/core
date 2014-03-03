@@ -39,7 +39,7 @@ public:
         const sal_uInt16 nId );
 
     SvxOrientationItem(
-        sal_Int32 nRotation, sal_Bool bStacked,
+        sal_Int32 nRotation, bool bStacked,
         const sal_uInt16 nId );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -62,11 +62,11 @@ public:
             }
 
     /** Returns sal_True, if the item represents STACKED state. */
-    sal_Bool                    IsStacked() const;
+    bool                    IsStacked() const;
     /** Returns the rotation this item represents (returns nStdAngle for STANDARD and STACKED state). */
-    sal_Int32                   GetRotation( sal_Int32 nStdAngle = 0 ) const;
+    sal_Int32               GetRotation( sal_Int32 nStdAngle = 0 ) const;
     /** Fills this item according to passed item values. */
-    void                    SetFromRotation( sal_Int32 nRotation, sal_Bool bStacked );
+    void                    SetFromRotation( sal_Int32 nRotation, bool bStacked );
 };
 
 
@@ -98,14 +98,14 @@ public:
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
-            sal_Int16           GetLeftMargin() const {return nLeftMargin; }
-            sal_Bool            SetLeftMargin(sal_Int16 nLeft);
-            sal_Int16           GetTopMargin() const {return nTopMargin; }
-            sal_Bool            SetTopMargin(sal_Int16 nTop);
-            sal_Int16           GetRightMargin() const {return nRightMargin; }
-            sal_Bool            SetRightMargin(sal_Int16 nRight);
-            sal_Int16           GetBottomMargin() const {return nBottomMargin; }
-            sal_Bool            SetBottomMargin(sal_Int16 nBottom);
+            sal_Int16       GetLeftMargin() const {return nLeftMargin; }
+            void            SetLeftMargin(sal_Int16 nLeft);
+            sal_Int16       GetTopMargin() const {return nTopMargin; }
+            void            SetTopMargin(sal_Int16 nTop);
+            sal_Int16       GetRightMargin() const {return nRightMargin; }
+            void            SetRightMargin(sal_Int16 nRight);
+            sal_Int16       GetBottomMargin() const {return nBottomMargin; }
+            void            SetBottomMargin(sal_Int16 nBottom);
 
     inline  SvxMarginItem& operator=(const SvxMarginItem& rMargin)
             {

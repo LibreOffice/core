@@ -577,7 +577,7 @@ bool SvxBmpMask::Close()
 
 
 
-sal_Bool SvxBmpMask::NeedsColorList() const
+bool SvxBmpMask::NeedsColorList() const
 {
     return ( aLbColor1.GetEntryCount() == 0 );
 }
@@ -656,7 +656,7 @@ void SvxBmpMask::PipetteClicked()
 
 
 
-void SvxBmpMask::SetExecState( sal_Bool bEnable )
+void SvxBmpMask::SetExecState( bool bEnable )
 {
     pData->SetExecState( bEnable );
 
@@ -1199,7 +1199,7 @@ Graphic SvxBmpMask::Mask( const Graphic& rGraphic )
 
 
 
-sal_Bool SvxBmpMask::IsEyedropping() const
+bool SvxBmpMask::IsEyedropping() const
 {
     return aTbxPipette.IsItemChecked( TBI_PIPETTE );
 }

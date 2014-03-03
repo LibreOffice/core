@@ -290,7 +290,7 @@ public:
             The returned value indicates whether the replacement has been
             finished successfully.
     */
-    virtual sal_Bool ReplaceChild (
+    virtual bool ReplaceChild (
         AccessibleShape* pCurrentChild,
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _rxShape,
         const long _nIndex,

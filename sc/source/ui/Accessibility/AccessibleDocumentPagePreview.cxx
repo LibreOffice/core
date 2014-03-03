@@ -683,7 +683,7 @@ public:
 
     ///=====  IAccessibleParent  ==============================================
 
-    virtual sal_Bool ReplaceChild (
+    virtual bool ReplaceChild (
         ::accessibility::AccessibleShape* pCurrentChild,
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _rxShape,
         const long _nIndex,
@@ -889,7 +889,7 @@ void ScShapeChildren::VisAreaChanged() const
 
     ///=====  IAccessibleParent  ==============================================
 
-sal_Bool ScShapeChildren::ReplaceChild (::accessibility::AccessibleShape* /* pCurrentChild */,
+bool ScShapeChildren::ReplaceChild (::accessibility::AccessibleShape* /* pCurrentChild */,
     const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& /* _rxShape */,
         const long /* _nIndex */, const ::accessibility::AccessibleShapeTreeInfo& /* _rShapeTreeInfo */)
         throw (uno::RuntimeException)

@@ -74,7 +74,7 @@ public:
         @raises RuntimeException
            in case something went heavily wrong
     */
-    virtual sal_Bool ReplaceChild (
+    virtual bool ReplaceChild (
         AccessibleShape* pCurrentChild,
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _rxShape,
         const long _nIndex,
@@ -89,7 +89,7 @@ public:
         GetAccessibleCaption (const ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::XShape>&)
             throw (::com::sun::star::uno::RuntimeException){return NULL;};
-    virtual sal_Bool IsDocumentSelAll(){ return sal_False; }
+    virtual bool IsDocumentSelAll(){ return false; }
 };
 
 } // end of namespace accessibility

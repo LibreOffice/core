@@ -89,7 +89,7 @@ class EnhancedCustomShape2d : public SfxItemSet
         double                      fXRatio;
         double                      fYRatio;
 
-        sal_Bool                    bOOXMLShape;
+        bool                        bOOXMLShape;
 
         sal_Int32                   nXRef;
         sal_Int32                   nYRef;
@@ -100,7 +100,7 @@ class EnhancedCustomShape2d : public SfxItemSet
 
         */
         struct EquationResult {
-            sal_Bool bReady;
+            bool bReady;
             double fValue;
         };
         com::sun::star::uno::Sequence< OUString >                                                  seqEquations;
@@ -115,13 +115,13 @@ class EnhancedCustomShape2d : public SfxItemSet
         com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValues >                          seqHandles;
         com::sun::star::uno::Sequence< com::sun::star::awt::Size >                                      seqSubViewSize;
 
-        sal_Bool                    bTextFlow       : 1;
-        sal_Bool                    bFilled         : 1;
-        sal_Bool                    bStroked        : 1;
+        bool                    bTextFlow       : 1;
+        bool                    bFilled         : 1;
+        bool                    bStroked        : 1;
 
-        sal_Bool                    bFlipH;
-        sal_Bool                    bFlipV;
-        sal_Int32                   nRotateAngle;
+        bool                    bFlipH;
+        bool                    bFlipV;
+        sal_Int32               nRotateAngle;
 
         bool                    SetAdjustValueAsDouble( const double& rValue, const sal_Int32 nIndex );
         sal_Int32                   GetLuminanceChange( sal_uInt32 nIndex ) const;
@@ -134,9 +134,9 @@ class EnhancedCustomShape2d : public SfxItemSet
                                                     const bool bScale = true, const bool bReplaceGeoSize = false ) const;
 
         void                        CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegmentInd, std::vector< SdrPathObj* >& rObjectList,
-                                                   sal_Bool bLineGeometryNeededOnly, sal_Bool bSortFilledObjectsToBack,
+                                                   bool bLineGeometryNeededOnly, bool bSortFilledObjectsToBack,
                                                    sal_Int32 nIndex );
-        SdrObject*                  CreatePathObj( sal_Bool bLineGeometryNeededOnly );
+        SdrObject*                  CreatePathObj( bool bLineGeometryNeededOnly );
         const sal_Int32*            ApplyShapeAttributes( const SdrCustomShapeGeometryItem& rItem );
 
         void                        SetPathSize( sal_Int32 nIndex = 0 );
@@ -147,9 +147,9 @@ class EnhancedCustomShape2d : public SfxItemSet
         {
             sal_uInt32  nFlags;
 
-            sal_Bool    bMirroredX;
-            sal_Bool    bMirroredY;
-            sal_Bool    bSwitched;
+            bool        bMirroredX;
+            bool        bMirroredY;
+            bool        bSwitched;
 
             com::sun::star::drawing::EnhancedCustomShapeParameterPair   aPosition;
             com::sun::star::drawing::EnhancedCustomShapeParameterPair   aPolar;
@@ -166,21 +166,21 @@ class EnhancedCustomShape2d : public SfxItemSet
             com::sun::star::drawing::EnhancedCustomShapeParameter       aYRangeMinimum;
             com::sun::star::drawing::EnhancedCustomShapeParameter       aYRangeMaximum;
 
-            Handle() : bMirroredX ( sal_False ), bMirroredY ( sal_False ), bSwitched( sal_False ),
+            Handle() : bMirroredX ( false ), bMirroredY ( false ), bSwitched( false ),
                 nRefX( -1 ), nRefY( -1 ), nRefAngle( -1 ), nRefR( -1 ) {};
         };
 
-        sal_Bool                    IsFlipVert() { return bFlipV; };
-        sal_Bool                    IsFlipHorz() { return bFlipH; };
+        bool                        IsFlipVert() { return bFlipV; };
+        bool                        IsFlipHorz() { return bFlipH; };
         sal_Int32                   GetRotateAngle() { return nRotateAngle; };
         SVX_DLLPUBLIC bool          IsPostRotate() const;
 
-        SVX_DLLPUBLIC SdrObject*                    CreateLineGeometry();
-        SVX_DLLPUBLIC SdrObject*                    CreateObject( sal_Bool bLineGeometryNeededOnly );
+        SVX_DLLPUBLIC SdrObject*                CreateLineGeometry();
+        SVX_DLLPUBLIC SdrObject*                CreateObject( bool bLineGeometryNeededOnly );
         SVX_DLLPUBLIC void                      ApplyGluePoints( SdrObject* pObj );
         SVX_DLLPUBLIC Rectangle                 GetTextRect() const;
 
-        SVX_DLLPUBLIC sal_uInt32                    GetHdlCount() const;
+        SVX_DLLPUBLIC sal_uInt32                GetHdlCount() const;
         SVX_DLLPUBLIC bool                  GetHandlePosition( const sal_uInt32 nIndex, Point& rReturnPosition ) const;
         SVX_DLLPUBLIC bool                  SetHandleControllerPosition( const sal_uInt32 nIndex, const com::sun::star::awt::Point& rPosition );
 
@@ -214,7 +214,7 @@ class EnhancedCustomShape2d : public SfxItemSet
         static void                 AppendEnhancedCustomShapeEquationParameter( OUString& rParameter, const sal_Int32 nPara, const bool bIsSpecialValue );
 
         static void                 SetEnhancedCustomShapeEquationParameter( com::sun::star::drawing::EnhancedCustomShapeParameter&
-                                        rParameter, const sal_Int16 nPara, const sal_Bool bIsSpecialValue );
+                                        rParameter, const sal_Int16 nPara, const bool bIsSpecialValue );
         SVX_DLLPUBLIC static void                   SetEnhancedCustomShapeParameter( com::sun::star::drawing::EnhancedCustomShapeParameter&
                                         rParameter, const sal_Int32 nValue );
         SVX_DLLPUBLIC static void                   SetEnhancedCustomShapeHandleParameter( com::sun::star::drawing::EnhancedCustomShapeParameter&

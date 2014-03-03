@@ -6194,9 +6194,9 @@ static const sal_uInt16 mso_DefaultFillingTable[] =
 {
     0x0000, 0x0018, 0x01ff, 0x0000, 0x0c00, 0x01e0, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0600, 0x0000, 0x0000, 0x0000, 0x0000
 };
-sal_Bool IsCustomShapeFilledByDefault( MSO_SPT eSpType )
+bool IsCustomShapeFilledByDefault( MSO_SPT eSpType )
 {
-    sal_Bool bIsFilledByDefault = sal_True;
+    bool bIsFilledByDefault = true;
     sal_uInt32 i = (sal_uInt32)eSpType;
     if ( i < 0x100 )
         bIsFilledByDefault = ( mso_DefaultFillingTable[ i >> 4 ] & ( 1 << ( i & 0xf ) ) ) == 0;
@@ -6239,9 +6239,9 @@ static const sal_uInt16 mso_DefaultStrokingTable[] =
     0x0000, 0x0000, 0x0000, 0x0000
 };
 // #i28269#
-sal_Bool IsCustomShapeStrokedByDefault( MSO_SPT eSpType )
+bool IsCustomShapeStrokedByDefault( MSO_SPT eSpType )
 {
-    sal_Bool bIsStrokedByDefault = sal_True;
+    bool bIsStrokedByDefault = true;
     sal_uInt32 i = (sal_uInt32)eSpType;
     if ( i < 0x100 )
         bIsStrokedByDefault = ( mso_DefaultStrokingTable[ i >> 4 ] & ( 1 << ( i & 0xf ) ) ) == 0;
@@ -6252,9 +6252,9 @@ static const sal_uInt16 msoSortFilledObjectsToBackTable[] =
 {
     0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0010, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000
 };
-sal_Bool SortFilledObjectsToBackByDefault( MSO_SPT eSpType )
+bool SortFilledObjectsToBackByDefault( MSO_SPT eSpType )
 {
-    sal_Bool bSortFilledObjectsToBackByDefault = sal_True;
+    bool bSortFilledObjectsToBackByDefault = true;
     sal_uInt32 i = (sal_uInt32)eSpType;
     if ( i < 0x100 )
         bSortFilledObjectsToBackByDefault = ( msoSortFilledObjectsToBackTable[ i >> 4 ] & ( 1 << ( i & 0xf ) ) ) != 0;

@@ -60,7 +60,7 @@ SvxOrientationItem::SvxOrientationItem( const SvxCellOrientation eOrientation,
 {
 }
 
-SvxOrientationItem::SvxOrientationItem( sal_Int32 nRotation, sal_Bool bStacked, const sal_uInt16 nId ) :
+SvxOrientationItem::SvxOrientationItem( sal_Int32 nRotation, bool bStacked, const sal_uInt16 nId ) :
     SfxEnumItem( nId )
 {
     SetFromRotation( nRotation, bStacked );
@@ -161,7 +161,7 @@ sal_uInt16 SvxOrientationItem::GetValueCount() const
 
 
 
-sal_Bool SvxOrientationItem::IsStacked() const
+bool SvxOrientationItem::IsStacked() const
 {
     return static_cast< SvxCellOrientation >( GetValue() ) == SVX_ORIENTATION_STACKED;
 }
@@ -178,7 +178,7 @@ sal_Int32 SvxOrientationItem::GetRotation( sal_Int32 nStdAngle ) const
     return nAngle;
 }
 
-void SvxOrientationItem::SetFromRotation( sal_Int32 nRotation, sal_Bool bStacked )
+void SvxOrientationItem::SetFromRotation( sal_Int32 nRotation, bool bStacked )
 {
     if( bStacked )
     {
@@ -393,34 +393,30 @@ bool SvxMarginItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 
 
-sal_Bool SvxMarginItem::SetLeftMargin( sal_Int16 nLeft )
+void SvxMarginItem::SetLeftMargin( sal_Int16 nLeft )
 {
     nLeftMargin = nLeft;
-    return sal_True;
 }
 
 
 
-sal_Bool SvxMarginItem::SetTopMargin( sal_Int16 nTop )
+void SvxMarginItem::SetTopMargin( sal_Int16 nTop )
 {
     nTopMargin = nTop;
-    return sal_True;
 }
 
 
 
-sal_Bool SvxMarginItem::SetRightMargin( sal_Int16 nRight )
+void SvxMarginItem::SetRightMargin( sal_Int16 nRight )
 {
     nRightMargin = nRight;
-    return sal_True;
 }
 
 
 
-sal_Bool SvxMarginItem::SetBottomMargin( sal_Int16 nBottom )
+void SvxMarginItem::SetBottomMargin( sal_Int16 nBottom )
 {
     nBottomMargin = nBottom;
-    return sal_True;
 }
 
 

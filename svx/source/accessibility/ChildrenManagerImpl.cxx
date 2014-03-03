@@ -801,7 +801,7 @@ void ChildrenManagerImpl::ViewForwarderChanged (ChangeType aChangeType,
 
 //=====  IAccessibleParent  ===================================================
 
-sal_Bool ChildrenManagerImpl::ReplaceChild (
+bool ChildrenManagerImpl::ReplaceChild (
     AccessibleShape* pCurrentChild,
     const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _rxShape,
     const long _nIndex,
@@ -818,7 +818,7 @@ sal_Bool ChildrenManagerImpl::ReplaceChild (
     if ( pNewChild )
         pNewChild->Init();
 
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     // Iterate over the visible children.  If one of them has an already
     // created accessible object that matches pCurrentChild then replace
@@ -844,7 +844,7 @@ sal_Bool ChildrenManagerImpl::ReplaceChild (
                 AccessibleEventId::CHILD,
                 uno::makeAny (I->mxAccessibleShape),
                 uno::Any());
-            bResult = sal_True;
+            bResult = true;
             break;
         }
     }

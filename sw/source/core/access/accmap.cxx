@@ -3217,7 +3217,7 @@ Size SwAccessibleMap::PixelToLogic( const Size& rSize ) const
     return aSize;
 }
 
-sal_Bool SwAccessibleMap::ReplaceChild (
+bool SwAccessibleMap::ReplaceChild (
         ::accessibility::AccessibleShape* pCurrentChild,
         const uno::Reference< drawing::XShape >& _rxShape,
         const long /*_nIndex*/,
@@ -3245,7 +3245,7 @@ sal_Bool SwAccessibleMap::ReplaceChild (
         }
     }
     if( !pObj )
-        return sal_False;
+        return false;
 
     uno::Reference < drawing::XShape > xShape( _rxShape );  // keep reference to shape, because
                                                             // we might be the only one that
@@ -3292,7 +3292,7 @@ sal_Bool SwAccessibleMap::ReplaceChild (
     SwRect aEmptyRect;
     InvalidatePosOrSize( 0, pObj, 0, aEmptyRect );
 
-    return sal_True;
+    return true;
 }
 
 //Get the accessible control shape from the model object, here model object is with XPropertySet type
@@ -3629,7 +3629,7 @@ const SwRect& SwAccessibleMap::GetVisArea() const
            : GetShell()->VisArea();
 }
 
-sal_Bool SwAccessibleMap::IsDocumentSelAll()
+bool SwAccessibleMap::IsDocumentSelAll()
 {
     return GetShell()->GetDoc()->IsPrepareSelAll();
 }

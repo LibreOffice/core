@@ -153,14 +153,14 @@ public:
     void                SetColor( const Color& rColor );
     void                PipetteClicked();
 
-    sal_Bool            NeedsColorList() const;
+    bool                NeedsColorList() const;
     void                SetColorList( const XColorListRef &pColorList );
 
-    void                SetExecState( sal_Bool bEnable );
+    void                SetExecState( bool bEnable );
 
     Graphic             Mask( const Graphic& rGraphic );
 
-    sal_Bool                IsEyedropping() const;
+    bool                IsEyedropping() const;
 
     void                onSelect( MaskSet* pSet );
 

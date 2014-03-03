@@ -262,7 +262,7 @@ public:
 
     ///=====  IAccessibleParent  ===============================================
 
-    virtual sal_Bool ReplaceChild (
+    virtual bool ReplaceChild (
         ::accessibility::AccessibleShape* pCurrentChild,
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _rxShape,
         const long _nIndex,
@@ -450,7 +450,7 @@ void ScChildrenShapes::Notify(SfxBroadcaster&, const SfxHint& rHint)
     }
 }
 
-sal_Bool ScChildrenShapes::ReplaceChild (::accessibility::AccessibleShape* pCurrentChild,
+bool ScChildrenShapes::ReplaceChild (::accessibility::AccessibleShape* pCurrentChild,
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _rxShape,
         const long _nIndex, const ::accessibility::AccessibleShapeTreeInfo& _rShapeTreeInfo)
     throw (uno::RuntimeException)
@@ -464,7 +464,7 @@ sal_Bool ScChildrenShapes::ReplaceChild (::accessibility::AccessibleShape* pCurr
     if ( pReplacement )
         pReplacement->Init();
 
-    sal_Bool bResult(false);
+    bool bResult(false);
     if (pReplacement)
     {
         OSL_ENSURE(pCurrentChild->GetXShape().get() == pReplacement->GetXShape().get(), "XShape changes and should be inserted sorted");
@@ -491,7 +491,7 @@ sal_Bool ScChildrenShapes::ReplaceChild (::accessibility::AccessibleShape* pCurr
             aEvent.NewValue <<= uno::makeAny(uno::Reference<XAccessible>(pReplacement));
 
             mpAccessibleDocument->CommitChange(aEvent); // child is new - event
-            bResult = sal_True;
+            bResult = true;
         }
     }
     return bResult;
