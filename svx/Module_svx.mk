@@ -34,7 +34,7 @@ $(eval $(call gb_Module_add_l10n_targets,svx,\
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,svx,\
-    Executable_gengal.bin \
+    Executable_gengal \
     Package_gengal \
 ))
 endif
