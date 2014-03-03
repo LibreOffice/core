@@ -24,6 +24,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/table/BorderLine2.hpp>
+#include <com/sun/star/table/BorderLineStyle.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -55,18 +56,19 @@ const sal_uInt16 API_LINE_NONE = USHRT_MAX;
 
 SvXMLEnumMapEntry pXML_BorderStyles[] =
 {
-    { XML_NONE,                 API_LINE_NONE   },
-    { XML_HIDDEN,               API_LINE_NONE   },
-    { XML_SOLID,                API_LINE_SOLID  },
-    { XML_DOUBLE,               API_LINE_DOUBLE },
-    { XML_DOTTED,               API_LINE_DOTTED },
-    { XML_DASHED,               API_LINE_DASHED },
-    { XML_GROOVE,               API_LINE_ENGRAVED },
-    { XML_RIDGE,                API_LINE_EMBOSSED },
-    { XML_INSET,                API_LINE_INSET  },
-    { XML_OUTSET,               API_LINE_OUTSET },
-    { XML_FINE_DASHED,          API_LINE_FINE_DASHED },
-    { XML_TOKEN_INVALID,        0 }
+    { XML_NONE,          table::BorderLineStyle::NONE   },
+    { XML_HIDDEN,        table::BorderLineStyle::NONE   },
+    { XML_SOLID,         table::BorderLineStyle::SOLID  },
+    { XML_DOUBLE,        table::BorderLineStyle::DOUBLE },
+    { XML_DOUBLE_THIN,   table::BorderLineStyle::DOUBLE_THIN },
+    { XML_DOTTED,        table::BorderLineStyle::DOTTED },
+    { XML_DASHED,        table::BorderLineStyle::DASHED },
+    { XML_GROOVE,        table::BorderLineStyle::ENGRAVED },
+    { XML_RIDGE,         table::BorderLineStyle::EMBOSSED },
+    { XML_INSET,         table::BorderLineStyle::INSET  },
+    { XML_OUTSET,        table::BorderLineStyle::OUTSET },
+    { XML_FINE_DASHED,   table::BorderLineStyle::FINE_DASHED },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 SvXMLEnumMapEntry pXML_NamedBorderWidths[] =
@@ -151,13 +153,14 @@ bool XMLBorderWidthHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValu
     bool bDouble = false;
     switch ( aBorderLine.LineStyle )
     {
-        case API_LINE_DOUBLE:
-        case API_LINE_THINTHICK_SMALLGAP:
-        case API_LINE_THINTHICK_MEDIUMGAP:
-        case API_LINE_THINTHICK_LARGEGAP:
-        case API_LINE_THICKTHIN_SMALLGAP:
-        case API_LINE_THICKTHIN_MEDIUMGAP:
-        case API_LINE_THICKTHIN_LARGEGAP:
+        case table::BorderLineStyle::DOUBLE:
+        case table::BorderLineStyle::DOUBLE_THIN:
+        case table::BorderLineStyle::THINTHICK_SMALLGAP:
+        case table::BorderLineStyle::THINTHICK_MEDIUMGAP:
+        case table::BorderLineStyle::THINTHICK_LARGEGAP:
+        case table::BorderLineStyle::THICKTHIN_SMALLGAP:
+        case table::BorderLineStyle::THICKTHIN_MEDIUMGAP:
+        case table::BorderLineStyle::THICKTHIN_LARGEGAP:
             bDouble = true;
             break;
         default:
@@ -339,7 +342,10 @@ bool XMLBorderHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, co
             case API_LINE_FINE_DASHED:
                 eStyleToken = XML_FINE_DASHED;
                 break;
-            case API_LINE_SOLID:
+            case table::BorderLineStyle::DOUBLE_THIN:
+                eStyleToken = XML_DOUBLE_THIN;
+                break;
+            case table::BorderLineStyle::SOLID:
             default:
                 break;
         }
