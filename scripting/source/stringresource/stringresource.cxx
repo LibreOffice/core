@@ -788,7 +788,7 @@ OUString StringResourcePersistenceImpl::getImplementationName(  )
 sal_Bool StringResourcePersistenceImpl::supportsService( const OUString& rServiceName )
     throw (RuntimeException, std::exception)
 {
-    return StringResourceImpl::supportsService( rServiceName );
+    return cppu::supportsService( this, rServiceName );
 }
 
 
