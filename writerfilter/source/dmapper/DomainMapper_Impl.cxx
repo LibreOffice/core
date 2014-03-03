@@ -2019,7 +2019,7 @@ static OUString lcl_ExtractToken(OUString const& rCommand,
 }
 
 SAL_DLLPUBLIC_EXPORT // export just for test
-boost::tuple<OUString, vector<OUString>, vector<OUString>>
+boost::tuple<OUString, vector<OUString>, vector<OUString> >
 lcl_SplitFieldCommand(const OUString& rCommand)
 {
     OUString sType;
