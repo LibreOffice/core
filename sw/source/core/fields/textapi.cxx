@@ -129,7 +129,7 @@ SvxTextForwarder* SwTextAPIEditSource::GetTextForwarder()
     }
 
     if( !pImpl->mpTextForwarder )
-        pImpl->mpTextForwarder = new SvxOutlinerForwarder( *pImpl->mpOutliner, 0 );
+        pImpl->mpTextForwarder = new SvxOutlinerForwarder( *pImpl->mpOutliner, false );
 
     return pImpl->mpTextForwarder;
 }

@@ -500,14 +500,14 @@ void LinguMgrExitLstnr::AtExit()
     LinguMgr::xIgnoreAll    = 0;
     LinguMgr::xChangeAll    = 0;
 
-    LinguMgr::bExiting      = sal_True;
+    LinguMgr::bExiting      = true;
 
     LinguMgr::pExitLstnr    = 0;
 }
 
 
 LinguMgrExitLstnr *             LinguMgr::pExitLstnr    = 0;
-sal_Bool                        LinguMgr::bExiting      = sal_False;
+bool                            LinguMgr::bExiting      = false;
 uno::Reference< XLinguServiceManager2 >  LinguMgr::xLngSvcMgr    = 0;
 uno::Reference< XSpellChecker1 >    LinguMgr::xSpell        = 0;
 uno::Reference< XHyphenator >       LinguMgr::xHyph         = 0;
@@ -808,7 +808,7 @@ SvxAlternativeSpelling SvxGetAltSpelling(
         aRes.aReplacement       = OUString( aAltWord.copy( nL, nAltLen - nL - nR ) );
         aRes.nChangedPos        = (sal_Int16) nL;
         aRes.nChangedLength     = nLen - nL - nR;
-        aRes.bIsAltSpelling     = sal_True;
+        aRes.bIsAltSpelling     = true;
         aRes.xHyphWord          = rHyphWord;
     }
     return aRes;

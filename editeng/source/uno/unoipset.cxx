@@ -50,7 +50,7 @@ struct SvxIDPropertyCombine
 };
 
 
-SvxItemPropertySet::SvxItemPropertySet( const SfxItemPropertyMapEntry* pMap, SfxItemPool& rItemPool, sal_Bool bConvertTwips )
+SvxItemPropertySet::SvxItemPropertySet( const SfxItemPropertyMapEntry* pMap, SfxItemPool& rItemPool, bool bConvertTwips )
 :   m_aPropertyMap( pMap ),
     _pMap(pMap), mbConvertTwips(bConvertTwips), mrItemPool( rItemPool )
 {

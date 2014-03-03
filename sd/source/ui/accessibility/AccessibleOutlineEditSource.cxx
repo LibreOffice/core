@@ -36,7 +36,7 @@ namespace accessibility
           mrWindow( rViewWindow ),
           mpOutliner( &rOutliner ),
           mpOutlinerView( &rOutlView ),
-          mTextForwarder( rOutliner, 0 ),
+          mTextForwarder( rOutliner, false ),
           mViewForwarder( rOutlView )
     {
         // register as listener - need to broadcast state change messages

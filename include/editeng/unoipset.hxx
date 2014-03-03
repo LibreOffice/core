@@ -39,11 +39,11 @@ class EDITENG_DLLPUBLIC SvxItemPropertySet
     mutable com::sun::star::uno::Reference<com::sun::star::beans::XPropertySetInfo> m_xInfo;
     const SfxItemPropertyMapEntry*  _pMap;
     ::std::vector< SvxIDPropertyCombine* > aCombineList;
-    sal_Bool                        mbConvertTwips;
+    bool                            mbConvertTwips;
     SfxItemPool&                    mrItemPool;
 
 public:
-    SvxItemPropertySet( const SfxItemPropertyMapEntry *pMap, SfxItemPool& rPool, sal_Bool bConvertTwips = sal_False );
+    SvxItemPropertySet( const SfxItemPropertyMapEntry *pMap, SfxItemPool& rPool, bool bConvertTwips = false );
     ~SvxItemPropertySet();
 
     // Methods, which work directly with the ItemSet
@@ -54,7 +54,7 @@ public:
     ::com::sun::star::uno::Any getPropertyValue( const SfxItemPropertySimpleEntry* pMap ) const;
     void setPropertyValue( const SfxItemPropertySimpleEntry* pMap, const ::com::sun::star::uno::Any& rVal ) const;
 
-    sal_Bool AreThereOwnUsrAnys() const { return ( aCombineList.empty() ? sal_False : sal_True ); }
+    bool AreThereOwnUsrAnys() const { return ! aCombineList.empty(); }
     ::com::sun::star::uno::Any* GetUsrAnyForID(sal_uInt16 nWID) const;
     void AddUsrAnyForID(const ::com::sun::star::uno::Any& rAny, sal_uInt16 nWID);
     void ClearAllUsrAny();

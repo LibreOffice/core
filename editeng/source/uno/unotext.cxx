@@ -1240,7 +1240,7 @@ void SvxUnoTextRangeBase::_setPropertyToDefault(SvxTextForwarder* pForwarder, co
         }
         else if( pMap->nWID == WID_PARAISNUMBERINGRESTART )
         {
-            pForwarder->SetParaIsNumberingRestart( maSelection.nStartPara, sal_False );
+            pForwarder->SetParaIsNumberingRestart( maSelection.nStartPara, false );
         }
         else
         {

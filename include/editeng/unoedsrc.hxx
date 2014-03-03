@@ -434,8 +434,8 @@ public:
     virtual sal_Int32 GetNumberingStartValue( sal_Int32 nPara );
     virtual void SetNumberingStartValue( sal_Int32 nPara, sal_Int32 nNumberingStartValue );
 
-    virtual sal_Bool IsParaIsNumberingRestart( sal_Int32 nPara );
-    virtual void SetParaIsNumberingRestart( sal_Int32 nPara, sal_Bool bParaIsNumberingRestart );
+    virtual bool IsParaIsNumberingRestart( sal_Int32 nPara );
+    virtual void SetParaIsNumberingRestart( sal_Int32 nPara, bool bParaIsNumberingRestart );
 };
 
 /** Encapsulates the document view for the purpose of unified
@@ -535,9 +535,9 @@ public:
      */
     virtual bool Paste() = 0;
 
-    virtual sal_Bool IsWrongSpelledWordAtPos( sal_Int32, sal_Int32 ) { return sal_False; };
-    virtual sal_Bool IsShapeParaFocusable( ) { return sal_True; };
-    virtual sal_Bool BreakParaWrongList(sal_Int32, sal_Int32&, sal_Int32&, sal_Int32){ return sal_False; };
+    virtual bool IsWrongSpelledWordAtPos( sal_Int32, sal_Int32 ) { return false; };
+    virtual bool IsShapeParaFocusable( ) { return true; };
+    virtual bool BreakParaWrongList(sal_Int32, sal_Int32&, sal_Int32&, sal_Int32){ return false; };
 };
 
 #endif

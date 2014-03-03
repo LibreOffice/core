@@ -61,7 +61,7 @@ class EDITENG_DLLPUBLIC LinguMgr
         ::com::sun::star::linguistic2::XDictionary >    xChangeAll;
 
     static LinguMgrExitLstnr                           *pExitLstnr;
-    static sal_Bool                                     bExiting;
+    static bool                                        bExiting;
 
     static ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellChecker1 > GetSpell();
@@ -122,13 +122,13 @@ struct SvxAlternativeSpelling
                     xHyphWord;
     sal_Int16       nChangedPos,
                     nChangedLength;
-    sal_Bool        bIsAltSpelling;
+    bool            bIsAltSpelling;
 
     inline SvxAlternativeSpelling();
 };
 
 inline SvxAlternativeSpelling::SvxAlternativeSpelling() :
-    nChangedPos(-1), nChangedLength(-1), bIsAltSpelling(sal_False)
+    nChangedPos(-1), nChangedLength(-1), bIsAltSpelling(false)
 {
 }
 

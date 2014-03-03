@@ -39,7 +39,7 @@ using namespace ::com::sun::star;
 
 
 
-SvxOutlinerForwarder::SvxOutlinerForwarder( Outliner& rOutl, sal_Bool bOutlText /* = sal_False */ ) :
+SvxOutlinerForwarder::SvxOutlinerForwarder( Outliner& rOutl, bool bOutlText /* = false */ ) :
     rOutliner( rOutl ),
     bOutlinerText( bOutlText ),
     mpAttribsCache( NULL ),
@@ -514,7 +514,7 @@ void SvxOutlinerForwarder::SetNumberingStartValue(  sal_Int32 nPara, sal_Int32 n
     }
 }
 
-sal_Bool SvxOutlinerForwarder::IsParaIsNumberingRestart( sal_Int32 nPara )
+bool SvxOutlinerForwarder::IsParaIsNumberingRestart( sal_Int32 nPara )
 {
     if( 0 <= nPara && nPara < GetParagraphCount() )
     {
@@ -523,11 +523,11 @@ sal_Bool SvxOutlinerForwarder::IsParaIsNumberingRestart( sal_Int32 nPara )
     else
     {
         OSL_FAIL( "SvxOutlinerForwarder::IsParaIsNumberingRestart)(), Invalid paragraph index");
-        return sal_False;
+        return false;
     }
 }
 
-void SvxOutlinerForwarder::SetParaIsNumberingRestart(  sal_Int32 nPara, sal_Bool bParaIsNumberingRestart )
+void SvxOutlinerForwarder::SetParaIsNumberingRestart(  sal_Int32 nPara, bool bParaIsNumberingRestart )
 {
     if( 0 <= nPara && nPara < GetParagraphCount() )
     {
@@ -589,12 +589,12 @@ void SvxTextForwarder::SetNumberingStartValue( sal_Int32, sal_Int32 )
 {
 }
 
-sal_Bool SvxTextForwarder::IsParaIsNumberingRestart( sal_Int32  )
+bool SvxTextForwarder::IsParaIsNumberingRestart( sal_Int32  )
 {
-    return sal_False;
+    return false;
 }
 
-void SvxTextForwarder::SetParaIsNumberingRestart( sal_Int32, sal_Bool )
+void SvxTextForwarder::SetParaIsNumberingRestart( sal_Int32, bool )
 {
 }
 

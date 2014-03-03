@@ -33,7 +33,7 @@ class EDITENG_DLLPUBLIC SvxOutlinerForwarder : public SvxTextForwarder
 {
 private:
     Outliner&           rOutliner;
-    sal_Bool                bOutlinerText;
+    bool                bOutlinerText;
 
     /** this pointer may be null or point to an item set for the attribs of
         the selection maAttribsSelection */
@@ -50,7 +50,7 @@ private:
     mutable sal_Int32   mnParaAttribsCache;
 
 public:
-                        SvxOutlinerForwarder( Outliner& rOutl, sal_Bool bOutlText = sal_False );
+                        SvxOutlinerForwarder( Outliner& rOutl, bool bOutlText = false );
     virtual             ~SvxOutlinerForwarder();
 
     virtual sal_Int32   GetParagraphCount() const;
@@ -102,8 +102,8 @@ public:
     virtual sal_Int32       GetNumberingStartValue( sal_Int32 nPara );
     virtual void            SetNumberingStartValue( sal_Int32 nPara, sal_Int32 nNumberingStartValue );
 
-    virtual sal_Bool        IsParaIsNumberingRestart( sal_Int32 nPara );
-    virtual void            SetParaIsNumberingRestart( sal_Int32 nPara, sal_Bool bParaIsNumberingRestart );
+    virtual bool            IsParaIsNumberingRestart( sal_Int32 nPara );
+    virtual void            SetParaIsNumberingRestart( sal_Int32 nPara, bool bParaIsNumberingRestart );
 
     /* this method flushes internal caches for this forwarder */
     void                flushCache();
