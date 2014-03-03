@@ -1451,7 +1451,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             }
         }
 
-        //fdo#61320: only store thumbnail image if the corresponding option is not disabled in the configuration
+        //fdo#61320: only store thumbnail image if the corresponding option is enabled in the configuration
         if ( bOk && officecfg::Office::Common::Save::Document::GenerateThumbnail::get()
                 && GetCreateMode() != SFX_CREATE_MODE_EMBEDDED && !bPasswdProvided )
         {
