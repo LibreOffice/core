@@ -137,10 +137,10 @@ class XFColumns
 {
 public:
     XFColumns()
-    {
-        m_nFlag = 0;
-        m_fGap = 0;
-    }
+        : m_nFlag(0)
+        , m_nCount(0)
+        , m_fGap(0.0)
+        { }
 public:
     void    SetSeparator(XFColumnSep& aSeparator);
     void    SetGap(double fGap);
