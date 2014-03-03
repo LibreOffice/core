@@ -57,7 +57,6 @@ $(eval $(call gb_Module_add_targets,shell,\
 	Executable_regsvrex \
 	Executable_senddoc \
 	Library_smplmail \
-	Library_syssh_win \
 	Library_wininetbe \
 	StaticLibrary_simplemapi \
 ))
@@ -101,6 +100,7 @@ ifeq ($(filter DESKTOP,$(BUILD_TYPE)),DESKTOP)
 
 $(eval $(call gb_Module_add_targets,shell,\
 	Executable_lngconvex \
+	Library_syssh \
 ))
 
 ifneq ($(OS),WNT)
@@ -109,7 +109,6 @@ $(eval $(call gb_Module_add_targets,shell,\
 	Executable_gnome_open_url \
 	Executable_uri_encode \
 	Library_cmdmail \
-	Library_syssh \
 	Package_scripts \
 	Package_scripts_gnome \
 	Package_scripts_kde \
