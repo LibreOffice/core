@@ -112,7 +112,9 @@ void LwpCellList::Convert(XFCell * pCell, LwpTableLayout* /*pCellsMap*/)
     }
 }
 
- LwpNumericValue::LwpNumericValue(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpObject(objHdr, pStrm)
+LwpNumericValue::LwpNumericValue(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+    : LwpObject(objHdr, pStrm)
+    , cNumber(0)
 {}
 
 LwpNumericValue::~LwpNumericValue()
