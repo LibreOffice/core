@@ -297,13 +297,13 @@ namespace drawinglayer
             switch (rSource.getStyle())
             {
                 case table::BorderLineStyle::SOLID:
-                case table::BorderLineStyle::DOUBLE:
+                case table::BorderLineStyle::DOUBLE_THIN:
                 {
                     const basegfx::BColor aLineColor =
                         maBColorModifierStack.getModifiedColor(rSource.getRGBColorLeft());
                     double nThick = rtl::math::round(rSource.getLeftWidth());
 
-                    bool bDouble = rSource.getStyle() == table::BorderLineStyle::DOUBLE;
+                    bool bDouble = rSource.getStyle() == table::BorderLineStyle::DOUBLE_THIN;
 
                     basegfx::B2DPolygon aTarget;
 

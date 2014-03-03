@@ -130,6 +130,8 @@ private:
     void                ResetFrameLine_Impl( svx::FrameBorderType eBorder,
                                              const editeng::SvxBorderLine* pCurLine,
                                              bool bValid );
+
+    bool IsBorderLineStyleAllowed( sal_Int16 nStyle ) const;
 };
 
 

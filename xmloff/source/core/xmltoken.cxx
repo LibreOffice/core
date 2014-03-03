@@ -651,6 +651,7 @@ namespace xmloff { namespace token {
         TOKEN( "dotted",                          XML_DOTTED ),
         TOKEN( "double",                          XML_DOUBLE ),
         TOKEN( "double-sided",                    XML_DOUBLE_SIDED ),
+        TOKEN( "double-thin",                     XML_DOUBLE_THIN ),
         TOKEN( "down",                            XML_DOWN ),
         TOKEN( "draft",                           XML_DRAFT ),
         TOKEN( "draw",                            XML_DRAW ),
