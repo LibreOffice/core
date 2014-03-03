@@ -463,7 +463,11 @@ uno::Reference< text::XTextAppend >  DomainMapper_Impl::GetTopTextAppend()
     return m_aTextAppendStack.top().xTextAppend;
 }
 
-
+FieldContextPtr  DomainMapper_Impl::GetTopFieldContext()
+{
+    OSL_ENSURE(!m_aFieldStack.empty(), "Field stack is empty" );
+    return m_aFieldStack.top();
+}
 
 void DomainMapper_Impl::InitTabStopFromStyle( const uno::Sequence< style::TabStop >& rInitTabStops )
 {
@@ -2880,9 +2884,12 @@ void DomainMapper_Impl::handleIndex
         sValue = sValue.replaceAll("\"", "");
         uno::Reference<text::XTextColumns> xTextColumns;
         xTOC->getPropertyValue(rPropNameSupplier.GetName( PROP_TEXT_COLUMNS )) >>= xTextColumns;
+//        uno::Reference< beans::XPropertySet > xColumnPropSet( xTextColumns, uno::UNO_QUERY_THROW );
         if (xTextColumns.is())
         {
             xTextColumns->setColumnCount( sValue.toInt32() );
+//            if ( xColumnPropSet.is() )
+//                xColumnPropSet->setPropertyValue( rPropNameSupplier.GetName( PROP_AUTOMATIC_DISTANCE ), uno::makeAny( 720 ));
             xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_TEXT_COLUMNS ), uno::makeAny( xTextColumns ) );
         }
     }
