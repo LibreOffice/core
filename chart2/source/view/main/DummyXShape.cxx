@@ -514,6 +514,13 @@ void DummyCircle::render()
     else
         SAL_WARN("chart2.opengl", "missing color");
 
+    itr = maProperties.find("FillTransparence");
+    if(itr != maProperties.end())
+    {
+        sal_Int32 nTrans = itr->second.get<sal_Int32>();
+        pChart->m_GLRender.SetTransparency(nTrans&0xFF);
+    }
+
     pChart->m_GLRender.Bubble2DShapePoint(maPosition.X, maPosition.Y,
                                           maSize.Width, maSize.Height);
     pChart->m_GLRender.RenderBubble2FBO(GL_TRUE);

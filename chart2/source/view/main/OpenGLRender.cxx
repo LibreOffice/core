@@ -1044,6 +1044,7 @@ int OpenGLRender::Bubble2DShapePoint(float x, float y, float directionX, float d
 int OpenGLRender::RenderBubble2FBO(int)
 {
     CHECK_GL_ERROR();
+    glm::vec4 edgeColor = glm::vec4(0.0, 0.0, 0.0, 1.0);
     size_t listNum = m_Bubble2DShapePointList.size();
     for (size_t i = 0; i < listNum; i++)
     {
@@ -1082,7 +1083,30 @@ int OpenGLRender::RenderBubble2FBO(int)
         glDrawArrays(GL_TRIANGLE_FAN, 0, m_Bubble2DCircle.size() / 2);
         glDisableVertexAttribArray(m_2DVertexID);
         glUseProgram(0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        //add black edge
+        glLineWidth(3.0);
+        glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+        glBufferData(GL_ARRAY_BUFFER, m_Bubble2DCircle.size() * sizeof(GLfloat) -2 , &m_Bubble2DCircle[2], GL_STATIC_DRAW);
+        glUseProgram(m_CommonProID);
+        glUniform4fv(m_2DColorID, 1, &edgeColor[0]);
+        glUniformMatrix4fv(m_MatrixID, 1, GL_FALSE, &m_MVP[0][0]);
+        glEnableVertexAttribArray(m_2DVertexID);
+        glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+        glVertexAttribPointer(
+            m_2DVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+            2,                  // size
+            GL_FLOAT,           // type
+            GL_FALSE,           // normalized?
+            0,                  // stride
+            (void*)0            // array buffer offset
+            );
+        glDrawArrays(GL_LINE_STRIP, 0, (m_Bubble2DCircle.size() * sizeof(GLfloat) -2) / sizeof(float) / 2);
+        glDisableVertexAttribArray(m_2DVertexID);
+        glUseProgram(0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
         m_Bubble2DShapePointList.pop_front();
+        glLineWidth(m_fLineWidth);
     }
     //if use MSAA, we should copy the data to the FBO texture
     GLenum fbResult = glCheckFramebufferStatus(GL_FRAMEBUFFER);
@@ -1528,7 +1552,11 @@ void OpenGLRender::SetChartTransparencyGradient(long transparencyGradient)
         m_BackgroundColor[15] = 0.0;
     }
 }
-
+void OpenGLRender::SetTransparency(sal_uInt32 transparency)
+{
+    m_fAlpha = (float)transparency / 255.0;
+    m_2DColor = glm::vec4(m_2DColor.r, m_2DColor.g, m_2DColor.b, m_fAlpha);
+}
 void OpenGLRender::GeneratePieSegment2D(double fInnerRadius, double fOutterRadius, double nAngleStart, double nAngleWidth)
 {
     double nAngleStep = 1;
