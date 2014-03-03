@@ -72,7 +72,11 @@
 #include "xfilter/xfstylemanager.hxx"
 
 LwpSilverBullet::LwpSilverBullet(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
-    : LwpDLNFVList(objHdr, pStrm), m_pAtomHolder(new LwpAtomHolder), m_pBulletPara(NULL)
+    : LwpDLNFVList(objHdr, pStrm)
+    , m_nFlags(0)
+    , m_nUseCount(0)
+    , m_pAtomHolder(new LwpAtomHolder)
+    , m_pBulletPara(NULL)
 {
 }
 
