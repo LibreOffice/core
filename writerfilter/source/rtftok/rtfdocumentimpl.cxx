@@ -2988,17 +2988,29 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_EXPNDTW: nSprm = NS_ooxml::LN_EG_RPrBase_spacing; break;
         case RTF_KERNING: nSprm = NS_ooxml::LN_EG_RPrBase_kern; break;
         case RTF_CHARSCALEX: nSprm = NS_ooxml::LN_EG_RPrBase_w; break;
-        case RTF_LANG: nSprm = NS_sprm::LN_CRgLid0; break;
-        case RTF_LANGFE: nSprm = NS_sprm::LN_CRgLid1; break;
-        case RTF_ALANG: nSprm = NS_sprm::LN_CLidBi; break;
         default: break;
     }
     if (nSprm > 0)
     {
         m_aStates.top().aCharacterSprms.set(nSprm, pIntValue);
+        return 0;
+    }
+    // Trivial character attributes.
+    switch (nKeyword)
+    {
+        case RTF_LANG: nSprm = NS_ooxml::LN_CT_Language_val; break;
+        case RTF_LANGFE: nSprm = NS_ooxml::LN_CT_Language_eastAsia; break;
+        case RTF_ALANG: nSprm = NS_ooxml::LN_CT_Language_bidi; break;
+        default: break;
+    }
+    if (nSprm > 0)
+    {
+        LanguageTag aTag((LanguageType)nParam);
+        RTFValue::Pointer_t pValue(new RTFValue(aTag.getBcp47()));
+        lcl_putNestedAttribute(m_aStates.top().aCharacterSprms, NS_ooxml::LN_EG_RPrBase_lang, nSprm, pValue);
         // Language is a character property, but we should store it at a paragraph level as well for fields.
         if (nKeyword == RTF_LANG && m_bNeedPap)
-            m_aStates.top().aParagraphSprms.set(nSprm, pIntValue);
+            lcl_putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_EG_RPrBase_lang, nSprm, pValue);
         return 0;
     }
     // Trivial paragraph sprms.
@@ -3221,10 +3233,12 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             m_aDefaultState.aCharacterSprms.set(NS_sprm::LN_CRgFtc0, pIntValue);
             break;
         case RTF_DEFLANG:
-            m_aDefaultState.aCharacterSprms.set(NS_sprm::LN_CRgLid0, pIntValue);
-            break;
         case RTF_ADEFLANG:
-            m_aDefaultState.aCharacterSprms.set(NS_sprm::LN_CLidBi, pIntValue);
+            {
+                LanguageTag aTag((LanguageType)nParam);
+                RTFValue::Pointer_t pValue(new RTFValue(aTag.getBcp47()));
+                lcl_putNestedAttribute(m_aStates.top().aCharacterSprms, (nKeyword == RTF_DEFLANG ? NS_ooxml::LN_EG_RPrBase_lang : NS_ooxml::LN_CT_Language_bidi), nSprm, pValue);
+            }
             break;
         case RTF_CHCBPAT:
             {

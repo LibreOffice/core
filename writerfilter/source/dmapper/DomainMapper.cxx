@@ -1463,8 +1463,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             handleUnderlineType(nIntValue, rContext);
         }
         break;
-    case NS_sprm::LN_CLid:
-        break;  // sprmCLid
     case NS_sprm::LN_CIco:
         {
             sal_Int32 nColor = 0;
@@ -1604,30 +1602,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             }
             break;
         }
-    case NS_sprm::LN_CLidBi:     // sprmCLidBi     language complex
-    case NS_sprm::LN_CRgLid0:    // sprmCRgLid0    language Western
-    case NS_sprm::LN_CRgLid1:    // sprmCRgLid1    language Asian
-        {
-            lang::Locale aLocale( LanguageTag( (LanguageType)nIntValue).getLocale());
-
-            PropertyIds aPropId;
-            switch (nSprmId)
-            {
-                case NS_sprm::LN_CRgLid0:
-                    aPropId = PROP_CHAR_LOCALE;
-                    break;
-                case NS_sprm::LN_CRgLid1:
-                    aPropId = PROP_CHAR_LOCALE_ASIAN;
-                    break;
-                default:
-                    aPropId = PROP_CHAR_LOCALE_COMPLEX;
-                    break;
-            }
-
-            rContext->Insert(aPropId, uno::makeAny( aLocale ) );
-        }
-        break;
-
     case NS_ooxml::LN_EG_SectPrContents_type:
         /* break type
           0 - No break
