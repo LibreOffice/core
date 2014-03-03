@@ -1403,6 +1403,8 @@ XFCell* LwpTableLayout::GetCellsMap(sal_uInt16 nRow,sal_uInt8 nCol)
 //add end by
 LwpColumnLayout::LwpColumnLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpVirtualLayout(objHdr, pStrm)
+    , ccolid(0)
+    , cwidth(0)
 {}
 
 LwpColumnLayout::~LwpColumnLayout()
