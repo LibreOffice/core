@@ -20,9 +20,6 @@
 #include "index.hxx"
 
 #include <assert.h>
-#include <stdlib.h>
-#include <rtl/ustring.hxx>
-#include <tools/solar.h>
 #include <sal/log.hxx>
 
 TYPEINIT0(SwIndexReg);
