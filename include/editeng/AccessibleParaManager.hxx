@@ -172,8 +172,6 @@ namespace accessibility
         VectorOfChildren::const_iterator begin() const;
         VectorOfChildren::const_iterator end() const;
 
-        // dealing with single paragraphs (release reference, return reference etc)
-        void Release( sal_Int32 nPara );
         /// Set focus to given child
         void SetFocus( sal_Int32 nChild );
 

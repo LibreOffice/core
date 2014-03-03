@@ -109,20 +109,6 @@ namespace accessibility
         return maChildren.end();
     }
 
-    void AccessibleParaManager::Release( sal_Int32 nPara )
-    {
-        DBG_ASSERT( 0 <= nPara && maChildren.size() > static_cast<size_t>(nPara),
-                "AccessibleParaManager::Release: invalid index" );
-
-        if( 0 <= nPara && maChildren.size() > static_cast<size_t>(nPara) )
-        {
-            ShutdownPara( GetChild( nPara ) );
-
-            // clear reference and rect
-            maChildren[ nPara ] = WeakChild();
-        }
-    }
-
     void AccessibleParaManager::FireEvent( sal_Int32 nPara,
                                            const sal_Int16 nEventId,
                                            const uno::Any& rNewValue,
