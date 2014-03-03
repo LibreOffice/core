@@ -210,9 +210,6 @@ apitest::XText::testInsertRemoveTextContent()
 apitest::XTextContent::testAttach()
 apitest::XTextContent::testGetAnchor()
 apitest::XTextField::testGetPresentation()
-basegfx::tools::containsOnlyHorizontalAndVerticalEdges(basegfx::B2DPolyPolygon const&)
-basegfx::tools::equal(basegfx::B2DPolygon const&, basegfx::B2DPolygon const&, double const&)
-basegfx::tools::equal(basegfx::B3DPolyPolygon const&, basegfx::B3DPolyPolygon const&)
 canvas::createSurfaceProxyManager(boost::shared_ptr<canvas::IRenderModule> const&)
 comphelper::detail::ConfigurationWrapper::getGroupReadWrite(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(rtl::OUString const&) const

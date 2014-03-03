@@ -287,11 +287,6 @@ namespace basegfx
         */
         BASEGFX_DLLPUBLIC B2DPolyPolygon snapPointsOfHorizontalOrVerticalEdges(const B2DPolyPolygon& rCandidate);
 
-        /** returns true if the Polygon only contains horizontal or vertical edges
-            so that it could be represented by RegionBands
-        */
-        BASEGFX_DLLPUBLIC bool containsOnlyHorizontalAndVerticalEdges(const B2DPolyPolygon& rCandidate);
-
         /// converters for com::sun::star::drawing::PointSequence
         BASEGFX_DLLPUBLIC B2DPolyPolygon UnoPointSequenceSequenceToB2DPolyPolygon(
             const com::sun::star::drawing::PointSequenceSequence& rPointSequenceSequenceSource,
