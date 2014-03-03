@@ -65,10 +65,7 @@ enough if you want to test a paragraph or character property.
 Figuring out the UNO API just by reading the idl files under `offapi/` is not
 that productive. Xray can help in this case. Download it from:
 
-http://bernard.marcelly.perso.sfr.fr/index2.html
-
-(Mirror in case a new version behaves in a strange way:
-http://people.freedesktop.org/~vmiklos/2013/XrayTool52_en.sxw)
+http://dev-www.libreoffice.org/extern/XrayTool52_en.sxw
 
 It's an SXW file, start Writer, Tools -> Options -> LibreOffice -> Security,
 Macro Security, and there choose Low. Then open the SXW, and click `Install
