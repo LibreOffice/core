@@ -38,11 +38,6 @@ using namespace ::com::sun::star::chart2;
 
 namespace
 {
-    long lcl_getDistance()
-    {
-        return 6;
-    }
-
     sal_Bool lcl_getSortByXValues( const uno::Reference< chart2::XChartDocument >& xChartDoc )
     {
         sal_Bool bRet = sal_False;
