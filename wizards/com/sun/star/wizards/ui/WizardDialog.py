@@ -126,7 +126,7 @@ class WizardDialog(UnoDialog2):
         xPropertySet = \
             self.xMSF.createInstance("com.sun.star.util.PathSettings")
         self.sTemplatePath = \
-            xPropertySet.getPropertyValue("Template_user")[0]
+            xPropertySet.getPropertyValue("Template_internal")[0]
         self.sUserTemplatePath = \
             xPropertySet.getPropertyValue("Template_writable")
             
