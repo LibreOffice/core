@@ -730,6 +730,7 @@ LwpPara* LwpPageLayout::GetPagePosition()
 }
 LwpHeaderLayout::LwpHeaderLayout( LwpObjectHeader &objHdr, LwpSvStream* pStrm )
     : LwpPlacableLayout(objHdr, pStrm)
+    , m_nBorderOffset(0)
 {
 }
 
