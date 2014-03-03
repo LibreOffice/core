@@ -259,7 +259,7 @@ void SAL_CALL SVGFilter::setTargetDocument( const Reference< XComponent >& xDoc 
     mxDstDoc = xDoc;
 }
 
-bool SAL_CALL SVGFilter::isStreamGZip(uno::Reference<io::XInputStream> xInput)
+bool SVGFilter::isStreamGZip(uno::Reference<io::XInputStream> xInput)
 {
     uno::Reference<io::XSeekable> xSeek(xInput, uno::UNO_QUERY);
     if(xSeek.is())
@@ -276,7 +276,7 @@ bool SAL_CALL SVGFilter::isStreamGZip(uno::Reference<io::XInputStream> xInput)
     return false;
 }
 
-bool SAL_CALL SVGFilter::isStreamSvg(uno::Reference<io::XInputStream> xInput)
+bool SVGFilter::isStreamSvg(uno::Reference<io::XInputStream> xInput)
 {
     uno::Reference<io::XSeekable> xSeek(xInput, uno::UNO_QUERY);
     if(xSeek.is())
