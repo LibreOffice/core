@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a930d6b_0b95fde3",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-03-03T12:10:57Z",
+      "side": 1,
+      "message": "No. That is in the boost_system case. The boost_iostreams one is in line 680",
+      "parentUuid": "1a930d6b_6beda18b",
+      "revId": "be94684b2d0adad435c196d121a8aec3898e376d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a930d6b_cbfbf545",
         "filename": "external/liborcus/ExternalProject_liborcus.mk",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2014-03-03T12:03:17Z",
       "side": 1,
       "message": "I think $(BOOST_IOSTREAMS_LIB) needs to be added here",
+      "revId": "be94684b2d0adad435c196d121a8aec3898e376d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_2b9ab914",
+        "filename": "external/liborcus/ExternalProject_liborcus.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-03-03T12:10:57Z",
+      "side": 1,
+      "message": "Thanks fixed. However I\u0027m not in the SYSTEM_BOOST case as that part is working through the boost.m4 already even if the lib is not added. The problem is the non system case which I test on Windows.",
+      "parentUuid": "1a930d6b_cbfbf545",
       "revId": "be94684b2d0adad435c196d121a8aec3898e376d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
