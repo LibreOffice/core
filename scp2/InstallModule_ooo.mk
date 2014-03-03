@@ -107,21 +107,6 @@ $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
 	-DICU_MAJOR=$(ICU_MAJOR) \
 ))
 
-ifeq ($(SYSTEM_LIBXSLT),)
-$(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
-	-DLIBXSLT_MAJOR=$(LIBXSLT_MAJOR) \
-))
-endif
-
-ifeq ($(SYSTEM_REDLAND),)
-
-$(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
-	-DRAPTOR_MAJOR=$(RAPTOR_MAJOR) \
-	-DRASQAL_MAJOR=$(RASQAL_MAJOR) \
-	-DREDLAND_MAJOR=$(REDLAND_MAJOR) \
-))
-endif
-
 ifeq ($(SYSTEM_JFREEREPORT),)
 
 $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\

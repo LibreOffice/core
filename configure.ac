@@ -7756,7 +7756,6 @@ if test "$with_system_libxml" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBXSLT=
-    LIBXSLT_MAJOR=1
     BUILD_TYPE="$BUILD_TYPE LIBXSLT"
 
     if test "$cross_compiling" = "yes"; then
@@ -7776,7 +7775,6 @@ AC_SUBST(LIBEXSLT_CFLAGS)
 AC_SUBST(LIBEXSLT_LIBS)
 AC_SUBST(LIBXSLT_CFLAGS)
 AC_SUBST(LIBXSLT_LIBS)
-AC_SUBST(LIBXSLT_MAJOR)
 AC_SUBST(XSLTPROC)
 
 # ===================================================================
