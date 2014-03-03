@@ -72,6 +72,7 @@ Jun 2005        Created
 
 LwpVerDocument::LwpVerDocument(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
     : LwpObject(objHdr, pStrm)
+    , m_nTabSpacing(0)
 {}
 
 void LwpVerDocument::Read()
