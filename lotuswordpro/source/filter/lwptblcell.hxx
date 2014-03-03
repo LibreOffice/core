@@ -304,7 +304,9 @@ LwpRowColumnQualifier::IsAbsolute()
 class LwpRowSpecifier
 {
 public:
-    LwpRowSpecifier(void){}
+    LwpRowSpecifier(void)
+        : cRow(0)
+        {}
     ~LwpRowSpecifier(){}
 
     void QuickRead(LwpObjectStream *pStrm);
