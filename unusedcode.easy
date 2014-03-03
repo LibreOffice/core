@@ -224,7 +224,6 @@ connectivity::file::OStatement_Base::reset()
 connectivity::firebird::release(int&, cppu::OBroadcastHelperVar<cppu::OMultiTypeInterfaceContainerHelper, com::sun::star::uno::Type>&, com::sun::star::uno::Reference<com::sun::star::uno::XInterface>&, com::sun::star::lang::XComponent*)
 connectivity::sdbcx::OGroup::OGroup(rtl::OUString const&, unsigned char)
 connectivity::sdbcx::OGroup::OGroup(unsigned char)
-drawinglayer::attribute::SdrFillGraphicAttribute::getLogSize() const
 oglcanvas::CanvasHelper::flush() const
 oglcanvas::TextLayout::draw(com::sun::star::rendering::ViewState const&, com::sun::star::rendering::RenderState const&, com::sun::star::uno::Reference<com::sun::star::rendering::XGraphicDevice> const&) const
 oox::core::Relations::getRelationsFromType(rtl::OUString const&) const
