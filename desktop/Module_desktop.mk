@@ -37,8 +37,8 @@ endif
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,desktop,\
-    Executable_soffice.bin \
-    Executable_unopkg.bin \
+    Executable_soffice_bin \
+    Executable_unopkg_bin \
     Library_migrationoo2 \
     Library_migrationoo3 \
     Library_unopkgapp \
@@ -65,7 +65,7 @@ ifeq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,desktop,\
     StaticLibrary_winextendloaderenv \
     StaticLibrary_winlauncher \
-    Executable_crashrep.com \
+    Executable_crashrep_com \
     Executable_quickstart \
     Executable_sbase \
     Executable_scalc \
@@ -77,7 +77,7 @@ $(eval $(call gb_Module_add_targets,desktop,\
     Executable_swriter \
     Executable_unoinfo \
     Executable_unopkg \
-    Executable_unopkg.com \
+    Executable_unopkg_com \
     WinResTarget_quickstart \
     WinResTarget_sbase \
     WinResTarget_scalc \
