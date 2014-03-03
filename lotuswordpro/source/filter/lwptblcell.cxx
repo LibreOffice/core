@@ -67,7 +67,9 @@
 #include "lwptblcell.hxx"
 #include "lwppara.hxx"
 
- LwpCellList::LwpCellList(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpDLVList(objHdr, pStrm)
+ LwpCellList::LwpCellList(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+     : LwpDLVList(objHdr, pStrm)
+     , cColumn(0)
 {}
 
 LwpCellList::~LwpCellList()
