@@ -92,7 +92,6 @@ TextEngine::GetLeftMargin() const
 ThumbnailView::DeselectItem(unsigned short)
 ThumbnailView::GetItemText(unsigned short) const
 ThumbnailView::SetColor(Color const&)
-ToolBox::GetItemExpand(unsigned short) const
 UnoApiTest::closeDocument(com::sun::star::uno::Reference<com::sun::star::lang::XComponent>)
 apitest::CellProperties::testRotateReference()
 apitest::CellProperties::testVertJustify()

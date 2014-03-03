@@ -1207,14 +1207,6 @@ void ToolBox::SetItemExpand( sal_uInt16 nItemId, bool bExpand )
     }
 }
 
-bool ToolBox::GetItemExpand( sal_uInt16 nItemId ) const
-{
-    ImplToolItem* pItem = ImplGetItem( nItemId );
-    if (!pItem)
-        return false;
-    return pItem->mbExpand;
-}
-
 void ToolBox::SetItemData( sal_uInt16 nItemId, void* pNewData )
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
