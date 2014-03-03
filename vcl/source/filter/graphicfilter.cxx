@@ -1343,7 +1343,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
                                      WMF_EXTERNALHEADER *pExtHeader )
 {
     OUString                aFilterName;
-    sal_uLong               nStmBegin;
+    sal_uLong               nStreamBegin;
     sal_uInt16              nStatus;
     GraphicReader*          pContext = rGraphic.GetContext();
     GfxLinkType             eLinkType = GFX_LINK_TYPE_NONE;
@@ -1354,6 +1354,9 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
     Size                    aPreviewSizeHint( 0, 0 );
     bool                bAllowPartialStreamRead = false;
     bool                bCreateNativeLink = true;
+
+    sal_uInt8* pGraphicContent = NULL;
+    sal_Int32  nGraphicContentSize = 0;
 
     ResetLastError();
 
@@ -1394,10 +1397,10 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
         if( bDummyContext )
         {
             rGraphic.SetContext( NULL );
-            nStmBegin = 0;
+            nStreamBegin = 0;
         }
         else
-            nStmBegin = rIStream.Tell();
+            nStreamBegin = rIStream.Tell();
 
         bAbort = false;
         nStatus = ImpTestOrFindFormat( rPath, rIStream, nFormat );
@@ -1406,11 +1409,11 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
         {
             rGraphic.SetContext( (GraphicReader*) 1 );
             rIStream.ResetError();
-            rIStream.Seek( nStmBegin );
+            rIStream.Seek( nStreamBegin );
             return (sal_uInt16) ImplSetError( GRFILTER_OK );
         }
 
-        rIStream.Seek( nStmBegin );
+        rIStream.Seek( nStreamBegin );
 
         if( ( nStatus != GRFILTER_OK ) || rIStream.GetError() )
             return (sal_uInt16) ImplSetError( ( nStatus != GRFILTER_OK ) ? nStatus : GRFILTER_OPENERROR, &rIStream );
@@ -1425,7 +1428,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
         if( pContext && !bDummyContext )
             aFilterName = pContext->GetUpperFilterName();
 
-        nStmBegin = 0;
+        nStreamBegin = 0;
         nStatus = GRFILTER_OK;
     }
 
@@ -1539,6 +1542,11 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
                         SvgDataArray aNewData(new sal_uInt8[nMemoryLength]);
                         aMemStream.Seek(STREAM_SEEK_TO_BEGIN);
                         aMemStream.Read(aNewData.get(), nMemoryLength);
+
+                        // Make a uncompressed copy for GfxLink
+                        nGraphicContentSize = nMemoryLength;
+                        pGraphicContent = new sal_uInt8[nGraphicContentSize];
+                        std::copy(aNewData.get(), aNewData.get() + nMemoryLength, pGraphicContent);
 
                         if(!aMemStream.GetError() )
                         {
@@ -1742,28 +1750,36 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
 
     if( nStatus == GRFILTER_OK && bCreateNativeLink && ( eLinkType != GFX_LINK_TYPE_NONE ) && !rGraphic.GetContext() && !bLinkSet )
     {
-        const sal_uLong nStmEnd = rIStream.Tell();
-        const sal_uLong nBufSize = nStmEnd - nStmBegin;
-
-        if( nBufSize )
+        if (pGraphicContent == NULL)
         {
-            sal_uInt8*  pBuf=0;
-            try
-            {
-                pBuf = new sal_uInt8[ nBufSize ];
-            }
-            catch (const std::bad_alloc&)
-            {
-                nStatus = GRFILTER_TOOBIG;
-            }
+            const sal_uLong nStreamEnd = rIStream.Tell();
+            nGraphicContentSize = nStreamEnd - nStreamBegin;
 
-            if( nStatus == GRFILTER_OK )
+            if (nGraphicContentSize > 0)
             {
-                rIStream.Seek( nStmBegin );
-                rIStream.Read( pBuf, nBufSize );
-                rGraphic.SetLink( GfxLink( pBuf, nBufSize, eLinkType, true ) );
+                try
+                {
+                    pGraphicContent = new sal_uInt8[nGraphicContentSize];
+                }
+                catch (const std::bad_alloc&)
+                {
+                    nStatus = GRFILTER_TOOBIG;
+                }
+
+                if( nStatus == GRFILTER_OK )
+                {
+                    rIStream.Seek(nStreamBegin);
+                    rIStream.Read(pGraphicContent, nGraphicContentSize);
+                }
             }
         }
+        if( nStatus == GRFILTER_OK )
+            rGraphic.SetLink( GfxLink( pGraphicContent, nGraphicContentSize, eLinkType, true ) );
+    }
+    else
+    {
+        if(nGraphicContentSize > 0)
+            delete[] pGraphicContent;
     }
 
     // Set error code or try to set native buffer
@@ -1773,7 +1789,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
             nStatus = GRFILTER_ABORT;
 
         ImplSetError( nStatus, &rIStream );
-        rIStream.Seek( nStmBegin );
+        rIStream.Seek( nStreamBegin );
         rGraphic.Clear();
     }
 
