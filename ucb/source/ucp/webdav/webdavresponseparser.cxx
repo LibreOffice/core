@@ -338,7 +338,7 @@ namespace
             }
             else
             {
-                OSL_ENSURE(false, "Parser context pop without context (!)");
+                SAL_WARN( "ucb.ucp.webdav", "Parser context pop without context (!)");
             }
         }
 
@@ -382,7 +382,7 @@ namespace
 
     WebDAVResponseParser::~WebDAVResponseParser()
     {
-        OSL_ENSURE(!mpContext, "Parser destructed with existing content (!)");
+        SAL_WARN_IF(mpContext, "ucb.ucp.webdav", "Parser destructed with existing content (!)");
         while(mpContext)
         {
             pop_context();
@@ -391,12 +391,12 @@ namespace
 
     void SAL_CALL WebDAVResponseParser::startDocument(  ) throw (xml::sax::SAXException, uno::RuntimeException)
     {
-        OSL_ENSURE(!mpContext, "Parser start with existing content (!)");
+        SAL_WARN_IF(mpContext, "ucb.ucp.webdav", "Parser start with existing content (!)");
     }
 
     void SAL_CALL WebDAVResponseParser::endDocument(  ) throw (xml::sax::SAXException, uno::RuntimeException)
     {
-        OSL_ENSURE(!mpContext, "Parser end with existing content (!)");
+        SAL_WARN_IF(mpContext, "ucb.ucp.webdav", "Parser end with existing content (!)");
     }
 
     void SAL_CALL WebDAVResponseParser::startElement( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs ) throw (xml::sax::SAXException, uno::RuntimeException)
@@ -495,7 +495,7 @@ namespace
     void SAL_CALL WebDAVResponseParser::endElement( const OUString& aName ) throw (xml::sax::SAXException, uno::RuntimeException)
     {
         const sal_Int32 nLen(aName.getLength());
-        OSL_ENSURE(mpContext, "Parser EndElement without content (!)");
+        SAL_WARN_IF(!mpContext, "ucb.ucp.webdav", "Parser EndElement without content (!)");
 
         if(mpContext && nLen)
         {
@@ -747,7 +747,7 @@ namespace
     void SAL_CALL WebDAVResponseParser::characters( const OUString& aChars ) throw (xml::sax::SAXException, uno::RuntimeException)
     {
         // collect whitespace over evtl. several calls in mpContext
-        OSL_ENSURE(mpContext, "Parser characters without content (!)");
+        SAL_WARN_IF(!mpContext, "ucb.ucp.webdav", "Parser characters without content (!)");
         const sal_Int32 nLen(aChars.getLength());
 
         if(mpContext && nLen)
@@ -832,7 +832,7 @@ namespace
             }
             catch(uno::Exception&)
             {
-                OSL_ENSURE(false, "WebDAV Parse error (!)");
+                SAL_WARN("ucb.ucp.webdav", "WebDAV Parse error (!)");
             }
         }
     }

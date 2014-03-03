@@ -378,7 +378,7 @@ bool DataSupplier::getData()
         }
         catch ( DAVException & )
         {
-//          OSL_ENSURE( false, "PROPFIND : DAVException" );
+            SAL_WARN( "ucb.ucp.webdav", "PROPFIND : DAVException" );
             m_pImpl->m_bThrowException = true;
         }
 

@@ -112,7 +112,7 @@ extern "C" int UCBDeadPropertyValue_chardata_callback(
     switch ( state )
     {
         case STATE_TYPE:
-            OSL_ENSURE( !pCtx->pType,
+            SAL_WARN_IF( pCtx->pType, "ucb.ucp.webdav",
                         "UCBDeadPropertyValue_endelement_callback - "
                         "Type already set!" );
             pCtx->pType
@@ -120,7 +120,7 @@ extern "C" int UCBDeadPropertyValue_chardata_callback(
             break;
 
         case STATE_VALUE:
-            OSL_ENSURE( !pCtx->pValue,
+            SAL_WARN_IF( pCtx->pValue, "ucb.ucp.webdav",
                         "UCBDeadPropertyValue_endelement_callback - "
                         "Value already set!" );
             pCtx->pValue
@@ -217,7 +217,7 @@ static OUString decodeValue( const OUString & rValue )
 
             if ( nPos == nEnd )
             {
-                OSL_ENSURE( sal_False,
+                SAL_WARN( "ucb.ucp.webdav",
                     "UCBDeadPropertyValue::decodeValue - syntax error!" );
                 return OUString();
             }
@@ -230,7 +230,7 @@ static OUString decodeValue( const OUString & rValue )
 
                 if ( nPos > nEnd - 4 )
                 {
-                    OSL_ENSURE( sal_False,
+                    SAL_WARN( "ucb.ucp.webdav",
                         "UCBDeadPropertyValue::decodeValue - syntax error!" );
                     return OUString();
                 }
@@ -246,7 +246,7 @@ static OUString decodeValue( const OUString & rValue )
                 }
                 else
                 {
-                    OSL_ENSURE( sal_False,
+                    SAL_WARN( "ucb.ucp.webdav",
                         "UCBDeadPropertyValue::decodeValue - syntax error!" );
                     return OUString();
                 }
@@ -257,7 +257,7 @@ static OUString decodeValue( const OUString & rValue )
 
                 if ( nPos > nEnd - 3 )
                 {
-                    OSL_ENSURE( sal_False,
+                    SAL_WARN( "ucb.ucp.webdav",
                         "UCBDeadPropertyValue::decodeValue - syntax error!" );
                     return OUString();
                 }
@@ -271,7 +271,7 @@ static OUString decodeValue( const OUString & rValue )
                 }
                 else
                 {
-                    OSL_ENSURE( sal_False,
+                    SAL_WARN( "ucb.ucp.webdav",
                         "UCBDeadPropertyValue::decodeValue - syntax error!" );
                     return OUString();
                 }
@@ -282,7 +282,7 @@ static OUString decodeValue( const OUString & rValue )
 
                 if ( nPos > nEnd - 3 )
                 {
-                    OSL_ENSURE( sal_False,
+                    SAL_WARN( "ucb.ucp.webdav",
                         "UCBDeadPropertyValue::decodeValue - syntax error!" );
                     return OUString();
                 }
@@ -296,14 +296,14 @@ static OUString decodeValue( const OUString & rValue )
                 }
                 else
                 {
-                    OSL_ENSURE( sal_False,
+                    SAL_WARN( "ucb.ucp.webdav",
                         "UCBDeadPropertyValue::decodeValue - syntax error!" );
                     return OUString();
                 }
             }
             else
             {
-                OSL_ENSURE( sal_False,
+                SAL_WARN( "ucb.ucp.webdav",
                     "UCBDeadPropertyValue::decodeValue - syntax error!" );
                 return OUString();
             }
@@ -418,7 +418,7 @@ bool UCBDeadPropertyValue::createFromXML( const OString & /*rInData*/,
                 }
                 else
                 {
-                    OSL_ENSURE( sal_False,
+                    SAL_WARN( "ucb.ucp.webdav",
                                 "UCBDeadPropertyValue::createFromXML - "
                                 "Unsupported property type!" );
                     success = false;
@@ -517,7 +517,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
     }
     else
     {
-        OSL_ENSURE( sal_False,
+        SAL_WARN( "ucb.ucp.webdav",
                     "UCBDeadPropertyValue::toXML - "
                     "Unsupported property type!" );
         return false;

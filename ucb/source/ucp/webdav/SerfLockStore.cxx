@@ -79,7 +79,7 @@ SerfLockStore::SerfLockStore()
     : m_pSerfLockStore( ne_lockstore_create() ),
       m_pTickerThread( 0 )
 {
-    OSL_ENSURE( m_pSerfLockStore, "Unable to create neon lock store!" );
+    SAL_WARN_IF( !m_pSerfLockStore, "ucb.ucp.webdav", "Unable to create neon lock store!" );
 }
 
 
@@ -88,7 +88,7 @@ SerfLockStore::~SerfLockStore()
     stopTicker();
 
     // release active locks, if any.
-    OSL_ENSURE( m_aLockInfoMap.size() == 0,
+    SAL_WARN_IF( !m_aLockInfoMap.empty(), "ucb.ucp.webdav",
                 "SerfLockStore::~SerfLockStore - Releasing active locks!" );
 
     LockInfoMap::const_iterator it( m_aLockInfoMap.begin() );
@@ -173,7 +173,7 @@ void SerfLockStore::updateLock( SerfLock * pLock,
     osl::MutexGuard aGuard( m_aMutex );
 
     LockInfoMap::iterator it( m_aLockInfoMap.find( pLock ) );
-    OSL_ENSURE( it != m_aLockInfoMap.end(),
+    SAL_WARN_IF( it == m_aLockInfoMap.end(), "ucb.ucp.webdav",
                 "SerfLockStore::updateLock: lock not found!" );
 
     if ( it != m_aLockInfoMap.end() )
