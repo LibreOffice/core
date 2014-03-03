@@ -372,8 +372,8 @@ apr_status_t SerfSession::verifySerfCertificateChain (
     // Check arguments.
     if (pCertificateChainBase64Encoded == NULL || nCertificateChainLength<=0)
     {
-        OSL_ASSERT(pCertificateChainBase64Encoded != NULL);
-        OSL_ASSERT(nCertificateChainLength>0);
+        assert(pCertificateChainBase64Encoded != NULL);
+        assert(nCertificateChainLength>0);
         return SERF_SSL_CERT_UNKNOWN_FAILURE;
     }
 
