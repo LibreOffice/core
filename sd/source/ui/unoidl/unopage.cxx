@@ -2243,7 +2243,7 @@ Sequence< OUString > SAL_CALL SdDrawPage::getSupportedServiceNames() throw(uno::
 sal_Bool SAL_CALL SdDrawPage::supportsService( const OUString& ServiceName )
     throw(uno::RuntimeException, std::exception)
 {
-    return SdGenericDrawPage::supportsService( ServiceName );
+    return cppu::supportsService( this, ServiceName );
 }
 
 // XNamed
@@ -2799,7 +2799,7 @@ Sequence< OUString > SAL_CALL SdMasterPage::getSupportedServiceNames() throw(uno
 sal_Bool SAL_CALL SdMasterPage::supportsService( const OUString& ServiceName )
     throw(uno::RuntimeException, std::exception)
 {
-    return SdGenericDrawPage::supportsService( ServiceName );
+    return cppu::supportsService( this, ServiceName );
 }
 
 // XElementAccess
