@@ -45,6 +45,7 @@
 #include <svsys.h>
 #endif
 
+#include <cstdlib>
 #include <string.h>
 #include <vector>
 #include <math.h>
@@ -2206,11 +2207,11 @@ Size ToolBox::ImplGetOptimalFloatingSize()
         return aSize2;
 
     // set the size with the smallest delta as the current size
-    long dx1 = abs( mnDX - aSize1.Width() );
-    long dy1 = abs( mnDY - aSize1.Height() );
+    long dx1 = std::abs( mnDX - aSize1.Width() );
+    long dy1 = std::abs( mnDY - aSize1.Height() );
 
-    long dx2 = abs( mnDX - aSize2.Width() );
-    long dy2 = abs( mnDY - aSize2.Height() );
+    long dx2 = std::abs( mnDX - aSize2.Width() );
+    long dy2 = std::abs( mnDY - aSize2.Height() );
 
     if( dx1*dy1 < dx2*dy2 )
         aCurrentSize = aSize1;

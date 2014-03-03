@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstdlib>
+
 #include <SidebarWin.hxx>
 #include <SidebarWinAcc.hxx>
 #include <PostItMgr.hxx>
@@ -462,7 +466,7 @@ void SwSidebarWin::SetPosAndSize()
         DoResize();
     }
 
-    if (GetPosPixel().X() != mPosSize.TopLeft().X() || (abs(GetPosPixel().Y() - mPosSize.TopLeft().Y()) > 5) )
+    if (GetPosPixel().X() != mPosSize.TopLeft().X() || (std::abs(GetPosPixel().Y() - mPosSize.TopLeft().Y()) > 5) )
     {
         bChange = true;
         SetPosPixel(mPosSize.TopLeft());

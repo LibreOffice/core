@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstdlib>
+
 #include <svx/framelink.hxx>
 
 #include <math.h>
@@ -765,9 +769,9 @@ void lclDrawHorLine(
     LinePoints aTPoints( rLPos + lclToMapUnit( rLRes.mnOffs1, nTOffs ), rRPos + lclToMapUnit( rRRes.mnOffs1, nTOffs ) );
     LinePoints aBPoints( rLPos + lclToMapUnit( rLRes.mnOffs2, nBOffs ), rRPos + lclToMapUnit( rRRes.mnOffs2, nBOffs ) );
 
-    sal_uInt32 nWidth = lclToMapUnit( abs( nTOffs ) ) + lclToMapUnit( abs( nBOffs ) );
+    sal_uInt32 nWidth = lclToMapUnit( std::abs( nTOffs ) ) + lclToMapUnit( std::abs( nBOffs ) );
     if ( ( nTOffs >= 0 && nBOffs >= 0 ) || ( nTOffs <= 0 && nBOffs <= 0 ) )
-        nWidth = abs( lclToMapUnit( nTOffs ) - lclToMapUnit( nBOffs ) ) + 1;
+        nWidth = std::abs( lclToMapUnit( nTOffs ) - lclToMapUnit( nBOffs ) ) + 1;
     Point rLMid = ( aTPoints.maBeg + aBPoints.maBeg ) / 2;
     Point rRMid = ( aTPoints.maEnd + aBPoints.maEnd ) / 2;
 
@@ -835,9 +839,9 @@ void lclDrawVerLine(
     LinePoints aLPoints( rTPos + lclToMapUnit( nLOffs, rTRes.mnOffs1 ), rBPos + lclToMapUnit( nLOffs, rBRes.mnOffs1 ) );
     LinePoints aRPoints( rTPos + lclToMapUnit( nROffs, rTRes.mnOffs2 ), rBPos + lclToMapUnit( nROffs, rBRes.mnOffs2 ) );
 
-    sal_uInt32 nWidth = lclToMapUnit( abs( nLOffs ) ) + lclToMapUnit( abs( nROffs ) );
+    sal_uInt32 nWidth = lclToMapUnit( std::abs( nLOffs ) ) + lclToMapUnit( std::abs( nROffs ) );
     if ( ( nLOffs >= 0 && nROffs >= 0 ) || ( nLOffs <= 0 && nROffs <= 0 ) )
-        nWidth = abs( lclToMapUnit( nLOffs ) - lclToMapUnit( nROffs ) ) + 1;
+        nWidth = std::abs( lclToMapUnit( nLOffs ) - lclToMapUnit( nROffs ) ) + 1;
     Point rTMid = ( aLPoints.maBeg + aRPoints.maBeg ) / 2;
     Point rBMid = ( aLPoints.maEnd + aRPoints.maEnd ) / 2;
 
@@ -1023,9 +1027,9 @@ void lclDrawDiagLine(
     Point aSMid( ( aLPoints.maBeg + aL2Points.maBeg ) / 2 );
     Point aEMid( ( aLPoints.maEnd + aL2Points.maEnd ) / 2 );
 
-    sal_uInt32 nWidth = lclToMapUnit( abs( nDiagOffs1 ) ) + lclToMapUnit( abs( nDiagOffs2 ) );
+    sal_uInt32 nWidth = lclToMapUnit( std::abs( nDiagOffs1 ) ) + lclToMapUnit( std::abs( nDiagOffs2 ) );
     if ( ( nDiagOffs1 <= 0 && nDiagOffs2 <= 0 ) || ( nDiagOffs1 >=0 && nDiagOffs2 >=0 ) )
-        nWidth = lclToMapUnit( abs( nDiagOffs1 - nDiagOffs2 ) );
+        nWidth = lclToMapUnit( std::abs( nDiagOffs1 - nDiagOffs2 ) );
 
     svtools::DrawLine( rDev, aSMid, aEMid, nWidth, nDashing );
     rDev.Pop(); // clipping region

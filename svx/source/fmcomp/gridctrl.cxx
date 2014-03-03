@@ -56,6 +56,7 @@
 #include <comphelper/property.hxx>
 
 #include <algorithm>
+#include <cstdlib>
 #include <map>
 
 using namespace ::svxform;
@@ -2302,7 +2303,7 @@ sal_Bool DbGridControl::SeekCursor(long nRow, sal_Bool bAbsolute)
                 DBG_ASSERT( !m_pSeekCursor->isAfterLast() && !m_pSeekCursor->isBeforeFirst(),
                     "DbGridControl::SeekCursor: how did the seek cursor get to this position?!" );
                 nSteps = nRow - (m_pSeekCursor->getRow() - 1);
-                bAbsolute = bAbsolute || (abs(nSteps) > 100);
+                bAbsolute = bAbsolute || (std::abs(nSteps) > 100);
             }
 
             if ( bAbsolute )

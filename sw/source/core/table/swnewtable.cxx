@@ -29,6 +29,7 @@
 #include <fmtfsize.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <cstdlib>
 #include <vector>
 #include <set>
 #include <list>
@@ -2141,7 +2142,7 @@ void SwTable::CheckConsistency() const
         SAL_WARN_IF( nWidth != nLineWidth, "sw.core",
                 "Different Line Widths: first: " << nLineWidth
                 << " current [" << nCurrLine << "]: " <<  nWidth);
-        SAL_WARN_IF( abs(nWidth - nTabSize) > 1 /* how tolerant? */, "sw.core",
+        SAL_WARN_IF( std::abs(nWidth - nTabSize) > 1 /* how tolerant? */, "sw.core",
                 "Line width differs from table width: " << nTabSize
                 << " current [" << nCurrLine << "]: " << nWidth);
         SAL_WARN_IF( nWidth < 0 || nWidth > USHRT_MAX, "sw.core",

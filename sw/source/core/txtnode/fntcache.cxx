@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstdlib>
+
 #include <i18nlangtag/mslangid.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/print.hxx>
@@ -348,7 +352,7 @@ sal_uInt16 SwFntObj::GetFontHeight( const SwViewShell* pSh, const OutputDevice& 
             long nTmpPrtHeight = (sal_uInt16)aOutMet.GetAscent() + aOutMet.GetDescent();
             (void) nTmpPrtHeight;
             // #i106098#: do not compare with == here due to rounding error
-            OSL_ENSURE( abs(nTmpPrtHeight - nPrtHeight) < 3,
+            OSL_ENSURE( std::abs(nTmpPrtHeight - nPrtHeight) < 3,
                     "GetTextHeight != Ascent + Descent" );
 #endif
 

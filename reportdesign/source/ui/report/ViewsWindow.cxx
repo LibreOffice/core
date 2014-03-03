@@ -47,6 +47,7 @@
 #include <svx/svdundo.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <algorithm>
+#include <cstdlib>
 #include <numeric>
 #include <o3tl/compat_functional.hxx>
 
@@ -1096,8 +1097,8 @@ void OViewsWindow::BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionVi
         aNewObjPos.Y() += nSectionHeight;
     }
 
-    const sal_Int32 nDeltaX = abs(aLeftTop.X() - aAbsolutePnt.X());
-    const sal_Int32 nDeltaY = abs(aLeftTop.Y() - aAbsolutePnt.Y());
+    const sal_Int32 nDeltaX = std::abs(aLeftTop.X() - aAbsolutePnt.X());
+    const sal_Int32 nDeltaY = std::abs(aLeftTop.Y() - aAbsolutePnt.Y());
     m_aDragDelta.X() = nDeltaX;
     m_aDragDelta.Y() = nDeltaY;
 

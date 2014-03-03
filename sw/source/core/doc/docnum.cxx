@@ -52,6 +52,7 @@
 #include <switerator.hxx>
 #include <comphelper/string.hxx>
 
+#include <cstdlib>
 #include <map>
 
 namespace {
@@ -1758,7 +1759,7 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
     else
     {
         // Impossible to move to negative index
-        if( sal_uLong(abs( nOffset )) > nStIdx)
+        if( sal_uLong(std::abs( nOffset )) > nStIdx)
             return false;
 
         nInEndIdx = nStIdx - 1;

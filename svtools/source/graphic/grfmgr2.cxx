@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstdlib>
+
 #include <vcl/bmpacc.hxx>
 #include <tools/poly.hxx>
 #include <vcl/outdev.hxx>
@@ -1007,8 +1011,8 @@ static BitmapEx checkMetadataBitmap( const BitmapEx& rBmpEx,
         // caused by this small difference). This will allow caching of the resulting
         // (scaled) pixmap, which can make a noticeable performance difference.
         if( rBmpEx.GetSizePixel().Width() > 100 && rBmpEx.GetSizePixel().Height() > 100
-            && abs( rDestSize.Width() - rRefSize.Width()) < 5
-            && abs( rDestSize.Height() - rRefSize.Height()) < 5 )
+            && std::abs( rDestSize.Width() - rRefSize.Width()) < 5
+            && std::abs( rDestSize.Height() - rRefSize.Height()) < 5 )
             ; // ok, assume it's close enough
         else
         {  // fall back to mtf rendering

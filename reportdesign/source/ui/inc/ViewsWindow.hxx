@@ -65,9 +65,9 @@ namespace rptui
             case POS_DOWN:
                 return lhs.Bottom() >= rhs.Bottom();
             case POS_CENTER_HORIZONTAL:
-                return abs(m_aRefPoint.X() - lhs.Center().X()) < abs(m_aRefPoint.X() - rhs.Center().X());
+                return std::abs(m_aRefPoint.X() - lhs.Center().X()) < std::abs(m_aRefPoint.X() - rhs.Center().X());
             case POS_CENTER_VERTICAL:
-                return abs(lhs.Center().Y() - m_aRefPoint.Y()) < abs(rhs.Center().Y() - m_aRefPoint.Y());
+                return std::abs(lhs.Center().Y() - m_aRefPoint.Y()) < std::abs(rhs.Center().Y() - m_aRefPoint.Y());
             }
             return false;
         }

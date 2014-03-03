@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstdlib>
+
 #include "PageMarginControl.hxx"
 #include "PagePropertyPanel.hxx"
 #include "PagePropertyPanel.hrc"
@@ -259,34 +263,34 @@ void PageMarginControl::SelectValueSetItem()
 {
     const long cTolerance = 5;
 
-    if( abs(mnPageLeftMargin - SWPAGE_NARROW_VALUE) <= cTolerance &&
-        abs(mnPageRightMargin - SWPAGE_NARROW_VALUE) <= cTolerance &&
-        abs(mnPageTopMargin - SWPAGE_NARROW_VALUE) <= cTolerance &&
-        abs(mnPageBottomMargin - SWPAGE_NARROW_VALUE) <= cTolerance &&
+    if( std::abs(mnPageLeftMargin - SWPAGE_NARROW_VALUE) <= cTolerance &&
+        std::abs(mnPageRightMargin - SWPAGE_NARROW_VALUE) <= cTolerance &&
+        std::abs(mnPageTopMargin - SWPAGE_NARROW_VALUE) <= cTolerance &&
+        std::abs(mnPageBottomMargin - SWPAGE_NARROW_VALUE) <= cTolerance &&
         !mbMirrored )
     {
         mpMarginValueSet->SelectItem(1);
     }
-    else if( abs(mnPageLeftMargin - SWPAGE_NORMAL_VALUE) <= cTolerance &&
-        abs(mnPageRightMargin - SWPAGE_NORMAL_VALUE) <= cTolerance &&
-        abs(mnPageTopMargin - SWPAGE_NORMAL_VALUE) <= cTolerance &&
-        abs(mnPageBottomMargin - SWPAGE_NORMAL_VALUE) <= cTolerance &&
+    else if( std::abs(mnPageLeftMargin - SWPAGE_NORMAL_VALUE) <= cTolerance &&
+        std::abs(mnPageRightMargin - SWPAGE_NORMAL_VALUE) <= cTolerance &&
+        std::abs(mnPageTopMargin - SWPAGE_NORMAL_VALUE) <= cTolerance &&
+        std::abs(mnPageBottomMargin - SWPAGE_NORMAL_VALUE) <= cTolerance &&
         !mbMirrored )
     {
         mpMarginValueSet->SelectItem(2);
     }
-    else if( abs(mnPageLeftMargin - SWPAGE_WIDE_VALUE2) <= cTolerance &&
-        abs(mnPageRightMargin - SWPAGE_WIDE_VALUE2) <= cTolerance &&
-        abs(mnPageTopMargin - SWPAGE_WIDE_VALUE1) <= cTolerance &&
-        abs(mnPageBottomMargin - SWPAGE_WIDE_VALUE1) <= cTolerance &&
+    else if( std::abs(mnPageLeftMargin - SWPAGE_WIDE_VALUE2) <= cTolerance &&
+        std::abs(mnPageRightMargin - SWPAGE_WIDE_VALUE2) <= cTolerance &&
+        std::abs(mnPageTopMargin - SWPAGE_WIDE_VALUE1) <= cTolerance &&
+        std::abs(mnPageBottomMargin - SWPAGE_WIDE_VALUE1) <= cTolerance &&
         !mbMirrored )
     {
         mpMarginValueSet->SelectItem(3);
     }
-    else if( abs(mnPageLeftMargin - SWPAGE_WIDE_VALUE3) <= cTolerance &&
-        abs(mnPageRightMargin - SWPAGE_WIDE_VALUE1) <= cTolerance &&
-        abs(mnPageTopMargin - SWPAGE_WIDE_VALUE1) <= cTolerance &&
-        abs(mnPageBottomMargin - SWPAGE_WIDE_VALUE1) <= cTolerance &&
+    else if( std::abs(mnPageLeftMargin - SWPAGE_WIDE_VALUE3) <= cTolerance &&
+        std::abs(mnPageRightMargin - SWPAGE_WIDE_VALUE1) <= cTolerance &&
+        std::abs(mnPageTopMargin - SWPAGE_WIDE_VALUE1) <= cTolerance &&
+        std::abs(mnPageBottomMargin - SWPAGE_WIDE_VALUE1) <= cTolerance &&
         mbMirrored )
     {
         mpMarginValueSet->SelectItem(4);

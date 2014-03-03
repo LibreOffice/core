@@ -39,6 +39,7 @@
 #include <vcl/image.hxx>
 #include <tools/diagnose_ex.h>
 
+#include <cstdlib>
 #include <functional>
 #include <numeric>
 
@@ -2338,7 +2339,7 @@ namespace svt { namespace table
             Rectangle aDataArea( Point( 0, m_nColHeaderHeightPixel ), m_pDataWindow->GetOutputSizePixel() );
 
             if  (   m_pDataWindow->GetBackground().IsScrollable()
-                &&  abs( nPixelDelta ) < aDataArea.GetHeight()
+                &&  std::abs( nPixelDelta ) < aDataArea.GetHeight()
                 )
             {
                 m_pDataWindow->Scroll( 0, (long)-nPixelDelta, aDataArea, SCROLL_CLIP | SCROLL_UPDATE | SCROLL_CHILDREN);
@@ -2418,7 +2419,7 @@ namespace svt { namespace table
 
             // scroll the window content (if supported and possible), or invalidate the complete window
             if  (   m_pDataWindow->GetBackground().IsScrollable()
-                &&  abs( nPixelDelta ) < aDataArea.GetWidth()
+                &&  std::abs( nPixelDelta ) < aDataArea.GetWidth()
                 )
             {
                 m_pDataWindow->Scroll( nPixelDelta, 0, aDataArea, SCROLL_CLIP | SCROLL_UPDATE );

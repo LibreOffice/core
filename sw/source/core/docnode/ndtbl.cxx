@@ -79,6 +79,7 @@
 #include <unochart.hxx>
 #include <node.hxx>
 #include <ndtxt.hxx>
+#include <cstdlib>
 #include <map>
 #include <algorithm>
 #include <rootfrm.hxx>
@@ -2516,7 +2517,7 @@ struct FuzzyCompare
 
 bool FuzzyCompare::operator() ( long s1, long s2 ) const
 {
-    return ( s1 < s2 && abs( s1 - s2 ) > ROWFUZZY );
+    return ( s1 < s2 && std::abs( s1 - s2 ) > ROWFUZZY );
 }
 
 static bool lcl_IsFrmInColumn( const SwCellFrm& rFrm, SwSelBoxes& rBoxes )
@@ -2801,7 +2802,7 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, sal_Bool bCurColOnly, const SwCur
         const long nNewRowHeight = nNewRowEnd - nNewRowStart;
 
         const long nDiff = nNewRowHeight - nOldRowHeight;
-        if ( abs( nDiff ) >= ROWFUZZY )
+        if ( std::abs( nDiff ) >= ROWFUZZY )
         {
             // For the old table model pTxtFrm and pLine will be set for every box.
             // For the new table model pTxtFrm will be set if the box is not covered,
@@ -2819,7 +2820,7 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, sal_Bool bCurColOnly, const SwCur
                 {
                     const long nLowerBorder = (pFrm->Frm().*fnRect->fnGetBottom)();
                     const sal_uLong nTabTop = (pTab->*fnRect->fnGetPrtTop)();
-                    if ( abs( (*fnRect->fnYInc)( nTabTop, nOldRowEnd ) - nLowerBorder ) <= ROWFUZZY )
+                    if ( std::abs( (*fnRect->fnYInc)( nTabTop, nOldRowEnd ) - nLowerBorder ) <= ROWFUZZY )
                     {
                         if ( !bCurColOnly || pFrm == pBoxFrm )
                         {

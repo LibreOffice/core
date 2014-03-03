@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstdlib>
+
 #include <tools/debug.hxx>
 
 #include <vcl/svapp.hxx>
@@ -714,7 +718,7 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
                         pWin->ImplGetWindow()->IsTopWindow() && pWin->mpWindowImpl->mbReallyVisible )
                     {
                         SalFrameGeometry g = pWin->mpWindowImpl->mpFrame->GetGeometry();
-                        if( abs(g.nX-aState.mnX) < 2 && abs(g.nY-aState.mnY) < 5 )
+                        if( std::abs(g.nX-aState.mnX) < 2 && std::abs(g.nY-aState.mnY) < 5 )
                         {
                             long displacement = g.nTopDecoration ? g.nTopDecoration : 20;
                             if( (unsigned long) (aState.mnX + displacement + aState.mnWidth + g.nRightDecoration) > (unsigned long) aDesktop.Right() ||

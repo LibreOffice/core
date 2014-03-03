@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstdlib>
 
 #include "psputil.hxx"
 #include "glyphset.hxx"
@@ -194,8 +197,8 @@ PrinterGfx::JoinVerticalClipRectangles( std::list< Rectangle >::iterator& it,
                )
             {
                 if( aLastRect.GetHeight() > 1                           ||
-                    abs( aLastRect.Left() - nextit->Left() ) > 2        ||
-                    abs( aLastRect.Right() - nextit->Right() ) > 2
+                    std::abs( aLastRect.Left() - nextit->Left() ) > 2        ||
+                    std::abs( aLastRect.Right() - nextit->Right() ) > 2
                     )
                 {
                     leftside.push_back( Point( aLastRect.Left(), aLastRect.Bottom()+1 ) );

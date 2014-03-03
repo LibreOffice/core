@@ -46,7 +46,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-
+#include <cstdlib>
 #include <limits>
 #include <boost/bind.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -392,8 +392,8 @@ namespace pcr
     void HyperlinkInput::impl_checkEndClick( const ::MouseEvent rMEvt )
     {
         const MouseSettings& rMouseSettings( GetSettings().GetMouseSettings() );
-        if  (   ( abs( rMEvt.GetPosPixel().X() - m_aMouseButtonDownPos.X() ) < rMouseSettings.GetStartDragWidth() )
-            &&  ( abs( rMEvt.GetPosPixel().Y() - m_aMouseButtonDownPos.Y() ) < rMouseSettings.GetStartDragHeight() )
+        if  (   ( std::abs( rMEvt.GetPosPixel().X() - m_aMouseButtonDownPos.X() ) < rMouseSettings.GetStartDragWidth() )
+            &&  ( std::abs( rMEvt.GetPosPixel().Y() - m_aMouseButtonDownPos.Y() ) < rMouseSettings.GetStartDragHeight() )
             )
             Application::PostUserEvent( m_aClickHandler );
     }

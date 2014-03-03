@@ -22,6 +22,7 @@
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
 
+#include <cstdlib>
 #include <stack>
 
 #include <svtools/treelistbox.hxx>
@@ -3141,8 +3142,8 @@ IMPL_LINK_NOARG(SvImpLBox, EditTimerCall)
         if ( bIsMouseTriggered )
         {
             Point aCurrentMousePos = pView->GetPointerPosPixel();
-            if  (   ( abs( aCurrentMousePos.X() - aEditClickPos.X() ) > 5 )
-                ||  ( abs( aCurrentMousePos.Y() - aEditClickPos.Y() ) > 5 )
+            if  (   ( std::abs( aCurrentMousePos.X() - aEditClickPos.X() ) > 5 )
+                ||  ( std::abs( aCurrentMousePos.Y() - aEditClickPos.Y() ) > 5 )
                 )
             {
                 return 0L;

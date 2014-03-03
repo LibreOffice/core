@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstdlib>
 
 #include "unx/saldisp.hxx"
 #include "unx/saldata.hxx"
@@ -1246,7 +1249,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
         it = m_aSelections.find( selection );
         if( it != m_aSelections.end()                           &&
             it->second->m_aTypes.getLength()                    &&
-            abs( it->second->m_nLastTimestamp - time( NULL ) ) < 2
+            std::abs( it->second->m_nLastTimestamp - time( NULL ) ) < 2
             )
         {
             rTypes = it->second->m_aTypes;

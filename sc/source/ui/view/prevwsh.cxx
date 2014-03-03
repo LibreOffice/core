@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstdlib>
+
 #include "scitems.hxx"
 #include <comphelper/string.hxx>
 #include <editeng/eeitem.hxx>
@@ -1072,7 +1076,7 @@ void ScPreviewShell::DoScroll( sal_uInt16 nMode )
                 aCurPos.Y() -= nVPage;
             break;
         case SID_CURSORPAGEDOWN:
-            if( (abs(nVPage+nThumbPos-nRangeMax)<10) || nMaxVertPos<0 )
+            if( (std::abs(nVPage+nThumbPos-nRangeMax)<10) || nMaxVertPos<0 )
             {
                 long nPage = pPreview->GetPageNo();
                 long nTotal = pPreview->GetTotalPages();

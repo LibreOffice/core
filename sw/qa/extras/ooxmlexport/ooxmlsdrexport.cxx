@@ -517,22 +517,22 @@ DECLARE_OOXMLEXPORT_TEST(testFdo70838, "fdo70838.docx")
             if( aStyleCommandName.equals( "margin-left" ) )
             {
                 float fValue = aStyleCommandValue.getToken( 0, 'p' ).toFloat();
-                CPPUNIT_ASSERT_EQUAL(0, abs(97.6 - fValue));
+                CPPUNIT_ASSERT_DOUBLES_EQUAL(97.6, fValue, 0.1);
             }
             else if( aStyleCommandName.equals( "margin-top" ) )
             {
                 float fValue = aStyleCommandValue.getToken( 0, 'p' ).toFloat();
-                CPPUNIT_ASSERT_EQUAL(0, abs(165 - fValue));
+                CPPUNIT_ASSERT_DOUBLES_EQUAL(165.0, fValue, 0.2);
             }
             else if( aStyleCommandName.equals( "width" ) )
             {
                 float fValue = aStyleCommandValue.getToken( 0, 'p' ).toFloat();
-                CPPUNIT_ASSERT_EQUAL(0, abs(283.4 - fValue));
+                CPPUNIT_ASSERT_DOUBLES_EQUAL(283.4, fValue, 0.1);
             }
             else if( aStyleCommandName.equals( "height" ) )
             {
                 float fValue = aStyleCommandValue.getToken( 0, 'p' ).toFloat();
-                CPPUNIT_ASSERT_EQUAL(0, abs(141.7 - fValue));
+                CPPUNIT_ASSERT_DOUBLES_EQUAL(141.7, fValue, 0.1);
             }
 
         } while( nextTokenPos != -1 );

@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstdlib>
+
 #include "controller/SlsSelectionFunction.hxx"
 
 #include "SlideSorter.hxx"
@@ -1361,8 +1365,8 @@ bool NormalModeHandler::ProcessMotionEvent (
             {
                 const sal_Int32 nDistance (maButtonDownLocation
                     ? ::std::max (
-                        abs(maButtonDownLocation->X() - rDescriptor.maMousePosition.X()),
-                        abs(maButtonDownLocation->Y() - rDescriptor.maMousePosition.Y()))
+                        std::abs(maButtonDownLocation->X() - rDescriptor.maMousePosition.X()),
+                        std::abs(maButtonDownLocation->Y() - rDescriptor.maMousePosition.Y()))
                     : 0);
                 if (nDistance > 3)
                     StartDrag(
