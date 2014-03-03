@@ -11,8 +11,6 @@
 
 namespace editeng {
 
-Section::Section() : mnParagraph(0), mnStart(0), mnEnd(0) {}
-
 Section::Section(sal_Int32 nPara, sal_Int32 nStart, sal_Int32 nEnd) :
     mnParagraph(nPara), mnStart(nStart), mnEnd(nEnd){}
 

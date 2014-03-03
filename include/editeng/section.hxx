@@ -26,7 +26,6 @@ struct EDITENG_DLLPUBLIC Section
 
     std::vector<const SfxPoolItem*> maAttributes;
 
-    Section();
     Section(sal_Int32 nPara, sal_Int32 nStart, sal_Int32 nEnd);
 };
 
