@@ -1560,24 +1560,9 @@ void VclMultiLineEdit::SetRightToLeft( bool bRightToLeft )
     }
 }
 
-bool VclMultiLineEdit::IsRightToLeft() const
-{
-    bool bRightToLeft = false;
-
-    if ( GetTextEngine() )
-        bRightToLeft = GetTextEngine()->IsRightToLeft();
-
-    return bRightToLeft;
-}
-
 void VclMultiLineEdit::DisableSelectionOnFocus()
 {
     pImpVclMEdit->GetTextWindow()->DisableSelectionOnFocus();
-}
-
-void VclMultiLineEdit::SetTextSelectable( bool bTextSelectable )
-{
-    pImpVclMEdit->GetTextWindow()->SetTextSelectable( bTextSelectable );
 }
 
 void VclMultiLineEdit::EnableCursor( bool bEnable )

@@ -94,8 +94,6 @@ ThumbnailView::GetItemText(unsigned short) const
 ThumbnailView::SetColor(Color const&)
 ToolBox::GetItemExpand(unsigned short) const
 UnoApiTest::closeDocument(com::sun::star::uno::Reference<com::sun::star::lang::XComponent>)
-VclMultiLineEdit::IsRightToLeft() const
-VclMultiLineEdit::SetTextSelectable(bool)
 apitest::CellProperties::testRotateReference()
 apitest::CellProperties::testVertJustify()
 apitest::DataPilotField::testAutoShowInfo()

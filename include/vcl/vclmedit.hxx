@@ -105,7 +105,6 @@ public:
     OUString        GetTextLines( LineEnd aSeparator ) const;
 
     void            SetRightToLeft( bool bRightToLeft );
-    bool            IsRightToLeft() const;
 
     void            SaveValue()                         { aSaveValue = GetText(); }
     const OUString&    GetSavedValue() const            { return aSaveValue; }
@@ -129,7 +128,6 @@ public:
 
     void            DisableSelectionOnFocus();
 
-    void            SetTextSelectable( bool bTextSelectable );
     void            EnableCursor( bool bEnable );
 
     virtual bool set_property(const OString &rKey, const OString &rValue);
