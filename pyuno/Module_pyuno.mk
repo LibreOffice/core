@@ -33,7 +33,7 @@ endif
 # zipcore: pyuno/python.exe on Windows
 ifeq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,pyuno,\
-    Executable_python_wrapper \
+    Executable_python \
 ))
 endif
 
