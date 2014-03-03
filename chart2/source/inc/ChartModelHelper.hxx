@@ -93,10 +93,6 @@ public:
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::frame::XModel >& xModel );
 
-    static void setPageSize( const ::com::sun::star::awt::Size& rSize
-                           , const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::frame::XModel >& xModel );
-
     static void triggerRangeHighlighting( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::frame::XModel >& xModel );
 

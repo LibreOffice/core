@@ -182,14 +182,6 @@ awt::Size ChartModelHelper::getPageSize( const uno::Reference< frame::XModel >& 
     return aPageSize;
 }
 
-void ChartModelHelper::setPageSize( const awt::Size& rSize, const uno::Reference< frame::XModel >& xModel )
-{
-    uno::Reference< embed::XVisualObject > xVisualObject(xModel,uno::UNO_QUERY);
-    OSL_ENSURE(xVisualObject.is(),"need xVisualObject for page size");
-    if( xVisualObject.is() )
-        xVisualObject->setVisualAreaSize( embed::Aspects::MSOLE_CONTENT, rSize );
-}
-
 void ChartModelHelper::triggerRangeHighlighting( const uno::Reference< frame::XModel >& xModel )
 {
     uno::Reference< chart2::data::XDataReceiver > xDataReceiver( xModel, uno::UNO_QUERY );

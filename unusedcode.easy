@@ -214,7 +214,6 @@ basegfx::tools::containsOnlyHorizontalAndVerticalEdges(basegfx::B2DPolyPolygon c
 basegfx::tools::equal(basegfx::B2DPolygon const&, basegfx::B2DPolygon const&, double const&)
 basegfx::tools::equal(basegfx::B3DPolyPolygon const&, basegfx::B3DPolyPolygon const&)
 canvas::createSurfaceProxyManager(boost::shared_ptr<canvas::IRenderModule> const&)
-chart::ChartModelHelper::setPageSize(com::sun::star::awt::Size const&, com::sun::star::uno::Reference<com::sun::star::frame::XModel> const&)
 comphelper::detail::ConfigurationWrapper::getGroupReadWrite(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&, com::sun::star::uno::Any const&) const
