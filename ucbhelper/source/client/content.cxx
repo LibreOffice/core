@@ -143,7 +143,12 @@ public:
     : m_rContent( rContent ) {}
 
     // XInterface
-    XINTERFACE_DECL()
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
+        throw( css::uno::RuntimeException, std::exception );
+    virtual void SAL_CALL acquire()
+        throw();
+    virtual void SAL_CALL release()
+        throw();
 
     // XContentEventListener
     virtual void SAL_CALL contentEvent( const ContentEvent& evt )
