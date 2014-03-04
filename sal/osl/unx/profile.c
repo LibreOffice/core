@@ -2026,11 +2026,11 @@ static sal_Bool osl_ProfileSwapProfileNames(osl_TProfileImpl* pProfile)
     pszTmpFile[0] = '\0';
     pszIniFile[0] = '\0';
 
-    osl_ProfileGenerateExtension(pProfile->m_FileName, "bak", pszBakFile, PATH_MAX);
+    osl_ProfileGenerateExtension(pProfile->m_FileName, "bak", pszBakFile, PATH_MAX - 1);
 
-    strcpy(pszIniFile,pProfile->m_FileName);
+    strcpy(pszIniFile, pProfile->m_FileName);
 
-    osl_ProfileGenerateExtension(pProfile->m_FileName, "tmp", pszTmpFile, PATH_MAX);
+    osl_ProfileGenerateExtension(pProfile->m_FileName, "tmp", pszTmpFile, PATH_MAX - 1);
 
     /* unlink bak */
     unlink( pszBakFile );
