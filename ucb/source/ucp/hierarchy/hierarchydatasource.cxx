@@ -234,16 +234,29 @@ HierarchyDataSource::~HierarchyDataSource()
 
 
 // XInterface methods.
+void SAL_CALL HierarchyDataSource::acquire()
+    throw()
+{
+    OWeakObject::acquire();
+}
 
+void SAL_CALL HierarchyDataSource::release()
+    throw()
+{
+    OWeakObject::release();
+}
 
-
-XINTERFACE_IMPL_4( HierarchyDataSource,
-                   lang::XTypeProvider,
-                   lang::XServiceInfo,
-                   lang::XComponent,
-                   lang::XMultiServiceFactory );
-
-
+css::uno::Any SAL_CALL HierarchyDataSource::queryInterface( const css::uno::Type & rType )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    css::uno::Any aRet = cppu::queryInterface( rType,
+                                               (static_cast< lang::XTypeProvider* >(this)),
+                                               (static_cast< lang::XServiceInfo* >(this)),
+                                               (static_cast< lang::XComponent* >(this)),
+                                               (static_cast< lang::XMultiServiceFactory* >(this))
+                                               );
+    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
+}
 
 // XTypeProvider methods.
 

@@ -70,16 +70,29 @@ ResultSetImplHelper::~ResultSetImplHelper()
 
 
 // XInterface methods.
+void SAL_CALL ResultSetImplHelper::acquire()
+    throw()
+{
+    OWeakObject::acquire();
+}
 
+void SAL_CALL ResultSetImplHelper::release()
+    throw()
+{
+    OWeakObject::release();
+}
 
-
-XINTERFACE_IMPL_4( ResultSetImplHelper,
-                   lang::XTypeProvider,
-                   lang::XServiceInfo,
-                   lang::XComponent, /* base of XDynamicResultSet */
-                   com::sun::star::ucb::XDynamicResultSet );
-
-
+css::uno::Any SAL_CALL ResultSetImplHelper::queryInterface( const css::uno::Type & rType )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    css::uno::Any aRet = cppu::queryInterface( rType,
+                                               (static_cast< lang::XTypeProvider* >(this)),
+                                               (static_cast< lang::XServiceInfo* >(this)),
+                                               (static_cast< lang::XComponent* >(this)),
+                                               (static_cast< css::ucb::XDynamicResultSet* >(this))
+                                               );
+    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
+}
 
 // XTypeProvider methods.
 

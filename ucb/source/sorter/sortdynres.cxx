@@ -103,14 +103,29 @@ SortedDynamicResultSet::~SortedDynamicResultSet()
 
 
 // XInterface methods.
+void SAL_CALL SortedDynamicResultSet::acquire()
+    throw()
+{
+    OWeakObject::acquire();
+}
 
+void SAL_CALL SortedDynamicResultSet::release()
+    throw()
+{
+    OWeakObject::release();
+}
 
-XINTERFACE_IMPL_4( SortedDynamicResultSet,
-                   XTypeProvider,
-                   XServiceInfo,
-                   XComponent,      /* base class of XDynamicResultSet */
-                   XDynamicResultSet );
-
+css::uno::Any SAL_CALL SortedDynamicResultSet::queryInterface( const css::uno::Type & rType )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    css::uno::Any aRet = cppu::queryInterface( rType,
+                                               (static_cast< XTypeProvider* >(this)),
+                                               (static_cast< XServiceInfo* >(this)),
+                                               (static_cast< XComponent* >(this)),
+                                               (static_cast< XDynamicResultSet* >(this))
+                                               );
+    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
+}
 
 // XTypeProvider methods.
 
