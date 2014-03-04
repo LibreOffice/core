@@ -618,12 +618,6 @@ sal_Bool SvdProgressInfo::SetNextObject()
     return ReportActions(0);
 }
 
-void SvdProgressInfo::ReportError()
-{
-    pLink->Call((void *)1L);
-}
-
-
 // #i101872# isolate GetTextEditBackgroundColor to tooling; it will anyways only be used as long
 // as text edit is not running on overlay
 

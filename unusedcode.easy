@@ -58,7 +58,6 @@ StyleSettings::SetSpinSize(long)
 StyleSettings::SetTitleHeight(long)
 StyleSettings::SetUseFlatBorders(bool)
 StyleSettings::SetUseFlatMenus(bool)
-SvdProgressInfo::ReportError()
 SvpSalInstance::PostedEventsInQueue()
 SvtListener::IsListening(SvtBroadcaster&) const
 SvxNumberFormatShell::IsAdded_Impl(unsigned long)

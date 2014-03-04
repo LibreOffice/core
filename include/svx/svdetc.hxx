@@ -167,7 +167,6 @@ public:
     sal_uIntPtr GetInsertCount() const { return nInsertCount; };
     sal_uIntPtr GetCurInsert() const { return nCurInsert; };
 
-    void ReportError();
     sal_Bool ReportRescales( sal_uIntPtr nAnzRescales );
 };
 
