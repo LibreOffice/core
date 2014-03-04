@@ -141,3 +141,14 @@ rendering:
 
 another interesting part is actual rendering into canvas bitmap and
 using that bitmap later in code using vcl API.
+
+EMF+ implementation has some extensive logging, best if you do a dbgutil
+build, and then
+
+export SAL_LOG=+INFO.cppcanvas.emf+INFO.vcl.emf
+
+before running LibreOffice; it will give you lots of useful hints.
+
+You can also fallback to EMF (from EMF+) rendering via
+
+export EMF_PLUS_DISABLE=1
