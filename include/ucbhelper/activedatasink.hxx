@@ -45,8 +45,13 @@ class UCBHELPER_DLLPUBLIC ActiveDataSink : public cppu::OWeakObject,
         com::sun::star::io::XInputStream > m_xStream;
 
 public:
-     // XInterface
-    XINTERFACE_DECL()
+    // XInterface
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
+        throw( css::uno::RuntimeException, std::exception );
+    virtual void SAL_CALL acquire()
+        throw();
+    virtual void SAL_CALL release()
+        throw();
 
     // XTypeProvider
     XTYPEPROVIDER_DECL()
