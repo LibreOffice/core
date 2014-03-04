@@ -78,6 +78,10 @@ ControlHelper::~ControlHelper()
         [m_pUserPane release];
     }
 
+    if (m_pFilterControl != NULL) {
+        [m_pFilterControl setTarget:nil];
+    }
+
     for(std::list<NSControl *>::iterator control = m_aActiveControls.begin(); control != m_aActiveControls.end(); ++control) {
         NSControl* pControl = (*control);
         NSString* sLabelName = m_aMapListLabels[pControl];
@@ -91,10 +95,6 @@ ControlHelper::~ControlHelper()
             }
         }
         [pControl release];
-    }
-
-    if (m_pFilterControl != NULL) {
-        [m_pFilterControl setTarget:nil];
     }
 
     [pool release];
