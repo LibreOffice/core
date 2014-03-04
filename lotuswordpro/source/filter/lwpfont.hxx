@@ -234,7 +234,10 @@ private:
 class LwpFontAttrManager
 {
 public:
-    LwpFontAttrManager():m_pFontAttrs(NULL){}
+    LwpFontAttrManager()
+        : m_nCount(0)
+        , m_pFontAttrs(NULL)
+        {}
     ~LwpFontAttrManager();
 public:
     void Read(LwpObjectStream *pStrm);
