@@ -58,7 +58,7 @@ SwUndoRedline::SwUndoRedline( SwUndoId nUsrId, const SwPaM& rRange )
     sal_uLong nEndExtra = rDoc.GetNodes().GetEndOfExtras().GetIndex();
 
     mpRedlSaveData = new SwRedlineSaveDatas;
-    if( !FillSaveData( rRange, *mpRedlSaveData, false ))
+    if( !FillSaveData( rRange, *mpRedlSaveData, false, UNDO_REJECT_REDLINE != mnUserId ))
         delete mpRedlSaveData, mpRedlSaveData = 0;
     else
     {
@@ -116,7 +116,7 @@ void SwUndoRedline::RedoImpl(::sw::UndoRedoContext & rContext)
     if( mpRedlSaveData && mbHiddenRedlines )
     {
         sal_uLong nEndExtra = pDoc->GetNodes().GetEndOfExtras().GetIndex();
-        FillSaveData(rPam, *mpRedlSaveData, false );
+        FillSaveData(rPam, *mpRedlSaveData, false, UNDO_REJECT_REDLINE != mnUserId );
 
         nEndExtra -= pDoc->GetNodes().GetEndOfExtras().GetIndex();
         nSttNode -= nEndExtra;
@@ -379,7 +379,7 @@ SwUndoCompDoc::SwUndoCompDoc( const SwRangeRedline& rRedl )
     }
 
     pRedlSaveData = new SwRedlineSaveDatas;
-    if( !FillSaveData( rRedl, *pRedlSaveData, false ))
+    if( !FillSaveData( rRedl, *pRedlSaveData, false, true ))
         delete pRedlSaveData, pRedlSaveData = 0;
 }
 
