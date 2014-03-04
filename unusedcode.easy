@@ -70,7 +70,6 @@ SvtAccessibilityOptions::SetListBoxMaximumLineCount(short)
 SvtAccessibilityOptions::SetPreviewUsesCheckeredBackground(unsigned char)
 SvtIconChoiceCtrl::SetEntryTextMode(SvxIconChoiceCtrlTextMode, SvxIconChoiceCtrlEntry*)
 SvtListener::IsListening(SvtBroadcaster&) const
-SvxDistributePage::GetRanges()
 SvxNumberFormatShell::IsAdded_Impl(unsigned long)
 SwAccessibleField::SwAccessibleField(SwField*, SwAccessibleParagraph*, short)
 TextDoc::IsValidPaM(TextPaM const&)

@@ -47,7 +47,6 @@ public:
 
     static SfxTabPage* Create(Window*, const SfxItemSet&,
         SvxDistributeHorizontal eHor, SvxDistributeVertical eVer);
-    static sal_uInt16* GetRanges();
     virtual sal_Bool FillItemSet(SfxItemSet&);
     virtual void Reset(const SfxItemSet&);
     virtual void PointChanged(Window* pWindow, RECT_POINT eRP);

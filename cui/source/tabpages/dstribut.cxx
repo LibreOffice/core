@@ -25,13 +25,6 @@
 #include <dialmgr.hxx>
 #include <tools/shl.hxx>
 
-static sal_uInt16 pRanges[] =
-{
-    SDRATTR_MEASURE_FIRST,
-    SDRATTR_MEASURE_LAST,
-    0
-};
-
 /*************************************************************************
 |*
 |* Dialog
@@ -86,11 +79,6 @@ SfxTabPage* SvxDistributePage::Create(Window* pWindow, const SfxItemSet& rAttrs,
     SvxDistributeHorizontal eHor, SvxDistributeVertical eVer)
 {
     return new SvxDistributePage(pWindow, rAttrs, eHor, eVer);
-}
-
-sal_uInt16* SvxDistributePage::GetRanges()
-{
-    return pRanges;
 }
 
 void SvxDistributePage::PointChanged(Window* /*pWindow*/, RECT_POINT /*eRP*/)
