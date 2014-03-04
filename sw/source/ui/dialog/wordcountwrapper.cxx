@@ -45,3 +45,5 @@ void SwWordCountWrapper::SetCounts(const SwDocStat &rCurrCnt, const SwDocStat &r
 {
     pAbstDlg->SetCounts(rCurrCnt, rDocStat);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

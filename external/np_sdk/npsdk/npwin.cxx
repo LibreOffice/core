@@ -356,3 +356,4 @@ jref NPN_GetJavaPeer(NPP instance)
 #endif
 } //end of extern "C"
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

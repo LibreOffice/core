@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -235,3 +236,5 @@ sal_Bool SAL_CALL SwAccessibleNoTextHyperlink::isValid(  )
         return sal_True;
     return sal_False;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

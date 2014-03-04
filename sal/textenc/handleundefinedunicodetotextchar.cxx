@@ -171,3 +171,5 @@ bool sal::detail::textenc::handleUndefinedUnicodeToTextChar(
 
     return true;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

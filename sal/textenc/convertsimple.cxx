@@ -664,3 +664,5 @@ sal_Size sal::detail::textenc::convertUnicodeToChar(
     *pSrcCvtChars = nSrcChars - (pEndSrcBuf-pSrcBuf);
     return (nDestBytes - (pEndDestBuf-pDestBuf));
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

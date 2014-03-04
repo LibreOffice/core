@@ -129,3 +129,5 @@ SalGenericInstance::~SalGenericInstance()
     ::tools::SolarMutex::SetSolarMutex( 0 );
     delete mpSalYieldMutex;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
