@@ -26,12 +26,6 @@
 class SwIndexReg;
 struct SwPosition;
 
-#ifdef DBG_UTIL
-#define INLINE
-#else
-#define INLINE inline
-#endif
-
 /// Marks a character position inside a document model node.
 class SW_DLLPUBLIC SwIndex
 {
@@ -54,23 +48,23 @@ public:
     SwIndex( const SwIndex &, short nDiff );
     ~SwIndex() { Remove(); }
 
-    INLINE SwIndex& operator=( sal_Int32 const );
+    SwIndex& operator=( sal_Int32 const );
     SwIndex& operator=( const SwIndex & );
 
-    INLINE sal_Int32 operator++();
-    INLINE sal_Int32 operator--();
-    INLINE sal_Int32 operator++(int);
-    INLINE sal_Int32 operator--(int);
+    sal_Int32 operator++();
+    sal_Int32 operator--();
+    sal_Int32 operator++(int);
+    sal_Int32 operator--(int);
 
-    INLINE sal_Int32 operator+=( sal_Int32 const );
-    INLINE sal_Int32 operator-=( sal_Int32 const );
-    INLINE sal_Int32 operator+=( const SwIndex& );
-    INLINE sal_Int32 operator-=( const SwIndex& );
+    sal_Int32 operator+=( sal_Int32 const );
+    sal_Int32 operator-=( sal_Int32 const );
+    sal_Int32 operator+=( const SwIndex& );
+    sal_Int32 operator-=( const SwIndex& );
 
-    INLINE bool operator< ( const SwIndex& ) const;
-    INLINE bool operator<=( const SwIndex& ) const;
-    INLINE bool operator> ( const SwIndex& ) const;
-    INLINE bool operator>=( const SwIndex& ) const;
+    bool operator< ( const SwIndex& ) const;
+    bool operator<=( const SwIndex& ) const;
+    bool operator> ( const SwIndex& ) const;
+    bool operator>=( const SwIndex& ) const;
 
     bool operator< ( sal_Int32 const nVal ) const { return m_nIndex <  nVal; }
     bool operator<=( sal_Int32 const nVal ) const { return m_nIndex <= nVal; }
@@ -99,8 +93,6 @@ public:
     // Returns pointer to IndexArray (for RTTI at SwIndexReg).
     const SwIndexReg* GetIdxReg() const { return m_pIndexReg; }
 };
-
-#undef INLINE
 
 class SwIndexReg
 {
