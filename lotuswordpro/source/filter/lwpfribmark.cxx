@@ -1415,7 +1415,9 @@ void LwpFribField::ConvertCrossRefEnd(XFContentContainer* pXFPara,LwpFieldMark* 
         pXFPara->Add(pRef);
 }
 
-LwpFribRubyMarker::LwpFribRubyMarker( LwpPara* pPara ): LwpFrib(pPara)
+LwpFribRubyMarker::LwpFribRubyMarker( LwpPara* pPara )
+  : LwpFrib(pPara)
+  , m_nType(0)
 {
 }
 
