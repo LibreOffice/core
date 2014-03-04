@@ -71,10 +71,10 @@ void SwModalRedlineAcceptDlg::AcceptAll( sal_Bool bAccept )
     if (pFilterTP->IsDate() || pFilterTP->IsAuthor() ||
         pFilterTP->IsRange() || pFilterTP->IsAction())
     {
-        pFilterTP->CheckDate(sal_False);    // turn off all filters
-        pFilterTP->CheckAuthor(sal_False);
-        pFilterTP->CheckRange(sal_False);
-        pFilterTP->CheckAction(sal_False);
+        pFilterTP->CheckDate(false);    // turn off all filters
+        pFilterTP->CheckAuthor(false);
+        pFilterTP->CheckRange(false);
+        pFilterTP->CheckAction(false);
         pImplDlg->FilterChangedHdl();
     }
 

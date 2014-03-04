@@ -99,7 +99,7 @@ void E3dCubeObj::SetCubeSize(const basegfx::B3DVector& rNew)
     }
 }
 
-void E3dCubeObj::SetPosIsCenter(sal_Bool bNew)
+void E3dCubeObj::SetPosIsCenter(bool bNew)
 {
     if(bPosIsCenter != bNew)
     {

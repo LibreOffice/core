@@ -329,7 +329,7 @@ void SvxShowCharSetAcc::implSelect( sal_Int32 nAccessibleChildIndex, sal_Bool bS
     if ( m_pParent )
     {
         if ( bSelect )
-            m_pParent->getCharSetControl()->SelectIndex(nAccessibleChildIndex,sal_True);
+            m_pParent->getCharSetControl()->SelectIndex(nAccessibleChildIndex, true);
         else
             m_pParent->getCharSetControl()->DeSelect();
     }

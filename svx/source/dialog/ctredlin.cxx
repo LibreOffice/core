@@ -51,7 +51,7 @@ RedlinData::RedlinData()
     :
         aDateTime( DateTime::EMPTY )
 {
-    bDisabled=sal_False;
+    bDisabled=false;
     pData=NULL;
 }
 RedlinData::~RedlinData()
@@ -124,11 +124,11 @@ void SvLBoxColorString::Paint(
 
 SvxRedlinTable::SvxRedlinTable(SvSimpleTableContainer& rParent, WinBits nBits)
     : SvSimpleTable(rParent,nBits)
-    , bIsCalc(sal_False)
+    , bIsCalc(false)
     , nDatePos(WRITER_DATE)
-    , bAuthor(sal_False)
-    , bDate(sal_False)
-    , bComment(sal_False)
+    , bAuthor(false)
+    , bDate(false)
+    , bComment(false)
     , nDaTiMode(0)
     , aDaTiFirst( DateTime::EMPTY )
     , aDaTiLast( DateTime::EMPTY )
@@ -185,7 +185,7 @@ sal_Int32 SvxRedlinTable::ColCompare(SvTreeListEntry* pLeft,SvTreeListEntry* pRi
 
     return nCompare;
 }
-void SvxRedlinTable::SetCalcView(sal_Bool bFlag)
+void SvxRedlinTable::SetCalcView(bool bFlag)
 {
     bIsCalc=bFlag;
     if(bFlag)
@@ -243,7 +243,7 @@ void SvxRedlinTable::UpdateFilterTest()
 }
 
 
-void SvxRedlinTable::SetFilterDate(sal_Bool bFlag)
+void SvxRedlinTable::SetFilterDate(bool bFlag)
 {
     bDate=bFlag;
 }
@@ -273,7 +273,7 @@ void SvxRedlinTable::SetLastTime(const Time& aTime)
     aDaTiLast.SetTime(aTime.GetTime());
 }
 
-void SvxRedlinTable::SetFilterAuthor(sal_Bool bFlag)
+void SvxRedlinTable::SetFilterAuthor(bool bFlag)
 {
     bAuthor=bFlag;
 }
@@ -283,7 +283,7 @@ void SvxRedlinTable::SetAuthor(const OUString &aString)
     aAuthor=aString;
 }
 
-void SvxRedlinTable::SetFilterComment(sal_Bool bFlag)
+void SvxRedlinTable::SetFilterComment(bool bFlag)
 {
     bComment=bFlag;
 }
@@ -475,36 +475,36 @@ void SvxTPView::InsertCalcHeader()
     m_pViewData->InsertHeaderEntry(aString);
 }
 
-void SvxTPView::EnableAccept(sal_Bool nFlag)
+void SvxTPView::EnableAccept(bool nFlag)
 {
     bEnableAccept = nFlag;
     m_pAccept->Enable(nFlag);
 }
 
-void SvxTPView::EnableAcceptAll(sal_Bool nFlag)
+void SvxTPView::EnableAcceptAll(bool nFlag)
 {
     bEnableAcceptAll = nFlag;
     m_pAcceptAll->Enable(nFlag);
 }
 
-void SvxTPView::EnableReject(sal_Bool nFlag)
+void SvxTPView::EnableReject(bool nFlag)
 {
     bEnableReject = nFlag;
     m_pReject->Enable(nFlag);
 }
 
-void SvxTPView::EnableRejectAll(sal_Bool nFlag)
+void SvxTPView::EnableRejectAll(bool nFlag)
 {
     bEnableRejectAll = nFlag;
     m_pRejectAll->Enable(nFlag);
 }
 
-void SvxTPView::ShowUndo(sal_Bool nFlag)
+void SvxTPView::ShowUndo(bool nFlag)
 {
     m_pUndo->Show(nFlag);
 }
 
-void SvxTPView::EnableUndo(sal_Bool nFlag)
+void SvxTPView::EnableUndo(bool nFlag)
 {
     bEnableUndo = nFlag;
     m_pUndo->Enable(nFlag);
@@ -617,7 +617,7 @@ SvxTPFilter::SvxTPFilter( Window * pParent)
     m_pTfDate2->SetTime(aTime);
     HideRange();
     ShowAction();
-    bModified=sal_False;
+    bModified=false;
 }
 
 void SvxTPFilter::SetRedlinTable(SvxRedlinTable* pTable)
@@ -630,37 +630,37 @@ void SvxTPFilter::ShowDateFields(sal_uInt16 nKind)
     switch(nKind)
     {
         case FLT_DATE_BEFORE:
-                EnableDateLine1(sal_True);
-                EnableDateLine2(sal_False);
+                EnableDateLine1(true);
+                EnableDateLine2(false);
                 break;
         case FLT_DATE_SINCE:
-                EnableDateLine1(sal_True);
-                EnableDateLine2(sal_False);
+                EnableDateLine1(true);
+                EnableDateLine2(false);
                 break;
         case FLT_DATE_EQUAL:
-                EnableDateLine1(sal_True);
+                EnableDateLine1(true);
                 m_pTfDate->Disable();
                 m_pTfDate->SetText(OUString());
-                EnableDateLine2(sal_False);
+                EnableDateLine2(false);
                 break;
         case FLT_DATE_NOTEQUAL:
-                EnableDateLine1(sal_True);
+                EnableDateLine1(true);
                 m_pTfDate->Disable();
                 m_pTfDate->SetText(OUString());
-                EnableDateLine2(sal_False);
+                EnableDateLine2(false);
                 break;
         case FLT_DATE_BETWEEN:
-                EnableDateLine1(sal_True);
-                EnableDateLine2(sal_True);
+                EnableDateLine1(true);
+                EnableDateLine2(true);
                 break;
         case FLT_DATE_SAVE:
-                EnableDateLine1(sal_False);
-                EnableDateLine2(sal_False);
+                EnableDateLine1(false);
+                EnableDateLine2(false);
                 break;
     }
 }
 
-void SvxTPFilter::EnableDateLine1(sal_Bool bFlag)
+void SvxTPFilter::EnableDateLine1(bool bFlag)
 {
     if(bFlag && m_pCbDate->IsChecked())
     {
@@ -675,7 +675,7 @@ void SvxTPFilter::EnableDateLine1(sal_Bool bFlag)
         m_pIbClock->Disable();
     }
 }
-void SvxTPFilter::EnableDateLine2(sal_Bool bFlag)
+void SvxTPFilter::EnableDateLine2(bool bFlag)
 {
     if(bFlag && m_pCbDate->IsChecked())
     {
@@ -787,7 +787,7 @@ void SvxTPFilter::SetFocusToRange()
     m_pEdRange->GrabFocus();
 }
 
-void SvxTPFilter::HideRange(sal_Bool bHide)
+void SvxTPFilter::HideRange(bool bHide)
 {
     if (bHide)
     {
@@ -814,67 +814,67 @@ OUString SvxTPFilter::GetComment()const
     return m_pEdComment->GetText();
 }
 
-sal_Bool SvxTPFilter::IsDate()
+bool SvxTPFilter::IsDate()
 {
     return m_pCbDate->IsChecked();
 }
 
-sal_Bool SvxTPFilter::IsAuthor()
+bool SvxTPFilter::IsAuthor()
 {
     return m_pCbAuthor->IsChecked();
 }
 
-sal_Bool SvxTPFilter::IsRange()
+bool SvxTPFilter::IsRange()
 {
     return m_pCbRange->IsChecked();
 }
 
-sal_Bool SvxTPFilter::IsAction()
+bool SvxTPFilter::IsAction()
 {
     return m_pCbAction->IsChecked();
 }
 
-sal_Bool SvxTPFilter::IsComment()
+bool SvxTPFilter::IsComment()
 {
     return m_pCbComment->IsChecked();
 }
 
-void SvxTPFilter::CheckDate(sal_Bool bFlag)
+void SvxTPFilter::CheckDate(bool bFlag)
 {
     m_pCbDate->Check(bFlag);
     RowEnableHdl(m_pCbDate);
-    bModified=sal_False;
+    bModified=false;
 }
 
-void SvxTPFilter::CheckAuthor(sal_Bool bFlag)
+void SvxTPFilter::CheckAuthor(bool bFlag)
 {
     m_pCbAuthor->Check(bFlag);
     RowEnableHdl(m_pCbAuthor);
-    bModified=sal_False;
+    bModified=false;
 }
 
-void SvxTPFilter::CheckRange(sal_Bool bFlag)
+void SvxTPFilter::CheckRange(bool bFlag)
 {
     m_pCbRange->Check(bFlag);
     RowEnableHdl(m_pCbRange);
-    bModified=sal_False;
+    bModified=false;
 }
 
-void SvxTPFilter::CheckAction(sal_Bool bFlag)
+void SvxTPFilter::CheckAction(bool bFlag)
 {
     m_pCbAction->Check(bFlag);
     RowEnableHdl(m_pCbAction);
-    bModified=sal_False;
+    bModified=false;
 }
 
-void SvxTPFilter::CheckComment(sal_Bool bFlag)
+void SvxTPFilter::CheckComment(bool bFlag)
 {
     m_pCbComment->Check(bFlag);
     RowEnableHdl(m_pCbComment);
-    bModified=sal_False;
+    bModified=false;
 }
 
-void SvxTPFilter::ShowAction(sal_Bool bShow)
+void SvxTPFilter::ShowAction(bool bShow)
 {
     if(!bShow)
     {
@@ -907,8 +907,8 @@ IMPL_LINK( SvxTPFilter, RowEnableHdl, CheckBox*, pCB )
     {
         m_pLbDate->Enable(m_pCbDate->IsChecked());
         m_pLbDate->Invalidate();
-        EnableDateLine1(sal_False);
-        EnableDateLine2(sal_False);
+        EnableDateLine1(false);
+        EnableDateLine2(false);
         if(m_pCbDate->IsChecked()) SelDateHdl(m_pLbDate);
     }
     else if (pCB == m_pCbAuthor)
@@ -980,7 +980,7 @@ IMPL_LINK( SvxTPFilter, ModifyHdl, void*, pCtr)
             aModifyComLink.Call(this);
         }
 
-        bModified=sal_True;
+        bModified=true;
         aModifyLink.Call(this);
     }
     return 0;
@@ -1013,7 +1013,7 @@ void SvxTPFilter::DeactivatePage()
 
         aReadyLink.Call(this);
     }
-    bModified=sal_False;
+    bModified=false;
     TabPage::DeactivatePage();
 }
 

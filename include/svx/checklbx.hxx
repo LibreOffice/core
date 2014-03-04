@@ -56,13 +56,13 @@ public:
                                               SvLBoxButtonKind_enabledCheckbox );
     void            RemoveEntry         ( sal_uLong  nPos );
 
-    void            SelectEntryPos      ( sal_uLong  nPos, sal_Bool bSelect = sal_True );
+    void            SelectEntryPos      ( sal_uLong  nPos, bool bSelect = true );
     sal_uLong       GetSelectEntryPos   () const;
 
     OUString        GetText             ( sal_uLong  nPos ) const;
     sal_uLong       GetCheckedEntryCount() const;
-    void            CheckEntryPos       ( sal_uLong  nPos, sal_Bool bCheck = sal_True );
-    sal_Bool        IsChecked           ( sal_uLong  nPos ) const;
+    void            CheckEntryPos       ( sal_uLong  nPos, bool bCheck = true );
+    bool            IsChecked           ( sal_uLong  nPos ) const;
     void            ToggleCheckButton   ( SvTreeListEntry* pEntry );
 
     void*           SetEntryData        ( sal_uLong  nPos, void* pNewData );

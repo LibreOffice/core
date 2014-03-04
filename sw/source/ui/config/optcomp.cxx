@@ -325,7 +325,7 @@ IMPL_LINK_NOARG(SwCompatibilityOptPage, UseAsDefaultHdl)
                 sal_uInt16 nCount = static_cast< sal_uInt16 >( m_pOptionsLB->GetEntryCount() );
                 for ( sal_uInt16 i = 0; i < nCount; ++i )
                 {
-                    bool bChecked = ( m_pOptionsLB->IsChecked(i) != sal_False );
+                    bool bChecked = m_pOptionsLB->IsChecked(i);
                     CompatibilityOptions eOption = static_cast< CompatibilityOptions >(i);
                     switch ( eOption )
                     {

@@ -185,7 +185,7 @@ const Graphic& SvxContourDlg::GetGraphic() const
     return pSuperClass->GetGraphic();
 }
 
-sal_Bool SvxContourDlg::IsGraphicChanged() const
+bool SvxContourDlg::IsGraphicChanged() const
 {
     return pSuperClass->IsGraphicChanged();
 }
@@ -200,7 +200,7 @@ const void* SvxContourDlg::GetEditingObject() const
     return pSuperClass->GetEditingObject();
 }
 
-void SvxContourDlg::Update( const Graphic& rGraphic, sal_Bool bGraphicLinked,
+void SvxContourDlg::Update( const Graphic& rGraphic, bool bGraphicLinked,
                             const PolyPolygon* pPolyPoly, void* pEditingObj )
 {
     pSuperClass->UpdateGraphic( rGraphic, bGraphicLinked, pPolyPoly, pEditingObj );

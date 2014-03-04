@@ -50,7 +50,7 @@ class SVX_DLLPUBLIC RedlinData
 public:
                     RedlinData();
     virtual         ~RedlinData();
-    sal_Bool            bDisabled;
+    bool            bDisabled;
     DateTime        aDateTime;
     void*           pData;
 };
@@ -87,12 +87,12 @@ class SVX_DLLPUBLIC SvxRedlinTable : public SvSimpleTable
 
 private:
 
-    sal_Bool            bIsCalc;
-    sal_uInt16          nDatePos;
-    sal_Bool            bAuthor;
-    sal_Bool            bDate;
-    sal_Bool            bComment;
-    sal_uInt16          nDaTiMode;
+    bool            bIsCalc;
+    sal_uInt16      nDatePos;
+    bool            bAuthor;
+    bool            bDate;
+    bool            bComment;
+    sal_uInt16      nDaTiMode;
     DateTime        aDaTiFirst;
     DateTime        aDaTiLast;
     DateTime        aDaTiFilterFirst;
@@ -116,21 +116,21 @@ public:
     ~SvxRedlinTable();
 
     // For FilterPage only {
-    void            SetFilterDate(sal_Bool bFlag=sal_True);
+    void            SetFilterDate(bool bFlag=true);
     void            SetDateTimeMode(sal_uInt16 nMode);
     void            SetFirstDate(const Date&);
     void            SetLastDate(const Date&);
     void            SetFirstTime(const Time&);
     void            SetLastTime(const Time&);
-    void            SetFilterAuthor(sal_Bool bFlag=sal_True);
+    void            SetFilterAuthor(bool bFlag=true);
     void            SetAuthor(const OUString &);
-    void            SetFilterComment(sal_Bool bFlag=sal_True);
+    void            SetFilterComment(bool bFlag=true);
     void            SetCommentParams( const utl::SearchParam* pSearchPara );
 
     void            UpdateFilterTest();
     // } For FilterPage only
 
-    void            SetCalcView(sal_Bool bFlag=sal_True);
+    void            SetCalcView(bool bFlag=true);
 
     bool            IsValidEntry(const OUString &rAuthor, const DateTime &rDateTime, const OUString &rComment);
     bool            IsValidEntry(const OUString &rAuthor, const DateTime &rDateTime);
@@ -185,7 +185,7 @@ private:
     ListBox*        m_pLbAction;
     CheckBox*       m_pCbComment;
     Edit*           m_pEdComment;
-    sal_Bool            bModified;
+    bool            bModified;
 
     DECL_LINK( SelDateHdl, ListBox* );
     DECL_LINK( RowEnableHdl, CheckBox* );
@@ -198,8 +198,8 @@ private:
 protected:
 
     void            ShowDateFields(sal_uInt16 nKind);
-    void            EnableDateLine1(sal_Bool bFlag);
-    void            EnableDateLine2(sal_Bool bFlag);
+    void            EnableDateLine1(bool bFlag);
+    void            EnableDateLine2(bool bFlag);
 
 public:
                     SvxTPFilter( Window * pParent);
@@ -232,25 +232,25 @@ public:
     // Methods for Calc {
     void            SetRange(const OUString& rString);
     OUString        GetRange() const;
-    void            HideRange(sal_Bool bHide=sal_True);
+    void            HideRange(bool bHide=true);
     void            SetFocusToRange();
     // } Methods for Calc
 
-    void            DisableRef(sal_Bool bFlag);
+    void            DisableRef(bool bFlag);
 
-    sal_Bool            IsDate();
-    sal_Bool            IsAuthor();
-    sal_Bool            IsRange();
-    sal_Bool            IsAction();
-    sal_Bool            IsComment();
+    bool            IsDate();
+    bool            IsAuthor();
+    bool            IsRange();
+    bool            IsAction();
+    bool            IsComment();
 
-    void            ShowAction(sal_Bool bShow=sal_True);
+    void            ShowAction(bool bShow=true);
 
-    void            CheckDate(sal_Bool bFlag=sal_True);
-    void            CheckAuthor(sal_Bool bFlag=sal_True);
-    void            CheckRange(sal_Bool bFlag=sal_True);
-    void            CheckAction(sal_Bool bFlag=sal_True);
-    void            CheckComment(sal_Bool bFlag=sal_True);
+    void            CheckDate(bool bFlag=true);
+    void            CheckAuthor(bool bFlag=true);
+    void            CheckRange(bool bFlag=true);
+    void            CheckAction(bool bFlag=true);
+    void            CheckComment(bool bFlag=true);
 
     ListBox*        GetLbAction();
 
@@ -321,21 +321,21 @@ public:
     void            InsertCalcHeader();
     SvxRedlinTable* GetTableControl();
 
-    void            EnableAccept(sal_Bool nFlag=sal_True);
-    void            EnableAcceptAll(sal_Bool nFlag=sal_True);
-    void            EnableReject(sal_Bool nFlag=sal_True);
-    void            EnableRejectAll(sal_Bool nFlag=sal_True);
-    void            EnableUndo(sal_Bool nFlag=sal_True);
+    void            EnableAccept(bool nFlag=true);
+    void            EnableAcceptAll(bool nFlag=true);
+    void            EnableReject(bool nFlag=true);
+    void            EnableRejectAll(bool nFlag=true);
+    void            EnableUndo(bool nFlag=true);
 
-    void            DisableAccept()     {EnableAccept(sal_False);}
-    void            DisableAcceptAll()  {EnableAcceptAll(sal_False);}
-    void            DisableReject()     {EnableReject(sal_False);}
-    void            DisableRejectAll()  {EnableRejectAll(sal_False);}
-    void            DisableUndo()       {EnableUndo(sal_False);}
+    void            DisableAccept()     {EnableAccept(false);}
+    void            DisableAcceptAll()  {EnableAcceptAll(false);}
+    void            DisableReject()     {EnableReject(false);}
+    void            DisableRejectAll()  {EnableRejectAll(false);}
+    void            DisableUndo()       {EnableUndo(false);}
 
-    void            ShowUndo(sal_Bool nFlag=sal_True);
-    void            HideUndo()          {ShowUndo(sal_False);}
-    sal_Bool            IsUndoVisible();
+    void            ShowUndo(bool nFlag=true);
+    void            HideUndo()          {ShowUndo(false);}
+    bool            IsUndoVisible();
 
     void            SetAcceptClickHdl( const Link& rLink ) { AcceptClickLk = rLink; }
     const Link&     GetAcceptClickHdl() const { return AcceptClickLk; }

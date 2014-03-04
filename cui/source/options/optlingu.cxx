@@ -2081,7 +2081,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
                 OUString* pChange = aChange.getArray();
                 pChange[nStart] = pData->GetImplName();
                 bChanged |= pData->GetIndex() != nLocalIndex ||
-                    pData->IsChecked() != m_pModulesCLB->IsChecked(i);
+                    pData->IsChecked() != (m_pModulesCLB->IsChecked(i) ? 1 : 0);
                 if(m_pModulesCLB->IsChecked(i))
                     nStart++;
                 ++nLocalIndex;

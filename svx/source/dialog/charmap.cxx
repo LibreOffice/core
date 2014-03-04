@@ -61,7 +61,7 @@ SvxShowCharSet::SvxShowCharSet(Window* pParent, const ResId& rResId)
     , aVscrollSB(this, WB_VERT)
 {
     init();
-    InitSettings( sal_True, sal_True );
+    InitSettings( true, true );
 }
 
 SvxShowCharSet::SvxShowCharSet(Window* pParent)
@@ -70,7 +70,7 @@ SvxShowCharSet::SvxShowCharSet(Window* pParent)
     , aVscrollSB( this, WB_VERT)
 {
     init();
-    InitSettings( sal_True, sal_True );
+    InitSettings( true, true );
 }
 
 void SvxShowCharSet::init()
@@ -84,7 +84,7 @@ void SvxShowCharSet::init()
     aVscrollSB.EnableDrag( true );
     // other settings like aVscroll depend on selected font => see SetFont
 
-    bDrag = sal_False;
+    bDrag = false;
 }
 
 void SvxShowCharSet::Resize()
@@ -103,7 +103,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxShowCharSet(Window *pPar
 void SvxShowCharSet::GetFocus()
 {
     Control::GetFocus();
-    SelectIndex( nSelectedIndex, sal_True );
+    SelectIndex( nSelectedIndex, true );
 }
 
 
@@ -111,7 +111,7 @@ void SvxShowCharSet::GetFocus()
 void SvxShowCharSet::LoseFocus()
 {
     Control::LoseFocus();
-    SelectIndex( nSelectedIndex, sal_False );
+    SelectIndex( nSelectedIndex, false );
 }
 
 
@@ -119,9 +119,9 @@ void SvxShowCharSet::LoseFocus()
 void SvxShowCharSet::StateChanged( StateChangedType nType )
 {
     if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
-        InitSettings( sal_True, sal_False );
+        InitSettings( true, false );
     else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
-        InitSettings( sal_False, sal_True );
+        InitSettings( false, true );
 
     Control::StateChanged( nType );
 }
@@ -132,7 +132,7 @@ void SvxShowCharSet::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( ( rDCEvt.GetType() == DATACHANGED_SETTINGS )
       && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
-        InitSettings( sal_True, sal_True );
+        InitSettings( true, true );
     else
         Control::DataChanged( rDCEvt );
 }
@@ -146,12 +146,12 @@ void SvxShowCharSet::MouseButtonDown( const MouseEvent& rMEvt )
         if ( rMEvt.GetClicks() == 1 )
         {
             GrabFocus();
-            bDrag = sal_True;
+            bDrag = true;
             CaptureMouse();
 
             int nIndex = PixelToMapIndex( rMEvt.GetPosPixel() );
         // Fire the focus event
-            SelectIndex( nIndex , sal_True);
+            SelectIndex( nIndex, true);
         }
 
         if ( !(rMEvt.GetClicks() % 2) )
@@ -169,7 +169,7 @@ void SvxShowCharSet::MouseButtonUp( const MouseEvent& rMEvt )
         if ( Rectangle(Point(), GetOutputSize()).IsInside(rMEvt.GetPosPixel()))
             aSelectHdl.Call( this );
         ReleaseMouse();
-        bDrag = sal_False;
+        bDrag = false;
     }
 }
 
@@ -193,7 +193,7 @@ void SvxShowCharSet::MouseMove( const MouseEvent& rMEvt )
 
         int nIndex = PixelToMapIndex( aPos );
     // Fire the focus event.
-        SelectIndex( nIndex , sal_True );
+        SelectIndex( nIndex, true );
     }
 }
 
@@ -322,7 +322,7 @@ void SvxShowCharSet::KeyInput( const KeyEvent& rKEvt )
 
     if ( tmpSelected >= 0 )
     {
-        SelectIndex( tmpSelected, sal_True );
+        SelectIndex( tmpSelected, true );
         aPreSelectHdl.Call( this );
     }
 }
@@ -482,7 +482,7 @@ void SvxShowCharSet::DrawChars_Impl( int n1, int n2 )
 
 
 
-void SvxShowCharSet::InitSettings( sal_Bool bForeground, sal_Bool bBackground )
+void SvxShowCharSet::InitSettings( bool bForeground, bool bBackground )
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
@@ -562,7 +562,7 @@ void SvxShowCharSet::SetFont( const Font& rFont )
 
 
 
-void SvxShowCharSet::SelectIndex( int nNewIndex, sal_Bool bFocus )
+void SvxShowCharSet::SelectIndex( int nNewIndex, bool bFocus )
 {
     if( nNewIndex < 0 )
     {
@@ -656,7 +656,7 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, sal_Bool bFocus )
 
 
 
-void SvxShowCharSet::SelectCharacter( sal_UCS4 cNew, sal_Bool bFocus )
+void SvxShowCharSet::SelectCharacter( sal_UCS4 cNew, bool bFocus )
 {
     // get next available char of current font
     sal_UCS4 cNext = maFontCharMap.GetNextChar( (cNew > 0) ? cNew - 1 : cNew );

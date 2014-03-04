@@ -78,13 +78,13 @@ public:
                         ~SvxContourDlg();
 
     const Graphic&      GetGraphic() const;
-    sal_Bool                IsGraphicChanged() const;
+    bool                IsGraphicChanged() const;
 
     PolyPolygon         GetPolyPolygon();
 
     const void*         GetEditingObject() const;
 
-    void                Update( const Graphic& rGraphic, sal_Bool bGraphicLinked,
+    void                Update( const Graphic& rGraphic, bool bGraphicLinked,
                                 const PolyPolygon* pPolyPoly = NULL, void* pEditingObj = NULL );
 
     static PolyPolygon  CreateAutoContour(  const Graphic& rGraphic,

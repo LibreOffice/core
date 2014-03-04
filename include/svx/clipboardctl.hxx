@@ -35,7 +35,7 @@ class SVX_DLLPUBLIC SvxClipBoardControl : public SfxToolBoxControl
 {
     SfxPoolItem*            pClipboardFmtItem;
     PopupMenu*              pPopup;
-    sal_Bool                    bDisabled;
+    bool                    bDisabled;
 
     void                    DelPopup();
 

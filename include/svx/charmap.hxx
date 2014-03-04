@@ -49,7 +49,7 @@ public:
 
     void            SetFont( const Font& rFont );
 
-    void            SelectCharacter( sal_uInt32 cNew, sal_Bool bFocus = sal_False );
+    void            SelectCharacter( sal_uInt32 cNew, bool bFocus = false );
     sal_UCS4        GetSelectCharacter() const;
 
     Link            GetDoubleClickHdl() const { return aDoubleClkHdl; }
@@ -66,12 +66,12 @@ public:
     int                         FirstInView( void) const;
     int                         LastInView( void) const;
     int                         PixelToMapIndex( const Point&) const;
-    void                        SelectIndex( int index, sal_Bool bFocus = sal_False );
+    void                        SelectIndex( int index, bool bFocus = false );
     void                        DeSelect();
-    inline sal_Bool             IsSelected(sal_uInt16 _nPos) const { return _nPos == nSelectedIndex; }
-    inline sal_uInt16               GetSelectIndexId() const { return sal::static_int_cast<sal_uInt16>(nSelectedIndex); }
-    sal_uInt16                      GetRowPos(sal_uInt16 _nPos) const;
-    sal_uInt16                      GetColumnPos(sal_uInt16 _nPos) const;
+    inline bool                 IsSelected(sal_uInt16 _nPos) const { return _nPos == nSelectedIndex; }
+    inline sal_uInt16           GetSelectIndexId() const { return sal::static_int_cast<sal_uInt16>(nSelectedIndex); }
+    sal_uInt16                  GetRowPos(sal_uInt16 _nPos) const;
+    sal_uInt16                  GetColumnPos(sal_uInt16 _nPos) const;
 
     ScrollBar*                  getScrollBar();
     void                        ReleaseAccessible();
@@ -109,7 +109,7 @@ private:
     long            nY;
     long            m_nXGap;
     long            m_nYGap;
-    sal_Bool            bDrag;
+    bool            bDrag;
 
     sal_Int32       nSelectedIndex;
 
@@ -118,7 +118,7 @@ private:
 
 private:
     void            DrawChars_Impl( int n1, int n2);
-    void            InitSettings( sal_Bool bForeground, sal_Bool bBackground);
+    void            InitSettings( bool bForeground, bool bBackground);
     // abstraction layers are: Unicode<->MapIndex<->Pixel
     Point           MapIndexToPixel( int) const;
     DECL_LINK(VscrollHdl, void *);

@@ -44,8 +44,8 @@ SvxClipBoardControl::SvxClipBoardControl(
 
     SfxToolBoxControl( nSlotId, nId, rTbx ),
     pClipboardFmtItem( 0 ),
-     pPopup     (0),
-    bDisabled( sal_False )
+    pPopup( 0 ),
+    bDisabled( false )
 {
     addStatusListener( OUString( ".uno:ClipboardFormatItems" ));
     ToolBox& rBox = GetToolBox();

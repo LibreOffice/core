@@ -180,7 +180,7 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(Dialog *pParent, sal_Bool bAutoFmt) :
     {
         pActLB->InsertEntry(sFmtCollSet);
         pActLB->InsertEntry(sAutoFormat);
-        pTPView->ShowUndo(sal_True);
+        pTPView->ShowUndo(true);
         pTPView->DisableUndo();     // no UNDO events yet
     }
 
@@ -583,7 +583,7 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRa
         {
             RedlinData *pData = new RedlinData;
             pData->pData = pRedlineChild;
-            pData->bDisabled = sal_True;
+            pData->bDisabled = true;
             sChild = GetRedlineText(rRedln, pData->aDateTime, nStack);
 
             SvTreeListEntry* pChild = pTable->InsertEntry(sChild, pData, pParent->pTLBParent);
@@ -729,7 +729,7 @@ void SwRedlineAcceptDlg::InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd)
 
         pData = new RedlinData;
         pData->pData = pRedlineParent;
-        pData->bDisabled = sal_False;
+        pData->bDisabled = false;
 
         sParent = GetRedlineText(rRedln, pData->aDateTime);
         pParent = pTable->InsertEntry(sParent, pData, 0, i);

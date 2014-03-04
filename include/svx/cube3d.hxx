@@ -47,10 +47,10 @@ private:
     // Parameter
     basegfx::B3DPoint                   aCubePos;
     basegfx::B3DVector                  aCubeSize;
-    sal_uInt16                              nSideFlags;
+    sal_uInt16                          nSideFlags;
 
     // BOOLeans
-    unsigned                            bPosIsCenter : 1;
+    bool                                bPosIsCenter : 1;
 
 protected:
     void SetDefaultAttributes(E3dDefaultAttributes& rDefault);
@@ -73,8 +73,8 @@ public:
     void SetCubeSize(const basegfx::B3DVector& rNew);
     const basegfx::B3DVector& GetCubeSize() { return aCubeSize; }
 
-    void SetPosIsCenter(sal_Bool bNew);
-    sal_Bool GetPosIsCenter() { return (sal_Bool)bPosIsCenter; }
+    void SetPosIsCenter(bool bNew);
+    bool GetPosIsCenter() { return bPosIsCenter; }
 
     sal_uInt16 GetSideFlags() { return nSideFlags; }
 

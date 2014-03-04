@@ -103,7 +103,7 @@ void SvxCheckListBox::RemoveEntry( sal_uLong nPos )
 
 
 
-void SvxCheckListBox::SelectEntryPos( sal_uLong nPos, sal_Bool bSelect )
+void SvxCheckListBox::SelectEntryPos( sal_uLong nPos, bool bSelect )
 {
     if ( nPos < GetEntryCount() )
         Select( GetEntry( nPos ), bSelect );
@@ -148,7 +148,7 @@ sal_uLong SvxCheckListBox::GetCheckedEntryCount() const
 
 
 
-void SvxCheckListBox::CheckEntryPos( sal_uLong nPos, sal_Bool bCheck )
+void SvxCheckListBox::CheckEntryPos( sal_uLong nPos, bool bCheck )
 {
     if ( nPos < GetEntryCount() )
         SetCheckButtonState(
@@ -158,12 +158,12 @@ void SvxCheckListBox::CheckEntryPos( sal_uLong nPos, sal_Bool bCheck )
 
 
 
-sal_Bool SvxCheckListBox::IsChecked( sal_uLong nPos ) const
+bool SvxCheckListBox::IsChecked( sal_uLong nPos ) const
 {
     if ( nPos < GetEntryCount() )
         return (GetCheckButtonState( GetEntry( nPos ) ) == SV_BUTTON_CHECKED);
     else
-        return sal_False;
+        return false;
 }
 
 
