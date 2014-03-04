@@ -74,7 +74,10 @@
 class LwpFribCHBlock : public LwpFrib
 {
 public:
-    LwpFribCHBlock( LwpPara* pPara ) : LwpFrib(pPara){}
+    LwpFribCHBlock( LwpPara* pPara )
+        : LwpFrib(pPara)
+        , m_nType(0)
+        {}
     ~LwpFribCHBlock(){}
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len);
     LwpCHBlkMarker* GetMarker();
