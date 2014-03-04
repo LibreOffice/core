@@ -166,7 +166,11 @@ protected:
 class LwpFootnoteNumberOptions
 {
 public:
-    LwpFootnoteNumberOptions(){}
+    LwpFootnoteNumberOptions()
+        : m_nFlag(0)
+        , m_nStartingNumber(0)
+        {}
+
     ~LwpFootnoteNumberOptions(){}
     void Read(LwpObjectStream* pObjStrm);
 private:
