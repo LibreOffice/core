@@ -1,4 +1,18 @@
 :
+#
+# This script checks various configure parameters and uses three files:
+#   * autogen.input (ro)
+#   * autogen.lastrun (rw)
+#   * autogen.lastrun.bak (rw)
+#
+# If _no_ parmeters:
+#   Read args from autogen.input or autogen.lastrun
+# Else
+#   Backup autogen.lastrun as autogen.lastrun.bak
+#   Write autogen.lastrun with new commandline args
+#
+# Run configure with checked args
+#
     eval 'exec perl -S $0 ${1+"$@"}'
         if 0;
 
@@ -65,13 +79,13 @@ sub read_args($)
         chomp();
         # migrate from the old system
         if ( substr($_, 0, 1) eq "'" ) {
-            print "Migrating options from the old autogen.lastrun format, using:\n";
+            print STDERR "Migrating options from the old autogen.lastrun format, using:\n";
             my @opts;
             @opts = split(/'/);
             foreach my $opt (@opts) {
                 if ( substr($opt, 0, 1) eq "-" ) {
                     push @lst, $opt;
-                    print "  $opt\n";
+                    print STDERR "  $opt\n";
                 }
             }
         } elsif ( substr($_, 0, 1) eq "#" ) {
@@ -142,13 +156,31 @@ my $lastrun = "autogen.lastrun";
 
 if (!@ARGV) {
     if (-f $input) {
-        warn "Ignoring $lastrun, using $input.\n" if (-f $lastrun);
+        if (-f $lastrun) {
+            print STDERR <<WARNING;
+********************************************************************
+*
+*   Reading $input and ignoring $lastrun!
+*   Consider removing $lastrun to get rid of this warning.
+*
+********************************************************************
+WARNING
+        }
         @cmdline_args = read_args ($input);
     } elsif (-f $lastrun) {
         print STDERR "Reading $lastrun. Please rename it to $input to avoid this message.\n";
         @cmdline_args = read_args ($lastrun);
     }
 } else {
+    if (-f $input) {
+        print STDERR <<WARNING;
+********************************************************************
+*
+*   Using commandline arguments and ignoring $input!
+*
+********************************************************************
+WARNING
+    }
     @cmdline_args = @ARGV;
 }
 
