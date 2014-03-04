@@ -2253,11 +2253,6 @@ const ScDocument& ScTable::GetDoc() const
     return *pDocument;
 }
 
-SCSIZE ScTable::GetCellCount(SCCOL nCol) const
-{
-    return aCol[nCol].GetCellCount();
-}
-
 sal_uLong ScTable::GetCellCount() const
 {
     sal_uLong nCellCount = 0;

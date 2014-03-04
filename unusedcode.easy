@@ -32,7 +32,6 @@ SalGraphics::drawTransformedBitmap(basegfx::B2DPoint const&, basegfx::B2DPoint c
 ScDocument::CreateFormatTable() const
 ScExtIButton::GetSelected() const
 ScSimpleRefDlg::GetRefString() const
-ScTable::GetCellCount(short) const
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
 SdrItemBrowser::ForceParent()
