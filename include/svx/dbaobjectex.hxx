@@ -53,7 +53,7 @@ namespace svx
             @param _rFlavors
                 available flavors
         */
-        static sal_Bool canExtractComponentDescriptor(const DataFlavorExVector& _rFlavors,sal_Bool _bForm );
+        static bool canExtractComponentDescriptor(const DataFlavorExVector& _rFlavors, bool _bForm );
 
         /** extracts a component descriptor from the transferable given
         */
@@ -65,7 +65,7 @@ namespace svx
         virtual void        AddSupportedFormats();
         virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
 
-        static sal_uInt32   getDescriptorFormatId(sal_Bool _bExtractForm);
+        static sal_uInt32   getDescriptorFormatId(bool _bExtractForm);
     };
 
 

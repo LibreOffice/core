@@ -68,7 +68,7 @@ class SvxPixelCtlAccessible;
 class SVX_DLLPUBLIC SvxRectCtl : public Control
 {
 private:
-    SVX_DLLPRIVATE void             InitSettings( sal_Bool bForeground, sal_Bool bBackground );
+    SVX_DLLPRIVATE void             InitSettings( bool bForeground, bool bBackground );
     SVX_DLLPRIVATE void             InitRectBitmap( void );
     SVX_DLLPRIVATE Bitmap&          GetRectBitmap( void );
     SVX_DLLPRIVATE void             Resize_Impl();
@@ -87,7 +87,7 @@ protected:
     Bitmap*                         pBitmap;
     CTL_STATE                       m_nState;
 
-    sal_Bool                        mbCompleteDisable;
+    bool                            mbCompleteDisable;
 
     RECT_POINT          GetRPFromPoint( Point, bool bRTL = false ) const;
     Point               GetPointFromRP( RECT_POINT ) const;
@@ -128,8 +128,8 @@ public:
 
     RECT_POINT          GetApproxRPFromPixPt( const ::com::sun::star::awt::Point& rPixelPoint ) const;
 
-    sal_Bool IsCompletelyDisabled() const { return mbCompleteDisable; }
-    void DoCompletelyDisable(sal_Bool bNew);
+    bool IsCompletelyDisabled() const { return mbCompleteDisable; }
+    void DoCompletelyDisable(bool bNew);
     void SetCS(CTL_STYLE eNew);
 };
 
@@ -172,8 +172,8 @@ protected:
     Color       aBackgroundColor;
     Color       aLineColor;
     Size        aRectSize;
-    sal_uInt16*     pPixel;
-    sal_Bool        bPaintable;
+    sal_uInt16* pPixel;
+    bool        bPaintable;
     //Add member identifying position
     Point       aFocusPosition;
     Rectangle   implCalFocusRect( const Point& aPosition );
@@ -202,7 +202,7 @@ public:
     sal_uInt16  GetBitmapPixel( const sal_uInt16 nPixelNumber );
     sal_uInt16* GetBitmapPixelPtr() { return pPixel; }
 
-    void    SetPaintable( sal_Bool bTmp ) { bPaintable = bTmp; }
+    void    SetPaintable( bool bTmp ) { bPaintable = bTmp; }
     void    Reset();
     SvxPixelCtlAccessible*  m_pAccess;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >        m_xAccess;
@@ -401,7 +401,7 @@ private:
     SdrPathObj*                                     mpLineObjC;
 
     Graphic*                                        mpGraphic;
-    sal_Bool                                        mbWithSymbol;
+    bool                                            mbWithSymbol;
     Size                                            maSymbolSize;
 
 public:
@@ -410,7 +410,7 @@ public:
 
     void SetLineAttributes(const SfxItemSet& rItemSet);
 
-    void ShowSymbol( sal_Bool b ) { mbWithSymbol = b; };
+    void ShowSymbol( bool b ) { mbWithSymbol = b; };
     void SetSymbol( Graphic* p, const Size& s );
     void ResizeSymbol( const Size& s );
 

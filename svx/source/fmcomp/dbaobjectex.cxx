@@ -56,7 +56,7 @@ namespace svx
 
 
 
-    sal_uInt32 OComponentTransferable::getDescriptorFormatId(sal_Bool _bExtractForm)
+    sal_uInt32 OComponentTransferable::getDescriptorFormatId(bool _bExtractForm)
     {
         static sal_uInt32 s_nReportFormat = (sal_uInt32)-1;
         static sal_uInt32 s_nFormFormat = (sal_uInt32)-1;
@@ -93,14 +93,14 @@ namespace svx
     sal_Bool OComponentTransferable::GetData( const DataFlavor& _rFlavor )
     {
         const sal_uInt32 nFormatId = SotExchange::GetFormat(_rFlavor);
-        if ( nFormatId == getDescriptorFormatId(sal_True) || nFormatId == getDescriptorFormatId(sal_False) )
+        if ( nFormatId == getDescriptorFormatId(true) || nFormatId == getDescriptorFormatId(false) )
             return SetAny( makeAny( m_aDescriptor.createPropertyValueSequence() ), _rFlavor );
 
         return sal_False;
     }
 
 
-    sal_Bool OComponentTransferable::canExtractComponentDescriptor(const DataFlavorExVector& _rFlavors,sal_Bool _bForm )
+    bool OComponentTransferable::canExtractComponentDescriptor(const DataFlavorExVector& _rFlavors, bool _bForm )
     {
         DataFlavorExVector::const_iterator aEnd = _rFlavors.end();
         for (   DataFlavorExVector::const_iterator aCheck = _rFlavors.begin();
@@ -109,17 +109,17 @@ namespace svx
             )
         {
             if ( getDescriptorFormatId(_bForm) == aCheck->mnSotId )
-                return sal_True;
+                return true;
         }
 
-        return sal_False;
+        return false;
     }
 
 
     ODataAccessDescriptor OComponentTransferable::extractComponentDescriptor(const TransferableDataHelper& _rData)
     {
-        sal_Bool bForm = _rData.HasFormat(getDescriptorFormatId(sal_True));
-        if ( bForm || _rData.HasFormat(getDescriptorFormatId(sal_False)) )
+        sal_Bool bForm = _rData.HasFormat(getDescriptorFormatId(true));
+        if ( bForm || _rData.HasFormat(getDescriptorFormatId(false)) )
         {
             // the object has a real descriptor object (not just the old compatible format)
 

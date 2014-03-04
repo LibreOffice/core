@@ -57,7 +57,7 @@ namespace svxform
 
     ODbtoolsClient::ODbtoolsClient()
     {
-        m_bCreateAlready = sal_False;
+        m_bCreateAlready = false;
     }
 
 
@@ -264,18 +264,18 @@ namespace svxform
     }
 
 
-    sal_Bool OStaticDataAccessTools::canInsert(const Reference< XPropertySet>& _rxCursorSet) const
+    bool OStaticDataAccessTools::canInsert(const Reference< XPropertySet>& _rxCursorSet) const
     {
-        sal_Bool bRet = sal_False;
+        bool bRet = false;
         if ( ensureLoaded() )
             bRet = m_xDataAccessTools->canInsert( _rxCursorSet );
         return bRet;
     }
 
 
-    sal_Bool OStaticDataAccessTools::canUpdate(const Reference< XPropertySet>& _rxCursorSet) const
+    bool OStaticDataAccessTools::canUpdate(const Reference< XPropertySet>& _rxCursorSet) const
     {
-        sal_Bool bRet = sal_False;
+        bool bRet = false;
         if ( ensureLoaded() )
             bRet = m_xDataAccessTools->canUpdate( _rxCursorSet );
         return bRet;

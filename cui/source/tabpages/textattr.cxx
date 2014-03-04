@@ -283,7 +283,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
         m_pCtlPosition->Reset();
 
         m_pCtlPosition->SetState(TRISTATE_INDET);
-        m_pCtlPosition->DoCompletelyDisable(sal_True);
+        m_pCtlPosition->DoCompletelyDisable(true);
 
         m_pTsbFullWidth->SetState(TRISTATE_INDET);
         m_pFlPosition->Enable( false );

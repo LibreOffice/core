@@ -34,14 +34,14 @@ E3dDefaultAttributes::E3dDefaultAttributes()
 void E3dDefaultAttributes::Reset()
 {
     // Compound object
-    bDefaultCreateNormals = sal_True;
-    bDefaultCreateTexture = sal_True;
+    bDefaultCreateNormals = true;
+    bDefaultCreateTexture = true;
 
     // Cube object
     aDefaultCubePos = basegfx::B3DPoint(-500.0, -500.0, -500.0);
     aDefaultCubeSize = basegfx::B3DVector(1000.0, 1000.0, 1000.0);
     nDefaultCubeSideFlags = CUBE_FULL;
-    bDefaultCubePosIsCenter = sal_False;
+    bDefaultCubePosIsCenter = false;
 
     // Sphere object
     aDefaultSphereCenter = basegfx::B3DPoint(0.0, 0.0, 0.0);
@@ -49,18 +49,18 @@ void E3dDefaultAttributes::Reset()
 
     // Lathe object
     nDefaultLatheEndAngle = 3600;
-    bDefaultLatheSmoothed = sal_True;
-    bDefaultLatheSmoothFrontBack = sal_False;
-    bDefaultLatheCharacterMode = sal_False;
-    bDefaultLatheCloseFront = sal_True;
-    bDefaultLatheCloseBack = sal_True;
+    bDefaultLatheSmoothed = true;
+    bDefaultLatheSmoothFrontBack = false;
+    bDefaultLatheCharacterMode = false;
+    bDefaultLatheCloseFront = true;
+    bDefaultLatheCloseBack = true;
 
     // Extrude object
-    bDefaultExtrudeSmoothed = sal_True;
-    bDefaultExtrudeSmoothFrontBack = sal_False;
-    bDefaultExtrudeCharacterMode = sal_False;
-    bDefaultExtrudeCloseFront = sal_True;
-    bDefaultExtrudeCloseBack = sal_True;
+    bDefaultExtrudeSmoothed = true;
+    bDefaultExtrudeSmoothFrontBack = false;
+    bDefaultExtrudeCharacterMode = false;
+    bDefaultExtrudeCloseFront = true;
+    bDefaultExtrudeCloseBack = true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

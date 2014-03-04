@@ -158,7 +158,7 @@ void SvxRectCtl::Resize_Impl()
         break;
     }
     Reset();
-    InitSettings( sal_True, sal_True );
+    InitSettings( true, true );
 }
 
 
@@ -211,7 +211,7 @@ void SvxRectCtl::InitRectBitmap( void )
 
 
 
-void SvxRectCtl::InitSettings( sal_Bool bForeground, sal_Bool bBackground )
+void SvxRectCtl::InitSettings( bool bForeground, bool bBackground )
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
@@ -372,9 +372,9 @@ void SvxRectCtl::KeyInput( const KeyEvent& rKeyEvt )
 void SvxRectCtl::StateChanged( StateChangedType nType )
 {
     if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
-        InitSettings( sal_True, sal_False );
+        InitSettings( true, false );
     else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
-        InitSettings( sal_False, sal_True );
+        InitSettings( false, true );
 
     Window::StateChanged( nType );
 }
@@ -384,7 +384,7 @@ void SvxRectCtl::StateChanged( StateChangedType nType )
 void SvxRectCtl::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
-        InitSettings( sal_True, sal_True );
+        InitSettings( true, true );
     else
         Window::DataChanged( rDCEvt );
 }
@@ -745,7 +745,7 @@ RECT_POINT SvxRectCtl::GetApproxRPFromPixPt( const ::com::sun::star::awt::Point&
 }
 
 // CompletelyDisabled() added to have a disabled state for SvxRectCtl
-void SvxRectCtl::DoCompletelyDisable(sal_Bool bNew)
+void SvxRectCtl::DoCompletelyDisable(bool bNew)
 {
     mbCompleteDisable = bNew;
     Invalidate();

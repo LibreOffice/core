@@ -708,9 +708,9 @@ void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, boo
     {
         E3dDefaultAttributes aDefault = Get3DDefaultAttributes();
         if(bExtrude)
-            aDefault.SetDefaultExtrudeCharacterMode(sal_True);
+            aDefault.SetDefaultExtrudeCharacterMode(true);
         else
-            aDefault.SetDefaultLatheCharacterMode(sal_True);
+            aDefault.SetDefaultLatheCharacterMode(true);
 
         // Get Itemset of the original object
         SfxItemSet aSet(pObj->GetMergedItemSet());
@@ -725,8 +725,8 @@ void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, boo
         {
             // This SdrPathObj is not filled, leave the front and rear face out.
             // Moreover, a two-sided representation necessary.
-            aDefault.SetDefaultExtrudeCloseFront(sal_False);
-            aDefault.SetDefaultExtrudeCloseBack(sal_False);
+            aDefault.SetDefaultExtrudeCloseFront(false);
+            aDefault.SetDefaultExtrudeCloseBack(false);
 
             aSet.Put(Svx3DDoubleSidedItem(sal_True));
 

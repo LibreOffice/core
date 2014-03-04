@@ -343,7 +343,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBitmapHdl_Impl)
 
         if(bIs8x8)
         {
-            m_pCtlPixel->SetPaintable( sal_True );
+            m_pCtlPixel->SetPaintable( true );
             m_pBxPixelEditor->Enable();
             m_pBtnModify->Enable();
             m_pBtnAdd->Enable();
@@ -393,7 +393,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBitmapHdl_Impl)
         else
         {
             m_pCtlPixel->Reset();
-            m_pCtlPixel->SetPaintable( sal_False );
+            m_pCtlPixel->SetPaintable( false );
             m_pBxPixelEditor->Disable();
             m_pBtnModify->Disable();
             m_pBtnAdd->Disable();

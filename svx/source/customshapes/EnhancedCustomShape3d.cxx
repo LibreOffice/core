@@ -329,8 +329,8 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
         ProjectionType eProjectionType( eProjectionMode == drawing::ProjectionMode_PARALLEL ? PR_PARALLEL : PR_PERSPECTIVE );
         // pShape2d Convert in scenes which include 3D Objects
         E3dDefaultAttributes a3DDefaultAttr;
-        a3DDefaultAttr.SetDefaultLatheCharacterMode( sal_True );
-        a3DDefaultAttr.SetDefaultExtrudeCharacterMode( sal_True );
+        a3DDefaultAttr.SetDefaultLatheCharacterMode( true );
+        a3DDefaultAttr.SetDefaultExtrudeCharacterMode( true );
 
         E3dScene* pScene = new E3dPolyScene( a3DDefaultAttr );
 

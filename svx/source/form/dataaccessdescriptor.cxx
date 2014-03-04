@@ -343,7 +343,7 @@ namespace svx
     }
 
 
-    sal_Bool ODataAccessDescriptor::has(DataAccessDescriptorProperty _eWhich) const
+    bool ODataAccessDescriptor::has(DataAccessDescriptorProperty _eWhich) const
     {
         return m_pImpl->m_aValues.find(_eWhich) != m_pImpl->m_aValues.end();
     }
@@ -369,7 +369,7 @@ namespace svx
     }
 
 
-    void ODataAccessDescriptor::initializeFrom(const Sequence< PropertyValue >& _rValues, sal_Bool _bClear)
+    void ODataAccessDescriptor::initializeFrom(const Sequence< PropertyValue >& _rValues, bool _bClear)
     {
         if (_bClear)
             clear();

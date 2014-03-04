@@ -42,7 +42,7 @@ namespace svxform
         static ::connectivity::simple::createDataAccessToolsFactoryFunction
                                 s_pFactoryCreationFunc;
 
-        mutable sal_Bool            m_bCreateAlready;
+        mutable bool            m_bCreateAlready;
 
     private:
         mutable ::rtl::Reference< ::connectivity::simple::IDataAccessToolsFactory > m_xDataAccessFactory;
@@ -128,12 +128,12 @@ namespace svxform
         /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::INSERT
             @param      _rxCursorSet    the property set
         */
-        sal_Bool canInsert(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const;
+        bool canInsert(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const;
 
         /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::UPDATE
             @param      _rxCursorSet    the property set
         */
-        sal_Bool canUpdate(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const;
+        bool canUpdate(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
             getFieldsByCommandDescriptor(

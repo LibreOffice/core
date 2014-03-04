@@ -240,25 +240,25 @@ namespace svx
     }
 
 
-    sal_Bool OColumnTransferable::canExtractColumnDescriptor(const DataFlavorExVector& _rFlavors, sal_Int32 _nFormats)
+    bool OColumnTransferable::canExtractColumnDescriptor(const DataFlavorExVector& _rFlavors, sal_Int32 _nFormats)
     {
-        sal_Bool bFieldFormat       = 0 != (_nFormats & CTF_FIELD_DESCRIPTOR);
-        sal_Bool bControlFormat     = 0 != (_nFormats & CTF_CONTROL_EXCHANGE);
-        sal_Bool bDescriptorFormat  = 0 != (_nFormats & CTF_COLUMN_DESCRIPTOR);
+        bool bFieldFormat       = 0 != (_nFormats & CTF_FIELD_DESCRIPTOR);
+        bool bControlFormat     = 0 != (_nFormats & CTF_CONTROL_EXCHANGE);
+        bool bDescriptorFormat  = 0 != (_nFormats & CTF_COLUMN_DESCRIPTOR);
         for (   DataFlavorExVector::const_iterator aCheck = _rFlavors.begin();
                 aCheck != _rFlavors.end();
                 ++aCheck
             )
         {
             if (bFieldFormat && (SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE == aCheck->mnSotId))
-                return sal_True;
+                return true;
             if (bControlFormat && (SOT_FORMATSTR_ID_SBA_CTRLDATAEXCHANGE == aCheck->mnSotId))
-                return sal_True;
+                return true;
             if (bDescriptorFormat && (getDescriptorFormatId() == aCheck->mnSotId))
-                return sal_True;
+                return true;
         }
 
-        return sal_False;
+        return false;
     }
 
 
@@ -313,7 +313,7 @@ namespace svx
     }
 
 
-    sal_Bool OColumnTransferable::extractColumnDescriptor(const TransferableDataHelper& _rData
+    bool OColumnTransferable::extractColumnDescriptor(const TransferableDataHelper& _rData
                                             ,OUString& _rDatasource
                                             ,OUString& _rDatabaseLocation
                                             ,OUString& _rConnectionResource
@@ -334,7 +334,7 @@ namespace svx
             aDescriptor[daCommand]              >>= _rCommand;
             aDescriptor[daCommandType]          >>= _nCommandType;
             aDescriptor[daColumnName]           >>= _rFieldName;
-            return sal_True;
+            return true;
         }
 
         // check if we have a (string) format we can use ....
@@ -344,7 +344,7 @@ namespace svx
         if (_rData.HasFormat(SOT_FORMATSTR_ID_SBA_CTRLDATAEXCHANGE))
             nRecognizedFormat = SOT_FORMATSTR_ID_SBA_CTRLDATAEXCHANGE;
         if (!nRecognizedFormat)
-            return sal_False;
+            return false;
 
         OUString sFieldDescription;
         const_cast<TransferableDataHelper&>(_rData).GetString(nRecognizedFormat, sFieldDescription);
@@ -355,7 +355,7 @@ namespace svx
         _nCommandType   = sFieldDescription.getToken(2, cSeparator).toInt32();
         _rFieldName     = sFieldDescription.getToken(3, cSeparator);
 
-        return sal_True;
+        return true;
     }
 
 
@@ -486,7 +486,7 @@ namespace svx
     }
 
 
-    sal_Bool ODataAccessObjectTransferable::canExtractObjectDescriptor(const DataFlavorExVector& _rFlavors)
+    bool ODataAccessObjectTransferable::canExtractObjectDescriptor(const DataFlavorExVector& _rFlavors)
     {
         for (   DataFlavorExVector::const_iterator aCheck = _rFlavors.begin();
                 aCheck != _rFlavors.end();
@@ -494,13 +494,13 @@ namespace svx
             )
         {
             if (SOT_FORMATSTR_ID_DBACCESS_TABLE == aCheck->mnSotId)
-                return sal_True;
+                return true;
             if (SOT_FORMATSTR_ID_DBACCESS_QUERY == aCheck->mnSotId)
-                return sal_True;
+                return true;
             if (SOT_FORMATSTR_ID_DBACCESS_COMMAND == aCheck->mnSotId)
-                return sal_True;
+                return true;
         }
-        return sal_False;
+        return false;
     }
 
 
@@ -571,7 +571,7 @@ namespace svx
                                                     ,const sal_Int32        _nCommandType
                                                     ,const OUString& _rCommand
                                                     ,const Reference< XConnection >& _rxConnection
-                                                    ,sal_Bool _bAddCommand
+                                                    ,bool _bAddCommand
                                                     ,const OUString& _sActiveCommand)
     {
         m_aDescriptor.setDataSource(_rDatasource);
@@ -656,7 +656,7 @@ namespace svx
     }
 
 
-    sal_Bool OMultiColumnTransferable::canExtractDescriptor(const DataFlavorExVector& _rFlavors)
+    bool OMultiColumnTransferable::canExtractDescriptor(const DataFlavorExVector& _rFlavors)
     {
         DataFlavorExVector::const_iterator aCheck = _rFlavors.begin();
         for (   ;

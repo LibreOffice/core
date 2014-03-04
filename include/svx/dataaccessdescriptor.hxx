@@ -92,10 +92,10 @@ namespace svx
         */
         void        initializeFrom(
                         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rValues,
-                        sal_Bool _bClear = sal_True);
+                        bool _bClear = true);
 
         /// checks whether or not a given property is present in the descriptor
-        sal_Bool    has(DataAccessDescriptorProperty _eWhich) const;
+        bool        has(DataAccessDescriptorProperty _eWhich) const;
 
         /** erases the given property from the descriptor
         */

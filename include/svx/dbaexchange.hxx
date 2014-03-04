@@ -113,11 +113,11 @@ namespace svx
             @param _nFormats
                 formats to accept
         */
-        static sal_Bool canExtractColumnDescriptor(const DataFlavorExVector& _rFlavors, sal_Int32 _nFormats);
+        static bool canExtractColumnDescriptor(const DataFlavorExVector& _rFlavors, sal_Int32 _nFormats);
 
         /** extracts a column descriptor from the transferable given
         */
-        static sal_Bool extractColumnDescriptor(
+        static bool extractColumnDescriptor(
              const TransferableDataHelper&  _rData
             ,OUString&               _rDatasource
             ,OUString&               _rDatabaseLocation
@@ -216,7 +216,7 @@ namespace svx
             @param _nFormats
                 formats to accept
         */
-        static sal_Bool canExtractObjectDescriptor(const DataFlavorExVector& _rFlavors);
+        static bool canExtractObjectDescriptor(const DataFlavorExVector& _rFlavors);
 
         /** extracts a object descriptor from the transferable given
         */
@@ -245,7 +245,7 @@ namespace svx
                         ,const sal_Int32        _nCommandType
                         ,const OUString& _rCommand
                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
-                        ,sal_Bool _bAddCommand
+                        ,bool _bAddCommand
                         ,const OUString& _sActiveCommand);
     };
 
@@ -267,7 +267,7 @@ namespace svx
             @param _nFormats
                 formats to accept
         */
-        static sal_Bool canExtractDescriptor(const DataFlavorExVector& _rFlavors);
+        static bool canExtractDescriptor(const DataFlavorExVector& _rFlavors);
 
         /** extracts a object descriptor from the transferable given
         */
