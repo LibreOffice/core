@@ -1925,7 +1925,12 @@ LwpVirtualLayout* LwpLayout::GetContainerLayout()
 }
 
 LwpPlacableLayout::LwpPlacableLayout( LwpObjectHeader &objHdr, LwpSvStream* pStrm )
-    : LwpLayout(objHdr, pStrm),m_pFont(NULL)
+    : LwpLayout(objHdr, pStrm)
+    , m_nWrapType(0)
+    , m_nBuoyancy(0)
+    , m_nBaseLineOffset(0)
+    , m_nPageNumber(0)
+    , m_pFont(NULL)
 {}
 
 LwpPlacableLayout::~LwpPlacableLayout()
