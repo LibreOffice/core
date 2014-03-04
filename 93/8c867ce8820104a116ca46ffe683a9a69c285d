@@ -1,0 +1,1 @@
+reject: half-baked clean-up of published mail API (e.g., consolidates Simple{Command,System}Mail but keeps needless queryMailClient indirection; consolidates XSimpleMailMessage{,2} but needlessly keeps it an interface instead of a struct); probably does more harm than good
