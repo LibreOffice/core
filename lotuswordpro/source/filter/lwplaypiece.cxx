@@ -240,6 +240,8 @@ void LwpLayoutExternalBorder::Parse(IXFStream* /*pOutputStream*/)
 {}
 
 LwpColumnInfo::LwpColumnInfo()
+    : m_nWidth(0)
+    , m_nGap(0)
 {}
 
 LwpColumnInfo::~LwpColumnInfo()
