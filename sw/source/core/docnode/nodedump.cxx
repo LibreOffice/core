@@ -24,6 +24,7 @@
 #include <svl/intitem.hxx>
 #include <editeng/charrotateitem.hxx>
 #include <editeng/rsiditem.hxx>
+#include <editeng/fontitem.hxx>
 #include <tools/datetimeutils.hxx>
 
 #include <libxml/encoding.h>
@@ -286,24 +287,6 @@ void SwStartNode::dumpAsXml( xmlTextWriterPtr w )
     // writer.endElement(); - it is a start node, so don't end, will make xml better nested
 }
 
-void SwCharFmts::dumpAsXml(xmlTextWriterPtr w)
-{
-    WriterHelper writer(w);
-    if (size())
-    {
-        writer.startElement("swcharfmts");
-        for (size_t i = 0; i < size(); ++i)
-        {
-            SwCharFmt* pFmt = static_cast<SwCharFmt*>(GetFmt(i));
-            writer.startElement("swcharfmt");
-            OString aName = OUStringToOString(pFmt->GetName(), RTL_TEXTENCODING_UTF8);
-            writer.writeFormatAttribute("name", "%s", BAD_CAST(aName.getStr()));
-            writer.endElement();
-        }
-        writer.endElement();
-    }
-}
-
 void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
 {
     SfxItemIter aIter(*pSet);
@@ -333,12 +316,35 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
             case RES_CHRATR_ROTATE: pWhich = "character rotation"; oValue = OString::number(static_cast<const SvxCharRotateItem*>(pItem)->GetValue()); break;
             case RES_PARATR_OUTLINELEVEL: pWhich = "paragraph outline level"; oValue = OString::number(static_cast<const SfxUInt16Item*>(pItem)->GetValue()); break;
             case RES_PARATR_NUMRULE: pWhich = "paragraph numbering rule"; oValue = OUStringToOString(static_cast<const SwNumRuleItem*>(pItem)->GetValue(), RTL_TEXTENCODING_UTF8); break;
+            case RES_CHRATR_FONT: pWhich = "character font"; oValue = OUStringToOString(static_cast<const SvxFontItem*>(pItem)->GetFamilyName(), RTL_TEXTENCODING_UTF8); break;
+            case RES_CHRATR_BACKGROUND: pWhich = "character background"; break;
+            case RES_CHRATR_CTL_FONT: pWhich = "character ctl font"; break;
         }
         if (pWhich)
             writer.writeFormatAttribute("which", "%s", BAD_CAST(pWhich));
         if (oValue)
             writer.writeFormatAttribute("value", "%s", BAD_CAST(oValue->getStr()));
         pItem = aIter.NextItem();
+        writer.endElement();
+    }
+}
+
+void SwCharFmts::dumpAsXml(xmlTextWriterPtr w)
+{
+    WriterHelper writer(w);
+    if (size())
+    {
+        writer.startElement("swcharfmts");
+        for (size_t i = 0; i < size(); ++i)
+        {
+            SwCharFmt* pFmt = static_cast<SwCharFmt*>(GetFmt(i));
+            writer.startElement("swcharfmt");
+            OString aName = OUStringToOString(pFmt->GetName(), RTL_TEXTENCODING_UTF8);
+            writer.writeFormatAttribute("name", "%s", BAD_CAST(aName.getStr()));
+
+            lcl_dumpSfxItemSet(writer, &pFmt->GetAttrSet());
+            writer.endElement();
+        }
         writer.endElement();
     }
 }
