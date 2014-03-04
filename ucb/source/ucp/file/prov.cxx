@@ -21,10 +21,11 @@
 #include <osl/file.hxx>
 #include <osl/socket.h>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/factory.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/ucb/FileSystemNotation.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
+#include <cppuhelper/factory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include "filglob.hxx"
 #include "filid.hxx"
 #include "shell.hxx"
@@ -183,7 +184,6 @@ XTYPEPROVIDER_IMPL_7( FileProvider,
 
 
 // XServiceInfo methods.
-
 OUString SAL_CALL
 FileProvider::getImplementationName()
     throw( RuntimeException, std::exception )
@@ -191,15 +191,11 @@ FileProvider::getImplementationName()
     return fileaccess::shell::getImplementationName_static();
 }
 
-
-sal_Bool SAL_CALL
-FileProvider::supportsService(
-                  const OUString& ServiceName )
+sal_Bool SAL_CALL FileProvider::supportsService(const OUString& ServiceName )
   throw( RuntimeException, std::exception )
 {
-  return ServiceName == "com.sun.star.ucb.FileContentProvider";
+    return cppu::supportsService(this, ServiceName);
 }
-
 
 Sequence< OUString > SAL_CALL
 FileProvider::getSupportedServiceNames(
@@ -208,8 +204,6 @@ FileProvider::getSupportedServiceNames(
 {
     return fileaccess::shell::getSupportedServiceNames_static();
 }
-
-
 
 Reference< XSingleServiceFactory > SAL_CALL
 FileProvider::createServiceFactory(

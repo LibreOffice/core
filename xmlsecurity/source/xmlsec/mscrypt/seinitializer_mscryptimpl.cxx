@@ -27,6 +27,7 @@
 #include "com/sun/star/xml/crypto/SecurityEnvironment.hpp"
 #include "com/sun/star/xml/crypto/XMLSecurityContext.hpp"
 #include "comphelper/processfactory.hxx"
+#include <cppuhelper/supportsservice.hxx>
 
 namespace cssu = com::sun::star::uno;
 namespace cssl = com::sun::star::lang;
@@ -152,12 +153,6 @@ OUString SEInitializer_MSCryptImpl_getImplementationName()
     return OUString( "com.sun.star.xml.security.bridge.xmlsec.SEInitializer_MSCryptImpl" );
 }
 
-sal_Bool SAL_CALL SEInitializer_MSCryptImpl_supportsService( const OUString& rServiceName )
-    throw (cssu::RuntimeException)
-{
-    return rServiceName == "com.sun.star.xml.crypto.SEInitializer";
-}
-
 cssu::Sequence< OUString > SAL_CALL SEInitializer_MSCryptImpl_getSupportedServiceNames()
     throw (cssu::RuntimeException)
 {
@@ -183,7 +178,7 @@ OUString SAL_CALL SEInitializer_MSCryptImpl::getImplementationName()
 sal_Bool SAL_CALL SEInitializer_MSCryptImpl::supportsService( const OUString& rServiceName )
     throw (cssu::RuntimeException)
 {
-    return SEInitializer_MSCryptImpl_supportsService( rServiceName );
+    return cppu::supportsService( this, rServiceName );
 }
 
 cssu::Sequence< OUString > SAL_CALL SEInitializer_MSCryptImpl::getSupportedServiceNames()

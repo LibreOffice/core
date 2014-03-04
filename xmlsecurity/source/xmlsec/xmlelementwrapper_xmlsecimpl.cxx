@@ -20,11 +20,11 @@
 #include <string.h>
 
 #include "xmlelementwrapper_xmlsecimpl.hxx"
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
 namespace cssu = com::sun::star::uno;
 
-#define SERVICE_NAME "com.sun.star.xml.wrapper.XMLElementWrapper"
 #define IMPLEMENTATION_NAME "com.sun.star.xml.security.bridge.xmlsec.XMLElementWrapper_XmlSecImpl"
 
 XMLElementWrapper_XmlSecImpl::XMLElementWrapper_XmlSecImpl(const xmlNodePtr pNode)
@@ -76,21 +76,14 @@ OUString XMLElementWrapper_XmlSecImpl_getImplementationName ()
     return OUString ( IMPLEMENTATION_NAME );
 }
 
-sal_Bool SAL_CALL XMLElementWrapper_XmlSecImpl_supportsService( const OUString& ServiceName )
-    throw (cssu::RuntimeException)
-{
-    return ServiceName == SERVICE_NAME;
-}
-
 cssu::Sequence< OUString > SAL_CALL XMLElementWrapper_XmlSecImpl_getSupportedServiceNames(  )
     throw (cssu::RuntimeException)
 {
     cssu::Sequence < OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] =  OUString ( SERVICE_NAME );
+    pArray[0] = "com.sun.star.xml.wrapper.XMLElementWrapper";
     return aRet;
 }
-#undef SERVICE_NAME
 
 cssu::Reference< cssu::XInterface > SAL_CALL
     XMLElementWrapper_XmlSecImpl_createInstance(
@@ -109,7 +102,7 @@ OUString SAL_CALL XMLElementWrapper_XmlSecImpl::getImplementationName(  )
 sal_Bool SAL_CALL XMLElementWrapper_XmlSecImpl::supportsService( const OUString& rServiceName )
     throw (cssu::RuntimeException, std::exception)
 {
-    return XMLElementWrapper_XmlSecImpl_supportsService( rServiceName );
+    return cppu::supportsService( this, rServiceName );
 }
 cssu::Sequence< OUString > SAL_CALL XMLElementWrapper_XmlSecImpl::getSupportedServiceNames(  )
     throw (cssu::RuntimeException, std::exception)

@@ -21,6 +21,7 @@
 
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "URIHelper.hxx"
 
@@ -272,14 +273,7 @@ sal_Bool SAL_CALL
 ScriptingFrameworkURIHelper::supportsService( const OUString& serviceName )
     throw( uno::RuntimeException, std::exception )
 {
-    OUString m_sServiceName(
-        "com.sun.star.script.provider.ScriptURIHelper" );
-
-    if ( serviceName.equals( m_sServiceName ) )
-    {
-        return sal_True;
-    }
-    return sal_False;
+    return cppu::supportsService( this, serviceName );
 }
 
 uno::Sequence< OUString > SAL_CALL

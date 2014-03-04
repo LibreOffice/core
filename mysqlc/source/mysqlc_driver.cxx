@@ -108,11 +108,9 @@ OUString SAL_CALL MysqlCDriver::getImplementationName()
 }
 /* }}} */
 
-/* {{{ MysqlCDriver::supportsService() -I- */
 sal_Bool SAL_CALL MysqlCDriver::supportsService(const OUString& _rServiceName)
     throw(RuntimeException, std::exception)
 {
-    OSL_TRACE("MysqlCDriver::supportsService");
     return cppu::supportsService(this, _rServiceName);
 }
 /* }}} */
