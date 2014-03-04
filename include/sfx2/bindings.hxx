@@ -148,7 +148,6 @@ public:
 
     sal_Bool         IsBound( sal_uInt16 nMsgId, sal_uInt16 nStartSearchAt = 0 );
 
-    const SfxSlot*   GetSlot( sal_uInt16 nMsgId );
     SfxStateCache*   GetStateCache( sal_uInt16 nId);
     SAL_DLLPRIVATE SfxStateCache* GetAnyStateCache_Impl( sal_uInt16 nId );
     /**
@@ -175,7 +174,6 @@ public:
     void             LeaveRegistrations( sal_uInt16 nLevel = USHRT_MAX, const char *pFile = 0, int nLine = 0 );
     void             Register( SfxControllerItem& rBinding );
     void             Release( SfxControllerItem& rBinding );
-    SystemWindow*    GetSystemWindow() const;
     SfxDispatcher*   GetDispatcher() const
                      { return pDispatcher; }
     com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > GetRecorder() const;

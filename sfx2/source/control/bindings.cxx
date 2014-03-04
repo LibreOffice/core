@@ -1829,23 +1829,6 @@ void SfxBindings::LeaveRegistrations( sal_uInt16 nLevel, const char *pFile, int 
 
 
 
-const SfxSlot* SfxBindings::GetSlot(sal_uInt16 nSlotId)
-{
-    DBG_ASSERT( pImp->pCaches != 0, "SfxBindings not initialized" );
-
-    // synchronizing
-    pDispatcher->Flush();
-    if ( pImp->bMsgDirty )
-        UpdateSlotServer_Impl();
-
-    // get the cache for the specified function; return if not bound
-    SfxStateCache* pCache = GetStateCache(nSlotId);
-    return pCache && pCache->GetSlotServer(*pDispatcher, pImp->xProv)?
-            pCache->GetSlotServer(*pDispatcher, pImp->xProv)->GetSlot(): 0;
-}
-
-
-
 void SfxBindings::SetDispatcher( SfxDispatcher *pDisp )
 {
     SfxDispatcher *pOldDispat = pDispatcher;
@@ -2178,15 +2161,6 @@ void SfxBindings::SetDispatchProvider_Impl( const ::com::sun::star::uno::Referen
 
     if ( pImp->pSubBindings )
         pImp->pSubBindings->SetDispatchProvider_Impl( pImp->xProv );
-}
-
-SystemWindow* SfxBindings::GetSystemWindow() const
-{
-    SfxViewFrame *pFrame = pDispatcher->GetFrame();
-    while ( pFrame->GetParentViewFrame_Impl() )
-        pFrame = pFrame->GetParentViewFrame_Impl();
-    SfxViewFrame* pTop = pFrame->GetTopViewFrame();
-    return pTop->GetFrame().GetTopWindow_Impl();
 }
 
 sal_Bool SfxBindings::ExecuteCommand_Impl( const OUString& rCommand )
