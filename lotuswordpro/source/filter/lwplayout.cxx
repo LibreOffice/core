@@ -78,6 +78,12 @@
 
 LwpVirtualLayout::LwpVirtualLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpDLNFPVList(objHdr, pStrm)
+    , m_nAttributes(0)
+    , m_nAttributes2(0)
+    , m_nAttributes3(0)
+    , m_nOverrideFlag(0)
+    , m_nDirection(0)
+    , m_nEditorID(0)
 {
 }
 
