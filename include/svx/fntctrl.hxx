@@ -40,7 +40,7 @@ class SVX_DLLPUBLIC SvxFontPrevWindow : public Window
 private:
     FontPrevWin_Impl*   pImpl;
 
-    SVX_DLLPRIVATE void InitSettings( sal_Bool bForeground, sal_Bool bBackground );
+    SVX_DLLPRIVATE void InitSettings( bool bForeground, bool bBackground );
     SVX_DLLPRIVATE void Init ();
     SVX_DLLPRIVATE void SetFontSize(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont);
     SVX_DLLPRIVATE void SetFontLang(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont);

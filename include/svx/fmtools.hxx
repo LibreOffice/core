@@ -104,8 +104,8 @@ private:
 public:
     // Construction/Destruction
     CursorWrapper() { }
-    CursorWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxCursor, sal_Bool bUseCloned = sal_False);
-    SVX_DLLPUBLIC CursorWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _rxCursor, sal_Bool bUseCloned = sal_False);
+    CursorWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxCursor, bool bUseCloned = false);
+    SVX_DLLPUBLIC CursorWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _rxCursor, bool bUseCloned = false);
         // if bUseCloned == sal_True, the cursor is first doubled over the XCloneable interface (which it must implement)
         // and then used
 
@@ -114,8 +114,8 @@ public:
         return lhs.m_xGeneric.get() == rhs.m_xGeneric.get();
     }
 
-    sal_Bool is() const { return m_xMoveOperations.is(); }
-    sal_Bool Is() const { return m_xMoveOperations.is(); }
+    bool is() const { return m_xMoveOperations.is(); }
+    bool Is() const { return m_xMoveOperations.is(); }
 
     CursorWrapper* operator ->() { return this; }
     operator const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& () const{ return m_xGeneric; }
@@ -166,7 +166,7 @@ public:
     // ::com::sun::star::sdbcx::XColumnsSupplier
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> getColumns() const throw( ::com::sun::star::uno::RuntimeException ) { return m_xColumnsSupplier->getColumns(); }
 private:
-    void ImplConstruct(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _rxCursor, sal_Bool bUseCloned);
+    void ImplConstruct(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _rxCursor, bool bUseCloned);
 };
 
 
@@ -212,7 +212,7 @@ sal_Int16       getControlTypeByObject(const ::com::sun::star::uno::Reference< :
     // get the object type (OBJ_FM_...) from the services the object supports
 
 
-sal_Bool isRowSetAlive(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rxRowSet);
+bool isRowSetAlive(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rxRowSet);
     // checks if the ::com::sun::star::sdbcx::XColumnsSupplier provided by _rxRowSet supllies any columns
 
 

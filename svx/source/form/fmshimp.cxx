@@ -481,18 +481,18 @@ namespace
 
 // check if the control has one of the interfaces we can use for searching
 // *_pCurrentText will be filled with the current text of the control (as used when searching this control)
-sal_Bool IsSearchableControl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rxControl,
+bool IsSearchableControl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rxControl,
     OUString* _pCurrentText )
 {
     if ( !_rxControl.is() )
-        return sal_False;
+        return false;
 
     Reference< XTextComponent > xAsText( _rxControl, UNO_QUERY );
     if ( xAsText.is() )
     {
         if ( _pCurrentText )
             *_pCurrentText = xAsText->getText();
-        return sal_True;
+        return true;
     }
 
     Reference< XListBox > xListBox( _rxControl, UNO_QUERY );
@@ -500,7 +500,7 @@ sal_Bool IsSearchableControl( const ::com::sun::star::uno::Reference< ::com::sun
     {
         if ( _pCurrentText )
             *_pCurrentText = xListBox->getSelectedItem();
-        return sal_True;
+        return true;
     }
 
     Reference< XCheckBox > xCheckBox( _rxControl, UNO_QUERY );
@@ -515,10 +515,10 @@ sal_Bool IsSearchableControl( const ::com::sun::star::uno::Reference< ::com::sun
                 default: *_pCurrentText = ""; break;
             }
         }
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 
@@ -2558,7 +2558,7 @@ void FmXFormShell::elementInserted(const ContainerEvent& evt) throw(::com::sun::
     Reference< XInterface> xTemp;
     evt.Element >>= xTemp;
     AddElement(xTemp);
-    m_pShell->DetermineForms(sal_True);
+    m_pShell->DetermineForms(true);
 }
 
 
@@ -2583,7 +2583,7 @@ void FmXFormShell::elementRemoved(const ContainerEvent& evt) throw(::com::sun::s
     Reference< XInterface> xTemp;
     evt.Element >>= xTemp;
     RemoveElement(xTemp);
-    m_pShell->DetermineForms(sal_True);
+    m_pShell->DetermineForms(true);
 }
 
 

@@ -57,14 +57,14 @@ namespace svx
 
 class SVX_DLLPUBLIC FmDesignModeChangedHint : public SfxHint
 {
-    sal_Bool m_bDesignMode;
+    bool m_bDesignMode;
 
 public:
     TYPEINFO();
-    FmDesignModeChangedHint( sal_Bool bDesMode );
+    FmDesignModeChangedHint( bool bDesMode );
     virtual ~FmDesignModeChangedHint();
 
-    sal_Bool GetDesignMode() const { return m_bDesignMode; }
+    bool GetDesignMode() const { return m_bDesignMode; }
 };
 
 
@@ -113,7 +113,7 @@ public:
     void ExecuteTextAttribute( SfxRequest& );
     void GetTextAttributeState( SfxItemSet& );
 
-    sal_Bool GetY2KState(sal_uInt16& nReturn);
+    bool GetY2KState(sal_uInt16& nReturn);
     void SetY2KState(sal_uInt16 n);
 
     void SetView(FmFormView* pView);
@@ -123,7 +123,7 @@ public:
     FmFormPage*  GetCurPage() const;
     FmXFormShell* GetImpl() const {return m_pImpl;};
 
-    bool PrepareClose(sal_Bool bUI = sal_True);
+    bool PrepareClose(bool bUI = true);
 
     bool        IsActiveControl() const;
     void        ForgetActiveControl();
@@ -161,15 +161,15 @@ public:
                 const OutputDevice& i_rDevice
             ) const;
 
-    sal_Bool    IsDesignMode() const { return m_bDesignMode; }
+    bool        IsDesignMode() const { return m_bDesignMode; }
     void        SetDesignMode( bool _bDesignMode );
 
 protected:
     void GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich);
 
     // is there a form on the current page?
-    void DetermineForms(sal_Bool bInvalidate);
-    void impl_setDesignMode( sal_Bool bDesign);
+    void DetermineForms(bool bInvalidate);
+    void impl_setDesignMode( bool bDesign);
 };
 
 // ***************************************************************************************************

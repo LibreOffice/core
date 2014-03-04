@@ -151,7 +151,7 @@ using namespace ::svxform;
 TYPEINIT1( FmDesignModeChangedHint, SfxHint );
 
 
-FmDesignModeChangedHint::FmDesignModeChangedHint( sal_Bool bDesMode )
+FmDesignModeChangedHint::FmDesignModeChangedHint( bool bDesMode )
     :m_bDesignMode( bDesMode )
 {
 }
@@ -247,7 +247,7 @@ void FmFormShell::NotifyMarkListChanged(FmFormView* pWhichView)
 }
 
 
-bool FmFormShell::PrepareClose(sal_Bool bUI)
+bool FmFormShell::PrepareClose(bool bUI)
 {
     if ( GetImpl()->didPrepareClose() )
         // we already did a PrepareClose for the current modifications of the current form
@@ -300,7 +300,7 @@ bool FmFormShell::PrepareClose(sal_Bool bUI)
 }
 
 
-void FmFormShell::impl_setDesignMode(sal_Bool bDesign)
+void FmFormShell::impl_setDesignMode(bool bDesign)
 {
     if (m_pFormView)
     {
@@ -1226,7 +1226,7 @@ void FmFormShell::SetView( FmFormView* _pView )
 }
 
 
-void FmFormShell::DetermineForms(sal_Bool bInvalidate)
+void FmFormShell::DetermineForms(bool bInvalidate)
 {
     // Existieren Formulare auf der aktuellen Page
     bool bForms = GetImpl()->hasForms();
@@ -1239,7 +1239,7 @@ void FmFormShell::DetermineForms(sal_Bool bInvalidate)
 }
 
 
-sal_Bool FmFormShell::GetY2KState(sal_uInt16& nReturn)
+bool FmFormShell::GetY2KState(sal_uInt16& nReturn)
 {
     return GetImpl()->GetY2KState(nReturn);
 }
@@ -1464,7 +1464,7 @@ void FmFormShell::SetDesignMode( bool _bDesignMode )
         pModel->GetUndoEnv().Lock();
 
     // dann die eigentliche Umschaltung
-    if ( m_bDesignMode || PrepareClose( sal_True ) )
+    if ( m_bDesignMode || PrepareClose( true ) )
         impl_setDesignMode(!m_bDesignMode );
 
     // und mein Undo-Environment wieder an

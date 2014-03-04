@@ -1115,7 +1115,7 @@ sal_Bool DrawViewShell::IsSwitchPageAllowed() const
     bool bOK = true;
 
     FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager()->GetFormShell();
-    if (pFormShell!=NULL && !pFormShell->PrepareClose (sal_False))
+    if (pFormShell != NULL && !pFormShell->PrepareClose(false))
         bOK = false;
 
     return bOK;

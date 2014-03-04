@@ -117,7 +117,7 @@ public:
         @param _bForceSync
             <TRUE/> if the handling should be done synchronously.
     */
-    SVX_DLLPRIVATE void GrabFirstControlFocus( sal_Bool _bForceSync = sal_False );
+    SVX_DLLPRIVATE void GrabFirstControlFocus( bool _bForceSync = false );
 
     /** returns the form controller for a given form and a given device
     */
@@ -133,9 +133,9 @@ public:
     SVX_DLLPRIVATE void ActivateControls(SdrPageView*);
     SVX_DLLPRIVATE void DeactivateControls(SdrPageView*);
 
-     SVX_DLLPRIVATE void ChangeDesignMode(sal_Bool bDesign);
+    SVX_DLLPRIVATE void ChangeDesignMode(bool bDesign);
 
-     SVX_DLLPRIVATE FmXFormView* GetImpl() const { return pImpl; }
+    SVX_DLLPRIVATE FmXFormView* GetImpl() const { return pImpl; }
     SVX_DLLPRIVATE FmFormShell* GetFormShell() const { return pFormShell; }
 
     struct FormShellAccess { friend class FmFormShell; private: FormShellAccess() { } };
@@ -150,7 +150,7 @@ public:
     virtual void EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer);
 
     SVX_DLLPRIVATE const OutputDevice* GetActualOutDev() const {return pActualOutDev;}
-    SVX_DLLPRIVATE sal_Bool checkUnMarkAll(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xSource);
+    SVX_DLLPRIVATE bool checkUnMarkAll(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xSource);
 
 private:
     SVX_DLLPRIVATE void AdjustMarks(const SdrMarkList& rMarkList);

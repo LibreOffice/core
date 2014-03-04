@@ -35,14 +35,14 @@ namespace svxform
         ,nLevOther          ( 2 )
         ,nLevShorter        ( 2 )
         ,nLevLonger         ( 2 )
-        ,bLevRelaxed        ( sal_True )
-        ,bAllFields         ( sal_False )
-        ,bUseFormatter      ( sal_True )
-        ,bBackwards         ( sal_False )
-        ,bWildcard          ( sal_False )
-        ,bRegular           ( sal_False )
-        ,bApproxSearch      ( sal_False )
-        ,bSoundsLikeCJK     ( sal_False )
+        ,bLevRelaxed        ( true )
+        ,bAllFields         ( false )
+        ,bUseFormatter      ( true )
+        ,bBackwards         ( false )
+        ,bWildcard          ( false )
+        ,bRegular           ( false )
+        ,bApproxSearch      ( false )
+        ,bSoundsLikeCJK     ( false )
     {
         nTransliterationFlags =
                 TransliterationModules_ignoreSpace_ja_JP
@@ -52,17 +52,17 @@ namespace svxform
             |   TransliterationModules_IGNORE_CASE;
     }
 
-    sal_Bool FmSearchParams::isIgnoreWidthCJK( ) const
+    bool FmSearchParams::isIgnoreWidthCJK( ) const
     {
         return 0 != (nTransliterationFlags & TransliterationModules_IGNORE_WIDTH);
     }
 
-    sal_Bool FmSearchParams::isCaseSensitive( ) const
+    bool FmSearchParams::isCaseSensitive( ) const
     {
         return 0 == (nTransliterationFlags & TransliterationModules_IGNORE_CASE);
     }
 
-    void FmSearchParams::setCaseSensitive( sal_Bool _bCase )
+    void FmSearchParams::setCaseSensitive( bool _bCase )
     {
         if ( _bCase )
             nTransliterationFlags &= ~TransliterationModules_IGNORE_CASE;

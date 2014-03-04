@@ -208,9 +208,9 @@ OUString CheckBoxWrapper::getCurrentText() const
 
 // = FmSearchEngine
 
-sal_Bool FmSearchEngine::MoveCursor()
+bool FmSearchEngine::MoveCursor()
 {
-    sal_Bool bSuccess = sal_True;
+    bool bSuccess = true;
     try
     {
         if (m_bForward)
@@ -243,7 +243,7 @@ sal_Bool FmSearchEngine::MoveCursor()
 #else
         (void)e;
 #endif
-        bSuccess = sal_False;
+        bSuccess = false;
     }
     catch(Exception const& e)
     {
@@ -255,21 +255,21 @@ sal_Bool FmSearchEngine::MoveCursor()
 #else
         (void)e;
 #endif
-        bSuccess = sal_False;
+        bSuccess = false;
     }
     catch(...)
     {
         OSL_FAIL("FmSearchEngine::MoveCursor : catched an unknown Exception !");
-        bSuccess = sal_False;
+        bSuccess = false;
     }
 
     return bSuccess;
 }
 
 
-sal_Bool FmSearchEngine::MoveField(sal_Int32& nPos, FieldCollection::iterator& iter, const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd)
+bool FmSearchEngine::MoveField(sal_Int32& nPos, FieldCollection::iterator& iter, const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd)
 {
-    sal_Bool bSuccess(sal_True);
+    bool bSuccess(true);
     if (m_bForward)
     {
         ++iter;
@@ -312,7 +312,7 @@ void FmSearchEngine::BuildAndInsertFieldInfo(const Reference< ::com::sun::star::
     FieldInfo fiCurrent;
     fiCurrent.xContents = Reference< ::com::sun::star::sdb::XColumn > (xCurrentField, UNO_QUERY);
     fiCurrent.nFormatKey = ::comphelper::getINT32(xProperties->getPropertyValue(FM_PROP_FORMATKEY));
-    fiCurrent.bDoubleHandling = sal_False;
+    fiCurrent.bDoubleHandling = false;
     if (m_xFormatSupplier.is())
     {
         Reference< ::com::sun::star::util::XNumberFormats >  xNumberFormats(m_xFormatSupplier->getNumberFormats());
@@ -395,7 +395,7 @@ OUString FmSearchEngine::FormatField(sal_Int32 nWhich)
 }
 
 
-FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchSpecial(sal_Bool _bSearchForNull, sal_Int32& nFieldPos,
+FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchSpecial(bool _bSearchForNull, sal_Int32& nFieldPos,
     FieldCollection::iterator& iterFieldLoop, const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd)
 {
     // die Startposition merken
@@ -405,8 +405,8 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchSpecial(sal_Bool _bSearchFor
     FieldCollection::iterator iterInitialField = iterFieldLoop;
 
 
-    sal_Bool bFound(sal_False);
-    sal_Bool bMovedAround(sal_False);
+    bool bFound(false);
+    bool bMovedAround(false);
     do
     {
         if (m_eMode == SM_ALLOWSCHEDULE)
@@ -422,7 +422,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchSpecial(sal_Bool _bSearchFor
 
         // der aktuell zu vergleichende Inhalt
         iterFieldLoop->xContents->getString();  // needed for wasNull
-        bFound = _bSearchForNull == iterFieldLoop->xContents->wasNull();
+        bFound = (_bSearchForNull ? 1 : 0) == iterFieldLoop->xContents->wasNull();
         if (bFound)
             break;
 
@@ -673,19 +673,19 @@ FmSearchEngine::FmSearchEngine(const Reference< XComponentContext >& _rxContext,
     ,m_aCharacterClassficator( _rxContext, SvtSysLocale().GetLanguageTag() )
     ,m_aStringCompare( _rxContext )
     ,m_nCurrentFieldIndex(-2)   // -1 hat schon eine Bedeutung, also nehme ich -2 fuer 'ungueltig'
-    ,m_bUsingTextComponents(sal_False)
+    ,m_bUsingTextComponents(false)
     ,m_eSearchForType(SEARCHFOR_STRING)
     ,m_srResult(SR_FOUND)
-    ,m_bSearchingCurrently(sal_False)
-    ,m_bCancelAsynchRequest(sal_False)
+    ,m_bSearchingCurrently(false)
+    ,m_bCancelAsynchRequest(false)
     ,m_eMode(eMode)
-    ,m_bFormatter(sal_False)
-    ,m_bForward(sal_False)
-    ,m_bWildcard(sal_False)
-    ,m_bRegular(sal_False)
-    ,m_bLevenshtein(sal_False)
-    ,m_bTransliteration(sal_False)
-    ,m_bLevRelaxed(sal_False)
+    ,m_bFormatter(false)
+    ,m_bForward(false)
+    ,m_bWildcard(false)
+    ,m_bRegular(false)
+    ,m_bLevenshtein(false)
+    ,m_bTransliteration(false)
+    ,m_bLevRelaxed(false)
     ,m_nLevOther(0)
     ,m_nLevShorter(0)
     ,m_nLevLonger(0)
@@ -709,21 +709,21 @@ FmSearchEngine::FmSearchEngine(const Reference< XComponentContext >& _rxContext,
     ,m_aCharacterClassficator( _rxContext, SvtSysLocale().GetLanguageTag() )
     ,m_aStringCompare( _rxContext )
     ,m_nCurrentFieldIndex(-2)   // -1 hat schon eine Bedeutung, also nehme ich -2 fuer 'ungueltig'
-    ,m_bUsingTextComponents(sal_True)
+    ,m_bUsingTextComponents(true)
     ,m_xOriginalIterator(xCursor)
-    ,m_xClonedIterator(m_xOriginalIterator, sal_True)
+    ,m_xClonedIterator(m_xOriginalIterator, true)
     ,m_eSearchForType(SEARCHFOR_STRING)
     ,m_srResult(SR_FOUND)
-    ,m_bSearchingCurrently(sal_False)
-    ,m_bCancelAsynchRequest(sal_False)
+    ,m_bSearchingCurrently(false)
+    ,m_bCancelAsynchRequest(false)
     ,m_eMode(eMode)
-    ,m_bFormatter(sal_True)     // das muss konsistent sein mit m_xSearchCursor, der i.A. == m_xOriginalIterator ist
-    ,m_bForward(sal_False)
-    ,m_bWildcard(sal_False)
-    ,m_bRegular(sal_False)
-    ,m_bLevenshtein(sal_False)
-    ,m_bTransliteration(sal_False)
-    ,m_bLevRelaxed(sal_False)
+    ,m_bFormatter(true)     // das muss konsistent sein mit m_xSearchCursor, der i.A. == m_xOriginalIterator ist
+    ,m_bForward(false)
+    ,m_bWildcard(false)
+    ,m_bRegular(false)
+    ,m_bLevenshtein(false)
+    ,m_bTransliteration(false)
+    ,m_bLevRelaxed(false)
     ,m_nLevOther(0)
     ,m_nLevShorter(0)
     ,m_nLevLonger(0)
@@ -743,7 +743,7 @@ FmSearchEngine::~FmSearchEngine()
 }
 
 
-void FmSearchEngine::SetIgnoreWidthCJK(sal_Bool bSet)
+void FmSearchEngine::SetIgnoreWidthCJK(bool bSet)
 {
     if (bSet)
         m_nTransliterationFlags |= TransliterationModules_IGNORE_WIDTH;
@@ -752,13 +752,13 @@ void FmSearchEngine::SetIgnoreWidthCJK(sal_Bool bSet)
 }
 
 
-sal_Bool FmSearchEngine::GetIgnoreWidthCJK() const
+bool FmSearchEngine::GetIgnoreWidthCJK() const
 {
     return 0 != (m_nTransliterationFlags & TransliterationModules_IGNORE_WIDTH);
 }
 
 
-void FmSearchEngine::SetCaseSensitive(sal_Bool bSet)
+void FmSearchEngine::SetCaseSensitive(bool bSet)
 {
     if (bSet)
         m_nTransliterationFlags &= ~TransliterationModules_IGNORE_CASE;
@@ -767,7 +767,7 @@ void FmSearchEngine::SetCaseSensitive(sal_Bool bSet)
 }
 
 
-sal_Bool FmSearchEngine::GetCaseSensitive() const
+bool FmSearchEngine::GetCaseSensitive() const
 {
     return 0 == (m_nTransliterationFlags & TransliterationModules_IGNORE_CASE);
 }
@@ -898,7 +898,7 @@ void FmSearchEngine::Init(const OUString& sVisibleFields)
 }
 
 
-void FmSearchEngine::SetFormatterUsing(sal_Bool bSet)
+void FmSearchEngine::SetFormatterUsing(bool bSet)
 {
     if (m_bFormatter == bSet)
         return;
@@ -930,14 +930,14 @@ void FmSearchEngine::SetFormatterUsing(sal_Bool bSet)
 
         // ich muss die Fields neu binden, da der Textaustausch eventuell ueber diese Fields erfolgt und sich der unterliegende Cursor
         // geaendert hat
-        RebuildUsedFields(m_nCurrentFieldIndex, sal_True);
+        RebuildUsedFields(m_nCurrentFieldIndex, true);
     }
     else
         InvalidatePreviousLoc();
 }
 
 
-void FmSearchEngine::PropagateProgress(sal_Bool _bDontPropagateOverflow)
+void FmSearchEngine::PropagateProgress(bool _bDontPropagateOverflow)
 {
     if (m_aProgressHandler.IsSet())
     {
@@ -1034,7 +1034,7 @@ void FmSearchEngine::SearchNextImpl()
         nFieldPos = iterFieldCheck - iterBegin;
     }
 
-    PropagateProgress(sal_True);
+    PropagateProgress(true);
     SEARCH_RESULT srResult;
     if (m_eSearchForType != SEARCHFOR_STRING)
         srResult = SearchSpecial(m_eSearchForType == SEARCHFOR_NULL, nFieldPos, iterFieldCheck, iterBegin, iterEnd);
@@ -1099,7 +1099,7 @@ IMPL_LINK(FmSearchEngine, OnSearchTerminated, FmSearchThread*, /*pThread*/)
     // per definitionem muss der Link Thread-sicher sein (das verlange ich einfach), so dass ich mich um so etwas hier nicht kuemmern muss
     m_aProgressHandler.Call(&aProgress);
 
-    m_bSearchingCurrently = sal_False;
+    m_bSearchingCurrently = false;
     return 0L;
 }
 
@@ -1118,10 +1118,10 @@ IMPL_LINK(FmSearchEngine, OnNewRecordCount, void*, pCounterAsVoid)
 }
 
 
-sal_Bool FmSearchEngine::CancelRequested()
+bool FmSearchEngine::CancelRequested()
 {
     m_aCancelAsynchAccess.acquire();
-    sal_Bool bReturn = m_bCancelAsynchRequest;
+    bool bReturn = m_bCancelAsynchRequest;
     m_aCancelAsynchAccess.release();
     return bReturn;
 }
@@ -1130,36 +1130,36 @@ sal_Bool FmSearchEngine::CancelRequested()
 void FmSearchEngine::CancelSearch()
 {
     m_aCancelAsynchAccess.acquire();
-    m_bCancelAsynchRequest = sal_True;
+    m_bCancelAsynchRequest = true;
     m_aCancelAsynchAccess.release();
 }
 
 
-sal_Bool FmSearchEngine::SwitchToContext(const Reference< ::com::sun::star::sdbc::XResultSet > & xCursor, const OUString& sVisibleFields, const InterfaceArray& arrFields,
+bool FmSearchEngine::SwitchToContext(const Reference< ::com::sun::star::sdbc::XResultSet > & xCursor, const OUString& sVisibleFields, const InterfaceArray& arrFields,
     sal_Int32 nFieldIndex)
 {
     DBG_ASSERT(!m_bSearchingCurrently, "FmSearchEngine::SwitchToContext : please do not call while I'm searching !");
     if (m_bSearchingCurrently)
-        return sal_False;
+        return false;
 
     m_xSearchCursor = xCursor;
     m_xOriginalIterator = xCursor;
-    m_xClonedIterator = CursorWrapper(m_xOriginalIterator, sal_True);
-    m_bUsingTextComponents = sal_True;
+    m_xClonedIterator = CursorWrapper(m_xOriginalIterator, true);
+    m_bUsingTextComponents = true;
 
     fillControlTexts(arrFields);
 
     Init(sVisibleFields);
-    RebuildUsedFields(nFieldIndex, sal_True);
+    RebuildUsedFields(nFieldIndex, true);
 
-    return sal_True;
+    return true;
 }
 
 
 void FmSearchEngine::ImplStartNextSearch()
 {
-    m_bCancelAsynchRequest = sal_False;
-    m_bSearchingCurrently = sal_True;
+    m_bCancelAsynchRequest = false;
+    m_bSearchingCurrently = true;
 
     if (m_eMode == SM_USETHREAD)
     {
@@ -1187,7 +1187,7 @@ void FmSearchEngine::SearchNext(const OUString& strExpression)
 }
 
 
-void FmSearchEngine::SearchNextSpecial(sal_Bool _bSearchForNull)
+void FmSearchEngine::SearchNextSpecial(bool _bSearchForNull)
 {
     m_eSearchForType = _bSearchForNull ? SEARCHFOR_NULL : SEARCHFOR_NOTNULL;
     ImplStartNextSearch();
@@ -1214,7 +1214,7 @@ void FmSearchEngine::StartOver(const OUString& strExpression)
 }
 
 
-void FmSearchEngine::StartOverSpecial(sal_Bool _bSearchForNull)
+void FmSearchEngine::StartOverSpecial(bool _bSearchForNull)
 {
     try
     {
@@ -1241,7 +1241,7 @@ void FmSearchEngine::InvalidatePreviousLoc()
 }
 
 
-void FmSearchEngine::RebuildUsedFields(sal_Int32 nFieldIndex, sal_Bool bForce)
+void FmSearchEngine::RebuildUsedFields(sal_Int32 nFieldIndex, bool bForce)
 {
     if (!bForce && (nFieldIndex == m_nCurrentFieldIndex))
         return;

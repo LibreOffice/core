@@ -64,12 +64,12 @@ struct FmSearchProgress
     enum STATE { STATE_PROGRESS, STATE_PROGRESS_COUNTING, STATE_CANCELED, STATE_SUCCESSFULL, STATE_NOTHINGFOUND, STATE_ERROR };
     // (move to new record; progress during counting of records; cancelled; record found; nothing found;
     // any non-processable error)
-    STATE   aSearchState;
+    STATE       aSearchState;
 
     // current record - always valid (e.g. of interest for continuing search in case of cancellation)
     sal_uInt32  nCurrentRecord;
     // Overflow - only valid in case of STATE_PROGRESS
-    sal_Bool    bOverflow;
+    bool        bOverflow;
 
     // the position of the search cursor - valid in case of STATE_SUCCESSFULL, STATE_CANCELED and STATE_NOTHING_FOUND
     ::com::sun::star::uno::Any  aBookmark;
@@ -184,7 +184,7 @@ class SVX_DLLPUBLIC FmSearchEngine
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >          xContents;
         sal_uInt32              nFormatKey;
-        sal_Bool                bDoubleHandling;
+        bool                    bDoubleHandling;
     };
 
     typedef std::vector<FieldInfo> FieldCollection;
@@ -194,7 +194,7 @@ class SVX_DLLPUBLIC FmSearchEngine
     typedef std::vector<svxform::ControlTextWrapper*> ControlTextSuppliers;
     ControlTextSuppliers    m_aControlTexts;
 
-    sal_Bool                m_bUsingTextComponents;
+    bool                    m_bUsingTextComponents;
     CursorWrapper           m_xOriginalIterator;
     CursorWrapper           m_xClonedIterator;
 
@@ -209,21 +209,21 @@ class SVX_DLLPUBLIC FmSearchEngine
 
     // The link we broadcast the progress and the result to
     Link                m_aProgressHandler;
-    sal_Bool            m_bSearchingCurrently : 1;      // is an (asynchronous) search running?
-    sal_Bool            m_bCancelAsynchRequest : 1;     // should be cancelled?
+    bool                m_bSearchingCurrently : 1;      // is an (asynchronous) search running?
+    bool                m_bCancelAsynchRequest : 1;     // should be cancelled?
     ::osl::Mutex        m_aCancelAsynchAccess;          // access to_bCancelAsynchRequest (technically only
                                                         // relevant for m_eMode == SM_USETHREAD)
     FMSEARCH_MODE   m_eMode;                            // current mode
 
     // parameters for the search
-    sal_Bool    m_bFormatter : 1;       // use field formatting
-    sal_Bool    m_bForward : 1;         // direction
-    sal_Bool    m_bWildcard : 1;        // wildcard search
-    sal_Bool    m_bRegular : 1;         // regular expression
-    sal_Bool    m_bLevenshtein : 1;     // Levenshtein search
-    sal_Bool    m_bTransliteration : 1; // Levenshtein search
+    bool        m_bFormatter : 1;       // use field formatting
+    bool        m_bForward : 1;         // direction
+    bool        m_bWildcard : 1;        // wildcard search
+    bool        m_bRegular : 1;         // regular expression
+    bool        m_bLevenshtein : 1;     // Levenshtein search
+    bool        m_bTransliteration : 1; // Levenshtein search
 
-    sal_Bool    m_bLevRelaxed : 1;      // parameters for Levenshtein search
+    bool        m_bLevRelaxed : 1;      // parameters for Levenshtein search
     sal_uInt16  m_nLevOther;
     sal_uInt16  m_nLevShorter;
     sal_uInt16  m_nLevLonger;
@@ -235,35 +235,35 @@ class SVX_DLLPUBLIC FmSearchEngine
 
 // member access
 private:
-    SVX_DLLPRIVATE sal_Bool CancelRequested();      // provides a through m_aCancelAsynchAccess backed interpretation of m_bCancelAsynchRequest
+    SVX_DLLPRIVATE bool CancelRequested();      // provides a through m_aCancelAsynchAccess backed interpretation of m_bCancelAsynchRequest
 
 public:
-    void        SetCaseSensitive(sal_Bool bSet);
-    sal_Bool    GetCaseSensitive() const;
+    void        SetCaseSensitive(bool bSet);
+    bool        GetCaseSensitive() const;
 
-    void        SetFormatterUsing(sal_Bool bSet);   // this is somewhat more extensive, so no inline ... here
-    sal_Bool    GetFormatterUsing() const           { return m_bFormatter; }
+    void        SetFormatterUsing(bool bSet);   // this is somewhat more extensive, so no inline ... here
+    bool        GetFormatterUsing() const           { return m_bFormatter; }
 
-    void        SetDirection(sal_Bool bForward)     { m_bForward = bForward; }
-    sal_Bool    GetDirection() const                { return m_bForward; }
+    void        SetDirection(bool bForward)     { m_bForward = bForward; }
+    bool        GetDirection() const                { return m_bForward; }
 
-    void        SetWildcard(sal_Bool bSet)          { m_bWildcard = bSet; }
-    sal_Bool    GetWildcard() const                 { return m_bWildcard; }
+    void        SetWildcard(bool bSet)          { m_bWildcard = bSet; }
+    bool        GetWildcard() const                 { return m_bWildcard; }
 
-    void        SetRegular(sal_Bool bSet)           { m_bRegular = bSet; }
-    sal_Bool    GetRegular() const                  { return m_bRegular; }
+    void        SetRegular(bool bSet)           { m_bRegular = bSet; }
+    bool        GetRegular() const                  { return m_bRegular; }
 
-    void        SetLevenshtein(sal_Bool bSet)       { m_bLevenshtein = bSet; }
-    sal_Bool    GetLevenshtein() const              { return m_bLevenshtein; }
+    void        SetLevenshtein(bool bSet)       { m_bLevenshtein = bSet; }
+    bool        GetLevenshtein() const              { return m_bLevenshtein; }
 
-    void        SetIgnoreWidthCJK(sal_Bool bSet);
-    sal_Bool    GetIgnoreWidthCJK() const;
+    void        SetIgnoreWidthCJK(bool bSet);
+    bool        GetIgnoreWidthCJK() const;
 
-    void        SetTransliteration(sal_Bool bSet)   { m_bTransliteration = bSet; }
-    sal_Bool    GetTransliteration() const          { return m_bTransliteration; }
+    void        SetTransliteration(bool bSet)   { m_bTransliteration = bSet; }
+    bool        GetTransliteration() const          { return m_bTransliteration; }
 
-    void        SetLevRelaxed(sal_Bool bSet)        { m_bLevRelaxed = bSet; }
-    sal_Bool    GetLevRelaxed() const               { return m_bLevRelaxed; }
+    void        SetLevRelaxed(bool bSet)        { m_bLevRelaxed = bSet; }
+    bool        GetLevRelaxed() const               { return m_bLevRelaxed; }
     void        SetLevOther(sal_uInt16 nHowMuch)    { m_nLevOther = nHowMuch; }
     sal_uInt16  GetLevOther() const                 { return m_nLevOther; }
     void        SetLevShorter(sal_uInt16 nHowMuch)  { m_nLevShorter = nHowMuch; }
@@ -314,11 +314,11 @@ public:
     /// search for the next appearance (for nDirection values check DIRECTION_*-defines)
     void SearchNext(const OUString& strExpression);
     /// analogous, search for "NULL" (_bSearchForNull==sal_True) or "not NULL"
-    void SearchNextSpecial(sal_Bool _bSearchForNull);
+    void SearchNextSpecial(bool _bSearchForNull);
     /// search for the next appearance, dependent on nDirection from the start or end
     void StartOver(const OUString& strExpression);
     /// analogous, search for "NULL" (_bSearchForNull==sal_True) or "not NULL"
-    void StartOverSpecial(sal_Bool _bSearchForNull);
+    void StartOverSpecial(bool _bSearchForNull);
     /// invalidate previous search reference
     void InvalidatePreviousLoc();
 
@@ -326,7 +326,7 @@ public:
         if bForce is not set, nothing will happen in case of nFieldIndex == m_nCurrentFieldIndex
         (calls InvalidatePreviousLoc)
     */
-    void RebuildUsedFields(sal_Int32 nFieldIndex, sal_Bool bForce = sal_False);
+    void RebuildUsedFields(sal_Int32 nFieldIndex, bool bForce = false);
     OUString FormatField(sal_Int32 nWhich);
 
     /// returns directly; once it was really aborted, ProgressHandler is called with STATE_CANCELED
@@ -335,7 +335,7 @@ public:
     /** only valid, if not an (asynchronous) search is running, the next search will then be executed
         on top of the new iterator with the new parameter
     */
-    sal_Bool SwitchToContext(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& xCursor, const OUString& strVisibleFields, const InterfaceArray& arrFields,
+    bool SwitchToContext(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& xCursor, const OUString& strVisibleFields, const InterfaceArray& arrFields,
         sal_Int32 nFieldIndex);
 
 protected:
@@ -354,20 +354,20 @@ private:
     // three methods implementing a complete search loop (null/not null, wildcard, SearchText)
     // (they all have some code in common, but with this solution we have do do a distinction only once per search (before
     // starting the loop), not in every loop step
-    SVX_DLLPRIVATE SEARCH_RESULT SearchSpecial(sal_Bool _bSearchForNull, sal_Int32& nFieldPos, FieldCollection::iterator& iterFieldLoop,
+    SVX_DLLPRIVATE SEARCH_RESULT SearchSpecial(bool _bSearchForNull, sal_Int32& nFieldPos, FieldCollection::iterator& iterFieldLoop,
         const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd);
     SVX_DLLPRIVATE SEARCH_RESULT SearchWildcard(const OUString& strExpression, sal_Int32& nFieldPos, FieldCollection::iterator& iterFieldLoop,
         const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd);
     SVX_DLLPRIVATE SEARCH_RESULT SearchRegularApprox(const OUString& strExpression, sal_Int32& nFieldPos, FieldCollection::iterator& iterFieldLoop,
         const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd);
 
-    SVX_DLLPRIVATE void PropagateProgress(sal_Bool _bDontPropagateOverflow);
+    SVX_DLLPRIVATE void PropagateProgress(bool _bDontPropagateOverflow);
     // call the ProgressHandler with STATE_PROGRESS and the current position of the search iterator
 
     // helpers, that are needed several times
-    SVX_DLLPRIVATE sal_Bool MoveCursor();
+    SVX_DLLPRIVATE bool MoveCursor();
     // moves m_xSearchIterator with respect to direction/overflow cursor
-    SVX_DLLPRIVATE sal_Bool MoveField(sal_Int32& nPos, FieldCollection::iterator& iter, const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd);
+    SVX_DLLPRIVATE bool MoveField(sal_Int32& nPos, FieldCollection::iterator& iter, const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd);
     // moves the iterator with respect to the direction/overflow iterator/overflow cursor
     SVX_DLLPRIVATE void BuildAndInsertFieldInfo(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xAllFields, sal_Int32 nField);
     // builds a FieldInfo in relation to field number nField (in xAllFields) and adds it to m_arrUsedFields
@@ -375,7 +375,7 @@ private:
     SVX_DLLPRIVATE OUString FormatField(const FieldInfo& rField);
     // formats the field with the NumberFormatter
 
-    SVX_DLLPRIVATE sal_Bool HasPreviousLoc() { return m_aPreviousLocBookmark.hasValue(); }
+    SVX_DLLPRIVATE bool HasPreviousLoc() { return m_aPreviousLocBookmark.hasValue(); }
 
     DECL_LINK(OnSearchTerminated, FmSearchThread*);
     // is used by SearchThread, after the return from this handler the thread removes itself

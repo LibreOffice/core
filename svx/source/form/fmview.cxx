@@ -227,9 +227,9 @@ void FmFormView::DeleteWindowFromPaintView(OutputDevice* pNewWin)
 }
 
 
-void FmFormView::ChangeDesignMode(sal_Bool bDesign)
+void FmFormView::ChangeDesignMode(bool bDesign)
 {
-    if (bDesign == IsDesignMode())
+    if ((bDesign ? 1 : 0) == IsDesignMode())
         return;
 
     FmFormModel* pModel = PTR_CAST(FmFormModel, GetModel());
@@ -314,7 +314,7 @@ void FmFormView::ChangeDesignMode(sal_Bool bDesign)
 }
 
 
-void FmFormView::GrabFirstControlFocus( sal_Bool _bForceSync )
+void FmFormView::GrabFirstControlFocus( bool _bForceSync )
 {
     if ( !IsDesignMode() )
         pImpl->AutoFocus( _bForceSync );
@@ -540,10 +540,10 @@ sal_Bool FmFormView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
     return bDone;
 }
 
-sal_Bool FmFormView::checkUnMarkAll(const Reference< XInterface >& _xSource)
+bool FmFormView::checkUnMarkAll(const Reference< XInterface >& _xSource)
 {
     Reference< ::com::sun::star::awt::XControl> xControl(pImpl->m_xWindow,UNO_QUERY);
-    sal_Bool bRet = !xControl.is() || !_xSource.is() || _xSource != xControl->getModel();
+    bool bRet = !xControl.is() || !_xSource.is() || _xSource != xControl->getModel();
     if ( bRet )
         UnmarkAll();
 

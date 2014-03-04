@@ -452,7 +452,7 @@ void FontPrevWin_Impl::ScaleFontWidth( const OutputDevice& rOutDev )
 
 // class SvxFontPrevWindow -----------------------------------------------
 
-void SvxFontPrevWindow::InitSettings( sal_Bool bForeground, sal_Bool bBackground )
+void SvxFontPrevWindow::InitSettings( bool bForeground, bool bBackground )
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
@@ -495,7 +495,7 @@ void SvxFontPrevWindow::Init()
     initFont(pImpl->aFont);
     initFont(pImpl->aCJKFont);
     initFont(pImpl->aCTLFont);
-    InitSettings( sal_True, sal_True );
+    InitSettings( true, true );
     SetBorderStyle( WINDOW_BORDER_MONO );
 }
 
@@ -544,9 +544,9 @@ SvxFont& SvxFontPrevWindow::GetCJKFont()
 void SvxFontPrevWindow::StateChanged( StateChangedType nType )
 {
     if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
-        InitSettings( sal_True, sal_False );
+        InitSettings( true, false );
     else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
-        InitSettings( sal_False, sal_True );
+        InitSettings( false, true );
 
     Window::StateChanged( nType );
     Invalidate();
@@ -557,7 +557,7 @@ void SvxFontPrevWindow::StateChanged( StateChangedType nType )
 void SvxFontPrevWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
-        InitSettings( sal_True, sal_True );
+        InitSettings( true, true );
     else
         Window::DataChanged( rDCEvt );
 }
@@ -1187,7 +1187,7 @@ void SvxFontPrevWindow::Init( const SfxItemSet& rSet )
     initFont(rFont);
     initFont(rCJKFont);
     initFont(rCTLFont);
-    InitSettings( sal_True, sal_True );
+    InitSettings( true, true );
 
     sal_uInt16 nWhich;
     nWhich = rSet.GetPool()->GetWhich( SID_CHAR_DLG_PREVIEW_STRING );

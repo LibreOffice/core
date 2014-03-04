@@ -225,19 +225,19 @@ OUString getLabelName(const Reference< ::com::sun::star::beans::XPropertySet>& x
 
 // = CursorWrapper
 
-CursorWrapper::CursorWrapper(const Reference< ::com::sun::star::sdbc::XRowSet>& _rxCursor, sal_Bool bUseCloned)
+CursorWrapper::CursorWrapper(const Reference< ::com::sun::star::sdbc::XRowSet>& _rxCursor, bool bUseCloned)
 {
     ImplConstruct(Reference< ::com::sun::star::sdbc::XResultSet>(_rxCursor, UNO_QUERY), bUseCloned);
 }
 
 
-CursorWrapper::CursorWrapper(const Reference< ::com::sun::star::sdbc::XResultSet>& _rxCursor, sal_Bool bUseCloned)
+CursorWrapper::CursorWrapper(const Reference< ::com::sun::star::sdbc::XResultSet>& _rxCursor, bool bUseCloned)
 {
     ImplConstruct(_rxCursor, bUseCloned);
 }
 
 
-void CursorWrapper::ImplConstruct(const Reference< ::com::sun::star::sdbc::XResultSet>& _rxCursor, sal_Bool bUseCloned)
+void CursorWrapper::ImplConstruct(const Reference< ::com::sun::star::sdbc::XResultSet>& _rxCursor, bool bUseCloned)
 {
     if (bUseCloned)
     {
@@ -430,15 +430,15 @@ sal_Int16 getControlTypeByObject(const Reference< ::com::sun::star::lang::XServi
 }
 
 
-sal_Bool isRowSetAlive(const Reference< XInterface >& _rxRowSet)
+bool isRowSetAlive(const Reference< XInterface >& _rxRowSet)
 {
-    sal_Bool bIsAlive = sal_False;
+    bool bIsAlive = false;
     Reference< ::com::sun::star::sdbcx::XColumnsSupplier> xSupplyCols(_rxRowSet, UNO_QUERY);
     Reference< ::com::sun::star::container::XIndexAccess> xCols;
     if (xSupplyCols.is())
         xCols = Reference< ::com::sun::star::container::XIndexAccess>(xSupplyCols->getColumns(), UNO_QUERY);
     if (xCols.is() && (xCols->getCount() > 0))
-        bIsAlive = sal_True;
+        bIsAlive = true;
 
     return bIsAlive;
 }

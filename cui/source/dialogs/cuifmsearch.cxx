@@ -72,7 +72,7 @@ void FmSearchDialog::initCommon( const Reference< XResultSet >& _rxCursor )
         m_aHalfFullFormsCJK.Hide();
 
         // never ignore the width (ignoring is expensive) if the option is not available at all
-        m_pSearchEngine->SetIgnoreWidthCJK( sal_False );
+        m_pSearchEngine->SetIgnoreWidthCJK( false );
     }
 
     // some initial record texts

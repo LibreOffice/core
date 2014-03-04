@@ -225,7 +225,7 @@ SdrLayerID FmFormModel::GetControlExportLayerId( const SdrObject& rObj ) const
 }
 
 
-void FmFormModel::implSetOpenInDesignMode( sal_Bool _bOpenDesignMode, sal_Bool _bForce )
+void FmFormModel::implSetOpenInDesignMode( bool _bOpenDesignMode, bool _bForce )
 {
     if( ( _bOpenDesignMode != m_bOpenInDesignMode ) || _bForce )
     {
@@ -239,19 +239,19 @@ void FmFormModel::implSetOpenInDesignMode( sal_Bool _bOpenDesignMode, sal_Bool _
 }
 
 
-void FmFormModel::SetOpenInDesignMode( sal_Bool bOpenDesignMode )
+void FmFormModel::SetOpenInDesignMode( bool bOpenDesignMode )
 {
-    implSetOpenInDesignMode( bOpenDesignMode, sal_False );
+    implSetOpenInDesignMode( bOpenDesignMode, false );
 }
 
 
-sal_Bool FmFormModel::OpenInDesignModeIsDefaulted( )
+bool FmFormModel::OpenInDesignModeIsDefaulted( )
 {
     return m_pImpl->bOpenInDesignIsDefaulted;
 }
 
 
-sal_Bool FmFormModel::ControlsUseRefDevice() const
+bool FmFormModel::ControlsUseRefDevice() const
 {
     if ( !m_pImpl->aControlsUseRefDevice )
     {
@@ -264,7 +264,7 @@ sal_Bool FmFormModel::ControlsUseRefDevice() const
 }
 
 
-void FmFormModel::SetAutoControlFocus( sal_Bool _bAutoControlFocus )
+void FmFormModel::SetAutoControlFocus( bool _bAutoControlFocus )
 {
     if( _bAutoControlFocus != m_bAutoControlFocus )
     {

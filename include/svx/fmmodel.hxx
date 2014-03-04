@@ -39,8 +39,8 @@ private:
     FmFormModelImplData*    m_pImpl;
     SfxObjectShell*         m_pObjShell;
 
-    sal_Bool            m_bOpenInDesignMode : 1;
-    sal_Bool            m_bAutoControlFocus : 1;
+    bool            m_bOpenInDesignMode : 1;
+    bool            m_bAutoControlFocus : 1;
 
     SVX_DLLPRIVATE FmFormModel( const FmFormModel& );   // never implemented
     SVX_DLLPRIVATE void operator=(const FmFormModel& rSrcModel);   // never implemented
@@ -67,25 +67,25 @@ public:
     SfxObjectShell*         GetObjectShell() const { return m_pObjShell; }
     void                    SetObjectShell( SfxObjectShell* pShell );
 
-    sal_Bool GetOpenInDesignMode() const { return m_bOpenInDesignMode; }
-    void SetOpenInDesignMode( sal_Bool _bOpenDesignMode );
+    bool GetOpenInDesignMode() const { return m_bOpenInDesignMode; }
+    void SetOpenInDesignMode( bool _bOpenDesignMode );
 
-    sal_Bool    GetAutoControlFocus() const { return m_bAutoControlFocus; }
-    void        SetAutoControlFocus( sal_Bool _bAutoControlFocus );
+    bool    GetAutoControlFocus() const { return m_bAutoControlFocus; }
+    void    SetAutoControlFocus( bool _bAutoControlFocus );
 
     /** check whether the OpenInDesignMode has been set explicitly or been loaded (<FALSE/>)
         or if it still has the default value from construction (<TRUE/>)
     */
-    sal_Bool    OpenInDesignModeIsDefaulted();
+    bool    OpenInDesignModeIsDefaulted();
 
     /** determines whether form controls should use the SdrModel's reference device for text rendering
     */
-    sal_Bool    ControlsUseRefDevice() const;
+    bool    ControlsUseRefDevice() const;
 
     FmXUndoEnvironment& GetUndoEnv();
 
 private:
-    void        implSetOpenInDesignMode( sal_Bool _bOpenDesignMode, sal_Bool _bForce );
+    void        implSetOpenInDesignMode( bool _bOpenDesignMode, bool _bForce );
 };
 
 #endif          // _FM_FMMODEL_HXX

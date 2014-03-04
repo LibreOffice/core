@@ -466,7 +466,7 @@ void DrawViewShell::HidePage()
 {
     FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager()->GetFormShell();
     if (pFormShell != NULL)
-        pFormShell->PrepareClose (sal_False);
+        pFormShell->PrepareClose(false);
 }
 
 

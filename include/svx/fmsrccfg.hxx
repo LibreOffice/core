@@ -54,37 +54,37 @@ namespace svxform
 
     public:
         // no bit fields at all (want to pass the addresses to the OConfigurationValueContainer)
-        ::com::sun::star::uno::Sequence< OUString >
-                        aHistory;
-        OUString sSingleSearchField;
+        ::css::uno::Sequence< OUString >
+                    aHistory;
+        OUString    sSingleSearchField;
 
-        sal_Int16       nSearchForType;
-        sal_Int16       nPosition;
-        sal_Int16       nLevOther;
-        sal_Int16       nLevShorter;
-        sal_Int16       nLevLonger;
-        sal_Bool        bLevRelaxed;
+        sal_Int16   nSearchForType;
+        sal_Int16   nPosition;
+        sal_Int16   nLevOther;
+        sal_Int16   nLevShorter;
+        sal_Int16   nLevLonger;
+        bool        bLevRelaxed;
 
-        sal_Bool        bAllFields;
-        sal_Bool        bUseFormatter;
-        sal_Bool        bBackwards;
-        sal_Bool        bWildcard;
-        sal_Bool        bRegular;
-        sal_Bool        bApproxSearch;
+        bool        bAllFields;
+        bool        bUseFormatter;
+        bool        bBackwards;
+        bool        bWildcard;
+        bool        bRegular;
+        bool        bApproxSearch;
             // the last three are mutually exclusive
 
-        sal_Bool        bSoundsLikeCJK;
+        bool        bSoundsLikeCJK;
 
 
         FmSearchParams();
 
-        sal_Bool    isIgnoreWidthCJK( ) const;
+        bool        isIgnoreWidthCJK( ) const;
 
         sal_Int32   getTransliterationFlags( ) const { return nTransliterationFlags; }
         void        setTransliterationFlags( sal_Int32 _nFlags ) { nTransliterationFlags = _nFlags; }
 
-        sal_Bool    isCaseSensitive( ) const;
-        void        setCaseSensitive( sal_Bool _bCase );
+        bool        isCaseSensitive( ) const;
+        void        setCaseSensitive( bool _bCase );
     };
 
 
@@ -101,28 +101,28 @@ namespace svxform
 
         // wrapper properties:
         // some of the members of FmSearchParams are must be translated to be stored in the configuration
-        OUString     m_sSearchForType;
-        OUString     m_sSearchPosition;
+        OUString        m_sSearchForType;
+        OUString        m_sSearchPosition;
 
-        sal_Bool            m_bIsMatchCase;
-        sal_Bool            m_bIsMatchFullHalfWidthForms;
-        sal_Bool            m_bIsMatchHiraganaKatakana;
-        sal_Bool            m_bIsMatchContractions;
-        sal_Bool            m_bIsMatchMinusDashCho_on;
-        sal_Bool            m_bIsMatchRepeatCharMarks;
-        sal_Bool            m_bIsMatchVariantFormKanji;
-        sal_Bool            m_bIsMatchOldKanaForms;
-        sal_Bool            m_bIsMatch_DiZi_DuZu;
-        sal_Bool            m_bIsMatch_BaVa_HaFa;
-        sal_Bool            m_bIsMatch_TsiThiChi_DhiZi;
-        sal_Bool            m_bIsMatch_HyuIyu_ByuVyu;
-        sal_Bool            m_bIsMatch_SeShe_ZeJe;
-        sal_Bool            m_bIsMatch_IaIya;
-        sal_Bool            m_bIsMatch_KiKu;
-        sal_Bool            m_bIsIgnorePunctuation;
-        sal_Bool            m_bIsIgnoreWhitespace;
-        sal_Bool            m_bIsIgnoreProlongedSoundMark;
-        sal_Bool            m_bIsIgnoreMiddleDot;
+        bool            m_bIsMatchCase;
+        bool            m_bIsMatchFullHalfWidthForms;
+        bool            m_bIsMatchHiraganaKatakana;
+        bool            m_bIsMatchContractions;
+        bool            m_bIsMatchMinusDashCho_on;
+        bool            m_bIsMatchRepeatCharMarks;
+        bool            m_bIsMatchVariantFormKanji;
+        bool            m_bIsMatchOldKanaForms;
+        bool            m_bIsMatch_DiZi_DuZu;
+        bool            m_bIsMatch_BaVa_HaFa;
+        bool            m_bIsMatch_TsiThiChi_DhiZi;
+        bool            m_bIsMatch_HyuIyu_ByuVyu;
+        bool            m_bIsMatch_SeShe_ZeJe;
+        bool            m_bIsMatch_IaIya;
+        bool            m_bIsMatch_KiKu;
+        bool            m_bIsIgnorePunctuation;
+        bool            m_bIsIgnoreWhitespace;
+        bool            m_bIsIgnoreProlongedSoundMark;
+        bool            m_bIsIgnoreMiddleDot;
 
     public:
         FmSearchConfigItem();
