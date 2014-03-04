@@ -87,10 +87,29 @@ ContentProvider::~ContentProvider()
 {
 }
 
-XINTERFACE_IMPL_3( ContentProvider,
-                   lang::XTypeProvider,
-                   lang::XServiceInfo,
-                   com::sun::star::ucb::XContentProvider );
+//XInterface
+void SAL_CALL ContentProvider::acquire()
+    throw()
+{
+    OWeakObject::acquire();
+}
+
+void SAL_CALL ContentProvider::release()
+    throw()
+{
+    OWeakObject::release();
+}
+
+css::uno::Any SAL_CALL ContentProvider::queryInterface( const css::uno::Type & rType )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    css::uno::Any aRet = cppu::queryInterface( rType,
+                                               (static_cast< lang::XTypeProvider* >(this)),
+                                               (static_cast< lang::XServiceInfo* >(this)),
+                                               (static_cast< css::ucb::XContentProvider* >(this))
+                                               );
+    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
+}
 
 XTYPEPROVIDER_IMPL_3( ContentProvider,
                       lang::XTypeProvider,

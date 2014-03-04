@@ -309,15 +309,28 @@ UcbPropertiesManager::~UcbPropertiesManager()
 
 
 // XInterface methods.
+void SAL_CALL UcbPropertiesManager::acquire()
+    throw()
+{
+    OWeakObject::acquire();
+}
 
+void SAL_CALL UcbPropertiesManager::release()
+    throw()
+{
+    OWeakObject::release();
+}
 
-
-XINTERFACE_IMPL_3( UcbPropertiesManager,
-                   XTypeProvider,
-                   XServiceInfo,
-                   XPropertySetInfo );
-
-
+css::uno::Any SAL_CALL UcbPropertiesManager::queryInterface( const css::uno::Type & rType )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    css::uno::Any aRet = cppu::queryInterface( rType,
+                                               (static_cast< XTypeProvider* >(this)),
+                                               (static_cast< XServiceInfo* >(this)),
+                                               (static_cast< XPropertySetInfo* >(this))
+                                               );
+    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
+}
 
 // XTypeProvider methods.
 

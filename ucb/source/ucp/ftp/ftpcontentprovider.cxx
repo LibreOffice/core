@@ -68,15 +68,28 @@ FTPContentProvider::~FTPContentProvider()
 
 
 // XInterface methods.
+void SAL_CALL FTPContentProvider::acquire()
+    throw()
+{
+    OWeakObject::acquire();
+}
 
+void SAL_CALL FTPContentProvider::release()
+    throw()
+{
+    OWeakObject::release();
+}
 
-
-XINTERFACE_IMPL_3(FTPContentProvider,
-                  XTypeProvider,
-                  XServiceInfo,
-                  XContentProvider)
-
-
+css::uno::Any SAL_CALL FTPContentProvider::queryInterface( const css::uno::Type & rType )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    css::uno::Any aRet = cppu::queryInterface( rType,
+    (static_cast< XTypeProvider* >(this)),
+    (static_cast< XServiceInfo* >(this)),
+    (static_cast< XContentProvider* >(this))
+                    );
+    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
+}
 
 // XTypeProvider methods.
 

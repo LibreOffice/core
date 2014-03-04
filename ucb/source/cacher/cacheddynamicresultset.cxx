@@ -153,13 +153,28 @@ CachedDynamicResultSetFactory::~CachedDynamicResultSetFactory()
 
 
 // CachedDynamicResultSetFactory XInterface methods.
+void SAL_CALL CachedDynamicResultSetFactory::acquire()
+    throw()
+{
+    OWeakObject::acquire();
+}
 
+void SAL_CALL CachedDynamicResultSetFactory::release()
+    throw()
+{
+    OWeakObject::release();
+}
 
-XINTERFACE_IMPL_3( CachedDynamicResultSetFactory,
-                   XTypeProvider,
-                   XServiceInfo,
-                   XCachedDynamicResultSetFactory );
-
+css::uno::Any SAL_CALL CachedDynamicResultSetFactory::queryInterface( const css::uno::Type & rType )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    css::uno::Any aRet = cppu::queryInterface( rType,
+                                               (static_cast< XTypeProvider* >(this)),
+                                               (static_cast< XServiceInfo* >(this)),
+                                               (static_cast< XCachedDynamicResultSetFactory* >(this))
+                                               );
+    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
+}
 
 // CachedDynamicResultSetFactory XTypeProvider methods.
 

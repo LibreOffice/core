@@ -35,33 +35,6 @@
 #define CPPU_TYPE( T )      getCppuType( static_cast< T * >( 0 ) )
 #define CPPU_TYPE_REF( T )  CPPU_TYPE( com::sun::star::uno::Reference< T > )
 
-// XInterface impl.
-
-// 3 interfaces implemented
-#define XINTERFACE_IMPL_3( Class, Ifc1, Ifc2, Ifc3 )                        \
-void SAL_CALL Class::acquire()                                              \
-    throw()                                                                 \
-{                                                                           \
-    OWeakObject::acquire();                                                 \
-}                                                                           \
-                                                                            \
-void SAL_CALL Class::release()                                              \
-    throw()                                                                 \
-{                                                                           \
-    OWeakObject::release();                                                 \
-} \
-com::sun::star::uno::Any SAL_CALL Class::queryInterface(                    \
-                                const com::sun::star::uno::Type & rType )   \
-    throw( com::sun::star::uno::RuntimeException, std::exception )          \
-{                                                                           \
-    com::sun::star::uno::Any aRet = cppu::queryInterface( rType, \
-    (static_cast< Ifc1* >(this)),                                         \
-    (static_cast< Ifc2* >(this)),                                         \
-    (static_cast< Ifc3* >(this))                                          \
-                    );                                                      \
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );   \
-}\
-
 // XTypeProvider decl.
 
 

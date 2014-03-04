@@ -271,15 +271,28 @@ PropertyValueSet::~PropertyValueSet()
 
 
 // XInterface methods.
+void SAL_CALL PropertyValueSet::acquire()
+    throw()
+{
+    OWeakObject::acquire();
+}
 
+void SAL_CALL PropertyValueSet::release()
+    throw()
+{
+    OWeakObject::release();
+}
 
-
-XINTERFACE_IMPL_3( PropertyValueSet,
-                   XTypeProvider,
-                   XRow,
-                   XColumnLocate );
-
-
+css::uno::Any SAL_CALL PropertyValueSet::queryInterface( const css::uno::Type & rType )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    css::uno::Any aRet = cppu::queryInterface( rType,
+                                               (static_cast< XTypeProvider* >(this)),
+                                               (static_cast< XRow* >(this)),
+                                               (static_cast< XColumnLocate* >(this))
+                                               );
+    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
+}
 
 // XTypeProvider methods.
 

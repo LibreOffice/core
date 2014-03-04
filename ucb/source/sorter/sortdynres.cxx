@@ -492,13 +492,28 @@ SortedDynamicResultSetFactory::~SortedDynamicResultSetFactory()
 
 
 // XInterface methods.
+void SAL_CALL SortedDynamicResultSetFactory::acquire()
+    throw()
+{
+    OWeakObject::acquire();
+}
 
+void SAL_CALL SortedDynamicResultSetFactory::release()
+    throw()
+{
+    OWeakObject::release();
+}
 
-XINTERFACE_IMPL_3( SortedDynamicResultSetFactory,
-                   XTypeProvider,
-                   XServiceInfo,
-                   XSortedDynamicResultSetFactory );
-
+css::uno::Any SAL_CALL SortedDynamicResultSetFactory::queryInterface( const css::uno::Type & rType )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    css::uno::Any aRet = cppu::queryInterface( rType,
+                                               (static_cast< XTypeProvider* >(this)),
+                                               (static_cast< XServiceInfo* >(this)),
+                                               (static_cast< XSortedDynamicResultSetFactory* >(this))
+                                               );
+    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
+}
 
 // XTypeProvider methods.
 
