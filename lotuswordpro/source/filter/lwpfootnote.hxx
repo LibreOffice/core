@@ -198,7 +198,14 @@ public:
 class LwpFootnoteSeparatorOptions
 {
 public:
-    LwpFootnoteSeparatorOptions(){}
+    LwpFootnoteSeparatorOptions()
+        : m_nFlag(0)
+        , m_nLength(0)
+        , m_nIndent(0)
+        , m_nAbove(0)
+        , m_nBelow(0)
+        {}
+
     ~LwpFootnoteSeparatorOptions(){}
     void Read(LwpObjectStream* pObjStrm);
 private:
