@@ -135,7 +135,7 @@ static void osl_ProfileGenerateExtension(const sal_Char* pszFileName, const sal_
 static oslProfile SAL_CALL osl_psz_openProfile(const sal_Char *pszProfileName, oslProfileOption Flags);
 
 /* implemented in file.c */
-extern oslFileError FileURLToPath( char *, size_t, rtl_uString* );
+extern "C" oslFileError FileURLToPath( char *, size_t, rtl_uString* );
 
 oslProfile SAL_CALL osl_openProfile(rtl_uString *ustrProfileName, oslProfileOption Options)
 {
@@ -151,7 +151,7 @@ static oslProfile SAL_CALL osl_psz_openProfile(const sal_Char *pszProfileName, o
 {
     osl_TFile*        pFile;
     osl_TProfileImpl* pProfile;
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
 #ifdef TRACE_OSL_PROFILE
     OSL_TRACE("In  osl_openProfile");
@@ -1288,7 +1288,7 @@ static osl_TStamp closeFileImpl(osl_TFile* pFile, oslProfileOption Flags)
 
 static sal_Bool OslProfile_rewindFile(osl_TFile* pFile, sal_Bool bTruncate)
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
 #ifdef TRACE_OSL_PROFILE
     OSL_TRACE("In  osl_OslProfile_rewindFile");
 #endif
@@ -1881,7 +1881,7 @@ static sal_Bool loadProfile(osl_TFile* pFile, osl_TProfileImpl* pProfile)
             if (! addEntry(pProfile, &pProfile->m_Sections[pProfile->m_NoSections - 1],
                            i, pStr, pChar - pStr))
             {
-                OSL_ASSERT(0);
+                OSL_ASSERT(false);
                 continue;
             }
 
@@ -1892,7 +1892,7 @@ static sal_Bool loadProfile(osl_TFile* pFile, osl_TProfileImpl* pProfile)
 
             if (! addSection(pProfile, i, pStr + 1, pChar - pStr - 1))
             {
-                OSL_ASSERT(0);
+                OSL_ASSERT(false);
                 continue;
             }
 
@@ -1987,7 +1987,7 @@ static sal_Bool storeProfile(osl_TProfileImpl* pProfile, sal_Bool bCleanup)
 static osl_TFile* osl_openTmpProfileImpl(osl_TProfileImpl* pProfile)
 {
     osl_TFile* pFile=0;
-    sal_Char* pszExtension = "tmp";
+    sal_Char const * pszExtension = "tmp";
     sal_Char pszTmpName[PATH_MAX];
     oslProfileOption PFlags=0;
 
