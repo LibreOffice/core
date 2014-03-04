@@ -505,21 +505,23 @@ void DummyCircle::render()
     SAL_WARN("chart2.opengl", "render DummyCircle");
     debugProperties(maProperties);
     DummyChart* pChart = getRootShape();
-    std::map<OUString, uno::Any>::const_iterator itr = maProperties.find("FillColor");
-    if(itr != maProperties.end())
-    {
-        sal_Int32 nColor = itr->second.get<sal_Int32>();
-        pChart->m_GLRender.SetColor(nColor, 255);
-    }
-    else
-        SAL_WARN("chart2.opengl", "missing color");
 
-    itr = maProperties.find("FillTransparence");
+    sal_uInt8 nAlpha = 255;
+    std::map<OUString, uno::Any>::const_iterator itr = maProperties.find("FillTransparence");
     if(itr != maProperties.end())
     {
         sal_Int32 nTrans = itr->second.get<sal_Int32>();
-        pChart->m_GLRender.SetTransparency(nTrans&0xFF);
+        nAlpha = static_cast<sal_uInt8>(nTrans & 0xFF);
     }
+
+    itr = maProperties.find("FillColor");
+    if(itr != maProperties.end())
+    {
+        sal_Int32 nColor = itr->second.get<sal_Int32>();
+        pChart->m_GLRender.SetColor(nColor, nAlpha);
+    }
+    else
+        SAL_WARN("chart2.opengl", "missing color");
 
     pChart->m_GLRender.Bubble2DShapePoint(maPosition.X, maPosition.Y,
                                           maSize.Width, maSize.Height);

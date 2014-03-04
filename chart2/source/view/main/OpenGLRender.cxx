@@ -1552,11 +1552,7 @@ void OpenGLRender::SetChartTransparencyGradient(long transparencyGradient)
         m_BackgroundColor[15] = 0.0;
     }
 }
-void OpenGLRender::SetTransparency(sal_uInt32 transparency)
-{
-    m_fAlpha = (float)transparency / 255.0;
-    m_2DColor = glm::vec4(m_2DColor.r, m_2DColor.g, m_2DColor.b, m_fAlpha);
-}
+
 void OpenGLRender::GeneratePieSegment2D(double fInnerRadius, double fOutterRadius, double nAngleStart, double nAngleWidth)
 {
     double nAngleStep = 1;
