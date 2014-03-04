@@ -72,7 +72,6 @@ SvtIconChoiceCtrl::SetEntryTextMode(SvxIconChoiceCtrlTextMode, SvxIconChoiceCtrl
 SvtListener::IsListening(SvtBroadcaster&) const
 SvxDistributePage::GetRanges()
 SvxNumRule::Create(SvStream&)
-SvxNumberFormat::Create(SvStream&)
 SvxNumberFormatShell::IsAdded_Impl(unsigned long)
 SwAccessibleField::SwAccessibleField(SwField*, SwAccessibleParagraph*, short)
 TextDoc::IsValidPaM(TextPaM const&)

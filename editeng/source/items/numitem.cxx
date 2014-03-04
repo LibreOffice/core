@@ -306,11 +306,6 @@ SvStream&   SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pC
     return rStream;
 }
 
-SvxNumberFormat* SvxNumberFormat::Create( SvStream &rStream )
-{
-    return new SvxNumberFormat( rStream );
-}
-
 SvxNumberFormat& SvxNumberFormat::operator=( const SvxNumberFormat& rFormat )
 {
     if (& rFormat == this) { return *this; }
