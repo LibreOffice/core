@@ -262,7 +262,6 @@ public:
     SvxNumRule&             operator=( const SvxNumRule&  );
 
     SvStream&               Store(SvStream &rStream);
-    SvxNumRule*             Create(SvStream &rStream);
     const SvxNumberFormat*  Get(sal_uInt16 nLevel)const;
     const SvxNumberFormat&  GetLevel(sal_uInt16 nLevel)const;
     void                    SetLevel(sal_uInt16 nLevel, const SvxNumberFormat& rFmt, bool bIsValid = true);

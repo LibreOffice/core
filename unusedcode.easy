@@ -71,7 +71,6 @@ SvtAccessibilityOptions::SetPreviewUsesCheckeredBackground(unsigned char)
 SvtIconChoiceCtrl::SetEntryTextMode(SvxIconChoiceCtrlTextMode, SvxIconChoiceCtrlEntry*)
 SvtListener::IsListening(SvtBroadcaster&) const
 SvxDistributePage::GetRanges()
-SvxNumRule::Create(SvStream&)
 SvxNumberFormatShell::IsAdded_Impl(unsigned long)
 SwAccessibleField::SwAccessibleField(SwField*, SwAccessibleParagraph*, short)
 TextDoc::IsValidPaM(TextPaM const&)

@@ -699,11 +699,6 @@ SvxNumRule::SvxNumRule( SvStream &rStream )
     rStream.ReadUInt16( nTmp16 ); nFeatureFlags = nTmp16;
 }
 
-SvxNumRule* SvxNumRule::Create( SvStream & rStream )
-{
-    return new SvxNumRule( rStream );
-}
-
 SvStream& SvxNumRule::Store( SvStream &rStream )
 {
     rStream.WriteUInt16( (sal_uInt16)NUMITEM_VERSION_03 );
