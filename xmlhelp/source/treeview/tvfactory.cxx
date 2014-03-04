@@ -21,6 +21,7 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include "tvfactory.hxx"
 #include "tvread.hxx"
 
@@ -87,14 +88,10 @@ TVFactory::getImplementationName()
     return TVFactory::getImplementationName_static();
 }
 
-sal_Bool SAL_CALL
-TVFactory::supportsService(
-    const OUString& ServiceName )
+sal_Bool SAL_CALL TVFactory::supportsService( const OUString& ServiceName )
     throw( RuntimeException, std::exception )
 {
-    return
-        ServiceName.equalsAscii( "com.sun.star.help.TreeView" ) ||
-        ServiceName.equalsAscii( "com.sun.star.ucb.HiearchyDataSource" );
+    return cppu::supportsService( this, ServiceName );
 }
 
 Sequence< OUString > SAL_CALL

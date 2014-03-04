@@ -70,11 +70,9 @@ Sequence< OUString > SAL_CALL OResultSet::getSupportedServiceNames()
 }
 /* }}} */
 
-/* {{{ OResultSet::supportsService() -I- */
 sal_Bool SAL_CALL OResultSet::supportsService(const OUString& _rServiceName)
     throw(RuntimeException, std::exception)
 {
-    OSL_TRACE("OResultSet::supportsService");
     return cppu::supportsService(this, _rServiceName);
 }
 /* }}} */

@@ -34,6 +34,7 @@
 #include <com/sun/star/beans/PropertySetInfoChange.hpp>
 #include <com/sun/star/ucb/ContentAction.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include "filglob.hxx"
 #include "filid.hxx"
 #include "filrow.hxx"
@@ -251,12 +252,7 @@ BaseContent::dispose()
     delete pPropertySetInfoChangeListeners;
 }
 
-
-
-
 //  XServiceInfo
-
-
 OUString SAL_CALL
 BaseContent::getImplementationName()
     throw( RuntimeException, std::exception)
@@ -264,19 +260,12 @@ BaseContent::getImplementationName()
     return OUString("com.sun.star.comp.ucb.FileContent");
 }
 
-
-
 sal_Bool SAL_CALL
 BaseContent::supportsService( const OUString& ServiceName )
     throw( RuntimeException, std::exception)
 {
-    if ( ServiceName == "com.sun.star.ucb.FileContent" )
-        return true;
-    else
-        return false;
+    return cppu::supportsService( this, ServiceName );
 }
-
-
 
 Sequence< OUString > SAL_CALL
 BaseContent::getSupportedServiceNames()
@@ -287,12 +276,7 @@ BaseContent::getSupportedServiceNames()
     return ret;
 }
 
-
-
-
 //  XTypeProvider
-
-
 XTYPEPROVIDER_IMPL_10( BaseContent,
                        lang::XComponent,
                        lang::XTypeProvider,

@@ -18,6 +18,7 @@
  */
 
 #include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <comphelper/processfactory.hxx>
 #include <framework/menuconfiguration.hxx>
 #include <rtl/ref.hxx>
@@ -46,7 +47,11 @@ using namespace framework;
 
 namespace {
 
-class PopupMenuToolbarController : public svt::ToolboxController
+typedef cppu::ImplInheritanceHelper1< svt::ToolboxController,
+                                    css::lang::XServiceInfo >
+                ToolBarBase;
+
+class PopupMenuToolbarController : public ToolBarBase
 {
 public:
     virtual ~PopupMenuToolbarController();
@@ -80,8 +85,7 @@ private:
 PopupMenuToolbarController::PopupMenuToolbarController(
     const css::uno::Reference< css::uno::XComponentContext >& xContext,
     const OUString &rPopupCommand )
-    : svt::ToolboxController()
-    , m_xContext( xContext )
+    : m_xContext( xContext )
     , m_bHasController( sal_False )
     , m_aPopupCommand( rPopupCommand )
 {
@@ -249,14 +253,11 @@ public:
     WizardsToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException);
 
-    sal_Bool SAL_CALL supportsService(OUString const & rServiceName)
-        throw (css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService(OUString const & rServiceName) throw (css::uno::RuntimeException);
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException);
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException);
 
 private:
     sal_uInt16 getDropDownStyle() const;
@@ -277,7 +278,7 @@ OUString WizardsToolbarController::getImplementationName()
 sal_Bool WizardsToolbarController::supportsService(OUString const & rServiceName)
     throw (css::uno::RuntimeException)
 {
-    return rServiceName == "com.sun.star.frame.ToolbarController";
+    return cppu::supportsService( this, rServiceName );
 }
 
 css::uno::Sequence<OUString> WizardsToolbarController::getSupportedServiceNames()
@@ -300,14 +301,11 @@ public:
     OpenToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException);
 
-    sal_Bool SAL_CALL supportsService(OUString const & rServiceName)
-        throw (css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService(OUString const & rServiceName) throw (css::uno::RuntimeException);
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException);
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException);
 };
 
 OpenToolbarController::OpenToolbarController(
@@ -325,7 +323,7 @@ OUString OpenToolbarController::getImplementationName()
 sal_Bool OpenToolbarController::supportsService(OUString const & rServiceName)
     throw (css::uno::RuntimeException)
 {
-    return rServiceName == "com.sun.star.frame.ToolbarController";
+    return cppu::supportsService( this, rServiceName );
 }
 
 css::uno::Sequence<OUString> OpenToolbarController::getSupportedServiceNames()
@@ -346,8 +344,7 @@ public:
     OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException);
 
-    sal_Bool SAL_CALL supportsService(OUString const & rServiceName)
-        throw (css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService(OUString const & rServiceName) throw (css::uno::RuntimeException);
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
         throw (css::uno::RuntimeException);
@@ -378,7 +375,7 @@ OUString NewToolbarController::getImplementationName()
 sal_Bool NewToolbarController::supportsService(OUString const & rServiceName)
     throw (css::uno::RuntimeException)
 {
-    return rServiceName == "com.sun.star.frame.ToolbarController";
+    return cppu::supportsService( this, rServiceName );
 }
 
 css::uno::Sequence<OUString> NewToolbarController::getSupportedServiceNames()

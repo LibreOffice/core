@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
+#include <cppuhelper/supportsservice.hxx>
 #include "xmldocumentwrapper_xmlsecimpl.hxx"
 
 #include <xmloff/attrlist.hxx>
@@ -43,7 +43,6 @@ namespace cssxcsax = com::sun::star::xml::csax;
 namespace cssxs = com::sun::star::xml::sax;
 namespace cssxw = com::sun::star::xml::wrapper;
 
-#define SERVICE_NAME "com.sun.star.xml.wrapper.XMLDocumentWrapper"
 #define IMPLEMENTATION_NAME "com.sun.star.xml.security.bridge.xmlsec.XMLDocumentWrapper_XmlSecImpl"
 
 #define STRXMLNS "xmlns"
@@ -1061,21 +1060,14 @@ OUString XMLDocumentWrapper_XmlSecImpl_getImplementationName ()
     return OUString ( IMPLEMENTATION_NAME );
 }
 
-sal_Bool SAL_CALL XMLDocumentWrapper_XmlSecImpl_supportsService( const OUString& ServiceName )
-    throw (cssu::RuntimeException)
-{
-    return ServiceName == SERVICE_NAME;
-}
-
 cssu::Sequence< OUString > SAL_CALL XMLDocumentWrapper_XmlSecImpl_getSupportedServiceNames(  )
     throw (cssu::RuntimeException)
 {
     cssu::Sequence < OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] =  OUString ( SERVICE_NAME );
+    pArray[0] = "com.sun.star.xml.wrapper.XMLDocumentWrapper";
     return aRet;
 }
-#undef SERVICE_NAME
 
 cssu::Reference< cssu::XInterface > SAL_CALL XMLDocumentWrapper_XmlSecImpl_createInstance(
     const cssu::Reference< cssu::XComponentContext > &)
@@ -1093,7 +1085,7 @@ OUString SAL_CALL XMLDocumentWrapper_XmlSecImpl::getImplementationName(  )
 sal_Bool SAL_CALL XMLDocumentWrapper_XmlSecImpl::supportsService( const OUString& rServiceName )
     throw (cssu::RuntimeException, std::exception)
 {
-    return XMLDocumentWrapper_XmlSecImpl_supportsService( rServiceName );
+    return cppu::supportsService( this, rServiceName );
 }
 cssu::Sequence< OUString > SAL_CALL XMLDocumentWrapper_XmlSecImpl::getSupportedServiceNames(  )
     throw (cssu::RuntimeException, std::exception)

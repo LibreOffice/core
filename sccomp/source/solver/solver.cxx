@@ -35,6 +35,7 @@
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <vector>
 #include <unordered_map>
 
@@ -577,8 +578,6 @@ void SAL_CALL SolverComponent::solve() throw(uno::RuntimeException, std::excepti
     CoinUnloadProblem( hProb );
 }
 
-// -------------------------------------------------------------------------
-
 // XServiceInfo
 
 uno::Sequence< OUString > SolverComponent_getSupportedServiceNames()
@@ -600,10 +599,7 @@ OUString SAL_CALL SolverComponent::getImplementationName() throw(uno::RuntimeExc
 
 sal_Bool SAL_CALL SolverComponent::supportsService( const OUString& rServiceName ) throw(uno::RuntimeException, std::exception)
 {
-    const uno::Sequence< OUString > aServices = SolverComponent_getSupportedServiceNames();
-    const OUString* pArray = aServices.getConstArray();
-    const OUString* pArrayEnd = pArray + aServices.getLength();
-    return ::std::find( pArray, pArrayEnd, rServiceName ) != pArrayEnd;
+    return cppu::supportsService( this, rServiceName );
 }
 
 uno::Sequence<OUString> SAL_CALL SolverComponent::getSupportedServiceNames() throw(uno::RuntimeException, std::exception)
@@ -616,8 +612,6 @@ uno::Reference<uno::XInterface> SolverComponent_createInstance( const uno::Refer
 {
     return (cppu::OWeakObject*) new SolverComponent( rSMgr );
 }
-
-// -------------------------------------------------------------------------
 
 extern "C"
 {

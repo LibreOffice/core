@@ -24,6 +24,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
 #include <osl/mutex.hxx>
@@ -625,16 +626,7 @@ sal_Bool SAL_CALL                                                           \
 Class::supportsService( const OUString& ServiceName )                  \
     throw( com::sun::star::uno::RuntimeException, std::exception )          \
 {                                                                           \
-    com::sun::star::uno::Sequence< OUString > aSNL =                   \
-                                        getSupportedServiceNames();         \
-    const OUString* pArray = aSNL.getArray();                          \
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )                       \
-    {                                                                       \
-        if( pArray[ i ] == ServiceName )                                    \
-            return sal_True;                                                \
-    }                                                                       \
-                                                                            \
-    return sal_False;                                                       \
+    return cppu::supportsService( this, ServiceName );                      \
 }                                                                           \
                                                                             \
 com::sun::star::uno::Sequence< OUString > SAL_CALL                     \
