@@ -37,6 +37,7 @@
 #include "sdpage.hxx"
 #include "glob.hxx"
 
+#include <boost/make_shared.hpp>
 #include <map>
 
 using namespace ::com::sun::star::uno;
@@ -75,12 +76,21 @@ PresStyleMap& SdStyleFamilyImpl::getStyleSheets()
         {
             maStyleSheets.clear();
 
-            const SfxStyles& rStyles = mxPool->GetStyles();
-            for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); ++iter )
+            // The iterator will return only style sheets of family master page
+            SfxStyleSheetIteratorPtr aSSSIterator = boost::make_shared<SfxStyleSheetIterator>(mxPool.get(), SD_STYLE_FAMILY_MASTERPAGE);
+            for ( SfxStyleSheetBase* pStyle = aSSSIterator->First(); pStyle;
+                                     pStyle = aSSSIterator->Next() )
             {
-                SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
-                if( pStyle && (pStyle->GetFamily() == SD_STYLE_FAMILY_MASTERPAGE) && pStyle->GetName().startsWith(aLayoutName) )
-                    maStyleSheets[ pStyle->GetApiName() ] = rtl::Reference< SdStyleSheet >( pStyle );
+                // we assume that we have only SdStyleSheets
+                SdStyleSheet* pSdStyle = static_cast< SdStyleSheet* >( pStyle );
+                if (!pSdStyle)
+                {
+                    continue;
+                }
+                if (pSdStyle->GetName().startsWith(aLayoutName))
+                {
+                    maStyleSheets[ pSdStyle->GetApiName() ] = rtl::Reference< SdStyleSheet >( pSdStyle );
+                }
             }
         }
     }
@@ -137,8 +147,6 @@ SdStyleSheet* SdStyleFamily::GetValidNewSheet( const Any& rElement ) throw(Illeg
     return pStyle;
 }
 
-
-
 SdStyleSheet* SdStyleFamily::GetSheetByName( const OUString& rName ) throw(NoSuchElementException, WrappedTargetException )
 {
     SdStyleSheet* pRet = 0;
@@ -153,13 +161,15 @@ SdStyleSheet* SdStyleFamily::GetSheetByName( const OUString& rName ) throw(NoSuc
         }
         else
         {
-            const SfxStyles& rStyles = mxPool->GetStyles();
-            for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); ++iter )
+            SfxStyleSheetIteratorPtr aSSSIterator = boost::make_shared<SfxStyleSheetIterator>(mxPool.get(), mnFamily);
+            for ( SfxStyleSheetBase* pStyle = aSSSIterator->First(); pStyle;
+                                     pStyle = aSSSIterator->Next() )
             {
-                SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
-                if( pStyle && (pStyle->GetFamily() == mnFamily) && (pStyle->GetApiName() == rName) )
+                // we assume that we have only SdStyleSheets
+                SdStyleSheet* pSdStyle = static_cast< SdStyleSheet* >( pStyle );
+                if( pSdStyle && pSdStyle->GetApiName() == rName)
                 {
-                    pRet = pStyle;
+                    pRet = pSdStyle;
                     break;
                 }
             }
@@ -258,12 +268,16 @@ Sequence< OUString > SAL_CALL SdStyleFamily::getElementNames() throw(RuntimeExce
     else
     {
         std::vector< OUString > aNames;
-        const SfxStyles& rStyles = mxPool->GetStyles();
-        for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); ++iter )
+        SfxStyleSheetIteratorPtr aSSSIterator = boost::make_shared<SfxStyleSheetIterator>(mxPool.get(), mnFamily);
+        for ( SfxStyleSheetBase* pStyle = aSSSIterator->First(); pStyle;
+                                 pStyle = aSSSIterator->Next() )
         {
-            SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
-            if( pStyle && (pStyle->GetFamily() == mnFamily) )
-                aNames.push_back( pStyle->GetApiName() );
+            // we assume that we have only SdStyleSheets
+            SdStyleSheet* pSdStyle = static_cast< SdStyleSheet* >( pStyle );
+            if( pSdStyle )
+            {
+                aNames.push_back( pSdStyle->GetApiName() );
+            }
         }
         return Sequence< OUString >( &(*aNames.begin()), aNames.size() );
     }
@@ -286,12 +300,19 @@ sal_Bool SAL_CALL SdStyleFamily::hasByName( const OUString& aName ) throw(Runtim
         }
         else
         {
-            const SfxStyles& rStyles = mxPool->GetStyles();
-            for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); ++iter )
+            SfxStyleSheetIteratorPtr aSSSIterator = boost::make_shared<SfxStyleSheetIterator>(mxPool.get(), mnFamily);
+            for ( SfxStyleSheetBase* pStyle = aSSSIterator->First(); pStyle;
+                                     pStyle = aSSSIterator->Next() )
             {
-                SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
-                if( pStyle && (pStyle->GetFamily() == mnFamily) && ( pStyle->GetApiName() == aName ) )
-                    return sal_True;
+                // we assume that we have only SdStyleSheets
+                SdStyleSheet* pSdStyle = static_cast< SdStyleSheet* >( pStyle );
+                if( pSdStyle )
+                {
+                    if (pSdStyle->GetApiName() == aName)
+                    {
+                        return sal_True;
+                    }
+                }
             }
         }
     }
@@ -321,11 +342,10 @@ sal_Bool SAL_CALL SdStyleFamily::hasElements() throw(RuntimeException, std::exce
     }
     else
     {
-        const SfxStyles& rStyles = mxPool->GetStyles();
-        for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); ++iter )
+        SfxStyleSheetIteratorPtr aSSSIterator = boost::make_shared<SfxStyleSheetIterator>(mxPool.get(), mnFamily);
+        for ( SfxStyleSheetBase* pStyle = aSSSIterator->First(); pStyle;
+                                 pStyle = aSSSIterator->Next() )
         {
-            SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
-            if( pStyle && (pStyle->GetFamily() == mnFamily) )
                 return sal_True;
         }
     }
@@ -349,12 +369,11 @@ sal_Int32 SAL_CALL SdStyleFamily::getCount() throw(RuntimeException, std::except
     }
     else
     {
-        const SfxStyles& rStyles = mxPool->GetStyles();
-        for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); ++iter )
+        SfxStyleSheetIteratorPtr aSSSIterator = boost::make_shared<SfxStyleSheetIterator>(mxPool.get(), mnFamily);
+        for ( SfxStyleSheetBase* pStyle = aSSSIterator->First(); pStyle;
+                                 pStyle = aSSSIterator->Next() )
         {
-            SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
-            if( pStyle && (pStyle->GetFamily() == mnFamily) )
-                nCount++;
+            nCount++;
         }
     }
 
@@ -385,14 +404,15 @@ Any SAL_CALL SdStyleFamily::getByIndex( sal_Int32 Index ) throw(IndexOutOfBounds
         }
         else
         {
-            const SfxStyles& rStyles = mxPool->GetStyles();
-            for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); ++iter )
+            SfxStyleSheetIteratorPtr aSSSIterator = boost::make_shared<SfxStyleSheetIterator>(mxPool.get(), mnFamily);
+            for ( SfxStyleSheetBase* pStyle = aSSSIterator->First(); pStyle;
+                                     pStyle = aSSSIterator->Next() )
             {
-                SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
-                if( pStyle && (pStyle->GetFamily() == mnFamily) )
+                // we assume that we have only SdStyleSheets
+                SdStyleSheet* pSdStyle = static_cast< SdStyleSheet* >( pStyle );
+                if( Index-- == 0 )
                 {
-                    if( Index-- == 0 )
-                        return Any( Reference< XStyle >( pStyle ) );
+                    return Any( Reference< XStyle >( pSdStyle ) );
                 }
             }
         }
