@@ -1008,8 +1008,8 @@ FmGridControl::FmGridControl(
         ,m_pPeer(_pPeer)
         ,m_nCurrentSelectedColumn(-1)
         ,m_nMarkedColumnId(BROWSER_INVALIDID)
-        ,m_bSelecting(sal_False)
-        ,m_bInColumnMove(sal_False)
+        ,m_bSelecting(false)
+        ,m_bInColumnMove(false)
 {
     EnableInteractiveRowHeight( );
 }
@@ -1439,7 +1439,7 @@ void FmGridControl::markColumn(sal_uInt16 nId)
     }
 }
 
-sal_Bool FmGridControl::isColumnMarked(sal_uInt16 nId) const
+bool FmGridControl::isColumnMarked(sal_uInt16 nId) const
 {
     return m_nMarkedColumnId == nId;
 }
@@ -1510,7 +1510,7 @@ void FmGridControl::EndCursorAction()
 
 void FmGridControl::ColumnMoved(sal_uInt16 nId)
 {
-    m_bInColumnMove = sal_True;
+    m_bInColumnMove = true;
 
     DbGridControl::ColumnMoved(nId);
     Reference< ::com::sun::star::container::XIndexContainer >  xColumns(GetPeer()->getColumns());
@@ -1546,7 +1546,7 @@ void FmGridControl::ColumnMoved(sal_uInt16 nId)
             markColumn(nId); // ... -> mark it
     }
 
-    m_bInColumnMove = sal_False;
+    m_bInColumnMove = false;
 }
 
 void FmGridControl::InitColumnsByModels(const Reference< ::com::sun::star::container::XIndexContainer >& xColumns)
@@ -1714,10 +1714,10 @@ void FmGridControl::HideColumn(sal_uInt16 nId)
         m_nMarkedColumnId = (sal_uInt16)-1;
 }
 
-sal_Bool FmGridControl::isColumnSelected(sal_uInt16 /*nId*/,DbGridColumn* _pColumn)
+bool FmGridControl::isColumnSelected(sal_uInt16 /*nId*/,DbGridColumn* _pColumn)
 {
     OSL_ENSURE(_pColumn,"Column can not be null!");
-    sal_Bool bSelected = sal_False;
+    bool bSelected = false;
     // if the column which is shown here is selected ...
     Reference< ::com::sun::star::view::XSelectionSupplier >  xSelSupplier(GetPeer()->getColumns(), UNO_QUERY);
     if ( xSelSupplier.is() )
@@ -1746,7 +1746,7 @@ void FmGridControl::ShowColumn(sal_uInt16 nId)
         markColumn(nId); // ... -> mark it
 }
 
-sal_Bool FmGridControl::selectBookmarks(const Sequence< Any >& _rBookmarks)
+bool FmGridControl::selectBookmarks(const Sequence< Any >& _rBookmarks)
 {
     SolarMutexGuard aGuard;
         // need to lock the SolarMutex so that no paint call disturbs us ...
@@ -1754,7 +1754,7 @@ sal_Bool FmGridControl::selectBookmarks(const Sequence< Any >& _rBookmarks)
     if ( !m_pSeekCursor )
     {
         OSL_FAIL( "FmGridControl::selectBookmarks: no seek cursor!" );
-        return sal_False;
+        return false;
     }
 
     const Any* pBookmark = _rBookmarks.getConstArray();
@@ -1762,7 +1762,7 @@ sal_Bool FmGridControl::selectBookmarks(const Sequence< Any >& _rBookmarks)
 
     SetNoSelection();
 
-    sal_Bool bAllSuccessfull = sal_True;
+    bool bAllSuccessfull = true;
     try
     {
         for (; pBookmark != pBookmarkEnd; ++pBookmark)
@@ -1771,13 +1771,13 @@ sal_Bool FmGridControl::selectBookmarks(const Sequence< Any >& _rBookmarks)
             if (m_pSeekCursor->moveToBookmark(*pBookmark))
                 SelectRow( m_pSeekCursor->getRow() - 1);
             else
-                bAllSuccessfull = sal_False;
+                bAllSuccessfull = false;
         }
     }
     catch(Exception&)
     {
         OSL_FAIL("FmGridControl::selectBookmarks: could not move to one of the bookmarks!");
-        return sal_False;
+        return false;
     }
 
     return bAllSuccessfull;
@@ -1974,7 +1974,7 @@ void FmGridControl::Select()
 
         if (!m_bSelecting)
         {
-            m_bSelecting = sal_True;
+            m_bSelecting = true;
 
             try
             {
@@ -2000,7 +2000,7 @@ void FmGridControl::Select()
             }
 
 
-            m_bSelecting = sal_False;
+            m_bSelecting = false;
         }
     }
 }

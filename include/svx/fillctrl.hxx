@@ -53,8 +53,8 @@ private:
     SvxFillTypeBox*     pFillTypeLB;
     SvxFillAttrBox*     pFillAttrLB;
 
-    sal_Bool                bUpdate;
-    sal_uInt16              eLastXFS;
+    bool                bUpdate;
+    sal_uInt16          eLastXFS;
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();

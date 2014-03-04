@@ -100,8 +100,8 @@ class SVX_DLLPUBLIC FmGridControl : public DbGridControl
     FmXGridPeer*        m_pPeer;
     sal_Int32           m_nCurrentSelectedColumn;   // this is the column model (not the view) posisition ...
     sal_uInt16          m_nMarkedColumnId;
-    sal_Bool            m_bSelecting;
-    sal_Bool            m_bInColumnMove : 1;
+    bool                m_bSelecting;
+    bool                m_bInColumnMove : 1;
 
 public:
     FmGridControl(
@@ -126,7 +126,7 @@ public:
     void inserted(const ::com::sun::star::lang::EventObject& rEvent);
 
     void markColumn(sal_uInt16 nId);
-    sal_Bool isColumnMarked(sal_uInt16 nId) const;
+    bool isColumnMarked(sal_uInt16 nId) const;
 
     sal_Int32   GetSelectedColumn() const;
 
@@ -164,7 +164,7 @@ protected:
     virtual void HideColumn(sal_uInt16 nId);
     virtual void ShowColumn(sal_uInt16 nId);
 
-    sal_Bool    IsInColumnMove() const {return m_bInColumnMove;}
+    bool    IsInColumnMove() const {return m_bInColumnMove;}
 
     virtual void BeginCursorAction();
     virtual void EndCursorAction();
@@ -188,7 +188,7 @@ protected:
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>
             getSelectionBookmarks();
-    sal_Bool selectBookmarks(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& _rBookmarks);
+    bool selectBookmarks(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& _rBookmarks);
 
     /** returns if a column is selected
         @param  nColumnId
@@ -198,7 +198,7 @@ protected:
         @return
             <TRUE/> if the column is selected, otherwise <FALSE/>
     */
-    sal_Bool isColumnSelected(sal_uInt16 nColumnId,DbGridColumn* _pColumn);
+    bool isColumnSelected(sal_uInt16 nColumnId,DbGridColumn* _pColumn);
 };
 
 #endif // INCLUDED_SVX_FMGRIDCL_HXX

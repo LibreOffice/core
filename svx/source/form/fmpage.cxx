@@ -140,11 +140,11 @@ const Reference< css::form::XForms > & FmFormPage::GetForms( bool _bForceCreate 
 }
 
 
-sal_Bool FmFormPage::RequestHelp( Window* pWindow, SdrView* pView,
+bool FmFormPage::RequestHelp( Window* pWindow, SdrView* pView,
                               const HelpEvent& rEvt )
 {
     if( pView->IsAction() )
-        return sal_False;
+        return false;
 
     Point aPos = rEvt.GetMousePosPixel();
     aPos = pWindow->ScreenToOutputPixel( aPos );
@@ -153,11 +153,11 @@ sal_Bool FmFormPage::RequestHelp( Window* pWindow, SdrView* pView,
     SdrObject* pObj = NULL;
     SdrPageView* pPV = NULL;
     if ( !pView->PickObj( aPos, 0, pObj, pPV, SDRSEARCH_DEEP ) )
-        return sal_False;
+        return false;
 
     FmFormObj* pFormObject = FmFormObj::GetFormObject( pObj );
     if ( !pFormObject )
-        return sal_False;
+        return false;
 
     OUString aHelpText;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet( pFormObject->GetUnoControlModel(), ::com::sun::star::uno::UNO_QUERY );
@@ -202,7 +202,7 @@ sal_Bool FmFormPage::RequestHelp( Window* pWindow, SdrView* pView,
         else
             Help::ShowQuickHelp( pWindow, aItemRect, aHelpText );
     }
-    return sal_True;
+    return true;
 }
 
 

@@ -362,7 +362,7 @@ FmXGridControl::FmXGridControl(const Reference< XComponentContext >& _rxContext)
                ,m_aSelectionListeners(*this, GetMutex())
                ,m_aGridControlListeners(*this, GetMutex())
                ,m_nPeerCreationLevel(0)
-               ,m_bInDraw(sal_False)
+               ,m_bInDraw(false)
                ,m_xContext(_rxContext)
 {
 }
@@ -723,9 +723,9 @@ void SAL_CALL FmXGridControl::removeModifyListener(const Reference< ::com::sun::
 void SAL_CALL FmXGridControl::draw( sal_Int32 x, sal_Int32 y ) throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    m_bInDraw = sal_True;
+    m_bInDraw = true;
     UnoControl::draw(x, y);
-    m_bInDraw = sal_False;
+    m_bInDraw = false;
 }
 
 
@@ -1100,7 +1100,7 @@ FmXGridPeer::FmXGridPeer(const Reference< XComponentContext >& _rxContext)
             ,m_aGridControlListeners(m_aMutex)
             ,m_aMode( getDataModeIdentifier() )
             ,m_nCursorListening(0)
-            ,m_bInterceptingDispatch(sal_False)
+            ,m_bInterceptingDispatch(false)
             ,m_pStateCache(NULL)
             ,m_pDispatchers(NULL)
             ,m_pGridListener(NULL)
@@ -1215,7 +1215,7 @@ using namespace ::com::sun::star::util;
             {
                 m_pDispatchers[i]->removeStatusListener( static_cast< ::com::sun::star::frame::XStatusListener* >( this ), *pSupportedURLs );
                 m_pDispatchers[i] = NULL;
-                m_pStateCache[i] = 0;
+                m_pStateCache[i] = false;
                 bKnownSender = true;
             }
         }
@@ -2509,11 +2509,11 @@ Reference< ::com::sun::star::frame::XDispatch >  FmXGridPeer::queryDispatch(cons
     // first ask our interceptor chain
     if (m_xFirstDispatchInterceptor.is() && !m_bInterceptingDispatch)
     {
-        m_bInterceptingDispatch = sal_True;
+        m_bInterceptingDispatch = true;
         // safety against recursion : as we are master of the first chain element and slave of the last one we would
         // have an infinite loop without this if no dispatcher can fullfill the request
         xResult = m_xFirstDispatchInterceptor->queryDispatch(aURL, aTargetFrameName, nSearchFlags);
-        m_bInterceptingDispatch = sal_False;
+        m_bInterceptingDispatch = false;
     }
 
     // then ask ourself : we don't have any dispatches
@@ -2810,14 +2810,14 @@ void FmXGridPeer::ConnectToDispatcher()
     const Sequence< ::com::sun::star::util::URL>& aSupportedURLs = getSupportedURLs();
 
     // _before_ adding the status listeners (as the add should result in a statusChanged-call) !
-    m_pStateCache = new sal_Bool[aSupportedURLs.getLength()];
+    m_pStateCache = new bool[aSupportedURLs.getLength()];
     m_pDispatchers = new Reference< ::com::sun::star::frame::XDispatch > [aSupportedURLs.getLength()];
 
     sal_uInt16 nDispatchersGot = 0;
     const ::com::sun::star::util::URL* pSupportedURLs = aSupportedURLs.getConstArray();
     for (sal_uInt16 i=0; i<aSupportedURLs.getLength(); ++i, ++pSupportedURLs)
     {
-        m_pStateCache[i] = 0;
+        m_pStateCache[i] = false;
         m_pDispatchers[i] = queryDispatch(*pSupportedURLs, OUString(), 0);
         if (m_pDispatchers[i].is())
         {
@@ -2874,7 +2874,7 @@ IMPL_LINK(FmXGridPeer, OnQueryGridSlotState, void*, pSlot)
             if (!m_pDispatchers[i].is())
                 return -1;  // nothing known about this slot
             else
-                return m_pStateCache[i];
+                return m_pStateCache[i] ? 1 : 0;
         }
     }
 

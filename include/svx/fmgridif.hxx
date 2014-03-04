@@ -217,7 +217,7 @@ class SVX_DLLPUBLIC FmXGridControl  :public UnoControl
 
 protected:
     sal_uInt16  m_nPeerCreationLevel;
-    sal_Bool    m_bInDraw;
+    bool        m_bInDraw;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
 
@@ -341,24 +341,24 @@ class FmGridControl;
 class SVX_DLLPUBLIC FmXGridPeer :public VCLXWindow
                     ,public FmXGridPeer_BASE
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >    m_xColumns;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >                 m_xCursor;
+    ::css::uno::Reference< ::css::container::XIndexContainer >    m_xColumns;
+    ::css::uno::Reference< ::css::sdbc::XRowSet >                 m_xCursor;
     ::cppu::OInterfaceContainerHelper       m_aModifyListeners,
                                             m_aUpdateListeners,
                                             m_aContainerListeners,
                                             m_aSelectionListeners,
                                             m_aGridControlListeners;
 
-    OUString         m_aMode;
+    OUString                m_aMode;
     sal_Int32               m_nCursorListening;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >   m_xFirstDispatchInterceptor;
+    ::css::uno::Reference< ::css::frame::XDispatchProviderInterceptor >   m_xFirstDispatchInterceptor;
 
-    sal_Bool                                m_bInterceptingDispatch;
+    bool                                m_bInterceptingDispatch;
 
-    sal_Bool*                               m_pStateCache;
+    bool*                               m_pStateCache;
         // one bool for each supported url
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > *                        m_pDispatchers;
+    ::css::uno::Reference< ::css::frame::XDispatch > *                    m_pDispatchers;
         // one dispatcher for each supported url
         // (I would like to have a vector here but including the stl in an exported file seems
         // very risky to me ....)
@@ -368,11 +368,11 @@ class SVX_DLLPUBLIC FmXGridPeer :public VCLXWindow
     GridListenerDelegator*  m_pGridListener;
 
 protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
-    ::osl::Mutex                                                                    m_aMutex;
+    ::css::uno::Reference< ::css::uno::XComponentContext >    m_xContext;
+    ::osl::Mutex                                              m_aMutex;
 
 public:
-    FmXGridPeer(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
+    FmXGridPeer(const ::css::uno::Reference< ::css::uno::XComponentContext >&);
     ~FmXGridPeer();
 
     // spaeter Constructor, immer nach dem realen Constructor zu rufen !

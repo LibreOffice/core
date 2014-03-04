@@ -69,7 +69,7 @@ public:
 public:
     const OUString&     GetName() const { return m_sPageName; }
     void                SetName( const OUString& rName ) { m_sPageName = rName; }
-    sal_Bool            RequestHelp(
+    bool                RequestHelp(
                             Window* pWin,
                             SdrView* pView,
                             const HelpEvent& rEvt );

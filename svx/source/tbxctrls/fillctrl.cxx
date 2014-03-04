@@ -64,7 +64,7 @@ SvxFillToolBoxControl::SvxFillToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId
     pFillControl    ( NULL ),
     pFillTypeLB     ( NULL ),
     pFillAttrLB     ( NULL ),
-    bUpdate         ( sal_False ),
+    bUpdate         ( false ),
     eLastXFS        ( XFILL_NONE )
 {
     addStatusListener( OUString( ".uno:FillColor" ));
@@ -168,7 +168,7 @@ void SvxFillToolBoxControl::StateChanged(
 
                 if(eLastXFS != eXFS)
                 {
-                    bUpdate = sal_True;
+                    bUpdate = true;
                     pFillTypeLB->SelectEntryPos( eXFS );
                 }
 
@@ -180,7 +180,7 @@ void SvxFillToolBoxControl::StateChanged(
                 //pFillTypeLB->Enable();
                 pFillAttrLB->Enable();
 
-                bUpdate = sal_True;
+                bUpdate = true;
             }
 
             Update( pState );
@@ -193,7 +193,7 @@ void SvxFillToolBoxControl::StateChanged(
                 pFillTypeLB->SetNoSelection();
                 pFillAttrLB->Disable();
                 pFillAttrLB->SetNoSelection();
-                bUpdate = sal_False;
+                bUpdate = false;
             }
             else
             {
@@ -220,7 +220,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
 {
     if ( pStyleItem && pState && bUpdate )
     {
-        bUpdate = sal_False;
+        bUpdate = false;
 
         XFillStyle eXFS = (XFillStyle)pStyleItem->GetValue();
 

@@ -213,7 +213,7 @@ Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
         aImgLightOn         ( SVX_RES( RID_SVXIMAGE_LIGHT_ON ) ),
         aImgLightOff        ( SVX_RES( RID_SVXIMAGE_LIGHT_OFF ) ),
 
-        bUpdate             ( sal_False ),
+        bUpdate             ( false ),
         eViewType           ( VIEWTYPE_GEO ),
 
         pModel              ( NULL ),
@@ -226,7 +226,7 @@ Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
         pConvertTo3DLatheItem(0L),
         mpImpl              ( new Svx3DWinImpl() ),
         mpRemember2DAttributes(NULL),
-        bOnly3DChanged      ( sal_False )
+        bOnly3DChanged      ( false )
 {
     OUString accname(SVX_RESSTR(RID_SVXFLOAT3D_COLOR_LIGHT_PRE));
     aCtlLightPreview.SetAccessibleName(accname);
@@ -639,7 +639,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             if(nValue != (sal_uInt32 )aNumHorizontal.GetValue())
             {
                 aNumHorizontal.SetValue( nValue );
-                bUpdate = sal_True;
+                bUpdate = true;
             }
             else if( aNumHorizontal.IsEmptyFieldValue() )
                 aNumHorizontal.SetValue( nValue );
@@ -649,7 +649,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             if( !aNumHorizontal.IsEmptyFieldValue() )
             {
                 aNumHorizontal.SetEmptyFieldValue();
-                bUpdate = sal_True;
+                bUpdate = true;
             }
         }
     }
@@ -664,7 +664,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             if( nValue != (sal_uInt32) aNumVertical.GetValue() )
             {
                 aNumVertical.SetValue( nValue );
-                bUpdate = sal_True;
+                bUpdate = true;
             }
             else if( aNumVertical.IsEmptyFieldValue() )
                 aNumVertical.SetValue( nValue );
@@ -674,7 +674,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             if( !aNumVertical.IsEmptyFieldValue() )
             {
                 aNumVertical.SetEmptyFieldValue();
-                bUpdate = sal_True;
+                bUpdate = true;
             }
         }
     }
@@ -693,7 +693,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
                     SetFieldUnit( aMtrDepth, eFUnit );
 
                 SetMetricValue( aMtrDepth, nValue, ePoolUnit );
-                bUpdate = sal_True;
+                bUpdate = true;
             }
             else if( aMtrDepth.IsEmptyFieldValue() )
                 aMtrDepth.SetValue( aMtrDepth.GetValue() );
@@ -703,7 +703,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             if( !aMtrDepth.IsEmptyFieldValue() )
             {
                 aMtrDepth.SetEmptyFieldValue();
-                bUpdate = sal_True;
+                bUpdate = true;
             }
         }
     }
@@ -716,7 +716,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( bValue != aBtnDoubleSided.IsChecked() )
         {
             aBtnDoubleSided.Check( bValue );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
         else if( aBtnDoubleSided.GetState() == TRISTATE_INDET )
             aBtnDoubleSided.Check( bValue );
@@ -726,7 +726,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aBtnDoubleSided.GetState() != TRISTATE_INDET )
         {
             aBtnDoubleSided.SetState( TRISTATE_INDET );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
 
@@ -740,7 +740,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             if( nValue != aMtrPercentDiagonal.GetValue() )
             {
                 aMtrPercentDiagonal.SetValue( nValue );
-                bUpdate = sal_True;
+                bUpdate = true;
             }
             else if( aMtrPercentDiagonal.IsEmptyFieldValue() )
                 aMtrPercentDiagonal.SetValue( nValue );
@@ -750,7 +750,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             if( !aMtrPercentDiagonal.IsEmptyFieldValue() )
             {
                 aMtrPercentDiagonal.SetEmptyFieldValue();
-                bUpdate = sal_True;
+                bUpdate = true;
             }
         }
     }
@@ -765,7 +765,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             if( nValue != aMtrBackscale.GetValue() )
             {
                 aMtrBackscale.SetValue( nValue );
-                bUpdate = sal_True;
+                bUpdate = true;
             }
             else if( aMtrBackscale.IsEmptyFieldValue() )
                 aMtrBackscale.SetValue( nValue );
@@ -775,7 +775,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             if( !aMtrBackscale.IsEmptyFieldValue() )
             {
                 aMtrBackscale.SetEmptyFieldValue();
-                bUpdate = sal_True;
+                bUpdate = true;
             }
         }
     }
@@ -790,7 +790,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             if( nValue != aMtrEndAngle.GetValue() )
             {
                 aMtrEndAngle.SetValue( nValue );
-                bUpdate = sal_True;
+                bUpdate = true;
             }
         }
         else
@@ -798,7 +798,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             if( !aMtrEndAngle.IsEmptyFieldValue() )
             {
                 aMtrEndAngle.SetEmptyFieldValue();
-                bUpdate = sal_True;
+                bUpdate = true;
             }
         }
     }
@@ -816,7 +816,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             aBtnNormalsObj.Check( nValue == 0 );
             aBtnNormalsFlat.Check( nValue == 1 );
             aBtnNormalsSphere.Check( nValue == 2 );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
     else
@@ -828,7 +828,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             aBtnNormalsObj.Check( false );
             aBtnNormalsFlat.Check( false );
             aBtnNormalsSphere.Check( false );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
 
@@ -840,7 +840,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( bValue != aBtnNormalsInvert.IsChecked() )
         {
             aBtnNormalsInvert.Check( bValue );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
         else if( aBtnNormalsInvert.GetState() == TRISTATE_INDET )
             aBtnNormalsInvert.Check( bValue );
@@ -850,7 +850,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aBtnNormalsInvert.GetState() != TRISTATE_INDET )
         {
             aBtnNormalsInvert.SetState( TRISTATE_INDET );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
 
@@ -862,7 +862,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( bValue != aBtnTwoSidedLighting.IsChecked() )
         {
             aBtnTwoSidedLighting.Check( bValue );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
         else if( aBtnTwoSidedLighting.GetState() == TRISTATE_INDET )
             aBtnTwoSidedLighting.Check( bValue );
@@ -872,7 +872,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aBtnTwoSidedLighting.GetState() != TRISTATE_INDET )
         {
             aBtnTwoSidedLighting.SetState( TRISTATE_INDET );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
 
@@ -885,7 +885,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( nValue != aLbShademode.GetSelectEntryPos() )
         {
             aLbShademode.SelectEntryPos( nValue );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
     else
@@ -893,7 +893,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aLbShademode.GetSelectEntryCount() != 0 )
         {
             aLbShademode.SetNoSelection();
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
 
@@ -907,7 +907,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             aBtnShadow3d.Check( bValue );
             aFtSlant.Enable( bValue );
             aMtrSlant.Enable( bValue );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
         else if( aBtnShadow3d.GetState() == TRISTATE_INDET )
             aBtnShadow3d.Check( bValue );
@@ -917,7 +917,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aBtnShadow3d.GetState() != TRISTATE_INDET )
         {
             aBtnShadow3d.SetState( TRISTATE_INDET );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
 
@@ -929,7 +929,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( nValue != aMtrSlant.GetValue() )
         {
             aMtrSlant.SetValue( nValue );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
     else
@@ -937,7 +937,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( !aMtrSlant.IsEmptyFieldValue() )
         {
             aMtrSlant.SetEmptyFieldValue();
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
 
@@ -953,7 +953,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
                 SetFieldUnit( aMtrDistance, eFUnit );
 
             SetMetricValue( aMtrDistance, nValue, ePoolUnit );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
     else
@@ -961,7 +961,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( !aMtrDepth.IsEmptyFieldValue() )
         {
             aMtrDepth.SetEmptyFieldValue();
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
 
@@ -977,7 +977,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
                 SetFieldUnit( aMtrFocalLength, eFUnit );
 
             SetMetricValue( aMtrFocalLength, nValue, ePoolUnit );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
     else
@@ -985,7 +985,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( !aMtrFocalLength.IsEmptyFieldValue() )
         {
             aMtrFocalLength.SetEmptyFieldValue();
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
 
@@ -1001,7 +1001,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aColor != pLb->GetSelectEntryColor() )
         {
             LBSelectColor( pLb, aColor );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
     else
@@ -1009,7 +1009,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aLbLight1.GetSelectEntryCount() != 0 )
         {
             aLbLight1.SetNoSelection();
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
     // Light 1 (on/off)
@@ -1021,7 +1021,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             ( !bOn && GetUILightState( aBtnLight1 )) )
         {
             SetUILightState( aBtnLight1, bOn );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
         if( aBtnLight1.GetState() == TRISTATE_INDET )
             aBtnLight1.Check( aBtnLight1.IsChecked() );
@@ -1031,14 +1031,14 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aBtnLight1.GetState() != TRISTATE_INDET )
         {
             aBtnLight1.SetState( TRISTATE_INDET );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
     // Light 1 (direction)
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTDIRECTION_1);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        bUpdate = sal_True;
+        bUpdate = true;
     }
 
     //Light 2 (color)
@@ -1050,7 +1050,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aColor != pLb->GetSelectEntryColor() )
         {
             LBSelectColor( pLb, aColor );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
     else
@@ -1058,7 +1058,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aLbLight2.GetSelectEntryCount() != 0 )
         {
             aLbLight2.SetNoSelection();
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
     // Light 2 (on/off)
@@ -1070,7 +1070,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             ( !bOn && GetUILightState( aBtnLight2 )) )
         {
             SetUILightState( aBtnLight2, bOn );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
         if( aBtnLight2.GetState() == TRISTATE_INDET )
             aBtnLight2.Check( aBtnLight2.IsChecked() );
@@ -1080,14 +1080,14 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aBtnLight2.GetState() != TRISTATE_INDET )
         {
             aBtnLight2.SetState( TRISTATE_INDET );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
     //Light 2 (Direction)
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTDIRECTION_2);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        bUpdate = sal_True;
+        bUpdate = true;
     }
 
     //Light 3 (color)
@@ -1099,7 +1099,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aColor != pLb->GetSelectEntryColor() )
         {
             LBSelectColor( pLb, aColor );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
     else
@@ -1107,7 +1107,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aLbLight3.GetSelectEntryCount() != 0 )
         {
             aLbLight3.SetNoSelection();
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
     // Ligh 3 (on/off)
@@ -1119,7 +1119,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             ( !bOn && GetUILightState( aBtnLight3)) )
         {
             SetUILightState( aBtnLight3, bOn );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
         if( aBtnLight3.GetState() == TRISTATE_INDET )
             aBtnLight3.Check( aBtnLight3.IsChecked() );
@@ -1129,14 +1129,14 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aBtnLight3.GetState() != TRISTATE_INDET )
         {
             aBtnLight3.SetState( TRISTATE_INDET );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
     // Light 3 (Direction)
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTDIRECTION_3);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        bUpdate = sal_True;
+        bUpdate = true;
     }
 
     // Light 4 (Color)
@@ -1148,7 +1148,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aColor != pLb->GetSelectEntryColor() )
         {
             LBSelectColor( pLb, aColor );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
     else
@@ -1156,7 +1156,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aLbLight4.GetSelectEntryCount() != 0 )
         {
             aLbLight4.SetNoSelection();
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
     // Light 4 (on/off)
@@ -1168,7 +1168,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             ( !bOn && GetUILightState( aBtnLight4 )) )
         {
             SetUILightState( aBtnLight4, bOn );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
         if( aBtnLight4.GetState() == TRISTATE_INDET )
             aBtnLight4.Check( aBtnLight4.IsChecked() );
@@ -1178,14 +1178,14 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aBtnLight4.GetState() != TRISTATE_INDET )
         {
             aBtnLight4.SetState( TRISTATE_INDET );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
     // Light 4 (direction)
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTDIRECTION_4);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        bUpdate = sal_True;
+        bUpdate = true;
     }
 
     // Light 5 (color)
@@ -1197,7 +1197,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aColor != pLb->GetSelectEntryColor() )
         {
             LBSelectColor( pLb, aColor );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
     else
@@ -1205,7 +1205,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aLbLight5.GetSelectEntryCount() != 0 )
         {
             aLbLight5.SetNoSelection();
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
     // Light 5 (on/off)
@@ -1217,7 +1217,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             ( !bOn && GetUILightState( aBtnLight5 )) )
         {
             SetUILightState( aBtnLight5, bOn );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
         if( aBtnLight5.GetState() == TRISTATE_INDET )
             aBtnLight5.Check( aBtnLight5.IsChecked() );
@@ -1227,14 +1227,14 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aBtnLight5.GetState() != TRISTATE_INDET )
         {
             aBtnLight5.SetState( TRISTATE_INDET );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
     // Light 5 (direction)
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTDIRECTION_5);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        bUpdate = sal_True;
+        bUpdate = true;
     }
 
     // Light 6 (color)
@@ -1246,7 +1246,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aColor != pLb->GetSelectEntryColor() )
         {
             LBSelectColor( pLb, aColor );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
     else
@@ -1254,7 +1254,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aLbLight6.GetSelectEntryCount() != 0 )
         {
             aLbLight6.SetNoSelection();
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
     // Light 6 (on/off)
@@ -1266,7 +1266,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             ( !bOn && GetUILightState( aBtnLight6 )) )
         {
             SetUILightState( aBtnLight6, bOn );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
         if( aBtnLight6.GetState() == TRISTATE_INDET )
             aBtnLight6.Check( aBtnLight6.IsChecked() );
@@ -1276,14 +1276,14 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aBtnLight6.GetState() != TRISTATE_INDET )
         {
             aBtnLight6.SetState( TRISTATE_INDET );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
     // Light 6 (direction)
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTDIRECTION_6);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        bUpdate = sal_True;
+        bUpdate = true;
     }
 
     // Light 7 (color)
@@ -1295,7 +1295,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aColor != pLb->GetSelectEntryColor() )
         {
             LBSelectColor( pLb, aColor );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
     else
@@ -1303,7 +1303,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aLbLight7.GetSelectEntryCount() != 0 )
         {
             aLbLight7.SetNoSelection();
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
     // Light 7 (on/off)
@@ -1315,7 +1315,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             ( !bOn && GetUILightState( aBtnLight7 )) )
         {
             SetUILightState( aBtnLight7 , bOn );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
         if( aBtnLight7.GetState() == TRISTATE_INDET )
             aBtnLight7.Check( aBtnLight7.IsChecked() );
@@ -1325,14 +1325,14 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aBtnLight7.GetState() != TRISTATE_INDET )
         {
             aBtnLight7.SetState( TRISTATE_INDET );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
     // Light 7 (direction)
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTDIRECTION_7);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        bUpdate = sal_True;
+        bUpdate = true;
     }
 
     // Light 8 (color)
@@ -1344,7 +1344,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aColor != pLb->GetSelectEntryColor() )
         {
             LBSelectColor( pLb, aColor );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
     else
@@ -1352,7 +1352,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aLbLight8.GetSelectEntryCount() != 0 )
         {
             aLbLight8.SetNoSelection();
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
     // Light 8 (on/off)
@@ -1364,7 +1364,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             ( !bOn && GetUILightState( aBtnLight8 )) )
         {
             SetUILightState( aBtnLight8, bOn );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
         if( aBtnLight8.GetState() == TRISTATE_INDET )
             aBtnLight8.Check( aBtnLight8.IsChecked() );
@@ -1374,14 +1374,14 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aBtnLight8.GetState() != TRISTATE_INDET )
         {
             aBtnLight8.SetState( TRISTATE_INDET );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
     // Light 8 (direction)
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTDIRECTION_8);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        bUpdate = sal_True;
+        bUpdate = true;
     }
 
     // Ambient light
@@ -1393,7 +1393,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aColor != pLb->GetSelectEntryColor() )
         {
             LBSelectColor( pLb, aColor );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
     else
@@ -1401,7 +1401,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aLbAmbientlight.GetSelectEntryCount() != 0 )
         {
             aLbAmbientlight.SetNoSelection();
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
 
@@ -1420,7 +1420,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             {
                 aBtnTexLuminance.Check( nValue == 1 );
                 aBtnTexColor.Check( nValue == 3 );
-                bUpdate = sal_True;
+                bUpdate = true;
             }
         }
         else
@@ -1430,7 +1430,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             {
                 aBtnTexLuminance.Check( false );
                 aBtnTexColor.Check( false );
-                bUpdate = sal_True;
+                bUpdate = true;
             }
         }
 
@@ -1445,7 +1445,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             {
                 aBtnTexReplace.Check( nValue == 1 );
                 aBtnTexModulate.Check( nValue == 2 );
-                bUpdate = sal_True;
+                bUpdate = true;
             }
         }
         else
@@ -1455,7 +1455,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             {
                 aBtnTexReplace.Check( false );
                 aBtnTexModulate.Check( false );
-                bUpdate = sal_True;
+                bUpdate = true;
             }
         }
 
@@ -1472,7 +1472,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
                 aBtnTexObjectX.Check( nValue == 0 );
                 aBtnTexParallelX.Check( nValue == 1 );
                 aBtnTexCircleX.Check( nValue == 2 );
-                bUpdate = sal_True;
+                bUpdate = true;
             }
         }
         else
@@ -1484,7 +1484,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
                 aBtnTexObjectX.Check( false );
                 aBtnTexParallelX.Check( false );
                 aBtnTexCircleX.Check( false );
-                bUpdate = sal_True;
+                bUpdate = true;
             }
         }
 
@@ -1501,7 +1501,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
                 aBtnTexObjectY.Check( nValue == 0 );
                 aBtnTexParallelY.Check( nValue == 1 );
                 aBtnTexCircleY.Check( nValue == 2 );
-                bUpdate = sal_True;
+                bUpdate = true;
             }
         }
         else
@@ -1513,7 +1513,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
                 aBtnTexObjectY.Check( false );
                 aBtnTexParallelY.Check( false );
                 aBtnTexCircleY.Check( false );
-                bUpdate = sal_True;
+                bUpdate = true;
             }
         }
 
@@ -1525,7 +1525,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             if( bValue != aBtnTexFilter.IsChecked() )
             {
                 aBtnTexFilter.Check( bValue );
-                bUpdate = sal_True;
+                bUpdate = true;
             }
             if( aBtnTexFilter.GetState() == TRISTATE_INDET )
                 aBtnTexFilter.Check( bValue );
@@ -1535,7 +1535,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             if( aBtnTexFilter.GetState() != TRISTATE_INDET )
             {
                 aBtnTexFilter.SetState( TRISTATE_INDET );
-                bUpdate = sal_True;
+                bUpdate = true;
             }
         }
     }
@@ -1553,7 +1553,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aColor != pLb->GetSelectEntryColor() )
         {
             LBSelectColor( pLb, aColor );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
     else
@@ -1561,7 +1561,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aLbMatColor.GetSelectEntryCount() != 0 )
         {
             aLbMatColor.SetNoSelection();
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
 
@@ -1574,7 +1574,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aColor != pLb->GetSelectEntryColor() )
         {
             LBSelectColor( pLb, aColor );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
     else
@@ -1582,7 +1582,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aLbMatEmission.GetSelectEntryCount() != 0 )
         {
             aLbMatEmission.SetNoSelection();
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
 
@@ -1595,7 +1595,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aColor != pLb->GetSelectEntryColor() )
         {
             LBSelectColor( pLb, aColor );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
     else
@@ -1603,7 +1603,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aLbMatSpecular.GetSelectEntryCount() != 0 )
         {
             aLbMatSpecular.SetNoSelection();
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
 
@@ -1615,7 +1615,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( nValue != aMtrMatSpecularIntensity.GetValue() )
         {
             aMtrMatSpecularIntensity.SetValue( nValue );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
     else
@@ -1623,7 +1623,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( !aMtrMatSpecularIntensity.IsEmptyFieldValue() )
         {
             aMtrMatSpecularIntensity.SetEmptyFieldValue();
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
 
@@ -1638,7 +1638,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             ( aBtnPerspective.IsChecked() && ePT == PR_PARALLEL ) )
         {
             aBtnPerspective.Check( ePT == PR_PERSPECTIVE );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
         if( aBtnPerspective.GetState() == TRISTATE_INDET )
             aBtnPerspective.Check( ePT == PR_PERSPECTIVE );
@@ -1648,7 +1648,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if( aBtnPerspective.GetState() != TRISTATE_INDET )
         {
             aBtnPerspective.SetState( TRISTATE_INDET );
-            bUpdate = sal_True;
+            bUpdate = true;
         }
     }
 
@@ -1656,7 +1656,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     {
         // however the 2D attributes may be different. Compare these and decide
 
-        bUpdate = sal_True;
+        bUpdate = true;
     }
 
     if( bUpdate || bOnly3DChanged )
@@ -3045,9 +3045,9 @@ IMPL_LINK_NOARG(Svx3DWin, ChangeSelectionCallbackHdl)
 // Method to ensure that the LB is also associated with a color
 // returns true if color was added
 
-sal_Bool Svx3DWin::LBSelectColor( ColorLB* pLb, const Color& rColor )
+bool Svx3DWin::LBSelectColor( ColorLB* pLb, const Color& rColor )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     pLb->SetNoSelection();
     pLb->SelectEntry( rColor );
@@ -3065,7 +3065,7 @@ sal_Bool Svx3DWin::LBSelectColor( ColorLB* pLb, const Color& rColor )
 
         sal_uInt16 nPos = pLb->InsertEntry( rColor, aStr );
         pLb->SelectEntryPos( nPos );
-        bRet = sal_True;
+        bRet = true;
     }
     return( bRet );
 }
@@ -3087,7 +3087,7 @@ void Svx3DWin::UpdatePreview()
                 SID_3D_STATE, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
         }
         // Reset Flag
-        bOnly3DChanged = sal_False;
+        bOnly3DChanged = false;
     }
 
     // Get Itemset
@@ -3264,13 +3264,13 @@ void Svx3DCtrlItem::StateChanged( sal_uInt16 /*nSId*/,
 
 SvxConvertTo3DItem::SvxConvertTo3DItem(sal_uInt16 _nId, SfxBindings* _pBindings)
 :   SfxControllerItem(_nId, *_pBindings),
-    bState(sal_False)
+    bState(false)
 {
 }
 
 void SvxConvertTo3DItem::StateChanged(sal_uInt16 /*_nId*/, SfxItemState eState, const SfxPoolItem* /*pState*/)
 {
-    sal_Bool bNewState = (eState != SFX_ITEM_DISABLED);
+    bool bNewState = (eState != SFX_ITEM_DISABLED);
     if(bNewState != bState)
     {
         bState = bNewState;
