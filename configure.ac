@@ -5659,60 +5659,6 @@ fi
 AC_CONFIG_HEADERS([config_host/config_probes.h])
 
 dnl ===================================================================
-dnl Compiler plugins
-dnl ===================================================================
-
-COMPILER_PLUGINS=
-# currently only Clang
-if test "$COM_GCC_IS_CLANG" = "TRUE"; then
-    if test -n "$enable_compiler_plugins"; then
-        compiler_plugins="$enable_compiler_plugins"
-    elif test -n "$ENABLE_DBGUTIL"; then
-        compiler_plugins=test
-    else
-        compiler_plugins=no
-    fi
-    if test "$compiler_plugins" != "no"; then
-        dnl The prefix where Clang resides, override to where Clang resides if
-        dnl using a source build:
-        if test -z "$CLANGDIR"; then
-            CLANGDIR=/usr
-        fi
-        AC_LANG_PUSH([C++])
-        save_CPPFLAGS=$CPPFLAGS
-        save_CXX=$CXX
-        # compiler plugins must be built with "native" bitness of clang
-        # because they link against clang libraries
-        CXX=`echo $CXX | sed -e s/-m64// -e s/-m32//`
-        CPPFLAGS="$CPPFLAGS -I$CLANGDIR/include -I$CLANGDIR/tools/clang/include -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS"
-        AC_CHECK_HEADER(clang/AST/RecursiveASTVisitor.h,
-            [COMPILER_PLUGINS=TRUE],
-            [
-            if test "$compiler_plugins" = "yes"; then
-                AC_MSG_ERROR([Cannot find Clang headers to build compiler plugins.])
-            else
-                AC_MSG_WARN([Cannot find Clang headers to build compiler plugins, plugins disabled])
-                add_warning "Cannot find Clang headers to build compiler plugins, plugins disabled."
-            fi
-            ])
-        CXX=$save_CXX
-        CPPFLAGS=$save_CPPFLAGS
-        AC_LANG_POP([C++])
-    fi
-else
-    if test "$enable_compiler_plugins" = "yes"; then
-        AC_MSG_ERROR([Compiler plugins are currently supported only with the Clang compiler.])
-    fi
-fi
-AC_SUBST(COMPILER_PLUGINS)
-AC_SUBST(CLANGDIR)
-
-# Plugin to help linker.
-# Add something like LD_PLUGIN=/usr/lib64/LLVMgold.so to your autogen.input.
-# This makes --enable-lto build with clang work.
-AC_SUBST(LD_PLUGIN)
-
-dnl ===================================================================
 dnl Set the MinGW sys-root
 dnl ===================================================================
 if test "$WITH_MINGW" = "yes"; then
@@ -6620,6 +6566,59 @@ fi
 AC_SUBST(HAVE_GCC_FNO_DEFAULT_INLINE)
 AC_SUBST(HAVE_GCC_FNO_ENFORCE_EH_SPECS)
 
+dnl ===================================================================
+dnl Compiler plugins
+dnl ===================================================================
+
+COMPILER_PLUGINS=
+# currently only Clang
+if test "$COM_GCC_IS_CLANG" = "TRUE"; then
+    if test -n "$enable_compiler_plugins"; then
+        compiler_plugins="$enable_compiler_plugins"
+    elif test -n "$ENABLE_DBGUTIL"; then
+        compiler_plugins=test
+    else
+        compiler_plugins=no
+    fi
+    if test "$compiler_plugins" != "no"; then
+        dnl The prefix where Clang resides, override to where Clang resides if
+        dnl using a source build:
+        if test -z "$CLANGDIR"; then
+            CLANGDIR=/usr
+        fi
+        AC_LANG_PUSH([C++])
+        save_CPPFLAGS=$CPPFLAGS
+        save_CXX=$CXX
+        # compiler plugins must be built with "native" bitness of clang
+        # because they link against clang libraries
+        CXX=`echo $CXX | sed -e s/-m64// -e s/-m32//`
+        CPPFLAGS="$CPPFLAGS $CXXFLAGS_CXX11 -I$CLANGDIR/include -I$CLANGDIR/tools/clang/include -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS"
+        AC_CHECK_HEADER(clang/AST/RecursiveASTVisitor.h,
+            [COMPILER_PLUGINS=TRUE],
+            [
+            if test "$compiler_plugins" = "yes"; then
+                AC_MSG_ERROR([Cannot find Clang headers to build compiler plugins.])
+            else
+                AC_MSG_WARN([Cannot find Clang headers to build compiler plugins, plugins disabled])
+                add_warning "Cannot find Clang headers to build compiler plugins, plugins disabled."
+            fi
+            ])
+        CXX=$save_CXX
+        CPPFLAGS=$save_CPPFLAGS
+        AC_LANG_POP([C++])
+    fi
+else
+    if test "$enable_compiler_plugins" = "yes"; then
+        AC_MSG_ERROR([Compiler plugins are currently supported only with the Clang compiler.])
+    fi
+fi
+AC_SUBST(COMPILER_PLUGINS)
+AC_SUBST(CLANGDIR)
+
+# Plugin to help linker.
+# Add something like LD_PLUGIN=/usr/lib64/LLVMgold.so to your autogen.input.
+# This makes --enable-lto build with clang work.
+AC_SUBST(LD_PLUGIN)
 
 dnl ===================================================================
 dnl allocator
