@@ -270,7 +270,7 @@ bool SVGFilter::isStreamGZip(uno::Reference<io::XInputStream> xInput)
     if (nBytes == 2)
     {
         const sal_Int8* pBuffer = aBuffer.getConstArray();
-        if (pBuffer[0] == (sal_Int8)0x1F && pBuffer[1] == (sal_Int8)0x8B)
+        if (pBuffer[0] == 0x1F && static_cast<sal_uInt8>(pBuffer[1]) == 0x8B)
             return true;
     }
     return false;
