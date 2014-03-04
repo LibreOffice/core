@@ -46,7 +46,6 @@ SfxGrabBagItem::SetGrabBag(std::map<rtl::OUString, com::sun::star::uno::Any, std
 SfxInt64Item::SetValue(long)
 SfxItemPool::GetMasterPool() const
 SimpleErrorHandler::SimpleErrorHandler()
-SmFontPickList::Contains(Font const&) const
 StyleSettings::SetActiveColor2(Color const&)
 StyleSettings::SetCursorSize(long)
 StyleSettings::SetDeactiveColor2(Color const&)

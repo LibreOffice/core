@@ -137,7 +137,6 @@ public:
     virtual void    Remove(const Font &rFont);
 
     void     Clear();
-    bool     Contains(const Font &rFont) const;
     Font     Get(sal_uInt16 nPos = 0) const;
 
     SmFontPickList&  operator = (const SmFontPickList& rList);

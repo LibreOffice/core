@@ -75,14 +75,6 @@ Font SmFontPickList::Get(sal_uInt16 nPos) const
     return nPos < aFontVec.size() ? aFontVec[nPos] : Font();
 }
 
-bool SmFontPickList::Contains(const Font &rFont) const
-{
-    return std::find( aFontVec.begin(), aFontVec.end(), rFont ) != aFontVec.end();
-}
-
-
-
-
 bool SmFontPickList::CompareItem(const Font & rFirstFont, const Font & rSecondFont) const
 {
   return rFirstFont.GetName() == rSecondFont.GetName() &&
