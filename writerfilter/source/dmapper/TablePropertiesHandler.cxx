@@ -113,7 +113,7 @@ namespace dmapper {
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                 if( pProperties.get())
                 {
-                    sal_Int32 nToken;
+                    sal_Int32 nToken = sal_Int32();
                     switch( nSprmId )
                     {
                         case NS_ooxml::LN_CT_TrPr_ins:
