@@ -6,9 +6,38 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-refresh</property>
+  </object>
+  <object class="GtkListStore" id="liststore1">
+    <columns>
+      <!-- column-name type -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">WebDAV</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">FTP</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">SSH</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Windows Share</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">CMIS</col>
+      </row>
+    </data>
+  </object>
   <object class="GtkDialog" id="PlaceEditDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
+    <property name="title" translatable="yes">File Services</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -16,78 +45,104 @@
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child>
-          <object class="GtkGrid" id="grid1">
+          <object class="GtkFrame" id="FileServices">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="row_spacing">6</property>
-            <property name="column_spacing">12</property>
+            <property name="label_xalign">0</property>
+            <property name="shadow_type">none</property>
             <child>
+              <object class="GtkAlignment" id="alignment5">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="top_padding">6</property>
+                <property name="left_padding">12</property>
+                <child>
+                  <object class="GtkGrid" id="grid1">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="row_spacing">6</property>
+                    <property name="column_spacing">12</property>
+                    <child>
+                      <object class="GtkLabel" id="label2">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">Name</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">name</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label6">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">Type</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">type</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="name">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="invisible_char">●</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBox" id="type">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="model">liststore1</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">1</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="label">
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
-                <property name="xalign">0</property>
-                <property name="label" translatable="yes">Name</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">name</property>
+                <property name="label" translatable="yes">File Service</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
               </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label2">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">start</property>
-                <property name="xalign">0</property>
-                <property name="label" translatable="yes">Type</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">type</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkEntry" id="name">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="hexpand">True</property>
-                <property name="invisible_char">●</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkComboBox" id="type">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="hexpand">True</property>
-                <property name="model">liststore1</property>
-                <child>
-                  <object class="GtkCellRendererText" id="cellrenderertext1"/>
-                  <attributes>
-                    <attribute name="text">0</attribute>
-                  </attributes>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">1</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
             </child>
           </object>
           <packing>
@@ -260,6 +315,138 @@
             <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkFrame" id="SmbDetails">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label_xalign">0</property>
+            <property name="shadow_type">none</property>
+            <child>
+              <object class="GtkAlignment" id="alignment2">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="top_padding">6</property>
+                <property name="left_padding">12</property>
+                <child>
+                  <object class="GtkGrid" id="grid4">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="row_spacing">6</property>
+                    <property name="column_spacing">12</property>
+                    <child>
+                      <object class="GtkLabel" id="label9">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">Host</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">smbHost</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label10">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">Share</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">smbShare</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label11">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">Path</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">smbPath</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">2</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="smbHost">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="invisible_char">●</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="smbShare">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="invisible_char">●</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">1</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="smbPath">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="invisible_char">●</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">2</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="label">
+              <object class="GtkLabel" id="label8">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Server Details</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">3</property>
           </packing>
         </child>
         <child>
@@ -447,138 +634,6 @@
             <property name="position">3</property>
           </packing>
         </child>
-        <child>
-          <object class="GtkFrame" id="SmbDetails">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label_xalign">0</property>
-            <property name="shadow_type">none</property>
-            <child>
-              <object class="GtkAlignment" id="alignment2">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="top_padding">6</property>
-                <property name="left_padding">12</property>
-                <child>
-                  <object class="GtkGrid" id="grid4">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="row_spacing">6</property>
-                    <property name="column_spacing">12</property>
-                    <child>
-                      <object class="GtkLabel" id="label9">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Host</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">smbHost</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label10">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Share</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">smbShare</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label11">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Path</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">smbPath</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">2</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="smbHost">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="invisible_char">●</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="smbShare">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="invisible_char">●</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="smbPath">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="invisible_char">●</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">2</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child type="label">
-              <object class="GtkLabel" id="label8">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Server Details</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">3</property>
-          </packing>
-        </child>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="can_focus">False</property>
@@ -712,33 +767,5 @@
       <action-widget response="0">ok</action-widget>
       <action-widget response="0">cancel</action-widget>
     </action-widgets>
-  </object>
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-refresh</property>
-  </object>
-  <object class="GtkListStore" id="liststore1">
-    <columns>
-      <!-- column-name type -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">WebDAV</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">FTP</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">SSH</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Windows Share</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">CMIS</col>
-      </row>
-    </data>
   </object>
 </interface>
