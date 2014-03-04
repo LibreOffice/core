@@ -35,6 +35,7 @@ public:
     void testN816593();
     void testPageBorder();
     void testN823651();
+    void testBnc821208();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -61,6 +62,7 @@ void Test::run()
         {"n816593.doc", &Test::testN816593},
         {"page-border.doc", &Test::testPageBorder},
         {"n823651.doc", &Test::testN823651},
+        {"bnc821208.doc", &Test::testBnc821208},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -263,6 +265,15 @@ void Test::testN823651()
     uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
     uno::Reference<text::XText> xText = getProperty< uno::Reference<text::XTextRange> >(xStyle, "HeaderTextFirst")->getText();
     CPPUNIT_ASSERT_EQUAL(7.5f, getProperty<float>(getParagraphOfText(1, xText), "CharHeight"));
+}
+
+void Test::testBnc821208()
+{
+    // WW8Num1z0 earned a Symbol font, turning numbers into rectangles.
+    uno::Reference<beans::XPropertyState> xPropertyState(getStyles("CharacterStyles")->getByName("WW8Num1z0"), uno::UNO_QUERY);
+    beans::PropertyState ePropertyState = xPropertyState->getPropertyState("CharFontName");
+    // This was beans::PropertyState_DIRECT_VALUE.
+    CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DEFAULT_VALUE, ePropertyState);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
