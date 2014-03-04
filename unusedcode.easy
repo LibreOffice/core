@@ -41,7 +41,6 @@ SfxAcceleratorConfigPage::Create(Window*, SfxItemSet const&)
 SfxAppMenuControl_Impl::RegisterControl(unsigned short, SfxModule*)
 SfxBindings::GetSlot(unsigned short)
 SfxBindings::GetSystemWindow() const
-SfxDispatcher::IsOnTop(SfxShell const&)
 SfxInt64Item::SetValue(long)
 SimpleErrorHandler::SimpleErrorHandler()
 StyleSettings::SetActiveColor2(Color const&)

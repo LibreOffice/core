@@ -205,20 +205,6 @@ sal_Bool SfxDispatcher::IsActive(const SfxShell& rShell)
     return CheckVirtualStack(rShell, sal_True);
 }
 
-/*  This method checks whether a particular <SfxShell> instance is on
-    top of the SfxDispatcher.
-
-    @returns sal_True   The SfxShell instance is on the top of
-                        the SfxDispatcher.
-             sal_False  The SfxShell instance is not on the top of
-                        the SfxDispatcher.
-*/
-sal_Bool SfxDispatcher::IsOnTop(const SfxShell& rShell)
-{
-    return CheckVirtualStack(rShell, sal_False);
-}
-
-
 sal_Bool SfxDispatcher::IsLocked( sal_uInt16 ) const
 
 /*  [Description]

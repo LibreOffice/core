@@ -136,8 +136,7 @@ public:
     const SfxSlot*      GetSlot( const OUString& rCommand );
 
     sal_Bool                IsActive( const SfxShell& rShell );
-    sal_Bool                IsOnTop( const SfxShell& rShell );
-    sal_uInt16              GetShellLevel( const SfxShell &rShell );
+    sal_uInt16          GetShellLevel( const SfxShell &rShell );
     SfxBindings*        GetBindings() const;
 
     void                Push( SfxShell& rShell );
