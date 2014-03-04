@@ -1200,6 +1200,11 @@ void LwpDropcapLayout::RegisterStyle()
 
 LwpRubyLayout::LwpRubyLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpFrameLayout(objHdr, pStrm)
+    , m_nPlacement(0)
+    , m_nAlignment(0)
+    , m_nStateFlag(0)
+    , m_nXOffset(0)
+    , m_nYOffset(0)
 {
 }
 
