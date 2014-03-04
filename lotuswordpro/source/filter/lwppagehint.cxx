@@ -83,7 +83,16 @@ void LwpFootnoteSeenHead::Read(LwpObjectStream* pObjStrm)
 }
 
 LwpPageHint::LwpPageHint(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
-    :LwpDLVList(objHdr,pStrm)
+    : LwpDLVList(objHdr,pStrm)
+    , m_nLastFootnoteSeen(0)
+    , m_nLastFootnoteProcessed(0)
+    , m_nFlags(0)
+    , m_nPageNumber(0)
+    , m_nNumberStyle(0)
+    , m_nNumberFlags(0)
+    , m_nRenderedPageNumber(0)
+    , m_nCurrentSectionPage(0)
+    , m_nLayoutPageNumber(0)
 {
 }
 
