@@ -18,6 +18,8 @@ $(eval $(call gb_CppunitTest_use_ure,filter_xslt))
 
 $(eval $(call gb_CppunitTest_use_configuration,filter_xslt))
 
+$(eval $(call gb_CppunitTest_use_external,filter_xslt,boost_headers))
+
 $(eval $(call gb_CppunitTest_use_libraries,filter_xslt, \
 	comphelper \
 	test \
