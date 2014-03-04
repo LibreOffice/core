@@ -234,6 +234,15 @@ DECLARE_WW8IMPORT_TEST(testListNolevel, "list-nolevel.doc")
     CPPUNIT_ASSERT_EQUAL(OUString("1."), aText);
 }
 
+DECLARE_WW8IMPORT_TEST(testBnc821208, "bnc821208.doc")
+{
+    // WW8Num1z0 earned a Symbol font, turning numbers into rectangles.
+    uno::Reference<beans::XPropertyState> xPropertyState(getStyles("CharacterStyles")->getByName("WW8Num1z0"), uno::UNO_QUERY);
+    beans::PropertyState ePropertyState = xPropertyState->getPropertyState("CharFontName");
+    // This was beans::PropertyState_DIRECT_VALUE.
+    CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DEFAULT_VALUE, ePropertyState);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
