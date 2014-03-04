@@ -331,19 +331,32 @@ PropertySetRegistry::~PropertySetRegistry()
 
 // XInterface methods.
 
+void SAL_CALL PropertySetRegistry::acquire()
+    throw()
+{
+    OWeakObject::acquire();
+}
 
+void SAL_CALL PropertySetRegistry::release()
+    throw()
+{
+    OWeakObject::release();
+}
 
-XINTERFACE_IMPL_5( PropertySetRegistry,
-                   XTypeProvider,
-                   XServiceInfo,
-                   XPropertySetRegistry,
-                   XElementAccess, /* base of XNameAccess */
-                   XNameAccess );
-
-
+css::uno::Any SAL_CALL PropertySetRegistry::queryInterface( const css::uno::Type & rType )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    css::uno::Any aRet = cppu::queryInterface( rType,
+                                               (static_cast< XTypeProvider* >(this)),
+                                               (static_cast< XServiceInfo* >(this)),
+                                               (static_cast< XPropertySetRegistry* >(this)),
+                                               (static_cast< XElementAccess* >(this)),
+                                               (static_cast< XNameAccess* >(this))
+                                               );
+    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
+}
 
 // XTypeProvider methods.
-
 
 
 XTYPEPROVIDER_IMPL_4( PropertySetRegistry,

@@ -88,33 +88,6 @@ com::sun::star::uno::Any SAL_CALL Class::queryInterface(                    \
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );   \
 }\
 
-// 5 interfaces implemented
-#define XINTERFACE_IMPL_5( Class, Ifc1, Ifc2, Ifc3, Ifc4, Ifc5 )            \
-void SAL_CALL Class::acquire()                                              \
-    throw()                                                                 \
-{                                                                           \
-    OWeakObject::acquire();                                                 \
-}                                                                           \
-                                                                            \
-void SAL_CALL Class::release()                                              \
-    throw()                                                                 \
-{                                                                           \
-    OWeakObject::release();                                                 \
-} \
-com::sun::star::uno::Any SAL_CALL Class::queryInterface(                    \
-                                const com::sun::star::uno::Type & rType )   \
-    throw( com::sun::star::uno::RuntimeException, std::exception )          \
-{                                                                           \
-    com::sun::star::uno::Any aRet = cppu::queryInterface( rType, \
-    (static_cast< Ifc1* >(this)),                                         \
-    (static_cast< Ifc2* >(this)),                                         \
-    (static_cast< Ifc3* >(this)),                                         \
-    (static_cast< Ifc4* >(this)),                                         \
-    (static_cast< Ifc5* >(this))                                          \
-                    );                                                      \
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );   \
-}\
-
 // 6 interfaces implemented
 #define XINTERFACE_IMPL_6( Class,I1,I2,I3,I4,I5,I6 )                        \
 void SAL_CALL Class::acquire()                                              \
