@@ -30,7 +30,6 @@ public:
     SfxGrabBagItem(const SfxGrabBagItem& rItem);
     ~SfxGrabBagItem();
 
-    void SetGrabBag(const std::map<OUString, com::sun::star::uno::Any>& rMap);
     const std::map<OUString, com::sun::star::uno::Any>& GetGrabBag() const;
 
     virtual bool operator==(const SfxPoolItem&) const;

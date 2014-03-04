@@ -42,7 +42,6 @@ SfxAppMenuControl_Impl::RegisterControl(unsigned short, SfxModule*)
 SfxBindings::GetSlot(unsigned short)
 SfxBindings::GetSystemWindow() const
 SfxDispatcher::IsOnTop(SfxShell const&)
-SfxGrabBagItem::SetGrabBag(std::map<rtl::OUString, com::sun::star::uno::Any, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, com::sun::star::uno::Any> > > const&)
 SfxInt64Item::SetValue(long)
 SimpleErrorHandler::SimpleErrorHandler()
 StyleSettings::SetActiveColor2(Color const&)

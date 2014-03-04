@@ -42,11 +42,6 @@ SfxGrabBagItem::~SfxGrabBagItem()
 {
 }
 
-void SfxGrabBagItem::SetGrabBag(const std::map<OUString, uno::Any>& rMap)
-{
-    m_aMap = rMap;
-}
-
 const std::map<OUString, uno::Any>& SfxGrabBagItem::GetGrabBag() const
 {
     return m_aMap;
