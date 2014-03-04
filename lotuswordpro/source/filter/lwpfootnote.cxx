@@ -146,6 +146,8 @@ LwpFootnote* LwpFribFootnote::GetFootnote()
 
 LwpFootnote::LwpFootnote(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
     : LwpOrderedObject(objHdr, pStrm)
+    , m_nType(0)
+    , m_nRow(0)
 {
 }
 
