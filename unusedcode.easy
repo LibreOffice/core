@@ -89,9 +89,6 @@ SwViewImp::FireSectionChangeEvent(unsigned short, unsigned short)
 TemplateLocalView::HasUnfilteredItems(FILTER_APPLICATION)
 TextDoc::IsValidPaM(TextPaM const&)
 TextEngine::GetLeftMargin() const
-ThumbnailView::DeselectItem(unsigned short)
-ThumbnailView::GetItemText(unsigned short) const
-ThumbnailView::SetColor(Color const&)
 UnoApiTest::closeDocument(com::sun::star::uno::Reference<com::sun::star::lang::XComponent>)
 apitest::CellProperties::testRotateReference()
 apitest::CellProperties::testVertJustify()

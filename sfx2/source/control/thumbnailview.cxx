@@ -1157,25 +1157,6 @@ void ThumbnailView::SelectItem( sal_uInt16 nItemId )
     }
 }
 
-void ThumbnailView::DeselectItem( sal_uInt16 nItemId )
-{
-    size_t nItemPos = GetItemPos( nItemId );
-    if ( nItemPos == THUMBNAILVIEW_ITEM_NOTFOUND )
-        return;
-
-    ThumbnailViewItem* pItem = mFilteredItemList[nItemPos];
-    if (pItem->isSelected())
-    {
-        pItem->setSelection(false);
-        maItemStateHdl.Call(pItem);
-
-        if (IsReallyVisible() && IsUpdateMode())
-            Invalidate();
-
-        // TODO Trigger event in accessible object?
-    }
-}
-
 bool ThumbnailView::IsItemSelected( sal_uInt16 nItemId ) const
 {
     size_t nItemPos = GetItemPos( nItemId );
@@ -1203,28 +1184,9 @@ void ThumbnailView::deselectItems()
         Invalidate();
 }
 
-OUString ThumbnailView::GetItemText( sal_uInt16 nItemId ) const
-{
-    size_t nPos = GetItemPos( nItemId );
-
-    if ( nPos != THUMBNAILVIEW_ITEM_NOTFOUND )
-        return mFilteredItemList[nPos]->maTitle;
-
-    return OUString();
-}
-
 void ThumbnailView::ShowTooltips( bool bShowTooltips )
 {
     mbShowTooltips = bShowTooltips;
-}
-
-void ThumbnailView::SetColor( const Color& rColor )
-{
-    maColor = rColor;
-    mpItemAttrs->aFillColor = rColor.getBColor();
-
-    if ( IsReallyVisible() && IsUpdateMode() )
-        Invalidate();
 }
 
 void ThumbnailView::filterItems (const boost::function<bool (const ThumbnailViewItem*) > &func)

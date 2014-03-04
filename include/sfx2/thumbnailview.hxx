@@ -216,8 +216,6 @@ public:
 
     void SelectItem( sal_uInt16 nItemId );
 
-    void DeselectItem( sal_uInt16 nItemId );
-
     bool IsItemSelected( sal_uInt16 nItemId ) const;
 
     /**
@@ -228,13 +226,7 @@ public:
 
     void deselectItems ();
 
-    OUString GetItemText( sal_uInt16 nItemId ) const;
-
     void ShowTooltips( bool bShowTooltips );
-
-    void SetColor( const Color& rColor );
-
-    void SetColor() { SetColor( Color( COL_TRANSPARENT ) ); }
 
     Color GetColor() const { return maColor; }
 
