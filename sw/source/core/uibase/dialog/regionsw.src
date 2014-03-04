@@ -1,0 +1,119 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include "regionsw.hrc"
+#include "cmdid.h"
+#include "globals.hrc"
+#include "helpid.h"
+/*************************************************************************
+
+    Dialog "paste region"
+
+*************************************************************************/
+#define FT_SUBREG_TEXT \
+    Text [ en-US ] = "~Section" ; \
+
+#define CB_HIDE_TEXT \
+    Text [ en-US ] = "H~ide" ;\
+
+#define FL_HIDE_TEXT \
+    Text [ en-US ] = "Hide" ;\
+
+#define CB_CONDITION_TEXT  \
+    Text [ en-US ] = "~With Condition" ;\
+
+#define FL_PROPERTIES_TEXT \
+    Text [ en-US ] = "Properties" ;\
+
+#define CB_EDIT_IN_READONLY_TEXT \
+    Text [ en-US ] = "E~ditable in read-only document" ;\
+
+#define FL_FILE_TEXT \
+    Text [ en-US ] = "Link" ;\
+
+#define CB_FILE_TEXT\
+    Text [ en-US ] = "~Link";\
+
+#define CB_DDE_TEXT \
+    Text [ en-US ] = "DD~E" ;\
+
+#define FT_DDE_TEXT \
+    Text [ en-US ] = "DDE ~command" ;\
+
+#define FT_FILE_TEXT \
+    Text [ en-US ] = "~File name" ;\
+
+
+#define GB_HIDE_TEXT \
+    Text [ en-US ] = "Hide";\
+
+#define GB_OPTIONS_TEXT \
+    Text [ en-US ] = "Options" ;\
+
+#define FL_PROTECT_TEXT \
+    Text [ en-US ] = "Write protection";\
+
+#define CB_PASSWD_TEXT\
+    Text [ en-US ] = "Wit~h password";\
+
+#define DLG_IMAGE_IDLIST \
+        IdList =                        \
+        {                               \
+            BMP_HIDE           /*1*/ ;\
+            BMP_NO_HIDE        /*2*/ ;\
+            BMP_PROT_HIDE      /*3*/ ;\
+            BMP_PROT_NO_HIDE   /*4*/ ;\
+        };                              \
+        IdCount = { 4 ; };
+
+ImageList IL_SECTION_BITMAPS
+{
+    Prefix = "re";
+    MaskColor = IMAGE_MASK_COLOR ;
+    DLG_IMAGE_IDLIST
+};
+
+String STR_REG_DUPLICATE
+{
+    Text [ en-US ] = "Section name changed:" ;
+};
+String STR_INFO_DUPLICATE
+{
+    Text [ en-US ] = "Duplicate section name" ;
+};
+QueryBox QB_CONNECT
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_NO ;
+    Message [ en-US ] = "A file connection will delete the contents of the current section. Connect anyway?" ;
+};
+InfoBox REG_WRONG_PASSWORD
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message [ en-US ] = "The password entered is invalid." ;
+};
+InfoBox REG_WRONG_PASSWD_REPEAT
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message [ en-US ] = "The password has not been set." ;
+};
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

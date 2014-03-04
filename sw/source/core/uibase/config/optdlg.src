@@ -1,0 +1,77 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+/* StarView resource file */
+#include <sfx2/sfx.hrc>
+#include <svx/dialogs.hrc>
+#include "globals.hrc"
+#include "config.hrc"
+#include "optdlg.hrc"
+#include "helpid.h"
+
+String ST_SCRIPT_ASIAN
+{
+    Text [ en-US ] = "Asian";
+};
+String ST_SCRIPT_CTL
+{
+    Text [ en-US ] = "CTL";
+};
+String ST_SCRIPT_WESTERN
+{
+    Text [ en-US ] = "Western";
+};
+
+StringArray STR_PRINTOPTUI
+{
+    ItemList [en-US] =
+    {
+        < "%PRODUCTNAME %s"; >;
+        < "Contents"; >;
+        < "Page ba~ckground"; >;
+        < "P~ictures and other graphic objects"; >;
+        < "Hidden te~xt"; >;
+        < "~Text placeholders"; >;
+        < "Form control~s"; >;
+        < "Color"; >;
+        < "Print text in blac~k"; >;
+        < "Pages"; >;
+        < "Print ~automatically inserted blank pages"; >;
+        < "~Use only paper tray from printer preferences"; >;
+        < "Print"; >;
+        < "None (document only)"; >;
+        < "Comments only"; >;
+        < "Place at end of document"; >;
+        < "Place at end of page"; >;
+        < "~Comments"; >;
+        < "Page sides";>;
+        < "All pages"; >;
+        < "Back sides / left pages"; >;
+        < "Front sides / right pages"; >;
+        < "Include"; >;
+        < "Broch~ure"; >;
+        < "Left-to-right script"; >;
+        < "Right-to-left script"; >;
+        < "Range and copies"; >;
+        < "~All pages"; >;
+        < "Pa~ges"; >;
+        < "~Selection"; >;
+    };
+};
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
