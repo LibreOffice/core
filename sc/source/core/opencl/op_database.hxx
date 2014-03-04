@@ -19,7 +19,7 @@ class OpDmax: public CheckVariables
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-             const std::string sSymName, SubArguments &vSubArguments);
+             const std::string &sSymName, SubArguments &vSubArguments);
     virtual std::string BinFuncName(void) const { return "Dmax"; }
 };
 
@@ -27,7 +27,7 @@ class OpDmin: public CheckVariables
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-             const std::string sSymName, SubArguments &vSubArguments);
+             const std::string &sSymName, SubArguments &vSubArguments);
     virtual std::string BinFuncName(void) const { return "Dmin"; }
 };
 
@@ -35,7 +35,7 @@ class OpDproduct: public CheckVariables
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-             const std::string sSymName, SubArguments &vSubArguments);
+             const std::string &sSymName, SubArguments &vSubArguments);
     virtual std::string BinFuncName(void) const { return "Dproduct"; }
 };
 
@@ -43,7 +43,7 @@ class OpDaverage: public CheckVariables
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-             const std::string sSymName, SubArguments &vSubArguments);
+             const std::string &sSymName, SubArguments &vSubArguments);
     virtual std::string BinFuncName(void) const { return "Daverage"; }
 };
 
@@ -51,7 +51,7 @@ class OpDstdev: public CheckVariables
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-             const std::string sSymName, SubArguments &vSubArguments);
+             const std::string &sSymName, SubArguments &vSubArguments);
     virtual std::string BinFuncName(void) const { return "Dstdev"; }
 };
 
@@ -59,7 +59,7 @@ class OpDstdevp: public CheckVariables
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-             const std::string sSymName, SubArguments &vSubArguments);
+             const std::string &sSymName, SubArguments &vSubArguments);
     virtual std::string BinFuncName(void) const { return "Dstdevp"; }
 };
 
@@ -67,7 +67,7 @@ class OpDsum: public CheckVariables
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-             const std::string sSymName, SubArguments &vSubArguments);
+             const std::string &sSymName, SubArguments &vSubArguments);
     virtual std::string BinFuncName(void) const { return "Dsum"; }
 };
 
@@ -75,7 +75,7 @@ class OpDvar: public CheckVariables
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-             const std::string sSymName, SubArguments &vSubArguments);
+             const std::string &sSymName, SubArguments &vSubArguments);
     virtual std::string BinFuncName(void) const { return "Dvar"; }
 };
 
@@ -83,7 +83,7 @@ class OpDvarp: public CheckVariables
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-             const std::string sSymName, SubArguments &vSubArguments);
+             const std::string &sSymName, SubArguments &vSubArguments);
     virtual std::string BinFuncName(void) const { return "Dvarp"; }
 };
 
@@ -91,7 +91,7 @@ class OpDcount: public CheckVariables
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-             const std::string sSymName, SubArguments &vSubArguments);
+             const std::string &sSymName, SubArguments &vSubArguments);
     virtual std::string BinFuncName(void) const { return "Dcount"; }
 };
 
@@ -99,7 +99,7 @@ class OpDcount2: public CheckVariables
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-             const std::string sSymName, SubArguments &vSubArguments);
+             const std::string &sSymName, SubArguments &vSubArguments);
     virtual std::string BinFuncName(void) const { return "Dcount2"; }
 };
 

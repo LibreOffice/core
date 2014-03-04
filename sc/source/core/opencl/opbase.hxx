@@ -253,7 +253,7 @@ public:
     typedef boost::shared_ptr<DynamicKernelArgument> SubArgument;
     typedef std::vector<SubArgument> SubArguments;
     virtual void GenSlidingWindowFunction(std::stringstream &,
-        const std::string, SubArguments &) = 0;
+        const std::string&, SubArguments &) = 0;
     virtual ~SlidingFunctionBase() {};
 };
 
@@ -261,7 +261,7 @@ class Normal: public SlidingFunctionBase
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-            const std::string sSymName, SubArguments &vSubArguments);
+            const std::string &sSymName, SubArguments &vSubArguments);
     virtual bool takeString() const { return false; }
     virtual bool takeNumeric() const { return true; }
 };

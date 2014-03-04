@@ -25,7 +25,7 @@ namespace sc { namespace opencl {
 #include "opinlinefun_finacial.cxx"
 
 void RRI::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string sSymName, SubArguments &vSubArguments)
+    std::stringstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -102,7 +102,7 @@ void RRI::GenSlidingWindowFunction(
 }
 
 void OpNominal::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string sSymName, SubArguments &
+    std::stringstream &ss, const std::string &sSymName, SubArguments &
 vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -174,7 +174,7 @@ vSubArguments)
 }
 
 void OpDollarde::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string sSymName, SubArguments &vSubArguments)
+    std::stringstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -231,7 +231,7 @@ void OpDollarde::GenSlidingWindowFunction(
 }
 
 void OpDollarfr::GenSlidingWindowFunction(std::stringstream &ss,
-        const std::string sSymName, SubArguments &vSubArguments)
+        const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -297,7 +297,7 @@ void OpDISC::BinInlineFun(std::set<std::string>& decls,
 }
 
 void OpDISC::GenSlidingWindowFunction(std::stringstream& ss,
-    const std::string sSymName, SubArguments& vSubArguments)
+    const std::string &sSymName, SubArguments& vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_" << BinFuncName() << "(";
@@ -378,7 +378,7 @@ void OpINTRATE::BinInlineFun(std::set<std::string>& decls,
 }
 
 void OpINTRATE::GenSlidingWindowFunction(std::stringstream& ss,
-    const std::string sSymName, SubArguments& vSubArguments)
+    const std::string &sSymName, SubArguments& vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_" << BinFuncName() << "(";
@@ -452,7 +452,7 @@ void OpFV::BinInlineFun(std::set<std::string>& decls,
 }
 
 void OpFV::GenSlidingWindowFunction(std::stringstream& ss,
-    const std::string sSymName, SubArguments& vSubArguments)
+    const std::string &sSymName, SubArguments& vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -504,7 +504,7 @@ void OpIPMT::BinInlineFun(std::set<std::string>& decls,
 }
 
 void OpIPMT::GenSlidingWindowFunction(std::stringstream& ss,
-    const std::string sSymName, SubArguments& vSubArguments)
+    const std::string &sSymName, SubArguments& vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -574,7 +574,7 @@ void OpIPMT::GenSlidingWindowFunction(std::stringstream& ss,
     ss << "}";
 }
 void OpISPMT::GenSlidingWindowFunction(std::stringstream& ss,
-    const std::string sSymName, SubArguments& vSubArguments)
+    const std::string &sSymName, SubArguments& vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_" << BinFuncName() <<"(";
@@ -637,7 +637,7 @@ void OpISPMT::GenSlidingWindowFunction(std::stringstream& ss,
 }
 
 void OpDuration::GenSlidingWindowFunction(std::stringstream& ss,
-    const std::string sSymName, SubArguments& vSubArguments)
+    const std::string &sSymName, SubArguments& vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_" << BinFuncName() <<"(";
@@ -712,7 +712,7 @@ void OpDuration_ADD::BinInlineFun(std::set<std::string>& decls,
 }
 
 void OpDuration_ADD::GenSlidingWindowFunction(std::stringstream& ss,
-    const std::string sSymName, SubArguments& vSubArguments)
+    const std::string &sSymName, SubArguments& vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -774,7 +774,7 @@ void OpMDuration::BinInlineFun(std::set<std::string>& decls,
 }
 
 void OpMDuration::GenSlidingWindowFunction(std::stringstream& ss,
-    const std::string sSymName, SubArguments& vSubArguments)
+    const std::string &sSymName, SubArguments& vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -841,7 +841,7 @@ void OpMDuration::GenSlidingWindowFunction(std::stringstream& ss,
     ss << "}";
 }
 void Fvschedule::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string sSymName, SubArguments &vSubArguments)
+    std::stringstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
     FormulaToken* pCur = vSubArguments[1]->GetFormulaToken();
     assert(pCur);
@@ -891,7 +891,7 @@ void Cumipmt::BinInlineFun(std::set<std::string>& decls,
     funs.insert(GetRmz_new);funs.insert(GetZw_new);
 }
 void Cumipmt::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string sSymName, SubArguments &
+    std::stringstream &ss, const std::string &sSymName, SubArguments &
 vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -1020,7 +1020,7 @@ vSubArguments)
 }
 
 void IRR::GenSlidingWindowFunction(std::stringstream &ss,
-            const std::string sSymName, SubArguments &vSubArguments)
+            const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_" << BinFuncName() << "(";
@@ -1233,7 +1233,7 @@ void IRR::GenSlidingWindowFunction(std::stringstream &ss,
 }
 
 void XNPV::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string sSymName, SubArguments &vSubArguments)
+    std::stringstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
     FormulaToken *pCur = vSubArguments[1]->GetFormulaToken();
     assert(pCur);
@@ -1339,7 +1339,7 @@ void XNPV::GenSlidingWindowFunction(
     funs.insert(DaysInMonth);funs.insert(IsLeapYear);
 }
 void PriceMat::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string sSymName, SubArguments &vSubArguments)
+    std::stringstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -1464,7 +1464,7 @@ void PriceMat::GenSlidingWindowFunction(
 }
 
 void OpSYD::GenSlidingWindowFunction(std::stringstream &ss,
-            const std::string sSymName, SubArguments &vSubArguments)
+            const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -1558,7 +1558,7 @@ void OpSYD::GenSlidingWindowFunction(std::stringstream &ss,
 }
 
 void MIRR::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string sSymName, SubArguments &vSubArguments)
+    std::stringstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
     FormulaToken* pCur = vSubArguments[0]->GetFormulaToken();
     assert(pCur);
@@ -1640,7 +1640,7 @@ void MIRR::GenSlidingWindowFunction(
 }
 
 void OpEffective::GenSlidingWindowFunction(std::stringstream& ss,
-    const std::string sSymName, SubArguments& vSubArguments)
+    const std::string &sSymName, SubArguments& vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_" << BinFuncName() << "(";
@@ -1713,7 +1713,7 @@ void OpEffective::GenSlidingWindowFunction(std::stringstream& ss,
     funs.insert(IsLeapYear);
 }
 void OpTbilleq::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string sSymName, SubArguments &vSubArguments)
+    std::stringstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -1799,7 +1799,7 @@ void OpCumprinc::BinInlineFun(std::set<std::string>& decls,
     funs.insert(GetRmz_new);funs.insert(GetZw_new);
 }
 void OpCumprinc::GenSlidingWindowFunction(std::stringstream &ss,
-            const std::string sSymName, SubArguments &vSubArguments)
+            const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -1938,7 +1938,7 @@ void OpAccrint::BinInlineFun(std::set<std::string>& decls,
     funs.insert(GetNullDate);funs.insert(GetDiffDate);
 }
 void OpAccrint::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string sSymName,
+    std::stringstream &ss, const std::string &sSymName,
     SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -2067,7 +2067,7 @@ void OpAccrintm::BinInlineFun(std::set<std::string>& decls,
     funs.insert(GetNullDate);funs.insert(GetDiffDate);
 }
 void OpAccrintm::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string sSymName, SubArguments &vSubArguments)
+    std::stringstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -2207,7 +2207,7 @@ void OpAccrintm::GenSlidingWindowFunction(
 
 
 void OpYield::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string sSymName, SubArguments &vSubArguments)
+    std::stringstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -2364,7 +2364,7 @@ void OpYield::GenSlidingWindowFunction(
 }
 
 void OpSLN::GenSlidingWindowFunction(std::stringstream &ss,
-            const std::string sSymName, SubArguments &vSubArguments)
+            const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -2448,7 +2448,7 @@ void OpSLN::GenSlidingWindowFunction(std::stringstream &ss,
 }
 
 void OpYieldmat::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string sSymName, SubArguments &vSubArguments)
+    std::stringstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -2586,7 +2586,7 @@ void OpYieldmat::GenSlidingWindowFunction(
 }
 
 void OpPMT::GenSlidingWindowFunction(std::stringstream &ss,
-        const std::string sSymName, SubArguments &vSubArguments)
+        const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -2663,7 +2663,7 @@ void OpPMT::GenSlidingWindowFunction(std::stringstream &ss,
 }
 
 void OpNPV::GenSlidingWindowFunction(std::stringstream &ss,
-    const std::string sSymName, SubArguments &vSubArguments)
+    const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -2823,7 +2823,7 @@ void OpNPV::GenSlidingWindowFunction(std::stringstream &ss,
     funs.insert(coupnum_new);funs.insert(getPrice_new);
  }
 void OpPrice::GenSlidingWindowFunction(std::stringstream &ss,
-          const std::string sSymName, SubArguments &vSubArguments)
+          const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -2911,7 +2911,7 @@ void OpOddlprice::BinInlineFun(std::set<std::string>& decls,
     funs.insert(GetYearFrac);
 }
 void OpOddlprice::GenSlidingWindowFunction(std::stringstream &ss,
-          const std::string sSymName, SubArguments &vSubArguments)
+          const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -3043,7 +3043,7 @@ void OpOddlyield::BinInlineFun(std::set<std::string>& decls,
     funs.insert(GetYearFrac);funs.insert(GetOddlyield);
 }
 void OpOddlyield::GenSlidingWindowFunction(std::stringstream &ss,
-          const std::string sSymName, SubArguments &vSubArguments)
+          const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -3179,7 +3179,7 @@ void OpPriceDisc::BinInlineFun(std::set<std::string>& decls,
     funs.insert(IsLeapYear);funs.insert(GetDiffDate);
 }
 void OpPriceDisc::GenSlidingWindowFunction(std::stringstream &ss,
-          const std::string sSymName, SubArguments &vSubArguments)
+          const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -3253,7 +3253,7 @@ void OpPriceDisc::GenSlidingWindowFunction(std::stringstream &ss,
     ss <<"}";
 }
 void OpNper::GenSlidingWindowFunction(std::stringstream &ss,
-         const std::string sSymName, SubArguments &vSubArguments)
+         const std::string &sSymName, SubArguments &vSubArguments)
  {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -3343,7 +3343,7 @@ void OpPPMT::BinInlineFun(std::set<std::string>& decls,
 }
 
 void OpPPMT::GenSlidingWindowFunction(std::stringstream &ss,
-        const std::string sSymName, SubArguments &vSubArguments)
+        const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -3460,7 +3460,7 @@ void OpCoupdaybs::BinInlineFun(std::set<std::string>& decls,
     funs.insert(coupdaybs_new);
 }
 void OpCoupdaybs::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string sSymName, SubArguments &
+    std::stringstream &ss, const std::string &sSymName, SubArguments &
 vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -3561,7 +3561,7 @@ void OpCoupdays::BinInlineFun(std::set<std::string>& decls,
     funs.insert(coupdays_new);
 }
 void OpCoupdays::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string sSymName, SubArguments &
+    std::stringstream &ss, const std::string &sSymName, SubArguments &
 vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -3657,7 +3657,7 @@ void OpCouppcd::BinInlineFun(std::set<std::string>& decls,
     funs.insert(lcl_GetCouppcd);
 }
 void OpCouppcd::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string sSymName,
+    std::stringstream &ss, const std::string &sSymName,
     SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -3754,7 +3754,7 @@ void OpCoupncd::BinInlineFun(std::set<std::string>& decls,
     funs.insert(lcl_GetCoupncd);
 }
 void OpCoupncd::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string sSymName, SubArguments &
+    std::stringstream &ss, const std::string &sSymName, SubArguments &
 vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -3864,7 +3864,7 @@ void OpCoupdaysnc::BinInlineFun(std::set<std::string>& decls,
     funs.insert(coupdays_new);
 }
 void OpCoupdaysnc::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string sSymName,
+    std::stringstream &ss, const std::string &sSymName,
     SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -3961,7 +3961,7 @@ void OpCoupnum::BinInlineFun(std::set<std::string>& decls,
     funs.insert(coupnum_new);
 }
 void OpCoupnum::GenSlidingWindowFunction(std::stringstream &ss,
-        const std::string sSymName, SubArguments &vSubArguments)
+        const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -4050,7 +4050,7 @@ void OpAmordegrc::BinInlineFun(std::set<std::string>& decls,
     funs.insert(GetNullDate);funs.insert(GetYearFrac);
 }
 void OpAmordegrc::GenSlidingWindowFunction(std::stringstream &ss,
-            const std::string sSymName, SubArguments &vSubArguments)
+            const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -4214,7 +4214,7 @@ void OpAmorlinc::BinInlineFun(std::set<std::string>& decls,
     funs.insert(GetYearFrac);
 }
 void OpAmorlinc::GenSlidingWindowFunction(std::stringstream &ss,
-             const std::string sSymName, SubArguments &vSubArguments)
+             const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -4361,7 +4361,7 @@ void OpReceived::BinInlineFun(std::set<std::string>& decls,
 }
 
 void OpReceived::GenSlidingWindowFunction(std::stringstream &ss,
-        const std::string sSymName, SubArguments &vSubArguments)
+        const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -4470,7 +4470,7 @@ void OpReceived::GenSlidingWindowFunction(std::stringstream &ss,
     funs.insert(DaysInMonth);funs.insert(IsLeapYear);
 }
 void OpYielddisc::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string sSymName, SubArguments &vSubArguments)
+    std::stringstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -4602,7 +4602,7 @@ void OpYielddisc::GenSlidingWindowFunction(
 }
 
 void OpTbillprice::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string sSymName, SubArguments &vSubArguments)
+    std::stringstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -4637,7 +4637,7 @@ void OpTbillprice::GenSlidingWindowFunction(
 }
 
 void RATE::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string sSymName, SubArguments &vSubArguments)
+    std::stringstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -4782,7 +4782,7 @@ void RATE::GenSlidingWindowFunction(
 }
 
 void OpTbillyield::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string sSymName, SubArguments &vSubArguments)
+    std::stringstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -4867,7 +4867,7 @@ void OpTbillyield::GenSlidingWindowFunction(
     ss << "}\n";
 }
 void OpDDB::GenSlidingWindowFunction(std::stringstream& ss,
-            const std::string sSymName, SubArguments& vSubArguments)
+            const std::string &sSymName, SubArguments& vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -4979,7 +4979,7 @@ void OpDDB::GenSlidingWindowFunction(std::stringstream& ss,
     ss <<"}";
 }
 void OpPV::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string sSymName, SubArguments &
+    std::stringstream &ss, const std::string &sSymName, SubArguments &
 vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -5131,7 +5131,7 @@ tmpCur4);
 }
 
 void OpVDB::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string sSymName, SubArguments &vSubArguments)
+    std::stringstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -5174,7 +5174,7 @@ void OpVDB::GenSlidingWindowFunction(
 }
 
 void OpXirr::GenSlidingWindowFunction(std::stringstream &ss,
-             const std::string sSymName, SubArguments &vSubArguments)
+             const std::string &sSymName, SubArguments &vSubArguments)
 {
     FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
     const formula::DoubleVectorRefToken*pCurDVR= static_cast<const
@@ -5292,7 +5292,7 @@ void OpXirr::GenSlidingWindowFunction(std::stringstream &ss,
 
 }
 void OpDB::GenSlidingWindowFunction(std::stringstream& ss,
-            const std::string sSymName, SubArguments& vSubArguments)
+            const std::string &sSymName, SubArguments& vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
