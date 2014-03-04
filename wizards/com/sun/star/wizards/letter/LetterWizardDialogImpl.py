@@ -752,7 +752,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             return None
 
     def initializeTemplates(self, xMSF):
-        sLetterPath = self.sTemplatePath + "/../common/wizard/letter"
+        sLetterPath = self.sTemplatePath + "/wizard/letter"
         self.BusinessFiles = \
             FileAccess.getFolderTitles(
                 xMSF, "bus", sLetterPath, self.resources.dictBusinessTemplate)
